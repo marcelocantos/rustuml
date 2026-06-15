@@ -2221,8 +2221,23 @@ fn sequence_if_depth(nodes: &[LayoutNode]) -> usize {
     nodes.iter().map(node_if_depth).max().unwrap_or(0)
 }
 
+/// Extents of one fork branch. A branch that is a single multi-case switch uses
+/// the wider `switch_x_layout_in_fork` (the fork bar blocks ON_X compression of
+/// the switch's inner bands), so its `(left, right)` extent — which drives the
+/// branch centre and bar width — must reflect that wider, asymmetric block. Every
+/// other branch keeps the ordinary `sequence_extents`.
+fn fork_branch_extents(branch: &[LayoutNode]) -> (f64, f64) {
+    if let [LayoutNode::Switch { cases, condition }] = branch
+        && cases.len() > 1
+    {
+        let layout = switch_x_layout_in_fork(cases, condition);
+        return (layout.diamond_dx, layout.block_w - layout.diamond_dx);
+    }
+    sequence_extents(branch)
+}
+
 fn fork_layout(branches: &[Vec<LayoutNode>]) -> ForkLayout {
-    let branch_extents: Vec<(f64, f64)> = branches.iter().map(|b| sequence_extents(b)).collect();
+    let branch_extents: Vec<(f64, f64)> = branches.iter().map(|b| fork_branch_extents(b)).collect();
     let branch_widths: Vec<f64> = branch_extents.iter().map(|(l, r)| l + r).collect();
     let n = branch_widths.len();
     if n == 0 {
@@ -3001,6 +3016,62 @@ fn switch_x_layout_in_while(cases: &[SwitchCase], condition: &str) -> SwitchXLay
     // Spine stays on the center case.
     layout.diamond_dx = layout.centers[center];
     layout
+}
+
+/// Switch layout for a multi-case switch that is a direct flow node of a `fork`
+/// branch.
+///
+/// PlantUML lays every switch out by `FtileSwitchNude` at `xSeparation = 20`
+/// (uniform inter-case gaps, diamond at the geometric block centre), then the
+/// diagram-wide `CompressionXorYBuilder(ON_X)` pass squeezes the empty inter-case
+/// bands NOT protected by a drawn shape. For a STANDALONE switch every
+/// unprotected band collapses, leaving the symmetric `switch_small_compressed`
+/// result. Inside a fork the whole-diagram pass STILL runs (`compress.rs`), but
+/// the diagram's own spine arrowhead — the start→bar / bar→stop down-arrow at the
+/// fork centreline — lands over the bands right of the switch diamond, blocking
+/// their compression, while the left bands stay unprotected. So the fork-branch
+/// switch must be emitted UNCOMPRESSED (xSeparation = 20, symmetric, diamond at
+/// the geometric centre); `compress.rs` then reclaims only the unprotected left
+/// band(s), yielding the faithful asymmetric `… 10, 20, 20, 10 …` result of the
+/// `act_switch_in_fork2_*cases` goldens.
+///
+/// ODD all-bodied SMALL switches are unchanged: the centre case sits on the
+/// diamond, its two adjacent bands straddle the (protected) diamond column, and
+/// the symmetric standalone compression already matches — so they fall through to
+/// the standalone layout.
+fn switch_x_layout_in_fork(cases: &[SwitchCase], condition: &str) -> SwitchXLayout {
+    let n = cases.len();
+    let standalone = switch_x_layout(cases, condition);
+    let base = switch_x_layout_base(cases, condition);
+    // Only an even, all-bodied SMALL switch whose right-half cases were compressed
+    // through the diamond corridor (`SWITCH_INNER_CORRIDOR_PACKING_PULL_LEFT`)
+    // renders wider inside a fork. ODD switches, BIG_DIAMOND, and empty/mixed
+    // cases reach the goldens via the standalone layout.
+    if base.big_diamond
+        || n < 4
+        || !n.is_multiple_of(2)
+        || cases.iter().any(|c| c.body.is_empty())
+        || !switch_inner_uses_diamond_corridor(cases, condition, &base)
+    {
+        return standalone;
+    }
+    // Uncompressed `FtileSwitchNude` layout: uniform `xSeparation` gaps with the
+    // diamond at the geometric block centre. The whole-diagram ON_X pass reclaims
+    // the unprotected left band(s).
+    let tiles: Vec<SwitchCaseTile> = cases.iter().map(switch_case_tile).collect();
+    let mut centers = vec![0.0f64; n];
+    let mut x = 0.0;
+    for i in 0..n {
+        centers[i] = x + tiles[i].left;
+        x += tiles[i].width + SWITCH_IF_BRANCH_CASE_GAP;
+    }
+    let block_w = x - SWITCH_IF_BRANCH_CASE_GAP;
+    SwitchXLayout {
+        centers,
+        block_w,
+        diamond_dx: block_w / 2.0,
+        big_diamond: false,
+    }
 }
 
 fn switch_x_layout_if_branch(cases: &[SwitchCase], condition: &str) -> SwitchXLayout {
@@ -7034,6 +7105,17 @@ struct SvgEmitter {
     /// inner bands) instead of the standalone gap-10 layout. Set per-switch by
     /// `emit_sequence_ex` (while-body mode) and consumed once by `emit_switch`.
     while_body_switch: bool,
+    /// One-shot flag set by `emit_fork_with_layout` just before emitting a fork
+    /// branch's body sequence: the next `emit_sequence_ex` is a fork branch, so a
+    /// multi-case switch directly in it uses `switch_x_layout_in_fork` (the fork's
+    /// `ignoreForCompressionOnX` bar blocks the standalone ON_X compression of the
+    /// inner bands). `emit_sequence_ex` takes the flag at entry so nested
+    /// sequences do not inherit it.
+    pending_fork_branch: bool,
+    /// True while emitting a multi-case switch that is a direct flow node of a
+    /// `fork` branch. Set per-switch by `emit_sequence_ex` (fork-branch mode) and
+    /// consumed once by `emit_switch`.
+    fork_branch_switch: bool,
     /// y of the loop-back up-arrowhead tip when a multi-case switch is in the
     /// `while` body. PlantUML's ON_Y compression of the loop-back corridor pulls
     /// the emphasized arrowhead from the corridor midpoint down to anchor on the
@@ -7164,6 +7246,8 @@ impl SvgEmitter {
             repeat_nested_expansion: 0.0,
             while_switch_merge_extra: 0.0,
             while_body_switch: false,
+            pending_fork_branch: false,
+            fork_branch_switch: false,
             while_switch_loopback_tip: None,
             swimlane_while_cond_special: false,
             swimlane_cross_lane: None,
@@ -7972,6 +8056,11 @@ fn emit_sequence_ex(
     } else {
         None
     };
+    // Take the one-shot fork-branch flag set by `emit_fork_with_layout`: when set,
+    // this sequence is a fork branch body and each direct multi-case switch uses
+    // the wider `switch_x_layout_in_fork` (the fork bar blocks ON_X compression of
+    // its inner bands). Reset it so nested sequences do not inherit it.
+    let fork_branch = std::mem::take(&mut svg.pending_fork_branch);
     // Map flow-node ordinal → node index so the stretch can target the right
     // inbound arrow.
     let mut flow_ordinal = 0usize;
@@ -8364,10 +8453,16 @@ fn emit_sequence_ex(
                 switch_while_merge_extra(node, Some(i) == while_body_last_flow);
             svg.while_body_switch = true;
         }
+        // A multi-case switch directly in a `fork` branch uses the wider
+        // fork-branch layout (the fork bar blocks ON_X compression).
+        if fork_branch && matches!(node, LayoutNode::Switch { .. }) {
+            svg.fork_branch_switch = true;
+        }
         let node_y =
             emit_node_with_repeat_extra(svg, node, cx, y, repeat_extra, first_repeat_branch_extra);
         svg.while_switch_merge_extra = 0.0;
         svg.while_body_switch = false;
+        svg.fork_branch_switch = false;
         prev_was_deferred_while = node_defers;
         // Inbound connector goes AFTER the node's own emit so it lands
         // after the node's internal connectors in the connectors buffer
@@ -10731,6 +10826,8 @@ fn emit_switch(
     }
     let layout = if svg.while_body_switch {
         switch_x_layout_in_while(cases, condition)
+    } else if svg.fork_branch_switch {
+        switch_x_layout_in_fork(cases, condition)
     } else {
         switch_x_layout(cases, condition)
     };
@@ -11517,7 +11614,12 @@ fn emit_fork_with_layout(
             };
             bar_bottom + ARROW_LEN + center_offsets[i] + start_lead
         };
+        // Mark the branch body so a direct multi-case switch uses the wider
+        // fork-branch layout (the fork bar blocks ON_X compression of its inner
+        // bands). Taken at `emit_sequence_ex` entry.
+        svg.pending_fork_branch = true;
         let bottom = emit_sequence(svg, branch, bcx, branch_y);
+        svg.pending_fork_branch = false;
         branch_bottoms.push(bottom);
     }
     svg.fork_branch_gap_extra = saved_gap_extra;
