@@ -8080,8 +8080,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // bottom margin must fit inside the canvas.
     if has_boxes {
         let box_bottom = if diagram.hide_footbox {
-            // With no foot boxes the lifelines extend 6px below the box frame.
-            lifeline_bottom - 6.0
+            if diagram.teoz {
+                // Teoz frame bottom sits 6px *below* the lifeline tail (see the
+                // box-rect render path); the canvas must clear the frame plus
+                // the footer band stacked beneath it (seq_all_features_01).
+                lifeline_bottom + 6.0
+            } else {
+                // With no foot boxes the lifelines extend 6px below the box frame.
+                lifeline_bottom - 6.0
+            }
         } else {
             tail_box_y + max_box_h + BOX_BOTTOM_MARGIN
         };
@@ -8090,7 +8097,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         // the footer band beneath the whole content, including the named-box
         // frame), so add it before the final ceil — otherwise the footer text,
         // which is placed relative to the canvas bottom, rides up into the box.
-        svg_height = svg_height.max((box_bottom + 6.0 + footer_band_h).ceil() as u32);
+        // In Teoz the footer band is offset a further 8px (the head-band factor
+        // reserved below the frame), matching the footer baseline derived above.
+        let teoz_box_footer_extra = if diagram.teoz && footer_band_h > 0.0 {
+            8.0
+        } else {
+            0.0
+        };
+        svg_height = svg_height
+            .max((box_bottom + 6.0 + footer_band_h + teoz_box_footer_extra).ceil() as u32);
     }
     if has_deprecated_handwritten
         && let Some(orc) = oracle
@@ -9104,6 +9119,16 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             max_frame_right + RIGHT_MARGIN + 5.0
         };
         let from_participants = effective_right + RIGHT_MARGIN;
+        // PlantUML's `SequenceDiagramArea.getWidth()` is `max(sequenceWidth, …)`
+        // and the header/title/footer bands all centre/right-align on it. In
+        // Teoz the sequence-area width spans the *group frames* (which can reach
+        // past the participant boxes), not the participant-based estimate that
+        // `svg_width_exact` was first seeded with. Refresh the band reference to
+        // the unrounded frame-based width so the bands track the real area edge
+        // (seq_all_features_01).
+        if diagram.teoz {
+            svg_width_exact = svg_width_exact.max(from_participants.max(from_frames));
+        }
         from_participants.max(from_frames).ceil() as u32
     } else {
         svg_width
@@ -9312,8 +9337,17 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 0.0
             };
         let box_bottom = if diagram.hide_footbox {
-            // With no foot boxes the lifelines extend 6px below the box frame.
-            lifeline_bottom - 6.0
+            if diagram.teoz {
+                // In Teoz the named-box frame is sized off the playing space,
+                // which extends 6px *below* the lifeline tail (the head-band
+                // factor reserves space the classic renderer does not). The
+                // classic renderer instead clips the frame 6px above the
+                // lifeline tail (seq_all_features_01 vs seq_combo_everything).
+                lifeline_bottom + 6.0
+            } else {
+                // With no foot boxes the lifelines extend 6px below the box frame.
+                lifeline_bottom - 6.0
+            }
         } else {
             tail_box_y
                 + max_box_h
@@ -11221,7 +11255,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 note.shape,
                                 note_global_padding,
                             );
-                            let left = (cx - raw_w / 2.0).max(HEAD_BOX_Y).floor();
+                            // Teoz routes notes through NoteTile, which keeps the
+                            // fractional Real x of the lifeline centre; the classic
+                            // renderer truncates with `(int)` (floor). Only floor
+                            // in the classic path (seq_all_features_01).
+                            let left = (cx - raw_w / 2.0).max(HEAD_BOX_Y);
+                            let left = if diagram.teoz { left } else { left.floor() };
                             (left, left + note_content_w)
                         } else {
                             // Note over multiple participants (OVER_SEVERAL).
@@ -12253,6 +12292,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             // group frames the sequence area width spans the outermost frame.
             if let Some(gw) = group_band_get_width {
                 ((gw - w) / 2.0).max(0.0)
+            } else if diagram.teoz {
+                // Teoz centres the footer on the same area width as the title /
+                // header (`getWidth = svg_width_exact - 1`), which spans the
+                // group frames rather than the participant boxes
+                // (seq_all_features_01).
+                ((svg_width_exact - 1.0 - w) / 2.0).max(0.0)
             } else if let (Some(first), Some(last)) = (participants.first(), participants.last()) {
                 let center = (first.box_x + last.box_x + last.box_width - 1.0) / 2.0;
                 (center - w / 2.0).max(0.0)
@@ -12269,10 +12314,19 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         let footer_y = if diagram.meta.caption.is_some() {
             svg_height as f64 - combined_footer_bottom_offset(&page_font_family)
         } else if diagram.hide_footbox {
-            // With no foot boxes the footer sits in its band just below the
-            // lifelines, not below the (hidden) tail boxes. Baseline =
-            // lifeline_bottom + ascent(10) - 5 (seq_combo_everything).
-            lifeline_bottom + plantuml_metrics::ascent(FOOTER_FONT_SIZE as f64) - 5.0
+            if diagram.teoz && has_boxes {
+                // Teoz sizes the named-box frame 6px below the lifeline tail
+                // (see box_bottom above) and stacks the footer band beneath the
+                // frame. The footer baseline lands 9px below the frame bottom
+                // plus one ascent: lifeline_bottom + 6 + 9 + ascent(10)
+                // (seq_all_features_01).
+                lifeline_bottom + plantuml_metrics::ascent(FOOTER_FONT_SIZE as f64) + 15.0
+            } else {
+                // With no foot boxes the footer sits in its band just below the
+                // lifelines, not below the (hidden) tail boxes. Baseline =
+                // lifeline_bottom + ascent(10) - 5 (seq_combo_everything).
+                lifeline_bottom + plantuml_metrics::ascent(FOOTER_FONT_SIZE as f64) - 5.0
+            }
         } else if has_boxes {
             // Named boxes extend the content below the foot boxes; the footer
             // band is reserved beneath the box frame. The band starts 1px
