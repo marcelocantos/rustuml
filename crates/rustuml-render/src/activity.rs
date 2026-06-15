@@ -4305,6 +4305,12 @@ struct IfLongLayout {
     tile2_empty: bool,
     /// Diamond north label height (single-line; reserved below the diamond).
     north_h: f64,
+    /// Inter-tile gap extra applied inside each branch column (and tile2): the
+    /// partially-reclaimed `IF_LONG_BRANCH_GAP_EXTRA` (all branches simple) or
+    /// the full uncompressed `FORK_BRANCH_INTER_GAP_EXTRA` (a sibling carries a
+    /// nested construct). The emitter must mirror this so boxes land where the
+    /// predicted heights placed them.
+    branch_gap_extra: f64,
     /// Left / right drawn extents from the spine.
     left_ext: f64,
     right_ext: f64,
@@ -4366,6 +4372,21 @@ fn if_long_layout(
         pm::ascent(SMALL_FONT) + 1.5
     };
 
+    // Inter-tile gap retained inside each branch column. When every branch is a
+    // simple linear flow the whole-diagram `ON_Y` compression reaches into the
+    // branch columns and reclaims the 35 px `addBottom` assembly reserve down to
+    // `ARROW_LEN + (4.477539… − 1)` ≈ 23.4775 (`IF_LONG_BRANCH_GAP_EXTRA`). But
+    // when ANY branch carries a nested control-flow construct (fork/while/repeat/
+    // if/switch), that construct's own un-compressible assembly snakes block the
+    // ON_Y pass from reaching the sibling simple branches, so their inter-action
+    // gaps keep the full 35 px reserve (extra = `FORK_BRANCH_INTER_GAP_EXTRA` =
+    // 15). Picked once for the whole couple row so prediction and emission agree.
+    let branch_gap_extra = if all_branches_simple {
+        IF_LONG_BRANCH_GAP_EXTRA
+    } else {
+        FORK_BRANCH_INTER_GAP_EXTRA
+    };
+
     let mut push_col = |cond: &str, north: &Option<String>, body: &[LayoutNode]| -> Option<()> {
         let g = sequence_geometry(body)?;
         let branch_w = g.width.max(30.0);
@@ -4380,7 +4401,7 @@ fn if_long_layout(
         // Branch column height carries the partially-uncompressed inter-tile
         // slack (see IF_LONG_BRANCH_GAP_EXTRA): `sequence_geometry` assembles at
         // the fully-compressed 20 px gap, so re-derive the height with the extra.
-        let branch_h = sequence_height_ex(body, IF_LONG_BRANCH_GAP_EXTRA);
+        let branch_h = sequence_height_ex(body, branch_gap_extra);
         let cond_text_w = text_render::measure(cond, SMALL_FONT, false);
         let cond_text_h = pm::text_height(SMALL_FONT);
         let north_w = north
@@ -4457,7 +4478,7 @@ fn if_long_layout(
             let (dl, dr) = sequence_extents(body);
             (
                 w,
-                sequence_height_ex(body, IF_LONG_BRANCH_GAP_EXTRA),
+                sequence_height_ex(body, branch_gap_extra),
                 dl.min(w / 2.0),
                 dr.min(w / 2.0),
             )
@@ -4571,7 +4592,7 @@ fn if_long_layout(
         max_x = max_x.max(compress.transform(e) - spine_comp);
     }
     let mut left_ext = -min_x;
-    let right_ext = max_x;
+    let mut right_ext = max_x;
 
     // PlantUML positions the whole diagram with `Recentred` over the actual drawn
     // bounding box (ActivityDiagram3:206), not the if-tile's symmetric reported
@@ -4602,6 +4623,42 @@ fn if_long_layout(
         .fold(f64::INFINITY, f64::min);
     left_ext = left_ext.max(-leftmost_diamond_vertex + IF_LONG_LEFT_MARGIN);
 
+    // Leading-fork flow-axis offset. When the FIRST branch (couple[0]) is a fork,
+    // PlantUML builds it via the if-branch fork tile, which grows the bar to the
+    // RIGHT by `FORK_IF_BRANCH_RIGHT_EXTRA` while keeping the fork's flow spine
+    // fixed (`fork_layout_if_branch`, n==2). That extra right reservation widens
+    // the couple's reported geometry without moving its drawn (symmetric) bar, so
+    // `calculateDimensionInternal`'s spine (`internalWidth/2`) lands left of the
+    // drawn-content centre. After `Recentred` the if-long's flow axis (where the
+    // start/stop spine connects) therefore sits `FORK_IF_BRANCH_RIGHT_EXTRA` px
+    // LEFT of where the symmetric model places it, while every drawn shape keeps
+    // its absolute position. Model that directly: shift the flow axis left
+    // (cols/tile2 move right relative to it, the spine ellipse moves left). Guard
+    // to a genuine fork branch (≥2 non-empty lanes) so plain branches are
+    // untouched.
+    let leading_fork_axis_shift = if let Some(LayoutNode::Fork {
+        branches,
+        is_split: false,
+        merge: false,
+        ..
+    }) = then_branch.iter().find(|n| node_is_flow(n))
+        && branches.len() >= 2
+        && !branches.iter().any(Vec::is_empty)
+    {
+        FORK_IF_BRANCH_RIGHT_EXTRA
+    } else {
+        0.0
+    };
+    let mut tile2_cx = tile2_cx;
+    if leading_fork_axis_shift != 0.0 {
+        for c in &mut cols {
+            c.cx += leading_fork_axis_shift;
+        }
+        tile2_cx = tile2_cx.map(|t| t + leading_fork_axis_shift);
+        left_ext -= leading_fork_axis_shift;
+        right_ext += leading_fork_axis_shift;
+    }
+
     Some(IfLongLayout {
         cols,
         east_label,
@@ -4609,6 +4666,7 @@ fn if_long_layout(
         tile2_cx,
         tile2_empty,
         north_h,
+        branch_gap_extra,
         left_ext,
         right_ext,
     })
@@ -9641,7 +9699,7 @@ fn emit_if_long(
     // IF_LONG_BRANCH_GAP_EXTRA); set it for the branch/else body emits below and
     // restore before the connector loops, which use plain ARROW_LEN spacing.
     let saved_gap_extra = svg.fork_branch_gap_extra;
-    svg.fork_branch_gap_extra = IF_LONG_BRANCH_GAP_EXTRA;
+    svg.fork_branch_gap_extra = l.branch_gap_extra;
 
     // Branch bodies in column order: then_branch, then each elseif body.
     let elseif_bodies: Vec<&[LayoutNode]> = else_branches
