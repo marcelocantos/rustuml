@@ -1299,6 +1299,38 @@ fn body_contains_break_if(body: &[LayoutNode]) -> bool {
     })
 }
 
+/// The break-bearing `if`'s diamond half-width (cond_inner_w/2 + halfHex) for the
+/// first such `if` directly in `body`. Used by [`emit_repeat`] and the Repeat
+/// extent to size the left break corridor (whose column is anchored on the
+/// break-if's diamond, the body's leftmost element).
+fn repeat_break_if_cond_half(body: &[LayoutNode]) -> Option<f64> {
+    body.iter().find_map(|n| match n {
+        LayoutNode::If {
+            condition,
+            then_branch,
+            else_branches,
+            diamond_font_family,
+            diamond_font_size,
+            diamond_text_bold,
+            diamond_pad_x,
+            ..
+        } if if_break_down_plan(then_branch, else_branches).is_some() => Some(if_diamond_half_width(
+            condition,
+            *diamond_font_size,
+            *diamond_text_bold,
+            diamond_font_family,
+            *diamond_pad_x,
+        )),
+        _ => None,
+    })
+}
+
+/// Width reserved on the LEFT of a break-bearing `repeat` for the break-exit
+/// corridor: 9 px past the break-if's diamond half (FtileIfDown's left lead). The
+/// repeat spine shifts right by this so the corridor — which carries the break
+/// down to the merge — clears the content's left margin.
+const REPEAT_BREAK_CORRIDOR_PAD: f64 = 9.0;
+
 /// True when the break-bearing `if` is the first *flow* node of the loop body
 /// (no populated tile precedes it). Such a body reserves an extra middle-stretch
 /// unit in its `FtileGeometry` — see [`WHILE_BREAK_FIRST_FRAME_EXTRA`].
@@ -4775,14 +4807,24 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             // FtileRepeat appends the backward tile on the right.
             if let Some(label) = backward {
                 // Left side mirrors the ordinary repeat (`getLeft` is independent
-                // of the appended backward tile): the body's asymmetric left.
-                let left_extent = body_left.max(cond_half + 9.0);
+                // of the appended backward tile): the body's asymmetric left, plus
+                // a break-bearing body's left exit-corridor reservation.
+                let break_left = repeat_break_if_cond_half(body)
+                    .map_or(0.0, |ch| ch + REPEAT_BREAK_CORRIDOR_PAD);
+                let left_extent = body_left.max(cond_half + 9.0).max(break_left);
                 let body_geo_right = repeat_body_geo_right(body);
                 let right_extent =
                     repeat_backward_right_extent(cond_half, body_geo_right, is_label, label);
                 (left_extent, right_extent)
             } else {
-                let left_extent = body_left.max(cond_half + 9.0);
+                // A break-bearing body welds its break LEFT to an exit corridor
+                // that the repeat carries down to its break-merge diamond. That
+                // corridor is anchored `REPEAT_BREAK_CORRIDOR_PAD` past the
+                // break-if's diamond (the body's leftmost element), so the spine
+                // reserves that column on the left.
+                let break_left = repeat_break_if_cond_half(body)
+                    .map_or(0.0, |ch| ch + REPEAT_BREAK_CORRIDOR_PAD);
+                let left_extent = body_left.max(cond_half + 9.0).max(break_left);
                 // Right extent mirrors `emit_repeat`'s loop-back arm exactly:
                 // `arm = max(diamond_right + 12, extents.right + 12,
                 //            geo.right() + 4)`, then the canvas reserves a
@@ -6509,7 +6551,18 @@ fn node_height(node: &LayoutNode) -> f64 {
             } else {
                 diamond_h + ARROW_LEN
             };
-            top_lead + body_h + cond_gap + diamond_h
+            // A body `break` adds a break-merge diamond below the condition
+            // (ARROW_LEN inbound + the merge rhombus), but the trailing break-`if`'s
+            // own advertised height (`node_height` returns the compressed
+            // `WHILE_BREAK_IF_CORRIDOR_DROP_COMPRESSED` drop) overcounts the drop to
+            // its pointOut by `REPEAT_BREAK_IF_HEIGHT_OVERCOUNT`: in a repeat the
+            // if rejoins straight into the condition (`IF_DOWN_LEAD + ARROW_LEN − 1`).
+            let break_merge = if !*has_start_label && body_contains_break_if(body) {
+                ARROW_LEN + diamond_h - REPEAT_BREAK_IF_HEIGHT_OVERCOUNT
+            } else {
+                0.0
+            };
+            top_lead + body_h + cond_gap + diamond_h + break_merge
         }
         LayoutNode::Arrow { .. } => 0.0, // arrows don't add height (they're between nodes)
         LayoutNode::Note { .. } => 0.0,
@@ -6921,6 +6974,11 @@ struct SvgEmitter {
     /// [`WhileBreakContext::fuse_loopback`]). `emit_while` reads and clears it
     /// after body emission to suppress its own junction loop-back arm.
     while_break_loopback_fused: bool,
+    /// One-shot record set by [`emit_if_break_down`] in repeat mode: the y of
+    /// the break weld (where the south spine meets the left corridor). `emit_repeat`
+    /// reads it after body emission to draw the corridor DOWN from this y to the
+    /// break-merge diamond.
+    repeat_break_weld_y: Option<f64>,
     /// Context for a SOLE single-survivor `if` nested directly in an enclosing
     /// `if`/`switch` branch; see [`IfSurvivorRedirect`].
     if_survivor_redirect: Option<IfSurvivorRedirect>,
@@ -7015,6 +7073,12 @@ struct WhileBreakContext {
     /// signals `emit_while` to skip its junction loop-back. `None` for the
     /// mid/early topologies. See [`break_if_is_last_flow`].
     fuse_loopback: Option<WhileBreakLoopback>,
+    /// Set when the enclosing loop is a `repeat` (not a `while`). The break
+    /// welds LEFT to the corridor but the left arrowhead is NOT drawn at the
+    /// weld: the repeat continues the corridor DOWN to a merge diamond below the
+    /// condition (the loop's `out`), where the arrowhead lands instead. The
+    /// repeat records the weld point so it can draw the down-corridor + merge.
+    repeat_mode: bool,
 }
 
 /// Loop-back fusion geometry handed to a last-flow break-`if` (see
@@ -7077,6 +7141,7 @@ impl SvgEmitter {
             fork_branch_gap_extra: 0.0,
             while_break: None,
             while_break_loopback_fused: false,
+            repeat_break_weld_y: None,
             if_survivor_redirect: None,
             pending_while_body: false,
             repeat_body_depth: 0,
@@ -9768,6 +9833,21 @@ const WHILE_EVEN_BODY_LOOP_ARROW_STRETCH: f64 = 7.5;
 /// the body in the repeat frame; with an even number of flow nodes the centre
 /// falls inside the middle connector, lengthening that one snake by 7.5 px.
 const REPEAT_EVEN_BODY_MID_STRETCH: f64 = 7.5;
+
+/// Upward bias of the loop-back emphasis arrowhead for a break-bearing repeat.
+/// The break corridor's compressed band shifts the loop-back snake's
+/// pre-compression midpoint up by this much relative to the drawn
+/// `(top_cy + cond_cy)/2`. Empirically constant across the
+/// `act_repeat_acts{1,2,3}_*_brk` family.
+const REPEAT_BREAK_LOOPBACK_ARROW_BIAS: f64 = 1.7612;
+
+/// The break-`if`'s `node_height` advertises the `while`-tuned compressed corridor
+/// drop (`DIAMOND_HALF*2 + WHILE_BREAK_IF_CORRIDOR_DROP_COMPRESSED`). In a repeat
+/// the if rejoins straight into the condition one `IF_DOWN_LEAD + ARROW_LEN − 1`
+/// below its diamond bottom, which is this much shorter — subtract it so the
+/// advertised repeat height (and canvas) matches.
+const REPEAT_BREAK_IF_HEIGHT_OVERCOUNT: f64 =
+    WHILE_BREAK_IF_CORRIDOR_DROP_COMPRESSED - (IF_DOWN_LEAD + ARROW_LEN - 1.0);
 /// Extra vertical slack FtileRepeat distributes through a multi-action body
 /// when an explicit `backward :...;` tile occupies the loop-back arm.
 const REPEAT_BACKWARD_BODY_SLACK: f64 = 30.0;
@@ -9871,6 +9951,26 @@ fn repeat_body_mid_stretch(body: &[LayoutNode], has_backward: bool) -> Option<(u
                 flow_count - 1,
                 REPEAT_BACKWARD_BODY_SLACK / flow_count as f64,
             ));
+        }
+        return None;
+    }
+    // A break-bearing body `[actions…, break-if]`: when the leading actions are
+    // EVEN in number, FtileRepeat's even-stack centring lengthens the connector
+    // feeding the trailing break-`if` by one `IF_DOWN_MID_STRETCH` (the break-if
+    // is the "trailing composite" the actions balance against — like a plain if).
+    // Place that stretch in the gap before the break-if (its flow index).
+    if break_if_is_last_flow(body) {
+        let action_count = body
+            .iter()
+            .filter(|n| matches!(n, LayoutNode::Action { .. }))
+            .count();
+        if action_count >= 2 && action_count.is_multiple_of(2) {
+            let break_if_idx = body
+                .iter()
+                .filter(|n| node_is_flow(n))
+                .count()
+                .saturating_sub(1);
+            return Some((break_if_idx, IF_DOWN_MID_STRETCH));
         }
         return None;
     }
@@ -10392,13 +10492,25 @@ fn emit_if_break_down(
     // further ARROW_LEN + IF_BRANCH_UP down — plus an uncompressed slack unit
     // when the loop column is thin (see WHILE_BREAK_IF_CORRIDOR_* constants).
     let break_y = diamond_bottom + IF_DOWN_LEAD;
-    let return_y = diamond_bottom
+    // The empty (continue) branch's east corridor rejoins the spine at the if's
+    // pointOut. For a `while`, that drop is the WHILE_BREAK_IF_CORRIDOR_* slot.
+    // For a `repeat` (the break-`if` is the last body node, rejoining straight
+    // into the condition), the drop is one IF_DOWN_LEAD + ARROW_LEN, less one px
+    // — the whole-diagram ON_Y pass cannot squeeze the corridor column further.
+    // The DOWN arrowhead still anchors on the *uncompressed* corridor midpoint
+    // (PlantUML draws it before the slot pass shortens the run).
+    let return_y_uncompressed = diamond_bottom
         + WHILE_BREAK_IF_CORRIDOR_DROP_COMPRESSED
         + if brk.compresses {
             0.0
         } else {
             WHILE_BREAK_IF_CORRIDOR_UNCOMPRESSED_EXTRA
         };
+    let return_y = if brk.repeat_mode {
+        diamond_bottom + IF_DOWN_LEAD + ARROW_LEN - 1.0
+    } else {
+        return_y_uncompressed
+    };
 
     // Condition hexagon (no populated branch shapes precede it — the break tile
     // is empty).
@@ -10469,10 +10581,27 @@ fn emit_if_break_down(
     // to a `FtileBreak` draws no arrowhead).
     svg.connector_line(&arrow_color, cx, cx, diamond_bottom, break_y, false);
 
-    // Break weld: horizontal LEFT from the spine to the loop exit corridor, with
-    // a left-pointing arrowhead at the corridor (asToLeft). No merge.
+    // Break weld: horizontal LEFT from the spine to the loop exit corridor.
+    // For a `while`, a left-pointing arrowhead lands at the corridor (asToLeft)
+    // and the while's own exit arm carries the flow on. For a `repeat`, the
+    // corridor continues DOWN to the break-merge diamond below the condition
+    // (the loop's `out`); the corridor + the right-into-merge arrowhead are
+    // drawn here (so they land in the correct document-order slot, immediately
+    // after the weld), and the repeat draws only the merge rhombus + the
+    // condition's south exit into it. The merge centreline sits a fixed span
+    // below this if's pointOut: ARROW_LEN (→condition) + condition diamond
+    // + ARROW_LEN (→merge) + halfHex (merge centre).
     svg.connector_line(&arrow_color, cx, brk.corridor_x, break_y, break_y, false);
-    svg.left_arrow(brk.corridor_x, break_y, &arrow_color);
+    if brk.repeat_mode {
+        svg.repeat_break_weld_y = Some(break_y);
+        let merge_cy = return_y + ARROW_LEN + DIAMOND_HALF * 2.0 + ARROW_LEN + DIAMOND_HALF;
+        let merge_left = cx - DIAMOND_HALF;
+        svg.connector_line(&arrow_color, brk.corridor_x, brk.corridor_x, break_y, merge_cy, false);
+        svg.connector_line(&arrow_color, brk.corridor_x, merge_left, merge_cy, merge_cy, false);
+        svg.right_arrow(merge_left, merge_cy, &arrow_color);
+    } else {
+        svg.left_arrow(brk.corridor_x, break_y, &arrow_color);
+    }
 
     // Fused loop-back: when the break-`if` is the body's LAST flow node, its
     // empty (continue) branch is the whole loop's `pointOut`. PlantUML's
@@ -10529,7 +10658,7 @@ fn emit_if_break_down(
     // finder nudges the tip down by one `IF_CORRIDOR_ARROW_OFFSET`; an
     // uncompressed corridor (break-`if` first, only one trailing tile) keeps the
     // exact midpoint.
-    let arrow_tip = (diamond_cy + return_y) / 2.0
+    let arrow_tip = (diamond_cy + return_y_uncompressed) / 2.0
         + if brk.compresses {
             IF_CORRIDOR_ARROW_OFFSET
         } else {
@@ -10555,6 +10684,15 @@ fn emit_if_break_down(
         false,
     );
     svg.connector_line(&arrow_color, corridor_x, cx, return_y, return_y, false);
+
+    // In a `repeat`, the break-`if` is the body's last flow node and its pointOut
+    // feeds straight into the condition diamond one ARROW_LEN below. PlantUML
+    // emits that body→diamond2 connection as part of the if-block's connection
+    // list (right after the empty-east corridor), BEFORE the body's internal
+    // spine arrows — so draw it here, and let `emit_repeat` skip its own.
+    if brk.repeat_mode {
+        svg.down_arrow(cx, return_y, return_y + ARROW_LEN, &arrow_color);
+    }
 
     return_y
 }
@@ -11618,6 +11756,7 @@ fn emit_while(
             corridor_x: pre_geo_left_x - DIAMOND_HALF,
             compresses: while_break_corridor_compresses(body),
             fuse_loopback,
+            repeat_mode: false,
         });
     }
 
@@ -12180,6 +12319,27 @@ fn emit_repeat(
     } else {
         repeat_body_mid_stretch(body, backward.is_some())
     };
+    // A `break` directly in the body (rendered by its `if` as a no-diamond
+    // `FtileIfDown`) welds LEFT to an exit corridor that the repeat carries down
+    // to its break-merge diamond. Set the corridor context before the body emit
+    // (the if reads it), mirroring `emit_while`; restore the prior value after.
+    // The corridor x is anchored on the break-if's diamond (the body's leftmost
+    // element): `REPEAT_BREAK_CORRIDOR_PAD` past it on the spine's left, one px
+    // inside the reserved content margin.
+    let has_break = !has_start_label && body_contains_break_if(body);
+    let break_corridor_x = repeat_break_if_cond_half(body)
+        .map(|ch| cx - (ch + REPEAT_BREAK_CORRIDOR_PAD) - 1.0);
+    let prev_while_break = svg.while_break.take();
+    let prev_weld_y = svg.repeat_break_weld_y.take();
+    if has_break && let Some(corridor_x) = break_corridor_x {
+        svg.while_break = Some(WhileBreakContext {
+            corridor_x,
+            compresses: false,
+            fuse_loopback: None,
+            repeat_mode: true,
+        });
+    }
+
     // Mark the body as a repeat body so any directly-nested repeat applies its
     // `nested_cond_extra` (read at that child's entry). Save+zero the expansion
     // accumulator so we can read how much nested-repeat tail expansion this
@@ -12208,6 +12368,11 @@ fn emit_repeat(
         emit_sequence_ex(svg, body, cx, body_y, body_mid_stretch, None, false)
     };
     svg.repeat_body_depth -= 1;
+    // Capture the break weld y the body's break-`if` recorded (if any), then
+    // restore the prior break context so a sibling/parent loop is unaffected.
+    let break_weld_y = svg.repeat_break_weld_y.take();
+    svg.while_break = prev_while_break;
+    svg.repeat_break_weld_y = prev_weld_y;
     // Nested-repeat tail expansion contributed by this repeat's body.
     let body_expansion = svg.repeat_nested_expansion;
     // Propagate this whole subtree's expansion (own tail + body's) to the
@@ -12472,12 +12637,23 @@ fn emit_repeat(
         // the lower half of the loop-back, so it biases the visible midpoint
         // down by half that amount — undo it to land on the content midpoint.
         let nested_bias = (nested_cond_extra + body_expansion) / 2.0;
-        // Leading-action + balanced-if bodies anchor the arrowhead on the
-        // pre-compression frame centre, `space/2` above the naive midpoint.
-        let loopback_arrow_bias = repeat_loopback_arrow_bias(body, backward.is_some());
-        let mid_y = (top_cy + cond_diamond_cy - body_stretch + body_top_extra) / 2.0
-            - nested_bias
-            - loopback_arrow_bias;
+        // A break-bearing repeat anchors its loop-back arrowhead on the naive
+        // `(top_cy + cond_cy)/2` midpoint less a fixed bias — the trailing-stretch
+        // `body_stretch` here sits BELOW the loop-back's content (in the break
+        // corridor's compressed band), not on a middle connector, so it must NOT
+        // be subtracted from the midpoint.
+        let mid_y = if break_weld_y.is_some() {
+            (top_cy + cond_diamond_cy + body_top_extra) / 2.0
+                - nested_bias
+                - REPEAT_BREAK_LOOPBACK_ARROW_BIAS
+        } else {
+            // Leading-action + balanced-if bodies anchor the arrowhead on the
+            // pre-compression frame centre, `space/2` above the naive midpoint.
+            let loopback_arrow_bias = repeat_loopback_arrow_bias(body, backward.is_some());
+            (top_cy + cond_diamond_cy - body_stretch + body_top_extra) / 2.0
+                - nested_bias
+                - loopback_arrow_bias
+        };
         svg.polygon_connector(
             &arrow_color,
             &[
@@ -12510,10 +12686,45 @@ fn emit_repeat(
         svg.left_arrow(top_entry_right, top_cy, &arrow_color);
     }
 
-    // Body → condition diamond connector (after loop-back path).
-    svg.down_arrow(cx, body_bottom, cond_y, &arrow_color);
+    // Body → condition diamond connector (after loop-back path). A break-bearing
+    // body already drew this from the break-`if`'s pointOut (it lands earlier in
+    // document order, with the if's own connectors), so skip it here.
+    if break_weld_y.is_none() {
+        svg.down_arrow(cx, body_bottom, cond_y, &arrow_color);
+    }
 
-    cond_y + DIAMOND_HALF * 2.0
+    let cond_bottom = cond_y + DIAMOND_HALF * 2.0;
+
+    // Break-merge diamond: a body `break` welded LEFT to the exit corridor; the
+    // repeat carries that corridor DOWN to a small merge rhombus below the
+    // condition, where the loop's south exit and the break re-converge (the
+    // loop's `out`). Mirrors PlantUML's FtileRepeat break-`out` collector.
+    if break_weld_y.is_some() {
+        let merge_top = cond_bottom + ARROW_LEN;
+        let merge_cy = merge_top + DIAMOND_HALF;
+        let merge_bottom = merge_top + DIAMOND_HALF * 2.0;
+
+        // Merge rhombus (the break-`if` already drew the left corridor down into
+        // its west vertex; here we add the shape and the condition's south exit).
+        svg.polygon_shape(
+            &diamond_fill,
+            &[
+                (cx, merge_top),
+                (cx + DIAMOND_HALF, merge_cy),
+                (cx, merge_bottom),
+                (cx - DIAMOND_HALF, merge_cy),
+            ],
+            &diamond_stroke,
+            &diamond_stroke_width,
+        );
+
+        // Condition south exit → merge top (a plain down-arrow).
+        svg.down_arrow(cx, cond_bottom, merge_top, &arrow_color);
+
+        return merge_bottom;
+    }
+
+    cond_bottom
 }
 
 /// Emit a swimlanes block. Lanes are arranged left-to-right with vertical
