@@ -888,6 +888,12 @@ enum LayoutNode {
         lanes: Vec<Lane>,
         segments: Vec<LaneSegment>,
     },
+    /// Swimlane V2 (single-tree rewrite): a zero-size marker lowered from a
+    /// `|Lane|` step. It carries the index of the lane that becomes active at
+    /// this flow position; `emit`/`layout_swimlanes_v2` route subsequent shapes
+    /// into that lane's buffer. Produced ONLY on the V2 path (RUSTUML_SWIMLANE_V2);
+    /// the default segment model never builds one. Contributes no geometry.
+    LaneMark(usize),
 }
 
 #[derive(Debug)]
@@ -6058,6 +6064,8 @@ fn repeat_backward_body_right(body: &[LayoutNode]) -> f64 {
 
 fn node_width(node: &LayoutNode) -> f64 {
     match node {
+        // Swimlane V2: zero-size lane marker (no geometry).
+        LayoutNode::LaneMark(_) => 0.0,
         // Bare start/stop circles: PlantUML lays them out at minimum width
         // without padding (margins are added once at the SVG level). The
         // `+ ACTION_MIN_X * 2.0` previously here forced ~52px of empty
@@ -6936,6 +6944,8 @@ fn partition_top_gap(
 
 fn node_height(node: &LayoutNode) -> f64 {
     match node {
+        // Swimlane V2: zero-size lane marker (no geometry).
+        LayoutNode::LaneMark(_) => 0.0,
         // Start ellipse cy is fixed at START_CY (25), so from the y=MARGIN_LEAD
         // cursor (16) the ellipse bottom is 25+10-16 = 19, not the full diameter.
         LayoutNode::Start => START_CY + START_R - 16.0,
@@ -7665,6 +7675,13 @@ struct SvgEmitter {
     /// Connectors (lines, arrowhead polygons). PlantUML emits all of these
     /// after the shapes, also in document order.
     connectors: String,
+    /// Swimlane V2: the lane currently active during emit (0 off the V2 path).
+    /// Switched by each `LayoutNode::LaneMark` as the single tree is walked.
+    current_lane: usize,
+    /// Swimlane V2: `(shapes.len(), connectors.len(), lane)` recorded at every
+    /// `LaneMark`, so `layout_swimlanes_v2` can partition the two buffers into
+    /// per-lane byte ranges after emit. Empty off the V2 path.
+    lane_spans: Vec<(usize, usize, usize)>,
     /// Resolved color palette for this render (PlantUML defaults +
     /// inline skinparam overrides).
     palette: Palette,
@@ -8024,6 +8041,8 @@ impl SvgEmitter {
         SvgEmitter {
             shapes: String::new(),
             connectors: String::new(),
+            current_lane: 0,
+            lane_spans: Vec::new(),
             palette,
             colored_partition_while_depth: 0,
             partition_wrapped_fork_depth: 0,
@@ -9431,6 +9450,15 @@ fn emit_node_with_repeat_extra(
     if_branch: bool,
 ) -> f64 {
     match node {
+        // Swimlane V2 lane marker: switch the active lane and record the byte
+        // offsets in both buffers so the post-emit pass can partition by lane.
+        // No y advance, no shape.
+        LayoutNode::LaneMark(idx) => {
+            svg.current_lane = *idx;
+            svg.lane_spans
+                .push((svg.shapes.len(), svg.connectors.len(), *idx));
+            y
+        }
         LayoutNode::Start => {
             // The cursor (`y`) represents the centreline at which the next
             // node should sit. PlantUML enforces a minimum of START_CY (25)
