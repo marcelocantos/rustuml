@@ -16120,8 +16120,10 @@ fn layout_swimlanes_v2(
     let content_pad: Vec<f64> = (0..n)
         .map(|l| {
             if if_mode && title_w[l] > lane_content_w[l] + 0.001 {
-                // Title-driven: centre the content in the lane column.
-                (lane_w[l] - lane_content_w[l]) / 2.0
+                // Title-driven: centre the content in the lane column, with the
+                // lane's intrinsic 6-left/4-right padding asymmetry (+1 to the
+                // left half) baked in.
+                (lane_w[l] - lane_content_w[l]) / 2.0 + 1.0
             } else if if_mode && lane_leftmost_is_text(&shape_frags[l], lane_minx[l]) {
                 5.0
             } else {
