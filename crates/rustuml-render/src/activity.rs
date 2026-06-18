@@ -1396,6 +1396,33 @@ fn break_if_is_last_flow(body: &[LayoutNode]) -> bool {
     )
 }
 
+/// Whether the loop body's break-bearing `if` carries a positive (south) label
+/// on its break branch — `then (yes)` rather than a bare `then`. PlantUML's
+/// `FtileIfDown` reserves a south-label band only when the label is present; its
+/// absence collapses the band (see [`WHILE_BREAK_NO_SOUTH_LABEL_DROP`] and
+/// [`WHILE_BREAK_NO_SOUTH_LABEL_INBOUND_EXTRA`]). Returns `None` when the body
+/// has no break-down `if`.
+fn break_if_south_label_present(body: &[LayoutNode]) -> Option<bool> {
+    body.iter().find_map(|n| match n {
+        LayoutNode::If {
+            then_label,
+            then_branch,
+            else_branches,
+            ..
+        } => if_break_down_plan(then_branch, else_branches).map(|plan| {
+            if plan.then_is_break {
+                then_label.is_some()
+            } else {
+                else_branches
+                    .first()
+                    .map(|b| b.label.is_some())
+                    .unwrap_or(false)
+            }
+        }),
+        _ => None,
+    })
+}
+
 /// Width of an if/while/repeat condition diamond's inner (top/bottom) edge.
 /// PlantUML clamps this to a minimum of 24 px so very short conditions still
 /// produce a diamond wider than their text. The text inside stays at its
@@ -5177,8 +5204,17 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
                 // unchanged). Labeled last-flow break loops collapse it (their
                 // wider body absorbs the slack within the ±1px canvas tolerance);
                 // a narrow unlabeled body does not, so restore the tail.
+                // A bare `then` (no south label) on the break branch also drops
+                // the south-band's residual canvas tail (FtileIfDown advertises a
+                // narrower geometry); `edge_activity_while_infinite` needs
+                // `DIAMOND_HALF / 2` less trailing whitespace than the labeled
+                // `edge_activity_while_break`. Whitespace only.
                 let unlabeled_break_tail = if is_label.is_none() && end_label.is_none() {
-                    WHILE_NO_LABEL_BREAK_CANVAS_TAIL
+                    if break_if_south_label_present(body) == Some(false) {
+                        WHILE_NO_LABEL_BREAK_CANVAS_TAIL - DIAMOND_HALF / 2.0
+                    } else {
+                        WHILE_NO_LABEL_BREAK_CANVAS_TAIL
+                    }
                 } else {
                     0.0
                 };
@@ -6649,9 +6685,26 @@ fn node_height(node: &LayoutNode) -> f64 {
             // Break-down `if` (nested in a while): diamond + the no-diamond
             // corridor drop to the if's pointOut (no merge diamond). The
             // compressed drop is the common case; thin-loop uncompression is
-            // re-added by the enclosing while (see while_body_height).
-            if if_break_down_plan(then_branch, else_branches).is_some() {
-                return DIAMOND_HALF * 2.0 + WHILE_BREAK_IF_CORRIDOR_DROP_COMPRESSED;
+            // re-added by the enclosing while (see while_body_height). A bare
+            // `then` (no south label) collapses the FtileIfDown south band,
+            // shortening the corridor by the same band the weld/lead account for
+            // (see `WHILE_BREAK_NO_SOUTH_LABEL_DROP`).
+            if let Some(plan) = if_break_down_plan(then_branch, else_branches) {
+                let south_label_present = if plan.then_is_break {
+                    then_label.is_some()
+                } else {
+                    else_branches
+                        .first()
+                        .map(|b| b.label.is_some())
+                        .unwrap_or(false)
+                };
+                let south_band_collapse = if south_label_present {
+                    0.0
+                } else {
+                    IF_DOWN_LEAD - WHILE_BREAK_NO_SOUTH_LABEL_DROP
+                };
+                return DIAMOND_HALF * 2.0 + WHILE_BREAK_IF_CORRIDOR_DROP_COMPRESSED
+                    - south_band_collapse;
             }
             if let Some(plan) = if_down_plan(then_branch, else_branches) {
                 // diamond + lead + populated branch + ARROW_LEN + merge diamond.
@@ -10297,6 +10350,23 @@ const IF_DOWN_MID_STRETCH: f64 = 15.0;
 const WHILE_BREAK_IF_CORRIDOR_DROP_COMPRESSED: f64 = IF_DOWN_LEAD + ARROW_LEN + IF_BRANCH_UP; // 50.4775
 const WHILE_BREAK_IF_CORRIDOR_UNCOMPRESSED_EXTRA: f64 = 4.477539062500001;
 
+/// Drop from a break-`if`'s diamond bottom to the break weld when the break
+/// branch carries NO label (a bare `then`). PlantUML's `FtileIfDown` reserves a
+/// south-label band between the diamond and the break tile; with no label that
+/// band collapses, so the break tile sits only `ARROW_LEN - IF_BRANCH_UP` below
+/// the diamond instead of the full `IF_DOWN_LEAD`
+/// (`edge_activity_while_infinite`: weld `diamond_bottom + 14`, vs the labeled
+/// `edge_activity_while_break`'s `diamond_bottom + 24.4775`). The corridor
+/// rejoin and the diamond's inbound lead shift by the same band — see
+/// [`WHILE_BREAK_NO_SOUTH_LABEL_INBOUND_EXTRA`].
+const WHILE_BREAK_NO_SOUTH_LABEL_DROP: f64 = ARROW_LEN - IF_BRANCH_UP; // 14.0
+/// Extra inbound lead added above an unlabeled-`while` break-`if`'s diamond when
+/// the break branch ALSO has no south label. The collapsed south band's residual
+/// `IF_DOWN_LEAD - ARROW_LEN` slack is pushed above the diamond on top of the
+/// labeled-branch [`WHILE_BREAK_NO_LABEL_INBOUND_LEAD`]
+/// (`edge_activity_while_infinite`: work→break-if gap `20 + 1.5664`).
+const WHILE_BREAK_NO_SOUTH_LABEL_INBOUND_EXTRA: f64 = IF_DOWN_LEAD - ARROW_LEN - 4.0; // 0.477539…
+
 /// FtileWhile frame-height bridge for break-bearing loops. PlantUML computes
 /// `FtileWhile.calculateDimensionFtile` as
 ///   `frame_h = geoDiamond1.appendBottom(geoWhile).height + 4*hexHalf + supp`
@@ -11272,20 +11342,41 @@ fn emit_if_break_down(
     let diamond_right = cx + cond_inner_w / 2.0 + DIAMOND_HALF;
     let diamond_bottom = y + DIAMOND_HALF * 2.0;
 
-    // The break tile sits on the spine, IF_DOWN_LEAD below the diamond. The
-    // if-block's pointOut (where the east corridor rejoins the spine) sits a
-    // further ARROW_LEN + IF_BRANCH_UP down — plus an uncompressed slack unit
-    // when the loop column is thin (see WHILE_BREAK_IF_CORRIDOR_* constants).
-    let break_y = diamond_bottom + IF_DOWN_LEAD;
+    // The break branch's positive (south) label: drawn below the diamond. When
+    // absent (a bare `then`), PlantUML's `FtileIfDown` collapses its reserved
+    // south-label band, pulling the break tile (and the corridor rejoin) up by
+    // `IF_DOWN_LEAD - WHILE_BREAK_NO_SOUTH_LABEL_DROP`.
+    let south_label_present = if plan.then_is_break {
+        then_label.is_some()
+    } else {
+        else_label.is_some()
+    };
+
+    // The break tile sits on the spine, IF_DOWN_LEAD below the diamond (one
+    // collapsed band less when the break branch is unlabeled). The if-block's
+    // pointOut (where the east corridor rejoins the spine) sits a further
+    // ARROW_LEN + IF_BRANCH_UP down — plus an uncompressed slack unit when the
+    // loop column is thin (see WHILE_BREAK_IF_CORRIDOR_* constants).
+    let break_y = if south_label_present {
+        diamond_bottom + IF_DOWN_LEAD
+    } else {
+        diamond_bottom + WHILE_BREAK_NO_SOUTH_LABEL_DROP
+    };
     // The empty (continue) branch's east corridor rejoins the spine at the if's
-    // pointOut. For a `while`, that drop is the WHILE_BREAK_IF_CORRIDOR_* slot.
-    // For a `repeat` (the break-`if` is the last body node, rejoining straight
-    // into the condition), the drop is one IF_DOWN_LEAD + ARROW_LEN, less one px
-    // — the whole-diagram ON_Y pass cannot squeeze the corridor column further.
-    // The DOWN arrowhead still anchors on the *uncompressed* corridor midpoint
+    // pointOut. For a `while`, that drop is the WHILE_BREAK_IF_CORRIDOR_* slot
+    // (one collapsed south band less when the break branch is unlabeled). For a
+    // `repeat` (the break-`if` is the last body node, rejoining straight into the
+    // condition), the drop is one IF_DOWN_LEAD + ARROW_LEN, less one px — the
+    // whole-diagram ON_Y pass cannot squeeze the corridor column further. The
+    // DOWN arrowhead still anchors on the *uncompressed* corridor midpoint
     // (PlantUML draws it before the slot pass shortens the run).
-    let return_y_uncompressed = diamond_bottom
-        + WHILE_BREAK_IF_CORRIDOR_DROP_COMPRESSED
+    let south_band_collapse = if south_label_present {
+        0.0
+    } else {
+        IF_DOWN_LEAD - WHILE_BREAK_NO_SOUTH_LABEL_DROP
+    };
+    let return_y_uncompressed = diamond_bottom + WHILE_BREAK_IF_CORRIDOR_DROP_COMPRESSED
+        - south_band_collapse
         + if brk.compresses {
             0.0
         } else {
@@ -12620,6 +12711,10 @@ fn emit_while(
         // corridor at the *compressed* drop and pushes a small lead above the
         // diamond instead (see `WHILE_BREAK_NO_LABEL_INBOUND_LEAD`).
         let no_label = is_label.is_none() && end_label.is_none();
+        // When the break branch itself carries no south label, the collapsed
+        // FtileIfDown south band pushes its residual above the diamond on top of
+        // the bare-while lead (see `WHILE_BREAK_NO_SOUTH_LABEL_INBOUND_EXTRA`).
+        let no_south_label = break_if_south_label_present(body) == Some(false);
         svg.while_break = Some(WhileBreakContext {
             corridor_x: pre_geo_left_x - DIAMOND_HALF,
             compresses: while_break_corridor_compresses(body) || no_label,
@@ -12627,6 +12722,11 @@ fn emit_while(
             repeat_mode: false,
             inbound_lead: if no_label {
                 WHILE_BREAK_NO_LABEL_INBOUND_LEAD
+                    + if no_south_label {
+                        WHILE_BREAK_NO_SOUTH_LABEL_INBOUND_EXTRA
+                    } else {
+                        0.0
+                    }
             } else {
                 0.0
             },
@@ -12860,6 +12960,17 @@ fn emit_while(
     let break_frame_h = break_in_body.then(|| {
         24.0 + sequence_height(body)
             + WHILE_BREAK_BODY_GEO_RESIDUAL
+            // A bare `then` break branch shortens the drawn corridor (and thus
+            // `sequence_height`), but PlantUML's FtileWhile frame height is
+            // unchanged — the WHILE_BREAK_BODY_GEO_RESIDUAL model already reserves
+            // the full (labeled) corridor. Add the collapsed south band back so
+            // the frame-derived exit/loop-back arrowheads stay at the labeled
+            // midpoints (`edge_activity_while_infinite`).
+            + if break_if_south_label_present(body) == Some(false) {
+                IF_DOWN_LEAD - WHILE_BREAK_NO_SOUTH_LABEL_DROP
+            } else {
+                0.0
+            }
             // `getSuppHeightForLabel`: the `is (yes)` loop-back label band raises
             // the frame; a bare `while (cond)` with no label adds nothing.
             + if is_label.is_some() {
