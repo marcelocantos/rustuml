@@ -4284,6 +4284,16 @@ const IF_LONG_X_SEP: f64 = 20.0;
 const IF_LONG_BELOW: f64 = 100.0;
 /// `alignDiamonds` bottom margin (`incVertically(_, 20)`).
 const IF_LONG_ALIGN_BOTTOM: f64 = 20.0;
+/// Amount by which the ABSTRACT couple dimension of a single-action `repeat`-led
+/// branch (used only for tile2 centring) exceeds the EMITTED `branch_h`. The
+/// abstract FtileRepeat keeps its full `8*hexHalf` tail (uncompressed) while the
+/// emitted form keeps only `IF_LONG_BRANCH_REPEAT_EXTRA` (top) + the
+/// `text_height(11)` `is`-label band (bottom). The residual is the entry/test
+/// diamond height minus the kept loop-back band and the corridor reclaim:
+/// `2*hexHalf − text_height(11) − (descent(11) − 1.5)` = 24 − 12.955078125 −
+/// 0.8203125 = 10.224609375.
+const IF_LONG_REPEAT_CENTERING_EXTRA: f64 =
+    DIAMOND_HALF * 2.0 - 12.955078125 - IF_LONG_BRANCH_REPEAT_CORRIDOR_RECLAIM;
 /// Extra inter-tile gap retained inside an `if/elseif*/else` branch column.
 /// PlantUML's `FtileFactoryDelegatorAssembly` stacks consecutive branch tiles
 /// with a 35 px `addBottom` reserve; the whole-diagram `CompressionXorY` (ON_Y)
@@ -4382,8 +4392,19 @@ struct IfLongCol {
     /// reservation band collapses (PlantUML's compression reads real shapes).
     branch_draw_l: f64,
     branch_draw_r: f64,
+    /// Branch REPORTED left extent (un-clamped `sequence_extents().0`). For a
+    /// while/repeat branch this exceeds `branch_draw_l` by the tile's reserved
+    /// (un-drawn) placement margin. Occupancy/compression use the DRAWN extent,
+    /// but the diagram's left-margin placement (`left_ext`) must honour the
+    /// reported reservation so the leftmost drawn shape lands at MARGIN_LEAD +
+    /// that margin (PlantUML positions on `calculateDimension`, not drawn bounds).
+    branch_report_l: f64,
     /// Branch box height.
     branch_h: f64,
+    /// True when this branch is led by a single-action `repeat` that keeps its
+    /// uncompressed FtileRepeat tail (drives tile2 centring; see
+    /// [`IF_LONG_REPEAT_CENTERING_EXTRA`]).
+    leads_repeat: bool,
     /// Couple width = `FtileGeometryMerger(diamondTile, branch)`'s width, where
     /// `diamondTile` is `FtileDiamondInside2.calculateDimensionFtile` (the alone
     /// diamond possibly widened to the right by a long north label). This is what
@@ -4509,14 +4530,24 @@ fn if_long_layout(
         // action/leaf branch these equal branch_w/2; for a branch whose body
         // reserves un-drawn placement margin (nested if/while/…) they are smaller,
         // so the occupancy / left_ext below collapses that empty reservation.
-        let (branch_draw_l, branch_draw_r) = {
+        let (branch_report_l, branch_draw_l, branch_draw_r) = {
             let (dl, dr) = sequence_extents(body);
-            (dl.min(branch_w / 2.0), dr.min(branch_w / 2.0))
+            (dl, dl.min(branch_w / 2.0), dr.min(branch_w / 2.0))
         };
         // Branch column height carries the partially-uncompressed inter-tile
         // slack (see IF_LONG_BRANCH_GAP_EXTRA): `sequence_geometry` assembles at
         // the fully-compressed 20 px gap, so re-derive the height with the extra.
-        let branch_h = sequence_height_ex(body, branch_gap_extra);
+        // A branch led by a `repeat` keeps both uncompressed FtileRepeat reserves
+        // (top above the body + bottom `is`-label band below it): the emit places
+        // the body and condition diamond that far lower, so the merge reservation
+        // must include the same total growth.
+        let repeat_total = leading_if_long_branch_repeat_total(body);
+        // A while-led branch keeps its uncompressed loop-back junction (`+12`, not
+        // the compressed `+10`): `emit_while` adds the same 2 px via
+        // `in_if_long_branch`, so the merge reservation must match.
+        let while_extra = leading_if_long_branch_while_extra(body);
+        let branch_h = sequence_height_ex(body, branch_gap_extra) + repeat_total + while_extra;
+        let leads_repeat = repeat_total != 0.0;
         let cond_text_w = text_render::measure(cond, SMALL_FONT, false);
         let cond_text_h = pm::text_height(SMALL_FONT);
         let north_w = north
@@ -4552,7 +4583,9 @@ fn if_long_layout(
             diamond_w_tile: diamond_tile_w,
             branch_draw_l,
             branch_draw_r,
+            branch_report_l,
             branch_h,
+            leads_repeat,
             couple_w,
             couple_left,
             cx: 0.0,
@@ -4737,6 +4770,17 @@ fn if_long_layout(
         .map(|c| c.cx - c.diamond_w / 2.0)
         .fold(f64::INFINITY, f64::min);
     left_ext = left_ext.max(-leftmost_diamond_vertex + IF_LONG_LEFT_MARGIN);
+    // A branch tile (while/repeat) reserves un-drawn placement margin past its
+    // leftmost drawn shape. Occupancy/compression collapse that empty margin, but
+    // PlantUML positions the whole if-block by its `calculateDimension` left — so
+    // the diagram's left extent must honour the REPORTED branch left, landing the
+    // drawn corridor at MARGIN_LEAD + the margin. (Only matters when the reported
+    // reservation exceeds the drawn occupancy, i.e. for loop branches.)
+    let leftmost_branch_report = cols
+        .iter()
+        .map(|c| c.cx - c.branch_report_l)
+        .fold(f64::INFINITY, f64::min);
+    left_ext = left_ext.max(-leftmost_branch_report);
 
     // Leading-fork flow-axis offset. When the FIRST branch (couple[0]) is a fork,
     // PlantUML builds it via the if-branch fork tile, which grows the bar to the
@@ -4818,10 +4862,24 @@ fn if_long_vmetrics(l: &IfLongLayout, y: f64) -> IfLongV {
     // `diamond_aligned_h`, so the reclaim only needs subtracting here, in the
     // height-for-centring.
     let corridor_overlap = (pm::text_height(SMALL_FONT) - l.north_h).max(0.0);
+    // The merge line (`merge_y`/`deepest`) keys off each branch's EMITTED height
+    // (`branch_h`, ON_Y-compressed with the kept reserves). The tile2 (bare-else)
+    // centring instead uses the ABSTRACT couple dimension PlantUML's
+    // `calculateDimensionInternal` reports, in which a leading `repeat` keeps its
+    // full uncompressed `8*hexHalf` tail. For a single-action repeat that abstract
+    // couple is `IF_LONG_REPEAT_CENTERING_EXTRA` taller than `branch_h`; add that
+    // (centring only) so the centred else aligns.
     let couples_h = l
         .cols
         .iter()
-        .map(|c| diamond_aligned_h + c.branch_h - corridor_overlap)
+        .map(|c| {
+            diamond_aligned_h + c.branch_h - corridor_overlap
+                + if c.leads_repeat {
+                    IF_LONG_REPEAT_CENTERING_EXTRA
+                } else {
+                    0.0
+                }
+        })
         .fold(0.0_f64, f64::max);
     let diamonds_height = diamond_aligned_h;
     let tile2_merged_h = l.tile2_h + diamonds_height / 2.0;
@@ -7294,6 +7352,25 @@ struct SvgEmitter {
     /// subtree's total expansion (its own `nested_cond_extra` plus the body's)
     /// to the parent.
     repeat_nested_expansion: f64,
+    /// One-shot extra lowering for the body of a `repeat` that leads an if-long
+    /// (`if/elseif*/else`) branch. The if-long row top-aligns its couples at a
+    /// fixed y, so the FtileRepeat top reserve above the body never recompresses;
+    /// `emit_if_long` sets this before emitting such a branch and `emit_repeat`
+    /// consumes it (adding to `body_top_extra`) at entry.
+    if_long_repeat_body_extra: f64,
+    /// True while emitting an if-long branch body. The if-long row top-aligns its
+    /// couples (`getTranslateCouple1` → fixed y), so the whole-diagram ON_Y
+    /// compression never reaches the branch tiles: a `while` keeps its full
+    /// uncompressed loop-back tail (junction `body_bottom + 12`, not the
+    /// compressed `+ 10`). `emit_if_long` sets this around each branch emit.
+    in_if_long_branch: bool,
+    /// One-shot merge-line y handed to a `while` that leads an if-long branch:
+    /// PlantUML fuses the loop's exit corridor with the branch→merge connector
+    /// (the wrap-back continues straight down the spine to the merge line, drawn
+    /// in document order right after the wrap-back — not as a separate later
+    /// ConnectionVerticalOut). `emit_while` consumes it, draws the spine-down +
+    /// merge arrowhead, and the if-long skips its own vout for that branch.
+    while_if_long_merge_y: Option<f64>,
     /// Extra added to the current switch's merge gap because it is a direct flow
     /// node of a `while` body. Set per-switch by `emit_sequence_ex` (while-body
     /// mode) and consumed once by `emit_switch_with_layout`.
@@ -7475,6 +7552,9 @@ impl SvgEmitter {
             pending_while_body: false,
             repeat_body_depth: 0,
             repeat_nested_expansion: 0.0,
+            if_long_repeat_body_extra: 0.0,
+            in_if_long_branch: false,
+            while_if_long_merge_y: None,
             while_switch_merge_extra: 0.0,
             while_body_switch: false,
             fork_body_switch: false,
@@ -9994,7 +10074,25 @@ fn emit_if_long(
         } else {
             elseif_bodies[i - 1]
         };
+        // A branch led by a `repeat` keeps its uncompressed FtileRepeat top
+        // reserve in the if-long row (couples are top-aligned at y=25, so the
+        // tail never recompresses). Signal the body's leading repeat to lower its
+        // body by that reserve; `emit_repeat` consumes the one-shot.
+        svg.if_long_repeat_body_extra =
+            first_flow_node(body).map_or(0.0, leading_if_long_branch_repeat_extra);
+        let saved_in_if_long = svg.in_if_long_branch;
+        svg.in_if_long_branch = true;
+        // A branch that is a sole no-special `while` fuses its exit corridor with
+        // the branch→merge connector: hand the merge-line y to `emit_while` so it
+        // draws the spine-down in place (document order), and skip the separate
+        // vout below.
+        if branch_is_redirectable_while(body) {
+            svg.while_if_long_merge_y = Some(v.merge_y);
+        }
         emit_sequence(svg, body, dcx, v.couple_branch_top);
+        svg.while_if_long_merge_y = None;
+        svg.in_if_long_branch = saved_in_if_long;
+        svg.if_long_repeat_body_extra = 0.0;
     }
 
     // tile2 (the bare else) to the right.
@@ -10011,8 +10109,10 @@ fn emit_if_long(
 
     // --- Connectors ------------------------------------------------------
     // Per-couple ConnectionVerticalIn (diamond→branch) + ConnectionVerticalOut
-    // (branch→merge line).
-    for col in &l.cols {
+    // (branch→merge line). A while-led branch already drew its vout in place
+    // (fused with the loop's exit corridor — see `while_if_long_merge_y`), so
+    // skip it here to keep document order matching PlantUML.
+    for (i, col) in l.cols.iter().enumerate() {
         let dcx = cx + col.cx;
         // Vertical in: diamond bottom → branch top.
         svg.connector_line(
@@ -10034,7 +10134,16 @@ fn emit_if_long(
             &arrow_color,
             "1",
         );
-        // Vertical out: branch bottom → merge line.
+        // Vertical out: branch bottom → merge line. Skipped for a while-led
+        // branch whose exit corridor already reached the merge line.
+        let body: &[LayoutNode] = if i == 0 {
+            then_branch
+        } else {
+            elseif_bodies[i - 1]
+        };
+        if branch_is_redirectable_while(body) {
+            continue;
+        }
         let branch_bottom = v.couple_branch_top + col.branch_h;
         svg.connector_line(&arrow_color, dcx, dcx, branch_bottom, v.merge_y, false);
         svg.polygon_connector(
@@ -10688,6 +10797,81 @@ fn repeat_not_label_outbound_gap(node: &LayoutNode) -> Option<f64> {
 
 fn first_flow_node(nodes: &[LayoutNode]) -> Option<&LayoutNode> {
     nodes.iter().find(|node| node_is_flow(node))
+}
+
+/// The uncompressed FtileRepeat top reserve a `repeat` keeps when it leads an
+/// if-long (`if/elseif*/else`) branch. PlantUML's `FtileIfLongHorizontal`
+/// top-aligns every couple at a fixed y (`getTranslateCouple1` → y=25), so the
+/// repeat's `8*hexHalf` tail above the body (FtileRepeat `getTranslateForRepeat`
+/// places the body at `dimDiamond1.height + space/2`) never recompresses against
+/// a following tile. The whole-diagram ON_Y pass only reclaims the diamond→
+/// branch corridor band (`descent(11) − 1.5`, the same term as `north_h`'s
+/// nested-construct compression in `if_long_layout`), so the body sits
+/// `2*hexHalf − (descent − 1.5)` lower than the fully-compressed
+/// (`top_bottom + ARROW_LEN`) standalone form.
+// = 24 − (descent(11) − 1.5) = 24 − (2.3203125 − 1.5) = 23.1796875.
+const IF_LONG_BRANCH_REPEAT_CORRIDOR_RECLAIM: f64 = 2.3203125 - 1.5; // descent(11) − 1.5
+const IF_LONG_BRANCH_REPEAT_EXTRA: f64 =
+    DIAMOND_HALF * 2.0 - IF_LONG_BRANCH_REPEAT_CORRIDOR_RECLAIM;
+
+/// Extra lowering for the body of a `repeat` that leads an if-long branch
+/// (see [`IF_LONG_BRANCH_REPEAT_EXTRA`]). Applies to the plain and labelled
+/// (`repeatwhile … is …`) forms alike; a `repeat :label;` start tile or a
+/// `backward` tile routes its body through different geometry, so those are
+/// excluded.
+fn leading_if_long_branch_repeat_extra(node: &LayoutNode) -> f64 {
+    let LayoutNode::Repeat {
+        backward,
+        body,
+        has_start_label,
+        ..
+    } = node
+    else {
+        return 0.0;
+    };
+    if backward.is_some() || *has_start_label {
+        return 0.0;
+    }
+    // Only the simple-body form is calibrated; composite bodies carry their own
+    // vertical reservation.
+    if body.iter().filter(|n| node_is_flow(n)).count() != 1
+        || !matches!(first_flow_node(body), Some(LayoutNode::Action { .. }))
+    {
+        return 0.0;
+    }
+    IF_LONG_BRANCH_REPEAT_EXTRA
+}
+
+/// Total uncompressed FtileRepeat reserve growth (top + bottom) for a `repeat`
+/// that leads an if-long branch — the amount its tile is taller than the
+/// fully-compressed standalone form. Used to size the merge reservation
+/// (`if_long_layout`'s `branch_h`); the emit applies the two halves separately
+/// (see [`IF_LONG_BRANCH_REPEAT_EXTRA`] and the `is`-label band in
+/// `emit_repeat`).
+fn leading_if_long_branch_repeat_total(body: &[LayoutNode]) -> f64 {
+    let Some(node) = first_flow_node(body) else {
+        return 0.0;
+    };
+    let top = leading_if_long_branch_repeat_extra(node);
+    if top == 0.0 {
+        0.0
+    } else {
+        top + pm::text_height(SMALL_FONT)
+    }
+}
+
+/// Extra height a `while`-led if-long branch keeps over `sequence_height`: the
+/// loop-back junction stays at its uncompressed `+12` (the if-long row blocks the
+/// whole-diagram ON_Y pass) rather than the compressed `+10` that
+/// `sequence_height`'s `LayoutNode::While` arm assumes. `emit_while` matches this
+/// via `in_if_long_branch`. Only the no-special (wrap-back) loop is affected.
+fn leading_if_long_branch_while_extra(body: &[LayoutNode]) -> f64 {
+    match first_flow_node(body) {
+        Some(LayoutNode::While {
+            special_out, body, ..
+        }) if special_out.is_none() && !body.is_empty() => DIAMOND_HALF - 10.0,
+        _ => 0.0,
+    }
 }
 
 fn leading_if_branch_repeat_extra(node: &LayoutNode) -> f64 {
@@ -12339,6 +12523,14 @@ fn emit_while(
     } else {
         None
     };
+    // Take the if-long-branch flag now: this while leads an if-long branch whose
+    // couples are top-aligned, so the whole-diagram ON_Y pass never compresses
+    // its loop-back tail. A nested body must NOT inherit it (its own frame
+    // re-establishes compressibility), so consume it here.
+    let in_if_long_branch = std::mem::take(&mut svg.in_if_long_branch);
+    // Take the fused-merge target now too, so a nested while in the body cannot
+    // consume it (only this top-of-branch while fuses with the merge line).
+    let if_long_merge_y = std::mem::take(&mut svg.while_if_long_merge_y);
     let colored_partition_while = svg.colored_partition_while_depth > 0;
     let ordinary_slot_compressed =
         while_ordinary_slot_compresses(body, is_label, end_label, special_out);
@@ -12473,7 +12665,9 @@ fn emit_while(
     // un-compressed value (body_bottom + 12) — PlantUML draws the
     // arrowhead at the midpoint of the segment BEFORE compression
     // transforms the line endpoints.
-    let junction_y = if body.is_empty() {
+    let junction_y = if body.is_empty() || in_if_long_branch {
+        // Empty body, or an if-long branch where ON_Y never reaches the tail:
+        // the UEmpty(halfHex) placeholder keeps its full 12 px.
         body_bottom + DIAMOND_HALF
     } else {
         body_bottom + 10.0
@@ -12952,6 +13146,13 @@ fn emit_while(
     if exit_vertical_after_arrow && break_frame_h.is_none() {
         arrow_y -= PARTITION_COLORED_WHILE_EXIT_ARROW_PULL_UP;
     }
+    // The exit emphasis arrowhead anchors on the PRE-compression midpoint. In an
+    // if-long branch the drawn `wrap_y` kept the uncompressed `+12` junction
+    // (`in_if_long_branch`), raising the geometric midpoint by half that 2 px;
+    // pull the arrowhead back up so it lands where the compressed midpoint would.
+    if in_if_long_branch && special_out.is_none() && break_frame_h.is_none() {
+        arrow_y -= (DIAMOND_HALF - 10.0) / 2.0;
+    }
     svg.polygon_connector(
         &arrow_color,
         &[
@@ -12974,6 +13175,26 @@ fn emit_while(
         emit_node(svg, special, exit_x, wrap_y)
     } else {
         svg.line_styled(&arrow_color, "1", exit_x, cx, wrap_y, wrap_y, false);
+        // If this while leads an if-long branch, its exit corridor fuses with the
+        // branch→merge connector: continue straight down the spine to the merge
+        // line (in document order, right after the wrap-back) and draw the merge
+        // arrowhead, instead of leaving a separate ConnectionVerticalOut. Consume
+        // the one-shot so a nested loop is unaffected.
+        if let Some(merge_y) = if_long_merge_y {
+            svg.line_styled(&arrow_color, "1", cx, cx, wrap_y, merge_y, false);
+            svg.polygon_connector(
+                &arrow_color,
+                &[
+                    (cx - 4.0, merge_y - 10.0),
+                    (cx, merge_y),
+                    (cx + 4.0, merge_y - 10.0),
+                    (cx, merge_y - 6.0),
+                ],
+                &arrow_color,
+                "1",
+            );
+            return merge_y;
+        }
         wrap_y
     }
 }
@@ -12996,7 +13217,32 @@ fn emit_repeat(
 ) -> f64 {
     let backward = options.backward;
     let not_label = options.not_label;
-    let body_top_extra = options.body_top_extra;
+    // A repeat leading an if-long branch keeps BOTH uncompressed FtileRepeat
+    // reserves: the top reserve above the body (`if_long_extra`, lowering the
+    // body) and the bottom reserve below the body — the `is (...)` loop-back
+    // label band (`text_height(11)`) — pushing the condition diamond further
+    // down. The if-long emit pushes the body reserve here as a one-shot (consume
+    // so nested loops are unaffected). `has_start_label` repeats route the body
+    // via the entry tile, not these reserves, so they do not apply there.
+    let if_long_extra = std::mem::take(&mut svg.if_long_repeat_body_extra);
+    let if_long_active = if_long_extra != 0.0 && !options.has_start_label;
+    let if_long_cond_extra = if if_long_active {
+        pm::text_height(SMALL_FONT)
+    } else {
+        0.0
+    };
+    let body_top_extra = options.body_top_extra + if if_long_active { if_long_extra } else { 0.0 };
+    // The loop-back arrowhead anchors on the ABSTRACT (uncompressed) frame centre,
+    // not the drawn body position. In the if-long branch that frame is
+    // `IF_LONG_REPEAT_CENTERING_EXTRA` taller than the emitted `branch_h` (the
+    // same term that drives tile2 centring), so the arrowhead's `body_top_extra`
+    // term uses THAT, not the (larger) body-lowering reserve.
+    let arrow_body_top_extra = options.body_top_extra
+        + if if_long_active {
+            IF_LONG_REPEAT_CENTERING_EXTRA
+        } else {
+            0.0
+        };
     let has_start_label = options.has_start_label;
     // A repeat nested inside another repeat's body keeps one extra `ARROW_LEN`
     // below its body before the condition diamond: the enclosing loop frame
@@ -13102,7 +13348,8 @@ fn emit_repeat(
     let cond_y = body_bottom
         + ARROW_LEN
         + repeat_backward_extra_cond_gap(body, backward.is_some())
-        + nested_cond_extra;
+        + nested_cond_extra
+        + if_long_cond_extra;
 
     // Top entry diamond (small rhombus at y). `repeat :label;` replaces this
     // diamond with the labelled action as the loop entry tile.
@@ -13384,14 +13631,14 @@ fn emit_repeat(
         // corridor's compressed band), not on a middle connector, so it must NOT
         // be subtracted from the midpoint.
         let mid_y = if break_weld_y.is_some() {
-            (top_cy + cond_diamond_cy + body_top_extra) / 2.0
+            (top_cy + cond_diamond_cy + arrow_body_top_extra) / 2.0
                 - nested_bias
                 - REPEAT_BREAK_LOOPBACK_ARROW_BIAS
         } else {
             // Leading-action + balanced-if bodies anchor the arrowhead on the
             // pre-compression frame centre, `space/2` above the naive midpoint.
             let loopback_arrow_bias = repeat_loopback_arrow_bias(body, backward.is_some());
-            (top_cy + cond_diamond_cy - body_stretch + body_top_extra) / 2.0
+            (top_cy + cond_diamond_cy - body_stretch + arrow_body_top_extra) / 2.0
                 - nested_bias
                 - loopback_arrow_bias
         };
