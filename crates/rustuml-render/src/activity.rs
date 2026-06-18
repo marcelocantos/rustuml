@@ -3546,6 +3546,66 @@ fn while_ordinary_slot_compresses(
     ) != 0.0
 }
 
+/// Slot-compression decision for a `while` that is a direct flow tile of a
+/// `fork`/`split` branch. Inside a branch the diagram-wide ON_Y pass behaves
+/// differently from the top level: the branch's surrounding assembly snakes are
+/// `ignoreForCompression` (ParallelBuilderFork ConnectionIn/Out), so a loop with
+/// a plain action body KEEPS its uncompressed `diamond→body` slot (no adjacent
+/// compressible flow to absorb it — `act_fork_with_while`). A structured,
+/// if-bearing body still presents a reclaimable slot to the ON_Y pass and so
+/// compresses (`act_complex_fork*_while_if`). This is the inverse of the
+/// top-level [`while_ordinary_slot_compress_allowed`] body-shape gate.
+fn while_fork_branch_slot_compresses(
+    body: &[LayoutNode],
+    is_label: &Option<String>,
+    special_out: Option<&LayoutNode>,
+) -> bool {
+    // Labelled, non-empty, no absorbed terminator (a special_out keeps the
+    // top-level uncompressed behaviour — its exit corridor blocks the slot).
+    if is_label.is_none() || body.is_empty() || special_out.is_some() {
+        return false;
+    }
+    // Compress iff the body carries a non-break `if` (a structured diamond row).
+    body.iter().any(|node| {
+        matches!(
+            node,
+            LayoutNode::If { then_branch, else_branches, .. }
+                if if_break_down_plan(then_branch, else_branches).is_none()
+        )
+    })
+}
+
+/// Height adjustment a `while` tile gains (positive) or loses (negative) when it
+/// is a direct flow tile of a fork/split branch, versus the top-level
+/// `node_height`. The branch flips the slot-compression decision
+/// ([`while_fork_branch_slot_compresses`] vs [`while_ordinary_slot_compresses`]),
+/// shifting the `diamond→body` offset by [`WHILE_BODY_SLOT_COMPRESS`]. Keeps the
+/// fork-branch height in sync with what `emit_while` draws. Zero for non-`while`
+/// nodes and for loops whose two rules agree.
+fn while_fork_branch_height_extra(node: &LayoutNode) -> f64 {
+    let LayoutNode::While {
+        body,
+        is_label,
+        end_label,
+        special_out,
+        ..
+    } = node
+    else {
+        return 0.0;
+    };
+    let top = while_ordinary_slot_compresses(body, is_label, end_label, special_out.as_deref());
+    let fork = while_fork_branch_slot_compresses(body, is_label, special_out.as_deref());
+    if top == fork {
+        0.0
+    } else if top {
+        // top compresses, fork does not → fork is taller.
+        WHILE_BODY_SLOT_COMPRESS
+    } else {
+        // fork compresses, top does not → fork is shorter.
+        -WHILE_BODY_SLOT_COMPRESS
+    }
+}
+
 /// Whether a `while` body's ON_Y compression removes the residual slack from a
 /// break-bearing `if`'s no-diamond corridor (see
 /// [`WHILE_BREAK_IF_CORRIDOR_DROP_COMPRESSED`]). Empirically the slack survives
@@ -4173,7 +4233,7 @@ fn fork_geometry_with_layout(
 ) -> ftile::FtileGeometry {
     let max_h: f64 = branches
         .iter()
-        .map(|b| sequence_height(b))
+        .map(|b| sequence_height_fork_branch(b, 0.0))
         .fold(0.0f64, f64::max);
     let height = if is_split {
         ARROW_LEN + max_h + ARROW_LEN
@@ -5860,6 +5920,16 @@ fn sequence_height(nodes: &[LayoutNode]) -> f64 {
     sequence_height_ex(nodes, 0.0)
 }
 
+/// Height of a fork/split branch's tile sequence. Same as [`sequence_height_ex`]
+/// plus the per-tile [`while_fork_branch_height_extra`] for any direct `while`
+/// tile whose slot-compression decision flips inside a branch (see
+/// [`while_fork_branch_slot_compresses`]). Keeps the predicted branch height in
+/// step with what `emit_while` draws inside a fork branch.
+fn sequence_height_fork_branch(nodes: &[LayoutNode], gap_extra: f64) -> f64 {
+    sequence_height_ex(nodes, gap_extra)
+        + nodes.iter().map(while_fork_branch_height_extra).sum::<f64>()
+}
+
 /// Like [`sequence_height`], but adds `gap_extra` to each plain inter-tile
 /// inbound gap — used for fork branches, whose assembly snakes are not
 /// compressed (see [`FORK_BRANCH_INTER_GAP_EXTRA`]). Mirrors `emit_sequence_ex`'s
@@ -7312,6 +7382,15 @@ struct SvgEmitter {
     /// `fork_branch_switch_is_nude`. Set per-branch by `emit_fork_with_layout`,
     /// consumed once by `emit_switch`.
     fork_body_switch: bool,
+    /// Nesting depth of `fork`/`split` branch emission currently in progress.
+    /// PlantUML wraps each branch's tiles so the whole-diagram ON_Y pass reclaims
+    /// the `while` inbound slot differently than at top level: an action-bodied
+    /// loop keeps its uncompressed `diamond→body` slack, while a structured
+    /// (if-bearing) body still loses it. `emit_while` consults this (via
+    /// [`while_fork_branch_slot_compresses`]) to flip its slot-compression
+    /// decision inside a fork branch. Incremented around each branch's
+    /// `emit_sequence`, decremented after.
+    fork_branch_depth: usize,
     /// True while emitting a `while` body whose loop-back corridor ON_Y-compresses
     /// (>=3 body flow tiles; see `while_break_corridor_compresses`). A multi-case
     /// switch in such a body routes its centre-spine drop's collinear split at the
@@ -7478,6 +7557,7 @@ impl SvgEmitter {
             while_switch_merge_extra: 0.0,
             while_body_switch: false,
             fork_body_switch: false,
+            fork_branch_depth: 0,
             while_corridor_compresses: false,
             while_switch_corridor_compresses: false,
             while_switch_merge_compressed: false,
@@ -12033,7 +12113,7 @@ fn emit_fork_with_layout(
             if b.is_empty() {
                 0.0
             } else {
-                sequence_height(b)
+                sequence_height_fork_branch(b, 0.0)
             }
         })
         .collect();
@@ -12076,7 +12156,7 @@ fn emit_fork_with_layout(
                         .filter(|_| b.len() == 1)
                         .map(switch_fork_centering_extra)
                         .unwrap_or(0.0);
-                    sequence_height_ex(b, gap_extra) + extra
+                    sequence_height_fork_branch(b, gap_extra) + extra
                 }
             })
             .collect();
@@ -12116,7 +12196,9 @@ fn emit_fork_with_layout(
         // `emit_switch` selects the nude layout. One-shot, consumed by
         // `emit_switch`.
         svg.fork_body_switch = fork_branch_nude_switch(branch).is_some();
+        svg.fork_branch_depth += 1;
         let bottom = emit_sequence(svg, branch, bcx, branch_y);
+        svg.fork_branch_depth -= 1;
         svg.fork_body_switch = false;
         branch_bottoms.push(bottom);
     }
@@ -12300,8 +12382,18 @@ fn emit_while(
         None
     };
     let colored_partition_while = svg.colored_partition_while_depth > 0;
-    let ordinary_slot_compressed =
-        while_ordinary_slot_compresses(body, is_label, end_label, special_out);
+    // A `while` that is a direct flow tile of a fork/split branch flips its slot-
+    // compression decision (see `while_fork_branch_slot_compresses`). Capture the
+    // branch context here and clear it for body emission so a nested while/fork
+    // in the body does not inherit it.
+    let in_fork_branch = svg.fork_branch_depth > 0;
+    let saved_fork_branch_depth = svg.fork_branch_depth;
+    svg.fork_branch_depth = 0;
+    let ordinary_slot_compressed = if in_fork_branch {
+        while_fork_branch_slot_compresses(body, is_label, special_out)
+    } else {
+        while_ordinary_slot_compresses(body, is_label, end_label, special_out)
+    };
     let compress_while_slot = colored_partition_while || ordinary_slot_compressed;
     // A break-bearing loop keeps the normal long-exit arrowhead placement: the
     // break shares the exit corridor, so the loop exits/wraps like a no-special
@@ -12416,6 +12508,9 @@ fn emit_while(
     svg.pending_while_body = true;
     svg.while_corridor_compresses = while_break_corridor_compresses(body);
     let body_bottom = emit_sequence_ex(svg, body, cx, body_top, body_mid_stretch, None, false);
+    // Restore the fork-branch context cleared at entry, so a following direct
+    // branch tile (this while was not the branch's last) still flips correctly.
+    svg.fork_branch_depth = saved_fork_branch_depth;
     svg.while_if_branch_stretch = prev_if_branch_stretch;
     let body_switch_loopback_tip = svg.while_switch_loopback_tip.take();
     svg.while_switch_loopback_tip = prev_loopback_tip;
