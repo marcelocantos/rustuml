@@ -1160,6 +1160,23 @@ fn if_node_has_single_survivor(node: &LayoutNode) -> bool {
     )
 }
 
+/// True for a binary `if` that `if_down_plan` renders with a *terminating*
+/// populated branch (`:foo; stop endif`). Like the single-survivor if, PlantUML's
+/// `FtileIfDown.ConnectionOut` draws the spine arrow leaving the if-block as part
+/// of the if's own connector list (right after the no-diamond corridor), so the
+/// enclosing sequence must NOT also draw a deferred inbound to the following node.
+fn if_node_is_terminating_down(node: &LayoutNode) -> bool {
+    matches!(
+        node,
+        LayoutNode::If {
+            then_branch,
+            else_branches,
+            ..
+        } if if_down_plan(then_branch, else_branches)
+            .is_some_and(|p| p.populated_terminates)
+    )
+}
+
 /// True for nodes that occupy vertical space and receive inbound connectors —
 /// i.e. everything `emit_sequence` treats as a flow step. Mirrors the skip set
 /// at the top of `emit_sequence_ex`.
@@ -1223,6 +1240,12 @@ struct IfDownPlan<'a> {
     /// True when the *then* branch is the populated one (controls which side
     /// the diamond labels sit on).
     then_populated: bool,
+    /// True when the populated branch ends in a control-flow terminator (stop,
+    /// end, …). PlantUML's `FtileIfDown` then has `hasPointOut1 == false` and
+    /// `hasTwoBranches() == false`, so `getShape2` returns an `FtileEmpty`: no
+    /// merge diamond, the empty branch's east corridor IS the if's pointOut
+    /// (`ConnectionElseNoDiamond`). The spine branch terminates in place.
+    populated_terminates: bool,
 }
 
 fn if_down_plan<'a>(
@@ -1242,14 +1265,23 @@ fn if_down_plan<'a>(
         return None;
     }
     let populated = if then_empty { else_body } else { then_branch };
-    // The populated branch must not terminate — a terminating populated branch
-    // is the single-stop case PlantUML handles with a different connector set.
-    if branch_terminates(populated) {
+    // A populated branch that terminates with a bare circle terminal (a lone
+    // `stop`/`end`) is the FtileIfDown `optionalStop` case — the terminal sits
+    // EAST of the diamond, handled by `if_single_circle_terminal_plan` (which
+    // requires the OTHER branch be non-empty). When the other branch is empty,
+    // PlantUML still routes to that east-stop layout, so leave it out of here.
+    if lone_circle_terminal(populated).is_some() {
         return None;
     }
+    // A populated branch ending in an action-terminator (`:foo; stop`) still
+    // flows down the spine, but PlantUML draws no merge diamond: `hasPointOut1`
+    // is false → `getShape2` is `FtileEmpty`, the empty branch becomes the if's
+    // pointOut via `ConnectionElseNoDiamond`.
+    let populated_terminates = branch_terminates(populated);
     Some(IfDownPlan {
         populated,
         then_populated: !then_empty,
+        populated_terminates,
     })
 }
 
@@ -6856,17 +6888,31 @@ fn node_height(node: &LayoutNode) -> f64 {
                 // An even-action branch stretches its middle gap by 15 px.
                 let branch_h = sequence_height(plan.populated);
                 let flow_count = plan.populated.iter().filter(|n| node_is_flow(n)).count();
-                let stretch = if flow_count >= 2 && flow_count.is_multiple_of(2) {
+                let stretch_amount = if plan.populated_terminates {
+                    IF_DOWN_TERM_MID_STRETCH
+                } else {
                     IF_DOWN_MID_STRETCH
+                };
+                let stretch = if flow_count >= 2 && flow_count.is_multiple_of(2) {
+                    stretch_amount
                 } else {
                     0.0
+                };
+                // A terminating populated branch draws no merge diamond: the
+                // empty branch's corridor rejoins the spine ARROW_LEN +
+                // IF_DOWN_TERM_REJOIN_EXTRA below the branch's pointOut
+                // (`emit_if_down`'s terminating arm).
+                let merge_h = if plan.populated_terminates {
+                    IF_DOWN_TERM_REJOIN_EXTRA
+                } else {
+                    DIAMOND_HALF * 2.0
                 };
                 return DIAMOND_HALF * 2.0
                     + IF_DOWN_LEAD
                     + branch_h
                     + stretch
                     + ARROW_LEN
-                    + DIAMOND_HALF * 2.0;
+                    + merge_h;
             }
             if let Some(plan) =
                 if_single_circle_terminal_plan(then_label.as_ref(), then_branch, else_branches)
@@ -7622,6 +7668,12 @@ struct SvgEmitter {
     /// inner bands) instead of the standalone gap-10 layout. Set per-switch by
     /// `emit_sequence_ex` (while-body mode) and consumed once by `emit_switch`.
     while_body_switch: bool,
+    /// True when the terminating if-down currently being emitted is followed by
+    /// another flow node in its sequence. Its no-diamond corridor then owns the
+    /// outbound spine arrow (FtileIfDown.ConnectionOut), drawn right after the
+    /// corridor; the enclosing sequence skips the deferred inbound. Set per-node
+    /// by `emit_sequence_ex`, consumed once by `emit_if_down`.
+    if_down_terminating_has_next: bool,
     /// True while emitting a leading multi-case (>= 3) SMALL-diamond switch of a
     /// `fork`/`split` branch. Such a switch emits its uncompressed `FtileSwitchNude`
     /// layout (`switch_x_layout_nude`) rather than the switch-locally-compressed
@@ -7858,6 +7910,7 @@ impl SvgEmitter {
             while_if_long_merge_y: None,
             while_switch_merge_extra: 0.0,
             while_body_switch: false,
+            if_down_terminating_has_next: false,
             fork_body_switch: false,
             while_corridor_compresses: false,
             while_switch_corridor_compresses: false,
@@ -8832,7 +8885,16 @@ fn emit_sequence_ex(
                 && prev_idx
                     .and_then(|j| nodes.get(j))
                     .is_some_and(if_node_has_single_survivor);
-            if prev_idx.is_some() && !skip_implicit_inbound_after_single_survivor_if {
+            // A terminating-populated if-down draws its own outbound spine arrow
+            // (FtileIfDown.ConnectionOut), so skip the deferred inbound here too.
+            let skip_implicit_inbound_after_terminating_down = explicit_arrow.is_none()
+                && prev_idx
+                    .and_then(|j| nodes.get(j))
+                    .is_some_and(if_node_is_terminating_down);
+            if prev_idx.is_some()
+                && !skip_implicit_inbound_after_single_survivor_if
+                && !skip_implicit_inbound_after_terminating_down
+            {
                 let style = match explicit_arrow {
                     Some(LayoutNode::Arrow {
                         color: Some(c),
@@ -9153,8 +9215,14 @@ fn emit_sequence_ex(
         {
             svg.repeat_switch_merge_extra = switch_repeat_merge_extra(node);
         }
+        // A terminating if-down owns its outbound spine arrow when followed by
+        // another flow node; tell its emit whether that next node exists.
+        if if_node_is_terminating_down(node) {
+            svg.if_down_terminating_has_next = following_flow_count(nodes, i) > 0;
+        }
         let node_y =
             emit_node_with_repeat_extra(svg, node, cx, y, repeat_extra, first_repeat_branch_extra);
+        svg.if_down_terminating_has_next = false;
         svg.while_switch_merge_extra = 0.0;
         svg.while_body_switch = false;
         svg.while_switch_corridor_compresses = false;
@@ -10633,6 +10701,14 @@ const IF_DOWN_BRANCH_CORRIDOR_TRAILING_PAD: f64 = 15.0;
 /// Extra gap stretched onto the middle inter-action arrow of an even-action
 /// populated branch in the FtileIfDown layout.
 const IF_DOWN_MID_STRETCH: f64 = 15.0;
+/// Same stretch for a *terminating* populated branch (`:foo; stop`). With no
+/// merge diamond below it, `FtileIfDown.getTranslateForThen` centres the branch
+/// against a shallower band, so the inter-action gap stretch is smaller.
+const IF_DOWN_TERM_MID_STRETCH: f64 = 8.43359375;
+/// Extra drop from the terminating populated branch's pointOut to the if-block's
+/// pointOut (where the no-diamond east corridor rejoins the spine), beyond the
+/// ARROW_LEN merge gap — the residual band the FtileEmpty `diamond2` reserves.
+const IF_DOWN_TERM_REJOIN_EXTRA: f64 = 2.0;
 /// Drop from a break-bearing `if`'s diamond bottom to the (no-diamond) east
 /// corridor's return line — i.e. the if-block's pointOut. The break tile sits
 /// `IF_DOWN_LEAD` below the diamond; the corridor then runs `ARROW_LEN +
@@ -11566,6 +11642,9 @@ fn emit_if_down(
     else_label: Option<&str>,
     plan: &IfDownPlan,
 ) -> f64 {
+    // Capture before emitting the populated branch — the nested emit_sequence_ex
+    // resets this per-node flag, so read it up front.
+    let terminating_has_next = std::mem::take(&mut svg.if_down_terminating_has_next);
     let arrow_color = svg.palette.arrow_color.clone();
     let diamond_stroke = svg.palette.diamond_stroke.clone();
     let diamond_fill = svg.palette.diamond_fill.clone();
@@ -11585,10 +11664,19 @@ fn emit_if_down(
     let branch_top = diamond_bottom + IF_DOWN_LEAD;
     // When the populated branch has an even number of flow nodes, PlantUML's
     // vertical centring stretches the inter-action gap straddling the branch's
-    // midpoint by 15 px (the gap before the (N/2)-th flow node).
+    // midpoint (the gap before the (N/2)-th flow node). A non-terminating branch
+    // is centred against the merge diamond's band (full IF_DOWN_MID_STRETCH); a
+    // terminating branch has no merge diamond (`getShape2` → FtileEmpty), so its
+    // `getTranslateForThen` centring reserves less band below — the stretch
+    // shrinks to IF_DOWN_TERM_MID_STRETCH.
     let flow_count = plan.populated.iter().filter(|n| node_is_flow(n)).count();
+    let stretch_amount = if plan.populated_terminates {
+        IF_DOWN_TERM_MID_STRETCH
+    } else {
+        IF_DOWN_MID_STRETCH
+    };
     let mid_stretch = if flow_count >= 2 && flow_count.is_multiple_of(2) {
-        Some((flow_count / 2, IF_DOWN_MID_STRETCH))
+        Some((flow_count / 2, stretch_amount))
     } else {
         None
     };
@@ -11667,6 +11755,79 @@ fn emit_if_down(
         );
     }
 
+    // Corridor x: the east column the empty branch runs down. PlantUML's
+    // `xmax = max(diamond_east + halfHex, then_x + then_width)`.
+    let corridor_x = (diamond_right + DIAMOND_HALF)
+        .max(cx + sequence_width(plan.populated) / 2.0 + IF_DOWN_BRANCH_CORRIDOR_GAP);
+
+    if plan.populated_terminates {
+        // Terminating populated branch (`:foo; stop`): PlantUML draws no merge
+        // diamond (`getShape2` → FtileEmpty, `hasTwoBranches() == false`). The
+        // spine branch terminates in place; the empty branch's east corridor
+        // (`ConnectionElseNoDiamond`) rejoins the spine at the if-block's
+        // pointOut, which then carries flow on. The if-block's pointOut sits one
+        // ARROW_LEN below the terminating branch's pointOut, plus the 2 px the
+        // FtileEmpty diamond2 band contributes (mirror of the `-2` in
+        // IF_DOWN_LEAD's south-label reservation).
+        let rejoin_y = branch_bottom + ARROW_LEN + IF_DOWN_TERM_REJOIN_EXTRA;
+
+        // Diamond → populated branch (down arrow on the spine).
+        svg.down_arrow(cx, diamond_bottom, branch_top, &arrow_color);
+
+        // ConnectionElseNoDiamond: exit east vertex, run down (mid down-arrow),
+        // rejoin the spine at the if's pointOut. No terminal in-arrow.
+        svg.connector_line(
+            &arrow_color,
+            diamond_right,
+            corridor_x,
+            diamond_cy,
+            diamond_cy,
+            false,
+        );
+        // The DOWN emphasize arrowhead anchors on the corridor's UNCOMPRESSED
+        // midpoint. Before the whole-diagram ON_Y pass, the branch carries the
+        // full IF_DOWN_MID_STRETCH and the FtileEmpty diamond2 reserves its full
+        // halfHex band, so the uncompressed pointOut sits this far below the
+        // (compressed) rejoin. PlantUML draws the arrow at that midpoint and the
+        // slot finder later squeezes only the line endpoints.
+        let rejoin_uncompressed = branch_bottom
+            + (IF_DOWN_MID_STRETCH - IF_DOWN_TERM_MID_STRETCH)
+            + ARROW_LEN
+            + DIAMOND_HALF / 2.0;
+        let arrow_tip = (diamond_cy + rejoin_uncompressed) / 2.0 + IF_CORRIDOR_ARROW_OFFSET;
+        svg.polygon_connector(
+            &arrow_color,
+            &[
+                (corridor_x - 4.0, arrow_tip - 10.0),
+                (corridor_x, arrow_tip),
+                (corridor_x + 4.0, arrow_tip - 10.0),
+                (corridor_x, arrow_tip - 6.0),
+            ],
+            &arrow_color,
+            "1",
+        );
+        svg.connector_line(
+            &arrow_color,
+            corridor_x,
+            corridor_x,
+            diamond_cy,
+            rejoin_y,
+            false,
+        );
+        svg.connector_line(&arrow_color, corridor_x, cx, rejoin_y, rejoin_y, false);
+        // FtileIfDown.ConnectionOut: the spine arrow leaving the if-block is part
+        // of the if's own connector list (drawn here, right after the corridor),
+        // not the next node's deferred inbound. The enclosing sequence skips that
+        // inbound (`skip_implicit_inbound_after_terminating_down`). Only when a
+        // following flow node exists.
+        if terminating_has_next {
+            let out_y = rejoin_y + ARROW_LEN;
+            svg.down_arrow(cx, rejoin_y, out_y, &arrow_color);
+            return out_y;
+        }
+        return rejoin_y;
+    }
+
     // Merge diamond ARROW_LEN below the branch.
     let merge_top = branch_bottom + ARROW_LEN;
     let merge_cy = merge_top + DIAMOND_HALF;
@@ -11687,8 +11848,6 @@ fn emit_if_down(
 
     // Empty corridor on the right: exit east vertex, run down, rejoin merge
     // east vertex with a left arrow. A mid-corridor down arrow marks flow.
-    let corridor_x = (diamond_right + DIAMOND_HALF)
-        .max(cx + sequence_width(plan.populated) / 2.0 + IF_DOWN_BRANCH_CORRIDOR_GAP);
     let merge_right = cx + DIAMOND_HALF;
     // The corridor is a single PlantUML snake: exit-horizontal, then the
     // emphasised mid down-arrow, then the vertical run, the merge-horizontal,
@@ -11929,9 +12088,9 @@ fn emit_if_break_down(
         // immediately follows the if (`return_y` + arrow + condition + arrow +
         // half). Mid/early break: trailing body flow + the condition push the
         // merge lower, so `emit_repeat` pre-computes its centre and hands it in.
-        let merge_cy = brk.repeat_merge_cy.unwrap_or(
-            return_y + ARROW_LEN + DIAMOND_HALF * 2.0 + ARROW_LEN + DIAMOND_HALF,
-        );
+        let merge_cy = brk
+            .repeat_merge_cy
+            .unwrap_or(return_y + ARROW_LEN + DIAMOND_HALF * 2.0 + ARROW_LEN + DIAMOND_HALF);
         let merge_left = cx - DIAMOND_HALF;
         svg.connector_line(
             &arrow_color,
@@ -14147,8 +14306,7 @@ fn emit_repeat(
             repeat_mode: true,
             repeat_merge_cy: break_merge_cy,
             inbound_lead: 0.0,
-            repeat_break_first_flow: break_if_is_first_flow(body)
-                && !break_if_is_last_flow(body),
+            repeat_break_first_flow: break_if_is_first_flow(body) && !break_if_is_last_flow(body),
         });
     }
 
