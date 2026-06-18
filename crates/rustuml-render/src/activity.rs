@@ -10121,6 +10121,13 @@ fn emit_if(
     then_branch: &[LayoutNode],
     else_branches: &[ElseBranch],
 ) -> f64 {
+    // Swimlane V2: PlantUML's `InstructionIf.getSwimlaneOut()` is the if's ENTRY
+    // lane — a `|Lane|` inside a branch is scoped to that branch, so the merge
+    // and everything after the if revert to the entry lane. The branch emits set
+    // `current_lane` to their (possibly switched) lane; capture the entry now and
+    // restore it before the merge diamond + post-merge connectors are emitted.
+    let if_entry_lane = svg.current_lane;
+
     // if/elseif*/else chain → FtileIfLongHorizontal.
     if if_is_long(else_branches)
         && let Some(l) = if_long_layout(condition, then_label, then_branch, else_branches)
@@ -10328,7 +10335,17 @@ fn emit_if(
     // buffer (after the diamond/condition/labels) and any branch-internal
     // connectors into the connectors buffer FIRST. PlantUML emits branch-
     // internal connectors before the diamond→branch outbound connectors.
-    let branch_y = diamond_bottom + IF_BRANCH_DOWN;
+    //
+    // Swimlane V2: the standalone `IF_BRANCH_DOWN` (10) is the ON_Y-compressed
+    // diamond→branch inbound. A swimlane does not compress the if vertically the
+    // same way, so the inbound keeps the full `ARROW_LEN` (20) — matching gold.
+    // Gated to the V2 path so standalone ifs are untouched.
+    let if_branch_down = if svg.swimlane_v2_active {
+        ARROW_LEN
+    } else {
+        IF_BRANCH_DOWN
+    };
+    let branch_y = diamond_bottom + if_branch_down;
 
     // A no-special `while` that is the entire then/else flow owns the
     // branch→merge corridor (PlantUML's MergeStrategy.LIMITED fusion). Such a
@@ -10386,7 +10403,9 @@ fn emit_if(
     let single_survivor = if_single_survivor(then_branch_flow, else_branches);
 
     // Merge diamond at bottom — sits IF_BRANCH_UP px below the deepest branch.
-    let merge_gap = if diamond_pad_x > 0.0 {
+    // Swimlane V2 keeps the uncompressed branch→merge gap (10) even when the
+    // standalone path would use the compressed `IF_BRANCH_UP` (6).
+    let merge_gap = if diamond_pad_x > 0.0 || svg.swimlane_v2_active {
         10.0
     } else {
         IF_BRANCH_UP
@@ -10449,6 +10468,16 @@ fn emit_if(
             svg.while_exit_redirect = None;
             svg.if_survivor_redirect = None;
         }
+    }
+
+    // Swimlane V2: restore the if's entry lane before the merge + post-merge
+    // flow (a branch `|Lane|` is branch-scoped; the merge belongs to the if's
+    // lane). Record a lane span so the merge diamond and its connectors are
+    // byte-tagged to the entry lane.
+    if svg.swimlane_v2_active && svg.current_lane != if_entry_lane {
+        svg.current_lane = if_entry_lane;
+        svg.lane_spans
+            .push((svg.shapes.len(), svg.connectors.len(), if_entry_lane));
     }
 
     if !all_terminate && single_survivor.is_none() {
@@ -10526,15 +10555,15 @@ fn emit_if(
         then_cx,
         then_cx,
         diamond_cy,
-        diamond_bottom + IF_BRANCH_DOWN,
+        diamond_bottom + if_branch_down,
     );
     svg.polygon_connector(
         &then_arrow_style.color,
         &[
-            (then_cx - 4.0, diamond_bottom + IF_BRANCH_DOWN - 10.0),
-            (then_cx, diamond_bottom + IF_BRANCH_DOWN),
-            (then_cx + 4.0, diamond_bottom + IF_BRANCH_DOWN - 10.0),
-            (then_cx, diamond_bottom + IF_BRANCH_DOWN - 6.0),
+            (then_cx - 4.0, diamond_bottom + if_branch_down - 10.0),
+            (then_cx, diamond_bottom + if_branch_down),
+            (then_cx + 4.0, diamond_bottom + if_branch_down - 10.0),
+            (then_cx, diamond_bottom + if_branch_down - 6.0),
         ],
         &then_arrow_style.color,
         "1",
@@ -10553,15 +10582,15 @@ fn emit_if(
         else_cx,
         else_cx,
         diamond_cy,
-        diamond_bottom + IF_BRANCH_DOWN,
+        diamond_bottom + if_branch_down,
     );
     svg.polygon_connector(
         &else_arrow_style.color,
         &[
-            (else_cx - 4.0, diamond_bottom + IF_BRANCH_DOWN - 10.0),
-            (else_cx, diamond_bottom + IF_BRANCH_DOWN),
-            (else_cx + 4.0, diamond_bottom + IF_BRANCH_DOWN - 10.0),
-            (else_cx, diamond_bottom + IF_BRANCH_DOWN - 6.0),
+            (else_cx - 4.0, diamond_bottom + if_branch_down - 10.0),
+            (else_cx, diamond_bottom + if_branch_down),
+            (else_cx + 4.0, diamond_bottom + if_branch_down - 10.0),
+            (else_cx, diamond_bottom + if_branch_down - 6.0),
         ],
         &else_arrow_style.color,
         "1",
@@ -15311,6 +15340,102 @@ fn node_dbg_name(n: &LayoutNode) -> &'static str {
     }
 }
 
+/// True when the leftmost drawn element of a lane's shape fragment (the one
+/// reaching `min_x`) is a free `<text>` label rather than a box/diamond. Such a
+/// lane uses a 5 px (not 6 px) content-left pad — see `content_pad`. Scans the
+/// raw buffer (text elements are not self-closing, so `split_svg_primitives`
+/// misses them).
+fn lane_leftmost_is_text(buf: &str, min_x: f64) -> bool {
+    let mut leftmost_is_text = false;
+    let mut leftmost = f64::MAX;
+    let mut update = |lx: f64, is_text: bool| {
+        if lx < leftmost - 0.001 {
+            leftmost = lx;
+            leftmost_is_text = is_text;
+        }
+    };
+    // <text x="..."> labels.
+    for cap in iter_attr(buf, "<text", " x=\"") {
+        update(cap, true);
+    }
+    // <rect x="...">.
+    for cap in iter_attr(buf, "<rect", " x=\"") {
+        update(cap, false);
+    }
+    // <ellipse cx=".." rx=".."> → cx − rx.
+    for (cx, rx) in iter_pair(buf, "<ellipse", "cx=\"", "rx=\"") {
+        update(cx - rx, false);
+    }
+    // <polygon points="..">.
+    let mut rest = buf;
+    while let Some(p) = rest.find("<polygon") {
+        let frag = &rest[p..];
+        let end = frag.find("/>").map(|e| &frag[..e + 2]).unwrap_or(frag);
+        if let Some((lo, _)) = polygon_x_bounds(frag) {
+            let _ = end;
+            update(lo, false);
+        }
+        rest = &rest[p + 8..];
+    }
+    let _ = min_x;
+    leftmost_is_text
+}
+
+/// Iterate the numeric values of `attr` for every `tag` occurrence in `buf`.
+fn iter_attr(buf: &str, tag: &str, attr: &str) -> Vec<f64> {
+    let mut out = Vec::new();
+    let mut rest = buf;
+    while let Some(p) = rest.find(tag) {
+        let frag = &rest[p..];
+        // Bound the search to this element (up to the next '>').
+        let elem_end = frag.find('>').unwrap_or(frag.len());
+        if let Some(v) = prim_attr(&frag[..elem_end + 1], attr) {
+            out.push(v);
+        }
+        rest = &rest[p + tag.len()..];
+    }
+    out
+}
+
+/// Iterate `(a, b)` numeric attribute pairs for every `tag` occurrence in `buf`.
+fn iter_pair(buf: &str, tag: &str, a: &str, b: &str) -> Vec<(f64, f64)> {
+    let mut out = Vec::new();
+    let mut rest = buf;
+    while let Some(p) = rest.find(tag) {
+        let frag = &rest[p..];
+        let elem_end = frag.find('>').unwrap_or(frag.len());
+        let e = &frag[..elem_end + 1];
+        if let (Some(av), Some(bv)) = (prim_attr(e, a), prim_attr(e, b)) {
+            out.push((av, bv));
+        }
+        rest = &rest[p + tag.len()..];
+    }
+    out
+}
+
+/// Parse a numeric attribute (e.g. ` x="`) from an SVG element string.
+fn prim_attr(prim: &str, key: &str) -> Option<f64> {
+    let at = prim.find(key)? + key.len();
+    let r = &prim[at..];
+    r[..r.find('"')?].parse().ok()
+}
+
+/// The (min, max) x of a `<polygon>`'s points.
+fn polygon_x_bounds(prim: &str) -> Option<(f64, f64)> {
+    let at = prim.find("points=\"")? + 8;
+    let rest = &prim[at..];
+    let end = rest.find('"')?;
+    let mut lo = f64::MAX;
+    let mut hi = f64::MIN;
+    for x in rest[..end].split(',').step_by(2) {
+        if let Ok(v) = x.trim().parse::<f64>() {
+            lo = lo.min(v);
+            hi = hi.max(v);
+        }
+    }
+    (lo <= hi).then_some((lo, hi))
+}
+
 /// Minimum and maximum y referenced by a shape fragment (rect/ellipse/polygon).
 /// Used to derive a lane's natural vertical band.
 fn svg_y_bounds(buf: &str) -> Option<(f64, f64)> {
@@ -15396,6 +15521,403 @@ fn relabel_connectors_by_yband(buf: &str, bands: &[(f64, f64)]) -> Vec<String> {
         }
     }
     frags
+}
+
+/// Swimlane V2 if-mode: rebuild every flow connector as a faithful cross-lane
+/// `Cross` snake from the FINAL shape positions, discarding the natural
+/// polylines (whose routing assumed the single-tree side-by-side branch layout).
+/// `nat_shapes`/`fin_shapes` are the per-lane shape fragments before/after the
+/// lane shift; they pair index-for-index. Returns one connector string per lane
+/// (each routed connector is attributed to its SOURCE lane, matching gold's
+/// emit grouping). Returns `None` if any edge can't be matched (caller keeps the
+/// shifted natural connectors).
+fn route_if_cross_lane_connectors(
+    nat_conns: &str,
+    nat_shapes: &[String],
+    fin_shapes: &[String],
+    arrow_color: &str,
+) -> Option<String> {
+    let n = nat_shapes.len();
+    // Natural + final anchors, paired by (lane, index-within-lane). We flatten
+    // to a single list but keep the lane tag, and pair nat↔fin by position.
+    let mut nat: Vec<ShapeAnchor> = Vec::new();
+    let mut fin: Vec<ShapeAnchor> = Vec::new();
+    for l in 0..n {
+        let before = nat.len();
+        extract_shape_anchors(&nat_shapes[l], l, &mut nat);
+        let after = nat.len();
+        extract_shape_anchors(&fin_shapes[l], l, &mut fin);
+        // Both must produce the same count for this lane.
+        if fin.len() - before != after - before {
+            if std::env::var("RUSTUML_EXT_DBG").is_ok() {
+                eprintln!("[V2] router: lane {l} anchor count mismatch nat={} fin={}", after - before, fin.len() - before);
+            }
+            return None;
+        }
+    }
+    if std::env::var("RUSTUML_EXT_DBG").is_ok() {
+        eprintln!("[V2] router: nat anchors={} fin anchors={}", nat.len(), fin.len());
+    }
+    if nat.len() != fin.len() {
+        return None;
+    }
+    // Match a natural point to the nearest anchor (by a connection edge), return
+    // its index. Connection points: top-centre, bottom-centre, west/east vertex.
+    let match_pt = |pt: (f64, f64)| -> Option<usize> {
+        let mut best = None;
+        let mut bestd = 6.0_f64; // within 6px of a connection point
+        for (i, a) in nat.iter().enumerate() {
+            let cands = [
+                (a.cx, a.top),
+                (a.cx, a.bottom),
+                (a.west.unwrap_or(a.cx), a.cy),
+                (a.east.unwrap_or(a.cx), a.cy),
+            ];
+            for c in cands {
+                let d = ((c.0 - pt.0).powi(2) + (c.1 - pt.1).powi(2)).sqrt();
+                if d < bestd {
+                    bestd = d;
+                    best = Some(i);
+                }
+            }
+        }
+        best
+    };
+
+    let head = |x: f64, y: f64| -> String {
+        format!(
+            r#"<polygon fill="{c}" points="{}" style="stroke:{c};stroke-width:1;"/>"#,
+            polygon_points(&[
+                (x - 4.0, y - 10.0),
+                (x, y),
+                (x + 4.0, y - 10.0),
+                (x, y - 6.0),
+            ]),
+            c = arrow_color,
+        )
+    };
+    // Right-pointing arrowhead (tip at (x,y), entering from the left).
+    let head_right = |x: f64, y: f64| -> String {
+        format!(
+            r#"<polygon fill="{c}" points="{}" style="stroke:{c};stroke-width:1;"/>"#,
+            polygon_points(&[
+                (x - 10.0, y - 4.0),
+                (x, y),
+                (x - 10.0, y + 4.0),
+                (x - 6.0, y),
+            ]),
+            c = arrow_color,
+        )
+    };
+    // Left-pointing arrowhead (tip at (x,y), entering from the right).
+    let head_left = |x: f64, y: f64| -> String {
+        format!(
+            r#"<polygon fill="{c}" points="{}" style="stroke:{c};stroke-width:1;"/>"#,
+            polygon_points(&[
+                (x + 10.0, y - 4.0),
+                (x, y),
+                (x + 10.0, y + 4.0),
+                (x + 6.0, y),
+            ]),
+            c = arrow_color,
+        )
+    };
+    let line = |x1: f64, x2: f64, y1: f64, y2: f64| -> String {
+        format!(
+            r#"<line style="stroke:{c};stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+            f(x1),
+            f(x2),
+            f(y1),
+            f(y2),
+            c = arrow_color,
+        )
+    };
+
+    let dbg = std::env::var("RUSTUML_EXT_DBG").is_ok();
+    // Connectors are emitted in natural (PlantUML) document order — a flat list,
+    // not grouped by lane (gold interleaves source lanes).
+    let mut routed = String::new();
+    for pl in parse_conn_polylines(nat_conns) {
+        let (Some(src_pt), Some(tip)) = (pl.verts.first().copied(), pl.tip) else {
+            if dbg {
+                eprintln!("[V2] router: polyline missing src/tip verts={:?} tip={:?}", pl.verts, pl.tip);
+            }
+            return None;
+        };
+        let (Some(si), Some(ti)) = (match_pt(src_pt), match_pt(tip)) else {
+            if dbg {
+                eprintln!("[V2] router: unmatched src={src_pt:?} tip={tip:?}");
+            }
+            return None;
+        };
+        let s = &fin[si];
+        let t = &fin[ti];
+        let src_nat = &nat[si];
+        // Which side the source exits: compare the natural source point to the
+        // natural anchor's connection points.
+        let exits_bottom = (src_pt.1 - src_nat.bottom).abs() < 3.0;
+        let exits_west = src_nat.west.is_some_and(|w| (src_pt.0 - w).abs() < 3.0);
+        let exits_east = src_nat.east.is_some_and(|e| (src_pt.0 - e).abs() < 3.0);
+
+        let mut snake = String::new();
+        if exits_bottom {
+            // Form A/C: exit the source bottom, optional cross, drop into target.
+            let sx = s.cx;
+            let sy = s.bottom;
+            if t.is_merge {
+                // Form C: branch → merge diamond, entered at its west/east vertex.
+                // The then-branch (natural-left of the merge) enters the WEST
+                // vertex via a stair; the else-branch (natural-right) the EAST
+                // vertex directly. Mirror of Form B (diamond → branch).
+                let tgt_nat = &nat[ti];
+                let from_left = src_nat.cx < tgt_nat.cx;
+                let mcy = t.cy;
+                if from_left {
+                    let mw = t.west.unwrap_or(t.cx);
+                    let approach = mw - 18.0;
+                    snake.push_str(&line(sx, sx, sy, sy + 4.0));
+                    snake.push_str(&line(sx, approach, sy + 4.0, sy + 4.0));
+                    snake.push_str(&line(approach, approach, sy + 4.0, mcy));
+                    snake.push_str(&line(approach, mw, mcy, mcy));
+                    snake.push_str(&head_right(mw, mcy));
+                } else {
+                    let me = t.east.unwrap_or(t.cx);
+                    snake.push_str(&line(sx, sx, sy, mcy));
+                    snake.push_str(&line(sx, me, mcy, mcy));
+                    snake.push_str(&head_left(me, mcy));
+                }
+            } else {
+                let tx = t.cx;
+                let ty = t.top;
+                if (sx - tx).abs() < 0.01 {
+                    // In-lane straight down.
+                    snake.push_str(&line(sx, sx, sy, ty));
+                } else {
+                    // Down a 5px stub, horizontal to target column, down to top.
+                    let stub = sy + 5.0;
+                    snake.push_str(&line(sx, sx, sy, stub));
+                    snake.push_str(&line(sx, tx, stub, stub));
+                    snake.push_str(&line(tx, tx, stub, ty));
+                }
+                snake.push_str(&head(tx, ty));
+            }
+        } else if exits_west || exits_east {
+            // Form B: diamond side exit. West exits 12px left then drops to a
+            // cross-y, crosses to the target column, drops in. East crosses at
+            // the diamond centre-line directly.
+            let dcy = s.cy;
+            let tx = t.cx;
+            let ty = t.top;
+            if exits_west {
+                let wx = s.west.unwrap_or(s.cx);
+                let stub_x = wx - 12.0;
+                let cross_y = ty - 14.0;
+                snake.push_str(&line(wx, stub_x, dcy, dcy));
+                snake.push_str(&line(stub_x, stub_x, dcy, cross_y));
+                snake.push_str(&line(stub_x, tx, cross_y, cross_y));
+                snake.push_str(&line(tx, tx, cross_y, ty));
+            } else {
+                let ex = s.east.unwrap_or(s.cx);
+                snake.push_str(&line(ex, tx, dcy, dcy));
+                snake.push_str(&line(tx, tx, dcy, ty));
+            }
+            snake.push_str(&head(tx, ty));
+        } else {
+            return None;
+        }
+        let _ = s.lane;
+        routed.push_str(&snake);
+    }
+    Some(routed)
+}
+
+/// One natural flow connector parsed into its polyline vertices + arrowhead tip.
+struct ConnPolyline {
+    /// Ordered vertices of the line run (natural, pre-shift coords).
+    verts: Vec<(f64, f64)>,
+    /// Arrowhead tip (the connector's TARGET entry point), if present.
+    tip: Option<(f64, f64)>,
+}
+
+/// Parse a connectors buffer (NATURAL coords) into per-edge polylines. Each edge
+/// is a maximal run of `<line>` segments that share endpoints, optionally
+/// terminated by an arrowhead `<polygon>` (tip = the point farthest from the
+/// line, i.e. the 2nd of the 4 polygon points in PlantUML's down/left/right/up
+/// arrowhead encoding).
+fn parse_conn_polylines(buf: &str) -> Vec<ConnPolyline> {
+    let prims = split_svg_primitives(buf);
+    let mut out: Vec<ConnPolyline> = Vec::new();
+    let mut cur: Vec<(f64, f64)> = Vec::new();
+    let flush = |cur: &mut Vec<(f64, f64)>, tip: Option<(f64, f64)>, out: &mut Vec<ConnPolyline>| {
+        if !cur.is_empty() {
+            out.push(ConnPolyline {
+                verts: std::mem::take(cur),
+                tip,
+            });
+        }
+    };
+    for prim in &prims {
+        if let Some((x1, x2, y1, y2)) = parse_line_xy(prim) {
+            let a = (x1, y1);
+            let b = (x2, y2);
+            if cur.is_empty() {
+                cur.push(a);
+                cur.push(b);
+            } else if cur.last() == Some(&a) {
+                cur.push(b);
+            } else {
+                // New polyline starts.
+                flush(&mut cur, None, &mut out);
+                cur.push(a);
+                cur.push(b);
+            }
+        } else if prim.starts_with("<polygon") {
+            // Arrowhead: tip = 2nd point (PlantUML's down/left/right/up order
+            // puts the tip 2nd). Close the current polyline.
+            let tip = polygon_nth_point(prim, 1);
+            flush(&mut cur, tip, &mut out);
+        }
+    }
+    flush(&mut cur, None, &mut out);
+    out
+}
+
+/// The nth (x,y) point of a `<polygon points="...">`.
+fn polygon_nth_point(prim: &str, n: usize) -> Option<(f64, f64)> {
+    let at = prim.find("points=\"")? + 8;
+    let rest = &prim[at..];
+    let end = rest.find('"')?;
+    let nums: Vec<f64> = rest[..end]
+        .split(',')
+        .filter_map(|s| s.trim().parse().ok())
+        .collect();
+    let i = n * 2;
+    (i + 1 < nums.len()).then(|| (nums[i], nums[i + 1]))
+}
+
+/// A drawn shape's connection anchors (final coords), for cross-lane connector
+/// routing. `kind` distinguishes a box/start/stop (connect top/bottom on spine)
+/// from a diamond (connect top/bottom on spine + west/east vertices).
+#[derive(Clone, Copy, Debug)]
+struct ShapeAnchor {
+    lane: usize,
+    cx: f64,
+    top: f64,
+    bottom: f64,
+    /// Diamond west/east vertex x (== left/right of the hexagon); `None` for boxes.
+    west: Option<f64>,
+    east: Option<f64>,
+    /// Diamond centre-line y (where west/east exits leave), else mid of top/bottom.
+    cy: f64,
+    /// A MERGE diamond (4-point rhombus) — entered at its west/east vertex from a
+    /// branch, not at its top. Condition diamonds (6-point hexagon) are `false`.
+    is_merge: bool,
+}
+
+/// Extract every drawn shape from a lane's (final-coord) shape fragment as a
+/// [`ShapeAnchor`]. Handles rounded action rects, start/stop ellipses, and
+/// if/while/merge diamonds (7-point or 5-point polygons).
+fn extract_shape_anchors(buf: &str, lane: usize, out: &mut Vec<ShapeAnchor>) {
+    // Rounded action rects (rx="12.5").
+    let mut rest = buf;
+    while let Some(p) = rest.find("<rect") {
+        let frag = &rest[p..];
+        let end = frag.find("/>").map(|e| e + 2).unwrap_or(frag.len());
+        let e = &frag[..end];
+        if e.contains(r#"rx="12.5""#)
+            && let (Some(x), Some(w), Some(y), Some(h)) = (
+                prim_attr(e, " x=\""),
+                prim_attr(e, "width=\""),
+                prim_attr(e, " y=\""),
+                prim_attr(e, "height=\""),
+            )
+        {
+            out.push(ShapeAnchor {
+                lane,
+                cx: x + w / 2.0,
+                top: y,
+                bottom: y + h,
+                west: None,
+                east: None,
+                cy: y + h / 2.0,
+                is_merge: false,
+            });
+        }
+        rest = &rest[p + 5..];
+    }
+    // Ellipses (start/stop): the OUTER ring (largest rx) defines the anchor.
+    let mut by_center: HashMap<(i64, i64), f64> = HashMap::new();
+    for (cx, rx) in iter_pair(buf, "<ellipse", "cx=\"", "rx=\"") {
+        if let Some(cy) = iter_attr(buf, "<ellipse", "cy=\"").into_iter().next() {
+            let _ = cy;
+        }
+        let key = ((cx * 100.0) as i64, 0);
+        by_center
+            .entry(key)
+            .and_modify(|m| *m = m.max(rx))
+            .or_insert(rx);
+    }
+    // Re-scan ellipses pairing cx/cy/rx in order (start has 1 ring, stop 2 same-centre).
+    let cxs = iter_attr(buf, "<ellipse", "cx=\"");
+    let cys = iter_attr(buf, "<ellipse", "cy=\"");
+    let rxs = iter_attr(buf, "<ellipse", "rx=\"");
+    let mut seen: Vec<(f64, f64)> = Vec::new();
+    for i in 0..cxs.len().min(cys.len()).min(rxs.len()) {
+        let (cx, cy, rx) = (cxs[i], cys[i], rxs[i]);
+        // Keep the largest-rx ring per (cx,cy) centre.
+        if seen.iter().any(|&(sx, sy)| (sx - cx).abs() < 0.5 && (sy - cy).abs() < 0.5) {
+            continue;
+        }
+        // Find max rx among same-centre rings.
+        let max_rx = (0..rxs.len())
+            .filter(|&j| (cxs[j] - cx).abs() < 0.5 && (cys[j] - cy).abs() < 0.5)
+            .map(|j| rxs[j])
+            .fold(rx, f64::max);
+        seen.push((cx, cy));
+        out.push(ShapeAnchor {
+            lane,
+            cx,
+            top: cy - max_rx,
+            bottom: cy + max_rx,
+            west: None,
+            east: None,
+            cy,
+            is_merge: false,
+        });
+    }
+    // Diamonds: 7-point (if/while) or 5-point (merge) `#F1F1F1` polygons.
+    let mut rest = buf;
+    while let Some(p) = rest.find(r##"<polygon fill="#F1F1F1""##) {
+        let frag = &rest[p..];
+        let end = frag.find("/>").map(|e| e + 2).unwrap_or(frag.len());
+        if let Some((lo, hi)) = polygon_x_bounds(&frag[..end]) {
+            // y bounds from points (1st,3rd,... are y).
+            let at = frag[..end].find("points=\"").unwrap() + 8;
+            let pend = frag[at..end].find('"').unwrap() + at;
+            let ys: Vec<f64> = frag[at..pend]
+                .split(',')
+                .skip(1)
+                .step_by(2)
+                .filter_map(|s| s.trim().parse().ok())
+                .collect();
+            let top = ys.iter().cloned().fold(f64::MAX, f64::min);
+            let bottom = ys.iter().cloned().fold(f64::MIN, f64::max);
+            // A merge diamond is a 4-point rhombus (5 with the closing point); a
+            // condition diamond is a 6-point hexagon (7 with the close).
+            let is_merge = ys.len() <= 5;
+            out.push(ShapeAnchor {
+                lane,
+                cx: (lo + hi) / 2.0,
+                top,
+                bottom,
+                west: Some(lo),
+                east: Some(hi),
+                cy: (top + bottom) / 2.0,
+                is_merge,
+            });
+        }
+        rest = &rest[p + 8..];
+    }
 }
 
 /// Split an SVG fragment into its top-level `<line.../>` / `<polygon.../>`
@@ -15494,6 +16016,7 @@ fn layout_swimlanes_v2(
     tree: &[LayoutNode],
     natural_cx: f64,
     natural_start_y: f64,
+    natural_bottom: f64,
     lane_names: &[String],
     chrome: &SwimlaneV2Chrome,
 ) -> Option<(String, String, u32, u32)> {
@@ -15555,12 +16078,14 @@ fn layout_swimlanes_v2(
     // (the back-edge corridor is reserved but not drawn — the divider sits at the
     // reserved edge); if-lanes use the DRAWN shape bounding box (PlantUML's
     // per-swimlane `getMinMax`).
+    let mut lane_content_w = vec![0.0f64; n];
     let (lane_minx, lane_w): (Vec<f64>, Vec<f64>) = if if_mode {
         let mut minx = vec![0.0f64; n];
         let mut w = vec![0.0f64; n];
         for l in 0..n {
             let (lo, hi) = crate::compress::x_bounds(&shape_frags[l]).unwrap_or((0.0, 0.0));
             minx[l] = lo;
+            lane_content_w[l] = hi - lo;
             w[l] = (hi - lo + 10.0).max(title_w[l] + 10.0);
         }
         (minx, w)
@@ -15586,9 +16111,27 @@ fn layout_swimlanes_v2(
     // the right divider at `acc`; if-lanes' last divider sits at the last lane's
     // drawn right edge (no trailing gap), i.e. `acc − 10`.
     let right_edge = if if_mode && n > 0 { acc - 10.0 } else { acc };
-    // Each lane's content left edge sits 6 px right of its left divider
-    // (PlantUML lane content padding), so its natural minX maps there.
-    let dx: Vec<f64> = (0..n).map(|l| lane_left[l] + 6.0 - lane_minx[l]).collect();
+    // Each lane's content left edge sits `content_pad` right of its left divider.
+    // The pad is 6 for a box/diamond-leftmost lane, but 5 when the leftmost drawn
+    // element is a free text label (e.g. a branch `yes`/`no` label that hangs off
+    // the diamond — PlantUML's label has 1 px less left bearing inside the lane).
+    // When the lane is wider than its content because its TITLE dominates, the
+    // content is CENTRED in the column instead of left-anchored.
+    let content_pad: Vec<f64> = (0..n)
+        .map(|l| {
+            if if_mode && title_w[l] > lane_content_w[l] + 0.001 {
+                // Title-driven: centre the content in the lane column.
+                (lane_w[l] - lane_content_w[l]) / 2.0
+            } else if if_mode && lane_leftmost_is_text(&shape_frags[l], lane_minx[l]) {
+                5.0
+            } else {
+                6.0
+            }
+        })
+        .collect();
+    let dx: Vec<f64> = (0..n)
+        .map(|l| lane_left[l] + content_pad[l] - lane_minx[l])
+        .collect();
 
     // Title band: lane titles sit in a band above the content. Content drops by
     // text-height + 5 (PlantUML getTitleHeightTranslate).
@@ -15602,8 +16145,8 @@ fn layout_swimlanes_v2(
     if std::env::var("RUSTUML_EXT_DBG").is_ok() {
         for l in 0..n {
             eprintln!(
-                "[V2] lane {l} {:?} if_mode={if_mode} minx={} lane_w={} lane_left={} dx={}",
-                lane_names[l], lane_minx[l], lane_w[l], lane_left[l], dx[l]
+                "[V2] lane {l} {:?} if_mode={if_mode} minx={} lane_w={} lane_left={} pad={} dx={}",
+                lane_names[l], lane_minx[l], lane_w[l], lane_left[l], content_pad[l], dx[l]
             );
         }
         eprintln!("[V2] natural_cx={natural_cx} title_band={title_band} right_edge={right_edge}");
@@ -15631,6 +16174,30 @@ fn layout_swimlanes_v2(
         .map(|l| crate::compress::shift_y(&crate::compress::shift_x(&conn_frags[l], dx[l]), lane_dy[l]))
         .collect();
 
+    let arrow_color = svg.palette.arrow_color.clone();
+
+    // If-mode: rebuild all flow connectors as faithful cross-lane `Cross` snakes
+    // from the final (shifted, uncompressed) shape positions — the natural
+    // polylines' routing assumed the single-tree side-by-side branch layout. The
+    // natural shapes are shifted by content_dy only (no dx) so they pair with the
+    // per-lane-shifted final shapes for endpoint→shape matching.
+    if if_mode {
+        let nat_shapes: Vec<String> = (0..n)
+            .map(|l| crate::compress::shift_y(&shape_frags[l], content_dy))
+            .collect();
+        let nat_conns = crate::compress::shift_y(&svg.connectors, content_dy);
+        if let Some(routed) =
+            route_if_cross_lane_connectors(&nat_conns, &nat_shapes, &lane_shapes, &arrow_color)
+        {
+            // All routed connectors go (in natural document order) into a single
+            // buffer; the assembly emits them as one block after the shapes.
+            lane_conns = vec![String::new(); n];
+            if n > 0 {
+                lane_conns[0] = routed;
+            }
+        }
+    }
+
     // Cross-lane connector synthesis. The natural single-tree draws each lane
     // boundary as the source while's west-exit corridor (stub, rail-arrowhead,
     // rail, horizontal-back-to-spine) followed by an inbound drop in the target
@@ -15642,11 +16209,13 @@ fn layout_swimlanes_v2(
     // `Cross` L-snake with FINAL coordinates (matching `emit_while`'s stitch:
     // exit arrowhead at (diamond_cy + tile_bottom)/2, rail down to cross_y,
     // horizontal to the target spine, drop into the target tile).
-    let arrow_color = svg.palette.arrow_color.clone();
     for l in 0..n.saturating_sub(1) {
         let ends_while = runs[l]
             .last()
             .is_some_and(|node| swimlane_segment_ends_in_plain_while(std::slice::from_ref(node)));
+        if if_mode {
+            break; // if-mode connectors are fully synthesized above.
+        }
         if !ends_while {
             continue;
         }
@@ -15756,29 +16325,37 @@ fn layout_swimlanes_v2(
     // dividers ride left with the content right of the gap).
     let mut right_edge = right_edge;
     if if_mode {
-        // Occupancy anchor: a marker rect spanning the leftmost divider to the
-        // first lane's content, so the compress does not treat that leading
-        // padding as a collapsible gap. It is built into a throwaway buffer used
+        // Occupancy anchors: a marker rect per lane spanning its left divider to
+        // its leftmost content (the 6 px lane pad), so the compress does not
+        // treat that padding as collapsible. Built into a throwaway buffer used
         // only to derive the transform (never emitted).
-        let content_left = (0..n)
-            .filter_map(|l| crate::compress::x_bounds(&lane_shapes[l]).map(|(lo, _)| lo))
-            .fold(f64::MAX, f64::min);
-        let anchor_w = (content_left - lane_left[0]).max(1.0);
-        let mut content = format!(
-            r#"<rect fill="none" height="1" style="stroke:none;stroke-width:1;" width="{}" x="{}" y="0"/>"#,
-            f(anchor_w),
-            f(lane_left[0]),
-        );
+        let mut content = String::new();
+        for l in 0..n {
+            if let Some((lo, _)) = crate::compress::x_bounds(&lane_shapes[l]) {
+                let w = (lo - lane_left[l]).max(1.0);
+                content.push_str(&format!(
+                    r#"<rect fill="none" height="1" style="stroke:none;stroke-width:1;" width="{}" x="{}" y="0"/>"#,
+                    f(w),
+                    f(lane_left[l]),
+                ));
+            }
+        }
         let mut conns = String::new();
         for l in 0..n {
             content.push_str(&lane_shapes[l]);
             conns.push_str(&lane_conns[l]);
         }
-        let (_, _, x_tf, _) = crate::compress::compress_activity_buffers(
+        let (_, _, mut x_tf, _) = crate::compress::compress_activity_buffers(
             &content,
             &conns,
             crate::compress::COMPRESS_MARGIN,
         );
+        // Only intra-lane slack (an if's inter-branch gap) collapses — keep the
+        // inter-lane spacing. Restrict the transform's slots to each lane's
+        // content column.
+        let lane_ranges: Vec<(f64, f64)> =
+            (0..n).map(|l| (lane_left[l], lane_left[l] + lane_w[l])).collect();
+        x_tf.restrict_to_ranges(&lane_ranges);
         if !x_tf.is_identity() {
             // Re-anchor: keep the first lane's left edge (its divider x) fixed so
             // only INTERNAL gaps collapse, not the leading margin.
@@ -15790,13 +16367,20 @@ fn layout_swimlanes_v2(
                 lane_conns[l] = crate::compress::apply_x_offset(&lane_conns[l], &x_tf, off);
                 lane_left[l] = tx(lane_left[l]);
             }
-            right_edge = tx(right_edge);
+            // The rightmost divider follows the last lane's COMPRESSED content
+            // right edge + the 4 px lane right pad (the column width shrinks with
+            // the collapsed inter-branch slack).
+            let last_right = crate::compress::x_bounds(&lane_shapes[n - 1])
+                .map(|(_, hi)| hi)
+                .unwrap_or_else(|| tx(right_edge));
+            right_edge = (last_right + 4.0).max(lane_left[n - 1]);
         }
     }
 
-    // Dividers span from the header top to the bottom of the drawn content
-    // (the maximum y over all shifted shapes + connectors), plus PlantUML's
-    // 12 px lane-bottom margin.
+    // Divider bottom = the bottom of the drawn content. An if-flow ends at the
+    // drawn extent (e.g. a stop ellipse bottom); a linear while frame reserves
+    // 12 px below the last drawn back-edge (its tail tile), so those lanes add
+    // the 12 px lane-bottom margin.
     let mut content_max_y = 0.0f64;
     for l in 0..n {
         if let Some(b) = crate::compress::y_max(&lane_shapes[l]) {
@@ -15806,7 +16390,12 @@ fn layout_swimlanes_v2(
             content_max_y = content_max_y.max(b);
         }
     }
-    let content_bottom = content_max_y + 12.0;
+    let _ = natural_bottom;
+    let content_bottom = if if_mode {
+        content_max_y
+    } else {
+        content_max_y + 12.0
+    };
 
     // Divider x positions: left edge of each lane, plus the rightmost edge.
     let mut divider_xs: Vec<f64> = lane_left.clone();
@@ -17093,7 +17682,7 @@ fn render_inner(
             title_bg: svg.palette.swimlane_title_background.clone(),
         };
         if let Some((sh, cn, w, h)) =
-            layout_swimlanes_v2(&svg, &tree, cx, start_y, &lane_names, &chrome)
+            layout_swimlanes_v2(&svg, &tree, cx, start_y, body_bottom_y, &lane_names, &chrome)
         {
             // V2 columns are already tight (reserved extents) — skip the ON_X
             // compress pass, which would wrongly collapse the inter-lane gaps.

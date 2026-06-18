@@ -180,6 +180,17 @@ impl CompressionTransform {
         self.offset = offset;
     }
 
+    /// Swimlane V2: keep only the compressible slots that lie ENTIRELY inside one
+    /// of the given `[start, end]` ranges (the lane content columns). Drops
+    /// inter-lane slivers so only intra-lane (e.g. if-branch) slack collapses.
+    pub fn restrict_to_ranges(&mut self, ranges: &[(f64, f64)]) {
+        self.slots.retain(|&(s, e)| {
+            ranges
+                .iter()
+                .any(|&(lo, hi)| s >= lo - 0.001 && e <= hi + 0.001)
+        });
+    }
+
     /// `CompressionTransform.transform`: `v - getCompressDelta(v)`, where the
     /// delta sums the sizes of every compressible slot lying left of `v` (partial
     /// for a slot that contains `v` — collapsing `v` toward the slot start). The
