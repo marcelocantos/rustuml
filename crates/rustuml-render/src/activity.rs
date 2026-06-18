@@ -7335,6 +7335,17 @@ struct SvgEmitter {
     /// ARROW_LEN/2`. Recorded by `emit_switch_with_layout` (in while-body mode,
     /// last writer wins) and consumed once by `emit_while`.
     while_switch_loopback_tip: Option<f64>,
+    /// Extra px the loop-body centring slack distributes into the middle inter-
+    /// action gap of the deepest 2-action `then`-branch of a `while` body that is
+    /// a single (possibly nested) balanced `if`. PlantUML's `FtileWhile` centring
+    /// reserves `2*hexHalf` of slack above the body tile; ON_Y compression
+    /// reclaims it into the if-block's tallest branch's middle connector, less the
+    /// merge-band each nesting level absorbs (see `while_if_body_branch_stretch`).
+    /// Set by `emit_while` before emitting a pure-balanced-if body; routed
+    /// unchanged down the `then`-chain by `emit_if` (it does NOT leak into an
+    /// `else` branch) and consumed once when the terminal 2-action `then`-branch
+    /// emits. Drives the `act_while_ifdepth*_acts2` family.
+    while_if_branch_stretch: Option<f64>,
     /// Set while emitting a swimlane lane body that is a single
     /// `while ... endwhile <terminator>` whose lane width was taken from the
     /// cond-driven drawn box (`swimlane_lane_extents` narrowed the left extent).
@@ -7471,6 +7482,7 @@ impl SvgEmitter {
             while_switch_corridor_compresses: false,
             while_switch_merge_compressed: false,
             while_switch_loopback_tip: None,
+            while_if_branch_stretch: None,
             swimlane_while_cond_special: false,
             swimlane_cross_lane: None,
         }
@@ -8248,6 +8260,36 @@ fn emit_sequence(svg: &mut SvgEmitter, nodes: &[LayoutNode], cx: f64, y: f64) ->
 
 fn emit_sequence_if_branch(svg: &mut SvgEmitter, nodes: &[LayoutNode], cx: f64, y: f64) -> f64 {
     emit_sequence_ex(svg, nodes, cx, y, None, None, true)
+}
+
+/// Emit an `if` then-branch flow, routing a pending `while`-body if-branch
+/// stretch (set by `emit_while` for a pure-balanced-if loop body, see
+/// [`SvgEmitter::while_if_branch_stretch`]) to the deepest 2-action terminal
+/// branch's middle gap. `stretch == None` is the ordinary case (no slack to
+/// distribute) and behaves exactly like [`emit_sequence_if_branch`].
+fn emit_if_then_branch_with_stretch(
+    svg: &mut SvgEmitter,
+    flow: &[LayoutNode],
+    cx: f64,
+    y: f64,
+    stretch: Option<f64>,
+) -> f64 {
+    match (stretch, flow) {
+        // Terminal: the two plain actions of the deepest then-branch — the loop
+        // centring slack lands in their straddling gap (flow index 1).
+        (Some(s), [LayoutNode::Action { .. }, LayoutNode::Action { .. }]) => {
+            emit_sequence_ex(svg, flow, cx, y, Some((1, s)), None, true)
+        }
+        // Recurse: a single nested balanced `if` — re-arm the flag so the nested
+        // `emit_if` (reached via `emit_node`) routes the stretch one level deeper.
+        (Some(s), [LayoutNode::If { .. }]) => {
+            let prev = svg.while_if_branch_stretch.replace(s);
+            let bottom = emit_sequence_if_branch(svg, flow, cx, y);
+            svg.while_if_branch_stretch = prev;
+            bottom
+        }
+        _ => emit_sequence_if_branch(svg, flow, cx, y),
+    }
 }
 
 /// Like `emit_sequence`, but `mid_stretch = Some((flow_idx, extra))` adds
@@ -9392,6 +9434,11 @@ fn emit_if(
         .first()
         .map(|branch| leading_branch_arrow(&branch.body))
         .unwrap_or((None, &[]));
+    // Take the pending `while`-body if-branch stretch (one-shot): it routes to
+    // THIS if's then-branch only — clear it so the else-branch and any sibling
+    // never inherit it. `emit_if_then_branch_with_stretch` re-arms it when the
+    // then-branch is itself a single nested `if`.
+    let if_branch_stretch = svg.while_if_branch_stretch.take();
     let default_arrow_color = svg.palette.arrow_color.clone();
     let then_arrow_style = branch_arrow_style(then_arrow, &default_arrow_color);
     let else_arrow_style = branch_arrow_style(else_arrow, &default_arrow_color);
@@ -9487,7 +9534,13 @@ fn emit_if(
 
     let shapes_chk = svg.shapes.len();
     let conns_chk = svg.connectors.len();
-    let then_bottom_raw = emit_sequence_if_branch(svg, then_branch_flow, then_cx, branch_y);
+    let then_bottom_raw = emit_if_then_branch_with_stretch(
+        svg,
+        then_branch_flow,
+        then_cx,
+        branch_y,
+        if_branch_stretch,
+    );
     let else_bottom_raw = if !else_branches.is_empty() {
         emit_sequence_if_branch(svg, else_branch_flow, else_cx, branch_y)
     } else {
@@ -9557,7 +9610,13 @@ fn emit_if(
                 to_right: true,
             });
         }
-        emit_sequence_if_branch(svg, then_branch_flow, then_cx, branch_y);
+        emit_if_then_branch_with_stretch(
+            svg,
+            then_branch_flow,
+            then_cx,
+            branch_y,
+            if_branch_stretch,
+        );
         svg.while_exit_redirect = None;
         svg.if_survivor_redirect = None;
         if !else_branches.is_empty() {
@@ -10289,6 +10348,102 @@ fn last_flow_index(body: &[LayoutNode]) -> Option<usize> {
     body.iter().rposition(node_is_flow)
 }
 
+/// Upward bias of the `while` loop-back emphasis arrowhead for a body that LEADS
+/// with plain action tile(s) and ends in a balanced `if` (then + else,
+/// reconverging through a merge diamond). PlantUML's `ConnectionBackSimple`
+/// anchors the UP arrowhead on the loop-back snake's PRE-compression vertical
+/// midpoint (`(y1bis + diamond_cy)/2` with `y1bis = getBottom + hexHalf`, where
+/// `getBottom` is the body tile's pre-compression bottom from
+/// `getTranslateForWhile`). With leading actions the leading tiles stay
+/// uncompressed while the trailing if-block's internal slack collapses below the
+/// spine, so the pre-compression frame centre sits one even-body stretch
+/// (`WHILE_EVEN_BODY_LOOP_ARROW_STRETCH`) above the naive
+/// `(diamond_cy + body_bottom + hexHalf)/2` midpoint this renderer computes from
+/// the post-emit merge-diamond bottom. `while_body_mid_stretch` rejects this
+/// shape (the trailing `if` is a composite, so the connector-stretch path returns
+/// `None`/zero), so this is the only contributor; we re-add it for the arrowhead
+/// only. Returns 0 for a pure-`if` body (no leading actions — see the
+/// `act_while_ifdepth*` family, whose arrowhead rides the branch-stretched merge
+/// bottom instead) and every other shape, leaving all currently-correct
+/// loop-backs byte-identical. Drives `act_while_with_if`.
+fn while_loopback_arrow_bias(body: &[LayoutNode]) -> f64 {
+    let flow: Vec<&LayoutNode> = body.iter().filter(|n| node_is_flow(n)).collect();
+    let Some((last, lead)) = flow.split_last() else {
+        return 0.0;
+    };
+    if lead.is_empty() || !lead.iter().all(|n| matches!(n, LayoutNode::Action { .. })) {
+        return 0.0;
+    }
+    match last {
+        LayoutNode::If {
+            else_branches,
+            then_branch,
+            ..
+        } if !else_branches.is_empty()
+            && !branch_terminates(then_branch)
+            && else_branches.iter().any(|b| !branch_terminates(&b.body)) =>
+        {
+            WHILE_EVEN_BODY_LOOP_ARROW_STRETCH
+        }
+        _ => 0.0,
+    }
+}
+
+/// Per nesting `if`-diamond, the merge band ON_Y compression reclaims from the
+/// `while`-body centring slack before it reaches the innermost branch gap. Each
+/// nested `if` level interposes one diamond+merge structure that absorbs this
+/// much of the slack the outer loop frame reserves.
+const WHILE_IF_BODY_LEVEL_RECLAIM: f64 = 2.0;
+
+/// When a `while` body is a single balanced `if` (then + else, reconverging
+/// through a merge) whose `then`-branch chain bottoms out in a 2-action terminal
+/// branch, PlantUML's `FtileWhile` centring slack lands in that terminal
+/// branch's middle inter-action connector. `FtileWhile.getTranslateForWhile`
+/// places the body `2*hexHalf` below the diamond and ON_Y compression then pushes
+/// the residual into the if-block's tallest branch's middle gap — exactly the
+/// `WHILE_EVEN_BODY_MID_STRETCH_LABELED` an all-action even body receives, less
+/// `WHILE_IF_BODY_LEVEL_RECLAIM` for each nesting `if`-diamond's merge band. This
+/// returns `Some((depth, stretch))` for that body shape (`depth` = number of
+/// nested `if` levels from the outer `if` to the terminal 2-action branch;
+/// `stretch` the px to add to the terminal branch's middle gap), else `None`.
+/// Drives the `act_while_ifdepth*_acts2` family.
+fn while_if_body_branch_stretch(body: &[LayoutNode]) -> Option<(usize, f64)> {
+    let [LayoutNode::If { .. }] = body else {
+        return None;
+    };
+    // Walk the then-chain: each balanced `if` whose then-branch is itself a single
+    // balanced `if` recurses one level deeper; bottoming out in a 2-action
+    // terminal `then`-branch fixes the depth.
+    fn depth_to_two_action_terminal(node: &LayoutNode) -> Option<usize> {
+        let LayoutNode::If {
+            then_branch,
+            else_branches,
+            ..
+        } = node
+        else {
+            return None;
+        };
+        // Must be balanced: a surviving else (so the if reconverges to a merge).
+        if else_branches.is_empty()
+            || branch_terminates(then_branch)
+            || !else_branches.iter().any(|b| !branch_terminates(&b.body))
+        {
+            return None;
+        }
+        let then_flow: Vec<&LayoutNode> = then_branch.iter().filter(|n| node_is_flow(n)).collect();
+        match then_flow.as_slice() {
+            // Terminal: exactly two plain actions — the centring lands here.
+            [LayoutNode::Action { .. }, LayoutNode::Action { .. }] => Some(1),
+            // Recurse: a single nested balanced `if`.
+            [inner @ LayoutNode::If { .. }] => depth_to_two_action_terminal(inner).map(|d| d + 1),
+            _ => None,
+        }
+    }
+    let depth = depth_to_two_action_terminal(&body[0])?;
+    let stretch = WHILE_EVEN_BODY_MID_STRETCH_LABELED - WHILE_IF_BODY_LEVEL_RECLAIM * depth as f64;
+    (stretch > 0.0).then_some((depth, stretch))
+}
+
 /// Number of flow tiles in `body` strictly after index `i`.
 fn following_flow_count(body: &[LayoutNode], i: usize) -> usize {
     body.iter().skip(i + 1).filter(|n| node_is_flow(n)).count()
@@ -10309,6 +10464,10 @@ fn while_body_switch_extra(body: &[LayoutNode]) -> f64 {
 fn while_body_height(body: &[LayoutNode], has_in_label: bool) -> f64 {
     sequence_height(body)
         + while_body_mid_stretch(body, has_in_label).map_or(0.0, |(_, stretch)| stretch)
+        // Pure-balanced-if body: the loop centring slack stretches the deepest
+        // 2-action then-branch's middle gap (see `while_if_body_branch_stretch`),
+        // growing the body tile — and hence the advertised frame/canvas — height.
+        + while_if_body_branch_stretch(body).map_or(0.0, |(_, stretch)| stretch)
         + while_body_switch_extra(body)
         // A compressed leading break corridor lengthens the connector leaving the
         // break-`if`'s pointOut by one `IF_DOWN_MID_STRETCH` (see
@@ -12245,10 +12404,19 @@ fn emit_while(
     // Body below diamond — emit it first (PlantUML emits body shapes before
     // diamond shapes in document order).
     let body_mid_stretch = while_body_mid_stretch(body, is_label.is_some());
+    // Pure-balanced-if body: route the loop centring slack into the deepest
+    // 2-action then-branch's middle gap (see `while_if_body_branch_stretch`). The
+    // flag is consumed by `emit_if` when the terminal branch emits; we keep the
+    // stretch magnitude to bias the loop-back arrowhead off the UNSTRETCHED
+    // midpoint below.
+    let if_body_stretch = while_if_body_branch_stretch(body).map(|(_, s)| s);
+    let prev_if_branch_stretch = svg.while_if_branch_stretch.take();
+    svg.while_if_branch_stretch = if_body_stretch;
     let prev_loopback_tip = svg.while_switch_loopback_tip.take();
     svg.pending_while_body = true;
     svg.while_corridor_compresses = while_break_corridor_compresses(body);
     let body_bottom = emit_sequence_ex(svg, body, cx, body_top, body_mid_stretch, None, false);
+    svg.while_if_branch_stretch = prev_if_branch_stretch;
     let body_switch_loopback_tip = svg.while_switch_loopback_tip.take();
     svg.while_switch_loopback_tip = prev_loopback_tip;
     svg.while_break = prev_while_break;
@@ -12513,6 +12681,18 @@ fn emit_while(
             + body_mid_stretch.map_or(0.0, |(_, stretch)| {
                 WHILE_EVEN_BODY_LOOP_ARROW_STRETCH - stretch / 2.0
             })
+            // Body terminating in a balanced `if`: anchor the arrowhead on the
+            // pre-compression frame centre, one even-body stretch above the
+            // naive midpoint computed from the post-emit merge-diamond bottom.
+            // `body_mid_stretch` returns `None` for a composite-terminated body
+            // (it gates on all-actions), so this term is the only contributor.
+            - while_loopback_arrow_bias(body)
+            // Pure-balanced-if body: the merge-diamond bottom (hence `body_bottom`)
+            // already carries the branch stretch `S`, dropping the naive midpoint
+            // by `S/2`. PlantUML draws the loop-back arrowhead on the UNSTRETCHED
+            // midpoint plus a fixed even-body stretch, so undo the `S/2` and add
+            // `WHILE_EVEN_BODY_LOOP_ARROW_STRETCH`. Drives `act_while_ifdepth*`.
+            + if_body_stretch.map_or(0.0, |s| WHILE_EVEN_BODY_LOOP_ARROW_STRETCH - s / 2.0)
     });
     // Segments 4-7 (loop-back arm) are drawn by the break-`if` itself when the
     // loop-back was fused into its empty branch (last-flow break); skip them here.
