@@ -2340,6 +2340,68 @@ fn fork_branch_extents(branch: &[LayoutNode]) -> (f64, f64) {
     sequence_extents(branch)
 }
 
+/// The leading `while` of a fork branch (the branch's first flow node), if it is
+/// an ordinary labelled, non-empty, non-special loop whose inbound slot is
+/// eligible for compression. Returns the loop's `(body, is_label, end_label,
+/// special_out)` so callers can re-run the per-construct gate.
+fn fork_branch_leading_while(branch: &[LayoutNode]) -> Option<&LayoutNode> {
+    match first_flow_node(branch) {
+        Some(node @ LayoutNode::While { .. }) => Some(node),
+        _ => None,
+    }
+}
+
+/// Whether a fork branch's LEADING `while` reclaims its condition→body inbound
+/// slot (PlantUML's `WHILE_BODY_SLOT_COMPRESS`). The slot is an empty horizontal
+/// band; the global ON_Y slot finder reclaims it only when the band is empty
+/// across the WHOLE diagram width. Inside a fork the band sits at the same y in
+/// every branch that also leads with a `while`, but a sibling branch whose
+/// leading shape (an action, a fork bar, an if diamond, …) overlaps the band
+/// blocks the reclaim. So the leading `while` compresses iff EVERY other
+/// non-empty sibling also leads with a `while`. This overrides the per-construct
+/// gate (`while_ordinary_slot_compress_allowed`), which cannot see siblings:
+/// e.g. an action-body loop beside a plain action (`act_fork_with_while`) does
+/// NOT compress, while an if-body loop beside identical if-body loops
+/// (`act_complex_fork*_while_if`) DOES.
+fn fork_branch_leading_while_compresses(branches: &[Vec<LayoutNode>], i: usize) -> bool {
+    if fork_branch_leading_while(&branches[i]).is_none() {
+        return false;
+    }
+    branches.iter().enumerate().all(|(j, sibling)| {
+        j == i || sibling.is_empty() || fork_branch_leading_while(sibling).is_some()
+    })
+}
+
+/// The height correction a fork branch's leading-`while` needs when the
+/// sibling-aware compression decision (`fork_branch_leading_while_compresses`)
+/// differs from the per-construct gate `node_height` already baked in. Positive
+/// re-adds the slot (gate compressed but siblings block it); negative removes it
+/// (gate left it open but the aligned siblings reclaim it).
+fn fork_branch_while_slot_delta(branches: &[Vec<LayoutNode>], i: usize) -> f64 {
+    let Some(LayoutNode::While {
+        body,
+        is_label,
+        end_label,
+        special_out,
+        ..
+    }) = fork_branch_leading_while(&branches[i])
+    else {
+        return 0.0;
+    };
+    let gate_compresses =
+        while_ordinary_slot_compresses(body, is_label, end_label, special_out.as_deref());
+    let sibling_compresses = fork_branch_leading_while_compresses(branches, i);
+    if gate_compresses == sibling_compresses {
+        0.0
+    } else if sibling_compresses {
+        // Gate left the slot open; aligned siblings let ON_Y reclaim it.
+        -WHILE_BODY_SLOT_COMPRESS
+    } else {
+        // Gate compressed; a sibling shape blocks the reclaim.
+        WHILE_BODY_SLOT_COMPRESS
+    }
+}
+
 fn fork_layout(branches: &[Vec<LayoutNode>]) -> ForkLayout {
     let branch_extents: Vec<(f64, f64)> = branches.iter().map(|b| fork_branch_extents(b)).collect();
     let branch_widths: Vec<f64> = branch_extents.iter().map(|(l, r)| l + r).collect();
@@ -7515,6 +7577,18 @@ struct SvgEmitter {
     /// entry (one-shot, so it does not leak to a deeper body) and forces
     /// `compress_while_slot = false`.
     while_sole_body_suppress_compress: bool,
+    /// One-shot override for a fork branch's LEADING `while` inbound-slot
+    /// compression. PlantUML's slot finder reclaims the empty band between a
+    /// `while`'s condition diamond and its body only when that horizontal band is
+    /// empty across the WHOLE diagram width (ON_Y). Inside a fork the band is
+    /// empty iff every sibling branch also leads with a `while` (their bands
+    /// align); a sibling whose leading shape (an action, etc.) overlaps the band
+    /// blocks the reclaim. This decision cannot be made from the branch subtree
+    /// alone (the per-construct gate in `while_ordinary_slot_compress_allowed`),
+    /// so `emit_fork_with_layout` computes it from the sibling set and sets this
+    /// for the leading `while` of each branch. `emit_while` consumes it at entry
+    /// (one-shot, so a nested body's `while` re-establishes its own decision).
+    fork_branch_while_compress: Option<bool>,
     /// One-shot flag set by `emit_while` before emitting a single-nested-`while`
     /// body it wants to FUSE its loop-back with (case (b) compression). The
     /// nested `while` consumes it at entry and, instead of wrapping its exit
@@ -7784,6 +7858,7 @@ impl SvgEmitter {
             if_survivor_redirect: None,
             pending_while_body: false,
             while_sole_body_suppress_compress: false,
+            fork_branch_while_compress: None,
             while_expect_nested_exit: false,
             while_nested_exit: None,
             repeat_body_depth: 0,
@@ -12623,13 +12698,22 @@ fn emit_fork_with_layout(
     let center_branches = !branches
         .iter()
         .any(|branch| single_partition_branch_body_top(branch, bar_bottom).is_some());
+    // A fork branch's leading `while` reclaims its inbound slot per the
+    // SIBLING-aware decision (`fork_branch_leading_while_compresses`), which can
+    // differ from the per-construct gate `sequence_height`/`node_height` bakes
+    // in. Correct each branch's advertised height by that delta so centring and
+    // the fork's total height use the actually-emitted geometry.
+    let while_slot_deltas: Vec<f64> = (0..branches.len())
+        .map(|i| fork_branch_while_slot_delta(branches, i))
+        .collect();
     let base_heights: Vec<f64> = branches
         .iter()
-        .map(|b| {
+        .enumerate()
+        .map(|(i, b)| {
             if b.is_empty() {
                 0.0
             } else {
-                sequence_height(b)
+                sequence_height(b) + while_slot_deltas[i]
             }
         })
         .collect();
@@ -12663,7 +12747,8 @@ fn emit_fork_with_layout(
         // here rather than inside `sequence_height_ex`/`node_height`.
         let heights: Vec<f64> = branches
             .iter()
-            .map(|b| {
+            .enumerate()
+            .map(|(i, b)| {
                 if b.is_empty() {
                     0.0
                 } else {
@@ -12672,7 +12757,7 @@ fn emit_fork_with_layout(
                         .filter(|_| b.len() == 1)
                         .map(switch_fork_centering_extra)
                         .unwrap_or(0.0);
-                    sequence_height_ex(b, gap_extra) + extra
+                    sequence_height_ex(b, gap_extra) + extra + while_slot_deltas[i]
                 }
             })
             .collect();
@@ -12712,7 +12797,13 @@ fn emit_fork_with_layout(
         // `emit_switch` selects the nude layout. One-shot, consumed by
         // `emit_switch`.
         svg.fork_body_switch = fork_branch_nude_switch(branch).is_some();
+        // Override the leading `while`'s inbound-slot compression with the
+        // sibling-aware decision (one-shot; consumed by the branch's leading
+        // `emit_while`). Only set when the branch leads with an eligible loop.
+        svg.fork_branch_while_compress = fork_branch_leading_while(branch)
+            .map(|_| fork_branch_leading_while_compresses(branches, i));
         let bottom = emit_sequence(svg, branch, bcx, branch_y);
+        svg.fork_branch_while_compress = None;
         svg.fork_body_switch = false;
         branch_bottoms.push(bottom);
     }
@@ -12933,6 +13024,17 @@ fn emit_while(
     let single_while_slot_compressed =
         is_label.is_some() && special_out.is_none() && matches!(body, [LayoutNode::While { .. }]);
     let ordinary_slot_compressed = ordinary_slot_compressed || single_while_slot_compressed;
+    // Fork-branch override (one-shot): a fork's leading `while` reclaims its
+    // inbound slot per the SIBLING-aware decision, not the per-construct gate.
+    // `emit_fork_with_layout` sets this for the branch's leading loop only; a
+    // nested body's loop re-establishes its own decision (the flag was taken).
+    let fork_branch_while_compress = svg.fork_branch_while_compress.take();
+    let ordinary_slot_compressed = match fork_branch_while_compress {
+        Some(decision) if is_label.is_some() && special_out.is_none() && !body.is_empty() => {
+            decision
+        }
+        _ => ordinary_slot_compressed,
+    };
     let compress_while_slot = colored_partition_while || ordinary_slot_compressed;
     // A break-bearing loop keeps the normal long-exit arrowhead placement: the
     // break shares the exit corridor, so the loop exits/wraps like a no-special
