@@ -5236,7 +5236,14 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             // Reverse-engineered from goldens with varying body/condition
             // widths.
             let body_has_note = partition_body_has_direct_note(body);
-            let (body_left, body_right) = if body_has_note {
+            // A direct multi-case in-loop switch keeps its uncompressed gap-20
+            // drawn block (see `repeat_body_has_in_loop_switch`); reserve the
+            // wider drawn extents (`sequence_loop_body_extents`, which widens the
+            // switch to its `switch_x_layout_in_while` block) so the spine and
+            // loop-back arm track the drawn case rects, not the narrower
+            // standalone layout.
+            let in_loop_switch = repeat_body_has_in_loop_switch(body);
+            let (body_left, body_right) = if body_has_note || in_loop_switch {
                 sequence_loop_body_extents(body)
             } else {
                 // FtileRepeat.getLeft/getRight key off the body tile's own
@@ -5286,9 +5293,15 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
                 //            geo.right() + 4)`, then the canvas reserves a
                 // further 15 px past the arm. For a plain body the geometry
                 // and drawn extents coincide, reducing to the historical
-                // `max(cond_half, body_right) + 12 + 15`.
-                let geo_clear =
-                    sequence_geometry(body).map_or(body_right + 12.0, |g| g.right() + 4.0);
+                // `max(cond_half, body_right) + 12 + 15`. An in-loop switch's
+                // gap-20 `FtileGeometry` (`switch_with_diamonds`) overshoots the
+                // gap-20 DRAWN block the arm actually clears, so suppress the
+                // geometry clearance there and clear the drawn extents (+12).
+                let geo_clear = if in_loop_switch {
+                    body_right + 12.0
+                } else {
+                    sequence_geometry(body).map_or(body_right + 12.0, |g| g.right() + 4.0)
+                };
                 let arm_rel = (cond_half + 12.0).max(body_right + 12.0).max(geo_clear);
                 let right_extent = arm_rel + 15.0;
                 (left_extent, right_extent)
@@ -5915,6 +5928,27 @@ fn repeat_backward_right_extent(
 /// computable geometry (e.g. a note-only body).
 fn repeat_body_geo_right(body: &[LayoutNode]) -> f64 {
     sequence_geometry(body).map_or_else(|| sequence_width(body) / 2.0, |g| g.right())
+}
+
+/// True when a `repeat` body has a multi-case SMALL-diamond switch as a direct
+/// flow node. Such a switch keeps its uncompressed gap-20 inner bands (drawn via
+/// `switch_x_layout_in_while`; see `repeat_body_switch`), so its DRAWN block is
+/// wider than the standalone `switch_x_layout` that `sequence_extents` measures —
+/// but its `FtileGeometry` (`node_geometry`'s gap-20 `switch_with_diamonds`) is
+/// wider still. The repeat's loop-back arm clears the DRAWN block (`extents +
+/// 12`, mirroring `emit_while`'s arm), NOT the nude geometry's `getRight + 4`, so
+/// callers gate the geometry-based clearance off when this returns true and feed
+/// the widened `sequence_loop_body_extents` extents instead. SMALL diamonds only:
+/// a BIG-diamond switch keeps its standalone layout under the loop frame.
+fn repeat_body_has_in_loop_switch(body: &[LayoutNode]) -> bool {
+    body.iter().any(|node| match node {
+        LayoutNode::Switch { cases, condition } => {
+            cases.len() > 1
+                && cases.iter().all(|c| !c.body.is_empty())
+                && !switch_x_layout(cases, condition).big_diamond
+        }
+        _ => false,
+    })
 }
 
 /// Clearance the appended `backward :...;` box keeps to the right of a break-`if`
@@ -7622,6 +7656,15 @@ struct SvgEmitter {
     /// inner bands) instead of the standalone gap-10 layout. Set per-switch by
     /// `emit_sequence_ex` (while-body mode) and consumed once by `emit_switch`.
     while_body_switch: bool,
+    /// True while emitting a multi-case switch that is a direct flow node of a
+    /// `repeat` body. Exactly like `while_body_switch`: the loop frame blocks the
+    /// standalone diagram-wide ON_X compression of the bands straddling the
+    /// condition/merge-diamond column, so the switch keeps its uncompressed
+    /// gap-20 inner bands (`switch_x_layout_in_while`) instead of the standalone
+    /// gap-10 layout. Affects ONLY the horizontal layout selection; the vertical
+    /// merge band stays driven by `repeat_switch_merge_extra`. Set per-switch by
+    /// `emit_sequence_ex` (repeat-body mode), consumed once by `emit_switch`.
+    repeat_body_switch: bool,
     /// True while emitting a leading multi-case (>= 3) SMALL-diamond switch of a
     /// `fork`/`split` branch. Such a switch emits its uncompressed `FtileSwitchNude`
     /// layout (`switch_x_layout_nude`) rather than the switch-locally-compressed
@@ -7858,6 +7901,7 @@ impl SvgEmitter {
             while_if_long_merge_y: None,
             while_switch_merge_extra: 0.0,
             while_body_switch: false,
+            repeat_body_switch: false,
             fork_body_switch: false,
             while_corridor_compresses: false,
             while_switch_corridor_compresses: false,
@@ -9143,15 +9187,21 @@ fn emit_sequence_ex(
         }
         // A terminal multi-case switch directly in a `repeat` body keeps one
         // `ARROW_LEN` of its uncompressed merge band (the loop frame's fixed tail);
-        // pass that extra to the switch emit (one-shot). Unlike the `while` case
-        // this does NOT alter the switch's horizontal layout (the standalone gap-10
-        // layout survives ON_X under the repeat frame), so `while_body_switch` stays
-        // unset; only the vertical merge band and loop-back-tip anchor change.
+        // pass that extra to the switch emit (one-shot).
         if repeat_body
             && Some(i) == repeat_body_last_flow
             && matches!(node, LayoutNode::Switch { .. })
         {
             svg.repeat_switch_merge_extra = switch_repeat_merge_extra(node);
+        }
+        // A multi-case switch directly in a `repeat` body keeps its uncompressed
+        // gap-20 inner bands, exactly like a `while`-body switch: the loop frame
+        // blocks the standalone diagram-wide ON_X compression of the bands
+        // straddling the condition/merge-diamond column. This flag affects ONLY
+        // the horizontal layout selection (`switch_x_layout_in_while`); the
+        // vertical merge band stays driven by `repeat_switch_merge_extra` above.
+        if repeat_body && matches!(node, LayoutNode::Switch { .. }) {
+            svg.repeat_body_switch = true;
         }
         let node_y =
             emit_node_with_repeat_extra(svg, node, cx, y, repeat_extra, first_repeat_branch_extra);
@@ -9160,6 +9210,7 @@ fn emit_sequence_ex(
         svg.while_switch_corridor_compresses = false;
         svg.while_switch_merge_compressed = false;
         svg.repeat_switch_merge_extra = 0.0;
+        svg.repeat_body_switch = false;
         prev_was_deferred_while = node_defers;
         // Inbound connector goes AFTER the node's own emit so it lands
         // after the node's internal connectors in the connectors buffer
@@ -12080,7 +12131,11 @@ fn emit_switch(
             false,
         );
     }
-    let layout = if svg.while_body_switch {
+    // A switch directly in a `while` *or* `repeat` body keeps its uncompressed
+    // gap-20 inner bands: the loop frame blocks the standalone ON_X compression of
+    // the bands straddling the diamond column. Both flags select the same
+    // `switch_x_layout_in_while` layout.
+    let layout = if svg.while_body_switch || svg.repeat_body_switch {
         switch_x_layout_in_while(cases, condition)
     } else {
         switch_x_layout(cases, condition)
@@ -14320,6 +14375,13 @@ fn emit_repeat(
     // off-centre body (e.g. a nested-if with a wide left branch) from leaving
     // a phantom empty corridor that the ON_X compression pass would collapse.
     let body_right = if partition_body_has_direct_note(body) {
+        cx + sequence_loop_body_extents(body).1 + 12.0
+    } else if repeat_body_has_in_loop_switch(body) {
+        // A direct multi-case in-loop switch draws its uncompressed gap-20 block
+        // (`switch_x_layout_in_while`); the arm clears that DRAWN block (extents +
+        // 12, mirroring `emit_while`). Its gap-20 `FtileGeometry`
+        // (`switch_with_diamonds`) overshoots the drawn block, so skip `geo.right()
+        // + 4` and use the widened `sequence_loop_body_extents` right edge.
         cx + sequence_loop_body_extents(body).1 + 12.0
     } else {
         let extents_clear = cx + sequence_extents(body).1 + 12.0;
