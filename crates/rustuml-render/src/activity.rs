@@ -56,6 +56,11 @@ const PARTITION_GEOMETRIC_IF_DEEP_LEFT_ADJUST: f64 = -9.0;
 const GROUP_REPEAT_BODY_WIDTH_SUBTRACT: f64 = 1.0;
 const GROUP_REPEAT_TITLE_WIDTH_EXTRA: f64 = 15.0;
 const GROUP_REPEAT_SPINE_LEFT_OF_TITLE_MID: f64 = 2.0;
+/// Right margin a `group`'s rect keeps past a wrapped `while`'s drawn loop arm:
+/// the FtileGroup `addHorizontalMargin` 10 plus the FtileWhile's reclaimed
+/// trailing residual (`getInnerDimensionSlow`'s `+ ... + 5` rounding). The left
+/// side keeps just the plain 10 px margin.
+const GROUP_WHILE_RIGHT_RESIDUAL: f64 = 16.0;
 const GROUP_COLOR_TITLE_WIDTH_EXTRA: f64 = 4.1572;
 const GROUP_COLOR_RIGHT_EXTENT_EXTRA: f64 = 2.0;
 const PARTITION_FORK_WIDTH_EXTRA: f64 = 2.0;
@@ -1343,6 +1348,27 @@ fn body_contains_break_if(body: &[LayoutNode]) -> bool {
                 if if_break_down_plan(then_branch, else_branches).is_some()
         )
     })
+}
+
+/// A `while` directly in this body. A nested while ADVERTISES a wider layout
+/// extent (`sequence_extents`) than it draws (`sequence_geometry`) because of the
+/// FtileWhile `dx + halfHex` trailing reservation that the whole-diagram ON_X
+/// pass reclaims. A loop/group container that clears off the inflated layout
+/// extent over-reserves; the faithful FtileRepeat/FtileGroup clears off the
+/// drawn geometry instead. Used to gate that geometry-based clearance so plain /
+/// if / switch bodies (whose extent and geometry coincide) are unaffected.
+fn body_contains_while(body: &[LayoutNode]) -> bool {
+    body.iter().any(|n| matches!(n, LayoutNode::While { .. }))
+}
+
+/// True when the LAST flow node of this body is a `while`. The while's
+/// pointOut→condition link is then assembled with the body (its own exit
+/// corridor), landing in the connector stream BEFORE the repeat's ConnectionIn/
+/// Back — so the repeat's body→condition arrow is emitted early. A trailing plain
+/// tile after the while (e.g. `act_combo_while_in_repeat`'s `:After while;`)
+/// keeps the ordinary late body→condition order.
+fn body_last_flow_is_while(body: &[LayoutNode]) -> bool {
+    last_flow_index(body).is_some_and(|i| matches!(body[i], LayoutNode::While { .. }))
 }
 
 /// The break-bearing `if`'s diamond half-width (cond_inner_w/2 + halfHex) for the
@@ -5293,16 +5319,29 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
                 //            geo.right() + 4)`, then the canvas reserves a
                 // further 15 px past the arm. For a plain body the geometry
                 // and drawn extents coincide, reducing to the historical
-                // `max(cond_half, body_right) + 12 + 15`. An in-loop switch's
-                // gap-20 `FtileGeometry` (`switch_with_diamonds`) overshoots the
-                // gap-20 DRAWN block the arm actually clears, so suppress the
-                // geometry clearance there and clear the drawn extents (+12).
-                let geo_clear = if in_loop_switch {
-                    body_right + 12.0
+                // `max(cond_half, body_right) + 12 + 15`.
+                // FtileRepeat's loop arm clears the BODY TILE's geometric right
+                // by halfHex. A `while` body ADVERTISES a wider layout extent
+                // than it draws (the FtileWhile `dx + halfHex` trailing
+                // reservation reclaimed by ON_X — see
+                // `while_chain_trailing_reservation`); clearing from `body_right`
+                // (the inflated extent) over-reserves, so prefer `geo.right() +
+                // halfHex` when a while inflates the body extent. An in-loop
+                // switch's gap-20 `FtileGeometry` (`switch_with_diamonds`)
+                // OVERSHOOTS the gap-20 DRAWN block the arm clears, so suppress
+                // the geometry clearance there and clear the drawn extents (+12).
+                let arm_rel = if body_contains_while(body)
+                    && let Some(g) = sequence_geometry(body)
+                {
+                    (cond_half + 12.0).max(g.right() + DIAMOND_HALF)
                 } else {
-                    sequence_geometry(body).map_or(body_right + 12.0, |g| g.right() + 4.0)
+                    let geo_clear = if in_loop_switch {
+                        body_right + 12.0
+                    } else {
+                        sequence_geometry(body).map_or(body_right + 12.0, |g| g.right() + 4.0)
+                    };
+                    (cond_half + 12.0).max(body_right + 12.0).max(geo_clear)
                 };
-                let arm_rel = (cond_half + 12.0).max(body_right + 12.0).max(geo_clear);
                 let right_extent = arm_rel + 15.0;
                 (left_extent, right_extent)
             }
@@ -5433,6 +5472,21 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             let title_width_extra = partition_title_width_extra(color, *is_group, body);
             let title_drives_width =
                 partition_title_drives_width(title_w, body_w, title_width_extra, *is_group, body);
+            // A `group` (is_group) wrapping a bare `while` places the FtileWhile by
+            // its DRAWN geometry, not the inflated layout extent. FtileGroup wraps
+            // the inner in `addHorizontalMargin(inner, 10)`; the loop's trailing
+            // `dx + halfHex` reservation (which inflates `node_extents`) is
+            // reclaimed by the whole-diagram ON_X pass, leaving the rect's right
+            // edge `GROUP_WHILE_RIGHT_RESIDUAL` past the drawn loop arm. The left
+            // margin is the plain `addHorizontalMargin` 10. (The non-group
+            // `partition` while path is handled separately, below.)
+            if *is_group
+                && partition_wraps_while(body)
+                && !title_drives_width
+                && let Some(g) = sequence_geometry(body)
+            {
+                return (g.left + 10.0, g.right() + GROUP_WHILE_RIGHT_RESIDUAL);
+            }
             if !*is_group && partition_wraps_while(body) && !title_drives_width {
                 let half = (body_w + 20.0 + body_width_extra) / 2.0;
                 return (half, half);
@@ -6701,6 +6755,22 @@ fn partition_wrapped_while_slot_compresses(body: &[LayoutNode]) -> bool {
     ) != 0.0
 }
 
+/// A `group` (is_group) wrapping a bare `while`. Like a loop, it defers its
+/// inbound `ConnectionIn` past its internal/outbound connectors: PlantUML draws
+/// the connection FROM the group's output (down to the following `stop`/tile)
+/// before the connection INTO the group. Without deferral the start→group arrow
+/// lands before the group→stop arrow, swapping their (positional) emission order.
+fn is_group_wrapping_while(node: &LayoutNode) -> bool {
+    matches!(
+        node,
+        LayoutNode::Partition {
+            is_group: true,
+            body,
+            ..
+        } if partition_wraps_while(body)
+    )
+}
+
 fn is_partition_wrapping_compressed_while(node: &LayoutNode) -> bool {
     matches!(
         node,
@@ -6751,9 +6821,25 @@ fn partition_body_width_extra(is_group: bool, body: &[LayoutNode]) -> f64 {
     }
 }
 
+/// Shell width of a `group` wrapping a bare `while`, from the FtileWhile's DRAWN
+/// geometry: `addHorizontalMargin` 10 on the left plus
+/// [`GROUP_WHILE_RIGHT_RESIDUAL`] on the right (the loop's trailing reservation is
+/// reclaimed by the whole-diagram ON_X pass). Mirrors the group-while
+/// `node_extents` arm so the emitted rect, spine, and predicted extents agree.
+/// `None` for any other body shape (falls back to the layout-extent shell).
+fn group_while_shell_width(is_group: bool, body: &[LayoutNode]) -> Option<f64> {
+    if is_group && partition_wraps_while(body) {
+        sequence_geometry(body).map(|g| g.left + 10.0 + g.right() + GROUP_WHILE_RIGHT_RESIDUAL)
+    } else {
+        None
+    }
+}
+
 fn partition_body_shell_width(is_group: bool, body: &[LayoutNode]) -> f64 {
     if !is_group && let Some((geometry, left_adjust)) = partition_wrapped_geometric_if(body) {
         geometry.width + GROUP_IF_BODY_WIDTH_EXTRA + left_adjust
+    } else if let Some(w) = group_while_shell_width(is_group, body) {
+        w
     } else {
         partition_body_width_for_frame(body) + 20.0 + partition_body_width_extra(is_group, body)
     }
@@ -7704,6 +7790,13 @@ struct SvgEmitter {
     /// the condition diamond). `emit_sequence_ex` takes the flag at entry so nested
     /// sequences do not inherit it.
     pending_repeat_body: bool,
+    /// One-shot: this `while` is a NON-terminal flow node of a `repeat` body
+    /// (another flow tile follows it inside the loop). The FtileRepeat frame holds
+    /// the loop-back tail open below such a while — its junction keeps the full
+    /// `body_bottom + halfHex` (12) rather than the diagram-level ON_Y compressed
+    /// `body_bottom + 10`. A terminal while in the body still compresses to 10.
+    /// Set per-node by `emit_sequence_ex`, consumed once by `emit_while`.
+    while_repeat_body_nonterminal: bool,
     /// Extra added to the current switch's merge gap because it is the terminal
     /// flow node of a `repeat` body (`ARROW_LEN`). Set per-switch by
     /// `emit_sequence_ex` (repeat-body mode) and consumed once by
@@ -7908,6 +8001,7 @@ impl SvgEmitter {
             while_switch_merge_compressed: false,
             while_switch_loopback_tip: None,
             pending_repeat_body: false,
+            while_repeat_body_nonterminal: false,
             repeat_switch_merge_extra: 0.0,
             while_if_branch_stretch: None,
             swimlane_while_cond_special: false,
@@ -9203,6 +9297,16 @@ fn emit_sequence_ex(
         if repeat_body && matches!(node, LayoutNode::Switch { .. }) {
             svg.repeat_body_switch = true;
         }
+        // A NON-terminal `while` in a repeat body keeps its loop-back tail open
+        // (the FtileRepeat frame holds the band; the diagram-level ON_Y +10
+        // compression does not reach under the loop). See
+        // `while_repeat_body_nonterminal`.
+        if repeat_body
+            && Some(i) != repeat_body_last_flow
+            && matches!(node, LayoutNode::While { .. })
+        {
+            svg.while_repeat_body_nonterminal = true;
+        }
         let node_y =
             emit_node_with_repeat_extra(svg, node, cx, y, repeat_extra, first_repeat_branch_extra);
         svg.while_switch_merge_extra = 0.0;
@@ -9211,6 +9315,7 @@ fn emit_sequence_ex(
         svg.while_switch_merge_compressed = false;
         svg.repeat_switch_merge_extra = 0.0;
         svg.repeat_body_switch = false;
+        svg.while_repeat_body_nonterminal = false;
         prev_was_deferred_while = node_defers;
         // Inbound connector goes AFTER the node's own emit so it lands
         // after the node's internal connectors in the connectors buffer
@@ -9221,6 +9326,7 @@ fn emit_sequence_ex(
                 || is_ordinary_compressed_while(node)
                 || is_unlabeled_break_while(node)
                 || is_break_down_if(node)
+                || is_group_wrapping_while(node)
             {
                 deferred_partition_inbound = Some((arrow_top, style, label, arrow_gap));
             } else {
@@ -11268,6 +11374,45 @@ fn repeat_loopback_arrow_bias(body: &[LayoutNode], has_backward: bool) -> f64 {
     if has_backward {
         return 0.0;
     }
+    // A `while` body slot-compresses its inbound band (`WHILE_BODY_SLOT_COMPRESS`);
+    // that reclaimed slack sits in the lower half of the outer repeat's loop-back
+    // span, so the arrowhead's pre-compression midpoint sits
+    // `WHILE_BODY_SLOT_COMPRESS/2 − 1` above the drawn `(top_cy + cond_cy)/2`
+    // (the same pull-up the colored-partition-while exit arrow uses).
+    if let [
+        LayoutNode::While {
+            body: while_body,
+            is_label,
+            end_label,
+            special_out,
+            ..
+        },
+    ] = body
+        && while_ordinary_slot_compresses(while_body, is_label, end_label, special_out.as_deref())
+    {
+        return WHILE_BODY_SLOT_COMPRESS / 2.0 - 1.0;
+    }
+    // A repeat body that LEADS with a slot-compressing `while` and then a plain
+    // action (`act_combo_while_in_repeat`): an even body, so the centre falls in
+    // the middle connector (even-body `space/2` stretch), but the while's
+    // inbound-slot compression pulls the drawn content up by
+    // `WHILE_BODY_SLOT_COMPRESS/2`. The loop-back arrowhead sits BELOW the naive
+    // midpoint by the residual `WHILE_EVEN_BODY_LOOP_ARROW_STRETCH −
+    // WHILE_BODY_SLOT_COMPRESS/2` (a negative bias, since this fn is subtracted).
+    if let [
+        LayoutNode::While {
+            body: while_body,
+            is_label,
+            end_label,
+            special_out,
+            ..
+        },
+        LayoutNode::Action { .. },
+    ] = body
+        && while_ordinary_slot_compresses(while_body, is_label, end_label, special_out.as_deref())
+    {
+        return -(WHILE_EVEN_BODY_LOOP_ARROW_STRETCH - WHILE_BODY_SLOT_COMPRESS / 2.0);
+    }
     let flow: Vec<&LayoutNode> = body.iter().filter(|n| node_is_flow(n)).collect();
     // Need an even flow count whose leading nodes are plain actions and whose
     // single trailing composite is a balanced `if` (has at least one else
@@ -11312,6 +11457,24 @@ fn repeat_body_height(body: &[LayoutNode], has_backward: bool) -> f64 {
         // A terminal multi-case switch keeps one uncompressible `ARROW_LEN` of its
         // merge band under the loop frame (see `repeat_body_switch_extra`).
         + repeat_body_switch_extra(body)
+        // A NON-terminal `while` keeps its loop-back tail open (`body_bottom +
+        // halfHex` rather than the ON_Y-compressed `+10`); `sequence_height`'s
+        // While arm models the compressed form, so add back the `halfHex − 10`
+        // residual to match `emit_while`'s `repeat_body_nonterminal` junction.
+        + repeat_body_nonterminal_while_extra(body)
+}
+
+/// `halfHex − 10` (= 2) per `while` that is a NON-terminal flow node of a repeat
+/// body — the loop-back-tail slack the FtileRepeat frame holds open and
+/// `emit_while` draws (see `while_repeat_body_nonterminal`). Zero for a terminal
+/// while (its tail ON_Y-compresses) and for any other tile.
+fn repeat_body_nonterminal_while_extra(body: &[LayoutNode]) -> f64 {
+    let last = last_flow_index(body);
+    body.iter()
+        .enumerate()
+        .filter(|(i, n)| Some(*i) != last && matches!(n, LayoutNode::While { .. }))
+        .count() as f64
+        * (DIAMOND_HALF - 10.0)
 }
 
 /// Extra vertical gap a `backward` repeat reserves between the body bottom and
@@ -13173,6 +13336,11 @@ fn emit_while(
     // diamond below to merge against), so it does NOT compress. One-shot — consume
     // so a deeper nested body re-establishes its own compressibility.
     let sole_body_suppress = std::mem::take(&mut svg.while_sole_body_suppress_compress);
+    // One-shot: this while is a non-terminal flow in a repeat body, so the
+    // FtileRepeat frame holds its loop-back tail open (junction keeps the full
+    // halfHex, not the ON_Y-compressed 10). Take it before the body emit so a
+    // nested while cannot inherit it.
+    let repeat_body_nonterminal = std::mem::take(&mut svg.while_repeat_body_nonterminal);
     let ordinary_slot_compressed = !sole_body_suppress
         && while_ordinary_slot_compresses(body, is_label, end_label, special_out);
     // Case (b): a `while` whose body is a single nested `while`. Every diamond in
@@ -13369,9 +13537,10 @@ fn emit_while(
         // not at `body_bottom + 10` (which would count the nested loop's whole
         // drawn extent including its own wrapped corridor).
         ne.fused_y
-    } else if body.is_empty() || in_if_long_branch {
-        // Empty body, or an if-long branch where ON_Y never reaches the tail:
-        // the UEmpty(halfHex) placeholder keeps its full 12 px.
+    } else if body.is_empty() || in_if_long_branch || repeat_body_nonterminal {
+        // Empty body, an if-long branch where ON_Y never reaches the tail, or a
+        // non-terminal while in a repeat body (the FtileRepeat frame holds the
+        // tail open): the UEmpty(halfHex) placeholder keeps its full 12 px.
         body_bottom + DIAMOND_HALF
     } else {
         body_bottom + 10.0
@@ -13997,11 +14166,15 @@ fn emit_while(
     if nested_exit.is_some() && special_out.is_none() && break_frame_h.is_none() {
         arrow_y += WHILE_NESTED_EXIT_ARROW_BIAS;
     }
-    // The exit emphasis arrowhead anchors on the PRE-compression midpoint. In an
-    // if-long branch the drawn `wrap_y` kept the uncompressed `+12` junction
-    // (`in_if_long_branch`), raising the geometric midpoint by half that 2 px;
+    // The exit emphasis arrowhead anchors on the PRE-compression midpoint. When
+    // the drawn `wrap_y` kept the uncompressed `+12` junction — an if-long branch
+    // (`in_if_long_branch`) or a non-terminal while in a repeat body
+    // (`repeat_body_nonterminal`) — the geometric midpoint rose by half that 2 px;
     // pull the arrowhead back up so it lands where the compressed midpoint would.
-    if in_if_long_branch && special_out.is_none() && break_frame_h.is_none() {
+    if (in_if_long_branch || repeat_body_nonterminal)
+        && special_out.is_none()
+        && break_frame_h.is_none()
+    {
         arrow_y -= (DIAMOND_HALF - 10.0) / 2.0;
     }
     svg.polygon_connector(
@@ -14352,6 +14525,20 @@ fn emit_repeat(
         );
     }
 
+    // Body → condition connector ordering. PlantUML normally emits the
+    // top-diamond → body ConnectionIn and the loop-back ConnectionBack BEFORE
+    // the body's spine→condition link (plain bodies: [in, back, out]). A `while`
+    // body, however, is a composite tile whose pointOut→condition link is
+    // assembled with the BODY (its own exit corridor), so it lands in the stream
+    // BEFORE the repeat's ConnectionIn/Back — order [out, in, back]. Gate the
+    // early emit on a while-LAST body so plain/if/switch bodies (and a while
+    // followed by a trailing tile) keep [in, back, out].
+    let break_is_last = break_weld_y.is_some() && break_if_is_last_flow(body);
+    let while_body_out_first = body_last_flow_is_while(body) && !has_start_label && !break_is_last;
+    if while_body_out_first {
+        svg.down_arrow(cx, body_bottom, cond_y, &arrow_color);
+    }
+
     // Top-diamond → body inbound connector — PlantUML emits this BEFORE
     // the loop-back path in the connector stream. Labelled-start repeats
     // have no top diamond; the outer sequence connector enters the label box.
@@ -14376,6 +14563,14 @@ fn emit_repeat(
     // a phantom empty corridor that the ON_X compression pass would collapse.
     let body_right = if partition_body_has_direct_note(body) {
         cx + sequence_loop_body_extents(body).1 + 12.0
+    } else if body_contains_while(body)
+        && let Some(g) = sequence_geometry(body)
+    {
+        // A `while` body advertises a wider layout extent than it draws (the
+        // FtileWhile `dx + halfHex` trailing reservation reclaimed by ON_X). The
+        // faithful FtileRepeat arm clears the drawn geometry by halfHex, matching
+        // the Repeat `node_extents` arm formula above.
+        cx + g.right() + DIAMOND_HALF
     } else if repeat_body_has_in_loop_switch(body) {
         // A direct multi-case in-loop switch draws its uncompressed gap-20 block
         // (`switch_x_layout_in_while`); the arm clears that DRAWN block (extents +
@@ -14639,9 +14834,9 @@ fn emit_repeat(
     // is the body's LAST flow node it already drew this from its own pointOut (it
     // lands earlier in document order, with the if's connectors), so skip it. A
     // MID/early break ends the body with a trailing action, whose spine→condition
-    // arrow the break-`if` did NOT draw — emit it here.
-    let break_is_last = break_weld_y.is_some() && break_if_is_last_flow(body);
-    if !break_is_last {
+    // arrow the break-`if` did NOT draw — emit it here. A `while`-LAST body already
+    // drew it early (see `while_body_out_first`).
+    if !break_is_last && !while_body_out_first {
         svg.down_arrow(cx, body_bottom, cond_y, &arrow_color);
     }
 
