@@ -1218,7 +1218,10 @@ fn node_is_flow(n: &LayoutNode) -> bool {
         | LayoutNode::Detach
         | LayoutNode::Kill
         | LayoutNode::Break
-        | LayoutNode::Goto(_) => false,
+        | LayoutNode::Goto(_)
+        // Swimlane V2 lane marker: zero-size, no shape, no connector — not a
+        // flow node (so it never claims `first_flow_node` nor an inbound arrow).
+        | LayoutNode::LaneMark(_) => false,
         LayoutNode::Partition { body, .. } if body.is_empty() => false,
         _ => true,
     }
@@ -1626,14 +1629,27 @@ fn build_tree(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode> {
         // V2 single-tree path: assign lane indices in first-appearance order, set
         // the thread-local so `build_tree_inner` (recursively, incl. branch
         // helpers) lowers each `|Lane|` step to a `LayoutNode::LaneMark(idx)`.
-        let mut map: HashMap<String, usize> = HashMap::new();
-        for name in &swimlane_markers {
-            let next = map.len();
-            map.entry((*name).to_string()).or_insert(next);
+        //
+        // Re-entrancy guard: branch bodies are built via `collect_until` →
+        // `build_tree`, so this gate fires again on each branch sub-slice. Only
+        // the OUTERMOST call (map currently unset) owns the map — it builds and
+        // sets it, then clears it; inner calls leave the parent's lane indices
+        // intact (a nested rebuild would renumber lanes and corrupt the
+        // top-level mapping). `build_tree_inner` lowers `|Lane|` markers found
+        // at any nesting depth using whichever map the outermost call installed.
+        let we_set = SWIMLANE_V2_MAP.with(|m| m.borrow().is_none());
+        if we_set {
+            let mut map: HashMap<String, usize> = HashMap::new();
+            for name in &swimlane_markers {
+                let next = map.len();
+                map.entry((*name).to_string()).or_insert(next);
+            }
+            SWIMLANE_V2_MAP.with(|m| *m.borrow_mut() = Some(map));
         }
-        SWIMLANE_V2_MAP.with(|m| *m.borrow_mut() = Some(map));
         let tree = build_tree_inner(steps, palette);
-        SWIMLANE_V2_MAP.with(|m| *m.borrow_mut() = None);
+        if we_set {
+            SWIMLANE_V2_MAP.with(|m| *m.borrow_mut() = None);
+        }
         return tree;
     }
 
@@ -7931,6 +7947,11 @@ struct SvgEmitter {
     /// column (`special_cx = diamond_left_vertex - halfHex - 9`) rather than the
     /// standalone body-corridor position. Consumed (one-shot) by `emit_while`.
     swimlane_while_cond_special: bool,
+    /// Swimlane V2 single-tree emit is active. While set, `emit_sequence_ex`
+    /// turns on `swimlane_while_cond_special` around each `while`+special_out
+    /// tile that forms (the tail of) its lane — the lane-narrowed terminator
+    /// placement that the legacy segment model applies per segment.
+    swimlane_v2_active: bool,
     /// Set by `emit_swimlanes` before emitting a lane segment whose body ends in
     /// a no-special `while` and whose next chronological segment lives in another
     /// lane. PlantUML stitches the inter-lane arrow onto the loop's exit corridor
@@ -8118,6 +8139,7 @@ impl SvgEmitter {
             repeat_switch_merge_extra: 0.0,
             while_if_branch_stretch: None,
             swimlane_while_cond_special: false,
+            swimlane_v2_active: false,
             swimlane_cross_lane: None,
         }
     }
@@ -8982,6 +9004,15 @@ fn emit_sequence_ex(
     // run (the one preceded by a non-while tile) is genuinely deferred.
     let mut prev_was_deferred_while = false;
     for (i, node) in nodes.iter().enumerate() {
+        // Swimlane V2 lane marker: record the lane span (emit_node sets
+        // current_lane + pushes the byte offsets) but take NO vertical space and
+        // NO inbound connector — it is not a flow node, so it must not advance
+        // `flow_ordinal` (otherwise the node after a leading `|Lane|` gets a
+        // phantom inbound arrow, e.g. an arrow into `start`).
+        if matches!(node, LayoutNode::LaneMark(_)) {
+            emit_node(svg, node, cx, y);
+            continue;
+        }
         // Skip layout for non-flow nodes (arrows and notes don't take vertical space
         // on their own).
         if matches!(node, LayoutNode::Arrow { .. } | LayoutNode::Note { .. }) {
@@ -9065,6 +9096,11 @@ fn emit_sequence_ex(
                     }
                     LayoutNode::Note { .. } => {}
                     LayoutNode::Title { .. } => {}
+                    // Swimlane V2 lane marker: transparent to the previous-flow
+                    // lookup (it is not a flow node), so a node after a leading
+                    // `|Lane|` does not treat the marker as its predecessor and
+                    // gets no phantom inbound arrow.
+                    LayoutNode::LaneMark(_) => {}
                     n if is_empty_partition_node(n) => {}
                     LayoutNode::Detach
                     | LayoutNode::Kill
@@ -9434,8 +9470,19 @@ fn emit_sequence_ex(
         if if_node_is_terminating_down(node) {
             svg.if_down_terminating_has_next = following_flow_count(nodes, i) > 0;
         }
+        // Swimlane V2: a `while`+terminator tile that forms (the tail of) its
+        // lane hangs the terminator off the diamond's left-vertex column, like
+        // the legacy segment model's cond-special lanes. Gate one-shot around
+        // this node's emit (emit_while consumes the flag).
+        if svg.swimlane_v2_active
+            && matches!(node, LayoutNode::While { special_out: Some(_), .. })
+            && swimlane_while_cond_special_lane(std::slice::from_ref(node))
+        {
+            svg.swimlane_while_cond_special = true;
+        }
         let node_y =
             emit_node_with_repeat_extra(svg, node, cx, y, repeat_extra, first_repeat_branch_extra);
+        svg.swimlane_while_cond_special = false;
         svg.if_down_terminating_has_next = false;
         svg.while_switch_merge_extra = 0.0;
         svg.while_body_switch = false;
@@ -13536,6 +13583,11 @@ fn emit_while(
     } else {
         None
     };
+    // Take the cond-driven swimlane terminator flag NOW (one-shot), before the
+    // body emit — the body's `emit_sequence_ex` clears the shared flag after
+    // each node, which would otherwise reset it before the special placement
+    // below reads it.
+    let swimlane_cond_special = std::mem::take(&mut svg.swimlane_while_cond_special);
     // Take the if-long-branch flag now: this while leads an if-long branch whose
     // couples are top-aligned, so the whole-diagram ON_Y pass never compresses
     // its loop-back tail. A nested body must NOT inherit it (its own frame
@@ -13829,7 +13881,7 @@ fn emit_while(
         // hangs the terminator circle off the diamond's left-vertex column:
         // its centre sits halfHex + 9 left of the diamond's left vertex,
         // matching the lane's drawn `getMinMax` width.
-        let special_cx = if svg.swimlane_while_cond_special {
+        let special_cx = if swimlane_cond_special {
             diamond_left_vertex_x - DIAMOND_HALF - 9.0
         } else {
             special_left_abs + special_w / 2.0
@@ -15201,13 +15253,204 @@ fn swimlane_v2_node_extents(node: &LayoutNode) -> (f64, f64) {
     node_extents(node)
 }
 
+fn node_dbg_name(n: &LayoutNode) -> &'static str {
+    match n {
+        LayoutNode::LaneMark(_) => "LaneMark",
+        LayoutNode::Start => "Start",
+        LayoutNode::Stop => "Stop",
+        LayoutNode::End => "End",
+        LayoutNode::While { .. } => "While",
+        LayoutNode::Action { .. } => "Action",
+        LayoutNode::Arrow { .. } => "Arrow",
+        LayoutNode::Note { .. } => "Note",
+        _ => "Other",
+    }
+}
+
+/// Minimum and maximum y referenced by a shape fragment (rect/ellipse/polygon).
+/// Used to derive a lane's natural vertical band.
+fn svg_y_bounds(buf: &str) -> Option<(f64, f64)> {
+    let mut lo = f64::MAX;
+    let mut hi = f64::MIN;
+    for prim in split_svg_primitives(buf) {
+        let getn = |k: &str| -> Option<f64> {
+            let at = prim.find(k)? + k.len();
+            let r = &prim[at..];
+            r[..r.find('"')?].parse().ok()
+        };
+        if prim.starts_with("<polygon") {
+            if let Some(at) = prim.find("points=\"") {
+                let rest = &prim[at + 8..];
+                if let Some(end) = rest.find('"') {
+                    for y in rest[..end].split(',').skip(1).step_by(2) {
+                        if let Ok(v) = y.trim().parse::<f64>() {
+                            lo = lo.min(v);
+                            hi = hi.max(v);
+                        }
+                    }
+                }
+            }
+        } else if prim.starts_with("<rect")
+            && let (Some(y), Some(h)) = (getn(" y=\""), getn("height=\""))
+        {
+            lo = lo.min(y);
+            hi = hi.max(y + h);
+        } else if prim.starts_with("<ellipse")
+            && let (Some(cy), Some(ry)) = (getn("cy=\""), getn("ry=\""))
+        {
+            lo = lo.min(cy - ry);
+            hi = hi.max(cy + ry);
+        }
+    }
+    if lo <= hi { Some((lo, hi)) } else { None }
+}
+
+/// The (min, max) y referenced by a single connector primitive (line/polygon).
+fn conn_prim_y_range(prim: &str) -> Option<(f64, f64)> {
+    if prim.starts_with("<polygon") {
+        let at = prim.find("points=\"")? + 8;
+        let rest = &prim[at..];
+        let end = rest.find('"')?;
+        let mut lo = f64::MAX;
+        let mut hi = f64::MIN;
+        for y in rest[..end].split(',').skip(1).step_by(2) {
+            if let Ok(v) = y.trim().parse::<f64>() {
+                lo = lo.min(v);
+                hi = hi.max(v);
+            }
+        }
+        return (lo <= hi).then_some((lo, hi));
+    }
+    let (_, _, y1, y2) = parse_line_xy(prim)?;
+    Some((y1.min(y2), y1.max(y2)))
+}
+
+/// Re-partition the connectors buffer into per-lane fragments by NATURAL y-band.
+/// A connector wholly inside lane `l`'s band → lane `l` (regardless of emit
+/// order, so deferred connectors land correctly). A connector that SPANS a band
+/// boundary is a cross-lane transition; it is assigned to the lowest lane whose
+/// band its top touches (the source lane), where the synthesis rewrites it.
+/// Connectors keep their emit order within each resulting fragment.
+fn relabel_connectors_by_yband(buf: &str, bands: &[(f64, f64)]) -> Vec<String> {
+    let n = bands.len();
+    let mut frags = vec![String::new(); n.max(1)];
+    // Boundary between lane l and l+1 = midpoint of band l's max and band l+1's min.
+    let boundary = |l: usize| -> f64 { (bands[l].1 + bands[l + 1].0) / 2.0 };
+    for prim in split_svg_primitives(buf) {
+        let (ymin, _ymax) = conn_prim_y_range(&prim).unwrap_or((f64::MAX, f64::MAX));
+        // Lane whose band contains the connector's TOP. A connector wholly in
+        // one band → that lane; one that spans bands (a cross-lane transition)
+        // → its source (top) lane, where the synthesis rewrites it.
+        let mut lane = 0usize;
+        for l in 0..n.saturating_sub(1) {
+            if ymin >= boundary(l) {
+                lane = l + 1;
+            }
+        }
+        if lane < frags.len() {
+            frags[lane].push_str(&prim);
+        }
+    }
+    frags
+}
+
+/// Split an SVG fragment into its top-level `<line.../>` / `<polygon.../>`
+/// primitives (self-closing). Returns the substrings verbatim.
+fn split_svg_primitives(buf: &str) -> Vec<String> {
+    let mut out = Vec::new();
+    let bytes = buf.as_bytes();
+    let mut i = 0;
+    while i < bytes.len() {
+        if bytes[i] == b'<' {
+            // Find the closing "/>" of this element.
+            if let Some(end) = buf[i..].find("/>") {
+                let prim = &buf[i..i + end + 2];
+                out.push(prim.to_string());
+                i += end + 2;
+                continue;
+            }
+        }
+        i += 1;
+    }
+    out
+}
+
+/// Parse a `<line .../>` primitive's (x1, x2, y1, y2). Returns None if absent.
+fn parse_line_xy(prim: &str) -> Option<(f64, f64, f64, f64)> {
+    if !prim.starts_with("<line") {
+        return None;
+    }
+    let get = |key: &str| -> Option<f64> {
+        let at = prim.find(key)? + key.len();
+        let rest = &prim[at..];
+        let close = rest.find('"')?;
+        rest[..close].parse().ok()
+    };
+    Some((
+        get("x1=\"")?,
+        get("x2=\"")?,
+        get("y1=\"")?,
+        get("y2=\"")?,
+    ))
+}
+
+/// The y of a while diamond's vertical centre (first diamond polygon) and the
+/// bottom of the loop body's action rect, read from a lane's SHIFTED shape
+/// fragment. Used to place the cross-lane exit arrowhead faithfully (matching
+/// `emit_while`'s `(diamond_cy + tile_bottom)/2` rule). Returns
+/// `(diamond_cy, body_bottom)`.
+fn first_while_diamond_and_body(shapes: &str) -> Option<(f64, f64)> {
+    // First diamond: a 7-point `<polygon ...>` whose points form a hexagon;
+    // PlantUML emits the diamond top first, so points[1] = top y, and the
+    // diamond centre y = top + DIAMOND_HALF.
+    let poly_at = shapes.find("<polygon")?;
+    let pts_at = shapes[poly_at..].find("points=\"")? + poly_at + 8;
+    let pts_end = shapes[pts_at..].find('"')? + pts_at;
+    let nums: Vec<f64> = shapes[pts_at..pts_end]
+        .split(',')
+        .filter_map(|s| s.trim().parse().ok())
+        .collect();
+    if nums.len() < 4 {
+        return None;
+    }
+    let diamond_top = nums[1];
+    let diamond_cy = diamond_top + DIAMOND_HALF;
+    // Body action rect bottom: the first rounded action rect (`rx="12.5"`),
+    // which PlantUML emits BEFORE the loop diamond. Its y + height gives the
+    // loop body bottom (used to place the exit arrowhead).
+    let rect_at = shapes.find(r#"rx="12.5""#)?;
+    // Back up to the start of this `<rect ...>` element.
+    let rect_start = shapes[..rect_at].rfind("<rect")?;
+    let rect = &shapes[rect_start..];
+    let geth = |key: &str| -> Option<f64> {
+        let at = rect.find(key)? + key.len();
+        let rest = &rect[at..];
+        let close = rest.find('"')?;
+        rest[..close].parse().ok()
+    };
+    let ry = geth(" y=\"")?;
+    let rh = geth("height=\"")?;
+    Some((diamond_cy, ry + rh))
+}
+
+/// The top y of the first while diamond in a lane's SHIFTED shape fragment.
+fn first_diamond_top(shapes: &str) -> Option<f64> {
+    let poly_at = shapes.find("<polygon")?;
+    let pts_at = shapes[poly_at..].find("points=\"")? + poly_at + 8;
+    let pts_end = shapes[pts_at..].find('"')? + pts_at;
+    let nums: Vec<f64> = shapes[pts_at..pts_end]
+        .split(',')
+        .filter_map(|s| s.trim().parse().ok())
+        .collect();
+    nums.get(1).copied()
+}
+
 fn layout_swimlanes_v2(
     svg: &SvgEmitter,
     tree: &[LayoutNode],
     natural_cx: f64,
     natural_start_y: f64,
     lane_names: &[String],
-    natural_h: f64,
     chrome: &SwimlaneV2Chrome,
 ) -> Option<(String, String, u32, u32)> {
     let n = lane_names.len();
@@ -15215,7 +15458,26 @@ fn layout_swimlanes_v2(
         return None;
     }
     let shape_frags = partition_lane_buffer(&svg.shapes, &svg.lane_spans, |s| s.0, n);
-    let conn_frags = partition_lane_buffer(&svg.connectors, &svg.lane_spans, |s| s.1, n);
+
+    // Connectors: start from the byte-offset partition, then RELABEL by natural
+    // y-band. The single-tree emit defers some connectors (notably each
+    // `while`'s inbound), so a connector can be written into the byte range of a
+    // later lane than the one it belongs to. Lanes stack vertically with
+    // disjoint y, so a connector wholly inside one lane's natural y-band belongs
+    // to that lane regardless of emit order. Connectors that SPAN bands are the
+    // cross-lane transitions and stay where the byte tag put them (the source
+    // lane), to be rewritten by the synthesis below. Shapes are never deferred,
+    // so their byte-tagged fragments give each lane's reliable y-band.
+    let lane_yband: Vec<(f64, f64)> = (0..n)
+        .map(|l| svg_y_bounds(&shape_frags[l]).unwrap_or((f64::MIN, f64::MAX)))
+        .collect();
+    let conn_frags = relabel_connectors_by_yband(&svg.connectors, &lane_yband);
+
+    if std::env::var("RUSTUML_EXT_DBG").is_ok() {
+        eprintln!("[V2] natural_start_y={natural_start_y}");
+        eprintln!("[V2] tree variants = {:?}", tree.iter().map(node_dbg_name).collect::<Vec<_>>());
+        eprintln!("[V2] lane_yband = {lane_yband:?}");
+    }
 
     // Partition the single tree's top-level nodes into per-lane runs (= old
     // segments for linear flows). LaneMark switches the active lane.
@@ -15276,28 +15538,146 @@ fn layout_swimlanes_v2(
     let natural_ref = first_ellipse_cy(&svg.shapes).unwrap_or(natural_start_y);
     let content_dy = body_top - natural_ref;
 
-    // Shift each lane's shape/connector fragment by its dx (x) and content_dy (y).
+    // Per-lane y-offset. With the leading-`|Lane|` phantom inbound arrow
+    // suppressed (see `emit_sequence_ex`), the natural single-tree's
+    // while-to-while gap already matches PlantUML's per-lane spacing, so every
+    // lane shares the same vertical content_dy.
+    let lane_dy: Vec<f64> = vec![content_dy; n];
+
+    // Shift each lane's shape/connector fragment by its dx (x) and lane_dy (y).
     let lane_shapes: Vec<String> = (0..n)
-        .map(|l| {
-            crate::compress::shift_y(&crate::compress::shift_x(&shape_frags[l], dx[l]), content_dy)
-        })
+        .map(|l| crate::compress::shift_y(&crate::compress::shift_x(&shape_frags[l], dx[l]), lane_dy[l]))
         .collect();
-    let lane_conns: Vec<String> = (0..n)
-        .map(|l| {
-            crate::compress::shift_y(&crate::compress::shift_x(&conn_frags[l], dx[l]), content_dy)
-        })
+    let mut lane_conns: Vec<String> = (0..n)
+        .map(|l| crate::compress::shift_y(&crate::compress::shift_x(&conn_frags[l], dx[l]), lane_dy[l]))
         .collect();
 
-    // Dividers span from the header top to the bottom of the drawn content.
-    let mut content_bottom = natural_h;
+    // Cross-lane connector synthesis. The natural single-tree draws each lane
+    // boundary as the source while's west-exit corridor (stub, rail-arrowhead,
+    // rail, horizontal-back-to-spine) followed by an inbound drop in the target
+    // lane — all on the shared natural spine. Per-lane x-shift would split that
+    // corridor across two `dx` values and break the L-snake. So for each
+    // boundary out of a plain (no-special) `while`, strip the corridor's
+    // trailing rail-arrowhead/rail/horizontal from the source fragment and the
+    // leading drop+arrowhead from the target fragment, then re-emit the full
+    // `Cross` L-snake with FINAL coordinates (matching `emit_while`'s stitch:
+    // exit arrowhead at (diamond_cy + tile_bottom)/2, rail down to cross_y,
+    // horizontal to the target spine, drop into the target tile).
+    let arrow_color = svg.palette.arrow_color.clone();
+    for l in 0..n.saturating_sub(1) {
+        let ends_while = runs[l]
+            .last()
+            .is_some_and(|node| swimlane_segment_ends_in_plain_while(std::slice::from_ref(node)));
+        if !ends_while {
+            continue;
+        }
+        // Locate the natural transition in the (shifted) source-lane connectors.
+        // It is the source while's west-exit corridor that wraps back to the
+        // spine then drops into the next tile: a contiguous run
+        //   [rail-arrowhead(poly), rail(vert line, min x), horiz-back(horiz line),
+        //    drop(vert line at spine), drop-arrowhead(poly)]
+        // The rail is the vertical line with the smallest x in the fragment.
+        let src_prims = split_svg_primitives(&lane_conns[l]);
+        // Index of the west rail: vertical line (x1==x2) with the minimum x.
+        let rail_idx = src_prims.iter().enumerate().fold(None, |best, (i, p)| {
+            match parse_line_xy(p) {
+                Some((x1, x2, _, _)) if (x1 - x2).abs() < 0.001 => match best {
+                    Some((_, bx)) if x1 >= bx => best,
+                    _ => Some((i, x1)),
+                },
+                _ => best,
+            }
+        });
+        let Some((rail_idx, _)) = rail_idx else { continue };
+        // The rail-arrowhead is the polygon immediately before the rail.
+        if rail_idx == 0 || rail_idx + 2 >= src_prims.len() {
+            continue;
+        }
+        // The transition run is [rail_idx-1 .. rail_idx+3] (5 primitives:
+        // rail-head, rail, horiz, drop, drop-head). Validate shapes loosely.
+        let run_start = rail_idx - 1;
+        let run_end = rail_idx + 4; // exclusive
+        if run_end > src_prims.len() {
+            continue;
+        }
+        // Source while's diamond_cy + body bottom (for the exit arrowhead y).
+        let Some((diamond_cy, body_bottom)) = first_while_diamond_and_body(&lane_shapes[l]) else {
+            continue;
+        };
+        // Target tile top (target lane's first diamond) → entry y.
+        let Some(target_top) = first_diamond_top(&lane_shapes[l + 1]) else {
+            continue;
+        };
+        // West exit x/y from the rail itself.
+        let Some((exit_x, _, exit_y, _)) = parse_line_xy(&src_prims[rail_idx]) else {
+            continue;
+        };
+        // The target lane's spine (where its tiles centre, in final coords).
+        let target_cx = lane_cx[l + 1];
+        let target_y = target_top;
+        let cross_y = target_y - 15.0;
+        let tile_bottom = body_bottom + 2.0 * DIAMOND_HALF + WHILE_LOOPBACK_LABEL_H;
+        let arrow_y = (diamond_cy + tile_bottom) / 2.0;
+
+        // Re-emit the corridor + cross-lane L-snake with final coordinates.
+        let head = |x: f64, y: f64| -> String {
+            format!(
+                r#"<polygon fill="{c}" points="{}" style="stroke:{c};stroke-width:1;"/>"#,
+                polygon_points(&[
+                    (x - 4.0, y - 10.0),
+                    (x, y),
+                    (x + 4.0, y - 10.0),
+                    (x, y - 6.0),
+                ]),
+                c = arrow_color,
+            )
+        };
+        let line = |x1: f64, x2: f64, y1: f64, y2: f64| -> String {
+            format!(
+                r#"<line style="stroke:{c};stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                f(x1),
+                f(x2),
+                f(y1),
+                f(y2),
+                c = arrow_color,
+            )
+        };
+        let mut snake = String::new();
+        snake.push_str(&head(exit_x, arrow_y));
+        snake.push_str(&line(exit_x, exit_x, exit_y, cross_y));
+        snake.push_str(&line(exit_x, target_cx, cross_y, cross_y));
+        snake.push_str(&line(target_cx, target_cx, cross_y, target_y));
+        snake.push_str(&head(target_cx, target_y));
+
+        // Replace the transition run in place with the synthesized snake (the
+        // west-exit stub before it, and any deferred connectors after it, are
+        // kept in their original positions).
+        let mut rebuilt = String::new();
+        for (i, p) in src_prims.iter().enumerate() {
+            if i == run_start {
+                rebuilt.push_str(&snake);
+            }
+            if i >= run_start && i < run_end {
+                continue;
+            }
+            rebuilt.push_str(p);
+        }
+        lane_conns[l] = rebuilt;
+    }
+
+    // Dividers span from the header top to the bottom of the drawn content
+    // (the maximum y over all shifted shapes + connectors), plus PlantUML's
+    // 12 px lane-bottom margin.
+    let mut content_max_y = 0.0f64;
     for l in 0..n {
         if let Some(b) = crate::compress::y_max(&lane_shapes[l]) {
-            content_bottom = content_bottom.max(b);
+            content_max_y = content_max_y.max(b);
         }
         if let Some(b) = crate::compress::y_max(&lane_conns[l]) {
-            content_bottom = content_bottom.max(b);
+            content_max_y = content_max_y.max(b);
         }
     }
+    let content_bottom = content_max_y + 12.0;
 
     // Divider x positions: left edge of each lane, plus the rightmost edge.
     let mut divider_xs: Vec<f64> = lane_left.clone();
@@ -15378,7 +15758,15 @@ fn layout_swimlanes_v2(
     }
     let _ = &chrome.title_bg;
 
-    let total_w = (divider_xs[n] + SWIM_LEFT_DIVIDER_X).ceil() as u32;
+    // Width matches the legacy/segment path: a Swimlanes tile's reserved extent
+    // is `sum_lane_w/2 + 4` left + `sum_lane_w/2 + 9` right (`node_extents`), and
+    // render() pads the content box by MARGIN_LEAD (16) + MARGIN_TRAIL (19). So
+    // total width = sum_lane_w + 13 + 35, ceil'd.
+    const SWIM_NODE_EXTENT_PAD: f64 = 13.0; // 4 (left) + 9 (right)
+    const SWIM_MARGIN_LEAD: f64 = 16.0;
+    const SWIM_MARGIN_TRAIL: f64 = 19.0;
+    let total_w =
+        (sum_lane_w + SWIM_NODE_EXTENT_PAD + SWIM_MARGIN_LEAD + SWIM_MARGIN_TRAIL).ceil() as u32;
     let total_h = (content_bottom + SWIM_LEFT_DIVIDER_X).ceil() as u32;
     Some((out, String::new(), total_w, total_h))
 }
@@ -16492,8 +16880,12 @@ fn render_inner(
         }
     }
 
-    // Emit all nodes.
+    // Emit all nodes. On the swimlane V2 path the tree carries LaneMark nodes;
+    // mark the emitter so per-lane self-layout details (the cond-driven
+    // terminator placement) apply, mirroring the legacy segment model.
+    svg.swimlane_v2_active = tree.iter().any(|n| matches!(n, LayoutNode::LaneMark(_)));
     emit_sequence_ex(&mut svg, &tree, cx, start_y, None, lead_note_h, false);
+    svg.swimlane_v2_active = false;
 
     if !caption_lines.is_empty() {
         let source_line = diagram.meta.caption_line.unwrap_or(1);
@@ -16560,7 +16952,7 @@ fn render_inner(
             title_bg: svg.palette.swimlane_title_background.clone(),
         };
         if let Some((sh, cn, w, h)) =
-            layout_swimlanes_v2(&svg, &tree, cx, start_y, &lane_names, svg_h as f64, &chrome)
+            layout_swimlanes_v2(&svg, &tree, cx, start_y, &lane_names, &chrome)
         {
             // V2 columns are already tight (reserved extents) — skip the ON_X
             // compress pass, which would wrongly collapse the inter-lane gaps.
