@@ -170,6 +170,16 @@ impl CompressionTransform {
         self.slots.is_empty() && self.offset == 0.0
     }
 
+    /// The uniform translation added after slot compression.
+    pub fn offset(&self) -> f64 {
+        self.offset
+    }
+
+    /// Set the uniform post-compression translation (swimlane V2 re-anchoring).
+    pub fn set_offset(&mut self, offset: f64) {
+        self.offset = offset;
+    }
+
     /// `CompressionTransform.transform`: `v - getCompressDelta(v)`, where the
     /// delta sums the sizes of every compressible slot lying left of `v` (partial
     /// for a slot that contains `v` — collapsing `v` toward the slot start). The
@@ -202,6 +212,28 @@ pub fn shift_x(svg: &str, dx: f64) -> String {
         CompressionMode::OnX,
         &CompressionTransform::translate(dx),
     )
+}
+
+/// Swimlane V2: apply an arbitrary X-axis [`CompressionTransform`] to an SVG
+/// fragment (used to collapse an if's inter-branch slack within a lane while
+/// leaving the lane dividers/chrome at their uncompressed positions).
+pub fn apply_x(svg: &str, tf: &CompressionTransform) -> String {
+    if tf.is_identity() {
+        return svg.to_string();
+    }
+    rewrite_axis(svg, CompressionMode::OnX, tf)
+}
+
+/// Swimlane V2: apply an X-axis [`CompressionTransform`] then a constant
+/// `offset` (re-anchoring so the leading margin is not collapsed). Equivalent to
+/// `transform(v) + offset` for every X coordinate.
+pub fn apply_x_offset(svg: &str, tf: &CompressionTransform, offset: f64) -> String {
+    let mut t = tf.clone();
+    t.set_offset(t.offset() + offset);
+    if t.is_identity() {
+        return svg.to_string();
+    }
+    rewrite_axis(svg, CompressionMode::OnX, &t)
 }
 
 /// Swimlane V2: shift every Y coordinate in an SVG fragment by `dy` (used to drop

@@ -1598,6 +1598,47 @@ fn default_inbound_gap(node: &LayoutNode) -> f64 {
     }
 }
 
+/// True when the swimlane V2 single-tree path should own this diagram (instead
+/// of the legacy segment model). V2 is the ONLY path that can render a `|Lane|`
+/// switch INSIDE an `if` branch body (the segment model fractures branches that
+/// change lane). So route to V2 exactly that class: a multi-lane diagram with
+/// NO fork/split and at least one `|Lane|` marker nested inside an `if`/`switch`
+/// branch. Within-lane ifs (no nested `|Lane|`) and fork-bearing swimlanes stay
+/// on the segment model, so they cannot regress.
+fn swimlane_v2_can_handle(steps: &[ActivityStep], is_swimlane: bool) -> bool {
+    if !is_swimlane {
+        return false;
+    }
+    // Forks are out of scope (need per-lane fork-bar decomposition).
+    if steps.iter().any(|s| {
+        matches!(
+            s,
+            ActivityStep::Fork
+                | ActivityStep::ForkAgain
+                | ActivityStep::EndFork
+                | ActivityStep::EndMerge
+                | ActivityStep::Split
+                | ActivityStep::SplitAgain
+                | ActivityStep::EndSplit
+        )
+    }) {
+        return false;
+    }
+    // A `|Lane|` nested inside an if/switch branch (depth > 0) — the failing
+    // class the segment model can't represent.
+    let mut depth = 0i32;
+    let mut lane_in_branch = false;
+    for s in steps {
+        match s {
+            ActivityStep::If(_) | ActivityStep::Switch(_) => depth += 1,
+            ActivityStep::EndIf | ActivityStep::EndSwitch => depth -= 1,
+            ActivityStep::Swimlane(_) if depth > 0 => lane_in_branch = true,
+            _ => {}
+        }
+    }
+    lane_in_branch
+}
+
 /// Build a layout tree from the flat step list.
 fn build_tree(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode> {
     // Swimlane detection: if any `|Lane|` marker appears (and there's more
@@ -1621,7 +1662,10 @@ fn build_tree(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode> {
         .any(|s| !matches!(s, ActivityStep::Note(_) | ActivityStep::Arrow(_)));
     let is_swimlane =
         distinct_lanes.len() > 1 || (distinct_lanes.len() == 1 && has_pre_lane_content);
-    let v2 = std::env::var("RUSTUML_SWIMLANE_V2").is_ok();
+    // V2 single-tree path owns the branch-internal-lane class by default; the
+    // env var forces it on for any swimlane (testing the linear cluster etc.).
+    let v2 = std::env::var("RUSTUML_SWIMLANE_V2").is_ok()
+        || swimlane_v2_can_handle(steps, is_swimlane);
     if is_swimlane && !v2 {
         return build_swimlanes(steps, palette);
     }
@@ -15477,6 +15521,10 @@ fn layout_swimlanes_v2(
         eprintln!("[V2] natural_start_y={natural_start_y}");
         eprintln!("[V2] tree variants = {:?}", tree.iter().map(node_dbg_name).collect::<Vec<_>>());
         eprintln!("[V2] lane_yband = {lane_yband:?}");
+        for l in 0..n {
+            let sx = crate::compress::x_bounds(&shape_frags[l]);
+            eprintln!("[V2] lane {l} {:?} shape_xbounds={sx:?}", lane_names[l]);
+        }
     }
 
     // Partition the single tree's top-level nodes into per-lane runs (= old
@@ -15490,26 +15538,57 @@ fn layout_swimlanes_v2(
         }
     }
 
-    // Per-lane RESERVED extents (content_left, content_right) + lane width/cx, via the
-    // legacy lane geometry (lane_width = cl+cr+10 floored by title; cx = left+6+cl).
-    let ext: Vec<(f64, f64)> = (0..n).map(|l| swimlane_v2_run_extents(&runs[l])).collect();
+    // If-case detection: a lane that has drawn shapes (byte-tagged) but NO
+    // top-level run node holds content reached only via a `|Lane|` inside an
+    // `if`/`switch` branch. The top-level node-extent model can't measure such a
+    // lane (the whole `if` is one node attributed to the lane active at the
+    // `if`), so switch to per-lane drawn-MinMax geometry + a final ON_X compress
+    // (PlantUML's CompressionXorYBuilder collapses the inter-branch slack).
+    let if_mode = (0..n).any(|l| runs[l].is_empty() && !shape_frags[l].trim().is_empty());
+
     let title_w: Vec<f64> = lane_names
         .iter()
         .map(|nm| text_render::measure(nm, LANE_TITLE_FONT, false))
         .collect();
-    let lane_w: Vec<f64> = (0..n)
-        .map(|l| (ext[l].0 + ext[l].1 + 10.0).max(title_w[l] + 10.0))
-        .collect();
+
+    // Per-lane natural (minX, width). Linear lanes use the RESERVED node extents
+    // (the back-edge corridor is reserved but not drawn — the divider sits at the
+    // reserved edge); if-lanes use the DRAWN shape bounding box (PlantUML's
+    // per-swimlane `getMinMax`).
+    let (lane_minx, lane_w): (Vec<f64>, Vec<f64>) = if if_mode {
+        let mut minx = vec![0.0f64; n];
+        let mut w = vec![0.0f64; n];
+        for l in 0..n {
+            let (lo, hi) = crate::compress::x_bounds(&shape_frags[l]).unwrap_or((0.0, 0.0));
+            minx[l] = lo;
+            w[l] = (hi - lo + 10.0).max(title_w[l] + 10.0);
+        }
+        (minx, w)
+    } else {
+        let ext: Vec<(f64, f64)> =
+            (0..n).map(|l| swimlane_v2_run_extents(&runs[l])).collect();
+        let w: Vec<f64> = (0..n)
+            .map(|l| (ext[l].0 + ext[l].1 + 10.0).max(title_w[l] + 10.0))
+            .collect();
+        // Linear lanes all centre on the single-tree spine `natural_cx`; their
+        // natural minX is `natural_cx − content_left`.
+        let minx: Vec<f64> = (0..n).map(|l| natural_cx - ext[l].0).collect();
+        (minx, w)
+    };
+
     let mut lane_left = vec![0.0f64; n];
     let mut acc = SWIM_LEFT_DIVIDER_X;
     for l in 0..n {
         lane_left[l] = acc;
         acc += lane_w[l];
     }
-    let right_edge = acc;
-    let lane_cx: Vec<f64> = (0..n).map(|l| lane_left[l] + 6.0 + ext[l].0).collect();
-    // dx shifts each lane's natural content (spine at natural_cx) to its column cx.
-    let dx: Vec<f64> = (0..n).map(|l| lane_cx[l] - natural_cx).collect();
+    // Rightmost divider. Linear lanes carry a trailing +10 in `lane_w` that lands
+    // the right divider at `acc`; if-lanes' last divider sits at the last lane's
+    // drawn right edge (no trailing gap), i.e. `acc − 10`.
+    let right_edge = if if_mode && n > 0 { acc - 10.0 } else { acc };
+    // Each lane's content left edge sits 6 px right of its left divider
+    // (PlantUML lane content padding), so its natural minX maps there.
+    let dx: Vec<f64> = (0..n).map(|l| lane_left[l] + 6.0 - lane_minx[l]).collect();
 
     // Title band: lane titles sit in a band above the content. Content drops by
     // text-height + 5 (PlantUML getTitleHeightTranslate).
@@ -15523,11 +15602,11 @@ fn layout_swimlanes_v2(
     if std::env::var("RUSTUML_EXT_DBG").is_ok() {
         for l in 0..n {
             eprintln!(
-                "[V2] lane {l} {:?} ext={:?} lane_w={} lane_left={} lane_cx={} dx={}",
-                lane_names[l], ext[l], lane_w[l], lane_left[l], lane_cx[l], dx[l]
+                "[V2] lane {l} {:?} if_mode={if_mode} minx={} lane_w={} lane_left={} dx={}",
+                lane_names[l], lane_minx[l], lane_w[l], lane_left[l], dx[l]
             );
         }
-        eprintln!("[V2] natural_cx={natural_cx} title_band={title_band}");
+        eprintln!("[V2] natural_cx={natural_cx} title_band={title_band} right_edge={right_edge}");
     }
 
     // Content drops to gold's swimlane body_top = header_top + text_height(title) + 15
@@ -15545,7 +15624,7 @@ fn layout_swimlanes_v2(
     let lane_dy: Vec<f64> = vec![content_dy; n];
 
     // Shift each lane's shape/connector fragment by its dx (x) and lane_dy (y).
-    let lane_shapes: Vec<String> = (0..n)
+    let mut lane_shapes: Vec<String> = (0..n)
         .map(|l| crate::compress::shift_y(&crate::compress::shift_x(&shape_frags[l], dx[l]), lane_dy[l]))
         .collect();
     let mut lane_conns: Vec<String> = (0..n)
@@ -15613,7 +15692,9 @@ fn layout_swimlanes_v2(
             continue;
         };
         // The target lane's spine (where its tiles centre, in final coords).
-        let target_cx = lane_cx[l + 1];
+        // Linear lanes share the single-tree spine `natural_cx`, shifted by the
+        // target lane's dx.
+        let target_cx = natural_cx + dx[l + 1];
         let target_y = target_top;
         let cross_y = target_y - 15.0;
         let tile_bottom = body_bottom + 2.0 * DIAMOND_HALF + WHILE_LOOPBACK_LABEL_H;
@@ -15665,6 +15746,54 @@ fn layout_swimlanes_v2(
         lane_conns[l] = rebuilt;
     }
 
+    // If-mode: collapse the horizontal inter-branch slack. PlantUML lays an if's
+    // branches side-by-side with a 20 px gap; the diagram-level ON_X pass then
+    // collapses it to 2*margin = 10. With the lanes now spread into columns the
+    // slack is exposed. Build the ON_X transform from the laid-out shapes (the
+    // chrome is excluded — a full-width header would mask the gap), re-anchor so
+    // the leftmost content does not slide into the leading margin, and apply the
+    // same transform to the lane fragments AND the divider x positions (the
+    // dividers ride left with the content right of the gap).
+    let mut right_edge = right_edge;
+    if if_mode {
+        // Occupancy anchor: a marker rect spanning the leftmost divider to the
+        // first lane's content, so the compress does not treat that leading
+        // padding as a collapsible gap. It is built into a throwaway buffer used
+        // only to derive the transform (never emitted).
+        let content_left = (0..n)
+            .filter_map(|l| crate::compress::x_bounds(&lane_shapes[l]).map(|(lo, _)| lo))
+            .fold(f64::MAX, f64::min);
+        let anchor_w = (content_left - lane_left[0]).max(1.0);
+        let mut content = format!(
+            r#"<rect fill="none" height="1" style="stroke:none;stroke-width:1;" width="{}" x="{}" y="0"/>"#,
+            f(anchor_w),
+            f(lane_left[0]),
+        );
+        let mut conns = String::new();
+        for l in 0..n {
+            content.push_str(&lane_shapes[l]);
+            conns.push_str(&lane_conns[l]);
+        }
+        let (_, _, x_tf, _) = crate::compress::compress_activity_buffers(
+            &content,
+            &conns,
+            crate::compress::COMPRESS_MARGIN,
+        );
+        if !x_tf.is_identity() {
+            // Re-anchor: keep the first lane's left edge (its divider x) fixed so
+            // only INTERNAL gaps collapse, not the leading margin.
+            let anchor = lane_left[0];
+            let off = anchor - x_tf.transform(anchor);
+            let tx = |v: f64| x_tf.transform(v) + off;
+            for l in 0..n {
+                lane_shapes[l] = crate::compress::apply_x_offset(&lane_shapes[l], &x_tf, off);
+                lane_conns[l] = crate::compress::apply_x_offset(&lane_conns[l], &x_tf, off);
+                lane_left[l] = tx(lane_left[l]);
+            }
+            right_edge = tx(right_edge);
+        }
+    }
+
     // Dividers span from the header top to the bottom of the drawn content
     // (the maximum y over all shifted shapes + connectors), plus PlantUML's
     // 12 px lane-bottom margin.
@@ -15688,8 +15817,10 @@ fn layout_swimlanes_v2(
     // divider, then all connectors lane-by-lane, then the lane titles.
     let mut out = String::new();
 
-    // Empty header rect spanning all lanes (PlantUML: width = sum_lane_w + 1.8476).
-    let sum_lane_w: f64 = lane_w.iter().sum();
+    // Empty header rect spanning all lanes (left divider to right divider, plus
+    // PlantUML's 1.8476 px overhang). For linear lanes `right_edge − lane_left[0]
+    // == sum_lane_w`; if-lanes drop the last lane's trailing gap.
+    let header_span = right_edge - lane_left[0];
     let header_fill = chrome.title_bg.as_deref().unwrap_or("none");
     let header_stroke = chrome.title_bg.as_deref().unwrap_or("none");
     write!(
@@ -15698,7 +15829,7 @@ fn layout_swimlanes_v2(
         header_fill,
         f(title_text_h),
         header_stroke,
-        f(sum_lane_w + 1.8476),
+        f(header_span + 1.8476),
         f(lane_left[0]),
         f(header_top),
     )
@@ -15758,15 +15889,23 @@ fn layout_swimlanes_v2(
     }
     let _ = &chrome.title_bg;
 
+    // If-mode: collapse the horizontal inter-branch slack. PlantUML lays an if's
+    // branches side-by-side with a 20 px gap, then the diagram-level
+    // CompressionXorYBuilder ON_X pass collapses it to 2*margin = 10. Run that
+    // pass on the whole assembled buffer: the full-width header rect anchors the
+    // left (no leading collapse), the lane dividers (lines, exempt from
+    // X-occupancy) ride the transform left with the content right of the gap.
+    let span_after = header_span;
+
     // Width matches the legacy/segment path: a Swimlanes tile's reserved extent
-    // is `sum_lane_w/2 + 4` left + `sum_lane_w/2 + 9` right (`node_extents`), and
-    // render() pads the content box by MARGIN_LEAD (16) + MARGIN_TRAIL (19). So
-    // total width = sum_lane_w + 13 + 35, ceil'd.
+    // is `span/2 + 4` left + `span/2 + 9` right (`node_extents`), and render()
+    // pads the content box by MARGIN_LEAD (16) + MARGIN_TRAIL (19). So total
+    // width = span + 13 + 35, ceil'd (`span` = left-to-right divider distance).
     const SWIM_NODE_EXTENT_PAD: f64 = 13.0; // 4 (left) + 9 (right)
     const SWIM_MARGIN_LEAD: f64 = 16.0;
     const SWIM_MARGIN_TRAIL: f64 = 19.0;
     let total_w =
-        (sum_lane_w + SWIM_NODE_EXTENT_PAD + SWIM_MARGIN_LEAD + SWIM_MARGIN_TRAIL).ceil() as u32;
+        (span_after + SWIM_NODE_EXTENT_PAD + SWIM_MARGIN_LEAD + SWIM_MARGIN_TRAIL).ceil() as u32;
     let total_h = (content_bottom + SWIM_LEFT_DIVIDER_X).ceil() as u32;
     Some((out, String::new(), total_w, total_h))
 }
@@ -16935,9 +17074,11 @@ fn render_inner(
         emit_legend_table(&mut svg, &legend_rows, body_bottom_y + LEGEND_TOP_GAP);
     }
 
-    // Swimlane V2 per-lane layout (env-gated, in progress). Lays the natural
-    // single-tree emit out into lane columns; falls through while WIP returns None.
-    if std::env::var("RUSTUML_SWIMLANE_V2").is_ok() && !svg.lane_spans.is_empty() {
+    // Swimlane V2 per-lane layout. Fires whenever the build chose the V2 path
+    // (the tree carried LaneMark nodes, so `lane_spans` is populated); lays the
+    // natural single-tree emit out into lane columns. Returns None to fall
+    // through if it cannot handle the shape (defensive — keeps the canvas valid).
+    if !svg.lane_spans.is_empty() {
         let mut lane_names: Vec<String> = Vec::new();
         for s in &diagram.steps {
             if let ActivityStep::Swimlane(l) = s
