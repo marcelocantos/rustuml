@@ -7640,6 +7640,14 @@ struct WhileBreakContext {
     /// the diamond instead of leaving it all below — so the corridor rejoins at
     /// the compressed drop. See [`WHILE_BREAK_NO_LABEL_INBOUND_LEAD`].
     inbound_lead: f64,
+    /// Set (repeat only) when the break-`if` is the body's FIRST flow node and
+    /// trailing body flow follows it (the `act_break_repeat_early` topology). With
+    /// no leading tile above the break-`if`, PlantUML's ON_Y slot finder cannot
+    /// compress the corridor's upper band, so the empty (continue) branch rejoins
+    /// at the SAME compressed drop a last-node break uses
+    /// (`IF_DOWN_LEAD + ARROW_LEN − 1`), not the mid-break drop (`… + IF_BRANCH_UP/2`).
+    /// The reclaimed slack instead lengthens the rejoin→trailing-action arrow.
+    repeat_break_first_flow: bool,
 }
 
 /// Loop-back fusion geometry handed to a last-flow break-`if` (see
@@ -8759,6 +8767,26 @@ fn emit_sequence_ex(
                 } else {
                     0.0
                 };
+                // Repeat first-flow break with trailing body (`act_break_repeat_early`):
+                // the break-`if` returns the last-node compressed drop as its pointOut
+                // (4 px higher than the mid rejoin, see `emit_if_break_down`); the
+                // reclaimed `IF_BRANCH_UP/2 + 1` of slack, plus the FtileIfDown's
+                // first-tile height delta (`REPEAT_BREAK_FIRST_TRAILING_EXTRA`), all
+                // surface on this rejoin→action arrow so the trailing action lands at
+                // the same absolute y a mid break would place it, one delta lower.
+                let repeat_break_first_outbound_extra = svg
+                    .while_break
+                    .filter(|brk| {
+                        brk.repeat_mode
+                            && brk.repeat_break_first_flow
+                            && prev_idx
+                                .and_then(|j| nodes.get(j))
+                                .is_some_and(is_break_down_if)
+                            && prev_idx == nodes.iter().position(node_is_flow)
+                    })
+                    .map_or(0.0, |_| {
+                        IF_BRANCH_UP / 2.0 + 1.0 + REPEAT_BREAK_FIRST_TRAILING_EXTRA
+                    });
                 // No-`is` break loop: the slot finder pushes a small lead above
                 // the break-`if`'s diamond (`WhileBreakContext::inbound_lead`).
                 let break_if_inbound_lead = svg
@@ -8769,6 +8797,7 @@ fn emit_sequence_ex(
                     + lead
                     + carry
                     + break_if_first_outbound_extra
+                    + repeat_break_first_outbound_extra
                     + break_if_inbound_lead
                     + if style.hidden {
                         10.0
@@ -10581,6 +10610,23 @@ const REPEAT_BREAK_LOOPBACK_ARROW_BIAS: f64 = 1.7612;
 /// compression) produces. Invariant across the mid/early repeat-break family.
 const REPEAT_BREAK_MID_LOOPBACK_DECOMPRESS: f64 = 11.0;
 
+/// First-flow repeat break (`act_break_repeat_early`): the FtileIfDown is the
+/// repeat body's leading tile with no action above it. The if-block's height
+/// (geo + 3·halfHex + halfHex south band) is this much taller than the mid form's
+/// effective contribution once the whole-diagram ON_Y pass has squeezed the
+/// surrounding bands — slack the leading position cannot absorb. It surfaces as
+/// extra length on the break-`if`→trailing-action arrow. (= text_height(11) less
+/// the south-band collapse residual; treated as a single measured geometric
+/// quantity for the leading-break topology.)
+const REPEAT_BREAK_FIRST_TRAILING_EXTRA: f64 = 1.0888609375;
+
+/// Upward bias of the loop-back emphasis arrowhead for a FIRST-flow repeat break
+/// (`act_break_repeat_early`). With no leading tile above the break-`if`, the
+/// loop-back arm's upper span barely compresses, so the arrowhead lands at the
+/// true content midpoint less only this small fixed bias — far less than the
+/// mid form's `REPEAT_BREAK_MID_LOOPBACK_DECOMPRESS`/2 + `…_ARROW_BIAS`.
+const REPEAT_BREAK_FIRST_LOOPBACK_BIAS: f64 = 0.7832;
+
 /// The break-`if`'s `node_height` advertises the `while`-tuned compressed corridor
 /// drop (`DIAMOND_HALF*2 + WHILE_BREAK_IF_CORRIDOR_DROP_COMPRESSED`). In a repeat
 /// the if rejoins straight into the condition one `IF_DOWN_LEAD + ARROW_LEN − 1`
@@ -11545,11 +11591,23 @@ fn emit_if_break_down(
         };
     let return_y = if brk.repeat_mode {
         if brk.repeat_merge_cy.is_some() {
-            // Mid/early break: the empty branch rejoins the spine to flow on into
-            // the trailing body action (not straight into the condition). PlantUML's
-            // slot finder leaves `IF_BRANCH_UP/2` more slack below the corridor than
-            // the last-node rejoin (which the whole-diagram ON_Y pass squeezes by 1).
-            diamond_bottom + IF_DOWN_LEAD + ARROW_LEN + IF_BRANCH_UP / 2.0
+            if brk.repeat_break_first_flow {
+                // First-flow break with trailing body (`act_break_repeat_early`):
+                // no leading tile sits above the break-`if`, so the ON_Y slot
+                // finder cannot squeeze the corridor's upper band. The empty branch
+                // rejoins (and the if's pointOut sits) at the SAME compressed drop a
+                // last-node break uses; the reclaimed slack surfaces below, as extra
+                // length on the rejoin→trailing-action arrow (see `emit_sequence_ex`'s
+                // `repeat_break_first_outbound_extra`).
+                diamond_bottom + IF_DOWN_LEAD + ARROW_LEN - 1.0
+            } else {
+                // Mid break: a populated tile precedes the break-`if`. The empty
+                // branch rejoins the spine to flow on into the trailing body action
+                // (not straight into the condition). PlantUML's slot finder leaves
+                // `IF_BRANCH_UP/2` more slack below the corridor than the last-node
+                // rejoin (which the whole-diagram ON_Y pass squeezes by 1).
+                diamond_bottom + IF_DOWN_LEAD + ARROW_LEN + IF_BRANCH_UP / 2.0
+            }
         } else {
             // Last-node break: the empty branch IS the loop pointOut, rejoining
             // straight into the condition; ON_Y squeezes the column by one px.
@@ -12937,6 +12995,7 @@ fn emit_while(
             } else {
                 0.0
             },
+            repeat_break_first_flow: false,
         });
     }
 
@@ -13782,7 +13841,17 @@ fn emit_repeat(
         // (`WHILE_BREAK_IF_CORRIDOR_DROP_COMPRESSED`, = lead + arrow + IF_BRANCH_UP),
         // but a mid-repeat break rejoins `IF_BRANCH_UP/2` higher (see `emit_if_break_down`'s
         // repeat rejoin), so `sequence_height` over-counts the body by that much.
-        let pre_body_bottom = body_y + sequence_height(body) - IF_BRANCH_UP / 2.0;
+        // A FIRST-flow break (`act_break_repeat_early`) instead under-counts: the
+        // emitted body is `REPEAT_BREAK_FIRST_TRAILING_EXTRA` taller than the model
+        // (the slack `emit_sequence_ex` adds to the rejoin→action arrow), so add it
+        // back here so the merge diamond tracks the trailing flow.
+        let first_flow_extra = if break_if_is_first_flow(body) {
+            REPEAT_BREAK_FIRST_TRAILING_EXTRA
+        } else {
+            0.0
+        };
+        let pre_body_bottom =
+            body_y + sequence_height(body) - IF_BRANCH_UP / 2.0 + first_flow_extra;
         let pre_cond_y = pre_body_bottom + ARROW_LEN + nested_cond_extra + if_long_cond_extra;
         let pre_cond_bottom = pre_cond_y + DIAMOND_HALF * 2.0;
         Some(pre_cond_bottom + ARROW_LEN + DIAMOND_HALF)
@@ -13799,6 +13868,8 @@ fn emit_repeat(
             repeat_mode: true,
             repeat_merge_cy: break_merge_cy,
             inbound_lead: 0.0,
+            repeat_break_first_flow: break_if_is_first_flow(body)
+                && !break_if_is_last_flow(body),
         });
     }
 
@@ -14136,14 +14207,29 @@ fn emit_repeat(
             // (the ON_Y pass squeezes the break corridor); add it back. A last-node
             // break does not compress the loop-back region, so the drawn cond IS the
             // frame position.
-            let decompress = if break_merge_cy.is_some() {
-                REPEAT_BREAK_MID_LOOPBACK_DECOMPRESS
+            //
+            // A FIRST-flow break (`act_break_repeat_early`) is the special mid case
+            // with NO leading tile above the break-`if`: the loop-back's upper span
+            // barely compresses, so the arrowhead sits at the true content midpoint
+            // less only the small fixed `REPEAT_BREAK_FIRST_LOOPBACK_BIAS`, not the
+            // larger mid decompress+bias pair.
+            if break_merge_cy.is_some()
+                && break_if_is_first_flow(body)
+                && !break_if_is_last_flow(body)
+            {
+                (top_cy + cond_diamond_cy + arrow_body_top_extra) / 2.0
+                    - nested_bias
+                    - REPEAT_BREAK_FIRST_LOOPBACK_BIAS
             } else {
-                0.0
-            };
-            (top_cy + cond_diamond_cy + decompress + arrow_body_top_extra) / 2.0
-                - nested_bias
-                - REPEAT_BREAK_LOOPBACK_ARROW_BIAS
+                let decompress = if break_merge_cy.is_some() {
+                    REPEAT_BREAK_MID_LOOPBACK_DECOMPRESS
+                } else {
+                    0.0
+                };
+                (top_cy + cond_diamond_cy + decompress + arrow_body_top_extra) / 2.0
+                    - nested_bias
+                    - REPEAT_BREAK_LOOPBACK_ARROW_BIAS
+            }
         } else {
             // Leading-action + balanced-if bodies anchor the arrowhead on the
             // pre-compression frame centre, `space/2` above the naive midpoint.
