@@ -133,6 +133,10 @@ impl SlotSet {
 pub struct CompressionTransform {
     /// The compressible empty slots (`reverse().smaller(margin)`).
     slots: Vec<(f64, f64)>,
+    /// A uniform translation added after slot compression. Zero for compression
+    /// transforms; non-zero only for [`CompressionTransform::translate`] (swimlane
+    /// V2 per-lane x/y shifts, which reuse the coordinate-rewrite machinery).
+    offset: f64,
 }
 
 impl CompressionTransform {
@@ -141,21 +145,35 @@ impl CompressionTransform {
     pub fn from_occupied(occupied: &SlotSet, margin: f64) -> Self {
         CompressionTransform {
             slots: occupied.reverse().smaller(margin).all,
+            offset: 0.0,
         }
     }
 
     /// The identity transform (no compressible slots).
     pub fn identity() -> Self {
-        CompressionTransform { slots: Vec::new() }
+        CompressionTransform {
+            slots: Vec::new(),
+            offset: 0.0,
+        }
+    }
+
+    /// A pure translation by `d` (no compression). Swimlane V2 uses this with
+    /// [`rewrite_axis`] to shift a whole lane's emitted fragment into its column.
+    pub fn translate(d: f64) -> Self {
+        CompressionTransform {
+            slots: Vec::new(),
+            offset: d,
+        }
     }
 
     pub fn is_identity(&self) -> bool {
-        self.slots.is_empty()
+        self.slots.is_empty() && self.offset == 0.0
     }
 
     /// `CompressionTransform.transform`: `v - getCompressDelta(v)`, where the
     /// delta sums the sizes of every compressible slot lying left of `v` (partial
-    /// for a slot that contains `v` — collapsing `v` toward the slot start).
+    /// for a slot that contains `v` — collapsing `v` toward the slot start). The
+    /// `offset` is added after (zero for compression transforms).
     pub fn transform(&self, v: f64) -> f64 {
         let mut delta = 0.0;
         for &(s, e) in &self.slots {
@@ -168,8 +186,152 @@ impl CompressionTransform {
                 delta += v - s;
             }
         }
-        v - delta
+        v - delta + self.offset
     }
+}
+
+/// Swimlane V2: shift every X coordinate in an SVG fragment by `dx` (rects move
+/// with width, ellipses keep radius, polygons/paths/lines/text all translate).
+/// Reuses the compression coordinate-rewrite machinery via a pure translation.
+pub fn shift_x(svg: &str, dx: f64) -> String {
+    if dx == 0.0 {
+        return svg.to_string();
+    }
+    rewrite_axis(
+        svg,
+        CompressionMode::OnX,
+        &CompressionTransform::translate(dx),
+    )
+}
+
+/// Swimlane V2: shift every Y coordinate in an SVG fragment by `dy` (used to drop
+/// content below the lane-title band). Mirror of [`shift_x`] on the Y axis.
+pub fn shift_y(svg: &str, dy: f64) -> String {
+    if dy == 0.0 {
+        return svg.to_string();
+    }
+    rewrite_axis(
+        svg,
+        CompressionMode::OnY,
+        &CompressionTransform::translate(dy),
+    )
+}
+
+/// Swimlane V2: the `[minX, maxX]` span of every drawn coordinate in an SVG
+/// fragment — including `<line>`, since PlantUML's per-lane `LimitFinder` records
+/// all drawn shapes for the lane `MinMax` (unlike compression, which treats flow
+/// lines as transparent). `None` if the fragment has no coordinates.
+pub fn x_bounds(svg: &str) -> Option<(f64, f64)> {
+    let mut lo = f64::INFINITY;
+    let mut hi = f64::NEG_INFINITY;
+    let mut acc = |a: f64, b: f64| {
+        lo = lo.min(a);
+        hi = hi.max(b);
+    };
+    static RECT: OnceLock<Regex> = OnceLock::new();
+    for c in re(
+        r#"<rect\b[^>]*\bwidth="([-\d.]+)"[^>]*\bx="([-\d.]+)""#,
+        &RECT,
+    )
+    .captures_iter(svg)
+    {
+        let (w, xx) = (num(&c[1]), num(&c[2]));
+        acc(xx, xx + w);
+    }
+    static ELL: OnceLock<Regex> = OnceLock::new();
+    for c in re(
+        r#"<ellipse\b[^>]*\bcx="([-\d.]+)"[^>]*\brx="([-\d.]+)""#,
+        &ELL,
+    )
+    .captures_iter(svg)
+    {
+        let (cx, rx) = (num(&c[1]), num(&c[2]));
+        acc(cx - rx, cx + rx);
+    }
+    static POLY: OnceLock<Regex> = OnceLock::new();
+    for c in re(r#"<polygon\b[^>]*\bpoints="([^"]+)""#, &POLY).captures_iter(svg) {
+        if let Some((a, b)) = points_bbox(&c[1], true) {
+            acc(a, b);
+        }
+    }
+    static PATH: OnceLock<Regex> = OnceLock::new();
+    for c in re(r#"<path\b[^>]*\bd="([^"]+)""#, &PATH).captures_iter(svg) {
+        if let Some((a, b)) = path_bbox(&c[1], true) {
+            acc(a, b);
+        }
+    }
+    static TEXT: OnceLock<Regex> = OnceLock::new();
+    for c in re(
+        r#"<text\b[^>]*\btextLength="([-\d.]+)"[^>]*\bx="([-\d.]+)""#,
+        &TEXT,
+    )
+    .captures_iter(svg)
+    {
+        let (tl, xx) = (num(&c[1]), num(&c[2]));
+        acc(xx, xx + tl);
+    }
+    static LINE: OnceLock<Regex> = OnceLock::new();
+    for c in re(
+        r#"<line\b[^>]*\bx1="([-\d.]+)"[^>]*\bx2="([-\d.]+)""#,
+        &LINE,
+    )
+    .captures_iter(svg)
+    {
+        let (x1, x2) = (num(&c[1]), num(&c[2]));
+        acc(x1.min(x2), x1.max(x2));
+    }
+    (lo <= hi).then_some((lo, hi))
+}
+
+/// Swimlane V2: the maximum Y coordinate in an SVG fragment (bottom of content),
+/// across rect y+height, ellipse cy+ry, polygon/path points, line y1/y2, text y.
+/// Used to size lane dividers to the content bottom. `None` if no Y coords.
+pub fn y_max(svg: &str) -> Option<f64> {
+    let mut hi = f64::NEG_INFINITY;
+    static RECT: OnceLock<Regex> = OnceLock::new();
+    for c in re(
+        r#"<rect\b[^>]*\bheight="([-\d.]+)"[^>]*\by="([-\d.]+)""#,
+        &RECT,
+    )
+    .captures_iter(svg)
+    {
+        hi = hi.max(num(&c[1]) + num(&c[2]));
+    }
+    static ELL: OnceLock<Regex> = OnceLock::new();
+    for c in re(
+        r#"<ellipse\b[^>]*\bcy="([-\d.]+)"[^>]*\bry="([-\d.]+)""#,
+        &ELL,
+    )
+    .captures_iter(svg)
+    {
+        hi = hi.max(num(&c[1]) + num(&c[2]));
+    }
+    static POLY: OnceLock<Regex> = OnceLock::new();
+    for c in re(r#"<polygon\b[^>]*\bpoints="([^"]+)""#, &POLY).captures_iter(svg) {
+        if let Some((_, b)) = points_bbox(&c[1], false) {
+            hi = hi.max(b);
+        }
+    }
+    static PATH: OnceLock<Regex> = OnceLock::new();
+    for c in re(r#"<path\b[^>]*\bd="([^"]+)""#, &PATH).captures_iter(svg) {
+        if let Some((_, b)) = path_bbox(&c[1], false) {
+            hi = hi.max(b);
+        }
+    }
+    static LINE: OnceLock<Regex> = OnceLock::new();
+    for c in re(
+        r#"<line\b[^>]*\by1="([-\d.]+)"[^>]*\by2="([-\d.]+)""#,
+        &LINE,
+    )
+    .captures_iter(svg)
+    {
+        hi = hi.max(num(&c[1]).max(num(&c[2])));
+    }
+    static TEXT: OnceLock<Regex> = OnceLock::new();
+    for c in re(r#"<text\b[^>]*\by="([-\d.]+)""#, &TEXT).captures_iter(svg) {
+        hi = hi.max(num(&c[1]));
+    }
+    (hi > f64::NEG_INFINITY).then_some(hi)
 }
 
 /// A drawn primitive with enough geometry to (a) report its occupied interval on
@@ -812,6 +974,56 @@ mod tests {
             s.add_slot(a, b);
         }
         s
+    }
+
+    fn compress_x_bounds_round(svg: &str) -> Option<(f64, f64)> {
+        x_bounds(svg).map(|(a, b)| ((a * 1e6).round() / 1e6, (b * 1e6).round() / 1e6))
+    }
+
+    #[test]
+    fn shift_x_translates_all_shape_kinds() {
+        let svg = concat!(
+            r#"<rect x="10" y="5" width="30" height="8"/>"#,
+            r#"<ellipse cx="50" cy="9" rx="4" ry="4"/>"#,
+            r#"<polygon points="60,1,70,2,60,3"/>"#,
+            r#"<line x1="80" x2="90" y1="1" y2="1"/>"#,
+            r#"<text x="100" y="2" textLength="12">hi</text>"#,
+        );
+        let out = shift_x(svg, 100.0);
+        assert!(
+            out.contains(r#"<rect x="110" y="5" width="30" height="8"/>"#),
+            "{out}"
+        );
+        assert!(
+            out.contains(r#"cx="150""#) && out.contains(r#"rx="4""#),
+            "{out}"
+        );
+        assert!(out.contains(r#"points="160,1,170,2,160,3""#), "{out}");
+        assert!(
+            out.contains(r#"x1="180""#) && out.contains(r#"x2="190""#),
+            "{out}"
+        );
+        assert!(
+            out.contains(r#"x="200""#) && out.contains(r#"textLength="12""#),
+            "{out}"
+        );
+    }
+
+    #[test]
+    fn shift_x_zero_is_noop() {
+        let svg = r#"<rect x="10" y="5" width="30" height="8"/>"#;
+        assert_eq!(shift_x(svg, 0.0), svg);
+    }
+
+    #[test]
+    fn x_bounds_spans_all_kinds_incl_lines() {
+        let svg = concat!(
+            r#"<rect fill="x" height="8" width="30" x="10" y="5"/>"#, // [10,40]
+            r#"<ellipse cx="50" cy="9" rx="4" ry="4"/>"#,             // [46,54]
+            r#"<line x1="80" x2="90" y1="1" y2="1"/>"#,               // [80,90]
+        );
+        assert_eq!(compress_x_bounds_round(svg), Some((10.0, 90.0)));
+        assert_eq!(x_bounds(""), None);
     }
 
     #[test]
