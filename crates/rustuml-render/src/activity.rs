@@ -3511,6 +3511,24 @@ fn is_ordinary_compressed_while(node: &LayoutNode) -> bool {
     )
 }
 
+/// A bare `while (cond)` (no `is`/end label) whose body carries a break-bearing
+/// `if`. Such a loop defers its inbound `ConnectionIn` like a slot-compressed
+/// loop (PlantUML draws the loop's internal break/exit corridor connectors
+/// before the connection into it). Labeled break loops are already caught by
+/// [`is_ordinary_compressed_while`]; this covers the unlabeled form.
+fn is_unlabeled_break_while(node: &LayoutNode) -> bool {
+    matches!(
+        node,
+        LayoutNode::While {
+            body,
+            is_label: None,
+            end_label: None,
+            special_out: None,
+            ..
+        } if body_contains_break_if(body)
+    )
+}
+
 /// True for a `while` whose body has the ordinary-compressed shape, ignoring
 /// whether a trailing terminator was absorbed into `special_out`. Used to keep
 /// a sequential run of compressed whiles "chained" even when the final loop
@@ -4998,9 +5016,21 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             // collapses — the arm vertical at `max(cond,body) + halfHex + pad` is
             // the rightmost geometry, with no further reservation.
             let right_extent = if break_if_is_last_flow(body) {
+                // A bare `while (cond)` (no `is`/end label) keeps the FtileWhile
+                // frame's trailing `hexHalf - 3 - pad` reservation past the
+                // loop-back arm (advertised whitespace only — the drawn arm is
+                // unchanged). Labeled last-flow break loops collapse it (their
+                // wider body absorbs the slack within the ±1px canvas tolerance);
+                // a narrow unlabeled body does not, so restore the tail.
+                let unlabeled_break_tail = if is_label.is_none() && end_label.is_none() {
+                    WHILE_NO_LABEL_BREAK_CANVAS_TAIL
+                } else {
+                    0.0
+                };
                 cond_half.max(body_right)
                     + DIAMOND_HALF
                     + while_single_if_right_pad(body, end_label)
+                    + unlabeled_break_tail
             } else {
                 cond_half.max(body_right)
                     + 2.0 * DIAMOND_HALF
@@ -7254,6 +7284,14 @@ struct WhileBreakContext {
     /// condition (the loop's `out`), where the arrowhead lands instead. The
     /// repeat records the weld point so it can draw the down-corridor + merge.
     repeat_mode: bool,
+    /// Extra lead added to the inbound connector that reaches the break-`if`'s
+    /// diamond (on top of the plain `ARROW_LEN`). A bare `while (cond)` with no
+    /// `is`/end label centres its body in a frame with `suppLabel = 0` (see
+    /// [`WHILE_BREAK_SUPP_LABEL_H`]); PlantUML's slot finder then redistributes
+    /// the if-down corridor's uncompressed slack — pushing a small lead *above*
+    /// the diamond instead of leaving it all below — so the corridor rejoins at
+    /// the compressed drop. See [`WHILE_BREAK_NO_LABEL_INBOUND_LEAD`].
+    inbound_lead: f64,
 }
 
 /// Loop-back fusion geometry handed to a last-flow break-`if` (see
@@ -8309,10 +8347,17 @@ fn emit_sequence_ex(
                 } else {
                     0.0
                 };
+                // No-`is` break loop: the slot finder pushes a small lead above
+                // the break-`if`'s diamond (`WhileBreakContext::inbound_lead`).
+                let break_if_inbound_lead = svg
+                    .while_break
+                    .filter(|_| is_break_down_if(node))
+                    .map_or(0.0, |brk| brk.inbound_lead);
                 let gap = stretch
                     + lead
                     + carry
                     + break_if_first_outbound_extra
+                    + break_if_inbound_lead
                     + if style.hidden {
                         10.0
                     } else if label.is_some() {
@@ -8549,6 +8594,7 @@ fn emit_sequence_ex(
             if is_colored_partition_wrapping_while(node)
                 || is_partition_wrapping_compressed_while(node)
                 || is_ordinary_compressed_while(node)
+                || is_unlabeled_break_while(node)
                 || is_break_down_if(node)
             {
                 deferred_partition_inbound = Some((arrow_top, style, label, arrow_gap));
@@ -9980,17 +10026,39 @@ const WHILE_BREAK_IF_CORRIDOR_UNCOMPRESSED_EXTRA: f64 = 4.477539062500001;
 /// FtileWhile frame-height bridge for break-bearing loops. PlantUML computes
 /// `FtileWhile.calculateDimensionFtile` as
 ///   `frame_h = geoDiamond1.appendBottom(geoWhile).height + 4*hexHalf + supp`
-/// where `geoWhile` is the body's true `FtileGeometry` height. A break-bearing
-/// body's `FtileGeometry` reserves more vertical space than this renderer's flat
+/// where `geoWhile` is the body's true `FtileGeometry` height and `supp =
+/// getSuppHeightForLabel` is the height of `back1` (the `is (yes)` loop-back
+/// label) — *zero* when the loop has no `is`/end label. A break-bearing body's
+/// `FtileGeometry` reserves more vertical space than this renderer's flat
 /// [`sequence_height`] models (the `FtileIfDown` break corridor's empty-side
-/// rejoin + welding band). This is the constant residual between
-/// `geoWhile.height` and `sequence_height(body)` for a break-bearing body, so
-///   `frame_h = 24 (diamond1) + sequence_height(body) + WHILE_BREAK_BODY_GEO_EXTRA + 48`.
+/// rejoin + welding band): [`WHILE_BREAK_BODY_GEO_RESIDUAL`] is that constant
+/// `geoWhile.height - sequence_height(body)` residual (label-independent), so
+///   `frame_h = 24 (diamond1) + sequence_height(body)
+///              + WHILE_BREAK_BODY_GEO_RESIDUAL + 48 + supp`.
 /// The loop-back / exit arrowheads are placed at the frame-height-derived
 /// midpoints (`(diamond_cy + frame_h)/2` for the exit `ConnectionOut`,
 /// `(diamond_cy + frame_h - hexHalf)/2` for the loop-back), exactly as PlantUML
 /// draws them — independent of where the (lower) loop-back junction line lands.
-const WHILE_BREAK_BODY_GEO_EXTRA: f64 = 62.7920359375;
+const WHILE_BREAK_BODY_GEO_RESIDUAL: f64 = 38.655248437500006;
+/// `getSuppHeightForLabel` for a labeled break loop: the height of the `is (yes)`
+/// loop-back label band (`back1`). Added to `frame_h` only when the loop carries
+/// such a label; a bare `while (cond)` (no `is`/end label) contributes nothing.
+const WHILE_BREAK_SUPP_LABEL_H: f64 = 24.136787499999997;
+/// Lead added above a break-`if`'s diamond when the enclosing `while` has no
+/// `is`/end label. With `suppLabel = 0` the body centres in a shorter frame and
+/// the slot finder pushes this much of the if-down corridor's
+/// [`WHILE_BREAK_IF_CORRIDOR_UNCOMPRESSED_EXTRA`] slack *above* the diamond
+/// (`act_edge … edge_activity_while_break`: work→break-if gap `20 + 1.0889`,
+/// corridor rejoins at the compressed drop).
+const WHILE_BREAK_NO_LABEL_INBOUND_LEAD: f64 = 1.0888575;
+/// Trailing advertised-width reservation an unlabeled `while (cond)` break loop
+/// keeps past its loop-back arm. The `break_if_is_last_flow` collapse drops the
+/// FtileWhile `dx + hexHalf` frame tail (correct for labeled loops, whose wider
+/// body absorbs it within the canvas's ±1px tolerance); a narrow unlabeled body
+/// must keep `hexHalf - 3 - WHILE_SINGLE_IF_RIGHT_PAD` of it so the advertised
+/// canvas matches PlantUML's `geo.width + dx + hexHalf`. Whitespace only — drawn
+/// shapes are unaffected.
+const WHILE_NO_LABEL_BREAK_CANVAS_TAIL: f64 = DIAMOND_HALF - 3.0 - WHILE_SINGLE_IF_RIGHT_PAD;
 /// When the break-bearing `if` is the FIRST flow node of the loop body, the
 /// body's `FtileGeometry` gains one even-action middle stretch unit
 /// ([`IF_DOWN_MID_STRETCH`]) of reserved height (no leading tile compresses the
@@ -11955,8 +12023,13 @@ fn emit_while(
     // loop and its loop-back/exit arrowheads sit at the *uncompressed* midpoint
     // (PlantUML draws them before the slot-compression pass shifts endpoints).
     let break_in_body = body_contains_break_if(body);
-    let exit_vertical_after_arrow =
-        special_out.is_none() && (colored_partition_while || ordinary_slot_compressed);
+    // A break-bearing loop emits its exit `ConnectionOut` as a snake: the DOWN
+    // emphasize arrowhead is drawn before the vertical run (matching PlantUML's
+    // `Snake` point order). Labeled break loops already take this branch via slot
+    // compression; a bare `while (cond)` break loop has no slot compression but
+    // must still emit arrowhead-before-line.
+    let exit_vertical_after_arrow = special_out.is_none()
+        && (colored_partition_while || ordinary_slot_compressed || break_in_body);
 
     let cond_inner_w = diamond_inner_w_styled(
         condition,
@@ -12025,11 +12098,21 @@ fn emit_while(
                 diamond_right_vertex_x,
             }
         });
+        // A bare `while (cond)` (no `is`/end label) centres its body in a frame
+        // with `suppLabel = 0`; the slot finder then rejoins the if-down break
+        // corridor at the *compressed* drop and pushes a small lead above the
+        // diamond instead (see `WHILE_BREAK_NO_LABEL_INBOUND_LEAD`).
+        let no_label = is_label.is_none() && end_label.is_none();
         svg.while_break = Some(WhileBreakContext {
             corridor_x: pre_geo_left_x - DIAMOND_HALF,
-            compresses: while_break_corridor_compresses(body),
+            compresses: while_break_corridor_compresses(body) || no_label,
             fuse_loopback,
             repeat_mode: false,
+            inbound_lead: if no_label {
+                WHILE_BREAK_NO_LABEL_INBOUND_LEAD
+            } else {
+                0.0
+            },
         });
     }
 
@@ -12248,7 +12331,14 @@ fn emit_while(
     // [`WHILE_BREAK_BODY_GEO_EXTRA`].
     let break_frame_h = break_in_body.then(|| {
         24.0 + sequence_height(body)
-            + WHILE_BREAK_BODY_GEO_EXTRA
+            + WHILE_BREAK_BODY_GEO_RESIDUAL
+            // `getSuppHeightForLabel`: the `is (yes)` loop-back label band raises
+            // the frame; a bare `while (cond)` with no label adds nothing.
+            + if is_label.is_some() {
+                WHILE_BREAK_SUPP_LABEL_H
+            } else {
+                0.0
+            }
             + if break_if_is_first_flow(body) {
                 // The break-`if` is the body's first flow node. The FtileWhile
                 // frame reserves the south-label mid band (`IF_DOWN_MID_STRETCH`)
@@ -12610,6 +12700,7 @@ fn emit_repeat(
             compresses: false,
             fuse_loopback: None,
             repeat_mode: true,
+            inbound_lead: 0.0,
         });
     }
 
@@ -12834,7 +12925,8 @@ fn emit_repeat(
             } else {
                 REPEAT_BACKWARD_BREAK_ODD_SLACK / 2.0
             };
-            composite_center - backward_h / 2.0 - REPEAT_BREAK_LOOPBACK_ARROW_BIAS + odd_action_relief
+            composite_center - backward_h / 2.0 - REPEAT_BREAK_LOOPBACK_ARROW_BIAS
+                + odd_action_relief
         } else {
             let odd_stretch_adjust =
                 if backward_flow_count >= 2 && !backward_flow_count.is_multiple_of(2) {
