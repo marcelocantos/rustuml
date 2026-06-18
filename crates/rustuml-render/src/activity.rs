@@ -2185,6 +2185,17 @@ struct ForkLayout {
 
 const FORK_INNER_PAD: f64 = 12.0;
 const FORK_BRANCH_GAP: f64 = 10.0;
+/// The 2 px the whole-diagram ON_X pass shaves off each OUTER (un-compressible)
+/// branch margin: PlantUML's per-branch `addHorizontalMargin(14, 14)` overhangs
+/// the black bar by 14, but the goldens show the bar overhanging each edge branch
+/// by [`FORK_INNER_PAD`] (12). (Inter-branch margins compress to 10 regardless, so
+/// this only affects the two outer edges, the bar width, and the spine offset.)
+const FORK_PARALLEL_X_MARGIN_TRIM: f64 = 2.0;
+/// `AbstractParallelFtilesBuilder.computeNewFtile`'s per-branch
+/// `addHorizontalMargin(xMargin, xMargin)` with `xMargin = 14`, trimmed for the
+/// drawn extent (see [`FORK_PARALLEL_X_MARGIN_TRIM`]). Used by the faithful
+/// `FtileForkInner` fork-layout path (nude-switch branches).
+const FORK_PARALLEL_X_MARGIN: f64 = 14.0 - FORK_PARALLEL_X_MARGIN_TRIM;
 const FORK_EVEN_MIDDLE_EXTRA: f64 = 18.0;
 const FORK_ASYMMETRIC_EVEN_MIDDLE_EXTRA: f64 = 32.0;
 const FORK_ASYMMETRIC_SPINE_STEP: f64 = 5.0;
@@ -2259,12 +2270,73 @@ fn sequence_if_depth(nodes: &[LayoutNode]) -> usize {
     nodes.iter().map(node_if_depth).max().unwrap_or(0)
 }
 
+/// The leading multi-case switch of a `fork`/`split` branch that lays out nude
+/// (>= 3 cases, see `fork_branch_switch_is_nude`), if any.
+fn fork_branch_nude_switch(branch: &[LayoutNode]) -> Option<(&[SwitchCase], &str)> {
+    if let Some(LayoutNode::Switch { cases, condition }) = branch.iter().find(|n| node_is_flow(n))
+        && fork_branch_switch_is_nude(cases, condition)
+    {
+        Some((cases, condition))
+    } else {
+        None
+    }
+}
+
+/// (left, right) extents a `fork`/`split` branch reserves. Identical to
+/// `sequence_extents` except for a leading nude switch (>= 3 cases), which
+/// reserves its uncompressed `FtileSwitchNude` block (`switch_x_layout_nude`)
+/// rather than the switch-locally-compressed standalone block.
+fn fork_branch_extents(branch: &[LayoutNode]) -> (f64, f64) {
+    if let Some((cases, condition)) = fork_branch_nude_switch(branch) {
+        let layout = switch_x_layout_nude(cases, condition);
+        let (mut left, mut right) = sequence_extents(branch);
+        left = left.max(layout.diamond_dx);
+        right = right.max(layout.block_w - layout.diamond_dx);
+        return (left, right);
+    }
+    sequence_extents(branch)
+}
+
 fn fork_layout(branches: &[Vec<LayoutNode>]) -> ForkLayout {
-    let branch_extents: Vec<(f64, f64)> = branches.iter().map(|b| sequence_extents(b)).collect();
+    let branch_extents: Vec<(f64, f64)> = branches.iter().map(|b| fork_branch_extents(b)).collect();
     let branch_widths: Vec<f64> = branch_extents.iter().map(|(l, r)| l + r).collect();
     let n = branch_widths.len();
     if n == 0 {
         return ForkLayout::default();
+    }
+
+    // A fork containing a nude-switch branch (>= 3 cases) lays out FAITHFULLY per
+    // `AbstractParallelFtilesBuilder` + `FtileForkInner`: each branch wrapped in
+    // `addHorizontalMargin(14, 14)`, placed left-to-right, the join spine pinned
+    // at `totalWidth / 2`. The black bar spans the full inner width. The
+    // diagram-wide ON_X pass (the bar is `ignoreForCompressionOnX`) then reclaims
+    // the empty bands. This replaces the construct-local FORK_INNER_PAD / gap /
+    // even-extra model — which assumes already-tight branches — for the switch
+    // case, where the switch advertises its loose nude reserve.
+    if !branches.iter().any(Vec::is_empty)
+        && branches.iter().any(|b| fork_branch_nude_switch(b).is_some())
+    {
+        let mut centers = Vec::with_capacity(n);
+        let mut x = 0.0;
+        for (left, right) in &branch_extents {
+            // Decorated tile: +14 each side; the branch spine sits at its own left
+            // extent plus the left margin.
+            centers.push(x + FORK_PARALLEL_X_MARGIN + left);
+            x += left + right + 2.0 * FORK_PARALLEL_X_MARGIN;
+        }
+        return ForkLayout {
+            bar_w: x,
+            centers,
+            // The join spine sits at the FULL-margin (`xMargin = 14`) inner centre,
+            // i.e. 2 px right of the trimmed (`FORK_PARALLEL_X_MARGIN = 12`) bar
+            // centre — the 2 px the outer margins lost. `spine = bar_w/2 + 2` is
+            // `spine_dx = -2` (spine = `bar_w/2 - spine_dx`); this keeps the drawn
+            // branch positions anchored while the start/stop terminals re-centre.
+            spine_dx: -(FORK_PARALLEL_X_MARGIN_TRIM),
+            // The bar is `ignoreForCompressionOnX`; its slack collapses with the
+            // empty inter-branch bands in the whole-diagram pass.
+            bar_compressible: true,
+        };
     }
 
     if branches.iter().any(Vec::is_empty) {
@@ -3094,6 +3166,31 @@ fn switch_x_layout_if_branch_extents(cases: &[SwitchCase], condition: &str) -> S
 /// Returns whether the SMALL/BIG diamond test selects BIG mode for these cases.
 fn switch_case_block_is_big_diamond(cases: &[SwitchCase], condition: &str) -> bool {
     switch_x_layout_with_small_gap(cases, condition, SWITCH_IF_BRANCH_CASE_GAP, false).big_diamond
+}
+
+/// A multi-case SMALL-diamond switch that is the leading flow node of a
+/// `fork`/`split` branch (with >= 3 cases) lays out FAITHFULLY: PlantUML's
+/// `FtileSwitch.calculateDimension` returns the uncompressed `FtileSwitchNude`
+/// block (cases at `xSeparation = 20`, diamond at the nude centre, getLeft =
+/// width/2), and the fork's `AbstractParallelFtilesBuilder` wraps each branch in
+/// `addHorizontalMargin(14, 14)`, lays them left-to-right (`FtileForkInner`), and
+/// pins the join spine at `totalWidth / 2`. The diagram-wide `CompressionXorYBuilder`
+/// (ON_X) — whose blocking column is the diagram spine; the fork black bar is
+/// `ignoreForCompressionOnX` — then collapses the empty bands. Running the switch
+/// through the standalone `switch_x_layout` instead applies a SWITCH-LOCAL
+/// compression that double-counts the bands and mis-centres the diamond. A 2-case
+/// switch keeps the standalone form (its tighter spacing is verified by
+/// `act_switch_in_fork`, two 2-case switch branches, which passes).
+fn fork_branch_switch_is_nude(cases: &[SwitchCase], condition: &str) -> bool {
+    cases.len() >= 3 && !switch_case_block_is_big_diamond(cases, condition)
+}
+
+/// The uncompressed `FtileSwitchNude` layout for a switch that is a fork/split
+/// branch: cases at the full `xSeparation = 20` with the diamond at the nude
+/// block centre and NO switch-local ON_X compression — the diagram-wide pass
+/// reclaims the empty bands instead (see `fork_branch_switch_is_nude`).
+fn switch_x_layout_nude(cases: &[SwitchCase], condition: &str) -> SwitchXLayout {
+    switch_x_layout_with_small_gap(cases, condition, SWITCH_IF_BRANCH_CASE_GAP, false)
 }
 
 /// Packed if/while/fork-branch switch layout for four or more SMALL-diamond
@@ -7207,6 +7304,14 @@ struct SvgEmitter {
     /// inner bands) instead of the standalone gap-10 layout. Set per-switch by
     /// `emit_sequence_ex` (while-body mode) and consumed once by `emit_switch`.
     while_body_switch: bool,
+    /// True while emitting a leading multi-case (>= 3) SMALL-diamond switch of a
+    /// `fork`/`split` branch. Such a switch emits its uncompressed `FtileSwitchNude`
+    /// layout (`switch_x_layout_nude`) rather than the switch-locally-compressed
+    /// standalone `switch_x_layout`; the diagram-wide ON_X pass (the fork's black
+    /// bar is `ignoreForCompressionOnX`) reclaims the empty bands instead. See
+    /// `fork_branch_switch_is_nude`. Set per-branch by `emit_fork_with_layout`,
+    /// consumed once by `emit_switch`.
+    fork_body_switch: bool,
     /// True while emitting a `while` body whose loop-back corridor ON_Y-compresses
     /// (>=3 body flow tiles; see `while_break_corridor_compresses`). A multi-case
     /// switch in such a body routes its centre-spine drop's collinear split at the
@@ -7361,6 +7466,7 @@ impl SvgEmitter {
             repeat_nested_expansion: 0.0,
             while_switch_merge_extra: 0.0,
             while_body_switch: false,
+            fork_body_switch: false,
             while_corridor_compresses: false,
             while_switch_corridor_compresses: false,
             while_switch_merge_compressed: false,
@@ -11023,6 +11129,20 @@ fn emit_switch(
     if let [case] = cases {
         return emit_switch_one_link(svg, cx, y, condition, case);
     }
+    // A leading nude switch (>= 3 cases) in a fork branch emits its uncompressed
+    // `FtileSwitchNude` layout; the diagram-wide ON_X pass reclaims the bands.
+    // One-shot flag set by `emit_fork_with_layout`.
+    if std::mem::take(&mut svg.fork_body_switch) && fork_branch_switch_is_nude(cases, condition) {
+        return emit_switch_with_layout(
+            svg,
+            cx,
+            y,
+            condition,
+            cases,
+            switch_x_layout_nude(cases, condition),
+            false,
+        );
+    }
     let layout = if svg.while_body_switch {
         switch_x_layout_in_while(cases, condition)
     } else {
@@ -11832,7 +11952,13 @@ fn emit_fork_with_layout(
             };
             bar_bottom + ARROW_LEN + center_offsets[i] + start_lead
         };
+        // A leading nude switch (>= 3 cases) in this branch emits its
+        // `FtileSwitchNude` layout (see `fork_branch_switch_is_nude`); flag it so
+        // `emit_switch` selects the nude layout. One-shot, consumed by
+        // `emit_switch`.
+        svg.fork_body_switch = fork_branch_nude_switch(branch).is_some();
         let bottom = emit_sequence(svg, branch, bcx, branch_y);
+        svg.fork_body_switch = false;
         branch_bottoms.push(bottom);
     }
     svg.fork_branch_gap_extra = saved_gap_extra;
