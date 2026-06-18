@@ -4311,7 +4311,12 @@ fn sequence_geometry(nodes: &[LayoutNode]) -> Option<ftile::FtileGeometry> {
             | LayoutNode::Detach
             | LayoutNode::Kill
             | LayoutNode::Break
-            | LayoutNode::Goto(_) => continue,
+            | LayoutNode::Goto(_)
+            // Swimlane V2: a branch-internal `|Lane|` marker contributes no
+            // geometry. Without this skip the wildcard hits node_geometry's
+            // None-on-LaneMark and the whole branch geometry collapses to None,
+            // breaking the if-long/elseif path for lane-spanning if-swimlanes.
+            | LayoutNode::LaneMark(_) => continue,
             _ => geoms.push(node_geometry(n)?),
         }
     }
@@ -4326,7 +4331,10 @@ fn sequence_geometry_if_branch(nodes: &[LayoutNode]) -> Option<ftile::FtileGeome
             | LayoutNode::Detach
             | LayoutNode::Kill
             | LayoutNode::Break
-            | LayoutNode::Goto(_) => continue,
+            | LayoutNode::Goto(_)
+            // Swimlane V2: branch-internal lane marker, no geometry (see
+            // `sequence_geometry`).
+            | LayoutNode::LaneMark(_) => continue,
             _ => geoms.push(node_geometry_if_branch(n)?),
         }
     }
