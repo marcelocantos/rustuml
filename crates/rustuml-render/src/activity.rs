@@ -10389,11 +10389,51 @@ fn while_loopback_arrow_bias(body: &[LayoutNode]) -> f64 {
     }
 }
 
+/// Sum of the [`WHILE_NESTED_LABELLED_BAND`] reserved-but-undrawn bands every
+/// nested labelled `while` in this `while` body interposes into the body's
+/// advertised `FtileGeometry` (`getSuppHeightForLabel`). The enclosing loop's
+/// loop-back arrowhead anchors on that inflated body bottom, so it seats
+/// `band / 2` lower than the drawn `body_bottom` midpoint. Counts only nested
+/// `while`s carrying an `is (…)`/end loop-back label (a non-empty `back1`);
+/// every body without one returns 0 and stays byte-identical.
+fn while_body_nested_labelled_band(body: &[LayoutNode]) -> f64 {
+    body.iter()
+        .filter(|n| {
+            matches!(
+                n,
+                LayoutNode::While {
+                    is_label: Some(_),
+                    ..
+                } | LayoutNode::While {
+                    end_label: Some(_),
+                    ..
+                }
+            )
+        })
+        .count() as f64
+        * WHILE_NESTED_LABELLED_BAND
+}
+
 /// Per nesting `if`-diamond, the merge band ON_Y compression reclaims from the
 /// `while`-body centring slack before it reaches the innermost branch gap. Each
 /// nested `if` level interposes one diamond+merge structure that absorbs this
 /// much of the slack the outer loop frame reserves.
 const WHILE_IF_BODY_LEVEL_RECLAIM: f64 = 2.0;
+
+/// Reserved-but-undrawn vertical band a *nested labelled* `while` interposes into
+/// its enclosing `while`'s body `FtileGeometry`. PlantUML's `FtileWhile`
+/// advertises `geo.getHeight() = body.h + 4*hexHalf + getSuppHeightForLabel`,
+/// where `getSuppHeightForLabel = back1.height` is the inner loop's `is (…)`
+/// loop-back label band. That band inflates the body sequence's reported
+/// `getPointOut` (hence `getP1`) that the enclosing loop's
+/// `ConnectionBackSimple.drawTranslate` anchors its UP loop-back arrowhead on
+/// (`(y1 + y2)/2`, `y1 = body pointOut`), even though the drawn flow never
+/// occupies it. This renderer's `mid_y` uses the DRAWN `body_bottom`, so the
+/// arrowhead seats `WHILE_NESTED_LABELLED_BAND / 2` too high. Only a nested
+/// `while` with an `is (…)`/end loop-back label has a non-empty `back1` (a bare
+/// `while (cond)` reserves no band), so a body without one stays byte-identical.
+/// Verified on `act_while_nested`.
+const WHILE_NESTED_LABELLED_BAND: f64 = 12.1798;
 
 /// When a `while` body is a single balanced `if` (then + else, reconverging
 /// through a merge) whose `then`-branch chain bottoms out in a 2-action terminal
@@ -12693,6 +12733,13 @@ fn emit_while(
             // midpoint plus a fixed even-body stretch, so undo the `S/2` and add
             // `WHILE_EVEN_BODY_LOOP_ARROW_STRETCH`. Drives `act_while_ifdepth*`.
             + if_body_stretch.map_or(0.0, |s| WHILE_EVEN_BODY_LOOP_ARROW_STRETCH - s / 2.0)
+            // A nested labelled `while` in the body advertises a loop-back label
+            // band (`getSuppHeightForLabel`) the drawn flow never occupies, so the
+            // body's reported `getPointOut` — which `ConnectionBackSimple` anchors
+            // this arrowhead on — sits `band` below the drawn `body_bottom`. The
+            // arrowhead seats at the midpoint, i.e. `band/2` lower. Zero for any
+            // body without a nested labelled `while`. Drives `act_while_nested`.
+            + while_body_nested_labelled_band(body) / 2.0
     });
     // Segments 4-7 (loop-back arm) are drawn by the break-`if` itself when the
     // loop-back was fused into its empty branch (last-flow break); skip them here.
