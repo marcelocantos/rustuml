@@ -3624,6 +3624,44 @@ fn while_body_is_single_compressible_while(body: &[LayoutNode]) -> bool {
     )
 }
 
+/// True when a `while` body is EXACTLY one nested `while` and nothing else (no
+/// trailing flow tile, no end label / special-out on the inner loop). This is
+/// the "pure while-chain" shape (`while { while { ... } }`).
+///
+/// In PlantUML the inner loop tile is the body's only content, so its own
+/// loop-back arm is the body's rightmost geometry; the enclosing loop's frame
+/// adds just `Hexagon.hexagonHalfSize` of corridor past it. The normal
+/// `dx + halfHex` trailing whitespace that a `while` reserves past its arm
+/// (`WHILE_CHAIN_TRAILING_FULL`) is reclaimed by ON_X compression because there
+/// is no content below the corridor to keep it open — verified against
+/// `act_nest_while_while_while` (golden trailing past the arm ≈ 20.5 px vs the
+/// ~34.4 px a trailing-content loop keeps, e.g. `act_while_nested`).
+fn while_body_is_pure_while_chain(body: &[LayoutNode]) -> bool {
+    matches!(
+        body,
+        [
+            LayoutNode::While {
+                end_label: None,
+                special_out: None,
+                ..
+            },
+        ]
+    )
+}
+
+/// Trailing right-side whitespace a `while` reserves past its loop-back arm (the
+/// FtileWhile frame's `dx + halfHex` term past the arm at `max(cond,body)+halfHex`).
+/// Normally `DIAMOND_HALF + 3` (= the `+2*halfHex+3` past `max(cond,body)`); for a
+/// pure while-chain body the corridor compresses away to a 1 px residual (see
+/// [`while_body_is_pure_while_chain`]).
+fn while_chain_trailing_reservation(body: &[LayoutNode]) -> f64 {
+    if while_body_is_pure_while_chain(body) {
+        WHILE_CHAIN_TRAILING_COMPRESSED
+    } else {
+        WHILE_CHAIN_TRAILING_FULL
+    }
+}
+
 /// Whether a `while` body's ON_Y compression removes the residual slack from a
 /// break-bearing `if`'s no-diamond corridor (see
 /// [`WHILE_BREAK_IF_CORRIDOR_DROP_COMPRESSED`]). Empirically the slack survives
@@ -5284,8 +5322,8 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
                     + unlabeled_break_tail
             } else {
                 cond_half.max(body_right)
-                    + 2.0 * DIAMOND_HALF
-                    + 3.0
+                    + DIAMOND_HALF
+                    + while_chain_trailing_reservation(body)
                     + while_single_if_right_pad(body, end_label)
             };
             (left_extent, right_extent)
@@ -5452,14 +5490,13 @@ fn sequence_extents_with_note_margin(
     sequence_extents_with_note_margins(nodes, if_branch, note_outer_margin, note_outer_margin)
 }
 
-/// The trailing right-side reservation a `while`/`repeat` tile carries in its
-/// own `node_extents` (`+ 2*halfHex + 3` past `max(cond, body_right)` vs the
-/// loop-back arm at `+ halfHex`). That extra `halfHex + 3` is canvas margin —
-/// the FtileWhile/FtileRepeat geometry's `dx + halfHex` term that lands in the
-/// SVG right margin. When a loop tile is itself nested inside ANOTHER loop's
-/// body, the enclosing loop's loop-back arm only needs to clear the inner arm,
-/// not the inner's canvas reservation, so this slack is removed.
-const LOOP_NEST_TRAILING_RESERVATION: f64 = DIAMOND_HALF + 3.0;
+/// Trailing right-side whitespace a `while` reserves past its loop-back arm in
+/// the ordinary (non-chain) case — the FtileWhile frame's `dx + halfHex` term.
+const WHILE_CHAIN_TRAILING_FULL: f64 = DIAMOND_HALF + 3.0;
+/// Same trailing reservation for a pure while-chain body, where ON_X
+/// compression reclaims the corridor down to a 1 px residual (see
+/// [`while_body_is_pure_while_chain`]).
+const WHILE_CHAIN_TRAILING_COMPRESSED: f64 = 1.0;
 
 /// True for a nested `while` tile whose `node_extents` right edge includes the
 /// trailing canvas reservation that must be stripped when the tile is nested
@@ -5505,10 +5542,17 @@ fn sequence_loop_body_extents(nodes: &[LayoutNode]) -> (f64, f64) {
             continue;
         }
         let (_nl, nr) = node_extents(node);
-        let nr = if node_is_loop_tile(node) {
-            (nr - LOOP_NEST_TRAILING_RESERVATION).max(0.0)
-        } else {
-            nr
+        // Strip the inner loop's own trailing reservation back to its arm. A
+        // pure while-chain inner loop already reserves only the compressed
+        // trailing (see `while_chain_trailing_reservation`), so strip that
+        // amount rather than the full reservation — otherwise the arm would be
+        // under-cleared.
+        let nr = match node {
+            LayoutNode::While { body: inner, .. } => {
+                let strip = while_chain_trailing_reservation(inner);
+                (nr - strip).max(0.0)
+            }
+            _ => nr,
         };
         adjusted_right = adjusted_right.max(nr);
     }
