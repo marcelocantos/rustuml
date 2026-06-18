@@ -84,6 +84,16 @@ const WHILE_SPECIAL_BODY_X_PULL_RIGHT: f64 = WHILE_SPECIAL_COND_LEAD - WHILE_SPE
 const WHILE_UNLABELED_SPECIAL_Y_PULL_UP: f64 = 4.0;
 const WHILE_UNLABELED_LOOP_ARROW_Y_PULL_UP: f64 = 2.0;
 const WHILE_BODY_SLOT_COMPRESS: f64 = 4.8203125;
+/// The body→loop-back-junction gap a `while` reserves below its body (the
+/// `body_bottom + 10` slack). When a loop consumes a nested loop's fused exit,
+/// its loop-back junction sits at the child's fused band (which already counts
+/// this gap), but its own exit corridor still drops this far below the junction.
+const WHILE_NESTED_EXIT_BODY_GAP: f64 = 10.0;
+/// A nested fused-exit corridor's DOWN emphasize arrowhead sits one pixel below
+/// the drawn corridor-run midpoint: PlantUML anchors the `ConnectionOut`
+/// emphasize on the un-merged `FtileWhile` segment, which is one pixel longer
+/// than the MergeStrategy.LIMITED-merged corridor actually drawn.
+const WHILE_NESTED_EXIT_ARROW_BIAS: f64 = 1.0;
 /// `FtileWhile.getSuppHeightForLabel`: the height the loop-back incoming label
 /// (`back1`) reserves below the body. PlantUML's `calculateDimensionFtile`
 /// includes this in the tile height (`diamond + body + 4*halfHex + suppLabel`),
@@ -2347,7 +2357,9 @@ fn fork_layout(branches: &[Vec<LayoutNode>]) -> ForkLayout {
     // even-extra model — which assumes already-tight branches — for the switch
     // case, where the switch advertises its loose nude reserve.
     if !branches.iter().any(Vec::is_empty)
-        && branches.iter().any(|b| fork_branch_nude_switch(b).is_some())
+        && branches
+            .iter()
+            .any(|b| fork_branch_nude_switch(b).is_some())
     {
         let mut centers = Vec::with_capacity(n);
         let mut x = 0.0;
@@ -3577,6 +3589,39 @@ fn while_ordinary_slot_compresses(
         end_label.is_some(),
         body.is_empty(),
     ) != 0.0
+}
+
+/// A `while` whose body is *exactly* a single nested `while` whose own body is
+/// an ordinary compressible chain (pure actions etc.). In PlantUML's global ON_Y
+/// pass, the empty inbound band between two stacked condition diamonds is the
+/// reclaimable slot, and only ONE band in the diamond chain compresses. The slot
+/// finder claims it at the *parent* of the deepest (pure-action) loop: this
+/// while compresses its own inbound, and the nested pure-action while does NOT
+/// (its slack was already reclaimed above it — see
+/// [`SvgEmitter::while_sole_body_suppress_compress`]). Drives the nested-while
+/// cases (`act_while_nested_3_levels`, `act_nest_while_while_while`,
+/// `act_if*while*_nesting`). The labels/special_out gating mirrors
+/// [`while_ordinary_slot_compress_allowed`]: the nested while must be a labelled,
+/// non-empty, non-special loop for its inbound band to exist and be claimable.
+fn while_body_is_single_compressible_while(body: &[LayoutNode]) -> bool {
+    let [
+        LayoutNode::While {
+            body: inner_body,
+            is_label: inner_is_label,
+            end_label: inner_end_label,
+            special_out: inner_special,
+            ..
+        },
+    ] = body
+    else {
+        return false;
+    };
+    while_ordinary_slot_compresses(
+        inner_body,
+        inner_is_label,
+        inner_end_label,
+        inner_special.as_deref(),
+    )
 }
 
 /// Whether a `while` body's ON_Y compression removes the residual slack from a
@@ -6914,8 +6959,16 @@ fn node_height(node: &LayoutNode) -> f64 {
             // + body_h + below-body-gap + wrap-back-offset. We derive it
             // from the same compression-aware formula as emit_while.
             let diamond_alone_h = DIAMOND_HALF * 2.0;
+            // Case (b): a single-nested-`while` body compresses this loop's
+            // inbound too (see `emit_while`), so the advertised height must drop by
+            // the same slot. The deepest action-bodied loop in such a chain is
+            // suppressed; `while_body_height` re-adds its slot below.
+            let single_while_compresses = is_label.is_some()
+                && special_out.is_none()
+                && matches!(&body[..], [LayoutNode::While { .. }]);
             let body_top_offset = while_body_top_offset(
-                while_ordinary_slot_compress_allowed(body, special_out.as_deref()),
+                while_ordinary_slot_compress_allowed(body, special_out.as_deref())
+                    || single_while_compresses,
                 is_label.is_some(),
                 end_label.is_some(),
                 body.is_empty(),
@@ -7410,6 +7463,23 @@ struct SvgEmitter {
     /// nested sequences do not inherit it, and applies `while_switch_merge_extra`
     /// per switch via `emit_node`.
     pending_while_body: bool,
+    /// One-shot flag set by `emit_while` just before emitting a body that is a
+    /// single nested compressible `while` (see
+    /// [`while_body_is_single_compressible_while`]). The enclosing while claims
+    /// the diamond-chain's reclaimable inbound slot, so the nested while must NOT
+    /// apply its own inbound slot compression. `emit_while` consumes the flag at
+    /// entry (one-shot, so it does not leak to a deeper body) and forces
+    /// `compress_while_slot = false`.
+    while_sole_body_suppress_compress: bool,
+    /// One-shot flag set by `emit_while` before emitting a single-nested-`while`
+    /// body it wants to FUSE its loop-back with (case (b) compression). The
+    /// nested `while` consumes it at entry and, instead of wrapping its exit
+    /// corridor back to the spine, descends to the fused band and reports its
+    /// `WhileNestedExit` so the parent's loop-back can source from it.
+    while_expect_nested_exit: bool,
+    /// Reported by a fused nested `while` (see `while_expect_nested_exit`) for the
+    /// parent `emit_while` to consume when drawing its loop-back arm.
+    while_nested_exit: Option<WhileNestedExit>,
     /// Nesting depth of `repeat` loop bodies currently being emitted. A `repeat`
     /// reserves an `8*halfHex` tail below its body (FtileRepeat
     /// `calculateDimensionInternal`); at top level the whole-diagram ON_Y
@@ -7586,6 +7656,32 @@ struct WhileBreakLoopback {
     diamond_right_vertex_x: f64,
 }
 
+/// Geometry a directly-nested `while` (the sole body of a fusing parent `while`)
+/// hands back UP to its parent so the parent's loop-back arm sources from the
+/// nested loop's exit corridor instead of the centre spine. PlantUML's nested
+/// `FtileWhile` loop-back `ConnectionBackSimple` snake starts at the inner
+/// `whileBlock.getPointOut` (the inner frame's left exit column) and its `y1bis`
+/// sits one `halfHex` below the inner frame bottom (= the inner loop-back
+/// junction). MergeStrategy.LIMITED then drops the parent's redundant UP
+/// emphasize arrowhead. Drives the nested-while cases.
+#[derive(Clone, Copy)]
+struct WhileNestedExit {
+    /// X of the inner loop's exit corridor (its `getPointOut` column). The
+    /// parent's loop-back horizontal sources from here.
+    exit_x: f64,
+    /// Y of the fused corridor band: inner loop-back junction + `halfHex`. The
+    /// parent uses this as its own loop-back junction y.
+    fused_y: f64,
+    /// Number of inbound-compressed `while`s strictly BELOW the consuming parent
+    /// in this single-while chain (the child if it compressed, plus its own
+    /// count). Each compressed level lowered the drawn body by
+    /// `WHILE_BODY_SLOT_COMPRESS`, but PlantUML anchors the parent's exit
+    /// `ConnectionOut` emphasize arrowhead on the PRE-compression frame midpoint,
+    /// so each level pulls that arrowhead up by
+    /// `PARTITION_COLORED_WHILE_EXIT_ARROW_PULL_UP`.
+    compressed_below: usize,
+}
+
 /// Geometry the parent `if` hands to a directly-nested `while` so the loop's
 /// exit corridor terminates at the merge diamond.
 #[derive(Clone, Copy)]
@@ -7635,6 +7731,9 @@ impl SvgEmitter {
             repeat_break_weld_y: None,
             if_survivor_redirect: None,
             pending_while_body: false,
+            while_sole_body_suppress_compress: false,
+            while_expect_nested_exit: false,
+            while_nested_exit: None,
             repeat_body_depth: 0,
             repeat_nested_expansion: 0.0,
             if_long_repeat_body_extra: 0.0,
@@ -10721,7 +10820,29 @@ fn while_body_switch_extra(body: &[LayoutNode]) -> f64 {
 }
 
 fn while_body_height(body: &[LayoutNode], has_in_label: bool) -> f64 {
+    // Suppressed deepest loop: when this body is a single nested `while` whose own
+    // body is ordinary-compressible (an action chain), that nested loop is the
+    // deepest of a single-while chain and does NOT compress its inbound (its band
+    // sits directly above the action with no diamond below). `sequence_height`'s
+    // recursive `node_height` compressed it via the ordinary gate, so re-add the
+    // slot here. The enclosing loop claimed that slot via `single_while_compresses`.
+    let suppressed_deepest_readd = if let [
+        LayoutNode::While {
+            body: inner,
+            is_label: Some(_),
+            special_out: None,
+            ..
+        },
+    ] = body
+        && while_ordinary_slot_compress_allowed(inner, None)
+        && !matches!(&inner[..], [LayoutNode::While { .. }])
+    {
+        WHILE_BODY_SLOT_COMPRESS
+    } else {
+        0.0
+    };
     sequence_height(body)
+        + suppressed_deepest_readd
         + while_body_mid_stretch(body, has_in_label).map_or(0.0, |(_, stretch)| stretch)
         // Pure-balanced-if body: the loop centring slack stretches the deepest
         // 2-action then-branch's middle gap (see `while_if_body_branch_stretch`),
@@ -12680,9 +12801,36 @@ fn emit_while(
     // Take the fused-merge target now too, so a nested while in the body cannot
     // consume it (only this top-of-branch while fuses with the merge line).
     let if_long_merge_y = std::mem::take(&mut svg.while_if_long_merge_y);
+    // Take the if-branch exit redirect NOW (before emitting the body) so a nested
+    // while in the body cannot consume it — only THIS top-of-branch loop's exit
+    // corridor fuses with the if's branch→merge connector. Held locally and
+    // applied in the exit block below.
+    let exit_redirect = svg.while_exit_redirect.take();
+    // This loop is the sole body of a parent `while` that fuses its loop-back arm
+    // with this loop's exit corridor (one-shot — take it now so a deeper nested
+    // body does not inherit it). When set, the exit corridor descends to the
+    // fused band instead of wrapping back to the spine, and reports a
+    // `WhileNestedExit` to the parent. Only a plain no-special loop can fuse.
+    let fuse_as_nested_exit =
+        special_out.is_none() && std::mem::take(&mut svg.while_expect_nested_exit);
     let colored_partition_while = svg.colored_partition_while_depth > 0;
-    let ordinary_slot_compressed =
-        while_ordinary_slot_compresses(body, is_label, end_label, special_out);
+    // This loop has an ordinary (action) body AND is the sole body of a parent
+    // `while`, so it is the DEEPEST loop of a single-while chain. PlantUML's
+    // global ON_Y pass reclaims the inbound band of every diamond in the chain
+    // EXCEPT this deepest one (its inbound sits directly above the action, with no
+    // diamond below to merge against), so it does NOT compress. One-shot — consume
+    // so a deeper nested body re-establishes its own compressibility.
+    let sole_body_suppress = std::mem::take(&mut svg.while_sole_body_suppress_compress);
+    let ordinary_slot_compressed = !sole_body_suppress
+        && while_ordinary_slot_compresses(body, is_label, end_label, special_out);
+    // Case (b): a `while` whose body is a single nested `while`. Every diamond in
+    // a single-while chain (except the deepest, suppressed above) reclaims its
+    // inbound band, so this loop compresses its own inbound. The slot exists only
+    // for a labelled, non-special outer loop (same `is_label`/specialOut gating as
+    // `while_ordinary_slot_compress_allowed`).
+    let single_while_slot_compressed =
+        is_label.is_some() && special_out.is_none() && matches!(body, [LayoutNode::While { .. }]);
+    let ordinary_slot_compressed = ordinary_slot_compressed || single_while_slot_compressed;
     let compress_while_slot = colored_partition_while || ordinary_slot_compressed;
     // A break-bearing loop keeps the normal long-exit arrowhead placement: the
     // break shares the exit corridor, so the loop exits/wraps like a no-special
@@ -12806,7 +12954,37 @@ fn emit_while(
     let prev_loopback_tip = svg.while_switch_loopback_tip.take();
     svg.pending_while_body = true;
     svg.while_corridor_compresses = while_break_corridor_compresses(body);
+    // Suppress the inbound compression of the DEEPEST loop in a single-while
+    // chain: only when this loop's sole nested `while` has an ordinary (action)
+    // body — that nested loop sits directly above the action with no diamond below
+    // to merge against, so its inbound band is not reclaimable. An intermediate
+    // while-bodied nested loop compresses on its own (case (b)). `emit_while`
+    // consumes this one-shot at entry.
+    if single_while_slot_compressed && while_body_is_single_compressible_while(body) {
+        svg.while_sole_body_suppress_compress = true;
+    }
+    // Loop-back fusion: when the body is exactly one nested `while`, that nested
+    // loop's exit corridor is consumed by THIS loop's loop-back arm (PlantUML's
+    // nested `FtileWhile` loop-back snake starts at the inner `getPointOut`). Tell
+    // the nested loop to descend its exit to the fused band and report it. This is
+    // independent of inbound compression and of THIS loop's own exit routing: a
+    // top-of-chain loop may absorb a trailing `stop` into `special_out`, or fuse
+    // its own exit into an if branch→merge redirect, yet still loop back through
+    // the nested exit corridor. Applies at every chain level (the innermost
+    // pure-action loop fuses its exit too). The nested loop itself must be a plain
+    // no-special loop (it has an exit corridor to descend).
+    if matches!(
+        body,
+        [LayoutNode::While {
+            special_out: None,
+            ..
+        }]
+    ) {
+        svg.while_expect_nested_exit = true;
+    }
+    svg.while_nested_exit = None;
     let body_bottom = emit_sequence_ex(svg, body, cx, body_top, body_mid_stretch, None, false);
+    let nested_exit = svg.while_nested_exit.take();
     svg.while_if_branch_stretch = prev_if_branch_stretch;
     let body_switch_loopback_tip = svg.while_switch_loopback_tip.take();
     svg.while_switch_loopback_tip = prev_loopback_tip;
@@ -12824,7 +13002,13 @@ fn emit_while(
     // un-compressed value (body_bottom + 12) — PlantUML draws the
     // arrowhead at the midpoint of the segment BEFORE compression
     // transforms the line endpoints.
-    let junction_y = if body.is_empty() || in_if_long_branch {
+    let junction_y = if let Some(ne) = nested_exit {
+        // Fused nested-`while` body: the parent loop-back junction sits at the
+        // nested loop's reported fused band (its loop-back junction + halfHex),
+        // not at `body_bottom + 10` (which would count the nested loop's whole
+        // drawn extent including its own wrapped corridor).
+        ne.fused_y
+    } else if body.is_empty() || in_if_long_branch {
         // Empty body, or an if-long branch where ON_Y never reaches the tail:
         // the UEmpty(halfHex) placeholder keeps its full 12 px.
         body_bottom + DIAMOND_HALF
@@ -12907,7 +13091,20 @@ fn emit_while(
         (special_cx, special_top)
     } else {
         let exit_x = geo_left_x - DIAMOND_HALF;
-        (exit_x, junction_y)
+        // When this loop CONSUMES a nested loop's fused exit, its loop-back
+        // junction sits at the child's fused band (no `+10` body gap — the child
+        // already carries it). The exit corridor, however, must still descend the
+        // full body→junction gap below the loop-back band, so it drops an extra
+        // `WHILE_NESTED_EXIT_BODY_GAP` (the standard `body_bottom + 10` slack) past
+        // the loop-back junction. A non-consuming loop's junction already includes
+        // that gap, so its exit and loop-back share the junction level.
+        let exit_bottom_y = junction_y
+            + if nested_exit.is_some() {
+                WHILE_NESTED_EXIT_BODY_GAP
+            } else {
+                0.0
+            };
+        (exit_x, exit_bottom_y)
     };
 
     // Diamond polygon (after body shapes are in `shapes`).
@@ -12990,24 +13187,42 @@ fn emit_while(
 
     // 1. Inbound path from diamond bottom to body top. With no body content,
     // PlantUML stretches this as a plain connector down to the loop junction;
-    // there is no emphasized down arrowhead for the empty placeholder.
-    if body.is_empty() {
-        svg.line_styled(&arrow_color, "1", cx, cx, diamond_bottom, junction_y, false);
-    } else {
-        svg.down_arrow(cx, diamond_bottom, body_top, &arrow_color);
+    // there is no emphasized down arrowhead for the empty placeholder. When this
+    // loop's body is a nested fused `while` (a consumer), PlantUML draws its
+    // `ConnectionIn` AFTER its loop-back LEFT arrowhead (interleaved nested-tile
+    // document order); see the segment-7 tail below.
+    if nested_exit.is_none() {
+        if body.is_empty() {
+            svg.line_styled(&arrow_color, "1", cx, cx, diamond_bottom, junction_y, false);
+        } else {
+            svg.down_arrow(cx, diamond_bottom, body_top, &arrow_color);
+        }
     }
 
     // 2. Body bottom → junction (only if body has content; for empty body
     // the inbound arrow already reaches the junction-equivalent point). When the
     // loop-back was fused into the break-`if` (last-flow break), there is no
-    // junction: the if's empty branch is the loop's pointOut.
-    if !body.is_empty() && !loopback_fused {
+    // junction: the if's empty branch is the loop's pointOut. For a fused nested
+    // exit, the nested loop's exit corridor already carries the descent down to
+    // `junction_y`, so this loop draws no body→junction spine segment.
+    if !body.is_empty() && !loopback_fused && nested_exit.is_none() {
         svg.line_styled(&arrow_color, "1", cx, cx, body_bottom, junction_y, false);
     }
 
-    // 3. Horizontal at junction from body cx out to loop_x (skip when fused).
+    // 3. Horizontal at junction out to loop_x (skip when fused into a break-if).
+    // For a fused nested exit the loop-back sources from the nested loop's exit
+    // corridor column (`ne.exit_x`) instead of the spine.
     if !loopback_fused {
-        svg.line_styled(&arrow_color, "1", cx, loop_x, junction_y, junction_y, false);
+        let loopback_src_x = nested_exit.map_or(cx, |ne| ne.exit_x);
+        svg.line_styled(
+            &arrow_color,
+            "1",
+            loopback_src_x,
+            loop_x,
+            junction_y,
+            junction_y,
+            false,
+        );
     }
 
     // Break-bearing loop: PlantUML places the loop-back / exit arrowheads at the
@@ -13108,17 +13323,24 @@ fn emit_while(
     // Segments 4-7 (loop-back arm) are drawn by the break-`if` itself when the
     // loop-back was fused into its empty branch (last-flow break); skip them here.
     if !loopback_fused {
-        svg.polygon_connector(
-            &arrow_color,
-            &[
-                (loop_x - 4.0, mid_y + 10.0),
-                (loop_x, mid_y),
-                (loop_x + 4.0, mid_y + 10.0),
-                (loop_x, mid_y + 6.0),
-            ],
-            &arrow_color,
-            "1",
-        );
+        // 4. UP emphasize arrowhead at the loop arm's vertical-run midpoint. A
+        // fused nested exit drops it: MergeStrategy.LIMITED merges the parent's
+        // ConnectionBackSimple snake into the nested loop's exit corridor, which
+        // already carried its own DOWN emphasize, so PlantUML emits no second
+        // arrowhead for the merged run.
+        if nested_exit.is_none() {
+            svg.polygon_connector(
+                &arrow_color,
+                &[
+                    (loop_x - 4.0, mid_y + 10.0),
+                    (loop_x, mid_y),
+                    (loop_x + 4.0, mid_y + 10.0),
+                    (loop_x, mid_y + 6.0),
+                ],
+                &arrow_color,
+                "1",
+            );
+        }
 
         // 5. Loop arm vertical at loop_x.
         svg.line_styled(
@@ -13156,6 +13378,17 @@ fn emit_while(
         );
     }
 
+    // 7b. A consumer (body is a single nested fused `while`) draws its OWN inbound
+    // arrow here — after its loop-back LEFT arrowhead and before its exit —
+    // matching PlantUML's interleaved nested `ConnectionIn` document order.
+    if nested_exit.is_some() {
+        if body.is_empty() {
+            svg.line_styled(&arrow_color, "1", cx, cx, diamond_bottom, junction_y, false);
+        } else {
+            svg.down_arrow(cx, diamond_bottom, body_top, &arrow_color);
+        }
+    }
+
     // 8. Exit arm horizontal at diamond_cy: diamond_left_vertex → exit_x.
     svg.line_styled(
         &arrow_color,
@@ -13167,14 +13400,65 @@ fn emit_while(
         false,
     );
 
+    // Fused nested exit (this loop is the sole body of a parent `while`): instead
+    // of wrapping the exit corridor back to the spine, descend to the fused band
+    // one `halfHex` below this loop's exit base (= the parent's loop-back
+    // junction), drop the DOWN emphasize at that run's midpoint, and report the
+    // corridor column + band y to the parent. `exit_bottom_y` already folds in the
+    // extra body-gap when this loop is itself a consumer, so the chain stacks
+    // correctly. The parent's loop-back arm sources from `exit_x` at `fused_y`;
+    // its own UP emphasize is dropped (snake merge).
+    if fuse_as_nested_exit {
+        let fused_y = exit_bottom_y + DIAMOND_HALF;
+        // The DOWN emphasize sits at the corridor-run midpoint plus the
+        // `WHILE_NESTED_EXIT_ARROW_BIAS` the snake-merge surfaces (PlantUML draws
+        // it on the un-merged `ConnectionOut` segment, one pixel below the drawn
+        // midpoint). A loop whose inbound slot compressed (case (b)) pulls it back
+        // up by the same `PARTITION_COLORED_WHILE_EXIT_ARROW_PULL_UP` the regular
+        // compressed exit uses.
+        let child_compressed_below = nested_exit.map_or(0, |ne| ne.compressed_below);
+        let mut arrow_y = (diamond_cy + fused_y) / 2.0 + WHILE_NESTED_EXIT_ARROW_BIAS;
+        if ordinary_slot_compressed {
+            arrow_y -= PARTITION_COLORED_WHILE_EXIT_ARROW_PULL_UP;
+        }
+        // Each compressed loop below pulls the pre-compression frame midpoint up.
+        arrow_y -= child_compressed_below as f64 * PARTITION_COLORED_WHILE_EXIT_ARROW_PULL_UP;
+        svg.polygon_connector(
+            &arrow_color,
+            &[
+                (exit_x - 4.0, arrow_y - 10.0),
+                (exit_x, arrow_y),
+                (exit_x + 4.0, arrow_y - 10.0),
+                (exit_x, arrow_y - 6.0),
+            ],
+            &arrow_color,
+            "1",
+        );
+        svg.line_styled(
+            &arrow_color,
+            "1",
+            exit_x,
+            exit_x,
+            diamond_cy,
+            fused_y,
+            false,
+        );
+        svg.while_nested_exit = Some(WhileNestedExit {
+            exit_x,
+            fused_y,
+            compressed_below: child_compressed_below + usize::from(ordinary_slot_compressed),
+        });
+        return body_bottom;
+    }
+
     // Branch-nested no-special while: the exit corridor is the if's
     // branch→merge connection (PlantUML fuses FtileWhile.ConnectionOut with
     // the if's ConnectionVerticalThenHorizontal under MergeStrategy.LIMITED).
     // Route the corridor straight down to the merge diamond instead of
-    // wrapping back to our own spine. Consume the redirect one-shot so a
-    // sibling/parent while does not inherit it.
+    // wrapping back to our own spine. The redirect was taken into `exit_redirect`
+    // at entry (so a nested body while could not consume it).
     if special_out.is_none()
-        && let Some(redir) = svg.while_exit_redirect.take()
+        && let Some(redir) = exit_redirect
     {
         let merge_cy = redir.merge_cy;
         // DOWN arrowhead at the midpoint of the corridor's vertical run
@@ -13183,7 +13467,16 @@ fn emit_while(
         // emphasize arrow at the midpoint of the FtileWhile's own ConnectionOut
         // segment (diamond_cy → frame bottom), which sits one slot-compression
         // half (minus one) above the midpoint of the full corridor to merge_cy.
-        let arrow_y = (diamond_cy + merge_cy) / 2.0 - PARTITION_COLORED_WHILE_EXIT_ARROW_PULL_UP;
+        let mut arrow_y =
+            (diamond_cy + merge_cy) / 2.0 - PARTITION_COLORED_WHILE_EXIT_ARROW_PULL_UP;
+        // A redirect loop that also consumed a nested fused exit drops the
+        // arrowhead one pixel (same snake-merge offset as the fused corridors),
+        // and pulls up once per compressed loop in the consumed chain (the
+        // pre-compression frame midpoint sits higher than the drawn corridor).
+        if let Some(ne) = nested_exit {
+            arrow_y += WHILE_NESTED_EXIT_ARROW_BIAS;
+            arrow_y -= ne.compressed_below as f64 * PARTITION_COLORED_WHILE_EXIT_ARROW_PULL_UP;
+        }
         svg.polygon_connector(
             &arrow_color,
             &[
@@ -13315,6 +13608,12 @@ fn emit_while(
     };
     if exit_vertical_after_arrow && break_frame_h.is_none() {
         arrow_y -= PARTITION_COLORED_WHILE_EXIT_ARROW_PULL_UP;
+    }
+    // A loop that consumed a nested fused exit wraps its own corridor one pixel
+    // lower (same `WHILE_NESTED_EXIT_ARROW_BIAS` snake-merge offset as the
+    // fused-producer corridor above).
+    if nested_exit.is_some() && special_out.is_none() && break_frame_h.is_none() {
+        arrow_y += WHILE_NESTED_EXIT_ARROW_BIAS;
     }
     // The exit emphasis arrowhead anchors on the PRE-compression midpoint. In an
     // if-long branch the drawn `wrap_y` kept the uncompressed `+12` junction
