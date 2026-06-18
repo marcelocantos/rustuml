@@ -10944,6 +10944,59 @@ fn while_body_nested_labelled_band(body: &[LayoutNode]) -> f64 {
         * WHILE_NESTED_LABELLED_BAND
 }
 
+/// Per-pixel residual a *doubly* nested labelled `while` adds to the enclosing
+/// loop's loop-back arrowhead anchor. `while_body_nested_labelled_band` models a
+/// directly-nested labelled `while` adding `band/2` to the anchor (its
+/// `getSuppHeightForLabel` inflates the body's advertised `getPointOut`). When
+/// that nested loop ITSELF wraps a further labelled `while`, the inner loop's own
+/// `getSuppHeightForLabel` propagates up through `getTranslateForWhile`'s
+/// centering, so the enclosing loop's advertised `getPointOut` — which
+/// `ConnectionBackSimple.drawTranslate` anchors the UP `asToUp` arrowhead's
+/// `(y1+y2)/2` on — sits one further pixel below the drawn `body_bottom` per
+/// extra nesting level. Same sub-pixel anchor character as
+/// [`WHILE_NESTED_EXIT_ARROW_BIAS`]. Returns the count of direct nested labelled
+/// `while`s that recursively contain another labelled `while`, times the per-level
+/// residual. Zero for any body without a doubly-nested labelled `while`, so a
+/// single-level nest (`act_while_nested`) stays byte-identical. Drives
+/// `act_while_nested_3_levels`.
+fn while_body_nested_labelled_band_residual(body: &[LayoutNode]) -> f64 {
+    fn has_labelled_while(body: &[LayoutNode]) -> bool {
+        body.iter().any(|n| {
+            matches!(
+                n,
+                LayoutNode::While {
+                    is_label: Some(_),
+                    ..
+                } | LayoutNode::While {
+                    end_label: Some(_),
+                    ..
+                }
+            )
+        })
+    }
+    body.iter()
+        .filter(|n| match n {
+            LayoutNode::While {
+                is_label,
+                end_label,
+                body: inner,
+                ..
+            } => (is_label.is_some() || end_label.is_some()) && has_labelled_while(inner),
+            _ => false,
+        })
+        .count() as f64
+        * WHILE_NESTED_LABELLED_BAND_RESIDUAL
+}
+
+/// Per-level pixel residual a doubly-nested labelled `while` adds to the
+/// enclosing loop's loop-back arrowhead anchor; see
+/// [`while_body_nested_labelled_band_residual`]. Measured from
+/// `act_while_nested_3_levels` (the L1 loop's UP arrowhead sits ~1px below the
+/// single-level band model's prediction; the sub-pixel value is the propagated
+/// deeper-label band's centering residual, like [`WHILE_NESTED_LABELLED_BAND`]
+/// itself being a fractional measured constant).
+const WHILE_NESTED_LABELLED_BAND_RESIDUAL: f64 = 0.9999;
+
 /// Per nesting `if`-diamond, the merge band ON_Y compression reclaims from the
 /// `while`-body centring slack before it reaches the innermost branch gap. Each
 /// nested `if` level interposes one diamond+merge structure that absorbs this
@@ -13587,6 +13640,12 @@ fn emit_while(
             // arrowhead seats at the midpoint, i.e. `band/2` lower. Zero for any
             // body without a nested labelled `while`. Drives `act_while_nested`.
             + while_body_nested_labelled_band(body) / 2.0
+            // When that nested labelled `while` itself wraps a further labelled
+            // `while`, the deeper loop's own `getSuppHeightForLabel` propagates up
+            // through `getTranslateForWhile` centering, seating the anchor one
+            // further pixel below per extra level. Drives
+            // `act_while_nested_3_levels`.
+            + while_body_nested_labelled_band_residual(body)
     });
     // Segments 4-7 (loop-back arm) are drawn by the break-`if` itself when the
     // loop-back was fused into its empty branch (last-flow break); skip them here.
