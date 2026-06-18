@@ -7590,6 +7590,15 @@ struct SvgEmitter {
     /// `emit_if_long` sets this before emitting such a branch and `emit_repeat`
     /// consumes it (adding to `body_top_extra`) at entry.
     if_long_repeat_body_extra: f64,
+    /// One-shot extra gap added to the body→condition tail of a `repeat` that is
+    /// the leading tile of an even-flow, labelled `while` body. FtileWhile centres
+    /// the body in its frame; with an even number of body flow nodes the centre
+    /// falls on the connector between them, and that centring slack
+    /// (`WHILE_EVEN_BODY_MID_STRETCH_LABELED`) cannot be reclaimed from the
+    /// repeat's already-reserved tail — so the repeat's condition diamond (and the
+    /// following tile) sit one stretch lower. `emit_while` sets this before
+    /// emitting such a body and `emit_repeat` consumes it (adding to `cond_y`).
+    while_repeat_tail_extra: f64,
     /// True while emitting an if-long branch body. The if-long row top-aligns its
     /// couples (`getTranslateCouple1` → fixed y), so the whole-diagram ON_Y
     /// compression never reaches the branch tiles: a `while` keeps its full
@@ -7844,6 +7853,7 @@ impl SvgEmitter {
             repeat_body_depth: 0,
             repeat_nested_expansion: 0.0,
             if_long_repeat_body_extra: 0.0,
+            while_repeat_tail_extra: 0.0,
             in_if_long_branch: false,
             while_if_long_merge_y: None,
             while_switch_merge_extra: 0.0,
@@ -10797,6 +10807,39 @@ fn while_body_flow_is_all_actions(body: &[LayoutNode]) -> bool {
     })
 }
 
+/// The centring slack a labelled `while` distributes into the tail of a leading
+/// `repeat` tile. When the `while` body is an even-flow stack led by a plain
+/// (non-backward, non-start-label) `repeat` — e.g. `repeat { … } repeatwhile;
+/// :after;` — FtileWhile centres the assembly and the
+/// `WHILE_EVEN_BODY_MID_STRETCH_LABELED` slack lands in the repeat's reserved
+/// body→condition band (the only compressible space inside the leading tile),
+/// pushing the repeat's condition diamond and everything below it one stretch
+/// lower. `while_body_mid_stretch` rejects this body (the leading repeat is not a
+/// plain action), so the slack is routed into the repeat itself via
+/// [`SvgEmitter::while_repeat_tail_extra`]. Returns 0 for every other shape.
+fn while_body_repeat_tail_extra(body: &[LayoutNode], has_in_label: bool) -> f64 {
+    if !has_in_label {
+        return 0.0;
+    }
+    let flow: Vec<&LayoutNode> = body.iter().filter(|n| node_is_flow(n)).collect();
+    if flow.len() < 2 || !flow.len().is_multiple_of(2) {
+        return 0.0;
+    }
+    let leads_with_plain_repeat = matches!(
+        flow.first(),
+        Some(LayoutNode::Repeat {
+            backward: None,
+            has_start_label: false,
+            ..
+        })
+    );
+    if leads_with_plain_repeat {
+        WHILE_EVEN_BODY_MID_STRETCH_LABELED
+    } else {
+        0.0
+    }
+}
+
 fn while_body_mid_stretch(body: &[LayoutNode], has_in_label: bool) -> Option<(usize, f64)> {
     if !while_body_flow_is_all_actions(body) {
         return None;
@@ -11013,6 +11056,10 @@ fn while_body_height(body: &[LayoutNode], has_in_label: bool) -> f64 {
     sequence_height(body)
         + suppressed_deepest_readd
         + while_body_mid_stretch(body, has_in_label).map_or(0.0, |(_, stretch)| stretch)
+        // Even-flow labelled body led by a `repeat`: the loop centring slack lands
+        // in that repeat's body→condition tail (see `while_body_repeat_tail_extra`),
+        // growing the body tile — and hence the advertised frame/canvas — height.
+        + while_body_repeat_tail_extra(body, has_in_label)
         // Pure-balanced-if body: the loop centring slack stretches the deepest
         // 2-action then-branch's middle gap (see `while_if_body_branch_stretch`),
         // growing the body tile — and hence the advertised frame/canvas — height.
@@ -13141,6 +13188,13 @@ fn emit_while(
     // Body below diamond — emit it first (PlantUML emits body shapes before
     // diamond shapes in document order).
     let body_mid_stretch = while_body_mid_stretch(body, is_label.is_some());
+    // Even-flow labelled body led by a plain `repeat`: route the FtileWhile
+    // centring slack into that repeat's body→condition tail (see
+    // `while_body_repeat_tail_extra`). Set before the body emit; the leading
+    // repeat consumes it at entry. A nested body re-establishes its own value, so
+    // it is a one-shot taken in `emit_repeat`.
+    let prev_repeat_tail_extra = svg.while_repeat_tail_extra;
+    svg.while_repeat_tail_extra = while_body_repeat_tail_extra(body, is_label.is_some());
     // Pure-balanced-if body: route the loop centring slack into the deepest
     // 2-action then-branch's middle gap (see `while_if_body_branch_stretch`). The
     // flag is consumed by `emit_if` when the terminal branch emits; we keep the
@@ -13182,6 +13236,7 @@ fn emit_while(
     }
     svg.while_nested_exit = None;
     let body_bottom = emit_sequence_ex(svg, body, cx, body_top, body_mid_stretch, None, false);
+    svg.while_repeat_tail_extra = prev_repeat_tail_extra;
     let nested_exit = svg.while_nested_exit.take();
     svg.while_if_branch_stretch = prev_if_branch_stretch;
     let body_switch_loopback_tip = svg.while_switch_loopback_tip.take();
@@ -13498,6 +13553,21 @@ fn emit_while(
             + body_mid_stretch.map_or(0.0, |(_, stretch)| {
                 WHILE_EVEN_BODY_LOOP_ARROW_STRETCH - stretch / 2.0
             })
+            // Even-flow labelled body led by a `repeat` tile: `body_mid_stretch`
+            // rejects it (the leading repeat is not a plain action), but the body
+            // is still even, so the loop-back arrowhead takes the same even-body
+            // placement. The `while_tail_extra` stretch grows `body_bottom`,
+            // raising the naive midpoint by `stretch/2`; add the residual
+            // (`WHILE_EVEN_BODY_LOOP_ARROW_STRETCH − stretch/2`) so it lands at the
+            // even-body offset, exactly like the all-action path above.
+            + {
+                let tail = while_body_repeat_tail_extra(body, is_label.is_some());
+                if tail != 0.0 {
+                    WHILE_EVEN_BODY_LOOP_ARROW_STRETCH - tail / 2.0
+                } else {
+                    0.0
+                }
+            }
             // Body terminating in a balanced `if`: anchor the arrowhead on the
             // pre-compression frame centre, one even-body stretch above the
             // naive midpoint computed from the post-emit merge-diamond bottom.
@@ -13893,6 +13963,17 @@ fn emit_repeat(
     // via the entry tile, not these reserves, so they do not apply there.
     let if_long_extra = std::mem::take(&mut svg.if_long_repeat_body_extra);
     let if_long_active = if_long_extra != 0.0 && !options.has_start_label;
+    // Centring slack a labelled `while` distributes into the tail of this repeat
+    // when it leads an even-flow loop body (see `while_body_repeat_tail_extra`).
+    // One-shot taken at entry so a repeat nested in this body does not inherit it.
+    // Only the plain (non-backward, non-start-label) form is reachable from the
+    // setter, but guard here too so backward/start-label repeats ignore it.
+    let while_tail_extra = std::mem::take(&mut svg.while_repeat_tail_extra);
+    let while_tail_extra = if backward.is_none() && !options.has_start_label {
+        while_tail_extra
+    } else {
+        0.0
+    };
     let if_long_cond_extra = if if_long_active {
         pm::text_height(SMALL_FONT)
     } else {
@@ -14071,7 +14152,8 @@ fn emit_repeat(
         + ARROW_LEN
         + repeat_backward_extra_cond_gap(body, backward.is_some())
         + nested_cond_extra
-        + if_long_cond_extra;
+        + if_long_cond_extra
+        + while_tail_extra;
 
     // Top entry diamond (small rhombus at y). `repeat :label;` replaces this
     // diamond with the labelled action as the loop entry tile.
@@ -14391,9 +14473,14 @@ fn emit_repeat(
             // Leading-action + balanced-if bodies anchor the arrowhead on the
             // pre-compression frame centre, `space/2` above the naive midpoint.
             let loopback_arrow_bias = repeat_loopback_arrow_bias(body, backward.is_some());
+            // A `while`-distributed tail extra (this repeat leads an even-flow
+            // labelled while body) sits below the body, in the loop-back's lower
+            // half, biasing the visible midpoint down by half — undo it so the
+            // arrowhead lands on the content midpoint, exactly like `nested_bias`.
             (top_cy + cond_diamond_cy - body_stretch + arrow_body_top_extra) / 2.0
                 - nested_bias
                 - loopback_arrow_bias
+                - while_tail_extra / 2.0
         };
         svg.polygon_connector(
             &arrow_color,
