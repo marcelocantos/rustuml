@@ -2337,7 +2337,71 @@ fn fork_branch_extents(branch: &[LayoutNode]) -> (f64, f64) {
         right = right.max(layout.block_w - layout.diamond_dx);
         return (left, right);
     }
+    // A fork branch whose sole flow node is a `while` loop reserves the FAITHFUL
+    // `FtileWhile.calculateDimensionFtile` extent — `geo.getLeft() + 2*hexHalf`
+    // left, `geo.getRight() + hexHalf` right (see FtileWhile.java:590). The
+    // standalone `node_extents(While)` instead carries the canvas trailing
+    // reservation (`+2*hexHalf+3` past `max(cond, body_right)`), which only ever
+    // lands in the (ignored) SVG right margin for a top-level loop. Inside a fork
+    // that inflated right edge pushes sibling branches apart — a visible
+    // coordinate error — so use the tight tile extent here, exactly as PlantUML's
+    // `FtileForkInner` places the real `FtileWhile` dimension.
+    if let Some(extent) = fork_while_branch_faithful_extent(branch) {
+        return extent;
+    }
     sequence_extents(branch)
+}
+
+/// The faithful `FtileWhile.calculateDimensionFtile` extent for a fork branch
+/// that is a single plain `while` loop (no `endwhile` label, no `is`-label, no
+/// special out / break, no backward). Returns `None` for any branch outside that
+/// shape so the caller falls back to the standalone `sequence_extents`.
+fn fork_while_branch_faithful_extent(branch: &[LayoutNode]) -> Option<(f64, f64)> {
+    // Exactly one flow node, and it is a bare while.
+    let mut flow = branch.iter().filter(|n| node_is_flow(n));
+    let only = flow.next()?;
+    if flow.next().is_some() {
+        return None;
+    }
+    let LayoutNode::While {
+        body,
+        condition,
+        special_out,
+        diamond_font_family,
+        diamond_font_size,
+        diamond_text_bold,
+        ..
+    } = only
+    else {
+        return None;
+    };
+    // The `special out` / break-as-last shapes carry a genuinely different
+    // FtileWhile geometry (an extra child tile / fused loop-back arm), so keep
+    // their standalone reservation. `is`/`endwhile` labels do NOT change the
+    // Java tile width (they are connection labels, drawn by ignore-for-
+    // compression snakes) — only the height — so a labelled loop is fine here.
+    if special_out.is_some() {
+        return None;
+    }
+    if break_if_is_last_flow(body) {
+        return None;
+    }
+    let (body_left, body_right) = sequence_loop_body_extents(body);
+    let cond_half = diamond_inner_w_styled(
+        condition,
+        *diamond_font_size,
+        *diamond_text_bold,
+        diamond_font_family,
+    ) / 2.0
+        + DIAMOND_HALF;
+    // FtileWhile dim: left = geo.getLeft() + 2*hexHalf, right = geo.getRight() +
+    // hexHalf, where geo = diamond1.appendBottom(whileBlock) so getLeft =
+    // max(cond_half, body_left) and getRight = max(cond_half, body_right).
+    let inner_left = cond_half.max(while_body_left(body, body_left));
+    let inner_right = cond_half.max(body_right);
+    let left = inner_left + 2.0 * DIAMOND_HALF;
+    let right = inner_right + DIAMOND_HALF;
+    Some((left, right))
 }
 
 fn fork_layout(branches: &[Vec<LayoutNode>]) -> ForkLayout {
