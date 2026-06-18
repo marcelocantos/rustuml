@@ -2990,6 +2990,47 @@ fn switch_while_merge_extra(
     }
 }
 
+/// Extra added to a multi-case switch's merge gap when the switch is the
+/// terminal flow node of a `repeat` body (over the standalone `switch_merge_gap`).
+///
+/// Unlike a `while` body — where the loop-back corridor's ON_Y compression seats
+/// the merge band at a metric-dependent reclaim (see `switch_while_merge_extra`)
+/// — a `repeat` body's switch keeps a clean, case-count-independent `ARROW_LEN`.
+/// PlantUML's `FtileRepeat.calculateDimensionInternal` reserves `8*halfHex` of
+/// tail split as 48 px above and below the body (`getTranslateForRepeat`'s
+/// `space/2`); the switch's intrinsic merge diamond sits inside `dimRepeat`, and
+/// the whole-diagram ON_Y pass can only reclaim that fixed-tail corridor down to
+/// one `ARROW_LEN` between the switch's merge diamond and the condition diamond,
+/// not to the standalone-compressed gap. So the band keeps `standalone +
+/// ARROW_LEN` regardless of case count (even/odd alike — empirically uniform
+/// across the `act_combo_repeat_switch_{2..5}cases` goldens). Zero for single-link
+/// or all-terminating switches (no reclaimable merge band).
+fn switch_repeat_merge_extra(node: &LayoutNode) -> f64 {
+    let LayoutNode::Switch { cases, condition: _ } = node else {
+        return 0.0;
+    };
+    if cases.len() < 2 || switch_all_branches_terminate(cases) {
+        return 0.0;
+    }
+    ARROW_LEN
+}
+
+/// Sum of the per-switch in-repeat merge-band extras for a `repeat` body. Only a
+/// switch that is the body's terminal (last) flow node keeps the uncompressible
+/// `ARROW_LEN` (a switch followed by more body flow has that band reclaimed by
+/// the trailing tile's inbound corridor, like the standalone case). Mirrors
+/// `while_body_switch_extra` so `repeat_body_height` agrees with the height
+/// `emit_repeat` actually draws.
+fn repeat_body_switch_extra(body: &[LayoutNode]) -> f64 {
+    let Some(last) = last_flow_index(body) else {
+        return 0.0;
+    };
+    match &body[last] {
+        node @ LayoutNode::Switch { .. } => switch_repeat_merge_extra(node),
+        _ => 0.0,
+    }
+}
+
 /// PlantUML's `SUPP15` margin used by `FtileSwitchWithDiamonds` in
 /// BIG_DIAMOND mode (the horizontal padding either side of the diamond
 /// column between the first and last case tiles).
@@ -7603,6 +7644,20 @@ struct SvgEmitter {
     /// ARROW_LEN/2`. Recorded by `emit_switch_with_layout` (in while-body mode,
     /// last writer wins) and consumed once by `emit_while`.
     while_switch_loopback_tip: Option<f64>,
+    /// One-shot flag set by `emit_repeat` just before emitting its body sequence:
+    /// the next `emit_sequence_ex` is a `repeat` body, so a terminal multi-case
+    /// switch in it keeps one `ARROW_LEN` of its uncompressed merge band that the
+    /// whole-diagram ON_Y pass cannot reclaim under the loop frame (the FtileRepeat
+    /// `8*halfHex` tail keeps a full arrow below the switch's merge diamond before
+    /// the condition diamond). `emit_sequence_ex` takes the flag at entry so nested
+    /// sequences do not inherit it.
+    pending_repeat_body: bool,
+    /// Extra added to the current switch's merge gap because it is the terminal
+    /// flow node of a `repeat` body (`ARROW_LEN`). Set per-switch by
+    /// `emit_sequence_ex` (repeat-body mode) and consumed once by
+    /// `emit_switch_with_layout`, which also records `while_switch_loopback_tip`
+    /// so `emit_repeat` can anchor its loop-back arrowhead on the merge diamond.
+    repeat_switch_merge_extra: f64,
     /// Extra px the loop-body centring slack distributes into the middle inter-
     /// action gap of the deepest 2-action `then`-branch of a `while` body that is
     /// a single (possibly nested) balanced `if`. PlantUML's `FtileWhile` centring
@@ -7798,6 +7853,8 @@ impl SvgEmitter {
             while_switch_corridor_compresses: false,
             while_switch_merge_compressed: false,
             while_switch_loopback_tip: None,
+            pending_repeat_body: false,
+            repeat_switch_merge_extra: 0.0,
             while_if_branch_stretch: None,
             swimlane_while_cond_special: false,
             swimlane_cross_lane: None,
@@ -8631,10 +8688,19 @@ fn emit_sequence_ex(
     // uncompressed merge band (see `switch_while_merge_extra`). Reset it so
     // nested sequences emitted from this body do not inherit it.
     let while_body = std::mem::take(&mut svg.pending_while_body);
+    // Take the one-shot `repeat` body flag set by `emit_repeat`: when set, this
+    // sequence is the loop body and a terminal multi-case switch keeps one
+    // `ARROW_LEN` of its uncompressed merge band (see `switch_repeat_merge_extra`).
+    let repeat_body = std::mem::take(&mut svg.pending_repeat_body);
     // Whether this loop body's loop-back corridor ON_Y-compresses (one-shot,
     // reset so nested bodies do not inherit it).
     let while_corridor_compresses = std::mem::take(&mut svg.while_corridor_compresses);
     let while_body_last_flow = if while_body {
+        last_flow_index(nodes)
+    } else {
+        None
+    };
+    let repeat_body_last_flow = if repeat_body {
         last_flow_index(nodes)
     } else {
         None
@@ -9065,12 +9131,25 @@ fn emit_sequence_ex(
             svg.while_switch_merge_compressed =
                 !is_terminal && following >= SWITCH_WHILE_MERGE_COMPRESS_MIN_FOLLOWING;
         }
+        // A terminal multi-case switch directly in a `repeat` body keeps one
+        // `ARROW_LEN` of its uncompressed merge band (the loop frame's fixed tail);
+        // pass that extra to the switch emit (one-shot). Unlike the `while` case
+        // this does NOT alter the switch's horizontal layout (the standalone gap-10
+        // layout survives ON_X under the repeat frame), so `while_body_switch` stays
+        // unset; only the vertical merge band and loop-back-tip anchor change.
+        if repeat_body
+            && Some(i) == repeat_body_last_flow
+            && matches!(node, LayoutNode::Switch { .. })
+        {
+            svg.repeat_switch_merge_extra = switch_repeat_merge_extra(node);
+        }
         let node_y =
             emit_node_with_repeat_extra(svg, node, cx, y, repeat_extra, first_repeat_branch_extra);
         svg.while_switch_merge_extra = 0.0;
         svg.while_body_switch = false;
         svg.while_switch_corridor_compresses = false;
         svg.while_switch_merge_compressed = false;
+        svg.repeat_switch_merge_extra = 0.0;
         prev_was_deferred_while = node_defers;
         // Inbound connector goes AFTER the node's own emit so it lands
         // after the node's internal connectors in the connectors buffer
@@ -11079,6 +11158,9 @@ fn repeat_body_height(body: &[LayoutNode], has_backward: bool) -> f64 {
     sequence_height(body)
         + repeat_body_mid_stretch(body, has_backward).map_or(0.0, |(_, stretch)| stretch)
         + body.iter().map(nested_repeat_cond_extra).sum::<f64>()
+        // A terminal multi-case switch keeps one uncompressible `ARROW_LEN` of its
+        // merge band under the loop frame (see `repeat_body_switch_extra`).
+        + repeat_body_switch_extra(body)
 }
 
 /// Extra vertical gap a `backward` repeat reserves between the body bottom and
@@ -12024,6 +12106,11 @@ fn emit_switch_with_layout(
     // Likewise for a switch directly in a `while` body: the loop frame keeps part
     // of the uncompressed merge band (set by `emit_sequence_ex`, one-shot).
     let while_switch_extra = svg.while_switch_merge_extra;
+    // And for a terminal switch in a `repeat` body: the loop frame keeps one
+    // `ARROW_LEN` of the uncompressed merge band (set by `emit_sequence_ex`,
+    // one-shot). Records `while_switch_loopback_tip` like the while case so
+    // `emit_repeat` can anchor its loop-back arrowhead on the merge diamond.
+    let repeat_switch_extra = std::mem::take(&mut svg.repeat_switch_merge_extra);
     // True when this switch is a flow node of a `while` body (the extra may be
     // zero when the merge band fully compresses, so test the flag, not the extra).
     let in_while_body = svg.while_body_switch;
@@ -12096,8 +12183,9 @@ fn emit_switch_with_layout(
 
     let all_terminate = switch_all_branches_terminate(cases);
     let has_center = !n.is_multiple_of(2);
-    let merge_gap =
-        switch_merge_gap_in_fork(cases, condition, &layout, fork_gap_extra) + while_switch_extra;
+    let merge_gap = switch_merge_gap_in_fork(cases, condition, &layout, fork_gap_extra)
+        + while_switch_extra
+        + repeat_switch_extra;
     let merge_top = max_bottom + merge_gap;
     let merge_cy = merge_top + DIAMOND_HALF;
     let merge_bottom = merge_top + DIAMOND_HALF * 2.0;
@@ -12115,6 +12203,13 @@ fn emit_switch_with_layout(
         } else {
             merge_top - standalone_gap - ARROW_LEN / 2.0
         });
+    }
+    // A terminal switch in a `repeat` body anchors the loop-back arrowhead on its
+    // merge diamond the same way: `merge_top - standalone_gap - ARROW_LEN/2`
+    // (empirically a constant-y tip across case counts — see the goldens).
+    if repeat_switch_extra > 0.0 && !all_terminate {
+        let standalone_gap = switch_merge_gap(cases, condition, &layout);
+        svg.while_switch_loopback_tip = Some(merge_top - standalone_gap - ARROW_LEN / 2.0);
     }
 
     let center_idx = if has_center { Some(n / 2) } else { None };
@@ -13923,6 +14018,9 @@ fn emit_repeat(
     // body contributed (used to bias the loop-back arrowhead).
     svg.repeat_body_depth += 1;
     let outer_expansion = std::mem::take(&mut svg.repeat_nested_expansion);
+    // Loop-back arrowhead anchor recorded by a terminal switch in the body
+    // (see the repeat-body emit branch below); `None` unless one was emitted.
+    let mut repeat_switch_loopback_tip: Option<f64> = None;
     let body_bottom = if has_start_label {
         if let Some((entry, rest)) = body.split_first() {
             let entry_bottom = body_y + node_height(entry);
@@ -13942,7 +14040,17 @@ fn emit_repeat(
             body_y
         }
     } else {
-        emit_sequence_ex(svg, body, cx, body_y, body_mid_stretch, None, false)
+        // Mark this as a repeat body: a terminal multi-case switch keeps one
+        // uncompressible `ARROW_LEN` of its merge band under the loop frame, and
+        // records `while_switch_loopback_tip` so the loop-back arrowhead below
+        // anchors on the switch's merge diamond. Save+restore the tip around the
+        // emit so a sibling/parent loop is unaffected.
+        let prev_loopback_tip = svg.while_switch_loopback_tip.take();
+        svg.pending_repeat_body = true;
+        let bottom = emit_sequence_ex(svg, body, cx, body_y, body_mid_stretch, None, false);
+        repeat_switch_loopback_tip = svg.while_switch_loopback_tip.take();
+        svg.while_switch_loopback_tip = prev_loopback_tip;
+        bottom
     };
     svg.repeat_body_depth -= 1;
     // Capture the break weld y the body's break-`if` recorded (if any), then
@@ -14244,7 +14352,12 @@ fn emit_repeat(
         // `body_stretch` here sits BELOW the loop-back's content (in the break
         // corridor's compressed band), not on a middle connector, so it must NOT
         // be subtracted from the midpoint.
-        let mid_y = if break_weld_y.is_some() {
+        let mid_y = if let Some(tip) = repeat_switch_loopback_tip {
+            // A terminal switch in the body anchors the loop-back arrowhead on the
+            // switch's merge diamond (recorded by `emit_switch_with_layout`), not on
+            // the corridor midpoint — the merge band's uncompressed tail sits below.
+            tip
+        } else if break_weld_y.is_some() {
             // Anchor on the abstract (uncompressed) frame centre. A mid/early break
             // (trailing body flow after the break-`if`) has its condition drawn
             // `REPEAT_BREAK_MID_LOOPBACK_DECOMPRESS` above the uncompressed position
