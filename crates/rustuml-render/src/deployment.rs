@@ -320,7 +320,7 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
         for root in &roots {
             let mut group: Vec<(usize, usize, &DeploymentNode, String)> = Vec::new();
             collect_entities_dfs(root, &diagram.nodes, None, 0, &mut group);
-            group.sort_by(|a, b| (a.0, a.1).cmp(&(b.0, b.1)));
+            group.sort_by_key(|a| (a.0, a.1));
             for (_, _, node, qname) in &group {
                 emit_entity(&mut svg, node, qname, &ctx);
             }

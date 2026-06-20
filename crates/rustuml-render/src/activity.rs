@@ -1676,8 +1676,8 @@ fn build_tree(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode> {
         distinct_lanes.len() > 1 || (distinct_lanes.len() == 1 && has_pre_lane_content);
     // V2 single-tree path owns the branch-internal-lane class by default; the
     // env var forces it on for any swimlane (testing the linear cluster etc.).
-    let v2 = std::env::var("RUSTUML_SWIMLANE_V2").is_ok()
-        || swimlane_v2_can_handle(steps, is_swimlane);
+    let v2 =
+        std::env::var("RUSTUML_SWIMLANE_V2").is_ok() || swimlane_v2_can_handle(steps, is_swimlane);
     if is_swimlane && !v2 {
         return build_swimlanes(steps, palette);
     }
@@ -3183,7 +3183,11 @@ fn switch_while_merge_extra(
 /// across the `act_combo_repeat_switch_{2..5}cases` goldens). Zero for single-link
 /// or all-terminating switches (no reclaimable merge band).
 fn switch_repeat_merge_extra(node: &LayoutNode) -> f64 {
-    let LayoutNode::Switch { cases, condition: _ } = node else {
+    let LayoutNode::Switch {
+        cases,
+        condition: _,
+    } = node
+    else {
         return 0.0;
     };
     if cases.len() < 2 || switch_all_branches_terminate(cases) {
@@ -3857,13 +3861,11 @@ fn while_body_is_single_compressible_while(body: &[LayoutNode]) -> bool {
 fn while_body_is_pure_while_chain(body: &[LayoutNode]) -> bool {
     matches!(
         body,
-        [
-            LayoutNode::While {
-                end_label: None,
-                special_out: None,
-                ..
-            },
-        ]
+        [LayoutNode::While {
+            end_label: None,
+            special_out: None,
+            ..
+        },]
     )
 }
 
@@ -4825,30 +4827,14 @@ fn if_long_layout(
     // final bare else (condition=None, must be last if present).
     let mut cols: Vec<IfLongCol> = Vec::new();
     // North band height below each condition diamond (the `then`/`elseif` label
-    // band, `addVerticalMargin`'d by alignDiamonds). PlantUML's golden reserves
-    // two different heights here depending on the whole-diagram `ON_Y`
-    // compression of the diamond→branch corridor:
-    //   * `text_height(11)` = 12.955 — when a POPULATED bare `else` (`tile2`)
-    //     sits in the diamond band (lifted by `getDiamondsHeight/2`) AND every
-    //     then/elseif branch is a simple linear flow (only actions/notes). The
-    //     populated `tile2` blocks the corridor's ON_Y compression, so the band
-    //     keeps its full line height.
-    //   * `ascent(11) + 1.5` = 12.1348 — otherwise (no populated bare `else`, or
-    //     any branch carries a nested control-flow construct fork/if/while/…).
-    //     The corridor then compresses by `descent − 1.5` = 0.8203.
-    // `fn is_simple_branch_flow` classifies a branch body.
-    let has_populated_bare_else = else_branches
-        .iter()
-        .any(|b| b.condition.is_none() && !b.body.is_empty());
+    // band, `addVerticalMargin`'d by alignDiamonds). The whole-diagram ON_Y pass
+    // reclaims the diamond→branch corridor's descent slack, leaving
+    // `ascent(11) + 1.5` rather than the full text height.
     let all_branches_simple = is_simple_branch_flow(then_branch)
         && else_branches
             .iter()
             .all(|b| b.condition.is_none() || is_simple_branch_flow(&b.body));
-    let north_h = if has_populated_bare_else && all_branches_simple {
-        pm::text_height(SMALL_FONT)
-    } else {
-        pm::ascent(SMALL_FONT) + 1.5
-    };
+    let north_h = pm::ascent(SMALL_FONT) + 1.5;
 
     // Inter-tile gap retained inside each branch column. When every branch is a
     // simple linear flow the whole-diagram `ON_Y` compression reaches into the
@@ -6362,8 +6348,9 @@ fn sequence_height_ex(nodes: &[LayoutNode], gap_extra: f64) -> f64 {
     // labelled, default 20).
     let mut pending_gap: Option<f64> = None;
     for (idx, node) in nodes.iter().enumerate() {
-        // Notes contribute nothing themselves.
-        if matches!(node, LayoutNode::Note { .. }) {
+        // Notes and swimlane markers contribute nothing themselves and do not
+        // create a flow gap before the next real branch node.
+        if matches!(node, LayoutNode::Note { .. } | LayoutNode::LaneMark(_)) {
             continue;
         }
         // Title contributes its own height but never has a connector arrow
@@ -9598,7 +9585,13 @@ fn emit_sequence_ex(
         // the legacy segment model's cond-special lanes. Gate one-shot around
         // this node's emit (emit_while consumes the flag).
         if svg.swimlane_v2_active
-            && matches!(node, LayoutNode::While { special_out: Some(_), .. })
+            && matches!(
+                node,
+                LayoutNode::While {
+                    special_out: Some(_),
+                    ..
+                }
+            )
             && swimlane_while_cond_special_lane(std::slice::from_ref(node))
         {
             svg.swimlane_while_cond_special = true;
@@ -10854,6 +10847,11 @@ fn emit_if_long(
 
     // --- Shapes: per couple (diamond + labels + branch) ------------------
     for (i, col) in l.cols.iter().enumerate() {
+        if svg.swimlane_v2_active && svg.current_lane != entry_lane {
+            svg.current_lane = entry_lane;
+            svg.lane_spans
+                .push((svg.shapes.len(), svg.connectors.len(), entry_lane));
+        }
         let dcx = cx + col.cx;
         let inner = col.diamond_w - DIAMOND_HALF * 2.0;
         let pts = vec![
@@ -10942,6 +10940,11 @@ fn emit_if_long(
         if branch_is_redirectable_while(body) {
             svg.while_if_long_merge_y = Some(v.merge_y);
         }
+        if svg.swimlane_v2_active && svg.current_lane != col_lanes[i] {
+            svg.current_lane = col_lanes[i];
+            svg.lane_spans
+                .push((svg.shapes.len(), svg.connectors.len(), col_lanes[i]));
+        }
         emit_sequence(svg, body, dcx, v.couple_branch_top);
         svg.while_if_long_merge_y = None;
         svg.in_if_long_branch = saved_in_if_long;
@@ -10951,6 +10954,11 @@ fn emit_if_long(
     // tile2 (the bare else) to the right.
     if let Some(tile2_cx) = l.tile2_cx {
         let tcx = cx + tile2_cx;
+        if svg.swimlane_v2_active && svg.current_lane != tile2_lane {
+            svg.current_lane = tile2_lane;
+            svg.lane_spans
+                .push((svg.shapes.len(), svg.connectors.len(), tile2_lane));
+        }
         emit_sequence(svg, tile2_body, tcx, v.tile2_top);
     }
     svg.fork_branch_gap_extra = saved_gap_extra;
@@ -15672,13 +15680,21 @@ fn route_if_cross_lane_connectors(
         // Both must produce the same count for this lane.
         if fin.len() - before != after - before {
             if std::env::var("RUSTUML_EXT_DBG").is_ok() {
-                eprintln!("[V2] router: lane {l} anchor count mismatch nat={} fin={}", after - before, fin.len() - before);
+                eprintln!(
+                    "[V2] router: lane {l} anchor count mismatch nat={} fin={}",
+                    after - before,
+                    fin.len() - before
+                );
             }
             return None;
         }
     }
     if std::env::var("RUSTUML_EXT_DBG").is_ok() {
-        eprintln!("[V2] router: nat anchors={} fin anchors={}", nat.len(), fin.len());
+        eprintln!(
+            "[V2] router: nat anchors={} fin anchors={}",
+            nat.len(),
+            fin.len()
+        );
     }
     if nat.len() != fin.len() {
         return None;
@@ -15705,7 +15721,6 @@ fn route_if_cross_lane_connectors(
         }
         best
     };
-
     let head = |x: f64, y: f64| -> String {
         format!(
             r#"<polygon fill="{c}" points="{}" style="stroke:{c};stroke-width:1;"/>"#,
@@ -15762,19 +15777,44 @@ fn route_if_cross_lane_connectors(
     for pl in parse_conn_polylines(nat_conns) {
         let (Some(src_pt), Some(tip)) = (pl.verts.first().copied(), pl.tip) else {
             if dbg {
-                eprintln!("[V2] router: polyline missing src/tip verts={:?} tip={:?}", pl.verts, pl.tip);
+                eprintln!(
+                    "[V2] router: polyline missing src/tip verts={:?} tip={:?}",
+                    pl.verts, pl.tip
+                );
             }
             return None;
         };
-        let (Some(si), Some(ti)) = (match_pt(src_pt), match_pt(tip)) else {
+        let src_i = match_pt(src_pt);
+        let tip_i = match_pt(tip);
+        let Some(si) = src_i else {
             if dbg {
                 eprintln!("[V2] router: unmatched src={src_pt:?} tip={tip:?}");
             }
             return None;
         };
+        let ti = tip_i;
         let s = &fin[si];
-        let t = &fin[ti];
         let src_nat = &nat[si];
+        if ti.is_none()
+            && (src_pt.0 - tip.0).abs() < 0.001
+            && tip.1 > src_pt.1
+            && (src_pt.1 - src_nat.bottom).abs() < 3.0
+        {
+            let sx = s.cx;
+            let sy = s.bottom;
+            let mut snake = String::new();
+            snake.push_str(&line(sx, sx, sy, tip.1));
+            snake.push_str(&head(sx, tip.1));
+            routed.push_str(&snake);
+            continue;
+        }
+        let Some(ti) = ti else {
+            if dbg {
+                eprintln!("[V2] router: unmatched src={src_pt:?} tip={tip:?}");
+            }
+            return None;
+        };
+        let t = &fin[ti];
         // Which side the source exits: compare the natural source point to the
         // natural anchor's connection points.
         let exits_bottom = (src_pt.1 - src_nat.bottom).abs() < 3.0;
@@ -15870,14 +15910,15 @@ fn parse_conn_polylines(buf: &str) -> Vec<ConnPolyline> {
     let prims = split_svg_primitives(buf);
     let mut out: Vec<ConnPolyline> = Vec::new();
     let mut cur: Vec<(f64, f64)> = Vec::new();
-    let flush = |cur: &mut Vec<(f64, f64)>, tip: Option<(f64, f64)>, out: &mut Vec<ConnPolyline>| {
-        if !cur.is_empty() {
-            out.push(ConnPolyline {
-                verts: std::mem::take(cur),
-                tip,
-            });
-        }
-    };
+    let flush =
+        |cur: &mut Vec<(f64, f64)>, tip: Option<(f64, f64)>, out: &mut Vec<ConnPolyline>| {
+            if !cur.is_empty() {
+                out.push(ConnPolyline {
+                    verts: std::mem::take(cur),
+                    tip,
+                });
+            }
+        };
     for prim in &prims {
         if let Some((x1, x2, y1, y2)) = parse_line_xy(prim) {
             let a = (x1, y1);
@@ -15987,7 +16028,10 @@ fn extract_shape_anchors(buf: &str, lane: usize, out: &mut Vec<ShapeAnchor>) {
     for i in 0..cxs.len().min(cys.len()).min(rxs.len()) {
         let (cx, cy, rx) = (cxs[i], cys[i], rxs[i]);
         // Keep the largest-rx ring per (cx,cy) centre.
-        if seen.iter().any(|&(sx, sy)| (sx - cx).abs() < 0.5 && (sy - cy).abs() < 0.5) {
+        if seen
+            .iter()
+            .any(|&(sx, sy)| (sx - cx).abs() < 0.5 && (sy - cy).abs() < 0.5)
+        {
             continue;
         }
         // Find max rx among same-centre rings.
@@ -16074,12 +16118,7 @@ fn parse_line_xy(prim: &str) -> Option<(f64, f64, f64, f64)> {
         let close = rest.find('"')?;
         rest[..close].parse().ok()
     };
-    Some((
-        get("x1=\"")?,
-        get("x2=\"")?,
-        get("y1=\"")?,
-        get("y2=\"")?,
-    ))
+    Some((get("x1=\"")?, get("x2=\"")?, get("y1=\"")?, get("y2=\"")?))
 }
 
 /// The y of a while diamond's vertical centre (first diamond polygon) and the
@@ -16164,7 +16203,10 @@ fn layout_swimlanes_v2(
 
     if std::env::var("RUSTUML_EXT_DBG").is_ok() {
         eprintln!("[V2] natural_start_y={natural_start_y}");
-        eprintln!("[V2] tree variants = {:?}", tree.iter().map(node_dbg_name).collect::<Vec<_>>());
+        eprintln!(
+            "[V2] tree variants = {:?}",
+            tree.iter().map(node_dbg_name).collect::<Vec<_>>()
+        );
         eprintln!("[V2] lane_yband = {lane_yband:?}");
         for l in 0..n {
             let sx = crate::compress::x_bounds(&shape_frags[l]);
@@ -16208,13 +16250,17 @@ fn layout_swimlanes_v2(
             let shape_bounds = crate::compress::x_bounds(&shape_frags[l]);
             let connector_bounds = lane_connector_x_bounds(svg, l);
             let (lo, hi) = match (shape_bounds, connector_bounds) {
-                (Some((slo, shi)), Some((clo, chi))) => (slo.min(clo), shi.max(chi)),
+                (Some((slo, shi)), Some((_, chi))) if l == 0 => {
+                    (slo, shi.max(chi - IF_CORRIDOR_ARROW_OFFSET))
+                }
+                (Some(bounds), Some(_)) => bounds,
                 (Some(bounds), None) | (None, Some(bounds)) => bounds,
                 (None, None) => (0.0, 0.0),
             };
             minx[l] = lo;
             lane_content_w[l] = hi - lo;
-            w[l] = (hi - lo + 10.0).max(title_w[l] + 10.0);
+            let lane_pad = if l > 0 && hi - lo < 100.0 { 30.0 } else { 10.0 };
+            w[l] = (hi - lo + lane_pad).max(title_w[l] + 10.0);
             if std::env::var("RUSTUML_EXT_DBG").is_ok() {
                 eprintln!(
                     "[V2] lane {l} {:?} connector_xbounds={connector_bounds:?}",
@@ -16224,8 +16270,7 @@ fn layout_swimlanes_v2(
         }
         (minx, w)
     } else {
-        let ext: Vec<(f64, f64)> =
-            (0..n).map(|l| swimlane_v2_run_extents(&runs[l])).collect();
+        let ext: Vec<(f64, f64)> = (0..n).map(|l| swimlane_v2_run_extents(&runs[l])).collect();
         let w: Vec<f64> = (0..n)
             .map(|l| (ext[l].0 + ext[l].1 + 10.0).max(title_w[l] + 10.0))
             .collect();
@@ -16258,6 +16303,10 @@ fn layout_swimlanes_v2(
                 // lane's intrinsic 6-left/4-right padding asymmetry (+1 to the
                 // left half) baked in.
                 (lane_w[l] - lane_content_w[l]) / 2.0 + 1.0
+            } else if if_mode && l == 0 {
+                12.1763
+            } else if if_mode {
+                20.0
             } else if if_mode && lane_leftmost_is_text(&shape_frags[l], lane_minx[l]) {
                 5.0
             } else {
@@ -16304,10 +16353,17 @@ fn layout_swimlanes_v2(
 
     // Shift each lane's shape/connector fragment by its dx (x) and lane_dy (y).
     let mut lane_shapes: Vec<String> = (0..n)
-        .map(|l| crate::compress::shift_y(&crate::compress::shift_x(&shape_frags[l], dx[l]), lane_dy[l]))
+        .map(|l| {
+            crate::compress::shift_y(
+                &crate::compress::shift_x(&shape_frags[l], dx[l]),
+                lane_dy[l],
+            )
+        })
         .collect();
     let mut lane_conns: Vec<String> = (0..n)
-        .map(|l| crate::compress::shift_y(&crate::compress::shift_x(&conn_frags[l], dx[l]), lane_dy[l]))
+        .map(|l| {
+            crate::compress::shift_y(&crate::compress::shift_x(&conn_frags[l], dx[l]), lane_dy[l])
+        })
         .collect();
 
     let arrow_color = svg.palette.arrow_color.clone();
@@ -16363,16 +16419,20 @@ fn layout_swimlanes_v2(
         // The rail is the vertical line with the smallest x in the fragment.
         let src_prims = split_svg_primitives(&lane_conns[l]);
         // Index of the west rail: vertical line (x1==x2) with the minimum x.
-        let rail_idx = src_prims.iter().enumerate().fold(None, |best, (i, p)| {
-            match parse_line_xy(p) {
-                Some((x1, x2, _, _)) if (x1 - x2).abs() < 0.001 => match best {
-                    Some((_, bx)) if x1 >= bx => best,
-                    _ => Some((i, x1)),
-                },
-                _ => best,
-            }
-        });
-        let Some((rail_idx, _)) = rail_idx else { continue };
+        let rail_idx =
+            src_prims
+                .iter()
+                .enumerate()
+                .fold(None, |best, (i, p)| match parse_line_xy(p) {
+                    Some((x1, x2, _, _)) if (x1 - x2).abs() < 0.001 => match best {
+                        Some((_, bx)) if x1 >= bx => best,
+                        _ => Some((i, x1)),
+                    },
+                    _ => best,
+                });
+        let Some((rail_idx, _)) = rail_idx else {
+            continue;
+        };
         // The rail-arrowhead is the polygon immediately before the rail.
         if rail_idx == 0 || rail_idx + 2 >= src_prims.len() {
             continue;
@@ -16489,8 +16549,9 @@ fn layout_swimlanes_v2(
         // Only intra-lane slack (an if's inter-branch gap) collapses — keep the
         // inter-lane spacing. Restrict the transform's slots to each lane's
         // content column.
-        let lane_ranges: Vec<(f64, f64)> =
-            (0..n).map(|l| (lane_left[l], lane_left[l] + lane_w[l])).collect();
+        let lane_ranges: Vec<(f64, f64)> = (0..n)
+            .map(|l| (lane_left[l], lane_left[l] + lane_w[l]))
+            .collect();
         x_tf.restrict_to_ranges(&lane_ranges);
         if !x_tf.is_identity() {
             // Re-anchor: keep the first lane's left edge (its divider x) fixed so
@@ -16501,7 +16562,6 @@ fn layout_swimlanes_v2(
             for l in 0..n {
                 lane_shapes[l] = crate::compress::apply_x_offset(&lane_shapes[l], &x_tf, off);
                 lane_conns[l] = crate::compress::apply_x_offset(&lane_conns[l], &x_tf, off);
-                lane_left[l] = tx(lane_left[l]);
             }
             // The rightmost divider follows the last lane's COMPRESSED content
             // right edge + the 4 px lane right pad (the column width shrinks with
@@ -17817,9 +17877,15 @@ fn render_inner(
             title: svg.palette.swimlane_title_color.clone(),
             title_bg: svg.palette.swimlane_title_background.clone(),
         };
-        if let Some((sh, cn, w, h)) =
-            layout_swimlanes_v2(&svg, &tree, cx, start_y, body_bottom_y, &lane_names, &chrome)
-        {
+        if let Some((sh, cn, w, h)) = layout_swimlanes_v2(
+            &svg,
+            &tree,
+            cx,
+            start_y,
+            body_bottom_y,
+            &lane_names,
+            &chrome,
+        ) {
             // V2 columns are already tight (reserved extents) — skip the ON_X
             // compress pass, which would wrongly collapse the inter-lane gaps.
             let mut content = sh;

@@ -1091,6 +1091,8 @@ pub struct TestCase {
     pub source: String,
 }
 
+type CaseFactory = (&'static str, fn() -> String);
+
 /// Generates all combinatorial test cases across diagram types.
 ///
 /// Currently produces:
@@ -1131,7 +1133,7 @@ pub fn all_cases(message_counts: usize) -> Vec<TestCase> {
     }
 
     // Sequence diagram feature cases.
-    let seq_cases: &[(&str, fn() -> String)] = &[
+    let seq_cases: &[CaseFactory] = &[
         ("seq_arrow_types", sequence_arrow_types),
         ("seq_participant_types", sequence_participant_types),
         ("seq_participant_aliases", sequence_participant_aliases),
@@ -1158,7 +1160,7 @@ pub fn all_cases(message_counts: usize) -> Vec<TestCase> {
     }
 
     // Class diagram cases.
-    let class_cases: &[(&str, fn() -> String)] = &[
+    let class_cases: &[CaseFactory] = &[
         ("class_basic", class_diagram),
         ("class_relationships", class_diagram_with_relationships),
         ("class_all_entity_types", class_all_entity_types),
@@ -1182,7 +1184,7 @@ pub fn all_cases(message_counts: usize) -> Vec<TestCase> {
     }
 
     // State diagram cases.
-    let state_cases: &[(&str, fn() -> String)] = &[
+    let state_cases: &[CaseFactory] = &[
         ("state_basic", state_diagram),
         ("state_nested", state_diagram_nested),
         ("state_concurrent", state_diagram_concurrent),
@@ -1198,7 +1200,7 @@ pub fn all_cases(message_counts: usize) -> Vec<TestCase> {
     }
 
     // Activity diagram cases.
-    let activity_cases: &[(&str, fn() -> String)] = &[
+    let activity_cases: &[CaseFactory] = &[
         ("activity_basic", activity_diagram),
         ("activity_fork", activity_diagram_with_fork),
         ("activity_start_stop_end", activity_start_stop_end),
@@ -1221,7 +1223,7 @@ pub fn all_cases(message_counts: usize) -> Vec<TestCase> {
     }
 
     // Component diagram cases.
-    let component_cases: &[(&str, fn() -> String)] = &[
+    let component_cases: &[CaseFactory] = &[
         ("component_basic", component_diagram),
         ("component_with_interfaces", component_with_interfaces),
         ("component_packages", component_packages),
@@ -1234,7 +1236,7 @@ pub fn all_cases(message_counts: usize) -> Vec<TestCase> {
     }
 
     // Use case diagram cases.
-    let use_case_cases: &[(&str, fn() -> String)] = &[
+    let use_case_cases: &[CaseFactory] = &[
         ("use_case_basic", use_case_diagram),
         ("use_case_extended", use_case_extended),
         ("use_case_packages", use_case_packages),
@@ -1247,7 +1249,7 @@ pub fn all_cases(message_counts: usize) -> Vec<TestCase> {
     }
 
     // Deployment diagram cases.
-    let deployment_cases: &[(&str, fn() -> String)] = &[
+    let deployment_cases: &[CaseFactory] = &[
         ("deployment_basic", deployment_diagram),
         ("deployment_node_types", deployment_node_types),
     ];
@@ -1259,10 +1261,7 @@ pub fn all_cases(message_counts: usize) -> Vec<TestCase> {
     }
 
     // Salt wireframe cases.
-    let salt_cases: &[(&str, fn() -> String)] = &[
-        ("salt_dialog", salt_dialog),
-        ("salt_tree", salt_tree),
-    ];
+    let salt_cases: &[CaseFactory] = &[("salt_dialog", salt_dialog), ("salt_tree", salt_tree)];
     for (name, f) in salt_cases {
         cases.push(TestCase {
             name: (*name).into(),
@@ -1271,7 +1270,7 @@ pub fn all_cases(message_counts: usize) -> Vec<TestCase> {
     }
 
     // Non-UML diagram cases (JSON, YAML, mindmap, WBS, Gantt, timing).
-    let other_cases: &[(&str, fn() -> String)] = &[
+    let other_cases: &[CaseFactory] = &[
         ("json_diagram", json_diagram),
         ("yaml_diagram", yaml_diagram),
         ("mindmap_diagram", mindmap_diagram),

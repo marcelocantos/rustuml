@@ -389,19 +389,9 @@ pub fn y_max(svg: &str) -> Option<f64> {
 #[derive(Clone, Debug)]
 pub enum Prim {
     /// Axis-aligned box: `[x, x+w] × [y, y+h]`.
-    Rect {
-        x: f64,
-        y: f64,
-        w: f64,
-        h: f64,
-    },
+    Rect { x: f64, y: f64, w: f64, h: f64 },
     /// `[cx-rx, cx+rx] × [cy-ry, cy+ry]`.
-    Ellipse {
-        cx: f64,
-        cy: f64,
-        rx: f64,
-        ry: f64,
-    },
+    Ellipse { cx: f64, cy: f64, rx: f64, ry: f64 },
     /// Bounding box of its points.
     Polygon {
         points: Vec<(f64, f64)>,
@@ -428,12 +418,7 @@ pub enum Prim {
     /// `TextLimitFinder` uses the laid-out text extent; height is folded into the
     /// owning box for occupancy, so only the x-advance matters for ON_X and the
     /// glyph band `[y-ascent, y+descent]` (approximated by `h`) for ON_Y.
-    Text {
-        x: f64,
-        y: f64,
-        w: f64,
-        h: f64,
-    },
+    Text { x: f64, y: f64, w: f64, h: f64 },
 }
 
 impl Prim {
@@ -469,12 +454,18 @@ impl Prim {
                 },
                 CompressionMode::OnY,
             ) => (!ignore_y).then(|| bbox_axis(points, false)).flatten(),
-            (Prim::Line { x1, x2, ignore_x, .. }, CompressionMode::OnX) => {
-                (!ignore_x).then(|| (x1.min(*x2), x1.max(*x2)))
-            }
-            (Prim::Line { y1, y2, ignore_y, .. }, CompressionMode::OnY) => {
-                (!ignore_y).then(|| (y1.min(*y2), y1.max(*y2)))
-            }
+            (
+                Prim::Line {
+                    x1, x2, ignore_x, ..
+                },
+                CompressionMode::OnX,
+            ) => (!ignore_x).then(|| (x1.min(*x2), x1.max(*x2))),
+            (
+                Prim::Line {
+                    y1, y2, ignore_y, ..
+                },
+                CompressionMode::OnY,
+            ) => (!ignore_y).then(|| (y1.min(*y2), y1.max(*y2))),
             (Prim::Text { x, w, .. }, CompressionMode::OnX) => Some((*x, x + w)),
             (Prim::Text { y, h, .. }, CompressionMode::OnY) => Some((*y, y + h)),
         }
@@ -759,7 +750,14 @@ fn points_bbox(points: &str, x_axis: bool) -> Option<(f64, f64)> {
 fn path_arg_axes(cmd: char) -> &'static [Option<bool>] {
     match cmd.to_ascii_uppercase() {
         'M' | 'L' | 'T' => &[Some(true), Some(false)],
-        'C' => &[Some(true), Some(false), Some(true), Some(false), Some(true), Some(false)],
+        'C' => &[
+            Some(true),
+            Some(false),
+            Some(true),
+            Some(false),
+            Some(true),
+            Some(false),
+        ],
         'S' | 'Q' => &[Some(true), Some(false), Some(true), Some(false)],
         'A' => &[None, None, None, None, None, Some(true), Some(false)],
         'H' => &[Some(true)],
@@ -775,7 +773,10 @@ fn path_coords(d: &str) -> Vec<(f64, Option<bool>)> {
     let mut group: &'static [Option<bool>] = &[];
     let mut gi = 0usize;
     let mut tok = String::new();
-    let flush = |tok: &mut String, out: &mut Vec<(f64, Option<bool>)>, group: &[Option<bool>], gi: &mut usize| {
+    let flush = |tok: &mut String,
+                 out: &mut Vec<(f64, Option<bool>)>,
+                 group: &[Option<bool>],
+                 gi: &mut usize| {
         if tok.is_empty() {
             return;
         }
@@ -921,7 +922,12 @@ fn rewrite_pair(el: &str, pos: &str, len: &str, tf: &CompressionTransform) -> St
 }
 
 /// Replace a center/radius pair so `[c-r, c+r]` maps through `tf`.
-fn rewrite_center_radius(el: &str, center: &str, radius: &str, tf: &CompressionTransform) -> String {
+fn rewrite_center_radius(
+    el: &str,
+    center: &str,
+    radius: &str,
+    tf: &CompressionTransform,
+) -> String {
     let (Some(c), Some(r)) = (attr_val(el, center), attr_val(el, radius)) else {
         return el.to_string();
     };
@@ -938,8 +944,10 @@ fn attr_val(el: &str, name: &str) -> Option<f64> {
 
 fn set_attr(el: &str, name: &str, v: f64) -> String {
     let rx = Regex::new(&format!(r#"(\b{name}=")[-\d.]+(")"#)).unwrap();
-    rx.replace(el, |c: &regex::Captures| format!("{}{}{}", &c[1], fmt_coord(v), &c[2]))
-        .into_owned()
+    rx.replace(el, |c: &regex::Captures| {
+        format!("{}{}{}", &c[1], fmt_coord(v), &c[2])
+    })
+    .into_owned()
 }
 
 fn rewrite_points(points: &str, x_axis: bool, tf: &CompressionTransform) -> String {
@@ -979,7 +987,11 @@ fn rewrite_path_d(d: &str, x_axis: bool, tf: &CompressionTransform) -> String {
             *gi += 1;
             a
         };
-        let nv = if axis == Some(x_axis) { tf.transform(v) } else { v };
+        let nv = if axis == Some(x_axis) {
+            tf.transform(v)
+        } else {
+            v
+        };
         out.push_str(&fmt_coord(nv));
     };
     for ch in d.chars() {
@@ -1138,7 +1150,10 @@ mod tests {
         // Re-deriving a transform from the compressed output is the identity:
         // the remaining band is exactly 10px.
         let tf2 = CompressionTransform::from_occupied(&compressed, M);
-        assert!(tf2.is_identity(), "second pass must be a no-op (idempotence)");
+        assert!(
+            tf2.is_identity(),
+            "second pass must be a no-op (idempotence)"
+        );
     }
 
     #[test]
@@ -1158,8 +1173,18 @@ mod tests {
         // A box at x=40 of width 20, with an occupying box at [0,20] before it,
         // leaving a 20px empty band that collapses to 10.
         let mut prims = vec![
-            Prim::Rect { x: 0.0, y: 0.0, w: 20.0, h: 10.0 },
-            Prim::Rect { x: 40.0, y: 0.0, w: 20.0, h: 10.0 },
+            Prim::Rect {
+                x: 0.0,
+                y: 0.0,
+                w: 20.0,
+                h: 10.0,
+            },
+            Prim::Rect {
+                x: 40.0,
+                y: 0.0,
+                w: 20.0,
+                h: 10.0,
+            },
         ];
         compress(&mut prims, M);
         if let Prim::Rect { x, w, .. } = prims[1] {
@@ -1175,9 +1200,26 @@ mod tests {
         // An ignorable connector LINE spanning the empty corridor must NOT block
         // the corridor from collapsing — boxes either side still compress.
         let mut prims = vec![
-            Prim::Rect { x: 0.0, y: 0.0, w: 20.0, h: 10.0 },
-            Prim::Line { x1: 20.0, y1: 5.0, x2: 40.0, y2: 5.0, ignore_x: true, ignore_y: true },
-            Prim::Rect { x: 40.0, y: 0.0, w: 20.0, h: 10.0 },
+            Prim::Rect {
+                x: 0.0,
+                y: 0.0,
+                w: 20.0,
+                h: 10.0,
+            },
+            Prim::Line {
+                x1: 20.0,
+                y1: 5.0,
+                x2: 40.0,
+                y2: 5.0,
+                ignore_x: true,
+                ignore_y: true,
+            },
+            Prim::Rect {
+                x: 40.0,
+                y: 0.0,
+                w: 20.0,
+                h: 10.0,
+            },
         ];
         compress(&mut prims, M);
         if let Prim::Rect { x, .. } = prims[2] {
