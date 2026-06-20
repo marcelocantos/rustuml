@@ -20,7 +20,7 @@ jobs:
     name: Check & Lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: clippy, rustfmt
@@ -33,9 +33,9 @@ jobs:
     name: Unit Tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Pinned PlantUML standard library
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: plantuml/plantuml-stdlib
           ref: 747d1eae809cde20675976d67e3eb84dc0021a0c
@@ -48,11 +48,11 @@ jobs:
     name: Parity, Evidence & CLI
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
         with:
           submodules: true
       - name: Pinned PlantUML standard library
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: plantuml/plantuml-stdlib
           ref: 747d1eae809cde20675976d67e3eb84dc0021a0c
@@ -68,16 +68,16 @@ jobs:
     name: Oracle Tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Pinned PlantUML standard library
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: plantuml/plantuml-stdlib
           ref: 747d1eae809cde20675976d67e3eb84dc0021a0c
           path: reference-stdlib
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
-      - uses: actions/setup-java@v4
+      - uses: actions/setup-java@v5
         with:
           distribution: temurin
           java-version: 21
@@ -87,14 +87,14 @@ jobs:
 
       - name: Cache PlantUML JAR
         id: cache-plantuml
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: /tmp/plantuml.jar
           key: plantuml-source-${{ env.PLANTUML_REVISION }}-temurin21-${{ runner.os }}
 
       - name: Pinned PlantUML source
         if: steps.cache-plantuml.outputs.cache-hit != 'true'
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: plantuml/plantuml
           ref: ${{ env.PLANTUML_REVISION }}
