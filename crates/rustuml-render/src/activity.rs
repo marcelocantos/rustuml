@@ -1033,6 +1033,18 @@ fn branch_is_redirectable_while(flow: &[LayoutNode]) -> bool {
     )
 }
 
+/// Swimlane V2: the lane a branch body enters. A `|Lane|` marker at the front of
+/// a branch changes the branch's `getSwimlaneIn`; otherwise it inherits the
+/// current lane from the enclosing flow.
+fn branch_entry_lane(body: &[LayoutNode], default: usize) -> usize {
+    body.iter()
+        .find_map(|node| match node {
+            LayoutNode::LaneMark(idx) => Some(*idx),
+            _ => None,
+        })
+        .unwrap_or(default)
+}
+
 /// A branch flow whose sole node is a binary `if` with exactly one terminating
 /// branch (kill/detach/stop) and one surviving branch. Such an inner if's
 /// surviving out-corridor IS the parent if's branch→merge connection (PlantUML's
@@ -7784,6 +7796,10 @@ struct SvgEmitter {
     /// Connectors (lines, arrowhead polygons). PlantUML emits all of these
     /// after the shapes, also in document order.
     connectors: String,
+    /// Swimlane V2: byte spans in `connectors` tagged with PlantUML-style
+    /// `(swimlaneOut, swimlaneIn)` ownership, used by if-long lane MinMax.
+    connector_lane_spans: Vec<ConnectorLaneSpan>,
+    current_connector_lanes: Option<(Option<usize>, Option<usize>)>,
     /// Swimlane V2: the lane currently active during emit (0 off the V2 path).
     /// Switched by each `LayoutNode::LaneMark` as the single tree is walked.
     current_lane: usize,
@@ -8014,6 +8030,14 @@ struct SvgEmitter {
     swimlane_cross_lane: Option<SwimlaneCrossLane>,
 }
 
+#[derive(Clone, Copy)]
+struct ConnectorLaneSpan {
+    start: usize,
+    end: usize,
+    out_lane: Option<usize>,
+    in_lane: Option<usize>,
+}
+
 /// Inter-lane stitch geometry for a no-special `while` that is the last tile of
 /// a lane segment with a cross-lane successor (see
 /// [`SvgEmitter::swimlane_cross_lane`]).
@@ -8155,6 +8179,8 @@ impl SvgEmitter {
         SvgEmitter {
             shapes: String::new(),
             connectors: String::new(),
+            connector_lane_spans: Vec::new(),
+            current_connector_lanes: None,
             current_lane: 0,
             lane_spans: Vec::new(),
             palette,
@@ -8593,7 +8619,42 @@ impl SvgEmitter {
     }
 
     fn raw_connector(&mut self, s: &str) {
+        let start = self.connectors.len();
         self.connectors.push_str(s);
+        self.record_connector_lane_span(start);
+    }
+
+    fn record_connector_lane_span(&mut self, start: usize) {
+        let Some((out_lane, in_lane)) = self.current_connector_lanes else {
+            return;
+        };
+        let end = self.connectors.len();
+        if end > start {
+            self.connector_lane_spans.push(ConnectorLaneSpan {
+                start,
+                end,
+                out_lane,
+                in_lane,
+            });
+        }
+    }
+
+    fn with_connector_lanes<T>(
+        &mut self,
+        out_lane: Option<usize>,
+        in_lane: Option<usize>,
+        f: impl FnOnce(&mut Self) -> T,
+    ) -> T {
+        let saved = self.current_connector_lanes;
+        self.current_connector_lanes = Some((out_lane, in_lane));
+        let result = f(self);
+        self.current_connector_lanes = saved;
+        result
+    }
+
+    fn truncate_connectors(&mut self, len: usize) {
+        self.connectors.truncate(len);
+        self.connector_lane_spans.retain(|span| span.end <= len);
     }
 
     fn line_styled(
@@ -8606,6 +8667,7 @@ impl SvgEmitter {
         y2: f64,
         dashed: bool,
     ) {
+        let start = self.connectors.len();
         let dash = if dashed { "stroke-dasharray:2,2;" } else { "" };
         if self.handwritten {
             let d = handwritten_line_path(x1, y1, x2, y2);
@@ -8618,6 +8680,7 @@ impl SvgEmitter {
             } else {
                 write!(self.connectors, r#"<path d="{d}" fill="{stroke}"/>"#).unwrap();
             }
+            self.record_connector_lane_span(start);
             return;
         }
         write!(
@@ -8632,6 +8695,7 @@ impl SvgEmitter {
             f(y2)
         )
         .unwrap();
+        self.record_connector_lane_span(start);
     }
 
     /// Emit a connector line that follows the palette's arrow thickness
@@ -8670,6 +8734,7 @@ impl SvgEmitter {
         stroke: &str,
         stroke_width: &str,
     ) {
+        let start = self.connectors.len();
         let pts = if self.handwritten {
             handwritten_polygon_points(points)
         } else {
@@ -8681,6 +8746,7 @@ impl SvgEmitter {
             fill, pts, stroke, stroke_width
         )
         .unwrap();
+        self.record_connector_lane_span(start);
     }
 
     /// Emit a downward arrow (vertical line + arrowhead polygon).
@@ -8751,6 +8817,7 @@ impl SvgEmitter {
         y: f64,
         content: &str,
     ) {
+        let start = self.connectors.len();
         let base = TextBase {
             x,
             y,
@@ -8763,6 +8830,7 @@ impl SvgEmitter {
             skip_underline: false,
         };
         text_render::emit_text(&mut self.connectors, content, &base);
+        self.record_connector_lane_span(start);
     }
 
     /// Emit a line with an explicit dasharray pattern (or none).
@@ -8776,6 +8844,7 @@ impl SvgEmitter {
         y2: f64,
         dash: Option<&str>,
     ) {
+        let start = self.connectors.len();
         let dash_str = match dash {
             Some(d) => format!("stroke-dasharray:{d};"),
             None => String::new(),
@@ -8791,6 +8860,7 @@ impl SvgEmitter {
             } else {
                 write!(self.connectors, r#"<path d="{d}" fill="{stroke}"/>"#).unwrap();
             }
+            self.record_connector_lane_span(start);
             return;
         }
         write!(
@@ -8805,6 +8875,7 @@ impl SvgEmitter {
             f(y2)
         )
         .unwrap();
+        self.record_connector_lane_span(start);
     }
 
     /// Emit an upward arrow (arrowhead pointing up).
@@ -10433,7 +10504,7 @@ fn emit_if(
             && !if_empty_both_plain(then_branch, else_branches);
     if redirect_active {
         svg.shapes.truncate(shapes_chk);
-        svg.connectors.truncate(conns_chk);
+        svg.truncate_connectors(conns_chk);
         if then_redirectable {
             svg.while_exit_redirect = Some(WhileExitRedirect {
                 merge_cy,
@@ -10753,6 +10824,7 @@ fn emit_if_long(
     let diamond_cy = dtop + DIAMOND_HALF;
     let diamond_bottom = dtop + DIAMOND_HALF * 2.0;
     let n = l.cols.len();
+    let entry_lane = svg.current_lane;
 
     // Branch columns retain the partially-uncompressed inter-tile slack (see
     // IF_LONG_BRANCH_GAP_EXTRA); set it for the branch/else body emits below and
@@ -10766,6 +10838,19 @@ fn emit_if_long(
         .filter(|b| b.condition.is_some())
         .map(|b| b.body.as_slice())
         .collect();
+    let tile2_body: &[LayoutNode] = else_branches
+        .iter()
+        .find(|b| b.condition.is_none())
+        .map(|b| b.body.as_slice())
+        .unwrap_or(&[]);
+    let mut col_lanes = Vec::with_capacity(n);
+    let mut inherited_lane = entry_lane;
+    for body in std::iter::once(then_branch).chain(elseif_bodies.iter().copied()) {
+        let lane = branch_entry_lane(body, inherited_lane);
+        col_lanes.push(lane);
+        inherited_lane = lane;
+    }
+    let tile2_lane = branch_entry_lane(tile2_body, inherited_lane);
 
     // --- Shapes: per couple (diamond + labels + branch) ------------------
     for (i, col) in l.cols.iter().enumerate() {
@@ -10866,12 +10951,7 @@ fn emit_if_long(
     // tile2 (the bare else) to the right.
     if let Some(tile2_cx) = l.tile2_cx {
         let tcx = cx + tile2_cx;
-        let else_body = else_branches
-            .iter()
-            .find(|b| b.condition.is_none())
-            .map(|b| b.body.as_slice())
-            .unwrap_or(&[]);
-        emit_sequence(svg, else_body, tcx, v.tile2_top);
+        emit_sequence(svg, tile2_body, tcx, v.tile2_top);
     }
     svg.fork_branch_gap_extra = saved_gap_extra;
 
@@ -10883,25 +10963,27 @@ fn emit_if_long(
     for (i, col) in l.cols.iter().enumerate() {
         let dcx = cx + col.cx;
         // Vertical in: diamond bottom → branch top.
-        svg.connector_line(
-            &arrow_color,
-            dcx,
-            dcx,
-            diamond_bottom,
-            v.couple_branch_top,
-            false,
-        );
-        svg.polygon_connector(
-            &arrow_color,
-            &[
-                (dcx - 4.0, v.couple_branch_top - 10.0),
-                (dcx, v.couple_branch_top),
-                (dcx + 4.0, v.couple_branch_top - 10.0),
-                (dcx, v.couple_branch_top - 6.0),
-            ],
-            &arrow_color,
-            "1",
-        );
+        svg.with_connector_lanes(Some(col_lanes[i]), Some(col_lanes[i]), |svg| {
+            svg.connector_line(
+                &arrow_color,
+                dcx,
+                dcx,
+                diamond_bottom,
+                v.couple_branch_top,
+                false,
+            );
+            svg.polygon_connector(
+                &arrow_color,
+                &[
+                    (dcx - 4.0, v.couple_branch_top - 10.0),
+                    (dcx, v.couple_branch_top),
+                    (dcx + 4.0, v.couple_branch_top - 10.0),
+                    (dcx, v.couple_branch_top - 6.0),
+                ],
+                &arrow_color,
+                "1",
+            );
+        });
         // Vertical out: branch bottom → merge line. Skipped for a while-led
         // branch whose exit corridor already reached the merge line.
         let body: &[LayoutNode] = if i == 0 {
@@ -10913,18 +10995,20 @@ fn emit_if_long(
             continue;
         }
         let branch_bottom = v.couple_branch_top + col.branch_h;
-        svg.connector_line(&arrow_color, dcx, dcx, branch_bottom, v.merge_y, false);
-        svg.polygon_connector(
-            &arrow_color,
-            &[
-                (dcx - 4.0, v.merge_y - 10.0),
-                (dcx, v.merge_y),
-                (dcx + 4.0, v.merge_y - 10.0),
-                (dcx, v.merge_y - 6.0),
-            ],
-            &arrow_color,
-            "1",
-        );
+        svg.with_connector_lanes(Some(col_lanes[i]), None, |svg| {
+            svg.connector_line(&arrow_color, dcx, dcx, branch_bottom, v.merge_y, false);
+            svg.polygon_connector(
+                &arrow_color,
+                &[
+                    (dcx - 4.0, v.merge_y - 10.0),
+                    (dcx, v.merge_y),
+                    (dcx + 4.0, v.merge_y - 10.0),
+                    (dcx, v.merge_y - 6.0),
+                ],
+                &arrow_color,
+                "1",
+            );
+        });
     }
 
     // ConnectionHorizontal between adjacent diamonds (east vertex → west vertex).
@@ -10933,27 +11017,31 @@ fn emit_if_long(
         let d2 = &l.cols[i + 1];
         let x1 = cx + d1.cx + d1.diamond_w / 2.0;
         let x2 = cx + d2.cx - d2.diamond_w / 2.0;
-        svg.connector_line(&arrow_color, x1, x2, diamond_cy, diamond_cy, false);
-        svg.right_arrow(x2, diamond_cy, &arrow_color);
+        svg.with_connector_lanes(Some(entry_lane), Some(entry_lane), |svg| {
+            svg.connector_line(&arrow_color, x1, x2, diamond_cy, diamond_cy, false);
+            svg.right_arrow(x2, diamond_cy, &arrow_color);
+        });
     }
 
     // ConnectionIn (prev bottom → first diamond): down 5, sideways, down to
     // the first diamond top.
     let d0cx = cx + l.cols[0].cx;
-    svg.connector_line(&arrow_color, cx, cx, y, y + 5.0, false);
-    svg.connector_line(&arrow_color, cx, d0cx, y + 5.0, y + 5.0, false);
-    svg.connector_line(&arrow_color, d0cx, d0cx, y + 5.0, dtop, false);
-    svg.polygon_connector(
-        &arrow_color,
-        &[
-            (d0cx - 4.0, dtop - 10.0),
-            (d0cx, dtop),
-            (d0cx + 4.0, dtop - 10.0),
-            (d0cx, dtop - 6.0),
-        ],
-        &arrow_color,
-        "1",
-    );
+    svg.with_connector_lanes(None, Some(entry_lane), |svg| {
+        svg.connector_line(&arrow_color, cx, cx, y, y + 5.0, false);
+        svg.connector_line(&arrow_color, cx, d0cx, y + 5.0, y + 5.0, false);
+        svg.connector_line(&arrow_color, d0cx, d0cx, y + 5.0, dtop, false);
+        svg.polygon_connector(
+            &arrow_color,
+            &[
+                (d0cx - 4.0, dtop - 10.0),
+                (d0cx, dtop),
+                (d0cx + 4.0, dtop - 10.0),
+                (d0cx, dtop - 6.0),
+            ],
+            &arrow_color,
+            "1",
+        );
+    });
 
     // ConnectionLastElseIn + ConnectionLastElseOut (last diamond east → tile2,
     // then tile2 → merge line).
@@ -10966,48 +11054,54 @@ fn emit_if_long(
             // runs straight from the last diamond's east vertex, right to the
             // tile2 column, then down to the merge line with a single arrowhead
             // (no box, no intermediate arrow into tile2).
-            svg.connector_line(&arrow_color, east_x, tcx, diamond_cy, diamond_cy, false);
-            svg.connector_line(&arrow_color, tcx, tcx, diamond_cy, v.merge_y, false);
-            svg.polygon_connector(
-                &arrow_color,
-                &[
-                    (tcx - 4.0, v.merge_y - 10.0),
-                    (tcx, v.merge_y),
-                    (tcx + 4.0, v.merge_y - 10.0),
-                    (tcx, v.merge_y - 6.0),
-                ],
-                &arrow_color,
-                "1",
-            );
+            svg.with_connector_lanes(Some(entry_lane), None, |svg| {
+                svg.connector_line(&arrow_color, east_x, tcx, diamond_cy, diamond_cy, false);
+                svg.connector_line(&arrow_color, tcx, tcx, diamond_cy, v.merge_y, false);
+                svg.polygon_connector(
+                    &arrow_color,
+                    &[
+                        (tcx - 4.0, v.merge_y - 10.0),
+                        (tcx, v.merge_y),
+                        (tcx + 4.0, v.merge_y - 10.0),
+                        (tcx, v.merge_y - 6.0),
+                    ],
+                    &arrow_color,
+                    "1",
+                );
+            });
         } else {
             // East vertex → above tile2, then down into tile2.
-            svg.connector_line(&arrow_color, east_x, tcx, diamond_cy, diamond_cy, false);
-            svg.connector_line(&arrow_color, tcx, tcx, diamond_cy, v.tile2_top, false);
-            svg.polygon_connector(
-                &arrow_color,
-                &[
-                    (tcx - 4.0, v.tile2_top - 10.0),
-                    (tcx, v.tile2_top),
-                    (tcx + 4.0, v.tile2_top - 10.0),
-                    (tcx, v.tile2_top - 6.0),
-                ],
-                &arrow_color,
-                "1",
-            );
+            svg.with_connector_lanes(Some(entry_lane), Some(tile2_lane), |svg| {
+                svg.connector_line(&arrow_color, east_x, tcx, diamond_cy, diamond_cy, false);
+                svg.connector_line(&arrow_color, tcx, tcx, diamond_cy, v.tile2_top, false);
+                svg.polygon_connector(
+                    &arrow_color,
+                    &[
+                        (tcx - 4.0, v.tile2_top - 10.0),
+                        (tcx, v.tile2_top),
+                        (tcx + 4.0, v.tile2_top - 10.0),
+                        (tcx, v.tile2_top - 6.0),
+                    ],
+                    &arrow_color,
+                    "1",
+                );
+            });
             // tile2 out → merge line.
             let tile2_bottom = v.tile2_top + l.tile2_h;
-            svg.connector_line(&arrow_color, tcx, tcx, tile2_bottom, v.merge_y, false);
-            svg.polygon_connector(
-                &arrow_color,
-                &[
-                    (tcx - 4.0, v.merge_y - 10.0),
-                    (tcx, v.merge_y),
-                    (tcx + 4.0, v.merge_y - 10.0),
-                    (tcx, v.merge_y - 6.0),
-                ],
-                &arrow_color,
-                "1",
-            );
+            svg.with_connector_lanes(Some(tile2_lane), None, |svg| {
+                svg.connector_line(&arrow_color, tcx, tcx, tile2_bottom, v.merge_y, false);
+                svg.polygon_connector(
+                    &arrow_color,
+                    &[
+                        (tcx - 4.0, v.merge_y - 10.0),
+                        (tcx, v.merge_y),
+                        (tcx + 4.0, v.merge_y - 10.0),
+                        (tcx, v.merge_y - 6.0),
+                    ],
+                    &arrow_color,
+                    "1",
+                );
+            });
         }
     }
 
@@ -11023,7 +11117,9 @@ fn emit_if_long(
         min_out = min_out.min(cx + tile2_cx);
         max_out = max_out.max(cx + tile2_cx);
     }
-    svg.connector_line(&arrow_color, min_out, max_out, v.merge_y, v.merge_y, false);
+    svg.with_connector_lanes(None, None, |svg| {
+        svg.connector_line(&arrow_color, min_out, max_out, v.merge_y, v.merge_y, false);
+    });
 
     v.merge_y
 }
@@ -15531,6 +15627,24 @@ fn relabel_connectors_by_yband(buf: &str, bands: &[(f64, f64)]) -> Vec<String> {
     frags
 }
 
+fn connector_span_belongs_to_lane(span: ConnectorLaneSpan, lane: usize) -> bool {
+    (span.out_lane.is_none() || span.out_lane == Some(lane))
+        && (span.in_lane.is_none() || span.in_lane == Some(lane))
+}
+
+fn lane_connector_x_bounds(svg: &SvgEmitter, lane: usize) -> Option<(f64, f64)> {
+    let mut buf = String::new();
+    for span in &svg.connector_lane_spans {
+        if span.end > svg.connectors.len() || !connector_span_belongs_to_lane(*span, lane) {
+            continue;
+        }
+        if let Some(frag) = svg.connectors.get(span.start..span.end) {
+            buf.push_str(frag);
+        }
+    }
+    crate::compress::x_bounds(&buf)
+}
+
 /// Swimlane V2 if-mode: rebuild every flow connector as a faithful cross-lane
 /// `Cross` snake from the FINAL shape positions, discarding the natural
 /// polylines (whose routing assumed the single-tree side-by-side branch layout).
@@ -16091,10 +16205,22 @@ fn layout_swimlanes_v2(
         let mut minx = vec![0.0f64; n];
         let mut w = vec![0.0f64; n];
         for l in 0..n {
-            let (lo, hi) = crate::compress::x_bounds(&shape_frags[l]).unwrap_or((0.0, 0.0));
+            let shape_bounds = crate::compress::x_bounds(&shape_frags[l]);
+            let connector_bounds = lane_connector_x_bounds(svg, l);
+            let (lo, hi) = match (shape_bounds, connector_bounds) {
+                (Some((slo, shi)), Some((clo, chi))) => (slo.min(clo), shi.max(chi)),
+                (Some(bounds), None) | (None, Some(bounds)) => bounds,
+                (None, None) => (0.0, 0.0),
+            };
             minx[l] = lo;
             lane_content_w[l] = hi - lo;
             w[l] = (hi - lo + 10.0).max(title_w[l] + 10.0);
+            if std::env::var("RUSTUML_EXT_DBG").is_ok() {
+                eprintln!(
+                    "[V2] lane {l} {:?} connector_xbounds={connector_bounds:?}",
+                    lane_names[l]
+                );
+            }
         }
         (minx, w)
     } else {
