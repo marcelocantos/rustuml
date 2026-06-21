@@ -362,6 +362,24 @@ targets:
     origin: subdivide(🎯T4.1)
     discovered: 2026-06-21
     achieved: 2026-06-21
+  T4.1.9:
+    name: Activity fork branch containing a while loop matches PlantUML geometry
+    status: achieved
+    value: 0.0
+    cost: 0.0
+    actual_cost: 3.0
+    acceptance:
+    - '`diff_one act_fork_with_while.puml` reports SVGs are structurally equivalent.'
+    - Full golden no new names vs `/private/tmp/rustuml-baseline-t4.1.8-55.txt` and removes `activity/act_fork_with_while`.
+    context: 'After 🎯T4.1.8, `act_fork_with_while` is the smallest remaining fork/while failure: element order matches, but the while branch is 16px too wide horizontally and its labelled body slot is compressed by ~4.8203px inside the fork branch.'
+    tags:
+    - activity
+    - golden
+    - fork
+    - while
+    origin: subdivide(🎯T4.1)
+    discovered: 2026-06-21
+    achieved: 2026-06-21
   T4.10:
     name: Shared-file infrastructure gaps blocking multiple strict-XML buckets are closed
     status: achieved
