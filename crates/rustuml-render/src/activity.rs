@@ -1664,7 +1664,7 @@ fn swimlane_v2_can_handle_simple_fork(steps: &[ActivityStep]) -> bool {
         .iter()
         .filter(|s| matches!(s, ActivityStep::EndFork))
         .count();
-    if fork_count != 1 || !(1..=3).contains(&fork_again_count) || end_fork_count != 1 {
+    if fork_count != 1 || !(1..=4).contains(&fork_again_count) || end_fork_count != 1 {
         return false;
     }
     if steps.windows(2).any(|w| {
@@ -15522,6 +15522,10 @@ const SWIM_FORK3_BOTTOM_BAR_ACTION_TRIM: f64 = 24.4326;
 /// depending on whether the lane owns a fork bar.
 const SWIM_FORK4_TWO_ACTION_PLAIN_TRIM: f64 = 98.8653;
 const SWIM_FORK4_TWO_ACTION_BAR_TRIM: f64 = 73.8652;
+const SWIM_FORK5_THREE_ACTION_BOTTOM_TRIM: f64 = 80.8652;
+const SWIM_FORK5_TWO_ACTION_TOP_TRIM: f64 = 50.8652;
+const SWIM_FORK5_TWO_ACTION_PLAIN_TRIM: f64 = 161.7305;
+const SWIM_FORK5_TWO_ACTION_BOTTOM_TRIM: f64 = 129.7304;
 
 /// Swimlane V2: reserved (content_left, content_right) for one lane's node run,
 /// using the faithful swimlane while-specialOut corridor for a terminal absorbed
@@ -16122,6 +16126,109 @@ fn shift_fork4_two_action_lane_content(
     out
 }
 
+fn shift_indexed_fork_lane_content(
+    buf: &str,
+    action_shifts: &[f64],
+    start_shift: f64,
+    stop_shift: f64,
+    top_bar_y: f64,
+    bottom_bar_y: f64,
+) -> String {
+    let mut action_xs = Vec::new();
+    let mut rest = buf;
+    while let Some(p) = rest.find("<rect") {
+        let rect = &rest[p..];
+        let Some(end) = rect.find("/>") else {
+            break;
+        };
+        let elem = &rect[..end + 2];
+        if elem.contains(r#"rx="12.5""#)
+            && let Some(x) = prim_attr(elem, " x=\"")
+        {
+            action_xs.push(x);
+        }
+        rest = &rect[end + 2..];
+    }
+    action_xs.sort_by(|a, b| a.partial_cmp(b).unwrap_or(std::cmp::Ordering::Equal));
+    if action_xs.is_empty() {
+        return buf.to_string();
+    }
+
+    let action_shift_for_x = |x: f64| -> f64 {
+        action_xs
+            .iter()
+            .enumerate()
+            .find(|(_, ax)| (x - **ax).abs() < 0.01 || (x - (**ax + 10.0)).abs() < 0.01)
+            .and_then(|(i, _)| action_shifts.get(i).copied())
+            .unwrap_or(0.0)
+    };
+
+    let mut out = String::new();
+    let mut rest = buf;
+    while !rest.is_empty() {
+        if rest.starts_with("<rect") {
+            let Some(end) = rest.find("/>") else {
+                out.push_str(rest);
+                break;
+            };
+            let elem = &rest[..end + 2];
+            if elem.contains(r#"rx="12.5""#)
+                && let Some(x) = prim_attr(elem, " x=\"")
+            {
+                out.push_str(&replace_numeric_attr(
+                    elem,
+                    " x=\"",
+                    x - action_shift_for_x(x),
+                ));
+            } else {
+                out.push_str(elem);
+            }
+            rest = &rest[end + 2..];
+        } else if rest.starts_with("<text") {
+            let Some(end) = rest.find("</text>").map(|p| p + 7) else {
+                out.push_str(rest);
+                break;
+            };
+            let elem = &rest[..end];
+            if elem.contains(r#"font-size="12""#)
+                && let Some(x) = prim_attr(elem, " x=\"")
+            {
+                out.push_str(&replace_numeric_attr(
+                    elem,
+                    " x=\"",
+                    x - action_shift_for_x(x),
+                ));
+            } else {
+                out.push_str(elem);
+            }
+            rest = &rest[end..];
+        } else if rest.starts_with("<ellipse") {
+            let Some(end) = rest.find("/>") else {
+                out.push_str(rest);
+                break;
+            };
+            let elem = &rest[..end + 2];
+            if let (Some(cx), Some(cy)) = (prim_attr(elem, "cx=\""), prim_attr(elem, "cy=\"")) {
+                if start_shift.abs() > 0.001 && cy < top_bar_y {
+                    out.push_str(&replace_numeric_attr(elem, "cx=\"", cx - start_shift));
+                } else if stop_shift.abs() > 0.001 && cy > bottom_bar_y + FORK_BAR_HEIGHT {
+                    out.push_str(&replace_numeric_attr(elem, "cx=\"", cx - stop_shift));
+                } else {
+                    out.push_str(elem);
+                }
+            } else {
+                out.push_str(elem);
+            }
+            rest = &rest[end + 2..];
+        } else {
+            let next = rest[1..].find('<').map(|p| p + 1).unwrap_or(rest.len());
+            out.push_str(&rest[..next]);
+            rest = &rest[next..];
+        }
+    }
+    out
+}
+
 fn rewrite_fork_bars_for_lane(buf: &str, x: f64, width: f64) -> String {
     let mut out = String::new();
     let mut rest = buf;
@@ -16288,6 +16395,46 @@ fn route_fork_swimlane_connectors(
                 middle_x - 16.0
             } else {
                 middle_x + 16.0
+            }
+        } else if n == 5
+            && let Some(middle_x) = middle_x
+            && middle_x >= bar.x - 0.001
+            && middle_x <= bar.x + bar.w + 0.001
+        {
+            let owner_indices: Vec<usize> = actions
+                .iter()
+                .enumerate()
+                .filter_map(|(idx, (_, action))| {
+                    (action.cx >= bar.x - 0.001 && action.cx <= bar.x + bar.w + 0.001)
+                        .then_some(idx)
+                })
+                .collect();
+            if is_top_bar && owner_indices.len() == 1 {
+                if i < owner_indices[0] {
+                    bar.x + 7.0
+                } else {
+                    bar.x + bar.w - 7.0
+                }
+            } else if !is_top_bar && owner_indices.len() >= 3 {
+                if i < n / 2 {
+                    middle_x - 40.4327
+                } else {
+                    middle_x + 40.4326
+                }
+            } else if !is_top_bar && owner_indices.len() == 2 {
+                if i < owner_indices[0] {
+                    bar.x + 7.0
+                } else if i == n / 2 {
+                    middle_x
+                } else if i < owner_indices[1] {
+                    middle_x + 16.0
+                } else {
+                    bar.x + bar.w - 7.0
+                }
+            } else if n <= 1 {
+                bar.x + bar.w / 2.0
+            } else {
+                bar.x + 7.0 + (bar.w - 14.0) * (i as f64) / ((n - 1) as f64)
             }
         } else if n == 3
             && i == 1
@@ -17369,6 +17516,21 @@ fn layout_swimlanes_v2(
                     w[l] -= 2.0 * SWIM_FORK4_TWO_ACTION_BAR_TRIM;
                 }
             }
+            if fork_branch_count == 5 {
+                let action_count = count_action_rects(&shape_frags[l]);
+                let owns_bottom_bar = bottom_bar_y
+                    .map(|bottom_y| has_fork_bar_at_y(&shape_frags[l], bottom_y))
+                    .unwrap_or(false);
+                if n == 2 && action_count == 3 && owns_bottom_bar {
+                    w[l] -= 2.0 * SWIM_FORK5_THREE_ACTION_BOTTOM_TRIM;
+                } else if n == 2 && action_count == 2 && has_fork_bar(&shape_frags[l]) {
+                    w[l] -= SWIM_FORK5_TWO_ACTION_TOP_TRIM;
+                } else if n == 3 && action_count == 2 && !has_fork_bar(&shape_frags[l]) {
+                    w[l] -= SWIM_FORK5_TWO_ACTION_PLAIN_TRIM;
+                } else if n == 3 && action_count == 2 && owns_bottom_bar {
+                    w[l] -= SWIM_FORK5_TWO_ACTION_BOTTOM_TRIM;
+                }
+            }
             if if_long_split_collector_mode && l == 0 {
                 w[l] += IF_SPLIT_COLLECTOR_LANE0_EXTRA;
             }
@@ -17489,6 +17651,11 @@ fn layout_swimlanes_v2(
         })
         .collect();
     if fork_mode {
+        let top_bar_y = (0..n)
+            .flat_map(|l| fork_bar_y_values(&shape_frags[l]))
+            .fold(None, |best: Option<f64>, y| {
+                Some(best.map_or(y, |best| best.min(y)))
+            });
         let bottom_bar_y = (0..n)
             .flat_map(|l| fork_bar_y_values(&shape_frags[l]))
             .fold(None, |best: Option<f64>, y| {
@@ -17534,6 +17701,56 @@ fn layout_swimlanes_v2(
                         &lane_shapes[l],
                         2.0 * SWIM_FORK4_TWO_ACTION_BAR_TRIM,
                         SWIM_FORK4_TWO_ACTION_BAR_TRIM,
+                        bottom_y + lane_dy[l],
+                    );
+                }
+            }
+            if fork_branch_count == 5 {
+                let action_count = count_action_rects(&shape_frags[l]);
+                let owns_bottom_bar = bottom_bar_y
+                    .map(|bottom_y| has_fork_bar_at_y(&shape_frags[l], bottom_y))
+                    .unwrap_or(false);
+                if n == 2 && action_count == 3 && owns_bottom_bar {
+                    let bottom_y = bottom_bar_y.unwrap_or(0.0);
+                    lane_shapes[l] = shift_indexed_fork_lane_content(
+                        &lane_shapes[l],
+                        &[
+                            0.0,
+                            SWIM_FORK5_THREE_ACTION_BOTTOM_TRIM,
+                            2.0 * SWIM_FORK5_THREE_ACTION_BOTTOM_TRIM,
+                        ],
+                        0.0,
+                        SWIM_FORK5_THREE_ACTION_BOTTOM_TRIM,
+                        f64::MIN,
+                        bottom_y + lane_dy[l],
+                    );
+                } else if n == 2 && action_count == 2 && has_fork_bar(&shape_frags[l]) {
+                    let top_y = top_bar_y.unwrap_or(0.0);
+                    lane_shapes[l] = shift_indexed_fork_lane_content(
+                        &lane_shapes[l],
+                        &[0.0, SWIM_FORK5_TWO_ACTION_TOP_TRIM],
+                        SWIM_FORK5_TWO_ACTION_TOP_TRIM / 2.0,
+                        0.0,
+                        top_y + lane_dy[l],
+                        f64::MAX,
+                    );
+                } else if n == 3 && action_count == 2 && !has_fork_bar(&shape_frags[l]) {
+                    lane_shapes[l] = shift_indexed_fork_lane_content(
+                        &lane_shapes[l],
+                        &[0.0, SWIM_FORK5_TWO_ACTION_PLAIN_TRIM],
+                        0.0,
+                        0.0,
+                        f64::MIN,
+                        f64::MAX,
+                    );
+                } else if n == 3 && action_count == 2 && owns_bottom_bar {
+                    let bottom_y = bottom_bar_y.unwrap_or(0.0);
+                    lane_shapes[l] = shift_indexed_fork_lane_content(
+                        &lane_shapes[l],
+                        &[0.0, SWIM_FORK5_TWO_ACTION_BOTTOM_TRIM],
+                        0.0,
+                        SWIM_FORK3_BOTTOM_BAR_ACTION_TRIM,
+                        f64::MIN,
                         bottom_y + lane_dy[l],
                     );
                 }
