@@ -1664,7 +1664,7 @@ fn swimlane_v2_can_handle_simple_fork(steps: &[ActivityStep]) -> bool {
         .iter()
         .filter(|s| matches!(s, ActivityStep::EndFork))
         .count();
-    if fork_count != 1 || fork_again_count != 1 || end_fork_count != 1 {
+    if fork_count != 1 || !(1..=2).contains(&fork_again_count) || end_fork_count != 1 {
         return false;
     }
     if steps.windows(2).any(|w| {
@@ -15515,6 +15515,9 @@ const SWIM_LEFT_DIVIDER_X: f64 = 20.0;
 /// Fork-only swimlane title slack: PlantUML lets a top-bar-only lane shrink
 /// almost to the title text width instead of forcing the ordinary 10 px gutter.
 const SWIM_FORK_TITLE_PAD: f64 = 1.8809;
+/// In a 3-branch fork, each action hosted by the bottom-bar lane loses one
+/// compressed fork-slot band compared with the natural single-tree MinMax.
+const SWIM_FORK3_BOTTOM_BAR_ACTION_TRIM: f64 = 24.4326;
 
 /// Swimlane V2: reserved (content_left, content_right) for one lane's node run,
 /// using the faithful swimlane while-specialOut corridor for a terminal absorbed
@@ -15882,6 +15885,142 @@ fn extract_fork_bars(buf: &str, lane: usize, out: &mut Vec<ForkBar>) {
     }
 }
 
+fn fork_bar_y_values(buf: &str) -> Vec<f64> {
+    let mut bars = Vec::new();
+    extract_fork_bars(buf, 0, &mut bars);
+    bars.into_iter().map(|bar| bar.y).collect()
+}
+
+fn count_action_rects(buf: &str) -> usize {
+    let mut count = 0;
+    let mut rest = buf;
+    while let Some(p) = rest.find("<rect") {
+        let rect = &rest[p..];
+        let Some(end) = rect.find("/>") else {
+            return count;
+        };
+        if rect[..end + 2].contains(r#"rx="12.5""#) {
+            count += 1;
+        }
+        rest = &rect[end + 2..];
+    }
+    count
+}
+
+fn replace_numeric_attr(elem: &str, key: &str, value: f64) -> String {
+    let Some(at) = elem.find(key) else {
+        return elem.to_string();
+    };
+    let value_start = at + key.len();
+    let Some(value_end) = elem[value_start..].find('"').map(|p| value_start + p) else {
+        return elem.to_string();
+    };
+    let mut out = String::new();
+    out.push_str(&elem[..value_start]);
+    out.push_str(&f(value));
+    out.push_str(&elem[value_end..]);
+    out
+}
+
+fn fork3_bottom_lane_action_shifts(buf: &str, trim: f64) -> Vec<(f64, f64)> {
+    let mut xs = Vec::new();
+    let mut rest = buf;
+    while let Some(p) = rest.find("<rect") {
+        let rect = &rest[p..];
+        let Some(end) = rect.find("/>") else {
+            break;
+        };
+        let elem = &rect[..end + 2];
+        if elem.contains(r#"rx="12.5""#)
+            && let Some(x) = prim_attr(elem, " x=\"")
+        {
+            xs.push(x);
+        }
+        rest = &rect[end + 2..];
+    }
+    xs.sort_by(|a, b| a.partial_cmp(b).unwrap_or(std::cmp::Ordering::Equal));
+    let n = xs.len();
+    xs.into_iter()
+        .enumerate()
+        .map(|(i, x)| {
+            let units = if n == 1 { 1.0 } else { 2.0 * i as f64 };
+            (x, -trim * units)
+        })
+        .collect()
+}
+
+fn fork3_bottom_lane_shift_for_x(action_shifts: &[(f64, f64)], x: f64) -> f64 {
+    action_shifts
+        .iter()
+        .find(|(ax, _)| (x - (*ax + 10.0)).abs() < 0.01 || (x - *ax).abs() < 0.01)
+        .map(|(_, dx)| *dx)
+        .unwrap_or(0.0)
+}
+
+fn shift_fork3_bottom_lane_content(buf: &str, bottom_bar_y: f64) -> String {
+    let action_shifts = fork3_bottom_lane_action_shifts(buf, SWIM_FORK3_BOTTOM_BAR_ACTION_TRIM);
+    if action_shifts.is_empty() {
+        return buf.to_string();
+    }
+    let stop_shift = -SWIM_FORK3_BOTTOM_BAR_ACTION_TRIM * (action_shifts.len() as f64 - 1.0);
+    let mut out = String::new();
+    let mut rest = buf;
+    while !rest.is_empty() {
+        if rest.starts_with("<rect") {
+            let Some(end) = rest.find("/>") else {
+                out.push_str(rest);
+                break;
+            };
+            let elem = &rest[..end + 2];
+            if elem.contains(r#"rx="12.5""#)
+                && let Some(x) = prim_attr(elem, " x=\"")
+            {
+                let dx = fork3_bottom_lane_shift_for_x(&action_shifts, x);
+                out.push_str(&replace_numeric_attr(elem, " x=\"", x + dx));
+            } else {
+                out.push_str(elem);
+            }
+            rest = &rest[end + 2..];
+        } else if rest.starts_with("<text") {
+            let Some(end) = rest.find("</text>").map(|p| p + 7) else {
+                out.push_str(rest);
+                break;
+            };
+            let elem = &rest[..end];
+            if elem.contains(r#"font-size="12""#)
+                && let Some(x) = prim_attr(elem, " x=\"")
+            {
+                let dx = fork3_bottom_lane_shift_for_x(&action_shifts, x);
+                out.push_str(&replace_numeric_attr(elem, " x=\"", x + dx));
+            } else {
+                out.push_str(elem);
+            }
+            rest = &rest[end..];
+        } else if rest.starts_with("<ellipse") {
+            let Some(end) = rest.find("/>") else {
+                out.push_str(rest);
+                break;
+            };
+            let elem = &rest[..end + 2];
+            if let (Some(cx), Some(cy)) = (prim_attr(elem, "cx=\""), prim_attr(elem, "cy=\"")) {
+                if cy > bottom_bar_y + FORK_BAR_HEIGHT {
+                    out.push_str(&replace_numeric_attr(elem, "cx=\"", cx + stop_shift));
+                } else {
+                    out.push_str(elem);
+                }
+            } else {
+                out.push_str(elem);
+            }
+            rest = &rest[end + 2..];
+        } else {
+            let next = rest[1..].find('<').map(|p| p + 1).unwrap_or(rest.len());
+            out.push_str(&rest[..next]);
+            rest = &rest[next..];
+        }
+    }
+    out
+}
+
 fn rewrite_fork_bars_for_lane(buf: &str, x: f64, width: f64) -> String {
     let mut out = String::new();
     let mut rest = buf;
@@ -15947,22 +16086,34 @@ fn extract_action_anchors(buf: &str, lane: usize, out: &mut Vec<ShapeAnchor>) {
     }
 }
 
-fn route_fork_swimlane_connectors(lane_shapes: &[String], arrow_color: &str) -> Option<String> {
+fn route_fork_swimlane_connectors(
+    nat_shapes: &[String],
+    lane_shapes: &[String],
+    arrow_color: &str,
+) -> Option<String> {
     let mut bars = Vec::new();
     let mut actions = Vec::new();
     let mut anchors = Vec::new();
     for (lane, shapes) in lane_shapes.iter().enumerate() {
         extract_fork_bars(shapes, lane, &mut bars);
-        extract_action_anchors(shapes, lane, &mut actions);
         extract_shape_anchors(shapes, lane, &mut anchors);
+    }
+    for lane in 0..lane_shapes.len() {
+        let mut nat_lane_actions = Vec::new();
+        let mut fin_lane_actions = Vec::new();
+        extract_action_anchors(&nat_shapes[lane], lane, &mut nat_lane_actions);
+        extract_action_anchors(&lane_shapes[lane], lane, &mut fin_lane_actions);
+        for (nat, fin) in nat_lane_actions.iter().zip(fin_lane_actions.iter()) {
+            actions.push((nat.cx, *fin));
+        }
     }
     bars.sort_by(|a, b| a.y.partial_cmp(&b.y).unwrap_or(std::cmp::Ordering::Equal));
     let (top_bar, bottom_bar) = (*bars.first()?, *bars.last()?);
     let top_bar_bottom = top_bar.y + FORK_BAR_HEIGHT;
     let bottom_bar_top = bottom_bar.y;
 
-    actions.retain(|a| a.top >= top_bar_bottom - 0.001 && a.bottom <= bottom_bar_top + 0.001);
-    actions.sort_by(|a, b| a.cx.partial_cmp(&b.cx).unwrap_or(std::cmp::Ordering::Equal));
+    actions.retain(|(_, a)| a.top >= top_bar_bottom - 0.001 && a.bottom <= bottom_bar_top + 0.001);
+    actions.sort_by(|a, b| a.0.partial_cmp(&b.0).unwrap_or(std::cmp::Ordering::Equal));
     if actions.is_empty() {
         return None;
     }
@@ -16000,9 +16151,14 @@ fn route_fork_swimlane_connectors(lane_shapes: &[String], arrow_color: &str) -> 
             c = arrow_color,
         )
     };
-    let slot_x = |bar: ForkBar, i: usize, n: usize, target_x: f64| -> f64 {
+    let slot_x = |bar: ForkBar, i: usize, n: usize, target_x: f64, middle_x: Option<f64>| -> f64 {
         if target_x >= bar.x - 0.001 && target_x <= bar.x + bar.w + 0.001 {
             target_x
+        } else if n == 3
+            && i == 1
+            && let Some(middle_x) = middle_x
+        {
+            middle_x
         } else if n <= 1 {
             bar.x + bar.w / 2.0
         } else {
@@ -16015,9 +16171,9 @@ fn route_fork_swimlane_connectors(lane_shapes: &[String], arrow_color: &str) -> 
     let mut other_top_edges = String::new();
     let mut other_bottom_edges = String::new();
     let branch_count = actions.len();
-    for (i, action) in actions.iter().enumerate() {
-        let top_x = slot_x(top_bar, i, branch_count, action.cx);
-        let bottom_x = slot_x(bottom_bar, i, branch_count, action.cx);
+    for (i, (_, action)) in actions.iter().enumerate() {
+        let top_x = slot_x(top_bar, i, branch_count, action.cx, start.map(|a| a.cx));
+        let bottom_x = slot_x(bottom_bar, i, branch_count, action.cx, stop.map(|a| a.cx));
         let mut top_edge = String::new();
         if (top_x - action.cx).abs() < 0.001 {
             top_edge.push_str(&line(action.cx, action.cx, top_bar_bottom, action.top));
@@ -16079,8 +16235,8 @@ fn route_fork_swimlane_connectors(lane_shapes: &[String], arrow_color: &str) -> 
     } else {
         out.push_str(&owner_bottom_edges);
         out.push_str(&stop_edge);
-        out.push_str(&start_edge);
         out.push_str(&owner_top_edges);
+        out.push_str(&start_edge);
         out.push_str(&other_top_edges);
         out.push_str(&other_bottom_edges);
     }
@@ -16982,6 +17138,13 @@ fn layout_swimlanes_v2(
             .iter()
             .any(|pl| pl.tip.is_none());
     let fork_mode = tree_has_fork(tree);
+    let fork_branch_count = tree
+        .iter()
+        .find_map(|node| match node {
+            LayoutNode::Fork { branches, .. } => Some(branches.len()),
+            _ => None,
+        })
+        .unwrap_or(0);
     let if_long_multi_elseif_mode = if_long_collector_mode && tree_has_if_long_multi_elseif(tree);
     let if_long_split_collector_mode =
         if_long_collector_mode && tree_has_if_long_lane_backtrack(tree);
@@ -16999,6 +17162,15 @@ fn layout_swimlanes_v2(
     let (lane_minx, lane_w): (Vec<f64>, Vec<f64>) = if if_mode {
         let mut minx = vec![0.0f64; n];
         let mut w = vec![0.0f64; n];
+        let bottom_bar_y = if fork_mode {
+            (0..n)
+                .flat_map(|l| fork_bar_y_values(&shape_frags[l]))
+                .fold(None, |best: Option<f64>, y| {
+                    Some(best.map_or(y, |best| best.max(y)))
+                })
+        } else {
+            None
+        };
         for l in 0..n {
             let shape_bounds = if fork_mode {
                 x_bounds_without_fork_bars(&shape_frags[l])
@@ -17029,6 +17201,15 @@ fn layout_swimlanes_v2(
                 10.0
             };
             w[l] = (hi - lo + lane_pad).max(title_w[l] + title_pad);
+            if fork_branch_count == 3
+                && let Some(bottom_y) = bottom_bar_y
+                && fork_bar_y_values(&shape_frags[l])
+                    .iter()
+                    .any(|y| (*y - bottom_y).abs() < 0.001)
+            {
+                w[l] -=
+                    SWIM_FORK3_BOTTOM_BAR_ACTION_TRIM * count_action_rects(&shape_frags[l]) as f64;
+            }
             if if_long_split_collector_mode && l == 0 {
                 w[l] += IF_SPLIT_COLLECTOR_LANE0_EXTRA;
             }
@@ -17149,6 +17330,11 @@ fn layout_swimlanes_v2(
         })
         .collect();
     if fork_mode {
+        let bottom_bar_y = (0..n)
+            .flat_map(|l| fork_bar_y_values(&shape_frags[l]))
+            .fold(None, |best: Option<f64>, y| {
+                Some(best.map_or(y, |best| best.max(y)))
+            });
         for l in 0..n {
             if has_fork_bar(&shape_frags[l]) {
                 lane_shapes[l] = rewrite_fork_bars_for_lane(
@@ -17156,6 +17342,15 @@ fn layout_swimlanes_v2(
                     lane_left[l] + 6.0,
                     lane_w[l] - 10.0,
                 );
+                if fork_branch_count == 3
+                    && let Some(bottom_y) = bottom_bar_y
+                    && fork_bar_y_values(&shape_frags[l])
+                        .iter()
+                        .any(|y| (*y - bottom_y).abs() < 0.001)
+                {
+                    lane_shapes[l] =
+                        shift_fork3_bottom_lane_content(&lane_shapes[l], bottom_y + lane_dy[l]);
+                }
             }
         }
     }
@@ -17170,7 +17365,12 @@ fn layout_swimlanes_v2(
     // natural shapes are shifted by content_dy only (no dx) so they pair with the
     // per-lane-shifted final shapes for endpoint→shape matching.
     if if_mode && fork_mode {
-        if let Some(routed) = route_fork_swimlane_connectors(&lane_shapes, &arrow_color) {
+        let nat_shapes: Vec<String> = (0..n)
+            .map(|l| crate::compress::shift_y(&shape_frags[l], content_dy))
+            .collect();
+        if let Some(routed) =
+            route_fork_swimlane_connectors(&nat_shapes, &lane_shapes, &arrow_color)
+        {
             lane_conns = vec![String::new(); n];
             if n > 0 {
                 lane_conns[0] = routed;
