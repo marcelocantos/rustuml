@@ -18470,6 +18470,8 @@ fn layout_swimlanes_v2(
         .map(|(shape_off, conn_off, lane)| (shape_off - shape_base, conn_off - conn_base, *lane))
         .collect();
     let shape_frags = partition_lane_buffer(&svg.shapes[shape_base..], &adjusted_spans, |s| s.0, n);
+    let raw_conn_frags =
+        partition_lane_buffer(&svg.connectors[conn_base..], &adjusted_spans, |s| s.1, n);
 
     // Connectors: start from the byte-offset partition, then RELABEL by natural
     // y-band. The single-tree emit defers some connectors (notably each
@@ -18483,7 +18485,6 @@ fn layout_swimlanes_v2(
     let lane_yband: Vec<(f64, f64)> = (0..n)
         .map(|l| svg_y_bounds(&shape_frags[l]).unwrap_or((f64::MIN, f64::MAX)))
         .collect();
-    let conn_frags = relabel_connectors_by_yband(&svg.connectors[conn_base..], &lane_yband);
 
     if std::env::var("RUSTUML_EXT_DBG").is_ok() {
         eprintln!("[V2] natural_start_y={natural_start_y}");
@@ -18532,6 +18533,16 @@ fn layout_swimlanes_v2(
             _ => None,
         })
         .unwrap_or(0);
+    let conn_frags = if if_mode && fork_mode && fork_branch_count == 0 {
+        // A fork nested inside an `if` overlaps several lane contents in the
+        // same natural y-band, so y-band relabeling collapses unrelated
+        // connectors into the first lane. The byte spans are the better owner
+        // signal here: each LaneMark has switched the active lane before the
+        // nested branch body emits.
+        raw_conn_frags
+    } else {
+        relabel_connectors_by_yband(&svg.connectors[conn_base..], &lane_yband)
+    };
     let top_bar_y = if fork_mode {
         (0..n)
             .flat_map(|l| fork_bar_y_values(&shape_frags[l]))
