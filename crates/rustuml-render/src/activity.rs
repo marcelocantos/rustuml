@@ -1635,7 +1635,8 @@ fn swimlane_v2_can_handle(steps: &[ActivityStep], is_swimlane: bool) -> bool {
     let has_fork = steps.iter().any(|s| matches!(s, ActivityStep::Fork));
     if has_fork {
         return swimlane_v2_can_handle_simple_fork(steps)
-            || swimlane_v2_can_handle_nested_while_fork(steps);
+            || swimlane_v2_can_handle_nested_while_fork(steps)
+            || swimlane_v2_can_handle_nested_if_fork(steps);
     }
     if swimlane_v2_can_handle_simple_while_lane_switch(steps) {
         return true;
@@ -1713,6 +1714,46 @@ fn swimlane_v2_can_handle_nested_while_fork(steps: &[ActivityStep]) -> bool {
             ActivityStep::While(_) => while_depth += 1,
             ActivityStep::EndWhile(_) => while_depth -= 1,
             ActivityStep::Fork if if_depth > 0 && while_depth > 0 => nested_fork = true,
+            ActivityStep::Start
+            | ActivityStep::Stop
+            | ActivityStep::End
+            | ActivityStep::Action(_)
+            | ActivityStep::ElseIf(_)
+            | ActivityStep::Else(_)
+            | ActivityStep::Fork
+            | ActivityStep::ForkAgain
+            | ActivityStep::EndFork
+            | ActivityStep::Swimlane(_) => {}
+            _ => return false,
+        }
+    }
+    nested_fork
+}
+
+fn swimlane_v2_can_handle_nested_if_fork(steps: &[ActivityStep]) -> bool {
+    let fork_count = steps
+        .iter()
+        .filter(|s| matches!(s, ActivityStep::Fork))
+        .count();
+    let fork_again_count = steps
+        .iter()
+        .filter(|s| matches!(s, ActivityStep::ForkAgain))
+        .count();
+    let end_fork_count = steps
+        .iter()
+        .filter(|s| matches!(s, ActivityStep::EndFork))
+        .count();
+    if fork_count != 1 || !(1..=5).contains(&fork_again_count) || end_fork_count != 1 {
+        return false;
+    }
+
+    let mut if_depth = 0i32;
+    let mut nested_fork = false;
+    for step in steps {
+        match step {
+            ActivityStep::If(_) => if_depth += 1,
+            ActivityStep::EndIf => if_depth -= 1,
+            ActivityStep::Fork if if_depth > 0 => nested_fork = true,
             ActivityStep::Start
             | ActivityStep::Stop
             | ActivityStep::End
@@ -18996,7 +19037,7 @@ fn layout_swimlanes_v2(
     // polylines' routing assumed the single-tree side-by-side branch layout. The
     // natural shapes are shifted by content_dy only (no dx) so they pair with the
     // per-lane-shifted final shapes for endpoint→shape matching.
-    if if_mode && fork_mode {
+    if if_mode && fork_mode && fork_branch_count > 0 {
         if !tree_has_while_with_fork(tree) {
             let nat_shapes: Vec<String> = (0..n)
                 .map(|l| crate::compress::shift_y(&shape_frags[l], content_dy))
@@ -19010,7 +19051,7 @@ fn layout_swimlanes_v2(
                 }
             }
         }
-    } else if if_mode {
+    } else if if_mode && !fork_mode {
         let nat_shapes: Vec<String> = (0..n)
             .map(|l| crate::compress::shift_y(&shape_frags[l], content_dy))
             .collect();
