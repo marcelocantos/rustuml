@@ -263,6 +263,26 @@ targets:
     origin: subdivide(🎯T4.1)
     discovered: 2026-06-21
     achieved: 2026-06-21
+  T4.1.13:
+    name: Core activity swimlane primitives use PlantUML connector streams
+    status: achieved
+    value: 0.0
+    cost: 0.0
+    actual_cost: 3.0
+    acceptance:
+    - '`activity/act_swimlane_with_fork` passes strict-XML comparison.'
+    - '`activity/act_swimlane_with_if` passes strict-XML comparison.'
+    - '`activity/act_swimlane_with_while` passes strict-XML comparison.'
+    - No new failure names appear compared with `/private/tmp/rustuml-t4.1.12-failures.txt`.
+    - '`cargo fmt --check`, `cargo clippy -- -D warnings`, and `cargo test --lib` pass.'
+    context: Created after 🎯T4.1.12 reduced the full strict-XML ledger from 50 to 42 failures. The remaining direct swimlane primitives fail primarily on PlantUML connector stream/order and lane geometry, and they are likely upstream of larger scenario failures such as `act_swimlane_all_features` and `combo_workflow_swimlanes`.
+    tags:
+    - activity
+    - strict-xml
+    - swimlane
+    origin: subdivide(🎯T4.1)
+    discovered: 2026-06-21
+    achieved: 2026-06-21
   T4.1.2:
     name: Swimlane V2 fork lane-spanning diagrams match PlantUML geometry
     status: achieved
