@@ -344,6 +344,24 @@ targets:
     origin: manual
     discovered: 2026-06-21
     achieved: 2026-06-21
+  T4.1.8:
+    name: Activity while-contained fork combo matches PlantUML geometry
+    status: achieved
+    value: 0.0
+    cost: 0.0
+    actual_cost: 2.0
+    acceptance:
+    - '`diff_one act_combo_while_fork_2.puml` reports SVGs are structurally equivalent.'
+    - Full golden no new names vs `/private/tmp/rustuml-baseline-t4.1.7-56.txt` and removes `activity/act_combo_while_fork_2`.
+    context: 'After 🎯T4.1.7, the 56-name ledger leaves `act_combo_while_fork_2` as a compact coordinate-only miss: a while node containing a three-branch fork is horizontally narrow by about 5.4141px, shifting the central spine left by 2.707px while preserving element order and counts.'
+    tags:
+    - activity
+    - golden
+    - fork
+    - while
+    origin: subdivide(🎯T4.1)
+    discovered: 2026-06-21
+    achieved: 2026-06-21
   T4.10:
     name: Shared-file infrastructure gaps blocking multiple strict-XML buckets are closed
     status: achieved
