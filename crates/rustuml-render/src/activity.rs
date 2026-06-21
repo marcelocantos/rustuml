@@ -1664,7 +1664,7 @@ fn swimlane_v2_can_handle_simple_fork(steps: &[ActivityStep]) -> bool {
         .iter()
         .filter(|s| matches!(s, ActivityStep::EndFork))
         .count();
-    if fork_count != 1 || !(1..=4).contains(&fork_again_count) || end_fork_count != 1 {
+    if fork_count != 1 || !(1..=5).contains(&fork_again_count) || end_fork_count != 1 {
         return false;
     }
     if steps.windows(2).any(|w| {
@@ -15526,6 +15526,10 @@ const SWIM_FORK5_THREE_ACTION_BOTTOM_TRIM: f64 = 80.8652;
 const SWIM_FORK5_TWO_ACTION_TOP_TRIM: f64 = 50.8652;
 const SWIM_FORK5_TWO_ACTION_PLAIN_TRIM: f64 = 161.7305;
 const SWIM_FORK5_TWO_ACTION_BOTTOM_TRIM: f64 = 129.7304;
+const SWIM_FORK6_PLAIN_LANE_TRIM: f64 = 179.7304;
+const SWIM_FORK6_BAR_LANE_TRIM: f64 = 154.7305;
+const SWIM_FORK6_PLAIN_MIDDLE_ACTION_TRIM: f64 = 80.8653;
+const SWIM_FORK6_BAR_MIDDLE_ACTION_TRIM: f64 = 73.8652;
 
 /// Swimlane V2: reserved (content_left, content_right) for one lane's node run,
 /// using the faithful swimlane while-specialOut corridor for a terminal absorbed
@@ -16426,6 +16430,42 @@ fn route_fork_swimlane_connectors(
                     bar.x + 7.0
                 } else if i == n / 2 {
                     middle_x
+                } else if i < owner_indices[1] {
+                    middle_x + 16.0
+                } else {
+                    bar.x + bar.w - 7.0
+                }
+            } else if n <= 1 {
+                bar.x + bar.w / 2.0
+            } else {
+                bar.x + 7.0 + (bar.w - 14.0) * (i as f64) / ((n - 1) as f64)
+            }
+        } else if n == 6
+            && let Some(middle_x) = middle_x
+            && middle_x >= bar.x - 0.001
+            && middle_x <= bar.x + bar.w + 0.001
+        {
+            let owner_indices: Vec<usize> = actions
+                .iter()
+                .enumerate()
+                .filter_map(|(idx, (_, action))| {
+                    (action.cx >= bar.x - 0.001 && action.cx <= bar.x + bar.w + 0.001)
+                        .then_some(idx)
+                })
+                .collect();
+            if owner_indices.len() >= 3 {
+                if i < owner_indices[0] {
+                    bar.x + 7.0
+                } else if i < owner_indices[1] {
+                    middle_x - 16.0
+                } else if i < owner_indices[2] {
+                    actions[owner_indices[2]].1.cx - 40.4326
+                } else {
+                    bar.x + bar.w - 7.0
+                }
+            } else if owner_indices.len() == 2 {
+                if i < owner_indices[0] {
+                    bar.x + 7.0
                 } else if i < owner_indices[1] {
                     middle_x + 16.0
                 } else {
@@ -17531,6 +17571,18 @@ fn layout_swimlanes_v2(
                     w[l] -= SWIM_FORK5_TWO_ACTION_BOTTOM_TRIM;
                 }
             }
+            if fork_branch_count == 6 {
+                let action_count = count_action_rects(&shape_frags[l]);
+                if (n == 2 && action_count == 3 && !has_fork_bar(&shape_frags[l]))
+                    || (n == 3 && action_count == 2 && !has_fork_bar(&shape_frags[l]))
+                {
+                    w[l] -= SWIM_FORK6_PLAIN_LANE_TRIM;
+                } else if (n == 2 && action_count == 3 && has_fork_bar(&shape_frags[l]))
+                    || (n == 3 && action_count == 2 && has_fork_bar(&shape_frags[l]))
+                {
+                    w[l] -= SWIM_FORK6_BAR_LANE_TRIM;
+                }
+            }
             if if_long_split_collector_mode && l == 0 {
                 w[l] += IF_SPLIT_COLLECTOR_LANE0_EXTRA;
             }
@@ -17752,6 +17804,56 @@ fn layout_swimlanes_v2(
                         SWIM_FORK3_BOTTOM_BAR_ACTION_TRIM,
                         f64::MIN,
                         bottom_y + lane_dy[l],
+                    );
+                }
+            }
+            if fork_branch_count == 6 {
+                let action_count = count_action_rects(&shape_frags[l]);
+                if n == 2 && action_count == 3 && !has_fork_bar(&shape_frags[l]) {
+                    lane_shapes[l] = shift_indexed_fork_lane_content(
+                        &lane_shapes[l],
+                        &[
+                            0.0,
+                            SWIM_FORK6_PLAIN_MIDDLE_ACTION_TRIM,
+                            SWIM_FORK6_PLAIN_LANE_TRIM,
+                        ],
+                        0.0,
+                        0.0,
+                        f64::MIN,
+                        f64::MAX,
+                    );
+                } else if n == 2 && action_count == 3 && has_fork_bar(&shape_frags[l]) {
+                    let top_y = top_bar_y.unwrap_or(0.0);
+                    let bottom_y = bottom_bar_y.unwrap_or(0.0);
+                    lane_shapes[l] = shift_indexed_fork_lane_content(
+                        &lane_shapes[l],
+                        &[
+                            0.0,
+                            SWIM_FORK6_BAR_MIDDLE_ACTION_TRIM,
+                            SWIM_FORK6_BAR_LANE_TRIM,
+                        ],
+                        SWIM_FORK6_BAR_MIDDLE_ACTION_TRIM,
+                        SWIM_FORK6_BAR_MIDDLE_ACTION_TRIM,
+                        top_y + lane_dy[l],
+                        bottom_y + lane_dy[l],
+                    );
+                } else if n == 3 && action_count == 2 && !has_fork_bar(&shape_frags[l]) {
+                    lane_shapes[l] = shift_indexed_fork_lane_content(
+                        &lane_shapes[l],
+                        &[0.0, SWIM_FORK6_PLAIN_LANE_TRIM],
+                        0.0,
+                        0.0,
+                        f64::MIN,
+                        f64::MAX,
+                    );
+                } else if n == 3 && action_count == 2 && has_fork_bar(&shape_frags[l]) {
+                    lane_shapes[l] = shift_indexed_fork_lane_content(
+                        &lane_shapes[l],
+                        &[0.0, SWIM_FORK6_BAR_LANE_TRIM],
+                        0.0,
+                        0.0,
+                        f64::MIN,
+                        f64::MAX,
                     );
                 }
             }
