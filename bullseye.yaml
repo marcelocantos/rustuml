@@ -203,6 +203,7 @@ targets:
       NEXT WORK: choose the next activity-led failure cluster from `test-diagrams/golden_failure_names.txt` under the 69-failure ledger. Likely remaining leverage is still swimlane fork/composite cases and activity-shaped edge/rendering buckets; verify any candidate by comparing against `/private/tmp/rustuml-baseline-93d34d2c-72.txt` (or a refreshed 69-name baseline) and requiring `comm -13` to stay empty. User directive: NO releases until explicitly told, even if `/cv` recommends one.
     depends_on:
     - T4.1.1
+    - T4.1.10
     origin: manual
     discovered: 2026-05-17
   T4.1.1:
@@ -219,6 +220,20 @@ targets:
     context: 'Created 2026-06-20 from the latest Claude handoff plus Codex follow-up. Starting point: master `93d34d2c` with 72 total golden failures and baseline ledger copied to `/private/tmp/rustuml-baseline-93d34d2c-72.txt`. Claude''s PlantUML instrumentation for `act_elseif3_swim3` established the exact lane-ownership rule for MinMax: a connector draws into lane L iff `tile1.getSwimlaneOut() in {L, null}` and `tile2.getSwimlaneIn() in {L, null}`; `null/null` connectors, especially if-long `ConnectionHline`, draw into every lane; cross-lane non-null/non-null connectors are excluded. Codex WIP in `crates/rustuml-render/src/activity.rs` added connector byte-span metadata plus if-long `(out_lane, in_lane)` tagging and unioned tagged connector x-bounds into swimlane V2 if-mode lane MinMax. It compiles and preserves the simple guard cases, but it is not commit-worthy yet: the three target elseif cases still fail. `RUSTUML_EXT_DBG=1 diff_one act_elseif3_swim3` after the WIP shows Lane1 MinMax moved close to PlantUML (`lane_w=222.789`, target divider width roughly 220.55) while Lane3 becomes over-wide (`lane_w=218.415` before ON_X). More importantly, `route_if_cross_lane_connectors` still bails on branch-to-merge-line polylines (`unmatched src=(57.6089, 174.584) tip=(57.6089, 218.0615)`), because the target is the if-long merge hline rather than a shape anchor. `if_long_vmetrics` also leaves the populated bare-else/merge band about 24 px too tall in the swimlane V2 if-long shape (actual height 281 vs expected 256 for `act_elseif3_swim3`). Next session should either continue from the uncommitted WIP or recreate it, then make the router/vertical merge-band model faithful before committing. Do not release; user explicitly disallowed releases.'
     origin: manual
     discovered: 2026-06-20
+    achieved: 2026-06-21
+  T4.1.10:
+    name: Activity fork branches reserve PlantUML-style compound-loop slots
+    status: achieved
+    value: 0.0
+    cost: 0.0
+    actual_cost: 3.0
+    acceptance:
+    - '`activity/act_complex_loop_in_fork` passes strict XML comparison.'
+    - No new strict-XML failure names appear in the full golden-pairs ledger compared with the 54-failure T4 baseline.
+    - 'Fast Rust gates pass: `cargo fmt --check`, `cargo clippy -- -D warnings`, and `cargo test --lib`.'
+    context: 'Created 2026-06-21 after T4.1.9. The remaining non-swimlane activity failures include fork branches whose visible loop tiles are emitted inside taller PlantUML branch slots. `act_complex_loop_in_fork` is the smallest sampled case: both branches are loop tiles (`while` and `repeat`) and RustUML currently emits them too high, joins too early, and keeps the fork bar too wide. Model this as advertised fork-branch geometry, then verify the full ledger stays monotonic.'
+    origin: subdivide(🎯T4.1)
+    discovered: 2026-06-21
     achieved: 2026-06-21
   T4.1.2:
     name: Swimlane V2 fork lane-spanning diagrams match PlantUML geometry
