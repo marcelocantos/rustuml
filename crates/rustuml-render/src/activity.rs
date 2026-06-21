@@ -2482,6 +2482,12 @@ const FORK_BRANCH_WHILE_LEFT_TRIM: f64 = 9.0;
 const FORK_BRANCH_WHILE_RIGHT_TRIM: f64 = 23.0;
 const FORK_BRANCH_WHILE_SIBLING_CENTER_EXTRA: f64 = 1.0;
 const FORK_BRANCH_WHILE_EXIT_ARROW_PUSH_DOWN: f64 = 1.0;
+/// A two-way fork whose branches are a simple `while` loop and a simple
+/// `repeat` loop keeps the loop tiles in PlantUML's uncompressed branch slots.
+/// The while branch shifts as a whole; the repeat keeps its entry diamond near
+/// the fork bar and distributes the slack around the body/condition.
+const FORK_BRANCH_LOOP_SLOT_HALF: f64 = 27.0;
+const FORK_BRANCH_REPEAT_TAIL_EXTRA: f64 = 26.0;
 /// Gap below the deepest branch to the join bar when every branch terminates
 /// (no ConnectionOut arrows reach the bar — half the usual ARROW_LEN reserve).
 const FORK_TERMINATING_JOIN_GAP: f64 = 10.0;
@@ -2575,9 +2581,43 @@ fn fork_branch_while_slot_opens(branch: &[LayoutNode]) -> bool {
     )
 }
 
+fn branch_is_simple_while_loop(branch: &[LayoutNode]) -> bool {
+    matches!(
+        branch,
+        [LayoutNode::While {
+            body,
+            is_label: Some(_),
+            end_label: None,
+            special_out: None,
+            ..
+        }] if matches!(body.as_slice(), [LayoutNode::Action { .. }])
+    )
+}
+
+fn branch_is_simple_repeat_loop(branch: &[LayoutNode]) -> bool {
+    matches!(
+        branch,
+        [LayoutNode::Repeat {
+            body,
+            backward: None,
+            has_start_label: false,
+            ..
+        }] if matches!(body.as_slice(), [LayoutNode::Action { .. }])
+    )
+}
+
+fn fork_branches_are_simple_while_repeat_pair(branches: &[Vec<LayoutNode>]) -> bool {
+    matches!(branches, [a, b] if (branch_is_simple_while_loop(a) && branch_is_simple_repeat_loop(b))
+        || (branch_is_simple_repeat_loop(a) && branch_is_simple_while_loop(b)))
+}
+
 fn sequence_height_fork_branch(branch: &[LayoutNode], gap_extra: f64) -> f64 {
     let extra = if fork_branch_while_slot_opens(branch) {
         WHILE_BODY_SLOT_COMPRESS
+    } else if branch_is_simple_repeat_loop(branch) {
+        FORK_BRANCH_LOOP_SLOT_HALF + FORK_BRANCH_REPEAT_TAIL_EXTRA
+    } else if branch_is_simple_while_loop(branch) {
+        FORK_BRANCH_LOOP_SLOT_HALF
     } else {
         0.0
     };
@@ -2704,7 +2744,8 @@ fn fork_layout(branches: &[Vec<LayoutNode>]) -> ForkLayout {
     } else {
         FORK_EVEN_MIDDLE_EXTRA
     };
-    let bar_w = FORK_INNER_PAD * 2.0 + total_branch_w + inter_gaps * FORK_BRANCH_GAP + even_extra;
+    let mut bar_w =
+        FORK_INNER_PAD * 2.0 + total_branch_w + inter_gaps * FORK_BRANCH_GAP + even_extra;
     let mut centers = Vec::with_capacity(n);
     if n == 1 {
         centers.push(bar_w / 2.0);
@@ -2725,6 +2766,14 @@ fn fork_layout(branches: &[Vec<LayoutNode>]) -> ForkLayout {
                     0.0
                 };
                 x += FORK_BRANCH_GAP + extra;
+            }
+        }
+    }
+    if fork_branches_are_simple_while_repeat_pair(branches) {
+        bar_w -= FORK_BRANCH_LOOP_SLOT_HALF - 1.0;
+        for (i, center) in centers.iter_mut().enumerate() {
+            if i > 0 {
+                *center -= FORK_BRANCH_INTER_GAP_EXTRA;
             }
         }
     }
@@ -8028,6 +8077,11 @@ struct SvgEmitter {
     /// while. PlantUML keeps that while's inbound label slot open inside the
     /// branch instead of applying the ordinary standalone slot compression.
     fork_branch_while_slot_open: bool,
+    /// One-shot vertical slack for a simple `repeat` emitted as a fork branch in
+    /// a simple while/repeat pair. PlantUML keeps the entry diamond high, then
+    /// lowers the repeat body and condition inside the branch slot.
+    fork_branch_repeat_body_extra: f64,
+    fork_branch_repeat_tail_extra: f64,
     /// Context for a `break` nested in an `if` inside the current `while` body.
     /// PlantUML collects each `FtileBreak` welding point and (in
     /// `FtileFactoryDelegatorWhile.createWhile`) draws a left-pointing arrow from
@@ -8392,6 +8446,8 @@ impl SvgEmitter {
             fork_branch_gap_extra: 0.0,
             while_body_fork_layout: None,
             fork_branch_while_slot_open: false,
+            fork_branch_repeat_body_extra: 0.0,
+            fork_branch_repeat_tail_extra: 0.0,
             while_break: None,
             while_break_loopback_fused: false,
             repeat_break_weld_y: None,
@@ -13712,6 +13768,7 @@ fn emit_fork_with_layout(
         return y;
     }
 
+    let simple_while_repeat_pair = fork_branches_are_simple_while_repeat_pair(branches);
     let bar_w = layout.bar_w;
 
     // Top bar
@@ -13818,6 +13875,41 @@ fn emit_fork_with_layout(
         branches.iter().map(|b| branch_terminates(b)).collect();
 
     let mut branch_bottoms = Vec::new();
+    let predicted_bottom_bar_y = if simple_while_repeat_pair {
+        let bottoms = branches
+            .iter()
+            .zip(branch_centers.iter())
+            .enumerate()
+            .filter_map(|(i, (branch, _))| {
+                if branch.is_empty() {
+                    None
+                } else {
+                    let branch_y = if single_partition_branch_body_top(branch, bar_bottom).is_some()
+                    {
+                        bar_bottom
+                    } else {
+                        let start_lead = if matches!(branch.first(), Some(LayoutNode::Start)) {
+                            START_R
+                        } else {
+                            0.0
+                        };
+                        let loop_pair_adjust = if branch_is_simple_while_loop(branch) {
+                            0.5
+                        } else if branch_is_simple_repeat_loop(branch) {
+                            -1.0
+                        } else {
+                            0.0
+                        };
+                        bar_bottom + ARROW_LEN + center_offsets[i] + start_lead + loop_pair_adjust
+                    };
+                    Some(branch_y + sequence_height_fork_branch(branch, gap_extra))
+                }
+            })
+            .fold(0.0f64, f64::max);
+        Some(bottoms + ARROW_LEN + 1.0)
+    } else {
+        None
+    };
     for (i, (branch, &bcx)) in branches.iter().zip(branch_centers.iter()).enumerate() {
         let branch_y = if single_partition_branch_body_top(branch, bar_bottom).is_some() {
             bar_bottom
@@ -13832,15 +13924,36 @@ fn emit_fork_with_layout(
             } else {
                 0.0
             };
-            bar_bottom + ARROW_LEN + center_offsets[i] + start_lead
+            let loop_pair_adjust =
+                if simple_while_repeat_pair && branch_is_simple_while_loop(branch) {
+                    0.5
+                } else if simple_while_repeat_pair && branch_is_simple_repeat_loop(branch) {
+                    -1.0
+                } else {
+                    0.0
+                };
+            bar_bottom + ARROW_LEN + center_offsets[i] + start_lead + loop_pair_adjust
         };
         // A leading nude switch (>= 3 cases) in this branch emits its
         // `FtileSwitchNude` layout (see `fork_branch_switch_is_nude`); flag it so
         // `emit_switch` selects the nude layout. One-shot, consumed by
         // `emit_switch`.
         svg.fork_body_switch = fork_branch_nude_switch(branch).is_some();
+        if simple_while_repeat_pair && branch_is_simple_repeat_loop(branch) {
+            svg.fork_branch_repeat_body_extra = FORK_BRANCH_LOOP_SLOT_HALF + 1.0;
+            svg.fork_branch_repeat_tail_extra = FORK_BRANCH_REPEAT_TAIL_EXTRA;
+        }
         let bottom = emit_fork_branch_sequence(svg, branch, bcx, branch_y);
+        svg.fork_branch_repeat_body_extra = 0.0;
+        svg.fork_branch_repeat_tail_extra = 0.0;
         svg.fork_body_switch = false;
+        if simple_while_repeat_pair
+            && branch_is_simple_while_loop(branch)
+            && !branch_terminates_flags[i]
+            && let Some(bottom_bar_y) = predicted_bottom_bar_y
+        {
+            svg.down_arrow(bcx, bottom, bottom_bar_y, &arrow_color);
+        }
         branch_bottoms.push(bottom);
     }
     svg.fork_branch_gap_extra = saved_gap_extra;
@@ -13867,7 +13980,10 @@ fn emit_fork_with_layout(
     // loop's branch-local connectors as a unit before returning to the fork's
     // top connector pass.
     for (i, (branch, bottom)) in branches.iter().zip(branch_bottoms.iter()).enumerate() {
-        if branch.is_empty() || branch_terminates_flags[i] || !fork_branch_while_slot_opens(branch)
+        if branch.is_empty()
+            || branch_terminates_flags[i]
+            || !fork_branch_while_slot_opens(branch)
+            || (simple_while_repeat_pair && branch_is_simple_while_loop(branch))
         {
             continue;
         }
@@ -13875,7 +13991,13 @@ fn emit_fork_with_layout(
         let branch_y = if single_partition_branch_body_top(branch, bar_bottom).is_some() {
             bar_bottom
         } else {
-            bar_bottom + ARROW_LEN + center_offsets[i]
+            let loop_pair_adjust =
+                if simple_while_repeat_pair && branch_is_simple_repeat_loop(branch) {
+                    -1.0
+                } else {
+                    0.0
+                };
+            bar_bottom + ARROW_LEN + center_offsets[i] + loop_pair_adjust
         };
         let arrow_top = single_partition_branch_body_bottom(branch, branch_y).unwrap_or(*bottom);
         svg.down_arrow(bcx, arrow_top, bottom_bar_y, &arrow_color);
@@ -13893,10 +14015,17 @@ fn emit_fork_with_layout(
         let branch_y = if single_partition_branch_body_top(branch, bar_bottom).is_some() {
             bar_bottom
         } else {
-            bar_bottom + ARROW_LEN + center_offsets[i]
+            let loop_pair_adjust =
+                if simple_while_repeat_pair && branch_is_simple_while_loop(branch) {
+                    0.5
+                } else if simple_while_repeat_pair && branch_is_simple_repeat_loop(branch) {
+                    -1.0
+                } else {
+                    0.0
+                };
+            bar_bottom + ARROW_LEN + center_offsets[i] + loop_pair_adjust
         };
-        let arrow_bottom = single_partition_branch_body_top(branch, branch_y)
-            .unwrap_or(bar_bottom + ARROW_LEN + center_offsets[i]);
+        let arrow_bottom = single_partition_branch_body_top(branch, branch_y).unwrap_or(branch_y);
         svg.down_arrow(bcx, bar_bottom, arrow_bottom, &arrow_color);
     }
 
@@ -13910,7 +14039,13 @@ fn emit_fork_with_layout(
         let branch_y = if single_partition_branch_body_top(branch, bar_bottom).is_some() {
             bar_bottom
         } else {
-            bar_bottom + ARROW_LEN + center_offsets[i]
+            let loop_pair_adjust =
+                if simple_while_repeat_pair && branch_is_simple_repeat_loop(branch) {
+                    -1.0
+                } else {
+                    0.0
+                };
+            bar_bottom + ARROW_LEN + center_offsets[i] + loop_pair_adjust
         };
         let arrow_top = single_partition_branch_body_bottom(branch, branch_y).unwrap_or(*bottom);
         svg.down_arrow(bcx, arrow_top, bottom_bar_y, &arrow_color);
@@ -15011,7 +15146,11 @@ fn emit_repeat(
     } else {
         0.0
     };
-    let body_top_extra = options.body_top_extra + if if_long_active { if_long_extra } else { 0.0 };
+    let fork_branch_body_extra = std::mem::take(&mut svg.fork_branch_repeat_body_extra);
+    let fork_branch_tail_extra = std::mem::take(&mut svg.fork_branch_repeat_tail_extra);
+    let body_top_extra = options.body_top_extra
+        + if if_long_active { if_long_extra } else { 0.0 }
+        + fork_branch_body_extra;
     // The loop-back arrowhead anchors on the ABSTRACT (uncompressed) frame centre,
     // not the drawn body position. In the if-long branch that frame is
     // `IF_LONG_REPEAT_CENTERING_EXTRA` taller than the emitted `branch_h` (the
@@ -15184,7 +15323,8 @@ fn emit_repeat(
         + repeat_backward_extra_cond_gap(body, backward.is_some())
         + nested_cond_extra
         + if_long_cond_extra
-        + while_tail_extra;
+        + while_tail_extra
+        + fork_branch_tail_extra;
 
     // Top entry diamond (small rhombus at y). `repeat :label;` replaces this
     // diamond with the labelled action as the loop entry tile.
@@ -15541,6 +15681,11 @@ fn emit_repeat(
                 - nested_bias
                 - loopback_arrow_bias
                 - while_tail_extra / 2.0
+                + if fork_branch_tail_extra != 0.0 {
+                    1.0
+                } else {
+                    0.0
+                }
         };
         svg.polygon_connector(
             &arrow_color,
