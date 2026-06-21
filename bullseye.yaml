@@ -283,6 +283,32 @@ targets:
     origin: subdivide(🎯T4.1)
     discovered: 2026-06-21
     achieved: 2026-06-21
+  T4.1.14:
+    name: Nested swimlane branch workflows use the single-tree lane model
+    status: identified
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - '`activity/act_business_expense_report` passes strict-XML comparison.'
+    - '`activity/act_swimlane_shopping_cart` passes strict-XML comparison or is reduced to a fork-specific residual after the nested branch lane model is accepted.'
+    - No new failure names appear compared with `/private/tmp/rustuml-t4.1.13-failures.txt`.
+    - '`cargo fmt --check`, `cargo clippy -- -D warnings`, and `cargo test --lib` pass.'
+    context: Created after 🎯T4.1.13 reduced the activity-led ledger to 39 failures. The remaining activity bucket is dominated by real workflow diagrams with lane changes inside nested if/fork/while bodies; this child tracks broadening the V2 swimlane single-tree model beyond the small primitive gates.
+    origin: subdivide(🎯T4.1)
+    discovered: 2026-06-21
+  T4.1.15:
+    name: Nested activity algorithm flows use PlantUML loop/branch geometry
+    status: identified
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - '`activity/act_algo_bfs` passes strict-XML comparison.'
+    - '`activity/act_while_break_nested_if` passes strict-XML comparison or is reduced to a documented break-corridor residual after the nested branch/loop geometry is corrected.'
+    - No new failure names appear compared with `/private/tmp/rustuml-t4.1.13-failures.txt`.
+    - '`cargo fmt --check`, `cargo clippy -- -D warnings`, and `cargo test --lib` pass.'
+    context: Created from the 39-name T4.1.13 ledger after the swimlane/title groundwork showed the remaining real workflow failures are not only lane-column issues. Several non-swimlane algorithm fixtures share nested while/if geometry and break-corridor behavior.
+    origin: subdivide(🎯T4.1)
+    discovered: 2026-06-21
   T4.1.2:
     name: Swimlane V2 fork lane-spanning diagrams match PlantUML geometry
     status: achieved
