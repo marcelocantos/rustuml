@@ -204,6 +204,7 @@ targets:
     depends_on:
     - T4.1.1
     - T4.1.10
+    - T4.1.11
     origin: manual
     discovered: 2026-05-17
   T4.1.1:
@@ -232,6 +233,19 @@ targets:
     - No new strict-XML failure names appear in the full golden-pairs ledger compared with the 54-failure T4 baseline.
     - 'Fast Rust gates pass: `cargo fmt --check`, `cargo clippy -- -D warnings`, and `cargo test --lib`.'
     context: 'Created 2026-06-21 after T4.1.9. The remaining non-swimlane activity failures include fork branches whose visible loop tiles are emitted inside taller PlantUML branch slots. `act_complex_loop_in_fork` is the smallest sampled case: both branches are loop tiles (`while` and `repeat`) and RustUML currently emits them too high, joins too early, and keeps the fork bar too wide. Model this as advertised fork-branch geometry, then verify the full ledger stays monotonic.'
+    origin: subdivide(🎯T4.1)
+    discovered: 2026-06-21
+    achieved: 2026-06-21
+  T4.1.11:
+    name: Activity fork branches containing while-if loops reserve compressed PlantUML slots
+    status: achieved
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - '`activity/act_complex_fork2_while_if`, `activity/act_complex_fork3_while_if`, and `activity/act_complex_fork4_while_if` pass strict XML comparison.'
+    - No new strict-XML failure names appear in the full golden-pairs ledger compared with `/private/tmp/rustuml-baseline-t4.1.10-53.txt`.
+    - 'Fast Rust gates pass: `cargo fmt --check`, `cargo clippy -- -D warnings`, and `cargo test --lib`.'
+    context: Created 2026-06-21 after T4.1.10. The next sampled fork cluster has branches shaped as `while (...) { if (...) ... }`. RustUML emits each branch one `WHILE_BODY_SLOT_COMPRESS` lower and keeps a too-wide fork lattice. Model the branch class directly rather than coordinate-patching each arity.
     origin: subdivide(🎯T4.1)
     discovered: 2026-06-21
     achieved: 2026-06-21
