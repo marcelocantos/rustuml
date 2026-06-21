@@ -2732,6 +2732,68 @@ fn fork_layout(branches: &[Vec<LayoutNode>]) -> ForkLayout {
     }
 }
 
+fn following_flow_node(nodes: &[LayoutNode], i: usize) -> Option<&LayoutNode> {
+    nodes.iter().skip(i + 1).find(|node| node_is_flow(node))
+}
+
+fn while_body_fork_following_action_extra(
+    nodes: &[LayoutNode],
+    i: usize,
+    branches: &[Vec<LayoutNode>],
+) -> f64 {
+    if branches.len() != 3
+        || !branches
+            .iter()
+            .all(|branch| matches!(branch.as_slice(), [LayoutNode::Action { .. }]))
+    {
+        return 0.0;
+    }
+    let Some(next) = following_flow_node(nodes, i) else {
+        return 0.0;
+    };
+    if !matches!(next, LayoutNode::Action { .. }) {
+        return 0.0;
+    }
+    let widest_branch = branches
+        .iter()
+        .map(|branch| sequence_width(branch))
+        .fold(0.0f64, f64::max);
+    (node_width(next) - widest_branch).max(0.0)
+}
+
+fn fork_layout_with_following_action(mut layout: ForkLayout, extra: f64) -> ForkLayout {
+    if extra <= 0.0 || layout.centers.len() < 2 {
+        return layout;
+    }
+    let last = layout.centers.len() - 1;
+    layout.bar_w += extra;
+    for (i, center) in layout.centers.iter_mut().enumerate() {
+        *center += extra * i as f64 / last as f64;
+    }
+    layout
+}
+
+fn while_body_fork_layout(nodes: &[LayoutNode], i: usize, node: &LayoutNode) -> Option<ForkLayout> {
+    let LayoutNode::Fork {
+        branches,
+        is_split: false,
+        merge: false,
+        ..
+    } = node
+    else {
+        return None;
+    };
+    let extra = while_body_fork_following_action_extra(nodes, i, branches);
+    if extra > 0.0 {
+        Some(fork_layout_with_following_action(
+            fork_layout(branches),
+            extra,
+        ))
+    } else {
+        None
+    }
+}
+
 fn split_layout(branches: &[Vec<LayoutNode>]) -> ForkLayout {
     let branch_extents: Vec<(f64, f64)> = branches.iter().map(|b| sequence_extents(b)).collect();
     let branch_widths: Vec<f64> = branch_extents.iter().map(|(l, r)| l + r).collect();
@@ -5883,6 +5945,13 @@ fn sequence_loop_body_extents(nodes: &[LayoutNode]) -> (f64, f64) {
             right = right.max(layout.block_w - layout.diamond_dx);
         }
     }
+    for (i, node) in nodes.iter().enumerate() {
+        if let Some(layout) = while_body_fork_layout(nodes, i, node) {
+            let (fork_left, fork_right) = fork_bar_extents(&layout);
+            left = left.max(fork_left);
+            right = right.max(fork_right);
+        }
+    }
     // A nested loop tile contributes its canvas-reservation-inflated right edge
     // to the raw extent. When such a tile is the rightmost element, the
     // enclosing loop's loop-back arm only needs to clear the INNER arm, not the
@@ -7917,6 +7986,10 @@ struct SvgEmitter {
     /// (ParallelBuilderFork ConnectionIn/Out), so the full 35 survives. We model
     /// that as ARROW_LEN + this extra (15) for tiles assembled inside a branch.
     fork_branch_gap_extra: f64,
+    /// One-shot layout override for a fork emitted directly as a `while` body
+    /// flow node. PlantUML lets a wider following same-spine action spread a
+    /// three-way fork's branch lattice while keeping the left bar edge fixed.
+    while_body_fork_layout: Option<ForkLayout>,
     /// Context for a `break` nested in an `if` inside the current `while` body.
     /// PlantUML collects each `FtileBreak` welding point and (in
     /// `FtileFactoryDelegatorWhile.createWhile`) draws a left-pointing arrow from
@@ -8279,6 +8352,7 @@ impl SvgEmitter {
             handwritten,
             while_exit_redirect: None,
             fork_branch_gap_extra: 0.0,
+            while_body_fork_layout: None,
             while_break: None,
             while_break_loopback_fused: false,
             repeat_break_weld_y: None,
@@ -9581,6 +9655,11 @@ fn emit_sequence_ex(
             );
             emit_if_attached_notes(svg, attached_notes, cx, y, diamond_half_w);
         }
+        let fork_layout_override = if while_body {
+            while_body_fork_layout(nodes, i, node)
+        } else {
+            None
+        };
         if let LayoutNode::Fork {
             branches,
             attached_notes,
@@ -9589,13 +9668,15 @@ fn emit_sequence_ex(
         } = node
             && !attached_notes.is_empty()
         {
-            let layout = if *is_split {
-                split_layout(branches)
-            } else if first_repeat_branch_extra {
-                fork_layout_if_branch(branches)
-            } else {
-                fork_layout(branches)
-            };
+            let layout = fork_layout_override.clone().unwrap_or_else(|| {
+                if *is_split {
+                    split_layout(branches)
+                } else if first_repeat_branch_extra {
+                    fork_layout_if_branch(branches)
+                } else {
+                    fork_layout(branches)
+                }
+            });
             emit_fork_attached_notes(svg, attached_notes, cx, y, branches, &layout);
         }
         let repeat_extra = if first_repeat_branch_extra && flow_ordinal == 0 {
@@ -9699,8 +9780,10 @@ fn emit_sequence_ex(
         {
             svg.swimlane_while_cond_special = true;
         }
+        svg.while_body_fork_layout = fork_layout_override;
         let node_y =
             emit_node_with_repeat_extra(svg, node, cx, y, repeat_extra, first_repeat_branch_extra);
+        svg.while_body_fork_layout = None;
         svg.swimlane_while_cond_special = false;
         svg.if_down_terminating_has_next = false;
         svg.while_switch_merge_extra = 0.0;
@@ -10034,6 +10117,8 @@ fn emit_node_with_repeat_extra(
                 emit_split(svg, cx, y, branches)
             } else if *merge {
                 emit_fork_merge(svg, cx, y, branches)
+            } else if let Some(layout) = svg.while_body_fork_layout.take() {
+                emit_fork_with_layout(svg, cx, y, branches, layout)
             } else if if_branch {
                 emit_fork_with_layout(svg, cx, y, branches, fork_layout_if_branch(branches))
             } else if svg.partition_wrapped_fork_depth > 0 && !*is_split {
