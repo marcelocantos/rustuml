@@ -2475,6 +2475,13 @@ const FORK_MERGE_GAP: f64 = 10.0;
 /// Extra inter-tile gap inside a fork branch: PlantUML's assembly space is 35,
 /// versus the 20 px `ARROW_LEN` that compresses in ordinary sequences.
 const FORK_BRANCH_INTER_GAP_EXTRA: f64 = 15.0;
+/// A labelled while used as a single fork branch keeps its inbound label slot
+/// open inside the branch, and PlantUML measures the branch by drawn extents
+/// rather than the standalone while's frame reservation.
+const FORK_BRANCH_WHILE_LEFT_TRIM: f64 = 9.0;
+const FORK_BRANCH_WHILE_RIGHT_TRIM: f64 = 23.0;
+const FORK_BRANCH_WHILE_SIBLING_CENTER_EXTRA: f64 = 1.0;
+const FORK_BRANCH_WHILE_EXIT_ARROW_PUSH_DOWN: f64 = 1.0;
 /// Gap below the deepest branch to the join bar when every branch terminates
 /// (no ConnectionOut arrows reach the bar — half the usual ARROW_LEN reserve).
 const FORK_TERMINATING_JOIN_GAP: f64 = 10.0;
@@ -2547,7 +2554,34 @@ fn fork_branch_extents(branch: &[LayoutNode]) -> (f64, f64) {
         right = right.max(layout.block_w - layout.diamond_dx);
         return (left, right);
     }
-    sequence_extents(branch)
+    let (mut left, mut right) = sequence_extents(branch);
+    if fork_branch_while_slot_opens(branch) {
+        left -= FORK_BRANCH_WHILE_LEFT_TRIM;
+        right -= FORK_BRANCH_WHILE_RIGHT_TRIM;
+    }
+    (left, right)
+}
+
+fn fork_branch_while_slot_opens(branch: &[LayoutNode]) -> bool {
+    matches!(
+        branch,
+        [LayoutNode::While {
+            body,
+            is_label,
+            end_label,
+            special_out: None,
+            ..
+        }] if while_ordinary_slot_compresses(body, is_label, end_label, None)
+    )
+}
+
+fn sequence_height_fork_branch(branch: &[LayoutNode], gap_extra: f64) -> f64 {
+    let extra = if fork_branch_while_slot_opens(branch) {
+        WHILE_BODY_SLOT_COMPRESS
+    } else {
+        0.0
+    };
+    sequence_height_ex(branch, gap_extra) + extra
 }
 
 fn fork_layout(branches: &[Vec<LayoutNode>]) -> ForkLayout {
@@ -7373,7 +7407,7 @@ fn node_height(node: &LayoutNode) -> f64 {
         } => {
             let max_h: f64 = branches
                 .iter()
-                .map(|b| sequence_height(b))
+                .map(|b| sequence_height_fork_branch(b, 0.0))
                 .fold(0.0f64, f64::max);
             if *is_split {
                 ARROW_LEN + max_h + ARROW_LEN
@@ -7390,7 +7424,7 @@ fn node_height(node: &LayoutNode) -> f64 {
                 let nonempty: Vec<f64> = branches
                     .iter()
                     .filter(|b| !b.is_empty())
-                    .map(|b| sequence_height(b))
+                    .map(|b| sequence_height_fork_branch(b, 0.0))
                     .collect();
                 let unequal =
                     !nonempty.is_empty() && nonempty.iter().any(|h| (h - nonempty[0]).abs() > 0.01);
@@ -7402,7 +7436,7 @@ fn node_height(node: &LayoutNode) -> f64 {
                 let max_h: f64 = branches
                     .iter()
                     .filter(|b| !b.is_empty())
-                    .map(|b| sequence_height_ex(b, gap_extra))
+                    .map(|b| sequence_height_fork_branch(b, gap_extra))
                     .fold(0.0f64, f64::max);
                 let all_terminate = branches
                     .iter()
@@ -7990,6 +8024,10 @@ struct SvgEmitter {
     /// flow node. PlantUML lets a wider following same-spine action spread a
     /// three-way fork's branch lattice while keeping the left bar edge fixed.
     while_body_fork_layout: Option<ForkLayout>,
+    /// True while emitting a fork branch whose only flow tile is a labelled
+    /// while. PlantUML keeps that while's inbound label slot open inside the
+    /// branch instead of applying the ordinary standalone slot compression.
+    fork_branch_while_slot_open: bool,
     /// Context for a `break` nested in an `if` inside the current `while` body.
     /// PlantUML collects each `FtileBreak` welding point and (in
     /// `FtileFactoryDelegatorWhile.createWhile`) draws a left-pointing arrow from
@@ -8353,6 +8391,7 @@ impl SvgEmitter {
             while_exit_redirect: None,
             fork_branch_gap_extra: 0.0,
             while_body_fork_layout: None,
+            fork_branch_while_slot_open: false,
             while_break: None,
             while_break_loopback_fused: false,
             repeat_break_weld_y: None,
@@ -13562,6 +13601,14 @@ fn emit_fork(svg: &mut SvgEmitter, cx: f64, y: f64, branches: &[Vec<LayoutNode>]
     emit_fork_with_layout(svg, cx, y, branches, fork_layout(branches))
 }
 
+fn emit_fork_branch_sequence(svg: &mut SvgEmitter, branch: &[LayoutNode], cx: f64, y: f64) -> f64 {
+    let saved = svg.fork_branch_while_slot_open;
+    svg.fork_branch_while_slot_open = fork_branch_while_slot_opens(branch);
+    let bottom = emit_sequence(svg, branch, cx, y);
+    svg.fork_branch_while_slot_open = saved;
+    bottom
+}
+
 fn emit_fork_merge(svg: &mut SvgEmitter, cx: f64, y: f64, branches: &[Vec<LayoutNode>]) -> f64 {
     if branches.is_empty() {
         return y;
@@ -13588,7 +13635,7 @@ fn emit_fork_merge(svg: &mut SvgEmitter, cx: f64, y: f64, branches: &[Vec<Layout
     let branch_centers: Vec<f64> = layout.centers.iter().map(|center| bar_x + center).collect();
     let mut branch_bottoms = Vec::new();
     for (branch, &bcx) in branches.iter().zip(branch_centers.iter()) {
-        let bottom = emit_sequence(svg, branch, bcx, bar_bottom + ARROW_LEN);
+        let bottom = emit_fork_branch_sequence(svg, branch, bcx, bar_bottom + ARROW_LEN);
         branch_bottoms.push(bottom);
     }
 
@@ -13699,7 +13746,7 @@ fn emit_fork_with_layout(
             if b.is_empty() {
                 0.0
             } else {
-                sequence_height(b)
+                sequence_height_fork_branch(b, 0.0)
             }
         })
         .collect();
@@ -13742,7 +13789,7 @@ fn emit_fork_with_layout(
                         .filter(|_| b.len() == 1)
                         .map(switch_fork_centering_extra)
                         .unwrap_or(0.0);
-                    sequence_height_ex(b, gap_extra) + extra
+                    sequence_height_fork_branch(b, gap_extra) + extra
                 }
             })
             .collect();
@@ -13750,6 +13797,16 @@ fn emit_fork_with_layout(
         for (i, &h) in heights.iter().enumerate() {
             if !branches[i].is_empty() {
                 center_offsets[i] = (max_h - h) / 2.0;
+            }
+        }
+        if branches
+            .iter()
+            .any(|branch| fork_branch_while_slot_opens(branch))
+        {
+            for (i, branch) in branches.iter().enumerate() {
+                if !branch.is_empty() && !fork_branch_while_slot_opens(branch) {
+                    center_offsets[i] += FORK_BRANCH_WHILE_SIBLING_CENTER_EXTRA;
+                }
             }
         }
     }
@@ -13782,7 +13839,7 @@ fn emit_fork_with_layout(
         // `emit_switch` selects the nude layout. One-shot, consumed by
         // `emit_switch`.
         svg.fork_body_switch = fork_branch_nude_switch(branch).is_some();
-        let bottom = emit_sequence(svg, branch, bcx, branch_y);
+        let bottom = emit_fork_branch_sequence(svg, branch, bcx, branch_y);
         svg.fork_body_switch = false;
         branch_bottoms.push(bottom);
     }
@@ -13804,6 +13861,25 @@ fn emit_fork_with_layout(
         ARROW_LEN
     };
     let bottom_bar_y = max_bottom + bottom_bar_gap;
+
+    // A labelled while used as a fork branch emits its ConnectionOut to the join
+    // bar before the ordinary top-bar ConnectionIn arrows. PlantUML draws the
+    // loop's branch-local connectors as a unit before returning to the fork's
+    // top connector pass.
+    for (i, (branch, bottom)) in branches.iter().zip(branch_bottoms.iter()).enumerate() {
+        if branch.is_empty() || branch_terminates_flags[i] || !fork_branch_while_slot_opens(branch)
+        {
+            continue;
+        }
+        let bcx = branch_centers[i];
+        let branch_y = if single_partition_branch_body_top(branch, bar_bottom).is_some() {
+            bar_bottom
+        } else {
+            bar_bottom + ARROW_LEN + center_offsets[i]
+        };
+        let arrow_top = single_partition_branch_body_bottom(branch, branch_y).unwrap_or(*bottom);
+        svg.down_arrow(bcx, arrow_top, bottom_bar_y, &arrow_color);
+    }
 
     // Top arrows from bar to each branch (all together, after internals).
     // Empty fork branches do not draw a zero-height top arrow plus a separate
@@ -13827,7 +13903,7 @@ fn emit_fork_with_layout(
     // Bottom arrows from each branch to bottom bar — skipped for a branch that
     // terminates (no pointOut → no ConnectionOut to the join bar).
     for (i, (branch, bottom)) in branches.iter().zip(branch_bottoms.iter()).enumerate() {
-        if branch.is_empty() || branch_terminates_flags[i] {
+        if branch.is_empty() || branch_terminates_flags[i] || fork_branch_while_slot_opens(branch) {
             continue;
         }
         let bcx = branch_centers[i];
@@ -13998,12 +14074,14 @@ fn emit_while(
     // diamond below to merge against), so it does NOT compress. One-shot — consume
     // so a deeper nested body re-establishes its own compressibility.
     let sole_body_suppress = std::mem::take(&mut svg.while_sole_body_suppress_compress);
+    let fork_branch_slot_open = std::mem::take(&mut svg.fork_branch_while_slot_open);
     // One-shot: this while is a non-terminal flow in a repeat body, so the
     // FtileRepeat frame holds its loop-back tail open (junction keeps the full
     // halfHex, not the ON_Y-compressed 10). Take it before the body emit so a
     // nested while cannot inherit it.
     let repeat_body_nonterminal = std::mem::take(&mut svg.while_repeat_body_nonterminal);
     let ordinary_slot_compressed = !sole_body_suppress
+        && !fork_branch_slot_open
         && while_ordinary_slot_compresses(body, is_label, end_label, special_out);
     // Case (b): a `while` whose body is a single nested `while`. Every diamond in
     // a single-while chain (except the deepest, suppressed above) reclaims its
@@ -14025,7 +14103,10 @@ fn emit_while(
     // compression; a bare `while (cond)` break loop has no slot compression but
     // must still emit arrowhead-before-line.
     let exit_vertical_after_arrow = special_out.is_none()
-        && (colored_partition_while || ordinary_slot_compressed || break_in_body);
+        && (colored_partition_while
+            || ordinary_slot_compressed
+            || break_in_body
+            || fork_branch_slot_open);
 
     let cond_inner_w = diamond_inner_w_styled(
         condition,
@@ -14819,7 +14900,9 @@ fn emit_while(
     } else {
         (diamond_cy + wrap_y) / 2.0
     };
-    if exit_vertical_after_arrow && break_frame_h.is_none() {
+    if fork_branch_slot_open && special_out.is_none() && break_frame_h.is_none() {
+        arrow_y += FORK_BRANCH_WHILE_EXIT_ARROW_PUSH_DOWN;
+    } else if exit_vertical_after_arrow && break_frame_h.is_none() {
         arrow_y -= PARTITION_COLORED_WHILE_EXIT_ARROW_PULL_UP;
     }
     // A loop that consumed a nested fused exit wraps its own corridor one pixel
