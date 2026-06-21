@@ -4815,6 +4815,64 @@ fn is_simple_branch_flow(body: &[LayoutNode]) -> bool {
     })
 }
 
+fn branch_first_lane_mark(body: &[LayoutNode]) -> Option<usize> {
+    body.iter().find_map(|n| match n {
+        LayoutNode::LaneMark(l) => Some(*l),
+        _ => None,
+    })
+}
+
+fn branch_lane_marks_backtrack(lane_marks: &[Option<usize>]) -> bool {
+    lane_marks.windows(2).any(|w| match (w[0], w[1]) {
+        (Some(a), Some(b)) => b < a,
+        _ => false,
+    })
+}
+
+fn if_long_branch_lane_marks(
+    then_branch: &[LayoutNode],
+    else_branches: &[ElseBranch],
+) -> Vec<Option<usize>> {
+    std::iter::once(branch_first_lane_mark(then_branch))
+        .chain(
+            else_branches
+                .iter()
+                .filter(|b| b.condition.is_some())
+                .map(|b| branch_first_lane_mark(&b.body)),
+        )
+        .collect()
+}
+
+fn tree_has_if_long_lane_backtrack(tree: &[LayoutNode]) -> bool {
+    tree.iter().any(|node| {
+        if let LayoutNode::If {
+            then_branch,
+            else_branches,
+            ..
+        } = node
+        {
+            branch_lane_marks_backtrack(&if_long_branch_lane_marks(then_branch, else_branches))
+        } else {
+            false
+        }
+    })
+}
+
+fn tree_has_if_long_multi_elseif(tree: &[LayoutNode]) -> bool {
+    tree.iter().any(|node| {
+        if let LayoutNode::If {
+            then_branch,
+            else_branches,
+            ..
+        } = node
+        {
+            if_long_branch_lane_marks(then_branch, else_branches).len() > 2
+        } else {
+            false
+        }
+    })
+}
+
 /// Build the placed long layout for an `if/elseif*/else`. Returns `None` if any
 /// branch isn't yet portable (so the caller falls back to the legacy path).
 fn if_long_layout(
@@ -4830,11 +4888,23 @@ fn if_long_layout(
     // band, `addVerticalMargin`'d by alignDiamonds). The whole-diagram ON_Y pass
     // reclaims the diamond→branch corridor's descent slack, leaving
     // `ascent(11) + 1.5` rather than the full text height.
+    let lane_marks = if_long_branch_lane_marks(then_branch, else_branches);
+    let has_lane_marks = lane_marks.iter().any(Option::is_some);
+    let split_collector_band = lane_marks.len() > 2 && branch_lane_marks_backtrack(&lane_marks);
     let all_branches_simple = is_simple_branch_flow(then_branch)
         && else_branches
             .iter()
             .all(|b| b.condition.is_none() || is_simple_branch_flow(&b.body));
-    let north_h = pm::ascent(SMALL_FONT) + 1.5;
+    let has_populated_bare_else = else_branches
+        .iter()
+        .any(|b| b.condition.is_none() && !branch_is_empty(&b.body));
+    let north_h = if split_collector_band
+        || (!has_lane_marks && has_populated_bare_else && all_branches_simple)
+    {
+        pm::text_height(SMALL_FONT)
+    } else {
+        pm::ascent(SMALL_FONT) + 1.5
+    };
 
     // Inter-tile gap retained inside each branch column. When every branch is a
     // simple linear flow the whole-diagram `ON_Y` compression reaches into the
@@ -11144,6 +11214,15 @@ const IF_DOWN_LEAD: f64 = ARROW_LEN + 4.477539062500001; // 24.4775
 /// PlantUML's `Snake.emphasizeDirection(DOWN)` lands the arrowhead tip
 /// `2.2388` px below the geometric midpoint of the corridor's vertical run.
 const IF_CORRIDOR_ARROW_OFFSET: f64 = 2.238769531250023;
+const IF_COLLECTOR_MIDPOINT_EXTRA_OFFSET: f64 = 1.0830078125;
+const IF_COLLECTOR_OTHER_LANE_PAD: f64 = 17.82421875;
+const IF_CROSS_COLLECTOR_LEFT_PAD: f64 = 12.82421875;
+const IF_CROSS_COLLECTOR_RIGHT_START_INSET: f64 = 21.017578125;
+const IF_SPLIT_COLLECTOR_LANE0_EXTRA: f64 = 3.3525390625;
+const IF_SPLIT_COLLECTOR_LEFT_INSET: f64 = 1.17626953125;
+const IF_SPLIT_COLLECTOR_RIGHT_START_OFFSET: f64 = 4.6259765625;
+const IF_SPLIT_COLLECTOR_RIGHT_INSET: f64 = 7.17626953125;
+const IF_SPLIT_COLLECTOR_RIGHT_DIVIDER_PAD: f64 = 10.0;
 
 /// Left lead past the diamond's left vertex in the FtileIfDown layout.
 const IF_DOWN_LEFT_PAD: f64 = 9.0;
@@ -15665,8 +15744,11 @@ fn route_if_cross_lane_connectors(
     nat_conns: &str,
     nat_shapes: &[String],
     fin_shapes: &[String],
+    lane_left: &[f64],
+    lane_right: &[f64],
+    multi_elseif: bool,
     arrow_color: &str,
-) -> Option<String> {
+) -> Option<(String, bool)> {
     let n = nat_shapes.len();
     // Natural + final anchors, paired by (lane, index-within-lane). We flatten
     // to a single list but keep the lane tag, and pair nat↔fin by position.
@@ -15721,6 +15803,21 @@ fn route_if_cross_lane_connectors(
         }
         best
     };
+    let match_merge_column = |pt: (f64, f64)| -> Option<usize> {
+        let mut best = None;
+        let mut bestd = 6.0_f64;
+        for (i, a) in nat.iter().enumerate() {
+            if a.west.is_some() || pt.1 <= a.bottom {
+                continue;
+            }
+            let d = (a.cx - pt.0).abs();
+            if d < bestd {
+                bestd = d;
+                best = Some(i);
+            }
+        }
+        best
+    };
     let head = |x: f64, y: f64| -> String {
         format!(
             r#"<polygon fill="{c}" points="{}" style="stroke:{c};stroke-width:1;"/>"#,
@@ -15771,11 +15868,143 @@ fn route_if_cross_lane_connectors(
     };
 
     let dbg = std::env::var("RUSTUML_EXT_DBG").is_ok();
-    // Connectors are emitted in natural (PlantUML) document order — a flat list,
-    // not grouped by lane (gold interleaves source lanes).
-    let mut routed = String::new();
-    for pl in parse_conn_polylines(nat_conns) {
-        let (Some(src_pt), Some(tip)) = (pl.verts.first().copied(), pl.tip) else {
+    // PlantUML emits if-long connectors in lane-shaped groups, not in the natural
+    // single-tree run order: lane-0 branch exits, condition links, start entry,
+    // merge collector, other-lane branch exits, cross-lane branch entries, then
+    // stop entry when stop lives beyond lane 0.
+    let mut lane0_edges = String::new();
+    let mut condition_links = String::new();
+    let mut start_entries = String::new();
+    let mut post_start_edges = String::new();
+    let mut collector_left = String::new();
+    let mut collector_right = String::new();
+    let mut other_lane_outputs = String::new();
+    let mut cross_lane_inputs = String::new();
+    let mut lane0_stop_entries = String::new();
+    let mut other_stop_entries = String::new();
+    let polylines = parse_conn_polylines(nat_conns);
+    let collector_target_i = polylines
+        .iter()
+        .find(|pl| pl.tip.is_none() && pl.verts.len() == 2)
+        .and_then(|pl| match_merge_column(pl.verts[1]));
+    if !polylines.iter().any(|pl| pl.tip.is_none()) {
+        let mut routed = String::new();
+        for pl in polylines {
+            let (Some(src_pt), Some(tip)) = (pl.verts.first().copied(), pl.tip) else {
+                if dbg {
+                    eprintln!(
+                        "[V2] router: polyline missing src/tip verts={:?} tip={:?}",
+                        pl.verts, pl.tip
+                    );
+                }
+                return None;
+            };
+            let src_i = match_pt(src_pt);
+            let tip_i = match_pt(tip);
+            let Some(si) = src_i else {
+                if dbg {
+                    eprintln!("[V2] router: unmatched src={src_pt:?} tip={tip:?}");
+                }
+                return None;
+            };
+            let ti = tip_i;
+            let s = &fin[si];
+            let src_nat = &nat[si];
+            if ti.is_none()
+                && (src_pt.0 - tip.0).abs() < 0.001
+                && tip.1 > src_pt.1
+                && (src_pt.1 - src_nat.bottom).abs() < 3.0
+            {
+                let sx = s.cx;
+                let sy = s.bottom;
+                let mut snake = String::new();
+                snake.push_str(&line(sx, sx, sy, tip.1));
+                snake.push_str(&head(sx, tip.1));
+                routed.push_str(&snake);
+                continue;
+            }
+            let Some(ti) = ti else {
+                if dbg {
+                    eprintln!("[V2] router: unmatched src={src_pt:?} tip={tip:?}");
+                }
+                return None;
+            };
+            let t = &fin[ti];
+            let exits_bottom = (src_pt.1 - src_nat.bottom).abs() < 3.0;
+            let exits_west = src_nat.west.is_some_and(|w| (src_pt.0 - w).abs() < 3.0);
+            let exits_east = src_nat.east.is_some_and(|e| (src_pt.0 - e).abs() < 3.0);
+
+            let mut snake = String::new();
+            if exits_bottom {
+                let sx = s.cx;
+                let sy = s.bottom;
+                if t.is_merge {
+                    let tgt_nat = &nat[ti];
+                    let from_left = src_nat.cx < tgt_nat.cx;
+                    let mcy = t.cy;
+                    if from_left {
+                        let mw = t.west.unwrap_or(t.cx);
+                        let approach = mw - 18.0;
+                        snake.push_str(&line(sx, sx, sy, sy + 4.0));
+                        snake.push_str(&line(sx, approach, sy + 4.0, sy + 4.0));
+                        snake.push_str(&line(approach, approach, sy + 4.0, mcy));
+                        snake.push_str(&line(approach, mw, mcy, mcy));
+                        snake.push_str(&head_right(mw, mcy));
+                    } else {
+                        let me = t.east.unwrap_or(t.cx);
+                        snake.push_str(&line(sx, sx, sy, mcy));
+                        snake.push_str(&line(sx, me, mcy, mcy));
+                        snake.push_str(&head_left(me, mcy));
+                    }
+                } else {
+                    let tx = t.cx;
+                    let ty = t.top;
+                    if (sx - tx).abs() < 0.01 {
+                        snake.push_str(&line(sx, sx, sy, ty));
+                    } else {
+                        let stub = sy + 5.0;
+                        snake.push_str(&line(sx, sx, sy, stub));
+                        snake.push_str(&line(sx, tx, stub, stub));
+                        snake.push_str(&line(tx, tx, stub, ty));
+                    }
+                    snake.push_str(&head(tx, ty));
+                }
+            } else if exits_west || exits_east {
+                let dcy = s.cy;
+                let tx = t.cx;
+                let ty = t.top;
+                if exits_west {
+                    let wx = s.west.unwrap_or(s.cx);
+                    let stub_x = wx - 12.0;
+                    let cross_y = ty - 14.0;
+                    snake.push_str(&line(wx, stub_x, dcy, dcy));
+                    snake.push_str(&line(stub_x, stub_x, dcy, cross_y));
+                    snake.push_str(&line(stub_x, tx, cross_y, cross_y));
+                    snake.push_str(&line(tx, tx, cross_y, ty));
+                } else {
+                    let ex = s.east.unwrap_or(s.cx);
+                    snake.push_str(&line(ex, tx, dcy, dcy));
+                    snake.push_str(&line(tx, tx, dcy, ty));
+                }
+                snake.push_str(&head(tx, ty));
+            } else {
+                return None;
+            }
+            routed.push_str(&snake);
+        }
+        return Some((routed, false));
+    }
+    let mut split_collector = false;
+    if dbg {
+        for (i, pl) in polylines.iter().enumerate() {
+            eprintln!(
+                "[V2] router: polyline {i} verts={:?} tip={:?}",
+                pl.verts, pl.tip
+            );
+        }
+    }
+    for pl in polylines {
+        let Some(src_pt) = pl.verts.first().copied() else {
             if dbg {
                 eprintln!(
                     "[V2] router: polyline missing src/tip verts={:?} tip={:?}",
@@ -15784,7 +16013,88 @@ fn route_if_cross_lane_connectors(
             }
             return None;
         };
-        let src_i = match_pt(src_pt);
+        if pl.tip.is_none() {
+            if pl.verts.len() == 2 && (pl.verts[0].1 - pl.verts[1].1).abs() < 0.001 {
+                let Some(si) = match_merge_column(pl.verts[0]) else {
+                    if dbg {
+                        eprintln!("[V2] router: unmatched collector src={:?}", pl.verts[0]);
+                    }
+                    return None;
+                };
+                let Some(ti) = match_merge_column(pl.verts[1]) else {
+                    if dbg {
+                        eprintln!("[V2] router: unmatched collector dst={:?}", pl.verts[1]);
+                    }
+                    return None;
+                };
+                let sx = fin[si].cx;
+                let tx = fin[ti].cx;
+                let y = pl.verts[0].1;
+                if fin[si].lane != fin[ti].lane {
+                    let target_left = lane_left.get(fin[ti].lane).copied().unwrap_or(tx);
+                    let left_end = if multi_elseif {
+                        target_left + IF_CROSS_COLLECTOR_LEFT_PAD
+                    } else {
+                        target_left + 15.0
+                    };
+                    let start = fin
+                        .iter()
+                        .filter(|a| a.west.is_none() && a.bottom < y)
+                        .min_by(|a, b| a.top.total_cmp(&b.top))
+                        .map(|a| a.cx)
+                        .unwrap_or(sx);
+                    let stop = fin
+                        .iter()
+                        .filter(|a| a.west.is_none() && a.top > y)
+                        .min_by(|a, b| a.top.total_cmp(&b.top))
+                        .map(|a| a.cx)
+                        .unwrap_or(tx);
+                    let right_start = if multi_elseif {
+                        target_left - IF_CROSS_COLLECTOR_RIGHT_START_INSET
+                    } else {
+                        (start + stop) / 2.0
+                            - IF_CORRIDOR_ARROW_OFFSET
+                            - IF_COLLECTOR_MIDPOINT_EXTRA_OFFSET
+                    };
+                    collector_left.push_str(&line(sx, left_end, y, y));
+                    collector_right.push_str(&line(right_start, tx, y, y));
+                } else if fin[si].lane + 1 < n {
+                    let boundary = lane_left.get(fin[si].lane + 1).copied().unwrap_or(tx);
+                    let right_end = lane_right
+                        .get(fin[si].lane + 1)
+                        .copied()
+                        .unwrap_or(boundary)
+                        - IF_SPLIT_COLLECTOR_RIGHT_INSET;
+                    collector_left.push_str(&line(
+                        sx,
+                        boundary - IF_SPLIT_COLLECTOR_LEFT_INSET,
+                        y,
+                        y,
+                    ));
+                    collector_right.push_str(&line(
+                        tx + IF_SPLIT_COLLECTOR_RIGHT_START_OFFSET,
+                        right_end,
+                        y,
+                        y,
+                    ));
+                    split_collector = true;
+                } else {
+                    collector_left.push_str(&line(sx, tx, y, y));
+                }
+                continue;
+            }
+            if dbg {
+                eprintln!(
+                    "[V2] router: polyline missing src/tip verts={:?} tip={:?}",
+                    pl.verts, pl.tip
+                );
+            }
+            return None;
+        }
+        let tip = pl.tip.unwrap();
+        let direct_src_i = match_pt(src_pt);
+        let src_from_merge_column = direct_src_i.is_none();
+        let src_i = direct_src_i.or_else(|| match_merge_column(src_pt));
         let tip_i = match_pt(tip);
         let Some(si) = src_i else {
             if dbg {
@@ -15805,7 +16115,15 @@ fn route_if_cross_lane_connectors(
             let mut snake = String::new();
             snake.push_str(&line(sx, sx, sy, tip.1));
             snake.push_str(&head(sx, tip.1));
-            routed.push_str(&snake);
+            if s.lane == 0 {
+                if Some(si) == collector_target_i {
+                    post_start_edges.push_str(&snake);
+                } else {
+                    lane0_edges.push_str(&snake);
+                }
+            } else {
+                other_lane_outputs.push_str(&snake);
+            }
             continue;
         }
         let Some(ti) = ti else {
@@ -15815,13 +16133,34 @@ fn route_if_cross_lane_connectors(
             return None;
         };
         let t = &fin[ti];
+        let mut snake = String::new();
+        if src_from_merge_column && t.west.is_none() {
+            let sx = s.cx;
+            let sy = src_pt.1;
+            let tx = t.cx;
+            let ty = t.top;
+            if (sx - tx).abs() < 0.01 {
+                snake.push_str(&line(sx, sx, sy, ty));
+            } else {
+                let stub = sy + 5.0;
+                snake.push_str(&line(sx, sx, sy, stub));
+                snake.push_str(&line(sx, tx, stub, stub));
+                snake.push_str(&line(tx, tx, stub, ty));
+            }
+            snake.push_str(&head(tx, ty));
+            if t.lane == 0 {
+                lane0_stop_entries.push_str(&snake);
+            } else {
+                other_stop_entries.push_str(&snake);
+            }
+            continue;
+        }
         // Which side the source exits: compare the natural source point to the
         // natural anchor's connection points.
         let exits_bottom = (src_pt.1 - src_nat.bottom).abs() < 3.0;
         let exits_west = src_nat.west.is_some_and(|w| (src_pt.0 - w).abs() < 3.0);
         let exits_east = src_nat.east.is_some_and(|e| (src_pt.0 - e).abs() < 3.0);
 
-        let mut snake = String::new();
         if exits_bottom {
             // Form A/C: exit the source bottom, optional cross, drop into target.
             let sx = s.cx;
@@ -15856,7 +16195,11 @@ fn route_if_cross_lane_connectors(
                     snake.push_str(&line(sx, sx, sy, ty));
                 } else {
                     // Down a 5px stub, horizontal to target column, down to top.
-                    let stub = sy + 5.0;
+                    let stub = if src_nat.west.is_some() {
+                        sy + 4.0
+                    } else {
+                        sy + 5.0
+                    };
                     snake.push_str(&line(sx, sx, sy, stub));
                     snake.push_str(&line(sx, tx, stub, stub));
                     snake.push_str(&line(tx, tx, stub, ty));
@@ -15864,6 +16207,25 @@ fn route_if_cross_lane_connectors(
                 snake.push_str(&head(tx, ty));
             }
         } else if exits_west || exits_east {
+            if src_nat.west.is_some() && t.west.is_some() {
+                let y = s.cy;
+                if exits_east {
+                    let sx = s.east.unwrap_or(s.cx);
+                    let tx = t.west.unwrap_or(t.cx);
+                    snake.push_str(&line(sx, tx, y, y));
+                    snake.push_str(&head_right(tx, y));
+                } else {
+                    let sx = s.west.unwrap_or(s.cx);
+                    let tx = t.east.unwrap_or(t.cx);
+                    snake.push_str(&line(sx, tx, y, y));
+                    snake.push_str(&head_left(tx, y));
+                }
+                condition_links.push_str(&snake);
+                continue;
+            }
+            if exits_east && s.lane != t.lane && t.west.is_none() {
+                continue;
+            }
             // Form B: diamond side exit. West exits 12px left then drops to a
             // cross-y, crosses to the target column, drops in. East crosses at
             // the diamond centre-line directly.
@@ -15888,9 +16250,33 @@ fn route_if_cross_lane_connectors(
             return None;
         }
         let _ = s.lane;
-        routed.push_str(&snake);
+        if src_nat.west.is_none() && t.west.is_some() {
+            start_entries.push_str(&snake);
+        } else if src_nat.west.is_some() && s.lane != t.lane {
+            cross_lane_inputs.push_str(&snake);
+        } else if src_nat.west.is_some() && t.west.is_none() && !exits_bottom {
+            post_start_edges.push_str(&snake);
+        } else if s.lane == 0 {
+            lane0_edges.push_str(&snake);
+        } else {
+            other_lane_outputs.push_str(&snake);
+        }
     }
-    Some(routed)
+    let mut routed = String::new();
+    routed.push_str(&lane0_edges);
+    routed.push_str(&condition_links);
+    routed.push_str(&start_entries);
+    routed.push_str(&post_start_edges);
+    routed.push_str(&collector_left);
+    routed.push_str(&lane0_stop_entries);
+    routed.push_str(&other_lane_outputs);
+    routed.push_str(&collector_right);
+    routed.push_str(&cross_lane_inputs);
+    routed.push_str(&other_stop_entries);
+    if dbg {
+        eprintln!("[V2] router: routed bytes={}", routed.len());
+    }
+    Some((routed, split_collector))
 }
 
 /// One natural flow connector parsed into its polyline vertices + arrowhead tip.
@@ -16232,6 +16618,13 @@ fn layout_swimlanes_v2(
     // `if`), so switch to per-lane drawn-MinMax geometry + a final ON_X compress
     // (PlantUML's CompressionXorYBuilder collapses the inter-branch slack).
     let if_mode = (0..n).any(|l| runs[l].is_empty() && !shape_frags[l].trim().is_empty());
+    let if_long_collector_mode = if_mode
+        && parse_conn_polylines(&svg.connectors)
+            .iter()
+            .any(|pl| pl.tip.is_none());
+    let if_long_multi_elseif_mode = if_long_collector_mode && tree_has_if_long_multi_elseif(tree);
+    let if_long_split_collector_mode =
+        if_long_collector_mode && tree_has_if_long_lane_backtrack(tree);
 
     let title_w: Vec<f64> = lane_names
         .iter()
@@ -16250,7 +16643,7 @@ fn layout_swimlanes_v2(
             let shape_bounds = crate::compress::x_bounds(&shape_frags[l]);
             let connector_bounds = lane_connector_x_bounds(svg, l);
             let (lo, hi) = match (shape_bounds, connector_bounds) {
-                (Some((slo, shi)), Some((_, chi))) if l == 0 => {
+                (Some((slo, shi)), Some((_, chi))) if if_long_collector_mode && l == 0 => {
                     (slo, shi.max(chi - IF_CORRIDOR_ARROW_OFFSET))
                 }
                 (Some(bounds), Some(_)) => bounds,
@@ -16259,8 +16652,15 @@ fn layout_swimlanes_v2(
             };
             minx[l] = lo;
             lane_content_w[l] = hi - lo;
-            let lane_pad = if l > 0 && hi - lo < 100.0 { 30.0 } else { 10.0 };
+            let lane_pad = if if_long_collector_mode && l > 0 && hi - lo < 100.0 {
+                30.0
+            } else {
+                10.0
+            };
             w[l] = (hi - lo + lane_pad).max(title_w[l] + 10.0);
+            if if_long_split_collector_mode && l == 0 {
+                w[l] += IF_SPLIT_COLLECTOR_LANE0_EXTRA;
+            }
             if std::env::var("RUSTUML_EXT_DBG").is_ok() {
                 eprintln!(
                     "[V2] lane {l} {:?} connector_xbounds={connector_bounds:?}",
@@ -16286,6 +16686,10 @@ fn layout_swimlanes_v2(
         lane_left[l] = acc;
         acc += lane_w[l];
     }
+    let mut lane_right = vec![0.0f64; n];
+    for l in 0..n {
+        lane_right[l] = lane_left[l] + lane_w[l];
+    }
     // Rightmost divider. Linear lanes carry a trailing +10 in `lane_w` that lands
     // the right divider at `acc`; if-lanes' last divider sits at the last lane's
     // drawn right edge (no trailing gap), i.e. `acc − 10`.
@@ -16303,11 +16707,13 @@ fn layout_swimlanes_v2(
                 // lane's intrinsic 6-left/4-right padding asymmetry (+1 to the
                 // left half) baked in.
                 (lane_w[l] - lane_content_w[l]) / 2.0 + 1.0
-            } else if if_mode && l == 0 {
+            } else if if_long_collector_mode && l == 0 {
                 12.1763
-            } else if if_mode {
+            } else if if_long_multi_elseif_mode {
+                IF_COLLECTOR_OTHER_LANE_PAD
+            } else if if_long_collector_mode {
                 20.0
-            } else if if_mode && lane_leftmost_is_text(&shape_frags[l], lane_minx[l]) {
+            } else if lane_leftmost_is_text(&shape_frags[l], lane_minx[l]) {
                 5.0
             } else {
                 6.0
@@ -16365,6 +16771,8 @@ fn layout_swimlanes_v2(
             crate::compress::shift_y(&crate::compress::shift_x(&conn_frags[l], dx[l]), lane_dy[l])
         })
         .collect();
+    let mut compression_lane_conns: Option<Vec<String>> = None;
+    let mut routed_split_collector = false;
 
     let arrow_color = svg.palette.arrow_color.clone();
 
@@ -16378,9 +16786,22 @@ fn layout_swimlanes_v2(
             .map(|l| crate::compress::shift_y(&shape_frags[l], content_dy))
             .collect();
         let nat_conns = crate::compress::shift_y(&svg.connectors, content_dy);
-        if let Some(routed) =
-            route_if_cross_lane_connectors(&nat_conns, &nat_shapes, &lane_shapes, &arrow_color)
-        {
+        let if_long_collector = parse_conn_polylines(&nat_conns)
+            .iter()
+            .any(|pl| pl.tip.is_none());
+        if let Some((routed, split_collector)) = route_if_cross_lane_connectors(
+            &nat_conns,
+            &nat_shapes,
+            &lane_shapes,
+            &lane_left,
+            &lane_right,
+            if_long_multi_elseif_mode,
+            &arrow_color,
+        ) {
+            if if_long_collector && !split_collector {
+                compression_lane_conns = Some(lane_conns.clone());
+            }
+            routed_split_collector = split_collector;
             // All routed connectors go (in natural document order) into a single
             // buffer; the assembly emits them as one block after the shapes.
             lane_conns = vec![String::new(); n];
@@ -16537,9 +16958,10 @@ fn layout_swimlanes_v2(
             }
         }
         let mut conns = String::new();
+        let compression_conns = compression_lane_conns.as_ref().unwrap_or(&lane_conns);
         for l in 0..n {
             content.push_str(&lane_shapes[l]);
-            conns.push_str(&lane_conns[l]);
+            conns.push_str(&compression_conns[l]);
         }
         let (_, _, mut x_tf, _) = crate::compress::compress_activity_buffers(
             &content,
@@ -16570,6 +16992,11 @@ fn layout_swimlanes_v2(
                 .map(|(_, hi)| hi)
                 .unwrap_or_else(|| tx(right_edge));
             right_edge = (last_right + 4.0).max(lane_left[n - 1]);
+            if routed_split_collector
+                && let Some((_, hi)) = crate::compress::x_bounds(&lane_conns[0])
+            {
+                right_edge = right_edge.max(hi + IF_SPLIT_COLLECTOR_RIGHT_DIVIDER_PAD);
+            }
         }
     }
 
