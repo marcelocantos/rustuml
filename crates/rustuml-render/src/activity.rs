@@ -15983,8 +15983,6 @@ fn first_ellipse_cy(shapes: &str) -> Option<f64> {
     rest[cy_at..cy_at + end].parse().ok()
 }
 
-/// Half of the inter-lane gap (PlantUML `getHalfMissingSpace`, common case = 5).
-const SWIM_HALF_GAP: f64 = 5.0;
 /// Target x of the leftmost lane divider (matches gold).
 const SWIM_LEFT_DIVIDER_X: f64 = 20.0;
 /// Fork-only swimlane title slack: PlantUML lets a top-bar-only lane shrink
@@ -18418,7 +18416,19 @@ fn layout_swimlanes_v2(
     if let Some(layout) = exact_while_fork_swimlane_fixture_layout(tree) {
         return Some(layout);
     }
-    let shape_frags = partition_lane_buffer(&svg.shapes, &svg.lane_spans, |s| s.0, n);
+    let (shape_base, conn_base) = svg
+        .lane_spans
+        .first()
+        .map(|(shape_off, conn_off, _)| (*shape_off, *conn_off))
+        .unwrap_or((0, 0));
+    let prelude_shapes = &svg.shapes[..shape_base];
+    let prelude_connectors = &svg.connectors[..conn_base];
+    let adjusted_spans: Vec<(usize, usize, usize)> = svg
+        .lane_spans
+        .iter()
+        .map(|(shape_off, conn_off, lane)| (shape_off - shape_base, conn_off - conn_base, *lane))
+        .collect();
+    let shape_frags = partition_lane_buffer(&svg.shapes[shape_base..], &adjusted_spans, |s| s.0, n);
 
     // Connectors: start from the byte-offset partition, then RELABEL by natural
     // y-band. The single-tree emit defers some connectors (notably each
@@ -18432,7 +18442,7 @@ fn layout_swimlanes_v2(
     let lane_yband: Vec<(f64, f64)> = (0..n)
         .map(|l| svg_y_bounds(&shape_frags[l]).unwrap_or((f64::MIN, f64::MAX)))
         .collect();
-    let conn_frags = relabel_connectors_by_yband(&svg.connectors, &lane_yband);
+    let conn_frags = relabel_connectors_by_yband(&svg.connectors[conn_base..], &lane_yband);
 
     if std::env::var("RUSTUML_EXT_DBG").is_ok() {
         eprintln!("[V2] natural_start_y={natural_start_y}");
@@ -18723,9 +18733,18 @@ fn layout_swimlanes_v2(
     // Content drops to gold's swimlane body_top = header_top + text_height(title) + 15
     // (= gold's first-node reference y). Align the natural content's first reference
     // (the start ellipse cy, else the natural cursor) to body_top.
-    let header_top = SWIM_HALF_GAP + 12.2969; // ~17.2969
-    let body_top = header_top + title_text_h + 15.0;
+    let top_title_h = tree.iter().find_map(|node| match node {
+        LayoutNode::Title { font_size, .. } => Some(pm::text_height(*font_size)),
+        LayoutNode::Note { .. } | LayoutNode::Arrow { .. } => None,
+        _ => None,
+    });
     let natural_ref = first_ellipse_cy(&svg.shapes).unwrap_or(natural_start_y);
+    let header_top = if let Some(title_h) = top_title_h {
+        natural_start_y + title_h + 22.2969
+    } else {
+        natural_start_y + 1.2969
+    };
+    let body_top = header_top + title_text_h + 15.0;
     let content_dy = body_top - natural_ref;
 
     // Per-lane y-offset. With the leading-`|Lane|` phantom inbound arrow
@@ -19283,6 +19302,7 @@ fn layout_swimlanes_v2(
     .unwrap();
 
     // Connectors, lane by lane.
+    out.push_str(prelude_connectors);
     for conn in &lane_conns {
         out.push_str(conn);
     }
@@ -19329,7 +19349,14 @@ fn layout_swimlanes_v2(
     let total_w =
         (span_after + SWIM_NODE_EXTENT_PAD + SWIM_MARGIN_LEAD + SWIM_MARGIN_TRAIL).ceil() as u32;
     let total_h = (content_bottom + SWIM_LEFT_DIVIDER_X).ceil() as u32;
-    Some((out, String::new(), total_w, total_h))
+    let prelude_shapes = crate::compress::x_bounds(prelude_shapes)
+        .map(|(lo, hi)| {
+            crate::compress::shift_x(prelude_shapes, total_w as f64 / 2.0 - (lo + hi) / 2.0)
+        })
+        .unwrap_or_else(|| prelude_shapes.to_string());
+    let mut full_out = prelude_shapes;
+    full_out.push_str(&out);
+    Some((full_out, String::new(), total_w, total_h))
 }
 
 /// Emit a swimlanes block. Lanes are arranged left-to-right with vertical
