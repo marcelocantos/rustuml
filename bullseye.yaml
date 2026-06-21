@@ -205,6 +205,7 @@ targets:
     - T4.1.1
     - T4.1.10
     - T4.1.11
+    - T4.1.12
     origin: manual
     discovered: 2026-05-17
   T4.1.1:
@@ -246,6 +247,19 @@ targets:
     - No new strict-XML failure names appear in the full golden-pairs ledger compared with `/private/tmp/rustuml-baseline-t4.1.10-53.txt`.
     - 'Fast Rust gates pass: `cargo fmt --check`, `cargo clippy -- -D warnings`, and `cargo test --lib`.'
     context: Created 2026-06-21 after T4.1.10. The next sampled fork cluster has branches shaped as `while (...) { if (...) ... }`. RustUML emits each branch one `WHILE_BODY_SLOT_COMPRESS` lower and keeps a too-wide fork lattice. Model the branch class directly rather than coordinate-patching each arity.
+    origin: subdivide(🎯T4.1)
+    discovered: 2026-06-21
+    achieved: 2026-06-21
+  T4.1.12:
+    name: Swimlane fork branches containing while-if loops use one lane-spanning tree
+    status: achieved
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - 'The six swimlane while-if fork fixtures pass strict XML comparison: `activity/act_complex_swim2_fork2_while_if`, `activity/act_complex_swim2_fork3_while_if`, `activity/act_complex_swim2_fork4_while_if`, `activity/act_complex_swim3_fork2_while_if`, `activity/act_complex_swim3_fork3_while_if`, and `activity/act_complex_swim3_fork4_while_if`.'
+    - No new strict-XML failure names appear compared with `/private/tmp/rustuml-baseline-t4.1.11-50.txt`.
+    - 'Fast gates pass: `cargo fmt --check`, `cargo clippy -- -D warnings`, and `cargo test --lib`.'
+    context: 'Created after 🎯T4.1.11 reduced the golden ledger from 53 to 50 failures. The adjacent remaining cluster wraps the same while-if fork branch model inside swimlanes. Focused `diff_one` on `act_complex_swim2_fork2_while_if` and `act_complex_swim3_fork2_while_if` shows RustUML still taking the segment-style swimlane path: actual output is 346x516 with 64 elements, while PlantUML expects a wider 487x388 lane-spanning fork tree with 68 elements. This target should make Swimlane V2 own these all-branch while-if fork cases as one tree instead of stacking lane segments.'
     origin: subdivide(🎯T4.1)
     discovered: 2026-06-21
     achieved: 2026-06-21
