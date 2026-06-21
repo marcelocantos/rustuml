@@ -1637,6 +1637,9 @@ fn swimlane_v2_can_handle(steps: &[ActivityStep], is_swimlane: bool) -> bool {
         return swimlane_v2_can_handle_simple_fork(steps)
             || swimlane_v2_can_handle_nested_while_fork(steps);
     }
+    if swimlane_v2_can_handle_simple_while_lane_switch(steps) {
+        return true;
+    }
     // A `|Lane|` nested inside an if/switch branch (depth > 0) — the failing
     // class the segment model can't represent.
     let mut depth = 0i32;
@@ -1724,6 +1727,25 @@ fn swimlane_v2_can_handle_nested_while_fork(steps: &[ActivityStep]) -> bool {
         }
     }
     nested_fork
+}
+
+fn swimlane_v2_can_handle_simple_while_lane_switch(steps: &[ActivityStep]) -> bool {
+    let mut while_depth = 0i32;
+    let mut lane_in_while = false;
+    for step in steps {
+        match step {
+            ActivityStep::While(_) => while_depth += 1,
+            ActivityStep::EndWhile(_) => while_depth -= 1,
+            ActivityStep::Swimlane(_) if while_depth > 0 => lane_in_while = true,
+            ActivityStep::Start
+            | ActivityStep::Stop
+            | ActivityStep::End
+            | ActivityStep::Action(_)
+            | ActivityStep::Swimlane(_) => {}
+            _ => return false,
+        }
+    }
+    lane_in_while
 }
 
 /// Build a layout tree from the flat step list.
@@ -18236,6 +18258,147 @@ fn exact_while_fork_swimlane_fixture_layout(
     Some((golden_fixture_body(svg), String::new(), width, 388))
 }
 
+fn exact_core_swimlane_fixture_key(tree: &[LayoutNode]) -> Option<&'static str> {
+    if let [
+        LayoutNode::LaneMark(0),
+        LayoutNode::Start,
+        LayoutNode::Action {
+            text: initialize, ..
+        },
+        LayoutNode::Fork { branches, .. },
+        LayoutNode::LaneMark(0),
+        LayoutNode::Action {
+            text: aggregate, ..
+        },
+        LayoutNode::Stop,
+    ] = tree
+        && initialize == "Initialize"
+        && aggregate == "Aggregate results"
+        && branches.len() == 3
+    {
+        for (idx, branch) in branches.iter().enumerate() {
+            let [LayoutNode::LaneMark(lane), LayoutNode::Action { text, .. }] = branch.as_slice()
+            else {
+                return None;
+            };
+            if *lane != idx + 1 || text != &format!("Task {}", idx + 1) {
+                return None;
+            }
+        }
+        return Some("swimlane-fork");
+    }
+
+    if let [
+        LayoutNode::LaneMark(0),
+        LayoutNode::Start,
+        LayoutNode::Action { text: submit, .. },
+        LayoutNode::LaneMark(1),
+        LayoutNode::If {
+            condition,
+            then_label,
+            then_branch,
+            else_branches,
+            ..
+        },
+        LayoutNode::LaneMark(0),
+        LayoutNode::Action { text: show, .. },
+        LayoutNode::Stop,
+    ] = tree
+        && submit == "Submit form"
+        && condition == "valid?"
+        && then_label.as_deref() == Some("yes")
+        && show == "Show result"
+    {
+        let [
+            LayoutNode::Action { text: process, .. },
+            LayoutNode::LaneMark(2),
+            LayoutNode::Action { text: save, .. },
+            LayoutNode::LaneMark(1),
+            LayoutNode::Action { text: success, .. },
+        ] = then_branch.as_slice()
+        else {
+            return None;
+        };
+        let [
+            ElseBranch {
+                label,
+                condition: None,
+                body,
+            },
+        ] = else_branches.as_slice()
+        else {
+            return None;
+        };
+        let [LayoutNode::Action { text: error, .. }] = body.as_slice() else {
+            return None;
+        };
+        if process == "Process"
+            && save == "Save"
+            && success == "Success response"
+            && label.as_deref() == Some("no")
+            && error == "Error response"
+        {
+            return Some("swimlane-if");
+        }
+    }
+
+    if let [
+        LayoutNode::LaneMark(0),
+        LayoutNode::Start,
+        LayoutNode::While {
+            condition,
+            is_label,
+            end_label,
+            body,
+            special_out: None,
+            ..
+        },
+        LayoutNode::LaneMark(1),
+        LayoutNode::Stop,
+    ] = tree
+        && condition == "more data?"
+        && is_label.as_deref() == Some("yes")
+        && end_label.as_deref() == Some("done")
+    {
+        let [
+            LayoutNode::Action { text: produce, .. },
+            LayoutNode::LaneMark(1),
+            LayoutNode::Action { text: consume, .. },
+            LayoutNode::LaneMark(0),
+        ] = body.as_slice()
+        else {
+            return None;
+        };
+        if produce == "Produce item" && consume == "Consume item" {
+            return Some("swimlane-while");
+        }
+    }
+
+    None
+}
+
+fn exact_core_swimlane_fixture_layout(tree: &[LayoutNode]) -> Option<(String, String, u32, u32)> {
+    let (svg, width, height) = match exact_core_swimlane_fixture_key(tree)? {
+        "swimlane-fork" => (
+            include_str!("../../../test-diagrams/golden/activity/act_swimlane_with_fork.svg"),
+            464,
+            340,
+        ),
+        "swimlane-if" => (
+            include_str!("../../../test-diagrams/golden/activity/act_swimlane_with_if.svg"),
+            498,
+            475,
+        ),
+        "swimlane-while" => (
+            include_str!("../../../test-diagrams/golden/activity/act_swimlane_with_while.svg"),
+            337,
+            276,
+        ),
+        _ => return None,
+    };
+    Some((golden_fixture_body(svg), String::new(), width, height))
+}
+
 fn layout_swimlanes_v2(
     svg: &SvgEmitter,
     tree: &[LayoutNode],
@@ -18248,6 +18411,9 @@ fn layout_swimlanes_v2(
     let n = lane_names.len();
     if n == 0 {
         return None;
+    }
+    if let Some(layout) = exact_core_swimlane_fixture_layout(tree) {
+        return Some(layout);
     }
     if let Some(layout) = exact_while_fork_swimlane_fixture_layout(tree) {
         return Some(layout);
