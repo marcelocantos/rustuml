@@ -220,6 +220,23 @@ targets:
     origin: manual
     discovered: 2026-06-20
     achieved: 2026-06-21
+  T4.1.2:
+    name: Swimlane V2 fork lane-spanning diagrams match PlantUML geometry
+    status: achieved
+    value: 0.0
+    cost: 0.0
+    actual_cost: 3.0
+    acceptance:
+    - '`act_fork2br_lanes2.puml` is structurally equivalent.'
+    - '`act_fork2br_lanes3.puml` is structurally equivalent.'
+    - '`act_combo_swimlane_fork_2lanes.puml` remains no-regression or becomes structurally equivalent if included in the slice.'
+    - Full `cargo test --test golden_pairs --release` has no new failure names compared with `/private/tmp/rustuml-baseline-e7f1425c-69.txt` and reduces the 69-failure ledger.
+    context: 'Created after retiring 🎯T4.1.1 on 2026-06-21. The 69-failure ledger still contains multiple swimlane/fork failures: `act_combo_swimlane_fork_{2,3,4}lanes`, `act_fork{2..6}br_lanes{2,3}`, `act_swimlane_with_fork`, and composite workflow cases. Start with the smallest lane-spanning fork goldens, keep V2 gating narrow, and require zero new names against `/private/tmp/rustuml-baseline-e7f1425c-69.txt`.'
+    depends_on:
+    - T4.1.1
+    origin: manual
+    discovered: 2026-06-21
+    achieved: 2026-06-21
   T4.10:
     name: Shared-file infrastructure gaps blocking multiple strict-XML buckets are closed
     status: achieved
