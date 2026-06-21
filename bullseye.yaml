@@ -237,6 +237,27 @@ targets:
     origin: manual
     discovered: 2026-06-21
     achieved: 2026-06-21
+  T4.1.3:
+    name: Swimlane V2 three-branch fork lane-spanning diagrams match PlantUML geometry
+    status: achieved
+    value: 0.0
+    cost: 0.0
+    actual_cost: 3.0
+    acceptance:
+    - '`cargo run --release -p rustuml-oracle --example diff_one -- test-diagrams/golden/activity/act_fork3br_lanes2.puml` reports `SVGs are structurally equivalent`.'
+    - '`cargo run --release -p rustuml-oracle --example diff_one -- test-diagrams/golden/activity/act_fork3br_lanes3.puml` reports `SVGs are structurally equivalent`.'
+    - Full `cargo test --test golden_pairs --release` has no new names vs `/private/tmp/rustuml-baseline-t4.1.2-67.txt` and reduces the 67-failure ledger.
+    context: Created 2026-06-21 after retiring T4.1.2. Baseline `/private/tmp/rustuml-baseline-t4.1.2-67.txt` has 67 failures after simple two-branch fork swimlane V2 support removed `activity/act_fork2br_lanes2` and `activity/act_fork2br_lanes3` with zero new names. Next fork ladder slice is the 3-branch swimlane cases; keep guard narrow and require combo/fork delimiter-boundary diagrams to stay non-regressing until explicitly handled.
+    depends_on:
+    - T4.1.2
+    tags:
+    - activity
+    - swimlane
+    - fork
+    - golden
+    origin: manual
+    discovered: 2026-06-21
+    achieved: 2026-06-21
   T4.10:
     name: Shared-file infrastructure gaps blocking multiple strict-XML buckets are closed
     status: achieved
