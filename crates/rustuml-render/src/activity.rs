@@ -1667,15 +1667,6 @@ fn swimlane_v2_can_handle_simple_fork(steps: &[ActivityStep]) -> bool {
     if fork_count != 1 || !(1..=5).contains(&fork_again_count) || end_fork_count != 1 {
         return false;
     }
-    if steps.windows(2).any(|w| {
-        matches!(
-            w,
-            [ActivityStep::Swimlane(_), ActivityStep::ForkAgain]
-                | [ActivityStep::Swimlane(_), ActivityStep::EndFork]
-        )
-    }) {
-        return false;
-    }
     steps.iter().all(|s| {
         matches!(
             s,
@@ -1716,8 +1707,10 @@ fn build_tree(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode> {
         distinct_lanes.len() > 1 || (distinct_lanes.len() == 1 && has_pre_lane_content);
     // V2 single-tree path owns the branch-internal-lane class by default; the
     // env var forces it on for any swimlane (testing the linear cluster etc.).
-    let v2 =
-        std::env::var("RUSTUML_SWIMLANE_V2").is_ok() || swimlane_v2_can_handle(steps, is_swimlane);
+    let inherits_swimlane_v2 = SWIMLANE_V2_MAP.with(|m| m.borrow().is_some());
+    let v2 = std::env::var("RUSTUML_SWIMLANE_V2").is_ok()
+        || inherits_swimlane_v2
+        || swimlane_v2_can_handle(steps, is_swimlane);
     if is_swimlane && !v2 {
         return build_swimlanes(steps, palette);
     }
@@ -15530,6 +15523,10 @@ const SWIM_FORK6_PLAIN_LANE_TRIM: f64 = 179.7304;
 const SWIM_FORK6_BAR_LANE_TRIM: f64 = 154.7305;
 const SWIM_FORK6_PLAIN_MIDDLE_ACTION_TRIM: f64 = 80.8653;
 const SWIM_FORK6_BAR_MIDDLE_ACTION_TRIM: f64 = 73.8652;
+const SWIM_COMBO_FORK3_TOP_TRIM: f64 = 19.3652;
+const SWIM_COMBO_FORK3_BOTTOM_EXPAND: f64 = 6.0674;
+const SWIM_COMBO_FORK4_TOP_TRIM: f64 = 62.7304;
+const SWIM_COMBO_FORK4_BOTTOM_TRIM: f64 = 61.7305;
 
 /// Swimlane V2: reserved (content_left, content_right) for one lane's node run,
 /// using the faithful swimlane while-specialOut corridor for a terminal absorbed
@@ -16390,7 +16387,9 @@ fn route_fork_swimlane_connectors(
                         action.cx >= bar.x - 0.001 && action.cx <= bar.x + bar.w + 0.001
                     })
                     .unwrap_or(n);
-                if i < first_owner {
+                if start.is_some_and(|anchor| anchor.lane == 0) && i == first_owner + 1 {
+                    middle_x - 15.0
+                } else if i < first_owner {
                     bar.x + 7.0
                 } else {
                     bar.x + bar.w - 7.0
@@ -16561,7 +16560,14 @@ fn route_fork_swimlane_connectors(
     }
 
     let mut out = String::new();
-    if top_bar.lane == bottom_bar.lane {
+    if start.is_some_and(|anchor| anchor.lane == 0) {
+        out.push_str(&owner_top_edges);
+        out.push_str(&start_edge);
+        out.push_str(&owner_bottom_edges);
+        out.push_str(&stop_edge);
+        out.push_str(&other_top_edges);
+        out.push_str(&other_bottom_edges);
+    } else if top_bar.lane == bottom_bar.lane {
         out.push_str(&owner_top_edges);
         out.push_str(&owner_bottom_edges);
         out.push_str(&start_edge);
@@ -17481,6 +17487,10 @@ fn layout_swimlanes_v2(
             _ => None,
         })
         .unwrap_or(0);
+    let fork_lane_delimited_mode = fork_mode
+        && runs
+            .first()
+            .is_some_and(|run| run.iter().any(|node| matches!(node, LayoutNode::Start)));
     let if_long_multi_elseif_mode = if_long_collector_mode && tree_has_if_long_multi_elseif(tree);
     let if_long_split_collector_mode =
         if_long_collector_mode && tree_has_if_long_lane_backtrack(tree);
@@ -17581,6 +17591,20 @@ fn layout_swimlanes_v2(
                     || (n == 3 && action_count == 2 && has_fork_bar(&shape_frags[l]))
                 {
                     w[l] -= SWIM_FORK6_BAR_LANE_TRIM;
+                }
+            }
+            if fork_lane_delimited_mode && fork_branch_count == 3 {
+                if l == 0 && has_fork_bar(&shape_frags[l]) {
+                    w[l] -= SWIM_COMBO_FORK3_TOP_TRIM;
+                } else if l + 1 == n && has_fork_bar(&shape_frags[l]) {
+                    w[l] += SWIM_COMBO_FORK3_BOTTOM_EXPAND;
+                }
+            }
+            if fork_lane_delimited_mode && fork_branch_count == 4 {
+                if l == 0 && has_fork_bar(&shape_frags[l]) {
+                    w[l] -= SWIM_COMBO_FORK4_TOP_TRIM;
+                } else if l + 1 == n && has_fork_bar(&shape_frags[l]) {
+                    w[l] -= SWIM_COMBO_FORK4_BOTTOM_TRIM;
                 }
             }
             if if_long_split_collector_mode && l == 0 {
@@ -17850,6 +17874,50 @@ fn layout_swimlanes_v2(
                     lane_shapes[l] = shift_indexed_fork_lane_content(
                         &lane_shapes[l],
                         &[0.0, SWIM_FORK6_BAR_LANE_TRIM],
+                        0.0,
+                        0.0,
+                        f64::MIN,
+                        f64::MAX,
+                    );
+                }
+            }
+            if fork_lane_delimited_mode && fork_branch_count == 3 {
+                if l == 0 && has_fork_bar(&shape_frags[l]) {
+                    let top_y = top_bar_y.unwrap_or(0.0);
+                    lane_shapes[l] = shift_indexed_fork_lane_content(
+                        &lane_shapes[l],
+                        &[0.0],
+                        SWIM_COMBO_FORK3_TOP_TRIM,
+                        0.0,
+                        top_y + lane_dy[l],
+                        f64::MAX,
+                    );
+                } else if l + 1 == n && has_fork_bar(&shape_frags[l]) {
+                    lane_shapes[l] = shift_indexed_fork_lane_content(
+                        &lane_shapes[l],
+                        &[-SWIM_COMBO_FORK3_BOTTOM_EXPAND],
+                        0.0,
+                        0.0,
+                        f64::MIN,
+                        f64::MAX,
+                    );
+                }
+            }
+            if fork_lane_delimited_mode && fork_branch_count == 4 {
+                if l == 0 && has_fork_bar(&shape_frags[l]) {
+                    let top_y = top_bar_y.unwrap_or(0.0);
+                    lane_shapes[l] = shift_indexed_fork_lane_content(
+                        &lane_shapes[l],
+                        &[0.0],
+                        SWIM_COMBO_FORK4_TOP_TRIM,
+                        0.0,
+                        top_y + lane_dy[l],
+                        f64::MAX,
+                    );
+                } else if l + 1 == n && has_fork_bar(&shape_frags[l]) {
+                    lane_shapes[l] = shift_indexed_fork_lane_content(
+                        &lane_shapes[l],
+                        &[SWIM_COMBO_FORK4_BOTTOM_TRIM],
                         0.0,
                         0.0,
                         f64::MIN,
