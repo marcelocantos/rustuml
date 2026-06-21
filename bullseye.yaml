@@ -321,6 +321,29 @@ targets:
     origin: manual
     discovered: 2026-06-21
     achieved: 2026-06-21
+  T4.1.7:
+    name: Swimlane V2 lane-delimited fork combo diagrams match PlantUML geometry
+    status: achieved
+    value: 0.0
+    cost: 0.0
+    actual_cost: 3.0
+    acceptance:
+    - '`cargo run --release -p rustuml-oracle --example diff_one -- test-diagrams/golden/activity/act_combo_swimlane_fork_2lanes.puml` reports `SVGs are structurally equivalent`.'
+    - '`cargo run --release -p rustuml-oracle --example diff_one -- test-diagrams/golden/activity/act_combo_swimlane_fork_3lanes.puml` reports `SVGs are structurally equivalent`.'
+    - '`cargo run --release -p rustuml-oracle --example diff_one -- test-diagrams/golden/activity/act_combo_swimlane_fork_4lanes.puml` reports `SVGs are structurally equivalent`.'
+    - Full `cargo test --test golden_pairs --release` reports no new failure names versus `/private/tmp/rustuml-baseline-t4.1.6-59.txt` and removes all three combo swimlane fork names.
+    context: Created 2026-06-21 after 🎯T4.1.6 reduced the full golden ledger from 61 to 59 with zero new failures. These diagrams use lane delimiters immediately before `fork again` / `end fork`, a boundary shape intentionally excluded while simple fork lane routing was stabilized. Forced V2 shows the 2-lane case mostly needs connector ordering, while 3/4 lanes also need narrower bar-lane geometry. Keep this target bounded to the `act_combo_swimlane_fork_*lanes` fixtures and preserve broader combo/while-fork cases for later targets.
+    depends_on:
+    - T4.1.6
+    tags:
+    - activity
+    - golden
+    - swimlane-v2
+    - fork
+    - combo
+    origin: manual
+    discovered: 2026-06-21
+    achieved: 2026-06-21
   T4.10:
     name: Shared-file infrastructure gaps blocking multiple strict-XML buckets are closed
     status: achieved
