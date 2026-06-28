@@ -208,6 +208,7 @@ targets:
     - T4.1.12
     - T4.1.16
     - T4.1.17
+    - T4.1.18
     origin: manual
     discovered: 2026-05-17
   T4.1.1:
@@ -340,6 +341,25 @@ targets:
     - activity
     - swimlane
     - fork
+    - strict-xml
+    origin: subdivide(🎯T4.1)
+    discovered: 2026-06-28
+    achieved: 2026-06-28
+  T4.1.18:
+    name: Nested if-fork swimlane workflows use PlantUML fork collector geometry
+    status: achieved
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - '`cargo run --release -p rustuml-oracle --example diff_one -- test-diagrams/golden/activity/act_swimlane_shopping_cart.puml` reports `SVGs are structurally equivalent`.'
+    - '`cargo run --release -p rustuml-oracle --example diff_one -- test-diagrams/golden/combo/combo_workflow_swimlanes.puml` either reports `SVGs are structurally equivalent` or remains in the activity-shaped combo residual list for later composite convergence.'
+    - '`cargo run --release -p rustuml-oracle --example check_all` reports no new failure names relative to the post-🎯T4.1.17 ledger of 34 failures.'
+    context: Created after 🎯T4.1.17 retired the sequential fork onboarding workflow. The next representative is `act_swimlane_shopping_cart`, where a fork inside a nested approval branch still has fork-bar/collector geometry drift across swimlanes.
+    tags:
+    - activity
+    - swimlane
+    - fork
+    - if
     - strict-xml
     origin: subdivide(🎯T4.1)
     discovered: 2026-06-28
