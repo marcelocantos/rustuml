@@ -1025,6 +1025,10 @@ fn branch_terminates(body: &[LayoutNode]) -> bool {
     )
 }
 
+fn branch_terminates_with_break(body: &[LayoutNode]) -> bool {
+    matches!(body.last(), Some(LayoutNode::Break))
+}
+
 fn branch_ends_with_goto(body: &[LayoutNode]) -> bool {
     matches!(body.last(), Some(LayoutNode::Goto(_)))
 }
@@ -1209,6 +1213,25 @@ fn if_node_has_single_survivor(node: &LayoutNode) -> bool {
             ..
         } if if_single_survivor(then_branch, else_branches).is_some()
     )
+}
+
+fn single_survivor_if_join_offset(node: &LayoutNode) -> Option<f64> {
+    let LayoutNode::If {
+        diamond_half_y,
+        then_branch,
+        else_branches,
+        ..
+    } = node
+    else {
+        return None;
+    };
+    if if_single_survivor(then_branch, else_branches).is_none() || else_branches.len() != 1 {
+        return None;
+    }
+    let branch_y = diamond_half_y * 2.0 + IF_BRANCH_DOWN;
+    let then_bottom = branch_y + sequence_height(then_branch);
+    let else_bottom = branch_y + sequence_height(&else_branches[0].body);
+    Some(then_bottom.max(else_bottom) + IF_SINGLE_SURVIVOR_JOIN_GAP)
 }
 
 /// True for a binary `if` that `if_down_plan` renders with a *terminating*
@@ -8118,7 +8141,15 @@ fn node_height(node: &LayoutNode) -> f64 {
             } else {
                 0.0
             };
-            top_lead + body_h + cond_gap + diamond_h + break_merge
+            let backward_composite_break_canvas = if backward.is_some()
+                && body_contains_break_if(body)
+                && !break_if_is_last_flow(body)
+            {
+                4.0
+            } else {
+                0.0
+            };
+            top_lead + body_h + cond_gap + diamond_h + break_merge + backward_composite_break_canvas
         }
         LayoutNode::Arrow { .. } => 0.0, // arrows don't add height (they're between nodes)
         LayoutNode::Note { .. } => 0.0,
@@ -8564,6 +8595,7 @@ struct SvgEmitter {
     /// reads it after body emission to draw the corridor DOWN from this y to the
     /// break-merge diamond.
     repeat_break_weld_y: Option<f64>,
+    repeat_body_condition_connector_drawn: bool,
     /// Context for a SOLE single-survivor `if` nested directly in an enclosing
     /// `if`/`switch` branch; see [`IfSurvivorRedirect`].
     if_survivor_redirect: Option<IfSurvivorRedirect>,
@@ -8812,6 +8844,7 @@ struct WhileBreakContext {
     /// topologies), the merge sits below that flow + the condition, so `emit_repeat`
     /// pre-computes it here from the body height.
     repeat_merge_cy: Option<f64>,
+    repeat_merge_left_x: Option<f64>,
     /// Extra lead added to the inbound connector that reaches the break-`if`'s
     /// diamond (on top of the plain `ARROW_LEN`). A bare `while (cond)` with no
     /// `is`/end label centres its body in a frame with `suppLabel = 0` (see
@@ -8900,6 +8933,7 @@ struct IfSurvivorRedirect {
     /// `true` → arrives at the left vertex, points right; `false` → right
     /// vertex, points left.
     to_right: bool,
+    draw_arrow: bool,
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -8926,6 +8960,7 @@ impl SvgEmitter {
             while_break: None,
             while_break_loopback_fused: false,
             repeat_break_weld_y: None,
+            repeat_body_condition_connector_drawn: false,
             if_survivor_redirect: None,
             pending_while_body: false,
             while_sole_body_suppress_compress: false,
@@ -9896,7 +9931,21 @@ fn emit_sequence_ex(
             continue;
         }
         // Detach/Kill/Break/Goto also produce no shape and no incoming
-        // connector — they mark the previous flow as terminated.
+        // connector — they mark the previous flow as terminated. A `break`
+        // inside a repeat branch still owns its exit collector, emitted here so
+        // the connector lands in the branch's document-order slot.
+        if matches!(node, LayoutNode::Break)
+            && let Some(brk) = svg.while_break.filter(|brk| brk.repeat_mode)
+            && let (Some(merge_cy), Some(merge_left)) =
+                (brk.repeat_merge_cy, brk.repeat_merge_left_x)
+        {
+            let arrow_color = svg.palette.arrow_color.clone();
+            let merge_cy = merge_cy - 1.0;
+            svg.connector_line(&arrow_color, cx, cx, y, merge_cy, false);
+            svg.connector_line(&arrow_color, cx, merge_left, merge_cy, merge_cy, false);
+            svg.right_arrow(merge_left, merge_cy, &arrow_color);
+            svg.repeat_break_weld_y = Some(y);
+        }
         if matches!(
             node,
             LayoutNode::Detach | LayoutNode::Kill | LayoutNode::Break | LayoutNode::Goto(_)
@@ -11290,6 +11339,13 @@ fn emit_if(
             .as_ref()
             .map(|(p, _)| !p.then_is_break)
     });
+    let repeat_break_single_survivor = svg.while_break.is_some_and(|brk| brk.repeat_mode)
+        && else_branches.len() == 1
+        && else_branches[0].condition.is_none()
+        && ((branch_terminates_with_break(then_branch_flow)
+            && !branch_terminates(else_branch_flow))
+            || (branch_terminates_with_break(else_branch_flow)
+                && !branch_terminates(then_branch_flow)));
 
     // Merge diamond at bottom — sits IF_BRANCH_UP px below the deepest branch.
     // Swimlane V2 keeps the uncompressed branch→merge gap (10) even when the
@@ -11307,10 +11363,28 @@ fn emit_if(
     // exit corridor (while) or surviving out-corridor (single-survivor if) lands
     // on the merge diamond. Only meaningful when a real merge diamond exists
     // (non-terminating, no single-survivor short-circuit at THIS level).
+    let repeat_break_redirect_cy = if repeat_break_single_survivor {
+        if then_survivor_if {
+            then_branch_flow
+                .first()
+                .and_then(single_survivor_if_join_offset)
+                .map(|off| branch_y + off)
+        } else if else_survivor_if {
+            else_branch_flow
+                .first()
+                .and_then(single_survivor_if_join_offset)
+                .map(|off| branch_y + off)
+        } else {
+            None
+        }
+    } else {
+        None
+    };
+    let redirect_merge_cy = repeat_break_redirect_cy.unwrap_or(merge_cy);
     let redirect_active =
         (then_redirectable || else_redirectable || then_survivor_if || else_survivor_if)
             && !all_terminate
-            && single_survivor.is_none()
+            && (single_survivor.is_none() || repeat_break_redirect_cy.is_some())
             && !if_empty_both_plain(then_branch, else_branches);
     if redirect_active {
         svg.shapes.truncate(shapes_chk);
@@ -11326,9 +11400,14 @@ fn emit_if(
         }
         if then_survivor_if {
             svg.if_survivor_redirect = Some(IfSurvivorRedirect {
-                merge_cy,
-                merge_vertex_x: cx - DIAMOND_HALF,
+                merge_cy: redirect_merge_cy,
+                merge_vertex_x: if repeat_break_redirect_cy.is_some() {
+                    cx
+                } else {
+                    cx - DIAMOND_HALF
+                },
                 to_right: true,
+                draw_arrow: repeat_break_redirect_cy.is_none(),
             });
         }
         emit_if_then_branch_with_stretch(
@@ -11350,9 +11429,14 @@ fn emit_if(
             }
             if else_survivor_if {
                 svg.if_survivor_redirect = Some(IfSurvivorRedirect {
-                    merge_cy,
-                    merge_vertex_x: cx + DIAMOND_HALF,
+                    merge_cy: redirect_merge_cy,
+                    merge_vertex_x: if repeat_break_redirect_cy.is_some() {
+                        cx
+                    } else {
+                        cx + DIAMOND_HALF
+                    },
                     to_right: false,
+                    draw_arrow: repeat_break_redirect_cy.is_none(),
                 });
             }
             emit_sequence_if_branch(svg, else_branch_flow, else_cx, branch_y);
@@ -11541,6 +11625,9 @@ fn emit_if(
         } else {
             (else_cx, else_bottom)
         };
+        if let Some(merge_cy) = repeat_break_redirect_cy {
+            return merge_cy;
+        }
         // Nested directly inside a parent if/switch branch: PlantUML's
         // ConnectionVerticalThenHorizontalDirect + MergeStrategy.LIMITED fuses
         // the surviving out-corridor with the parent's branch→merge connector.
@@ -11592,10 +11679,16 @@ fn emit_if(
                 redir.merge_cy,
                 false,
             );
-            if redir.to_right {
-                svg.right_arrow(redir.merge_vertex_x, redir.merge_cy, &arrow_color);
+            if redir.draw_arrow {
+                if redir.to_right {
+                    svg.right_arrow(redir.merge_vertex_x, redir.merge_cy, &arrow_color);
+                } else {
+                    svg.left_arrow(redir.merge_vertex_x, redir.merge_cy, &arrow_color);
+                }
             } else {
-                svg.left_arrow(redir.merge_vertex_x, redir.merge_cy, &arrow_color);
+                let cond_y = redir.merge_cy + ARROW_LEN - IF_SINGLE_SURVIVOR_JOIN_GAP;
+                svg.down_arrow(redir.merge_vertex_x, redir.merge_cy, cond_y, &arrow_color);
+                svg.repeat_body_condition_connector_drawn = true;
             }
             return redir.merge_cy;
         }
@@ -12587,7 +12680,11 @@ fn repeat_body_mid_stretch(body: &[LayoutNode], has_backward: bool) -> Option<(u
             let target = (action_count.saturating_sub(1)).max(1).min(break_if_idx);
             return Some((target, REPEAT_BACKWARD_BREAK_ODD_SLACK));
         }
-        if flow_count >= 2 {
+        let all_actions_flow = body
+            .iter()
+            .filter(|n| node_is_flow(n))
+            .all(|n| matches!(n, LayoutNode::Action { .. }));
+        if flow_count >= 2 && all_actions_flow {
             return Some((
                 flow_count - 1,
                 REPEAT_BACKWARD_BODY_SLACK / flow_count as f64,
@@ -12761,10 +12858,33 @@ fn repeat_backward_extra_cond_gap(body: &[LayoutNode], has_backward: bool) -> f6
     if !has_backward {
         return 0.0;
     }
+    let flow_count = body.iter().filter(|n| node_is_flow(n)).count();
+    if flow_count >= 2 && body_contains_break_if(body) && !break_if_is_last_flow(body) {
+        return -IF_SINGLE_SURVIVOR_JOIN_GAP;
+    }
     let mut flow = body.iter().filter(|n| node_is_flow(n));
     match (flow.next(), flow.next()) {
         (Some(LayoutNode::Action { .. }), None) => 10.0,
         _ => 0.0,
+    }
+}
+
+fn repeat_backward_composite_break_body_slack(body: &[LayoutNode], has_backward: bool) -> f64 {
+    if !has_backward || break_if_is_last_flow(body) || !body_contains_break_if(body) {
+        return 0.0;
+    }
+    let flow_count = body.iter().filter(|n| node_is_flow(n)).count();
+    if flow_count < 2 {
+        return 0.0;
+    }
+    let all_actions_flow = body
+        .iter()
+        .filter(|n| node_is_flow(n))
+        .all(|n| matches!(n, LayoutNode::Action { .. }));
+    if all_actions_flow {
+        0.0
+    } else {
+        IF_BRANCH_UP / 2.0 + 0.5
     }
 }
 
@@ -14934,6 +15054,7 @@ fn emit_while(
             fuse_loopback,
             repeat_mode: false,
             repeat_merge_cy: None,
+            repeat_merge_left_x: None,
             inbound_lead: if no_label {
                 WHILE_BREAK_NO_LABEL_INBOUND_LEAD
                     + if no_south_label {
@@ -15907,6 +16028,8 @@ fn emit_repeat(
     };
     let prev_while_break = svg.while_break.take();
     let prev_weld_y = svg.repeat_break_weld_y.take();
+    let prev_body_condition_drawn = svg.repeat_body_condition_connector_drawn;
+    svg.repeat_body_condition_connector_drawn = false;
     if has_break && let Some(corridor_x) = break_corridor_x {
         svg.while_break = Some(WhileBreakContext {
             corridor_x,
@@ -15914,6 +16037,7 @@ fn emit_repeat(
             fuse_loopback: None,
             repeat_mode: true,
             repeat_merge_cy: break_merge_cy,
+            repeat_merge_left_x: Some(cx - DIAMOND_HALF),
             inbound_lead: 0.0,
             repeat_break_first_flow: break_if_is_first_flow(body) && !break_if_is_last_flow(body),
         });
@@ -15963,8 +16087,10 @@ fn emit_repeat(
     // Capture the break weld y the body's break-`if` recorded (if any), then
     // restore the prior break context so a sibling/parent loop is unaffected.
     let break_weld_y = svg.repeat_break_weld_y.take();
+    let body_condition_connector_drawn = svg.repeat_body_condition_connector_drawn;
     svg.while_break = prev_while_break;
     svg.repeat_break_weld_y = prev_weld_y;
+    svg.repeat_body_condition_connector_drawn = prev_body_condition_drawn;
     // Nested-repeat tail expansion contributed by this repeat's body.
     let body_expansion = svg.repeat_nested_expansion;
     // Propagate this whole subtree's expansion (own tail + body's) to the
@@ -16195,6 +16321,7 @@ fn emit_repeat(
                     0.0
                 };
             body_y + (body_bottom - body_y - backward_h) / 2.0 - odd_stretch_adjust
+                + repeat_backward_composite_break_body_slack(body, backward.is_some())
         };
         let box_bottom = box_top + backward_h;
 
@@ -16381,7 +16508,7 @@ fn emit_repeat(
     // MID/early break ends the body with a trailing action, whose spine→condition
     // arrow the break-`if` did NOT draw — emit it here. A `while`-LAST body already
     // drew it early (see `while_body_out_first`).
-    if !break_is_last && !while_body_out_first {
+    if !break_is_last && !while_body_out_first && !body_condition_connector_drawn {
         svg.down_arrow(cx, body_bottom, cond_y, &arrow_color);
     }
 
