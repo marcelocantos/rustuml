@@ -1219,6 +1219,10 @@ fn branch_last_flow_is_single_survivor_if(nodes: &[LayoutNode]) -> bool {
     last_flow_index(nodes).is_some_and(|i| if_node_has_single_survivor(&nodes[i]))
 }
 
+fn branch_last_flow_is_terminating_down_if(nodes: &[LayoutNode]) -> bool {
+    last_flow_index(nodes).is_some_and(|i| if_node_is_terminating_down(&nodes[i]))
+}
+
 fn if_down_populated_ends_with_single_survivor_if(node: &LayoutNode) -> bool {
     matches!(
         node,
@@ -6042,6 +6046,8 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
                 let left = (cond_half + IF_DOWN_LEFT_PAD).max(branch_w / 2.0);
                 let branch_clear = if branch_last_flow_is_single_survivor_if(plan.populated) {
                     branch_right + ARROW_LEN + DIAMOND_HALF
+                } else if branch_last_flow_is_terminating_down_if(plan.populated) {
+                    branch_right + IF_DOWN_TERMINATING_BRANCH_CORRIDOR_GAP + DIAMOND_HALF
                 } else {
                     branch_w / 2.0
                         + IF_DOWN_BRANCH_CORRIDOR_GAP
@@ -7886,9 +7892,10 @@ fn node_height(node: &LayoutNode) -> f64 {
                 } else {
                     IF_DOWN_MID_STRETCH
                 };
-                let last_single_survivor = branch_last_flow_is_single_survivor_if(plan.populated);
+                let last_owns_corridor = branch_last_flow_is_single_survivor_if(plan.populated)
+                    || branch_last_flow_is_terminating_down_if(plan.populated);
                 let stretch =
-                    if !last_single_survivor && flow_count >= 2 && flow_count.is_multiple_of(2) {
+                    if !last_owns_corridor && flow_count >= 2 && flow_count.is_multiple_of(2) {
                         stretch_amount
                     } else {
                         0.0
@@ -8732,6 +8739,12 @@ struct SvgEmitter {
     /// is reclaimed; `emit_if_down` consumes this one-shot and lengthens only
     /// that outbound spine arrow.
     if_down_terminating_while_body_has_next: bool,
+    /// While a parent if-down branch ends in a nested terminating if-down,
+    /// PlantUML emits the parent's branch→merge arrow before the child's inbound
+    /// arrow. `emit_if_down` sets this around the branch sequence and then emits
+    /// the captured arrow in that interleaved slot.
+    defer_if_down_terminating_inbound: bool,
+    if_down_terminating_deferred_inbound: Option<PendingDownArrow>,
     /// True while emitting a leading multi-case (>= 3) SMALL-diamond switch of a
     /// `fork`/`split` branch. Such a switch emits its uncompressed `FtileSwitchNude`
     /// layout (`switch_x_layout_nude`) rather than the switch-locally-compressed
@@ -9006,6 +9019,8 @@ impl SvgEmitter {
             repeat_body_switch: false,
             if_down_terminating_has_next: false,
             if_down_terminating_while_body_has_next: false,
+            defer_if_down_terminating_inbound: false,
+            if_down_terminating_deferred_inbound: None,
             fork_body_switch: false,
             while_corridor_compresses: false,
             while_switch_corridor_compresses: false,
@@ -10481,6 +10496,12 @@ fn emit_sequence_ex(
                 || is_group_wrapping_while(node)
             {
                 deferred_partition_inbound = Some((arrow_top, style, label, arrow_gap));
+            } else if svg.defer_if_down_terminating_inbound
+                && if_node_is_terminating_down(node)
+                && Some(i) == last_flow_index(nodes)
+            {
+                svg.if_down_terminating_deferred_inbound =
+                    Some((arrow_top, style, label, arrow_gap));
             } else {
                 emit_pending_down_arrow(svg, arrow_top, style, label, arrow_gap, cx);
                 if let Some((arrow_top, style, label, arrow_gap)) =
@@ -12141,6 +12162,10 @@ const IF_CORRIDOR_ARROW_OFFSET: f64 = 2.238769531250023;
 /// midpoint lower than the compressed line endpoints; the down-arrowhead lands
 /// on that uncompressed midpoint.
 const IF_DOWN_SINGLE_SURVIVOR_CORRIDOR_ARROW_EXTRA: f64 = DIAMOND_HALF - 1.5;
+/// A nested terminating if-down also anchors the parent empty-side corridor
+/// arrowhead on PlantUML's abstract no-diamond midpoint, which survives one
+/// tiny text-metric rounding step below the compressed line midpoint.
+const IF_DOWN_TERMINATING_CORRIDOR_ARROW_EXTRA: f64 = 0.02197265625;
 /// The repeat loop-back for a body ending in an if-down/single-survivor branch
 /// keeps part of the same uncompressed corridor band in its content midpoint.
 const REPEAT_SINGLE_SURVIVOR_LOOPBACK_ARROW_RELIEF: f64 = IF_CORRIDOR_ARROW_OFFSET + 3.0;
@@ -12173,6 +12198,11 @@ const IF_DOWN_BRANCH_CORRIDOR_GAP: f64 = 10.0;
 /// diamond-based IF_DOWN_RIGHT_PAD includes this implicitly; branch-based
 /// corridors need it added explicitly for canvas width parity.
 const IF_DOWN_BRANCH_CORRIDOR_TRAILING_PAD: f64 = 15.0;
+/// A branch ending in a nested terminating if-down owns the final no-diamond
+/// corridor, but PlantUML keeps it closer to the branch than the survivor
+/// merge-join corridor. The gap is one hex half-width minus the survivor's
+/// small merge join.
+const IF_DOWN_TERMINATING_BRANCH_CORRIDOR_GAP: f64 = DIAMOND_HALF - IF_SINGLE_SURVIVOR_JOIN_GAP;
 /// Extra gap stretched onto the middle inter-action arrow of an even-action
 /// populated branch in the FtileIfDown layout.
 const IF_DOWN_MID_STRETCH: f64 = 15.0;
@@ -13243,9 +13273,9 @@ fn emit_if_down(
     // is centred against the merge diamond's band (full IF_DOWN_MID_STRETCH); a
     // terminating branch has no merge diamond (`getShape2` → FtileEmpty), so its
     // `getTranslateForThen` centring reserves less band below — the stretch
-    // shrinks to IF_DOWN_TERM_MID_STRETCH. A trailing single-survivor if owns
-    // the vertical wait-for-terminal-side corridor itself, so the if-down frame
-    // must not inject this stretch into the nested branch.
+    // shrinks to IF_DOWN_TERM_MID_STRETCH. A trailing single-survivor or
+    // terminating if-down owns its vertical corridor itself, so the parent
+    // if-down frame must not inject this stretch into the nested branch.
     let flow_count = plan.populated.iter().filter(|n| node_is_flow(n)).count();
     let stretch_amount = if plan.populated_terminates {
         IF_DOWN_TERM_MID_STRETCH
@@ -13253,12 +13283,20 @@ fn emit_if_down(
         IF_DOWN_MID_STRETCH
     };
     let populated_last_single_survivor = branch_last_flow_is_single_survivor_if(plan.populated);
-    let mid_stretch =
-        if !populated_last_single_survivor && flow_count >= 2 && flow_count.is_multiple_of(2) {
-            Some((flow_count / 2, stretch_amount))
-        } else {
-            None
-        };
+    let populated_last_terminating_down = branch_last_flow_is_terminating_down_if(plan.populated);
+    let mid_stretch = if !populated_last_single_survivor
+        && !populated_last_terminating_down
+        && flow_count >= 2
+        && flow_count.is_multiple_of(2)
+    {
+        Some((flow_count / 2, stretch_amount))
+    } else {
+        None
+    };
+    let previous_defer_if_down_terminating_inbound = std::mem::replace(
+        &mut svg.defer_if_down_terminating_inbound,
+        populated_last_terminating_down,
+    );
     let branch_bottom = emit_sequence_ex(
         svg,
         plan.populated,
@@ -13268,6 +13306,7 @@ fn emit_if_down(
         None,
         false,
     );
+    svg.defer_if_down_terminating_inbound = previous_defer_if_down_terminating_inbound;
 
     // Condition hexagon.
     let pts = vec![
@@ -13339,6 +13378,8 @@ fn emit_if_down(
     let populated_right = sequence_extents(plan.populated).1;
     let populated_clear_x = if populated_last_single_survivor {
         cx + populated_right + ARROW_LEN
+    } else if populated_last_terminating_down {
+        cx + populated_right + IF_DOWN_TERMINATING_BRANCH_CORRIDOR_GAP
     } else {
         cx + sequence_width(plan.populated) / 2.0 + IF_DOWN_BRANCH_CORRIDOR_GAP
     };
@@ -13440,6 +13481,15 @@ fn emit_if_down(
         &diamond_stroke_width,
     );
 
+    if populated_last_terminating_down {
+        svg.down_arrow(cx, branch_bottom, merge_top, &arrow_color);
+        if let Some((arrow_top, style, label, arrow_gap)) =
+            svg.if_down_terminating_deferred_inbound.take()
+        {
+            emit_pending_down_arrow(svg, arrow_top, style, label, arrow_gap, cx);
+        }
+    }
+
     // Diamond → populated branch (down arrow on the spine).
     svg.down_arrow(cx, diamond_bottom, branch_top, &arrow_color);
 
@@ -13464,6 +13514,8 @@ fn emit_if_down(
         + IF_CORRIDOR_ARROW_OFFSET
         + if populated_last_single_survivor {
             IF_DOWN_SINGLE_SURVIVOR_CORRIDOR_ARROW_EXTRA
+        } else if populated_last_terminating_down {
+            IF_DOWN_TERMINATING_CORRIDOR_ARROW_EXTRA
         } else {
             0.0
         };
@@ -13500,7 +13552,7 @@ fn emit_if_down(
 
     // Branch → merge (down arrow on the spine). A trailing single-survivor if
     // has already emitted this connector as its own out-corridor.
-    if !populated_last_single_survivor {
+    if !populated_last_single_survivor && !populated_last_terminating_down {
         svg.down_arrow(cx, branch_bottom, merge_top, &arrow_color);
     }
 
