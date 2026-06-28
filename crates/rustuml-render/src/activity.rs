@@ -73,6 +73,12 @@ const PARTITION_EMBEDDED_REPEAT_FRAME_TRIM: f64 = 5.4286;
 const PARTITION_EMBEDDED_REPEAT_X_BIAS: f64 = 12.0;
 const PARTITION_REPEAT_FOLLOWED_BY_IF_SHELL_EXTRA: f64 = 18.7445;
 const PARTITION_REPEAT_FOLLOWED_BY_IF_X_BIAS: f64 = 1.1604;
+const PARTITION_TERMINAL_IF_SEQUENCE_SHELL_EXTRA: f64 = 7.0;
+const PARTITION_DEEP_TERMINAL_IF_SEQUENCE_SHELL_EXTRA: f64 = 4.0;
+const PARTITION_DEEP_TERMINAL_IF_SEQUENCE_HEIGHT_TRIM: f64 = 20.0;
+const PARTITION_TERMINAL_IF_SEQUENCE_LEFT_TRIM: f64 = 6.3682;
+const PARTITION_TERMINAL_IF_SEQUENCE_RIGHT_TRIM: f64 = 7.6318;
+const PARTITION_TERMINAL_IF_SEQUENCE_X_BIAS: f64 = 6.0;
 const PARTITION_EMBEDDED_ACTION_FORK_BAR_EXTRA: f64 = 4.0;
 const PARTITION_EMBEDDED_ACTION_FORK_CENTER_SHIFT: f64 =
     PARTITION_EMBEDDED_ACTION_FORK_BAR_EXTRA / 2.0;
@@ -7058,6 +7064,15 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
                     geometry.right() + PARTITION_GEOMETRIC_IF_SHELL_PAD,
                 );
             }
+            if !*is_group && !title_drives_width && partition_wraps_terminal_if_sequence(body) {
+                let (body_left, body_right) = sequence_extents(body);
+                return (
+                    body_left + PARTITION_IF_SEQUENCE_LEFT_PAD
+                        - PARTITION_TERMINAL_IF_SEQUENCE_LEFT_TRIM,
+                    body_right + PARTITION_IF_SEQUENCE_RIGHT_PAD
+                        - PARTITION_TERMINAL_IF_SEQUENCE_RIGHT_TRIM,
+                );
+            }
             if !*is_group && !title_drives_width && partition_wraps_if_sequence(body) {
                 let (body_left, body_right) = sequence_extents(body);
                 return (
@@ -8441,6 +8456,27 @@ fn partition_wraps_if_sequence(body: &[LayoutNode]) -> bool {
         })
 }
 
+fn partition_wraps_terminal_if_sequence(body: &[LayoutNode]) -> bool {
+    partition_wraps_if_sequence(body)
+        && body.iter().any(|node| {
+            matches!(
+                node,
+                LayoutNode::If {
+                    then_branch,
+                    else_branches,
+                    ..
+                } if branch_terminates(then_branch)
+                    || else_branches
+                        .iter()
+                        .any(|branch| branch_terminates(&branch.body))
+            )
+        })
+}
+
+fn partition_wraps_deep_terminal_if_sequence(body: &[LayoutNode]) -> bool {
+    partition_wraps_terminal_if_sequence(body) && sequence_if_depth(body) > 1
+}
+
 fn partition_wrapped_geometric_if(body: &[LayoutNode]) -> Option<(ftile::FtileGeometry, f64)> {
     if partition_wraps_min_width_if(body) {
         return None;
@@ -8632,6 +8668,12 @@ fn group_while_shell_width(is_group: bool, body: &[LayoutNode]) -> Option<f64> {
 fn partition_body_shell_width(is_group: bool, body: &[LayoutNode]) -> f64 {
     if !is_group && let Some((geometry, left_adjust)) = partition_wrapped_geometric_if(body) {
         geometry.width + GROUP_IF_BODY_WIDTH_EXTRA + left_adjust
+    } else if !is_group && partition_wraps_deep_terminal_if_sequence(body) {
+        partition_body_width_for_frame(body)
+            + 20.0
+            + PARTITION_DEEP_TERMINAL_IF_SEQUENCE_SHELL_EXTRA
+    } else if !is_group && partition_wraps_terminal_if_sequence(body) {
+        partition_body_width_for_frame(body) + 20.0 + PARTITION_TERMINAL_IF_SEQUENCE_SHELL_EXTRA
     } else if !is_group && partition_wraps_if_sequence(body) {
         let (body_left, body_right) = sequence_extents(body);
         body_left + PARTITION_IF_SEQUENCE_LEFT_PAD + body_right + PARTITION_IF_SEQUENCE_RIGHT_PAD
@@ -12067,7 +12109,9 @@ fn emit_node_with_repeat_extra(
             } else if !*is_group
                 && (partition_wraps_single_if(body)
                     || partition_action_fork_forces_left(body)
-                    || partition_wraps_if_sequence(body))
+                    || partition_wraps_deep_terminal_if_sequence(body)
+                    || (partition_wraps_if_sequence(body)
+                        && !partition_wraps_terminal_if_sequence(body)))
             {
                 16.0
             } else if (*is_group && *nested) || (!*is_group && !title_drives_width) {
@@ -12076,6 +12120,8 @@ fn emit_node_with_repeat_extra(
                     x + PARTITION_PREFIXED_WHILE_X_BIAS
                 } else if !*is_group && partition_body_has_prefixed_simple_while(body) {
                     x + PARTITION_PREFIXED_SIMPLE_WHILE_X_BIAS
+                } else if !*is_group && partition_wraps_terminal_if_sequence(body) {
+                    x + PARTITION_TERMINAL_IF_SEQUENCE_X_BIAS
                 } else if !*is_group && partition_body_has_repeat_followed_by_if(body) {
                     x + PARTITION_REPEAT_FOLLOWED_BY_IF_X_BIAS
                 } else if !*is_group && partition_body_has_embedded_repeat(body) {
@@ -12100,6 +12146,11 @@ fn emit_node_with_repeat_extra(
             let body_h = sequence_height(body)
                 - if colored_partition_while && colored_partition_needs_while_slot_subtract(body) {
                     WHILE_BODY_SLOT_COMPRESS
+                } else {
+                    0.0
+                }
+                - if !*is_group && partition_wraps_deep_terminal_if_sequence(body) {
+                    PARTITION_DEEP_TERMINAL_IF_SEQUENCE_HEIGHT_TRIM
                 } else {
                     0.0
                 };
