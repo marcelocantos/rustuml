@@ -1009,20 +1009,44 @@ struct SwitchCase {
     body: Vec<LayoutNode>,
 }
 
-/// Returns true if a branch ends with a control-flow terminator (Stop, End,
-/// Detach, Kill, Break, or Goto). PlantUML omits the merge diamond and
-/// post-merge connectors entirely when every branch of an if/else terminates
-/// this way.
+fn node_terminates(node: &LayoutNode) -> bool {
+    match node {
+        LayoutNode::Stop
+        | LayoutNode::End
+        | LayoutNode::Detach
+        | LayoutNode::Kill
+        | LayoutNode::Break
+        | LayoutNode::Goto(_) => true,
+        LayoutNode::If {
+            then_branch,
+            else_branches,
+            ..
+        } => {
+            let has_final_else = else_branches
+                .iter()
+                .any(|branch| branch.condition.is_none());
+            has_final_else
+                && branch_terminates(then_branch)
+                && else_branches
+                    .iter()
+                    .all(|branch| branch_terminates(&branch.body))
+        }
+        LayoutNode::Fork { branches, .. } => {
+            !branches.is_empty() && branches.iter().all(|branch| branch_terminates(branch))
+        }
+        LayoutNode::Switch { cases, .. } => switch_all_branches_terminate(cases),
+        LayoutNode::Partition { body, .. } => branch_terminates(body),
+        _ => false,
+    }
+}
+
+/// Returns true if a branch has no pointOut because its final flow node
+/// terminates. This includes literal terminators (Stop, End, Detach, Kill,
+/// Break, Goto) and structured nodes whose every possible path terminates.
+/// PlantUML omits merge diamonds and post-merge connectors when every branch of
+/// an if/fork/switch terminates this way.
 fn branch_terminates(body: &[LayoutNode]) -> bool {
-    matches!(
-        body.last(),
-        Some(LayoutNode::Stop)
-            | Some(LayoutNode::End)
-            | Some(LayoutNode::Detach)
-            | Some(LayoutNode::Kill)
-            | Some(LayoutNode::Break)
-            | Some(LayoutNode::Goto(_))
-    )
+    body.last().is_some_and(node_terminates)
 }
 
 fn branch_terminates_with_break(body: &[LayoutNode]) -> bool {
@@ -1031,6 +1055,42 @@ fn branch_terminates_with_break(body: &[LayoutNode]) -> bool {
 
 fn branch_ends_with_goto(body: &[LayoutNode]) -> bool {
     matches!(body.last(), Some(LayoutNode::Goto(_)))
+}
+
+fn branch_has_top_level_fork(body: &[LayoutNode]) -> bool {
+    body.iter()
+        .any(|node| matches!(node, LayoutNode::Fork { .. }))
+}
+
+fn branch_has_terminal_fork_tail(body: &[LayoutNode]) -> bool {
+    body.windows(2).any(|pair| {
+        matches!(pair[0], LayoutNode::Fork { .. })
+            && matches!(pair[1], LayoutNode::Stop | LayoutNode::End)
+    })
+}
+
+fn branch_contains_terminal_fork_tail(body: &[LayoutNode]) -> bool {
+    branch_has_terminal_fork_tail(body)
+        || body.iter().any(|node| match node {
+            LayoutNode::If {
+                then_branch,
+                else_branches,
+                ..
+            } => {
+                branch_contains_terminal_fork_tail(then_branch)
+                    || else_branches
+                        .iter()
+                        .any(|branch| branch_contains_terminal_fork_tail(&branch.body))
+            }
+            LayoutNode::Fork { branches, .. } => branches
+                .iter()
+                .any(|branch| branch_contains_terminal_fork_tail(branch)),
+            LayoutNode::Switch { cases, .. } => cases
+                .iter()
+                .any(|case| branch_contains_terminal_fork_tail(&case.body)),
+            LayoutNode::Partition { body, .. } => branch_contains_terminal_fork_tail(body),
+            _ => false,
+        })
 }
 
 /// A branch flow whose sole node is a no-`specialOut` `while`. Such a branch's
@@ -2769,6 +2829,7 @@ const FORK_EMPTY_LANE_GAP: f64 = 21.0;
 /// When a fork is itself the first branch tile under `FtileIfWithLinks`,
 /// PlantUML keeps the fork's flow spine fixed and grows the bar to the right.
 const FORK_IF_BRANCH_RIGHT_EXTRA: f64 = 2.0;
+const FORK_IF_BRANCH_TERMINAL_FORK_EXTRA: f64 = FORK_IF_BRANCH_RIGHT_EXTRA;
 const FORK_IF_BRANCH_ODD_LAST_GAP_EXTRA: f64 = 10.6240234375;
 const FORK_IF_BRANCH_EVEN_LAST_GAP_EXTRA: f64 = FORK_EVEN_MIDDLE_EXTRA;
 const FORK_IF_BRANCH_ODD_SPACING_EXTRA: f64 = 6.083;
@@ -3407,6 +3468,19 @@ fn fork_layout_if_branch(branches: &[Vec<LayoutNode>]) -> ForkLayout {
     };
     layout.bar_w += last_gap_extra + right_extra;
     layout.spine_dx = layout.bar_w / 2.0 - old_spine;
+    layout
+}
+
+fn fork_layout_if_branch_terminal_tail(branches: &[Vec<LayoutNode>]) -> ForkLayout {
+    let mut layout = fork_layout_if_branch(branches);
+    if layout.centers.len() >= 2 && !branches.iter().any(Vec::is_empty) {
+        let old_left = layout.spine_dx - layout.bar_w / 2.0;
+        layout.bar_w += FORK_IF_BRANCH_TERMINAL_FORK_EXTRA;
+        for center in &mut layout.centers {
+            *center += FORK_IF_BRANCH_TERMINAL_FORK_EXTRA;
+        }
+        layout.spine_dx = old_left + layout.bar_w / 2.0;
+    }
     layout
 }
 
@@ -4966,6 +5040,7 @@ fn sequence_geometry(nodes: &[LayoutNode]) -> Option<ftile::FtileGeometry> {
 
 fn sequence_geometry_if_branch(nodes: &[LayoutNode]) -> Option<ftile::FtileGeometry> {
     let mut geoms: Vec<ftile::FtileGeometry> = Vec::new();
+    let terminal_fork_tail = branch_has_terminal_fork_tail(nodes);
     for n in nodes {
         match n {
             LayoutNode::Arrow { .. }
@@ -4976,6 +5051,19 @@ fn sequence_geometry_if_branch(nodes: &[LayoutNode]) -> Option<ftile::FtileGeome
             // Swimlane V2: branch-internal lane marker, no geometry (see
             // `sequence_geometry`).
             | LayoutNode::LaneMark(_) => continue,
+            LayoutNode::Fork {
+                branches,
+                is_split,
+                ..
+            } if terminal_fork_tail => geoms.push(fork_geometry_with_layout(
+                branches,
+                if *is_split {
+                    split_layout(branches)
+                } else {
+                    fork_layout_if_branch_terminal_tail(branches)
+                },
+                *is_split,
+            )),
             _ => geoms.push(node_geometry_if_branch(n)?),
         }
     }
@@ -5224,6 +5312,16 @@ fn if_ftile_layout_styled(
         else_off -= spine_shift;
         left_ext += spine_shift;
         right_ext -= spine_shift;
+    }
+    if branch_contains_terminal_fork_tail(then_branch)
+        || else_branches
+            .iter()
+            .any(|branch| branch_contains_terminal_fork_tail(&branch.body))
+    {
+        then_off -= IF_TERMINAL_FORK_TAIL_BRANCH_SPREAD / 2.0;
+        else_off += IF_TERMINAL_FORK_TAIL_BRANCH_SPREAD / 2.0;
+        left_ext += IF_TERMINAL_FORK_TAIL_BRANCH_SPREAD / 2.0;
+        right_ext += IF_TERMINAL_FORK_TAIL_BRANCH_SPREAD / 2.0;
     }
     if if_break_single_survivor_plan(then_branch, else_branches).is_some() {
         then_off -= IF_BREAK_SINGLE_SURVIVOR_BRANCH_SPREAD;
@@ -6562,6 +6660,7 @@ fn sequence_extents_with_note_margins(
     let mut right = 0.0f64;
     let multi_fork_sequence = !if_branch && sequence_uses_multi_fork_layout(nodes);
     let multi_fork_has_prelude = multi_fork_sequence && sequence_multi_fork_has_prelude(nodes);
+    let terminal_fork_tail = if_branch && branch_has_terminal_fork_tail(nodes);
     // The half-width of the most recent flow node — a note attaches to it and
     // sits `NOTE_GAP` to one side, so its lateral reach from the spine is
     // anchor_half + NOTE_GAP + note_box_width.
@@ -6581,7 +6680,22 @@ fn sequence_extents_with_note_margins(
                 }
             }
             _ => {
-                let (nl, nr) = if multi_fork_sequence && is_multi_fork_sequence_candidate(node) {
+                let (nl, nr) = if terminal_fork_tail
+                    && let LayoutNode::Fork {
+                        branches,
+                        attached_notes,
+                        is_split,
+                        ..
+                    } = node
+                {
+                    let layout = if *is_split {
+                        split_layout(branches)
+                    } else {
+                        fork_layout_if_branch_terminal_tail(branches)
+                    };
+                    let (left, right) = fork_bar_extents(&layout);
+                    with_fork_attached_note_extents(left, right, attached_notes)
+                } else if multi_fork_sequence && is_multi_fork_sequence_candidate(node) {
                     let layout = match node {
                         LayoutNode::Fork { branches, .. } => {
                             fork_layout_multi_sequence(branches, multi_fork_has_prelude)
@@ -8808,6 +8922,14 @@ struct SvgEmitter {
     /// `else` branch) and consumed once when the terminal 2-action `then`-branch
     /// emits. Drives the `act_while_ifdepth*_acts2` family.
     while_if_branch_stretch: Option<f64>,
+    /// True while emitting branches of an all-terminal `if` whose immediate
+    /// branch set contains a fork. PlantUML keeps the terminal-circle inbound
+    /// gaps in that branch family partially uncompressed.
+    if_all_terminal_fork_branch_gap: bool,
+    /// One-shot around a fork emitted as an if-branch sequence followed by a
+    /// terminal circle. Its bar grows right and branch centers shift right by
+    /// the if-branch fork quantum.
+    if_branch_terminal_fork_layout: bool,
     /// Set while emitting a swimlane lane body that is a single
     /// `while ... endwhile <terminator>` whose lane width was taken from the
     /// cond-driven drawn box (`swimlane_lane_extents` narrowed the left extent).
@@ -9030,6 +9152,8 @@ impl SvgEmitter {
             while_repeat_body_nonterminal: false,
             repeat_switch_merge_extra: 0.0,
             while_if_branch_stretch: None,
+            if_all_terminal_fork_branch_gap: false,
+            if_branch_terminal_fork_layout: false,
             swimlane_while_cond_special: false,
             swimlane_v2_active: false,
             swimlane_cross_lane: None,
@@ -9944,6 +10068,8 @@ fn emit_sequence_ex(
     // Map flow-node ordinal → node index so the stretch can target the right
     // inbound arrow.
     let mut flow_ordinal = 0usize;
+    let if_branch_terminal_fork_tail =
+        first_repeat_branch_extra && branch_has_terminal_fork_tail(nodes);
     // Extra length applied to the single arrow leaving a leading-floating-note
     // start node (consumed by the next flow node's inbound connector).
     let mut lead_stretch = 0.0f64;
@@ -10176,12 +10302,27 @@ fn emit_sequence_ex(
                     .while_break
                     .filter(|_| is_break_down_if(node))
                     .map_or(0.0, |brk| brk.inbound_lead);
+                let all_terminal_fork_branch_terminal_extra = if svg.if_all_terminal_fork_branch_gap
+                    && matches!(node, LayoutNode::Stop | LayoutNode::End)
+                {
+                    if prev_idx
+                        .and_then(|j| nodes.get(j))
+                        .is_some_and(|prev| matches!(prev, LayoutNode::Fork { .. }))
+                    {
+                        IF_ALL_TERMINAL_FORK_BRANCH_AFTER_FORK_TERMINAL_EXTRA
+                    } else {
+                        IF_ALL_TERMINAL_FORK_BRANCH_TERMINAL_EXTRA
+                    }
+                } else {
+                    0.0
+                };
                 let gap = stretch
                     + lead
                     + carry
                     + break_if_first_outbound_extra
                     + repeat_break_first_outbound_extra
                     + break_if_inbound_lead
+                    + all_terminal_fork_branch_terminal_extra
                     + if style.hidden {
                         10.0
                     } else if label.is_some() {
@@ -10470,8 +10611,37 @@ fn emit_sequence_ex(
             svg.swimlane_while_cond_special = true;
         }
         svg.while_body_fork_layout = fork_layout_override;
-        let node_y =
-            emit_node_with_repeat_extra(svg, node, cx, y, repeat_extra, first_repeat_branch_extra);
+        let saved_if_branch_terminal_fork_layout = svg.if_branch_terminal_fork_layout;
+        svg.if_branch_terminal_fork_layout =
+            if_branch_terminal_fork_tail && matches!(node, LayoutNode::Fork { .. });
+        let previous_flow_is_fork = nodes[..i]
+            .iter()
+            .rev()
+            .find(|prev| {
+                !matches!(
+                    prev,
+                    LayoutNode::Arrow { .. } | LayoutNode::Note { .. } | LayoutNode::LaneMark(_)
+                )
+            })
+            .is_some_and(|prev| matches!(prev, LayoutNode::Fork { .. }));
+        let terminal_fork_tail_node_offset = if if_branch_terminal_fork_tail
+            && matches!(node, LayoutNode::Stop | LayoutNode::End)
+            && previous_flow_is_fork
+        {
+            FORK_IF_BRANCH_TERMINAL_FORK_EXTRA
+        } else {
+            0.0
+        };
+        let node_cx = cx + terminal_fork_tail_node_offset;
+        let node_y = emit_node_with_repeat_extra(
+            svg,
+            node,
+            node_cx,
+            y,
+            repeat_extra,
+            first_repeat_branch_extra,
+        );
+        svg.if_branch_terminal_fork_layout = saved_if_branch_terminal_fork_layout;
         svg.while_body_fork_layout = None;
         svg.swimlane_while_cond_special = false;
         svg.if_down_terminating_has_next = false;
@@ -10503,7 +10673,7 @@ fn emit_sequence_ex(
                 svg.if_down_terminating_deferred_inbound =
                     Some((arrow_top, style, label, arrow_gap));
             } else {
-                emit_pending_down_arrow(svg, arrow_top, style, label, arrow_gap, cx);
+                emit_pending_down_arrow(svg, arrow_top, style, label, arrow_gap, node_cx);
                 if let Some((arrow_top, style, label, arrow_gap)) =
                     deferred_partition_inbound.take()
                 {
@@ -10831,7 +11001,12 @@ fn emit_node_with_repeat_extra(
             } else if let Some(layout) = svg.while_body_fork_layout.take() {
                 emit_fork_with_layout(svg, cx, y, branches, layout)
             } else if if_branch {
-                emit_fork_with_layout(svg, cx, y, branches, fork_layout_if_branch(branches))
+                let layout = if svg.if_branch_terminal_fork_layout {
+                    fork_layout_if_branch_terminal_tail(branches)
+                } else {
+                    fork_layout_if_branch(branches)
+                };
+                emit_fork_with_layout(svg, cx, y, branches, layout)
             } else if svg.partition_wrapped_fork_depth > 0 && !*is_split {
                 emit_fork_with_layout(svg, cx, y, branches, fork_layout_in_partition(branches))
             } else {
@@ -11235,6 +11410,17 @@ fn emit_if(
     let default_arrow_color = svg.palette.arrow_color.clone();
     let then_arrow_style = branch_arrow_style(then_arrow, &default_arrow_color);
     let else_arrow_style = branch_arrow_style(else_arrow, &default_arrow_color);
+    let pre_then_terminates = branch_terminates(then_branch_flow);
+    let pre_else_terminates = else_branches.split_first().is_some_and(|(_, rest)| {
+        branch_terminates(else_branch_flow)
+            && rest.iter().all(|branch| branch_terminates(&branch.body))
+    });
+    let all_terminal_fork_branch_gap = pre_then_terminates
+        && pre_else_terminates
+        && (branch_has_top_level_fork(then_branch_flow)
+            || else_branches
+                .iter()
+                .any(|branch| branch_has_top_level_fork(&branch.body)));
 
     // Then label (to the left of diamond). PlantUML places the label
     // flush against the diamond's left vertex (no horizontal gap), with
@@ -11268,21 +11454,54 @@ fn emit_if(
     let else_w: f64 = else_branches.iter().map(|b| sequence_width(&b.body)).sum();
     // ftile wire (binary if): branch spines from the exact FtileIfWithDiamonds
     // layout (consistent with node_extents). Legacy branch_dist otherwise.
-    let (then_cx, else_cx) = if let Some((then_off, else_off, _, _)) = if_ftile_layout_styled(
-        condition,
-        diamond_font_size,
-        diamond_text_bold,
-        diamond_font_family,
-        diamond_pad_x,
-        then_branch,
-        else_branches,
-    ) {
+    let (mut then_cx, mut else_cx) = if let Some((then_off, else_off, _, _)) =
+        if_ftile_layout_styled(
+            condition,
+            diamond_font_size,
+            diamond_text_bold,
+            diamond_font_family,
+            diamond_pad_x,
+            then_branch,
+            else_branches,
+        ) {
         (cx + then_off, cx + else_off)
     } else {
         let branch_dist = (diamond_w + 20.0).max((then_w + else_w) / 2.0 + 20.0)
             + if_branch_distance_extra(then_branch, else_branches);
         (cx - branch_dist / 2.0, cx + branch_dist / 2.0)
     };
+    if all_terminal_fork_branch_gap {
+        let then_shift = if branch_has_terminal_fork_tail(then_branch_flow) {
+            IF_TERMINAL_FORK_TAIL_BRANCH_SPREAD + 2.0 * IF_TERMINAL_FORK_TAIL_BRANCH_DRIFT
+        } else {
+            IF_TERMINAL_FORK_TAIL_BRANCH_SPREAD * 2.0 + IF_TERMINAL_FORK_TAIL_BRANCH_DRIFT
+        };
+        let else_shift = if branch_has_terminal_fork_tail(else_branch_flow) {
+            IF_TERMINAL_FORK_TAIL_BRANCH_SPREAD + 2.0 * IF_TERMINAL_FORK_TAIL_BRANCH_DRIFT
+        } else {
+            IF_TERMINAL_FORK_TAIL_BRANCH_SPREAD * 2.0 + IF_TERMINAL_FORK_TAIL_BRANCH_DRIFT
+        };
+        then_cx -= then_shift;
+        else_cx -= else_shift;
+    }
+    if branch_contains_terminal_fork_tail(then_branch_flow) {
+        then_cx += IF_TERMINAL_FORK_TAIL_BRANCH_DRIFT;
+    }
+    if branch_contains_terminal_fork_tail(else_branch_flow) {
+        else_cx += IF_TERMINAL_FORK_TAIL_BRANCH_DRIFT;
+    }
+    let then_entry_cx = then_cx
+        + if branch_has_terminal_fork_tail(then_branch_flow) {
+            FORK_IF_BRANCH_TERMINAL_FORK_EXTRA
+        } else {
+            0.0
+        };
+    let else_entry_cx = else_cx
+        + if branch_has_terminal_fork_tail(else_branch_flow) {
+            FORK_IF_BRANCH_TERMINAL_FORK_EXTRA
+        } else {
+            0.0
+        };
 
     // Else label: text shape, must land in shapes buffer before branch
     // shapes (matches golden order: yes label, no label, then branch boxes).
@@ -11339,6 +11558,9 @@ fn emit_if(
     let shapes_chk = svg.shapes.len();
     let conns_chk = svg.connectors.len();
     let lane_chk = svg.current_lane;
+    let saved_if_all_terminal_fork_branch_gap = svg.if_all_terminal_fork_branch_gap;
+    svg.if_all_terminal_fork_branch_gap =
+        saved_if_all_terminal_fork_branch_gap || all_terminal_fork_branch_gap;
     let then_bottom_raw = emit_if_then_branch_with_stretch(
         svg,
         then_branch_flow,
@@ -11351,6 +11573,7 @@ fn emit_if(
     } else {
         branch_y
     };
+    svg.if_all_terminal_fork_branch_gap = saved_if_all_terminal_fork_branch_gap;
     // A nested single-survivor if (rendered standalone in this first pass) ends
     // with its own out-arrow (`survivor_bottom + ARROW_LEN`). When it is going
     // to be redirected into THIS merge, its corridor instead fuses to the merge
@@ -11371,11 +11594,8 @@ fn emit_if(
     // If every branch ends with a terminator (Stop/End/Detach/Kill), PlantUML
     // skips the merge diamond and post-merge connectors entirely. The two
     // branches stand on their own; the if-block's bottom is the deeper one.
-    let then_terminates = branch_terminates(then_branch_flow);
-    let else_terminates = else_branches.split_first().is_some_and(|(_, rest)| {
-        branch_terminates(else_branch_flow)
-            && rest.iter().all(|branch| branch_terminates(&branch.body))
-    });
+    let then_terminates = pre_then_terminates;
+    let else_terminates = pre_else_terminates;
     let break_single_survivor = svg.while_break.and_then(|brk| {
         if_break_single_survivor_plan(then_branch_flow, else_branches)
             .zip((!brk.repeat_mode).then_some(brk))
@@ -11573,14 +11793,20 @@ fn emit_if(
         svg.connector_line_full(
             &then_arrow_style,
             diamond_left,
-            then_cx,
+            then_entry_cx,
             diamond_cy,
             diamond_cy,
         );
-        svg.connector_line_full(&then_arrow_style, then_cx, then_cx, diamond_cy, branch_y);
+        svg.connector_line_full(
+            &then_arrow_style,
+            then_entry_cx,
+            then_entry_cx,
+            diamond_cy,
+            branch_y,
+        );
         svg.connector_line(
             &arrow_color,
-            then_cx,
+            then_entry_cx,
             brk.corridor_x,
             branch_y,
             branch_y,
@@ -11591,24 +11817,24 @@ fn emit_if(
         svg.connector_line_full(
             &then_arrow_style,
             diamond_left,
-            then_cx,
+            then_entry_cx,
             diamond_cy,
             diamond_cy,
         );
         svg.connector_line_full(
             &then_arrow_style,
-            then_cx,
-            then_cx,
+            then_entry_cx,
+            then_entry_cx,
             diamond_cy,
             diamond_bottom + if_branch_down,
         );
         svg.polygon_connector(
             &then_arrow_style.color,
             &[
-                (then_cx - 4.0, diamond_bottom + if_branch_down - 10.0),
-                (then_cx, diamond_bottom + if_branch_down),
-                (then_cx + 4.0, diamond_bottom + if_branch_down - 10.0),
-                (then_cx, diamond_bottom + if_branch_down - 6.0),
+                (then_entry_cx - 4.0, diamond_bottom + if_branch_down - 10.0),
+                (then_entry_cx, diamond_bottom + if_branch_down),
+                (then_entry_cx + 4.0, diamond_bottom + if_branch_down - 10.0),
+                (then_entry_cx, diamond_bottom + if_branch_down - 6.0),
             ],
             &then_arrow_style.color,
             "1",
@@ -11624,14 +11850,20 @@ fn emit_if(
         svg.connector_line_full(
             &else_arrow_style,
             diamond_right,
-            else_cx,
+            else_entry_cx,
             diamond_cy,
             diamond_cy,
         );
-        svg.connector_line_full(&else_arrow_style, else_cx, else_cx, diamond_cy, branch_y);
+        svg.connector_line_full(
+            &else_arrow_style,
+            else_entry_cx,
+            else_entry_cx,
+            diamond_cy,
+            branch_y,
+        );
         svg.connector_line(
             &arrow_color,
-            else_cx,
+            else_entry_cx,
             brk.corridor_x,
             branch_y,
             branch_y,
@@ -11642,24 +11874,24 @@ fn emit_if(
         svg.connector_line_full(
             &else_arrow_style,
             diamond_right,
-            else_cx,
+            else_entry_cx,
             diamond_cy,
             diamond_cy,
         );
         svg.connector_line_full(
             &else_arrow_style,
-            else_cx,
-            else_cx,
+            else_entry_cx,
+            else_entry_cx,
             diamond_cy,
             diamond_bottom + if_branch_down,
         );
         svg.polygon_connector(
             &else_arrow_style.color,
             &[
-                (else_cx - 4.0, diamond_bottom + if_branch_down - 10.0),
-                (else_cx, diamond_bottom + if_branch_down),
-                (else_cx + 4.0, diamond_bottom + if_branch_down - 10.0),
-                (else_cx, diamond_bottom + if_branch_down - 6.0),
+                (else_entry_cx - 4.0, diamond_bottom + if_branch_down - 10.0),
+                (else_entry_cx, diamond_bottom + if_branch_down),
+                (else_entry_cx + 4.0, diamond_bottom + if_branch_down - 10.0),
+                (else_entry_cx, diamond_bottom + if_branch_down - 6.0),
             ],
             &else_arrow_style.color,
             "1",
@@ -12177,6 +12409,19 @@ const IF_BRANCH_CONTAINS_BREAK_SURVIVOR_SPREAD: f64 = 35.6015625;
 const IF_BREAK_SINGLE_SURVIVOR_BRANCH_SPREAD: f64 = 7.5;
 const WHILE_NESTED_BREAK_SURVIVOR_FRAME_TRIM: f64 = 12.4776;
 const WHILE_NESTED_BREAK_SURVIVOR_CANVAS_TRIM: f64 = 10.0;
+/// Terminal circle spacing kept when an all-terminal if contains a fork branch.
+const IF_ALL_TERMINAL_FORK_BRANCH_TERMINAL_EXTRA: f64 = 15.0;
+/// Post-fork terminal circles keep a smaller part of the same uncompressed band.
+const IF_ALL_TERMINAL_FORK_BRANCH_AFTER_FORK_TERMINAL_EXTRA: f64 = 5.0;
+/// Branch-spread residue kept by an all-terminal `if` subtree containing a
+/// terminal fork tail.
+const IF_TERMINAL_FORK_TAIL_BRANCH_SPREAD: f64 = 0.5;
+/// Branch-local residue from the terminal-fork-tail spacing band after the
+/// enclosing if's extent spread has been applied.
+const IF_TERMINAL_FORK_TAIL_BRANCH_DRIFT: f64 = 0.25;
+/// Title centering residue after ON_X compression for a body containing the
+/// terminal-fork-tail spacing band.
+const TITLE_TERMINAL_FORK_TAIL_X_OFFSET: f64 = 9.375;
 const IF_COLLECTOR_MIDPOINT_EXTRA_OFFSET: f64 = 1.0830078125;
 const IF_COLLECTOR_OTHER_LANE_PAD: f64 = 17.82421875;
 const IF_CROSS_COLLECTOR_LEFT_PAD: f64 = 12.82421875;
@@ -13076,7 +13321,13 @@ fn leading_if_branch_repeat_extra(node: &LayoutNode) -> f64 {
 }
 
 fn sequence_height_if_branch(nodes: &[LayoutNode]) -> f64 {
-    sequence_height(nodes) + first_flow_node(nodes).map_or(0.0, leading_if_branch_repeat_extra)
+    sequence_height(nodes)
+        + first_flow_node(nodes).map_or(0.0, leading_if_branch_repeat_extra)
+        + if branch_has_terminal_fork_tail(nodes) {
+            IF_ALL_TERMINAL_FORK_BRANCH_AFTER_FORK_TERMINAL_EXTRA
+        } else {
+            0.0
+        }
 }
 
 /// Branch height for the enclosing if's merge reservation. A directly-nested
@@ -21898,6 +22149,9 @@ fn render_inner(
     let mut svg = SvgEmitter::with_palette(palette, is_handwritten);
     if matches!(tree.first(), Some(LayoutNode::Title { .. })) {
         svg.title_x_offset += (content_right - content_left) / 2.0;
+        if branch_contains_terminal_fork_tail(&tree) {
+            svg.title_x_offset += TITLE_TERMINAL_FORK_TAIL_X_OFFSET;
+        }
     }
     if matches!(tree.first(), Some(LayoutNode::Title { .. }))
         && tree.iter().skip(1).any(|node| {

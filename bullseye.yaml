@@ -212,6 +212,9 @@ targets:
     - T4.1.19
     - T4.1.20
     - T4.1.21
+    - T4.1.22
+    - T4.1.23
+    - T4.1.24
     origin: manual
     discovered: 2026-05-17
   T4.1.1:
@@ -465,6 +468,27 @@ targets:
     - if-down
     - terminal-flow
     - compression
+    origin: manual
+    discovered: 2026-06-28
+    achieved: 2026-06-28
+  T4.1.24:
+    name: Cache-aside terminal if/fork workflows use PlantUML recursive no-pointOut geometry
+    status: achieved
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - '`cargo run --release -p rustuml-oracle --example diff_one -- test-diagrams/golden/activity/act_technical_cache_aside.puml` reports structural equivalence.'
+    - '`cargo run --release -p rustuml-oracle --example check_all` has no new failure names beyond the current 27-failure ledger.'
+    - '`cargo fmt --check`, `cargo clippy -- -D warnings`, and `cargo test --lib` pass.'
+    context: 'Created after retiring 🎯T4.1.23. The `act_technical_cache_aside` fixture is an all-terminal if/fork workflow: the cache-hit branch stops, the miss branch contains a nested all-terminal `if`, and the found branch terminates via `fork ... end fork` followed by `stop`. RustUML only treated literal terminators as no-pointOut branches, so it emitted merge scaffolding for structured branches that PlantUML treats as terminal. The remaining geometry is the PlantUML terminal-fork-tail spacing band: post-fork terminal gaps, branch point-in drift, and titled-diagram ON_X title centering.'
+    depends_on:
+    - T4.1.23
+    tags:
+    - activity
+    - if
+    - fork
+    - terminal-flow
+    - strict-xml
     origin: manual
     discovered: 2026-06-28
     achieved: 2026-06-28
