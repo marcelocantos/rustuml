@@ -218,6 +218,7 @@ targets:
     - T4.1.25
     - T4.1.26
     - T4.1.27
+    - T4.1.28
     origin: manual
     discovered: 2026-05-17
   T4.1.1:
@@ -552,6 +553,27 @@ targets:
     - activity
     - swimlane
     - group
+    - strict-xml
+    origin: manual
+    discovered: 2026-06-28
+    achieved: 2026-06-28
+  T4.1.28:
+    name: Nested swimlane-if flows use PlantUML direct same-lane and deferred cross-lane connectors
+    status: achieved
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - '`cargo run -p rustuml-oracle --example diff_one -- test-diagrams/golden/activity/act_edge_deep_if_in_swimlane.puml` reports structural equivalence.'
+    - Guard fixtures `act_elseif4_swim3`, `act_swimlane_with_if`, and `act_combo_swimlane_if_2` remain structurally equivalent.
+    - '`cargo run -p rustuml-oracle --example check_all` reports the current 22-failure ledger with no new failure names.'
+    - '`cargo fmt --check`, `cargo clippy -- -D warnings`, and `cargo test --lib` pass.'
+    context: 'Created after retiring 🎯T4.1.27. The `act_edge_deep_if_in_swimlane` fixture is a single top-level nested if whose deepest then branch switches from Lane A to Lane B and back. Swimlane V2 already kept it as one tree, but the no-collector if router treated same-lane nested connectors as cross-lane doglegs and emitted true cross-lane connectors before the lane-local branch/merge stream. PlantUML uses direct same-lane side/bottom-to-merge connectors, then defers the true lane-crossing connectors to the end of the connector block; the lane-boundary compression also needs the single-top-level-if lane pad/divider adjustment.'
+    depends_on:
+    - T4.1.27
+    tags:
+    - activity
+    - swimlane
+    - if
     - strict-xml
     origin: manual
     discovered: 2026-06-28

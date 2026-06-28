@@ -18916,7 +18916,8 @@ fn route_if_cross_lane_connectors(
         .find(|pl| pl.tip.is_none() && pl.verts.len() == 2)
         .and_then(|pl| match_merge_column(pl.verts[1]));
     if !polylines.iter().any(|pl| pl.tip.is_none()) {
-        let mut routed = String::new();
+        let mut lane_local = String::new();
+        let mut cross_lane = String::new();
         for pl in polylines {
             let (Some(src_pt), Some(tip)) = (pl.verts.first().copied(), pl.tip) else {
                 if dbg {
@@ -18948,7 +18949,7 @@ fn route_if_cross_lane_connectors(
                 let mut snake = String::new();
                 snake.push_str(&line(sx, sx, sy, tip.1));
                 snake.push_str(&head(sx, tip.1));
-                routed.push_str(&snake);
+                lane_local.push_str(&snake);
                 continue;
             }
             let Some(ti) = ti else {
@@ -18970,7 +18971,20 @@ fn route_if_cross_lane_connectors(
                     let tgt_nat = &nat[ti];
                     let from_left = src_nat.cx < tgt_nat.cx;
                     let mcy = t.cy;
-                    if from_left {
+                    if s.lane == t.lane {
+                        let mx = if from_left {
+                            t.west.unwrap_or(t.cx)
+                        } else {
+                            t.east.unwrap_or(t.cx)
+                        };
+                        snake.push_str(&line(sx, sx, sy, mcy));
+                        snake.push_str(&line(sx, mx, mcy, mcy));
+                        if from_left {
+                            snake.push_str(&head_right(mx, mcy));
+                        } else {
+                            snake.push_str(&head_left(mx, mcy));
+                        }
+                    } else if from_left {
                         let mw = t.west.unwrap_or(t.cx);
                         let approach = mw - 18.0;
                         snake.push_str(&line(sx, sx, sy, sy + 4.0));
@@ -19001,7 +19015,15 @@ fn route_if_cross_lane_connectors(
                 let dcy = s.cy;
                 let tx = t.cx;
                 let ty = t.top;
-                if exits_west {
+                if s.lane == t.lane {
+                    let sx = if exits_west {
+                        s.west.unwrap_or(s.cx)
+                    } else {
+                        s.east.unwrap_or(s.cx)
+                    };
+                    snake.push_str(&line(sx, tx, dcy, dcy));
+                    snake.push_str(&line(tx, tx, dcy, ty));
+                } else if exits_west {
                     let wx = s.west.unwrap_or(s.cx);
                     let stub_x = wx - 12.0;
                     let cross_y = ty - 14.0;
@@ -19018,8 +19040,14 @@ fn route_if_cross_lane_connectors(
             } else {
                 return None;
             }
-            routed.push_str(&snake);
+            if s.lane == t.lane {
+                lane_local.push_str(&snake);
+            } else {
+                cross_lane.push_str(&snake);
+            }
         }
+        let mut routed = lane_local;
+        routed.push_str(&cross_lane);
         return Some((routed, false));
     }
     let mut split_collector = false;
@@ -20934,6 +20962,29 @@ fn layout_swimlanes_v2(
     // the right divider at `acc`; if-lanes' last divider sits at the last lane's
     // drawn right edge (no trailing gap), i.e. `acc − 10`.
     let has_partition_frames = !svg.swimlane_v2_partition_frames.is_empty();
+    let top_level_if_only = tree
+        .iter()
+        .any(|node| matches!(node, LayoutNode::If { .. }))
+        && tree
+            .iter()
+            .filter(|node| {
+                !matches!(
+                    node,
+                    LayoutNode::LaneMark(_)
+                        | LayoutNode::Start
+                        | LayoutNode::Stop
+                        | LayoutNode::End
+                        | LayoutNode::Arrow { .. }
+                        | LayoutNode::Note { .. }
+                )
+            })
+            .count()
+            == 1;
+    let simple_if_cross_lane_mode = if_mode
+        && !fork_mode
+        && !has_partition_frames
+        && !if_long_collector_mode
+        && top_level_if_only;
     let right_edge = if if_mode && !fork_mode && n > 0 && !has_partition_frames {
         acc - 10.0
     } else {
@@ -20975,7 +21026,9 @@ fn layout_swimlanes_v2(
                 IF_COLLECTOR_OTHER_LANE_PAD
             } else if if_long_collector_mode {
                 20.0
-            } else if lane_leftmost_is_text(&shape_frags[l], lane_minx[l]) {
+            } else if (simple_if_cross_lane_mode && l > 0)
+                || lane_leftmost_is_text(&shape_frags[l], lane_minx[l])
+            {
                 5.0
             } else {
                 6.0
@@ -21557,6 +21610,13 @@ fn layout_swimlanes_v2(
 
     // Divider x positions: left edge of each lane, plus the rightmost edge.
     let mut divider_xs: Vec<f64> = lane_left.clone();
+    if simple_if_cross_lane_mode {
+        for l in 1..n {
+            if let Some((lo, _)) = crate::compress::x_bounds(&lane_shapes[l]) {
+                divider_xs[l] = lo - 6.0;
+            }
+        }
+    }
     divider_xs.push(right_edge);
 
     // Assemble in PlantUML's `drawWhenSwimlanes` order: header band, then for
