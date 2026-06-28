@@ -9963,6 +9963,8 @@ struct IfSurvivorRedirect {
     /// vertex, points left.
     to_right: bool,
     draw_arrow: bool,
+    use_local_join: bool,
+    down_to: Option<f64>,
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -11269,6 +11271,14 @@ fn emit_sequence_ex(
                         }
                         _ => false,
                     });
+                let prev_partition_wraps_deep_terminal_if = prev_idx
+                    .and_then(|j| nodes.get(j))
+                    .is_some_and(|prev| match prev {
+                        LayoutNode::Partition { body, is_group, .. } => {
+                            !*is_group && partition_wraps_deep_terminal_if_sequence(body)
+                        }
+                        _ => false,
+                    });
                 let prev_was_split = matches!(
                     prev_idx.and_then(|j| nodes.get(j)),
                     Some(LayoutNode::Fork { is_split: true, .. })
@@ -11330,7 +11340,9 @@ fn emit_sequence_ex(
                         base
                     }
                 };
-                if !style.hidden && !is_long_if {
+                let suppress_deep_terminal_partition_outbound =
+                    prev_partition_wraps_deep_terminal_if && matches!(node, LayoutNode::Stop);
+                if !style.hidden && !is_long_if && !suppress_deep_terminal_partition_outbound {
                     pending_arrow = Some((arrow_top_y, style, label, arrow_gap));
                 }
                 // Don't advance y past the partition's outer top — the
@@ -12703,6 +12715,8 @@ fn emit_if(
                 },
                 to_right: true,
                 draw_arrow: repeat_break_redirect_cy.is_none(),
+                use_local_join: false,
+                down_to: None,
             });
         }
         emit_if_then_branch_with_stretch(
@@ -12732,11 +12746,90 @@ fn emit_if(
                     },
                     to_right: false,
                     draw_arrow: repeat_break_redirect_cy.is_none(),
+                    use_local_join: false,
+                    down_to: None,
                 });
             }
             emit_sequence_if_branch(svg, else_branch_flow, else_cx, branch_y);
             svg.while_exit_redirect = None;
             svg.if_survivor_redirect = None;
+        }
+    }
+
+    let mut last_survivor_redirect_out_y = None;
+    if !redirect_active
+        && !all_terminate
+        && let Some(then_survives) = single_survivor
+    {
+        let survivor_flow = if then_survives {
+            then_branch_flow
+        } else {
+            else_branch_flow
+        };
+        if branch_last_flow_is_single_survivor_if(survivor_flow) {
+            let survivor_bottom = if then_survives {
+                then_bottom
+            } else {
+                else_bottom
+            };
+            let terminal_bottom = if then_survives {
+                else_bottom
+            } else {
+                then_bottom
+            };
+            let join_y = survivor_bottom.max(terminal_bottom) + IF_SINGLE_SURVIVOR_JOIN_GAP;
+            let out_y = join_y + ARROW_LEN - IF_SINGLE_SURVIVOR_JOIN_GAP - DIAMOND_HALF
+                + IF_SURVIVOR_REDIRECT_GAP;
+
+            svg.shapes.truncate(shapes_chk);
+            svg.truncate_connectors(conns_chk);
+            svg.truncate_lane_spans(shapes_chk, conns_chk);
+            svg.current_lane = lane_chk;
+            svg.if_all_terminal_fork_branch_gap =
+                saved_if_all_terminal_fork_branch_gap || all_terminal_fork_branch_gap;
+            if then_survives {
+                svg.if_survivor_redirect = Some(IfSurvivorRedirect {
+                    merge_cy: join_y,
+                    merge_vertex_x: cx,
+                    to_right: true,
+                    draw_arrow: false,
+                    use_local_join: true,
+                    down_to: Some(out_y),
+                });
+                emit_if_then_branch_with_stretch(
+                    svg,
+                    then_branch_flow,
+                    then_cx,
+                    branch_y,
+                    if_branch_stretch,
+                );
+                svg.if_survivor_redirect = None;
+                if !else_branches.is_empty() {
+                    emit_sequence_if_branch(svg, else_branch_flow, else_cx, branch_y);
+                }
+            } else {
+                emit_if_then_branch_with_stretch(
+                    svg,
+                    then_branch_flow,
+                    then_cx,
+                    branch_y,
+                    if_branch_stretch,
+                );
+                svg.if_survivor_redirect = Some(IfSurvivorRedirect {
+                    merge_cy: join_y,
+                    merge_vertex_x: cx,
+                    to_right: false,
+                    draw_arrow: false,
+                    use_local_join: true,
+                    down_to: Some(out_y),
+                });
+                if !else_branches.is_empty() {
+                    emit_sequence_if_branch(svg, else_branch_flow, else_cx, branch_y);
+                }
+                svg.if_survivor_redirect = None;
+            }
+            svg.if_all_terminal_fork_branch_gap = saved_if_all_terminal_fork_branch_gap;
+            last_survivor_redirect_out_y = Some(out_y);
         }
     }
 
@@ -12940,10 +13033,37 @@ fn emit_if(
         if let Some(merge_cy) = repeat_break_redirect_cy {
             return merge_cy;
         }
+        if let Some(out_y) = last_survivor_redirect_out_y {
+            return out_y;
+        }
         // Nested directly inside a parent if/switch branch: PlantUML's
         // ConnectionVerticalThenHorizontalDirect + MergeStrategy.LIMITED fuses
         // the surviving out-corridor with the parent's branch→merge connector.
         if let Some(redir) = svg.if_survivor_redirect.take() {
+            if redir.use_local_join {
+                let join_y = survivor_bottom.max(terminal_bottom) + IF_SINGLE_SURVIVOR_JOIN_GAP;
+                svg.connector_line(
+                    &arrow_color,
+                    survivor_cx,
+                    survivor_cx,
+                    survivor_bottom,
+                    join_y,
+                    false,
+                );
+                svg.connector_line(
+                    &arrow_color,
+                    survivor_cx,
+                    redir.merge_vertex_x,
+                    join_y,
+                    join_y,
+                    false,
+                );
+                if let Some(down_to) = redir.down_to {
+                    svg.down_arrow(redir.merge_vertex_x, join_y, down_to, &arrow_color);
+                    return down_to;
+                }
+                return join_y;
+            }
             // `ConnectionVerticalThenHorizontalDirect` reconverges the surviving
             // branch to THIS if's own spine (g.left = `cx`) before the parent's
             // branch→merge corridor takes over. When the survivor column sits on
