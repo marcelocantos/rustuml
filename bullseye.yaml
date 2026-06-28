@@ -429,6 +429,25 @@ targets:
     origin: subdivide(🎯T4.1)
     discovered: 2026-06-28
     achieved: 2026-06-28
+  T4.1.22:
+    name: Repeat transaction workflows with nested terminal branches use PlantUML repeat/if survivor geometry
+    status: achieved
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - '`cargo run --release -p rustuml-oracle --example diff_one -- test-diagrams/golden/activity/act_technical_db_transaction.puml` reports structural equivalence.'
+    - '`cargo run --release -p rustuml-oracle --example check_all` has no new failure names beyond the current 29-failure ledger.'
+    context: 'Created after retiring 🎯T4.1.21. The remaining `act_technical_db_transaction` failure is still in the repeat/if terminal-control family, but it is not the exact backward-retry pattern: a repeat body contains an if whose retryable branch survives to the repeat condition while the non-retryable branch rolls back/closes/stops. The expected PlantUML geometry reserves the terminal branch corridor and routes it around the repeat condition; RustUML currently emits two extra elements, places the repeat condition too low, and emits the nested branch collector at the wrong vertical band.'
+    depends_on:
+    - T4.1.21
+    tags:
+    - activity
+    - repeat
+    - if
+    - terminal-flow
+    origin: manual
+    discovered: 2026-06-28
+    achieved: 2026-06-28
   T4.1.3:
     name: Swimlane V2 three-branch fork lane-spanning diagrams match PlantUML geometry
     status: achieved
