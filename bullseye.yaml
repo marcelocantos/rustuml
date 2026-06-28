@@ -210,6 +210,7 @@ targets:
     - T4.1.17
     - T4.1.18
     - T4.1.19
+    - T4.1.20
     origin: manual
     discovered: 2026-05-17
   T4.1.1:
@@ -398,6 +399,18 @@ targets:
     origin: manual
     discovered: 2026-06-21
     achieved: 2026-06-21
+  T4.1.20:
+    name: Quicksort sequential-fork algorithm flow uses PlantUML prelude-aware fork centering
+    status: achieved
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - '`cargo run --release -p rustuml-oracle --example diff_one -- test-diagrams/golden/activity/act_algo_quicksort.puml` reports `SVGs are structurally equivalent`.'
+    - '`cargo run --release -p rustuml-oracle --example check_all` reports no new failure names relative to the post-🎯T4.7.1 ledger of 31 failures.'
+    context: 'Post-🎯T4.7.1 ledger still includes `activity/act_algo_quicksort`. Focused diff is a uniform horizontal geometry mismatch: after the early terminating if and `Choose pivot` prelude, both sequential two-branch forks are 4px too narrow and all following geometry is 2px left. This looks like the same PlantUML widened fork edge-pad behavior as the tiny multi-fork edge case, but triggered by a non-fork prelude rather than tiny branch labels.'
+    origin: subdivide(🎯T4.1)
+    discovered: 2026-06-28
+    achieved: 2026-06-28
   T4.1.3:
     name: Swimlane V2 three-branch fork lane-spanning diagrams match PlantUML geometry
     status: achieved
