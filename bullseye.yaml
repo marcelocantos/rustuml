@@ -215,6 +215,7 @@ targets:
     - T4.1.22
     - T4.1.23
     - T4.1.24
+    - T4.1.25
     origin: manual
     discovered: 2026-05-17
   T4.1.1:
@@ -488,6 +489,26 @@ targets:
     - if
     - fork
     - terminal-flow
+    - strict-xml
+    origin: manual
+    discovered: 2026-06-28
+    achieved: 2026-06-28
+  T4.1.25:
+    name: Partitions containing if-led validation sequences use PlantUML asymmetric shell geometry
+    status: achieved
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - '`cargo run --release -p rustuml-oracle --example diff_one -- test-diagrams/golden/activity/act_partition_with_if.puml` reports structural equivalence.'
+    - '`cargo run --release -p rustuml-oracle --example check_all` has no new failure names beyond the current 26-failure ledger.'
+    - '`cargo fmt --check`, `cargo clippy -- -D warnings`, and `cargo test --lib` pass.'
+    context: 'Created after retiring 🎯T4.1.24. The `act_partition_with_if` fixture has a first partition whose body is an action followed by a binary `if`; RustUML treats the partition frame as generic symmetric `sequence_width + 20`, while PlantUML uses the sequence extents with a wider, asymmetric partition shell. The failure is otherwise a coherent x-only offset with matching element count and height.'
+    depends_on:
+    - T4.1.24
+    tags:
+    - activity
+    - partition
+    - if
     - strict-xml
     origin: manual
     discovered: 2026-06-28

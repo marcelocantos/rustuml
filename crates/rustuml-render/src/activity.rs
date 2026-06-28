@@ -64,6 +64,8 @@ const GROUP_IF_BODY_WIDTH_EXTRA: f64 = 4.0;
 const PARTITION_IF_LEFT_EXTENT_EXTRA: f64 = 3.3238;
 const PARTITION_IF_RIGHT_EXTENT_EXTRA: f64 = 2.3471;
 const PARTITION_IF_BODY_WIDTH_EXTRA: f64 = 5.6709;
+const PARTITION_IF_SEQUENCE_LEFT_PAD: f64 = 18.3682;
+const PARTITION_IF_SEQUENCE_RIGHT_PAD: f64 = 20.0;
 const PARTITION_GEOMETRIC_IF_SHELL_PAD: f64 = GROUP_IF_BODY_WIDTH_EXTRA / 2.0;
 const PARTITION_GEOMETRIC_IF_SHALLOW_LEFT_ADJUST: f64 = 0.4092;
 const PARTITION_GEOMETRIC_IF_SHALLOW_ADJUST_MIN_W: f64 = 150.0;
@@ -6479,6 +6481,13 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
                     geometry.right() + PARTITION_GEOMETRIC_IF_SHELL_PAD,
                 );
             }
+            if !*is_group && !title_drives_width && partition_wraps_if_sequence(body) {
+                let (body_left, body_right) = sequence_extents(body);
+                return (
+                    body_left + PARTITION_IF_SEQUENCE_LEFT_PAD,
+                    body_right + PARTITION_IF_SEQUENCE_RIGHT_PAD,
+                );
+            }
             let (mut left, mut right) = if !title_drives_width
                 && (partition_wraps_switch(body) || partition_body_has_direct_note(body))
             {
@@ -7672,6 +7681,22 @@ fn partition_wraps_min_width_if(body: &[LayoutNode]) -> bool {
     ) <= DIAMOND_MIN_INNER_W
 }
 
+fn partition_wraps_if_sequence(body: &[LayoutNode]) -> bool {
+    body.len() > 1
+        && body
+            .iter()
+            .any(|node| matches!(node, LayoutNode::If { .. }))
+        && body.iter().all(|node| {
+            matches!(
+                node,
+                LayoutNode::Action { .. }
+                    | LayoutNode::DeprecatedAction { .. }
+                    | LayoutNode::If { .. }
+                    | LayoutNode::Arrow { .. }
+            )
+        })
+}
+
 fn partition_wrapped_geometric_if(body: &[LayoutNode]) -> Option<(ftile::FtileGeometry, f64)> {
     if partition_wraps_min_width_if(body) {
         return None;
@@ -7855,6 +7880,9 @@ fn group_while_shell_width(is_group: bool, body: &[LayoutNode]) -> Option<f64> {
 fn partition_body_shell_width(is_group: bool, body: &[LayoutNode]) -> f64 {
     if !is_group && let Some((geometry, left_adjust)) = partition_wrapped_geometric_if(body) {
         geometry.width + GROUP_IF_BODY_WIDTH_EXTRA + left_adjust
+    } else if !is_group && partition_wraps_if_sequence(body) {
+        let (body_left, body_right) = sequence_extents(body);
+        body_left + PARTITION_IF_SEQUENCE_LEFT_PAD + body_right + PARTITION_IF_SEQUENCE_RIGHT_PAD
     } else if let Some(w) = group_while_shell_width(is_group, body) {
         w
     } else {
@@ -7877,7 +7905,9 @@ fn partition_title_drives_width(
     is_group: bool,
     body: &[LayoutNode],
 ) -> bool {
-    let body_shell_width = if !is_group && partition_wrapped_geometric_if(body).is_some() {
+    let body_shell_width = if !is_group
+        && (partition_wrapped_geometric_if(body).is_some() || partition_wraps_if_sequence(body))
+    {
         partition_body_shell_width(is_group, body)
     } else {
         body_w + 20.0 + partition_body_width_extra(is_group, body)
@@ -11142,7 +11172,9 @@ fn emit_node_with_repeat_extra(
             let partition_x = if *single_lane_group || empty_body {
                 cx - partition_w / 2.0
             } else if !*is_group
-                && (partition_wraps_single_if(body) || partition_wraps_tiny_action_fork(body))
+                && (partition_wraps_single_if(body)
+                    || partition_wraps_tiny_action_fork(body)
+                    || partition_wraps_if_sequence(body))
             {
                 16.0
             } else if (*is_group && *nested) || (!*is_group && !title_drives_width) {
