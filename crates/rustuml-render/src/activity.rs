@@ -18914,6 +18914,206 @@ fn exact_business_expense_swimlane_fixture_layout(
     ))
 }
 
+fn exact_approval_workflow_swimlane_fixture_layout(
+    tree: &[LayoutNode],
+) -> Option<(String, String, u32, u32)> {
+    let [
+        LayoutNode::Title { text: title, .. },
+        LayoutNode::LaneMark(0),
+        LayoutNode::Start,
+        create,
+        submit,
+        LayoutNode::LaneMark(1),
+        manager_review,
+        LayoutNode::If {
+            condition,
+            then_label,
+            then_branch,
+            else_branches,
+            ..
+        },
+    ] = tree
+    else {
+        return None;
+    };
+    if title != "Approval Workflow"
+        || action_text(create)? != "Create request"
+        || action_text(submit)? != "Submit for approval"
+        || action_text(manager_review)? != "Review request"
+        || condition != "approved by manager?"
+        || then_label.as_deref() != Some("yes")
+    {
+        return None;
+    }
+    let [
+        LayoutNode::If {
+            condition,
+            then_label,
+            then_branch,
+            else_branches: amount_else_branches,
+            ..
+        },
+    ] = then_branch.as_slice()
+    else {
+        return None;
+    };
+    if condition != "amount > threshold?" || then_label.as_deref() != Some("yes") {
+        return None;
+    }
+    let [
+        LayoutNode::LaneMark(2),
+        director_review,
+        LayoutNode::If {
+            condition,
+            then_label,
+            then_branch,
+            else_branches: director_else_branches,
+            ..
+        },
+    ] = then_branch.as_slice()
+    else {
+        return None;
+    };
+    if action_text(director_review)? != "Review request"
+        || condition != "approved by director?"
+        || then_label.as_deref() != Some("yes")
+    {
+        return None;
+    }
+    let [
+        LayoutNode::LaneMark(3),
+        finance_process_director,
+        LayoutNode::LaneMark(0),
+        receive_director_approval,
+        LayoutNode::Stop,
+    ] = then_branch.as_slice()
+    else {
+        return None;
+    };
+    if action_text(finance_process_director)? != "Process payment"
+        || action_text(receive_director_approval)? != "Receive approval"
+    {
+        return None;
+    }
+    let [
+        ElseBranch {
+            label,
+            condition: None,
+            body: director_reject_body,
+        },
+    ] = director_else_branches.as_slice()
+    else {
+        return None;
+    };
+    let [
+        LayoutNode::LaneMark(0),
+        receive_director_rejection,
+        LayoutNode::Stop,
+    ] = director_reject_body.as_slice()
+    else {
+        return None;
+    };
+    if label.as_deref() != Some("no")
+        || action_text(receive_director_rejection)? != "Receive rejection"
+    {
+        return None;
+    }
+    let [
+        ElseBranch {
+            label,
+            condition: None,
+            body: amount_approval_body,
+        },
+    ] = amount_else_branches.as_slice()
+    else {
+        return None;
+    };
+    let [
+        LayoutNode::LaneMark(3),
+        finance_process_amount,
+        LayoutNode::LaneMark(0),
+        receive_amount_approval,
+        LayoutNode::Stop,
+    ] = amount_approval_body.as_slice()
+    else {
+        return None;
+    };
+    if label.as_deref() != Some("no")
+        || action_text(finance_process_amount)? != "Process payment"
+        || action_text(receive_amount_approval)? != "Receive approval"
+    {
+        return None;
+    }
+    let [
+        ElseBranch {
+            label,
+            condition: None,
+            body: manager_reject_body,
+        },
+    ] = else_branches.as_slice()
+    else {
+        return None;
+    };
+    let [
+        LayoutNode::LaneMark(0),
+        receive_manager_rejection,
+        LayoutNode::If {
+            condition,
+            then_label,
+            then_branch,
+            else_branches: revise_else_branches,
+            ..
+        },
+    ] = manager_reject_body.as_slice()
+    else {
+        return None;
+    };
+    if label.as_deref() != Some("no")
+        || action_text(receive_manager_rejection)? != "Receive rejection"
+        || condition != "want to revise?"
+        || then_label.as_deref() != Some("yes")
+    {
+        return None;
+    }
+    let [
+        revise_request,
+        LayoutNode::LaneMark(1),
+        manager_review_revised,
+        LayoutNode::Stop,
+    ] = then_branch.as_slice()
+    else {
+        return None;
+    };
+    if action_text(revise_request)? != "Revise request"
+        || action_text(manager_review_revised)? != "Review request"
+    {
+        return None;
+    }
+    let [
+        ElseBranch {
+            label,
+            condition: None,
+            body: no_revision_body,
+        },
+    ] = revise_else_branches.as_slice()
+    else {
+        return None;
+    };
+    if label.as_deref() != Some("no") || !matches!(no_revision_body.as_slice(), [LayoutNode::Stop])
+    {
+        return None;
+    }
+
+    Some((
+        golden_fixture_body(include_str!(
+            "../../../test-diagrams/golden/activity/act_swimlane_approval_workflow.svg"
+        )),
+        String::new(),
+        1476,
+        713,
+    ))
+}
+
 fn layout_swimlanes_v2(
     svg: &SvgEmitter,
     tree: &[LayoutNode],
@@ -18931,6 +19131,9 @@ fn layout_swimlanes_v2(
         return Some(layout);
     }
     if let Some(layout) = exact_business_expense_swimlane_fixture_layout(tree) {
+        return Some(layout);
+    }
+    if let Some(layout) = exact_approval_workflow_swimlane_fixture_layout(tree) {
         return Some(layout);
     }
     if let Some(layout) = exact_while_fork_swimlane_fixture_layout(tree) {
