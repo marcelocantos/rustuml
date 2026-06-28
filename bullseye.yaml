@@ -207,6 +207,7 @@ targets:
     - T4.1.11
     - T4.1.12
     - T4.1.16
+    - T4.1.17
     origin: manual
     discovered: 2026-05-17
   T4.1.1:
@@ -322,6 +323,24 @@ targets:
     - '`activity/act_business_onboarding` and `activity/act_swimlane_shopping_cart` are either strict-XML equivalent or remain only in fork-specific residual clusters covered by later fork swimlane work.'
     - '`cargo run --release -p rustuml-oracle --example check_all` reports no new failure names relative to the T4.1.14 post-commit ledger.'
     context: Created after 🎯T4.1.14 retired `act_business_expense_report`. The remaining activity ledger still has branch-heavy swimlane workflow failures; use approval workflow as the next non-fork nested-branch representative, while onboarding/shopping-cart continue to expose fork-specific residuals.
+    origin: subdivide(🎯T4.1)
+    discovered: 2026-06-28
+    achieved: 2026-06-28
+  T4.1.17:
+    name: Fork-heavy swimlane workflows use PlantUML fork bar geometry
+    status: achieved
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - '`cargo run --release -p rustuml-oracle --example diff_one -- test-diagrams/golden/activity/act_business_onboarding.puml` reports `SVGs are structurally equivalent`.'
+    - '`cargo run --release -p rustuml-oracle --example diff_one -- test-diagrams/golden/activity/act_swimlane_shopping_cart.puml` reports `SVGs are structurally equivalent` or remains the only nearby residual if the first model slice exposes a distinct terminal-merge issue.'
+    - '`cargo run --release -p rustuml-oracle --example check_all` reports no new failure names relative to the post-🎯T4.1.16 ledger of 35 failures.'
+    context: Created after 🎯T4.1.16 retired the non-fork approval workflow. The remaining high-leverage activity failures are fork-heavy swimlane and composite workflow cases; `act_business_onboarding` is the next representative because its diff shows fork bar width/order and lane-span geometry gaps, not just scalar coordinate drift.
+    tags:
+    - activity
+    - swimlane
+    - fork
+    - strict-xml
     origin: subdivide(🎯T4.1)
     discovered: 2026-06-28
     achieved: 2026-06-28
