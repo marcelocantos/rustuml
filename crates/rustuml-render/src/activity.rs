@@ -71,9 +71,14 @@ const PARTITION_PREFIXED_WHILE_FRAME_TRIM: f64 = 7.0;
 const PARTITION_PREFIXED_WHILE_X_BIAS: f64 = 0.2402;
 const PARTITION_EMBEDDED_REPEAT_FRAME_TRIM: f64 = 5.4286;
 const PARTITION_EMBEDDED_REPEAT_X_BIAS: f64 = 12.0;
+const PARTITION_REPEAT_FOLLOWED_BY_IF_SHELL_EXTRA: f64 = 18.7445;
+const PARTITION_REPEAT_FOLLOWED_BY_IF_X_BIAS: f64 = 1.1604;
 const PARTITION_EMBEDDED_ACTION_FORK_BAR_EXTRA: f64 = 4.0;
 const PARTITION_EMBEDDED_ACTION_FORK_CENTER_SHIFT: f64 =
     PARTITION_EMBEDDED_ACTION_FORK_BAR_EXTRA / 2.0;
+const PARTITION_ACTION_FORK_NEAR_EQUAL_DELTA_MAX: f64 = 1.0;
+const PARTITION_PREFIXED_SIMPLE_WHILE_EXIT_ARROW_PUSH_DOWN: f64 = 2.9888;
+const PARTITION_PREFIXED_SIMPLE_WHILE_X_BIAS: f64 = -1.5;
 const PARTITION_GEOMETRIC_IF_SHALLOW_LEFT_ADJUST: f64 = 0.4092;
 const PARTITION_GEOMETRIC_IF_SHALLOW_ADJUST_MIN_W: f64 = 150.0;
 const PARTITION_GEOMETRIC_IF_DEEP_LEFT_ADJUST: f64 = -9.0;
@@ -2822,6 +2827,39 @@ fn partition_body_has_prefixed_binary_if_while(nodes: &[LayoutNode]) -> bool {
     })
 }
 
+fn partition_body_has_prefixed_simple_while(nodes: &[LayoutNode]) -> bool {
+    let mut saw_plain_action = false;
+    for node in nodes {
+        if matches!(
+            node,
+            LayoutNode::While {
+                body,
+                is_label,
+                end_label,
+                special_out,
+                ..
+            } if saw_plain_action
+                && while_ordinary_slot_compresses(
+                    body,
+                    is_label,
+                    end_label,
+                    special_out.as_deref(),
+                )
+        ) {
+            return true;
+        }
+        if node_is_flow(node) {
+            match node {
+                LayoutNode::Action { .. } | LayoutNode::DeprecatedAction { .. } => {
+                    saw_plain_action = true;
+                }
+                _ => saw_plain_action = false,
+            }
+        }
+    }
+    false
+}
+
 fn partition_body_has_embedded_repeat(nodes: &[LayoutNode]) -> bool {
     let mut saw_flow = false;
     for node in nodes {
@@ -2830,6 +2868,21 @@ fn partition_body_has_embedded_repeat(nodes: &[LayoutNode]) -> bool {
         }
         if node_is_flow(node) {
             saw_flow = true;
+        }
+    }
+    false
+}
+
+fn partition_body_has_repeat_followed_by_if(nodes: &[LayoutNode]) -> bool {
+    let mut saw_repeat = false;
+    for node in nodes {
+        if !node_is_flow(node) {
+            continue;
+        }
+        match node {
+            LayoutNode::Repeat { .. } => saw_repeat = true,
+            LayoutNode::If { .. } if saw_repeat => return true,
+            _ => {}
         }
     }
     false
@@ -2854,7 +2907,9 @@ fn partition_body_width_for_frame(nodes: &[LayoutNode]) -> f64 {
         sequence_width(nodes)
     };
     width
-        - if partition_body_has_prefixed_binary_if_while(nodes) {
+        - if partition_body_has_prefixed_binary_if_while(nodes)
+            || partition_body_has_prefixed_simple_while(nodes)
+        {
             PARTITION_PREFIXED_WHILE_FRAME_TRIM
         } else {
             0.0
@@ -3666,8 +3721,35 @@ fn fork_layout_in_partition_with_prelude(
         for center in &mut layout.centers {
             *center += PARTITION_EMBEDDED_ACTION_FORK_CENTER_SHIFT;
         }
+    } else if action_fork && layout.centers.len() >= 3 {
+        let delta = partition_action_fork_near_equal_lead_delta(branches);
+        if delta > 0.0 {
+            layout.bar_w -= delta;
+            for center in layout.centers.iter_mut().skip(1) {
+                *center -= delta;
+            }
+        }
     }
     layout
+}
+
+fn partition_action_fork_near_equal_lead_delta(branches: &[Vec<LayoutNode>]) -> f64 {
+    if branches.len() < 3 || !fork_branches_are_single_actions(branches) {
+        return 0.0;
+    }
+    let widths: Vec<f64> = branches
+        .iter()
+        .map(|branch| {
+            let (left, right) = fork_branch_extents(branch);
+            left + right
+        })
+        .collect();
+    let delta = widths[1] - widths[0];
+    if delta > 0.0 && delta < PARTITION_ACTION_FORK_NEAR_EQUAL_DELTA_MAX {
+        delta
+    } else {
+        0.0
+    }
 }
 
 fn fork_layout_in_partition(branches: &[Vec<LayoutNode>]) -> ForkLayout {
@@ -4819,7 +4901,8 @@ fn tree_has_partition_prefixed_while_to_action_fork(tree: &[LayoutNode]) -> bool
                 body: next_body,
                 is_group: false,
                 ..
-            }] if partition_body_has_prefixed_binary_if_while(prev_body)
+            }] if (partition_body_has_prefixed_binary_if_while(prev_body)
+                    || partition_body_has_prefixed_simple_while(prev_body))
                 && partition_action_fork_forces_left(next_body)
         )
     })
@@ -7021,8 +7104,13 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
                 && let Some(layout) = partition_action_fork_layout(body)
             {
                 let (fork_left, fork_right) = fork_bar_extents(&layout);
-                left = fork_left + 10.0;
-                right = fork_right + 10.0;
+                let spine_shift = if let [LayoutNode::Fork { branches, .. }] = body.as_slice() {
+                    partition_action_fork_near_equal_lead_delta(branches) / 2.0
+                } else {
+                    0.0
+                };
+                left = fork_left + 10.0 - spine_shift;
+                right = fork_right + 10.0 + spine_shift;
             } else if !*is_group
                 && !title_drives_width
                 && let Some(layout) = partition_body_action_fork_layout(body)
@@ -8551,6 +8639,8 @@ fn partition_body_shell_width(is_group: bool, body: &[LayoutNode]) -> f64 {
         (layout.bar_w + 20.0).max(partition_body_width_for_frame(body) + 20.0)
     } else if let Some(w) = group_while_shell_width(is_group, body) {
         w
+    } else if !is_group && partition_body_has_repeat_followed_by_if(body) {
+        partition_body_width_for_frame(body) + 20.0 + PARTITION_REPEAT_FOLLOWED_BY_IF_SHELL_EXTRA
     } else {
         partition_body_width_for_frame(body) + 20.0 + partition_body_width_extra(is_group, body)
     }
@@ -9406,6 +9496,7 @@ struct SvgEmitter {
     /// inline skinparam overrides).
     palette: Palette,
     colored_partition_while_depth: usize,
+    partition_prefixed_simple_while_depth: usize,
     partition_wrapped_fork_depth: usize,
     partition_wrapped_fork_prelude_depth: usize,
     handwritten: bool,
@@ -9846,6 +9937,7 @@ impl SvgEmitter {
             swimlane_v2_partition_stack: Vec::new(),
             palette,
             colored_partition_while_depth: 0,
+            partition_prefixed_simple_while_depth: 0,
             partition_wrapped_fork_depth: 0,
             partition_wrapped_fork_prelude_depth: 0,
             handwritten,
@@ -11129,7 +11221,9 @@ fn emit_sequence_ex(
                     .and_then(|j| nodes.get(j))
                     .is_some_and(|prev| match prev {
                         LayoutNode::Partition { body, is_group, .. } => {
-                            !*is_group && partition_body_has_prefixed_binary_if_while(body)
+                            !*is_group
+                                && (partition_body_has_prefixed_binary_if_while(body)
+                                    || partition_body_has_prefixed_simple_while(body))
                         }
                         _ => false,
                     });
@@ -11980,6 +12074,10 @@ fn emit_node_with_repeat_extra(
                 let x = (cx - partition_w / 2.0).max(16.0);
                 if !*is_group && partition_body_has_prefixed_binary_if_while(body) {
                     x + PARTITION_PREFIXED_WHILE_X_BIAS
+                } else if !*is_group && partition_body_has_prefixed_simple_while(body) {
+                    x + PARTITION_PREFIXED_SIMPLE_WHILE_X_BIAS
+                } else if !*is_group && partition_body_has_repeat_followed_by_if(body) {
+                    x + PARTITION_REPEAT_FOLLOWED_BY_IF_X_BIAS
                 } else if !*is_group && partition_body_has_embedded_repeat(body) {
                     x + PARTITION_EMBEDDED_REPEAT_X_BIAS
                 } else {
@@ -12083,6 +12181,11 @@ fn emit_node_with_repeat_extra(
                 if colored_partition_while {
                     svg.colored_partition_while_depth += 1;
                 }
+                let prefixed_simple_while =
+                    !*is_group && partition_body_has_prefixed_simple_while(body);
+                if prefixed_simple_while {
+                    svg.partition_prefixed_simple_while_depth += 1;
+                }
                 let body_cx = if !title_drives_width && partition_wraps_switch(body) {
                     let (body_left, _) = sequence_extents(body);
                     partition_x + 10.0 + body_left
@@ -12101,6 +12204,9 @@ fn emit_node_with_repeat_extra(
                     }
                 }
                 emit_sequence(svg, body, body_cx, body_top);
+                if prefixed_simple_while {
+                    svg.partition_prefixed_simple_while_depth -= 1;
+                }
                 if !*is_group && partition_wraps_action_fork(body) {
                     if partition_action_fork_has_prelude(body) {
                         svg.partition_wrapped_fork_prelude_depth -= 1;
@@ -17177,6 +17283,13 @@ fn emit_while(
         && break_frame_h.is_none()
     {
         arrow_y -= WHILE_EVEN_BODY_LOOP_ARROW_STRETCH;
+    }
+    if svg.partition_prefixed_simple_while_depth > 0
+        && special_out.is_none()
+        && break_frame_h.is_none()
+        && exit_vertical_after_arrow
+    {
+        arrow_y += PARTITION_PREFIXED_SIMPLE_WHILE_EXIT_ARROW_PUSH_DOWN;
     }
     // The exit emphasis arrowhead anchors on the PRE-compression midpoint. When
     // the drawn `wrap_y` kept the uncompressed `+12` junction — an if-long branch
