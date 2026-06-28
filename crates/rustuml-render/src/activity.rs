@@ -1642,6 +1642,31 @@ fn body_contains_break_if(body: &[LayoutNode]) -> bool {
     nodes_contain_break(body)
 }
 
+fn body_contains_repeat_break_collector(body: &[LayoutNode]) -> bool {
+    body.iter().any(node_contains_repeat_break_collector)
+}
+
+fn node_contains_repeat_break_collector(node: &LayoutNode) -> bool {
+    match node {
+        LayoutNode::Break => true,
+        LayoutNode::If {
+            then_branch,
+            else_branches,
+            ..
+        } => {
+            body_contains_repeat_break_collector(then_branch)
+                || else_branches
+                    .iter()
+                    .any(|b| body_contains_repeat_break_collector(&b.body))
+        }
+        LayoutNode::Fork { branches, .. } => branches
+            .iter()
+            .any(|branch| body_contains_repeat_break_collector(branch)),
+        LayoutNode::Partition { body, .. } => body_contains_repeat_break_collector(body),
+        _ => false,
+    }
+}
+
 /// A `while` directly in this body. A nested while ADVERTISES a wider layout
 /// extent (`sequence_extents`) than it draws (`sequence_geometry`) because of the
 /// FtileWhile `dx + halfHex` trailing reservation that the whole-diagram ON_X
@@ -2934,6 +2959,7 @@ struct ForkLayout {
     centers: Vec<f64>,
     spine_dx: f64,
     bar_overhang: f64,
+    top_bar_pull_up: f64,
     /// True when the black bar should be `ignoreForCompressionOnX` AND there is a
     /// reclaimable middle-gap corridor (a mixed-asymmetry even fork — one off-
     /// centre branch beside a plain one). For such forks the +18 even-middle gap
@@ -3264,6 +3290,7 @@ fn fork_layout(branches: &[Vec<LayoutNode>]) -> ForkLayout {
             // `spine_dx = -2` (spine = `bar_w/2 - spine_dx`); this keeps the drawn
             // branch positions anchored while the start/stop terminals re-centre.
             spine_dx: -(FORK_PARALLEL_X_MARGIN_TRIM),
+            top_bar_pull_up: 0.0,
             // The bar is `ignoreForCompressionOnX`; its slack collapses with the
             // empty inter-branch bands in the whole-diagram pass.
             bar_overhang: 0.0,
@@ -3311,6 +3338,7 @@ fn fork_layout(branches: &[Vec<LayoutNode>]) -> ForkLayout {
                 0.0
             },
             bar_overhang: 0.0,
+            top_bar_pull_up: 0.0,
             bar_compressible: false,
         };
     }
@@ -3437,6 +3465,7 @@ fn fork_layout(branches: &[Vec<LayoutNode>]) -> ForkLayout {
             0.0
         },
         bar_overhang: 0.0,
+        top_bar_pull_up: 0.0,
         bar_compressible,
     }
 }
@@ -3471,6 +3500,7 @@ fn fork_layout_multi_sequence(branches: &[Vec<LayoutNode>], has_prelude: bool) -
         centers,
         spine_dx: 0.0,
         bar_overhang: 0.0,
+        top_bar_pull_up: 0.0,
         bar_compressible: false,
     }
 }
@@ -3516,6 +3546,13 @@ fn fork_layout_with_following_action(mut layout: ForkLayout, extra: f64) -> Fork
     layout
 }
 
+fn while_body_is_single_fork(nodes: &[LayoutNode], fork: &LayoutNode) -> bool {
+    nodes
+        .iter()
+        .filter(|node| node_is_flow(node))
+        .all(|flow| std::ptr::eq(flow, fork))
+}
+
 fn while_body_fork_layout(nodes: &[LayoutNode], i: usize, node: &LayoutNode) -> Option<ForkLayout> {
     let LayoutNode::Fork {
         branches,
@@ -3527,11 +3564,13 @@ fn while_body_fork_layout(nodes: &[LayoutNode], i: usize, node: &LayoutNode) -> 
         return None;
     };
     let extra = while_body_fork_following_action_extra(nodes, i, branches);
-    if extra > 0.0 {
-        Some(fork_layout_with_following_action(
-            fork_layout(branches),
-            extra,
-        ))
+    let single_fork_body = while_body_is_single_fork(nodes, node);
+    if extra > 0.0 || single_fork_body {
+        let mut layout = fork_layout_with_following_action(fork_layout(branches), extra);
+        if single_fork_body {
+            layout.top_bar_pull_up = WHILE_BODY_SLOT_COMPRESS;
+        }
+        Some(layout)
     } else {
         None
     }
@@ -3628,6 +3667,7 @@ fn split_layout(branches: &[Vec<LayoutNode>]) -> ForkLayout {
         centers,
         spine_dx: 0.0,
         bar_overhang: 0.0,
+        top_bar_pull_up: 0.0,
         bar_compressible: false,
     }
 }
@@ -3845,6 +3885,12 @@ fn switch_one_link_below_diamond(case: &SwitchCase) -> f64 {
 
 fn switch_all_branches_terminate(cases: &[SwitchCase]) -> bool {
     !cases.is_empty() && cases.iter().all(|case| branch_terminates(&case.body))
+}
+
+fn switch_has_break_terminating_case(cases: &[SwitchCase]) -> bool {
+    cases
+        .iter()
+        .any(|case| branch_terminates_with_break(&case.body))
 }
 
 fn switch_has_empty_middle_case(cases: &[SwitchCase]) -> bool {
@@ -4129,7 +4175,10 @@ fn switch_repeat_merge_extra(node: &LayoutNode) -> f64 {
     else {
         return 0.0;
     };
-    if cases.len() < 2 || switch_all_branches_terminate(cases) {
+    if cases.len() < 2
+        || switch_all_branches_terminate(cases)
+        || switch_has_break_terminating_case(cases)
+    {
         return 0.0;
     }
     ARROW_LEN
@@ -6934,7 +6983,13 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
                 } else {
                     0.0
                 };
-                let left_extent = body_left.max(cond_half + 9.0).max(break_left);
+                let switch_break = repeat_body_is_single_switch_with_break_case(body);
+                let left_extent = body_left.max(cond_half + 9.0).max(break_left)
+                    - if switch_break {
+                        REPEAT_SWITCH_BREAK_LEFT_RECLAIM
+                    } else {
+                        0.0
+                    };
                 // Right extent mirrors `emit_repeat`'s loop-back arm exactly:
                 // `arm = max(diamond_right + 12, extents.right + 12,
                 //            geo.right() + 4)`, then the canvas reserves a
@@ -6963,7 +7018,13 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
                     };
                     (cond_half + 12.0).max(body_right + 12.0).max(geo_clear)
                 };
-                let right_extent = arm_rel + 15.0;
+                let right_extent = arm_rel
+                    + 15.0
+                    + if switch_break {
+                        REPEAT_SWITCH_BREAK_RIGHT_RESERVE
+                    } else {
+                        0.0
+                    };
                 (left_extent, right_extent)
             }
         }
@@ -7725,6 +7786,7 @@ fn repeat_body_has_in_loop_switch(body: &[LayoutNode]) -> bool {
         LayoutNode::Switch { cases, condition } => {
             cases.len() > 1
                 && cases.iter().all(|c| !c.body.is_empty())
+                && !switch_has_break_terminating_case(cases)
                 && !switch_x_layout(cases, condition).big_diamond
         }
         _ => false,
@@ -9223,7 +9285,7 @@ fn node_height(node: &LayoutNode) -> f64 {
             //  - MID/early break: a trailing action follows, and the if rejoins the
             //    spine `IF_BRANCH_UP/2` higher than `node_height` models — `body_h`
             //    is too tall by exactly that, and the merge term is the full tail.
-            let break_merge = if !*has_start_label && body_contains_break_if(body) {
+            let break_merge = if !*has_start_label && body_contains_repeat_break_collector(body) {
                 if break_if_is_last_flow(body) {
                     ARROW_LEN + diamond_h - REPEAT_BREAK_IF_HEIGHT_OVERCOUNT
                 } else {
@@ -9233,7 +9295,7 @@ fn node_height(node: &LayoutNode) -> f64 {
                 0.0
             };
             let backward_composite_break_canvas = if backward.is_some()
-                && body_contains_break_if(body)
+                && body_contains_repeat_break_collector(body)
                 && !break_if_is_last_flow(body)
             {
                 4.0
@@ -9867,6 +9929,13 @@ struct SvgEmitter {
     /// `emit_switch_with_layout`, which also records `while_switch_loopback_tip`
     /// so `emit_repeat` can anchor its loop-back arrowhead on the merge diamond.
     repeat_switch_merge_extra: f64,
+    /// One-shot for a repeat whose whole body is a switch with a break-terminating
+    /// case: the repeat frame's compressed extent moves the spine left while the
+    /// switch case columns stay in their pre-frame positions.
+    repeat_switch_break_columns: bool,
+    /// One-shot while emitting a case body under `repeat_switch_break_columns`.
+    /// The nested if-down merge keeps the south-label residual band.
+    repeat_switch_break_if_merge_extra: bool,
     /// Extra px the loop-body centring slack distributes into the middle inter-
     /// action gap of the deepest 2-action `then`-branch of a `while` body that is
     /// a single (possibly nested) balanced `if`. PlantUML's `FtileWhile` centring
@@ -10126,6 +10195,8 @@ impl SvgEmitter {
             pending_repeat_body: false,
             while_repeat_body_nonterminal: false,
             repeat_switch_merge_extra: 0.0,
+            repeat_switch_break_columns: false,
+            repeat_switch_break_if_merge_extra: false,
             while_if_branch_stretch: None,
             if_all_terminal_fork_branch_gap: false,
             if_branch_terminal_fork_layout: false,
@@ -11114,6 +11185,26 @@ fn emit_sequence_ex(
             svg.right_arrow(merge_left, merge_cy, &arrow_color);
             svg.repeat_break_weld_y = Some(y);
         }
+        if matches!(node, LayoutNode::Break) && svg.while_break.is_none() {
+            let prev_flow = nodes[..i].iter().rev().find(|prev| {
+                !matches!(
+                    prev,
+                    LayoutNode::Arrow { .. }
+                        | LayoutNode::Note { .. }
+                        | LayoutNode::Title { .. }
+                        | LayoutNode::LaneMark(_)
+                ) && !is_empty_partition_node(prev)
+            });
+            if prev_flow.is_some_and(|prev| {
+                matches!(
+                    prev,
+                    LayoutNode::Action { .. } | LayoutNode::DeprecatedAction { .. }
+                )
+            }) {
+                let arrow_color = svg.palette.arrow_color.clone();
+                svg.down_arrow(cx, y, y + ARROW_LEN, &arrow_color);
+            }
+        }
         if matches!(
             node,
             LayoutNode::Detach | LayoutNode::Kill | LayoutNode::Break | LayoutNode::Goto(_)
@@ -11621,6 +11712,9 @@ fn emit_sequence_ex(
             && matches!(node, LayoutNode::Switch { .. })
         {
             svg.repeat_switch_merge_extra = switch_repeat_merge_extra(node);
+            if repeat_body_is_single_switch_with_break_case(nodes) {
+                svg.repeat_switch_break_columns = true;
+            }
         }
         // A multi-case switch directly in a `repeat` body keeps its uncompressed
         // gap-20 inner bands, exactly like a `while`-body switch: the loop frame
@@ -11628,7 +11722,12 @@ fn emit_sequence_ex(
         // straddling the condition/merge-diamond column. This flag affects ONLY
         // the horizontal layout selection (`switch_x_layout_in_while`); the
         // vertical merge band stays driven by `repeat_switch_merge_extra` above.
-        if repeat_body && matches!(node, LayoutNode::Switch { .. }) {
+        if repeat_body
+            && matches!(
+                node,
+                LayoutNode::Switch { cases, .. } if !switch_has_break_terminating_case(cases)
+            )
+        {
             svg.repeat_body_switch = true;
         }
         // A NON-terminal `while` in a repeat body keeps its loop-back tail open
@@ -11716,6 +11815,7 @@ fn emit_sequence_ex(
         svg.while_switch_corridor_compresses = false;
         svg.while_switch_merge_compressed = false;
         svg.repeat_switch_merge_extra = 0.0;
+        svg.repeat_switch_break_columns = false;
         svg.repeat_body_switch = false;
         svg.while_repeat_body_nonterminal = false;
         prev_was_deferred_while = node_defers;
@@ -13876,6 +13976,9 @@ const REPEAT_BACKWARD_BODY_SLACK: f64 = 30.0;
 /// backward tile; this renderer defers ON_Y, so it is reproduced here.
 /// Empirically constant across the `act_repeat_acts{1,3}_bwd_brk` family.
 const REPEAT_BACKWARD_BREAK_ODD_SLACK: f64 = 2.1553;
+const REPEAT_SWITCH_BREAK_LEFT_RECLAIM: f64 = 6.5;
+const REPEAT_SWITCH_BREAK_RIGHT_RESERVE: f64 = 13.5;
+const REPEAT_SWITCH_BREAK_LOOPBACK_ARROW_DROP: f64 = 44.7387;
 
 /// The even-body mid-stretch is calibrated for loop bodies whose flow nodes are
 /// plain action tiles (`act_while_2actions_body` and friends): PlantUML's Snake
@@ -14431,6 +14534,10 @@ fn repeat_body_nonterminal_while_extra(body: &[LayoutNode]) -> f64 {
         * (DIAMOND_HALF - 10.0)
 }
 
+fn repeat_body_is_single_switch_with_break_case(body: &[LayoutNode]) -> bool {
+    matches!(body, [LayoutNode::Switch { cases, .. }] if switch_has_break_terminating_case(cases))
+}
+
 /// Extra vertical gap a `backward` repeat reserves between the body bottom and
 /// the condition diamond. A single PLAIN ACTION body keeps an extra halfHex of
 /// slack before the diamond (PlantUML's UEmpty placeholder is uncompressed when
@@ -14797,6 +14904,8 @@ fn emit_if_down(
     let terminating_has_next = std::mem::take(&mut svg.if_down_terminating_has_next);
     let terminating_while_body_has_next =
         std::mem::take(&mut svg.if_down_terminating_while_body_has_next);
+    let repeat_switch_break_if_merge_extra =
+        std::mem::take(&mut svg.repeat_switch_break_if_merge_extra);
     let arrow_color = svg.palette.arrow_color.clone();
     let diamond_stroke = svg.palette.diamond_stroke.clone();
     let diamond_fill = svg.palette.diamond_fill.clone();
@@ -14824,6 +14933,12 @@ fn emit_if_down(
     // terminating if-down owns its vertical corridor itself, so the parent
     // if-down frame must not inject this stretch into the nested branch.
     let flow_count = plan.populated.iter().filter(|n| node_is_flow(n)).count();
+    let repeat_switch_break_if_merge_extra =
+        if repeat_switch_break_if_merge_extra && !flow_count.is_multiple_of(2) {
+            IF_DOWN_LEAD - ARROW_LEN
+        } else {
+            0.0
+        };
     let stretch_amount = if plan.populated_terminates {
         IF_DOWN_TERM_MID_STRETCH
     } else {
@@ -15013,7 +15128,7 @@ fn emit_if_down(
         + if populated_last_single_survivor {
             0.0
         } else {
-            ARROW_LEN
+            ARROW_LEN + repeat_switch_break_if_merge_extra
         };
     let merge_cy = merge_top + DIAMOND_HALF;
     svg.polygon_shape(
@@ -15057,8 +15172,8 @@ fn emit_if_down(
         false,
     );
     // Mid-corridor down arrowhead (emphasizeDirection on the vertical run).
-    let arrow_tip = (diamond_cy + merge_cy) / 2.0
-        + IF_CORRIDOR_ARROW_OFFSET
+    let arrow_tip = (diamond_cy + merge_cy) / 2.0 + IF_CORRIDOR_ARROW_OFFSET
+        - repeat_switch_break_if_merge_extra / 2.0
         + if populated_last_single_survivor {
             IF_DOWN_SINGLE_SURVIVOR_CORRIDOR_ARROW_EXTRA
         } else if populated_last_terminating_down {
@@ -15599,6 +15714,17 @@ fn emit_switch_with_layout(
     // block extends asymmetrically around it per the BIG/SMALL diamond model.
     let block_left = cx - layout.diamond_dx;
     let mut centers: Vec<f64> = layout.centers.iter().map(|c| block_left + c).collect();
+    let repeat_switch_break_columns = std::mem::take(&mut svg.repeat_switch_break_columns);
+    if repeat_switch_break_columns {
+        let split = n / 2;
+        for (i, center) in centers.iter_mut().enumerate() {
+            *center += if i < split {
+                REPEAT_SWITCH_BREAK_LEFT_RECLAIM
+            } else {
+                REPEAT_SWITCH_BREAK_RIGHT_RESERVE
+            };
+        }
+    }
     if clamp_left_case && let (Some(center), Some(case)) = (centers.first_mut(), cases.first()) {
         let min_center = SVG_CONTENT_LEAD + switch_case_width(case) / 2.0;
         *center = center.max(min_center);
@@ -15645,7 +15771,11 @@ fn emit_switch_with_layout(
     // Case bodies (shapes + internal connectors) in source order.
     let mut bottoms = Vec::with_capacity(n);
     for (i, case) in cases.iter().enumerate() {
+        if repeat_switch_break_columns {
+            svg.repeat_switch_break_if_merge_extra = true;
+        }
         bottoms.push(emit_sequence(svg, &case.body, centers[i], cases_top));
+        svg.repeat_switch_break_if_merge_extra = false;
     }
     let max_bottom = bottoms.iter().cloned().fold(0.0f64, f64::max);
 
@@ -16193,6 +16323,7 @@ fn emit_fork_with_layout(
     let bar_x = cx + layout.spine_dx - bar_w / 2.0;
     let draw_bar_w = bar_w + 2.0 * layout.bar_overhang;
     let draw_bar_x = bar_x - layout.bar_overhang;
+    let top_bar_y = y - layout.top_bar_pull_up;
     let bar_color = svg.palette.bar_color.clone();
     let arrow_color = svg.palette.arrow_color.clone();
     let bar_compressible = layout.bar_compressible;
@@ -16201,10 +16332,11 @@ fn emit_fork_with_layout(
         &bar_color,
         draw_bar_w,
         draw_bar_x,
-        y,
+        top_bar_y,
         bar_compressible,
     );
 
+    let top_bar_bottom = top_bar_y + FORK_BAR_HEIGHT;
     let bar_bottom = y + FORK_BAR_HEIGHT;
 
     let branch_centers: Vec<f64> = layout.centers.iter().map(|center| bar_x + center).collect();
@@ -16430,7 +16562,7 @@ fn emit_fork_with_layout(
     // bar straight into the bottom bar, in branch order.
     for (i, (branch, &bcx)) in branches.iter().zip(branch_centers.iter()).enumerate() {
         if branch.is_empty() {
-            svg.down_arrow(bcx, bar_bottom, bottom_bar_y, &arrow_color);
+            svg.down_arrow(bcx, top_bar_bottom, bottom_bar_y, &arrow_color);
             continue;
         }
         let branch_y = if single_partition_branch_body_top(branch, bar_bottom).is_some() {
@@ -16440,7 +16572,7 @@ fn emit_fork_with_layout(
             bar_bottom + ARROW_LEN + center_offsets[i] + origin_adjust
         };
         let arrow_bottom = single_partition_branch_body_top(branch, branch_y).unwrap_or(branch_y);
-        svg.down_arrow(bcx, bar_bottom, arrow_bottom, &arrow_color);
+        svg.down_arrow(bcx, top_bar_bottom, arrow_bottom, &arrow_color);
     }
 
     // Bottom arrows from each branch to bottom bar — skipped for a branch that
@@ -17728,7 +17860,7 @@ fn emit_repeat(
     // `REPEAT_BREAK_CORRIDOR_MARGIN` (10) px left of the repeat's OWN left extent
     // (`repeat.getLeft()` = max(body_left, cond_diamond reservation)), not the
     // break-`if` diamond's half — a wide post-break body action sets that left.
-    let has_break = !has_start_label && body_contains_break_if(body);
+    let has_break = !has_start_label && body_contains_repeat_break_collector(body);
     let break_corridor_x = if has_break {
         let body_left = sequence_extents(body).0;
         let cond_half = diamond_inner_w(condition) / 2.0 + DIAMOND_HALF;
@@ -17991,9 +18123,15 @@ fn emit_repeat(
         let geo_clear = sequence_geometry(body).map_or(extents_clear, |g| cx + g.right() + 4.0);
         extents_clear.max(geo_clear)
     };
+    let switch_break_body = repeat_body_is_single_switch_with_break_case(body);
     let arm_x = (diamond_right + 12.0).max(body_right)
         - if repeat_body_has_implicit_if_with_trailing_flow(body) {
             REPEAT_IMPLICIT_IF_TRAILING_ARM_PULL_LEFT
+        } else {
+            0.0
+        }
+        + if switch_break_body {
+            REPEAT_SWITCH_BREAK_RIGHT_RESERVE
         } else {
             0.0
         };
@@ -18211,6 +18349,11 @@ fn emit_repeat(
                 - nested_bias
                 - loopback_arrow_bias
                 - while_tail_extra / 2.0
+                + if switch_break_body {
+                    REPEAT_SWITCH_BREAK_LOOPBACK_ARROW_DROP
+                } else {
+                    0.0
+                }
                 + if fork_branch_tail_extra != 0.0 {
                     1.0
                 } else {
