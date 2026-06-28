@@ -209,6 +209,7 @@ targets:
     - T4.1.16
     - T4.1.17
     - T4.1.18
+    - T4.1.19
     origin: manual
     discovered: 2026-05-17
   T4.1.1:
@@ -360,6 +361,22 @@ targets:
     - swimlane
     - fork
     - if
+    - strict-xml
+    origin: subdivide(🎯T4.1)
+    discovered: 2026-06-28
+    achieved: 2026-06-28
+  T4.1.19:
+    name: Restaurant-order swimlane workflow uses PlantUML nested branch geometry
+    status: achieved
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - '`cargo run --release -p rustuml-oracle --example diff_one -- test-diagrams/golden/activity/act_swimlane_restaurant_order.puml` reports `SVGs are structurally equivalent`.'
+    - '`cargo run --release -p rustuml-oracle --example check_all` reports no new failure names relative to the post-🎯T4.1.18 ledger of 33 failures.'
+    context: Created after 🎯T4.1.18 retired the shopping-cart nested if/fork workflow. `act_swimlane_restaurant_order` is the next remaining named swimlane workflow in the strict ledger.
+    tags:
+    - activity
+    - swimlane
     - strict-xml
     origin: subdivide(🎯T4.1)
     discovered: 2026-06-28
