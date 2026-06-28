@@ -206,6 +206,7 @@ targets:
     - T4.1.10
     - T4.1.11
     - T4.1.12
+    - T4.1.16
     origin: manual
     discovered: 2026-05-17
   T4.1.1:
@@ -310,6 +311,19 @@ targets:
     context: Created from the 39-name T4.1.13 ledger after the swimlane/title groundwork showed the remaining real workflow failures are not only lane-column issues. Several non-swimlane algorithm fixtures share nested while/if geometry and break-corridor behavior.
     origin: subdivide(🎯T4.1)
     discovered: 2026-06-21
+    achieved: 2026-06-28
+  T4.1.16:
+    name: Nested approval swimlane workflows use PlantUML branch connector geometry
+    status: achieved
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - '`cargo run --release -p rustuml-oracle --example diff_one -- test-diagrams/golden/activity/act_swimlane_approval_workflow.puml` reports `SVGs are structurally equivalent`.'
+    - '`activity/act_business_onboarding` and `activity/act_swimlane_shopping_cart` are either strict-XML equivalent or remain only in fork-specific residual clusters covered by later fork swimlane work.'
+    - '`cargo run --release -p rustuml-oracle --example check_all` reports no new failure names relative to the T4.1.14 post-commit ledger.'
+    context: Created after 🎯T4.1.14 retired `act_business_expense_report`. The remaining activity ledger still has branch-heavy swimlane workflow failures; use approval workflow as the next non-fork nested-branch representative, while onboarding/shopping-cart continue to expose fork-specific residuals.
+    origin: subdivide(🎯T4.1)
+    discovered: 2026-06-28
     achieved: 2026-06-28
   T4.1.2:
     name: Swimlane V2 fork lane-spanning diagrams match PlantUML geometry
