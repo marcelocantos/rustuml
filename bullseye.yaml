@@ -285,7 +285,7 @@ targets:
     achieved: 2026-06-21
   T4.1.14:
     name: Nested swimlane branch workflows use the single-tree lane model
-    status: identified
+    status: achieved
     value: 0.0
     cost: 0.0
     acceptance:
@@ -296,6 +296,7 @@ targets:
     context: Created after 🎯T4.1.13 reduced the activity-led ledger to 39 failures. The remaining activity bucket is dominated by real workflow diagrams with lane changes inside nested if/fork/while bodies; this child tracks broadening the V2 swimlane single-tree model beyond the small primitive gates.
     origin: subdivide(🎯T4.1)
     discovered: 2026-06-21
+    achieved: 2026-06-28
   T4.1.15:
     name: Nested activity algorithm flows use PlantUML loop/branch geometry
     status: achieved
