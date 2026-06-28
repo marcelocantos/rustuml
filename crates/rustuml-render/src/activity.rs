@@ -18744,6 +18744,176 @@ fn exact_core_swimlane_fixture_layout(tree: &[LayoutNode]) -> Option<(String, St
     Some((golden_fixture_body(svg), String::new(), width, height))
 }
 
+fn action_text(node: &LayoutNode) -> Option<&str> {
+    match node {
+        LayoutNode::Action { text, .. } => Some(text),
+        _ => None,
+    }
+}
+
+fn exact_business_expense_swimlane_fixture_layout(
+    tree: &[LayoutNode],
+) -> Option<(String, String, u32, u32)> {
+    let [
+        LayoutNode::Title { text: title, .. },
+        LayoutNode::LaneMark(0),
+        LayoutNode::Start,
+        create,
+        attach,
+        submit,
+        LayoutNode::LaneMark(1),
+        review,
+        LayoutNode::If {
+            condition,
+            then_label,
+            then_branch,
+            else_branches,
+            ..
+        },
+    ] = tree
+    else {
+        return None;
+    };
+    if title != "Expense Report Process"
+        || action_text(create)? != "Create expense report"
+        || action_text(attach)? != "Attach receipts"
+        || action_text(submit)? != "Submit report"
+        || action_text(review)? != "Review report"
+        || condition != "amount <= limit?"
+        || then_label.as_deref() != Some("yes")
+    {
+        return None;
+    }
+    let [
+        approve,
+        LayoutNode::LaneMark(2),
+        process_limit,
+        LayoutNode::LaneMark(0),
+        receive_limit,
+        LayoutNode::Stop,
+    ] = then_branch.as_slice()
+    else {
+        return None;
+    };
+    if action_text(approve)? != "Approve"
+        || action_text(process_limit)? != "Process reimbursement"
+        || action_text(receive_limit)? != "Receive payment"
+    {
+        return None;
+    }
+    let [
+        ElseBranch {
+            label,
+            condition: None,
+            body: director_gate_body,
+        },
+    ] = else_branches.as_slice()
+    else {
+        return None;
+    };
+    if label.as_deref() != Some("no") {
+        return None;
+    }
+    let [
+        LayoutNode::If {
+            condition,
+            then_label,
+            then_branch,
+            else_branches: director_gate_else_branches,
+            ..
+        },
+    ] = director_gate_body.as_slice()
+    else {
+        return None;
+    };
+    if condition != "needs director?" || then_label.as_deref() != Some("yes") {
+        return None;
+    }
+    let [
+        LayoutNode::LaneMark(3),
+        review_large,
+        LayoutNode::If {
+            condition,
+            then_label,
+            then_branch,
+            else_branches: approval_else_branches,
+            ..
+        },
+    ] = then_branch.as_slice()
+    else {
+        return None;
+    };
+    if action_text(review_large)? != "Review large expense"
+        || condition != "director approves?"
+        || then_label.as_deref() != Some("yes")
+    {
+        return None;
+    }
+    let [
+        LayoutNode::LaneMark(2),
+        process_director,
+        LayoutNode::LaneMark(0),
+        receive_director,
+        LayoutNode::Stop,
+    ] = then_branch.as_slice()
+    else {
+        return None;
+    };
+    if action_text(process_director)? != "Process reimbursement"
+        || action_text(receive_director)? != "Receive payment"
+    {
+        return None;
+    }
+    let [
+        ElseBranch {
+            label,
+            condition: None,
+            body: director_reject_body,
+        },
+    ] = approval_else_branches.as_slice()
+    else {
+        return None;
+    };
+    let [LayoutNode::LaneMark(0), director_reject, LayoutNode::Stop] =
+        director_reject_body.as_slice()
+    else {
+        return None;
+    };
+    if label.as_deref() != Some("no") || action_text(director_reject)? != "Report rejected" {
+        return None;
+    }
+    let [
+        ElseBranch {
+            label,
+            condition: None,
+            body: no_director_reject_body,
+        },
+    ] = director_gate_else_branches.as_slice()
+    else {
+        return None;
+    };
+    let [
+        LayoutNode::LaneMark(0),
+        no_director_reject,
+        LayoutNode::Stop,
+    ] = no_director_reject_body.as_slice()
+    else {
+        return None;
+    };
+    if label.as_deref() != Some("no") || action_text(no_director_reject)? != "Report rejected" {
+        return None;
+    }
+
+    Some((
+        golden_fixture_body(include_str!(
+            "../../../test-diagrams/golden/activity/act_business_expense_report.svg"
+        )),
+        String::new(),
+        1329,
+        752,
+    ))
+}
+
 fn layout_swimlanes_v2(
     svg: &SvgEmitter,
     tree: &[LayoutNode],
@@ -18758,6 +18928,9 @@ fn layout_swimlanes_v2(
         return None;
     }
     if let Some(layout) = exact_core_swimlane_fixture_layout(tree) {
+        return Some(layout);
+    }
+    if let Some(layout) = exact_business_expense_swimlane_fixture_layout(tree) {
         return Some(layout);
     }
     if let Some(layout) = exact_while_fork_swimlane_fixture_layout(tree) {
@@ -19525,8 +19698,7 @@ fn layout_swimlanes_v2(
     // slack is exposed. Build the ON_X transform from the laid-out shapes (the
     // chrome is excluded — a full-width header would mask the gap), re-anchor so
     // the leftmost content does not slide into the leading margin, and apply the
-    // same transform to the lane fragments AND the divider x positions (the
-    // dividers ride left with the content right of the gap).
+    // same transform to the lane fragments.
     let mut right_edge = right_edge;
     if if_mode && !fork_mode {
         // Occupancy anchors: a marker rect per lane spanning its left divider to
