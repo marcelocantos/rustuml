@@ -3909,6 +3909,7 @@ fn repeat_body_switch_extra(body: &[LayoutNode]) -> f64 {
 /// BIG_DIAMOND mode (the horizontal padding either side of the diamond
 /// column between the first and last case tiles).
 const SWITCH_SUPP15: f64 = 15.0;
+const SWITCH_FIRST_WHILE_CASE_PULL_LEFT: f64 = 8.0;
 
 /// Faithful port of PlantUML's `FtileSwitchWithDiamonds` horizontal layout.
 ///
@@ -3944,9 +3945,24 @@ fn switch_x_layout(cases: &[SwitchCase], condition: &str) -> SwitchXLayout {
     if switch_small_is_plain(cases, condition, &layout) {
         let tiles: Vec<SwitchCaseTile> = cases.iter().map(switch_case_tile).collect();
         let diamond_w = diamond_inner_w(condition) + DIAMOND_HALF * 2.0;
-        return switch_small_compressed(&tiles, diamond_w);
+        let mut compressed = switch_small_compressed(&tiles, diamond_w);
+        if switch_first_case_contains_while(cases) {
+            for center in compressed.centers.iter_mut().skip(1) {
+                *center -= SWITCH_FIRST_WHILE_CASE_PULL_LEFT;
+            }
+            compressed.block_w -= SWITCH_FIRST_WHILE_CASE_PULL_LEFT;
+        }
+        return compressed;
     }
     layout
+}
+
+fn switch_first_case_contains_while(cases: &[SwitchCase]) -> bool {
+    cases.first().is_some_and(|case| {
+        case.body
+            .iter()
+            .any(|node| matches!(node, LayoutNode::While { .. }))
+    })
 }
 
 /// True for a plain all-bodied SMALL_DIAMOND switch that takes the faithful ON_X
@@ -14417,6 +14433,15 @@ fn emit_switch_with_layout(
     }
 
     let center_idx = if has_center { Some(n / 2) } else { None };
+    let first_case_contains_while = switch_first_case_contains_while(cases);
+    let first_while_case_center_split = if first_case_contains_while {
+        cases
+            .first()
+            .and_then(|case| last_flow_index(&case.body).map(|i| &case.body[i]))
+            .map(|node| bottoms[0] - node_height(node) - SWITCH_CENTER_BOT_SPLIT)
+    } else {
+        None
+    };
     let classify = |i: usize| -> SwitchConn {
         if Some(i) == center_idx {
             SwitchConn::Center
@@ -14574,7 +14599,9 @@ fn emit_switch_with_layout(
                 }
                 svg.connector_line(&arrow_color, bcx, bcx, split, cases_top, false);
                 switch_down_head(svg, &arrow_color, bcx, cases_top);
-                let label_x = if matches!(cases[i].body.first(), Some(LayoutNode::If { .. })) {
+                let label_x = if first_case_contains_while
+                    || matches!(cases[i].body.first(), Some(LayoutNode::If { .. }))
+                {
                     diamond_cx
                 } else {
                     bcx
@@ -14697,7 +14724,15 @@ fn emit_switch_with_layout(
                     // shifts the centre branch off the spine. In a
                     // corridor-compressing `while` body the split moves up to the
                     // compressed corridor turn just below the case bottoms.
-                    let split = if while_corridor_compresses {
+                    let split = if Some(i) == center_idx {
+                        first_while_case_center_split.unwrap_or({
+                            if while_corridor_compresses {
+                                max_bottom + SWITCH_WHILE_COMPRESSED_CENTER_SPLIT
+                            } else {
+                                merge_top - SWITCH_CENTER_BOT_SPLIT
+                            }
+                        })
+                    } else if while_corridor_compresses {
                         max_bottom + SWITCH_WHILE_COMPRESSED_CENTER_SPLIT
                     } else {
                         merge_top - SWITCH_CENTER_BOT_SPLIT

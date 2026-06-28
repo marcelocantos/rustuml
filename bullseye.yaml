@@ -216,6 +216,7 @@ targets:
     - T4.1.23
     - T4.1.24
     - T4.1.25
+    - T4.1.26
     origin: manual
     discovered: 2026-05-17
   T4.1.1:
@@ -509,6 +510,27 @@ targets:
     - activity
     - partition
     - if
+    - strict-xml
+    origin: manual
+    discovered: 2026-06-28
+    achieved: 2026-06-28
+  T4.1.26:
+    name: Switch cases containing while bodies use drawn FTile geometry for case packing
+    status: achieved
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - '`cargo run -p rustuml-oracle --example diff_one -- test-diagrams/golden/activity/act_complex_state_machine_like.puml` reports structural equivalence.'
+    - Switch guard fixtures including `act_sw3_while1`, `act_sw3_while2`, and `act_switch_3cases_multi_action` remain structurally equivalent.
+    - '`cargo run -p rustuml-oracle --example check_all` reports the current 24-failure ledger with no new failure names.'
+    - '`cargo fmt --check`, `cargo clippy -- -D warnings`, and `cargo test --lib` pass.'
+    context: 'Created after retiring 🎯T4.1.25. The `act_complex_state_machine_like` fixture is a standalone three-case switch whose first case body contains a `while`; RustUML packed the later case columns 8px too far right and routed the center-case merge connector to the full merge band. PlantUML keeps the first case column fixed, pulls subsequent columns left by 8px, anchors the center case label on the switch spine, and routes the center merge connector through the first case''s compressed post-while corridor.'
+    depends_on:
+    - T4.1.25
+    tags:
+    - activity
+    - switch
+    - while
     - strict-xml
     origin: manual
     discovered: 2026-06-28
