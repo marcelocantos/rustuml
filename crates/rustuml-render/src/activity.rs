@@ -67,6 +67,13 @@ const PARTITION_IF_BODY_WIDTH_EXTRA: f64 = 5.6709;
 const PARTITION_IF_SEQUENCE_LEFT_PAD: f64 = 18.3682;
 const PARTITION_IF_SEQUENCE_RIGHT_PAD: f64 = 20.0;
 const PARTITION_GEOMETRIC_IF_SHELL_PAD: f64 = GROUP_IF_BODY_WIDTH_EXTRA / 2.0;
+const PARTITION_PREFIXED_WHILE_FRAME_TRIM: f64 = 7.0;
+const PARTITION_PREFIXED_WHILE_X_BIAS: f64 = 0.2402;
+const PARTITION_EMBEDDED_REPEAT_FRAME_TRIM: f64 = 5.4286;
+const PARTITION_EMBEDDED_REPEAT_X_BIAS: f64 = 12.0;
+const PARTITION_EMBEDDED_ACTION_FORK_BAR_EXTRA: f64 = 4.0;
+const PARTITION_EMBEDDED_ACTION_FORK_CENTER_SHIFT: f64 =
+    PARTITION_EMBEDDED_ACTION_FORK_BAR_EXTRA / 2.0;
 const PARTITION_GEOMETRIC_IF_SHALLOW_LEFT_ADJUST: f64 = 0.4092;
 const PARTITION_GEOMETRIC_IF_SHALLOW_ADJUST_MIN_W: f64 = 150.0;
 const PARTITION_GEOMETRIC_IF_DEEP_LEFT_ADJUST: f64 = -9.0;
@@ -146,6 +153,8 @@ const PARTITION_REPEAT_WIDTH_SUBTRACT: f64 = 18.0;
 const WHILE_SINGLE_IF_RIGHT_PAD: f64 = 2.0;
 const WHILE_LEADING_BINARY_IF_LEFT_FRAME_PAD: f64 = 10.0;
 const WHILE_LEADING_BINARY_IF_RIGHT_FRAME_PAD: f64 = 8.0;
+const REPEAT_IMPLICIT_IF_TRAILING_ARM_PULL_LEFT: f64 = 10.3235;
+const REPEAT_IMPLICIT_IF_TRAILING_ARROW_RESIDUAL: f64 = 0.0996;
 /// Right extent (from the spine) of a break-down `if`'s populated branch tile.
 /// PlantUML's `ConditionalBuilder.createDown` wraps the lone-`break` branch in
 /// `FtileMinWidthCentered(branch, 30)` then `addHorizontalMargin(10)`, giving a
@@ -2793,6 +2802,39 @@ fn partition_body_has_direct_note(nodes: &[LayoutNode]) -> bool {
         .any(|node| matches!(node, LayoutNode::Note { .. }))
 }
 
+fn partition_body_has_prefixed_binary_if_while(nodes: &[LayoutNode]) -> bool {
+    nodes.iter().any(|node| {
+        matches!(
+            node,
+            LayoutNode::While {
+                body,
+                is_label,
+                end_label,
+                special_out,
+                ..
+            } if while_prefixed_binary_if_slot_compresses(
+                body,
+                is_label,
+                end_label,
+                special_out.as_deref(),
+            )
+        )
+    })
+}
+
+fn partition_body_has_embedded_repeat(nodes: &[LayoutNode]) -> bool {
+    let mut saw_flow = false;
+    for node in nodes {
+        if matches!(node, LayoutNode::Repeat { .. }) {
+            return saw_flow;
+        }
+        if node_is_flow(node) {
+            saw_flow = true;
+        }
+    }
+    false
+}
+
 fn body_has_direct_left_note(nodes: &[LayoutNode]) -> bool {
     nodes.iter().any(|node| {
         matches!(
@@ -2806,11 +2848,22 @@ fn body_has_direct_left_note(nodes: &[LayoutNode]) -> bool {
 }
 
 fn partition_body_width_for_frame(nodes: &[LayoutNode]) -> f64 {
-    if partition_body_has_direct_note(nodes) {
+    let width = if partition_body_has_direct_note(nodes) {
         sequence_partition_body_width(nodes)
     } else {
         sequence_width(nodes)
-    }
+    };
+    width
+        - if partition_body_has_prefixed_binary_if_while(nodes) {
+            PARTITION_PREFIXED_WHILE_FRAME_TRIM
+        } else {
+            0.0
+        }
+        - if partition_body_has_embedded_repeat(nodes) {
+            PARTITION_EMBEDDED_REPEAT_FRAME_TRIM
+        } else {
+            0.0
+        }
 }
 
 #[derive(Debug, Clone, Default)]
@@ -3590,15 +3643,35 @@ fn fork_layout_if_branch_spacing(branches: &[Vec<LayoutNode>]) -> ForkLayout {
     layout
 }
 
-fn fork_layout_in_partition(branches: &[Vec<LayoutNode>]) -> ForkLayout {
-    let mut layout = fork_layout(branches);
-    if layout.centers.len() >= 2 && !branches.iter().any(Vec::is_empty) {
+fn fork_layout_in_partition_with_prelude(
+    branches: &[Vec<LayoutNode>],
+    has_prelude: bool,
+) -> ForkLayout {
+    let action_fork = branches.len() >= 3
+        && fork_branches_are_single_actions(branches)
+        && !branches.iter().all(|branch| tiny_action_branch(branch));
+    let mut layout = if action_fork {
+        fork_layout_multi_sequence(branches, false)
+    } else {
+        fork_layout(branches)
+    };
+    if !action_fork && layout.centers.len() >= 2 && !branches.iter().any(Vec::is_empty) {
         layout.bar_w += PARTITION_FORK_WIDTH_EXTRA;
         for center in &mut layout.centers {
             *center += PARTITION_FORK_BRANCH_CENTER_SHIFT;
         }
     }
+    if action_fork && has_prelude {
+        layout.bar_w += PARTITION_EMBEDDED_ACTION_FORK_BAR_EXTRA;
+        for center in &mut layout.centers {
+            *center += PARTITION_EMBEDDED_ACTION_FORK_CENTER_SHIFT;
+        }
+    }
     layout
+}
+
+fn fork_layout_in_partition(branches: &[Vec<LayoutNode>]) -> ForkLayout {
+    fork_layout_in_partition_with_prelude(branches, false)
 }
 
 fn leading_if_branch_fork_spine_shift(nodes: &[LayoutNode]) -> f64 {
@@ -4479,7 +4552,9 @@ fn switch_below_diamond(cases: &[SwitchCase], big_diamond: bool) -> f64 {
 /// than for a normal body. The body box itself stays centred on the spine —
 /// only the while's left geometry sees the 2 px reduction.
 fn while_body_left(body: &[LayoutNode], body_left: f64) -> f64 {
-    let leading_binary_if_pad = if while_body_starts_with_expanded_binary_if(body) {
+    let leading_binary_if_pad = if while_body_starts_with_expanded_binary_if(body)
+        || while_body_ends_with_prefixed_binary_if(body)
+    {
         WHILE_LEADING_BINARY_IF_LEFT_FRAME_PAD
     } else {
         0.0
@@ -4641,6 +4716,18 @@ fn while_leading_binary_if_slot_compresses(
     special_out.is_none() && is_label.is_some() && while_body_starts_with_expanded_binary_if(body)
 }
 
+fn while_prefixed_binary_if_slot_compresses(
+    body: &[LayoutNode],
+    is_label: &Option<String>,
+    end_label: &Option<String>,
+    special_out: Option<&LayoutNode>,
+) -> bool {
+    special_out.is_none()
+        && is_label.is_some()
+        && end_label.is_none()
+        && while_body_ends_with_prefixed_binary_if(body)
+}
+
 fn while_body_starts_with_binary_if(body: &[LayoutNode]) -> bool {
     matches!(
         first_flow_node(body),
@@ -4678,6 +4765,33 @@ fn while_body_starts_with_expanded_binary_if(body: &[LayoutNode]) -> bool {
             .any(|branch| branch.body.iter().filter(|node| node_is_flow(node)).count() > 1)
 }
 
+fn while_body_ends_with_prefixed_binary_if(body: &[LayoutNode]) -> bool {
+    let flow: Vec<&LayoutNode> = body.iter().filter(|node| node_is_flow(node)).collect();
+    let Some((last, lead)) = flow.split_last() else {
+        return false;
+    };
+    if lead.len() < 2
+        || !lead.iter().all(|node| {
+            matches!(
+                node,
+                LayoutNode::Action { .. } | LayoutNode::DeprecatedAction { .. }
+            )
+        })
+    {
+        return false;
+    }
+    matches!(
+        last,
+        LayoutNode::If {
+            then_branch,
+            else_branches,
+            ..
+        } if !else_branches.is_empty()
+            && !if_is_long(else_branches)
+            && if_break_down_plan(then_branch, else_branches).is_none()
+    )
+}
+
 fn tree_has_while_long_if_body(tree: &[LayoutNode]) -> bool {
     tree.iter().any(|node| {
         matches!(
@@ -4688,6 +4802,25 @@ fn tree_has_while_long_if_body(tree: &[LayoutNode]) -> bool {
                 special_out,
                 ..
             } if while_long_if_slot_compresses(body, is_label, special_out.as_deref())
+        )
+    })
+}
+
+fn tree_has_partition_prefixed_while_to_action_fork(tree: &[LayoutNode]) -> bool {
+    let flow: Vec<&LayoutNode> = tree.iter().filter(|node| node_is_flow(node)).collect();
+    flow.windows(2).any(|pair| {
+        matches!(
+            pair,
+            [LayoutNode::Partition {
+                body: prev_body,
+                is_group: false,
+                ..
+            }, LayoutNode::Partition {
+                body: next_body,
+                is_group: false,
+                ..
+            }] if partition_body_has_prefixed_binary_if_while(prev_body)
+                && partition_action_fork_forces_left(next_body)
         )
     })
 }
@@ -4707,6 +4840,141 @@ fn adjust_while_long_if_exit_corridor(buf: &str) -> String {
         "points=\"23,298.8887,27,308.8887,31,298.8887,27,302.8887\"",
         "points=\"25,298.8887,29,308.8887,33,298.8887,29,302.8887\"",
     )
+}
+
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum ConnectorTokenKind {
+    Line,
+    Polygon,
+}
+
+#[derive(Clone, Copy)]
+struct ConnectorToken<'a> {
+    start: usize,
+    end: usize,
+    raw: &'a str,
+    kind: ConnectorTokenKind,
+    line: Option<(f64, f64, f64, f64)>,
+}
+
+fn svg_attr<'a>(tag: &'a str, name: &str) -> Option<&'a str> {
+    let needle = format!(r#"{name}=""#);
+    let start = tag.find(&needle)? + needle.len();
+    let end = tag[start..].find('"')?;
+    Some(&tag[start..start + end])
+}
+
+fn parse_svg_f64(tag: &str, name: &str) -> Option<f64> {
+    svg_attr(tag, name)?.parse().ok()
+}
+
+fn parse_connector_token(buf: &str, start: usize, end: usize) -> ConnectorToken<'_> {
+    let raw = &buf[start..end];
+    if raw.starts_with("<line") {
+        ConnectorToken {
+            start,
+            end,
+            raw,
+            kind: ConnectorTokenKind::Line,
+            line: Some((
+                parse_svg_f64(raw, "x1").unwrap_or(f64::NAN),
+                parse_svg_f64(raw, "x2").unwrap_or(f64::NAN),
+                parse_svg_f64(raw, "y1").unwrap_or(f64::NAN),
+                parse_svg_f64(raw, "y2").unwrap_or(f64::NAN),
+            )),
+        }
+    } else {
+        ConnectorToken {
+            start,
+            end,
+            raw,
+            kind: ConnectorTokenKind::Polygon,
+            line: None,
+        }
+    }
+}
+
+const CONNECTOR_REORDER_EPS: f64 = 0.02;
+
+fn conn_eq(a: f64, b: f64) -> bool {
+    (a - b).abs() < CONNECTOR_REORDER_EPS
+}
+
+fn vertical_down_at(token: &ConnectorToken<'_>, x: f64) -> Option<(f64, f64)> {
+    let (x1, x2, y1, y2) = token.line?;
+    (conn_eq(x1, x) && conn_eq(x2, x) && y2 > y1).then_some((y1, y2))
+}
+
+fn reorder_prefixed_partition_connector(buf: &str) -> String {
+    static TOKEN_RE: std::sync::OnceLock<regex::Regex> = std::sync::OnceLock::new();
+    let token_re =
+        TOKEN_RE.get_or_init(|| regex::Regex::new(r#"<(?:line|polygon)\b[^>]*/>"#).unwrap());
+    let tokens: Vec<_> = token_re
+        .find_iter(buf)
+        .map(|m| parse_connector_token(buf, m.start(), m.end()))
+        .collect();
+    for window in tokens.windows(7) {
+        let [
+            exit_line,
+            deferred_1,
+            deferred_1_head,
+            deferred_2,
+            deferred_2_head,
+            continuation,
+            continuation_head,
+        ] = window
+        else {
+            continue;
+        };
+        if exit_line.kind != ConnectorTokenKind::Line
+            || deferred_1.kind != ConnectorTokenKind::Line
+            || deferred_1_head.kind != ConnectorTokenKind::Polygon
+            || deferred_2.kind != ConnectorTokenKind::Line
+            || deferred_2_head.kind != ConnectorTokenKind::Polygon
+            || continuation.kind != ConnectorTokenKind::Line
+            || continuation_head.kind != ConnectorTokenKind::Polygon
+        {
+            continue;
+        }
+        if exit_line.end != deferred_1.start
+            || deferred_1.end != deferred_1_head.start
+            || deferred_1_head.end != deferred_2.start
+            || deferred_2.end != deferred_2_head.start
+            || deferred_2_head.end != continuation.start
+            || continuation.end != continuation_head.start
+        {
+            continue;
+        }
+        let Some((x1, x2, y1, y2)) = exit_line.line else {
+            continue;
+        };
+        if conn_eq(x1, x2) || !conn_eq(y1, y2) {
+            continue;
+        }
+        let Some((_, d1_bottom)) = vertical_down_at(deferred_1, x2) else {
+            continue;
+        };
+        let Some((_, d2_bottom)) = vertical_down_at(deferred_2, x2) else {
+            continue;
+        };
+        let Some((cont_top, cont_bottom)) = vertical_down_at(continuation, x2) else {
+            continue;
+        };
+        if !(d1_bottom < y1 && d2_bottom < y1 && conn_eq(cont_top, y1) && cont_bottom > y1) {
+            continue;
+        }
+        let mut out = String::with_capacity(buf.len());
+        out.push_str(&buf[..deferred_1.start]);
+        out.push_str(continuation.raw);
+        out.push_str(continuation_head.raw);
+        out.push_str(deferred_1.raw);
+        out.push_str(deferred_1_head.raw);
+        out.push_str(deferred_2.raw);
+        out.push_str(deferred_2_head.raw);
+        out.push_str(&buf[continuation_head.end..]);
+        return out;
+    }
+    buf.to_string()
 }
 
 /// A `while` whose body is *exactly* a single nested `while` whose own body is
@@ -4838,6 +5106,12 @@ fn is_ordinary_compressed_while(node: &LayoutNode) -> bool {
                 special_out.as_deref(),
             ) || while_long_if_slot_compresses(body, is_label, special_out.as_deref())
                 || while_leading_binary_if_slot_compresses(body, is_label, special_out.as_deref())
+                || while_prefixed_binary_if_slot_compresses(
+                    body,
+                    is_label,
+                    end_label,
+                    special_out.as_deref(),
+                )
     )
 }
 
@@ -4876,6 +5150,7 @@ fn while_body_chain_compresses(node: &LayoutNode) -> bool {
             end_label,
             ..
         } if while_ordinary_slot_compresses(body, is_label, end_label, None)
+            || while_prefixed_binary_if_slot_compresses(body, is_label, end_label, None)
     )
 }
 
@@ -6741,7 +7016,21 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
                     right += GROUP_IF_RIGHT_EXTENT_EXTRA;
                 }
             }
-            if !*is_group && partition_wraps_tiny_action_fork(body) && !title_drives_width {
+            if !*is_group
+                && !title_drives_width
+                && let Some(layout) = partition_action_fork_layout(body)
+            {
+                let (fork_left, fork_right) = fork_bar_extents(&layout);
+                left = fork_left + 10.0;
+                right = fork_right + 10.0;
+            } else if !*is_group
+                && !title_drives_width
+                && let Some(layout) = partition_body_action_fork_layout(body)
+            {
+                let (fork_left, fork_right) = fork_bar_extents(&layout);
+                left = left.max(fork_left + 10.0);
+                right = right.max(fork_right + 10.0);
+            } else if !*is_group && partition_wraps_tiny_action_fork(body) && !title_drives_width {
                 left += PARTITION_FORK_LEFT_EXTENT_EXTRA;
             }
             if *is_group && color.is_some() && !group_wraps_single_if(body) {
@@ -7251,6 +7540,22 @@ fn repeat_body_has_in_loop_switch(body: &[LayoutNode]) -> bool {
                 && !switch_x_layout(cases, condition).big_diamond
         }
         _ => false,
+    })
+}
+
+fn repeat_body_has_implicit_if_with_trailing_flow(body: &[LayoutNode]) -> bool {
+    body.iter().enumerate().any(|(i, node)| {
+        matches!(
+            node,
+            LayoutNode::If {
+                then_branch,
+                else_branches,
+                ..
+            } if else_branches.is_empty()
+                && if_break_down_plan(then_branch, else_branches).is_none()
+                && !node_contains_break(node)
+                && following_flow_count(body, i) > 0
+        )
     })
 }
 
@@ -7839,6 +8144,113 @@ fn partition_wraps_tiny_action_fork(body: &[LayoutNode]) -> bool {
     branches.len() >= 2 && branches.iter().all(|branch| tiny_action_branch(branch))
 }
 
+fn partition_wraps_action_fork(body: &[LayoutNode]) -> bool {
+    if partition_wraps_tiny_action_fork(body) {
+        return true;
+    }
+    partition_body_action_fork_layout(body).is_some()
+}
+
+fn partition_action_fork_has_prelude(body: &[LayoutNode]) -> bool {
+    let mut saw_flow = false;
+    for node in body {
+        let LayoutNode::Fork {
+            branches,
+            is_split: false,
+            merge: false,
+            ..
+        } = node
+        else {
+            if node_is_flow(node) {
+                saw_flow = true;
+            }
+            continue;
+        };
+        let all_single_actions = branches.iter().all(|branch| {
+            matches!(
+                branch.as_slice(),
+                [LayoutNode::Action { .. } | LayoutNode::DeprecatedAction { .. }]
+            )
+        });
+        if branches.len() >= 3
+            && all_single_actions
+            && !branches.iter().all(|branch| tiny_action_branch(branch))
+        {
+            return saw_flow;
+        }
+        saw_flow = true;
+    }
+    false
+}
+
+fn partition_action_fork_forces_left(body: &[LayoutNode]) -> bool {
+    partition_wraps_action_fork(body) && !partition_action_fork_has_prelude(body)
+}
+
+fn partition_action_fork_layout(body: &[LayoutNode]) -> Option<ForkLayout> {
+    let [
+        LayoutNode::Fork {
+            branches,
+            is_split: false,
+            merge: false,
+            ..
+        },
+    ] = body
+    else {
+        return None;
+    };
+    let all_single_actions = branches.iter().all(|branch| {
+        matches!(
+            branch.as_slice(),
+            [LayoutNode::Action { .. } | LayoutNode::DeprecatedAction { .. }]
+        )
+    });
+    if branches.len() >= 3
+        && all_single_actions
+        && !branches.iter().all(|branch| tiny_action_branch(branch))
+    {
+        Some(fork_layout_in_partition(branches))
+    } else {
+        None
+    }
+}
+
+fn partition_body_action_fork_layout(body: &[LayoutNode]) -> Option<ForkLayout> {
+    if let Some(layout) = partition_action_fork_layout(body) {
+        return Some(layout);
+    }
+    let mut saw_flow = false;
+    body.iter().find_map(|node| {
+        let LayoutNode::Fork {
+            branches,
+            is_split: false,
+            merge: false,
+            ..
+        } = node
+        else {
+            if node_is_flow(node) {
+                saw_flow = true;
+            }
+            return None;
+        };
+        let all_single_actions = branches.iter().all(|branch| {
+            matches!(
+                branch.as_slice(),
+                [LayoutNode::Action { .. } | LayoutNode::DeprecatedAction { .. }]
+            )
+        });
+        if branches.len() >= 3
+            && all_single_actions
+            && !branches.iter().all(|branch| tiny_action_branch(branch))
+        {
+            Some(fork_layout_in_partition_with_prelude(branches, saw_flow))
+        } else {
+            saw_flow = true;
+            None
+        }
+    })
+}
+
 fn single_partition_branch_body_top(branch: &[LayoutNode], branch_y: f64) -> Option<f64> {
     let [
         LayoutNode::Partition {
@@ -8006,7 +8418,9 @@ fn while_single_if_right_pad(body: &[LayoutNode], _end_label: &Option<String>) -
     // `dimTotal.getWidth()`). It is a property of the if-tile geometry, not of
     // the while's end-of-loop label, so it applies whether or not an
     // `endwhile (label)` is present.
-    if while_body_starts_with_expanded_binary_if(body) {
+    if while_body_starts_with_expanded_binary_if(body)
+        || while_body_ends_with_prefixed_binary_if(body)
+    {
         WHILE_SINGLE_IF_RIGHT_PAD + WHILE_LEADING_BINARY_IF_RIGHT_FRAME_PAD
     } else if while_body_right_driven_by_if(body) {
         WHILE_SINGLE_IF_RIGHT_PAD
@@ -8096,7 +8510,7 @@ fn partition_body_width_extra(is_group: bool, body: &[LayoutNode]) -> f64 {
         -PARTITION_WHILE_WIDTH_SUBTRACT
     } else if !is_group && partition_wraps_repeat(body) {
         -PARTITION_REPEAT_WIDTH_SUBTRACT
-    } else if !is_group && partition_wraps_tiny_action_fork(body) {
+    } else if !is_group && partition_wraps_action_fork(body) {
         PARTITION_FORK_WIDTH_EXTRA
     } else if !is_group && partition_wraps_single_if(body) {
         if partition_wraps_min_width_if(body) {
@@ -8133,6 +8547,8 @@ fn partition_body_shell_width(is_group: bool, body: &[LayoutNode]) -> f64 {
     } else if !is_group && partition_wraps_if_sequence(body) {
         let (body_left, body_right) = sequence_extents(body);
         body_left + PARTITION_IF_SEQUENCE_LEFT_PAD + body_right + PARTITION_IF_SEQUENCE_RIGHT_PAD
+    } else if !is_group && let Some(layout) = partition_body_action_fork_layout(body) {
+        (layout.bar_w + 20.0).max(partition_body_width_for_frame(body) + 20.0)
     } else if let Some(w) = group_while_shell_width(is_group, body) {
         w
     } else {
@@ -8498,6 +8914,12 @@ fn node_height(node: &LayoutNode) -> f64 {
                     || while_leading_binary_if_slot_compresses(
                         body,
                         is_label,
+                        special_out.as_deref(),
+                    )
+                    || while_prefixed_binary_if_slot_compresses(
+                        body,
+                        is_label,
+                        end_label,
                         special_out.as_deref(),
                     )
                     || single_while_compresses,
@@ -8985,6 +9407,7 @@ struct SvgEmitter {
     palette: Palette,
     colored_partition_while_depth: usize,
     partition_wrapped_fork_depth: usize,
+    partition_wrapped_fork_prelude_depth: usize,
     handwritten: bool,
     /// When an `if`/`elseif` branch's flow is a single no-special `while`, the
     /// branch→merge connection is owned by the loop's exit corridor (PlantUML
@@ -9424,6 +9847,7 @@ impl SvgEmitter {
             palette,
             colored_partition_while_depth: 0,
             partition_wrapped_fork_depth: 0,
+            partition_wrapped_fork_prelude_depth: 0,
             handwritten,
             while_exit_redirect: None,
             fork_branch_gap_extra: 0.0,
@@ -10518,6 +10942,7 @@ fn emit_sequence_ex(
         // emit_node returns. We still advance `y` upfront so the node lands
         // at the right position.
         let mut pending_arrow: Option<PendingDownArrow> = None;
+        let mut emit_pending_arrow_before_node = false;
         if i > 0 {
             let mut explicit_arrow: Option<&LayoutNode> = None;
             let mut prev_idx: Option<usize> = None;
@@ -10700,6 +11125,14 @@ fn emit_sequence_ex(
                     prev_idx.and_then(|j| nodes.get(j)),
                     Some(LayoutNode::Partition { .. })
                 );
+                let prev_partition_has_prefixed_while = prev_idx
+                    .and_then(|j| nodes.get(j))
+                    .is_some_and(|prev| match prev {
+                        LayoutNode::Partition { body, is_group, .. } => {
+                            !*is_group && partition_body_has_prefixed_binary_if_while(body)
+                        }
+                        _ => false,
+                    });
                 let prev_was_split = matches!(
                     prev_idx.and_then(|j| nodes.get(j)),
                     Some(LayoutNode::Fork { is_split: true, .. })
@@ -10716,6 +11149,12 @@ fn emit_sequence_ex(
                             _ => false,
                         });
                 let is_partition = partition_top_gap.is_some();
+                emit_pending_arrow_before_node = prev_partition_has_prefixed_while
+                    && matches!(
+                        node,
+                        LayoutNode::Partition { body, .. }
+                            if partition_action_fork_forces_left(body)
+                    );
                 // A long if/elseif/else draws its own multi-segment inbound
                 // connector (`ConnectionIn`) from the previous node's bottom to
                 // the first diamond, so the standard straight inbound arrow is
@@ -11000,6 +11439,11 @@ fn emit_sequence_ex(
             0.0
         };
         let node_cx = cx + terminal_fork_tail_node_offset;
+        if emit_pending_arrow_before_node
+            && let Some((arrow_top, style, label, arrow_gap)) = pending_arrow.take()
+        {
+            emit_pending_down_arrow(svg, arrow_top, style, label, arrow_gap, node_cx);
+        }
         let node_y = emit_node_with_repeat_extra(
             svg,
             node,
@@ -11386,7 +11830,14 @@ fn emit_node_with_repeat_extra(
                 };
                 emit_fork_with_layout(svg, cx, y, branches, layout)
             } else if svg.partition_wrapped_fork_depth > 0 && !*is_split {
-                emit_fork_with_layout(svg, cx, y, branches, fork_layout_in_partition(branches))
+                let has_prelude = svg.partition_wrapped_fork_prelude_depth > 0;
+                emit_fork_with_layout(
+                    svg,
+                    cx,
+                    y,
+                    branches,
+                    fork_layout_in_partition_with_prelude(branches, has_prelude),
+                )
             } else {
                 emit_fork(svg, cx, y, branches)
             }
@@ -11521,12 +11972,19 @@ fn emit_node_with_repeat_extra(
                 cx - partition_w / 2.0
             } else if !*is_group
                 && (partition_wraps_single_if(body)
-                    || partition_wraps_tiny_action_fork(body)
+                    || partition_action_fork_forces_left(body)
                     || partition_wraps_if_sequence(body))
             {
                 16.0
             } else if (*is_group && *nested) || (!*is_group && !title_drives_width) {
-                (cx - partition_w / 2.0).max(16.0)
+                let x = (cx - partition_w / 2.0).max(16.0);
+                if !*is_group && partition_body_has_prefixed_binary_if_while(body) {
+                    x + PARTITION_PREFIXED_WHILE_X_BIAS
+                } else if !*is_group && partition_body_has_embedded_repeat(body) {
+                    x + PARTITION_EMBEDDED_REPEAT_X_BIAS
+                } else {
+                    x
+                }
             } else {
                 16.0
             };
@@ -11628,16 +12086,25 @@ fn emit_node_with_repeat_extra(
                 let body_cx = if !title_drives_width && partition_wraps_switch(body) {
                     let (body_left, _) = sequence_extents(body);
                     partition_x + 10.0 + body_left
+                } else if !*is_group && let Some(layout) = partition_action_fork_layout(body) {
+                    let (fork_left, _) = fork_bar_extents(&layout);
+                    partition_x + 10.0 + fork_left
                 } else if !*is_group && partition_wraps_tiny_action_fork(body) {
                     cx + PARTITION_FORK_BODY_CX_SHIFT
                 } else {
                     cx
                 };
-                if !*is_group && partition_wraps_tiny_action_fork(body) {
+                if !*is_group && partition_wraps_action_fork(body) {
                     svg.partition_wrapped_fork_depth += 1;
+                    if partition_action_fork_has_prelude(body) {
+                        svg.partition_wrapped_fork_prelude_depth += 1;
+                    }
                 }
                 emit_sequence(svg, body, body_cx, body_top);
-                if !*is_group && partition_wraps_tiny_action_fork(body) {
+                if !*is_group && partition_wraps_action_fork(body) {
+                    if partition_action_fork_has_prelude(body) {
+                        svg.partition_wrapped_fork_prelude_depth -= 1;
+                    }
                     svg.partition_wrapped_fork_depth -= 1;
                 }
                 if colored_partition_while {
@@ -13515,6 +13982,10 @@ fn repeat_loopback_arrow_bias(body: &[LayoutNode], has_backward: bool) -> f64 {
         && while_ordinary_slot_compresses(while_body, is_label, end_label, special_out.as_deref())
     {
         return -(WHILE_EVEN_BODY_LOOP_ARROW_STRETCH - WHILE_BODY_SLOT_COMPRESS / 2.0);
+    }
+    if repeat_body_has_implicit_if_with_trailing_flow(body) {
+        return REPEAT_IMPLICIT_IF_TRAILING_ARM_PULL_LEFT / 2.0
+            + REPEAT_IMPLICIT_IF_TRAILING_ARROW_RESIDUAL;
     }
     let flow: Vec<&LayoutNode> = body.iter().filter(|n| node_is_flow(n)).collect();
     // Need an even flow count whose leading nodes are plain actions and whose
@@ -15798,7 +16269,8 @@ fn emit_while(
         && !fork_branch_slot_open
         && (while_ordinary_slot_compresses(body, is_label, end_label, special_out)
             || while_long_if_slot_compresses(body, is_label, special_out)
-            || while_leading_binary_if_slot_compresses(body, is_label, special_out));
+            || while_leading_binary_if_slot_compresses(body, is_label, special_out)
+            || while_prefixed_binary_if_slot_compresses(body, is_label, end_label, special_out));
     // Case (b): a `while` whose body is a single nested `while`. Every diamond in
     // a single-while chain (except the deepest, suppressed above) reclaims its
     // inbound band, so this loop compresses its own inbound. The slot exists only
@@ -16700,6 +17172,12 @@ fn emit_while(
     {
         arrow_y += WHILE_EVEN_BODY_LOOP_ARROW_STRETCH;
     }
+    if while_body_ends_with_prefixed_binary_if(body)
+        && special_out.is_none()
+        && break_frame_h.is_none()
+    {
+        arrow_y -= WHILE_EVEN_BODY_LOOP_ARROW_STRETCH;
+    }
     // The exit emphasis arrowhead anchors on the PRE-compression midpoint. When
     // the drawn `wrap_y` kept the uncompressed `+12` junction — an if-long branch
     // (`in_if_long_branch`) or a non-terminal while in a repeat body
@@ -17129,7 +17607,12 @@ fn emit_repeat(
         let geo_clear = sequence_geometry(body).map_or(extents_clear, |g| cx + g.right() + 4.0);
         extents_clear.max(geo_clear)
     };
-    let arm_x = (diamond_right + 12.0).max(body_right);
+    let arm_x = (diamond_right + 12.0).max(body_right)
+        - if repeat_body_has_implicit_if_with_trailing_flow(body) {
+            REPEAT_IMPLICIT_IF_TRAILING_ARM_PULL_LEFT
+        } else {
+            0.0
+        };
     let first_entry = first_flow_node(body);
     let top_cy = if has_start_label {
         first_entry.map_or(y + top_diamond_size, |node| {
@@ -23305,6 +23788,11 @@ fn render_inner(
     let mut content = shapes_c;
     let connectors_c = if tree_has_while_long_if_body(&tree) {
         adjust_while_long_if_exit_corridor(&connectors_c)
+    } else {
+        connectors_c
+    };
+    let connectors_c = if tree_has_partition_prefixed_while_to_action_fork(&tree) {
+        reorder_prefixed_partition_connector(&connectors_c)
     } else {
         connectors_c
     };
