@@ -1215,6 +1215,22 @@ fn if_node_has_single_survivor(node: &LayoutNode) -> bool {
     )
 }
 
+fn branch_last_flow_is_single_survivor_if(nodes: &[LayoutNode]) -> bool {
+    last_flow_index(nodes).is_some_and(|i| if_node_has_single_survivor(&nodes[i]))
+}
+
+fn if_down_populated_ends_with_single_survivor_if(node: &LayoutNode) -> bool {
+    matches!(
+        node,
+        LayoutNode::If {
+            then_branch,
+            else_branches,
+            ..
+        } if if_down_plan(then_branch, else_branches)
+            .is_some_and(|plan| branch_last_flow_is_single_survivor_if(plan.populated))
+    )
+}
+
 fn single_survivor_if_join_offset(node: &LayoutNode) -> Option<f64> {
     let LayoutNode::If {
         diamond_half_y,
@@ -6022,12 +6038,16 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
                 // A wide populated branch overrides via branch_w/2.
                 let cond_half = diamond_half_w;
                 let branch_w = sequence_width(plan.populated);
+                let branch_right = sequence_extents(plan.populated).1;
                 let left = (cond_half + IF_DOWN_LEFT_PAD).max(branch_w / 2.0);
-                let right = (cond_half + IF_DOWN_RIGHT_PAD).max(
+                let branch_clear = if branch_last_flow_is_single_survivor_if(plan.populated) {
+                    branch_right + ARROW_LEN + DIAMOND_HALF
+                } else {
                     branch_w / 2.0
                         + IF_DOWN_BRANCH_CORRIDOR_GAP
-                        + IF_DOWN_BRANCH_CORRIDOR_TRAILING_PAD,
-                );
+                        + IF_DOWN_BRANCH_CORRIDOR_TRAILING_PAD
+                };
+                let right = (cond_half + IF_DOWN_RIGHT_PAD).max(branch_clear);
                 return with_if_attached_note_extents(left, right, attached_notes, diamond_half_w);
             }
             if let Some(plan) =
@@ -7854,7 +7874,11 @@ fn node_height(node: &LayoutNode) -> f64 {
                 && let Some(plan) = if_down_plan(then_branch, else_branches)
             {
                 // diamond + lead + populated branch + ARROW_LEN + merge diamond.
-                // An even-action branch stretches its middle gap by 15 px.
+                // An even-action branch stretches its middle gap by 15 px. When
+                // the populated branch ends in a single-survivor if, that nested
+                // if already provides the parent merge entry, so there is no
+                // extra branch→merge ARROW_LEN and no centring stretch pushed
+                // into the nested if's branch corridor.
                 let branch_h = sequence_height(plan.populated);
                 let flow_count = plan.populated.iter().filter(|n| node_is_flow(n)).count();
                 let stretch_amount = if plan.populated_terminates {
@@ -7862,11 +7886,13 @@ fn node_height(node: &LayoutNode) -> f64 {
                 } else {
                     IF_DOWN_MID_STRETCH
                 };
-                let stretch = if flow_count >= 2 && flow_count.is_multiple_of(2) {
-                    stretch_amount
-                } else {
-                    0.0
-                };
+                let last_single_survivor = branch_last_flow_is_single_survivor_if(plan.populated);
+                let stretch =
+                    if !last_single_survivor && flow_count >= 2 && flow_count.is_multiple_of(2) {
+                        stretch_amount
+                    } else {
+                        0.0
+                    };
                 // A terminating populated branch draws no merge diamond: the
                 // empty branch's corridor rejoins the spine ARROW_LEN +
                 // IF_DOWN_TERM_REJOIN_EXTRA below the branch's pointOut
@@ -11625,6 +11651,11 @@ fn emit_if(
         } else {
             (else_cx, else_bottom)
         };
+        let terminal_bottom = if then_survives {
+            else_bottom
+        } else {
+            then_bottom
+        };
         if let Some(merge_cy) = repeat_break_redirect_cy {
             return merge_cy;
         }
@@ -11692,8 +11723,8 @@ fn emit_if(
             }
             return redir.merge_cy;
         }
-        let join_y = survivor_bottom + IF_SINGLE_SURVIVOR_JOIN_GAP;
-        let out_y = survivor_bottom + ARROW_LEN;
+        let join_y = survivor_bottom.max(terminal_bottom) + IF_SINGLE_SURVIVOR_JOIN_GAP;
+        let out_y = join_y + ARROW_LEN - IF_SINGLE_SURVIVOR_JOIN_GAP;
         svg.connector_line(
             &arrow_color,
             survivor_cx,
@@ -12106,6 +12137,13 @@ const IF_DOWN_LEAD: f64 = ARROW_LEN + 4.477539062500001; // 24.4775
 /// PlantUML's `Snake.emphasizeDirection(DOWN)` lands the arrowhead tip
 /// `2.2388` px below the geometric midpoint of the corridor's vertical run.
 const IF_CORRIDOR_ARROW_OFFSET: f64 = 2.238769531250023;
+/// A trailing single-survivor branch keeps the empty-side corridor's abstract
+/// midpoint lower than the compressed line endpoints; the down-arrowhead lands
+/// on that uncompressed midpoint.
+const IF_DOWN_SINGLE_SURVIVOR_CORRIDOR_ARROW_EXTRA: f64 = DIAMOND_HALF - 1.5;
+/// The repeat loop-back for a body ending in an if-down/single-survivor branch
+/// keeps part of the same uncompressed corridor band in its content midpoint.
+const REPEAT_SINGLE_SURVIVOR_LOOPBACK_ARROW_RELIEF: f64 = IF_CORRIDOR_ARROW_OFFSET + 3.0;
 /// Extra branch separation an enclosing `if` reserves when one of its branch
 /// tiles contains a loop-owned break-survivor `if`. The nested tile advertises
 /// the loop-exit corridor as part of its abstract width, even though that
@@ -12796,6 +12834,9 @@ fn repeat_loopback_arrow_bias(body: &[LayoutNode], has_backward: bool) -> f64 {
         return 0.0;
     }
     match last {
+        LayoutNode::If { .. } if if_down_populated_ends_with_single_survivor_if(last) => {
+            -REPEAT_SINGLE_SURVIVOR_LOOPBACK_ARROW_RELIEF
+        }
         LayoutNode::If { else_branches, .. } if !else_branches.is_empty() => {
             REPEAT_EVEN_BODY_MID_STRETCH
         }
@@ -13202,18 +13243,22 @@ fn emit_if_down(
     // is centred against the merge diamond's band (full IF_DOWN_MID_STRETCH); a
     // terminating branch has no merge diamond (`getShape2` → FtileEmpty), so its
     // `getTranslateForThen` centring reserves less band below — the stretch
-    // shrinks to IF_DOWN_TERM_MID_STRETCH.
+    // shrinks to IF_DOWN_TERM_MID_STRETCH. A trailing single-survivor if owns
+    // the vertical wait-for-terminal-side corridor itself, so the if-down frame
+    // must not inject this stretch into the nested branch.
     let flow_count = plan.populated.iter().filter(|n| node_is_flow(n)).count();
     let stretch_amount = if plan.populated_terminates {
         IF_DOWN_TERM_MID_STRETCH
     } else {
         IF_DOWN_MID_STRETCH
     };
-    let mid_stretch = if flow_count >= 2 && flow_count.is_multiple_of(2) {
-        Some((flow_count / 2, stretch_amount))
-    } else {
-        None
-    };
+    let populated_last_single_survivor = branch_last_flow_is_single_survivor_if(plan.populated);
+    let mid_stretch =
+        if !populated_last_single_survivor && flow_count >= 2 && flow_count.is_multiple_of(2) {
+            Some((flow_count / 2, stretch_amount))
+        } else {
+            None
+        };
     let branch_bottom = emit_sequence_ex(
         svg,
         plan.populated,
@@ -13291,8 +13336,13 @@ fn emit_if_down(
 
     // Corridor x: the east column the empty branch runs down. PlantUML's
     // `xmax = max(diamond_east + halfHex, then_x + then_width)`.
-    let corridor_x = (diamond_right + DIAMOND_HALF)
-        .max(cx + sequence_width(plan.populated) / 2.0 + IF_DOWN_BRANCH_CORRIDOR_GAP);
+    let populated_right = sequence_extents(plan.populated).1;
+    let populated_clear_x = if populated_last_single_survivor {
+        cx + populated_right + ARROW_LEN
+    } else {
+        cx + sequence_width(plan.populated) / 2.0 + IF_DOWN_BRANCH_CORRIDOR_GAP
+    };
+    let corridor_x = (diamond_right + DIAMOND_HALF).max(populated_clear_x);
 
     if plan.populated_terminates {
         // Terminating populated branch (`:foo; stop`): PlantUML draws no merge
@@ -13368,8 +13418,15 @@ fn emit_if_down(
         return rejoin_y;
     }
 
-    // Merge diamond ARROW_LEN below the branch.
-    let merge_top = branch_bottom + ARROW_LEN;
+    // Merge diamond ARROW_LEN below the branch, except when the populated
+    // branch ends in a single-survivor if: its own out-corridor already lands
+    // at the parent merge entry.
+    let merge_top = branch_bottom
+        + if populated_last_single_survivor {
+            0.0
+        } else {
+            ARROW_LEN
+        };
     let merge_cy = merge_top + DIAMOND_HALF;
     svg.polygon_shape(
         &diamond_fill,
@@ -13403,7 +13460,13 @@ fn emit_if_down(
         false,
     );
     // Mid-corridor down arrowhead (emphasizeDirection on the vertical run).
-    let arrow_tip = (diamond_cy + merge_cy) / 2.0 + IF_CORRIDOR_ARROW_OFFSET;
+    let arrow_tip = (diamond_cy + merge_cy) / 2.0
+        + IF_CORRIDOR_ARROW_OFFSET
+        + if populated_last_single_survivor {
+            IF_DOWN_SINGLE_SURVIVOR_CORRIDOR_ARROW_EXTRA
+        } else {
+            0.0
+        };
     svg.polygon_connector(
         &arrow_color,
         &[
@@ -13435,8 +13498,11 @@ fn emit_if_down(
     );
     svg.left_arrow(merge_right, merge_cy, &arrow_color);
 
-    // Branch → merge (down arrow on the spine).
-    svg.down_arrow(cx, branch_bottom, merge_top, &arrow_color);
+    // Branch → merge (down arrow on the spine). A trailing single-survivor if
+    // has already emitted this connector as its own out-corridor.
+    if !populated_last_single_survivor {
+        svg.down_arrow(cx, branch_bottom, merge_top, &arrow_color);
+    }
 
     merge_top + DIAMOND_HALF * 2.0
 }
@@ -21778,6 +21844,9 @@ fn render_inner(
 
     let svg_background = palette.svg_background.clone();
     let mut svg = SvgEmitter::with_palette(palette, is_handwritten);
+    if matches!(tree.first(), Some(LayoutNode::Title { .. })) {
+        svg.title_x_offset += (content_right - content_left) / 2.0;
+    }
     if matches!(tree.first(), Some(LayoutNode::Title { .. }))
         && tree.iter().skip(1).any(|node| {
             matches!(
