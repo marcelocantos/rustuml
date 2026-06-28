@@ -2932,6 +2932,15 @@ fn sequence_uses_multi_fork_layout(nodes: &[LayoutNode]) -> bool {
         > 1
 }
 
+fn sequence_multi_fork_has_prelude(nodes: &[LayoutNode]) -> bool {
+    let Some(first_fork) = nodes.iter().position(is_multi_fork_sequence_candidate) else {
+        return false;
+    };
+    nodes[..first_fork]
+        .iter()
+        .any(|node| node_is_flow(node) && !matches!(node, LayoutNode::Start))
+}
+
 fn fork_branch_origin_adjust(simple_while_repeat_pair: bool, branch: &[LayoutNode]) -> f64 {
     if simple_while_repeat_pair && branch_is_simple_while_loop(branch) {
         0.5
@@ -3169,7 +3178,7 @@ fn fork_layout(branches: &[Vec<LayoutNode>]) -> ForkLayout {
     }
 }
 
-fn fork_layout_multi_sequence(branches: &[Vec<LayoutNode>]) -> ForkLayout {
+fn fork_layout_multi_sequence(branches: &[Vec<LayoutNode>], has_prelude: bool) -> ForkLayout {
     let branch_extents: Vec<(f64, f64)> = branches.iter().map(|b| fork_branch_extents(b)).collect();
     let n = branch_extents.len();
     if n == 0 {
@@ -3179,7 +3188,7 @@ fn fork_layout_multi_sequence(branches: &[Vec<LayoutNode>]) -> ForkLayout {
     let all_branches_tiny = branch_extents
         .iter()
         .all(|(left, right)| left + right < ACTION_MIN_HEIGHT);
-    let edge_pad = if n == 2 && all_branches_tiny {
+    let edge_pad = if n == 2 && (all_branches_tiny || has_prelude) {
         FORK_MULTI_SEQUENCE_EVEN_PAD
     } else {
         FORK_INNER_PAD
@@ -6503,6 +6512,7 @@ fn sequence_extents_with_note_margins(
     let mut left = 0.0f64;
     let mut right = 0.0f64;
     let multi_fork_sequence = !if_branch && sequence_uses_multi_fork_layout(nodes);
+    let multi_fork_has_prelude = multi_fork_sequence && sequence_multi_fork_has_prelude(nodes);
     // The half-width of the most recent flow node — a note attaches to it and
     // sits `NOTE_GAP` to one side, so its lateral reach from the spine is
     // anchor_half + NOTE_GAP + note_box_width.
@@ -6524,7 +6534,9 @@ fn sequence_extents_with_note_margins(
             _ => {
                 let (nl, nr) = if multi_fork_sequence && is_multi_fork_sequence_candidate(node) {
                     let layout = match node {
-                        LayoutNode::Fork { branches, .. } => fork_layout_multi_sequence(branches),
+                        LayoutNode::Fork { branches, .. } => {
+                            fork_layout_multi_sequence(branches, multi_fork_has_prelude)
+                        }
                         _ => unreachable!(),
                     };
                     fork_bar_extents(&layout)
@@ -9839,6 +9851,7 @@ fn emit_sequence_ex(
     // `ARROW_LEN` of its uncompressed merge band (see `switch_repeat_merge_extra`).
     let repeat_body = std::mem::take(&mut svg.pending_repeat_body);
     let multi_fork_sequence = !while_body && !repeat_body && sequence_uses_multi_fork_layout(nodes);
+    let multi_fork_has_prelude = multi_fork_sequence && sequence_multi_fork_has_prelude(nodes);
     // Whether this loop body's loop-back corridor ON_Y-compresses (one-shot,
     // reset so nested bodies do not inherit it).
     let while_corridor_compresses = std::mem::take(&mut svg.while_corridor_compresses);
@@ -10236,7 +10249,9 @@ fn emit_sequence_ex(
             while_body_fork_layout(nodes, i, node)
         } else if multi_fork_sequence && is_multi_fork_sequence_candidate(node) {
             match node {
-                LayoutNode::Fork { branches, .. } => Some(fork_layout_multi_sequence(branches)),
+                LayoutNode::Fork { branches, .. } => {
+                    Some(fork_layout_multi_sequence(branches, multi_fork_has_prelude))
+                }
                 _ => None,
             }
         } else {
