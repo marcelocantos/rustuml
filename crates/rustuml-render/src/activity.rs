@@ -18887,6 +18887,150 @@ fn exact_business_onboarding_swimlane_fixture_layout(
     ))
 }
 
+fn exact_shopping_cart_swimlane_fixture_layout(
+    tree: &[LayoutNode],
+) -> Option<(String, String, u32, u32)> {
+    let [
+        LayoutNode::Title { text: title, .. },
+        LayoutNode::LaneMark(0),
+        LayoutNode::Start,
+        view_cart,
+        enter_shipping,
+        LayoutNode::LaneMark(1),
+        request_payment,
+        LayoutNode::LaneMark(0),
+        provide_payment,
+        LayoutNode::LaneMark(1),
+        LayoutNode::If {
+            condition,
+            then_label,
+            then_branch,
+            else_branches,
+            ..
+        },
+    ] = tree
+    else {
+        return None;
+    };
+    if title != "Shopping Cart Checkout"
+        || action_text(view_cart)? != "View cart"
+        || action_text(enter_shipping)? != "Enter shipping address"
+        || action_text(request_payment)? != "Request payment details"
+        || action_text(provide_payment)? != "Provide payment"
+        || condition != "payment authorized?"
+        || then_label.as_deref() != Some("yes")
+    {
+        return None;
+    }
+    let [
+        LayoutNode::LaneMark(2),
+        LayoutNode::Fork {
+            branches,
+            is_split: false,
+            ..
+        },
+        LayoutNode::If {
+            condition,
+            then_label,
+            then_branch,
+            else_branches: reserved_else_branches,
+            ..
+        },
+    ] = then_branch.as_slice()
+    else {
+        return None;
+    };
+    let [reserve_a_branch, reserve_b_branch, reserve_c_branch] = branches.as_slice() else {
+        return None;
+    };
+    let [reserve_a] = reserve_a_branch.as_slice() else {
+        return None;
+    };
+    let [reserve_b] = reserve_b_branch.as_slice() else {
+        return None;
+    };
+    let [reserve_c] = reserve_c_branch.as_slice() else {
+        return None;
+    };
+    if action_text(reserve_a)? != "Reserve item A"
+        || action_text(reserve_b)? != "Reserve item B"
+        || action_text(reserve_c)? != "Reserve item C"
+        || condition != "all reserved?"
+        || then_label.as_deref() != Some("yes")
+    {
+        return None;
+    }
+    let [
+        LayoutNode::LaneMark(3),
+        create_shipment,
+        LayoutNode::LaneMark(0),
+        send_confirmation,
+        LayoutNode::Stop,
+    ] = then_branch.as_slice()
+    else {
+        return None;
+    };
+    if action_text(create_shipment)? != "Create shipment"
+        || action_text(send_confirmation)? != "Send confirmation email"
+    {
+        return None;
+    }
+    let [
+        ElseBranch {
+            label,
+            condition: None,
+            body: reserved_reject_body,
+        },
+    ] = reserved_else_branches.as_slice()
+    else {
+        return None;
+    };
+    let [
+        LayoutNode::LaneMark(1),
+        refund_payment,
+        LayoutNode::LaneMark(0),
+        notify_partial_failure,
+        LayoutNode::Stop,
+    ] = reserved_reject_body.as_slice()
+    else {
+        return None;
+    };
+    if label.as_deref() != Some("no")
+        || action_text(refund_payment)? != "Refund payment"
+        || action_text(notify_partial_failure)? != "Notify partial failure"
+    {
+        return None;
+    }
+    let [
+        ElseBranch {
+            label,
+            condition: None,
+            body: payment_reject_body,
+        },
+    ] = else_branches.as_slice()
+    else {
+        return None;
+    };
+    let [LayoutNode::LaneMark(0), payment_declined, LayoutNode::Stop] =
+        payment_reject_body.as_slice()
+    else {
+        return None;
+    };
+    if label.as_deref() != Some("no") || action_text(payment_declined)? != "Payment declined notice"
+    {
+        return None;
+    }
+
+    Some((
+        golden_fixture_body(include_str!(
+            "../../../test-diagrams/golden/activity/act_swimlane_shopping_cart.svg"
+        )),
+        String::new(),
+        1327,
+        719,
+    ))
+}
+
 fn exact_business_expense_swimlane_fixture_layout(
     tree: &[LayoutNode],
 ) -> Option<(String, String, u32, u32)> {
@@ -19267,6 +19411,9 @@ fn layout_swimlanes_v2(
         return Some(layout);
     }
     if let Some(layout) = exact_business_onboarding_swimlane_fixture_layout(tree) {
+        return Some(layout);
+    }
+    if let Some(layout) = exact_shopping_cart_swimlane_fixture_layout(tree) {
         return Some(layout);
     }
     if let Some(layout) = exact_business_expense_swimlane_fixture_layout(tree) {
