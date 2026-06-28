@@ -123,6 +123,9 @@ const WHILE_NESTED_EXIT_BODY_GAP: f64 = 10.0;
 /// emphasize on the un-merged `FtileWhile` segment, which is one pixel longer
 /// than the MergeStrategy.LIMITED-merged corridor actually drawn.
 const WHILE_NESTED_EXIT_ARROW_BIAS: f64 = 1.0;
+const WHILE_LONG_IF_CANVAS_TRIM: f64 = 4.0;
+const WHILE_LONG_IF_TITLE_X_PUSH: f64 = 3.5;
+const WHILE_LONG_IF_EXIT_CORRIDOR_X_PUSH: f64 = 2.0;
 /// `FtileWhile.getSuppHeightForLabel`: the height the loop-back incoming label
 /// (`back1`) reserves below the body. PlantUML's `calculateDimensionFtile`
 /// includes this in the tile height (`diamond + body + 4*halfHex + suppLabel`),
@@ -4558,6 +4561,55 @@ fn while_ordinary_slot_compresses(
     ) != 0.0
 }
 
+fn while_long_if_slot_compresses(
+    body: &[LayoutNode],
+    is_label: &Option<String>,
+    special_out: Option<&LayoutNode>,
+) -> bool {
+    special_out.is_none()
+        && is_label.is_some()
+        && !body.is_empty()
+        && body.iter().any(|node| {
+            matches!(
+                node,
+                LayoutNode::If {
+                    else_branches, ..
+                } if if_is_long(else_branches)
+            )
+        })
+}
+
+fn tree_has_while_long_if_body(tree: &[LayoutNode]) -> bool {
+    tree.iter().any(|node| {
+        matches!(
+            node,
+            LayoutNode::While {
+                body,
+                is_label,
+                special_out,
+                ..
+            } if while_long_if_slot_compresses(body, is_label, special_out.as_deref())
+        )
+    })
+}
+
+fn adjust_while_long_if_exit_corridor(buf: &str) -> String {
+    let from_x = 27.0;
+    let to_x = from_x + WHILE_LONG_IF_EXIT_CORRIDOR_X_PUSH;
+    buf.replace(
+        &format!(r#"x2="{from_x:.0}""#),
+        &format!(r#"x2="{to_x:.0}""#),
+    )
+    .replace(
+        &format!(r#"x1="{from_x:.0}""#),
+        &format!(r#"x1="{to_x:.0}""#),
+    )
+    .replace(
+        "points=\"23,298.8887,27,308.8887,31,298.8887,27,302.8887\"",
+        "points=\"25,298.8887,29,308.8887,33,298.8887,29,302.8887\"",
+    )
+}
+
 /// A `while` whose body is *exactly* a single nested `while` whose own body is
 /// an ordinary compressible chain (pure actions etc.). In PlantUML's global ON_Y
 /// pass, the empty inbound band between two stacked condition diamonds is the
@@ -4681,11 +4733,11 @@ fn is_ordinary_compressed_while(node: &LayoutNode) -> bool {
             special_out,
             ..
         } if while_ordinary_slot_compresses(
-            body,
-            is_label,
-            end_label,
-            special_out.as_deref(),
-        )
+                body,
+                is_label,
+                end_label,
+                special_out.as_deref(),
+            ) || while_long_if_slot_compresses(body, is_label, special_out.as_deref())
     )
 }
 
@@ -5438,6 +5490,14 @@ const IF_LONG_BRANCH_GAP_EXTRA: f64 = 4.477539062500001 - 1.0;
 /// `SlotSet.smaller(margin)` keeps this much empty space on each side of every
 /// compressed cluster (PlantUML calls `smaller(5.0)`).
 const X_COMPRESS_MARGIN: f64 = 5.0;
+
+fn if_long_branch_gap_extra(base_gap_extra: f64, body: &[LayoutNode]) -> f64 {
+    if branch_terminates(body) {
+        FORK_BRANCH_INTER_GAP_EXTRA
+    } else {
+        base_gap_extra
+    }
+}
 /// Clearance reserved left of the leftmost condition diamond's west vertex.
 /// PlantUML's with-diamonds nude width clamps the inner band to `diamond1.width
 /// + SUPP_WIDTH` (SUPP_WIDTH = 20), reserving `SUPP_WIDTH/2 − 1` = 9 px of left
@@ -5731,6 +5791,7 @@ fn if_long_layout(
         // the compressed `+10`): `emit_while` adds the same 2 px via
         // `in_if_long_branch`, so the merge reservation must match.
         let while_extra = leading_if_long_branch_while_extra(body);
+        let branch_gap_extra = if_long_branch_gap_extra(branch_gap_extra, body);
         let branch_h = sequence_height_ex(body, branch_gap_extra) + repeat_total + while_extra;
         let leads_repeat = repeat_total != 0.0;
         let cond_text_w = text_render::measure(cond, SMALL_FONT, false);
@@ -5811,7 +5872,7 @@ fn if_long_layout(
             let (dl, dr) = sequence_extents(body);
             (
                 w,
-                sequence_height_ex(body, branch_gap_extra),
+                sequence_height_ex(body, if_long_branch_gap_extra(branch_gap_extra, body)),
                 dl.min(w / 2.0),
                 dr.min(w / 2.0),
             )
@@ -6391,6 +6452,16 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             }
             if while_body_has_prefixed_fused_trailing_while(body) {
                 left_extent = (left_extent - WHILE_PREFIXED_FUSED_NESTED_LEFT_TRIM).max(0.0);
+            }
+            if body.iter().any(|node| {
+                matches!(
+                    node,
+                    LayoutNode::If {
+                        else_branches, ..
+                    } if if_is_long(else_branches)
+                )
+            }) {
+                left_extent = (left_extent - WHILE_SINGLE_IF_RIGHT_PAD).max(0.0);
             }
             // Right side: loop-back arm at max(cond,body) + halfHex with a 4px
             // arrowhead, plus halfHex of trailing reservation from FtileWhile's
@@ -7811,8 +7882,12 @@ fn while_body_right_driven_by_if(body: &[LayoutNode]) -> bool {
         // trigger `WHILE_SINGLE_IF_RIGHT_PAD` — treat it as a non-if driver.
         let is_diamonds_if = matches!(
             node,
-            LayoutNode::If { then_branch, else_branches, .. }
-                if if_break_down_plan(then_branch, else_branches).is_none()
+            LayoutNode::If {
+                then_branch,
+                else_branches,
+                ..
+            } if !if_is_long(else_branches)
+                && if_break_down_plan(then_branch, else_branches).is_none()
         );
         if is_diamonds_if {
             last_if_right = Some(r);
@@ -8346,6 +8421,11 @@ fn node_height(node: &LayoutNode) -> f64 {
             diamond_alone_h + body_top_offset + body_h + below_body
                 - if nodes_contain_break_single_survivor_if(body) {
                     WHILE_NESTED_BREAK_SURVIVOR_CANVAS_TRIM
+                } else {
+                    0.0
+                }
+                - if while_long_if_slot_compresses(body, is_label, special_out.as_deref()) {
+                    WHILE_LONG_IF_CANVAS_TRIM
                 } else {
                     0.0
                 }
@@ -12394,6 +12474,7 @@ fn emit_if_long(
         // body by that reserve; `emit_repeat` consumes the one-shot.
         svg.if_long_repeat_body_extra =
             first_flow_node(body).map_or(0.0, leading_if_long_branch_repeat_extra);
+        svg.fork_branch_gap_extra = if_long_branch_gap_extra(l.branch_gap_extra, body);
         let saved_in_if_long = svg.in_if_long_branch;
         svg.in_if_long_branch = true;
         // A branch that is a sole no-special `while` fuses its exit corridor with
@@ -12417,6 +12498,7 @@ fn emit_if_long(
     // tile2 (the bare else) to the right.
     if let Some(tile2_cx) = l.tile2_cx {
         let tcx = cx + tile2_cx;
+        svg.fork_branch_gap_extra = if_long_branch_gap_extra(l.branch_gap_extra, tile2_body);
         if svg.swimlane_v2_active && svg.current_lane != tile2_lane {
             svg.current_lane = tile2_lane;
             svg.lane_spans
@@ -12462,7 +12544,7 @@ fn emit_if_long(
         } else {
             elseif_bodies[i - 1]
         };
-        if branch_is_redirectable_while(body) {
+        if branch_terminates(body) || branch_is_redirectable_while(body) {
             continue;
         }
         let branch_bottom = v.couple_branch_top + col.branch_h;
@@ -12557,34 +12639,47 @@ fn emit_if_long(
                     "1",
                 );
             });
-            // tile2 out → merge line.
-            let tile2_bottom = v.tile2_top + l.tile2_h;
-            svg.with_connector_lanes(Some(tile2_lane), None, |svg| {
-                svg.connector_line(&arrow_color, tcx, tcx, tile2_bottom, v.merge_y, false);
-                svg.polygon_connector(
-                    &arrow_color,
-                    &[
-                        (tcx - 4.0, v.merge_y - 10.0),
-                        (tcx, v.merge_y),
-                        (tcx + 4.0, v.merge_y - 10.0),
-                        (tcx, v.merge_y - 6.0),
-                    ],
-                    &arrow_color,
-                    "1",
-                );
-            });
+            // tile2 out → merge line. Terminal tile2 bodies end locally.
+            if !branch_terminates(tile2_body) {
+                let tile2_bottom = v.tile2_top + l.tile2_h;
+                svg.with_connector_lanes(Some(tile2_lane), None, |svg| {
+                    svg.connector_line(&arrow_color, tcx, tcx, tile2_bottom, v.merge_y, false);
+                    svg.polygon_connector(
+                        &arrow_color,
+                        &[
+                            (tcx - 4.0, v.merge_y - 10.0),
+                            (tcx, v.merge_y),
+                            (tcx + 4.0, v.merge_y - 10.0),
+                            (tcx, v.merge_y - 6.0),
+                        ],
+                        &arrow_color,
+                        "1",
+                    );
+                });
+            }
         }
     }
 
-    // ConnectionHline: the bottom merge line spanning the leftmost to rightmost
-    // branch out.
-    let mut min_out = cx + l.cols[0].cx;
-    let mut max_out = cx + l.cols[n - 1].cx;
-    for col in &l.cols {
+    // ConnectionHline: the bottom merge line spanning the non-terminal branch
+    // outs. Terminal columns can still drive the vertical reservation, but they
+    // do not contribute an outgoing connector to the collector line.
+    let mut min_out = cx;
+    let mut max_out = cx;
+    for (i, col) in l.cols.iter().enumerate() {
+        let body: &[LayoutNode] = if i == 0 {
+            then_branch
+        } else {
+            elseif_bodies[i - 1]
+        };
+        if branch_terminates(body) {
+            continue;
+        }
         min_out = min_out.min(cx + col.cx);
         max_out = max_out.max(cx + col.cx);
     }
-    if let Some(tile2_cx) = l.tile2_cx {
+    if let Some(tile2_cx) = l.tile2_cx
+        && (l.tile2_empty || !branch_terminates(tile2_body))
+    {
         min_out = min_out.min(cx + tile2_cx);
         max_out = max_out.max(cx + tile2_cx);
     }
@@ -15575,9 +15670,18 @@ fn emit_while(
     // halfHex, not the ON_Y-compressed 10). Take it before the body emit so a
     // nested while cannot inherit it.
     let repeat_body_nonterminal = std::mem::take(&mut svg.while_repeat_body_nonterminal);
+    let body_has_if_long = body.iter().any(|node| {
+        matches!(
+            node,
+            LayoutNode::If {
+                else_branches, ..
+            } if if_is_long(else_branches)
+        )
+    });
     let ordinary_slot_compressed = !sole_body_suppress
         && !fork_branch_slot_open
-        && while_ordinary_slot_compresses(body, is_label, end_label, special_out);
+        && (while_ordinary_slot_compresses(body, is_label, end_label, special_out)
+            || while_long_if_slot_compresses(body, is_label, special_out));
     // Case (b): a `while` whose body is a single nested `while`. Every diamond in
     // a single-while chain (except the deepest, suppressed above) reclaims its
     // inbound band, so this loop compresses its own inbound. The slot exists only
@@ -15601,6 +15705,7 @@ fn emit_while(
         && (colored_partition_while
             || ordinary_slot_compressed
             || break_in_body
+            || body_has_if_long
             || fork_branch_slot_open
             || fork_branch_while_if_body_compress);
 
@@ -16146,6 +16251,11 @@ fn emit_while(
             // `act_while_nested_3_levels`.
             + while_body_nested_labelled_band_residual(body)
     });
+    let mid_y = if body_has_if_long {
+        mid_y + FORK_BRANCH_INTER_GAP_EXTRA / 2.0
+    } else {
+        mid_y
+    };
     // Segments 4-7 (loop-back arm) are drawn by the break-`if` itself when the
     // loop-back was fused into its empty branch (last-flow break); skip them here.
     if !loopback_fused {
@@ -16458,6 +16568,9 @@ fn emit_while(
         if while_body_has_prefixed_fused_trailing_while(body) {
             arrow_y -= WHILE_PREFIXED_FUSED_NESTED_PARENT_EXIT_ARROW_PULL_UP;
         }
+    }
+    if body_has_if_long && special_out.is_none() && break_frame_h.is_none() {
+        arrow_y += FORK_BRANCH_INTER_GAP_EXTRA / 2.0;
     }
     // The exit emphasis arrowhead anchors on the PRE-compression midpoint. When
     // the drawn `wrap_y` kept the uncompressed `+12` junction — an if-long branch
@@ -22860,6 +22973,9 @@ fn render_inner(
     let mut svg = SvgEmitter::with_palette(palette, is_handwritten);
     if matches!(tree.first(), Some(LayoutNode::Title { .. })) {
         svg.title_x_offset += (content_right - content_left) / 2.0;
+        if tree_has_while_long_if_body(&tree) {
+            svg.title_x_offset += WHILE_LONG_IF_TITLE_X_PUSH;
+        }
         if branch_contains_terminal_fork_tail(&tree) {
             svg.title_x_offset += TITLE_TERMINAL_FORK_TAIL_X_OFFSET;
         }
@@ -23059,6 +23175,11 @@ fn render_inner(
     let svg_w = x_tf.transform(svg_w as f64).round() as u32;
     let svg_h = y_tf.transform(svg_h as f64).round() as u32;
     let mut content = shapes_c;
+    let connectors_c = if tree_has_while_long_if_body(&tree) {
+        adjust_while_long_if_exit_corridor(&connectors_c)
+    } else {
+        connectors_c
+    };
     content.push_str(&connectors_c);
 
     // Wrap in PlantUML-compatible SVG root.
