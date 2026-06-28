@@ -298,7 +298,7 @@ targets:
     discovered: 2026-06-21
   T4.1.15:
     name: Nested activity algorithm flows use PlantUML loop/branch geometry
-    status: identified
+    status: achieved
     value: 0.0
     cost: 0.0
     acceptance:
@@ -309,6 +309,7 @@ targets:
     context: Created from the 39-name T4.1.13 ledger after the swimlane/title groundwork showed the remaining real workflow failures are not only lane-column issues. Several non-swimlane algorithm fixtures share nested while/if geometry and break-corridor behavior.
     origin: subdivide(🎯T4.1)
     discovered: 2026-06-21
+    achieved: 2026-06-28
   T4.1.2:
     name: Swimlane V2 fork lane-spanning diagrams match PlantUML geometry
     status: achieved
