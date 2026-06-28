@@ -2697,6 +2697,8 @@ struct ForkLayout {
 
 const FORK_INNER_PAD: f64 = 12.0;
 const FORK_BRANCH_GAP: f64 = 10.0;
+const FORK_MULTI_SEQUENCE_EVEN_PAD: f64 = 14.0;
+const FORK_MULTI_SEQUENCE_GAP: f64 = FORK_BRANCH_GAP + FORK_EVEN_MIDDLE_EXTRA;
 /// The 2 px the whole-diagram ON_X pass shaves off each OUTER (un-compressible)
 /// branch margin: PlantUML's per-branch `addHorizontalMargin(14, 14)` overhangs
 /// the black bar by 14, but the goldens show the bar overhanging each edge branch
@@ -2903,6 +2905,31 @@ fn fork_branches_are_simple_while_if(branches: &[Vec<LayoutNode>]) -> bool {
         && branches
             .iter()
             .all(|branch| branch_is_simple_while_if_loop(branch))
+}
+
+fn fork_branches_are_single_actions(branches: &[Vec<LayoutNode>]) -> bool {
+    branches
+        .iter()
+        .all(|branch| matches!(branch.as_slice(), [LayoutNode::Action { .. }]))
+}
+
+fn is_multi_fork_sequence_candidate(node: &LayoutNode) -> bool {
+    matches!(
+        node,
+        LayoutNode::Fork {
+            branches,
+            is_split: false,
+            ..
+        } if branches.len() >= 2 && fork_branches_are_single_actions(branches)
+    )
+}
+
+fn sequence_uses_multi_fork_layout(nodes: &[LayoutNode]) -> bool {
+    nodes
+        .iter()
+        .filter(|node| is_multi_fork_sequence_candidate(node))
+        .count()
+        > 1
 }
 
 fn fork_branch_origin_adjust(simple_while_repeat_pair: bool, branch: &[LayoutNode]) -> f64 {
@@ -3139,6 +3166,39 @@ fn fork_layout(branches: &[Vec<LayoutNode>]) -> ForkLayout {
             0.0
         },
         bar_compressible,
+    }
+}
+
+fn fork_layout_multi_sequence(branches: &[Vec<LayoutNode>]) -> ForkLayout {
+    let branch_extents: Vec<(f64, f64)> = branches.iter().map(|b| fork_branch_extents(b)).collect();
+    let n = branch_extents.len();
+    if n == 0 {
+        return ForkLayout::default();
+    }
+
+    let all_branches_tiny = branch_extents
+        .iter()
+        .all(|(left, right)| left + right < ACTION_MIN_HEIGHT);
+    let edge_pad = if n == 2 && all_branches_tiny {
+        FORK_MULTI_SEQUENCE_EVEN_PAD
+    } else {
+        FORK_INNER_PAD
+    };
+    let mut centers = Vec::with_capacity(n);
+    let mut x = edge_pad;
+    for (i, (left, right)) in branch_extents.iter().enumerate() {
+        centers.push(x + left);
+        x += left + right;
+        if i + 1 < n {
+            x += FORK_MULTI_SEQUENCE_GAP;
+        }
+    }
+
+    ForkLayout {
+        bar_w: x + edge_pad,
+        centers,
+        spine_dx: 0.0,
+        bar_compressible: false,
     }
 }
 
@@ -6442,6 +6502,7 @@ fn sequence_extents_with_note_margins(
 ) -> (f64, f64) {
     let mut left = 0.0f64;
     let mut right = 0.0f64;
+    let multi_fork_sequence = !if_branch && sequence_uses_multi_fork_layout(nodes);
     // The half-width of the most recent flow node — a note attaches to it and
     // sits `NOTE_GAP` to one side, so its lateral reach from the spine is
     // anchor_half + NOTE_GAP + note_box_width.
@@ -6461,7 +6522,13 @@ fn sequence_extents_with_note_margins(
                 }
             }
             _ => {
-                let (nl, nr) = if if_branch {
+                let (nl, nr) = if multi_fork_sequence && is_multi_fork_sequence_candidate(node) {
+                    let layout = match node {
+                        LayoutNode::Fork { branches, .. } => fork_layout_multi_sequence(branches),
+                        _ => unreachable!(),
+                    };
+                    fork_bar_extents(&layout)
+                } else if if_branch {
                     node_extents_if_branch(node)
                 } else {
                     node_extents(node)
@@ -6469,7 +6536,9 @@ fn sequence_extents_with_note_margins(
                 left = left.max(nl);
                 right = right.max(nr);
                 // Only genuine flow nodes (those with width) can anchor a note.
-                let width = if if_branch {
+                let width = if multi_fork_sequence && is_multi_fork_sequence_candidate(node) {
+                    nl + nr
+                } else if if_branch {
                     node_width_if_branch(node)
                 } else {
                     node_width(node)
@@ -9769,6 +9838,7 @@ fn emit_sequence_ex(
     // sequence is the loop body and a terminal multi-case switch keeps one
     // `ARROW_LEN` of its uncompressed merge band (see `switch_repeat_merge_extra`).
     let repeat_body = std::mem::take(&mut svg.pending_repeat_body);
+    let multi_fork_sequence = !while_body && !repeat_body && sequence_uses_multi_fork_layout(nodes);
     // Whether this loop body's loop-back corridor ON_Y-compresses (one-shot,
     // reset so nested bodies do not inherit it).
     let while_corridor_compresses = std::mem::take(&mut svg.while_corridor_compresses);
@@ -10164,6 +10234,11 @@ fn emit_sequence_ex(
         }
         let fork_layout_override = if while_body {
             while_body_fork_layout(nodes, i, node)
+        } else if multi_fork_sequence && is_multi_fork_sequence_candidate(node) {
+            match node {
+                LayoutNode::Fork { branches, .. } => Some(fork_layout_multi_sequence(branches)),
+                _ => None,
+            }
         } else {
             None
         };
