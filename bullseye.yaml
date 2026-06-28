@@ -217,6 +217,7 @@ targets:
     - T4.1.24
     - T4.1.25
     - T4.1.26
+    - T4.1.27
     origin: manual
     discovered: 2026-05-17
   T4.1.1:
@@ -531,6 +532,26 @@ targets:
     - activity
     - switch
     - while
+    - strict-xml
+    origin: manual
+    discovered: 2026-06-28
+    achieved: 2026-06-28
+  T4.1.27:
+    name: Swimlane V2 replicates lane-spanning group chrome per lane column
+    status: achieved
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - '`cargo run -p rustuml-oracle --example diff_one -- test-diagrams/golden/activity/act_group_with_swimlane.puml` reports structural equivalence.'
+    - '`cargo run -p rustuml-oracle --example check_all` reports the current 23-failure ledger with no new failure names.'
+    - '`cargo fmt --check`, `cargo clippy -- -D warnings`, and `cargo test --lib` pass.'
+    context: 'Created after retiring 🎯T4.1.26. The `act_group_with_swimlane` fixture has a `group` whose body switches from Lane A to Lane B. The legacy segment model emitted only the entry-lane group frame; Swimlane V2 needed to keep the group as a single tree while replicating the group frame/title chrome into each spanned lane column and routing the linear cross-lane connectors from final shape anchors.'
+    depends_on:
+    - T4.1.26
+    tags:
+    - activity
+    - swimlane
+    - group
     - strict-xml
     origin: manual
     discovered: 2026-06-28

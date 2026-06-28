@@ -1849,6 +1849,9 @@ fn swimlane_v2_can_handle(steps: &[ActivityStep], is_swimlane: bool) -> bool {
     if swimlane_v2_can_handle_simple_while_lane_switch(steps) {
         return true;
     }
+    if swimlane_v2_can_handle_lane_spanning_partition(steps) {
+        return true;
+    }
     // A `|Lane|` nested inside an if/switch branch (depth > 0) — the failing
     // class the segment model can't represent.
     let mut depth = 0i32;
@@ -1862,6 +1865,19 @@ fn swimlane_v2_can_handle(steps: &[ActivityStep], is_swimlane: bool) -> bool {
         }
     }
     lane_in_branch
+}
+
+fn swimlane_v2_can_handle_lane_spanning_partition(steps: &[ActivityStep]) -> bool {
+    let mut depth = 0i32;
+    for step in steps {
+        match step {
+            ActivityStep::Partition(_) => depth += 1,
+            ActivityStep::EndPartition => depth -= 1,
+            ActivityStep::Swimlane(_) if depth > 0 => return true,
+            _ => {}
+        }
+    }
+    false
 }
 
 fn swimlane_v2_can_handle_simple_fork_flow(steps: &[ActivityStep]) -> bool {
@@ -7557,13 +7573,28 @@ fn emit_action_line(
 }
 
 fn group_uses_compact_top_gap(body: &[LayoutNode]) -> bool {
-    matches!(
+    if matches!(
         body,
         [LayoutNode::Action { .. }
             | LayoutNode::If { .. }
             | LayoutNode::Fork { .. }
             | LayoutNode::Switch { .. }]
-    )
+    ) {
+        return true;
+    }
+    let mut has_lane_mark = false;
+    let mut has_compact_tile = false;
+    for node in body {
+        match node {
+            LayoutNode::LaneMark(_) => has_lane_mark = true,
+            LayoutNode::Action { .. }
+            | LayoutNode::If { .. }
+            | LayoutNode::Fork { .. }
+            | LayoutNode::Switch { .. } => has_compact_tile = true,
+            _ => return false,
+        }
+    }
+    has_lane_mark && has_compact_tile
 }
 
 fn group_wraps_single_if(body: &[LayoutNode]) -> bool {
@@ -8731,6 +8762,11 @@ struct SvgEmitter {
     /// `LaneMark`, so `layout_swimlanes_v2` can partition the two buffers into
     /// per-lane byte ranges after emit. Empty off the V2 path.
     lane_spans: Vec<(usize, usize, usize)>,
+    /// Swimlane V2 lane-spanning `group`/`partition` frames. The single-tree
+    /// emitter records the frame once, then the lane compositor draws one copy
+    /// in each spanned lane column.
+    swimlane_v2_partition_frames: Vec<SwimlaneV2PartitionFrame>,
+    swimlane_v2_partition_stack: Vec<usize>,
     /// Resolved color palette for this render (PlantUML defaults +
     /// inline skinparam overrides).
     palette: Palette,
@@ -9006,6 +9042,18 @@ struct ConnectorLaneSpan {
     in_lane: Option<usize>,
 }
 
+#[derive(Debug, Clone)]
+struct SwimlaneV2PartitionFrame {
+    id: usize,
+    name: String,
+    color: Option<String>,
+    is_group: bool,
+    top: f64,
+    height: f64,
+    entry_lane: usize,
+    lanes: Vec<usize>,
+}
+
 /// Inter-lane stitch geometry for a no-special `while` that is the last tile of
 /// a lane segment with a cross-lane successor (see
 /// [`SvgEmitter::swimlane_cross_lane`]).
@@ -9153,6 +9201,8 @@ impl SvgEmitter {
             current_connector_lanes: None,
             current_lane: 0,
             lane_spans: Vec::new(),
+            swimlane_v2_partition_frames: Vec::new(),
+            swimlane_v2_partition_stack: Vec::new(),
             palette,
             colored_partition_while_depth: 0,
             partition_wrapped_fork_depth: 0,
@@ -9652,6 +9702,25 @@ impl SvgEmitter {
             self.current_lane = lane;
             self.lane_spans
                 .push((self.shapes.len(), self.connectors.len(), lane));
+            self.mark_swimlane_v2_partition_lane(lane);
+        }
+    }
+
+    fn mark_swimlane_v2_partition_lane(&mut self, lane: usize) {
+        if !self.swimlane_v2_active {
+            return;
+        }
+        let stack = self.swimlane_v2_partition_stack.clone();
+        for id in stack {
+            let Some(frame) = self.swimlane_v2_partition_frames.get_mut(id) else {
+                continue;
+            };
+            if frame.lanes.contains(&lane) {
+                continue;
+            }
+            frame.lanes.push(lane);
+            self.shapes
+                .push_str(&format!("<!--rustuml-swimlane-v2-partition:{id}:{lane}-->"));
         }
     }
 
@@ -10771,9 +10840,14 @@ fn emit_node_with_repeat_extra(
         // offsets in both buffers so the post-emit pass can partition by lane.
         // No y advance, no shape.
         LayoutNode::LaneMark(idx) => {
-            svg.current_lane = *idx;
-            svg.lane_spans
-                .push((svg.shapes.len(), svg.connectors.len(), *idx));
+            if svg.swimlane_v2_active {
+                svg.current_lane = *idx;
+                svg.lane_spans
+                    .push((svg.shapes.len(), svg.connectors.len(), *idx));
+                svg.mark_swimlane_v2_partition_lane(*idx);
+            } else {
+                svg.current_lane = *idx;
+            }
             y
         }
         LayoutNode::Start => {
@@ -11221,6 +11295,7 @@ fn emit_node_with_repeat_extra(
                 PARTITION_TITLE_BAND_H + body_h + 12.0
             };
             let partition_right = partition_x + partition_w;
+            let lane_spanning_v2 = svg.swimlane_v2_active && nodes_have_lane_mark(body);
 
             // Outer rect: fill = color (default none), stroke #000000 width 1.5
             let fill = color.as_deref().unwrap_or("none");
@@ -11230,33 +11305,53 @@ fn emit_node_with_repeat_extra(
                 let stripped = fill.strip_prefix('#').unwrap_or(fill);
                 crate::sequence::resolve_color(stripped)
             };
-            svg.partition_rect(
-                &resolved_fill,
-                partition_h,
-                partition_w,
-                partition_x,
-                partition_top,
-            );
+            if lane_spanning_v2 {
+                let id = svg.swimlane_v2_partition_frames.len();
+                let entry_lane = svg.current_lane;
+                svg.swimlane_v2_partition_frames
+                    .push(SwimlaneV2PartitionFrame {
+                        id,
+                        name: name.clone(),
+                        color: color.clone(),
+                        is_group: *is_group,
+                        top: partition_top,
+                        height: partition_h,
+                        entry_lane,
+                        lanes: vec![entry_lane],
+                    });
+                svg.shapes.push_str(&format!(
+                    "<!--rustuml-swimlane-v2-partition:{id}:{entry_lane}-->"
+                ));
+                svg.swimlane_v2_partition_stack.push(id);
+            } else {
+                svg.partition_rect(
+                    &resolved_fill,
+                    partition_h,
+                    partition_w,
+                    partition_x,
+                    partition_top,
+                );
 
-            // Title bar path: M{R},{Y} L{R},{Y+9.49} L{R-10},{Y+19.49} L{X},{Y+19.49}.
-            // R is anchored to the title text: partition_x + title_w + 10
-            // (the notch sits just past the title's right edge).
-            let path_r = partition_x + title_w + 10.0;
-            svg.partition_path(path_r, partition_top, partition_x);
-            let _ = partition_right;
+                // Title bar path: M{R},{Y} L{R},{Y+9.49} L{R-10},{Y+19.49} L{X},{Y+19.49}.
+                // R is anchored to the title text: partition_x + title_w + 10
+                // (the notch sits just past the title's right edge).
+                let path_r = partition_x + title_w + 10.0;
+                svg.partition_path(path_r, partition_top, partition_x);
+                let _ = partition_right;
 
-            // Title text
-            let title_y = partition_top + pm::ascent(TITLE_FONT_SIZE) + 1.0;
-            svg.text_element(
-                TEXT_COLOR,
-                "sans-serif",
-                TITLE_FONT_SIZE,
-                title_w,
-                partition_x + 3.0,
-                title_y,
-                partition_title_label(name),
-                false,
-            );
+                // Title text
+                let title_y = partition_top + pm::ascent(TITLE_FONT_SIZE) + 1.0;
+                svg.text_element(
+                    TEXT_COLOR,
+                    "sans-serif",
+                    TITLE_FONT_SIZE,
+                    title_w,
+                    partition_x + 3.0,
+                    title_y,
+                    partition_title_label(name),
+                    false,
+                );
+            }
 
             if !empty_body {
                 // Emit body inside, at the diagram's cx, starting at partition_top + 36.49.
@@ -11290,6 +11385,9 @@ fn emit_node_with_repeat_extra(
                 if colored_partition_while {
                     svg.colored_partition_while_depth -= 1;
                 }
+            }
+            if lane_spanning_v2 {
+                svg.swimlane_v2_partition_stack.pop();
             }
 
             partition_top + partition_h
@@ -17033,6 +17131,286 @@ fn first_ellipse_cy(shapes: &str) -> Option<f64> {
     rest[cy_at..cy_at + end].parse().ok()
 }
 
+fn swimlane_v2_partition_marker(frame_id: usize, lane: usize) -> String {
+    format!("<!--rustuml-swimlane-v2-partition:{frame_id}:{lane}-->")
+}
+
+fn swimlane_v2_partition_frame_svg(
+    frame: &SwimlaneV2PartitionFrame,
+    lane_left: f64,
+    lane_w: f64,
+    top: f64,
+) -> String {
+    let title_w = partition_title_width(&frame.name);
+    let partition_x = lane_left + 6.0;
+    let partition_w = (lane_w - 10.0).max(title_w + 15.0);
+    let fill = frame.color.as_deref().unwrap_or("none");
+    let resolved_fill = if fill == "none" {
+        "none".to_string()
+    } else {
+        let stripped = fill.strip_prefix('#').unwrap_or(fill);
+        crate::sequence::resolve_color(stripped)
+    };
+    let path_r = partition_x + title_w + 10.0;
+    let title_y = top + pm::ascent(TITLE_FONT_SIZE) + 1.0;
+    let mut out = String::new();
+    write!(
+        out,
+        r#"<rect fill="{}" height="{}" style="stroke:#000000;stroke-width:1.5;" width="{}" x="{}" y="{}"/>"#,
+        resolved_fill,
+        f(frame.height),
+        f(partition_w),
+        f(partition_x),
+        f(top),
+    )
+    .unwrap();
+    write!(
+        out,
+        r#"<path d="M{},{} L{},{} L{},{} L{},{}" fill="none" style="stroke:#000000;stroke-width:1.5;"/>"#,
+        f(path_r),
+        f(top),
+        f(path_r),
+        f(top + 9.4883),
+        f(path_r - 10.0),
+        f(top + 19.4883),
+        f(partition_x),
+        f(top + 19.4883),
+    )
+    .unwrap();
+    write!(
+        out,
+        r#"<text fill="{}" font-family="sans-serif" font-size="{}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
+        TEXT_COLOR,
+        TITLE_FONT_SIZE as u32,
+        f(title_w),
+        f(partition_x + 3.0),
+        f(title_y),
+        svg_text_escape(partition_title_label(&frame.name)),
+    )
+    .unwrap();
+    out
+}
+
+#[derive(Clone, Copy)]
+struct SwimlaneV2Anchor {
+    cx: f64,
+    top: f64,
+    bottom: f64,
+}
+
+fn attr_f64(el: &str, name: &str) -> Option<f64> {
+    let pat = format!(r#" {name}=""#);
+    let at = el.find(&pat)? + pat.len();
+    let rest = &el[at..];
+    let end = rest.find('"')?;
+    rest[..end].parse().ok()
+}
+
+fn swimlane_v2_shape_anchors(buf: &str) -> Vec<SwimlaneV2Anchor> {
+    let mut anchors = Vec::new();
+    let mut ellipse_centers: Vec<(f64, f64)> = Vec::new();
+    let mut rest = buf;
+    while let Some(rect_i) = rest.find("<rect") {
+        let ell_i = rest.find("<ellipse");
+        let (at, is_rect) = match ell_i {
+            Some(ell_i) if ell_i < rect_i => (ell_i, false),
+            _ => (rect_i, true),
+        };
+        rest = &rest[at..];
+        let Some(end) = rest.find("/>") else {
+            break;
+        };
+        let prim = &rest[..end + 2];
+        rest = &rest[end + 2..];
+        if is_rect && prim.contains(r#"rx="12.5""#) {
+            if let (Some(x), Some(y), Some(w), Some(h)) = (
+                attr_f64(prim, "x"),
+                attr_f64(prim, "y"),
+                attr_f64(prim, "width"),
+                attr_f64(prim, "height"),
+            ) {
+                anchors.push(SwimlaneV2Anchor {
+                    cx: x + w / 2.0,
+                    top: y,
+                    bottom: y + h,
+                });
+            }
+        } else if !is_rect
+            && let (Some(cx), Some(cy), Some(rx), Some(ry)) = (
+                attr_f64(prim, "cx"),
+                attr_f64(prim, "cy"),
+                attr_f64(prim, "rx"),
+                attr_f64(prim, "ry"),
+            )
+        {
+            if ellipse_centers
+                .iter()
+                .any(|(x, y)| (cx - *x).abs() < 0.001 && (cy - *y).abs() < 0.001)
+            {
+                continue;
+            }
+            ellipse_centers.push((cx, cy));
+            anchors.push(SwimlaneV2Anchor {
+                cx,
+                top: cy - ry,
+                bottom: cy + rx.min(ry),
+            });
+        }
+    }
+    while let Some(at) = rest.find("<ellipse") {
+        rest = &rest[at..];
+        let Some(end) = rest.find("/>") else {
+            break;
+        };
+        let prim = &rest[..end + 2];
+        rest = &rest[end + 2..];
+        if let (Some(cx), Some(cy), Some(rx), Some(ry)) = (
+            attr_f64(prim, "cx"),
+            attr_f64(prim, "cy"),
+            attr_f64(prim, "rx"),
+            attr_f64(prim, "ry"),
+        ) {
+            if ellipse_centers
+                .iter()
+                .any(|(x, y)| (cx - *x).abs() < 0.001 && (cy - *y).abs() < 0.001)
+            {
+                continue;
+            }
+            ellipse_centers.push((cx, cy));
+            anchors.push(SwimlaneV2Anchor {
+                cx,
+                top: cy - ry,
+                bottom: cy + rx.min(ry),
+            });
+        }
+    }
+    anchors
+}
+
+fn collect_swimlane_v2_linear_flow_lanes(
+    nodes: &[LayoutNode],
+    cur_lane: &mut usize,
+    out: &mut Vec<usize>,
+) -> bool {
+    for node in nodes {
+        match node {
+            LayoutNode::LaneMark(lane) => *cur_lane = *lane,
+            LayoutNode::Start
+            | LayoutNode::Stop
+            | LayoutNode::End
+            | LayoutNode::Action { .. }
+            | LayoutNode::DeprecatedAction { .. } => out.push(*cur_lane),
+            LayoutNode::Partition { body, .. } => {
+                if !collect_swimlane_v2_linear_flow_lanes(body, cur_lane, out) {
+                    return false;
+                }
+            }
+            LayoutNode::Arrow { .. } | LayoutNode::Note { .. } => {}
+            _ => return false,
+        }
+    }
+    true
+}
+
+fn swimlane_v2_arrowhead(color: &str, x: f64, y: f64) -> String {
+    format!(
+        r#"<polygon fill="{color}" points="{}" style="stroke:{color};stroke-width:1;"/>"#,
+        polygon_points(&[
+            (x - 4.0, y - 10.0),
+            (x, y),
+            (x + 4.0, y - 10.0),
+            (x, y - 6.0),
+        ]),
+    )
+}
+
+fn swimlane_v2_line(color: &str, x1: f64, x2: f64, y1: f64, y2: f64) -> String {
+    format!(
+        r#"<line style="stroke:{color};stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+        f(x1),
+        f(x2),
+        f(y1),
+        f(y2),
+    )
+}
+
+fn route_swimlane_v2_partition_connectors(
+    tree: &[LayoutNode],
+    lane_shapes: &[String],
+    arrow_color: &str,
+) -> Option<String> {
+    let mut flow_lanes = Vec::new();
+    let mut cur_lane = 0usize;
+    if !collect_swimlane_v2_linear_flow_lanes(tree, &mut cur_lane, &mut flow_lanes) {
+        if std::env::var("RUSTUML_EXT_DBG").is_ok() {
+            eprintln!("[V2 partition router] non-linear flow");
+        }
+        return None;
+    }
+    if flow_lanes.len() < 2 {
+        if std::env::var("RUSTUML_EXT_DBG").is_ok() {
+            eprintln!("[V2 partition router] too few flow anchors: {flow_lanes:?}");
+        }
+        return None;
+    }
+    let anchors_by_lane: Vec<Vec<SwimlaneV2Anchor>> = lane_shapes
+        .iter()
+        .map(|shapes| swimlane_v2_shape_anchors(shapes))
+        .collect();
+    if std::env::var("RUSTUML_EXT_DBG").is_ok() {
+        let counts: Vec<usize> = anchors_by_lane.iter().map(Vec::len).collect();
+        eprintln!("[V2 partition router] flow_lanes={flow_lanes:?} anchors={counts:?}");
+    }
+    let mut used = vec![0usize; anchors_by_lane.len()];
+    let mut flow = Vec::with_capacity(flow_lanes.len());
+    for lane in flow_lanes {
+        let idx = *used.get(lane)?;
+        let anchor = *anchors_by_lane.get(lane)?.get(idx)?;
+        used[lane] += 1;
+        flow.push((lane, anchor));
+    }
+    let mut out = String::new();
+    for pair in flow.windows(2) {
+        let (from_lane, from) = pair[0];
+        let (to_lane, to) = pair[1];
+        if from_lane == to_lane {
+            out.push_str(&swimlane_v2_line(
+                arrow_color,
+                from.cx,
+                to.cx,
+                from.bottom,
+                to.top,
+            ));
+            out.push_str(&swimlane_v2_arrowhead(arrow_color, to.cx, to.top));
+        } else {
+            let cross_y = to.top - 15.0;
+            out.push_str(&swimlane_v2_line(
+                arrow_color,
+                from.cx,
+                from.cx,
+                from.bottom,
+                cross_y,
+            ));
+            out.push_str(&swimlane_v2_line(
+                arrow_color,
+                from.cx,
+                to.cx,
+                cross_y,
+                cross_y,
+            ));
+            out.push_str(&swimlane_v2_line(
+                arrow_color,
+                to.cx,
+                to.cx,
+                cross_y,
+                to.top,
+            ));
+            out.push_str(&swimlane_v2_arrowhead(arrow_color, to.cx, to.top));
+        }
+    }
+    Some(out)
+}
+
 /// Target x of the leftmost lane divider (matches gold).
 const SWIM_LEFT_DIVIDER_X: f64 = 20.0;
 /// Fork-only swimlane title slack: PlantUML lets a top-bar-only lane shrink
@@ -17144,6 +17522,41 @@ fn tree_has_fork(nodes: &[LayoutNode]) -> bool {
 
 fn node_has_fork(node: &LayoutNode) -> bool {
     tree_has_fork(std::slice::from_ref(node))
+}
+
+fn nodes_have_lane_mark(nodes: &[LayoutNode]) -> bool {
+    nodes.iter().any(|node| match node {
+        LayoutNode::LaneMark(_) => true,
+        LayoutNode::If {
+            then_branch,
+            else_branches,
+            ..
+        } => {
+            nodes_have_lane_mark(then_branch)
+                || else_branches
+                    .iter()
+                    .any(|branch| nodes_have_lane_mark(&branch.body))
+        }
+        LayoutNode::While {
+            body, special_out, ..
+        } => {
+            nodes_have_lane_mark(body)
+                || special_out
+                    .as_deref()
+                    .is_some_and(|node| nodes_have_lane_mark(std::slice::from_ref(node)))
+        }
+        LayoutNode::Repeat { body, .. } | LayoutNode::Partition { body, .. } => {
+            nodes_have_lane_mark(body)
+        }
+        LayoutNode::Fork { branches, .. } => branches.iter().any(|b| nodes_have_lane_mark(b)),
+        LayoutNode::Switch { cases, .. } => {
+            cases.iter().any(|case| nodes_have_lane_mark(&case.body))
+        }
+        LayoutNode::Swimlanes { segments, .. } => segments
+            .iter()
+            .any(|segment| nodes_have_lane_mark(&segment.body)),
+        _ => false,
+    })
 }
 
 fn tree_has_while_with_fork(nodes: &[LayoutNode]) -> bool {
@@ -20356,7 +20769,7 @@ fn layout_swimlanes_v2(
     // reserved edge); if-lanes use the DRAWN shape bounding box (PlantUML's
     // per-swimlane `getMinMax`).
     let mut lane_content_w = vec![0.0f64; n];
-    let (lane_minx, lane_w): (Vec<f64>, Vec<f64>) = if if_mode {
+    let (lane_minx, mut lane_w): (Vec<f64>, Vec<f64>) = if if_mode {
         let mut minx = vec![0.0f64; n];
         let mut w = vec![0.0f64; n];
         for l in 0..n {
@@ -20484,6 +20897,29 @@ fn layout_swimlanes_v2(
         (minx, w)
     };
 
+    for frame in &svg.swimlane_v2_partition_frames {
+        let title_w = partition_title_width(&frame.name);
+        for &lane in &frame.lanes {
+            if lane >= n {
+                continue;
+            }
+            let entry_extra = if frame.is_group && lane == frame.entry_lane {
+                GROUP_IF_BODY_WIDTH_EXTRA
+            } else {
+                0.0
+            };
+            let body_shell_w = lane_content_w[lane] + 20.0 + entry_extra;
+            let title_shell_w = title_w
+                + 15.0
+                + if frame.is_group && frame.color.is_some() {
+                    GROUP_COLOR_TITLE_WIDTH_EXTRA
+                } else {
+                    0.0
+                };
+            lane_w[lane] = lane_w[lane].max(body_shell_w.max(title_shell_w) + 10.0);
+        }
+    }
+
     let mut lane_left = vec![0.0f64; n];
     let mut acc = SWIM_LEFT_DIVIDER_X;
     for l in 0..n {
@@ -20497,7 +20933,8 @@ fn layout_swimlanes_v2(
     // Rightmost divider. Linear lanes carry a trailing +10 in `lane_w` that lands
     // the right divider at `acc`; if-lanes' last divider sits at the last lane's
     // drawn right edge (no trailing gap), i.e. `acc − 10`.
-    let right_edge = if if_mode && !fork_mode && n > 0 {
+    let has_partition_frames = !svg.swimlane_v2_partition_frames.is_empty();
+    let right_edge = if if_mode && !fork_mode && n > 0 && !has_partition_frames {
         acc - 10.0
     } else {
         acc
@@ -20510,7 +20947,17 @@ fn layout_swimlanes_v2(
     // content is CENTRED in the column instead of left-anchored.
     let content_pad: Vec<f64> = (0..n)
         .map(|l| {
-            if if_mode && title_w[l] > lane_content_w[l] + 0.001 {
+            if let Some(frame) = svg
+                .swimlane_v2_partition_frames
+                .iter()
+                .find(|frame| frame.lanes.contains(&l))
+            {
+                if frame.is_group && frame.entry_lane == l {
+                    18.0
+                } else {
+                    16.0
+                }
+            } else if if_mode && title_w[l] > lane_content_w[l] + 0.001 {
                 // Title-driven: centre the content in the lane column, with the
                 // lane's intrinsic 6-left/4-right padding asymmetry (+1 to the
                 // left half) baked in.
@@ -20814,6 +21261,29 @@ fn layout_swimlanes_v2(
             }
         }
     }
+    for frame in &svg.swimlane_v2_partition_frames {
+        for &lane in &frame.lanes {
+            if lane >= n {
+                continue;
+            }
+            let marker = swimlane_v2_partition_marker(frame.id, lane);
+            let frame_svg = swimlane_v2_partition_frame_svg(
+                frame,
+                lane_left[lane],
+                lane_w[lane],
+                frame.top + lane_dy[lane],
+            );
+            lane_shapes[lane] = lane_shapes[lane].replace(&marker, &frame_svg);
+        }
+    }
+    for lane_shape in &mut lane_shapes {
+        while let Some(start) = lane_shape.find("<!--rustuml-swimlane-v2-partition:") {
+            let Some(end) = lane_shape[start..].find("-->") else {
+                break;
+            };
+            lane_shape.replace_range(start..start + end + 3, "");
+        }
+    }
     let mut compression_lane_conns: Option<Vec<String>> = None;
     let mut routed_split_collector = false;
 
@@ -20838,7 +21308,7 @@ fn layout_swimlanes_v2(
                 }
             }
         }
-    } else if if_mode && !fork_mode {
+    } else if if_mode && !fork_mode && !has_partition_frames {
         let nat_shapes: Vec<String> = (0..n)
             .map(|l| crate::compress::shift_y(&shape_frags[l], content_dy))
             .collect();
@@ -20865,6 +21335,15 @@ fn layout_swimlanes_v2(
             if n > 0 {
                 lane_conns[0] = routed;
             }
+        }
+    }
+    if has_partition_frames
+        && let Some(routed) =
+            route_swimlane_v2_partition_connectors(tree, &lane_shapes, &arrow_color)
+    {
+        lane_conns = vec![String::new(); n];
+        if n > 0 {
+            lane_conns[0] = routed;
         }
     }
 
