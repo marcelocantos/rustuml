@@ -104,6 +104,13 @@ const WHILE_SPECIAL_BODY_X_PULL_RIGHT: f64 = WHILE_SPECIAL_COND_LEAD - WHILE_SPE
 const WHILE_UNLABELED_SPECIAL_Y_PULL_UP: f64 = 4.0;
 const WHILE_UNLABELED_LOOP_ARROW_Y_PULL_UP: f64 = 2.0;
 const WHILE_BODY_SLOT_COMPRESS: f64 = 4.8203125;
+const WHILE_PREFIXED_FUSED_NESTED_LEFT_TRIM: f64 = 1.0;
+const WHILE_PREFIXED_FUSED_NESTED_RIGHT_TRIM: f64 = 7.5722;
+const WHILE_PREFIXED_FUSED_NESTED_EMIT_RIGHT_TRIM: f64 = 3.5722;
+const WHILE_PREFIXED_FUSED_NESTED_CANVAS_RIGHT_TRIM: f64 = 9.4277;
+const WHILE_PREFIXED_FUSED_NESTED_TITLE_X_OFFSET: f64 = -5.7823;
+const WHILE_PREFIXED_FUSED_NESTED_CHILD_EXIT_ARROW_PUSH_DOWN: f64 = 1.9887;
+const WHILE_PREFIXED_FUSED_NESTED_PARENT_EXIT_ARROW_PULL_UP: f64 = 1.6675;
 /// The body→loop-back-junction gap a `while` reserves below its body (the
 /// `body_bottom + 10` slack). When a loop consumes a nested loop's fused exit,
 /// its loop-back junction sits at the child's fused band (which already counts
@@ -733,6 +740,8 @@ impl Default for ArrowStyle {
         }
     }
 }
+
+type PendingDownArrow = (f64, ArrowStyle, Option<String>, f64);
 
 /// Parse the bracketed payload from `-[...]->` into an `ArrowStyle`.
 /// Accepts tokens separated by `,` or `;`; tokens may be a colour (`#fff`,
@@ -1514,6 +1523,22 @@ fn body_contains_while(body: &[LayoutNode]) -> bool {
 /// keeps the ordinary late body→condition order.
 fn body_last_flow_is_while(body: &[LayoutNode]) -> bool {
     last_flow_index(body).is_some_and(|i| matches!(body[i], LayoutNode::While { .. }))
+}
+
+fn while_body_has_prefixed_fused_trailing_while(body: &[LayoutNode]) -> bool {
+    let Some(last) = last_flow_index(body) else {
+        return false;
+    };
+    if !matches!(
+        body[last],
+        LayoutNode::While {
+            special_out: None,
+            ..
+        }
+    ) {
+        return false;
+    }
+    body[..last].iter().any(node_is_flow)
 }
 
 /// The break-bearing `if`'s diamond half-width (cond_inner_w/2 + halfHex) for the
@@ -4214,21 +4239,23 @@ fn while_ordinary_slot_compress_allowed(
     // `endwhile` (so the usual specialOut gate does not apply). This includes a
     // `break` nested under ordinary if/switch/fork nodes owned by this loop.
     let has_break_if = body_contains_break_if(body);
+    let has_terminating_if_down = while_body_has_terminating_if_down_with_following_flow(body);
     (special_out.is_none() || has_break_if)
-        && body.iter().all(|node| {
-            matches!(
-                node,
-                LayoutNode::Action { .. }
-                    | LayoutNode::DeprecatedAction { .. }
-                    | LayoutNode::Arrow { .. }
-                    | LayoutNode::Note { .. }
-            ) || matches!(
-                node,
-                LayoutNode::If { then_branch, else_branches, .. }
-                    if if_break_down_plan(then_branch, else_branches).is_some()
-                        || node_contains_break(node)
-            )
-        })
+        && (has_terminating_if_down
+            || body.iter().all(|node| {
+                matches!(
+                    node,
+                    LayoutNode::Action { .. }
+                        | LayoutNode::DeprecatedAction { .. }
+                        | LayoutNode::Arrow { .. }
+                        | LayoutNode::Note { .. }
+                ) || matches!(
+                    node,
+                    LayoutNode::If { then_branch, else_branches, .. }
+                        if if_break_down_plan(then_branch, else_branches).is_some()
+                            || node_contains_break(node)
+                )
+            }))
 }
 
 fn while_ordinary_slot_compresses(
@@ -4412,6 +4439,12 @@ fn while_body_chain_compresses(node: &LayoutNode) -> bool {
             ..
         } if while_ordinary_slot_compresses(body, is_label, end_label, None)
     )
+}
+
+fn while_body_has_terminating_if_down_with_following_flow(body: &[LayoutNode]) -> bool {
+    body.iter()
+        .enumerate()
+        .any(|(i, node)| if_node_is_terminating_down(node) && following_flow_count(body, i) > 0)
 }
 
 fn while_body_top_offset(
@@ -6040,6 +6073,9 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             if special_out.is_some() && body_has_direct_left_note(body) {
                 left_extent += 1.0;
             }
+            if while_body_has_prefixed_fused_trailing_while(body) {
+                left_extent = (left_extent - WHILE_PREFIXED_FUSED_NESTED_LEFT_TRIM).max(0.0);
+            }
             // Right side: loop-back arm at max(cond,body) + halfHex with a 4px
             // arrowhead, plus halfHex of trailing reservation from FtileWhile's
             // `dx + halfHex` term (= 2*halfHex + 3 past max). Verified against
@@ -6080,6 +6116,11 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
                     + DIAMOND_HALF
                     + while_chain_trailing_reservation(body)
                     + while_single_if_right_pad(body, end_label)
+            };
+            let right_extent = if while_body_has_prefixed_fused_trailing_while(body) {
+                (right_extent - WHILE_PREFIXED_FUSED_NESTED_CANVAS_RIGHT_TRIM).max(0.0)
+            } else {
+                right_extent
             };
             (left_extent, right_extent)
         }
@@ -6314,7 +6355,9 @@ fn sequence_loop_body_extents(nodes: &[LayoutNode]) -> (f64, f64) {
         return (left, right);
     }
     let mut adjusted_right = 0.0f64;
-    for node in nodes {
+    let prefixed_fused_trailing_while = while_body_has_prefixed_fused_trailing_while(nodes);
+    let last_flow = last_flow_index(nodes);
+    for (i, node) in nodes.iter().enumerate() {
         if matches!(node, LayoutNode::Note { .. } | LayoutNode::Arrow { .. }) {
             continue;
         }
@@ -6326,7 +6369,12 @@ fn sequence_loop_body_extents(nodes: &[LayoutNode]) -> (f64, f64) {
         // under-cleared.
         let nr = match node {
             LayoutNode::While { body: inner, .. } => {
-                let strip = while_chain_trailing_reservation(inner);
+                let strip = while_chain_trailing_reservation(inner)
+                    + if prefixed_fused_trailing_while && Some(i) == last_flow {
+                        WHILE_PREFIXED_FUSED_NESTED_RIGHT_TRIM
+                    } else {
+                        0.0
+                    };
                 (nr - strip).max(0.0)
             }
             _ => nr,
@@ -8409,9 +8457,15 @@ struct SvgEmitter {
     /// corridor back to the spine, descends to the fused band and reports its
     /// `WhileNestedExit` so the parent's loop-back can source from it.
     while_expect_nested_exit: bool,
+    while_expect_prefixed_nested_exit: bool,
     /// Reported by a fused nested `while` (see `while_expect_nested_exit`) for the
     /// parent `emit_while` to consume when drawing its loop-back arm.
     while_nested_exit: Option<WhileNestedExit>,
+    /// Deferred inbound arrow into a nested `while` that is the last flow node of
+    /// the current `while` body. The parent loop-back arm must emit before this
+    /// child inbound, so `emit_sequence_ex` carries it back to `emit_while`.
+    while_nested_child_inbound: Option<PendingDownArrow>,
+    title_x_offset: f64,
     /// Nesting depth of `repeat` loop bodies currently being emitted. A `repeat`
     /// reserves an `8*halfHex` tail below its body (FtileRepeat
     /// `calculateDimensionInternal`); at top level the whole-diagram ON_Y
@@ -8484,6 +8538,11 @@ struct SvgEmitter {
     /// corridor; the enclosing sequence skips the deferred inbound. Set per-node
     /// by `emit_sequence_ex`, consumed once by `emit_if_down`.
     if_down_terminating_has_next: bool,
+    /// Same terminating-if handoff, but inside a `while` body. PlantUML keeps an
+    /// extra no-diamond `ConnectionOut` band here after the loop's inbound slot
+    /// is reclaimed; `emit_if_down` consumes this one-shot and lengthens only
+    /// that outbound spine arrow.
+    if_down_terminating_while_body_has_next: bool,
     /// True while emitting a leading multi-case (>= 3) SMALL-diamond switch of a
     /// `fork`/`split` branch. Such a switch emits its uncompressed `FtileSwitchNude`
     /// layout (`switch_x_layout_nude`) rather than the switch-locally-compressed
@@ -8740,7 +8799,10 @@ impl SvgEmitter {
             pending_while_body: false,
             while_sole_body_suppress_compress: false,
             while_expect_nested_exit: false,
+            while_expect_prefixed_nested_exit: false,
             while_nested_exit: None,
+            while_nested_child_inbound: None,
+            title_x_offset: 0.0,
             repeat_body_depth: 0,
             repeat_nested_expansion: 0.0,
             if_long_repeat_body_extra: 0.0,
@@ -8751,6 +8813,7 @@ impl SvgEmitter {
             while_body_switch: false,
             repeat_body_switch: false,
             if_down_terminating_has_next: false,
+            if_down_terminating_while_body_has_next: false,
             fork_body_switch: false,
             while_corridor_compresses: false,
             while_switch_corridor_compresses: false,
@@ -9764,7 +9827,7 @@ fn emit_sequence_ex(
         // connectors, so we defer the actual svg writes until after
         // emit_node returns. We still advance `y` upfront so the node lands
         // at the right position.
-        let mut pending_arrow: Option<(f64, ArrowStyle, Option<String>, f64)> = None;
+        let mut pending_arrow: Option<PendingDownArrow> = None;
         if i > 0 {
             let mut explicit_arrow: Option<&LayoutNode> = None;
             let mut prev_idx: Option<usize> = None;
@@ -10156,7 +10219,9 @@ fn emit_sequence_ex(
         // A terminating if-down owns its outbound spine arrow when followed by
         // another flow node; tell its emit whether that next node exists.
         if if_node_is_terminating_down(node) {
-            svg.if_down_terminating_has_next = following_flow_count(nodes, i) > 0;
+            let has_next = following_flow_count(nodes, i) > 0;
+            svg.if_down_terminating_has_next = has_next;
+            svg.if_down_terminating_while_body_has_next = while_body && has_next;
         }
         // Swimlane V2: a `while`+terminator tile that forms (the tail of) its
         // lane hangs the terminator off the diamond's left-vertex column, like
@@ -10180,6 +10245,7 @@ fn emit_sequence_ex(
         svg.while_body_fork_layout = None;
         svg.swimlane_while_cond_special = false;
         svg.if_down_terminating_has_next = false;
+        svg.if_down_terminating_while_body_has_next = false;
         svg.while_switch_merge_extra = 0.0;
         svg.while_body_switch = false;
         svg.while_switch_corridor_compresses = false;
@@ -10213,8 +10279,23 @@ fn emit_sequence_ex(
         carry_gap_extra = note_bottom_extra;
         flow_ordinal += 1;
     }
-    if let Some((arrow_top, style, label, arrow_gap)) = deferred_partition_inbound {
-        emit_pending_down_arrow(svg, arrow_top, style, label, arrow_gap, cx);
+    if let Some(deferred) = deferred_partition_inbound {
+        if while_body
+            && last_flow_index(nodes).is_some_and(|i| {
+                matches!(
+                    nodes[i],
+                    LayoutNode::While {
+                        special_out: None,
+                        ..
+                    }
+                )
+            })
+        {
+            svg.while_nested_child_inbound = Some(deferred);
+        } else {
+            let (arrow_top, style, label, arrow_gap) = deferred;
+            emit_pending_down_arrow(svg, arrow_top, style, label, arrow_gap, cx);
+        }
     }
     y
 }
@@ -10610,7 +10691,7 @@ fn emit_node_with_repeat_extra(
                 "sans-serif",
                 *font_size,
                 tw,
-                cx - tw / 2.0 + 1.0,
+                cx - tw / 2.0 + 1.0 + svg.title_x_offset,
                 text_y,
                 text,
                 *bold,
@@ -11832,6 +11913,12 @@ const IF_DOWN_TERM_MID_STRETCH: f64 = 8.43359375;
 /// pointOut (where the no-diamond east corridor rejoins the spine), beyond the
 /// ARROW_LEN merge gap — the residual band the FtileEmpty `diamond2` reserves.
 const IF_DOWN_TERM_REJOIN_EXTRA: f64 = 2.0;
+/// Extra length of `FtileIfDown.ConnectionOut` when a terminating populated
+/// branch (`:return; stop`) is followed by more flow inside a labelled `while`
+/// body. The loop frame reclaims the diamond→body inbound slot, but the
+/// terminating-if's pointOut→next-node snake keeps a near-full `ARROW_LEN -
+/// IF_BRANCH_UP` band plus a small text-band residual.
+const IF_DOWN_TERM_WHILE_BODY_OUTBOUND_EXTRA: f64 = 14.0889;
 /// Drop from a break-bearing `if`'s diamond bottom to the (no-diamond) east
 /// corridor's return line — i.e. the if-block's pointOut. The break tile sits
 /// `IF_DOWN_LEAD` below the diamond; the corridor then runs `ARROW_LEN +
@@ -12324,6 +12411,11 @@ fn while_body_height(body: &[LayoutNode], has_in_label: bool) -> f64 {
         // must include it.
         + if break_if_is_first_flow(body) && while_break_corridor_compresses(body) {
             IF_DOWN_MID_STRETCH
+        } else {
+            0.0
+        }
+        + if while_body_has_terminating_if_down_with_following_flow(body) {
+            IF_DOWN_TERM_WHILE_BODY_OUTBOUND_EXTRA
         } else {
             0.0
         }
@@ -12825,6 +12917,8 @@ fn emit_if_down(
     // Capture before emitting the populated branch — the nested emit_sequence_ex
     // resets this per-node flag, so read it up front.
     let terminating_has_next = std::mem::take(&mut svg.if_down_terminating_has_next);
+    let terminating_while_body_has_next =
+        std::mem::take(&mut svg.if_down_terminating_while_body_has_next);
     let arrow_color = svg.palette.arrow_color.clone();
     let diamond_stroke = svg.palette.diamond_stroke.clone();
     let diamond_fill = svg.palette.diamond_fill.clone();
@@ -13001,7 +13095,13 @@ fn emit_if_down(
         // inbound (`skip_implicit_inbound_after_terminating_down`). Only when a
         // following flow node exists.
         if terminating_has_next {
-            let out_y = rejoin_y + ARROW_LEN;
+            let out_y = rejoin_y
+                + ARROW_LEN
+                + if terminating_while_body_has_next {
+                    IF_DOWN_TERM_WHILE_BODY_OUTBOUND_EXTRA
+                } else {
+                    0.0
+                };
             svg.down_arrow(cx, rejoin_y, out_y, &arrow_color);
             return out_y;
         }
@@ -14562,6 +14662,8 @@ fn emit_while(
     // `WhileNestedExit` to the parent. Only a plain no-special loop can fuse.
     let fuse_as_nested_exit =
         special_out.is_none() && std::mem::take(&mut svg.while_expect_nested_exit);
+    let fuse_as_prefixed_nested_exit =
+        special_out.is_none() && std::mem::take(&mut svg.while_expect_prefixed_nested_exit);
     let colored_partition_while = svg.colored_partition_while_depth > 0;
     // This loop has an ordinary (action) body AND is the sole body of a parent
     // `while`, so it is the DEEPEST loop of a single-while chain. PlantUML's
@@ -14736,31 +14838,35 @@ fn emit_while(
     if single_while_slot_compressed && while_body_is_single_compressible_while(body) {
         svg.while_sole_body_suppress_compress = true;
     }
-    // Loop-back fusion: when the body is exactly one nested `while`, that nested
-    // loop's exit corridor is consumed by THIS loop's loop-back arm (PlantUML's
-    // nested `FtileWhile` loop-back snake starts at the inner `getPointOut`). Tell
-    // the nested loop to descend its exit to the fused band and report it. This is
-    // independent of inbound compression and of THIS loop's own exit routing: a
-    // top-of-chain loop may absorb a trailing `stop` into `special_out`, or fuse
-    // its own exit into an if branch→merge redirect, yet still loop back through
-    // the nested exit corridor. Applies at every chain level (the innermost
-    // pure-action loop fuses its exit too). The nested loop itself must be a plain
-    // no-special loop (it has an exit corridor to descend).
-    if matches!(
-        body,
-        [LayoutNode::While {
-            special_out: None,
-            ..
-        }]
-    ) {
+    // Loop-back fusion: when the body's last flow tile is a nested `while`, that
+    // nested loop's exit corridor is consumed by THIS loop's loop-back arm
+    // (PlantUML's nested `FtileWhile` loop-back snake starts at the inner
+    // `getPointOut`). Tell the nested loop to descend its exit to the fused band
+    // and report it. Leading actions remain ordinary body flow; only the trailing
+    // no-special loop owns the fused corridor.
+    if last_flow_index(body).is_some_and(|i| {
+        matches!(
+            body[i],
+            LayoutNode::While {
+                special_out: None,
+                ..
+            }
+        )
+    }) {
         svg.while_expect_nested_exit = true;
+        if while_body_has_prefixed_fused_trailing_while(body) {
+            svg.while_expect_prefixed_nested_exit = true;
+        }
     }
     svg.while_nested_exit = None;
+    let prev_nested_child_inbound = svg.while_nested_child_inbound.take();
     let body_bottom = emit_sequence_ex(svg, body, cx, body_top, body_mid_stretch, None, false);
     let while_exit_lane = svg.current_lane;
     svg.switch_lane_span(while_entry_lane);
     svg.while_repeat_tail_extra = prev_repeat_tail_extra;
     let nested_exit = svg.while_nested_exit.take();
+    let nested_child_inbound = svg.while_nested_child_inbound.take();
+    svg.while_nested_child_inbound = prev_nested_child_inbound;
     svg.while_if_branch_stretch = prev_if_branch_stretch;
     let body_switch_loopback_tip = svg.while_switch_loopback_tip.take();
     svg.while_switch_loopback_tip = prev_loopback_tip;
@@ -14796,6 +14902,11 @@ fn emit_while(
     // Loop-back arm x position: 12 past whichever is wider, the diamond or
     // the body's right extent.
     let (body_left_ext, body_right_ext) = sequence_loop_body_extents(body);
+    let body_right_ext = if while_body_has_prefixed_fused_trailing_while(body) {
+        (body_right_ext - WHILE_PREFIXED_FUSED_NESTED_EMIT_RIGHT_TRIM).max(0.0)
+    } else {
+        body_right_ext
+    };
     let body_right_x = cx + body_right_ext;
     // A deprecated body pulls the left corridor 2 px tighter (see
     // while_body_left); the special-terminator placement uses the adjusted
@@ -14871,6 +14982,11 @@ fn emit_while(
             - DIAMOND_HALF
             - if fork_branch_while_if_body_compress {
                 2.0
+            } else {
+                0.0
+            }
+            + if while_body_has_prefixed_fused_trailing_while(body) {
+                WHILE_PREFIXED_FUSED_NESTED_LEFT_TRIM
             } else {
                 0.0
             };
@@ -15191,6 +15307,10 @@ fn emit_while(
         );
     }
 
+    if let Some((arrow_top, style, label, arrow_gap)) = nested_child_inbound {
+        emit_pending_down_arrow(svg, arrow_top, style, label, arrow_gap, cx);
+    }
+
     // 7b. A consumer (body is a single nested fused `while`) draws its OWN inbound
     // arrow here — after its loop-back LEFT arrowhead and before its exit —
     // matching PlantUML's interleaved nested `ConnectionIn` document order.
@@ -15233,6 +15353,9 @@ fn emit_while(
         let mut arrow_y = (diamond_cy + fused_y) / 2.0 + WHILE_NESTED_EXIT_ARROW_BIAS;
         if ordinary_slot_compressed {
             arrow_y -= PARTITION_COLORED_WHILE_EXIT_ARROW_PULL_UP;
+        }
+        if fuse_as_prefixed_nested_exit {
+            arrow_y += WHILE_PREFIXED_FUSED_NESTED_CHILD_EXIT_ARROW_PUSH_DOWN;
         }
         // Each compressed loop below pulls the pre-compression frame midpoint up.
         arrow_y -= child_compressed_below as f64 * PARTITION_COLORED_WHILE_EXIT_ARROW_PULL_UP;
@@ -15432,6 +15555,9 @@ fn emit_while(
     // fused-producer corridor above).
     if nested_exit.is_some() && special_out.is_none() && break_frame_h.is_none() {
         arrow_y += WHILE_NESTED_EXIT_ARROW_BIAS;
+        if while_body_has_prefixed_fused_trailing_while(body) {
+            arrow_y -= WHILE_PREFIXED_FUSED_NESTED_PARENT_EXIT_ARROW_PULL_UP;
+        }
     }
     // The exit emphasis arrowhead anchors on the PRE-compression midpoint. When
     // the drawn `wrap_y` kept the uncompressed `+12` junction — an if-long branch
@@ -20619,6 +20745,17 @@ fn render_inner(
 
     let svg_background = palette.svg_background.clone();
     let mut svg = SvgEmitter::with_palette(palette, is_handwritten);
+    if matches!(tree.first(), Some(LayoutNode::Title { .. }))
+        && tree.iter().skip(1).any(|node| {
+            matches!(
+                node,
+                LayoutNode::While { body, .. }
+                    if while_body_has_prefixed_fused_trailing_while(body)
+            )
+        })
+    {
+        svg.title_x_offset = WHILE_PREFIXED_FUSED_NESTED_TITLE_X_OFFSET;
+    }
 
     if !header_lines.is_empty() {
         let source_line = diagram.meta.header_line.unwrap_or(1);
