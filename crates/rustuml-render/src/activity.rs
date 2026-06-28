@@ -131,6 +131,11 @@ const WHILE_NESTED_EXIT_ARROW_BIAS: f64 = 1.0;
 /// swimlane while goldens (the non-swimlane wrap-back path compresses this slack
 /// away, so it only surfaces when the exit corridor is stitched across lanes).
 const WHILE_LOOPBACK_LABEL_H: f64 = 12.6795625;
+/// A labelled top-level `while` inside an if branch that redirects its exit into
+/// the parent merge keeps the loop label's frame midpoint for the DOWN emphasize
+/// arrowhead. The drawn corridor itself is merged down to the if merge, but the
+/// arrowhead seats one labelled-frame residual below the plain merged midpoint.
+const WHILE_IF_BRANCH_REDIRECT_LABEL_ARROW_PUSH_DOWN: f64 = 6.5224609375;
 const PARTITION_COLORED_WHILE_SPINE_SHIFT: f64 = 1.5;
 const PARTITION_COLORED_WHILE_EXIT_ARROW_PULL_UP: f64 = WHILE_BODY_SLOT_COMPRESS / 2.0 - 1.0;
 const PARTITION_WHILE_WIDTH_SUBTRACT: f64 = 16.0;
@@ -1095,17 +1100,19 @@ fn branch_contains_terminal_fork_tail(body: &[LayoutNode]) -> bool {
         })
 }
 
-/// A branch flow whose sole node is a no-`specialOut` `while`. Such a branch's
-/// loop exit corridor IS the if's branch→merge connection (see
+/// A branch flow whose last top-level flow is a no-`specialOut` `while`. Such a
+/// branch's loop exit corridor IS the if's branch→merge connection (see
 /// [`WhileExitRedirect`]); the if delegates the merge wiring to `emit_while`.
 fn branch_is_redirectable_while(flow: &[LayoutNode]) -> bool {
-    matches!(
-        flow,
-        [LayoutNode::While {
-            special_out: None,
-            ..
-        }]
-    )
+    last_flow_index(flow).is_some_and(|i| {
+        matches!(
+            flow[i],
+            LayoutNode::While {
+                special_out: None,
+                ..
+            }
+        )
+    })
 }
 
 /// Swimlane V2: the lane a branch body enters. A `|Lane|` marker at the front of
@@ -3061,6 +3068,15 @@ fn sequence_multi_fork_has_prelude(nodes: &[LayoutNode]) -> bool {
     nodes[..first_fork]
         .iter()
         .any(|node| node_is_flow(node) && !matches!(node, LayoutNode::Start))
+}
+
+fn simple_fork_follows_if(nodes: &[LayoutNode], fork_index: usize) -> bool {
+    is_multi_fork_sequence_candidate(&nodes[fork_index])
+        && nodes[..fork_index]
+            .iter()
+            .rev()
+            .find(|node| node_is_flow(node))
+            .is_some_and(|node| matches!(node, LayoutNode::If { .. }))
 }
 
 fn fork_branch_origin_adjust(simple_while_repeat_pair: bool, branch: &[LayoutNode]) -> f64 {
@@ -6706,7 +6722,7 @@ fn sequence_extents_with_note_margins(
     // sits `NOTE_GAP` to one side, so its lateral reach from the spine is
     // anchor_half + NOTE_GAP + note_box_width.
     let mut anchor_half = 0.0f64;
-    for node in nodes {
+    for (i, node) in nodes.iter().enumerate() {
         match node {
             LayoutNode::Note { text, position, .. } => {
                 let box_w = note_box_width(text);
@@ -6744,6 +6760,14 @@ fn sequence_extents_with_note_margins(
                         _ => unreachable!(),
                     };
                     fork_bar_extents(&layout)
+                } else if !if_branch && simple_fork_follows_if(nodes, i) {
+                    let layout = match node {
+                        LayoutNode::Fork { branches, .. } => {
+                            fork_layout_multi_sequence(branches, true)
+                        }
+                        _ => unreachable!(),
+                    };
+                    fork_bar_extents(&layout)
                 } else if if_branch {
                     node_extents_if_branch(node)
                 } else {
@@ -6752,7 +6776,9 @@ fn sequence_extents_with_note_margins(
                 left = left.max(nl);
                 right = right.max(nr);
                 // Only genuine flow nodes (those with width) can anchor a note.
-                let width = if multi_fork_sequence && is_multi_fork_sequence_candidate(node) {
+                let width = if (multi_fork_sequence && is_multi_fork_sequence_candidate(node))
+                    || (!if_branch && simple_fork_follows_if(nodes, i))
+                {
                     nl + nr
                 } else if if_branch {
                     node_width_if_branch(node)
@@ -8898,6 +8924,11 @@ struct SvgEmitter {
     /// uncompressed loop-back tail (junction `body_bottom + 12`, not the
     /// compressed `+ 10`). `emit_if_long` sets this around each branch emit.
     in_if_long_branch: bool,
+    /// One-shot for a top-level no-special `while` emitted inside an if branch.
+    /// The branch frame blocks the standalone ON_Y compression of the loop-back
+    /// tail just like an if-long branch, and redirecting the exit into the if
+    /// merge uses the labelled-loop frame midpoint for the DOWN emphasize.
+    in_if_branch_while: bool,
     /// One-shot merge-line y handed to a `while` that leads an if-long branch:
     /// PlantUML fuses the loop's exit corridor with the branch→merge connector
     /// (the wrap-back continues straight down the spine to the merge line, drawn
@@ -9231,6 +9262,7 @@ impl SvgEmitter {
             if_long_repeat_body_extra: 0.0,
             while_repeat_tail_extra: 0.0,
             in_if_long_branch: false,
+            in_if_branch_while: false,
             while_if_long_merge_y: None,
             while_switch_merge_extra: 0.0,
             while_body_switch: false,
@@ -10185,6 +10217,13 @@ fn emit_sequence_ex(
     let mut flow_ordinal = 0usize;
     let if_branch_terminal_fork_tail =
         first_repeat_branch_extra && branch_has_terminal_fork_tail(nodes);
+    let if_branch_first_repeat_index = if first_repeat_branch_extra {
+        nodes
+            .iter()
+            .position(|node| matches!(node, LayoutNode::Repeat { .. }))
+    } else {
+        None
+    };
     // Extra length applied to the single arrow leaving a leading-floating-note
     // start node (consumed by the next flow node's inbound connector).
     let mut lead_stretch = 0.0f64;
@@ -10600,6 +10639,13 @@ fn emit_sequence_ex(
                 }
                 _ => None,
             }
+        } else if simple_fork_follows_if(nodes, i) {
+            match node {
+                LayoutNode::Fork { branches, .. } => {
+                    Some(fork_layout_multi_sequence(branches, true))
+                }
+                _ => None,
+            }
         } else {
             None
         };
@@ -10622,11 +10668,30 @@ fn emit_sequence_ex(
             });
             emit_fork_attached_notes(svg, attached_notes, cx, y, branches, &layout);
         }
-        let repeat_extra = if first_repeat_branch_extra && flow_ordinal == 0 {
-            leading_if_branch_repeat_extra(node)
+        let arms_if_branch_repeat = Some(i) == if_branch_first_repeat_index;
+        let repeat_extra = if arms_if_branch_repeat {
+            let labelled_extra = leading_if_branch_repeat_body_extra(node);
+            if labelled_extra != 0.0 {
+                svg.if_long_repeat_body_extra = labelled_extra;
+                0.0
+            } else {
+                leading_if_branch_repeat_body_only_extra(node)
+            }
         } else {
             0.0
         };
+        let arms_if_branch_while = first_repeat_branch_extra
+            && flow_ordinal > 0
+            && matches!(
+                node,
+                LayoutNode::While {
+                    special_out: None,
+                    ..
+                }
+            );
+        if arms_if_branch_while {
+            svg.in_if_branch_while = true;
+        }
         // A run of sequential compressed whiles (bare, or each wrapped in its
         // own partition): each loop after the first emits its OWN inbound
         // connector BEFORE its body, then flushes the predecessor loop's
@@ -10756,6 +10821,12 @@ fn emit_sequence_ex(
             repeat_extra,
             first_repeat_branch_extra,
         );
+        if arms_if_branch_repeat {
+            svg.if_long_repeat_body_extra = 0.0;
+        }
+        if arms_if_branch_while {
+            svg.in_if_branch_while = false;
+        }
         svg.if_branch_terminal_fork_layout = saved_if_branch_terminal_fork_layout;
         svg.while_body_fork_layout = None;
         svg.swimlane_while_cond_special = false;
@@ -13372,14 +13443,22 @@ fn first_flow_node(nodes: &[LayoutNode]) -> Option<&LayoutNode> {
     nodes.iter().find(|node| node_is_flow(node))
 }
 
+fn first_repeat_flow_node(nodes: &[LayoutNode]) -> Option<&LayoutNode> {
+    nodes
+        .iter()
+        .find(|node| matches!(node, LayoutNode::Repeat { .. }))
+}
+
 /// The uncompressed FtileRepeat top reserve a `repeat` keeps when it leads an
-/// if-long (`if/elseif*/else`) branch. PlantUML's `FtileIfLongHorizontal`
-/// top-aligns every couple at a fixed y (`getTranslateCouple1` → y=25), so the
-/// repeat's `8*hexHalf` tail above the body (FtileRepeat `getTranslateForRepeat`
-/// places the body at `dimDiamond1.height + space/2`) never recompresses against
-/// a following tile. The whole-diagram ON_Y pass only reclaims the diamond→
-/// branch corridor band (`descent(11) − 1.5`, the same term as `north_h`'s
-/// nested-construct compression in `if_long_layout`), so the body sits
+/// if branch. In the if-long (`if/elseif*/else`) case, PlantUML's
+/// `FtileIfLongHorizontal` top-aligns every couple at a fixed y
+/// (`getTranslateCouple1` → y=25). The same repeat tile is used as the leading
+/// tile of a normal binary if branch, so the repeat's `8*hexHalf` tail above the
+/// body (FtileRepeat `getTranslateForRepeat` places the body at
+/// `dimDiamond1.height + space/2`) does not recompress against a following tile.
+/// The whole-diagram ON_Y pass only reclaims the diamond→branch corridor band
+/// (`descent(11) − 1.5`, the same term as `north_h`'s nested-construct
+/// compression in `if_long_layout`), so the body sits
 /// `2*hexHalf − (descent − 1.5)` lower than the fully-compressed
 /// (`top_bottom + ARROW_LEN`) standalone form.
 // = 24 − (descent(11) − 1.5) = 24 − (2.3203125 − 1.5) = 23.1796875.
@@ -13387,22 +13466,23 @@ const IF_LONG_BRANCH_REPEAT_CORRIDOR_RECLAIM: f64 = 2.3203125 - 1.5; // descent(
 const IF_LONG_BRANCH_REPEAT_EXTRA: f64 =
     DIAMOND_HALF * 2.0 - IF_LONG_BRANCH_REPEAT_CORRIDOR_RECLAIM;
 
-/// Extra lowering for the body of a `repeat` that leads an if-long branch
+/// Extra lowering for the body of a `repeat` that leads an if branch
 /// (see [`IF_LONG_BRANCH_REPEAT_EXTRA`]). Applies to the plain and labelled
 /// (`repeatwhile … is …`) forms alike; a `repeat :label;` start tile or a
 /// `backward` tile routes its body through different geometry, so those are
 /// excluded.
-fn leading_if_long_branch_repeat_extra(node: &LayoutNode) -> f64 {
+fn branch_repeat_body_extra(node: &LayoutNode, require_is_label: bool) -> f64 {
     let LayoutNode::Repeat {
         backward,
         body,
         has_start_label,
+        is_label,
         ..
     } = node
     else {
         return 0.0;
     };
-    if backward.is_some() || *has_start_label {
+    if backward.is_some() || *has_start_label || (require_is_label && is_label.is_none()) {
         return 0.0;
     }
     // Only the simple-body form is calibrated; composite bodies carry their own
@@ -13415,12 +13495,51 @@ fn leading_if_long_branch_repeat_extra(node: &LayoutNode) -> f64 {
     IF_LONG_BRANCH_REPEAT_EXTRA
 }
 
+fn leading_if_branch_repeat_body_extra(node: &LayoutNode) -> f64 {
+    branch_repeat_body_extra(node, true)
+}
+
+fn leading_if_branch_repeat_body_only_extra(node: &LayoutNode) -> f64 {
+    let LayoutNode::Repeat {
+        body,
+        is_label,
+        backward,
+        ..
+    } = node
+    else {
+        return 0.0;
+    };
+    if is_label.is_some()
+        || backward.is_some()
+        || body.iter().filter(|n| node_is_flow(n)).count() != 1
+    {
+        return 0.0;
+    }
+    (repeat_body_height(body, false) - DIAMOND_HALF * 2.0).max(0.0)
+}
+
+fn leading_if_long_branch_repeat_extra(node: &LayoutNode) -> f64 {
+    branch_repeat_body_extra(node, false)
+}
+
 /// Total uncompressed FtileRepeat reserve growth (top + bottom) for a `repeat`
-/// that leads an if-long branch — the amount its tile is taller than the
-/// fully-compressed standalone form. Used to size the merge reservation
-/// (`if_long_layout`'s `branch_h`); the emit applies the two halves separately
-/// (see [`IF_LONG_BRANCH_REPEAT_EXTRA`] and the `is`-label band in
+/// that leads an if branch — the amount its tile is taller than the
+/// fully-compressed standalone form. Used to size the merge reservation; the
+/// emit applies the two halves separately (see [`IF_LONG_BRANCH_REPEAT_EXTRA`]
+/// and the `is`-label band in
 /// `emit_repeat`).
+fn leading_if_branch_repeat_total(body: &[LayoutNode]) -> f64 {
+    let Some(node) = first_repeat_flow_node(body) else {
+        return 0.0;
+    };
+    let top = leading_if_branch_repeat_body_extra(node);
+    if top == 0.0 {
+        leading_if_branch_repeat_body_only_extra(node)
+    } else {
+        top + pm::text_height(SMALL_FONT)
+    }
+}
+
 fn leading_if_long_branch_repeat_total(body: &[LayoutNode]) -> f64 {
     let Some(node) = first_flow_node(body) else {
         return 0.0;
@@ -13447,28 +13566,9 @@ fn leading_if_long_branch_while_extra(body: &[LayoutNode]) -> f64 {
     }
 }
 
-fn leading_if_branch_repeat_extra(node: &LayoutNode) -> f64 {
-    let LayoutNode::Repeat {
-        body,
-        is_label,
-        backward,
-        ..
-    } = node
-    else {
-        return 0.0;
-    };
-    if is_label.is_some()
-        || backward.is_some()
-        || body.iter().filter(|n| node_is_flow(n)).count() != 1
-    {
-        return 0.0;
-    }
-    (repeat_body_height(body, false) - DIAMOND_HALF * 2.0).max(0.0)
-}
-
 fn sequence_height_if_branch(nodes: &[LayoutNode]) -> f64 {
     sequence_height(nodes)
-        + first_flow_node(nodes).map_or(0.0, leading_if_branch_repeat_extra)
+        + leading_if_branch_repeat_total(nodes)
         + if branch_has_terminal_fork_tail(nodes) {
             IF_ALL_TERMINAL_FORK_BRANCH_AFTER_FORK_TERMINAL_EXTRA
         } else {
@@ -15441,6 +15541,7 @@ fn emit_while(
     // its loop-back tail. A nested body must NOT inherit it (its own frame
     // re-establishes compressibility), so consume it here.
     let in_if_long_branch = std::mem::take(&mut svg.in_if_long_branch);
+    let in_if_branch_while = std::mem::take(&mut svg.in_if_branch_while);
     // Take the fused-merge target now too, so a nested while in the body cannot
     // consume it (only this top-of-branch while fuses with the merge line).
     let if_long_merge_y = std::mem::take(&mut svg.while_if_long_merge_y);
@@ -15685,7 +15786,8 @@ fn emit_while(
         // not at `body_bottom + 10` (which would count the nested loop's whole
         // drawn extent including its own wrapped corridor).
         ne.fused_y
-    } else if body.is_empty() || in_if_long_branch || repeat_body_nonterminal {
+    } else if body.is_empty() || in_if_long_branch || in_if_branch_while || repeat_body_nonterminal
+    {
         // Empty body, an if-long branch where ON_Y never reaches the tail, or a
         // non-terminal while in a repeat body (the FtileRepeat frame holds the
         // tail open): the UEmpty(halfHex) placeholder keeps its full 12 px.
@@ -16208,6 +16310,9 @@ fn emit_while(
         if let Some(ne) = nested_exit {
             arrow_y += WHILE_NESTED_EXIT_ARROW_BIAS;
             arrow_y -= ne.compressed_below as f64 * PARTITION_COLORED_WHILE_EXIT_ARROW_PULL_UP;
+        }
+        if in_if_branch_while && is_label.is_some() {
+            arrow_y += WHILE_IF_BRANCH_REDIRECT_LABEL_ARROW_PUSH_DOWN;
         }
         svg.polygon_connector(
             &arrow_color,

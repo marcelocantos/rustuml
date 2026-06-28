@@ -219,6 +219,7 @@ targets:
     - T4.1.26
     - T4.1.27
     - T4.1.28
+    - T4.1.29
     origin: manual
     discovered: 2026-05-17
   T4.1.1:
@@ -574,6 +575,29 @@ targets:
     - activity
     - swimlane
     - if
+    - strict-xml
+    origin: manual
+    discovered: 2026-06-28
+    achieved: 2026-06-28
+  T4.1.29:
+    name: Activity comprehensive edge workflow uses PlantUML if-branch repeat/while/fork geometry
+    status: achieved
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - '`cargo run -p rustuml-oracle --example diff_one -- test-diagrams/golden/edge-cases/edge_activity_comprehensive.puml` reports structural equivalence.'
+    - '`cargo run -q -p rustuml-oracle --example check_all` no longer lists `edge-cases/edge_activity_comprehensive`.'
+    - Guard fixtures `act_if1_repeats1`, `act_if1while1_nesting`, `act_fork_pre1_post0`, and `act_fork_pre3_post3_br4` remain structurally equivalent.
+    - '`cargo fmt --check`, `cargo clippy -- -D warnings`, and `cargo test --lib` pass.'
+    context: 'Created after retiring 🎯T4.1.28. The `edge_activity_comprehensive` fixture combines normal if-branch repeats, trailing whiles after action preludes, and a simple fork immediately after an if. PlantUML keeps labelled repeat body reserves inside normal if branches, redirects prefixed trailing while exits into the parent if merge, and uses the prelude fork layout only for the simple fork that follows an if; broadening any of those rules regresses existing repeat, while, or fork-matrix fixtures.'
+    depends_on:
+    - T4.1.28
+    tags:
+    - activity
+    - if
+    - repeat
+    - while
+    - fork
     - strict-xml
     origin: manual
     discovered: 2026-06-28
