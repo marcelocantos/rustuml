@@ -129,6 +129,7 @@ const WHILE_PREFIXED_FUSED_NESTED_RIGHT_TRIM: f64 = 7.5722;
 const WHILE_PREFIXED_FUSED_NESTED_EMIT_RIGHT_TRIM: f64 = 3.5722;
 const WHILE_PREFIXED_FUSED_NESTED_CANVAS_RIGHT_TRIM: f64 = 9.4277;
 const WHILE_PREFIXED_FUSED_NESTED_TITLE_X_OFFSET: f64 = -5.7823;
+const TERMINAL_PARTITION_TITLE_X_OFFSET: f64 = -0.1841;
 const WHILE_PREFIXED_FUSED_NESTED_CHILD_EXIT_ARROW_PUSH_DOWN: f64 = 1.9887;
 const WHILE_PREFIXED_FUSED_NESTED_PARENT_EXIT_ARROW_PULL_UP: f64 = 1.6675;
 /// The body→loop-back-junction gap a `while` reserves below its body (the
@@ -4914,6 +4915,23 @@ fn tree_has_partition_prefixed_while_to_action_fork(tree: &[LayoutNode]) -> bool
     })
 }
 
+fn tree_has_terminal_partition_to_partition(tree: &[LayoutNode]) -> bool {
+    let flow: Vec<&LayoutNode> = tree.iter().filter(|node| node_is_flow(node)).collect();
+    flow.windows(2).any(|pair| {
+        matches!(
+            pair,
+            [LayoutNode::Partition {
+                body: prev_body,
+                is_group: false,
+                ..
+            }, LayoutNode::Partition {
+                is_group: false,
+                ..
+            }] if partition_wraps_terminal_if_sequence(prev_body)
+        )
+    })
+}
+
 fn adjust_while_long_if_exit_corridor(buf: &str) -> String {
     let from_x = 27.0;
     let to_x = from_x + WHILE_LONG_IF_EXIT_CORRIDOR_X_PUSH;
@@ -4992,6 +5010,73 @@ fn conn_eq(a: f64, b: f64) -> bool {
 fn vertical_down_at(token: &ConnectorToken<'_>, x: f64) -> Option<(f64, f64)> {
     let (x1, x2, y1, y2) = token.line?;
     (conn_eq(x1, x) && conn_eq(x2, x) && y2 > y1).then_some((y1, y2))
+}
+
+fn horizontal_entry_to(token: &ConnectorToken<'_>, x: f64, y: f64) -> bool {
+    let Some((x1, x2, y1, y2)) = token.line else {
+        return false;
+    };
+    !conn_eq(x1, x2) && conn_eq(x2, x) && conn_eq(y1, y) && conn_eq(y2, y)
+}
+
+fn reorder_delayed_terminal_partition_inbounds(buf: &str) -> String {
+    static TOKEN_RE: std::sync::OnceLock<regex::Regex> = std::sync::OnceLock::new();
+    let token_re =
+        TOKEN_RE.get_or_init(|| regex::Regex::new(r#"<(?:line|polygon)\b[^>]*/>"#).unwrap());
+    let mut out = buf.to_string();
+    loop {
+        let tokens: Vec<_> = token_re
+            .find_iter(&out)
+            .map(|m| parse_connector_token(&out, m.start(), m.end()))
+            .collect();
+        let mut move_span = None;
+        'find_move: for i in 0..tokens.len().saturating_sub(1) {
+            let line = &tokens[i];
+            let head = &tokens[i + 1];
+            if line.kind != ConnectorTokenKind::Line
+                || head.kind != ConnectorTokenKind::Polygon
+                || line.end != head.start
+            {
+                continue;
+            }
+            let Some((x1, x2, y1, y2)) = line.line else {
+                continue;
+            };
+            if !conn_eq(x1, x2) || y2 <= y1 {
+                continue;
+            };
+            let x = x1;
+            if y2 - y1 < 40.0 {
+                continue;
+            }
+            for j in (0..i).rev() {
+                let entry = &tokens[j];
+                if !horizontal_entry_to(entry, x, y1) {
+                    continue;
+                }
+                if j + 1 == i {
+                    break;
+                }
+                let between = &out[entry.end..line.start];
+                if between.contains("<text") || between.contains("<path") || between.contains("<g")
+                {
+                    break;
+                }
+                move_span = Some((entry.end, line.start, head.end));
+                break 'find_move;
+            }
+        }
+        let Some((insert_at, move_start, move_end)) = move_span else {
+            return out;
+        };
+        let moved = out[move_start..move_end].to_string();
+        let mut next = String::with_capacity(out.len());
+        next.push_str(&out[..insert_at]);
+        next.push_str(&moved);
+        next.push_str(&out[insert_at..move_start]);
+        next.push_str(&out[move_end..]);
+        out = next;
+    }
 }
 
 fn reorder_prefixed_partition_connector(buf: &str) -> String {
@@ -7857,6 +7942,7 @@ fn sequence_height_ex(nodes: &[LayoutNode], gap_extra: f64) -> f64 {
     let mut h = 0.0;
     let mut prior_flow = false;
     let mut prior_single_survivor_if = false;
+    let mut prior_deep_terminal_partition = false;
     let mut prior_outbound_gap: Option<f64> = None;
     // Pending arrow style — modifiers from an explicit `-[…]->` preceding the
     // next flow node change the gap length (10 for hidden, 41.275 for
@@ -7876,6 +7962,7 @@ fn sequence_height_ex(nodes: &[LayoutNode], gap_extra: f64) -> f64 {
             h += node_height(node);
             pending_gap = None;
             prior_single_survivor_if = false;
+            prior_deep_terminal_partition = false;
             prior_outbound_gap = None;
             continue;
         }
@@ -7883,6 +7970,7 @@ fn sequence_height_ex(nodes: &[LayoutNode], gap_extra: f64) -> f64 {
             h += node_height(node);
             pending_gap = None;
             prior_single_survivor_if = false;
+            prior_deep_terminal_partition = false;
             prior_outbound_gap = None;
             continue;
         }
@@ -7896,6 +7984,14 @@ fn sequence_height_ex(nodes: &[LayoutNode], gap_extra: f64) -> f64 {
             // does get a connector arrow back to the partition's bottom.
             prior_flow = true;
             prior_single_survivor_if = false;
+            prior_deep_terminal_partition = matches!(
+                node,
+                LayoutNode::Partition {
+                    body,
+                    is_group: false,
+                    ..
+                } if partition_wraps_deep_terminal_if_sequence(body)
+            );
             prior_outbound_gap = None;
             continue;
         }
@@ -7935,12 +8031,15 @@ fn sequence_height_ex(nodes: &[LayoutNode], gap_extra: f64) -> f64 {
             prior_flow = false;
             pending_gap = None;
             prior_single_survivor_if = false;
+            prior_deep_terminal_partition = false;
             prior_outbound_gap = None;
             continue;
         }
         let (note_inbound_extra, note_bottom_extra) =
             flow_note_vertical_extras(nodes, idx, node_height(node));
-        let skip_implicit_gap = prior_single_survivor_if && pending_gap.is_none();
+        let skip_implicit_gap = (prior_single_survivor_if
+            || (prior_deep_terminal_partition && matches!(node, LayoutNode::Stop)))
+            && pending_gap.is_none();
         if prior_flow && !skip_implicit_gap {
             h += pending_gap
                 .or(prior_outbound_gap)
@@ -7951,6 +8050,7 @@ fn sequence_height_ex(nodes: &[LayoutNode], gap_extra: f64) -> f64 {
         h += node_height(node) + note_bottom_extra + switch_fork_uncompress_extra(node, gap_extra);
         prior_flow = true;
         prior_single_survivor_if = if_node_has_single_survivor(node);
+        prior_deep_terminal_partition = false;
         prior_outbound_gap = repeat_not_label_outbound_gap(node);
     }
     h
@@ -23874,6 +23974,9 @@ fn render_inner(
         if branch_contains_terminal_fork_tail(&tree) {
             svg.title_x_offset += TITLE_TERMINAL_FORK_TAIL_X_OFFSET;
         }
+        if tree_has_terminal_partition_to_partition(&tree) {
+            svg.title_x_offset += TERMINAL_PARTITION_TITLE_X_OFFSET;
+        }
     }
     if matches!(tree.first(), Some(LayoutNode::Title { .. }))
         && tree.iter().skip(1).any(|node| {
@@ -24077,6 +24180,11 @@ fn render_inner(
     };
     let connectors_c = if tree_has_partition_prefixed_while_to_action_fork(&tree) {
         reorder_prefixed_partition_connector(&connectors_c)
+    } else {
+        connectors_c
+    };
+    let connectors_c = if tree_has_terminal_partition_to_partition(&tree) {
+        reorder_delayed_terminal_partition_inbounds(&connectors_c)
     } else {
         connectors_c
     };
