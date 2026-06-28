@@ -713,8 +713,22 @@ targets:
       Reverted 2026-05-23: Edge-cases bucket was cleared by cascade from replayed renderers. Replay disabled in f6500c8d; bucket back to 364 failures.
 
       Update 2026-06-07 (HEAD ae277a46): authoritative full-suite ledger has 5 `edge-cases/` failures: `edge_activity_comprehensive`, `edge_activity_if_elseif`, `edge_activity_while_break`, `edge_activity_while_infinite`, and `edge_flow_multiple_forks`. These are all activity-shaped, so the recommended path is to let 🎯T4.1 activity work shrink this bucket rather than treating edge-cases as an independent first move.
+    depends_on:
+    - T4.7.1
     origin: manual
     discovered: 2026-05-17
+  T4.7.1:
+    name: Sequential multiple-fork activity flows use PlantUML fork bar centering geometry
+    status: achieved
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - '`cargo run --release -p rustuml-oracle --example diff_one -- test-diagrams/golden/edge-cases/edge_flow_multiple_forks.puml` reports `SVGs are structurally equivalent`.'
+    - '`cargo run --release -p rustuml-oracle --example check_all` reports no new failure names relative to the post-🎯T4.1.19 ledger of 32 failures.'
+    context: 'Post-🎯T4.1.19 ledger leaves `edge-cases/edge_flow_multiple_forks`; focused diff shows pure geometry drift for two sequential ordinary forks: heights match, but fork bars and branch centers are too narrow/left-shifted. This should be handled as generic activity fork geometry, not as a swimlane fixture.'
+    origin: subdivide(🎯T4.7)
+    discovered: 2026-06-28
+    achieved: 2026-06-28
   T4.8:
     name: Deployment diagrams strict-XML pass
     status: achieved
