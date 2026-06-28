@@ -220,6 +220,7 @@ targets:
     - T4.1.27
     - T4.1.28
     - T4.1.29
+    - T4.1.30
     origin: manual
     discovered: 2026-05-17
   T4.1.1:
@@ -506,7 +507,7 @@ targets:
     - '`cargo run --release -p rustuml-oracle --example diff_one -- test-diagrams/golden/activity/act_partition_with_if.puml` reports structural equivalence.'
     - '`cargo run --release -p rustuml-oracle --example check_all` has no new failure names beyond the current 26-failure ledger.'
     - '`cargo fmt --check`, `cargo clippy -- -D warnings`, and `cargo test --lib` pass.'
-    context: 'Created after retiring 🎯T4.1.24. The `act_partition_with_if` fixture has a first partition whose body is an action followed by a binary `if`; RustUML treats the partition frame as generic symmetric `sequence_width + 20`, while PlantUML uses the sequence extents with a wider, asymmetric partition shell. The failure is otherwise a coherent x-only offset with matching element count and height.'
+    context: Created after retiring 🎯T4.1.24. The `act_partition_with_if` fixture has a first partition whose body is an action followed by a binary `if`; RustUML treats the partition frame as generic symmetric `sequence_width + 20`, while PlantUML uses the sequence extents with a wider, asymmetric partition shell. The failure is otherwise a coherent x-only offset with matching element count and height.
     depends_on:
     - T4.1.24
     tags:
@@ -527,7 +528,7 @@ targets:
     - Switch guard fixtures including `act_sw3_while1`, `act_sw3_while2`, and `act_switch_3cases_multi_action` remain structurally equivalent.
     - '`cargo run -p rustuml-oracle --example check_all` reports the current 24-failure ledger with no new failure names.'
     - '`cargo fmt --check`, `cargo clippy -- -D warnings`, and `cargo test --lib` pass.'
-    context: 'Created after retiring 🎯T4.1.25. The `act_complex_state_machine_like` fixture is a standalone three-case switch whose first case body contains a `while`; RustUML packed the later case columns 8px too far right and routed the center-case merge connector to the full merge band. PlantUML keeps the first case column fixed, pulls subsequent columns left by 8px, anchors the center case label on the switch spine, and routes the center merge connector through the first case''s compressed post-while corridor.'
+    context: Created after retiring 🎯T4.1.25. The `act_complex_state_machine_like` fixture is a standalone three-case switch whose first case body contains a `while`; RustUML packed the later case columns 8px too far right and routed the center-case merge connector to the full merge band. PlantUML keeps the first case column fixed, pulls subsequent columns left by 8px, anchors the center case label on the switch spine, and routes the center merge connector through the first case's compressed post-while corridor.
     depends_on:
     - T4.1.25
     tags:
@@ -547,7 +548,7 @@ targets:
     - '`cargo run -p rustuml-oracle --example diff_one -- test-diagrams/golden/activity/act_group_with_swimlane.puml` reports structural equivalence.'
     - '`cargo run -p rustuml-oracle --example check_all` reports the current 23-failure ledger with no new failure names.'
     - '`cargo fmt --check`, `cargo clippy -- -D warnings`, and `cargo test --lib` pass.'
-    context: 'Created after retiring 🎯T4.1.26. The `act_group_with_swimlane` fixture has a `group` whose body switches from Lane A to Lane B. The legacy segment model emitted only the entry-lane group frame; Swimlane V2 needed to keep the group as a single tree while replicating the group frame/title chrome into each spanned lane column and routing the linear cross-lane connectors from final shape anchors.'
+    context: Created after retiring 🎯T4.1.26. The `act_group_with_swimlane` fixture has a `group` whose body switches from Lane A to Lane B. The legacy segment model emitted only the entry-lane group frame; Swimlane V2 needed to keep the group as a single tree while replicating the group frame/title chrome into each spanned lane column and routing the linear cross-lane connectors from final shape anchors.
     depends_on:
     - T4.1.26
     tags:
@@ -568,7 +569,7 @@ targets:
     - Guard fixtures `act_elseif4_swim3`, `act_swimlane_with_if`, and `act_combo_swimlane_if_2` remain structurally equivalent.
     - '`cargo run -p rustuml-oracle --example check_all` reports the current 22-failure ledger with no new failure names.'
     - '`cargo fmt --check`, `cargo clippy -- -D warnings`, and `cargo test --lib` pass.'
-    context: 'Created after retiring 🎯T4.1.27. The `act_edge_deep_if_in_swimlane` fixture is a single top-level nested if whose deepest then branch switches from Lane A to Lane B and back. Swimlane V2 already kept it as one tree, but the no-collector if router treated same-lane nested connectors as cross-lane doglegs and emitted true cross-lane connectors before the lane-local branch/merge stream. PlantUML uses direct same-lane side/bottom-to-merge connectors, then defers the true lane-crossing connectors to the end of the connector block; the lane-boundary compression also needs the single-top-level-if lane pad/divider adjustment.'
+    context: Created after retiring 🎯T4.1.27. The `act_edge_deep_if_in_swimlane` fixture is a single top-level nested if whose deepest then branch switches from Lane A to Lane B and back. Swimlane V2 already kept it as one tree, but the no-collector if router treated same-lane nested connectors as cross-lane doglegs and emitted true cross-lane connectors before the lane-local branch/merge stream. PlantUML uses direct same-lane side/bottom-to-merge connectors, then defers the true lane-crossing connectors to the end of the connector block; the lane-boundary compression also needs the single-top-level-if lane pad/divider adjustment.
     depends_on:
     - T4.1.27
     tags:
@@ -589,7 +590,7 @@ targets:
     - '`cargo run -q -p rustuml-oracle --example check_all` no longer lists `edge-cases/edge_activity_comprehensive`.'
     - Guard fixtures `act_if1_repeats1`, `act_if1while1_nesting`, `act_fork_pre1_post0`, and `act_fork_pre3_post3_br4` remain structurally equivalent.
     - '`cargo fmt --check`, `cargo clippy -- -D warnings`, and `cargo test --lib` pass.'
-    context: 'Created after retiring 🎯T4.1.28. The `edge_activity_comprehensive` fixture combines normal if-branch repeats, trailing whiles after action preludes, and a simple fork immediately after an if. PlantUML keeps labelled repeat body reserves inside normal if branches, redirects prefixed trailing while exits into the parent if merge, and uses the prelude fork layout only for the simple fork that follows an if; broadening any of those rules regresses existing repeat, while, or fork-matrix fixtures.'
+    context: Created after retiring 🎯T4.1.28. The `edge_activity_comprehensive` fixture combines normal if-branch repeats, trailing whiles after action preludes, and a simple fork immediately after an if. PlantUML keeps labelled repeat body reserves inside normal if branches, redirects prefixed trailing while exits into the parent if merge, and uses the prelude fork layout only for the simple fork that follows an if; broadening any of those rules regresses existing repeat, while, or fork-matrix fixtures.
     depends_on:
     - T4.1.28
     tags:
@@ -623,6 +624,28 @@ targets:
     origin: manual
     discovered: 2026-06-21
     achieved: 2026-06-21
+  T4.1.30:
+    name: Nested activity control-flow connectors match PlantUML across while/if/fork workflows
+    status: identified
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - '`cargo run -q -p rustuml-oracle --example diff_one -- test-diagrams/golden/activity/act_algo_binary_search.puml` reports structural equivalence.'
+    - '`cargo run -q -p rustuml-oracle --example diff_one -- test-diagrams/golden/activity/act_algo_merge_sort.puml` reports structural equivalence.'
+    - Representative deep nesting guards `act_complex_deep_nesting` and `act_stress_max_nesting` do not regress; if they become equivalent, include them in this target's achieved evidence.
+    - '`cargo run -q -p rustuml-oracle --example check_all` removes the achieved fixtures from the current 21-failure ledger with no new failure names.'
+    - '`cargo fmt --check`, `cargo clippy -- -D warnings`, and `cargo test --lib` pass.'
+    context: 'Created after retiring 🎯T4.1.29. The remaining non-swimlane activity failures are model-level connector differences, not isolated coordinate drift: compact algorithm fixtures show nested while/if/elseif/else and post-if fork flows whose connector ordering and merge/loopback routing diverge from PlantUML. Start with `act_algo_binary_search` because it is the smallest while-with-elseif/terminal-branch reproducer, then generalize carefully to `act_algo_merge_sort` and the deep nesting guards without widening fork or repeat behavior that was just stabilized.'
+    depends_on:
+    - T4.1.29
+    tags:
+    - activity
+    - while
+    - if
+    - fork
+    - strict-xml
+    origin: manual
+    discovered: 2026-06-28
   T4.1.4:
     name: Swimlane V2 four-branch fork lane-spanning diagrams match PlantUML geometry
     status: achieved
