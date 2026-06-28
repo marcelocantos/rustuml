@@ -144,6 +144,8 @@ const PARTITION_COLORED_WHILE_EXIT_ARROW_PULL_UP: f64 = WHILE_BODY_SLOT_COMPRESS
 const PARTITION_WHILE_WIDTH_SUBTRACT: f64 = 16.0;
 const PARTITION_REPEAT_WIDTH_SUBTRACT: f64 = 18.0;
 const WHILE_SINGLE_IF_RIGHT_PAD: f64 = 2.0;
+const WHILE_LEADING_BINARY_IF_LEFT_FRAME_PAD: f64 = 10.0;
+const WHILE_LEADING_BINARY_IF_RIGHT_FRAME_PAD: f64 = 8.0;
 /// Right extent (from the spine) of a break-down `if`'s populated branch tile.
 /// PlantUML's `ConditionalBuilder.createDown` wraps the lone-`break` branch in
 /// `FtileMinWidthCentered(branch, 30)` then `addHorizontalMargin(10)`, giving a
@@ -2816,6 +2818,7 @@ struct ForkLayout {
     bar_w: f64,
     centers: Vec<f64>,
     spine_dx: f64,
+    bar_overhang: f64,
     /// True when the black bar should be `ignoreForCompressionOnX` AND there is a
     /// reclaimable middle-gap corridor (a mixed-asymmetry even fork — one off-
     /// centre branch beside a plain one). For such forks the +18 even-middle gap
@@ -2828,6 +2831,7 @@ struct ForkLayout {
 
 const FORK_INNER_PAD: f64 = 12.0;
 const FORK_BRANCH_GAP: f64 = 10.0;
+const FORK_LEADING_BINARY_IF_WHILE_BAR_OVERHANG: f64 = 2.0;
 const FORK_MULTI_SEQUENCE_EVEN_PAD: f64 = 14.0;
 const FORK_MULTI_SEQUENCE_GAP: f64 = FORK_BRANCH_GAP + FORK_EVEN_MIDDLE_EXTRA;
 /// The 2 px the whole-diagram ON_X pass shaves off each OUTER (un-compressible)
@@ -3147,6 +3151,7 @@ fn fork_layout(branches: &[Vec<LayoutNode>]) -> ForkLayout {
             spine_dx: -(FORK_PARALLEL_X_MARGIN_TRIM),
             // The bar is `ignoreForCompressionOnX`; its slack collapses with the
             // empty inter-branch bands in the whole-diagram pass.
+            bar_overhang: 0.0,
             bar_compressible: true,
         };
     }
@@ -3190,6 +3195,7 @@ fn fork_layout(branches: &[Vec<LayoutNode>]) -> ForkLayout {
             } else {
                 0.0
             },
+            bar_overhang: 0.0,
             bar_compressible: false,
         };
     }
@@ -3315,6 +3321,7 @@ fn fork_layout(branches: &[Vec<LayoutNode>]) -> ForkLayout {
         } else {
             0.0
         },
+        bar_overhang: 0.0,
         bar_compressible,
     }
 }
@@ -3348,6 +3355,7 @@ fn fork_layout_multi_sequence(branches: &[Vec<LayoutNode>], has_prelude: bool) -
         bar_w: x + edge_pad,
         centers,
         spine_dx: 0.0,
+        bar_overhang: 0.0,
         bar_compressible: false,
     }
 }
@@ -3414,6 +3422,46 @@ fn while_body_fork_layout(nodes: &[LayoutNode], i: usize, node: &LayoutNode) -> 
     }
 }
 
+fn fork_layout_before_leading_binary_if_while(
+    nodes: &[LayoutNode],
+    i: usize,
+    node: &LayoutNode,
+) -> Option<ForkLayout> {
+    let LayoutNode::Fork {
+        branches,
+        is_split: false,
+        merge: false,
+        ..
+    } = node
+    else {
+        return None;
+    };
+    if branches.len() != 2
+        || !branches
+            .iter()
+            .all(|branch| matches!(branch.as_slice(), [LayoutNode::Action { .. }]))
+    {
+        return None;
+    }
+    let followed_by_leading_binary_if_while = nodes.iter().skip(i + 1).any(|node| {
+        matches!(
+            node,
+            LayoutNode::While {
+                body,
+                is_label,
+                special_out,
+                ..
+            } if while_leading_binary_if_slot_compresses(body, is_label, special_out.as_deref())
+        )
+    });
+    if !followed_by_leading_binary_if_while {
+        return None;
+    }
+    let mut layout = fork_layout(branches);
+    layout.bar_overhang = FORK_LEADING_BINARY_IF_WHILE_BAR_OVERHANG;
+    Some(layout)
+}
+
 fn split_layout(branches: &[Vec<LayoutNode>]) -> ForkLayout {
     let branch_extents: Vec<(f64, f64)> = branches.iter().map(|b| sequence_extents(b)).collect();
     let branch_widths: Vec<f64> = branch_extents.iter().map(|(l, r)| l + r).collect();
@@ -3464,6 +3512,7 @@ fn split_layout(branches: &[Vec<LayoutNode>]) -> ForkLayout {
         bar_w,
         centers,
         spine_dx: 0.0,
+        bar_overhang: 0.0,
         bar_compressible: false,
     }
 }
@@ -4430,13 +4479,18 @@ fn switch_below_diamond(cases: &[SwitchCase], big_diamond: bool) -> f64 {
 /// than for a normal body. The body box itself stays centred on the spine —
 /// only the while's left geometry sees the 2 px reduction.
 fn while_body_left(body: &[LayoutNode], body_left: f64) -> f64 {
+    let leading_binary_if_pad = if while_body_starts_with_expanded_binary_if(body) {
+        WHILE_LEADING_BINARY_IF_LEFT_FRAME_PAD
+    } else {
+        0.0
+    };
     if body
         .iter()
         .any(|n| matches!(n, LayoutNode::DeprecatedAction { .. }))
     {
-        body_left - 2.0
+        body_left + leading_binary_if_pad - 2.0
     } else {
-        body_left
+        body_left + leading_binary_if_pad
     }
 }
 
@@ -4577,6 +4631,51 @@ fn while_long_if_slot_compresses(
                 } if if_is_long(else_branches)
             )
         })
+}
+
+fn while_leading_binary_if_slot_compresses(
+    body: &[LayoutNode],
+    is_label: &Option<String>,
+    special_out: Option<&LayoutNode>,
+) -> bool {
+    special_out.is_none() && is_label.is_some() && while_body_starts_with_expanded_binary_if(body)
+}
+
+fn while_body_starts_with_binary_if(body: &[LayoutNode]) -> bool {
+    matches!(
+        first_flow_node(body),
+        Some(LayoutNode::If {
+            then_branch,
+            else_branches,
+            ..
+        }) if !if_is_long(else_branches)
+            && if_break_down_plan(then_branch, else_branches).is_none()
+            && !else_branches.is_empty()
+    )
+}
+
+fn while_body_starts_with_binary_if_then_flow(body: &[LayoutNode]) -> bool {
+    while_body_starts_with_binary_if(body)
+        && body.iter().filter(|node| node_is_flow(node)).count() > 1
+}
+
+fn while_body_starts_with_expanded_binary_if(body: &[LayoutNode]) -> bool {
+    let Some(LayoutNode::If {
+        then_branch,
+        else_branches,
+        ..
+    }) = first_flow_node(body)
+    else {
+        return false;
+    };
+    if !while_body_starts_with_binary_if(body) {
+        return false;
+    }
+    body.iter().filter(|node| node_is_flow(node)).count() > 1
+        || then_branch.iter().filter(|node| node_is_flow(node)).count() > 1
+        || else_branches
+            .iter()
+            .any(|branch| branch.body.iter().filter(|node| node_is_flow(node)).count() > 1)
 }
 
 fn tree_has_while_long_if_body(tree: &[LayoutNode]) -> bool {
@@ -4738,6 +4837,7 @@ fn is_ordinary_compressed_while(node: &LayoutNode) -> bool {
                 end_label,
                 special_out.as_deref(),
             ) || while_long_if_slot_compresses(body, is_label, special_out.as_deref())
+                || while_leading_binary_if_slot_compresses(body, is_label, special_out.as_deref())
     )
 }
 
@@ -7906,7 +8006,9 @@ fn while_single_if_right_pad(body: &[LayoutNode], _end_label: &Option<String>) -
     // `dimTotal.getWidth()`). It is a property of the if-tile geometry, not of
     // the while's end-of-loop label, so it applies whether or not an
     // `endwhile (label)` is present.
-    if while_body_right_driven_by_if(body) {
+    if while_body_starts_with_expanded_binary_if(body) {
+        WHILE_SINGLE_IF_RIGHT_PAD + WHILE_LEADING_BINARY_IF_RIGHT_FRAME_PAD
+    } else if while_body_right_driven_by_if(body) {
         WHILE_SINGLE_IF_RIGHT_PAD
     } else {
         0.0
@@ -8393,6 +8495,11 @@ fn node_height(node: &LayoutNode) -> f64 {
                 && matches!(&body[..], [LayoutNode::While { .. }]);
             let body_top_offset = while_body_top_offset(
                 while_ordinary_slot_compress_allowed(body, special_out.as_deref())
+                    || while_leading_binary_if_slot_compresses(
+                        body,
+                        is_label,
+                        special_out.as_deref(),
+                    )
                     || single_while_compresses,
                 is_label.is_some(),
                 end_label.is_some(),
@@ -10727,7 +10834,7 @@ fn emit_sequence_ex(
                 _ => None,
             }
         } else {
-            None
+            fork_layout_before_leading_binary_if_while(nodes, i, node)
         };
         if let LayoutNode::Fork {
             branches,
@@ -15236,10 +15343,19 @@ fn emit_fork_with_layout(
 
     // Top bar
     let bar_x = cx + layout.spine_dx - bar_w / 2.0;
+    let draw_bar_w = bar_w + 2.0 * layout.bar_overhang;
+    let draw_bar_x = bar_x - layout.bar_overhang;
     let bar_color = svg.palette.bar_color.clone();
     let arrow_color = svg.palette.arrow_color.clone();
     let bar_compressible = layout.bar_compressible;
-    svg.fork_bar(&bar_color, &bar_color, bar_w, bar_x, y, bar_compressible);
+    svg.fork_bar(
+        &bar_color,
+        &bar_color,
+        draw_bar_w,
+        draw_bar_x,
+        y,
+        bar_compressible,
+    );
 
     let bar_bottom = y + FORK_BAR_HEIGHT;
 
@@ -15504,8 +15620,8 @@ fn emit_fork_with_layout(
     svg.fork_bar(
         &bar_color,
         &bar_color,
-        bar_w,
-        bar_x,
+        draw_bar_w,
+        draw_bar_x,
         bottom_bar_y,
         bar_compressible,
     );
@@ -15681,7 +15797,8 @@ fn emit_while(
     let ordinary_slot_compressed = !sole_body_suppress
         && !fork_branch_slot_open
         && (while_ordinary_slot_compresses(body, is_label, end_label, special_out)
-            || while_long_if_slot_compresses(body, is_label, special_out));
+            || while_long_if_slot_compresses(body, is_label, special_out)
+            || while_leading_binary_if_slot_compresses(body, is_label, special_out));
     // Case (b): a `while` whose body is a single nested `while`. Every diamond in
     // a single-while chain (except the deepest, suppressed above) reclaims its
     // inbound band, so this loop compresses its own inbound. The slot exists only
@@ -16237,6 +16354,11 @@ fn emit_while(
             // midpoint plus a fixed even-body stretch, so undo the `S/2` and add
             // `WHILE_EVEN_BODY_LOOP_ARROW_STRETCH`. Drives `act_while_ifdepth*`.
             + if_body_stretch.map_or(0.0, |s| WHILE_EVEN_BODY_LOOP_ARROW_STRETCH - s / 2.0)
+            + if while_body_starts_with_binary_if_then_flow(body) {
+                WHILE_EVEN_BODY_LOOP_ARROW_STRETCH
+            } else {
+                0.0
+            }
             // A nested labelled `while` in the body advertises a loop-back label
             // band (`getSuppHeightForLabel`) the drawn flow never occupies, so the
             // body's reported `getPointOut` — which `ConnectionBackSimple` anchors
@@ -16571,6 +16693,12 @@ fn emit_while(
     }
     if body_has_if_long && special_out.is_none() && break_frame_h.is_none() {
         arrow_y += FORK_BRANCH_INTER_GAP_EXTRA / 2.0;
+    }
+    if while_body_starts_with_binary_if_then_flow(body)
+        && special_out.is_none()
+        && break_frame_h.is_none()
+    {
+        arrow_y += WHILE_EVEN_BODY_LOOP_ARROW_STRETCH;
     }
     // The exit emphasis arrowhead anchors on the PRE-compression midpoint. When
     // the drawn `wrap_y` kept the uncompressed `+12` junction — an if-long branch
