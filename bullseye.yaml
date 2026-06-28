@@ -626,7 +626,7 @@ targets:
     achieved: 2026-06-21
   T4.1.30:
     name: Nested activity control-flow connectors match PlantUML across while/if/fork workflows
-    status: identified
+    status: achieved
     value: 0.0
     cost: 0.0
     acceptance:
@@ -646,6 +646,7 @@ targets:
     - strict-xml
     origin: manual
     discovered: 2026-06-28
+    achieved: 2026-06-28
   T4.1.4:
     name: Swimlane V2 four-branch fork lane-spanning diagrams match PlantUML geometry
     status: achieved
