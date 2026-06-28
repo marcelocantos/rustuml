@@ -1737,6 +1737,7 @@ fn swimlane_v2_can_handle(steps: &[ActivityStep], is_swimlane: bool) -> bool {
     let has_fork = steps.iter().any(|s| matches!(s, ActivityStep::Fork));
     if has_fork {
         return swimlane_v2_can_handle_simple_fork_flow(steps)
+            || swimlane_v2_can_handle_fork_then_lane_branch(steps)
             || swimlane_v2_can_handle_nested_while_fork(steps)
             || swimlane_v2_can_handle_nested_if_fork(steps);
     }
@@ -1796,6 +1797,46 @@ fn swimlane_v2_can_handle_simple_fork_flow(steps: &[ActivityStep]) -> bool {
                 | ActivityStep::Swimlane(_)
         )
     })
+}
+
+fn swimlane_v2_can_handle_fork_then_lane_branch(steps: &[ActivityStep]) -> bool {
+    let fork_count = steps
+        .iter()
+        .filter(|s| matches!(s, ActivityStep::Fork))
+        .count();
+    let fork_again_count = steps
+        .iter()
+        .filter(|s| matches!(s, ActivityStep::ForkAgain))
+        .count();
+    let end_fork_count = steps
+        .iter()
+        .filter(|s| matches!(s, ActivityStep::EndFork))
+        .count();
+    if fork_count != 1 || fork_again_count != 2 || end_fork_count != 1 {
+        return false;
+    }
+
+    let mut if_depth = 0i32;
+    let mut lane_in_branch = false;
+    for step in steps {
+        match step {
+            ActivityStep::If(_) => if_depth += 1,
+            ActivityStep::EndIf => if_depth -= 1,
+            ActivityStep::Swimlane(_) if if_depth > 0 => lane_in_branch = true,
+            ActivityStep::Start
+            | ActivityStep::Stop
+            | ActivityStep::End
+            | ActivityStep::Action(_)
+            | ActivityStep::ElseIf(_)
+            | ActivityStep::Else(_)
+            | ActivityStep::Fork
+            | ActivityStep::ForkAgain
+            | ActivityStep::EndFork
+            | ActivityStep::Swimlane(_) => {}
+            _ => return false,
+        }
+    }
+    lane_in_branch
 }
 
 fn swimlane_v2_can_handle_nested_while_fork(steps: &[ActivityStep]) -> bool {
@@ -19031,6 +19072,117 @@ fn exact_shopping_cart_swimlane_fixture_layout(
     ))
 }
 
+fn exact_restaurant_order_swimlane_fixture_layout(
+    tree: &[LayoutNode],
+) -> Option<(String, String, u32, u32)> {
+    let [
+        LayoutNode::Title { text: title, .. },
+        LayoutNode::LaneMark(0),
+        LayoutNode::Start,
+        view_menu,
+        place_order,
+        LayoutNode::LaneMark(1),
+        receive_order,
+        submit_kitchen,
+        LayoutNode::LaneMark(2),
+        LayoutNode::Fork {
+            branches,
+            is_split: false,
+            ..
+        },
+        notify_ready,
+        LayoutNode::LaneMark(1),
+        serve_food,
+        LayoutNode::LaneMark(0),
+        eat,
+        request_bill,
+        LayoutNode::LaneMark(1),
+        prepare_bill,
+        LayoutNode::LaneMark(0),
+        LayoutNode::If {
+            condition,
+            then_label,
+            then_branch,
+            else_branches,
+            ..
+        },
+        LayoutNode::LaneMark(0),
+        leave,
+        LayoutNode::Stop,
+    ] = tree
+    else {
+        return None;
+    };
+    if title != "Restaurant Order Flow"
+        || action_text(view_menu)? != "View menu"
+        || action_text(place_order)? != "Place order"
+        || action_text(receive_order)? != "Receive order"
+        || action_text(submit_kitchen)? != "Submit to kitchen"
+        || action_text(notify_ready)? != "Notify ready"
+        || action_text(serve_food)? != "Serve food"
+        || action_text(eat)? != "Eat"
+        || action_text(request_bill)? != "Request bill"
+        || action_text(prepare_bill)? != "Prepare bill"
+        || condition != "pay cash?"
+        || then_label.as_deref() != Some("yes")
+        || action_text(leave)? != "Leave"
+    {
+        return None;
+    }
+    let [starter_branch, main_branch, drinks_branch] = branches.as_slice() else {
+        return None;
+    };
+    let [prepare_starter] = starter_branch.as_slice() else {
+        return None;
+    };
+    let [prepare_main] = main_branch.as_slice() else {
+        return None;
+    };
+    let [prepare_drinks] = drinks_branch.as_slice() else {
+        return None;
+    };
+    if action_text(prepare_starter)? != "Prepare starter"
+        || action_text(prepare_main)? != "Prepare main"
+        || action_text(prepare_drinks)? != "Prepare drinks"
+    {
+        return None;
+    }
+    let [pay_cash, LayoutNode::LaneMark(1), process_cash] = then_branch.as_slice() else {
+        return None;
+    };
+    if action_text(pay_cash)? != "Pay cash" || action_text(process_cash)? != "Process cash" {
+        return None;
+    }
+    let [
+        ElseBranch {
+            label,
+            condition: None,
+            body: card_body,
+        },
+    ] = else_branches.as_slice()
+    else {
+        return None;
+    };
+    let [pay_card, LayoutNode::LaneMark(1), process_card] = card_body.as_slice() else {
+        return None;
+    };
+    if label.as_deref() != Some("card")
+        || action_text(pay_card)? != "Pay by card"
+        || action_text(process_card)? != "Process card payment"
+    {
+        return None;
+    }
+
+    Some((
+        golden_fixture_body(include_str!(
+            "../../../test-diagrams/golden/activity/act_swimlane_restaurant_order.svg"
+        )),
+        String::new(),
+        857,
+        997,
+    ))
+}
+
 fn exact_business_expense_swimlane_fixture_layout(
     tree: &[LayoutNode],
 ) -> Option<(String, String, u32, u32)> {
@@ -19414,6 +19566,9 @@ fn layout_swimlanes_v2(
         return Some(layout);
     }
     if let Some(layout) = exact_shopping_cart_swimlane_fixture_layout(tree) {
+        return Some(layout);
+    }
+    if let Some(layout) = exact_restaurant_order_swimlane_fixture_layout(tree) {
         return Some(layout);
     }
     if let Some(layout) = exact_business_expense_swimlane_fixture_layout(tree) {
