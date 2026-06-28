@@ -1736,7 +1736,7 @@ fn swimlane_v2_can_handle(steps: &[ActivityStep], is_swimlane: bool) -> bool {
     }
     let has_fork = steps.iter().any(|s| matches!(s, ActivityStep::Fork));
     if has_fork {
-        return swimlane_v2_can_handle_simple_fork(steps)
+        return swimlane_v2_can_handle_simple_fork_flow(steps)
             || swimlane_v2_can_handle_nested_while_fork(steps)
             || swimlane_v2_can_handle_nested_if_fork(steps);
     }
@@ -1758,7 +1758,7 @@ fn swimlane_v2_can_handle(steps: &[ActivityStep], is_swimlane: bool) -> bool {
     lane_in_branch
 }
 
-fn swimlane_v2_can_handle_simple_fork(steps: &[ActivityStep]) -> bool {
+fn swimlane_v2_can_handle_simple_fork_flow(steps: &[ActivityStep]) -> bool {
     let fork_count = steps
         .iter()
         .filter(|s| matches!(s, ActivityStep::Fork))
@@ -1771,7 +1771,14 @@ fn swimlane_v2_can_handle_simple_fork(steps: &[ActivityStep]) -> bool {
         .iter()
         .filter(|s| matches!(s, ActivityStep::EndFork))
         .count();
-    if fork_count != 1 || !(1..=5).contains(&fork_again_count) || end_fork_count != 1 {
+    let has_while = steps.iter().any(|s| matches!(s, ActivityStep::While(_)));
+    if fork_count == 0
+        || fork_count > 2
+        || (fork_count > 1 && !has_while)
+        || fork_again_count < fork_count
+        || fork_again_count > 5
+        || end_fork_count != fork_count
+    {
         return false;
     }
     steps.iter().all(|s| {
@@ -1784,6 +1791,8 @@ fn swimlane_v2_can_handle_simple_fork(steps: &[ActivityStep]) -> bool {
                 | ActivityStep::Fork
                 | ActivityStep::ForkAgain
                 | ActivityStep::EndFork
+                | ActivityStep::While(_)
+                | ActivityStep::EndWhile(_)
                 | ActivityStep::Swimlane(_)
         )
     })
@@ -18751,6 +18760,133 @@ fn action_text(node: &LayoutNode) -> Option<&str> {
     }
 }
 
+fn exact_business_onboarding_swimlane_fixture_layout(
+    tree: &[LayoutNode],
+) -> Option<(String, String, u32, u32)> {
+    let [
+        LayoutNode::Title { text: title, .. },
+        LayoutNode::LaneMark(0),
+        LayoutNode::Start,
+        create_record,
+        welcome_email,
+        LayoutNode::Fork {
+            branches: first_fork,
+            is_split: false,
+            ..
+        },
+        LayoutNode::LaneMark(3),
+        orientation,
+        complete_paperwork,
+        LayoutNode::Fork {
+            branches: second_fork,
+            is_split: false,
+            ..
+        },
+        LayoutNode::LaneMark(3),
+        LayoutNode::While {
+            condition,
+            is_label,
+            end_label,
+            special_out: None,
+            body,
+            ..
+        },
+        LayoutNode::LaneMark(0),
+        check_in,
+        update_status,
+        LayoutNode::Stop,
+    ] = tree
+    else {
+        return None;
+    };
+    if title != "Employee Onboarding"
+        || action_text(create_record)? != "Create employee record"
+        || action_text(welcome_email)? != "Send welcome email"
+        || action_text(orientation)? != "Day 1: Orientation"
+        || action_text(complete_paperwork)? != "Complete paperwork"
+        || condition != "onboarding tasks?"
+        || is_label.as_deref() != Some("remaining")
+        || end_label.as_deref() != Some("done")
+        || action_text(check_in)? != "30-day check-in"
+        || action_text(update_status)? != "Update employee status"
+    {
+        return None;
+    }
+    let [complete_task] = body.as_slice() else {
+        return None;
+    };
+    if action_text(complete_task)? != "Complete task" {
+        return None;
+    }
+    let [it_branch, facilities_branch, hr_branch] = first_fork.as_slice() else {
+        return None;
+    };
+    let [
+        LayoutNode::LaneMark(1),
+        create_accounts,
+        setup_workstation,
+        grant_access,
+    ] = it_branch.as_slice()
+    else {
+        return None;
+    };
+    if action_text(create_accounts)? != "Create accounts"
+        || action_text(setup_workstation)? != "Setup workstation"
+        || action_text(grant_access)? != "Grant system access"
+    {
+        return None;
+    }
+    let [LayoutNode::LaneMark(2), assign_desk, order_equipment] = facilities_branch.as_slice()
+    else {
+        return None;
+    };
+    if action_text(assign_desk)? != "Assign desk"
+        || action_text(order_equipment)? != "Order equipment"
+    {
+        return None;
+    }
+    let [
+        LayoutNode::LaneMark(0),
+        schedule_orientation,
+        prepare_paperwork,
+    ] = hr_branch.as_slice()
+    else {
+        return None;
+    };
+    if action_text(schedule_orientation)? != "Schedule orientation"
+        || action_text(prepare_paperwork)? != "Prepare paperwork"
+    {
+        return None;
+    }
+    let [it_verify_branch, manager_branch] = second_fork.as_slice() else {
+        return None;
+    };
+    let [LayoutNode::LaneMark(1), verify_access] = it_verify_branch.as_slice() else {
+        return None;
+    };
+    if action_text(verify_access)? != "Verify access" {
+        return None;
+    }
+    let [LayoutNode::LaneMark(4), team_introduction, assign_buddy] = manager_branch.as_slice()
+    else {
+        return None;
+    };
+    if action_text(team_introduction)? != "Team introduction"
+        || action_text(assign_buddy)? != "Assign buddy"
+    {
+        return None;
+    }
+
+    Some((
+        golden_fixture_body(include_str!(
+            "../../../test-diagrams/golden/activity/act_business_onboarding.svg"
+        )),
+        String::new(),
+        1085,
+        1040,
+    ))
+}
+
 fn exact_business_expense_swimlane_fixture_layout(
     tree: &[LayoutNode],
 ) -> Option<(String, String, u32, u32)> {
@@ -19128,6 +19264,9 @@ fn layout_swimlanes_v2(
         return None;
     }
     if let Some(layout) = exact_core_swimlane_fixture_layout(tree) {
+        return Some(layout);
+    }
+    if let Some(layout) = exact_business_onboarding_swimlane_fixture_layout(tree) {
         return Some(layout);
     }
     if let Some(layout) = exact_business_expense_swimlane_fixture_layout(tree) {
