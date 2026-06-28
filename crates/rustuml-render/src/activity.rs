@@ -1057,12 +1057,16 @@ fn branch_is_redirectable_single_survivor_if(flow: &[LayoutNode]) -> bool {
             then_branch,
             else_branches,
             ..
-        }] if if_single_survivor(then_branch, else_branches).is_some()
+        }] if (if_single_survivor(then_branch, else_branches).is_some()
+                || if_break_single_survivor_plan(then_branch, else_branches).is_some())
             // The empty-branch FtileIfDown corridor and the circle-terminal
             // forms have their own dedicated wiring; only the plain
             // action-terminator (kill/detach/stop-with-body) survivor uses the
-            // straight redirect.
-            && if_down_plan(then_branch, else_branches).is_none()
+            // straight redirect. A loop-owned break single-survivor is also
+            // redirectable: its break side welds to the loop corridor while the
+            // live side fuses into the parent's merge.
+            && (if_down_plan(then_branch, else_branches).is_none()
+                || if_break_single_survivor_plan(then_branch, else_branches).is_some())
             && if_single_circle_terminal_plan(None::<&String>, then_branch, else_branches).is_none()
     )
 }
@@ -1376,6 +1380,87 @@ fn if_break_down_plan(
     }
 }
 
+/// A binary `if` inside a break-bearing loop where one branch is a lone
+/// `break` and the other branch survives. PlantUML keeps the normal condition
+/// diamond but routes the break branch sideways into the loop's left exit
+/// corridor; the surviving branch then behaves like the ordinary
+/// single-survivor-if case and may fuse into an enclosing `if` merge.
+struct IfBreakSingleSurvivorPlan {
+    /// True when the *then* branch is the break branch.
+    then_is_break: bool,
+}
+
+fn if_break_single_survivor_plan(
+    then_branch: &[LayoutNode],
+    else_branches: &[ElseBranch],
+) -> Option<IfBreakSingleSurvivorPlan> {
+    if else_branches.len() != 1 || else_branches[0].condition.is_some() {
+        return None;
+    }
+    let else_body = else_branches[0].body.as_slice();
+    let then_break = branch_is_lone_break(then_branch);
+    let else_break = branch_is_lone_break(else_body);
+    match (then_break, else_break) {
+        (true, false) if !branch_is_empty(else_body) && !branch_terminates(else_body) => {
+            Some(IfBreakSingleSurvivorPlan {
+                then_is_break: true,
+            })
+        }
+        (false, true) if !branch_is_empty(then_branch) && !branch_terminates(then_branch) => {
+            Some(IfBreakSingleSurvivorPlan {
+                then_is_break: false,
+            })
+        }
+        _ => None,
+    }
+}
+
+fn nodes_contain_break_single_survivor_if(nodes: &[LayoutNode]) -> bool {
+    nodes.iter().any(node_contains_break_single_survivor_if)
+}
+
+fn node_contains_break_single_survivor_if(node: &LayoutNode) -> bool {
+    match node {
+        LayoutNode::If {
+            then_branch,
+            else_branches,
+            ..
+        } => {
+            if_break_single_survivor_plan(then_branch, else_branches).is_some()
+                || nodes_contain_break_single_survivor_if(then_branch)
+                || else_branches
+                    .iter()
+                    .any(|b| nodes_contain_break_single_survivor_if(&b.body))
+        }
+        LayoutNode::Switch { cases, .. } => cases
+            .iter()
+            .any(|c| nodes_contain_break_single_survivor_if(&c.body)),
+        LayoutNode::Fork { branches, .. } => branches
+            .iter()
+            .any(|b| nodes_contain_break_single_survivor_if(b)),
+        LayoutNode::Partition { body, .. } => nodes_contain_break_single_survivor_if(body),
+        _ => false,
+    }
+}
+
+fn if_branch_distance_extra(then_branch: &[LayoutNode], else_branches: &[ElseBranch]) -> f64 {
+    let direct = if if_break_single_survivor_plan(then_branch, else_branches).is_some() {
+        IF_BREAK_SINGLE_SURVIVOR_BRANCH_SPREAD * 2.0
+    } else {
+        0.0
+    };
+    let nested = if nodes_contain_break_single_survivor_if(then_branch)
+        || else_branches
+            .iter()
+            .any(|b| nodes_contain_break_single_survivor_if(&b.body))
+    {
+        IF_BRANCH_CONTAINS_BREAK_SURVIVOR_SPREAD
+    } else {
+        0.0
+    };
+    direct + nested
+}
+
 /// Recursively whether a node sequence contains a `break` (mirrors PlantUML's
 /// `Instruction.containsBreak`, which recurses through if/else, switch, fork,
 /// group and partition bodies but NOT through nested while/repeat loops — those
@@ -1403,19 +1488,11 @@ fn node_contains_break(node: &LayoutNode) -> bool {
     }
 }
 
-/// Whether a `while` body directly contains a break-bearing `if` that
-/// [`if_break_down_plan`] will render as a no-diamond down layout welding its
-/// break branch to the loop exit corridor. Only direct body children are
-/// considered: a `break` inside a nested `while`/`repeat`/`fork` welds to *that*
-/// loop, and other shapes route their own break.
+/// Whether a `while` body contains a `break` that belongs to this loop. Nested
+/// `while`/`repeat` bodies are excluded by [`nodes_contain_break`]; nested
+/// `if`/`switch`/`fork`/partition bodies still share this loop's break corridor.
 fn body_contains_break_if(body: &[LayoutNode]) -> bool {
-    body.iter().any(|n| {
-        matches!(
-            n,
-            LayoutNode::If { then_branch, else_branches, .. }
-                if if_break_down_plan(then_branch, else_branches).is_some()
-        )
-    })
+    nodes_contain_break(body)
 }
 
 /// A `while` directly in this body. A nested while ADVERTISES a wider layout
@@ -4131,10 +4208,11 @@ fn while_ordinary_slot_compress_allowed(
     body: &[LayoutNode],
     special_out: Option<&LayoutNode>,
 ) -> bool {
-    // A break-bearing `if` renders as a "thin" FtileIfDown that does not block
-    // the loop's inbound-slot compression — and, because the `break` shares the
-    // exit corridor, PlantUML keeps that compression even when a terminator was
-    // absorbed after `endwhile` (so the usual specialOut gate does not apply).
+    // A break-bearing `if` renders thinly enough not to block the loop's inbound
+    // slot compression — and, because the `break` shares the exit corridor,
+    // PlantUML keeps that compression even when a terminator was absorbed after
+    // `endwhile` (so the usual specialOut gate does not apply). This includes a
+    // `break` nested under ordinary if/switch/fork nodes owned by this loop.
     let has_break_if = body_contains_break_if(body);
     (special_out.is_none() || has_break_if)
         && body.iter().all(|node| {
@@ -4148,6 +4226,7 @@ fn while_ordinary_slot_compress_allowed(
                 node,
                 LayoutNode::If { then_branch, else_branches, .. }
                     if if_break_down_plan(then_branch, else_branches).is_some()
+                        || node_contains_break(node)
             )
         })
 }
@@ -4754,7 +4833,10 @@ fn node_geometry(node: &LayoutNode) -> Option<ftile::FtileGeometry> {
             // Only the binary FtileIfWithDiamonds (one then + one populated
             // else) is ported; elseif-chains (FtileIfLong) and the empty-branch
             // FtileIfDown fall back to the legacy model.
-            if else_branches.len() != 1 || if_down_plan(then_branch, else_branches).is_some() {
+            if else_branches.len() != 1
+                || (if_down_plan(then_branch, else_branches).is_some()
+                    && if_break_single_survivor_plan(then_branch, else_branches).is_none())
+            {
                 return None;
             }
             let diamond1 = condition_diamond_styled(
@@ -4917,7 +4999,10 @@ fn if_ftile_layout_styled(
     then_branch: &[LayoutNode],
     else_branches: &[ElseBranch],
 ) -> Option<(f64, f64, f64, f64)> {
-    if else_branches.len() != 1 || if_down_plan(then_branch, else_branches).is_some() {
+    if else_branches.len() != 1
+        || (if_down_plan(then_branch, else_branches).is_some()
+            && if_break_single_survivor_plan(then_branch, else_branches).is_none())
+    {
         return None;
     }
     let (then_l, _then_r) = sequence_extents_if_branch(then_branch);
@@ -4944,6 +5029,12 @@ fn if_ftile_layout_styled(
         else_off -= spine_shift;
         left_ext += spine_shift;
         right_ext -= spine_shift;
+    }
+    if if_break_single_survivor_plan(then_branch, else_branches).is_some() {
+        then_off -= IF_BREAK_SINGLE_SURVIVOR_BRANCH_SPREAD;
+        else_off += IF_BREAK_SINGLE_SURVIVOR_BRANCH_SPREAD;
+        left_ext += IF_BREAK_SINGLE_SURVIVOR_BRANCH_SPREAD;
+        right_ext += IF_BREAK_SINGLE_SURVIVOR_BRANCH_SPREAD;
     }
     Some((then_off, else_off, left_ext, right_ext))
 }
@@ -5745,7 +5836,9 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
                 let right = cond_half.max(BREAK_DOWN_BRANCH_HALF_FLOOR) + DIAMOND_HALF;
                 return with_if_attached_note_extents(left, right, attached_notes, diamond_half_w);
             }
-            if let Some(plan) = if_down_plan(then_branch, else_branches) {
+            if if_break_single_survivor_plan(then_branch, else_branches).is_none()
+                && let Some(plan) = if_down_plan(then_branch, else_branches)
+            {
                 // FtileIfDown reserves a fixed corridor on the right (the empty
                 // branch routes out the diamond's east vertex) plus a small
                 // left lead. Reverse-engineered against the act_if_*yes_*no
@@ -5807,7 +5900,8 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             // Branch centrelines are at least `diamond_w + 20` apart, but
             // also at least `(then_w + else_w)/2 + 20` so the branch boxes
             // don't crowd each other. PlantUML takes the max of these two.
-            let branch_dist = (diamond_w + 20.0).max((then_w + else_w) / 2.0 + 20.0);
+            let branch_dist = (diamond_w + 20.0).max((then_w + else_w) / 2.0 + 20.0)
+                + if_branch_distance_extra(then_branch, else_branches);
             let (left, right) = (
                 branch_dist / 2.0 + then_w / 2.0,
                 branch_dist / 2.0 + else_w / 2.0,
@@ -6645,7 +6739,9 @@ fn node_width(node: &LayoutNode) -> f64 {
                 let (l, r) = node_extents(node);
                 return l + r;
             }
-            if if_down_plan(then_branch, else_branches).is_some() {
+            if if_down_plan(then_branch, else_branches).is_some()
+                && if_break_single_survivor_plan(then_branch, else_branches).is_none()
+            {
                 let (l, r) = node_extents(node);
                 return l + r;
             }
@@ -6673,7 +6769,8 @@ fn node_width(node: &LayoutNode) -> f64 {
             // also at least `(then_w + else_w)/2 + 20` so the branch boxes
             // don't crowd each other when the branches are wider than the
             // diamond. content_w = branch_dist + (then_w + else_w) / 2.
-            let branch_dist = (diamond_w + 20.0).max((then_w + else_w) / 2.0 + 20.0);
+            let branch_dist = (diamond_w + 20.0).max((then_w + else_w) / 2.0 + 20.0)
+                + if_branch_distance_extra(then_branch, else_branches);
             branch_dist + (then_w + else_w) / 2.0
         }
         LayoutNode::Fork { attached_notes, .. } if !attached_notes.is_empty() => {
@@ -7551,7 +7648,9 @@ fn node_height(node: &LayoutNode) -> f64 {
                 return DIAMOND_HALF * 2.0 + WHILE_BREAK_IF_CORRIDOR_DROP_COMPRESSED
                     - south_band_collapse;
             }
-            if let Some(plan) = if_down_plan(then_branch, else_branches) {
+            if if_break_single_survivor_plan(then_branch, else_branches).is_none()
+                && let Some(plan) = if_down_plan(then_branch, else_branches)
+            {
                 // diamond + lead + populated branch + ARROW_LEN + merge diamond.
                 // An even-action branch stretches its middle gap by 15 px.
                 let branch_h = sequence_height(plan.populated);
@@ -7793,6 +7892,11 @@ fn node_height(node: &LayoutNode) -> f64 {
                 10.0 + DIAMOND_HALF // +10 junction, +12 wrap-back
             };
             diamond_alone_h + body_top_offset + body_h + below_body
+                - if nodes_contain_break_single_survivor_if(body) {
+                    WHILE_NESTED_BREAK_SURVIVOR_CANVAS_TRIM
+                } else {
+                    0.0
+                }
         }
         LayoutNode::Repeat {
             body,
@@ -10699,10 +10803,14 @@ fn emit_if(
         return emit_if_break_down(svg, cx, y, condition, then_label, else_label, &plan, &brk);
     }
 
+    let has_break_single_survivor = svg.while_break.is_some_and(|brk| {
+        !brk.repeat_mode && if_break_single_survivor_plan(then_branch, else_branches).is_some()
+    });
+
     // Empty-branch corridor: when one branch is empty and the other populated
     // and non-terminating, PlantUML's FtileIfDown routes the populated branch
     // down the centre spine and the empty branch as a thin side corridor.
-    if let Some(plan) = if_down_plan(then_branch, else_branches) {
+    if !has_break_single_survivor && let Some(plan) = if_down_plan(then_branch, else_branches) {
         let then_label = then_label.as_deref();
         let else_label = else_branches.first().and_then(|b| b.label.as_deref());
         return emit_if_down(svg, cx, y, condition, then_label, else_label, &plan);
@@ -10854,7 +10962,8 @@ fn emit_if(
     ) {
         (cx + then_off, cx + else_off)
     } else {
-        let branch_dist = (diamond_w + 20.0).max((then_w + else_w) / 2.0 + 20.0);
+        let branch_dist = (diamond_w + 20.0).max((then_w + else_w) / 2.0 + 20.0)
+            + if_branch_distance_extra(then_branch, else_branches);
         (cx - branch_dist / 2.0, cx + branch_dist / 2.0)
     };
 
@@ -10950,8 +11059,16 @@ fn emit_if(
         branch_terminates(else_branch_flow)
             && rest.iter().all(|branch| branch_terminates(&branch.body))
     });
+    let break_single_survivor = svg.while_break.and_then(|brk| {
+        if_break_single_survivor_plan(then_branch_flow, else_branches)
+            .zip((!brk.repeat_mode).then_some(brk))
+    });
     let all_terminate = then_terminates && else_terminates;
-    let single_survivor = if_single_survivor(then_branch_flow, else_branches);
+    let single_survivor = if_single_survivor(then_branch_flow, else_branches).or_else(|| {
+        break_single_survivor
+            .as_ref()
+            .map(|(p, _)| !p.then_is_break)
+    });
 
     // Merge diamond at bottom — sits IF_BRANCH_UP px below the deepest branch.
     // Swimlane V2 keeps the uncompressed branch→merge gap (10) even when the
@@ -11089,62 +11206,113 @@ fn emit_if(
     }
 
     // Now emit the if/else-frame connectors AFTER the branch-internal ones.
-    // Order: diamond→then, diamond→else, then→merge, else→merge.
+    // Order: diamond→then, diamond→else, then→merge, else→merge. A
+    // break-single-survivor branch uses the same slot, but its terminating side
+    // welds left into the enclosing loop's exit corridor instead of receiving a
+    // normal down-arrow inbound.
 
     // Diamond → then: horizontal from diamond left to then_cx, then down to
     // branch top, with an arrowhead overlay.
-    svg.connector_line_full(
-        &then_arrow_style,
-        diamond_left,
-        then_cx,
-        diamond_cy,
-        diamond_cy,
-    );
-    svg.connector_line_full(
-        &then_arrow_style,
-        then_cx,
-        then_cx,
-        diamond_cy,
-        diamond_bottom + if_branch_down,
-    );
-    svg.polygon_connector(
-        &then_arrow_style.color,
-        &[
-            (then_cx - 4.0, diamond_bottom + if_branch_down - 10.0),
-            (then_cx, diamond_bottom + if_branch_down),
-            (then_cx + 4.0, diamond_bottom + if_branch_down - 10.0),
-            (then_cx, diamond_bottom + if_branch_down - 6.0),
-        ],
-        &then_arrow_style.color,
-        "1",
-    );
+    if let Some((_, brk)) = break_single_survivor
+        .as_ref()
+        .filter(|(plan, _)| plan.then_is_break)
+    {
+        let branch_y = diamond_bottom + if_branch_down;
+        svg.connector_line_full(
+            &then_arrow_style,
+            diamond_left,
+            then_cx,
+            diamond_cy,
+            diamond_cy,
+        );
+        svg.connector_line_full(&then_arrow_style, then_cx, then_cx, diamond_cy, branch_y);
+        svg.connector_line(
+            &arrow_color,
+            then_cx,
+            brk.corridor_x,
+            branch_y,
+            branch_y,
+            false,
+        );
+        svg.left_arrow(brk.corridor_x, branch_y, &arrow_color);
+    } else {
+        svg.connector_line_full(
+            &then_arrow_style,
+            diamond_left,
+            then_cx,
+            diamond_cy,
+            diamond_cy,
+        );
+        svg.connector_line_full(
+            &then_arrow_style,
+            then_cx,
+            then_cx,
+            diamond_cy,
+            diamond_bottom + if_branch_down,
+        );
+        svg.polygon_connector(
+            &then_arrow_style.color,
+            &[
+                (then_cx - 4.0, diamond_bottom + if_branch_down - 10.0),
+                (then_cx, diamond_bottom + if_branch_down),
+                (then_cx + 4.0, diamond_bottom + if_branch_down - 10.0),
+                (then_cx, diamond_bottom + if_branch_down - 6.0),
+            ],
+            &then_arrow_style.color,
+            "1",
+        );
+    }
 
     // Diamond → else: mirror of the then side.
-    svg.connector_line_full(
-        &else_arrow_style,
-        diamond_right,
-        else_cx,
-        diamond_cy,
-        diamond_cy,
-    );
-    svg.connector_line_full(
-        &else_arrow_style,
-        else_cx,
-        else_cx,
-        diamond_cy,
-        diamond_bottom + if_branch_down,
-    );
-    svg.polygon_connector(
-        &else_arrow_style.color,
-        &[
-            (else_cx - 4.0, diamond_bottom + if_branch_down - 10.0),
-            (else_cx, diamond_bottom + if_branch_down),
-            (else_cx + 4.0, diamond_bottom + if_branch_down - 10.0),
-            (else_cx, diamond_bottom + if_branch_down - 6.0),
-        ],
-        &else_arrow_style.color,
-        "1",
-    );
+    if let Some((_, brk)) = break_single_survivor
+        .as_ref()
+        .filter(|(plan, _)| !plan.then_is_break)
+    {
+        let branch_y = diamond_bottom + if_branch_down;
+        svg.connector_line_full(
+            &else_arrow_style,
+            diamond_right,
+            else_cx,
+            diamond_cy,
+            diamond_cy,
+        );
+        svg.connector_line_full(&else_arrow_style, else_cx, else_cx, diamond_cy, branch_y);
+        svg.connector_line(
+            &arrow_color,
+            else_cx,
+            brk.corridor_x,
+            branch_y,
+            branch_y,
+            false,
+        );
+        svg.left_arrow(brk.corridor_x, branch_y, &arrow_color);
+    } else {
+        svg.connector_line_full(
+            &else_arrow_style,
+            diamond_right,
+            else_cx,
+            diamond_cy,
+            diamond_cy,
+        );
+        svg.connector_line_full(
+            &else_arrow_style,
+            else_cx,
+            else_cx,
+            diamond_cy,
+            diamond_bottom + if_branch_down,
+        );
+        svg.polygon_connector(
+            &else_arrow_style.color,
+            &[
+                (else_cx - 4.0, diamond_bottom + if_branch_down - 10.0),
+                (else_cx, diamond_bottom + if_branch_down),
+                (else_cx + 4.0, diamond_bottom + if_branch_down - 10.0),
+                (else_cx, diamond_bottom + if_branch_down - 6.0),
+            ],
+            &else_arrow_style.color,
+            "1",
+        );
+    }
 
     if let Some(then_survives) = single_survivor {
         let (survivor_cx, survivor_bottom) = if then_survives {
@@ -11624,6 +11792,14 @@ const IF_DOWN_LEAD: f64 = ARROW_LEN + 4.477539062500001; // 24.4775
 /// PlantUML's `Snake.emphasizeDirection(DOWN)` lands the arrowhead tip
 /// `2.2388` px below the geometric midpoint of the corridor's vertical run.
 const IF_CORRIDOR_ARROW_OFFSET: f64 = 2.238769531250023;
+/// Extra branch separation an enclosing `if` reserves when one of its branch
+/// tiles contains a loop-owned break-survivor `if`. The nested tile advertises
+/// the loop-exit corridor as part of its abstract width, even though that
+/// corridor is drawn by the enclosing loop frame.
+const IF_BRANCH_CONTAINS_BREAK_SURVIVOR_SPREAD: f64 = 35.6015625;
+const IF_BREAK_SINGLE_SURVIVOR_BRANCH_SPREAD: f64 = 7.5;
+const WHILE_NESTED_BREAK_SURVIVOR_FRAME_TRIM: f64 = 12.4776;
+const WHILE_NESTED_BREAK_SURVIVOR_CANVAS_TRIM: f64 = 10.0;
 const IF_COLLECTOR_MIDPOINT_EXTRA_OFFSET: f64 = 1.0830078125;
 const IF_COLLECTOR_OTHER_LANE_PAD: f64 = 17.82421875;
 const IF_CROSS_COLLECTOR_LEFT_PAD: f64 = 12.82421875;
@@ -14838,8 +15014,9 @@ fn emit_while(
     // snake's polyline actually visits. Compute `frame_h` faithfully from the
     // body geometry and drive both arrowheads from it. See
     // [`WHILE_BREAK_BODY_GEO_EXTRA`].
-    let break_frame_h = break_in_body.then(|| {
-        24.0 + sequence_height(body)
+    let break_frame_h =
+        break_in_body.then(|| {
+            24.0 + sequence_height(body)
             + WHILE_BREAK_BODY_GEO_RESIDUAL
             // A bare `then` break branch shortens the drawn corridor (and thus
             // `sequence_height`), but PlantUML's FtileWhile frame height is
@@ -14876,9 +15053,12 @@ fn emit_while(
                     }
             } else {
                 0.0
-            }
-            + 4.0 * DIAMOND_HALF
-    });
+            } - if nodes_contain_break_single_survivor_if(body) {
+                WHILE_NESTED_BREAK_SURVIVOR_FRAME_TRIM
+            } else {
+                0.0
+            } + 4.0 * DIAMOND_HALF
+        });
     // 4. UP arrowhead at midpoint of the loop arm's vertical run.
     // PlantUML draws this at the midpoint of (diamond_cy, body_bottom +
     // halfHex), adjusted by the same compression that shifts body_top up.
