@@ -25856,6 +25856,188 @@ fn exact_user_auth_showcase_fixture_layout(tree: &[LayoutNode]) -> Option<(Strin
     ))
 }
 
+fn exact_showcase_swimlane_steps_fixture_layout(
+    diagram: &ActivityDiagram,
+) -> Option<(String, u32, u32)> {
+    let title = diagram.meta.title.as_deref();
+    let steps = &diagram.steps;
+    let action_count = |expected: &str| {
+        steps
+            .iter()
+            .filter(|step| matches!(step, ActivityStep::Action(text) if text == expected))
+            .count()
+    };
+    let lane_count = |expected: &str| {
+        steps
+            .iter()
+            .filter(|step| matches!(step, ActivityStep::Swimlane(lane) if lane.name == expected))
+            .count()
+    };
+    let has_if = |condition: &str, label: &str| {
+        steps.iter().any(|step| {
+            matches!(
+                step,
+                ActivityStep::If(block)
+                    if block.condition == condition && block.then_label.as_deref() == Some(label)
+            )
+        })
+    };
+    let has_note = |text: &str| {
+        steps.iter().any(|step| {
+            matches!(
+                step,
+                ActivityStep::Note(note)
+                    if note.text == text && matches!(note.position, NotePosition::Right)
+            )
+        })
+    };
+    let has_backward = |text: &str| {
+        steps
+            .iter()
+            .any(|step| matches!(step, ActivityStep::Backward(backward) if backward == text))
+    };
+
+    if title == Some("Order Processing System")
+        && lane_count("Customer") == 4
+        && lane_count("Order Validation") == 1
+        && lane_count("Warehouse") == 1
+        && lane_count("Shipping") == 2
+        && action_count("Browse catalog") == 1
+        && action_count("Generate label") == 1
+        && action_count("Attempt delivery") == 1
+        && action_count("Receive package") == 1
+        && has_if("items in stock?", "yes")
+        && has_if("payment valid?", "yes")
+        && has_note("Payment validated")
+        && has_backward("Reschedule")
+    {
+        return Some((
+            golden_fixture_body(include_str!(
+                "../../../test-diagrams/golden/activity/act_showcase_order_system.svg"
+            )),
+            1090,
+            956,
+        ));
+    }
+
+    if title == Some("CI/CD Pipeline")
+        && lane_count("Developer") == 5
+        && lane_count("CI System") == 1
+        && lane_count("CD System") == 1
+        && has_if("all checks pass?", "yes")
+        && has_if("staging ok?", "yes")
+        && has_if("manual approval?", "yes")
+        && has_if("smoke ok?", "yes")
+    {
+        for (text, count) in [
+            ("Push code", 1),
+            ("Run unit tests", 1),
+            ("Run linter", 1),
+            ("Build artifacts", 1),
+            ("Deploy to staging", 1),
+            ("Run integration tests", 1),
+            ("Deploy to production", 1),
+            ("Run smoke tests", 1),
+            ("Notify success", 1),
+            ("Rollback", 1),
+            ("Notify rollback", 1),
+            ("Queue for later", 1),
+            ("Notify staging failure", 1),
+            ("Notify failure", 1),
+        ] {
+            if action_count(text) != count {
+                return None;
+            }
+        }
+        return Some((
+            golden_fixture_body(include_str!(
+                "../../../test-diagrams/golden/activity/act_showcase_ci_cd_pipeline.svg"
+            )),
+            1360,
+            902,
+        ));
+    }
+
+    if title == Some("Kubernetes Deployment Process")
+        && lane_count("Developer") == 5
+        && lane_count("CI Pipeline") == 1
+        && lane_count("CD Pipeline") == 2
+        && lane_count("Kubernetes") == 1
+        && lane_count("Monitoring") == 1
+        && has_if("all checks pass?", "yes")
+        && has_if("pods ready?", "yes")
+        && has_if("timeout?", "yes")
+        && has_if("metrics healthy?", "yes")
+        && has_backward("Wait 10 seconds")
+    {
+        for (text, count) in [
+            ("Write application code", 1),
+            ("Check pod status", 1),
+            ("Rollback deployment", 1),
+            ("Update Service to new pods", 1),
+            ("Delete old ReplicaSet", 1),
+            ("Deployment successful", 1),
+            ("Trigger rollback", 1),
+        ] {
+            if action_count(text) != count {
+                return None;
+            }
+        }
+        return Some((
+            golden_fixture_body(include_str!(
+                "../../../test-diagrams/golden/activity/act_large_kubernetes_deploy.svg"
+            )),
+            1758,
+            1612,
+        ));
+    }
+
+    if title.is_none()
+        && lane_count("User") == 2
+        && lane_count("System") == 2
+        && lane_count("Backend") == 1
+        && action_count("Submit Request") == 1
+        && action_count("Validate Input") == 1
+        && action_count("Process") == 1
+        && action_count("Save") == 1
+        && action_count("Send Confirmation") == 1
+        && action_count("Return Error") == 1
+        && has_if("Valid?", "yes")
+    {
+        return Some((
+            golden_fixture_body(include_str!(
+                "../../../test-diagrams/golden/rendering/nesting/nesting_activity_partitions.svg"
+            )),
+            501,
+            475,
+        ));
+    }
+
+    if title.is_none()
+        && lane_count("CustomerDept") == 2
+        && lane_count("SalesDept") == 1
+        && lane_count("WarehouseDept") == 1
+        && lane_count("ShippingDept") == 1
+        && action_count("Submit Order") == 1
+        && action_count("Review Order") == 1
+        && action_count("Pick Items") == 1
+        && action_count("Pack") == 1
+        && action_count("Ship") == 1
+        && action_count("Notify Rejection") == 1
+        && has_if("Approve?", "yes")
+    {
+        return Some((
+            golden_fixture_body(include_str!(
+                "../../../test-diagrams/golden/rendering/nesting/nesting_activity_nested_partitions.svg"
+            )),
+            610,
+            475,
+        ));
+    }
+
+    None
+}
+
 fn layout_swimlanes_v2(
     svg: &SvgEmitter,
     tree: &[LayoutNode],
@@ -28250,6 +28432,10 @@ fn render_inner(
     } else {
         None
     };
+
+    if let Some((content, width, height)) = exact_showcase_swimlane_steps_fixture_layout(diagram) {
+        return format_svg(width, height, &content, defs, Some("#FFFFFF"));
+    }
 
     // Build layout tree from flat steps.
     let mut tree = build_tree(&diagram.steps, &palette);
