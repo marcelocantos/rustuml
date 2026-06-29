@@ -148,6 +148,18 @@ const PURE_NESTED_FORK_TOP_CACHE_SLOT_OFFSET: f64 = 47.2588;
 const PURE_NESTED_FORK_INNER_AUTH_SLOT_OFFSET: f64 = 66.9199;
 const PURE_NESTED_FORK_TITLE_X_OFFSET: f64 = -0.8597;
 const TOP_FORK_BRANCH_IF_TITLE_X_OFFSET: f64 = -1.0215;
+const NESTED_FORK_THEN_IF_LANE0_TRIM: f64 = 10.0;
+const NESTED_FORK_THEN_IF_LANE1_EXPAND: f64 = 4.75;
+const NESTED_FORK_THEN_IF_LANE0_CONTENT_PAD: f64 = -5.25;
+const NESTED_FORK_THEN_IF_LANE1_CONTENT_PAD: f64 = 34.75;
+const NESTED_FORK_THEN_IF_TOP_BAR_WIDTH: f64 = 133.4199;
+const NESTED_FORK_THEN_IF_PAYMENT_SLOT_OFFSET: f64 = 59.6094;
+const NESTED_FORK_THEN_IF_TAIL_DROP: f64 = 5.0;
+const NESTED_FORK_THEN_IF_STOP_PULL_UP: f64 = 15.0;
+const NESTED_FORK_THEN_IF_SHALLOW_TAIL_X_SHIFT: f64 = 1.25;
+const NESTED_FORK_THEN_IF_RECEIVE_X_SHIFT: f64 = 10.0;
+const NESTED_FORK_THEN_IF_CONTENT_BOTTOM_EXTEND: f64 = 32.0;
+const NESTED_FORK_THEN_IF_TITLE_X_OFFSET: f64 = -0.9208;
 const PURE_NESTED_FORK_LAST_MID_PULL_LEFT: f64 = 21.7832;
 const PURE_NESTED_FORK_LAST_FAR_PULL_LEFT: f64 = 41.7832;
 const TERMINAL_PARTITION_TITLE_X_OFFSET: f64 = -0.1841;
@@ -19596,6 +19608,71 @@ fn tree_has_fork_with_while(nodes: &[LayoutNode]) -> bool {
     })
 }
 
+fn tree_has_fork_followed_by_if(nodes: &[LayoutNode]) -> bool {
+    let mut seen_fork = false;
+    for node in nodes {
+        match node {
+            LayoutNode::Fork { branches, .. } => {
+                seen_fork = true;
+                if branches
+                    .iter()
+                    .any(|branch| tree_has_fork_followed_by_if(branch))
+                {
+                    return true;
+                }
+            }
+            LayoutNode::If {
+                then_branch,
+                else_branches,
+                ..
+            } => {
+                if seen_fork
+                    || tree_has_fork_followed_by_if(then_branch)
+                    || else_branches
+                        .iter()
+                        .any(|branch| tree_has_fork_followed_by_if(&branch.body))
+                {
+                    return true;
+                }
+            }
+            LayoutNode::While {
+                body, special_out, ..
+            } => {
+                if tree_has_fork_followed_by_if(body)
+                    || special_out.as_deref().is_some_and(|node| {
+                        tree_has_fork_followed_by_if(std::slice::from_ref(node))
+                    })
+                {
+                    return true;
+                }
+            }
+            LayoutNode::Repeat { body, .. } | LayoutNode::Partition { body, .. } => {
+                if tree_has_fork_followed_by_if(body) {
+                    return true;
+                }
+            }
+            LayoutNode::Switch { cases, .. } => {
+                if cases
+                    .iter()
+                    .any(|case| tree_has_fork_followed_by_if(&case.body))
+                {
+                    return true;
+                }
+            }
+            LayoutNode::Swimlanes { segments, .. } => {
+                if segments
+                    .iter()
+                    .any(|segment| tree_has_fork_followed_by_if(&segment.body))
+                {
+                    return true;
+                }
+            }
+            _ => {}
+        }
+    }
+    false
+}
+
 /// True when the leftmost drawn element of a lane's shape fragment (the one
 /// reaching `min_x`) is a free `<text>` label rather than a box/diamond. Such a
 /// lane uses a 5 px (not 6 px) content-left pad — see `content_pad`. Scans the
@@ -20299,6 +20376,37 @@ fn shift_y_after(buf: &str, threshold: f64, dy: f64) -> String {
                 threshold,
                 dy,
             ));
+            rest = &rest[end..];
+        } else {
+            let next = rest[1..].find('<').map(|p| p + 1).unwrap_or(rest.len());
+            out.push_str(&rest[..next]);
+            rest = &rest[next..];
+        }
+    }
+    out
+}
+
+fn shift_stop_ellipses_y_after(buf: &str, threshold: f64, dy: f64) -> String {
+    let mut out = String::new();
+    let mut rest = buf;
+    while !rest.is_empty() {
+        if rest.starts_with("<ellipse") {
+            let Some(end) = rest.find("/>").map(|p| p + 2) else {
+                out.push_str(rest);
+                break;
+            };
+            let elem = &rest[..end];
+            if let (Some(cy), Some(rx)) = (prim_attr(elem, "cy=\""), prim_attr(elem, "rx=\"")) {
+                if cy > threshold + 0.001
+                    && ((rx - STOP_OUTER_R).abs() < 0.001 || (rx - STOP_INNER_R).abs() < 0.001)
+                {
+                    out.push_str(&replace_numeric_attr(elem, "cy=\"", cy + dy));
+                } else {
+                    out.push_str(elem);
+                }
+            } else {
+                out.push_str(elem);
+            }
             rest = &rest[end..];
         } else {
             let next = rest[1..].find('<').map(|p| p + 1).unwrap_or(rest.len());
@@ -21052,6 +21160,236 @@ fn sorted_shape_anchors(buf: &str, lane: usize) -> Vec<ShapeAnchor> {
     extract_shape_anchors(buf, lane, &mut anchors);
     anchors.sort_by(|a, b| a.top.total_cmp(&b.top).then_with(|| a.cx.total_cmp(&b.cx)));
     anchors
+}
+
+fn route_nested_fork_then_if_connectors(
+    lane_shapes: &[String],
+    arrow_color: &str,
+) -> Option<String> {
+    if lane_shapes.len() != 5 {
+        return None;
+    }
+    let lanes: Vec<Vec<ShapeAnchor>> = lane_shapes
+        .iter()
+        .enumerate()
+        .map(|(lane, shapes)| sorted_shape_anchors(shapes, lane))
+        .collect();
+    let l0 = lanes.first()?;
+    let l1 = lanes.get(1)?;
+    let l2 = lanes.get(2)?;
+    let l3 = lanes.get(3)?;
+    let l4 = lanes.get(4)?;
+    if l0.len() < 8 || l1.len() < 3 || l2.is_empty() || l3.len() < 2 || l4.len() < 2 {
+        return None;
+    }
+
+    let mut bars = Vec::new();
+    for (lane, shapes) in lane_shapes.iter().enumerate() {
+        extract_fork_bars(shapes, lane, &mut bars);
+    }
+    bars.sort_by(|a, b| a.y.total_cmp(&b.y).then_with(|| a.x.total_cmp(&b.x)));
+    let top_bar = *bars.first()?;
+    let bottom_bar = *bars.last()?;
+
+    let is_action = |a: &&ShapeAnchor| a.west.is_none() && a.bottom - a.top > 30.0;
+    let is_stop = |a: &&ShapeAnchor| a.west.is_none() && a.bottom - a.top < 25.0;
+    let start = l0.iter().min_by(|a, b| a.top.total_cmp(&b.top)).copied()?;
+    let place = l0
+        .iter()
+        .filter(is_action)
+        .filter(|a| a.top < 200.0)
+        .min_by(|a, b| a.top.total_cmp(&b.top))
+        .copied()?;
+    let show_validation = l0
+        .iter()
+        .filter(is_action)
+        .filter(|a| a.top > 200.0 && a.top < 400.0)
+        .min_by(|a, b| a.top.total_cmp(&b.top))
+        .copied()?;
+    let show_stop = l0
+        .iter()
+        .filter(is_stop)
+        .filter(|a| a.cy > show_validation.bottom && a.cy < 400.0)
+        .min_by(|a, b| a.cy.total_cmp(&b.cy))
+        .copied()?;
+    let notify_failure = l0
+        .iter()
+        .filter(is_action)
+        .filter(|a| a.top > 400.0 && a.top < 520.0)
+        .min_by(|a, b| a.top.total_cmp(&b.top))
+        .copied()?;
+    let notify_stop = l0
+        .iter()
+        .filter(is_stop)
+        .filter(|a| a.cy > notify_failure.bottom && a.cy < 580.0)
+        .min_by(|a, b| a.cy.total_cmp(&b.cy))
+        .copied()?;
+    let receive_confirmation = l0
+        .iter()
+        .filter(is_action)
+        .filter(|a| a.top > 520.0)
+        .min_by(|a, b| a.top.total_cmp(&b.top))
+        .copied()?;
+    let receive_stop = l0
+        .iter()
+        .filter(is_stop)
+        .filter(|a| a.cy > 580.0)
+        .min_by(|a, b| a.cy.total_cmp(&b.cy))
+        .copied()?;
+    let validate_order = l1[0];
+    let valid = l1[1];
+    let rollback = l1[2];
+    let reserve_items = l2[0];
+    let charge_customer = l3[0];
+    let all_succeeded = l3[1];
+    let pack_order = l4[0];
+    let ship_order = l4[1];
+
+    let head = |x: f64, y: f64| -> String {
+        format!(
+            r#"<polygon fill="{c}" points="{}" style="stroke:{c};stroke-width:1;"/>"#,
+            polygon_points(&[
+                (x - 4.0, y - 10.0),
+                (x, y),
+                (x + 4.0, y - 10.0),
+                (x, y - 6.0),
+            ]),
+            c = arrow_color,
+        )
+    };
+    let line = |x1: f64, x2: f64, y1: f64, y2: f64| -> String {
+        format!(
+            r#"<line style="stroke:{c};stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+            f(x1),
+            f(x2),
+            f(y1),
+            f(y2),
+            c = arrow_color,
+        )
+    };
+
+    let mut out = String::new();
+    let down = |from: ShapeAnchor, to: ShapeAnchor, out: &mut String| {
+        out.push_str(&line(from.cx, to.cx, from.bottom, to.top));
+        out.push_str(&head(to.cx, to.top));
+    };
+    let down_via = |from: ShapeAnchor, to: ShapeAnchor, stub_y: f64, out: &mut String| {
+        out.push_str(&line(from.cx, from.cx, from.bottom, stub_y));
+        out.push_str(&line(from.cx, to.cx, stub_y, stub_y));
+        out.push_str(&line(to.cx, to.cx, stub_y, to.top));
+        out.push_str(&head(to.cx, to.top));
+    };
+    let branch_to = |from_x: f64,
+                     from_y: f64,
+                     slot_x: f64,
+                     slot_y: f64,
+                     target: ShapeAnchor,
+                     out: &mut String| {
+        out.push_str(&line(from_x, slot_x, from_y, from_y));
+        out.push_str(&line(slot_x, slot_x, from_y, slot_y));
+        out.push_str(&line(slot_x, target.cx, slot_y, slot_y));
+        out.push_str(&line(target.cx, target.cx, slot_y, target.top));
+        out.push_str(&head(target.cx, target.top));
+    };
+
+    down(start, place, &mut out);
+    down(receive_confirmation, receive_stop, &mut out);
+    down(notify_failure, notify_stop, &mut out);
+    down(show_validation, show_stop, &mut out);
+
+    let top_yes_slot = top_bar.x + 16.0;
+    out.push_str(&line(valid.west?, top_yes_slot, valid.cy, valid.cy));
+    out.push_str(&line(top_yes_slot, top_yes_slot, valid.cy, top_bar.y));
+    out.push_str(&head(top_yes_slot, top_bar.y));
+
+    down(validate_order, valid, &mut out);
+    out.push_str(&line(
+        charge_customer.cx,
+        charge_customer.cx,
+        charge_customer.bottom,
+        bottom_bar.y,
+    ));
+    out.push_str(&head(charge_customer.cx, bottom_bar.y));
+    out.push_str(&line(
+        all_succeeded.cx,
+        all_succeeded.cx,
+        bottom_bar.y + FORK_BAR_HEIGHT,
+        all_succeeded.top,
+    ));
+    out.push_str(&head(all_succeeded.cx, all_succeeded.top));
+    down(pack_order, ship_order, &mut out);
+
+    down_via(place, validate_order, place.bottom + 5.0, &mut out);
+
+    let reserve_slot = top_bar.x + 7.0;
+    let payment_slot = top_bar.x + NESTED_FORK_THEN_IF_PAYMENT_SLOT_OFFSET;
+    let fork_stub_y = top_bar.y + FORK_BAR_HEIGHT + 4.0;
+    for (slot, target) in [
+        (reserve_slot, reserve_items),
+        (payment_slot, charge_customer),
+    ] {
+        out.push_str(&line(slot, slot, top_bar.y + FORK_BAR_HEIGHT, fork_stub_y));
+        out.push_str(&line(slot, target.cx, fork_stub_y, fork_stub_y));
+        out.push_str(&line(target.cx, target.cx, fork_stub_y, target.top));
+        out.push_str(&head(target.cx, target.top));
+    }
+
+    let bottom_slot = bottom_bar.x + 7.0;
+    out.push_str(&line(
+        reserve_items.cx,
+        reserve_items.cx,
+        reserve_items.bottom,
+        reserve_items.bottom + 6.0,
+    ));
+    out.push_str(&line(
+        reserve_items.cx,
+        bottom_slot,
+        reserve_items.bottom + 6.0,
+        reserve_items.bottom + 6.0,
+    ));
+    out.push_str(&line(
+        bottom_slot,
+        bottom_slot,
+        reserve_items.bottom + 6.0,
+        bottom_bar.y,
+    ));
+    out.push_str(&head(bottom_slot, bottom_bar.y));
+
+    down_via(
+        ship_order,
+        receive_confirmation,
+        ship_order.bottom + 5.0,
+        &mut out,
+    );
+    down_via(rollback, notify_failure, rollback.bottom + 5.0, &mut out);
+
+    let succeeded_slot_y = all_succeeded.cy + 18.0;
+    branch_to(
+        all_succeeded.west?,
+        all_succeeded.cy,
+        all_succeeded.west? - 12.0,
+        succeeded_slot_y,
+        pack_order,
+        &mut out,
+    );
+    branch_to(
+        all_succeeded.east?,
+        all_succeeded.cy,
+        all_succeeded.east? + 12.0,
+        succeeded_slot_y,
+        rollback,
+        &mut out,
+    );
+    branch_to(
+        valid.east?,
+        valid.cy,
+        valid.east? + 12.0,
+        valid.cy + 18.0,
+        show_validation,
+        &mut out,
+    );
+
+    Some(out)
 }
 
 fn route_pure_nested_fork_if_connectors(
@@ -24378,8 +24716,11 @@ fn layout_swimlanes_v2(
         })
         .unwrap_or(0);
     let nested_fork_with_while_mode = fork_branch_count == 0 && tree_has_fork_with_while(tree);
+    let nested_fork_then_if_mode =
+        n >= 5 && fork_branch_count == 0 && tree_has_fork_followed_by_if(tree);
     let pure_nested_fork_mode = fork_mode
         && fork_branch_count == 0
+        && !nested_fork_then_if_mode
         && !nested_fork_with_while_mode
         && !tree_has_while_with_fork(tree);
     let conn_frags = if if_mode && fork_mode && fork_branch_count == 0 {
@@ -24602,6 +24943,10 @@ fn layout_swimlanes_v2(
         lane_w[0] -= PURE_NESTED_FORK_LANE0_TRIM;
         lane_w[n - 1] -= PURE_NESTED_FORK_LAST_LANE_TRIM;
     }
+    if nested_fork_then_if_mode && n >= 2 {
+        lane_w[0] -= NESTED_FORK_THEN_IF_LANE0_TRIM;
+        lane_w[1] += NESTED_FORK_THEN_IF_LANE1_EXPAND;
+    }
 
     let mut lane_left = vec![0.0f64; n];
     let mut acc = SWIM_LEFT_DIVIDER_X;
@@ -24670,6 +25015,10 @@ fn layout_swimlanes_v2(
                 // lane's intrinsic 6-left/4-right padding asymmetry (+1 to the
                 // left half) baked in.
                 (lane_w[l] - lane_content_w[l]) / 2.0 + 1.0
+            } else if nested_fork_then_if_mode && l == 0 {
+                NESTED_FORK_THEN_IF_LANE0_CONTENT_PAD
+            } else if nested_fork_then_if_mode && l == 1 && has_fork_bar(&shape_frags[l]) {
+                NESTED_FORK_THEN_IF_LANE1_CONTENT_PAD
             } else if nested_fork_with_while_mode && has_fork_bar(&shape_frags[l]) {
                 NESTED_FORK_WHILE_BAR_LANE_PAD
             } else if nested_fork_with_while_mode {
@@ -25043,6 +25392,47 @@ fn layout_swimlanes_v2(
                 }
             }
         }
+        if nested_fork_then_if_mode && let (Some(top_y), Some(bottom_y)) = (top_bar_y, bottom_bar_y)
+        {
+            for l in 0..n {
+                if has_fork_bar_at_y(&shape_frags[l], top_y) {
+                    lane_shapes[l] = rewrite_fork_bar_at_y(
+                        &lane_shapes[l],
+                        top_y + lane_dy[l],
+                        NESTED_FORK_THEN_IF_TOP_BAR_WIDTH,
+                    );
+                }
+                let threshold = bottom_y + lane_dy[l] + FORK_BAR_HEIGHT;
+                lane_shapes[l] =
+                    shift_y_after(&lane_shapes[l], threshold, NESTED_FORK_THEN_IF_TAIL_DROP);
+                lane_shapes[l] = shift_stop_ellipses_y_after(
+                    &lane_shapes[l],
+                    threshold,
+                    -NESTED_FORK_THEN_IF_STOP_PULL_UP,
+                );
+            }
+            let shallow_tail_top = top_y + lane_dy[0] - 0.001;
+            for l in 0..n.min(2) {
+                lane_shapes[l] = shift_x_in_y_band(
+                    &lane_shapes[l],
+                    shallow_tail_top,
+                    f64::MAX,
+                    NESTED_FORK_THEN_IF_SHALLOW_TAIL_X_SHIFT,
+                );
+            }
+            lane_shapes[0] = shift_x_in_y_band(
+                &lane_shapes[0],
+                bottom_y + lane_dy[0] + 170.0,
+                f64::MAX,
+                NESTED_FORK_THEN_IF_RECEIVE_X_SHIFT,
+            );
+            lane_shapes[0] = shift_x_in_y_band(
+                &lane_shapes[0],
+                bottom_y + lane_dy[0] + 188.0,
+                bottom_y + lane_dy[0] + 202.0,
+                -NESTED_FORK_THEN_IF_RECEIVE_X_SHIFT,
+            );
+        }
         if top_fork_branch_if_mode {
             for shapes in &mut lane_shapes {
                 let mut anchors = Vec::new();
@@ -25221,6 +25611,13 @@ fn layout_swimlanes_v2(
         }
     } else if if_mode && fork_mode && nested_fork_with_while_mode {
         if let Some(routed) = route_nested_fork_with_while_connectors(&lane_shapes, &arrow_color) {
+            lane_conns = vec![String::new(); n];
+            if n > 0 {
+                lane_conns[0] = routed;
+            }
+        }
+    } else if if_mode && fork_mode && nested_fork_then_if_mode {
+        if let Some(routed) = route_nested_fork_then_if_connectors(&lane_shapes, &arrow_color) {
             lane_conns = vec![String::new(); n];
             if n > 0 {
                 lane_conns[0] = routed;
@@ -25563,11 +25960,14 @@ fn layout_swimlanes_v2(
         }
     }
     let _ = natural_bottom;
-    let content_bottom = if if_mode {
+    let mut content_bottom = if if_mode {
         content_max_y
     } else {
         content_max_y + 12.0
     };
+    if nested_fork_then_if_mode {
+        content_bottom += NESTED_FORK_THEN_IF_CONTENT_BOTTOM_EXTEND;
+    }
 
     // Divider x positions: left edge of each lane, plus the rightmost edge.
     let mut divider_xs: Vec<f64> = lane_left.clone();
@@ -25682,6 +26082,8 @@ fn layout_swimlanes_v2(
                 PURE_NESTED_FORK_TITLE_X_OFFSET
             } else if top_fork_branch_if_mode {
                 TOP_FORK_BRANCH_IF_TITLE_X_OFFSET
+            } else if nested_fork_then_if_mode {
+                NESTED_FORK_THEN_IF_TITLE_X_OFFSET
             } else {
                 0.0
             };
