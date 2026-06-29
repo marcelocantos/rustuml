@@ -136,6 +136,9 @@ const WHILE_PREFIXED_FUSED_NESTED_TITLE_X_OFFSET: f64 = -5.7823;
 const NESTED_FORK_WHILE_BAR_LANE_PAD: f64 = 23.0;
 const NESTED_FORK_WHILE_PLAIN_LANE_PAD: f64 = 10.0;
 const NESTED_FORK_WHILE_PLAIN_CONTENT_PAD: f64 = 6.0;
+const NESTED_FORK_WHILE_BODY_X_SHIFT: f64 = 11.0;
+const NESTED_FORK_WHILE_PRELUDE_ACTION_PULL_LEFT: f64 = 4.0;
+const NESTED_FORK_WHILE_SIBLING_PULL_UP: f64 = WHILE_BODY_SLOT_COMPRESS / 2.0 - 1.0;
 const TERMINAL_PARTITION_TITLE_X_OFFSET: f64 = -0.1841;
 const WHILE_PREFIXED_FUSED_NESTED_CHILD_EXIT_ARROW_PUSH_DOWN: f64 = 1.9887;
 const WHILE_PREFIXED_FUSED_NESTED_PARENT_EXIT_ARROW_PULL_UP: f64 = 1.6675;
@@ -19853,6 +19856,289 @@ fn replace_numeric_attr_if_ge(elem: &str, key: &str, threshold: f64, dy: f64) ->
     replace_numeric_attr(elem, key, value + dy)
 }
 
+fn value_in_band(value: f64, min: f64, max: f64) -> bool {
+    value + 0.001 >= min && value < max - 0.001
+}
+
+fn replace_numeric_attr_if_y_band(
+    elem: &str,
+    key: &str,
+    y: f64,
+    min_y: f64,
+    max_y: f64,
+    dx: f64,
+) -> String {
+    let Some(value) = prim_attr(elem, key) else {
+        return elem.to_string();
+    };
+    if !value_in_band(y, min_y, max_y) {
+        return elem.to_string();
+    }
+    replace_numeric_attr(elem, key, value + dx)
+}
+
+fn shift_polygon_x_in_y_band(elem: &str, min_y: f64, max_y: f64, dx: f64) -> String {
+    let Some(at) = elem.find("points=\"") else {
+        return elem.to_string();
+    };
+    let value_start = at + "points=\"".len();
+    let Some(value_end) = elem[value_start..].find('"').map(|p| value_start + p) else {
+        return elem.to_string();
+    };
+    let nums: Vec<&str> = elem[value_start..value_end].split(',').collect();
+    if nums.len() < 2 {
+        return elem.to_string();
+    }
+    let mut shifted = Vec::with_capacity(nums.len());
+    let mut i = 0;
+    while i < nums.len() {
+        let x = nums[i].trim().parse::<f64>().ok();
+        let y = nums
+            .get(i + 1)
+            .and_then(|raw| raw.trim().parse::<f64>().ok());
+        if let (Some(x), Some(y)) = (x, y) {
+            if value_in_band(y, min_y, max_y) {
+                shifted.push(f(x + dx));
+            } else {
+                shifted.push(f(x));
+            }
+            shifted.push(f(y));
+            i += 2;
+        } else {
+            shifted.push(nums[i].to_string());
+            i += 1;
+        }
+    }
+    let mut out = String::new();
+    out.push_str(&elem[..value_start]);
+    out.push_str(&shifted.join(","));
+    out.push_str(&elem[value_end..]);
+    out
+}
+
+fn shift_polygon_y_in_band(elem: &str, min_y: f64, max_y: f64, dy: f64) -> String {
+    let Some(at) = elem.find("points=\"") else {
+        return elem.to_string();
+    };
+    let value_start = at + "points=\"".len();
+    let Some(value_end) = elem[value_start..].find('"').map(|p| value_start + p) else {
+        return elem.to_string();
+    };
+    let nums: Vec<&str> = elem[value_start..value_end].split(',').collect();
+    if nums.len() < 2 {
+        return elem.to_string();
+    }
+    let mut shifted = Vec::with_capacity(nums.len());
+    let mut i = 0;
+    while i < nums.len() {
+        let x = nums[i].trim().parse::<f64>().ok();
+        let y = nums
+            .get(i + 1)
+            .and_then(|raw| raw.trim().parse::<f64>().ok());
+        if let (Some(x), Some(y)) = (x, y) {
+            shifted.push(f(x));
+            shifted.push(if value_in_band(y, min_y, max_y) {
+                f(y + dy)
+            } else {
+                f(y)
+            });
+            i += 2;
+        } else {
+            shifted.push(nums[i].to_string());
+            i += 1;
+        }
+    }
+    let mut out = String::new();
+    out.push_str(&elem[..value_start]);
+    out.push_str(&shifted.join(","));
+    out.push_str(&elem[value_end..]);
+    out
+}
+
+fn shift_x_in_y_band(buf: &str, min_y: f64, max_y: f64, dx: f64) -> String {
+    if dx.abs() < 0.001 {
+        return buf.to_string();
+    }
+    let mut out = String::new();
+    let mut rest = buf;
+    while !rest.is_empty() {
+        if rest.starts_with("<polygon") {
+            let Some(end) = rest.find("/>").map(|p| p + 2) else {
+                out.push_str(rest);
+                break;
+            };
+            out.push_str(&shift_polygon_x_in_y_band(&rest[..end], min_y, max_y, dx));
+            rest = &rest[end..];
+        } else if rest.starts_with("<rect") {
+            let Some(end) = rest.find("/>").map(|p| p + 2) else {
+                out.push_str(rest);
+                break;
+            };
+            let elem = &rest[..end];
+            if is_fork_bar_prim(elem) {
+                out.push_str(elem);
+            } else if let Some(y) = prim_attr(elem, " y=\"") {
+                out.push_str(&replace_numeric_attr_if_y_band(
+                    elem, " x=\"", y, min_y, max_y, dx,
+                ));
+            } else {
+                out.push_str(elem);
+            }
+            rest = &rest[end..];
+        } else if rest.starts_with("<ellipse") {
+            let Some(end) = rest.find("/>").map(|p| p + 2) else {
+                out.push_str(rest);
+                break;
+            };
+            let elem = &rest[..end];
+            if let Some(cy) = prim_attr(elem, "cy=\"") {
+                out.push_str(&replace_numeric_attr_if_y_band(
+                    elem, "cx=\"", cy, min_y, max_y, dx,
+                ));
+            } else {
+                out.push_str(elem);
+            }
+            rest = &rest[end..];
+        } else if rest.starts_with("<line") {
+            let Some(end) = rest.find("/>").map(|p| p + 2) else {
+                out.push_str(rest);
+                break;
+            };
+            let elem = &rest[..end];
+            let shift_line = if let (Some(y1), Some(y2)) =
+                (prim_attr(elem, "y1=\""), prim_attr(elem, "y2=\""))
+            {
+                value_in_band(y1, min_y, max_y) || value_in_band(y2, min_y, max_y)
+            } else {
+                false
+            };
+            if shift_line {
+                let elem = replace_numeric_attr_if_ge(elem, "x1=\"", f64::MIN, dx);
+                out.push_str(&replace_numeric_attr_if_ge(&elem, "x2=\"", f64::MIN, dx));
+            } else {
+                out.push_str(elem);
+            }
+            rest = &rest[end..];
+        } else if rest.starts_with("<text") {
+            let Some(end) = rest.find("</text>").map(|p| p + 7) else {
+                out.push_str(rest);
+                break;
+            };
+            let elem = &rest[..end];
+            if let Some(y) = prim_attr(elem, " y=\"") {
+                out.push_str(&replace_numeric_attr_if_y_band(
+                    elem, " x=\"", y, min_y, max_y, dx,
+                ));
+            } else {
+                out.push_str(elem);
+            }
+            rest = &rest[end..];
+        } else {
+            let next = rest[1..].find('<').map(|p| p + 1).unwrap_or(rest.len());
+            out.push_str(&rest[..next]);
+            rest = &rest[next..];
+        }
+    }
+    out
+}
+
+fn shift_y_in_band(buf: &str, min_y: f64, max_y: f64, dy: f64) -> String {
+    if dy.abs() < 0.001 {
+        return buf.to_string();
+    }
+    let mut out = String::new();
+    let mut rest = buf;
+    while !rest.is_empty() {
+        if rest.starts_with("<polygon") {
+            let Some(end) = rest.find("/>").map(|p| p + 2) else {
+                out.push_str(rest);
+                break;
+            };
+            out.push_str(&shift_polygon_y_in_band(&rest[..end], min_y, max_y, dy));
+            rest = &rest[end..];
+        } else if rest.starts_with("<rect") {
+            let Some(end) = rest.find("/>").map(|p| p + 2) else {
+                out.push_str(rest);
+                break;
+            };
+            let elem = &rest[..end];
+            if let Some(y) = prim_attr(elem, " y=\"") {
+                if value_in_band(y, min_y, max_y) {
+                    out.push_str(&replace_numeric_attr(elem, " y=\"", y + dy));
+                } else {
+                    out.push_str(elem);
+                }
+            } else {
+                out.push_str(elem);
+            }
+            rest = &rest[end..];
+        } else if rest.starts_with("<ellipse") {
+            let Some(end) = rest.find("/>").map(|p| p + 2) else {
+                out.push_str(rest);
+                break;
+            };
+            let elem = &rest[..end];
+            if let Some(cy) = prim_attr(elem, "cy=\"") {
+                if value_in_band(cy, min_y, max_y) {
+                    out.push_str(&replace_numeric_attr(elem, "cy=\"", cy + dy));
+                } else {
+                    out.push_str(elem);
+                }
+            } else {
+                out.push_str(elem);
+            }
+            rest = &rest[end..];
+        } else if rest.starts_with("<line") {
+            let Some(end) = rest.find("/>").map(|p| p + 2) else {
+                out.push_str(rest);
+                break;
+            };
+            let elem = &rest[..end];
+            let elem = if let Some(y1) = prim_attr(elem, "y1=\"") {
+                if value_in_band(y1, min_y, max_y) {
+                    replace_numeric_attr(elem, "y1=\"", y1 + dy)
+                } else {
+                    elem.to_string()
+                }
+            } else {
+                elem.to_string()
+            };
+            let elem = if let Some(y2) = prim_attr(&elem, "y2=\"") {
+                if value_in_band(y2, min_y, max_y) {
+                    replace_numeric_attr(&elem, "y2=\"", y2 + dy)
+                } else {
+                    elem
+                }
+            } else {
+                elem
+            };
+            out.push_str(&elem);
+            rest = &rest[end..];
+        } else if rest.starts_with("<text") {
+            let Some(end) = rest.find("</text>").map(|p| p + 7) else {
+                out.push_str(rest);
+                break;
+            };
+            let elem = &rest[..end];
+            if let Some(y) = prim_attr(elem, " y=\"") {
+                if value_in_band(y, min_y, max_y) {
+                    out.push_str(&replace_numeric_attr(elem, " y=\"", y + dy));
+                } else {
+                    out.push_str(elem);
+                }
+            } else {
+                out.push_str(elem);
+            }
+            rest = &rest[end..];
+        } else {
+            let next = rest[1..].find('<').map(|p| p + 1).unwrap_or(rest.len());
+            out.push_str(&rest[..next]);
+            rest = &rest[next..];
+        }
+    }
+    out
+}
+
 fn shift_polygon_y_after(elem: &str, threshold: f64, dy: f64) -> String {
     let Some(at) = elem.find("points=\"") else {
         return elem.to_string();
@@ -20009,6 +20295,60 @@ fn nested_fork_with_while_shift_threshold(buf: &str, top_bar_y: f64) -> Option<f
         rest = &frag[end + 2..];
     }
     shape_y
+}
+
+fn nested_fork_with_while_diamond_top(buf: &str, top_bar_y: f64, bottom_bar_y: f64) -> Option<f64> {
+    let min_y = top_bar_y + FORK_BAR_HEIGHT + 0.001;
+    let mut best: Option<f64> = None;
+    let mut rest = buf;
+    while let Some(p) = rest.find(r##"<polygon fill="#F1F1F1""##) {
+        let frag = &rest[p..];
+        let Some(end) = frag.find("/>") else {
+            break;
+        };
+        if let Some(at) = frag[..end].find("points=\"") {
+            let value_start = at + "points=\"".len();
+            if let Some(value_end) = frag[value_start..end]
+                .find('"')
+                .map(|pos| value_start + pos)
+            {
+                let ys: Vec<f64> = frag[value_start..value_end]
+                    .split(',')
+                    .skip(1)
+                    .step_by(2)
+                    .filter_map(|s| s.trim().parse::<f64>().ok())
+                    .collect();
+                if ys.len() > 5 {
+                    let top = ys.iter().copied().fold(f64::MAX, f64::min);
+                    if top > min_y && top < bottom_bar_y - 0.001 {
+                        best = Some(best.map_or(top, |best| best.min(top)));
+                    }
+                }
+            }
+        }
+        rest = &frag[end + 2..];
+    }
+    best
+}
+
+fn first_action_top_in_band(buf: &str, min_y: f64, max_y: f64) -> Option<f64> {
+    let mut best: Option<f64> = None;
+    let mut rest = buf;
+    while let Some(p) = rest.find("<rect") {
+        let rect = &rest[p..];
+        let Some(end) = rect.find("/>") else {
+            break;
+        };
+        let elem = &rect[..end + 2];
+        if elem.contains(r#"rx="12.5""#)
+            && let Some(y) = prim_attr(elem, " y=\"")
+            && value_in_band(y, min_y, max_y)
+        {
+            best = Some(best.map_or(y, |best| best.min(y)));
+        }
+        rest = &rect[end + 2..];
+    }
+    best
 }
 
 fn fork3_bottom_lane_action_shifts(buf: &str, trim: f64) -> Vec<(f64, f64)> {
@@ -23624,6 +23964,7 @@ fn layout_swimlanes_v2(
             }
             if nested_fork_with_while_mode && nested_fork_with_while_body_shift.abs() > 0.001 {
                 let top_y = top_bar_y.unwrap_or(0.0);
+                let bottom_y = bottom_bar_y.unwrap_or(0.0);
                 if let Some(threshold) =
                     nested_fork_with_while_shift_threshold(&lane_shapes[l], top_y + lane_dy[l])
                 {
@@ -23634,6 +23975,51 @@ fn layout_swimlanes_v2(
                     );
                     lane_conns[l] =
                         shift_y_after(&lane_conns[l], threshold, nested_fork_with_while_body_shift);
+                }
+                let top_y = top_y + lane_dy[l];
+                let bottom_y = bottom_y + lane_dy[l] + nested_fork_with_while_body_shift;
+                if has_fork_bar(&shape_frags[l]) {
+                    if let Some(while_top) =
+                        nested_fork_with_while_diamond_top(&lane_shapes[l], top_y, bottom_y)
+                    {
+                        if let Some(action_top) =
+                            first_action_top_in_band(&lane_shapes[l], top_y, while_top)
+                        {
+                            lane_shapes[l] = shift_x_in_y_band(
+                                &lane_shapes[l],
+                                action_top,
+                                while_top,
+                                -NESTED_FORK_WHILE_PRELUDE_ACTION_PULL_LEFT,
+                            );
+                        }
+                        lane_shapes[l] = shift_x_in_y_band(
+                            &lane_shapes[l],
+                            while_top,
+                            bottom_y,
+                            NESTED_FORK_WHILE_BODY_X_SHIFT,
+                        );
+                        lane_conns[l] = shift_x_in_y_band(
+                            &lane_conns[l],
+                            while_top,
+                            bottom_y,
+                            NESTED_FORK_WHILE_BODY_X_SHIFT,
+                        );
+                    }
+                } else if let Some(action_top) =
+                    first_action_top_in_band(&lane_shapes[l], top_y + FORK_BAR_HEIGHT, bottom_y)
+                {
+                    lane_shapes[l] = shift_y_in_band(
+                        &lane_shapes[l],
+                        action_top,
+                        bottom_y,
+                        -NESTED_FORK_WHILE_SIBLING_PULL_UP,
+                    );
+                    lane_conns[l] = shift_y_in_band(
+                        &lane_conns[l],
+                        action_top,
+                        bottom_y,
+                        -NESTED_FORK_WHILE_SIBLING_PULL_UP,
+                    );
                 }
             }
         }
