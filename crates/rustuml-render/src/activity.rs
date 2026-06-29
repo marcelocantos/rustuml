@@ -13802,6 +13802,7 @@ const IF_SPLIT_COLLECTOR_LEFT_INSET: f64 = 1.17626953125;
 const IF_SPLIT_COLLECTOR_RIGHT_START_OFFSET: f64 = 4.6259765625;
 const IF_SPLIT_COLLECTOR_RIGHT_INSET: f64 = 7.17626953125;
 const IF_SPLIT_COLLECTOR_RIGHT_DIVIDER_PAD: f64 = 10.0;
+const SWIMLANE_V2_TERMINAL_ANCHOR_MAX_HEIGHT: f64 = 24.0;
 
 /// Left lead past the diamond's left vertex in the FtileIfDown layout.
 const IF_DOWN_LEFT_PAD: f64 = 9.0;
@@ -20423,6 +20424,7 @@ fn route_if_cross_lane_connectors(
     let mut collector_left = String::new();
     let mut collector_right = String::new();
     let mut other_lane_outputs = String::new();
+    let mut repeat_late_entries = String::new();
     let mut cross_lane_inputs = String::new();
     let mut lane0_stop_entries = String::new();
     let mut other_stop_entries = String::new();
@@ -20838,6 +20840,26 @@ fn route_if_cross_lane_connectors(
         };
         let t = &fin[ti];
         let mut snake = String::new();
+        if repeat_mode
+            && exits_bottom
+            && src_nat.west.is_some()
+            && t.is_merge
+            && s.lane != t.lane
+            && pl.verts.len() > 2
+            && (pl.verts[1].0 - src_pt.0).abs() < 0.001
+        {
+            let sx = s.cx;
+            let sy = s.bottom;
+            let break_y = pl.verts[1].1;
+            snake.push_str(&line(sx, sx, sy, break_y));
+            snake.push_str(&head(sx, break_y));
+            if s.lane == 0 {
+                lane0_edges.push_str(&snake);
+            } else {
+                other_lane_outputs.push_str(&snake);
+            }
+            continue;
+        }
         if src_from_merge_column && t.west.is_none() {
             let sx = s.cx;
             let sy = src_pt.1;
@@ -20953,12 +20975,20 @@ fn route_if_cross_lane_connectors(
             return None;
         }
         let _ = s.lane;
+        let target_round_terminal =
+            t.west.is_none() && (t.bottom - t.top) <= SWIMLANE_V2_TERMINAL_ANCHOR_MAX_HEIGHT;
         if src_nat.west.is_none() && t.west.is_some() {
-            start_entries.push_str(&snake);
-        } else if src_nat.west.is_some() && s.lane != t.lane {
+            if repeat_mode && s.lane != 0 {
+                repeat_late_entries.push_str(&snake);
+            } else {
+                start_entries.push_str(&snake);
+            }
+        } else if s.lane != t.lane && (src_nat.west.is_some() || repeat_mode) {
             cross_lane_inputs.push_str(&snake);
         } else if src_nat.west.is_some() && t.west.is_none() && !exits_bottom {
             post_start_edges.push_str(&snake);
+        } else if repeat_mode && src_nat.is_merge && target_round_terminal && s.lane == 0 {
+            lane0_stop_entries.push_str(&snake);
         } else if s.lane == 0 {
             lane0_edges.push_str(&snake);
         } else {
@@ -20973,6 +21003,7 @@ fn route_if_cross_lane_connectors(
     routed.push_str(&collector_left);
     routed.push_str(&lane0_stop_entries);
     routed.push_str(&other_lane_outputs);
+    routed.push_str(&repeat_late_entries);
     routed.push_str(&collector_right);
     routed.push_str(&cross_lane_inputs);
     routed.push_str(&other_stop_entries);
