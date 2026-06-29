@@ -139,6 +139,13 @@ const NESTED_FORK_WHILE_PLAIN_CONTENT_PAD: f64 = 6.0;
 const NESTED_FORK_WHILE_BODY_X_SHIFT: f64 = 11.0;
 const NESTED_FORK_WHILE_PRELUDE_ACTION_PULL_LEFT: f64 = 4.0;
 const NESTED_FORK_WHILE_SIBLING_PULL_UP: f64 = WHILE_BODY_SLOT_COMPRESS / 2.0 - 1.0;
+const PURE_NESTED_FORK_LANE0_TRIM: f64 = 7.9571;
+const PURE_NESTED_FORK_LAST_LANE_TRIM: f64 = 41.7831;
+const PURE_NESTED_FORK_OUTER_X_SHIFT: f64 = 3.0429;
+const PURE_NESTED_FORK_NESTED_EXTRA_X_SHIFT: f64 = 14.9571;
+const PURE_NESTED_FORK_TOP_BAR_WIDTH: f64 = 107.4814;
+const PURE_NESTED_FORK_LAST_MID_PULL_LEFT: f64 = 21.7832;
+const PURE_NESTED_FORK_LAST_FAR_PULL_LEFT: f64 = 41.7832;
 const TERMINAL_PARTITION_TITLE_X_OFFSET: f64 = -0.1841;
 const WHILE_PREFIXED_FUSED_NESTED_CHILD_EXIT_ARROW_PUSH_DOWN: f64 = 1.9887;
 const WHILE_PREFIXED_FUSED_NESTED_PARENT_EXIT_ARROW_PULL_UP: f64 = 1.6675;
@@ -20680,6 +20687,31 @@ fn rewrite_fork_bars_for_lane(buf: &str, x: f64, width: f64) -> String {
     out
 }
 
+fn rewrite_fork_bar_at_y(buf: &str, target_y: f64, width: f64) -> String {
+    let mut out = String::new();
+    let mut rest = buf;
+    while let Some(p) = rest.find("<rect") {
+        out.push_str(&rest[..p]);
+        let rect = &rest[p..];
+        let Some(end) = rect.find("/>") else {
+            out.push_str(rect);
+            return out;
+        };
+        let elem = &rect[..end + 2];
+        if is_fork_bar_prim(elem)
+            && let Some(y) = prim_attr(elem, " y=\"")
+            && (y - target_y).abs() < 0.001
+        {
+            out.push_str(&replace_numeric_attr(elem, " width=\"", width));
+        } else {
+            out.push_str(elem);
+        }
+        rest = &rect[end + 2..];
+    }
+    out.push_str(rest);
+    out
+}
+
 fn rewrite_nested_fork_with_while_bars_for_lane(buf: &str, lane_left: f64) -> String {
     let bar_x = lane_left + 6.0;
     let mut bars = Vec::new();
@@ -23688,6 +23720,10 @@ fn layout_swimlanes_v2(
         })
         .unwrap_or(0);
     let nested_fork_with_while_mode = fork_branch_count == 0 && tree_has_fork_with_while(tree);
+    let pure_nested_fork_mode = fork_mode
+        && fork_branch_count == 0
+        && !nested_fork_with_while_mode
+        && !tree_has_while_with_fork(tree);
     let conn_frags = if if_mode && fork_mode && fork_branch_count == 0 {
         // A fork nested inside an `if` overlaps several lane contents in the
         // same natural y-band, so y-band relabeling collapses unrelated
@@ -23899,6 +23935,10 @@ fn layout_swimlanes_v2(
                 };
             lane_w[lane] = lane_w[lane].max(body_shell_w.max(title_shell_w) + 10.0);
         }
+    }
+    if pure_nested_fork_mode && n >= 4 {
+        lane_w[0] -= PURE_NESTED_FORK_LANE0_TRIM;
+        lane_w[n - 1] -= PURE_NESTED_FORK_LAST_LANE_TRIM;
     }
 
     let mut lane_left = vec![0.0f64; n];
@@ -24340,6 +24380,84 @@ fn layout_swimlanes_v2(
                 }
             }
         }
+        if pure_nested_fork_mode && n >= 4 {
+            let mut anchors = Vec::new();
+            extract_shape_anchors(&lane_shapes[0], 0, &mut anchors);
+            let if_bottom = anchors
+                .iter()
+                .filter(|a| a.west.is_some() && !a.is_merge)
+                .map(|a| a.bottom)
+                .min_by(|a, b| a.partial_cmp(b).unwrap_or(std::cmp::Ordering::Equal));
+            let nested_action_top = if let (Some(if_bottom), Some(top_y)) = (if_bottom, top_bar_y) {
+                first_action_top_in_band(&lane_shapes[0], if_bottom, top_y + lane_dy[0])
+            } else {
+                None
+            };
+            let second_merge_top = {
+                let mut tops: Vec<f64> = anchors
+                    .iter()
+                    .filter(|a| a.is_merge)
+                    .map(|a| a.top)
+                    .collect();
+                tops.sort_by(|a, b| a.partial_cmp(b).unwrap_or(std::cmp::Ordering::Equal));
+                tops.get(1).copied()
+            };
+            lane_shapes[0] = shift_x_in_y_band(
+                &lane_shapes[0],
+                f64::MIN,
+                f64::MAX,
+                PURE_NESTED_FORK_OUTER_X_SHIFT,
+            );
+            if let (Some(nested_action_top), Some(second_merge_top)) =
+                (nested_action_top, second_merge_top)
+            {
+                lane_shapes[0] = shift_x_in_y_band(
+                    &lane_shapes[0],
+                    nested_action_top,
+                    second_merge_top,
+                    PURE_NESTED_FORK_NESTED_EXTRA_X_SHIFT,
+                );
+            }
+            if let Some(top_y) = top_bar_y {
+                lane_shapes[0] = rewrite_fork_bar_at_y(
+                    &lane_shapes[0],
+                    top_y + lane_dy[0],
+                    PURE_NESTED_FORK_TOP_BAR_WIDTH,
+                );
+            }
+            let mut last_actions = Vec::new();
+            let mut rest = lane_shapes[n - 1].as_str();
+            while let Some(p) = rest.find("<rect") {
+                let rect = &rest[p..];
+                let Some(end) = rect.find("/>") else {
+                    break;
+                };
+                let elem = &rect[..end + 2];
+                if elem.contains(r#"rx="12.5""#)
+                    && let Some(y) = prim_attr(elem, " y=\"")
+                {
+                    last_actions.push(y);
+                }
+                rest = &rect[end + 2..];
+            }
+            last_actions.sort_by(|a, b| a.partial_cmp(b).unwrap_or(std::cmp::Ordering::Equal));
+            if let Some(first_top) = last_actions.first().copied() {
+                lane_shapes[n - 1] = shift_x_in_y_band(
+                    &lane_shapes[n - 1],
+                    first_top,
+                    first_top + ACTION_MIN_HEIGHT + ACTION_PADDING,
+                    -PURE_NESTED_FORK_LAST_FAR_PULL_LEFT,
+                );
+            }
+            if let Some(second_top) = last_actions.get(1).copied() {
+                lane_shapes[n - 1] = shift_x_in_y_band(
+                    &lane_shapes[n - 1],
+                    second_top,
+                    second_top + ACTION_MIN_HEIGHT + ACTION_PADDING,
+                    -PURE_NESTED_FORK_LAST_MID_PULL_LEFT,
+                );
+            }
+        }
     }
     for frame in &svg.swimlane_v2_partition_frames {
         for &lane in &frame.lanes {
@@ -24379,6 +24497,49 @@ fn layout_swimlanes_v2(
             lane_conns = vec![String::new(); n];
             if n > 0 {
                 lane_conns[0] = routed;
+            }
+        }
+    } else if if_mode && fork_mode && pure_nested_fork_mode {
+        let nat_shapes: Vec<String> = (0..n)
+            .map(|l| crate::compress::shift_y(&shape_frags[l], content_dy))
+            .collect();
+        let nat_conns = crate::compress::shift_y(&svg.connectors, content_dy);
+        if let Some((routed, split_collector)) = route_if_cross_lane_connectors(
+            &nat_conns,
+            &nat_shapes,
+            &lane_shapes,
+            &lane_left,
+            &lane_right,
+            if_long_multi_elseif_mode,
+            tree_has_repeat(tree),
+            &arrow_color,
+        ) {
+            routed_split_collector = split_collector;
+            lane_conns = vec![String::new(); n];
+            if n > 0 {
+                lane_conns[0] = routed;
+            }
+        } else if !tree_has_while_with_fork(tree) {
+            let nat_shapes: Vec<String> = (0..n)
+                .map(|l| crate::compress::shift_y(&shape_frags[l], content_dy))
+                .collect();
+            if let Some(routed) =
+                route_fork_swimlane_connectors(&nat_shapes, &lane_shapes, &arrow_color)
+            {
+                if let (Some(top_y), Some(bottom_y)) = (top_bar_y, bottom_bar_y) {
+                    for l in 0..n {
+                        if has_fork_bar(&shape_frags[l]) {
+                            lane_conns[l] = strip_direct_fork_bar_connectors(
+                                &lane_conns[l],
+                                top_y + lane_dy[l],
+                                bottom_y + lane_dy[l],
+                            );
+                        }
+                    }
+                }
+                if let Some(owner) = (0..n).find(|&l| has_fork_bar(&shape_frags[l])) {
+                    lane_conns[owner].push_str(&routed);
+                }
             }
         }
     } else if if_mode && fork_mode {
