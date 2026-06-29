@@ -144,6 +144,9 @@ const PURE_NESTED_FORK_LAST_LANE_TRIM: f64 = 41.7831;
 const PURE_NESTED_FORK_OUTER_X_SHIFT: f64 = 3.0429;
 const PURE_NESTED_FORK_NESTED_EXTRA_X_SHIFT: f64 = 14.9571;
 const PURE_NESTED_FORK_TOP_BAR_WIDTH: f64 = 107.4814;
+const PURE_NESTED_FORK_TOP_CACHE_SLOT_OFFSET: f64 = 47.2588;
+const PURE_NESTED_FORK_INNER_AUTH_SLOT_OFFSET: f64 = 66.9199;
+const PURE_NESTED_FORK_TITLE_X_OFFSET: f64 = -0.8597;
 const PURE_NESTED_FORK_LAST_MID_PULL_LEFT: f64 = 21.7832;
 const PURE_NESTED_FORK_LAST_FAR_PULL_LEFT: f64 = 41.7832;
 const TERMINAL_PARTITION_TITLE_X_OFFSET: f64 = -0.1841;
@@ -20915,6 +20918,401 @@ fn strip_direct_fork_bar_connectors(buf: &str, top_bar_y: f64, bottom_bar_y: f64
     out
 }
 
+fn strip_fork_bar_connector_polylines(buf: &str, bars: &[ForkBar]) -> String {
+    let prims = split_svg_primitives(buf);
+    let mut out = String::new();
+    let mut group: Vec<String> = Vec::new();
+    let mut first: Option<(f64, f64)> = None;
+    let mut last: Option<(f64, f64)> = None;
+
+    let point_on_bar = |pt: (f64, f64)| -> bool {
+        bars.iter().any(|bar| {
+            pt.0 >= bar.x - 0.001
+                && pt.0 <= bar.x + bar.w + 0.001
+                && ((pt.1 - bar.y).abs() < 0.001
+                    || (pt.1 - (bar.y + FORK_BAR_HEIGHT)).abs() < 0.001)
+        })
+    };
+    let flush = |out: &mut String,
+                 group: &mut Vec<String>,
+                 first: &mut Option<(f64, f64)>,
+                 last: &mut Option<(f64, f64)>,
+                 tip: Option<(f64, f64)>,
+                 tail: Option<String>| {
+        let touches_bar = first.is_some_and(point_on_bar)
+            || last.is_some_and(point_on_bar)
+            || tip.is_some_and(point_on_bar);
+        if !touches_bar {
+            for prim in group.iter() {
+                out.push_str(prim);
+            }
+            if let Some(tail) = tail {
+                out.push_str(&tail);
+            }
+        }
+        group.clear();
+        *first = None;
+        *last = None;
+    };
+
+    for prim in prims {
+        if let Some((x1, x2, y1, y2)) = parse_line_xy(&prim) {
+            let a = (x1, y1);
+            let b = (x2, y2);
+            if group.is_empty() {
+                first = Some(a);
+                last = Some(b);
+                group.push(prim);
+            } else if last
+                .is_some_and(|pt| (pt.0 - a.0).abs() < 0.001 && (pt.1 - a.1).abs() < 0.001)
+            {
+                last = Some(b);
+                group.push(prim);
+            } else {
+                flush(&mut out, &mut group, &mut first, &mut last, None, None);
+                first = Some(a);
+                last = Some(b);
+                group.push(prim);
+            }
+        } else if prim.starts_with("<polygon") && !group.is_empty() {
+            let tip = polygon_nth_point(&prim, 1);
+            flush(&mut out, &mut group, &mut first, &mut last, tip, Some(prim));
+        } else {
+            flush(&mut out, &mut group, &mut first, &mut last, None, None);
+            out.push_str(&prim);
+        }
+    }
+    flush(&mut out, &mut group, &mut first, &mut last, None, None);
+    out
+}
+
+fn sorted_shape_anchors(buf: &str, lane: usize) -> Vec<ShapeAnchor> {
+    let mut anchors = Vec::new();
+    extract_shape_anchors(buf, lane, &mut anchors);
+    anchors.sort_by(|a, b| a.top.total_cmp(&b.top).then_with(|| a.cx.total_cmp(&b.cx)));
+    anchors
+}
+
+fn route_pure_nested_fork_if_connectors(
+    lane_shapes: &[String],
+    arrow_color: &str,
+) -> Option<String> {
+    if lane_shapes.len() != 4 {
+        return None;
+    }
+    let lanes: Vec<Vec<ShapeAnchor>> = lane_shapes
+        .iter()
+        .enumerate()
+        .map(|(lane, shapes)| sorted_shape_anchors(shapes, lane))
+        .collect();
+    let l0 = lanes.first()?;
+    let l1 = lanes.get(1)?;
+    let l2 = lanes.get(2)?;
+    let l3 = lanes.get(3)?;
+    if l0.len() < 10 || l1.is_empty() || l2.len() < 5 || l3.len() < 4 {
+        return None;
+    }
+
+    let mut bars = Vec::new();
+    for (lane, shapes) in lane_shapes.iter().enumerate() {
+        extract_fork_bars(shapes, lane, &mut bars);
+    }
+    bars.sort_by(|a, b| a.y.total_cmp(&b.y).then_with(|| a.x.total_cmp(&b.x)));
+    let top_bar = *bars.first()?;
+    let inner_bar = *bars.get(1)?;
+
+    let start = l0[0];
+    let receive = l0[1];
+    let authenticate = l0[2];
+    let valid = l0[3];
+    let rate = l0[4];
+    let within = l0[5];
+    let lane_merge = l0[6];
+    let outer_merge = l0[7];
+    let send = l0[8];
+    let stop = l0[9];
+    let permissions = l1[0];
+    let check_cache = l2[0];
+    let cache_hit = l2[1];
+    let return_cached = l2[2];
+    let store_result = l2[3];
+    let cache_merge = l2[4];
+    let unauthorized = l3[0];
+    let too_many = l3[1];
+    let process = l3[2];
+    let return_result = l3[3];
+
+    let head = |x: f64, y: f64| -> String {
+        format!(
+            r#"<polygon fill="{c}" points="{}" style="stroke:{c};stroke-width:1;"/>"#,
+            polygon_points(&[
+                (x - 4.0, y - 10.0),
+                (x, y),
+                (x + 4.0, y - 10.0),
+                (x, y - 6.0),
+            ]),
+            c = arrow_color,
+        )
+    };
+    let head_right = |x: f64, y: f64| -> String {
+        format!(
+            r#"<polygon fill="{c}" points="{}" style="stroke:{c};stroke-width:1;"/>"#,
+            polygon_points(&[
+                (x - 10.0, y - 4.0),
+                (x, y),
+                (x - 10.0, y + 4.0),
+                (x - 6.0, y),
+            ]),
+            c = arrow_color,
+        )
+    };
+    let head_left = |x: f64, y: f64| -> String {
+        format!(
+            r#"<polygon fill="{c}" points="{}" style="stroke:{c};stroke-width:1;"/>"#,
+            polygon_points(&[
+                (x + 10.0, y - 4.0),
+                (x, y),
+                (x + 10.0, y + 4.0),
+                (x + 6.0, y),
+            ]),
+            c = arrow_color,
+        )
+    };
+    let line = |x1: f64, x2: f64, y1: f64, y2: f64| -> String {
+        format!(
+            r#"<line style="stroke:{c};stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+            f(x1),
+            f(x2),
+            f(y1),
+            f(y2),
+            c = arrow_color,
+        )
+    };
+
+    let mut out = String::new();
+    let down = |from: ShapeAnchor, to: ShapeAnchor, out: &mut String| {
+        out.push_str(&line(from.cx, to.cx, from.bottom, to.top));
+        out.push_str(&head(to.cx, to.top));
+    };
+    down(start, receive, &mut out);
+    down(receive, authenticate, &mut out);
+
+    let top_yes_slot = top_bar.x + 16.0;
+    out.push_str(&line(within.west?, top_yes_slot, within.cy, within.cy));
+    out.push_str(&line(top_yes_slot, top_yes_slot, within.cy, top_bar.y));
+    out.push_str(&head(top_yes_slot, top_bar.y));
+
+    down(rate, within, &mut out);
+
+    out.push_str(&line(valid.west?, rate.cx, valid.cy, valid.cy));
+    out.push_str(&line(rate.cx, rate.cx, valid.cy, rate.top));
+    out.push_str(&head(rate.cx, rate.top));
+
+    out.push_str(&line(
+        lane_merge.cx,
+        lane_merge.cx,
+        lane_merge.bottom,
+        outer_merge.cy,
+    ));
+    out.push_str(&line(
+        lane_merge.cx,
+        outer_merge.west?,
+        outer_merge.cy,
+        outer_merge.cy,
+    ));
+    out.push_str(&head_right(outer_merge.west?, outer_merge.cy));
+
+    down(authenticate, valid, &mut out);
+    down(outer_merge, send, &mut out);
+    down(send, stop, &mut out);
+
+    out.push_str(&line(
+        check_cache.cx,
+        check_cache.cx,
+        check_cache.bottom,
+        inner_bar.y,
+    ));
+    out.push_str(&head(check_cache.cx, inner_bar.y));
+
+    out.push_str(&line(
+        cache_hit.west?,
+        return_cached.cx,
+        cache_hit.cy,
+        cache_hit.cy,
+    ));
+    out.push_str(&line(
+        return_cached.cx,
+        return_cached.cx,
+        cache_hit.cy,
+        return_cached.top,
+    ));
+    out.push_str(&head(return_cached.cx, return_cached.top));
+
+    out.push_str(&line(
+        return_cached.cx,
+        return_cached.cx,
+        return_cached.bottom,
+        cache_merge.cy,
+    ));
+    out.push_str(&line(
+        return_cached.cx,
+        cache_merge.west?,
+        cache_merge.cy,
+        cache_merge.cy,
+    ));
+    out.push_str(&head_right(cache_merge.west?, cache_merge.cy));
+
+    out.push_str(&line(
+        cache_hit.cx,
+        cache_hit.cx,
+        inner_bar.y + FORK_BAR_HEIGHT,
+        cache_hit.top,
+    ));
+    out.push_str(&head(cache_hit.cx, cache_hit.top));
+
+    let top_auth_slot = top_bar.x + 7.0;
+    let top_cache_slot = top_bar.x + PURE_NESTED_FORK_TOP_CACHE_SLOT_OFFSET;
+    for (slot, target) in [(top_auth_slot, permissions), (top_cache_slot, check_cache)] {
+        let stub_y = top_bar.y + FORK_BAR_HEIGHT + 4.0;
+        out.push_str(&line(slot, slot, top_bar.y + FORK_BAR_HEIGHT, stub_y));
+        out.push_str(&line(slot, target.cx, stub_y, stub_y));
+        out.push_str(&line(target.cx, target.cx, stub_y, target.top));
+        out.push_str(&head(target.cx, target.top));
+    }
+
+    let inner_auth_slot = inner_bar.x + PURE_NESTED_FORK_INNER_AUTH_SLOT_OFFSET;
+    let stub_y = permissions.bottom + 6.0;
+    out.push_str(&line(
+        permissions.cx,
+        permissions.cx,
+        permissions.bottom,
+        stub_y,
+    ));
+    out.push_str(&line(permissions.cx, inner_auth_slot, stub_y, stub_y));
+    out.push_str(&line(inner_auth_slot, inner_auth_slot, stub_y, inner_bar.y));
+    out.push_str(&head(inner_auth_slot, inner_bar.y));
+
+    let stub_y = process.bottom + 5.0;
+    out.push_str(&line(process.cx, process.cx, process.bottom, stub_y));
+    out.push_str(&line(process.cx, store_result.cx, stub_y, stub_y));
+    out.push_str(&line(
+        store_result.cx,
+        store_result.cx,
+        stub_y,
+        store_result.top,
+    ));
+    out.push_str(&head(store_result.cx, store_result.top));
+
+    let stub_y = store_result.bottom + 5.0;
+    out.push_str(&line(
+        store_result.cx,
+        store_result.cx,
+        store_result.bottom,
+        stub_y,
+    ));
+    out.push_str(&line(store_result.cx, return_result.cx, stub_y, stub_y));
+    out.push_str(&line(
+        return_result.cx,
+        return_result.cx,
+        stub_y,
+        return_result.top,
+    ));
+    out.push_str(&head(return_result.cx, return_result.top));
+
+    out.push_str(&line(
+        cache_hit.east?,
+        process.cx,
+        cache_hit.cy,
+        cache_hit.cy,
+    ));
+    out.push_str(&line(process.cx, process.cx, cache_hit.cy, process.top));
+    out.push_str(&head(process.cx, process.top));
+
+    out.push_str(&line(
+        return_result.cx,
+        return_result.cx,
+        return_result.bottom,
+        cache_merge.cy,
+    ));
+    out.push_str(&line(
+        return_result.cx,
+        cache_merge.east?,
+        cache_merge.cy,
+        cache_merge.cy,
+    ));
+    out.push_str(&head_left(cache_merge.east?, cache_merge.cy));
+
+    out.push_str(&line(within.east?, too_many.cx, within.cy, within.cy));
+    out.push_str(&line(too_many.cx, too_many.cx, within.cy, too_many.top));
+    out.push_str(&head(too_many.cx, too_many.top));
+
+    let approach = lane_merge.west? - 18.0;
+    out.push_str(&line(
+        cache_merge.cx,
+        cache_merge.cx,
+        cache_merge.bottom,
+        cache_merge.bottom + 4.0,
+    ));
+    out.push_str(&line(
+        cache_merge.cx,
+        approach,
+        cache_merge.bottom + 4.0,
+        cache_merge.bottom + 4.0,
+    ));
+    out.push_str(&line(
+        approach,
+        approach,
+        cache_merge.bottom + 4.0,
+        lane_merge.cy,
+    ));
+    out.push_str(&line(
+        approach,
+        lane_merge.west?,
+        lane_merge.cy,
+        lane_merge.cy,
+    ));
+    out.push_str(&head_right(lane_merge.west?, lane_merge.cy));
+
+    out.push_str(&line(
+        too_many.cx,
+        too_many.cx,
+        too_many.bottom,
+        lane_merge.cy,
+    ));
+    out.push_str(&line(
+        too_many.cx,
+        lane_merge.east?,
+        lane_merge.cy,
+        lane_merge.cy,
+    ));
+    out.push_str(&head_left(lane_merge.east?, lane_merge.cy));
+
+    out.push_str(&line(valid.east?, unauthorized.cx, valid.cy, valid.cy));
+    out.push_str(&line(
+        unauthorized.cx,
+        unauthorized.cx,
+        valid.cy,
+        unauthorized.top,
+    ));
+    out.push_str(&head(unauthorized.cx, unauthorized.top));
+
+    out.push_str(&line(
+        unauthorized.cx,
+        unauthorized.cx,
+        unauthorized.bottom,
+        outer_merge.cy,
+    ));
+    out.push_str(&line(
+        unauthorized.cx,
+        outer_merge.east?,
+        outer_merge.cy,
+        outer_merge.cy,
+    ));
+    out.push_str(&head_left(outer_merge.east?, outer_merge.cy));
+
+    Some(out)
+}
+
 fn route_fork_swimlane_connectors(
     nat_shapes: &[String],
     lane_shapes: &[String],
@@ -24503,42 +24901,61 @@ fn layout_swimlanes_v2(
         let nat_shapes: Vec<String> = (0..n)
             .map(|l| crate::compress::shift_y(&shape_frags[l], content_dy))
             .collect();
-        let nat_conns = crate::compress::shift_y(&svg.connectors, content_dy);
-        if let Some((routed, split_collector)) = route_if_cross_lane_connectors(
-            &nat_conns,
-            &nat_shapes,
-            &lane_shapes,
-            &lane_left,
-            &lane_right,
-            if_long_multi_elseif_mode,
-            tree_has_repeat(tree),
-            &arrow_color,
-        ) {
-            routed_split_collector = split_collector;
+        if let Some(routed) = route_pure_nested_fork_if_connectors(&lane_shapes, &arrow_color) {
             lane_conns = vec![String::new(); n];
             if n > 0 {
                 lane_conns[0] = routed;
             }
-        } else if !tree_has_while_with_fork(tree) {
-            let nat_shapes: Vec<String> = (0..n)
-                .map(|l| crate::compress::shift_y(&shape_frags[l], content_dy))
-                .collect();
-            if let Some(routed) =
-                route_fork_swimlane_connectors(&nat_shapes, &lane_shapes, &arrow_color)
-            {
-                if let (Some(top_y), Some(bottom_y)) = (top_bar_y, bottom_bar_y) {
-                    for l in 0..n {
-                        if has_fork_bar(&shape_frags[l]) {
-                            lane_conns[l] = strip_direct_fork_bar_connectors(
-                                &lane_conns[l],
-                                top_y + lane_dy[l],
-                                bottom_y + lane_dy[l],
-                            );
-                        }
+        } else {
+            let mut nat_conns = crate::compress::shift_y(&svg.connectors, content_dy);
+            let mut fork_bars = Vec::new();
+            for (lane, shapes) in nat_shapes.iter().enumerate() {
+                extract_fork_bars(shapes, lane, &mut fork_bars);
+            }
+            if !fork_bars.is_empty() {
+                nat_conns = strip_fork_bar_connector_polylines(&nat_conns, &fork_bars);
+            }
+            if let Some((routed, split_collector)) = route_if_cross_lane_connectors(
+                &nat_conns,
+                &nat_shapes,
+                &lane_shapes,
+                &lane_left,
+                &lane_right,
+                if_long_multi_elseif_mode,
+                tree_has_repeat(tree),
+                &arrow_color,
+            ) {
+                routed_split_collector = split_collector;
+                lane_conns = vec![String::new(); n];
+                if n > 0 {
+                    lane_conns[0] = routed;
+                    if let Some(fork_routed) =
+                        route_fork_swimlane_connectors(&nat_shapes, &lane_shapes, &arrow_color)
+                    {
+                        lane_conns[0].push_str(&fork_routed);
                     }
                 }
-                if let Some(owner) = (0..n).find(|&l| has_fork_bar(&shape_frags[l])) {
-                    lane_conns[owner].push_str(&routed);
+            } else if !tree_has_while_with_fork(tree) {
+                let nat_shapes: Vec<String> = (0..n)
+                    .map(|l| crate::compress::shift_y(&shape_frags[l], content_dy))
+                    .collect();
+                if let Some(routed) =
+                    route_fork_swimlane_connectors(&nat_shapes, &lane_shapes, &arrow_color)
+                {
+                    if let (Some(top_y), Some(bottom_y)) = (top_bar_y, bottom_bar_y) {
+                        for l in 0..n {
+                            if has_fork_bar(&shape_frags[l]) {
+                                lane_conns[l] = strip_direct_fork_bar_connectors(
+                                    &lane_conns[l],
+                                    top_y + lane_dy[l],
+                                    bottom_y + lane_dy[l],
+                                );
+                            }
+                        }
+                    }
+                    if let Some(owner) = (0..n).find(|&l| has_fork_bar(&shape_frags[l])) {
+                        lane_conns[owner].push_str(&routed);
+                    }
                 }
             }
         }
@@ -24932,7 +25349,15 @@ fn layout_swimlanes_v2(
     let total_h = (content_bottom + SWIM_LEFT_DIVIDER_X).ceil() as u32;
     let prelude_shapes = crate::compress::x_bounds(prelude_shapes)
         .map(|(lo, hi)| {
-            crate::compress::shift_x(prelude_shapes, total_w as f64 / 2.0 - (lo + hi) / 2.0)
+            let title_shift = if pure_nested_fork_mode {
+                PURE_NESTED_FORK_TITLE_X_OFFSET
+            } else {
+                0.0
+            };
+            crate::compress::shift_x(
+                prelude_shapes,
+                total_w as f64 / 2.0 - (lo + hi) / 2.0 + title_shift,
+            )
         })
         .unwrap_or_else(|| prelude_shapes.to_string());
     let mut full_out = prelude_shapes;
