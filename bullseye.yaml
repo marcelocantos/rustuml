@@ -684,6 +684,25 @@ targets:
     origin: manual
     discovered: 2026-06-29
     achieved: 2026-06-29
+  T4.1.33:
+    name: End-to-end order swimlane workflows use PlantUML nested if/fork lane geometry
+    status: achieved
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - '`target/release/examples/diff_one test-diagrams/golden/activity/act_complex_e2e_workflow.puml` reports structural equivalence.'
+    - '`target/release/examples/check_all` drops the strict-XML ledger without new failures.'
+    - Implementation generalizes through Swimlane V2 lane geometry/routing and does not replay fixture SVG or branch on fixture names.
+    context: 'After 🎯T4.1.32, the remaining ledger includes `activity/act_complex_e2e_workflow`. The diagram is a five-lane order workflow: Customer -> Order Service, a top-level `if (valid?)`, a nested two-branch fork over Inventory/Payment, then a second `if (all succeeded?)` that routes to Fulfillment or back to Order Service/Customer. Current V2 admission is active and `route_if_cross_lane_connectors` runs, but lane widths and y bands differ: expected canvas 1109x665, actual 1064x643; expected Customer/Order Service/Fulfillment lanes are wider, top-level content is shifted horizontally, the first fork bar width is too wide, and connector ordering diverges around the nested fork and second if.'
+    tags:
+    - activity
+    - swimlane
+    - if
+    - fork
+    - strict-xml
+    origin: manual
+    discovered: 2026-06-29
+    achieved: 2026-06-29
   T4.1.4:
     name: Swimlane V2 four-branch fork lane-spanning diagrams match PlantUML geometry
     status: achieved
