@@ -15253,6 +15253,7 @@ fn emit_if_break_down(
     let diamond_stroke = svg.palette.diamond_stroke.clone();
     let diamond_fill = svg.palette.diamond_fill.clone();
     let diamond_stroke_width = svg.palette.diamond_stroke_width.clone();
+    let if_lane = svg.swimlane_v2_active.then_some(svg.current_lane);
 
     let cond_inner_w = diamond_inner_w(condition);
     let cond_text_w = text_render::measure(condition, SMALL_FONT, false);
@@ -15397,7 +15398,9 @@ fn emit_if_break_down(
     // Diamond → break: plain connector down the spine to the break tile (the
     // break tile is empty / has no inbound decoration — PlantUML's `ConnectionIn`
     // to a `FtileBreak` draws no arrowhead).
-    svg.connector_line(&arrow_color, cx, cx, diamond_bottom, break_y, false);
+    svg.with_connector_lanes(if_lane, if_lane, |svg| {
+        svg.connector_line(&arrow_color, cx, cx, diamond_bottom, break_y, false);
+    });
 
     // Break weld: horizontal LEFT from the spine to the loop exit corridor.
     // For a `while`, a left-pointing arrowhead lands at the corridor (asToLeft)
@@ -15409,37 +15412,39 @@ fn emit_if_break_down(
     // condition's south exit into it. The merge centreline sits a fixed span
     // below this if's pointOut: ARROW_LEN (→condition) + condition diamond
     // + ARROW_LEN (→merge) + halfHex (merge centre).
-    svg.connector_line(&arrow_color, cx, brk.corridor_x, break_y, break_y, false);
-    if brk.repeat_mode {
-        svg.repeat_break_weld_y = Some(break_y);
-        // Last-node break: the merge sits a fixed span below the condition that
-        // immediately follows the if (`return_y` + arrow + condition + arrow +
-        // half). Mid/early break: trailing body flow + the condition push the
-        // merge lower, so `emit_repeat` pre-computes its centre and hands it in.
-        let merge_cy = brk
-            .repeat_merge_cy
-            .unwrap_or(return_y + ARROW_LEN + DIAMOND_HALF * 2.0 + ARROW_LEN + DIAMOND_HALF);
-        let merge_left = cx - DIAMOND_HALF;
-        svg.connector_line(
-            &arrow_color,
-            brk.corridor_x,
-            brk.corridor_x,
-            break_y,
-            merge_cy,
-            false,
-        );
-        svg.connector_line(
-            &arrow_color,
-            brk.corridor_x,
-            merge_left,
-            merge_cy,
-            merge_cy,
-            false,
-        );
-        svg.right_arrow(merge_left, merge_cy, &arrow_color);
-    } else {
-        svg.left_arrow(brk.corridor_x, break_y, &arrow_color);
-    }
+    svg.with_connector_lanes(if_lane, None, |svg| {
+        svg.connector_line(&arrow_color, cx, brk.corridor_x, break_y, break_y, false);
+        if brk.repeat_mode {
+            svg.repeat_break_weld_y = Some(break_y);
+            // Last-node break: the merge sits a fixed span below the condition that
+            // immediately follows the if (`return_y` + arrow + condition + arrow +
+            // half). Mid/early break: trailing body flow + the condition push the
+            // merge lower, so `emit_repeat` pre-computes its centre and hands it in.
+            let merge_cy = brk
+                .repeat_merge_cy
+                .unwrap_or(return_y + ARROW_LEN + DIAMOND_HALF * 2.0 + ARROW_LEN + DIAMOND_HALF);
+            let merge_left = cx - DIAMOND_HALF;
+            svg.connector_line(
+                &arrow_color,
+                brk.corridor_x,
+                brk.corridor_x,
+                break_y,
+                merge_cy,
+                false,
+            );
+            svg.connector_line(
+                &arrow_color,
+                brk.corridor_x,
+                merge_left,
+                merge_cy,
+                merge_cy,
+                false,
+            );
+            svg.right_arrow(merge_left, merge_cy, &arrow_color);
+        } else {
+            svg.left_arrow(brk.corridor_x, break_y, &arrow_color);
+        }
+    });
 
     // Fused loop-back: when the break-`if` is the body's LAST flow node, its
     // empty (continue) branch is the whole loop's `pointOut`. PlantUML's
@@ -15450,31 +15455,33 @@ fn emit_if_break_down(
     // east vertex → right to `loop_x` → up to the diamond `cy` → left-arrow into
     // the diamond's right vertex. Signal `emit_while` to skip its own arm.
     if let Some(lb) = brk.fuse_loopback {
-        svg.connector_line(
-            &arrow_color,
-            diamond_right,
-            lb.loop_x,
-            diamond_cy,
-            diamond_cy,
-            false,
-        );
-        svg.connector_line(
-            &arrow_color,
-            lb.loop_x,
-            lb.loop_x,
-            lb.diamond_cy,
-            diamond_cy,
-            false,
-        );
-        svg.connector_line(
-            &arrow_color,
-            lb.loop_x,
-            lb.diamond_right_vertex_x,
-            lb.diamond_cy,
-            lb.diamond_cy,
-            false,
-        );
-        svg.left_arrow(lb.diamond_right_vertex_x, lb.diamond_cy, &arrow_color);
+        svg.with_connector_lanes(if_lane, if_lane, |svg| {
+            svg.connector_line(
+                &arrow_color,
+                diamond_right,
+                lb.loop_x,
+                diamond_cy,
+                diamond_cy,
+                false,
+            );
+            svg.connector_line(
+                &arrow_color,
+                lb.loop_x,
+                lb.loop_x,
+                lb.diamond_cy,
+                diamond_cy,
+                false,
+            );
+            svg.connector_line(
+                &arrow_color,
+                lb.loop_x,
+                lb.diamond_right_vertex_x,
+                lb.diamond_cy,
+                lb.diamond_cy,
+                false,
+            );
+            svg.left_arrow(lb.diamond_right_vertex_x, lb.diamond_cy, &arrow_color);
+        });
         svg.while_break_loopback_fused = true;
         return return_y;
     }
@@ -15483,14 +15490,16 @@ fn emit_if_break_down(
     // vertex, run down (down-emphasized mid arrow), then rejoin the spine at the
     // if-block's pointOut. No terminal in-arrow — it simply welds back.
     let corridor_x = diamond_right + DIAMOND_HALF;
-    svg.connector_line(
-        &arrow_color,
-        diamond_right,
-        corridor_x,
-        diamond_cy,
-        diamond_cy,
-        false,
-    );
+    svg.with_connector_lanes(if_lane, None, |svg| {
+        svg.connector_line(
+            &arrow_color,
+            diamond_right,
+            corridor_x,
+            diamond_cy,
+            diamond_cy,
+            false,
+        );
+    });
     // The corridor's DOWN emphasize arrowhead sits at its run midpoint. When the
     // loop column compresses the corridor (>=3 body flow nodes) PlantUML's slot
     // finder nudges the tip down by one `IF_CORRIDOR_ARROW_OFFSET`; an
@@ -15502,26 +15511,28 @@ fn emit_if_break_down(
         } else {
             0.0
         };
-    svg.polygon_connector(
-        &arrow_color,
-        &[
-            (corridor_x - 4.0, arrow_tip - 10.0),
-            (corridor_x, arrow_tip),
-            (corridor_x + 4.0, arrow_tip - 10.0),
-            (corridor_x, arrow_tip - 6.0),
-        ],
-        &arrow_color,
-        "1",
-    );
-    svg.connector_line(
-        &arrow_color,
-        corridor_x,
-        corridor_x,
-        diamond_cy,
-        return_y,
-        false,
-    );
-    svg.connector_line(&arrow_color, corridor_x, cx, return_y, return_y, false);
+    svg.with_connector_lanes(if_lane, None, |svg| {
+        svg.polygon_connector(
+            &arrow_color,
+            &[
+                (corridor_x - 4.0, arrow_tip - 10.0),
+                (corridor_x, arrow_tip),
+                (corridor_x + 4.0, arrow_tip - 10.0),
+                (corridor_x, arrow_tip - 6.0),
+            ],
+            &arrow_color,
+            "1",
+        );
+        svg.connector_line(
+            &arrow_color,
+            corridor_x,
+            corridor_x,
+            diamond_cy,
+            return_y,
+            false,
+        );
+        svg.connector_line(&arrow_color, corridor_x, cx, return_y, return_y, false);
+    });
 
     // In a LAST-node `repeat` break, the break-`if`'s pointOut feeds straight into
     // the condition diamond one ARROW_LEN below. PlantUML emits that body→diamond2
@@ -15531,7 +15542,9 @@ fn emit_if_break_down(
     // trailing body flow; the enclosing `emit_sequence` draws the rejoin→action
     // arrow, so DON'T draw it here (it would duplicate).
     if brk.repeat_mode && brk.repeat_merge_cy.is_none() {
-        svg.down_arrow(cx, return_y, return_y + ARROW_LEN, &arrow_color);
+        svg.with_connector_lanes(if_lane, None, |svg| {
+            svg.down_arrow(cx, return_y, return_y + ARROW_LEN, &arrow_color);
+        });
     }
 
     return_y
@@ -20302,6 +20315,18 @@ fn route_if_cross_lane_connectors(
             c = arrow_color,
         )
     };
+    let head_up = |x: f64, y: f64| -> String {
+        format!(
+            r#"<polygon fill="{c}" points="{}" style="stroke:{c};stroke-width:1;"/>"#,
+            polygon_points(&[
+                (x - 4.0, y + 10.0),
+                (x, y),
+                (x + 4.0, y + 10.0),
+                (x, y + 6.0),
+            ]),
+            c = arrow_color,
+        )
+    };
     // Right-pointing arrowhead (tip at (x,y), entering from the left).
     let head_right = |x: f64, y: f64| -> String {
         format!(
@@ -20340,6 +20365,21 @@ fn route_if_cross_lane_connectors(
     };
 
     let dbg = std::env::var("RUSTUML_EXT_DBG").is_ok();
+    let final_anchor_point = |idx: usize, pt: (f64, f64)| -> (f64, f64) {
+        let na = &nat[idx];
+        let fa = &fin[idx];
+        if na.west.is_some_and(|x| (pt.0 - x).abs() < 3.0) {
+            (fa.west.unwrap_or(fa.cx), fa.cy)
+        } else if na.east.is_some_and(|x| (pt.0 - x).abs() < 3.0) {
+            (fa.east.unwrap_or(fa.cx), fa.cy)
+        } else if (pt.1 - na.top).abs() < 3.0 {
+            (fa.cx, fa.top)
+        } else if (pt.1 - na.bottom).abs() < 3.0 {
+            (fa.cx, fa.bottom)
+        } else {
+            (fa.cx, pt.1)
+        }
+    };
     // PlantUML emits if-long connectors in lane-shaped groups, not in the natural
     // single-tree run order: lane-0 branch exits, condition links, start entry,
     // merge collector, other-lane branch exits, cross-lane branch entries, then
@@ -20495,6 +20535,8 @@ fn route_if_cross_lane_connectors(
         return Some((routed, false));
     }
     let mut split_collector = false;
+    let mut side_corridor: Option<(usize, (f64, f64), f64)> = None;
+    let mut floating_corridor_x: Option<(usize, f64, f64)> = None;
     if dbg {
         for (i, pl) in polylines.iter().enumerate() {
             eprintln!(
@@ -20514,6 +20556,36 @@ fn route_if_cross_lane_connectors(
             return None;
         };
         if pl.tip.is_none() {
+            if let Some((source_lane, nat_x, final_x)) = floating_corridor_x
+                && pl.verts.len() == 2
+                && (src_pt.0 - nat_x).abs() < 3.0
+                && (pl.verts[0].0 - pl.verts[1].0).abs() < 0.001
+            {
+                let mut snake = String::new();
+                snake.push_str(&line(final_x, final_x, pl.verts[0].1, pl.verts[1].1));
+                if source_lane == 0 {
+                    lane0_edges.push_str(&snake);
+                } else {
+                    other_lane_outputs.push_str(&snake);
+                }
+                continue;
+            }
+            if pl.verts.len() == 2
+                && (pl.verts[0].1 - pl.verts[1].1).abs() < 0.001
+                && let Some(si) = match_pt(pl.verts[0])
+            {
+                let (sx, sy) = final_anchor_point(si, pl.verts[0]);
+                let tx = sx + (pl.verts[1].0 - pl.verts[0].0);
+                let mut snake = String::new();
+                snake.push_str(&line(sx, tx, sy, sy));
+                if fin[si].lane == 0 {
+                    lane0_edges.push_str(&snake);
+                } else {
+                    other_lane_outputs.push_str(&snake);
+                }
+                floating_corridor_x = Some((fin[si].lane, pl.verts[1].0, tx));
+                continue;
+            }
             if pl.verts.len() == 2 && (pl.verts[0].1 - pl.verts[1].1).abs() < 0.001 {
                 let Some(si) = match_merge_column(pl.verts[0]) else {
                     if dbg {
@@ -20596,6 +20668,75 @@ fn route_if_cross_lane_connectors(
         let src_from_merge_column = direct_src_i.is_none();
         let src_i = direct_src_i.or_else(|| match_merge_column(src_pt));
         let tip_i = match_pt(tip);
+        if src_i.is_none()
+            && let Some((source_lane, nat_x, final_x)) = floating_corridor_x
+            && (src_pt.0 - nat_x).abs() < 3.0
+        {
+            if pl.verts.len() == 2 && (pl.verts[0].0 - pl.verts[1].0).abs() < 0.001 {
+                let mut snake = String::new();
+                snake.push_str(&line(final_x, final_x, pl.verts[0].1, pl.verts[1].1));
+                if (tip.1 - pl.verts[0].1).abs() < 3.0 {
+                    snake.push_str(&head_up(final_x, tip.1));
+                } else {
+                    snake.push_str(&head(final_x, tip.1));
+                }
+                if source_lane == 0 {
+                    lane0_edges.push_str(&snake);
+                } else {
+                    other_lane_outputs.push_str(&snake);
+                }
+                continue;
+            }
+            if pl.verts.len() == 2
+                && (pl.verts[0].1 - pl.verts[1].1).abs() < 0.001
+                && let Some(ti) = tip_i
+            {
+                let (tx, ty) = final_anchor_point(ti, tip);
+                let mut snake = String::new();
+                snake.push_str(&line(final_x, tx, src_pt.1, src_pt.1));
+                if tx < final_x {
+                    snake.push_str(&head_left(tx, ty));
+                } else {
+                    snake.push_str(&head_right(tx, ty));
+                }
+                if source_lane == 0 {
+                    lane0_edges.push_str(&snake);
+                } else {
+                    other_lane_outputs.push_str(&snake);
+                }
+                continue;
+            }
+        }
+        if src_i.is_none()
+            && let Some((source_lane, nat_corridor_pt, final_corridor_x)) = side_corridor
+            && (src_pt.0 - nat_corridor_pt.0).abs() < 3.0
+            && (src_pt.1 - nat_corridor_pt.1).abs() < 3.0
+            && let Some(ti) = tip_i
+        {
+            let t = &fin[ti];
+            let tx = t.cx;
+            let ty = t.top;
+            let rejoin_y = pl.verts.get(1).map(|p| p.1).unwrap_or(ty);
+            let mut snake = String::new();
+            snake.push_str(&line(
+                final_corridor_x,
+                final_corridor_x,
+                src_pt.1,
+                rejoin_y,
+            ));
+            snake.push_str(&line(final_corridor_x, tx, rejoin_y, rejoin_y));
+            if (rejoin_y - ty).abs() > 0.001 {
+                snake.push_str(&line(tx, tx, rejoin_y, ty));
+            }
+            snake.push_str(&head(tx, ty));
+            if source_lane == 0 {
+                lane0_edges.push_str(&snake);
+            } else {
+                other_lane_outputs.push_str(&snake);
+            }
+            side_corridor = None;
+            continue;
+        }
         let Some(si) = src_i else {
             if dbg {
                 eprintln!("[V2] router: unmatched src={src_pt:?} tip={tip:?}");
@@ -20605,11 +20746,10 @@ fn route_if_cross_lane_connectors(
         let ti = tip_i;
         let s = &fin[si];
         let src_nat = &nat[si];
-        if ti.is_none()
-            && (src_pt.0 - tip.0).abs() < 0.001
-            && tip.1 > src_pt.1
-            && (src_pt.1 - src_nat.bottom).abs() < 3.0
-        {
+        let exits_bottom = (src_pt.1 - src_nat.bottom).abs() < 3.0;
+        let exits_west = src_nat.west.is_some_and(|w| (src_pt.0 - w).abs() < 3.0);
+        let exits_east = src_nat.east.is_some_and(|e| (src_pt.0 - e).abs() < 3.0);
+        if ti.is_none() && (src_pt.0 - tip.0).abs() < 0.001 && tip.1 > src_pt.1 && exits_bottom {
             let sx = s.cx;
             let sy = s.bottom;
             let mut snake = String::new();
@@ -20624,6 +20764,30 @@ fn route_if_cross_lane_connectors(
             } else {
                 other_lane_outputs.push_str(&snake);
             }
+            continue;
+        }
+        if ti.is_none()
+            && (exits_west || exits_east)
+            && pl.verts.len() == 2
+            && (pl.verts[1].1 - src_pt.1).abs() < 0.001
+            && (pl.verts[1].0 - tip.0).abs() < 0.001
+        {
+            let sx = if exits_west {
+                s.west.unwrap_or(s.cx)
+            } else {
+                s.east.unwrap_or(s.cx)
+            };
+            let corridor_dx = pl.verts[1].0 - src_pt.0;
+            let corridor_x = sx + corridor_dx;
+            let mut snake = String::new();
+            snake.push_str(&line(sx, corridor_x, s.cy, s.cy));
+            snake.push_str(&head(corridor_x, tip.1));
+            if s.lane == 0 {
+                lane0_edges.push_str(&snake);
+            } else {
+                other_lane_outputs.push_str(&snake);
+            }
+            side_corridor = Some((s.lane, pl.verts[1], corridor_x));
             continue;
         }
         let Some(ti) = ti else {
@@ -20657,9 +20821,6 @@ fn route_if_cross_lane_connectors(
         }
         // Which side the source exits: compare the natural source point to the
         // natural anchor's connection points.
-        let exits_bottom = (src_pt.1 - src_nat.bottom).abs() < 3.0;
-        let exits_west = src_nat.west.is_some_and(|w| (src_pt.0 - w).abs() < 3.0);
-        let exits_east = src_nat.east.is_some_and(|e| (src_pt.0 - e).abs() < 3.0);
 
         if exits_bottom {
             // Form A/C: exit the source bottom, optional cross, drop into target.
