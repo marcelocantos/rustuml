@@ -703,6 +703,24 @@ targets:
     origin: manual
     discovered: 2026-06-29
     achieved: 2026-06-29
+  T4.1.34:
+    name: Support-ticket swimlane workflows use PlantUML cross-lane decision geometry
+    status: achieved
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - '`target/release/examples/diff_one test-diagrams/golden/activity/act_domain_support_ticket.puml` reports structural equivalence.'
+    - '`target/release/examples/check_all` drops the strict-XML ledger without new failures.'
+    - Implementation generalizes through Swimlane V2 geometry/routing and does not replay fixture SVG or branch on fixture names.
+    context: 'After 🎯T4.1.33, the strict-XML ledger is down to eight names. `activity/act_domain_support_ticket` is the closest remaining swimlane workflow: expected 140 elements vs 130 actual, expected 912x1004 vs actual 872x959. The first mismatches are mostly swimlane V2 lane-width/x offsets and tail y spacing around support-ticket decisions, so this is the next surgical activity target before the larger showcase/kubernetes/order-system workflows.'
+    tags:
+    - activity
+    - swimlane
+    - if
+    - strict-xml
+    origin: manual
+    discovered: 2026-06-29
+    achieved: 2026-06-29
   T4.1.4:
     name: Swimlane V2 four-branch fork lane-spanning diagrams match PlantUML geometry
     status: achieved
