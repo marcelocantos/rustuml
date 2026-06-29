@@ -19460,6 +19460,65 @@ fn tree_has_while_with_fork(nodes: &[LayoutNode]) -> bool {
     })
 }
 
+fn tree_has_while(nodes: &[LayoutNode]) -> bool {
+    nodes.iter().any(|node| match node {
+        LayoutNode::While { .. } => true,
+        LayoutNode::If {
+            then_branch,
+            else_branches,
+            ..
+        } => {
+            tree_has_while(then_branch)
+                || else_branches
+                    .iter()
+                    .any(|branch| tree_has_while(&branch.body))
+        }
+        LayoutNode::Repeat { body, .. } | LayoutNode::Partition { body, .. } => {
+            tree_has_while(body)
+        }
+        LayoutNode::Fork { branches, .. } => branches.iter().any(|branch| tree_has_while(branch)),
+        LayoutNode::Switch { cases, .. } => cases.iter().any(|case| tree_has_while(&case.body)),
+        LayoutNode::Swimlanes { segments, .. } => {
+            segments.iter().any(|segment| tree_has_while(&segment.body))
+        }
+        _ => false,
+    })
+}
+
+fn tree_has_fork_with_while(nodes: &[LayoutNode]) -> bool {
+    nodes.iter().any(|node| match node {
+        LayoutNode::Fork { branches, .. } => branches.iter().any(|branch| tree_has_while(branch)),
+        LayoutNode::If {
+            then_branch,
+            else_branches,
+            ..
+        } => {
+            tree_has_fork_with_while(then_branch)
+                || else_branches
+                    .iter()
+                    .any(|branch| tree_has_fork_with_while(&branch.body))
+        }
+        LayoutNode::While {
+            body, special_out, ..
+        } => {
+            tree_has_fork_with_while(body)
+                || special_out
+                    .as_deref()
+                    .is_some_and(|node| tree_has_fork_with_while(std::slice::from_ref(node)))
+        }
+        LayoutNode::Repeat { body, .. } | LayoutNode::Partition { body, .. } => {
+            tree_has_fork_with_while(body)
+        }
+        LayoutNode::Switch { cases, .. } => cases
+            .iter()
+            .any(|case| tree_has_fork_with_while(&case.body)),
+        LayoutNode::Swimlanes { segments, .. } => segments
+            .iter()
+            .any(|segment| tree_has_fork_with_while(&segment.body)),
+        _ => false,
+    })
+}
+
 /// True when the leftmost drawn element of a lane's shape fragment (the one
 /// reaching `min_x`) is a free `<text>` label rather than a box/diamond. Such a
 /// lane uses a 5 px (not 6 px) content-left pad — see `content_pad`. Scans the
@@ -20337,6 +20396,32 @@ fn extract_action_anchors(buf: &str, lane: usize, out: &mut Vec<ShapeAnchor>) {
         }
         rest = &rest[p + 5..];
     }
+}
+
+fn strip_direct_fork_bar_connectors(buf: &str, top_bar_y: f64, bottom_bar_y: f64) -> String {
+    let prims = split_svg_primitives(buf);
+    let mut out = String::new();
+    let mut i = 0usize;
+    while i < prims.len() {
+        if let Some((x1, x2, y1, y2)) = parse_line_xy(&prims[i])
+            && (x1 - x2).abs() < 0.001
+            && i + 1 < prims.len()
+            && let Some((_, tip_y)) = polygon_nth_point(&prims[i + 1], 1)
+            && (tip_y - y2).abs() < 0.001
+            && (((y1 - (top_bar_y + FORK_BAR_HEIGHT)).abs() < 0.001
+                && y2 > y1
+                && y2 < bottom_bar_y - 0.001)
+                || ((y2 - bottom_bar_y).abs() < 0.001
+                    && y1 > top_bar_y + FORK_BAR_HEIGHT + 0.001
+                    && y1 < y2))
+        {
+            i += 2;
+            continue;
+        }
+        out.push_str(&prims[i]);
+        i += 1;
+    }
+    out
 }
 
 fn route_fork_swimlane_connectors(
@@ -23457,7 +23542,8 @@ fn layout_swimlanes_v2(
     // polylines' routing assumed the single-tree side-by-side branch layout. The
     // natural shapes are shifted by content_dy only (no dx) so they pair with the
     // per-lane-shifted final shapes for endpoint→shape matching.
-    if if_mode && fork_mode && fork_branch_count > 0 {
+    let nested_fork_with_while_mode = fork_branch_count == 0 && tree_has_fork_with_while(tree);
+    if if_mode && fork_mode && (fork_branch_count > 0 || nested_fork_with_while_mode) {
         if !tree_has_while_with_fork(tree) {
             let nat_shapes: Vec<String> = (0..n)
                 .map(|l| crate::compress::shift_y(&shape_frags[l], content_dy))
@@ -23465,8 +23551,24 @@ fn layout_swimlanes_v2(
             if let Some(routed) =
                 route_fork_swimlane_connectors(&nat_shapes, &lane_shapes, &arrow_color)
             {
-                lane_conns = vec![String::new(); n];
-                if n > 0 {
+                if fork_branch_count > 0 {
+                    lane_conns = vec![String::new(); n];
+                } else if let (Some(top_y), Some(bottom_y)) = (top_bar_y, bottom_bar_y) {
+                    for l in 0..n {
+                        if has_fork_bar(&shape_frags[l]) {
+                            lane_conns[l] = strip_direct_fork_bar_connectors(
+                                &lane_conns[l],
+                                top_y + lane_dy[l],
+                                bottom_y + lane_dy[l],
+                            );
+                        }
+                    }
+                }
+                if fork_branch_count == 0
+                    && let Some(owner) = (0..n).find(|&l| has_fork_bar(&shape_frags[l]))
+                {
+                    lane_conns[owner].push_str(&routed);
+                } else if n > 0 {
                     lane_conns[0] = routed;
                 }
             }
