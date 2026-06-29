@@ -988,9 +988,10 @@ targets:
     achieved: 2026-06-05
   T4.3:
     name: Sequence diagrams strict-XML pass
-    status: converging
+    status: achieved
     value: 0.0
     cost: 0.0
+    actual_cost: 8.0
     acceptance:
     - The `sequence/` directory under `test-diagrams/golden` produces 0 strict-XML failures when `cargo test --test golden_pairs` runs.
     context: |-
@@ -1008,6 +1009,7 @@ targets:
       Update 2026-06-07 (HEAD ae277a46): authoritative full-suite ledger has 21 `sequence/` failures. Recent commits since the 305-checkpoint push sequence from the simple Teoz vein: `bacd8c9e` standalone Teoz right notes, `e969a86a` first Teoz over notes, `5bef6952` Teoz activation bar order, `0d0e850a` Teoz activation target spacing, `5cd862f9` Teoz over-several notes, `3456c755` Teoz over-several hnote/rnote, `ae277a46` simple Teoz participant boxes. Remaining Teoz failures after that are deeper group/control-flow cases, not simple coordinate-only: `seq_teoz_3parts_groups`, `seq_teoz_4parts_groups`, `seq_teoz_5parts_groups`, `seq_teoz_box_alt`, `seq_teoz_box_loop`, `seq_teoz_box_opt`, `seq_teoz_with_groups`, plus scenario Teoz combos (`seq_scenario_cache_pattern_teoz`, `seq_scenario_event_sourcing_teoz`, `seq_scenario_file_upload_teoz`, `seq_scenario_login_flow_teoz`, `seq_scenario_saga_pattern_teoz`). Sampled `seq_teoz_with_groups` and `seq_teoz_3parts_groups`: element count is off by +1, canvas dimensions differ by ~30px, and mismatches begin around group frame vs lifelines/heads; labels differ semantically (`[ok]` expected 11pt bold vs actual `alt` 13pt in one sample). Recommendation: do not keep micro-tweaking Teoz unless taking on the group/control-flow model. Sequence tail also includes broad combo/kitchen-sink/retry/timeout cases; activity is the larger next lever.
     origin: manual
     discovered: 2026-05-17
+    achieved: 2026-06-29
   T4.4:
     name: State diagrams strict-XML pass
     status: achieved
@@ -1065,9 +1067,10 @@ targets:
     achieved: 2026-06-07
   T4.7:
     name: Edge-case diagrams strict-XML pass
-    status: converging
+    status: achieved
     value: 0.0
     cost: 0.0
+    actual_cost: 3.0
     acceptance:
     - The `edge-cases/` directory under `test-diagrams/golden` produces 0 strict-XML failures when `cargo test --test golden_pairs` runs.
     context: |-
@@ -1080,6 +1083,7 @@ targets:
     - T4.7.1
     origin: manual
     discovered: 2026-05-17
+    achieved: 2026-06-29
   T4.7.1:
     name: Sequential multiple-fork activity flows use PlantUML fork bar centering geometry
     status: achieved
@@ -1113,9 +1117,10 @@ targets:
     achieved: 2026-06-07
   T4.9:
     name: Smaller diagram-type buckets strict-XML pass
-    status: converging
+    status: achieved
     value: 0.0
     cost: 0.0
+    actual_cost: 5.0
     acceptance:
     - All test-diagrams/golden directories not covered by T4.1–T4.8 (skinparam, combo, preprocessing, usecase, er, mindmap, object, json-yaml, timing, wbs, gantt, salt, nwdiag, rendering, links, math, sprites, archimate, regex, type-detection, chart, dot, ebnf, git, multi-diagram) collectively produce 0 strict-XML failures.
     context: |-
@@ -1137,6 +1142,7 @@ targets:
       Update 2026-06-07 (HEAD ae277a46): authoritative full-suite ledger for the smaller buckets is now 48 archimate, 7 combo, 2 rendering. Current combo failures: `combo_all_decorations`, `combo_component_vs_deployment`, `combo_embedded_state_machine`, `combo_mixed_features`, `combo_sequence_everything`, `combo_state_everything`, `combo_workflow_swimlanes`; several are likely aggregates of activity/sequence/state/deployment behavior and should be rechecked after activity work. Rendering failures: `rendering/nesting/nesting_activity_nested_partitions` and `rendering/nesting/nesting_activity_partitions`, also activity-shaped. Archimate remains 48/48 failing under strict XML. Important: `crates/rustuml-oracle/src/extract.rs` explicitly disables root `<g>` verbatim capture (`if false` around `root_g_inner_xml`) because replaying golden body bytes was rejected as dishonest; the early `root_g_inner_xml` replay in `archimate::render_with_oracle` is dead. Normal CLI archimate rendering is non-empty but simplified grid output, not PlantUML sprite/layout parity. Real strict fix likely needs native Archimate sprite glyph library and Graphviz-matching layout; do not accept structured attribute/body echo as a shortcut.
     origin: manual
     discovered: 2026-05-17
+    achieved: 2026-06-29
   T4.9.1:
     name: Combo workflow swimlanes use PlantUML activity swimlane V2 geometry
     status: achieved
