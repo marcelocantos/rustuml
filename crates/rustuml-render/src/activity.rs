@@ -67,6 +67,10 @@ const PARTITION_IF_BODY_WIDTH_EXTRA: f64 = 5.6709;
 const PARTITION_IF_SEQUENCE_LEFT_PAD: f64 = 18.3682;
 const PARTITION_IF_SEQUENCE_RIGHT_PAD: f64 = 20.0;
 const PARTITION_GEOMETRIC_IF_SHELL_PAD: f64 = GROUP_IF_BODY_WIDTH_EXTRA / 2.0;
+const PARTITION_COMPLEX_IF_LEFT_PAD: f64 = 3.75;
+const PARTITION_COMPLEX_IF_RIGHT_PAD: f64 = 6.25;
+const PARTITION_COMPLEX_IF_THEN_PULL_LEFT: f64 = 0.25;
+const PARTITION_COMPLEX_IF_ELSE_PULL_LEFT: f64 = 5.75;
 const PARTITION_PREFIXED_WHILE_FRAME_TRIM: f64 = 7.0;
 const PARTITION_PREFIXED_WHILE_X_BIAS: f64 = 0.2402;
 const PARTITION_EMBEDDED_REPEAT_FRAME_TRIM: f64 = 5.4286;
@@ -3104,6 +3108,13 @@ const FORK_BRANCH_WHILE_EXIT_ARROW_PUSH_DOWN: f64 = 1.0;
 /// the fork bar and distributes the slack around the body/condition.
 const FORK_BRANCH_LOOP_SLOT_HALF: f64 = 27.0;
 const FORK_BRANCH_REPEAT_TAIL_EXTRA: f64 = 26.0;
+const WHILE_SINGLE_FORK_REPEAT_BRANCH_HEIGHT_TRIM: f64 =
+    2.0 * FORK_BRANCH_LOOP_SLOT_HALF + WHILE_BODY_SLOT_COMPRESS - 1.0;
+const WHILE_SINGLE_FORK_REPEAT_SIBLING_CENTER_TRIM: f64 =
+    WHILE_SINGLE_FORK_REPEAT_BRANCH_HEIGHT_TRIM / 2.0 + 1.0;
+const WHILE_SINGLE_FORK_REPEAT_BAR_OVERHANG: f64 = 0.5;
+const WHILE_SINGLE_FORK_REPEAT_CENTER_PUSH: f64 = 1.5;
+const WHILE_SINGLE_FORK_REPEAT_SIBLING_PULL: f64 = 1.5;
 /// Gap below the deepest branch to the join bar when every branch terminates
 /// (no ConnectionOut arrows reach the bar — half the usual ARROW_LEN reserve).
 const FORK_TERMINATING_JOIN_GAP: f64 = 10.0;
@@ -3647,6 +3658,19 @@ fn while_body_fork_layout(nodes: &[LayoutNode], i: usize, node: &LayoutNode) -> 
         let mut layout = fork_layout_with_following_action(fork_layout(branches), extra);
         if single_fork_body {
             layout.top_bar_pull_up = WHILE_BODY_SLOT_COMPRESS;
+            if branches
+                .iter()
+                .any(|branch| branch_is_simple_repeat_loop(branch))
+            {
+                layout.bar_overhang += WHILE_SINGLE_FORK_REPEAT_BAR_OVERHANG;
+                for (center, branch) in layout.centers.iter_mut().zip(branches.iter()) {
+                    if branch_is_simple_repeat_loop(branch) {
+                        *center += WHILE_SINGLE_FORK_REPEAT_CENTER_PUSH;
+                    } else {
+                        *center -= WHILE_SINGLE_FORK_REPEAT_SIBLING_PULL;
+                    }
+                }
+            }
         }
         Some(layout)
     } else {
@@ -7281,6 +7305,12 @@ fn node_extents(node: &LayoutNode) -> (f64, f64) {
             }
             if !*is_group
                 && !title_drives_width
+                && let Some((left, right)) = partition_complex_single_if_extents(body)
+            {
+                return (left, right);
+            }
+            if !*is_group
+                && !title_drives_width
                 && let Some((geometry, left_adjust)) = partition_wrapped_geometric_if(body)
             {
                 return (
@@ -8735,6 +8765,20 @@ fn partition_wrapped_geometric_if(body: &[LayoutNode]) -> Option<(ftile::FtileGe
     Some((geometry, left_adjust))
 }
 
+fn partition_complex_single_if_extents(body: &[LayoutNode]) -> Option<(f64, f64)> {
+    if !partition_wraps_single_if(body)
+        || !tree_has_fork(body)
+        || partition_wrapped_geometric_if(body).is_some()
+    {
+        return None;
+    }
+    let (body_left, body_right) = sequence_extents(body);
+    Some((
+        body_left + PARTITION_COMPLEX_IF_LEFT_PAD,
+        body_right + PARTITION_COMPLEX_IF_RIGHT_PAD,
+    ))
+}
+
 fn while_body_is_single_if(body: &[LayoutNode]) -> bool {
     matches!(body, [LayoutNode::If { .. }])
 }
@@ -8906,7 +8950,10 @@ fn group_while_shell_width(is_group: bool, body: &[LayoutNode]) -> Option<f64> {
 }
 
 fn partition_body_shell_width(is_group: bool, body: &[LayoutNode]) -> f64 {
-    if !is_group && let Some((geometry, left_adjust)) = partition_wrapped_geometric_if(body) {
+    if !is_group && let Some((left, right)) = partition_complex_single_if_extents(body) {
+        left + right
+    } else if !is_group && let Some((geometry, left_adjust)) = partition_wrapped_geometric_if(body)
+    {
         geometry.width + GROUP_IF_BODY_WIDTH_EXTRA + left_adjust
     } else if !is_group && partition_wraps_deep_terminal_if_sequence(body) {
         partition_body_width_for_frame(body)
@@ -9781,6 +9828,7 @@ struct SvgEmitter {
     partition_prefixed_simple_while_depth: usize,
     partition_wrapped_fork_depth: usize,
     partition_wrapped_fork_prelude_depth: usize,
+    partition_complex_single_if_emit: bool,
     handwritten: bool,
     /// When an `if`/`elseif` branch's flow is a single no-special `while`, the
     /// branch→merge connection is owned by the loop's exit corridor (PlantUML
@@ -10235,6 +10283,7 @@ impl SvgEmitter {
             partition_prefixed_simple_while_depth: 0,
             partition_wrapped_fork_depth: 0,
             partition_wrapped_fork_prelude_depth: 0,
+            partition_complex_single_if_emit: false,
             handwritten,
             while_exit_redirect: None,
             fork_branch_gap_extra: 0.0,
@@ -12552,7 +12601,11 @@ fn emit_node_with_repeat_extra(
                         svg.partition_wrapped_fork_prelude_depth += 1;
                     }
                 }
+                let saved_partition_complex_single_if_emit = svg.partition_complex_single_if_emit;
+                svg.partition_complex_single_if_emit =
+                    !*is_group && partition_complex_single_if_extents(body).is_some();
                 emit_sequence(svg, body, body_cx, body_top);
+                svg.partition_complex_single_if_emit = saved_partition_complex_single_if_emit;
                 if prefixed_simple_while {
                     svg.partition_prefixed_simple_while_depth -= 1;
                 }
@@ -12796,6 +12849,10 @@ fn emit_if(
             + if_branch_distance_extra(then_branch, else_branches);
         (cx - branch_dist / 2.0, cx + branch_dist / 2.0)
     };
+    if std::mem::take(&mut svg.partition_complex_single_if_emit) {
+        then_cx -= PARTITION_COMPLEX_IF_THEN_PULL_LEFT;
+        else_cx -= PARTITION_COMPLEX_IF_ELSE_PULL_LEFT;
+    }
     if all_terminal_fork_branch_gap {
         let then_shift = if branch_has_terminal_fork_tail(then_branch_flow) {
             IF_TERMINAL_FORK_TAIL_BRANCH_SPREAD + 2.0 * IF_TERMINAL_FORK_TAIL_BRANCH_DRIFT
@@ -14381,6 +14438,28 @@ fn while_body_switch_extra(body: &[LayoutNode]) -> f64 {
         .sum()
 }
 
+fn while_body_single_fork_repeat_height_trim(body: &[LayoutNode]) -> f64 {
+    let [
+        LayoutNode::Fork {
+            branches,
+            is_split: false,
+            merge: false,
+            ..
+        },
+    ] = body
+    else {
+        return 0.0;
+    };
+    if branches
+        .iter()
+        .any(|branch| branch_is_simple_repeat_loop(branch))
+    {
+        WHILE_SINGLE_FORK_REPEAT_BRANCH_HEIGHT_TRIM
+    } else {
+        0.0
+    }
+}
+
 fn while_body_height(body: &[LayoutNode], has_in_label: bool) -> f64 {
     // Suppressed deepest loop: when this body is a single nested `while` whose own
     // body is ordinary-compressible (an action chain), that nested loop is the
@@ -14404,6 +14483,7 @@ fn while_body_height(body: &[LayoutNode], has_in_label: bool) -> f64 {
         0.0
     };
     sequence_height(body)
+        - while_body_single_fork_repeat_height_trim(body)
         + suppressed_deepest_readd
         + while_body_mid_stretch(body, has_in_label).map_or(0.0, |(_, stretch)| stretch)
         // Even-flow labelled body led by a `repeat`: the loop centring slack lands
@@ -16550,6 +16630,17 @@ fn emit_fork_with_layout(
                 }
             }
         }
+        if layout.top_bar_pull_up != 0.0
+            && branches
+                .iter()
+                .any(|branch| branch_is_simple_repeat_loop(branch))
+        {
+            for (i, branch) in branches.iter().enumerate() {
+                if !branch.is_empty() && !branch_is_simple_repeat_loop(branch) {
+                    center_offsets[i] -= WHILE_SINGLE_FORK_REPEAT_SIBLING_CENTER_TRIM;
+                }
+            }
+        }
     }
 
     // A branch whose last tile terminates (Detach/Kill/Stop/End/Break/Goto) has
@@ -16980,6 +17071,12 @@ fn emit_while(
         body_top_offset -= WHILE_BODY_SLOT_COMPRESS;
     }
     let body_top = diamond_bottom + body_top_offset;
+    let body_entry_top = body_top
+        - if while_body_single_fork_repeat_height_trim(body) != 0.0 {
+            WHILE_BODY_SLOT_COMPRESS
+        } else {
+            0.0
+        };
 
     // Break welding context (PlantUML's `FtileFactoryDelegatorWhile.createWhile`
     // post-pass): a `break` nested in a body `if` is rendered by that if as a
@@ -17136,6 +17233,13 @@ fn emit_while(
     // Loop-back arm x position: 12 past whichever is wider, the diamond or
     // the body's right extent.
     let (body_left_ext, body_right_ext) = sequence_loop_body_extents(body);
+    let single_fork_repeat_overhang = if while_body_single_fork_repeat_height_trim(body) != 0.0 {
+        WHILE_SINGLE_FORK_REPEAT_BAR_OVERHANG
+    } else {
+        0.0
+    };
+    let body_left_ext = body_left_ext + single_fork_repeat_overhang;
+    let body_right_ext = body_right_ext + single_fork_repeat_overhang;
     let body_right_ext = if while_body_has_prefixed_fused_trailing_while(body) {
         (body_right_ext - WHILE_PREFIXED_FUSED_NESTED_EMIT_RIGHT_TRIM).max(0.0)
     } else {
@@ -17328,7 +17432,7 @@ fn emit_while(
         if body.is_empty() {
             svg.line_styled(&arrow_color, "1", cx, cx, diamond_bottom, junction_y, false);
         } else {
-            svg.down_arrow(cx, diamond_bottom, body_top, &arrow_color);
+            svg.down_arrow(cx, diamond_bottom, body_entry_top, &arrow_color);
         }
     }
 
@@ -17471,6 +17575,11 @@ fn emit_while(
             + if_body_stretch.map_or(0.0, |s| WHILE_EVEN_BODY_LOOP_ARROW_STRETCH - s / 2.0)
             + if while_body_starts_with_binary_if_then_flow(body) {
                 WHILE_EVEN_BODY_LOOP_ARROW_STRETCH
+            } else {
+                0.0
+            }
+            - if while_body_single_fork_repeat_height_trim(body) != 0.0 {
+                WHILE_BODY_SLOT_COMPRESS / 2.0
             } else {
                 0.0
             }
