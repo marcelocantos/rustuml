@@ -18943,8 +18943,38 @@ fn tree_has_fork(nodes: &[LayoutNode]) -> bool {
     })
 }
 
+fn tree_has_repeat(nodes: &[LayoutNode]) -> bool {
+    nodes.iter().any(|node| match node {
+        LayoutNode::Repeat { .. } => true,
+        LayoutNode::If {
+            then_branch,
+            else_branches,
+            ..
+        } => {
+            tree_has_repeat(then_branch)
+                || else_branches
+                    .iter()
+                    .any(|branch| tree_has_repeat(&branch.body))
+        }
+        LayoutNode::While {
+            body, special_out, ..
+        } => tree_has_repeat(body) || special_out.as_deref().is_some_and(node_has_repeat),
+        LayoutNode::Partition { body, .. } => tree_has_repeat(body),
+        LayoutNode::Fork { branches, .. } => branches.iter().any(|b| tree_has_repeat(b)),
+        LayoutNode::Switch { cases, .. } => cases.iter().any(|case| tree_has_repeat(&case.body)),
+        LayoutNode::Swimlanes { segments, .. } => segments
+            .iter()
+            .any(|segment| tree_has_repeat(&segment.body)),
+        _ => false,
+    })
+}
+
 fn node_has_fork(node: &LayoutNode) -> bool {
     tree_has_fork(std::slice::from_ref(node))
+}
+
+fn node_has_repeat(node: &LayoutNode) -> bool {
+    tree_has_repeat(std::slice::from_ref(node))
 }
 
 fn nodes_have_lane_mark(nodes: &[LayoutNode]) -> bool {
@@ -20225,6 +20255,7 @@ fn route_fork_swimlane_connectors(
 /// (each routed connector is attributed to its SOURCE lane, matching gold's
 /// emit grouping). Returns `None` if any edge can't be matched (caller keeps the
 /// shifted natural connectors).
+#[allow(clippy::too_many_arguments)]
 fn route_if_cross_lane_connectors(
     nat_conns: &str,
     nat_shapes: &[String],
@@ -20232,6 +20263,7 @@ fn route_if_cross_lane_connectors(
     lane_left: &[f64],
     lane_right: &[f64],
     multi_elseif: bool,
+    repeat_mode: bool,
     arrow_color: &str,
 ) -> Option<(String, bool)> {
     let n = nat_shapes.len();
@@ -20451,7 +20483,10 @@ fn route_if_cross_lane_connectors(
             if exits_bottom {
                 let sx = s.cx;
                 let sy = s.bottom;
-                if t.is_merge {
+                if t.is_merge
+                    && !(repeat_mode
+                        && (src_nat.is_merge || (src_nat.cx - nat[ti].cx).abs() <= 3.0))
+                {
                     let tgt_nat = &nat[ti];
                     let from_left = src_nat.cx < tgt_nat.cx;
                     let mcy = t.cy;
@@ -20668,11 +20703,15 @@ fn route_if_cross_lane_connectors(
         let src_from_merge_column = direct_src_i.is_none();
         let src_i = direct_src_i.or_else(|| match_merge_column(src_pt));
         let tip_i = match_pt(tip);
-        if src_i.is_none()
+        if (src_i.is_none() || repeat_mode)
             && let Some((source_lane, nat_x, final_x)) = floating_corridor_x
             && (src_pt.0 - nat_x).abs() < 3.0
         {
-            if pl.verts.len() == 2 && (pl.verts[0].0 - pl.verts[1].0).abs() < 0.001 {
+            if pl.verts.len() == 2
+                && (pl.verts[0].0 - pl.verts[1].0).abs() < 0.001
+                && (src_i.is_none()
+                    || ((tip.0 - src_pt.0).abs() < 3.0 && (tip.1 - src_pt.1).abs() < 3.0))
+            {
                 let mut snake = String::new();
                 snake.push_str(&line(final_x, final_x, pl.verts[0].1, pl.verts[1].1));
                 if (tip.1 - pl.verts[0].1).abs() < 3.0 {
@@ -20687,7 +20726,8 @@ fn route_if_cross_lane_connectors(
                 }
                 continue;
             }
-            if pl.verts.len() == 2
+            if src_i.is_none()
+                && pl.verts.len() == 2
                 && (pl.verts[0].1 - pl.verts[1].1).abs() < 0.001
                 && let Some(ti) = tip_i
             {
@@ -20826,7 +20866,9 @@ fn route_if_cross_lane_connectors(
             // Form A/C: exit the source bottom, optional cross, drop into target.
             let sx = s.cx;
             let sy = s.bottom;
-            if t.is_merge {
+            if t.is_merge
+                && !(repeat_mode && (src_nat.is_merge || (src_nat.cx - nat[ti].cx).abs() <= 3.0))
+            {
                 // Form C: branch → merge diamond, entered at its west/east vertex.
                 // The then-branch (natural-left of the merge) enters the WEST
                 // vertex via a stair; the else-branch (natural-right) the EAST
@@ -22981,6 +23023,7 @@ fn layout_swimlanes_v2(
             &lane_left,
             &lane_right,
             if_long_multi_elseif_mode,
+            tree_has_repeat(tree),
             &arrow_color,
         ) {
             if if_long_collector && !split_collector {
