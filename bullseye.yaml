@@ -666,6 +666,24 @@ targets:
     origin: manual
     discovered: 2026-06-29
     achieved: 2026-06-29
+  T4.1.32:
+    name: Event-driven swimlane fork workflows use PlantUML fork bar width and nested if connector routing
+    status: achieved
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - '`target/release/examples/diff_one test-diagrams/golden/activity/act_pattern_event_driven.puml` reports structural equivalence.'
+    - '`target/release/examples/check_all` drops the ledger without introducing new failures.'
+    - Implementation generalizes through Swimlane V2 geometry/routing and does not replay fixture SVG or branch on fixture names.
+    context: After 🎯T4.1.31, the remaining activity ledger includes `activity/act_pattern_event_driven`. It is a titled swimlane workflow with a top-level fork across three consumers and a nested `if (ack?)` inside Consumer A; current diff shows canvas/header/fork-bar and connector ordering mismatches.
+    tags:
+    - activity
+    - swimlane
+    - fork
+    - strict-xml
+    origin: manual
+    discovered: 2026-06-29
+    achieved: 2026-06-29
   T4.1.4:
     name: Swimlane V2 four-branch fork lane-spanning diagrams match PlantUML geometry
     status: achieved
