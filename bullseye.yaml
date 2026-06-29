@@ -123,6 +123,23 @@ targets:
     - rendering
     origin: manual
     discovered: 2026-06-06
+  T12:
+    name: Activity action suffix syntax matches PlantUML error behavior
+    status: achieved
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - '`act_action_all_endings` and the single non-semicolon action-ending fixtures are classified consistently with Java PlantUML error behavior rather than rendered as valid parity examples.'
+    - 'The activity parser or oracle harness documents the accepted action terminator grammar: `:label;` is valid, bare suffix endings are not PlantUML-valid action terminators.'
+    - Golden viewer/check_all/diff_one behavior remains consistent for PlantUML-error goldens.
+    context: 'Discovered while inspecting activity/act_action_all_endings: Java PlantUML''s CommandActivity3 accepts action lines as '':'' LABEL '';'' and rejects bare suffix endings like ''|'', ''<'', ''>'', ''/'', ''\\'', and '']''. RustUML''s activity parser currently accepts those suffixes as action terminators, so skipped error goldens can render as normal RustUML diagrams in ad-hoc tools.'
+    tags:
+    - activity
+    - parser
+    - oracle
+    origin: manual
+    discovered: 2026-06-30
+    achieved: 2026-06-30
   T2:
     name: Ditaa rendering engine ported to Rust
     status: set_aside
