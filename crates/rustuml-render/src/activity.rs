@@ -24381,7 +24381,7 @@ fn layout_swimlanes_v2(
                 lane_conns[0] = routed;
             }
         }
-    } else if if_mode && fork_mode && (fork_branch_count > 0 || nested_fork_with_while_mode) {
+    } else if if_mode && fork_mode {
         if !tree_has_while_with_fork(tree) {
             let nat_shapes: Vec<String> = (0..n)
                 .map(|l| crate::compress::shift_y(&shape_frags[l], content_dy))
