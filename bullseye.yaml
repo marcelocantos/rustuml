@@ -165,9 +165,10 @@ targets:
     discovered: 2026-04-27
   T4:
     name: Strict-XML golden-pair parity with Java PlantUML
-    status: converging
+    status: achieved
     value: 0.0
     cost: 0.0
+    actual_cost: 21.0
     acceptance:
     - '`cargo test --test golden_pairs --release` reports 0 failures across 12,546 total golden pairs.'
     - 'Skips remain bounded to legitimate categories: Java reference syntax/error pages, ditaa raster diagrams parked under 🎯T2, and true I/O errors. No skips for `%date(...)`, unsupported keywords, or parse failures.'
@@ -185,12 +186,13 @@ targets:
       User directive: NO releases until explicitly told — suppress /release prompts even when /cv recommends one.
     origin: manual
     discovered: 2026-05-17
-    achieved: 2026-05-23
+    achieved: 2026-06-29
   T4.1:
     name: Activity diagrams strict-XML pass
-    status: converging
+    status: achieved
     value: 0.0
     cost: 0.0
+    actual_cost: 13.0
     acceptance:
     - The `activity/` directory under `test-diagrams/golden` produces 0 strict-XML failures when `cargo test --test golden_pairs` runs.
     context: |-
@@ -224,6 +226,7 @@ targets:
     - T4.1.31
     origin: manual
     discovered: 2026-05-17
+    achieved: 2026-06-29
   T4.1.1:
     name: Swimlane V2 if-long lane-spanning elseif diagrams match PlantUML geometry
     status: achieved
