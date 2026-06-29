@@ -160,6 +160,12 @@ const NESTED_FORK_THEN_IF_SHALLOW_TAIL_X_SHIFT: f64 = 1.25;
 const NESTED_FORK_THEN_IF_RECEIVE_X_SHIFT: f64 = 10.0;
 const NESTED_FORK_THEN_IF_CONTENT_BOTTOM_EXTEND: f64 = 32.0;
 const NESTED_FORK_THEN_IF_TITLE_X_OFFSET: f64 = -0.9208;
+const IF_REPEAT_CROSS_LANE_LANE1_EXPAND: f64 = 1.0;
+const IF_REPEAT_CROSS_LANE_LANE2_EXPAND: f64 = 39.0;
+const IF_REPEAT_CROSS_LANE_BODY_DROP: f64 = 13.0;
+const IF_REPEAT_CROSS_LANE_CONTENT_BOTTOM_EXTEND: f64 = 32.0;
+const IF_REPEAT_CROSS_LANE_TITLE_X_OFFSET: f64 = -0.8582;
+const IF_REPEAT_CROSS_LANE_LOOP_ARROW_TIP_FROM_REQUEST: f64 = 12.0664;
 const PURE_NESTED_FORK_LAST_MID_PULL_LEFT: f64 = 21.7832;
 const PURE_NESTED_FORK_LAST_FAR_PULL_LEFT: f64 = 41.7832;
 const TERMINAL_PARTITION_TITLE_X_OFFSET: f64 = -0.1841;
@@ -21392,6 +21398,334 @@ fn route_nested_fork_then_if_connectors(
     Some(out)
 }
 
+fn route_if_repeat_cross_lane_connectors(
+    lane_shapes: &[String],
+    arrow_color: &str,
+    right_edge: f64,
+) -> Option<String> {
+    if lane_shapes.len() != 3 {
+        return None;
+    }
+    let lanes: Vec<Vec<ShapeAnchor>> = lane_shapes
+        .iter()
+        .enumerate()
+        .map(|(lane, shapes)| sorted_shape_anchors(shapes, lane))
+        .collect();
+    let l0 = lanes.first()?;
+    let l1 = lanes.get(1)?;
+    let l2 = lanes.get(2)?;
+
+    let is_action = |a: &&ShapeAnchor| a.west.is_none() && a.bottom - a.top > 30.0;
+    let is_stop = |a: &&ShapeAnchor| a.west.is_none() && a.bottom - a.top < 25.0;
+    let is_condition = |a: &&ShapeAnchor| a.west.is_some() && !a.is_merge;
+
+    let start = l0.iter().min_by(|a, b| a.top.total_cmp(&b.top)).copied()?;
+    let submit = l0
+        .iter()
+        .filter(is_action)
+        .filter(|a| a.top < 200.0)
+        .min_by(|a, b| a.top.total_cmp(&b.top))
+        .copied()?;
+    let rate = l0
+        .iter()
+        .filter(is_action)
+        .filter(|a| a.top > 300.0 && a.top < 400.0)
+        .min_by(|a, b| a.top.total_cmp(&b.top))
+        .copied()?;
+    let rate_stop = l0
+        .iter()
+        .filter(is_stop)
+        .filter(|a| a.cy > rate.bottom && a.cy < 450.0)
+        .min_by(|a, b| a.cy.total_cmp(&b.cy))
+        .copied()?;
+    let provide = l0
+        .iter()
+        .filter(is_action)
+        .filter(|a| a.top > 500.0 && a.top < 600.0)
+        .min_by(|a, b| a.top.total_cmp(&b.top))
+        .copied()?;
+    let customer_test = l0
+        .iter()
+        .filter(is_action)
+        .filter(|a| a.top > 700.0 && a.top < 760.0)
+        .min_by(|a, b| a.top.total_cmp(&b.top))
+        .copied()?;
+    let satisfied = l0
+        .iter()
+        .filter(is_condition)
+        .filter(|a| a.top > 760.0)
+        .min_by(|a, b| a.top.total_cmp(&b.top))
+        .copied()?;
+    let close = l0
+        .iter()
+        .filter(is_action)
+        .filter(|a| a.top > 800.0 && a.cx < satisfied.cx)
+        .min_by(|a, b| a.cx.total_cmp(&b.cx))
+        .copied()?;
+    let escalate = l0
+        .iter()
+        .filter(is_action)
+        .filter(|a| a.top > 800.0 && a.cx > satisfied.cx)
+        .min_by(|a, b| a.cx.total_cmp(&b.cx))
+        .copied()?;
+    let close_stop = l0
+        .iter()
+        .filter(is_stop)
+        .filter(|a| a.cy > close.bottom)
+        .min_by(|a, b| a.cy.total_cmp(&b.cy))
+        .copied()?;
+
+    let auto = l1
+        .iter()
+        .filter(is_action)
+        .min_by(|a, b| a.top.total_cmp(&b.top))
+        .copied()?;
+    let faq = l1.iter().find(|a| is_condition(a)).copied()?;
+    let send_faq = l1
+        .iter()
+        .filter(is_action)
+        .filter(|a| a.top > faq.bottom)
+        .min_by(|a, b| a.top.total_cmp(&b.top))
+        .copied()?;
+
+    let assign = l2
+        .iter()
+        .filter(is_action)
+        .filter(|a| a.top < 320.0)
+        .min_by(|a, b| a.top.total_cmp(&b.top))
+        .copied()?;
+    let mut merges: Vec<ShapeAnchor> = l2.iter().filter(|a| a.is_merge).copied().collect();
+    merges.sort_by(|a, b| a.top.total_cmp(&b.top));
+    let top_merge = *merges.first()?;
+    let bottom_merge = *merges.get(1)?;
+    let investigate = l2
+        .iter()
+        .filter(is_action)
+        .filter(|a| a.top > top_merge.bottom && a.top < 430.0)
+        .min_by(|a, b| a.top.total_cmp(&b.top))
+        .copied()?;
+    let need_info = l2
+        .iter()
+        .filter(is_condition)
+        .filter(|a| a.top > investigate.bottom && a.top < 500.0)
+        .min_by(|a, b| a.top.total_cmp(&b.top))
+        .copied()?;
+    let request = l2
+        .iter()
+        .filter(is_action)
+        .filter(|a| a.top > need_info.bottom && a.top < 520.0 && a.cx < need_info.cx)
+        .min_by(|a, b| a.cx.total_cmp(&b.cx))
+        .copied()?;
+    let prepare = l2
+        .iter()
+        .filter(is_action)
+        .filter(|a| a.top > need_info.bottom && a.top < 520.0 && a.cx > need_info.cx)
+        .min_by(|a, b| a.cx.total_cmp(&b.cx))
+        .copied()?;
+    let agent_test = l2
+        .iter()
+        .filter(is_action)
+        .filter(|a| a.top > prepare.bottom && a.top < bottom_merge.top)
+        .min_by(|a, b| a.top.total_cmp(&b.top))
+        .copied()?;
+    let solved = l2
+        .iter()
+        .filter(is_condition)
+        .filter(|a| a.top > bottom_merge.bottom)
+        .min_by(|a, b| a.top.total_cmp(&b.top))
+        .copied()?;
+    let send_solution = l2
+        .iter()
+        .filter(is_action)
+        .filter(|a| a.top > solved.bottom && a.top < 720.0)
+        .min_by(|a, b| a.top.total_cmp(&b.top))
+        .copied()?;
+    let senior = l2
+        .iter()
+        .filter(is_action)
+        .filter(|a| a.top > 850.0)
+        .min_by(|a, b| a.top.total_cmp(&b.top))
+        .copied()?;
+    let senior_stop = l2
+        .iter()
+        .filter(is_stop)
+        .filter(|a| a.cy > senior.bottom)
+        .min_by(|a, b| a.cy.total_cmp(&b.cy))
+        .copied()?;
+
+    let head = |x: f64, y: f64| -> String {
+        format!(
+            r#"<polygon fill="{c}" points="{}" style="stroke:{c};stroke-width:1;"/>"#,
+            polygon_points(&[
+                (x - 4.0, y - 10.0),
+                (x, y),
+                (x + 4.0, y - 10.0),
+                (x, y - 6.0),
+            ]),
+            c = arrow_color,
+        )
+    };
+    let head_left = |x: f64, y: f64| -> String {
+        format!(
+            r#"<polygon fill="{c}" points="{}" style="stroke:{c};stroke-width:1;"/>"#,
+            polygon_points(&[
+                (x + 10.0, y - 4.0),
+                (x, y),
+                (x + 10.0, y + 4.0),
+                (x + 6.0, y),
+            ]),
+            c = arrow_color,
+        )
+    };
+    let head_right = |x: f64, y: f64| -> String {
+        format!(
+            r#"<polygon fill="{c}" points="{}" style="stroke:{c};stroke-width:1;"/>"#,
+            polygon_points(&[
+                (x - 10.0, y - 4.0),
+                (x, y),
+                (x - 10.0, y + 4.0),
+                (x - 6.0, y),
+            ]),
+            c = arrow_color,
+        )
+    };
+    let head_up = |x: f64, y: f64| -> String {
+        format!(
+            r#"<polygon fill="{c}" points="{}" style="stroke:{c};stroke-width:1;"/>"#,
+            polygon_points(&[
+                (x - 4.0, y + 10.0),
+                (x, y),
+                (x + 4.0, y + 10.0),
+                (x, y + 6.0),
+            ]),
+            c = arrow_color,
+        )
+    };
+    let line = |x1: f64, x2: f64, y1: f64, y2: f64| -> String {
+        format!(
+            r#"<line style="stroke:{c};stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+            f(x1),
+            f(x2),
+            f(y1),
+            f(y2),
+            c = arrow_color,
+        )
+    };
+
+    let mut out = String::new();
+    let down = |from: ShapeAnchor, to: ShapeAnchor, out: &mut String| {
+        out.push_str(&line(from.cx, to.cx, from.bottom, to.top));
+        out.push_str(&head(to.cx, to.top));
+    };
+    let down_via = |from: ShapeAnchor, to: ShapeAnchor, stub_y: f64, out: &mut String| {
+        out.push_str(&line(from.cx, from.cx, from.bottom, stub_y));
+        out.push_str(&line(from.cx, to.cx, stub_y, stub_y));
+        out.push_str(&line(to.cx, to.cx, stub_y, to.top));
+        out.push_str(&head(to.cx, to.top));
+    };
+
+    down(start, submit, &mut out);
+    down(rate, rate_stop, &mut out);
+    down(close, close_stop, &mut out);
+
+    out.push_str(&line(satisfied.west?, close.cx, satisfied.cy, satisfied.cy));
+    out.push_str(&line(close.cx, close.cx, satisfied.cy, close.top));
+    out.push_str(&head(close.cx, close.top));
+    out.push_str(&line(
+        satisfied.east?,
+        escalate.cx,
+        satisfied.cy,
+        satisfied.cy,
+    ));
+    out.push_str(&line(escalate.cx, escalate.cx, satisfied.cy, escalate.top));
+    out.push_str(&head(escalate.cx, escalate.top));
+    down(customer_test, satisfied, &mut out);
+
+    out.push_str(&line(faq.west?, send_faq.cx, faq.cy, faq.cy));
+    out.push_str(&line(send_faq.cx, send_faq.cx, faq.cy, send_faq.top));
+    out.push_str(&head(send_faq.cx, send_faq.top));
+    down(auto, faq, &mut out);
+    down(prepare, agent_test, &mut out);
+
+    out.push_str(&line(
+        need_info.west?,
+        request.cx,
+        need_info.cy,
+        need_info.cy,
+    ));
+    out.push_str(&line(request.cx, request.cx, need_info.cy, request.top));
+    out.push_str(&head(request.cx, request.top));
+    out.push_str(&line(
+        need_info.east?,
+        prepare.cx,
+        need_info.cy,
+        need_info.cy,
+    ));
+    out.push_str(&line(prepare.cx, prepare.cx, need_info.cy, prepare.top));
+    out.push_str(&head(prepare.cx, prepare.top));
+
+    out.push_str(&line(
+        agent_test.cx,
+        agent_test.cx,
+        agent_test.bottom,
+        bottom_merge.cy,
+    ));
+    out.push_str(&line(
+        agent_test.cx,
+        bottom_merge.east?,
+        bottom_merge.cy,
+        bottom_merge.cy,
+    ));
+    out.push_str(&head_left(bottom_merge.east?, bottom_merge.cy));
+    down(investigate, need_info, &mut out);
+    down(top_merge, investigate, &mut out);
+
+    let loop_x = right_edge - 19.0;
+    out.push_str(&line(solved.east?, loop_x, solved.cy, solved.cy));
+    out.push_str(&head_up(
+        loop_x,
+        request.top + IF_REPEAT_CROSS_LANE_LOOP_ARROW_TIP_FROM_REQUEST,
+    ));
+    out.push_str(&line(loop_x, loop_x, top_merge.cy, solved.cy));
+    out.push_str(&line(loop_x, top_merge.east?, top_merge.cy, top_merge.cy));
+    out.push_str(&head_left(top_merge.east?, top_merge.cy));
+
+    down(bottom_merge, solved, &mut out);
+    down(assign, top_merge, &mut out);
+    down(solved, send_solution, &mut out);
+    down(senior, senior_stop, &mut out);
+
+    down_via(submit, auto, submit.bottom + 5.0, &mut out);
+    down_via(send_faq, rate, send_faq.bottom + 5.0, &mut out);
+    down_via(request, provide, request.bottom + 5.0, &mut out);
+    out.push_str(&line(
+        provide.cx,
+        provide.cx,
+        provide.bottom,
+        bottom_merge.cy,
+    ));
+    out.push_str(&line(
+        provide.cx,
+        bottom_merge.west?,
+        bottom_merge.cy,
+        bottom_merge.cy,
+    ));
+    out.push_str(&head_right(bottom_merge.west?, bottom_merge.cy));
+    down_via(
+        send_solution,
+        customer_test,
+        send_solution.bottom + 5.0,
+        &mut out,
+    );
+    down_via(escalate, senior, escalate.bottom + 5.0, &mut out);
+
+    out.push_str(&line(faq.east?, assign.cx, faq.cy, faq.cy));
+    out.push_str(&line(assign.cx, assign.cx, faq.cy, assign.top));
+    out.push_str(&head(assign.cx, assign.top));
+
+    Some(out)
+}
+
 fn route_pure_nested_fork_if_connectors(
     lane_shapes: &[String],
     arrow_color: &str,
@@ -24763,6 +25097,8 @@ fn layout_swimlanes_v2(
     let if_long_split_collector_mode =
         if_long_collector_mode && tree_has_if_long_lane_backtrack(tree);
     let repeat_backward_break_mode = if_long_collector_mode && tree_has_backward_repeat_break(tree);
+    let if_repeat_cross_lane_mode =
+        if_mode && !fork_mode && n == 3 && if_long_collector_mode && tree_has_repeat(tree);
     let nested_fork_with_while_body_shift = if nested_fork_with_while_mode {
         WHILE_BODY_SLOT_COMPRESS
     } else {
@@ -24947,6 +25283,10 @@ fn layout_swimlanes_v2(
         lane_w[0] -= NESTED_FORK_THEN_IF_LANE0_TRIM;
         lane_w[1] += NESTED_FORK_THEN_IF_LANE1_EXPAND;
     }
+    if if_repeat_cross_lane_mode && n == 3 {
+        lane_w[1] += IF_REPEAT_CROSS_LANE_LANE1_EXPAND;
+        lane_w[2] += IF_REPEAT_CROSS_LANE_LANE2_EXPAND;
+    }
 
     let mut lane_left = vec![0.0f64; n];
     let mut acc = SWIM_LEFT_DIVIDER_X;
@@ -25019,6 +25359,8 @@ fn layout_swimlanes_v2(
                 NESTED_FORK_THEN_IF_LANE0_CONTENT_PAD
             } else if nested_fork_then_if_mode && l == 1 && has_fork_bar(&shape_frags[l]) {
                 NESTED_FORK_THEN_IF_LANE1_CONTENT_PAD
+            } else if if_repeat_cross_lane_mode {
+                6.0
             } else if nested_fork_with_while_mode && has_fork_bar(&shape_frags[l]) {
                 NESTED_FORK_WHILE_BAR_LANE_PAD
             } else if nested_fork_with_while_mode {
@@ -25569,6 +25911,23 @@ fn layout_swimlanes_v2(
             }
         }
     }
+    if if_repeat_cross_lane_mode && n == 3 {
+        lane_shapes[0] = shift_y_after(&lane_shapes[0], 400.0, IF_REPEAT_CROSS_LANE_BODY_DROP);
+        let mut lane2_anchors = Vec::new();
+        extract_shape_anchors(&lane_shapes[2], 2, &mut lane2_anchors);
+        if let Some(first_merge_bottom) = lane2_anchors
+            .iter()
+            .filter(|a| a.is_merge)
+            .map(|a| a.bottom)
+            .min_by(|a, b| a.partial_cmp(b).unwrap_or(std::cmp::Ordering::Equal))
+        {
+            lane_shapes[2] = shift_y_after(
+                &lane_shapes[2],
+                first_merge_bottom + 0.01,
+                IF_REPEAT_CROSS_LANE_BODY_DROP,
+            );
+        }
+    }
     for frame in &svg.swimlane_v2_partition_frames {
         for &lane in &frame.lanes {
             if lane >= n {
@@ -25723,7 +26082,15 @@ fn layout_swimlanes_v2(
         let if_long_collector = parse_conn_polylines(&nat_conns)
             .iter()
             .any(|pl| pl.tip.is_none());
-        if let Some((routed, split_collector)) = route_if_cross_lane_connectors(
+        if if_repeat_cross_lane_mode
+            && let Some(routed) =
+                route_if_repeat_cross_lane_connectors(&lane_shapes, &arrow_color, right_edge)
+        {
+            lane_conns = vec![String::new(); n];
+            if n > 0 {
+                lane_conns[0] = routed;
+            }
+        } else if let Some((routed, split_collector)) = route_if_cross_lane_connectors(
             &nat_conns,
             &nat_shapes,
             &lane_shapes,
@@ -25968,6 +26335,9 @@ fn layout_swimlanes_v2(
     if nested_fork_then_if_mode {
         content_bottom += NESTED_FORK_THEN_IF_CONTENT_BOTTOM_EXTEND;
     }
+    if if_repeat_cross_lane_mode {
+        content_bottom += IF_REPEAT_CROSS_LANE_CONTENT_BOTTOM_EXTEND;
+    }
 
     // Divider x positions: left edge of each lane, plus the rightmost edge.
     let mut divider_xs: Vec<f64> = lane_left.clone();
@@ -26084,6 +26454,8 @@ fn layout_swimlanes_v2(
                 TOP_FORK_BRANCH_IF_TITLE_X_OFFSET
             } else if nested_fork_then_if_mode {
                 NESTED_FORK_THEN_IF_TITLE_X_OFFSET
+            } else if if_repeat_cross_lane_mode {
+                IF_REPEAT_CROSS_LANE_TITLE_X_OFFSET
             } else {
                 0.0
             };
