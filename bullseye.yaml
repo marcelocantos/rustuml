@@ -1095,6 +1095,20 @@ targets:
       Update 2026-06-07 (HEAD ae277a46): authoritative full-suite ledger for the smaller buckets is now 48 archimate, 7 combo, 2 rendering. Current combo failures: `combo_all_decorations`, `combo_component_vs_deployment`, `combo_embedded_state_machine`, `combo_mixed_features`, `combo_sequence_everything`, `combo_state_everything`, `combo_workflow_swimlanes`; several are likely aggregates of activity/sequence/state/deployment behavior and should be rechecked after activity work. Rendering failures: `rendering/nesting/nesting_activity_nested_partitions` and `rendering/nesting/nesting_activity_partitions`, also activity-shaped. Archimate remains 48/48 failing under strict XML. Important: `crates/rustuml-oracle/src/extract.rs` explicitly disables root `<g>` verbatim capture (`if false` around `root_g_inner_xml`) because replaying golden body bytes was rejected as dishonest; the early `root_g_inner_xml` replay in `archimate::render_with_oracle` is dead. Normal CLI archimate rendering is non-empty but simplified grid output, not PlantUML sprite/layout parity. Real strict fix likely needs native Archimate sprite glyph library and Graphviz-matching layout; do not accept structured attribute/body echo as a shortcut.
     origin: manual
     discovered: 2026-05-17
+  T4.9.1:
+    name: Combo workflow swimlanes use PlantUML activity swimlane V2 geometry
+    status: achieved
+    value: 0.0
+    cost: 0.0
+    actual_cost: 3.0
+    acceptance:
+    - '`target/release/examples/diff_one test-diagrams/golden/combo/combo_workflow_swimlanes.puml` reports SVGs structurally equivalent.'
+    - '`target/release/examples/check_all` drops `combo/combo_workflow_swimlanes` without adding new failure names.'
+    - The fix generalizes through swimlane V2 layout/routing logic and does not branch on fixture names or replay oracle SVG bytes.
+    context: 'After retiring 🎯T4.1.35, the strict ledger is down to six names. `combo/combo_workflow_swimlanes` is the closest remaining failure: element count already matches, and the differences are primarily swimlane V2 content height, lane width, connector ordering/offsets, and one combo-title source-line discrepancy.'
+    origin: subdivide(🎯T4.9)
+    discovered: 2026-06-29
+    achieved: 2026-06-29
   T5:
     name: Tier-1 quick-win strict-XML fixes are landed in master
     status: achieved
