@@ -3115,6 +3115,13 @@ const WHILE_SINGLE_FORK_REPEAT_SIBLING_CENTER_TRIM: f64 =
 const WHILE_SINGLE_FORK_REPEAT_BAR_OVERHANG: f64 = 0.5;
 const WHILE_SINGLE_FORK_REPEAT_CENTER_PUSH: f64 = 1.5;
 const WHILE_SINGLE_FORK_REPEAT_SIBLING_PULL: f64 = 1.5;
+const IF_NESTED_WHILE_FORK_REPEAT_LEFT_TRIM: f64 = 2.5;
+const IF_NESTED_WHILE_FORK_REPEAT_THEN_PUSH: f64 = 0.5;
+const WHILE_SINGLE_FORK_COMPLEX_REPEAT_FRAME_SHIFT: f64 = 2.0;
+const WHILE_SINGLE_FORK_COMPLEX_REPEAT_LOOPBACK_PULL: f64 = WHILE_BODY_SLOT_COMPRESS / 2.0 - 1.0;
+const WHILE_REPEAT_BODY_EXIT_ARROW_DROP: f64 = WHILE_BODY_SLOT_COMPRESS / 2.0;
+const WHILE_SINGLE_FORK_COMPLEX_REPEAT_EXIT_ARROW_DROP: f64 = 1.0;
+const REPEAT_COMPLEX_IF_LOOPBACK_ARROW_DROP: f64 = 1.0;
 /// Gap below the deepest branch to the join bar when every branch terminates
 /// (no ConnectionOut arrows reach the bar — half the usual ARROW_LEN reserve).
 const FORK_TERMINATING_JOIN_GAP: f64 = 10.0;
@@ -3230,6 +3237,63 @@ fn branch_is_simple_repeat_loop(branch: &[LayoutNode]) -> bool {
             has_start_label: false,
             ..
         }] if matches!(body.as_slice(), [LayoutNode::Action { .. }])
+    )
+}
+
+fn branch_is_complex_repeat_loop(branch: &[LayoutNode]) -> bool {
+    matches!(
+        branch,
+        [LayoutNode::Repeat {
+            body,
+            backward: None,
+            has_start_label: false,
+            ..
+        }] if body.iter().any(|node| {
+            matches!(
+                node,
+                LayoutNode::If { .. }
+                    | LayoutNode::While { .. }
+                    | LayoutNode::Repeat { .. }
+                    | LayoutNode::Fork { .. }
+                    | LayoutNode::Switch { .. }
+            )
+        })
+    )
+}
+
+fn while_body_is_single_fork_with_complex_repeat(body: &[LayoutNode]) -> bool {
+    matches!(
+        body,
+        [LayoutNode::Fork {
+            branches,
+            is_split: false,
+            merge: false,
+            ..
+        }] if branches.iter().any(|branch| branch_is_complex_repeat_loop(branch))
+    )
+}
+
+fn if_has_nested_while_fork_repeat_branch(
+    then_branch: &[LayoutNode],
+    else_branches: &[ElseBranch],
+) -> bool {
+    matches!(
+        (then_branch, else_branches),
+        (
+            [LayoutNode::While {
+                body,
+                is_label: Some(_),
+                end_label: None,
+                special_out: None,
+                ..
+            }],
+            [ElseBranch {
+                condition: None,
+                body: else_body,
+                ..
+            }]
+        ) if while_body_is_single_fork_with_complex_repeat(body)
+            && matches!(else_body.as_slice(), [LayoutNode::Action { .. }])
     )
 }
 
@@ -6130,6 +6194,14 @@ fn if_ftile_layout_styled(
         else_off += IF_BREAK_SINGLE_SURVIVOR_BRANCH_SPREAD;
         left_ext += IF_BREAK_SINGLE_SURVIVOR_BRANCH_SPREAD;
         right_ext += IF_BREAK_SINGLE_SURVIVOR_BRANCH_SPREAD;
+    }
+    if if_has_nested_while_fork_repeat_branch(then_branch, else_branches) {
+        then_off += IF_NESTED_WHILE_FORK_REPEAT_THEN_PUSH;
+        else_off +=
+            IF_NESTED_WHILE_FORK_REPEAT_LEFT_TRIM + WHILE_SINGLE_FORK_COMPLEX_REPEAT_FRAME_SHIFT;
+        left_ext -= IF_NESTED_WHILE_FORK_REPEAT_LEFT_TRIM;
+        right_ext +=
+            IF_NESTED_WHILE_FORK_REPEAT_LEFT_TRIM + WHILE_SINGLE_FORK_COMPLEX_REPEAT_FRAME_SHIFT;
     }
     Some((then_off, else_off, left_ext, right_ext))
 }
@@ -9925,6 +9997,10 @@ struct SvgEmitter {
     /// `2*ARROW_LEN`. `emit_repeat` reads this at entry to add the extra gap,
     /// then increments it around its own body emit.
     repeat_body_depth: usize,
+    /// Nesting depth while emitting the fork body of a labelled while whose only
+    /// body tile is a fork containing a complex repeat. PlantUML keeps that fork
+    /// frame and its nested loop arrowheads in the parent's pre-compression band.
+    single_fork_complex_repeat_depth: usize,
     /// Running sum of `nested_cond_extra` gap added by repeats emitted since the
     /// enclosing `emit_repeat` last reset it. The loop-back emphasis arrowhead
     /// sits at the loop's *content* midpoint, i.e. the geometric midpoint minus
@@ -10305,6 +10381,7 @@ impl SvgEmitter {
             while_nested_child_inbound: None,
             title_x_offset: 0.0,
             repeat_body_depth: 0,
+            single_fork_complex_repeat_depth: 0,
             repeat_nested_expansion: 0.0,
             if_long_repeat_body_extra: 0.0,
             while_repeat_tail_extra: 0.0,
@@ -12885,7 +12962,6 @@ fn emit_if(
         } else {
             0.0
         };
-
     // Else label: text shape, must land in shapes buffer before branch
     // shapes (matches golden order: yes label, no label, then branch boxes).
     if let Some(label) = else_branches
@@ -17071,9 +17147,18 @@ fn emit_while(
         body_top_offset -= WHILE_BODY_SLOT_COMPRESS;
     }
     let body_top = diamond_bottom + body_top_offset;
+    let single_fork_complex_repeat_body = while_body_is_single_fork_with_complex_repeat(body);
     let body_entry_top = body_top
-        - if while_body_single_fork_repeat_height_trim(body) != 0.0 {
+        - if while_body_single_fork_repeat_height_trim(body) != 0.0
+            || single_fork_complex_repeat_body
+        {
             WHILE_BODY_SLOT_COMPRESS
+        } else {
+            0.0
+        };
+    let body_frame_cx = cx
+        + if single_fork_complex_repeat_body {
+            WHILE_SINGLE_FORK_COMPLEX_REPEAT_FRAME_SHIFT
         } else {
             0.0
         };
@@ -17090,7 +17175,7 @@ fn emit_while(
     let prev_while_break = svg.while_break.take();
     if body_contains_break_if(body) {
         let (pre_body_left_ext, pre_body_right_ext) = sequence_loop_body_extents(body);
-        let pre_body_left_x = cx - while_body_left(body, pre_body_left_ext);
+        let pre_body_left_x = body_frame_cx - while_body_left(body, pre_body_left_ext);
         let pre_geo_left_x = diamond_left_vertex_x.min(pre_body_left_x);
         // Fuse the loop-back into the break-`if`'s east branch when it is the
         // body's last flow node (then its empty branch is the loop's pointOut —
@@ -17098,7 +17183,7 @@ fn emit_while(
         // up-front from the body's extents, identically to the post-body `loop_x`;
         // the if draws the arm itself so it lands in the correct document slot.
         let fuse_loopback = break_if_is_last_flow(body).then(|| {
-            let pre_body_right_x = cx + pre_body_right_ext;
+            let pre_body_right_x = body_frame_cx + pre_body_right_ext;
             let loop_x = diamond_right_vertex_x.max(pre_body_right_x)
                 + DIAMOND_HALF
                 + while_single_if_right_pad(body, end_label);
@@ -17190,7 +17275,21 @@ fn emit_while(
     }
     svg.while_nested_exit = None;
     let prev_nested_child_inbound = svg.while_nested_child_inbound.take();
-    let body_bottom = emit_sequence_ex(svg, body, cx, body_top, body_mid_stretch, None, false);
+    if single_fork_complex_repeat_body {
+        svg.single_fork_complex_repeat_depth += 1;
+    }
+    let body_bottom = emit_sequence_ex(
+        svg,
+        body,
+        body_frame_cx,
+        body_top,
+        body_mid_stretch,
+        None,
+        false,
+    );
+    if single_fork_complex_repeat_body {
+        svg.single_fork_complex_repeat_depth -= 1;
+    }
     let while_exit_lane = svg.current_lane;
     svg.switch_lane_span(while_entry_lane);
     svg.while_repeat_tail_extra = prev_repeat_tail_extra;
@@ -17245,12 +17344,12 @@ fn emit_while(
     } else {
         body_right_ext
     };
-    let body_right_x = cx + body_right_ext;
+    let body_right_x = body_frame_cx + body_right_ext;
     // A deprecated body pulls the left corridor 2 px tighter (see
     // while_body_left); the special-terminator placement uses the adjusted
     // extent so the terminator lands at the same absolute x as a
     // non-deprecated body. The body box itself stays centred on the spine.
-    let body_left_x = cx - while_body_left(body, body_left_ext);
+    let body_left_x = body_frame_cx - while_body_left(body, body_left_ext);
     let loop_x = diamond_right_vertex_x.max(body_right_x)
         + DIAMOND_HALF
         + while_single_if_right_pad(body, end_label);
@@ -17580,6 +17679,8 @@ fn emit_while(
             }
             - if while_body_single_fork_repeat_height_trim(body) != 0.0 {
                 WHILE_BODY_SLOT_COMPRESS / 2.0
+            } else if while_body_is_single_fork_with_complex_repeat(body) {
+                WHILE_SINGLE_FORK_COMPLEX_REPEAT_LOOPBACK_PULL
             } else {
                 0.0
             }
@@ -17770,6 +17871,17 @@ fn emit_while(
         if in_if_branch_while && is_label.is_some() {
             arrow_y += WHILE_IF_BRANCH_REDIRECT_LABEL_ARROW_PUSH_DOWN;
         }
+        if svg.single_fork_complex_repeat_depth > 0
+            && svg.repeat_body_depth > 0
+            && is_label.is_some()
+            && end_label.is_none()
+            && matches!(body, [LayoutNode::Action { .. }])
+        {
+            arrow_y += WHILE_REPEAT_BODY_EXIT_ARROW_DROP;
+        }
+        if while_body_is_single_fork_with_complex_repeat(body) {
+            arrow_y += WHILE_SINGLE_FORK_COMPLEX_REPEAT_EXIT_ARROW_DROP;
+        }
         svg.polygon_connector(
             &arrow_color,
             &[
@@ -17947,6 +18059,22 @@ fn emit_while(
         && break_frame_h.is_none()
     {
         arrow_y -= (DIAMOND_HALF - 10.0) / 2.0;
+    }
+    if svg.single_fork_complex_repeat_depth > 0
+        && svg.repeat_body_depth > 0
+        && is_label.is_some()
+        && end_label.is_none()
+        && special_out.is_none()
+        && break_frame_h.is_none()
+        && matches!(body, [LayoutNode::Action { .. }])
+    {
+        arrow_y += WHILE_REPEAT_BODY_EXIT_ARROW_DROP;
+    }
+    if while_body_is_single_fork_with_complex_repeat(body)
+        && special_out.is_none()
+        && break_frame_h.is_none()
+    {
+        arrow_y += WHILE_SINGLE_FORK_COMPLEX_REPEAT_EXIT_ARROW_DROP;
     }
     svg.polygon_connector(
         &arrow_color,
@@ -18615,6 +18743,13 @@ fn emit_repeat(
                 }
                 + if fork_branch_tail_extra != 0.0 {
                     1.0
+                } else {
+                    0.0
+                }
+                + if svg.single_fork_complex_repeat_depth > 0
+                    && matches!(body, [LayoutNode::If { .. }])
+                {
+                    REPEAT_COMPLEX_IF_LOOPBACK_ARROW_DROP
                 } else {
                     0.0
                 }
