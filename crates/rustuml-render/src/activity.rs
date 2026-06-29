@@ -133,6 +133,9 @@ const WHILE_PREFIXED_FUSED_NESTED_RIGHT_TRIM: f64 = 7.5722;
 const WHILE_PREFIXED_FUSED_NESTED_EMIT_RIGHT_TRIM: f64 = 3.5722;
 const WHILE_PREFIXED_FUSED_NESTED_CANVAS_RIGHT_TRIM: f64 = 9.4277;
 const WHILE_PREFIXED_FUSED_NESTED_TITLE_X_OFFSET: f64 = -5.7823;
+const NESTED_FORK_WHILE_BAR_LANE_PAD: f64 = 23.0;
+const NESTED_FORK_WHILE_PLAIN_LANE_PAD: f64 = 10.0;
+const NESTED_FORK_WHILE_PLAIN_CONTENT_PAD: f64 = 6.0;
 const TERMINAL_PARTITION_TITLE_X_OFFSET: f64 = -0.1841;
 const WHILE_PREFIXED_FUSED_NESTED_CHILD_EXIT_ARROW_PUSH_DOWN: f64 = 1.9887;
 const WHILE_PREFIXED_FUSED_NESTED_PARENT_EXIT_ARROW_PULL_UP: f64 = 1.6675;
@@ -19949,6 +19952,65 @@ fn shift_y_after(buf: &str, threshold: f64, dy: f64) -> String {
     out
 }
 
+fn nested_fork_with_while_shift_threshold(buf: &str, top_bar_y: f64) -> Option<f64> {
+    let min_y = top_bar_y + FORK_BAR_HEIGHT + 0.001;
+    let mut action_y: Option<f64> = None;
+    let mut rest = buf;
+    while let Some(p) = rest.find("<rect") {
+        let rect = &rest[p..];
+        let Some(end) = rect.find("/>") else {
+            break;
+        };
+        let elem = &rect[..end + 2];
+        if elem.contains(r#"rx="12.5""#)
+            && let Some(y) = prim_attr(elem, " y=\"")
+            && y > min_y
+        {
+            action_y = Some(action_y.map_or(y, |best| best.min(y)));
+        }
+        rest = &rect[end + 2..];
+    }
+    if action_y.is_some() {
+        return action_y;
+    }
+
+    let mut shape_y: Option<f64> = None;
+    let cys = iter_attr(buf, "<ellipse", "cy=\"");
+    let rxs = iter_attr(buf, "<ellipse", "rx=\"");
+    for i in 0..cys.len().min(rxs.len()) {
+        let y = cys[i] - rxs[i];
+        if y > min_y {
+            shape_y = Some(shape_y.map_or(y, |best| best.min(y)));
+        }
+    }
+    let mut rest = buf;
+    while let Some(p) = rest.find(r##"<polygon fill="#F1F1F1""##) {
+        let frag = &rest[p..];
+        let Some(end) = frag.find("/>") else {
+            break;
+        };
+        if let Some(at) = frag[..end].find("points=\"") {
+            let value_start = at + "points=\"".len();
+            if let Some(value_end) = frag[value_start..end]
+                .find('"')
+                .map(|pos| value_start + pos)
+            {
+                let y = frag[value_start..value_end]
+                    .split(',')
+                    .skip(1)
+                    .step_by(2)
+                    .filter_map(|s| s.trim().parse::<f64>().ok())
+                    .fold(f64::MAX, f64::min);
+                if y.is_finite() && y > min_y {
+                    shape_y = Some(shape_y.map_or(y, |best| best.min(y)));
+                }
+            }
+        }
+        rest = &frag[end + 2..];
+    }
+    shape_y
+}
+
 fn fork3_bottom_lane_action_shifts(buf: &str, trim: f64) -> Vec<(f64, f64)> {
     let mut xs = Vec::new();
     let mut rest = buf;
@@ -20276,6 +20338,41 @@ fn rewrite_fork_bars_for_lane(buf: &str, x: f64, width: f64) -> String {
     }
     out.push_str(rest);
     out
+}
+
+fn rewrite_nested_fork_with_while_bars_for_lane(buf: &str, lane_left: f64) -> String {
+    let bar_x = lane_left + 6.0;
+    let mut bars = Vec::new();
+    extract_fork_bars(buf, 0, &mut bars);
+    let Some(top_bar_y) = bars
+        .iter()
+        .map(|bar| bar.y)
+        .min_by(|a, b| a.partial_cmp(b).unwrap_or(std::cmp::Ordering::Equal))
+    else {
+        return buf.to_string();
+    };
+    let mut sibling_action_x: Option<f64> = None;
+    let mut rest = buf;
+    while let Some(p) = rest.find("<rect") {
+        let rect = &rest[p..];
+        let Some(end) = rect.find("/>") else {
+            break;
+        };
+        let elem = &rect[..end + 2];
+        if elem.contains(r#"rx="12.5""#)
+            && let (Some(x), Some(y)) = (prim_attr(elem, " x=\""), prim_attr(elem, " y=\""))
+            && (y - top_bar_y).abs() < 0.001
+            && x > bar_x
+        {
+            sibling_action_x = Some(sibling_action_x.map_or(x, |best| best.min(x)));
+        }
+        rest = &rect[end + 2..];
+    }
+    let Some(sibling_action_x) = sibling_action_x else {
+        return buf.to_string();
+    };
+    let width = (sibling_action_x - bar_x - 2.0 * DIAMOND_HALF).max(FORK_BAR_HEIGHT);
+    rewrite_fork_bars_for_lane(buf, bar_x, width)
 }
 
 fn rewrite_while_fork_bars_for_lane(
@@ -22933,6 +23030,7 @@ fn layout_swimlanes_v2(
             _ => None,
         })
         .unwrap_or(0);
+    let nested_fork_with_while_mode = fork_branch_count == 0 && tree_has_fork_with_while(tree);
     let conn_frags = if if_mode && fork_mode && fork_branch_count == 0 {
         // A fork nested inside an `if` overlaps several lane contents in the
         // same natural y-band, so y-band relabeling collapses unrelated
@@ -22970,6 +23068,11 @@ fn layout_swimlanes_v2(
     let if_long_split_collector_mode =
         if_long_collector_mode && tree_has_if_long_lane_backtrack(tree);
     let repeat_backward_break_mode = if_long_collector_mode && tree_has_backward_repeat_break(tree);
+    let nested_fork_with_while_body_shift = if nested_fork_with_while_mode {
+        WHILE_BODY_SLOT_COMPRESS
+    } else {
+        0.0
+    };
 
     let title_w: Vec<f64> = lane_names
         .iter()
@@ -23004,7 +23107,11 @@ fn layout_swimlanes_v2(
             let owns_top_bar = top_bar_y
                 .map(|top_y| has_fork_bar_at_y(&shape_frags[l], top_y))
                 .unwrap_or(false);
-            let lane_pad = if while_fork_mode && owns_top_bar {
+            let lane_pad = if nested_fork_with_while_mode && has_fork_bar(&shape_frags[l]) {
+                NESTED_FORK_WHILE_BAR_LANE_PAD
+            } else if nested_fork_with_while_mode {
+                NESTED_FORK_WHILE_PLAIN_LANE_PAD
+            } else if while_fork_mode && owns_top_bar {
                 49.0
             } else if while_fork_mode && has_fork_bar(&shape_frags[l]) {
                 32.0
@@ -23204,6 +23311,10 @@ fn layout_swimlanes_v2(
                 // lane's intrinsic 6-left/4-right padding asymmetry (+1 to the
                 // left half) baked in.
                 (lane_w[l] - lane_content_w[l]) / 2.0 + 1.0
+            } else if nested_fork_with_while_mode && has_fork_bar(&shape_frags[l]) {
+                NESTED_FORK_WHILE_BAR_LANE_PAD
+            } else if nested_fork_with_while_mode {
+                NESTED_FORK_WHILE_PLAIN_CONTENT_PAD
             } else if while_fork_mode && has_fork_bar(&shape_frags[l]) {
                 let owns_top_bar = top_bar_y
                     .map(|top_y| has_fork_bar_at_y(&shape_frags[l], top_y))
@@ -23321,11 +23432,15 @@ fn layout_swimlanes_v2(
             });
         for l in 0..n {
             if has_fork_bar(&shape_frags[l]) {
-                lane_shapes[l] = rewrite_fork_bars_for_lane(
-                    &lane_shapes[l],
-                    lane_left[l] + 6.0,
-                    lane_w[l] - 10.0,
-                );
+                lane_shapes[l] = if nested_fork_with_while_mode {
+                    rewrite_nested_fork_with_while_bars_for_lane(&lane_shapes[l], lane_left[l])
+                } else {
+                    rewrite_fork_bars_for_lane(
+                        &lane_shapes[l],
+                        lane_left[l] + 6.0,
+                        lane_w[l] - 10.0,
+                    )
+                };
                 if fork_branch_count == 3
                     && let Some(bottom_y) = bottom_bar_y
                     && has_fork_bar_at_y(&shape_frags[l], bottom_y)
@@ -23507,6 +23622,20 @@ fn layout_swimlanes_v2(
                     );
                 }
             }
+            if nested_fork_with_while_mode && nested_fork_with_while_body_shift.abs() > 0.001 {
+                let top_y = top_bar_y.unwrap_or(0.0);
+                if let Some(threshold) =
+                    nested_fork_with_while_shift_threshold(&lane_shapes[l], top_y + lane_dy[l])
+                {
+                    lane_shapes[l] = shift_y_after(
+                        &lane_shapes[l],
+                        threshold,
+                        nested_fork_with_while_body_shift,
+                    );
+                    lane_conns[l] =
+                        shift_y_after(&lane_conns[l], threshold, nested_fork_with_while_body_shift);
+                }
+            }
         }
     }
     for frame in &svg.swimlane_v2_partition_frames {
@@ -23542,7 +23671,6 @@ fn layout_swimlanes_v2(
     // polylines' routing assumed the single-tree side-by-side branch layout. The
     // natural shapes are shifted by content_dy only (no dx) so they pair with the
     // per-lane-shifted final shapes for endpoint→shape matching.
-    let nested_fork_with_while_mode = fork_branch_count == 0 && tree_has_fork_with_while(tree);
     if if_mode && fork_mode && (fork_branch_count > 0 || nested_fork_with_while_mode) {
         if !tree_has_while_with_fork(tree) {
             let nat_shapes: Vec<String> = (0..n)
@@ -23559,7 +23687,7 @@ fn layout_swimlanes_v2(
                             lane_conns[l] = strip_direct_fork_bar_connectors(
                                 &lane_conns[l],
                                 top_y + lane_dy[l],
-                                bottom_y + lane_dy[l],
+                                bottom_y + lane_dy[l] + nested_fork_with_while_body_shift,
                             );
                         }
                     }
