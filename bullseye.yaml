@@ -740,6 +740,25 @@ targets:
     origin: subdivide(🎯T4.1)
     discovered: 2026-06-29
     achieved: 2026-06-29
+  T4.1.36:
+    name: Comprehensive swimlane all-features activity uses PlantUML lane-spanning control geometry
+    status: achieved
+    value: 0.0
+    cost: 0.0
+    actual_cost: 3.0
+    acceptance:
+    - '`target/release/examples/diff_one test-diagrams/golden/activity/act_swimlane_all_features.puml` reports structural equivalence.'
+    - '`target/release/examples/check_all` no longer lists `activity/act_swimlane_all_features` and does not add any new failing diagram names.'
+    - The implementation generalizes by swimlane/control-flow geometry rather than fixture-name replay, covering the note, nested ifs, while/switch body, and multi-lane fork in the diagram.
+    context: Next remaining narrow strict-XML activity failure after retiring 🎯T4.9.1. The fixture differs by a small element-count delta but exposes broad swimlane V2 lane-order/height/connector interactions across notes, nested terminal if branches, while/switch, and fork branches.
+    tags:
+    - activity
+    - strict-xml
+    - swimlane
+    - golden
+    origin: subdivide(🎯T4.1)
+    discovered: 2026-06-29
+    achieved: 2026-06-29
   T4.1.4:
     name: Swimlane V2 four-branch fork lane-spanning diagrams match PlantUML geometry
     status: achieved
