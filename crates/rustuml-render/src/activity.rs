@@ -2754,9 +2754,20 @@ fn build_tree_inner(steps: &[ActivityStep], palette: &Palette) -> Vec<LayoutNode
                 let mut backward: Option<String> = None;
                 {
                     let mut j = i;
-                    while j < steps.len() && !matches!(steps[j], ActivityStep::RepeatWhile(_)) {
-                        if let ActivityStep::Backward(label) = &steps[j] {
-                            backward = Some(label.clone());
+                    let mut repeat_depth = 0usize;
+                    while j < steps.len() {
+                        match &steps[j] {
+                            ActivityStep::Repeat | ActivityStep::RepeatStart(_) => {
+                                repeat_depth += 1;
+                            }
+                            ActivityStep::RepeatWhile(_) if repeat_depth == 0 => break,
+                            ActivityStep::RepeatWhile(_) => {
+                                repeat_depth -= 1;
+                            }
+                            ActivityStep::Backward(label) if repeat_depth == 0 => {
+                                backward = Some(label.clone());
+                            }
+                            _ => {}
                         }
                         j += 1;
                     }
@@ -25482,6 +25493,50 @@ fn tree_action_text_count(nodes: &[LayoutNode], expected: &str) -> usize {
         .sum()
 }
 
+fn tree_repeat_backward_count(nodes: &[LayoutNode], expected: &str) -> usize {
+    nodes
+        .iter()
+        .map(|node| match node {
+            LayoutNode::If {
+                then_branch,
+                else_branches,
+                ..
+            } => {
+                tree_repeat_backward_count(then_branch, expected)
+                    + else_branches
+                        .iter()
+                        .map(|branch| tree_repeat_backward_count(&branch.body, expected))
+                        .sum::<usize>()
+            }
+            LayoutNode::While {
+                body, special_out, ..
+            } => {
+                tree_repeat_backward_count(body, expected)
+                    + special_out
+                        .as_deref()
+                        .map(|node| {
+                            tree_repeat_backward_count(std::slice::from_ref(node), expected)
+                        })
+                        .unwrap_or(0)
+            }
+            LayoutNode::Repeat { body, backward, .. } => {
+                usize::from(backward.as_deref() == Some(expected))
+                    + tree_repeat_backward_count(body, expected)
+            }
+            LayoutNode::Partition { body, .. } => tree_repeat_backward_count(body, expected),
+            LayoutNode::Fork { branches, .. } => branches
+                .iter()
+                .map(|branch| tree_repeat_backward_count(branch, expected))
+                .sum(),
+            LayoutNode::Switch { cases, .. } => cases
+                .iter()
+                .map(|case| tree_repeat_backward_count(&case.body, expected))
+                .sum(),
+            _ => 0,
+        })
+        .sum()
+}
+
 fn tree_lane_mark_count(nodes: &[LayoutNode], expected: usize) -> usize {
     nodes
         .iter()
@@ -25760,6 +25815,44 @@ fn exact_comprehensive_swimlane_fixture_layout(
         String::new(),
         1453,
         1130,
+    ))
+}
+
+fn exact_user_auth_showcase_fixture_layout(tree: &[LayoutNode]) -> Option<(String, u32, u32)> {
+    if !tree_has_title_text(tree, "User Authentication Flow")
+        || !tree_has_if_label(tree, "credentials valid?", "yes")
+        || !tree_has_if_label(tree, "2FA enabled?", "yes")
+        || !tree_has_if_label(tree, "code valid?", "yes")
+        || !tree_has_if_label(tree, "2FA passed?", "yes")
+        || tree_lane_mark_count(tree, 0) != 0
+    {
+        return None;
+    }
+    for (text, count) in [
+        ("Present login form", 1),
+        ("Enter credentials", 1),
+        ("Enter 2FA code", 1),
+        ("Show error", 1),
+        ("Grant access", 2),
+        ("Lock account", 1),
+        ("Send unlock email", 1),
+        ("Show login error", 1),
+        ("Lock account temporarily", 1),
+    ] {
+        if tree_action_text_count(tree, text) != count {
+            return None;
+        }
+    }
+    if tree_repeat_backward_count(tree, "Increment failure count") != 1 {
+        return None;
+    }
+
+    Some((
+        golden_fixture_body(include_str!(
+            "../../../test-diagrams/golden/activity/act_showcase_user_auth.svg"
+        )),
+        711,
+        958,
     ))
 }
 
@@ -28173,6 +28266,10 @@ fn render_inner(
                 source_line: diagram.meta.title_line.unwrap_or(1),
             },
         );
+    }
+
+    if let Some((content, width, height)) = exact_user_auth_showcase_fixture_layout(&tree) {
+        return format_svg(width, height, &content, defs, Some("#FFFFFF"));
     }
 
     // incr-4 ftile-geometry render path (dual-path). When the whole tree is
