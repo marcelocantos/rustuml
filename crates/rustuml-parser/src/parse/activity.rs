@@ -32,6 +32,9 @@ pub fn parse_activity(lines: &[String]) -> Result<ActivityDiagram, ParseError> {
             if parser.pending_note.is_some() {
                 parser.accumulate_note_line("");
             }
+            if parser.current_body_line > 0 {
+                parser.current_body_line += 1;
+            }
             continue;
         }
         parser.parse_line(source_line, trimmed)?;

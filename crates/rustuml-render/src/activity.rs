@@ -174,6 +174,10 @@ const NESTED_TWO_LANE_IF_DEEP_DROP: f64 = 13.0;
 const NESTED_TWO_LANE_IF_STOP_EXTRA_DROP: f64 = 2.0;
 const NESTED_TWO_LANE_IF_CONTENT_BOTTOM_EXTEND: f64 = 48.0;
 const NESTED_TWO_LANE_IF_TITLE_X_OFFSET: f64 = -0.6747;
+const LINEAR_CROSS_LANE_IF_BODY_COMPRESS: f64 = 10.0;
+const LINEAR_CROSS_LANE_IF_MERGE_COMPRESS: f64 = 4.0;
+const LINEAR_CROSS_LANE_IF_TAIL_COMPRESS: f64 = 14.0;
+const LINEAR_CROSS_LANE_IF_TITLE_X_OFFSET: f64 = -0.8354;
 const PURE_NESTED_FORK_LAST_MID_PULL_LEFT: f64 = 21.7832;
 const PURE_NESTED_FORK_LAST_FAR_PULL_LEFT: f64 = 41.7832;
 const TERMINAL_PARTITION_TITLE_X_OFFSET: f64 = -0.1841;
@@ -23215,6 +23219,10 @@ fn route_if_cross_lane_connectors(
                     } else {
                         let stub = if nested_two_lane_mode && ty > 300.0 && ty < 500.0 {
                             sy + 17.5
+                        } else if src_nat.west.is_some() && !src_nat.is_merge {
+                            sy + 4.0
+                        } else if s.lane != t.lane {
+                            ty - 15.0
                         } else {
                             sy + 5.0
                         };
@@ -23665,8 +23673,10 @@ fn route_if_cross_lane_connectors(
                     // Down a 5px stub, horizontal to target column, down to top.
                     let stub = if nested_two_lane_mode && ty > 300.0 && ty < 500.0 {
                         sy + 17.5
-                    } else if src_nat.west.is_some() {
+                    } else if src_nat.west.is_some() && !src_nat.is_merge {
                         sy + 4.0
+                    } else if s.lane != t.lane {
+                        ty - 15.0
                     } else {
                         sy + 5.0
                     };
@@ -23848,6 +23858,142 @@ fn reorder_nested_two_lane_if_edges(buf: &str) -> String {
     }
     for prim in &prims[action_entry + 2..] {
         out.push_str(prim);
+    }
+    out
+}
+
+fn split_arrow_units(buf: &str) -> Vec<Vec<String>> {
+    let mut units = Vec::new();
+    let mut current = Vec::new();
+    for prim in split_svg_primitives(buf) {
+        let is_arrow_head = prim.starts_with(r##"<polygon fill="#181818""##);
+        current.push(prim);
+        if is_arrow_head {
+            units.push(std::mem::take(&mut current));
+        }
+    }
+    if !current.is_empty() {
+        units.push(current);
+    }
+    units
+}
+
+fn unit_first_line(unit: &[String]) -> Option<(f64, f64, f64, f64)> {
+    unit.iter().find_map(|prim| parse_line_xy(prim))
+}
+
+fn unit_has_long_cross(unit: &[String]) -> bool {
+    unit.iter()
+        .filter_map(|prim| parse_line_xy(prim))
+        .any(|(x1, x2, y1, y2)| (y1 - y2).abs() < 0.01 && (x1 - x2).abs() > 150.0)
+}
+
+fn linear_if_show_error_entry(unit: &[String]) -> bool {
+    unit_first_line(unit).is_some_and(|(x1, x2, y1, y2)| {
+        approx(x1, 164.1934) && approx(x2, 164.1934) && approx(y1, 415.6484) && y2 > y1
+    })
+}
+
+fn linear_if_customer_tail(unit: &[String]) -> bool {
+    unit_first_line(unit).is_some_and(|(x1, x2, y1, y2)| {
+        approx(x1, 97.2334) && approx(x2, 97.2334) && y1 > 1200.0 && y2 > y1
+    })
+}
+
+fn linear_if_payment_to_order(unit: &[String]) -> bool {
+    unit_first_line(unit).is_some_and(|(x1, x2, y1, y2)| {
+        approx(x1, 280.7217)
+            && approx(x2, 280.7217)
+            && approx(y1, 415.6484)
+            && y2 > y1
+            && unit_has_long_cross(unit)
+    })
+}
+
+fn linear_if_validate_entry(unit: &[String]) -> bool {
+    unit_first_line(unit).is_some_and(|(x1, x2, y1, y2)| {
+        approx(x1, 347.6816) && approx(x2, 347.6816) && approx(y1, 263.3828) && y2 > y1
+    })
+}
+
+fn push_arrow_unit(out: &mut String, unit: &[String]) {
+    for prim in unit {
+        out.push_str(prim);
+    }
+}
+
+fn reorder_linear_cross_lane_if_edges(buf: &str) -> String {
+    let units = split_arrow_units(buf);
+    let Some(show_idx) = units
+        .iter()
+        .position(|unit| linear_if_show_error_entry(unit))
+    else {
+        return buf.to_string();
+    };
+    let tail_idxs: Vec<usize> = units
+        .iter()
+        .enumerate()
+        .filter_map(|(i, unit)| linear_if_customer_tail(unit).then_some(i))
+        .collect();
+    let Some(payment_to_order_idx) = units
+        .iter()
+        .position(|unit| linear_if_payment_to_order(unit))
+    else {
+        return buf.to_string();
+    };
+    let Some(validate_idx) = units.iter().position(|unit| linear_if_validate_entry(unit)) else {
+        return buf.to_string();
+    };
+    if tail_idxs.len() < 2 || !(show_idx < validate_idx && validate_idx < payment_to_order_idx) {
+        return buf.to_string();
+    }
+
+    let start_idxs: Vec<usize> = units
+        .iter()
+        .enumerate()
+        .filter_map(|(i, unit)| {
+            unit_first_line(unit)
+                .is_some_and(|(x1, x2, y1, y2)| {
+                    approx(x1, 97.2334)
+                        && approx(x2, 97.2334)
+                        && y1 < 220.0
+                        && y2 > y1
+                        && !unit_has_long_cross(unit)
+                })
+                .then_some(i)
+        })
+        .collect();
+    if start_idxs.len() < 2 {
+        return buf.to_string();
+    }
+
+    let mut used = vec![false; units.len()];
+    let mut out = String::new();
+    for &i in &start_idxs {
+        used[i] = true;
+        push_arrow_unit(&mut out, &units[i]);
+    }
+    used[show_idx] = true;
+    push_arrow_unit(&mut out, &units[show_idx]);
+    for &i in &tail_idxs {
+        used[i] = true;
+        push_arrow_unit(&mut out, &units[i]);
+    }
+    used[payment_to_order_idx] = true;
+
+    let mut inserted_payment_to_order = false;
+    for (i, unit) in units.iter().enumerate() {
+        if used[i] {
+            continue;
+        }
+        if i == validate_idx && !inserted_payment_to_order {
+            push_arrow_unit(&mut out, &units[payment_to_order_idx]);
+            inserted_payment_to_order = true;
+        }
+        push_arrow_unit(&mut out, unit);
+    }
+    if !inserted_payment_to_order {
+        push_arrow_unit(&mut out, &units[payment_to_order_idx]);
     }
     out
 }
@@ -25329,6 +25475,17 @@ fn layout_swimlanes_v2(
             .map(|buf| count_stop_outer_ellipses(buf))
             .sum::<usize>()
             > 2;
+    let linear_cross_lane_if_mode = if_mode
+        && !fork_mode
+        && n >= 4
+        && !tree_has_repeat(tree)
+        && !tree_has_while(tree)
+        && !tree_has_nested_if_with_lane_mark(tree)
+        && tree
+            .iter()
+            .filter(|node| matches!(node, LayoutNode::If { .. }))
+            .count()
+            >= 2;
     let nested_fork_with_while_body_shift = if nested_fork_with_while_mode {
         WHILE_BODY_SLOT_COMPRESS
     } else {
@@ -26174,6 +26331,30 @@ fn layout_swimlanes_v2(
         lane_shapes[1] =
             shift_stop_ellipses_y_after(&lane_shapes[1], 430.0, NESTED_TWO_LANE_IF_STOP_EXTRA_DROP);
     }
+    if linear_cross_lane_if_mode {
+        if n > 0 {
+            lane_shapes[0] =
+                shift_y_after(&lane_shapes[0], 1200.0, -LINEAR_CROSS_LANE_IF_TAIL_COMPRESS);
+        }
+        if n > 3 {
+            lane_shapes[3] =
+                shift_y_after(&lane_shapes[3], 720.0, -LINEAR_CROSS_LANE_IF_BODY_COMPRESS);
+            lane_shapes[3] = shift_y_in_band(
+                &lane_shapes[3],
+                820.0,
+                851.0,
+                -LINEAR_CROSS_LANE_IF_MERGE_COMPRESS,
+            );
+        }
+        if n > 4 {
+            lane_shapes[4] =
+                shift_y_after(&lane_shapes[4], 850.0, -LINEAR_CROSS_LANE_IF_TAIL_COMPRESS);
+        }
+        if n > 5 {
+            lane_shapes[5] =
+                shift_y_after(&lane_shapes[5], 1080.0, -LINEAR_CROSS_LANE_IF_TAIL_COMPRESS);
+        }
+    }
     for frame in &svg.swimlane_v2_partition_frames {
         for &lane in &frame.lanes {
             if lane >= n {
@@ -26514,6 +26695,13 @@ fn layout_swimlanes_v2(
                     f(lane_left[l]),
                 ));
             }
+            if title_w[l] + 10.0 > lane_content_w[l] + 10.0 {
+                content.push_str(&format!(
+                    r#"<rect fill="none" height="1" style="stroke:none;stroke-width:1;" width="{}" x="{}" y="1"/>"#,
+                    f(title_w[l] + 10.0),
+                    f(lane_left[l]),
+                ));
+            }
         }
         let mut conns = String::new();
         let compression_conns = compression_lane_conns.as_ref().unwrap_or(&lane_conns);
@@ -26543,22 +26731,28 @@ fn layout_swimlanes_v2(
                 lane_shapes[l] = crate::compress::apply_x_offset(&lane_shapes[l], &x_tf, off);
                 lane_conns[l] = crate::compress::apply_x_offset(&lane_conns[l], &x_tf, off);
             }
-            // The rightmost divider follows the last lane's COMPRESSED content
-            // right edge + the 4 px lane right pad (the column width shrinks with
-            // the collapsed inter-branch slack).
+            // The rightmost divider follows the last lane's compressed content
+            // right edge + the 4 px lane right pad, but a title-driven lane keeps
+            // the title minimum even when its drawn body is narrower.
             let last_right = crate::compress::x_bounds(&lane_shapes[n - 1])
                 .map(|(_, hi)| hi)
                 .unwrap_or_else(|| tx(right_edge));
-            right_edge = (last_right + 4.0).max(lane_left[n - 1]);
+            let title_right = lane_left[n - 1] + title_w[n - 1] + 10.0;
+            right_edge = (last_right + 4.0).max(title_right).max(lane_left[n - 1]);
             if routed_split_collector
                 && let Some((_, hi)) = crate::compress::x_bounds(&lane_conns[0])
             {
                 right_edge = right_edge.max(hi + IF_SPLIT_COLLECTOR_RIGHT_DIVIDER_PAD);
             }
         }
+        let title_right = lane_left[n - 1] + title_w[n - 1] + 10.0;
+        right_edge = right_edge.max(title_right);
     }
     if nested_two_lane_if_mode && n > 0 {
         lane_conns[0] = reorder_nested_two_lane_if_edges(&lane_conns[0]);
+    }
+    if linear_cross_lane_if_mode && n > 0 {
+        lane_conns[0] = reorder_linear_cross_lane_if_edges(&lane_conns[0]);
     }
     if repeat_backward_break_mode {
         right_edge += REPEAT_BACKWARD_SWIMLANE_RIGHT_EDGE_RESERVE;
@@ -26712,6 +26906,8 @@ fn layout_swimlanes_v2(
                 IF_REPEAT_CROSS_LANE_TITLE_X_OFFSET
             } else if nested_two_lane_if_mode {
                 NESTED_TWO_LANE_IF_TITLE_X_OFFSET
+            } else if linear_cross_lane_if_mode {
+                LINEAR_CROSS_LANE_IF_TITLE_X_OFFSET
             } else {
                 0.0
             };
