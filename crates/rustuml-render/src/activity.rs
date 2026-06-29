@@ -2176,6 +2176,8 @@ fn swimlane_v2_can_handle_nested_if_fork(steps: &[ActivityStep]) -> bool {
             | ActivityStep::Fork
             | ActivityStep::ForkAgain
             | ActivityStep::EndFork
+            | ActivityStep::While(_)
+            | ActivityStep::EndWhile(_)
             | ActivityStep::Swimlane(_) => {}
             _ => return false,
         }
