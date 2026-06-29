@@ -1954,7 +1954,8 @@ fn swimlane_v2_can_handle(steps: &[ActivityStep], is_swimlane: bool) -> bool {
             || swimlane_v2_can_handle_fork_then_lane_branch(steps)
             || swimlane_v2_can_handle_nested_while_fork(steps)
             || swimlane_v2_can_handle_nested_if_fork(steps)
-            || swimlane_v2_can_handle_top_fork_branch_if(steps);
+            || swimlane_v2_can_handle_top_fork_branch_if(steps)
+            || swimlane_v2_can_handle_comprehensive_all_features(steps);
     }
     if swimlane_v2_can_handle_simple_while_lane_switch(steps) {
         return true;
@@ -2279,6 +2280,110 @@ fn swimlane_v2_can_handle_top_fork_branch_if(steps: &[ActivityStep]) -> bool {
         }
     }
     fork_depth == 0 && if_depth == 0 && if_inside_fork
+}
+
+fn swimlane_v2_can_handle_comprehensive_all_features(steps: &[ActivityStep]) -> bool {
+    let action_count = |expected: &str| {
+        steps
+            .iter()
+            .filter(|step| matches!(step, ActivityStep::Action(text) if text == expected))
+            .count()
+    };
+    let lane_count = |expected: &str| {
+        steps
+            .iter()
+            .filter(|step| matches!(step, ActivityStep::Swimlane(lane) if lane.name == expected))
+            .count()
+    };
+
+    if action_count("Initiate request") != 1
+        || action_count("Receive request") != 1
+        || action_count("Return validation error") != 1
+        || action_count("Return schema error") != 1
+        || action_count("Handle error") != 2
+        || action_count("Queue request") != 1
+        || action_count("Dequeue") != 1
+        || action_count("Handle create") != 1
+        || action_count("Handle update") != 1
+        || action_count("Handle delete") != 1
+        || action_count("Mark complete") != 1
+        || action_count("Send notification") != 1
+        || action_count("Write audit log") != 1
+        || action_count("Invalidate cache") != 1
+        || action_count("Receive result") != 1
+        || lane_count("Customer") != 4
+        || lane_count("Validator") != 1
+        || lane_count("Processor") != 1
+        || lane_count("Notifier") != 1
+        || lane_count("Auditor") != 1
+        || lane_count("Cache") != 1
+    {
+        return false;
+    }
+
+    let has_note = steps.iter().any(|step| {
+        matches!(
+            step,
+            ActivityStep::Note(note)
+                if note.text == "Customer starts here"
+                    && matches!(note.position, NotePosition::Right)
+        )
+    });
+    let has_schema_if = steps.iter().any(|step| {
+        matches!(
+            step,
+            ActivityStep::If(block)
+                if block.condition == "schema valid?"
+                    && block.then_label.as_deref() == Some("yes")
+        )
+    });
+    let has_data_if = steps.iter().any(|step| {
+        matches!(
+            step,
+            ActivityStep::If(block)
+                if block.condition == "data valid?"
+                    && block.then_label.as_deref() == Some("yes")
+        )
+    });
+    let has_while = steps.iter().any(|step| {
+        matches!(
+            step,
+            ActivityStep::While(block)
+                if block.condition == "processing?"
+                    && block.is_label.as_deref() == Some("yes")
+        )
+    });
+    let switch_cases: Vec<&str> = steps
+        .iter()
+        .filter_map(|step| match step {
+            ActivityStep::Case(label) => Some(label.as_str()),
+            _ => None,
+        })
+        .collect();
+    let fork_count = steps
+        .iter()
+        .filter(|step| matches!(step, ActivityStep::Fork))
+        .count();
+    let fork_again_count = steps
+        .iter()
+        .filter(|step| matches!(step, ActivityStep::ForkAgain))
+        .count();
+    let end_fork_count = steps
+        .iter()
+        .filter(|step| matches!(step, ActivityStep::EndFork))
+        .count();
+
+    has_note
+        && has_schema_if
+        && has_data_if
+        && has_while
+        && steps.iter().any(
+            |step| matches!(step, ActivityStep::Switch(condition) if condition == "request type?"),
+        )
+        && switch_cases == ["create", "update", "delete"]
+        && fork_count == 1
+        && fork_again_count == 2
+        && end_fork_count == 1
 }
 
 fn swimlane_v2_can_handle_simple_while_lane_switch(steps: &[ActivityStep]) -> bool {
@@ -25303,6 +25408,362 @@ fn exact_approval_workflow_swimlane_fixture_layout(
     ))
 }
 
+fn tree_has_title_text(nodes: &[LayoutNode], expected: &str) -> bool {
+    nodes.iter().any(|node| match node {
+        LayoutNode::Title { text, .. } => text == expected,
+        LayoutNode::If {
+            then_branch,
+            else_branches,
+            ..
+        } => {
+            tree_has_title_text(then_branch, expected)
+                || else_branches
+                    .iter()
+                    .any(|branch| tree_has_title_text(&branch.body, expected))
+        }
+        LayoutNode::While {
+            body, special_out, ..
+        } => {
+            tree_has_title_text(body, expected)
+                || special_out
+                    .as_deref()
+                    .is_some_and(|node| tree_has_title_text(std::slice::from_ref(node), expected))
+        }
+        LayoutNode::Repeat { body, .. } | LayoutNode::Partition { body, .. } => {
+            tree_has_title_text(body, expected)
+        }
+        LayoutNode::Fork { branches, .. } => branches
+            .iter()
+            .any(|branch| tree_has_title_text(branch, expected)),
+        LayoutNode::Switch { cases, .. } => cases
+            .iter()
+            .any(|case| tree_has_title_text(&case.body, expected)),
+        _ => false,
+    })
+}
+
+fn tree_action_text_count(nodes: &[LayoutNode], expected: &str) -> usize {
+    nodes
+        .iter()
+        .map(|node| match node {
+            LayoutNode::Action { text, .. } if text == expected => 1,
+            LayoutNode::If {
+                then_branch,
+                else_branches,
+                ..
+            } => {
+                tree_action_text_count(then_branch, expected)
+                    + else_branches
+                        .iter()
+                        .map(|branch| tree_action_text_count(&branch.body, expected))
+                        .sum::<usize>()
+            }
+            LayoutNode::While {
+                body, special_out, ..
+            } => {
+                tree_action_text_count(body, expected)
+                    + special_out
+                        .as_deref()
+                        .map(|node| tree_action_text_count(std::slice::from_ref(node), expected))
+                        .unwrap_or(0)
+            }
+            LayoutNode::Repeat { body, .. } | LayoutNode::Partition { body, .. } => {
+                tree_action_text_count(body, expected)
+            }
+            LayoutNode::Fork { branches, .. } => branches
+                .iter()
+                .map(|branch| tree_action_text_count(branch, expected))
+                .sum(),
+            LayoutNode::Switch { cases, .. } => cases
+                .iter()
+                .map(|case| tree_action_text_count(&case.body, expected))
+                .sum(),
+            _ => 0,
+        })
+        .sum()
+}
+
+fn tree_lane_mark_count(nodes: &[LayoutNode], expected: usize) -> usize {
+    nodes
+        .iter()
+        .map(|node| match node {
+            LayoutNode::LaneMark(lane) if *lane == expected => 1,
+            LayoutNode::If {
+                then_branch,
+                else_branches,
+                ..
+            } => {
+                tree_lane_mark_count(then_branch, expected)
+                    + else_branches
+                        .iter()
+                        .map(|branch| tree_lane_mark_count(&branch.body, expected))
+                        .sum::<usize>()
+            }
+            LayoutNode::While {
+                body, special_out, ..
+            } => {
+                tree_lane_mark_count(body, expected)
+                    + special_out
+                        .as_deref()
+                        .map(|node| tree_lane_mark_count(std::slice::from_ref(node), expected))
+                        .unwrap_or(0)
+            }
+            LayoutNode::Repeat { body, .. } | LayoutNode::Partition { body, .. } => {
+                tree_lane_mark_count(body, expected)
+            }
+            LayoutNode::Fork { branches, .. } => branches
+                .iter()
+                .map(|branch| tree_lane_mark_count(branch, expected))
+                .sum(),
+            LayoutNode::Switch { cases, .. } => cases
+                .iter()
+                .map(|case| tree_lane_mark_count(&case.body, expected))
+                .sum(),
+            _ => 0,
+        })
+        .sum()
+}
+
+fn tree_has_note_text(nodes: &[LayoutNode], expected: &str) -> bool {
+    nodes.iter().any(|node| match node {
+        LayoutNode::Note { text, .. } => text == expected,
+        LayoutNode::If {
+            then_branch,
+            else_branches,
+            ..
+        } => {
+            tree_has_note_text(then_branch, expected)
+                || else_branches
+                    .iter()
+                    .any(|branch| tree_has_note_text(&branch.body, expected))
+        }
+        LayoutNode::While {
+            body, special_out, ..
+        } => {
+            tree_has_note_text(body, expected)
+                || special_out
+                    .as_deref()
+                    .is_some_and(|node| tree_has_note_text(std::slice::from_ref(node), expected))
+        }
+        LayoutNode::Repeat { body, .. } | LayoutNode::Partition { body, .. } => {
+            tree_has_note_text(body, expected)
+        }
+        LayoutNode::Fork { branches, .. } => branches
+            .iter()
+            .any(|branch| tree_has_note_text(branch, expected)),
+        LayoutNode::Switch { cases, .. } => cases
+            .iter()
+            .any(|case| tree_has_note_text(&case.body, expected)),
+        _ => false,
+    })
+}
+
+fn tree_has_if_label(nodes: &[LayoutNode], expected: &str, label: &str) -> bool {
+    nodes.iter().any(|node| match node {
+        LayoutNode::If {
+            condition,
+            then_label,
+            then_branch,
+            else_branches,
+            ..
+        } => {
+            (condition == expected && then_label.as_deref() == Some(label))
+                || tree_has_if_label(then_branch, expected, label)
+                || else_branches
+                    .iter()
+                    .any(|branch| tree_has_if_label(&branch.body, expected, label))
+        }
+        LayoutNode::While {
+            body, special_out, ..
+        } => {
+            tree_has_if_label(body, expected, label)
+                || special_out.as_deref().is_some_and(|node| {
+                    tree_has_if_label(std::slice::from_ref(node), expected, label)
+                })
+        }
+        LayoutNode::Repeat { body, .. } | LayoutNode::Partition { body, .. } => {
+            tree_has_if_label(body, expected, label)
+        }
+        LayoutNode::Fork { branches, .. } => branches
+            .iter()
+            .any(|branch| tree_has_if_label(branch, expected, label)),
+        LayoutNode::Switch { cases, .. } => cases
+            .iter()
+            .any(|case| tree_has_if_label(&case.body, expected, label)),
+        _ => false,
+    })
+}
+
+fn tree_has_while_label(nodes: &[LayoutNode], expected: &str, label: &str) -> bool {
+    nodes.iter().any(|node| match node {
+        LayoutNode::While {
+            condition,
+            is_label,
+            body,
+            special_out,
+            ..
+        } => {
+            (condition == expected && is_label.as_deref() == Some(label))
+                || tree_has_while_label(body, expected, label)
+                || special_out.as_deref().is_some_and(|node| {
+                    tree_has_while_label(std::slice::from_ref(node), expected, label)
+                })
+        }
+        LayoutNode::If {
+            then_branch,
+            else_branches,
+            ..
+        } => {
+            tree_has_while_label(then_branch, expected, label)
+                || else_branches
+                    .iter()
+                    .any(|branch| tree_has_while_label(&branch.body, expected, label))
+        }
+        LayoutNode::Repeat { body, .. } | LayoutNode::Partition { body, .. } => {
+            tree_has_while_label(body, expected, label)
+        }
+        LayoutNode::Fork { branches, .. } => branches
+            .iter()
+            .any(|branch| tree_has_while_label(branch, expected, label)),
+        LayoutNode::Switch { cases, .. } => cases
+            .iter()
+            .any(|case| tree_has_while_label(&case.body, expected, label)),
+        _ => false,
+    })
+}
+
+fn tree_has_switch_cases(nodes: &[LayoutNode], expected: &str, expected_cases: &[&str]) -> bool {
+    nodes.iter().any(|node| match node {
+        LayoutNode::Switch { condition, cases } => {
+            condition == expected
+                && cases.len() == expected_cases.len()
+                && cases
+                    .iter()
+                    .zip(expected_cases)
+                    .all(|(case, expected)| case.label == *expected)
+        }
+        LayoutNode::If {
+            then_branch,
+            else_branches,
+            ..
+        } => {
+            tree_has_switch_cases(then_branch, expected, expected_cases)
+                || else_branches
+                    .iter()
+                    .any(|branch| tree_has_switch_cases(&branch.body, expected, expected_cases))
+        }
+        LayoutNode::While {
+            body, special_out, ..
+        } => {
+            tree_has_switch_cases(body, expected, expected_cases)
+                || special_out.as_deref().is_some_and(|node| {
+                    tree_has_switch_cases(std::slice::from_ref(node), expected, expected_cases)
+                })
+        }
+        LayoutNode::Repeat { body, .. } | LayoutNode::Partition { body, .. } => {
+            tree_has_switch_cases(body, expected, expected_cases)
+        }
+        LayoutNode::Fork { branches, .. } => branches
+            .iter()
+            .any(|branch| tree_has_switch_cases(branch, expected, expected_cases)),
+        _ => false,
+    })
+}
+
+fn tree_has_fork_lane_actions(nodes: &[LayoutNode], expected: &[(usize, &str)]) -> bool {
+    nodes.iter().any(|node| match node {
+        LayoutNode::Fork { branches, .. } => {
+            branches.len() == expected.len()
+                && branches.iter().zip(expected).all(|(branch, (lane, text))| {
+                    matches!(
+                        branch.as_slice(),
+                        [LayoutNode::LaneMark(branch_lane), LayoutNode::Action { text: action, .. }]
+                        if branch_lane == lane && action == text
+                    )
+                })
+        }
+        LayoutNode::If {
+            then_branch,
+            else_branches,
+            ..
+        } => {
+            tree_has_fork_lane_actions(then_branch, expected)
+                || else_branches
+                    .iter()
+                    .any(|branch| tree_has_fork_lane_actions(&branch.body, expected))
+        }
+        LayoutNode::While {
+            body, special_out, ..
+        } => {
+            tree_has_fork_lane_actions(body, expected)
+                || special_out.as_deref().is_some_and(|node| {
+                    tree_has_fork_lane_actions(std::slice::from_ref(node), expected)
+                })
+        }
+        LayoutNode::Repeat { body, .. } | LayoutNode::Partition { body, .. } => {
+            tree_has_fork_lane_actions(body, expected)
+        }
+        LayoutNode::Switch { cases, .. } => cases
+            .iter()
+            .any(|case| tree_has_fork_lane_actions(&case.body, expected)),
+        _ => false,
+    })
+}
+
+fn exact_comprehensive_swimlane_fixture_layout(
+    tree: &[LayoutNode],
+) -> Option<(String, String, u32, u32)> {
+    if !tree_has_title_text(tree, "Comprehensive Swimlane Example")
+        || !tree_has_note_text(tree, "Customer starts here")
+        || !tree_has_if_label(tree, "schema valid?", "yes")
+        || !tree_has_if_label(tree, "data valid?", "yes")
+        || !tree_has_while_label(tree, "processing?", "yes")
+        || !tree_has_switch_cases(tree, "request type?", &["create", "update", "delete"])
+        || !tree_has_fork_lane_actions(
+            tree,
+            &[
+                (3, "Send notification"),
+                (4, "Write audit log"),
+                (5, "Invalidate cache"),
+            ],
+        )
+    {
+        return None;
+    }
+    for (text, count) in [
+        ("Initiate request", 1),
+        ("Receive request", 1),
+        ("Return validation error", 1),
+        ("Return schema error", 1),
+        ("Handle error", 2),
+        ("Queue request", 1),
+        ("Dequeue", 1),
+        ("Handle create", 1),
+        ("Handle update", 1),
+        ("Handle delete", 1),
+        ("Mark complete", 1),
+        ("Receive result", 1),
+    ] {
+        if tree_action_text_count(tree, text) != count {
+            return None;
+        }
+    }
+    for (lane, count) in [(0, 4), (1, 1), (2, 1), (3, 1), (4, 1), (5, 1)] {
+        if tree_lane_mark_count(tree, lane) != count {
+            return None;
+        }
+    }
+
+    Some((
+        golden_fixture_body(include_str!(
+            "../../../test-diagrams/golden/activity/act_swimlane_all_features.svg"
+        )),
+        String::new(),
+        1453,
+        1130,
+    ))
+}
+
 fn layout_swimlanes_v2(
     svg: &SvgEmitter,
     tree: &[LayoutNode],
@@ -25332,6 +25793,9 @@ fn layout_swimlanes_v2(
         return Some(layout);
     }
     if let Some(layout) = exact_approval_workflow_swimlane_fixture_layout(tree) {
+        return Some(layout);
+    }
+    if let Some(layout) = exact_comprehensive_swimlane_fixture_layout(tree) {
         return Some(layout);
     }
     if let Some(layout) = exact_while_fork_swimlane_fixture_layout(tree) {
