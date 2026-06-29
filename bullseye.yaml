@@ -650,7 +650,7 @@ targets:
     achieved: 2026-06-28
   T4.1.31:
     name: Nested swimlane if/fork workflows use PlantUML local fork-bar and cross-lane connector routing
-    status: identified
+    status: achieved
     value: 0.0
     cost: 0.0
     acceptance:
@@ -665,6 +665,7 @@ targets:
     - strict-xml
     origin: manual
     discovered: 2026-06-29
+    achieved: 2026-06-29
   T4.1.4:
     name: Swimlane V2 four-branch fork lane-spanning diagrams match PlantUML geometry
     status: achieved
