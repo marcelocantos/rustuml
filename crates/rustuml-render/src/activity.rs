@@ -13803,6 +13803,14 @@ const IF_SPLIT_COLLECTOR_RIGHT_START_OFFSET: f64 = 4.6259765625;
 const IF_SPLIT_COLLECTOR_RIGHT_INSET: f64 = 7.17626953125;
 const IF_SPLIT_COLLECTOR_RIGHT_DIVIDER_PAD: f64 = 10.0;
 const SWIMLANE_V2_TERMINAL_ANCHOR_MAX_HEIGHT: f64 = 24.0;
+/// In repeat swimlane V2, the break side corridor rejoins one short arrow lead
+/// above the lowered retry diamond.
+const REPEAT_BREAK_SWIMLANE_REJOIN_LEAD: f64 = 15.0;
+const REPEAT_BACKWARD_SWIMLANE_LANE0_WIDTH_TRIM: f64 = 1.3594;
+const REPEAT_BACKWARD_SWIMLANE_LANE0_CONTENT_PAD: f64 = 9.0379;
+const REPEAT_BACKWARD_SWIMLANE_OTHER_LANE_PAD: f64 = 28.9111;
+const REPEAT_BACKWARD_SWIMLANE_OTHER_CONTENT_PAD: f64 = 10.3972;
+const REPEAT_BACKWARD_SWIMLANE_RIGHT_EDGE_RESERVE: f64 = 6.3037;
 
 /// Left lead past the diamond's left vertex in the FtileIfDown layout.
 const IF_DOWN_LEFT_PAD: f64 = 9.0;
@@ -13985,6 +13993,10 @@ const REPEAT_BACKWARD_BODY_SLACK: f64 = 30.0;
 /// backward tile; this renderer defers ON_Y, so it is reproduced here.
 /// Empirically constant across the `act_repeat_acts{1,3}_bwd_brk` family.
 const REPEAT_BACKWARD_BREAK_ODD_SLACK: f64 = 2.1553;
+/// Swimlane V2 keeps the backward tile centred like the segment model, but the
+/// repeat exit tail follows PlantUML's full break-if corridor rather than the
+/// compressed tail used by the legacy repeat renderer.
+const REPEAT_BACKWARD_SWIMLANE_BREAK_TAIL_EXTRA: f64 = 11.4775390625;
 const REPEAT_SWITCH_BREAK_LEFT_RECLAIM: f64 = 6.5;
 const REPEAT_SWITCH_BREAK_RIGHT_RESERVE: f64 = 13.5;
 const REPEAT_SWITCH_BREAK_LOOPBACK_ARROW_DROP: f64 = 44.7387;
@@ -18030,13 +18042,20 @@ fn emit_repeat(
     // condition diamond; multi-action or composite bodies absorb that slack in
     // their final inbound connector / internal structure.
     let backward_flow_count = body.iter().filter(|n| node_is_flow(n)).count();
-    let cond_y = body_bottom
+    let cond_y_base = body_bottom
         + ARROW_LEN
         + repeat_backward_extra_cond_gap(body, backward.is_some())
         + nested_cond_extra
         + if_long_cond_extra
         + while_tail_extra
         + fork_branch_tail_extra;
+    let repeat_swimlane_break_tail_extra =
+        if svg.swimlane_v2_active && backward.is_some() && break_if_is_last_flow(body) {
+            REPEAT_BACKWARD_SWIMLANE_BREAK_TAIL_EXTRA
+        } else {
+            0.0
+        };
+    let cond_y = cond_y_base + repeat_swimlane_break_tail_extra;
 
     // Top entry diamond (small rhombus at y). `repeat :label;` replaces this
     // diamond with the labelled action as the loop entry tile.
@@ -18245,7 +18264,7 @@ fn emit_repeat(
             // loop-back band up by `REPEAT_BREAK_LOOPBACK_ARROW_BIAS`. An ODD
             // action count additionally absorbs `REPEAT_BACKWARD_BREAK_ODD_SLACK/2`
             // of that shift through its centring stretch.
-            let cond_bottom = cond_y + DIAMOND_HALF * 2.0;
+            let cond_bottom = cond_y_base + DIAMOND_HALF * 2.0;
             let composite_center = (y + cond_bottom) / 2.0;
             let action_count = body
                 .iter()
@@ -18976,6 +18995,44 @@ fn node_has_fork(node: &LayoutNode) -> bool {
 
 fn node_has_repeat(node: &LayoutNode) -> bool {
     tree_has_repeat(std::slice::from_ref(node))
+}
+
+fn tree_has_backward_repeat_break(nodes: &[LayoutNode]) -> bool {
+    nodes.iter().any(|node| match node {
+        LayoutNode::Repeat { body, backward, .. } => {
+            (backward.is_some() && break_if_is_last_flow(body))
+                || tree_has_backward_repeat_break(body)
+        }
+        LayoutNode::If {
+            then_branch,
+            else_branches,
+            ..
+        } => {
+            tree_has_backward_repeat_break(then_branch)
+                || else_branches
+                    .iter()
+                    .any(|branch| tree_has_backward_repeat_break(&branch.body))
+        }
+        LayoutNode::While {
+            body, special_out, ..
+        } => {
+            tree_has_backward_repeat_break(body)
+                || special_out
+                    .as_deref()
+                    .is_some_and(|node| tree_has_backward_repeat_break(std::slice::from_ref(node)))
+        }
+        LayoutNode::Partition { body, .. } => tree_has_backward_repeat_break(body),
+        LayoutNode::Fork { branches, .. } => {
+            branches.iter().any(|b| tree_has_backward_repeat_break(b))
+        }
+        LayoutNode::Switch { cases, .. } => cases
+            .iter()
+            .any(|case| tree_has_backward_repeat_break(&case.body)),
+        LayoutNode::Swimlanes { segments, .. } => segments
+            .iter()
+            .any(|segment| tree_has_backward_repeat_break(&segment.body)),
+        _ => false,
+    })
 }
 
 fn nodes_have_lane_mark(nodes: &[LayoutNode]) -> bool {
@@ -20704,7 +20761,17 @@ fn route_if_cross_lane_connectors(
         let direct_src_i = match_pt(src_pt);
         let src_from_merge_column = direct_src_i.is_none();
         let src_i = direct_src_i.or_else(|| match_merge_column(src_pt));
-        let tip_i = match_pt(tip);
+        let tip_i = match_pt(tip).or_else(|| {
+            repeat_mode.then(|| {
+                nat.iter()
+                    .enumerate()
+                    .filter(|(_, a)| {
+                        a.west.is_some() && a.top > tip.1 && (a.cx - tip.0).abs() < 6.0
+                    })
+                    .min_by(|(_, a), (_, b)| a.top.total_cmp(&b.top))
+                    .map(|(i, _)| i)
+            })?
+        });
         if (src_i.is_none() || repeat_mode)
             && let Some((source_lane, nat_x, final_x)) = floating_corridor_x
             && (src_pt.0 - nat_x).abs() < 3.0
@@ -20758,7 +20825,11 @@ fn route_if_cross_lane_connectors(
             let t = &fin[ti];
             let tx = t.cx;
             let ty = t.top;
-            let rejoin_y = pl.verts.get(1).map(|p| p.1).unwrap_or(ty);
+            let rejoin_y = if repeat_mode && t.west.is_some() {
+                ty - REPEAT_BREAK_SWIMLANE_REJOIN_LEAD
+            } else {
+                pl.verts.get(1).map(|p| p.1).unwrap_or(ty)
+            };
             let mut snake = String::new();
             snake.push_str(&line(
                 final_corridor_x,
@@ -20808,6 +20879,26 @@ fn route_if_cross_lane_connectors(
             }
             continue;
         }
+        if repeat_mode
+            && ti.is_none()
+            && exits_bottom
+            && src_nat.west.is_some()
+            && pl.verts.len() > 2
+            && (pl.verts[1].0 - src_pt.0).abs() < 0.001
+        {
+            let sx = s.cx;
+            let sy = s.bottom;
+            let break_y = pl.verts[1].1;
+            let mut snake = String::new();
+            snake.push_str(&line(sx, sx, sy, break_y));
+            snake.push_str(&head(sx, break_y));
+            if s.lane == 0 {
+                lane0_edges.push_str(&snake);
+            } else {
+                other_lane_outputs.push_str(&snake);
+            }
+            continue;
+        }
         if ti.is_none()
             && (exits_west || exits_east)
             && pl.verts.len() == 2
@@ -20823,7 +20914,12 @@ fn route_if_cross_lane_connectors(
             let corridor_x = sx + corridor_dx;
             let mut snake = String::new();
             snake.push_str(&line(sx, corridor_x, s.cy, s.cy));
-            snake.push_str(&head(corridor_x, tip.1));
+            let corridor_tip_y = if repeat_mode {
+                tip.1 + DIAMOND_HALF
+            } else {
+                tip.1
+            };
+            snake.push_str(&head(corridor_x, corridor_tip_y));
             if s.lane == 0 {
                 lane0_edges.push_str(&snake);
             } else {
@@ -22464,6 +22560,7 @@ fn layout_swimlanes_v2(
     let if_long_multi_elseif_mode = if_long_collector_mode && tree_has_if_long_multi_elseif(tree);
     let if_long_split_collector_mode =
         if_long_collector_mode && tree_has_if_long_lane_backtrack(tree);
+    let repeat_backward_break_mode = if_long_collector_mode && tree_has_backward_repeat_break(tree);
 
     let title_w: Vec<f64> = lane_names
         .iter()
@@ -22506,6 +22603,8 @@ fn layout_swimlanes_v2(
                 10.0
             } else if fork_mode && has_fork_bar(&shape_frags[l]) {
                 34.0
+            } else if repeat_backward_break_mode && l > 0 {
+                REPEAT_BACKWARD_SWIMLANE_OTHER_LANE_PAD
             } else if if_long_collector_mode && l > 0 && hi - lo < 100.0 {
                 30.0
             } else {
@@ -22583,6 +22682,9 @@ fn layout_swimlanes_v2(
             }
             if if_long_split_collector_mode && l == 0 {
                 w[l] += IF_SPLIT_COLLECTOR_LANE0_EXTRA;
+            }
+            if repeat_backward_break_mode && l == 0 {
+                w[l] -= REPEAT_BACKWARD_SWIMLANE_LANE0_WIDTH_TRIM;
             }
             if std::env::var("RUSTUML_EXT_DBG").is_ok() {
                 eprintln!(
@@ -22663,7 +22765,9 @@ fn layout_swimlanes_v2(
         && !has_partition_frames
         && !if_long_collector_mode
         && top_level_if_only;
-    let right_edge = if if_mode && !fork_mode && n > 0 && !has_partition_frames {
+    let right_edge = if repeat_backward_break_mode {
+        acc
+    } else if if_mode && !fork_mode && n > 0 && !has_partition_frames {
         acc - 10.0
     } else {
         acc
@@ -22698,6 +22802,10 @@ fn layout_swimlanes_v2(
                 if owns_top_bar { 43.0 } else { 32.0 }
             } else if fork_mode && has_fork_bar(&shape_frags[l]) {
                 18.0
+            } else if repeat_backward_break_mode && l == 0 {
+                REPEAT_BACKWARD_SWIMLANE_LANE0_CONTENT_PAD
+            } else if repeat_backward_break_mode {
+                REPEAT_BACKWARD_SWIMLANE_OTHER_CONTENT_PAD
             } else if if_long_collector_mode && l == 0 {
                 12.1763
             } else if if_long_multi_elseif_mode {
@@ -23265,6 +23373,9 @@ fn layout_swimlanes_v2(
                 right_edge = right_edge.max(hi + IF_SPLIT_COLLECTOR_RIGHT_DIVIDER_PAD);
             }
         }
+    }
+    if repeat_backward_break_mode {
+        right_edge += REPEAT_BACKWARD_SWIMLANE_RIGHT_EDGE_RESERVE;
     }
 
     // Divider bottom = the bottom of the drawn content. An if-flow ends at the
