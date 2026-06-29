@@ -657,10 +657,14 @@ fn parse_occupancy(shapes: &str, mode: CompressionMode) -> SlotSet {
     );
     for c in rect.captures_iter(shapes) {
         // A fork bar tagged `ignoreForCompressionOnX` (FtileBlackBlock) contributes
-        // NO X-occupancy, so its reclaimable middle-gap corridor collapses and the
-        // bar shrinks with it. It still BLOCKS on Y and is still remapped by
-        // `rewrite_axis`.
+        // only its two 2px edge bands on X: Java's `URectangle.drawWhenCompressed`
+        // draws `UEmpty(2, height)` at x=0 and x=width-2. The reclaimable middle
+        // corridor still collapses and the bar shrinks with it, but the edges
+        // keep their tiny occupancy.
         if x && c[0].contains(FORK_BAR_COMPRESS_MARKER) {
+            let (xx, w) = (num(&c[3]), num(&c[2]));
+            occ.add_slot(xx, xx + 2.0);
+            occ.add_slot(xx + w - 2.0, xx + w);
             continue;
         }
         if x {

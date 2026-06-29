@@ -9923,6 +9923,10 @@ struct SvgEmitter {
     /// `body_bottom + 10`. A terminal while in the body still compresses to 10.
     /// Set per-node by `emit_sequence_ex`, consumed once by `emit_while`.
     while_repeat_body_nonterminal: bool,
+    /// One-shot: this `while` is itself the direct flow node currently being
+    /// emitted by a repeat body. Nested whiles inside that node are still inside
+    /// the repeat body, but should use the nested repeat-body compression model.
+    repeat_body_direct_while: bool,
     /// Extra added to the current switch's merge gap because it is the terminal
     /// flow node of a `repeat` body (`ARROW_LEN`). Set per-switch by
     /// `emit_sequence_ex` (repeat-body mode) and consumed once by
@@ -10194,6 +10198,7 @@ impl SvgEmitter {
             while_switch_loopback_tip: None,
             pending_repeat_body: false,
             while_repeat_body_nonterminal: false,
+            repeat_body_direct_while: false,
             repeat_switch_merge_extra: 0.0,
             repeat_switch_break_columns: false,
             repeat_switch_break_if_merge_extra: false,
@@ -11739,6 +11744,9 @@ fn emit_sequence_ex(
             && matches!(node, LayoutNode::While { .. })
         {
             svg.while_repeat_body_nonterminal = true;
+        }
+        if repeat_body && matches!(node, LayoutNode::While { .. }) {
+            svg.repeat_body_direct_while = true;
         }
         // A terminating if-down owns its outbound spine arrow when followed by
         // another flow node; tell its emit whether that next node exists.
@@ -16212,6 +16220,14 @@ fn emit_fork_branch_sequence(svg: &mut SvgEmitter, branch: &[LayoutNode], cx: f6
     bottom
 }
 
+fn fork_branch_repeat_pull_up(layout: &ForkLayout, branch: &[LayoutNode]) -> f64 {
+    if layout.top_bar_pull_up != 0.0 && matches!(branch, [LayoutNode::Repeat { .. }]) {
+        layout.top_bar_pull_up
+    } else {
+        0.0
+    }
+}
+
 fn emit_fork_merge(svg: &mut SvgEmitter, cx: f64, y: f64, branches: &[Vec<LayoutNode>]) -> f64 {
     if branches.is_empty() {
         return y;
@@ -16413,6 +16429,11 @@ fn emit_fork_with_layout(
         for (i, &h) in heights.iter().enumerate() {
             if !branches[i].is_empty() {
                 center_offsets[i] = (max_h - h) / 2.0;
+                if layout.top_bar_pull_up != 0.0 && center_offsets[i] > 0.0 {
+                    // Single-fork while bodies pull the top bar by one slot, but
+                    // Java keeps a 2px edge band in the centred branch height.
+                    center_offsets[i] -= (WHILE_BODY_SLOT_COMPRESS - 2.0) / 2.0;
+                }
             }
         }
         if branches
@@ -16452,9 +16473,11 @@ fn emit_fork_with_layout(
                         } else {
                             0.0
                         };
+                        let repeat_pull_up = fork_branch_repeat_pull_up(&layout, branch);
                         let origin_adjust =
                             fork_branch_origin_adjust(simple_while_repeat_pair, branch);
                         bar_bottom + ARROW_LEN + center_offsets[i] + start_lead + origin_adjust
+                            - repeat_pull_up
                     };
                     Some(branch_y + sequence_height_fork_branch(branch, gap_extra))
                 }
@@ -16478,8 +16501,9 @@ fn emit_fork_with_layout(
             } else {
                 0.0
             };
+            let repeat_pull_up = fork_branch_repeat_pull_up(&layout, branch);
             let origin_adjust = fork_branch_origin_adjust(simple_while_repeat_pair, branch);
-            bar_bottom + ARROW_LEN + center_offsets[i] + start_lead + origin_adjust
+            bar_bottom + ARROW_LEN + center_offsets[i] + start_lead + origin_adjust - repeat_pull_up
         };
         // A leading nude switch (>= 3 cases) in this branch emits its
         // `FtileSwitchNude` layout (see `fork_branch_switch_is_nude`); flag it so
@@ -16549,8 +16573,9 @@ fn emit_fork_with_layout(
         let branch_y = if single_partition_branch_body_top(branch, bar_bottom).is_some() {
             bar_bottom
         } else {
+            let repeat_pull_up = fork_branch_repeat_pull_up(&layout, branch);
             let origin_adjust = fork_branch_origin_adjust(simple_while_repeat_pair, branch);
-            bar_bottom + ARROW_LEN + center_offsets[i] + origin_adjust
+            bar_bottom + ARROW_LEN + center_offsets[i] + origin_adjust - repeat_pull_up
         };
         let arrow_top = single_partition_branch_body_bottom(branch, branch_y).unwrap_or(*bottom);
         svg.down_arrow(bcx, arrow_top, bottom_bar_y, &arrow_color);
@@ -16568,8 +16593,9 @@ fn emit_fork_with_layout(
         let branch_y = if single_partition_branch_body_top(branch, bar_bottom).is_some() {
             bar_bottom
         } else {
+            let repeat_pull_up = fork_branch_repeat_pull_up(&layout, branch);
             let origin_adjust = fork_branch_origin_adjust(simple_while_repeat_pair, branch);
-            bar_bottom + ARROW_LEN + center_offsets[i] + origin_adjust
+            bar_bottom + ARROW_LEN + center_offsets[i] + origin_adjust - repeat_pull_up
         };
         let arrow_bottom = single_partition_branch_body_top(branch, branch_y).unwrap_or(branch_y);
         svg.down_arrow(bcx, top_bar_bottom, arrow_bottom, &arrow_color);
@@ -16589,8 +16615,9 @@ fn emit_fork_with_layout(
         let branch_y = if single_partition_branch_body_top(branch, bar_bottom).is_some() {
             bar_bottom
         } else {
+            let repeat_pull_up = fork_branch_repeat_pull_up(&layout, branch);
             let origin_adjust = fork_branch_origin_adjust(simple_while_repeat_pair, branch);
-            bar_bottom + ARROW_LEN + center_offsets[i] + origin_adjust
+            bar_bottom + ARROW_LEN + center_offsets[i] + origin_adjust - repeat_pull_up
         };
         let arrow_top = single_partition_branch_body_bottom(branch, branch_y).unwrap_or(*bottom);
         svg.down_arrow(bcx, arrow_top, bottom_bar_y, &arrow_color);
@@ -16761,6 +16788,8 @@ fn emit_while(
     let fork_branch_slot_open = std::mem::take(&mut svg.fork_branch_while_slot_open);
     let fork_branch_while_if_body_compress =
         std::mem::take(&mut svg.fork_branch_while_if_body_compress);
+    let direct_repeat_body_while = std::mem::take(&mut svg.repeat_body_direct_while);
+    let nested_in_repeat_body = svg.repeat_body_depth > 0 && !direct_repeat_body_while;
     // One-shot: this while is a non-terminal flow in a repeat body, so the
     // FtileRepeat frame holds its loop-back tail open (junction keeps the full
     // halfHex, not the ON_Y-compressed 10). Take it before the body emit so a
@@ -16776,6 +16805,7 @@ fn emit_while(
     });
     let ordinary_slot_compressed = !sole_body_suppress
         && !fork_branch_slot_open
+        && !nested_in_repeat_body
         && (while_ordinary_slot_compresses(body, is_label, end_label, special_out)
             || while_long_if_slot_compresses(body, is_label, special_out)
             || while_leading_binary_if_slot_compresses(body, is_label, special_out)
