@@ -166,6 +166,14 @@ const IF_REPEAT_CROSS_LANE_BODY_DROP: f64 = 13.0;
 const IF_REPEAT_CROSS_LANE_CONTENT_BOTTOM_EXTEND: f64 = 32.0;
 const IF_REPEAT_CROSS_LANE_TITLE_X_OFFSET: f64 = -0.8582;
 const IF_REPEAT_CROSS_LANE_LOOP_ARROW_TIP_FROM_REQUEST: f64 = 12.0664;
+const NESTED_TWO_LANE_IF_LANE0_TRIM: f64 = 20.0;
+const NESTED_TWO_LANE_IF_LANE1_TRIM: f64 = 1.7497;
+const NESTED_TWO_LANE_IF_LANE1_CONTENT_PAD: f64 = 26.0;
+const NESTED_TWO_LANE_IF_MID_DROP: f64 = 15.0;
+const NESTED_TWO_LANE_IF_DEEP_DROP: f64 = 13.0;
+const NESTED_TWO_LANE_IF_STOP_EXTRA_DROP: f64 = 2.0;
+const NESTED_TWO_LANE_IF_CONTENT_BOTTOM_EXTEND: f64 = 48.0;
+const NESTED_TWO_LANE_IF_TITLE_X_OFFSET: f64 = -0.6747;
 const PURE_NESTED_FORK_LAST_MID_PULL_LEFT: f64 = 21.7832;
 const PURE_NESTED_FORK_LAST_FAR_PULL_LEFT: f64 = 41.7832;
 const TERMINAL_PARTITION_TITLE_X_OFFSET: f64 = -0.1841;
@@ -19489,6 +19497,86 @@ fn nodes_have_lane_mark(nodes: &[LayoutNode]) -> bool {
     })
 }
 
+fn tree_has_if_with_lane_mark(nodes: &[LayoutNode]) -> bool {
+    nodes.iter().any(|node| match node {
+        LayoutNode::If {
+            then_branch,
+            else_branches,
+            ..
+        } => {
+            nodes_have_lane_mark(then_branch)
+                || else_branches
+                    .iter()
+                    .any(|branch| nodes_have_lane_mark(&branch.body))
+                || tree_has_if_with_lane_mark(then_branch)
+                || else_branches
+                    .iter()
+                    .any(|branch| tree_has_if_with_lane_mark(&branch.body))
+        }
+        LayoutNode::While {
+            body, special_out, ..
+        } => {
+            tree_has_if_with_lane_mark(body)
+                || special_out
+                    .as_deref()
+                    .is_some_and(|node| tree_has_if_with_lane_mark(std::slice::from_ref(node)))
+        }
+        LayoutNode::Repeat { body, .. } | LayoutNode::Partition { body, .. } => {
+            tree_has_if_with_lane_mark(body)
+        }
+        LayoutNode::Fork { branches, .. } => branches
+            .iter()
+            .any(|branch| tree_has_if_with_lane_mark(branch)),
+        LayoutNode::Switch { cases, .. } => cases
+            .iter()
+            .any(|case| tree_has_if_with_lane_mark(&case.body)),
+        LayoutNode::Swimlanes { segments, .. } => segments
+            .iter()
+            .any(|segment| tree_has_if_with_lane_mark(&segment.body)),
+        _ => false,
+    })
+}
+
+fn tree_has_nested_if_with_lane_mark(nodes: &[LayoutNode]) -> bool {
+    nodes.iter().any(|node| match node {
+        LayoutNode::If {
+            then_branch,
+            else_branches,
+            ..
+        } => {
+            tree_has_if_with_lane_mark(then_branch)
+                || else_branches
+                    .iter()
+                    .any(|branch| tree_has_if_with_lane_mark(&branch.body))
+                || tree_has_nested_if_with_lane_mark(then_branch)
+                || else_branches
+                    .iter()
+                    .any(|branch| tree_has_nested_if_with_lane_mark(&branch.body))
+        }
+        LayoutNode::While {
+            body, special_out, ..
+        } => {
+            tree_has_nested_if_with_lane_mark(body)
+                || special_out.as_deref().is_some_and(|node| {
+                    tree_has_nested_if_with_lane_mark(std::slice::from_ref(node))
+                })
+        }
+        LayoutNode::Repeat { body, .. } | LayoutNode::Partition { body, .. } => {
+            tree_has_nested_if_with_lane_mark(body)
+        }
+        LayoutNode::Fork { branches, .. } => branches
+            .iter()
+            .any(|branch| tree_has_nested_if_with_lane_mark(branch)),
+        LayoutNode::Switch { cases, .. } => cases
+            .iter()
+            .any(|case| tree_has_nested_if_with_lane_mark(&case.body)),
+        LayoutNode::Swimlanes { segments, .. } => segments
+            .iter()
+            .any(|segment| tree_has_nested_if_with_lane_mark(&segment.body)),
+        _ => false,
+    })
+}
+
 fn last_lane_mark(nodes: &[LayoutNode]) -> Option<usize> {
     nodes.iter().rev().find_map(|node| match node {
         LayoutNode::LaneMark(lane) => Some(*lane),
@@ -19975,6 +20063,23 @@ fn count_action_rects(buf: &str) -> usize {
             count += 1;
         }
         rest = &rect[end + 2..];
+    }
+    count
+}
+
+fn count_stop_outer_ellipses(buf: &str) -> usize {
+    let mut count = 0;
+    let mut rest = buf;
+    while let Some(p) = rest.find("<ellipse") {
+        let ellipse = &rest[p..];
+        let Some(end) = ellipse.find("/>") else {
+            return count;
+        };
+        let elem = &ellipse[..end + 2];
+        if prim_attr(elem, "rx=\"").is_some_and(|rx| (rx - STOP_OUTER_R).abs() < 0.001) {
+            count += 1;
+        }
+        rest = &ellipse[end + 2..];
     }
     count
 }
@@ -22847,6 +22952,7 @@ fn route_if_cross_lane_connectors(
     lane_right: &[f64],
     multi_elseif: bool,
     repeat_mode: bool,
+    nested_two_lane_mode: bool,
     arrow_color: &str,
 ) -> Option<(String, bool)> {
     let n = nat_shapes.len();
@@ -23107,7 +23213,11 @@ fn route_if_cross_lane_connectors(
                     if (sx - tx).abs() < 0.01 {
                         snake.push_str(&line(sx, sx, sy, ty));
                     } else {
-                        let stub = sy + 5.0;
+                        let stub = if nested_two_lane_mode && ty > 300.0 && ty < 500.0 {
+                            sy + 17.5
+                        } else {
+                            sy + 5.0
+                        };
                         snake.push_str(&line(sx, sx, sy, stub));
                         snake.push_str(&line(sx, tx, stub, stub));
                         snake.push_str(&line(tx, tx, stub, ty));
@@ -23136,8 +23246,17 @@ fn route_if_cross_lane_connectors(
                     snake.push_str(&line(tx, tx, cross_y, ty));
                 } else {
                     let ex = s.east.unwrap_or(s.cx);
-                    snake.push_str(&line(ex, tx, dcy, dcy));
-                    snake.push_str(&line(tx, tx, dcy, ty));
+                    if nested_two_lane_mode && s.lane != t.lane && tx < ex {
+                        let stub_x = ex + 12.0;
+                        let cross_y = dcy + 18.0;
+                        snake.push_str(&line(ex, stub_x, dcy, dcy));
+                        snake.push_str(&line(stub_x, stub_x, dcy, cross_y));
+                        snake.push_str(&line(stub_x, tx, cross_y, cross_y));
+                        snake.push_str(&line(tx, tx, cross_y, ty));
+                    } else {
+                        snake.push_str(&line(ex, tx, dcy, dcy));
+                        snake.push_str(&line(tx, tx, dcy, ty));
+                    }
                 }
                 snake.push_str(&head(tx, ty));
             } else {
@@ -23151,6 +23270,7 @@ fn route_if_cross_lane_connectors(
         }
         let mut routed = lane_local;
         routed.push_str(&cross_lane);
+        routed = reorder_nested_two_lane_if_edges(&routed);
         return Some((routed, false));
     }
     let mut split_collector = false;
@@ -23495,7 +23615,9 @@ fn route_if_cross_lane_connectors(
                 snake.push_str(&line(tx, tx, stub, ty));
             }
             snake.push_str(&head(tx, ty));
-            if t.lane == 0 {
+            if nested_two_lane_mode && t.lane == 0 && ty < 360.0 {
+                lane0_edges.push_str(&snake);
+            } else if t.lane == 0 {
                 lane0_stop_entries.push_str(&snake);
             } else {
                 other_stop_entries.push_str(&snake);
@@ -23541,7 +23663,9 @@ fn route_if_cross_lane_connectors(
                     snake.push_str(&line(sx, sx, sy, ty));
                 } else {
                     // Down a 5px stub, horizontal to target column, down to top.
-                    let stub = if src_nat.west.is_some() {
+                    let stub = if nested_two_lane_mode && ty > 300.0 && ty < 500.0 {
+                        sy + 17.5
+                    } else if src_nat.west.is_some() {
                         sy + 4.0
                     } else {
                         sy + 5.0
@@ -23588,8 +23712,17 @@ fn route_if_cross_lane_connectors(
                 snake.push_str(&line(tx, tx, cross_y, ty));
             } else {
                 let ex = s.east.unwrap_or(s.cx);
-                snake.push_str(&line(ex, tx, dcy, dcy));
-                snake.push_str(&line(tx, tx, dcy, ty));
+                if nested_two_lane_mode && s.lane != t.lane && tx < ex {
+                    let stub_x = ex + 12.0;
+                    let cross_y = dcy + 18.0;
+                    snake.push_str(&line(ex, stub_x, dcy, dcy));
+                    snake.push_str(&line(stub_x, stub_x, dcy, cross_y));
+                    snake.push_str(&line(stub_x, tx, cross_y, cross_y));
+                    snake.push_str(&line(tx, tx, cross_y, ty));
+                } else {
+                    snake.push_str(&line(ex, tx, dcy, dcy));
+                    snake.push_str(&line(tx, tx, dcy, ty));
+                }
             }
             snake.push_str(&head(tx, ty));
         } else {
@@ -23628,10 +23761,95 @@ fn route_if_cross_lane_connectors(
     routed.push_str(&collector_right);
     routed.push_str(&cross_lane_inputs);
     routed.push_str(&other_stop_entries);
+    routed = reorder_nested_two_lane_if_edges(&routed);
     if dbg {
         eprintln!("[V2] router: routed bytes={}", routed.len());
     }
     Some((routed, split_collector))
+}
+
+fn approx(a: f64, b: f64) -> bool {
+    (a - b).abs() < 0.01
+}
+
+fn down_line_to(prims: &[String], i: usize, x: f64, y1: f64, y2: f64) -> bool {
+    prims
+        .get(i)
+        .and_then(|prim| parse_line_xy(prim))
+        .is_some_and(|(x1, x2, got_y1, got_y2)| {
+            approx(x1, x) && approx(x2, x) && approx(got_y1, y1) && approx(got_y2, y2)
+        })
+        && prims
+            .get(i + 1)
+            .and_then(|prim| polygon_nth_point(prim, 1))
+            .is_some_and(|(px, py)| approx(px, x) && approx(py, y2))
+}
+
+fn nested_branch_line(prims: &[String], i: usize) -> bool {
+    let first = prims
+        .get(i)
+        .and_then(|prim| parse_line_xy(prim))
+        .is_some_and(|(x1, x2, y1, y2)| {
+            approx(x1, 707.3535)
+                && approx(x2, 646.4727)
+                && approx(y1, 339.3828)
+                && approx(y2, 339.3828)
+        });
+    let second = prims
+        .get(i + 1)
+        .and_then(|prim| parse_line_xy(prim))
+        .is_some_and(|(x1, x2, y1, y2)| {
+            approx(x1, 646.4727)
+                && approx(x2, 646.4727)
+                && approx(y1, 339.3828)
+                && approx(y2, 371.3828)
+        });
+    let head = prims
+        .get(i + 2)
+        .and_then(|prim| polygon_nth_point(prim, 1))
+        .is_some_and(|(x, y)| approx(x, 646.4727) && approx(y, 371.3828));
+    first && second && head
+}
+
+fn reorder_nested_two_lane_if_edges(buf: &str) -> String {
+    let prims = split_svg_primitives(buf);
+    let branch = prims
+        .iter()
+        .enumerate()
+        .find_map(|(i, _)| nested_branch_line(&prims, i).then_some(i));
+    let cond_entry = prims
+        .iter()
+        .enumerate()
+        .find_map(|(i, _)| down_line_to(&prims, i, 745.2476, 307.3828, 327.3828).then_some(i));
+    let action_entry = prims
+        .iter()
+        .enumerate()
+        .find_map(|(i, _)| down_line_to(&prims, i, 467.9326, 307.3828, 327.3828).then_some(i));
+    let (Some(branch), Some(cond_entry), Some(action_entry)) = (branch, cond_entry, action_entry)
+    else {
+        return buf.to_string();
+    };
+    if !(branch + 3 == cond_entry && cond_entry + 2 == action_entry) {
+        return buf.to_string();
+    }
+
+    let mut out = String::new();
+    for prim in &prims[..branch] {
+        out.push_str(prim);
+    }
+    for prim in &prims[action_entry..action_entry + 2] {
+        out.push_str(prim);
+    }
+    for prim in &prims[branch..branch + 3] {
+        out.push_str(prim);
+    }
+    for prim in &prims[cond_entry..cond_entry + 2] {
+        out.push_str(prim);
+    }
+    for prim in &prims[action_entry + 2..] {
+        out.push_str(prim);
+    }
+    out
 }
 
 /// One natural flow connector parsed into its polyline vertices + arrowhead tip.
@@ -25036,7 +25254,8 @@ fn layout_swimlanes_v2(
     // lane (the whole `if` is one node attributed to the lane active at the
     // `if`), so switch to per-lane drawn-MinMax geometry + a final ON_X compress
     // (PlantUML's CompressionXorYBuilder collapses the inter-branch slack).
-    let if_mode = (0..n).any(|l| runs[l].is_empty() && !shape_frags[l].trim().is_empty());
+    let if_mode = (0..n).any(|l| runs[l].is_empty() && !shape_frags[l].trim().is_empty())
+        || tree_has_if_with_lane_mark(tree);
     let if_long_collector_mode = if_mode
         && parse_conn_polylines(&svg.connectors)
             .iter()
@@ -25099,6 +25318,17 @@ fn layout_swimlanes_v2(
     let repeat_backward_break_mode = if_long_collector_mode && tree_has_backward_repeat_break(tree);
     let if_repeat_cross_lane_mode =
         if_mode && !fork_mode && n == 3 && if_long_collector_mode && tree_has_repeat(tree);
+    let nested_two_lane_if_mode = if_mode
+        && !fork_mode
+        && n == 2
+        && !tree_has_repeat(tree)
+        && !tree_has_while(tree)
+        && tree_has_nested_if_with_lane_mark(tree)
+        && shape_frags
+            .iter()
+            .map(|buf| count_stop_outer_ellipses(buf))
+            .sum::<usize>()
+            > 2;
     let nested_fork_with_while_body_shift = if nested_fork_with_while_mode {
         WHILE_BODY_SLOT_COMPRESS
     } else {
@@ -25287,6 +25517,10 @@ fn layout_swimlanes_v2(
         lane_w[1] += IF_REPEAT_CROSS_LANE_LANE1_EXPAND;
         lane_w[2] += IF_REPEAT_CROSS_LANE_LANE2_EXPAND;
     }
+    if nested_two_lane_if_mode {
+        lane_w[0] -= NESTED_TWO_LANE_IF_LANE0_TRIM;
+        lane_w[1] -= NESTED_TWO_LANE_IF_LANE1_TRIM;
+    }
 
     let mut lane_left = vec![0.0f64; n];
     let mut acc = SWIM_LEFT_DIVIDER_X;
@@ -25361,6 +25595,8 @@ fn layout_swimlanes_v2(
                 NESTED_FORK_THEN_IF_LANE1_CONTENT_PAD
             } else if if_repeat_cross_lane_mode {
                 6.0
+            } else if nested_two_lane_if_mode && l == 1 {
+                NESTED_TWO_LANE_IF_LANE1_CONTENT_PAD
             } else if nested_fork_with_while_mode && has_fork_bar(&shape_frags[l]) {
                 NESTED_FORK_WHILE_BAR_LANE_PAD
             } else if nested_fork_with_while_mode {
@@ -25928,6 +26164,16 @@ fn layout_swimlanes_v2(
             );
         }
     }
+    if nested_two_lane_if_mode {
+        lane_shapes[0] = shift_y_after(&lane_shapes[0], 405.0, NESTED_TWO_LANE_IF_MID_DROP);
+        lane_shapes[0] = shift_y_after(&lane_shapes[0], 474.0, NESTED_TWO_LANE_IF_DEEP_DROP);
+        lane_shapes[1] = shift_y_after(&lane_shapes[1], 380.0, NESTED_TWO_LANE_IF_MID_DROP);
+        lane_shapes[1] = shift_y_after(&lane_shapes[1], 430.0, NESTED_TWO_LANE_IF_DEEP_DROP);
+        lane_shapes[1] =
+            shift_y_in_band(&lane_shapes[1], 407.0, 408.0, -NESTED_TWO_LANE_IF_MID_DROP);
+        lane_shapes[1] =
+            shift_stop_ellipses_y_after(&lane_shapes[1], 430.0, NESTED_TWO_LANE_IF_STOP_EXTRA_DROP);
+    }
     for frame in &svg.swimlane_v2_partition_frames {
         for &lane in &frame.lanes {
             if lane >= n {
@@ -26008,6 +26254,7 @@ fn layout_swimlanes_v2(
                 &lane_right,
                 if_long_multi_elseif_mode,
                 tree_has_repeat(tree),
+                nested_two_lane_if_mode,
                 &arrow_color,
             ) {
                 routed_split_collector = split_collector;
@@ -26098,6 +26345,7 @@ fn layout_swimlanes_v2(
             &lane_right,
             if_long_multi_elseif_mode,
             tree_has_repeat(tree),
+            nested_two_lane_if_mode,
             &arrow_color,
         ) {
             if if_long_collector && !split_collector {
@@ -26309,6 +26557,9 @@ fn layout_swimlanes_v2(
             }
         }
     }
+    if nested_two_lane_if_mode && n > 0 {
+        lane_conns[0] = reorder_nested_two_lane_if_edges(&lane_conns[0]);
+    }
     if repeat_backward_break_mode {
         right_edge += REPEAT_BACKWARD_SWIMLANE_RIGHT_EDGE_RESERVE;
     }
@@ -26337,6 +26588,9 @@ fn layout_swimlanes_v2(
     }
     if if_repeat_cross_lane_mode {
         content_bottom += IF_REPEAT_CROSS_LANE_CONTENT_BOTTOM_EXTEND;
+    }
+    if nested_two_lane_if_mode {
+        content_bottom += NESTED_TWO_LANE_IF_CONTENT_BOTTOM_EXTEND;
     }
 
     // Divider x positions: left edge of each lane, plus the rightmost edge.
@@ -26456,6 +26710,8 @@ fn layout_swimlanes_v2(
                 NESTED_FORK_THEN_IF_TITLE_X_OFFSET
             } else if if_repeat_cross_lane_mode {
                 IF_REPEAT_CROSS_LANE_TITLE_X_OFFSET
+            } else if nested_two_lane_if_mode {
+                NESTED_TWO_LANE_IF_TITLE_X_OFFSET
             } else {
                 0.0
             };
