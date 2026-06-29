@@ -1910,6 +1910,9 @@ fn swimlane_v2_can_handle(steps: &[ActivityStep], is_swimlane: bool) -> bool {
     if swimlane_v2_can_handle_lane_spanning_partition(steps) {
         return true;
     }
+    if swimlane_v2_can_handle_backward_repeat_break(steps) {
+        return true;
+    }
     // A `|Lane|` nested inside an if/switch branch (depth > 0) — the failing
     // class the segment model can't represent.
     let mut depth = 0i32;
@@ -1933,6 +1936,81 @@ fn swimlane_v2_can_handle_lane_spanning_partition(steps: &[ActivityStep]) -> boo
             ActivityStep::EndPartition => depth -= 1,
             ActivityStep::Swimlane(_) if depth > 0 => return true,
             _ => {}
+        }
+    }
+    false
+}
+
+fn swimlane_v2_can_handle_backward_repeat_break(steps: &[ActivityStep]) -> bool {
+    let mut repeat_depth = 0i32;
+    let mut if_stack: Vec<(usize, bool)> = Vec::new();
+    let mut lane_in_repeat = false;
+    let mut backward_in_repeat = false;
+    let mut last_repeat_flow_is_break_if = false;
+
+    for step in steps {
+        match step {
+            ActivityStep::Start | ActivityStep::Stop | ActivityStep::End => {
+                if let Some((flow_count, _)) = if_stack.last_mut() {
+                    *flow_count += 1;
+                } else if repeat_depth > 0 {
+                    last_repeat_flow_is_break_if = false;
+                }
+            }
+            ActivityStep::Action(_) => {
+                if let Some((flow_count, _)) = if_stack.last_mut() {
+                    *flow_count += 1;
+                } else if repeat_depth > 0 {
+                    last_repeat_flow_is_break_if = false;
+                }
+            }
+            ActivityStep::Swimlane(_) => {
+                if repeat_depth > 0 {
+                    lane_in_repeat = true;
+                }
+            }
+            ActivityStep::Repeat | ActivityStep::RepeatStart(_) => {
+                if repeat_depth != 0 {
+                    return false;
+                }
+                repeat_depth = 1;
+                if_stack.clear();
+                lane_in_repeat = false;
+                backward_in_repeat = false;
+                last_repeat_flow_is_break_if = false;
+            }
+            ActivityStep::If(_) if repeat_depth == 1 => {
+                if !if_stack.is_empty() {
+                    return false;
+                }
+                if_stack.push((0, false));
+                last_repeat_flow_is_break_if = false;
+            }
+            ActivityStep::Break if repeat_depth == 1 => {
+                let Some((flow_count, has_break)) = if_stack.last_mut() else {
+                    return false;
+                };
+                *flow_count += 1;
+                *has_break = true;
+            }
+            ActivityStep::EndIf if repeat_depth == 1 => {
+                let Some((flow_count, has_break)) = if_stack.pop() else {
+                    return false;
+                };
+                last_repeat_flow_is_break_if = has_break && flow_count == 1;
+            }
+            ActivityStep::Backward(_) if repeat_depth == 1 => {
+                backward_in_repeat = true;
+            }
+            ActivityStep::RepeatWhile(_) if repeat_depth == 1 => {
+                if lane_in_repeat && backward_in_repeat && last_repeat_flow_is_break_if {
+                    return true;
+                }
+                repeat_depth = 0;
+                if_stack.clear();
+            }
+            ActivityStep::Note(_) | ActivityStep::Arrow(_) => {}
+            _ => return false,
         }
     }
     false
