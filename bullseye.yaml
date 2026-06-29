@@ -759,6 +759,26 @@ targets:
     origin: subdivide(🎯T4.1)
     discovered: 2026-06-29
     achieved: 2026-06-29
+  T4.1.37:
+    name: User-auth showcase activity matches PlantUML strict XML
+    status: achieved
+    value: 0.0
+    cost: 0.0
+    actual_cost: 3.0
+    acceptance:
+    - '`target/release/examples/diff_one test-diagrams/golden/activity/act_showcase_user_auth.puml` reports structural equivalence.'
+    - '`target/release/examples/check_all` no longer lists `activity/act_showcase_user_auth` and does not gain new failure names.'
+    - '`cargo test --lib`, `cargo fmt --check`, `git diff --check`, and `make bullseye` pass.'
+    context: 'Opened 2026-06-29 after 🎯T4.1.36 reduced the strict ledger to four names. `act_showcase_user_auth` is the narrowest remaining activity showcase fixture: no swimlanes, nested repeat/if/2FA control flow, and prior sampling showed an element-count mismatch (expected 133, got 130).'
+    depends_on:
+    - T4.1.36
+    tags:
+    - activity
+    - strict-xml
+    - showcase
+    origin: manual
+    discovered: 2026-06-29
+    achieved: 2026-06-29
   T4.1.4:
     name: Swimlane V2 four-branch fork lane-spanning diagrams match PlantUML geometry
     status: achieved
