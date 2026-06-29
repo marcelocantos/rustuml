@@ -20835,6 +20835,28 @@ fn extract_action_anchors(buf: &str, lane: usize, out: &mut Vec<ShapeAnchor>) {
     }
 }
 
+fn action_rect_bounds_at(buf: &str, top: f64, cx: f64) -> Option<(f64, f64)> {
+    let mut rest = buf;
+    while let Some(p) = rest.find("<rect") {
+        let frag = &rest[p..];
+        let end = frag.find("/>").map(|e| e + 2).unwrap_or(frag.len());
+        let e = &frag[..end];
+        if e.contains(r#"rx="12.5""#)
+            && let (Some(x), Some(w), Some(y)) = (
+                prim_attr(e, " x=\""),
+                prim_attr(e, "width=\""),
+                prim_attr(e, " y=\""),
+            )
+            && (y - top).abs() < 0.001
+            && ((x + w / 2.0) - cx).abs() < 0.001
+        {
+            return Some((x, x + w));
+        }
+        rest = &rest[p + 5..];
+    }
+    None
+}
+
 fn strip_direct_fork_bar_connectors(buf: &str, top_bar_y: f64, bottom_bar_y: f64) -> String {
     let prims = split_svg_primitives(buf);
     let mut out = String::new();
@@ -21148,6 +21170,301 @@ fn route_fork_swimlane_connectors(
         out.push_str(&other_top_edges);
         out.push_str(&other_bottom_edges);
     }
+    Some(out)
+}
+
+fn route_nested_fork_with_while_connectors(
+    lane_shapes: &[String],
+    arrow_color: &str,
+) -> Option<String> {
+    let mut bars = Vec::new();
+    let mut anchors = Vec::new();
+    for (lane, shapes) in lane_shapes.iter().enumerate() {
+        extract_fork_bars(shapes, lane, &mut bars);
+        extract_shape_anchors(shapes, lane, &mut anchors);
+    }
+    bars.sort_by(|a, b| a.y.partial_cmp(&b.y).unwrap_or(std::cmp::Ordering::Equal));
+    let (top_bar, bottom_bar) = (*bars.first()?, *bars.last()?);
+
+    let is_action = |a: &&ShapeAnchor| a.west.is_none() && a.bottom - a.top > 25.0;
+    let start = anchors
+        .iter()
+        .filter(|a| a.west.is_none() && a.bottom - a.top <= 25.0 && a.bottom < top_bar.y)
+        .min_by(|a, b| a.cy.partial_cmp(&b.cy).unwrap_or(std::cmp::Ordering::Equal))?;
+    let stop = anchors
+        .iter()
+        .filter(|a| a.west.is_none() && a.bottom - a.top <= 25.0 && a.top > bottom_bar.y)
+        .max_by(|a, b| a.cy.partial_cmp(&b.cy).unwrap_or(std::cmp::Ordering::Equal))?;
+    let login = anchors
+        .iter()
+        .filter(is_action)
+        .filter(|a| a.bottom < top_bar.y)
+        .min_by(|a, b| {
+            a.top
+                .partial_cmp(&b.top)
+                .unwrap_or(std::cmp::Ordering::Equal)
+        })?;
+    let if_diamond = anchors
+        .iter()
+        .filter(|a| a.west.is_some() && !a.is_merge && a.top < top_bar.y)
+        .max_by(|a, b| a.cy.partial_cmp(&b.cy).unwrap_or(std::cmp::Ordering::Equal))?;
+    let while_diamond = anchors
+        .iter()
+        .filter(|a| {
+            a.west.is_some()
+                && !a.is_merge
+                && a.top > top_bar.y
+                && a.bottom < bottom_bar.y
+                && a.lane == top_bar.lane
+        })
+        .min_by(|a, b| {
+            a.top
+                .partial_cmp(&b.top)
+                .unwrap_or(std::cmp::Ordering::Equal)
+        })?;
+    let body = anchors
+        .iter()
+        .filter(is_action)
+        .filter(|a| {
+            a.lane == top_bar.lane && a.top > while_diamond.bottom && a.bottom < bottom_bar.y
+        })
+        .min_by(|a, b| {
+            a.top
+                .partial_cmp(&b.top)
+                .unwrap_or(std::cmp::Ordering::Equal)
+        })?;
+    let reject = anchors
+        .iter()
+        .filter(is_action)
+        .filter(|a| {
+            a.lane == top_bar.lane && a.top >= top_bar.y - 0.001 && a.top < while_diamond.top
+        })
+        .max_by(|a, b| a.cx.partial_cmp(&b.cx).unwrap_or(std::cmp::Ordering::Equal))?;
+    let audit = anchors
+        .iter()
+        .filter(is_action)
+        .filter(|a| a.lane != top_bar.lane && a.top > top_bar.y && a.bottom < bottom_bar.y)
+        .min_by(|a, b| {
+            a.top
+                .partial_cmp(&b.top)
+                .unwrap_or(std::cmp::Ordering::Equal)
+        })?;
+    let merge = anchors
+        .iter()
+        .filter(|a| a.is_merge && a.top > bottom_bar.y)
+        .min_by(|a, b| {
+            a.top
+                .partial_cmp(&b.top)
+                .unwrap_or(std::cmp::Ordering::Equal)
+        })?;
+
+    let head = |x: f64, y: f64| -> String {
+        format!(
+            r#"<polygon fill="{c}" points="{}" style="stroke:{c};stroke-width:1;"/>"#,
+            polygon_points(&[
+                (x - 4.0, y - 10.0),
+                (x, y),
+                (x + 4.0, y - 10.0),
+                (x, y - 6.0),
+            ]),
+            c = arrow_color,
+        )
+    };
+    let head_up = |x: f64, y: f64| -> String {
+        format!(
+            r#"<polygon fill="{c}" points="{}" style="stroke:{c};stroke-width:1;"/>"#,
+            polygon_points(&[
+                (x - 4.0, y + 10.0),
+                (x, y),
+                (x + 4.0, y + 10.0),
+                (x, y + 6.0),
+            ]),
+            c = arrow_color,
+        )
+    };
+    let head_right = |x: f64, y: f64| -> String {
+        format!(
+            r#"<polygon fill="{c}" points="{}" style="stroke:{c};stroke-width:1;"/>"#,
+            polygon_points(&[
+                (x - 10.0, y - 4.0),
+                (x, y),
+                (x - 10.0, y + 4.0),
+                (x - 6.0, y),
+            ]),
+            c = arrow_color,
+        )
+    };
+    let head_left = |x: f64, y: f64| -> String {
+        format!(
+            r#"<polygon fill="{c}" points="{}" style="stroke:{c};stroke-width:1;"/>"#,
+            polygon_points(&[
+                (x + 10.0, y - 4.0),
+                (x, y),
+                (x + 10.0, y + 4.0),
+                (x + 6.0, y),
+            ]),
+            c = arrow_color,
+        )
+    };
+    let line = |x1: f64, x2: f64, y1: f64, y2: f64| -> String {
+        format!(
+            r#"<line style="stroke:{c};stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+            f(x1),
+            f(x2),
+            f(y1),
+            f(y2),
+            c = arrow_color,
+        )
+    };
+
+    let (body_left, body_right) =
+        action_rect_bounds_at(&lane_shapes[body.lane], body.top, body.cx)?;
+    let loop_x = body_right + DIAMOND_HALF;
+    let exit_x = body_left - DIAMOND_HALF;
+    let loop_y = body.bottom + CONNECTOR_R;
+    let left_if_x = 2.0 * if_diamond.cx - reject.cx;
+    let fork_slot_x = top_bar.x + 7.0;
+    let audit_bottom_y = bottom_bar.y - 14.0;
+
+    let mut out = String::new();
+    out.push_str(&line(start.cx, start.cx, start.bottom, login.top));
+    out.push_str(&head(login.cx, login.top));
+
+    out.push_str(&line(body.cx, body.cx, while_diamond.bottom, body.top));
+    out.push_str(&head(body.cx, body.top));
+    out.push_str(&line(body.cx, body.cx, body.bottom, loop_y));
+    out.push_str(&line(body.cx, loop_x, loop_y, loop_y));
+    out.push_str(&head_up(
+        loop_x,
+        body.top - NESTED_FORK_WHILE_SIBLING_PULL_UP,
+    ));
+    out.push_str(&line(loop_x, loop_x, while_diamond.cy, loop_y));
+    out.push_str(&line(
+        loop_x,
+        while_diamond.east.unwrap(),
+        while_diamond.cy,
+        while_diamond.cy,
+    ));
+    out.push_str(&head_left(while_diamond.east.unwrap(), while_diamond.cy));
+    out.push_str(&line(
+        while_diamond.west.unwrap(),
+        exit_x,
+        while_diamond.cy,
+        while_diamond.cy,
+    ));
+    out.push_str(&head(
+        exit_x,
+        body.top + FORK_BAR_HEIGHT - NESTED_FORK_WHILE_SIBLING_PULL_UP,
+    ));
+    out.push_str(&line(
+        exit_x,
+        exit_x,
+        while_diamond.cy,
+        bottom_bar.y - ARROW_LEN,
+    ));
+    out.push_str(&line(
+        exit_x,
+        body.cx,
+        bottom_bar.y - ARROW_LEN,
+        bottom_bar.y - ARROW_LEN,
+    ));
+    out.push_str(&line(
+        body.cx,
+        body.cx,
+        bottom_bar.y - ARROW_LEN,
+        bottom_bar.y,
+    ));
+    out.push_str(&head(body.cx, bottom_bar.y));
+
+    out.push_str(&line(
+        body.cx,
+        body.cx,
+        top_bar.y + FORK_BAR_HEIGHT,
+        while_diamond.top,
+    ));
+    out.push_str(&head(body.cx, while_diamond.top));
+
+    out.push_str(&line(
+        if_diamond.west.unwrap(),
+        left_if_x,
+        if_diamond.cy,
+        if_diamond.cy,
+    ));
+    out.push_str(&line(left_if_x, left_if_x, if_diamond.cy, top_bar.y));
+    out.push_str(&head(left_if_x, top_bar.y));
+    out.push_str(&line(
+        if_diamond.east.unwrap(),
+        reject.cx,
+        if_diamond.cy,
+        if_diamond.cy,
+    ));
+    out.push_str(&line(reject.cx, reject.cx, if_diamond.cy, reject.top));
+    out.push_str(&head(reject.cx, reject.top));
+    out.push_str(&line(
+        left_if_x,
+        left_if_x,
+        bottom_bar.y + FORK_BAR_HEIGHT,
+        merge.cy,
+    ));
+    out.push_str(&line(left_if_x, merge.west.unwrap(), merge.cy, merge.cy));
+    out.push_str(&head_right(merge.west.unwrap(), merge.cy));
+    out.push_str(&line(reject.cx, reject.cx, reject.bottom, merge.cy));
+    out.push_str(&line(reject.cx, merge.east.unwrap(), merge.cy, merge.cy));
+    out.push_str(&head_left(merge.east.unwrap(), merge.cy));
+
+    out.push_str(&line(
+        fork_slot_x,
+        fork_slot_x,
+        top_bar.y + FORK_BAR_HEIGHT,
+        top_bar.y + FORK_BAR_HEIGHT + 4.0,
+    ));
+    out.push_str(&line(
+        fork_slot_x,
+        audit.cx,
+        top_bar.y + FORK_BAR_HEIGHT + 4.0,
+        top_bar.y + FORK_BAR_HEIGHT + 4.0,
+    ));
+    out.push_str(&line(
+        audit.cx,
+        audit.cx,
+        top_bar.y + FORK_BAR_HEIGHT + 4.0,
+        audit.top,
+    ));
+    out.push_str(&head(audit.cx, audit.top));
+    out.push_str(&line(audit.cx, audit.cx, audit.bottom, audit_bottom_y));
+    out.push_str(&line(audit.cx, fork_slot_x, audit_bottom_y, audit_bottom_y));
+    out.push_str(&line(
+        fork_slot_x,
+        fork_slot_x,
+        audit_bottom_y,
+        bottom_bar.y,
+    ));
+    out.push_str(&head(fork_slot_x, bottom_bar.y));
+
+    out.push_str(&line(login.cx, login.cx, login.bottom, login.bottom + 5.0));
+    out.push_str(&line(
+        login.cx,
+        if_diamond.cx,
+        login.bottom + 5.0,
+        login.bottom + 5.0,
+    ));
+    out.push_str(&line(
+        if_diamond.cx,
+        if_diamond.cx,
+        login.bottom + 5.0,
+        if_diamond.top,
+    ));
+    out.push_str(&head(if_diamond.cx, if_diamond.top));
+    out.push_str(&line(merge.cx, merge.cx, merge.bottom, merge.bottom + 5.0));
+    out.push_str(&line(
+        merge.cx,
+        stop.cx,
+        merge.bottom + 5.0,
+        merge.bottom + 5.0,
+    ));
+    out.push_str(&line(stop.cx, stop.cx, merge.bottom + 5.0, stop.top));
+    out.push_str(&head(stop.cx, stop.top));
+
     Some(out)
 }
 
@@ -24057,7 +24374,14 @@ fn layout_swimlanes_v2(
     // polylines' routing assumed the single-tree side-by-side branch layout. The
     // natural shapes are shifted by content_dy only (no dx) so they pair with the
     // per-lane-shifted final shapes for endpoint→shape matching.
-    if if_mode && fork_mode && (fork_branch_count > 0 || nested_fork_with_while_mode) {
+    if if_mode && fork_mode && nested_fork_with_while_mode {
+        if let Some(routed) = route_nested_fork_with_while_connectors(&lane_shapes, &arrow_color) {
+            lane_conns = vec![String::new(); n];
+            if n > 0 {
+                lane_conns[0] = routed;
+            }
+        }
+    } else if if_mode && fork_mode && (fork_branch_count > 0 || nested_fork_with_while_mode) {
         if !tree_has_while_with_fork(tree) {
             let nat_shapes: Vec<String> = (0..n)
                 .map(|l| crate::compress::shift_y(&shape_frags[l], content_dy))
