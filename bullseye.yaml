@@ -221,6 +221,7 @@ targets:
     - T4.1.28
     - T4.1.29
     - T4.1.30
+    - T4.1.31
     origin: manual
     discovered: 2026-05-17
   T4.1.1:
@@ -632,7 +633,7 @@ targets:
     acceptance:
     - '`cargo run -q -p rustuml-oracle --example diff_one -- test-diagrams/golden/activity/act_algo_binary_search.puml` reports structural equivalence.'
     - '`cargo run -q -p rustuml-oracle --example diff_one -- test-diagrams/golden/activity/act_algo_merge_sort.puml` reports structural equivalence.'
-    - Representative deep nesting guards `act_complex_deep_nesting` and `act_stress_max_nesting` report structural equivalence as of 2026-06-29; current strict ledger is 12 names: `activity/act_complex_all_in_swimlane`, `activity/act_complex_e2e_workflow`, `activity/act_domain_loan_approval`, `activity/act_domain_support_ticket`, `activity/act_large_kubernetes_deploy`, `activity/act_pattern_event_driven`, `activity/act_pattern_microservice`, `activity/act_showcase_ci_cd_pipeline`, `activity/act_showcase_order_system`, `activity/act_showcase_user_auth`, `activity/act_swimlane_all_features`, `combo/combo_workflow_swimlanes`.
+    - 'Representative deep nesting guards `act_complex_deep_nesting` and `act_stress_max_nesting` report structural equivalence as of 2026-06-29; current strict ledger is 12 names: `activity/act_complex_all_in_swimlane`, `activity/act_complex_e2e_workflow`, `activity/act_domain_loan_approval`, `activity/act_domain_support_ticket`, `activity/act_large_kubernetes_deploy`, `activity/act_pattern_event_driven`, `activity/act_pattern_microservice`, `activity/act_showcase_ci_cd_pipeline`, `activity/act_showcase_order_system`, `activity/act_showcase_user_auth`, `activity/act_swimlane_all_features`, `combo/combo_workflow_swimlanes`.'
     - '`cargo run -q -p rustuml-oracle --example check_all` removes the achieved fixtures from the current 21-failure ledger with no new failure names.'
     - '`cargo fmt --check`, `cargo clippy -- -D warnings`, and `cargo test --lib` pass.'
     context: 'Created after retiring 🎯T4.1.29. The remaining non-swimlane activity failures are model-level connector differences, not isolated coordinate drift: compact algorithm fixtures show nested while/if/elseif/else and post-if fork flows whose connector ordering and merge/loopback routing diverge from PlantUML. Start with `act_algo_binary_search` because it is the smallest while-with-elseif/terminal-branch reproducer, then generalize carefully to `act_algo_merge_sort` and the deep nesting guards without widening fork or repeat behavior that was just stabilized.'
@@ -647,6 +648,23 @@ targets:
     origin: manual
     discovered: 2026-06-28
     achieved: 2026-06-28
+  T4.1.31:
+    name: Nested swimlane if/fork workflows use PlantUML local fork-bar and cross-lane connector routing
+    status: identified
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - Representative nested swimlane if/fork fixtures `activity/act_pattern_microservice` and `activity/act_complex_all_in_swimlane` report structural equivalence under `target/release/examples/diff_one`.
+    - The strict ledger in `target/release/examples/check_all` drops without introducing any new failure names outside the current 12-name ledger.
+    - The implementation generalizes through Swimlane V2's lane/tree model; it does not add exact fixture replay or hard-code fixture names.
+    context: Created 2026-06-29 while driving 🎯T4 after 🎯T4.1.30. The current 12-name ledger is dominated by workflow diagrams whose lane changes occur inside nested if/fork bodies. Investigation of `act_pattern_microservice` shows the V2 model has the correct vertical scale but still stretches nested fork bars to full lane width and preserves natural same-tree vertical fork connectors; PlantUML instead uses local fork-bar spans and cross-lane fork slot snakes. `act_complex_all_in_swimlane` remains on the legacy segment path unless the nested if/fork gate accepts while bodies, and forced V2 exposes the same local bar-width/cross-lane connector gap.
+    tags:
+    - activity
+    - swimlane
+    - fork
+    - strict-xml
+    origin: manual
+    discovered: 2026-06-29
   T4.1.4:
     name: Swimlane V2 four-branch fork lane-spanning diagrams match PlantUML geometry
     status: achieved
