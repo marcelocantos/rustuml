@@ -19862,13 +19862,12 @@ fn tree_has_fork_followed_by_if(nodes: &[LayoutNode]) -> bool {
                     return true;
                 }
             }
-            LayoutNode::Swimlanes { segments, .. } => {
+            LayoutNode::Swimlanes { segments, .. }
                 if segments
                     .iter()
-                    .any(|segment| tree_has_fork_followed_by_if(&segment.body))
-                {
-                    return true;
-                }
+                    .any(|segment| tree_has_fork_followed_by_if(&segment.body)) =>
+            {
+                return true;
             }
             _ => {}
         }
@@ -26611,9 +26610,9 @@ fn layout_swimlanes_v2(
                 );
             }
             let shallow_tail_top = top_y + lane_dy[0] - 0.001;
-            for l in 0..n.min(2) {
-                lane_shapes[l] = shift_x_in_y_band(
-                    &lane_shapes[l],
+            for lane_shape in lane_shapes.iter_mut().take(n.min(2)) {
+                *lane_shape = shift_x_in_y_band(
+                    lane_shape,
                     shallow_tail_top,
                     f64::MAX,
                     NESTED_FORK_THEN_IF_SHALLOW_TAIL_X_SHIFT,
