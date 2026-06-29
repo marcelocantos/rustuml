@@ -34,6 +34,26 @@ DIFF_ONE_BIN = REPO_ROOT / "target" / "release" / "examples" / "diff_one"
 CHECK_ALL_BIN = REPO_ROOT / "target" / "release" / "examples" / "check_all"
 PORT = 8788
 
+ERROR_NEEDLES = [
+    "Syntax Error",
+    "NoSuchElementException",
+    "Welcome to PlantUML",
+    "An error has occured",
+    "kill cannot be used here",
+    "swimlane must be defined at the start",
+    "Note already created:",
+    "Parsing syntax error about %",
+    "[From string",
+    "Your data does not sound like YAML data",
+    "does&#160;not&#160;sound&#160;like&#160;YAML",
+    "Your data does not sound like JSON data",
+    "does&#160;not&#160;sound&#160;like&#160;JSON",
+    "No class ",
+    "(Assumed diagram type:",
+    "DITAA has crashed",
+    "This feature has been suppressed",
+]
+
 
 def build_tree() -> dict:
     """Walk GOLDEN_ROOT and return a nested dict: {bucket: [puml_basename, ...]}."""
@@ -47,6 +67,23 @@ def build_tree() -> dict:
         if names:
             tree[bucket_dir.name] = names
     return tree
+
+
+def compute_skip_set() -> set:
+    """Return 'bucket/name' entries whose golden SVG is a PlantUML error."""
+    skipped = set()
+    for bucket, names in build_tree().items():
+        for name in names:
+            svg = GOLDEN_ROOT / bucket / f"{name}.svg"
+            if not svg.is_file():
+                continue
+            try:
+                text = svg.read_text(errors="replace")
+            except OSError:
+                continue
+            if any(needle in text for needle in ERROR_NEEDLES):
+                skipped.add(f"{bucket}/{name}")
+    return skipped
 
 
 def compute_diff_set() -> set:
@@ -180,6 +217,11 @@ INDEX_HTML = """<!doctype html>
     font-size: 13px;
     font-family: -apple-system, BlinkMacSystemFont, ui-monospace, monospace;
   }
+  .skip-badge {
+    color: var(--muted);
+    font-size: 11px;
+    margin-left: 6px;
+  }
   li a:hover { background: var(--accent-bg); }
   li a.active { background: var(--accent-bg); color: var(--accent); font-weight: 600; }
   #main { display: flex; flex-direction: column; overflow: hidden; }
@@ -191,6 +233,13 @@ INDEX_HTML = """<!doctype html>
   }
   #header h1 { margin: 0; font-size: 15px; font-weight: 600; }
   #header .puml-path { color: var(--muted); font-family: ui-monospace, monospace; font-size: 13px; }
+  #notice {
+    padding: 8px 18px;
+    border-bottom: 1px solid var(--border);
+    background: var(--accent-bg);
+    color: var(--text);
+    font-size: 13px;
+  }
   #panels {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -243,6 +292,7 @@ INDEX_HTML = """<!doctype html>
       <h1 id="title"></h1>
       <span class="puml-path" id="path"></span>
     </div>
+    <div id="notice" class="hidden"></div>
     <div id="panels" class="hidden">
       <div class="panel">
         <div class="panel-title">Golden (Java PlantUML)</div>
@@ -259,11 +309,13 @@ INDEX_HTML = """<!doctype html>
 <script>
   const tree = TREE_JSON;
   const diffSet = new Set(DIFFS_JSON);
+  const skipSet = new Set(SKIPS_JSON);
   const treeEl = document.getElementById("tree");
   const searchEl = document.getElementById("search");
   const diffOnlyEl = document.getElementById("differences-only");
   const diffCountEl = document.getElementById("diff-count");
   const headerEl = document.getElementById("header");
+  const noticeEl = document.getElementById("notice");
   const panelsEl = document.getElementById("panels");
   const placeholderEl = document.getElementById("placeholder");
   const titleEl = document.getElementById("title");
@@ -307,7 +359,15 @@ INDEX_HTML = """<!doctype html>
         const li = document.createElement("li");
         const a = document.createElement("a");
         a.href = "#" + encodeURIComponent(bucket + "/" + name);
+        const path = bucket + "/" + name;
         a.textContent = name;
+        if (skipSet.has(path)) {
+          const badge = document.createElement("span");
+          badge.className = "skip-badge";
+          badge.textContent = "skipped";
+          a.appendChild(badge);
+          a.title = "Golden SVG is a PlantUML error and is skipped by parity gates.";
+        }
         a.dataset.bucket = bucket;
         a.dataset.name = name;
         a.tabIndex = -1;
@@ -346,6 +406,14 @@ INDEX_HTML = """<!doctype html>
     headerEl.classList.remove("hidden");
     panelsEl.classList.remove("hidden");
     placeholderEl.classList.add("hidden");
+    if (skipSet.has(path)) {
+      noticeEl.textContent =
+        "Skipped by parity gates: the Java PlantUML golden for this input is an error diagram.";
+      noticeEl.classList.remove("hidden");
+    } else {
+      noticeEl.classList.add("hidden");
+      noticeEl.textContent = "";
+    }
     if (activeLink) activeLink.classList.remove("active");
     activeLink = treeEl.querySelector(
       `a[data-bucket="${CSS.escape(bucket)}"][data-name="${CSS.escape(name)}"]`
@@ -481,6 +549,7 @@ class Handler(http.server.BaseHTTPRequestHandler):
             INDEX_HTML
             .replace("TREE_JSON", json.dumps(tree))
             .replace("DIFFS_JSON", json.dumps(sorted(diff_set)))
+            .replace("SKIPS_JSON", json.dumps(sorted(self.server.skip_set)))
         ).encode("utf-8")
         self.send_response(200)
         self.send_header("Content-Type", "text/html; charset=utf-8")
@@ -563,9 +632,11 @@ def main():
     print("computing strict-XML differences …", end=" ", flush=True)
     diff_set = compute_diff_set()
     print(f"{len(diff_set)} differing")
+    skip_set = compute_skip_set()
     server = socketserver.ThreadingTCPServer(("127.0.0.1", PORT), Handler)
     server.allow_reuse_address = True
     server.diff_set = diff_set
+    server.skip_set = skip_set
     print(f"viewer running at http://127.0.0.1:{PORT}/")
     try:
         server.serve_forever()
