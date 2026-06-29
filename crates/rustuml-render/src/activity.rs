@@ -17861,6 +17861,12 @@ fn emit_repeat(
     let diamond_fill = svg.palette.diamond_fill.clone();
     let diamond_stroke_width = svg.palette.diamond_stroke_width.clone();
     let text_color = svg.palette.text_color.clone();
+    let repeat_entry_lane = svg.swimlane_v2_active.then_some(svg.current_lane);
+    let repeat_declared_out_lane = if svg.swimlane_v2_active {
+        last_lane_mark(body).or(repeat_entry_lane)
+    } else {
+        None
+    };
 
     // PlantUML emits repeat in this order: body shapes → top entry diamond
     // → condition diamond → labels → connectors. Compute positions
@@ -17987,6 +17993,12 @@ fn emit_repeat(
         svg.while_switch_loopback_tip = prev_loopback_tip;
         bottom
     };
+    let repeat_body_out_lane = if svg.swimlane_v2_active {
+        Some(svg.current_lane)
+    } else {
+        repeat_declared_out_lane
+    };
+    let repeat_condition_lane = repeat_body_out_lane.or(repeat_entry_lane);
     svg.repeat_body_depth -= 1;
     // Capture the break weld y the body's break-`if` recorded (if any), then
     // restore the prior break context so a sibling/parent loop is unaffected.
@@ -18106,14 +18118,18 @@ fn emit_repeat(
     let break_is_last = break_weld_y.is_some() && break_if_is_last_flow(body);
     let while_body_out_first = body_last_flow_is_while(body) && !has_start_label && !break_is_last;
     if while_body_out_first {
-        svg.down_arrow(cx, body_bottom, cond_y, &arrow_color);
+        svg.with_connector_lanes(repeat_body_out_lane, repeat_condition_lane, |svg| {
+            svg.down_arrow(cx, body_bottom, cond_y, &arrow_color);
+        });
     }
 
     // Top-diamond → body inbound connector — PlantUML emits this BEFORE
     // the loop-back path in the connector stream. Labelled-start repeats
     // have no top diamond; the outer sequence connector enters the label box.
     if !has_start_label {
-        svg.down_arrow(cx, top_bottom, body_y, &arrow_color);
+        svg.with_connector_lanes(repeat_entry_lane, repeat_entry_lane, |svg| {
+            svg.down_arrow(cx, top_bottom, body_y, &arrow_color);
+        });
     }
 
     // Loop-back arrow runs up the right side regardless of whether `is`
@@ -18260,62 +18276,55 @@ fn emit_repeat(
         };
         emit_node(svg, &backward_node, box_cx, box_top);
 
-        // Horizontal from cond diamond's east vertex out to the arm column.
-        svg.line_styled(
-            &arrow_color,
-            "1",
-            diamond_right,
-            box_cx,
-            cond_diamond_cy,
-            cond_diamond_cy,
-            false,
-        );
-        // Up from the cond-diamond line into the box's bottom. PlantUML emits
-        // the line first, then the arrowhead polygon (tip at the box bottom).
-        svg.line_styled(
-            &arrow_color,
-            "1",
-            box_cx,
-            box_cx,
-            box_bottom,
-            cond_diamond_cy,
-            false,
-        );
-        svg.polygon_connector(
-            &arrow_color,
-            &[
-                (box_cx - 4.0, box_bottom + 10.0),
-                (box_cx, box_bottom),
-                (box_cx + 4.0, box_bottom + 10.0),
-                (box_cx, box_bottom + 6.0),
-            ],
-            &arrow_color,
-            "1",
-        );
-        // Up from the box's top to the entry-diamond row.
-        svg.line_styled(&arrow_color, "1", box_cx, box_cx, top_cy, box_top, false);
-        // Across to the entry diamond's east vertex (arrowhead left into it).
-        svg.line_styled(
-            &arrow_color,
-            "1",
-            box_cx,
-            top_entry_right,
-            top_cy,
-            top_cy,
-            false,
-        );
-        svg.left_arrow(top_entry_right, top_cy, &arrow_color);
+        svg.with_connector_lanes(repeat_condition_lane, repeat_entry_lane, |svg| {
+            // Horizontal from cond diamond's east vertex out to the arm column.
+            svg.line_styled(
+                &arrow_color,
+                "1",
+                diamond_right,
+                box_cx,
+                cond_diamond_cy,
+                cond_diamond_cy,
+                false,
+            );
+            // Up from the cond-diamond line into the box's bottom. PlantUML emits
+            // the line first, then the arrowhead polygon (tip at the box bottom).
+            svg.line_styled(
+                &arrow_color,
+                "1",
+                box_cx,
+                box_cx,
+                box_bottom,
+                cond_diamond_cy,
+                false,
+            );
+            svg.polygon_connector(
+                &arrow_color,
+                &[
+                    (box_cx - 4.0, box_bottom + 10.0),
+                    (box_cx, box_bottom),
+                    (box_cx + 4.0, box_bottom + 10.0),
+                    (box_cx, box_bottom + 6.0),
+                ],
+                &arrow_color,
+                "1",
+            );
+            // Up from the box's top to the entry-diamond row.
+            svg.line_styled(&arrow_color, "1", box_cx, box_cx, top_cy, box_top, false);
+            // Across to the entry diamond's east vertex (arrowhead left into it).
+            svg.line_styled(
+                &arrow_color,
+                "1",
+                box_cx,
+                top_entry_right,
+                top_cy,
+                top_cy,
+                false,
+            );
+            svg.left_arrow(top_entry_right, top_cy, &arrow_color);
+        });
     } else {
         let loop_x = arm_x;
-        svg.line_styled(
-            &arrow_color,
-            "1",
-            diamond_right,
-            loop_x,
-            cond_diamond_cy,
-            cond_diamond_cy,
-            false,
-        );
         // Vertical loop-back: PlantUML emits the arrowhead polygon BEFORE the
         // line in the SVG, and places the arrowhead at the midpoint of the
         // long vertical run (not at the top) so the direction is clear when
@@ -18390,36 +18399,47 @@ fn emit_repeat(
                     0.0
                 }
         };
-        svg.polygon_connector(
-            &arrow_color,
-            &[
-                (loop_x - 4.0, mid_y + 10.0),
-                (loop_x, mid_y),
-                (loop_x + 4.0, mid_y + 10.0),
-                (loop_x, mid_y + 6.0),
-            ],
-            &arrow_color,
-            "1",
-        );
-        svg.line_styled(
-            &arrow_color,
-            "1",
-            loop_x,
-            loop_x,
-            top_cy,
-            cond_diamond_cy,
-            false,
-        );
-        svg.line_styled(
-            &arrow_color,
-            "1",
-            loop_x,
-            top_entry_right,
-            top_cy,
-            top_cy,
-            false,
-        );
-        svg.left_arrow(top_entry_right, top_cy, &arrow_color);
+        svg.with_connector_lanes(repeat_condition_lane, repeat_entry_lane, |svg| {
+            svg.line_styled(
+                &arrow_color,
+                "1",
+                diamond_right,
+                loop_x,
+                cond_diamond_cy,
+                cond_diamond_cy,
+                false,
+            );
+            svg.polygon_connector(
+                &arrow_color,
+                &[
+                    (loop_x - 4.0, mid_y + 10.0),
+                    (loop_x, mid_y),
+                    (loop_x + 4.0, mid_y + 10.0),
+                    (loop_x, mid_y + 6.0),
+                ],
+                &arrow_color,
+                "1",
+            );
+            svg.line_styled(
+                &arrow_color,
+                "1",
+                loop_x,
+                loop_x,
+                top_cy,
+                cond_diamond_cy,
+                false,
+            );
+            svg.line_styled(
+                &arrow_color,
+                "1",
+                loop_x,
+                top_entry_right,
+                top_cy,
+                top_cy,
+                false,
+            );
+            svg.left_arrow(top_entry_right, top_cy, &arrow_color);
+        });
     }
 
     // Body → condition diamond connector (after loop-back path). When the break-`if`
@@ -18429,7 +18449,9 @@ fn emit_repeat(
     // arrow the break-`if` did NOT draw — emit it here. A `while`-LAST body already
     // drew it early (see `while_body_out_first`).
     if !break_is_last && !while_body_out_first && !body_condition_connector_drawn {
-        svg.down_arrow(cx, body_bottom, cond_y, &arrow_color);
+        svg.with_connector_lanes(repeat_body_out_lane, repeat_condition_lane, |svg| {
+            svg.down_arrow(cx, body_bottom, cond_y, &arrow_color);
+        });
     }
 
     let cond_bottom = cond_y + DIAMOND_HALF * 2.0;
@@ -18458,7 +18480,9 @@ fn emit_repeat(
         );
 
         // Condition south exit → merge top (a plain down-arrow).
-        svg.down_arrow(cx, cond_bottom, merge_top, &arrow_color);
+        svg.with_connector_lanes(repeat_condition_lane, repeat_condition_lane, |svg| {
+            svg.down_arrow(cx, cond_bottom, merge_top, &arrow_color);
+        });
 
         return merge_bottom;
     }
@@ -18942,6 +18966,40 @@ fn nodes_have_lane_mark(nodes: &[LayoutNode]) -> bool {
             .iter()
             .any(|segment| nodes_have_lane_mark(&segment.body)),
         _ => false,
+    })
+}
+
+fn last_lane_mark(nodes: &[LayoutNode]) -> Option<usize> {
+    nodes.iter().rev().find_map(|node| match node {
+        LayoutNode::LaneMark(lane) => Some(*lane),
+        LayoutNode::If {
+            then_branch,
+            else_branches,
+            ..
+        } => else_branches
+            .iter()
+            .rev()
+            .find_map(|branch| last_lane_mark(&branch.body))
+            .or_else(|| last_lane_mark(then_branch)),
+        LayoutNode::While {
+            body, special_out, ..
+        } => special_out
+            .as_deref()
+            .and_then(|node| last_lane_mark(std::slice::from_ref(node)))
+            .or_else(|| last_lane_mark(body)),
+        LayoutNode::Repeat { body, .. } | LayoutNode::Partition { body, .. } => {
+            last_lane_mark(body)
+        }
+        LayoutNode::Fork { branches, .. } => branches.iter().rev().find_map(|b| last_lane_mark(b)),
+        LayoutNode::Switch { cases, .. } => cases
+            .iter()
+            .rev()
+            .find_map(|case| last_lane_mark(&case.body)),
+        LayoutNode::Swimlanes { segments, .. } => segments
+            .iter()
+            .rev()
+            .find_map(|segment| last_lane_mark(&segment.body)),
+        _ => None,
     })
 }
 
