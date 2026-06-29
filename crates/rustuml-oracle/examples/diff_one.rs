@@ -14,6 +14,15 @@ fn main() {
     let source = std::fs::read_to_string(&puml_path).unwrap();
     let golden = std::fs::read_to_string(puml_path.with_extension("svg")).unwrap();
 
+    if golden_has_syntax_error(&golden) {
+        if args.iter().any(|a| a == "--print-rust") {
+            eprintln!("skipped: golden SVG contains a PlantUML error");
+            std::process::exit(2);
+        }
+        println!("skipped: golden SVG contains a PlantUML error");
+        return;
+    }
+
     let oracle = if golden.contains("<?plantuml ") {
         rustuml_oracle::extract::extract_oracle_layout(&golden)
     } else {
@@ -66,4 +75,27 @@ fn main() {
 
     let cmp = compare::compare_svg_strict(&golden, &rust_svg).unwrap();
     println!("{}", cmp);
+}
+
+fn golden_has_syntax_error(svg: &str) -> bool {
+    let needles = [
+        "Syntax Error",
+        "NoSuchElementException",
+        "Welcome to PlantUML",
+        "An error has occured",
+        "kill cannot be used here",
+        "swimlane must be defined at the start",
+        "Note already created:",
+        "Parsing syntax error about %",
+        "[From string",
+        "Your data does not sound like YAML data",
+        "does&#160;not&#160;sound&#160;like&#160;YAML",
+        "Your data does not sound like JSON data",
+        "does&#160;not&#160;sound&#160;like&#160;JSON",
+        "No class ",
+        "(Assumed diagram type:",
+        "DITAA has crashed",
+        "This feature has been suppressed",
+    ];
+    needles.iter().any(|n| svg.contains(n))
 }

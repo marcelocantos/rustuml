@@ -86,6 +86,14 @@ def compute_skip_set() -> set:
     return skipped
 
 
+def skipped_svg() -> bytes:
+    return b"""<svg xmlns="http://www.w3.org/2000/svg" width="460px" height="153px" viewBox="0 0 460 153" preserveAspectRatio="none">
+<rect width="460" height="153" fill="#fff8dc" stroke="#d6b656"/>
+<text x="24" y="70" font-family="sans-serif" font-size="14" fill="#5f4b00">Skipped: Java PlantUML golden is an error diagram.</text>
+<text x="24" y="94" font-family="sans-serif" font-size="12" fill="#6a6a72">RustUML rendering is intentionally not run for this invalid syntax.</text>
+</svg>"""
+
+
 def compute_diff_set() -> set:
     """Run check_all and return a set of 'bucket/name' strings whose
     rustuml render disagrees with the golden under the strict-XML
@@ -579,6 +587,15 @@ class Handler(http.server.BaseHTTPRequestHandler):
             return
         if not full.is_file():
             self.send_error(404, "Puml not found: " + rel)
+            return
+        key = rel[:-5] if rel.endswith(".puml") else rel
+        if key in self.server.skip_set:
+            body = skipped_svg()
+            self.send_response(200)
+            self.send_header("Content-Type", "image/svg+xml")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
             return
         if not DIFF_ONE_BIN.is_file():
             msg = (

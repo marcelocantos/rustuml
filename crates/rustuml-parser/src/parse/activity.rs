@@ -39,7 +39,7 @@ pub fn parse_activity(lines: &[String]) -> Result<ActivityDiagram, ParseError> {
         }
         parser.parse_line(source_line, trimmed)?;
     }
-    Ok(parser.finish())
+    parser.finish()
 }
 
 /// Parse legacy (v1) activity syntax.
@@ -328,12 +328,10 @@ struct ActivityParser {
     pending_note: Option<PendingNote>,
     pending_meta: Option<&'static str>, // "header", "footer", "legend", "caption"
     pending_meta_lines: Vec<String>,
-    /// When an action ends with `\` (output connector), this holds the partial
-    /// text so the next line can be appended to it.
+    /// Text accumulated for a multiline `:label` action that has not yet
+    /// reached its terminating `;`.
     continuation_text: Option<String>,
-    /// When an action ends with a non-`;`/non-`\` connector (`|`, `]`, `/`,
-    /// `>`, `<`), the immediately following action should keep its `:` prefix.
-    next_action_keep_colon: bool,
+    continuation_start_line: Option<usize>,
     /// True when we are inside a `skinparam <type> {` block.
     in_skinparam_block: bool,
     /// Current 1-based source line number (set before each parse_line call).
@@ -351,18 +349,25 @@ impl ActivityParser {
             pending_meta: None,
             pending_meta_lines: Vec::new(),
             continuation_text: None,
-            next_action_keep_colon: false,
+            continuation_start_line: None,
             in_skinparam_block: false,
             current_line: 0,
             current_body_line: 0,
         }
     }
 
-    fn finish(self) -> ActivityDiagram {
-        ActivityDiagram {
+    fn finish(self) -> Result<ActivityDiagram, ParseError> {
+        if self.continuation_text.is_some() {
+            return Err(ParseError {
+                line: self.continuation_start_line.unwrap_or(self.current_line),
+                message: "unterminated activity action; multiline actions must end with ';'"
+                    .to_string(),
+            });
+        }
+        Ok(ActivityDiagram {
             meta: self.meta,
             steps: self.steps,
-        }
+        })
     }
 
     fn accumulate_note_line(&mut self, line: &str) {
@@ -451,28 +456,29 @@ impl ActivityParser {
             return Ok(());
         }
 
-        // Handle action continuations. `\` joins the next source line onto the
-        // same label line; the other non-semicolon terminators (`| ] / > <`)
-        // start a second label line. PlantUML keeps consuming even
-        // control-looking lines (`else`, `fork again`) until the eventual
-        // `:action;` terminator.
+        // PlantUML's activity grammar accepts a single-line action as
+        // `:label;`. A `:` line without the final `;` starts a multiline
+        // action, and every following line belongs to the label until a line
+        // ending in `;` closes it. Bare `|`, `<`, `>`, `/`, and `]` are label
+        // text here, not terminators; a trailing `\` joins the next source
+        // line onto the same rendered label line.
         if let Some(partial) = self.continuation_text.take() {
             let mut combined = partial;
-            let closes = line.trim_start().starts_with(':')
-                && line.trim_end().ends_with(|c: char| ";|]/><\\".contains(c));
-            if closes {
-                // Strip trailing action terminator only (keep leading `:`
-                // intact so `:next action;` becomes `:next action` when
-                // appended).
-                let appended = line.trim_end_matches(|c: char| ";|]/><\\".contains(c));
+            let trimmed_end = line.trim_end();
+            if trimmed_end.ends_with(';') {
+                let appended = trimmed_end.trim_end_matches(';');
                 combined.push_str(appended);
                 self.steps.push(ActivityStep::Action(combined));
-                self.next_action_keep_colon = true;
+                self.continuation_start_line = None;
                 return Ok(());
             }
 
-            combined.push_str(line);
-            combined.push('\n');
+            if let Some(appended) = trimmed_end.strip_suffix('\\') {
+                combined.push_str(appended);
+            } else {
+                combined.push_str(line);
+                combined.push('\n');
+            }
             self.continuation_text = Some(combined);
             return Ok(());
         }
@@ -510,7 +516,7 @@ impl ActivityParser {
             }
             _ => {
                 if !self.try_meta(line)
-                    && !self.try_action(line)
+                    && !self.try_action(line)?
                     && !self.try_deprecated_color_action(line)
                     && !self.try_arrow(line)
                     && !self.try_backward(line)
@@ -608,48 +614,27 @@ impl ActivityParser {
         false
     }
 
-    fn try_action(&mut self, line: &str) -> bool {
-        // Match actions with various endings: ; | ] / > < \ (all PlantUML action terminators)
-        // The ending char (except ;) is included in the display text as per PlantUML behavior.
-        static RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^:(.+?)([;|\]/>\\<])$").unwrap());
+    fn try_action(&mut self, line: &str) -> Result<bool, ParseError> {
+        static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^:(.*)$").unwrap());
 
         if let Some(caps) = RE.captures(line) {
             // PlantUML strips trailing whitespace from an action label but
             // *keeps* leading whitespace, rendering it as left padding (the
             // text element is shifted right by the leading-space advance and
             // the box widens to match). `trim_end` preserves that behaviour.
-            let text = caps[1].trim_end().to_string();
-            let ending = &caps[2];
-
-            if ending == "\\" {
-                // Output connector: start a continuation. The partial text
-                // (without `:` prefix) is held until the next line is seen.
-                self.next_action_keep_colon = false;
-                self.continuation_text = Some(text);
-                return true;
-            }
-
-            let display = if ending == ";" {
-                if self.next_action_keep_colon {
-                    // Preserve the `:` prefix on this action.
-                    self.next_action_keep_colon = false;
-                    format!(":{}", text)
-                } else {
-                    text
-                }
+            let text = caps[1].trim_end();
+            if let Some(stripped) = text.strip_suffix(';') {
+                self.steps.push(ActivityStep::Action(stripped.to_string()));
+            } else if let Some(stripped) = text.strip_suffix('\\') {
+                self.continuation_text = Some(stripped.to_string());
+                self.continuation_start_line = Some(self.current_line);
             } else {
-                // Non-`;` endings start a multiline action when the next line
-                // is an ordinary `:action;`. The terminator stays visible on
-                // the first line; the next action keeps its leading `:`.
-                self.next_action_keep_colon = false;
-                self.continuation_text = Some(format!("{}{}\n", text, ending));
-                return true;
-            };
-            self.steps.push(ActivityStep::Action(display));
-            true
+                self.continuation_text = Some(format!("{text}\n"));
+                self.continuation_start_line = Some(self.current_line);
+            }
+            Ok(true)
         } else {
-            false
+            Ok(false)
         }
     }
 
@@ -1013,6 +998,11 @@ mod tests {
         parse_activity(&lines).unwrap()
     }
 
+    fn parse_err(input: &str) -> ParseError {
+        let lines: Vec<String> = input.lines().map(|s| s.to_string()).collect();
+        parse_activity(&lines).unwrap_err()
+    }
+
     #[test]
     fn basic_activity() {
         let d = parse("start\n:Step 1;\n:Step 2;\nstop");
@@ -1166,13 +1156,13 @@ mod tests {
     }
 
     #[test]
-    fn bar_ended_action_continues_on_next_action_line() {
+    fn non_semicolon_action_line_starts_multiline_action() {
         let d = parse("start\n:action1|\n:action2;\nstop");
         assert!(matches!(&d.steps[1], ActivityStep::Action(s) if s == "action1|\n:action2"));
     }
 
     #[test]
-    fn bar_ended_action_before_control_keyword_keeps_accumulating() {
+    fn multiline_action_consumes_control_like_lines_until_semicolon() {
         let d = parse("start\nif (c?) then (yes)\n  :action|\nelse (no)\n  :alt;\nendif\nstop");
         assert!(d.steps.iter().any(
             |s| matches!(s, ActivityStep::Action(text) if text == "action|\nelse (no)\n:alt")
@@ -1181,7 +1171,7 @@ mod tests {
     }
 
     #[test]
-    fn backslash_ended_action_joins_control_keyword_then_accumulates() {
+    fn backslash_in_multiline_action_joins_next_source_line() {
         let d = parse("start\nif (c?) then (yes)\n  :action\\\nelse (no)\n  :alt;\nendif\nstop");
         assert!(
             d.steps.iter().any(
@@ -1189,6 +1179,31 @@ mod tests {
             )
         );
         assert!(!d.steps.iter().any(|s| matches!(s, ActivityStep::Else(_))));
+    }
+
+    #[test]
+    fn action_without_semicolon_is_rejected_at_eof() {
+        for line in [
+            ":fork_action|",
+            ":receive_action<",
+            ":send_action>",
+            ":input_action/",
+            ":output_action\\",
+            ":flow_final_action]",
+        ] {
+            let err = parse_err(&format!("start\n{line}\nstop"));
+            assert_eq!(err.line, 2);
+            assert!(err.message.contains("unterminated activity action"));
+        }
+    }
+
+    #[test]
+    fn all_action_endings_probe_is_rejected_like_plantuml() {
+        let err = parse_err(
+            "start\n:action;\n:fork_action|\n:receive_action<\n:send_action>\n:input_action/\n:output_action\\\n:flow_final_action]\nstop",
+        );
+        assert_eq!(err.line, 3);
+        assert!(err.message.contains("unterminated activity action"));
     }
 
     #[test]
