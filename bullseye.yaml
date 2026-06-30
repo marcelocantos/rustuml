@@ -140,6 +140,23 @@ targets:
     origin: manual
     discovered: 2026-06-30
     achieved: 2026-06-30
+  T13:
+    name: Activity action-ending error goldens have representative valid boundary siblings
+    status: achieved
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - Representative valid activity fixtures cover multiline actions where suffix-looking characters (`|`, `<`, `>`, `/`, `]`) are label text before a later terminating semicolon.
+    - A representative valid fixture covers backslash source-line joining inside a semicolon-terminated multiline activity action.
+    - Valid sibling fixtures render successfully under the golden-pair harness and do not appear in the PlantUML-error skip set.
+    context: Follow-up from 🎯T12. The invalid activity action-ending goldens are useful negative oracle cases, but a small positive sibling set should pin the grammar boundary so RustUML does not overcorrect and reject legal multiline actions.
+    tags:
+    - activity
+    - golden
+    - parser
+    origin: manual
+    discovered: 2026-06-30
+    achieved: 2026-06-30
   T2:
     name: Ditaa rendering engine ported to Rust
     status: set_aside
