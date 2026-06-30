@@ -71,9 +71,7 @@ Standard Rust conventions. Use `cargo fmt` and `cargo clippy -- -D warnings`.
 
 ## Gates
 
-profile: rustuml-t4-freeze
-
-release_freeze: Active until 🎯T4 reaches 0 strict-XML golden failures (`cargo test --test golden_pairs --release` reports 0 failures across 12,546 golden pairs). No release may be cut while this directive is present. To lift: remove this `release_freeze:` line AND switch the `## Gates` profile back to `base`, via a normal PR — that merge is the "T4 achieved / release-ready" lifecycle event.
+profile: base
 
 ## Delivery
 

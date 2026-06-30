@@ -115,7 +115,7 @@ targets:
     context: |-
       Discovered during a 2026-06-06 strategy review of 🎯T4. The strict golden harness passes `extract_oracle_layout(...)` into `rustuml_render::render_svg_with_oracle`, but the normal CLI path calls `render_svg_with_theme` and cannot receive a golden-derived oracle. A smoke check showed `cargo run -q -p rustuml -- -tsvg test-diagrams/golden/deployment/deploy_with_title.puml` emits an empty 100x50 DESCRIPTION SVG because `crates/rustuml-render/src/deployment.rs::render_no_oracle` is a minimal placeholder. This does not invalidate strict-XML parity work, but it means T4 alone is not a sufficient release-readiness signal for product rendering.
 
-      Update 2026-06-07 (HEAD ae277a46): re-ran the normal CLI smoke during a strategy checkpoint. `cargo run -q -p rustuml -- -tsvg test-diagrams/golden/deployment/deploy_with_title.puml` still emits `<svg ... width="100px" height="50px" ...><defs/><g></g></svg>`: empty body confirmed. `cargo run -q -p rustuml -- -tsvg test-diagrams/golden/archimate/archimate_basic.puml` emits non-empty SVG with labels (`Customer`, `Reduce Costs`, `24h Availability`) but uses the simplified native grid renderer, not PlantUML Archimate glyph/layout parity. User explicitly stated no releases until they say so; keep this target as a release-readiness gate separate from 🎯T4 strict golden parity.
+      Update 2026-06-07 (HEAD ae277a46): re-ran the normal CLI smoke during a strategy checkpoint. `cargo run -q -p rustuml -- -tsvg test-diagrams/golden/deployment/deploy_with_title.puml` still emits `<svg ... width="100px" height="50px" ...><defs/><g></g></svg>`: empty body confirmed. `cargo run -q -p rustuml -- -tsvg test-diagrams/golden/archimate/archimate_basic.puml` emits non-empty SVG with labels (`Customer`, `Reduce Costs`, `24h Availability`) but uses the simplified native grid renderer, not PlantUML Archimate glyph/layout parity. User lifted the release freeze on 2026-06-30; keep this target as a release-readiness concern separate from 🎯T4 strict golden parity.
     tags:
     - release
     - product
@@ -217,7 +217,7 @@ targets:
 
       BIGGEST REMAINING LEVER: the SWIMLANE single-tree rewrite (~36 + ~10 swimlane-dependent composites). RustUML's chronological SEGMENT model (build_swimlanes) chops the step stream at |Lane| markers and can't represent a control-flow container (if/fork/while/group) whose branches switch lanes — open token lands in one segment, close in another → malformed tree (element-count mismatches, not coords). Linear while_simple lanes ARE fixed. PlantUML uses one ftile tree with per-lane x-translate + frame chrome replicated across spanned lane columns (Swimlanes.java). This is a coherent rewrite (build_swimlanes/emit_swimlanes/LaneSegment data model) bounded fan-out agents consistently defer; branch swimlane-single-tree has V2 scaffold + docs/swimlane-rewrite-design.md. Smaller: act_if{N}while{M}_nesting (deep ON_Y), FtileRepeat break-corridor port (act_break_repeat_early/mid, act_repeat_break — merge_cy + trailing-gap + left-corridor-width).
 
-      User directive: NO releases until explicitly told — suppress /release prompts even when /cv recommends one.
+      User directive lifted 2026-06-30: 🎯T4 no longer suppresses /release now that strict-XML golden-pair parity is achieved.
     origin: manual
     discovered: 2026-05-17
     achieved: 2026-06-29
@@ -236,7 +236,7 @@ targets:
 
       T4.1.1 implementation notes: the Swimlane V2 if-long router now handles branch-to-merge collector lines, cross-lane branch entry ordering, same-lane split collectors, and the if-long north-band distinction between ordinary simple elseif chains, compressed swimlane chains, and backtracking lane-spanning chains. Keep `swimlane_v2_can_handle` narrow so within-lane if-swimlanes and fork swimlanes stay on the segment model until their own decompositions are ready.
 
-      NEXT WORK: choose the next activity-led failure cluster from `test-diagrams/golden_failure_names.txt` under the 69-failure ledger. Likely remaining leverage is still swimlane fork/composite cases and activity-shaped edge/rendering buckets; verify any candidate by comparing against `/private/tmp/rustuml-baseline-93d34d2c-72.txt` (or a refreshed 69-name baseline) and requiring `comm -13` to stay empty. User directive: NO releases until explicitly told, even if `/cv` recommends one.
+      NEXT WORK (historical): choose the next activity-led failure cluster from `test-diagrams/golden_failure_names.txt` under the 69-failure ledger. Likely remaining leverage is still swimlane fork/composite cases and activity-shaped edge/rendering buckets; verify any candidate by comparing against `/private/tmp/rustuml-baseline-93d34d2c-72.txt` (or a refreshed 69-name baseline) and requiring `comm -13` to stay empty. The former no-release directive was lifted on 2026-06-30.
     depends_on:
     - T4.1.1
     - T4.1.10
