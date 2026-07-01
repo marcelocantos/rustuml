@@ -15,7 +15,7 @@ The Java PlantUML at `~/work/github.com/plantuml/plantuml` serves as the oracle 
 ## Licensing
 
 - RustUML own code: Apache 2.0
-- Layout engine (`rustuml-layout`): Apache 2.0 (wraps layout-rs, MIT)
+- Layout engine (`rustuml-layout`): Apache 2.0 Rust wrapper around vendored Graphviz layout code (EPL 2.0)
 - KaTeX math (`rustuml-math`): MIT (wraps katex crate via QuickJS)
 - Embedded font (Liberation Sans): SIL OFL
 
@@ -26,7 +26,7 @@ crates/
   rustuml/          — binary (CLI entry point)
   rustuml-parser/   — PlantUML/YAML/JSON parsing, TIM preprocessor
   rustuml-render/   — SVG/PNG/PDF/EPS rendering, themes, creole markup
-  rustuml-layout/   — hierarchical graph layout (wraps layout-rs)
+  rustuml-layout/   — hierarchical graph layout (wraps vendored Graphviz layout code)
   rustuml-math/     — LaTeX math rendering (wraps katex)
   rustuml-oracle/   — oracle test framework (generator, runner, comparator)
 ```
@@ -56,7 +56,7 @@ Generate new ones with `scripts/generate-golden.sh` or `gen_*.py` scripts.
 - Semantic rewrite using idiomatic Rust — not a Java transliteration
 - Oracle-based testing: 12,500+ golden .puml/.svg pairs from Java PlantUML
 - Two comparison tiers: exact match (parsing, preprocessing) and structural equivalence (layout — topologically correct, not pixel-identical)
-- Layout via layout-rs (Sugiyama algorithm) with timeout guard for degenerate graphs
+- Layout via vendored Graphviz layout code with timeout guard for degenerate graphs
 - 22 diagram types, 16 @start dispatch types, 6 output formats
 
 ## Agent Guidance

@@ -10,13 +10,6 @@ Licensed under the SIL Open Font License, Version 1.1.
 Embedded in the binary for text metrics (crates/rustuml-render/fonts/).
 Full licence: crates/rustuml-render/fonts/LIBERATION-LICENSE
 
-layout-rs
----------
-Copyright Nadav Rotem and contributors.
-Licensed under the MIT License.
-Used for hierarchical graph layout (Sugiyama algorithm).
-https://github.com/nadavrot/layout
-
 katex (Rust crate)
 ------------------
 Licensed under the MIT License.

@@ -8,7 +8,7 @@ use std::sync::LazyLock;
 
 use ab_glyph::{Font, FontRef, PxScale, ScaleFont};
 
-/// Embedded Liberation Sans Regular font (Apache 2.0 licensed).
+/// Embedded Liberation Sans Regular font (SIL Open Font License 1.1).
 static FONT_DATA: &[u8] = include_bytes!("../fonts/LiberationSans-Regular.ttf");
 
 static FONT: LazyLock<FontRef<'static>> =

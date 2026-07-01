@@ -66,7 +66,7 @@ bump. The pre-1.0 period exists to get these right.
 
 ### Features
 - [ ] stdlib theme/icon library support (`!include <C4/...>`)
-- [ ] Archimate diagram support
+- [x] Archimate diagram support
 - [ ] Improved layout engine (edge routing quality on dense graphs)
 - [ ] Extend Sugiyama layout to component/deployment/usecase/state
 - [ ] Creole markup edge cases (tables, complex nesting)
@@ -86,7 +86,7 @@ bump. The pre-1.0 period exists to get these right.
 
 ### Dependencies
 - [x] `serde_yaml` deprecation — migrated to `serde_yml`
-- [ ] `layout-rs` stability — infinite loop and panic issues (mitigated with timeout)
+- [ ] Vendored Graphviz layout stability and source-availability review
 
 ## Out of scope for 1.0
 

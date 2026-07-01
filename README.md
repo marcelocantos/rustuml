@@ -6,7 +6,7 @@ JVM, no Graphviz, no external fonts.
 
 ## Status
 
-Pre-release. 18 diagram types supported, 12,500+ golden test pairs
+Pre-release. 23 parsed diagram models supported, 12,500+ golden test pairs
 passing against Java PlantUML reference output.
 
 ## Supported diagram types
@@ -15,6 +15,7 @@ passing against Java PlantUML reference output.
 |------|-----|--------|
 | Sequence | `@startuml` | Good |
 | Class | `@startuml` | Good |
+| Archimate | `@startuml` | Good |
 | Activity (new syntax) | `@startuml` | Good |
 | State | `@startuml` | Good |
 | Component | `@startuml` | Good |
@@ -31,6 +32,10 @@ passing against Java PlantUML reference output.
 | Salt (wireframes) | `@startsalt` | Good |
 | Network (nwdiag) | `@startnwdiag` | Good |
 | Regex (railroad) | `@startregex` | Good |
+| EBNF | `@startebnf` | Good |
+| DOT | `@startdot` | Basic |
+| Git | `@startgit` | Basic |
+| Board | `@startboard` | Basic |
 | Ditaa (ASCII art) | `@startditaa` | Basic |
 | Math/LaTeX | `@startmath` / `@startlatex` | Good |
 
@@ -73,6 +78,7 @@ rustuml --theme=modern input.puml
 | `-tsvg` | SVG (default) |
 | `-tpng` | PNG |
 | `-tpdf` | PDF |
+| `-teps` | EPS |
 | `-ttxt` | ASCII art (sequence diagrams) |
 
 ### Other options
@@ -83,6 +89,8 @@ rustuml --theme=modern input.puml
 | `--yaml` | Print diagram as YAML |
 | `--theme=NAME` | Use built-in theme |
 | `--theme-file=PATH` | Load theme from YAML file |
+| `--block=N` | Select block by 0-based index |
+| `--block-name=NAME` | Select block by `@start... name` |
 | `--version` | Print version |
 | `--help` | Print usage |
 | `--help-agent` | Print agent integration guide |
@@ -141,15 +149,16 @@ cargo test --test golden_pairs # Run golden comparison (~8s)
 crates/
   rustuml/          — CLI binary
   rustuml-parser/   — PlantUML/YAML/JSON parsing, TIM preprocessor
-  rustuml-render/   — SVG/PNG/PDF rendering, themes, creole markup
-  rustuml-layout/   — Hierarchical graph layout (Sugiyama via layout-rs)
+  rustuml-render/   — SVG/PNG/PDF/EPS rendering, themes, creole markup
+  rustuml-layout/   — Hierarchical graph layout (vendored Graphviz layout code)
   rustuml-math/     — LaTeX math rendering
   rustuml-oracle/   — Oracle test framework
 ```
 
 ## Licence
 
-Apache 2.0. See [LICENSE](LICENSE).
+RustUML's own code is Apache 2.0. See [LICENSE](LICENSE).
+Bundled third-party components and assets are listed in [NOTICES](NOTICES).
 
 ## Agent integration
 
