@@ -1,0 +1,38 @@
+# No-oracle product-parity baseline (🎯T14). One line per family:
+# <family> <pass> <eligible>
+# Regenerate ONLY to lock in verified progress:
+#   HARNESS_WRITE_BASELINES=1 cargo test --test golden_no_oracle --release
+activity 1277 1299
+archimate 0 48
+chart 25 25
+class 118 1971
+combo 114 327
+component 0 663
+creole 301 639
+deployment 37 495
+dot 25 25
+ebnf 25 25
+edge-cases 308 777
+er 0 157
+gantt 114 114
+git 25 25
+json-yaml 56 147
+links 2 50
+math 50 50
+mindmap 157 157
+multi-diagram 35 53
+nwdiag 89 89
+object 36 155
+preprocessing 130 307
+regex 45 45
+rendering 8 98
+salt 103 103
+sequence 1400 1411
+skinparam 241 410
+sprites 0 49
+state 0 901
+timing 141 141
+type-detection 17 42
+usecase 2 315
+wbs 138 138
+wire 0 0
