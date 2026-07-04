@@ -26070,6 +26070,7 @@ fn render_legacy_activity_with_oracle(
 #[derive(Clone, Copy, PartialEq, Eq)]
 enum LegacyDirection {
     Down,
+    Left,
     Right,
 }
 
@@ -26166,12 +26167,17 @@ fn render_legacy_activity_linear(diagram: &ActivityDiagram) -> Option<String> {
             LegacyDirection::Down => {
                 y += LEGACY_V1_ACTION_ROW_STEP;
             }
-            LegacyDirection::Right => {
+            LegacyDirection::Left | LegacyDirection::Right => {
                 let advance = ((action_widths[idx - 1] + action_widths[idx]) / 2.0
                     + ACTION_H_PADDING * 2.0)
                     .round();
                 let prev_cx = x + action_widths[idx - 1] / 2.0;
-                x = ((prev_cx + advance - action_widths[idx] / 2.0) * 100.0).round() / 100.0;
+                let next_cx = match action_dirs[idx - 1] {
+                    LegacyDirection::Left => prev_cx - advance,
+                    LegacyDirection::Right => prev_cx + advance,
+                    LegacyDirection::Down => unreachable!(),
+                };
+                x = ((next_cx - action_widths[idx] / 2.0) * 100.0).round() / 100.0;
             }
         }
         actions.push(LegacyActionNode {
@@ -26190,8 +26196,22 @@ fn render_legacy_activity_linear(diagram: &ActivityDiagram) -> Option<String> {
         for action in &mut actions {
             action.x = center_x - action.width / 2.0;
         }
+    } else {
+        let min_x = actions
+            .iter()
+            .map(|action| action.x)
+            .fold(f64::INFINITY, f64::min);
+        let dx = LEGACY_V1_LEFT_RAIL - min_x;
+        if dx != 0.0 {
+            for action in &mut actions {
+                action.x += dx;
+            }
+        }
     }
 
+    let has_reverse = action_dirs
+        .iter()
+        .any(|direction| matches!(direction, LegacyDirection::Left));
     let first_cx = actions[0].x + actions[0].width / 2.0;
     let last = actions.last()?;
     let end_cx = last.x + last.width / 2.0;
@@ -26218,7 +26238,8 @@ fn render_legacy_activity_linear(diagram: &ActivityDiagram) -> Option<String> {
             action_h,
         );
     }
-    let end_id = format!("ent{:04}", 3 + actions.len() * 2);
+    let reverse_bump = usize::from(has_reverse);
+    let end_id = format!("ent{:04}", 3 + actions.len() * 2 + reverse_bump);
     write!(
         body,
         r##"<g class="end_entity" data-qualified-name="end" data-source-line="{}" id="{}"><ellipse cx="{}" cy="{}" fill="none" rx="11" ry="11" style="stroke:#222222;stroke-width:1.5;"/><ellipse cx="{}" cy="{}" fill="#222222" rx="6" ry="6" style="stroke:#222222;stroke-width:1;"/></g>"##,
@@ -26244,6 +26265,9 @@ fn render_legacy_activity_linear(diagram: &ActivityDiagram) -> Option<String> {
                 actions[idx + 1].y,
                 action_h,
             ),
+            LegacyDirection::Left => {
+                emit_legacy_v1_left_edge(&mut body, idx, &actions[idx], &actions[idx + 1], action_h)
+            }
             LegacyDirection::Right => emit_legacy_v1_right_edge(
                 &mut body,
                 idx,
@@ -26256,11 +26280,11 @@ fn render_legacy_activity_linear(diagram: &ActivityDiagram) -> Option<String> {
     emit_legacy_v1_end_edge(
         &mut body,
         actions.len() - 1,
-        &last.label,
+        last,
         end_cx,
-        last.y,
         action_h,
         end_cy,
+        reverse_bump,
     );
 
     Some(format_svg(svg_w, svg_h, &body, "", Some("#FFFFFF")))
@@ -26301,6 +26325,7 @@ fn parse_legacy_linear_edge(line: &str) -> Option<LegacyEdge> {
     let arrow = &rest[..arrow_end + 2];
     let direction = match arrow {
         "-->" | "-down->" => LegacyDirection::Down,
+        "-left->" => LegacyDirection::Left,
         "-right->" => LegacyDirection::Right,
         _ => return None,
     };
@@ -26482,20 +26507,71 @@ fn emit_legacy_v1_right_edge(
     .unwrap();
 }
 
+fn emit_legacy_v1_left_edge(
+    out: &mut String,
+    idx: usize,
+    from: &LegacyActionNode,
+    to: &LegacyActionNode,
+    action_h: f64,
+) {
+    let source_line = idx + 2;
+    let from_ent = format!("ent{:04}", 5 + idx * 2);
+    let to_ent = format!("ent{:04}", 3 + idx * 2);
+    let link = format!("lnk{}", 7 + idx * 2);
+    let raw_y = from.y + action_h / 2.0;
+    let y = if (from.width - to.width).abs() < 0.001 {
+        (raw_y * 100.0).round() / 100.0
+    } else {
+        (raw_y * 100.0).floor() / 100.0
+    };
+    let arrow_tip_x = to.x + to.width + 0.2461;
+    let start_x = arrow_tip_x + 6.0;
+    let end_x = from.x - 0.36;
+    write!(
+        out,
+        r##"<g class="link" data-entity-1="{}" data-entity-2="{}" data-link-type="dependency" data-source-line="{}" id="{}"><path d="M{},{} C{},{} {},{} {},{}" fill="none" id="{}-backto-{}" style="stroke:#181818;stroke-width:1;"/><polygon fill="#181818" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:#181818;stroke-width:1;"/></g>"##,
+        from_ent,
+        to_ent,
+        source_line,
+        link,
+        f(start_x),
+        f(y),
+        f(start_x + 6.38),
+        f(y),
+        f(end_x - 6.38),
+        f(y),
+        f(end_x),
+        f(y),
+        escape_xml_attr_local(&to.label),
+        escape_xml_attr_local(&from.label),
+        f(arrow_tip_x),
+        f(y),
+        f(arrow_tip_x + 9.0),
+        f(y + ARROW_HEAD_HALF),
+        f(arrow_tip_x + 5.0),
+        f(y),
+        f(arrow_tip_x + 9.0),
+        f(y - ARROW_HEAD_HALF),
+        f(arrow_tip_x),
+        f(y),
+    )
+    .unwrap();
+}
+
 fn emit_legacy_v1_end_edge(
     out: &mut String,
     idx: usize,
-    from: &str,
+    from: &LegacyActionNode,
     x: f64,
-    from_y: f64,
     action_h: f64,
     end_cy: f64,
+    id_bump: usize,
 ) {
     let from_ent = format!("ent{:04}", 3 + idx * 2);
-    let end_ent = format!("ent{:04}", 5 + idx * 2);
-    let link = format!("lnk{}", 6 + idx * 2);
+    let end_ent = format!("ent{:04}", 5 + idx * 2 + id_bump);
+    let link = format!("lnk{}", 6 + idx * 2 + id_bump);
     let source_line = idx + 2;
-    let bottom = from_y + action_h;
+    let bottom = from.y + action_h;
     write!(
         out,
         r##"<g class="link" data-entity-1="{}" data-entity-2="{}" data-link-type="dependency" data-source-line="{}" id="{}"><path d="M{},{} C{},{} {},{} {},{}" fill="none" id="{}-to-end" style="stroke:#181818;stroke-width:1;"/><polygon fill="#181818" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:#181818;stroke-width:1;"/></g>"##,
@@ -26511,7 +26587,7 @@ fn emit_legacy_v1_end_edge(
         f(end_cy - 27.73),
         f(x),
         f(end_cy - 17.18),
-        escape_xml_attr_local(from),
+        escape_xml_attr_local(&from.label),
         f(x),
         f(end_cy - 11.18),
         f(x + ARROW_HEAD_HALF),
