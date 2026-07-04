@@ -19287,10 +19287,6 @@ fn route_swimlane_v2_partition_connectors(
 
 /// Target x of the leftmost lane divider (matches gold).
 const SWIM_LEFT_DIVIDER_X: f64 = 20.0;
-const SWIM_COMBO_FORK3_TOP_TRIM: f64 = 19.3652;
-const SWIM_COMBO_FORK3_BOTTOM_EXPAND: f64 = 6.0674;
-const SWIM_COMBO_FORK4_TOP_TRIM: f64 = 62.7304;
-const SWIM_COMBO_FORK4_BOTTOM_TRIM: f64 = 61.7305;
 
 /// Swimlane V2: reserved (content_left, content_right) for one lane's node run,
 /// using the faithful swimlane while-specialOut corridor for a terminal absorbed
@@ -19334,6 +19330,175 @@ fn swimlane_v2_node_extents(node: &LayoutNode) -> (f64, f64) {
         return (left, right);
     }
     node_extents(node)
+}
+
+#[derive(Debug)]
+struct SwimlaneForkCompaction {
+    lane_widths: Vec<Option<f64>>,
+    bar_lanes: Vec<bool>,
+}
+
+fn first_direct_lane_mark(nodes: &[LayoutNode]) -> Option<usize> {
+    nodes.iter().find_map(|node| match node {
+        LayoutNode::LaneMark(lane) => Some(*lane),
+        LayoutNode::Arrow { .. } | LayoutNode::Note { .. } => None,
+        _ => None,
+    })
+}
+
+fn top_level_fork_with_input_lane(
+    nodes: &[LayoutNode],
+    lane_count: usize,
+) -> Option<(usize, &[Vec<LayoutNode>])> {
+    let mut lane = 0usize;
+    for node in nodes {
+        match node {
+            LayoutNode::LaneMark(next) => lane = (*next).min(lane_count - 1),
+            LayoutNode::Fork {
+                branches,
+                is_split: false,
+                ..
+            } => return Some((lane, branches)),
+            LayoutNode::Arrow { .. } | LayoutNode::Note { .. } => {}
+            _ => {}
+        }
+    }
+    None
+}
+
+fn swimlane_v2_top_fork_compaction(
+    tree: &[LayoutNode],
+    lane_count: usize,
+) -> Option<SwimlaneForkCompaction> {
+    let (input_lane, branches) = top_level_fork_with_input_lane(tree, lane_count)?;
+    if branches.len() < 2
+        || !branches
+            .iter()
+            .all(|branch| first_direct_lane_mark(branch).is_some())
+    {
+        return None;
+    }
+
+    let branch_tiles: Vec<ftile::FtileGeometry> = branches
+        .iter()
+        .map(|branch| sequence_geometry(branch))
+        .collect::<Option<Vec<_>>>()?;
+    if ftile::fork_inner_translates(&branch_tiles).len() != branch_tiles.len() {
+        return None;
+    }
+
+    let mut branch_lanes = Vec::with_capacity(branches.len());
+    for branch in branches {
+        branch_lanes.push(first_direct_lane_mark(branch)?.min(lane_count - 1));
+    }
+    let output_lane = *branch_lanes.last().unwrap_or(&input_lane);
+
+    let mut lane_widths = vec![None; lane_count];
+    let mut bar_lanes = vec![false; lane_count];
+    bar_lanes[input_lane] = true;
+    bar_lanes[output_lane] = true;
+    for lane in 0..lane_count {
+        let mut local_x = 0.0;
+        let mut local_width = 0.0;
+        let mut count = 0usize;
+        for (i, tile) in branch_tiles.iter().enumerate() {
+            if branch_lanes[i] != lane {
+                continue;
+            }
+            local_width = local_x + tile.width;
+            local_x += tile.width + FORK_BRANCH_GAP;
+            count += 1;
+        }
+        if count > 0 {
+            let lane_pad = if bar_lanes[lane] {
+                // `AbstractParallelFtilesBuilder.computeNewFtile` wraps fork
+                // branches in 14px horizontal margins, then the swimlane bar
+                // lane must still carry the vertical start/stop terminal reach.
+                let mut pad = 2.0 * (FORK_PARALLEL_X_MARGIN + FORK_PARALLEL_X_MARGIN_TRIM)
+                    + ARROW_LEN
+                    + STOP_OUTER_R;
+                if input_lane == output_lane && branches.len() % 2 == 1 {
+                    pad += STOP_OUTER_R - START_R + FORK_BAR_HEIGHT;
+                }
+                if lane == output_lane && lane != input_lane && branches.len() % 2 == 1 {
+                    pad += ARROW_LEN - FORK_BAR_HEIGHT / 2.0;
+                }
+                pad
+            } else {
+                FORK_BRANCH_GAP
+            };
+            lane_widths[lane] = Some(local_width + lane_pad);
+        } else if bar_lanes[lane] {
+            lane_widths[lane] =
+                Some(2.0 * ARROW_LEN + FORK_PARALLEL_X_MARGIN + FORK_PARALLEL_X_MARGIN_TRIM);
+        }
+    }
+
+    Some(SwimlaneForkCompaction {
+        lane_widths,
+        bar_lanes,
+    })
+}
+
+fn fork_lane_action_shifts(
+    buf: &str,
+    target_left: f64,
+    content_pad: f64,
+    lane_w: f64,
+    bar_lane: bool,
+) -> Vec<f64> {
+    let mut actions = Vec::new();
+    let mut rest = buf;
+    while let Some(p) = rest.find("<rect") {
+        let rect = &rest[p..];
+        let Some(end) = rect.find("/>") else {
+            break;
+        };
+        let elem = &rect[..end + 2];
+        if elem.contains(r#"rx="12.5""#)
+            && let (Some(x), Some(w)) = (prim_attr(elem, " x=\""), prim_attr(elem, "width=\""))
+        {
+            actions.push((x, w));
+        }
+        rest = &rect[end + 2..];
+    }
+    actions.sort_by(|a, b| a.0.partial_cmp(&b.0).unwrap_or(std::cmp::Ordering::Equal));
+    if actions.is_empty() {
+        return Vec::new();
+    }
+
+    let right_margin = if bar_lane {
+        FORK_PARALLEL_X_MARGIN + 2.0 * FORK_PARALLEL_X_MARGIN_TRIM
+    } else {
+        2.0 * FORK_PARALLEL_X_MARGIN_TRIM
+    };
+    let total_action_w: f64 = actions.iter().map(|(_, w)| *w).sum();
+    let first_gap_extra = if bar_lane && actions.len() > 1 {
+        (lane_w
+            - content_pad
+            - total_action_w
+            - right_margin
+            - FORK_BRANCH_GAP * (actions.len() - 1) as f64)
+            .max(0.0)
+    } else {
+        0.0
+    };
+    let mut target_x = if bar_lane && actions.len() == 1 {
+        target_left + lane_w - content_pad - right_margin - actions[0].1
+    } else {
+        target_left
+    };
+    let mut shifts = Vec::with_capacity(actions.len());
+    for (i, (x, w)) in actions.into_iter().enumerate() {
+        shifts.push(x - target_x);
+        let gap = if i == 0 {
+            FORK_BRANCH_GAP + first_gap_extra
+        } else {
+            FORK_BRANCH_GAP
+        };
+        target_x += w + gap;
+    }
+    shifts
 }
 
 fn node_dbg_name(n: &LayoutNode) -> &'static str {
@@ -23973,14 +24138,19 @@ fn layout_swimlanes_v2(
     let fork_lane_delimited_mode = fork_mode
         && !top_fork_branch_if_mode
         && runs
-            .first()
-            .is_some_and(|run| run.iter().any(|node| matches!(node, LayoutNode::Start)));
+            .iter()
+            .any(|run| run.iter().any(|node| matches!(node, LayoutNode::Start)));
     let if_long_multi_elseif_mode = if_long_collector_mode && tree_has_if_long_multi_elseif(tree);
     let if_long_split_collector_mode =
         if_long_collector_mode && tree_has_if_long_lane_backtrack(tree);
     let repeat_backward_break_mode = if_long_collector_mode && tree_has_backward_repeat_break(tree);
     let if_repeat_cross_lane_mode =
         if_mode && !fork_mode && n == 3 && if_long_collector_mode && tree_has_repeat(tree);
+    let top_fork_compaction = if fork_lane_delimited_mode && !while_fork_mode {
+        swimlane_v2_top_fork_compaction(tree, n)
+    } else {
+        None
+    };
     let nested_two_lane_if_mode = if_mode
         && !fork_mode
         && n == 2
@@ -24062,19 +24232,10 @@ fn layout_swimlanes_v2(
                 10.0
             };
             w[l] = (hi - lo + lane_pad).max(title_w[l] + 10.0);
-            if !while_fork_mode && fork_lane_delimited_mode && fork_branch_count == 3 {
-                if l == 0 && has_fork_bar(&shape_frags[l]) {
-                    w[l] -= SWIM_COMBO_FORK3_TOP_TRIM;
-                } else if l + 1 == n && has_fork_bar(&shape_frags[l]) {
-                    w[l] += SWIM_COMBO_FORK3_BOTTOM_EXPAND;
-                }
-            }
-            if !while_fork_mode && fork_lane_delimited_mode && fork_branch_count == 4 {
-                if l == 0 && has_fork_bar(&shape_frags[l]) {
-                    w[l] -= SWIM_COMBO_FORK4_TOP_TRIM;
-                } else if l + 1 == n && has_fork_bar(&shape_frags[l]) {
-                    w[l] -= SWIM_COMBO_FORK4_BOTTOM_TRIM;
-                }
+            if let Some(compaction) = &top_fork_compaction
+                && let Some(compacted_w) = compaction.lane_widths[l]
+            {
+                w[l] = compacted_w.max(title_w[l] + 10.0);
             }
             if if_long_split_collector_mode && l == 0 {
                 w[l] += IF_SPLIT_COLLECTOR_LANE0_EXTRA;
@@ -24346,49 +24507,24 @@ fn layout_swimlanes_v2(
                     )
                 };
             }
-            if fork_lane_delimited_mode && fork_branch_count == 3 {
-                if l == 0 && has_fork_bar(&shape_frags[l]) {
-                    let top_y = top_bar_y.unwrap_or(0.0);
-                    lane_shapes[l] = shift_indexed_fork_lane_content(
-                        &lane_shapes[l],
-                        &[0.0],
-                        SWIM_COMBO_FORK3_TOP_TRIM,
-                        0.0,
-                        top_y + lane_dy[l],
-                        f64::MAX,
-                    );
-                } else if l + 1 == n && has_fork_bar(&shape_frags[l]) {
-                    lane_shapes[l] = shift_indexed_fork_lane_content(
-                        &lane_shapes[l],
-                        &[-SWIM_COMBO_FORK3_BOTTOM_EXPAND],
-                        0.0,
-                        0.0,
-                        f64::MIN,
-                        f64::MAX,
-                    );
-                }
-            }
-            if fork_lane_delimited_mode && fork_branch_count == 4 {
-                if l == 0 && has_fork_bar(&shape_frags[l]) {
-                    let top_y = top_bar_y.unwrap_or(0.0);
-                    lane_shapes[l] = shift_indexed_fork_lane_content(
-                        &lane_shapes[l],
-                        &[0.0],
-                        SWIM_COMBO_FORK4_TOP_TRIM,
-                        0.0,
-                        top_y + lane_dy[l],
-                        f64::MAX,
-                    );
-                } else if l + 1 == n && has_fork_bar(&shape_frags[l]) {
-                    lane_shapes[l] = shift_indexed_fork_lane_content(
-                        &lane_shapes[l],
-                        &[SWIM_COMBO_FORK4_BOTTOM_TRIM],
-                        0.0,
-                        0.0,
-                        f64::MIN,
-                        f64::MAX,
-                    );
-                }
+            if let Some(compaction) = &top_fork_compaction
+                && compaction.lane_widths[l].is_some()
+            {
+                let action_shifts = fork_lane_action_shifts(
+                    &lane_shapes[l],
+                    lane_left[l] + content_pad[l],
+                    content_pad[l],
+                    lane_w[l],
+                    compaction.bar_lanes[l],
+                );
+                lane_shapes[l] = shift_indexed_fork_lane_content(
+                    &lane_shapes[l],
+                    &action_shifts,
+                    0.0,
+                    0.0,
+                    f64::MIN,
+                    f64::MAX,
+                );
             }
             if nested_fork_with_while_mode && nested_fork_with_while_body_shift.abs() > 0.001 {
                 let top_y = top_bar_y.unwrap_or(0.0);
