@@ -2,7 +2,7 @@
 # <family> <pass> <eligible>
 # Regenerate ONLY to lock in verified progress:
 #   HARNESS_WRITE_BASELINES=1 cargo test --test golden_no_oracle --release
-activity 1257 1299
+activity 1259 1299
 archimate 0 48
 chart 25 25
 class 118 1971
