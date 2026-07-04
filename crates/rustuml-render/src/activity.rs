@@ -26072,6 +26072,7 @@ enum LegacyDirection {
     Down,
     Left,
     Right,
+    Up,
 }
 
 #[derive(Clone)]
@@ -26167,6 +26168,12 @@ fn render_legacy_activity_linear(diagram: &ActivityDiagram) -> Option<String> {
             LegacyDirection::Down => {
                 y += LEGACY_V1_ACTION_ROW_STEP;
             }
+            LegacyDirection::Up => {
+                let advance = ((action_widths[idx - 1] + action_widths[idx]) / 2.0 + 8.0).round();
+                let prev_cx = x + action_widths[idx - 1] / 2.0;
+                x = ((prev_cx + advance - action_widths[idx] / 2.0) * 100.0).round() / 100.0;
+                y -= LEGACY_V1_ACTION_ROW_STEP;
+            }
             LegacyDirection::Left | LegacyDirection::Right => {
                 let advance = ((action_widths[idx - 1] + action_widths[idx]) / 2.0
                     + ACTION_H_PADDING * 2.0)
@@ -26175,7 +26182,7 @@ fn render_legacy_activity_linear(diagram: &ActivityDiagram) -> Option<String> {
                 let next_cx = match action_dirs[idx - 1] {
                     LegacyDirection::Left => prev_cx - advance,
                     LegacyDirection::Right => prev_cx + advance,
-                    LegacyDirection::Down => unreachable!(),
+                    LegacyDirection::Down | LegacyDirection::Up => unreachable!(),
                 };
                 x = ((next_cx - action_widths[idx] / 2.0) * 100.0).round() / 100.0;
             }
@@ -26207,25 +26214,57 @@ fn render_legacy_activity_linear(diagram: &ActivityDiagram) -> Option<String> {
                 action.x += dx;
             }
         }
+        let min_y = actions
+            .iter()
+            .map(|action| action.y)
+            .fold(f64::INFINITY, f64::min);
+        if min_y < LEGACY_V1_LEFT_RAIL {
+            let dy = LEGACY_V1_LEFT_RAIL - min_y;
+            for action in &mut actions {
+                action.y += dy;
+            }
+        }
     }
 
     let has_reverse = action_dirs
         .iter()
-        .any(|direction| matches!(direction, LegacyDirection::Left));
+        .any(|direction| matches!(direction, LegacyDirection::Left | LegacyDirection::Up));
+    let has_up = action_dirs
+        .iter()
+        .any(|direction| matches!(direction, LegacyDirection::Up));
     let first_cx = actions[0].x + actions[0].width / 2.0;
     let last = actions.last()?;
-    let end_cx = last.x + last.width / 2.0;
-    let end_cy = last.y + LEGACY_V1_END_CY_FROM_ACTION_Y;
+    let end_cx = last.x + last.width / 2.0 + if has_up { 2.0 } else { 0.0 };
+    let end_cy = last.y
+        + if has_up {
+            91.2
+        } else {
+            LEGACY_V1_END_CY_FROM_ACTION_Y
+        };
     let max_right = actions.iter().map(|a| a.x + a.width).fold(0.0, f64::max);
     let svg_w = (max_right + LEGACY_V1_RIGHT_PAD).ceil() as u32;
-    let svg_h = (end_cy + LEGACY_V1_BOTTOM_PAD_FROM_END_CY).ceil() as u32;
+    let bottom_pad = if has_up {
+        30.8
+    } else {
+        LEGACY_V1_BOTTOM_PAD_FROM_END_CY
+    };
+    let svg_h = (end_cy + bottom_pad).ceil() as u32;
+    let start_cy = if has_up {
+        actions
+            .iter()
+            .map(|action| action.y)
+            .fold(f64::INFINITY, f64::min)
+            + action_h / 2.0
+    } else {
+        LEGACY_V1_START_CY
+    };
 
     let mut body = String::new();
     write!(
         body,
         r##"<g class="start_entity" data-qualified-name="start" data-source-line="1" id="ent0002"><ellipse cx="{}" cy="{}" fill="#222222" rx="10" ry="10" style="stroke:#222222;stroke-width:1;"/></g>"##,
         f(first_cx),
-        f(LEGACY_V1_START_CY),
+        f(start_cy),
     )
     .unwrap();
     for action in &actions {
@@ -26252,7 +26291,11 @@ fn render_legacy_activity_linear(diagram: &ActivityDiagram) -> Option<String> {
     )
     .unwrap();
 
-    emit_legacy_v1_start_edge(&mut body, &actions[0].label, first_cx, actions[0].y);
+    if has_up {
+        emit_legacy_v1_up_start_edge(&mut body, &actions[0].label, first_cx, actions[0].y);
+    } else {
+        emit_legacy_v1_start_edge(&mut body, &actions[0].label, first_cx, actions[0].y);
+    }
     for idx in 0..actions.len().saturating_sub(1) {
         match action_dirs[idx] {
             LegacyDirection::Down => emit_legacy_v1_action_edge(
@@ -26265,6 +26308,9 @@ fn render_legacy_activity_linear(diagram: &ActivityDiagram) -> Option<String> {
                 actions[idx + 1].y,
                 action_h,
             ),
+            LegacyDirection::Up => {
+                emit_legacy_v1_up_edge(&mut body, idx, &actions[idx + 1], &actions[idx], action_h)
+            }
             LegacyDirection::Left => {
                 emit_legacy_v1_left_edge(&mut body, idx, &actions[idx], &actions[idx + 1], action_h)
             }
@@ -26277,15 +26323,19 @@ fn render_legacy_activity_linear(diagram: &ActivityDiagram) -> Option<String> {
             ),
         }
     }
-    emit_legacy_v1_end_edge(
-        &mut body,
-        actions.len() - 1,
-        last,
-        end_cx,
-        action_h,
-        end_cy,
-        reverse_bump,
-    );
+    if has_up {
+        emit_legacy_v1_up_end_edge(&mut body, actions.len() - 1, last, end_cx, action_h, end_cy);
+    } else {
+        emit_legacy_v1_end_edge(
+            &mut body,
+            actions.len() - 1,
+            last,
+            end_cx,
+            action_h,
+            end_cy,
+            reverse_bump,
+        );
+    }
 
     Some(format_svg(svg_w, svg_h, &body, "", Some("#FFFFFF")))
 }
@@ -26327,6 +26377,7 @@ fn parse_legacy_linear_edge(line: &str) -> Option<LegacyEdge> {
         "-->" | "-down->" => LegacyDirection::Down,
         "-left->" => LegacyDirection::Left,
         "-right->" => LegacyDirection::Right,
+        "-up->" => LegacyDirection::Up,
         _ => return None,
     };
     let to = parse_legacy_endpoint(rest[arrow_end + 2..].trim(), false)?.0;
@@ -26406,6 +26457,31 @@ fn emit_legacy_v1_start_edge(out: &mut String, target: &str, x: f64, target_y: f
     .unwrap();
 }
 
+fn emit_legacy_v1_up_start_edge(out: &mut String, target: &str, x: f64, target_y: f64) {
+    // Metrics from Java PlantUML 1.2026.3beta6 act_legacy_arrow_up.svg.
+    write!(
+        out,
+        r##"<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="1" id="lnk4"><path d="M{},34.5 C{},46.26 {},60.56 {},{}" fill="none" id="start-to-{}" style="stroke:#181818;stroke-width:1;"/><polygon fill="#181818" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:#181818;stroke-width:1;"/></g>"##,
+        f(x),
+        f(x),
+        f(x),
+        f(x),
+        f(target_y - 6.27),
+        escape_xml_attr_local(target),
+        f(x),
+        f(target_y - 0.27),
+        f(x + ARROW_HEAD_HALF),
+        f(target_y - 9.27),
+        f(x),
+        f(target_y - 5.27),
+        f(x - ARROW_HEAD_HALF),
+        f(target_y - 9.27),
+        f(x),
+        f(target_y - 0.27),
+    )
+    .unwrap();
+}
+
 #[allow(clippy::too_many_arguments)]
 fn emit_legacy_v1_action_edge(
     out: &mut String,
@@ -26449,6 +26525,54 @@ fn emit_legacy_v1_action_edge(
         f(to_y - 9.49),
         f(x),
         f(to_y - 0.49),
+    )
+    .unwrap();
+}
+
+fn emit_legacy_v1_up_edge(
+    out: &mut String,
+    idx: usize,
+    from: &LegacyActionNode,
+    to: &LegacyActionNode,
+    action_h: f64,
+) {
+    // Metrics from Java PlantUML 1.2026.3beta6 act_legacy_arrow_up.svg.
+    let source_line = idx + 2;
+    let from_ent = format!("ent{:04}", 5 + idx * 2);
+    let to_ent = format!("ent{:04}", 3 + idx * 2);
+    let link = format!("lnk{}", 7 + idx * 2);
+    let from_bottom = from.y + action_h;
+    let start_x = from.x + 5.441;
+    let start_y = from_bottom + 5.1741;
+    let arrow_tip_x = from.x + 8.95;
+    let arrow_tip_y = from_bottom + 0.3072;
+    write!(
+        out,
+        r##"<g class="link" data-entity-1="{}" data-entity-2="{}" data-link-type="dependency" data-source-line="{}" id="{}"><path d="M{},{} C{},{} {},{} {},{}" fill="none" id="{}-backto-{}" style="stroke:#181818;stroke-width:1;"/><polygon fill="#181818" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:#181818;stroke-width:1;"/></g>"##,
+        from_ent,
+        to_ent,
+        source_line,
+        link,
+        f(start_x),
+        f(start_y),
+        f(start_x - 8.45),
+        f(start_y + 11.72),
+        f(to.x + to.width - 3.0766),
+        f(to.y - 12.25),
+        f(to.x + 35.42),
+        f(to.y - 0.49),
+        escape_xml_attr_local(&from.label),
+        escape_xml_attr_local(&to.label),
+        f(arrow_tip_x),
+        f(arrow_tip_y),
+        f(arrow_tip_x - 8.5081),
+        f(arrow_tip_y + 4.961),
+        f(arrow_tip_x - 2.9242),
+        f(arrow_tip_y + 4.0558),
+        f(arrow_tip_x - 2.0189),
+        f(arrow_tip_y + 9.6397),
+        f(arrow_tip_x),
+        f(arrow_tip_y),
     )
     .unwrap();
 }
@@ -26554,6 +26678,51 @@ fn emit_legacy_v1_left_edge(
         f(y - ARROW_HEAD_HALF),
         f(arrow_tip_x),
         f(y),
+    )
+    .unwrap();
+}
+
+fn emit_legacy_v1_up_end_edge(
+    out: &mut String,
+    idx: usize,
+    from: &LegacyActionNode,
+    x: f64,
+    action_h: f64,
+    end_cy: f64,
+) {
+    // Metrics from Java PlantUML 1.2026.3beta6 act_legacy_arrow_up.svg.
+    let from_ent = format!("ent{:04}", 3 + idx * 2);
+    let end_ent = format!("ent{:04}", 6 + idx * 2);
+    let link = format!("lnk{}", 7 + idx * 2);
+    let source_line = idx + 2;
+    let from_cx = from.x + from.width / 2.0;
+    let bottom = from.y + action_h;
+    write!(
+        out,
+        r##"<g class="link" data-entity-1="{}" data-entity-2="{}" data-link-type="dependency" data-source-line="{}" id="{}"><path d="M{},{} C{},{} {},{} {},{}" fill="none" id="{}-to-end" style="stroke:#181818;stroke-width:1;"/><polygon fill="#181818" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:#181818;stroke-width:1;"/></g>"##,
+        from_ent,
+        end_ent,
+        source_line,
+        link,
+        f(from_cx + 0.4481),
+        f(bottom + 0.3072),
+        f(from_cx + 0.8381),
+        f(bottom + 14.2772),
+        f(x - 0.7869),
+        f(end_cy - 29.1377),
+        f(x - 0.4569),
+        f(end_cy - 17.2777),
+        escape_xml_attr_local(&from.label),
+        f(x - 0.29),
+        f(end_cy - 11.28),
+        f(x + 3.4581),
+        f(end_cy - 20.3878),
+        f(x - 0.4291),
+        f(end_cy - 16.2781),
+        f(x - 4.5388),
+        f(end_cy - 20.1653),
+        f(x - 0.29),
+        f(end_cy - 11.28),
     )
     .unwrap();
 }
