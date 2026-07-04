@@ -39,26 +39,26 @@ enum Outcome {
     Fail,
 }
 
-fn run_one_no_oracle(puml_path: &Path, root: &Path) -> (String, Outcome) {
-    let family = puml_path
-        .strip_prefix(root)
-        .unwrap()
+fn run_one_no_oracle(puml_path: &Path, root: &Path) -> (String, String, Outcome) {
+    let rel = puml_path.strip_prefix(root).unwrap();
+    let family = rel
         .components()
         .next()
         .map(|c| c.as_os_str().to_string_lossy().to_string())
         .unwrap_or_else(|| "unknown".into());
+    let name = rel.with_extension("").to_string_lossy().to_string();
 
     let Ok(source) = std::fs::read_to_string(puml_path) else {
-        return (family, Outcome::Skip);
+        return (family, name, Outcome::Skip);
     };
     let Ok(golden_svg) = std::fs::read_to_string(puml_path.with_extension("svg")) else {
-        return (family, Outcome::Skip);
+        return (family, name, Outcome::Skip);
     };
     if golden_has_syntax_error(&golden_svg)
         || !has_supported_start_keyword(&source)
         || is_ditaa(&source)
     {
-        return (family, Outcome::Skip);
+        return (family, name, Outcome::Skip);
     }
 
     let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
@@ -79,8 +79,8 @@ fn run_one_no_oracle(puml_path: &Path, root: &Path) -> (String, Outcome) {
         // Parse/compare errors count as failures here, NOT skips: the CLI
         // user sees them. (The strict tier skips parse errors because its
         // question is narrower.) Panics likewise.
-        Ok(Ok(true)) => (family, Outcome::Pass),
-        Ok(Ok(false)) | Ok(Err(())) | Err(_) => (family, Outcome::Fail),
+        Ok(Ok(true)) => (family, name, Outcome::Pass),
+        Ok(Ok(false)) | Ok(Err(())) | Err(_) => (family, name, Outcome::Fail),
     }
 }
 
@@ -128,7 +128,7 @@ fn golden_no_oracle() {
         .build()
         .expect("failed to build rayon pool");
 
-    let results: Vec<(String, Outcome)> = pool.install(|| {
+    let results: Vec<(String, String, Outcome)> = pool.install(|| {
         pairs
             .par_iter()
             .map(|p| run_one_no_oracle(p, &root))
@@ -138,15 +138,30 @@ fn golden_no_oracle() {
 
     // family → (pass, eligible). Skips don't count toward eligible.
     let mut counts: BTreeMap<String, (usize, usize)> = BTreeMap::new();
-    for (family, outcome) in results {
+    let mut failures = Vec::new();
+    for (family, name, outcome) in results {
         let entry = counts.entry(family).or_insert((0, 0));
         match outcome {
             Outcome::Pass => {
                 entry.0 += 1;
                 entry.1 += 1;
             }
-            Outcome::Fail => entry.1 += 1,
+            Outcome::Fail => {
+                entry.1 += 1;
+                failures.push(name);
+            }
             Outcome::Skip => {}
+        }
+    }
+    failures.sort();
+    let names_path = golden_dir()
+        .parent()
+        .unwrap()
+        .join("no_oracle_failure_names.txt");
+    if let Ok(mut f) = std::fs::File::create(&names_path) {
+        use std::io::Write;
+        for name in &failures {
+            writeln!(f, "{name}").ok();
         }
     }
 

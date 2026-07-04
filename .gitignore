@@ -9,3 +9,4 @@ sqlite_mcp_server.db
 golden_stats.txt
 /test-diagrams/golden_failure_names.txt
 /test-diagrams/golden_ulp_candidates.txt
+/test-diagrams/no_oracle_failure_names.txt
