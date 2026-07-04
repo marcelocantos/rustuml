@@ -46,6 +46,7 @@ fn swimlane_v2_lane_index(name: &str) -> Option<usize> {
 const START_R: f64 = 10.0;
 const STOP_OUTER_R: f64 = 11.0;
 const STOP_INNER_R: f64 = 6.0;
+const TERMINAL_FORK_PORT_OFFSET: f64 = START_R + STOP_INNER_R;
 const START_CY: f64 = 25.0;
 /// Half-width of PlantUML's `FtileCircle*` terminal tile (start/stop/end).
 /// The circle glyph (rx 10-11) sits inside a fixed-width tile whose spine is
@@ -19508,6 +19509,31 @@ fn fork_lane_action_shifts(
     shifts
 }
 
+fn fork_lane_terminal_axis(buf: &str, action_shifts: &[f64]) -> Option<(f64, usize)> {
+    let mut actions = Vec::new();
+    let mut rest = buf;
+    while let Some(p) = rest.find("<rect") {
+        let rect = &rest[p..];
+        let Some(end) = rect.find("/>") else {
+            break;
+        };
+        let elem = &rect[..end + 2];
+        if elem.contains(r#"rx="12.5""#)
+            && let (Some(x), Some(w)) = (prim_attr(elem, " x=\""), prim_attr(elem, "width=\""))
+        {
+            actions.push((x, w));
+        }
+        rest = &rect[end + 2..];
+    }
+    actions.sort_by(|a, b| a.0.partial_cmp(&b.0).unwrap_or(std::cmp::Ordering::Equal));
+    if actions.len() < 2 {
+        return None;
+    }
+    let first_shift = action_shifts.first().copied().unwrap_or(0.0);
+    let first_right = actions[0].0 - first_shift + actions[0].1;
+    Some((first_right + START_R + STOP_OUTER_R, actions.len()))
+}
+
 fn node_dbg_name(n: &LayoutNode) -> &'static str {
     match n {
         LayoutNode::LaneMark(_) => "LaneMark",
@@ -20821,6 +20847,26 @@ fn shift_indexed_fork_lane_content(
         return buf.to_string();
     }
 
+    let terminal_axis = fork_lane_terminal_axis(buf, action_shifts);
+    let mut start_axis = None;
+    let mut stop_axis = None;
+    let mut rest = buf;
+    while let Some(p) = rest.find("<ellipse") {
+        let ellipse = &rest[p..];
+        let Some(end) = ellipse.find("/>") else {
+            break;
+        };
+        let elem = &ellipse[..end + 2];
+        if let (Some(cx), Some(cy)) = (prim_attr(elem, "cx=\""), prim_attr(elem, "cy=\"")) {
+            if cy < top_bar_y {
+                start_axis = Some(cx);
+            } else if cy > bottom_bar_y + FORK_BAR_HEIGHT {
+                stop_axis = Some(cx);
+            }
+        }
+        rest = &ellipse[end + 2..];
+    }
+
     let action_shift_for_x = |x: f64| -> f64 {
         action_xs
             .iter()
@@ -20829,6 +20875,78 @@ fn shift_indexed_fork_lane_content(
             .and_then(|(i, _)| action_shifts.get(i).copied())
             .unwrap_or(0.0)
     };
+    let same_lane_terminal = start_axis.is_some() && stop_axis.is_some();
+    let terminal_axis = terminal_axis.and_then(|(axis, action_count)| {
+        if action_count == 2 {
+            Some(if same_lane_terminal { axis - 7.0 } else { axis })
+        } else if same_lane_terminal {
+            Some(axis)
+        } else {
+            None
+        }
+    });
+    let start_shift = start_axis
+        .zip(terminal_axis)
+        .map(|(axis, target)| axis - target)
+        .unwrap_or(start_shift);
+    let stop_shift = stop_axis
+        .zip(terminal_axis)
+        .map(|(axis, target)| axis - target)
+        .unwrap_or(stop_shift);
+    let shift_terminal_x = |x: f64, axis: Option<f64>, shift: f64| -> f64 {
+        let Some(axis) = axis else {
+            return x;
+        };
+        if shift.abs() < 0.001 {
+            return x;
+        }
+        let touches_axis = (x - axis).abs() < 0.01
+            || (x - (axis - TERMINAL_FORK_PORT_OFFSET)).abs() < 0.01
+            || (x - (axis + TERMINAL_FORK_PORT_OFFSET)).abs() < 0.01;
+        if touches_axis { x - shift } else { x }
+    };
+    let shift_terminal_polygon =
+        |elem: &str, axis: Option<f64>, shift: f64, min_y: f64, max_y: f64| -> String {
+            if shift.abs() < 0.001 {
+                return elem.to_string();
+            }
+            let Some(at) = elem.find("points=\"") else {
+                return elem.to_string();
+            };
+            let value_start = at + "points=\"".len();
+            let Some(value_end) = elem[value_start..].find('"').map(|p| value_start + p) else {
+                return elem.to_string();
+            };
+            let nums: Vec<&str> = elem[value_start..value_end].split(',').collect();
+            if nums.len() < 2 {
+                return elem.to_string();
+            }
+            let mut shifted = Vec::with_capacity(nums.len());
+            let mut i = 0;
+            while i < nums.len() {
+                let x = nums[i].trim().parse::<f64>().ok();
+                let y = nums
+                    .get(i + 1)
+                    .and_then(|raw| raw.trim().parse::<f64>().ok());
+                if let (Some(x), Some(y)) = (x, y) {
+                    if value_in_band(y, min_y, max_y) {
+                        shifted.push(f(shift_terminal_x(x, axis, shift)));
+                    } else {
+                        shifted.push(f(x));
+                    }
+                    shifted.push(f(y));
+                    i += 2;
+                } else {
+                    shifted.push(nums[i].to_string());
+                    i += 1;
+                }
+            }
+            let mut out = String::new();
+            out.push_str(&elem[..value_start]);
+            out.push_str(&shifted.join(","));
+            out.push_str(&elem[value_end..]);
+            out
+        };
 
     let mut out = String::new();
     let mut rest = buf;
@@ -20886,6 +21004,74 @@ fn shift_indexed_fork_lane_content(
             } else {
                 out.push_str(elem);
             }
+            rest = &rest[end + 2..];
+        } else if rest.starts_with("<line") {
+            let Some(end) = rest.find("/>") else {
+                out.push_str(rest);
+                break;
+            };
+            let elem = &rest[..end + 2];
+            let y1 = prim_attr(elem, "y1=\"").unwrap_or(0.0);
+            let y2 = prim_attr(elem, "y2=\"").unwrap_or(0.0);
+            let mut elem = elem.to_string();
+            if value_in_band(y1, f64::MIN, top_bar_y + ARROW_LEN)
+                || value_in_band(y2, f64::MIN, top_bar_y + ARROW_LEN)
+            {
+                if let Some(x1) = prim_attr(&elem, "x1=\"") {
+                    elem = replace_numeric_attr(
+                        &elem,
+                        "x1=\"",
+                        shift_terminal_x(x1, start_axis, start_shift),
+                    );
+                }
+                if let Some(x2) = prim_attr(&elem, "x2=\"") {
+                    elem = replace_numeric_attr(
+                        &elem,
+                        "x2=\"",
+                        shift_terminal_x(x2, start_axis, start_shift),
+                    );
+                }
+            }
+            if value_in_band(y1, bottom_bar_y - ARROW_LEN, f64::MAX)
+                || value_in_band(y2, bottom_bar_y - ARROW_LEN, f64::MAX)
+            {
+                if let Some(x1) = prim_attr(&elem, "x1=\"") {
+                    elem = replace_numeric_attr(
+                        &elem,
+                        "x1=\"",
+                        shift_terminal_x(x1, stop_axis, stop_shift),
+                    );
+                }
+                if let Some(x2) = prim_attr(&elem, "x2=\"") {
+                    elem = replace_numeric_attr(
+                        &elem,
+                        "x2=\"",
+                        shift_terminal_x(x2, stop_axis, stop_shift),
+                    );
+                }
+            }
+            out.push_str(&elem);
+            rest = &rest[end + 2..];
+        } else if rest.starts_with("<polygon") {
+            let Some(end) = rest.find("/>") else {
+                out.push_str(rest);
+                break;
+            };
+            let elem = &rest[..end + 2];
+            let elem = shift_terminal_polygon(
+                elem,
+                start_axis,
+                start_shift,
+                f64::MIN,
+                top_bar_y + ARROW_LEN,
+            );
+            out.push_str(&shift_terminal_polygon(
+                &elem,
+                stop_axis,
+                stop_shift,
+                bottom_bar_y - ARROW_LEN,
+                f64::MAX,
+            ));
             rest = &rest[end + 2..];
         } else {
             let next = rest[1..].find('<').map(|p| p + 1).unwrap_or(rest.len());
@@ -24533,8 +24719,8 @@ fn layout_swimlanes_v2(
                     &action_shifts,
                     0.0,
                     0.0,
-                    f64::MIN,
-                    f64::MAX,
+                    top_bar_y.map(|y| y + lane_dy[l]).unwrap_or(f64::MIN),
+                    bottom_bar_y.map(|y| y + lane_dy[l]).unwrap_or(f64::MAX),
                 );
             }
             if nested_fork_with_while_mode && nested_fork_with_while_body_shift.abs() > 0.001 {
