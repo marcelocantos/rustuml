@@ -19410,7 +19410,14 @@ fn swimlane_v2_top_fork_compaction(
             count += 1;
         }
         if count > 0 {
-            let lane_pad = if bar_lanes[lane] {
+            let lane_pad = if lane == input_lane && lane != output_lane {
+                let mut pad =
+                    2.0 * (FORK_PARALLEL_X_MARGIN + FORK_PARALLEL_X_MARGIN_TRIM) + FORK_BAR_HEIGHT;
+                if branches.len().is_multiple_of(2) {
+                    pad += ARROW_LEN + 2.0 * FORK_PARALLEL_X_MARGIN_TRIM;
+                }
+                pad
+            } else if bar_lanes[lane] {
                 // `AbstractParallelFtilesBuilder.computeNewFtile` wraps fork
                 // branches in 14px horizontal margins, then the swimlane bar
                 // lane must still carry the vertical start/stop terminal reach.
@@ -19421,7 +19428,7 @@ fn swimlane_v2_top_fork_compaction(
                     pad += STOP_OUTER_R - START_R + FORK_BAR_HEIGHT;
                 }
                 if lane == output_lane && lane != input_lane && branches.len() % 2 == 1 {
-                    pad += ARROW_LEN - FORK_BAR_HEIGHT / 2.0;
+                    pad += STOP_OUTER_R - START_R + FORK_BAR_HEIGHT;
                 }
                 pad
             } else {
@@ -24235,7 +24242,11 @@ fn layout_swimlanes_v2(
             if let Some(compaction) = &top_fork_compaction
                 && let Some(compacted_w) = compaction.lane_widths[l]
             {
-                w[l] = compacted_w.max(title_w[l] + 10.0);
+                w[l] = if compaction.bar_lanes[l] {
+                    compacted_w
+                } else {
+                    compacted_w.max(title_w[l] + 10.0)
+                };
             }
             if if_long_split_collector_mode && l == 0 {
                 w[l] += IF_SPLIT_COLLECTOR_LANE0_EXTRA;
