@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: Apache-2.0
 
 //! Show full diff for one golden pair.
-//! Usage: cargo run --release -p rustuml-oracle --example diff_one -- <puml_path>
+//! Usage: cargo run --release -p rustuml-oracle --example diff_one -- [--no-oracle] <puml_path>
 
 use rustuml_oracle::compare;
 use std::path::PathBuf;
@@ -10,7 +10,13 @@ use std::path::PathBuf;
 fn main() {
     unsafe { std::env::set_var("RUSTUML_DEBUG", "date=1774210426000,tz=AEDT+1100") };
     let args: Vec<_> = std::env::args().collect();
-    let puml_path = PathBuf::from(&args[1]);
+    let no_oracle = args.iter().any(|a| a == "--no-oracle");
+    let puml_path = args
+        .iter()
+        .skip(1)
+        .find(|a| !a.starts_with("--"))
+        .map(PathBuf::from)
+        .expect("usage: diff_one [--no-oracle] <puml_path>");
     let source = std::fs::read_to_string(&puml_path).unwrap();
     let golden = std::fs::read_to_string(puml_path.with_extension("svg")).unwrap();
 
@@ -23,7 +29,7 @@ fn main() {
         return;
     }
 
-    let oracle = if golden.contains("<?plantuml ") {
+    let oracle = if !no_oracle && golden.contains("<?plantuml ") {
         rustuml_oracle::extract::extract_oracle_layout(&golden)
     } else {
         None
@@ -53,15 +59,27 @@ fn main() {
         }
     }
 
-    let source = rustuml_oracle::golden_source::source_for_oracle_golden(&source, &golden);
+    let source = if no_oracle {
+        std::borrow::Cow::Borrowed(source.as_str())
+    } else {
+        rustuml_oracle::golden_source::source_for_oracle_golden(&source, &golden)
+    };
     let source = source.as_ref();
     let blocks = rustuml_parser::parse::split_blocks(source);
     let rust_svg = if blocks.len() > 1 {
         let b = rustuml_parser::parse::parse_block(source, 0).unwrap();
-        rustuml_render::render_svg_with_oracle(&b, oracle.as_ref())
+        if no_oracle {
+            rustuml_render::render_svg(&b)
+        } else {
+            rustuml_render::render_svg_with_oracle(&b, oracle.as_ref())
+        }
     } else {
         let d = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
-        rustuml_render::render_svg_with_oracle(&d, oracle.as_ref())
+        if no_oracle {
+            rustuml_render::render_svg(&d)
+        } else {
+            rustuml_render::render_svg_with_oracle(&d, oracle.as_ref())
+        }
     };
 
     if args.iter().any(|a| a == "--print-rust") {
