@@ -2,7 +2,7 @@
 # Ratchet: counts may only grow alongside a provenance comment citing the Java
 # source or an extracted metrics table, reviewed in the same change.
 # Regenerate: HARNESS_WRITE_BASELINES=1 cargo test --test harness_guards
-crates/rustuml-render/src/activity.rs 686
+crates/rustuml-render/src/activity.rs 644
 crates/rustuml-render/src/archimate.rs 2
 crates/rustuml-render/src/archimate/icons.rs 2531
 crates/rustuml-render/src/board.rs 2

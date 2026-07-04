@@ -2,11 +2,11 @@
 # <family> <pass> <eligible>
 # Regenerate ONLY to lock in verified progress:
 #   HARNESS_WRITE_BASELINES=1 cargo test --test golden_no_oracle --release
-activity 1277 1299
+activity 1247 1299
 archimate 0 48
 chart 25 25
 class 118 1971
-combo 114 327
+combo 113 327
 component 0 663
 creole 301 639
 deployment 37 495
@@ -25,7 +25,7 @@ nwdiag 89 89
 object 36 155
 preprocessing 130 307
 regex 45 45
-rendering 8 98
+rendering 6 98
 salt 103 103
 sequence 1400 1411
 skinparam 241 410

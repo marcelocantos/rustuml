@@ -47,11 +47,7 @@ fn rust_sources(dir: &Path, out: &mut Vec<PathBuf>) {
 #[test]
 fn no_golden_data_embedded_in_shipping_crates() {
     // (crate-relative file, max allowed embedding lines)
-    const ALLOWED: &[(&str, usize)] = &[
-        // The June 2026 swimlane/showcase fixture echoes. To be deleted in
-        // 🎯T14.2; must never grow.
-        ("crates/rustuml-render/src/activity.rs", 20),
-    ];
+    const ALLOWED: &[(&str, usize)] = &[];
     const SHIPPING_CRATES: &[&str] = &[
         "crates/rustuml",
         "crates/rustuml-parser",
