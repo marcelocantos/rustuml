@@ -47,6 +47,8 @@ const START_R: f64 = 10.0;
 const STOP_OUTER_R: f64 = 11.0;
 const STOP_INNER_R: f64 = 6.0;
 const TERMINAL_FORK_PORT_OFFSET: f64 = START_R + STOP_INNER_R;
+const FORK_COLLECTOR_PORT_OFFSET: f64 = START_R / 2.0;
+const ARROW_HEAD_HALF: f64 = 4.0;
 const START_CY: f64 = 25.0;
 /// Half-width of PlantUML's `FtileCircle*` terminal tile (start/stop/end).
 /// The circle glyph (rx 10-11) sits inside a fixed-width tile whose spine is
@@ -19416,6 +19418,8 @@ fn swimlane_v2_top_fork_compaction(
                     2.0 * (FORK_PARALLEL_X_MARGIN + FORK_PARALLEL_X_MARGIN_TRIM) + FORK_BAR_HEIGHT;
                 if branches.len().is_multiple_of(2) {
                     pad += ARROW_LEN + 2.0 * FORK_PARALLEL_X_MARGIN_TRIM;
+                } else if count > 1 {
+                    pad += ARROW_LEN + 2.0 * FORK_PARALLEL_X_MARGIN_TRIM + FORK_BAR_HEIGHT;
                 }
                 pad
             } else if bar_lanes[lane] {
@@ -19428,8 +19432,12 @@ fn swimlane_v2_top_fork_compaction(
                 if input_lane == output_lane && branches.len() % 2 == 1 {
                     pad += STOP_OUTER_R - START_R + FORK_BAR_HEIGHT;
                 }
-                if lane == output_lane && lane != input_lane && branches.len() % 2 == 1 {
-                    pad += STOP_OUTER_R - START_R + FORK_BAR_HEIGHT;
+                if lane == output_lane && lane != input_lane {
+                    if count > 2 {
+                        pad = FORK_PARALLEL_X_MARGIN + FORK_PARALLEL_X_MARGIN_TRIM + ARROW_LEN;
+                    } else if count > 1 {
+                        pad += STOP_OUTER_R - START_R + FORK_BAR_HEIGHT;
+                    }
                 }
                 pad
             } else {
@@ -20827,7 +20835,7 @@ fn shift_indexed_fork_lane_content(
     top_bar_y: f64,
     bottom_bar_y: f64,
 ) -> String {
-    let mut action_xs = Vec::new();
+    let mut action_rects = Vec::new();
     let mut rest = buf;
     while let Some(p) = rest.find("<rect") {
         let rect = &rest[p..];
@@ -20836,20 +20844,30 @@ fn shift_indexed_fork_lane_content(
         };
         let elem = &rect[..end + 2];
         if elem.contains(r#"rx="12.5""#)
-            && let Some(x) = prim_attr(elem, " x=\"")
+            && let (Some(x), Some(w)) = (prim_attr(elem, " x=\""), prim_attr(elem, "width=\""))
         {
-            action_xs.push(x);
+            action_rects.push((x, w));
         }
         rest = &rect[end + 2..];
     }
-    action_xs.sort_by(|a, b| a.partial_cmp(b).unwrap_or(std::cmp::Ordering::Equal));
-    if action_xs.is_empty() {
+    action_rects.sort_by(|a, b| a.0.partial_cmp(&b.0).unwrap_or(std::cmp::Ordering::Equal));
+    if action_rects.is_empty() {
         return buf.to_string();
     }
+    let action_xs: Vec<f64> = action_rects.iter().map(|(x, _)| *x).collect();
+    let action_shift_for_x = |x: f64| -> f64 {
+        action_xs
+            .iter()
+            .enumerate()
+            .find(|(_, ax)| (x - **ax).abs() < 0.01 || (x - (**ax + 10.0)).abs() < 0.01)
+            .and_then(|(i, _)| action_shifts.get(i).copied())
+            .unwrap_or(0.0)
+    };
 
     let terminal_axis = fork_lane_terminal_axis(buf, action_shifts);
     let mut start_axis = None;
     let mut stop_axis = None;
+    let mut bottom_bar_span = None;
     let mut rest = buf;
     while let Some(p) = rest.find("<ellipse") {
         let ellipse = &rest[p..];
@@ -20866,19 +20884,64 @@ fn shift_indexed_fork_lane_content(
         }
         rest = &ellipse[end + 2..];
     }
+    let mut rest = buf;
+    while let Some(p) = rest.find("<rect") {
+        let rect = &rest[p..];
+        let Some(end) = rect.find("/>") else {
+            break;
+        };
+        let elem = &rect[..end + 2];
+        if is_fork_bar_prim(elem)
+            && let (Some(x), Some(y), Some(w)) = (
+                prim_attr(elem, " x=\""),
+                prim_attr(elem, " y=\""),
+                prim_attr(elem, "width=\""),
+            )
+            && (y - bottom_bar_y).abs() < 0.01
+        {
+            bottom_bar_span = Some((x, x + w));
+        }
+        rest = &rect[end + 2..];
+    }
 
-    let action_shift_for_x = |x: f64| -> f64 {
-        action_xs
-            .iter()
-            .enumerate()
-            .find(|(_, ax)| (x - **ax).abs() < 0.01 || (x - (**ax + 10.0)).abs() < 0.01)
-            .and_then(|(i, _)| action_shifts.get(i).copied())
-            .unwrap_or(0.0)
+    let shifted_action_rects: Vec<(f64, f64)> = action_rects
+        .iter()
+        .map(|(x, w)| (x - action_shift_for_x(*x), *w))
+        .collect();
+    let collector_action_rects: Vec<(f64, f64)> = if start_axis.is_none() && stop_axis.is_some() {
+        if let Some((bar_left, bar_right)) = bottom_bar_span {
+            shifted_action_rects
+                .iter()
+                .copied()
+                .filter(|(x, w)| {
+                    let cx = x + w / 2.0;
+                    value_in_band(cx, bar_left, bar_right)
+                })
+                .collect()
+        } else {
+            shifted_action_rects.clone()
+        }
+    } else {
+        shifted_action_rects.clone()
     };
     let same_lane_terminal = start_axis.is_some() && stop_axis.is_some();
     let terminal_axis = terminal_axis.and_then(|(axis, action_count)| {
         if action_count == 2 {
-            Some(if same_lane_terminal { axis - 7.0 } else { axis })
+            Some(if same_lane_terminal {
+                axis - 7.0
+            } else if start_axis.is_some() && stop_axis.is_none() {
+                axis - (STOP_OUTER_R - START_R)
+            } else {
+                axis
+            })
+        } else if collector_action_rects.len() > 2
+            && collector_action_rects.len() % 2 == 1
+            && start_axis.is_none()
+            && stop_axis.is_some()
+        {
+            collector_action_rects
+                .get(collector_action_rects.len() / 2)
+                .map(|(x, w)| x + w / 2.0)
         } else if same_lane_terminal {
             Some(axis)
         } else {
@@ -20905,48 +20968,78 @@ fn shift_indexed_fork_lane_content(
             || (x - (axis + TERMINAL_FORK_PORT_OFFSET)).abs() < 0.01;
         if touches_axis { x - shift } else { x }
     };
-    let shift_terminal_polygon =
-        |elem: &str, axis: Option<f64>, shift: f64, min_y: f64, max_y: f64| -> String {
-            if shift.abs() < 0.001 {
-                return elem.to_string();
+    let shift_bottom_collector_x = |x: f64, shift: f64| -> f64 {
+        if shift.abs() < 0.001
+            || collector_action_rects.len() < 3
+            || start_axis.is_some()
+            || stop_axis.is_none()
+        {
+            return x;
+        }
+        for (action_x, action_w) in collector_action_rects.iter().skip(1) {
+            let port_x = action_x + action_w + FORK_COLLECTOR_PORT_OFFSET;
+            let touches_port = (x - port_x).abs() < 0.01
+                || (x - (port_x - ARROW_HEAD_HALF)).abs() < 0.01
+                || (x - (port_x + ARROW_HEAD_HALF)).abs() < 0.01;
+            if touches_port {
+                return x - shift;
             }
-            let Some(at) = elem.find("points=\"") else {
-                return elem.to_string();
-            };
-            let value_start = at + "points=\"".len();
-            let Some(value_end) = elem[value_start..].find('"').map(|p| value_start + p) else {
-                return elem.to_string();
-            };
-            let nums: Vec<&str> = elem[value_start..value_end].split(',').collect();
-            if nums.len() < 2 {
-                return elem.to_string();
-            }
-            let mut shifted = Vec::with_capacity(nums.len());
-            let mut i = 0;
-            while i < nums.len() {
-                let x = nums[i].trim().parse::<f64>().ok();
-                let y = nums
-                    .get(i + 1)
-                    .and_then(|raw| raw.trim().parse::<f64>().ok());
-                if let (Some(x), Some(y)) = (x, y) {
-                    if value_in_band(y, min_y, max_y) {
-                        shifted.push(f(shift_terminal_x(x, axis, shift)));
-                    } else {
-                        shifted.push(f(x));
-                    }
-                    shifted.push(f(y));
-                    i += 2;
-                } else {
-                    shifted.push(nums[i].to_string());
-                    i += 1;
-                }
-            }
-            let mut out = String::new();
-            out.push_str(&elem[..value_start]);
-            out.push_str(&shifted.join(","));
-            out.push_str(&elem[value_end..]);
-            out
+        }
+        x
+    };
+    let shift_terminal_polygon = |elem: &str,
+                                  axis: Option<f64>,
+                                  shift: f64,
+                                  min_y: f64,
+                                  max_y: f64,
+                                  shift_collectors: bool|
+     -> String {
+        if shift.abs() < 0.001 {
+            return elem.to_string();
+        }
+        let Some(at) = elem.find("points=\"") else {
+            return elem.to_string();
         };
+        let value_start = at + "points=\"".len();
+        let Some(value_end) = elem[value_start..].find('"').map(|p| value_start + p) else {
+            return elem.to_string();
+        };
+        let nums: Vec<&str> = elem[value_start..value_end].split(',').collect();
+        if nums.len() < 2 {
+            return elem.to_string();
+        }
+        let mut shifted = Vec::with_capacity(nums.len());
+        let mut i = 0;
+        while i < nums.len() {
+            let x = nums[i].trim().parse::<f64>().ok();
+            let y = nums
+                .get(i + 1)
+                .and_then(|raw| raw.trim().parse::<f64>().ok());
+            if let (Some(x), Some(y)) = (x, y) {
+                if value_in_band(y, min_y, max_y) {
+                    let x = shift_terminal_x(x, axis, shift);
+                    let x = if shift_collectors {
+                        shift_bottom_collector_x(x, shift)
+                    } else {
+                        x
+                    };
+                    shifted.push(f(x));
+                } else {
+                    shifted.push(f(x));
+                }
+                shifted.push(f(y));
+                i += 2;
+            } else {
+                shifted.push(nums[i].to_string());
+                i += 1;
+            }
+        }
+        let mut out = String::new();
+        out.push_str(&elem[..value_start]);
+        out.push_str(&shifted.join(","));
+        out.push_str(&elem[value_end..]);
+        out
+    };
 
     let mut out = String::new();
     let mut rest = buf;
@@ -21036,17 +21129,19 @@ fn shift_indexed_fork_lane_content(
                 || value_in_band(y2, bottom_bar_y - ARROW_LEN, f64::MAX)
             {
                 if let Some(x1) = prim_attr(&elem, "x1=\"") {
+                    let x1 = shift_terminal_x(x1, stop_axis, stop_shift);
                     elem = replace_numeric_attr(
                         &elem,
                         "x1=\"",
-                        shift_terminal_x(x1, stop_axis, stop_shift),
+                        shift_bottom_collector_x(x1, stop_shift),
                     );
                 }
                 if let Some(x2) = prim_attr(&elem, "x2=\"") {
+                    let x2 = shift_terminal_x(x2, stop_axis, stop_shift);
                     elem = replace_numeric_attr(
                         &elem,
                         "x2=\"",
-                        shift_terminal_x(x2, stop_axis, stop_shift),
+                        shift_bottom_collector_x(x2, stop_shift),
                     );
                 }
             }
@@ -21064,6 +21159,7 @@ fn shift_indexed_fork_lane_content(
                 start_shift,
                 f64::MIN,
                 top_bar_y + ARROW_LEN,
+                false,
             );
             out.push_str(&shift_terminal_polygon(
                 &elem,
@@ -21071,6 +21167,7 @@ fn shift_indexed_fork_lane_content(
                 stop_shift,
                 bottom_bar_y - ARROW_LEN,
                 f64::MAX,
+                true,
             ));
             rest = &rest[end + 2..];
         } else {
