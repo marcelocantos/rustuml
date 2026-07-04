@@ -26123,6 +26123,160 @@ const LEGACY_V1_END_CY_FROM_ACTION_Y: f64 = 85.13;
 const LEGACY_V1_BOTTOM_PAD_FROM_END_CY: f64 = 24.73;
 const LEGACY_V1_RIGHT_PAD: f64 = 13.0;
 
+fn render_legacy_activity_partition(diagram: &ActivityDiagram) -> Option<String> {
+    let source = diagram.meta.source.as_deref()?;
+    let mut partition_label = None;
+    let mut action_labels = Vec::new();
+    let mut action_edge_source_lines = Vec::new();
+    let mut end_source_line = None;
+    let mut stmt_line = 0;
+
+    for line in source.lines() {
+        let t = line.trim();
+        if t.is_empty() || t.starts_with("@start") || t.starts_with("@end") {
+            continue;
+        }
+        if t == "}" {
+            continue;
+        }
+        stmt_line += 1;
+        if let Some(label) = parse_legacy_partition_header(t) {
+            if partition_label.is_some() {
+                return None;
+            }
+            partition_label = Some(label.to_string());
+            continue;
+        }
+        let edge = parse_legacy_linear_edge(t)?;
+        if edge.direction != LegacyDirection::Down {
+            return None;
+        }
+        match (&edge.from, &edge.to) {
+            (LegacyEndpoint::Start, LegacyEndpoint::Action(label)) if action_labels.is_empty() => {
+                action_labels.push(label.clone());
+            }
+            (LegacyEndpoint::Action(from), LegacyEndpoint::Action(to)) => {
+                if action_labels.last() != Some(from) || action_labels.iter().any(|a| a == to) {
+                    return None;
+                }
+                action_labels.push(to.clone());
+                action_edge_source_lines.push(stmt_line);
+            }
+            (LegacyEndpoint::Action(from), LegacyEndpoint::End)
+                if action_labels.last() == Some(from) =>
+            {
+                end_source_line = Some(stmt_line);
+            }
+            _ => return None,
+        }
+    }
+    let partition_label = partition_label?;
+    if action_labels.is_empty() || end_source_line.is_none() {
+        return None;
+    }
+
+    let action_h = ACTION_PADDING + pm::text_height(FONT_SIZE);
+    let action_widths: Vec<f64> = action_labels
+        .iter()
+        .map(|label| text_render::measure(label, FONT_SIZE, false) + ACTION_H_PADDING * 2.0)
+        .collect();
+    let max_action_w = action_widths.iter().copied().fold(0.0, f64::max);
+    let label_w = text_render::measure(&partition_label, 14.0, true);
+    let cluster_x = 16.0;
+    let cluster_y = 6.0;
+    let content_w = max_action_w + 61.4141;
+    let title_w = label_w + 14.1924;
+    let action_cx = cluster_x + content_w.max(title_w) / 2.0;
+    let mut actions = Vec::new();
+    for (idx, label) in action_labels.iter().enumerate() {
+        actions.push(LegacyActionNode {
+            label: label.clone(),
+            width: action_widths[idx],
+            x: action_cx - action_widths[idx] / 2.0,
+            y: 101.0 + idx as f64 * LEGACY_V1_ACTION_ROW_STEP,
+        });
+    }
+    let last = actions.last()?;
+    let end_cx = action_cx;
+    let end_cy = last.y + LEGACY_V1_END_CY_FROM_ACTION_Y;
+    let cluster_right =
+        (action_cx + max_action_w / 2.0 + 31.7041).max(cluster_x + label_w + 15.1924);
+    let cluster_bottom = end_cy + 27.0;
+    let svg_w = (cluster_right + 25.0).ceil() as u32;
+    let svg_h = (end_cy + 41.73).ceil() as u32;
+
+    let mut body = String::new();
+    emit_legacy_v1_partition_cluster(
+        &mut body,
+        &partition_label,
+        cluster_x,
+        cluster_y,
+        cluster_right,
+        cluster_bottom,
+        label_w,
+    );
+    write!(
+        body,
+        r##"<g class="start_entity" data-qualified-name="{}.start" data-source-line="2" id="ent0003"><ellipse cx="{}" cy="51" fill="#222222" rx="10" ry="10" style="stroke:#222222;stroke-width:1;"/></g>"##,
+        escape_xml_attr_local(&partition_label),
+        f(action_cx),
+    )
+    .unwrap();
+    for action in &actions {
+        emit_legacy_v1_action(
+            &mut body,
+            &action.label,
+            action.x,
+            action.y,
+            action.width,
+            action_h,
+        );
+    }
+    let end_ent = 4 + actions.len() * 2;
+    write!(
+        body,
+        r##"<g class="end_entity" data-qualified-name="{}.end" data-source-line="{}" id="ent{:04}"><ellipse cx="{}" cy="{}" fill="none" rx="11" ry="11" style="stroke:#222222;stroke-width:1.5;"/><ellipse cx="{}" cy="{}" fill="#222222" rx="6" ry="6" style="stroke:#222222;stroke-width:1;"/></g>"##,
+        escape_xml_attr_local(&partition_label),
+        end_source_line?,
+        end_ent,
+        f(end_cx),
+        f(end_cy),
+        f(end_cx),
+        f(end_cy),
+    )
+    .unwrap();
+    emit_legacy_v1_partition_start_edge(&mut body, &actions[0].label, action_cx, actions[0].y);
+    for idx in 0..actions.len().saturating_sub(1) {
+        emit_legacy_v1_action_edge_numbered(
+            &mut body,
+            action_edge_source_lines[idx],
+            4 + idx * 2,
+            6 + idx * 2,
+            7 + idx * 2,
+            &actions[idx].label,
+            &actions[idx + 1].label,
+            action_cx,
+            actions[idx].y,
+            actions[idx + 1].y,
+            action_h,
+        );
+    }
+    let last_idx = actions.len() - 1;
+    emit_legacy_v1_end_edge_numbered(
+        &mut body,
+        end_source_line?,
+        4 + last_idx * 2,
+        end_ent,
+        7 + last_idx * 2,
+        last,
+        end_cx,
+        action_h,
+        end_cy,
+    );
+
+    Some(format_svg(svg_w, svg_h, &body, "", Some("#FFFFFF")))
+}
+
 fn render_legacy_activity_linear_notes(diagram: &ActivityDiagram) -> Option<String> {
     let source = diagram.meta.source.as_deref()?;
     let mut action_labels = Vec::new();
@@ -26584,6 +26738,16 @@ fn parse_legacy_single_line_note(line: &str) -> Option<(LegacyNoteSide, &str)> {
     }
 }
 
+fn parse_legacy_partition_header(line: &str) -> Option<&str> {
+    let rest = line.strip_prefix("partition \"")?;
+    let end = rest.find('"')?;
+    if rest[end + 1..].trim() == "{" {
+        Some(&rest[..end])
+    } else {
+        None
+    }
+}
+
 fn parse_legacy_linear_edge(line: &str) -> Option<LegacyEdge> {
     let (from, rest) = parse_legacy_endpoint(line, true)?;
     let rest = rest.trim_start();
@@ -26800,11 +26964,81 @@ fn emit_legacy_v1_note(
     }
 }
 
+#[allow(clippy::too_many_arguments)]
+fn emit_legacy_v1_partition_cluster(
+    out: &mut String,
+    label: &str,
+    x: f64,
+    y: f64,
+    right: f64,
+    bottom: f64,
+    label_w: f64,
+) {
+    // Metrics from Java PlantUML 1.2026.3beta6 act_legacy_partition.svg.
+    let header_y = y + 22.4883;
+    let tab_right = x + label_w + 6.0;
+    let tab_tip = tab_right + 7.0;
+    write!(
+        out,
+        r##"<!--cluster {}--><g class="cluster" data-qualified-name="{}" data-source-line="1" id="ent0002"><polygon fill="none" points="{},{},{},{},{},{},{},{},{},{},{},{},{},{}" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="{}" x2="{}" y1="{}" y2="{}"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text></g>"##,
+        escape_xml_attr_local(label),
+        escape_xml_attr_local(label),
+        f(x),
+        f(y),
+        f(tab_right),
+        f(y),
+        f(tab_tip),
+        f(header_y),
+        f(right),
+        f(header_y),
+        f(right),
+        f(bottom),
+        f(x),
+        f(bottom),
+        f(x),
+        f(y),
+        f(x),
+        f(tab_tip),
+        f(header_y),
+        f(header_y),
+        f(label_w),
+        f(x + 4.0),
+        f(y + 15.5352),
+        escape_xml_attr_local(label),
+    )
+    .unwrap();
+}
+
 #[allow(clippy::approx_constant)]
 fn emit_legacy_v1_start_edge(out: &mut String, target: &str, x: f64, target_y: f64) {
     write!(
         out,
         r##"<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="1" id="lnk4"><path d="M{},26.33 C{},36.59 {},47.28 {},{}" fill="none" id="start-to-{}" style="stroke:#181818;stroke-width:1;"/><polygon fill="#181818" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:#181818;stroke-width:1;"/></g>"##,
+        f(x),
+        f(x),
+        f(x),
+        f(x),
+        f(target_y - 6.28),
+        escape_xml_attr_local(target),
+        f(x),
+        f(target_y - 0.28),
+        f(x + ARROW_HEAD_HALF),
+        f(target_y - 9.28),
+        f(x),
+        f(target_y - 5.28),
+        f(x - ARROW_HEAD_HALF),
+        f(target_y - 9.28),
+        f(x),
+        f(target_y - 0.28),
+    )
+    .unwrap();
+}
+
+#[allow(clippy::approx_constant)]
+fn emit_legacy_v1_partition_start_edge(out: &mut String, target: &str, x: f64, target_y: f64) {
+    write!(
+        out,
+        r##"<g class="link" data-entity-1="ent0003" data-entity-2="ent0004" data-link-type="dependency" data-source-line="2" id="lnk5"><path d="M{},61.33 C{},71.59 {},82.28 {},{}" fill="none" id="start-to-{}" style="stroke:#181818;stroke-width:1;"/><polygon fill="#181818" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:#181818;stroke-width:1;"/></g>"##,
         f(x),
         f(x),
         f(x),
@@ -27582,6 +27816,12 @@ fn render_inner(
 ) -> String {
     if diagram.steps.is_empty() {
         return empty_svg();
+    }
+    if oracle.is_none()
+        && defs.is_empty()
+        && let Some(svg) = render_legacy_activity_partition(diagram)
+    {
+        return svg;
     }
     if oracle.is_none()
         && defs.is_empty()
