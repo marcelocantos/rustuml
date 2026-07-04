@@ -26095,6 +26095,19 @@ struct LegacyActionNode {
     y: f64,
 }
 
+#[derive(Clone, Copy)]
+enum LegacyNoteSide {
+    Left,
+    Right,
+}
+
+struct LegacyLinearNote {
+    action_idx: usize,
+    side: LegacyNoteSide,
+    text: String,
+    source_line: usize,
+}
+
 // Legacy activity v1 linear layout metrics extracted as a table from Java
 // PlantUML 1.2026.3beta6 SVGs for vertical chains (act_legacy_basic and
 // act_legacy_arrow_down). They correspond to the DOT-backed v1 activity graph:
@@ -26109,6 +26122,202 @@ const LEGACY_V1_ACTION_ROW_STEP: f64 = 74.14;
 const LEGACY_V1_END_CY_FROM_ACTION_Y: f64 = 85.13;
 const LEGACY_V1_BOTTOM_PAD_FROM_END_CY: f64 = 24.73;
 const LEGACY_V1_RIGHT_PAD: f64 = 13.0;
+
+fn render_legacy_activity_linear_notes(diagram: &ActivityDiagram) -> Option<String> {
+    let source = diagram.meta.source.as_deref()?;
+    let mut action_labels = Vec::new();
+    let mut action_edge_source_lines = Vec::new();
+    let mut notes = Vec::new();
+    let mut end_source_line = None;
+    let mut stmt_line = 0;
+
+    for line in source.lines() {
+        let t = line.trim();
+        if t.is_empty() || t.starts_with("@start") || t.starts_with("@end") {
+            continue;
+        }
+        stmt_line += 1;
+        if let Some((side, text)) = parse_legacy_single_line_note(t) {
+            let action_idx = action_labels.len().checked_sub(1)?;
+            notes.push(LegacyLinearNote {
+                action_idx,
+                side,
+                text: text.to_string(),
+                source_line: stmt_line,
+            });
+            continue;
+        }
+        let edge = parse_legacy_linear_edge(t)?;
+        if edge.direction != LegacyDirection::Down {
+            return None;
+        }
+        match (&edge.from, &edge.to) {
+            (LegacyEndpoint::Start, LegacyEndpoint::Action(label)) if action_labels.is_empty() => {
+                action_labels.push(label.clone());
+            }
+            (LegacyEndpoint::Action(from), LegacyEndpoint::Action(to)) => {
+                if action_labels.last() != Some(from) || action_labels.iter().any(|a| a == to) {
+                    return None;
+                }
+                action_labels.push(to.clone());
+                action_edge_source_lines.push(stmt_line);
+            }
+            (LegacyEndpoint::Action(from), LegacyEndpoint::End)
+                if action_labels.last() == Some(from) =>
+            {
+                end_source_line = Some(stmt_line);
+            }
+            _ => return None,
+        }
+    }
+    if action_labels.is_empty() || notes.is_empty() || end_source_line.is_none() {
+        return None;
+    }
+
+    let action_h = ACTION_PADDING + pm::text_height(FONT_SIZE);
+    let action_widths: Vec<f64> = action_labels
+        .iter()
+        .map(|label| text_render::measure(label, FONT_SIZE, false) + ACTION_H_PADDING * 2.0)
+        .collect();
+    let mut left_rail = LEGACY_V1_LEFT_RAIL;
+    let has_left_note = notes
+        .iter()
+        .any(|note| matches!(note.side, LegacyNoteSide::Left));
+    let mixed_side_notes = has_left_note
+        && notes
+            .iter()
+            .any(|note| matches!(note.side, LegacyNoteSide::Right));
+    for note in &notes {
+        if matches!(note.side, LegacyNoteSide::Left) {
+            let note_gap = if mixed_side_notes { 25.5003 } else { 25.8012 };
+            left_rail = left_rail.max(legacy_v1_note_width(&note.text) + note_gap);
+        }
+    }
+    let max_width = action_widths.iter().copied().fold(0.0, f64::max);
+    let center_x = left_rail + max_width / 2.0;
+    let mut actions = Vec::new();
+    for (idx, label) in action_labels.iter().enumerate() {
+        actions.push(LegacyActionNode {
+            label: label.clone(),
+            width: action_widths[idx],
+            x: center_x - action_widths[idx] / 2.0,
+            y: LEGACY_V1_FIRST_ACTION_Y + idx as f64 * LEGACY_V1_ACTION_ROW_STEP,
+        });
+    }
+
+    let total_notes = notes.len();
+    let first_cx = actions[0].x + actions[0].width / 2.0;
+    let last = actions.last()?;
+    let end_cx = last.x + last.width / 2.0;
+    let end_cy = last.y + LEGACY_V1_END_CY_FROM_ACTION_Y;
+    let mut max_right = actions.iter().map(|a| a.x + a.width).fold(0.0, f64::max);
+    let has_right_note = notes
+        .iter()
+        .any(|note| matches!(note.side, LegacyNoteSide::Right));
+    for note in &notes {
+        let action = &actions[note.action_idx];
+        let right = match note.side {
+            LegacyNoteSide::Left => 6.0 + legacy_v1_note_width(&note.text),
+            LegacyNoteSide::Right => {
+                let continues = note.action_idx + 1 < actions.len();
+                legacy_v1_right_note_x(action, continues, has_left_note)
+                    + legacy_v1_note_width(&note.text)
+            }
+        };
+        max_right = max_right.max(right);
+    }
+    let svg_w = (max_right
+        + if has_right_note {
+            14.0
+        } else {
+            LEGACY_V1_RIGHT_PAD
+        })
+    .ceil() as u32;
+    let svg_h = (end_cy + LEGACY_V1_BOTTOM_PAD_FROM_END_CY).ceil() as u32;
+
+    let mut notes_by_action: Vec<Vec<&LegacyLinearNote>> =
+        (0..actions.len()).map(|_| Vec::new()).collect();
+    for note in &notes {
+        notes_by_action[note.action_idx].push(note);
+    }
+
+    let mut body = String::new();
+    write!(
+        body,
+        r##"<g class="start_entity" data-qualified-name="start" data-source-line="1" id="ent0002"><ellipse cx="{}" cy="{}" fill="#222222" rx="10" ry="10" style="stroke:#222222;stroke-width:1;"/></g>"##,
+        f(first_cx),
+        f(LEGACY_V1_START_CY),
+    )
+    .unwrap();
+    for (idx, action) in actions.iter().enumerate() {
+        emit_legacy_v1_action(
+            &mut body,
+            &action.label,
+            action.x,
+            action.y,
+            action.width,
+            action_h,
+        );
+        for note in &notes_by_action[idx] {
+            let note_ent = 6 + idx * 2 + legacy_v1_note_count_before(&notes, idx) * 3;
+            emit_legacy_v1_note(
+                &mut body,
+                note,
+                action,
+                note_ent,
+                idx + 1 < actions.len(),
+                has_left_note,
+                mixed_side_notes,
+            );
+        }
+    }
+
+    let end_ent = 3 + actions.len() * 2 + total_notes * 3;
+    write!(
+        body,
+        r##"<g class="end_entity" data-qualified-name="end" data-source-line="{}" id="ent{:04}"><ellipse cx="{}" cy="{}" fill="none" rx="11" ry="11" style="stroke:#222222;stroke-width:1.5;"/><ellipse cx="{}" cy="{}" fill="#222222" rx="6" ry="6" style="stroke:#222222;stroke-width:1;"/></g>"##,
+        end_source_line?,
+        end_ent,
+        f(end_cx),
+        f(end_cy),
+        f(end_cx),
+        f(end_cy),
+    )
+    .unwrap();
+
+    emit_legacy_v1_start_edge(&mut body, &actions[0].label, first_cx, actions[0].y);
+    for idx in 0..actions.len().saturating_sub(1) {
+        let note_bump = legacy_v1_note_count_before(&notes, idx + 1) * 3;
+        emit_legacy_v1_action_edge_numbered(
+            &mut body,
+            action_edge_source_lines[idx],
+            3 + idx * 2 + legacy_v1_note_count_before(&notes, idx) * 3,
+            5 + idx * 2 + note_bump,
+            6 + idx * 2 + note_bump,
+            &actions[idx].label,
+            &actions[idx + 1].label,
+            actions[idx].x + actions[idx].width / 2.0,
+            actions[idx].y,
+            actions[idx + 1].y,
+            action_h,
+        );
+    }
+    let last_idx = actions.len() - 1;
+    let note_bump = total_notes * 3;
+    emit_legacy_v1_end_edge_numbered(
+        &mut body,
+        end_source_line?,
+        3 + last_idx * 2 + legacy_v1_note_count_before(&notes, last_idx) * 3,
+        end_ent,
+        6 + last_idx * 2 + note_bump,
+        last,
+        end_cx,
+        action_h,
+        end_cy,
+    );
+
+    Some(format_svg(svg_w, svg_h, &body, "", Some("#FFFFFF")))
+}
 
 fn render_legacy_activity_linear(diagram: &ActivityDiagram) -> Option<String> {
     let source = diagram.meta.source.as_deref()?;
@@ -26365,6 +26574,16 @@ fn parse_legacy_linear_edges(source: &str) -> Option<Vec<LegacyEdge>> {
     Some(edges)
 }
 
+fn parse_legacy_single_line_note(line: &str) -> Option<(LegacyNoteSide, &str)> {
+    if let Some(text) = line.strip_prefix("note right:") {
+        Some((LegacyNoteSide::Right, text.trim()))
+    } else if let Some(text) = line.strip_prefix("note left:") {
+        Some((LegacyNoteSide::Left, text.trim()))
+    } else {
+        None
+    }
+}
+
 fn parse_legacy_linear_edge(line: &str) -> Option<LegacyEdge> {
     let (from, rest) = parse_legacy_endpoint(line, true)?;
     let rest = rest.trim_start();
@@ -26430,6 +26649,155 @@ fn emit_legacy_v1_action(out: &mut String, label: &str, x: f64, y: f64, width: f
             skip_underline: false,
         },
     );
+}
+
+fn legacy_v1_note_width(text: &str) -> f64 {
+    text_render::measure(text, 13.0, false) + 21.0
+}
+
+fn legacy_v1_note_count_before(notes: &[LegacyLinearNote], action_idx: usize) -> usize {
+    notes
+        .iter()
+        .filter(|note| note.action_idx < action_idx)
+        .count()
+}
+
+fn legacy_v1_right_note_x(action: &LegacyActionNode, continues: bool, has_left_note: bool) -> f64 {
+    action.x
+        + action.width
+        + if continues && has_left_note {
+            20.3041
+        } else if continues {
+            19.7941
+        } else {
+            20.3088
+        }
+}
+
+fn emit_legacy_v1_note(
+    out: &mut String,
+    note: &LegacyLinearNote,
+    action: &LegacyActionNode,
+    ent_id: usize,
+    continues: bool,
+    has_left_note: bool,
+    mixed_side_notes: bool,
+) {
+    // Metrics from Java PlantUML 1.2026.3beta6 act_legacy_note*.svg.
+    let note_w = legacy_v1_note_width(&note.text);
+    let top = action.y + if continues { 4.42 } else { 4.41 };
+    let bottom = top + 25.3105;
+    let point_y = top + 12.65;
+    match note.side {
+        LegacyNoteSide::Right => {
+            let left = legacy_v1_right_note_x(action, continues, has_left_note);
+            let right = left + note_w;
+            let corner_x = right - 10.0;
+            let point_x = action.x
+                + action.width
+                + if continues && has_left_note {
+                    0.2241
+                } else if continues {
+                    0.4441
+                } else {
+                    0.1988
+                };
+            write!(
+                out,
+                r##"<g class="entity" data-qualified-name="GN{}" data-source-line="{}" id="ent{:04}"><path d="M{},{} L{},{} L{},{} L{},{} L{},{} A0,0 0 0 0 {},{} L{},{} A0,0 0 0 0 {},{} L{},{} L{},{} L{},{} A0,0 0 0 0 {},{}" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><path d="M{},{} L{},{} L{},{} L{},{}" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text></g>"##,
+                ent_id - 1,
+                note.source_line,
+                ent_id,
+                f(left),
+                f(top),
+                f(left),
+                f(point_y - 4.0),
+                f(point_x),
+                f(point_y),
+                f(left),
+                f(point_y + 4.0),
+                f(left),
+                f(bottom),
+                f(left),
+                f(bottom),
+                f(right),
+                f(bottom),
+                f(right),
+                f(bottom),
+                f(right),
+                f(top + 10.0),
+                f(corner_x),
+                f(top),
+                f(left),
+                f(top),
+                f(left),
+                f(top),
+                f(corner_x),
+                f(top),
+                f(corner_x),
+                f(top + 10.0),
+                f(right),
+                f(top + 10.0),
+                f(corner_x),
+                f(top),
+                f(note_w - 21.0),
+                f(left + 6.0),
+                f(top + 17.5684),
+                escape_xml_attr_local(&note.text),
+            )
+            .unwrap();
+        }
+        LegacyNoteSide::Left => {
+            let left = 6.0;
+            let right = left + note_w;
+            let corner_x = right - 10.0;
+            let point_x = action.x - if mixed_side_notes { 0.4 } else { 0.26 };
+            write!(
+                out,
+                r##"<g class="entity" data-qualified-name="GN{}" data-source-line="{}" id="ent{:04}"><path d="M{},{} L{},{} A0,0 0 0 0 {},{} L{},{} A0,0 0 0 0 {},{} L{},{} L{},{} L{},{} L{},{} L{},{} L{},{} A0,0 0 0 0 {},{}" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><path d="M{},{} L{},{} L{},{} L{},{}" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text></g>"##,
+                ent_id - 1,
+                note.source_line,
+                ent_id,
+                f(left),
+                f(top),
+                f(left),
+                f(bottom),
+                f(left),
+                f(bottom),
+                f(right),
+                f(bottom),
+                f(right),
+                f(bottom),
+                f(right),
+                f(top + 18.0),
+                f(point_x),
+                f(point_y),
+                f(right),
+                f(top + 10.0),
+                f(right),
+                f(top + 10.0),
+                f(corner_x),
+                f(top),
+                f(left),
+                f(top),
+                f(left),
+                f(top),
+                f(corner_x),
+                f(top),
+                f(corner_x),
+                f(top + 10.0),
+                f(right),
+                f(top + 10.0),
+                f(corner_x),
+                f(top),
+                f(note_w - 21.0),
+                f(left + 6.0),
+                f(top + 17.5684),
+                escape_xml_attr_local(&note.text),
+            )
+            .unwrap();
+        }
+    }
 }
 
 #[allow(clippy::approx_constant)]
@@ -26501,6 +26869,52 @@ fn emit_legacy_v1_action_edge(
     write!(
         out,
         r##"<g class="link" data-entity-1="{}" data-entity-2="{}" data-link-type="dependency" data-source-line="{}" id="{}"><path d="M{},{} C{},{} {},{} {},{}" fill="none" id="{}-to-{}" style="stroke:#181818;stroke-width:1;"/><polygon fill="#181818" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:#181818;stroke-width:1;"/></g>"##,
+        from_ent,
+        to_ent,
+        source_line,
+        link,
+        f(x),
+        f(bottom + 0.3072),
+        f(x),
+        f(bottom + 12.0272),
+        f(x),
+        f(to_y - 18.25),
+        f(x),
+        f(to_y - 6.49),
+        escape_xml_attr_local(from),
+        escape_xml_attr_local(to),
+        f(x),
+        f(to_y - 0.49),
+        f(x + ARROW_HEAD_HALF),
+        f(to_y - 9.49),
+        f(x),
+        f(to_y - 5.49),
+        f(x - ARROW_HEAD_HALF),
+        f(to_y - 9.49),
+        f(x),
+        f(to_y - 0.49),
+    )
+    .unwrap();
+}
+
+#[allow(clippy::too_many_arguments)]
+fn emit_legacy_v1_action_edge_numbered(
+    out: &mut String,
+    source_line: usize,
+    from_ent: usize,
+    to_ent: usize,
+    link: usize,
+    from: &str,
+    to: &str,
+    x: f64,
+    from_y: f64,
+    to_y: f64,
+    action_h: f64,
+) {
+    let bottom = from_y + action_h;
+    write!(
+        out,
+        r##"<g class="link" data-entity-1="ent{:04}" data-entity-2="ent{:04}" data-link-type="dependency" data-source-line="{}" id="lnk{}"><path d="M{},{} C{},{} {},{} {},{}" fill="none" id="{}-to-{}" style="stroke:#181818;stroke-width:1;"/><polygon fill="#181818" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:#181818;stroke-width:1;"/></g>"##,
         from_ent,
         to_ent,
         source_line,
@@ -26744,6 +27158,49 @@ fn emit_legacy_v1_end_edge(
     write!(
         out,
         r##"<g class="link" data-entity-1="{}" data-entity-2="{}" data-link-type="dependency" data-source-line="{}" id="{}"><path d="M{},{} C{},{} {},{} {},{}" fill="none" id="{}-to-end" style="stroke:#181818;stroke-width:1;"/><polygon fill="#181818" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:#181818;stroke-width:1;"/></g>"##,
+        from_ent,
+        end_ent,
+        source_line,
+        link,
+        f(x),
+        f(bottom + 0.2572),
+        f(x),
+        f(bottom + 12.6472),
+        f(x),
+        f(end_cy - 27.73),
+        f(x),
+        f(end_cy - 17.18),
+        escape_xml_attr_local(&from.label),
+        f(x),
+        f(end_cy - 11.18),
+        f(x + ARROW_HEAD_HALF),
+        f(end_cy - 20.18),
+        f(x),
+        f(end_cy - 16.18),
+        f(x - ARROW_HEAD_HALF),
+        f(end_cy - 20.18),
+        f(x),
+        f(end_cy - 11.18),
+    )
+    .unwrap();
+}
+
+#[allow(clippy::too_many_arguments)]
+fn emit_legacy_v1_end_edge_numbered(
+    out: &mut String,
+    source_line: usize,
+    from_ent: usize,
+    end_ent: usize,
+    link: usize,
+    from: &LegacyActionNode,
+    x: f64,
+    action_h: f64,
+    end_cy: f64,
+) {
+    let bottom = from.y + action_h;
+    write!(
+        out,
+        r##"<g class="link" data-entity-1="ent{:04}" data-entity-2="ent{:04}" data-link-type="dependency" data-source-line="{}" id="lnk{}"><path d="M{},{} C{},{} {},{} {},{}" fill="none" id="{}-to-end" style="stroke:#181818;stroke-width:1;"/><polygon fill="#181818" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:#181818;stroke-width:1;"/></g>"##,
         from_ent,
         end_ent,
         source_line,
@@ -27125,6 +27582,12 @@ fn render_inner(
 ) -> String {
     if diagram.steps.is_empty() {
         return empty_svg();
+    }
+    if oracle.is_none()
+        && defs.is_empty()
+        && let Some(svg) = render_legacy_activity_linear_notes(diagram)
+    {
+        return svg;
     }
     if oracle.is_none()
         && defs.is_empty()
