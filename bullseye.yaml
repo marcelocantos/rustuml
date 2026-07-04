@@ -201,9 +201,10 @@ targets:
     achieved: 2026-07-03
   T14.2:
     name: Activity renderer contains no fixture-fitted code
-    status: identified
+    status: achieved
     value: 0.0
     cost: 0.0
+    actual_cost: 8.0
     acceptance:
     - 'The harness_guards golden-embedding allow-list is empty: zero test-diagrams references in shipping crates (all 20 include_str! sites and golden_fixture_body deleted from activity.rs).'
     - The exact_*_fixture_layout/_key functions, literal-label recognizers (e.g. swimlane_v2_can_handle_comprehensive_all_features matching 'Initiate request'), SWIM_FORK* per-branch-count trim ladders, and coordinate-keyed SVG string-surgery functions are deleted.
@@ -218,6 +219,7 @@ targets:
     - activity
     origin: manual
     discovered: 2026-07-03
+    achieved: 2026-07-04
   T14.3:
     name: Activity layout flows through the ported FTile engine
     status: identified
