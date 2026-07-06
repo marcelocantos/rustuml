@@ -6,38 +6,46 @@ JVM, no Graphviz, no external fonts.
 
 ## Status
 
-Pre-release. 23 parsed diagram models supported, 12,500+ golden test pairs
-passing against Java PlantUML reference output.
+Pre-release. 23 parsed diagram models are supported, but release-readiness
+claims are based on the no-oracle product tier: 5,005/11,251 eligible SVG
+goldens currently pass when rendered through the same path as the CLI (44.5%).
+The strict oracle-assisted tier is green at 11,251/11,251 eligible SVG goldens
+and remains a regression net, not the headline product metric. The 1,199 Java
+PlantUML error-page goldens are skipped by both tiers and are not counted as
+passes.
 
 ## Supported diagram types
 
-| Type | Tag | Status |
-|------|-----|--------|
-| Sequence | `@startuml` | Good |
-| Class | `@startuml` | Good |
-| Archimate | `@startuml` | Good |
-| Activity (new syntax) | `@startuml` | Good |
-| State | `@startuml` | Good |
-| Component | `@startuml` | Good |
-| Deployment | `@startuml` | Good |
-| Use Case | `@startuml` | Good |
-| Object | `@startuml` | Good |
-| Timing | `@startuml` | Good |
-| ER (crow's foot) | `@startuml` | Good |
-| Gantt | `@startgantt` | Good |
-| Mindmap | `@startmindmap` | Good |
-| WBS | `@startwbs` | Good |
-| JSON | `@startjson` | Good |
-| YAML | `@startyaml` | Good |
-| Salt (wireframes) | `@startsalt` | Good |
-| Network (nwdiag) | `@startnwdiag` | Good |
-| Regex (railroad) | `@startregex` | Good |
-| EBNF | `@startebnf` | Good |
-| DOT | `@startdot` | Basic |
-| Git | `@startgit` | Basic |
-| Board | `@startboard` | Basic |
-| Ditaa (ASCII art) | `@startditaa` | Basic |
-| Math/LaTeX | `@startmath` / `@startlatex` | Good |
+The table below is derived from `test-diagrams/no_oracle_baseline.txt`.
+
+<!-- no-oracle-status:start -->
+| Type | Tag | Baseline family | No-oracle product status |
+|------|-----|-----------------|--------------------------|
+| Sequence | `@startuml` | `sequence` | 1,400/1,411 (99.2%, partial) |
+| Class | `@startuml` | `class` | 118/1,971 (6.0%, partial) |
+| Archimate | `@startuml` | `archimate` | 0/48 (0.0%, none) |
+| Activity (new syntax) | `@startuml` | `activity` | 1,266/1,299 (97.5%, partial) |
+| State | `@startuml` | `state` | 0/901 (0.0%, none) |
+| Component | `@startuml` | `component` | 0/663 (0.0%, none) |
+| Deployment | `@startuml` | `deployment` | 37/495 (7.5%, partial) |
+| Use Case | `@startuml` | `usecase` | 2/315 (0.6%, partial) |
+| Object | `@startuml` | `object` | 36/155 (23.2%, partial) |
+| Timing | `@startuml` | `timing` | 141/141 (100.0%, exact) |
+| ER (crow's foot) | `@startuml` | `er` | 0/157 (0.0%, none) |
+| Gantt | `@startgantt` | `gantt` | 114/114 (100.0%, exact) |
+| Mindmap | `@startmindmap` | `mindmap` | 157/157 (100.0%, exact) |
+| WBS | `@startwbs` | `wbs` | 138/138 (100.0%, exact) |
+| JSON/YAML | `@startjson` / `@startyaml` | `json-yaml` | 56/147 (38.1%, partial) |
+| Salt (wireframes) | `@startsalt` | `salt` | 103/103 (100.0%, exact) |
+| Network (nwdiag) | `@startnwdiag` | `nwdiag` | 89/89 (100.0%, exact) |
+| Regex (railroad) | `@startregex` | `regex` | 45/45 (100.0%, exact) |
+| EBNF | `@startebnf` | `ebnf` | 25/25 (100.0%, exact) |
+| DOT | `@startdot` | `dot` | 25/25 (100.0%, exact) |
+| Git | `@startgit` | `git` | 25/25 (100.0%, exact) |
+| Board / Wire | `@startboard` | `wire` | 0/0 (no eligible SVG goldens) |
+| Ditaa (ASCII art) | `@startditaa` | excluded | Excluded from SVG parity tiers; raster comparator pending |
+| Math/LaTeX | `@startmath` / `@startlatex` | `math` | 50/50 (100.0%, exact) |
+<!-- no-oracle-status:end -->
 
 ## Install
 
@@ -134,13 +142,24 @@ cargo fmt            # Format
 
 ### Golden tests
 
-The golden test suite compares RustUML output against Java PlantUML
-reference SVGs. The test files live in a separate repo added as a
-submodule:
+There are two golden tiers:
+
+- Strict oracle-assisted tier: `cargo test --test golden_pairs`. This compares
+  against Java PlantUML reference SVGs while allowing test-only oracle layout
+  extraction. Current state: 11,251/11,251 eligible SVG goldens pass, with 1,299
+  skipped.
+- No-oracle product tier: `cargo test --test golden_no_oracle --release`. This
+  renders through the same source-only path the CLI uses. Current baseline:
+  5,005/11,251 eligible SVG goldens pass.
+
+The 1,199 Java PlantUML error-page goldens are skips, not successes, and do
+not contribute to either headline pass count. The test files live in a
+separate repo added as a submodule:
 
 ```bash
 git submodule update --init    # Fetch golden test files
 cargo test --test golden_pairs # Run golden comparison (~8s)
+cargo test --test golden_no_oracle --release
 ```
 
 ## Architecture

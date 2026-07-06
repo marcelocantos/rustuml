@@ -7,7 +7,14 @@ bump. The pre-1.0 period exists to get these right.
 
 ## Interaction surface catalogue
 
-*Snapshot as of v0.6.0*
+*Snapshot as of v0.7.0*
+
+Parity claims in this document use the no-oracle product tier, not the
+oracle-assisted strict tier. The current no-oracle baseline is 5,005/11,251
+eligible SVG goldens (44.5%). The strict tier is green at 11,251/11,251
+eligible SVG goldens but uses test-only oracle layout extraction. The 1,199 Java
+PlantUML error-page goldens are skipped by both tiers and are not counted as
+passes.
 
 ### CLI interface
 
@@ -55,12 +62,12 @@ bump. The pre-1.0 period exists to get these right.
 
 | Type | Stability |
 |------|-----------|
-| Sequence, Class, State, Activity | Needs review — core types, mostly complete |
-| Component, Deployment, Use Case | Needs review — parsers expanded in v0.3.0 |
-| Object, Timing, Gantt, Mindmap, WBS | Needs review — maturing |
-| JSON/YAML, Salt, Nwdiag, Regex, Ditaa, Math | Needs review — stabilising |
-| DOT, EBNF, Git, Board | Fluid — new in v0.3.0 |
-| ER (crow's foot notation) | Fluid — piggybacks on class parser |
+| Sequence, Activity | Needs review — high no-oracle coverage, still not exact |
+| Timing, Gantt, Mindmap, WBS, Salt, Nwdiag, Regex, EBNF, DOT, Git, Math | Needs review — exact on the current no-oracle baseline |
+| Class, Deployment, Use Case, Object, JSON/YAML | Fluid — partial no-oracle coverage |
+| Archimate, State, Component, ER (crow's foot notation) | Fluid — no current no-oracle passes |
+| Board | Fluid — no eligible SVG goldens in the no-oracle baseline |
+| Ditaa | Fluid — excluded from SVG parity tiers pending a raster comparator |
 
 ## Gaps and prerequisites for 1.0
 

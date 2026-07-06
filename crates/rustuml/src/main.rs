@@ -245,6 +245,16 @@ fn print_agent_guide() {
         "Sequence, Class, Archimate, Object, State, Activity, Component, UseCase, Deployment, Nwdiag, JSON/YAML, MindMap, Gantt, Git, Timing, WBS, Math/LaTeX, Salt, Regex, Ditaa, DOT, Board, EBNF"
     );
     println!();
+    println!("## Parity Claims");
+    println!(
+        "Product truth is the no-oracle tier: `cargo test --test golden_no_oracle --release`."
+    );
+    println!("Current no-oracle baseline: 5,005/11,251 eligible SVG goldens pass (44.5%).");
+    println!(
+        "The strict tier is oracle-assisted: `cargo test --test golden_pairs` currently passes 11,251/11,251 eligible SVG goldens."
+    );
+    println!("The 1,199 Java PlantUML error-page goldens are skips, not headline pass claims.");
+    println!();
     println!("## Output Formats");
     println!("- SVG (default): `rustuml -tsvg input.puml`");
     println!("- PNG: `rustuml -tpng input.puml > output.png`");
