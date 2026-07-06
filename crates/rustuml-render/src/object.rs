@@ -27,6 +27,10 @@ use crate::text_render::{self, TextBase};
 
 /// Margin from SVG edge to entity boxes.
 const MARGIN: f64 = 7.0;
+const OBJECT_CANVAS_PAD: i64 = 13;
+/// Linked object diagrams in PlantUML's SVEK path keep an extra two pixels of
+/// right/bottom slack beyond the entity-only envelope.
+const OBJECT_LINK_CANVAS_PAD: i64 = 15;
 /// Name baseline y relative to rect top (no stereotype).
 const NAME_BASELINE_Y: f64 = 15.5352;
 /// Header separator y relative to rect top (no stereotype).
@@ -432,7 +436,33 @@ fn render_plantuml_svg(
                 max_y = max_y.max(y);
             }
         }
-        (max_x as i64 + 13, max_y as i64 + 13)
+        for link in &diagram.links {
+            if !is_rendered_layout_dependency(link) {
+                continue;
+            }
+            let Some(edge_path) = layout
+                .edge_paths
+                .iter()
+                .find(|edge| edge.from == link.from && edge.to == link.to)
+            else {
+                continue;
+            };
+            if edge_path.points.len() < 4 {
+                continue;
+            }
+            let endpoint = edge_path.points[edge_path.points.len() - 1];
+            let control = edge_path.points[edge_path.points.len() - 2];
+            for (x, y) in dependency_arrow_polygon(control, endpoint) {
+                max_x = max_x.max(x);
+                max_y = max_y.max(y);
+            }
+        }
+        let canvas_pad = if has_rendered_layout_dependency(diagram, &layout.edge_paths) {
+            OBJECT_LINK_CANVAS_PAD
+        } else {
+            OBJECT_CANVAS_PAD
+        };
+        (max_x as i64 + canvas_pad, max_y as i64 + canvas_pad)
     };
 
     let mut svg = String::new();
@@ -609,13 +639,7 @@ fn render_layout_links(
     ent_id: &mut usize,
 ) {
     for link in &diagram.links {
-        if link.from.contains("::") || link.to.contains("::") {
-            continue;
-        }
-        if link.from_multiplicity.is_some()
-            || link.to_multiplicity.is_some()
-            || link.label.is_some()
-        {
+        if !is_rendered_layout_dependency(link) {
             continue;
         }
         let Some(edge_path) = edge_paths
@@ -669,6 +693,23 @@ fn render_layout_links(
     }
 }
 
+fn is_rendered_layout_dependency(link: &ObjectLink) -> bool {
+    !link.from.contains("::")
+        && !link.to.contains("::")
+        && link.from_multiplicity.is_none()
+        && link.to_multiplicity.is_none()
+        && link.label.is_none()
+}
+
+fn has_rendered_layout_dependency(diagram: &ObjectDiagram, edge_paths: &[EdgePath]) -> bool {
+    diagram.links.iter().any(|link| {
+        is_rendered_layout_dependency(link)
+            && edge_paths
+                .iter()
+                .any(|edge| edge.from == link.from && edge.to == link.to && edge.points.len() >= 4)
+    })
+}
+
 fn edge_path_d(points: &[(f64, f64)]) -> String {
     let mut d = format!("M{},{}", fmt_tl(points[0].0), fmt_tl(points[0].1));
     let mut i = 1;
@@ -689,15 +730,27 @@ fn edge_path_d(points: &[(f64, f64)]) -> String {
     d
 }
 
+const DEPENDENCY_ARROW_PATH_INSET: f64 = 6.0;
+const DEPENDENCY_ARROW_BACK: f64 = 9.0;
+const DEPENDENCY_ARROW_NOTCH: f64 = 5.0;
+const DEPENDENCY_ARROW_HALF_WIDTH: f64 = 4.0;
+
 fn edge_path_d_with_dependency_arrow(points: &[(f64, f64)]) -> String {
     let mut points = points.to_vec();
     if points.len() >= 2 {
         let endpoint = points[points.len() - 1];
         let control = points[points.len() - 2];
         let (ux, uy) = unit_vector(control, endpoint);
+        // PlantUML's SVEK path solver keeps the Graphviz tangent segment
+        // aligned with the drawn extremity. When the dependency arrow consumes
+        // the end of the spline, move the final control point by the same
+        // inset as the endpoint so the cubic reaches the arrow base cleanly.
+        let penultimate = points.len() - 2;
+        points[penultimate].0 -= ux * DEPENDENCY_ARROW_PATH_INSET;
+        points[penultimate].1 -= uy * DEPENDENCY_ARROW_PATH_INSET;
         if let Some(last) = points.last_mut() {
-            last.0 -= ux * 6.0;
-            last.1 -= uy * 6.0;
+            last.0 -= ux * DEPENDENCY_ARROW_PATH_INSET;
+            last.1 -= uy * DEPENDENCY_ARROW_PATH_INSET;
         }
     }
     edge_path_d(&points)
@@ -715,30 +768,38 @@ fn unit_vector(control: (f64, f64), endpoint: (f64, f64)) -> (f64, f64) {
 }
 
 fn dependency_arrow_points(control: (f64, f64), endpoint: (f64, f64)) -> String {
+    let points = dependency_arrow_polygon(control, endpoint);
+    format!(
+        "{},{},{},{},{},{},{},{},{},{}",
+        fmt_tl(points[0].0),
+        fmt_tl(points[0].1),
+        fmt_tl(points[1].0),
+        fmt_tl(points[1].1),
+        fmt_tl(points[2].0),
+        fmt_tl(points[2].1),
+        fmt_tl(points[3].0),
+        fmt_tl(points[3].1),
+        fmt_tl(points[4].0),
+        fmt_tl(points[4].1),
+    )
+}
+
+fn dependency_arrow_polygon(control: (f64, f64), endpoint: (f64, f64)) -> [(f64, f64); 5] {
     let (ux, uy) = unit_vector(control, endpoint);
     let (px, py) = (-uy, ux);
     let side1 = (
-        endpoint.0 - ux * 9.0 - px * 4.0,
-        endpoint.1 - uy * 9.0 - py * 4.0,
+        endpoint.0 - ux * DEPENDENCY_ARROW_BACK - px * DEPENDENCY_ARROW_HALF_WIDTH,
+        endpoint.1 - uy * DEPENDENCY_ARROW_BACK - py * DEPENDENCY_ARROW_HALF_WIDTH,
     );
-    let notch = (endpoint.0 - ux * 5.0, endpoint.1 - uy * 5.0);
+    let notch = (
+        endpoint.0 - ux * DEPENDENCY_ARROW_NOTCH,
+        endpoint.1 - uy * DEPENDENCY_ARROW_NOTCH,
+    );
     let side2 = (
-        endpoint.0 - ux * 9.0 + px * 4.0,
-        endpoint.1 - uy * 9.0 + py * 4.0,
+        endpoint.0 - ux * DEPENDENCY_ARROW_BACK + px * DEPENDENCY_ARROW_HALF_WIDTH,
+        endpoint.1 - uy * DEPENDENCY_ARROW_BACK + py * DEPENDENCY_ARROW_HALF_WIDTH,
     );
-    format!(
-        "{},{},{},{},{},{},{},{},{},{}",
-        fmt_tl(endpoint.0),
-        fmt_tl(endpoint.1),
-        fmt_tl(side1.0),
-        fmt_tl(side1.1),
-        fmt_tl(notch.0),
-        fmt_tl(notch.1),
-        fmt_tl(side2.0),
-        fmt_tl(side2.1),
-        fmt_tl(endpoint.0),
-        fmt_tl(endpoint.1),
-    )
+    [endpoint, side1, notch, side2, endpoint]
 }
 
 /// Render the inner content of one entity rect (body, header text, separator,
