@@ -15,7 +15,7 @@
 use std::collections::HashMap;
 use std::fmt::Write;
 
-use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph, NodePosition};
+use rustuml_layout::graph::{ClusterPosition, Direction, EdgePath, LayoutGraph, NodePosition};
 use rustuml_parser::diagram::SpriteData;
 use rustuml_parser::diagram::class::*;
 
@@ -189,6 +189,17 @@ const CLASS_MIN_WIDTH: f64 = 120.0;
 const PACKAGE_HEADER: f64 = 24.0;
 #[allow(dead_code)]
 const PACKAGE_PAD: f64 = 12.0;
+/// Default package tab separator offset from `ClusterDecoration` output.
+/// Provenance: Java SVEK `Cluster.drawU` delegates to `ClusterDecoration`;
+/// default class package goldens place the tab line at package top + 22.4883.
+const PACKAGE_TAB_H: f64 = 22.4883;
+/// Default package title baseline within the tab.
+/// Provenance: same `ClusterDecoration` path; goldens place title baseline at
+/// package top + 15.5352 for 14px bold sans-serif package labels.
+const PACKAGE_TITLE_BASELINE: f64 = 15.5352;
+const PACKAGE_TAB_TEXT_X: f64 = 4.0;
+const PACKAGE_TAB_TEXT_RIGHT_PAD: f64 = 9.0;
+const PACKAGE_STROKE_WIDTH: &str = "1.5";
 
 /// Font names that PlantUML treats as monospace.
 const MONOSPACE_FONTS: &[&str] = &[
@@ -1484,6 +1495,7 @@ pub fn render_with_oracle(
             diagram,
             &dims,
             &node_positions,
+            &[],
             &edge_paths,
             canvas_dims,
             Some(&oracle_entities),
@@ -1496,6 +1508,25 @@ pub fn render_with_oracle(
     let mut layout = LayoutGraph::new(Direction::TopToBottom).with_plantuml_svek_spacing();
     for (entity, dim) in diagram.entities.iter().zip(&dims) {
         layout.add_node(&entity.id, &entity.label, dim.width, dim.height);
+    }
+    let parent_pkg = package_parent_indices(diagram);
+    let innermost_pkg = innermost_entity_packages(diagram, &parent_pkg);
+    for (idx, pkg) in diagram.packages.iter().enumerate() {
+        if !is_default_package_cluster(pkg) {
+            continue;
+        }
+        let parent = parent_pkg[idx].and_then(|p| {
+            is_default_package_cluster(&diagram.packages[p]).then(|| package_cluster_id(p))
+        });
+        let label = package_display_label(pkg);
+        layout.add_cluster(&package_cluster_id(idx), label, parent.as_deref());
+    }
+    for (entity_idx, entity) in diagram.entities.iter().enumerate() {
+        if let Some(pkg_idx) = innermost_pkg[entity_idx]
+            && is_default_package_cluster(&diagram.packages[pkg_idx])
+        {
+            layout.add_cluster_node(&package_cluster_id(pkg_idx), &entity.id);
+        }
     }
     for rel in &diagram.relationships {
         layout.add_edge(&rel.from, &rel.to, rel.label.as_deref());
@@ -1513,6 +1544,7 @@ pub fn render_with_oracle(
         diagram,
         &dims,
         &result.node_positions,
+        &result.cluster_positions,
         &result.edge_paths,
         None,
         None,
@@ -1955,24 +1987,13 @@ fn oracle_entities_for_diagram(
     matched
 }
 
-fn entity_emission_order(diagram: &ClassDiagram) -> Vec<usize> {
+fn package_parent_indices(diagram: &ClassDiagram) -> Vec<Option<usize>> {
     let n_pkg = diagram.packages.len();
-    let innermost_pkg: Vec<Option<usize>> = diagram
-        .entities
-        .iter()
-        .map(|e| {
-            diagram
-                .packages
-                .iter()
-                .enumerate()
-                .filter(|(_, p)| p.entities.iter().any(|m| m == &e.id))
-                .min_by_key(|(idx, p)| (p.entities.len(), usize::MAX - idx))
-                .map(|(idx, _)| idx)
-        })
-        .collect();
-
-    let parent_pkg: Vec<Option<usize>> = (0..n_pkg)
+    (0..n_pkg)
         .map(|i| {
+            if let Some(parent) = diagram.packages[i].parent {
+                return Some(parent);
+            }
             let mine = &diagram.packages[i].entities;
             (0..n_pkg)
                 .filter(|&j| {
@@ -1984,7 +2005,69 @@ fn entity_emission_order(diagram: &ClassDiagram) -> Vec<usize> {
                 })
                 .min_by_key(|&j| diagram.packages[j].entities.len())
         })
-        .collect();
+        .collect()
+}
+
+fn package_depth(parent_pkg: &[Option<usize>], mut idx: usize) -> usize {
+    let mut depth = 0;
+    while let Some(parent) = parent_pkg[idx] {
+        depth += 1;
+        idx = parent;
+    }
+    depth
+}
+
+fn innermost_entity_packages(
+    diagram: &ClassDiagram,
+    parent_pkg: &[Option<usize>],
+) -> Vec<Option<usize>> {
+    diagram
+        .entities
+        .iter()
+        .map(|e| {
+            diagram
+                .packages
+                .iter()
+                .enumerate()
+                .filter(|(_, p)| p.entities.iter().any(|m| m == &e.id))
+                .max_by_key(|(idx, p)| (package_depth(parent_pkg, *idx), p.entities.len(), *idx))
+                .map(|(idx, _)| idx)
+        })
+        .collect()
+}
+
+fn is_default_package_cluster(pkg: &Package) -> bool {
+    matches!(pkg.kind, PackageKind::Package | PackageKind::Namespace)
+}
+
+fn package_cluster_id(idx: usize) -> String {
+    format!("pkg{idx}")
+}
+
+fn package_display_label(pkg: &Package) -> &str {
+    pkg.display_name.as_deref().unwrap_or(&pkg.name)
+}
+
+fn package_qualified_name(
+    diagram: &ClassDiagram,
+    parent_pkg: &[Option<usize>],
+    idx: usize,
+) -> String {
+    let mut chain = Vec::new();
+    let mut cur = Some(idx);
+    while let Some(i) = cur {
+        chain.push(translate_qualified_name(package_display_label(
+            &diagram.packages[i],
+        )));
+        cur = parent_pkg[i];
+    }
+    chain.reverse();
+    chain.join(".")
+}
+
+fn entity_emission_order(diagram: &ClassDiagram) -> Vec<usize> {
+    let parent_pkg = package_parent_indices(diagram);
+    let innermost_pkg = innermost_entity_packages(diagram, &parent_pkg);
 
     let pkg_sort_key = |pi: usize| -> usize {
         diagram
@@ -2080,6 +2163,7 @@ fn render_plantuml_svg(
     diagram: &ClassDiagram,
     dims: &[EntityDims],
     positions: &[rustuml_layout::graph::NodePosition],
+    cluster_positions: &[ClusterPosition],
     edge_paths: &[EdgePath],
     canvas_override: Option<(f64, f64)>,
     oracle_entities: Option<&[Option<OracleEntity>]>,
@@ -2120,6 +2204,10 @@ fn render_plantuml_svg(
         for (i, (x, y)) in entity_positions.iter().enumerate() {
             max_x = max_x.max(x + dims[i].width);
             max_y = max_y.max(y + dims[i].height);
+        }
+        for cluster in cluster_positions {
+            max_x = max_x.max(cluster.x + MARGIN + cluster.width);
+            max_y = max_y.max(cluster.y + MARGIN + cluster.height);
         }
         // PlantUML formula: floor(max_extent) + 13 (= MARGIN + 6).
         // Verified against 100+ golden single-entity SVGs.
@@ -2197,6 +2285,14 @@ fn render_plantuml_svg(
         body_top = body_top.min(*y);
         body_bottom = body_bottom.max(y + dims[i].height);
     }
+    for cluster in cluster_positions {
+        let x = cluster.x + MARGIN;
+        let y = cluster.y + MARGIN;
+        body_min_x = body_min_x.min(x);
+        body_max_x = body_max_x.max(x + cluster.width);
+        body_top = body_top.min(y);
+        body_bottom = body_bottom.max(y + cluster.height);
+    }
     if !body_min_x.is_finite() {
         body_min_x = 0.0;
         body_max_x = 0.0;
@@ -2264,6 +2360,11 @@ fn render_plantuml_svg(
                 .collect()
         })
         .unwrap_or_default();
+    let layout_pkg_clusters = if oracle.is_none() {
+        layout_package_clusters(diagram, cluster_positions)
+    } else {
+        Vec::new()
+    };
     // Note entities (alias-named like `N1` AND auto-generated `GMNn`) are
     // captured separately in `note_entities`. The legacy `clusters`
     // collection only picks up GMN-prefixed qnames; reading from
@@ -2293,6 +2394,9 @@ fn render_plantuml_svg(
         emit_oracle_cluster_children(&mut svg, cluster);
         svg.push_str("</g>");
     }
+    for (idx, cluster) in layout_pkg_clusters.iter().enumerate() {
+        emit_layout_package_cluster(&mut svg, cluster, idx);
+    }
     if let Some(oracle) = oracle {
         for cluster in &oracle.loose_clusters {
             emit_oracle_cluster_children(&mut svg, cluster);
@@ -2300,7 +2404,7 @@ fn render_plantuml_svg(
     }
 
     // Entity ID counter (PlantUML starts at ent0002, shifted past clusters).
-    let mut ent_id = 2 + oracle_pkg_clusters.len();
+    let mut ent_id = 2 + oracle_pkg_clusters.len() + layout_pkg_clusters.len();
 
     let emission_order = entity_emission_order(diagram);
 
@@ -2557,6 +2661,121 @@ fn render_plantuml_svg(
     // Close top-level group and SVG.
     svg.push_str("</g></svg>");
     svg
+}
+
+struct LayoutPackageCluster {
+    qualified_name: String,
+    source_line: usize,
+    label: String,
+    x: f64,
+    y: f64,
+    width: f64,
+    height: f64,
+}
+
+fn layout_package_clusters(
+    diagram: &ClassDiagram,
+    cluster_positions: &[ClusterPosition],
+) -> Vec<LayoutPackageCluster> {
+    let parent_pkg = package_parent_indices(diagram);
+    diagram
+        .packages
+        .iter()
+        .enumerate()
+        .filter(|(_, pkg)| is_default_package_cluster(pkg))
+        .filter_map(|(idx, pkg)| {
+            let id = package_cluster_id(idx);
+            let pos = cluster_positions.iter().find(|p| p.id == id)?;
+            Some(LayoutPackageCluster {
+                qualified_name: package_qualified_name(diagram, &parent_pkg, idx),
+                source_line: pkg.source_line,
+                label: package_display_label(pkg).to_string(),
+                x: pos.x + MARGIN,
+                y: pos.y + MARGIN,
+                width: pos.width,
+                height: pos.height,
+            })
+        })
+        .collect()
+}
+
+fn emit_layout_package_cluster(svg: &mut String, cluster: &LayoutPackageCluster, idx: usize) {
+    let label_w = text_render::measure_no_underline(&cluster.label, FONT_SIZE, true);
+    let tab_w = (label_w + PACKAGE_TAB_TEXT_X + PACKAGE_TAB_TEXT_RIGHT_PAD)
+        .min((cluster.width - PACKAGE_TAB_TEXT_RIGHT_PAD).max(0.0));
+    let x = cluster.x;
+    let y = cluster.y;
+    let right = cluster.x + cluster.width;
+    let bottom = cluster.y + cluster.height;
+    let tab_join = x + tab_w - 7.0;
+    let tab_right = x + tab_w;
+    let line_y = y + PACKAGE_TAB_H;
+    let text_x = x + PACKAGE_TAB_TEXT_X;
+    let text_y = y + PACKAGE_TITLE_BASELINE;
+    write!(
+        svg,
+        "<!--cluster {}-->",
+        escape_xml(&cluster.qualified_name)
+    )
+    .unwrap();
+    write!(
+        svg,
+        r#"<g class="cluster" data-qualified-name="{}" data-source-line="{}" id="ent{:04}">"#,
+        escape_xml(&cluster.qualified_name),
+        cluster.source_line,
+        idx + 2,
+    )
+    .unwrap();
+    write!(
+        svg,
+        r##"<path d="M{},{} L{},{} A3.75,3.75 0 0 1 {},{} L{},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{}" fill="none" style="stroke:#000000;stroke-width:{};"/>"##,
+        fmt4(x + 2.5),
+        fmt4(y),
+        fmt4(tab_join),
+        fmt4(y),
+        fmt4(tab_join + 2.5),
+        fmt4(y + 2.5),
+        fmt4(tab_right),
+        fmt4(line_y),
+        fmt4(right - 2.5),
+        fmt4(line_y),
+        fmt4(right),
+        fmt4(line_y + 2.5),
+        fmt4(right),
+        fmt4(bottom - 2.5),
+        fmt4(right - 2.5),
+        fmt4(bottom),
+        fmt4(x + 2.5),
+        fmt4(bottom),
+        fmt4(x),
+        fmt4(bottom - 2.5),
+        fmt4(x),
+        fmt4(y + 2.5),
+        fmt4(x + 2.5),
+        fmt4(y),
+        PACKAGE_STROKE_WIDTH,
+    )
+    .unwrap();
+    write!(
+        svg,
+        r##"<line style="stroke:#000000;stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+        PACKAGE_STROKE_WIDTH,
+        fmt4(x),
+        fmt4(tab_right),
+        fmt4(line_y),
+        fmt4(line_y),
+    )
+    .unwrap();
+    write!(
+        svg,
+        r##"<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
+        fmt4(label_w),
+        fmt4(text_x),
+        fmt4(text_y),
+        escape_xml(&cluster.label),
+    )
+    .unwrap();
+    svg.push_str("</g>");
 }
 
 fn emit_oracle_legend(svg: &mut String, legend: &OracleLegend, fallback_line: Option<usize>) {

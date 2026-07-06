@@ -58,6 +58,7 @@ pub struct LayoutGraph {
     direction: Direction,
     spacing: Option<GraphSpacing>,
     nodes: Vec<(String, String, f64, f64, bool)>, // (id, label, w, h, is_circle)
+    clusters: Vec<ClusterSpec>,
     edges: Vec<(String, String, Option<String>)>, // (from, to, label)
 }
 
@@ -68,6 +69,7 @@ impl LayoutGraph {
             direction,
             spacing: None,
             nodes: Vec::new(),
+            clusters: Vec::new(),
             edges: Vec::new(),
         }
     }
@@ -107,6 +109,31 @@ impl LayoutGraph {
         self.nodes
             .push((id.to_string(), label.to_string(), diameter, diameter, true));
         true
+    }
+
+    /// Adds a Graphviz cluster/subgraph. Returns true if new, false if duplicate.
+    ///
+    /// This mirrors PlantUML SVEK's `ClusterDotString.printInternal`, which
+    /// wraps package members in `subgraph cluster...` before dot layout and
+    /// later draws package chrome from the resulting cluster bounds.
+    pub fn add_cluster(&mut self, id: &str, label: &str, parent: Option<&str>) -> bool {
+        if self.clusters.iter().any(|c| c.id == id) {
+            return false;
+        }
+        self.clusters.push(ClusterSpec {
+            id: id.to_string(),
+            label: label.to_string(),
+            parent: parent.map(String::from),
+            nodes: Vec::new(),
+        });
+        true
+    }
+
+    /// Adds a node to an existing cluster/subgraph.
+    pub fn add_cluster_node(&mut self, cluster_id: &str, node_id: &str) {
+        if let Some(cluster) = self.clusters.iter_mut().find(|c| c.id == cluster_id) {
+            cluster.nodes.push(node_id.to_string());
+        }
     }
 
     /// Adds an edge between two nodes by their ids.
@@ -267,6 +294,37 @@ impl LayoutGraph {
             node_order.push(id.clone());
         }
 
+        // Build package clusters after nodes so each subgraph can include the
+        // already-created node handles. Java SVEK writes `subgraph cluster...`
+        // blocks around member shapes in `ClusterDotString.printInternal`;
+        // Graphviz recognises the `cluster` prefix and computes `GD_bb` for
+        // those package bounds.
+        let mut cluster_handles: HashMap<String, *mut graphviz_ffi::Agraph_t> = HashMap::new();
+        let mut cluster_order: Vec<String> = Vec::new();
+        for cluster in &self.clusters {
+            let parent = cluster
+                .parent
+                .as_ref()
+                .and_then(|id| cluster_handles.get(id).copied())
+                .unwrap_or(g);
+            let name = CString::new(format!("cluster_{}", cluster.id)).unwrap();
+            let subgraph = graphviz_ffi::agsubg(parent, name.as_ptr() as *mut _, 1);
+            let label_val = CString::new(cluster.label.as_str()).unwrap();
+            graphviz_ffi::agsafeset(
+                subgraph as *mut c_void,
+                label_key.as_ptr(),
+                label_val.as_ptr(),
+                empty.as_ptr(),
+            );
+            for node_id in &cluster.nodes {
+                if let Some(&node) = node_handles.get(node_id) {
+                    graphviz_ffi::agsubnode(subgraph, node, 1);
+                }
+            }
+            cluster_handles.insert(cluster.id.clone(), subgraph);
+            cluster_order.push(cluster.id.clone());
+        }
+
         // Build edges — track insertion order for result mapping.
         let mut edge_specs: Vec<(String, String)> = Vec::new();
         for (from, to, label) in &self.edges {
@@ -394,6 +452,23 @@ impl LayoutGraph {
             n = graphviz_ffi::agnxtnode(g, n);
         }
 
+        let mut cluster_positions = Vec::with_capacity(cluster_order.len());
+        for id in &cluster_order {
+            let cluster = cluster_handles[id];
+            let mut ll_x: f64 = 0.0;
+            let mut ll_y: f64 = 0.0;
+            let mut ur_x: f64 = 0.0;
+            let mut ur_y: f64 = 0.0;
+            graphviz_ffi::rustuml_graph_bb(cluster, &mut ll_x, &mut ll_y, &mut ur_x, &mut ur_y);
+            cluster_positions.push(ClusterPosition {
+                id: id.clone(),
+                x: ll_x,
+                y: ll_y,
+                width: ur_x - ll_x,
+                height: ur_y - ll_y,
+            });
+        }
+
         // Cleanup.
         graphviz_ffi::gvFreeLayout(gvc, g);
         graphviz_ffi::agclose(g);
@@ -404,9 +479,13 @@ impl LayoutGraph {
         let max_y = node_positions
             .iter()
             .map(|p| p.y + p.height)
+            .chain(cluster_positions.iter().map(|p| p.y + p.height))
             .fold(0.0f64, f64::max);
 
         for pos in &mut node_positions {
+            pos.y = max_y - pos.y - pos.height;
+        }
+        for pos in &mut cluster_positions {
             pos.y = max_y - pos.y - pos.height;
         }
         for path in &mut edge_paths {
@@ -423,6 +502,7 @@ impl LayoutGraph {
 
         LayoutResult {
             node_positions,
+            cluster_positions,
             edge_paths,
         }
     }
@@ -436,7 +516,26 @@ fn dot_inches(pixel: f64) -> String {
 #[derive(Debug, Clone)]
 pub struct LayoutResult {
     pub node_positions: Vec<NodePosition>,
+    pub cluster_positions: Vec<ClusterPosition>,
     pub edge_paths: Vec<EdgePath>,
+}
+
+#[derive(Debug, Clone)]
+struct ClusterSpec {
+    id: String,
+    label: String,
+    parent: Option<String>,
+    nodes: Vec<String>,
+}
+
+/// Position of a laid-out cluster/subgraph (top-left corner).
+#[derive(Debug, Clone)]
+pub struct ClusterPosition {
+    pub id: String,
+    pub x: f64,
+    pub y: f64,
+    pub width: f64,
+    pub height: f64,
 }
 
 /// Position of a laid-out node (top-left corner).
@@ -524,6 +623,28 @@ mod tests {
         let result = g.layout_full_no_timeout();
         assert_eq!(result.node_positions.len(), 3);
         assert_eq!(result.edge_paths.len(), 2);
+    }
+
+    #[test]
+    fn cluster_bounds_wrap_member_nodes() {
+        let mut g = LayoutGraph::new(Direction::TopToBottom);
+        g.add_node("a", "A", 100.0, 40.0);
+        g.add_node("b", "B", 100.0, 40.0);
+        assert!(g.add_cluster("pkg", "pkg", None));
+        g.add_cluster_node("pkg", "a");
+
+        let result = g.layout_full_no_timeout();
+        assert_eq!(result.cluster_positions.len(), 1);
+        let cluster = &result.cluster_positions[0];
+        let node = result
+            .node_positions
+            .first()
+            .expect("cluster member node should be laid out");
+        assert_eq!(cluster.id, "pkg");
+        assert!(cluster.x <= node.x);
+        assert!(cluster.y <= node.y);
+        assert!(cluster.x + cluster.width >= node.x + node.width);
+        assert!(cluster.y + cluster.height >= node.y + node.height);
     }
 
     #[test]

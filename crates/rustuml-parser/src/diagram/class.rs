@@ -235,6 +235,13 @@ pub struct Package {
     /// Optional background color (CSS name or hex without leading `#`).
     pub color: Option<String>,
     pub entities: Vec<String>,
+    /// Parent package index, when this package was declared inside another
+    /// package/namespace block.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub parent: Option<usize>,
+    /// 1-based source line within the `@startuml` block.
+    #[serde(default)]
+    pub source_line: usize,
     /// Stereotypes applied to this package (e.g. `<<Application>>`).
     #[serde(default)]
     pub stereotypes: Vec<String>,

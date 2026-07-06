@@ -231,6 +231,8 @@ impl ClassParser {
                     kind: PackageKind::Package,
                     color: None,
                     entities: Vec::new(),
+                    parent: parent_pkg_idx,
+                    source_line: self.current_line,
                     stereotypes: Vec::new(),
                     display_name: Some(pkg_label),
                 });
@@ -912,6 +914,8 @@ impl ClassParser {
                 kind,
                 color,
                 entities: Vec::new(),
+                parent: self.package_stack.iter().rev().nth(1).copied(),
+                source_line: self.current_line,
                 stereotypes,
                 display_name: None,
             });

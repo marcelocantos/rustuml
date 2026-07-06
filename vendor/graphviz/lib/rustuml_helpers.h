@@ -24,6 +24,10 @@ void rustuml_node_pos(Agnode_t *n, double *x, double *y);
 // Get the bounding box dimensions of a node (width/height in inches).
 void rustuml_node_size(Agnode_t *n, double *w, double *h);
 
+// Get a laid-out graph or subgraph bounding box in points.
+void rustuml_graph_bb(Agraph_t *g, double *ll_x, double *ll_y,
+                      double *ur_x, double *ur_y);
+
 // ── Edge spline access ──
 
 // Returns the number of bezier curves in the edge spline, or 0 if none.

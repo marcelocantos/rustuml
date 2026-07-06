@@ -14,6 +14,15 @@ void rustuml_node_size(Agnode_t *n, double *w, double *h) {
     *h = ND_height(n);
 }
 
+void rustuml_graph_bb(Agraph_t *g, double *ll_x, double *ll_y,
+                      double *ur_x, double *ur_y) {
+    boxf bb = GD_bb(g);
+    *ll_x = bb.LL.x;
+    *ll_y = bb.LL.y;
+    *ur_x = bb.UR.x;
+    *ur_y = bb.UR.y;
+}
+
 size_t rustuml_edge_spl_count(Agedge_t *e) {
     splines *spl = ED_spl(e);
     if (!spl) return 0;
