@@ -69,10 +69,15 @@ const CHOICE_SIZE: f64 = 12.0;
 
 /// Vertical gap between nodes in the layout.
 const V_GAP: f64 = 60.0;
-/// Horizontal gap between side-by-side nodes.
-const H_GAP: f64 = 40.0;
-/// Margin around the entire diagram.
-const MARGIN: f64 = 30.0;
+/// State SVEK body origin after PlantUML shifts the laid-out graph.
+///
+/// Java provenance: `net.sourceforge.plantuml.svek.SvekResult.calculateDimension`
+/// calls `clusterManager.moveDelta(6 - minX, 6 - minY)` and then returns
+/// `minMax.getDimension().delta(15, 15)`. SVG stroke emission lands the visible
+/// top-left entity coordinates at 7px in the state goldens, with 14px trailing
+/// canvas room.
+const SVEK_ORIGIN: f64 = 7.0;
+const SVEK_TRAILING_PAD: f64 = 14.0;
 
 /// Title font size.
 const TITLE_FONT_SIZE: f64 = 14.0;
@@ -867,6 +872,8 @@ pub fn render_with_oracle(
         .filter(|n| matches!(&n.kind, StateNoteKind::LeftOf(_)))
         .map(|n| note_box_width(&n.text) + NOTE_H_GAP)
         .fold(0.0_f64, f64::max);
+    let graph_body_x = SVEK_ORIGIN + left_note_space;
+    let graph_body_y = SVEK_ORIGIN + title_h;
 
     // Resolve state defs. For layout IDs like "__start__" and "__end__", there's
     // no state definition.
@@ -991,8 +998,8 @@ pub fn render_with_oracle(
                 } else {
                     node_width(id, state_def)
                 };
-                let cy = MARGIN + positions.len() as f64 * 80.0 + h / 2.0;
-                positions.push((id.clone(), MARGIN + w / 2.0, cy, w, h));
+                let cy = SVEK_ORIGIN + positions.len() as f64 * 80.0 + h / 2.0;
+                positions.push((id.clone(), SVEK_ORIGIN + w / 2.0, cy, w, h));
             }
         }
         let tw = if orc.canvas_width > 0.0 {
@@ -1000,7 +1007,7 @@ pub fn render_with_oracle(
         } else {
             positions
                 .iter()
-                .map(|(_, cx, _, w, _)| cx + w / 2.0 + MARGIN)
+                .map(|(_, cx, _, w, _)| cx + w / 2.0 + SVEK_TRAILING_PAD)
                 .fold(0.0_f64, f64::max)
         };
         let th = if orc.canvas_height > 0.0 {
@@ -1008,7 +1015,7 @@ pub fn render_with_oracle(
         } else {
             positions
                 .iter()
-                .map(|(_, _, cy, _, h)| cy + h / 2.0 + MARGIN)
+                .map(|(_, _, cy, _, h)| cy + h / 2.0 + SVEK_TRAILING_PAD)
                 .fold(0.0_f64, f64::max)
         };
         (positions, tw, th)
@@ -1029,17 +1036,14 @@ pub fn render_with_oracle(
             } else {
                 node_width(id, state_def)
             };
-            let x = lp[i].x + MARGIN + left_note_space.max(H_GAP / 2.0) + w / 2.0;
-            let y = lp[i].y + MARGIN + title_h + h / 2.0;
+            let x = lp[i].x + graph_body_x + w / 2.0;
+            let y = lp[i].y + graph_body_y + h / 2.0;
             positions.push((id.clone(), x, y, w, h));
             max_x = max_x.max(lp[i].x + w);
             max_y = max_y.max(lp[i].y + h);
         }
-        let tw = MARGIN * 2.0
-            + left_note_space.max(H_GAP / 2.0)
-            + max_x
-            + right_note_space.max(H_GAP / 2.0);
-        let th = max_y + MARGIN * 2.0 + title_h;
+        let tw = graph_body_x + max_x + right_note_space + SVEK_TRAILING_PAD;
+        let th = graph_body_y + max_y + SVEK_TRAILING_PAD;
         (positions, tw, th)
     } else {
         // Vertical stacking fallback.
@@ -1053,13 +1057,10 @@ pub fn render_with_oracle(
                 }
             })
             .fold(STATE_MIN_WIDTH, f64::max);
-        let tw = MARGIN * 2.0
-            + left_note_space.max(H_GAP / 2.0)
-            + max_w
-            + right_note_space.max(H_GAP / 2.0);
-        let cx = MARGIN + left_note_space.max(H_GAP / 2.0) + max_w / 2.0;
+        let tw = SVEK_ORIGIN + left_note_space + max_w + right_note_space + SVEK_TRAILING_PAD;
+        let cx = SVEK_ORIGIN + left_note_space + max_w / 2.0;
         let mut positions: Vec<(String, f64, f64, f64, f64)> = Vec::new();
-        let mut y_cursor = title_h + MARGIN;
+        let mut y_cursor = title_h + SVEK_ORIGIN;
         for id in &state_ids {
             let state_def = find_state(id);
             let h = if id == "__start__" || id == "__end__" {
@@ -1076,7 +1077,7 @@ pub fn render_with_oracle(
             positions.push((id.clone(), cx, cy, w, h));
             y_cursor += h + V_GAP;
         }
-        let th = y_cursor - V_GAP + MARGIN;
+        let th = y_cursor - V_GAP + SVEK_TRAILING_PAD;
         (positions, tw, th)
     };
 
@@ -1085,7 +1086,7 @@ pub fn render_with_oracle(
             .iter()
             .find(|(sid, _, _, _, _)| sid == id)
             .map(|(_, x, y, w, h)| (*x, *y, *w, *h))
-            .unwrap_or((MARGIN, MARGIN, STATE_MIN_WIDTH, STATE_BOX_HEIGHT))
+            .unwrap_or((SVEK_ORIGIN, SVEK_ORIGIN, STATE_MIN_WIDTH, STATE_BOX_HEIGHT))
     };
 
     // --- Build SVG ---
@@ -2063,15 +2064,18 @@ pub fn render_with_oracle(
                 let ny = sy - sh / 2.0;
                 (nx, ny, sx - sw / 2.0, sy)
             }
-            StateNoteKind::Floating(_) => {
-                (MARGIN, MARGIN + title_h, MARGIN + note_w, MARGIN + title_h)
-            }
+            StateNoteKind::Floating(_) => (
+                SVEK_ORIGIN,
+                SVEK_ORIGIN + title_h,
+                SVEK_ORIGIN + note_w,
+                SVEK_ORIGIN + title_h,
+            ),
             StateNoteKind::OnLink => {
                 let mid_y = total_height / 2.0;
                 let cx_approx = positions
                     .first()
                     .map(|(_, x, _, _, _)| *x)
-                    .unwrap_or(MARGIN + STATE_MIN_WIDTH / 2.0);
+                    .unwrap_or(SVEK_ORIGIN + STATE_MIN_WIDTH / 2.0);
                 let nx = cx_approx + STATE_MIN_WIDTH / 2.0 + NOTE_H_GAP;
                 (
                     nx,
@@ -2085,7 +2089,7 @@ pub fn render_with_oracle(
                 let cx_approx = positions
                     .first()
                     .map(|(_, x, _, _, _)| *x)
-                    .unwrap_or(MARGIN + STATE_MIN_WIDTH / 2.0);
+                    .unwrap_or(SVEK_ORIGIN + STATE_MIN_WIDTH / 2.0);
                 let nx = cx_approx + STATE_MIN_WIDTH / 2.0 + NOTE_H_GAP;
                 (
                     nx,
@@ -2099,7 +2103,7 @@ pub fn render_with_oracle(
                 let cx_approx = positions
                     .first()
                     .map(|(_, x, _, _, _)| *x)
-                    .unwrap_or(MARGIN + STATE_MIN_WIDTH / 2.0);
+                    .unwrap_or(SVEK_ORIGIN + STATE_MIN_WIDTH / 2.0);
                 let nx = cx_approx - STATE_MIN_WIDTH / 2.0 - NOTE_H_GAP - note_w;
                 (
                     nx,
@@ -2231,7 +2235,11 @@ pub fn render_with_oracle(
                 && !ep.points.is_empty()
             {
                 // Render bezier path.
-                let points = &ep.points;
+                let points: Vec<(f64, f64)> = ep
+                    .points
+                    .iter()
+                    .map(|(x, y)| (x + graph_body_x, y + graph_body_y))
+                    .collect();
                 let mut d = format!("M{},{}", fmt_f(points[0].0), fmt_f(points[0].1));
                 let mut i = 1;
                 while i + 2 < points.len() {
@@ -4165,6 +4173,51 @@ mod tests {
         assert!(
             svg.contains("Floating note 1"),
             "floating note text should appear in SVG"
+        );
+    }
+
+    #[test]
+    fn state_svek_origin_and_spline_translation_use_body_coordinates() {
+        let input = concat!(
+            "@startuml\n",
+            "state RenamedIdle\n",
+            "state RenamedReady\n",
+            "[*] --> RenamedReady\n",
+            "RenamedReady --> [*]\n",
+            "@enduml",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(
+            svg.contains(r#"x="7" y="7""#),
+            "first declared state should start at PlantUML's SVEK body origin"
+        );
+
+        let start_group = svg.find(r#"data-qualified-name=".start.""#).unwrap();
+        let start_cx = svg[start_group..]
+            .split(r#"cx=""#)
+            .nth(1)
+            .unwrap()
+            .split('"')
+            .next()
+            .unwrap()
+            .parse::<f64>()
+            .unwrap();
+        let start_link = svg.find(r#"id="*start*-to-RenamedReady""#).unwrap();
+        let path_x = svg[..start_link]
+            .rsplit(r#"<path d="M"#)
+            .next()
+            .unwrap()
+            .split(',')
+            .next()
+            .unwrap()
+            .parse::<f64>()
+            .unwrap();
+
+        assert!(
+            (path_x - start_cx).abs() < 0.1,
+            "Graphviz spline x-coordinate should be translated into SVG body coordinates"
         );
     }
 
