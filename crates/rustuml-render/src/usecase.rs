@@ -8,7 +8,9 @@
 //! the same envelope used by component and deployment diagrams.
 
 use std::collections::HashMap;
+use std::fmt::Write as _;
 
+use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph};
 use rustuml_parser::diagram::usecase::*;
 
 use crate::layout_oracle::{OracleLayout, wrap_oracle_envelope};
@@ -29,16 +31,19 @@ const ACTOR_ARM_OFFSET: f64 = 8.0;
 const ACTOR_LEG_RUN: f64 = 13.0;
 const ACTOR_LEG_DROP: f64 = 15.0;
 const ACTOR_LABEL_GAP: f64 = 15.0352;
+/// Java SVEK's actor node height is based on the drawn stick-figure footprint;
+/// text descent is painted but does not expand the dot node by a full line.
+const ACTOR_DOT_HEIGHT_TRIM: f64 = 10.5;
 /// Vertical offset from head centre to stereotype baseline (measured).
 const ACTOR_STEREO_OFFSET: f64 = 11.4531;
 const LINE_H: f64 = 16.4883;
 const UC_TEXT_OFFSET_SINGLE: f64 = 4.7441;
 
-const UC_RX_PAD: f64 = 23.6825;
-const UC_RY_PAD: f64 = 23.6825;
-
 const MARGIN: f64 = 7.0;
 const GAP: f64 = 40.0;
+const BODY_MARGIN: f64 = 6.0;
+const SVEK_CANVAS_PAD: f64 = 14.0;
+const LAYOUT_TIMEOUT: std::time::Duration = std::time::Duration::from_secs(5);
 
 const NOTE_FILL: &str = "#FEFFDD";
 const NOTE_FOLD: f64 = 10.0;
@@ -472,6 +477,8 @@ pub fn render_with_oracle(
 
     if let Some(orc) = oracle {
         render_oracle_connections(&mut svg, diagram, orc, &skin);
+    } else {
+        render_no_oracle_connections(&mut svg, diagram, &id_map, &positions.edge_paths, &skin);
     }
 
     render_footer(&mut svg, diagram, total_h);
@@ -615,6 +622,8 @@ fn build_entity_id_map(diagram: &UseCaseDiagram) -> HashMap<String, String> {
 struct ActorDim {
     label_w: f64,
     stereo_w: f64,
+    width: f64,
+    height: f64,
 }
 
 struct UseCaseDim {
@@ -644,7 +653,15 @@ fn actor_dim(actor: &Actor, skin: &SkinColors) -> ActorDim {
             )
         })
         .unwrap_or(0.0);
-    ActorDim { label_w, stereo_w }
+    let width = label_w.max(stereo_w).max(ACTOR_ARM_HALF * 2.0);
+    let height = ACTOR_HEAD_R * 2.0 + ACTOR_BODY_LEN + ACTOR_LEG_DROP + ACTOR_LABEL_GAP
+        - ACTOR_DOT_HEIGHT_TRIM;
+    ActorDim {
+        label_w,
+        stereo_w,
+        width,
+        height,
+    }
 }
 
 fn use_case_dim(uc: &UseCase, skin: &SkinColors) -> UseCaseDim {
@@ -670,8 +687,7 @@ fn use_case_dim(uc: &UseCase, skin: &SkinColors) -> UseCaseDim {
         .fold(0.0_f64, f64::max);
     let max_w = label_w.max(stereo_w).max(desc_max_w);
     let line_count = uc.description.len().max(1) + if uc.stereotype.is_some() { 1 } else { 0 };
-    let rx = max_w / 2.0 + UC_RX_PAD;
-    let ry = (line_count as f64 * LINE_H) / 2.0 + UC_RY_PAD - font_size / 2.0;
+    let (rx, ry) = use_case_ellipse_radii(max_w, line_count as f64 * LINE_H);
     UseCaseDim {
         label_w,
         stereo_w,
@@ -681,9 +697,24 @@ fn use_case_dim(uc: &UseCase, skin: &SkinColors) -> UseCaseDim {
     }
 }
 
+fn use_case_ellipse_radii(text_w: f64, text_h: f64) -> (f64, f64) {
+    // Java provenance: `svek.image.EntityImageUseCase.calculateDimensionSlow`
+    // wraps the merged stereotype/body `TextBlock` in
+    // `klimt.shape.TextBlockInEllipse`; that helper clamps
+    // `textDim.height / textDim.width` to [0.2, 0.8], computes the containing
+    // ellipse footprint, then returns `getUEllipse().bigger(6)`.
+    let w = text_w.max(1.0);
+    let h = text_h.max(1.0);
+    let alpha = (h / w).clamp(0.2, 0.8);
+    let inner_rx = ((w / 2.0).powi(2) + (h / 2.0 / alpha).powi(2)).sqrt();
+    let inner_ry = inner_rx * alpha;
+    (inner_rx + 3.0, inner_ry + 3.0)
+}
+
 struct Positions {
     actors: Vec<(f64, f64)>,
     use_cases: Vec<(f64, f64)>,
+    edge_paths: Vec<EdgePath>,
 }
 
 fn resolve_positions(
@@ -711,8 +742,92 @@ fn resolve_positions(
                     .unwrap_or_else(|| fallback_use_case_center(i, &uc_dims[i]))
             })
             .collect();
-        return Positions { actors, use_cases };
+        return Positions {
+            actors,
+            use_cases,
+            edge_paths: Vec::new(),
+        };
     }
+    layout_usecase_positions(diagram, actor_dims, uc_dims)
+        .unwrap_or_else(|| fallback_positions(actor_dims, uc_dims))
+}
+
+fn layout_usecase_positions(
+    diagram: &UseCaseDiagram,
+    actor_dims: &[ActorDim],
+    uc_dims: &[UseCaseDim],
+) -> Option<Positions> {
+    // Java path: `CucaDiagramFileMakerSvek` builds measured SVEK nodes,
+    // `DotStringFactory` serialises fixed-size nodes/clusters to dot, and
+    // `GeneralImageBuilder` paints the returned positions. This mirrors that
+    // flow with the vendored Graphviz wrapper rather than the old hand-stacked
+    // fallback.
+    if diagram.actors.is_empty() && diagram.use_cases.is_empty() {
+        return None;
+    }
+    let mut layout = LayoutGraph::new(Direction::TopToBottom).with_plantuml_svek_spacing();
+    for (actor, dim) in diagram.actors.iter().zip(actor_dims) {
+        layout.add_node(&actor.id, &actor.label, dim.width, dim.height);
+    }
+    for (uc, dim) in diagram.use_cases.iter().zip(uc_dims) {
+        layout.add_node(&uc.id, &uc.label, dim.rx * 2.0, dim.ry * 2.0);
+    }
+    for pkg in &diagram.packages {
+        layout.add_cluster(&pkg.name, &pkg.name, None);
+        for member in &pkg.elements {
+            layout.add_cluster_node(&pkg.name, member);
+        }
+    }
+    for conn in &diagram.connections {
+        layout.add_edge(
+            &conn.from,
+            &conn.to,
+            conn.label.as_deref().or(conn.stereotype.as_deref()),
+        );
+    }
+    let mut result = layout.layout_full(LAYOUT_TIMEOUT)?;
+    for edge in &mut result.edge_paths {
+        for point in &mut edge.points {
+            point.0 += BODY_MARGIN;
+            point.1 += BODY_MARGIN;
+        }
+        if let Some(point) = &mut edge.start_point {
+            point.0 += BODY_MARGIN;
+            point.1 += BODY_MARGIN;
+        }
+        if let Some(point) = &mut edge.end_point {
+            point.0 += BODY_MARGIN;
+            point.1 += BODY_MARGIN;
+        }
+    }
+    let actor_count = diagram.actors.len();
+    let actors = result
+        .node_positions
+        .iter()
+        .take(actor_count)
+        .map(|p| {
+            (
+                p.x + BODY_MARGIN + p.width / 2.0,
+                p.y + BODY_MARGIN + ACTOR_HEAD_R,
+            )
+        })
+        .collect();
+    let use_cases = result
+        .node_positions
+        .iter()
+        .skip(actor_count)
+        .take(diagram.use_cases.len())
+        .zip(uc_dims)
+        .map(|(p, dim)| (p.x + BODY_MARGIN + dim.rx, p.y + BODY_MARGIN + dim.ry))
+        .collect();
+    Some(Positions {
+        actors,
+        use_cases,
+        edge_paths: result.edge_paths,
+    })
+}
+
+fn fallback_positions(actor_dims: &[ActorDim], uc_dims: &[UseCaseDim]) -> Positions {
     let actors: Vec<(f64, f64)> = actor_dims
         .iter()
         .enumerate()
@@ -723,7 +838,11 @@ fn resolve_positions(
         .enumerate()
         .map(|(i, d)| fallback_use_case_center(i, d))
         .collect();
-    Positions { actors, use_cases }
+    Positions {
+        actors,
+        use_cases,
+        edge_paths: Vec::new(),
+    }
 }
 
 fn lookup_actor_center(oracle: &OracleLayout, actor: &Actor) -> Option<(f64, f64)> {
@@ -824,20 +943,31 @@ fn compute_canvas(
     actor_dims: &[ActorDim],
     uc_dims: &[UseCaseDim],
 ) -> (f64, f64) {
-    let mut max_x: f64 = 100.0;
-    let mut max_y: f64 = 50.0;
+    let mut max_x: f64 = 0.0;
+    let mut max_y: f64 = 0.0;
     for (i, (cx, cy)) in positions.actors.iter().enumerate() {
         let half = actor_dims[i].label_w.max(ACTOR_ARM_HALF * 2.0) / 2.0;
-        max_x = max_x.max(cx + half + MARGIN);
+        max_x = max_x.max(cx + half + SVEK_CANVAS_PAD);
         max_y = max_y.max(
-            cy + ACTOR_HEAD_R + ACTOR_BODY_LEN + ACTOR_LEG_DROP + ACTOR_LABEL_GAP * 2.0 + MARGIN,
+            cy + ACTOR_HEAD_R
+                + ACTOR_BODY_LEN
+                + ACTOR_LEG_DROP
+                + ACTOR_LABEL_GAP
+                + pm::text_height(FONT_SIZE)
+                + SVEK_CANVAS_PAD,
         );
     }
     for (i, (cx, cy)) in positions.use_cases.iter().enumerate() {
-        max_x = max_x.max(cx + uc_dims[i].rx + MARGIN);
-        max_y = max_y.max(cy + uc_dims[i].ry + MARGIN);
+        max_x = max_x.max(cx + uc_dims[i].rx + SVEK_CANVAS_PAD);
+        max_y = max_y.max(cy + uc_dims[i].ry + SVEK_CANVAS_PAD);
     }
-    (max_x, max_y)
+    for edge in &positions.edge_paths {
+        for (x, y) in &edge.points {
+            max_x = max_x.max(x + SVEK_CANVAS_PAD);
+            max_y = max_y.max(y + SVEK_CANVAS_PAD);
+        }
+    }
+    (max_x.ceil().max(1.0), max_y.ceil().max(1.0))
 }
 
 fn render_package_group(
@@ -1580,6 +1710,194 @@ fn render_oracle_connections(
     }
 }
 
+fn render_no_oracle_connections(
+    svg: &mut SvgBuilder,
+    diagram: &UseCaseDiagram,
+    id_map: &HashMap<String, String>,
+    edge_paths: &[EdgePath],
+    skin: &SkinColors,
+) {
+    for conn in &diagram.connections {
+        let Some(edge) = edge_paths
+            .iter()
+            .find(|edge| edge.from == conn.from && edge.to == conn.to)
+        else {
+            continue;
+        };
+        let Some(ent1) = usecase_entity_id(diagram, id_map, &conn.from) else {
+            continue;
+        };
+        let Some(ent2) = usecase_entity_id(diagram, id_map, &conn.to) else {
+            continue;
+        };
+        let link_id = no_oracle_link_id(diagram, conn.source_line);
+        let from_label = link_comment_name(diagram, &conn.from);
+        let to_label = link_comment_name(diagram, &conn.to);
+        svg.raw(&format!("<!--link {from_label} to {to_label}-->"));
+        svg.raw(&format!(
+            r#"<g class="link" data-entity-1="{ent1}" data-entity-2="{ent2}" data-link-type="dependency" data-source-line="{line}" id="{link_id}">"#,
+            line = conn.source_line,
+        ));
+        if let Some(d) = edge_path_d(edge) {
+            svg.raw(&format!(
+                r#"<path d="{d}" fill="none" id="{}-to-{}" style="stroke:{STROKE};stroke-width:1;"/>"#,
+                conn.from, conn.to,
+            ));
+        }
+        if let Some((control, endpoint)) = edge_arrow_basis(edge) {
+            let points = dependency_arrow_points(control, endpoint);
+            svg.raw(&format!(
+                r##"<polygon fill="#181818" points="{points}" style="stroke:#181818;stroke-width:1;"/>"##,
+            ));
+        }
+        let label_text = conn
+            .label
+            .as_deref()
+            .or(conn.stereotype.as_deref())
+            .map(|s| {
+                if s.starts_with("<<") {
+                    s.replace("<<", "\u{00AB}").replace(">>", "\u{00BB}")
+                } else {
+                    s.to_string()
+                }
+            });
+        if let Some(label) = label_text
+            && let Some((x, y)) = edge.points.get(edge.points.len() / 2).copied()
+        {
+            let mut buf = String::new();
+            text_render::emit_text(
+                &mut buf,
+                &label,
+                &TextBase {
+                    x: x + 4.0,
+                    y: y - 4.0,
+                    font_size: skin.arrow_font_size,
+                    font_family: &skin.arrow_font_family,
+                    fill: &skin.arrow_font_color,
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
+            svg.raw(&buf);
+        }
+        svg.raw("</g>");
+    }
+}
+
+fn usecase_entity_id<'a>(
+    diagram: &UseCaseDiagram,
+    id_map: &'a HashMap<String, String>,
+    id: &str,
+) -> Option<&'a str> {
+    if diagram.actors.iter().any(|a| a.id == id) {
+        return id_map.get(&format!("actor::{id}")).map(String::as_str);
+    }
+    if diagram.use_cases.iter().any(|u| u.id == id) {
+        return id_map.get(&format!("uc::{id}")).map(String::as_str);
+    }
+    None
+}
+
+fn link_comment_name<'a>(diagram: &'a UseCaseDiagram, id: &'a str) -> &'a str {
+    if let Some(uc) = diagram.use_cases.iter().find(|u| u.id == id) {
+        return display_name(uc);
+    }
+    if let Some(actor) = diagram.actors.iter().find(|a| a.id == id) {
+        if actor.id == label_to_id(&actor.label) {
+            return actor.label.as_str();
+        }
+        return actor.id.as_str();
+    }
+    id
+}
+
+fn no_oracle_link_id(diagram: &UseCaseDiagram, source_line: usize) -> String {
+    let mut counter = 2usize;
+    let mut items: Vec<(usize, bool)> = Vec::new();
+    items.extend(diagram.actors.iter().map(|a| (a.source_line, false)));
+    items.extend(diagram.use_cases.iter().map(|u| (u.source_line, false)));
+    items.extend(diagram.packages.iter().map(|p| (p.source_line, false)));
+    items.extend(diagram.connections.iter().map(|c| (c.source_line, true)));
+    items.sort_by_key(|(line, _)| *line);
+    for (line, is_link) in items {
+        if is_link && line == source_line {
+            return format!("lnk{counter}");
+        }
+        counter += 1;
+    }
+    format!("lnk{counter}")
+}
+
+fn edge_path_d(edge: &EdgePath) -> Option<String> {
+    let (start, rest) = edge.points.split_first()?;
+    let mut d = format!("M{},{}", fc(start.0), fc(start.1));
+    for chunk in rest.chunks(3) {
+        if let [c1, c2, to] = chunk {
+            write!(
+                d,
+                " C{},{} {},{} {},{}",
+                fc(c1.0),
+                fc(c1.1),
+                fc(c2.0),
+                fc(c2.1),
+                fc(to.0),
+                fc(to.1),
+            )
+            .unwrap();
+        }
+    }
+    Some(d)
+}
+
+fn edge_arrow_basis(edge: &EdgePath) -> Option<((f64, f64), (f64, f64))> {
+    let endpoint = edge.end_point.or_else(|| edge.points.last().copied())?;
+    let control = edge
+        .points
+        .iter()
+        .rev()
+        .copied()
+        .find(|p| (p.0 - endpoint.0).abs() > 0.01 || (p.1 - endpoint.1).abs() > 0.01)?;
+    Some((control, endpoint))
+}
+
+fn dependency_arrow_points(control: (f64, f64), endpoint: (f64, f64)) -> String {
+    let dx = endpoint.0 - control.0;
+    let dy = endpoint.1 - control.1;
+    let len = (dx * dx + dy * dy).sqrt().max(1.0);
+    let ux = dx / len;
+    let uy = dy / len;
+    let px = -uy;
+    let py = ux;
+    let back = 9.0;
+    let notch = 5.0;
+    let wing = 4.0;
+    let p1 = endpoint;
+    let p2 = (
+        endpoint.0 - ux * back + px * wing,
+        endpoint.1 - uy * back + py * wing,
+    );
+    let p3 = (endpoint.0 - ux * notch, endpoint.1 - uy * notch);
+    let p4 = (
+        endpoint.0 - ux * back - px * wing,
+        endpoint.1 - uy * back - py * wing,
+    );
+    format!(
+        "{},{} {},{} {},{} {},{} {},{}",
+        fc(p1.0),
+        fc(p1.1),
+        fc(p2.0),
+        fc(p2.1),
+        fc(p3.0),
+        fc(p3.1),
+        fc(p4.0),
+        fc(p4.1),
+        fc(p1.0),
+        fc(p1.1),
+    )
+}
+
 #[cfg(test)]
 mod tests {
     #[test]
@@ -1589,6 +1907,16 @@ mod tests {
         let svg = crate::render_svg(&diagram);
         assert!(svg.contains("User"));
         assert!(svg.contains("Login"));
+    }
+
+    #[test]
+    fn no_oracle_usecase_routes_renamed_actor_link() {
+        let input = "@startuml\nactor \"Reader\" as R\nusecase \"Browse Catalog\" as Browse\nR --> Browse\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        assert!(svg.contains(r#"<!--link R to Browse-->"#));
+        assert!(svg.contains(r#"<path d="M"#));
+        assert!(svg.contains(r##"<polygon fill="#181818""##));
     }
 
     #[test]
