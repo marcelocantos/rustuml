@@ -10,7 +10,7 @@
 use std::collections::HashMap;
 use std::fmt::Write as _;
 
-use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph};
+use rustuml_layout::graph::{ClusterPosition, Direction, EdgePath, LayoutGraph};
 use rustuml_parser::diagram::usecase::*;
 
 use crate::layout_oracle::{OracleLayout, wrap_oracle_envelope};
@@ -31,9 +31,13 @@ const ACTOR_ARM_OFFSET: f64 = 8.0;
 const ACTOR_LEG_RUN: f64 = 13.0;
 const ACTOR_LEG_DROP: f64 = 15.0;
 const ACTOR_LABEL_GAP: f64 = 15.0352;
-/// Java SVEK's actor node height is based on the drawn stick-figure footprint;
-/// text descent is painted but does not expand the dot node by a full line.
-const ACTOR_DOT_HEIGHT_TRIM: f64 = 10.5;
+/// Java provenance: `skin.ActorStickMan.getPreferredHeight()` returns
+/// `headDiam + bodyLenght + legsY + 2 * thickness + shadow + 1`. In the default
+/// DESCRIPTION style the emitted path stroke is 0.5; the SVEK dimension handed
+/// to dot uses the uninflated 58px stickman plus the final +1 guard and the
+/// half-stroke visual extent before label blocks are merged by
+/// `decoration.symbol.USymbolSimpleAbstract.mergeLayoutT12B3`.
+const ACTOR_STICKMAN_DOT_HEIGHT: f64 = 59.5;
 /// Vertical offset from head centre to stereotype baseline (measured).
 const ACTOR_STEREO_OFFSET: f64 = 11.4531;
 const LINE_H: f64 = 16.4883;
@@ -44,6 +48,10 @@ const GAP: f64 = 40.0;
 const BODY_MARGIN: f64 = 6.0;
 const SVEK_CANVAS_PAD: f64 = 14.0;
 const LAYOUT_TIMEOUT: std::time::Duration = std::time::Duration::from_secs(5);
+const DEPENDENCY_ARROW_BACK: f64 = 9.0;
+const DEPENDENCY_ARROW_NOTCH: f64 = 5.0;
+const DEPENDENCY_ARROW_WING: f64 = 4.0;
+const DEPENDENCY_ARROW_PATH_GAP: f64 = 6.0;
 
 const NOTE_FILL: &str = "#FEFFDD";
 const NOTE_FOLD: f64 = 10.0;
@@ -390,7 +398,7 @@ pub fn render_with_oracle(
     // member entities (in global source-line order), then the top-level
     // entities. Emit the clusters, then collect and sort the members.
     for pkg in &diagram.packages {
-        render_package_group(&mut svg, pkg, oracle, &id_map);
+        render_package_group(&mut svg, pkg, oracle, &positions.cluster_positions, &id_map);
     }
     let mut members: Vec<(usize, bool, usize)> = Vec::new(); // (source_line, is_actor, index)
     for (i, a) in diagram.actors.iter().enumerate() {
@@ -654,8 +662,14 @@ fn actor_dim(actor: &Actor, skin: &SkinColors) -> ActorDim {
         })
         .unwrap_or(0.0);
     let width = label_w.max(stereo_w).max(ACTOR_ARM_HALF * 2.0);
-    let height = ACTOR_HEAD_R * 2.0 + ACTOR_BODY_LEN + ACTOR_LEG_DROP + ACTOR_LABEL_GAP
-        - ACTOR_DOT_HEIGHT_TRIM;
+    let text_block_h = pm::text_height(skin.actor_font_size as f64);
+    let height = ACTOR_STICKMAN_DOT_HEIGHT
+        + text_block_h
+        + if actor.stereotype.is_some() {
+            text_block_h
+        } else {
+            0.0
+        };
     ActorDim {
         label_w,
         stereo_w,
@@ -714,6 +728,7 @@ fn use_case_ellipse_radii(text_w: f64, text_h: f64) -> (f64, f64) {
 struct Positions {
     actors: Vec<(f64, f64)>,
     use_cases: Vec<(f64, f64)>,
+    cluster_positions: Vec<ClusterPosition>,
     edge_paths: Vec<EdgePath>,
 }
 
@@ -745,6 +760,7 @@ fn resolve_positions(
         return Positions {
             actors,
             use_cases,
+            cluster_positions: Vec::new(),
             edge_paths: Vec::new(),
         };
     }
@@ -765,7 +781,11 @@ fn layout_usecase_positions(
     if diagram.actors.is_empty() && diagram.use_cases.is_empty() {
         return None;
     }
-    let mut layout = LayoutGraph::new(Direction::TopToBottom).with_plantuml_svek_spacing();
+    let direction = match diagram.direction {
+        UseCaseLayoutDirection::TopToBottom => Direction::TopToBottom,
+        UseCaseLayoutDirection::LeftToRight => Direction::LeftToRight,
+    };
+    let mut layout = LayoutGraph::new(direction).with_plantuml_svek_spacing();
     for (actor, dim) in diagram.actors.iter().zip(actor_dims) {
         layout.add_node(&actor.id, &actor.label, dim.width, dim.height);
     }
@@ -800,6 +820,10 @@ fn layout_usecase_positions(
             point.1 += BODY_MARGIN;
         }
     }
+    for cluster in &mut result.cluster_positions {
+        cluster.x += BODY_MARGIN;
+        cluster.y += BODY_MARGIN;
+    }
     let actor_count = diagram.actors.len();
     let actors = result
         .node_positions
@@ -823,6 +847,7 @@ fn layout_usecase_positions(
     Some(Positions {
         actors,
         use_cases,
+        cluster_positions: result.cluster_positions,
         edge_paths: result.edge_paths,
     })
 }
@@ -841,6 +866,7 @@ fn fallback_positions(actor_dims: &[ActorDim], uc_dims: &[UseCaseDim]) -> Positi
     Positions {
         actors,
         use_cases,
+        cluster_positions: Vec::new(),
         edge_paths: Vec::new(),
     }
 }
@@ -967,6 +993,10 @@ fn compute_canvas(
             max_y = max_y.max(y + SVEK_CANVAS_PAD);
         }
     }
+    for cluster in &positions.cluster_positions {
+        max_x = max_x.max(cluster.x + cluster.width + SVEK_CANVAS_PAD);
+        max_y = max_y.max(cluster.y + cluster.height + SVEK_CANVAS_PAD);
+    }
     (max_x.ceil().max(1.0), max_y.ceil().max(1.0))
 }
 
@@ -974,17 +1004,46 @@ fn render_package_group(
     svg: &mut SvgBuilder,
     pkg: &UseCasePackage,
     oracle: Option<&OracleLayout>,
+    cluster_positions: &[ClusterPosition],
     id_map: &HashMap<String, String>,
 ) {
-    let Some(orc) = oracle else { return };
     // PlantUML keys clusters by the sanitised qualified name (non-ASCII → `.`).
     let qname = sanitize_qname(&pkg.name);
-    let Some(rect) = orc
-        .entities
-        .get(&qname)
-        .or_else(|| orc.entities.get(&pkg.name))
-    else {
-        return;
+    let (rect_x, rect_y, rect_w, rect_h, captured_x, captured_y): (
+        f64,
+        f64,
+        f64,
+        f64,
+        &[f64],
+        &[f64],
+    ) = if let Some(orc) = oracle {
+        let Some(rect) = orc
+            .entities
+            .get(&qname)
+            .or_else(|| orc.entities.get(&pkg.name))
+        else {
+            return;
+        };
+        (
+            rect.x,
+            rect.y,
+            rect.width,
+            rect.height,
+            rect.text_x_values.as_slice(),
+            rect.text_y_values.as_slice(),
+        )
+    } else {
+        let Some(cluster) = cluster_positions.iter().find(|p| p.id == pkg.name) else {
+            return;
+        };
+        (
+            cluster.x,
+            cluster.y,
+            cluster.width,
+            cluster.height,
+            &[],
+            &[],
+        )
     };
     let ent_id = id_map
         .get(&format!("pkg::{}", pkg.name))
@@ -1006,22 +1065,22 @@ fn render_package_group(
             // Plain rounded rect, centred bold label.
             svg.raw(&format!(
                 r#"<rect fill="{fill}" height="{h}" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"#,
-                h = fc(rect.height),
-                w = fc(rect.width),
-                x = fc(rect.x),
-                y = fc(rect.y),
+                h = fc(rect_h),
+                w = fc(rect_w),
+                x = fc(rect_x),
+                y = fc(rect_y),
             ));
-            (rect.x + (rect.width - label_w) / 2.0, rect.y + 15.5352)
+            (rect_x + (rect_w - label_w) / 2.0, rect_y + 15.5352)
         }
         PackageKind::Package => {
             // Folder-tab outline: a notched top-left "tab" carrying the label,
             // a diagonal slope down to the body's top edge, then a rounded
             // rectangle body. Reconstructed from the oracle box rect and label
             // width (HALF_UP coords).
-            let x = rect.x;
-            let y = rect.y;
-            let xr = rect.x + rect.width;
-            let yb = rect.y + rect.height;
+            let x = rect_x;
+            let y = rect_y;
+            let xr = rect_x + rect_w;
+            let yb = rect_y + rect_h;
             // Tab top-right corner: label start (x+4) + label width, less 0.5.
             let tab_tr = x + 3.5 + label_w;
             let tab_y = y + pm::text_height(FONT_SIZE) + 6.0;
@@ -1056,8 +1115,8 @@ fn render_package_group(
     };
     // Prefer the oracle-captured label baseline (avoids sub-pixel drift from
     // recomputing `rect.y + offset` against the already-rounded oracle rect).
-    let label_x = rect.text_x_values.first().copied().unwrap_or(label_x);
-    let label_y = rect.text_y_values.first().copied().unwrap_or(label_y);
+    let label_x = captured_x.first().copied().unwrap_or(label_x);
+    let label_y = captured_y.first().copied().unwrap_or(label_y);
     let mut buf = String::new();
     text_render::emit_text(
         &mut buf,
@@ -1733,18 +1792,34 @@ fn render_no_oracle_connections(
         let link_id = no_oracle_link_id(diagram, conn.source_line);
         let from_label = link_comment_name(diagram, &conn.from);
         let to_label = link_comment_name(diagram, &conn.to);
+        let link_type = if conn.arrow {
+            "dependency"
+        } else {
+            "association"
+        };
         svg.raw(&format!("<!--link {from_label} to {to_label}-->"));
         svg.raw(&format!(
-            r#"<g class="link" data-entity-1="{ent1}" data-entity-2="{ent2}" data-link-type="dependency" data-source-line="{line}" id="{link_id}">"#,
+            r#"<g class="link" data-entity-1="{ent1}" data-entity-2="{ent2}" data-link-type="{link_type}" data-source-line="{line}" id="{link_id}">"#,
             line = conn.source_line,
         ));
-        if let Some(d) = edge_path_d(edge) {
+        if let Some(d) = edge_path_d(edge, conn.arrow) {
+            let path_style = if conn.dashed {
+                format!("stroke:{STROKE};stroke-width:1;stroke-dasharray:7,7;")
+            } else {
+                format!("stroke:{STROKE};stroke-width:1;")
+            };
+            let path_id = if conn.arrow {
+                format!("{}-to-{}", conn.from, conn.to)
+            } else {
+                format!("{}-{}", conn.from, conn.to)
+            };
             svg.raw(&format!(
-                r#"<path d="{d}" fill="none" id="{}-to-{}" style="stroke:{STROKE};stroke-width:1;"/>"#,
-                conn.from, conn.to,
+                r#"<path d="{d}" fill="none" id="{path_id}" style="{path_style}"/>"#,
             ));
         }
-        if let Some((control, endpoint)) = edge_arrow_basis(edge) {
+        if conn.arrow
+            && let Some((control, endpoint)) = edge_arrow_basis(edge)
+        {
             let points = dependency_arrow_points(control, endpoint);
             svg.raw(&format!(
                 r##"<polygon fill="#181818" points="{points}" style="stroke:#181818;stroke-width:1;"/>"##,
@@ -1830,8 +1905,25 @@ fn no_oracle_link_id(diagram: &UseCaseDiagram, source_line: usize) -> String {
     format!("lnk{counter}")
 }
 
-fn edge_path_d(edge: &EdgePath) -> Option<String> {
-    let (start, rest) = edge.points.split_first()?;
+fn edge_path_d(edge: &EdgePath, shorten_for_arrow: bool) -> Option<String> {
+    let mut points = edge.points.clone();
+    if shorten_for_arrow && points.len() >= 2 {
+        let end = points.len() - 1;
+        let control =
+            points[..end].iter().rev().copied().find(|p| {
+                (p.0 - points[end].0).abs() > 0.01 || (p.1 - points[end].1).abs() > 0.01
+            })?;
+        let dx = points[end].0 - control.0;
+        let dy = points[end].1 - control.1;
+        let len = (dx * dx + dy * dy).sqrt().max(1.0);
+        let ux = dx / len;
+        let uy = dy / len;
+        for point in &mut points[end.saturating_sub(1)..=end] {
+            point.0 -= ux * DEPENDENCY_ARROW_PATH_GAP;
+            point.1 -= uy * DEPENDENCY_ARROW_PATH_GAP;
+        }
+    }
+    let (start, rest) = points.split_first()?;
     let mut d = format!("M{},{}", fc(start.0), fc(start.1));
     for chunk in rest.chunks(3) {
         if let [c1, c2, to] = chunk {
@@ -1870,18 +1962,18 @@ fn dependency_arrow_points(control: (f64, f64), endpoint: (f64, f64)) -> String 
     let uy = dy / len;
     let px = -uy;
     let py = ux;
-    let back = 9.0;
-    let notch = 5.0;
-    let wing = 4.0;
     let p1 = endpoint;
     let p2 = (
-        endpoint.0 - ux * back + px * wing,
-        endpoint.1 - uy * back + py * wing,
+        endpoint.0 - ux * DEPENDENCY_ARROW_BACK + px * DEPENDENCY_ARROW_WING,
+        endpoint.1 - uy * DEPENDENCY_ARROW_BACK + py * DEPENDENCY_ARROW_WING,
     );
-    let p3 = (endpoint.0 - ux * notch, endpoint.1 - uy * notch);
+    let p3 = (
+        endpoint.0 - ux * DEPENDENCY_ARROW_NOTCH,
+        endpoint.1 - uy * DEPENDENCY_ARROW_NOTCH,
+    );
     let p4 = (
-        endpoint.0 - ux * back - px * wing,
-        endpoint.1 - uy * back - py * wing,
+        endpoint.0 - ux * DEPENDENCY_ARROW_BACK - px * DEPENDENCY_ARROW_WING,
+        endpoint.1 - uy * DEPENDENCY_ARROW_BACK - py * DEPENDENCY_ARROW_WING,
     );
     format!(
         "{},{} {},{} {},{} {},{} {},{}",

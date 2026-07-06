@@ -14,12 +14,23 @@ fn is_false(value: &bool) -> bool {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct UseCaseDiagram {
     pub meta: DiagramMeta,
+    #[serde(default)]
+    pub direction: UseCaseLayoutDirection,
     pub actors: Vec<Actor>,
     pub use_cases: Vec<UseCase>,
     pub connections: Vec<UseCaseConnection>,
     pub packages: Vec<UseCasePackage>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub notes: Vec<UseCaseNote>,
+}
+
+/// Dot/SVEK rank direction selected by `left to right direction` or
+/// `top to bottom direction`.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
+pub enum UseCaseLayoutDirection {
+    #[default]
+    TopToBottom,
+    LeftToRight,
 }
 
 /// An inline note attached to a diagram element or floating.
@@ -74,6 +85,13 @@ pub struct UseCaseConnection {
     pub to: String,
     pub label: Option<String>,
     pub stereotype: Option<String>,
+    /// True for dotted relations such as `..>` / `.>`; PlantUML renders these
+    /// with a DESCRIPTION dependency dash pattern.
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub dashed: bool,
+    /// True when the relation token carries an arrow head (`>`).
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub arrow: bool,
     /// 1-based line number within the `@startuml` block.
     #[serde(default)]
     pub source_line: usize,

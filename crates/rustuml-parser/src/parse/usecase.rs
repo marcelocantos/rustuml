@@ -47,6 +47,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
     let mut packages: Vec<UseCasePackage> = Vec::new();
     let mut notes: Vec<UseCaseNote> = Vec::new();
     let mut meta = DiagramMeta::default();
+    let mut direction = UseCaseLayoutDirection::TopToBottom;
     let mut current_package: Option<usize> = None;
     // For multiline string literals in usecase declarations.
     let mut multiline_uc_id: Option<String> = None;
@@ -251,9 +252,15 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
             continue;
         }
         // Skip top-level directives.
-        if trimmed.starts_with("left to right")
-            || trimmed.starts_with("top to bottom")
-            || trimmed.starts_with("end note")
+        if trimmed.starts_with("left to right direction") {
+            direction = UseCaseLayoutDirection::LeftToRight;
+            continue;
+        }
+        if trimmed.starts_with("top to bottom direction") {
+            direction = UseCaseLayoutDirection::TopToBottom;
+            continue;
+        }
+        if trimmed.starts_with("end note")
             || trimmed.starts_with("hide")
             || trimmed.starts_with("show")
             || trimmed.starts_with("!")
@@ -496,6 +503,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
             }
         } else if let Some(caps) = RE_CONN.captures(trimmed) {
             let from = normalize_endpoint(&caps[1]);
+            let arrow = caps[2].to_string();
             let to = normalize_endpoint(&caps[3]);
             let raw_label = caps.get(4).map(|m| m.as_str().trim().to_string());
             let stereotype = raw_label.as_ref().and_then(|l| extract_stereotype_text(l));
@@ -546,6 +554,8 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                 to,
                 label,
                 stereotype,
+                dashed: arrow.contains('.'),
+                arrow: arrow.contains('>'),
                 source_line: current_line,
             });
         } else if let Some(caps) = RE_PKG.captures(trimmed) {
@@ -572,6 +582,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
 
     Ok(UseCaseDiagram {
         meta,
+        direction,
         actors,
         use_cases,
         connections,
@@ -620,8 +631,16 @@ mod tests {
             "actor User\nusecase \"Login\" as UC1\nusecase \"Auth\" as UC2\nUC1 ..> UC2 : <<include>>",
         );
         assert_eq!(d.connections[0].stereotype.as_deref(), Some("include"));
+        assert!(d.connections[0].dashed);
+        assert!(d.connections[0].arrow);
         // Label should be normalized to guillemets.
         assert_eq!(d.connections[0].label.as_deref(), Some("«include»"));
+    }
+
+    #[test]
+    fn direction_directive_is_recorded() {
+        let d = parse("left to right direction\nactor User\nusecase UC1\nUser --> UC1");
+        assert_eq!(d.direction, UseCaseLayoutDirection::LeftToRight);
     }
 
     #[test]
