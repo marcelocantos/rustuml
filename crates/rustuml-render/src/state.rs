@@ -123,10 +123,10 @@ struct IdCounter {
 }
 
 impl IdCounter {
-    fn new() -> Self {
+    fn from_next(counter: usize) -> Self {
         Self {
-            entity_counter: 2,
-            link_counter: 0,
+            entity_counter: counter,
+            link_counter: counter,
         }
     }
 
@@ -494,6 +494,91 @@ fn compute_first_appearance_order(diagram: &StateDiagram) -> Vec<String> {
     }
     ordered.sort_by_key(|(line, seq, _)| (*line, *seq));
     ordered.into_iter().map(|(_, _, id)| id).collect()
+}
+
+struct StateSvgIds {
+    entity_ids: Vec<(String, String)>,
+    link_ids: Vec<String>,
+    next_counter: usize,
+}
+
+/// Allocate state entity/link ids in PlantUML's construction order.
+///
+/// Java provenance: `CommandCreateState.executeArg` creates explicit leaves as
+/// declarations are parsed; `CommandLinkStateCommon.executeArg` then calls
+/// `getEntityStart`, `getEntityEnd`, and `diagram.addLink` for each transition.
+/// SVEK later emits all entities before links, but the shared SVG id counter
+/// has already been consumed by those interleaved create-link events.
+fn allocate_state_svg_ids(diagram: &StateDiagram, state_ids: &[String]) -> StateSvgIds {
+    let mut next_counter = 2usize;
+    let mut entity_ids: Vec<(String, String)> = Vec::new();
+    let mut link_ids = vec![String::new(); diagram.transitions.len()];
+
+    let mut alloc_entity = |id: &str, next_counter: &mut usize| {
+        if state_ids.iter().any(|state_id| state_id == id)
+            && !entity_ids.iter().any(|(seen, _)| seen == id)
+        {
+            entity_ids.push((id.to_string(), format!("ent{next_counter:04}")));
+            *next_counter += 1;
+        }
+    };
+
+    let mut events: Vec<(usize, usize, IdEvent)> = Vec::new();
+    for (idx, state) in diagram.states.iter().enumerate() {
+        if let Some(line) = state.decl_line {
+            events.push((line, idx, IdEvent::Declaration(state.id.clone())));
+        }
+    }
+    for (idx, transition) in diagram.transitions.iter().enumerate() {
+        events.push((
+            transition.source_line,
+            diagram.states.len() + idx,
+            IdEvent::Transition(idx),
+        ));
+    }
+    events.sort_by_key(|(line, seq, _)| (*line, *seq));
+
+    for (_, _, event) in events {
+        match event {
+            IdEvent::Declaration(id) => alloc_entity(&id, &mut next_counter),
+            IdEvent::Transition(idx) => {
+                let transition = &diagram.transitions[idx];
+                let from = if transition.from == "[*]" {
+                    "__start__"
+                } else {
+                    transition.from.as_str()
+                };
+                let to = if transition.to == "[*]" {
+                    "__end__"
+                } else {
+                    transition.to.as_str()
+                };
+                alloc_entity(from, &mut next_counter);
+                alloc_entity(to, &mut next_counter);
+                link_ids[idx] = format!("lnk{next_counter}");
+                next_counter += 1;
+            }
+        }
+    }
+
+    for id in state_ids {
+        alloc_entity(id, &mut next_counter);
+    }
+    for id in link_ids.iter_mut().filter(|id| id.is_empty()) {
+        *id = format!("lnk{next_counter}");
+        next_counter += 1;
+    }
+
+    StateSvgIds {
+        entity_ids,
+        link_ids,
+        next_counter,
+    }
+}
+
+enum IdEvent {
+    Declaration(String),
+    Transition(usize),
 }
 
 // --- Rendering ---
@@ -1137,8 +1222,6 @@ pub fn render_with_oracle(
         .unwrap();
     }
 
-    let mut ids = IdCounter::new();
-
     // Handwritten compatibility notice.
     let has_deprecated_handwritten = has_deprecated_handwritten_skinparam(&diagram.meta.skinparams);
     if has_deprecated_handwritten
@@ -1179,35 +1262,35 @@ pub fn render_with_oracle(
         svg.push_str("</g>");
     }
 
-    // Assign entity IDs for all nodes. Fork/join bars do not emit a
-    // `<g class="entity">` wrapper; PlantUML still tracks them in its
-    // counter (they are referenced via `data-entity-1`/`data-entity-2` on
-    // surrounding `<g class="link">` wrappers) so we keep their allocation
-    // here.
-    let mut entity_ids: Vec<(String, String)> = Vec::new();
-    for (id, _, _, _, _) in &positions {
-        // Prefer the oracle's entity id when available — PlantUML's counter
-        // interleaves entity and link allocations in a way that's hard to
-        // model from first principles (start_entity sometimes shares an id
-        // with the preceding entity, etc.). Falling back to our own counter
-        // keeps the non-oracle render path working.
-        let oracle_id = oracle.and_then(|orc| {
-            let oracle_name = if let Some(key) = history_key_for(id) {
-                key
-            } else if id == "__start__" {
-                ".start."
-            } else if id == "__end__" {
-                ".end."
-            } else {
-                id.as_str()
-            };
-            orc.entities
-                .get(oracle_name)
-                .and_then(|r| r.entity_id.clone())
-        });
-        let ent_id = oracle_id.unwrap_or_else(|| ids.next_entity());
-        entity_ids.push((id.clone(), ent_id));
-    }
+    // Assign SVG ids using PlantUML's construction-time counter. Fork/join bars
+    // do not emit a `<g class="entity">` wrapper; PlantUML still tracks them in
+    // its counter, so the preallocation includes every positioned node.
+    let allocated_ids = allocate_state_svg_ids(diagram, &state_ids);
+    let mut ids = IdCounter::from_next(allocated_ids.next_counter);
+    let entity_ids: Vec<(String, String)> = if let Some(orc) = oracle {
+        positions
+            .iter()
+            .map(|(id, _, _, _, _)| {
+                let oracle_name = if let Some(key) = history_key_for(id) {
+                    key
+                } else if id == "__start__" {
+                    ".start."
+                } else if id == "__end__" {
+                    ".end."
+                } else {
+                    id.as_str()
+                };
+                let ent_id = orc
+                    .entities
+                    .get(oracle_name)
+                    .and_then(|r| r.entity_id.clone())
+                    .unwrap_or_else(|| ids.next_entity());
+                (id.clone(), ent_id)
+            })
+            .collect()
+    } else {
+        allocated_ids.entity_ids
+    };
 
     let ent_id_of = |id: &str| -> &str {
         entity_ids
@@ -2201,7 +2284,7 @@ pub fn render_with_oracle(
     if let Some(orc) = oracle {
         render_oracle_transitions(&mut svg, diagram, orc);
     } else {
-        for t in &diagram.transitions {
+        for (transition_idx, t) in diagram.transitions.iter().enumerate() {
             let from_layout = map_id(&t.from, true);
             let to_layout = map_id(&t.to, false);
             let from_name = if t.from == "[*]" { "*start*" } else { &t.from };
@@ -2210,7 +2293,12 @@ pub fn render_with_oracle(
             // HTML comment.
             write!(svg, "<!--link {} to {}-->", from_name, to_name).unwrap();
 
-            let link_id = ids.next_link();
+            let link_id = allocated_ids
+                .link_ids
+                .get(transition_idx)
+                .filter(|id| !id.is_empty())
+                .cloned()
+                .unwrap_or_else(|| ids.next_link());
             let from_ent = ent_id_of(&from_layout);
             let to_ent = ent_id_of(&to_layout);
 

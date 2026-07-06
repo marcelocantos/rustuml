@@ -3802,7 +3802,7 @@ fn render_entity_content(
             d.to_string()
         } else {
             match entity.kind {
-                EntityKind::Class | EntityKind::Object | EntityKind::Entity => {
+                EntityKind::Class | EntityKind::Object => {
                     // Offset the C glyph from reference position (cx=22) to actual cx.
                     let dx = icon_cx - 22.0;
                     let dy = icon_cy - 23.0;
@@ -3813,7 +3813,9 @@ fn render_entity_content(
                     }
                 }
                 EntityKind::Interface => interface_glyph(icon_cx, icon_cy),
-                EntityKind::Enum => {
+                EntityKind::Enum | EntityKind::Entity => {
+                    // Java `EntityImageClassHeader.getCircledChar` maps both
+                    // LeafType.ENUM and LeafType.ENTITY to the circled `E`.
                     let dx = icon_cx - 22.0;
                     let dy = icon_cy - 23.0;
                     if dx.abs() < 0.001 && dy.abs() < 0.001 {
@@ -4680,7 +4682,7 @@ fn render_entity_content(
                     let sep_inline_y = oracle_sep_y
                         .get(inline_sep_oracle_idx)
                         .copied()
-                        .unwrap_or(member_y - FIRST_MEMBER_OFFSET + COMPARTMENT_PAD - 1.0);
+                        .unwrap_or(member_y - FIRST_MEMBER_OFFSET + COMPARTMENT_PAD);
                     inline_sep_oracle_idx += 1;
                     write!(
                         svg,
@@ -4692,6 +4694,10 @@ fn render_entity_content(
                         fmt4(sep_inline_y),
                     )
                     .unwrap();
+                    // PlantUML's entity-table divider starts a fresh
+                    // compartment; following rows are measured from the
+                    // divider line, not from the previous field baseline.
+                    member_y = sep_inline_y + FIRST_MEMBER_OFFSET;
                     // After an inline divider, subsequent default-visibility
                     // fields move to the narrow inset ONLY when the whole
                     // post-divider sub-compartment is default-visibility. If
@@ -6162,8 +6168,15 @@ fn render_relationship_svg(
         ""
     };
 
+    let points = shortened_endpoint_points(
+        &edge_path.points,
+        rel.from_decor
+            .map(endpoint_decoration_length)
+            .unwrap_or(0.0),
+        rel.to_decor.map(endpoint_decoration_length).unwrap_or(0.0),
+    );
+
     // Build cubic bezier path.
-    let points = &edge_path.points;
     let mut d = format!("M{},{}", fmt4(points[0].0), fmt4(points[0].1));
     let mut i = 1;
     while i + 2 <= points.len() {
@@ -6207,8 +6220,8 @@ fn render_relationship_svg(
     )
     .unwrap();
 
-    emit_no_oracle_endpoint_decor(svg, rel.from_decor, &edge_path.points, true);
-    emit_no_oracle_endpoint_decor(svg, rel.to_decor, &edge_path.points, false);
+    emit_no_oracle_endpoint_decor(svg, rel.from_decor, &points, true);
+    emit_no_oracle_endpoint_decor(svg, rel.to_decor, &points, false);
 
     // Arrowhead.
     match rel.kind {
@@ -6318,6 +6331,51 @@ fn edge_midpoint(points: &[(f64, f64)]) -> (f64, f64) {
     points.get(points.len() / 2).copied().unwrap_or(points[0])
 }
 
+fn shortened_endpoint_points(
+    points: &[(f64, f64)],
+    start_len: f64,
+    end_len: f64,
+) -> Vec<(f64, f64)> {
+    let mut out = points.to_vec();
+    if out.len() < 2 {
+        return out;
+    }
+    if start_len > 0.0 {
+        let tangent = unit_vector(out[0], out[1]);
+        out[0] = add(out[0], scale(tangent, start_len));
+    }
+    if end_len > 0.0 {
+        let last = out.len() - 1;
+        let tangent = unit_vector(out[last], out[last - 1]);
+        out[last] = add(out[last], scale(tangent, end_len));
+    }
+    out
+}
+
+fn endpoint_decoration_length(decor: EndpointDecor) -> f64 {
+    // Java SVEK shortens `dotPath` by `Extremity::getDecorationLength()` in
+    // `SvekEdge.getExtremitySimplier` before drawing the endpoint decoration.
+    // Values below are from the corresponding PlantUML extremity classes.
+    match decor {
+        EndpointDecor::CrowFoot => 8.0,
+        EndpointDecor::CircleCrowFoot => 18.0,
+        EndpointDecor::CircleLine => 15.0,
+        EndpointDecor::DoubleLine => 8.0,
+        EndpointDecor::LineCrowFoot => 8.0,
+    }
+}
+
+fn unit_vector(from: (f64, f64), to: (f64, f64)) -> (f64, f64) {
+    let ux = to.0 - from.0;
+    let uy = to.1 - from.1;
+    let len = (ux * ux + uy * uy).sqrt();
+    if len <= f64::EPSILON {
+        (0.0, 0.0)
+    } else {
+        (ux / len, uy / len)
+    }
+}
+
 fn emit_no_oracle_endpoint_decor(
     svg: &mut String,
     decor: Option<EndpointDecor>,
@@ -6335,12 +6393,8 @@ fn emit_no_oracle_endpoint_decor(
     } else {
         (points[points.len() - 1], points[points.len() - 2])
     };
-    let mut ux = contact.0 - neighbor.0;
-    let mut uy = contact.1 - neighbor.1;
-    if at_start {
-        ux = -ux;
-        uy = -uy;
-    }
+    let ux = contact.0 - neighbor.0;
+    let uy = contact.1 - neighbor.1;
     let len = (ux * ux + uy * uy).sqrt();
     if len <= f64::EPSILON {
         return;
@@ -7282,6 +7336,7 @@ mod tests {
 
         assert!(svg.contains(r#"data-link-type="crowfoot""#));
         assert!(svg.contains(r#"id="Animal-Dog""#));
+        assert!(svg.contains(r#"d="M40,58 C40,80 40,120 40,132""#));
         assert!(svg.contains("<line "));
         assert!(svg.contains("<ellipse "));
         assert!(svg.contains(">renamed relation</text>"));

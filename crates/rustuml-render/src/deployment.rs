@@ -11,7 +11,7 @@
 use std::collections::{HashMap, HashSet};
 use std::fmt::Write as _;
 
-use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph, NodePosition};
+use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph, LayoutResult};
 use rustuml_parser::diagram::deployment::*;
 
 use crate::handwritten::{
@@ -2741,36 +2741,70 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
     // GeneralImageBuilder paints the returned positions. This mirrors that
     // data flow with the vendored Graphviz wrapper rather than grid-placement.
     let dims: Vec<DeploymentNodeDim> = diagram.nodes.iter().map(deployment_node_dim).collect();
+    let parent_of = deployment_parent_map(diagram);
+    let cluster_ids: HashSet<&str> = diagram
+        .nodes
+        .iter()
+        .filter(|node| !node.children.is_empty())
+        .map(|node| node.id.as_str())
+        .collect();
     let mut layout = LayoutGraph::new(Direction::TopToBottom).with_plantuml_svek_spacing();
     for (node, dim) in diagram.nodes.iter().zip(&dims) {
-        layout.add_node(&node.id, &node.label, dim.width, dim.height);
+        if !cluster_ids.contains(node.id.as_str()) {
+            layout.add_node(&node.id, &node.label, dim.width, dim.height);
+        }
+    }
+    for node in &diagram.nodes {
+        if cluster_ids.contains(node.id.as_str()) {
+            let parent = parent_of
+                .get(&node.id)
+                .filter(|parent| cluster_ids.contains(parent.as_str()))
+                .map(String::as_str);
+            layout.add_cluster(&node.id, &node.label, parent);
+        }
+    }
+    for node in &diagram.nodes {
+        if cluster_ids.contains(node.id.as_str()) {
+            continue;
+        }
+        if let Some(parent) = parent_of.get(&node.id)
+            && cluster_ids.contains(parent.as_str())
+        {
+            layout.add_cluster_node(parent, &node.id);
+        }
     }
     for conn in &diagram.connections {
-        layout.add_edge(&conn.from, &conn.to, conn.label.as_deref());
+        if !cluster_ids.contains(conn.from.as_str()) && !cluster_ids.contains(conn.to.as_str()) {
+            layout.add_edge(&conn.from, &conn.to, conn.label.as_deref());
+        }
     }
 
     let result = layout.layout_full(LAYOUT_TIMEOUT);
-    let positions = result.as_ref().map(|r| r.node_positions.as_slice());
-    let (rects, content_w, content_h) = layout_deployment_rects(diagram, &dims, positions);
+    let (rects, content_w, content_h) = layout_deployment_rects(diagram, &dims, result.as_ref());
     let total_w = (content_w + BODY_RIGHT_MARGIN).max(100.0);
     let total_h = (content_h + BODY_BOTTOM_MARGIN).max(50.0);
 
     let mut oracle = OracleLayout::default();
+    let qnames = deployment_qnames(diagram, &parent_of);
     for (i, node) in diagram.nodes.iter().enumerate() {
         let dim = &dims[i];
         let rect = rects[i];
         let mut entity_rect = empty_entity_rect(rect.x, rect.y, rect.width, rect.height);
-        let text_y = rect.y + dim.top_pad;
-        let text_x = entity_text_center(node.kind, rect.x, rect.width) - dim.label_width / 2.0;
-        entity_rect.text_x_values.push(text_x);
-        entity_rect.text_y_values.push(text_y);
-        entity_rect.texts.push(EntityText {
-            x: text_x,
-            y: text_y,
-            text: node.label.clone(),
-        });
+        if !cluster_ids.contains(node.id.as_str()) {
+            let text_y = rect.y + dim.top_pad;
+            let text_x = entity_text_center(node.kind, rect.x, rect.width) - dim.label_width / 2.0;
+            entity_rect.text_x_values.push(text_x);
+            entity_rect.text_y_values.push(text_y);
+            entity_rect.texts.push(EntityText {
+                x: text_x,
+                y: text_y,
+                text: node.label.clone(),
+            });
+        }
         entity_rect.source_line = Some(node.source_line.to_string());
-        oracle.entities.insert(own_qname(node), entity_rect);
+        oracle
+            .entities
+            .insert(qnames[&node.id].clone(), entity_rect);
     }
 
     let id_for_node = no_oracle_node_ids(diagram);
@@ -2787,8 +2821,26 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
     };
 
     let mut svg = SvgBuilder::new_plantuml(total_w, total_h, "DESCRIPTION");
-    for node in &diagram.nodes {
-        emit_entity(&mut svg, node, &own_qname(node), &ctx);
+    let all_children: HashSet<&str> = diagram
+        .nodes
+        .iter()
+        .flat_map(|n| n.children.iter().map(|s| s.as_str()))
+        .collect();
+    let roots: Vec<&DeploymentNode> = diagram
+        .nodes
+        .iter()
+        .filter(|n| !all_children.contains(n.id.as_str()))
+        .collect();
+    for root in &roots {
+        emit_clusters_dfs(&mut svg, root, &diagram.nodes, None, &ctx);
+    }
+    let mut leaves = Vec::new();
+    for root in &roots {
+        collect_entities_dfs(root, &diagram.nodes, None, 0, &mut leaves);
+    }
+    leaves.sort_by_key(|(_, source_line, _, _)| *source_line);
+    for (_, _, node, qname) in leaves {
+        emit_entity(&mut svg, node, &qname, &ctx);
     }
     if let Some(result) = result.as_ref() {
         render_no_oracle_edges(&mut svg, diagram, &id_for_node, &result.edge_paths);
@@ -2809,6 +2861,37 @@ struct LayoutRect {
     y: f64,
     width: f64,
     height: f64,
+}
+
+fn deployment_parent_map(diagram: &DeploymentDiagram) -> HashMap<String, String> {
+    let mut parent_of = HashMap::new();
+    for node in &diagram.nodes {
+        for child in &node.children {
+            parent_of.insert(child.clone(), node.id.clone());
+        }
+    }
+    parent_of
+}
+
+fn deployment_qnames(
+    diagram: &DeploymentDiagram,
+    parent_of: &HashMap<String, String>,
+) -> HashMap<String, String> {
+    let mut qnames = HashMap::new();
+    for node in &diagram.nodes {
+        let mut qname = own_qname(node);
+        let mut cur_id = node.id.as_str();
+        while let Some(parent_id) = parent_of.get(cur_id) {
+            if let Some(parent) = diagram.nodes.iter().find(|n| n.id == *parent_id) {
+                qname = format!("{}.{qname}", own_qname(parent));
+                cur_id = parent.id.as_str();
+            } else {
+                break;
+            }
+        }
+        qnames.insert(node.id.clone(), qname);
+    }
+    qnames
 }
 
 fn deployment_node_dim(node: &DeploymentNode) -> DeploymentNodeDim {
@@ -2853,13 +2936,45 @@ fn deployment_node_dim(node: &DeploymentNode) -> DeploymentNodeDim {
 fn layout_deployment_rects(
     diagram: &DeploymentDiagram,
     dims: &[DeploymentNodeDim],
-    positions: Option<&[NodePosition]>,
+    result: Option<&LayoutResult>,
 ) -> (Vec<LayoutRect>, f64, f64) {
     let mut rects = Vec::new();
-    if let Some(positions) = positions
-        && positions.len() >= diagram.nodes.len()
-    {
-        for (pos, dim) in positions.iter().zip(dims) {
+    if let Some(result) = result {
+        let cluster_ids: HashSet<&str> = diagram
+            .nodes
+            .iter()
+            .filter(|node| !node.children.is_empty())
+            .map(|node| node.id.as_str())
+            .collect();
+        let cluster_positions: HashMap<&str, &rustuml_layout::graph::ClusterPosition> = result
+            .cluster_positions
+            .iter()
+            .map(|pos| (pos.id.as_str(), pos))
+            .collect();
+        let mut leaf_positions = result.node_positions.iter();
+        for (node, dim) in diagram.nodes.iter().zip(dims) {
+            if cluster_ids.contains(node.id.as_str()) {
+                if let Some(pos) = cluster_positions.get(node.id.as_str()) {
+                    rects.push(LayoutRect {
+                        x: pos.x + BODY_MARGIN,
+                        y: pos.y + BODY_MARGIN,
+                        width: pos.width,
+                        height: pos.height,
+                    });
+                } else {
+                    rects.push(LayoutRect {
+                        x: BODY_MARGIN,
+                        y: BODY_MARGIN,
+                        width: dim.width,
+                        height: dim.height,
+                    });
+                }
+                continue;
+            }
+            let Some(pos) = leaf_positions.next() else {
+                rects.clear();
+                break;
+            };
             rects.push(LayoutRect {
                 x: pos.x + BODY_MARGIN,
                 y: pos.y + BODY_MARGIN,
@@ -2867,7 +2982,9 @@ fn layout_deployment_rects(
                 height: dim.height,
             });
         }
-    } else {
+    }
+    if rects.len() != diagram.nodes.len() {
+        rects.clear();
         let mut y = BODY_MARGIN;
         for dim in dims {
             rects.push(LayoutRect {
