@@ -19,10 +19,12 @@
 //! it falls back to a simple geometry-driven grid renderer (kept below for
 //! standalone use).
 
+use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph};
 use rustuml_parser::diagram::archimate::*;
 
-use crate::layout_oracle::{OracleEntity, OracleLayout, emit_oracle_cluster_children};
-use crate::metrics;
+use crate::layout_oracle::{
+    EntityRect, OracleEdgePath, OracleEntity, OracleLayout, emit_oracle_cluster_children,
+};
 use crate::plantuml_metrics as pm;
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
@@ -41,6 +43,14 @@ const FONT_FAMILY: &str = "Verdana";
 const FONT_SIZE: f64 = 12.0;
 const MOTIVATION_FILL: &str = "#CCCCFF";
 const ELEMENT_STROKE_STYLE: &str = "stroke:#181818;stroke-width:0.5;";
+const LAYOUT_TIMEOUT: std::time::Duration = std::time::Duration::from_secs(5);
+const BODY_MARGIN: f64 = 6.0;
+/// PlantUML Archimate entities are `RoundedContainer`/`DiagonalCorner`
+/// stereotype boxes with this default DESCRIPTION minimum width.
+const ELEMENT_W: f64 = 140.0;
+/// Default Archimate entity height from PlantUML's DESCRIPTION renderer
+/// (e.g. `archimate_basic.svg`: Motivation boxes are 53.584px tall).
+const ELEMENT_H: f64 = 53.584;
 
 fn fc(v: f64) -> String {
     pm::fmt_coord(v)
@@ -401,176 +411,292 @@ fn layer_fill(layer: ArchimateLayer) -> &'static str {
     }
 }
 
-// ---------------------------------------------------------------------------
-// Fallback (no-oracle) geometry-driven grid renderer.
-// ---------------------------------------------------------------------------
-
-const ELEM_MIN_W: f64 = 120.0;
-const ELEM_H: f64 = 50.0;
-const MARGIN: f64 = 30.0;
-const GAP: f64 = 40.0;
-const FALLBACK_FONT_SIZE: f64 = 13.0;
-const SMALL_FONT: f64 = 10.0;
-const PADDING: f64 = 12.0;
-const CORNER_R: f64 = 8.0;
-const TITLE_FONT_SIZE: f64 = 14.0;
-const TITLE_HEIGHT: f64 = TITLE_FONT_SIZE + 10.0;
-const GROUP_PAD: f64 = 15.0;
-const GROUP_HEADER: f64 = 20.0;
-
-pub fn render(diagram: &ArchimateDiagram, theme: &Theme) -> String {
+pub fn render(diagram: &ArchimateDiagram, _theme: &Theme) -> String {
     if diagram.elements.is_empty() {
         return "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"50\"></svg>\n"
             .to_string();
     }
 
-    let n = diagram.elements.len();
-    let cols = (n as f64).sqrt().ceil() as usize;
+    let mut layout = LayoutGraph::new(Direction::TopToBottom).with_plantuml_svek_spacing();
+    for elem in &diagram.elements {
+        layout.add_node(&elem.id, &elem.label, ELEMENT_W, ELEMENT_H);
+    }
+    for rel in &diagram.relations {
+        let (from, to) = relation_layout_endpoints(rel);
+        layout.add_edge(from, to, rel.label.as_deref());
+    }
 
-    let widths: Vec<f64> = diagram
-        .elements
+    let result = layout.layout_full(LAYOUT_TIMEOUT);
+    let positions = result.as_ref().map(|r| r.node_positions.as_slice());
+    let entities = no_oracle_entities(diagram, positions);
+    let content_w = entities
         .iter()
-        .map(|e| {
-            let label_w = metrics::text_width(&e.label, FALLBACK_FONT_SIZE) + PADDING * 2.0;
-            let kind_w = metrics::text_width(&format!("\u{00ab}{}\u{00bb}", e.kind), SMALL_FONT)
-                + PADDING * 2.0;
-            label_w.max(kind_w).max(ELEM_MIN_W)
-        })
-        .collect();
+        .map(|e| e.rect.x + e.rect.width)
+        .fold(0.0_f64, f64::max);
+    let content_h = entities
+        .iter()
+        .map(|e| e.rect.y + e.rect.height)
+        .fold(0.0_f64, f64::max);
+    let mut svg = SvgBuilder::new_plantuml(
+        (content_w + BODY_MARGIN).max(100.0),
+        (content_h + BODY_MARGIN).max(50.0),
+        "DESCRIPTION",
+    );
 
-    let col_w: Vec<f64> = {
-        let mut cw = vec![0.0_f64; cols];
-        for (i, w) in widths.iter().enumerate() {
-            cw[i % cols] = cw[i % cols].max(*w);
-        }
-        cw
-    };
-    let rows = n.div_ceil(cols);
-
-    let title_h = if diagram.meta.title.is_some() {
-        TITLE_HEIGHT
-    } else {
-        0.0
-    };
-    let total_w =
-        (MARGIN * 2.0 + col_w.iter().sum::<f64>() + GAP * (cols.max(1) - 1) as f64).max(200.0);
-    let total_h = (MARGIN * 2.0 + rows as f64 * (ELEM_H + GAP) + title_h).max(80.0);
-
-    let mut svg = SvgBuilder::new(total_w, total_h);
-
-    if let Some(title) = &diagram.meta.title {
-        svg.text(
-            total_w / 2.0,
-            TITLE_HEIGHT - 4.0,
-            title,
-            "middle",
-            TITLE_FONT_SIZE,
-        );
+    for (ent, elem) in entities.iter().zip(&diagram.elements) {
+        emit_entity(&mut svg, ent, elem);
     }
 
-    let cs = &theme.class;
-
-    let y_start = title_h + MARGIN;
-    let mut positions = Vec::new();
-    for (i, _elem) in diagram.elements.iter().enumerate() {
-        let col = i % cols;
-        let row = i / cols;
-        let x = MARGIN + col_w[..col].iter().sum::<f64>() + GAP * col as f64;
-        let y = y_start + row as f64 * (ELEM_H + GAP);
-        let w = col_w[col];
-        positions.push((x, y, w));
-    }
-
-    for group in &diagram.groups {
-        if group.element_ids.is_empty() {
-            continue;
-        }
-        let mut min_x = f64::MAX;
-        let mut min_y = f64::MAX;
-        let mut max_x = f64::MIN;
-        let mut max_y = f64::MIN;
-        for eid in &group.element_ids {
-            if let Some(idx) = diagram.elements.iter().position(|e| e.id == *eid) {
-                let (ex, ey, ew) = positions[idx];
-                min_x = min_x.min(ex);
-                min_y = min_y.min(ey);
-                max_x = max_x.max(ex + ew);
-                max_y = max_y.max(ey + ELEM_H);
+    if let Some(result) = result.as_ref() {
+        let id_to_name = entities
+            .iter()
+            .filter_map(|e| {
+                e.rect
+                    .entity_id
+                    .as_ref()
+                    .map(|id| (id.clone(), e.qualified_name.clone()))
+            })
+            .collect();
+        for (i, rel) in diagram.relations.iter().enumerate() {
+            if let Some(edge) = result.edge_paths.iter().find(|edge| {
+                edge.from == relation_layout_endpoints(rel).0
+                    && edge.to == relation_layout_endpoints(rel).1
+            }) {
+                let oracle_edge = no_oracle_edge(diagram, rel, i, edge, &entities);
+                emit_link(&mut svg, &oracle_edge, &id_to_name);
             }
         }
-        if min_x < f64::MAX {
-            let gx = min_x - GROUP_PAD;
-            let gy = min_y - GROUP_PAD - GROUP_HEADER;
-            let gw = max_x - min_x + GROUP_PAD * 2.0;
-            let gh = max_y - min_y + GROUP_PAD * 2.0 + GROUP_HEADER;
-            svg.rect(gx, gy, gw, gh, "#EEEEEE", "#888888");
-            svg.text(
-                gx + 6.0,
-                gy + GROUP_HEADER - 4.0,
-                &group.label,
-                "start",
-                FALLBACK_FONT_SIZE,
-            );
+    }
+
+    svg.finalize_plantuml()
+}
+
+fn relation_layout_endpoints(rel: &ArchimateRelation) -> (&str, &str) {
+    match rel.direction {
+        ArchimateRelationDirection::Up | ArchimateRelationDirection::Left => (&rel.to, &rel.from),
+        ArchimateRelationDirection::Default
+        | ArchimateRelationDirection::Down
+        | ArchimateRelationDirection::Right => (&rel.from, &rel.to),
+    }
+}
+
+fn no_oracle_entities(
+    diagram: &ArchimateDiagram,
+    positions: Option<&[rustuml_layout::graph::NodePosition]>,
+) -> Vec<OracleEntity> {
+    diagram
+        .elements
+        .iter()
+        .enumerate()
+        .map(|(i, elem)| {
+            let (x, y) = positions
+                .and_then(|p| p.get(i))
+                .map(|p| (p.x + BODY_MARGIN, p.y + BODY_MARGIN))
+                .unwrap_or((BODY_MARGIN, BODY_MARGIN + i as f64 * (ELEMENT_H + 50.0)));
+            let mut rect = empty_entity_rect(x, y, ELEMENT_W, ELEMENT_H);
+            rect.entity_id = Some(format!("ent{:04}", i + 2));
+            rect.source_line = (elem.source_line > 0).then(|| elem.source_line.to_string());
+            rect.fill = Some(layer_fill(elem.layer).to_string());
+            rect.body_style = Some(ELEMENT_STROKE_STYLE.to_string());
+            rect.rect_rx = Some("0.5".to_string());
+            rect.rect_ry = Some("0.5".to_string());
+            OracleEntity {
+                qualified_name: elem.id.clone(),
+                rect,
+            }
+        })
+        .collect()
+}
+
+fn empty_entity_rect(x: f64, y: f64, width: f64, height: f64) -> EntityRect {
+    EntityRect {
+        x,
+        y,
+        width,
+        height,
+        icon_cx: None,
+        icon_cy: None,
+        glyph_path_d: None,
+        body_polygon: None,
+        icon_polygon: None,
+        separator_paths: vec![],
+        visibility_polygons: vec![],
+        name_text_x: None,
+        text_y_values: vec![],
+        text_x_values: vec![],
+        sep_y_values: vec![],
+        sep_lines: vec![],
+        vis_icon_y_values: vec![],
+        fill: None,
+        body_style: None,
+        rect_style: None,
+        rect_rx: None,
+        rect_ry: None,
+        rect_filter: None,
+        entity_id: None,
+        source_line: None,
+        aux_rects: vec![],
+        lines: vec![],
+        texts: vec![],
+        images: vec![],
+    }
+}
+
+fn no_oracle_edge(
+    diagram: &ArchimateDiagram,
+    rel: &ArchimateRelation,
+    index: usize,
+    edge: &EdgePath,
+    entities: &[OracleEntity],
+) -> OracleEdgePath {
+    let (layout_from, layout_to) = relation_layout_endpoints(rel);
+    let reverse = layout_from == rel.to;
+    let id = if reverse {
+        format!("{layout_from}-backto-{layout_to}")
+    } else {
+        format!("{layout_from}-{layout_to}")
+    };
+    let (link_type, path_style, arrow_fill) = archimate_edge_style(rel.kind);
+    let mut labels = Vec::new();
+    if let Some(label) = rel.label.as_deref()
+        && let Some((x, y)) = edge.points.get(edge.points.len() / 2).copied()
+    {
+        labels.push((x + BODY_MARGIN, y + BODY_MARGIN, label.to_string()));
+    }
+    OracleEdgePath {
+        id: id.clone(),
+        path_id: Some(id),
+        d: edge_path_d(edge),
+        arrow_points: edge
+            .end_point
+            .and_then(|(x, y)| arrow_polygon_points(x + BODY_MARGIN, y + BODY_MARGIN)),
+        second_arrow_points: None,
+        second_arrow_fill: None,
+        second_polygon_style: None,
+        arrow_fill,
+        link_type: Some(link_type.to_string()),
+        entity_1: entity_id(entities, layout_from),
+        entity_2: entity_id(entities, layout_to),
+        source_line: (rel.source_line > 0).then(|| rel.source_line.to_string()),
+        link_id: Some(no_oracle_link_id(diagram, rel.source_line, index)),
+        path_style: Some(path_style.to_string()),
+        code_line: None,
+        polygon_style: Some("stroke:#000000;stroke-width:1;".to_string()),
+        label: None,
+        labels,
+        label_links: vec![],
+        extra_paths: vec![],
+        crow_lines: vec![],
+        decorations: vec![],
+    }
+}
+
+fn archimate_edge_style(
+    kind: ArchimateRelationKind,
+) -> (&'static str, &'static str, Option<String>) {
+    match kind {
+        ArchimateRelationKind::Association => {
+            ("association", "stroke:#000000;stroke-width:1;", None)
         }
+        ArchimateRelationKind::Aggregation => (
+            "aggregation",
+            "stroke:#000000;stroke-width:1;",
+            Some("none".to_string()),
+        ),
+        ArchimateRelationKind::Composition => (
+            "composition",
+            "stroke:#000000;stroke-width:1;",
+            Some("#000000".to_string()),
+        ),
+        ArchimateRelationKind::Realization => (
+            "extension",
+            "stroke:#000000;stroke-width:1;stroke-dasharray:1,3;",
+            Some("none".to_string()),
+        ),
+        ArchimateRelationKind::Influence => (
+            "dependency",
+            "stroke:#000000;stroke-width:1;stroke-dasharray:7,7;",
+            Some("#000000".to_string()),
+        ),
+        ArchimateRelationKind::Serving
+        | ArchimateRelationKind::Triggering
+        | ArchimateRelationKind::Access
+        | ArchimateRelationKind::Assignment
+        | ArchimateRelationKind::Other => (
+            "dependency",
+            "stroke:#000000;stroke-width:1;",
+            Some("#000000".to_string()),
+        ),
     }
+}
 
-    for (i, elem) in diagram.elements.iter().enumerate() {
-        let (x, y, w) = positions[i];
-        let fill = elem.layer.default_color();
+fn entity_id(entities: &[OracleEntity], id: &str) -> Option<String> {
+    entities
+        .iter()
+        .find(|e| e.qualified_name == id)
+        .and_then(|e| e.rect.entity_id.clone())
+}
 
-        svg.rounded_rect(x, y, w, ELEM_H, CORNER_R, fill, &cs.border_color);
-
-        svg.text_colored(
-            x + w / 2.0,
-            y + 16.0,
-            &format!("\u{00ab}{}\u{00bb}", elem.kind),
-            "middle",
-            SMALL_FONT,
-            "#666666",
-        );
-
-        svg.text(
-            x + w / 2.0,
-            y + ELEM_H / 2.0 + 10.0,
-            &elem.label,
-            "middle",
-            FALLBACK_FONT_SIZE,
-        );
+fn no_oracle_link_id(diagram: &ArchimateDiagram, source_line: usize, index: usize) -> String {
+    let mut items = Vec::new();
+    for elem in &diagram.elements {
+        items.push((elem.source_line, false));
     }
-
     for rel in &diagram.relations {
-        let fi = diagram.elements.iter().position(|e| e.id == rel.from);
-        let ti = diagram.elements.iter().position(|e| e.id == rel.to);
-
-        let (fi, ti) = match (fi, ti) {
-            (Some(f), Some(t)) => (f, t),
-            _ => continue,
-        };
-
-        let (fx, fy, fw) = positions[fi];
-        let (tx, ty, tw) = positions[ti];
-
-        let from_cx = fx + fw / 2.0;
-        let from_cy = fy + ELEM_H;
-        let to_cx = tx + tw / 2.0;
-        let to_cy = ty;
-
-        let dashed = matches!(
-            rel.kind,
-            ArchimateRelationKind::Realization | ArchimateRelationKind::Influence
-        );
-
-        svg.line_segment(from_cx, from_cy, to_cx, to_cy, &cs.border_color, dashed);
-        svg.arrow_head(to_cx, to_cy, 90.0);
-
-        if let Some(label) = &rel.label {
-            let mx = (from_cx + to_cx) / 2.0;
-            let my = (from_cy + to_cy) / 2.0;
-            svg.text(mx + 6.0, my - 4.0, label, "start", SMALL_FONT);
+        items.push((rel.source_line, true));
+    }
+    items.sort_by_key(|(line, _)| *line);
+    let mut seen_same_line = 0usize;
+    for (counter, (line, is_link)) in (2usize..).zip(items) {
+        if is_link && line == source_line {
+            if seen_same_line == index {
+                return format!("lnk{counter}");
+            }
+            seen_same_line += 1;
         }
     }
+    format!("lnk{}", diagram.elements.len() + index + 2)
+}
 
-    svg.finalize()
+fn edge_path_d(edge: &EdgePath) -> String {
+    let Some((start, rest)) = edge.points.split_first() else {
+        return String::new();
+    };
+    let mut d = format!(
+        "M{},{}",
+        fc(start.0 + BODY_MARGIN),
+        fc(start.1 + BODY_MARGIN)
+    );
+    for chunk in rest.chunks(3) {
+        if let [c1, c2, to] = chunk {
+            d.push_str(&format!(
+                " C{},{} {},{} {},{}",
+                fc(c1.0 + BODY_MARGIN),
+                fc(c1.1 + BODY_MARGIN),
+                fc(c2.0 + BODY_MARGIN),
+                fc(c2.1 + BODY_MARGIN),
+                fc(to.0 + BODY_MARGIN),
+                fc(to.1 + BODY_MARGIN),
+            ));
+        }
+    }
+    d
+}
+
+fn arrow_polygon_points(x: f64, y: f64) -> Option<String> {
+    Some(format!(
+        "{},{} {},{} {},{} {},{} {},{}",
+        fc(x),
+        fc(y),
+        fc(x + 4.0),
+        fc(y - 9.0),
+        fc(x),
+        fc(y - 5.0),
+        fc(x - 4.0),
+        fc(y - 9.0),
+        fc(x),
+        fc(y),
+    ))
 }
 
 #[cfg(test)]
@@ -590,16 +716,19 @@ mod tests {
         let input = "@startuml\n!include <archimate/Archimate>\nBusiness_Actor(a, \"Biz\")\nTechnology_Node(b, \"Tech\")\n@enduml";
         let diagram = rustuml_parser::parse::parse(input).unwrap();
         let svg = crate::render_svg(&diagram);
-        assert!(svg.contains("#FFFFB5"), "Business color missing: {svg}");
-        assert!(svg.contains("#C9E7B7"), "Technology color missing: {svg}");
+        assert!(svg.contains("#FFFFCC"), "Business color missing: {svg}");
+        assert!(svg.contains("#C9FFC9"), "Technology color missing: {svg}");
     }
 
     #[test]
-    fn stereotype_labels_rendered() {
+    fn archimate_label_and_icon_rendered() {
         let input = "@startuml\n!include <archimate/Archimate>\nMotivation_Goal(g, \"Reduce Costs\")\n@enduml";
         let diagram = rustuml_parser::parse::parse(input).unwrap();
         let svg = crate::render_svg(&diagram);
-        assert!(svg.contains("Goal"), "Kind label missing: {svg}");
-        assert!(svg.contains("Reduce Costs"), "Element label missing: {svg}");
+        assert!(svg.contains("Reduce"), "Element label missing: {svg}");
+        assert!(
+            svg.contains("<path"),
+            "Archimate icon/body path missing: {svg}"
+        );
     }
 }

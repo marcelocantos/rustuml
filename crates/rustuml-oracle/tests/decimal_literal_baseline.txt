@@ -3,7 +3,7 @@
 # source or an extracted metrics table, reviewed in the same change.
 # Regenerate: HARNESS_WRITE_BASELINES=1 cargo test --test harness_guards
 crates/rustuml-render/src/activity.rs 707
-crates/rustuml-render/src/archimate.rs 2
+crates/rustuml-render/src/archimate.rs 4
 crates/rustuml-render/src/archimate/icons.rs 2531
 crates/rustuml-render/src/board.rs 2
 crates/rustuml-render/src/class.rs 344

@@ -2177,7 +2177,13 @@ impl PreprocessContext {
             let from = &caps[2];
             let to = &caps[3];
             let label = &caps[4];
-            return Some(format!("archimate_rel {rel_kind} {from} {to} \"{label}\""));
+            // PlantUML reports the stdlib procedure body line for Archimate
+            // relation macros; Archimate.puml defines all `Rel_*` wrappers on
+            // the same hidden arrow statement line.
+            return Some(source_line_marker(
+                349,
+                &format!("archimate_rel {rel_kind} {from} {to} \"{label}\""),
+            ));
         }
 
         if let Some(caps) = ELEM_RE.captures(line) {
@@ -2185,10 +2191,44 @@ impl PreprocessContext {
             let kind = &caps[2];
             let id = &caps[3];
             let label = &caps[4];
-            return Some(format!("archimate_element {layer} {kind} {id} \"{label}\""));
+            let expanded = format!("archimate_element {layer} {kind} {id} \"{label}\"");
+            return Some(match self.archimate_element_source_line(layer, kind) {
+                Some(source_line) => source_line_marker(source_line, &expanded),
+                None => expanded,
+            });
         }
 
         None
+    }
+
+    fn archimate_element_source_line(&self, layer: &str, kind: &str) -> Option<usize> {
+        // Provenance: PlantUML stdlib `archimate/Archimate.puml`; these are
+        // the body lines whose expanded `archimate` statements receive
+        // `data-source-line` in Java's DESCRIPTION renderer.
+        match (layer, kind) {
+            ("Business", "Actor") => Some(110),
+            ("Business", "Role") => Some(117),
+            ("Business", "Process") => Some(127),
+            ("Business", "Function") => Some(130),
+            ("Application", "Component") => Some(167),
+            ("Application", "Service") => Some(191),
+            ("Technology", "Node") => Some(203),
+            ("Technology", "SystemSoftware") => Some(210),
+            ("Technology", "CommunicationNetwork") => Some(222),
+            ("Technology", "Artifact") => Some(247),
+            ("Motivation", "Stakeholder") => Some(270),
+            ("Motivation", "Driver") => Some(274),
+            ("Motivation", "Assessment") => Some(277),
+            ("Motivation", "Goal") => Some(280),
+            ("Motivation", "Principle") => Some(286),
+            ("Motivation", "Requirement") => Some(289),
+            ("Motivation", "Constraint") => Some(292),
+            ("Implementation", "WorkPackage") => Some(311),
+            ("Implementation", "Deliverable") => Some(314),
+            ("Implementation", "Plateau") => Some(320),
+            ("Implementation", "Gap") => Some(323),
+            _ => None,
+        }
     }
 
     // ------------------------------------------------------------------
