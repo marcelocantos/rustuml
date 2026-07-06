@@ -18,6 +18,9 @@
 //! `render_nested`). Without an oracle, nested diagrams fall through to a
 //! best-effort single-box render.
 
+use std::fmt::Write;
+
+use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph};
 use rustuml_parser::diagram::json_diagram::{DataFormat, JsonDiagram, JsonNode, JsonNodeValue};
 
 use crate::layout_oracle::{OracleLayout, wrap_oracle_envelope};
@@ -79,6 +82,10 @@ pub fn render_with_oracle(
         return svg;
     }
 
+    if let Some(svg) = render_nested_no_oracle(diagram, diagram_type) {
+        return svg;
+    }
+
     render_fallback(diagram, diagram_type)
 }
 
@@ -87,6 +94,12 @@ pub fn render_with_oracle(
 /// A box to draw: either a content box (rows) or an empty placeholder box.
 struct BoxSpec {
     rows: Vec<FlatRow>,
+}
+
+struct LayoutBoxSpec {
+    id: String,
+    rows: Vec<FlatRow>,
+    parent: Option<String>,
 }
 
 /// Walk the data tree in PlantUML's box-emission order (DFS pre-order: a node,
@@ -163,6 +176,103 @@ fn render_nested(
     }
 
     Some(wrap_oracle_envelope(oracle, &body, diagram_type))
+}
+
+fn render_nested_no_oracle(diagram: &JsonDiagram, diagram_type: &str) -> Option<String> {
+    let mut specs = Vec::new();
+    collect_layout_boxes(&diagram.root, diagram.format, None, &mut specs);
+    if specs.len() <= 1 {
+        return None;
+    }
+
+    // PlantUML routes nested JSON/YAML boxes through its Smetana/Graphviz path:
+    // measured boxes become graph nodes and parent-child placeholders become
+    // dashed connector edges. This mirrors that graph-construction step with
+    // the vendored Graphviz wrapper instead of replaying oracle connector SVG.
+    let dims: Vec<(f64, f64)> = specs
+        .iter()
+        .map(|spec| box_dimensions(&spec.rows))
+        .collect();
+    let mut graph = LayoutGraph::new(Direction::LeftToRight).with_plantuml_svek_spacing();
+    for (spec, (width, height)) in specs.iter().zip(&dims) {
+        graph.add_node(&spec.id, "", *width, *height);
+    }
+    for spec in &specs {
+        if let Some(parent) = &spec.parent {
+            graph.add_edge(parent, &spec.id, None);
+        }
+    }
+    let layout = graph.layout_full(std::time::Duration::from_secs(5))?;
+
+    let mut body = String::new();
+    let mut max_x = 0.0_f64;
+    let mut max_y = 0.0_f64;
+    for (spec, pos) in specs.iter().zip(&layout.node_positions) {
+        let x = pos.x + MARGIN;
+        let y = pos.y + MARGIN;
+        let (width, height) = box_dimensions(&spec.rows);
+        max_x = max_x.max(x + width);
+        max_y = max_y.max(y + height);
+        body.push_str(&render_box_rows_at(&spec.rows, x, y));
+    }
+    for edge in &layout.edge_paths {
+        let rendered = render_nested_connector(edge, MARGIN, MARGIN);
+        if let Some((x, y)) = edge.end_point {
+            max_x = max_x.max(x + MARGIN);
+            max_y = max_y.max(y + MARGIN);
+        }
+        body.push_str(&rendered);
+    }
+
+    let mut svg = SvgBuilder::new_plantuml(
+        max_x.ceil() + MARGIN + 1.0,
+        max_y.ceil() + MARGIN + 1.0,
+        diagram_type,
+    );
+    svg.raw_inline(&body);
+    Some(svg.finalize_plantuml())
+}
+
+fn collect_layout_boxes(
+    node: &JsonNode,
+    format: DataFormat,
+    parent: Option<String>,
+    out: &mut Vec<LayoutBoxSpec>,
+) {
+    let id = format!("json{}", out.len());
+    let children: Vec<&JsonNode> = match &node.value {
+        JsonNodeValue::Object { fields } => fields.iter().collect(),
+        JsonNodeValue::Array { items } => items.iter().collect(),
+        _ => Vec::new(),
+    };
+    let is_object = matches!(node.value, JsonNodeValue::Object { .. });
+    let mut rows = Vec::with_capacity(children.len());
+    for child in &children {
+        let value = scalar_display(&child.value, format).unwrap_or_else(nested_placeholder);
+        rows.push(FlatRow {
+            key: if is_object {
+                child.key.clone().unwrap_or_default()
+            } else {
+                String::new()
+            },
+            value,
+            highlighted: child.highlighted,
+        });
+    }
+    out.push(LayoutBoxSpec {
+        id: id.clone(),
+        rows,
+        parent,
+    });
+
+    for child in children {
+        if matches!(
+            child.value,
+            JsonNodeValue::Object { .. } | JsonNodeValue::Array { .. }
+        ) {
+            collect_layout_boxes(child, format, Some(id.clone()), out);
+        }
+    }
 }
 
 /// Render one box at the oracle position, reproducing PlantUML's row layout.
@@ -272,6 +382,145 @@ fn render_box_at(rows: &[FlatRow], geom: &crate::layout_oracle::JsonBox) -> Stri
     out.push_str(&rounded_rect(
         box_x, box_y, box_w, box_h, "none", BORDER, 1.5,
     ));
+    out
+}
+
+fn box_dimensions(rows: &[FlatRow]) -> (f64, f64) {
+    if rows.is_empty() {
+        return (30.0, 15.0);
+    }
+    let has_keys = rows.iter().any(|r| !r.key.is_empty());
+    let key_text_w = rows
+        .iter()
+        .map(|r| text_width(&r.key, FONT_SIZE, true))
+        .fold(0.0_f64, f64::max);
+    let val_text_w = rows
+        .iter()
+        .map(|r| text_width(&r.value, FONT_SIZE, false))
+        .fold(0.0_f64, f64::max);
+    let key_col_w = if has_keys {
+        key_text_w + 2.0 * CELL_PAD
+    } else {
+        0.0
+    };
+    let val_col_w = val_text_w + 2.0 * CELL_PAD;
+    let row_h = text_height(FONT_SIZE) + ROW_EXTRA;
+    (key_col_w + val_col_w, row_h * rows.len() as f64)
+}
+
+fn render_box_rows_at(rows: &[FlatRow], box_x: f64, box_y: f64) -> String {
+    if rows.is_empty() {
+        let mut out = String::new();
+        out.push_str(&rounded_rect(box_x, box_y, 30.0, 15.0, FILL, FILL, 1.5));
+        out.push_str(&rounded_rect(box_x, box_y, 30.0, 15.0, "none", BORDER, 1.5));
+        return out;
+    }
+
+    let has_keys = rows.iter().any(|r| !r.key.is_empty());
+    let (box_w, box_h) = box_dimensions(rows);
+    let key_text_w = rows
+        .iter()
+        .map(|r| text_width(&r.key, FONT_SIZE, true))
+        .fold(0.0_f64, f64::max);
+    let key_col_w = if has_keys {
+        key_text_w + 2.0 * CELL_PAD
+    } else {
+        0.0
+    };
+    let val_col_x = box_x + key_col_w;
+    let row_h = text_height(FONT_SIZE) + ROW_EXTRA;
+    let box_right = box_x + box_w;
+    let mut out = String::new();
+
+    out.push_str(&rounded_rect(box_x, box_y, box_w, box_h, FILL, FILL, 1.5));
+    let highlight_rect = |y: f64| highlight_box(box_x, y, box_w, row_h);
+    if rows[0].highlighted {
+        out.push_str(&highlight_rect(box_y));
+    }
+    let mut row_top = box_y;
+    for (i, row) in rows.iter().enumerate() {
+        let baseline = row_top + TEXT_TOP_PAD + ascent(FONT_SIZE);
+        let row_bottom = row_top + row_h;
+        if has_keys && !row.key.is_empty() {
+            out.push_str(&key_text(
+                box_x + CELL_PAD,
+                baseline,
+                &row.key,
+                text_width(&row.key, FONT_SIZE, true),
+            ));
+        }
+        out.push_str(&value_text(
+            val_col_x + CELL_PAD,
+            baseline,
+            &row.value,
+            text_width(&row.value, FONT_SIZE, false),
+        ));
+        if has_keys {
+            out.push_str(&line(val_col_x, row_top, val_col_x, row_bottom));
+        }
+        if i + 1 < rows.len() {
+            if rows[i + 1].highlighted {
+                out.push_str(&highlight_rect(row_bottom));
+            }
+            out.push_str(&line(box_x, row_bottom, box_right, row_bottom));
+        }
+        row_top = row_bottom;
+    }
+    out.push_str(&rounded_rect(
+        box_x, box_y, box_w, box_h, "none", BORDER, 1.5,
+    ));
+    out
+}
+
+fn render_nested_connector(edge: &EdgePath, dx: f64, dy: f64) -> String {
+    let mut out = String::new();
+    if !edge.points.is_empty() {
+        let mut d = format!(
+            "M{},{}",
+            fmt_coord(edge.points[0].0 + dx),
+            fmt_coord(edge.points[0].1 + dy)
+        );
+        let mut i = 1;
+        while i + 2 < edge.points.len() {
+            write!(
+                d,
+                " C{},{} {},{} {},{}",
+                fmt_coord(edge.points[i].0 + dx),
+                fmt_coord(edge.points[i].1 + dy),
+                fmt_coord(edge.points[i + 1].0 + dx),
+                fmt_coord(edge.points[i + 1].1 + dy),
+                fmt_coord(edge.points[i + 2].0 + dx),
+                fmt_coord(edge.points[i + 2].1 + dy),
+            )
+            .unwrap();
+            i += 3;
+        }
+        out.push_str(&format!(
+            r#"<path d="{d}" fill="none" style="stroke:#000000;stroke-width:1;stroke-dasharray:3,3;"/>"#
+        ));
+    }
+    if let Some((x, y)) = edge.end_point {
+        let (x, y) = (x + dx, y + dy);
+        let points = format!(
+            "M{},{} L{},{} L{},{} L{},{} Z",
+            fmt_coord(x - 7.5),
+            fmt_coord(y + 3.0),
+            fmt_coord(x - 5.0),
+            fmt_coord(y),
+            fmt_coord(x - 7.5),
+            fmt_coord(y - 3.0),
+            fmt_coord(x),
+            fmt_coord(y),
+        );
+        out.push_str(&format!(r##"<path d="{points}" fill="#000000"/>"##));
+    }
+    if let Some((x, y)) = edge.start_point.or_else(|| edge.points.first().copied()) {
+        out.push_str(&format!(
+            r##"<ellipse cx="{}" cy="{}" fill="#000000" rx="3" ry="3" style="stroke:#000000;stroke-width:1;"/>"##,
+            fmt_coord(x + dx),
+            fmt_coord(y + dy),
+        ));
+    }
     out
 }
 
