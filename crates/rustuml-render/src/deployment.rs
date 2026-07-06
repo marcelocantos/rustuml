@@ -280,12 +280,15 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
         .keys()
         .map(|k| k.to_lowercase())
         .collect();
+    let sprite_cache = crate::sprite::SpriteCache::from_sprites(&diagram.meta.sprites);
     let ctx = OracleRenderContext {
         oracle,
         id_for_node: &id_for_node,
         skin_fills: &skin_fills,
         skin_strokes: &skin_strokes,
         sprite_names: &sprite_names,
+        sprites: &diagram.meta.sprites,
+        sprite_cache: &sprite_cache,
         handwritten: is_handwritten_enabled(&diagram.meta.skinparams),
     };
 
@@ -650,6 +653,8 @@ struct OracleRenderContext<'a> {
     skin_fills: &'a HashMap<DeploymentNodeKind, String>,
     skin_strokes: &'a HashMap<DeploymentNodeKind, String>,
     sprite_names: &'a HashSet<String>,
+    sprites: &'a HashMap<String, rustuml_parser::diagram::SpriteData>,
+    sprite_cache: &'a crate::sprite::SpriteCache,
     handwritten: bool,
 }
 
@@ -720,15 +725,7 @@ fn emit_clusters_dfs(
                 {
                     emit_text(svg, &node.label, text_x, text_y, FONT_SIZE, true, false);
                 } else {
-                    emit_cluster_label(
-                        svg,
-                        node.kind,
-                        node,
-                        rect.x,
-                        rect.y,
-                        rect.width,
-                        ctx.sprite_names,
-                    );
+                    emit_cluster_label(svg, node.kind, node, rect.x, rect.y, rect.width, Some(ctx));
                 }
             } else {
                 emit_cluster_shape(
@@ -742,15 +739,7 @@ fn emit_clusters_dfs(
                     stroke,
                     &node.label,
                 );
-                emit_cluster_label(
-                    svg,
-                    node.kind,
-                    node,
-                    rect.x,
-                    rect.y,
-                    rect.width,
-                    ctx.sprite_names,
-                );
+                emit_cluster_label(svg, node.kind, node, rect.x, rect.y, rect.width, Some(ctx));
             }
             svg.raw("</g>");
         }
@@ -855,15 +844,7 @@ fn emit_entity(
                 &node.label,
             );
             if !emit_oracle_image_label_children(svg, rect) {
-                emit_entity_label(
-                    svg,
-                    node.kind,
-                    node,
-                    rect.x,
-                    rect.y,
-                    rect.width,
-                    ctx.sprite_names,
-                );
+                emit_entity_label(svg, node.kind, node, rect.x, rect.y, rect.width, Some(ctx));
             }
         }
         svg.raw("</g>");
@@ -907,15 +888,7 @@ fn emit_handwritten_entity(
         {
             emit_text(svg, &node.label, x, y, FONT_SIZE, false, false);
         } else {
-            emit_entity_label(
-                svg,
-                node.kind,
-                node,
-                rect.x,
-                rect.y,
-                rect.width,
-                &HashSet::new(),
-            );
+            emit_entity_label(svg, node.kind, node, rect.x, rect.y, rect.width, None);
         }
     }
     emitted_shape
@@ -1902,10 +1875,10 @@ fn emit_entity_label(
     x: f64,
     y: f64,
     w: f64,
-    sprite_names: &HashSet<String>,
+    ctx: Option<&OracleRenderContext<'_>>,
 ) {
     let (text_x_pad, top_pad, bold) = entity_text_geom(kind, w, &node.label);
-    let label_w = text_render::measure(&node.label, FONT_SIZE, bold);
+    let label_w = deployment_label_width(&node.label, FONT_SIZE, bold, ctx);
     let center_x = entity_text_center(kind, x, w);
     // Folder and package labels are left-aligned with a 10px indent rather
     // than centred.
@@ -1922,7 +1895,7 @@ fn emit_entity_label(
     });
 
     if let Some(stereo) = &node.stereotype
-        && !stereotype_refs_sprite(stereo, sprite_names)
+        && !ctx.is_some_and(|ctx| stereotype_refs_sprite(stereo, ctx.sprite_names))
     {
         let stereo_label = format!("\u{00AB}{stereo}\u{00BB}");
         let stereo_w = text_render::measure(&stereo_label, FONT_SIZE, false);
@@ -1947,7 +1920,7 @@ fn emit_entity_label(
             );
         } else {
             let label_x = center_x - label_w / 2.0;
-            emit_text(
+            emit_deployment_label(
                 svg,
                 &node.label,
                 label_x,
@@ -1955,6 +1928,7 @@ fn emit_entity_label(
                 FONT_SIZE,
                 bold,
                 false,
+                ctx,
             );
         }
     } else {
@@ -1962,7 +1936,7 @@ fn emit_entity_label(
             emit_multiline_text(svg, lines, multiline_label_x, y + top_pad, FONT_SIZE, bold);
         } else {
             let label_x = folder_label_x.unwrap_or(center_x - label_w / 2.0);
-            emit_text(
+            emit_deployment_label(
                 svg,
                 &node.label,
                 label_x,
@@ -1970,6 +1944,7 @@ fn emit_entity_label(
                 FONT_SIZE,
                 bold,
                 false,
+                ctx,
             );
         }
     }
@@ -1982,11 +1957,11 @@ fn emit_cluster_label(
     x: f64,
     y: f64,
     w: f64,
-    sprite_names: &HashSet<String>,
+    ctx: Option<&OracleRenderContext<'_>>,
 ) {
     // Cluster labels are centered horizontally above the children area
     // for most shapes; frame is left-aligned (with a tab decoration).
-    let label_w = text_render::measure(&node.label, FONT_SIZE, true);
+    let label_w = deployment_label_width(&node.label, FONT_SIZE, true, ctx);
 
     if matches!(kind, DeploymentNodeKind::Frame) {
         // Frame cluster: tab path comes before the text label, then a
@@ -1994,7 +1969,16 @@ fn emit_cluster_label(
         emit_frame_tab(svg, x, y, label_w);
         let label_x = x + 3.0;
         let label_y = y + ASCENT_14 + 1.0;
-        emit_text(svg, &node.label, label_x, label_y, FONT_SIZE, true, false);
+        emit_deployment_label(
+            svg,
+            &node.label,
+            label_x,
+            label_y,
+            FONT_SIZE,
+            true,
+            false,
+            ctx,
+        );
         return;
     }
 
@@ -2004,14 +1988,23 @@ fn emit_cluster_label(
         // emit_folder_cluster.
         let label_x = x + 4.0;
         let label_y = y + ASCENT_14 + 2.0;
-        emit_text(svg, &node.label, label_x, label_y, FONT_SIZE, true, false);
+        emit_deployment_label(
+            svg,
+            &node.label,
+            label_x,
+            label_y,
+            FONT_SIZE,
+            true,
+            false,
+            ctx,
+        );
         return;
     }
 
     let center_x = cluster_text_center(kind, x, w);
 
     if let Some(stereo) = &node.stereotype
-        && !stereotype_refs_sprite(stereo, sprite_names)
+        && !ctx.is_some_and(|ctx| stereotype_refs_sprite(stereo, ctx.sprite_names))
     {
         let stereo_label = format!("\u{00AB}{stereo}\u{00BB}");
         let stereo_w = text_render::measure(&stereo_label, FONT_SIZE, false);
@@ -2027,7 +2020,7 @@ fn emit_cluster_label(
             true,
         );
         let label_x = center_x - label_w / 2.0;
-        emit_text(
+        emit_deployment_label(
             svg,
             &node.label,
             label_x,
@@ -2035,12 +2028,111 @@ fn emit_cluster_label(
             FONT_SIZE,
             true,
             false,
+            ctx,
         );
     } else {
         let label_x = center_x - label_w / 2.0;
         let label_y = y + cluster_top_pad(kind);
-        emit_text(svg, &node.label, label_x, label_y, FONT_SIZE, true, false);
+        emit_deployment_label(
+            svg,
+            &node.label,
+            label_x,
+            label_y,
+            FONT_SIZE,
+            true,
+            false,
+            ctx,
+        );
     }
+}
+
+fn deployment_label_width(
+    label: &str,
+    font_size: f64,
+    bold: bool,
+    ctx: Option<&OracleRenderContext<'_>>,
+) -> f64 {
+    let Some(ctx) = ctx else {
+        return text_render::measure(label, font_size, bold);
+    };
+    if !label.contains("<$") {
+        return text_render::measure(label, font_size, bold);
+    }
+    crate::sprite::parse_sprite_segments(label)
+        .iter()
+        .map(|seg| match seg {
+            crate::sprite::TextSegment::Text(text) => text_render::measure(text, font_size, bold),
+            crate::sprite::TextSegment::Sprite(name) => ctx
+                .sprites
+                .get(name)
+                .map(|sprite| deployment_sprite_dimensions(sprite).0)
+                .unwrap_or(0.0),
+            crate::sprite::TextSegment::OpenIcon(name) => crate::openiconic::lookup(name)
+                .map(|icon| icon.width * (font_size / icon.height))
+                .unwrap_or(0.0),
+        })
+        .sum()
+}
+
+fn emit_deployment_label(
+    svg: &mut SvgBuilder,
+    content: &str,
+    x: f64,
+    y: f64,
+    font_size: f64,
+    bold: bool,
+    italic: bool,
+    ctx: Option<&OracleRenderContext<'_>>,
+) {
+    let Some(ctx) = ctx else {
+        emit_text(svg, content, x, y, font_size, bold, italic);
+        return;
+    };
+    if !content.contains("<$") {
+        emit_text(svg, content, x, y, font_size, bold, italic);
+        return;
+    }
+
+    let mut cursor = x;
+    for segment in crate::sprite::parse_sprite_segments(content) {
+        match segment {
+            crate::sprite::TextSegment::Text(text) => {
+                let advance = text_render::measure(&text, font_size, bold);
+                let visible = text.trim_end();
+                if !visible.is_empty() {
+                    emit_text(svg, visible, cursor, y, font_size, bold, italic);
+                }
+                cursor += advance;
+            }
+            crate::sprite::TextSegment::Sprite(name) => {
+                if let Some(sprite) = ctx.sprites.get(&name)
+                    && let Some(uri) = ctx.sprite_cache.get(&name)
+                {
+                    let (width, height) = deployment_sprite_dimensions(sprite);
+                    // Java DESCRIPTION sprite labels use the sprite as an
+                    // inline image centered on the text baseline; the baseline
+                    // offset matches PlantUML's `TextBlockSprite` emission.
+                    let image_y = y - height * 0.63;
+                    svg.image(cursor, image_y, width, height, uri);
+                    cursor += width;
+                }
+            }
+            crate::sprite::TextSegment::OpenIcon(name) => {
+                if let Some(icon) = crate::openiconic::lookup(&name) {
+                    cursor += icon.width * (font_size / icon.height);
+                }
+            }
+        }
+    }
+}
+
+fn deployment_sprite_dimensions(sprite: &rustuml_parser::diagram::SpriteData) -> (f64, f64) {
+    let (width, height) = crate::sprite::sprite_dimensions(sprite);
+    // PlantUML's DESCRIPTION inline sprite labels emit an extra pixel for
+    // 8px-and-larger sprite grids (e.g. [8x8] -> image 9x9, [12x12] -> 13x13)
+    // while [4x4] remains 4x4 in the same golden family.
+    let extra = if width >= 8 { 1.0 } else { 0.0 };
+    (width as f64 + extra, height as f64 + extra)
 }
 
 fn cluster_top_pad(kind: DeploymentNodeKind) -> f64 {
@@ -2740,7 +2832,11 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
     // SvekNodes, DotStringFactory serialises those node boxes to dot, then
     // GeneralImageBuilder paints the returned positions. This mirrors that
     // data flow with the vendored Graphviz wrapper rather than grid-placement.
-    let dims: Vec<DeploymentNodeDim> = diagram.nodes.iter().map(deployment_node_dim).collect();
+    let dims: Vec<DeploymentNodeDim> = diagram
+        .nodes
+        .iter()
+        .map(|node| deployment_node_dim(node, &diagram.meta.sprites))
+        .collect();
     let parent_of = deployment_parent_map(diagram);
     let cluster_ids: HashSet<&str> = diagram
         .nodes
@@ -2810,13 +2906,21 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
     let id_for_node = no_oracle_node_ids(diagram);
     let skin_fills = skin_background_fills(&diagram.meta.skinparams);
     let skin_strokes = skin_border_colors(&diagram.meta.skinparams);
-    let sprite_names: HashSet<String> = diagram.meta.sprites.keys().cloned().collect();
+    let sprite_names: HashSet<String> = diagram
+        .meta
+        .sprites
+        .keys()
+        .map(|k| k.to_lowercase())
+        .collect();
+    let sprite_cache = crate::sprite::SpriteCache::from_sprites(&diagram.meta.sprites);
     let ctx = OracleRenderContext {
         oracle: &oracle,
         id_for_node: &id_for_node,
         skin_fills: &skin_fills,
         skin_strokes: &skin_strokes,
         sprite_names: &sprite_names,
+        sprites: &diagram.meta.sprites,
+        sprite_cache: &sprite_cache,
         handwritten: false,
     };
 
@@ -2894,12 +2998,15 @@ fn deployment_qnames(
     qnames
 }
 
-fn deployment_node_dim(node: &DeploymentNode) -> DeploymentNodeDim {
+fn deployment_node_dim(
+    node: &DeploymentNode,
+    sprites: &HashMap<String, rustuml_parser::diagram::SpriteData>,
+) -> DeploymentNodeDim {
     let bold = matches!(node.kind, DeploymentNodeKind::Package);
     let label_width = node
         .label
         .lines()
-        .map(|line| text_render::measure(line, FONT_SIZE, bold))
+        .map(|line| deployment_label_width_for_sprites(line, FONT_SIZE, bold, sprites))
         .fold(0.0_f64, f64::max);
     let stereo_width = node
         .stereotype
@@ -2931,6 +3038,30 @@ fn deployment_node_dim(node: &DeploymentNode) -> DeploymentNodeDim {
         label_width,
         top_pad,
     }
+}
+
+fn deployment_label_width_for_sprites(
+    label: &str,
+    font_size: f64,
+    bold: bool,
+    sprites: &HashMap<String, rustuml_parser::diagram::SpriteData>,
+) -> f64 {
+    if !label.contains("<$") {
+        return text_render::measure(label, font_size, bold);
+    }
+    crate::sprite::parse_sprite_segments(label)
+        .iter()
+        .map(|seg| match seg {
+            crate::sprite::TextSegment::Text(text) => text_render::measure(text, font_size, bold),
+            crate::sprite::TextSegment::Sprite(name) => sprites
+                .get(name)
+                .map(|sprite| deployment_sprite_dimensions(sprite).0)
+                .unwrap_or(0.0),
+            crate::sprite::TextSegment::OpenIcon(name) => crate::openiconic::lookup(name)
+                .map(|icon| icon.width * (font_size / icon.height))
+                .unwrap_or(0.0),
+        })
+        .sum()
 }
 
 fn layout_deployment_rects(
