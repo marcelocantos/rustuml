@@ -1228,35 +1228,50 @@ pub fn render_with_oracle(
                 .map(|i| format!("ent{i:04}"))
                 .unwrap_or_default();
             let to_ent_id = to_ent_idx.map(|i| format!("ent{i:04}")).unwrap_or_default();
+            let source_line_attr = if conn.source_line > 0 {
+                format!(r#" data-source-line="{}""#, conn.source_line)
+            } else {
+                String::new()
+            };
 
             svg.raw(&format!(
-            r#"<g class="link" data-entity-1="{from_ent_id}" data-entity-2="{to_ent_id}" data-link-type="{link_type}" id="{link_id}">"#,
+            r#"<g class="link" data-entity-1="{from_ent_id}" data-entity-2="{to_ent_id}" data-link-type="{link_type}"{source_line_attr} id="{link_id}">"#,
         ));
 
             if let Some(ep) = edge_path
                 && !ep.points.is_empty()
             {
-                // Render bezier path.
-                let path_d = build_path_d(&ep.points);
+                // Render bezier path. Graphviz returns spline points in the
+                // layout graph's local coordinates; SVEK then moves the whole
+                // graph into the rendered frame before drawing links
+                // (`SvekResult.calculateDimension` / `SvekEdge.solveLine`).
+                // The final arrow decor also shortens the visible path by
+                // `ExtremityArrow.getDecorationLength()`.
+                let edge_points =
+                    component_svek_edge_points(&ep.points, MARGIN, MARGIN + title_h, true);
+                let path_d = build_path_d(&edge_points);
                 let path_id = format!("{}-to-{}", conn.from, conn.to);
                 svg.raw(&format!(
                 r#"<path d="{path_d}" fill="none" id="{path_id}" style="stroke:{STROKE};stroke-width:1;{dash_attr}"/>"#,
             ));
 
                 // Arrowhead.
-                let last = ep.points.last().unwrap();
-                let prev = if ep.points.len() >= 2 {
-                    &ep.points[ep.points.len() - 2]
+                let arrow_points =
+                    component_svek_edge_points(&ep.points, MARGIN, MARGIN + title_h, false);
+                let last = arrow_points.last().unwrap();
+                let prev = if arrow_points.len() >= 2 {
+                    &arrow_points[arrow_points.len() - 2]
                 } else {
                     last
                 };
                 render_arrowhead(&mut svg, prev, last);
 
                 // Labels.
-                let first = ep.points.first().unwrap();
+                let first = edge_points.first().unwrap();
                 if let Some(label) = &conn.label {
-                    let mx = (first.0 + last.0) / 2.0;
-                    let my = (first.1 + last.1) / 2.0;
+                    let path_last = edge_points.last().unwrap();
+                    let mx = (first.0 + path_last.0) / 2.0;
+                    let my = (first.1 + path_last.1) / 2.0;
                     let mut text_buf = String::new();
                     text_render::emit_text(
                         &mut text_buf,
@@ -2559,15 +2574,27 @@ fn render_arrowhead_from_coords(svg: &mut SvgBuilder, _fx: f64, _fy: f64, tx: f6
 }
 
 fn render_arrow_at(svg: &mut SvgBuilder, x: f64, y: f64, angle: f64) {
-    let size = 5.0;
-    let spread = 0.5;
-    let x1 = x - size * 2.0 * (angle - spread).cos();
-    let y1 = y - size * 2.0 * (angle - spread).sin();
-    let x2 = x - size * 1.5 * angle.cos();
-    let y2 = y - size * 1.5 * angle.sin();
-    let x3 = x - size * 2.0 * (angle + spread).cos();
-    let y3 = y - size * 2.0 * (angle + spread).sin();
-    let pts = format!("{x},{y},{x1},{y1},{x2},{y2},{x3},{y3},{x},{y}");
+    // Java PlantUML `svek.extremity.ExtremityArrow.buildPolygon()` uses:
+    // tip (0,0), wing (-9,-4), contact (-5,0), wing (-9,4), tip (0,0),
+    // rotated by the path angle and translated to the spline endpoint.
+    let local = [
+        (0.0, 0.0),
+        (-9.0, -4.0),
+        (-5.0, 0.0),
+        (-9.0, 4.0),
+        (0.0, 0.0),
+    ];
+    let cos = angle.cos();
+    let sin = angle.sin();
+    let mut pts = String::new();
+    for (i, (px, py)) in local.iter().enumerate() {
+        if i > 0 {
+            pts.push(',');
+        }
+        let rx = x + px * cos - py * sin;
+        let ry = y + px * sin + py * cos;
+        write!(pts, "{},{}", fc(rx), fc(ry)).unwrap();
+    }
     svg.raw(&format!(
         r#"<polygon fill="{STROKE}" points="{pts}" style="stroke:{STROKE};stroke-width:1;"/>"#,
     ));
@@ -2577,13 +2604,46 @@ fn render_arrow_at(svg: &mut SvgBuilder, x: f64, y: f64, angle: f64) {
 // Path building
 // ---------------------------------------------------------------------------
 
+fn component_svek_edge_points(
+    points: &[(f64, f64)],
+    dx: f64,
+    dy: f64,
+    trim_end_for_arrow: bool,
+) -> Vec<(f64, f64)> {
+    let mut out: Vec<(f64, f64)> = points.iter().map(|(x, y)| (x + dx, y + dy)).collect();
+
+    if trim_end_for_arrow && out.len() >= 2 {
+        let n = out.len();
+        let (tip_x, tip_y) = out[n - 1];
+        let (prev_x, prev_y) = out[n - 2];
+        let vx = tip_x - prev_x;
+        let vy = tip_y - prev_y;
+        let len = (vx * vx + vy * vy).sqrt();
+        if len > f64::EPSILON {
+            // Java PlantUML `ExtremityArrow.getDecorationLength()` returns 6,
+            // so `SvekEdge.solveLine` leaves that much room between the drawn
+            // spline endpoint and the filled arrowhead tip.
+            let ux = vx / len;
+            let uy = vy / len;
+            let trim = 6.0;
+            out[n - 1] = (tip_x - ux * trim, tip_y - uy * trim);
+            if n >= 4 {
+                let (cx, cy) = out[n - 2];
+                out[n - 2] = (cx - ux * trim, cy - uy * trim);
+            }
+        }
+    }
+
+    out
+}
+
 fn build_path_d(points: &[(f64, f64)]) -> String {
     if points.is_empty() {
         return String::new();
     }
     let mut d = String::new();
     let (x0, y0) = points[0];
-    write!(d, "M {x0},{y0}").unwrap();
+    write!(d, "M{},{}", fc(x0), fc(y0)).unwrap();
     if points.len() >= 4 {
         // Cubic bezier.
         let mut i = 1;
@@ -2591,13 +2651,23 @@ fn build_path_d(points: &[(f64, f64)]) -> String {
             let (x1, y1) = points[i];
             let (x2, y2) = points[i + 1];
             let (x3, y3) = points[i + 2];
-            write!(d, " C {x1},{y1} {x2},{y2} {x3},{y3}").unwrap();
+            write!(
+                d,
+                " C{},{} {},{} {},{}",
+                fc(x1),
+                fc(y1),
+                fc(x2),
+                fc(y2),
+                fc(x3),
+                fc(y3)
+            )
+            .unwrap();
             i += 3;
         }
     } else {
         // Line segments.
         for &(x, y) in &points[1..] {
-            write!(d, " L {x},{y}").unwrap();
+            write!(d, " L{},{}", fc(x), fc(y)).unwrap();
         }
     }
     d
@@ -2968,6 +3038,26 @@ mod tests {
         assert!(
             svg.contains(&format!(r#"height="{expected_h}px""#)),
             "canvas height should follow Svek bounds for renamed labels: {svg}"
+        );
+    }
+
+    #[test]
+    fn no_oracle_routed_link_uses_svek_frame_for_renamed_components() {
+        let input = "@startuml\ncomponent \"Renamed Producer\" as RP\ncomponent \"Renamed Consumer\" as RC\nRP --> RC\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(
+            svg.contains(r#"data-source-line="3" id="lnk4""#),
+            "link group should retain the parsed connection source line: {svg}"
+        );
+        assert!(
+            svg.contains(r#"<path d="M"#) && !svg.contains(r#"<path d="M "#),
+            "SVEK path syntax should match PlantUML's compact path skeleton: {svg}"
+        );
+        assert!(
+            svg.contains(r##"<polygon fill="#181818" points=""##),
+            "dependency link should draw a PlantUML-style extremity polygon: {svg}"
         );
     }
 }
