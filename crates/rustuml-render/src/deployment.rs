@@ -49,6 +49,9 @@ fn fc(v: f64) -> String {
 // ---------------------------------------------------------------------------
 
 const FONT_SIZE: f64 = 14.0;
+// PlantUML `CommandCreoleSprite.executeAndGetRemaining` scales inline sprites
+// by the current font size divided by 13 before drawing the backing image.
+const SPRITE_BASE_FONT_SIZE: f64 = 13.0;
 const FILL: &str = "#F1F1F1";
 const STROKE: &str = "#181818";
 const TEXT_COLOR: &str = "#000000";
@@ -280,7 +283,8 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
         .keys()
         .map(|k| k.to_lowercase())
         .collect();
-    let sprite_cache = crate::sprite::SpriteCache::from_sprites(&diagram.meta.sprites);
+    let sprite_cache =
+        crate::sprite::SpriteCache::from_sprites_scaled(&diagram.meta.sprites, sprite_scale());
     let ctx = OracleRenderContext {
         oracle,
         id_for_node: &id_for_node,
@@ -1925,9 +1929,11 @@ fn emit_entity_label(
                 &node.label,
                 label_x,
                 y + top_pad + TEXT_LINE_H,
-                FONT_SIZE,
-                bold,
-                false,
+                DeploymentLabelStyle {
+                    font_size: FONT_SIZE,
+                    bold,
+                    italic: false,
+                },
                 ctx,
             );
         }
@@ -1941,9 +1947,11 @@ fn emit_entity_label(
                 &node.label,
                 label_x,
                 y + top_pad,
-                FONT_SIZE,
-                bold,
-                false,
+                DeploymentLabelStyle {
+                    font_size: FONT_SIZE,
+                    bold,
+                    italic: false,
+                },
                 ctx,
             );
         }
@@ -1974,9 +1982,11 @@ fn emit_cluster_label(
             &node.label,
             label_x,
             label_y,
-            FONT_SIZE,
-            true,
-            false,
+            DeploymentLabelStyle {
+                font_size: FONT_SIZE,
+                bold: true,
+                italic: false,
+            },
             ctx,
         );
         return;
@@ -1993,9 +2003,11 @@ fn emit_cluster_label(
             &node.label,
             label_x,
             label_y,
-            FONT_SIZE,
-            true,
-            false,
+            DeploymentLabelStyle {
+                font_size: FONT_SIZE,
+                bold: true,
+                italic: false,
+            },
             ctx,
         );
         return;
@@ -2025,9 +2037,11 @@ fn emit_cluster_label(
             &node.label,
             label_x,
             stereo_y + TEXT_LINE_H,
-            FONT_SIZE,
-            true,
-            false,
+            DeploymentLabelStyle {
+                font_size: FONT_SIZE,
+                bold: true,
+                italic: false,
+            },
             ctx,
         );
     } else {
@@ -2038,9 +2052,11 @@ fn emit_cluster_label(
             &node.label,
             label_x,
             label_y,
-            FONT_SIZE,
-            true,
-            false,
+            DeploymentLabelStyle {
+                font_size: FONT_SIZE,
+                bold: true,
+                italic: false,
+            },
             ctx,
         );
     }
@@ -2074,22 +2090,43 @@ fn deployment_label_width(
         .sum()
 }
 
+#[derive(Clone, Copy)]
+struct DeploymentLabelStyle {
+    font_size: f64,
+    bold: bool,
+    italic: bool,
+}
+
 fn emit_deployment_label(
     svg: &mut SvgBuilder,
     content: &str,
     x: f64,
     y: f64,
-    font_size: f64,
-    bold: bool,
-    italic: bool,
+    style: DeploymentLabelStyle,
     ctx: Option<&OracleRenderContext<'_>>,
 ) {
     let Some(ctx) = ctx else {
-        emit_text(svg, content, x, y, font_size, bold, italic);
+        emit_text(
+            svg,
+            content,
+            x,
+            y,
+            style.font_size,
+            style.bold,
+            style.italic,
+        );
         return;
     };
     if !content.contains("<$") {
-        emit_text(svg, content, x, y, font_size, bold, italic);
+        emit_text(
+            svg,
+            content,
+            x,
+            y,
+            style.font_size,
+            style.bold,
+            style.italic,
+        );
         return;
     }
 
@@ -2097,10 +2134,18 @@ fn emit_deployment_label(
     for segment in crate::sprite::parse_sprite_segments(content) {
         match segment {
             crate::sprite::TextSegment::Text(text) => {
-                let advance = text_render::measure(&text, font_size, bold);
+                let advance = text_render::measure(&text, style.font_size, style.bold);
                 let visible = text.trim_end();
                 if !visible.is_empty() {
-                    emit_text(svg, visible, cursor, y, font_size, bold, italic);
+                    emit_text(
+                        svg,
+                        visible,
+                        cursor,
+                        y,
+                        style.font_size,
+                        style.bold,
+                        style.italic,
+                    );
                 }
                 cursor += advance;
             }
@@ -2119,20 +2164,20 @@ fn emit_deployment_label(
             }
             crate::sprite::TextSegment::OpenIcon(name) => {
                 if let Some(icon) = crate::openiconic::lookup(&name) {
-                    cursor += icon.width * (font_size / icon.height);
+                    cursor += icon.width * (style.font_size / icon.height);
                 }
             }
         }
     }
 }
 
+fn sprite_scale() -> f64 {
+    FONT_SIZE / SPRITE_BASE_FONT_SIZE
+}
+
 fn deployment_sprite_dimensions(sprite: &rustuml_parser::diagram::SpriteData) -> (f64, f64) {
-    let (width, height) = crate::sprite::sprite_dimensions(sprite);
-    // PlantUML's DESCRIPTION inline sprite labels emit an extra pixel for
-    // 8px-and-larger sprite grids (e.g. [8x8] -> image 9x9, [12x12] -> 13x13)
-    // while [4x4] remains 4x4 in the same golden family.
-    let extra = if width >= 8 { 1.0 } else { 0.0 };
-    (width as f64 + extra, height as f64 + extra)
+    let (width, height) = crate::sprite::scaled_sprite_dimensions(sprite, sprite_scale());
+    (width as f64, height as f64)
 }
 
 fn cluster_top_pad(kind: DeploymentNodeKind) -> f64 {
@@ -2912,7 +2957,8 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
         .keys()
         .map(|k| k.to_lowercase())
         .collect();
-    let sprite_cache = crate::sprite::SpriteCache::from_sprites(&diagram.meta.sprites);
+    let sprite_cache =
+        crate::sprite::SpriteCache::from_sprites_scaled(&diagram.meta.sprites, sprite_scale());
     let ctx = OracleRenderContext {
         oracle: &oracle,
         id_for_node: &id_for_node,
