@@ -309,6 +309,7 @@ impl ObjectParser {
         if let Some(caps) = RE.captures(line) {
             let from_raw = caps[1].to_string();
             let from_multiplicity = caps.get(2).map(|m| m.as_str().to_string());
+            let connector = caps[3].to_string();
             let to_multiplicity = caps.get(4).map(|m| m.as_str().to_string());
             let to_raw = caps[5].to_string();
             let raw_label = caps.get(6).map(|m| m.as_str().trim().to_string());
@@ -333,9 +334,11 @@ impl ObjectParser {
             self.links.push(ObjectLink {
                 from: from_raw,
                 to: to_raw,
+                kind: parse_object_link_kind(&connector),
                 label,
                 from_multiplicity,
                 to_multiplicity,
+                dashed: connector.contains(".."),
                 source_line: self.current_line,
             });
             true
@@ -509,6 +512,28 @@ impl ObjectParser {
     }
 }
 
+fn parse_object_link_kind(connector: &str) -> ObjectLinkKind {
+    if connector.contains("--|>") || connector.contains("<|--") {
+        ObjectLinkKind::Extension
+    } else if connector.contains("..|>") || connector.contains("<|..") {
+        ObjectLinkKind::Extension
+    } else if connector.contains("*--") || connector.contains("--*") {
+        ObjectLinkKind::Composition
+    } else if connector.contains("o--") || connector.contains("--o") {
+        ObjectLinkKind::Aggregation
+    } else if connector.contains("..>") || connector.contains("<..") {
+        ObjectLinkKind::Dependency
+    } else if connector.contains("-->")
+        || connector.contains("<--")
+        || connector == "->"
+        || connector == "<-"
+    {
+        ObjectLinkKind::Dependency
+    } else {
+        ObjectLinkKind::Association
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -586,6 +611,13 @@ mod tests {
         assert_eq!(d.links.len(), 6);
         assert_eq!(d.links[0].from, "A");
         assert_eq!(d.links[0].to, "B");
+        assert_eq!(d.links[0].kind, ObjectLinkKind::Aggregation);
+        assert_eq!(d.links[1].kind, ObjectLinkKind::Composition);
+        assert_eq!(d.links[2].kind, ObjectLinkKind::Dependency);
+        assert!(d.links[2].dashed);
+        assert_eq!(d.links[3].kind, ObjectLinkKind::Extension);
+        assert_eq!(d.links[4].kind, ObjectLinkKind::Association);
+        assert_eq!(d.links[5].kind, ObjectLinkKind::Composition);
     }
 
     #[test]

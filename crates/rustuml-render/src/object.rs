@@ -414,60 +414,64 @@ fn render_plantuml_svg(
     // Canvas dimensions: prefer oracle (matches PlantUML exactly), otherwise
     // compute from the union of entity rects with the standard 6px right/bottom
     // pad on top of MARGIN.
-    let (canvas_w, canvas_h) = if let Some(orc) = oracle
-        && orc.canvas_width > 0.0
-        && orc.canvas_height > 0.0
-    {
-        (orc.canvas_width as i64, orc.canvas_height as i64)
-    } else {
-        let mut max_x = 0.0_f64;
-        let mut max_y = 0.0_f64;
-        for (i, (x, y)) in positions.iter().enumerate() {
-            max_x = max_x.max(x + dims[i].width);
-            max_y = max_y.max(y + dims[i].height);
-        }
-        for edge in &layout.edge_paths {
-            for (x, y) in &edge.points {
-                max_x = max_x.max(*x);
-                max_y = max_y.max(*y);
-            }
-            if let Some((x, y)) = edge.start_point {
-                max_x = max_x.max(x);
-                max_y = max_y.max(y);
-            }
-            if let Some((x, y)) = edge.end_point {
-                max_x = max_x.max(x);
-                max_y = max_y.max(y);
-            }
-        }
-        for link in &diagram.links {
-            if !is_rendered_layout_dependency(link) {
-                continue;
-            }
-            let Some(edge_path) = layout
-                .edge_paths
-                .iter()
-                .find(|edge| edge.from == link.from && edge.to == link.to)
-            else {
-                continue;
-            };
-            if edge_path.points.len() < 4 {
-                continue;
-            }
-            let endpoint = edge_path.points[edge_path.points.len() - 1];
-            let control = edge_path.points[edge_path.points.len() - 2];
-            for (x, y) in dependency_arrow_polygon(control, endpoint) {
-                max_x = max_x.max(x);
-                max_y = max_y.max(y);
-            }
-        }
-        let canvas_pad = if has_rendered_layout_dependency(diagram, &layout.edge_paths) {
-            OBJECT_LINK_CANVAS_PAD
+    let (canvas_w, canvas_h) =
+        if let Some(orc) = oracle
+            && orc.canvas_width > 0.0
+            && orc.canvas_height > 0.0
+        {
+            (orc.canvas_width as i64, orc.canvas_height as i64)
         } else {
-            OBJECT_CANVAS_PAD
+            let mut max_x = 0.0_f64;
+            let mut max_y = 0.0_f64;
+            for (i, (x, y)) in positions.iter().enumerate() {
+                max_x = max_x.max(x + dims[i].width);
+                max_y = max_y.max(y + dims[i].height);
+            }
+            for edge in &layout.edge_paths {
+                for (x, y) in &edge.points {
+                    max_x = max_x.max(*x);
+                    max_y = max_y.max(*y);
+                }
+                if let Some((x, y)) = edge.start_point {
+                    max_x = max_x.max(x);
+                    max_y = max_y.max(y);
+                }
+                if let Some((x, y)) = edge.end_point {
+                    max_x = max_x.max(x);
+                    max_y = max_y.max(y);
+                }
+            }
+            for link in &diagram.links {
+                if !is_rendered_layout_link(link) {
+                    continue;
+                }
+                let Some(edge_path) = layout.edge_paths.iter().find(|edge| {
+                    edge.from == link_base(&link.from) && edge.to == link_base(&link.to)
+                }) else {
+                    continue;
+                };
+                if edge_path.points.len() < 4 {
+                    continue;
+                }
+                let endpoint = edge_path.points[edge_path.points.len() - 1];
+                let control = edge_path.points[edge_path.points.len() - 2];
+                for (x, y) in dependency_arrow_polygon(control, endpoint) {
+                    max_x = max_x.max(x);
+                    max_y = max_y.max(y);
+                }
+                if let Some(label) = link.label.as_deref() {
+                    let (label_x, label_y) = edge_label_position(&edge_path.points);
+                    max_x = max_x.max(label_x + text_render::measure(label, 13.0, false) + 1.0);
+                    max_y = max_y.max(label_y + crate::plantuml_metrics::text_height(13.0));
+                }
+            }
+            let canvas_pad = if has_rendered_layout_dependency(diagram, &layout.edge_paths) {
+                OBJECT_LINK_CANVAS_PAD
+            } else {
+                OBJECT_CANVAS_PAD
+            };
+            (max_x as i64 + canvas_pad, max_y as i64 + canvas_pad)
         };
-        (max_x as i64 + canvas_pad, max_y as i64 + canvas_pad)
-    };
 
     let mut svg = String::new();
 
@@ -643,12 +647,14 @@ fn render_layout_links(
     ent_id: &mut usize,
 ) {
     for link in &diagram.links {
-        if !is_rendered_layout_dependency(link) {
+        if !is_rendered_layout_link(link) {
             continue;
         }
+        let from_base = link_base(&link.from);
+        let to_base = link_base(&link.to);
         let Some(edge_path) = edge_paths
             .iter()
-            .find(|edge| edge.from == link.from && edge.to == link.to)
+            .find(|edge| edge.from == from_base && edge.to == to_base)
         else {
             continue;
         };
@@ -656,10 +662,10 @@ fn render_layout_links(
             continue;
         }
 
-        let Some(from_index) = diagram.objects.iter().position(|obj| obj.id == link.from) else {
+        let Some(from_index) = diagram.objects.iter().position(|obj| obj.id == from_base) else {
             continue;
         };
-        let Some(to_index) = diagram.objects.iter().position(|obj| obj.id == link.to) else {
+        let Some(to_index) = diagram.objects.iter().position(|obj| obj.id == to_base) else {
             continue;
         };
         let source_line = if link.source_line > 0 {
@@ -668,50 +674,254 @@ fn render_layout_links(
             0
         };
         let link_id = format!("lnk{ent_id}");
-        let path_id = format!("{}-to-{}", link.from, link.to);
+        let path_id = object_link_path_id(link, from_base, to_base);
+        let link_type = object_link_type(link.kind);
 
-        write!(svg, "<!--link {} to {}-->", link.from, link.to).unwrap();
+        write!(svg, "<!--link {from_base} to {to_base}-->").unwrap();
         write!(
             svg,
-            r#"<g class="link" data-entity-1="ent{:04}" data-entity-2="ent{:04}" data-link-type="dependency" data-source-line="{source_line}" id="{link_id}">"#,
+            r#"<g class="link" data-entity-1="ent{:04}" data-entity-2="ent{:04}" data-link-type="{link_type}" data-source-line="{source_line}" id="{link_id}">"#,
             from_index + 2,
             to_index + 2,
         )
         .unwrap();
+        let path_points = shortened_object_link_points(link, &edge_path.points);
+        let dash_style = if link.dashed {
+            "stroke-dasharray:7,7;"
+        } else {
+            ""
+        };
         write!(
             svg,
-            r#"<path codeLine="{source_line}" d="{}" fill="none" id="{path_id}" style="stroke:{BORDER_COLOR};stroke-width:1;"/>"#,
-            edge_path_d_with_dependency_arrow(&edge_path.points),
+            r#"<path codeLine="{source_line}" d="{}" fill="none" id="{path_id}" style="stroke:{BORDER_COLOR};stroke-width:1;{dash_style}"/>"#,
+            edge_path_d(&path_points),
         )
         .unwrap();
-        let endpoint = edge_path.points[edge_path.points.len() - 1];
-        let control = edge_path.points[edge_path.points.len() - 2];
-        let arrow = dependency_arrow_points(control, endpoint);
-        write!(
-            svg,
-            r#"<polygon fill="{BORDER_COLOR}" points="{arrow}" style="stroke:{BORDER_COLOR};stroke-width:1;"/>"#,
-        )
-        .unwrap();
+        emit_object_link_start_decor(svg, link, &edge_path.points);
+        emit_object_link_end_decor(svg, link, &edge_path.points);
+        if let Some(label) = link.label.as_deref() {
+            let (x, y) = edge_label_position(&edge_path.points);
+            text_render::emit_text(
+                svg,
+                label,
+                &TextBase {
+                    x: x + 1.0,
+                    y: y - 4.0,
+                    font_size: 13,
+                    font_family: "sans-serif",
+                    fill: "#000000",
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
+        }
         svg.push_str("</g>");
         *ent_id += 1;
     }
 }
 
-fn is_rendered_layout_dependency(link: &ObjectLink) -> bool {
+fn link_base(link_end: &str) -> &str {
+    link_end.split("::").next().unwrap_or(link_end)
+}
+
+fn is_rendered_layout_link(link: &ObjectLink) -> bool {
     !link.from.contains("::")
         && !link.to.contains("::")
         && link.from_multiplicity.is_none()
         && link.to_multiplicity.is_none()
-        && link.label.is_none()
 }
 
 fn has_rendered_layout_dependency(diagram: &ObjectDiagram, edge_paths: &[EdgePath]) -> bool {
     diagram.links.iter().any(|link| {
-        is_rendered_layout_dependency(link)
-            && edge_paths
-                .iter()
-                .any(|edge| edge.from == link.from && edge.to == link.to && edge.points.len() >= 4)
+        is_rendered_layout_link(link)
+            && edge_paths.iter().any(|edge| {
+                edge.from == link_base(&link.from)
+                    && edge.to == link_base(&link.to)
+                    && edge.points.len() >= 4
+            })
     })
+}
+
+fn object_link_type(kind: ObjectLinkKind) -> &'static str {
+    match kind {
+        ObjectLinkKind::Dependency => "dependency",
+        ObjectLinkKind::Extension => "extension",
+        ObjectLinkKind::Composition => "composition",
+        ObjectLinkKind::Aggregation => "aggregation",
+        ObjectLinkKind::Association => "association",
+    }
+}
+
+fn object_link_path_id(link: &ObjectLink, from: &str, to: &str) -> String {
+    match link.kind {
+        ObjectLinkKind::Aggregation | ObjectLinkKind::Composition | ObjectLinkKind::Association => {
+            format!("{from}-{to}")
+        }
+        ObjectLinkKind::Dependency | ObjectLinkKind::Extension => format!("{from}-to-{to}"),
+    }
+}
+
+fn shortened_object_link_points(link: &ObjectLink, points: &[(f64, f64)]) -> Vec<(f64, f64)> {
+    let start_len = match link.kind {
+        ObjectLinkKind::Aggregation | ObjectLinkKind::Composition => OBJECT_DIAMOND_LENGTH,
+        ObjectLinkKind::Dependency | ObjectLinkKind::Extension | ObjectLinkKind::Association => 0.0,
+    };
+    let end_len = match link.kind {
+        ObjectLinkKind::Dependency => DEPENDENCY_ARROW_PATH_INSET,
+        ObjectLinkKind::Extension => OBJECT_TRIANGLE_LENGTH,
+        ObjectLinkKind::Aggregation | ObjectLinkKind::Composition => DEPENDENCY_ARROW_PATH_INSET,
+        ObjectLinkKind::Association => 0.0,
+    };
+    shorten_edge_points(points, start_len, end_len)
+}
+
+fn shorten_edge_points(points: &[(f64, f64)], start_len: f64, end_len: f64) -> Vec<(f64, f64)> {
+    let mut out = points.to_vec();
+    if out.len() < 2 {
+        return out;
+    }
+    if start_len > 0.0 {
+        let tangent = unit_vector(out[0], out[1]);
+        out[0].0 += tangent.0 * start_len;
+        out[0].1 += tangent.1 * start_len;
+        out[1].0 += tangent.0 * start_len;
+        out[1].1 += tangent.1 * start_len;
+    }
+    if end_len > 0.0 {
+        let last = out.len() - 1;
+        let tangent = unit_vector(out[last], out[last - 1]);
+        out[last].0 += tangent.0 * end_len;
+        out[last].1 += tangent.1 * end_len;
+        out[last - 1].0 += tangent.0 * end_len;
+        out[last - 1].1 += tangent.1 * end_len;
+    }
+    out
+}
+
+fn emit_object_link_start_decor(svg: &mut String, link: &ObjectLink, points: &[(f64, f64)]) {
+    match link.kind {
+        ObjectLinkKind::Aggregation => emit_diamond(svg, points, true, "none"),
+        ObjectLinkKind::Composition => emit_diamond(svg, points, true, BORDER_COLOR),
+        ObjectLinkKind::Dependency | ObjectLinkKind::Extension | ObjectLinkKind::Association => {}
+    }
+}
+
+fn emit_object_link_end_decor(svg: &mut String, link: &ObjectLink, points: &[(f64, f64)]) {
+    match link.kind {
+        ObjectLinkKind::Dependency | ObjectLinkKind::Aggregation | ObjectLinkKind::Composition => {
+            if points.len() >= 2 {
+                let endpoint = points[points.len() - 1];
+                let control = points[points.len() - 2];
+                let arrow = dependency_arrow_points(control, endpoint);
+                write!(
+                    svg,
+                    r#"<polygon fill="{BORDER_COLOR}" points="{arrow}" style="stroke:{BORDER_COLOR};stroke-width:1;"/>"#,
+                )
+                .unwrap();
+            }
+        }
+        ObjectLinkKind::Extension => emit_extension_triangle(svg, points),
+        ObjectLinkKind::Association => {}
+    }
+}
+
+const OBJECT_DIAMOND_LENGTH: f64 = 12.0;
+const OBJECT_DIAMOND_HALF_WIDTH: f64 = 4.0;
+const OBJECT_TRIANGLE_LENGTH: f64 = 18.0;
+const OBJECT_TRIANGLE_HALF_WIDTH: f64 = 6.0;
+
+fn emit_diamond(svg: &mut String, points: &[(f64, f64)], at_start: bool, fill: &str) {
+    if points.len() < 2 {
+        return;
+    }
+    let (contact, neighbor) = if at_start {
+        (points[0], points[1])
+    } else {
+        (points[points.len() - 1], points[points.len() - 2])
+    };
+    let inside = unit_vector(contact, neighbor);
+    let perp = (-inside.1, inside.0);
+    let side_center = (
+        contact.0 + inside.0 * (OBJECT_DIAMOND_LENGTH / 2.0),
+        contact.1 + inside.1 * (OBJECT_DIAMOND_LENGTH / 2.0),
+    );
+    let far = (
+        contact.0 + inside.0 * OBJECT_DIAMOND_LENGTH,
+        contact.1 + inside.1 * OBJECT_DIAMOND_LENGTH,
+    );
+    let side1 = (
+        side_center.0 + perp.0 * OBJECT_DIAMOND_HALF_WIDTH,
+        side_center.1 + perp.1 * OBJECT_DIAMOND_HALF_WIDTH,
+    );
+    let side2 = (
+        side_center.0 - perp.0 * OBJECT_DIAMOND_HALF_WIDTH,
+        side_center.1 - perp.1 * OBJECT_DIAMOND_HALF_WIDTH,
+    );
+    write!(
+        svg,
+        r#"<polygon fill="{fill}" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{BORDER_COLOR};stroke-width:1;"/>"#,
+        fmt_tl(contact.0),
+        fmt_tl(contact.1),
+        fmt_tl(side1.0),
+        fmt_tl(side1.1),
+        fmt_tl(far.0),
+        fmt_tl(far.1),
+        fmt_tl(side2.0),
+        fmt_tl(side2.1),
+        fmt_tl(contact.0),
+        fmt_tl(contact.1),
+    )
+    .unwrap();
+}
+
+fn emit_extension_triangle(svg: &mut String, points: &[(f64, f64)]) {
+    if points.len() < 2 {
+        return;
+    }
+    let contact = points[points.len() - 1];
+    let neighbor = points[points.len() - 2];
+    let inside = unit_vector(contact, neighbor);
+    let perp = (-inside.1, inside.0);
+    let base = (
+        contact.0 + inside.0 * OBJECT_TRIANGLE_LENGTH,
+        contact.1 + inside.1 * OBJECT_TRIANGLE_LENGTH,
+    );
+    let side1 = (
+        base.0 + perp.0 * OBJECT_TRIANGLE_HALF_WIDTH,
+        base.1 + perp.1 * OBJECT_TRIANGLE_HALF_WIDTH,
+    );
+    let side2 = (
+        base.0 - perp.0 * OBJECT_TRIANGLE_HALF_WIDTH,
+        base.1 - perp.1 * OBJECT_TRIANGLE_HALF_WIDTH,
+    );
+    write!(
+        svg,
+        r#"<polygon fill="none" points="{},{},{},{},{},{},{},{}" style="stroke:{BORDER_COLOR};stroke-width:1;"/>"#,
+        fmt_tl(contact.0),
+        fmt_tl(contact.1),
+        fmt_tl(side1.0),
+        fmt_tl(side1.1),
+        fmt_tl(side2.0),
+        fmt_tl(side2.1),
+        fmt_tl(contact.0),
+        fmt_tl(contact.1),
+    )
+    .unwrap();
+}
+
+fn edge_label_position(points: &[(f64, f64)]) -> (f64, f64) {
+    if points.len() >= 2 {
+        let first = points[0];
+        let last = points[points.len() - 1];
+        (
+            (first.0 + last.0) / 2.0,
+            (first.1 + last.1) / 2.0 + crate::plantuml_metrics::text_height(13.0) / 3.0,
+        )
+    } else {
+        points[0]
+    }
 }
 
 fn edge_path_d(points: &[(f64, f64)]) -> String {
@@ -738,27 +948,6 @@ const DEPENDENCY_ARROW_PATH_INSET: f64 = 6.0;
 const DEPENDENCY_ARROW_BACK: f64 = 9.0;
 const DEPENDENCY_ARROW_NOTCH: f64 = 5.0;
 const DEPENDENCY_ARROW_HALF_WIDTH: f64 = 4.0;
-
-fn edge_path_d_with_dependency_arrow(points: &[(f64, f64)]) -> String {
-    let mut points = points.to_vec();
-    if points.len() >= 2 {
-        let endpoint = points[points.len() - 1];
-        let control = points[points.len() - 2];
-        let (ux, uy) = unit_vector(control, endpoint);
-        // PlantUML's SVEK path solver keeps the Graphviz tangent segment
-        // aligned with the drawn extremity. When the dependency arrow consumes
-        // the end of the spline, move the final control point by the same
-        // inset as the endpoint so the cubic reaches the arrow base cleanly.
-        let penultimate = points.len() - 2;
-        points[penultimate].0 -= ux * DEPENDENCY_ARROW_PATH_INSET;
-        points[penultimate].1 -= uy * DEPENDENCY_ARROW_PATH_INSET;
-        if let Some(last) = points.last_mut() {
-            last.0 -= ux * DEPENDENCY_ARROW_PATH_INSET;
-            last.1 -= uy * DEPENDENCY_ARROW_PATH_INSET;
-        }
-    }
-    edge_path_d(&points)
-}
 
 fn unit_vector(control: (f64, f64), endpoint: (f64, f64)) -> (f64, f64) {
     let dx = endpoint.0 - control.0;
@@ -1429,9 +1618,11 @@ mod tests {
             links: vec![ObjectLink {
                 from: "Owner".into(),
                 to: "Car".into(),
+                kind: ObjectLinkKind::Dependency,
                 label: Some("drives".into()),
                 from_multiplicity: None,
                 to_multiplicity: None,
+                dashed: false,
                 source_line: 9,
             }],
             notes: vec![],
