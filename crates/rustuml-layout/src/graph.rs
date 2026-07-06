@@ -208,7 +208,9 @@ impl LayoutGraph {
         let width_key = CString::new("width").unwrap();
         let height_key = CString::new("height").unwrap();
         let shape_key = CString::new("shape").unwrap();
+        let label_key = CString::new("label").unwrap();
         let fixedsize_key = CString::new("fixedsize").unwrap();
+        let no_label_val = CString::new("").unwrap();
         let fixedsize_val = CString::new("true").unwrap();
         let circle_val = CString::new("circle").unwrap();
         let box_val = CString::new("box").unwrap();
@@ -239,6 +241,15 @@ impl LayoutGraph {
                 node as *mut c_void,
                 fixedsize_key.as_ptr(),
                 fixedsize_val.as_ptr(),
+                empty.as_ptr(),
+            );
+            // PlantUML SVEK uses dot for geometry and renders entity labels
+            // itself. Leaving Graphviz's default label (the node id) makes fixed
+            // layout boxes warn and can feed label bounds back into routing.
+            graphviz_ffi::agsafeset(
+                node as *mut c_void,
+                label_key.as_ptr(),
+                no_label_val.as_ptr(),
                 empty.as_ptr(),
             );
             let shape = if *is_circle { &circle_val } else { &box_val };
