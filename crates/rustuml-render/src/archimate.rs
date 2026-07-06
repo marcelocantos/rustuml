@@ -563,13 +563,18 @@ fn no_oracle_edge(
     {
         labels.push((x + BODY_MARGIN, y + BODY_MARGIN, label.to_string()));
     }
+    let decor_at_start = uses_backto_id;
+    let mut path_points = archimate_edge_points(edge);
+    if matches!(rel.kind, ArchimateRelationKind::Realization) {
+        // Java SVEK shortens `dotPath` by the triangle extremity length before
+        // drawing `ExtremityExtends`, whose triangle is 18px deep and 12px wide.
+        shorten_archimate_endpoint(&mut path_points, decor_at_start, REALIZATION_TRIANGLE_DEPTH);
+    }
     OracleEdgePath {
         id: id.clone(),
         path_id: Some(id),
-        d: edge_path_d(edge),
-        arrow_points: edge
-            .end_point
-            .and_then(|(x, y)| arrow_polygon_points(x + BODY_MARGIN, y + BODY_MARGIN)),
+        d: edge_path_d(&path_points),
+        arrow_points: archimate_arrow_points(rel.kind, edge, decor_at_start),
         second_arrow_points: None,
         second_arrow_fill: None,
         second_polygon_style: None,
@@ -590,6 +595,12 @@ fn no_oracle_edge(
         decorations: vec![],
     }
 }
+
+const REALIZATION_TRIANGLE_DEPTH: f64 = 18.0;
+const REALIZATION_TRIANGLE_HALF_WIDTH: f64 = 6.0;
+const DEPENDENCY_ARROW_BACK: f64 = 9.0;
+const DEPENDENCY_ARROW_NOTCH: f64 = 5.0;
+const DEPENDENCY_ARROW_HALF_WIDTH: f64 = 4.0;
 
 fn archimate_relation_has_endpoint_decor(kind: ArchimateRelationKind) -> bool {
     !matches!(kind, ArchimateRelationKind::Association)
@@ -662,45 +673,162 @@ fn no_oracle_link_id(diagram: &ArchimateDiagram, source_line: usize, index: usiz
     format!("lnk{}", diagram.elements.len() + index + 2)
 }
 
-fn edge_path_d(edge: &EdgePath) -> String {
-    let Some((start, rest)) = edge.points.split_first() else {
+fn archimate_edge_points(edge: &EdgePath) -> Vec<(f64, f64)> {
+    edge.points
+        .iter()
+        .map(|(x, y)| (x + BODY_MARGIN, y + BODY_MARGIN))
+        .collect()
+}
+
+fn edge_path_d(points: &[(f64, f64)]) -> String {
+    let Some((start, rest)) = points.split_first() else {
         return String::new();
     };
-    let mut d = format!(
-        "M{},{}",
-        fc(start.0 + BODY_MARGIN),
-        fc(start.1 + BODY_MARGIN)
-    );
+    let mut d = format!("M{},{}", fc(start.0), fc(start.1));
     for chunk in rest.chunks(3) {
         if let [c1, c2, to] = chunk {
             d.push_str(&format!(
                 " C{},{} {},{} {},{}",
-                fc(c1.0 + BODY_MARGIN),
-                fc(c1.1 + BODY_MARGIN),
-                fc(c2.0 + BODY_MARGIN),
-                fc(c2.1 + BODY_MARGIN),
-                fc(to.0 + BODY_MARGIN),
-                fc(to.1 + BODY_MARGIN),
+                fc(c1.0),
+                fc(c1.1),
+                fc(c2.0),
+                fc(c2.1),
+                fc(to.0),
+                fc(to.1),
             ));
         }
     }
     d
 }
 
-fn arrow_polygon_points(x: f64, y: f64) -> Option<String> {
-    Some(format!(
+fn archimate_arrow_points(
+    kind: ArchimateRelationKind,
+    edge: &EdgePath,
+    decor_at_start: bool,
+) -> Option<String> {
+    if matches!(kind, ArchimateRelationKind::Association) {
+        return None;
+    }
+    let points = archimate_edge_points(edge);
+    let (control, endpoint) = archimate_extremity_basis(&points, decor_at_start)?;
+    if matches!(kind, ArchimateRelationKind::Realization) {
+        Some(realization_triangle_points(control, endpoint))
+    } else {
+        Some(dependency_arrow_points(control, endpoint))
+    }
+}
+
+fn archimate_extremity_basis(
+    points: &[(f64, f64)],
+    at_start: bool,
+) -> Option<((f64, f64), (f64, f64))> {
+    if at_start {
+        let endpoint = points.first().copied()?;
+        let control = points
+            .iter()
+            .copied()
+            .find(|p| (p.0 - endpoint.0).abs() > 0.01 || (p.1 - endpoint.1).abs() > 0.01)?;
+        Some((control, endpoint))
+    } else {
+        let endpoint = points.last().copied()?;
+        let control = points
+            .iter()
+            .rev()
+            .copied()
+            .find(|p| (p.0 - endpoint.0).abs() > 0.01 || (p.1 - endpoint.1).abs() > 0.01)?;
+        Some((control, endpoint))
+    }
+}
+
+fn shorten_archimate_endpoint(points: &mut [(f64, f64)], at_start: bool, length: f64) {
+    if points.len() < 2 {
+        return;
+    }
+    if at_start {
+        let tangent = unit_vector(points[0], points[1]);
+        points[0] = add(points[0], scale(tangent, length));
+    } else {
+        let last = points.len() - 1;
+        let tangent = unit_vector(points[last], points[last - 1]);
+        points[last] = add(points[last], scale(tangent, length));
+    }
+}
+
+fn dependency_arrow_points(control: (f64, f64), endpoint: (f64, f64)) -> String {
+    let (ux, uy) = unit_vector(control, endpoint);
+    let (px, py) = (-uy, ux);
+    let side1 = (
+        endpoint.0 - ux * DEPENDENCY_ARROW_BACK + px * DEPENDENCY_ARROW_HALF_WIDTH,
+        endpoint.1 - uy * DEPENDENCY_ARROW_BACK + py * DEPENDENCY_ARROW_HALF_WIDTH,
+    );
+    let notch = (
+        endpoint.0 - ux * DEPENDENCY_ARROW_NOTCH,
+        endpoint.1 - uy * DEPENDENCY_ARROW_NOTCH,
+    );
+    let side2 = (
+        endpoint.0 - ux * DEPENDENCY_ARROW_BACK - px * DEPENDENCY_ARROW_HALF_WIDTH,
+        endpoint.1 - uy * DEPENDENCY_ARROW_BACK - py * DEPENDENCY_ARROW_HALF_WIDTH,
+    );
+    format!(
         "{},{} {},{} {},{} {},{} {},{}",
-        fc(x),
-        fc(y),
-        fc(x + 4.0),
-        fc(y - 9.0),
-        fc(x),
-        fc(y - 5.0),
-        fc(x - 4.0),
-        fc(y - 9.0),
-        fc(x),
-        fc(y),
-    ))
+        fc(endpoint.0),
+        fc(endpoint.1),
+        fc(side1.0),
+        fc(side1.1),
+        fc(notch.0),
+        fc(notch.1),
+        fc(side2.0),
+        fc(side2.1),
+        fc(endpoint.0),
+        fc(endpoint.1),
+    )
+}
+
+fn realization_triangle_points(control: (f64, f64), endpoint: (f64, f64)) -> String {
+    let (ux, uy) = unit_vector(control, endpoint);
+    let (px, py) = (-uy, ux);
+    let base = (
+        endpoint.0 - ux * REALIZATION_TRIANGLE_DEPTH,
+        endpoint.1 - uy * REALIZATION_TRIANGLE_DEPTH,
+    );
+    let side1 = (
+        base.0 + px * REALIZATION_TRIANGLE_HALF_WIDTH,
+        base.1 + py * REALIZATION_TRIANGLE_HALF_WIDTH,
+    );
+    let side2 = (
+        base.0 - px * REALIZATION_TRIANGLE_HALF_WIDTH,
+        base.1 - py * REALIZATION_TRIANGLE_HALF_WIDTH,
+    );
+    format!(
+        "{},{} {},{} {},{} {},{}",
+        fc(endpoint.0),
+        fc(endpoint.1),
+        fc(side1.0),
+        fc(side1.1),
+        fc(side2.0),
+        fc(side2.1),
+        fc(endpoint.0),
+        fc(endpoint.1),
+    )
+}
+
+fn unit_vector(from: (f64, f64), to: (f64, f64)) -> (f64, f64) {
+    let dx = to.0 - from.0;
+    let dy = to.1 - from.1;
+    let len = (dx * dx + dy * dy).sqrt();
+    if len > 0.0 {
+        (dx / len, dy / len)
+    } else {
+        (0.0, 1.0)
+    }
+}
+
+fn add(a: (f64, f64), b: (f64, f64)) -> (f64, f64) {
+    (a.0 + b.0, a.1 + b.1)
+}
+
+fn scale(v: (f64, f64), s: f64) -> (f64, f64) {
+    (v.0 * s, v.1 * s)
 }
 
 #[cfg(test)]
