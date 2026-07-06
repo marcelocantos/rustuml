@@ -513,17 +513,19 @@ impl ObjectParser {
 }
 
 fn parse_object_link_kind(connector: &str) -> ObjectLinkKind {
-    if connector.contains("--|>") || connector.contains("<|--") {
-        ObjectLinkKind::Extension
-    } else if connector.contains("..|>") || connector.contains("<|..") {
+    if connector.contains("--|>")
+        || connector.contains("<|--")
+        || connector.contains("..|>")
+        || connector.contains("<|..")
+    {
         ObjectLinkKind::Extension
     } else if connector.contains("*--") || connector.contains("--*") {
         ObjectLinkKind::Composition
     } else if connector.contains("o--") || connector.contains("--o") {
         ObjectLinkKind::Aggregation
-    } else if connector.contains("..>") || connector.contains("<..") {
-        ObjectLinkKind::Dependency
-    } else if connector.contains("-->")
+    } else if connector.contains("..>")
+        || connector.contains("<..")
+        || connector.contains("-->")
         || connector.contains("<--")
         || connector == "->"
         || connector == "<-"
