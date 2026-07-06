@@ -106,6 +106,20 @@ fn parse_container_color(line: &str) -> Option<String> {
         .map(|part| part.trim_end_matches('{').to_string())
 }
 
+fn parse_link_shape(arrow: &str) -> LinkShape {
+    if arrow.contains("(0)-") {
+        LinkShape::MiddleFullSocket
+    } else if arrow.contains("(0-") {
+        LinkShape::MiddleBallSocket
+    } else if arrow.contains("(0") {
+        LinkShape::TargetBallSocket
+    } else if arrow.contains('(') {
+        LinkShape::TargetSocket
+    } else {
+        LinkShape::Plain
+    }
+}
+
 pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError> {
     let mut components = Vec::new();
     let mut interfaces = Vec::new();
@@ -392,6 +406,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                             id: id.clone(),
                             label,
                             stereotypes: parse_stereotypes(trimmed),
+                            color: parse_container_color(trimmed),
                             url: container_url,
                             source_line: current_line,
                             kind,
@@ -493,6 +508,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                     id: id.clone(),
                     label,
                     stereotypes: parse_stereotypes(trimmed),
+                    color: parse_container_color(trimmed),
                     url: comp_url,
                     source_line: current_line,
                     kind: ComponentElementKind::Component,
@@ -515,6 +531,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                     id: id.clone(),
                     label: name,
                     stereotypes: parse_stereotypes(trimmed),
+                    color: None,
                     url: None,
                     source_line: current_line,
                     kind: ComponentElementKind::Component,
@@ -609,6 +626,8 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 .unwrap_or_default();
             let label = caps.get(10).map(|m| m.as_str().trim().to_string());
             let dashed = arrow.contains("..") || arrow.contains('.');
+            let has_arrow = arrow.contains('>') || arrow.contains('<');
+            let shape = parse_link_shape(arrow);
 
             // Auto-create endpoints if not already declared. Bracketed and
             // quoted endpoints become components; bare ones become interfaces.
@@ -627,6 +646,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                             id: id.clone(),
                             label: id.clone(),
                             stereotypes: Vec::new(),
+                            color: None,
                             url: None,
                             source_line: current_line,
                             kind: ComponentElementKind::Component,
@@ -648,6 +668,8 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                     from_mult,
                     to_mult,
                     dashed,
+                    has_arrow,
+                    shape,
                     source_line: current_line,
                 });
             }
@@ -758,6 +780,13 @@ mod tests {
     }
 
     #[test]
+    fn component_leaf_color() {
+        let d = parse("component Provider #LightBlue\ncomponent Consumer #Orange");
+        assert_eq!(d.components[0].color.as_deref(), Some("#LightBlue"));
+        assert_eq!(d.components[1].color.as_deref(), Some("#Orange"));
+    }
+
+    #[test]
     fn parallel_containers() {
         let d = parse(
             "cloud G1 {\n  component AA\n}\nfolder G2 {\n  component BB\n}\nnode G3 {\n  component CC\n}\nAA --> BB\nBB --> CC",
@@ -806,6 +835,8 @@ mod tests {
         let d = parse("component Foo\ncomponent Bar\nFoo -(0- Bar : uses");
         assert_eq!(d.connections.len(), 1);
         assert_eq!(d.connections[0].label.as_deref(), Some("uses"));
+        assert!(!d.connections[0].has_arrow);
+        assert_eq!(d.connections[0].shape, LinkShape::MiddleBallSocket);
     }
 
     #[test]

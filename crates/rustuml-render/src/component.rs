@@ -499,16 +499,16 @@ pub fn render_with_oracle(
     {
         (orc.canvas_width, orc.canvas_height)
     } else if oracle.is_none() {
-        compute_no_oracle_canvas(
-            &positions,
-            &iface_positions,
-            &comp_dims,
-            &cluster_positions,
-            &diagram.packages,
+        compute_no_oracle_canvas(NoOracleCanvas {
+            positions: &positions,
+            iface_positions: &iface_positions,
+            comp_dims: &comp_dims,
+            cluster_positions: &cluster_positions,
+            packages: &diagram.packages,
             pkg_total_w,
             pkg_total_h,
             title_h,
-        )
+        })
     } else {
         (
             content_w.max(pkg_total_w).max(100.0),
@@ -884,7 +884,9 @@ pub fn render_with_oracle(
 
         // Determine fill: use oracle fill if available, otherwise default.
         let oracle_rect = oracle_comp_rect(comp);
-        let fill_owned = oracle_rect.and_then(|r| r.fill.clone());
+        let fill_owned = oracle_rect
+            .and_then(|r| r.fill.clone())
+            .or_else(|| comp.color.as_deref().map(crate::sequence::resolve_color));
         let fill = fill_owned.as_deref().unwrap_or(&component_fill);
 
         // Use oracle width/height when available — they're authoritative.
@@ -1188,18 +1190,7 @@ pub fn render_with_oracle(
                 continue;
             };
 
-            // Determine link type.
-            let _has_arrow = conn.from.contains("-->")
-                || conn.to.contains("-->")
-                || !conn.dashed && from_comp.is_some() && to_comp.is_some();
-            // In PlantUML: --> is dependency, -- is association, ..> is dependency (dashed),
-            // .. is association (dashed). We infer from the parser's dashed flag and arrow presence.
-            // The parser sets dashed=true for dotted lines. Arrow presence is implied by --> vs --.
-            // Since Connection doesn't carry arrow type, we assume:
-            // - non-dashed + components => dependency (has arrow)
-            // - dashed => dependency (has arrow)
-            // For association (no arrow), the link type is "association".
-            let link_type = "dependency"; // Simplified - the parser doesn't distinguish fully.
+            let link_type_attr = no_oracle_link_type_attr(conn);
             let dash_attr = if conn.dashed {
                 "stroke-dasharray:7,7;"
             } else {
@@ -1249,7 +1240,7 @@ pub fn render_with_oracle(
             };
 
             svg.raw(&format!(
-            r#"<g class="link" data-entity-1="{from_ent_id}" data-entity-2="{to_ent_id}" data-link-type="{link_type}"{source_line_attr} id="{link_id}">"#,
+            r#"<g class="link" data-entity-1="{from_ent_id}" data-entity-2="{to_ent_id}"{link_type_attr}{source_line_attr} id="{link_id}">"#,
         ));
 
             if let Some(ep) = edge_path
@@ -1261,24 +1252,34 @@ pub fn render_with_oracle(
                 // (`SvekResult.calculateDimension` / `SvekEdge.solveLine`).
                 // The final arrow decor also shortens the visible path by
                 // `ExtremityArrow.getDecorationLength()`.
-                let edge_points =
-                    component_svek_edge_points(&ep.points, MARGIN, MARGIN + title_h, true);
+                let edge_points = component_svek_edge_points(
+                    &ep.points,
+                    MARGIN,
+                    MARGIN + title_h,
+                    conn.has_arrow,
+                );
                 let path_d = build_path_d(&edge_points);
-                let path_id = format!("{}-to-{}", conn.from, conn.to);
+                let path_id = no_oracle_path_id(conn);
                 svg.raw(&format!(
                 r#"<path d="{path_d}" fill="none" id="{path_id}" style="stroke:{STROKE};stroke-width:1;{dash_attr}"/>"#,
             ));
 
-                // Arrowhead.
-                let arrow_points =
+                let raw_edge_points =
                     component_svek_edge_points(&ep.points, MARGIN, MARGIN + title_h, false);
-                let last = arrow_points.last().unwrap();
-                let prev = if arrow_points.len() >= 2 {
-                    &arrow_points[arrow_points.len() - 2]
-                } else {
-                    last
-                };
-                render_arrowhead(&mut svg, prev, last);
+                if conn.has_arrow {
+                    let last = raw_edge_points.last().unwrap();
+                    let prev = if raw_edge_points.len() >= 2 {
+                        &raw_edge_points[raw_edge_points.len() - 2]
+                    } else {
+                        last
+                    };
+                    render_arrowhead(&mut svg, prev, last);
+                } else if matches!(
+                    conn.shape,
+                    LinkShape::TargetSocket | LinkShape::TargetBallSocket
+                ) {
+                    render_target_socket_decoration(&mut svg, conn.shape, &raw_edge_points);
+                }
 
                 // Labels.
                 let first = edge_points.first().unwrap();
@@ -1326,13 +1327,14 @@ pub fn render_with_oracle(
                 }
                 if let Some(to_mult) = &conn.to_mult {
                     let mw = text_render::measure(to_mult, LINK_FONT, false);
+                    let path_last = edge_points.last().unwrap();
                     let mut text_buf = String::new();
                     text_render::emit_text(
                         &mut text_buf,
                         to_mult,
                         &TextBase {
-                            x: last.0 - mw - 1.0,
-                            y: last.1 - 4.0,
+                            x: path_last.0 - mw - 1.0,
+                            y: path_last.1 - 4.0,
                             font_size: LINK_FONT as u32,
                             font_family: "sans-serif",
                             fill: TEXT_COLOR,
@@ -1344,6 +1346,12 @@ pub fn render_with_oracle(
                     );
                     svg.raw(&text_buf);
                 }
+                if matches!(
+                    conn.shape,
+                    LinkShape::MiddleBallSocket | LinkShape::MiddleFullSocket
+                ) {
+                    render_middle_socket_decoration(&mut svg, conn.shape, &raw_edge_points);
+                }
             } else {
                 // Straight line fallback.
                 let path_d = format!(
@@ -1351,13 +1359,20 @@ pub fn render_with_oracle(
                     mid_y1 = from_cy + (to_cy - from_cy) * 0.3,
                     mid_y2 = from_cy + (to_cy - from_cy) * 0.7,
                 );
-                let path_id = format!("{}-to-{}", conn.from, conn.to);
+                let path_id = no_oracle_path_id(conn);
                 svg.raw(&format!(
                 r#"<path d="{path_d}" fill="none" id="{path_id}" style="stroke:{STROKE};stroke-width:1;{dash_attr}"/>"#,
             ));
 
-                // Arrowhead for dependency arrows.
-                render_arrowhead_from_coords(&mut svg, from_cx, from_bottom, to_cx, to_cy);
+                if conn.has_arrow {
+                    render_arrowhead_from_coords(&mut svg, from_cx, from_bottom, to_cx, to_cy);
+                } else if matches!(
+                    conn.shape,
+                    LinkShape::TargetSocket | LinkShape::TargetBallSocket
+                ) {
+                    let points = [(from_cx, from_bottom), (to_cx, to_cy)];
+                    render_target_socket_decoration(&mut svg, conn.shape, &points);
+                }
 
                 // Labels.
                 if let Some(label) = &conn.label {
@@ -1420,6 +1435,13 @@ pub fn render_with_oracle(
                         },
                     );
                     svg.raw(&text_buf);
+                }
+                if matches!(
+                    conn.shape,
+                    LinkShape::MiddleBallSocket | LinkShape::MiddleFullSocket
+                ) {
+                    let points = [(from_cx, from_bottom), (to_cx, to_cy)];
+                    render_middle_socket_decoration(&mut svg, conn.shape, &points);
                 }
             }
 
@@ -2189,34 +2211,36 @@ fn compute_positions_grid(
     (positions, iface_positions, Vec::new(), content_w, content_h)
 }
 
-fn compute_no_oracle_canvas(
-    positions: &[(f64, f64)],
-    iface_positions: &[(f64, f64)],
-    comp_dims: &[CompDim],
-    cluster_positions: &[ClusterPosition],
-    packages: &[ComponentPackage],
+struct NoOracleCanvas<'a> {
+    positions: &'a [(f64, f64)],
+    iface_positions: &'a [(f64, f64)],
+    comp_dims: &'a [CompDim],
+    cluster_positions: &'a [ClusterPosition],
+    packages: &'a [ComponentPackage],
     pkg_total_w: f64,
     pkg_total_h: f64,
     title_h: f64,
-) -> (f64, f64) {
-    let mut max_x = 0.0_f64;
-    let mut max_y = title_h;
+}
 
-    for ((x, y), dim) in positions.iter().zip(comp_dims) {
+fn compute_no_oracle_canvas(input: NoOracleCanvas<'_>) -> (f64, f64) {
+    let mut max_x = 0.0_f64;
+    let mut max_y = input.title_h;
+
+    for ((x, y), dim) in input.positions.iter().zip(input.comp_dims) {
         max_x = max_x.max(x + dim.width);
         max_y = max_y.max(y + dim.height);
     }
-    for (cx, cy) in iface_positions {
+    for (cx, cy) in input.iface_positions {
         max_x = max_x.max(cx + IFACE_R);
         max_y = max_y.max(cy + IFACE_R + LINE_HEIGHT + 4.0);
     }
-    for cluster in cluster_positions {
+    for cluster in input.cluster_positions {
         max_x = max_x.max(cluster.x + cluster.width);
         max_y = max_y.max(cluster.y + cluster.height);
     }
-    if cluster_positions.is_empty() && !packages.is_empty() {
-        max_x = max_x.max(pkg_total_w);
-        max_y = max_y.max(title_h + MARGIN + pkg_total_h);
+    if input.cluster_positions.is_empty() && !input.packages.is_empty() {
+        max_x = max_x.max(input.pkg_total_w);
+        max_y = max_y.max(input.title_h + MARGIN + input.pkg_total_h);
     }
 
     let total_w = (max_x + SVEK_CANVAS_PAD).max(1.0);
@@ -2633,6 +2657,108 @@ fn render_arrowhead_from_coords(svg: &mut SvgBuilder, _fx: f64, _fy: f64, tx: f6
     );
     svg.raw(&format!(
         r#"<polygon fill="{STROKE}" points="{pts}" style="stroke:{STROKE};stroke-width:1;"/>"#,
+    ));
+}
+
+fn no_oracle_link_type_attr(conn: &Connection) -> String {
+    if conn.has_arrow {
+        r#" data-link-type="dependency""#.to_string()
+    } else if matches!(
+        conn.shape,
+        LinkShape::Plain | LinkShape::MiddleBallSocket | LinkShape::MiddleFullSocket
+    ) {
+        r#" data-link-type="association""#.to_string()
+    } else {
+        String::new()
+    }
+}
+
+fn no_oracle_path_id(conn: &Connection) -> String {
+    if conn.has_arrow
+        || matches!(
+            conn.shape,
+            LinkShape::TargetSocket | LinkShape::TargetBallSocket
+        )
+    {
+        format!("{}-to-{}", conn.from, conn.to)
+    } else {
+        format!("{}-{}", conn.from, conn.to)
+    }
+}
+
+fn render_target_socket_decoration(svg: &mut SvgBuilder, shape: LinkShape, points: &[(f64, f64)]) {
+    let Some((&tip, &prev)) = points.last().zip(points.iter().rev().nth(1)) else {
+        return;
+    };
+    if matches!(shape, LinkShape::TargetBallSocket) {
+        render_socket_ball(svg, tip);
+    }
+    render_socket_arc(svg, tip, prev, 9.0, false);
+}
+
+fn render_middle_socket_decoration(svg: &mut SvgBuilder, shape: LinkShape, points: &[(f64, f64)]) {
+    let (Some(first), Some(last)) = (points.first(), points.last()) else {
+        return;
+    };
+    let center = ((first.0 + last.0) / 2.0, (first.1 + last.1) / 2.0);
+    if matches!(shape, LinkShape::MiddleFullSocket) {
+        svg.raw(&format!(
+            r##"<ellipse cx="{}" cy="{}" fill="#FFFFFF" rx="10" ry="10" style="stroke:#FFFFFF;stroke-width:1;"/>"##,
+            fc(center.0),
+            fc(center.1),
+        ));
+        render_socket_arc(svg, center, *first, 10.0, true);
+    }
+    render_socket_arc(svg, center, *last, 10.0, false);
+    render_socket_ball(svg, center);
+}
+
+fn render_socket_ball(svg: &mut SvgBuilder, center: (f64, f64)) {
+    svg.raw(&format!(
+        r##"<ellipse cx="{}" cy="{}" fill="#FFFFFF" rx="6" ry="6" style="stroke:#181818;stroke-width:1.5;"/>"##,
+        fc(center.0),
+        fc(center.1),
+    ));
+}
+
+fn render_socket_arc(
+    svg: &mut SvgBuilder,
+    center: (f64, f64),
+    toward: (f64, f64),
+    radius: f64,
+    opposite: bool,
+) {
+    let dx = toward.0 - center.0;
+    let dy = toward.1 - center.1;
+    let len = (dx * dx + dy * dy).sqrt();
+    if len <= f64::EPSILON {
+        return;
+    }
+    let ux = dx / len;
+    let uy = dy / len;
+    let (ux, uy) = if opposite { (-ux, -uy) } else { (ux, uy) };
+    // Java PlantUML draws socket marks via `svek.extremity.ExtremityParenthesis`
+    // and `ExtremityParenthesis2`: a stroked UEllipse arc centered on the
+    // endpoint or the lollipop midpoint, with 1.5px stroke and radii 9/10.
+    let spread = std::f64::consts::FRAC_1_SQRT_2;
+    let px = -uy;
+    let py = ux;
+    let start = (
+        center.0 + (ux + px) * radius * spread,
+        center.1 + (uy + py) * radius * spread,
+    );
+    let end = (
+        center.0 + (ux - px) * radius * spread,
+        center.1 + (uy - py) * radius * spread,
+    );
+    svg.raw(&format!(
+        r##"<path d="M{},{} A{},{} 0 0 0 {},{}" fill="none" style="stroke:#181818;stroke-width:1.5;"/>"##,
+        fc(start.0),
+        fc(start.1),
+        fc(radius),
+        fc(radius),
+        fc(end.0),
+        fc(end.1),
     ));
 }
 

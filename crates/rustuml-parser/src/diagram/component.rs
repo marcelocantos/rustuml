@@ -41,6 +41,10 @@ pub struct Component {
     pub label: String,
     /// All stereotypes (e.g. `["facade", "service"]`).
     pub stereotypes: Vec<String>,
+    /// Optional element-specific fill color from declarations such as
+    /// `component Gateway #LightBlue`.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub color: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
     /// 1-based line number within the `@startuml` block.
@@ -65,9 +69,23 @@ pub struct Connection {
     pub from_mult: Option<String>,
     pub to_mult: Option<String>,
     pub dashed: bool,
+    #[serde(default)]
+    pub has_arrow: bool,
+    #[serde(default)]
+    pub shape: LinkShape,
     /// 1-based line number within the `@startuml` block.
     #[serde(default)]
     pub source_line: usize,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
+pub enum LinkShape {
+    #[default]
+    Plain,
+    TargetSocket,
+    TargetBallSocket,
+    MiddleBallSocket,
+    MiddleFullSocket,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
