@@ -249,6 +249,10 @@ fn format_field(f: &ObjectField) -> String {
     raw.replace("\"\"", "~\"~\"")
 }
 
+fn map_key_column_text_width(dim: &ObjDim) -> f64 {
+    (dim.map_divider_x - 2.0 * MAP_TEXT_X_OFFSET).max(0.0)
+}
+
 // ---------------------------------------------------------------------------
 // Position resolution
 // ---------------------------------------------------------------------------
@@ -1119,7 +1123,14 @@ fn render_map_rows(
         // Key text (left column).
         let key_x = oracle_rect
             .and_then(|r| r.text_x_values.get(1 + stereo_offset + i * 2).copied())
-            .unwrap_or(x + MAP_TEXT_X_OFFSET);
+            .unwrap_or_else(|| {
+                // PlantUML TextBlockMap.drawU centers each key TextBlock in
+                // widthColA via HorizontalAlignment.getPosition(keyWidth,
+                // widthColA); TextBlockUtils.withMargin then adds the 5px
+                // left text inset inside that centered block.
+                let key_w = text_render::measure(&field.name, font_size as f64, false);
+                x + MAP_TEXT_X_OFFSET + (map_key_column_text_width(dim) - key_w) / 2.0
+            });
         text_render::emit_text(
             svg,
             &field.name,
@@ -1486,6 +1497,41 @@ mod tests {
         assert!(svg.contains("port"));
         assert!(svg.contains("8080"));
         assert!(svg.contains("Config"));
+    }
+
+    #[test]
+    fn map_keys_center_in_key_column() {
+        let diagram = ObjectDiagram {
+            meta: DiagramMeta::default(),
+            objects: vec![ObjectInstance {
+                id: "cfg".into(),
+                label: "Config".into(),
+                kind: ObjectKind::Map,
+                fields: vec![
+                    ObjectField {
+                        name: "host".into(),
+                        value: Some("localhost".into()),
+                    },
+                    ObjectField {
+                        name: "debug".into(),
+                        value: Some("true".into()),
+                    },
+                ],
+                stereotype: None,
+                color: None,
+                source_line: 1,
+            }],
+            links: vec![],
+            notes: vec![],
+            packages: vec![],
+        };
+        let svg = render(&diagram, &Theme::default());
+        let host_w = text_render::measure("host", Theme::default().class.font_size as f64, false);
+        let debug_w = text_render::measure("debug", Theme::default().class.font_size as f64, false);
+        let host_x = MARGIN + MAP_TEXT_X_OFFSET + (debug_w - host_w) / 2.0;
+        let debug_x = MARGIN + MAP_TEXT_X_OFFSET;
+        assert!(svg.contains(&format!(r#"x="{}""#, fmt_tl(host_x))));
+        assert!(svg.contains(&format!(r#"x="{}""#, fmt_tl(debug_x))));
     }
 
     #[test]
