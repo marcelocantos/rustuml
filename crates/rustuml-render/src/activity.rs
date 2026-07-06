@@ -27790,15 +27790,262 @@ fn escape_xml_attr_local(s: &str) -> String {
 /// FtileGeometry layout; otherwise `None`, so `render` falls back to the legacy
 /// extent-model renderer. The geometry layer (`node_geometry`/`sequence_geometry`,
 /// covering leaves+linear+While+binary-If+Switch+Repeat) is ported and
-/// committed; the remaining incr-4 work is the EMITTER — drawing every tile and
-/// arrow at its ported position, with the canvas derived from the root
-/// geometry. Until that lands this defers (returns None); see the incr-4 plan
-/// in project memory (`project_parity_gaps.md`).
-fn render_ftile(tree: &[LayoutNode], _diagram: &ActivityDiagram) -> Option<String> {
+/// committed. The live bridge starts with byte-stable linear action stacks:
+/// FTile geometry selects the root spine and calls each supported construct's
+/// placement helper, while the existing sequence emitter still draws the SVG
+/// until each construct's full FTile emitter lands.
+fn render_ftile(
+    tree: &[LayoutNode],
+    diagram: &ActivityDiagram,
+    palette: &Palette,
+    handwritten: bool,
+    defs: &str,
+) -> Option<String> {
+    if diagram.meta.header.is_some()
+        || diagram.meta.footer.is_some()
+        || diagram.meta.caption.is_some()
+        || diagram.meta.legend.is_some()
+        || diagram.meta.title.is_some()
+    {
+        return None;
+    }
     // Portability gate: bail unless every tile maps to an FtileGeometry.
-    let _root = sequence_geometry(tree)?;
-    // TODO(incr-4): emit from `_root` + the `*_layout` fns instead of deferring.
-    None
+    let root = sequence_geometry(tree)?;
+    render_ftile_compatible_sequence(tree, root, palette, handwritten, defs)
+}
+
+fn render_ftile_compatible_sequence(
+    tree: &[LayoutNode],
+    root: ftile::FtileGeometry,
+    palette: &Palette,
+    handwritten: bool,
+    defs: &str,
+) -> Option<String> {
+    const MARGIN_LEAD: f64 = 16.0;
+    const MARGIN_TRAIL: f64 = 19.0;
+    const FTILE_BRIDGE_EPSILON: f64 = 1.0 / 1000.0;
+
+    let mut nodes = Vec::new();
+    let mut tiles = Vec::new();
+    let mut has_action = false;
+    for node in tree {
+        match node {
+            LayoutNode::Arrow {
+                dashed: false,
+                color: None,
+                label: None,
+            } => {}
+            LayoutNode::Start
+            | LayoutNode::Action { .. }
+            | LayoutNode::Stop
+            | LayoutNode::End
+            | LayoutNode::If { .. }
+            | LayoutNode::While { .. }
+            | LayoutNode::Repeat { .. }
+            | LayoutNode::Switch { .. }
+            | LayoutNode::Fork { .. } => {
+                has_action |= node_contains_action(node);
+                nodes.push(node);
+                tiles.push(node_geometry(node)?);
+            }
+            _ => return None,
+        }
+    }
+    if nodes.is_empty() || tiles.is_empty() || !has_action {
+        return None;
+    }
+    probe_ftile_layouts(tree)?;
+    let translates = ftile::linear_translates(&tiles);
+    if translates.len() != nodes.len() {
+        return None;
+    }
+    let (legacy_left, legacy_right) = sequence_extents(tree);
+    if (root.left - legacy_left).abs() > FTILE_BRIDGE_EPSILON
+        || (root.right() - legacy_right).abs() > FTILE_BRIDGE_EPSILON
+    {
+        return None;
+    }
+
+    let content_left = root.left;
+    let content_right = root.right();
+    let svg_w = (content_left + content_right + MARGIN_LEAD + MARGIN_TRAIL)
+        .ceil()
+        .max(65.0) as u32;
+    let content_h = sequence_height(tree);
+    let svg_h = (MARGIN_LEAD + content_h + MARGIN_TRAIL).ceil() as u32;
+    let mut svg = SvgEmitter::with_palette(palette.clone(), handwritten);
+    let root_spine = root.left;
+    if tiles
+        .iter()
+        .zip(&translates)
+        .any(|(tile, (dx, _))| (dx + tile.left - root_spine).abs() > FTILE_BRIDGE_EPSILON)
+    {
+        return None;
+    }
+
+    let cx = MARGIN_LEAD + root_spine;
+    emit_sequence_ex(&mut svg, tree, cx, MARGIN_LEAD, None, None, false);
+
+    let (shapes_c, connectors_c, x_tf, y_tf) = crate::compress::compress_activity_buffers(
+        &svg.shapes,
+        &svg.connectors,
+        crate::compress::COMPRESS_MARGIN,
+    );
+    let mut content = shapes_c;
+    content.push_str(&connectors_c);
+    let svg_w = x_tf.transform(svg_w as f64).round() as u32;
+    let svg_h = y_tf.transform(svg_h as f64).round() as u32;
+    format_svg(
+        svg_w,
+        svg_h,
+        &content,
+        defs,
+        palette.svg_background.as_deref(),
+    )
+    .into()
+}
+
+fn probe_ftile_layouts(nodes: &[LayoutNode]) -> Option<()> {
+    for node in nodes {
+        match node {
+            LayoutNode::Arrow { .. }
+            | LayoutNode::Start
+            | LayoutNode::Stop
+            | LayoutNode::End
+            | LayoutNode::Action { .. } => {}
+            LayoutNode::If {
+                condition,
+                then_branch,
+                else_branches,
+                diamond_font_family,
+                diamond_font_size,
+                diamond_text_bold,
+                ..
+            } => {
+                if else_branches.len() != 1 {
+                    return None;
+                }
+                let total = node_geometry(node)?;
+                let diamond1 = condition_diamond_styled(
+                    condition,
+                    *diamond_font_size,
+                    *diamond_text_bold,
+                    diamond_font_family,
+                );
+                let diamond2 = ftile::FtileGeometry::diamond_empty(0.0);
+                let tile2 = if_branch_tile(&else_branches[0].body)?;
+                let _layout =
+                    ftile::if_layout(&total, &diamond1, &diamond2, &tile2, 10.0, (0.0, 0.0, 0.0));
+                probe_ftile_layouts(then_branch)?;
+                probe_ftile_layouts(&else_branches[0].body)?;
+            }
+            LayoutNode::While {
+                condition,
+                body,
+                special_out,
+                ..
+            } => {
+                let total = node_geometry(node)?;
+                let diamond1 = condition_diamond(condition);
+                let body_tile = sequence_geometry(body)?;
+                let special = special_out.as_deref().and_then(node_geometry);
+                let _layout =
+                    ftile::while_layout(&total, &diamond1, &body_tile, None, special.as_ref(), 0.0);
+                probe_ftile_layouts(body)?;
+            }
+            LayoutNode::Repeat {
+                body,
+                condition,
+                backward,
+                ..
+            } => {
+                let total = node_geometry(node)?;
+                let diamond1 = ftile::FtileGeometry::diamond_empty(0.0);
+                let diamond2 = condition_diamond(condition);
+                let repeat = sequence_geometry(body)?;
+                let backward_g = backward.as_ref().map(|label| {
+                    ftile::FtileGeometry::box_tile(
+                        text_render::measure(label, FONT_SIZE, false),
+                        text_render::label_height(label, FONT_SIZE),
+                        ACTION_H_PADDING,
+                        ACTION_H_PADDING,
+                        ACTION_H_PADDING,
+                        ACTION_H_PADDING,
+                    )
+                });
+                let _layout = ftile::repeat_layout(
+                    &total,
+                    &diamond1,
+                    &diamond2,
+                    &repeat,
+                    backward_g.as_ref(),
+                );
+                probe_ftile_layouts(body)?;
+            }
+            LayoutNode::Switch { cases, .. } => {
+                let total = node_geometry(node)?;
+                let LayoutNode::Switch { condition, .. } = node else {
+                    unreachable!();
+                };
+                let diamond1 = condition_diamond(condition);
+                let diamond2 = ftile::FtileGeometry::diamond_empty(0.0);
+                let tiles = cases
+                    .iter()
+                    .map(|case| sequence_geometry(&case.body))
+                    .collect::<Option<Vec<_>>>()?;
+                let _layout = ftile::switch_layout(&total, &diamond1, &diamond2, &tiles, 20.0);
+                for case in cases {
+                    probe_ftile_layouts(&case.body)?;
+                }
+            }
+            LayoutNode::Fork {
+                branches, is_split, ..
+            } => {
+                if *is_split {
+                    return None;
+                }
+                let branch_tiles = branches
+                    .iter()
+                    .map(|branch| sequence_geometry(branch))
+                    .collect::<Option<Vec<_>>>()?;
+                let translates = ftile::fork_inner_translates(&branch_tiles);
+                if translates.len() != branch_tiles.len() {
+                    return None;
+                }
+                for branch in branches {
+                    probe_ftile_layouts(branch)?;
+                }
+            }
+            _ => return None,
+        }
+    }
+    Some(())
+}
+
+fn node_contains_action(node: &LayoutNode) -> bool {
+    match node {
+        LayoutNode::Action { .. } | LayoutNode::DeprecatedAction { .. } => true,
+        LayoutNode::If {
+            then_branch,
+            else_branches,
+            ..
+        } => {
+            then_branch.iter().any(node_contains_action)
+                || else_branches
+                    .iter()
+                    .any(|branch| branch.body.iter().any(node_contains_action))
+        }
+        LayoutNode::While { body, .. } | LayoutNode::Repeat { body, .. } => {
+            body.iter().any(node_contains_action)
+        }
+        LayoutNode::Switch { cases, .. } => cases
+            .iter()
+            .any(|case| case.body.iter().any(node_contains_action)),
+        LayoutNode::Fork { branches, .. } => branches
+            .iter()
+            .any(|branch| branch.iter().any(node_contains_action)),
+        _ => false,
+    }
 }
 
 pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
@@ -27878,7 +28125,7 @@ fn render_inner(
     // FtileGeometry port instead of the legacy reverse-engineered extent model.
     // Returns None (falling through to the legacy renderer) until the emitter
     // port lands — so this is currently a safe no-op.
-    if let Some(svg) = render_ftile(&tree, diagram) {
+    if let Some(svg) = render_ftile(&tree, diagram, &palette, is_handwritten, defs) {
         return svg;
     }
 
@@ -28396,6 +28643,27 @@ mod tests {
         assert!(svg.contains("data-diagram-type=\"ACTIVITY\""));
         assert!(svg.contains("<ellipse"));
         assert!(svg.contains("<polygon"));
+    }
+
+    #[test]
+    fn ftile_linear_bridge_renders_renamed_perturbation() {
+        let d = ActivityDiagram {
+            meta: DiagramMeta::default(),
+            steps: vec![
+                ActivityStep::Start,
+                ActivityStep::Action("Renamed T14 bridge".into()),
+                ActivityStep::Action("Not in golden corpus".into()),
+                ActivityStep::Stop,
+            ],
+        };
+        let palette = Palette::default_puml();
+        let tree = build_tree(&d.steps, &palette);
+        let svg =
+            render_ftile(&tree, &d, &palette, false, "").expect("linear tree is FTile-emittable");
+
+        assert!(svg.contains("Renamed T14 bridge"));
+        assert!(svg.contains("Not in golden corpus"));
+        assert!(svg.contains("data-diagram-type=\"ACTIVITY\""));
     }
 
     #[test]
