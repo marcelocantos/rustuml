@@ -898,7 +898,7 @@ pub fn render_with_oracle(
     let layout_result = if use_oracle {
         None
     } else {
-        let mut layout = LayoutGraph::new(Direction::TopToBottom);
+        let mut layout = LayoutGraph::new(Direction::TopToBottom).with_plantuml_svek_spacing();
         for id in &state_ids {
             let state_def = find_state(id);
             let h = if id == "__start__" || id == "__end__" {

@@ -1493,7 +1493,7 @@ pub fn render_with_oracle(
     }
 
     // Phase 2: Use layout engine to determine positions.
-    let mut layout = LayoutGraph::new(Direction::TopToBottom);
+    let mut layout = LayoutGraph::new(Direction::TopToBottom).with_plantuml_svek_spacing();
     for (entity, dim) in diagram.entities.iter().zip(&dims) {
         layout.add_node(&entity.id, &entity.label, dim.width, dim.height);
     }

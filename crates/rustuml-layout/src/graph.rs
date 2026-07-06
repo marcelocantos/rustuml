@@ -18,6 +18,8 @@ use crate::graphviz_ffi;
 /// All layout operations must be serialized.
 static GRAPHVIZ_LOCK: Mutex<()> = Mutex::new(());
 
+const DOT_POINTS_PER_INCH: f64 = 72.0;
+
 /// Direction of the graph layout.
 #[derive(Clone, Copy, Debug, Default)]
 pub enum Direction {
@@ -26,9 +28,35 @@ pub enum Direction {
     LeftToRight,
 }
 
+/// Graph-level spacing inputs for Graphviz dot, expressed in pixels.
+#[derive(Clone, Copy, Debug)]
+pub struct GraphSpacing {
+    pub node_sep_px: f64,
+    pub rank_sep_px: f64,
+}
+
+impl GraphSpacing {
+    /// Non-activity SVEK minima from PlantUML
+    /// `net.sourceforge.plantuml.svek.DotStringFactory`:
+    /// `getMinNodeSep()` = 35 px, `getMinRankSep()` = 60 px, converted by
+    /// `SvekUtils.pixelToInches(pixel)`.
+    pub const PLANTUML_SVEK_DEFAULTS: Self = Self {
+        node_sep_px: 35.0,
+        rank_sep_px: 60.0,
+    };
+
+    pub const fn pixels(node_sep_px: f64, rank_sep_px: f64) -> Self {
+        Self {
+            node_sep_px,
+            rank_sep_px,
+        }
+    }
+}
+
 /// A graph builder that produces laid-out node positions and edge paths.
 pub struct LayoutGraph {
     direction: Direction,
+    spacing: Option<GraphSpacing>,
     nodes: Vec<(String, String, f64, f64, bool)>, // (id, label, w, h, is_circle)
     edges: Vec<(String, String, Option<String>)>, // (from, to, label)
 }
@@ -38,9 +66,27 @@ impl LayoutGraph {
     pub fn new(direction: Direction) -> Self {
         Self {
             direction,
+            spacing: None,
             nodes: Vec::new(),
             edges: Vec::new(),
         }
+    }
+
+    /// Sets graph-level dot spacing in pixels.
+    pub fn with_spacing_pixels(mut self, node_sep_px: f64, rank_sep_px: f64) -> Self {
+        self.spacing = Some(GraphSpacing::pixels(node_sep_px, rank_sep_px));
+        self
+    }
+
+    /// Opts in to PlantUML's non-activity SVEK dot spacing minima.
+    pub fn with_plantuml_svek_spacing(self) -> Self {
+        self.with_spacing(GraphSpacing::PLANTUML_SVEK_DEFAULTS)
+    }
+
+    /// Sets graph-level dot spacing.
+    pub fn with_spacing(mut self, spacing: GraphSpacing) -> Self {
+        self.spacing = Some(spacing);
+        self
     }
 
     /// Adds a rectangular node. Returns true if new, false if duplicate.
@@ -135,6 +181,26 @@ impl LayoutGraph {
             empty.as_ptr(),
         );
 
+        if let Some(spacing) = self.spacing {
+            let nodesep_key = CString::new("nodesep").unwrap();
+            let ranksep_key = CString::new("ranksep").unwrap();
+            let nodesep_val = CString::new(dot_inches(spacing.node_sep_px)).unwrap();
+            let ranksep_val = CString::new(dot_inches(spacing.rank_sep_px)).unwrap();
+
+            graphviz_ffi::agsafeset(
+                g as *mut c_void,
+                nodesep_key.as_ptr(),
+                nodesep_val.as_ptr(),
+                empty.as_ptr(),
+            );
+            graphviz_ffi::agsafeset(
+                g as *mut c_void,
+                ranksep_key.as_ptr(),
+                ranksep_val.as_ptr(),
+                empty.as_ptr(),
+            );
+        }
+
         // Build nodes.
         let mut node_handles: HashMap<String, *mut graphviz_ffi::Agnode_t> = HashMap::new();
         let mut node_order: Vec<String> = Vec::new();
@@ -152,8 +218,8 @@ impl LayoutGraph {
             let node = graphviz_ffi::agnode(g, cid.as_ptr(), 1);
 
             // Graphviz uses inches for width/height.
-            let w_inches = *w / 72.0;
-            let h_inches = *h / 72.0;
+            let w_inches = *w / DOT_POINTS_PER_INCH;
+            let h_inches = *h / DOT_POINTS_PER_INCH;
             let w_str = CString::new(format!("{w_inches:.4}")).unwrap();
             let h_str = CString::new(format!("{h_inches:.4}")).unwrap();
 
@@ -231,8 +297,8 @@ impl LayoutGraph {
 
             // Graphviz coordinates are in points (72 per inch), centered.
             // Convert to top-left corner coordinates.
-            let w = w_in * 72.0;
-            let h = h_in * 72.0;
+            let w = w_in * DOT_POINTS_PER_INCH;
+            let h = h_in * DOT_POINTS_PER_INCH;
             node_positions.push(NodePosition {
                 x: cx - w / 2.0,
                 y: cy - h / 2.0,
@@ -331,6 +397,10 @@ impl LayoutGraph {
             edge_paths,
         }
     }
+}
+
+fn dot_inches(pixel: f64) -> String {
+    format!("{:.6}", pixel / DOT_POINTS_PER_INCH)
 }
 
 /// Full layout result with both node positions and edge routing.
@@ -485,5 +555,37 @@ mod tests {
 
         let result = g.layout_full_no_timeout();
         assert_eq!(result.node_positions.len(), 1);
+    }
+
+    #[test]
+    fn spacing_pixels_set_dot_rank_gap() {
+        const NODE_W: f64 = 100.0;
+        const NODE_H: f64 = 40.0;
+        const RANK_SEP_PX: f64 = 144.0;
+
+        let mut default = LayoutGraph::new(Direction::TopToBottom);
+        default.add_node("a", "A", NODE_W, NODE_H);
+        default.add_node("b", "B", NODE_W, NODE_H);
+        default.add_edge("a", "b", None);
+        let default_positions = default.layout_positions_no_timeout();
+
+        let mut spaced =
+            LayoutGraph::new(Direction::TopToBottom).with_spacing_pixels(35.0, RANK_SEP_PX);
+        spaced.add_node("a", "A", NODE_W, NODE_H);
+        spaced.add_node("b", "B", NODE_W, NODE_H);
+        spaced.add_edge("a", "b", None);
+        let spaced_positions = spaced.layout_positions_no_timeout();
+
+        let default_gap =
+            default_positions[1].y - default_positions[0].y - default_positions[0].height;
+        let spaced_gap = spaced_positions[1].y - spaced_positions[0].y - spaced_positions[0].height;
+        assert!(
+            spaced_gap > default_gap,
+            "spacing should increase rank gap: default={default_gap}, spaced={spaced_gap}"
+        );
+        assert!(
+            (spaced_gap - RANK_SEP_PX).abs() <= 1.0,
+            "ranksep should be applied in pixels: expected {RANK_SEP_PX}, got {spaced_gap}"
+        );
     }
 }

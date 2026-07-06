@@ -297,7 +297,7 @@ fn oracle_positions(
 }
 
 fn layout_positions(diagram: &ObjectDiagram, dims: &[ObjDim]) -> Vec<(f64, f64)> {
-    let mut layout = LayoutGraph::new(Direction::TopToBottom);
+    let mut layout = LayoutGraph::new(Direction::TopToBottom).with_plantuml_svek_spacing();
     for (obj, dim) in diagram.objects.iter().zip(dims) {
         layout.add_node(&obj.id, &obj.label, dim.width, dim.height);
     }

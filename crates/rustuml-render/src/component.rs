@@ -428,7 +428,7 @@ pub fn render_with_oracle(
     let layout_result = if use_oracle {
         None
     } else if !diagram.components.is_empty() || !diagram.interfaces.is_empty() {
-        let mut layout = LayoutGraph::new(Direction::TopToBottom);
+        let mut layout = LayoutGraph::new(Direction::TopToBottom).with_plantuml_svek_spacing();
         for (comp, dim) in diagram.components.iter().zip(&comp_dims) {
             layout.add_node(&comp.id, &comp.label, dim.width, dim.height);
         }
