@@ -11,6 +11,7 @@
 use std::collections::{HashMap, HashSet};
 use std::fmt::Write as _;
 
+use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph, NodePosition};
 use rustuml_parser::diagram::deployment::*;
 
 use crate::handwritten::{
@@ -18,8 +19,8 @@ use crate::handwritten::{
     is_enabled as is_handwritten_enabled,
 };
 use crate::layout_oracle::{
-    EntityPath, EntityPolygon, OracleHandwrittenWarning, OracleLayout, emit_entity_image,
-    wrap_oracle_envelope,
+    EntityPath, EntityPolygon, EntityRect, EntityText, OracleHandwrittenWarning, OracleLayout,
+    emit_entity_image, wrap_oracle_envelope,
 };
 use crate::plantuml_metrics as pm;
 use crate::style::Theme;
@@ -86,6 +87,11 @@ const TEXT_PAD_PACKAGE_LABEL: f64 = ASCENT_14 + 3.0;
 /// Vertical gap between two stacked text lines (used for stereotype + label).
 /// Equals `text_height(14)` = 14 * 1.17773...
 const TEXT_LINE_H: f64 = 16.48828125;
+
+const BODY_MARGIN: f64 = 6.0;
+const BODY_RIGHT_MARGIN: f64 = 25.0;
+const BODY_BOTTOM_MARGIN: f64 = 24.0;
+const LAYOUT_TIMEOUT: std::time::Duration = std::time::Duration::from_secs(5);
 
 // ---------------------------------------------------------------------------
 // Public entry points
@@ -2729,9 +2735,311 @@ fn render_connection(
 // Non-oracle fallback (minimal)
 // ---------------------------------------------------------------------------
 
-fn render_no_oracle(_diagram: &DeploymentDiagram, _theme: &Theme) -> String {
-    // Minimal empty SVG envelope — golden tests always supply oracle.
-    let mut s = String::new();
-    write!(s, r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="50px" preserveAspectRatio="none" style="width:100px;height:50px;background:#FFFFFF;" version="1.1" viewBox="0 0 100 50" width="100px" zoomAndPan="magnify"><defs/><g></g></svg>"#).unwrap();
-    s
+fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
+    // Java path: CucaDiagramFileMakerSvek builds a Bibliotekon of measured
+    // SvekNodes, DotStringFactory serialises those node boxes to dot, then
+    // GeneralImageBuilder paints the returned positions. This mirrors that
+    // data flow with the vendored Graphviz wrapper rather than grid-placement.
+    let dims: Vec<DeploymentNodeDim> = diagram.nodes.iter().map(deployment_node_dim).collect();
+    let mut layout = LayoutGraph::new(Direction::TopToBottom).with_plantuml_svek_spacing();
+    for (node, dim) in diagram.nodes.iter().zip(&dims) {
+        layout.add_node(&node.id, &node.label, dim.width, dim.height);
+    }
+    for conn in &diagram.connections {
+        layout.add_edge(&conn.from, &conn.to, conn.label.as_deref());
+    }
+
+    let result = layout.layout_full(LAYOUT_TIMEOUT);
+    let positions = result.as_ref().map(|r| r.node_positions.as_slice());
+    let (rects, content_w, content_h) = layout_deployment_rects(diagram, &dims, positions);
+    let total_w = (content_w + BODY_RIGHT_MARGIN).max(100.0);
+    let total_h = (content_h + BODY_BOTTOM_MARGIN).max(50.0);
+
+    let mut oracle = OracleLayout::default();
+    for (i, node) in diagram.nodes.iter().enumerate() {
+        let dim = &dims[i];
+        let rect = rects[i];
+        let mut entity_rect = empty_entity_rect(rect.x, rect.y, rect.width, rect.height);
+        let text_y = rect.y + dim.top_pad;
+        let text_x = entity_text_center(node.kind, rect.x, rect.width) - dim.label_width / 2.0;
+        entity_rect.text_x_values.push(text_x);
+        entity_rect.text_y_values.push(text_y);
+        entity_rect.texts.push(EntityText {
+            x: text_x,
+            y: text_y,
+            text: node.label.clone(),
+        });
+        entity_rect.source_line = Some(node.source_line.to_string());
+        oracle.entities.insert(own_qname(node), entity_rect);
+    }
+
+    let id_for_node = no_oracle_node_ids(diagram);
+    let skin_fills = skin_background_fills(&diagram.meta.skinparams);
+    let skin_strokes = skin_border_colors(&diagram.meta.skinparams);
+    let sprite_names: HashSet<String> = diagram.meta.sprites.keys().cloned().collect();
+    let ctx = OracleRenderContext {
+        oracle: &oracle,
+        id_for_node: &id_for_node,
+        skin_fills: &skin_fills,
+        skin_strokes: &skin_strokes,
+        sprite_names: &sprite_names,
+        handwritten: false,
+    };
+
+    let mut svg = SvgBuilder::new_plantuml(total_w, total_h, "DESCRIPTION");
+    for node in &diagram.nodes {
+        emit_entity(&mut svg, node, &own_qname(node), &ctx);
+    }
+    if let Some(result) = result.as_ref() {
+        render_no_oracle_edges(&mut svg, diagram, &id_for_node, &result.edge_paths);
+    }
+    svg.finalize_plantuml()
+}
+
+struct DeploymentNodeDim {
+    width: f64,
+    height: f64,
+    label_width: f64,
+    top_pad: f64,
+}
+
+#[derive(Clone, Copy)]
+struct LayoutRect {
+    x: f64,
+    y: f64,
+    width: f64,
+    height: f64,
+}
+
+fn deployment_node_dim(node: &DeploymentNode) -> DeploymentNodeDim {
+    let bold = matches!(node.kind, DeploymentNodeKind::Package);
+    let label_width = node
+        .label
+        .lines()
+        .map(|line| text_render::measure(line, FONT_SIZE, bold))
+        .fold(0.0_f64, f64::max);
+    let stereo_width = node
+        .stereotype
+        .as_ref()
+        .map(|stereo| text_render::measure(&format!("\u{00AB}{stereo}\u{00BB}"), FONT_SIZE, false))
+        .unwrap_or(0.0);
+    let line_count = node.label.lines().count().max(1) + usize::from(node.stereotype.is_some());
+    let (text_x_pad, top_pad, _) = entity_text_geom(node.kind, 0.0, &node.label);
+    let width = match node.kind {
+        DeploymentNodeKind::Node | DeploymentNodeKind::Artifact | DeploymentNodeKind::Frame => {
+            label_width.max(stereo_width) + 2.0 * text_x_pad + 10.0
+        }
+        DeploymentNodeKind::Cloud => label_width.max(stereo_width) + 2.0 * CLOUD_MARGIN,
+        DeploymentNodeKind::Queue => label_width.max(stereo_width) + 25.0,
+        _ => label_width.max(stereo_width) + 2.0 * text_x_pad,
+    };
+    let height = match node.kind {
+        DeploymentNodeKind::Cloud => line_count as f64 * TEXT_LINE_H + 2.0 * CLOUD_MARGIN,
+        _ => {
+            top_pad
+                + (line_count.saturating_sub(1)) as f64 * TEXT_LINE_H
+                + (pm::text_height(FONT_SIZE) - ASCENT_14)
+                + 10.0
+        }
+    };
+    DeploymentNodeDim {
+        width,
+        height,
+        label_width,
+        top_pad,
+    }
+}
+
+fn layout_deployment_rects(
+    diagram: &DeploymentDiagram,
+    dims: &[DeploymentNodeDim],
+    positions: Option<&[NodePosition]>,
+) -> (Vec<LayoutRect>, f64, f64) {
+    let mut rects = Vec::new();
+    if let Some(positions) = positions
+        && positions.len() >= diagram.nodes.len()
+    {
+        for (pos, dim) in positions.iter().zip(dims) {
+            rects.push(LayoutRect {
+                x: pos.x + BODY_MARGIN,
+                y: pos.y + BODY_MARGIN,
+                width: dim.width,
+                height: dim.height,
+            });
+        }
+    } else {
+        let mut y = BODY_MARGIN;
+        for dim in dims {
+            rects.push(LayoutRect {
+                x: BODY_MARGIN,
+                y,
+                width: dim.width,
+                height: dim.height,
+            });
+            y += dim.height + 50.0;
+        }
+    }
+
+    let content_w = rects.iter().map(|r| r.x + r.width).fold(0.0_f64, f64::max);
+    let content_h = rects.iter().map(|r| r.y + r.height).fold(0.0_f64, f64::max);
+    (rects, content_w, content_h)
+}
+
+fn empty_entity_rect(x: f64, y: f64, width: f64, height: f64) -> EntityRect {
+    EntityRect {
+        x,
+        y,
+        width,
+        height,
+        icon_cx: None,
+        icon_cy: None,
+        glyph_path_d: None,
+        body_polygon: None,
+        icon_polygon: None,
+        separator_paths: vec![],
+        visibility_polygons: vec![],
+        name_text_x: None,
+        text_y_values: vec![],
+        text_x_values: vec![],
+        sep_y_values: vec![],
+        sep_lines: vec![],
+        vis_icon_y_values: vec![],
+        fill: None,
+        body_style: None,
+        rect_style: None,
+        rect_rx: None,
+        rect_ry: None,
+        rect_filter: None,
+        entity_id: None,
+        source_line: None,
+        aux_rects: vec![],
+        lines: vec![],
+        texts: vec![],
+        images: vec![],
+    }
+}
+
+fn no_oracle_node_ids(diagram: &DeploymentDiagram) -> HashMap<String, String> {
+    #[derive(Copy, Clone)]
+    enum Item<'a> {
+        Node(&'a DeploymentNode),
+        Conn,
+    }
+    let mut items = Vec::new();
+    for node in &diagram.nodes {
+        items.push((node.source_line, Item::Node(node)));
+    }
+    for conn in &diagram.connections {
+        items.push((conn.source_line, Item::Conn));
+    }
+    items.sort_by_key(|(line, _)| *line);
+    let mut ids = HashMap::new();
+    for (counter, (_, item)) in (2usize..).zip(items) {
+        if let Item::Node(node) = item {
+            ids.insert(node.id.clone(), format!("ent{counter:04}"));
+        }
+    }
+    ids
+}
+
+fn render_no_oracle_edges(
+    svg: &mut SvgBuilder,
+    diagram: &DeploymentDiagram,
+    id_for_node: &HashMap<String, String>,
+    edge_paths: &[EdgePath],
+) {
+    for (i, conn) in diagram.connections.iter().enumerate() {
+        let Some(edge) = edge_paths
+            .iter()
+            .find(|edge| edge.from == conn.from && edge.to == conn.to)
+        else {
+            continue;
+        };
+        let Some(ent1) = id_for_node.get(&conn.from) else {
+            continue;
+        };
+        let Some(ent2) = id_for_node.get(&conn.to) else {
+            continue;
+        };
+        let link_id = format!("lnk{}", i + diagram.nodes.len() + 2);
+        svg.raw(&format!("<!--link {} to {}-->", conn.from, conn.to));
+        svg.raw(&format!(
+            r#"<g class="link" data-entity-1="{ent1}" data-entity-2="{ent2}" data-link-type="dependency" data-source-line="{line}" id="{link_id}">"#,
+            line = conn.source_line,
+        ));
+        if let Some(d) = edge_path_d(edge) {
+            svg.raw(&format!(
+                r#"<path d="{d}" fill="none" id="{}-to-{}" style="stroke:#181818;stroke-width:1;"/>"#,
+                conn.from, conn.to,
+            ));
+        }
+        if edge.has_end_arrow
+            && let Some((x, y)) = edge.end_point
+        {
+            let points = format!(
+                "{},{} {},{} {},{} {},{} {},{}",
+                fc(x),
+                fc(y),
+                fc(x + 4.0),
+                fc(y - 9.0),
+                fc(x),
+                fc(y - 5.0),
+                fc(x - 4.0),
+                fc(y - 9.0),
+                fc(x),
+                fc(y),
+            );
+            svg.raw(&format!(
+                r##"<polygon fill="#181818" points="{points}" style="stroke:#181818;stroke-width:1;"/>"##,
+            ));
+        }
+        if let Some(label) = conn.label.as_deref()
+            && let Some((x, y)) = edge.points.get(edge.points.len() / 2).copied()
+        {
+            emit_text(svg, label, x + 4.0, y - 4.0, 13.0, false, false);
+        }
+        svg.raw("</g>");
+    }
+}
+
+fn edge_path_d(edge: &EdgePath) -> Option<String> {
+    let (start, rest) = edge.points.split_first()?;
+    let mut d = format!("M{},{}", fc(start.0), fc(start.1));
+    for chunk in rest.chunks(3) {
+        if let [c1, c2, to] = chunk {
+            write!(
+                d,
+                " C{},{} {},{} {},{}",
+                fc(c1.0),
+                fc(c1.1),
+                fc(c2.0),
+                fc(c2.1),
+                fc(to.0),
+                fc(to.1),
+            )
+            .unwrap();
+        }
+    }
+    Some(d)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn no_oracle_deployment_renders_entities_and_links() {
+        let source = "@startuml\nnode N01\nnode N02\nN01 --> N02\n@enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+
+        let svg = render(&diagram, &Theme::default());
+
+        assert!(svg.contains(r#"<g class="entity" data-qualified-name="N01""#));
+        assert!(svg.contains(r#"<g class="entity" data-qualified-name="N02""#));
+        assert!(svg.contains(r#"<g class="link""#));
+        assert!(!svg.contains(r#"<defs/><g></g>"#));
+    }
 }
