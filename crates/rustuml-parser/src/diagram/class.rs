@@ -195,6 +195,12 @@ pub struct Relationship {
     pub label: Option<String>,
     pub from_multiplicity: Option<String>,
     pub to_multiplicity: Option<String>,
+    /// Crow's-foot / IE endpoint decorations, as parsed from PlantUML's
+    /// `LinkDecor` tokens by `CommandLinkElement.getLinkType`.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub from_decor: Option<EndpointDecor>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub to_decor: Option<EndpointDecor>,
     /// Whether the line is dashed (e.g. `..>` vs `-->`).
     #[serde(default)]
     pub dashed: bool,
@@ -211,6 +217,15 @@ pub enum RelationshipKind {
     Aggregation,
     Association,
     Dependency,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum EndpointDecor {
+    CrowFoot,
+    CircleCrowFoot,
+    CircleLine,
+    DoubleLine,
+    LineCrowFoot,
 }
 
 /// Container type for grouping entities in a class diagram.

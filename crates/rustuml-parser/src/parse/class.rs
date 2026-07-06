@@ -635,6 +635,8 @@ impl ClassParser {
                 label: None,
                 from_multiplicity: None,
                 to_multiplicity: None,
+                from_decor: None,
+                to_decor: None,
                 dashed,
                 source_line: self.current_line,
             });
@@ -747,7 +749,7 @@ impl ClassParser {
         });
         // ER crow's foot notation: entity1 CROW--CROW entity2 : "label"
         static ER_RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r#"^(\w+)\s+([|o}][|{o]--[|o][|{])\s+(\w+)(?:\s*:\s*(.+))?$"#).unwrap()
+            Regex::new(r#"^(\w+)\s+([|o}][|{o])--([|o][|{])\s+(\w+)(?:\s*:\s*(.+))?$"#).unwrap()
         });
 
         if let Some(caps) = RE.captures(line) {
@@ -782,6 +784,8 @@ impl ClassParser {
                 label,
                 from_multiplicity: from_mult,
                 to_multiplicity: to_mult,
+                from_decor: None,
+                to_decor: None,
                 dashed,
                 source_line: self.current_line,
             });
@@ -790,9 +794,11 @@ impl ClassParser {
 
         if let Some(caps) = ER_RE.captures(line) {
             let from_raw = &caps[1];
-            let to_raw = &caps[3];
+            let from_decor = parse_endpoint_decor(&caps[2]);
+            let to_decor = parse_endpoint_decor(&caps[3]);
+            let to_raw = &caps[4];
             let label = caps
-                .get(4)
+                .get(5)
                 .map(|m| m.as_str().trim().trim_matches('"').to_string());
 
             let from = self.ensure_entity(from_raw);
@@ -805,6 +811,8 @@ impl ClassParser {
                 label,
                 from_multiplicity: None,
                 to_multiplicity: None,
+                from_decor,
+                to_decor,
                 dashed: false,
                 source_line: self.current_line,
             });
@@ -847,6 +855,8 @@ impl ClassParser {
                 label: None,
                 from_multiplicity: None,
                 to_multiplicity: None,
+                from_decor: None,
+                to_decor: None,
                 dashed: false,
                 source_line: self.current_line,
             });
@@ -1488,6 +1498,17 @@ fn parse_relationship_kind(s: &str) -> (RelationshipKind, bool) {
     }
 }
 
+fn parse_endpoint_decor(s: &str) -> Option<EndpointDecor> {
+    match s {
+        "}" | "{" => Some(EndpointDecor::CrowFoot),
+        "}o" | "o{" => Some(EndpointDecor::CircleCrowFoot),
+        "|o" | "o|" => Some(EndpointDecor::CircleLine),
+        "||" => Some(EndpointDecor::DoubleLine),
+        "}|" | "|{" => Some(EndpointDecor::LineCrowFoot),
+        _ => None,
+    }
+}
+
 /// Extract `text:colour` from the entity shorthand
 /// `#back:colour;line:colour;line.bold;text:colour` (any order). Returns the
 /// raw colour token (e.g. `"blue"` or `"#FF0000"`) so the renderer can map it
@@ -1987,6 +2008,34 @@ mod tests {
         assert_eq!(d.relationships.len(), 1);
         assert_eq!(d.relationships[0].from_multiplicity.as_deref(), Some("1"));
         assert_eq!(d.relationships[0].to_multiplicity.as_deref(), Some("1..*"));
+    }
+
+    #[test]
+    fn er_crowfoot_endpoint_decorations_are_preserved() {
+        let d = parse(
+            "AlphaZero ||--o| BetaZero : maybe\n\
+             GammaMany }|--|{ DeltaMany\n\
+             EchoOptional }o--|| FoxtrotOne",
+        );
+        assert_eq!(d.relationships.len(), 3);
+        assert_eq!(
+            d.relationships[0].from_decor,
+            Some(EndpointDecor::DoubleLine)
+        );
+        assert_eq!(d.relationships[0].to_decor, Some(EndpointDecor::CircleLine));
+        assert_eq!(
+            d.relationships[1].from_decor,
+            Some(EndpointDecor::LineCrowFoot)
+        );
+        assert_eq!(
+            d.relationships[1].to_decor,
+            Some(EndpointDecor::LineCrowFoot)
+        );
+        assert_eq!(
+            d.relationships[2].from_decor,
+            Some(EndpointDecor::CircleCrowFoot)
+        );
+        assert_eq!(d.relationships[2].to_decor, Some(EndpointDecor::DoubleLine));
     }
 
     #[test]

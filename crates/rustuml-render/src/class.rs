@@ -6113,21 +6113,25 @@ fn render_relationship_svg(
     svg: &mut String,
     rel: &Relationship,
     edge_path: &EdgePath,
-    _diagram: &ClassDiagram,
-    _ent_id: usize,
+    diagram: &ClassDiagram,
+    ent_id: usize,
 ) {
     if edge_path.points.is_empty() {
         return;
     }
 
     // Determine link type for data attribute.
-    let _link_type = match rel.kind {
-        RelationshipKind::Dependency => "dependency",
-        RelationshipKind::Implementation => "extension",
-        RelationshipKind::Inheritance => "extension",
-        RelationshipKind::Composition => "composition",
-        RelationshipKind::Aggregation => "aggregation",
-        RelationshipKind::Association => "association",
+    let link_type = if rel.from_decor.is_some() || rel.to_decor.is_some() {
+        "crowfoot"
+    } else {
+        match rel.kind {
+            RelationshipKind::Dependency => "dependency",
+            RelationshipKind::Implementation => "extension",
+            RelationshipKind::Inheritance => "extension",
+            RelationshipKind::Composition => "composition",
+            RelationshipKind::Aggregation => "aggregation",
+            RelationshipKind::Association => "association",
+        }
     };
 
     let is_reverse = matches!(
@@ -6141,6 +6145,15 @@ fn render_relationship_svg(
     } else {
         write!(svg, "<!--link {} to {}-->", rel.from, rel.to).unwrap();
     }
+
+    let entity_1 = no_oracle_entity_id(diagram, &rel.from);
+    let entity_2 = no_oracle_entity_id(diagram, &rel.to);
+    write!(
+        svg,
+        r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="{link_type}" data-source-line="{}" id="lnk{}">"#,
+        rel.source_line, ent_id,
+    )
+    .unwrap();
 
     // Build path data from edge points.
     let dash_style = if rel.dashed {
@@ -6168,18 +6181,34 @@ fn render_relationship_svg(
         i += 3;
     }
 
-    let path_id = if is_reverse {
+    let path_id = if rel.from_decor.is_some()
+        || rel.to_decor.is_some()
+        || matches!(rel.kind, RelationshipKind::Association)
+    {
+        format!("{}-{}", rel.from, rel.to)
+    } else if is_reverse {
         format!("{}-backto-{}", rel.from, rel.to)
     } else {
         format!("{}-to-{}", rel.from, rel.to)
     };
 
+    let code_line_attr = if rel.source_line > 0 {
+        format!(r#" codeLine="{}""#, rel.source_line)
+    } else {
+        String::new()
+    };
     write!(
         svg,
-        r#"<path d="{}" fill="none" id="{}" style="stroke:{};stroke-width:1;{}"/>"#,
-        d, path_id, BORDER_COLOR, dash_style,
+        r#"<path{code_line_attr} d="{}" fill="none" id="{}" style="stroke:{};stroke-width:1;{}"/>"#,
+        d,
+        escape_xml(&path_id),
+        BORDER_COLOR,
+        dash_style,
     )
     .unwrap();
+
+    emit_no_oracle_endpoint_decor(svg, rel.from_decor, &edge_path.points, true);
+    emit_no_oracle_endpoint_decor(svg, rel.to_decor, &edge_path.points, false);
 
     // Arrowhead.
     match rel.kind {
@@ -6253,6 +6282,182 @@ fn render_relationship_svg(
             // No arrowhead.
         }
     }
+
+    if let Some(label) = rel.label.as_deref() {
+        let (x, y) = edge_midpoint(&edge_path.points);
+        text_render::emit_text(
+            svg,
+            label.trim_matches('"'),
+            &TextBase {
+                x: x + 1.0,
+                y: y - 4.0,
+                font_size: 13,
+                font_family: "sans-serif",
+                fill: "#000000",
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+    }
+
+    svg.push_str("</g>");
+}
+
+fn no_oracle_entity_id(diagram: &ClassDiagram, id: &str) -> String {
+    diagram
+        .entities
+        .iter()
+        .position(|e| e.id == id)
+        .map(|i| format!("ent{:04}", i + 2))
+        .unwrap_or_else(|| "ent0002".to_string())
+}
+
+fn edge_midpoint(points: &[(f64, f64)]) -> (f64, f64) {
+    points.get(points.len() / 2).copied().unwrap_or(points[0])
+}
+
+fn emit_no_oracle_endpoint_decor(
+    svg: &mut String,
+    decor: Option<EndpointDecor>,
+    points: &[(f64, f64)],
+    at_start: bool,
+) {
+    let Some(decor) = decor else {
+        return;
+    };
+    if points.len() < 2 {
+        return;
+    }
+    let (contact, neighbor) = if at_start {
+        (points[0], points[1])
+    } else {
+        (points[points.len() - 1], points[points.len() - 2])
+    };
+    let mut ux = contact.0 - neighbor.0;
+    let mut uy = contact.1 - neighbor.1;
+    if at_start {
+        ux = -ux;
+        uy = -uy;
+    }
+    let len = (ux * ux + uy * uy).sqrt();
+    if len <= f64::EPSILON {
+        return;
+    }
+    let out = (ux / len, uy / len);
+    let perp = (-out.1, out.0);
+
+    match decor {
+        EndpointDecor::CrowFoot => emit_crowfoot(svg, contact, out, perp, false, false),
+        EndpointDecor::CircleCrowFoot => emit_crowfoot(svg, contact, out, perp, true, false),
+        EndpointDecor::CircleLine => emit_circle_line(svg, contact, out, perp),
+        EndpointDecor::DoubleLine => emit_double_line(svg, contact, out, perp),
+        EndpointDecor::LineCrowFoot => emit_crowfoot(svg, contact, out, perp, false, true),
+    }
+}
+
+fn emit_crowfoot(
+    svg: &mut String,
+    contact: (f64, f64),
+    out: (f64, f64),
+    perp: (f64, f64),
+    circle: bool,
+    line: bool,
+) {
+    // Ported from PlantUML's `LinkDecor` ER values and the SVEK extremities:
+    // `ExtremityCrowfoot`, `ExtremityLineCrowfoot`, and
+    // `ExtremityCircleCrowfoot` use an 8px wing, 6px crow aperture, 4px line
+    // half-height, and 4px zero-cardinality circle radius.
+    const WING: f64 = 8.0;
+    const APERTURE: f64 = 6.0;
+    const LINE_OFFSET: f64 = 10.0;
+    const LINE_HALF: f64 = 4.0;
+    const CIRCLE_OFFSET: f64 = -6.0;
+    const CIRCLE_RADIUS: f64 = 4.0;
+    let base = add(contact, scale(out, WING));
+    emit_svg_line(svg, base, add(contact, scale(perp, APERTURE)));
+    emit_svg_line(svg, base, add(contact, scale(perp, -APERTURE)));
+    emit_svg_line(svg, base, contact);
+    if line {
+        let c = add(contact, scale(out, LINE_OFFSET));
+        emit_svg_line(
+            svg,
+            add(c, scale(perp, LINE_HALF)),
+            add(c, scale(perp, -LINE_HALF)),
+        );
+    }
+    if circle {
+        let c = add(contact, scale(out, CIRCLE_OFFSET));
+        emit_svg_circle(svg, c, CIRCLE_RADIUS);
+    }
+}
+
+fn emit_circle_line(svg: &mut String, contact: (f64, f64), out: (f64, f64), perp: (f64, f64)) {
+    // PlantUML `ExtremityCircleLine`: xWing=4, radius=4, lineHeight=4.
+    const LINE_OFFSET: f64 = 4.0;
+    const CIRCLE_OFFSET: f64 = -6.0;
+    const LINE_HALF: f64 = 4.0;
+    const CIRCLE_RADIUS: f64 = 4.0;
+    let line_c = add(contact, scale(out, LINE_OFFSET));
+    emit_svg_line(
+        svg,
+        add(line_c, scale(perp, LINE_HALF)),
+        add(line_c, scale(perp, -LINE_HALF)),
+    );
+    let circle_c = add(contact, scale(out, CIRCLE_OFFSET));
+    emit_svg_circle(svg, circle_c, CIRCLE_RADIUS);
+    emit_svg_line(svg, contact, circle_c);
+}
+
+fn emit_double_line(svg: &mut String, contact: (f64, f64), out: (f64, f64), perp: (f64, f64)) {
+    // PlantUML `ExtremityDoubleLine`: xWing=4, second line 3px farther out,
+    // lineHeight=4, plus a short connector segment.
+    const FIRST_OFFSET: f64 = 4.0;
+    const SECOND_OFFSET: f64 = 7.0;
+    const CONNECTOR_OFFSET: f64 = 8.0;
+    const LINE_HALF: f64 = 4.0;
+    for offset in [FIRST_OFFSET, SECOND_OFFSET] {
+        let c = add(contact, scale(out, offset));
+        emit_svg_line(
+            svg,
+            add(c, scale(perp, LINE_HALF)),
+            add(c, scale(perp, -LINE_HALF)),
+        );
+    }
+    emit_svg_line(svg, contact, add(contact, scale(out, CONNECTOR_OFFSET)));
+}
+
+fn add(a: (f64, f64), b: (f64, f64)) -> (f64, f64) {
+    (a.0 + b.0, a.1 + b.1)
+}
+
+fn scale(v: (f64, f64), k: f64) -> (f64, f64) {
+    (v.0 * k, v.1 * k)
+}
+
+fn emit_svg_line(svg: &mut String, a: (f64, f64), b: (f64, f64)) {
+    write!(
+        svg,
+        r#"<line style="stroke:#181818;stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+        crate::plantuml_metrics::fmt_coord(a.0),
+        crate::plantuml_metrics::fmt_coord(b.0),
+        crate::plantuml_metrics::fmt_coord(a.1),
+        crate::plantuml_metrics::fmt_coord(b.1),
+    )
+    .unwrap();
+}
+
+fn emit_svg_circle(svg: &mut String, c: (f64, f64), r: f64) {
+    write!(
+        svg,
+        r#"<ellipse cx="{}" cy="{}" fill="none" rx="{}" ry="{}" style="stroke:#181818;stroke-width:1;"/>"#,
+        crate::plantuml_metrics::fmt_coord(c.0),
+        crate::plantuml_metrics::fmt_coord(c.1),
+        crate::plantuml_metrics::fmt_coord(r),
+        crate::plantuml_metrics::fmt_coord(r),
+    )
+    .unwrap();
 }
 
 // ---------------------------------------------------------------------------
@@ -6725,6 +6930,8 @@ mod tests {
                 label: None,
                 from_multiplicity: None,
                 to_multiplicity: None,
+                from_decor: None,
+                to_decor: None,
                 dashed: false,
                 source_line: 0,
             }],
@@ -7043,6 +7250,41 @@ mod tests {
         let svg = crate::render_svg(&diagram);
         assert!(svg.contains("Animal"));
         assert!(svg.contains("Dog"));
+    }
+
+    #[test]
+    fn no_oracle_er_crowfoot_link_group_is_rendered() {
+        let mut diagram = simple_class_diagram();
+        let rel = Relationship {
+            from: "Animal".into(),
+            to: "Dog".into(),
+            kind: RelationshipKind::Association,
+            label: Some("renamed relation".into()),
+            from_multiplicity: None,
+            to_multiplicity: None,
+            from_decor: Some(EndpointDecor::DoubleLine),
+            to_decor: Some(EndpointDecor::CircleCrowFoot),
+            dashed: false,
+            source_line: 17,
+        };
+        diagram.relationships = vec![rel.clone()];
+        let edge_path = EdgePath {
+            from: "Animal".into(),
+            to: "Dog".into(),
+            points: vec![(40.0, 50.0), (40.0, 80.0), (40.0, 120.0), (40.0, 150.0)],
+            has_start_arrow: false,
+            start_point: None,
+            has_end_arrow: false,
+            end_point: None,
+        };
+        let mut svg = String::new();
+        render_relationship_svg(&mut svg, &rel, &edge_path, &diagram, 4);
+
+        assert!(svg.contains(r#"data-link-type="crowfoot""#));
+        assert!(svg.contains(r#"id="Animal-Dog""#));
+        assert!(svg.contains("<line "));
+        assert!(svg.contains("<ellipse "));
+        assert!(svg.contains(">renamed relation</text>"));
     }
 
     #[test]
