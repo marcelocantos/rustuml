@@ -43,6 +43,14 @@ const HEADER_H_NO_CIRCLE: f64 = 26.4883;
 const NAME_BASELINE_Y_NO_CIRCLE: f64 = 25.5352;
 /// Gap between icon and entity name text.
 const ICON_TEXT_GAP: f64 = 3.0;
+/// PlantUML `EntityImageClassHeader` wraps the circled character in
+/// `TextBlockUtils.withMargin(..., 4, 0, 5, 5)` before `HeaderLayout.drawU`.
+const HEADER_CIRCLE_LEFT_MARGIN: f64 = 4.0;
+const HEADER_CIRCLE_RIGHT_MARGIN: f64 = 0.0;
+/// Class names in `EntityImageClassHeader` carry 3px left/right margin.
+const HEADER_NAME_MARGIN_X: f64 = 3.0;
+/// Java `HeaderLayout.drawU`: `h2 = min(circleWidth / 4, suppWidth * 0.1)`.
+const HEADER_SECONDARY_GAP_RATIO: f64 = 0.1;
 /// Icon ellipse radius at the default circled-character font size (17): the
 /// radius is `circled_font_size / 3 + 6 = 17/3 + 6 = 11`.
 const ICON_RX: f64 = 11.0;
@@ -200,6 +208,31 @@ const PACKAGE_TITLE_BASELINE: f64 = 15.5352;
 const PACKAGE_TAB_TEXT_X: f64 = 4.0;
 const PACKAGE_TAB_TEXT_RIGHT_PAD: f64 = 9.0;
 const PACKAGE_STROKE_WIDTH: &str = "1.5";
+/// PlantUML normalises the laid-out SVEK body to min x/y = 6 in
+/// `SvekResult.drawU`, which calls `moveDelta(6 - minX, 6 - minY)`.
+const PLANTUML_BODY_MIN: f64 = 6.0;
+/// Direct entity insets inside a default package.
+///
+/// Provenance: Java SVEK builds package rectangles through
+/// `ClusterDotString.printInternal` and draws them with
+/// `Cluster.drawU`/`ClusterDecoration`; the default class package goldens show
+/// the child entity body starts 35px below the package top and about 16px from
+/// the other sides after SVEK's body normalisation.
+const PACKAGE_ENTITY_PAD_X: f64 = 16.0;
+const PACKAGE_ENTITY_PAD_TOP: f64 = 35.0;
+const PACKAGE_ENTITY_PAD_BOTTOM: f64 = 16.0;
+/// Nested package insets. `ClusterDotString.printInternal` wraps clusters in
+/// protection subgraphs (`p0`/`p1`) before Graphviz layout; the drawn package
+/// rectangle therefore leaves a larger gutter around child clusters than
+/// Graphviz's raw cluster bbox exposes.
+const PACKAGE_CHILD_CLUSTER_PAD_X: f64 = 24.0;
+const PACKAGE_CHILD_CLUSTER_PAD_TOP: f64 = 43.0;
+const PACKAGE_CHILD_CLUSTER_PAD_BOTTOM: f64 = 24.0;
+/// Package cluster canvases use the full SVEK body side extent (left 6 plus
+/// right-side stroke/body slack) rather than the single-entity 13px formula.
+/// Provenance: Java `SvekResult.drawU` normalises the body at x/y=6 before
+/// emitting the package `ClusterDecoration` rectangle.
+const PACKAGE_CANVAS_EXTENT_PAD: i64 = 15;
 
 /// Font names that PlantUML treats as monospace.
 const MONOSPACE_FONTS: &[&str] = &[
@@ -1532,12 +1565,18 @@ pub fn render_with_oracle(
         layout.add_edge(&rel.from, &rel.to, rel.label.as_deref());
     }
 
-    let result = match layout.layout_full(std::time::Duration::from_secs(5)) {
+    let mut result = match layout.layout_full(std::time::Duration::from_secs(5)) {
         Some(r) => r,
         None => {
             return render_grid_fallback(diagram, cs);
         }
     };
+    expand_default_package_clusters(
+        diagram,
+        &mut result.node_positions,
+        &mut result.cluster_positions,
+        &mut result.edge_paths,
+    );
 
     // Phase 3: Render with PlantUML-compatible SVG structure.
     render_plantuml_svg(
@@ -2065,6 +2104,177 @@ fn package_qualified_name(
     chain.join(".")
 }
 
+#[derive(Clone, Copy)]
+struct Bounds {
+    x1: f64,
+    y1: f64,
+    x2: f64,
+    y2: f64,
+}
+
+impl Bounds {
+    fn from_rect(x: f64, y: f64, width: f64, height: f64) -> Self {
+        Self {
+            x1: x,
+            y1: y,
+            x2: x + width,
+            y2: y + height,
+        }
+    }
+
+    fn include(&mut self, other: Bounds) {
+        self.x1 = self.x1.min(other.x1);
+        self.y1 = self.y1.min(other.y1);
+        self.x2 = self.x2.max(other.x2);
+        self.y2 = self.y2.max(other.y2);
+    }
+}
+
+struct HeaderPositions {
+    icon_cx: f64,
+    name_x: f64,
+}
+
+fn class_header_positions(
+    x: f64,
+    width: f64,
+    icon_radius: f64,
+    name_text_width: f64,
+) -> HeaderPositions {
+    let circle_width = icon_radius * 2.0 + HEADER_CIRCLE_LEFT_MARGIN + HEADER_CIRCLE_RIGHT_MARGIN;
+    let name_width = name_text_width + HEADER_NAME_MARGIN_X * 2.0;
+    let supp_width = (width - circle_width - name_width).max(0.0);
+    let h2 = (circle_width / 4.0).min(supp_width * HEADER_SECONDARY_GAP_RATIO);
+    let h1 = (supp_width - h2) / 2.0;
+    HeaderPositions {
+        icon_cx: x + h1 + HEADER_CIRCLE_LEFT_MARGIN + icon_radius,
+        name_x: x + circle_width + h1 + h2 + HEADER_NAME_MARGIN_X,
+    }
+}
+
+fn expand_default_package_clusters(
+    diagram: &ClassDiagram,
+    node_positions: &mut [NodePosition],
+    cluster_positions: &mut [ClusterPosition],
+    edge_paths: &mut [EdgePath],
+) {
+    if cluster_positions.is_empty() {
+        return;
+    }
+
+    let parent_pkg = package_parent_indices(diagram);
+    let innermost_pkg = innermost_entity_packages(diagram, &parent_pkg);
+    let cluster_index_by_id: HashMap<String, usize> = cluster_positions
+        .iter()
+        .enumerate()
+        .map(|(i, p)| (p.id.clone(), i))
+        .collect();
+    let mut package_indices: Vec<usize> = diagram
+        .packages
+        .iter()
+        .enumerate()
+        .filter_map(|(idx, pkg)| is_default_package_cluster(pkg).then_some(idx))
+        .collect();
+    package_indices.sort_by_key(|idx| std::cmp::Reverse(package_depth(&parent_pkg, *idx)));
+
+    for pkg_idx in package_indices {
+        let mut bounds: Option<Bounds> = None;
+
+        for (entity_idx, _) in diagram.entities.iter().enumerate() {
+            if innermost_pkg[entity_idx] != Some(pkg_idx) {
+                continue;
+            }
+            let p = node_positions[entity_idx];
+            let child = Bounds::from_rect(
+                p.x - PACKAGE_ENTITY_PAD_X,
+                p.y - PACKAGE_ENTITY_PAD_TOP,
+                p.width + PACKAGE_ENTITY_PAD_X * 2.0,
+                p.height + PACKAGE_ENTITY_PAD_TOP + PACKAGE_ENTITY_PAD_BOTTOM,
+            );
+            if let Some(b) = &mut bounds {
+                b.include(child);
+            } else {
+                bounds = Some(child);
+            }
+        }
+
+        for child_pkg_idx in (0..diagram.packages.len()).filter(|&i| parent_pkg[i] == Some(pkg_idx))
+        {
+            if !is_default_package_cluster(&diagram.packages[child_pkg_idx]) {
+                continue;
+            }
+            let child_id = package_cluster_id(child_pkg_idx);
+            let Some(&cluster_pos_idx) = cluster_index_by_id.get(&child_id) else {
+                continue;
+            };
+            let p = &cluster_positions[cluster_pos_idx];
+            let child = Bounds::from_rect(
+                p.x - PACKAGE_CHILD_CLUSTER_PAD_X,
+                p.y - PACKAGE_CHILD_CLUSTER_PAD_TOP,
+                p.width + PACKAGE_CHILD_CLUSTER_PAD_X * 2.0,
+                p.height + PACKAGE_CHILD_CLUSTER_PAD_TOP + PACKAGE_CHILD_CLUSTER_PAD_BOTTOM,
+            );
+            if let Some(b) = &mut bounds {
+                b.include(child);
+            } else {
+                bounds = Some(child);
+            }
+        }
+
+        let Some(bounds) = bounds else {
+            continue;
+        };
+        let id = package_cluster_id(pkg_idx);
+        let Some(&cluster_pos_idx) = cluster_index_by_id.get(&id) else {
+            continue;
+        };
+        let pos = &mut cluster_positions[cluster_pos_idx];
+        pos.x = bounds.x1;
+        pos.y = bounds.y1;
+        pos.width = bounds.x2 - bounds.x1;
+        pos.height = bounds.y2 - bounds.y1;
+    }
+
+    let mut min_x = f64::INFINITY;
+    let mut min_y = f64::INFINITY;
+    for pos in node_positions.iter() {
+        min_x = min_x.min(pos.x);
+        min_y = min_y.min(pos.y);
+    }
+    for pos in cluster_positions.iter() {
+        min_x = min_x.min(pos.x);
+        min_y = min_y.min(pos.y);
+    }
+    if !min_x.is_finite() || !min_y.is_finite() {
+        return;
+    }
+
+    let dx = (PLANTUML_BODY_MIN - MARGIN) - min_x;
+    let dy = (PLANTUML_BODY_MIN - MARGIN) - min_y;
+    for pos in node_positions {
+        pos.x += dx;
+        pos.y += dy;
+    }
+    for pos in cluster_positions {
+        pos.x += dx;
+        pos.y += dy;
+    }
+    for path in edge_paths {
+        for point in &mut path.points {
+            point.0 += dx;
+            point.1 += dy;
+        }
+        if let Some(point) = &mut path.start_point {
+            point.0 += dx;
+            point.1 += dy;
+        }
+        if let Some(point) = &mut path.end_point {
+            point.0 += dx;
+            point.1 += dy;
+        }
+    }
+}
+
 fn entity_emission_order(diagram: &ClassDiagram) -> Vec<usize> {
     let parent_pkg = package_parent_indices(diagram);
     let innermost_pkg = innermost_entity_packages(diagram, &parent_pkg);
@@ -2209,9 +2419,15 @@ fn render_plantuml_svg(
             max_x = max_x.max(cluster.x + MARGIN + cluster.width);
             max_y = max_y.max(cluster.y + MARGIN + cluster.height);
         }
-        // PlantUML formula: floor(max_extent) + 13 (= MARGIN + 6).
-        // Verified against 100+ golden single-entity SVGs.
-        (max_x as i64 + 13, max_y as i64 + 13)
+        // PlantUML formula: floor(max_extent) + 13 (= MARGIN + 6) for
+        // single-entity bodies. Package clusters follow the SVEK cluster body
+        // envelope and keep a 15px trailing extent.
+        let extent_pad = if cluster_positions.is_empty() {
+            13
+        } else {
+            PACKAGE_CANVAS_EXTENT_PAD
+        };
+        (max_x as i64 + extent_pad, max_y as i64 + extent_pad)
     };
 
     let mut svg = String::new();
@@ -3447,19 +3663,45 @@ fn render_entity_content(
         emit_entity_image(svg, image);
     }
 
-    // Icon (colored ellipse + letter glyph). Skipped entirely when `hide circle`.
-    // The circled-character icon scales with the resolved circled font size:
-    // its radius is `font_size/3 + 6` (11 at the default size 17). The default
-    // vertical placement centres the icon against the taller of the icon block
-    // and the title line: `cy = rect_top + 5 + max(radius, title_line_height/2)`
-    // (equals the legacy `y + 16` at the default radius/name size).
+    // Header placement follows Java `HeaderLayout.drawU`: the circled
+    // character block, name block, and generic block are centred as a combined
+    // header inside the final entity width. The formula matters whenever the
+    // body members force the class wider than its name.
     let icon_radius = font.circled_radius();
-    // Member text inset scales with the circled radius (20 at default).
     let member_text_offset = MEMBER_TEXT_INSET + icon_radius;
-    // Name font size follows the same modern class cascade as the colour:
-    // `ClassAttributeFontSize`, then `ClassFontSize`/default, then 14.
     let name_font_size = font.attr_font_size.or(font.font_size).unwrap_or(14);
-    let icon_cx = icon_cx_override.unwrap_or(x + ICON_CX_OFFSET);
+    let (stereotype_bold, stereotype_italic) = font.stereotype_font_style(&entity.stereotypes);
+    let name_bold = font.font_bold || font.attr_font_bold || stereotype_bold;
+    let name_italic = is_abstract
+        || is_interface
+        || font.font_italic
+        || font.attr_font_italic
+        || stereotype_italic;
+    let name_lines = escaped_newline_lines(&entity.label);
+    let name_tl = name_lines
+        .iter()
+        .map(|line| {
+            text_render::measure_no_underline_with_family(
+                line,
+                name_font_size as f64,
+                name_bold,
+                &font.name_family,
+            )
+        })
+        .fold(0.0_f64, f64::max);
+    let is_object_entity = entity.kind == EntityKind::Object;
+    let header_positions = (!dim.hide.circle
+        && !suppress_header_icon
+        && !is_object_entity
+        && !dim.has_stereotypes
+        && entity.generic.is_none())
+    .then(|| class_header_positions(x, dim.width, icon_radius, name_tl));
+    let icon_cx = icon_cx_override.unwrap_or_else(|| {
+        header_positions
+            .as_ref()
+            .map(|p| p.icon_cx)
+            .unwrap_or(x + ICON_CX_OFFSET)
+    });
     let icon_cy = if let Some(cy) = icon_cy_override {
         cy
     } else if dim.has_stereotypes {
@@ -3473,7 +3715,6 @@ fn render_entity_content(
         let title_lh = text_render::label_height(&entity.label, name_font_size as f64);
         y + CIRCLED_ICON_TOP_INSET + icon_radius.max(title_lh / 2.0)
     };
-    let is_object_entity = entity.kind == EntityKind::Object;
     if !dim.hide.circle && !suppress_header_icon && !is_object_entity {
         // A hex spot color from `<< (X,#HEX) Name >>` overrides the default
         // kind-based circle fill. Named spot colors do not (PlantUML behavior).
@@ -3600,28 +3841,8 @@ fn render_entity_content(
     // Name font size/style honour `skinparam ClassFontSize`/`ClassFontStyle`.
     // PlantUML sizes the entity name from `ClassFontSize`; when that is unset
     // but `ClassAttributeFontSize` is, the name inherits the attribute size.
-    // (`name_font_size` resolved above, before the header icon.)
     // As with font size, the name inherits `ClassAttributeFontStyle` when
     // `ClassFontStyle` does not itself set the corresponding flag.
-    let (stereotype_bold, stereotype_italic) = font.stereotype_font_style(&entity.stereotypes);
-    let name_bold = font.font_bold || font.attr_font_bold || stereotype_bold;
-    let name_italic = is_abstract
-        || is_interface
-        || font.font_italic
-        || font.attr_font_italic
-        || stereotype_italic;
-    let name_lines = escaped_newline_lines(&entity.label);
-    let name_tl = name_lines
-        .iter()
-        .map(|line| {
-            text_render::measure_no_underline_with_family(
-                line,
-                name_font_size as f64,
-                name_bold,
-                &font.name_family,
-            )
-        })
-        .fold(0.0_f64, f64::max);
     if dim.has_stereotypes {
         for (i, stereo_text) in format_stereotype_lines(&entity.stereotypes)
             .iter()
@@ -3694,7 +3915,11 @@ fn render_entity_content(
         // With the icon hidden the name is centred inside the rectangle.
         x + (dim.width - round_4dp(name_tl)) / 2.0
     } else {
-        name_text_x_override.unwrap_or(icon_cx + ICON_RX + ICON_TEXT_GAP)
+        let default_name_x = header_positions
+            .as_ref()
+            .map(|p| p.name_x)
+            .unwrap_or(icon_cx + ICON_RX + ICON_TEXT_GAP);
+        name_text_x_override.unwrap_or(default_name_x)
     };
     let name_y_default = if dim.has_stereotypes {
         y + NAME_Y_WITH_STEREO
@@ -6700,6 +6925,45 @@ mod tests {
 
         assert!(svg.contains("background:#FF0000;"));
         assert!(svg.contains(r##"<rect fill="#FF0000""##));
+    }
+
+    #[test]
+    fn nested_package_clusters_use_plantuml_svek_gutters() {
+        let input = "@startuml\npackage alpha {\n  package beta {\n    package gamma {\n      package delta {\n        class RenamedDeep {\n          +void go()\n        }\n      }\n    }\n  }\n}\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        let (alpha_x, alpha_y) = cluster_path_origin(&svg, "alpha");
+        let (beta_x, beta_y) = cluster_path_origin(&svg, "alpha.beta");
+        let (gamma_x, gamma_y) = cluster_path_origin(&svg, "alpha.beta.gamma");
+        let (delta_x, delta_y) = cluster_path_origin(&svg, "alpha.beta.gamma.delta");
+
+        assert_eq!(alpha_x, PLANTUML_BODY_MIN);
+        assert_eq!(alpha_y, PLANTUML_BODY_MIN);
+        assert_eq!(beta_x - alpha_x, PACKAGE_CHILD_CLUSTER_PAD_X);
+        assert_eq!(gamma_x - beta_x, PACKAGE_CHILD_CLUSTER_PAD_X);
+        assert_eq!(delta_x - gamma_x, PACKAGE_CHILD_CLUSTER_PAD_X);
+        assert_eq!(beta_y - alpha_y, PACKAGE_CHILD_CLUSTER_PAD_TOP);
+        assert_eq!(gamma_y - beta_y, PACKAGE_CHILD_CLUSTER_PAD_TOP);
+        assert_eq!(delta_y - gamma_y, PACKAGE_CHILD_CLUSTER_PAD_TOP);
+        assert!(svg.contains(r#"data-qualified-name="alpha.beta.gamma.delta.RenamedDeep""#));
+    }
+
+    fn cluster_path_origin(svg: &str, qualified_name: &str) -> (f64, f64) {
+        let marker = format!("<!--cluster {qualified_name}-->");
+        let after_marker = svg
+            .split_once(&marker)
+            .unwrap_or_else(|| panic!("missing cluster marker {qualified_name}"))
+            .1;
+        let coords = after_marker
+            .split_once("<path d=\"M")
+            .unwrap_or_else(|| panic!("missing path for cluster {qualified_name}"))
+            .1
+            .split_once(" L")
+            .unwrap()
+            .0;
+        let (x, y) = coords.split_once(',').unwrap();
+        (x.parse::<f64>().unwrap() - 2.5, y.parse::<f64>().unwrap())
     }
 
     #[test]
