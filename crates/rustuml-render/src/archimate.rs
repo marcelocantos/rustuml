@@ -550,8 +550,8 @@ fn no_oracle_edge(
     entities: &[OracleEntity],
 ) -> OracleEdgePath {
     let (layout_from, layout_to) = relation_layout_endpoints(rel);
-    let reverse = layout_from == rel.to;
-    let id = if reverse {
+    let uses_backto_id = layout_from == rel.to && archimate_relation_has_endpoint_decor(rel.kind);
+    let id = if uses_backto_id {
         format!("{layout_from}-backto-{layout_to}")
     } else {
         format!("{layout_from}-{layout_to}")
@@ -589,6 +589,10 @@ fn no_oracle_edge(
         crow_lines: vec![],
         decorations: vec![],
     }
+}
+
+fn archimate_relation_has_endpoint_decor(kind: ArchimateRelationKind) -> bool {
+    !matches!(kind, ArchimateRelationKind::Association)
 }
 
 fn archimate_edge_style(
