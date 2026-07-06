@@ -11,7 +11,7 @@
 
 use std::fmt::Write;
 
-use rustuml_layout::graph::{Direction, LayoutGraph};
+use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph};
 use rustuml_parser::diagram::object::*;
 
 use crate::layout_oracle::{
@@ -99,13 +99,16 @@ pub fn render_with_oracle(
         .collect();
 
     // Determine positions: oracle first, layout-rs fallback.
-    let positions = if let Some(orc) = oracle {
-        oracle_positions(diagram, &mut dims, orc)
+    let layout = if let Some(orc) = oracle {
+        ObjectLayout {
+            positions: oracle_positions(diagram, &mut dims, orc),
+            edge_paths: Vec::new(),
+        }
     } else {
-        layout_positions(diagram, &dims)
+        layout_object(diagram, &dims)
     };
 
-    render_plantuml_svg(diagram, &dims, &positions, oracle, font_size)
+    render_plantuml_svg(diagram, &dims, &layout, oracle, font_size)
 }
 
 // ---------------------------------------------------------------------------
@@ -296,7 +299,12 @@ fn oracle_positions(
     positions
 }
 
-fn layout_positions(diagram: &ObjectDiagram, dims: &[ObjDim]) -> Vec<(f64, f64)> {
+struct ObjectLayout {
+    positions: Vec<(f64, f64)>,
+    edge_paths: Vec<EdgePath>,
+}
+
+fn layout_object(diagram: &ObjectDiagram, dims: &[ObjDim]) -> ObjectLayout {
     let mut layout = LayoutGraph::new(Direction::TopToBottom).with_plantuml_svek_spacing();
     for (obj, dim) in diagram.objects.iter().zip(dims) {
         layout.add_node(&obj.id, &obj.label, dim.width, dim.height);
@@ -307,14 +315,36 @@ fn layout_positions(diagram: &ObjectDiagram, dims: &[ObjDim]) -> Vec<(f64, f64)>
         layout.add_edge(from_base, to_base, link.label.as_deref());
     }
     match layout.layout_full(std::time::Duration::from_secs(5)) {
-        Some(r) => r
-            .node_positions
-            .iter()
-            .map(|p| (p.x + MARGIN, p.y + MARGIN))
-            .collect(),
-        None => (0..diagram.objects.len())
-            .map(|i| (MARGIN, MARGIN + (i as f64) * 100.0))
-            .collect(),
+        Some(mut result) => {
+            for edge in &mut result.edge_paths {
+                for point in &mut edge.points {
+                    point.0 += MARGIN;
+                    point.1 += MARGIN;
+                }
+                if let Some(point) = &mut edge.start_point {
+                    point.0 += MARGIN;
+                    point.1 += MARGIN;
+                }
+                if let Some(point) = &mut edge.end_point {
+                    point.0 += MARGIN;
+                    point.1 += MARGIN;
+                }
+            }
+            ObjectLayout {
+                positions: result
+                    .node_positions
+                    .iter()
+                    .map(|p| (p.x + MARGIN, p.y + MARGIN))
+                    .collect(),
+                edge_paths: result.edge_paths,
+            }
+        }
+        None => ObjectLayout {
+            positions: (0..diagram.objects.len())
+                .map(|i| (MARGIN, MARGIN + (i as f64) * 100.0))
+                .collect(),
+            edge_paths: Vec::new(),
+        },
     }
 }
 
@@ -368,10 +398,11 @@ fn translate_qualified_name(label: &str) -> String {
 fn render_plantuml_svg(
     diagram: &ObjectDiagram,
     dims: &[ObjDim],
-    positions: &[(f64, f64)],
+    layout: &ObjectLayout,
     oracle: Option<&OracleLayout>,
     font_size: u32,
 ) -> String {
+    let positions = &layout.positions;
     // Canvas dimensions: prefer oracle (matches PlantUML exactly), otherwise
     // compute from the union of entity rects with the standard 6px right/bottom
     // pad on top of MARGIN.
@@ -386,6 +417,20 @@ fn render_plantuml_svg(
         for (i, (x, y)) in positions.iter().enumerate() {
             max_x = max_x.max(x + dims[i].width);
             max_y = max_y.max(y + dims[i].height);
+        }
+        for edge in &layout.edge_paths {
+            for (x, y) in &edge.points {
+                max_x = max_x.max(*x);
+                max_y = max_y.max(*y);
+            }
+            if let Some((x, y)) = edge.start_point {
+                max_x = max_x.max(x);
+                max_y = max_y.max(y);
+            }
+            if let Some((x, y)) = edge.end_point {
+                max_x = max_x.max(x);
+                max_y = max_y.max(y);
+            }
         }
         (max_x as i64 + 13, max_y as i64 + 13)
     };
@@ -549,10 +594,151 @@ fn render_plantuml_svg(
     // Links: prefer oracle data.
     if let Some(orc) = oracle {
         render_oracle_links(&mut svg, diagram, orc, &mut ent_id);
+    } else {
+        render_layout_links(&mut svg, diagram, &layout.edge_paths, &mut ent_id);
     }
 
     svg.push_str("</g></svg>");
     svg
+}
+
+fn render_layout_links(
+    svg: &mut String,
+    diagram: &ObjectDiagram,
+    edge_paths: &[EdgePath],
+    ent_id: &mut usize,
+) {
+    for link in &diagram.links {
+        if link.from.contains("::") || link.to.contains("::") {
+            continue;
+        }
+        if link.from_multiplicity.is_some()
+            || link.to_multiplicity.is_some()
+            || link.label.is_some()
+        {
+            continue;
+        }
+        let Some(edge_path) = edge_paths
+            .iter()
+            .find(|edge| edge.from == link.from && edge.to == link.to)
+        else {
+            continue;
+        };
+        if edge_path.points.len() < 4 {
+            continue;
+        }
+
+        let Some(from_index) = diagram.objects.iter().position(|obj| obj.id == link.from) else {
+            continue;
+        };
+        let Some(to_index) = diagram.objects.iter().position(|obj| obj.id == link.to) else {
+            continue;
+        };
+        let source_line = if link.source_line > 0 {
+            link.source_line
+        } else {
+            0
+        };
+        let link_id = format!("lnk{ent_id}");
+        let path_id = format!("{}-to-{}", link.from, link.to);
+
+        write!(svg, "<!--link {} to {}-->", link.from, link.to).unwrap();
+        write!(
+            svg,
+            r#"<g class="link" data-entity-1="ent{:04}" data-entity-2="ent{:04}" data-link-type="dependency" data-source-line="{source_line}" id="{link_id}">"#,
+            from_index + 2,
+            to_index + 2,
+        )
+        .unwrap();
+        write!(
+            svg,
+            r#"<path codeLine="{source_line}" d="{}" fill="none" id="{path_id}" style="stroke:{BORDER_COLOR};stroke-width:1;"/>"#,
+            edge_path_d_with_dependency_arrow(&edge_path.points),
+        )
+        .unwrap();
+        let endpoint = edge_path.points[edge_path.points.len() - 1];
+        let control = edge_path.points[edge_path.points.len() - 2];
+        let arrow = dependency_arrow_points(control, endpoint);
+        write!(
+            svg,
+            r#"<polygon fill="{BORDER_COLOR}" points="{arrow}" style="stroke:{BORDER_COLOR};stroke-width:1;"/>"#,
+        )
+        .unwrap();
+        svg.push_str("</g>");
+        *ent_id += 1;
+    }
+}
+
+fn edge_path_d(points: &[(f64, f64)]) -> String {
+    let mut d = format!("M{},{}", fmt_tl(points[0].0), fmt_tl(points[0].1));
+    let mut i = 1;
+    while i + 2 < points.len() {
+        write!(
+            d,
+            " C{},{} {},{} {},{}",
+            fmt_tl(points[i].0),
+            fmt_tl(points[i].1),
+            fmt_tl(points[i + 1].0),
+            fmt_tl(points[i + 1].1),
+            fmt_tl(points[i + 2].0),
+            fmt_tl(points[i + 2].1),
+        )
+        .unwrap();
+        i += 3;
+    }
+    d
+}
+
+fn edge_path_d_with_dependency_arrow(points: &[(f64, f64)]) -> String {
+    let mut points = points.to_vec();
+    if points.len() >= 2 {
+        let endpoint = points[points.len() - 1];
+        let control = points[points.len() - 2];
+        let (ux, uy) = unit_vector(control, endpoint);
+        if let Some(last) = points.last_mut() {
+            last.0 -= ux * 6.0;
+            last.1 -= uy * 6.0;
+        }
+    }
+    edge_path_d(&points)
+}
+
+fn unit_vector(control: (f64, f64), endpoint: (f64, f64)) -> (f64, f64) {
+    let dx = endpoint.0 - control.0;
+    let dy = endpoint.1 - control.1;
+    let len = (dx * dx + dy * dy).sqrt();
+    if len > 0.0 {
+        (dx / len, dy / len)
+    } else {
+        (0.0, 1.0)
+    }
+}
+
+fn dependency_arrow_points(control: (f64, f64), endpoint: (f64, f64)) -> String {
+    let (ux, uy) = unit_vector(control, endpoint);
+    let (px, py) = (-uy, ux);
+    let side1 = (
+        endpoint.0 - ux * 9.0 - px * 4.0,
+        endpoint.1 - uy * 9.0 - py * 4.0,
+    );
+    let notch = (endpoint.0 - ux * 5.0, endpoint.1 - uy * 5.0);
+    let side2 = (
+        endpoint.0 - ux * 9.0 + px * 4.0,
+        endpoint.1 - uy * 9.0 + py * 4.0,
+    );
+    format!(
+        "{},{},{},{},{},{},{},{},{},{}",
+        fmt_tl(endpoint.0),
+        fmt_tl(endpoint.1),
+        fmt_tl(side1.0),
+        fmt_tl(side1.1),
+        fmt_tl(notch.0),
+        fmt_tl(notch.1),
+        fmt_tl(side2.0),
+        fmt_tl(side2.1),
+        fmt_tl(endpoint.0),
+        fmt_tl(endpoint.1),
+    )
 }
 
 /// Render the inner content of one entity rect (body, header text, separator,

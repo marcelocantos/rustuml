@@ -214,6 +214,9 @@ impl LayoutGraph {
         let fixedsize_val = CString::new("true").unwrap();
         let circle_val = CString::new("circle").unwrap();
         let box_val = CString::new("box").unwrap();
+        let arrowhead_key = CString::new("arrowhead").unwrap();
+        let arrowtail_key = CString::new("arrowtail").unwrap();
+        let no_arrow_val = CString::new("none").unwrap();
 
         for (id, _label, w, h, is_circle) in &self.nodes {
             let cid = CString::new(id.as_str()).unwrap();
@@ -286,6 +289,21 @@ impl LayoutGraph {
                     empty.as_ptr(),
                 );
             }
+            // PlantUML SVEK lets dot route splines, then renders link
+            // decorations itself (`SvekEdge.solveLine`). Keep Graphviz from
+            // shortening splines for its own built-in arrowheads.
+            graphviz_ffi::agsafeset(
+                edge as *mut c_void,
+                arrowhead_key.as_ptr(),
+                no_arrow_val.as_ptr(),
+                empty.as_ptr(),
+            );
+            graphviz_ffi::agsafeset(
+                edge as *mut c_void,
+                arrowtail_key.as_ptr(),
+                no_arrow_val.as_ptr(),
+                empty.as_ptr(),
+            );
 
             edge_specs.push((from.clone(), to.clone()));
         }
