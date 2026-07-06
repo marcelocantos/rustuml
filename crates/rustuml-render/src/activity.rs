@@ -28624,6 +28624,30 @@ fn format_svg(
 mod tests {
     use super::*;
     use rustuml_parser::diagram::DiagramMeta;
+    use rustuml_parser::diagram::activity::{IfBlock, RepeatWhileBlock, WhileBlock};
+
+    fn render_ftile_steps(steps: Vec<ActivityStep>) -> String {
+        let d = ActivityDiagram {
+            meta: DiagramMeta::default(),
+            steps,
+        };
+        let palette = Palette::default_puml();
+        let tree = build_tree(&d.steps, &palette);
+        render_ftile(&tree, &d, &palette, false, "").expect("tree is FTile-emittable")
+    }
+
+    fn assert_ftile_geometry_portable(steps: Vec<ActivityStep>) {
+        let palette = Palette::default_puml();
+        let tree = build_tree(&steps, &palette);
+        assert!(
+            sequence_geometry(&tree).is_some(),
+            "tree has FTile geometry"
+        );
+        assert!(
+            probe_ftile_layouts(&tree).is_some(),
+            "tree has FTile child placement"
+        );
+    }
 
     #[test]
     fn simple_activity() {
@@ -28647,19 +28671,12 @@ mod tests {
 
     #[test]
     fn ftile_linear_bridge_renders_renamed_perturbation() {
-        let d = ActivityDiagram {
-            meta: DiagramMeta::default(),
-            steps: vec![
-                ActivityStep::Start,
-                ActivityStep::Action("Renamed T14 bridge".into()),
-                ActivityStep::Action("Not in golden corpus".into()),
-                ActivityStep::Stop,
-            ],
-        };
-        let palette = Palette::default_puml();
-        let tree = build_tree(&d.steps, &palette);
-        let svg =
-            render_ftile(&tree, &d, &palette, false, "").expect("linear tree is FTile-emittable");
+        let svg = render_ftile_steps(vec![
+            ActivityStep::Start,
+            ActivityStep::Action("Renamed T14 bridge".into()),
+            ActivityStep::Action("Not in golden corpus".into()),
+            ActivityStep::Stop,
+        ]);
 
         assert!(svg.contains("Renamed T14 bridge"));
         assert!(svg.contains("Not in golden corpus"));
@@ -28667,8 +28684,80 @@ mod tests {
     }
 
     #[test]
+    fn ftile_if_perturbation_is_geometry_portable() {
+        assert_ftile_geometry_portable(vec![
+            ActivityStep::Start,
+            ActivityStep::If(IfBlock {
+                condition: "Renamed gate?".into(),
+                then_label: Some("green".into()),
+                source_line: 0,
+            }),
+            ActivityStep::Action("Fresh then label".into()),
+            ActivityStep::Else(Some("amber".into())),
+            ActivityStep::Action("Fresh else label".into()),
+            ActivityStep::EndIf,
+            ActivityStep::Stop,
+        ]);
+    }
+
+    #[test]
+    fn ftile_loop_perturbations_are_geometry_portable() {
+        assert_ftile_geometry_portable(vec![
+            ActivityStep::Start,
+            ActivityStep::While(WhileBlock {
+                condition: "Still retry?".into(),
+                is_label: Some("yes".into()),
+                source_line: 0,
+            }),
+            ActivityStep::Action("Poll renamed queue".into()),
+            ActivityStep::EndWhile(Some("no".into())),
+            ActivityStep::Stop,
+        ]);
+
+        assert_ftile_geometry_portable(vec![
+            ActivityStep::Start,
+            ActivityStep::Repeat,
+            ActivityStep::Action("Try renamed branch".into()),
+            ActivityStep::RepeatWhile(RepeatWhileBlock {
+                condition: "again?".into(),
+                is_label: Some("loop".into()),
+                not_label: Some("exit".into()),
+                source_line: 0,
+            }),
+            ActivityStep::Stop,
+        ]);
+    }
+
+    #[test]
+    fn ftile_switch_and_fork_perturbations_are_geometry_portable() {
+        assert_ftile_geometry_portable(vec![
+            ActivityStep::Start,
+            ActivityStep::Switch("Fresh selector?".into()),
+            ActivityStep::Case("alpha".into()),
+            ActivityStep::Action("Alpha renamed path".into()),
+            ActivityStep::Case("beta".into()),
+            ActivityStep::Action("Beta renamed path".into()),
+            ActivityStep::Case("gamma".into()),
+            ActivityStep::Action("Gamma renamed path".into()),
+            ActivityStep::EndSwitch,
+            ActivityStep::Stop,
+        ]);
+
+        assert_ftile_geometry_portable(vec![
+            ActivityStep::Start,
+            ActivityStep::Fork,
+            ActivityStep::Action("Branch one renamed".into()),
+            ActivityStep::ForkAgain,
+            ActivityStep::Action("Branch two renamed".into()),
+            ActivityStep::ForkAgain,
+            ActivityStep::Action("Branch three renamed".into()),
+            ActivityStep::EndFork,
+            ActivityStep::Stop,
+        ]);
+    }
+
+    #[test]
     fn with_condition() {
-        use rustuml_parser::diagram::activity::IfBlock;
         let d = ActivityDiagram {
             meta: DiagramMeta::default(),
             steps: vec![
