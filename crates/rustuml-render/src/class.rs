@@ -6168,7 +6168,7 @@ fn render_relationship_svg(
         ""
     };
 
-    let points = shortened_endpoint_points(
+    let path_points = shortened_endpoint_points(
         &edge_path.points,
         rel.from_decor
             .map(endpoint_decoration_length)
@@ -6177,18 +6177,18 @@ fn render_relationship_svg(
     );
 
     // Build cubic bezier path.
-    let mut d = format!("M{},{}", fmt4(points[0].0), fmt4(points[0].1));
+    let mut d = format!("M{},{}", fmt4(path_points[0].0), fmt4(path_points[0].1));
     let mut i = 1;
-    while i + 2 <= points.len() {
+    while i + 2 <= path_points.len() {
         write!(
             d,
             " C{},{} {},{} {},{}",
-            fmt4(points[i].0),
-            fmt4(points[i].1),
-            fmt4(points[i + 1].0),
-            fmt4(points[i + 1].1),
-            fmt4(points[i + 2].0.min(points[i + 2].0)),
-            fmt4(points[i + 2].1),
+            fmt4(path_points[i].0),
+            fmt4(path_points[i].1),
+            fmt4(path_points[i + 1].0),
+            fmt4(path_points[i + 1].1),
+            fmt4(path_points[i + 2].0.min(path_points[i + 2].0)),
+            fmt4(path_points[i + 2].1),
         )
         .unwrap();
         i += 3;
@@ -6220,16 +6220,21 @@ fn render_relationship_svg(
     )
     .unwrap();
 
-    emit_no_oracle_endpoint_decor(svg, rel.from_decor, &points, true);
-    emit_no_oracle_endpoint_decor(svg, rel.to_decor, &points, false);
+    // Java `SvekEdge.getExtremitySimplier` creates the `Extremity*` at the
+    // original dot contact point, then shortens only the visible `dotPath` by
+    // `Extremity.getDecorationLength()`. Keep those two coordinate streams
+    // separate here: `path_points` feeds the `<path d=...>`, while endpoint
+    // decorations use the unshortened Graphviz contacts.
+    emit_no_oracle_endpoint_decor(svg, rel.from_decor, &edge_path.points, true);
+    emit_no_oracle_endpoint_decor(svg, rel.to_decor, &edge_path.points, false);
 
     // Arrowhead.
     match rel.kind {
         RelationshipKind::Inheritance | RelationshipKind::Implementation => {
             // Hollow triangle at the source end.
-            if points.len() >= 2 {
-                let tip = points[0];
-                let _next = points[1];
+            if path_points.len() >= 2 {
+                let tip = path_points[0];
+                let _next = path_points[1];
                 // Triangle pointing up (toward source).
                 write!(
                     svg,
@@ -6245,7 +6250,7 @@ fn render_relationship_svg(
         }
         RelationshipKind::Dependency => {
             // Filled arrowhead at target.
-            if let Some(&tip) = points.last() {
+            if let Some(&tip) = path_points.last() {
                 write!(
                     svg,
                     r#"<polygon fill="{}" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{};stroke-width:1;"/>"#,
@@ -6262,7 +6267,7 @@ fn render_relationship_svg(
         }
         RelationshipKind::Composition => {
             // Filled diamond at source.
-            let tip = points[0];
+            let tip = path_points[0];
             write!(
                 svg,
                 r#"<polygon fill="{}" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{};stroke-width:1;"/>"#,
@@ -6278,7 +6283,7 @@ fn render_relationship_svg(
         }
         RelationshipKind::Aggregation => {
             // Hollow diamond at source.
-            let tip = points[0];
+            let tip = path_points[0];
             write!(
                 svg,
                 r#"<polygon fill="none" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{};stroke-width:1;"/>"#,
@@ -6393,48 +6398,54 @@ fn emit_no_oracle_endpoint_decor(
     } else {
         (points[points.len() - 1], points[points.len() - 2])
     };
-    let ux = contact.0 - neighbor.0;
-    let uy = contact.1 - neighbor.1;
+    let ux = neighbor.0 - contact.0;
+    let uy = neighbor.1 - contact.1;
     let len = (ux * ux + uy * uy).sqrt();
     if len <= f64::EPSILON {
         return;
     }
-    let out = (ux / len, uy / len);
-    let perp = (-out.1, out.0);
+    let inside = (ux / len, uy / len);
+    let perp = (-inside.1, inside.0);
 
     match decor {
-        EndpointDecor::CrowFoot => emit_crowfoot(svg, contact, out, perp, false, false),
-        EndpointDecor::CircleCrowFoot => emit_crowfoot(svg, contact, out, perp, true, false),
-        EndpointDecor::CircleLine => emit_circle_line(svg, contact, out, perp),
-        EndpointDecor::DoubleLine => emit_double_line(svg, contact, out, perp),
-        EndpointDecor::LineCrowFoot => emit_crowfoot(svg, contact, out, perp, false, true),
+        EndpointDecor::CrowFoot => emit_crowfoot(svg, contact, inside, perp, false, false),
+        EndpointDecor::CircleCrowFoot => emit_crowfoot(svg, contact, inside, perp, true, false),
+        EndpointDecor::CircleLine => emit_circle_line(svg, contact, inside, perp),
+        EndpointDecor::DoubleLine => emit_double_line(svg, contact, inside, perp),
+        EndpointDecor::LineCrowFoot => emit_crowfoot(svg, contact, inside, perp, false, true),
     }
 }
 
 fn emit_crowfoot(
     svg: &mut String,
     contact: (f64, f64),
-    out: (f64, f64),
+    inside: (f64, f64),
     perp: (f64, f64),
     circle: bool,
     line: bool,
 ) {
-    // Ported from PlantUML's `LinkDecor` ER values and the SVEK extremities:
-    // `ExtremityCrowfoot`, `ExtremityLineCrowfoot`, and
-    // `ExtremityCircleCrowfoot` use an 8px wing, 6px crow aperture, 4px line
-    // half-height, and 4px zero-cardinality circle radius.
+    // Ported from PlantUML SVEK `ExtremityCrowfoot`,
+    // `ExtremityLineCrowfoot`, and `ExtremityCircleCrowfoot`: the contact
+    // point stays on the entity boundary while the visible path is shortened
+    // separately by `getDecorationLength()`.
     const WING: f64 = 8.0;
-    const APERTURE: f64 = 6.0;
+    const CROW_APERTURE: f64 = 8.0;
+    const CIRCLE_CROW_APERTURE: f64 = 6.0;
     const LINE_OFFSET: f64 = 10.0;
     const LINE_HALF: f64 = 4.0;
-    const CIRCLE_OFFSET: f64 = -6.0;
     const CIRCLE_RADIUS: f64 = 4.0;
-    let base = add(contact, scale(out, WING));
-    emit_svg_line(svg, base, add(contact, scale(perp, APERTURE)));
-    emit_svg_line(svg, base, add(contact, scale(perp, -APERTURE)));
+    const CIRCLE_GAP: f64 = 2.0;
+    let aperture = if circle {
+        CIRCLE_CROW_APERTURE
+    } else {
+        CROW_APERTURE
+    };
+    let base = add(contact, scale(inside, WING));
+    emit_svg_line(svg, base, add(contact, scale(perp, aperture)));
+    emit_svg_line(svg, base, add(contact, scale(perp, -aperture)));
     emit_svg_line(svg, base, contact);
     if line {
-        let c = add(contact, scale(out, LINE_OFFSET));
+        let c = add(contact, scale(inside, LINE_OFFSET));
         emit_svg_line(
             svg,
             add(c, scale(perp, LINE_HALF)),
@@ -6442,44 +6453,45 @@ fn emit_crowfoot(
         );
     }
     if circle {
-        let c = add(contact, scale(out, CIRCLE_OFFSET));
+        let c = add(contact, scale(inside, WING + CIRCLE_RADIUS + CIRCLE_GAP));
         emit_svg_circle(svg, c, CIRCLE_RADIUS);
     }
 }
 
-fn emit_circle_line(svg: &mut String, contact: (f64, f64), out: (f64, f64), perp: (f64, f64)) {
-    // PlantUML `ExtremityCircleLine`: xWing=4, radius=4, lineHeight=4.
+fn emit_circle_line(svg: &mut String, contact: (f64, f64), inside: (f64, f64), perp: (f64, f64)) {
+    // PlantUML `ExtremityCircleLine`: xWing=4, radius=4, lineHeight=4, and
+    // the circle centre is xWing + radius + 3 px inside the entity boundary.
     const LINE_OFFSET: f64 = 4.0;
-    const CIRCLE_OFFSET: f64 = -6.0;
     const LINE_HALF: f64 = 4.0;
     const CIRCLE_RADIUS: f64 = 4.0;
-    let line_c = add(contact, scale(out, LINE_OFFSET));
+    const CIRCLE_OFFSET: f64 = 11.0;
+    let line_c = add(contact, scale(inside, LINE_OFFSET));
     emit_svg_line(
         svg,
         add(line_c, scale(perp, LINE_HALF)),
         add(line_c, scale(perp, -LINE_HALF)),
     );
-    let circle_c = add(contact, scale(out, CIRCLE_OFFSET));
+    let circle_c = add(contact, scale(inside, CIRCLE_OFFSET));
     emit_svg_circle(svg, circle_c, CIRCLE_RADIUS);
     emit_svg_line(svg, contact, circle_c);
 }
 
-fn emit_double_line(svg: &mut String, contact: (f64, f64), out: (f64, f64), perp: (f64, f64)) {
-    // PlantUML `ExtremityDoubleLine`: xWing=4, second line 3px farther out,
-    // lineHeight=4, plus a short connector segment.
+fn emit_double_line(svg: &mut String, contact: (f64, f64), inside: (f64, f64), perp: (f64, f64)) {
+    // PlantUML `ExtremityDoubleLine`: xWing=4, second line at xWing+3,
+    // lineHeight=4, and a connector ending 8px inside the contact.
     const FIRST_OFFSET: f64 = 4.0;
     const SECOND_OFFSET: f64 = 7.0;
     const CONNECTOR_OFFSET: f64 = 8.0;
     const LINE_HALF: f64 = 4.0;
     for offset in [FIRST_OFFSET, SECOND_OFFSET] {
-        let c = add(contact, scale(out, offset));
+        let c = add(contact, scale(inside, offset));
         emit_svg_line(
             svg,
             add(c, scale(perp, LINE_HALF)),
             add(c, scale(perp, -LINE_HALF)),
         );
     }
-    emit_svg_line(svg, contact, add(contact, scale(out, CONNECTOR_OFFSET)));
+    emit_svg_line(svg, contact, add(contact, scale(inside, CONNECTOR_OFFSET)));
 }
 
 fn add(a: (f64, f64), b: (f64, f64)) -> (f64, f64) {
