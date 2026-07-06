@@ -216,6 +216,16 @@ const CONTAINER_PAD: f64 = 16.0;
 /// Minimum component width.
 const COMPONENT_MIN_W: f64 = 40.0;
 
+/// Canvas pad after the rightmost/bottommost rendered shape.
+///
+/// Java PlantUML computes DESCRIPTION/Svek image size in
+/// `svek.SvekResult.calculateDimension`: it scans the drawn result with
+/// `TextBlockUtils.getMinMax`, moves the solved graph by `6 - min`, then
+/// returns `minMax.getDimension().delta(15, 15)`. Our component leaves are
+/// already emitted at PlantUML's 7px top/left offset, so the equivalent
+/// no-oracle frame is the maximum rendered bound plus this residual pad.
+const SVEK_CANVAS_PAD: f64 = 14.0;
+
 // ---------------------------------------------------------------------------
 // Component icon geometry (the "tab" icon at top-right of each component)
 // ---------------------------------------------------------------------------
@@ -480,6 +490,16 @@ pub fn render_with_oracle(
         && orc.canvas_height > 0.0
     {
         (orc.canvas_width, orc.canvas_height)
+    } else if oracle.is_none() {
+        compute_no_oracle_canvas(
+            &positions,
+            &iface_positions,
+            &comp_dims,
+            &diagram.packages,
+            pkg_total_w,
+            pkg_total_h,
+            title_h,
+        )
     } else {
         (
             content_w.max(pkg_total_w).max(100.0),
@@ -2096,6 +2116,36 @@ fn compute_positions_grid(
     (positions, iface_positions, content_w, content_h)
 }
 
+fn compute_no_oracle_canvas(
+    positions: &[(f64, f64)],
+    iface_positions: &[(f64, f64)],
+    comp_dims: &[CompDim],
+    packages: &[ComponentPackage],
+    pkg_total_w: f64,
+    pkg_total_h: f64,
+    title_h: f64,
+) -> (f64, f64) {
+    let mut max_x = 0.0_f64;
+    let mut max_y = title_h;
+
+    for ((x, y), dim) in positions.iter().zip(comp_dims) {
+        max_x = max_x.max(x + dim.width);
+        max_y = max_y.max(y + dim.height);
+    }
+    for (cx, cy) in iface_positions {
+        max_x = max_x.max(cx + IFACE_R);
+        max_y = max_y.max(cy + IFACE_R + LINE_HEIGHT + 4.0);
+    }
+    if !packages.is_empty() {
+        max_x = max_x.max(pkg_total_w);
+        max_y = max_y.max(title_h + MARGIN + pkg_total_h);
+    }
+
+    let total_w = (max_x + SVEK_CANVAS_PAD).max(1.0);
+    let total_h = (max_y + SVEK_CANVAS_PAD).max(1.0);
+    (total_w, total_h)
+}
+
 // ---------------------------------------------------------------------------
 // Arrowhead rendering
 // ---------------------------------------------------------------------------
@@ -2895,6 +2945,29 @@ mod tests {
         assert!(
             svg.contains(r##"fill="#F1F1F1""##),
             "missing #F1F1F1 fill: {svg}"
+        );
+    }
+
+    #[test]
+    fn no_oracle_canvas_tracks_svek_bounds_for_renamed_component() {
+        let input = "@startuml\ncomponent RenamedProbe\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        let rustuml_parser::diagram::Diagram::Component(component_diagram) = &diagram else {
+            panic!("expected component diagram");
+        };
+        let component = &component_diagram.components[0];
+        let dim = super::calc_component_dim(component);
+        let expected_w = (super::MARGIN + dim.width + super::SVEK_CANVAS_PAD) as i64;
+        let expected_h = (super::MARGIN + dim.height + super::SVEK_CANVAS_PAD) as i64;
+
+        assert!(
+            svg.contains(&format!(r#"width="{expected_w}px""#)),
+            "canvas width should follow Svek bounds for renamed labels: {svg}"
+        );
+        assert!(
+            svg.contains(&format!(r#"height="{expected_h}px""#)),
+            "canvas height should follow Svek bounds for renamed labels: {svg}"
         );
     }
 }
