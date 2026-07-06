@@ -2284,6 +2284,7 @@ pub fn render_with_oracle(
     if let Some(orc) = oracle {
         render_oracle_transitions(&mut svg, diagram, orc);
     } else {
+        let mut consumed_edge_paths = vec![false; edge_paths.len()];
         for (transition_idx, t) in diagram.transitions.iter().enumerate() {
             let from_layout = map_id(&t.from, true);
             let to_layout = map_id(&t.to, false);
@@ -2311,13 +2312,23 @@ pub fn render_with_oracle(
             )
             .unwrap();
 
-            // Try bezier path from layout engine.
-            let edge_path = edge_paths
-                .iter()
-                .find(|ep| ep.from == from_layout && ep.to == to_layout);
-
             let (from_cx, from_cy, _from_w, from_h) = pos_of(&from_layout);
             let (to_cx, to_cy, _to_w, to_h) = pos_of(&to_layout);
+            // Try bezier path from layout engine. Graphviz exposes splines by
+            // graph traversal order, while PlantUML's SVEK binds each solved
+            // line back to the link whose endpoint shapes it touches
+            // (`net.sourceforge.plantuml.svek.SvekEdge.solveLine`). Match by
+            // routed endpoint geometry so a state registered before its lazy
+            // `.start.` node does not swap the start/end transition paths.
+            let edge_path = routed_edge_path_for_transition(
+                edge_paths,
+                &mut consumed_edge_paths,
+                &from_layout,
+                &to_layout,
+                graph_body_x,
+                graph_body_y,
+                &pos_of,
+            );
 
             if let Some(ep) = edge_path
                 && !ep.points.is_empty()
@@ -2464,13 +2475,83 @@ fn render_arrowhead(svg: &mut String, control: (f64, f64), endpoint: (f64, f64))
     let STROKE_COLOR = DEFAULT_STROKE_COLOR;
     write!(
         svg,
-        r#"<polygon fill="{STROKE_COLOR}" points="{},{},{},{},{},{},{},{}" style="stroke:{STROKE_COLOR};stroke-width:1;"/>"#,
+        r#"<polygon fill="{STROKE_COLOR}" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{STROKE_COLOR};stroke-width:1;"/>"#,
         fmt_f(tip_x), fmt_f(tip_y),
-        fmt_f(left_x), fmt_f(left_y),
-        fmt_f(indent_x), fmt_f(indent_y),
         fmt_f(right_x), fmt_f(right_y),
+        fmt_f(indent_x), fmt_f(indent_y),
+        fmt_f(left_x), fmt_f(left_y),
+        fmt_f(tip_x), fmt_f(tip_y),
     )
     .unwrap();
+}
+
+fn routed_edge_path_for_transition<'a, F>(
+    edge_paths: &'a [EdgePath],
+    consumed: &mut [bool],
+    from: &str,
+    to: &str,
+    graph_body_x: f64,
+    graph_body_y: f64,
+    pos_of: &F,
+) -> Option<&'a EdgePath>
+where
+    F: Fn(&str) -> (f64, f64, f64, f64),
+{
+    let from_rect = pos_of(from);
+    let to_rect = pos_of(to);
+    let mut best: Option<(usize, f64)> = None;
+
+    for (idx, edge_path) in edge_paths.iter().enumerate() {
+        if consumed.get(idx).copied().unwrap_or(true) || edge_path.points.is_empty() {
+            continue;
+        }
+        let first = edge_path.points[0];
+        let last = edge_path.points[edge_path.points.len() - 1];
+        let start = (first.0 + graph_body_x, first.1 + graph_body_y);
+        let end = (last.0 + graph_body_x, last.1 + graph_body_y);
+        let score =
+            distance_to_node_border(start, from_rect) + distance_to_node_border(end, to_rect);
+        if best.is_none_or(|(_, best_score)| score < best_score) {
+            best = Some((idx, score));
+        }
+    }
+
+    let (idx, _) = best?;
+    consumed[idx] = true;
+    edge_paths.get(idx)
+}
+
+fn distance_to_node_border(point: (f64, f64), rect: (f64, f64, f64, f64)) -> f64 {
+    let (cx, cy, width, height) = rect;
+    let left = cx - width / 2.0;
+    let right = cx + width / 2.0;
+    let top = cy - height / 2.0;
+    let bottom = cy + height / 2.0;
+    let (x, y) = point;
+
+    if (left..=right).contains(&x) && (top..=bottom).contains(&y) {
+        return (x - left)
+            .abs()
+            .min((x - right).abs())
+            .min((y - top).abs())
+            .min((y - bottom).abs());
+    }
+
+    let dx = if x < left {
+        left - x
+    } else if x > right {
+        x - right
+    } else {
+        0.0
+    };
+    let dy = if y < top {
+        top - y
+    } else if y > bottom {
+        y - bottom
+    } else {
+        0.0
+    };
+    dx.hypot(dy)
 }
 
 /// Render transitions directly from oracle edge data.
