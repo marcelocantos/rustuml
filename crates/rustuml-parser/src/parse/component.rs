@@ -83,6 +83,29 @@ fn parse_container_label(kw: &str, rest: &str) -> (String, String) {
     (kw.to_string(), kw.to_string())
 }
 
+fn component_package_kind(kw: &str) -> ComponentPackageKind {
+    match kw {
+        "cloud" => ComponentPackageKind::Cloud,
+        "component" => ComponentPackageKind::Component,
+        "database" | "storage" => ComponentPackageKind::Database,
+        "folder" => ComponentPackageKind::Folder,
+        "frame" => ComponentPackageKind::Frame,
+        "node" => ComponentPackageKind::Node,
+        "package" => ComponentPackageKind::Package,
+        "queue" => ComponentPackageKind::Queue,
+        "rectangle" | "boundary" | "control" | "entity" | "collections" | "actor" | "artifact" => {
+            ComponentPackageKind::Rectangle
+        }
+        _ => ComponentPackageKind::Rectangle,
+    }
+}
+
+fn parse_container_color(line: &str) -> Option<String> {
+    line.split_whitespace()
+        .find(|part| part.starts_with('#') && part.len() > 1)
+        .map(|part| part.trim_end_matches('{').to_string())
+}
+
 pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError> {
     let mut components = Vec::new();
     let mut interfaces = Vec::new();
@@ -336,6 +359,9 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                     name: id,
                     label,
                     stereotype: parse_stereotypes(trimmed).into_iter().next(),
+                    kind: component_package_kind(kw),
+                    color: parse_container_color(trimmed),
+                    source_line: current_line,
                     components: Vec::new(),
                     packages: Vec::new(),
                 });

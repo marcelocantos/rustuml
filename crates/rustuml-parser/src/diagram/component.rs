@@ -75,8 +75,28 @@ pub struct ComponentPackage {
     pub name: String,
     pub label: String,
     pub stereotype: Option<String>,
+    #[serde(default)]
+    pub kind: ComponentPackageKind,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub color: Option<String>,
+    #[serde(default)]
+    pub source_line: usize,
     pub components: Vec<String>,
     pub packages: Vec<ComponentPackage>,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
+pub enum ComponentPackageKind {
+    Cloud,
+    Component,
+    Database,
+    Folder,
+    Frame,
+    Node,
+    Package,
+    Queue,
+    #[default]
+    Rectangle,
 }
 
 /// A note attached to a component or floating.

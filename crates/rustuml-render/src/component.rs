@@ -8,7 +8,7 @@
 
 use std::fmt::Write;
 
-use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph};
+use rustuml_layout::graph::{ClusterPosition, Direction, EdgePath, LayoutGraph};
 use rustuml_parser::diagram::component::*;
 
 use crate::layout_oracle::{
@@ -450,6 +450,7 @@ pub fn render_with_oracle(
                 IFACE_R * 2.0 + 20.0,
             );
         }
+        add_package_clusters_to_layout(&mut layout, &diagram.packages, "");
         for conn in &diagram.connections {
             layout.add_edge(&conn.from, &conn.to, conn.label.as_deref());
         }
@@ -461,15 +462,22 @@ pub fn render_with_oracle(
     let n_comp = diagram.components.len();
 
     // Compute positions from oracle, layout engine, or grid fallback.
-    let (positions, iface_positions, content_w, content_h) = if let Some(orc) = oracle {
-        compute_positions_from_oracle(diagram, &comp_dims, orc, title_h)
-    } else if let Some(ref result) = layout_result
-        && result.node_positions.len() >= n_comp + diagram.interfaces.len()
-    {
-        compute_positions_from_layout(diagram, &comp_dims, &result.node_positions, title_h)
-    } else {
-        compute_positions_grid(diagram, &comp_dims, title_h)
-    };
+    let (positions, iface_positions, cluster_positions, content_w, content_h) =
+        if let Some(orc) = oracle {
+            compute_positions_from_oracle(diagram, &comp_dims, orc, title_h)
+        } else if let Some(ref result) = layout_result
+            && result.node_positions.len() >= n_comp + diagram.interfaces.len()
+        {
+            compute_positions_from_layout(
+                diagram,
+                &comp_dims,
+                &result.node_positions,
+                &result.cluster_positions,
+                title_h,
+            )
+        } else {
+            compute_positions_grid(diagram, &comp_dims, title_h)
+        };
 
     let empty_edge_paths: Vec<EdgePath> = Vec::new();
     let edge_paths: &[EdgePath] = if use_oracle {
@@ -495,6 +503,7 @@ pub fn render_with_oracle(
             &positions,
             &iface_positions,
             &comp_dims,
+            &cluster_positions,
             &diagram.packages,
             pkg_total_w,
             pkg_total_h,
@@ -638,13 +647,18 @@ pub fn render_with_oracle(
     // path geometry that we can't realistically reproduce attribute-for-attribute
     // in a strict-XML comparator. The oracle replay sidesteps this entirely.
     let mut pkg_y = title_h + MARGIN;
-    if let Some(orc) = oracle
+    let rendered_layout_cluster_count = if let Some(orc) = oracle
         && !orc.clusters.is_empty()
     {
         render_packages_from_oracle(&diagram.packages, &mut svg, orc);
+        0
+    } else if !cluster_positions.is_empty() {
+        render_packages_from_layout(&diagram.packages, &mut svg, &cluster_positions);
+        cluster_positions.len()
     } else {
         render_packages(&diagram.packages, &mut svg, MARGIN, &mut pkg_y, theme);
-    }
+        0
+    };
 
     // Build qualified-name map (e.g. "AA" → "G1.AA") for oracle lookup.
     let qualified_names = build_qualified_names(&diagram.packages);
@@ -799,7 +813,7 @@ pub fn render_with_oracle(
             .collect()
     };
 
-    let mut entity_counter: usize = 2;
+    let mut entity_counter: usize = 2 + rendered_layout_cluster_count;
     for emit_item in &emit_order {
         let i = match *emit_item {
             EmitItem::Comp(i) => i,
@@ -1203,25 +1217,25 @@ pub fn render_with_oracle(
                 .components
                 .iter()
                 .position(|c| c.id == conn.from)
-                .map(|i| i + 2)
+                .map(|i| i + 2 + rendered_layout_cluster_count)
                 .or_else(|| {
                     diagram
                         .interfaces
                         .iter()
                         .position(|i| i.id == conn.from)
-                        .map(|i| i + 2 + n_comp)
+                        .map(|i| i + 2 + rendered_layout_cluster_count + n_comp)
                 });
             let to_ent_idx = diagram
                 .components
                 .iter()
                 .position(|c| c.id == conn.to)
-                .map(|i| i + 2)
+                .map(|i| i + 2 + rendered_layout_cluster_count)
                 .or_else(|| {
                     diagram
                         .interfaces
                         .iter()
                         .position(|i| i.id == conn.to)
-                        .map(|i| i + 2 + n_comp)
+                        .map(|i| i + 2 + rendered_layout_cluster_count + n_comp)
                 });
 
             let from_ent_id = from_ent_idx
@@ -1958,15 +1972,42 @@ fn calc_component_dim(comp: &Component) -> CompDim {
 // ---------------------------------------------------------------------------
 
 /// Positions of components and interfaces, plus content width and height.
-type LayoutResult = (Vec<(f64, f64)>, Vec<(f64, f64)>, f64, f64);
+type ComponentLayoutResult = (
+    Vec<(f64, f64)>,
+    Vec<(f64, f64)>,
+    Vec<ClusterPosition>,
+    f64,
+    f64,
+);
+
+fn add_package_clusters_to_layout(
+    layout: &mut LayoutGraph,
+    packages: &[ComponentPackage],
+    parent: &str,
+) {
+    for pkg in packages {
+        let qname = if parent.is_empty() {
+            pkg.name.clone()
+        } else {
+            format!("{parent}.{}", pkg.name)
+        };
+        let parent_id = (!parent.is_empty()).then_some(parent);
+        layout.add_cluster(&qname, &pkg.label, parent_id);
+        for component_id in &pkg.components {
+            layout.add_cluster_node(&qname, component_id);
+        }
+        add_package_clusters_to_layout(layout, &pkg.packages, &qname);
+    }
+}
 
 #[allow(clippy::type_complexity)]
 fn compute_positions_from_layout(
     diagram: &ComponentDiagram,
     comp_dims: &[CompDim],
     node_positions: &[rustuml_layout::graph::NodePosition],
+    raw_cluster_positions: &[ClusterPosition],
     title_h: f64,
-) -> LayoutResult {
+) -> ComponentLayoutResult {
     let n_comp = diagram.components.len();
     let mut positions = Vec::with_capacity(n_comp);
     let mut iface_positions = Vec::with_capacity(diagram.interfaces.len());
@@ -2006,7 +2047,24 @@ fn compute_positions_from_layout(
     let content_w = max_x + MARGIN * 2.0;
     let content_h = max_y + MARGIN * 2.0 + title_h;
 
-    (positions, iface_positions, content_w, content_h)
+    let cluster_positions = raw_cluster_positions
+        .iter()
+        .map(|p| ClusterPosition {
+            id: p.id.clone(),
+            x: p.x + MARGIN,
+            y: p.y + MARGIN + title_h,
+            width: p.width,
+            height: p.height,
+        })
+        .collect();
+
+    (
+        positions,
+        iface_positions,
+        cluster_positions,
+        content_w,
+        content_h,
+    )
 }
 
 fn compute_positions_from_oracle(
@@ -2014,7 +2072,7 @@ fn compute_positions_from_oracle(
     comp_dims: &[CompDim],
     oracle: &OracleLayout,
     title_h: f64,
-) -> LayoutResult {
+) -> ComponentLayoutResult {
     let mut positions = Vec::with_capacity(diagram.components.len());
     let mut iface_positions = Vec::with_capacity(diagram.interfaces.len());
 
@@ -2061,14 +2119,14 @@ fn compute_positions_from_oracle(
             .fold(50.0_f64, f64::max)
     };
 
-    (positions, iface_positions, content_w, content_h)
+    (positions, iface_positions, Vec::new(), content_w, content_h)
 }
 
 fn compute_positions_grid(
     diagram: &ComponentDiagram,
     comp_dims: &[CompDim],
     title_h: f64,
-) -> LayoutResult {
+) -> ComponentLayoutResult {
     let n = diagram.components.len();
     let cols = if n == 0 {
         1
@@ -2128,13 +2186,14 @@ fn compute_positions_grid(
     let content_w = comp_total_w.max(iface_total_w).max(100.0);
     let content_h = comp_total_h + iface_total_h + title_h;
 
-    (positions, iface_positions, content_w, content_h)
+    (positions, iface_positions, Vec::new(), content_w, content_h)
 }
 
 fn compute_no_oracle_canvas(
     positions: &[(f64, f64)],
     iface_positions: &[(f64, f64)],
     comp_dims: &[CompDim],
+    cluster_positions: &[ClusterPosition],
     packages: &[ComponentPackage],
     pkg_total_w: f64,
     pkg_total_h: f64,
@@ -2151,7 +2210,11 @@ fn compute_no_oracle_canvas(
         max_x = max_x.max(cx + IFACE_R);
         max_y = max_y.max(cy + IFACE_R + LINE_HEIGHT + 4.0);
     }
-    if !packages.is_empty() {
+    for cluster in cluster_positions {
+        max_x = max_x.max(cluster.x + cluster.width);
+        max_y = max_y.max(cluster.y + cluster.height);
+    }
+    if cluster_positions.is_empty() && !packages.is_empty() {
         max_x = max_x.max(pkg_total_w);
         max_y = max_y.max(title_h + MARGIN + pkg_total_h);
     }
@@ -2786,6 +2849,190 @@ fn render_packages_from_oracle(
         }
     }
     walk(packages, "", svg, oracle);
+}
+
+fn render_packages_from_layout(
+    packages: &[ComponentPackage],
+    svg: &mut SvgBuilder,
+    cluster_positions: &[ClusterPosition],
+) {
+    fn walk(
+        packages: &[ComponentPackage],
+        parent_path: &str,
+        svg: &mut SvgBuilder,
+        cluster_positions: &[ClusterPosition],
+        next_entity: &mut usize,
+    ) {
+        for pkg in packages {
+            let qname = if parent_path.is_empty() {
+                pkg.name.clone()
+            } else {
+                format!("{parent_path}.{}", pkg.name)
+            };
+            if let Some(pos) = cluster_positions.iter().find(|p| p.id == qname) {
+                emit_layout_package_cluster(svg, pkg, &qname, pos, *next_entity);
+                *next_entity += 1;
+            }
+            walk(&pkg.packages, &qname, svg, cluster_positions, next_entity);
+        }
+    }
+
+    let mut next_entity = 2;
+    walk(packages, "", svg, cluster_positions, &mut next_entity);
+}
+
+fn emit_layout_package_cluster(
+    svg: &mut SvgBuilder,
+    pkg: &ComponentPackage,
+    qname: &str,
+    pos: &ClusterPosition,
+    entity_num: usize,
+) {
+    let fill = pkg
+        .color
+        .as_deref()
+        .map(crate::sequence::resolve_color)
+        .unwrap_or_else(|| "none".to_string());
+    let source_attr = if pkg.source_line > 0 {
+        format!(r#" data-source-line="{}""#, pkg.source_line)
+    } else {
+        String::new()
+    };
+    svg.raw(&format!(
+        "<!--cluster {}-->",
+        fold_non_ascii(&pkg.name, '?')
+    ));
+    svg.raw(&format!(
+        r#"<g class="cluster" data-qualified-name="{}"{source_attr} id="ent{entity_num:04}">"#,
+        fold_non_ascii(qname, '.')
+    ));
+
+    match pkg.kind {
+        ComponentPackageKind::Package | ComponentPackageKind::Folder => {
+            emit_layout_package_path(svg, pos, &pkg.label, &fill);
+        }
+        ComponentPackageKind::Rectangle => {
+            emit_layout_rectangle_cluster(svg, pos, &pkg.label, &fill);
+        }
+        _ => {
+            emit_layout_rectangle_cluster(svg, pos, &pkg.label, &fill);
+        }
+    }
+
+    if let Some(stereo) = &pkg.stereotype {
+        let label = format!("\u{00AB}{stereo}\u{00BB}");
+        let mut text_buf = String::new();
+        text_render::emit_text(
+            &mut text_buf,
+            &label,
+            &TextBase {
+                x: pos.x + 4.0,
+                y: pos.y + pm::ascent(FONT_SIZE) + LINE_HEIGHT,
+                font_size: FONT_SIZE as u32,
+                font_family: "sans-serif",
+                fill: TEXT_COLOR,
+                bold: false,
+                italic: true,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        svg.raw(&text_buf);
+    }
+
+    svg.raw("</g>");
+}
+
+fn emit_layout_package_path(svg: &mut SvgBuilder, pos: &ClusterPosition, label: &str, fill: &str) {
+    // Java PlantUML builds component packages through
+    // `net.sourceforge.plantuml.svek.ClusterDotString.printInternal`: dot
+    // computes the cluster bbox, then the DESCRIPTION package shape is drawn as
+    // a folder-tab path around that bbox.
+    let label_w = text_render::measure(label, FONT_SIZE, true);
+    let x = pos.x;
+    let y = pos.y;
+    let right = pos.x + pos.width;
+    let bottom = pos.y + pos.height;
+    let tab_join = x + 3.5 + label_w;
+    let tab_right = x + 13.0 + label_w;
+    let line_y = y + LINE_HEIGHT + 6.0;
+    let d = format!(
+        "M{x25},{y_s} L{tab_join},{y_s} A3.75,3.75 0 0 1 {tab_join25},{y25} L{tab_right},{line_y} L{right25},{line_y} A2.5,2.5 0 0 1 {right_s},{line_y25} L{right_s},{bottom25} A2.5,2.5 0 0 1 {right25},{bottom_s} L{x25},{bottom_s} A2.5,2.5 0 0 1 {x_s},{bottom25} L{x_s},{y25} A2.5,2.5 0 0 1 {x25},{y_s}",
+        x25 = fc(x + 2.5),
+        y_s = fc(y),
+        tab_join = fc(tab_join),
+        tab_join25 = fc(tab_join + 2.5),
+        y25 = fc(y + 2.5),
+        tab_right = fc(tab_right),
+        line_y = fc(line_y),
+        right25 = fc(right - 2.5),
+        right_s = fc(right),
+        line_y25 = fc(line_y + 2.5),
+        bottom25 = fc(bottom - 2.5),
+        bottom_s = fc(bottom),
+        x_s = fc(x),
+    );
+    svg.raw(&format!(
+        r##"<path d="{d}" fill="{fill}" style="stroke:#000000;stroke-width:1.5;"/>"##
+    ));
+    svg.raw(&format!(
+        r##"<line style="stroke:#000000;stroke-width:1.5;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+        fc(x),
+        fc(tab_right),
+        fc(line_y),
+        fc(line_y),
+    ));
+
+    let mut text_buf = String::new();
+    text_render::emit_text(
+        &mut text_buf,
+        label,
+        &TextBase {
+            x: x + 4.0,
+            y: y + pm::ascent(FONT_SIZE),
+            font_size: FONT_SIZE as u32,
+            font_family: "sans-serif",
+            fill: TEXT_COLOR,
+            bold: true,
+            italic: false,
+            underline: false,
+            skip_underline: false,
+        },
+    );
+    svg.raw(&text_buf);
+}
+
+fn emit_layout_rectangle_cluster(
+    svg: &mut SvgBuilder,
+    pos: &ClusterPosition,
+    label: &str,
+    fill: &str,
+) {
+    svg.raw(&format!(
+        r#"<rect fill="{fill}" height="{}" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1;" width="{}" x="{}" y="{}"/>"#,
+        fc(pos.height),
+        fc(pos.width),
+        fc(pos.x),
+        fc(pos.y),
+    ));
+    let label_w = text_render::measure(label, FONT_SIZE, true);
+    let mut text_buf = String::new();
+    text_render::emit_text(
+        &mut text_buf,
+        label,
+        &TextBase {
+            x: pos.x + (pos.width - label_w) / 2.0,
+            y: pos.y + pm::ascent(FONT_SIZE),
+            font_size: FONT_SIZE as u32,
+            font_family: "sans-serif",
+            fill: TEXT_COLOR,
+            bold: true,
+            italic: false,
+            underline: false,
+            skip_underline: false,
+        },
+    );
+    svg.raw(&text_buf);
 }
 
 #[allow(clippy::only_used_in_recursion)]
