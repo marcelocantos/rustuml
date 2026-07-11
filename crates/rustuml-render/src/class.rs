@@ -3684,10 +3684,15 @@ fn render_entity_content(
     // `skinparam classBorderColor` recolours the body rect and compartment
     // separator strokes (but NOT the circled icon, which keeps PlantUML's
     // default #181818). Falls back to the default when unset.
-    let border_col = font
-        .border_color
+    let border_col = entity
+        .line_color
         .as_deref()
         .map(crate::sequence::resolve_color)
+        .or_else(|| {
+            font.border_color
+                .as_deref()
+                .map(crate::sequence::resolve_color)
+        })
         .unwrap_or_else(|| BORDER_COLOR.to_string());
     // Resolve the per-entity text colour from `#back:...;text:colour`
     // shorthand. When absent, PlantUML's class name follows
@@ -3739,7 +3744,18 @@ fn render_entity_content(
         icon: font.visibility_icon_geom(),
         visibility_stroke: visibility_stroke_owned.as_deref(),
     };
-    let style_default = format!("stroke:{};stroke-width:{};", border_col, BORDER_WIDTH);
+    // PlantUML `Colors.getSpecificLineStroke` applies the same explicit stroke
+    // to the body border and every compartment separator.
+    let style_default = match entity.line_style {
+        Some(EntityLineStyle::Bold) => format!("stroke:{border_col};stroke-width:2;"),
+        Some(EntityLineStyle::Dashed) => {
+            format!("stroke:{border_col};stroke-width:1;stroke-dasharray:7,7;")
+        }
+        Some(EntityLineStyle::Dotted) => {
+            format!("stroke:{border_col};stroke-width:1;stroke-dasharray:1,3;")
+        }
+        None => format!("stroke:{};stroke-width:{};", border_col, BORDER_WIDTH),
+    };
     let style = oracle_style.unwrap_or(style_default.as_str());
     let rx_str = oracle_rx.unwrap_or("2.5");
     let ry_str = oracle_ry.unwrap_or("2.5");
@@ -4384,11 +4400,10 @@ fn render_entity_content(
     // `style` (e.g. `class X #lightyellow;line:red;line.bold`), use it
     // verbatim for the field/method separator lines too. Java keeps the
     // separator strokes in sync with the entity border.
-    let default_sep_style = format!("stroke:{};stroke-width:{};", border_col, BORDER_WIDTH);
     let sep_style: &str = oracle_rect
         .and_then(|r| r.rect_style.as_deref())
         .filter(|_| !font.monochrome)
-        .unwrap_or(default_sep_style.as_str());
+        .unwrap_or(style_default.as_str());
 
     // Stereotype offset for separator and member positions.
     let stereo_shift = stereotype_header_extra_height(dim.stereotype_count);
@@ -7506,6 +7521,8 @@ mod tests {
                     url_tooltip: None,
                     color: None,
                     text_color: None,
+                    line_color: None,
+                    line_style: None,
                     source_line: 0,
                 },
                 ClassEntity {
@@ -7529,6 +7546,8 @@ mod tests {
                     url_tooltip: None,
                     color: None,
                     text_color: None,
+                    line_color: None,
+                    line_style: None,
                     source_line: 0,
                 },
             ],
@@ -7642,6 +7661,8 @@ mod tests {
                 url_tooltip: None,
                 color: None,
                 text_color: None,
+                line_color: None,
+                line_style: None,
                 source_line: 0,
             }],
             relationships: vec![],
@@ -7797,6 +7818,17 @@ mod tests {
     }
 
     #[test]
+    fn entity_color_channels_style_renamed_class_independently() {
+        let input = "@startuml\nclass Renamed #back:azure;line:#12ABEF;line.dashed;text:navy {\n  +field: String\n}\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(r##"<rect fill="#F0FFFF""##));
+        assert!(svg.contains(r##"style="stroke:#12ABEF;stroke-width:1;stroke-dasharray:7,7;""##));
+        assert!(svg.contains(r##"<text fill="#000080""##));
+    }
+
+    #[test]
     fn custom_spot_uses_arbitrary_character_outline() {
         let input = "@startuml\nclass Renamed << (G,#12ABEF) NewKind >>\n@enduml";
         let diagram = rustuml_parser::parse::parse(input).unwrap();
@@ -7856,6 +7888,8 @@ mod tests {
                 url_tooltip: None,
                 color: None,
                 text_color: None,
+                line_color: None,
+                line_style: None,
                 source_line: 0,
             }],
             relationships: vec![],

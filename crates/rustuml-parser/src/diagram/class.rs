@@ -108,9 +108,23 @@ pub struct ClassEntity {
     /// Optional text colour from `text:colour` shorthand.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub text_color: Option<String>,
+    /// Optional border colour from `line:colour` shorthand.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub line_color: Option<String>,
+    /// Optional border stroke from `line.bold`, `line.dashed`, or `line.dotted`.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub line_style: Option<EntityLineStyle>,
     /// 1-based line number within the `@startuml` block.
     #[serde(default)]
     pub source_line: usize,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub enum EntityLineStyle {
+    Bold,
+    Dashed,
+    Dotted,
 }
 
 /// The kind of entity in a class diagram.

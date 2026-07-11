@@ -275,6 +275,8 @@ mod tests {
             url_tooltip: None,
             color: None,
             text_color: None,
+            line_color: None,
+            line_style: None,
             source_line: 0,
         }
     }

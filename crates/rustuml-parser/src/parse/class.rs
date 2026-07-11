@@ -159,6 +159,8 @@ impl ClassParser {
                 url_tooltip: None,
                 color: None,
                 text_color: None,
+                line_color: None,
+                line_style: None,
                 source_line: self.current_line,
             });
         }
@@ -498,11 +500,7 @@ impl ClassParser {
                 .filter(|s| !s.is_empty())
                 .collect();
 
-            // Extract entity-level color (e.g., `#lightblue`, `#FF0000`)
-            static COLOR_RE: LazyLock<Regex> = LazyLock::new(|| {
-                Regex::new(r"(#[a-zA-Z0-9]+(?:[|/\\-]#?[a-zA-Z0-9]+)?)(?:\s|\{|;|$)").unwrap()
-            });
-            let entity_color = COLOR_RE.captures(line).map(|c| c[1].to_string());
+            let entity_colors = parse_entity_colors(line);
 
             // Handle namespace separation: split `com.example.MyClass` or `com::example::MyClass`
             // into package hierarchy + short entity name.  For default separator ".", we must
@@ -541,11 +539,17 @@ impl ClassParser {
                     entity.url = url.clone();
                     entity.url_tooltip = url_tooltip.clone();
                 }
-                if entity_color.is_some() {
-                    entity.color = entity_color.clone();
+                if entity_colors.back.is_some() {
+                    entity.color = entity_colors.back.clone();
                 }
-                if let Some(tc) = extract_text_color(line) {
-                    entity.text_color = Some(tc);
+                if entity_colors.text.is_some() {
+                    entity.text_color = entity_colors.text.clone();
+                }
+                if entity_colors.line.is_some() {
+                    entity.line_color = entity_colors.line.clone();
+                }
+                if entity_colors.line_style.is_some() {
+                    entity.line_style = entity_colors.line_style;
                 }
                 if generic.is_some() {
                     entity.generic = generic.clone();
@@ -562,8 +566,10 @@ impl ClassParser {
                     spot_character,
                     url: url.clone(),
                     url_tooltip: url_tooltip.clone(),
-                    color: entity_color.clone(),
-                    text_color: extract_text_color(line),
+                    color: entity_colors.back,
+                    text_color: entity_colors.text,
+                    line_color: entity_colors.line,
+                    line_style: entity_colors.line_style,
                     source_line: self.current_line,
                 });
             }
@@ -669,6 +675,8 @@ impl ClassParser {
                     url_tooltip: None,
                     color: None,
                     text_color: None,
+                    line_color: None,
+                    line_style: None,
                     source_line: self.current_line,
                 });
             }
@@ -857,6 +865,8 @@ impl ClassParser {
                     url_tooltip: None,
                     color: None,
                     text_color: None,
+                    line_color: None,
+                    line_style: None,
                     source_line: self.current_line,
                 });
             }
@@ -1132,6 +1142,8 @@ impl ClassParser {
                         url_tooltip: None,
                         color: None,
                         text_color: None,
+                        line_color: None,
+                        line_style: None,
                         source_line: self.current_line,
                     });
                 }
@@ -1595,13 +1607,64 @@ fn parse_endpoint_decor(s: &str) -> Option<EndpointDecor> {
     }
 }
 
-/// Extract `text:colour` from the entity shorthand
-/// `#back:colour;line:colour;line.bold;text:colour` (any order). Returns the
-/// raw colour token (e.g. `"blue"` or `"#FF0000"`) so the renderer can map it
-/// to a CSS-compatible `fill`.
-fn extract_text_color(line: &str) -> Option<String> {
-    static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"text:([#A-Za-z0-9]+)").unwrap());
-    RE.captures(line).map(|c| c[1].to_string())
+#[derive(Default)]
+struct ParsedEntityColors {
+    back: Option<String>,
+    line: Option<String>,
+    text: Option<String>,
+    line_style: Option<EntityLineStyle>,
+}
+
+/// Port of PlantUML `Colors(String, HColorSet, ColorType)`: split the entity
+/// color suffix on semicolons, route named channels independently, and retain
+/// the specific line stroke. The terminating-character check excludes custom
+/// spot colors inside `<< (X,#RRGGBB) Name >>`.
+fn parse_entity_colors(line: &str) -> ParsedEntityColors {
+    static RE: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r"#([A-Za-z0-9.:;|/\\#-]+)(?:\s|\{|$)").unwrap());
+    let Some(raw) = RE
+        .captures_iter(line)
+        .last()
+        .map(|caps| caps[1].replace('#', ""))
+    else {
+        return ParsedEntityColors::default();
+    };
+
+    let lower = raw.to_ascii_lowercase();
+    let line_style = if lower.contains("line.dashed") {
+        Some(EntityLineStyle::Dashed)
+    } else if lower.contains("line.dotted") {
+        Some(EntityLineStyle::Dotted)
+    } else if lower.contains("line.bold") {
+        Some(EntityLineStyle::Bold)
+    } else {
+        None
+    };
+    let mut colors = ParsedEntityColors {
+        line_style,
+        ..ParsedEntityColors::default()
+    };
+    for token in raw.split(';').filter(|token| !token.is_empty()) {
+        let Some((name, value)) = token.split_once(':') else {
+            if !token.contains('.') {
+                colors.back = Some(format!("#{token}"));
+            }
+            continue;
+        };
+        match name
+            .split('.')
+            .next()
+            .unwrap_or_default()
+            .to_ascii_lowercase()
+            .as_str()
+        {
+            "back" => colors.back = Some(value.to_string()),
+            "line" => colors.line = Some(value.to_string()),
+            "text" => colors.text = Some(value.to_string()),
+            _ => {}
+        }
+    }
+    colors
 }
 
 fn parse_member(s: &str) -> Member {
@@ -1934,6 +1997,16 @@ mod tests {
             assert_eq!(entity.spot_character, None);
             assert_eq!(entity.spot_color, None);
         }
+    }
+
+    #[test]
+    fn entity_color_channels_and_stroke_are_independent() {
+        let entity =
+            &parse("class Renamed #back:azure;line:#12ABEF;line.dashed;text:navy").entities[0];
+        assert_eq!(entity.color.as_deref(), Some("azure"));
+        assert_eq!(entity.line_color.as_deref(), Some("12ABEF"));
+        assert_eq!(entity.text_color.as_deref(), Some("navy"));
+        assert_eq!(entity.line_style, Some(EntityLineStyle::Dashed));
     }
 
     #[test]
