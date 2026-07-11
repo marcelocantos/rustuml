@@ -1318,6 +1318,10 @@ int place_portlabel(edge_t * e, bool head_p)
     splines *spl;
     pointf pe, pf;
 
+    const char *external = agget(e, "rustuml_external_endpoint_labels");
+    if (external && streq(external, "true"))
+	return 0;
+
     if (ED_edge_type(e) == IGNORED)
 	return 0;
     /* add label here only if labelangle or labeldistance is defined; else, use external label */
@@ -1372,4 +1376,3 @@ splines *getsplinepoints(edge_t * e)
 	    agnameof(agtail(e)), agnameof(aghead(e)));
     return sp;
 }
-

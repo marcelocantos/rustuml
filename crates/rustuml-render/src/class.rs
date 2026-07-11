@@ -15,7 +15,9 @@
 use std::collections::HashMap;
 use std::fmt::Write;
 
-use rustuml_layout::graph::{ClusterPosition, Direction, EdgePath, LayoutGraph, NodePosition};
+use rustuml_layout::graph::{
+    ClusterPosition, Direction, EdgeLabelSize, EdgePath, LayoutGraph, NodePosition,
+};
 use rustuml_parser::diagram::SpriteData;
 use rustuml_parser::diagram::class::*;
 
@@ -112,6 +114,11 @@ const VIS_ICON_ANGLED_HALF: f64 = 4.0;
 const VIS_ICON_SIZE_RADIUS_DIVISOR: u32 = 3;
 /// Diamond/triangle horizontal half-size is one pixel inside half the icon box.
 const VIS_ICON_ANGLED_INSET: f64 = 1.0;
+/// PlantUML draws angled class-member visibility glyphs one pixel above the
+/// round/square icon center. This follows the `USymbol` polygon coordinates
+/// used for protected/package member markers after `classAttributeIconSize`
+/// sizing, while public/private icons remain centered on the member baseline.
+const VIS_ICON_ANGLED_CENTER_BIAS: f64 = 1.0;
 /// Right padding for header (icon + name) area.
 const HEADER_RIGHT_PAD: f64 = 3.0;
 /// Right padding for member text area.
@@ -174,6 +181,63 @@ const TITLE_HEIGHT: f64 = TITLE_FONT_SIZE + 10.0;
 /// Left + right body margins added to the entity rect extent to form the body
 /// block width (`dimOriginal`): 7px left + 8px right.
 const BODY_DECORATION_MARGIN: f64 = 15.0;
+/// Java SVEK `ExtremityExtends` draws the inheritance triangle with an 18px
+/// length from contact tip to base centre and 12px base width, oriented by the
+/// edge tangent.
+const EXTENDS_TRIANGLE_LENGTH: f64 = 18.0;
+const EXTENDS_TRIANGLE_HALF_WIDTH: f64 = 6.0;
+/// Java SVEK diamond extremities (`ExtremityDiamond`) occupy 12px along the
+/// edge tangent with a 4px half-width.
+const DIAMOND_DECORATION_LENGTH: f64 = 12.0;
+const DIAMOND_DECORATION_HALF_WIDTH: f64 = 4.0;
+/// Java SVEK `ExtremityArrow.getDecorationLength()` returns 6px; the filled
+/// arrow polygon itself reaches 9px back from the contact.
+const ARROW_DECORATION_LENGTH: f64 = 6.0;
+const ARROW_POLYGON_LENGTH: f64 = 9.0;
+const ARROW_NOTCH_LENGTH: f64 = 5.0;
+const ARROW_POLYGON_HALF_WIDTH: f64 = 4.0;
+/// Java `SvekEdge` measures relationship, cardinality, and role labels with the
+/// arrow font before passing fixed-size HTML-table placeholders to Graphviz.
+const RELATIONSHIP_LABEL_FONT_SIZE: f64 = 13.0;
+const RELATIONSHIP_LABEL_MARGIN_X: f64 = 1.0;
+/// Standalone center/endpoint tables contribute a one-pixel outer edge.
+/// When endpoint roles share a corridor with a center label, Smetana also
+/// applies the default 2px cell padding on each side (5px total chrome).
+const RELATIONSHIP_CENTER_TABLE_EDGE: f64 = 1.0;
+const RELATIONSHIP_ENDPOINT_TABLE_EDGE: f64 = 1.0;
+const COMBINED_ENDPOINT_TABLE_CHROME: f64 = 5.0;
+const RELATIONSHIP_TABLE_HEIGHT_EDGES: f64 = 2.0;
+/// Java `TextBlockArrow2` reserves one font-size square before the label. Its
+/// triangle size is `(int)(fontSize * .80)`, hence 10px at the 13px arrow font.
+const LINK_ARROW_BLOCK_SIZE: f64 = RELATIONSHIP_LABEL_FONT_SIZE;
+const LINK_ARROW_TRIANGLE_SIZE: f64 = 10.0;
+/// Extracted from the Smetana edge-label metrics matrix (aggregation,
+/// dependency, inheritance; both directions): center-label baselines sit one
+/// quarter pixel above the raw dot control-point convention.
+const RELATIONSHIP_LABEL_BASELINE_BIAS: f64 = 0.25;
+/// The same matrix shows Smetana's endpoint anchor solver advancing one eighth
+/// pixel beyond the measured text-block height along the local tangent.
+const ENDPOINT_LABEL_ANCHOR_BIAS: f64 = 0.125;
+/// Smetana `placeLabels` rounds tail/head external-label x anchors
+/// asymmetrically. Values are extracted across the arrowhead multiplicity
+/// matrix, including reversed links.
+const ENDPOINT_TAIL_LABEL_X_BIAS: f64 = 0.05;
+const ENDPOINT_HEAD_LABEL_X_BIAS: f64 = 0.25;
+/// When a middle label shares the corridor with endpoint roles, Smetana's
+/// collision pass moves the tail anchor outward by a quarter pixel and the
+/// head anchor inward by 0.16px. Extracted across all 16 role fixtures.
+const COMBINED_TAIL_LABEL_ANCHOR_BIAS: f64 = -0.25;
+const COMBINED_HEAD_LABEL_ANCHOR_BIAS: f64 = 0.16;
+/// Extracted across the role matrix: Smetana's combined head-role box rounds
+/// 0.087px left of the integer external-label envelope.
+const COMBINED_HEAD_LABEL_X_BIAS: f64 = -0.087;
+/// `SvekResult.drawU` normalises a label-bearing SVEK envelope at x=6 rather
+/// than the ordinary entity margin at x=7.
+const SVEK_LABEL_ENVELOPE_MARGIN: f64 = 6.0;
+/// With the full Smetana center-table chrome, the combined center/endpoint
+/// label matrix solves 2.2162px to the right of Java's final SVEK envelope.
+/// This normalization is extracted across all relationship kinds/directions.
+const COMBINED_LABEL_LAYOUT_X_BIAS: f64 = -2.2162;
 /// document.title style: Padding 5 + Margin 5 on each side.
 const DECORATION_TITLE_INSET: f64 = 10.0;
 /// document.caption style: Padding 0 + Margin 1 on each side.
@@ -1530,6 +1594,7 @@ pub fn render_with_oracle(
             &node_positions,
             &[],
             &edge_paths,
+            None,
             canvas_dims,
             Some(&oracle_entities),
             Some(oracle),
@@ -1562,7 +1627,51 @@ pub fn render_with_oracle(
         }
     }
     for rel in &diagram.relationships {
-        layout.add_edge(&rel.from, &rel.to, rel.label.as_deref());
+        let has_center_label = relationship_has_center_label(rel);
+        let label_size = has_center_label.then(|| EdgeLabelSize {
+            width: rel
+                .label
+                .as_deref()
+                .map(|label| text_render::measure(label, RELATIONSHIP_LABEL_FONT_SIZE, false))
+                .unwrap_or(0.0)
+                + if rel.label_arrow == LinkArrow::None {
+                    0.0
+                } else {
+                    LINK_ARROW_BLOCK_SIZE
+                }
+                + 2.0 * RELATIONSHIP_LABEL_MARGIN_X
+                + RELATIONSHIP_CENTER_TABLE_EDGE,
+            height: (rel
+                .label
+                .as_deref()
+                .map(|label| text_render::label_height(label, RELATIONSHIP_LABEL_FONT_SIZE))
+                .unwrap_or(0.0)
+                .max(LINK_ARROW_BLOCK_SIZE)
+                + RELATIONSHIP_TABLE_HEIGHT_EDGES)
+                .floor(),
+        });
+        let endpoint_table_chrome = if has_center_label {
+            COMBINED_ENDPOINT_TABLE_CHROME
+        } else {
+            RELATIONSHIP_ENDPOINT_TABLE_EDGE
+        };
+        let endpoint_size = |label: Option<&str>| {
+            label.map(|label| EdgeLabelSize {
+                width: (text_render::measure(label, RELATIONSHIP_LABEL_FONT_SIZE, false)
+                    + endpoint_table_chrome)
+                    .floor(),
+                height: (text_render::label_height(label, RELATIONSHIP_LABEL_FONT_SIZE)
+                    + RELATIONSHIP_TABLE_HEIGHT_EDGES)
+                    .floor(),
+            })
+        };
+        layout.add_edge_with_label_sizes(
+            &rel.from,
+            &rel.to,
+            label_size,
+            endpoint_size(rel.from_multiplicity.as_deref()),
+            endpoint_size(rel.to_multiplicity.as_deref()),
+        );
     }
 
     let mut result = match layout.layout_full(std::time::Duration::from_secs(5)) {
@@ -1585,6 +1694,7 @@ pub fn render_with_oracle(
         &result.node_positions,
         &result.cluster_positions,
         &result.edge_paths,
+        Some((result.width, result.height)),
         None,
         None,
         None,
@@ -2375,6 +2485,7 @@ fn render_plantuml_svg(
     positions: &[rustuml_layout::graph::NodePosition],
     cluster_positions: &[ClusterPosition],
     edge_paths: &[EdgePath],
+    layout_extent: Option<(f64, f64)>,
     canvas_override: Option<(f64, f64)>,
     oracle_entities: Option<&[Option<OracleEntity>]>,
     oracle: Option<&OracleLayout>,
@@ -2400,9 +2511,16 @@ fn render_plantuml_svg(
         .filter_map(|sp| sp.value.trim().parse::<f64>().ok())
         .next_back();
 
+    let layout_x_bias = combined_label_layout_x_bias(diagram);
+
     // Compute entity positions (offset from layout).
     let entity_positions: Vec<(f64, f64)> = (0..diagram.entities.len())
-        .map(|i| (positions[i].x + MARGIN, positions[i].y + MARGIN))
+        .map(|i| {
+            (
+                positions[i].x + MARGIN + layout_x_bias,
+                positions[i].y + MARGIN,
+            )
+        })
         .collect();
 
     // Compute canvas dimensions.
@@ -2419,11 +2537,55 @@ fn render_plantuml_svg(
             max_x = max_x.max(cluster.x + MARGIN + cluster.width);
             max_y = max_y.max(cluster.y + MARGIN + cluster.height);
         }
+        if let Some((width, height)) = layout_extent {
+            max_x = max_x.max(width + layout_x_bias);
+            max_y = max_y.max(height);
+        }
+        for edge in edge_paths {
+            for label in [edge.tail_label, edge.head_label].into_iter().flatten() {
+                max_x = max_x.max(label.x + MARGIN + label.width);
+                max_y = max_y.max(label.y + MARGIN + label.height);
+            }
+        }
+        for relationship in &diagram.relationships {
+            if !relationship_has_center_label(relationship) {
+                continue;
+            }
+            let Some(edge) = edge_paths
+                .iter()
+                .find(|edge| edge.from == relationship.from && edge.to == relationship.to)
+            else {
+                continue;
+            };
+            let (x, _) = edge_midpoint(&edge.points);
+            let text_width = relationship
+                .label
+                .as_deref()
+                .map(|label| text_render::measure(label, RELATIONSHIP_LABEL_FONT_SIZE, false))
+                .unwrap_or(0.0);
+            let arrow_width = if relationship.label_arrow == LinkArrow::None {
+                0.0
+            } else {
+                LINK_ARROW_BLOCK_SIZE
+            };
+            max_x = max_x.max(
+                x + MARGIN
+                    + layout_x_bias
+                    + 2.0 * RELATIONSHIP_LABEL_MARGIN_X
+                    + arrow_width
+                    + text_width,
+            );
+        }
         // PlantUML formula: floor(max_extent) + 13 (= MARGIN + 6) for
-        // single-entity bodies. Package clusters follow the SVEK cluster body
-        // envelope and keep a 15px trailing extent.
+        // standalone entity bodies. Once SVEK links or clusters participate,
+        // Java `SvekResult.drawU` sizes from the full SVEK body envelope and
+        // keeps the same 15px trailing extent used by package cluster bodies.
         let extent_pad = if cluster_positions.is_empty() {
-            13
+            if diagram.relationships.is_empty() {
+                13
+            } else {
+                PACKAGE_CANVAS_EXTENT_PAD
+            }
         } else {
             PACKAGE_CANVAS_EXTENT_PAD
         };
@@ -3693,7 +3855,6 @@ fn render_entity_content(
     let header_positions = (!dim.hide.circle
         && !suppress_header_icon
         && !is_object_entity
-        && !dim.has_stereotypes
         && entity.generic.is_none())
     .then(|| class_header_positions(x, dim.width, icon_radius, name_tl));
     let icon_cx = icon_cx_override.unwrap_or_else(|| {
@@ -3850,10 +4011,21 @@ fn render_entity_content(
             .iter()
             .enumerate()
         {
+            let stereo_tl = round_4dp(text_render::measure_with_family(
+                stereo_text,
+                12.0,
+                false,
+                &font.name_family,
+            ));
             let stereo_x = oracle_rect
                 .and_then(|r| r.text_x_values.get(i).copied())
                 .or(name_text_x_override)
-                .unwrap_or(icon_cx + ICON_RX + ICON_TEXT_GAP);
+                .unwrap_or_else(|| {
+                    header_positions
+                        .as_ref()
+                        .map(|p| p.name_x + (round_4dp(name_tl) - stereo_tl) / 2.0)
+                        .unwrap_or(icon_cx + ICON_RX + ICON_TEXT_GAP)
+                });
             let stereo_y = oracle_rect
                 .and_then(|r| r.text_y_values.get(i).copied())
                 .unwrap_or(y + STEREOTYPE_Y_OFFSET + i as f64 * STEREOTYPE_LINE_HEIGHT);
@@ -3911,7 +4083,10 @@ fn render_entity_content(
             let text_center = oracle_x + stereo_tl / 2.0;
             text_center - name_tl_r / 2.0
         } else {
-            icon_cx + ICON_RX + ICON_TEXT_GAP
+            header_positions
+                .as_ref()
+                .map(|p| p.name_x)
+                .unwrap_or(icon_cx + ICON_RX + ICON_TEXT_GAP)
         }
     } else if dim.hide.circle {
         // With the icon hidden the name is centred inside the rectangle.
@@ -5329,15 +5504,16 @@ fn render_member_line(
                         VIS_PROTECTED_FILL_FIELD
                     };
                     let stroke = attr_font.visibility_stroke.unwrap_or(VIS_PROTECTED_STROKE);
+                    let angled_cy = icon_cy - VIS_ICON_ANGLED_CENTER_BIAS;
                     // Diamond icon (4 points).
                     write!(
                         svg,
                         r#"<polygon fill="{}" points="{},{},{},{},{},{},{},{}" style="stroke:{};stroke-width:{};"/>"#,
                         fill,
-                        fmt4(vis_cx), fmt_tl(icon_cy - icon.angled_half),
-                        fmt4(vis_cx + icon.angled_half), fmt_tl(icon_cy),
-                        fmt4(vis_cx), fmt_tl(icon_cy + icon.angled_half),
-                        fmt4(vis_cx - icon.angled_half), fmt_tl(icon_cy),
+                        fmt4(vis_cx), fmt_tl(angled_cy - icon.angled_half),
+                        fmt4(vis_cx + icon.angled_half), fmt_tl(angled_cy),
+                        fmt4(vis_cx), fmt_tl(angled_cy + icon.angled_half),
+                        fmt4(vis_cx - icon.angled_half), fmt_tl(angled_cy),
                         stroke, ICON_STROKE_WIDTH,
                     )
                     .unwrap();
@@ -5349,6 +5525,7 @@ fn render_member_line(
                         VIS_PACKAGE_FILL_FIELD
                     };
                     let stroke = attr_font.visibility_stroke.unwrap_or(VIS_PACKAGE_STROKE);
+                    let angled_cy = icon_cy - VIS_ICON_ANGLED_CENTER_BIAS;
                     // Triangle icon (3 points, pointing up). icon_cy is the bbox
                     // centre; the triangle spans symmetrically vertically so that
                     // its centre coincides with the oracle-supplied polygon centre.
@@ -5356,9 +5533,9 @@ fn render_member_line(
                         svg,
                         r#"<polygon fill="{}" points="{},{},{},{},{},{}" style="stroke:{};stroke-width:{};"/>"#,
                         fill,
-                        fmt4(vis_cx), fmt_tl(icon_cy - icon.triangle_half_y),
-                        fmt4(vis_cx - icon.angled_half), fmt_tl(icon_cy + icon.triangle_half_y),
-                        fmt4(vis_cx + icon.angled_half), fmt_tl(icon_cy + icon.triangle_half_y),
+                        fmt4(vis_cx), fmt_tl(angled_cy - icon.triangle_half_y),
+                        fmt4(vis_cx - icon.angled_half), fmt_tl(angled_cy + icon.triangle_half_y),
+                        fmt4(vis_cx + icon.angled_half), fmt_tl(angled_cy + icon.triangle_half_y),
                         stroke, ICON_STROKE_WIDTH,
                     )
                     .unwrap();
@@ -6140,10 +6317,9 @@ fn render_relationship_svg(
         }
     };
 
-    let is_reverse = matches!(
-        rel.kind,
-        RelationshipKind::Inheritance | RelationshipKind::Implementation
-    );
+    let decorates_from = relationship_decorates_from(rel);
+    let decorates_to = relationship_decorates_to(rel);
+    let is_reverse = decorates_from && !decorates_to;
 
     // HTML comment.
     if is_reverse {
@@ -6168,13 +6344,31 @@ fn render_relationship_svg(
         ""
     };
 
-    let path_points = shortened_endpoint_points(
-        &edge_path.points,
+    let layout_x_bias = combined_label_layout_x_bias(diagram);
+    let edge_points: Vec<(f64, f64)> = edge_path
+        .points
+        .iter()
+        .map(|(x, y)| (x + MARGIN + layout_x_bias, y + MARGIN))
+        .collect();
+    let start_decoration_len = if decorates_from {
+        relationship_decoration_length(rel.kind)
+    } else {
+        0.0
+    };
+    let start_decoration_len = start_decoration_len.max(
         rel.from_decor
             .map(endpoint_decoration_length)
             .unwrap_or(0.0),
-        rel.to_decor.map(endpoint_decoration_length).unwrap_or(0.0),
     );
+    let end_decoration_len = if decorates_to {
+        relationship_decoration_length(rel.kind)
+    } else {
+        0.0
+    };
+    let end_decoration_len =
+        end_decoration_len.max(rel.to_decor.map(endpoint_decoration_length).unwrap_or(0.0));
+    let path_points =
+        shortened_endpoint_points(&edge_points, start_decoration_len, end_decoration_len);
 
     // Build cubic bezier path.
     let mut d = format!("M{},{}", fmt4(path_points[0].0), fmt4(path_points[0].1));
@@ -6197,6 +6391,7 @@ fn render_relationship_svg(
     let path_id = if rel.from_decor.is_some()
         || rel.to_decor.is_some()
         || matches!(rel.kind, RelationshipKind::Association)
+        || (decorates_from && decorates_to)
     {
         format!("{}-{}", rel.from, rel.to)
     } else if is_reverse {
@@ -6225,91 +6420,54 @@ fn render_relationship_svg(
     // `Extremity.getDecorationLength()`. Keep those two coordinate streams
     // separate here: `path_points` feeds the `<path d=...>`, while endpoint
     // decorations use the unshortened Graphviz contacts.
-    emit_no_oracle_endpoint_decor(svg, rel.from_decor, &edge_path.points, true);
-    emit_no_oracle_endpoint_decor(svg, rel.to_decor, &edge_path.points, false);
+    emit_no_oracle_endpoint_decor(svg, rel.from_decor, &edge_points, true);
+    emit_no_oracle_endpoint_decor(svg, rel.to_decor, &edge_points, false);
 
     // Arrowhead.
     match rel.kind {
         RelationshipKind::Inheritance | RelationshipKind::Implementation => {
-            // Hollow triangle at the source end.
-            if path_points.len() >= 2 {
-                let tip = path_points[0];
-                let _next = path_points[1];
-                // Triangle pointing up (toward source).
-                write!(
-                    svg,
-                    r#"<polygon fill="none" points="{},{},{},{},{},{},{},{}" style="stroke:{};stroke-width:1;"/>"#,
-                    fmt4(tip.0), fmt4(tip.1),
-                    fmt4(tip.0 - 6.0), fmt4(tip.1 + 18.0),
-                    fmt4(tip.0 + 6.0), fmt4(tip.1 + 18.0),
-                    fmt4(tip.0), fmt4(tip.1),
-                    BORDER_COLOR,
-                )
-                .unwrap();
-            }
+            emit_extends_triangle(svg, &edge_points, true, decorates_from);
+            emit_extends_triangle(svg, &edge_points, false, decorates_to);
         }
         RelationshipKind::Dependency => {
-            // Filled arrowhead at target.
-            if let Some(&tip) = path_points.last() {
-                write!(
-                    svg,
-                    r#"<polygon fill="{}" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{};stroke-width:1;"/>"#,
-                    BORDER_COLOR,
-                    fmt4(tip.0), fmt4(tip.1),
-                    fmt4(tip.0 + 4.0), fmt4(tip.1 - 9.0),
-                    fmt4(tip.0), fmt4(tip.1 - 5.0),
-                    fmt4(tip.0 - 4.0), fmt4(tip.1 - 9.0),
-                    fmt4(tip.0), fmt4(tip.1),
-                    BORDER_COLOR,
-                )
-                .unwrap();
-            }
+            emit_dependency_arrow(svg, &edge_points, true, decorates_from);
+            emit_dependency_arrow(svg, &edge_points, false, decorates_to);
         }
         RelationshipKind::Composition => {
-            // Filled diamond at source.
-            let tip = path_points[0];
-            write!(
-                svg,
-                r#"<polygon fill="{}" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{};stroke-width:1;"/>"#,
-                BORDER_COLOR,
-                fmt4(tip.0), fmt4(tip.1),
-                fmt4(tip.0 - 4.0), fmt4(tip.1 + 6.0),
-                fmt4(tip.0), fmt4(tip.1 + 12.0),
-                fmt4(tip.0 + 4.0), fmt4(tip.1 + 6.0),
-                fmt4(tip.0), fmt4(tip.1),
-                BORDER_COLOR,
-            )
-            .unwrap();
+            emit_diamond_extremity(svg, &edge_points, BORDER_COLOR, true, decorates_from);
+            emit_diamond_extremity(svg, &edge_points, BORDER_COLOR, false, decorates_to);
         }
         RelationshipKind::Aggregation => {
-            // Hollow diamond at source.
-            let tip = path_points[0];
-            write!(
-                svg,
-                r#"<polygon fill="none" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{};stroke-width:1;"/>"#,
-                fmt4(tip.0), fmt4(tip.1),
-                fmt4(tip.0 - 4.0), fmt4(tip.1 + 6.0),
-                fmt4(tip.0), fmt4(tip.1 + 12.0),
-                fmt4(tip.0 + 4.0), fmt4(tip.1 + 6.0),
-                fmt4(tip.0), fmt4(tip.1),
-                BORDER_COLOR,
-            )
-            .unwrap();
+            emit_diamond_extremity(svg, &edge_points, "none", true, decorates_from);
+            emit_diamond_extremity(svg, &edge_points, "none", false, decorates_to);
         }
         RelationshipKind::Association => {
             // No arrowhead.
         }
     }
 
-    if let Some(label) = rel.label.as_deref() {
-        let (x, y) = edge_midpoint(&edge_path.points);
+    let emit_label = |svg: &mut String,
+                      label: &str,
+                      position: Option<rustuml_layout::graph::EdgeLabelPosition>,
+                      horizontal_margin: f64,
+                      fallback: (f64, f64)| {
+        let (x, y) = position
+            .map(|position| {
+                (
+                    position.x + MARGIN + horizontal_margin,
+                    position.y
+                        + MARGIN
+                        + text_render::label_ascent(label, RELATIONSHIP_LABEL_FONT_SIZE),
+                )
+            })
+            .unwrap_or(fallback);
         text_render::emit_text(
             svg,
             label.trim_matches('"'),
             &TextBase {
-                x: x + 1.0,
-                y: y - 4.0,
-                font_size: 13,
+                x,
+                y,
+                font_size: RELATIONSHIP_LABEL_FONT_SIZE as u32,
                 font_family: "sans-serif",
                 fill: "#000000",
                 bold: false,
@@ -6318,9 +6476,306 @@ fn render_relationship_svg(
                 skip_underline: false,
             },
         );
+    };
+
+    if relationship_has_center_label(rel) {
+        let (x, y) = edge_midpoint(&edge_path.points);
+        let label_x = x + MARGIN + layout_x_bias + RELATIONSHIP_LABEL_MARGIN_X;
+        let label_baseline = y - 4.0 - RELATIONSHIP_LABEL_BASELINE_BIAS;
+        if rel.label_arrow != LinkArrow::None {
+            let block_top = rel
+                .label
+                .as_deref()
+                .map(|label| {
+                    label_baseline - text_render::label_ascent(label, RELATIONSHIP_LABEL_FONT_SIZE)
+                        + (text_render::label_height(label, RELATIONSHIP_LABEL_FONT_SIZE)
+                            - LINK_ARROW_BLOCK_SIZE)
+                            / 2.0
+                })
+                .unwrap_or(label_baseline - LINK_ARROW_BLOCK_SIZE);
+            emit_link_arrow(
+                svg,
+                rel.label_arrow,
+                &edge_points,
+                label_x - RELATIONSHIP_LABEL_MARGIN_X,
+                block_top,
+            );
+        }
+        if let Some(label) = rel.label.as_deref() {
+            emit_label(
+                svg,
+                label,
+                None,
+                RELATIONSHIP_LABEL_MARGIN_X,
+                (
+                    label_x
+                        + if rel.label_arrow == LinkArrow::None {
+                            0.0
+                        } else {
+                            LINK_ARROW_BLOCK_SIZE
+                        },
+                    label_baseline,
+                ),
+            );
+        }
+    }
+    // Smetana's `postproc__c.addXLabels` hands endpoint labels to
+    // `placeLabels` with the spline contacts as anchors. In the unobstructed
+    // corridor, each label center advances one measured text-block height
+    // inward along the local edge tangent.
+    if let Some(label) = rel.from_multiplicity.as_deref() {
+        let label_height = text_render::label_height(label, RELATIONSHIP_LABEL_FONT_SIZE);
+        let combined_labels = relationship_has_center_label(rel);
+        let anchor_offset = label_height
+            + if combined_labels {
+                COMBINED_TAIL_LABEL_ANCHOR_BIAS
+            } else {
+                ENDPOINT_LABEL_ANCHOR_BIAS
+            };
+        let center = edge_points
+            .first()
+            .zip(edge_points.get(1))
+            .map(|(&start, &next)| add(start, scale(unit_vector(start, next), anchor_offset)))
+            .unwrap_or((0.0, 0.0));
+        let fallback_x = edge_points.first().map(|point| point.0).unwrap_or(0.0);
+        let x = edge_path
+            .tail_label
+            .map(|position| {
+                position.x
+                    + if combined_labels {
+                        SVEK_LABEL_ENVELOPE_MARGIN
+                    } else {
+                        MARGIN + ENDPOINT_TAIL_LABEL_X_BIAS
+                    }
+            })
+            .unwrap_or(fallback_x);
+        let y = center.1 - label_height / 2.0
+            + text_render::label_ascent(label, RELATIONSHIP_LABEL_FONT_SIZE);
+        emit_label(svg, label, None, 0.0, (x, y));
+    }
+    if let Some(label) = rel.to_multiplicity.as_deref() {
+        let label_height = text_render::label_height(label, RELATIONSHIP_LABEL_FONT_SIZE);
+        let combined_labels = relationship_has_center_label(rel);
+        let anchor_offset = label_height
+            + if combined_labels {
+                COMBINED_HEAD_LABEL_ANCHOR_BIAS
+            } else {
+                ENDPOINT_LABEL_ANCHOR_BIAS
+            };
+        let center = edge_points
+            .last()
+            .zip(edge_points.iter().rev().nth(1))
+            .map(|(&end, &previous)| add(end, scale(unit_vector(end, previous), anchor_offset)))
+            .unwrap_or((0.0, 0.0));
+        let fallback_x = edge_points.last().map(|point| point.0).unwrap_or(0.0);
+        let x = edge_path
+            .head_label
+            .map(|position| {
+                position.x
+                    + if combined_labels {
+                        SVEK_LABEL_ENVELOPE_MARGIN + COMBINED_HEAD_LABEL_X_BIAS
+                    } else {
+                        MARGIN + ENDPOINT_HEAD_LABEL_X_BIAS
+                    }
+            })
+            .unwrap_or(fallback_x);
+        let y = center.1 - label_height / 2.0
+            + text_render::label_ascent(label, RELATIONSHIP_LABEL_FONT_SIZE);
+        emit_label(svg, label, None, 0.0, (x, y));
     }
 
     svg.push_str("</g>");
+}
+
+fn relationship_decorates_from(rel: &Relationship) -> bool {
+    matches!(
+        rel.decorated_end,
+        RelationshipEnd::From | RelationshipEnd::Both
+    ) || (rel.decorated_end == RelationshipEnd::None
+        && matches!(
+            rel.kind,
+            RelationshipKind::Inheritance
+                | RelationshipKind::Implementation
+                | RelationshipKind::Composition
+                | RelationshipKind::Aggregation
+        ))
+}
+
+fn relationship_decorates_to(rel: &Relationship) -> bool {
+    matches!(
+        rel.decorated_end,
+        RelationshipEnd::To | RelationshipEnd::Both
+    ) || (rel.decorated_end == RelationshipEnd::None
+        && matches!(rel.kind, RelationshipKind::Dependency))
+}
+
+fn relationship_decoration_length(kind: RelationshipKind) -> f64 {
+    match kind {
+        RelationshipKind::Inheritance | RelationshipKind::Implementation => EXTENDS_TRIANGLE_LENGTH,
+        RelationshipKind::Composition | RelationshipKind::Aggregation => DIAMOND_DECORATION_LENGTH,
+        RelationshipKind::Dependency => ARROW_DECORATION_LENGTH,
+        RelationshipKind::Association => 0.0,
+    }
+}
+
+fn endpoint_tangent(
+    edge_points: &[(f64, f64)],
+    at_start: bool,
+) -> Option<((f64, f64), (f64, f64))> {
+    if edge_points.len() < 2 {
+        return None;
+    }
+    if at_start {
+        Some((edge_points[0], unit_vector(edge_points[0], edge_points[1])))
+    } else {
+        let last = edge_points.len() - 1;
+        Some((
+            edge_points[last],
+            unit_vector(edge_points[last], edge_points[last - 1]),
+        ))
+    }
+}
+
+fn emit_link_arrow(svg: &mut String, arrow: LinkArrow, edge_points: &[(f64, f64)], x: f64, y: f64) {
+    let Some((&start, &end)) = edge_points.first().zip(edge_points.last()) else {
+        return;
+    };
+    let mut direction = unit_vector(start, end);
+    if arrow == LinkArrow::Backward {
+        direction = scale(direction, -1.0);
+    }
+
+    // `TextBlockArrow2.drawU`: translate by (triSize/2, fontSize/2), then
+    // sample the guide angle at 0 and +/- 4*pi/5 radians.
+    let radius = LINK_ARROW_TRIANGLE_SIZE / 2.0;
+    let center = (x + radius, y + RELATIONSHIP_LABEL_FONT_SIZE / 2.0);
+    let beta = std::f64::consts::PI * 4.0 / 5.0;
+    let rotated = |angle: f64| {
+        (
+            direction.0 * angle.cos() + direction.1 * angle.sin(),
+            direction.1 * angle.cos() - direction.0 * angle.sin(),
+        )
+    };
+    let tip = add(center, scale(direction, radius));
+    let side_a = add(center, scale(rotated(beta), radius));
+    let side_b = add(center, scale(rotated(-beta), radius));
+    write!(
+        svg,
+        r##"<polygon fill="#000000" points="{},{},{},{},{},{},{},{}" style="stroke:#000000;stroke-width:1;"/>"##,
+        fmt4(tip.0),
+        fmt4(tip.1),
+        fmt4(side_a.0),
+        fmt4(side_a.1),
+        fmt4(side_b.0),
+        fmt4(side_b.1),
+        fmt4(tip.0),
+        fmt4(tip.1),
+    )
+    .unwrap();
+}
+
+fn emit_extends_triangle(
+    svg: &mut String,
+    edge_points: &[(f64, f64)],
+    at_start: bool,
+    enabled: bool,
+) {
+    if !enabled {
+        return;
+    }
+    let Some((tip, inside)) = endpoint_tangent(edge_points, at_start) else {
+        return;
+    };
+    // Java SVEK `SvekEdge.getExtremitySimplier` anchors `ExtremityExtends`
+    // at the original dot contact and shortens the visible `dotPath` by the
+    // triangle height.
+    let base_center = add(tip, scale(inside, EXTENDS_TRIANGLE_LENGTH));
+    let perp = (-inside.1, inside.0);
+    let base_a = add(base_center, scale(perp, EXTENDS_TRIANGLE_HALF_WIDTH));
+    let base_b = add(base_center, scale(perp, -EXTENDS_TRIANGLE_HALF_WIDTH));
+    write!(
+        svg,
+        r#"<polygon fill="none" points="{},{},{},{},{},{},{},{}" style="stroke:{};stroke-width:1;"/>"#,
+        fmt4(tip.0), fmt4(tip.1),
+        fmt4(base_a.0), fmt4(base_a.1),
+        fmt4(base_b.0), fmt4(base_b.1),
+        fmt4(tip.0), fmt4(tip.1),
+        BORDER_COLOR,
+    )
+    .unwrap();
+}
+
+fn emit_dependency_arrow(
+    svg: &mut String,
+    edge_points: &[(f64, f64)],
+    at_start: bool,
+    enabled: bool,
+) {
+    if !enabled {
+        return;
+    }
+    let Some((tip, inside)) = endpoint_tangent(edge_points, at_start) else {
+        return;
+    };
+    let perp = (-inside.1, inside.0);
+    let side_a = add(
+        add(tip, scale(inside, ARROW_POLYGON_LENGTH)),
+        scale(perp, ARROW_POLYGON_HALF_WIDTH),
+    );
+    let notch = add(tip, scale(inside, ARROW_NOTCH_LENGTH));
+    let side_b = add(
+        add(tip, scale(inside, ARROW_POLYGON_LENGTH)),
+        scale(perp, -ARROW_POLYGON_HALF_WIDTH),
+    );
+    write!(
+        svg,
+        r#"<polygon fill="{}" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{};stroke-width:1;"/>"#,
+        BORDER_COLOR,
+        fmt4(tip.0), fmt4(tip.1),
+        fmt4(side_a.0), fmt4(side_a.1),
+        fmt4(notch.0), fmt4(notch.1),
+        fmt4(side_b.0), fmt4(side_b.1),
+        fmt4(tip.0), fmt4(tip.1),
+        BORDER_COLOR,
+    )
+    .unwrap();
+}
+
+fn emit_diamond_extremity(
+    svg: &mut String,
+    edge_points: &[(f64, f64)],
+    fill: &str,
+    at_start: bool,
+    enabled: bool,
+) {
+    if !enabled {
+        return;
+    }
+    let Some((tip, inside)) = endpoint_tangent(edge_points, at_start) else {
+        return;
+    };
+    let perp = (-inside.1, inside.0);
+    let side_a = add(
+        add(tip, scale(inside, DIAMOND_DECORATION_LENGTH / 2.0)),
+        scale(perp, DIAMOND_DECORATION_HALF_WIDTH),
+    );
+    let base = add(tip, scale(inside, DIAMOND_DECORATION_LENGTH));
+    let side_b = add(
+        add(tip, scale(inside, DIAMOND_DECORATION_LENGTH / 2.0)),
+        scale(perp, -DIAMOND_DECORATION_HALF_WIDTH),
+    );
+    write!(
+        svg,
+        r#"<polygon fill="{}" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{};stroke-width:1;"/>"#,
+        fill,
+        fmt4(tip.0), fmt4(tip.1),
+        fmt4(side_a.0), fmt4(side_a.1),
+        fmt4(base.0), fmt4(base.1),
+        fmt4(side_b.0), fmt4(side_b.1),
+        fmt4(tip.0), fmt4(tip.1),
+        BORDER_COLOR,
+    )
+    .unwrap();
 }
 
 fn no_oracle_entity_id(diagram: &ClassDiagram, id: &str) -> String {
@@ -6336,6 +6791,21 @@ fn edge_midpoint(points: &[(f64, f64)]) -> (f64, f64) {
     points.get(points.len() / 2).copied().unwrap_or(points[0])
 }
 
+fn combined_label_layout_x_bias(diagram: &ClassDiagram) -> f64 {
+    if diagram.relationships.iter().any(|relationship| {
+        relationship_has_center_label(relationship)
+            && (relationship.from_multiplicity.is_some() || relationship.to_multiplicity.is_some())
+    }) {
+        COMBINED_LABEL_LAYOUT_X_BIAS
+    } else {
+        0.0
+    }
+}
+
+fn relationship_has_center_label(relationship: &Relationship) -> bool {
+    relationship.label.is_some() || relationship.label_arrow != LinkArrow::None
+}
+
 fn shortened_endpoint_points(
     points: &[(f64, f64)],
     start_len: f64,
@@ -6348,11 +6818,13 @@ fn shortened_endpoint_points(
     if start_len > 0.0 {
         let tangent = unit_vector(out[0], out[1]);
         out[0] = add(out[0], scale(tangent, start_len));
+        out[1] = add(out[1], scale(tangent, start_len));
     }
     if end_len > 0.0 {
         let last = out.len() - 1;
         let tangent = unit_vector(out[last], out[last - 1]);
         out[last] = add(out[last], scale(tangent, end_len));
+        out[last - 1] = add(out[last - 1], scale(tangent, end_len));
     }
     out
 }
@@ -6994,10 +7466,12 @@ mod tests {
                 to: "Dog".into(),
                 kind: RelationshipKind::Inheritance,
                 label: None,
+                label_arrow: LinkArrow::None,
                 from_multiplicity: None,
                 to_multiplicity: None,
                 from_decor: None,
                 to_decor: None,
+                decorated_end: RelationshipEnd::From,
                 dashed: false,
                 source_line: 0,
             }],
@@ -7326,10 +7800,12 @@ mod tests {
             to: "Dog".into(),
             kind: RelationshipKind::Association,
             label: Some("renamed relation".into()),
+            label_arrow: LinkArrow::None,
             from_multiplicity: None,
             to_multiplicity: None,
             from_decor: Some(EndpointDecor::DoubleLine),
             to_decor: Some(EndpointDecor::CircleCrowFoot),
+            decorated_end: RelationshipEnd::None,
             dashed: false,
             source_line: 17,
         };
@@ -7342,16 +7818,30 @@ mod tests {
             start_point: None,
             has_end_arrow: false,
             end_point: None,
+            label: None,
+            tail_label: None,
+            head_label: None,
         };
         let mut svg = String::new();
         render_relationship_svg(&mut svg, &rel, &edge_path, &diagram, 4);
 
         assert!(svg.contains(r#"data-link-type="crowfoot""#));
         assert!(svg.contains(r#"id="Animal-Dog""#));
-        assert!(svg.contains(r#"d="M40,58 C40,80 40,120 40,132""#));
+        assert!(svg.contains(r#"d="M47,65 C47,95 47,109 47,139""#));
         assert!(svg.contains("<line "));
         assert!(svg.contains("<ellipse "));
         assert!(svg.contains(">renamed relation</text>"));
+    }
+
+    #[test]
+    fn no_oracle_relationship_label_arrow_is_rendered_as_a_guide_triangle() {
+        let input = "@startuml\nclass Alpha\nclass Beta\nAlpha -- Beta : renamed flow >\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(">renamed flow</text>"));
+        assert!(!svg.contains("renamed flow &gt;"));
+        assert_eq!(svg.matches("<polygon ").count(), 1);
     }
 
     #[test]

@@ -135,4 +135,14 @@ unsafe extern "C" {
         ep_x: *mut f64,
         ep_y: *mut f64,
     );
+
+    /// Get a solved edge label box. kind: 0 = center, 1 = tail, 2 = head.
+    pub fn rustuml_edge_label_box(
+        e: *mut Agedge_t,
+        kind: c_int,
+        x: *mut f64,
+        y: *mut f64,
+        width: *mut f64,
+        height: *mut f64,
+    ) -> c_int;
 }

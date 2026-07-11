@@ -35,6 +35,13 @@ pub struct GraphSpacing {
     pub rank_sep_px: f64,
 }
 
+/// Pixel dimensions of a renderer-owned edge label placeholder.
+#[derive(Clone, Copy, Debug)]
+pub struct EdgeLabelSize {
+    pub width: f64,
+    pub height: f64,
+}
+
 impl GraphSpacing {
     /// Non-activity SVEK minima from PlantUML
     /// `net.sourceforge.plantuml.svek.DotStringFactory`:
@@ -57,9 +64,9 @@ impl GraphSpacing {
 pub struct LayoutGraph {
     direction: Direction,
     spacing: Option<GraphSpacing>,
-    nodes: Vec<(String, String, f64, f64, bool)>, // (id, label, w, h, is_circle)
+    nodes: Vec<NodeSpec>,
     clusters: Vec<ClusterSpec>,
-    edges: Vec<(String, String, Option<String>)>, // (from, to, label)
+    edges: Vec<EdgeSpec>,
 }
 
 impl LayoutGraph {
@@ -92,22 +99,51 @@ impl LayoutGraph {
     }
 
     /// Adds a rectangular node. Returns true if new, false if duplicate.
-    pub fn add_node(&mut self, id: &str, label: &str, width: f64, height: f64) -> bool {
-        if self.nodes.iter().any(|(nid, ..)| nid == id) {
+    pub fn add_node(&mut self, id: &str, _label: &str, width: f64, height: f64) -> bool {
+        if self.nodes.iter().any(|node| node.id == id) {
             return false;
         }
-        self.nodes
-            .push((id.to_string(), label.to_string(), width, height, false));
+        self.nodes.push(NodeSpec {
+            id: id.to_string(),
+            width,
+            height,
+            shape: NodeShape::Box,
+        });
         true
     }
 
     /// Adds a circle-shaped node. Returns true if new, false if duplicate.
-    pub fn add_circle_node(&mut self, id: &str, label: &str, diameter: f64) -> bool {
-        if self.nodes.iter().any(|(nid, ..)| nid == id) {
+    pub fn add_circle_node(&mut self, id: &str, _label: &str, diameter: f64) -> bool {
+        if self.nodes.iter().any(|node| node.id == id) {
             return false;
         }
-        self.nodes
-            .push((id.to_string(), label.to_string(), diameter, diameter, true));
+        self.nodes.push(NodeSpec {
+            id: id.to_string(),
+            width: diameter,
+            height: diameter,
+            shape: NodeShape::Circle,
+        });
+        true
+    }
+
+    /// Adds a fixed-size Graphviz record node with named row ports.
+    ///
+    /// PlantUML's JSON/YAML Smetana path emits `_dim_...` record labels with
+    /// row ports (`P0`, `P1`, ...), then routes nested-value connectors from
+    /// `tailport=P{row}`. RustUML still renders the box itself; the record shape
+    /// is used only to give dot row-level anchor points for splines.
+    pub fn add_record_node(&mut self, id: &str, width: f64, height: f64, ports: &[String]) -> bool {
+        if self.nodes.iter().any(|node| node.id == id) {
+            return false;
+        }
+        self.nodes.push(NodeSpec {
+            id: id.to_string(),
+            width,
+            height,
+            shape: NodeShape::Record {
+                ports: ports.to_vec(),
+            },
+        });
         true
     }
 
@@ -138,8 +174,51 @@ impl LayoutGraph {
 
     /// Adds an edge between two nodes by their ids.
     pub fn add_edge(&mut self, from: &str, to: &str, label: Option<&str>) {
-        self.edges
-            .push((from.to_string(), to.to_string(), label.map(String::from)));
+        self.add_edge_with_ports(from, to, label, None, None);
+    }
+
+    /// Adds an edge between two nodes, optionally binding Graphviz ports.
+    pub fn add_edge_with_ports(
+        &mut self,
+        from: &str,
+        to: &str,
+        label: Option<&str>,
+        tail_port: Option<&str>,
+        head_port: Option<&str>,
+    ) {
+        self.edges.push(EdgeSpec {
+            from: from.to_string(),
+            to: to.to_string(),
+            label: label.map(String::from),
+            tail_port: tail_port.map(String::from),
+            head_port: head_port.map(String::from),
+            label_size: None,
+            tail_label_size: None,
+            head_label_size: None,
+        });
+    }
+
+    /// Adds an edge whose center and endpoint labels are measured by the
+    /// renderer. PlantUML `SvekEdge.appendLine` sends these dimensions to dot
+    /// as fixed-size HTML tables, then draws the real text at the solved boxes.
+    pub fn add_edge_with_label_sizes(
+        &mut self,
+        from: &str,
+        to: &str,
+        label_size: Option<EdgeLabelSize>,
+        tail_label_size: Option<EdgeLabelSize>,
+        head_label_size: Option<EdgeLabelSize>,
+    ) {
+        self.edges.push(EdgeSpec {
+            from: from.to_string(),
+            to: to.to_string(),
+            label: None,
+            tail_port: None,
+            head_port: None,
+            label_size,
+            tail_label_size,
+            head_label_size,
+        });
     }
 
     /// Runs Graphviz dot layout and returns full results (positions + edge paths).
@@ -241,17 +320,32 @@ impl LayoutGraph {
         let fixedsize_val = CString::new("true").unwrap();
         let circle_val = CString::new("circle").unwrap();
         let box_val = CString::new("box").unwrap();
+        let record_val = CString::new("record").unwrap();
         let arrowhead_key = CString::new("arrowhead").unwrap();
         let arrowtail_key = CString::new("arrowtail").unwrap();
+        let headport_key = CString::new("headport").unwrap();
+        let tailport_key = CString::new("tailport").unwrap();
+        let headlabel_key = CString::new("headlabel").unwrap();
+        let taillabel_key = CString::new("taillabel").unwrap();
+        let label_width_key = CString::new("rustuml_label_width").unwrap();
+        let label_height_key = CString::new("rustuml_label_height").unwrap();
+        let tail_label_width_key = CString::new("rustuml_tail_label_width").unwrap();
+        let tail_label_height_key = CString::new("rustuml_tail_label_height").unwrap();
+        let head_label_width_key = CString::new("rustuml_head_label_width").unwrap();
+        let head_label_height_key = CString::new("rustuml_head_label_height").unwrap();
+        let external_endpoint_labels_key =
+            CString::new("rustuml_external_endpoint_labels").unwrap();
+        let true_val = CString::new("true").unwrap();
+        let placeholder_label_val = CString::new(" ").unwrap();
         let no_arrow_val = CString::new("none").unwrap();
 
-        for (id, _label, w, h, is_circle) in &self.nodes {
-            let cid = CString::new(id.as_str()).unwrap();
+        for spec in &self.nodes {
+            let cid = CString::new(spec.id.as_str()).unwrap();
             let node = graphviz_ffi::agnode(g, cid.as_ptr(), 1);
 
             // Graphviz uses inches for width/height.
-            let w_inches = *w / DOT_POINTS_PER_INCH;
-            let h_inches = *h / DOT_POINTS_PER_INCH;
+            let w_inches = spec.width / DOT_POINTS_PER_INCH;
+            let h_inches = spec.height / DOT_POINTS_PER_INCH;
             let w_str = CString::new(format!("{w_inches:.4}")).unwrap();
             let h_str = CString::new(format!("{h_inches:.4}")).unwrap();
 
@@ -276,13 +370,21 @@ impl LayoutGraph {
             // PlantUML SVEK uses dot for geometry and renders entity labels
             // itself. Leaving Graphviz's default label (the node id) makes fixed
             // layout boxes warn and can feed label bounds back into routing.
+            let label_val = match &spec.shape {
+                NodeShape::Record { ports } => CString::new(record_label(ports)).unwrap(),
+                NodeShape::Box | NodeShape::Circle => no_label_val.clone(),
+            };
             graphviz_ffi::agsafeset(
                 node as *mut c_void,
                 label_key.as_ptr(),
-                no_label_val.as_ptr(),
+                label_val.as_ptr(),
                 empty.as_ptr(),
             );
-            let shape = if *is_circle { &circle_val } else { &box_val };
+            let shape = match spec.shape {
+                NodeShape::Box => &box_val,
+                NodeShape::Circle => &circle_val,
+                NodeShape::Record { .. } => &record_val,
+            };
             graphviz_ffi::agsafeset(
                 node as *mut c_void,
                 shape_key.as_ptr(),
@@ -290,8 +392,8 @@ impl LayoutGraph {
                 empty.as_ptr(),
             );
 
-            node_handles.insert(id.clone(), node);
-            node_order.push(id.clone());
+            node_handles.insert(spec.id.clone(), node);
+            node_order.push(spec.id.clone());
         }
 
         // Build package clusters after nodes so each subgraph can include the
@@ -327,23 +429,91 @@ impl LayoutGraph {
 
         // Build edges — track insertion order for result mapping.
         let mut edge_specs: Vec<(String, String)> = Vec::new();
-        for (from, to, label) in &self.edges {
-            let Some(&from_h) = node_handles.get(from) else {
+        for edge_spec in &self.edges {
+            let Some(&from_h) = node_handles.get(&edge_spec.from) else {
                 continue;
             };
-            let Some(&to_h) = node_handles.get(to) else {
+            let Some(&to_h) = node_handles.get(&edge_spec.to) else {
                 continue;
             };
-            let edge_name = CString::new(format!("{from}__{to}")).unwrap();
+            let edge_name = CString::new(format!("{}__{}", edge_spec.from, edge_spec.to)).unwrap();
             let edge = graphviz_ffi::agedge(g, from_h, to_h, edge_name.as_ptr(), 1);
 
-            if let Some(lbl) = label {
+            if let Some(lbl) = &edge_spec.label {
                 let label_key = CString::new("label").unwrap();
                 let label_val = CString::new(lbl.as_str()).unwrap();
                 graphviz_ffi::agsafeset(
                     edge as *mut c_void,
                     label_key.as_ptr(),
                     label_val.as_ptr(),
+                    empty.as_ptr(),
+                );
+            }
+            for (label_key, width_key, height_key, size) in [
+                (
+                    &label_key,
+                    &label_width_key,
+                    &label_height_key,
+                    edge_spec.label_size,
+                ),
+                (
+                    &taillabel_key,
+                    &tail_label_width_key,
+                    &tail_label_height_key,
+                    edge_spec.tail_label_size,
+                ),
+                (
+                    &headlabel_key,
+                    &head_label_width_key,
+                    &head_label_height_key,
+                    edge_spec.head_label_size,
+                ),
+            ] {
+                let Some(size) = size else { continue };
+                let width_val = CString::new(size.width.max(1.0).to_string()).unwrap();
+                let height_val = CString::new(size.height.max(1.0).to_string()).unwrap();
+                graphviz_ffi::agsafeset(
+                    edge as *mut c_void,
+                    label_key.as_ptr(),
+                    placeholder_label_val.as_ptr(),
+                    empty.as_ptr(),
+                );
+                graphviz_ffi::agsafeset(
+                    edge as *mut c_void,
+                    width_key.as_ptr(),
+                    width_val.as_ptr(),
+                    empty.as_ptr(),
+                );
+                graphviz_ffi::agsafeset(
+                    edge as *mut c_void,
+                    height_key.as_ptr(),
+                    height_val.as_ptr(),
+                    empty.as_ptr(),
+                );
+            }
+            if edge_spec.tail_label_size.is_some() || edge_spec.head_label_size.is_some() {
+                graphviz_ffi::agsafeset(
+                    edge as *mut c_void,
+                    external_endpoint_labels_key.as_ptr(),
+                    true_val.as_ptr(),
+                    empty.as_ptr(),
+                );
+            }
+            if let Some(port) = &edge_spec.tail_port {
+                let port_val = CString::new(port.as_str()).unwrap();
+                graphviz_ffi::agsafeset(
+                    edge as *mut c_void,
+                    tailport_key.as_ptr(),
+                    port_val.as_ptr(),
+                    empty.as_ptr(),
+                );
+            }
+            if let Some(port) = &edge_spec.head_port {
+                let port_val = CString::new(port.as_str()).unwrap();
+                graphviz_ffi::agsafeset(
+                    edge as *mut c_void,
+                    headport_key.as_ptr(),
+                    port_val.as_ptr(),
                     empty.as_ptr(),
                 );
             }
@@ -363,7 +533,7 @@ impl LayoutGraph {
                 empty.as_ptr(),
             );
 
-            edge_specs.push((from.clone(), to.clone()));
+            edge_specs.push((edge_spec.from.clone(), edge_spec.to.clone()));
         }
 
         // Run layout.
@@ -444,6 +614,9 @@ impl LayoutGraph {
                     start_point: if sflag != 0 { Some((sp_x, sp_y)) } else { None },
                     has_end_arrow: eflag != 0,
                     end_point: if eflag != 0 { Some((ep_x, ep_y)) } else { None },
+                    label: edge_label_position(e, 0),
+                    tail_label: edge_label_position(e, 1),
+                    head_label: edge_label_position(e, 2),
                 });
 
                 edge_idx += 1;
@@ -468,6 +641,18 @@ impl LayoutGraph {
                 height: ur_y - ll_y,
             });
         }
+
+        let mut graph_ll_x = 0.0;
+        let mut graph_ll_y = 0.0;
+        let mut graph_ur_x = 0.0;
+        let mut graph_ur_y = 0.0;
+        graphviz_ffi::rustuml_graph_bb(
+            g,
+            &mut graph_ll_x,
+            &mut graph_ll_y,
+            &mut graph_ur_x,
+            &mut graph_ur_y,
+        );
 
         // Cleanup.
         graphviz_ffi::gvFreeLayout(gvc, g);
@@ -498,14 +683,58 @@ impl LayoutGraph {
             if let Some(ref mut ep) = path.end_point {
                 ep.1 = max_y - ep.1;
             }
+            for label in [&mut path.label, &mut path.tail_label, &mut path.head_label]
+                .into_iter()
+                .flatten()
+            {
+                label.x -= label.width / 2.0;
+                label.y = max_y - label.y - label.height / 2.0;
+            }
         }
 
         LayoutResult {
             node_positions,
             cluster_positions,
             edge_paths,
+            width: graph_ur_x - graph_ll_x,
+            height: graph_ur_y - graph_ll_y,
         }
     }
+}
+
+#[allow(unsafe_op_in_unsafe_fn)]
+unsafe fn edge_label_position(
+    edge: *mut graphviz_ffi::Agedge_t,
+    kind: i32,
+) -> Option<EdgeLabelPosition> {
+    let mut x = 0.0;
+    let mut y = 0.0;
+    let mut width = 0.0;
+    let mut height = 0.0;
+    (graphviz_ffi::rustuml_edge_label_box(edge, kind, &mut x, &mut y, &mut width, &mut height) != 0)
+        .then_some(EdgeLabelPosition {
+            x,
+            y,
+            width,
+            height,
+        })
+}
+
+fn record_label(ports: &[String]) -> String {
+    if ports.is_empty() {
+        return " ".to_string();
+    }
+    ports
+        .iter()
+        .map(|port| format!("<{}> ", escape_record_port(port)))
+        .collect::<Vec<_>>()
+        .join("|")
+}
+
+fn escape_record_port(port: &str) -> String {
+    port.chars()
+        .filter(|c| c.is_ascii_alphanumeric() || *c == '_')
+        .collect()
 }
 
 fn dot_inches(pixel: f64) -> String {
@@ -518,6 +747,36 @@ pub struct LayoutResult {
     pub node_positions: Vec<NodePosition>,
     pub cluster_positions: Vec<ClusterPosition>,
     pub edge_paths: Vec<EdgePath>,
+    /// Full solved Graphviz envelope, including edge-label constraints.
+    pub width: f64,
+    pub height: f64,
+}
+
+#[derive(Debug, Clone)]
+struct NodeSpec {
+    id: String,
+    width: f64,
+    height: f64,
+    shape: NodeShape,
+}
+
+#[derive(Debug, Clone)]
+enum NodeShape {
+    Box,
+    Circle,
+    Record { ports: Vec<String> },
+}
+
+#[derive(Debug, Clone)]
+struct EdgeSpec {
+    from: String,
+    to: String,
+    label: Option<String>,
+    tail_port: Option<String>,
+    head_port: Option<String>,
+    label_size: Option<EdgeLabelSize>,
+    tail_label_size: Option<EdgeLabelSize>,
+    head_label_size: Option<EdgeLabelSize>,
 }
 
 #[derive(Debug, Clone)]
@@ -565,6 +824,21 @@ pub struct EdgePath {
     pub has_end_arrow: bool,
     /// Arrow anchor at end (if present).
     pub end_point: Option<(f64, f64)>,
+    /// Center label box solved by Graphviz.
+    pub label: Option<EdgeLabelPosition>,
+    /// Tail label box solved by Graphviz.
+    pub tail_label: Option<EdgeLabelPosition>,
+    /// Head label box solved by Graphviz.
+    pub head_label: Option<EdgeLabelPosition>,
+}
+
+/// Solved top-left label box in layout coordinates.
+#[derive(Debug, Clone, Copy)]
+pub struct EdgeLabelPosition {
+    pub x: f64,
+    pub y: f64,
+    pub width: f64,
+    pub height: f64,
 }
 
 #[cfg(test)]
@@ -609,6 +883,42 @@ mod tests {
             "expected 3N+1 points, got {}",
             path.points.len()
         );
+    }
+
+    #[test]
+    fn sized_edge_labels_have_solved_boxes_and_expand_envelope() {
+        let mut plain = LayoutGraph::new(Direction::TopToBottom);
+        plain.add_node("a", "A", 40.0, 48.0);
+        plain.add_node("b", "B", 40.0, 48.0);
+        plain.add_edge("a", "b", None);
+        let plain_result = plain.layout_full_no_timeout();
+
+        let mut labeled = LayoutGraph::new(Direction::TopToBottom);
+        labeled.add_node("a", "A", 40.0, 48.0);
+        labeled.add_node("b", "B", 40.0, 48.0);
+        labeled.add_edge_with_label_sizes(
+            "a",
+            "b",
+            Some(EdgeLabelSize {
+                width: 25.0,
+                height: 15.0,
+            }),
+            Some(EdgeLabelSize {
+                width: 33.0,
+                height: 15.0,
+            }),
+            Some(EdgeLabelSize {
+                width: 31.0,
+                height: 15.0,
+            }),
+        );
+        let labeled_result = labeled.layout_full_no_timeout();
+        let edge = &labeled_result.edge_paths[0];
+
+        assert!(edge.label.is_some());
+        assert!(edge.tail_label.is_some());
+        assert!(edge.head_label.is_some());
+        assert!(labeled_result.width > plain_result.width);
     }
 
     #[test]
@@ -705,6 +1015,35 @@ mod tests {
 
         let result = g.layout_full_no_timeout();
         assert_eq!(result.node_positions.len(), 1);
+    }
+
+    #[test]
+    fn record_label_sanitizes_port_names() {
+        assert_eq!(
+            record_label(&[
+                "P0".to_string(),
+                "row:1".to_string(),
+                "bad|port".to_string()
+            ]),
+            "<P0> |<row1> |<badport> "
+        );
+        assert_eq!(record_label(&[]), " ");
+    }
+
+    #[test]
+    fn record_node_tail_port_routes_edge() {
+        let mut g = LayoutGraph::new(Direction::LeftToRight);
+        assert!(g.add_record_node("record", 90.0, 90.0, &["P0".to_string(), "P1".to_string()]));
+        g.add_node("child", "Child", 60.0, 40.0);
+        g.add_edge_with_ports("record", "child", None, Some("P1"), None);
+
+        let result = g.layout_full_no_timeout();
+        assert_eq!(result.node_positions.len(), 2);
+        assert_eq!(result.edge_paths.len(), 1);
+        assert!(
+            !result.edge_paths[0].points.is_empty(),
+            "record tail port should still produce a routed spline"
+        );
     }
 
     #[test]

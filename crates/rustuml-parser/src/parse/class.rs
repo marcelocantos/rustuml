@@ -633,10 +633,12 @@ impl ClassParser {
                 to,
                 kind,
                 label: None,
+                label_arrow: LinkArrow::None,
                 from_multiplicity: None,
                 to_multiplicity: None,
                 from_decor: None,
                 to_decor: None,
+                decorated_end: RelationshipEnd::To,
                 dashed,
                 source_line: self.current_line,
             });
@@ -771,9 +773,9 @@ impl ClassParser {
             } else {
                 caps.get(7).map(|m| m.as_str()).unwrap_or("").to_string()
             };
-            let label = caps.get(8).map(|m| m.as_str().trim().to_string());
+            let (label, label_arrow) = parse_label_arrow(caps.get(8).map(|m| m.as_str()));
 
-            let (kind, dashed) = parse_relationship_kind(rel_str);
+            let (kind, dashed, decorated_end) = parse_relationship_kind(rel_str);
             let from = self.resolve_relationship_endpoint(&from_raw);
             let to = self.resolve_relationship_endpoint(&to_raw);
 
@@ -782,10 +784,12 @@ impl ClassParser {
                 to,
                 kind,
                 label,
+                label_arrow,
                 from_multiplicity: from_mult,
                 to_multiplicity: to_mult,
                 from_decor: None,
                 to_decor: None,
+                decorated_end,
                 dashed,
                 source_line: self.current_line,
             });
@@ -809,10 +813,12 @@ impl ClassParser {
                 to,
                 kind: RelationshipKind::Association,
                 label,
+                label_arrow: LinkArrow::None,
                 from_multiplicity: None,
                 to_multiplicity: None,
                 from_decor,
                 to_decor,
+                decorated_end: RelationshipEnd::None,
                 dashed: false,
                 source_line: self.current_line,
             });
@@ -853,10 +859,12 @@ impl ClassParser {
                 to: to_raw,
                 kind: RelationshipKind::Association,
                 label: None,
+                label_arrow: LinkArrow::None,
                 from_multiplicity: None,
                 to_multiplicity: None,
                 from_decor: None,
                 to_decor: None,
+                decorated_end: RelationshipEnd::None,
                 dashed: false,
                 source_line: self.current_line,
             });
@@ -1466,19 +1474,47 @@ fn strip_arrow_modifiers(line: &str) -> String {
     }
 }
 
-/// Parse the relationship kind and whether the line style is dashed.
-fn parse_relationship_kind(s: &str) -> (RelationshipKind, bool) {
+/// Parse the relationship kind, whether the line style is dashed, and which
+/// endpoint carries PlantUML's built-in decoration.
+fn parse_relationship_kind(s: &str) -> (RelationshipKind, bool, RelationshipEnd) {
     if s.contains("<|--") || s.contains("--|>") || s.contains("<|--|>") {
-        (RelationshipKind::Inheritance, false)
+        let decorated_end = if s.contains("<|--|>") {
+            RelationshipEnd::Both
+        } else if s.contains("<|--") {
+            RelationshipEnd::From
+        } else {
+            RelationshipEnd::To
+        };
+        (RelationshipKind::Inheritance, false, decorated_end)
     } else if s.contains("..|>") || s.contains("<|..") {
-        (RelationshipKind::Implementation, true)
+        let decorated_end = if s.contains("<|..") {
+            RelationshipEnd::From
+        } else {
+            RelationshipEnd::To
+        };
+        (RelationshipKind::Implementation, true, decorated_end)
     } else if s.contains("*--") || s.contains("--*") {
-        (RelationshipKind::Composition, false)
+        let decorated_end = if s.contains("*--") {
+            RelationshipEnd::From
+        } else {
+            RelationshipEnd::To
+        };
+        (RelationshipKind::Composition, false, decorated_end)
     } else if s.contains("o--") || s.contains("--o") {
-        (RelationshipKind::Aggregation, false)
+        let decorated_end = if s.contains("o--") {
+            RelationshipEnd::From
+        } else {
+            RelationshipEnd::To
+        };
+        (RelationshipKind::Aggregation, false, decorated_end)
     } else if s.contains("..>") || s.contains("<..") {
         // Dashed dependency (..>)
-        (RelationshipKind::Dependency, true)
+        let decorated_end = if s.contains("<..") {
+            RelationshipEnd::From
+        } else {
+            RelationshipEnd::To
+        };
+        (RelationshipKind::Dependency, true, decorated_end)
     } else if s.contains("-->")
         || s.contains("<--")
         || s.contains("->>")
@@ -1488,14 +1524,56 @@ fn parse_relationship_kind(s: &str) -> (RelationshipKind, bool) {
         || s == "<->"
     {
         // Solid dependency (-->)
-        (RelationshipKind::Dependency, false)
+        let decorated_end = if s == "<-->" || s == "<->" {
+            RelationshipEnd::Both
+        } else if s.contains("<--") || s == "<-" {
+            RelationshipEnd::From
+        } else {
+            RelationshipEnd::To
+        };
+        (RelationshipKind::Dependency, false, decorated_end)
     } else if s.contains("..") {
         // Dashed association (..)
-        (RelationshipKind::Association, true)
+        (RelationshipKind::Association, true, RelationshipEnd::None)
     } else {
         // Plain association (-- or ---- etc.)
-        (RelationshipKind::Association, false)
+        (RelationshipKind::Association, false, RelationshipEnd::None)
     }
+}
+
+/// PlantUML `StringWithArrow` treats a lone, leading, or trailing `<`/`>` in
+/// a single-line relationship label as a directional guide arrow and removes
+/// it from the text passed to SVEK.
+fn parse_label_arrow(label: Option<&str>) -> (Option<String>, LinkArrow) {
+    let Some(label) = label else {
+        return (None, LinkArrow::None);
+    };
+    let label = label.trim();
+    let label = label
+        .strip_prefix('"')
+        .and_then(|s| s.strip_suffix('"'))
+        .unwrap_or(label);
+
+    if label.contains("\\n") || label.contains('\n') {
+        return (Some(label.to_string()), LinkArrow::None);
+    }
+
+    let (text, arrow) = if label == "<" {
+        (None, LinkArrow::Backward)
+    } else if label == ">" {
+        (None, LinkArrow::Direct)
+    } else if let Some(text) = label.strip_prefix("< ") {
+        (Some(text.trim().to_string()), LinkArrow::Backward)
+    } else if let Some(text) = label.strip_prefix("> ") {
+        (Some(text.trim().to_string()), LinkArrow::Direct)
+    } else if let Some(text) = label.strip_suffix(" >") {
+        (Some(text.trim().to_string()), LinkArrow::Direct)
+    } else if let Some(text) = label.strip_suffix(" <") {
+        (Some(text.trim().to_string()), LinkArrow::Backward)
+    } else {
+        (Some(label.to_string()), LinkArrow::None)
+    };
+    (text.filter(|text| !text.is_empty()), arrow)
 }
 
 fn parse_endpoint_decor(s: &str) -> Option<EndpointDecor> {
@@ -2008,6 +2086,28 @@ mod tests {
         assert_eq!(d.relationships.len(), 1);
         assert_eq!(d.relationships[0].from_multiplicity.as_deref(), Some("1"));
         assert_eq!(d.relationships[0].to_multiplicity.as_deref(), Some("1..*"));
+    }
+
+    #[test]
+    fn relationship_label_arrows_are_separate_from_label_text() {
+        let d = parse(
+            "A -- B : < renamed backward\n\
+             B -- C : renamed direct >\n\
+             C -- D : >\n\
+             D -- E : \"< quoted label\"",
+        );
+        assert_eq!(d.relationships.len(), 4);
+        assert_eq!(
+            d.relationships[0].label.as_deref(),
+            Some("renamed backward")
+        );
+        assert_eq!(d.relationships[0].label_arrow, LinkArrow::Backward);
+        assert_eq!(d.relationships[1].label.as_deref(), Some("renamed direct"));
+        assert_eq!(d.relationships[1].label_arrow, LinkArrow::Direct);
+        assert_eq!(d.relationships[2].label, None);
+        assert_eq!(d.relationships[2].label_arrow, LinkArrow::Direct);
+        assert_eq!(d.relationships[3].label.as_deref(), Some("quoted label"));
+        assert_eq!(d.relationships[3].label_arrow, LinkArrow::Backward);
     }
 
     #[test]

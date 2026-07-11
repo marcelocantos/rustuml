@@ -441,10 +441,8 @@ finish:
     for (n = agfstnode(g); n; n = agnxtnode(g, n)) {
       if (E_headlabel) {
         for (e = agfstin(g, n); e; e = agnxtin(g, e))
-          if (ED_head_label(AGMKOUT(e))) {
-            place_portlabel(AGMKOUT(e), true);
+          if (ED_head_label(AGMKOUT(e)) && place_portlabel(AGMKOUT(e), true))
             updateBB(g, ED_head_label(AGMKOUT(e)));
-          }
       }
       if (E_taillabel) {
         for (e = agfstout(g, n); e; e = agnxtout(g, e)) {

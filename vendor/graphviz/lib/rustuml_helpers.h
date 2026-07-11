@@ -47,6 +47,15 @@ void rustuml_edge_bezier_arrows(Agedge_t *e, size_t idx,
                                 int *sflag, double *sp_x, double *sp_y,
                                 int *eflag, double *ep_x, double *ep_y);
 
+// Get a solved edge label box. kind: 0 = center, 1 = tail, 2 = head.
+// Returns 1 when the requested label exists and has a solved position.
+int rustuml_edge_label_box(Agedge_t *e, int kind,
+                           double *x, double *y,
+                           double *width, double *height);
+
+// Apply renderer-measured dimensions carried in rustuml_* edge attributes.
+void rustuml_override_edge_label_dimensions(Agedge_t *e);
+
 #ifdef __cplusplus
 }
 #endif

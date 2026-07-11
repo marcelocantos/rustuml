@@ -193,6 +193,10 @@ pub struct Relationship {
     pub to: String,
     pub kind: RelationshipKind,
     pub label: Option<String>,
+    /// Directional marker embedded in the relationship label (`< label` or
+    /// `label >`), matching PlantUML's `StringWithArrow` / `LinkArrow` model.
+    #[serde(default)]
+    pub label_arrow: LinkArrow,
     pub from_multiplicity: Option<String>,
     pub to_multiplicity: Option<String>,
     /// Crow's-foot / IE endpoint decorations, as parsed from PlantUML's
@@ -201,6 +205,10 @@ pub struct Relationship {
     pub from_decor: Option<EndpointDecor>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub to_decor: Option<EndpointDecor>,
+    /// Endpoint that carries PlantUML's built-in relationship decoration
+    /// (arrowhead, inheritance triangle, composition diamond, etc.).
+    #[serde(default)]
+    pub decorated_end: RelationshipEnd,
     /// Whether the line is dashed (e.g. `..>` vs `-->`).
     #[serde(default)]
     pub dashed: bool,
@@ -217,6 +225,23 @@ pub enum RelationshipKind {
     Aggregation,
     Association,
     Dependency,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
+pub enum RelationshipEnd {
+    #[default]
+    None,
+    From,
+    To,
+    Both,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
+pub enum LinkArrow {
+    #[default]
+    None,
+    Direct,
+    Backward,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
