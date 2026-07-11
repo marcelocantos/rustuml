@@ -154,6 +154,7 @@ impl ClassParser {
                 stereotypes: Vec::new(),
                 generic: None,
                 spot_color: None,
+                spot_character: None,
                 url: None,
                 url_tooltip: None,
                 color: None,
@@ -483,12 +484,14 @@ impl ClassParser {
 
             let stereotype_source = text_outside_double_quotes(line);
             let mut spot_color: Option<String> = None;
+            let mut spot_character: Option<char> = None;
             let stereotypes: Vec<String> = STEREOTYPE_RE
                 .captures_iter(&stereotype_source)
                 .map(|c| {
-                    let (text, color) = process_spot_stereotype_with_color(c[1].trim());
+                    let (text, character, color) = process_spot_stereotype(c[1].trim());
                     if spot_color.is_none() {
                         spot_color = color;
+                        spot_character = character;
                     }
                     text
                 })
@@ -532,6 +535,7 @@ impl ClassParser {
                 }
                 if spot_color.is_some() {
                     entity.spot_color = spot_color.clone();
+                    entity.spot_character = spot_character;
                 }
                 if url.is_some() {
                     entity.url = url.clone();
@@ -555,6 +559,7 @@ impl ClassParser {
                     stereotypes,
                     generic: generic.clone(),
                     spot_color,
+                    spot_character,
                     url: url.clone(),
                     url_tooltip: url_tooltip.clone(),
                     color: entity_color.clone(),
@@ -659,6 +664,7 @@ impl ClassParser {
                     stereotypes: Vec::new(),
                     generic: None,
                     spot_color: None,
+                    spot_character: None,
                     url: None,
                     url_tooltip: None,
                     color: None,
@@ -846,6 +852,7 @@ impl ClassParser {
                     stereotypes: Vec::new(),
                     generic: None,
                     spot_color: None,
+                    spot_character: None,
                     url: None,
                     url_tooltip: None,
                     color: None,
@@ -1120,6 +1127,7 @@ impl ClassParser {
                         stereotypes: Vec::new(),
                         generic: None,
                         spot_color: None,
+                        spot_character: None,
                         url: None,
                         url_tooltip: None,
                         color: None,
@@ -1687,13 +1695,13 @@ fn parse_member(s: &str) -> Member {
 
 /// Process a stereotype string that may contain spot notation `(S,#color) Name`.
 ///
-/// Returns the stereotype display text and the hex spot color (with leading
-/// `#`) when the spot uses a hex code. PlantUML's behavior:
+/// Returns the stereotype display text, character, and hex spot color (with
+/// leading `#`) when the spot uses valid spot syntax. PlantUML's behavior:
 /// - Named color (e.g. `#red`, `#blue`): keep the full `(S,#color) Name` prefix
 ///   in the text and return no spot color (named colors don't fill the circle).
 /// - Hex code (e.g. `#FF7700`, `#00AAFF`): strip the `(S,#color)` prefix,
 ///   returning just the name plus the hex color for the circle fill.
-fn process_spot_stereotype_with_color(s: &str) -> (String, Option<String>) {
+fn process_spot_stereotype(s: &str) -> (String, Option<char>, Option<String>) {
     let s = s.trim();
     // Look for spot notation: `(X,#color) Name`
     if let Some(rest) = s.strip_prefix('(')
@@ -1703,21 +1711,30 @@ fn process_spot_stereotype_with_color(s: &str) -> (String, Option<String>) {
         let after = rest[close + 1..].trim();
         // spot_inner should be like `A,#red` or `F,#FF7700`
         if let Some(comma) = spot_inner.find(',') {
+            let character = spot_inner[..comma].trim();
             let color_part = spot_inner[comma + 1..].trim();
             if let Some(color_hex) = color_part.strip_prefix('#') {
                 // strip leading #
                 let is_hex =
                     !color_hex.is_empty() && color_hex.chars().all(|c| c.is_ascii_hexdigit());
-                if is_hex {
+                let valid_character = character.len() == 1
+                    && character
+                        .chars()
+                        .all(|c| c.is_ascii_alphanumeric() || c == '_');
+                if is_hex && color_hex.len() == 6 && valid_character {
                     // Hex color: strip spot prefix, return just the name and
                     // capture the hex color for the circle fill.
-                    return (after.to_string(), Some(format!("#{color_hex}")));
+                    return (
+                        after.to_string(),
+                        character.chars().next(),
+                        Some(format!("#{color_hex}")),
+                    );
                 }
             }
         }
     }
     // Named color or no spot notation: return as-is.
-    (s.to_string(), None)
+    (s.to_string(), None, None)
 }
 
 fn normalize_inline_stereotypes(s: &str) -> String {
@@ -1895,6 +1912,28 @@ mod tests {
     fn stereotype() {
         let d = parse("class Foo <<singleton>>");
         assert_eq!(d.entities[0].stereotypes, vec!["singleton"]);
+    }
+
+    #[test]
+    fn hex_spot_stereotype_preserves_arbitrary_character() {
+        let d = parse("class Renamed << (G,#12ABEF) NewKind >>");
+        let entity = &d.entities[0];
+        assert_eq!(entity.stereotypes, vec!["NewKind"]);
+        assert_eq!(entity.spot_character, Some('G'));
+        assert_eq!(entity.spot_color.as_deref(), Some("#12ABEF"));
+    }
+
+    #[test]
+    fn invalid_spot_syntax_remains_stereotype_text() {
+        for source in [
+            "class Named << (G,#red) NewKind >>",
+            "class Punctuated << (!,#12ABEF) NewKind >>",
+        ] {
+            let entity = &parse(source).entities[0];
+            assert!(entity.stereotypes[0].starts_with('('));
+            assert_eq!(entity.spot_character, None);
+            assert_eq!(entity.spot_color, None);
+        }
     }
 
     #[test]

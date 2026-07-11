@@ -10,6 +10,12 @@ Licensed under the SIL Open Font License, Version 1.1.
 Embedded in the binary for text metrics (crates/rustuml-render/fonts/).
 Full licence: crates/rustuml-render/fonts/LIBERATION-LICENSE
 
+DejaVu Sans Mono Bold for Powerline Font
+----------------------------------------
+Copyright 2003 Bitstream, Inc.; DejaVu changes are public domain.
+Embedded in the binary for PlantUML-compatible circled-character outlines.
+Full licence: crates/rustuml-render/fonts/DEJAVU-LICENSE
+
 katex (Rust crate)
 ------------------
 Licensed under the MIT License.

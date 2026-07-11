@@ -2245,6 +2245,12 @@ struct HeaderPositions {
     name_x: f64,
 }
 
+struct SpottedHeaderPositions {
+    icon_cx: f64,
+    stereo_x: f64,
+    name_x: f64,
+}
+
 fn class_header_positions(
     x: f64,
     width: f64,
@@ -2259,6 +2265,38 @@ fn class_header_positions(
     HeaderPositions {
         icon_cx: x + h1 + HEADER_CIRCLE_LEFT_MARGIN + icon_radius,
         name_x: x + circle_width + h1 + h2 + HEADER_NAME_MARGIN_X,
+    }
+}
+
+/// Port of PlantUML `HeaderLayout.drawU` for custom stereotype spots. The
+/// dimensions include `EntityImageClassHeader`'s circled-character, stereotype,
+/// and name margins. RustUML's Graphviz node envelope is one pixel wider than
+/// the internal PlantUML header width represented by the golden SVG rectangle.
+fn spotted_header_positions(
+    x: f64,
+    width: f64,
+    icon_radius: f64,
+    stereo_text_width: f64,
+    name_text_width: f64,
+) -> SpottedHeaderPositions {
+    let circle_width = icon_radius * 2.0 + HEADER_CIRCLE_LEFT_MARGIN + HEADER_CIRCLE_RIGHT_MARGIN;
+    let stereo_width = stereo_text_width + 1.0;
+    // PlantUML's name Display dimension is one pixel narrower than its SVG
+    // textLength; the symmetric three-pixel margins therefore add five here.
+    let name_width = name_text_width + 5.0;
+    let width_stereo_and_name = stereo_width.max(name_width);
+    let supp_width = (width - 1.0 - circle_width - width_stereo_and_name).max(0.0);
+    let h2 = (circle_width / 4.0).min(supp_width * HEADER_SECONDARY_GAP_RATIO);
+    let h1 = (supp_width - h2) / 2.0;
+    SpottedHeaderPositions {
+        icon_cx: x + h1 + HEADER_CIRCLE_LEFT_MARGIN + icon_radius,
+        stereo_x: x + circle_width + (width_stereo_and_name - stereo_width) / 2.0 + h1 + h2 + 1.0,
+        name_x: x
+            + circle_width
+            + (width_stereo_and_name - name_width) / 2.0
+            + h1
+            + h2
+            + HEADER_NAME_MARGIN_X,
     }
 }
 
@@ -3857,10 +3895,18 @@ fn render_entity_content(
         && !is_object_entity
         && entity.generic.is_none())
     .then(|| class_header_positions(x, dim.width, icon_radius, name_tl));
+    let stereo_width = format_stereotype_lines(&entity.stereotypes)
+        .iter()
+        .map(|line| text_render::measure_with_family(line, 12.0, false, &font.name_family))
+        .fold(0.0_f64, f64::max);
+    let spotted_header_positions = entity
+        .spot_character
+        .map(|_| spotted_header_positions(x, dim.width, icon_radius, stereo_width, name_tl));
     let icon_cx = icon_cx_override.unwrap_or_else(|| {
-        header_positions
+        spotted_header_positions
             .as_ref()
             .map(|p| p.icon_cx)
+            .or_else(|| header_positions.as_ref().map(|p| p.icon_cx))
             .unwrap_or(x + ICON_CX_OFFSET)
     });
     let icon_cy = if let Some(cy) = icon_cy_override {
@@ -3961,6 +4007,14 @@ fn render_entity_content(
         // Letter glyph path — use oracle override if available to avoid float precision issues.
         let glyph_path = if let Some(d) = glyph_path_override {
             d.to_string()
+        } else if let Some(character) = entity.spot_character {
+            crate::metrics::centered_character_path(
+                character,
+                font.circled_font_size as f64,
+                icon_cx,
+                icon_cy,
+            )
+            .unwrap_or_else(|| CLASS_GLYPH.to_string())
         } else {
             match entity.kind {
                 EntityKind::Class | EntityKind::Object => {
@@ -4021,9 +4075,14 @@ fn render_entity_content(
                 .and_then(|r| r.text_x_values.get(i).copied())
                 .or(name_text_x_override)
                 .unwrap_or_else(|| {
-                    header_positions
+                    spotted_header_positions
                         .as_ref()
-                        .map(|p| p.name_x + (round_4dp(name_tl) - stereo_tl) / 2.0)
+                        .map(|p| p.stereo_x + (stereo_width - stereo_tl) / 2.0)
+                        .or_else(|| {
+                            header_positions
+                                .as_ref()
+                                .map(|p| p.name_x + (round_4dp(name_tl) - stereo_tl) / 2.0)
+                        })
                         .unwrap_or(icon_cx + ICON_RX + ICON_TEXT_GAP)
                 });
             let stereo_y = oracle_rect
@@ -4083,9 +4142,10 @@ fn render_entity_content(
             let text_center = oracle_x + stereo_tl / 2.0;
             text_center - name_tl_r / 2.0
         } else {
-            header_positions
+            spotted_header_positions
                 .as_ref()
                 .map(|p| p.name_x)
+                .or_else(|| header_positions.as_ref().map(|p| p.name_x))
                 .unwrap_or(icon_cx + ICON_RX + ICON_TEXT_GAP)
         }
     } else if dim.hide.circle {
@@ -7432,6 +7492,7 @@ mod tests {
                     stereotypes: vec![],
                     generic: None,
                     spot_color: None,
+                    spot_character: None,
                     url: None,
                     url_tooltip: None,
                     color: None,
@@ -7454,6 +7515,7 @@ mod tests {
                     stereotypes: vec![],
                     generic: None,
                     spot_color: None,
+                    spot_character: None,
                     url: None,
                     url_tooltip: None,
                     color: None,
@@ -7566,6 +7628,7 @@ mod tests {
                 stereotypes: vec![],
                 generic: None,
                 spot_color: None,
+                spot_character: None,
                 url: None,
                 url_tooltip: None,
                 color: None,
@@ -7725,6 +7788,17 @@ mod tests {
     }
 
     #[test]
+    fn custom_spot_uses_arbitrary_character_outline() {
+        let input = "@startuml\nclass Renamed << (G,#12ABEF) NewKind >>\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(r##"fill="#12ABEF""##));
+        assert!(!svg.contains(CLASS_GLYPH));
+        assert!(!svg.contains(">G</text>"));
+    }
+
+    #[test]
     fn has_text_length() {
         let svg = render(&simple_class_diagram(), &Theme::default());
         assert!(
@@ -7757,6 +7831,7 @@ mod tests {
                 stereotypes: vec![],
                 generic: None,
                 spot_color: None,
+                spot_character: None,
                 url: None,
                 url_tooltip: None,
                 color: None,

@@ -270,6 +270,7 @@ mod tests {
             stereotypes: vec![],
             generic: None,
             spot_color: None,
+            spot_character: None,
             url: None,
             url_tooltip: None,
             color: None,

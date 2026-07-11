@@ -7,10 +7,10 @@ JVM, no Graphviz, no external fonts.
 ## Status
 
 Pre-release. 23 parsed diagram models are supported, but release-readiness
-claims are based on the no-oracle product tier: 5,005/11,251 eligible SVG
-goldens currently pass when rendered through the same path as the CLI (44.5%).
-The strict oracle-assisted tier is green at 11,251/11,251 eligible SVG goldens
-and remains a regression net, not the headline product metric. The 1,199 Java
+claims are based on the no-oracle product tier: 6,382/11,251 eligible SVG
+goldens currently pass when rendered through the same path as the CLI (56.7%).
+The strict oracle-assisted tier passes 11,022/11,251 eligible SVG goldens and
+remains a regression net, not the headline product metric. The 1,199 Java
 PlantUML error-page goldens are skipped by both tiers and are not counted as
 passes.
 
@@ -22,16 +22,16 @@ The table below is derived from `test-diagrams/no_oracle_baseline.txt`.
 | Type | Tag | Baseline family | No-oracle product status |
 |------|-----|-----------------|--------------------------|
 | Sequence | `@startuml` | `sequence` | 1,400/1,411 (99.2%, partial) |
-| Class | `@startuml` | `class` | 118/1,971 (6.0%, partial) |
+| Class | `@startuml` | `class` | 1,126/1,971 (57.1%, partial) |
 | Archimate | `@startuml` | `archimate` | 0/48 (0.0%, none) |
 | Activity (new syntax) | `@startuml` | `activity` | 1,266/1,299 (97.5%, partial) |
-| State | `@startuml` | `state` | 0/901 (0.0%, none) |
-| Component | `@startuml` | `component` | 0/663 (0.0%, none) |
-| Deployment | `@startuml` | `deployment` | 37/495 (7.5%, partial) |
+| State | `@startuml` | `state` | 1/901 (0.1%, partial) |
+| Component | `@startuml` | `component` | 56/663 (8.4%, partial) |
+| Deployment | `@startuml` | `deployment` | 38/495 (7.7%, partial) |
 | Use Case | `@startuml` | `usecase` | 2/315 (0.6%, partial) |
-| Object | `@startuml` | `object` | 36/155 (23.2%, partial) |
+| Object | `@startuml` | `object` | 48/155 (31.0%, partial) |
 | Timing | `@startuml` | `timing` | 141/141 (100.0%, exact) |
-| ER (crow's foot) | `@startuml` | `er` | 0/157 (0.0%, none) |
+| ER (crow's foot) | `@startuml` | `er` | 1/157 (0.6%, partial) |
 | Gantt | `@startgantt` | `gantt` | 114/114 (100.0%, exact) |
 | Mindmap | `@startmindmap` | `mindmap` | 157/157 (100.0%, exact) |
 | WBS | `@startwbs` | `wbs` | 138/138 (100.0%, exact) |
@@ -146,11 +146,11 @@ There are two golden tiers:
 
 - Strict oracle-assisted tier: `cargo test --test golden_pairs`. This compares
   against Java PlantUML reference SVGs while allowing test-only oracle layout
-  extraction. Current state: 11,251/11,251 eligible SVG goldens pass, with 1,299
-  skipped.
+  extraction. Current state: 11,022/11,251 eligible SVG goldens pass, 229 fail,
+  and 1,299 are skipped.
 - No-oracle product tier: `cargo test --test golden_no_oracle --release`. This
   renders through the same source-only path the CLI uses. Current baseline:
-  5,005/11,251 eligible SVG goldens pass.
+  6,382/11,251 eligible SVG goldens pass.
 
 The 1,199 Java PlantUML error-page goldens are skips, not successes, and do
 not contribute to either headline pass count. The test files live in a

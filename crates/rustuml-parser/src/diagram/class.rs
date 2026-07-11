@@ -99,6 +99,9 @@ pub struct ClassEntity {
     /// colors are ignored for the circle (PlantUML behavior).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub spot_color: Option<String>,
+    /// Circled character from a valid `<< (X,#RRGGBB) Name >>` stereotype.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub spot_character: Option<char>,
     /// Optional background color (e.g., "#lightblue", "#FF0000").
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub color: Option<String>,

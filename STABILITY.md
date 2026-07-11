@@ -10,9 +10,9 @@ bump. The pre-1.0 period exists to get these right.
 *Snapshot as of v0.7.0*
 
 Parity claims in this document use the no-oracle product tier, not the
-oracle-assisted strict tier. The current no-oracle baseline is 5,005/11,251
-eligible SVG goldens (44.5%). The strict tier is green at 11,251/11,251
-eligible SVG goldens but uses test-only oracle layout extraction. The 1,199 Java
+oracle-assisted strict tier. The current no-oracle baseline is 6,382/11,251
+eligible SVG goldens (56.7%). The strict tier passes 11,022/11,251 eligible SVG
+goldens but uses test-only oracle layout extraction. The 1,199 Java
 PlantUML error-page goldens are skipped by both tiers and are not counted as
 passes.
 
