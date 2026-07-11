@@ -17,6 +17,10 @@ pub struct GanttDiagram {
     pub project_start: Option<String>,
     /// Days of week that are closed (0=Monday, 1=Tuesday, ..., 6=Sunday).
     pub closed_days: Vec<u8>,
+    /// Specific calendar dates that are closed (YYYY-MM-DD), e.g. holidays
+    /// declared with `2024-12-25 is closed`.
+    #[serde(default)]
+    pub closed_dates: Vec<String>,
     /// Print scale (e.g. "daily", "weekly", "monthly").
     pub printscale: Option<String>,
     /// Resources mentioned in `on {Resource}` clauses, in order of first appearance.
@@ -28,6 +32,10 @@ pub struct GanttDiagram {
 /// A note block attached to a task.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct GanttNote {
+    /// Name of the task this note is attached to (the task immediately
+    /// preceding the `note` block in source order).
+    #[serde(default)]
+    pub task: String,
     /// Lines of note text.
     pub lines: Vec<String>,
 }
@@ -49,6 +57,8 @@ pub enum TaskStart {
     Day(u32),
     /// Starts when another named task ends.
     AfterTask(String),
+    /// Starts at the same day another named task starts (parallel tasks).
+    WithTask(String),
 }
 
 /// A single task in the Gantt chart.
@@ -62,6 +72,9 @@ pub struct GanttTask {
     pub start: TaskStart,
     /// Optional task color (CSS color name or hex).
     pub color: Option<String>,
+    /// Completion percentage (0-100), if specified with `is N% completed`.
+    #[serde(default)]
+    pub completed: Option<u32>,
     /// Resource assignments for this task (may be multiple with percentages).
     pub resources: Vec<TaskResource>,
 }

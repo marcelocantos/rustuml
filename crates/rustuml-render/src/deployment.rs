@@ -8,12 +8,20 @@
 //! by class/state/component renderers); per-shape geometry is computed
 //! locally so the byte-for-byte XML matches the Java PlantUML reference.
 
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::fmt::Write as _;
 
+use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph, LayoutResult};
 use rustuml_parser::diagram::deployment::*;
 
-use crate::layout_oracle::{OracleLayout, wrap_oracle_envelope};
+use crate::handwritten::{
+    has_deprecated_skinparam as has_deprecated_handwritten_skinparam,
+    is_enabled as is_handwritten_enabled,
+};
+use crate::layout_oracle::{
+    EntityPath, EntityPolygon, EntityRect, EntityText, OracleHandwrittenWarning, OracleLayout,
+    emit_entity_image, wrap_oracle_envelope,
+};
 use crate::plantuml_metrics as pm;
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
@@ -41,10 +49,28 @@ fn fc(v: f64) -> String {
 // ---------------------------------------------------------------------------
 
 const FONT_SIZE: f64 = 14.0;
+// PlantUML `CommandCreoleSprite.executeAndGetRemaining` scales inline sprites
+// by the current font size divided by 13 before drawing the backing image.
+const SPRITE_BASE_FONT_SIZE: f64 = 13.0;
 const FILL: &str = "#F1F1F1";
 const STROKE: &str = "#181818";
 const TEXT_COLOR: &str = "#000000";
 const RX_RY: f64 = 2.5;
+
+// Title block layout (matches the component renderer's constants).
+const TITLE_FONT_SIZE: f64 = 14.0;
+/// Header/footer captions render at font size 10 in grey.
+const HEADER_FONT_SIZE: f64 = 10.0;
+/// Vertical gap between the footer caption baseline and the canvas bottom,
+/// measured from the deployment goldens.
+const FOOTER_BOTTOM_GAP: f64 = 8.5764;
+const TITLE_MARGIN_X: f64 = 10.0;
+/// Trailing horizontal pad excluded from the title's centring region. PlantUML
+/// centres the title in the canvas width minus this 7px (3.5px each side),
+/// measured across the deployment goldens.
+const TITLE_RIGHT_PAD: f64 = 7.0;
+const TITLE_TOP_PAD: f64 = 10.0;
+const TITLE_LINE_H: f64 = 16.48828125;
 
 /// Baseline-y offset within the entity bounding box for a text line.
 ///
@@ -64,6 +90,11 @@ const TEXT_PAD_PACKAGE_LABEL: f64 = ASCENT_14 + 3.0;
 /// Vertical gap between two stacked text lines (used for stereotype + label).
 /// Equals `text_height(14)` = 14 * 1.17773...
 const TEXT_LINE_H: f64 = 16.48828125;
+
+const BODY_MARGIN: f64 = 6.0;
+const BODY_RIGHT_MARGIN: f64 = 25.0;
+const BODY_BOTTOM_MARGIN: f64 = 24.0;
+const LAYOUT_TIMEOUT: std::time::Duration = std::time::Duration::from_secs(5);
 
 // ---------------------------------------------------------------------------
 // Public entry points
@@ -121,6 +152,12 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
     };
 
     let mut svg = SvgBuilder::new_plantuml(canvas_w, canvas_h, "DESCRIPTION");
+
+    if has_deprecated_handwritten_skinparam(&diagram.meta.skinparams)
+        && let Some(warning) = oracle.handwritten_warning.as_ref()
+    {
+        emit_handwritten_warning(&mut svg, warning);
+    }
 
     // PlantUML's id counter starts at ent0002 and is shared between
     // entities/clusters and links. IDs are assigned in source-line order
@@ -199,29 +236,127 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
     // (flattened by the parser to `<kind>BackgroundColor`). PlantUML skinparam
     // keys are case-insensitive, so match case-insensitively.
     let skin_fills = skin_background_fills(&diagram.meta.skinparams);
+    let skin_strokes = skin_border_colors(&diagram.meta.skinparams);
+
+    // Title block. PlantUML emits a `<g class="title">` before the entities,
+    // centring each line in the canvas width (minus a 7px trailing pad), but
+    // never placing it left of TITLE_MARGIN_X. When the body is wider the title
+    // centres over it; when the title itself drives the canvas width it sits at
+    // the left margin. Baselines step by TITLE_LINE_H starting at
+    // TITLE_TOP_PAD + ascent. The entity coordinates supplied by the oracle
+    // already include the vertical offset the title introduces, so we only need
+    // to draw the title itself.
+    if let Some(title) = &diagram.meta.title {
+        let widths: Vec<f64> = title
+            .lines()
+            .map(|t| text_render::measure(t, TITLE_FONT_SIZE, true))
+            .collect();
+        svg.raw(r#"<g class="title" data-source-line="1">"#);
+        for (i, tline) in title.lines().enumerate() {
+            let ty = TITLE_TOP_PAD + pm::ascent(TITLE_FONT_SIZE) + i as f64 * TITLE_LINE_H;
+            let tx = TITLE_MARGIN_X.max((canvas_w - TITLE_RIGHT_PAD - widths[i]) / 2.0);
+            emit_text(&mut svg, tline, tx, ty, TITLE_FONT_SIZE, true, false);
+        }
+        svg.raw("</g>");
+    }
+
+    // Header/footer captions are centred within a block whose width is the
+    // wider of the two captions (anchored at x=0), not the full canvas width.
+    let caption_block_w = {
+        let hw = diagram
+            .meta
+            .header
+            .as_deref()
+            .map(|h| text_render::measure(h, HEADER_FONT_SIZE, false))
+            .unwrap_or(0.0);
+        let fw = diagram
+            .meta
+            .footer
+            .as_deref()
+            .map(|f| text_render::measure(f, HEADER_FONT_SIZE, false))
+            .unwrap_or(0.0);
+        hw.max(fw)
+    };
+    let sprite_names: HashSet<String> = diagram
+        .meta
+        .sprites
+        .keys()
+        .map(|k| k.to_lowercase())
+        .collect();
+    let sprite_cache =
+        crate::sprite::SpriteCache::from_sprites_scaled(&diagram.meta.sprites, sprite_scale());
+    let ctx = OracleRenderContext {
+        oracle,
+        id_for_node: &id_for_node,
+        skin_fills: &skin_fills,
+        skin_strokes: &skin_strokes,
+        sprite_names: &sprite_names,
+        sprites: &diagram.meta.sprites,
+        sprite_cache: &sprite_cache,
+        handwritten: is_handwritten_enabled(&diagram.meta.skinparams),
+    };
+
+    // Header — a centred grey caption above the diagram (font 10). The oracle
+    // canvas already includes the vertical space the header occupies.
+    if let Some(header) = &diagram.meta.header {
+        let tl = text_render::measure(header, HEADER_FONT_SIZE, false);
+        let hx = (caption_block_w - tl) / 2.0;
+        let hy = pm::ascent(HEADER_FONT_SIZE);
+        svg.raw(r#"<g class="header" data-source-line="1">"#);
+        emit_grey_text(&mut svg, header, hx, hy);
+        svg.raw("</g>");
+    }
 
     // Emit clusters first (depth-first), then leaf entities (depth-first).
     for root in &roots {
-        emit_clusters_dfs(
-            &mut svg,
-            root,
-            &diagram.nodes,
-            None,
-            oracle,
-            &id_for_node,
-            &skin_fills,
-        );
+        emit_clusters_dfs(&mut svg, root, &diagram.nodes, None, &ctx);
     }
+    // Leaf-entity emission order is normally shallow-before-deep, then source
+    // line. When duplicate child declarations are ignored by PlantUML, later
+    // root leaves can sit between earlier and later nested leaves; use source
+    // order for that root-leaf shape.
+    let mut leaves: Vec<(usize, usize, &DeploymentNode, String)> = Vec::new();
     for root in &roots {
-        emit_entities_dfs(
-            &mut svg,
-            root,
-            &diagram.nodes,
-            None,
-            oracle,
-            &id_for_node,
-            &skin_fills,
-        );
+        collect_entities_dfs(root, &diagram.nodes, None, 0, &mut leaves);
+    }
+    if diagram.connections.is_empty() || leaves.iter().any(|(depth, _, _, _)| *depth == 0) {
+        leaves.sort_by_key(|(_, source_line, _, _)| *source_line);
+        for (_, _, node, qname) in &leaves {
+            emit_entity(&mut svg, node, qname, &ctx);
+        }
+    } else {
+        // PlantUML walks each root subtree in turn, emitting that subtree's
+        // leaves shallow-before-deep (then by source line). Roots stay in
+        // declaration order, so a sibling root's direct child must NOT jump
+        // ahead of an earlier root's deeper grandchild. Sort within each root's
+        // contribution rather than globally.
+        for root in &roots {
+            let mut group: Vec<(usize, usize, &DeploymentNode, String)> = Vec::new();
+            collect_entities_dfs(root, &diagram.nodes, None, 0, &mut group);
+            group.sort_by_key(|a| (a.0, a.1));
+            for (_, _, node, qname) in &group {
+                emit_entity(&mut svg, node, qname, &ctx);
+            }
+        }
+    }
+
+    // Emit attached/floating notes. PlantUML lays each note out as a
+    // `<g class="entity">` with an auto-generated `GMN*` qualified name and a
+    // hand-rolled box-plus-leader path. We reconstruct that path locally from
+    // the box rectangle and leader apex the oracle extracted from the golden.
+    //
+    // The oracle captures any entity that leads with a filled `<path>` as a
+    // note, which also sweeps up `file`/`folder`/`package` leaf shapes (their
+    // outlines are filled paths too). Skip any "note" whose qualified name is
+    // actually a diagram node — those are element shapes drawn by the entity
+    // pass, not real notes.
+    let node_qnames: std::collections::HashSet<&str> =
+        qname_for_id.values().map(String::as_str).collect();
+    for note in &oracle.note_entities {
+        if node_qnames.contains(note.qualified_name.as_str()) {
+            continue;
+        }
+        emit_note(&mut svg, note);
     }
 
     // Emit connections in source order.
@@ -237,10 +372,114 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
             &id_for_node,
             &own_qname_for_id,
             &link_id,
+            ctx.handwritten,
         );
     }
 
+    if diagram.meta.legend.is_some() && !oracle.legends.is_empty() {
+        render_oracle_legends(&mut svg, oracle);
+    }
+
+    // Footer — a centred grey caption pinned near the bottom (font 10).
+    if let Some(footer) = &diagram.meta.footer {
+        let tl = text_render::measure(footer, HEADER_FONT_SIZE, false);
+        let fx = (caption_block_w - tl) / 2.0;
+        let fy = canvas_h - FOOTER_BOTTOM_GAP;
+        svg.raw(r#"<g class="footer" data-source-line="2">"#);
+        emit_grey_text(&mut svg, footer, fx, fy);
+        svg.raw("</g>");
+    }
+
     svg.finalize_plantuml()
+}
+
+fn render_oracle_legends(svg: &mut SvgBuilder, oracle: &OracleLayout) {
+    for legend in &oracle.legends {
+        let source_attr = legend
+            .source_line
+            .as_deref()
+            .map(|s| format!(r#" data-source-line="{s}""#))
+            .unwrap_or_default();
+        svg.raw(&format!(r#"<g class="legend"{source_attr}>"#));
+
+        let rx_attr = legend
+            .rect
+            .rx
+            .as_deref()
+            .map(|rx| format!(r#" rx="{rx}""#))
+            .unwrap_or_default();
+        let ry_attr = legend
+            .rect
+            .ry
+            .as_deref()
+            .map(|ry| format!(r#" ry="{ry}""#))
+            .unwrap_or_default();
+        svg.raw(&format!(
+            r#"<rect fill="{}" height="{}"{}{} style="{}" width="{}" x="{}" y="{}"/>"#,
+            legend.rect.fill,
+            fc(legend.rect.height),
+            rx_attr,
+            ry_attr,
+            legend.rect.style,
+            fc(legend.rect.width),
+            fc(legend.rect.x),
+            fc(legend.rect.y),
+        ));
+
+        for text in &legend.texts {
+            let mut text_buf = String::new();
+            text_render::emit_text(
+                &mut text_buf,
+                &text.text,
+                &TextBase {
+                    x: text.x,
+                    y: text.y,
+                    font_size: FONT_SIZE as u32,
+                    font_family: "sans-serif",
+                    fill: TEXT_COLOR,
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
+            svg.raw(&text_buf);
+        }
+
+        for line in &legend.lines {
+            let style = line
+                .style
+                .as_deref()
+                .unwrap_or("stroke:#000000;stroke-width:1;");
+            svg.raw(&format!(
+                r#"<line style="{style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                line.x1, line.x2, line.y1, line.y2,
+            ));
+        }
+
+        svg.raw("</g>");
+    }
+}
+
+/// Emit a grey caption line (header/footer) at font size 10.
+fn emit_grey_text(svg: &mut SvgBuilder, content: &str, x: f64, y: f64) {
+    let mut buf = String::new();
+    text_render::emit_text(
+        &mut buf,
+        content,
+        &TextBase {
+            x,
+            y,
+            font_size: HEADER_FONT_SIZE as u32,
+            font_family: "sans-serif",
+            fill: "#888888",
+            bold: false,
+            italic: false,
+            underline: false,
+            skip_underline: false,
+        },
+    );
+    svg.raw(&buf);
 }
 
 /// The skinparam keyword for each element kind (e.g. `node`, `database`).
@@ -268,7 +507,53 @@ fn skin_keyword(kind: DeploymentNodeKind) -> &'static str {
         File => "file",
         Package => "package",
         Stack => "stack",
+        Default => "",
     }
+}
+
+fn emit_handwritten_warning(svg: &mut SvgBuilder, warning: &OracleHandwrittenWarning) {
+    let mut buf = String::new();
+    write!(
+        buf,
+        r#"<polygon fill="{}" points="{}""#,
+        escape_xml_attr(&warning.polygon.fill),
+        escape_xml_attr(&warning.polygon.points),
+    )
+    .unwrap();
+    if let Some(style) = warning.polygon.style.as_deref() {
+        write!(buf, r#" style="{}""#, escape_xml_attr(style)).unwrap();
+    }
+    buf.push_str("/>");
+    match warning.text_length.as_deref() {
+        Some(text_length) => write!(
+            buf,
+            r##"<text fill="#000000" font-family="monospace" font-size="10" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
+            escape_xml_attr(text_length),
+            fc(warning.text.x),
+            fc(warning.text.y),
+            escape_xml_text(&warning.text.text),
+        ),
+        None => write!(
+            buf,
+            r##"<text fill="#000000" font-family="monospace" font-size="10" x="{}" y="{}">{}</text>"##,
+            fc(warning.text.x),
+            fc(warning.text.y),
+            escape_xml_text(&warning.text.text),
+        ),
+    }
+    .unwrap();
+    svg.raw(&buf);
+}
+
+fn escape_xml_attr(s: &str) -> String {
+    s.replace('&', "&amp;")
+        .replace('<', "&lt;")
+        .replace('>', "&gt;")
+        .replace('"', "&quot;")
+}
+
+fn escape_xml_text(s: &str) -> String {
+    escape_xml_attr(s)
 }
 
 /// Build a per-kind map of background fills from `<kind>BackgroundColor`
@@ -314,40 +599,96 @@ fn skin_background_fills(
     map
 }
 
+/// Build a per-kind map of border (stroke) colours from `<kind>BorderColor`
+/// skinparams. Keys are matched case-insensitively (PlantUML convention).
+fn skin_border_colors(
+    skinparams: &[rustuml_parser::diagram::SkinParam],
+) -> HashMap<DeploymentNodeKind, String> {
+    use DeploymentNodeKind::*;
+    const KINDS: &[DeploymentNodeKind] = &[
+        Node,
+        Artifact,
+        Cloud,
+        Database,
+        Storage,
+        Frame,
+        Folder,
+        Actor,
+        Queue,
+        Component,
+        Rectangle,
+        Agent,
+        Boundary,
+        Card,
+        Collections,
+        Control,
+        Entity,
+        File,
+        Package,
+        Stack,
+    ];
+    let mut map = HashMap::new();
+    for &kind in KINDS {
+        let target = format!("{}bordercolor", skin_keyword(kind));
+        if let Some(sp) = skinparams
+            .iter()
+            .rev()
+            .find(|sp| sp.key.to_ascii_lowercase() == target)
+        {
+            map.insert(kind, resolve_fill(&sp.value));
+        }
+    }
+    map
+}
+
 /// Compute the "own" qualified-name (last segment) for a node.
 fn own_qname(node: &DeploymentNode) -> String {
     let derived = label_to_id(&node.label);
     if derived == node.id && node.id != node.label {
-        node.label.clone()
+        qname_label_segment(&node.label)
     } else {
         node.id.clone()
     }
 }
 
-#[allow(clippy::too_many_arguments)]
+struct OracleRenderContext<'a> {
+    oracle: &'a OracleLayout,
+    id_for_node: &'a HashMap<String, String>,
+    skin_fills: &'a HashMap<DeploymentNodeKind, String>,
+    skin_strokes: &'a HashMap<DeploymentNodeKind, String>,
+    sprite_names: &'a HashSet<String>,
+    sprites: &'a HashMap<String, rustuml_parser::diagram::SpriteData>,
+    sprite_cache: &'a crate::sprite::SpriteCache,
+    handwritten: bool,
+}
+
 fn emit_clusters_dfs(
     svg: &mut SvgBuilder,
     node: &DeploymentNode,
     all: &[DeploymentNode],
     parent_qname: Option<&str>,
-    oracle: &OracleLayout,
-    id_for_node: &HashMap<String, String>,
-    skin_fills: &HashMap<DeploymentNodeKind, String>,
+    ctx: &OracleRenderContext<'_>,
 ) {
     let qname = qualified_name(node, parent_qname);
     let is_cluster = !node.children.is_empty();
     if is_cluster {
-        let ent_id = id_for_node.get(&node.id).cloned().unwrap_or_default();
-        let rect = oracle
+        let ent_id = ctx.id_for_node.get(&node.id).cloned().unwrap_or_default();
+        let rect = ctx
+            .oracle
             .entities
             .get(&qname)
-            .or_else(|| oracle.entities.get(&node.id))
-            .or_else(|| oracle.entities.get(&node.label));
+            .or_else(|| ctx.oracle.entities.get(&node.id))
+            .or_else(|| ctx.oracle.entities.get(&node.label));
         if let Some(rect) = rect {
+            let source_line = rect
+                .source_line
+                .as_deref()
+                .map(str::to_string)
+                .unwrap_or_else(|| node.source_line.to_string());
             svg.raw(&format!("<!--cluster {}-->", node.label));
             svg.raw(&format!(
                 r#"<g class="cluster" data-qualified-name="{qname}" data-source-line="{sl}" id="{ent_id}">"#,
-                sl = node.source_line,
+                sl = source_line,
             ));
             // A `#color` (or a `skinparam <kind> { BackgroundColor }`) fills
             // the cluster shape, replacing the default `fill="none"`; the
@@ -356,68 +697,145 @@ fn emit_clusters_dfs(
                 .color
                 .as_deref()
                 .map(resolve_fill)
-                .or_else(|| skin_fills.get(&node.kind).cloned());
-            emit_cluster_shape(
-                svg,
-                node.kind,
-                rect.x,
-                rect.y,
-                rect.width,
-                rect.height,
-                cluster_fill.as_deref(),
-            );
-            emit_cluster_label(svg, node.kind, node, rect.x, rect.y, rect.width);
+                .or_else(|| ctx.skin_fills.get(&node.kind).cloned());
+            let stroke = ctx
+                .skin_strokes
+                .get(&node.kind)
+                .map(String::as_str)
+                .unwrap_or(STROKE);
+            if matches!(node.kind, DeploymentNodeKind::Cloud) {
+                if let Some(glyph) = rect.glyph_path_d.as_deref() {
+                    emit_oracle_cloud_cluster_path(
+                        svg,
+                        glyph,
+                        cluster_fill.as_deref().unwrap_or("none"),
+                        stroke,
+                    );
+                } else {
+                    emit_cluster_shape(
+                        svg,
+                        node.kind,
+                        rect.x,
+                        rect.y,
+                        rect.width,
+                        rect.height,
+                        cluster_fill.as_deref(),
+                        stroke,
+                        &node.label,
+                    );
+                }
+                if let (Some(&text_x), Some(&text_y)) =
+                    (rect.text_x_values.first(), rect.text_y_values.first())
+                {
+                    emit_text(svg, &node.label, text_x, text_y, FONT_SIZE, true, false);
+                } else {
+                    emit_cluster_label(svg, node.kind, node, rect.x, rect.y, rect.width, Some(ctx));
+                }
+            } else {
+                emit_cluster_shape(
+                    svg,
+                    node.kind,
+                    rect.x,
+                    rect.y,
+                    rect.width,
+                    rect.height,
+                    cluster_fill.as_deref(),
+                    stroke,
+                    &node.label,
+                );
+                emit_cluster_label(svg, node.kind, node, rect.x, rect.y, rect.width, Some(ctx));
+            }
             svg.raw("</g>");
         }
         for child_id in &node.children {
             if let Some(child) = all.iter().find(|n| n.id == *child_id) {
-                emit_clusters_dfs(
-                    svg,
-                    child,
-                    all,
-                    Some(&qname),
-                    oracle,
-                    id_for_node,
-                    skin_fills,
-                );
+                emit_clusters_dfs(svg, child, all, Some(&qname), ctx);
             }
         }
     }
 }
 
-#[allow(clippy::too_many_arguments)]
-fn emit_entities_dfs(
-    svg: &mut SvgBuilder,
-    node: &DeploymentNode,
-    all: &[DeploymentNode],
+/// Walk the node tree depth-first, collecting leaf entities together with
+/// their nesting depth and computed qualified name.
+fn collect_entities_dfs<'a>(
+    node: &'a DeploymentNode,
+    all: &'a [DeploymentNode],
     parent_qname: Option<&str>,
-    oracle: &OracleLayout,
-    id_for_node: &HashMap<String, String>,
-    skin_fills: &HashMap<DeploymentNodeKind, String>,
+    depth: usize,
+    out: &mut Vec<(usize, usize, &'a DeploymentNode, String)>,
 ) {
     let qname = qualified_name(node, parent_qname);
     let is_cluster = !node.children.is_empty();
     if !is_cluster {
-        let ent_id = id_for_node.get(&node.id).cloned().unwrap_or_default();
-        let rect = oracle
-            .entities
-            .get(&qname)
-            .or_else(|| oracle.entities.get(&node.id))
-            .or_else(|| oracle.entities.get(&node.label));
-        if let Some(rect) = rect {
-            svg.raw(&format!("<!--entity {}-->", node.label));
-            svg.raw(&format!(
-                r#"<g class="entity" data-qualified-name="{qname}" data-source-line="{sl}" id="{ent_id}">"#,
-                sl = node.source_line,
-            ));
-            // Fill precedence: explicit `#color` > `skinparam <kind>
-            // BackgroundColor` > the `#F1F1F1` default.
-            let entity_fill = node
-                .color
-                .as_deref()
-                .map(resolve_fill)
-                .or_else(|| skin_fills.get(&node.kind).cloned())
-                .unwrap_or_else(|| FILL.to_string());
+        out.push((depth, node.source_line, node, qname));
+    } else {
+        for child_id in &node.children {
+            if let Some(child) = all.iter().find(|n| n.id == *child_id) {
+                collect_entities_dfs(child, all, Some(&qname), depth + 1, out);
+            }
+        }
+    }
+}
+
+fn emit_entity(
+    svg: &mut SvgBuilder,
+    node: &DeploymentNode,
+    qname: &str,
+    ctx: &OracleRenderContext<'_>,
+) {
+    let ent_id = ctx.id_for_node.get(&node.id).cloned().unwrap_or_default();
+    let rect = ctx
+        .oracle
+        .entities
+        .get(qname)
+        .or_else(|| ctx.oracle.entities.get(&node.id))
+        .or_else(|| ctx.oracle.entities.get(&node.label));
+    if let Some(rect) = rect {
+        let source_line = rect
+            .source_line
+            .as_deref()
+            .map(str::to_string)
+            .unwrap_or_else(|| node.source_line.to_string());
+        svg.raw(&format!("<!--entity {}-->", node.label));
+        svg.raw(&format!(
+            r#"<g class="entity" data-qualified-name="{qname}" data-source-line="{sl}" id="{ent_id}">"#,
+            sl = source_line,
+        ));
+        // Fill precedence: explicit `#color` > `skinparam <kind>
+        // BackgroundColor` > the `#F1F1F1` default.
+        let entity_fill = node
+            .color
+            .as_deref()
+            .map(resolve_fill)
+            .or_else(|| ctx.skin_fills.get(&node.kind).cloned())
+            .unwrap_or_else(|| FILL.to_string());
+        let stroke = ctx
+            .skin_strokes
+            .get(&node.kind)
+            .map(String::as_str)
+            .unwrap_or(STROKE);
+        // Sequence-style icon shapes (boundary/control/entity) are drawn
+        // from an ellipse-anchored EntityRect; their decorations and label
+        // sit at fixed offsets from the icon centre, so they render their
+        // own shape + label together rather than via the generic path.
+        use DeploymentNodeKind::*;
+        if ctx.handwritten && emit_handwritten_entity(svg, node, rect, &entity_fill) {
+            // The handwritten branch consumed oracle-captured primitive
+            // geometry and emitted the label using oracle text anchors.
+        } else if matches!(node.kind, Boundary | Control | Entity | Default) {
+            emit_icon_entity(svg, node, rect, &entity_fill);
+        } else if matches!(node.kind, Actor) {
+            emit_actor_entity(svg, rect, &entity_fill);
+            if !emit_oracle_image_label_children(svg, rect)
+                && let Some(text) = rect.texts.first()
+            {
+                emit_text(svg, &text.text, text.x, text.y, FONT_SIZE, false, false);
+            }
+        } else if matches!(node.kind, Collections) {
+            emit_collections_entity(svg, node, rect, &entity_fill);
+        } else if matches!(node.kind, Cloud) {
+            emit_cloud_entity(svg, node, rect, &entity_fill);
+        } else {
             emit_entity_shape(
                 svg,
                 node.kind,
@@ -426,25 +844,100 @@ fn emit_entities_dfs(
                 rect.width,
                 rect.height,
                 &entity_fill,
+                stroke,
+                &node.label,
             );
-            emit_entity_label(svg, node.kind, node, rect.x, rect.y, rect.width);
-            svg.raw("</g>");
-        }
-    } else {
-        for child_id in &node.children {
-            if let Some(child) = all.iter().find(|n| n.id == *child_id) {
-                emit_entities_dfs(
-                    svg,
-                    child,
-                    all,
-                    Some(&qname),
-                    oracle,
-                    id_for_node,
-                    skin_fills,
-                );
+            if !emit_oracle_image_label_children(svg, rect) {
+                emit_entity_label(svg, node.kind, node, rect.x, rect.y, rect.width, Some(ctx));
             }
         }
+        svg.raw("</g>");
     }
+}
+
+fn emit_handwritten_entity(
+    svg: &mut SvgBuilder,
+    node: &DeploymentNode,
+    rect: &crate::layout_oracle::EntityRect,
+    fill: &str,
+) -> bool {
+    let mut emitted_shape = false;
+    if let Some(polygon) = rect.body_polygon.as_ref() {
+        emit_oracle_polygon(svg, polygon);
+        emitted_shape = true;
+    }
+    for path in &rect.separator_paths {
+        emit_oracle_path(svg, path);
+        emitted_shape = true;
+    }
+    if let Some(paths) = rect.glyph_path_d.as_deref()
+        && !paths.is_empty()
+    {
+        for (i, piece) in paths.split('|').enumerate() {
+            let (d, style) = piece
+                .split_once("#STYLE#")
+                .unwrap_or((piece, "stroke:#181818;stroke-width:0.5;"));
+            let path_fill = if i == 0 { fill } else { "none" };
+            svg.raw(&format!(
+                r#"<path d="{d}" fill="{path_fill}" style="{style}"/>"#
+            ));
+            emitted_shape = true;
+        }
+    }
+    if emitted_shape {
+        if let Some(text) = rect.texts.first() {
+            emit_text(svg, &text.text, text.x, text.y, FONT_SIZE, false, false);
+        } else if let (Some(&x), Some(&y)) =
+            (rect.text_x_values.first(), rect.text_y_values.first())
+        {
+            emit_text(svg, &node.label, x, y, FONT_SIZE, false, false);
+        } else {
+            emit_entity_label(svg, node.kind, node, rect.x, rect.y, rect.width, None);
+        }
+    }
+    emitted_shape
+}
+
+fn emit_oracle_polygon(svg: &mut SvgBuilder, polygon: &EntityPolygon) {
+    let mut buf = String::new();
+    write!(
+        buf,
+        r#"<polygon fill="{}" points="{}""#,
+        escape_xml_attr(&polygon.fill),
+        escape_xml_attr(&polygon.points),
+    )
+    .unwrap();
+    if let Some(style) = polygon.style.as_deref() {
+        write!(buf, r#" style="{}""#, escape_xml_attr(style)).unwrap();
+    }
+    buf.push_str("/>");
+    svg.raw(&buf);
+}
+
+fn emit_oracle_path(svg: &mut SvgBuilder, path: &EntityPath) {
+    let mut buf = String::new();
+    write!(
+        buf,
+        r#"<path d="{}" fill="{}""#,
+        escape_xml_attr(&path.d),
+        escape_xml_attr(&path.fill),
+    )
+    .unwrap();
+    if let Some(style) = path.style.as_deref() {
+        write!(buf, r#" style="{}""#, escape_xml_attr(style)).unwrap();
+    }
+    buf.push_str("/>");
+    svg.raw(&buf);
+}
+
+fn stereotype_refs_sprite(stereotype: &str, sprite_names: &HashSet<String>) -> bool {
+    let lowered = stereotype.trim().trim_start_matches('$').to_lowercase();
+    if sprite_names.contains(&lowered) {
+        return true;
+    }
+    lowered
+        .rsplit_once('_')
+        .is_some_and(|(_, suffix)| sprite_names.contains(suffix))
 }
 
 fn qualified_name(node: &DeploymentNode, parent_qname: Option<&str>) -> String {
@@ -454,7 +947,7 @@ fn qualified_name(node: &DeploymentNode, parent_qname: Option<&str>) -> String {
     let derived = label_to_id(&node.label);
     let own = if derived == node.id && node.id != node.label {
         // Quoted-form, no alias: id was auto-derived. Use label.
-        node.label.clone()
+        qname_label_segment(&node.label)
     } else if node.id == node.label {
         // Bare form: id == label. Either works.
         node.id.clone()
@@ -466,6 +959,10 @@ fn qualified_name(node: &DeploymentNode, parent_qname: Option<&str>) -> String {
         Some(p) => format!("{p}.{own}"),
         None => own,
     }
+}
+
+fn qname_label_segment(label: &str) -> String {
+    label.replace(':', ".")
 }
 
 /// Resolve a raw `#color` token (the parser strips the leading `#`, so we
@@ -502,6 +999,7 @@ fn label_to_id(label: &str) -> String {
 // Shape emission — leaf entities
 // ---------------------------------------------------------------------------
 
+#[allow(clippy::too_many_arguments)]
 fn emit_entity_shape(
     svg: &mut SvgBuilder,
     kind: DeploymentNodeKind,
@@ -510,25 +1008,28 @@ fn emit_entity_shape(
     w: f64,
     h: f64,
     fill: &str,
+    stroke: &str,
+    label: &str,
 ) {
     use DeploymentNodeKind::*;
     match kind {
-        Node => emit_tag_polygon(svg, x, y, w, h, fill, 0.5),
-        Artifact => emit_artifact(svg, x, y, w, h, fill),
-        Card | Rectangle | Agent => emit_rounded_rect(svg, x, y, w, h, fill),
-        Component => emit_component(svg, x, y, w, h, fill),
-        Frame => emit_frame(svg, x, y, w, h, fill),
-        Folder => emit_folder(svg, x, y, w, h, fill),
-        File => emit_file(svg, x, y, w, h, fill),
-        Package => emit_package(svg, x, y, w, h, fill),
-        Stack => emit_stack(svg, x, y, w, h, fill),
-        Storage => emit_storage(svg, x, y, w, h, fill),
-        Database => emit_database(svg, x, y, w, h, fill),
-        Queue => emit_queue(svg, x, y, w, h, fill),
-        _ => emit_rounded_rect(svg, x, y, w, h, fill),
+        Node => emit_tag_polygon(svg, x, y, w, h, fill, 0.5, stroke),
+        Artifact => emit_artifact(svg, x, y, w, h, fill, stroke),
+        Card | Rectangle | Agent => emit_rounded_rect(svg, x, y, w, h, fill, stroke),
+        Component => emit_component(svg, x, y, w, h, fill, stroke),
+        Frame => emit_frame(svg, x, y, w, h, fill, label),
+        Folder => emit_folder(svg, x, y, w, h, fill, stroke),
+        File => emit_file(svg, x, y, w, h, fill, stroke),
+        Package => emit_package(svg, x, y, w, h, fill, stroke, label),
+        Stack => emit_stack(svg, x, y, w, h, fill, stroke),
+        Storage => emit_storage(svg, x, y, w, h, fill, stroke),
+        Database => emit_database(svg, x, y, w, h, fill, stroke, label),
+        Queue => emit_queue(svg, x, y, w, h, fill, stroke),
+        _ => emit_rounded_rect(svg, x, y, w, h, fill, stroke),
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 fn emit_cluster_shape(
     svg: &mut SvgBuilder,
     kind: DeploymentNodeKind,
@@ -537,27 +1038,56 @@ fn emit_cluster_shape(
     w: f64,
     h: f64,
     fill: Option<&str>,
+    stroke: &str,
+    label: &str,
 ) {
     use DeploymentNodeKind::*;
     // Clusters default to no fill; a `#color` paints the cluster background.
     let fill = fill.unwrap_or("none");
     match kind {
         // Clusters use stroke-width=1 (per goldens).
-        Node => emit_tag_polygon(svg, x, y, w, h, fill, 1.0),
+        Node => emit_tag_polygon(svg, x, y, w, h, fill, 1.0, stroke),
+        Artifact => emit_artifact_with_stroke_width(svg, x, y, w, h, fill, stroke, 1.0),
         // Card cluster has rect + horizontal line under title.
-        Card => emit_card_cluster(svg, x, y, w, h, fill),
+        Card => emit_card_cluster(svg, x, y, w, h, fill, stroke),
         // Rectangle / Agent cluster: bare rect, no line.
-        Rectangle | Agent => emit_plain_rect_cluster(svg, x, y, w, h, fill),
-        Frame => emit_frame_cluster(svg, x, y, w, h, fill),
-        Folder => emit_folder_cluster(svg, x, y, w, h),
-        Package => emit_package_cluster(svg, x, y, w, h),
-        _ => emit_tag_polygon(svg, x, y, w, h, fill, 1.0),
+        Rectangle | Agent => emit_plain_rect_cluster(svg, x, y, w, h, fill, stroke),
+        // Component cluster: rounded rect + UML component plug icon at the
+        // top-right, identical to the leaf component shape but drawn with the
+        // cluster stroke-width (1) instead of the leaf 0.5.
+        Component => emit_component_cluster(svg, x, y, w, h, fill, stroke),
+        Frame => emit_frame_cluster(svg, x, y, w, h, fill, stroke),
+        Folder => emit_folder_cluster(svg, x, y, w, h, fill, label),
+        Package => emit_package_cluster(svg, x, y, w, h, fill, label),
+        Stack => emit_stack_cluster(svg, x, y, w, h, fill),
+        _ => emit_tag_polygon(svg, x, y, w, h, fill, 1.0, stroke),
     }
 }
 
-fn emit_plain_rect_cluster(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) {
+fn emit_oracle_cloud_cluster_path(svg: &mut SvgBuilder, glyph: &str, fill: &str, stroke: &str) {
+    let first = glyph.split('|').next().unwrap_or(glyph);
+    let (d, style) = first
+        .split_once("#STYLE#")
+        .map_or((first, ""), |(d, style)| (d, style));
+    let style = if style.is_empty() {
+        format!("stroke:{stroke};stroke-width:1;")
+    } else {
+        style.to_string()
+    };
+    svg.raw(&format!(r#"<path d="{d}" fill="{fill}" style="{style}"/>"#,));
+}
+
+fn emit_plain_rect_cluster(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    stroke: &str,
+) {
     svg.raw(&format!(
-        r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{STROKE};stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"#,
+        r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{stroke};stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"#,
         h = fc(h),
         w = fc(w),
         x = fc(x),
@@ -567,7 +1097,17 @@ fn emit_plain_rect_cluster(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64,
 
 // ---- Node ("tag" polygon) -------------------------------------------------
 
-fn emit_tag_polygon(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str, sw: f64) {
+#[allow(clippy::too_many_arguments)]
+pub(crate) fn emit_tag_polygon(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    sw: f64,
+    stroke: &str,
+) {
     let off = 10.0;
     let x1 = fc(x);
     let y1 = fc(y + off);
@@ -579,7 +1119,7 @@ fn emit_tag_polygon(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: 
     let y4 = fc(y + h);
     let points = format!("{x1},{y1},{x2},{y2},{x3},{y2},{x3},{y3},{x4},{y4},{x1},{y4},{x1},{y1}");
     svg.raw(&format!(
-        r#"<polygon fill="{fill}" points="{points}" style="stroke:{STROKE};stroke-width:{sw};"/>"#,
+        r#"<polygon fill="{fill}" points="{points}" style="stroke:{stroke};stroke-width:{sw};"/>"#,
     ));
     // 3 lines for the 3D effect: top-right diagonal, top inner, right inner.
     let xa = fc(x + w - off);
@@ -587,27 +1127,50 @@ fn emit_tag_polygon(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: 
     let ya = fc(y + off);
     let yb = fc(y);
     svg.raw(&format!(
-        r#"<line style="stroke:{STROKE};stroke-width:{sw};" x1="{xa}" x2="{xb}" y1="{ya}" y2="{yb}"/>"#,
+        r#"<line style="stroke:{stroke};stroke-width:{sw};" x1="{xa}" x2="{xb}" y1="{ya}" y2="{yb}"/>"#,
     ));
     let xc = fc(x);
     svg.raw(&format!(
-        r#"<line style="stroke:{STROKE};stroke-width:{sw};" x1="{xc}" x2="{xa}" y1="{ya}" y2="{ya}"/>"#,
+        r#"<line style="stroke:{stroke};stroke-width:{sw};" x1="{xc}" x2="{xa}" y1="{ya}" y2="{ya}"/>"#,
     ));
     let yc = fc(y + h);
     svg.raw(&format!(
-        r#"<line style="stroke:{STROKE};stroke-width:{sw};" x1="{xa}" x2="{xa}" y1="{ya}" y2="{yc}"/>"#,
+        r#"<line style="stroke:{stroke};stroke-width:{sw};" x1="{xa}" x2="{xa}" y1="{ya}" y2="{yc}"/>"#,
     ));
 }
 
 // ---- Artifact (rect + folded corner) --------------------------------------
 
-fn emit_artifact(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) {
+pub(crate) fn emit_artifact(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    stroke: &str,
+) {
+    emit_artifact_with_stroke_width(svg, x, y, w, h, fill, stroke, 0.5);
+}
+
+#[allow(clippy::too_many_arguments)]
+fn emit_artifact_with_stroke_width(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    stroke: &str,
+    stroke_width: f64,
+) {
+    let sw = fc(stroke_width);
     let x_s = fc(x);
     let y_s = fc(y);
     let w_s = fc(w);
     let h_s = fc(h);
     svg.raw(&format!(
-        r#"<rect fill="{fill}" height="{h_s}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{STROKE};stroke-width:0.5;" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
+        r#"<rect fill="{fill}" height="{h_s}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{stroke};stroke-width:{sw};" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
     ));
     // Folded corner polygon at top-right (12x14 box, inset 5 from right and 5 from top).
     let fx = x + w - 17.0; // 12 wide, then 5 from right edge
@@ -633,17 +1196,17 @@ fn emit_artifact(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &st
         fc(p1.1),
     );
     svg.raw(&format!(
-        r#"<polygon fill="{fill}" points="{pts}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+        r#"<polygon fill="{fill}" points="{pts}" style="stroke:{stroke};stroke-width:{sw};"/>"#,
     ));
     // Two lines for the fold detail.
     svg.raw(&format!(
-        r#"<line style="stroke:{STROKE};stroke-width:0.5;" x1="{a}" x2="{a}" y1="{y1}" y2="{y2}"/>"#,
+        r#"<line style="stroke:{stroke};stroke-width:{sw};" x1="{a}" x2="{a}" y1="{y1}" y2="{y2}"/>"#,
         a = fc(fx + 6.0),
         y1 = fc(fy),
         y2 = fc(fy + 6.0),
     ));
     svg.raw(&format!(
-        r#"<line style="stroke:{STROKE};stroke-width:0.5;" x1="{x1}" x2="{x2}" y1="{y}" y2="{y}"/>"#,
+        r#"<line style="stroke:{stroke};stroke-width:{sw};" x1="{x1}" x2="{x2}" y1="{y}" y2="{y}"/>"#,
         x1 = fc(fx + 12.0),
         x2 = fc(fx + 6.0),
         y = fc(fy + 6.0),
@@ -652,9 +1215,17 @@ fn emit_artifact(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &st
 
 // ---- Rounded rect (card / rectangle / agent leaf) --------------------------
 
-fn emit_rounded_rect(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) {
+fn emit_rounded_rect(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    stroke: &str,
+) {
     svg.raw(&format!(
-        r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{STROKE};stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"#,
+        r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{stroke};stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"#,
         h = fc(h),
         w = fc(w),
         x = fc(x),
@@ -664,9 +1235,17 @@ fn emit_rounded_rect(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill:
 
 // ---- Card cluster (rect + horizontal line) --------------------------------
 
-fn emit_card_cluster(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) {
+fn emit_card_cluster(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    stroke: &str,
+) {
     svg.raw(&format!(
-        r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{STROKE};stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"#,
+        r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{stroke};stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"#,
         h = fc(h),
         w = fc(w),
         x = fc(x),
@@ -675,7 +1254,7 @@ fn emit_card_cluster(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill:
     // Horizontal line under the title row (at y + 20.4883).
     let ly = y + 20.4883;
     svg.raw(&format!(
-        r#"<line style="stroke:{STROKE};stroke-width:1;" x1="{x1}" x2="{x2}" y1="{ly_s}" y2="{ly_s}"/>"#,
+        r#"<line style="stroke:{stroke};stroke-width:1;" x1="{x1}" x2="{x2}" y1="{ly_s}" y2="{ly_s}"/>"#,
         x1 = fc(x),
         x2 = fc(x + w),
         ly_s = fc(ly),
@@ -684,9 +1263,9 @@ fn emit_card_cluster(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill:
 
 // ---- Component (rect + tab + bars) ----------------------------------------
 
-fn emit_component(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) {
+fn emit_component(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str, stroke: &str) {
     svg.raw(&format!(
-        r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{STROKE};stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"#,
+        r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{stroke};stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"#,
         h = fc(h),
         w = fc(w),
         x = fc(x),
@@ -696,19 +1275,59 @@ fn emit_component(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &s
     let tab_x = x + w - 20.0;
     let tab_y = y + 5.0;
     svg.raw(&format!(
-        r#"<rect fill="{fill}" height="10" style="stroke:{STROKE};stroke-width:0.5;" width="15" x="{x}" y="{y}"/>"#,
+        r#"<rect fill="{fill}" height="10" style="stroke:{stroke};stroke-width:0.5;" width="15" x="{x}" y="{y}"/>"#,
         x = fc(tab_x),
         y = fc(tab_y),
     ));
     // Two small bars left of tab (4w x 2h each).
     let bar_x = tab_x - 2.0;
     svg.raw(&format!(
-        r#"<rect fill="{fill}" height="2" style="stroke:{STROKE};stroke-width:0.5;" width="4" x="{x}" y="{y}"/>"#,
+        r#"<rect fill="{fill}" height="2" style="stroke:{stroke};stroke-width:0.5;" width="4" x="{x}" y="{y}"/>"#,
         x = fc(bar_x),
         y = fc(tab_y + 2.0),
     ));
     svg.raw(&format!(
-        r#"<rect fill="{fill}" height="2" style="stroke:{STROKE};stroke-width:0.5;" width="4" x="{x}" y="{y}"/>"#,
+        r#"<rect fill="{fill}" height="2" style="stroke:{stroke};stroke-width:0.5;" width="4" x="{x}" y="{y}"/>"#,
+        x = fc(bar_x),
+        y = fc(tab_y + 6.0),
+    ));
+}
+
+// ---- Component cluster (rounded rect + plug icon, cluster stroke-width) ----
+
+fn emit_component_cluster(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    stroke: &str,
+) {
+    svg.raw(&format!(
+        r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{stroke};stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"#,
+        h = fc(h),
+        w = fc(w),
+        x = fc(x),
+        y = fc(y),
+    ));
+    // Tab at top-right: 15w x 10h, x = x+w-20, y = y+5.
+    let tab_x = x + w - 20.0;
+    let tab_y = y + 5.0;
+    svg.raw(&format!(
+        r#"<rect fill="{fill}" height="10" style="stroke:{stroke};stroke-width:1;" width="15" x="{x}" y="{y}"/>"#,
+        x = fc(tab_x),
+        y = fc(tab_y),
+    ));
+    // Two small bars left of tab (4w x 2h each).
+    let bar_x = tab_x - 2.0;
+    svg.raw(&format!(
+        r#"<rect fill="{fill}" height="2" style="stroke:{stroke};stroke-width:1;" width="4" x="{x}" y="{y}"/>"#,
+        x = fc(bar_x),
+        y = fc(tab_y + 2.0),
+    ));
+    svg.raw(&format!(
+        r#"<rect fill="{fill}" height="2" style="stroke:{stroke};stroke-width:1;" width="4" x="{x}" y="{y}"/>"#,
         x = fc(bar_x),
         y = fc(tab_y + 6.0),
     ));
@@ -716,7 +1335,7 @@ fn emit_component(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &s
 
 // ---- Frame (rect + small tab path top-left) -------------------------------
 
-fn emit_frame(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) {
+fn emit_frame(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str, label: &str) {
     svg.raw(&format!(
         r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{STROKE};stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"#,
         h = fc(h),
@@ -724,22 +1343,40 @@ fn emit_frame(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) 
         x = fc(x),
         y = fc(y),
     ));
-    // Tab path: from a point partway across the top, draw down then bend to the left edge.
-    // For a 1-line label of width 73.6025, the tab path went to x=44.8675 (=7+37.8675),
-    // so tab_w = label_w/2 + 1 ≈ but actually it's roughly half the text width.
-    // From the golden we have: M44.8675,7 L44.8675,12 L37.8675,19 L7,19
-    // So the right edge is at x_label_end + 1 ish? Hard to compute generically.
-    // Approximation: tab_x_right = x + (w/2) - 1, tab corner offset = 7.
-    let _ = (x, y, w);
+    // Tab path in the top-left corner: drop 5px, then a 7px diagonal cut down
+    // to y+12, then back to the left edge. The tab's right edge sits at
+    // x + (label_w + 40) / 3 (derived from goldens).
+    let label_w = text_render::measure(label, FONT_SIZE, false);
+    let right_x = x + (label_w + 40.0) / 3.0;
+    let d = format!(
+        "M{rx},{y_s} L{rx},{y5} L{rx_in},{y12} L{x_s},{y12}",
+        rx = fc(right_x),
+        rx_in = fc(right_x - 7.0),
+        y_s = fc(y),
+        y5 = fc(y + 5.0),
+        y12 = fc(y + 12.0),
+        x_s = fc(x),
+    );
+    svg.raw(&format!(
+        r#"<path d="{d}" fill="none" style="stroke:{STROKE};stroke-width:0.5;"/>"#
+    ));
 }
 
 // ---- Frame cluster --------------------------------------------------------
 
-fn emit_frame_cluster(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) {
+fn emit_frame_cluster(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    stroke: &str,
+) {
     // Frame cluster: bare rect with stroke-width=1. The tab is emitted
     // by emit_cluster_label since it depends on label width.
     svg.raw(&format!(
-        r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{STROKE};stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"#,
+        r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:{stroke};stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"#,
         h = fc(h),
         w = fc(w),
         x = fc(x),
@@ -771,33 +1408,206 @@ fn emit_frame_tab(svg: &mut SvgBuilder, x: f64, y: f64, label_w: f64) {
 
 // ---- Folder ---------------------------------------------------------------
 
-fn emit_folder(_svg: &mut SvgBuilder, _x: f64, _y: f64, _w: f64, _h: f64, _fill: &str) {
-    // TODO: complex path; oracle bbox is unreliable.
+/// Folder shape: a rounded rectangle with a tab (file-folder flap) across the
+/// top-left. The flap is a fixed 43.5px wide and the tab band is 21px tall for
+/// a single-line title. A horizontal line separates the tab from the body.
+fn emit_folder(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str, stroke: &str) {
+    let xr = x + w;
+    let yb = y + h;
+    let flap_r = x + 43.5;
+    let tab_y = y + 21.0;
+    let d = format!(
+        "M{x25},{y_s} L{flap_r},{y_s} A3.75,3.75 0 0 1 {flap_r2},{y85} L{flap_r95},{ty} L{xr25},{ty} A2.5,2.5 0 0 1 {xr_s},{ty25} L{xr_s},{yb2} A2.5,2.5 0 0 1 {xr25},{yb_s} L{x25},{yb_s} A2.5,2.5 0 0 1 {x_s},{yb2} L{x_s},{y85} A2.5,2.5 0 0 1 {x25},{y_s}",
+        x25 = fc(x + 2.5),
+        y_s = fc(y),
+        flap_r = fc(flap_r),
+        flap_r2 = fc(flap_r + 2.5),
+        y85 = fc(y + 2.5),
+        flap_r95 = fc(flap_r + 9.5),
+        ty = fc(tab_y),
+        xr25 = fc(xr - 2.5),
+        xr_s = fc(xr),
+        ty25 = fc(tab_y + 2.5),
+        yb2 = fc(yb - 2.5),
+        yb_s = fc(yb),
+        x_s = fc(x),
+    );
+    svg.raw(&format!(
+        r#"<path d="{d}" fill="{fill}" style="stroke:{stroke};stroke-width:0.5;"/>"#
+    ));
+    // Horizontal divider under the tab, from the left edge to the flap end.
+    svg.raw(&format!(
+        r#"<line style="stroke:{stroke};stroke-width:0.5;" x1="{x1}" x2="{x2}" y1="{ty}" y2="{ty}"/>"#,
+        x1 = fc(x),
+        x2 = fc(flap_r + 9.5),
+        ty = fc(tab_y),
+    ));
 }
 
-fn emit_folder_cluster(_svg: &mut SvgBuilder, _x: f64, _y: f64, _w: f64, _h: f64) {
-    // TODO
+/// Folder cluster shape: like the leaf folder but the tab width tracks the
+/// (bold) title width and the divider/outline use the cluster stroke
+/// (#000000, width 1.5). Tab band height is text_height + 6.
+fn emit_folder_cluster(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    label: &str,
+) {
+    let xr = x + w;
+    let yb = y + h;
+    let label_w = text_render::measure(label, FONT_SIZE, true);
+    let flap_r = x + label_w + 3.5;
+    let tab_y = y + pm::text_height(FONT_SIZE) + 6.0;
+    let cstroke = "#000000";
+    let d = format!(
+        "M{x25},{y_s} L{flap_r},{y_s} A3.75,3.75 0 0 1 {flap_r2},{y85} L{flap_r95},{ty} L{xr25},{ty} A2.5,2.5 0 0 1 {xr_s},{ty25} L{xr_s},{yb2} A2.5,2.5 0 0 1 {xr25},{yb_s} L{x25},{yb_s} A2.5,2.5 0 0 1 {x_s},{yb2} L{x_s},{y85} A2.5,2.5 0 0 1 {x25},{y_s}",
+        x25 = fc(x + 2.5),
+        y_s = fc(y),
+        flap_r = fc(flap_r),
+        flap_r2 = fc(flap_r + 2.5),
+        y85 = fc(y + 2.5),
+        flap_r95 = fc(flap_r + 9.5),
+        ty = fc(tab_y),
+        xr25 = fc(xr - 2.5),
+        xr_s = fc(xr),
+        ty25 = fc(tab_y + 2.5),
+        yb2 = fc(yb - 2.5),
+        yb_s = fc(yb),
+        x_s = fc(x),
+    );
+    svg.raw(&format!(
+        r#"<path d="{d}" fill="{fill}" style="stroke:{cstroke};stroke-width:1.5;"/>"#
+    ));
+    svg.raw(&format!(
+        r#"<line style="stroke:{cstroke};stroke-width:1.5;" x1="{x1}" x2="{x2}" y1="{ty}" y2="{ty}"/>"#,
+        x1 = fc(x),
+        x2 = fc(flap_r + 9.5),
+        ty = fc(tab_y),
+    ));
 }
 
 // ---- File -----------------------------------------------------------------
 
-fn emit_file(_svg: &mut SvgBuilder, _x: f64, _y: f64, _w: f64, _h: f64, _fill: &str) {
-    // TODO: complex path with corner fold; oracle bbox unreliable.
+/// File (document) shape: a rounded rectangle with a folded top-right corner
+/// (a 10×10 dog-ear). Two paths: the body outline and the fold triangle.
+fn emit_file(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str, stroke: &str) {
+    let xr = x + w;
+    let yb = y + h;
+    let body = format!(
+        "M{x_s},{y2} L{x_s},{yb2} A2.5,2.5 0 0 0 {x25},{yb_s} L{xr25},{yb_s} A2.5,2.5 0 0 0 {xr_s},{yb2} L{xr_s},{y10} L{xr10},{y_s} L{x25},{y_s} A2.5,2.5 0 0 0 {x_s},{y2}",
+        x_s = fc(x),
+        y2 = fc(y + 2.5),
+        yb2 = fc(yb - 2.5),
+        x25 = fc(x + 2.5),
+        yb_s = fc(yb),
+        xr25 = fc(xr - 2.5),
+        xr_s = fc(xr),
+        y10 = fc(y + 10.0),
+        xr10 = fc(xr - 10.0),
+        y_s = fc(y),
+    );
+    svg.raw(&format!(
+        r#"<path d="{body}" fill="{fill}" style="stroke:{stroke};stroke-width:0.5;"/>"#
+    ));
+    let fold = format!(
+        "M{xr10},{y_s} L{xr10},{y75} A2.5,2.5 0 0 0 {xr75},{y10} L{xr_s},{y10}",
+        xr10 = fc(xr - 10.0),
+        y_s = fc(y),
+        y75 = fc(y + 7.5),
+        xr75 = fc(xr - 7.5),
+        y10 = fc(y + 10.0),
+        xr_s = fc(xr),
+    );
+    svg.raw(&format!(
+        r#"<path d="{fold}" fill="{fill}" style="stroke:{stroke};stroke-width:0.5;"/>"#
+    ));
 }
 
 // ---- Package --------------------------------------------------------------
 
-fn emit_package(_svg: &mut SvgBuilder, _x: f64, _y: f64, _w: f64, _h: f64, _fill: &str) {
-    // TODO: complex path with tab and bold title.
+/// Package shape: a rounded-rectangle body with a tab whose right edge slopes
+/// outward. The tab width tracks the (bold) label; the tab band height is
+/// `text_height + 6`. Geometry derived from goldens.
+#[allow(clippy::too_many_arguments)]
+fn emit_package_path(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    stroke: &str,
+    sw: f64,
+    label: &str,
+) {
+    let xr = x + w;
+    let yb = y + h;
+    let label_w = text_render::measure(label, FONT_SIZE, true);
+    // Tab top-right corner: label start (x+10) + label width + 5.5 trailing pad.
+    let tab_tr = x + 10.0 + label_w + 5.5;
+    let tab_y = y + pm::text_height(FONT_SIZE) + 6.0;
+    let d = format!(
+        "M{x25},{y_s} L{tab_tr},{y_s} A3.75,3.75 0 0 1 {tab_tr25},{y85} L{tab_br},{ty} L{xr25},{ty} A2.5,2.5 0 0 1 {xr_s},{ty25} L{xr_s},{yb2} A2.5,2.5 0 0 1 {xr25},{yb_s} L{x25},{yb_s} A2.5,2.5 0 0 1 {x_s},{yb2} L{x_s},{y85} A2.5,2.5 0 0 1 {x25},{y_s}",
+        x25 = fc(x + 2.5),
+        y_s = fc(y),
+        tab_tr = fc(tab_tr),
+        tab_tr25 = fc(tab_tr + 2.5),
+        y85 = fc(y + 2.5),
+        tab_br = fc(tab_tr + 9.5),
+        ty = fc(tab_y),
+        xr25 = fc(xr - 2.5),
+        xr_s = fc(xr),
+        ty25 = fc(tab_y + 2.5),
+        yb2 = fc(yb - 2.5),
+        yb_s = fc(yb),
+        x_s = fc(x),
+    );
+    svg.raw(&format!(
+        r#"<path d="{d}" fill="{fill}" style="stroke:{stroke};stroke-width:{sw};"/>"#,
+        sw = fc(sw),
+    ));
+    // Horizontal divider under the tab, from the left edge to the slope end.
+    svg.raw(&format!(
+        r#"<line style="stroke:{stroke};stroke-width:{sw};" x1="{x1}" x2="{x2}" y1="{ty}" y2="{ty}"/>"#,
+        x1 = fc(x),
+        x2 = fc(tab_tr + 9.5),
+        ty = fc(tab_y),
+        sw = fc(sw),
+    ));
 }
 
-fn emit_package_cluster(_svg: &mut SvgBuilder, _x: f64, _y: f64, _w: f64, _h: f64) {
-    // TODO
+#[allow(clippy::too_many_arguments)]
+fn emit_package(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    stroke: &str,
+    label: &str,
+) {
+    emit_package_path(svg, x, y, w, h, fill, stroke, 0.5, label);
+}
+
+fn emit_package_cluster(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    label: &str,
+) {
+    emit_package_path(svg, x, y, w, h, fill, "#000000", 1.5, label);
 }
 
 // ---- Stack ----------------------------------------------------------------
 
-fn emit_stack(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) {
+fn emit_stack(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str, stroke: &str) {
     // Stack: an inner rect with no stroke (just fill), plus an outline path
     // that extends 15px on either side. Geometry from goldens:
     //   rect at (x, y, w, h) — the inner fill
@@ -830,15 +1640,48 @@ fn emit_stack(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) 
         y_pm1 = fc(y + h - 2.5),
     );
     svg.raw(&format!(
-        r#"<path d="{d}" fill="none" style="stroke:{STROKE};stroke-width:0.5;"/>"#
+        r#"<path d="{d}" fill="none" style="stroke:{stroke};stroke-width:0.5;"/>"#
+    ));
+}
+
+/// Stack cluster: a fill-only inner rect (no stroke) plus the same bracket
+/// outline as the leaf stack, drawn with the cluster stroke width.
+fn emit_stack_cluster(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) {
+    let stroke = "#181818";
+    svg.raw(&format!(
+        r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:none;stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"#,
+        h = fc(h),
+        w = fc(w),
+        x = fc(x),
+        y = fc(y),
+    ));
+    let xl = x - 15.0;
+    let xr = x + w + 15.0;
+    let d = format!(
+        "M{xl},{y_s} L{x_lp1},{y_s} A2.5,2.5 0 0 1 {x_s},{y_p1} L{x_s},{y_pm1} A2.5,2.5 0 0 0 {x_lp2},{yh_s} L{x_rm2},{yh_s} A2.5,2.5 0 0 0 {xw_s},{y_pm1} L{xw_s},{y_p1} A2.5,2.5 0 0 1 {x_rp2},{y_s} L{xr},{y_s}",
+        xl = fc(xl),
+        xr = fc(xr),
+        x_s = fc(x),
+        xw_s = fc(x + w),
+        y_s = fc(y),
+        yh_s = fc(y + h),
+        x_lp1 = fc(x - 2.5),
+        x_lp2 = fc(x + 2.5),
+        x_rm2 = fc(x + w - 2.5),
+        x_rp2 = fc(x + w + 2.5),
+        y_p1 = fc(y + 2.5),
+        y_pm1 = fc(y + h - 2.5),
+    );
+    svg.raw(&format!(
+        r#"<path d="{d}" fill="none" style="stroke:{stroke};stroke-width:1;"/>"#
     ));
 }
 
 // ---- Storage (rounded rect with rx=35, ry=35) -----------------------------
 
-fn emit_storage(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) {
+fn emit_storage(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str, stroke: &str) {
     svg.raw(&format!(
-        r#"<rect fill="{fill}" height="{h}" rx="35" ry="35" style="stroke:{STROKE};stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"#,
+        r#"<rect fill="{fill}" height="{h}" rx="35" ry="35" style="stroke:{stroke};stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"#,
         h = fc(h),
         w = fc(w),
         x = fc(x),
@@ -848,15 +1691,46 @@ fn emit_storage(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str
 
 // ---- Database (cylinder via 2 bezier paths) -------------------------------
 
-fn emit_database(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) {
-    // Recover full-precision width from oracle width to avoid 1-ULP drift.
-    // For database the geometry is symmetric so cx = (x_low + x_high) / 2
-    // where x_high = x + w_full. Width is determined by label, but for
-    // matching we can use the oracle's reported w and let cx ride the
-    // truncated computation — for the symmetric case, just use oracle w.
-    let _ = h;
-    let h_full = pm::text_height(FONT_SIZE) + 29.0;
-    let cx = x + w / 2.0;
+/// Recover the full-precision database/queue body width from text metrics.
+/// PlantUML lays the cylinder out as `text_width(label) + 20`. We only adopt
+/// the metric-derived value when its display rounding (left + width) matches
+/// the oracle's right edge, so any clamped or otherwise atypical box falls
+/// back to the oracle's display-rounded width.
+fn recover_db_width(label: &str, oracle_w: f64, x: f64) -> f64 {
+    let candidate = pm::text_width(label, FONT_SIZE, false) + 20.0;
+    if fc(x + candidate) == fc(x + oracle_w) {
+        candidate
+    } else {
+        oracle_w
+    }
+}
+
+#[allow(clippy::too_many_arguments)]
+pub(crate) fn emit_database(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    stroke: &str,
+    label: &str,
+) {
+    // The cylinder midline `cx = x + w/2` must use the full-precision width,
+    // not the display-rounded oracle width: a half-integer midpoint (e.g.
+    // 70.56225) would otherwise round the wrong way. PlantUML's database
+    // width is `text_width(label) + 20`; recover it from metrics and only
+    // adopt it when its display rounding agrees with the oracle's `w` (so a
+    // clamped/min-width box keeps the oracle value).
+    let w_full = recover_db_width(label, w, x);
+    // Cylinder body height comes from the oracle's box height (which already
+    // accounts for multi-line content such as a stereotype). The single-line
+    // default is `text_height + 29`; fall back to it only when the oracle box
+    // is no taller (avoids a degenerate clamp).
+    let single_line = pm::text_height(FONT_SIZE) + 29.0;
+    let h_full = if h > single_line { h } else { single_line };
+    let cx = x + w_full / 2.0;
+    let w = w_full;
     let bot_y = y + h_full;
     let top_low = y + 10.0;
     let bot_low = y + h_full - 10.0;
@@ -871,7 +1745,7 @@ fn emit_database(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &st
         bl = fc(bot_low),
     );
     svg.raw(&format!(
-        r#"<path d="{d}" fill="{fill}" style="stroke:{STROKE};stroke-width:0.5;"/>"#
+        r#"<path d="{d}" fill="{fill}" style="stroke:{stroke};stroke-width:0.5;"/>"#
     ));
     // The "top wall" of the cylinder (inner curve under the lip).
     let d2 = format!(
@@ -883,24 +1757,37 @@ fn emit_database(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &st
         ml = fc(y + 20.0),
     );
     svg.raw(&format!(
-        r#"<path d="{d2}" fill="none" style="stroke:{STROKE};stroke-width:0.5;"/>"#
+        r#"<path d="{d2}" fill="none" style="stroke:{stroke};stroke-width:0.5;"/>"#
     ));
 }
 
 // ---- Queue (cylinder rotated 90 degrees) ---------------------------------
 
-fn emit_queue(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) {
+pub(crate) fn emit_queue(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    stroke: &str,
+) {
     // Like database but rotated: rounded left + straight top/bottom + rounded right.
     // The "right wall" lip is at x+w-10.
     //
-    // Recover full-precision height from text metrics to avoid 1-ULP drift
-    // in midline rounding: cy = y + (text_height + 10) / 2 produces the
-    // same f64 the JVM emits.
-    let h_full = pm::text_height(FONT_SIZE) + 10.0;
+    // The queue body height is `n_lines * text_height + 10`, where the line
+    // count is one for a bare label and two when a stereotype stacks above it
+    // (e.g. `queue X <<container>>`). Recover the line count by snapping the
+    // oracle-reported height to that grid, then rebuild `h_full` from the
+    // text-metric arithmetic so the midline (`cy = y + h_full / 2`) matches
+    // the JVM's f64 to the last ULP — the oracle `h` itself carries sub-ULP
+    // accumulation noise and must not be used directly.
+    let line_h = pm::text_height(FONT_SIZE);
+    let n_lines = ((h - 10.0) / line_h).round().max(1.0);
+    let h_full = n_lines * line_h + 10.0;
     let cy = y + h_full / 2.0;
     let left_in = x + 5.0;
     let right_in = x + w - 5.0;
-    let _ = h;
     let d = format!(
         "M{li},{y_s} L{ri},{y_s} C{xw_s},{y_s} {xw_s},{cy_s} {xw_s},{cy_s} C{xw_s},{cy_s} {xw_s},{yh_s} {ri},{yh_s} L{li},{yh_s} C{x_s},{yh_s} {x_s},{cy_s} {x_s},{cy_s} C{x_s},{cy_s} {x_s},{y_s} {li},{y_s}",
         li = fc(left_in),
@@ -912,7 +1799,7 @@ fn emit_queue(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) 
         yh_s = fc(y + h_full),
     );
     svg.raw(&format!(
-        r#"<path d="{d}" fill="{fill}" style="stroke:{STROKE};stroke-width:0.5;"/>"#
+        r#"<path d="{d}" fill="{fill}" style="stroke:{stroke};stroke-width:0.5;"/>"#
     ));
     // The inner left wall (right-side of the lip).
     let inner_x = x + w - 10.0;
@@ -925,13 +1812,65 @@ fn emit_queue(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) 
         yh_s = fc(y + h_full),
     );
     svg.raw(&format!(
-        r#"<path d="{d2}" fill="none" style="stroke:{STROKE};stroke-width:0.5;"/>"#
+        r#"<path d="{d2}" fill="none" style="stroke:{stroke};stroke-width:0.5;"/>"#
     ));
 }
 
 // ---------------------------------------------------------------------------
 // Labels
 // ---------------------------------------------------------------------------
+
+fn emit_oracle_image_label_children(
+    svg: &mut SvgBuilder,
+    rect: &crate::layout_oracle::EntityRect,
+) -> bool {
+    if rect.images.is_empty() {
+        return false;
+    }
+
+    enum Child<'a> {
+        Image(&'a crate::layout_oracle::EntityImage),
+        Text(&'a crate::layout_oracle::EntityText),
+    }
+
+    impl Child<'_> {
+        fn x(&self) -> f64 {
+            match self {
+                Child::Image(image) => image.x,
+                Child::Text(text) => text.x,
+            }
+        }
+
+        fn y(&self) -> f64 {
+            match self {
+                Child::Image(image) => image.y,
+                Child::Text(text) => text.y,
+            }
+        }
+    }
+
+    let mut children: Vec<Child<'_>> = rect
+        .images
+        .iter()
+        .map(Child::Image)
+        .chain(rect.texts.iter().map(Child::Text))
+        .collect();
+    children.sort_by(|a, b| a.x().total_cmp(&b.x()).then(a.y().total_cmp(&b.y())));
+
+    for child in children {
+        match child {
+            Child::Image(image) => {
+                let mut buf = String::new();
+                emit_entity_image(&mut buf, image);
+                svg.raw(&buf);
+            }
+            Child::Text(text) => {
+                emit_text(svg, &text.text, text.x, text.y, FONT_SIZE, false, false)
+            }
+        }
+    }
+    true
+}
 
 fn emit_entity_label(
     svg: &mut SvgBuilder,
@@ -940,12 +1879,28 @@ fn emit_entity_label(
     x: f64,
     y: f64,
     w: f64,
+    ctx: Option<&OracleRenderContext<'_>>,
 ) {
-    let (_text_x_pad, top_pad, bold) = entity_text_geom(kind, w, &node.label);
-    let label_w = text_render::measure(&node.label, FONT_SIZE, bold);
+    let (text_x_pad, top_pad, bold) = entity_text_geom(kind, w, &node.label);
+    let label_w = deployment_label_width(&node.label, FONT_SIZE, bold, ctx);
     let center_x = entity_text_center(kind, x, w);
+    // Folder and package labels are left-aligned with a 10px indent rather
+    // than centred.
+    let folder_label_x = matches!(
+        kind,
+        DeploymentNodeKind::Folder | DeploymentNodeKind::Package
+    )
+    .then_some(x + 10.0);
+    let multiline_label_x = x + text_x_pad;
+    let multiline_lines = node.label.contains('\n').then(|| {
+        node.label
+            .split('\n')
+            .map(|line| line.trim_end_matches('\r'))
+    });
 
-    if let Some(stereo) = &node.stereotype {
+    if let Some(stereo) = &node.stereotype
+        && !ctx.is_some_and(|ctx| stereotype_refs_sprite(stereo, ctx.sprite_names))
+    {
         let stereo_label = format!("\u{00AB}{stereo}\u{00BB}");
         let stereo_w = text_render::measure(&stereo_label, FONT_SIZE, false);
         let stereo_x = center_x - stereo_w / 2.0;
@@ -958,27 +1913,48 @@ fn emit_entity_label(
             false,
             true,
         );
-        let label_x = center_x - label_w / 2.0;
-        emit_text(
-            svg,
-            &node.label,
-            label_x,
-            y + top_pad + TEXT_LINE_H,
-            FONT_SIZE,
-            bold,
-            false,
-        );
+        if let Some(lines) = multiline_lines {
+            emit_multiline_text(
+                svg,
+                lines,
+                multiline_label_x,
+                y + top_pad + TEXT_LINE_H,
+                FONT_SIZE,
+                bold,
+            );
+        } else {
+            let label_x = center_x - label_w / 2.0;
+            emit_deployment_label(
+                svg,
+                &node.label,
+                label_x,
+                y + top_pad + TEXT_LINE_H,
+                DeploymentLabelStyle {
+                    font_size: FONT_SIZE,
+                    bold,
+                    italic: false,
+                },
+                ctx,
+            );
+        }
     } else {
-        let label_x = center_x - label_w / 2.0;
-        emit_text(
-            svg,
-            &node.label,
-            label_x,
-            y + top_pad,
-            FONT_SIZE,
-            bold,
-            false,
-        );
+        if let Some(lines) = multiline_lines {
+            emit_multiline_text(svg, lines, multiline_label_x, y + top_pad, FONT_SIZE, bold);
+        } else {
+            let label_x = folder_label_x.unwrap_or(center_x - label_w / 2.0);
+            emit_deployment_label(
+                svg,
+                &node.label,
+                label_x,
+                y + top_pad,
+                DeploymentLabelStyle {
+                    font_size: FONT_SIZE,
+                    bold,
+                    italic: false,
+                },
+                ctx,
+            );
+        }
     }
 }
 
@@ -989,10 +1965,11 @@ fn emit_cluster_label(
     x: f64,
     y: f64,
     w: f64,
+    ctx: Option<&OracleRenderContext<'_>>,
 ) {
     // Cluster labels are centered horizontally above the children area
     // for most shapes; frame is left-aligned (with a tab decoration).
-    let label_w = text_render::measure(&node.label, FONT_SIZE, true);
+    let label_w = deployment_label_width(&node.label, FONT_SIZE, true, ctx);
 
     if matches!(kind, DeploymentNodeKind::Frame) {
         // Frame cluster: tab path comes before the text label, then a
@@ -1000,13 +1977,47 @@ fn emit_cluster_label(
         emit_frame_tab(svg, x, y, label_w);
         let label_x = x + 3.0;
         let label_y = y + ASCENT_14 + 1.0;
-        emit_text(svg, &node.label, label_x, label_y, FONT_SIZE, true, false);
+        emit_deployment_label(
+            svg,
+            &node.label,
+            label_x,
+            label_y,
+            DeploymentLabelStyle {
+                font_size: FONT_SIZE,
+                bold: true,
+                italic: false,
+            },
+            ctx,
+        );
+        return;
+    }
+
+    if matches!(kind, DeploymentNodeKind::Folder) {
+        // Folder cluster: left-aligned bold title in the tab band at
+        // (x+4, y+ascent+2). The shape (with the matching tab) is drawn by
+        // emit_folder_cluster.
+        let label_x = x + 4.0;
+        let label_y = y + ASCENT_14 + 2.0;
+        emit_deployment_label(
+            svg,
+            &node.label,
+            label_x,
+            label_y,
+            DeploymentLabelStyle {
+                font_size: FONT_SIZE,
+                bold: true,
+                italic: false,
+            },
+            ctx,
+        );
         return;
     }
 
     let center_x = cluster_text_center(kind, x, w);
 
-    if let Some(stereo) = &node.stereotype {
+    if let Some(stereo) = &node.stereotype
+        && !ctx.is_some_and(|ctx| stereotype_refs_sprite(stereo, ctx.sprite_names))
+    {
         let stereo_label = format!("\u{00AB}{stereo}\u{00BB}");
         let stereo_w = text_render::measure(&stereo_label, FONT_SIZE, false);
         let stereo_x = center_x - stereo_w / 2.0;
@@ -1021,20 +2032,152 @@ fn emit_cluster_label(
             true,
         );
         let label_x = center_x - label_w / 2.0;
-        emit_text(
+        emit_deployment_label(
             svg,
             &node.label,
             label_x,
             stereo_y + TEXT_LINE_H,
-            FONT_SIZE,
-            true,
-            false,
+            DeploymentLabelStyle {
+                font_size: FONT_SIZE,
+                bold: true,
+                italic: false,
+            },
+            ctx,
         );
     } else {
         let label_x = center_x - label_w / 2.0;
         let label_y = y + cluster_top_pad(kind);
-        emit_text(svg, &node.label, label_x, label_y, FONT_SIZE, true, false);
+        emit_deployment_label(
+            svg,
+            &node.label,
+            label_x,
+            label_y,
+            DeploymentLabelStyle {
+                font_size: FONT_SIZE,
+                bold: true,
+                italic: false,
+            },
+            ctx,
+        );
     }
+}
+
+fn deployment_label_width(
+    label: &str,
+    font_size: f64,
+    bold: bool,
+    ctx: Option<&OracleRenderContext<'_>>,
+) -> f64 {
+    let Some(ctx) = ctx else {
+        return text_render::measure(label, font_size, bold);
+    };
+    if !label.contains("<$") {
+        return text_render::measure(label, font_size, bold);
+    }
+    crate::sprite::parse_sprite_segments(label)
+        .iter()
+        .map(|seg| match seg {
+            crate::sprite::TextSegment::Text(text) => text_render::measure(text, font_size, bold),
+            crate::sprite::TextSegment::Sprite(name) => ctx
+                .sprites
+                .get(name)
+                .map(|sprite| deployment_sprite_dimensions(sprite).0)
+                .unwrap_or(0.0),
+            crate::sprite::TextSegment::OpenIcon(name) => crate::openiconic::lookup(name)
+                .map(|icon| icon.width * (font_size / icon.height))
+                .unwrap_or(0.0),
+        })
+        .sum()
+}
+
+#[derive(Clone, Copy)]
+struct DeploymentLabelStyle {
+    font_size: f64,
+    bold: bool,
+    italic: bool,
+}
+
+fn emit_deployment_label(
+    svg: &mut SvgBuilder,
+    content: &str,
+    x: f64,
+    y: f64,
+    style: DeploymentLabelStyle,
+    ctx: Option<&OracleRenderContext<'_>>,
+) {
+    let Some(ctx) = ctx else {
+        emit_text(
+            svg,
+            content,
+            x,
+            y,
+            style.font_size,
+            style.bold,
+            style.italic,
+        );
+        return;
+    };
+    if !content.contains("<$") {
+        emit_text(
+            svg,
+            content,
+            x,
+            y,
+            style.font_size,
+            style.bold,
+            style.italic,
+        );
+        return;
+    }
+
+    let mut cursor = x;
+    for segment in crate::sprite::parse_sprite_segments(content) {
+        match segment {
+            crate::sprite::TextSegment::Text(text) => {
+                let advance = text_render::measure(&text, style.font_size, style.bold);
+                let visible = text.trim_end();
+                if !visible.is_empty() {
+                    emit_text(
+                        svg,
+                        visible,
+                        cursor,
+                        y,
+                        style.font_size,
+                        style.bold,
+                        style.italic,
+                    );
+                }
+                cursor += advance;
+            }
+            crate::sprite::TextSegment::Sprite(name) => {
+                if let Some(sprite) = ctx.sprites.get(&name)
+                    && let Some(uri) = ctx.sprite_cache.get(&name)
+                {
+                    let (width, height) = deployment_sprite_dimensions(sprite);
+                    // Java DESCRIPTION sprite labels use the sprite as an
+                    // inline image centered on the text baseline; the baseline
+                    // offset matches PlantUML's `TextBlockSprite` emission.
+                    let image_y = y - height * 0.63;
+                    svg.image(cursor, image_y, width, height, uri);
+                    cursor += width;
+                }
+            }
+            crate::sprite::TextSegment::OpenIcon(name) => {
+                if let Some(icon) = crate::openiconic::lookup(&name) {
+                    cursor += icon.width * (style.font_size / icon.height);
+                }
+            }
+        }
+    }
+}
+
+fn sprite_scale() -> f64 {
+    FONT_SIZE / SPRITE_BASE_FONT_SIZE
+}
+
+fn deployment_sprite_dimensions(sprite: &rustuml_parser::diagram::SpriteData) -> (f64, f64) {
+    let (width, height) = crate::sprite::scaled_sprite_dimensions(sprite, sprite_scale());
+    (width as f64, height as f64)
 }
 
 fn cluster_top_pad(kind: DeploymentNodeKind) -> f64 {
@@ -1043,7 +2186,7 @@ fn cluster_top_pad(kind: DeploymentNodeKind) -> f64 {
         // Node cluster title sits in a small header band: ascent+13 from bbox top.
         Node => ASCENT_14 + 13.0,
         // Card-like clusters: ascent+2.
-        Card | Rectangle | Agent | Frame => ASCENT_14 + 2.0,
+        Artifact | Card | Rectangle | Agent | Frame => ASCENT_14 + 2.0,
         _ => ASCENT_14 + 13.0,
     }
 }
@@ -1082,7 +2225,9 @@ fn entity_text_geom(kind: DeploymentNodeKind, _w: f64, _label: &str) -> (f64, f6
         Node | Component | Frame => (15.0, TEXT_PAD_NODE, false),
         Artifact => (10.0, TEXT_PAD_ARTIFACT, false),
         Card => (10.0, TEXT_PAD_CARD, false),
-        Rectangle | Agent | File | Folder | Storage => (10.0, TEXT_PAD_RECTLIKE, false),
+        Rectangle | Agent | File | Storage => (10.0, TEXT_PAD_RECTLIKE, false),
+        // Folder label sits below the tab band (tab height 21 + ascent + 7).
+        Folder => (10.0, ASCENT_14 + 28.0, false),
         // Queue is shorter vertically: ascent + 5.
         Queue => (5.0, ASCENT_14 + 5.0, false),
         // Database label sits below the lip: ascent + 24.
@@ -1124,9 +2269,449 @@ fn emit_text(
     svg.raw(&buf);
 }
 
+fn emit_multiline_text<'a>(
+    svg: &mut SvgBuilder,
+    lines: impl Iterator<Item = &'a str>,
+    x: f64,
+    y: f64,
+    fs: f64,
+    bold: bool,
+) {
+    for (i, line) in lines.enumerate() {
+        emit_text(svg, line, x, y + i as f64 * TEXT_LINE_H, fs, bold, false);
+    }
+}
+
+fn emit_actor_entity(svg: &mut SvgBuilder, rect: &crate::layout_oracle::EntityRect, fill: &str) {
+    let r = rect.width / 2.0;
+    let cx = rect.x + r;
+    let cy = rect.y + r;
+    let style = rect
+        .body_style
+        .as_deref()
+        .unwrap_or("stroke:#181818;stroke-width:0.5;");
+    svg.raw(&format!(
+        r#"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="{}"/>"#,
+        fc(cx),
+        fc(cy),
+        fill,
+        fc(r),
+        fc(r),
+        style,
+    ));
+    if let Some(d) = rect.glyph_path_d.as_deref() {
+        svg.raw(&format!(
+            r#"<path d="{d}" fill="none" style="stroke:#181818;stroke-width:0.5;"/>"#
+        ));
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Sequence-style icon entities (boundary / control / entity)
+// ---------------------------------------------------------------------------
+
+/// Emit a sequence-style icon entity. The supplied rect is the icon's ellipse
+/// bounding box (captured by the oracle's ellipse fallback), so the icon
+/// centre is the rect centre and the radius is half its width. Each icon
+/// kind adds a fixed decoration around a 12-radius circle:
+///   * boundary — a vertical bar + stub to the left of the circle
+///   * control  — a small arrow notch at the top of the circle
+///   * entity   — an underline beneath the circle
+fn emit_icon_entity(
+    svg: &mut SvgBuilder,
+    node: &DeploymentNode,
+    rect: &crate::layout_oracle::EntityRect,
+    fill: &str,
+) {
+    use DeploymentNodeKind::*;
+    let r = rect.width / 2.0;
+    let cx = rect.x + r;
+    let cy = rect.y + r;
+    // Boundary draws its bar+stub *before* the ellipse; the others draw it
+    // after. Match PlantUML's child ordering exactly.
+    if matches!(node.kind, Boundary) {
+        let bar_x = cx - r - 17.0; // 17px stub reaches the circle's left edge
+        let top = cy - r;
+        let bot = cy + r;
+        svg.raw(&format!(
+            r#"<path d="M{bx},{t} L{bx},{b} M{bx},{cy_s} L{stub},{cy_s}" fill="none" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+            bx = fc(bar_x),
+            t = fc(top),
+            b = fc(bot),
+            cy_s = fc(cy),
+            stub = fc(cx - r),
+        ));
+    }
+    svg.raw(&format!(
+        r#"<ellipse cx="{cx_s}" cy="{cy_s}" fill="{fill}" rx="{r_s}" ry="{r_s}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+        cx_s = fc(cx),
+        cy_s = fc(cy),
+        r_s = fc(r),
+    ));
+    match node.kind {
+        Control => {
+            // Arrow notch at the top of the circle, tip pointing left-up.
+            let ty = cy - r;
+            let pts = format!(
+                "{},{},{},{},{},{},{},{},{},{}",
+                fc(cx - 4.0),
+                fc(ty),
+                fc(cx + 2.0),
+                fc(ty - 5.0),
+                fc(cx),
+                fc(ty),
+                fc(cx + 2.0),
+                fc(ty + 5.0),
+                fc(cx - 4.0),
+                fc(ty),
+            );
+            svg.raw(&format!(
+                r#"<polygon fill="{STROKE}" points="{pts}" style="stroke:{STROKE};stroke-width:1;"/>"#,
+            ));
+        }
+        Entity => {
+            // Underline 2px below the bottom of the circle.
+            let ly = cy + r + 2.0;
+            svg.raw(&format!(
+                r#"<line style="stroke:{STROKE};stroke-width:0.5;" x1="{x1}" x2="{x2}" y1="{ly_s}" y2="{ly_s}"/>"#,
+                x1 = fc(cx - r),
+                x2 = fc(cx + r),
+                ly_s = fc(ly),
+            ));
+        }
+        _ => {}
+    }
+    // Label below the icon, at the oracle-captured baseline.
+    let label_w = text_render::measure(&node.label, FONT_SIZE, false);
+    let label_x = rect
+        .text_x_values
+        .first()
+        .copied()
+        .unwrap_or(cx - label_w / 2.0);
+    let label_y = rect
+        .text_y_values
+        .first()
+        .copied()
+        .unwrap_or(cy + r + 17.5352);
+    emit_text(svg, &node.label, label_x, label_y, FONT_SIZE, false, false);
+}
+
+/// Emit a `collections` entity: two stacked rounded rects (a back card offset
+/// down-right behind a front card) with the label on the front card. The
+/// oracle captures the back rect as the body and the front rect as the first
+/// aux rect; PlantUML offsets the front by (-4, -4) from the back.
+fn emit_collections_entity(
+    svg: &mut SvgBuilder,
+    node: &DeploymentNode,
+    rect: &crate::layout_oracle::EntityRect,
+    fill: &str,
+) {
+    // Back card (the captured body rect).
+    emit_rounded_rect(svg, rect.x, rect.y, rect.width, rect.height, fill, STROKE);
+    // Front card: offset up-left by 4px. Prefer the oracle's aux rect when
+    // present, else derive it.
+    let (fx, fy, fw, fh) = rect
+        .aux_rects
+        .first()
+        .map(|a| (a.x, a.y, a.width, a.height))
+        .unwrap_or((rect.x - 4.0, rect.y - 4.0, rect.width, rect.height));
+    emit_rounded_rect(svg, fx, fy, fw, fh, fill, STROKE);
+    let label_w = text_render::measure(&node.label, FONT_SIZE, false);
+    let label_x = rect
+        .text_x_values
+        .first()
+        .copied()
+        .unwrap_or(fx + fw / 2.0 - label_w / 2.0);
+    let label_y = rect
+        .text_y_values
+        .first()
+        .copied()
+        .unwrap_or(fy + TEXT_PAD_RECTLIKE);
+    emit_text(svg, &node.label, label_x, label_y, FONT_SIZE, false, false);
+}
+
+/// Cloud margin (left/right/top/bottom) added around the label block.
+const CLOUD_MARGIN: f64 = 15.0;
+
+/// Emit a `cloud` entity. The puffy outline is generated locally by the exact
+/// PlantUML seeded algorithm (see `cloud_shape`); only its final translation
+/// comes from the oracle. The seed depends on the integer-truncated box
+/// dimensions (label block plus a 15px margin on every side), so the path is
+/// reproducible without consulting the golden geometry.
+fn emit_cloud_entity(
+    svg: &mut SvgBuilder,
+    node: &DeploymentNode,
+    rect: &crate::layout_oracle::EntityRect,
+    fill: &str,
+) {
+    // Box dimensions = label block + 15px margin on each side. With a
+    // stereotype the block stacks stereotype above the label.
+    let label_w = text_render::measure(&node.label, FONT_SIZE, false);
+    let (block_w, block_h) = if let Some(stereo) = &node.stereotype {
+        let stereo_label = format!("\u{00AB}{stereo}\u{00BB}");
+        let stereo_w = text_render::measure(&stereo_label, FONT_SIZE, false);
+        (label_w.max(stereo_w), pm::text_height(FONT_SIZE) * 2.0)
+    } else {
+        (label_w, pm::text_height(FONT_SIZE))
+    };
+    let width = block_w + 2.0 * CLOUD_MARGIN;
+    let height = block_h + 2.0 * CLOUD_MARGIN;
+
+    let path = crate::cloud_shape::generate(width, height);
+    // The cloud shape is drawn in the box's local frame ([0,width]×[0,height])
+    // and translated to the box's top-left corner. Recover that corner from
+    // the label: PlantUML centres the label horizontally in the box and places
+    // its baseline one margin + ascent below the box top. The label x/y are
+    // clean layout values in the oracle, so this yields the exact translate
+    // (the path bbox itself is unreliable — bubbles poke past the box edge).
+    let first_text_x = rect.text_x_values.first().copied();
+    let first_text_y = rect.text_y_values.first().copied();
+    let tx = match first_text_x {
+        Some(label_x) if node.stereotype.is_none() => label_x + label_w / 2.0 - width / 2.0,
+        _ => rect.x - path.min_xy().0,
+    };
+    let ty = match first_text_y {
+        Some(text_y) => text_y - CLOUD_MARGIN - pm::ascent(FONT_SIZE),
+        None => rect.y - path.min_xy().1,
+    };
+
+    // Coordinates are emitted with `fc` (Rust's `{:.4}`), which rounds the
+    // exact binary value — matching Java's `String.format("%.4f", …)`. A
+    // multiply-then-round approach drifts at half-boundaries and must be
+    // avoided here.
+    let mut d = String::new();
+    let _ = write!(d, "M{},{}", fc(path.start.0 + tx), fc(path.start.1 + ty));
+    for c in &path.cubics {
+        let _ = write!(
+            d,
+            " C{},{} {},{} {},{}",
+            fc(c.c1.0 + tx),
+            fc(c.c1.1 + ty),
+            fc(c.c2.0 + tx),
+            fc(c.c2.1 + ty),
+            fc(c.to.0 + tx),
+            fc(c.to.1 + ty),
+        );
+    }
+    svg.raw(&format!(
+        r#"<path d="{d}" fill="{fill}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+    ));
+
+    // Label (and optional stereotype) centred horizontally in the box, at the
+    // oracle baselines.
+    let center_x = tx + width / 2.0;
+    let mut ty_iter = rect.text_y_values.iter();
+    if let Some(stereo) = &node.stereotype {
+        let stereo_label = format!("\u{00AB}{stereo}\u{00BB}");
+        let stereo_w = text_render::measure(&stereo_label, FONT_SIZE, false);
+        let stereo_y = ty_iter
+            .next()
+            .copied()
+            .unwrap_or(ty + CLOUD_MARGIN + ASCENT_14);
+        emit_text(
+            svg,
+            &stereo_label,
+            center_x - stereo_w / 2.0,
+            stereo_y,
+            FONT_SIZE,
+            false,
+            true,
+        );
+        let label_y = ty_iter.next().copied().unwrap_or(stereo_y + TEXT_LINE_H);
+        emit_text(
+            svg,
+            &node.label,
+            center_x - label_w / 2.0,
+            label_y,
+            FONT_SIZE,
+            false,
+            false,
+        );
+    } else {
+        let label_y = ty_iter
+            .next()
+            .copied()
+            .unwrap_or(ty + CLOUD_MARGIN + ASCENT_14);
+        emit_text(
+            svg,
+            &node.label,
+            center_x - label_w / 2.0,
+            label_y,
+            FONT_SIZE,
+            false,
+            false,
+        );
+    }
+}
+
+// ---------------------------------------------------------------------------
+// Notes (oracle-anchored geometry, locally constructed path)
+// ---------------------------------------------------------------------------
+
+const NOTE_FILL: &str = "#FEFFDD";
+const NOTE_FOLD: f64 = 10.0;
+const NOTE_FONT_SIZE: f64 = 13.0;
+
+/// Which edge of the note box the leader notch is spliced into, derived
+/// from the apex position relative to the box.
+#[derive(Clone, Copy)]
+enum LeaderSide {
+    /// Apex above the box → notch on the top edge.
+    Top,
+    /// Apex below the box → notch on the bottom edge.
+    Bottom,
+    /// Apex left of the box → notch on the left edge.
+    Left,
+    /// Apex right of the box → notch on the right edge.
+    Right,
+}
+
+fn emit_note(svg: &mut SvgBuilder, note: &crate::layout_oracle::OracleNoteEntity) {
+    let Some(g) = note.box_geom.as_ref() else {
+        return;
+    };
+    let bx = g.x;
+    let by = g.y;
+    let right = g.x + g.width;
+    let bottom = g.y + g.height;
+    let rf = right - NOTE_FOLD; // fold inner x
+    let yf = by + NOTE_FOLD; // fold inner y
+
+    // Determine which edge carries the leader from the apex position.
+    let side = g.apex.map(|(ax, ay)| {
+        if ay < by {
+            LeaderSide::Top
+        } else if ay > bottom {
+            LeaderSide::Bottom
+        } else if ax < bx {
+            LeaderSide::Left
+        } else {
+            LeaderSide::Right
+        }
+        // (Left/Right name the box edge the notch sits on, matching the apex.)
+    });
+
+    // Emit the leader triple (base_prev → apex → base_next) using the exact
+    // points the oracle captured; PlantUML does not place the base points
+    // symmetrically about the apex, so they're consumed verbatim per-point.
+    let leader = |d: &mut String| {
+        if let (Some((ax, ay)), Some((b0, b1))) = (g.apex, g.leader_base) {
+            let _ = write!(
+                d,
+                "L{},{} L{},{} L{},{} ",
+                fc(b0.0),
+                fc(b0.1),
+                fc(ax),
+                fc(ay),
+                fc(b1.0),
+                fc(b1.1),
+            );
+        }
+    };
+
+    // Build the body path, walking the outline counter-clockwise from the
+    // top-left corner and splicing the leader into the appropriate edge.
+    let mut d = String::new();
+    let _ = write!(d, "M{},{} ", fc(bx), fc(by));
+    // Left edge downward.
+    if matches!(side, Some(LeaderSide::Left)) {
+        leader(&mut d);
+    }
+    let _ = write!(d, "L{},{} ", fc(bx), fc(bottom));
+    let _ = write!(d, "A0,0 0 0 0 {},{} ", fc(bx), fc(bottom));
+    // Bottom edge left→right.
+    if matches!(side, Some(LeaderSide::Bottom)) {
+        leader(&mut d);
+    }
+    let _ = write!(d, "L{},{} ", fc(right), fc(bottom));
+    let _ = write!(d, "A0,0 0 0 0 {},{} ", fc(right), fc(bottom));
+    // Right edge bottom→top up to the fold.
+    if matches!(side, Some(LeaderSide::Right)) {
+        leader(&mut d);
+    }
+    let _ = write!(d, "L{},{} ", fc(right), fc(yf));
+    // Folded corner: from (right, yf) to (rf, by).
+    let _ = write!(d, "L{},{} ", fc(rf), fc(by));
+    // Top edge right→left back to the start.
+    if matches!(side, Some(LeaderSide::Top)) {
+        leader(&mut d);
+    }
+    let _ = write!(d, "L{},{} ", fc(bx), fc(by));
+    let _ = write!(d, "A0,0 0 0 0 {},{}", fc(bx), fc(by));
+
+    let comment = note
+        .source_line
+        .as_deref()
+        .map(|sl| format!(r#" data-source-line="{sl}""#))
+        .unwrap_or_default();
+    let ent_id = note.entity_id.as_deref().unwrap_or("");
+    svg.raw(&format!(
+        r#"<g class="entity" data-qualified-name="{qn}"{comment} id="{ent_id}">"#,
+        qn = note.qualified_name,
+    ));
+    svg.raw(&format!(
+        r#"<path d="{d}" fill="{NOTE_FILL}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+    ));
+    // Folded-corner detail (second path).
+    svg.raw(&format!(
+        r#"<path d="M{rf_s},{by_s} L{rf_s},{yf_s} L{r_s},{yf_s} L{rf_s},{by_s}" fill="{NOTE_FILL}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+        rf_s = fc(rf),
+        by_s = fc(by),
+        yf_s = fc(yf),
+        r_s = fc(right),
+    ));
+    // Text lines, each at its own oracle-captured baseline.
+    if g.text_lines.is_empty() {
+        let tx = g.text_x.unwrap_or(bx + 6.0);
+        let ty0 = g.text_y.unwrap_or(by + pm::ascent(NOTE_FONT_SIZE) + 5.0);
+        for (i, line) in note.text.split('\n').enumerate() {
+            let ty = ty0 + (i as f64) * pm::text_height(NOTE_FONT_SIZE);
+            emit_text(svg, line, tx, ty, NOTE_FONT_SIZE, false, false);
+        }
+    } else {
+        for (tx, ty, line) in &g.text_lines {
+            emit_text(svg, line, *tx, *ty, NOTE_FONT_SIZE, false, false);
+        }
+    }
+    svg.raw("</g>");
+}
+
 // ---------------------------------------------------------------------------
 // Connections (oracle-driven)
 // ---------------------------------------------------------------------------
+
+fn is_numbered_duplicate_edge(edge_id: &str, candidate_id: &str) -> bool {
+    let Some(rest) = edge_id.strip_prefix(candidate_id) else {
+        return false;
+    };
+    let Some(number) = rest.strip_prefix('-') else {
+        return false;
+    };
+    !number.is_empty() && number.bytes().all(|b| b.is_ascii_digit())
+}
+
+fn find_oracle_connection_edge<'a>(
+    oracle: &'a OracleLayout,
+    candidates: &[String],
+    source_line: Option<&str>,
+) -> Option<&'a crate::layout_oracle::OracleEdgePath> {
+    let mut fallback = None;
+    for candidate in candidates {
+        for edge in oracle.edges.iter().filter(|edge| {
+            edge.id == *candidate
+                || source_line.is_some()
+                    && is_numbered_duplicate_edge(edge.id.as_str(), candidate.as_str())
+        }) {
+            if source_line.is_some_and(|line| edge.source_line.as_deref() == Some(line)) {
+                return Some(edge);
+            }
+            if edge.id == *candidate {
+                fallback.get_or_insert(edge);
+            }
+        }
+    }
+    fallback
+}
 
 fn render_connection(
     svg: &mut SvgBuilder,
@@ -1135,6 +2720,7 @@ fn render_connection(
     id_for_node: &HashMap<String, String>,
     own_qname_for_id: &HashMap<String, String>,
     link_id: &str,
+    handwritten: bool,
 ) {
     // Edge IDs in goldens use the OWN name of each endpoint. own_qname may
     // itself contain '.' (label-derived), so we can't recover it by splitting
@@ -1160,18 +2746,27 @@ fn render_connection(
         format!("{}-{}", conn.from, conn.to),
         format!("{from_qname}-backto-{to_qname}"),
     ];
-    let oracle_edge = candidates
-        .iter()
-        .find_map(|cand| oracle.edges.iter().find(|e| e.id == *cand));
+    let source_line = (conn.source_line > 0).then(|| conn.source_line.to_string());
+    let oracle_edge = find_oracle_connection_edge(oracle, &candidates, source_line.as_deref());
     let oracle_edge = oracle_edge.or_else(|| {
         let f_id = id_for_node.get(&conn.from).cloned();
         let t_id = id_for_node.get(&conn.to).cloned();
-        oracle.edges.iter().find(|e| {
+        let mut fallback = None;
+        for edge in oracle.edges.iter().filter(|e| {
             let e1 = e.entity_1.as_deref();
             let e2 = e.entity_2.as_deref();
             (e1 == f_id.as_deref() && e2 == t_id.as_deref())
                 || (e1 == t_id.as_deref() && e2 == f_id.as_deref())
-        })
+        }) {
+            if source_line
+                .as_deref()
+                .is_some_and(|line| edge.source_line.as_deref() == Some(line))
+            {
+                return Some(edge);
+            }
+            fallback.get_or_insert(edge);
+        }
+        fallback
     });
     let expected_id = oracle_edge
         .map(|e| e.id.clone())
@@ -1222,8 +2817,13 @@ fn render_connection(
             .as_ref()
             .map(|c| format!(r#" codeLine="{c}""#))
             .unwrap_or_default();
+        let id_attr = if handwritten {
+            String::new()
+        } else {
+            format!(r#" id="{expected_id}""#)
+        };
         svg.raw(&format!(
-            r#"<path{code_line_attr} d="{d}" fill="none" id="{expected_id}" style="{path_style}"/>"#,
+            r#"<path{code_line_attr} d="{d}" fill="none"{id_attr} style="{path_style}"/>"#,
             d = oe.d,
         ));
         if let Some(points) = &oe.arrow_points {
@@ -1246,8 +2846,17 @@ fn render_connection(
                 r#"<polygon fill="{fill}" points="{points}" style="{poly_style}"/>"#,
             ));
         }
-        // Connection label — position taken from oracle.
-        if let Some((lx, ly, text)) = &oe.label {
+        // Connection labels — positions taken from the oracle. PlantUML emits
+        // each label (mid-edge label, plus any endpoint/qualifier labels) as a
+        // separate `<text>` child of the link group; `labels` captures them all
+        // in document order with their own coordinates. Multi-line mid-edge
+        // labels also arrive as one `<text>` per line, so emitting each entry
+        // verbatim reproduces both multi-line and multi-label edges.
+        if !oe.labels.is_empty() {
+            for (lx, ly, text) in &oe.labels {
+                emit_text(svg, text, *lx, *ly, 13.0, false, false);
+            }
+        } else if let Some((lx, ly, text)) = &oe.label {
             for (i, line) in text.split('\n').enumerate() {
                 let y = *ly + (i as f64) * pm::text_height(13.0);
                 emit_text(svg, line, *lx, y, 13.0, false, false);
@@ -1263,9 +2872,468 @@ fn render_connection(
 // Non-oracle fallback (minimal)
 // ---------------------------------------------------------------------------
 
-fn render_no_oracle(_diagram: &DeploymentDiagram, _theme: &Theme) -> String {
-    // Minimal empty SVG envelope — golden tests always supply oracle.
-    let mut s = String::new();
-    write!(s, r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="50px" preserveAspectRatio="none" style="width:100px;height:50px;background:#FFFFFF;" version="1.1" viewBox="0 0 100 50" width="100px" zoomAndPan="magnify"><defs/><g></g></svg>"#).unwrap();
-    s
+fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
+    // Java path: CucaDiagramFileMakerSvek builds a Bibliotekon of measured
+    // SvekNodes, DotStringFactory serialises those node boxes to dot, then
+    // GeneralImageBuilder paints the returned positions. This mirrors that
+    // data flow with the vendored Graphviz wrapper rather than grid-placement.
+    let dims: Vec<DeploymentNodeDim> = diagram
+        .nodes
+        .iter()
+        .map(|node| deployment_node_dim(node, &diagram.meta.sprites))
+        .collect();
+    let parent_of = deployment_parent_map(diagram);
+    let cluster_ids: HashSet<&str> = diagram
+        .nodes
+        .iter()
+        .filter(|node| !node.children.is_empty())
+        .map(|node| node.id.as_str())
+        .collect();
+    let mut layout = LayoutGraph::new(Direction::TopToBottom).with_plantuml_svek_spacing();
+    for (node, dim) in diagram.nodes.iter().zip(&dims) {
+        if !cluster_ids.contains(node.id.as_str()) {
+            layout.add_node(&node.id, &node.label, dim.width, dim.height);
+        }
+    }
+    for node in &diagram.nodes {
+        if cluster_ids.contains(node.id.as_str()) {
+            let parent = parent_of
+                .get(&node.id)
+                .filter(|parent| cluster_ids.contains(parent.as_str()))
+                .map(String::as_str);
+            layout.add_cluster(&node.id, &node.label, parent);
+        }
+    }
+    for node in &diagram.nodes {
+        if cluster_ids.contains(node.id.as_str()) {
+            continue;
+        }
+        if let Some(parent) = parent_of.get(&node.id)
+            && cluster_ids.contains(parent.as_str())
+        {
+            layout.add_cluster_node(parent, &node.id);
+        }
+    }
+    for conn in &diagram.connections {
+        if !cluster_ids.contains(conn.from.as_str()) && !cluster_ids.contains(conn.to.as_str()) {
+            layout.add_edge(&conn.from, &conn.to, conn.label.as_deref());
+        }
+    }
+
+    let result = layout.layout_full(LAYOUT_TIMEOUT);
+    let (rects, content_w, content_h) = layout_deployment_rects(diagram, &dims, result.as_ref());
+    let total_w = (content_w + BODY_RIGHT_MARGIN).max(100.0);
+    let total_h = (content_h + BODY_BOTTOM_MARGIN).max(50.0);
+
+    let mut oracle = OracleLayout::default();
+    let qnames = deployment_qnames(diagram, &parent_of);
+    for (i, node) in diagram.nodes.iter().enumerate() {
+        let dim = &dims[i];
+        let rect = rects[i];
+        let mut entity_rect = empty_entity_rect(rect.x, rect.y, rect.width, rect.height);
+        if !cluster_ids.contains(node.id.as_str()) {
+            let text_y = rect.y + dim.top_pad;
+            let text_x = entity_text_center(node.kind, rect.x, rect.width) - dim.label_width / 2.0;
+            entity_rect.text_x_values.push(text_x);
+            entity_rect.text_y_values.push(text_y);
+            entity_rect.texts.push(EntityText {
+                x: text_x,
+                y: text_y,
+                text: node.label.clone(),
+            });
+        }
+        entity_rect.source_line = Some(node.source_line.to_string());
+        oracle
+            .entities
+            .insert(qnames[&node.id].clone(), entity_rect);
+    }
+
+    let id_for_node = no_oracle_node_ids(diagram);
+    let skin_fills = skin_background_fills(&diagram.meta.skinparams);
+    let skin_strokes = skin_border_colors(&diagram.meta.skinparams);
+    let sprite_names: HashSet<String> = diagram
+        .meta
+        .sprites
+        .keys()
+        .map(|k| k.to_lowercase())
+        .collect();
+    let sprite_cache =
+        crate::sprite::SpriteCache::from_sprites_scaled(&diagram.meta.sprites, sprite_scale());
+    let ctx = OracleRenderContext {
+        oracle: &oracle,
+        id_for_node: &id_for_node,
+        skin_fills: &skin_fills,
+        skin_strokes: &skin_strokes,
+        sprite_names: &sprite_names,
+        sprites: &diagram.meta.sprites,
+        sprite_cache: &sprite_cache,
+        handwritten: false,
+    };
+
+    let mut svg = SvgBuilder::new_plantuml(total_w, total_h, "DESCRIPTION");
+    let all_children: HashSet<&str> = diagram
+        .nodes
+        .iter()
+        .flat_map(|n| n.children.iter().map(|s| s.as_str()))
+        .collect();
+    let roots: Vec<&DeploymentNode> = diagram
+        .nodes
+        .iter()
+        .filter(|n| !all_children.contains(n.id.as_str()))
+        .collect();
+    for root in &roots {
+        emit_clusters_dfs(&mut svg, root, &diagram.nodes, None, &ctx);
+    }
+    let mut leaves = Vec::new();
+    for root in &roots {
+        collect_entities_dfs(root, &diagram.nodes, None, 0, &mut leaves);
+    }
+    leaves.sort_by_key(|(_, source_line, _, _)| *source_line);
+    for (_, _, node, qname) in leaves {
+        emit_entity(&mut svg, node, &qname, &ctx);
+    }
+    if let Some(result) = result.as_ref() {
+        render_no_oracle_edges(&mut svg, diagram, &id_for_node, &result.edge_paths);
+    }
+    svg.finalize_plantuml()
+}
+
+struct DeploymentNodeDim {
+    width: f64,
+    height: f64,
+    label_width: f64,
+    top_pad: f64,
+}
+
+#[derive(Clone, Copy)]
+struct LayoutRect {
+    x: f64,
+    y: f64,
+    width: f64,
+    height: f64,
+}
+
+fn deployment_parent_map(diagram: &DeploymentDiagram) -> HashMap<String, String> {
+    let mut parent_of = HashMap::new();
+    for node in &diagram.nodes {
+        for child in &node.children {
+            parent_of.insert(child.clone(), node.id.clone());
+        }
+    }
+    parent_of
+}
+
+fn deployment_qnames(
+    diagram: &DeploymentDiagram,
+    parent_of: &HashMap<String, String>,
+) -> HashMap<String, String> {
+    let mut qnames = HashMap::new();
+    for node in &diagram.nodes {
+        let mut qname = own_qname(node);
+        let mut cur_id = node.id.as_str();
+        while let Some(parent_id) = parent_of.get(cur_id) {
+            if let Some(parent) = diagram.nodes.iter().find(|n| n.id == *parent_id) {
+                qname = format!("{}.{qname}", own_qname(parent));
+                cur_id = parent.id.as_str();
+            } else {
+                break;
+            }
+        }
+        qnames.insert(node.id.clone(), qname);
+    }
+    qnames
+}
+
+fn deployment_node_dim(
+    node: &DeploymentNode,
+    sprites: &HashMap<String, rustuml_parser::diagram::SpriteData>,
+) -> DeploymentNodeDim {
+    let bold = matches!(node.kind, DeploymentNodeKind::Package);
+    let label_width = node
+        .label
+        .lines()
+        .map(|line| deployment_label_width_for_sprites(line, FONT_SIZE, bold, sprites))
+        .fold(0.0_f64, f64::max);
+    let stereo_width = node
+        .stereotype
+        .as_ref()
+        .map(|stereo| text_render::measure(&format!("\u{00AB}{stereo}\u{00BB}"), FONT_SIZE, false))
+        .unwrap_or(0.0);
+    let line_count = node.label.lines().count().max(1) + usize::from(node.stereotype.is_some());
+    let (text_x_pad, top_pad, _) = entity_text_geom(node.kind, 0.0, &node.label);
+    let width = match node.kind {
+        DeploymentNodeKind::Node | DeploymentNodeKind::Artifact | DeploymentNodeKind::Frame => {
+            label_width.max(stereo_width) + 2.0 * text_x_pad + 10.0
+        }
+        DeploymentNodeKind::Cloud => label_width.max(stereo_width) + 2.0 * CLOUD_MARGIN,
+        DeploymentNodeKind::Queue => label_width.max(stereo_width) + 25.0,
+        _ => label_width.max(stereo_width) + 2.0 * text_x_pad,
+    };
+    let height = match node.kind {
+        DeploymentNodeKind::Cloud => line_count as f64 * TEXT_LINE_H + 2.0 * CLOUD_MARGIN,
+        _ => {
+            top_pad
+                + (line_count.saturating_sub(1)) as f64 * TEXT_LINE_H
+                + (pm::text_height(FONT_SIZE) - ASCENT_14)
+                + 10.0
+        }
+    };
+    DeploymentNodeDim {
+        width,
+        height,
+        label_width,
+        top_pad,
+    }
+}
+
+fn deployment_label_width_for_sprites(
+    label: &str,
+    font_size: f64,
+    bold: bool,
+    sprites: &HashMap<String, rustuml_parser::diagram::SpriteData>,
+) -> f64 {
+    if !label.contains("<$") {
+        return text_render::measure(label, font_size, bold);
+    }
+    crate::sprite::parse_sprite_segments(label)
+        .iter()
+        .map(|seg| match seg {
+            crate::sprite::TextSegment::Text(text) => text_render::measure(text, font_size, bold),
+            crate::sprite::TextSegment::Sprite(name) => sprites
+                .get(name)
+                .map(|sprite| deployment_sprite_dimensions(sprite).0)
+                .unwrap_or(0.0),
+            crate::sprite::TextSegment::OpenIcon(name) => crate::openiconic::lookup(name)
+                .map(|icon| icon.width * (font_size / icon.height))
+                .unwrap_or(0.0),
+        })
+        .sum()
+}
+
+fn layout_deployment_rects(
+    diagram: &DeploymentDiagram,
+    dims: &[DeploymentNodeDim],
+    result: Option<&LayoutResult>,
+) -> (Vec<LayoutRect>, f64, f64) {
+    let mut rects = Vec::new();
+    if let Some(result) = result {
+        let cluster_ids: HashSet<&str> = diagram
+            .nodes
+            .iter()
+            .filter(|node| !node.children.is_empty())
+            .map(|node| node.id.as_str())
+            .collect();
+        let cluster_positions: HashMap<&str, &rustuml_layout::graph::ClusterPosition> = result
+            .cluster_positions
+            .iter()
+            .map(|pos| (pos.id.as_str(), pos))
+            .collect();
+        let mut leaf_positions = result.node_positions.iter();
+        for (node, dim) in diagram.nodes.iter().zip(dims) {
+            if cluster_ids.contains(node.id.as_str()) {
+                if let Some(pos) = cluster_positions.get(node.id.as_str()) {
+                    rects.push(LayoutRect {
+                        x: pos.x + BODY_MARGIN,
+                        y: pos.y + BODY_MARGIN,
+                        width: pos.width,
+                        height: pos.height,
+                    });
+                } else {
+                    rects.push(LayoutRect {
+                        x: BODY_MARGIN,
+                        y: BODY_MARGIN,
+                        width: dim.width,
+                        height: dim.height,
+                    });
+                }
+                continue;
+            }
+            let Some(pos) = leaf_positions.next() else {
+                rects.clear();
+                break;
+            };
+            rects.push(LayoutRect {
+                x: pos.x + BODY_MARGIN,
+                y: pos.y + BODY_MARGIN,
+                width: dim.width,
+                height: dim.height,
+            });
+        }
+    }
+    if rects.len() != diagram.nodes.len() {
+        rects.clear();
+        let mut y = BODY_MARGIN;
+        for dim in dims {
+            rects.push(LayoutRect {
+                x: BODY_MARGIN,
+                y,
+                width: dim.width,
+                height: dim.height,
+            });
+            y += dim.height + 50.0;
+        }
+    }
+
+    let content_w = rects.iter().map(|r| r.x + r.width).fold(0.0_f64, f64::max);
+    let content_h = rects.iter().map(|r| r.y + r.height).fold(0.0_f64, f64::max);
+    (rects, content_w, content_h)
+}
+
+fn empty_entity_rect(x: f64, y: f64, width: f64, height: f64) -> EntityRect {
+    EntityRect {
+        x,
+        y,
+        width,
+        height,
+        icon_cx: None,
+        icon_cy: None,
+        glyph_path_d: None,
+        body_polygon: None,
+        icon_polygon: None,
+        separator_paths: vec![],
+        visibility_polygons: vec![],
+        name_text_x: None,
+        text_y_values: vec![],
+        text_x_values: vec![],
+        sep_y_values: vec![],
+        sep_lines: vec![],
+        vis_icon_y_values: vec![],
+        fill: None,
+        body_style: None,
+        rect_style: None,
+        rect_rx: None,
+        rect_ry: None,
+        rect_filter: None,
+        entity_id: None,
+        source_line: None,
+        aux_rects: vec![],
+        lines: vec![],
+        texts: vec![],
+        images: vec![],
+    }
+}
+
+fn no_oracle_node_ids(diagram: &DeploymentDiagram) -> HashMap<String, String> {
+    #[derive(Copy, Clone)]
+    enum Item<'a> {
+        Node(&'a DeploymentNode),
+        Conn,
+    }
+    let mut items = Vec::new();
+    for node in &diagram.nodes {
+        items.push((node.source_line, Item::Node(node)));
+    }
+    for conn in &diagram.connections {
+        items.push((conn.source_line, Item::Conn));
+    }
+    items.sort_by_key(|(line, _)| *line);
+    let mut ids = HashMap::new();
+    for (counter, (_, item)) in (2usize..).zip(items) {
+        if let Item::Node(node) = item {
+            ids.insert(node.id.clone(), format!("ent{counter:04}"));
+        }
+    }
+    ids
+}
+
+fn render_no_oracle_edges(
+    svg: &mut SvgBuilder,
+    diagram: &DeploymentDiagram,
+    id_for_node: &HashMap<String, String>,
+    edge_paths: &[EdgePath],
+) {
+    for (i, conn) in diagram.connections.iter().enumerate() {
+        let Some(edge) = edge_paths
+            .iter()
+            .find(|edge| edge.from == conn.from && edge.to == conn.to)
+        else {
+            continue;
+        };
+        let Some(ent1) = id_for_node.get(&conn.from) else {
+            continue;
+        };
+        let Some(ent2) = id_for_node.get(&conn.to) else {
+            continue;
+        };
+        let link_id = format!("lnk{}", i + diagram.nodes.len() + 2);
+        svg.raw(&format!("<!--link {} to {}-->", conn.from, conn.to));
+        svg.raw(&format!(
+            r#"<g class="link" data-entity-1="{ent1}" data-entity-2="{ent2}" data-link-type="dependency" data-source-line="{line}" id="{link_id}">"#,
+            line = conn.source_line,
+        ));
+        if let Some(d) = edge_path_d(edge) {
+            svg.raw(&format!(
+                r#"<path d="{d}" fill="none" id="{}-to-{}" style="stroke:#181818;stroke-width:1;"/>"#,
+                conn.from, conn.to,
+            ));
+        }
+        if edge.has_end_arrow
+            && let Some((x, y)) = edge.end_point
+        {
+            let points = format!(
+                "{},{} {},{} {},{} {},{} {},{}",
+                fc(x),
+                fc(y),
+                fc(x + 4.0),
+                fc(y - 9.0),
+                fc(x),
+                fc(y - 5.0),
+                fc(x - 4.0),
+                fc(y - 9.0),
+                fc(x),
+                fc(y),
+            );
+            svg.raw(&format!(
+                r##"<polygon fill="#181818" points="{points}" style="stroke:#181818;stroke-width:1;"/>"##,
+            ));
+        }
+        if let Some(label) = conn.label.as_deref()
+            && let Some((x, y)) = edge.points.get(edge.points.len() / 2).copied()
+        {
+            emit_text(svg, label, x + 4.0, y - 4.0, 13.0, false, false);
+        }
+        svg.raw("</g>");
+    }
+}
+
+fn edge_path_d(edge: &EdgePath) -> Option<String> {
+    let (start, rest) = edge.points.split_first()?;
+    let mut d = format!("M{},{}", fc(start.0), fc(start.1));
+    for chunk in rest.chunks(3) {
+        if let [c1, c2, to] = chunk {
+            write!(
+                d,
+                " C{},{} {},{} {},{}",
+                fc(c1.0),
+                fc(c1.1),
+                fc(c2.0),
+                fc(c2.1),
+                fc(to.0),
+                fc(to.1),
+            )
+            .unwrap();
+        }
+    }
+    Some(d)
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn no_oracle_deployment_renders_entities_and_links() {
+        let source = "@startuml\nnode N01\nnode N02\nN01 --> N02\n@enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+
+        let svg = render(&diagram, &Theme::default());
+
+        assert!(svg.contains(r#"<g class="entity" data-qualified-name="N01""#));
+        assert!(svg.contains(r#"<g class="entity" data-qualified-name="N02""#));
+        assert!(svg.contains(r#"<g class="link""#));
+        assert!(!svg.contains(r#"<defs/><g></g>"#));
+    }
 }

@@ -30,14 +30,22 @@ pub struct SaltBlock {
 pub enum BlockKind {
     /// Plain container: `{`.
     Plain,
+    /// Container with an outer border only: `{+` (DRAW_OUTSIDE).
+    Frame,
     /// Table with visible grid lines: `{#`.
     Table,
     /// Tree widget: `{T`.
     Tree,
+    /// Menu widget: `{*`.
+    Menu,
     /// Tab bar: `{/`.
     Tabs,
-    /// Scrollable/multi-line input: `{SI`.
+    /// Scrollable container with both scrollbars: `{S`.
+    Scroll,
+    /// Scrollable container, vertical scrollbar only: `{SI`.
     ScrollInput,
+    /// Scrollable container, horizontal scrollbar only: `{S-`.
+    ScrollHorizontal,
 }
 
 /// A row of cells within a block, separated by `|`.
@@ -51,16 +59,26 @@ pub struct SaltRow {
 pub enum SaltWidget {
     /// A nested block `{...}` acting as a cell in a grid row.
     Block(Box<SaltBlock>),
+    /// A layout title bar: `{- Title }` or `{+ Title }`.
+    LayoutTitle { boxed: bool, label: String },
+    /// A one-pixel terminator gap after a `{- ... }` horizontal section.
+    LayoutTerminator,
     /// A push button: `[Label]`.
     Button(String),
     /// A text input field: `"text"`.
     TextField(String),
+    /// A password input field: `"*****   "`.
+    PasswordField(String),
+    /// A slider control: `[----------]`.
+    Slider(String),
     /// A checkbox: `[X] label` or `[ ] label`.
     Checkbox { checked: bool, label: String },
     /// A radio button: `(X) label` or `( ) label`.
     Radio { selected: bool, label: String },
     /// A dropdown/combo box: `^Label^`.
     Dropdown(String),
+    /// An opened dropdown/combo box: `^Label^ ^`.
+    DropdownOpen(String),
     /// A plain text label.
     Label(String),
     /// A horizontal separator line.

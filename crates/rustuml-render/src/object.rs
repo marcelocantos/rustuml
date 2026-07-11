@@ -11,10 +11,12 @@
 
 use std::fmt::Write;
 
-use rustuml_layout::graph::{Direction, LayoutGraph};
+use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph};
 use rustuml_parser::diagram::object::*;
 
-use crate::layout_oracle::OracleLayout;
+use crate::layout_oracle::{
+    OracleEdgePath, OracleLayout, emit_oracle_cluster_children, emit_oracle_note_entity,
+};
 use crate::style::Theme;
 use crate::text_render::{self, TextBase};
 
@@ -25,6 +27,10 @@ use crate::text_render::{self, TextBase};
 
 /// Margin from SVG edge to entity boxes.
 const MARGIN: f64 = 7.0;
+const OBJECT_CANVAS_PAD: i64 = 13;
+/// Linked object diagrams in PlantUML's SVEK path keep an extra two pixels of
+/// right/bottom slack beyond the entity-only envelope.
+const OBJECT_LINK_CANVAS_PAD: i64 = 15;
 /// Name baseline y relative to rect top (no stereotype).
 const NAME_BASELINE_Y: f64 = 15.5352;
 /// Header separator y relative to rect top (no stereotype).
@@ -97,13 +103,16 @@ pub fn render_with_oracle(
         .collect();
 
     // Determine positions: oracle first, layout-rs fallback.
-    let positions = if let Some(orc) = oracle {
-        oracle_positions(diagram, &mut dims, orc)
+    let layout = if let Some(orc) = oracle {
+        ObjectLayout {
+            positions: oracle_positions(diagram, &mut dims, orc),
+            edge_paths: Vec::new(),
+        }
     } else {
-        layout_positions(diagram, &dims)
+        layout_object(diagram, &dims)
     };
 
-    render_plantuml_svg(diagram, &dims, &positions, oracle, font_size)
+    render_plantuml_svg(diagram, &dims, &layout, oracle, font_size)
 }
 
 // ---------------------------------------------------------------------------
@@ -240,6 +249,10 @@ fn format_field(f: &ObjectField) -> String {
     raw.replace("\"\"", "~\"~\"")
 }
 
+fn map_key_column_text_width(dim: &ObjDim) -> f64 {
+    (dim.map_divider_x - 2.0 * MAP_TEXT_X_OFFSET).max(0.0)
+}
+
 // ---------------------------------------------------------------------------
 // Position resolution
 // ---------------------------------------------------------------------------
@@ -294,8 +307,13 @@ fn oracle_positions(
     positions
 }
 
-fn layout_positions(diagram: &ObjectDiagram, dims: &[ObjDim]) -> Vec<(f64, f64)> {
-    let mut layout = LayoutGraph::new(Direction::TopToBottom);
+struct ObjectLayout {
+    positions: Vec<(f64, f64)>,
+    edge_paths: Vec<EdgePath>,
+}
+
+fn layout_object(diagram: &ObjectDiagram, dims: &[ObjDim]) -> ObjectLayout {
+    let mut layout = LayoutGraph::new(Direction::TopToBottom).with_plantuml_svek_spacing();
     for (obj, dim) in diagram.objects.iter().zip(dims) {
         layout.add_node(&obj.id, &obj.label, dim.width, dim.height);
     }
@@ -305,14 +323,36 @@ fn layout_positions(diagram: &ObjectDiagram, dims: &[ObjDim]) -> Vec<(f64, f64)>
         layout.add_edge(from_base, to_base, link.label.as_deref());
     }
     match layout.layout_full(std::time::Duration::from_secs(5)) {
-        Some(r) => r
-            .node_positions
-            .iter()
-            .map(|p| (p.x + MARGIN, p.y + MARGIN))
-            .collect(),
-        None => (0..diagram.objects.len())
-            .map(|i| (MARGIN, MARGIN + (i as f64) * 100.0))
-            .collect(),
+        Some(mut result) => {
+            for edge in &mut result.edge_paths {
+                for point in &mut edge.points {
+                    point.0 += MARGIN;
+                    point.1 += MARGIN;
+                }
+                if let Some(point) = &mut edge.start_point {
+                    point.0 += MARGIN;
+                    point.1 += MARGIN;
+                }
+                if let Some(point) = &mut edge.end_point {
+                    point.0 += MARGIN;
+                    point.1 += MARGIN;
+                }
+            }
+            ObjectLayout {
+                positions: result
+                    .node_positions
+                    .iter()
+                    .map(|p| (p.x + MARGIN, p.y + MARGIN))
+                    .collect(),
+                edge_paths: result.edge_paths,
+            }
+        }
+        None => ObjectLayout {
+            positions: (0..diagram.objects.len())
+                .map(|i| (MARGIN, MARGIN + (i as f64) * 100.0))
+                .collect(),
+            edge_paths: Vec::new(),
+        },
     }
 }
 
@@ -366,27 +406,72 @@ fn translate_qualified_name(label: &str) -> String {
 fn render_plantuml_svg(
     diagram: &ObjectDiagram,
     dims: &[ObjDim],
-    positions: &[(f64, f64)],
+    layout: &ObjectLayout,
     oracle: Option<&OracleLayout>,
     font_size: u32,
 ) -> String {
+    let positions = &layout.positions;
     // Canvas dimensions: prefer oracle (matches PlantUML exactly), otherwise
     // compute from the union of entity rects with the standard 6px right/bottom
     // pad on top of MARGIN.
-    let (canvas_w, canvas_h) = if let Some(orc) = oracle
-        && orc.canvas_width > 0.0
-        && orc.canvas_height > 0.0
-    {
-        (orc.canvas_width as i64, orc.canvas_height as i64)
-    } else {
-        let mut max_x = 0.0_f64;
-        let mut max_y = 0.0_f64;
-        for (i, (x, y)) in positions.iter().enumerate() {
-            max_x = max_x.max(x + dims[i].width);
-            max_y = max_y.max(y + dims[i].height);
-        }
-        (max_x as i64 + 13, max_y as i64 + 13)
-    };
+    let (canvas_w, canvas_h) =
+        if let Some(orc) = oracle
+            && orc.canvas_width > 0.0
+            && orc.canvas_height > 0.0
+        {
+            (orc.canvas_width as i64, orc.canvas_height as i64)
+        } else {
+            let mut max_x = 0.0_f64;
+            let mut max_y = 0.0_f64;
+            for (i, (x, y)) in positions.iter().enumerate() {
+                max_x = max_x.max(x + dims[i].width);
+                max_y = max_y.max(y + dims[i].height);
+            }
+            for edge in &layout.edge_paths {
+                for (x, y) in &edge.points {
+                    max_x = max_x.max(*x);
+                    max_y = max_y.max(*y);
+                }
+                if let Some((x, y)) = edge.start_point {
+                    max_x = max_x.max(x);
+                    max_y = max_y.max(y);
+                }
+                if let Some((x, y)) = edge.end_point {
+                    max_x = max_x.max(x);
+                    max_y = max_y.max(y);
+                }
+            }
+            for link in &diagram.links {
+                if !is_rendered_layout_link(link) {
+                    continue;
+                }
+                let Some(edge_path) = layout.edge_paths.iter().find(|edge| {
+                    edge.from == link_base(&link.from) && edge.to == link_base(&link.to)
+                }) else {
+                    continue;
+                };
+                if edge_path.points.len() < 4 {
+                    continue;
+                }
+                let endpoint = edge_path.points[edge_path.points.len() - 1];
+                let control = edge_path.points[edge_path.points.len() - 2];
+                for (x, y) in dependency_arrow_polygon(control, endpoint) {
+                    max_x = max_x.max(x);
+                    max_y = max_y.max(y);
+                }
+                if let Some(label) = link.label.as_deref() {
+                    let (label_x, label_y) = edge_label_position(&edge_path.points);
+                    max_x = max_x.max(label_x + text_render::measure(label, 13.0, false) + 1.0);
+                    max_y = max_y.max(label_y + crate::plantuml_metrics::text_height(13.0));
+                }
+            }
+            let canvas_pad = if has_rendered_layout_dependency(diagram, &layout.edge_paths) {
+                OBJECT_LINK_CANVAS_PAD
+            } else {
+                OBJECT_CANVAS_PAD
+            };
+            (max_x as i64 + canvas_pad, max_y as i64 + canvas_pad)
+        };
 
     let mut svg = String::new();
 
@@ -433,7 +518,7 @@ fn render_plantuml_svg(
             )
             .unwrap(),
         }
-        svg.push_str(&cluster.inner_xml);
+        emit_oracle_cluster_children(&mut svg, cluster);
         svg.push_str("</g>");
     }
     let mut ent_id = 2;
@@ -526,22 +611,20 @@ fn render_plantuml_svg(
         ent_id += 1;
     }
 
-    // Oracle-captured note entities (GMN*) — emit verbatim, sharing the
+    // Oracle-captured note entities (GMN*) — emit from structured primitives,
+    // sharing the
     // entity-id counter.
     if let Some(orc) = oracle {
         for note in &orc.note_entities {
-            let nid = note.entity_id.as_deref().unwrap_or("ent0000");
-            let sl = note.source_line.as_deref().unwrap_or("0");
-            write!(
-                svg,
-                r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
-                escape_xml(&note.qualified_name),
-                sl,
-                nid,
-            )
-            .unwrap();
-            svg.push_str(&note.inner_xml);
-            svg.push_str("</g>");
+            let _ = emit_oracle_note_entity(
+                &mut svg,
+                note,
+                "#181818",
+                "#FEFFDD",
+                13,
+                "sans-serif",
+                "#000000",
+            );
             ent_id += 1;
         }
     }
@@ -549,10 +632,367 @@ fn render_plantuml_svg(
     // Links: prefer oracle data.
     if let Some(orc) = oracle {
         render_oracle_links(&mut svg, diagram, orc, &mut ent_id);
+    } else {
+        render_layout_links(&mut svg, diagram, &layout.edge_paths, &mut ent_id);
     }
 
     svg.push_str("</g></svg>");
     svg
+}
+
+fn render_layout_links(
+    svg: &mut String,
+    diagram: &ObjectDiagram,
+    edge_paths: &[EdgePath],
+    ent_id: &mut usize,
+) {
+    for link in &diagram.links {
+        if !is_rendered_layout_link(link) {
+            continue;
+        }
+        let from_base = link_base(&link.from);
+        let to_base = link_base(&link.to);
+        let Some(edge_path) = edge_paths
+            .iter()
+            .find(|edge| edge.from == from_base && edge.to == to_base)
+        else {
+            continue;
+        };
+        if edge_path.points.len() < 4 {
+            continue;
+        }
+
+        let Some(from_index) = diagram.objects.iter().position(|obj| obj.id == from_base) else {
+            continue;
+        };
+        let Some(to_index) = diagram.objects.iter().position(|obj| obj.id == to_base) else {
+            continue;
+        };
+        let source_line = if link.source_line > 0 {
+            link.source_line
+        } else {
+            0
+        };
+        let link_id = format!("lnk{ent_id}");
+        let path_id = object_link_path_id(link, from_base, to_base);
+        let link_type = object_link_type(link.kind);
+
+        write!(svg, "<!--link {from_base} to {to_base}-->").unwrap();
+        write!(
+            svg,
+            r#"<g class="link" data-entity-1="ent{:04}" data-entity-2="ent{:04}" data-link-type="{link_type}" data-source-line="{source_line}" id="{link_id}">"#,
+            from_index + 2,
+            to_index + 2,
+        )
+        .unwrap();
+        let path_points = shortened_object_link_points(link, &edge_path.points);
+        let dash_style = if link.dashed {
+            "stroke-dasharray:7,7;"
+        } else {
+            ""
+        };
+        write!(
+            svg,
+            r#"<path codeLine="{source_line}" d="{}" fill="none" id="{path_id}" style="stroke:{BORDER_COLOR};stroke-width:1;{dash_style}"/>"#,
+            edge_path_d(&path_points),
+        )
+        .unwrap();
+        emit_object_link_start_decor(svg, link, &edge_path.points);
+        emit_object_link_end_decor(svg, link, &edge_path.points);
+        if let Some(label) = link.label.as_deref() {
+            let (x, y) = edge_label_position(&edge_path.points);
+            text_render::emit_text(
+                svg,
+                label,
+                &TextBase {
+                    x: x + 1.0,
+                    y: y - 4.0,
+                    font_size: 13,
+                    font_family: "sans-serif",
+                    fill: "#000000",
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
+        }
+        svg.push_str("</g>");
+        *ent_id += 1;
+    }
+}
+
+fn link_base(link_end: &str) -> &str {
+    link_end.split("::").next().unwrap_or(link_end)
+}
+
+fn is_rendered_layout_link(link: &ObjectLink) -> bool {
+    !link.from.contains("::")
+        && !link.to.contains("::")
+        && link.from_multiplicity.is_none()
+        && link.to_multiplicity.is_none()
+}
+
+fn has_rendered_layout_dependency(diagram: &ObjectDiagram, edge_paths: &[EdgePath]) -> bool {
+    diagram.links.iter().any(|link| {
+        is_rendered_layout_link(link)
+            && edge_paths.iter().any(|edge| {
+                edge.from == link_base(&link.from)
+                    && edge.to == link_base(&link.to)
+                    && edge.points.len() >= 4
+            })
+    })
+}
+
+fn object_link_type(kind: ObjectLinkKind) -> &'static str {
+    match kind {
+        ObjectLinkKind::Dependency => "dependency",
+        ObjectLinkKind::Extension => "extension",
+        ObjectLinkKind::Composition => "composition",
+        ObjectLinkKind::Aggregation => "aggregation",
+        ObjectLinkKind::Association => "association",
+    }
+}
+
+fn object_link_path_id(link: &ObjectLink, from: &str, to: &str) -> String {
+    match link.kind {
+        ObjectLinkKind::Aggregation | ObjectLinkKind::Composition | ObjectLinkKind::Association => {
+            format!("{from}-{to}")
+        }
+        ObjectLinkKind::Dependency | ObjectLinkKind::Extension => format!("{from}-to-{to}"),
+    }
+}
+
+fn shortened_object_link_points(link: &ObjectLink, points: &[(f64, f64)]) -> Vec<(f64, f64)> {
+    let start_len = match link.kind {
+        ObjectLinkKind::Aggregation | ObjectLinkKind::Composition => OBJECT_DIAMOND_LENGTH,
+        ObjectLinkKind::Dependency | ObjectLinkKind::Extension | ObjectLinkKind::Association => 0.0,
+    };
+    let end_len = match link.kind {
+        ObjectLinkKind::Dependency => DEPENDENCY_ARROW_PATH_INSET,
+        ObjectLinkKind::Extension => OBJECT_TRIANGLE_LENGTH,
+        ObjectLinkKind::Aggregation | ObjectLinkKind::Composition => DEPENDENCY_ARROW_PATH_INSET,
+        ObjectLinkKind::Association => 0.0,
+    };
+    shorten_edge_points(points, start_len, end_len)
+}
+
+fn shorten_edge_points(points: &[(f64, f64)], start_len: f64, end_len: f64) -> Vec<(f64, f64)> {
+    let mut out = points.to_vec();
+    if out.len() < 2 {
+        return out;
+    }
+    if start_len > 0.0 {
+        let tangent = unit_vector(out[0], out[1]);
+        out[0].0 += tangent.0 * start_len;
+        out[0].1 += tangent.1 * start_len;
+        out[1].0 += tangent.0 * start_len;
+        out[1].1 += tangent.1 * start_len;
+    }
+    if end_len > 0.0 {
+        let last = out.len() - 1;
+        let tangent = unit_vector(out[last], out[last - 1]);
+        out[last].0 += tangent.0 * end_len;
+        out[last].1 += tangent.1 * end_len;
+        out[last - 1].0 += tangent.0 * end_len;
+        out[last - 1].1 += tangent.1 * end_len;
+    }
+    out
+}
+
+fn emit_object_link_start_decor(svg: &mut String, link: &ObjectLink, points: &[(f64, f64)]) {
+    match link.kind {
+        ObjectLinkKind::Aggregation => emit_diamond(svg, points, true, "none"),
+        ObjectLinkKind::Composition => emit_diamond(svg, points, true, BORDER_COLOR),
+        ObjectLinkKind::Dependency | ObjectLinkKind::Extension | ObjectLinkKind::Association => {}
+    }
+}
+
+fn emit_object_link_end_decor(svg: &mut String, link: &ObjectLink, points: &[(f64, f64)]) {
+    match link.kind {
+        ObjectLinkKind::Dependency | ObjectLinkKind::Aggregation | ObjectLinkKind::Composition => {
+            if points.len() >= 2 {
+                let endpoint = points[points.len() - 1];
+                let control = points[points.len() - 2];
+                let arrow = dependency_arrow_points(control, endpoint);
+                write!(
+                    svg,
+                    r#"<polygon fill="{BORDER_COLOR}" points="{arrow}" style="stroke:{BORDER_COLOR};stroke-width:1;"/>"#,
+                )
+                .unwrap();
+            }
+        }
+        ObjectLinkKind::Extension => emit_extension_triangle(svg, points),
+        ObjectLinkKind::Association => {}
+    }
+}
+
+const OBJECT_DIAMOND_LENGTH: f64 = 12.0;
+const OBJECT_DIAMOND_HALF_WIDTH: f64 = 4.0;
+const OBJECT_TRIANGLE_LENGTH: f64 = 18.0;
+const OBJECT_TRIANGLE_HALF_WIDTH: f64 = 6.0;
+
+fn emit_diamond(svg: &mut String, points: &[(f64, f64)], at_start: bool, fill: &str) {
+    if points.len() < 2 {
+        return;
+    }
+    let (contact, neighbor) = if at_start {
+        (points[0], points[1])
+    } else {
+        (points[points.len() - 1], points[points.len() - 2])
+    };
+    let inside = unit_vector(contact, neighbor);
+    let perp = (-inside.1, inside.0);
+    let side_center = (
+        contact.0 + inside.0 * (OBJECT_DIAMOND_LENGTH / 2.0),
+        contact.1 + inside.1 * (OBJECT_DIAMOND_LENGTH / 2.0),
+    );
+    let far = (
+        contact.0 + inside.0 * OBJECT_DIAMOND_LENGTH,
+        contact.1 + inside.1 * OBJECT_DIAMOND_LENGTH,
+    );
+    let side1 = (
+        side_center.0 + perp.0 * OBJECT_DIAMOND_HALF_WIDTH,
+        side_center.1 + perp.1 * OBJECT_DIAMOND_HALF_WIDTH,
+    );
+    let side2 = (
+        side_center.0 - perp.0 * OBJECT_DIAMOND_HALF_WIDTH,
+        side_center.1 - perp.1 * OBJECT_DIAMOND_HALF_WIDTH,
+    );
+    write!(
+        svg,
+        r#"<polygon fill="{fill}" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{BORDER_COLOR};stroke-width:1;"/>"#,
+        fmt_tl(contact.0),
+        fmt_tl(contact.1),
+        fmt_tl(side1.0),
+        fmt_tl(side1.1),
+        fmt_tl(far.0),
+        fmt_tl(far.1),
+        fmt_tl(side2.0),
+        fmt_tl(side2.1),
+        fmt_tl(contact.0),
+        fmt_tl(contact.1),
+    )
+    .unwrap();
+}
+
+fn emit_extension_triangle(svg: &mut String, points: &[(f64, f64)]) {
+    if points.len() < 2 {
+        return;
+    }
+    let contact = points[points.len() - 1];
+    let neighbor = points[points.len() - 2];
+    let inside = unit_vector(contact, neighbor);
+    let perp = (-inside.1, inside.0);
+    let base = (
+        contact.0 + inside.0 * OBJECT_TRIANGLE_LENGTH,
+        contact.1 + inside.1 * OBJECT_TRIANGLE_LENGTH,
+    );
+    let side1 = (
+        base.0 + perp.0 * OBJECT_TRIANGLE_HALF_WIDTH,
+        base.1 + perp.1 * OBJECT_TRIANGLE_HALF_WIDTH,
+    );
+    let side2 = (
+        base.0 - perp.0 * OBJECT_TRIANGLE_HALF_WIDTH,
+        base.1 - perp.1 * OBJECT_TRIANGLE_HALF_WIDTH,
+    );
+    write!(
+        svg,
+        r#"<polygon fill="none" points="{},{},{},{},{},{},{},{}" style="stroke:{BORDER_COLOR};stroke-width:1;"/>"#,
+        fmt_tl(contact.0),
+        fmt_tl(contact.1),
+        fmt_tl(side1.0),
+        fmt_tl(side1.1),
+        fmt_tl(side2.0),
+        fmt_tl(side2.1),
+        fmt_tl(contact.0),
+        fmt_tl(contact.1),
+    )
+    .unwrap();
+}
+
+fn edge_label_position(points: &[(f64, f64)]) -> (f64, f64) {
+    if points.len() >= 2 {
+        let first = points[0];
+        let last = points[points.len() - 1];
+        (
+            (first.0 + last.0) / 2.0,
+            (first.1 + last.1) / 2.0 + crate::plantuml_metrics::text_height(13.0) / 3.0,
+        )
+    } else {
+        points[0]
+    }
+}
+
+fn edge_path_d(points: &[(f64, f64)]) -> String {
+    let mut d = format!("M{},{}", fmt_tl(points[0].0), fmt_tl(points[0].1));
+    let mut i = 1;
+    while i + 2 < points.len() {
+        write!(
+            d,
+            " C{},{} {},{} {},{}",
+            fmt_tl(points[i].0),
+            fmt_tl(points[i].1),
+            fmt_tl(points[i + 1].0),
+            fmt_tl(points[i + 1].1),
+            fmt_tl(points[i + 2].0),
+            fmt_tl(points[i + 2].1),
+        )
+        .unwrap();
+        i += 3;
+    }
+    d
+}
+
+const DEPENDENCY_ARROW_PATH_INSET: f64 = 6.0;
+const DEPENDENCY_ARROW_BACK: f64 = 9.0;
+const DEPENDENCY_ARROW_NOTCH: f64 = 5.0;
+const DEPENDENCY_ARROW_HALF_WIDTH: f64 = 4.0;
+
+fn unit_vector(control: (f64, f64), endpoint: (f64, f64)) -> (f64, f64) {
+    let dx = endpoint.0 - control.0;
+    let dy = endpoint.1 - control.1;
+    let len = (dx * dx + dy * dy).sqrt();
+    if len > 0.0 {
+        (dx / len, dy / len)
+    } else {
+        (0.0, 1.0)
+    }
+}
+
+fn dependency_arrow_points(control: (f64, f64), endpoint: (f64, f64)) -> String {
+    let points = dependency_arrow_polygon(control, endpoint);
+    format!(
+        "{},{},{},{},{},{},{},{},{},{}",
+        fmt_tl(points[0].0),
+        fmt_tl(points[0].1),
+        fmt_tl(points[1].0),
+        fmt_tl(points[1].1),
+        fmt_tl(points[2].0),
+        fmt_tl(points[2].1),
+        fmt_tl(points[3].0),
+        fmt_tl(points[3].1),
+        fmt_tl(points[4].0),
+        fmt_tl(points[4].1),
+    )
+}
+
+fn dependency_arrow_polygon(control: (f64, f64), endpoint: (f64, f64)) -> [(f64, f64); 5] {
+    let (ux, uy) = unit_vector(control, endpoint);
+    let (px, py) = (-uy, ux);
+    let side1 = (
+        endpoint.0 - ux * DEPENDENCY_ARROW_BACK - px * DEPENDENCY_ARROW_HALF_WIDTH,
+        endpoint.1 - uy * DEPENDENCY_ARROW_BACK - py * DEPENDENCY_ARROW_HALF_WIDTH,
+    );
+    let notch = (
+        endpoint.0 - ux * DEPENDENCY_ARROW_NOTCH,
+        endpoint.1 - uy * DEPENDENCY_ARROW_NOTCH,
+    );
+    let side2 = (
+        endpoint.0 - ux * DEPENDENCY_ARROW_BACK + px * DEPENDENCY_ARROW_HALF_WIDTH,
+        endpoint.1 - uy * DEPENDENCY_ARROW_BACK + py * DEPENDENCY_ARROW_HALF_WIDTH,
+    );
+    [endpoint, side1, notch, side2, endpoint]
 }
 
 /// Render the inner content of one entity rect (body, header text, separator,
@@ -872,7 +1312,14 @@ fn render_map_rows(
         // Key text (left column).
         let key_x = oracle_rect
             .and_then(|r| r.text_x_values.get(1 + stereo_offset + i * 2).copied())
-            .unwrap_or(x + MAP_TEXT_X_OFFSET);
+            .unwrap_or_else(|| {
+                // PlantUML TextBlockMap.drawU centers each key TextBlock in
+                // widthColA via HorizontalAlignment.getPosition(keyWidth,
+                // widthColA); TextBlockUtils.withMargin then adds the 5px
+                // left text inset inside that centered block.
+                let key_w = text_render::measure(&field.name, font_size as f64, false);
+                x + MAP_TEXT_X_OFFSET + (map_key_column_text_width(dim) - key_w) / 2.0
+            });
         text_render::emit_text(
             svg,
             &field.name,
@@ -961,40 +1408,30 @@ fn render_oracle_links(
     oracle: &OracleLayout,
     ent_id: &mut usize,
 ) {
-    // Track per-(from,to) counts so multi-edges resolve to A-to-B, A-to-B-1, …
-    // matching PlantUML's id-suffixing convention.
-    let mut seen: std::collections::HashMap<(String, String), usize> =
-        std::collections::HashMap::new();
     for link in &diagram.links {
         let from_base = link.from.split("::").next().unwrap_or(&link.from);
         let to_base = link.to.split("::").next().unwrap_or(&link.to);
-        let key = (from_base.to_string(), to_base.to_string());
-        let idx = *seen.get(&key).unwrap_or(&0);
-        seen.insert(key, idx + 1);
-        let suffix = if idx == 0 {
-            String::new()
-        } else {
-            format!("-{idx}")
+
+        let to_id = format!("{from_base}-to-{to_base}");
+        let backto_id = format!("{from_base}-backto-{to_base}");
+        let assoc_id = format!("{from_base}-{to_base}");
+        let to_id_rev = format!("{to_base}-to-{from_base}");
+        let backto_id_rev = format!("{to_base}-backto-{from_base}");
+        let assoc_id_rev = format!("{to_base}-{from_base}");
+        let source_line = (link.source_line > 0).then(|| link.source_line.to_string());
+        let candidates = [
+            backto_id.as_str(),
+            to_id.as_str(),
+            assoc_id.as_str(),
+            backto_id_rev.as_str(),
+            to_id_rev.as_str(),
+            assoc_id_rev.as_str(),
+        ];
+        let Some((_edge_index, edge)) =
+            find_oracle_object_edge(&oracle.edges, &candidates, source_line.as_deref())
+        else {
+            continue;
         };
-
-        let to_id = format!("{from_base}-to-{to_base}{suffix}");
-        let backto_id = format!("{from_base}-backto-{to_base}{suffix}");
-        let assoc_id = format!("{from_base}-{to_base}{suffix}");
-        let to_id_rev = format!("{to_base}-to-{from_base}{suffix}");
-        let backto_id_rev = format!("{to_base}-backto-{from_base}{suffix}");
-        let assoc_id_rev = format!("{to_base}-{from_base}{suffix}");
-
-        let oracle_edge = oracle
-            .edges
-            .iter()
-            .find(|e| e.id == backto_id)
-            .or_else(|| oracle.edges.iter().find(|e| e.id == to_id))
-            .or_else(|| oracle.edges.iter().find(|e| e.id == assoc_id))
-            .or_else(|| oracle.edges.iter().find(|e| e.id == backto_id_rev))
-            .or_else(|| oracle.edges.iter().find(|e| e.id == to_id_rev))
-            .or_else(|| oracle.edges.iter().find(|e| e.id == assoc_id_rev));
-
-        let Some(edge) = oracle_edge else { continue };
 
         let entity_1 = edge.entity_1.as_deref().unwrap_or("ent0002");
         let entity_2 = edge.entity_2.as_deref().unwrap_or("ent0003");
@@ -1075,6 +1512,38 @@ fn render_oracle_links(
     }
 }
 
+fn find_oracle_object_edge<'a>(
+    edges: &'a [OracleEdgePath],
+    candidates: &[&str],
+    source_line: Option<&str>,
+) -> Option<(usize, &'a OracleEdgePath)> {
+    fn is_numbered_duplicate(edge_id: &str, candidate_id: &str) -> bool {
+        let Some(rest) = edge_id.strip_prefix(candidate_id) else {
+            return false;
+        };
+        let Some(number) = rest.strip_prefix('-') else {
+            return false;
+        };
+        !number.is_empty() && number.bytes().all(|b| b.is_ascii_digit())
+    }
+
+    let mut fallback = None;
+    for candidate_id in candidates {
+        for (edge_index, edge) in edges.iter().enumerate().filter(|(_, edge)| {
+            edge.id == *candidate_id
+                || source_line.is_some() && is_numbered_duplicate(&edge.id, candidate_id)
+        }) {
+            if source_line.is_some_and(|line| edge.source_line.as_deref() == Some(line)) {
+                return Some((edge_index, edge));
+            }
+            if edge.id == *candidate_id {
+                fallback.get_or_insert((edge_index, edge));
+            }
+        }
+    }
+    fallback
+}
+
 // ---------------------------------------------------------------------------
 // Tests
 // ---------------------------------------------------------------------------
@@ -1083,6 +1552,33 @@ fn render_oracle_links(
 mod tests {
     use super::*;
     use rustuml_parser::diagram::DiagramMeta;
+
+    fn oracle_edge(id: &str, source_line: &str) -> OracleEdgePath {
+        OracleEdgePath {
+            id: id.to_string(),
+            path_id: Some(id.to_string()),
+            d: String::new(),
+            arrow_points: None,
+            second_arrow_points: None,
+            second_arrow_fill: None,
+            second_polygon_style: None,
+            arrow_fill: None,
+            link_type: None,
+            entity_1: None,
+            entity_2: None,
+            source_line: Some(source_line.to_string()),
+            link_id: None,
+            path_style: None,
+            code_line: None,
+            polygon_style: None,
+            label: None,
+            labels: Vec::new(),
+            label_links: Vec::new(),
+            extra_paths: Vec::new(),
+            crow_lines: Vec::new(),
+            decorations: Vec::new(),
+        }
+    }
 
     fn simple_object_diagram() -> ObjectDiagram {
         ObjectDiagram {
@@ -1122,9 +1618,11 @@ mod tests {
             links: vec![ObjectLink {
                 from: "Owner".into(),
                 to: "Car".into(),
+                kind: ObjectLinkKind::Dependency,
                 label: Some("drives".into()),
                 from_multiplicity: None,
                 to_multiplicity: None,
+                dashed: false,
                 source_line: 9,
             }],
             notes: vec![],
@@ -1193,6 +1691,41 @@ mod tests {
     }
 
     #[test]
+    fn map_keys_center_in_key_column() {
+        let diagram = ObjectDiagram {
+            meta: DiagramMeta::default(),
+            objects: vec![ObjectInstance {
+                id: "cfg".into(),
+                label: "Config".into(),
+                kind: ObjectKind::Map,
+                fields: vec![
+                    ObjectField {
+                        name: "host".into(),
+                        value: Some("localhost".into()),
+                    },
+                    ObjectField {
+                        name: "debug".into(),
+                        value: Some("true".into()),
+                    },
+                ],
+                stereotype: None,
+                color: None,
+                source_line: 1,
+            }],
+            links: vec![],
+            notes: vec![],
+            packages: vec![],
+        };
+        let svg = render(&diagram, &Theme::default());
+        let host_w = text_render::measure("host", Theme::default().class.font_size as f64, false);
+        let debug_w = text_render::measure("debug", Theme::default().class.font_size as f64, false);
+        let host_x = MARGIN + MAP_TEXT_X_OFFSET + (debug_w - host_w) / 2.0;
+        let debug_x = MARGIN + MAP_TEXT_X_OFFSET;
+        assert!(svg.contains(&format!(r#"x="{}""#, fmt_tl(host_x))));
+        assert!(svg.contains(&format!(r#"x="{}""#, fmt_tl(debug_x))));
+    }
+
+    #[test]
     fn empty_diagram() {
         let diagram = ObjectDiagram {
             meta: DiagramMeta::default(),
@@ -1224,5 +1757,31 @@ mod tests {
         assert!(svg.contains("class=\"entity\""));
         assert!(svg.contains("data-qualified-name=\"Car\""));
         assert!(svg.contains("id=\"ent0002\""));
+    }
+
+    #[test]
+    fn oracle_edge_matching_uses_source_line_before_endpoint_suffix() {
+        let edges = vec![
+            oracle_edge("o1-to-o2", "7"),
+            oracle_edge("o1-o2", "8"),
+            oracle_edge("o1-o2-1", "9"),
+        ];
+        let candidates = [
+            "o1-backto-o2",
+            "o1-to-o2",
+            "o1-o2",
+            "o2-backto-o1",
+            "o2-to-o1",
+            "o2-o1",
+        ];
+
+        let (_, directed) = find_oracle_object_edge(&edges, &candidates, Some("7")).unwrap();
+        assert_eq!(directed.id, "o1-to-o2");
+
+        let (_, association) = find_oracle_object_edge(&edges, &candidates, Some("8")).unwrap();
+        assert_eq!(association.id, "o1-o2");
+
+        let (_, duplicate) = find_oracle_object_edge(&edges, &candidates, Some("9")).unwrap();
+        assert_eq!(duplicate.id, "o1-o2-1");
     }
 }

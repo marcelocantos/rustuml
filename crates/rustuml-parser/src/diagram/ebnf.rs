@@ -26,6 +26,10 @@ pub struct EbnfRule {
 pub enum EbnfExpr {
     /// A quoted terminal: `"text"`.
     Terminal(String),
+    /// A special sequence: `? description ?`. Carries the raw inner text
+    /// (including any surrounding whitespace), which PlantUML uses for box
+    /// sizing while displaying the trimmed text.
+    SpecialSequence(String),
     /// A bare identifier referencing another rule.
     Nonterminal(String),
     /// A comma-separated sequence: `a , b , c`.

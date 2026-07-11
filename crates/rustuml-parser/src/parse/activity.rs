@@ -14,7 +14,7 @@ use crate::diagram::activity::*;
 pub fn parse_activity(lines: &[String]) -> Result<ActivityDiagram, ParseError> {
     // Detect legacy v1 syntax by looking for `(*)` or `===NAME===` markers.
     let is_legacy = lines.iter().any(|l| {
-        let t = l.trim();
+        let t = super::source_text(l).trim();
         t == "(*)"
             || t.starts_with("(*) ")
             || t.ends_with(" (*)")
@@ -27,16 +27,19 @@ pub fn parse_activity(lines: &[String]) -> Result<ActivityDiagram, ParseError> {
 
     let mut parser = ActivityParser::new();
     for (i, line) in lines.iter().enumerate() {
-        let trimmed = line.trim();
+        let (source_line, trimmed) = super::source_line_and_trimmed(i + 1, line);
         if trimmed.is_empty() {
             if parser.pending_note.is_some() {
                 parser.accumulate_note_line("");
             }
+            if parser.current_body_line > 0 {
+                parser.current_body_line += 1;
+            }
             continue;
         }
-        parser.parse_line(i + 1, trimmed)?;
+        parser.parse_line(source_line, trimmed)?;
     }
-    Ok(parser.finish())
+    parser.finish()
 }
 
 /// Parse legacy (v1) activity syntax.
@@ -77,7 +80,7 @@ fn parse_legacy_activity(lines: &[String]) -> Result<ActivityDiagram, ParseError
     static RE_FORK_BAR: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^===([^=]+)===$").unwrap());
     static RE_PARTITION: LazyLock<Regex> = LazyLock::new(|| {
         // partition "Name" {  or  partition Name {
-        Regex::new(r#"^partition\s+(?:"([^"]+)"|(\S+))\s*\{?\s*$"#).unwrap()
+        Regex::new(r#"^partition\s+(?:"([^"]*)"|(\S+))\s*\{?\s*$"#).unwrap()
     });
 
     let mut meta = DiagramMeta::default();
@@ -110,6 +113,7 @@ fn parse_legacy_activity(lines: &[String]) -> Result<ActivityDiagram, ParseError
             steps.push(ActivityStep::Partition(PartitionBlock {
                 name,
                 color: None,
+                is_group: false,
                 source_line: 0,
             }));
             partition_depth += 1;
@@ -324,16 +328,16 @@ struct ActivityParser {
     pending_note: Option<PendingNote>,
     pending_meta: Option<&'static str>, // "header", "footer", "legend", "caption"
     pending_meta_lines: Vec<String>,
-    /// When an action ends with `\` (output connector), this holds the partial
-    /// text so the next line can be appended to it.
+    /// Text accumulated for a multiline `:label` action that has not yet
+    /// reached its terminating `;`.
     continuation_text: Option<String>,
-    /// When an action ends with a non-`;`/non-`\` connector (`|`, `]`, `/`,
-    /// `>`, `<`), the immediately following action should keep its `:` prefix.
-    next_action_keep_colon: bool,
+    continuation_start_line: Option<usize>,
     /// True when we are inside a `skinparam <type> {` block.
     in_skinparam_block: bool,
     /// Current 1-based source line number (set before each parse_line call).
     current_line: usize,
+    /// Current 1-based non-empty line number within the diagram body.
+    current_body_line: usize,
 }
 
 impl ActivityParser {
@@ -345,17 +349,25 @@ impl ActivityParser {
             pending_meta: None,
             pending_meta_lines: Vec::new(),
             continuation_text: None,
-            next_action_keep_colon: false,
+            continuation_start_line: None,
             in_skinparam_block: false,
             current_line: 0,
+            current_body_line: 0,
         }
     }
 
-    fn finish(self) -> ActivityDiagram {
-        ActivityDiagram {
+    fn finish(self) -> Result<ActivityDiagram, ParseError> {
+        if self.continuation_text.is_some() {
+            return Err(ParseError {
+                line: self.continuation_start_line.unwrap_or(self.current_line),
+                message: "unterminated activity action; multiline actions must end with ';'"
+                    .to_string(),
+            });
+        }
+        Ok(ActivityDiagram {
             meta: self.meta,
             steps: self.steps,
-        }
+        })
     }
 
     fn accumulate_note_line(&mut self, line: &str) {
@@ -394,8 +406,13 @@ impl ActivityParser {
         }
     }
 
+    fn decoration_source_line(&self) -> usize {
+        self.current_body_line.max(1)
+    }
+
     fn parse_line(&mut self, line_num: usize, line: &str) -> Result<(), ParseError> {
         self.current_line = line_num;
+        self.current_body_line += 1;
         // Inside a skinparam block: collect nested `Key Value` entries until `}`.
         if self.in_skinparam_block {
             if line == "}" {
@@ -439,17 +456,30 @@ impl ActivityParser {
             return Ok(());
         }
 
-        // Handle output-connector continuation: the previous action ended with
-        // `\`, so this entire line (stripped of its trailing terminator) is
-        // appended to the pending text and emitted as one action.
+        // PlantUML's activity grammar accepts a single-line action as
+        // `:label;`. A `:` line without the final `;` starts a multiline
+        // action, and every following line belongs to the label until a line
+        // ending in `;` closes it. Bare `|`, `<`, `>`, `/`, and `]` are label
+        // text here, not terminators; a trailing `\` joins the next source
+        // line onto the same rendered label line.
         if let Some(partial) = self.continuation_text.take() {
-            // Strip trailing action terminator only (keep leading `:` intact
-            // so `:next action;` becomes `:next action` when appended).
-            let appended = line.trim_end_matches(|c: char| ";|]/><\\".contains(c));
-            let combined = format!("{}{}", partial, appended);
-            self.steps.push(ActivityStep::Action(combined));
-            // After a continuation, the next action preserves its `:` prefix.
-            self.next_action_keep_colon = true;
+            let mut combined = partial;
+            let trimmed_end = line.trim_end();
+            if trimmed_end.ends_with(';') {
+                let appended = trimmed_end.trim_end_matches(';');
+                combined.push_str(appended);
+                self.steps.push(ActivityStep::Action(combined));
+                self.continuation_start_line = None;
+                return Ok(());
+            }
+
+            if let Some(appended) = trimmed_end.strip_suffix('\\') {
+                combined.push_str(appended);
+            } else {
+                combined.push_str(line);
+                combined.push('\n');
+            }
+            self.continuation_text = Some(combined);
             return Ok(());
         }
 
@@ -462,27 +492,35 @@ impl ActivityParser {
             "fork" => self.steps.push(ActivityStep::Fork),
             "fork again" => self.steps.push(ActivityStep::ForkAgain),
             "end fork" => self.steps.push(ActivityStep::EndFork),
+            "end merge" => self.steps.push(ActivityStep::EndMerge),
             "split" => self.steps.push(ActivityStep::Split),
             "split again" => self.steps.push(ActivityStep::SplitAgain),
             "end split" => self.steps.push(ActivityStep::EndSplit),
             "repeat" => self.steps.push(ActivityStep::Repeat),
             _ if line.starts_with("repeat :") => {
-                // `repeat :label;` — push Repeat then parse the rest as an action.
-                self.steps.push(ActivityStep::Repeat);
-                let rest = line.strip_prefix("repeat ").unwrap_or("").trim();
-                if !rest.is_empty() {
-                    self.try_action(rest);
-                }
+                let label = line
+                    .strip_prefix("repeat :")
+                    .unwrap_or_default()
+                    .trim_end_matches(';')
+                    .trim()
+                    .to_string();
+                self.steps.push(ActivityStep::RepeatStart(label));
             }
             "break" => self.steps.push(ActivityStep::Break),
             "detach" => self.steps.push(ActivityStep::Detach),
             "kill" => self.steps.push(ActivityStep::Kill),
+            _ if line.starts_with("label ") => {}
+            _ if let Some(target) = line.strip_prefix("goto ") => {
+                self.steps
+                    .push(ActivityStep::Goto(target.trim().to_string()));
+            }
             _ => {
                 if !self.try_meta(line)
-                    && !self.try_action(line)
+                    && !self.try_action(line)?
                     && !self.try_deprecated_color_action(line)
                     && !self.try_arrow(line)
                     && !self.try_backward(line)
+                    && !self.try_connector(line)
                     && !self.try_if(line)
                     && !self.try_elseif(line)
                     && !self.try_else(line)
@@ -517,18 +555,22 @@ impl ActivityParser {
 
         if let Some(caps) = RE_TITLE.captures(line) {
             self.meta.title = Some(super::strip_title_quotes(&caps[1]).to_string());
+            self.meta.title_line = Some(self.decoration_source_line());
             return true;
         }
         if let Some(caps) = RE_HEADER.captures(line) {
             self.meta.header = Some(caps[1].trim().to_string());
+            self.meta.header_line = Some(self.decoration_source_line());
             return true;
         }
         if let Some(caps) = RE_FOOTER.captures(line) {
             self.meta.footer = Some(caps[1].trim().to_string());
+            self.meta.footer_line = Some(self.decoration_source_line());
             return true;
         }
         if let Some(caps) = RE_CAPTION.captures(line) {
             self.meta.caption = Some(caps[1].trim().to_string());
+            self.meta.caption_line = Some(self.decoration_source_line());
             return true;
         }
         if let Some(caps) = RE_SKINPARAM.captures(line) {
@@ -553,11 +595,13 @@ impl ActivityParser {
             "header" => {
                 self.pending_meta = Some("header");
                 self.pending_meta_lines.clear();
+                self.meta.header_line = Some(self.decoration_source_line());
                 return true;
             }
             "footer" => {
                 self.pending_meta = Some("footer");
                 self.pending_meta_lines.clear();
+                self.meta.footer_line = Some(self.decoration_source_line());
                 return true;
             }
             "legend" | "legend right" | "legend left" => {
@@ -570,42 +614,27 @@ impl ActivityParser {
         false
     }
 
-    fn try_action(&mut self, line: &str) -> bool {
-        // Match actions with various endings: ; | ] / > < \ (all PlantUML action terminators)
-        // The ending char (except ;) is included in the display text as per PlantUML behavior.
-        static RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^:(.+?)([;|\]/>\\<])$").unwrap());
+    fn try_action(&mut self, line: &str) -> Result<bool, ParseError> {
+        static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^:(.*)$").unwrap());
 
         if let Some(caps) = RE.captures(line) {
-            let text = caps[1].trim().to_string();
-            let ending = &caps[2];
-
-            if ending == "\\" {
-                // Output connector: start a continuation. The partial text
-                // (without `:` prefix) is held until the next line is seen.
-                self.next_action_keep_colon = false;
-                self.continuation_text = Some(text);
-                return true;
-            }
-
-            let display = if ending == ";" {
-                if self.next_action_keep_colon {
-                    // Preserve the `:` prefix on this action.
-                    self.next_action_keep_colon = false;
-                    format!(":{}", text)
-                } else {
-                    text
-                }
+            // PlantUML strips trailing whitespace from an action label but
+            // *keeps* leading whitespace, rendering it as left padding (the
+            // text element is shifted right by the leading-space advance and
+            // the box widens to match). `trim_end` preserves that behaviour.
+            let text = caps[1].trim_end();
+            if let Some(stripped) = text.strip_suffix(';') {
+                self.steps.push(ActivityStep::Action(stripped.to_string()));
+            } else if let Some(stripped) = text.strip_suffix('\\') {
+                self.continuation_text = Some(stripped.to_string());
+                self.continuation_start_line = Some(self.current_line);
             } else {
-                // Non-`;`/non-`\` ending: include the ending char, and signal
-                // that the next action should keep its `:` prefix.
-                self.next_action_keep_colon = true;
-                format!("{}{}", text, ending)
-            };
-            self.steps.push(ActivityStep::Action(display));
-            true
+                self.continuation_text = Some(format!("{text}\n"));
+                self.continuation_start_line = Some(self.current_line);
+            }
+            Ok(true)
         } else {
-            false
+            Ok(false)
         }
     }
 
@@ -636,7 +665,12 @@ impl ActivityParser {
     }
 
     fn try_arrow(&mut self, line: &str) -> bool {
-        // Matches: ->, -->, -[#color]->, -[#color]-->, optionally followed by label;
+        if let Some(text) = line.strip_prefix("-->") {
+            self.steps.push(ActivityStep::Action(format!("->{text}")));
+            return true;
+        }
+
+        // Matches: ->, -[#color]->, -[#color]-->, optionally followed by label;
         // Group 1: full arrow, Group 2: color (optional), Group 3: extra dash (-> vs -->),
         // Group 4: label (optional)
         static RE: LazyLock<Regex> =
@@ -685,6 +719,18 @@ impl ActivityParser {
         if let Some(caps) = RE.captures(line) {
             self.steps
                 .push(ActivityStep::Backward(caps[1].trim().to_string()));
+            true
+        } else {
+            false
+        }
+    }
+
+    fn try_connector(&mut self, line: &str) -> bool {
+        static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^\(([A-Za-z0-9])\)$").unwrap());
+
+        if let Some(caps) = RE.captures(line) {
+            self.steps
+                .push(ActivityStep::Connector(caps[1].to_string()));
             true
         } else {
             false
@@ -825,10 +871,13 @@ impl ActivityParser {
     fn try_swimlane(&mut self, line: &str) -> bool {
         // Match |Name| or |#color|Name| (colored swimlane)
         static RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^\|(?:#[A-Za-z0-9]+\|)?([^|]+)\|$").unwrap());
+            LazyLock::new(|| Regex::new(r"^\|(?:(#[A-Za-z0-9]+)\|)?([^|]+)\|$").unwrap());
 
         if let Some(caps) = RE.captures(line) {
-            self.steps.push(ActivityStep::Swimlane(caps[1].to_string()));
+            self.steps.push(ActivityStep::Swimlane(SwimlaneBlock {
+                name: caps[2].to_string(),
+                color: caps.get(1).map(|m| m.as_str().to_string()),
+            }));
             true
         } else {
             false
@@ -837,7 +886,7 @@ impl ActivityParser {
 
     fn try_partition(&mut self, line: &str) -> bool {
         static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r#"^partition\s+(?:(#[A-Za-z0-9]+)\s+)?(?:"([^"]+)"|([A-Za-z_]\w*))\s*\{?"#)
+            Regex::new(r#"^partition\s+(?:(#[A-Za-z0-9]+)\s+)?(?:"([^"]*)"|([A-Za-z_]\w*))\s*\{?"#)
                 .unwrap()
         });
 
@@ -855,6 +904,7 @@ impl ActivityParser {
             self.steps.push(ActivityStep::Partition(PartitionBlock {
                 name,
                 color,
+                is_group: false,
                 source_line: self.current_line,
             }));
             true
@@ -866,7 +916,7 @@ impl ActivityParser {
     fn try_group(&mut self, line: &str) -> bool {
         // `group [#color] "Name" {` — treated as a partition.
         static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r#"^group\s+(?:(#[A-Za-z0-9]+)\s+)?(?:"([^"]+)"|([A-Za-z_]\w*))\s*\{?"#)
+            Regex::new(r#"^group\s+(?:(#[A-Za-z0-9]+)\s+)?(?:"([^"]*)"|([A-Za-z_]\w*))\s*\{?"#)
                 .unwrap()
         });
 
@@ -880,6 +930,7 @@ impl ActivityParser {
             self.steps.push(ActivityStep::Partition(PartitionBlock {
                 name,
                 color,
+                is_group: true,
                 source_line: self.current_line,
             }));
             true
@@ -947,6 +998,11 @@ mod tests {
         parse_activity(&lines).unwrap()
     }
 
+    fn parse_err(input: &str) -> ParseError {
+        let lines: Vec<String> = input.lines().map(|s| s.to_string()).collect();
+        parse_activity(&lines).unwrap_err()
+    }
+
     #[test]
     fn basic_activity() {
         let d = parse("start\n:Step 1;\n:Step 2;\nstop");
@@ -997,11 +1053,28 @@ mod tests {
     }
 
     #[test]
+    fn repeat_start_label() {
+        let d = parse("start\nrepeat :start label;\n  :action;\nrepeat while (again?)\nstop");
+        assert!(matches!(d.steps[1], ActivityStep::RepeatStart(ref s) if s == "start label"));
+        assert!(matches!(d.steps[2], ActivityStep::Action(ref s) if s == "action"));
+        assert!(matches!(d.steps[3], ActivityStep::RepeatWhile(ref b) if b.condition == "again?"));
+    }
+
+    #[test]
     fn fork() {
         let d = parse("start\nfork\n  :A;\nfork again\n  :B;\nend fork\nstop");
         assert!(matches!(d.steps[1], ActivityStep::Fork));
         assert!(matches!(d.steps[3], ActivityStep::ForkAgain));
         assert!(matches!(d.steps[5], ActivityStep::EndFork));
+    }
+
+    #[test]
+    fn fork_end_merge() {
+        let d = parse("start\nfork\n  :A;\nfork again\n  :B;\nend merge\nstop");
+        assert!(matches!(d.steps[1], ActivityStep::Fork));
+        assert!(matches!(d.steps[3], ActivityStep::ForkAgain));
+        assert!(matches!(d.steps[5], ActivityStep::EndMerge));
+        assert!(matches!(d.steps[6], ActivityStep::Stop));
     }
 
     #[test]
@@ -1026,14 +1099,28 @@ mod tests {
     #[test]
     fn swimlanes() {
         let d = parse("|Lane1|\nstart\n:task1;\n|Lane2|\n:task2;\nstop");
-        assert!(matches!(d.steps[0], ActivityStep::Swimlane(ref s) if s == "Lane1"));
-        assert!(matches!(d.steps[3], ActivityStep::Swimlane(ref s) if s == "Lane2"));
+        assert!(
+            matches!(d.steps[0], ActivityStep::Swimlane(ref s) if s.name == "Lane1" && s.color.is_none())
+        );
+        assert!(
+            matches!(d.steps[3], ActivityStep::Swimlane(ref s) if s.name == "Lane2" && s.color.is_none())
+        );
     }
 
     #[test]
     fn swimlane_with_spaces() {
         let d = parse("|New Employee|\nstart\n:task;\nstop");
-        assert!(matches!(d.steps[0], ActivityStep::Swimlane(ref s) if s == "New Employee"));
+        assert!(
+            matches!(d.steps[0], ActivityStep::Swimlane(ref s) if s.name == "New Employee" && s.color.is_none())
+        );
+    }
+
+    #[test]
+    fn colored_swimlane() {
+        let d = parse("|#lightblue|Lane1|\nstart\n:task;\nstop");
+        assert!(
+            matches!(d.steps[0], ActivityStep::Swimlane(ref s) if s.name == "Lane1" && s.color.as_deref() == Some("#lightblue"))
+        );
     }
 
     #[test]
@@ -1044,12 +1131,79 @@ mod tests {
     }
 
     #[test]
+    fn partition_empty_quoted_name() {
+        let d = parse("start\npartition \"\" {\n  :step1;\n}\nstop");
+        assert!(matches!(d.steps[1], ActivityStep::Partition(ref s) if s.name.is_empty()));
+        assert!(matches!(d.steps[3], ActivityStep::EndPartition));
+    }
+
+    #[test]
     fn detach_and_kill() {
         let d = parse("start\ndetach");
         assert!(matches!(d.steps[1], ActivityStep::Detach));
 
         let d2 = parse("start\nkill");
         assert!(matches!(d2.steps[1], ActivityStep::Kill));
+    }
+
+    #[test]
+    fn label_and_goto() {
+        let d = parse("start\nlabel loop\n:work;\ngoto loop\nstop");
+        assert!(matches!(d.steps[0], ActivityStep::Start));
+        assert!(matches!(d.steps[1], ActivityStep::Action(ref s) if s == "work"));
+        assert!(matches!(d.steps[2], ActivityStep::Goto(ref s) if s == "loop"));
+        assert!(matches!(d.steps[3], ActivityStep::Stop));
+    }
+
+    #[test]
+    fn non_semicolon_action_line_starts_multiline_action() {
+        let d = parse("start\n:action1|\n:action2;\nstop");
+        assert!(matches!(&d.steps[1], ActivityStep::Action(s) if s == "action1|\n:action2"));
+    }
+
+    #[test]
+    fn multiline_action_consumes_control_like_lines_until_semicolon() {
+        let d = parse("start\nif (c?) then (yes)\n  :action|\nelse (no)\n  :alt;\nendif\nstop");
+        assert!(d.steps.iter().any(
+            |s| matches!(s, ActivityStep::Action(text) if text == "action|\nelse (no)\n:alt")
+        ));
+        assert!(!d.steps.iter().any(|s| matches!(s, ActivityStep::Else(_))));
+    }
+
+    #[test]
+    fn backslash_in_multiline_action_joins_next_source_line() {
+        let d = parse("start\nif (c?) then (yes)\n  :action\\\nelse (no)\n  :alt;\nendif\nstop");
+        assert!(
+            d.steps.iter().any(
+                |s| matches!(s, ActivityStep::Action(text) if text == "actionelse (no)\n:alt")
+            )
+        );
+        assert!(!d.steps.iter().any(|s| matches!(s, ActivityStep::Else(_))));
+    }
+
+    #[test]
+    fn action_without_semicolon_is_rejected_at_eof() {
+        for line in [
+            ":fork_action|",
+            ":receive_action<",
+            ":send_action>",
+            ":input_action/",
+            ":output_action\\",
+            ":flow_final_action]",
+        ] {
+            let err = parse_err(&format!("start\n{line}\nstop"));
+            assert_eq!(err.line, 2);
+            assert!(err.message.contains("unterminated activity action"));
+        }
+    }
+
+    #[test]
+    fn all_action_endings_probe_is_rejected_like_plantuml() {
+        let err = parse_err(
+            "start\n:action;\n:fork_action|\n:receive_action<\n:send_action>\n:input_action/\n:output_action\\\n:flow_final_action]\nstop",
+        );
+        assert_eq!(err.line, 3);
+        assert!(err.message.contains("unterminated activity action"));
     }
 
     #[test]
@@ -1068,16 +1222,18 @@ mod tests {
 
     #[test]
     fn arrow_steps() {
-        let d = parse("start\n:A;\n->\n:B;\n-->\n:C;\nstop");
+        let d = parse("start\n:A;\n->\n:B;\n-[dashed]->\n:C;\nstop");
         assert!(matches!(d.steps[2], ActivityStep::Arrow(ref a) if !a.dashed && a.label.is_none()));
-        assert!(matches!(d.steps[4], ActivityStep::Arrow(ref a) if a.dashed && a.label.is_none()));
+        assert!(
+            matches!(d.steps[4], ActivityStep::Arrow(ref a) if !a.dashed && a.color.as_deref() == Some("dashed"))
+        );
     }
 
     #[test]
     fn arrow_with_label() {
-        let d = parse("start\n:A;\n--> label;\n:B;\nstop");
+        let d = parse("start\n:A;\n-> label;\n:B;\nstop");
         if let ActivityStep::Arrow(ref a) = d.steps[2] {
-            assert!(a.dashed);
+            assert!(!a.dashed);
             assert_eq!(a.label.as_deref(), Some("label"));
         } else {
             panic!("expected Arrow");
@@ -1085,8 +1241,22 @@ mod tests {
     }
 
     #[test]
+    fn double_dash_arrow_is_action_text() {
+        let d = parse("start\n:A;\n--> label;\n:B;\nstop");
+        assert!(matches!(d.steps[2], ActivityStep::Action(ref text) if text == "-> label;"));
+    }
+
+    #[test]
     fn backward_step() {
         let d = parse("start\nrepeat\n:action;\nbackward :retry;\nrepeat while (again?)\nstop");
         assert!(matches!(d.steps[3], ActivityStep::Backward(ref s) if s == "retry"));
+    }
+
+    #[test]
+    fn single_character_connectors() {
+        let d = parse("start\n(A)\n:Step 1;\n(1)\nstop\n(SKIP)");
+        assert!(matches!(d.steps[1], ActivityStep::Connector(ref s) if s == "A"));
+        assert!(matches!(d.steps[3], ActivityStep::Connector(ref s) if s == "1"));
+        assert_eq!(d.steps.len(), 5);
     }
 }

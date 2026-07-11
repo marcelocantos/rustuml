@@ -130,16 +130,40 @@ pub(super) fn strip_front_matter(source: &str) -> &str {
 pub(super) fn flatten_theme_output(lines: &[String]) -> Vec<String> {
     let mut out = Vec::with_capacity(lines.len());
     let mut in_style = false;
+    let mut style_scopes: Vec<String> = Vec::new();
     let mut skin_prefix: Option<String> = None;
 
     for raw in lines {
-        let line = raw.trim();
+        let source = super::split_source_line_marker(raw).map_or(raw.as_str(), |(_, text)| text);
+        let line = source.trim();
 
         // `<style>` block: drop everything up to `</style>` (case-sensitive,
-        // matching PlantUML's own convention).
+        // matching PlantUML's own convention). Preserve the few root-level
+        // style values that older renderers can consume as skinparams.
         if in_style {
             if line.contains("</style>") {
                 in_style = false;
+                style_scopes.clear();
+                continue;
+            }
+            if line == "}" {
+                style_scopes.pop();
+            } else if let Some(scope) = line.strip_suffix('{') {
+                style_scopes.push(scope.trim().to_ascii_lowercase());
+            } else if style_scopes.len() == 1
+                && style_scopes.last().is_some_and(|scope| scope == "root")
+                && let Some((key, value)) = line.split_once(char::is_whitespace)
+            {
+                if key.eq_ignore_ascii_case("LineThickness") {
+                    out.push(format!(
+                        "skinparam __styleRootLineThickness {}",
+                        value.trim()
+                    ));
+                } else if key.eq_ignore_ascii_case("LineColor") {
+                    out.push(format!("skinparam __styleRootLineColor {}", value.trim()));
+                } else if key.eq_ignore_ascii_case("FontColor") {
+                    out.push(format!("skinparam __styleRootFontColor {}", value.trim()));
+                }
             }
             continue;
         }
@@ -189,7 +213,7 @@ pub(super) fn flatten_theme_output(lines: &[String]) -> Vec<String> {
             }
         }
 
-        out.push(raw.clone());
+        out.push(source.to_string());
     }
     out
 }
@@ -263,6 +287,48 @@ mod tests {
     }
 
     #[test]
+    fn flatten_preserves_root_line_thickness_from_style() {
+        let input = vec![
+            "<style>".to_string(),
+            "root {".to_string(),
+            "  FontColor #FFFFFF".to_string(),
+            "  LineColor #2683B9".to_string(),
+            "  LineThickness 1".to_string(),
+            "  Padding 6".to_string(),
+            "}".to_string(),
+            "activity {".to_string(),
+            "  LineThickness 2".to_string(),
+            "}".to_string(),
+            "</style>".to_string(),
+        ];
+        let out = flatten_theme_output(&input);
+        assert_eq!(
+            out,
+            vec![
+                "skinparam __styleRootFontColor #FFFFFF".to_string(),
+                "skinparam __styleRootLineColor #2683B9".to_string(),
+                "skinparam __styleRootLineThickness 1".to_string(),
+            ]
+        );
+    }
+
+    #[test]
+    fn flatten_ignores_nested_root_style_scope() {
+        let input = vec![
+            "<style>".to_string(),
+            "wbsDiagram, mindmapDiagram {".to_string(),
+            "  root {".to_string(),
+            "    FontColor #FFFFFF".to_string(),
+            "    LineColor #2683B9".to_string(),
+            "  }".to_string(),
+            "}".to_string(),
+            "</style>".to_string(),
+        ];
+        let out = flatten_theme_output(&input);
+        assert!(out.is_empty());
+    }
+
+    #[test]
     fn flatten_expands_skinparam_block() {
         let input = vec![
             "skinparam class {".to_string(),
@@ -276,6 +342,24 @@ mod tests {
             vec![
                 "skinparam classBackgroundColor white".to_string(),
                 "skinparam classBorderColor black".to_string(),
+            ]
+        );
+    }
+
+    #[test]
+    fn flatten_expands_marker_prefixed_skinparam_block() {
+        let input = vec![
+            "skinparam participant {".to_string(),
+            super::super::source_line_marker(153, "  FontColor #FFF"),
+            super::super::source_line_marker(154, "  BorderColor #EC7211"),
+            "}".to_string(),
+        ];
+        let out = flatten_theme_output(&input);
+        assert_eq!(
+            out,
+            vec![
+                "skinparam participantFontColor #FFF".to_string(),
+                "skinparam participantBorderColor #EC7211".to_string(),
             ]
         );
     }

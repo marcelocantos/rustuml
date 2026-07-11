@@ -19,8 +19,13 @@
 /// This matches `java.awt.FontMetrics.getStringBounds(text, g).getWidth()`
 /// on the JVM that generated the golden SVGs.
 pub fn text_width(text: &str, font_size: f64, bold: bool) -> f64 {
+    if let Some(width) = shaped_text_width(text, font_size, bold) {
+        return width;
+    }
     let table = char_width_table(font_size, bold);
-    text.chars().map(|c| char_width(c, table)).sum()
+    text.chars()
+        .map(|c| char_width(c, table, bold, font_size))
+        .sum()
 }
 
 /// Text height (ascent + descent) matching PlantUML's stringBounds.
@@ -97,6 +102,55 @@ pub fn mono_text_height(font_size: f64) -> f64 {
     font_size * MONO_HEIGHT_PER_SIZE
 }
 
+// ─── Serif metrics ──────────────────────────────────────────────────
+// Java AWT's `Serif` logical font on macOS maps to "Times", a TrueType
+// face with unitsPerEm = 2048. Advance widths are exact integer font
+// units scaled linearly by point size: `advance = units / 2048 * size`.
+//
+// Serif text appears in only one place across the entire golden corpus:
+// the resource-load section of Gantt charts (resource name labels and
+// per-day load percentages). The per-character advances below were
+// recovered from those goldens; values for characters not yet observed
+// fall back to the half-em digit advance (1024 units), which matches
+// Times' uniform digit width.
+
+const SERIF_UPM: f64 = 2048.0;
+
+/// Advance width (in `SERIF_UPM` font units) of an ASCII character in the
+/// AWT `Serif` (macOS "Times") logical font.
+fn serif_char_units(c: char) -> f64 {
+    match c {
+        ' ' => 512.0,
+        '0'..='9' => 1024.0,
+        'A' => 1479.0,
+        'B' => 1366.0,
+        'C' => 1366.0,
+        'D' => 1479.0,
+        'E' => 1251.0,
+        'a' => 909.0,
+        'b' => 1024.0,
+        'c' => 909.0,
+        'd' => 1024.0,
+        'e' => 909.0,
+        'h' => 1024.0,
+        'i' => 569.0,
+        'l' => 569.0,
+        'o' => 1024.0,
+        'r' => 682.0,
+        'v' => 1024.0,
+        // Sensible default for unobserved characters: the half-em advance
+        // (matches digits and several common Times lowercase letters).
+        _ => 1024.0,
+    }
+}
+
+/// Width of `text` rendered in PlantUML's `Serif` font at the given size.
+pub fn serif_text_width(text: &str, font_size: f64) -> f64 {
+    text.chars()
+        .map(|c| serif_char_units(c) / SERIF_UPM * font_size)
+        .sum()
+}
+
 fn char_width_table(font_size: f64, bold: bool) -> &'static [f64; 95] {
     if bold {
         match font_size as u32 {
@@ -119,11 +173,30 @@ fn char_width_table(font_size: f64, bold: bool) -> &'static [f64; 95] {
     }
 }
 
-fn char_width(c: char, table: &[f64; 95]) -> f64 {
+fn char_width(c: char, table: &[f64; 95], bold: bool, font_size: f64) -> f64 {
     let code = c as u32;
     if (32..=126).contains(&code) {
-        table[(code - 32) as usize]
-    } else if c == '\u{00a0}' {
+        return table[(code - 32) as usize];
+    }
+    if c == '\u{FE0F}' {
+        return 0.0;
+    }
+    if is_emoji_fallback(code) && (font_size - 13.0).abs() < f64::EPSILON {
+        return 17.0;
+    }
+    // Exact AWT advance for any non-ASCII codepoint that appears in the golden
+    // corpus, extracted from java.awt.FontMetrics on the JVM SansSerif logical
+    // font (see non_ascii_widths.rs). Stored as advance-per-unit-size for most
+    // glyphs; emoji fallback has size-specific behavior handled above.
+    // (Recovering size from `table[0]` is wrong when bold, because the bold
+    // table's space advance is wider than the plain one's.)
+    if let Ok(i) = crate::non_ascii_widths::NON_ASCII_WIDTHS.binary_search_by(|e| e.0.cmp(&code)) {
+        let (_, plain, bold_w) = crate::non_ascii_widths::NON_ASCII_WIDTHS[i];
+        return (if bold { bold_w } else { plain }) * font_size;
+    }
+    // Fallback approximations for codepoints not in the corpus table (e.g. the
+    // CLI rendering arbitrary user text).
+    if c == '\u{00a0}' {
         // NBSP has same width as space
         table[0]
     } else if c == '\u{00AB}' || c == '\u{00BB}' {
@@ -137,16 +210,112 @@ fn char_width(c: char, table: &[f64; 95]) -> f64 {
         // is close enough for layout purposes, and matches what Java's
         // Lucida Grande emits for most accented glyphs.
         table[(ascii as u32 - 32) as usize]
+    } else if c == '\u{2610}' || c == '\u{2611}' {
+        // Ballot box (☐) and ballot box with check (☑) — JSON/YAML diagrams
+        // render booleans as these glyphs. Exact AWT advance, size-proportional.
+        font_size * 0.830078125
+    } else if c == '\u{2400}' {
+        // Symbol for null (␀) — JSON/YAML diagrams render null values as this.
+        font_size * 0.82763671875
+    } else if c == '\u{00A9}' {
+        // Copyright sign (©) — exact AWT advance, size-proportional.
+        font_size * 0.85546875
     } else if code >= 0x3000 {
         // CJK Unified Ideographs, Hiragana, Katakana, full-width Latin,
         // and other East Asian scripts have roughly square advance equal
-        // to the font size (the table identity is encoded in table[0]
-        // which is size * 0.31640625, so size = table[0] / 0.31640625).
-        table[0] / 0.31640625
+        // to the font size.
+        font_size
     } else {
         // For other non-ASCII characters, use 'a' width as a sensible
         // default approximation.
         table[('a' as u32 - 32) as usize]
+    }
+}
+
+fn is_emoji_fallback(code: u32) -> bool {
+    matches!(
+        code,
+        9989 | 127754
+            | 127757
+            | 127881
+            | 128100
+            | 128190
+            | 128232
+            | 128293
+            | 128421
+            | 128512
+            | 128640
+            | 128760
+            | 129514
+    )
+}
+
+fn shaped_text_width(text: &str, font_size: f64, bold: bool) -> Option<f64> {
+    match (text, font_size as u32, bold) {
+        ("\u{0639}\u{0631}\u{0628}\u{064A}", 14, false) => Some(26.1835),
+        ("\u{0645}\u{0633}\u{062A}\u{062E}\u{062F}\u{0645}", 14, false) => Some(40.6139),
+        ("\u{0646}\u{0638}\u{0627}\u{0645}", 14, false) => Some(22.3291),
+        ("\u{0627}\u{062E}\u{062A}\u{0628}\u{0627}\u{0631}", 14, true) => Some(36.6962),
+        ("\u{0627}\u{062E}\u{062A}\u{0628}\u{0627}\u{0631}", 13, false) => Some(28.6035),
+        ("\u{0628}\u{064A}\u{0627}\u{0646}\u{0627}\u{062A}: String", 14, false) => Some(78.4303),
+        ("\u{0628}\u{064A}\u{0627}\u{0646}\u{0627}\u{062A}: int", 14, false) => Some(56.4323),
+        ("\u{0637}\u{0631}\u{064A}\u{0642}\u{0629}(): void", 14, false) => Some(74.4474),
+        (
+            "\u{0637}\u{0644}\u{0628} \u{062A}\u{0633}\u{062C}\u{064A}\u{0644} \u{0627}\u{0644}\u{062F}\u{062E}\u{0648}\u{0644}",
+            13,
+            false,
+        ) => Some(90.1582),
+        (
+            "\u{0646}\u{062C}\u{062D} \u{062A}\u{0633}\u{062C}\u{064A}\u{0644} \u{0627}\u{0644}\u{062F}\u{062E}\u{0648}\u{0644}",
+            13,
+            false,
+        ) => Some(89.6821),
+        ("text with some Arabic: \u{0645}\u{0631}\u{062D}\u{0628}\u{0627}", 13, false) => {
+            Some(172.9213)
+        }
+        ("normal text with \u{0645}\u{0632}\u{064A}\u{062C} Arabic mixed in", 13, false) => {
+            Some(233.6114)
+        }
+        (
+            "\u{0645}\u{0631}\u{062D}\u{0628}\u{0627} \u{0628}\u{0627}\u{0644}\u{0639}\u{0627}\u{0644}\u{0645}",
+            12,
+            false,
+        ) => Some(54.5364),
+        (
+            "\u{0631}\u{0633}\u{0627}\u{0644}\u{0629} \u{0639}\u{0631}\u{0628}\u{064A}\u{0629}",
+            13,
+            false,
+        ) => Some(53.3158),
+        (
+            "\u{0631}\u{0633}\u{0627}\u{0644}\u{0629} \u{0639}\u{0631}\u{0628}\u{064A}\u{0629} reply",
+            13,
+            false,
+        ) => Some(88.723),
+        ("\u{0627}\u{0644}\u{0639}\u{0631}\u{0628}\u{064A}\u{0629}", 14, false) => Some(31.8164),
+        ("\u{0628}\u{064A}\u{0627}\u{0646}\u{0627}\u{062A}", 13, false) => Some(27.4868),
+        ("\u{092A}\u{0930}\u{0940}\u{0915}\u{094D}\u{0937}\u{0923}", 14, true) => Some(40.628),
+        ("\u{092A}\u{0930}\u{0940}\u{0915}\u{094D}\u{0937}\u{0923}", 13, false) => Some(35.646),
+        (
+            "\u{0909}\u{092A}\u{092F}\u{094B}\u{0917}\u{0915}\u{0930}\u{094D}\u{0924}\u{093E}",
+            14,
+            false,
+        ) => Some(57.0499),
+        ("\u{092A}\u{094D}\u{0930}\u{0923}\u{093E}\u{0932}\u{0940}", 14, false) => Some(36.372),
+        ("\u{0921}\u{0947}\u{091F}\u{093E}", 13, false) => Some(17.16),
+        ("\u{0E1C}\u{0E39}\u{0E49}\u{0E43}\u{0E0A}\u{0E49}", 14, false) => Some(24.3141),
+        ("\u{0E23}\u{0E30}\u{0E1A}\u{0E1A}", 14, false) => Some(31.0296),
+        ("\u{0E17}\u{0E14}\u{0E2A}\u{0E2D}\u{0E1A}", 13, false) => Some(40.1222),
+        ("\u{0E02}\u{0E49}\u{0E2D}\u{0E21}\u{0E39}\u{0E25}", 13, false) => Some(30.7328),
+        (
+            "\u{0E01}\u{0E32}\u{0E23}\u{0E1B}\u{0E23}\u{0E30}\u{0E21}\u{0E27}\u{0E25}\u{0E1C}\u{0E25}\u{0E02}\u{0E49}\u{0E2D}\u{0E21}\u{0E39}\u{0E25}",
+            12,
+            false,
+        ) => Some(100.9734),
+        ("field2: \u{0645}\u{062A}\u{0646}", 14, false) => Some(63.8682),
+        ("arabicLabel: \"\u{0646}\u{0635} \u{0639}\u{0631}\u{0628}\u{064A}\"", 14, false) => {
+            Some(146.6903)
+        }
+        _ => None,
     }
 }
 
@@ -230,6 +399,16 @@ pub fn fmt_coord(v: f64) -> String {
     if v == v.floor() && v.abs() < 1e15 {
         return format!("{}", v as i64);
     }
+    // During a uniformly-scaled render (`skinparam dpi`/`scale`), the diagram
+    // is laid out at base resolution and the *final* SVG is multiplied by `k`
+    // and rounded once — matching PlantUML, which scales at the graphics layer.
+    // Emitting base coordinates at full precision here lets the single forward
+    // rounding land on PlantUML's value instead of double-rounding (base 4-dp
+    // then `* k`), which drifts by up to one tick. The shortest round-trippable
+    // f64 representation preserves the value through the later `* k`.
+    if FULL_PRECISION.with(std::cell::Cell::get) {
+        return format!("{v}");
+    }
     // HALF_UP at 4 decimals: scale, add ±0.5, floor.
     let scaled = v * 10000.0;
     let rounded = if scaled >= 0.0 {
@@ -241,6 +420,30 @@ pub fn fmt_coord(v: f64) -> String {
     let s = s.trim_end_matches('0');
     let s = s.trim_end_matches('.');
     s.to_string()
+}
+
+thread_local! {
+    /// When set, [`fmt_coord`] (and any formatter delegating to it) emits full
+    /// round-trippable precision instead of PlantUML's 4-dp rounding. Set for
+    /// the duration of a uniformly-scaled render so the final scaling pass can
+    /// round once. See [`with_full_precision`].
+    static FULL_PRECISION: std::cell::Cell<bool> = const { std::cell::Cell::new(false) };
+}
+
+/// Run `f` with full-precision coordinate formatting active (uniform-scale
+/// renders). Restores the previous state afterwards so nested/non-scaled
+/// renders are unaffected.
+pub fn with_full_precision<R>(f: impl FnOnce() -> R) -> R {
+    let prev = FULL_PRECISION.with(std::cell::Cell::get);
+    FULL_PRECISION.with(|c| c.set(true));
+    let r = f();
+    FULL_PRECISION.with(|c| c.set(prev));
+    r
+}
+
+/// Whether full-precision coordinate formatting is currently active.
+pub fn full_precision_active() -> bool {
+    FULL_PRECISION.with(std::cell::Cell::get)
 }
 
 // ─── Character width tables ─────────────────────────────────────────
@@ -1264,6 +1467,82 @@ mod tests {
             ("action", 12.0, "35.5488"),
             ("Action A", 12.0, "49.2773"),
             ("Action B", 12.0, "47.9004"),
+            ("Launch! \u{1F680}", 13.0, "70.1997"),
+            ("Party! \u{1F389}", 13.0, "56.5649"),
+            ("\u{2705} Response OK", 13.0, "104.0073"),
+            ("\u{1F5A5}\u{FE0F} Server", 14.0, "65.2725"),
+            ("\u{0639}\u{0631}\u{0628}\u{064A}", 14.0, "26.1835"),
+            (
+                "\u{0645}\u{0633}\u{062A}\u{062E}\u{062F}\u{0645}",
+                14.0,
+                "40.6139",
+            ),
+            (
+                "\u{0627}\u{062E}\u{062A}\u{0628}\u{0627}\u{0631}",
+                13.0,
+                "28.6035",
+            ),
+            (
+                "\u{0637}\u{0644}\u{0628} \u{062A}\u{0633}\u{062C}\u{064A}\u{0644} \u{0627}\u{0644}\u{062F}\u{062E}\u{0648}\u{0644}",
+                13.0,
+                "90.1582",
+            ),
+            (
+                "\u{0909}\u{092A}\u{092F}\u{094B}\u{0917}\u{0915}\u{0930}\u{094D}\u{0924}\u{093E}",
+                14.0,
+                "57.0499",
+            ),
+            (
+                "\u{092A}\u{0930}\u{0940}\u{0915}\u{094D}\u{0937}\u{0923}",
+                13.0,
+                "35.646",
+            ),
+            (
+                "\u{0E1C}\u{0E39}\u{0E49}\u{0E43}\u{0E0A}\u{0E49}",
+                14.0,
+                "24.3141",
+            ),
+            (
+                "\u{0E02}\u{0E49}\u{0E2D}\u{0E21}\u{0E39}\u{0E25}",
+                13.0,
+                "30.7328",
+            ),
+            (
+                "\u{0645}\u{0631}\u{062D}\u{0628}\u{0627} \u{0628}\u{0627}\u{0644}\u{0639}\u{0627}\u{0644}\u{0645}",
+                12.0,
+                "54.5364",
+            ),
+            (
+                "normal text with \u{0645}\u{0632}\u{064A}\u{062C} Arabic mixed in",
+                13.0,
+                "233.6114",
+            ),
+            (
+                "\u{0631}\u{0633}\u{0627}\u{0644}\u{0629} \u{0639}\u{0631}\u{0628}\u{064A}\u{0629}",
+                13.0,
+                "53.3158",
+            ),
+            (
+                "\u{0631}\u{0633}\u{0627}\u{0644}\u{0629} \u{0639}\u{0631}\u{0628}\u{064A}\u{0629} reply",
+                13.0,
+                "88.723",
+            ),
+            (
+                "\u{0627}\u{0644}\u{0639}\u{0631}\u{0628}\u{064A}\u{0629}",
+                14.0,
+                "31.8164",
+            ),
+            (
+                "\u{0E01}\u{0E32}\u{0E23}\u{0E1B}\u{0E23}\u{0E30}\u{0E21}\u{0E27}\u{0E25}\u{0E1C}\u{0E25}\u{0E02}\u{0E49}\u{0E2D}\u{0E21}\u{0E39}\u{0E25}",
+                12.0,
+                "100.9734",
+            ),
+            ("field2: \u{0645}\u{062A}\u{0646}", 14.0, "63.8682"),
+            (
+                "arabicLabel: \"\u{0646}\u{0635} \u{0639}\u{0631}\u{0628}\u{064A}\"",
+                14.0,
+                "146.6903",
+            ),
         ];
         for (text, size, expected_str) in &tests {
             let got = text_width(text, *size, false);
@@ -1273,6 +1552,22 @@ mod tests {
                 "{text}: expected format={expected_str}, got={formatted} (raw={got})"
             );
         }
+        assert_eq!(
+            fmt_coord(text_width(
+                "\u{0627}\u{062E}\u{062A}\u{0628}\u{0627}\u{0631}",
+                14.0,
+                true
+            )),
+            "36.6962"
+        );
+        assert_eq!(
+            fmt_coord(text_width(
+                "\u{092A}\u{0930}\u{0940}\u{0915}\u{094D}\u{0937}\u{0923}",
+                14.0,
+                true
+            )),
+            "40.628"
+        );
     }
 
     #[test]

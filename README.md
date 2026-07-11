@@ -6,33 +6,46 @@ JVM, no Graphviz, no external fonts.
 
 ## Status
 
-Pre-release. 18 diagram types supported, 12,500+ golden test pairs
-passing against Java PlantUML reference output.
+Pre-release. 23 parsed diagram models are supported, but release-readiness
+claims are based on the no-oracle product tier: 6,476/11,251 eligible SVG
+goldens currently pass when rendered through the same path as the CLI (57.6%).
+The strict oracle-assisted tier passes 11,022/11,251 eligible SVG goldens and
+remains a regression net, not the headline product metric. The 1,199 Java
+PlantUML error-page goldens are skipped by both tiers and are not counted as
+passes.
 
 ## Supported diagram types
 
-| Type | Tag | Status |
-|------|-----|--------|
-| Sequence | `@startuml` | Good |
-| Class | `@startuml` | Good |
-| Activity (new syntax) | `@startuml` | Good |
-| State | `@startuml` | Good |
-| Component | `@startuml` | Good |
-| Deployment | `@startuml` | Good |
-| Use Case | `@startuml` | Good |
-| Object | `@startuml` | Good |
-| Timing | `@startuml` | Good |
-| ER (crow's foot) | `@startuml` | Good |
-| Gantt | `@startgantt` | Good |
-| Mindmap | `@startmindmap` | Good |
-| WBS | `@startwbs` | Good |
-| JSON | `@startjson` | Good |
-| YAML | `@startyaml` | Good |
-| Salt (wireframes) | `@startsalt` | Good |
-| Network (nwdiag) | `@startnwdiag` | Good |
-| Regex (railroad) | `@startregex` | Good |
-| Ditaa (ASCII art) | `@startditaa` | Basic |
-| Math/LaTeX | `@startmath` / `@startlatex` | Good |
+The table below is derived from `test-diagrams/no_oracle_baseline.txt`.
+
+<!-- no-oracle-status:start -->
+| Type | Tag | Baseline family | No-oracle product status |
+|------|-----|-----------------|--------------------------|
+| Sequence | `@startuml` | `sequence` | 1,400/1,411 (99.2%, partial) |
+| Class | `@startuml` | `class` | 1,217/1,971 (61.7%, partial) |
+| Archimate | `@startuml` | `archimate` | 0/48 (0.0%, none) |
+| Activity (new syntax) | `@startuml` | `activity` | 1,266/1,299 (97.5%, partial) |
+| State | `@startuml` | `state` | 1/901 (0.1%, partial) |
+| Component | `@startuml` | `component` | 56/663 (8.4%, partial) |
+| Deployment | `@startuml` | `deployment` | 38/495 (7.7%, partial) |
+| Use Case | `@startuml` | `usecase` | 2/315 (0.6%, partial) |
+| Object | `@startuml` | `object` | 48/155 (31.0%, partial) |
+| Timing | `@startuml` | `timing` | 141/141 (100.0%, exact) |
+| ER (crow's foot) | `@startuml` | `er` | 1/157 (0.6%, partial) |
+| Gantt | `@startgantt` | `gantt` | 114/114 (100.0%, exact) |
+| Mindmap | `@startmindmap` | `mindmap` | 157/157 (100.0%, exact) |
+| WBS | `@startwbs` | `wbs` | 138/138 (100.0%, exact) |
+| JSON/YAML | `@startjson` / `@startyaml` | `json-yaml` | 56/147 (38.1%, partial) |
+| Salt (wireframes) | `@startsalt` | `salt` | 103/103 (100.0%, exact) |
+| Network (nwdiag) | `@startnwdiag` | `nwdiag` | 89/89 (100.0%, exact) |
+| Regex (railroad) | `@startregex` | `regex` | 45/45 (100.0%, exact) |
+| EBNF | `@startebnf` | `ebnf` | 25/25 (100.0%, exact) |
+| DOT | `@startdot` | `dot` | 25/25 (100.0%, exact) |
+| Git | `@startgit` | `git` | 25/25 (100.0%, exact) |
+| Board / Wire | `@startboard` | `wire` | 0/0 (no eligible SVG goldens) |
+| Ditaa (ASCII art) | `@startditaa` | excluded | Excluded from SVG parity tiers; raster comparator pending |
+| Math/LaTeX | `@startmath` / `@startlatex` | `math` | 50/50 (100.0%, exact) |
+<!-- no-oracle-status:end -->
 
 ## Install
 
@@ -73,6 +86,7 @@ rustuml --theme=modern input.puml
 | `-tsvg` | SVG (default) |
 | `-tpng` | PNG |
 | `-tpdf` | PDF |
+| `-teps` | EPS |
 | `-ttxt` | ASCII art (sequence diagrams) |
 
 ### Other options
@@ -83,6 +97,8 @@ rustuml --theme=modern input.puml
 | `--yaml` | Print diagram as YAML |
 | `--theme=NAME` | Use built-in theme |
 | `--theme-file=PATH` | Load theme from YAML file |
+| `--block=N` | Select block by 0-based index |
+| `--block-name=NAME` | Select block by `@start... name` |
 | `--version` | Print version |
 | `--help` | Print usage |
 | `--help-agent` | Print agent integration guide |
@@ -126,13 +142,24 @@ cargo fmt            # Format
 
 ### Golden tests
 
-The golden test suite compares RustUML output against Java PlantUML
-reference SVGs. The test files live in a separate repo added as a
-submodule:
+There are two golden tiers:
+
+- Strict oracle-assisted tier: `cargo test --test golden_pairs`. This compares
+  against Java PlantUML reference SVGs while allowing test-only oracle layout
+  extraction. Current state: 11,022/11,251 eligible SVG goldens pass, 229 fail,
+  and 1,299 are skipped.
+- No-oracle product tier: `cargo test --test golden_no_oracle --release`. This
+  renders through the same source-only path the CLI uses. Current baseline:
+  6,476/11,251 eligible SVG goldens pass.
+
+The 1,199 Java PlantUML error-page goldens are skips, not successes, and do
+not contribute to either headline pass count. The test files live in a
+separate repo added as a submodule:
 
 ```bash
 git submodule update --init    # Fetch golden test files
 cargo test --test golden_pairs # Run golden comparison (~8s)
+cargo test --test golden_no_oracle --release
 ```
 
 ## Architecture
@@ -141,15 +168,16 @@ cargo test --test golden_pairs # Run golden comparison (~8s)
 crates/
   rustuml/          — CLI binary
   rustuml-parser/   — PlantUML/YAML/JSON parsing, TIM preprocessor
-  rustuml-render/   — SVG/PNG/PDF rendering, themes, creole markup
-  rustuml-layout/   — Hierarchical graph layout (Sugiyama via layout-rs)
+  rustuml-render/   — SVG/PNG/PDF/EPS rendering, themes, creole markup
+  rustuml-layout/   — Hierarchical graph layout (vendored Graphviz layout code)
   rustuml-math/     — LaTeX math rendering
   rustuml-oracle/   — Oracle test framework
 ```
 
 ## Licence
 
-Apache 2.0. See [LICENSE](LICENSE).
+RustUML's own code is Apache 2.0. See [LICENSE](LICENSE).
+Bundled third-party components and assets are listed in [NOTICES](NOTICES).
 
 ## Agent integration
 

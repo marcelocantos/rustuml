@@ -7,29 +7,7 @@ fn main() {
     let args: Vec<String> = std::env::args().collect();
 
     if args.len() < 2 || args[1] == "--help" || args[1] == "-h" {
-        eprintln!("Usage: rustuml [options] <file>");
-        eprintln!("       cat file | rustuml [options] -");
-        eprintln!("       cat file | rustuml -pipe [options]");
-        eprintln!();
-        eprintln!("Input formats: PlantUML (.puml), YAML (.yaml/.yml), JSON (.json)");
-        eprintln!("Format is auto-detected from content, or use file extension.");
-        eprintln!();
-        eprintln!("Options:");
-        eprintln!("  -pipe                 Read from stdin, write to stdout (PlantUML compatible)");
-        eprintln!("  -tsvg                 Output SVG (default)");
-        eprintln!("  -tpng                 Output PNG");
-        eprintln!("  -tpdf                 Output PDF");
-        eprintln!("  -teps                 Output EPS");
-        eprintln!("  -ttxt                 Output ASCII art text (sequence diagrams)");
-        eprintln!("  --ast                 Print parsed AST (Debug format)");
-        eprintln!("  --yaml                Print parsed diagram as YAML");
-        eprintln!("  --theme=NAME          Use built-in theme (default, modern)");
-        eprintln!("  --theme-file=PATH     Load theme from YAML file");
-        eprintln!("  --block=N             Select block by 0-based index (default: 0)");
-        eprintln!("  --block-name=NAME     Select block by name (@startXXX name)");
-        eprintln!("  --version             Print version");
-        eprintln!("  --help                Print this help");
-        eprintln!("  --help-agent          Print agent integration guide");
+        eprint!("{}", usage_text());
         std::process::exit(if args.len() < 2 { 1 } else { 0 });
     }
 
@@ -218,21 +196,64 @@ enum OutputMode {
     Yaml,
 }
 
+fn usage_text() -> &'static str {
+    "Usage: rustuml [options] <file>
+       cat file | rustuml [options] -
+       cat file | rustuml -pipe [options]
+
+Input formats: PlantUML (.puml), YAML (.yaml/.yml), JSON (.json)
+Format is auto-detected from content, or use file extension.
+
+Options:
+  -pipe                 Read from stdin, write to stdout (PlantUML compatible)
+  -tsvg                 Output SVG (default)
+  -tpng                 Output PNG
+  -tpdf                 Output PDF
+  -teps                 Output EPS
+  -ttxt                 Output ASCII art text (sequence diagrams)
+  --ast                 Print parsed AST (Debug format)
+  --yaml                Print parsed diagram as YAML
+  --theme=NAME          Use built-in theme (default, modern)
+  --theme-file=PATH     Load theme from YAML file
+  --block=N             Select block by 0-based index (default: 0)
+  --block-name=NAME     Select block by name (@startXXX name)
+  --version             Print version
+  --help                Print this help
+  --help-agent          Print agent integration guide
+"
+}
+
 fn print_agent_guide() {
+    print!("{}", usage_text());
+    println!();
     println!("# rustuml Agent Integration Guide");
     println!();
-    println!("rustuml converts PlantUML, YAML, or JSON diagram descriptions to SVG or PNG.");
+    println!(
+        "rustuml converts PlantUML, YAML, or JSON diagram descriptions to SVG, PNG, PDF, EPS, or text."
+    );
     println!();
     println!("## Input Formats");
-    println!("- **PlantUML**: Standard @startuml/@enduml text syntax");
-    println!("- **YAML**: Structured diagram model (type: Sequence/Class/State/Activity)");
+    println!("- **PlantUML**: Standard @start.../@end... text syntax");
+    println!("- **YAML**: Structured diagram model matching RustUML's parsed diagram enum");
     println!("- **JSON**: Same model as YAML, JSON-encoded");
     println!();
     println!("YAML/JSON is recommended for AI agents — no escaping or syntax ambiguity.");
     println!("Use `rustuml --yaml <file.puml>` to convert PlantUML to YAML for reference.");
     println!();
     println!("## Supported Diagram Types");
-    println!("Sequence, Class, State, Activity, Component, UseCase");
+    println!(
+        "Sequence, Class, Archimate, Object, State, Activity, Component, UseCase, Deployment, Nwdiag, JSON/YAML, MindMap, Gantt, Git, Timing, WBS, Math/LaTeX, Salt, Regex, Ditaa, DOT, Board, EBNF"
+    );
+    println!();
+    println!("## Parity Claims");
+    println!(
+        "Product truth is the no-oracle tier: `cargo test --test golden_no_oracle --release`."
+    );
+    println!("Current no-oracle baseline: 5,005/11,251 eligible SVG goldens pass (44.5%).");
+    println!(
+        "The strict tier is oracle-assisted: `cargo test --test golden_pairs` currently passes 11,251/11,251 eligible SVG goldens."
+    );
+    println!("The 1,199 Java PlantUML error-page goldens are skips, not headline pass claims.");
     println!();
     println!("## Output Formats");
     println!("- SVG (default): `rustuml -tsvg input.puml`");

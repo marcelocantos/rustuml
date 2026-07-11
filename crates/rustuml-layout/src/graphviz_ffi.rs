@@ -61,10 +61,12 @@ unsafe extern "C" {
 
     // ── Graph construction ──
     pub fn agopen(name: *const c_char, kind: Agdesc_t, disc: *mut Agdisc_t) -> *mut Agraph_t;
+    pub fn agsubg(g: *mut Agraph_t, name: *mut c_char, create: c_int) -> *mut Agraph_t;
     pub fn agclose(g: *mut Agraph_t) -> c_int;
 
     // ── Node/edge construction ──
     pub fn agnode(g: *mut Agraph_t, name: *const c_char, create: c_int) -> *mut Agnode_t;
+    pub fn agsubnode(g: *mut Agraph_t, n: *mut Agnode_t, create: c_int) -> *mut Agnode_t;
     pub fn agedge(
         g: *mut Agraph_t,
         t: *mut Agnode_t,
@@ -100,6 +102,15 @@ unsafe extern "C" {
     /// Get the bounding box dimensions of a node (width/height in inches).
     pub fn rustuml_node_size(n: *mut Agnode_t, w: *mut f64, h: *mut f64);
 
+    /// Get a laid-out graph or subgraph bounding box in points.
+    pub fn rustuml_graph_bb(
+        g: *mut Agraph_t,
+        ll_x: *mut f64,
+        ll_y: *mut f64,
+        ur_x: *mut f64,
+        ur_y: *mut f64,
+    );
+
     /// Returns the number of bezier curves in the edge's spline, or 0 if none.
     pub fn rustuml_edge_spl_count(e: *mut Agedge_t) -> usize;
 
@@ -124,4 +135,14 @@ unsafe extern "C" {
         ep_x: *mut f64,
         ep_y: *mut f64,
     );
+
+    /// Get a solved edge label box. kind: 0 = center, 1 = tail, 2 = head.
+    pub fn rustuml_edge_label_box(
+        e: *mut Agedge_t,
+        kind: c_int,
+        x: *mut f64,
+        y: *mut f64,
+        width: *mut f64,
+        height: *mut f64,
+    ) -> c_int;
 }

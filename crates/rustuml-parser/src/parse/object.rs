@@ -16,11 +16,11 @@ pub fn parse_object(lines: &[String]) -> Result<ObjectDiagram, ParseError> {
     let mut parser = ObjectParser::new();
 
     for (i, line) in lines.iter().enumerate() {
-        let trimmed = line.trim();
+        let (source_line, trimmed) = super::source_line_and_trimmed(i + 1, line);
         if trimmed.is_empty() {
             continue;
         }
-        parser.parse_line(i + 1, trimmed)?;
+        parser.parse_line(source_line, trimmed)?;
     }
 
     Ok(parser.finish())
@@ -83,6 +83,10 @@ impl ObjectParser {
             });
         }
         id
+    }
+
+    fn is_note_id(&self, id: &str) -> bool {
+        self.notes.iter().any(|n| n.id.as_deref() == Some(id))
     }
 
     fn parse_line(&mut self, line_num: usize, line: &str) -> Result<(), ParseError> {
@@ -305,6 +309,7 @@ impl ObjectParser {
         if let Some(caps) = RE.captures(line) {
             let from_raw = caps[1].to_string();
             let from_multiplicity = caps.get(2).map(|m| m.as_str().to_string());
+            let connector = caps[3].to_string();
             let to_multiplicity = caps.get(4).map(|m| m.as_str().to_string());
             let to_raw = caps[5].to_string();
             let raw_label = caps.get(6).map(|m| m.as_str().trim().to_string());
@@ -319,15 +324,21 @@ impl ObjectParser {
 
             let from_base = from_raw.split("::").next().unwrap_or(&from_raw).to_string();
             let to_base = to_raw.split("::").next().unwrap_or(&to_raw).to_string();
-            self.ensure_object(&from_base);
-            self.ensure_object(&to_base);
+            if !self.is_note_id(&from_base) {
+                self.ensure_object(&from_base);
+            }
+            if !self.is_note_id(&to_base) {
+                self.ensure_object(&to_base);
+            }
 
             self.links.push(ObjectLink {
                 from: from_raw,
                 to: to_raw,
+                kind: parse_object_link_kind(&connector),
                 label,
                 from_multiplicity,
                 to_multiplicity,
+                dashed: connector.contains(".."),
                 source_line: self.current_line,
             });
             true
@@ -501,6 +512,30 @@ impl ObjectParser {
     }
 }
 
+fn parse_object_link_kind(connector: &str) -> ObjectLinkKind {
+    if connector.contains("--|>")
+        || connector.contains("<|--")
+        || connector.contains("..|>")
+        || connector.contains("<|..")
+    {
+        ObjectLinkKind::Extension
+    } else if connector.contains("*--") || connector.contains("--*") {
+        ObjectLinkKind::Composition
+    } else if connector.contains("o--") || connector.contains("--o") {
+        ObjectLinkKind::Aggregation
+    } else if connector.contains("..>")
+        || connector.contains("<..")
+        || connector.contains("-->")
+        || connector.contains("<--")
+        || connector == "->"
+        || connector == "<-"
+    {
+        ObjectLinkKind::Dependency
+    } else {
+        ObjectLinkKind::Association
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -549,6 +584,16 @@ mod tests {
     }
 
     #[test]
+    fn link_to_floating_note_does_not_create_object() {
+        let d = parse("object Server\nnote \"text\" as N1\nServer .. N1");
+        assert_eq!(d.objects.len(), 1);
+        assert_eq!(d.objects[0].id, "Server");
+        assert_eq!(d.notes.len(), 1);
+        assert_eq!(d.notes[0].id.as_deref(), Some("N1"));
+        assert_eq!(d.links.len(), 1);
+    }
+
+    #[test]
     fn link_with_label() {
         let d = parse("object A\nobject B\nA --> B : owns");
         assert_eq!(d.links[0].label.as_deref(), Some("owns"));
@@ -568,6 +613,13 @@ mod tests {
         assert_eq!(d.links.len(), 6);
         assert_eq!(d.links[0].from, "A");
         assert_eq!(d.links[0].to, "B");
+        assert_eq!(d.links[0].kind, ObjectLinkKind::Aggregation);
+        assert_eq!(d.links[1].kind, ObjectLinkKind::Composition);
+        assert_eq!(d.links[2].kind, ObjectLinkKind::Dependency);
+        assert!(d.links[2].dashed);
+        assert_eq!(d.links[3].kind, ObjectLinkKind::Extension);
+        assert_eq!(d.links[4].kind, ObjectLinkKind::Association);
+        assert_eq!(d.links[5].kind, ObjectLinkKind::Composition);
     }
 
     #[test]

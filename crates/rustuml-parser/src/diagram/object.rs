@@ -79,6 +79,8 @@ pub struct ObjectLink {
     pub from: String,
     /// Target: either `"obj_id"` or `"obj_id::field"`.
     pub to: String,
+    #[serde(default)]
+    pub kind: ObjectLinkKind,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub label: Option<String>,
     /// Multiplicity label on the source end (e.g. `"1"`, `"0..*"`).
@@ -87,7 +89,20 @@ pub struct ObjectLink {
     /// Multiplicity label on the target end (e.g. `"1"`, `"0..*"`).
     #[serde(skip_serializing_if = "Option::is_none")]
     pub to_multiplicity: Option<String>,
+    /// Whether the line is dashed (e.g. `..>` / `..|>`).
+    #[serde(default)]
+    pub dashed: bool,
     /// 1-based line number within the `@startuml` block.
     #[serde(default)]
     pub source_line: usize,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
+pub enum ObjectLinkKind {
+    #[default]
+    Dependency,
+    Extension,
+    Composition,
+    Aggregation,
+    Association,
 }

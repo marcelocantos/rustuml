@@ -458,7 +458,8 @@ pub fn render_ascii(diagram: &SequenceDiagram) -> String {
             | Event::Deactivate(_)
             | Event::Destroy(_)
             | Event::Create(_)
-            | Event::NewPage(_) => {}
+            | Event::NewPage(_)
+            | Event::Autonumber(_) => {}
         }
     }
 
@@ -484,7 +485,8 @@ fn count_event_rows(diagram: &SequenceDiagram) -> Vec<usize> {
             | Event::Deactivate(_)
             | Event::Destroy(_)
             | Event::Create(_)
-            | Event::NewPage(_) => 0,
+            | Event::NewPage(_)
+            | Event::Autonumber(_) => 0,
         })
         .collect()
 }
@@ -514,6 +516,8 @@ mod tests {
             events,
             autonumber: None,
             hide_footbox: false,
+            teoz: false,
+            boxes: Vec::new(),
         }
     }
 
@@ -527,6 +531,9 @@ mod tests {
                 head: ArrowHead::Filled,
                 direction: ArrowDirection::LeftToRight,
                 color: None,
+                head_half: None,
+                thin_head: false,
+                source_cross: false,
             },
             activation: None,
             activation_color: None,
@@ -544,6 +551,9 @@ mod tests {
                 head: ArrowHead::Open,
                 direction: ArrowDirection::RightToLeft,
                 color: None,
+                head_half: None,
+                thin_head: false,
+                source_cross: false,
             },
             activation: None,
             activation_color: None,
@@ -631,6 +641,7 @@ mod tests {
                     text: "a note".to_string(),
                     shape: NoteShape::Note,
                     color: None,
+                    on_message: false,
                     source_line: 0,
                 }),
             ],
@@ -671,6 +682,8 @@ mod tests {
             events: vec![],
             autonumber: None,
             hide_footbox: false,
+            teoz: false,
+            boxes: Vec::new(),
         };
         assert_eq!(render_ascii(&diagram), "");
     }

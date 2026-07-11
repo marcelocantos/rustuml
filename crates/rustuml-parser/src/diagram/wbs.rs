@@ -32,6 +32,11 @@ pub enum WbsSide {
 pub struct WbsNode {
     /// Display label.
     pub label: String,
+    /// Optional explicit fill colour, taken from a leading `[#color]` token
+    /// (e.g. `**[#blue] Subtask`).  Stored verbatim including the leading `#`
+    /// (the renderer resolves named colours to hex).
+    #[serde(default)]
+    pub color: Option<String>,
     /// Nesting depth (1 = root, 2 = first level child, …).
     pub depth: usize,
     /// Which side of the root this node grows from.

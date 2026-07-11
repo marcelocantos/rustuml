@@ -103,6 +103,8 @@ fn split_on_semicolons(input: &str) -> Vec<&str> {
 #[derive(Debug, Clone, PartialEq)]
 enum Token {
     Terminal(String),
+    /// `? raw ?` — carries the raw inner text including surrounding whitespace.
+    SpecialSequence(String),
     Ident(String),
     Pipe,
     Comma,
@@ -158,7 +160,7 @@ fn tokenize(input: &str) -> Result<Vec<Token>, ParseError> {
                         }
                     }
                 }
-                tokens.push(Token::Terminal(s.trim().to_string()));
+                tokens.push(Token::SpecialSequence(s));
             }
             '|' => {
                 chars.next();
@@ -276,6 +278,11 @@ fn parse_atom(tokens: &[Token], pos: &mut usize) -> Result<EbnfExpr, ParseError>
             let s = s.clone();
             *pos += 1;
             Ok(EbnfExpr::Terminal(s))
+        }
+        Token::SpecialSequence(s) => {
+            let s = s.clone();
+            *pos += 1;
+            Ok(EbnfExpr::SpecialSequence(s))
         }
         Token::Ident(s) => {
             let s = s.clone();

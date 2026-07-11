@@ -64,6 +64,25 @@ pub fn extract_link_url(line: &str) -> (Option<String>, String) {
     (None, line.to_string())
 }
 
+/// Extract the optional tooltip from a `[[url{tooltip} label]]` link on the
+/// given line. PlantUML uses the `{...}` content as the anchor's `title`
+/// attribute (the URL is the title otherwise). A bare ` label` does not change
+/// the title, so it is not returned here. Returns `None` when there is no
+/// `[[ ]]` link or no `{...}` tooltip within it.
+pub fn extract_link_tooltip(line: &str) -> Option<String> {
+    let start = line.find("[[")?;
+    let rel_end = line[start..].find("]]")?;
+    let inner = &line[start + 2..start + rel_end];
+    let brace_start = inner.find('{')?;
+    let brace_end = inner[brace_start..].find('}')? + brace_start;
+    let tip = inner[brace_start + 1..brace_end].trim();
+    if tip.is_empty() {
+        None
+    } else {
+        Some(tip.to_string())
+    }
+}
+
 /// Strip surrounding double-quotes from a title string, then trim whitespace.
 pub fn strip_title_quotes(s: &str) -> &str {
     let s = s.trim();
@@ -72,6 +91,34 @@ pub fn strip_title_quotes(s: &str) -> &str {
     } else {
         s
     }
+}
+
+/// Truncate the preprocessed line list at the first standalone `newpage`
+/// directive. PlantUML's SVG renderer emits only the first page of a multipage
+/// (non-sequence) diagram, so everything from `newpage` onward is dropped. A
+/// `newpage <title>` form also delimits the page and is dropped along with its
+/// argument.
+fn truncate_at_newpage(lines: Vec<String>) -> Vec<String> {
+    if let Some(idx) = lines.iter().position(|l| {
+        let t = source_text(l).trim();
+        t == "newpage" || t.starts_with("newpage ") || t.starts_with("newpage\t")
+    }) {
+        let mut lines = lines;
+        lines.truncate(idx);
+        lines
+    } else {
+        lines
+    }
+}
+
+pub(crate) fn source_line_and_trimmed(fallback: usize, line: &str) -> (usize, &str) {
+    let (source_line, text) =
+        preprocess::split_source_line_marker(line).unwrap_or((fallback, line));
+    (source_line, text.trim())
+}
+
+pub(crate) fn source_text(line: &str) -> &str {
+    preprocess::split_source_line_marker(line).map_or(line, |(_, text)| text)
 }
 
 /// Detect the diagram type from the @start tag.
@@ -110,8 +157,27 @@ fn detect_type(input: &str) -> &str {
 fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     let mut scores = [0i32; 10]; // Seq, Class, Object, State, Activity, Component, UseCase, Deployment, Timing
 
+    // `allowmixing` is a class-diagram directive: it permits mixing other
+    // element kinds (state, object, etc.) into a CLASS diagram. When it appears
+    // alongside an explicit class-style declaration, the diagram is CLASS even
+    // if state/object signals would otherwise score higher.
+    let mut has_allowmixing = false;
+    let mut has_skinparam = false;
+    let mut has_meta_only_class_default = false;
+    let mut has_class_dependency_arrow = false;
+    let mut has_class_association_line = false;
+    let mut has_direction_directive = false;
+    let mut has_floating_note = false;
+    let mut has_interface_decl = false;
+    let mut has_component_leaf_keyword = false;
+    let mut has_quoted_deployment_container = false;
+    let mut has_component_package_container = false;
+    let mut has_top_level_component_leaf = false;
+    let mut has_non_interface_class_decl = false;
+    let mut brace_depth = 0usize;
+
     for line in lines {
-        let trimmed = line.trim();
+        let trimmed = source_text(line).trim();
         // Normalize internal tabs to spaces so keyword detection works regardless
         // of whether the source uses spaces or tabs as separators.
         let tab_normalized;
@@ -121,6 +187,17 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         } else {
             trimmed
         };
+        let top_level = brace_depth == 0;
+
+        if trimmed.starts_with("skinparam ") {
+            has_skinparam = true;
+        }
+        if matches!(
+            trimmed,
+            "left to right direction" | "top to bottom direction"
+        ) {
+            has_direction_directive = true;
+        }
 
         // Use case — must check before sequence (both use "actor").
         if trimmed.starts_with("usecase ") {
@@ -142,10 +219,18 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         // Weighted heavily so chains of `A --> B` arrows can't overwhelm a
         // single `[*] --> X` line, and so that diagrams mixing floating
         // notes (class-typed) with `[*]` transitions still parse as state.
+        // A `state ` line is only a state declaration when an identifier or
+        // quoted name follows. Inside an entity/class body, `state : TYPE` is a
+        // member named "state" (the typed `name : type` form), not a state
+        // declaration — exclude it so an ER entity with a `state` column does
+        // not get misrouted to a STATE diagram.
+        let state_decl = trimmed.starts_with("state ")
+            && !trimmed.contains("<<")
+            && !trimmed["state ".len()..].trim_start().starts_with(':');
         if trimmed.starts_with("[*]")
             || trimmed.contains("> [*]")
             || trimmed.contains(">[*]")
-            || (trimmed.starts_with("state ") && !trimmed.contains("<<"))
+            || state_decl
         {
             scores[3] += 50;
         }
@@ -201,6 +286,9 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
                 .unwrap_or(trimmed.len());
             let kw = &trimmed[..kw_end];
             let package_with_brace = kw == "package" && trimmed.contains('{');
+            if package_with_brace {
+                has_component_package_container = true;
+            }
             // Truly deployment-exclusive container keywords (not shared with
             // component diagrams) used as containers (with `{`) are a strong
             // deployment signal.  `node`, `cloud`, `database`, `component`,
@@ -218,6 +306,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             // boundary) and deployment diagrams; do not apply the quoted-container
             // boost to it so that `usecase` keywords can tip the balance.
             let after_kw = trimmed[kw_end..].trim_start();
+            let deployment_keyword_arg = !after_kw.starts_with(':');
             let is_quoted_container = trimmed.contains('{')
                 && after_kw.starts_with('"')
                 && kw != "package"
@@ -228,18 +317,30 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
                 && kw != "actor"
                 && deployment::DEPLOYMENT_KEYWORDS.contains(&kw)
                 && kw_end < trimmed.len()
+                && deployment_keyword_arg
             {
                 scores[7] += 5;
+                if matches!(kw, "artifact" | "cloud" | "database" | "node" | "queue")
+                    && !trimmed.contains('{')
+                {
+                    has_component_leaf_keyword = true;
+                }
             }
             if is_deploy_exclusive_container || is_quoted_container {
                 // Extra boost: deployment-exclusive container overrides component score.
                 scores[7] += 20;
+            }
+            if is_quoted_container {
+                has_quoted_deployment_container = true;
             }
         }
         // Component — weighted strongly so that a single `component` keyword
         // beats multiple `interface` lines that would otherwise score for class.
         if trimmed.starts_with("component ") {
             scores[5] += 15;
+            if top_level && !trimmed.contains('{') {
+                has_top_level_component_leaf = true;
+            }
         }
         // Standalone `[Bracket]` syntax marks a component (leaf on its own line).
         // Exclude `[[url]]` PlantUML hyperlink syntax (double brackets).
@@ -279,8 +380,15 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             && !trimmed.contains("[[")
             && !trimmed.contains("[#")
             && !trimmed.starts_with("return ")
+            // `autonumber "<b>[000]"` uses brackets inside its format string;
+            // that is a sequence-diagram directive, not a component reference.
+            && !trimmed.starts_with("autonumber")
         {
             scores[5] += 5;
+        }
+        // `autonumber` (with or without start/step/format) is sequence-only.
+        if trimmed == "autonumber" || trimmed.starts_with("autonumber ") {
+            scores[0] += 10;
         }
         // `interface` in a component context: score for both class and component.
         // `interface` alone still tips to class (class score ≥ component score in
@@ -318,13 +426,25 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             || trimmed.starts_with("abstract class ")
             || trimmed.starts_with("abstract ")
             || trimmed == "abstract"
-            || trimmed.starts_with("interface ")
             || trimmed.starts_with("enum ")
             || trimmed.starts_with("annotation ")
+            || trimmed.starts_with("circle ")
+            || trimmed.starts_with("diamond ")
             || trimmed.contains("<|--")
             || trimmed.contains("..|>")
         {
             scores[1] += 10;
+            has_non_interface_class_decl = true;
+        }
+        if trimmed.starts_with("interface ") {
+            scores[1] += 10;
+            has_interface_decl = true;
+        }
+        if trimmed.contains("..>") || trimmed.contains("<..") {
+            has_class_dependency_arrow = true;
+        }
+        if looks_like_bare_class_association(trimmed) {
+            has_class_association_line = true;
         }
         // `*--` and `o--` score for class only when no `object` keyword is present.
         // In object diagrams they denote composition/aggregation links.
@@ -347,7 +467,9 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         }
         // entity with a body block ({) is an unambiguous class/ER entity,
         // not a sequence participant.
-        if trimmed.starts_with("entity ") && (trimmed.ends_with('{') || trimmed.ends_with("{{")) {
+        if trimmed.starts_with("entity ")
+            && (trimmed.ends_with('{') || trimmed.ends_with("{{") || trimmed.ends_with("{}"))
+        {
             scores[1] += 15;
         }
         // Sequence. Skip lines that end with `{` — those are container blocks
@@ -389,15 +511,21 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         {
             scores[8] += 10;
         }
-        // Standalone floating notes (`note as X` or `note "text" as X`) are a
-        // class diagram feature in Java PlantUML and produce CLASS-type SVG output.
         if trimmed.starts_with("note as ") || trimmed.starts_with("note \"") {
+            has_floating_note = true;
+        }
+        // A leading `note : text` line is parsed by Java PlantUML as a CLASS
+        // note/entity diagram, even when later lines contain weak sequence-style
+        // arrows. Sequence notes use a side qualifier (`note right :`, etc.) or
+        // `note over`, so this bare form is a class signal.
+        if trimmed.starts_with("note :") {
             scores[1] += 10;
         }
         // `legend`, `header`/`endheader`, `footer`/`endfooter` — these are
-        // meta elements that PlantUML defaults to CLASS when no other content exists.
-        // Score them weakly for class so that a diagram with only meta elements
-        // produces a CLASS diagram (not a sequence diagram by default).
+        // meta elements that PlantUML defaults to CLASS when no other content
+        // exists. Track them as a fallback rather than scoring them, so a
+        // title/header expanded from a preamble procedure cannot outvote a
+        // real sequence message or state transition in the same block.
         if trimmed == "legend"
             || trimmed.starts_with("legend ")
             || trimmed == "endlegend"
@@ -416,12 +544,125 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             || trimmed.starts_with("title ")
             || trimmed == "title"
         {
-            scores[1] += 1; // weak class signal
+            has_meta_only_class_default = true;
         }
         // Archimate -- preprocessor-expanded lines are unambiguous.
         if trimmed.starts_with("archimate_element ") || trimmed.starts_with("archimate_rel ") {
             scores[9] += 20;
         }
+        // `allowmixing` directive (class-diagram only).
+        if trimmed == "allowmixing" || trimmed.starts_with("allowmixing ") {
+            has_allowmixing = true;
+        }
+
+        let opens = trimmed.chars().filter(|&c| c == '{').count();
+        let closes = trimmed.chars().filter(|&c| c == '}').count();
+        brace_depth = brace_depth.saturating_add(opens).saturating_sub(closes);
+    }
+
+    // Standalone floating notes (`note as X` or `note "text" as X`) can attach
+    // to class/object/deployment diagrams. Score class/object always so
+    // note-only diagrams tie back to CLASS by the default ordering; score
+    // deployment only when a real deployment keyword was already seen.
+    if has_floating_note {
+        scores[1] += 10;
+        scores[2] += 10;
+        if scores[7] > 0 {
+            scores[7] += 10;
+        }
+    }
+
+    // Plain class-style relationship lines default to CLASS in Java PlantUML:
+    // `A ..> B`, but also bare association forms like `A .. B` and `C -- D`.
+    // The same spellings are valid for object, component, and deployment links,
+    // so treat them as class signals only when no explicit non-class
+    // container/entity syntax has appeared.
+    if (has_class_dependency_arrow || has_class_association_line)
+        && scores[2] == 0
+        && scores[5] == 0
+        && scores[7] == 0
+    {
+        scores[1] += 10;
+    }
+
+    if has_interface_decl && has_component_leaf_keyword && !has_non_interface_class_decl {
+        let competing = scores[1].max(scores[7]);
+        if scores[5] <= competing {
+            scores[5] = competing + 1;
+        }
+    }
+
+    if has_quoted_deployment_container
+        && !has_component_package_container
+        && !has_top_level_component_leaf
+    {
+        let other_max = scores
+            .iter()
+            .enumerate()
+            .filter(|&(i, _)| i != 7)
+            .map(|(_, &s)| s)
+            .max()
+            .unwrap_or(0);
+        if scores[7] <= other_max {
+            scores[7] = other_max + 1;
+        }
+    }
+
+    if has_quoted_deployment_container
+        && (has_component_package_container || has_top_level_component_leaf)
+    {
+        let other_max = scores
+            .iter()
+            .enumerate()
+            .filter(|&(i, _)| i != 5)
+            .map(|(_, &s)| s)
+            .max()
+            .unwrap_or(0);
+        if scores[5] <= other_max {
+            scores[5] = other_max + 1;
+        }
+    }
+
+    // Direction directives (`left to right direction`, `top to bottom
+    // direction`) are handled by Java PlantUML's graph-style UML path. With no
+    // stronger explicit diagram syntax, weak `A -> B` arrows become CLASS
+    // dependencies rather than SEQUENCE messages.
+    if has_direction_directive
+        && scores[0] > 0
+        && scores[1] == 0
+        && scores[2] == 0
+        && scores[3] == 0
+        && scores[4] == 0
+        && scores[5] == 0
+        && scores[6] == 0
+        && scores[7] == 0
+        && scores[8] == 0
+        && scores[9] == 0
+    {
+        scores[1] = scores[0] + 1;
+    }
+
+    // `allowmixing` + an explicit class declaration => CLASS, overriding any
+    // state/object/etc. signals from the mixed-in elements. scores[1] (CLASS)
+    // is non-zero only when a real class-style declaration (class/interface/
+    // enum/abstract/annotation/inheritance) was seen, so this never fires on
+    // an `allowmixing` diagram that has no class content (e.g. participant +
+    // component, which Java PlantUML rejects as an error rather than CLASS).
+    if has_allowmixing && scores[1] > 0 {
+        let other_max = scores
+            .iter()
+            .enumerate()
+            .filter(|&(i, _)| i != 1)
+            .map(|(_, &s)| s)
+            .max()
+            .unwrap_or(0);
+        if scores[1] <= other_max {
+            scores[1] = other_max + 1;
+        }
+    }
+
+    if (has_skinparam || has_meta_only_class_default) && scores.iter().all(|&s| s == 0) {
+        return UmlSubtype::Class;
     }
 
     let subtypes = [
@@ -443,6 +684,16 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     let max_idx = scores.iter().position(|&s| s == max_score).unwrap_or(0);
 
     subtypes[max_idx]
+}
+
+fn looks_like_bare_class_association(line: &str) -> bool {
+    static RE: std::sync::LazyLock<regex::Regex> = std::sync::LazyLock::new(|| {
+        regex::Regex::new(
+            r#"^(?:"[^"]+"|[\w./:]+)\s*(?:-{2,}|\.{2,})\s*(?:"[^"]+"|[\w./:]+)(?:\s*:\s*.+)?$"#,
+        )
+        .unwrap()
+    });
+    RE.is_match(line)
 }
 
 #[derive(Clone, Copy)]
@@ -468,8 +719,18 @@ pub struct DiagramBlock {
     pub typ: String,
     /// Full block text including @start/@end lines, plus any leading preamble.
     pub source: String,
+    /// 1-based source line of the block's top-level `@startXXX`.
+    pub start_line: usize,
     /// 0-based index of this block in the file.
     pub index: usize,
+}
+
+struct OpenDiagramBlock<'a> {
+    typ: String,
+    name: Option<String>,
+    start_line: usize,
+    lines: Vec<&'a str>,
+    depth: usize,
 }
 
 /// Split a PlantUML file into individual blocks.
@@ -482,13 +743,13 @@ pub struct DiagramBlock {
 pub fn split_blocks(input: &str) -> Vec<DiagramBlock> {
     let mut blocks = Vec::new();
     let mut preamble_lines: Vec<&str> = Vec::new();
-    // (outer-type, name, lines, nesting-depth)
-    // nesting_depth counts how many @start tags are open; the block closes
-    // when depth drops back to 0 on an @end.
-    let mut current_start: Option<(String, Option<String>, Vec<&str>, usize)> = None;
+    // depth counts how many @start tags are open; the block closes when it
+    // drops back to 0 on an @end.
+    let mut current_start: Option<OpenDiagramBlock<'_>> = None;
     let mut index = 0usize;
 
-    for line in input.lines() {
+    for (line_idx, line) in input.lines().enumerate() {
+        let source_line = line_idx + 1;
         let trimmed = line.trim();
 
         if let Some(rest) = trimmed.strip_prefix("@start") {
@@ -497,33 +758,40 @@ pub fn split_blocks(input: &str) -> Vec<DiagramBlock> {
                 let mut parts = rest.split_whitespace();
                 let typ = parts.next().unwrap_or("uml").to_string();
                 let name = parts.next().map(|s| s.to_string());
-                current_start = Some((typ, name, vec![line], 1));
-            } else if let Some((_, _, ref mut block_lines, ref mut depth)) = current_start {
+                current_start = Some(OpenDiagramBlock {
+                    typ,
+                    name,
+                    start_line: source_line,
+                    lines: vec![line],
+                    depth: 1,
+                });
+            } else if let Some(block) = &mut current_start {
                 // Nested @start inside an open block — treat as content.
                 // PlantUML allows @startjson embedded inside @startuml etc.
-                block_lines.push(line);
-                *depth += 1;
+                block.lines.push(line);
+                block.depth += 1;
             }
         } else if trimmed.starts_with("@end") {
-            if let Some((_, _, ref mut block_lines, ref mut depth)) = current_start {
-                block_lines.push(line);
-                *depth -= 1;
-                if *depth == 0 {
+            if let Some(block) = &mut current_start {
+                block.lines.push(line);
+                block.depth -= 1;
+                if block.depth == 0 {
                     // Outer block is closed — emit it.
-                    let (typ, name, block_lines, _) = current_start.take().unwrap();
-                    let source = build_source(&preamble_lines, &block_lines);
+                    let block = current_start.take().unwrap();
+                    let source = build_source(&preamble_lines, &block.lines);
                     blocks.push(DiagramBlock {
-                        name,
-                        typ,
+                        name: block.name,
+                        typ: block.typ,
                         source,
+                        start_line: block.start_line,
                         index,
                     });
                     index += 1;
                 }
             }
             // If there's no open block, this is a stray @end — ignore it.
-        } else if let Some((_, _, ref mut block_lines, _)) = current_start {
-            block_lines.push(line);
+        } else if let Some(block) = &mut current_start {
+            block.lines.push(line);
         } else {
             // Before the first block: accumulate as preamble.
             preamble_lines.push(line);
@@ -531,17 +799,44 @@ pub fn split_blocks(input: &str) -> Vec<DiagramBlock> {
     }
 
     // If a block was started but never closed, emit it anyway.
-    if let Some((typ, name, block_lines, _)) = current_start.take() {
-        let source = build_source(&preamble_lines, &block_lines);
+    if let Some(block) = current_start.take() {
+        let source = build_source(&preamble_lines, &block.lines);
         blocks.push(DiagramBlock {
-            name,
-            typ,
+            name: block.name,
+            typ: block.typ,
             source,
+            start_line: block.start_line,
             index,
         });
     }
 
     blocks
+}
+
+fn source_with_original_line_offset(block: &DiagramBlock) -> String {
+    if block.start_line <= 1 || preamble_contains_body_expansion(&block.source) {
+        return block.source.clone();
+    }
+
+    let mut source = "\n".repeat(block.start_line - 1);
+    source.push_str(&block.source);
+    source
+}
+
+fn preamble_contains_body_expansion(source: &str) -> bool {
+    for line in source.lines() {
+        let trimmed = line.trim_start();
+        if trimmed.starts_with("@start") {
+            return false;
+        }
+        if trimmed.starts_with("!procedure ")
+            || trimmed.starts_with("!function ")
+            || trimmed.starts_with("!definelong ")
+        {
+            return true;
+        }
+    }
+    false
 }
 
 fn build_source(preamble: &[&str], block_lines: &[&str]) -> String {
@@ -562,7 +857,7 @@ fn build_source(preamble: &[&str], block_lines: &[&str]) -> String {
 pub fn parse_all(input: &str) -> Vec<Result<Diagram, ParseError>> {
     split_blocks(input)
         .into_iter()
-        .map(|block| parse_with_base(&block.source, None))
+        .map(|block| parse_with_base(&source_with_original_line_offset(&block), None))
         .collect()
 }
 
@@ -581,7 +876,7 @@ pub fn parse_block(input: &str, index: usize) -> Result<Diagram, ParseError> {
             split_blocks(input).len()
         ),
     })?;
-    parse_with_base(&block.source, None)
+    parse_with_base(&source_with_original_line_offset(&block), None)
 }
 
 /// Parse only the block with the given name (from `@startXXX name`).
@@ -597,7 +892,7 @@ pub fn parse_named(input: &str, name: &str) -> Result<Diagram, ParseError> {
             line: 1,
             message: format!("no block named {name:?} found in input"),
         })?;
-    parse_with_base(&block.source, None)
+    parse_with_base(&source_with_original_line_offset(&block), None)
 }
 
 /// Parse YAML input into a diagram model.
@@ -652,15 +947,34 @@ pub fn parse_with_base(
     base_dir: Option<&std::path::Path>,
 ) -> Result<Diagram, ParseError> {
     let typ = detect_type(input);
-    let preprocess_out = match base_dir {
-        Some(dir) => preprocess::preprocess_full_with_base(input, dir),
-        None => preprocess::preprocess_full(input, None),
+    let mut preprocess_out = match base_dir {
+        Some(dir) => preprocess::preprocess_full_for_parse(input, Some(dir.to_path_buf())),
+        None => preprocess::preprocess_full_for_parse(input, None),
     };
+    let uml_subtype = (typ == "uml").then(|| detect_uml_subtype(&preprocess_out.lines));
+    if matches!(uml_subtype, Some(UmlSubtype::Sequence)) {
+        preprocess_out = match base_dir {
+            Some(dir) => {
+                preprocess::preprocess_full_for_sequence_parse(input, Some(dir.to_path_buf()))
+            }
+            None => preprocess::preprocess_full_for_sequence_parse(input, None),
+        };
+    }
     let lines = preprocess_out.lines;
     let sprites = preprocess_out.sprites;
 
+    // For non-sequence UML diagrams a `newpage` directive splits the diagram
+    // into multiple pages, but PlantUML's SVG output renders only the first
+    // page. Sequence diagrams handle `newpage` as a paginating event with their
+    // own multipage rendering, so they keep all lines.
+    let lines = if matches!(uml_subtype, Some(UmlSubtype::Sequence)) {
+        lines
+    } else {
+        truncate_at_newpage(lines)
+    };
+
     let mut diagram = match typ {
-        "uml" => match detect_uml_subtype(&lines) {
+        "uml" => match uml_subtype.expect("uml subtype computed above") {
             UmlSubtype::Sequence => {
                 let seq = sequence::parse_sequence(&lines)?;
                 Ok(Diagram::Sequence(seq))
@@ -858,6 +1172,174 @@ mod tests {
     }
 
     #[test]
+    fn skinparam_only_uml_defaults_to_class() {
+        let input = "@startuml\nskinparam backgroundColor #FFFEF0\n@enduml";
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Class(_)));
+    }
+
+    #[test]
+    fn leading_bare_note_colon_routes_to_class() {
+        let input = "@startuml\nnote : x = 1\nAlice -> Bob : Message 1\n@enduml";
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Class(_)));
+    }
+
+    #[test]
+    fn quoted_deployment_containers_beat_nested_component_leaves() {
+        let input = r#"@startuml
+cloud "Kubernetes Cluster" {
+  node "Master Node" {
+    component "API Server"
+    component "Scheduler"
+  }
+}
+@enduml"#;
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Deployment(_)));
+    }
+
+    #[test]
+    fn component_package_containers_beat_quoted_deployment_containers() {
+        let input = r#"@startuml
+node "IoT Device" {
+  component Sensor
+}
+package "Backend" {
+  component "Data Ingestion" as DI
+}
+Sensor --> DI
+@enduml"#;
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Component(_)));
+    }
+
+    #[test]
+    fn top_level_component_leaf_beats_quoted_database_container() {
+        let input = r#"@startuml
+database "Main Store" {
+  component "Read Replica" as RR
+}
+component Application
+Application --> RR
+@enduml"#;
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Component(_)));
+    }
+
+    #[test]
+    fn inline_empty_entity_body_routes_to_class() {
+        let input = "@startuml\nentity MyType {}\n@enduml";
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Class(_)));
+    }
+
+    #[test]
+    fn dotted_dependency_arrows_route_to_class() {
+        let input = "@startuml\nA ..> B: dotted\n@enduml";
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Class(_)));
+
+        let input = "@startuml\nA ..>> B: dotted thick\n@enduml";
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Class(_)));
+    }
+
+    #[test]
+    fn bare_association_lines_route_to_class() {
+        let input = "@startuml\nA .. B\nC -- D\n@enduml";
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Class(_)));
+
+        let input = "@startuml\ncom.example.A -- com.example.B\n@enduml";
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Class(_)));
+    }
+
+    #[test]
+    fn sequence_label_with_dashes_stays_sequence() {
+        let input = "@startuml\nAlice -> Bob : --strike text--\n@enduml";
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Sequence(_)));
+    }
+
+    #[test]
+    fn direction_directive_with_weak_arrows_routes_to_class() {
+        let input = "@startuml\nleft to right direction\nAlice -> Bob : hello\n@enduml";
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Class(_)));
+    }
+
+    #[test]
+    fn dotted_dependency_arrows_preserve_explicit_non_class_types() {
+        let input = "@startuml\nobject Source\nobject Target\nSource ..> Target\n@enduml";
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Object(_)));
+
+        let input = "@startuml\nnode NodeA\nnode NodeB\nNodeA ..> NodeB\n@enduml";
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Deployment(_)));
+
+        let input = "@startuml\ncomponent A\ncomponent B\nA ..> B\n@enduml";
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Component(_)));
+    }
+
+    #[test]
+    fn interface_plus_component_leaf_routes_to_component() {
+        let input = "@startuml\ninterface MyA\nartifact MyB\nMyA --> MyB\n@enduml";
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Component(_)));
+
+        let input = "@startuml\ninterface MyA\n@enduml";
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Class(_)));
+    }
+
+    #[test]
+    fn bare_association_lines_preserve_explicit_non_class_types() {
+        let input = "@startuml\nobject Source\nobject Target\nSource -- Target\n@enduml";
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Object(_)));
+
+        let input = "@startuml\nnode NodeA\nnode NodeB\nNodeA -- NodeB\n@enduml";
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Deployment(_)));
+
+        let input = "@startuml\ncomponent A\ncomponent B\nA -- B\n@enduml";
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Component(_)));
+    }
+
+    #[test]
+    fn object_with_floating_note_stays_object() {
+        let input = "@startuml\nobject Server {\n  ip = \"192.168.1.1\"\n}\nnote \"text\" as N1\nServer .. N1\n@enduml";
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Object(_)));
+    }
+
+    #[test]
+    fn deployment_with_floating_note_stays_deployment() {
+        let input = "@startuml\nnode Server\nnote \"Primary server\" as N1\nN1 .. Server\n@enduml";
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Deployment(_)));
+    }
+
+    #[test]
+    fn note_only_diagram_stays_class() {
+        let input = "@startuml\nnote as N\n  file: example.puml\nend note\n@enduml";
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Class(_)));
+    }
+
+    #[test]
+    fn comment_only_uml_stays_sequence_welcome_path() {
+        let input = "@startuml\n' comment only\n@enduml";
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Sequence(_)));
+    }
+
+    #[test]
     fn yaml_round_trip() {
         let input = "@startuml\nAlice -> Bob : hello\n@enduml";
         let diagram = parse(input).unwrap();
@@ -964,6 +1446,152 @@ mod tests {
         // Preamble should be prepended to each block's source.
         assert!(blocks[0].source.contains("!define ALICE Alice"));
         assert!(blocks[1].source.contains("!define ALICE Alice"));
+    }
+
+    #[test]
+    fn split_records_block_start_lines() {
+        let input = "!define ALICE Alice\n\n@startuml first\nAlice -> Bob\n@enduml\n\n@startuml second\nBob -> Alice\n@enduml";
+        let blocks = split_blocks(input);
+        assert_eq!(blocks.len(), 2);
+        assert_eq!(blocks[0].start_line, 3);
+        assert_eq!(blocks[1].start_line, 7);
+    }
+
+    #[test]
+    fn parse_block_preserves_absolute_source_lines() {
+        let input = "!define ALICE Alice\n!define BOB Bob\n\n@startuml\nALICE -> BOB : Hello\nBOB --> ALICE : Hi\n@enduml";
+        let diagram = parse_block(input, 0).unwrap();
+        let Diagram::Sequence(seq) = diagram else {
+            panic!("expected sequence diagram");
+        };
+        assert_eq!(seq.participants[0].source_line, 5);
+        let crate::diagram::sequence::Event::Message(message) = &seq.events[0] else {
+            panic!("expected message event");
+        };
+        assert_eq!(message.source_line, 5);
+    }
+
+    #[test]
+    fn parse_block_keeps_preamble_procedure_body_lines() {
+        let input = concat!(
+            "!procedure $stdflow($from, $to)\n",
+            "  $from -> $to : request\n",
+            "  $to --> $from : response\n",
+            "!endprocedure\n",
+            "\n",
+            "@startuml\n",
+            "$stdflow(\"Alice\", \"Bob\")\n",
+            "@enduml"
+        );
+        let diagram = parse_block(input, 0).unwrap();
+        let Diagram::Sequence(seq) = diagram else {
+            panic!("expected sequence diagram");
+        };
+        let crate::diagram::sequence::Event::Message(first) = &seq.events[0] else {
+            panic!("expected first message event");
+        };
+        let crate::diagram::sequence::Event::Message(second) = &seq.events[1] else {
+            panic!("expected second message event");
+        };
+        assert_eq!(first.source_line, 2);
+        assert_eq!(second.source_line, 3);
+    }
+
+    #[test]
+    fn parse_block_keeps_inline_procedure_definition_lines() {
+        let input = concat!(
+            "@startuml\n",
+            "!procedure $request($from, $to, $msg)\n",
+            "  $from -> $to : $msg\n",
+            "  activate $to\n",
+            "  $to --> $from : response\n",
+            "  deactivate $to\n",
+            "!endprocedure\n",
+            "\n",
+            "$request(Client, Server, \"GET /users\")\n",
+            "$request(Client, Server, \"POST /users\")\n",
+            "@enduml"
+        );
+        let diagram = parse_block(input, 0).unwrap();
+        let Diagram::Sequence(seq) = diagram else {
+            panic!("expected sequence diagram");
+        };
+        assert_eq!(seq.participants[0].source_line, 2);
+        assert_eq!(seq.participants[1].source_line, 2);
+        let crate::diagram::sequence::Event::Message(first) = &seq.events[0] else {
+            panic!("expected first message event");
+        };
+        let crate::diagram::sequence::Event::Message(first_response) = &seq.events[2] else {
+            panic!("expected first response event");
+        };
+        let crate::diagram::sequence::Event::Message(second) = &seq.events[4] else {
+            panic!("expected second message event");
+        };
+        let crate::diagram::sequence::Event::Message(second_response) = &seq.events[6] else {
+            panic!("expected second response event");
+        };
+        assert_eq!(first.source_line, 2);
+        assert_eq!(first_response.source_line, 4);
+        assert_eq!(second.source_line, 2);
+        assert_eq!(second_response.source_line, 4);
+    }
+
+    #[test]
+    fn parse_block_sequence_with_preamble_meta_procedure_stays_sequence() {
+        let input = concat!(
+            "!procedure $stdheader()\n",
+            "  title Standard Header\n",
+            "  header Generated by RustUML\n",
+            "!endprocedure\n",
+            "\n",
+            "@startuml\n",
+            "$stdheader()\n",
+            "Alice -> Bob : Hello\n",
+            "@enduml"
+        );
+        let diagram = parse_block(input, 0).unwrap();
+        let Diagram::Sequence(seq) = diagram else {
+            panic!("expected sequence diagram");
+        };
+        assert_eq!(seq.meta.title_line, Some(2));
+        assert_eq!(seq.meta.header_line, Some(3));
+        assert_eq!(seq.participants[0].source_line, 8);
+        assert_eq!(seq.participants[1].source_line, 8);
+        let crate::diagram::sequence::Event::Message(message) = &seq.events[0] else {
+            panic!("expected message event");
+        };
+        assert_eq!(message.source_line, 8);
+    }
+
+    #[test]
+    fn parse_block_keeps_while_body_and_following_source_lines() {
+        let input = concat!(
+            "@startuml\n",
+            "!$i = 1\n",
+            "!while $i <= 3\n",
+            "  participant \"P$i\" as P$i\n",
+            "  !$i = $i + 1\n",
+            "!endwhile\n",
+            "\n",
+            "P1 -> P2 : step 1\n",
+            "P2 -> P3 : step 2\n",
+            "@enduml"
+        );
+        let diagram = parse_block(input, 0).unwrap();
+        let Diagram::Sequence(seq) = diagram else {
+            panic!("expected sequence diagram");
+        };
+        assert_eq!(seq.participants.len(), 3);
+        assert!(seq.participants.iter().all(|p| p.source_line == 3));
+
+        let crate::diagram::sequence::Event::Message(first) = &seq.events[0] else {
+            panic!("expected first message event");
+        };
+        let crate::diagram::sequence::Event::Message(second) = &seq.events[1] else {
+            panic!("expected second message event");
+        };
+        assert_eq!(first.source_line, 7);
+        assert_eq!(second.source_line, 8);
     }
 
     #[test]

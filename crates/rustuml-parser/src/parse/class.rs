@@ -26,11 +26,11 @@ pub fn parse_class(lines: &[String]) -> Result<ClassDiagram, ParseError> {
     let mut parser = ClassParser::new();
 
     for (i, line) in lines.iter().enumerate() {
-        let trimmed = line.trim();
+        let (source_line, trimmed) = super::source_line_and_trimmed(i + 1, line);
         if trimmed.is_empty() {
             continue;
         }
-        parser.parse_line(i + 1, trimmed)?;
+        parser.parse_line(source_line, trimmed)?;
     }
 
     Ok(parser.finish())
@@ -40,6 +40,7 @@ struct ClassParser {
     meta: DiagramMeta,
     entities: Vec<ClassEntity>,
     relationships: Vec<Relationship>,
+    association_classes: Vec<crate::diagram::class::AssociationClass>,
     packages: Vec<Package>,
     notes: Vec<Note>,
     /// Entity currently being parsed (inside { ... } block).
@@ -56,6 +57,8 @@ struct ClassParser {
     namespace_sep: Option<String>,
     /// Whether we are inside a multi-line header/footer/legend block.
     meta_block: Option<MetaBlock>,
+    /// Prefix of an open `skinparam X { ... }` block.
+    current_skinparam_prefix: Option<String>,
     /// Current 1-based source line number (set before each parse_line call).
     current_line: usize,
     /// Accumulated `hide` / `show` directives, in source order.
@@ -73,6 +76,7 @@ impl ClassParser {
             meta: DiagramMeta::default(),
             entities: Vec::new(),
             relationships: Vec::new(),
+            association_classes: Vec::new(),
             packages: Vec::new(),
             notes: Vec::new(),
             current_entity: None,
@@ -82,6 +86,7 @@ impl ClassParser {
             namespace_sep_none: false,
             namespace_sep: Some(".".to_string()),
             meta_block: None,
+            current_skinparam_prefix: None,
             current_line: 0,
             hide_show: Vec::new(),
             header_line: None,
@@ -126,6 +131,7 @@ impl ClassParser {
             meta: self.meta,
             entities,
             relationships,
+            association_classes: self.association_classes,
             packages: self.packages,
             notes: self.notes,
             hide_show: self.hide_show,
@@ -146,14 +152,45 @@ impl ClassParser {
                 kind: EntityKind::Class,
                 members: Vec::new(),
                 stereotypes: Vec::new(),
+                generic: None,
                 spot_color: None,
+                spot_character: None,
                 url: None,
+                url_tooltip: None,
                 color: None,
                 text_color: None,
+                line_color: None,
+                line_style: None,
                 source_line: self.current_line,
             });
         }
         id
+    }
+
+    fn resolve_relationship_endpoint(&mut self, raw: &str) -> String {
+        let raw = raw.trim();
+        if self.entities.iter().any(|e| e.id == raw) {
+            return raw.to_string();
+        }
+
+        for pkg in self.packages.iter().rev() {
+            let separators = [self.namespace_sep.as_deref().unwrap_or("."), ".", "::", "/"];
+            for sep in separators {
+                let Some(member) = raw
+                    .strip_prefix(&pkg.name)
+                    .and_then(|rest| rest.strip_prefix(sep))
+                else {
+                    continue;
+                };
+                if pkg.entities.iter().any(|id| id == member)
+                    && self.entities.iter().any(|e| e.id == member)
+                {
+                    return member.to_string();
+                }
+            }
+        }
+
+        self.ensure_entity(raw)
     }
 
     fn find_entity_mut(&mut self, id: &str) -> Option<&mut ClassEntity> {
@@ -197,6 +234,8 @@ impl ClassParser {
                     kind: PackageKind::Package,
                     color: None,
                     entities: Vec::new(),
+                    parent: parent_pkg_idx,
+                    source_line: self.current_line,
                     stereotypes: Vec::new(),
                     display_name: Some(pkg_label),
                 });
@@ -255,6 +294,23 @@ impl ClassParser {
 
     fn parse_line(&mut self, line_num: usize, line: &str) -> Result<(), ParseError> {
         self.current_line = line_num;
+        // Inside a grouped skinparam block?
+        if let Some(prefix) = self.current_skinparam_prefix.clone() {
+            if line == "}" {
+                self.current_skinparam_prefix = None;
+            } else if let Some((key, value)) = line.split_once(char::is_whitespace) {
+                let key = key.trim();
+                let value = value.trim();
+                if !key.is_empty() && !value.is_empty() {
+                    self.meta.skinparams.push(crate::diagram::SkinParam {
+                        key: format!("{prefix}{key}"),
+                        value: value.to_string(),
+                    });
+                }
+            }
+            return Ok(());
+        }
+
         // Inside a multi-line meta block (header/footer/legend/caption/title)?
         if let Some(block) = self.meta_block {
             let end1 = match block {
@@ -278,35 +334,35 @@ impl ClassParser {
                     MetaBlock::Header => {
                         let h = self.meta.header.get_or_insert_with(String::new);
                         if !h.is_empty() {
-                            h.push(' ');
+                            h.push('\n');
                         }
                         h.push_str(line);
                     }
                     MetaBlock::Footer => {
                         let f = self.meta.footer.get_or_insert_with(String::new);
                         if !f.is_empty() {
-                            f.push(' ');
+                            f.push('\n');
                         }
                         f.push_str(line);
                     }
                     MetaBlock::Legend => {
                         let l = self.meta.legend.get_or_insert_with(String::new);
                         if !l.is_empty() {
-                            l.push(' ');
+                            l.push('\n');
                         }
                         l.push_str(line);
                     }
                     MetaBlock::Caption => {
                         let c = self.meta.caption.get_or_insert_with(String::new);
                         if !c.is_empty() {
-                            c.push(' ');
+                            c.push('\n');
                         }
                         c.push_str(line);
                     }
                     MetaBlock::Title => {
                         let t = self.meta.title.get_or_insert_with(String::new);
                         if !t.is_empty() {
-                            t.push(' ');
+                            t.push('\n');
                         }
                         t.push_str(line);
                     }
@@ -345,6 +401,9 @@ impl ClassParser {
         if self.try_entity_decl(line) {
             return Ok(());
         }
+        if self.try_association_class(line) {
+            return Ok(());
+        }
         if self.try_relationship(line) {
             return Ok(());
         }
@@ -370,18 +429,19 @@ impl ClassParser {
 
     fn try_entity_decl(&mut self, line: &str) -> bool {
         let (url, clean_line) = super::extract_link_url(line);
+        let url_tooltip = super::extract_link_tooltip(line);
         let line = clean_line.as_str();
         // Allows dots in the identifier (for `set namespaceSeparator none`).
         static RE_DOTTED: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
-                r#"^(class|abstract\s+class|abstract|interface|enum|annotation|entity|object)\s+(?:(?:"([^"]+)"\s+as\s+)?(\w[\w.]*(?:<[^>]+>)?)|"([^"]+)")"#,
+                r#"^(class|abstract\s+class|abstract|interface|enum|annotation|entity|object|state|circle|diamond)\s+(?:(?:"([^"]+)"\s+as\s+)?(\w[\w.]*(?:<[^<>]*(?:<[^<>]*>[^<>]*)*>)?)|"([^"]+)")"#,
             )
             .unwrap()
         });
         // Permissive regex: accepts any non-whitespace name (for custom namespace separators).
         static RE_PERMISSIVE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
-                r#"^(class|abstract\s+class|abstract|interface|enum|annotation|entity|object)\s+(?:(?:"([^"]+)"\s+as\s+)?([^\s{<>]+(?:<[^>]+>)?)|"([^"]+)")"#,
+                r#"^(class|abstract\s+class|abstract|interface|enum|annotation|entity|object|state|circle|diamond)\s+(?:(?:"([^"]+)"\s+as\s+)?([^\s{<>]+(?:<[^<>]*(?:<[^<>]*>[^<>]*)*>)?)|"([^"]+)")"#,
             )
             .unwrap()
         });
@@ -401,7 +461,7 @@ impl ClassParser {
         if let Some(caps) = re.captures(line) {
             let kind = parse_entity_kind(caps[1].trim());
             // Group 4: quoted-only form — class "**Name**" with no `as` keyword.
-            let (label, id) = if let Some(m) = caps.get(4) {
+            let (mut label, mut id) = if let Some(m) = caps.get(4) {
                 let label_raw = m.as_str().to_string();
                 let id = strip_creole_for_id(&label_raw);
                 (label_raw, id)
@@ -412,24 +472,35 @@ impl ClassParser {
                 let id = caps[3].to_string();
                 (label, id)
             };
+            label = normalize_inline_stereotypes(&label);
 
+            // A trailing `<...>` is a generic type parameter, not part of the
+            // entity id/label/qualified-name. Split it off the id; mirror the
+            // split onto the label only when the label was derived from the id
+            // (no explicit alias / quoted name).
+            let label_was_id = caps.get(2).is_none() && caps.get(4).is_none();
+            let generic = split_generic(&mut id);
+            if label_was_id {
+                split_generic(&mut label);
+            }
+
+            let stereotype_source = text_outside_double_quotes(line);
             let mut spot_color: Option<String> = None;
+            let mut spot_character: Option<char> = None;
             let stereotypes: Vec<String> = STEREOTYPE_RE
-                .captures_iter(line)
+                .captures_iter(&stereotype_source)
                 .map(|c| {
-                    let (text, color) = process_spot_stereotype_with_color(c[1].trim());
+                    let (text, character, color) = process_spot_stereotype(c[1].trim());
                     if spot_color.is_none() {
                         spot_color = color;
+                        spot_character = character;
                     }
                     text
                 })
                 .filter(|s| !s.is_empty())
                 .collect();
 
-            // Extract entity-level color (e.g., `#lightblue`, `#FF0000`)
-            static COLOR_RE: LazyLock<Regex> =
-                LazyLock::new(|| Regex::new(r"(#[a-zA-Z0-9]+)(?:\s|\{|$)").unwrap());
-            let entity_color = COLOR_RE.captures(line).map(|c| c[1].to_string());
+            let entity_colors = parse_entity_colors(line);
 
             // Handle namespace separation: split `com.example.MyClass` or `com::example::MyClass`
             // into package hierarchy + short entity name.  For default separator ".", we must
@@ -457,18 +528,31 @@ impl ClassParser {
             if let Some(entity) = self.find_entity_mut(&final_id) {
                 entity.kind = kind;
                 entity.label = display_label;
-                entity.stereotypes.extend(stereotypes);
+                if !stereotypes.is_empty() {
+                    entity.stereotypes = stereotypes;
+                }
                 if spot_color.is_some() {
                     entity.spot_color = spot_color.clone();
+                    entity.spot_character = spot_character;
                 }
                 if url.is_some() {
                     entity.url = url.clone();
+                    entity.url_tooltip = url_tooltip.clone();
                 }
-                if entity_color.is_some() {
-                    entity.color = entity_color.clone();
+                if entity_colors.back.is_some() {
+                    entity.color = entity_colors.back.clone();
                 }
-                if let Some(tc) = extract_text_color(line) {
-                    entity.text_color = Some(tc);
+                if entity_colors.text.is_some() {
+                    entity.text_color = entity_colors.text.clone();
+                }
+                if entity_colors.line.is_some() {
+                    entity.line_color = entity_colors.line.clone();
+                }
+                if entity_colors.line_style.is_some() {
+                    entity.line_style = entity_colors.line_style;
+                }
+                if generic.is_some() {
+                    entity.generic = generic.clone();
                 }
             } else {
                 self.entities.push(ClassEntity {
@@ -477,10 +561,15 @@ impl ClassParser {
                     kind,
                     members: Vec::new(),
                     stereotypes,
+                    generic: generic.clone(),
                     spot_color,
+                    spot_character,
                     url: url.clone(),
-                    color: entity_color.clone(),
-                    text_color: extract_text_color(line),
+                    url_tooltip: url_tooltip.clone(),
+                    color: entity_colors.back,
+                    text_color: entity_colors.text,
+                    line_color: entity_colors.line,
+                    line_style: entity_colors.line_style,
                     source_line: self.current_line,
                 });
             }
@@ -496,6 +585,11 @@ impl ClassParser {
                 }
             }
 
+            // `class Child extends Parent[, P2]` / `... implements I1[, I2]`
+            // create inheritance / realization relationships, exactly as
+            // `Child --|> Parent` / `Child ..|> Iface` would.
+            self.parse_supertypes(line, &final_id);
+
             if line.ends_with('{') || line.ends_with("{{") {
                 self.current_entity = Some(final_id.clone());
             }
@@ -503,6 +597,62 @@ impl ClassParser {
             true
         } else {
             false
+        }
+    }
+
+    /// Parse `extends`/`implements` clauses on a class-declaration line into
+    /// Inheritance/Implementation relationships from the declared entity to
+    /// each named supertype. Generic (`<...>`) and stereotype (`<<...>>`) spans
+    /// are stripped first so a bounded type param like `class Foo<T extends X>`
+    /// is not mistaken for an inheritance clause.
+    fn parse_supertypes(&mut self, line: &str, child_id: &str) {
+        let body = strip_empty_inline_body(line);
+        // Drop angle-bracket spans (generics + `<<stereotype>>`).
+        let mut scan = String::new();
+        let mut depth: u32 = 0;
+        for ch in body.chars() {
+            match ch {
+                '<' => depth += 1,
+                '>' => depth = depth.saturating_sub(1),
+                _ if depth == 0 => scan.push(ch),
+                _ => {}
+            }
+        }
+        // Collect (supertype, kind, dashed) without borrowing self mutably yet.
+        let mut supers: Vec<(String, RelationshipKind, bool)> = Vec::new();
+        let mut current: Option<(RelationshipKind, bool)> = None;
+        for tok in scan.split_whitespace() {
+            match tok {
+                "extends" => current = Some((RelationshipKind::Inheritance, false)),
+                "implements" => current = Some((RelationshipKind::Implementation, true)),
+                _ => {
+                    if let Some((kind, dashed)) = current {
+                        for name in tok.split(',') {
+                            let name = name.trim();
+                            if !name.is_empty() {
+                                supers.push((name.to_string(), kind, dashed));
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        for (name, kind, dashed) in supers {
+            let to = self.ensure_entity(&name);
+            self.relationships.push(Relationship {
+                from: child_id.to_string(),
+                to,
+                kind,
+                label: None,
+                label_arrow: LinkArrow::None,
+                from_multiplicity: None,
+                to_multiplicity: None,
+                from_decor: None,
+                to_decor: None,
+                decorated_end: RelationshipEnd::To,
+                dashed,
+                source_line: self.current_line,
+            });
         }
     }
 
@@ -518,10 +668,15 @@ impl ClassParser {
                     kind: EntityKind::Enum,
                     members: Vec::new(),
                     stereotypes: Vec::new(),
+                    generic: None,
                     spot_color: None,
+                    spot_character: None,
                     url: None,
+                    url_tooltip: None,
                     color: None,
                     text_color: None,
+                    line_color: None,
+                    line_style: None,
                     source_line: self.current_line,
                 });
             }
@@ -535,10 +690,52 @@ impl ClassParser {
         }
     }
 
+    /// Association class: `(A, B) .. C` or `(A, B) -- C`. PlantUML draws a tiny
+    /// anchor (`apoint`) on the A–B line and a dashed (`..`) / solid (`--`)
+    /// connector to the association class `C`. Endpoints may be quoted.
+    fn try_association_class(&mut self, line: &str) -> bool {
+        static RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(
+                r#"^\(\s*(?:"([^"]+)"|([\w.]+))\s*,\s*(?:"([^"]+)"|([\w.]+))\s*\)\s*(\.\.|-{2,})\s*(?:"([^"]+)"|([\w.]+))\s*$"#,
+            )
+            .unwrap()
+        });
+        let Some(caps) = RE.captures(line) else {
+            return false;
+        };
+        let pick = |q: usize, b: usize| -> String {
+            if let Some(m) = caps.get(q) {
+                strip_creole_for_id(m.as_str())
+            } else {
+                caps.get(b).map(|m| m.as_str()).unwrap_or("").to_string()
+            }
+        };
+        let a_raw = pick(1, 2);
+        let b_raw = pick(3, 4);
+        let connector = &caps[5];
+        let c_raw = pick(6, 7);
+        let dashed = connector.starts_with('.');
+
+        let a = self.ensure_entity(&a_raw);
+        let b = self.ensure_entity(&b_raw);
+        let c = self.ensure_entity(&c_raw);
+
+        self.association_classes
+            .push(crate::diagram::class::AssociationClass {
+                a,
+                b,
+                c,
+                dashed,
+                source_line: self.current_line,
+            });
+        true
+    }
+
     fn try_relationship(&mut self, line: &str) -> bool {
         // Relationship format: EntityA ["mult"] ARROW ["mult"] EntityB [: label]
         // Supported arrows: <|--, --|>, ..|>, <|.., *--, --*, o--, --o,
-        //                   <-->, <..>, --, -->, <--, <-, ->, .., ..>, <..
+        //                   <-->, <..>, <->, --, -->, -->>, <--, <-, ->, ->>,
+        //                   .., ..>, ...>, ..>>, <..
         //                   <|--|> (bidirectional inheritance), <..|.> etc.
         // Multiple dashes (e.g. ---- or ------) are treated as plain association.
         //
@@ -552,45 +749,61 @@ impl ClassParser {
         let stripped_line = strip_arrow_modifiers(line);
         let line = stripped_line.as_str();
         static RE: LazyLock<Regex> = LazyLock::new(|| {
-            // Endpoint may be a bare identifier (`[\w.]+`) or a quoted name
-            // (`"any text"`) so labels with whitespace or punctuation work.
+            // Endpoint may be a bare identifier or a quoted name (`"any text"`)
+            // so labels with whitespace or punctuation work. The bare form
+            // accepts `/` and `:` (in addition to word chars and `.`) so a
+            // custom-namespace-separator endpoint (`com::service::UserService`,
+            // `com/example/Foo`) is captured whole — `[\w.]+` alone would stop
+            // at the first `:`/`/`, truncating the name and synthesising a
+            // phantom `com` entity. The label suffix still uses `\s*:\s*` (a
+            // separator colon flanked by optional space), which a bare endpoint
+            // (no spaces) never matches, so `A::B --> C::D : label` still splits.
             Regex::new(
-                r#"^(?:"([^"]+)"|([\w.]+))\s*(?:"([^"]+)")?\s*((?:<\|--\|>|<\.\.>|<\|--|--\|>|\.\.\|>|<\|\.\.|<\.\.|\*--|--\*|o--|--o|<-->|<--|-->|->|<-|-{2,}|\.\.|\.\.>))\s*(?:"([^"]+)")?\s*(?:"([^"]+)"|([\w.]+))(?:\s*:\s*(.+))?$"#,
+                r#"^(?:"([^"]+)"|([\w./:]+))\s*(?:"([^"]+)")?\s*((?:<\|--\|>|<\.\.>|<\|--|--\|>|\.\.\|>|<\|\.\.|<\.\.|<-->>|<-->|<->|\*--|--\*|o--|--o|-->>|<-{2,}|-{2,}>|<--|-->|->>|->|<-|-{2,}|\.{2,}>>|\.{2,}>|\.\.))\s*(?:"([^"]+)")?\s*(?:"([^"]+)"|([\w./:]+))(?:\s*:\s*(.+))?$"#,
             )
             .unwrap()
         });
         // ER crow's foot notation: entity1 CROW--CROW entity2 : "label"
         static ER_RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r#"^(\w+)\s+([|o}][|{o]--[|o][|{])\s+(\w+)(?:\s*:\s*(.+))?$"#).unwrap()
+            Regex::new(r#"^(\w+)\s+([|o}][|{o])--([|o][|{])\s+(\w+)(?:\s*:\s*(.+))?$"#).unwrap()
         });
 
         if let Some(caps) = RE.captures(line) {
-            let from_raw = caps
-                .get(1)
-                .or_else(|| caps.get(2))
-                .map(|m| m.as_str())
-                .unwrap_or("");
+            // Quoted endpoints (groups 1/6) must be normalized the same way the
+            // entity declaration normalizes a quoted name (whitespace → `_`,
+            // creole markers stripped), so a relationship like
+            // `"Fish & Chips" --> "Bread & Butter"` resolves to the existing
+            // declared entity instead of creating a duplicate.
+            let from_raw = if let Some(m) = caps.get(1) {
+                strip_creole_for_id(m.as_str())
+            } else {
+                caps.get(2).map(|m| m.as_str()).unwrap_or("").to_string()
+            };
             let from_mult = caps.get(3).map(|m| m.as_str().to_string());
             let rel_str = &caps[4];
             let to_mult = caps.get(5).map(|m| m.as_str().to_string());
-            let to_raw = caps
-                .get(6)
-                .or_else(|| caps.get(7))
-                .map(|m| m.as_str())
-                .unwrap_or("");
-            let label = caps.get(8).map(|m| m.as_str().trim().to_string());
+            let to_raw = if let Some(m) = caps.get(6) {
+                strip_creole_for_id(m.as_str())
+            } else {
+                caps.get(7).map(|m| m.as_str()).unwrap_or("").to_string()
+            };
+            let (label, label_arrow) = parse_label_arrow(caps.get(8).map(|m| m.as_str()));
 
-            let (kind, dashed) = parse_relationship_kind(rel_str);
-            let from = self.ensure_entity(from_raw);
-            let to = self.ensure_entity(to_raw);
+            let (kind, dashed, decorated_end) = parse_relationship_kind(rel_str);
+            let from = self.resolve_relationship_endpoint(&from_raw);
+            let to = self.resolve_relationship_endpoint(&to_raw);
 
             self.relationships.push(Relationship {
                 from,
                 to,
                 kind,
                 label,
+                label_arrow,
                 from_multiplicity: from_mult,
                 to_multiplicity: to_mult,
+                from_decor: None,
+                to_decor: None,
+                decorated_end,
                 dashed,
                 source_line: self.current_line,
             });
@@ -599,9 +812,11 @@ impl ClassParser {
 
         if let Some(caps) = ER_RE.captures(line) {
             let from_raw = &caps[1];
-            let to_raw = &caps[3];
+            let from_decor = parse_endpoint_decor(&caps[2]);
+            let to_decor = parse_endpoint_decor(&caps[3]);
+            let to_raw = &caps[4];
             let label = caps
-                .get(4)
+                .get(5)
                 .map(|m| m.as_str().trim().trim_matches('"').to_string());
 
             let from = self.ensure_entity(from_raw);
@@ -612,8 +827,12 @@ impl ClassParser {
                 to,
                 kind: RelationshipKind::Association,
                 label,
+                label_arrow: LinkArrow::None,
                 from_multiplicity: None,
                 to_multiplicity: None,
+                from_decor,
+                to_decor,
+                decorated_end: RelationshipEnd::None,
                 dashed: false,
                 source_line: self.current_line,
             });
@@ -639,10 +858,15 @@ impl ClassParser {
                     kind: EntityKind::Interface,
                     members: Vec::new(),
                     stereotypes: Vec::new(),
+                    generic: None,
                     spot_color: None,
+                    spot_character: None,
                     url: None,
+                    url_tooltip: None,
                     color: None,
                     text_color: None,
+                    line_color: None,
+                    line_style: None,
                     source_line: self.current_line,
                 });
             }
@@ -652,8 +876,12 @@ impl ClassParser {
                 to: to_raw,
                 kind: RelationshipKind::Association,
                 label: None,
+                label_arrow: LinkArrow::None,
                 from_multiplicity: None,
                 to_multiplicity: None,
+                from_decor: None,
+                to_decor: None,
+                decorated_end: RelationshipEnd::None,
                 dashed: false,
                 source_line: self.current_line,
             });
@@ -721,6 +949,8 @@ impl ClassParser {
                 kind,
                 color,
                 entities: Vec::new(),
+                parent: self.package_stack.iter().rev().nth(1).copied(),
+                source_line: self.current_line,
                 stereotypes,
                 display_name: None,
             });
@@ -905,10 +1135,15 @@ impl ClassParser {
                         kind: EntityKind::Class,
                         members: vec![member],
                         stereotypes: Vec::new(),
+                        generic: None,
                         spot_color: None,
+                        spot_character: None,
                         url: None,
+                        url_tooltip: None,
                         color: None,
                         text_color: None,
+                        line_color: None,
+                        line_style: None,
                         source_line: self.current_line,
                     });
                 }
@@ -1000,6 +1235,14 @@ impl ClassParser {
         }
         // Parse skinparam key value (store for renderer use).
         if let Some(rest) = line.strip_prefix("skinparam ") {
+            let rest = rest.trim();
+            if let Some(prefix) = rest.strip_suffix('{') {
+                let prefix = prefix.trim();
+                if !prefix.is_empty() {
+                    self.current_skinparam_prefix = Some(prefix.to_string());
+                }
+                return true;
+            }
             if let Some((key, value)) = rest.split_once(' ') {
                 self.meta.skinparams.push(crate::diagram::SkinParam {
                     key: key.trim().to_string(),
@@ -1013,6 +1256,7 @@ impl ClassParser {
         if let Some(rest) = line.strip_prefix("hide ") {
             self.hide_show.push(crate::diagram::class::HideShow {
                 show: false,
+                remove: false,
                 arg: rest.split_whitespace().collect::<Vec<_>>().join(" "),
             });
             return true;
@@ -1020,6 +1264,17 @@ impl ClassParser {
         if let Some(rest) = line.strip_prefix("show ") {
             self.hide_show.push(crate::diagram::class::HideShow {
                 show: true,
+                remove: false,
+                arg: rest.split_whitespace().collect::<Vec<_>>().join(" "),
+            });
+            return true;
+        }
+        // `remove X` drops the named entity (or `<<stereotype>>`-matched
+        // entities) from the diagram entirely, along with their links.
+        if let Some(rest) = line.strip_prefix("remove ") {
+            self.hide_show.push(crate::diagram::class::HideShow {
+                show: false,
+                remove: true,
                 arg: rest.split_whitespace().collect::<Vec<_>>().join(" "),
             });
             return true;
@@ -1088,10 +1343,20 @@ impl ClassParser {
             return;
         }
 
-        let member = parse_member(trimmed);
+        let mut member = parse_member(trimmed);
         if let Some(entity_id) = &self.current_entity
             && let Some(entity) = self.entities.iter_mut().find(|e| e.id == *entity_id)
         {
+            if entity.kind == EntityKind::Enum
+                && member.kind == MemberKind::Method
+                && member.visibility == Visibility::Default
+                && !entity
+                    .members
+                    .iter()
+                    .any(|m| m.kind == MemberKind::Separator)
+            {
+                member.kind = MemberKind::Field;
+            }
             entity.members.push(member);
         }
     }
@@ -1107,6 +1372,55 @@ fn parse_note_position(s: &str) -> NotePosition {
     }
 }
 
+/// If `name` ends with a balanced `<...>` generic suffix, strip it in place
+/// and return the inner text (e.g. `Foo<T>` → name becomes `Foo`, returns
+/// `Some("T")`). Handles nested angle brackets (`Wrapper<Container<T>>`).
+/// Returns `None` when there is no trailing generic.
+fn split_generic(name: &mut String) -> Option<String> {
+    let trimmed = name.trim_end();
+    if !trimmed.ends_with('>') {
+        return None;
+    }
+    // Walk back from the end matching nested angle brackets.
+    let bytes = trimmed.as_bytes();
+    let mut depth = 0i32;
+    let mut open_idx = None;
+    for (i, &b) in bytes.iter().enumerate().rev() {
+        match b {
+            b'>' => depth += 1,
+            b'<' => {
+                depth -= 1;
+                if depth == 0 {
+                    open_idx = Some(i);
+                    break;
+                }
+            }
+            _ => {}
+        }
+    }
+    let open = open_idx?;
+    // The base name must be non-empty (avoid stripping a leading `<...>`).
+    if open == 0 {
+        return None;
+    }
+    let inner = trimmed[open + 1..trimmed.len() - 1].trim().to_string();
+    let base = trimmed[..open].trim_end().to_string();
+    *name = base;
+    Some(inner)
+}
+
+fn strip_empty_inline_body(line: &str) -> &str {
+    let trimmed = line.trim_end();
+    if let Some(before_close) = trimmed.strip_suffix('}') {
+        let before_close = before_close.trim_end();
+        if let Some(before_open) = before_close.strip_suffix('{') {
+            return before_open.trim_end();
+        }
+        return trimmed;
+    }
+    trimmed.trim_end_matches('{').trim_end()
+}
+
 fn parse_entity_kind(s: &str) -> EntityKind {
     match s {
         "abstract class" | "abstract" => EntityKind::AbstractClass,
@@ -1114,6 +1428,10 @@ fn parse_entity_kind(s: &str) -> EntityKind {
         "enum" => EntityKind::Enum,
         "annotation" => EntityKind::Annotation,
         "entity" => EntityKind::Entity,
+        "object" => EntityKind::Object,
+        "state" => EntityKind::State,
+        "circle" => EntityKind::Circle,
+        "diamond" => EntityKind::Diamond,
         _ => EntityKind::Class,
     }
 }
@@ -1132,7 +1450,39 @@ fn strip_arrow_modifiers(line: &str) -> String {
     // Direction keywords appearing between dash/dot runs on the arrow body.
     static DIRECTION: LazyLock<Regex> =
         LazyLock::new(|| Regex::new(r"([-.])(left|right|up|down|l|r|u|d)([-.])").unwrap());
-    let s = BRACKETED.replace_all(line, "");
+    // Bracketed `[...]` arrow modifiers must be stripped, but brackets inside a
+    // double-quoted endpoint name (e.g. `"Class[WithBrackets]"`) are part of
+    // the name. Strip only outside quoted spans by masking quoted regions.
+    let s: String = if line.contains('"') {
+        let mut out = String::with_capacity(line.len());
+        let mut rest = line;
+        loop {
+            match rest.find('"') {
+                None => {
+                    out.push_str(&BRACKETED.replace_all(rest, ""));
+                    break;
+                }
+                Some(open) => {
+                    out.push_str(&BRACKETED.replace_all(&rest[..open], ""));
+                    let after = &rest[open + 1..];
+                    match after.find('"') {
+                        None => {
+                            // Unterminated quote: keep the remainder verbatim.
+                            out.push_str(&rest[open..]);
+                            break;
+                        }
+                        Some(close) => {
+                            out.push_str(&rest[open..open + 1 + close + 1]);
+                            rest = &after[close + 1..];
+                        }
+                    }
+                }
+            }
+        }
+        out
+    } else {
+        BRACKETED.replace_all(line, "").into_owned()
+    };
     let s = DIRECTION.replace_all(&s, "$1$3");
     // Re-promote isolated single-dash arrows (which result from bracketed
     // modifiers next to a single dash, e.g. `A -[#blue] B`) into standard
@@ -1144,38 +1494,177 @@ fn strip_arrow_modifiers(line: &str) -> String {
     }
 }
 
-/// Parse the relationship kind and whether the line style is dashed.
-fn parse_relationship_kind(s: &str) -> (RelationshipKind, bool) {
+/// Parse the relationship kind, whether the line style is dashed, and which
+/// endpoint carries PlantUML's built-in decoration.
+fn parse_relationship_kind(s: &str) -> (RelationshipKind, bool, RelationshipEnd) {
     if s.contains("<|--") || s.contains("--|>") || s.contains("<|--|>") {
-        (RelationshipKind::Inheritance, false)
+        let decorated_end = if s.contains("<|--|>") {
+            RelationshipEnd::Both
+        } else if s.contains("<|--") {
+            RelationshipEnd::From
+        } else {
+            RelationshipEnd::To
+        };
+        (RelationshipKind::Inheritance, false, decorated_end)
     } else if s.contains("..|>") || s.contains("<|..") {
-        (RelationshipKind::Implementation, true)
+        let decorated_end = if s.contains("<|..") {
+            RelationshipEnd::From
+        } else {
+            RelationshipEnd::To
+        };
+        (RelationshipKind::Implementation, true, decorated_end)
     } else if s.contains("*--") || s.contains("--*") {
-        (RelationshipKind::Composition, false)
+        let decorated_end = if s.contains("*--") {
+            RelationshipEnd::From
+        } else {
+            RelationshipEnd::To
+        };
+        (RelationshipKind::Composition, false, decorated_end)
     } else if s.contains("o--") || s.contains("--o") {
-        (RelationshipKind::Aggregation, false)
+        let decorated_end = if s.contains("o--") {
+            RelationshipEnd::From
+        } else {
+            RelationshipEnd::To
+        };
+        (RelationshipKind::Aggregation, false, decorated_end)
     } else if s.contains("..>") || s.contains("<..") {
         // Dashed dependency (..>)
-        (RelationshipKind::Dependency, true)
-    } else if s.contains("-->") || s.contains("<--") || s == "->" || s == "<-" || s == "<-->" {
+        let decorated_end = if s.contains("<..") {
+            RelationshipEnd::From
+        } else {
+            RelationshipEnd::To
+        };
+        (RelationshipKind::Dependency, true, decorated_end)
+    } else if s.contains("-->")
+        || s.contains("<--")
+        || s.contains("->>")
+        || s == "->"
+        || s == "<-"
+        || s == "<-->"
+        || s == "<->"
+    {
         // Solid dependency (-->)
-        (RelationshipKind::Dependency, false)
+        let decorated_end = if s == "<-->" || s == "<->" {
+            RelationshipEnd::Both
+        } else if s.contains("<--") || s == "<-" {
+            RelationshipEnd::From
+        } else {
+            RelationshipEnd::To
+        };
+        (RelationshipKind::Dependency, false, decorated_end)
     } else if s.contains("..") {
         // Dashed association (..)
-        (RelationshipKind::Association, true)
+        (RelationshipKind::Association, true, RelationshipEnd::None)
     } else {
         // Plain association (-- or ---- etc.)
-        (RelationshipKind::Association, false)
+        (RelationshipKind::Association, false, RelationshipEnd::None)
     }
 }
 
-/// Extract `text:colour` from the entity shorthand
-/// `#back:colour;line:colour;line.bold;text:colour` (any order). Returns the
-/// raw colour token (e.g. `"blue"` or `"#FF0000"`) so the renderer can map it
-/// to a CSS-compatible `fill`.
-fn extract_text_color(line: &str) -> Option<String> {
-    static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"text:([#A-Za-z0-9]+)").unwrap());
-    RE.captures(line).map(|c| c[1].to_string())
+/// PlantUML `StringWithArrow` treats a lone, leading, or trailing `<`/`>` in
+/// a single-line relationship label as a directional guide arrow and removes
+/// it from the text passed to SVEK.
+fn parse_label_arrow(label: Option<&str>) -> (Option<String>, LinkArrow) {
+    let Some(label) = label else {
+        return (None, LinkArrow::None);
+    };
+    let label = label.trim();
+    let label = label
+        .strip_prefix('"')
+        .and_then(|s| s.strip_suffix('"'))
+        .unwrap_or(label);
+
+    if label.contains("\\n") || label.contains('\n') {
+        return (Some(label.to_string()), LinkArrow::None);
+    }
+
+    let (text, arrow) = if label == "<" {
+        (None, LinkArrow::Backward)
+    } else if label == ">" {
+        (None, LinkArrow::Direct)
+    } else if let Some(text) = label.strip_prefix("< ") {
+        (Some(text.trim().to_string()), LinkArrow::Backward)
+    } else if let Some(text) = label.strip_prefix("> ") {
+        (Some(text.trim().to_string()), LinkArrow::Direct)
+    } else if let Some(text) = label.strip_suffix(" >") {
+        (Some(text.trim().to_string()), LinkArrow::Direct)
+    } else if let Some(text) = label.strip_suffix(" <") {
+        (Some(text.trim().to_string()), LinkArrow::Backward)
+    } else {
+        (Some(label.to_string()), LinkArrow::None)
+    };
+    (text.filter(|text| !text.is_empty()), arrow)
+}
+
+fn parse_endpoint_decor(s: &str) -> Option<EndpointDecor> {
+    match s {
+        "}" | "{" => Some(EndpointDecor::CrowFoot),
+        "}o" | "o{" => Some(EndpointDecor::CircleCrowFoot),
+        "|o" | "o|" => Some(EndpointDecor::CircleLine),
+        "||" => Some(EndpointDecor::DoubleLine),
+        "}|" | "|{" => Some(EndpointDecor::LineCrowFoot),
+        _ => None,
+    }
+}
+
+#[derive(Default)]
+struct ParsedEntityColors {
+    back: Option<String>,
+    line: Option<String>,
+    text: Option<String>,
+    line_style: Option<EntityLineStyle>,
+}
+
+/// Port of PlantUML `Colors(String, HColorSet, ColorType)`: split the entity
+/// color suffix on semicolons, route named channels independently, and retain
+/// the specific line stroke. The terminating-character check excludes custom
+/// spot colors inside `<< (X,#RRGGBB) Name >>`.
+fn parse_entity_colors(line: &str) -> ParsedEntityColors {
+    static RE: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r"#([A-Za-z0-9.:;|/\\#-]+)(?:\s|\{|$)").unwrap());
+    let Some(raw) = RE
+        .captures_iter(line)
+        .last()
+        .map(|caps| caps[1].replace('#', ""))
+    else {
+        return ParsedEntityColors::default();
+    };
+
+    let lower = raw.to_ascii_lowercase();
+    let line_style = if lower.contains("line.dashed") {
+        Some(EntityLineStyle::Dashed)
+    } else if lower.contains("line.dotted") {
+        Some(EntityLineStyle::Dotted)
+    } else if lower.contains("line.bold") {
+        Some(EntityLineStyle::Bold)
+    } else {
+        None
+    };
+    let mut colors = ParsedEntityColors {
+        line_style,
+        ..ParsedEntityColors::default()
+    };
+    for token in raw.split(';').filter(|token| !token.is_empty()) {
+        let Some((name, value)) = token.split_once(':') else {
+            if !token.contains('.') {
+                colors.back = Some(format!("#{token}"));
+            }
+            continue;
+        };
+        match name
+            .split('.')
+            .next()
+            .unwrap_or_default()
+            .to_ascii_lowercase()
+            .as_str()
+        {
+            "back" => colors.back = Some(value.to_string()),
+            "line" => colors.line = Some(value.to_string()),
+            "text" => colors.text = Some(value.to_string()),
+            _ => {}
+        }
+    }
+    colors
 }
 
 fn parse_member(s: &str) -> Member {
@@ -1193,15 +1682,7 @@ fn parse_member(s: &str) -> Member {
         text = text.replace("{abstract}", "").trim().to_string();
     }
 
-    // Convert <<stereotype>> notation to «stereotype» guillemets.
-    while let Some(start) = text.find("<<") {
-        if let Some(end) = text[start..].find(">>") {
-            let inner = text[start + 2..start + end].to_string();
-            text = format!("{}«{}»{}", &text[..start], inner, &text[start + end + 2..]);
-        } else {
-            break;
-        }
-    }
+    text = normalize_inline_stereotypes(&text);
 
     // Parse visibility prefix. Double-character creole markers (`**`, `--`,
     // `~~`, `__`) take precedence over visibility prefixes that share the
@@ -1277,13 +1758,13 @@ fn parse_member(s: &str) -> Member {
 
 /// Process a stereotype string that may contain spot notation `(S,#color) Name`.
 ///
-/// Returns the stereotype display text and the hex spot color (with leading
-/// `#`) when the spot uses a hex code. PlantUML's behavior:
+/// Returns the stereotype display text, character, and hex spot color (with
+/// leading `#`) when the spot uses valid spot syntax. PlantUML's behavior:
 /// - Named color (e.g. `#red`, `#blue`): keep the full `(S,#color) Name` prefix
 ///   in the text and return no spot color (named colors don't fill the circle).
 /// - Hex code (e.g. `#FF7700`, `#00AAFF`): strip the `(S,#color)` prefix,
 ///   returning just the name plus the hex color for the circle fill.
-fn process_spot_stereotype_with_color(s: &str) -> (String, Option<String>) {
+fn process_spot_stereotype(s: &str) -> (String, Option<char>, Option<String>) {
     let s = s.trim();
     // Look for spot notation: `(X,#color) Name`
     if let Some(rest) = s.strip_prefix('(')
@@ -1293,21 +1774,59 @@ fn process_spot_stereotype_with_color(s: &str) -> (String, Option<String>) {
         let after = rest[close + 1..].trim();
         // spot_inner should be like `A,#red` or `F,#FF7700`
         if let Some(comma) = spot_inner.find(',') {
+            let character = spot_inner[..comma].trim();
             let color_part = spot_inner[comma + 1..].trim();
             if let Some(color_hex) = color_part.strip_prefix('#') {
                 // strip leading #
                 let is_hex =
                     !color_hex.is_empty() && color_hex.chars().all(|c| c.is_ascii_hexdigit());
-                if is_hex {
+                let valid_character = character.len() == 1
+                    && character
+                        .chars()
+                        .all(|c| c.is_ascii_alphanumeric() || c == '_');
+                if is_hex && color_hex.len() == 6 && valid_character {
                     // Hex color: strip spot prefix, return just the name and
                     // capture the hex color for the circle fill.
-                    return (after.to_string(), Some(format!("#{color_hex}")));
+                    return (
+                        after.to_string(),
+                        character.chars().next(),
+                        Some(format!("#{color_hex}")),
+                    );
                 }
             }
         }
     }
     // Named color or no spot notation: return as-is.
-    (s.to_string(), None)
+    (s.to_string(), None, None)
+}
+
+fn normalize_inline_stereotypes(s: &str) -> String {
+    let mut text = s.to_string();
+    while let Some(start) = text.find("<<") {
+        if let Some(end) = text[start..].find(">>") {
+            let inner = text[start + 2..start + end].to_string();
+            text = format!("{}«{}»{}", &text[..start], inner, &text[start + end + 2..]);
+        } else {
+            break;
+        }
+    }
+    text
+}
+
+fn text_outside_double_quotes(s: &str) -> String {
+    let mut out = String::with_capacity(s.len());
+    let mut in_quote = false;
+    for ch in s.chars() {
+        if ch == '"' {
+            in_quote = !in_quote;
+            out.push(' ');
+        } else if in_quote {
+            out.push(' ');
+        } else {
+            out.push(ch);
+        }
+    }
+    out
 }
 
 /// Strip Creole/HTML markup from a display name to produce a plain identifier.
@@ -1356,14 +1875,37 @@ mod tests {
     }
 
     #[test]
+    fn multiline_title_preserves_lines() {
+        let d = parse("title\n  My Class Diagram\n  Version 1.0\nend title\nclass A");
+        assert_eq!(
+            d.meta.title.as_deref(),
+            Some("My Class Diagram\nVersion 1.0")
+        );
+    }
+
+    #[test]
     fn entity_types() {
-        let d = parse("class A\nabstract class B\ninterface C\nenum D\nannotation E\nentity F");
+        let d = parse(
+            "class A\nabstract class B\ninterface C\nenum D\nannotation E\nentity F\nstate G",
+        );
         assert_eq!(d.entities[0].kind, EntityKind::Class);
         assert_eq!(d.entities[1].kind, EntityKind::AbstractClass);
         assert_eq!(d.entities[2].kind, EntityKind::Interface);
         assert_eq!(d.entities[3].kind, EntityKind::Enum);
         assert_eq!(d.entities[4].kind, EntityKind::Annotation);
         assert_eq!(d.entities[5].kind, EntityKind::Entity);
+        assert_eq!(d.entities[6].kind, EntityKind::State);
+    }
+
+    #[test]
+    fn symbol_entity_declarations() {
+        let d = parse("class Foo\ncircle Bar\ndiamond Baz");
+        assert_eq!(d.entities[1].id, "Bar");
+        assert_eq!(d.entities[1].kind, EntityKind::Circle);
+        assert_eq!(d.entities[1].source_line, 2);
+        assert_eq!(d.entities[2].id, "Baz");
+        assert_eq!(d.entities[2].kind, EntityKind::Diamond);
+        assert_eq!(d.entities[2].source_line, 3);
     }
 
     #[test]
@@ -1410,6 +1952,18 @@ mod tests {
     }
 
     #[test]
+    fn qualified_relationship_endpoint_resolves_package_member() {
+        let d = parse(
+            "package service {\n  class UserService\n}\npackage model {\n  class User\n}\nservice.UserService ..> model.User",
+        );
+
+        assert_eq!(d.entities.len(), 2);
+        assert_eq!(d.relationships.len(), 1);
+        assert_eq!(d.relationships[0].from, "UserService");
+        assert_eq!(d.relationships[0].to, "User");
+    }
+
+    #[test]
     fn package() {
         let d = parse("package com.example {\n  class Foo\n  class Bar\n}");
         assert_eq!(d.packages.len(), 1);
@@ -1424,11 +1978,119 @@ mod tests {
     }
 
     #[test]
+    fn hex_spot_stereotype_preserves_arbitrary_character() {
+        let d = parse("class Renamed << (G,#12ABEF) NewKind >>");
+        let entity = &d.entities[0];
+        assert_eq!(entity.stereotypes, vec!["NewKind"]);
+        assert_eq!(entity.spot_character, Some('G'));
+        assert_eq!(entity.spot_color.as_deref(), Some("#12ABEF"));
+    }
+
+    #[test]
+    fn invalid_spot_syntax_remains_stereotype_text() {
+        for source in [
+            "class Named << (G,#red) NewKind >>",
+            "class Punctuated << (!,#12ABEF) NewKind >>",
+        ] {
+            let entity = &parse(source).entities[0];
+            assert!(entity.stereotypes[0].starts_with('('));
+            assert_eq!(entity.spot_character, None);
+            assert_eq!(entity.spot_color, None);
+        }
+    }
+
+    #[test]
+    fn entity_color_channels_and_stroke_are_independent() {
+        let entity =
+            &parse("class Renamed #back:azure;line:#12ABEF;line.dashed;text:navy").entities[0];
+        assert_eq!(entity.color.as_deref(), Some("azure"));
+        assert_eq!(entity.line_color.as_deref(), Some("12ABEF"));
+        assert_eq!(entity.text_color.as_deref(), Some("navy"));
+        assert_eq!(entity.line_style, Some(EntityLineStyle::Dashed));
+    }
+
+    #[test]
+    fn quoted_alias_label_keeps_inline_stereotype_text() {
+        let d = parse("class \"**BoundaryClass** <<boundary>>\" as C");
+        let e = &d.entities[0];
+        assert_eq!(e.id, "C");
+        assert_eq!(e.label, "**BoundaryClass** «boundary»");
+        assert!(e.stereotypes.is_empty());
+    }
+
+    #[test]
+    fn quoted_alias_stereotype_after_alias_is_entity_stereotype() {
+        let d = parse("class \"Service\" as C <<service>>");
+        let e = &d.entities[0];
+        assert_eq!(e.id, "C");
+        assert_eq!(e.label, "Service");
+        assert_eq!(e.stereotypes, vec!["service"]);
+    }
+
+    #[test]
+    fn redeclared_entity_replaces_explicit_stereotypes() {
+        let d = parse("class Foo <<service>>\nclass Foo <<controller>>");
+        assert_eq!(d.entities.len(), 1);
+        assert_eq!(d.entities[0].stereotypes, vec!["controller"]);
+    }
+
+    #[test]
+    fn skinparam_stereotype_block_flattens() {
+        let d = parse("skinparam class<<service>> {\n  FontStyle bold\n}\nclass User <<service>>");
+        assert!(
+            d.meta
+                .skinparams
+                .iter()
+                .any(|sp| { sp.key == "class<<service>>FontStyle" && sp.value == "bold" })
+        );
+    }
+
+    #[test]
+    fn entity_gradient_color_is_captured_as_one_token() {
+        let d = parse("class Foo #red|blue {\n  field: String\n}");
+        assert_eq!(d.entities[0].color.as_deref(), Some("#red|blue"));
+    }
+
+    #[test]
+    fn object_declaration_keeps_object_kind_in_class_diagram() {
+        let d = parse("class Person\nobject alice\nPerson <|.. alice");
+        let object = d.entities.iter().find(|e| e.id == "alice").unwrap();
+        assert_eq!(object.kind, EntityKind::Object);
+    }
+
+    #[test]
+    fn multiline_decoration_blocks_preserve_line_breaks() {
+        let d = parse(
+            "header\n  Company Name\n  Page %page%\nendheader\nfooter\n  Generated by RustUML\n  Date: %date%\nendfooter\nlegend right\n  First\n  Second\nendlegend\nclass Foo",
+        );
+
+        assert_eq!(d.meta.header.as_deref(), Some("Company Name\nPage %page%"));
+        assert_eq!(
+            d.meta.footer.as_deref(),
+            Some("Generated by RustUML\nDate: %date%")
+        );
+        assert_eq!(d.meta.legend.as_deref(), Some("First\nSecond"));
+    }
+
+    #[test]
     fn enum_values() {
         let d = parse("enum Color {\n  RED\n  GREEN\n  BLUE\n}");
         assert_eq!(d.entities[0].kind, EntityKind::Enum);
         assert_eq!(d.entities[0].members.len(), 3);
         assert_eq!(d.entities[0].members[0].name, "RED");
+    }
+
+    #[test]
+    fn enum_constructor_constants_before_separator_are_fields() {
+        let d = parse(
+            "enum Planet {\n  MERCURY (3.303e+23, 2.4397e6)\n  VENUS (4.869e+24, 6.0518e6)\n  --\n  +surfaceGravity(): double\n}",
+        );
+        let e = &d.entities[0];
+        assert_eq!(e.kind, EntityKind::Enum);
+        assert_eq!(e.members[0].kind, MemberKind::Field);
+        assert_eq!(e.members[1].kind, MemberKind::Field);
+        assert_eq!(e.members[2].kind, MemberKind::Separator);
+        assert_eq!(e.members[3].kind, MemberKind::Method);
     }
 
     #[test]
@@ -1439,10 +2101,43 @@ mod tests {
 
     #[test]
     fn generics() {
+        // The trailing `<...>` is a generic type parameter, captured separately
+        // and stripped from the entity id/label (it must not pollute the
+        // qualified name, which is keyed on the bare name for edge lookup).
         let d = parse("class Container<T>\nclass Map<K, V>");
         assert_eq!(d.entities.len(), 2);
-        assert_eq!(d.entities[0].id, "Container<T>");
-        assert_eq!(d.entities[1].id, "Map<K, V>");
+        assert_eq!(d.entities[0].id, "Container");
+        assert_eq!(d.entities[0].label, "Container");
+        assert_eq!(d.entities[0].generic.as_deref(), Some("T"));
+        assert_eq!(d.entities[1].id, "Map");
+        assert_eq!(d.entities[1].generic.as_deref(), Some("K, V"));
+    }
+
+    #[test]
+    fn nested_generics() {
+        let d = parse("class Foo<T extends Comparable<T>>");
+        assert_eq!(d.entities[0].id, "Foo");
+        assert_eq!(
+            d.entities[0].generic.as_deref(),
+            Some("T extends Comparable<T>")
+        );
+    }
+
+    #[test]
+    fn inline_empty_body_after_extends_is_not_a_supertype() {
+        let d = parse("class Animal\nclass Dog extends Animal {}\nclass Cat extends Animal { }");
+        assert_eq!(d.entities.len(), 3);
+        assert!(d.entities.iter().any(|e| e.id == "Animal"));
+        assert!(d.entities.iter().any(|e| e.id == "Dog"));
+        assert!(d.entities.iter().any(|e| e.id == "Cat"));
+        assert!(!d.entities.iter().any(|e| e.id == "{}"));
+        assert!(!d.entities.iter().any(|e| e.id == "{"));
+        assert_eq!(d.relationships.len(), 2);
+        assert!(
+            d.relationships
+                .iter()
+                .all(|rel| rel.to == "Animal" && rel.kind == RelationshipKind::Inheritance)
+        );
     }
 
     #[test]
@@ -1463,11 +2158,96 @@ mod tests {
     }
 
     #[test]
+    fn long_directional_arrows_are_dependencies() {
+        let d = parse("A ---> B\nA ----> C");
+        assert_eq!(d.relationships.len(), 2);
+        assert_eq!(d.relationships[0].kind, RelationshipKind::Dependency);
+        assert_eq!(d.relationships[1].kind, RelationshipKind::Dependency);
+        assert!(!d.relationships[0].dashed);
+        assert!(!d.relationships[1].dashed);
+    }
+
+    #[test]
+    fn dotted_thick_dependency() {
+        let d = parse("A ..>> B : dotted thick");
+        assert_eq!(d.relationships.len(), 1);
+        assert_eq!(d.relationships[0].kind, RelationshipKind::Dependency);
+        assert!(d.relationships[0].dashed);
+        assert_eq!(d.relationships[0].label.as_deref(), Some("dotted thick"));
+    }
+
+    #[test]
+    fn class_dependency_arrow_variants() {
+        let d = parse("A <-> B\nA ->> B\nA -->> B\nA <-->> B\nA ...> B");
+        assert_eq!(d.relationships.len(), 5);
+        assert!(
+            d.relationships
+                .iter()
+                .all(|rel| rel.kind == RelationshipKind::Dependency)
+        );
+        assert!(!d.relationships[0].dashed);
+        assert!(!d.relationships[1].dashed);
+        assert!(!d.relationships[2].dashed);
+        assert!(!d.relationships[3].dashed);
+        assert!(d.relationships[4].dashed);
+    }
+
+    #[test]
     fn relationship_multiplicity() {
         let d = parse(r#"Company "1" o-- "1..*" Department"#);
         assert_eq!(d.relationships.len(), 1);
         assert_eq!(d.relationships[0].from_multiplicity.as_deref(), Some("1"));
         assert_eq!(d.relationships[0].to_multiplicity.as_deref(), Some("1..*"));
+    }
+
+    #[test]
+    fn relationship_label_arrows_are_separate_from_label_text() {
+        let d = parse(
+            "A -- B : < renamed backward\n\
+             B -- C : renamed direct >\n\
+             C -- D : >\n\
+             D -- E : \"< quoted label\"",
+        );
+        assert_eq!(d.relationships.len(), 4);
+        assert_eq!(
+            d.relationships[0].label.as_deref(),
+            Some("renamed backward")
+        );
+        assert_eq!(d.relationships[0].label_arrow, LinkArrow::Backward);
+        assert_eq!(d.relationships[1].label.as_deref(), Some("renamed direct"));
+        assert_eq!(d.relationships[1].label_arrow, LinkArrow::Direct);
+        assert_eq!(d.relationships[2].label, None);
+        assert_eq!(d.relationships[2].label_arrow, LinkArrow::Direct);
+        assert_eq!(d.relationships[3].label.as_deref(), Some("quoted label"));
+        assert_eq!(d.relationships[3].label_arrow, LinkArrow::Backward);
+    }
+
+    #[test]
+    fn er_crowfoot_endpoint_decorations_are_preserved() {
+        let d = parse(
+            "AlphaZero ||--o| BetaZero : maybe\n\
+             GammaMany }|--|{ DeltaMany\n\
+             EchoOptional }o--|| FoxtrotOne",
+        );
+        assert_eq!(d.relationships.len(), 3);
+        assert_eq!(
+            d.relationships[0].from_decor,
+            Some(EndpointDecor::DoubleLine)
+        );
+        assert_eq!(d.relationships[0].to_decor, Some(EndpointDecor::CircleLine));
+        assert_eq!(
+            d.relationships[1].from_decor,
+            Some(EndpointDecor::LineCrowFoot)
+        );
+        assert_eq!(
+            d.relationships[1].to_decor,
+            Some(EndpointDecor::LineCrowFoot)
+        );
+        assert_eq!(
+            d.relationships[2].from_decor,
+            Some(EndpointDecor::CircleCrowFoot)
+        );
+        assert_eq!(d.relationships[2].to_decor, Some(EndpointDecor::DoubleLine));
     }
 
     #[test]

@@ -4,7 +4,7 @@
 //! Creole markup — converts PlantUML text markup to SVG tspan elements.
 //!
 //! Supports inline markup (**bold**, //italic//, __underline__, --strikethrough--,
-//! `<b>`, `<i>`, `<u>`, `<s>` HTML-style tags) and line-level constructs:
+//! `<b>`, `<i>`, `<u>`, `<s>`, `<w>` HTML-style tags) and line-level constructs:
 //! tables (`|= Header | data |`), tree structures (`|_ node`),
 //! horizontal rules (`----`, `====`, `....`), and nested lists (`*`, `**`, `#`).
 
@@ -68,7 +68,7 @@ fn to_svg_tspans_inner(text: &str, skip_underline: bool) -> String {
                 // Tilde escape — if the next chars form a recognized multi-character
                 // delimiter, escape the whole delimiter so it is emitted literally.
                 // If the next char is a single markup-start char (e.g. `/`, `*`,
-                // `-`, `_`, `~`, `"`, `` ` ``), consume the `~` and emit the char.
+                // `-`, `_`, `~`, `"`, `<`, `` ` ``), consume the `~` and emit the char.
                 // Otherwise emit `~` literally and leave the next char for the main loop.
                 let mut peeked = chars.clone().take(2);
                 let c1 = peeked.next();
@@ -90,10 +90,15 @@ fn to_svg_tspans_inner(text: &str, skip_underline: bool) -> String {
                 } else if let Some(next_ch) = c1 {
                     // Single markup-start chars: consume `~` and emit the char.
                     // For non-markup chars: emit `~` literally, leave the char for the loop.
-                    let is_markup_char = matches!(next_ch, '/' | '*' | '-' | '_' | '~' | '"' | '`');
+                    let is_markup_char =
+                        matches!(next_ch, '/' | '*' | '-' | '_' | '~' | '"' | '<' | '`');
                     if is_markup_char {
                         chars.next(); // consume the markup char
-                        result.push(next_ch);
+                        if next_ch == '<' {
+                            result.push_str("&lt;");
+                        } else {
+                            result.push(next_ch);
+                        }
                         last_char = Some(next_ch);
                     } else {
                         // Non-markup char: tilde is literal.
@@ -101,16 +106,26 @@ fn to_svg_tspans_inner(text: &str, skip_underline: bool) -> String {
                         last_char = Some('~');
                         // Leave next_ch for the main loop to process.
                     }
+                } else {
+                    // Lone trailing tilde is literal.
+                    result.push('~');
+                    last_char = Some('~');
                 }
-                // If c1 is None (~ at end of string), nothing to emit.
             }
             '"' if chars.peek() == Some(&'"') => {
                 chars.next();
                 // ""monospace"" — collect until closing ""
-                let (content, _found) = collect_until(&mut chars, "\"\"");
-                let content = monospace_spaces(&content);
-                write!(result, "<tspan font-family=\"monospace\">{content}</tspan>").unwrap();
-                last_char = content.chars().last();
+                let (content, found) = collect_until(&mut chars, "\"\"");
+                if found {
+                    let content = monospace_spaces(&content);
+                    write!(result, "<tspan font-family=\"monospace\">{content}</tspan>").unwrap();
+                    last_char = content.chars().last();
+                } else {
+                    // Unterminated `""` (e.g. `default ""`): literal quotes.
+                    result.push_str("\"\"");
+                    result.push_str(&escape_creole_text(&content));
+                    last_char = content.chars().last().or(Some('"'));
+                }
             }
             '`' => {
                 // `code` backtick monospace
@@ -137,11 +152,15 @@ fn to_svg_tspans_inner(text: &str, skip_underline: bool) -> String {
                 }
             }
             '/' if chars.peek() == Some(&'/') => {
-                // `//italic//` — but only start italic if preceded by whitespace
-                // or at the start of the string. This prevents `http://url`
-                // from being treated as italic markup.
-                let preceded_by_word = last_char.map(|c| !c.is_whitespace()).unwrap_or(false);
-                if preceded_by_word {
+                // `//italic//` opens an italic run. PlantUML only suppresses
+                // this when the `//` directly follows a URL scheme separator
+                // (`http://`, `ftp://`, …) — i.e. the preceding char is `:`.
+                // Otherwise `//` is italic markup even when glued to
+                // punctuation (e.g. `process(//italicText//)`). The closing
+                // `//` requirement (`found`) already keeps single-slash URLs
+                // literal, so only the scheme prefix needs guarding.
+                let preceded_by_scheme = last_char == Some(':');
+                if preceded_by_scheme {
                     // Treat as two literal `/` characters.
                     result.push('/');
                     result.push('/');
@@ -264,25 +283,9 @@ fn to_svg_tspans_inner(text: &str, skip_underline: bool) -> String {
                         )
                         .unwrap();
                     }
-                    "strong" => {
-                        let content = collect_until_tag(&mut chars, "</strong>");
-                        let inner = to_svg_tspans_inner(&content, skip_underline);
-                        write!(result, "<tspan font-weight=\"bold\">{inner}</tspan>").unwrap();
-                    }
-                    "em" => {
-                        let content = collect_until_tag(&mut chars, "</em>");
-                        let inner = to_svg_tspans_inner(&content, skip_underline);
-                        write!(result, "<tspan font-style=\"italic\">{inner}</tspan>").unwrap();
-                    }
-                    "ins" => {
-                        let content = collect_until_tag(&mut chars, "</ins>");
-                        let inner = to_svg_tspans_inner(&content, skip_underline);
-                        write!(
-                            result,
-                            "<tspan text-decoration=\"underline\">{inner}</tspan>"
-                        )
-                        .unwrap();
-                    }
+                    // `<strong>`, `<em>`, `<ins>` are not part of PlantUML's
+                    // HTML subset; they fall through to the unknown-tag arm
+                    // and render literally.
                     "sub" => {
                         let content = collect_until_tag(&mut chars, "</sub>");
                         let inner = to_svg_tspans_inner(&content, skip_underline);
@@ -823,6 +826,10 @@ pub struct Style {
     pub baseline_shift: Option<&'static str>,
     /// Hyperlink target from `[[url label]]`; carries blue underline styling.
     pub link_url: Option<String>,
+    /// Optional hyperlink tooltip from `[[url{tooltip} label]]`; becomes the
+    /// `<a>` element's `title` / `xlink:title`. Falls back to the URL when
+    /// absent.
+    pub link_title: Option<String>,
     /// Background colour from `<back:color>...</back>`, normalised to upper-
     /// case `#RRGGBB`. The renderer emits an SVG `<filter>` per unique value
     /// and references it via `filter="url(#...)"` on the matching `<text>`.
@@ -863,13 +870,19 @@ pub fn stripped_text(text: &str) -> String {
         .collect()
 }
 
+/// Like [`stripped_text`] but treats `__` as literal underscores (matching
+/// contexts — class entity/link labels — where `__` is not underline markup).
+pub fn stripped_text_no_underline(text: &str) -> String {
+    parse_segments_no_underline(text)
+        .into_iter()
+        .map(|s| unescape_for_metrics(&s.text))
+        .collect()
+}
+
 /// Reverse the XML escaping applied during segment building so the result
 /// matches the source string a font-metric calculation expects.
 fn unescape_for_metrics(s: &str) -> String {
-    s.replace("&amp;", "&")
-        .replace("&lt;", "<")
-        .replace("&gt;", ">")
-        .replace("&quot;", "\"")
+    crate::text_render::single_pass_unescape(s)
 }
 
 fn parse_segments_inner(text: &str, skip_underline: bool) -> Vec<Segment> {
@@ -962,7 +975,8 @@ fn walk_segments(text: &str, style: &Style, skip_underline: bool, out: &mut Vec<
                     buf.push(ch2);
                     last_char = Some(ch2);
                 } else if let Some(next_ch) = c1 {
-                    let is_markup_char = matches!(next_ch, '/' | '*' | '-' | '_' | '~' | '"' | '`');
+                    let is_markup_char =
+                        matches!(next_ch, '/' | '*' | '-' | '_' | '~' | '"' | '<' | '`');
                     if is_markup_char {
                         chars.next();
                         buf.push(next_ch);
@@ -971,16 +985,27 @@ fn walk_segments(text: &str, style: &Style, skip_underline: bool, out: &mut Vec<
                         buf.push('~');
                         last_char = Some('~');
                     }
+                } else {
+                    buf.push('~');
+                    last_char = Some('~');
                 }
             }
             '"' if chars.peek() == Some(&'"') => {
                 chars.next();
-                let (content, _found) = collect_until(&mut chars, "\"\"");
+                let (content, found) = collect_until(&mut chars, "\"\"");
                 flush_buf!();
-                let mut nested = style.clone();
-                nested.monospace = true;
-                walk_segments(&content, &nested, skip_underline, out);
-                last_char = content.chars().last();
+                if found {
+                    let mut nested = style.clone();
+                    nested.monospace = true;
+                    walk_segments(&content, &nested, skip_underline, out);
+                    last_char = content.chars().last();
+                } else {
+                    // Unterminated `""` (e.g. `default ""`): literal quotes,
+                    // not an open monospace run.
+                    push_literal(out, "\"\"", style);
+                    push_literal(out, &content, style);
+                    last_char = content.chars().last().or(Some('"'));
+                }
             }
             '`' => {
                 let content = collect_until_char(&mut chars, '`');
@@ -1006,8 +1031,11 @@ fn walk_segments(text: &str, style: &Style, skip_underline: bool, out: &mut Vec<
                 }
             }
             '/' if chars.peek() == Some(&'/') => {
-                let preceded_by_word = last_char.map(|c| !c.is_whitespace()).unwrap_or(false);
-                if preceded_by_word {
+                // `//` opens an italic run unless it directly follows a URL
+                // scheme separator (`http://`); see the matching note in
+                // `to_svg_tspans_inner`.
+                let preceded_by_scheme = last_char == Some(':');
+                if preceded_by_scheme {
                     buf.push('/');
                     buf.push('/');
                     chars.next();
@@ -1098,8 +1126,12 @@ fn walk_segments(text: &str, style: &Style, skip_underline: bool, out: &mut Vec<
                         None => break,
                     }
                 }
+                // A `{tooltip}` segment becomes the link's title attribute and
+                // is stripped before URL/label parsing.
+                let mut tooltip: Option<String> = None;
                 let inner = if let Some(brace) = inner.find('{') {
                     if let Some(end) = inner.find('}') {
+                        tooltip = Some(inner[brace + 1..end].to_string());
                         format!("{}{}", &inner[..brace], &inner[end + 1..])
                     } else {
                         inner
@@ -1129,6 +1161,7 @@ fn walk_segments(text: &str, style: &Style, skip_underline: bool, out: &mut Vec<
                 flush_buf!();
                 let mut nested = style.clone();
                 nested.link_url = Some(url.clone());
+                nested.link_title = tooltip;
                 nested.fill = Some("#0000FF".to_string());
                 nested.underline = true;
                 push_literal(out, display, &nested);
@@ -1151,29 +1184,34 @@ fn handle_tag(
     out: &mut Vec<Segment>,
 ) {
     match tag {
-        "b" | "strong" => walk_with(
+        // PlantUML's HTML subset supports only the short tags (`<b>`, `<i>`,
+        // `<u>`, `<s>`, `<w>`, `<del>`, `<strike>`, `<code>`, `<sub>`, `<sup>`,
+        // `<color:>`, `<size:>`, `<font:>`, `<back:>`, `<img:>`). The HTML5
+        // synonyms `<strong>`, `<em>`, `<ins>` are NOT recognized and render
+        // literally, so they deliberately fall through to the unknown-tag arm.
+        "b" | "B" => walk_with(
             chars,
-            "</b>".replace("b", tag),
+            format!("</{tag}>"),
             tag,
-            "strong",
+            "",
             style,
             |s| s.bold = true,
             skip_underline,
             out,
         ),
-        "i" | "em" => walk_with(
+        "i" | "I" => walk_with(
             chars,
             format!("</{tag}>"),
             tag,
-            "em",
+            "",
             style,
             |s| s.italic = true,
             skip_underline,
             out,
         ),
-        "u" => walk_with(
+        "u" | "U" => walk_with(
             chars,
-            "</u>".into(),
+            format!("</{tag}>"),
             tag,
             "",
             style,
@@ -1181,23 +1219,23 @@ fn handle_tag(
             skip_underline,
             out,
         ),
-        "ins" => walk_with(
+        "s" | "S" => walk_with(
             chars,
-            "</ins>".into(),
-            tag,
-            "",
-            style,
-            |s| s.underline = true,
-            skip_underline,
-            out,
-        ),
-        "s" => walk_with(
-            chars,
-            "</s>".into(),
+            format!("</{tag}>"),
             tag,
             "",
             style,
             |s| s.line_through = true,
+            skip_underline,
+            out,
+        ),
+        "w" | "W" => walk_with(
+            chars,
+            format!("</{tag}>"),
+            tag,
+            "",
+            style,
+            |s| s.wavy_underline = true,
             skip_underline,
             out,
         ),
@@ -1292,6 +1330,21 @@ fn handle_tag(
             nested.monospace = true;
             walk_segments(&content, &nested, skip_underline, out);
         }
+        _ if tag.starts_with("font ") && (tag.contains('\'') || tag.contains('"')) => {
+            let content = collect_until_tag(chars, "</font>");
+            let mut nested = style.clone();
+            nested.font_family = Some(tag["font ".len()..].to_string());
+            walk_segments(&content, &nested, skip_underline, out);
+        }
+        _ if tag.starts_with("font color=") || tag.starts_with("FONT COLOR=") => {
+            let content = collect_until_tag(chars, "</font>");
+            let mut nested = style.clone();
+            let color = tag["font color=".len()..].to_string();
+            if !color.is_empty() {
+                nested.fill = Some(color);
+            }
+            walk_segments(&content, &nested, skip_underline, out);
+        }
         _ if tag.starts_with("font") => {
             let content = collect_until_tag(chars, "</font>");
             walk_segments(&content, style, skip_underline, out);
@@ -1318,6 +1371,7 @@ fn handle_tag(
             };
             let mut nested = style.clone();
             nested.monospace = true;
+            nested.size = Some(14);
             push_segment(out, &fallback, &nested);
         }
         _ if tag.starts_with("&amp;") || tag.starts_with('&') => {
@@ -1385,6 +1439,13 @@ mod tests {
         }
     }
 
+    fn wavy_underline_style() -> Style {
+        Style {
+            wavy_underline: true,
+            ..Default::default()
+        }
+    }
+
     #[test]
     fn segments_plain_text() {
         assert_eq!(
@@ -1435,6 +1496,36 @@ mod tests {
         assert_eq!(
             parse_segments(r#"""mono activity"""#),
             vec![seg("mono\u{00a0}activity", mono_style())]
+        );
+    }
+
+    #[test]
+    fn segments_img_fallback_is_monospace_size_14() {
+        let mut style = mono_style();
+        style.size = Some(14);
+        assert_eq!(
+            parse_segments("<img:sprite.png>"),
+            vec![seg("(Cannot\u{00a0}decode)", style)]
+        );
+    }
+
+    #[test]
+    fn segments_quoted_font_attrs_become_family() {
+        let mut style = Style::default();
+        style.font_family = Some("color='red'".to_string());
+        assert_eq!(
+            parse_segments("<font color='red'>font color</font>"),
+            vec![seg("font color", style)]
+        );
+    }
+
+    #[test]
+    fn segments_unquoted_font_color_becomes_fill() {
+        let mut style = Style::default();
+        style.fill = Some("red".to_string());
+        assert_eq!(
+            parse_segments("<font color=red>Red Title</font>"),
+            vec![seg("Red Title", style)]
         );
     }
 
@@ -1493,9 +1584,61 @@ mod tests {
     }
 
     #[test]
+    fn uppercase_underline_tag_consumes_rest() {
+        let mut underlined = Style::default();
+        underlined.underline = true;
+        assert_eq!(
+            parse_segments_no_underline("Future<U> thenApply(Function<T,U> f)"),
+            vec![
+                seg("Future", Style::default()),
+                seg(" thenApply(Function&lt;T,U&gt; f)", underlined),
+            ]
+        );
+    }
+
+    #[test]
     fn segments_unmatched_bold_is_literal() {
         let segs = parse_segments("**no close");
         assert_eq!(segs, vec![seg("**no close", Style::default())]);
+    }
+
+    #[test]
+    fn segments_lone_trailing_tilde_is_literal() {
+        assert_eq!(
+            parse_segments("done~"),
+            vec![seg("done~", Style::default())]
+        );
+    }
+
+    #[test]
+    fn segments_tilde_escapes_less_than() {
+        assert_eq!(
+            parse_segments("~<code>"),
+            vec![seg("&lt;code&gt;", Style::default())]
+        );
+    }
+
+    #[test]
+    fn segments_wavy_underline_preserves_trailing_tilde() {
+        assert_eq!(
+            parse_segments("~~~not strike~~~"),
+            vec![
+                seg("~not strike", wavy_underline_style()),
+                seg("~", Style::default()),
+            ]
+        );
+    }
+
+    #[test]
+    fn segments_html_wavy_underline_tag() {
+        assert_eq!(
+            parse_segments("<w>wave</w> <W>upper</W>"),
+            vec![
+                seg("wave", wavy_underline_style()),
+                seg(" ", Style::default()),
+                seg("upper", wavy_underline_style()),
+            ]
+        );
     }
 
     #[test]
@@ -1591,6 +1734,16 @@ mod tests {
     fn tilde_single_char() {
         // ~ before a non-markup char is emitted literally; the next char is also emitted.
         assert_eq!(to_svg_tspans("~x"), "~x");
+    }
+
+    #[test]
+    fn tilde_trailing_char() {
+        assert_eq!(to_svg_tspans("done~"), "done~");
+    }
+
+    #[test]
+    fn tilde_escapes_less_than() {
+        assert_eq!(to_svg_tspans("~<"), "&lt;");
     }
 
     #[test]

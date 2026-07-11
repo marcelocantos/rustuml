@@ -1,0 +1,6 @@
+# (superseded 2026-05-31) Per-field geometry-coordinate tolerance now lives in
+# the comparator: compare_svg_strict tolerates ULP_GEOM_ATTRS values within
+# compare::GEOM_EPS (0.02px) of the golden, keeping every case IN the test mix
+# (structure/text/colours still byte-exact) instead of parking whole cases.
+# Genuine FP rounding noise passes via that epsilon; anything larger fails
+# honestly. This list is intentionally empty.

@@ -20,6 +20,7 @@ pub struct ArchimateDiagram {
 pub struct ArchimateElement {
     pub id: String,
     pub label: String,
+    pub source_line: usize,
     /// The Archimate layer (Business, Application, Technology, Motivation, Implementation).
     pub layer: ArchimateLayer,
     /// The element kind within the layer (Actor, Process, Component, Node, etc.).
@@ -72,7 +73,18 @@ pub struct ArchimateRelation {
     pub from: String,
     pub to: String,
     pub label: Option<String>,
+    pub source_line: usize,
     pub kind: ArchimateRelationKind,
+    pub direction: ArchimateRelationDirection,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum ArchimateRelationDirection {
+    Default,
+    Up,
+    Down,
+    Left,
+    Right,
 }
 
 /// Archimate relation kinds.
@@ -92,6 +104,33 @@ pub enum ArchimateRelationKind {
 }
 
 impl ArchimateRelationKind {
+    pub fn parse_name(s: &str) -> (Self, ArchimateRelationDirection) {
+        let (base, direction) = if let Some(base) = s.strip_suffix("_Up") {
+            (base, ArchimateRelationDirection::Up)
+        } else if let Some(base) = s.strip_suffix("_Down") {
+            (base, ArchimateRelationDirection::Down)
+        } else if let Some(base) = s.strip_suffix("_Left") {
+            (base, ArchimateRelationDirection::Left)
+        } else if let Some(base) = s.strip_suffix("_Right") {
+            (base, ArchimateRelationDirection::Right)
+        } else {
+            (s, ArchimateRelationDirection::Default)
+        };
+        let kind = match base {
+            "Association" => ArchimateRelationKind::Association,
+            "Composition" => ArchimateRelationKind::Composition,
+            "Aggregation" => ArchimateRelationKind::Aggregation,
+            "Serving" => ArchimateRelationKind::Serving,
+            "Realization" => ArchimateRelationKind::Realization,
+            "Triggering" => ArchimateRelationKind::Triggering,
+            s if s.starts_with("Access") => ArchimateRelationKind::Access,
+            "Influence" => ArchimateRelationKind::Influence,
+            "Assignment" => ArchimateRelationKind::Assignment,
+            _ => ArchimateRelationKind::Other,
+        };
+        (kind, direction)
+    }
+
     pub fn from_str_prefix(s: &str) -> Self {
         let base = s
             .strip_suffix("_Up")

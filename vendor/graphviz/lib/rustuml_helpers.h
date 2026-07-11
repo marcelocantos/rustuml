@@ -24,6 +24,10 @@ void rustuml_node_pos(Agnode_t *n, double *x, double *y);
 // Get the bounding box dimensions of a node (width/height in inches).
 void rustuml_node_size(Agnode_t *n, double *w, double *h);
 
+// Get a laid-out graph or subgraph bounding box in points.
+void rustuml_graph_bb(Agraph_t *g, double *ll_x, double *ll_y,
+                      double *ur_x, double *ur_y);
+
 // ── Edge spline access ──
 
 // Returns the number of bezier curves in the edge spline, or 0 if none.
@@ -42,6 +46,15 @@ size_t rustuml_edge_bezier_points(Agedge_t *e, size_t idx,
 void rustuml_edge_bezier_arrows(Agedge_t *e, size_t idx,
                                 int *sflag, double *sp_x, double *sp_y,
                                 int *eflag, double *ep_x, double *ep_y);
+
+// Get a solved edge label box. kind: 0 = center, 1 = tail, 2 = head.
+// Returns 1 when the requested label exists and has a solved position.
+int rustuml_edge_label_box(Agedge_t *e, int kind,
+                           double *x, double *y,
+                           double *width, double *height);
+
+// Apply renderer-measured dimensions carried in rustuml_* edge attributes.
+void rustuml_override_edge_label_dimensions(Agedge_t *e);
 
 #ifdef __cplusplus
 }

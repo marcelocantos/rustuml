@@ -29,7 +29,9 @@ pub mod ascii_class;
 pub mod ascii_state;
 pub mod board;
 pub mod class;
+pub mod cloud_shape;
 pub mod component;
+pub mod compress;
 pub mod creole;
 pub mod deployment;
 pub mod ditaa;
@@ -38,13 +40,16 @@ pub mod ebnf;
 pub mod eps;
 pub mod filter_registry;
 pub mod font_metrics;
+pub mod ftile;
 pub mod gantt;
 pub mod git_diagram;
+pub(crate) mod handwritten;
 pub mod json_diagram;
 pub mod layout_oracle;
 pub mod math;
 pub mod metrics;
 pub mod mindmap;
+mod non_ascii_widths;
 pub mod nwdiag;
 pub mod object;
 pub mod openiconic;
@@ -53,6 +58,7 @@ pub mod plantuml_metrics;
 pub mod png;
 pub mod regex_diagram;
 pub mod salt;
+pub mod scale;
 pub mod sequence;
 pub mod skinparam;
 pub mod sprite;
@@ -97,6 +103,38 @@ pub fn render_svg_with_theme(diagram: &Diagram, theme: &Theme) -> String {
     } else {
         skinparam::apply_skinparams(theme, meta_params)
     };
+    // Uniform geometric scaling (`skinparam dpi`/`scale`). No oracle on this
+    // path; render at base under full-precision formatting, then scale the
+    // final SVG by `k` with a single 4-dp rounding (matching PlantUML).
+    if let Some(directive) = scale::directive_from_meta(diagram.meta()) {
+        match directive {
+            scale::ScaleDirective::Factor(k) if k != 1.0 => {
+                let svg = plantuml_metrics::with_full_precision(|| {
+                    render_under_filter_registry(diagram, |d| {
+                        render_with_theme(d, &effective_theme)
+                    })
+                });
+                return scale::scale_svg_numbers(&svg, k);
+            }
+            scale::ScaleDirective::FitBox { .. }
+            | scale::ScaleDirective::FitMaxWidth(_)
+            | scale::ScaleDirective::FitMaxHeight(_) => {
+                let svg = plantuml_metrics::with_full_precision(|| {
+                    render_under_filter_registry(diagram, |d| {
+                        render_with_theme(d, &effective_theme)
+                    })
+                });
+                let Some(k) = scale::factor_for_fit_from_svg(&svg, directive) else {
+                    return svg;
+                };
+                if k != 1.0 {
+                    return scale::scale_svg_numbers(&svg, k);
+                }
+                return svg;
+            }
+            _ => {}
+        }
+    }
     render_under_filter_registry(diagram, |d| render_with_theme(d, &effective_theme))
 }
 
@@ -112,7 +150,71 @@ pub fn render_svg_with_oracle(diagram: &Diagram, oracle: Option<&OracleLayout>) 
     } else {
         skinparam::apply_skinparams(&Theme::default(), meta_params)
     };
+    // Uniform geometric scaling (`skinparam dpi`/`scale`). PlantUML lays the
+    // diagram out at base resolution and multiplies the *final* SVG by `k`,
+    // rounding once. We mirror that: the oracle (captured at golden, i.e.
+    // scaled, coordinates) is un-scaled by 1/k, the renderer runs at base under
+    // full-precision coordinate formatting (so no intermediate 4-dp rounding
+    // drifts when later multiplied), and the resulting SVG is scaled up by `k`
+    // with PlantUML's single 4-dp rounding.
+    if let Some(directive) = scale::directive_from_meta(diagram.meta()) {
+        let k = match directive {
+            scale::ScaleDirective::Factor(k) => Some(k),
+            scale::ScaleDirective::FitBox { .. }
+            | scale::ScaleDirective::FitMaxWidth(_)
+            | scale::ScaleDirective::FitMaxHeight(_) => oracle.and_then(|o| {
+                scale::factor_for_fit_from_scaled_oracle_size(
+                    o.canvas_width,
+                    o.canvas_height,
+                    directive,
+                )
+            }),
+        };
+        if let Some(k) = k
+            && k != 1.0
+        {
+            let base_oracle = oracle.map(|o| {
+                let mut b = o.clone();
+                scale::scale_oracle_layout(&mut b, 1.0 / k);
+                b
+            });
+            let svg = plantuml_metrics::with_full_precision(|| {
+                render_under_filter_registry(diagram, |d| {
+                    render_with_theme_and_oracle(d, &theme, base_oracle.as_ref())
+                })
+            });
+            let scaled = scale::scale_svg_numbers(&svg, k);
+            return restore_oracle_root_open_tag(&scaled, oracle);
+        }
+        if oracle.is_none() {
+            let svg = plantuml_metrics::with_full_precision(|| {
+                render_under_filter_registry(diagram, |d| {
+                    render_with_theme_and_oracle(d, &theme, None)
+                })
+            });
+            if let Some(k) = scale::factor_for_fit_from_svg(&svg, directive)
+                && k != 1.0
+            {
+                return scale::scale_svg_numbers(&svg, k);
+            }
+            return svg;
+        }
+    }
     render_under_filter_registry(diagram, |d| render_with_theme_and_oracle(d, &theme, oracle))
+}
+
+fn restore_oracle_root_open_tag(svg: &str, oracle: Option<&OracleLayout>) -> String {
+    let Some(open) = oracle.and_then(|o| o.root_open_tag.as_deref()) else {
+        return svg.to_string();
+    };
+    let Some(end) = svg.find('>') else {
+        return svg.to_string();
+    };
+    let mut out = String::with_capacity(svg.len() + open.len());
+    out.push_str(open);
+    out.push('>');
+    out.push_str(&svg[end + 1..]);
+    out
 }
 
 /// Install a fresh background-filter registry for the duration of one
@@ -137,7 +239,131 @@ fn render_under_filter_registry(
         let replacement = format!("<defs>{defs_content}</defs>");
         svg.replacen("<defs/>", &replacement, 1)
     };
-    rebrand_in_svg(svg)
+    apply_monochrome(rebrand_in_svg(svg), diagram)
+}
+
+/// `skinparam monochrome true|reverse` maps every emitted colour to its YIQ
+/// grey level (PlantUML `ColorUtils.getGrayScale`: `(R*299+G*587+B*114)/1000`,
+/// integer division; `reverse` uses `255-grey`). Applied as a final-SVG pass
+/// over `#RRGGBB` literals. Gated on the skinparam — non-monochrome diagrams
+/// are returned untouched. UTF-8 safe: bytes are copied through verbatim and
+/// only ASCII hex-colour runs are rewritten (matched replacement is ASCII).
+fn apply_monochrome(svg: String, diagram: &Diagram) -> String {
+    let mode = diagram.meta().skinparams.iter().rev().find_map(|sp| {
+        if !sp.key.eq_ignore_ascii_case("monochrome") {
+            return None;
+        }
+        match sp.value.trim().to_ascii_lowercase().as_str() {
+            "true" => Some(false),
+            "reverse" => Some(true),
+            _ => None,
+        }
+    });
+    let Some(reverse) = mode else {
+        return svg;
+    };
+    grey_hex_colors(svg, reverse)
+}
+
+/// Map every `#RRGGBB` literal to its YIQ grey (`reverse` => `255-grey`).
+/// UTF-8 safe: non-matching bytes (incl. multibyte text content) are copied
+/// verbatim and only ASCII hex-colour runs are rewritten.
+fn grey_hex_colors(svg: String, reverse: bool) -> String {
+    let b = svg.as_bytes();
+    let mut out: Vec<u8> = Vec::with_capacity(b.len());
+    let is_hex = |c: u8| c.is_ascii_hexdigit();
+    let mut i = 0;
+    while i < b.len() {
+        // A 6-digit hex colour: '#' + 6 hex digits, not followed by a 7th.
+        if b[i] == b'#'
+            && i + 7 <= b.len()
+            && b[i + 1..i + 7].iter().all(|&c| is_hex(c))
+            && (i + 7 == b.len() || !is_hex(b[i + 7]))
+        {
+            if is_transparent_fill_hex(b, i) {
+                out.extend_from_slice(&b[i..i + 7]);
+                i += 7;
+                continue;
+            }
+            let hex = std::str::from_utf8(&b[i + 1..i + 7]).unwrap();
+            let r = u32::from_str_radix(&hex[0..2], 16).unwrap();
+            let g = u32::from_str_radix(&hex[2..4], 16).unwrap();
+            let bl = u32::from_str_radix(&hex[4..6], 16).unwrap();
+            let mut grey = (r * 299 + g * 587 + bl * 114) / 1000;
+            if reverse {
+                grey = 255 - grey;
+            }
+            out.extend_from_slice(format!("#{grey:02X}{grey:02X}{grey:02X}").as_bytes());
+            i += 7;
+        } else {
+            out.push(b[i]);
+            i += 1;
+        }
+    }
+    // Safe: only ASCII runs were rewritten; all other bytes copied verbatim.
+    String::from_utf8(out).unwrap_or(svg)
+}
+
+fn is_transparent_fill_hex(bytes: &[u8], hash_idx: usize) -> bool {
+    const FILL_PREFIX: &[u8] = b"fill=\"";
+    const TRANSPARENT_ATTR: &[u8] = b"fill-opacity=\"0.00000\"";
+    if hash_idx < FILL_PREFIX.len() || &bytes[hash_idx - FILL_PREFIX.len()..hash_idx] != FILL_PREFIX
+    {
+        return false;
+    }
+    let Some(tag_end_rel) = bytes[hash_idx..].iter().position(|&c| c == b'>') else {
+        return false;
+    };
+    bytes[hash_idx..hash_idx + tag_end_rel]
+        .windows(TRANSPARENT_ATTR.len())
+        .any(|w| w == TRANSPARENT_ATTR)
+}
+
+#[cfg(test)]
+mod post_process_tests {
+    use super::grey_hex_colors;
+
+    /// Guards the byte-as-char bug class: an SVG-colour post-process must
+    /// preserve multibyte UTF-8 text content byte-for-byte while rewriting
+    /// only the ASCII hex colours. (Regression guard for the whole family of
+    /// final-SVG byte-scan passes — monochrome and any future scaler.)
+    #[test]
+    fn grey_hex_preserves_multibyte_text() {
+        // Guillemets, CJK, Cyrillic, accented Latin, emoji — all multibyte.
+        let svg = "<text fill=\"#ADD1B2\">«service» 客户端 Пользователь Ärger 🚀</text>\
+                   <rect style=\"stroke:#181818;fill:#FF0000\"/>";
+        let out = grey_hex_colors(svg.to_string(), false);
+        // Multibyte text content is untouched.
+        assert!(
+            out.contains("«service» 客户端 Пользователь Ärger 🚀"),
+            "text corrupted: {out}"
+        );
+        // Colours greyed: #ADD1B2 -> #C2C2C2, #181818 -> #181818, #FF0000 -> #4C4C4C.
+        assert!(out.contains("#C2C2C2"), "ADD1B2 not greyed: {out}");
+        assert!(out.contains("#4C4C4C"), "FF0000 not greyed: {out}");
+        // Output is valid UTF-8 and the same char count of the text run.
+        assert!(out.is_char_boundary(0));
+        // Reverse maps #FFFFFF->#000000 and #000000->#FFFFFF.
+        let rev = grey_hex_colors(
+            "<a fill=\"#FFFFFF\" stroke=\"#000000\">é</a>".to_string(),
+            true,
+        );
+        assert!(
+            rev.contains("#000000") && rev.contains("#FFFFFF") && rev.contains('é'),
+            "{rev}"
+        );
+    }
+
+    #[test]
+    fn grey_hex_preserves_transparent_hitbox_fill() {
+        let svg = r##"<rect fill="#000000" fill-opacity="0.00000" height="10"/><rect fill="#000000" height="10"/>"##;
+        let out = grey_hex_colors(svg.to_string(), true);
+        assert!(
+            out.contains(r##"fill="#000000" fill-opacity="0.00000""##),
+            "{out}"
+        );
+        assert!(out.contains(r##"fill="#FFFFFF" height="10""##), "{out}");
+    }
 }
 
 /// Swap PlantUML's own brand self-references for rustuml equivalents in
@@ -199,7 +425,7 @@ fn render_with_theme_and_oracle(
 
 fn render_with_theme(diagram: &Diagram, theme: &Theme) -> String {
     match diagram {
-        Diagram::Sequence(seq) => sequence::render(seq, theme),
+        Diagram::Sequence(seq) => sequence::render(seq, theme, None),
         Diagram::Class(cls) => class::render(cls, theme),
         Diagram::State(st) => state::render(st, theme),
         Diagram::Activity(act) => activity::render(act, theme),

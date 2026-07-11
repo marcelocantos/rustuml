@@ -11,6 +11,15 @@ fn main() {
     let lib = vendor.join("lib");
     let include = vendor.join("include");
 
+    println!(
+        "cargo:rerun-if-changed={}",
+        lib.join("rustuml_helpers.c").display()
+    );
+    println!(
+        "cargo:rerun-if-changed={}",
+        lib.join("rustuml_helpers.h").display()
+    );
+
     let mut build = cc::Build::new();
 
     // Compiler settings

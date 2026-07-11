@@ -24,6 +24,15 @@ pub struct TimingDiagram {
     /// Notes (`note top/bottom of X : text`).
     #[serde(default)]
     pub notes: Vec<TimingNote>,
+    /// Source line (`data-source-line`) of the `title` directive, if any.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub title_line: Option<usize>,
+    /// Source line of the `header` directive, if any.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub header_line: Option<usize>,
+    /// Source line of the `footer` directive, if any.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub footer_line: Option<usize>,
 }
 
 /// A note attached to a timeline at a specific time.
@@ -51,6 +60,22 @@ pub struct Timeline {
     pub kind: TimelineKind,
     /// Ordered list of state transitions.
     pub changes: Vec<StateChange>,
+    /// Clock parameters when `kind == TimelineKind::Clock`. A clock generates
+    /// its own square-wave from `period`/`pulse`/`offset` rather than from
+    /// `changes` (which are unused). Mirrors PlantUML's `PlayerClock`.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub clock: Option<ClockSpec>,
+}
+
+/// Clock waveform parameters (PlantUML `clock ... with period N [pulse P] [offset O]`).
+#[derive(Debug, Clone, Copy, Serialize, Deserialize)]
+pub struct ClockSpec {
+    /// Full cycle length, in time units.
+    pub period: i64,
+    /// High-level width per cycle; `0` means `period / 2` (PlantUML default).
+    pub pulse: i64,
+    /// Initial low offset before the first rising edge.
+    pub offset: i64,
 }
 
 /// Visual style of a timeline.
@@ -62,6 +87,8 @@ pub enum TimelineKind {
     Concise,
     /// Two-level digital signal (PlantUML `binary`).
     Binary,
+    /// Auto-generated periodic square wave (PlantUML `clock`).
+    Clock,
 }
 
 /// A state the timeline enters at a particular time.
@@ -71,6 +98,15 @@ pub struct StateChange {
     pub at: i64,
     /// The state name (e.g., `Idle`, `Processing`).
     pub state: String,
+    /// True when the state assignment appeared before the first explicit `@N`
+    /// marker. PlantUML renders that as an initial segment immediately before
+    /// the first ruler tick rather than as a zero-length transition at time 0.
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub before_first_time: bool,
+}
+
+fn is_false(value: &bool) -> bool {
+    !*value
 }
 
 /// A highlighted time range.

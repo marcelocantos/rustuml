@@ -15,19 +15,24 @@
 //! }
 //! ```
 //!
-//! Each hex digit represents a grayscale level (0 = transparent, F = opaque white).
-//! The sprite is rendered as a small PNG embedded in the SVG via a data URI.
+//! Each hex digit represents a grayscale level between the background and
+//! foreground colours. The sprite is rendered as a small PNG embedded in the
+//! SVG via a data URI.
 
 use std::collections::HashMap;
 
-use resvg::tiny_skia;
+use resvg::tiny_skia::{self, FilterQuality, PixmapPaint, Transform};
 use rustuml_parser::diagram::SpriteData;
+
+const PLANTUML_GRAY_LEVELS: u32 = 16;
+const PLANTUML_MAX_CHANNEL: u8 = 255;
+const PLANTUML_ALPHA_RAMP_DIVISOR: f64 = 4.0;
 
 /// Render a sprite's pixel data to a raw RGBA pixel buffer.
 ///
-/// Digit 0 → fully transparent (alpha 0).
-/// Digit 1–F → grayscale with proportional alpha.  For digit d (1–15),
-/// the gray level and alpha are both `round(d / 15.0 * 255)`.
+/// This follows PlantUML's `SpriteMonochrome.toUImage`: pixels are a
+/// white-to-foreground gradient, and low gray values ramp alpha relative to
+/// the maximum gray coefficient present in the sprite.
 fn sprite_to_rgba(sprite: &SpriteData) -> (u32, u32, Vec<u8>) {
     let rows = &sprite.rows;
     let height = rows.len() as u32;
@@ -45,7 +50,8 @@ fn sprite_to_rgba(sprite: &SpriteData) -> (u32, u32, Vec<u8>) {
         height
     };
 
-    let mut rgba = vec![0u8; (w * h * 4) as usize];
+    let mut gray = vec![0u32; (w * h) as usize];
+    let mut max_gray = 0u32;
 
     for (row_idx, row) in rows.iter().enumerate() {
         if row_idx >= h as usize {
@@ -56,30 +62,35 @@ fn sprite_to_rgba(sprite: &SpriteData) -> (u32, u32, Vec<u8>) {
                 break;
             }
             let digit = ch.to_digit(16).unwrap_or(0);
-            let base_idx = (row_idx as u32 * w + col_idx as u32) as usize * 4;
-            if digit == 0 {
-                // Fully transparent pixel.
-                rgba[base_idx] = 0;
-                rgba[base_idx + 1] = 0;
-                rgba[base_idx + 2] = 0;
-                rgba[base_idx + 3] = 0;
-            } else {
-                // Gray level: digit 1 → 17, digit F → 255.
-                let level = ((digit as f64 / 15.0) * 255.0).round() as u8;
-                rgba[base_idx] = level;
-                rgba[base_idx + 1] = level;
-                rgba[base_idx + 2] = level;
-                rgba[base_idx + 3] = 255; // fully opaque
-            }
+            let idx = (row_idx as u32 * w + col_idx as u32) as usize;
+            gray[idx] = digit;
+            max_gray = max_gray.max(digit);
         }
+    }
+
+    let mut rgba = vec![0u8; (w * h * 4) as usize];
+    let max_coef = max_gray as f64 / (PLANTUML_GRAY_LEVELS - 1) as f64;
+    for (idx, gray_value) in gray.iter().copied().enumerate() {
+        let coef = gray_value as f64 / (PLANTUML_GRAY_LEVELS - 1) as f64;
+        let alpha = if max_gray == 0 {
+            0
+        } else if coef > max_coef / PLANTUML_ALPHA_RAMP_DIVISOR {
+            PLANTUML_MAX_CHANNEL
+        } else {
+            (PLANTUML_MAX_CHANNEL as f64 * (coef * PLANTUML_ALPHA_RAMP_DIVISOR / max_coef)) as u8
+        };
+        let channel = PLANTUML_MAX_CHANNEL - (coef * PLANTUML_MAX_CHANNEL as f64).trunc() as u8;
+        let base_idx = idx * 4;
+        rgba[base_idx] = channel;
+        rgba[base_idx + 1] = channel;
+        rgba[base_idx + 2] = channel;
+        rgba[base_idx + 3] = alpha;
     }
 
     (w, h, rgba)
 }
 
-/// Encode a sprite to a PNG byte vector.
-pub fn sprite_to_png(sprite: &SpriteData) -> Result<Vec<u8>, String> {
-    let (w, h, rgba) = sprite_to_rgba(sprite);
+fn rgba_to_pixmap(w: u32, h: u32, rgba: &[u8]) -> Result<tiny_skia::Pixmap, String> {
     if w == 0 || h == 0 {
         return Err("sprite has no pixel data".to_string());
     }
@@ -87,10 +98,8 @@ pub fn sprite_to_png(sprite: &SpriteData) -> Result<Vec<u8>, String> {
     let mut pixmap =
         tiny_skia::Pixmap::new(w, h).ok_or_else(|| format!("failed to create pixmap {w}x{h}"))?;
 
-    // Copy RGBA data into the pixmap.
-    // tiny_skia uses premultiplied alpha internally, but Pixmap::data_mut()
-    // takes pre-multiplied RGBA. Since our pixels are either fully transparent
-    // or fully opaque, this is a direct copy for the opaque case.
+    // tiny-skia stores premultiplied RGBA; PlantUML's PortableImage stores
+    // straight ARGB, so premultiply here before handing pixels to the encoder.
     let dst = pixmap.data_mut();
     for (i, chunk) in rgba.chunks_exact(4).enumerate() {
         let r = chunk[0];
@@ -107,7 +116,56 @@ pub fn sprite_to_png(sprite: &SpriteData) -> Result<Vec<u8>, String> {
         dst[i * 4 + 3] = a;
     }
 
+    Ok(pixmap)
+}
+
+fn scale_pixmap(
+    pixmap: &tiny_skia::Pixmap,
+    target_w: u32,
+    target_h: u32,
+) -> Result<tiny_skia::Pixmap, String> {
+    if pixmap.width() == target_w && pixmap.height() == target_h {
+        return Ok(pixmap.clone());
+    }
+    if target_w == 0 || target_h == 0 {
+        return Err("sprite scale produced an empty image".to_string());
+    }
+
+    let mut scaled = tiny_skia::Pixmap::new(target_w, target_h)
+        .ok_or_else(|| format!("failed to create scaled pixmap {target_w}x{target_h}"))?;
+    let paint = PixmapPaint {
+        quality: FilterQuality::Bilinear,
+        ..PixmapPaint::default()
+    };
+    let sx = target_w as f32 / pixmap.width() as f32;
+    let sy = target_h as f32 / pixmap.height() as f32;
+    scaled.draw_pixmap(
+        0,
+        0,
+        pixmap.as_ref(),
+        &paint,
+        Transform::from_scale(sx, sy),
+        None,
+    );
+    Ok(scaled)
+}
+
+/// Encode a sprite to a PNG byte vector.
+pub fn sprite_to_png(sprite: &SpriteData) -> Result<Vec<u8>, String> {
+    let (w, h, rgba) = sprite_to_rgba(sprite);
+    let pixmap = rgba_to_pixmap(w, h, &rgba)?;
     pixmap
+        .encode_png()
+        .map_err(|e| format!("PNG encoding error: {e}"))
+}
+
+/// Encode a sprite to a PNG byte vector after PlantUML-style image scaling.
+pub fn sprite_to_png_scaled(sprite: &SpriteData, scale: f64) -> Result<Vec<u8>, String> {
+    let (w, h, rgba) = sprite_to_rgba(sprite);
+    let pixmap = rgba_to_pixmap(w, h, &rgba)?;
+    let (target_w, target_h) = scaled_sprite_dimensions(sprite, scale);
+    let scaled = scale_pixmap(&pixmap, target_w, target_h)?;
+    scaled
         .encode_png()
         .map_err(|e| format!("PNG encoding error: {e}"))
 }
@@ -115,6 +173,13 @@ pub fn sprite_to_png(sprite: &SpriteData) -> Result<Vec<u8>, String> {
 /// Encode a sprite to a base64-encoded PNG data URI suitable for `xlink:href`.
 pub fn sprite_to_data_uri(sprite: &SpriteData) -> Result<String, String> {
     let png = sprite_to_png(sprite)?;
+    let encoded = encode_base64(&png);
+    Ok(format!("data:image/png;base64,{encoded}"))
+}
+
+/// Encode a scaled sprite to a base64-encoded PNG data URI.
+pub fn sprite_to_data_uri_scaled(sprite: &SpriteData, scale: f64) -> Result<String, String> {
+    let png = sprite_to_png_scaled(sprite, scale)?;
     let encoded = encode_base64(&png);
     Ok(format!("data:image/png;base64,{encoded}"))
 }
@@ -131,6 +196,18 @@ impl SpriteCache {
             .iter()
             .map(|(name, data)| {
                 let uri = sprite_to_data_uri(data).ok();
+                (name.clone(), uri)
+            })
+            .collect();
+        Self { uris }
+    }
+
+    /// Build a cache whose PNG payloads use PlantUML-style image scaling.
+    pub fn from_sprites_scaled(sprites: &HashMap<String, SpriteData>, scale: f64) -> Self {
+        let uris = sprites
+            .iter()
+            .map(|(name, data)| {
+                let uri = sprite_to_data_uri_scaled(data, scale).ok();
                 (name.clone(), uri)
             })
             .collect();
@@ -156,6 +233,18 @@ pub fn sprite_dimensions(sprite: &SpriteData) -> (u32, u32) {
     let width = if sprite.width > 0 { sprite.width } else { w };
     let height = if sprite.height > 0 { sprite.height } else { h };
     (width, height)
+}
+
+/// Return sprite dimensions after Java `PortableImageAwt.scale` rounding.
+pub fn scaled_sprite_dimensions(sprite: &SpriteData, scale: f64) -> (u32, u32) {
+    let (width, height) = sprite_dimensions(sprite);
+    if scale <= 0.0 {
+        return (width, height);
+    }
+    (
+        (width as f64 * scale).round() as u32,
+        (height as f64 * scale).round() as u32,
+    )
 }
 
 /// A segment of text that may contain sprite or OpenIconic references.
@@ -334,8 +423,21 @@ mod tests {
         let (_, _, rgba) = sprite_to_rgba(&sprite);
         // First pixel (digit 0) → alpha = 0.
         assert_eq!(rgba[3], 0);
-        // Second pixel (digit F) → fully opaque white.
+        // Second pixel (digit F) → fully opaque foreground black.
+        assert_eq!(rgba[4], 0);
+        assert_eq!(rgba[5], 0);
+        assert_eq!(rgba[6], 0);
         assert_eq!(rgba[7], 255);
+    }
+
+    #[test]
+    fn scaled_dimensions_use_java_rounding() {
+        let sprite = SpriteData {
+            width: 8,
+            height: 8,
+            rows: vec!["0".repeat(8); 8],
+        };
+        assert_eq!(scaled_sprite_dimensions(&sprite, 14.0 / 13.0), (9, 9));
     }
 
     #[test]

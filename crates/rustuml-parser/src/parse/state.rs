@@ -14,7 +14,7 @@ use crate::diagram::state::*;
 pub fn parse_state(lines: &[String]) -> Result<StateDiagram, ParseError> {
     let mut parser = StateParser::new();
     for (i, line) in lines.iter().enumerate() {
-        let trimmed = line.trim();
+        let (source_line, trimmed) = super::source_line_and_trimmed(i + 1, line);
         if trimmed.is_empty() {
             // Empty lines may terminate a multi-line note with content already
             // accumulated — keep buffering (blank lines are part of note body).
@@ -23,11 +23,19 @@ pub fn parse_state(lines: &[String]) -> Result<StateDiagram, ParseError> {
             }
             continue;
         }
-        parser.parse_line(i + 1, trimmed)?;
+        parser.parse_line(source_line, trimmed)?;
     }
     // Flush any unclosed note buffer.
     parser.flush_note();
     Ok(parser.finish())
+}
+
+/// A concurrent-region separator is a line made entirely of two or more `-`
+/// (horizontal split) or two or more `|` (vertical split). PlantUML treats
+/// `--`, `---`, `||`, etc. inside a composite as region dividers.
+fn is_region_separator(line: &str) -> bool {
+    (line.len() >= 2 && line.bytes().all(|b| b == b'-'))
+        || (line.len() >= 2 && line.bytes().all(|b| b == b'|'))
 }
 
 /// Accumulator for a multi-line note body.
@@ -47,6 +55,27 @@ struct StateParser {
     current_line: usize,
     /// Active prefix when inside a `skinparam <prefix> { ... }` block.
     skinparam_block_prefix: Option<String>,
+    /// Stack of enclosing composite-state scopes. Empty at top level; each
+    /// `state X { … }` pushes a frame and the matching `}` pops it. A `--` (or
+    /// `||`) region separator inside a composite advances the top frame to a
+    /// synthetic concurrent-region sub-scope.
+    scope_stack: Vec<ScopeFrame>,
+    /// Diagram-wide concurrent-region counter. PlantUML names region sub-scopes
+    /// `CONC2`, `CONC3`, … sequentially across *every* composite in the diagram
+    /// (each composite's first region uses the composite's own scope and
+    /// consumes no counter value; the counter's first emitted value is 2), so
+    /// this is global rather than per-frame. Holds the highest CONC index
+    /// allocated so far (initially 1, so the first region becomes `CONC2`).
+    conc_counter: usize,
+}
+
+/// One enclosing-composite level on the scope stack.
+struct ScopeFrame {
+    /// Qualified id of the composite itself (region 0's scope).
+    base: String,
+    /// Active scope id: `base` for region 0, else `<base>.CONC{n}` where `n`
+    /// is the diagram-wide counter value assigned when the region opened.
+    current: String,
 }
 
 impl StateParser {
@@ -59,6 +88,41 @@ impl StateParser {
             note_buffer: None,
             current_line: 0,
             skinparam_block_prefix: None,
+            scope_stack: Vec::new(),
+            conc_counter: 1,
+        }
+    }
+
+    /// Fully-qualified id of the current scope (the enclosing composite), or
+    /// `None` at top level.
+    fn current_scope(&self) -> Option<&str> {
+        self.scope_stack.last().map(|f| f.current.as_str())
+    }
+
+    /// Resolve a raw state reference within the current scope.
+    ///
+    /// - `[*]` becomes a scoped pseudo-state marker `[*]<scope>` (the empty
+    ///   scope yields plain `[*]`); the renderer splits the marker back into a
+    ///   pseudo-state plus its owning composite.
+    /// - `[H]` / `[H*]` history markers and other bracketed pseudo-states are
+    ///   qualified the same way.
+    /// - A plain name nested inside composite `Outer` resolves to `Outer.name`,
+    ///   matching PlantUML's qualified entity naming. A name that already
+    ///   carries its full scope prefix (rare, when authors dot-qualify) is left
+    ///   untouched.
+    fn qualify(&self, raw: &str) -> String {
+        let raw = raw.trim();
+        match self.current_scope() {
+            None => raw.to_string(),
+            Some(scope) => {
+                if raw.starts_with('[') && raw.ends_with(']') {
+                    format!("{raw}{scope}")
+                } else if raw.starts_with(scope) && raw[scope.len()..].starts_with('.') {
+                    raw.to_string()
+                } else {
+                    format!("{scope}.{raw}")
+                }
+            }
         }
     }
 
@@ -83,24 +147,24 @@ impl StateParser {
         }
     }
 
-    fn ensure_state(&mut self, id: &str) -> String {
-        let id = id.trim().to_string();
+    fn ensure_state(&mut self, raw: &str) -> String {
+        let raw = raw.trim();
         // Pseudo-states ([*], [H], [H*]) are handled by the renderer directly
-        // and do not need a corresponding State entry in the states list.
-        if id.starts_with('[') && id.ends_with(']') {
-            return id;
+        // and do not need a corresponding State entry in the states list. They
+        // are still scope-qualified so the renderer can map them to the right
+        // composite's start/end pseudo-state.
+        if raw.starts_with('[') && raw.ends_with(']') {
+            return self.qualify(raw);
         }
+        let id = self.qualify(raw);
+        let parent = self.current_scope().map(String::from);
         if !self.states.iter().any(|s| s.id == id) {
             self.states.push(State {
                 id: id.clone(),
-                label: id.clone(),
-                kind: StateKind::Normal,
-                descriptions: Vec::new(),
-                substates: Vec::new(),
+                label: raw.to_string(),
                 source_line: self.current_line,
-                fill: None,
-                stroke: None,
-                stroke_style: None,
+                parent,
+                ..State::default()
             });
         }
         id
@@ -174,6 +238,28 @@ impl StateParser {
                     value: if show { "false" } else { "true" }.to_string(),
                 });
             }
+            return Ok(());
+        }
+
+        // Concurrent-region separator inside a composite: a line of two or more
+        // `-` (horizontal split) or `|` (vertical split) characters advances
+        // the enclosing composite to its next concurrent region. PlantUML scopes
+        // region 0 to the composite itself; region N≥1 lives in a synthetic
+        // sub-scope `<Composite>.CONC{N+1}` so each region gets its own
+        // `[*]` pseudo-states. Only meaningful inside a composite — at top level
+        // the line is ignored.
+        if is_region_separator(line) {
+            self.conc_counter += 1;
+            let n = self.conc_counter;
+            if let Some(frame) = self.scope_stack.last_mut() {
+                frame.current = format!("{}.CONC{}", frame.base, n);
+            }
+            return Ok(());
+        }
+
+        // Closing brace of a composite block: pop the current scope.
+        if line == "}" {
+            self.scope_stack.pop();
             return Ok(());
         }
 
@@ -256,13 +342,36 @@ impl StateParser {
         static RE_DESC: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(r#"^state\s+(?:"([^"]+)"\s+as\s+)?(\w+)\s*:\s*(.+)$"#).unwrap()
         });
+        // `state X [[url]]` / `state X [[url{tooltip}]]` — hyperlink decoration.
+        // PlantUML accepts this anywhere after the id; pull it out before the
+        // main match so the (otherwise strict) declaration regex still applies.
+        static URL_RE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"\[\[([^\]{}]+?)(?:\{([^}]*)\})?\]\]").unwrap());
+
+        let mut url: Option<String> = None;
+        let mut tooltip: Option<String> = None;
+        let stripped;
+        let line = if let Some(uc) = URL_RE.captures(line) {
+            url = Some(uc[1].trim().to_string());
+            tooltip = uc.get(2).map(|m| m.as_str().trim().to_string());
+            stripped = URL_RE.replace(line, "").trim_end().to_string();
+            stripped.as_str()
+        } else {
+            line
+        };
 
         if let Some(caps) = RE.captures(line) {
             let label = caps
                 .get(1)
                 .map_or_else(|| caps[2].to_string(), |m| m.as_str().to_string());
-            let id = caps[2].to_string();
+            let raw_id = caps[2].to_string();
+            let id = self.qualify(&raw_id);
+            let parent = self.current_scope().map(String::from);
             let stereotype = caps.get(3).map(|m| m.as_str());
+            // A trailing `{` opens a composite block; mark the state and push
+            // its qualified id so nested declarations/transitions qualify
+            // against it.
+            let is_composite = line.trim_end().ends_with('{');
 
             let kind = match stereotype {
                 Some("start") => StateKind::Initial,
@@ -272,8 +381,13 @@ impl StateParser {
                 Some("join") => StateKind::Join,
                 Some("history") => StateKind::History,
                 Some("history*") => StateKind::DeepHistory,
+                Some("entryPoint") => StateKind::EntryPoint,
+                Some("exitPoint") => StateKind::ExitPoint,
                 _ => StateKind::Normal,
             };
+            let ordinary_stereotype = matches!(kind, StateKind::Normal)
+                .then(|| stereotype.map(str::to_string))
+                .flatten();
 
             // Walk every `#color` / `##color` / `##[style]color` token in
             // the trailing decoration. Each match's first group is the
@@ -303,6 +417,13 @@ impl StateParser {
             if let Some(state) = self.states.iter_mut().find(|s| s.id == id) {
                 state.label = label;
                 state.kind = kind;
+                state.composite |= is_composite;
+                if state.decl_line.is_none() {
+                    state.decl_line = Some(self.current_line);
+                }
+                if state.parent.is_none() {
+                    state.parent = parent;
+                }
                 if state.source_line == 0 {
                     state.source_line = self.current_line;
                 }
@@ -315,17 +436,35 @@ impl StateParser {
                 if state.stroke_style.is_none() {
                     state.stroke_style = stroke_style;
                 }
+                if state.stereotype.is_none() {
+                    state.stereotype = ordinary_stereotype;
+                }
+                if state.url.is_none() {
+                    state.url = url;
+                    state.tooltip = tooltip;
+                }
             } else {
                 self.states.push(State {
                     id: id.clone(),
                     label,
                     kind,
-                    descriptions: Vec::new(),
-                    substates: Vec::new(),
                     source_line: self.current_line,
+                    decl_line: Some(self.current_line),
                     fill,
                     stroke,
                     stroke_style,
+                    stereotype: ordinary_stereotype,
+                    url,
+                    tooltip,
+                    composite: is_composite,
+                    parent,
+                    ..State::default()
+                });
+            }
+            if is_composite {
+                self.scope_stack.push(ScopeFrame {
+                    base: id.clone(),
+                    current: id,
                 });
             }
             true
@@ -333,22 +472,24 @@ impl StateParser {
             let label = caps
                 .get(1)
                 .map_or_else(|| caps[2].to_string(), |m| m.as_str().to_string());
-            let id = caps[2].to_string();
+            let id = self.qualify(&caps[2]);
+            let parent = self.current_scope().map(String::from);
             let desc = caps[3].trim().to_string();
             if let Some(state) = self.states.iter_mut().find(|s| s.id == id) {
                 state.label = label;
                 state.descriptions.push(desc);
+                if state.decl_line.is_none() {
+                    state.decl_line = Some(self.current_line);
+                }
             } else {
                 self.states.push(State {
                     id: id.clone(),
                     label,
-                    kind: StateKind::Normal,
                     descriptions: vec![desc],
-                    substates: Vec::new(),
                     source_line: self.current_line,
-                    fill: None,
-                    stroke: None,
-                    stroke_style: None,
+                    decl_line: Some(self.current_line),
+                    parent,
+                    ..State::default()
                 });
             }
             true
@@ -361,11 +502,13 @@ impl StateParser {
         static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^(\w+)\s*:\s*(.+)$").unwrap());
 
         if let Some(caps) = RE.captures(line) {
-            let id = caps[1].to_string();
+            let id = self.ensure_state(&caps[1]);
             let desc = caps[2].trim().to_string();
-            self.ensure_state(&id);
             if let Some(state) = self.states.iter_mut().find(|s| s.id == id) {
                 state.descriptions.push(desc);
+                if state.decl_line.is_none() {
+                    state.decl_line = Some(self.current_line);
+                }
             }
             true
         } else {
@@ -412,12 +555,13 @@ impl StateParser {
         // `note "floating text" as ALIAS`
         {
             static RE: LazyLock<Regex> =
-                LazyLock::new(|| Regex::new(r#"^note\s+"([^"]+)"\s+as\s+\w+$"#).unwrap());
+                LazyLock::new(|| Regex::new(r#"^note\s+"([^"]+)"\s+as\s+(\w+)$"#).unwrap());
             if let Some(caps) = RE.captures(line) {
                 let text = caps[1].to_string();
+                let alias = caps[2].to_string();
                 self.notes.push(StateNote {
                     text,
-                    kind: StateNoteKind::Floating,
+                    kind: StateNoteKind::Floating(Some(alias)),
                 });
                 return true;
             }
@@ -513,10 +657,19 @@ mod tests {
              state s4 <<fork>>\nstate s5 <<join>>",
         );
         assert_eq!(d.states[0].kind, StateKind::Initial);
+        assert_eq!(d.states[0].stereotype, None);
         assert_eq!(d.states[1].kind, StateKind::Final);
+        assert_eq!(d.states[1].stereotype, None);
         assert_eq!(d.states[2].kind, StateKind::Choice);
         assert_eq!(d.states[3].kind, StateKind::Fork);
         assert_eq!(d.states[4].kind, StateKind::Join);
+    }
+
+    #[test]
+    fn ordinary_state_stereotype() {
+        let d = parse("state A <<important>>");
+        assert_eq!(d.states[0].kind, StateKind::Normal);
+        assert_eq!(d.states[0].stereotype.as_deref(), Some("important"));
     }
 
     #[test]
@@ -568,7 +721,7 @@ mod tests {
         let d = parse("note \"Floating note 1\" as FN1\n[*] --> A\nA --> [*]");
         assert_eq!(d.notes.len(), 1);
         assert_eq!(d.notes[0].text, "Floating note 1");
-        assert!(matches!(&d.notes[0].kind, StateNoteKind::Floating));
+        assert!(matches!(&d.notes[0].kind, StateNoteKind::Floating(Some(a)) if a == "FN1"));
     }
 
     #[test]

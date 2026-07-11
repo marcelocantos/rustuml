@@ -171,12 +171,7 @@ mod tests {
             id: id.to_string(),
             label: id.to_string(),
             kind,
-            descriptions: vec![],
-            substates: vec![],
-            source_line: 0,
-            fill: None,
-            stroke: None,
-            stroke_style: None,
+            ..State::default()
         }
     }
 

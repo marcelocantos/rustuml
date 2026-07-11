@@ -69,6 +69,9 @@ pub enum DeploymentNodeKind {
     File,
     Package,
     Stack,
+    /// An entity referenced only via a connection (never declared with an
+    /// explicit keyword). PlantUML renders these as a bare default circle.
+    Default,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

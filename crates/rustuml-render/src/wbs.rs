@@ -3,9 +3,18 @@
 
 //! Work Breakdown Structure (WBS) SVG renderer.
 //!
-//! Output matches PlantUML's exact SVG structure: root box at top centre, a
-//! short vertical drop to a horizontal spine, then verticals from the spine
-//! down to each child box.
+//! This is a faithful port of PlantUML's `Fork` / `ITFComposed` / `ITFLeaf`
+//! layout (package `net.sourceforge.plantuml.wbs`).  Each node measures its own
+//! subtree dimension bottom-up; the draw pass then walks the tree emitting
+//! boxes and connector lines in PlantUML's exact order so the SVG element
+//! sequence matches.
+//!
+//! Coordinate model: PlantUML draws the `Fork` in a local frame and translates
+//! the whole diagram by a `MARGIN` on each side.  The root box sits at the top,
+//! a short vertical drop reaches a horizontal spine, and each top-level child
+//! subtree hangs below.  Within a subtree, left-side (`--`) children grow
+//! leftward and right-side (`**`) children grow rightward, each as a vertical
+//! stack indented `DELTA_X` past the parent's trunk.
 
 use std::fmt::Write;
 
@@ -18,50 +27,110 @@ use crate::text_render;
 
 const FONT_SIZE: f64 = 12.0;
 const PAD_X: f64 = 10.0;
-const BOX_H: f64 = 34.1328;
-const SPINE_DROP: f64 = 20.0;
-const H_GAP: f64 = 20.0;
+/// Exact box height: text height (14.1328125 at size 12) + 20px vertical
+/// padding.  Kept un-rounded so accumulated row offsets match PlantUML's
+/// per-coordinate HALF_UP rounding.
+const BOX_H: f64 = 34.1328125;
+/// Baseline offset inside a box: (box_h − text_height)/2 + ascent.
+const TEXT_BASELINE: f64 = 21.6015625;
 const MARGIN: f64 = 20.0;
+/// `ITFComposed.delta1x` / `Fork.delta1x` between sibling vertical stacks; also
+/// the length of an elbow stub line from a parent trunk to a child box edge.
+const DELTA_X: f64 = 10.0;
+/// `Fork.delta1x`: horizontal gap between top-level child subtrees.
+const FORK_DELTA_X: f64 = 20.0;
+/// `Fork.deltay`: vertical room between the root box and the spine of children.
+const FORK_DELTA_Y: f64 = 40.0;
+/// `ITFComposed.marginBottom`: vertical gap between stacked children.
+const MARGIN_BOTTOM: f64 = 15.0;
 
 const FILL_DEFAULT: &str = "#F1F1F1";
 const STROKE: &str = "#181818";
 
-struct Subtree {
+/// A measured WBS node: PlantUML's `ITF` (either `ITFLeaf` or `ITFComposed`).
+struct Itf {
     label: String,
+    fill: String,
     text_w: f64,
-    box_w: f64,
-    total_w: f64,
-    total_h: f64,
-    children: Vec<Subtree>,
+    main_w: f64,
+    /// Children that grow leftward (`--` prefix), in source order.
+    left: Vec<Itf>,
+    /// Children that grow rightward (`**` prefix), in source order.
+    right: Vec<Itf>,
+    /// Cached `calculateDimension` width of the whole subtree.
+    width: f64,
+    /// Cached `calculateDimension` height of the whole subtree.
+    height: f64,
 }
 
-fn measure_subtree(node: &WbsNode) -> Subtree {
+impl Itf {
+    /// `getw1`: x of this node's own trunk within its subtree frame.
+    fn w1(&self) -> f64 {
+        (self.main_w / 2.0).max(DELTA_X + coll_width(&self.left))
+    }
+}
+
+/// `getCollWidth`: max child width on one side (children stack vertically).
+fn coll_width(children: &[Itf]) -> f64 {
+    children.iter().map(|c| c.width).fold(0.0, f64::max)
+}
+
+/// `getCollHeight`: sum of `marginBottom + childHeight` over one side.
+fn coll_height(children: &[Itf]) -> f64 {
+    children
+        .iter()
+        .map(|c| MARGIN_BOTTOM + c.height)
+        .sum::<f64>()
+}
+
+fn measure(node: &WbsNode, is_root: bool) -> Itf {
     let text_w = pm::text_width(&node.label, FONT_SIZE, false);
-    let box_w = text_w + PAD_X * 2.0;
-    let children: Vec<Subtree> = node.children.iter().map(measure_subtree).collect();
-    let children_total_w = if children.is_empty() {
-        0.0
+    let main_w = text_w + PAD_X * 2.0;
+    let fill = node
+        .color
+        .as_deref()
+        .map(crate::sequence::resolve_color)
+        .unwrap_or_else(|| FILL_DEFAULT.to_string());
+
+    let mut left = Vec::new();
+    let mut right = Vec::new();
+    for child in &node.children {
+        let m = measure(child, false);
+        match child.side {
+            // PlantUML's WElement.createElement re-homes a left child of the
+            // root to the FRONT of the right list (newLevel == 1), so the root
+            // has no left side; deeper nodes keep left/right as written.
+            WbsSide::Left if is_root => right.insert(0, m),
+            WbsSide::Left => left.push(m),
+            WbsSide::Right => right.push(m),
+        }
+    }
+
+    // ITFComposed.calculateDimension / ITFLeaf.calculateDimension.
+    let (width, height) = if left.is_empty() && right.is_empty() {
+        (main_w, BOX_H)
     } else {
-        children.iter().map(|c| c.total_w).sum::<f64>() + H_GAP * (children.len() - 1) as f64
+        let w = (main_w / 2.0).max(DELTA_X + coll_width(&left))
+            + (main_w / 2.0).max(DELTA_X + coll_width(&right));
+        let h = BOX_H + coll_height(&left).max(coll_height(&right));
+        (w, h)
     };
-    let total_w = box_w.max(children_total_w);
-    let max_child_h = children.iter().map(|c| c.total_h).fold(0.0_f64, f64::max);
-    let total_h = if children.is_empty() {
-        BOX_H
-    } else {
-        BOX_H + SPINE_DROP * 2.0 + max_child_h
-    };
-    Subtree {
+
+    Itf {
         label: node.label.clone(),
+        fill,
         text_w,
-        box_w,
-        total_w,
-        total_h,
-        children,
+        main_w,
+        left,
+        right,
+        width,
+        height,
     }
 }
 
 fn emit_line(buf: &mut String, x1: f64, y1: f64, x2: f64, y2: f64) {
+    // PlantUML's drawLine normalises so the smaller x is x1.
+    let (x1, x2) = if x1 <= x2 { (x1, x2) } else { (x2, x1) };
     write!(
         buf,
         r#"<line style="stroke:{STROKE};stroke-width:1.5;" x1="{x1}" x2="{x2}" y1="{y1}" y2="{y2}"/>"#,
@@ -73,25 +142,24 @@ fn emit_line(buf: &mut String, x1: f64, y1: f64, x2: f64, y2: f64) {
     .unwrap();
 }
 
-fn emit_box(buf: &mut String, x: f64, y: f64, w: f64, label: &str, text_w: f64) {
+fn emit_box(buf: &mut String, x: f64, y: f64, node: &Itf) {
     write!(
         buf,
-        r#"<rect fill="{FILL_DEFAULT}" height="{h}" style="stroke:{STROKE};stroke-width:1.5;" width="{w}" x="{x}" y="{y}"/>"#,
+        r#"<rect fill="{fill}" height="{h}" style="stroke:{STROKE};stroke-width:1.5;" width="{w}" x="{x}" y="{y}"/>"#,
+        fill = node.fill,
         h = pm::fmt_coord(BOX_H),
-        w = pm::fmt_coord(w),
+        w = pm::fmt_coord(node.main_w),
         x = pm::fmt_coord(x),
         y = pm::fmt_coord(y),
     )
     .unwrap();
-    let text_x = x + PAD_X;
-    let text_y = y + 21.6016;
-    let _ = text_w; // width is recomputed inside emit_text via the creole segmenter
+    let _ = node.text_w; // width is recomputed inside emit_text via the segmenter
     text_render::emit_text(
         buf,
-        label,
+        &node.label,
         &text_render::TextBase {
-            x: text_x,
-            y: text_y,
+            x: x + PAD_X,
+            y: y + TEXT_BASELINE,
             font_size: FONT_SIZE as u32,
             font_family: "sans-serif",
             fill: "#000000",
@@ -103,185 +171,157 @@ fn emit_box(buf: &mut String, x: f64, y: f64, w: f64, label: &str, text_w: f64) 
     );
 }
 
-fn render_node(buf: &mut String, node: &Subtree, cx: f64, top_y: f64) {
-    let box_x = cx - node.box_w / 2.0;
-    if node.children.is_empty() {
-        emit_box(buf, box_x, top_y, node.box_w, &node.label, node.text_w);
+/// `ITFComposed.drawU` (and `ITFLeaf.drawU`): draw this subtree with its frame
+/// origin translated to (`ox`, `oy`).  Mirrors PlantUML's emit order: main box,
+/// then left children (each preceded by its elbow line), then right children,
+/// then the trunk vertical.
+fn draw_itf(buf: &mut String, node: &Itf, ox: f64, oy: f64) {
+    let x = node.w1(); // trunk x within this frame
+    emit_box(buf, ox + x - node.main_w / 2.0, oy, node);
+
+    if node.left.is_empty() && node.right.is_empty() {
         return;
     }
-    let kids_total_w: f64 = node.children.iter().map(|c| c.total_w).sum::<f64>()
-        + H_GAP * (node.children.len() - 1) as f64;
-    let kids_left = cx - kids_total_w / 2.0;
-    let parent_bottom = top_y + BOX_H;
-    let spine_y = parent_bottom + SPINE_DROP;
-    let child_top_y = spine_y + SPINE_DROP;
-    let mut child_xs: Vec<f64> = Vec::with_capacity(node.children.len());
-    let mut cursor = kids_left;
-    for child in &node.children {
-        let ccx = cursor + child.total_w / 2.0;
-        child_xs.push(ccx);
-        cursor += child.total_w + H_GAP;
-    }
-    for (child, ccx) in node.children.iter().zip(child_xs.iter()) {
-        emit_line(buf, *ccx, spine_y, *ccx, child_top_y);
-        render_node(buf, child, *ccx, child_top_y);
-    }
-    if child_xs.len() >= 2 {
-        let first = *child_xs.first().unwrap();
-        let last = *child_xs.last().unwrap();
-        emit_line(buf, first, spine_y, last, spine_y);
-    }
-    emit_box(buf, box_x, top_y, node.box_w, &node.label, node.text_w);
-    emit_line(buf, cx, parent_bottom, cx, spine_y);
-}
 
-struct RootLayout {
-    tree: Subtree,
-    right_indices: Vec<usize>,
-    left_indices: Vec<usize>,
-    canvas_h: f64,
-    offset_y: f64,
-}
-
-fn group_w(tree: &Subtree, indices: &[usize]) -> f64 {
-    if indices.is_empty() {
-        0.0
-    } else {
-        indices
-            .iter()
-            .map(|&i| tree.children[i].total_w)
-            .sum::<f64>()
-            + H_GAP * (indices.len() - 1) as f64
-    }
-}
-
-fn compute_root_layout(root_node: &WbsNode, offset_y: f64) -> (RootLayout, f64) {
-    let tree = measure_subtree(root_node);
-    let right_indices: Vec<usize> = root_node
-        .children
-        .iter()
-        .enumerate()
-        .filter(|(_, n)| n.side == WbsSide::Right)
-        .map(|(i, _)| i)
-        .collect();
-    let left_indices: Vec<usize> = root_node
-        .children
-        .iter()
-        .enumerate()
-        .filter(|(_, n)| n.side == WbsSide::Left)
-        .map(|(i, _)| i)
-        .collect();
-    let right_w = group_w(&tree, &right_indices);
-    let left_w = group_w(&tree, &left_indices);
-    let lr_gap = if right_w > 0.0 && left_w > 0.0 {
-        H_GAP
-    } else {
-        0.0
-    };
-    let children_total_w = right_w + lr_gap + left_w;
-    let total_span = children_total_w.max(tree.box_w);
-    let canvas_w = total_span + 2.0 * MARGIN;
-    let canvas_h = if root_node.children.is_empty() {
-        BOX_H
-    } else {
-        let max_child_h = tree
-            .children
-            .iter()
-            .map(|c| c.total_h)
-            .fold(0.0_f64, f64::max);
-        BOX_H + SPINE_DROP * 2.0 + max_child_h
-    };
-    (
-        RootLayout {
-            tree,
-            right_indices,
-            left_indices,
-            canvas_h,
-            offset_y,
-        },
-        canvas_w,
-    )
-}
-
-fn render_root(buf: &mut String, rl: &RootLayout, canvas_w: f64) {
-    let tree = &rl.tree;
-    let root_top_y = rl.offset_y;
-    let root_box_w = tree.box_w;
-    let right_w = group_w(tree, &rl.right_indices);
-    let left_w = group_w(tree, &rl.left_indices);
-    let lr_gap = if right_w > 0.0 && left_w > 0.0 {
-        H_GAP
-    } else {
-        0.0
-    };
-    let children_total_w = right_w + lr_gap + left_w;
-    let canvas_centre = canvas_w / 2.0;
-    let children_left = canvas_centre - children_total_w / 2.0;
-    let root_cx = if children_total_w > 0.0 {
-        children_left + children_total_w / 2.0
-    } else {
-        canvas_centre
-    };
-    let root_box_x = root_cx - root_box_w / 2.0;
-    if tree.children.is_empty() {
-        emit_box(
+    let mut last_y1 = BOX_H;
+    let mut y = BOX_H;
+    for child in &node.left {
+        y += MARGIN_BOTTOM;
+        // child.getF2 = (childW, childH/2) for leaf, or (w1+mainW/2, mainH/2).
+        let f2x = child.f2_x();
+        let f2y = child.f_y();
+        last_y1 = y + f2y;
+        emit_line(
             buf,
-            root_box_x,
-            root_top_y,
-            root_box_w,
-            &tree.label,
-            tree.text_w,
+            ox + x - child.width - DELTA_X + f2x,
+            oy + last_y1,
+            ox + x,
+            oy + last_y1,
         );
-        return;
+        draw_itf(buf, child, ox + x - child.width - DELTA_X, oy + y);
+        y += child.height;
     }
-    let mut left_cxs: Vec<f64> = Vec::new();
-    {
-        let mut x = children_left + left_w;
-        for &i in &rl.left_indices {
-            let tw = tree.children[i].total_w;
-            let ccx = x - tw / 2.0;
-            left_cxs.push(ccx);
-            x -= tw + H_GAP;
+
+    let mut last_y2 = BOX_H;
+    y = BOX_H;
+    for child in &node.right {
+        y += MARGIN_BOTTOM;
+        let f1x = child.f1_x();
+        let f1y = child.f_y();
+        last_y2 = y + f1y;
+        emit_line(
+            buf,
+            ox + x,
+            oy + last_y2,
+            ox + x + DELTA_X + f1x,
+            oy + last_y2,
+        );
+        draw_itf(buf, child, ox + x + DELTA_X, oy + y);
+        y += child.height;
+    }
+
+    emit_line(buf, ox + x, oy + BOX_H, ox + x, oy + last_y1.max(last_y2));
+}
+
+impl Itf {
+    fn is_leaf(&self) -> bool {
+        self.left.is_empty() && self.right.is_empty()
+    }
+    /// `getF1.x`: attach x on the left face, relative to the subtree frame.
+    fn f1_x(&self) -> f64 {
+        if self.is_leaf() {
+            0.0
+        } else {
+            self.w1() - self.main_w / 2.0
         }
     }
-    let right_start = children_left + left_w + lr_gap;
-    let mut right_cxs: Vec<f64> = Vec::new();
-    {
-        let mut x = right_start;
-        for &i in &rl.right_indices {
-            let tw = tree.children[i].total_w;
-            let ccx = x + tw / 2.0;
-            right_cxs.push(ccx);
-            x += tw + H_GAP;
+    /// `getF2.x`: attach x on the right face.
+    fn f2_x(&self) -> f64 {
+        if self.is_leaf() {
+            self.width
+        } else {
+            self.w1() + self.main_w / 2.0
         }
     }
-    let spine_y = root_top_y + BOX_H + SPINE_DROP;
-    let child_top_y = spine_y + SPINE_DROP;
-    for (idx, &i) in rl.right_indices.iter().enumerate() {
-        let ccx = right_cxs[idx];
-        emit_line(buf, ccx, spine_y, ccx, child_top_y);
-        render_node(buf, &tree.children[i], ccx, child_top_y);
+    /// `getF1.y` / `getF2.y`: vertical mid of this node's own box.
+    fn f_y(&self) -> f64 {
+        BOX_H / 2.0
     }
-    for (idx, &i) in rl.left_indices.iter().enumerate() {
-        let ccx = left_cxs[idx];
-        emit_line(buf, ccx, spine_y, ccx, child_top_y);
-        render_node(buf, &tree.children[i], ccx, child_top_y);
+}
+
+/// `Fork.drawU`: lay out the root and its top-level children.  Returns the
+/// rendered subtree's total width and height (excluding outer margins) so the
+/// caller can size the canvas and stack multiple roots.
+fn draw_fork(buf: &mut String, root: &Itf, ox: f64, oy: f64) -> (f64, f64) {
+    let main_w = root.main_w;
+    let y0 = BOX_H;
+    let y1 = y0 + FORK_DELTA_Y / 2.0;
+    let y2 = y0 + FORK_DELTA_Y;
+
+    // Top-level children are all on the right in Fork (left-at-root is
+    // re-homed to the right at parse time in PlantUML).
+    let children = &root.right;
+
+    if children.is_empty() {
+        emit_box(buf, ox, oy, root);
+        emit_line(buf, ox + main_w / 2.0, oy + y0, ox + main_w / 2.0, oy + y1);
+        return (main_w, y1);
     }
-    let all_cxs: Vec<f64> = left_cxs.iter().chain(right_cxs.iter()).cloned().collect();
-    if all_cxs.len() >= 2 {
-        let leftmost = all_cxs.iter().cloned().fold(f64::INFINITY, f64::min);
-        let rightmost = all_cxs.iter().cloned().fold(f64::NEG_INFINITY, f64::max);
-        emit_line(buf, leftmost, spine_y, rightmost, spine_y);
+
+    let mut x = 0.0;
+    let first_x = children[0].t1_x();
+    let mut last_x = first_x;
+    for child in children {
+        last_x = x + child.t1_x();
+        emit_line(buf, ox + last_x, oy + y1, ox + last_x, oy + y2);
+        draw_itf(buf, child, ox + x, oy + y2);
+        x += child.width + FORK_DELTA_X;
     }
-    emit_box(
+
+    let full_w = fork_width(root);
+    let pos_main = if last_x > first_x {
+        emit_line(buf, ox + first_x, oy + y1, ox + last_x, oy + y1);
+        first_x + (last_x - first_x - main_w) / 2.0
+    } else {
+        let pm = (full_w - main_w) / 2.0;
+        emit_line(buf, ox + first_x, oy + y1, ox + pm + main_w / 2.0, oy + y1);
+        pm
+    };
+    emit_box(buf, ox + pos_main, oy, root);
+    emit_line(
         buf,
-        root_box_x,
-        root_top_y,
-        root_box_w,
-        &tree.label,
-        tree.text_w,
+        ox + pos_main + main_w / 2.0,
+        oy + y0,
+        ox + pos_main + main_w / 2.0,
+        oy + y1,
     );
-    emit_line(buf, root_cx, root_top_y + BOX_H, root_cx, spine_y);
+
+    let mut h = 0.0_f64;
+    for child in children {
+        h = h.max(child.height);
+    }
+    (full_w, y0 + FORK_DELTA_Y + h)
+}
+
+impl Itf {
+    /// `getT1.x`: trunk x used by `Fork` to attach top-level drop lines.
+    fn t1_x(&self) -> f64 {
+        if self.is_leaf() {
+            self.width / 2.0
+        } else {
+            self.w1()
+        }
+    }
+}
+
+/// `Fork.calculateDimension` width.
+fn fork_width(root: &Itf) -> f64 {
+    let children = &root.right;
+    let mut w: f64 = children.iter().map(|c| c.width).sum();
+    if children.len() > 1 {
+        w += (children.len() - 1) as f64 * FORK_DELTA_X;
+    }
+    w.max(root.main_w)
 }
 
 /// Render a WBS diagram with an optional oracle layout.
@@ -306,26 +346,29 @@ pub fn render(diagram: &WbsDiagram, _theme: &Theme) -> String {
     if diagram.nodes.is_empty() {
         return r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="WBS" height="50px" preserveAspectRatio="none" style="width:100px;height:50px;background:#FFFFFF;" version="1.1" viewBox="0 0 100 50" width="100px" zoomAndPan="magnify"><?plantuml ?><defs/><g></g></svg>"#.to_string();
     }
-    let mut roots_layout: Vec<RootLayout> = Vec::new();
+
+    let roots: Vec<Itf> = diagram.nodes.iter().map(|n| measure(n, true)).collect();
+
+    // First pass: lay out into a scratch buffer to learn each root's extent.
+    let mut body = String::with_capacity(2048);
     let mut canvas_w = 0.0_f64;
     let mut y_cursor = MARGIN;
-    for root_node in &diagram.nodes {
-        let (rl, this_canvas_w) = compute_root_layout(root_node, y_cursor);
-        canvas_w = canvas_w.max(this_canvas_w);
-        y_cursor += rl.canvas_h + MARGIN;
-        roots_layout.push(rl);
+    for root in &roots {
+        let (w, h) = draw_fork(&mut body, root, MARGIN, y_cursor);
+        canvas_w = canvas_w.max(w);
+        y_cursor += h + MARGIN;
     }
-    let total_w_i = canvas_w.ceil() as i64;
+
+    let total_w_i = (canvas_w + 2.0 * MARGIN).ceil() as i64;
     let total_h_i = y_cursor.ceil() as i64;
-    let mut buf = String::with_capacity(2048);
+
+    let mut buf = String::with_capacity(body.len() + 512);
     write!(
         buf,
         r##"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="WBS" height="{total_h_i}px" preserveAspectRatio="none" style="width:{total_w_i}px;height:{total_h_i}px;background:#FFFFFF;" version="1.1" viewBox="0 0 {total_w_i} {total_h_i}" width="{total_w_i}px" zoomAndPan="magnify"><?plantuml ?><defs/><g>"##,
     )
     .unwrap();
-    for rl in &roots_layout {
-        render_root(&mut buf, rl, canvas_w);
-    }
+    buf.push_str(&body);
     buf.push_str("</g></svg>");
     buf
 }

@@ -8,19 +8,21 @@ fn wrap(body: &str) -> String {
     format!("@startuml\n{body}\n@enduml\n")
 }
 
-/// Wraps diagram body in custom start/end tags.
+/// Wraps diagram body in custom start/end tags (for non-UML diagram types).
 fn wrap_custom(start: &str, body: &str, end: &str) -> String {
-    format!("{start}\n{body}\n{end}\n")
+    format!("@{start}\n{body}\n@{end}\n")
 }
 
-// ===========================================================================
+// ---------------------------------------------------------------------------
 // Sequence diagrams
-// ===========================================================================
+// ---------------------------------------------------------------------------
 
+/// Generates a simple two-participant sequence diagram.
 pub fn simple_sequence() -> String {
     wrap("Alice -> Bob : hello")
 }
 
+/// Generates a sequence diagram with N messages between alternating participants.
 pub fn multi_message_sequence(n: usize) -> String {
     let participants = ["Alice", "Bob"];
     let mut body = String::new();
@@ -32,6 +34,7 @@ pub fn multi_message_sequence(n: usize) -> String {
     wrap(&body)
 }
 
+/// Options for generating sequence diagrams with various features.
 #[derive(Default)]
 pub struct SequenceOptions {
     pub reply_arrows: bool,
@@ -40,299 +43,271 @@ pub struct SequenceOptions {
     pub participant_declarations: bool,
 }
 
+/// Generates a sequence diagram exercising the requested features.
 pub fn sequence_with_features(opts: &SequenceOptions) -> String {
     let mut body = String::new();
+
     if opts.participant_declarations {
         writeln!(body, "participant Alice").unwrap();
         writeln!(body, "participant Bob").unwrap();
     }
+
     writeln!(body, "Alice -> Bob : request").unwrap();
+
     if opts.notes {
         writeln!(body, "note right of Bob : Processing...").unwrap();
     }
+
     if opts.reply_arrows {
         writeln!(body, "Bob --> Alice : response").unwrap();
     }
+
     if opts.groups {
         writeln!(body, "group Transaction").unwrap();
         writeln!(body, "  Alice -> Bob : commit").unwrap();
         writeln!(body, "  Bob --> Alice : ack").unwrap();
         writeln!(body, "end").unwrap();
     }
+
     wrap(&body)
 }
 
-pub fn seq_arrow_types() -> String {
+/// Generates a sequence diagram using all common arrow types.
+pub fn sequence_arrow_types() -> String {
     wrap(
-        "A -> B : solid\n\
-         A --> B : dotted\n\
-         A ->> B : thin\n\
-         A -->> B : thin dotted\n\
-         A ->x B : lost\n\
-         A ->o B : circle end\n\
-         A o-> B : circle start\n\
-         A <-> B : bidirectional",
+        "Alice -> Bob : sync\n\
+         Alice --> Bob : dashed\n\
+         Alice ->> Bob : async\n\
+         Alice -->> Bob : dashed async\n\
+         Alice ->x Bob : lost\n\
+         Alice -\\ Bob : half solid\n\
+         Alice -\\\\ Bob : half dashed\n\
+         Alice -/ Bob : half right\n\
+         Alice -// Bob : half right dashed\n\
+         Alice o-> Bob : circle\n\
+         Alice <-> Bob : bidirectional",
     )
 }
 
-pub fn seq_participant_types() -> String {
+/// Generates a sequence diagram with all participant types.
+pub fn sequence_participant_types() -> String {
     wrap(
-        "participant P\n\
-         actor A\n\
-         boundary B\n\
-         control C\n\
-         entity E\n\
-         database D\n\
-         collections Co\n\
-         queue Q\n\
-         P -> A : msg",
+        "actor User\n\
+         boundary Frontend\n\
+         control Controller\n\
+         entity Entity\n\
+         database DB\n\
+         collections Cache\n\
+         queue MQ\n\
+         User -> Frontend : request\n\
+         Frontend -> Controller : forward\n\
+         Controller -> Entity : load\n\
+         Entity -> DB : query\n\
+         Controller -> Cache : read\n\
+         Controller -> MQ : publish",
     )
 }
 
-pub fn seq_activation() -> String {
+/// Generates a sequence diagram with participant aliases and creation.
+pub fn sequence_participant_aliases() -> String {
     wrap(
-        "A -> B ++ : activate\n\
-         B -> C ++ : nested\n\
-         C --> B -- : return\n\
-         B --> A -- : return",
+        "participant \"Long Name\" as LN\n\
+         participant \"Another Long Name\" as ALN\n\
+         create participant \"Created Later\" as C\n\
+         LN -> ALN : first\n\
+         ALN -> C : create\n\
+         C --> ALN : created",
     )
 }
 
-pub fn seq_notes_all() -> String {
+/// Generates a sequence diagram with lifeline activation and deactivation.
+pub fn sequence_activation() -> String {
     wrap(
-        "A -> B : msg\n\
-         note left : left note\n\
-         note right : right note\n\
-         note over A : over A\n\
-         note over A, B : over both",
+        "Alice -> Bob : request\n\
+         activate Bob\n\
+         Bob -> Charlie : delegate\n\
+         activate Charlie\n\
+         Charlie --> Bob : done\n\
+         deactivate Charlie\n\
+         Bob --> Alice : result\n\
+         deactivate Bob",
     )
 }
 
-pub fn seq_alt_else() -> String {
+/// Generates a sequence diagram using ++ / -- activation shorthand.
+pub fn sequence_activation_shorthand() -> String {
     wrap(
-        "A -> B : check\n\
+        "Alice -> Bob ++ : call\n\
+         Bob -> Charlie ++ : sub-call\n\
+         return sub-done\n\
+         return done",
+    )
+}
+
+/// Generates a sequence diagram with destroy.
+pub fn sequence_destroy() -> String {
+    wrap(
+        "Alice -> Bob : create\n\
+         activate Bob\n\
+         Bob --> Alice : ack\n\
+         Alice -> Bob : kill\n\
+         destroy Bob",
+    )
+}
+
+/// Generates a sequence diagram with all note types.
+pub fn sequence_note_types() -> String {
+    wrap(
+        "Alice -> Bob : msg\n\
+         note left of Alice : Left note\n\
+         note right of Bob : Right note\n\
+         note over Alice : Over Alice\n\
+         note over Alice, Bob : Spanning both\n\
+         hnote over Alice : hexagonal\n\
+         rnote over Bob : rectangular",
+    )
+}
+
+/// Generates a sequence diagram with all grouping types.
+pub fn sequence_groupings() -> String {
+    wrap(
+        "Alice -> Bob : start\n\
          alt success\n\
-           B --> A : ok\n\
+           Bob --> Alice : ok\n\
          else failure\n\
-           B --> A : error\n\
-         end",
-    )
-}
-
-pub fn seq_loop() -> String {
-    wrap(
-        "A -> B : start\n\
+           Bob --> Alice : error\n\
+         end\n\
+         opt optional\n\
+           Alice -> Bob : maybe\n\
+         end\n\
          loop 3 times\n\
-           B --> A : iterate\n\
+           Alice -> Bob : repeat\n\
+         end\n\
+         par\n\
+           Alice -> Bob : parallel a\n\
+         else\n\
+           Alice -> Bob : parallel b\n\
+         end\n\
+         break on error\n\
+           Alice -> Bob : abort\n\
+         end\n\
+         critical\n\
+           Alice -> Bob : exclusive\n\
+         end\n\
+         group Custom Label\n\
+           Alice -> Bob : grouped\n\
          end",
     )
 }
 
-pub fn seq_opt() -> String {
+/// Generates a sequence diagram with dividers, delays, and spacing.
+pub fn sequence_dividers_delays() -> String {
     wrap(
-        "A -> B : check\n\
-         opt condition met\n\
-           B --> A : response\n\
-         end",
-    )
-}
-
-pub fn seq_critical() -> String {
-    wrap(
-        "A -> B : start\n\
-         critical Critical section\n\
-           A -> B : important\n\
-         end",
-    )
-}
-
-pub fn seq_par() -> String {
-    wrap(
-        "participant A\nparticipant B\nparticipant C\n\
-         par Branch 1\n\
-           A -> B : msg1\n\
-         else Branch 2\n\
-           A -> C : msg2\n\
-         end",
-    )
-}
-
-pub fn seq_break() -> String {
-    wrap(
-        "A -> B : start\n\
-         loop forever\n\
-           A -> B : try\n\
-           break on error\n\
-             B --> A : abort\n\
-           end\n\
-         end",
-    )
-}
-
-pub fn seq_divider() -> String {
-    wrap(
-        "A -> B : before\n\
-         == Phase 2 ==\n\
-         A -> B : after",
-    )
-}
-
-pub fn seq_delay() -> String {
-    wrap(
-        "A -> B : before\n\
+        "Alice -> Bob : before divider\n\
+         == Section A ==\n\
+         Alice -> Bob : in section\n\
          ...5 minutes later...\n\
-         A -> B : after",
-    )
-}
-
-pub fn seq_spacing() -> String {
-    wrap(
-        "A -> B : msg1\n\
+         Alice -> Bob : after delay\n\
          |||\n\
-         A -> B : msg2\n\
+         Alice -> Bob : after space\n\
          ||45||\n\
-         A -> B : msg3",
+         Alice -> Bob : after sized space",
     )
 }
 
-pub fn seq_box() -> String {
+/// Generates a sequence diagram with ref over.
+pub fn sequence_ref() -> String {
     wrap(
-        "box \"Internal\"\n\
-         participant A\n\
-         participant B\n\
-         end box\n\
-         box \"External\" #LightBlue\n\
-         participant C\n\
-         end box\n\
-         A -> C : call",
+        "Alice -> Bob : start\n\
+         ref over Alice, Bob : See interaction foo\n\
+         Bob --> Alice : done",
     )
 }
 
-pub fn seq_autonumber() -> String {
+/// Generates a sequence diagram with boxes.
+pub fn sequence_boxes() -> String {
+    wrap(
+        "box \"System A\"\n\
+           participant Alice\n\
+           participant Bob\n\
+         end box\n\
+         box \"System B\" #LightBlue\n\
+           participant Charlie\n\
+         end box\n\
+         Alice -> Bob : internal\n\
+         Bob -> Charlie : cross-system",
+    )
+}
+
+/// Generates a sequence diagram with basic autonumber.
+pub fn sequence_autonumber() -> String {
     wrap(
         "autonumber\n\
-         A -> B : first\n\
-         B -> C : second\n\
-         C --> B : third",
-    )
-}
-
-pub fn seq_autonumber_format() -> String {
-    wrap(
-        "autonumber 10 10 \"[000]\"\n\
-         A -> B : first\n\
-         B --> A : second\n\
+         Alice -> Bob : first\n\
+         Bob --> Alice : reply\n\
          autonumber stop\n\
-         A -> B : unnumbered\n\
+         Alice -> Bob : unnumbered\n\
          autonumber resume\n\
-         A -> B : numbered again",
+         Alice -> Bob : continued",
     )
 }
 
-pub fn seq_return() -> String {
+/// Generates a sequence diagram with autonumber format.
+pub fn sequence_autonumber_format() -> String {
     wrap(
-        "A -> B ++ : request\n\
-         return response",
+        "autonumber 10 10 \"<b>[00]</b>\"\n\
+         Alice -> Bob : msg 10\n\
+         Alice -> Bob : msg 20\n\
+         Alice -> Bob : msg 30",
     )
 }
 
-pub fn seq_self_message() -> String {
+/// Generates a sequence diagram with self-messages.
+pub fn sequence_self_messages() -> String {
     wrap(
-        "A -> A : self call\n\
-         A --> A : self return",
+        "Alice -> Alice : self message\n\
+         Alice --> Alice : self reply\n\
+         Bob -> Bob : Bob thinks",
     )
 }
 
-pub fn seq_create() -> String {
+/// Generates a sequence diagram with title, header, and footer.
+pub fn sequence_title_header_footer() -> String {
     wrap(
-        "A -> B : normal\n\
-         create C\n\
-         A -> C : create",
+        "title My Sequence Diagram\n\
+         header Page 1\n\
+         footer Generated by PlantUML\n\
+         Alice -> Bob : hello\n\
+         Bob --> Alice : world",
     )
 }
 
-pub fn seq_title_header_footer() -> String {
-    wrap(
-        "title My Diagram\n\
-         header Page Header\n\
-         footer Page Footer\n\
-         caption Figure 1\n\
-         A -> B : msg",
-    )
-}
-
-pub fn seq_legend() -> String {
-    wrap(
-        "A -> B : msg\n\
-         legend\n\
-           This is the legend\n\
-         endlegend",
-    )
-}
-
-pub fn seq_hide_unlinked() -> String {
-    wrap(
-        "participant A\n\
-         participant B\n\
-         participant C\n\
-         hide unlinked\n\
-         A -> B : only A and B",
-    )
-}
-
-pub fn seq_newpage() -> String {
-    wrap(
-        "A -> B : page 1\n\
-         newpage\n\
-         A -> B : page 2",
-    )
-}
-
-pub fn seq_skinparam() -> String {
+/// Generates a sequence diagram with skinparam.
+pub fn sequence_skinparam() -> String {
     wrap(
         "skinparam sequenceArrowThickness 2\n\
-         skinparam sequenceParticipantBorderColor Blue\n\
-         A -> B : styled",
+         skinparam roundcorner 20\n\
+         skinparam maxmessagesize 60\n\
+         Alice -> Bob : styled message\n\
+         Bob --> Alice : styled reply",
     )
 }
 
-pub fn seq_ref() -> String {
+/// Generates a sequence diagram with colored participants.
+pub fn sequence_colored_participants() -> String {
     wrap(
-        "participant A\n\
-         participant B\n\
-         ref over A, B : See other diagram\n\
-         A -> B : continue",
+        "participant Alice #lightblue\n\
+         participant Bob #lightgreen\n\
+         Alice -> Bob : hello\n\
+         Bob --> Alice : world",
     )
 }
 
-pub fn seq_external() -> String {
-    wrap(
-        "participant A\n\
-         [-> A : from outside\n\
-         A ->] : to outside",
-    )
-}
-
-pub fn seq_alias() -> String {
-    wrap(
-        "participant \"Alice Johnson\" as A\n\
-         participant \"Bob Smith\" as B\n\
-         A -> B : hello",
-    )
-}
-
-pub fn seq_destroy() -> String {
-    wrap(
-        "A -> B : request\n\
-         B --> A : response\n\
-         destroy B",
-    )
-}
-
-// ===========================================================================
+// ---------------------------------------------------------------------------
 // Class diagrams
-// ===========================================================================
+// ---------------------------------------------------------------------------
 
+/// Generates a class diagram with inheritance and fields/methods.
 pub fn class_diagram() -> String {
     wrap(
         "class Animal {\n  +name : String\n  +makeSound() : void\n}\n\
@@ -341,6 +316,7 @@ pub fn class_diagram() -> String {
     )
 }
 
+/// Generates a class diagram with interfaces and composition.
 pub fn class_diagram_with_relationships() -> String {
     wrap(
         "interface Drawable {\n  +draw() : void\n}\n\
@@ -352,180 +328,183 @@ pub fn class_diagram_with_relationships() -> String {
     )
 }
 
-pub fn class_entity_types() -> String {
+/// Generates a class diagram with all entity types.
+pub fn class_all_entity_types() -> String {
     wrap(
-        "class MyClass\n\
-         abstract class MyAbstract\n\
-         interface MyInterface\n\
-         enum MyEnum\n\
+        "class MyClass {\n  +field : int\n}\n\
+         abstract class AbstractBase {\n  +{abstract} doIt() : void\n}\n\
+         interface MyInterface {\n  +method() : void\n}\n\
+         enum Color {\n  RED\n  GREEN\n  BLUE\n}\n\
          annotation MyAnnotation\n\
-         entity MyEntity",
+         entity DataEntity {\n  id : int\n  name : String\n}\n\
+         MyClass --|> AbstractBase\n\
+         MyClass ..|> MyInterface",
     )
 }
 
-pub fn class_visibility() -> String {
+/// Generates a class diagram with all visibility modifiers.
+pub fn class_visibility_modifiers() -> String {
     wrap(
-        "class Foo {\n\
-           +publicField : String\n\
-           -privateField : int\n\
+        "class Visibility {\n\
+           +publicField : int\n\
+           -privateField : String\n\
            #protectedField : boolean\n\
            ~packageField : double\n\
-           +publicMethod()\n\
-           -privateMethod()\n\
+           +publicMethod() : void\n\
+           -privateMethod() : void\n\
+           #protectedMethod() : void\n\
+           ~packageMethod() : void\n\
          }",
     )
 }
 
+/// Generates a class diagram with static and abstract members.
 pub fn class_static_abstract() -> String {
     wrap(
-        "class Foo {\n\
-           {static} counter : int\n\
-           {abstract} process()\n\
-           {static} getInstance()\n\
+        "class Example {\n\
+           +{static} staticField : int\n\
+           +{abstract} abstractMethod() : void\n\
+           +{static} staticMethod() : String\n\
          }",
     )
 }
 
+/// Generates a class diagram with generics.
 pub fn class_generics() -> String {
     wrap(
-        "class Container<T>\n\
-         class Map<K, V>\n\
-         Container -> Map",
+        "class Container<T> {\n\
+           -items : List<T>\n\
+           +add(item : T) : void\n\
+           +get(index : int) : T\n\
+         }\n\
+         class Pair<K, V> {\n\
+           +key : K\n\
+           +value : V\n\
+         }",
     )
 }
 
+/// Generates a class diagram with all relationship types.
 pub fn class_all_relationships() -> String {
     wrap(
-        "A <|-- B\n\
-         C ..|> D\n\
-         E *-- F\n\
-         G o-- H\n\
-         I -- J\n\
-         K ..> L",
+        "ClassA <|-- ClassB : inheritance\n\
+         ClassC ..|> InterfaceD : realization\n\
+         ClassE *-- ClassF : composition\n\
+         ClassG o-- ClassH : aggregation\n\
+         ClassI -- ClassJ : association\n\
+         ClassK ..> ClassL : dependency\n\
+         ClassM ()-- ClassN : required interface",
     )
 }
 
-pub fn class_labels_multiplicity() -> String {
+/// Generates a class diagram with labels and multiplicity on relationships.
+pub fn class_relationship_labels() -> String {
     wrap(
-        "Parent \"1\" -- \"0..*\" Child : has\n\
-         Teacher \"1\" -- \"many\" Student : teaches",
+        "Customer \"1\" --> \"*\" Order : places\n\
+         Order \"1\" *-- \"1..*\" OrderLine : contains\n\
+         Product \"*\" <-- \"*\" OrderLine : references",
     )
 }
 
+/// Generates a class diagram with packages and namespaces.
 pub fn class_packages() -> String {
     wrap(
         "package com.example {\n\
-           class Foo\n\
-           class Bar\n\
-         }\n\
-         package org.test {\n\
-           class Baz\n\
-         }\n\
-         Foo --> Baz",
-    )
-}
-
-pub fn class_nested_packages() -> String {
-    wrap(
-        "package outer {\n\
-           package inner {\n\
-             class Foo\n\
+           class Service {\n\
+             +execute() : void\n\
            }\n\
-           class Bar\n\
-         }",
+           class Repository {\n\
+             +findById(id : int) : Entity\n\
+           }\n\
+         }\n\
+         namespace com.example.model {\n\
+           class Entity {\n\
+             +id : int\n\
+           }\n\
+         }\n\
+         com.example.Service --> com.example.Repository",
     )
 }
 
+/// Generates a class diagram with notes on classes.
 pub fn class_notes() -> String {
     wrap(
-        "class Foo\n\
-         note right of Foo : This is Foo\n\
-         class Bar\n\
-         Foo -- Bar\n\
-         note on link : relationship note",
+        "class Foo {\n  +bar() : void\n}\n\
+         note top of Foo : This is a top note\n\
+         note bottom of Foo : Bottom note\n\
+         note left of Foo : Left note\n\
+         note right of Foo : Right note",
     )
 }
 
+/// Generates a class diagram with stereotypes.
 pub fn class_stereotypes() -> String {
     wrap(
-        "class Foo <<singleton>>\n\
-         class Bar <<deprecated>>\n\
-         interface Baz <<callback>>",
-    )
-}
-
-pub fn class_separators() -> String {
-    wrap(
-        "class Foo {\n\
-           +field1\n\
-           --\n\
-           +method1()\n\
-           ==\n\
-           -internal\n\
-           ..\n\
-           #protectedStuff\n\
-         }",
-    )
-}
-
-pub fn class_enum_values() -> String {
-    wrap(
-        "enum Color {\n\
-           RED\n\
-           GREEN\n\
-           BLUE\n\
-         }",
-    )
-}
-
-pub fn class_together() -> String {
-    wrap(
-        "together {\n\
-           class A\n\
-           class B\n\
+        "class AuthService <<Service>> {\n\
+           +login(user: String, pass: String) : Token\n\
          }\n\
-         class C\n\
-         A --> C\n\
-         B --> C",
+         class UserEntity <<Entity>> {\n\
+           +id : int\n\
+           +username : String\n\
+         }\n\
+         class UserRepository <<Repository>> {\n\
+           +findByUsername(name: String) : UserEntity\n\
+         }",
     )
 }
 
+/// Generates a class diagram with body separators.
+pub fn class_body_separators() -> String {
+    wrap(
+        "class WithSeparators {\n\
+           +fieldA : int\n\
+           --\n\
+           +methodA() : void\n\
+           ..\n\
+           #internalMethod() : void\n\
+           ==\n\
+           +publicApi() : void\n\
+         }",
+    )
+}
+
+/// Generates an enum diagram with values.
+pub fn class_enum_with_values() -> String {
+    wrap(
+        "enum Status {\n\
+           PENDING\n\
+           ACTIVE\n\
+           INACTIVE\n\
+           DELETED\n\
+         }\n\
+         enum Priority {\n\
+           LOW\n\
+           MEDIUM\n\
+           HIGH\n\
+         }",
+    )
+}
+
+/// Generates an object diagram.
 pub fn class_object_diagram() -> String {
     wrap(
-        "object obj1 {\n\
+        "object alice {\n\
            name = \"Alice\"\n\
            age = 30\n\
          }\n\
-         object obj2 {\n\
+         object bob {\n\
            name = \"Bob\"\n\
+           age = 25\n\
          }\n\
-         obj1 --> obj2",
+         alice --> bob : knows",
     )
 }
 
-pub fn class_map() -> String {
-    wrap(
-        "map Config {\n\
-           host => localhost\n\
-           port => 8080\n\
-           debug => true\n\
-         }",
-    )
-}
-
-pub fn class_inline_definition() -> String {
-    wrap(
-        "class User\n\
-         User : +name : String\n\
-         User : +email : String\n\
-         User : +login()",
-    )
-}
-
-// ===========================================================================
+// ---------------------------------------------------------------------------
 // State diagrams
-// ===========================================================================
+// ---------------------------------------------------------------------------
 
+/// Generates a simple state diagram with transitions.
 pub fn state_diagram() -> String {
     wrap(
         "[*] --> Active\n\
@@ -535,6 +514,7 @@ pub fn state_diagram() -> String {
     )
 }
 
+/// Generates a state diagram with nested states.
 pub fn state_diagram_nested() -> String {
     wrap(
         "state Running {\n  \
@@ -547,74 +527,66 @@ pub fn state_diagram_nested() -> String {
     )
 }
 
-pub fn state_stereotypes() -> String {
+/// Generates a state diagram with concurrent regions.
+pub fn state_diagram_concurrent() -> String {
     wrap(
-        "state start1 <<start>>\n\
-         state end1 <<end>>\n\
-         state choice1 <<choice>>\n\
-         state fork1 <<fork>>\n\
-         state join1 <<join>>\n\
-         start1 --> choice1\n\
-         choice1 --> fork1 : yes\n\
-         choice1 --> end1 : no\n\
-         fork1 --> join1",
-    )
-}
-
-pub fn state_concurrent() -> String {
-    wrap(
-        "state Active {\n\
-           state \"Sub1\" as s1\n\
-           state \"Sub2\" as s2\n\
+        "state ConcurrentState {\n\
+           state RegionA {\n\
+             [*] --> A1\n\
+             A1 --> A2\n\
+           }\n\
            --\n\
-           state \"Sub3\" as s3\n\
-           state \"Sub4\" as s4\n\
+           state RegionB {\n\
+             [*] --> B1\n\
+             B1 --> B2\n\
+           }\n\
          }\n\
-         [*] --> Active",
+         [*] --> ConcurrentState",
     )
 }
 
-pub fn state_descriptions() -> String {
+/// Generates a state diagram with history state.
+pub fn state_diagram_history() -> String {
     wrap(
-        "state Active\n\
-         Active : entry / initialize\n\
-         Active : do / process\n\
-         Active : exit / cleanup\n\
-         [*] --> Active",
+        "state Workflow {\n\
+           [*] --> Step1\n\
+           Step1 --> Step2\n\
+           Step2 --> Step3\n\
+         }\n\
+         [*] --> Workflow\n\
+         Workflow --> Paused : pause\n\
+         Paused --> Workflow[H] : resume",
     )
 }
 
-pub fn state_colors() -> String {
+/// Generates a state diagram with notes on states.
+pub fn state_diagram_notes() -> String {
     wrap(
-        "state Active #LightGreen\n\
-         state Error #FF0000\n\
-         [*] --> Active\n\
-         Active --> Error : fail",
+        "[*] --> Active\n\
+         Active --> Inactive : disable\n\
+         note right of Active : This is the active state\n\
+         note left of Inactive : Waiting for enable",
     )
 }
 
-pub fn state_notes() -> String {
+/// Generates a state diagram with colored states.
+pub fn state_diagram_colored() -> String {
     wrap(
-        "state Active\n\
-         note right of Active : Important state\n\
-         [*] --> Active\n\
+        "state Active #lightgreen\n\
+         state Error #pink\n\
+         state Pending #lightyellow\n\
+         [*] --> Pending\n\
+         Pending --> Active : approve\n\
+         Pending --> Error : reject\n\
          Active --> [*]",
     )
 }
 
-pub fn state_hide_empty() -> String {
-    wrap(
-        "hide empty description\n\
-         state A\n\
-         state B\n\
-         A --> B",
-    )
-}
-
-// ===========================================================================
+// ---------------------------------------------------------------------------
 // Activity diagrams
-// ===========================================================================
+// ---------------------------------------------------------------------------
 
+/// Generates a simple activity diagram with a condition.
 pub fn activity_diagram() -> String {
     wrap(
         "start\n\
@@ -628,6 +600,7 @@ pub fn activity_diagram() -> String {
     )
 }
 
+/// Generates an activity diagram with a loop and fork/join.
 pub fn activity_diagram_with_fork() -> String {
     wrap(
         "start\n\
@@ -642,135 +615,174 @@ pub fn activity_diagram_with_fork() -> String {
     )
 }
 
+/// Generates an activity diagram with start, stop, and end.
+pub fn activity_start_stop_end() -> String {
+    wrap(
+        "start\n\
+         :Action;\n\
+         if (done?) then (yes)\n\
+           stop\n\
+         else (no)\n\
+           end\n\
+         endif",
+    )
+}
+
+/// Generates an activity diagram with elseif branches.
+pub fn activity_elseif() -> String {
+    wrap(
+        "start\n\
+         :Input;\n\
+         if (value > 10?) then (yes)\n\
+           :High;\n\
+         elseif (value > 5?) then (yes)\n\
+           :Medium;\n\
+         else (no)\n\
+           :Low;\n\
+         endif\n\
+         stop",
+    )
+}
+
+/// Generates an activity diagram with switch/case.
 pub fn activity_switch() -> String {
     wrap(
         "start\n\
-         switch (test?)\n\
-         case ( A )\n\
-           :action A;\n\
-         case ( B )\n\
-           :action B;\n\
+         switch (color?)\n\
+         case (red)\n\
+           :Red action;\n\
+         case (green)\n\
+           :Green action;\n\
+         case (blue)\n\
+           :Blue action;\n\
          endswitch\n\
          stop",
     )
 }
 
-pub fn activity_while_loop() -> String {
+/// Generates an activity diagram with while loop.
+pub fn activity_while() -> String {
     wrap(
         "start\n\
-         while (condition?) is (yes)\n\
-           :process;\n\
+         while (items remain?) is (yes)\n\
+           :Process item;\n\
          endwhile (no)\n\
          stop",
     )
 }
 
-pub fn activity_repeat_loop() -> String {
+/// Generates an activity diagram with repeat/repeatwhile.
+pub fn activity_repeat() -> String {
     wrap(
         "start\n\
          repeat\n\
-           :action;\n\
-         repeat while (again?) is (yes) not (no)\n\
+           :Try action;\n\
+         repeat while (failed?) is (yes)\n\
          stop",
     )
 }
 
-pub fn activity_swimlanes() -> String {
-    wrap(
-        "|Swimlane1|\n\
-         start\n\
-         :task1;\n\
-         |Swimlane2|\n\
-         :task2;\n\
-         |Swimlane1|\n\
-         :task3;\n\
-         stop",
-    )
-}
-
-pub fn activity_partition() -> String {
-    wrap(
-        "start\n\
-         partition Initialization {\n\
-           :step1;\n\
-           :step2;\n\
-         }\n\
-         partition Processing {\n\
-           :step3;\n\
-         }\n\
-         stop",
-    )
-}
-
-pub fn activity_detach() -> String {
-    wrap(
-        "start\n\
-         if (error?) then (yes)\n\
-           :log error;\n\
-           detach\n\
-         else (no)\n\
-           :continue;\n\
-         endif\n\
-         stop",
-    )
-}
-
-pub fn activity_kill() -> String {
-    wrap(
-        "start\n\
-         :step1;\n\
-         if (fatal?) then (yes)\n\
-           kill\n\
-         else (no)\n\
-           :step2;\n\
-         endif\n\
-         stop",
-    )
-}
-
+/// Generates an activity diagram with split.
 pub fn activity_split() -> String {
     wrap(
         "start\n\
          split\n\
-           :task A;\n\
+           :Branch A;\n\
          split again\n\
-           :task B;\n\
+           :Branch B;\n\
          split again\n\
-           :task C;\n\
+           :Branch C;\n\
          end split\n\
          stop",
     )
 }
 
-pub fn activity_notes() -> String {
+/// Generates an activity diagram with swimlanes.
+pub fn activity_swimlanes() -> String {
     wrap(
-        "start\n\
-         :action;\n\
-         note right\n\
-           This is a note\n\
-         end note\n\
-         stop",
-    )
-}
-
-pub fn activity_elseif() -> String {
-    wrap(
-        "start\n\
-         if (x > 0?) then (positive)\n\
-           :positive path;\n\
-         elseif (x < 0?) then (negative)\n\
-           :negative path;\n\
-         else (zero)\n\
-           :zero path;\n\
+        "|User|\n\
+         start\n\
+         :Submit request;\n\
+         |System|\n\
+         :Validate request;\n\
+         if (valid?) then (yes)\n\
+           |Database|\n\
+           :Save data;\n\
+           |User|\n\
+           :Show success;\n\
+         else (no)\n\
+           |User|\n\
+           :Show error;\n\
          endif\n\
          stop",
     )
 }
 
-// ===========================================================================
-// Component diagrams
-// ===========================================================================
+/// Generates an activity diagram with partition.
+pub fn activity_partition() -> String {
+    wrap(
+        "start\n\
+         partition \"Phase 1\" {\n\
+           :Setup;\n\
+           :Configure;\n\
+         }\n\
+         partition \"Phase 2\" {\n\
+           :Execute;\n\
+           :Verify;\n\
+         }\n\
+         stop",
+    )
+}
 
+/// Generates an activity diagram with notes.
+pub fn activity_notes() -> String {
+    wrap(
+        "start\n\
+         :Main action;\n\
+         note right\n\
+           This is a note\n\
+           on the right\n\
+         end note\n\
+         :Another action;\n\
+         note left : Quick left note\n\
+         stop",
+    )
+}
+
+/// Generates an activity diagram with kill and detach.
+pub fn activity_kill_detach() -> String {
+    wrap(
+        "start\n\
+         :Process;\n\
+         if (error?) then (yes)\n\
+           kill\n\
+         else (no)\n\
+           :Continue;\n\
+           detach\n\
+         endif",
+    )
+}
+
+/// Generates an activity diagram with connectors.
+pub fn activity_connectors() -> String {
+    wrap(
+        "start\n\
+         :Step A;\n\
+         (connector1)\n\
+         :Step B;\n\
+         if (done?) then (yes)\n\
+           stop\n\
+         else (no)\n\
+           (connector1)\n\
+         endif",
+    )
+}
+
+// ---------------------------------------------------------------------------
+// Component diagrams
+// ---------------------------------------------------------------------------
+
+/// Generates a simple component diagram.
 pub fn component_diagram() -> String {
     wrap(
         "component \"Web Server\" as WS\n\
@@ -781,38 +793,47 @@ pub fn component_diagram() -> String {
     )
 }
 
+/// Generates a component diagram with interfaces.
 pub fn component_with_interfaces() -> String {
     wrap(
-        "component \"App\" as app\n\
-         interface \"HTTP\" as http\n\
-         interface \"JDBC\" as jdbc\n\
-         component \"DB\" as db\n\
-         app - http\n\
-         app ..> jdbc\n\
-         jdbc - db",
+        "component Frontend\n\
+         component Backend\n\
+         component DataStore\n\
+         Frontend - [Backend] : REST\n\
+         [Backend] - [DataStore] : SQL\n\
+         () \"HTTP\" as HTTP\n\
+         Frontend ..> HTTP\n\
+         HTTP ..> Backend",
     )
 }
 
+/// Generates a component diagram with packages.
 pub fn component_packages() -> String {
     wrap(
-        "package \"Frontend\" {\n\
-           component [UI]\n\
-           component [Router]\n\
+        "package \"UI Layer\" {\n\
+           component WebApp\n\
+           component MobileApp\n\
          }\n\
-         package \"Backend\" {\n\
-           component [API]\n\
-           component [Service]\n\
+         package \"Service Layer\" {\n\
+           component AuthService\n\
+           component DataService\n\
          }\n\
-         [UI] --> [API]\n\
-         [Router] --> [API]\n\
-         [API] --> [Service]",
+         package \"Data Layer\" {\n\
+           database PostgreSQL\n\
+           database Redis\n\
+         }\n\
+         WebApp --> AuthService\n\
+         WebApp --> DataService\n\
+         DataService --> PostgreSQL\n\
+         AuthService --> Redis",
     )
 }
 
-// ===========================================================================
+// ---------------------------------------------------------------------------
 // Use case diagrams
-// ===========================================================================
+// ---------------------------------------------------------------------------
 
+/// Generates a use case diagram with actors and use cases.
 pub fn use_case_diagram() -> String {
     wrap(
         "actor User\n\
@@ -827,200 +848,242 @@ pub fn use_case_diagram() -> String {
     )
 }
 
-pub fn use_case_with_packages() -> String {
+/// Generates a use case diagram with stereotypes and extends.
+pub fn use_case_extended() -> String {
+    wrap(
+        "actor \"Customer\" as C\n\
+         actor \"Admin\" <<admin>> as A\n\
+         usecase \"Browse Catalog\" as UC1\n\
+         usecase \"Place Order\" as UC2\n\
+         usecase \"Apply Coupon\" as UC3\n\
+         usecase \"Track Order\" as UC4\n\
+         usecase \"Manage Products\" as UC5\n\
+         C --> UC1\n\
+         C --> UC2\n\
+         C --> UC4\n\
+         UC2 ..> UC3 : extends\n\
+         A --> UC5",
+    )
+}
+
+/// Generates a use case diagram with packages.
+pub fn use_case_packages() -> String {
     wrap(
         "actor User\n\
          rectangle System {\n\
-           usecase \"Login\" as UC1\n\
-           usecase \"Browse\" as UC2\n\
-           usecase \"Checkout\" as UC3\n\
+           usecase Login\n\
+           usecase Logout\n\
+           usecase ViewData\n\
          }\n\
-         User --> UC1\n\
-         User --> UC2\n\
-         UC2 ..> UC1 : <<include>>",
+         User --> Login\n\
+         User --> Logout\n\
+         User --> ViewData",
     )
 }
 
-// ===========================================================================
+// ---------------------------------------------------------------------------
 // Deployment diagrams
-// ===========================================================================
+// ---------------------------------------------------------------------------
 
+/// Generates a deployment diagram with nodes, artifacts, and cloud/frame.
 pub fn deployment_diagram() -> String {
     wrap(
-        "node WebServer {\n\
-           artifact app.war\n\
+        "node \"App Server\" as AppServer {\n\
+           artifact \"webapp.war\" as webapp\n\
          }\n\
-         node Database {\n\
-           artifact db.sql\n\
+         node \"Database Server\" as DBServer {\n\
+           database \"PostgreSQL\" as DB\n\
          }\n\
-         cloud Internet\n\
-         WebServer --> Database\n\
-         Internet --> WebServer",
+         cloud \"CDN\" as CDN\n\
+         frame \"Client Browser\" as Browser\n\
+         Browser --> CDN : HTTPS\n\
+         Browser --> AppServer : HTTPS\n\
+         AppServer --> DBServer : JDBC",
     )
 }
 
-pub fn deployment_detailed() -> String {
+/// Generates a deployment diagram with various node types.
+pub fn deployment_node_types() -> String {
     wrap(
-        "cloud \"AWS\" {\n\
-           node \"EC2\" as ec2 {\n\
-             artifact \"app.jar\"\n\
+        "node WebServer\n\
+         node AppServer\n\
+         database PostgreSQL\n\
+         cloud AWS\n\
+         frame Browser\n\
+         storage FileStorage\n\
+         WebServer --> AppServer : HTTP\n\
+         AppServer --> PostgreSQL : SQL\n\
+         AppServer --> FileStorage : read/write\n\
+         AWS --> WebServer : hosts",
+    )
+}
+
+// ---------------------------------------------------------------------------
+// Salt (wireframe) diagrams
+// ---------------------------------------------------------------------------
+
+/// Generates a simple Salt wireframe dialog.
+pub fn salt_dialog() -> String {
+    wrap_custom(
+        "startsalt",
+        "{+\n\
+           Login Dialog\n\
+           ===\n\
+           Username | \"user@example.com\"\n\
+           Password | \"***\"\n\
+           ===\n\
+           [Cancel] | [  OK  ]\n\
+         }",
+        "endsalt",
+    )
+}
+
+/// Generates a Salt wireframe with a tree widget.
+pub fn salt_tree() -> String {
+    wrap_custom(
+        "startsalt",
+        "{\n\
+           {T\n\
+             + Root\n\
+             ++ Child 1\n\
+             +++ Grandchild\n\
+             ++ Child 2\n\
            }\n\
-           database \"RDS\" as rds\n\
-           storage \"S3\" as s3\n\
-         }\n\
-         actor User\n\
-         User --> ec2\n\
-         ec2 --> rds\n\
-         ec2 --> s3",
+         }",
+        "endsalt",
     )
 }
 
-// ===========================================================================
-// Timing diagrams
-// ===========================================================================
-
-pub fn timing_diagram() -> String {
-    wrap(
-        "robust \"Web\" as W\n\
-         concise \"User\" as U\n\n\
-         @0\n\
-         W is Idle\n\
-         U is Idle\n\n\
-         @100\n\
-         W is Processing\n\
-         U is Waiting\n\n\
-         @300\n\
-         W is Idle\n\
-         U is Idle",
-    )
-}
-
-// ===========================================================================
-// Gantt charts
-// ===========================================================================
-
-pub fn gantt_chart() -> String {
-    wrap_custom(
-        "@startgantt",
-        "[Task 1] lasts 5 days\n\
-         [Task 2] lasts 3 days\n\
-         [Task 2] starts at [Task 1]'s end\n\
-         [Task 3] lasts 2 days\n\
-         [Task 3] starts at [Task 2]'s end",
-        "@endgantt",
-    )
-}
-
-// ===========================================================================
-// Mind maps
-// ===========================================================================
-
-pub fn mindmap() -> String {
-    wrap_custom(
-        "@startmindmap",
-        "* Root\n\
-         ** Branch A\n\
-         *** Leaf 1\n\
-         *** Leaf 2\n\
-         ** Branch B\n\
-         *** Leaf 3\n\
-         ** Branch C",
-        "@endmindmap",
-    )
-}
-
-// ===========================================================================
-// WBS (Work Breakdown Structure)
-// ===========================================================================
-
-pub fn wbs() -> String {
-    wrap_custom(
-        "@startwbs",
-        "* Project\n\
-         ** Phase 1\n\
-         *** Task A\n\
-         *** Task B\n\
-         ** Phase 2\n\
-         *** Task C",
-        "@endwbs",
-    )
-}
-
-// ===========================================================================
+// ---------------------------------------------------------------------------
 // JSON diagrams
-// ===========================================================================
+// ---------------------------------------------------------------------------
 
+/// Generates a JSON diagram.
 pub fn json_diagram() -> String {
     wrap_custom(
-        "@startjson",
+        "startjson",
         "{\n\
-           \"name\": \"test\",\n\
-           \"version\": 1,\n\
-           \"items\": [\"a\", \"b\", \"c\"],\n\
-           \"nested\": {\n\
-             \"key\": \"value\"\n\
-           }\n\
+           \"name\": \"Alice\",\n\
+           \"age\": 30,\n\
+           \"address\": {\n\
+             \"street\": \"123 Main St\",\n\
+             \"city\": \"Springfield\"\n\
+           },\n\
+           \"hobbies\": [\"reading\", \"coding\"]\n\
          }",
-        "@endjson",
+        "endjson",
     )
 }
 
-// ===========================================================================
+// ---------------------------------------------------------------------------
 // YAML diagrams
-// ===========================================================================
+// ---------------------------------------------------------------------------
 
+/// Generates a YAML diagram.
 pub fn yaml_diagram() -> String {
     wrap_custom(
-        "@startyaml",
-        "name: test\n\
-         version: 1\n\
-         items:\n\
-           - a\n\
-           - b\n\
-           - c",
-        "@endyaml",
+        "startyaml",
+        "name: Alice\n\
+         age: 30\n\
+         address:\n\
+           street: 123 Main St\n\
+           city: Springfield\n\
+         hobbies:\n\
+           - reading\n\
+           - coding",
+        "endyaml",
     )
 }
 
-// ===========================================================================
-// Salt (wireframe) diagrams
-// ===========================================================================
+// ---------------------------------------------------------------------------
+// Mind map diagrams
+// ---------------------------------------------------------------------------
 
-pub fn salt_wireframe() -> String {
+/// Generates a mind map diagram.
+pub fn mindmap_diagram() -> String {
     wrap_custom(
-        "@startsalt",
-        "{\n\
-           Login    | \"user\"\n\
-           Password | \"****\"\n\
-           [Cancel] | [ OK  ]\n\
-         }",
-        "@endsalt",
+        "startmindmap",
+        "* Root Topic\n\
+         ** Branch A\n\
+         *** Leaf A1\n\
+         *** Leaf A2\n\
+         ** Branch B\n\
+         *** Leaf B1\n\
+         left side\n\
+         ** Branch C\n\
+         *** Leaf C1",
+        "endmindmap",
     )
 }
 
-// ===========================================================================
-// Network diagrams
-// ===========================================================================
+// ---------------------------------------------------------------------------
+// WBS (Work Breakdown Structure) diagrams
+// ---------------------------------------------------------------------------
 
-pub fn network_diagram() -> String {
+/// Generates a WBS diagram.
+pub fn wbs_diagram() -> String {
+    wrap_custom(
+        "startwbs",
+        "* Project\n\
+         ** Planning\n\
+         *** Requirements\n\
+         *** Design\n\
+         ** Development\n\
+         *** Backend\n\
+         *** Frontend\n\
+         ** Testing\n\
+         *** Unit Tests\n\
+         *** Integration Tests",
+        "endwbs",
+    )
+}
+
+// ---------------------------------------------------------------------------
+// Gantt charts
+// ---------------------------------------------------------------------------
+
+/// Generates a Gantt chart.
+pub fn gantt_diagram() -> String {
+    wrap_custom(
+        "startgantt",
+        "Project starts 2025-01-01\n\
+         [Requirements] lasts 5 days\n\
+         [Design] lasts 7 days\n\
+         [Design] starts at [Requirements]'s end\n\
+         [Development] lasts 14 days\n\
+         [Development] starts at [Design]'s end\n\
+         [Testing] lasts 7 days\n\
+         [Testing] starts at [Development]'s end",
+        "endgantt",
+    )
+}
+
+// ---------------------------------------------------------------------------
+// Timing diagrams
+// ---------------------------------------------------------------------------
+
+/// Generates a timing diagram with robust and concise signals.
+pub fn timing_diagram() -> String {
+    // Timing diagrams use @startuml/@enduml with robust/concise keywords.
     wrap(
-        "nwdiag {\n\
-           network dmz {\n\
-             address = \"210.x.x.x/24\"\n\
-             web01 [address = \"210.x.x.1\"]\n\
-           }\n\
-           network internal {\n\
-             address = \"172.x.x.x/24\"\n\
-             web01 [address = \"172.x.x.1\"]\n\
-             db01\n\
-           }\n\
-         }",
+        "robust \"Signal A\" as SA\n\
+         concise \"Signal B\" as SB\n\
+         @0\n\
+         SA is idle\n\
+         SB is idle\n\
+         @100\n\
+         SA is active\n\
+         @200\n\
+         SB is active\n\
+         @300\n\
+         SA is idle\n\
+         SB is idle",
     )
 }
 
-// ===========================================================================
+// ---------------------------------------------------------------------------
 // Combinatorial generation
-// ===========================================================================
+// ---------------------------------------------------------------------------
 
 /// A named test case with PlantUML source.
 pub struct TestCase {
@@ -1028,20 +1091,19 @@ pub struct TestCase {
     pub source: String,
 }
 
-macro_rules! case {
-    ($name:expr, $func:expr) => {
-        TestCase {
-            name: $name.into(),
-            source: $func,
-        }
-    };
-}
+type CaseFactory = (&'static str, fn() -> String);
 
-/// Generates all test cases across all diagram types and features.
+/// Generates all combinatorial test cases across diagram types.
+///
+/// Currently produces:
+/// - 16 sequence diagram variants (4 boolean features = 2^4)
+/// - N multi-message sequences (1..=message_counts)
+/// - Expanded sequence, class, state, activity, component, use case,
+///   deployment, salt, json, yaml, mindmap, wbs, gantt, and timing cases
 pub fn all_cases(message_counts: usize) -> Vec<TestCase> {
     let mut cases = Vec::new();
 
-    // Sequence combinatorics: 4 boolean features = 16 combinations.
+    // Sequence diagram combinatorics: 4 boolean features = 16 combinations.
     for bits in 0u8..16 {
         let opts = SequenceOptions {
             reply_arrows: bits & 1 != 0,
@@ -1049,144 +1111,179 @@ pub fn all_cases(message_counts: usize) -> Vec<TestCase> {
             groups: bits & 4 != 0,
             participant_declarations: bits & 8 != 0,
         };
+        let name = format!(
+            "seq_reply{}_notes{}_groups{}_decl{}",
+            opts.reply_arrows as u8,
+            opts.notes as u8,
+            opts.groups as u8,
+            opts.participant_declarations as u8,
+        );
         cases.push(TestCase {
-            name: format!("seq_combo_{:04b}", bits),
+            name,
             source: sequence_with_features(&opts),
         });
     }
 
-    // Multi-message sequences.
+    // Multi-message sequences with varying counts.
     for n in 1..=message_counts {
-        cases.push(case!(
-            format!("seq_messages_{n}"),
-            multi_message_sequence(n)
-        ));
+        cases.push(TestCase {
+            name: format!("seq_messages_{n}"),
+            source: multi_message_sequence(n),
+        });
     }
 
-    // Sequence features.
-    cases.extend([
-        case!("seq_arrow_types", seq_arrow_types()),
-        case!("seq_participant_types", seq_participant_types()),
-        case!("seq_activation", seq_activation()),
-        case!("seq_notes_all", seq_notes_all()),
-        case!("seq_alt_else", seq_alt_else()),
-        case!("seq_loop", seq_loop()),
-        case!("seq_opt", seq_opt()),
-        case!("seq_critical", seq_critical()),
-        case!("seq_par", seq_par()),
-        case!("seq_break", seq_break()),
-        case!("seq_divider", seq_divider()),
-        case!("seq_delay", seq_delay()),
-        case!("seq_spacing", seq_spacing()),
-        case!("seq_box", seq_box()),
-        case!("seq_autonumber", seq_autonumber()),
-        case!("seq_autonumber_format", seq_autonumber_format()),
-        case!("seq_return", seq_return()),
-        case!("seq_self_message", seq_self_message()),
-        case!("seq_create", seq_create()),
-        case!("seq_title_header_footer", seq_title_header_footer()),
-        case!("seq_legend", seq_legend()),
-        case!("seq_hide_unlinked", seq_hide_unlinked()),
-        case!("seq_newpage", seq_newpage()),
-        case!("seq_skinparam", seq_skinparam()),
-        case!("seq_ref", seq_ref()),
-        case!("seq_external", seq_external()),
-        case!("seq_alias", seq_alias()),
-        case!("seq_destroy", seq_destroy()),
-    ]);
+    // Sequence diagram feature cases.
+    let seq_cases: &[CaseFactory] = &[
+        ("seq_arrow_types", sequence_arrow_types),
+        ("seq_participant_types", sequence_participant_types),
+        ("seq_participant_aliases", sequence_participant_aliases),
+        ("seq_activation", sequence_activation),
+        ("seq_activation_shorthand", sequence_activation_shorthand),
+        ("seq_destroy", sequence_destroy),
+        ("seq_note_types", sequence_note_types),
+        ("seq_groupings", sequence_groupings),
+        ("seq_dividers_delays", sequence_dividers_delays),
+        ("seq_ref", sequence_ref),
+        ("seq_boxes", sequence_boxes),
+        ("seq_autonumber", sequence_autonumber),
+        ("seq_autonumber_format", sequence_autonumber_format),
+        ("seq_self_messages", sequence_self_messages),
+        ("seq_title_header_footer", sequence_title_header_footer),
+        ("seq_skinparam", sequence_skinparam),
+        ("seq_colored_participants", sequence_colored_participants),
+    ];
+    for (name, f) in seq_cases {
+        cases.push(TestCase {
+            name: (*name).into(),
+            source: f(),
+        });
+    }
 
-    // Class diagram features.
-    cases.extend([
-        case!("class_basic", class_diagram()),
-        case!("class_relationships", class_diagram_with_relationships()),
-        case!("class_entity_types", class_entity_types()),
-        case!("class_visibility", class_visibility()),
-        case!("class_static_abstract", class_static_abstract()),
-        case!("class_generics", class_generics()),
-        case!("class_all_relationships", class_all_relationships()),
-        case!("class_labels_multiplicity", class_labels_multiplicity()),
-        case!("class_packages", class_packages()),
-        case!("class_nested_packages", class_nested_packages()),
-        case!("class_notes", class_notes()),
-        case!("class_stereotypes", class_stereotypes()),
-        case!("class_separators", class_separators()),
-        case!("class_enum_values", class_enum_values()),
-        case!("class_together", class_together()),
-        case!("class_object", class_object_diagram()),
-        case!("class_map", class_map()),
-        case!("class_inline_def", class_inline_definition()),
-    ]);
+    // Class diagram cases.
+    let class_cases: &[CaseFactory] = &[
+        ("class_basic", class_diagram),
+        ("class_relationships", class_diagram_with_relationships),
+        ("class_all_entity_types", class_all_entity_types),
+        ("class_visibility_modifiers", class_visibility_modifiers),
+        ("class_static_abstract", class_static_abstract),
+        ("class_generics", class_generics),
+        ("class_all_relationships", class_all_relationships),
+        ("class_relationship_labels", class_relationship_labels),
+        ("class_packages", class_packages),
+        ("class_notes", class_notes),
+        ("class_stereotypes", class_stereotypes),
+        ("class_body_separators", class_body_separators),
+        ("class_enum_with_values", class_enum_with_values),
+        ("class_object_diagram", class_object_diagram),
+    ];
+    for (name, f) in class_cases {
+        cases.push(TestCase {
+            name: (*name).into(),
+            source: f(),
+        });
+    }
 
-    // State diagram features.
-    cases.extend([
-        case!("state_basic", state_diagram()),
-        case!("state_nested", state_diagram_nested()),
-        case!("state_stereotypes", state_stereotypes()),
-        case!("state_concurrent", state_concurrent()),
-        case!("state_descriptions", state_descriptions()),
-        case!("state_colors", state_colors()),
-        case!("state_notes", state_notes()),
-        case!("state_hide_empty", state_hide_empty()),
-    ]);
+    // State diagram cases.
+    let state_cases: &[CaseFactory] = &[
+        ("state_basic", state_diagram),
+        ("state_nested", state_diagram_nested),
+        ("state_concurrent", state_diagram_concurrent),
+        ("state_history", state_diagram_history),
+        ("state_notes", state_diagram_notes),
+        ("state_colored", state_diagram_colored),
+    ];
+    for (name, f) in state_cases {
+        cases.push(TestCase {
+            name: (*name).into(),
+            source: f(),
+        });
+    }
 
-    // Activity diagram features.
-    cases.extend([
-        case!("activity_basic", activity_diagram()),
-        case!("activity_fork", activity_diagram_with_fork()),
-        case!("activity_switch", activity_switch()),
-        case!("activity_while", activity_while_loop()),
-        case!("activity_repeat", activity_repeat_loop()),
-        case!("activity_swimlanes", activity_swimlanes()),
-        case!("activity_partition", activity_partition()),
-        case!("activity_detach", activity_detach()),
-        // activity_kill excluded: PlantUML uses non-deterministic colors for kill nodes
-        case!("activity_split", activity_split()),
-        case!("activity_notes", activity_notes()),
-        case!("activity_elseif", activity_elseif()),
-    ]);
+    // Activity diagram cases.
+    let activity_cases: &[CaseFactory] = &[
+        ("activity_basic", activity_diagram),
+        ("activity_fork", activity_diagram_with_fork),
+        ("activity_start_stop_end", activity_start_stop_end),
+        ("activity_elseif", activity_elseif),
+        ("activity_switch", activity_switch),
+        ("activity_while", activity_while),
+        ("activity_repeat", activity_repeat),
+        ("activity_split", activity_split),
+        ("activity_swimlanes", activity_swimlanes),
+        ("activity_partition", activity_partition),
+        ("activity_notes", activity_notes),
+        ("activity_kill_detach", activity_kill_detach),
+        ("activity_connectors", activity_connectors),
+    ];
+    for (name, f) in activity_cases {
+        cases.push(TestCase {
+            name: (*name).into(),
+            source: f(),
+        });
+    }
 
-    // Component diagrams.
-    cases.extend([
-        case!("component_basic", component_diagram()),
-        case!("component_interfaces", component_with_interfaces()),
-        case!("component_packages", component_packages()),
-    ]);
+    // Component diagram cases.
+    let component_cases: &[CaseFactory] = &[
+        ("component_basic", component_diagram),
+        ("component_with_interfaces", component_with_interfaces),
+        ("component_packages", component_packages),
+    ];
+    for (name, f) in component_cases {
+        cases.push(TestCase {
+            name: (*name).into(),
+            source: f(),
+        });
+    }
 
-    // Use case diagrams.
-    cases.extend([
-        case!("usecase_basic", use_case_diagram()),
-        case!("usecase_packages", use_case_with_packages()),
-    ]);
+    // Use case diagram cases.
+    let use_case_cases: &[CaseFactory] = &[
+        ("use_case_basic", use_case_diagram),
+        ("use_case_extended", use_case_extended),
+        ("use_case_packages", use_case_packages),
+    ];
+    for (name, f) in use_case_cases {
+        cases.push(TestCase {
+            name: (*name).into(),
+            source: f(),
+        });
+    }
 
-    // Deployment diagrams.
-    cases.extend([
-        case!("deployment_basic", deployment_diagram()),
-        case!("deployment_detailed", deployment_detailed()),
-    ]);
+    // Deployment diagram cases.
+    let deployment_cases: &[CaseFactory] = &[
+        ("deployment_basic", deployment_diagram),
+        ("deployment_node_types", deployment_node_types),
+    ];
+    for (name, f) in deployment_cases {
+        cases.push(TestCase {
+            name: (*name).into(),
+            source: f(),
+        });
+    }
 
-    // Timing diagrams.
-    cases.push(case!("timing_basic", timing_diagram()));
+    // Salt wireframe cases.
+    let salt_cases: &[CaseFactory] = &[("salt_dialog", salt_dialog), ("salt_tree", salt_tree)];
+    for (name, f) in salt_cases {
+        cases.push(TestCase {
+            name: (*name).into(),
+            source: f(),
+        });
+    }
 
-    // Gantt charts.
-    cases.push(case!("gantt_basic", gantt_chart()));
-
-    // Mind maps.
-    cases.push(case!("mindmap_basic", mindmap()));
-
-    // WBS.
-    cases.push(case!("wbs_basic", wbs()));
-
-    // JSON.
-    cases.push(case!("json_basic", json_diagram()));
-
-    // YAML.
-    cases.push(case!("yaml_basic", yaml_diagram()));
-
-    // Salt wireframes.
-    cases.push(case!("salt_basic", salt_wireframe()));
-
-    // Network diagrams.
-    cases.push(case!("nwdiag_basic", network_diagram()));
+    // Non-UML diagram cases (JSON, YAML, mindmap, WBS, Gantt, timing).
+    let other_cases: &[CaseFactory] = &[
+        ("json_diagram", json_diagram),
+        ("yaml_diagram", yaml_diagram),
+        ("mindmap_diagram", mindmap_diagram),
+        ("wbs_diagram", wbs_diagram),
+        ("gantt_diagram", gantt_diagram),
+        ("timing_diagram", timing_diagram),
+    ];
+    for (name, f) in other_cases {
+        cases.push(TestCase {
+            name: (*name).into(),
+            source: f(),
+        });
+    }
 
     cases
 }

@@ -221,6 +221,32 @@ fn pipe_with_empty_input() {
     }
 }
 
+#[test]
+fn help_agent_discloses_no_oracle_product_metric() {
+    let output = Command::new(env!("CARGO_BIN_EXE_rustuml"))
+        .arg("--help-agent")
+        .output()
+        .expect("failed to run rustuml --help-agent");
+    assert!(
+        output.status.success(),
+        "expected success, got stderr: {}",
+        String::from_utf8_lossy(&output.stderr)
+    );
+    let stdout = String::from_utf8_lossy(&output.stdout);
+    assert!(
+        stdout.contains("Product truth is the no-oracle tier"),
+        "--help-agent must name no-oracle as the product metric"
+    );
+    assert!(
+        stdout.contains("5,005/11,251 eligible SVG goldens pass"),
+        "--help-agent must disclose the current no-oracle baseline"
+    );
+    assert!(
+        stdout.contains("1,199 Java PlantUML error-page goldens are skips"),
+        "--help-agent must disclose Java error-page skips"
+    );
+}
+
 // ── Test 10: -pipe with invalid PlantUML terminates without hanging ───────────
 //
 // The parser is intentionally lenient: unrecognised content is parsed into an

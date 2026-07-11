@@ -8,7 +8,9 @@
 //! the same envelope used by component and deployment diagrams.
 
 use std::collections::HashMap;
+use std::fmt::Write as _;
 
+use rustuml_layout::graph::{ClusterPosition, Direction, EdgePath, LayoutGraph};
 use rustuml_parser::diagram::usecase::*;
 
 use crate::layout_oracle::{OracleLayout, wrap_oracle_envelope};
@@ -18,7 +20,6 @@ use crate::svg::SvgBuilder;
 use crate::text_render::{self, TextBase};
 
 const FONT_SIZE: f64 = 14.0;
-const STEREO_FONT: f64 = 14.0;
 const STROKE: &str = "#181818";
 const ENTITY_FILL: &str = "#F1F1F1";
 const TEXT_COLOR: &str = "#000000";
@@ -30,20 +31,259 @@ const ACTOR_ARM_OFFSET: f64 = 8.0;
 const ACTOR_LEG_RUN: f64 = 13.0;
 const ACTOR_LEG_DROP: f64 = 15.0;
 const ACTOR_LABEL_GAP: f64 = 15.0352;
+/// Java provenance: `skin.ActorStickMan.getPreferredHeight()` returns
+/// `headDiam + bodyLenght + legsY + 2 * thickness + shadow + 1`. In the default
+/// DESCRIPTION style the emitted path stroke is 0.5; the SVEK dimension handed
+/// to dot uses the uninflated 58px stickman plus the final +1 guard and the
+/// half-stroke visual extent before label blocks are merged by
+/// `decoration.symbol.USymbolSimpleAbstract.mergeLayoutT12B3`.
+const ACTOR_STICKMAN_DOT_HEIGHT: f64 = 59.5;
 /// Vertical offset from head centre to stereotype baseline (measured).
 const ACTOR_STEREO_OFFSET: f64 = 11.4531;
 const LINE_H: f64 = 16.4883;
 const UC_TEXT_OFFSET_SINGLE: f64 = 4.7441;
 
-const UC_RX_PAD: f64 = 23.6825;
-const UC_RY_PAD: f64 = 23.6825;
-
 const MARGIN: f64 = 7.0;
 const GAP: f64 = 40.0;
+const BODY_MARGIN: f64 = 6.0;
+const SVEK_CANVAS_PAD: f64 = 14.0;
+const LAYOUT_TIMEOUT: std::time::Duration = std::time::Duration::from_secs(5);
+const DEPENDENCY_ARROW_BACK: f64 = 9.0;
+const DEPENDENCY_ARROW_NOTCH: f64 = 5.0;
+const DEPENDENCY_ARROW_WING: f64 = 4.0;
+const DEPENDENCY_ARROW_PATH_GAP: f64 = 6.0;
+
+const NOTE_FILL: &str = "#FEFFDD";
+const NOTE_FOLD: f64 = 10.0;
+const NOTE_FONT_SIZE: u32 = 13;
+
+/// Which box edge carries the note's leader (callout) notch.
+enum LeaderSide {
+    Top,
+    Bottom,
+    Left,
+    Right,
+}
 
 /// Round a coordinate to PlantUML's 4-decimal format, dropping trailing zeros.
 fn fc(v: f64) -> String {
     pm::fmt_coord(v)
+}
+
+/// Resolve a raw `#color` token (parser strips the leading `#`, so we receive
+/// e.g. `Pink`, `LightBlue`, or `FFC0CB`) into a PlantUML fill string. Named
+/// colours resolve to `#RRGGBB`; bare hex digits get a `#` prepended.
+fn resolve_fill(raw: &str) -> String {
+    let normalized = crate::sequence::resolve_color(raw);
+    if normalized.starts_with('#') {
+        normalized
+    } else {
+        format!("#{normalized}")
+    }
+}
+
+fn skin_value<'a>(
+    skinparams: &'a [rustuml_parser::diagram::SkinParam],
+    keys: &[&str],
+) -> Option<&'a str> {
+    skinparams
+        .iter()
+        .rev()
+        .find(|p| keys.iter().any(|k| p.key.eq_ignore_ascii_case(k)))
+        .map(|p| p.value.trim())
+}
+
+/// Look up a skinparam value case-insensitively (PlantUML convention) and
+/// resolve it to a fill string. The parser flattens block skinparams like
+/// `skinparam usecase { BackgroundColor X }` to the key `usecaseBackgroundColor`.
+fn skin_color(skinparams: &[rustuml_parser::diagram::SkinParam], key: &str) -> Option<String> {
+    skin_value(skinparams, &[key]).map(resolve_fill)
+}
+
+fn skin_fill(
+    skinparams: &[rustuml_parser::diagram::SkinParam],
+    key: &str,
+    gradient_defs: Option<&str>,
+) -> Option<String> {
+    skin_value(skinparams, &[key]).map(|v| crate::sequence::gradient_fill_or(v, gradient_defs))
+}
+
+fn skin_font_size(
+    skinparams: &[rustuml_parser::diagram::SkinParam],
+    keys: &[&str],
+    default: u32,
+) -> u32 {
+    skin_value(skinparams, keys)
+        .and_then(|v| v.parse::<f64>().ok())
+        .map(|v| v.round() as u32)
+        .unwrap_or(default)
+}
+
+fn skin_thickness(
+    skinparams: &[rustuml_parser::diagram::SkinParam],
+    keys: &[&str],
+    default: f64,
+) -> String {
+    skin_value(skinparams, keys)
+        .and_then(|v| v.parse::<f64>().ok())
+        .map(fc)
+        .unwrap_or_else(|| fc(default))
+}
+
+fn canonical_usecase_font_family(value: &str) -> String {
+    let raw = value.trim();
+    let quoted = (raw.starts_with('"') && raw.ends_with('"'))
+        || (raw.starts_with('\'') && raw.ends_with('\''));
+    let trimmed = raw.trim_matches('"').trim_matches('\'');
+    if trimmed.is_empty()
+        || trimmed.eq_ignore_ascii_case("sansserif")
+        || trimmed.eq_ignore_ascii_case("sans-serif")
+    {
+        "sans-serif".to_string()
+    } else if quoted {
+        format!("'{trimmed}'")
+    } else {
+        trimmed.to_string()
+    }
+}
+
+/// Per-kind background/border/text defaults derived from `skinparam`
+/// directives. Keep this opt-in: absent skinparams preserve the renderer's
+/// existing PlantUML defaults instead of inheriting RustUML's UI theme.
+struct SkinColors {
+    actor_fill: Option<String>,
+    actor_border: Option<String>,
+    actor_border_thickness: String,
+    actor_font_color: String,
+    actor_font_family: String,
+    actor_font_size: u32,
+    actor_stereo_font_color: String,
+    uc_fill: Option<String>,
+    uc_border: Option<String>,
+    uc_border_thickness: String,
+    uc_font_color: String,
+    uc_font_family: String,
+    uc_font_size: u32,
+    uc_stereo_font_color: String,
+    arrow_font_color: String,
+    arrow_font_family: String,
+    arrow_font_size: u32,
+    canvas_background: Option<String>,
+    canvas_rect: Option<String>,
+    gradient_defs: Option<String>,
+}
+
+impl SkinColors {
+    fn from_meta(
+        skinparams: &[rustuml_parser::diagram::SkinParam],
+        gradient_defs: Option<&str>,
+    ) -> Self {
+        let default_font_family = skin_value(skinparams, &["defaultFontName", "fontName"])
+            .map(canonical_usecase_font_family)
+            .unwrap_or_else(|| "sans-serif".to_string());
+        let default_font_size = skin_font_size(skinparams, &["defaultFontSize"], FONT_SIZE as u32);
+        let root_font_color = skin_color(skinparams, "__styleRootFontColor");
+        let default_font_color = skin_color(skinparams, "defaultFontColor");
+        let fallback_font_color = || {
+            root_font_color
+                .clone()
+                .or_else(|| default_font_color.clone())
+                .unwrap_or_else(|| TEXT_COLOR.to_string())
+        };
+        let actor_font_color = skin_color(skinparams, "actorFontColor")
+            .or_else(|| Some(fallback_font_color()))
+            .unwrap_or_else(|| TEXT_COLOR.to_string());
+        let uc_font_color = skin_color(skinparams, "usecaseFontColor")
+            .or_else(|| Some(fallback_font_color()))
+            .unwrap_or_else(|| TEXT_COLOR.to_string());
+        let actor_font_family = skin_value(skinparams, &["actorFontName"])
+            .map(canonical_usecase_font_family)
+            .unwrap_or_else(|| default_font_family.clone());
+        let uc_font_family = skin_value(skinparams, &["usecaseFontName"])
+            .map(canonical_usecase_font_family)
+            .unwrap_or_else(|| default_font_family.clone());
+        let arrow_font_family = skin_value(skinparams, &["arrowFontName", "usecaseArrowFontName"])
+            .map(canonical_usecase_font_family)
+            .unwrap_or_else(|| default_font_family.clone());
+        let root_line = ["__styleRootLineThickness", "borderThickness"];
+        let bg_value = skin_value(skinparams, &["backgroundColor"]);
+        let canvas_background = match bg_value {
+            Some(v) if v.eq_ignore_ascii_case("transparent") => None,
+            Some(v) => Some(crate::sequence::resolve_color(v)),
+            None => Some("#FFFFFF".to_string()),
+        };
+        let canvas_rect = canvas_background
+            .as_ref()
+            .filter(|c| *c != "#FFFFFF")
+            .cloned();
+        SkinColors {
+            actor_fill: skin_fill(skinparams, "actorBackgroundColor", gradient_defs),
+            actor_border: skin_color(skinparams, "actorBorderColor")
+                .or_else(|| skin_color(skinparams, "__styleRootLineColor")),
+            actor_border_thickness: skin_thickness(
+                skinparams,
+                &[
+                    "actorBorderThickness",
+                    "__styleRootLineThickness",
+                    "borderThickness",
+                ],
+                0.5,
+            ),
+            actor_font_color: actor_font_color.clone(),
+            actor_font_family,
+            actor_font_size: skin_font_size(
+                skinparams,
+                &["actorFontSize", "defaultFontSize"],
+                default_font_size,
+            ),
+            actor_stereo_font_color: skin_color(skinparams, "actorStereotypeFontColor")
+                .unwrap_or(actor_font_color),
+            uc_fill: skin_fill(skinparams, "usecaseBackgroundColor", gradient_defs),
+            uc_border: skin_color(skinparams, "usecaseBorderColor")
+                .or_else(|| skin_color(skinparams, "__styleRootLineColor")),
+            uc_border_thickness: skin_thickness(
+                skinparams,
+                &["usecaseBorderThickness", root_line[0], root_line[1]],
+                0.5,
+            ),
+            uc_font_color: uc_font_color.clone(),
+            uc_font_family,
+            uc_font_size: skin_font_size(
+                skinparams,
+                &["usecaseFontSize", "defaultFontSize"],
+                default_font_size,
+            ),
+            uc_stereo_font_color: skin_color(skinparams, "usecaseStereotypeFontColor")
+                .unwrap_or(uc_font_color),
+            arrow_font_color: skin_color(skinparams, "usecaseArrowFontColor")
+                .or_else(|| skin_color(skinparams, "arrowFontColor"))
+                .unwrap_or_else(|| TEXT_COLOR.to_string()),
+            arrow_font_family,
+            arrow_font_size: skin_font_size(
+                skinparams,
+                &["usecaseArrowFontSize", "arrowFontSize"],
+                13,
+            ),
+            canvas_background,
+            canvas_rect,
+            gradient_defs: gradient_defs.map(str::to_string),
+        }
+    }
+}
+
+/// Round a coordinate to 4 decimals (HALF_UP), returning the numeric value.
+///
+/// PlantUML places shapes at 4-decimal-rounded pixel coordinates and then
+/// centres text relative to that *rounded* anchor, not the raw f64. Matching
+/// this avoids 0.0001 drift in text `x` attributes.
+fn round_coord(v: f64) -> f64 {
+    let scaled = v * 10000.0;
+    let rounded = if scaled >= 0.0 {
+        (scaled + 0.5).floor()
+    } else {
+        -((-scaled + 0.5).floor())
+    };
+    rounded / 10000.0
 }
 
 pub fn render(diagram: &UseCaseDiagram, theme: &Theme) -> String {
@@ -75,8 +315,16 @@ pub fn render_with_oracle(
         return r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="50px" preserveAspectRatio="none" style="width:100px;height:50px;background:#FFFFFF;" version="1.1" viewBox="0 0 100 50" width="100px" zoomAndPan="magnify"><defs/><g></g></svg>"#.to_string();
     }
 
-    let actor_dims: Vec<ActorDim> = diagram.actors.iter().map(actor_dim).collect();
-    let uc_dims: Vec<UseCaseDim> = diagram.use_cases.iter().map(use_case_dim).collect();
+    let gradient_defs = oracle
+        .map(|o| o.defs_inner_xml.as_str())
+        .filter(|d| !d.is_empty());
+    let skin = SkinColors::from_meta(&diagram.meta.skinparams, gradient_defs);
+    let actor_dims: Vec<ActorDim> = diagram.actors.iter().map(|a| actor_dim(a, &skin)).collect();
+    let uc_dims: Vec<UseCaseDim> = diagram
+        .use_cases
+        .iter()
+        .map(|u| use_case_dim(u, &skin))
+        .collect();
     let positions = resolve_positions(diagram, &actor_dims, &uc_dims, oracle);
     let id_map = build_entity_id_map(diagram);
 
@@ -89,22 +337,156 @@ pub fn render_with_oracle(
         compute_canvas(&positions, &actor_dims, &uc_dims)
     };
 
-    let mut svg = SvgBuilder::new_plantuml(total_w, total_h, "DESCRIPTION");
+    let mut svg = SvgBuilder::new_plantuml_with_background_and_defs(
+        total_w,
+        total_h,
+        "DESCRIPTION",
+        skin.canvas_background.as_deref(),
+        gradient_defs.unwrap_or(""),
+    );
+    if let Some(bg) = skin.canvas_rect.as_deref() {
+        svg.raw(&format!(
+            r#"<rect fill="{bg}" height="{h}" style="stroke:none;stroke-width:1;" width="{w}" x="0" y="0"/>"#,
+            h = total_h as i64,
+            w = total_w as i64,
+        ));
+    }
 
     render_header(&mut svg, diagram);
     render_title(&mut svg, diagram, total_w);
-    render_packages(&mut svg, diagram, oracle, &id_map);
 
-    for (i, actor) in diagram.actors.iter().enumerate() {
+    // PlantUML renders each cluster group followed immediately by its member
+    // entities (in source-line order), then the top-level (non-member)
+    // entities. Track which entity ids belong to a package so we can emit the
+    // members under their cluster and skip them in the top-level pass.
+    let member_ids: std::collections::HashSet<&str> = diagram
+        .packages
+        .iter()
+        .flat_map(|p| p.elements.iter().map(String::as_str))
+        .collect();
+
+    // Helper closures can't borrow svg mutably twice, so emit inline.
+    let render_actor_i = |svg: &mut SvgBuilder, i: usize| {
         let (cx, cy) = positions.actors[i];
-        render_actor(&mut svg, actor, &actor_dims[i], cx, cy, &id_map);
-    }
-    for (i, uc) in diagram.use_cases.iter().enumerate() {
+        render_actor(
+            svg,
+            &diagram.actors[i],
+            &actor_dims[i],
+            cx,
+            cy,
+            oracle,
+            &id_map,
+            &skin,
+        );
+    };
+    let render_uc_i = |svg: &mut SvgBuilder, i: usize| {
         let (cx, cy) = positions.use_cases[i];
-        render_use_case(&mut svg, uc, &uc_dims[i], diagram, cx, cy, oracle, &id_map);
+        render_use_case(
+            svg,
+            &diagram.use_cases[i],
+            &uc_dims[i],
+            diagram,
+            cx,
+            cy,
+            oracle,
+            &id_map,
+            &skin,
+        );
+    };
+
+    // PlantUML emits all cluster groups first (in source-line order), then all
+    // member entities (in global source-line order), then the top-level
+    // entities. Emit the clusters, then collect and sort the members.
+    for pkg in &diagram.packages {
+        render_package_group(&mut svg, pkg, oracle, &positions.cluster_positions, &id_map);
     }
+    let mut members: Vec<(usize, bool, usize)> = Vec::new(); // (source_line, is_actor, index)
+    for (i, a) in diagram.actors.iter().enumerate() {
+        if member_ids.contains(a.id.as_str()) {
+            members.push((a.source_line, true, i));
+        }
+    }
+    for (i, u) in diagram.use_cases.iter().enumerate() {
+        if member_ids.contains(u.id.as_str()) {
+            members.push((u.source_line, false, i));
+        }
+    }
+    members.sort_by_key(|m| m.0);
+    for (_, is_actor, i) in members {
+        if is_actor {
+            render_actor_i(&mut svg, i);
+        } else {
+            render_uc_i(&mut svg, i);
+        }
+    }
+
+    // Attached/floating notes. PlantUML lays each note out as a
+    // `<g class="entity">` with an auto-generated `GMN*` qualified name and a
+    // box-plus-leader path; we reconstruct that path locally from the box
+    // rectangle and leader apex captured by the oracle. Notes interleave with
+    // the top-level entities in source-line order, and links are emitted last.
+    //
+    // The oracle also stashes each note's path-based shape in `entities`, so we
+    // can't use `entities` keys to tell notes apart — instead skip notes whose
+    // qualified name matches a declared diagram node.
+    let top_notes: Vec<&crate::layout_oracle::OracleNoteEntity> = if let Some(orc) = oracle {
+        let mut node_qnames: std::collections::HashSet<String> = std::collections::HashSet::new();
+        for a in &diagram.actors {
+            node_qnames.insert(a.id.clone());
+            node_qnames.insert(a.label.clone());
+        }
+        for uc in &diagram.use_cases {
+            node_qnames.insert(qualified_name(&uc.id, diagram));
+            node_qnames.insert(uc.id.clone());
+            node_qnames.insert(uc.label.clone());
+        }
+        for p in &diagram.packages {
+            node_qnames.insert(p.name.clone());
+        }
+        orc.note_entities
+            .iter()
+            .filter(|n| !node_qnames.contains(n.qualified_name.as_str()))
+            .collect()
+    } else {
+        Vec::new()
+    };
+
+    // Top-level (non-member) entities and notes, interleaved by source line.
+    // Kind: 0 = actor, 1 = use case, 2 = note.
+    let mut top: Vec<(usize, u8, usize)> = Vec::new();
+    for (i, a) in diagram.actors.iter().enumerate() {
+        if !member_ids.contains(a.id.as_str()) {
+            top.push((a.source_line, 0, i));
+        }
+    }
+    for (i, u) in diagram.use_cases.iter().enumerate() {
+        if !member_ids.contains(u.id.as_str()) {
+            top.push((u.source_line, 1, i));
+        }
+    }
+    for (i, n) in top_notes.iter().enumerate() {
+        let line = n
+            .source_line
+            .as_deref()
+            .and_then(|s| s.parse::<usize>().ok())
+            .unwrap_or(usize::MAX);
+        top.push((line, 2, i));
+    }
+    // Stable sort by source line; on ties keep declaration order (notes after
+    // their target on the same conceptual line never collide in practice).
+    top.sort_by_key(|m| m.0);
+    for (_, kind, i) in top {
+        match kind {
+            0 => render_actor_i(&mut svg, i),
+            1 => render_uc_i(&mut svg, i),
+            _ => emit_note(&mut svg, top_notes[i]),
+        }
+    }
+
     if let Some(orc) = oracle {
-        render_oracle_connections(&mut svg, diagram, orc);
+        render_oracle_connections(&mut svg, diagram, orc, &skin);
+    } else {
+        render_no_oracle_connections(&mut svg, diagram, &id_map, &positions.edge_paths, &skin);
     }
 
     render_footer(&mut svg, diagram, total_h);
@@ -178,7 +560,9 @@ fn render_title(svg: &mut SvgBuilder, diagram: &UseCaseDiagram, total_w: f64) {
         &mut buf,
         title,
         &TextBase {
-            x: (total_w - tw) / 2.0,
+            // PlantUML centres the title over the content area, which is inset
+            // by one MARGIN from the right canvas edge.
+            x: (total_w - MARGIN - tw) / 2.0,
             y: 23.5352,
             font_size: FONT_SIZE as u32,
             font_family: "sans-serif",
@@ -195,57 +579,50 @@ fn render_title(svg: &mut SvgBuilder, diagram: &UseCaseDiagram, total_w: f64) {
 
 /// Assign PlantUML-compatible entity IDs by sorting actors, use cases, and
 /// packages by `source_line` and numbering sequentially from `ent0002`.
+///
+/// PlantUML draws entity *and* link uids from a single monotonic counter in
+/// source-line order, so a connection declared between two entity declarations
+/// consumes a counter slot (it becomes a `lnk` id) and pushes later entities to
+/// higher `ent` numbers. We model this by interleaving connections as
+/// slot-consuming entries that produce no `ent` mapping.
 fn build_entity_id_map(diagram: &UseCaseDiagram) -> HashMap<String, String> {
     struct Entry {
-        key: String,
+        /// `None` for a connection (consumes a counter slot but emits no `ent` id).
+        key: Option<String>,
         line: usize,
     }
     let mut entries: Vec<Entry> = Vec::new();
     for a in &diagram.actors {
         entries.push(Entry {
-            key: format!("actor::{}", a.id),
+            key: Some(format!("actor::{}", a.id)),
             line: a.source_line,
         });
     }
     for uc in &diagram.use_cases {
         entries.push(Entry {
-            key: format!("uc::{}", uc.id),
+            key: Some(format!("uc::{}", uc.id)),
             line: uc.source_line,
         });
     }
-    // Packages have no source_line in the model; pin them at the lowest line
-    // of their first declared child entity (a reasonable proxy for declaration
-    // order). Fall back to declaration index when empty.
-    for (i, p) in diagram.packages.iter().enumerate() {
-        let line = p
-            .elements
-            .iter()
-            .filter_map(|eid| {
-                diagram
-                    .actors
-                    .iter()
-                    .find(|a| &a.id == eid)
-                    .map(|a| a.source_line)
-                    .or_else(|| {
-                        diagram
-                            .use_cases
-                            .iter()
-                            .find(|u| &u.id == eid)
-                            .map(|u| u.source_line)
-                    })
-            })
-            .min()
-            .map(|l| l.saturating_sub(1))
-            .unwrap_or(i);
+    for c in &diagram.connections {
         entries.push(Entry {
-            key: format!("pkg::{}", p.name),
+            key: None,
+            line: c.source_line,
+        });
+    }
+    for p in &diagram.packages {
+        let line = p.source_line;
+        entries.push(Entry {
+            key: Some(format!("pkg::{}", p.name)),
             line,
         });
     }
     entries.sort_by_key(|e| e.line);
     let mut map = HashMap::new();
     for (counter, e) in (2usize..).zip(entries) {
-        map.insert(e.key, format!("ent{counter:04}"));
+        if let Some(key) = e.key {
+            map.insert(key, format!("ent{counter:04}"));
+        }
     }
     map
 }
@@ -253,6 +630,8 @@ fn build_entity_id_map(diagram: &UseCaseDiagram) -> HashMap<String, String> {
 struct ActorDim {
     label_w: f64,
     stereo_w: f64,
+    width: f64,
+    height: f64,
 }
 
 struct UseCaseDim {
@@ -263,32 +642,66 @@ struct UseCaseDim {
     ry: f64,
 }
 
-fn actor_dim(actor: &Actor) -> ActorDim {
-    let label_w = text_render::measure(&actor.label, FONT_SIZE, false);
+fn actor_dim(actor: &Actor, skin: &SkinColors) -> ActorDim {
+    let label_w = text_render::measure_with_family(
+        &actor.label,
+        skin.actor_font_size as f64,
+        false,
+        &skin.actor_font_family,
+    );
     let stereo_w = actor
         .stereotype
         .as_ref()
-        .map(|s| text_render::measure(&format!("\u{00AB}{s}\u{00BB}"), STEREO_FONT, false))
+        .map(|s| {
+            text_render::measure_with_family(
+                &format!("\u{00AB}{s}\u{00BB}"),
+                skin.actor_font_size as f64,
+                false,
+                &skin.actor_font_family,
+            )
+        })
         .unwrap_or(0.0);
-    ActorDim { label_w, stereo_w }
+    let width = label_w.max(stereo_w).max(ACTOR_ARM_HALF * 2.0);
+    let text_block_h = pm::text_height(skin.actor_font_size as f64);
+    let height = ACTOR_STICKMAN_DOT_HEIGHT
+        + text_block_h
+        + if actor.stereotype.is_some() {
+            text_block_h
+        } else {
+            0.0
+        };
+    ActorDim {
+        label_w,
+        stereo_w,
+        width,
+        height,
+    }
 }
 
-fn use_case_dim(uc: &UseCase) -> UseCaseDim {
-    let label_w = text_render::measure(&uc.label, FONT_SIZE, false);
+fn use_case_dim(uc: &UseCase, skin: &SkinColors) -> UseCaseDim {
+    let font_size = skin.uc_font_size as f64;
+    let label_w =
+        text_render::measure_with_family(&uc.label, font_size, false, &skin.uc_font_family);
     let stereo_w = uc
         .stereotype
         .as_ref()
-        .map(|s| text_render::measure(&format!("\u{00AB}{s}\u{00BB}"), STEREO_FONT, false))
+        .map(|s| {
+            text_render::measure_with_family(
+                &format!("\u{00AB}{s}\u{00BB}"),
+                font_size,
+                false,
+                &skin.uc_font_family,
+            )
+        })
         .unwrap_or(0.0);
     let desc_max_w = uc
         .description
         .iter()
-        .map(|d| text_render::measure(d, FONT_SIZE, false))
+        .map(|d| text_render::measure_with_family(d, font_size, false, &skin.uc_font_family))
         .fold(0.0_f64, f64::max);
     let max_w = label_w.max(stereo_w).max(desc_max_w);
     let line_count = uc.description.len().max(1) + if uc.stereotype.is_some() { 1 } else { 0 };
-    let rx = max_w / 2.0 + UC_RX_PAD;
-    let ry = (line_count as f64 * LINE_H) / 2.0 + UC_RY_PAD - FONT_SIZE / 2.0;
+    let (rx, ry) = use_case_ellipse_radii(max_w, line_count as f64 * LINE_H);
     UseCaseDim {
         label_w,
         stereo_w,
@@ -298,9 +711,25 @@ fn use_case_dim(uc: &UseCase) -> UseCaseDim {
     }
 }
 
+fn use_case_ellipse_radii(text_w: f64, text_h: f64) -> (f64, f64) {
+    // Java provenance: `svek.image.EntityImageUseCase.calculateDimensionSlow`
+    // wraps the merged stereotype/body `TextBlock` in
+    // `klimt.shape.TextBlockInEllipse`; that helper clamps
+    // `textDim.height / textDim.width` to [0.2, 0.8], computes the containing
+    // ellipse footprint, then returns `getUEllipse().bigger(6)`.
+    let w = text_w.max(1.0);
+    let h = text_h.max(1.0);
+    let alpha = (h / w).clamp(0.2, 0.8);
+    let inner_rx = ((w / 2.0).powi(2) + (h / 2.0 / alpha).powi(2)).sqrt();
+    let inner_ry = inner_rx * alpha;
+    (inner_rx + 3.0, inner_ry + 3.0)
+}
+
 struct Positions {
     actors: Vec<(f64, f64)>,
     use_cases: Vec<(f64, f64)>,
+    cluster_positions: Vec<ClusterPosition>,
+    edge_paths: Vec<EdgePath>,
 }
 
 fn resolve_positions(
@@ -328,8 +757,102 @@ fn resolve_positions(
                     .unwrap_or_else(|| fallback_use_case_center(i, &uc_dims[i]))
             })
             .collect();
-        return Positions { actors, use_cases };
+        return Positions {
+            actors,
+            use_cases,
+            cluster_positions: Vec::new(),
+            edge_paths: Vec::new(),
+        };
     }
+    layout_usecase_positions(diagram, actor_dims, uc_dims)
+        .unwrap_or_else(|| fallback_positions(actor_dims, uc_dims))
+}
+
+fn layout_usecase_positions(
+    diagram: &UseCaseDiagram,
+    actor_dims: &[ActorDim],
+    uc_dims: &[UseCaseDim],
+) -> Option<Positions> {
+    // Java path: `CucaDiagramFileMakerSvek` builds measured SVEK nodes,
+    // `DotStringFactory` serialises fixed-size nodes/clusters to dot, and
+    // `GeneralImageBuilder` paints the returned positions. This mirrors that
+    // flow with the vendored Graphviz wrapper rather than the old hand-stacked
+    // fallback.
+    if diagram.actors.is_empty() && diagram.use_cases.is_empty() {
+        return None;
+    }
+    let direction = match diagram.direction {
+        UseCaseLayoutDirection::TopToBottom => Direction::TopToBottom,
+        UseCaseLayoutDirection::LeftToRight => Direction::LeftToRight,
+    };
+    let mut layout = LayoutGraph::new(direction).with_plantuml_svek_spacing();
+    for (actor, dim) in diagram.actors.iter().zip(actor_dims) {
+        layout.add_node(&actor.id, &actor.label, dim.width, dim.height);
+    }
+    for (uc, dim) in diagram.use_cases.iter().zip(uc_dims) {
+        layout.add_node(&uc.id, &uc.label, dim.rx * 2.0, dim.ry * 2.0);
+    }
+    for pkg in &diagram.packages {
+        layout.add_cluster(&pkg.name, &pkg.name, None);
+        for member in &pkg.elements {
+            layout.add_cluster_node(&pkg.name, member);
+        }
+    }
+    for conn in &diagram.connections {
+        layout.add_edge(
+            &conn.from,
+            &conn.to,
+            conn.label.as_deref().or(conn.stereotype.as_deref()),
+        );
+    }
+    let mut result = layout.layout_full(LAYOUT_TIMEOUT)?;
+    for edge in &mut result.edge_paths {
+        for point in &mut edge.points {
+            point.0 += BODY_MARGIN;
+            point.1 += BODY_MARGIN;
+        }
+        if let Some(point) = &mut edge.start_point {
+            point.0 += BODY_MARGIN;
+            point.1 += BODY_MARGIN;
+        }
+        if let Some(point) = &mut edge.end_point {
+            point.0 += BODY_MARGIN;
+            point.1 += BODY_MARGIN;
+        }
+    }
+    for cluster in &mut result.cluster_positions {
+        cluster.x += BODY_MARGIN;
+        cluster.y += BODY_MARGIN;
+    }
+    let actor_count = diagram.actors.len();
+    let actors = result
+        .node_positions
+        .iter()
+        .take(actor_count)
+        .map(|p| {
+            (
+                p.x + BODY_MARGIN + p.width / 2.0,
+                p.y + BODY_MARGIN + ACTOR_HEAD_R,
+            )
+        })
+        .collect();
+    let use_cases = result
+        .node_positions
+        .iter()
+        .skip(actor_count)
+        .take(diagram.use_cases.len())
+        .zip(uc_dims)
+        .map(|(p, dim)| (p.x + BODY_MARGIN + dim.rx, p.y + BODY_MARGIN + dim.ry))
+        .collect();
+    Some(Positions {
+        actors,
+        use_cases,
+        cluster_positions: result.cluster_positions,
+        edge_paths: result.edge_paths,
+    })
+}
+
+fn fallback_positions(actor_dims: &[ActorDim], uc_dims: &[UseCaseDim]) -> Positions {
     let actors: Vec<(f64, f64)> = actor_dims
         .iter()
         .enumerate()
@@ -340,7 +863,12 @@ fn resolve_positions(
         .enumerate()
         .map(|(i, d)| fallback_use_case_center(i, d))
         .collect();
-    Positions { actors, use_cases }
+    Positions {
+        actors,
+        use_cases,
+        cluster_positions: Vec::new(),
+        edge_paths: Vec::new(),
+    }
 }
 
 fn lookup_actor_center(oracle: &OracleLayout, actor: &Actor) -> Option<(f64, f64)> {
@@ -365,13 +893,63 @@ fn lookup_use_case_center(
     Some((rect.x + rect.width / 2.0, rect.y + rect.height / 2.0))
 }
 
+/// PlantUML strips spaces and punctuation when deriving an entity id from a
+/// quoted label (mirrors the parser's `label_to_id`).
+fn label_to_id(label: &str) -> String {
+    label
+        .chars()
+        .filter(|c| c.is_alphanumeric() || *c == '_')
+        .collect()
+}
+
+/// The name PlantUML emits as `data-qualified-name` and keys oracle entities
+/// by. For an aliased use case (`usecase "X" as UC1`) this is the alias/id; for
+/// a label-declared one (`usecase "Primary Action"`) it is the original label,
+/// spaces and all.
+fn display_name(uc: &UseCase) -> &str {
+    if uc.explicit_id {
+        &uc.id
+    } else if uc.id == label_to_id(&uc.label) {
+        &uc.label
+    } else {
+        &uc.id
+    }
+}
+
+/// PlantUML sanitises `data-qualified-name` (and the entity key it stores in
+/// the oracle map) by replacing every non-ASCII character with `.`. The visible
+/// label text keeps the original unicode; only the identifier attribute is
+/// folded.
+fn sanitize_qname(s: &str) -> String {
+    s.chars()
+        .map(|c| if c.is_ascii() { c } else { '.' })
+        .collect()
+}
+
+/// The form PlantUML uses in the `<!--entity/cluster …-->` comments: non-ASCII
+/// characters are replaced with `?` (distinct from the `.` used in
+/// `data-qualified-name`).
+fn sanitize_comment(s: &str) -> String {
+    s.chars()
+        .map(|c| if c.is_ascii() { c } else { '?' })
+        .collect()
+}
+
 fn qualified_name(id: &str, diagram: &UseCaseDiagram) -> String {
+    // Resolve the display name for use cases (label-declared ones use their
+    // label, not the space-stripped id).
+    let display = diagram
+        .use_cases
+        .iter()
+        .find(|u| u.id == id)
+        .map(display_name)
+        .unwrap_or(id);
     for pkg in &diagram.packages {
         if pkg.elements.iter().any(|e| e == id) {
-            return format!("{}.{id}", pkg.name);
+            return sanitize_qname(&format!("{}.{display}", pkg.name));
         }
     }
-    id.to_string()
+    sanitize_qname(display)
 }
 
 fn fallback_actor_center(i: usize, _dim: &ActorDim) -> (f64, f64) {
@@ -391,95 +969,224 @@ fn compute_canvas(
     actor_dims: &[ActorDim],
     uc_dims: &[UseCaseDim],
 ) -> (f64, f64) {
-    let mut max_x: f64 = 100.0;
-    let mut max_y: f64 = 50.0;
+    let mut max_x: f64 = 0.0;
+    let mut max_y: f64 = 0.0;
     for (i, (cx, cy)) in positions.actors.iter().enumerate() {
         let half = actor_dims[i].label_w.max(ACTOR_ARM_HALF * 2.0) / 2.0;
-        max_x = max_x.max(cx + half + MARGIN);
+        max_x = max_x.max(cx + half + SVEK_CANVAS_PAD);
         max_y = max_y.max(
-            cy + ACTOR_HEAD_R + ACTOR_BODY_LEN + ACTOR_LEG_DROP + ACTOR_LABEL_GAP * 2.0 + MARGIN,
+            cy + ACTOR_HEAD_R
+                + ACTOR_BODY_LEN
+                + ACTOR_LEG_DROP
+                + ACTOR_LABEL_GAP
+                + pm::text_height(FONT_SIZE)
+                + SVEK_CANVAS_PAD,
         );
     }
     for (i, (cx, cy)) in positions.use_cases.iter().enumerate() {
-        max_x = max_x.max(cx + uc_dims[i].rx + MARGIN);
-        max_y = max_y.max(cy + uc_dims[i].ry + MARGIN);
+        max_x = max_x.max(cx + uc_dims[i].rx + SVEK_CANVAS_PAD);
+        max_y = max_y.max(cy + uc_dims[i].ry + SVEK_CANVAS_PAD);
     }
-    (max_x, max_y)
+    for edge in &positions.edge_paths {
+        for (x, y) in &edge.points {
+            max_x = max_x.max(x + SVEK_CANVAS_PAD);
+            max_y = max_y.max(y + SVEK_CANVAS_PAD);
+        }
+    }
+    for cluster in &positions.cluster_positions {
+        max_x = max_x.max(cluster.x + cluster.width + SVEK_CANVAS_PAD);
+        max_y = max_y.max(cluster.y + cluster.height + SVEK_CANVAS_PAD);
+    }
+    (max_x.ceil().max(1.0), max_y.ceil().max(1.0))
 }
 
-fn render_packages(
+fn render_package_group(
     svg: &mut SvgBuilder,
-    diagram: &UseCaseDiagram,
+    pkg: &UseCasePackage,
     oracle: Option<&OracleLayout>,
+    cluster_positions: &[ClusterPosition],
     id_map: &HashMap<String, String>,
 ) {
-    for pkg in &diagram.packages {
-        let Some(orc) = oracle else { continue };
-        let Some(rect) = orc.entities.get(&pkg.name) else {
-            continue;
+    // PlantUML keys clusters by the sanitised qualified name (non-ASCII → `.`).
+    let qname = sanitize_qname(&pkg.name);
+    let (rect_x, rect_y, rect_w, rect_h, captured_x, captured_y): (
+        f64,
+        f64,
+        f64,
+        f64,
+        &[f64],
+        &[f64],
+    ) = if let Some(orc) = oracle {
+        let Some(rect) = orc
+            .entities
+            .get(&qname)
+            .or_else(|| orc.entities.get(&pkg.name))
+        else {
+            return;
         };
-        let ent_id = id_map
-            .get(&format!("pkg::{}", pkg.name))
-            .cloned()
-            .unwrap_or_else(|| "ent0003".to_string());
-        svg.raw(&format!("<!--cluster {}-->", pkg.name));
-        svg.raw(&format!(
-            r#"<g class="cluster" data-qualified-name="{}" id="{ent_id}">"#,
-            pkg.name
-        ));
-        svg.raw(&format!(
-            r#"<rect fill="none" height="{h}" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"#,
-            h = fc(rect.height),
-            w = fc(rect.width),
-            x = fc(rect.x),
-            y = fc(rect.y),
-        ));
-        let label_w = text_render::measure(&pkg.name, FONT_SIZE, true);
-        let label_x = rect.x + (rect.width - label_w) / 2.0;
-        let label_y = rect.y + 15.5352;
-        let mut buf = String::new();
-        text_render::emit_text(
-            &mut buf,
-            &pkg.name,
-            &TextBase {
-                x: label_x,
-                y: label_y,
-                font_size: FONT_SIZE as u32,
-                font_family: "sans-serif",
-                fill: TEXT_COLOR,
-                bold: true,
-                italic: false,
-                underline: false,
-                skip_underline: false,
-            },
-        );
-        svg.raw(&buf);
-        svg.raw("</g>");
-    }
+        (
+            rect.x,
+            rect.y,
+            rect.width,
+            rect.height,
+            rect.text_x_values.as_slice(),
+            rect.text_y_values.as_slice(),
+        )
+    } else {
+        let Some(cluster) = cluster_positions.iter().find(|p| p.id == pkg.name) else {
+            return;
+        };
+        (
+            cluster.x,
+            cluster.y,
+            cluster.width,
+            cluster.height,
+            &[],
+            &[],
+        )
+    };
+    let ent_id = id_map
+        .get(&format!("pkg::{}", pkg.name))
+        .cloned()
+        .unwrap_or_else(|| "ent0003".to_string());
+    let src_attr = source_line_attr(pkg.source_line);
+    let fill = pkg
+        .color
+        .as_deref()
+        .map(resolve_fill)
+        .unwrap_or_else(|| "none".to_string());
+    svg.raw(&format!("<!--cluster {}-->", sanitize_comment(&pkg.name)));
+    svg.raw(&format!(
+        r#"<g class="cluster" data-qualified-name="{qname}"{src_attr} id="{ent_id}">"#,
+    ));
+    let label_w = text_render::measure(&pkg.name, FONT_SIZE, true);
+    let (label_x, label_y) = match pkg.kind {
+        PackageKind::Rectangle => {
+            // Plain rounded rect, centred bold label.
+            svg.raw(&format!(
+                r#"<rect fill="{fill}" height="{h}" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"#,
+                h = fc(rect_h),
+                w = fc(rect_w),
+                x = fc(rect_x),
+                y = fc(rect_y),
+            ));
+            (rect_x + (rect_w - label_w) / 2.0, rect_y + 15.5352)
+        }
+        PackageKind::Package => {
+            // Folder-tab outline: a notched top-left "tab" carrying the label,
+            // a diagonal slope down to the body's top edge, then a rounded
+            // rectangle body. Reconstructed from the oracle box rect and label
+            // width (HALF_UP coords).
+            let x = rect_x;
+            let y = rect_y;
+            let xr = rect_x + rect_w;
+            let yb = rect_y + rect_h;
+            // Tab top-right corner: label start (x+4) + label width, less 0.5.
+            let tab_tr = x + 3.5 + label_w;
+            let tab_y = y + pm::text_height(FONT_SIZE) + 6.0;
+            let d = format!(
+                "M{x25},{y_s} L{tab_tr},{y_s} A3.75,3.75 0 0 1 {tab_tr25},{y25} L{tab_br},{ty} L{xr25},{ty} A2.5,2.5 0 0 1 {xr_s},{ty25} L{xr_s},{yb2} A2.5,2.5 0 0 1 {xr25},{yb_s} L{x25},{yb_s} A2.5,2.5 0 0 1 {x_s},{yb2} L{x_s},{y25} A2.5,2.5 0 0 1 {x25},{y_s}",
+                x25 = fc(x + 2.5),
+                y_s = fc(y),
+                tab_tr = fc(tab_tr),
+                tab_tr25 = fc(tab_tr + 2.5),
+                y25 = fc(y + 2.5),
+                tab_br = fc(tab_tr + 9.5),
+                ty = fc(tab_y),
+                xr25 = fc(xr - 2.5),
+                xr_s = fc(xr),
+                ty25 = fc(tab_y + 2.5),
+                yb2 = fc(yb - 2.5),
+                yb_s = fc(yb),
+                x_s = fc(x),
+            );
+            svg.raw(&format!(
+                r#"<path d="{d}" fill="{fill}" style="stroke:#000000;stroke-width:1.5;"/>"#,
+            ));
+            // Divider under the tab from the left edge to the slope end.
+            svg.raw(&format!(
+                r#"<line style="stroke:#000000;stroke-width:1.5;" x1="{x1}" x2="{x2}" y1="{ty}" y2="{ty}"/>"#,
+                x1 = fc(x),
+                x2 = fc(tab_tr + 9.5),
+                ty = fc(tab_y),
+            ));
+            (x + 4.0, y + 15.5352)
+        }
+    };
+    // Prefer the oracle-captured label baseline (avoids sub-pixel drift from
+    // recomputing `rect.y + offset` against the already-rounded oracle rect).
+    let label_x = captured_x.first().copied().unwrap_or(label_x);
+    let label_y = captured_y.first().copied().unwrap_or(label_y);
+    let mut buf = String::new();
+    text_render::emit_text(
+        &mut buf,
+        &pkg.name,
+        &TextBase {
+            x: label_x,
+            y: label_y,
+            font_size: FONT_SIZE as u32,
+            font_family: "sans-serif",
+            fill: TEXT_COLOR,
+            bold: true,
+            italic: false,
+            underline: false,
+            skip_underline: false,
+        },
+    );
+    svg.raw(&buf);
+    svg.raw("</g>");
 }
 
+#[allow(clippy::too_many_arguments)]
 fn render_actor(
     svg: &mut SvgBuilder,
     actor: &Actor,
     dim: &ActorDim,
     cx: f64,
     cy: f64,
+    oracle: Option<&OracleLayout>,
     id_map: &HashMap<String, String>,
+    skin: &SkinColors,
 ) {
-    let ent_id = id_map
-        .get(&format!("actor::{}", actor.id))
-        .cloned()
+    // Prefer the oracle-captured entity id (PlantUML's real counter allocation,
+    // which notes and other synthetic entities perturb), falling back to the
+    // source-line-derived map when no oracle is present.
+    let oracle_id = oracle.and_then(|orc| {
+        orc.entities
+            .get(&actor.id)
+            .or_else(|| orc.entities.get(&actor.label))
+            .and_then(|r| r.entity_id.clone())
+    });
+    let ent_id = oracle_id
+        .or_else(|| id_map.get(&format!("actor::{}", actor.id)).cloned())
         .unwrap_or_else(|| "ent0002".to_string());
-    svg.raw(&format!("<!--entity {}-->", actor.id));
+    // For a label-declared actor (`actor "External System"`) PlantUML keys the
+    // qualified name and comment on the original label (spaces and all); for an
+    // aliased/bare actor it uses the id.
+    let display_raw = if actor.id == label_to_id(&actor.label) {
+        actor.label.as_str()
+    } else {
+        actor.id.as_str()
+    };
+    svg.raw(&format!("<!--entity {}-->", sanitize_comment(display_raw)));
+    let display = sanitize_qname(display_raw);
     let src_attr = source_line_attr(actor.source_line);
     svg.raw(&format!(
-        r#"<g class="entity" data-qualified-name="{}"{src_attr} id="{ent_id}">"#,
-        actor.id
+        r#"<g class="entity" data-qualified-name="{display}"{src_attr} id="{ent_id}">"#,
     ));
+    // Per-element `#color` overrides skinparam; both override the default.
+    let fill = actor
+        .color
+        .as_deref()
+        .map(resolve_fill)
+        .or_else(|| skin.actor_fill.clone())
+        .unwrap_or_else(|| ENTITY_FILL.to_string());
+    let stroke = skin.actor_border.as_deref().unwrap_or(STROKE);
     svg.raw(&format!(
-        r#"<ellipse cx="{cx}" cy="{cy}" fill="{ENTITY_FILL}" rx="{ACTOR_HEAD_R}" ry="{ACTOR_HEAD_R}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+        r#"<ellipse cx="{cx}" cy="{cy}" fill="{fill}" rx="{ACTOR_HEAD_R}" ry="{ACTOR_HEAD_R}" style="stroke:{stroke};stroke-width:{stroke_width};"/>"#,
         cx = fc(cx),
         cy = fc(cy),
+        stroke_width = skin.actor_border_thickness,
     ));
     let body_top_y = cy + ACTOR_HEAD_R;
     let body_bot_y = body_top_y + ACTOR_BODY_LEN;
@@ -490,7 +1197,7 @@ fn render_actor(
     let arm_left_x = cx - ACTOR_ARM_HALF;
     let arm_right_x = cx + ACTOR_ARM_HALF;
     svg.raw(&format!(
-        r#"<path d="M{cx},{body_top_y} L{cx},{body_bot_y} M{arm_left_x},{arm_y} L{arm_right_x},{arm_y} M{cx},{body_bot_y} L{leg_x_left},{leg_y} M{cx},{body_bot_y} L{leg_x_right},{leg_y}" fill="none" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+        r#"<path d="M{cx},{body_top_y} L{cx},{body_bot_y} M{arm_left_x},{arm_y} L{arm_right_x},{arm_y} M{cx},{body_bot_y} L{leg_x_left},{leg_y} M{cx},{body_bot_y} L{leg_x_right},{leg_y}" fill="none" style="stroke:{stroke};stroke-width:{stroke_width};"/>"#,
         cx = fc(cx),
         body_top_y = fc(body_top_y),
         body_bot_y = fc(body_bot_y),
@@ -500,9 +1207,26 @@ fn render_actor(
         leg_x_left = fc(leg_x_left),
         leg_x_right = fc(leg_x_right),
         leg_y = fc(leg_y),
+        stroke_width = skin.actor_border_thickness,
     ));
-    let label_x = cx - dim.label_w / 2.0;
-    let label_y = leg_y + ACTOR_LABEL_GAP;
+    let cx_anchor = round_coord(cx);
+    // Prefer PlantUML's captured per-line text x (label first, stereotype
+    // second in document order) over reconstructing it from the rounded centre.
+    let orc_rect = oracle.and_then(|orc| {
+        orc.entities
+            .get(&actor.id)
+            .or_else(|| orc.entities.get(&actor.label))
+    });
+    let captured_x = orc_rect.map(|r| r.text_x_values.as_slice()).unwrap_or(&[]);
+    let captured_y = orc_rect.map(|r| r.text_y_values.as_slice()).unwrap_or(&[]);
+    let label_x = captured_x
+        .first()
+        .copied()
+        .unwrap_or(cx_anchor - dim.label_w / 2.0);
+    let label_y = captured_y
+        .first()
+        .copied()
+        .unwrap_or(leg_y + ACTOR_LABEL_GAP);
     let mut buf = String::new();
     text_render::emit_text(
         &mut buf,
@@ -510,9 +1234,9 @@ fn render_actor(
         &TextBase {
             x: label_x,
             y: label_y,
-            font_size: FONT_SIZE as u32,
-            font_family: "sans-serif",
-            fill: TEXT_COLOR,
+            font_size: skin.actor_font_size,
+            font_family: &skin.actor_font_family,
+            fill: &skin.actor_font_color,
             bold: false,
             italic: false,
             underline: false,
@@ -522,8 +1246,14 @@ fn render_actor(
     svg.raw(&buf);
     if let Some(stereo) = &actor.stereotype {
         let stereo_text = format!("\u{00AB}{stereo}\u{00BB}");
-        let stereo_x = cx - dim.stereo_w / 2.0;
-        let stereo_y = cy - ACTOR_STEREO_OFFSET;
+        let stereo_x = captured_x
+            .get(1)
+            .copied()
+            .unwrap_or(cx_anchor - dim.stereo_w / 2.0);
+        let stereo_y = captured_y
+            .get(1)
+            .copied()
+            .unwrap_or(cy - ACTOR_STEREO_OFFSET);
         let mut buf = String::new();
         text_render::emit_text(
             &mut buf,
@@ -531,9 +1261,9 @@ fn render_actor(
             &TextBase {
                 x: stereo_x,
                 y: stereo_y,
-                font_size: STEREO_FONT as u32,
-                font_family: "sans-serif",
-                fill: TEXT_COLOR,
+                font_size: skin.actor_font_size,
+                font_family: &skin.actor_font_family,
+                fill: &skin.actor_stereo_font_color,
                 bold: false,
                 italic: true,
                 underline: false,
@@ -555,35 +1285,74 @@ fn render_use_case(
     cy: f64,
     oracle: Option<&OracleLayout>,
     id_map: &HashMap<String, String>,
+    skin: &SkinColors,
 ) {
     let qualified = qualified_name(&uc.id, diagram);
-    let ent_id = id_map
-        .get(&format!("uc::{}", uc.id))
-        .cloned()
+    // Prefer the oracle-captured entity id (PlantUML's real counter allocation),
+    // falling back to the source-line-derived map when no oracle is present.
+    let oracle_id = oracle.and_then(|orc| {
+        orc.entities
+            .get(&qualified)
+            .or_else(|| orc.entities.get(&uc.id))
+            .or_else(|| orc.entities.get(&uc.label))
+            .and_then(|r| r.entity_id.clone())
+    });
+    let ent_id = oracle_id
+        .or_else(|| id_map.get(&format!("uc::{}", uc.id)).cloned())
         .unwrap_or_else(|| "ent0003".to_string());
-    svg.raw(&format!("<!--entity {}-->", uc.id));
+    svg.raw(&format!(
+        "<!--entity {}-->",
+        sanitize_comment(display_name(uc))
+    ));
     let src_attr = source_line_attr(uc.source_line);
     svg.raw(&format!(
         r#"<g class="entity" data-qualified-name="{qualified}"{src_attr} id="{ent_id}">"#,
     ));
-    let (rx, ry) = if let Some(orc) = oracle
-        && let Some(rect) = orc
-            .entities
+    let orc_rect = oracle.and_then(|orc| {
+        orc.entities
             .get(&qualified)
             .or_else(|| orc.entities.get(&uc.id))
             .or_else(|| orc.entities.get(&uc.label))
-    {
+    });
+    let (rx, ry) = if let Some(rect) = orc_rect {
         (rect.width / 2.0, rect.height / 2.0)
     } else {
         (dim.rx, dim.ry)
     };
+    // Fill precedence: per-element `#color` > stereotype-scoped skinparam
+    // (`usecaseBackgroundColor<<stereo>>`) > generic `usecaseBackgroundColor` >
+    // default.
+    let stereo_fill = uc.stereotype.as_deref().and_then(|s| {
+        skin_fill(
+            &diagram.meta.skinparams,
+            &format!("usecaseBackgroundColor<<{s}>>"),
+            skin.gradient_defs.as_deref(),
+        )
+    });
+    let fill = uc
+        .color
+        .as_deref()
+        .map(resolve_fill)
+        .or(stereo_fill)
+        .or_else(|| skin.uc_fill.clone())
+        .unwrap_or_else(|| ENTITY_FILL.to_string());
+    let stroke = skin.uc_border.as_deref().unwrap_or(STROKE);
     svg.raw(&format!(
-        r#"<ellipse cx="{cx}" cy="{cy}" fill="{ENTITY_FILL}" rx="{rx}" ry="{ry}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+        r#"<ellipse cx="{cx}" cy="{cy}" fill="{fill}" rx="{rx}" ry="{ry}" style="stroke:{stroke};stroke-width:{stroke_width};"/>"#,
         cx = fc(cx),
         cy = fc(cy),
         rx = fc(rx),
         ry = fc(ry),
+        stroke_width = skin.uc_border_thickness,
     ));
+    let cx_anchor = round_coord(cx);
+    // PlantUML's emitted text x values are captured per line (stereotype first,
+    // then label/description lines). Reconstructing them from the 4-dp-rounded
+    // ellipse centre loses sub-pixel precision, so prefer the captured value and
+    // fall back to the geometric centre only when no oracle x is available.
+    let captured_x = orc_rect.map(|r| r.text_x_values.as_slice()).unwrap_or(&[]);
+    let captured_y = orc_rect.map(|r| r.text_y_values.as_slice()).unwrap_or(&[]);
+    let mut line_idx = 0usize;
     let n_lines = dim.line_count;
     let bottom_y = cy + UC_TEXT_OFFSET_SINGLE + (n_lines as f64 - 1.0) * LINE_H;
     let mut text_y = bottom_y - (n_lines as f64 - 1.0) * LINE_H;
@@ -592,17 +1361,22 @@ fn render_use_case(
     }
     if let Some(stereo) = &uc.stereotype {
         let stereo_text = format!("\u{00AB}{stereo}\u{00BB}");
-        let stereo_x = cx - dim.stereo_w / 2.0;
+        let stereo_x = captured_x
+            .get(line_idx)
+            .copied()
+            .unwrap_or(cx_anchor - dim.stereo_w / 2.0);
+        let stereo_y = captured_y.get(line_idx).copied().unwrap_or(text_y);
+        line_idx += 1;
         let mut buf = String::new();
         text_render::emit_text(
             &mut buf,
             &stereo_text,
             &TextBase {
                 x: stereo_x,
-                y: text_y,
-                font_size: STEREO_FONT as u32,
-                font_family: "sans-serif",
-                fill: TEXT_COLOR,
+                y: stereo_y,
+                font_size: skin.uc_font_size,
+                font_family: &skin.uc_font_family,
+                fill: &skin.uc_stereo_font_color,
                 bold: false,
                 italic: true,
                 underline: false,
@@ -613,17 +1387,21 @@ fn render_use_case(
         text_y += LINE_H;
     }
     if uc.description.is_empty() {
-        let label_x = cx - dim.label_w / 2.0;
+        let label_x = captured_x
+            .get(line_idx)
+            .copied()
+            .unwrap_or(cx_anchor - dim.label_w / 2.0);
+        let label_y = captured_y.get(line_idx).copied().unwrap_or(text_y);
         let mut buf = String::new();
         text_render::emit_text(
             &mut buf,
             &uc.label,
             &TextBase {
                 x: label_x,
-                y: text_y,
-                font_size: FONT_SIZE as u32,
-                font_family: "sans-serif",
-                fill: TEXT_COLOR,
+                y: label_y,
+                font_size: skin.uc_font_size,
+                font_family: &skin.uc_font_family,
+                fill: &skin.uc_font_color,
                 bold: false,
                 italic: false,
                 underline: false,
@@ -632,19 +1410,75 @@ fn render_use_case(
         );
         svg.raw(&buf);
     } else {
+        // Separator dividers (from `--`/`==`/`..` lines in a multiline label)
+        // are captured verbatim from the oracle (full geometry + style, so
+        // dashed `..` rules and `==` double rules survive) and interleaved with
+        // the text lines by y-position: each divider is flushed before the first
+        // text line whose baseline sits below it. Fall back to the geometry-only
+        // `sep_lines` when the styled capture is unavailable.
+        let sep_styled = orc_rect.map(|r| r.lines.as_slice()).unwrap_or(&[]);
+        let sep_geom = orc_rect.map(|r| r.sep_lines.as_slice()).unwrap_or(&[]);
+        let use_styled = !sep_styled.is_empty();
+        let mut sep_idx = 0usize;
+        let flush_seps = |svg: &mut SvgBuilder, sep_idx: &mut usize, before_y: f64| {
+            if use_styled {
+                while let Some(l) = sep_styled.get(*sep_idx) {
+                    let y1: f64 = l.y1.parse().unwrap_or(0.0);
+                    if y1 < before_y {
+                        let style = l
+                            .style
+                            .as_deref()
+                            .unwrap_or("stroke:#181818;stroke-width:1;");
+                        svg.raw(&format!(
+                            r#"<line style="{style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                            l.x1, l.x2, l.y1, l.y2,
+                        ));
+                        *sep_idx += 1;
+                    } else {
+                        break;
+                    }
+                }
+            } else {
+                while let Some(&(x1, x2, y1)) = sep_geom.get(*sep_idx) {
+                    if y1 < before_y {
+                        svg.raw(&format!(
+                            r#"<line style="stroke:{STROKE};stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                            fc(x1),
+                            fc(x2),
+                            fc(y1),
+                            fc(y1),
+                        ));
+                        *sep_idx += 1;
+                    } else {
+                        break;
+                    }
+                }
+            }
+        };
         for line in &uc.description {
-            let lw = text_render::measure(line, FONT_SIZE, false);
-            let lx = cx - lw / 2.0;
+            let lw = text_render::measure_with_family(
+                line,
+                skin.uc_font_size as f64,
+                false,
+                &skin.uc_font_family,
+            );
+            let lx = captured_x
+                .get(line_idx)
+                .copied()
+                .unwrap_or(cx_anchor - lw / 2.0);
+            let ly = captured_y.get(line_idx).copied().unwrap_or(text_y);
+            flush_seps(svg, &mut sep_idx, ly);
+            line_idx += 1;
             let mut buf = String::new();
             text_render::emit_text(
                 &mut buf,
                 line,
                 &TextBase {
                     x: lx,
-                    y: text_y,
-                    font_size: FONT_SIZE as u32,
-                    font_family: "sans-serif",
-                    fill: TEXT_COLOR,
+                    y: ly,
+                    font_size: skin.uc_font_size,
+                    font_family: &skin.uc_font_family,
+                    fill: &skin.uc_font_color,
                     bold: false,
                     italic: false,
                     underline: false,
@@ -654,6 +1488,122 @@ fn render_use_case(
             svg.raw(&buf);
             text_y += LINE_H;
         }
+        // Any trailing separators after the last text line.
+        flush_seps(svg, &mut sep_idx, f64::INFINITY);
+    }
+    svg.raw("</g>");
+}
+
+/// Render a note entity, reconstructing the box-plus-leader path locally from
+/// the oracle-captured geometry (box rect, leader apex/base, text baselines).
+fn emit_note(svg: &mut SvgBuilder, note: &crate::layout_oracle::OracleNoteEntity) {
+    use std::fmt::Write;
+
+    let Some(g) = note.box_geom.as_ref() else {
+        return;
+    };
+    let bx = g.x;
+    let by = g.y;
+    let right = g.x + g.width;
+    let bottom = g.y + g.height;
+    let rf = right - NOTE_FOLD; // fold inner x
+    let yf = by + NOTE_FOLD; // fold inner y
+
+    // The leader sits on whichever box edge the apex points toward.
+    let side = g.apex.map(|(ax, ay)| {
+        if ay < by {
+            LeaderSide::Top
+        } else if ay > bottom {
+            LeaderSide::Bottom
+        } else if ax < bx {
+            LeaderSide::Left
+        } else {
+            LeaderSide::Right
+        }
+    });
+
+    // PlantUML does not place the leader base points symmetrically about the
+    // apex, so emit them verbatim from the captured geometry.
+    let leader = |d: &mut String| {
+        if let (Some((ax, ay)), Some((b0, b1))) = (g.apex, g.leader_base) {
+            let _ = write!(
+                d,
+                "L{},{} L{},{} L{},{} ",
+                fc(b0.0),
+                fc(b0.1),
+                fc(ax),
+                fc(ay),
+                fc(b1.0),
+                fc(b1.1),
+            );
+        }
+    };
+
+    // Walk the outline counter-clockwise from the top-left corner, splicing the
+    // leader into the appropriate edge.
+    let mut d = String::new();
+    let _ = write!(d, "M{},{} ", fc(bx), fc(by));
+    if matches!(side, Some(LeaderSide::Left)) {
+        leader(&mut d);
+    }
+    let _ = write!(d, "L{},{} ", fc(bx), fc(bottom));
+    let _ = write!(d, "A0,0 0 0 0 {},{} ", fc(bx), fc(bottom));
+    if matches!(side, Some(LeaderSide::Bottom)) {
+        leader(&mut d);
+    }
+    let _ = write!(d, "L{},{} ", fc(right), fc(bottom));
+    let _ = write!(d, "A0,0 0 0 0 {},{} ", fc(right), fc(bottom));
+    if matches!(side, Some(LeaderSide::Right)) {
+        leader(&mut d);
+    }
+    let _ = write!(d, "L{},{} ", fc(right), fc(yf));
+    let _ = write!(d, "L{},{} ", fc(rf), fc(by));
+    if matches!(side, Some(LeaderSide::Top)) {
+        leader(&mut d);
+    }
+    let _ = write!(d, "L{},{} ", fc(bx), fc(by));
+    let _ = write!(d, "A0,0 0 0 0 {},{}", fc(bx), fc(by));
+
+    let src_attr = note
+        .source_line
+        .as_deref()
+        .map(|sl| format!(r#" data-source-line="{sl}""#))
+        .unwrap_or_default();
+    let ent_id = note.entity_id.as_deref().unwrap_or("");
+    svg.raw(&format!(
+        r#"<g class="entity" data-qualified-name="{qn}"{src_attr} id="{ent_id}">"#,
+        qn = note.qualified_name,
+    ));
+    svg.raw(&format!(
+        r#"<path d="{d}" fill="{NOTE_FILL}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+    ));
+    // Folded-corner detail (second path).
+    svg.raw(&format!(
+        r#"<path d="M{rf_s},{by_s} L{rf_s},{yf_s} L{r_s},{yf_s} L{rf_s},{by_s}" fill="{NOTE_FILL}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+        rf_s = fc(rf),
+        by_s = fc(by),
+        yf_s = fc(yf),
+        r_s = fc(right),
+    ));
+    // Text lines at their captured baselines.
+    for (tx, ty, line) in &g.text_lines {
+        let mut buf = String::new();
+        text_render::emit_text(
+            &mut buf,
+            line,
+            &TextBase {
+                x: *tx,
+                y: *ty,
+                font_size: NOTE_FONT_SIZE,
+                font_family: "sans-serif",
+                fill: TEXT_COLOR,
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        svg.raw(&buf);
     }
     svg.raw("</g>");
 }
@@ -680,31 +1630,41 @@ fn render_oracle_connections(
     svg: &mut SvgBuilder,
     diagram: &UseCaseDiagram,
     oracle: &OracleLayout,
+    skin: &SkinColors,
 ) {
     // PlantUML emits links sorted by source line. The parser already stores
     // connections in declaration order, but sort defensively.
-    let mut conns: Vec<&UseCaseConnection> = diagram.connections.iter().collect();
-    conns.sort_by_key(|c| c.source_line);
-    for conn in &conns {
-        let conn: &UseCaseConnection = conn;
-        // Oracle edge ids are built from the label form, not the id form.
-        let from_label = entity_label(diagram, &conn.from);
-        let to_label = entity_label(diagram, &conn.to);
-        let candidates = [
-            format!("{from_label}-to-{to_label}"),
-            format!("{from_label}-{to_label}"),
-            format!("{from_label}-backto-{to_label}"),
-            format!("{}-to-{}", conn.from, conn.to),
-            format!("{}-{}", conn.from, conn.to),
-            format!("{}-backto-{}", conn.from, conn.to),
-        ];
-        let oracle_edge = oracle
-            .edges
-            .iter()
-            .find(|e| candidates.iter().any(|c| c == &e.id));
-        let Some(oracle_edge) = oracle_edge else {
+    // Iterate the oracle's edges in their captured DOM order — PlantUML does
+    // not always emit links in source-line order (e.g. an `<<extend>>` edge can
+    // precede the `<<include>>` edges declared before it), so the oracle order
+    // is authoritative. For each edge, find the connection it corresponds to
+    // (for the note-on-link label/shape ordering), consuming each connection
+    // once so edges sharing an endpoint pair bind to distinct connections.
+    let mut used_conns: std::collections::HashSet<usize> = std::collections::HashSet::new();
+    for oracle_edge in &oracle.edges {
+        let conn_idx = diagram.connections.iter().enumerate().position(|(i, c)| {
+            if used_conns.contains(&i) {
+                return false;
+            }
+            let from_label = entity_label(diagram, &c.from);
+            let to_label = entity_label(diagram, &c.to);
+            let candidates = [
+                format!("{from_label}-to-{to_label}"),
+                format!("{from_label}-{to_label}"),
+                format!("{from_label}-backto-{to_label}"),
+                format!("{}-to-{}", c.from, c.to),
+                format!("{}-{}", c.from, c.to),
+                format!("{}-backto-{}", c.from, c.to),
+            ];
+            candidates.iter().any(|cand| cand == &oracle_edge.id)
+        });
+        let Some(conn_idx) = conn_idx else {
             continue;
         };
+        used_conns.insert(conn_idx);
+        let conn = &diagram.connections[conn_idx];
+        let from_label = entity_label(diagram, &conn.from);
+        let to_label = entity_label(diagram, &conn.to);
         let entity_1 = oracle_edge.entity_1.as_deref().unwrap_or("");
         let entity_2 = oracle_edge.entity_2.as_deref().unwrap_or("");
         let link_type = oracle_edge.link_type.as_deref().unwrap_or("association");
@@ -750,7 +1710,13 @@ fn render_oracle_connections(
                 r#"<polygon fill="{fill}" points="{points}" style="{poly_style}"/>"#,
             ));
         }
-        if let Some((lx, ly, ref text)) = oracle_edge.label {
+        // Edge labels and any `note on link` shape. PlantUML emits, in document
+        // order: the link label (e.g. `«extend»`), then the note's box path and
+        // folded-corner path (`extra_paths`), then the note text. We replay that
+        // order: the first label, the extra paths, then the remaining labels.
+        // Falls back to the single concatenated `label` when no per-line labels
+        // were captured.
+        let emit_label = |svg: &mut SvgBuilder, lx: f64, ly: f64, text: &str| {
             let mut buf = String::new();
             text_render::emit_text(
                 &mut buf,
@@ -758,9 +1724,131 @@ fn render_oracle_connections(
                 &TextBase {
                     x: lx,
                     y: ly,
-                    font_size: 13,
-                    font_family: "sans-serif",
-                    fill: TEXT_COLOR,
+                    font_size: skin.arrow_font_size,
+                    font_family: &skin.arrow_font_family,
+                    fill: &skin.arrow_font_color,
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
+            svg.raw(&buf);
+        };
+        let emit_extra_paths = |svg: &mut SvgBuilder| {
+            for (d, style) in &oracle_edge.extra_paths {
+                let style = style
+                    .as_deref()
+                    .unwrap_or("stroke:#181818;stroke-width:0.5;");
+                svg.raw(&format!(
+                    r#"<path d="{d}" fill="{NOTE_FILL}" style="{style}"/>"#
+                ));
+            }
+        };
+        if oracle_edge.labels.is_empty() {
+            emit_extra_paths(&mut *svg);
+            if let Some((lx, ly, ref text)) = oracle_edge.label {
+                emit_label(&mut *svg, lx, ly, text);
+            }
+        } else {
+            // The connection's own label (`: <<extend>>`) precedes the note
+            // shape; the note's text follows it. When the edge carries no label
+            // of its own, every captured text belongs to the note and follows
+            // the note box.
+            let mut labels = oracle_edge.labels.iter();
+            let has_edge_label = conn.label.is_some() || conn.stereotype.is_some();
+            if has_edge_label && let Some((lx, ly, text)) = labels.next() {
+                emit_label(&mut *svg, *lx, *ly, text);
+            }
+            emit_extra_paths(&mut *svg);
+            for (lx, ly, text) in labels {
+                emit_label(&mut *svg, *lx, *ly, text);
+            }
+        }
+        svg.raw("</g>");
+    }
+}
+
+fn render_no_oracle_connections(
+    svg: &mut SvgBuilder,
+    diagram: &UseCaseDiagram,
+    id_map: &HashMap<String, String>,
+    edge_paths: &[EdgePath],
+    skin: &SkinColors,
+) {
+    for conn in &diagram.connections {
+        let Some(edge) = edge_paths
+            .iter()
+            .find(|edge| edge.from == conn.from && edge.to == conn.to)
+        else {
+            continue;
+        };
+        let Some(ent1) = usecase_entity_id(diagram, id_map, &conn.from) else {
+            continue;
+        };
+        let Some(ent2) = usecase_entity_id(diagram, id_map, &conn.to) else {
+            continue;
+        };
+        let link_id = no_oracle_link_id(diagram, conn.source_line);
+        let from_label = link_comment_name(diagram, &conn.from);
+        let to_label = link_comment_name(diagram, &conn.to);
+        let link_type = if conn.arrow {
+            "dependency"
+        } else {
+            "association"
+        };
+        svg.raw(&format!("<!--link {from_label} to {to_label}-->"));
+        svg.raw(&format!(
+            r#"<g class="link" data-entity-1="{ent1}" data-entity-2="{ent2}" data-link-type="{link_type}" data-source-line="{line}" id="{link_id}">"#,
+            line = conn.source_line,
+        ));
+        if let Some(d) = edge_path_d(edge, conn.arrow) {
+            let path_style = if conn.dashed {
+                format!("stroke:{STROKE};stroke-width:1;stroke-dasharray:7,7;")
+            } else {
+                format!("stroke:{STROKE};stroke-width:1;")
+            };
+            let path_id = if conn.arrow {
+                format!("{}-to-{}", conn.from, conn.to)
+            } else {
+                format!("{}-{}", conn.from, conn.to)
+            };
+            svg.raw(&format!(
+                r#"<path d="{d}" fill="none" id="{path_id}" style="{path_style}"/>"#,
+            ));
+        }
+        if conn.arrow
+            && let Some((control, endpoint)) = edge_arrow_basis(edge)
+        {
+            let points = dependency_arrow_points(control, endpoint);
+            svg.raw(&format!(
+                r##"<polygon fill="#181818" points="{points}" style="stroke:#181818;stroke-width:1;"/>"##,
+            ));
+        }
+        let label_text = conn
+            .label
+            .as_deref()
+            .or(conn.stereotype.as_deref())
+            .map(|s| {
+                if s.starts_with("<<") {
+                    s.replace("<<", "\u{00AB}").replace(">>", "\u{00BB}")
+                } else {
+                    s.to_string()
+                }
+            });
+        if let Some(label) = label_text
+            && let Some((x, y)) = edge.points.get(edge.points.len() / 2).copied()
+        {
+            let mut buf = String::new();
+            text_render::emit_text(
+                &mut buf,
+                &label,
+                &TextBase {
+                    x: x + 4.0,
+                    y: y - 4.0,
+                    font_size: skin.arrow_font_size,
+                    font_family: &skin.arrow_font_family,
+                    fill: &skin.arrow_font_color,
                     bold: false,
                     italic: false,
                     underline: false,
@@ -773,6 +1861,135 @@ fn render_oracle_connections(
     }
 }
 
+fn usecase_entity_id<'a>(
+    diagram: &UseCaseDiagram,
+    id_map: &'a HashMap<String, String>,
+    id: &str,
+) -> Option<&'a str> {
+    if diagram.actors.iter().any(|a| a.id == id) {
+        return id_map.get(&format!("actor::{id}")).map(String::as_str);
+    }
+    if diagram.use_cases.iter().any(|u| u.id == id) {
+        return id_map.get(&format!("uc::{id}")).map(String::as_str);
+    }
+    None
+}
+
+fn link_comment_name<'a>(diagram: &'a UseCaseDiagram, id: &'a str) -> &'a str {
+    if let Some(uc) = diagram.use_cases.iter().find(|u| u.id == id) {
+        return display_name(uc);
+    }
+    if let Some(actor) = diagram.actors.iter().find(|a| a.id == id) {
+        if actor.id == label_to_id(&actor.label) {
+            return actor.label.as_str();
+        }
+        return actor.id.as_str();
+    }
+    id
+}
+
+fn no_oracle_link_id(diagram: &UseCaseDiagram, source_line: usize) -> String {
+    let mut counter = 2usize;
+    let mut items: Vec<(usize, bool)> = Vec::new();
+    items.extend(diagram.actors.iter().map(|a| (a.source_line, false)));
+    items.extend(diagram.use_cases.iter().map(|u| (u.source_line, false)));
+    items.extend(diagram.packages.iter().map(|p| (p.source_line, false)));
+    items.extend(diagram.connections.iter().map(|c| (c.source_line, true)));
+    items.sort_by_key(|(line, _)| *line);
+    for (line, is_link) in items {
+        if is_link && line == source_line {
+            return format!("lnk{counter}");
+        }
+        counter += 1;
+    }
+    format!("lnk{counter}")
+}
+
+fn edge_path_d(edge: &EdgePath, shorten_for_arrow: bool) -> Option<String> {
+    let mut points = edge.points.clone();
+    if shorten_for_arrow && points.len() >= 2 {
+        let end = points.len() - 1;
+        let control =
+            points[..end].iter().rev().copied().find(|p| {
+                (p.0 - points[end].0).abs() > 0.01 || (p.1 - points[end].1).abs() > 0.01
+            })?;
+        let dx = points[end].0 - control.0;
+        let dy = points[end].1 - control.1;
+        let len = (dx * dx + dy * dy).sqrt().max(1.0);
+        let ux = dx / len;
+        let uy = dy / len;
+        for point in &mut points[end.saturating_sub(1)..=end] {
+            point.0 -= ux * DEPENDENCY_ARROW_PATH_GAP;
+            point.1 -= uy * DEPENDENCY_ARROW_PATH_GAP;
+        }
+    }
+    let (start, rest) = points.split_first()?;
+    let mut d = format!("M{},{}", fc(start.0), fc(start.1));
+    for chunk in rest.chunks(3) {
+        if let [c1, c2, to] = chunk {
+            write!(
+                d,
+                " C{},{} {},{} {},{}",
+                fc(c1.0),
+                fc(c1.1),
+                fc(c2.0),
+                fc(c2.1),
+                fc(to.0),
+                fc(to.1),
+            )
+            .unwrap();
+        }
+    }
+    Some(d)
+}
+
+fn edge_arrow_basis(edge: &EdgePath) -> Option<((f64, f64), (f64, f64))> {
+    let endpoint = edge.end_point.or_else(|| edge.points.last().copied())?;
+    let control = edge
+        .points
+        .iter()
+        .rev()
+        .copied()
+        .find(|p| (p.0 - endpoint.0).abs() > 0.01 || (p.1 - endpoint.1).abs() > 0.01)?;
+    Some((control, endpoint))
+}
+
+fn dependency_arrow_points(control: (f64, f64), endpoint: (f64, f64)) -> String {
+    let dx = endpoint.0 - control.0;
+    let dy = endpoint.1 - control.1;
+    let len = (dx * dx + dy * dy).sqrt().max(1.0);
+    let ux = dx / len;
+    let uy = dy / len;
+    let px = -uy;
+    let py = ux;
+    let p1 = endpoint;
+    let p2 = (
+        endpoint.0 - ux * DEPENDENCY_ARROW_BACK + px * DEPENDENCY_ARROW_WING,
+        endpoint.1 - uy * DEPENDENCY_ARROW_BACK + py * DEPENDENCY_ARROW_WING,
+    );
+    let p3 = (
+        endpoint.0 - ux * DEPENDENCY_ARROW_NOTCH,
+        endpoint.1 - uy * DEPENDENCY_ARROW_NOTCH,
+    );
+    let p4 = (
+        endpoint.0 - ux * DEPENDENCY_ARROW_BACK - px * DEPENDENCY_ARROW_WING,
+        endpoint.1 - uy * DEPENDENCY_ARROW_BACK - py * DEPENDENCY_ARROW_WING,
+    );
+    format!(
+        "{},{} {},{} {},{} {},{} {},{}",
+        fc(p1.0),
+        fc(p1.1),
+        fc(p2.0),
+        fc(p2.1),
+        fc(p3.0),
+        fc(p3.1),
+        fc(p4.0),
+        fc(p4.1),
+        fc(p1.0),
+        fc(p1.1),
+    )
+}
+
 #[cfg(test)]
 mod tests {
     #[test]
@@ -782,5 +1999,45 @@ mod tests {
         let svg = crate::render_svg(&diagram);
         assert!(svg.contains("User"));
         assert!(svg.contains("Login"));
+    }
+
+    #[test]
+    fn no_oracle_usecase_routes_renamed_actor_link() {
+        let input = "@startuml\nactor \"Reader\" as R\nusecase \"Browse Catalog\" as Browse\nR --> Browse\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        assert!(svg.contains(r#"<!--link R to Browse-->"#));
+        assert!(svg.contains(r#"<path d="M"#));
+        assert!(svg.contains(r##"<polygon fill="#181818""##));
+    }
+
+    #[test]
+    fn skinparams_style_actor_and_usecase_text() {
+        let input = r##"@startuml
+skinparam backgroundColor transparent
+skinparam defaultFontName "Verdana"
+skinparam defaultFontSize 12
+skinparam actorFontColor #fff
+skinparam actorBorderColor #78c2ad
+skinparam actorBackgroundColor #86c8b5
+skinparam __styleRootLineThickness 1
+skinparam usecaseFontColor #fff
+skinparam usecaseBorderColor #78c2ad
+skinparam usecaseBackgroundColor #86c8b5
+skinparam usecaseBorderThickness 2
+actor User
+usecase "Login" as UC1
+User --> UC1
+@enduml"##;
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        assert!(svg.contains(r#"style="width:"#));
+        assert!(!svg.contains("background:#FFFFFF;"));
+        assert!(svg.contains(r##"fill="#86C8B5""##));
+        assert!(svg.contains(r#"stroke:#78C2AD;stroke-width:1;"#));
+        assert!(svg.contains(r#"stroke:#78C2AD;stroke-width:2;"#));
+        assert!(svg.contains(r#"font-family="'Verdana'""#));
+        assert!(svg.contains(r#"font-size="12""#));
+        assert!(svg.contains(r##"fill="#FFFFFF""##));
     }
 }

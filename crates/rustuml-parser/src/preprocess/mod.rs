@@ -24,6 +24,29 @@ pub struct PreprocessOutput {
     pub sprites: HashMap<String, SpriteData>,
 }
 
+const SOURCE_LINE_PREFIX: &str = "\x1ERSL:";
+const SOURCE_LINE_SEPARATOR: char = '\x1F';
+
+pub(crate) fn source_line_marker(source_line: usize, line: &str) -> String {
+    format!("{SOURCE_LINE_PREFIX}{source_line}{SOURCE_LINE_SEPARATOR}{line}")
+}
+
+pub(crate) fn split_source_line_marker(line: &str) -> Option<(usize, &str)> {
+    let rest = line.strip_prefix(SOURCE_LINE_PREFIX)?;
+    let (source_line, line) = rest.split_once(SOURCE_LINE_SEPARATOR)?;
+    let source_line = source_line.parse().ok()?;
+    Some((source_line, line))
+}
+
+fn strip_source_line_markers(lines: Vec<String>) -> Vec<String> {
+    lines
+        .into_iter()
+        .map(|line| {
+            split_source_line_marker(&line).map_or(line.clone(), |(_, text)| text.to_string())
+        })
+        .collect()
+}
+
 /// Preprocess PlantUML source, expanding TIM directives.
 pub fn preprocess(input: &str) -> Vec<String> {
     preprocess_full(input, None).lines
@@ -37,7 +60,32 @@ pub fn preprocess_with_base(input: &str, base_dir: &Path) -> Vec<String> {
 /// Preprocess PlantUML source and return both expanded lines and sprite
 /// definitions collected from `sprite $name { ... }` blocks.
 pub fn preprocess_full(input: &str, base_dir: Option<PathBuf>) -> PreprocessOutput {
-    let mut ctx = PreprocessContext::new(base_dir);
+    let mut output = preprocess_full_inner(input, base_dir, false);
+    output.lines = strip_source_line_markers(output.lines);
+    output
+}
+
+pub(crate) fn preprocess_full_for_parse(
+    input: &str,
+    base_dir: Option<PathBuf>,
+) -> PreprocessOutput {
+    preprocess_full_inner(input, base_dir, false)
+}
+
+pub(crate) fn preprocess_full_for_sequence_parse(
+    input: &str,
+    base_dir: Option<PathBuf>,
+) -> PreprocessOutput {
+    preprocess_full_inner(input, base_dir, true)
+}
+
+fn preprocess_full_inner(
+    input: &str,
+    base_dir: Option<PathBuf>,
+    mark_function_body_source_lines: bool,
+) -> PreprocessOutput {
+    let mut ctx = PreprocessContext::new(base_dir, mark_function_body_source_lines);
+    ctx.preserve_teoz_pragma = mark_function_body_source_lines;
     let mut lines = ctx.process(input);
     // Append any accumulated theme expansion to the end of the diagram so
     // user-source line numbers are preserved (see `theme_tail`).
@@ -317,12 +365,16 @@ struct PreprocessContext {
     collecting_function: Option<String>,
     collecting_definelong: Option<String>,
     subs: HashMap<String, Vec<String>>,
+    sub_blocks: Vec<SubBlock>,
     collecting_sub: Option<String>,
+    collecting_sub_lines: Vec<String>,
     /// Local variable scopes for function calls (stack of saved scopes).
     local_vars: Vec<HashMap<String, String>>,
     /// Pending return value from a `!return` inside a function body.
     /// Set by process_one_line when `!return` is encountered while active.
     return_signal: Option<Value>,
+    /// 1-based line currently being processed within the active input chunk.
+    current_source_line: usize,
     /// Wall-clock snapshot captured once at render start. Drives `%date()`
     /// so all calls within a single render see the same instant and zone.
     /// Defaults to system time + local timezone; both overridable via
@@ -338,6 +390,13 @@ struct PreprocessContext {
     /// output — skinparams are position-insensitive so this is semantically
     /// equivalent to in-place expansion for everything we currently render.
     theme_tail: Vec<String>,
+    /// Once loop expansion produces generated content, subsequent original
+    /// lines need explicit source-origin markers because output position no
+    /// longer equals PlantUML's `data-source-line`.
+    mark_source_lines: bool,
+    source_line_override: Option<usize>,
+    mark_function_body_source_lines: bool,
+    preserve_teoz_pragma: bool,
 }
 
 const MAX_INCLUDE_DEPTH: usize = 10;
@@ -351,18 +410,30 @@ struct CondState {
 struct ForEachState {
     var_name: String,
     values: Vec<String>,
-    body_lines: Vec<String>,
+    body_lines: Vec<BufferedLine>,
 }
 
 struct WhileState {
     condition: String,
-    body_lines: Vec<String>,
+    body_lines: Vec<BufferedLine>,
+}
+
+#[derive(Clone)]
+struct BufferedLine {
+    text: String,
+    raw_source_line: usize,
+    source_line: usize,
+}
+
+#[derive(Clone)]
+struct SubBlock {
+    lines: Vec<String>,
 }
 
 #[derive(Clone)]
 struct FunctionDef {
     params: Vec<FuncParam>,
-    body: Vec<String>,
+    body: Vec<BufferedLine>,
 }
 
 #[derive(Clone)]
@@ -378,7 +449,7 @@ struct DefineLongDef {
 }
 
 impl PreprocessContext {
-    fn new(base_dir: Option<PathBuf>) -> Self {
+    fn new(base_dir: Option<PathBuf>, mark_function_body_source_lines: bool) -> Self {
         Self {
             defines: HashMap::new(),
             token_defines: HashMap::new(),
@@ -400,16 +471,78 @@ impl PreprocessContext {
             collecting_function: None,
             collecting_definelong: None,
             subs: HashMap::new(),
+            sub_blocks: Vec::new(),
             collecting_sub: None,
+            collecting_sub_lines: Vec::new(),
             local_vars: Vec::new(),
             return_signal: None,
+            current_source_line: 0,
             render_clock: RenderClock::from_env(),
             theme_tail: Vec::new(),
+            mark_source_lines: false,
+            source_line_override: None,
+            mark_function_body_source_lines,
+            preserve_teoz_pragma: false,
         }
     }
 
     fn is_active(&self) -> bool {
         self.cond_stack.iter().all(|c| c.active)
+    }
+
+    /// Push a blank placeholder for a directive line that produced no diagram
+    /// content. PlantUML preserves the original line position of surviving
+    /// content (it strips only the `@startuml` line), so its `data-source-line`
+    /// attribute equals the original 1-based file line minus one. Keeping a
+    /// placeholder for every consumed directive line keeps our preprocessed
+    /// stream — which the diagram parser indexes 1-based — aligned with that.
+    /// Placeholders are only emitted while collecting a single top-level
+    /// diagram block; nested includes manage their own numbering.
+    fn push_directive_placeholder(&self, output: &mut Vec<String>) {
+        if self.include_depth == 0 && self.in_diagram_block {
+            output.push(String::new());
+        }
+    }
+
+    fn current_diagram_source_line(&self) -> usize {
+        if self.include_depth == 0 && self.in_diagram_block && self.seen_start_tag {
+            self.current_source_line.saturating_sub(1)
+        } else {
+            self.current_source_line
+        }
+    }
+
+    fn current_buffered_line(&self, line: &str) -> BufferedLine {
+        BufferedLine {
+            text: line.to_string(),
+            raw_source_line: self.current_source_line,
+            source_line: self.current_diagram_source_line(),
+        }
+    }
+
+    fn push_content_line(&self, output: &mut Vec<String>, line: String) {
+        if self.mark_source_lines && !line.is_empty() {
+            output.push(source_line_marker(
+                self.source_line_override
+                    .unwrap_or_else(|| self.current_diagram_source_line()),
+                &line,
+            ));
+        } else {
+            output.push(line);
+        }
+    }
+
+    fn process_buffered_line(&mut self, line: &BufferedLine, output: &mut Vec<String>) {
+        let saved_source_line = self.current_source_line;
+        let saved_mark_source_lines = self.mark_source_lines;
+        let saved_source_line_override = self.source_line_override;
+        self.current_source_line = line.raw_source_line;
+        self.mark_source_lines = true;
+        self.source_line_override = Some(line.source_line);
+        self.process_one_line(&line.text, output);
+        self.source_line_override = saved_source_line_override;
+        self.mark_source_lines = saved_mark_source_lines;
+        self.current_source_line = saved_source_line;
     }
 
     fn get_var(&self, name: &str) -> Option<&String> {
@@ -451,9 +584,12 @@ impl PreprocessContext {
     fn process_lines(&mut self, lines: &[&str]) -> Vec<String> {
         let mut output = Vec::new();
 
-        for &line in lines {
+        let saved_source_line = self.current_source_line;
+        for (idx, &line) in lines.iter().enumerate() {
+            self.current_source_line = idx + 1;
             self.process_one_line(line, &mut output);
         }
+        self.current_source_line = saved_source_line;
 
         output
     }
@@ -461,7 +597,9 @@ impl PreprocessContext {
     fn process_one_line(&mut self, line: &str, output: &mut Vec<String>) {
         let trimmed = line.trim();
 
-        // Collect sprite pixel-data blocks.
+        // Collect sprite pixel-data blocks. Emit empty placeholder lines so
+        // downstream parsers preserve original source line numbers (PlantUML's
+        // `data-source-line` attribute matches the user's editor view).
         if self.in_sprite_block {
             if trimmed == "}" {
                 self.in_sprite_block = false;
@@ -476,6 +614,7 @@ impl PreprocessContext {
                     }
                 }
             }
+            output.push(String::new());
             return;
         }
 
@@ -566,6 +705,9 @@ impl PreprocessContext {
                 }
                 self.in_sprite_block = true;
             }
+            // Emit a placeholder for the `sprite $name {` opening line so
+            // downstream source-line numbers stay aligned (see block above).
+            output.push(String::new());
             return;
         }
 
@@ -578,21 +720,30 @@ impl PreprocessContext {
             {
                 dl.body.push(line.to_string());
             }
+            self.push_directive_placeholder(output);
             return;
         }
 
         // Collecting sub.
         if self.collecting_sub.is_some() {
             if trimmed == "!endsub" {
-                self.collecting_sub = None;
+                if self.collecting_sub.take().is_some() {
+                    self.sub_blocks.push(SubBlock {
+                        lines: std::mem::take(&mut self.collecting_sub_lines),
+                    });
+                }
             } else if let Some(name) = self.collecting_sub.clone() {
-                self.subs.entry(name).or_default().push(line.to_string());
+                let line = line.to_string();
+                self.subs.entry(name).or_default().push(line.clone());
+                self.collecting_sub_lines.push(line);
             }
+            self.push_directive_placeholder(output);
             return;
         }
 
         // Function definition collection.
         if self.try_function_def(trimmed) {
+            self.push_directive_placeholder(output);
             return;
         }
 
@@ -608,15 +759,19 @@ impl PreprocessContext {
 
         // Directives that are consumed silently.
         if self.try_silent_directive(trimmed) {
+            self.push_directive_placeholder(output);
             return;
         }
 
         // Startsub.
         if let Some(name) = trimmed.strip_prefix("!startsub ") {
             self.collecting_sub = Some(name.trim().to_string());
+            self.collecting_sub_lines.clear();
+            self.push_directive_placeholder(output);
             return;
         }
         if trimmed == "!endsub" {
+            self.push_directive_placeholder(output);
             return;
         }
 
@@ -625,14 +780,19 @@ impl PreprocessContext {
             return;
         }
 
-        // Process TIM directives.
+        // Process TIM directives. Each consumes a single source line and emits
+        // no diagram content; push a blank placeholder so surviving content
+        // keeps its original line offset (see `push_directive_placeholder`).
         if self.try_define(trimmed) {
+            self.push_directive_placeholder(output);
             return;
         }
         if self.try_local_var(trimmed) {
+            self.push_directive_placeholder(output);
             return;
         }
         if self.try_conditional(trimmed) {
+            self.push_directive_placeholder(output);
             return;
         }
 
@@ -645,10 +805,12 @@ impl PreprocessContext {
                 // "2.0") to have their quotes stripped during concatenation.
                 self.return_signal = Some(self.eval_expr_to_value(expr));
             }
+            self.push_directive_placeholder(output);
             return;
         }
 
         if self.try_undefine(trimmed) {
+            self.push_directive_placeholder(output);
             return;
         }
         if let Some(included_lines) = self.try_include(trimmed) {
@@ -666,6 +828,12 @@ impl PreprocessContext {
         if let Some(theme_lines) = self.try_theme(trimmed) {
             if self.is_active() {
                 output.extend(theme_lines);
+            }
+            return;
+        }
+        if let Some(option_lines) = self.try_option(trimmed) {
+            if self.is_active() {
+                output.extend(option_lines);
             }
             return;
         }
@@ -688,7 +856,7 @@ impl PreprocessContext {
                 let mut sorted_tokens = token_pairs;
                 sorted_tokens.sort();
                 all.extend(sorted_tokens);
-                output.push(format!("' [dump] {}", all.join(", ")));
+                self.push_content_line(output, format!("' [dump] {}", all.join(", ")));
             }
             return;
         }
@@ -718,14 +886,29 @@ impl PreprocessContext {
             // check, but the index advances). PlantUML's `data-source-line` counts
             // blank lines but excludes the dropped `@startuml`.
             for expanded_line in line_to_process.split('\n') {
-                output.push(expanded_line.to_string());
+                self.push_content_line(output, expanded_line.to_string());
             }
+        } else {
+            // Line suppressed by an inactive conditional branch. It still
+            // occupied a source line, so emit a placeholder to keep downstream
+            // `data-source-line` numbering aligned with the original file.
+            self.push_directive_placeholder(output);
         }
     }
 
     fn try_silent_directive(&self, line: &str) -> bool {
         // !log, !pragma, !assert — consume silently.
         // !includeurl / !import — URL fetching deferred; strip the line silently.
+        if self.preserve_teoz_pragma {
+            let mut parts = line.split_whitespace();
+            if matches!(parts.next(), Some("!pragma"))
+                && matches!(parts.next(), Some("teoz"))
+                && matches!(parts.next(), Some("true"))
+                && parts.next().is_none()
+            {
+                return false;
+            }
+        }
         if line.starts_with("!log ")
             || line.starts_with("!log\t")
             || line == "!log"
@@ -905,15 +1088,25 @@ impl PreprocessContext {
         if let Some(func_name) = &self.collecting_function.clone() {
             if line == "!endfunction" || line == "!endprocedure" {
                 self.collecting_function = None;
-            } else if let Some(func) = self.functions.get_mut(func_name) {
-                func.body.push(line.to_string());
+            } else {
+                let raw_source_line = self.current_source_line;
+                let source_line = self.current_diagram_source_line();
+                let buffered = BufferedLine {
+                    text: line.to_string(),
+                    raw_source_line,
+                    source_line,
+                };
+                if let Some(func) = self.functions.get_mut(func_name) {
+                    func.body.push(buffered);
+                }
             }
             return true;
         }
 
         // !function $name($param1, $param2 = "default")
+        // !procedure name() is also accepted by PlantUML themes.
         static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^!(?:function|procedure)\s+\$(\w+)\s*\(([^)]*)\)$").unwrap()
+            Regex::new(r"^!(?:function|procedure)\s+\$?(\w+)\s*\(([^)]*)\)$").unwrap()
         });
 
         if let Some(caps) = RE.captures(line) {
@@ -965,7 +1158,11 @@ impl PreprocessContext {
 
         for body_line in &func.body {
             // Process through the preprocessor (handles !if/!while/!return etc.)
-            self.process_one_line(body_line, &mut output_lines);
+            if self.mark_function_body_source_lines {
+                self.process_buffered_line(body_line, &mut output_lines);
+            } else {
+                self.process_one_line(&body_line.text, &mut output_lines);
+            }
             // Check if process_one_line set a return signal.
             if self.return_signal.is_some() {
                 break;
@@ -995,9 +1192,10 @@ impl PreprocessContext {
     }
 
     fn try_function_call(&mut self, line: &str, output: &mut Vec<String>) -> bool {
-        // $funcName("arg1", "arg2")
+        // $funcName("arg1", "arg2"). PlantUML themes also use bare
+        // procedure calls like `basic_style()` inside skinparam blocks.
         static RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^\$(\w+)\s*\(([^)]*)\)$").unwrap());
+            LazyLock::new(|| Regex::new(r"^\$?(\w+)\s*\(([^)]*)\)$").unwrap());
 
         if let Some(caps) = RE.captures(line) {
             let name = caps[1].to_string();
@@ -1024,6 +1222,15 @@ impl PreprocessContext {
                 }
             } else {
                 output.extend(lines);
+            }
+
+            // Procedure bodies keep their own definition-line attribution; pad
+            // after the call so following source lines still retain file-line
+            // attribution.
+            if self.include_depth == 0 && self.in_diagram_block && self.local_vars.is_empty() {
+                while output.len() < self.current_source_line {
+                    output.push(String::new());
+                }
             }
 
             return true;
@@ -1112,9 +1319,7 @@ impl PreprocessContext {
                     self.set_var(&foreach.var_name, val);
 
                     for body_line in &foreach.body_lines {
-                        let line_refs: Vec<&str> = vec![body_line.as_str()];
-                        let expanded = self.process_lines(&line_refs);
-                        output.extend(expanded);
+                        self.process_buffered_line(body_line, output);
                     }
 
                     match old_val {
@@ -1126,13 +1331,17 @@ impl PreprocessContext {
                         }
                     }
                 }
+                self.mark_source_lines = true;
             }
             return true;
         }
 
         // If we're inside a foreach, buffer the line.
-        if let Some(foreach) = self.foreach_stack.last_mut() {
-            foreach.body_lines.push(line.to_string());
+        if self.foreach_stack.last().is_some() {
+            let buffered = self.current_buffered_line(line);
+            if let Some(foreach) = self.foreach_stack.last_mut() {
+                foreach.body_lines.push(buffered);
+            }
             return true;
         }
 
@@ -1169,20 +1378,22 @@ impl PreprocessContext {
                     }
 
                     for body_line in &while_state.body_lines {
-                        let line_refs: Vec<&str> = vec![body_line.as_str()];
-                        let expanded = self.process_lines(&line_refs);
-                        output.extend(expanded);
+                        self.process_buffered_line(body_line, output);
                     }
 
                     iterations += 1;
                 }
+                self.mark_source_lines = true;
             }
             return true;
         }
 
         // If we're inside a while, buffer the line.
-        if let Some(while_state) = self.while_stack.last_mut() {
-            while_state.body_lines.push(line.to_string());
+        if self.while_stack.last().is_some() {
+            let buffered = self.current_buffered_line(line);
+            if let Some(while_state) = self.while_stack.last_mut() {
+                while_state.body_lines.push(buffered);
+            }
             return true;
         }
 
@@ -1282,8 +1493,12 @@ impl PreprocessContext {
         match std::fs::read_to_string(&file_path) {
             Ok(content) => {
                 // Parse the file to extract subs.
-                let mut temp_ctx = PreprocessContext::new(self.base_dir.clone());
+                let mut temp_ctx = PreprocessContext::new(
+                    self.base_dir.clone(),
+                    self.mark_function_body_source_lines,
+                );
                 temp_ctx.include_depth = self.include_depth + 1;
+                temp_ctx.preserve_teoz_pragma = self.preserve_teoz_pragma;
                 let _ = temp_ctx.process(&content);
                 // Now extract the named sub.
                 if let Some(sub_lines) = temp_ctx.subs.get(sub_name) {
@@ -1328,6 +1543,9 @@ impl PreprocessContext {
         if let Some(theme_src) = themes::get_theme_source(name_part) {
             let body = themes::strip_front_matter(theme_src);
             if self.include_depth < MAX_INCLUDE_DEPTH {
+                let saved_mark_function_body_source_lines = self.mark_function_body_source_lines;
+                self.mark_function_body_source_lines = false;
+                let sub_start = self.sub_blocks.len();
                 self.include_depth += 1;
                 let expanded = self.process(body);
                 self.include_depth -= 1;
@@ -1337,11 +1555,43 @@ impl PreprocessContext {
                 // every parser sees plain `skinparam Key Value` lines.
                 self.theme_tail
                     .extend(themes::flatten_theme_output(&expanded));
+
+                // PlantUML themes keep diagram-family styles in `!startsub`
+                // blocks (activity, sequence, class, arrow, note, etc.). A
+                // `!theme` load makes those family blocks available to the
+                // current diagram; process blocks collected by this theme
+                // through the normal TIM evaluator so procedure calls and
+                // variables are resolved before flattening.
+                let theme_subs: Vec<SubBlock> = self.sub_blocks[sub_start..].to_vec();
+                for sub in theme_subs {
+                    if sub.lines.is_empty() {
+                        continue;
+                    }
+                    let refs: Vec<&str> = sub.lines.iter().map(String::as_str).collect();
+                    self.include_depth += 1;
+                    let expanded = self.process_lines(&refs);
+                    self.include_depth -= 1;
+                    self.theme_tail
+                        .extend(themes::flatten_theme_output(&expanded));
+                }
+                self.mark_function_body_source_lines = saved_mark_function_body_source_lines;
             }
         }
         // Emit a placeholder blank line so the diagram body's source-line
         // numbers stay aligned with the original .puml.
         Some(vec![String::new()])
+    }
+
+    fn try_option(&self, line: &str) -> Option<Vec<String>> {
+        let rest = line.strip_prefix("!option ")?;
+        let mut parts = rest.split_whitespace();
+        let name = parts.next()?;
+        let value = parts.next().unwrap_or("true");
+        if name.eq_ignore_ascii_case("handwritten") && value.eq_ignore_ascii_case("true") {
+            Some(vec!["skinparam __optionHandwritten true".to_string()])
+        } else {
+            Some(vec![String::new()])
+        }
     }
 
     fn try_undefine(&mut self, line: &str) -> bool {
@@ -1927,7 +2177,13 @@ impl PreprocessContext {
             let from = &caps[2];
             let to = &caps[3];
             let label = &caps[4];
-            return Some(format!("archimate_rel {rel_kind} {from} {to} \"{label}\""));
+            // PlantUML reports the stdlib procedure body line for Archimate
+            // relation macros; Archimate.puml defines all `Rel_*` wrappers on
+            // the same hidden arrow statement line.
+            return Some(source_line_marker(
+                349,
+                &format!("archimate_rel {rel_kind} {from} {to} \"{label}\""),
+            ));
         }
 
         if let Some(caps) = ELEM_RE.captures(line) {
@@ -1935,10 +2191,44 @@ impl PreprocessContext {
             let kind = &caps[2];
             let id = &caps[3];
             let label = &caps[4];
-            return Some(format!("archimate_element {layer} {kind} {id} \"{label}\""));
+            let expanded = format!("archimate_element {layer} {kind} {id} \"{label}\"");
+            return Some(match self.archimate_element_source_line(layer, kind) {
+                Some(source_line) => source_line_marker(source_line, &expanded),
+                None => expanded,
+            });
         }
 
         None
+    }
+
+    fn archimate_element_source_line(&self, layer: &str, kind: &str) -> Option<usize> {
+        // Provenance: PlantUML stdlib `archimate/Archimate.puml`; these are
+        // the body lines whose expanded `archimate` statements receive
+        // `data-source-line` in Java's DESCRIPTION renderer.
+        match (layer, kind) {
+            ("Business", "Actor") => Some(110),
+            ("Business", "Role") => Some(117),
+            ("Business", "Process") => Some(127),
+            ("Business", "Function") => Some(130),
+            ("Application", "Component") => Some(167),
+            ("Application", "Service") => Some(191),
+            ("Technology", "Node") => Some(203),
+            ("Technology", "SystemSoftware") => Some(210),
+            ("Technology", "CommunicationNetwork") => Some(222),
+            ("Technology", "Artifact") => Some(247),
+            ("Motivation", "Stakeholder") => Some(270),
+            ("Motivation", "Driver") => Some(274),
+            ("Motivation", "Assessment") => Some(277),
+            ("Motivation", "Goal") => Some(280),
+            ("Motivation", "Principle") => Some(286),
+            ("Motivation", "Requirement") => Some(289),
+            ("Motivation", "Constraint") => Some(292),
+            ("Implementation", "WorkPackage") => Some(311),
+            ("Implementation", "Deliverable") => Some(314),
+            ("Implementation", "Plateau") => Some(320),
+            ("Implementation", "Gap") => Some(323),
+            _ => None,
+        }
     }
 
     // ------------------------------------------------------------------
@@ -1996,6 +2286,13 @@ impl PreprocessContext {
 
         // Split on top-level commas in the raw arg string (before substitution).
         let raw_parts = split_builtin_args(args_raw);
+        if func == "get_variable_value" {
+            let args: Vec<&str> = raw_parts
+                .iter()
+                .map(|a| a.trim().trim_matches('"'))
+                .collect();
+            return self.eval_one_builtin_from_values(func, &args);
+        }
         // Evaluate each argument as an expression.
         let evaluated: Vec<String> = raw_parts
             .iter()
@@ -2186,9 +2483,8 @@ impl PreprocessContext {
             }
             "get_variable_value" => {
                 let name = args.first().copied().unwrap_or("");
-                self.get_var(name)
-                    .cloned()
-                    .or_else(|| self.token_defines.get(name).cloned())
+                name.strip_prefix('$')
+                    .and_then(|name| self.get_var(name).cloned())
                     .unwrap_or_default()
             }
             "set_variable_value" => {
@@ -2817,73 +3113,85 @@ fn strip_inline_comment(line: &str) -> String {
 mod tests {
     use super::*;
 
+    /// Preprocess and drop blank placeholder lines. The preprocessor emits a
+    /// blank line for every consumed directive so that surviving content keeps
+    /// its original file line position (matching PlantUML's `data-source-line`).
+    /// Content-focused tests use this helper to assert on the expanded output
+    /// without threading the numbering placeholders through every expectation.
+    fn pp(input: &str) -> Vec<String> {
+        preprocess(input)
+            .into_iter()
+            .filter(|l| !l.is_empty())
+            .collect()
+    }
+
     #[test]
     fn strips_start_end_tags() {
         let input = "@startuml\nAlice -> Bob : hello\n@enduml\n";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["Alice -> Bob : hello"]);
     }
 
     #[test]
     fn handles_startuml_with_name() {
         let input = "@startuml MyDiagram\nA -> B\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["A -> B"]);
     }
 
     #[test]
     fn handles_non_uml_tags() {
         let input = "@startjson\n{\"key\": \"value\"}\n@endjson";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["{\"key\": \"value\"}"]);
     }
 
     #[test]
     fn define_substitution() {
         let input = "@startuml\n!define NAME Alice\n$NAME -> Bob : hello\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["Alice -> Bob : hello"]);
     }
 
     #[test]
     fn var_assignment() {
         let input = "@startuml\n!$name = \"World\"\nAlice -> $name : hi\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["Alice -> World : hi"]);
     }
 
     #[test]
     fn ifdef_defined() {
         let input = "@startuml\n!define FEATURE\n!ifdef FEATURE\nAlice -> Bob\n!endif\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["Alice -> Bob"]);
     }
 
     #[test]
     fn ifdef_not_defined() {
         let input = "@startuml\n!ifdef FEATURE\nAlice -> Bob\n!endif\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert!(lines.is_empty());
     }
 
     #[test]
     fn ifndef() {
         let input = "@startuml\n!ifndef FEATURE\nAlice -> Bob\n!endif\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["Alice -> Bob"]);
     }
 
     #[test]
     fn if_else() {
         let input = "@startuml\n!define MODE prod\n!if $MODE == \"prod\"\nA -> B : production\n!else\nA -> B : dev\n!endif\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["A -> B : production"]);
     }
 
     #[test]
     fn if_else_false_branch() {
         let input = "@startuml\n!define MODE dev\n!if $MODE == \"prod\"\nA -> B : production\n!else\nA -> B : dev\n!endif\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["A -> B : dev"]);
     }
 
@@ -2908,14 +3216,14 @@ mod tests {
     #[test]
     fn inline_comment() {
         let input = "@startuml\nAlice -> Bob : hello ' with comment\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["Alice -> Bob : hello "]);
     }
 
     #[test]
     fn undef() {
         let input = "@startuml\n!define X yes\n!ifdef X\nA -> B\n!endif\n!undef X\n!ifdef X\nC -> D\n!endif\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["A -> B"]);
     }
 
@@ -2923,28 +3231,28 @@ mod tests {
     fn nested_conditionals() {
         let input =
             "@startuml\n!define A\n!define B\n!ifdef A\n!ifdef B\ndeep\n!endif\n!endif\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["deep"]);
     }
 
     #[test]
     fn nested_conditional_outer_false() {
         let input = "@startuml\n!ifdef MISSING\n!ifdef ALSO_MISSING\nnope\n!endif\n!endif\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert!(lines.is_empty());
     }
 
     #[test]
     fn multiple_vars() {
         let input = "@startuml\n!define FROM Alice\n!define TO Bob\n!define MSG hello\n$FROM -> $TO : $MSG\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["Alice -> Bob : hello"]);
     }
 
     #[test]
     fn empty_define() {
         let input = "@startuml\n!define FEATURE\n!ifdef FEATURE\nyes\n!endif\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["yes"]);
     }
 
@@ -2964,7 +3272,7 @@ mod tests {
     #[test]
     fn include_missing_file_is_silent() {
         let input = "@startuml\n!include nonexistent.puml\nA -> B\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["A -> B"]);
     }
 
@@ -2984,7 +3292,7 @@ mod tests {
     #[test]
     fn foreach_basic() {
         let input = "@startuml\n!foreach $name in [\"Alice\", \"Bob\", \"Charlie\"]\nparticipant $name\n!endfor\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(
             lines,
             vec![
@@ -2998,56 +3306,56 @@ mod tests {
     #[test]
     fn foreach_with_message() {
         let input = "@startuml\n!foreach $x in [\"a\", \"b\"]\nAlice -> Bob : $x\n!endfor\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["Alice -> Bob : a", "Alice -> Bob : b"]);
     }
 
     #[test]
     fn foreach_preserves_other_vars() {
         let input = "@startuml\n!define WHO Alice\n!foreach $x in [\"hello\", \"world\"]\n$WHO -> Bob : $x\n!endfor\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["Alice -> Bob : hello", "Alice -> Bob : world"]);
     }
 
     #[test]
     fn foreach_endforeach() {
         let input = "@startuml\n!foreach $x in [\"a\"]\nline $x\n!endforeach\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["line a"]);
     }
 
     #[test]
     fn function_basic() {
         let input = "@startuml\n!function $greet($name)\nAlice -> $name : hello\n!endfunction\n$greet(\"Bob\")\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["Alice -> Bob : hello"]);
     }
 
     #[test]
     fn function_multiple_params() {
         let input = "@startuml\n!function $msg($from, $to, $text)\n$from -> $to : $text\n!endfunction\n$msg(\"Alice\", \"Bob\", \"hi\")\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["Alice -> Bob : hi"]);
     }
 
     #[test]
     fn function_no_params() {
         let input = "@startuml\n!function $header()\ntitle My Diagram\n!endfunction\n$header()\nAlice -> Bob\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["title My Diagram", "Alice -> Bob"]);
     }
 
     #[test]
     fn function_called_multiple_times() {
         let input = "@startuml\n!function $arrow($to)\nAlice -> $to : msg\n!endfunction\n$arrow(\"Bob\")\n$arrow(\"Charlie\")\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["Alice -> Bob : msg", "Alice -> Charlie : msg"]);
     }
 
     #[test]
     fn procedure_syntax() {
         let input = "@startuml\n!procedure $setup($name)\nparticipant $name\n!endprocedure\n$setup(\"Alice\")\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["participant Alice"]);
     }
 
@@ -3056,42 +3364,42 @@ mod tests {
     #[test]
     fn variable_arithmetic() {
         let input = "@startuml\n!$x = 10\n!$y = 20\n!$sum = $x + $y\nnote : $sum\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["note : 30"]);
     }
 
     #[test]
     fn while_loop() {
         let input = "@startuml\n!$i = 1\n!while $i <= 3\nline $i\n!$i = $i + 1\n!endwhile\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["line 1", "line 2", "line 3"]);
     }
 
     #[test]
     fn elseif_branch() {
         let input = "@startuml\n!$x = 2\n!if $x == 1\nfirst\n!elseif $x == 2\nsecond\n!else\nother\n!endif\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["second"]);
     }
 
     #[test]
     fn pragma_consumed() {
         let input = "@startuml\n!pragma teoz true\nA -> B\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["A -> B"]);
     }
 
     #[test]
     fn function_return_value() {
         let input = "@startuml\n!function $double($n)\n!return $n * 2\n!endfunction\n!$x = $double(5)\nnote : $x\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["note : 10"]);
     }
 
     #[test]
     fn numeric_comparison() {
         let input = "@startuml\n!$x = 5\n!if $x > 3\nyes\n!endif\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["yes"]);
     }
 
@@ -3103,7 +3411,7 @@ mod tests {
     fn includeurl_is_stripped_silently() {
         // !includeurl should consume the line without producing output or error.
         let input = "@startuml\n!includeurl https://example.com/common.puml\nA -> B\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["A -> B"]);
     }
 
@@ -3111,7 +3419,7 @@ mod tests {
     fn import_is_stripped_silently() {
         // !import is an alias for !includeurl — also silently consumed.
         let input = "@startuml\n!import https://example.com/lib.puml\nA -> B\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["A -> B"]);
     }
 
@@ -3119,14 +3427,14 @@ mod tests {
     fn dump_memory_no_vars() {
         // With no defines, !dump_memory emits an empty dump comment.
         let input = "@startuml\n!dump_memory\nA -> B\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["' [dump] ", "A -> B"]);
     }
 
     #[test]
     fn dump_memory_with_vars() {
         let input = "@startuml\n!$foo = \"bar\"\n!$baz = \"qux\"\n!dump_memory\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         // Output must contain the dump comment. Variable order is sorted.
         assert_eq!(lines.len(), 1);
         let dump = &lines[0];
@@ -3139,7 +3447,7 @@ mod tests {
     fn dump_memory_inactive_branch() {
         // !dump_memory inside an inactive branch should produce no output.
         let input = "@startuml\n!ifdef MISSING\n!dump_memory\n!endif\nA -> B\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["A -> B"]);
     }
 
@@ -3150,42 +3458,42 @@ mod tests {
     #[test]
     fn builtin_float() {
         let input = "@startuml\n!$v = %float(\"3.14\")\nnote : $v\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["note : 3.14"]);
     }
 
     #[test]
     fn builtin_float_integer_string() {
         let input = "@startuml\n!$v = %float(\"42\")\nnote : $v\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["note : 42"]);
     }
 
     #[test]
     fn builtin_dec2hex() {
         let input = "@startuml\n!$h = %dec2hex(255)\nnote : $h\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["note : ff"]);
     }
 
     #[test]
     fn builtin_dec2hex_zero() {
         let input = "@startuml\n!$h = %dec2hex(0)\nnote : $h\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["note : 0"]);
     }
 
     #[test]
     fn builtin_hex2dec() {
         let input = "@startuml\n!$d = %hex2dec(\"ff\")\nnote : $d\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["note : 255"]);
     }
 
     #[test]
     fn builtin_hex2dec_zero() {
         let input = "@startuml\n!$d = %hex2dec(\"0\")\nnote : $d\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["note : 0"]);
     }
 
@@ -3193,7 +3501,7 @@ mod tests {
     fn builtin_dirpath_no_base() {
         // Without a base dir, %dirpath() returns ".".
         let input = "@startuml\n!$p = %dirpath()\nnote : $p\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["note : ."]);
     }
 
@@ -3202,7 +3510,10 @@ mod tests {
         let dir = std::env::temp_dir().join("rustuml_test_dirpath");
         let _ = std::fs::create_dir_all(&dir);
         let input = "@startuml\n!$p = %dirpath()\nnote : $p\n@enduml";
-        let lines = preprocess_with_base(input, &dir);
+        let lines: Vec<String> = preprocess_with_base(input, &dir)
+            .into_iter()
+            .filter(|l| !l.is_empty())
+            .collect();
         assert_eq!(lines, vec![format!("note : {}", dir.display())]);
         let _ = std::fs::remove_dir_all(&dir);
     }
@@ -3211,7 +3522,7 @@ mod tests {
     fn builtin_feature_returns_false() {
         // All features are unsupported; always returns "false".
         let input = "@startuml\n!$f = %feature(\"dark-mode\")\nnote : $f\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["note : false"]);
     }
 
@@ -3219,8 +3530,15 @@ mod tests {
     fn builtin_feature_in_conditional() {
         // %feature() returning "false" means the ifdef branch is inactive.
         let input = "@startuml\n!if %feature(\"dark-mode\") == \"true\"\ndark\n!else\nlight\n!endif\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["light"]);
+    }
+
+    #[test]
+    fn builtin_get_variable_value_requires_dollar_name() {
+        let input = "@startuml\n!$myVar = \"hello\"\n!$a = %get_variable_value(\"myVar\")\n!$b = %get_variable_value(\"$myVar\")\nnote : [$a]|[$b]\n@enduml";
+        let lines = pp(input);
+        assert_eq!(lines, vec!["note : []|[hello]"]);
     }
 
     #[test]
@@ -3228,12 +3546,15 @@ mod tests {
         let input =
             "@startuml\nsprite $disk [8x8/16] {\nFF00FF00\n00FF00FF\n}\nnote : hello\n@enduml";
         let out = preprocess_full(input, None);
-        // The sprite block should NOT appear in the preprocessed lines.
+        // The sprite block should NOT appear as content in the preprocessed
+        // lines, but each block line is replaced by an empty placeholder so
+        // downstream source-line numbers stay aligned with the original source.
         assert!(
             !out.lines.iter().any(|l| l.contains("FF00FF00")),
             "sprite pixel rows should not appear in output lines"
         );
-        assert_eq!(out.lines, vec!["note : hello"]);
+        // 4 sprite-block lines (opener, 2 pixel rows, closer) → 4 placeholders.
+        assert_eq!(out.lines, vec!["", "", "", "", "note : hello"]);
         // The sprite should be collected.
         assert!(
             out.sprites.contains_key("disk"),
@@ -3251,7 +3572,8 @@ mod tests {
         let input =
             "@startuml\nsprite $icon [4x4/16] {\nFFFF\nFFFF\n}\nnote : <$icon> hello\n@enduml";
         let out = preprocess_full(input, None);
-        assert_eq!(out.lines, vec!["note : <$icon> hello"]);
+        // 4 sprite-block lines become empty placeholders (source-line alignment).
+        assert_eq!(out.lines, vec!["", "", "", "", "note : <$icon> hello"]);
         assert!(out.sprites.contains_key("icon"));
     }
 
@@ -3284,7 +3606,7 @@ mod tests {
         stdlib::set_stdlib_override(Some(dir.clone()));
 
         let input = "@startuml\n!include <C4/C4_Context>\n!ifdef C4_CONTEXT_LOADED\nloaded\n!endif\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["loaded"]);
 
         stdlib::set_stdlib_override(None);
@@ -3302,7 +3624,7 @@ mod tests {
         stdlib::set_stdlib_override(Some(dir.clone()));
 
         let input = "@startuml\n!include <nonexistent/Lib>\nA -> B\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["A -> B"]);
 
         stdlib::set_stdlib_override(None);
@@ -3325,6 +3647,42 @@ mod tests {
     }
 
     #[test]
+    fn theme_expands_sub_blocks() {
+        let input = "@startuml\n!theme aws-orange\nstart\n@enduml";
+        let lines = pp(input);
+        assert!(lines.contains(&"skinparam activityBarColor #1D8102".to_string()));
+        assert!(lines.contains(&"skinparam activityStartColor #0073bb".to_string()));
+        assert!(lines.contains(&"skinparam arrowThickness 3".to_string()));
+        assert!(lines.contains(&"skinparam sequenceArrowThickness 3".to_string()));
+    }
+
+    #[test]
+    fn option_handwritten_becomes_internal_skinparam() {
+        let input = "@startuml\n!option handwritten true\nstart\n@enduml";
+        let lines = pp(input);
+        assert!(lines.contains(&"skinparam __optionHandwritten true".to_string()));
+    }
+
+    #[test]
+    fn sketchy_theme_enables_handwritten_option() {
+        let input = "@startuml\n!theme sketchy\nstart\n@enduml";
+        let lines = pp(input);
+        assert!(lines.contains(&"skinparam __optionHandwritten true".to_string()));
+    }
+
+    #[test]
+    fn theme_bare_procedures_expand_inside_skinparam_blocks() {
+        let input = "@startuml\n!theme reddress-lightred\nstart\n@enduml";
+        let lines = pp(input);
+        assert!(lines.contains(&"skinparam activitybackgroundColor ccc".to_string()));
+        assert!(lines.contains(&"skinparam activityborderColor aaa".to_string()));
+        assert!(lines.contains(&"skinparam activityfontName Verdana".to_string()));
+        assert!(lines.contains(&"skinparam activityfontSize 11".to_string()));
+        assert!(lines.contains(&"skinparam activityarrowColor 000".to_string()));
+        assert!(lines.contains(&"skinparam activityarrowFontName Verdana".to_string()));
+    }
+
+    #[test]
     fn include_angle_bracket_with_extension() {
         // Angle-bracket includes with explicit extension should also work.
         let dir = std::env::temp_dir().join("rustuml_test_stdlib_explicit_ext");
@@ -3335,7 +3693,7 @@ mod tests {
         stdlib::set_stdlib_override(Some(dir.clone()));
 
         let input = "@startuml\n!include <lib/common.iuml>\n@enduml";
-        let lines = preprocess(input);
+        let lines = pp(input);
         assert_eq!(lines, vec!["participant StdLib"]);
 
         stdlib::set_stdlib_override(None);

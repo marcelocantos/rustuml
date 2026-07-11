@@ -32,6 +32,25 @@ jobs:
       - uses: dtolnay/rust-toolchain@stable
       - uses: Swatinem/rust-cache@v2
       - run: cargo test --lib
+      # Harness honesty guards (🎯T14.1) — cheap, no submodule needed
+      # (the census guard self-skips when the corpus is absent).
+      - run: cargo test -p rustuml-oracle --test harness_guards
+
+  test-golden:
+    name: Golden Parity (strict + no-oracle tiers)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: Swatinem/rust-cache@v2
+      - name: Strict tier (oracle-assisted, 🎯T4)
+        run: cargo test -p rustuml-oracle --test golden_pairs --release -- --nocapture
+      - name: No-oracle product tier ratchet (🎯T14)
+        run: cargo test -p rustuml-oracle --test golden_no_oracle --release -- --nocapture
+      - name: Harness honesty guards (🎯T14.1)
+        run: cargo test -p rustuml-oracle --test harness_guards --release
 
   test-oracle:
     name: Oracle Tests

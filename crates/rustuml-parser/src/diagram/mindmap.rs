@@ -28,6 +28,14 @@ pub struct MindMapNode {
     pub label: String,
     pub depth: usize,
     pub side: Side,
+    /// Optional explicit fill colour from the `[#color]` modifier, as written
+    /// in the source (e.g. `#blue`, `#FF0000`). `None` means the default fill.
+    #[serde(default)]
+    pub color: Option<String>,
+    /// `true` when the node uses the boxless `_` modifier (e.g. `**_ label`),
+    /// rendered as bare text with no surrounding rectangle.
+    #[serde(default)]
+    pub boxless: bool,
     pub children: Vec<MindMapNode>,
 }
 

@@ -7,7 +7,7 @@
 
 use std::sync::LazyLock;
 
-use regex::Regex;
+use regex::{Match, Regex};
 
 use super::ParseError;
 use crate::diagram::DiagramMeta;
@@ -18,11 +18,17 @@ pub fn parse_sequence(lines: &[String]) -> Result<SequenceDiagram, ParseError> {
     let mut parser = SeqParser::new();
 
     for (i, line) in lines.iter().enumerate() {
-        let trimmed = line.trim();
-        if trimmed.is_empty() {
+        let (source_line, trimmed) = super::source_line_and_trimmed(i + 1, line);
+        let in_note = parser.note_buffer.is_some();
+        if trimmed.is_empty() && !in_note {
             continue;
         }
-        parser.parse_line(i + 1, trimmed)?;
+        let text = if in_note {
+            super::source_text(line)
+        } else {
+            trimmed
+        };
+        parser.parse_line(source_line, text)?;
     }
 
     Ok(parser.finish())
@@ -44,8 +50,18 @@ struct SeqParser {
     in_legend: bool,
     /// Whether `hide footbox` was specified.
     hide_footbox: bool,
+    /// Whether `!pragma teoz true` was specified.
+    teoz: bool,
+    /// Whether `autoactivate on` is active for subsequent messages.
+    autoactivate: bool,
     /// Current 1-based source line number (set before each parse_line call).
     current_line: usize,
+    /// Named participant boxes (`box ... end box`).
+    boxes: Vec<ParticipantBox>,
+    /// Index into `boxes` of the box currently being collected, if any.
+    current_box: Option<usize>,
+    /// Prefix of an open `skinparam X { ... }` block.
+    skinparam_block_prefix: Option<String>,
 }
 
 struct NoteBuffer {
@@ -54,6 +70,7 @@ struct NoteBuffer {
     lines: Vec<String>,
     shape: NoteShape,
     color: Option<String>,
+    on_message: bool,
     source_line: usize,
 }
 
@@ -76,7 +93,12 @@ impl SeqParser {
             last_message: None,
             in_legend: false,
             hide_footbox: false,
+            teoz: false,
+            autoactivate: false,
             current_line: 0,
+            boxes: Vec::new(),
+            current_box: None,
+            skinparam_block_prefix: None,
         }
     }
 
@@ -87,10 +109,16 @@ impl SeqParser {
             events: self.events,
             autonumber: self.autonumber,
             hide_footbox: self.hide_footbox,
+            teoz: self.teoz,
+            boxes: self.boxes,
         }
     }
 
     fn ensure_participant(&mut self, id: &str) -> String {
+        self.ensure_participant_at(id, self.current_line)
+    }
+
+    fn ensure_participant_at(&mut self, id: &str, source_line: usize) -> String {
         let id = id.trim().to_string();
         if !self.participant_ids.contains(&id) {
             self.participant_ids.push(id.clone());
@@ -102,7 +130,7 @@ impl SeqParser {
                 stereotype: None,
                 url: None,
                 color: None,
-                source_line: self.current_line,
+                source_line,
             });
         }
         id
@@ -110,6 +138,22 @@ impl SeqParser {
 
     fn parse_line(&mut self, line_num: usize, line: &str) -> Result<(), ParseError> {
         self.current_line = line_num;
+
+        if let Some(prefix) = self.skinparam_block_prefix.clone() {
+            if line == "}" {
+                self.skinparam_block_prefix = None;
+            } else if let Some((key, value)) = line.split_once(char::is_whitespace) {
+                let key = key.trim();
+                let value = value.trim();
+                if !key.is_empty() && !value.is_empty() {
+                    self.meta.skinparams.push(crate::diagram::SkinParam {
+                        key: format!("{prefix}{key}"),
+                        value: value.to_string(),
+                    });
+                }
+            }
+            return Ok(());
+        }
 
         // Handle multiline ref buffering.
         if self.ref_buffer.is_some() {
@@ -129,15 +173,17 @@ impl SeqParser {
 
         // Handle multiline note buffering.
         if self.note_buffer.is_some() {
-            if line == "endnote" || line == "end note" {
+            let trimmed = line.trim();
+            if trimmed == "endnote" || trimmed == "end note" {
                 let buf = self.note_buffer.take().unwrap();
-                let text = buf.lines.join("\n");
+                let text = note_text_from_lines(&buf.lines);
                 self.events.push(Event::Note(Note {
                     position: buf.position,
                     participants: buf.participants,
                     text,
                     shape: buf.shape,
                     color: buf.color,
+                    on_message: buf.on_message,
                     source_line: buf.source_line,
                 }));
             } else if let Some(buf) = &mut self.note_buffer {
@@ -155,6 +201,9 @@ impl SeqParser {
             return Ok(());
         }
         if self.try_activate_deactivate(line) {
+            return Ok(());
+        }
+        if self.try_autoactivate(line) {
             return Ok(());
         }
         if self.try_create_destroy(line) {
@@ -192,6 +241,9 @@ impl SeqParser {
         if self.try_meta(line) {
             return Ok(());
         }
+        if self.try_pragma(line) {
+            return Ok(());
+        }
         if self.try_message(line) {
             return Ok(());
         }
@@ -218,57 +270,84 @@ impl SeqParser {
     fn try_participant_decl(&mut self, line: &str) -> bool {
         let (url, clean_line) = super::extract_link_url(line);
         let line = clean_line.as_str();
-        // Matches four forms:
+        // Matches these forms (label = display text, id = entity key):
         //   1. keyword "Long Label" as alias  <<stereotype>>
         //   2. keyword alias as "Long Label"  <<stereotype>>
-        //   3. keyword SimpleName            <<stereotype>>
-        //   4. keyword "Long Label"          <<stereotype>>  (no alias; id = label)
+        //   3. keyword Label as alias         <<stereotype>>  (both unquoted)
+        //   4. keyword SimpleName             <<stereotype>>
+        //   5. keyword "Long Label"           <<stereotype>>  (no alias; id = label)
         static RE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
-                r#"^(participant|actor|boundary|control|entity|database|collections|queue)\s+(?:"([^"]+)"\s+as\s+(\w+)|(\w+)\s+as\s+"([^"]+)"|"([^"]+)"|(\w+))(?:\s+<<([^>]+)>>)?(?:\s+(#\S+))?(?:\s+order\s+\d+)?"#,
+                r#"^(participant|actor|boundary|control|entity|database|collections|queue)\s+(?:"([^"]+)"\s+as\s+(\w+)|(\w+)\s+as\s+"([^"]+)"|(\w+)\s+as\s+(\w+)|"([^"]+)"|(\w+))(?:\s+<<([^>]+)>>)?(?:\s+(#\S+))?(?:\s+order\s+(\d+))?"#,
             )
             .unwrap()
         });
 
         if let Some(caps) = RE.captures(line) {
             let kind = parse_participant_kind(&caps[1]);
-            let (raw_label, id) = if let Some(quoted) = caps.get(2) {
+            // `quoted` tracks whether the display text came from a `"..."` form.
+            // PlantUML's grammar matches the stereotype (`STEREO`) only OUTSIDE the
+            // quoted display string (`FULL` = `[%g]([^%g]+)[%g]`), so a `<<...>>`
+            // that appears WITHIN a quoted label is literal display text, not a
+            // stereotype (see CommandParticipantA). We therefore only mine an
+            // inline stereotype from UNQUOTED labels.
+            let (raw_label, id, quoted) = if let Some(quoted) = caps.get(2) {
                 // Form 1: "Long Label" as alias
-                (quoted.as_str().to_string(), caps[3].to_string())
+                (quoted.as_str().to_string(), caps[3].to_string(), true)
             } else if let Some(alias) = caps.get(4) {
                 // Form 2: alias as "Long Label"
                 let lbl = caps.get(5).map_or("", |m| m.as_str()).to_string();
-                (lbl, alias.as_str().to_string())
-            } else if let Some(quoted) = caps.get(6) {
-                // Form 4: "Long Label" (no alias; id = label)
+                (lbl, alias.as_str().to_string(), true)
+            } else if let Some(label) = caps.get(6) {
+                // Form 3: Label as alias (both unquoted) — id is the alias.
+                (label.as_str().to_string(), caps[7].to_string(), false)
+            } else if let Some(quoted) = caps.get(8) {
+                // Form 5: "Long Label" (no alias; id = label)
                 let lbl = quoted.as_str().to_string();
-                (lbl.clone(), lbl)
+                (lbl.clone(), lbl, true)
             } else {
-                // Form 3: SimpleName
-                let name = caps[7].to_string();
-                (name.clone(), name)
+                // Form 4: SimpleName
+                let name = caps[9].to_string();
+                (name.clone(), name, false)
             };
-            // Extract <<stereotype>> from within the label text (e.g. "Service 1 <<internal>>").
-            let (label, label_stereotype) = extract_stereotype_from_label(&raw_label);
+            // Extract `<<stereotype>>` from within the label text (e.g.
+            // `Service 1 <<internal>>`) only for unquoted labels — a quoted
+            // display string keeps `<<...>>` as literal text.
+            let (label, label_stereotype) = if quoted {
+                (raw_label, None)
+            } else {
+                extract_stereotype_from_label(&raw_label)
+            };
             let stereotype = caps
-                .get(8)
+                .get(10)
                 .map(|m| m.as_str().to_string())
                 .or(label_stereotype);
 
-            let color = caps.get(9).map(|m| m.as_str().to_string());
+            let color = caps.get(11).map(|m| m.as_str().to_string());
+
+            // Explicit `order N` sets the layout sort key; otherwise it defaults
+            // to the declaration index. Implicit participants (created by a
+            // message) also default to their declaration index, so a participant
+            // declared with a large `order N` can be positioned to the right of a
+            // later, implicitly-created one (matching Java PlantUML).
+            let explicit_order = caps.get(12).and_then(|m| m.as_str().parse::<usize>().ok());
 
             if !self.participant_ids.contains(&id) {
                 self.participant_ids.push(id.clone());
+                let idx = self.participants.len();
                 self.participants.push(Participant {
                     id: id.clone(),
                     label,
                     kind,
-                    order: Some(self.participants.len()),
+                    order: Some(explicit_order.unwrap_or(idx)),
                     stereotype,
                     url,
                     color,
                     source_line: self.current_line,
                 });
+                if let Some(bi) = self.current_box {
+                    self.boxes[bi].members.push(idx);
+                }
             }
             true
         } else {
@@ -288,10 +367,11 @@ impl SeqParser {
             .unwrap()
         });
 
-        // Extract arrow color before stripping
-        let arrow_color = RE_COLOR.captures(line).map(|c| c[1].to_string());
-        let stripped = RE_COLOR.replace_all(line, "");
-        let line = stripped.as_ref();
+        // Extract arrow colour only from the arrow header. Message labels can
+        // contain local Creole links like `[[#anchor label]]`, whose inner
+        // `[#anchor label]` must not be mistaken for an arrow colour.
+        let (arrow_color, stripped) = strip_arrow_color_annotation(line, &RE_COLOR);
+        let line = stripped.as_str();
 
         if let Some(caps) = RE.captures(line) {
             // Strip surrounding quotes from quoted participant names.
@@ -307,11 +387,13 @@ impl SeqParser {
             let to_raw = unquote(&caps[3]);
             let activation_str = caps.get(4).map(|m| m.as_str());
             let activation_color = caps.get(5).map(|m| m.as_str().to_string());
-            let label = caps.get(6).map_or("", |m| m.as_str()).trim().to_string();
+            let label = message_label(line, caps.get(6));
 
             let mut arrow = parse_arrow(arrow_str);
             arrow.color = arrow_color;
-            let activation = activation_str.map(parse_activation);
+            let activation = activation_str
+                .map(parse_activation)
+                .or_else(|| self.autoactivation_for(&arrow));
 
             // Ensure participants in textual order (left-to-right as written)
             // so the participant list preserves declaration order.
@@ -346,47 +428,49 @@ impl SeqParser {
         // Strip [#color] annotations first.
         static RE_COLOR: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"\[#[^\]]*\]").unwrap());
         static RE_IN: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^\[[-=><ox]+\s*(\w+)\s*(?:(?:\+\+|--|!!)\s*)?(?::\s*(.*))?$").unwrap()
+            Regex::new(
+                r"^\[([-<>.\\/ox]+)\s*(\w+)\s*(?:((?:\+\+|--|!!))\s*(#\S+)?\s*)?(?::\s*(.*))?$",
+            )
+            .unwrap()
         });
         static RE_OUT: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^(\w+)\s*[-=><ox]+[\[\]]\s*(?:(?:\+\+|--|!!)\s*)?(?::\s*(.*))?$").unwrap()
+            Regex::new(r"^(\w+)\s*([-<>.\\/ox]+)([\[\]])\s*(?:((?:\+\+|--|!!))\s*(#\S+)?\s*)?(?::\s*(.*))?$")
+                .unwrap()
         });
-        let stripped = RE_COLOR.replace_all(line, "");
-        let line = stripped.as_ref();
+        let (_, stripped) = strip_arrow_color_annotation(line, &RE_COLOR);
+        let line = stripped.as_str();
 
         if let Some(caps) = RE_IN.captures(line) {
-            let to = self.ensure_participant(&caps[1]);
-            let label = caps.get(2).map_or("", |m| m.as_str()).trim().to_string();
+            let mut arrow = parse_arrow(&caps[1]);
+            arrow.direction = ArrowDirection::LeftToRight;
+            let to = self.ensure_participant(&caps[2]);
+            let activation = caps.get(3).map(|m| parse_activation(m.as_str()));
+            let activation_color = caps.get(4).map(|m| m.as_str().to_string());
+            let label = message_label(line, caps.get(5));
             self.events.push(Event::Message(Message {
                 from: "[".to_string(),
                 to,
                 label,
-                arrow: Arrow {
-                    line: LineStyle::Solid,
-                    head: ArrowHead::Filled,
-                    direction: ArrowDirection::LeftToRight,
-                    color: None,
-                },
-                activation: None,
-                activation_color: None,
+                arrow,
+                activation,
+                activation_color,
                 source_line: self.current_line,
             }));
             true
         } else if let Some(caps) = RE_OUT.captures(line) {
             let from = self.ensure_participant(&caps[1]);
-            let label = caps.get(2).map_or("", |m| m.as_str()).trim().to_string();
+            let mut arrow = parse_arrow(&caps[2]);
+            arrow.direction = ArrowDirection::LeftToRight;
+            let activation = caps.get(4).map(|m| parse_activation(m.as_str()));
+            let activation_color = caps.get(5).map(|m| m.as_str().to_string());
+            let label = message_label(line, caps.get(6));
             self.events.push(Event::Message(Message {
                 from,
-                to: "]".to_string(),
+                to: caps[3].to_string(),
                 label,
-                arrow: Arrow {
-                    line: LineStyle::Solid,
-                    head: ArrowHead::Filled,
-                    direction: ArrowDirection::LeftToRight,
-                    color: None,
-                },
-                activation: None,
-                activation_color: None,
+                arrow,
+                activation,
+                activation_color,
                 source_line: self.current_line,
             }));
             true
@@ -408,6 +492,7 @@ impl SeqParser {
                     text: text.to_string(),
                     shape: NoteShape::Note,
                     color: None,
+                    on_message: false,
                     source_line: self.current_line,
                 }));
             }
@@ -441,6 +526,7 @@ impl SeqParser {
                     lines: Vec::new(),
                     shape: NoteShape::Note,
                     color,
+                    on_message: false,
                     source_line: self.current_line,
                 });
             } else {
@@ -450,6 +536,7 @@ impl SeqParser {
                     text,
                     shape: NoteShape::Note,
                     color,
+                    on_message: false,
                     source_line: self.current_line,
                 }));
             }
@@ -474,28 +561,38 @@ impl SeqParser {
                 "over" => NotePosition::Over,
                 _ => NotePosition::Right,
             };
+            let inline_text = caps.get(5);
+            let participant_source_line = if inline_text.is_some() {
+                self.current_line
+            } else {
+                self.current_line + 1
+            };
             let mut participants: Vec<String> = caps.get(3).map_or(Vec::new(), |m| {
                 m.as_str()
                     .split(',')
-                    .map(|s| self.ensure_participant(s.trim()))
+                    .map(|s| self.ensure_participant_at(s.trim(), participant_source_line))
                     .collect()
             });
-            // Bare "note left" / "note right" (no participant) attaches to the last message:
-            // "note left" → source participant of the last message
-            // "note right" → target participant of the last message
+            // Bare "note left" / "note right" (no participant) attaches to the
+            // last message and straddles its arrow band (on_message). PlantUML
+            // anchors such notes to the message's leftmost/rightmost endpoint by
+            // screen position, so store BOTH endpoints and let the renderer pick.
+            // "note left"  → left of the leftmost endpoint
+            // "note right" → right of the rightmost endpoint
+            let mut on_message = false;
             if participants.is_empty()
                 && position != NotePosition::Over
                 && let Some((from, to)) = &self.last_message
             {
-                participants = match position {
-                    NotePosition::Left => vec![from.clone()],
-                    NotePosition::Right => vec![to.clone()],
-                    _ => Vec::new(),
-                };
+                participants = vec![from.clone(), to.clone()];
+                on_message = true;
             }
             let color = caps.get(4).map(|m| m.as_str().to_string());
 
-            if let Some(text_match) = caps.get(5) {
+            if let Some(text_match) = inline_text {
+                if participants.is_empty() && position != NotePosition::Over && !on_message {
+                    return true;
+                }
                 // Inline note: note right : text
                 let text = text_match.as_str().trim().to_string();
                 self.events.push(Event::Note(Note {
@@ -504,6 +601,7 @@ impl SeqParser {
                     text,
                     shape,
                     color,
+                    on_message,
                     source_line: self.current_line,
                 }));
             } else {
@@ -514,6 +612,7 @@ impl SeqParser {
                     lines: Vec::new(),
                     shape,
                     color,
+                    on_message,
                     source_line: self.current_line,
                 });
             }
@@ -628,37 +727,30 @@ impl SeqParser {
     }
 
     fn try_autonumber(&mut self, line: &str) -> bool {
-        static RE: LazyLock<Regex> = LazyLock::new(|| {
+        static RE_START: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(r#"^autonumber(?:\s+(\d+))?(?:\s+(\d+))?(?:\s+"([^"]*)")?$"#).unwrap()
         });
+        static RE_RESUME: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r#"^autonumber\s+resume(?:\s+(\d+))?(?:\s+"([^"]*)")?$"#).unwrap()
+        });
 
-        if line == "autonumber" {
-            self.autonumber = Some(AutoNumber {
-                start: 1,
-                step: 1,
-                format: None,
-            });
-            return true;
-        }
         if line == "autonumber stop" {
-            self.autonumber = None;
+            self.push_autonumber(AutonumberCmd::Stop);
             return true;
         }
-        if line == "autonumber resume" {
-            if self.autonumber.is_none() {
-                self.autonumber = Some(AutoNumber {
-                    start: 1,
-                    step: 1,
-                    format: None,
-                });
-            }
+        if line.starts_with("autonumber resume")
+            && let Some(caps) = RE_RESUME.captures(line)
+        {
+            let step = caps.get(1).and_then(|m| m.as_str().parse().ok());
+            let format = caps.get(2).map(|m| m.as_str().to_string());
+            self.push_autonumber(AutonumberCmd::Resume { step, format });
             return true;
         }
-        if let Some(caps) = RE.captures(line) {
+        if let Some(caps) = RE_START.captures(line) {
             let start = caps.get(1).map_or(1, |m| m.as_str().parse().unwrap_or(1));
             let step = caps.get(2).map_or(1, |m| m.as_str().parse().unwrap_or(1));
             let format = caps.get(3).map(|m| m.as_str().to_string());
-            self.autonumber = Some(AutoNumber {
+            self.push_autonumber(AutonumberCmd::Start {
                 start,
                 step,
                 format,
@@ -666,6 +758,26 @@ impl SeqParser {
             return true;
         }
         false
+    }
+
+    /// Record an autonumber directive: keep the first `Start` in the legacy
+    /// `self.autonumber` field (so initial layout still sees it) and always emit
+    /// an event so mid-stream changes (stop/resume/restart) take effect.
+    fn push_autonumber(&mut self, cmd: AutonumberCmd) {
+        if self.autonumber.is_none()
+            && let AutonumberCmd::Start {
+                start,
+                step,
+                format,
+            } = &cmd
+        {
+            self.autonumber = Some(AutoNumber {
+                start: *start,
+                step: *step,
+                format: format.clone(),
+            });
+        }
+        self.events.push(Event::Autonumber(cmd));
     }
 
     fn try_activate_deactivate(&mut self, line: &str) -> bool {
@@ -686,24 +798,81 @@ impl SeqParser {
         }
     }
 
-    fn try_create_destroy(&mut self, line: &str) -> bool {
-        static RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^(create|destroy)\s+(?:participant\s+)?(\w+)").unwrap());
-
-        if let Some(caps) = RE.captures(line) {
-            let id = caps[2].to_string();
-            match &caps[1] {
-                "create" => {
-                    self.ensure_participant(&id);
-                    self.events.push(Event::Create(id));
-                }
-                "destroy" => self.events.push(Event::Destroy(id)),
-                _ => {}
+    fn try_autoactivate(&mut self, line: &str) -> bool {
+        let Some(rest) = line.strip_prefix("autoactivate") else {
+            return false;
+        };
+        match rest.trim() {
+            state if state.eq_ignore_ascii_case("on") => {
+                self.autoactivate = true;
+                true
             }
-            true
-        } else {
-            false
+            state if state.eq_ignore_ascii_case("off") => {
+                self.autoactivate = false;
+                true
+            }
+            _ => false,
         }
+    }
+
+    fn autoactivation_for(&self, arrow: &Arrow) -> Option<ActivationChange> {
+        if !self.autoactivate || arrow.head_half.is_some() || arrow.source_cross {
+            return None;
+        }
+        match (arrow.line, arrow.head) {
+            (LineStyle::Dotted, ArrowHead::Filled | ArrowHead::Open) => {
+                Some(ActivationChange::Deactivate)
+            }
+            (LineStyle::Solid, ArrowHead::Filled | ArrowHead::Open) => {
+                Some(ActivationChange::Activate)
+            }
+            _ => None,
+        }
+    }
+
+    fn try_create_destroy(&mut self, line: &str) -> bool {
+        static KW: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"^(create|destroy)\s+(.*)$").unwrap());
+        // Identifier extraction from a participant declaration tail. Mirrors the
+        // forms in `try_participant_decl`; the id is the alias when `as` is
+        // present, otherwise the simple name (or quoted label).
+        static REST: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(
+                r#"^(?:participant|actor|boundary|control|entity|database|collections|queue)?\s*(?:"[^"]+"\s+as\s+(\w+)|(\w+)\s+as\s+(?:"[^"]+"|\w+)|"([^"]+)"|(\w+))"#,
+            )
+            .unwrap()
+        });
+
+        let Some(kw) = KW.captures(line) else {
+            return false;
+        };
+        let rest = kw[2].trim();
+        let Some(caps) = REST.captures(rest) else {
+            return false;
+        };
+        let id = caps
+            .get(1)
+            .or_else(|| caps.get(2))
+            .or_else(|| caps.get(3))
+            .or_else(|| caps.get(4))
+            .map(|m| m.as_str().to_string());
+        let Some(id) = id else {
+            return false;
+        };
+
+        match &kw[1] {
+            "create" => {
+                // Register with the declared kind/alias/label if a full declaration
+                // was given; otherwise ensure a plain participant exists.
+                if !self.try_participant_decl(rest) {
+                    self.ensure_participant(&id);
+                }
+                self.events.push(Event::Create(id));
+            }
+            "destroy" => self.events.push(Event::Destroy(id)),
+            _ => {}
+        }
+        true
     }
 
     fn try_return(&mut self, line: &str) -> bool {
@@ -759,23 +928,28 @@ impl SeqParser {
     fn try_meta(&mut self, line: &str) -> bool {
         if let Some(rest) = line.strip_prefix("title ") {
             self.meta.title = Some(super::strip_title_quotes(rest).to_string());
+            self.meta.title_line = Some(self.current_line);
             return true;
         }
         if let Some(rest) = line.strip_prefix("header ") {
             self.meta.header = Some(rest.trim().to_string());
+            self.meta.header_line = Some(self.current_line);
             return true;
         }
         if let Some(rest) = line.strip_prefix("footer ") {
             self.meta.footer = Some(rest.trim().to_string());
+            self.meta.footer_line = Some(self.current_line);
             return true;
         }
         if let Some(rest) = line.strip_prefix("caption ") {
             self.meta.caption = Some(rest.trim().to_string());
+            self.meta.caption_line = Some(self.current_line);
             return true;
         }
         // Legend block: `legend` / `legend right` / `legend left` ... `endlegend`
         if line == "legend" || line.starts_with("legend ") {
             self.in_legend = true;
+            self.meta.legend_line = Some(self.current_line);
             return true;
         }
         if self.in_legend {
@@ -794,13 +968,33 @@ impl SeqParser {
     }
 
     fn try_box(&mut self, line: &str) -> bool {
-        // Boxes are decorative containers — they don't affect message flow or
-        // vertical layout. We parse and silently skip them for now.
-        // TODO: Implement box rendering (colored background + title).
+        // `box ["Title"] [#color] ... end box` groups consecutive participant
+        // declarations into a titled, optionally coloured rectangle.
         if line == "end box" {
+            self.current_box = None;
             return true;
         }
-        if line.starts_with("box") {
+        if line == "box" || line.starts_with("box ") {
+            let rest = line[3..].trim();
+            // Title is an optional quoted string; colour is an optional #token.
+            let (title, after_title) = if let Some(stripped) = rest.strip_prefix('"') {
+                match stripped.find('"') {
+                    Some(end) => (stripped[..end].to_string(), stripped[end + 1..].trim()),
+                    None => (stripped.to_string(), ""),
+                }
+            } else {
+                (String::new(), rest)
+            };
+            let color = after_title
+                .split_whitespace()
+                .find(|tok| tok.starts_with('#'))
+                .map(|tok| tok.to_string());
+            self.boxes.push(ParticipantBox {
+                title,
+                color,
+                members: Vec::new(),
+            });
+            self.current_box = Some(self.boxes.len() - 1);
             return true;
         }
         false
@@ -821,17 +1015,37 @@ impl SeqParser {
 
     fn try_skinparam(&mut self, line: &str) -> bool {
         if let Some(rest) = line.strip_prefix("skinparam ") {
-            let parts: Vec<&str> = rest.splitn(2, ' ').collect();
-            if parts.len() == 2 {
+            let rest = rest.trim();
+            if let Some(prefix) = rest.strip_suffix('{') {
+                let prefix = prefix.trim();
+                if !prefix.is_empty() {
+                    self.skinparam_block_prefix = Some(prefix.to_string());
+                }
+                return true;
+            }
+            if let Some((key, value)) = rest.split_once(char::is_whitespace) {
                 self.meta.skinparams.push(crate::diagram::SkinParam {
-                    key: parts[0].to_string(),
-                    value: parts[1].trim().to_string(),
+                    key: key.trim().to_string(),
+                    value: value.trim().to_string(),
                 });
             }
             true
         } else {
             false
         }
+    }
+
+    fn try_pragma(&mut self, line: &str) -> bool {
+        let mut parts = line.split_whitespace();
+        if matches!(parts.next(), Some("!pragma"))
+            && matches!(parts.next(), Some("teoz"))
+            && matches!(parts.next(), Some("true"))
+            && parts.next().is_none()
+        {
+            self.teoz = true;
+            return true;
+        }
+        false
     }
 
     fn try_hide(&mut self, line: &str) -> bool {
@@ -880,7 +1094,10 @@ fn parse_arrow(s: &str) -> Arrow {
         LineStyle::Solid
     };
 
-    let head = if s.contains('x') {
+    let source_cross = s.starts_with('x');
+    let head = if source_cross {
+        ArrowHead::Filled
+    } else if s.contains('x') {
         ArrowHead::Cross
     } else if s.contains('o') {
         ArrowHead::Circle
@@ -890,7 +1107,22 @@ fn parse_arrow(s: &str) -> Arrow {
         ArrowHead::Filled
     };
 
-    let direction = if s.contains("<->") {
+    // Half-arrowhead modifiers: `/` draws only the bottom wing, `\` only the
+    // top wing. Doubling the modifier (`//`, `\\`) renders a thin open stroke
+    // instead of a filled triangle.
+    let (head_half, thin_head) = if s.contains("//") {
+        (Some(ArrowHalf::Bottom), true)
+    } else if s.contains("\\\\") {
+        (Some(ArrowHalf::Top), true)
+    } else if s.contains('/') {
+        (Some(ArrowHalf::Bottom), false)
+    } else if s.contains('\\') {
+        (Some(ArrowHalf::Top), false)
+    } else {
+        (None, false)
+    };
+
+    let direction = if s.starts_with('<') && s.ends_with('>') {
         ArrowDirection::Bidirectional
     } else if s.contains("<-") || s.contains("<") && !s.contains("->") {
         ArrowDirection::RightToLeft
@@ -903,7 +1135,41 @@ fn parse_arrow(s: &str) -> Arrow {
         head,
         direction,
         color: None,
+        head_half,
+        thin_head,
+        source_cross,
     }
+}
+
+fn strip_arrow_color_annotation(line: &str, color_re: &Regex) -> (Option<String>, String) {
+    let Some((head, tail)) = line.split_once(':') else {
+        let color = color_re
+            .captures(line)
+            .and_then(|captures| captures.get(1).map(|m| m.as_str().to_string()));
+        return (color, color_re.replace_all(line, "").into_owned());
+    };
+
+    let color = color_re
+        .captures(head)
+        .and_then(|captures| captures.get(1).map(|m| m.as_str().to_string()));
+    let stripped_head = color_re.replace_all(head, "");
+    (color, format!("{stripped_head}:{tail}"))
+}
+
+fn message_label(line: &str, matched: Option<Match<'_>>) -> String {
+    let Some(matched) = matched else {
+        return String::new();
+    };
+    let trimmed = matched.as_str().trim();
+    if trimmed.starts_with("\\n")
+        && let Some(colon) = line[..matched.start()].rfind(':')
+    {
+        let consumed = &line[colon + 1..matched.start()];
+        if !consumed.is_empty() && consumed.chars().all(char::is_whitespace) {
+            return format!("{consumed}{trimmed}");
+        }
+    }
+    trimmed.to_string()
 }
 
 fn parse_activation(s: &str) -> ActivationChange {
@@ -913,6 +1179,25 @@ fn parse_activation(s: &str) -> ActivationChange {
         "!!" => ActivationChange::Destroy,
         _ => ActivationChange::Activate,
     }
+}
+
+fn note_text_from_lines(lines: &[String]) -> String {
+    let common_indent = lines
+        .iter()
+        .filter(|line| !line.trim().is_empty())
+        .map(|line| {
+            line.bytes()
+                .take_while(|&b| b == b' ' || b == b'\t')
+                .count()
+        })
+        .min()
+        .unwrap_or(0);
+
+    lines
+        .iter()
+        .map(|line| line.get(common_indent..).unwrap_or("").to_string())
+        .collect::<Vec<_>>()
+        .join("\n")
 }
 
 #[cfg(test)]
@@ -943,10 +1228,156 @@ mod tests {
     }
 
     #[test]
+    fn message_label_preserves_space_before_escaped_newline() {
+        let d = parse(r"Alice -> Bob: \n \t \\");
+        if let Event::Message(m) = &d.events[0] {
+            assert_eq!(m.label, r" \n \t \\");
+        } else {
+            panic!("expected message");
+        }
+    }
+
+    #[test]
+    fn local_link_message_label_is_not_arrow_color() {
+        let d = parse("Alice -> Bob : [[#anchor local link]]");
+        if let Event::Message(m) = &d.events[0] {
+            assert_eq!(m.label, "[[#anchor local link]]");
+            assert_eq!(m.arrow.color, None);
+        } else {
+            panic!("expected message");
+        }
+    }
+
+    #[test]
+    fn teoz_pragma_sets_sequence_flag() {
+        let d = parse("!pragma teoz true\nAlice -> Bob : hello");
+        assert!(d.teoz);
+        assert_eq!(d.events.len(), 1);
+    }
+
+    #[test]
     fn dotted_arrow() {
         let d = parse("A --> B : reply");
         if let Event::Message(m) = &d.events[0] {
             assert_eq!(m.arrow.line, LineStyle::Dotted);
+        } else {
+            panic!("expected message");
+        }
+    }
+
+    #[test]
+    fn bidirectional_arrows() {
+        let d = parse("A <-> B : solid\nA <--> B : dotted\nA <<->> B : open");
+        if let Event::Message(m) = &d.events[0] {
+            assert_eq!(m.from, "A");
+            assert_eq!(m.to, "B");
+            assert_eq!(m.arrow.direction, ArrowDirection::Bidirectional);
+            assert_eq!(m.arrow.line, LineStyle::Solid);
+            assert_eq!(m.arrow.head, ArrowHead::Filled);
+        } else {
+            panic!("expected message");
+        }
+        if let Event::Message(m) = &d.events[1] {
+            assert_eq!(m.from, "A");
+            assert_eq!(m.to, "B");
+            assert_eq!(m.arrow.direction, ArrowDirection::Bidirectional);
+            assert_eq!(m.arrow.line, LineStyle::Dotted);
+            assert_eq!(m.arrow.head, ArrowHead::Filled);
+        } else {
+            panic!("expected message");
+        }
+        if let Event::Message(m) = &d.events[2] {
+            assert_eq!(m.from, "A");
+            assert_eq!(m.to, "B");
+            assert_eq!(m.arrow.direction, ArrowDirection::Bidirectional);
+            assert_eq!(m.arrow.line, LineStyle::Solid);
+            assert_eq!(m.arrow.head, ArrowHead::Open);
+        } else {
+            panic!("expected message");
+        }
+    }
+
+    #[test]
+    fn source_cross_arrow_keeps_target_head() {
+        let d = parse("A x-> B : found\nA ->x B : lost");
+        if let Event::Message(m) = &d.events[0] {
+            assert_eq!(m.from, "A");
+            assert_eq!(m.to, "B");
+            assert!(m.arrow.source_cross);
+            assert_eq!(m.arrow.head, ArrowHead::Filled);
+        } else {
+            panic!("expected message");
+        }
+        if let Event::Message(m) = &d.events[1] {
+            assert_eq!(m.from, "A");
+            assert_eq!(m.to, "B");
+            assert!(!m.arrow.source_cross);
+            assert_eq!(m.arrow.head, ArrowHead::Cross);
+        } else {
+            panic!("expected message");
+        }
+    }
+
+    #[test]
+    fn dotted_external_incoming_arrow() {
+        let d = parse("[--> Alice : found dotted");
+        if let Event::Message(m) = &d.events[0] {
+            assert_eq!(m.from, "[");
+            assert_eq!(m.to, "Alice");
+            assert_eq!(m.arrow.line, LineStyle::Dotted);
+        } else {
+            panic!("expected message");
+        }
+    }
+
+    #[test]
+    fn dotted_external_outgoing_arrow() {
+        let d = parse("Alice -->] : lost dotted");
+        if let Event::Message(m) = &d.events[0] {
+            assert_eq!(m.from, "Alice");
+            assert_eq!(m.to, "]");
+            assert_eq!(m.arrow.line, LineStyle::Dotted);
+        } else {
+            panic!("expected message");
+        }
+    }
+
+    #[test]
+    fn dotted_external_outgoing_left_arrow() {
+        let d = parse("Alice -->[ : lost left dotted");
+        if let Event::Message(m) = &d.events[0] {
+            assert_eq!(m.from, "Alice");
+            assert_eq!(m.to, "[");
+            assert_eq!(m.label, "lost left dotted");
+            assert_eq!(m.arrow.line, LineStyle::Dotted);
+        } else {
+            panic!("expected message");
+        }
+    }
+
+    #[test]
+    fn external_incoming_activation_and_color() {
+        let d = parse("[-> Alice ++ #red : found");
+        if let Event::Message(m) = &d.events[0] {
+            assert_eq!(m.from, "[");
+            assert_eq!(m.to, "Alice");
+            assert_eq!(m.label, "found");
+            assert_eq!(m.activation, Some(ActivationChange::Activate));
+            assert_eq!(m.activation_color.as_deref(), Some("#red"));
+        } else {
+            panic!("expected message");
+        }
+    }
+
+    #[test]
+    fn external_outgoing_deactivation() {
+        let d = parse("Alice -->] -- : lost return");
+        if let Event::Message(m) = &d.events[0] {
+            assert_eq!(m.from, "Alice");
+            assert_eq!(m.to, "]");
+            assert_eq!(m.label, "lost return");
+            assert_eq!(m.activation, Some(ActivationChange::Deactivate));
+            assert_eq!(m.activation_color, None);
         } else {
             panic!("expected message");
         }
@@ -986,6 +1417,27 @@ mod tests {
         } else {
             panic!("expected note");
         }
+    }
+
+    #[test]
+    fn skinparam_blocks_are_flattened() {
+        let d = parse(
+            "skinparam note {\n  BackgroundColor LightYellow\n  BorderColor Orange\n  FontColor DarkBrown\n}\nA -> B : msg\nnote right : hello",
+        );
+        assert_eq!(d.meta.skinparams.len(), 3);
+        assert_eq!(d.meta.skinparams[0].key, "noteBackgroundColor");
+        assert_eq!(d.meta.skinparams[0].value, "LightYellow");
+        assert_eq!(d.meta.skinparams[1].key, "noteBorderColor");
+        assert_eq!(d.meta.skinparams[1].value, "Orange");
+        assert_eq!(d.meta.skinparams[2].key, "noteFontColor");
+        assert_eq!(d.meta.skinparams[2].value, "DarkBrown");
+    }
+
+    #[test]
+    fn bare_side_note_before_message_is_ignored() {
+        let d = parse("note left : orphan\nA -> B : msg");
+        assert_eq!(d.events.len(), 1);
+        assert!(matches!(d.events[0], Event::Message(_)));
     }
 
     #[test]
@@ -1039,6 +1491,32 @@ mod tests {
         }
         if let Event::Message(m) = &d.events[1] {
             assert_eq!(m.activation, Some(ActivationChange::Deactivate));
+        }
+    }
+
+    #[test]
+    fn autoactivate_directive_applies_to_subsequent_messages() {
+        let d = parse(
+            "autoactivate on\nA -> B : call\nB --> A : done\nautoactivate off\nA -> B : later",
+        );
+        assert_eq!(d.participants.len(), 2);
+        assert_eq!(d.participants[0].id, "A");
+        assert_eq!(d.participants[1].id, "B");
+        assert_eq!(d.events.len(), 3);
+        if let Event::Message(m) = &d.events[0] {
+            assert_eq!(m.activation, Some(ActivationChange::Activate));
+        } else {
+            panic!("expected message");
+        }
+        if let Event::Message(m) = &d.events[1] {
+            assert_eq!(m.activation, Some(ActivationChange::Deactivate));
+        } else {
+            panic!("expected message");
+        }
+        if let Event::Message(m) = &d.events[2] {
+            assert_eq!(m.activation, None);
+        } else {
+            panic!("expected message");
         }
     }
 
@@ -1114,8 +1592,19 @@ mod tests {
         assert_eq!(d.events.len(), 2);
         if let Event::Note(n) = &d.events[1] {
             assert_eq!(n.position, NotePosition::Left);
-            assert!(n.text.contains("Line 1"));
-            assert!(n.text.contains("Line 2"));
+            assert_eq!(n.text, "Line 1\nLine 2");
+        } else {
+            panic!("expected note");
+        }
+    }
+
+    #[test]
+    fn multiline_note_preserves_relative_code_indent() {
+        let d = parse(
+            "A -> B : msg\nnote over A\n  <code>\n  function foo() {\n    return 42;\n  }\n  </code>\nend note",
+        );
+        if let Event::Note(n) = &d.events[1] {
+            assert_eq!(n.text, "<code>\nfunction foo() {\n  return 42;\n}\n</code>");
         } else {
             panic!("expected note");
         }
@@ -1130,6 +1619,17 @@ mod tests {
         } else {
             panic!("expected note");
         }
+    }
+
+    #[test]
+    fn multiline_note_implicit_participant_uses_first_body_line_source() {
+        let d = parse("\n\n\nnote over Alice\n  First\nend note\nAlice -> Bob");
+        let alice = d
+            .participants
+            .iter()
+            .find(|p| p.id == "Alice")
+            .expect("Alice participant");
+        assert_eq!(alice.source_line, 5);
     }
 
     #[test]

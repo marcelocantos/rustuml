@@ -30,17 +30,50 @@ impl SvgBuilder {
     ///
     /// `diagram_type` is the `data-diagram-type` value (e.g. "STATE", "CLASS").
     pub fn new_plantuml(width: f64, height: f64, diagram_type: &str) -> Self {
+        Self::new_plantuml_with_background(width, height, diagram_type, Some("#FFFFFF"))
+    }
+
+    /// Construct a PlantUML-compatible SVG root with an explicit canvas
+    /// background. `None` omits the `background:` style, matching
+    /// `skinparam backgroundColor transparent`.
+    pub fn new_plantuml_with_background(
+        width: f64,
+        height: f64,
+        diagram_type: &str,
+        background: Option<&str>,
+    ) -> Self {
+        Self::new_plantuml_with_background_and_defs(width, height, diagram_type, background, "")
+    }
+
+    /// Construct a PlantUML-compatible SVG root with an explicit canvas
+    /// background and `<defs>` content captured from the oracle.
+    pub fn new_plantuml_with_background_and_defs(
+        width: f64,
+        height: f64,
+        diagram_type: &str,
+        background: Option<&str>,
+        defs: &str,
+    ) -> Self {
         let w = width as i64;
         let h = height as i64;
+        let background_style = background
+            .map(|bg| format!("background:{bg};"))
+            .unwrap_or_default();
         let mut buf = String::new();
         write!(
             buf,
-            r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="{diagram_type}" height="{h}px" preserveAspectRatio="none" style="width:{w}px;height:{h}px;background:#FFFFFF;" version="1.1" viewBox="0 0 {w} {h}" width="{w}px" zoomAndPan="magnify">"#,
+            r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="{diagram_type}" height="{h}px" preserveAspectRatio="none" style="width:{w}px;height:{h}px;{background_style}" version="1.1" viewBox="0 0 {w} {h}" width="{w}px" zoomAndPan="magnify">"#,
         )
         .unwrap();
         // PlantUML processing instruction and defs.
         buf.push_str("<?plantuml ?>");
-        buf.push_str("<defs/>");
+        if defs.is_empty() {
+            buf.push_str("<defs/>");
+        } else {
+            buf.push_str("<defs>");
+            buf.push_str(defs);
+            buf.push_str("</defs>");
+        }
         // Open the single wrapping <g>.
         buf.push_str("<g>");
         Self {
@@ -337,8 +370,18 @@ impl SvgBuilder {
     }
 
     pub fn open_link(&mut self, url: &str) {
-        let escaped = escape_xml(url);
-        self.line(&format!(r#"<a href="{escaped}" target="_blank">"#));
+        self.open_link_with_title(url, None);
+    }
+
+    /// Open a PlantUML-style link anchor. The anchor carries the href four
+    /// ways (`href`, `xlink:href`, plus `target`/`title`/`xlink:*`) to support
+    /// multiple SVG viewers. `title` defaults to the URL when `None`.
+    pub fn open_link_with_title(&mut self, url: &str, title: Option<&str>) {
+        let h = escape_xml(url);
+        let t = title.map(escape_xml).unwrap_or_else(|| h.clone());
+        self.line(&format!(
+            r#"<a href="{h}" target="_top" title="{t}" xlink:actuate="onRequest" xlink:href="{h}" xlink:show="new" xlink:title="{t}" xlink:type="simple">"#,
+        ));
         self.indent += 1;
     }
 

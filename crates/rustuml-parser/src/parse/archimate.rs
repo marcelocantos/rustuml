@@ -31,8 +31,8 @@ pub fn parse_archimate(lines: &[String]) -> Result<ArchimateDiagram, ParseError>
         Regex::new(r#"^(\w+)\s+(-+>|\.+>|--+>|\.\.+>)\s+(\w+)(?:\s*:\s*(.+))?$"#).unwrap()
     });
 
-    for line in lines {
-        let trimmed = line.trim();
+    for (i, line) in lines.iter().enumerate() {
+        let (source_line, trimmed) = super::source_line_and_trimmed(i + 1, line);
         if trimmed.is_empty() {
             continue;
         }
@@ -83,6 +83,7 @@ pub fn parse_archimate(lines: &[String]) -> Result<ArchimateDiagram, ParseError>
                 elements.push(ArchimateElement {
                     id: id.clone(),
                     label,
+                    source_line,
                     layer,
                     kind,
                 });
@@ -93,7 +94,7 @@ pub fn parse_archimate(lines: &[String]) -> Result<ArchimateDiagram, ParseError>
             continue;
         }
         if let Some(caps) = RE_REL.captures(trimmed) {
-            let rel_kind = ArchimateRelationKind::from_str_prefix(&caps[1]);
+            let (rel_kind, direction) = ArchimateRelationKind::parse_name(&caps[1]);
             let from = caps[2].to_string();
             let to = caps[3].to_string();
             let label_str = caps[4].trim().to_string();
@@ -106,7 +107,9 @@ pub fn parse_archimate(lines: &[String]) -> Result<ArchimateDiagram, ParseError>
                 from,
                 to,
                 label,
+                source_line,
                 kind: rel_kind,
+                direction,
             });
             continue;
         }
@@ -118,7 +121,9 @@ pub fn parse_archimate(lines: &[String]) -> Result<ArchimateDiagram, ParseError>
                 from,
                 to,
                 label,
+                source_line,
                 kind: ArchimateRelationKind::Association,
+                direction: ArchimateRelationDirection::Default,
             });
             continue;
         }
@@ -155,6 +160,7 @@ mod tests {
         assert_eq!(d.elements[0].label, "Customer");
         assert!(matches!(d.elements[0].layer, ArchimateLayer::Business));
         assert_eq!(d.elements[0].kind, "Actor");
+        assert_eq!(d.elements[0].source_line, 1);
         assert_eq!(d.elements[1].id, "srv");
         assert!(matches!(d.elements[1].layer, ArchimateLayer::Technology));
     }
@@ -168,6 +174,7 @@ mod tests {
         assert_eq!(d.relations[0].from, "a");
         assert_eq!(d.relations[0].to, "b");
         assert_eq!(d.relations[0].label.as_deref(), Some("uses"));
+        assert_eq!(d.relations[0].source_line, 3);
     }
 
     #[test]
@@ -207,5 +214,6 @@ mod tests {
             d.relations[3].kind,
             ArchimateRelationKind::Realization
         ));
+        assert_eq!(d.relations[3].direction, ArchimateRelationDirection::Up);
     }
 }

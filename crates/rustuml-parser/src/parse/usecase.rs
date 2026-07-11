@@ -24,6 +24,14 @@ fn extract_stereotype_text(s: &str) -> Option<String> {
     RE.captures(s).map(|c| c[1].trim().to_string())
 }
 
+/// Extract a trailing `#color` modifier from an actor/use-case declaration
+/// line, e.g. `actor User #Pink` → `Some("Pink")`, `usecase "X" #AAFFAA` →
+/// `Some("AAFFAA")`. Returns the token without the leading `#`.
+fn trailing_color(line: &str) -> Option<String> {
+    static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"#([0-9A-Za-z]+)\s*$").unwrap());
+    RE.captures(line).map(|c| c[1].to_string())
+}
+
 /// Turn a label into a simple identifier (strip spaces, keep alphanumerics/underscores).
 fn label_to_id(label: &str) -> String {
     label
@@ -39,13 +47,20 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
     let mut packages: Vec<UseCasePackage> = Vec::new();
     let mut notes: Vec<UseCaseNote> = Vec::new();
     let mut meta = DiagramMeta::default();
+    let mut direction = UseCaseLayoutDirection::TopToBottom;
     let mut current_package: Option<usize> = None;
     // For multiline string literals in usecase declarations.
     let mut multiline_uc_id: Option<String> = None;
+    let mut multiline_uc_color: Option<String> = None;
     let mut multiline_label_lines: Vec<String> = Vec::new();
+    // Source line of the `usecase ID as "` opening for a multiline label.
+    let mut multiline_start_line: usize = 0;
     // For multiline note blocks.
     let mut in_note_block = false;
     let mut note_block_lines: Vec<String> = Vec::new();
+    // For `skinparam <prefix> { ... }` blocks: flatten nested `Key Value`
+    // entries to `<prefix>Key`.
+    let mut skinparam_block_prefix: Option<String> = None;
 
     // Regex patterns compiled once.
 
@@ -81,7 +96,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
         LazyLock::new(|| Regex::new(r"^usecase\s+\(([^)]+)\)\s+as\s+(\w+)").unwrap());
     // usecase ID [#color] as " (multiline label start — opening quote not closed on same line)
     static RE_UC_ID_AS_MULTI: LazyLock<Regex> =
-        LazyLock::new(|| Regex::new(r#"^usecase\s+(\w+)(?:\s+#\w+)?\s+as\s+"\s*$"#).unwrap());
+        LazyLock::new(|| Regex::new(r#"^usecase\s+(\w+)(?:\s+#(\w+))?\s+as\s+"\s*$"#).unwrap());
     // usecase ID <<stereotype>>  (bare word, with optional stereotype/color)
     static RE_UC_BARE: LazyLock<Regex> = LazyLock::new(|| {
         Regex::new(r#"^usecase\s+(\w+)(?:\s+(<<\s*[^>]+\s*>>))?(?:\s+#\w+)?"#).unwrap()
@@ -117,14 +132,17 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
     static RE_NOTE_FLOAT: LazyLock<Regex> =
         LazyLock::new(|| Regex::new(r#"^note\s+"([^"]+)""#).unwrap());
 
-    // Package/rectangle opening (with optional color/style modifiers)
+    // Package/rectangle opening (with optional color/style modifiers). The
+    // optional `#color` modifier (named or hex) before the brace is captured.
     static RE_PKG: LazyLock<Regex> = LazyLock::new(|| {
-        Regex::new(r#"^(?:rectangle|package)\s+(?:"([^"]+)"|(\w+))(?:\s+[^{]*)?\{"#).unwrap()
+        Regex::new(
+            r#"^(rectangle|package)\s+(?:"([^"]+)"|(\w+))(?:\s+[^{]*?#([0-9A-Za-z]+))?(?:\s+[^{]*)?\{"#,
+        )
+        .unwrap()
     });
 
     for (line_idx, line) in lines.iter().enumerate() {
-        let current_line = line_idx + 1;
-        let trimmed = line.trim();
+        let (current_line, trimmed) = super::source_line_and_trimmed(line_idx + 1, line);
         if trimmed.is_empty() {
             continue;
         }
@@ -159,15 +177,37 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                     use_cases.push(UseCase {
                         id,
                         label,
+                        explicit_id: true,
                         stereotype: None,
                         description,
-                        source_line: current_line,
+                        color: multiline_uc_color.clone(),
+                        source_line: multiline_start_line,
                     });
                 }
                 multiline_uc_id = None;
+                multiline_uc_color = None;
                 multiline_label_lines.clear();
             } else {
                 multiline_label_lines.push(trimmed.to_string());
+            }
+            continue;
+        }
+
+        // Inside a `skinparam <prefix> { ... }` block: flatten nested
+        // `Key Value` entries to `<prefix>Key` until the closing `}`. Must be
+        // checked before the package-close handler so the block's `}` resets
+        // the prefix rather than being swallowed as a package terminator.
+        if let Some(prefix) = &skinparam_block_prefix {
+            if trimmed == "}" {
+                skinparam_block_prefix = None;
+            } else {
+                let parts: Vec<&str> = trimmed.splitn(2, char::is_whitespace).collect();
+                if parts.len() == 2 {
+                    meta.skinparams.push(crate::diagram::SkinParam {
+                        key: format!("{prefix}{}", parts[0]),
+                        value: parts[1].trim().to_string(),
+                    });
+                }
             }
             continue;
         }
@@ -197,6 +237,12 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
 
         // Collect skinparam directives into metadata.
         if let Some(rest) = trimmed.strip_prefix("skinparam ") {
+            let rest = rest.trim();
+            // Block form: `skinparam usecase {` opens a nested block.
+            if let Some(prefix) = rest.strip_suffix('{') {
+                skinparam_block_prefix = Some(prefix.trim().to_string());
+                continue;
+            }
             if let Some((key, value)) = rest.split_once(' ') {
                 meta.skinparams.push(crate::diagram::SkinParam {
                     key: key.trim().to_string(),
@@ -206,9 +252,15 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
             continue;
         }
         // Skip top-level directives.
-        if trimmed.starts_with("left to right")
-            || trimmed.starts_with("top to bottom")
-            || trimmed.starts_with("end note")
+        if trimmed.starts_with("left to right direction") {
+            direction = UseCaseLayoutDirection::LeftToRight;
+            continue;
+        }
+        if trimmed.starts_with("top to bottom direction") {
+            direction = UseCaseLayoutDirection::TopToBottom;
+            continue;
+        }
+        if trimmed.starts_with("end note")
             || trimmed.starts_with("hide")
             || trimmed.starts_with("show")
             || trimmed.starts_with("!")
@@ -294,6 +346,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                     id,
                     label,
                     stereotype,
+                    color: trailing_color(trimmed),
                     source_line: current_line,
                 });
             }
@@ -305,6 +358,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                     id,
                     label,
                     stereotype: None,
+                    color: None,
                     source_line: current_line,
                 });
             }
@@ -319,6 +373,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                     id,
                     label,
                     stereotype,
+                    color: trailing_color(trimmed),
                     source_line: current_line,
                 });
             }
@@ -333,8 +388,10 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                 use_cases.push(UseCase {
                     id,
                     label,
+                    explicit_id: true,
                     stereotype: None,
                     description: Vec::new(),
+                    color: trailing_color(trimmed),
                     source_line: current_line,
                 });
             }
@@ -346,7 +403,9 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                 packages[idx].elements.push(id.clone());
             }
             multiline_uc_id = Some(id);
+            multiline_uc_color = caps.get(2).map(|m| m.as_str().to_string());
             multiline_label_lines.clear();
+            multiline_start_line = current_line;
         } else if let Some(caps) = RE_UC_PAREN_AS.captures(trimmed) {
             // usecase (Label) as ID
             let label = caps[1].trim().to_string();
@@ -358,8 +417,10 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                 use_cases.push(UseCase {
                     id,
                     label,
+                    explicit_id: true,
                     stereotype: None,
                     description: Vec::new(),
+                    color: trailing_color(trimmed),
                     source_line: current_line,
                 });
             }
@@ -376,8 +437,10 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                 use_cases.push(UseCase {
                     id,
                     label,
+                    explicit_id: true,
                     stereotype,
                     description: Vec::new(),
+                    color: trailing_color(trimmed),
                     source_line: current_line,
                 });
             }
@@ -394,8 +457,10 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                 use_cases.push(UseCase {
                     id,
                     label,
+                    explicit_id: false,
                     stereotype,
                     description: Vec::new(),
+                    color: trailing_color(trimmed),
                     source_line: current_line,
                 });
             }
@@ -412,8 +477,10 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                 use_cases.push(UseCase {
                     id,
                     label,
+                    explicit_id: false,
                     stereotype,
                     description: Vec::new(),
+                    color: trailing_color(trimmed),
                     source_line: current_line,
                 });
             }
@@ -427,13 +494,16 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                 use_cases.push(UseCase {
                     id,
                     label,
+                    explicit_id: false,
                     stereotype: None,
                     description: Vec::new(),
+                    color: None,
                     source_line: current_line,
                 });
             }
         } else if let Some(caps) = RE_CONN.captures(trimmed) {
             let from = normalize_endpoint(&caps[1]);
+            let arrow = caps[2].to_string();
             let to = normalize_endpoint(&caps[3]);
             let raw_label = caps.get(4).map(|m| m.as_str().trim().to_string());
             let stereotype = raw_label.as_ref().and_then(|l| extract_stereotype_text(l));
@@ -450,8 +520,10 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                         use_cases.push(UseCase {
                             id,
                             label: inner,
+                            explicit_id: false,
                             stereotype: None,
                             description: Vec::new(),
+                            color: None,
                             source_line: current_line,
                         });
                     }
@@ -470,6 +542,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                             id,
                             label: inner,
                             stereotype: None,
+                            color: None,
                             source_line: current_line,
                         });
                     }
@@ -481,24 +554,35 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                 to,
                 label,
                 stereotype,
+                dashed: arrow.contains('.'),
+                arrow: arrow.contains('>'),
                 source_line: current_line,
             });
         } else if let Some(caps) = RE_PKG.captures(trimmed) {
+            let kind = match caps.get(1).map(|m| m.as_str()) {
+                Some("rectangle") => crate::diagram::usecase::PackageKind::Rectangle,
+                _ => crate::diagram::usecase::PackageKind::Package,
+            };
             let name = caps
-                .get(1)
-                .or(caps.get(2))
+                .get(2)
+                .or(caps.get(3))
                 .map(|m| m.as_str().to_string())
                 .unwrap_or_default();
+            let color = caps.get(4).map(|m| m.as_str().to_string());
             current_package = Some(packages.len());
             packages.push(UseCasePackage {
                 name,
                 elements: Vec::new(),
+                color,
+                kind,
+                source_line: current_line,
             });
         }
     }
 
     Ok(UseCaseDiagram {
         meta,
+        direction,
         actors,
         use_cases,
         connections,
@@ -547,8 +631,16 @@ mod tests {
             "actor User\nusecase \"Login\" as UC1\nusecase \"Auth\" as UC2\nUC1 ..> UC2 : <<include>>",
         );
         assert_eq!(d.connections[0].stereotype.as_deref(), Some("include"));
+        assert!(d.connections[0].dashed);
+        assert!(d.connections[0].arrow);
         // Label should be normalized to guillemets.
         assert_eq!(d.connections[0].label.as_deref(), Some("«include»"));
+    }
+
+    #[test]
+    fn direction_directive_is_recorded() {
+        let d = parse("left to right direction\nactor User\nusecase UC1\nUser --> UC1");
+        assert_eq!(d.direction, UseCaseLayoutDirection::LeftToRight);
     }
 
     #[test]
@@ -607,6 +699,7 @@ mod tests {
         let d = parse("actor User\nusecase \"Action\"\nUser --> Action");
         assert_eq!(d.use_cases.len(), 1);
         assert_eq!(d.use_cases[0].label, "Action");
+        assert!(!d.use_cases[0].explicit_id);
     }
 
     #[test]
@@ -615,6 +708,7 @@ mod tests {
         assert_eq!(d.use_cases.len(), 1);
         assert_eq!(d.use_cases[0].id, "BaseUC");
         assert_eq!(d.use_cases[0].label, "Base Use Case");
+        assert!(d.use_cases[0].explicit_id);
     }
 
     #[test]
@@ -638,6 +732,7 @@ mod tests {
         assert_eq!(d.use_cases.len(), 1);
         assert_eq!(d.use_cases[0].id, "UC1");
         assert_eq!(d.use_cases[0].label, "Title");
+        assert!(d.use_cases[0].explicit_id);
         assert!(
             d.use_cases[0]
                 .description

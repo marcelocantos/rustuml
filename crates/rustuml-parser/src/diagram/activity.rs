@@ -20,6 +20,7 @@ pub enum ActivityStep {
     Stop,
     End,
     Action(String),
+    Connector(String),
     If(IfBlock),
     ElseIf(ElseIfBranch),
     Else(Option<String>),
@@ -30,14 +31,16 @@ pub enum ActivityStep {
     While(WhileBlock),
     EndWhile(Option<String>),
     Repeat,
+    RepeatStart(String),
     RepeatWhile(RepeatWhileBlock),
     Fork,
     ForkAgain,
     EndFork,
+    EndMerge,
     Split,
     SplitAgain,
     EndSplit,
-    Swimlane(String),
+    Swimlane(SwimlaneBlock),
     Partition(PartitionBlock),
     EndPartition,
     Note(NoteBlock),
@@ -45,6 +48,7 @@ pub enum ActivityStep {
     Arrow(ArrowStep),
     Backward(String),
     Break,
+    Goto(String),
     Detach,
     Kill,
 }
@@ -106,9 +110,18 @@ pub struct NoteBlock {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct SwimlaneBlock {
+    pub name: String,
+    pub color: Option<String>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PartitionBlock {
     pub name: String,
     pub color: Option<String>,
+    /// True when this block came from `group`, not `partition`.
+    #[serde(default)]
+    pub is_group: bool,
     /// 1-based line number within the `@startuml` block.
     #[serde(default)]
     pub source_line: usize,

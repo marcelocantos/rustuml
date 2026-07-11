@@ -7,29 +7,29 @@
 //! Syntax:
 //! ```text
 //! @startboard
-//! Simple Kanban
-//! + Backlog
+//! Board Title
+//! +Backlog+
 //! * Task 1
 //! * Task 2
-//! + In Progress
+//! +Done+
 //! * Task 3
-//! + Done
-//! * Task 4
 //! @endboard
 //! ```
 //!
-//! The first non-empty line is the title.  Lines starting with `+` define
-//! columns; lines starting with `*` define cards in the current column.
+//! The first non-empty, non-marker line is the *root* box. Lines starting
+//! with `+` are column headers; lines starting with `*` are cards. PlantUML
+//! strips only the *leading* marker from each label (so `+Backlog+` renders
+//! as `Backlog+`), then trims surrounding whitespace.
 
 use super::ParseError;
 use crate::diagram::DiagramMeta;
-use crate::diagram::board::{BoardColumn, BoardDiagram};
+use crate::diagram::board::{BoardDiagram, BoardItem, BoardItemKind};
 
 /// Parse preprocessed lines from a `@startboard` block.
 pub fn parse_board(lines: &[String]) -> Result<BoardDiagram, ParseError> {
     let mut meta = DiagramMeta::default();
-    let mut title: Option<String> = None;
-    let mut columns: Vec<BoardColumn> = Vec::new();
+    let mut items: Vec<BoardItem> = Vec::new();
+    let mut saw_root = false;
 
     for (line_no, line) in lines.iter().enumerate() {
         let trimmed = line.trim();
@@ -38,8 +38,6 @@ pub fn parse_board(lines: &[String]) -> Result<BoardDiagram, ParseError> {
         }
 
         if let Some(rest) = trimmed.strip_prefix('+') {
-            // Column definition.  Syntax: `+Column Name+`.
-            // Java PlantUML keeps the trailing `+` in the rendered label.
             let label = rest.trim().to_string();
             if label.is_empty() {
                 return Err(ParseError {
@@ -47,27 +45,22 @@ pub fn parse_board(lines: &[String]) -> Result<BoardDiagram, ParseError> {
                     message: "board column has no label".to_string(),
                 });
             }
-            columns.push(BoardColumn {
+            items.push(BoardItem {
+                kind: BoardItemKind::Column,
                 label,
-                cards: Vec::new(),
             });
         } else if let Some(rest) = trimmed.strip_prefix('*') {
-            // Card definition.
-            let card = rest.trim().to_string();
-            if card.is_empty() {
+            let label = rest.trim().to_string();
+            if label.is_empty() {
                 return Err(ParseError {
                     line: line_no + 1,
                     message: "board card has no text".to_string(),
                 });
             }
-            if let Some(col) = columns.last_mut() {
-                col.cards.push(card);
-            } else {
-                return Err(ParseError {
-                    line: line_no + 1,
-                    message: "card without a preceding column".to_string(),
-                });
-            }
+            items.push(BoardItem {
+                kind: BoardItemKind::Card,
+                label,
+            });
         } else if let Some(rest) = trimmed.strip_prefix("skinparam ") {
             if let Some((key, value)) = rest.split_once(' ') {
                 meta.skinparams.push(crate::diagram::SkinParam {
@@ -75,20 +68,18 @@ pub fn parse_board(lines: &[String]) -> Result<BoardDiagram, ParseError> {
                     value: value.trim().to_string(),
                 });
             }
-        } else if title.is_none() {
-            // First non-empty, non-marker line is the title.
-            title = Some(trimmed.to_string());
+        } else if !saw_root {
+            // First non-empty, non-marker line is the root box.
+            saw_root = true;
+            items.push(BoardItem {
+                kind: BoardItemKind::Root,
+                label: trimmed.to_string(),
+            });
         }
         // Other lines are ignored (comments, etc.)
     }
 
-    let title = title.unwrap_or_default();
-
-    Ok(BoardDiagram {
-        meta,
-        title,
-        columns,
-    })
+    Ok(BoardDiagram { meta, items })
 }
 
 #[cfg(test)]
@@ -105,31 +96,29 @@ mod tests {
 
     #[test]
     fn simple_board() {
-        let d = parse("Simple Kanban\n+ Backlog\n* Task 1\n* Task 2\n+ Done\n* Task 3");
-        assert_eq!(d.title, "Simple Kanban");
-        assert_eq!(d.columns.len(), 2);
-        assert_eq!(d.columns[0].label, "Backlog");
-        assert_eq!(d.columns[0].cards, vec!["Task 1", "Task 2"]);
-        assert_eq!(d.columns[1].label, "Done");
-        assert_eq!(d.columns[1].cards, vec!["Task 3"]);
+        let d = parse("Simple Kanban\n+Backlog+\n* Task 1\n* Task 2\n+Done+\n* Task 3");
+        assert_eq!(d.items.len(), 6);
+        assert_eq!(d.items[0].kind, BoardItemKind::Root);
+        assert_eq!(d.items[0].label, "Simple Kanban");
+        assert_eq!(d.items[1].kind, BoardItemKind::Column);
+        assert_eq!(d.items[1].label, "Backlog+");
+        assert_eq!(d.items[2].kind, BoardItemKind::Card);
+        assert_eq!(d.items[2].label, "Task 1");
     }
 
     #[test]
-    fn empty_column() {
-        let d = parse("Board\n+ Empty\n+ Has Card\n* Card 1");
-        assert_eq!(d.columns.len(), 2);
-        assert!(d.columns[0].cards.is_empty());
-        assert_eq!(d.columns[1].cards.len(), 1);
+    fn keeps_trailing_marker_in_label() {
+        let d = parse("Board\n+Want to Read+\n* Item");
+        assert_eq!(d.items[1].label, "Want to Read+");
     }
 
     #[test]
-    fn card_without_column_error() {
-        let err = parse_board(&lines("Title\n* Orphan")).unwrap_err();
-        assert!(
-            err.message.contains("without a preceding column"),
-            "{}",
-            err.message
-        );
+    fn empty_columns() {
+        let d = parse("Board\n+Empty+\n+Has Card+\n* Card 1");
+        assert_eq!(d.items.len(), 4);
+        assert_eq!(d.items[1].kind, BoardItemKind::Column);
+        assert_eq!(d.items[2].kind, BoardItemKind::Column);
+        assert_eq!(d.items[3].kind, BoardItemKind::Card);
     }
 
     #[test]
@@ -140,8 +129,7 @@ mod tests {
 
     #[test]
     fn skips_empty_lines() {
-        let d = parse("Title\n\n+ Col\n\n* Card");
-        assert_eq!(d.columns.len(), 1);
-        assert_eq!(d.columns[0].cards.len(), 1);
+        let d = parse("Title\n\n+Col+\n\n* Card");
+        assert_eq!(d.items.len(), 3);
     }
 }

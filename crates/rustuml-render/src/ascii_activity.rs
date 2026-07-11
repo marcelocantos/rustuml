@@ -131,6 +131,20 @@ pub fn render_ascii(diagram: &ActivityDiagram) -> String {
                 need_connector = false;
             }
 
+            ActivityStep::Connector(label) => {
+                if need_connector {
+                    grid.set(centre, row, V);
+                    row += 1;
+                    grid.set(centre, row, ARROW_DOWN);
+                    row += 1;
+                }
+                let text = format!("({label})");
+                let start_col = centre.saturating_sub(text.len() / 2);
+                grid.write_str(start_col, row, &text);
+                row += 1;
+                need_connector = true;
+            }
+
             ActivityStep::Action(text) => {
                 if need_connector {
                     grid.set(centre, row, V);
@@ -264,7 +278,7 @@ pub fn render_ascii(diagram: &ActivityDiagram) -> String {
                 need_connector = true;
             }
 
-            ActivityStep::EndFork | ActivityStep::EndSplit => {
+            ActivityStep::EndFork | ActivityStep::EndMerge | ActivityStep::EndSplit => {
                 if need_connector {
                     grid.set(centre, row, V);
                     row += 1;
@@ -286,8 +300,8 @@ pub fn render_ascii(diagram: &ActivityDiagram) -> String {
                 grid.write_str(note_col, row.saturating_sub(1), &text);
             }
 
-            ActivityStep::Swimlane(name) => {
-                let text = format!("|{name}|");
+            ActivityStep::Swimlane(lane) => {
+                let text = format!("|{}|", lane.name);
                 grid.write_str(0, row, &text);
                 row += 1;
             }
@@ -299,9 +313,11 @@ pub fn render_ascii(diagram: &ActivityDiagram) -> String {
             | ActivityStep::DeprecatedColorAction(_)
             | ActivityStep::Backward(_)
             | ActivityStep::Break
+            | ActivityStep::Goto(_)
             | ActivityStep::Detach
             | ActivityStep::Kill
             | ActivityStep::Repeat
+            | ActivityStep::RepeatStart(_)
             | ActivityStep::RepeatWhile(_)
             | ActivityStep::Switch(_)
             | ActivityStep::Case(_)

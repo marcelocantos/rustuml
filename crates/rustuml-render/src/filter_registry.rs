@@ -102,6 +102,13 @@ pub fn with_registry<R>(source: &str, body: impl FnOnce() -> R) -> (R, FilterReg
     (result, registry)
 }
 
+/// Derive PlantUML's drop-shadow filter id for a diagram source: `"f" +
+/// base36(abs(seed))`, mirroring `SvgGraphics.shadowId`. Shares the same
+/// seed as the `b`-prefixed back-colour filter ids.
+pub fn shadow_id_for(source: &str) -> String {
+    format!("f{}", abs_base36(plantuml_seed(source)))
+}
+
 /// Look up an id from the current registry, if any. Used by the text-
 /// emission path: a segment with `style.background = Some(_)` calls this
 /// to obtain the `filter="url(#...)"` value.

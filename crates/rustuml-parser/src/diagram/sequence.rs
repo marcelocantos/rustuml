@@ -16,6 +16,24 @@ pub struct SequenceDiagram {
     /// Whether `hide footbox` was specified — suppresses tail participant boxes.
     #[serde(default)]
     pub hide_footbox: bool,
+    /// Whether `!pragma teoz true` was specified.
+    #[serde(default)]
+    pub teoz: bool,
+    /// Named `box ... end box` groupings of participants.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub boxes: Vec<ParticipantBox>,
+}
+
+/// A named `box "Title" #color ... end box` grouping of participants.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ParticipantBox {
+    /// Optional box title (empty string if unnamed).
+    pub title: String,
+    /// Optional background color (e.g., "#lightblue", "#FFE4E1").
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub color: Option<String>,
+    /// Indices into `SequenceDiagram::participants` of the members, in order.
+    pub members: Vec<usize>,
 }
 
 /// A participant (lifeline) in a sequence diagram.
@@ -70,6 +88,28 @@ pub enum Event {
     Create(String),
     Return(ReturnMessage),
     NewPage(Option<String>),
+    /// A mid-stream autonumber directive (`autonumber`, `autonumber N M "fmt"`,
+    /// `autonumber stop`, `autonumber resume`). Applied to subsequent messages.
+    Autonumber(AutonumberCmd),
+}
+
+/// An autonumber directive encountered in the event stream.
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub enum AutonumberCmd {
+    /// `autonumber [start [step]] ["format"]` — (re)start numbering.
+    Start {
+        start: u32,
+        step: u32,
+        format: Option<String>,
+    },
+    /// `autonumber stop` — pause numbering (counter retained).
+    Stop,
+    /// `autonumber resume [step] ["format"]` — resume after a stop, keeping the
+    /// retained counter; optionally change step/format.
+    Resume {
+        step: Option<u32>,
+        format: Option<String>,
+    },
 }
 
 /// A message arrow between participants.
@@ -97,6 +137,27 @@ pub struct Arrow {
     /// Optional arrow color (e.g., "#red", "#FF0000").
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub color: Option<String>,
+    /// Half-arrowhead modifier from `/` (bottom half) or `\` (top half).
+    /// `None` for a normal full arrowhead.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub head_half: Option<ArrowHalf>,
+    /// True when the arrowhead is drawn as a thin open stroke rather than a
+    /// filled triangle. Triggered by doubling the half modifier (`//`, `\\`).
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub thin_head: bool,
+    /// True for source-cross arrows (`x->`): draw an X at the source side
+    /// while keeping the normal target arrowhead.
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub source_cross: bool,
+}
+
+/// Which half of the arrowhead is drawn when a `/` or `\` modifier is present.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum ArrowHalf {
+    /// `/` — only the bottom wing of the arrowhead.
+    Bottom,
+    /// `\` — only the top wing of the arrowhead.
+    Top,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
@@ -144,6 +205,11 @@ pub struct Note {
     /// Optional background color (e.g., "#blue", "#FEFFDD").
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub color: Option<String>,
+    /// True when this note was attached to the preceding message via a bare
+    /// `note left` / `note right` (no participant). Such notes straddle the
+    /// message's arrow band rather than consuming their own vertical row.
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub on_message: bool,
     /// 1-based line number within the `@startuml` block.
     #[serde(default)]
     pub source_line: usize,

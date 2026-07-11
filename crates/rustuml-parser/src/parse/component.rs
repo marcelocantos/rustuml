@@ -22,6 +22,7 @@ const CONTAINER_KEYWORDS: &[&str] = &[
     "database",
     "storage",
     "actor",
+    "artifact",
     "component",
     "queue",
     "boundary",
@@ -82,6 +83,43 @@ fn parse_container_label(kw: &str, rest: &str) -> (String, String) {
     (kw.to_string(), kw.to_string())
 }
 
+fn component_package_kind(kw: &str) -> ComponentPackageKind {
+    match kw {
+        "cloud" => ComponentPackageKind::Cloud,
+        "component" => ComponentPackageKind::Component,
+        "database" | "storage" => ComponentPackageKind::Database,
+        "folder" => ComponentPackageKind::Folder,
+        "frame" => ComponentPackageKind::Frame,
+        "node" => ComponentPackageKind::Node,
+        "package" => ComponentPackageKind::Package,
+        "queue" => ComponentPackageKind::Queue,
+        "rectangle" | "boundary" | "control" | "entity" | "collections" | "actor" | "artifact" => {
+            ComponentPackageKind::Rectangle
+        }
+        _ => ComponentPackageKind::Rectangle,
+    }
+}
+
+fn parse_container_color(line: &str) -> Option<String> {
+    line.split_whitespace()
+        .find(|part| part.starts_with('#') && part.len() > 1)
+        .map(|part| part.trim_end_matches('{').to_string())
+}
+
+fn parse_link_shape(arrow: &str) -> LinkShape {
+    if arrow.contains("(0)-") {
+        LinkShape::MiddleFullSocket
+    } else if arrow.contains("(0-") {
+        LinkShape::MiddleBallSocket
+    } else if arrow.contains("(0") {
+        LinkShape::TargetBallSocket
+    } else if arrow.contains('(') {
+        LinkShape::TargetSocket
+    } else {
+        LinkShape::Plain
+    }
+}
+
 pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError> {
     let mut components = Vec::new();
     let mut interfaces = Vec::new();
@@ -92,8 +130,24 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
     // Parse into a nested structure via a stack.
     // Each stack frame is a mutable ComponentPackage under construction.
     let mut package_stack: Vec<ComponentPackage> = Vec::new();
+    // Names of every block container ever opened, so a connection that targets
+    // a container by name is not mistaken for an undeclared interface endpoint.
+    let mut known_packages: std::collections::HashSet<String> = std::collections::HashSet::new();
+    // Ids of floating notes (`note "..." as N1`), so a `N1 .. Foo` link does
+    // not auto-create N1 as an interface endpoint.
+    let mut known_note_ids: std::collections::HashSet<String> = std::collections::HashSet::new();
     // Top-level packages collected.
     let mut top_packages: Vec<ComponentPackage> = Vec::new();
+    // `hide`/`remove` directives. PlantUML drops the targeted elements entirely
+    // (and any links touching them). We accept either a bare element id or a
+    // `<<stereotype>>` selector.
+    let mut hidden_ids: Vec<String> = Vec::new();
+    let mut hidden_stereotypes: Vec<String> = Vec::new();
+    // Count of open *transparent* brace blocks (`together { ... }`). These are
+    // layout hints, not containers: the elements inside stay in the enclosing
+    // package, but the matching `}` must not pop a real package frame. We only
+    // track the innermost run, since `together` blocks do not nest in practice.
+    let mut transparent_braces: usize = 0;
 
     // Note buffer for multi-line notes.
     let mut note_target: Option<String> = None;
@@ -120,6 +174,12 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
         LazyLock::new(|| Regex::new(r"^interface\s+\[([^\]]+)\]\s+as\s+(\w+)").unwrap());
     static RE_IFACE_BARE: LazyLock<Regex> =
         LazyLock::new(|| Regex::new(r"^interface\s+(\w+)\s*$").unwrap());
+    // Lollipop interface shorthand: `() IFoo`, `() "Label"`, `() "Label" as ID`.
+    // Matched as a standalone declaration only (no trailing arrow), so it must
+    // be tried before RE_CONN, whose arrow class also contains `(`/`)`.
+    static RE_IFACE_PAREN: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(r#"^\(\)\s+(?:"([^"]+)"|(\w+))(?:\s+as\s+(\w+))?\s*$"#).unwrap()
+    });
     // Note: `note right of ID : text` or `note right of ID` (multiline)
     static RE_NOTE_OF: LazyLock<Regex> = LazyLock::new(|| {
         Regex::new(r"^note\s+(?:right|left|top|bottom)\s+of\s+(\w+|\[[\w\s]+\])(?:\s*:\s*(.+))?$")
@@ -127,20 +187,21 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
     });
     // Floating note: `note "text" as ID` or `note : text`
     static RE_NOTE_INLINE: LazyLock<Regex> =
-        LazyLock::new(|| Regex::new(r#"^note\s+"([^"]+)"\s+as\s+\w+"#).unwrap());
+        LazyLock::new(|| Regex::new(r#"^note\s+"([^"]+)"\s+as\s+(\w+)"#).unwrap());
     // Matches: FROM ["from_mult"] ARROW ["to_mult"] TO [: label]
-    // FROM and TO can be [bracket] or \w+ identifiers.
+    // FROM and TO can be [bracket], "quoted label", or \w+ identifiers.
+    // Group map: 1=from-bracket 2=from-quoted 3=from-word 4=from-mult
+    // 5=arrow 6=to-mult 7=to-bracket 8=to-quoted 9=to-word 10=label.
     // Arrow chars broadened to include lollipop notation: `-(`, `-(0-`, `--(`  etc.
     static RE_CONN: LazyLock<Regex> = LazyLock::new(|| {
         Regex::new(
-            r#"^(?:\[([^\]]+)\]|(\w+))\s*(?:"([^"]*)")?\s*([-.<>()|~0#*o]+)\s*(?:"([^"]*)")?\s*(?:\[([^\]]+)\]|(\w+))(?:\s*:\s*(.+))?$"#,
+            r#"^(?:\[([^\]]+)\]|"([^"]+)"|(\w+))\s*(?:"([^"]*)")?\s*([-.<>()|~0#*o]+)\s*(?:"([^"]*)")?\s*(?:\[([^\]]+)\]|"([^"]+)"|(\w+))(?:\s*:\s*(.+))?$"#,
         )
         .unwrap()
     });
 
     for (line_idx, line) in lines.iter().enumerate() {
-        let current_line = line_idx + 1;
-        let trimmed = line.trim();
+        let (current_line, trimmed) = super::source_line_and_trimmed(line_idx + 1, line);
         if trimmed.is_empty() {
             if in_note {
                 note_lines.push(String::new());
@@ -227,9 +288,44 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             }
             continue;
         }
+        // `hide`/`remove` directives that target an element or stereotype drop
+        // it from the diagram. Other `hide` forms (e.g. `hide stereotype`,
+        // `hide empty members`) are display hints handled as skips below.
+        if let Some(arg) = trimmed
+            .strip_prefix("hide ")
+            .or_else(|| trimmed.strip_prefix("remove "))
+        {
+            let arg = arg.trim();
+            if let Some(stereo) = arg.strip_prefix("<<").and_then(|s| s.strip_suffix(">>")) {
+                hidden_stereotypes.push(stereo.trim().to_string());
+                continue;
+            }
+            // A bare identifier (optionally bracketed `[Name]`) names an element.
+            let id = arg.trim_matches(|c| c == '[' || c == ']');
+            const DISPLAY_HINTS: &[&str] = &[
+                "stereotype",
+                "stereotypes",
+                "empty",
+                "members",
+                "methods",
+                "fields",
+                "attributes",
+                "circle",
+                "footbox",
+                "unlinked",
+            ];
+            let first_word = id.split_whitespace().next().unwrap_or("");
+            if !id.is_empty()
+                && !id.contains(char::is_whitespace)
+                && !DISPLAY_HINTS.contains(&first_word)
+            {
+                hidden_ids.push(id.replace(' ', "_"));
+            }
+            continue;
+        }
+
         // Skip other decoration lines.
-        if trimmed.starts_with("hide ")
-            || trimmed.starts_with("show ")
+        if trimmed.starts_with("show ")
             || trimmed.starts_with("caption ")
             || trimmed.starts_with("left footer")
             || trimmed.starts_with("right footer")
@@ -241,8 +337,20 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             continue;
         }
 
+        // Opening transparent block — `together {` groups elements for layout
+        // but is not a container. Track the brace so its `}` is balanced without
+        // popping a real package frame.
+        if trimmed == "together {" || trimmed == "together{" {
+            transparent_braces += 1;
+            continue;
+        }
+
         // Closing brace — pop the stack.
         if trimmed == "}" {
+            if transparent_braces > 0 {
+                transparent_braces -= 1;
+                continue;
+            }
             if let Some(finished) = package_stack.pop() {
                 if let Some(parent) = package_stack.last_mut() {
                     parent.packages.push(finished);
@@ -260,34 +368,57 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 // Block container — push onto the stack.
                 let rest = &container_clean[kw.len()..];
                 let (id, label) = parse_container_label(kw, rest);
+                known_packages.insert(id.clone());
                 package_stack.push(ComponentPackage {
                     name: id,
                     label,
                     stereotype: parse_stereotypes(trimmed).into_iter().next(),
+                    kind: component_package_kind(kw),
+                    color: parse_container_color(trimmed),
+                    source_line: current_line,
                     components: Vec::new(),
                     packages: Vec::new(),
                 });
                 continue;
             } else {
-                // Leaf container declaration (no braces) — treat as a component.
-                // e.g. `cloud "Production" as PROD`, `database "User DB" as UDB`
-                let rest = &container_clean[kw.len()..];
-                let (id, label) = parse_container_label(kw, rest);
-                if !components.iter().any(|c: &Component| c.id == id) {
-                    components.push(Component {
-                        id: id.clone(),
-                        label,
-                        stereotypes: parse_stereotypes(trimmed),
-                        url: container_url,
-                        source_line: current_line,
-                    });
+                // A leaf `component ...` declaration has richer syntax than other
+                // container-shaped elements, including quoted labels that contain
+                // doubled quotes for Creole markup. Let the dedicated component
+                // declaration parser below own it. Block-form `component Foo { ... }`
+                // is still handled above.
+                if kw != "component" {
+                    // Leaf container declaration (no braces) — treat as a component.
+                    // e.g. `cloud "Production" as PROD`, `database "User DB" as UDB`
+                    let rest = &container_clean[kw.len()..];
+                    let (id, label) = parse_container_label(kw, rest);
+                    let kind = match kw {
+                        "actor" => ComponentElementKind::Actor,
+                        "artifact" => ComponentElementKind::Artifact,
+                        "collections" => ComponentElementKind::Collections,
+                        "database" => ComponentElementKind::Database,
+                        "node" => ComponentElementKind::Node,
+                        "queue" => ComponentElementKind::Queue,
+                        "cloud" => ComponentElementKind::Cloud,
+                        _ => ComponentElementKind::Component,
+                    };
+                    if !components.iter().any(|c: &Component| c.id == id) {
+                        components.push(Component {
+                            id: id.clone(),
+                            label,
+                            stereotypes: parse_stereotypes(trimmed),
+                            color: parse_container_color(trimmed),
+                            url: container_url,
+                            source_line: current_line,
+                            kind,
+                        });
+                    }
+                    if let Some(pkg) = package_stack.last_mut()
+                        && !pkg.components.contains(&id)
+                    {
+                        pkg.components.push(id);
+                    }
+                    continue;
                 }
-                if let Some(pkg) = package_stack.last_mut()
-                    && !pkg.components.contains(&id)
-                {
-                    pkg.components.push(id);
-                }
-                continue;
             }
         }
 
@@ -316,6 +447,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
         }
         // Floating inline note: `note "text" as ID`
         if let Some(caps) = RE_NOTE_INLINE.captures(trimmed) {
+            known_note_ids.insert(caps[2].to_string());
             notes.push(ComponentNote {
                 text: caps[1].to_string(),
                 target: None,
@@ -376,8 +508,10 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                     id: id.clone(),
                     label,
                     stereotypes: parse_stereotypes(trimmed),
+                    color: parse_container_color(trimmed),
                     url: comp_url,
                     source_line: current_line,
+                    kind: ComponentElementKind::Component,
                 });
             }
             if let Some(pkg) = package_stack.last_mut()
@@ -397,8 +531,10 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                     id: id.clone(),
                     label: name,
                     stereotypes: parse_stereotypes(trimmed),
+                    color: None,
                     url: None,
                     source_line: current_line,
+                    kind: ComponentElementKind::Component,
                 });
             }
             if let Some(pkg) = package_stack.last_mut()
@@ -436,6 +572,22 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             }
             continue;
         }
+        // `() IFoo` / `() "Label" as ID` — lollipop interface shorthand.
+        if let Some(caps) = RE_IFACE_PAREN.captures(trimmed) {
+            let label = caps
+                .get(1)
+                .or_else(|| caps.get(2))
+                .map(|m| m.as_str().to_string())
+                .unwrap_or_default();
+            let id = caps
+                .get(3)
+                .map(|m| m.as_str().to_string())
+                .unwrap_or_else(|| label.clone());
+            if !interfaces.iter().any(|i: &Interface| i.id == id) {
+                interfaces.push(Interface { id, label });
+            }
+            continue;
+        }
 
         // Strip embedded direction tokens (`-down-`, `-up->`, `-up.>`,
         // `<-left-`, …) so the arrow falls within the character class used
@@ -447,36 +599,64 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
         let trimmed = trimmed_owned.as_str();
 
         if let Some(caps) = RE_CONN.captures(trimmed) {
+            // Group map (see RE_CONN): 1/7 bracketed (`[Name]`), 2/8 quoted
+            // (`"Name"`), 3/9 bare word. PlantUML treats a *bare*, undeclared
+            // endpoint as an interface (drawn as a circle); bracketed or
+            // quoted endpoints are components. Quoted endpoints keep their
+            // spaces (they reference a declared `component "Name"`); bare
+            // identifiers have spaces normalised to underscores.
+            let from_bracketed = caps.get(1).is_some();
+            let from_quoted = caps.get(2).is_some();
             let from = caps
                 .get(1)
                 .or(caps.get(2))
-                .map(|m| m.as_str().replace(' ', "_"))
+                .map(|m| m.as_str().to_string())
+                .or_else(|| caps.get(3).map(|m| m.as_str().replace(' ', "_")))
                 .unwrap_or_default();
-            let from_mult = caps.get(3).map(|m| m.as_str().to_string());
-            let arrow = &caps[4];
-            let to_mult = caps.get(5).map(|m| m.as_str().to_string());
+            let from_mult = caps.get(4).map(|m| m.as_str().to_string());
+            let arrow = &caps[5];
+            let to_mult = caps.get(6).map(|m| m.as_str().to_string());
+            let to_bracketed = caps.get(7).is_some();
+            let to_quoted = caps.get(8).is_some();
             let to = caps
-                .get(6)
-                .or(caps.get(7))
-                .map(|m| m.as_str().replace(' ', "_"))
+                .get(7)
+                .or(caps.get(8))
+                .map(|m| m.as_str().to_string())
+                .or_else(|| caps.get(9).map(|m| m.as_str().replace(' ', "_")))
                 .unwrap_or_default();
-            let label = caps.get(8).map(|m| m.as_str().trim().to_string());
+            let label = caps.get(10).map(|m| m.as_str().trim().to_string());
             let dashed = arrow.contains("..") || arrow.contains('.');
+            let has_arrow = arrow.contains('>') || arrow.contains('<');
+            let shape = parse_link_shape(arrow);
 
-            // Auto-create components from connection endpoints if not already
-            // declared as a component or interface.
-            for id in [&from, &to] {
+            // Auto-create endpoints if not already declared. Bracketed and
+            // quoted endpoints become components; bare ones become interfaces.
+            for (id, bracketed) in [
+                (&from, from_bracketed || from_quoted),
+                (&to, to_bracketed || to_quoted),
+            ] {
                 if !id.is_empty()
                     && !components.iter().any(|c| c.id == *id)
                     && !interfaces.iter().any(|i| i.id == *id)
+                    && !known_packages.contains(id)
+                    && !known_note_ids.contains(id)
                 {
-                    components.push(Component {
-                        id: id.clone(),
-                        label: id.clone(),
-                        stereotypes: Vec::new(),
-                        url: None,
-                        source_line: current_line,
-                    });
+                    if bracketed {
+                        components.push(Component {
+                            id: id.clone(),
+                            label: id.clone(),
+                            stereotypes: Vec::new(),
+                            color: None,
+                            url: None,
+                            source_line: current_line,
+                            kind: ComponentElementKind::Component,
+                        });
+                    } else {
+                        interfaces.push(Interface {
+                            id: id.clone(),
+                            label: id.clone(),
+                        });
+                    }
                 }
             }
 
@@ -488,6 +668,8 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                     from_mult,
                     to_mult,
                     dashed,
+                    has_arrow,
+                    shape,
                     source_line: current_line,
                 });
             }
@@ -500,6 +682,32 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             parent.packages.push(finished);
         } else {
             top_packages.push(finished);
+        }
+    }
+
+    // Apply `hide`/`remove` directives: drop matching components and any links
+    // or package memberships referencing them.
+    if !hidden_ids.is_empty() || !hidden_stereotypes.is_empty() {
+        let mut drop: std::collections::HashSet<String> = hidden_ids.iter().cloned().collect();
+        for c in &components {
+            if c.stereotypes
+                .iter()
+                .any(|s| hidden_stereotypes.iter().any(|h| h == s))
+            {
+                drop.insert(c.id.clone());
+            }
+        }
+        components.retain(|c| !drop.contains(&c.id));
+        connections.retain(|c| !drop.contains(&c.from) && !drop.contains(&c.to));
+        notes.retain(|n| n.target.as_ref().is_none_or(|t| !drop.contains(t)));
+        fn prune_pkg(pkg: &mut ComponentPackage, drop: &std::collections::HashSet<String>) {
+            pkg.components.retain(|id| !drop.contains(id));
+            for child in &mut pkg.packages {
+                prune_pkg(child, drop);
+            }
+        }
+        for pkg in &mut top_packages {
+            prune_pkg(pkg, &drop);
         }
     }
 
@@ -531,6 +739,22 @@ mod tests {
     }
 
     #[test]
+    fn component_quoted_label_with_creole_monospace() {
+        let d = parse(
+            "component \"\"\"mono\"\" comp\" as C155\ninterface \"\"\"mono\"\" iface\" as I155\nC155 -- I155",
+        );
+        assert_eq!(d.components.len(), 1);
+        assert_eq!(d.components[0].id, "C155");
+        assert_eq!(d.components[0].label, "\"\"mono\"\" comp");
+        assert_eq!(d.interfaces.len(), 1);
+        assert_eq!(d.interfaces[0].id, "I155");
+        assert_eq!(d.interfaces[0].label, "\"\"mono\"\" iface");
+        assert_eq!(d.connections.len(), 1);
+        assert_eq!(d.connections[0].from, "C155");
+        assert_eq!(d.connections[0].to, "I155");
+    }
+
+    #[test]
     fn bracket_syntax() {
         let d = parse("[UI]\n[API]\n[UI] --> [API]");
         assert_eq!(d.components.len(), 2);
@@ -553,6 +777,13 @@ mod tests {
         assert!(d.components.iter().any(|c| c.id == "X"));
         assert!(d.components.iter().any(|c| c.id == "Y"));
         assert_eq!(d.connections.len(), 1);
+    }
+
+    #[test]
+    fn component_leaf_color() {
+        let d = parse("component Provider #LightBlue\ncomponent Consumer #Orange");
+        assert_eq!(d.components[0].color.as_deref(), Some("#LightBlue"));
+        assert_eq!(d.components[1].color.as_deref(), Some("#Orange"));
     }
 
     #[test]
@@ -604,6 +835,8 @@ mod tests {
         let d = parse("component Foo\ncomponent Bar\nFoo -(0- Bar : uses");
         assert_eq!(d.connections.len(), 1);
         assert_eq!(d.connections[0].label.as_deref(), Some("uses"));
+        assert!(!d.connections[0].has_arrow);
+        assert_eq!(d.connections[0].shape, LinkShape::MiddleBallSocket);
     }
 
     #[test]
@@ -630,5 +863,23 @@ mod tests {
             d.components[0].url.as_deref(),
             Some("https://example.com/storage")
         );
+    }
+
+    #[test]
+    fn artifact_and_node_are_leaf_components() {
+        let d = parse("artifact Build\nnode Server\nBuild --> Server");
+        assert_eq!(d.interfaces.len(), 0);
+        assert_eq!(d.components.len(), 2);
+        assert_eq!(d.components[0].kind, ComponentElementKind::Artifact);
+        assert_eq!(d.components[1].kind, ComponentElementKind::Node);
+    }
+
+    #[test]
+    fn actor_and_collections_are_leaf_components() {
+        let d = parse("actor User\ncollections Cache\nUser --> Cache");
+        assert_eq!(d.interfaces.len(), 0);
+        assert_eq!(d.components.len(), 2);
+        assert_eq!(d.components[0].kind, ComponentElementKind::Actor);
+        assert_eq!(d.components[1].kind, ComponentElementKind::Collections);
     }
 }

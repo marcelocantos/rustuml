@@ -29,15 +29,17 @@ use crate::diagram::gantt::{
     GanttDiagram, GanttNote, GanttResource, GanttRow, GanttTask, TaskResource, TaskStart,
 };
 
+const PLANTUML_IMPLICIT_EPOCH_DAY_OFFSET: u32 = 1;
+
 /// Parse pre-processed lines into a [`GanttDiagram`].
 pub fn parse_gantt(lines: &[String]) -> Result<GanttDiagram, ParseError> {
     let mut parser = GanttParser::new();
     for (i, line) in lines.iter().enumerate() {
-        let trimmed = line.trim();
+        let (source_line, trimmed) = super::source_line_and_trimmed(i + 1, line);
         if trimmed.is_empty() || trimmed.starts_with('\'') {
             continue;
         }
-        parser.parse_line(i + 1, trimmed)?;
+        parser.parse_line(source_line, trimmed)?;
     }
     Ok(parser.finish())
 }
@@ -49,6 +51,8 @@ struct GanttParser {
     rows: Vec<GanttRow>,
     project_start: Option<String>,
     closed_days: Vec<u8>,
+    /// Specific dates declared closed (YYYY-MM-DD).
+    closed_dates: Vec<String>,
     /// Name of the last task that was explicitly defined (for `then` syntax).
     last_task: Option<String>,
     /// Print scale directive (e.g. "daily", "weekly", "monthly").
@@ -59,6 +63,8 @@ struct GanttParser {
     in_note: bool,
     /// Lines collected for the current note block.
     current_note_lines: Vec<String>,
+    /// Task the current note block attaches to (captured at block start).
+    current_note_task: String,
     /// All notes collected.
     notes: Vec<GanttNote>,
 }
@@ -71,11 +77,13 @@ impl GanttParser {
             rows: Vec::new(),
             project_start: None,
             closed_days: Vec::new(),
+            closed_dates: Vec::new(),
             last_task: None,
             printscale: None,
             resources: Vec::new(),
             in_note: false,
             current_note_lines: Vec::new(),
+            current_note_task: String::new(),
             notes: Vec::new(),
         }
     }
@@ -87,6 +95,7 @@ impl GanttParser {
             rows: self.rows,
             project_start: self.project_start,
             closed_days: self.closed_days,
+            closed_dates: self.closed_dates,
             printscale: self.printscale,
             resources: self.resources,
             notes: self.notes,
@@ -100,6 +109,7 @@ impl GanttParser {
                 self.in_note = false;
                 if !self.current_note_lines.is_empty() {
                     self.notes.push(GanttNote {
+                        task: std::mem::take(&mut self.current_note_task),
                         lines: std::mem::take(&mut self.current_note_lines),
                     });
                 }
@@ -108,10 +118,12 @@ impl GanttParser {
             }
             return Ok(());
         }
-        // `note bottom/top` — start a note block.
+        // `note bottom/top` — start a note block. The note attaches to the
+        // task most recently defined (PlantUML's `last`).
         if line.starts_with("note ") {
             self.in_note = true;
             self.current_note_lines.clear();
+            self.current_note_task = self.last_task.clone().unwrap_or_default();
             return Ok(());
         }
         // `-- Label --` separator row.
@@ -166,6 +178,10 @@ impl GanttParser {
         }
         // Project starts YYYY-MM-DD
         if self.try_project_starts(line) {
+            return Ok(());
+        }
+        // YYYY-MM-DD is closed — specific-date holiday
+        if self.try_closed_date(line) {
             return Ok(());
         }
         // <day> are closed
@@ -258,9 +274,10 @@ impl GanttParser {
                     .map(TaskStart::Day)
                     .unwrap_or(TaskStart::Day(0))
             } else {
-                // No project start: use days since 1970-01-01 as offset.
+                // No project start: PlantUML's plain day axis is 1-based from
+                // the implicit 1970-01-01 epoch.
                 date_diff_days("1970-01-01", &date)
-                    .map(TaskStart::Day)
+                    .map(|d| TaskStart::Day(d + PLANTUML_IMPLICIT_EPOCH_DAY_OFFSET))
                     .unwrap_or(TaskStart::Day(0))
             };
             self.upsert_task(name, 0, start);
@@ -341,12 +358,17 @@ impl GanttParser {
     /// `[name] starts at [other]'s end`
     fn try_starts_after(&mut self, line: &str, _line_num: usize) -> Result<bool, ParseError> {
         static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^\[([^\]]+)\]\s+starts\s+at\s+\[([^\]]+)\]'s\s+end$").unwrap()
+            Regex::new(r"^\[([^\]]+)\]\s+starts\s+at\s+\[([^\]]+)\]'s\s+(end|start)$").unwrap()
         });
         if let Some(caps) = RE.captures(line) {
             let name = caps[1].to_string();
             let dep = caps[2].to_string();
-            self.upsert_start(name, TaskStart::AfterTask(dep));
+            let start = if &caps[3] == "start" {
+                TaskStart::WithTask(dep)
+            } else {
+                TaskStart::AfterTask(dep)
+            };
+            self.upsert_start(name, start);
             Ok(true)
         } else {
             Ok(false)
@@ -367,11 +389,34 @@ impl GanttParser {
         }
     }
 
-    /// `[name] is N% completed` — parsed but ignored
+    /// `[name] is N% completed` — records the completion percentage.
     fn try_completed(&mut self, line: &str) -> bool {
         static RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^\[([^\]]+)\]\s+is\s+\d+%\s+completed$").unwrap());
-        RE.is_match(line)
+            LazyLock::new(|| Regex::new(r"^\[([^\]]+)\]\s+is\s+(\d+)%\s+completed$").unwrap());
+        if let Some(caps) = RE.captures(line) {
+            let name = caps[1].to_string();
+            let pct: u32 = caps[2].parse().unwrap_or(0);
+            self.upsert_completed(name, pct);
+            true
+        } else {
+            false
+        }
+    }
+
+    /// Insert or update completion percentage only.
+    fn upsert_completed(&mut self, name: String, pct: u32) {
+        if let Some(task) = self.tasks.iter_mut().find(|t| t.name == name) {
+            task.completed = Some(pct);
+        } else {
+            self.tasks.push(GanttTask {
+                name,
+                duration: 1,
+                start: TaskStart::Day(0),
+                color: None,
+                completed: Some(pct),
+                resources: Vec::new(),
+            });
+        }
     }
 
     /// `Project starts YYYY-MM-DD`
@@ -381,6 +426,21 @@ impl GanttParser {
         });
         if let Some(caps) = RE.captures(line) {
             self.project_start = Some(caps[1].to_string());
+            true
+        } else {
+            false
+        }
+    }
+
+    /// `YYYY-MM-DD is closed` — a specific calendar date is a holiday.
+    fn try_closed_date(&mut self, line: &str) -> bool {
+        static RE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"^(\d{4}-\d{2}-\d{2})\s+is\s+closed?$").unwrap());
+        if let Some(caps) = RE.captures(line) {
+            let date = caps[1].to_string();
+            if !self.closed_dates.contains(&date) {
+                self.closed_dates.push(date);
+            }
             true
         } else {
             false
@@ -434,6 +494,7 @@ impl GanttParser {
                 duration,
                 start,
                 color: None,
+                completed: None,
                 resources: Vec::new(),
             });
         }
@@ -457,6 +518,7 @@ impl GanttParser {
                 duration,
                 start: TaskStart::Day(0),
                 color: None,
+                completed: None,
                 resources: Vec::new(),
             });
         }
@@ -479,6 +541,7 @@ impl GanttParser {
                 duration: 1,
                 start,
                 color: None,
+                completed: None,
                 resources: Vec::new(),
             });
         }
@@ -495,6 +558,7 @@ impl GanttParser {
                 duration: 1,
                 start: TaskStart::Day(0),
                 color: Some(color),
+                completed: None,
                 resources: Vec::new(),
             });
         }
@@ -526,6 +590,7 @@ impl GanttParser {
                 duration,
                 start,
                 color: None,
+                completed: None,
                 resources: task_resources,
             });
         }
@@ -659,6 +724,15 @@ mod tests {
     }
 
     #[test]
+    fn absolute_date_without_project_start_uses_one_based_epoch_day() {
+        let d = parse("[Milestone] happens at 1970-01-01");
+        assert!(matches!(d.tasks[0].start, TaskStart::Day(1)));
+
+        let d = parse("Project starts 1970-01-01\n[Milestone] happens at 1970-01-01");
+        assert!(matches!(d.tasks[0].start, TaskStart::Day(0)));
+    }
+
+    #[test]
     fn closed_days_parsed() {
         let d = parse("saturday are closed\nsunday are closed\n[T1] lasts 3 days");
         assert!(d.closed_days.contains(&5));
@@ -669,5 +743,23 @@ mod tests {
     fn colored_task_parsed() {
         let d = parse("[T1] lasts 3 days\n[T1] is colored in Coral");
         assert_eq!(d.tasks[0].color.as_deref(), Some("Coral"));
+    }
+
+    #[test]
+    fn closed_dates_parsed() {
+        let d = parse(
+            "Project starts 2024-12-20\n2024-12-25 is closed\n2025-01-01 is closed\n[T1] lasts 3 days",
+        );
+        assert_eq!(d.closed_dates, vec!["2024-12-25", "2025-01-01"]);
+    }
+
+    #[test]
+    fn note_attaches_to_last_task() {
+        let d = parse(
+            "[Task 1] lasts 5 days\nnote bottom\n  critical\nend note\n[Task 2] lasts 3 days",
+        );
+        assert_eq!(d.notes.len(), 1);
+        assert_eq!(d.notes[0].task, "Task 1");
+        assert_eq!(d.notes[0].lines, vec!["critical"]);
     }
 }

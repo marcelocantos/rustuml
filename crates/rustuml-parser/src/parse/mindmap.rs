@@ -47,20 +47,18 @@ pub fn parse_mindmap(lines: &[String]) -> Result<MindMapDiagram, ParseError> {
     let mut right_stack: Vec<usize> = Vec::new(); // depths of right-side ancestors
     let mut left_stack: Vec<usize> = Vec::new(); // depths of left-side ancestors
 
-    // When a bare `--` separator line is encountered, subsequent `*` nodes
-    // switch to the left side until another separator or end of input.
-    let mut side_flipped = false;
-
     // Multiline node accumulation: `**:first line\nsecond line;`
     // When we see `**:text` without a closing `;` on the same line, we
     // accumulate subsequent lines until a line ending with `;` is found.
-    let mut multiline_buf: Option<(usize, usize, Side, String)> = None; // (line_no, depth, side, text)
+    // (line_no, depth, side, color, boxless, text)
+    let mut multiline_buf: Option<(usize, usize, Side, Option<String>, bool, String)> = None;
 
     for (line_no, line) in lines.iter().enumerate() {
-        let trimmed = line.trim();
+        let (source_line, trimmed) = super::source_line_and_trimmed(line_no + 1, line);
+        let line_no = source_line.saturating_sub(1);
 
         // If we are accumulating a multiline node, keep collecting until `;`.
-        if let Some((start_no, depth, side, ref mut buf)) = multiline_buf {
+        if let Some((start_no, depth, side, ref color, boxless, ref mut buf)) = multiline_buf {
             if trimmed.ends_with(';') {
                 // Last line of multiline node (strip trailing `;`).
                 let last = trimmed.trim_end_matches(';').trim_end();
@@ -70,11 +68,13 @@ pub fn parse_mindmap(lines: &[String]) -> Result<MindMapDiagram, ParseError> {
                     }
                     buf.push_str(last);
                 }
-                let label = buf.replace('\n', " ");
+                let label = buf.clone();
                 let node = MindMapNode {
                     label,
                     depth,
                     side,
+                    color: color.clone(),
+                    boxless,
                     children: Vec::new(),
                 };
                 let (depth, side) = (depth, side);
@@ -122,33 +122,38 @@ pub fn parse_mindmap(lines: &[String]) -> Result<MindMapDiagram, ParseError> {
             continue;
         }
 
-        // Determine prefix character and side.
-        // `*` → right side; `#` → right side (markdown heading style); `-` → left side.
-        // After a bare `--` separator, `*` nodes switch to the left side.
+        // Determine prefix character and side. `*` and `#` go right; `-`
+        // nodes go left.
         let first = trimmed.chars().next().unwrap();
         let (bullet, side) = match first {
-            '*' => (
-                '*',
-                if side_flipped {
-                    Side::Left
-                } else {
-                    Side::Right
-                },
-            ),
-            '#' => (
-                '#',
-                if side_flipped {
-                    Side::Left
-                } else {
-                    Side::Right
-                },
-            ),
+            '*' => ('*', Side::Right),
+            '#' => ('#', Side::Right),
             '-' => ('-', Side::Left),
             _ => continue, // Not a node line — skip (skinparam, comment, etc.)
         };
 
         let count = trimmed.chars().take_while(|&c| c == bullet).count();
-        let rest = trimmed[count..].trim();
+        // After the bullet run come optional modifiers, in either order:
+        //   `_`        — boxless node (rendered as bare text, no rect)
+        //   `[#color]` — explicit fill colour
+        // e.g. `**[#green] Label`, `***_ No box`, `**_[#red] x`.
+        let mut after = &trimmed[count..];
+        let mut color: Option<String> = None;
+        let mut boxless = false;
+        loop {
+            if let Some(stripped) = after.strip_prefix('_') {
+                boxless = true;
+                after = stripped;
+            } else if after.starts_with('[')
+                && let Some(end) = after.find(']')
+            {
+                color = Some(after[1..end].trim().to_string());
+                after = &after[end + 1..];
+            } else {
+                break;
+            }
+        }
+        let rest = after.trim();
 
         // Detect multiline block syntax: `**:first line` (no closing `;` yet).
         if let Some(after_colon) = rest.strip_prefix(':') {
@@ -168,6 +173,8 @@ pub fn parse_mindmap(lines: &[String]) -> Result<MindMapDiagram, ParseError> {
                     label,
                     depth,
                     side,
+                    color: color.clone(),
+                    boxless,
                     children: Vec::new(),
                 };
                 insert_node(
@@ -181,18 +188,38 @@ pub fn parse_mindmap(lines: &[String]) -> Result<MindMapDiagram, ParseError> {
                 )?;
             } else {
                 // Start of multiline block — accumulate until `;`.
-                multiline_buf = Some((line_no, depth, side, after_colon.trim().to_string()));
+                multiline_buf = Some((
+                    line_no,
+                    depth,
+                    side,
+                    color.clone(),
+                    boxless,
+                    after_colon.trim().to_string(),
+                ));
             }
             continue;
         }
 
         let label = rest.to_string();
         if label.is_empty() {
-            // A bare `--` (or `---`, etc.) with no label text acts as a
-            // side separator in PlantUML mindmaps — subsequent `*` nodes
-            // switch to the left side.
             if bullet == '-' {
-                side_flipped = true;
+                let node = MindMapNode {
+                    label: "\u{00a0}".to_string(),
+                    depth: count,
+                    side,
+                    color: color.clone(),
+                    boxless,
+                    children: Vec::new(),
+                };
+                insert_node(
+                    node,
+                    count,
+                    side,
+                    &mut roots,
+                    &mut right_stack,
+                    &mut left_stack,
+                    line_no,
+                )?;
                 continue;
             }
             return Err(ParseError {
@@ -206,6 +233,8 @@ pub fn parse_mindmap(lines: &[String]) -> Result<MindMapDiagram, ParseError> {
             label,
             depth,
             side,
+            color: color.clone(),
+            boxless,
             children: Vec::new(),
         };
         insert_node(
@@ -403,6 +432,28 @@ mod tests {
         assert_eq!(root.children[1].side, Side::Left);
         assert_eq!(root.children[2].label, "L2");
         assert_eq!(root.children[2].side, Side::Left);
+    }
+
+    #[test]
+    fn bare_left_dash_is_blank_node_not_side_switch() {
+        let d = parse("* Root\n** Right\n--\n** Still right");
+        let root = &d.roots[0];
+        assert_eq!(root.children.len(), 3);
+        assert_eq!(root.children[0].label, "Right");
+        assert_eq!(root.children[0].side, Side::Right);
+        assert_eq!(root.children[1].label, "\u{00a0}");
+        assert_eq!(root.children[1].side, Side::Left);
+        assert_eq!(root.children[2].label, "Still right");
+        assert_eq!(root.children[2].side, Side::Right);
+    }
+
+    #[test]
+    fn multiline_node_preserves_line_breaks() {
+        let d = parse("* Root\n**:Branch 1\nwith multiple\nlines;\n** Branch 2");
+        assert_eq!(
+            d.roots[0].children[0].label,
+            "Branch 1\nwith multiple\nlines"
+        );
     }
 
     #[test]
