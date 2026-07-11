@@ -854,8 +854,14 @@ fn calc_entity_dims(
             .iter()
             .map(|line| text_render::measure(line, 12.0, false))
             .fold(0.0_f64, f64::max);
-        // Stereotype text is centered in the header area alongside the icon.
-        icon_area + stereo_tw + HEADER_RIGHT_PAD
+        if !hide.circle && entity.kind != EntityKind::Object {
+            // `EntityImageClassHeader` wraps a 22px circle with 4px of left
+            // margin and the stereotype Display with 1px of left margin.
+            // EntityImageClass's SVG envelope adds the final outer pixel.
+            font.circled_radius() * 2.0 + HEADER_CIRCLE_LEFT_MARGIN + stereo_tw + 2.0
+        } else {
+            icon_area + stereo_tw + HEADER_RIGHT_PAD
+        }
     } else {
         0.0
     };
@@ -2245,7 +2251,7 @@ struct HeaderPositions {
     name_x: f64,
 }
 
-struct SpottedHeaderPositions {
+struct StereotypedHeaderPositions {
     icon_cx: f64,
     stereo_x: f64,
     name_x: f64,
@@ -2268,17 +2274,17 @@ fn class_header_positions(
     }
 }
 
-/// Port of PlantUML `HeaderLayout.drawU` for custom stereotype spots. The
+/// Port of PlantUML `HeaderLayout.drawU` for stereotype headers. The
 /// dimensions include `EntityImageClassHeader`'s circled-character, stereotype,
 /// and name margins. RustUML's Graphviz node envelope is one pixel wider than
 /// the internal PlantUML header width represented by the golden SVG rectangle.
-fn spotted_header_positions(
+fn stereotyped_header_positions(
     x: f64,
     width: f64,
     icon_radius: f64,
     stereo_text_width: f64,
     name_text_width: f64,
-) -> SpottedHeaderPositions {
+) -> StereotypedHeaderPositions {
     let circle_width = icon_radius * 2.0 + HEADER_CIRCLE_LEFT_MARGIN + HEADER_CIRCLE_RIGHT_MARGIN;
     let stereo_width = stereo_text_width + 1.0;
     // PlantUML's name Display dimension is one pixel narrower than its SVG
@@ -2288,7 +2294,7 @@ fn spotted_header_positions(
     let supp_width = (width - 1.0 - circle_width - width_stereo_and_name).max(0.0);
     let h2 = (circle_width / 4.0).min(supp_width * HEADER_SECONDARY_GAP_RATIO);
     let h1 = (supp_width - h2) / 2.0;
-    SpottedHeaderPositions {
+    StereotypedHeaderPositions {
         icon_cx: x + h1 + HEADER_CIRCLE_LEFT_MARGIN + icon_radius,
         stereo_x: x + circle_width + (width_stereo_and_name - stereo_width) / 2.0 + h1 + h2 + 1.0,
         name_x: x
@@ -3899,11 +3905,14 @@ fn render_entity_content(
         .iter()
         .map(|line| text_render::measure_with_family(line, 12.0, false, &font.name_family))
         .fold(0.0_f64, f64::max);
-    let spotted_header_positions = entity
-        .spot_character
-        .map(|_| spotted_header_positions(x, dim.width, icon_radius, stereo_width, name_tl));
+    let stereotyped_header_positions = (dim.has_stereotypes
+        && !dim.hide.circle
+        && !suppress_header_icon
+        && !is_object_entity
+        && entity.generic.is_none())
+    .then(|| stereotyped_header_positions(x, dim.width, icon_radius, stereo_width, name_tl));
     let icon_cx = icon_cx_override.unwrap_or_else(|| {
-        spotted_header_positions
+        stereotyped_header_positions
             .as_ref()
             .map(|p| p.icon_cx)
             .or_else(|| header_positions.as_ref().map(|p| p.icon_cx))
@@ -4075,7 +4084,7 @@ fn render_entity_content(
                 .and_then(|r| r.text_x_values.get(i).copied())
                 .or(name_text_x_override)
                 .unwrap_or_else(|| {
-                    spotted_header_positions
+                    stereotyped_header_positions
                         .as_ref()
                         .map(|p| p.stereo_x + (stereo_width - stereo_tl) / 2.0)
                         .or_else(|| {
@@ -4142,7 +4151,7 @@ fn render_entity_content(
             let text_center = oracle_x + stereo_tl / 2.0;
             text_center - name_tl_r / 2.0
         } else {
-            spotted_header_positions
+            stereotyped_header_positions
                 .as_ref()
                 .map(|p| p.name_x)
                 .or_else(|| header_positions.as_ref().map(|p| p.name_x))
@@ -7796,6 +7805,17 @@ mod tests {
         assert!(svg.contains(r##"fill="#12ABEF""##));
         assert!(!svg.contains(CLASS_GLYPH));
         assert!(!svg.contains(">G</text>"));
+    }
+
+    #[test]
+    fn invalid_named_color_spot_uses_ordinary_stereotype_header() {
+        let input = "@startuml\nclass Renamed << (G,#red) NewKind >>\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(r#"<ellipse cx="22""#));
+        assert!(svg.contains(r#"x="34" y="#));
+        assert!(svg.contains("(G,#red) NewKind"));
     }
 
     #[test]
