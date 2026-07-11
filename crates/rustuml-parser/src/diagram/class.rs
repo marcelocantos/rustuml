@@ -26,6 +26,12 @@ pub struct Note {
     pub position: Option<NotePosition>,
     /// Named note alias (for `note "..." as N`).
     pub alias: Option<String>,
+    /// Optional note background color.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub color: Option<String>,
+    /// 1-based source line (first content line for multiline notes).
+    #[serde(default)]
+    pub source_line: usize,
 }
 
 /// A complete class diagram.

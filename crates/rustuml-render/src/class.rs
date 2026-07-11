@@ -26,7 +26,6 @@ use crate::layout_oracle::{
     OracleEntity, OracleHandwrittenWarning, OracleLayout, OracleLegend, emit_entity_image,
     emit_oracle_cluster_children, emit_oracle_note_entity, wrap_oracle_envelope,
 };
-use crate::metrics;
 use crate::style::Theme;
 use crate::svg::SvgBuilder;
 use crate::text_render::{self, TextBase};
@@ -161,11 +160,25 @@ const NAME_Y_WITH_STEREO: f64 = 32.668;
 const ICON_CY_WITH_STEREO: f64 = 20.3105;
 
 const NOTE_FILL: &str = "#FEFFDD";
-const NOTE_BORDER: &str = "#888888";
+const NOTE_BORDER: &str = "#181818";
 const NOTE_FOLD: f64 = 10.0;
 const NOTE_PAD_X: f64 = 6.0;
-const NOTE_PAD_Y: f64 = 4.0;
-const NOTE_LINE_HEIGHT: f64 = 16.0;
+const NOTE_PAD_RIGHT: f64 = 15.0;
+const NOTE_PAD_Y: f64 = 5.0;
+const NOTE_FONT_SIZE: f64 = 13.0;
+// Java `Bullet`: the level-one ellipse occupies a 12x5 atom, translated 3px
+// right, with starting altitude -5. Deeper bullets occupy `8 + 8 * order`
+// by 3 atoms, translate right by `1 + 8 * order`, and start at altitude -7.
+const NOTE_BULLET_HEADER_WIDTH: f64 = 12.0;
+const NOTE_BULLET_ELLIPSE_SIZE: f64 = 5.0;
+const NOTE_BULLET_ELLIPSE_X: f64 = 3.0;
+const NOTE_BULLET_START_ALTITUDE: f64 = -5.0;
+const NOTE_NESTED_BULLET_BASE_WIDTH: f64 = 8.0;
+const NOTE_NESTED_BULLET_INDENT: f64 = 8.0;
+const NOTE_NESTED_BULLET_SIZE: f64 = 3.5;
+const NOTE_NESTED_BULLET_DIM_HEIGHT: f64 = 3.0;
+const NOTE_NESTED_BULLET_X: f64 = 1.0;
+const NOTE_NESTED_BULLET_START_ALTITUDE: f64 = -7.0;
 #[allow(dead_code)]
 const SMALL_FONT: f64 = 11.0;
 const TITLE_FONT_SIZE: f64 = 14.0;
@@ -1613,6 +1626,26 @@ pub fn render_with_oracle(
     for (entity, dim) in diagram.entities.iter().zip(&dims) {
         layout.add_node(&entity.id, &entity.label, dim.width, dim.height);
     }
+    for (idx, note) in diagram.notes.iter().enumerate() {
+        let (Some(target), Some(position)) = (note.target.as_deref(), note.position) else {
+            continue;
+        };
+        let note_id = attached_note_layout_id(idx);
+        let (width, height) = note_box_dims(note);
+        layout.add_node(&note_id, "", width, height);
+        match position {
+            NotePosition::Left => {
+                layout.add_same_rank(&note_id, target);
+                layout.add_edge(&note_id, target, None);
+            }
+            NotePosition::Right => {
+                layout.add_same_rank(target, &note_id);
+                layout.add_edge(target, &note_id, None);
+            }
+            NotePosition::Top => layout.add_edge(&note_id, target, None),
+            NotePosition::Bottom => layout.add_edge(target, &note_id, None),
+        }
+    }
     let parent_pkg = package_parent_indices(diagram);
     let innermost_pkg = innermost_entity_packages(diagram, &parent_pkg);
     for (idx, pkg) in diagram.packages.iter().enumerate() {
@@ -1692,6 +1725,55 @@ pub fn render_with_oracle(
         &mut result.cluster_positions,
         &mut result.edge_paths,
     );
+    // Java `SvekResult.calculateDimension` measures the rendered MinMax and
+    // calls `moveDelta(6 - minX, 6 - minY)`. An Opale polygon begins at its
+    // node minimum, while ordinary class images retain the renderer's 1px
+    // body inset. Reproduce that envelope-origin shift on each axis only when
+    // an attached note, rather than an ordinary entity, owns the minimum.
+    let entity_positions = &result.node_positions[..diagram.entities.len()];
+    let note_positions = &result.node_positions[diagram.entities.len()..];
+    let entity_min_x = entity_positions
+        .iter()
+        .map(|pos| pos.x)
+        .fold(f64::INFINITY, f64::min);
+    let entity_min_y = entity_positions
+        .iter()
+        .map(|pos| pos.y)
+        .fold(f64::INFINITY, f64::min);
+    let note_min_x = note_positions
+        .iter()
+        .map(|pos| pos.x)
+        .fold(f64::INFINITY, f64::min);
+    let note_min_y = note_positions
+        .iter()
+        .map(|pos| pos.y)
+        .fold(f64::INFINITY, f64::min);
+    let note_dx = if note_min_x < entity_min_x { -1.0 } else { 0.0 };
+    let note_dy = if note_min_y < entity_min_y { -1.0 } else { 0.0 };
+    if note_dx != 0.0 || note_dy != 0.0 {
+        for pos in &mut result.node_positions {
+            pos.x += note_dx;
+            pos.y += note_dy;
+        }
+        for cluster in &mut result.cluster_positions {
+            cluster.x += note_dx;
+            cluster.y += note_dy;
+        }
+        for path in &mut result.edge_paths {
+            for point in &mut path.points {
+                point.0 += note_dx;
+                point.1 += note_dy;
+            }
+            if let Some(point) = &mut path.start_point {
+                point.0 += note_dx;
+                point.1 += note_dy;
+            }
+            if let Some(point) = &mut path.end_point {
+                point.0 += note_dx;
+                point.1 += note_dy;
+            }
+        }
+    }
 
     // Phase 3: Render with PlantUML-compatible SVG structure.
     render_plantuml_svg(
@@ -2566,6 +2648,21 @@ fn render_plantuml_svg(
             )
         })
         .collect();
+    let attached_notes: Vec<(usize, usize, NotePosition)> = diagram
+        .notes
+        .iter()
+        .enumerate()
+        .filter_map(|(note_idx, note)| {
+            note.target
+                .as_ref()
+                .zip(note.position)
+                .map(|(_, p)| (note_idx, p))
+        })
+        .enumerate()
+        .map(|(ordinal, (note_idx, position))| {
+            (note_idx, diagram.entities.len() + ordinal, position)
+        })
+        .collect();
 
     // Compute canvas dimensions.
     let (canvas_w, canvas_h) = if let Some((w, h)) = canvas_override {
@@ -2576,6 +2673,12 @@ fn render_plantuml_svg(
         for (i, (x, y)) in entity_positions.iter().enumerate() {
             max_x = max_x.max(x + dims[i].width);
             max_y = max_y.max(y + dims[i].height);
+        }
+        for &(_, node_idx, _) in &attached_notes {
+            if let Some(pos) = positions.get(node_idx) {
+                max_x = max_x.max(pos.x + MARGIN + layout_x_bias + pos.width);
+                max_y = max_y.max(pos.y + MARGIN + pos.height);
+            }
         }
         for cluster in cluster_positions {
             max_x = max_x.max(cluster.x + MARGIN + cluster.width);
@@ -2625,7 +2728,7 @@ fn render_plantuml_svg(
         // Java `SvekResult.drawU` sizes from the full SVEK body envelope and
         // keeps the same 15px trailing extent used by package cluster bodies.
         let extent_pad = if cluster_positions.is_empty() {
-            if diagram.relationships.is_empty() {
+            if diagram.relationships.is_empty() && attached_notes.is_empty() {
                 13
             } else {
                 PACKAGE_CANVAS_EXTENT_PAD
@@ -2714,6 +2817,16 @@ fn render_plantuml_svg(
         body_max_x = body_max_x.max(x + cluster.width);
         body_top = body_top.min(y);
         body_bottom = body_bottom.max(y + cluster.height);
+    }
+    for &(_, node_idx, _) in &attached_notes {
+        if let Some(pos) = positions.get(node_idx) {
+            let x = pos.x + MARGIN + layout_x_bias;
+            let y = pos.y + MARGIN;
+            body_min_x = body_min_x.min(x);
+            body_max_x = body_max_x.max(x + pos.width);
+            body_top = body_top.min(y);
+            body_bottom = body_bottom.max(y + pos.height);
+        }
     }
     if !body_min_x.is_finite() {
         body_min_x = 0.0;
@@ -3006,6 +3119,57 @@ fn render_plantuml_svg(
                     .unwrap();
                 }
             }
+        }
+    }
+
+    if oracle.is_none() {
+        for &(note_idx, node_idx, position) in &attached_notes {
+            let note = &diagram.notes[note_idx];
+            let Some(target) = note.target.as_deref() else {
+                continue;
+            };
+            let note_layout_id = attached_note_layout_id(note_idx);
+            let (edge_from, edge_to) = match position {
+                NotePosition::Left | NotePosition::Top => (note_layout_id.as_str(), target),
+                NotePosition::Right | NotePosition::Bottom => (target, note_layout_id.as_str()),
+            };
+            let Some(edge) = edge_paths
+                .iter()
+                .find(|edge| edge.from == edge_from && edge.to == edge_to)
+            else {
+                continue;
+            };
+            let endpoint = match position {
+                NotePosition::Left | NotePosition::Top => {
+                    edge.end_point.or_else(|| edge.points.last().copied())
+                }
+                NotePosition::Right | NotePosition::Bottom => {
+                    edge.start_point.or_else(|| edge.points.first().copied())
+                }
+            };
+            let Some((tip_x, tip_y)) = endpoint else {
+                continue;
+            };
+            let Some(pos) = positions.get(node_idx) else {
+                continue;
+            };
+            let qualified_name = format!("GMN{ent_id}");
+            ent_id += 1;
+            let entity_id = format!("ent{ent_id:04}");
+            ent_id += 1;
+            render_attached_note(
+                &mut svg,
+                note,
+                pos.x + MARGIN + layout_x_bias,
+                pos.y + MARGIN,
+                pos.width,
+                pos.height,
+                tip_x + MARGIN + layout_x_bias,
+                tip_y + MARGIN,
+                position,
+                &qualified_name,
+                &entity_id,
+            );
         }
     }
 
@@ -7087,6 +7251,248 @@ fn emit_svg_circle(svg: &mut String, c: (f64, f64), r: f64) {
 // These use the existing SvgBuilder for backward compatibility.
 // ---------------------------------------------------------------------------
 
+fn attached_note_layout_id(note_idx: usize) -> String {
+    format!("__attached_note_{note_idx}")
+}
+
+/// Port of PlantUML `Opale`'s four linked-note polygons. Graphviz positions the
+/// note node and its dashed logical edge; `EntityImageNote` consumes that edge
+/// and draws the callout tip as part of the note body instead of emitting a
+/// separate link group.
+#[allow(clippy::too_many_arguments)]
+fn render_attached_note(
+    svg: &mut String,
+    note: &Note,
+    x: f64,
+    y: f64,
+    width: f64,
+    height: f64,
+    tip_x: f64,
+    tip_y: f64,
+    position: NotePosition,
+    qualified_name: &str,
+    entity_id: &str,
+) {
+    let f = crate::plantuml_metrics::fmt_coord;
+    let right = x + width;
+    let bottom = y + height;
+    let fold_x = right - NOTE_FOLD;
+    let delta = 4.0;
+    let note_fill = note
+        .color
+        .as_deref()
+        .map(crate::sequence::resolve_color)
+        .unwrap_or_else(|| NOTE_FILL.to_string());
+    let path = match position {
+        // Note is left of its target: callout leaves the folded right side.
+        NotePosition::Left => {
+            let base_y = (height / 2.0 - delta).clamp(NOTE_FOLD, height - 2.0 * delta);
+            format!(
+                "M{},{} L{},{} A0,0 0 0 0 {},{} L{},{} A0,0 0 0 0 {},{} L{},{} L{},{} L{},{} L{},{} L{},{} L{},{} A0,0 0 0 0 {},{}",
+                f(x),
+                f(y),
+                f(x),
+                f(bottom),
+                f(x),
+                f(bottom),
+                f(right),
+                f(bottom),
+                f(right),
+                f(bottom),
+                f(right),
+                f(y + base_y + 2.0 * delta),
+                f(tip_x),
+                f(tip_y),
+                f(right),
+                f(y + base_y),
+                f(right),
+                f(y + NOTE_FOLD),
+                f(fold_x),
+                f(y),
+                f(x),
+                f(y),
+                f(x),
+                f(y),
+            )
+        }
+        // Note is right of its target: callout leaves the plain left side.
+        NotePosition::Right => {
+            let base_y = (height / 2.0 - delta).clamp(0.0, height - 2.0 * delta);
+            format!(
+                "M{},{} L{},{} L{},{} L{},{} L{},{} A0,0 0 0 0 {},{} L{},{} A0,0 0 0 0 {},{} L{},{} L{},{} L{},{} A0,0 0 0 0 {},{}",
+                f(x),
+                f(y),
+                f(x),
+                f(y + base_y),
+                f(tip_x),
+                f(tip_y),
+                f(x),
+                f(y + base_y + 2.0 * delta),
+                f(x),
+                f(bottom),
+                f(x),
+                f(bottom),
+                f(right),
+                f(bottom),
+                f(right),
+                f(bottom),
+                f(right),
+                f(y + NOTE_FOLD),
+                f(fold_x),
+                f(y),
+                f(x),
+                f(y),
+                f(x),
+                f(y),
+            )
+        }
+        // Note is above its target: callout leaves the bottom side.
+        NotePosition::Top => {
+            let base_x = (width / 2.0 - delta).clamp(0.0, width);
+            format!(
+                "M{},{} L{},{} A0,0 0 0 0 {},{} L{},{} L{},{} L{},{} L{},{} A0,0 0 0 0 {},{} L{},{} L{},{} L{},{} A0,0 0 0 0 {},{}",
+                f(x),
+                f(y),
+                f(x),
+                f(bottom),
+                f(x),
+                f(bottom),
+                f(x + base_x),
+                f(bottom),
+                f(tip_x),
+                f(tip_y),
+                f(x + base_x + 2.0 * delta),
+                f(bottom),
+                f(right),
+                f(bottom),
+                f(right),
+                f(bottom),
+                f(right),
+                f(y + NOTE_FOLD),
+                f(fold_x),
+                f(y),
+                f(x),
+                f(y),
+                f(x),
+                f(y),
+            )
+        }
+        // Note is below its target: callout leaves the folded top side.
+        NotePosition::Bottom => {
+            let base_x = (width / 2.0 - delta).clamp(0.0, (width - NOTE_FOLD).max(0.0));
+            format!(
+                "M{},{} L{},{} A0,0 0 0 0 {},{} L{},{} A0,0 0 0 0 {},{} L{},{} L{},{} L{},{} L{},{} L{},{} L{},{} A0,0 0 0 0 {},{}",
+                f(x),
+                f(y),
+                f(x),
+                f(bottom),
+                f(x),
+                f(bottom),
+                f(right),
+                f(bottom),
+                f(right),
+                f(bottom),
+                f(right),
+                f(y + NOTE_FOLD),
+                f(fold_x),
+                f(y),
+                f(x + base_x + 2.0 * delta),
+                f(y),
+                f(tip_x),
+                f(tip_y),
+                f(x + base_x),
+                f(y),
+                f(x),
+                f(y),
+                f(x),
+                f(y),
+            )
+        }
+    };
+
+    write!(
+        svg,
+        r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}"><path d="{}" fill="{}" style="stroke:{};stroke-width:0.5;"/><path d="M{},{} L{},{} L{},{} L{},{}" fill="{}" style="stroke:{};stroke-width:0.5;"/>"#,
+        escape_xml(qualified_name),
+        note.source_line,
+        entity_id,
+        path,
+        note_fill,
+        NOTE_BORDER,
+        f(fold_x),
+        f(y),
+        f(fold_x),
+        f(y + NOTE_FOLD),
+        f(right),
+        f(y + NOTE_FOLD),
+        f(fold_x),
+        f(y),
+        note_fill,
+        NOTE_BORDER,
+    )
+    .unwrap();
+    let mut line_top = y + NOTE_PAD_Y;
+    for line in &note.lines {
+        let (content, text_x) = if let Some((order, content)) = parse_note_bullet(line) {
+            let text_height = text_render::label_height(content, NOTE_FONT_SIZE);
+            if order == 0 {
+                let ellipse_x = x + NOTE_PAD_X + NOTE_BULLET_ELLIPSE_X;
+                let ellipse_y = line_top + text_height - NOTE_BULLET_ELLIPSE_SIZE
+                    + NOTE_BULLET_START_ALTITUDE
+                    + NOTE_BULLET_ELLIPSE_SIZE / 2.0;
+                write!(
+                    svg,
+                    r##"<ellipse cx="{}" cy="{}" fill="#000000" rx="{}" ry="{}"/>"##,
+                    f(ellipse_x + NOTE_BULLET_ELLIPSE_SIZE / 2.0),
+                    f(ellipse_y),
+                    f(NOTE_BULLET_ELLIPSE_SIZE / 2.0),
+                    f(NOTE_BULLET_ELLIPSE_SIZE / 2.0),
+                )
+                .unwrap();
+                (content, x + NOTE_PAD_X + NOTE_BULLET_HEADER_WIDTH)
+            } else {
+                let order_width = NOTE_NESTED_BULLET_INDENT * order as f64;
+                let rect_x = x + NOTE_PAD_X + NOTE_NESTED_BULLET_X + order_width;
+                let rect_y = line_top + text_height - NOTE_NESTED_BULLET_DIM_HEIGHT
+                    + NOTE_NESTED_BULLET_START_ALTITUDE;
+                write!(
+                    svg,
+                    r##"<rect fill="#000000" height="{}" width="{}" x="{}" y="{}"/>"##,
+                    f(NOTE_NESTED_BULLET_SIZE),
+                    f(NOTE_NESTED_BULLET_SIZE),
+                    f(rect_x),
+                    f(rect_y),
+                )
+                .unwrap();
+                (
+                    content,
+                    x + NOTE_PAD_X + NOTE_NESTED_BULLET_BASE_WIDTH + order_width,
+                )
+            }
+        } else {
+            (line.as_str(), x + NOTE_PAD_X)
+        };
+        let baseline = line_top + text_render::label_ascent(content, NOTE_FONT_SIZE);
+        text_render::emit_text(
+            svg,
+            content,
+            &TextBase {
+                x: text_x,
+                y: baseline,
+                font_size: NOTE_FONT_SIZE as u32,
+                font_family: "sans-serif",
+                fill: "#000000",
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        line_top += text_render::label_height(content, NOTE_FONT_SIZE);
+    }
+    svg.push_str("</g>");
+}
+
 fn render_grid_fallback(diagram: &ClassDiagram, _cs: &crate::style::ClassStyle) -> String {
     // Use the old grid renderer as fallback.
     if diagram.entities.is_empty() {
@@ -7441,10 +7847,63 @@ fn note_box_dims(note: &Note) -> (f64, f64) {
     let max_width = note
         .lines
         .iter()
-        .map(|l| metrics::text_width(l, FONT_SIZE) + NOTE_PAD_X * 2.0)
-        .fold(80.0_f64, f64::max);
-    let height = NOTE_PAD_Y * 2.0 + note.lines.len() as f64 * NOTE_LINE_HEIGHT;
-    (max_width.max(NOTE_FOLD * 3.0), height.max(NOTE_FOLD * 2.0))
+        .map(|line| {
+            if let Some((order, content)) = parse_note_bullet(line) {
+                let header_width = if order == 0 {
+                    NOTE_BULLET_HEADER_WIDTH
+                } else {
+                    NOTE_NESTED_BULLET_BASE_WIDTH + NOTE_NESTED_BULLET_INDENT * order as f64
+                };
+                header_width + text_render::measure(content, NOTE_FONT_SIZE, false)
+            } else {
+                text_render::measure(line, NOTE_FONT_SIZE, false)
+            }
+        })
+        .fold(0.0_f64, f64::max)
+        + NOTE_PAD_X
+        + NOTE_PAD_RIGHT;
+    let text_height: f64 = note
+        .lines
+        .iter()
+        .map(|line| {
+            let content = parse_note_bullet(line)
+                .map(|(_, content)| content)
+                .unwrap_or(line);
+            text_render::label_height(content, NOTE_FONT_SIZE)
+        })
+        .sum();
+    (max_width, text_height + NOTE_PAD_Y * 2.0)
+}
+
+/// Match `CreoleStripeSimpleParser.ASTERISK_PREFIXED_LINE_PATTERN` without
+/// trimming first. Leading whitespace therefore remains literal note text,
+/// while runs beginning at column zero become Java-compatible bullet atoms.
+fn parse_note_bullet(line: &str) -> Option<(usize, &str)> {
+    let star_count = line.bytes().take_while(|&byte| byte == b'*').count();
+    if star_count == 0 || star_count == line.len() {
+        return None;
+    }
+
+    let rest = &line[star_count..];
+    if rest.starts_with('*') {
+        return None;
+    }
+
+    // After the prefix, Java accepts non-star text interspersed with complete
+    // `**bold**` spans. Reject unmatched stars so `**bold**` remains an inline
+    // bold line rather than being mistaken for a nested list item.
+    let mut tail = rest;
+    while let Some(star) = tail.find('*') {
+        let bold = &tail[star..];
+        let inner = bold.strip_prefix("**")?;
+        let close = inner.find("**")?;
+        if close == 0 || inner[..close].contains('*') {
+            return None;
+        }
+        tail = &inner[close + 2..];
+    }
+
+    Some((star_count - 1, rest.trim()))
 }
 
 fn render_note_box(svg: &mut SvgBuilder, note: &Note, x: f64, y: f64, w: f64, h: f64) {
@@ -7464,15 +7923,21 @@ fn render_note_box(svg: &mut SvgBuilder, note: &Note, x: f64, y: f64, w: f64, h:
     ];
     svg.polygon(fold_pts, NOTE_FILL, NOTE_BORDER);
 
-    let mut ty = y + NOTE_PAD_Y + NOTE_LINE_HEIGHT - 3.0;
+    let mut ty = y
+        + NOTE_PAD_Y
+        + note
+            .lines
+            .first()
+            .map(|line| text_render::label_ascent(line, NOTE_FONT_SIZE))
+            .unwrap_or(0.0);
     for line in &note.lines {
         let trimmed = line.trim();
         if trimmed.is_empty() {
-            ty += NOTE_LINE_HEIGHT;
+            ty += text_render::label_height(line, NOTE_FONT_SIZE);
             continue;
         }
-        svg.text(x + NOTE_PAD_X, ty, trimmed, "start", FONT_SIZE);
-        ty += NOTE_LINE_HEIGHT;
+        svg.text(x + NOTE_PAD_X, ty, trimmed, "start", NOTE_FONT_SIZE);
+        ty += text_render::label_height(line, NOTE_FONT_SIZE);
     }
 }
 
@@ -7848,6 +8313,31 @@ mod tests {
         assert!(svg.contains(r#"<ellipse cx="22""#));
         assert!(svg.contains(r#"x="34" y="#));
         assert!(svg.contains("(G,#red) NewKind"));
+    }
+
+    #[test]
+    fn attached_note_bullets_follow_java_line_classification() {
+        assert_eq!(
+            parse_note_bullet("* renamed first"),
+            Some((0, "renamed first"))
+        );
+        assert_eq!(
+            parse_note_bullet("*** renamed third"),
+            Some((2, "renamed third"))
+        );
+        assert_eq!(parse_note_bullet("  * literal marker"), None);
+        assert_eq!(parse_note_bullet("**bold line**"), None);
+
+        let input = "@startuml\nclass Renamed\nnote left of Renamed : * renamed first\\n** renamed second\\n  * literal marker\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(r#"<ellipse cx="#));
+        assert!(svg.contains(r##"<rect fill="#000000" height="3.5""##));
+        assert!(svg.contains(">renamed first</text>"));
+        assert!(svg.contains(">renamed second</text>"));
+        assert!(svg.contains(">* literal marker</text>"));
+        assert!(!svg.contains(">* renamed first</text>"));
     }
 
     #[test]

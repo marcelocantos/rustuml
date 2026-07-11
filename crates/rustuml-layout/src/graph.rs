@@ -67,6 +67,7 @@ pub struct LayoutGraph {
     nodes: Vec<NodeSpec>,
     clusters: Vec<ClusterSpec>,
     edges: Vec<EdgeSpec>,
+    same_rank_pairs: Vec<(String, String)>,
 }
 
 impl LayoutGraph {
@@ -78,6 +79,7 @@ impl LayoutGraph {
             nodes: Vec::new(),
             clusters: Vec::new(),
             edges: Vec::new(),
+            same_rank_pairs: Vec::new(),
         }
     }
 
@@ -175,6 +177,12 @@ impl LayoutGraph {
     /// Adds an edge between two nodes by their ids.
     pub fn add_edge(&mut self, from: &str, to: &str, label: Option<&str>) {
         self.add_edge_with_ports(from, to, label, None, None);
+    }
+
+    /// Constrains two nodes to the same rank, preserving their insertion order.
+    pub fn add_same_rank(&mut self, first: &str, second: &str) {
+        self.same_rank_pairs
+            .push((first.to_string(), second.to_string()));
     }
 
     /// Adds an edge between two nodes, optionally binding Graphviz ports.
@@ -394,6 +402,24 @@ impl LayoutGraph {
 
             node_handles.insert(spec.id.clone(), node);
             node_order.push(spec.id.clone());
+        }
+
+        let rank_key = CString::new("rank").unwrap();
+        let same_val = CString::new("same").unwrap();
+        for (idx, (first, second)) in self.same_rank_pairs.iter().enumerate() {
+            let name = CString::new(format!("same_rank_{idx}")).unwrap();
+            let subgraph = graphviz_ffi::agsubg(g, name.as_ptr() as *mut _, 1);
+            graphviz_ffi::agsafeset(
+                subgraph as *mut c_void,
+                rank_key.as_ptr(),
+                same_val.as_ptr(),
+                empty.as_ptr(),
+            );
+            for id in [first, second] {
+                if let Some(&node) = node_handles.get(id) {
+                    graphviz_ffi::agsubnode(subgraph, node, 1);
+                }
+            }
         }
 
         // Build package clusters after nodes so each subgraph can include the
@@ -933,6 +959,22 @@ mod tests {
         let result = g.layout_full_no_timeout();
         assert_eq!(result.node_positions.len(), 3);
         assert_eq!(result.edge_paths.len(), 2);
+    }
+
+    #[test]
+    fn same_rank_constraint_keeps_renamed_nodes_horizontal() {
+        let mut g = LayoutGraph::new(Direction::TopToBottom);
+        g.add_node("note_renamed", "", 83.0, 41.0);
+        g.add_node("target_renamed", "Target", 117.0, 64.0);
+        g.add_same_rank("note_renamed", "target_renamed");
+        g.add_edge("note_renamed", "target_renamed", None);
+
+        let result = g.layout_full_no_timeout();
+        assert_eq!(result.node_positions.len(), 2);
+        let first_center = result.node_positions[0].y + result.node_positions[0].height / 2.0;
+        let second_center = result.node_positions[1].y + result.node_positions[1].height / 2.0;
+        assert_eq!(first_center, second_center);
+        assert!(result.node_positions[0].x < result.node_positions[1].x);
     }
 
     #[test]

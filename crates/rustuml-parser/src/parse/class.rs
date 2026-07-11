@@ -374,9 +374,11 @@ impl ClassParser {
         // Inside a multi-line note?
         if self.current_note.is_some() {
             if line == "end note" {
-                let note = self.current_note.take().unwrap();
-                self.notes.push(note);
+                self.notes.push(self.current_note.take().unwrap());
             } else if let Some(note) = self.current_note.as_mut() {
+                if note.lines.is_empty() {
+                    note.source_line = self.current_line;
+                }
                 note.lines.push(line.to_string());
             }
             return Ok(());
@@ -968,21 +970,20 @@ impl ClassParser {
         });
         // Multi-line attached note start: `note <pos> of <entity>` (optional color: `#color`)
         static ATTACHED_ML_RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^note\s+(top|bottom|left|right)\s+of\s+([\w.]+)\s*(?:#\S+)?\s*$").unwrap()
+            Regex::new(r"^note\s+(top|bottom|left|right)\s+of\s+([\w.]+)\s*(#\S+)?\s*$").unwrap()
         });
         // Shorthand single-line note attached to last entity: `note <pos> : <text>`
         static SHORT_RE: LazyLock<Regex> =
             LazyLock::new(|| Regex::new(r"^note\s+(top|bottom|left|right)\s*:\s*(.+)$").unwrap());
         // Shorthand multi-line note attached to last entity: `note <pos>` (optional color)
-        static SHORT_ML_RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^note\s+(top|bottom|left|right)\s*(?:#\S+)?\s*$").unwrap()
-        });
+        static SHORT_ML_RE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"^note\s+(top|bottom|left|right)\s*(#\S+)?\s*$").unwrap());
         // Floating named note: `note "text" as Name`
         static FLOATING_RE: LazyLock<Regex> =
             LazyLock::new(|| Regex::new(r#"^note\s+"([^"]+)"\s+as\s+(\w+)\s*$"#).unwrap());
         // Multi-line floating note: `note as Name` (optional color suffix like `#yellow`).
         static FLOATING_ML_RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^note\s+as\s+(\w+)\s*(?:#\S+)?\s*$").unwrap());
+            LazyLock::new(|| Regex::new(r"^note\s+as\s+(\w+)\s*(#\S+)?\s*$").unwrap());
 
         if let Some(caps) = ATTACHED_RE.captures(line) {
             let position = parse_note_position(&caps[1]);
@@ -1002,6 +1003,8 @@ impl ClassParser {
                 target: Some(target),
                 position: Some(position),
                 alias: None,
+                color: None,
+                source_line: self.current_line,
             });
             return true;
         }
@@ -1014,6 +1017,8 @@ impl ClassParser {
                 target: Some(target),
                 position: Some(position),
                 alias: None,
+                color: caps.get(3).map(|m| m.as_str().to_string()),
+                source_line: self.current_line,
             });
             return true;
         }
@@ -1032,6 +1037,8 @@ impl ClassParser {
                 target,
                 position: Some(position),
                 alias: None,
+                color: None,
+                source_line: self.current_line,
             });
             return true;
         }
@@ -1045,6 +1052,8 @@ impl ClassParser {
                 target,
                 position: Some(position),
                 alias: None,
+                color: caps.get(2).map(|m| m.as_str().to_string()),
+                source_line: self.current_line,
             });
             return true;
         }
@@ -1061,6 +1070,8 @@ impl ClassParser {
                 target: None,
                 position: None,
                 alias: Some(alias),
+                color: None,
+                source_line: self.current_line,
             });
             return true;
         }
@@ -1072,6 +1083,8 @@ impl ClassParser {
                 target: None,
                 position: None,
                 alias: Some(alias),
+                color: caps.get(2).map(|m| m.as_str().to_string()),
+                source_line: self.current_line,
             });
             return true;
         }
@@ -1094,6 +1107,8 @@ impl ClassParser {
                 target: None,
                 position: None,
                 alias: None,
+                color: None,
+                source_line: self.current_line,
             });
             return true;
         }
@@ -1104,6 +1119,8 @@ impl ClassParser {
                 target: None,
                 position: None,
                 alias: None,
+                color: None,
+                source_line: self.current_line,
             });
             return true;
         }
@@ -2283,5 +2300,24 @@ mod tests {
     fn class_no_url() {
         let d = parse("class Plain");
         assert_eq!(d.entities[0].url, None);
+    }
+
+    #[test]
+    fn multiline_note_tracks_first_content_line_and_color() {
+        let d = parse(
+            "class Renamed\n\
+             note left of Renamed #aliceblue\n\
+             First content line\n\
+             Second content line\n\
+             end note",
+        );
+
+        assert_eq!(d.notes.len(), 1);
+        assert_eq!(d.notes[0].source_line, 3);
+        assert_eq!(d.notes[0].color.as_deref(), Some("#aliceblue"));
+        assert_eq!(
+            d.notes[0].lines,
+            ["First content line", "Second content line"]
+        );
     }
 }

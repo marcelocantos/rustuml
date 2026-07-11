@@ -7,8 +7,8 @@ JVM, no Graphviz, no external fonts.
 ## Status
 
 Pre-release. 23 parsed diagram models are supported, but release-readiness
-claims are based on the no-oracle product tier: 6,476/11,251 eligible SVG
-goldens currently pass when rendered through the same path as the CLI (57.6%).
+claims are based on the no-oracle product tier: 6,698/11,251 eligible SVG
+goldens currently pass when rendered through the same path as the CLI (59.5%).
 The strict oracle-assisted tier passes 11,022/11,251 eligible SVG goldens and
 remains a regression net, not the headline product metric. The 1,199 Java
 PlantUML error-page goldens are skipped by both tiers and are not counted as
@@ -22,7 +22,7 @@ The table below is derived from `test-diagrams/no_oracle_baseline.txt`.
 | Type | Tag | Baseline family | No-oracle product status |
 |------|-----|-----------------|--------------------------|
 | Sequence | `@startuml` | `sequence` | 1,400/1,411 (99.2%, partial) |
-| Class | `@startuml` | `class` | 1,217/1,971 (61.7%, partial) |
+| Class | `@startuml` | `class` | 1,373/1,971 (69.7%, partial) |
 | Archimate | `@startuml` | `archimate` | 0/48 (0.0%, none) |
 | Activity (new syntax) | `@startuml` | `activity` | 1,266/1,299 (97.5%, partial) |
 | State | `@startuml` | `state` | 1/901 (0.1%, partial) |
