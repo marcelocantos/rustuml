@@ -19922,39 +19922,34 @@ fn tree_has_fork_followed_by_if(nodes: &[LayoutNode]) -> bool {
                 then_branch,
                 else_branches,
                 ..
-            } => {
-                if seen_fork
-                    || tree_has_fork_followed_by_if(then_branch)
-                    || else_branches
-                        .iter()
-                        .any(|branch| tree_has_fork_followed_by_if(&branch.body))
-                {
-                    return true;
-                }
+            } if seen_fork
+                || tree_has_fork_followed_by_if(then_branch)
+                || else_branches
+                    .iter()
+                    .any(|branch| tree_has_fork_followed_by_if(&branch.body)) =>
+            {
+                return true;
             }
             LayoutNode::While {
                 body, special_out, ..
-            } => {
-                if tree_has_fork_followed_by_if(body)
-                    || special_out.as_deref().is_some_and(|node| {
-                        tree_has_fork_followed_by_if(std::slice::from_ref(node))
-                    })
-                {
-                    return true;
-                }
+            } if tree_has_fork_followed_by_if(body)
+                || special_out.as_deref().is_some_and(|node| {
+                    tree_has_fork_followed_by_if(std::slice::from_ref(node))
+                }) =>
+            {
+                return true;
             }
-            LayoutNode::Repeat { body, .. } | LayoutNode::Partition { body, .. } => {
-                if tree_has_fork_followed_by_if(body) {
-                    return true;
-                }
+            LayoutNode::Repeat { body, .. } | LayoutNode::Partition { body, .. }
+                if tree_has_fork_followed_by_if(body) =>
+            {
+                return true;
             }
-            LayoutNode::Switch { cases, .. } => {
+            LayoutNode::Switch { cases, .. }
                 if cases
                     .iter()
-                    .any(|case| tree_has_fork_followed_by_if(&case.body))
-                {
-                    return true;
-                }
+                    .any(|case| tree_has_fork_followed_by_if(&case.body)) =>
+            {
+                return true;
             }
             LayoutNode::Swimlanes { segments, .. }
                 if segments

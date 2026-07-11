@@ -11908,54 +11908,53 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     }
                 }
             }
-            Event::GroupElse(g) => {
+            Event::GroupElse(g) if !diagram.teoz && !orphaned_else.contains(&ev_idx) => {
                 // An `else` belonging to a group whose frame was never drawn
                 // (its `end` was consumed by a `break`) draws no divider/label —
                 // PlantUML omits the whole group, dividers and guards included.
                 // Teoz already emitted this divider in the enclosing GroupStart's
                 // else-divider batch (the frame layer); skip the in-order copy.
-                if !diagram.teoz && !orphaned_else.contains(&ev_idx) {
-                    // Emit else dashed divider line. Use the enclosing group frame
-                    // bounds (which account for the header label width and the
-                    // participant subset) rather than the full participant extent.
-                    let (frame_left, frame_right) =
-                        else_frame_stack.last().copied().unwrap_or_else(|| {
-                            let fl = if participants.is_empty() {
-                                group_frame_margin
-                            } else {
-                                participants[0].box_x - group_frame_margin
-                            };
-                            let fr = if participants.is_empty() {
-                                100.0
-                            } else {
-                                let last = &participants[n - 1];
-                                last.box_x + last.box_width + group_frame_margin
-                            };
-                            (fl, fr)
-                        });
-                    write!(
-                        svg.buf,
-                        r##"<line style="stroke:#000000;stroke-width:1;stroke-dasharray:2,2;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
-                        fmt_coord(frame_left),
-                        fmt_coord(frame_right),
-                        fmt_coord(msg_y),
-                        fmt_coord(msg_y),
-                    )
-                    .unwrap();
+                // Emit else dashed divider line. Use the enclosing group frame
+                // bounds (which account for the header label width and the
+                // participant subset) rather than the full participant extent.
+                let (frame_left, frame_right) =
+                    else_frame_stack.last().copied().unwrap_or_else(|| {
+                        let fl = if participants.is_empty() {
+                            group_frame_margin
+                        } else {
+                            participants[0].box_x - group_frame_margin
+                        };
+                        let fr = if participants.is_empty() {
+                            100.0
+                        } else {
+                            let last = &participants[n - 1];
+                            last.box_x + last.box_width + group_frame_margin
+                        };
+                        (fl, fr)
+                    });
+                write!(
+                    svg.buf,
+                    r##"<line style="stroke:#000000;stroke-width:1;stroke-dasharray:2,2;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+                    fmt_coord(frame_left),
+                    fmt_coord(frame_right),
+                    fmt_coord(msg_y),
+                    fmt_coord(msg_y),
+                )
+                .unwrap();
 
-                    // Emit else label only when explicitly provided (PlantUML
-                    // does NOT show "[else]" text when the else clause has no label).
-                    if let Some(label) = &g.label {
-                        emit_group_guard(
-                            &mut svg.buf,
-                            label,
-                            frame_left + 5.0,
-                            msg_y + 10.63475,
-                            &group_header_font_family,
-                        );
-                    }
+                // Emit else label only when explicitly provided (PlantUML
+                // does NOT show "[else]" text when the else clause has no label).
+                if let Some(label) = &g.label {
+                    emit_group_guard(
+                        &mut svg.buf,
+                        label,
+                        frame_left + 5.0,
+                        msg_y + 10.63475,
+                        &group_header_font_family,
+                    );
                 }
             }
+            Event::GroupElse(_) => {}
             Event::GroupEnd => {
                 // Group end is handled by the frame rect emitted at GroupStart.
                 else_frame_stack.pop();
