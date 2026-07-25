@@ -31,8 +31,11 @@ const STATE_EMPTY_BOX_HEIGHT: f64 = 40.0;
 const STATE_RX: f64 = 12.5;
 /// Minimum state box width.
 const STATE_MIN_WIDTH: f64 = 50.0;
-/// Padding around state label text.
-const STATE_H_PADDING: f64 = 20.0;
+/// Shared dimension delta around the merged state title/body text.
+///
+/// Java provenance: `EntityImageState.calculateDimensionSlow` applies
+/// `MARGIN * 2 + 2 * MARGIN_LINE`, where both constants are five pixels.
+const STATE_DIMENSION_PADDING: f64 = 20.0;
 /// Font size for state name labels.
 const STATE_FONT_SIZE: f64 = 14.0;
 /// Font size for description text inside states.
@@ -48,11 +51,6 @@ const NAME_BASELINE_OFFSET: f64 = 18.53515625;
 const FIRST_DESC_OFFSET: f64 = 16.6015625;
 /// Vertical spacing between description lines.
 const DESC_LINE_SPACING: f64 = 14.1328125;
-/// Additional height per description line.
-const DESC_LINE_HEIGHT: f64 = 14.1328125;
-/// Base height of description area (padding above first line).
-const DESC_BASE_HEIGHT: f64 = 0.6211;
-
 /// Radius of the start pseudo-state circle.
 const START_RADIUS: f64 = 10.0;
 /// Outer radius of the end pseudo-state circle.
@@ -170,21 +168,20 @@ fn history_marker_label(id: &str) -> &'static str {
 
 /// Compute the width of a state box based on its label and descriptions.
 fn state_box_width(label: &str, descriptions: &[String]) -> f64 {
-    let label_w = text_render::measure(label, STATE_FONT_SIZE, false) + STATE_H_PADDING;
+    let label_w = text_render::measure(label, STATE_FONT_SIZE, false) + STATE_DIMENSION_PADDING;
     let desc_w = descriptions
         .iter()
-        .map(|d| text_render::measure(d, DESC_FONT_SIZE, false) + 10.0)
+        .map(|d| text_render::measure(d, DESC_FONT_SIZE, false) + STATE_DIMENSION_PADDING)
         .fold(0.0_f64, f64::max);
     label_w.max(desc_w).max(STATE_MIN_WIDTH)
 }
 
 /// Compute the height of a state box given its number of description lines.
 fn state_box_height(desc_count: usize) -> f64 {
-    if desc_count == 0 {
-        STATE_BOX_HEIGHT
-    } else {
-        STATE_BOX_HEIGHT + DESC_BASE_HEIGHT + desc_count as f64 * DESC_LINE_HEIGHT
-    }
+    let content_height = crate::plantuml_metrics::text_height(STATE_FONT_SIZE)
+        + desc_count as f64 * crate::plantuml_metrics::text_height(DESC_FONT_SIZE)
+        + STATE_DIMENSION_PADDING;
+    content_height.max(STATE_BOX_HEIGHT)
 }
 
 /// Node height for layout purposes.
@@ -4771,6 +4768,29 @@ mod tests {
         assert!(svg.contains(r#"<ellipse cx="72.87" cy="32""#));
         assert!(svg.contains(r#"x="119.17" y="7""#));
         assert!(svg.contains(r#"id="AzureDepot709-backto-CopperRelay701""#));
+    }
+
+    #[test]
+    fn renamed_state_body_merges_text_before_dimension_padding() {
+        let input = concat!(
+            "@startuml\n",
+            "state Meridian701 : phase alpha 709\n",
+            "state Meridian701 : phase beta 719\n",
+            "state Meridian701 : phase gamma 727\n",
+            "[*] --> Meridian701\n",
+            "Meridian701 --> [*]\n",
+            "@enduml\n",
+        );
+        let parsed = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::State(diagram) = &parsed else {
+            panic!("expected state diagram");
+        };
+
+        let svg = render(diagram, &Theme::default());
+        assert!(svg.contains(r#"width="149px""#));
+        assert!(svg.contains(">phase alpha 709</text>"));
+        assert!(svg.contains(">phase beta 719</text>"));
+        assert!(svg.contains(">phase gamma 727</text>"));
     }
 
     #[test]
