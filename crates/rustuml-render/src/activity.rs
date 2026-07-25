@@ -27946,11 +27946,27 @@ fn escape_xml_attr_local(s: &str) -> String {
         .replace('>', "&gt;")
 }
 
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+enum TypedFtileSpacing {
+    Compressed,
+    Natural,
+}
+
+impl TypedFtileSpacing {
+    fn assembly_separation(self) -> f64 {
+        match self {
+            Self::Compressed => ftile::ASSEMBLY_RENDERED_SEPARATION,
+            Self::Natural => ftile::ASSEMBLY_CONNECTION_HEIGHT,
+        }
+    }
+}
+
 struct TypedFtileScene<'a> {
     geometry: ftile::FtileGeometry,
     in_lane: usize,
     out_lane: usize,
     continuation_lane: usize,
+    spacing: TypedFtileSpacing,
     kind: TypedFtileKind<'a>,
 }
 
@@ -27994,12 +28010,17 @@ enum TypedFtileKind<'a> {
     },
 }
 
-fn typed_ftile_leaf(node: &LayoutNode, lane: usize) -> Option<TypedFtileScene<'_>> {
+fn typed_ftile_leaf(
+    node: &LayoutNode,
+    lane: usize,
+    spacing: TypedFtileSpacing,
+) -> Option<TypedFtileScene<'_>> {
     Some(TypedFtileScene {
         geometry: node_geometry(node)?,
         in_lane: lane,
         out_lane: lane,
         continuation_lane: lane,
+        spacing,
         kind: TypedFtileKind::Leaf { node, lane },
     })
 }
@@ -28051,14 +28072,38 @@ fn typed_ftile_preserve_terminal_branch_gap(scene: &mut TypedFtileScene<'_>) {
     );
 }
 
+fn typed_ftile_preserve_nested_fork_if_gap(scene: &mut TypedFtileScene<'_>) {
+    let TypedFtileKind::Sequence { children } = &scene.kind else {
+        return;
+    };
+    let following_if_indices: Vec<_> = children
+        .windows(2)
+        .enumerate()
+        .filter_map(|(index, pair)| {
+            (matches!(pair[0].scene.kind, TypedFtileKind::Fork { .. })
+                && matches!(pair[1].scene.kind, TypedFtileKind::If { .. }))
+            .then_some(index + 1)
+        })
+        .collect();
+    for following_if in following_if_indices {
+        // A fork bar nested in a conditional branch is invisible to the
+        // branch-local ON_Y SlotFinder. `FtileFactoryDelegatorAssembly`
+        // therefore retains one compression margin before the following
+        // conditional. A root InstructionList has no enclosing branch wrapper
+        // and its slot is reclaimed.
+        typed_ftile_stretch_sequence_gap(scene, following_if, crate::compress::COMPRESS_MARGIN);
+    }
+}
+
 fn typed_ftile_node<'a>(
     node: &'a LayoutNode,
     lane: usize,
     special_override: Option<(&'a LayoutNode, usize)>,
+    spacing: TypedFtileSpacing,
 ) -> Option<TypedFtileScene<'a>> {
     match node {
         LayoutNode::Start | LayoutNode::Action { .. } | LayoutNode::Stop | LayoutNode::End => {
-            typed_ftile_leaf(node, lane)
+            typed_ftile_leaf(node, lane, spacing)
         }
         LayoutNode::If {
             condition,
@@ -28080,14 +28125,21 @@ fn typed_ftile_node<'a>(
             // where the preceding branch finished. The FTile output anchor,
             // however, remains on the condition diamond's lane.
             let mut continuation_lane = lane;
-            let mut then_scene = typed_ftile_sequence(then_branch, &mut continuation_lane)?;
-            let mut else_scene =
-                typed_ftile_sequence(&else_branches[0].body, &mut continuation_lane)?;
-            // A branch-local same-lane terminator has no downstream ON_Y slot
-            // to collapse the natural 35px assembly reserve. Cross-lane
-            // branches are intercepted and retain the compressed 20px route.
-            typed_ftile_preserve_terminal_branch_gap(&mut then_scene);
-            typed_ftile_preserve_terminal_branch_gap(&mut else_scene);
+            let mut then_scene =
+                typed_ftile_sequence_with_spacing(then_branch, &mut continuation_lane, spacing)?;
+            let mut else_scene = typed_ftile_sequence_with_spacing(
+                &else_branches[0].body,
+                &mut continuation_lane,
+                spacing,
+            )?;
+            if spacing == TypedFtileSpacing::Compressed {
+                typed_ftile_preserve_nested_fork_if_gap(&mut then_scene);
+                typed_ftile_preserve_nested_fork_if_gap(&mut else_scene);
+                // A branch-local same-lane terminator has no downstream ON_Y
+                // slot to collapse the natural 35px assembly reserve.
+                typed_ftile_preserve_terminal_branch_gap(&mut then_scene);
+                typed_ftile_preserve_terminal_branch_gap(&mut else_scene);
+            }
             let then_tile = then_scene.geometry.add_margin_x(10.0);
             let else_tile = else_scene.geometry.add_margin_x(10.0);
             let diamond = condition_diamond_styled(
@@ -28148,6 +28200,7 @@ fn typed_ftile_node<'a>(
                 in_lane: lane,
                 out_lane: lane,
                 continuation_lane,
+                spacing,
                 kind: TypedFtileKind::If {
                     node,
                     lane,
@@ -28179,7 +28232,7 @@ fn typed_ftile_node<'a>(
             ..
         } => {
             let mut body_lane = lane;
-            let mut body_scene = typed_ftile_sequence(body, &mut body_lane)?;
+            let mut body_scene = typed_ftile_sequence_with_spacing(body, &mut body_lane, spacing)?;
             if let Some((following_child, stretch)) =
                 while_body_mid_stretch(body, is_label.is_some())
             {
@@ -28205,7 +28258,9 @@ fn typed_ftile_node<'a>(
             let special =
                 special_override.or_else(|| special_out.as_deref().map(|special| (special, lane)));
             let special_scene = match special {
-                Some((special, special_lane)) => Some(typed_ftile_leaf(special, special_lane)?),
+                Some((special, special_lane)) => {
+                    Some(typed_ftile_leaf(special, special_lane, spacing)?)
+                }
                 None => None,
             };
             let diamond = condition_diamond_styled(
@@ -28265,6 +28320,7 @@ fn typed_ftile_node<'a>(
                 in_lane: lane,
                 out_lane: lane,
                 continuation_lane: special.map_or(body_lane, |(_, special_lane)| special_lane),
+                spacing,
                 kind: TypedFtileKind::While {
                     node,
                     lane,
@@ -28296,7 +28352,7 @@ fn typed_ftile_node<'a>(
             let mut branch_geometries = Vec::with_capacity(branches.len());
             let mut branch_lane = lane;
             for branch in branches {
-                let scene = typed_ftile_sequence(branch, &mut branch_lane)?;
+                let scene = typed_ftile_sequence_with_spacing(branch, &mut branch_lane, spacing)?;
                 branch_geometries.push(scene.geometry);
                 branch_scenes.push(scene);
             }
@@ -28315,6 +28371,7 @@ fn typed_ftile_node<'a>(
                 in_lane: lane,
                 out_lane: output_lane,
                 continuation_lane: output_lane,
+                spacing,
                 kind: TypedFtileKind::Fork {
                     input_lane: lane,
                     output_lane,
@@ -28331,6 +28388,14 @@ fn typed_ftile_node<'a>(
 fn typed_ftile_sequence<'a>(
     nodes: &'a [LayoutNode],
     lane: &mut usize,
+) -> Option<TypedFtileScene<'a>> {
+    typed_ftile_sequence_with_spacing(nodes, lane, TypedFtileSpacing::Compressed)
+}
+
+fn typed_ftile_sequence_with_spacing<'a>(
+    nodes: &'a [LayoutNode],
+    lane: &mut usize,
+    spacing: TypedFtileSpacing,
 ) -> Option<TypedFtileScene<'a>> {
     let mut scenes = Vec::new();
     let mut index = 0usize;
@@ -28367,26 +28432,16 @@ fn typed_ftile_sequence<'a>(
                 } else {
                     None
                 };
-                let scene = typed_ftile_node(node, *lane, special)?;
+                let scene = typed_ftile_node(node, *lane, special, spacing)?;
                 *lane = scene.continuation_lane;
                 scenes.push(scene);
                 index += consumed;
             }
         }
     }
-    let mut geometries: Vec<_> = scenes.iter().map(|scene| scene.geometry).collect();
-    for index in 0..scenes.len().saturating_sub(1) {
-        if matches!(scenes[index].kind, TypedFtileKind::Fork { .. })
-            && matches!(scenes[index + 1].kind, TypedFtileKind::If { .. })
-        {
-            // The fork bar is ignored by the activity ON_Y SlotFinder.
-            // `FtileFactoryDelegatorAssembly` therefore retains one
-            // compression margin beyond the standard rendered separation
-            // before the following conditional diamond.
-            geometries[index] = geometries[index].add_bottom(crate::compress::COMPRESS_MARGIN);
-        }
-    }
-    let layout = ftile::connected_linear_layout(&geometries)?;
+    let geometries: Vec<_> = scenes.iter().map(|scene| scene.geometry).collect();
+    let layout =
+        ftile::connected_linear_layout_with_separation(&geometries, spacing.assembly_separation())?;
     let in_lane = scenes.first()?.in_lane;
     let out_lane = scenes.last()?.out_lane;
     let continuation_lane = scenes.last()?.continuation_lane;
@@ -28404,6 +28459,7 @@ fn typed_ftile_sequence<'a>(
         in_lane,
         out_lane,
         continuation_lane,
+        spacing,
         kind: TypedFtileKind::Sequence { children },
     })
 }
@@ -28447,6 +28503,54 @@ fn typed_ftile_scene_has_loop_or_fork(scene: &TypedFtileScene<'_>) -> bool {
                 || typed_ftile_scene_has_loop_or_fork(&else_scene.scene)
         }
         TypedFtileKind::While { .. } | TypedFtileKind::Fork { .. } => true,
+    }
+}
+
+fn typed_ftile_scene_has_recursive_if(scene: &TypedFtileScene<'_>, inside_if: bool) -> bool {
+    match &scene.kind {
+        TypedFtileKind::Leaf { .. } => false,
+        TypedFtileKind::Sequence { children } => children
+            .iter()
+            .any(|child| typed_ftile_scene_has_recursive_if(&child.scene, inside_if)),
+        TypedFtileKind::If {
+            then_scene,
+            else_scene,
+            ..
+        } => {
+            inside_if
+                || typed_ftile_scene_has_recursive_if(&then_scene.scene, true)
+                || typed_ftile_scene_has_recursive_if(&else_scene.scene, true)
+        }
+        TypedFtileKind::While { body, special, .. } => {
+            typed_ftile_scene_has_recursive_if(&body.scene, inside_if)
+                || special.as_ref().is_some_and(|special| {
+                    typed_ftile_scene_has_recursive_if(&special.scene, inside_if)
+                })
+        }
+        TypedFtileKind::Fork { branches, .. } => branches
+            .iter()
+            .any(|branch| typed_ftile_scene_has_recursive_if(&branch.scene, inside_if)),
+    }
+}
+
+fn typed_ftile_scene_contains_while(scene: &TypedFtileScene<'_>) -> bool {
+    match &scene.kind {
+        TypedFtileKind::Leaf { .. } => false,
+        TypedFtileKind::Sequence { children } => children
+            .iter()
+            .any(|child| typed_ftile_scene_contains_while(&child.scene)),
+        TypedFtileKind::If {
+            then_scene,
+            else_scene,
+            ..
+        } => {
+            typed_ftile_scene_contains_while(&then_scene.scene)
+                || typed_ftile_scene_contains_while(&else_scene.scene)
+        }
+        TypedFtileKind::While { .. } => true,
+        TypedFtileKind::Fork { branches, .. } => branches
+            .iter()
+            .any(|branch| typed_ftile_scene_contains_while(&branch.scene)),
     }
 }
 
@@ -28516,6 +28620,7 @@ fn typed_ftile_scene_control_count(
                 return None;
             }
             if then_count + else_count > 0
+                && !allow_terminal_cross_lane_if
                 && !typed_ftile_scene_has_loop_or_fork(&then_scene.scene)
                 && !typed_ftile_scene_has_loop_or_fork(&else_scene.scene)
             {
@@ -29575,6 +29680,8 @@ fn typed_ftile_lane_layout(
         .map(|name| text_render::measure(name, LANE_TITLE_FONT, false))
         .collect();
     if !typed_ftile_has_cross_lane_loop(scene) {
+        let mut limit_bounds = vec![crate::compress::SlotSet::new(); count];
+        typed_ftile_collect_limit_shapes(scene, 0.0, 0.0, &mut limit_bounds);
         let mut inner_transform = Vec::with_capacity(count);
         let mut min_x = Vec::with_capacity(count);
         let mut content_width = Vec::with_capacity(count);
@@ -29585,7 +29692,7 @@ fn typed_ftile_lane_layout(
             );
             let mut low = f64::INFINITY;
             let mut high = f64::NEG_INFINITY;
-            for &(start, end) in occupied[lane]
+            for &(start, end) in limit_bounds[lane]
                 .slots()
                 .iter()
                 .chain(same_lane_bounds[lane].slots())
@@ -29601,7 +29708,7 @@ fn typed_ftile_lane_layout(
             min_x.push(low);
             content_width.push(high - low);
         }
-        let mut width: Vec<_> = (0..count)
+        let width: Vec<_> = (0..count)
             .map(|lane| content_width[lane].max(title_width[lane]) + 10.0)
             .collect();
         let mut left = vec![0.0; count];
@@ -29610,27 +29717,16 @@ fn typed_ftile_lane_layout(
             left[lane] = cursor;
             cursor += width[lane];
         }
-        let mut offset: Vec<_> = (0..count)
+        let offset: Vec<_> = (0..count)
             .map(|lane| {
                 let centering = (width[lane] - 10.0 - content_width[lane]) / 2.0;
-                left[lane] + 6.0 + centering - min_x[lane]
+                // `Swimlanes.computeSizeInternal` adds the 5px first
+                // `LaneDivider` half-space, then subtracts the lane's
+                // `LimitFinder` minimum. Rectangle minima are already x-1;
+                // ellipses retain x (`LimitFinder.drawRectangle/drawEllipse`).
+                left[lane] + 5.0 + centering - min_x[lane]
             })
             .collect();
-        let mut canvas_extent_adjust = 0.0;
-        for boundary in 1..count {
-            if !conditional_parallel_boundaries[boundary] {
-                continue;
-            }
-            width[boundary - 1] += 1.0;
-            for downstream in left.iter_mut().skip(boundary) {
-                *downstream += 1.0;
-            }
-            for downstream in offset.iter_mut().skip(boundary) {
-                *downstream += 1.0;
-            }
-            cursor += 1.0;
-            canvas_extent_adjust += 1.0;
-        }
         return Some(TypedFtileLaneLayout {
             left,
             width,
@@ -29640,7 +29736,7 @@ fn typed_ftile_lane_layout(
             content_adjust: vec![0.0; count],
             right_edge: cursor,
             assembled: false,
-            canvas_extent_adjust,
+            canvas_extent_adjust: 0.0,
         });
     }
 
@@ -30516,7 +30612,7 @@ fn typed_ftile_emit_connectors(
                     // assembly wrapper retains the 10px arrow plus the 5px
                     // `SlotSet.smaller` destination clearance.
                     let middle = y2
-                        - (ftile::ASSEMBLY_RENDERED_SEPARATION - crate::compress::COMPRESS_MARGIN);
+                        - (scene.spacing.assembly_separation() - crate::compress::COMPRESS_MARGIN);
                     vec![(x1, y1), (x1, middle), (x2, middle), (x2, y2)]
                 };
                 typed_ftile_emit_connection(
@@ -31004,13 +31100,33 @@ fn render_typed_ftile_swimlanes(
         false,
     );
 
-    let content_bottom = content_top
+    let raw_content_bottom = content_top
         + scene.geometry.height
         + if typed_ftile_has_top_while_special(scene) {
             DIAMOND_HALF
         } else {
             0.0
         };
+    let occupied_shapes: String = emitters
+        .iter()
+        .map(|emitter| emitter.shapes.as_str())
+        .chain([emphasis.shapes.as_str(), cross.shapes.as_str()])
+        .collect();
+    let occupied_connectors: String = [emphasis.connectors.as_str()]
+        .into_iter()
+        .chain(emitters.iter().map(|emitter| emitter.connectors.as_str()))
+        .chain([cross.connectors.as_str()])
+        .collect();
+    let y_transform = if scene.spacing == TypedFtileSpacing::Natural {
+        crate::compress::activity_y_transform(
+            &occupied_shapes,
+            &occupied_connectors,
+            crate::compress::COMPRESS_MARGIN,
+        )
+    } else {
+        crate::compress::CompressionTransform::identity()
+    };
+    let content_bottom = y_transform.transform(raw_content_bottom);
     let header_fill = palette
         .swimlane_title_background
         .as_deref()
@@ -31030,7 +31146,7 @@ fn render_typed_ftile_swimlanes(
     )
     .unwrap();
     for (lane, emitter) in emitters.iter().enumerate() {
-        shapes.push_str(&emitter.shapes);
+        shapes.push_str(&crate::compress::apply_y(&emitter.shapes, &y_transform));
         write!(
             shapes,
             r#"<line style="stroke:{};stroke-width:1.5;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
@@ -31054,11 +31170,14 @@ fn render_typed_ftile_swimlanes(
     .unwrap();
 
     let mut connectors = String::new();
-    connectors.push_str(&emphasis.connectors);
+    connectors.push_str(&crate::compress::apply_y(
+        &emphasis.connectors,
+        &y_transform,
+    ));
     for emitter in &emitters {
-        connectors.push_str(&emitter.connectors);
+        connectors.push_str(&crate::compress::apply_y(&emitter.connectors, &y_transform));
     }
-    connectors.push_str(&cross.connectors);
+    connectors.push_str(&crate::compress::apply_y(&cross.connectors, &y_transform));
     let title_baseline = header_top + pm::ascent(LANE_TITLE_FONT);
     for (lane, lane_name) in lane_names.iter().enumerate() {
         let width = text_render::measure(lane_name, LANE_TITLE_FONT, false);
@@ -31141,12 +31260,27 @@ fn render_ftile(
     let lane_names = typed_ftile_lane_names(diagram);
     let body = if lane_names.len() > 1 {
         let mut lane = 0usize;
-        let scene = typed_ftile_sequence(tree, &mut lane)?;
-        let control_count =
-            typed_ftile_scene_control_count(&scene, typed_ftile_has_expanded_parallel(&scene))?;
+        let compressed_scene = typed_ftile_sequence(tree, &mut lane)?;
+        let control_count = typed_ftile_scene_control_count(
+            &compressed_scene,
+            typed_ftile_has_expanded_parallel(&compressed_scene),
+        )?;
         if control_count == 0 {
             return None;
         }
+        let scene = if typed_ftile_has_expanded_parallel(&compressed_scene)
+            && typed_ftile_scene_has_recursive_if(&compressed_scene, false)
+            && !typed_ftile_scene_contains_while(&compressed_scene)
+        {
+            // `FtileFactoryDelegatorAssembly` constructs every connection with
+            // a 35px reserve. `ActivityDiagram3.exportDiagramInternal` then
+            // applies one ON_Y `CompressionXorYBuilder` to the complete
+            // drawing, allowing sibling branches to protect occupied bands.
+            let mut lane = 0usize;
+            typed_ftile_sequence_with_spacing(tree, &mut lane, TypedFtileSpacing::Natural)?
+        } else {
+            compressed_scene
+        };
         render_typed_ftile_swimlanes(&scene, &lane_names, palette, handwritten)?
     } else {
         // Portability gate: bail unless every tile maps to an FtileGeometry.
@@ -32660,6 +32794,8 @@ mod tests {
         let mut current_lane = 0;
         let scene = typed_ftile_sequence(&tree, &mut current_lane).expect("typed FTile scene");
         assert!(typed_ftile_has_expanded_parallel(&scene));
+        assert!(typed_ftile_scene_has_recursive_if(&scene, false));
+        assert!(!typed_ftile_scene_contains_while(&scene));
         assert_eq!(
             typed_ftile_scene_control_count(&scene, typed_ftile_has_expanded_parallel(&scene)),
             Some(3)
@@ -32703,6 +32839,26 @@ mod tests {
         )
         .expect("fresh cross-lane if scene");
         assert!(rendered.content.contains("renamed request valid?"));
+
+        let mut natural_lane = 0;
+        let natural_scene =
+            typed_ftile_sequence_with_spacing(&tree, &mut natural_lane, TypedFtileSpacing::Natural)
+                .expect("natural recursive FTile scene");
+        assert_eq!(natural_scene.spacing, TypedFtileSpacing::Natural);
+        assert!(natural_scene.geometry.height > scene.geometry.height);
+        let natural_rendered = render_typed_ftile_swimlanes(
+            &natural_scene,
+            &[
+                "Fresh intake".to_string(),
+                "Fresh review".to_string(),
+                "Fresh archive".to_string(),
+                "Fresh dispatch".to_string(),
+            ],
+            &Palette::default_puml(),
+            false,
+        )
+        .expect("compressed natural recursive scene");
+        assert!(natural_rendered.content.contains("Record novel rejection"));
     }
 
     #[test]

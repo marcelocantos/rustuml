@@ -18,9 +18,10 @@
 //!
 //! The algorithm, per axis:
 //!   1. Walk every drawn shape, recording the 1-D interval it OCCUPIES on the
-//!      axis (`SlotFinder`). Shapes flagged ignorable for the axis (connectors,
-//!      arrowheads — `UShapeIgnorableForCompression` / `Worm.setCompressionMode`)
-//!      contribute nothing, so an empty corridor they pass through can collapse.
+//!      axis (`SlotFinder`). Shapes flagged ignorable for that axis
+//!      (`UShapeIgnorableForCompression` / `Worm.setCompressionMode`) contribute
+//!      nothing, so an empty corridor they pass through can collapse. Arrowheads
+//!      are ignored on X but remain occupied on Y.
 //!   2. Merge overlapping occupied intervals (`SlotSet.addSlot`).
 //!   3. Take the complement — the empty gaps between clusters (`SlotSet.reverse`).
 //!   4. Drop gaps `<= 2*margin` and shrink the rest by `margin` per side
@@ -233,6 +234,14 @@ pub fn apply_x(svg: &str, tf: &CompressionTransform) -> String {
         return svg.to_string();
     }
     rewrite_axis(svg, CompressionMode::OnX, tf)
+}
+
+/// Apply an arbitrary Y-axis [`CompressionTransform`] to an SVG fragment.
+pub fn apply_y(svg: &str, tf: &CompressionTransform) -> String {
+    if tf.is_identity() {
+        return svg.to_string();
+    }
+    rewrite_axis(svg, CompressionMode::OnY, tf)
 }
 
 /// Swimlane V2: apply an X-axis [`CompressionTransform`] then a constant
@@ -635,6 +644,21 @@ pub fn compress_activity_buffers(
         .replace(&format!("{FORK_BAR_COMPRESS_MARKER}=\"\" "), "")
         .replace(&format!(" {FORK_BAR_COMPRESS_MARKER}=\"\""), "");
     (shapes, connectors, x_tf, y_tf)
+}
+
+/// Build PlantUML's whole-activity ON_Y transform from emitted shapes and
+/// connectors.
+///
+/// `SlotFinder` ignores `ULine`, so connector lines contribute no interval.
+/// Their arrowhead polygons, emphasized-direction polygons, labels, and paths
+/// remain ordinary occupied shapes on Y. This is why a sibling branch can
+/// protect part of another branch's assembly gap from compression.
+pub fn activity_y_transform(shapes: &str, connectors: &str, margin: f64) -> CompressionTransform {
+    let mut occupied = parse_occupancy(shapes, CompressionMode::OnY);
+    for &(start, end) in parse_occupancy(connectors, CompressionMode::OnY).slots() {
+        occupied.add_slot(start, end);
+    }
+    CompressionTransform::from_occupied(&occupied, margin)
 }
 
 fn re(pattern: &str, cell: &'static OnceLock<Regex>) -> &'static Regex {
@@ -1248,5 +1272,21 @@ mod tests {
         };
         assert_eq!(head.occupied(CompressionMode::OnX), None);
         assert_eq!(head.occupied(CompressionMode::OnY), Some((100.0, 108.0)));
+    }
+
+    #[test]
+    fn activity_y_arrowhead_protects_sibling_assembly_band() {
+        let shapes = concat!(
+            r#"<rect fill="x" height="10" width="20" x="0" y="0"/>"#,
+            r#"<rect fill="x" height="10" width="20" x="0" y="45"/>"#,
+        );
+        let line = r#"<line x1="10" x2="10" y1="10" y2="45"/>"#;
+        let arrowhead = r#"<polygon points="6,25,10,35,14,25,10,29"/>"#;
+
+        let unprotected = activity_y_transform(shapes, line, M);
+        assert_eq!(unprotected.transform(45.0), 20.0);
+
+        let protected = activity_y_transform(shapes, &format!("{line}{arrowhead}"), M);
+        assert_eq!(protected.transform(45.0), 40.0);
     }
 }

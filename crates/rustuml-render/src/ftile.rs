@@ -335,21 +335,22 @@ pub struct LinearLayout {
     pub translates: Vec<(f64, f64)>,
 }
 
-/// Build the visible layout of a sequence assembled by
-/// `FtileFactoryDelegatorAssembly`.
+/// Build a connected sequence with the requested inter-tile reserve.
 ///
-/// [`ASSEMBLY_CONNECTION_HEIGHT`] is the natural model reserve. This function
-/// returns the post-compression layout that PlantUML draws, so callers can use
-/// [`linear_translates`] as the authoritative child-origin calculation without
-/// parsing or rewriting emitted SVG.
-pub fn connected_linear_layout(tiles: &[FtileGeometry]) -> Option<LinearLayout> {
+/// PlantUML first uses [`ASSEMBLY_CONNECTION_HEIGHT`] in
+/// `FtileFactoryDelegatorAssembly.assembly`; its diagram-level ON_Y pass then
+/// reduces unprotected gaps to [`ASSEMBLY_RENDERED_SEPARATION`].
+pub fn connected_linear_layout_with_separation(
+    tiles: &[FtileGeometry],
+    separation: f64,
+) -> Option<LinearLayout> {
     if tiles.is_empty() {
         return None;
     }
     let mut connected = Vec::with_capacity(tiles.len());
     for (index, tile) in tiles.iter().enumerate() {
         let tile = if index + 1 < tiles.len() {
-            tile.add_bottom(ASSEMBLY_RENDERED_SEPARATION)
+            tile.add_bottom(separation)
         } else {
             *tile
         };
@@ -359,6 +360,17 @@ pub fn connected_linear_layout(tiles: &[FtileGeometry]) -> Option<LinearLayout> 
         geometry: assemble_linear(&connected)?,
         translates: linear_translates(&connected),
     })
+}
+
+/// Build the visible layout of a sequence assembled by
+/// `FtileFactoryDelegatorAssembly`.
+///
+/// [`ASSEMBLY_CONNECTION_HEIGHT`] is the natural model reserve. This function
+/// returns the post-compression layout that PlantUML draws, so callers can use
+/// [`linear_translates`] as the authoritative child-origin calculation without
+/// parsing or rewriting emitted SVG.
+pub fn connected_linear_layout(tiles: &[FtileGeometry]) -> Option<LinearLayout> {
+    connected_linear_layout_with_separation(tiles, ASSEMBLY_RENDERED_SEPARATION)
 }
 
 // --- Composite tiles (calculateDimensionFtile) ---
