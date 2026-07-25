@@ -32,6 +32,23 @@ fn trailing_color(line: &str) -> Option<String> {
     RE.captures(line).map(|c| c[1].to_string())
 }
 
+fn usecase_separator_style(line: &str) -> Option<UseCaseSeparatorStyle> {
+    let trimmed = line.trim();
+    if trimmed.chars().count() < 2 || trimmed == "..." {
+        return None;
+    }
+    let first = trimmed.chars().next()?;
+    if !trimmed.chars().all(|ch| ch == first) {
+        return None;
+    }
+    match first {
+        '-' | '_' => Some(UseCaseSeparatorStyle::Solid),
+        '=' => Some(UseCaseSeparatorStyle::Double),
+        '.' => Some(UseCaseSeparatorStyle::Dotted),
+        _ => None,
+    }
+}
+
 /// Turn a label into a simple identifier (strip spaces, keep alphanumerics/underscores).
 fn label_to_id(label: &str) -> String {
     label
@@ -167,26 +184,26 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
             if trimmed.contains('"') {
                 // End of multiline literal.
                 // First non-separator, non-empty line is the title/label.
-                let is_sep = |s: &str| {
-                    let t = s.trim();
-                    t == "--"
-                        || t == "=="
-                        || t == ".."
-                        || t.chars().all(|c| c == '-')
-                        || t.chars().all(|c| c == '=')
-                        || t.chars().all(|c| c == '.')
-                };
                 let label = multiline_label_lines
                     .iter()
-                    .find(|l| !l.trim().is_empty() && !is_sep(l))
+                    .find(|line| !line.trim().is_empty() && usecase_separator_style(line).is_none())
                     .map(|l| l.trim().to_string())
                     .unwrap_or_else(|| uc_id.clone());
-                // All non-separator content lines form the description.
-                let description: Vec<String> = multiline_label_lines
-                    .iter()
-                    .filter(|l| !l.trim().is_empty() && !is_sep(l))
-                    .map(|l| l.trim().to_string())
-                    .collect();
+                let mut description = Vec::new();
+                let mut separators = Vec::new();
+                for line in &multiline_label_lines {
+                    if line.trim().is_empty() {
+                        continue;
+                    }
+                    if let Some(style) = usecase_separator_style(line) {
+                        separators.push(UseCaseSeparator {
+                            before_line: description.len(),
+                            style,
+                        });
+                    } else {
+                        description.push(line.trim().to_string());
+                    }
+                }
                 let id = uc_id.clone();
                 if !use_cases.iter().any(|u: &UseCase| u.id == id) {
                     use_cases.push(UseCase {
@@ -195,6 +212,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                         explicit_id: true,
                         stereotype: None,
                         description,
+                        separators,
                         color: multiline_uc_color.clone(),
                         source_line: multiline_start_line,
                     });
@@ -463,6 +481,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                     explicit_id: true,
                     stereotype: None,
                     description: Vec::new(),
+                    separators: Vec::new(),
                     color: trailing_color(trimmed),
                     source_line: current_line,
                 });
@@ -492,6 +511,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                     explicit_id: true,
                     stereotype: None,
                     description: Vec::new(),
+                    separators: Vec::new(),
                     color: trailing_color(trimmed),
                     source_line: current_line,
                 });
@@ -512,6 +532,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                     explicit_id: true,
                     stereotype,
                     description: Vec::new(),
+                    separators: Vec::new(),
                     color: trailing_color(trimmed),
                     source_line: current_line,
                 });
@@ -532,6 +553,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                     explicit_id: false,
                     stereotype,
                     description: Vec::new(),
+                    separators: Vec::new(),
                     color: trailing_color(trimmed),
                     source_line: current_line,
                 });
@@ -552,6 +574,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                     explicit_id: false,
                     stereotype,
                     description: Vec::new(),
+                    separators: Vec::new(),
                     color: trailing_color(trimmed),
                     source_line: current_line,
                 });
@@ -569,6 +592,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                     explicit_id: false,
                     stereotype: None,
                     description: Vec::new(),
+                    separators: Vec::new(),
                     color: None,
                     source_line: current_line,
                 });
@@ -595,6 +619,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                             explicit_id: false,
                             stereotype: None,
                             description: Vec::new(),
+                            separators: Vec::new(),
                             color: None,
                             source_line: current_line,
                         });
@@ -871,6 +896,60 @@ mod tests {
                 .description
                 .contains(&"Description text here".to_string())
         );
+        assert_eq!(
+            d.use_cases[0].separators,
+            vec![UseCaseSeparator {
+                before_line: 1,
+                style: UseCaseSeparatorStyle::Solid,
+            }]
+        );
+    }
+
+    #[test]
+    fn multiline_usecase_preserves_compartment_order_and_styles() {
+        let src = "usecase FreshFlow as \"\n\
+                   Summary\n\
+                   ....\n\
+                   First detail\n\
+                   ====\n\
+                   Second detail\n\
+                   ____\n\
+                   Final detail\n\
+                   \"";
+        let d = parse(src);
+        assert_eq!(
+            d.use_cases[0].description,
+            ["Summary", "First detail", "Second detail", "Final detail"]
+        );
+        assert_eq!(
+            d.use_cases[0].separators,
+            [
+                UseCaseSeparator {
+                    before_line: 1,
+                    style: UseCaseSeparatorStyle::Dotted,
+                },
+                UseCaseSeparator {
+                    before_line: 2,
+                    style: UseCaseSeparatorStyle::Double,
+                },
+                UseCaseSeparator {
+                    before_line: 3,
+                    style: UseCaseSeparatorStyle::Solid,
+                },
+            ]
+        );
+    }
+
+    #[test]
+    fn multiline_usecase_keeps_three_dot_ellipsis_as_body_text() {
+        let src = "usecase FreshFlow as \"\n\
+                   Summary\n\
+                   ...\n\
+                   Details\n\
+                   \"";
+        let d = parse(src);
+        assert_eq!(d.use_cases[0].description, ["Summary", "...", "Details"]);
+        assert!(d.use_cases[0].separators.is_empty());
     }
 
     #[test]

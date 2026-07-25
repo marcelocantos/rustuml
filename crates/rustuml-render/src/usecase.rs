@@ -38,11 +38,18 @@ const ACTOR_STEREOTYPE_MARGIN_X: f64 = 1.0;
 const ACTOR_STICKMAN_BASE_HEIGHT: f64 = 59.0;
 /// Vertical offset from head centre to stereotype baseline (measured).
 const ACTOR_STEREO_OFFSET: f64 = 11.4531;
+/// Extracted line advance for the undecorated `MethodsOrFieldsArea` created by
+/// Java `BodyEnhanced1.buildTextBlock`; decorated bodies use `TextBlockMarged`.
 const LINE_H: f64 = 16.4883;
 
 const MARGIN: f64 = 7.0;
 const GAP: f64 = 40.0;
 const BODY_MARGIN: f64 = 6.0;
+/// Java `BodyEnhancedAbstract.decorate` wraps a compartment below a rule
+/// with four pixels above and below its body.
+const COMPARTMENT_MARGIN_Y: f64 = 4.0;
+const SEPARATOR_SKIP_X: f64 = 1.0;
+const DOUBLE_SEPARATOR_GAP: f64 = 2.0;
 /// Java's `EntityImageDegenerated` wraps a lone non-state entity in 7px.
 const DEGENERATED_MARGIN: f64 = 7.0;
 const SVEK_CANVAS_PAD: f64 = 14.0;
@@ -697,9 +704,33 @@ struct ActorDim {
 struct UseCaseDim {
     label_w: f64,
     stereo_w: f64,
+    body_line_tops: Vec<f64>,
+    separators: Vec<UseCaseSeparatorPlacement>,
+    body_offset_y: f64,
+    text_x_shift: f64,
     footprint_center_y: f64,
     rx: f64,
     ry: f64,
+}
+
+#[derive(Clone, Copy)]
+struct UseCaseSeparatorPlacement {
+    before_line: usize,
+    style: UseCaseSeparatorStyle,
+    y: f64,
+}
+
+#[derive(Clone, Copy)]
+struct FootprintLine {
+    width: f64,
+    top: f64,
+    height: f64,
+}
+
+#[derive(Clone, Copy)]
+struct FootprintBounds {
+    start: (f64, f64),
+    end: (f64, f64),
 }
 
 struct NoteDim {
@@ -804,11 +835,31 @@ fn use_case_dim(uc: &UseCase, skin: &SkinColors) -> UseCaseDim {
             .map(|d| text_render::measure_with_family(d, font_size, false, &skin.uc_font_family))
             .collect()
     };
-    let mut footprint_widths = Vec::with_capacity(body_widths.len() + 1);
+    let (body_line_tops, separators, compartment_bounds, body_height, line_height) =
+        use_case_body_layout(&body_widths, &uc.separators);
+    let body_offset_y = if uc.stereotype.is_some() {
+        line_height
+    } else {
+        0.0
+    };
+    let mut footprint_lines = Vec::with_capacity(body_widths.len() + 1);
     if uc.stereotype.is_some() {
-        footprint_widths.push(stereo_w);
+        footprint_lines.push(FootprintLine {
+            width: stereo_w,
+            top: 0.0,
+            height: line_height,
+        });
     }
-    footprint_widths.extend(body_widths.iter().copied());
+    footprint_lines.extend(
+        body_widths
+            .iter()
+            .zip(&body_line_tops)
+            .map(|(&width, &top)| FootprintLine {
+                width,
+                top: body_offset_y + top,
+                height: line_height,
+            }),
+    );
     // Java `Display.getCreole` builds the standalone stereotype through
     // `SheetBlock1`, whose one-pixel horizontal padding contributes to the
     // merged block dimension (and therefore alpha). `Footprint` records only
@@ -820,16 +871,100 @@ fn use_case_dim(uc: &UseCase, skin: &SkinColors) -> UseCaseDim {
     };
     let body_block_w = body_widths.iter().copied().fold(0.0_f64, f64::max);
     let block_w = stereo_block_w.max(body_block_w);
-    let line_count = uc.description.len().max(1) + if uc.stereotype.is_some() { 1 } else { 0 };
-    let (rx, ry, footprint_center_y) =
-        use_case_ellipse_radii(&footprint_widths, block_w, line_count as f64 * LINE_H);
+    let block_h = body_offset_y + body_height;
+    let body_x = (block_w - body_block_w) / 2.0;
+    let footprint_bounds: Vec<_> = compartment_bounds
+        .iter()
+        .map(|bounds| FootprintBounds {
+            start: (body_x + bounds.start.0, body_offset_y + bounds.start.1),
+            end: (body_x + bounds.end.0, body_offset_y + bounds.end.1),
+        })
+        .collect();
+    let (rx, ry, footprint_center_x, footprint_center_y) =
+        use_case_ellipse_radii(&footprint_lines, &footprint_bounds, block_w, block_h);
     UseCaseDim {
         label_w,
         stereo_w,
+        body_line_tops,
+        separators,
+        body_offset_y,
+        text_x_shift: block_w / 2.0 - footprint_center_x,
         footprint_center_y,
         rx,
         ry,
     }
+}
+
+fn use_case_body_layout(
+    line_widths: &[f64],
+    separators: &[UseCaseSeparator],
+) -> (
+    Vec<f64>,
+    Vec<UseCaseSeparatorPlacement>,
+    Vec<FootprintBounds>,
+    f64,
+    f64,
+) {
+    let line_count = line_widths.len();
+    let mut line_tops = Vec::with_capacity(line_count);
+    let mut placements = Vec::with_capacity(separators.len());
+    let mut y = 0.0;
+    let mut decorated = false;
+    let line_height = if separators.is_empty() {
+        LINE_H
+    } else {
+        pm::text_height(FONT_SIZE)
+    };
+
+    for line_index in 0..=line_count {
+        for separator in separators
+            .iter()
+            .filter(|separator| separator.before_line.min(line_count) == line_index)
+        {
+            if decorated {
+                y += COMPARTMENT_MARGIN_Y;
+            }
+            placements.push(UseCaseSeparatorPlacement {
+                before_line: line_index,
+                style: separator.style,
+                y,
+            });
+            y += COMPARTMENT_MARGIN_Y;
+            decorated = true;
+        }
+        if line_index < line_count {
+            line_tops.push(y);
+            y += line_height;
+        }
+    }
+    if decorated {
+        y += COMPARTMENT_MARGIN_Y;
+    }
+    let body_width = line_widths.iter().copied().fold(0.0_f64, f64::max);
+    let compartment_bounds = placements
+        .iter()
+        .enumerate()
+        .map(|(index, placement)| {
+            let end_line = placements
+                .get(index + 1)
+                .map(|next| next.before_line)
+                .unwrap_or(line_count)
+                .min(line_count);
+            let width = line_widths[placement.before_line.min(line_count)..end_line]
+                .iter()
+                .copied()
+                .fold(0.0_f64, f64::max);
+            let x = (body_width - width) / 2.0;
+            FootprintBounds {
+                start: (x, placement.y),
+                end: (
+                    x + width,
+                    placements.get(index + 1).map(|next| next.y).unwrap_or(y),
+                ),
+            }
+        })
+        .collect();
+    (line_tops, placements, compartment_bounds, y, line_height)
 }
 
 #[derive(Clone, Copy)]
@@ -899,7 +1034,12 @@ fn smallest_enclosing_circle(
     circle
 }
 
-fn use_case_ellipse_radii(line_widths: &[f64], text_w: f64, text_h: f64) -> (f64, f64, f64) {
+fn use_case_ellipse_radii(
+    lines: &[FootprintLine],
+    bounds: &[FootprintBounds],
+    text_w: f64,
+    text_h: f64,
+) -> (f64, f64, f64, f64) {
     // Java provenance: `svek.image.EntityImageUseCase.calculateDimensionSlow`
     // wraps the merged stereotype/body `TextBlock` in `TextBlockInEllipse`.
     // `Footprint.getEllipse` records every painted text corner after scaling
@@ -908,28 +1048,35 @@ fn use_case_ellipse_radii(line_widths: &[f64], text_w: f64, text_h: f64) -> (f64
     let w = text_w.max(1.0);
     let h = text_h.max(1.0);
     let alpha = (h / w).clamp(0.2, 0.8);
-    let line_h = h / line_widths.len().max(1) as f64;
     let ascent = pm::ascent(FONT_SIZE);
-    let mut points = Vec::with_capacity(line_widths.len() * 4);
-    for (index, &line_w) in line_widths.iter().enumerate() {
-        let x = (w - line_w) / 2.0;
-        let baseline = index as f64 * line_h + ascent;
+    let mut points = Vec::with_capacity(lines.len() * 4 + bounds.len() * 2);
+    for line in lines {
+        let x = (w - line.width) / 2.0;
+        let baseline = line.top + ascent;
         // Java `Footprint.MyUGraphic.drawText` shifts the measured line box
         // upward by `height - 1.5` before recording its four corners.
-        let top = baseline - line_h + 1.5;
-        let bottom = top + line_h;
+        let top = baseline - line.height + 1.5;
+        let bottom = top + line.height;
         points.extend([
             (x, top / alpha),
             (x, bottom / alpha),
-            (x + line_w, top / alpha),
-            (x + line_w, bottom / alpha),
+            (x + line.width, top / alpha),
+            (x + line.width, bottom / alpha),
         ]);
+    }
+    // Java `TextBlockMarged.drawU` emits one `UEmpty` for each decorated
+    // compartment. `Footprint.MyUGraphic.drawEmpty` records only the two
+    // diagonal corners, so their asymmetry is part of the enclosing circle.
+    for bounds in bounds {
+        points.push((bounds.start.0, bounds.start.1 / alpha));
+        points.push((bounds.end.0, bounds.end.1 / alpha));
     }
     let mut boundary = points.clone();
     let circle = smallest_enclosing_circle(points.len(), &points, 0, &mut boundary);
     (
         circle.radius + 3.0,
         circle.radius * alpha + 3.0,
+        circle.center.0,
         circle.center.1 * alpha,
     )
 }
@@ -1950,13 +2097,14 @@ fn render_use_case(
     // `(ellipseHalfHeight - footprintCenterY - 2)`. Since `cy` already
     // includes the half-height, each baseline is relative to the computed
     // painted footprint center rather than a fixed one-line offset.
-    let mut text_y = cy - dim.footprint_center_y - 2.0 + pm::ascent(FONT_SIZE);
+    let text_origin_y = cy - dim.footprint_center_y - 2.0;
+    let mut text_y = text_origin_y + pm::ascent(FONT_SIZE);
     if let Some(stereo) = &uc.stereotype {
         let stereo_text = format!("\u{00AB}{stereo}\u{00BB}");
         let stereo_x = captured_x
             .get(line_idx)
             .copied()
-            .unwrap_or(cx_anchor - dim.stereo_w / 2.0);
+            .unwrap_or(cx_anchor + dim.text_x_shift - dim.stereo_w / 2.0);
         let stereo_y = captured_y.get(line_idx).copied().unwrap_or(text_y);
         line_idx += 1;
         let mut buf = String::new();
@@ -1976,13 +2124,16 @@ fn render_use_case(
             },
         );
         svg.raw(&buf);
-        text_y += LINE_H;
     }
+    text_y = text_origin_y
+        + dim.body_offset_y
+        + dim.body_line_tops.first().copied().unwrap_or(0.0)
+        + pm::ascent(FONT_SIZE);
     if uc.description.is_empty() {
         let label_x = captured_x
             .get(line_idx)
             .copied()
-            .unwrap_or(cx_anchor - dim.label_w / 2.0);
+            .unwrap_or(cx_anchor + dim.text_x_shift - dim.label_w / 2.0);
         let label_y = captured_y.get(line_idx).copied().unwrap_or(text_y);
         let mut buf = String::new();
         text_render::emit_text(
@@ -2047,7 +2198,7 @@ fn render_use_case(
                 }
             }
         };
-        for line in &uc.description {
+        for (body_line, line) in uc.description.iter().enumerate() {
             let lw = text_render::measure_with_family(
                 line,
                 skin.uc_font_size as f64,
@@ -2057,9 +2208,36 @@ fn render_use_case(
             let lx = captured_x
                 .get(line_idx)
                 .copied()
-                .unwrap_or(cx_anchor - lw / 2.0);
-            let ly = captured_y.get(line_idx).copied().unwrap_or(text_y);
-            flush_seps(svg, &mut sep_idx, ly);
+                .unwrap_or(cx_anchor + dim.text_x_shift - lw / 2.0);
+            let ly = captured_y.get(line_idx).copied().unwrap_or_else(|| {
+                text_origin_y
+                    + dim.body_offset_y
+                    + dim
+                        .body_line_tops
+                        .get(body_line)
+                        .copied()
+                        .unwrap_or(body_line as f64 * pm::text_height(FONT_SIZE))
+                    + pm::ascent(FONT_SIZE)
+            });
+            if orc_rect.is_some() {
+                flush_seps(svg, &mut sep_idx, ly);
+            } else {
+                for separator in dim
+                    .separators
+                    .iter()
+                    .filter(|separator| separator.before_line == body_line)
+                {
+                    render_usecase_separator(
+                        svg,
+                        separator,
+                        dim,
+                        cx,
+                        cy,
+                        text_origin_y + dim.body_offset_y,
+                        stroke,
+                    );
+                }
+            }
             line_idx += 1;
             let mut buf = String::new();
             text_render::emit_text(
@@ -2078,12 +2256,64 @@ fn render_use_case(
                 },
             );
             svg.raw(&buf);
-            text_y += LINE_H;
         }
         // Any trailing separators after the last text line.
-        flush_seps(svg, &mut sep_idx, f64::INFINITY);
+        if orc_rect.is_some() {
+            flush_seps(svg, &mut sep_idx, f64::INFINITY);
+        } else {
+            for separator in dim
+                .separators
+                .iter()
+                .filter(|separator| separator.before_line >= uc.description.len())
+            {
+                render_usecase_separator(
+                    svg,
+                    separator,
+                    dim,
+                    cx,
+                    cy,
+                    text_origin_y + dim.body_offset_y,
+                    stroke,
+                );
+            }
+        }
     }
     svg.raw("</g>");
+}
+
+fn render_usecase_separator(
+    svg: &mut SvgBuilder,
+    separator: &UseCaseSeparatorPlacement,
+    dim: &UseCaseDim,
+    cx: f64,
+    cy: f64,
+    body_origin_y: f64,
+    stroke: &str,
+) {
+    let line_y = body_origin_y + separator.y;
+    let emit_line = |svg: &mut SvgBuilder, y: f64, dotted: bool| {
+        let normalized_y = ((y - cy) / dim.ry).clamp(-1.0, 1.0);
+        let half_width = dim.rx * (1.0 - normalized_y * normalized_y).max(0.0).sqrt();
+        let x1 = cx - half_width + SEPARATOR_SKIP_X;
+        let x2 = cx + half_width - SEPARATOR_SKIP_X;
+        let dash = if dotted { "stroke-dasharray:1,2;" } else { "" };
+        svg.raw(&format!(
+            r#"<line style="stroke:{stroke};stroke-width:1;{dash}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+            fc(x1),
+            fc(x2),
+            fc(y),
+            fc(y),
+        ));
+    };
+
+    match separator.style {
+        UseCaseSeparatorStyle::Solid => emit_line(svg, line_y, false),
+        UseCaseSeparatorStyle::Dotted => emit_line(svg, line_y, true),
+        UseCaseSeparatorStyle::Double => {
+            emit_line(svg, line_y, false);
+            emit_line(svg, line_y + DOUBLE_SEPARATOR_GAP, false);
+        }
+    }
 }
 
 /// Render a note entity, reconstructing the box-plus-leader path locally from
@@ -2961,6 +3191,34 @@ mod tests {
             svg.contains(r#"<path d="M222.13,43.74 C233.44,43.74 238.75,43.74 250.06,43.74""#),
             "{svg}"
         );
+    }
+
+    #[test]
+    fn renamed_multicompartment_usecase_renders_stencilled_separator_styles() {
+        let input = "@startuml\n\
+                     actor \"Renamed Reviewer 1409\" as Reviewer1409\n\
+                     usecase Review1411 as \"\n\
+                       Fresh intake\n\
+                       ....\n\
+                       Validate unseen record\n\
+                       ====\n\
+                       Archive renamed result\n\
+                     \"\n\
+                     usecase \"Fresh downstream audit\" as Audit1423\n\
+                     Reviewer1409 --> Review1411\n\
+                     Review1411 --> Audit1423\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Fresh Java PlantUML reference for this renamed three-node topology.
+        // `BodyEnhanced1.getArea` creates three body compartments,
+        // `BodyEnhancedAbstract.decorate` adds their margins, and
+        // `TextBlockLineBefore.drawU` paints one dotted and one double rule.
+        assert_eq!(svg.matches("<line style=").count(), 3, "{svg}");
+        assert_eq!(svg.matches("stroke-dasharray:1,2;").count(), 1, "{svg}");
+        assert!(svg.contains(">Fresh intake</text>"), "{svg}");
+        assert!(svg.contains(">Archive renamed result</text>"), "{svg}");
     }
 
     #[test]

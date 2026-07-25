@@ -79,6 +79,20 @@ pub struct Actor {
     pub source_line: usize,
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum UseCaseSeparatorStyle {
+    Solid,
+    Double,
+    Dotted,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub struct UseCaseSeparator {
+    /// Index of the first description line in the compartment below the rule.
+    pub before_line: usize,
+    pub style: UseCaseSeparatorStyle,
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UseCase {
     pub id: String,
@@ -93,6 +107,9 @@ pub struct UseCase {
     /// Optional additional description lines (from multiline `as "Title\n--\n..."` syntax).
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub description: Vec<String>,
+    /// Compartment rules in a multiline use-case body.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub separators: Vec<UseCaseSeparator>,
     /// Optional inline background colour token, e.g. `#Cyan`, `#AAFFAA`.
     /// Stored without the leading `#`.
     #[serde(default, skip_serializing_if = "Option::is_none")]
