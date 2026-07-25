@@ -405,6 +405,9 @@ const LINK_FONT: f64 = 13.0;
 // `TextBlockUtils.withMargin(block, 1, 1)`. `TextBlockMarged.drawU` then
 // paints a full-size `UEmpty`, so the margin participates in SVEK bounds.
 const LINK_LABEL_MARGIN: f64 = 1.0;
+// `SvekEdge.addVisibilityModifier` expands an autolink label by six pixels on
+// every side because the label shares the loop's compact routing envelope.
+const SELF_LINK_LABEL_MARGIN: f64 = 6.0;
 /// Line height per text line in a component box.
 const LINE_HEIGHT: f64 = 16.4883;
 /// Base component box height (padding around one line of text).
@@ -959,13 +962,15 @@ pub fn render_with_oracle(
             if horizontal {
                 layout.add_same_rank(layout_from, layout_to);
             }
+            let center_label_margin = svek_link_label_margin(logical_from, logical_to);
             let center_label_size = conn.label.as_deref().map(|label| EdgeLabelSize {
-                // `SvekEdge.getLabelText` wraps the center label in one pixel
-                // of margin before `appendLine` emits its fixed HTML table.
+                // `SvekEdge.addVisibilityModifier` wraps ordinary center
+                // labels by one pixel and autolink labels by six before
+                // `appendLine` emits its fixed HTML table.
                 width: text_render::measure(label, component_arrow_font_size, false)
-                    + LINK_LABEL_MARGIN * 2.0,
+                    + center_label_margin * 2.0,
                 height: (text_render::label_height(label, component_arrow_font_size)
-                    + LINK_LABEL_MARGIN * 2.0)
+                    + center_label_margin * 2.0)
                     .floor(),
             });
             let endpoint_size = |label: Option<&str>| {
@@ -2201,14 +2206,15 @@ pub fn render_with_oracle(
                 // Labels.
                 let first = edge_points.first().unwrap();
                 if let Some(label) = &conn.label {
+                    let label_margin = svek_link_label_margin(logical_from, logical_to);
                     let (x, y) = ep
                         .label
                         .map(|position| {
                             (
-                                position.x + svek_edge_dx + 1.0,
+                                position.x + svek_edge_dx + label_margin,
                                 position.y
                                     + svek_edge_dy
-                                    + 1.0
+                                    + label_margin
                                     + text_render::label_ascent_with_family(
                                         label,
                                         component_arrow_font_size,
@@ -3600,12 +3606,22 @@ fn compute_no_oracle_canvas(input: NoOracleCanvas<'_>) -> (f64, f64) {
             path_max_y = Some(path_max_y.map_or(y, |bound| bound.max(y)));
         }
     }
-    for position in input.edge_paths.iter().filter_map(|edge| edge.label) {
-        // `SvekEdge.addVisibilityModifier` wraps only the center label.
-        // Graphviz reports the inner label box here; Java's subsequent
-        // `TextBlockMarged.drawU` contributes the full two-sided `UEmpty`.
-        max_x = max_x.max(position.x + input.edge_dx + position.width + LINK_LABEL_MARGIN * 2.0);
-        max_y = max_y.max(position.y + input.edge_dy + position.height + LINK_LABEL_MARGIN * 2.0);
+    for edge in input.edge_paths {
+        let Some(position) = edge.label else {
+            continue;
+        };
+        // `SvekEdge.addVisibilityModifier` wraps only the center label. For an
+        // autolink, Graphviz's label box already contains that six-pixel
+        // wrapper; `SvekResult.calculateDimension` therefore sees only the
+        // usual one-pixel painted tail beyond the reported box.
+        let margin = svek_link_label_margin(&edge.from, &edge.to);
+        let painted_tail = if edge.from == edge.to {
+            LINK_LABEL_MARGIN
+        } else {
+            margin * 2.0
+        };
+        max_x = max_x.max(position.x + input.edge_dx + position.width + painted_tail);
+        max_y = max_y.max(position.y + input.edge_dy + position.height + painted_tail);
     }
     for position in input
         .edge_paths
@@ -4067,6 +4083,14 @@ fn no_oracle_link_type_attr(conn: &Connection) -> String {
         r#" data-link-type="association""#.to_string()
     } else {
         String::new()
+    }
+}
+
+fn svek_link_label_margin(from: &str, to: &str) -> f64 {
+    if from == to {
+        SELF_LINK_LABEL_MARGIN
+    } else {
+        LINK_LABEL_MARGIN
     }
 }
 
@@ -5935,6 +5959,40 @@ mod tests {
         assert_eq!(
             canvas_width, required_width,
             "SvekEdge's one-pixel right label margin must participate in the canvas: {svg}"
+        );
+    }
+
+    #[test]
+    fn no_oracle_renamed_self_link_uses_svek_autolink_label_margin() {
+        let label = "renamed feedback circuit 971";
+        let input = format!(
+            "@startuml\ncomponent \"Relay 967\" as Relay967\nRelay967 --> Relay967 : {label}\n@enduml"
+        );
+        let diagram = rustuml_parser::parse::parse(&input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert_eq!(
+            super::svek_link_label_margin("Relay967", "Relay967"),
+            super::SELF_LINK_LABEL_MARGIN
+        );
+        assert_eq!(
+            super::svek_link_label_margin("Relay967", "Archive977"),
+            super::LINK_LABEL_MARGIN
+        );
+
+        let root = svg.split_once('>').map(|(root, _)| root).expect("SVG root");
+        let label_tag = svg
+            .split("<text ")
+            .find(|tag| tag.contains(&format!(">{label}</text>")))
+            .expect("renamed self-link label");
+        let canvas_width = numeric_attr(root, "width");
+        let text_right = numeric_attr(label_tag, "x") + numeric_attr(label_tag, "textLength");
+        let required_width =
+            (text_right + super::SELF_LINK_LABEL_MARGIN + super::SVEK_CANVAS_PAD).floor();
+
+        assert_eq!(
+            canvas_width, required_width,
+            "SvekEdge's six-pixel autolink margin must own the label envelope: {svg}"
         );
     }
 
