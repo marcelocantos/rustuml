@@ -172,6 +172,13 @@ const COMPONENT_H: f64 = COMPONENT_BASE_H + LINE_HEIGHT;
 const TEXT_PAD_LEFT: f64 = 15.0;
 /// Right padding inside component (icon area).
 const TEXT_PAD_RIGHT: f64 = 25.0;
+// PlantUML `USymbolDatabase.getMargin()` returns (10, 10, 24, 5).
+const DATABASE_MARGIN_X: f64 = 10.0;
+const DATABASE_MARGIN_TOP: f64 = 24.0;
+const DATABASE_MARGIN_BOTTOM: f64 = 5.0;
+// `USymbolDatabase.drawDatabase()` appends `UEmpty(10, 10)` at (width, height),
+// extending the rendered envelope without changing the Graphviz node size.
+const DATABASE_RENDER_OVERFLOW: f64 = 10.0;
 /// Margin around the entire diagram.
 const MARGIN: f64 = 7.0;
 /// Gap between entities when laid out by Sugiyama.
@@ -500,6 +507,7 @@ pub fn render_with_oracle(
         (orc.canvas_width, orc.canvas_height)
     } else if oracle.is_none() {
         compute_no_oracle_canvas(NoOracleCanvas {
+            components: &diagram.components,
             positions: &positions,
             iface_positions: &iface_positions,
             comp_dims: &comp_dims,
@@ -1043,14 +1051,24 @@ pub fn render_with_oracle(
         // `y + h - LABEL_BASELINE_FROM_BOTTOM`. Use oracle text_y_values when available.
         let oracle_text_y = oracle_rect.map(|r| r.text_y_values.as_slice());
         let oracle_text_x = oracle_rect.map(|r| r.text_x_values.as_slice());
+        let model_text_x = if matches!(comp.kind, ComponentElementKind::Database) {
+            x + DATABASE_MARGIN_X
+        } else {
+            x + TEXT_PAD_LEFT
+        };
         let text_x_default = oracle_rect
             .and_then(|r| r.name_text_x)
-            .unwrap_or(x + TEXT_PAD_LEFT);
+            .unwrap_or(model_text_x);
         let n_stereo = comp.stereotypes.len();
 
+        let model_label_y = if matches!(comp.kind, ComponentElementKind::Database) {
+            y + h - (LABEL_BASELINE_FROM_BOTTOM - DATABASE_MARGIN_BOTTOM)
+        } else {
+            y + h - LABEL_BASELINE_FROM_BOTTOM
+        };
         let label_y = oracle_text_y
             .and_then(|v| v.get(n_stereo).copied())
-            .unwrap_or(y + h - LABEL_BASELINE_FROM_BOTTOM);
+            .unwrap_or(model_label_y);
         let stereo_first_y = label_y - LINE_HEIGHT * n_stereo as f64;
 
         // Stereotypes first (italic in PlantUML).
@@ -1974,9 +1992,7 @@ struct CompDim {
 
 fn calc_component_dim(comp: &Component) -> CompDim {
     let n_lines = 1 + comp.stereotypes.len();
-    let height = COMPONENT_BASE_H + n_lines as f64 * LINE_HEIGHT;
 
-    // Width: max of label width and stereotype widths, plus padding.
     let label_w = text_render::measure(&comp.label, FONT_SIZE, false);
     let max_stereo_w = comp
         .stereotypes
@@ -1984,7 +2000,18 @@ fn calc_component_dim(comp: &Component) -> CompDim {
         .map(|s| text_render::measure(&format!("\u{00AB}{s}\u{00BB}"), FONT_SIZE, false))
         .fold(0.0_f64, f64::max);
     let text_w = label_w.max(max_stereo_w);
-    let width = (text_w + TEXT_PAD_LEFT + TEXT_PAD_RIGHT).max(COMPONENT_MIN_W);
+
+    let (width, height) = if matches!(comp.kind, ComponentElementKind::Database) {
+        (
+            text_w + DATABASE_MARGIN_X * 2.0,
+            DATABASE_MARGIN_TOP + n_lines as f64 * LINE_HEIGHT + DATABASE_MARGIN_BOTTOM,
+        )
+    } else {
+        (
+            (text_w + TEXT_PAD_LEFT + TEXT_PAD_RIGHT).max(COMPONENT_MIN_W),
+            COMPONENT_BASE_H + n_lines as f64 * LINE_HEIGHT,
+        )
+    };
 
     CompDim { width, height }
 }
@@ -2212,6 +2239,7 @@ fn compute_positions_grid(
 }
 
 struct NoOracleCanvas<'a> {
+    components: &'a [Component],
     positions: &'a [(f64, f64)],
     iface_positions: &'a [(f64, f64)],
     comp_dims: &'a [CompDim],
@@ -2226,9 +2254,19 @@ fn compute_no_oracle_canvas(input: NoOracleCanvas<'_>) -> (f64, f64) {
     let mut max_x = 0.0_f64;
     let mut max_y = input.title_h;
 
-    for ((x, y), dim) in input.positions.iter().zip(input.comp_dims) {
-        max_x = max_x.max(x + dim.width);
-        max_y = max_y.max(y + dim.height);
+    for (((x, y), dim), comp) in input
+        .positions
+        .iter()
+        .zip(input.comp_dims)
+        .zip(input.components)
+    {
+        let overflow = if matches!(comp.kind, ComponentElementKind::Database) {
+            DATABASE_RENDER_OVERFLOW
+        } else {
+            0.0
+        };
+        max_x = max_x.max(x + dim.width + overflow);
+        max_y = max_y.max(y + dim.height + overflow);
     }
     for (cx, cy) in input.iface_positions {
         max_x = max_x.max(cx + IFACE_R);
@@ -3412,6 +3450,48 @@ mod tests {
             svg.contains(&format!(r#"height="{expected_h}px""#)),
             "canvas height should follow Svek bounds for renamed labels: {svg}"
         );
+    }
+
+    #[test]
+    fn database_symbol_uses_java_margins_for_renamed_label() {
+        let input = "@startuml\ncomponent Anchor\ndatabase \"Renamed Ledger\" as Ledger\nAnchor --> Ledger\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Component(component_diagram) = &diagram else {
+            panic!("expected component diagram");
+        };
+        let component = component_diagram
+            .components
+            .iter()
+            .find(|component| matches!(component.kind, super::ComponentElementKind::Database))
+            .expect("renamed database");
+        let dim = super::calc_component_dim(component);
+        let text_width = crate::text_render::measure(&component.label, super::FONT_SIZE, false);
+
+        assert_eq!(dim.width, text_width + super::DATABASE_MARGIN_X * 2.0);
+        assert_eq!(
+            dim.height,
+            super::DATABASE_MARGIN_TOP + super::LINE_HEIGHT + super::DATABASE_MARGIN_BOTTOM
+        );
+
+        let expected_w =
+            super::MARGIN + dim.width + super::DATABASE_RENDER_OVERFLOW + super::SVEK_CANVAS_PAD;
+        let expected_h =
+            super::MARGIN + dim.height + super::DATABASE_RENDER_OVERFLOW + super::SVEK_CANVAS_PAD;
+        let positions = [(super::MARGIN, super::MARGIN)];
+        let dimensions = [dim];
+        let (canvas_w, canvas_h) = super::compute_no_oracle_canvas(super::NoOracleCanvas {
+            components: std::slice::from_ref(component),
+            positions: &positions,
+            iface_positions: &[],
+            comp_dims: &dimensions,
+            cluster_positions: &[],
+            packages: &[],
+            pkg_total_w: 0.0,
+            pkg_total_h: 0.0,
+            title_h: 0.0,
+        });
+        assert_eq!(canvas_w, expected_w);
+        assert_eq!(canvas_h, expected_h);
     }
 
     #[test]

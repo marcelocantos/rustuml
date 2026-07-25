@@ -12,12 +12,12 @@ creole 395 639
 deployment 38 495
 dot 25 25
 ebnf 25 25
-edge-cases 486 777
+edge-cases 487 777
 er 1 157
 gantt 114 114
 git 25 25
 json-yaml 56 147
-links 48 50
+links 49 50
 math 50 50
 mindmap 157 157
 multi-diagram 43 53
