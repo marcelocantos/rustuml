@@ -333,6 +333,29 @@ impl LayoutGraph {
             .push((first.to_string(), second.to_string()));
     }
 
+    fn same_rank_owner(&self, first: &str, second: &str) -> SameRankOwner<'_> {
+        if let Some(cluster) = self.clusters.iter().find(|cluster| {
+            cluster.nodes.iter().any(|node| node == first)
+                && cluster.nodes.iter().any(|node| node == second)
+        }) {
+            return SameRankOwner::Cluster(cluster.id.as_str());
+        }
+
+        let first_is_clustered = self
+            .clusters
+            .iter()
+            .any(|cluster| cluster.nodes.iter().any(|node| node == first));
+        let second_is_clustered = self
+            .clusters
+            .iter()
+            .any(|cluster| cluster.nodes.iter().any(|node| node == second));
+        if first_is_clustered || second_is_clustered {
+            SameRankOwner::None
+        } else {
+            SameRankOwner::Root
+        }
+    }
+
     /// Adds an edge between two nodes, optionally binding Graphviz ports.
     pub fn add_edge_with_ports(
         &mut self,
@@ -592,6 +615,9 @@ impl LayoutGraph {
         let rank_key = CString::new("rank").unwrap();
         let same_val = CString::new("same").unwrap();
         for (idx, (first, second)) in self.same_rank_pairs.iter().enumerate() {
+            if !matches!(self.same_rank_owner(first, second), SameRankOwner::Root) {
+                continue;
+            }
             let name = CString::new(format!("same_rank_{idx}")).unwrap();
             let subgraph = graphviz_ffi::agsubg(g, name.as_ptr() as *mut _, 1);
             graphviz_ffi::agsafeset(
@@ -1117,6 +1143,33 @@ impl LayoutGraph {
                 graphviz_ffi::agsubnode(node_parent, node, 1);
             }
         }
+        // PlantUML `Cluster.appendRankSame` emits horizontal-link rank
+        // subgraphs inside the cluster's `p1` protection wrapper. Keeping
+        // these at the root makes Graphviz treat the members as external and
+        // collapses a single container's solved bounds.
+        for (idx, (first, second)) in self.same_rank_pairs.iter().enumerate() {
+            if !matches!(
+                self.same_rank_owner(first, second),
+                SameRankOwner::Cluster(owner) if owner == cluster.id.as_str()
+            ) {
+                continue;
+            }
+            let name = CString::new(format!("same_rank_{idx}")).unwrap();
+            let subgraph = graphviz_ffi::agsubg(member_parent, name.as_ptr() as *mut _, 1);
+            let rank_key = CString::new("rank").unwrap();
+            let same_val = CString::new("same").unwrap();
+            graphviz_ffi::agsafeset(
+                subgraph as *mut c_void,
+                rank_key.as_ptr(),
+                same_val.as_ptr(),
+                empty.as_ptr(),
+            );
+            for id in [first, second] {
+                if let Some(&node) = node_handles.get(id) {
+                    graphviz_ffi::agsubnode(subgraph, node, 1);
+                }
+            }
+        }
         for (child_idx, child) in self.clusters.iter().enumerate() {
             if child.parent.as_deref() == Some(cluster.id.as_str()) {
                 let child_parent = self
@@ -1298,6 +1351,12 @@ struct ClusterSpec {
     parent: Option<String>,
     nodes: Vec<String>,
     has_svek_endpoint: bool,
+}
+
+enum SameRankOwner<'a> {
+    Root,
+    Cluster(&'a str),
+    None,
 }
 
 #[derive(Debug, Clone)]
@@ -1615,6 +1674,39 @@ mod tests {
         assert!(
             grouped_result.cluster_positions[0].height > plain_result.cluster_positions[0].height
         );
+    }
+
+    #[test]
+    fn same_rank_subgraphs_stay_inside_their_svek_cluster() {
+        let mut graph = LayoutGraph::new(Direction::TopToBottom).with_plantuml_svek_spacing();
+        for id in ["RenamedAlpha17", "RenamedBeta23", "RenamedGamma31"] {
+            graph.add_node(id, "", 58.0, 46.0);
+        }
+        graph.add_svek_cluster(
+            "RenamedContainer41",
+            None,
+            ClusterTitleSize {
+                width: 131.0,
+                height: 16.0,
+            },
+        );
+        for id in ["RenamedAlpha17", "RenamedBeta23", "RenamedGamma31"] {
+            graph.add_cluster_node("RenamedContainer41", id);
+        }
+        graph.add_same_rank("RenamedAlpha17", "RenamedBeta23");
+        graph.add_same_rank("RenamedBeta23", "RenamedGamma31");
+        graph.add_edge("RenamedAlpha17", "RenamedBeta23", None);
+        graph.add_edge("RenamedBeta23", "RenamedGamma31", None);
+
+        let result = graph.layout_full_no_timeout();
+        let cluster = &result.cluster_positions[0];
+
+        assert!(cluster.width > 250.0, "cluster must wrap all three members");
+        assert!(cluster.height > 80.0, "cluster must retain its title band");
+        for node in &result.node_positions {
+            assert!(node.x >= cluster.x && node.x + node.width <= cluster.x + cluster.width);
+            assert!(node.y >= cluster.y && node.y + node.height <= cluster.y + cluster.height);
+        }
     }
 
     #[test]
