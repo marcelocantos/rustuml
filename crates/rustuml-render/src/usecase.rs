@@ -30,14 +30,12 @@ const ACTOR_ARM_HALF: f64 = 13.0;
 const ACTOR_ARM_OFFSET: f64 = 8.0;
 const ACTOR_LEG_RUN: f64 = 13.0;
 const ACTOR_LEG_DROP: f64 = 15.0;
-const ACTOR_LABEL_GAP: f64 = 15.0352;
-/// Java provenance: `skin.ActorStickMan.getPreferredHeight()` returns
-/// `headDiam + bodyLenght + legsY + 2 * thickness + shadow + 1`. In the default
-/// DESCRIPTION style the emitted path stroke is 0.5; the SVEK dimension handed
-/// to dot uses the uninflated 58px stickman plus the final +1 guard and the
-/// half-stroke visual extent before label blocks are merged by
-/// `decoration.symbol.USymbolSimpleAbstract.mergeLayoutT12B3`.
-const ACTOR_STICKMAN_DOT_HEIGHT: f64 = 59.5;
+/// `EntityImageDescription` wraps actor stereotypes with
+/// `TextBlockUtils.withMargin(stereotype, 1, 0)`.
+const ACTOR_STEREOTYPE_MARGIN_X: f64 = 1.0;
+/// Java provenance: `skin.ActorStickMan.getPreferredHeight()` adds twice the
+/// current stroke thickness to this 58px geometry plus its final 1px guard.
+const ACTOR_STICKMAN_BASE_HEIGHT: f64 = 59.0;
 /// Vertical offset from head centre to stereotype baseline (measured).
 const ACTOR_STEREO_OFFSET: f64 = 11.4531;
 const LINE_H: f64 = 16.4883;
@@ -46,6 +44,8 @@ const UC_TEXT_OFFSET_SINGLE: f64 = 4.7441;
 const MARGIN: f64 = 7.0;
 const GAP: f64 = 40.0;
 const BODY_MARGIN: f64 = 6.0;
+/// Java's `EntityImageDegenerated` wraps a lone non-state entity in 7px.
+const DEGENERATED_MARGIN: f64 = 7.0;
 const SVEK_CANVAS_PAD: f64 = 14.0;
 const LAYOUT_TIMEOUT: std::time::Duration = std::time::Duration::from_secs(5);
 const DEPENDENCY_ARROW_BACK: f64 = 9.0;
@@ -630,6 +630,10 @@ fn build_entity_id_map(diagram: &UseCaseDiagram) -> HashMap<String, String> {
 struct ActorDim {
     label_w: f64,
     stereo_w: f64,
+    stereo_h: f64,
+    stroke_thickness: f64,
+    label_gap: f64,
+    paint_min_y: f64,
     width: f64,
     height: f64,
 }
@@ -658,21 +662,37 @@ fn actor_dim(actor: &Actor, skin: &SkinColors) -> ActorDim {
                 skin.actor_font_size as f64,
                 false,
                 &skin.actor_font_family,
-            )
+            ) + ACTOR_STEREOTYPE_MARGIN_X * 2.0
         })
         .unwrap_or(0.0);
-    let width = label_w.max(stereo_w).max(ACTOR_ARM_HALF * 2.0);
+    let stroke_thickness = skin.actor_border_thickness.parse::<f64>().unwrap_or(0.5);
     let text_block_h = pm::text_height(skin.actor_font_size as f64);
-    let height = ACTOR_STICKMAN_DOT_HEIGHT
-        + text_block_h
-        + if actor.stereotype.is_some() {
-            text_block_h
-        } else {
-            0.0
-        };
+    let stereo_h = if actor.stereotype.is_some() {
+        text_block_h
+    } else {
+        0.0
+    };
+    let stickman_width = ACTOR_ARM_HALF * 2.0 + stroke_thickness * 2.0;
+    let width = label_w.max(stereo_w).max(stickman_width);
+    let stickman_height = ACTOR_STICKMAN_BASE_HEIGHT + stroke_thickness * 2.0;
+    let label_gap = pm::ascent(skin.actor_font_size as f64) + 1.0 + stroke_thickness;
+    // `SvekResult.calculateDimension` normalizes from the minimum painted
+    // bound, not the node box. A stereotype's AWT line box overhangs the image
+    // origin by the remainder after its baseline; without one, the stickman's
+    // first painted point is one stroke thickness below the image origin.
+    let paint_min_y = if actor.stereotype.is_some() {
+        -(text_block_h - label_gap)
+    } else {
+        stroke_thickness
+    };
+    let height = stickman_height + text_block_h + stereo_h;
     ActorDim {
         label_w,
         stereo_w,
+        stereo_h,
+        stroke_thickness,
+        label_gap,
+        paint_min_y,
         width,
         height,
     }
@@ -806,33 +826,64 @@ fn layout_usecase_positions(
         );
     }
     let mut result = layout.layout_full(LAYOUT_TIMEOUT)?;
+    let degenerated = diagram.actors.len() + diagram.use_cases.len() == 1
+        && diagram.packages.is_empty()
+        && diagram.connections.is_empty();
+    let origin_x = if degenerated {
+        DEGENERATED_MARGIN
+    } else {
+        BODY_MARGIN
+    };
+    let base_origin_y = origin_x;
+    let actor_count = diagram.actors.len();
+    let min_painted_y = result
+        .node_positions
+        .iter()
+        .take(actor_count)
+        .zip(actor_dims)
+        .map(|(p, dim)| p.y + dim.paint_min_y)
+        .chain(
+            result
+                .node_positions
+                .iter()
+                .skip(actor_count)
+                .take(diagram.use_cases.len())
+                .map(|p| p.y),
+        )
+        .chain(result.cluster_positions.iter().map(|p| p.y))
+        .fold(f64::INFINITY, f64::min);
+    let origin_y = if min_painted_y.is_finite() {
+        base_origin_y - min_painted_y
+    } else {
+        base_origin_y
+    };
     for edge in &mut result.edge_paths {
         for point in &mut edge.points {
-            point.0 += BODY_MARGIN;
-            point.1 += BODY_MARGIN;
+            point.0 += origin_x;
+            point.1 += origin_y;
         }
         if let Some(point) = &mut edge.start_point {
-            point.0 += BODY_MARGIN;
-            point.1 += BODY_MARGIN;
+            point.0 += origin_x;
+            point.1 += origin_y;
         }
         if let Some(point) = &mut edge.end_point {
-            point.0 += BODY_MARGIN;
-            point.1 += BODY_MARGIN;
+            point.0 += origin_x;
+            point.1 += origin_y;
         }
     }
     for cluster in &mut result.cluster_positions {
-        cluster.x += BODY_MARGIN;
-        cluster.y += BODY_MARGIN;
+        cluster.x += origin_x;
+        cluster.y += origin_y;
     }
-    let actor_count = diagram.actors.len();
     let actors = result
         .node_positions
         .iter()
         .take(actor_count)
-        .map(|p| {
+        .zip(actor_dims)
+        .map(|(p, dim)| {
             (
-                p.x + BODY_MARGIN + p.width / 2.0,
-                p.y + BODY_MARGIN + ACTOR_HEAD_R,
+                p.x + origin_x + p.width / 2.0,
+                p.y + origin_y + dim.stereo_h + dim.stroke_thickness + ACTOR_HEAD_R,
             )
         })
         .collect();
@@ -842,7 +893,7 @@ fn layout_usecase_positions(
         .skip(actor_count)
         .take(diagram.use_cases.len())
         .zip(uc_dims)
-        .map(|(p, dim)| (p.x + BODY_MARGIN + dim.rx, p.y + BODY_MARGIN + dim.ry))
+        .map(|(p, dim)| (p.x + origin_x + dim.rx, p.y + origin_y + dim.ry))
         .collect();
     Some(Positions {
         actors,
@@ -969,23 +1020,33 @@ fn compute_canvas(
     actor_dims: &[ActorDim],
     uc_dims: &[UseCaseDim],
 ) -> (f64, f64) {
+    let degenerated = actor_dims.len() + uc_dims.len() == 1
+        && positions.edge_paths.is_empty()
+        && positions.cluster_positions.is_empty();
+    // `EntityImageDegenerated` owns the 7px entity inset; the surrounding
+    // image builder contributes the remaining 12px on the far edges.
+    let canvas_pad = if degenerated {
+        SVEK_CANVAS_PAD - 2.0
+    } else {
+        SVEK_CANVAS_PAD
+    };
     let mut max_x: f64 = 0.0;
     let mut max_y: f64 = 0.0;
     for (i, (cx, cy)) in positions.actors.iter().enumerate() {
-        let half = actor_dims[i].label_w.max(ACTOR_ARM_HALF * 2.0) / 2.0;
-        max_x = max_x.max(cx + half + SVEK_CANVAS_PAD);
+        let half = actor_dims[i].width / 2.0;
+        max_x = max_x.max(cx + half + canvas_pad);
         max_y = max_y.max(
             cy + ACTOR_HEAD_R
                 + ACTOR_BODY_LEN
                 + ACTOR_LEG_DROP
-                + ACTOR_LABEL_GAP
+                + actor_dims[i].label_gap
                 + pm::text_height(FONT_SIZE)
-                + SVEK_CANVAS_PAD,
+                + canvas_pad,
         );
     }
     for (i, (cx, cy)) in positions.use_cases.iter().enumerate() {
-        max_x = max_x.max(cx + uc_dims[i].rx + SVEK_CANVAS_PAD);
-        max_y = max_y.max(cy + uc_dims[i].ry + SVEK_CANVAS_PAD);
+        max_x = max_x.max(cx + uc_dims[i].rx + canvas_pad);
+        max_y = max_y.max(cy + uc_dims[i].ry + canvas_pad);
     }
     for edge in &positions.edge_paths {
         for (x, y) in &edge.points {
@@ -1223,10 +1284,7 @@ fn render_actor(
         .first()
         .copied()
         .unwrap_or(cx_anchor - dim.label_w / 2.0);
-    let label_y = captured_y
-        .first()
-        .copied()
-        .unwrap_or(leg_y + ACTOR_LABEL_GAP);
+    let label_y = captured_y.first().copied().unwrap_or(leg_y + dim.label_gap);
     let mut buf = String::new();
     text_render::emit_text(
         &mut buf,
@@ -1249,7 +1307,7 @@ fn render_actor(
         let stereo_x = captured_x
             .get(1)
             .copied()
-            .unwrap_or(cx_anchor - dim.stereo_w / 2.0);
+            .unwrap_or(cx_anchor - (dim.stereo_w - ACTOR_STEREOTYPE_MARGIN_X * 2.0) / 2.0);
         let stereo_y = captured_y
             .get(1)
             .copied()
@@ -1809,9 +1867,9 @@ fn render_no_oracle_connections(
                 format!("stroke:{STROKE};stroke-width:1;")
             };
             let path_id = if conn.arrow {
-                format!("{}-to-{}", conn.from, conn.to)
+                format!("{from_label}-to-{to_label}")
             } else {
-                format!("{}-{}", conn.from, conn.to)
+                format!("{from_label}-{to_label}")
             };
             svg.raw(&format!(
                 r#"<path d="{d}" fill="none" id="{path_id}" style="{path_style}"/>"#,
@@ -1963,28 +2021,30 @@ fn dependency_arrow_points(control: (f64, f64), endpoint: (f64, f64)) -> String 
     let px = -uy;
     let py = ux;
     let p1 = endpoint;
-    let p2 = (
+    let left_wing = (
         endpoint.0 - ux * DEPENDENCY_ARROW_BACK + px * DEPENDENCY_ARROW_WING,
         endpoint.1 - uy * DEPENDENCY_ARROW_BACK + py * DEPENDENCY_ARROW_WING,
     );
-    let p3 = (
+    let notch = (
         endpoint.0 - ux * DEPENDENCY_ARROW_NOTCH,
         endpoint.1 - uy * DEPENDENCY_ARROW_NOTCH,
     );
-    let p4 = (
+    let right_wing = (
         endpoint.0 - ux * DEPENDENCY_ARROW_BACK - px * DEPENDENCY_ARROW_WING,
         endpoint.1 - uy * DEPENDENCY_ARROW_BACK - py * DEPENDENCY_ARROW_WING,
     );
+    // Java's `ExtremityArrow.getDecorationPolygon()` emits the right wing,
+    // inset notch, and left wing in that order; SVG points are comma-delimited.
     format!(
-        "{},{} {},{} {},{} {},{} {},{}",
+        "{},{},{},{},{},{},{},{},{},{}",
         fc(p1.0),
         fc(p1.1),
-        fc(p2.0),
-        fc(p2.1),
-        fc(p3.0),
-        fc(p3.1),
-        fc(p4.0),
-        fc(p4.1),
+        fc(right_wing.0),
+        fc(right_wing.1),
+        fc(notch.0),
+        fc(notch.1),
+        fc(left_wing.0),
+        fc(left_wing.1),
         fc(p1.0),
         fc(p1.1),
     )
@@ -2009,6 +2069,67 @@ mod tests {
         assert!(svg.contains(r#"<!--link R to Browse-->"#));
         assert!(svg.contains(r#"<path d="M"#));
         assert!(svg.contains(r##"<polygon fill="#181818""##));
+    }
+
+    #[test]
+    fn actor_stereotype_is_a_measured_top_tile_for_renamed_actor() {
+        let input = "@startuml\nactor \"Renamed Portal\" as Portal <<externalized>>\nusecase \"Fresh Flow\" as Flow\nPortal --> Flow\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::UseCase(usecase) = &diagram else {
+            panic!("expected use-case diagram");
+        };
+        let skin = super::SkinColors::from_meta(&usecase.meta.skinparams, None);
+        let dim = super::actor_dim(&usecase.actors[0], &skin);
+        let bare_stereo_w = crate::text_render::measure_with_family(
+            "\u{00AB}externalized\u{00BB}",
+            skin.actor_font_size as f64,
+            false,
+            &skin.actor_font_family,
+        );
+
+        assert_eq!(
+            dim.stereo_w,
+            bare_stereo_w + super::ACTOR_STEREOTYPE_MARGIN_X * 2.0
+        );
+        let text_block_h = super::pm::text_height(skin.actor_font_size as f64);
+        assert_eq!(dim.stereo_h, text_block_h);
+        assert_eq!(
+            dim.height,
+            super::ACTOR_STICKMAN_BASE_HEIGHT + dim.stroke_thickness * 2.0 + text_block_h * 2.0
+        );
+        assert_eq!(dim.paint_min_y, -(text_block_h - dim.label_gap));
+
+        let svg = crate::render_svg(&diagram);
+        assert!(svg.contains(">Renamed Portal</text>"));
+        assert!(svg.contains("\u{00AB}externalized\u{00BB}</text>"));
+        assert!(svg.contains(r#"id="Portal-to-Flow""#));
+        assert!(svg.contains(r##"<polygon fill="#181818" points=""##));
+    }
+
+    #[test]
+    fn dependency_arrow_uses_extremity_arrow_point_order() {
+        assert_eq!(
+            super::dependency_arrow_points((0.0, 0.0), (0.0, 10.0)),
+            "0,10,4,1,0,5,-4,1,0,10"
+        );
+    }
+
+    #[test]
+    fn lone_renamed_usecase_uses_degenerated_entity_inset() {
+        let input = "@startuml\nusecase \"Fresh Singleton\" as Singleton\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        let rustuml_parser::diagram::Diagram::UseCase(usecase) = &diagram else {
+            panic!("expected use-case diagram");
+        };
+        let skin = super::SkinColors::from_meta(&usecase.meta.skinparams, None);
+        let dim = super::use_case_dim(&usecase.use_cases[0], &skin);
+        let expected_cx = super::fc(super::DEGENERATED_MARGIN + dim.rx);
+        let expected_cy = super::fc(super::DEGENERATED_MARGIN + dim.ry);
+        assert!(svg.contains(&format!(
+            r#"<ellipse cx="{expected_cx}" cy="{expected_cy}""#
+        )));
     }
 
     #[test]
