@@ -10,7 +10,9 @@
 use std::collections::HashMap;
 use std::fmt::Write as _;
 
-use rustuml_layout::graph::{ClusterPosition, Direction, EdgeLabelSize, EdgePath, LayoutGraph};
+use rustuml_layout::graph::{
+    ClusterPosition, ClusterTitleSize, Direction, EdgeLabelSize, EdgePath, LayoutGraph,
+};
 use rustuml_parser::diagram::usecase::*;
 
 use crate::layout_oracle::{OracleLayout, wrap_oracle_envelope};
@@ -1183,7 +1185,18 @@ fn layout_usecase_positions(
         );
     }
     for pkg in &diagram.packages {
-        layout.add_cluster(&pkg.name, &pkg.name, None);
+        // Java `ClusterHeader.getTitleAndAttribute{Width,Height}` truncates
+        // the measured title dimensions, then `ClusterDotString.printInternal`
+        // emits them as a fixed HTML-table label inside the protected SVEK
+        // cluster tree. The package chrome itself is painted after layout.
+        layout.add_svek_cluster(
+            &pkg.name,
+            None,
+            ClusterTitleSize {
+                width: text_render::measure_no_underline(&pkg.name, FONT_SIZE, true),
+                height: text_render::label_height(&pkg.name, FONT_SIZE),
+            },
+        );
         for member in &pkg.elements {
             layout.add_cluster_node(&pkg.name, member);
         }
@@ -1274,13 +1287,33 @@ fn layout_usecase_positions(
         == 1
         && diagram.packages.is_empty()
         && diagram.connections.is_empty();
-    let origin_x = if degenerated {
+    let base_origin_x = if degenerated {
         DEGENERATED_MARGIN
     } else {
         BODY_MARGIN
     };
-    let base_origin_y = origin_x;
+    let base_origin_y = base_origin_x;
     let actor_count = diagram.actors.len();
+    let min_painted_x = result
+        .node_positions
+        .iter()
+        .map(|p| p.x)
+        // `LimitFinder.drawRectangle` expands cluster chrome one pixel
+        // toward the top-left before `SvekResult.calculateDimension` moves
+        // the painted minimum to (6, 6).
+        .chain(result.cluster_positions.iter().map(|p| p.x - 1.0))
+        .chain(
+            result
+                .edge_paths
+                .iter()
+                .flat_map(|edge| edge.points.iter().map(|point| point.0)),
+        )
+        .fold(f64::INFINITY, f64::min);
+    let origin_x = if !result.cluster_positions.is_empty() && min_painted_x.is_finite() {
+        base_origin_x - min_painted_x
+    } else {
+        base_origin_x
+    };
     let min_painted_y = result
         .node_positions
         .iter()
@@ -3219,6 +3252,36 @@ mod tests {
         assert_eq!(svg.matches("stroke-dasharray:1,2;").count(), 1, "{svg}");
         assert!(svg.contains(">Fresh intake</text>"), "{svg}");
         assert!(svg.contains(">Archive renamed result</text>"), "{svg}");
+    }
+
+    #[test]
+    fn renamed_package_uses_svek_title_geometry_and_painted_origin() {
+        let input = "@startuml\n\
+                     actor \"Renamed Auditor 1701\" as Auditor1701\n\
+                     actor \"Renamed Scheduler 1709\" as Scheduler1709\n\
+                     rectangle \"Fresh Processing Boundary 1721\" #LightGreen {\n\
+                       usecase \"Queue unseen batch 1723\" as Queue1723\n\
+                       usecase \"Reconcile unusual result 1733\" as Reconcile1733\n\
+                       usecase \"Archive renamed record 1741\" as Archive1741\n\
+                     }\n\
+                     Auditor1701 --> Queue1723\n\
+                     Scheduler1709 --> Reconcile1733\n\
+                     Auditor1701 --> Archive1741\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // A fresh Java PlantUML render of this renamed topology has the same
+        // 779px canvas width and 758px cluster width. `ClusterHeader` supplies
+        // the title table while `SvekResult.calculateDimension` moves the
+        // rectangle's painted minimum to x=6, leaving its path origin at x=7.
+        assert!(svg.contains(r#"viewBox="0 0 779 "#), "{svg}");
+        assert!(svg.contains(r#"width="758" x="7""#), "{svg}");
+        assert!(
+            svg.contains(">Fresh Processing Boundary 1721</text>"),
+            "{svg}"
+        );
+        assert_eq!(svg.matches(r#"class="entity""#).count(), 5, "{svg}");
     }
 
     #[test]
