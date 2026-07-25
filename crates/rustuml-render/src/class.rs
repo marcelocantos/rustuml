@@ -41,8 +41,6 @@ const MARGIN: f64 = 7.0;
 /// standard 32px header because the name no longer needs to clear the 22px-tall
 /// icon glyph; PlantUML pushes the header separator up to y_rect + 26.4883.
 const HEADER_H_NO_CIRCLE: f64 = 26.4883;
-/// Name baseline y (relative to rect top) when `hide circle` is active.
-const NAME_BASELINE_Y_NO_CIRCLE: f64 = 25.5352;
 /// Gap between icon and entity name text.
 const ICON_TEXT_GAP: f64 = 3.0;
 /// PlantUML `EntityImageClassHeader` wraps the circled character in
@@ -66,18 +64,8 @@ const CIRCLED_CHARACTER_DEFAULT_SIZE: u32 = 17;
 const CIRCLED_ICON_TOP_INSET: f64 = 5.0;
 /// Icon ellipse center x relative to entity left + 1.
 const ICON_CX_OFFSET: f64 = 15.0;
-/// Icon center y within the entity header.
-const ICON_CY: f64 = 23.0;
-/// When `skinparam padding N` is set, PlantUML positions the stereotype circle
-/// at `rect_top + N + (ICON_CY - MARGIN) - PADDING_ICON_CY_BIAS`. The bias was
-/// measured from golden output across padding 5/10/15/20/30.
-const PADDING_ICON_CY_BIAS: f64 = 2.7559;
 /// Y position of entity name text baseline.
 const NAME_BASELINE_Y: f64 = 28.291;
-/// Y position of separator line below header.
-const HEADER_SEP_Y: f64 = 39.0;
-/// Y position of second separator line (empty methods compartment).
-const METHODS_SEP_Y: f64 = 47.0;
 /// State-shaped entities inside `allowmixing` class diagrams.
 const MIXED_STATE_HEIGHT: f64 = 50.0;
 const MIXED_STATE_MIN_WIDTH: f64 = 50.0;
@@ -152,8 +140,6 @@ const STEREOTYPE_EXTRA_HEIGHT: f64 = 8.6211;
 const STEREOTYPE_LINE_HEIGHT: f64 = 14.1328;
 /// Stereotype text baseline y relative to entity rect top.
 const STEREOTYPE_Y_OFFSET: f64 = 16.6016;
-/// Name text baseline y relative to entity rect top when stereotypes are present.
-const NAME_Y_WITH_STEREO: f64 = 32.668;
 /// Icon center y relative to entity rect top when stereotypes are present.
 const ICON_CY_WITH_STEREO: f64 = 20.3105;
 
@@ -801,6 +787,16 @@ fn calc_entity_dims(
             .iter()
             .any(|m| m.kind == MemberKind::Method || m.visibility != Visibility::Default);
     let enum_classic = is_enum && !enum_has_methods;
+    let visible_field_blocks = entity
+        .members
+        .iter()
+        .filter(|m| m.kind == MemberKind::Field && !hide.hides_member(m))
+        .count();
+    let visible_method_blocks = entity
+        .members
+        .iter()
+        .filter(|m| m.kind == MemberKind::Method && !hide.hides_member(m))
+        .count();
     let (field_count, method_count) = if enum_classic {
         (
             entity
@@ -843,7 +839,7 @@ fn calc_entity_dims(
     } else {
         ICON_CX_OFFSET + ICON_RX + ICON_TEXT_GAP // 29
     };
-    let name_total = icon_area + name_width + HEADER_RIGHT_PAD;
+    let name_total = icon_area + name_width + HEADER_RIGHT_PAD + font.text_padding * 2.0;
 
     // Stereotype text may also affect width.
     let stereo_width = if has_stereotypes {
@@ -855,9 +851,13 @@ fn calc_entity_dims(
             // `EntityImageClassHeader` wraps a 22px circle with 4px of left
             // margin and the stereotype Display with 1px of left margin.
             // EntityImageClass's SVG envelope adds the final outer pixel.
-            font.circled_radius() * 2.0 + HEADER_CIRCLE_LEFT_MARGIN + stereo_tw + 2.0
+            font.circled_radius() * 2.0
+                + HEADER_CIRCLE_LEFT_MARGIN
+                + stereo_tw
+                + 2.0
+                + font.text_padding * 2.0
         } else {
-            icon_area + stereo_tw + HEADER_RIGHT_PAD
+            icon_area + stereo_tw + HEADER_RIGHT_PAD + font.text_padding * 2.0
         }
     } else {
         0.0
@@ -923,7 +923,7 @@ fn calc_entity_dims(
                 } else {
                     ENUM_TEXT_OFFSET
                 };
-            text_offset + text_w + MEMBER_RIGHT_PAD
+            text_offset + text_w + MEMBER_RIGHT_PAD + font.text_padding * 2.0
         })
         .collect();
 
@@ -953,20 +953,21 @@ fn calc_entity_dims(
     //   each compartment = 8px padding + n * 16.4883px per member
     //   empty compartment = 8px
 
-    const HEADER_H: f64 = 32.0;
-    let header_h = if has_stereotypes {
-        HEADER_H + stereotype_header_extra_height(stereotype_count)
-    } else if hide.circle || entity.kind == EntityKind::Object {
-        HEADER_H_NO_CIRCLE
-    } else {
-        HEADER_H
-    };
+    let header_h = class_header_height(
+        entity,
+        hide,
+        has_stereotypes,
+        stereotype_count,
+        font.text_padding,
+    );
+    let field_padding = visible_field_blocks as f64 * font.text_padding * 2.0;
+    let method_padding = visible_method_blocks as f64 * font.text_padding * 2.0;
 
     let height = if hide.fields && hide.methods {
         // Both compartments hidden — header only, no body or separators.
         header_h
     } else if entity.kind == EntityKind::Object {
-        header_h + COMPARTMENT_PAD + eff_field_count as f64 * MEMBER_LINE_HEIGHT
+        header_h + COMPARTMENT_PAD + eff_field_count as f64 * MEMBER_LINE_HEIGHT + field_padding
     } else if entity.members.is_empty()
         || (eff_field_count == 0 && eff_method_count == 0 && !enum_classic)
     {
@@ -977,7 +978,9 @@ fn calc_entity_dims(
             + if hide.methods { 0.0 } else { COMPARTMENT_PAD }
     } else if enum_classic {
         // Enum: header + values + bottom separator.
-        header_h + (COMPARTMENT_PAD + eff_field_count as f64 * MEMBER_LINE_HEIGHT) + COMPARTMENT_PAD
+        header_h
+            + (COMPARTMENT_PAD + eff_field_count as f64 * MEMBER_LINE_HEIGHT + field_padding)
+            + COMPARTMENT_PAD
     } else {
         // Class/interface/abstract/annotation.
         // Java `BodierLikeClassOrObject.getBody()` returns only the visible
@@ -985,12 +988,12 @@ fn calc_entity_dims(
         let fields_section = if hide.fields {
             0.0
         } else {
-            COMPARTMENT_PAD + eff_field_count as f64 * MEMBER_LINE_HEIGHT
+            COMPARTMENT_PAD + eff_field_count as f64 * MEMBER_LINE_HEIGHT + field_padding
         };
         let methods_section = if hide.methods {
             0.0
         } else {
-            COMPARTMENT_PAD + eff_method_count as f64 * MEMBER_LINE_HEIGHT
+            COMPARTMENT_PAD + eff_method_count as f64 * MEMBER_LINE_HEIGHT + method_padding
         };
         header_h + fields_section + methods_section
     };
@@ -1017,6 +1020,27 @@ fn calc_entity_dims(
         stereotype_count,
         source_line,
         hide,
+    }
+}
+
+/// Ports PlantUML's class-header height composition:
+/// `EntityImageClassHeader` builds padded Display blocks, then
+/// `HeaderLayout.getDimension` takes the maximum of the circled-character
+/// block and `stereotype + name + 10`. `SheetBlock1.calculateDimensionSlow`
+/// adds twice the global padding to each Display block.
+fn class_header_height(
+    entity: &ClassEntity,
+    hide: HideFlags,
+    has_stereotypes: bool,
+    stereotype_count: usize,
+    text_padding: f64,
+) -> f64 {
+    if has_stereotypes {
+        HEADER_HEIGHT + stereotype_header_extra_height(stereotype_count) + text_padding * 4.0
+    } else if hide.circle || entity.kind == EntityKind::Object {
+        HEADER_H_NO_CIRCLE + text_padding * 2.0
+    } else {
+        HEADER_HEIGHT.max(HEADER_H_NO_CIRCLE + text_padding * 2.0)
     }
 }
 
@@ -1851,6 +1875,10 @@ pub fn render_with_oracle(
 /// text black, 14px, plain by default).
 #[derive(Default, Clone)]
 struct ClassFontOverrides {
+    /// Global `skinparam padding`. Java `Display.create8` passes this through
+    /// `SkinParam.getPadding` to `SheetBlock1`, which expands each class text
+    /// block by this amount on all four sides.
+    text_padding: f64,
     /// `skinparam ClassFontColor` — colours the class name.
     font_color: Option<String>,
     /// `skinparam ClassAttributeFontColor` — colours members and, in themed
@@ -1973,6 +2001,12 @@ impl ClassFontOverrides {
             .unwrap_or(CIRCLED_CHARACTER_DEFAULT_SIZE);
         let default_font_color = find(&["defaultFontColor"]);
         Self {
+            text_padding: params
+                .iter()
+                .filter(|sp| sp.key.eq_ignore_ascii_case("padding"))
+                .filter_map(|sp| sp.value.trim().parse::<f64>().ok())
+                .next_back()
+                .unwrap_or(0.0),
             font_color: find(&["ClassFontColor"]).or_else(|| default_font_color.clone()),
             attr_font_color: find(&["ClassAttributeFontColor"])
                 .or_else(|| default_font_color.clone()),
@@ -2574,15 +2608,16 @@ fn class_header_positions(
     width: f64,
     icon_radius: f64,
     name_text_width: f64,
+    text_padding: f64,
 ) -> HeaderPositions {
     let circle_width = icon_radius * 2.0 + HEADER_CIRCLE_LEFT_MARGIN + HEADER_CIRCLE_RIGHT_MARGIN;
-    let name_width = name_text_width + HEADER_NAME_MARGIN_X * 2.0;
+    let name_width = name_text_width + HEADER_NAME_MARGIN_X * 2.0 + text_padding * 2.0;
     let supp_width = (width - circle_width - name_width).max(0.0);
     let h2 = (circle_width / 4.0).min(supp_width * HEADER_SECONDARY_GAP_RATIO);
     let h1 = (supp_width - h2) / 2.0;
     HeaderPositions {
         icon_cx: x + h1 + HEADER_CIRCLE_LEFT_MARGIN + icon_radius,
-        name_x: x + circle_width + h1 + h2 + HEADER_NAME_MARGIN_X,
+        name_x: x + circle_width + h1 + h2 + HEADER_NAME_MARGIN_X + text_padding,
     }
 }
 
@@ -2595,16 +2630,17 @@ fn generic_header_positions(
     icon_radius: f64,
     name_text_width: f64,
     generic_text_width: f64,
+    text_padding: f64,
 ) -> HeaderPositions {
     let circle_width = icon_radius * 2.0 + HEADER_CIRCLE_LEFT_MARGIN + HEADER_CIRCLE_RIGHT_MARGIN;
-    let name_width = name_text_width + HEADER_NAME_MARGIN_X * 2.0;
-    let generic_width = generic_text_width + GENERIC_BOX_PAD * 2.0 + 2.0;
+    let name_width = name_text_width + HEADER_NAME_MARGIN_X * 2.0 + text_padding * 2.0;
+    let generic_width = generic_text_width + GENERIC_BOX_PAD * 2.0 + 2.0 + text_padding * 2.0;
     let supp_width = (width - circle_width - name_width - generic_width).max(0.0);
     let h2 = (circle_width / 4.0).min(supp_width * HEADER_SECONDARY_GAP_RATIO);
     let h1 = (supp_width - h2) / 2.0;
     HeaderPositions {
         icon_cx: x + h1 + HEADER_CIRCLE_LEFT_MARGIN + icon_radius,
-        name_x: x + circle_width + h1 + h2 + HEADER_NAME_MARGIN_X,
+        name_x: x + circle_width + h1 + h2 + HEADER_NAME_MARGIN_X + text_padding,
     }
 }
 
@@ -2618,25 +2654,33 @@ fn stereotyped_header_positions(
     icon_radius: f64,
     stereo_text_width: f64,
     name_text_width: f64,
+    text_padding: f64,
 ) -> StereotypedHeaderPositions {
     let circle_width = icon_radius * 2.0 + HEADER_CIRCLE_LEFT_MARGIN + HEADER_CIRCLE_RIGHT_MARGIN;
-    let stereo_width = stereo_text_width + 1.0;
+    let stereo_width = stereo_text_width + 1.0 + text_padding * 2.0;
     // PlantUML's name Display dimension is one pixel narrower than its SVG
     // textLength; the symmetric three-pixel margins therefore add five here.
-    let name_width = name_text_width + 5.0;
+    let name_width = name_text_width + 5.0 + text_padding * 2.0;
     let width_stereo_and_name = stereo_width.max(name_width);
     let supp_width = (width - 1.0 - circle_width - width_stereo_and_name).max(0.0);
     let h2 = (circle_width / 4.0).min(supp_width * HEADER_SECONDARY_GAP_RATIO);
     let h1 = (supp_width - h2) / 2.0;
     StereotypedHeaderPositions {
         icon_cx: x + h1 + HEADER_CIRCLE_LEFT_MARGIN + icon_radius,
-        stereo_x: x + circle_width + (width_stereo_and_name - stereo_width) / 2.0 + h1 + h2 + 1.0,
+        stereo_x: x
+            + circle_width
+            + (width_stereo_and_name - stereo_width) / 2.0
+            + h1
+            + h2
+            + 1.0
+            + text_padding,
         name_x: x
             + circle_width
             + (width_stereo_and_name - name_width) / 2.0
             + h1
             + h2
-            + HEADER_NAME_MARGIN_X,
+            + HEADER_NAME_MARGIN_X
+            + text_padding,
     }
 }
 
@@ -2791,19 +2835,7 @@ fn render_plantuml_svg(
             }
         }
     }
-    // `skinparam padding N` shifts the in-box header icon and member text.
-    // When the directive is present PlantUML offsets the stereotype circle
-    // down by `N` (the glyph and name baseline already track this through the
-    // captured text-y geometry) and shifts member text right by `N`. The
-    // default (directive absent) contributes nothing here. The last explicit
-    // value wins.
-    let explicit_padding: Option<f64> = diagram
-        .meta
-        .skinparams
-        .iter()
-        .filter(|sp| sp.key.eq_ignore_ascii_case("padding"))
-        .filter_map(|sp| sp.value.trim().parse::<f64>().ok())
-        .next_back();
+    let text_padding = font.text_padding;
 
     let layout_x_bias = svek_layout_x_bias(positions, cluster_positions, &adjusted_edge_paths);
 
@@ -3325,7 +3357,7 @@ fn render_plantuml_svg(
             oracle_rect,
             &font,
             link_anchor.as_deref(),
-            explicit_padding,
+            text_padding,
             body_gradient_fill.as_deref(),
             header_gradient_fill.as_deref(),
             entity_suppress_header_icon,
@@ -4470,7 +4502,7 @@ fn render_entity_content(
     oracle_rect: Option<&crate::layout_oracle::EntityRect>,
     font: &ClassFontOverrides,
     link_anchor: Option<&str>,
-    explicit_padding: Option<f64>,
+    text_padding: f64,
     body_gradient_fill: Option<&str>,
     header_gradient_fill: Option<&str>,
     suppress_header_icon: bool,
@@ -4817,12 +4849,13 @@ fn render_entity_content(
     } else if fill.starts_with("url(#") && !entity_gradient_fill {
         oracle_rect.and_then(|r| r.sep_y_values.first().copied())
     } else if header_solid.is_some() {
-        let stereo_shift = stereotype_header_extra_height(dim.stereotype_count);
-        let computed = if dim.hide.circle {
-            y + HEADER_H_NO_CIRCLE + stereo_shift
-        } else {
-            y + HEADER_SEP_Y - MARGIN + stereo_shift
-        };
+        let computed = y + class_header_height(
+            entity,
+            dim.hide,
+            dim.has_stereotypes,
+            dim.stereotype_count,
+            text_padding,
+        );
         Some(
             oracle_rect
                 .and_then(|r| r.sep_y_values.first().copied())
@@ -4925,7 +4958,7 @@ fn render_entity_content(
         && !suppress_header_icon
         && !is_object_entity
         && entity.generic.is_none())
-    .then(|| class_header_positions(x, dim.width, icon_radius, name_tl));
+    .then(|| class_header_positions(x, dim.width, icon_radius, name_tl, text_padding));
     let generic_header_positions = entity
         .generic
         .as_deref()
@@ -4939,6 +4972,7 @@ fn render_entity_content(
                 icon_radius,
                 name_tl,
                 text_render::measure(generic, GENERIC_FONT_SIZE as f64, false),
+                text_padding,
             )
         });
     let stereo_width = format_stereotype_lines(&entity.stereotypes)
@@ -4950,7 +4984,16 @@ fn render_entity_content(
         && !suppress_header_icon
         && !is_object_entity
         && entity.generic.is_none())
-    .then(|| stereotyped_header_positions(x, dim.width, icon_radius, stereo_width, name_tl));
+    .then(|| {
+        stereotyped_header_positions(
+            x,
+            dim.width,
+            icon_radius,
+            stereo_width,
+            name_tl,
+            text_padding,
+        )
+    });
     let icon_cx = icon_cx_override.unwrap_or_else(|| {
         stereotyped_header_positions
             .as_ref()
@@ -4964,13 +5007,18 @@ fn render_entity_content(
     } else if dim.has_stereotypes {
         y + ICON_CY_WITH_STEREO
             + (dim.stereotype_count.saturating_sub(1) as f64) * STEREOTYPE_LINE_HEIGHT / 2.0
-    } else if let Some(pad) = explicit_padding {
-        // PlantUML drops the stereotype circle by the explicit padding value,
-        // measured from the rect top plus a fixed icon inset (16 - 2.7559).
-        y + pad + (ICON_CY - MARGIN - PADDING_ICON_CY_BIAS)
     } else {
-        let title_lh = text_render::label_height(&entity.label, name_font_size as f64);
-        y + CIRCLED_ICON_TOP_INSET + icon_radius.max(title_lh / 2.0)
+        let circle_height = icon_radius * 2.0 + CIRCLED_ICON_TOP_INSET * 2.0;
+        let header_height = class_header_height(
+            entity,
+            dim.hide,
+            dim.has_stereotypes,
+            dim.stereotype_count,
+            text_padding,
+        );
+        // Java `HeaderLayout.drawU` vertically centres the complete
+        // circled-character block inside the measured header.
+        y + (header_height - circle_height) / 2.0 + CIRCLED_ICON_TOP_INSET + icon_radius
     };
     if !dim.hide.circle && !suppress_header_icon && !is_object_entity {
         // A hex spot color from `<< (X,#HEX) Name >>` overrides the default
@@ -5137,7 +5185,9 @@ fn render_entity_content(
                 });
             let stereo_y = oracle_rect
                 .and_then(|r| r.text_y_values.get(i).copied())
-                .unwrap_or(y + STEREOTYPE_Y_OFFSET + i as f64 * STEREOTYPE_LINE_HEIGHT);
+                .unwrap_or(
+                    y + STEREOTYPE_Y_OFFSET + text_padding + i as f64 * STEREOTYPE_LINE_HEIGHT,
+                );
             let stereo_family = unquoted_class_font_family(&font.name_family);
             let mut text_buf = String::new();
             text_render::emit_text(
@@ -5209,13 +5259,30 @@ fn render_entity_content(
             .unwrap_or(icon_cx + ICON_RX + ICON_TEXT_GAP);
         name_text_x_override.unwrap_or(default_name_x)
     };
+    let name_line_step =
+        text_render::text_height_for_family(name_font_size as f64, &font.name_family);
+    let name_content_height = name_line_step * name_lines.len().max(1) as f64;
+    let header_height = class_header_height(
+        entity,
+        dim.hide,
+        dim.has_stereotypes,
+        dim.stereotype_count,
+        text_padding,
+    );
     let name_y_default = if dim.has_stereotypes {
-        y + NAME_Y_WITH_STEREO
-            + (dim.stereotype_count.saturating_sub(1) as f64) * STEREOTYPE_LINE_HEIGHT
-    } else if dim.hide.circle {
-        y + NAME_BASELINE_Y_NO_CIRCLE - MARGIN
+        let stereo_content_height = dim.stereotype_count as f64 * STEREOTYPE_LINE_HEIGHT;
+        let stereo_block_height = stereo_content_height + text_padding * 2.0;
+        let name_block_height = name_content_height + text_padding * 2.0;
+        let vertical_slack = (header_height - stereo_block_height - name_block_height) / 2.0;
+        y + vertical_slack
+            + stereo_block_height
+            + text_padding
+            + text_render::ascent_for_family(name_font_size as f64, &font.name_family)
     } else {
-        y + NAME_BASELINE_Y - MARGIN
+        let name_block_height = name_content_height + text_padding * 2.0;
+        y + (header_height - name_block_height) / 2.0
+            + text_padding
+            + text_render::ascent_for_family(name_font_size as f64, &font.name_family)
     };
     // Prefer the oracle's recorded name y (text_y_values[0] when no
     // stereotype) verbatim — it carries PlantUML's exact baseline, including
@@ -5232,8 +5299,6 @@ fn render_entity_content(
     let oracle_name_line_anchors = oracle_rect
         .map(oracle_text_line_anchors)
         .unwrap_or_default();
-    let name_line_step =
-        text_render::text_height_for_family(name_font_size as f64, &font.name_family);
     let mut text_buf = String::new();
     for (line_index, line) in name_lines.iter().enumerate() {
         let anchor_index = dim.stereotype_count + line_index;
@@ -5273,7 +5338,7 @@ fn render_entity_content(
             )
             .unwrap();
         } else {
-            let sep_y = y + HEADER_H_NO_CIRCLE - MARGIN;
+            let sep_y = y + header_height;
             write!(
                 svg,
                 r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
@@ -5298,8 +5363,8 @@ fn render_entity_content(
         let header_sep_y = object_line
             .and_then(|line| line.y1.parse::<f64>().ok())
             .or_else(|| oracle_rect.and_then(|r| r.sep_y_values.first().copied()))
-            .unwrap_or(y + HEADER_H_NO_CIRCLE - MARGIN);
-        let mut member_y = header_sep_y + FIRST_MEMBER_OFFSET;
+            .unwrap_or(y + header_height);
+        let mut member_y = header_sep_y + FIRST_MEMBER_OFFSET + text_padding;
         for (mi, member) in entity
             .members
             .iter()
@@ -5310,7 +5375,7 @@ fn render_entity_content(
             let eff_x = oracle_text_x
                 .get(1 + mi)
                 .copied()
-                .unwrap_or(x + ENUM_TEXT_OFFSET);
+                .unwrap_or(x + ENUM_TEXT_OFFSET + text_padding);
             for (line_index, text) in member_display_lines(member, attr_font.monospace_spaces)
                 .iter()
                 .enumerate()
@@ -5332,7 +5397,8 @@ fn render_entity_content(
                 );
             }
             member_y += member_display_line_count(member, attr_font.monospace_spaces) as f64
-                * MEMBER_SPACING;
+                * MEMBER_SPACING
+                + text_padding * 2.0;
         }
         return;
     }
@@ -5431,16 +5497,13 @@ fn render_entity_content(
         .filter(|_| !font.monochrome)
         .unwrap_or(style_default.as_str());
 
-    // Stereotype offset for separator and member positions.
-    let stereo_shift = stereotype_header_extra_height(dim.stereotype_count);
-
-    // Default header-separator y (rect-relative): icon-less entities use a
-    // shorter header so the separator sits 5.5px higher.
-    let header_sep_default = if dim.hide.circle {
-        y + HEADER_H_NO_CIRCLE + stereo_shift
-    } else {
-        y + HEADER_SEP_Y - MARGIN + stereo_shift
-    };
+    let header_sep_default = y + class_header_height(
+        entity,
+        dim.hide,
+        dim.has_stereotypes,
+        dim.stereotype_count,
+        text_padding,
+    );
 
     // `dim.is_enum` is true only for the classic enum-constants layout
     // (all members are default-visibility fields). Enums with method
@@ -5504,7 +5567,7 @@ fn render_entity_content(
             x,
             attr_font,
             member_fill,
-            explicit_padding.unwrap_or(0.0),
+            text_padding,
             member_text_offset,
             oracle_text_y,
             oracle_vis_y,
@@ -5542,7 +5605,7 @@ fn render_entity_content(
             || visible_members
                 .iter()
                 .all(|m| m.visibility == Visibility::Default);
-        let mut member_y = sep_y + FIRST_MEMBER_OFFSET;
+        let mut member_y = sep_y + FIRST_MEMBER_OFFSET + text_padding;
         for (mi, member) in visible_members.iter().enumerate() {
             let eff_y = oracle_text_y
                 .get(text_header_count + mi)
@@ -5567,11 +5630,12 @@ fn render_entity_content(
                 attr_font,
                 link_anchor,
                 None,
-                explicit_padding.unwrap_or(0.0),
+                text_padding,
                 member_text_offset,
             );
             member_y += member_display_line_count(member, attr_font.monospace_spaces) as f64
-                * MEMBER_SPACING;
+                * MEMBER_SPACING
+                + text_padding * 2.0;
         }
     } else if effectively_no_members {
         // Two separator lines (fields/methods compartments both empty).
@@ -5579,7 +5643,7 @@ fn render_entity_content(
         let sep2_y = oracle_sep_y
             .get(1)
             .copied()
-            .unwrap_or(y + METHODS_SEP_Y - MARGIN + stereo_shift);
+            .unwrap_or(header_sep_default + COMPARTMENT_PAD);
         if let Some(path) = oracle_sep_paths.first() {
             emit_entity_path(svg, path);
         } else {
@@ -5627,7 +5691,7 @@ fn render_entity_content(
         }
 
         // Enum members: constants without visibility icons, fields/methods with icons.
-        let mut member_y = sep_y + FIRST_MEMBER_OFFSET;
+        let mut member_y = sep_y + FIRST_MEMBER_OFFSET + text_padding;
         for (mi, member) in entity.members.iter().enumerate() {
             // Use oracle text y if available (skip header texts).
             let eff_member_y = oracle_text_y
@@ -5654,7 +5718,7 @@ fn render_entity_content(
                     attr_font,
                     link_anchor,
                     None,
-                    explicit_padding.unwrap_or(0.0),
+                    text_padding,
                     member_text_offset,
                 );
             } else {
@@ -5682,14 +5746,23 @@ fn render_entity_content(
                 svg.push_str(&text_buf);
             }
             member_y += member_display_line_count(member, attr_font.monospace_spaces) as f64
-                * MEMBER_SPACING;
+                * MEMBER_SPACING
+                + text_padding * 2.0;
         }
 
         // Bottom separator: header_sep + compartment_pad + n_members * member_line_height.
-        let bottom_sep_y = oracle_sep_y
-            .get(1)
-            .copied()
-            .unwrap_or(sep_y + COMPARTMENT_PAD + dim.field_count as f64 * MEMBER_LINE_HEIGHT);
+        let bottom_sep_y = oracle_sep_y.get(1).copied().unwrap_or(
+            sep_y
+                + COMPARTMENT_PAD
+                + dim.field_count as f64 * MEMBER_LINE_HEIGHT
+                + entity
+                    .members
+                    .iter()
+                    .filter(|m| m.kind == MemberKind::Field && !dim.hide.hides_member(m))
+                    .count() as f64
+                    * text_padding
+                    * 2.0,
+        );
         write!(
             svg,
             r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
@@ -5878,7 +5951,10 @@ fn render_entity_content(
                 && inline_field_separators.is_empty()
             {
                 let methods_sep_y = oracle_sep_y.get(1).copied().unwrap_or(
-                    header_sep_y + COMPARTMENT_PAD + dim.field_count as f64 * MEMBER_LINE_HEIGHT,
+                    header_sep_y
+                        + COMPARTMENT_PAD
+                        + dim.field_count as f64 * MEMBER_LINE_HEIGHT
+                        + fields.len() as f64 * text_padding * 2.0,
                 );
                 Some(format!(
                     r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
@@ -5899,7 +5975,7 @@ fn render_entity_content(
             // the matching field and switch subsequent default-visibility
             // members to the narrow ENUM_TEXT_OFFSET inset.
             let last_field_idx = fields.len().saturating_sub(1);
-            let mut member_y = header_sep_y + FIRST_MEMBER_OFFSET;
+            let mut member_y = header_sep_y + FIRST_MEMBER_OFFSET + text_padding;
             let mut oracle_field_text_idx = text_header_count;
             // `inline_sep_consumed_idx` walks `oracle_sep_y` past the header
             // separator. Index 1 is the first inline separator y from oracle.
@@ -5945,12 +6021,13 @@ fn render_entity_content(
                     attr_font,
                     member_anchor,
                     trailing,
-                    explicit_padding.unwrap_or(0.0),
+                    text_padding,
                     member_text_offset,
                 );
                 oracle_field_text_idx += oracle_text_count;
                 member_y += member_display_line_count(member, attr_font.monospace_spaces) as f64
-                    * MEMBER_SPACING;
+                    * MEMBER_SPACING
+                    + text_padding * 2.0;
                 // Emit any inline separators that fall AFTER this field.
                 for (_, sym) in inline_field_separators
                     .iter()
@@ -5967,7 +6044,7 @@ fn render_entity_content(
                     let sep_inline_y = oracle_sep_y
                         .get(inline_sep_oracle_idx)
                         .copied()
-                        .unwrap_or(member_y - FIRST_MEMBER_OFFSET + COMPARTMENT_PAD);
+                        .unwrap_or(member_y - FIRST_MEMBER_OFFSET - text_padding + COMPARTMENT_PAD);
                     inline_sep_oracle_idx += 1;
                     write!(
                         svg,
@@ -5982,7 +6059,7 @@ fn render_entity_content(
                     // PlantUML's entity-table divider starts a fresh
                     // compartment; following rows are measured from the
                     // divider line, not from the previous field baseline.
-                    member_y = sep_inline_y + FIRST_MEMBER_OFFSET;
+                    member_y = sep_inline_y + FIRST_MEMBER_OFFSET + text_padding;
                     // After an inline divider, subsequent default-visibility
                     // fields move to the narrow inset ONLY when the whole
                     // post-divider sub-compartment is default-visibility. If
@@ -6008,7 +6085,8 @@ fn render_entity_content(
                     .unwrap_or(
                         header_sep_y
                             + COMPARTMENT_PAD
-                            + dim.field_count as f64 * MEMBER_LINE_HEIGHT,
+                            + dim.field_count as f64 * MEMBER_LINE_HEIGHT
+                            + fields.len() as f64 * text_padding * 2.0,
                     );
                 // A labelled divider is drawn AFTER the member text (centred
                 // caption flanked by two short rules), so suppress the normal
@@ -6060,7 +6138,7 @@ fn render_entity_content(
                 // Method members (text_y index continues after header + fields).
                 let method_text_offset = oracle_field_text_idx;
                 let mut oracle_method_text_idx = method_text_offset;
-                let mut method_y = methods_sep_y + FIRST_MEMBER_OFFSET;
+                let mut method_y = methods_sep_y + FIRST_MEMBER_OFFSET + text_padding;
                 for member in methods {
                     let eff_y = oracle_text_y
                         .get(oracle_method_text_idx)
@@ -6095,13 +6173,14 @@ fn render_entity_content(
                         attr_font,
                         member_anchor,
                         None,
-                        explicit_padding.unwrap_or(0.0),
+                        text_padding,
                         member_text_offset,
                     );
                     oracle_method_text_idx += oracle_text_count;
                     method_y += member_display_line_count(member, attr_font.monospace_spaces)
                         as f64
-                        * MEMBER_SPACING;
+                        * MEMBER_SPACING
+                        + text_padding * 2.0;
                 }
 
                 // Emit a labelled divider after the members: two short rules
@@ -6200,7 +6279,7 @@ fn render_entity_content(
                 header_anchor_closed = true;
             }
 
-            let mut method_y = methods_sep_y + FIRST_MEMBER_OFFSET;
+            let mut method_y = methods_sep_y + FIRST_MEMBER_OFFSET + text_padding;
             let mut oracle_method_text_idx = text_header_count;
             for member in methods {
                 let eff_y = oracle_text_y
@@ -6237,17 +6316,18 @@ fn render_entity_content(
                     attr_font,
                     member_anchor,
                     None,
-                    explicit_padding.unwrap_or(0.0),
+                    text_padding,
                     member_text_offset,
                 );
                 oracle_method_text_idx += oracle_text_count;
                 method_y += member_display_line_count(member, attr_font.monospace_spaces) as f64
-                    * MEMBER_SPACING;
+                    * MEMBER_SPACING
+                    + text_padding * 2.0;
             }
         } else {
             // No members at all (already handled above, but just in case).
-            let sep1_y = y + HEADER_SEP_Y - MARGIN;
-            let sep2_y = y + METHODS_SEP_Y - MARGIN;
+            let sep1_y = header_sep_default;
+            let sep2_y = header_sep_default + COMPARTMENT_PAD;
             write!(
                 svg,
                 r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
@@ -9304,6 +9384,94 @@ mod tests {
                 r##"fill="#FFFFFF" rx="9" ry="9" style="stroke:#000000;stroke-width:1;""##
             ),
             "{svg}"
+        );
+    }
+
+    #[test]
+    fn no_oracle_global_padding_expands_each_class_display_block() {
+        let body = "class TelemetryLedger739 {\n\
+                      +signalCode: String\n\
+                      statusNote\n\
+                      -archive(packet: Frame): Result\n\
+                    }\n";
+        let plain = rustuml_parser::parse::parse(&format!("@startuml\n{body}@enduml")).unwrap();
+        let padded = rustuml_parser::parse::parse(&format!(
+            "@startuml\nskinparam padding 13\n{body}@enduml"
+        ))
+        .unwrap();
+        let plain_svg = crate::render_svg(&plain);
+        let padded_svg = crate::render_svg(&padded);
+
+        fn class_rect(svg: &str) -> &str {
+            svg.split_once("<!--class TelemetryLedger739-->")
+                .unwrap()
+                .1
+                .split_once("/>")
+                .unwrap()
+                .0
+        }
+        fn attr_number(element: &str, name: &str) -> f64 {
+            attr_value(element, name).unwrap().parse::<f64>().unwrap()
+        }
+        fn text_position(svg: &str, text: &str) -> (f64, f64) {
+            let marker = format!(">{text}</text>");
+            let tag = svg
+                .split_once(&marker)
+                .unwrap()
+                .0
+                .rsplit_once("<text ")
+                .unwrap()
+                .1;
+            (attr_number(tag, " x"), attr_number(tag, " y"))
+        }
+        fn assert_close(actual: f64, expected: f64) {
+            let tolerance = 1.0 / 1000.0;
+            assert!(
+                (actual - expected).abs() < tolerance,
+                "actual={actual}, expected={expected}"
+            );
+        }
+
+        let padding = 13.0;
+        let block_growth = padding * 2.0;
+        // PlantUML `Display.create8` constructs a `SheetBlock1`; its
+        // `calculateDimensionSlow` adds both vertical and horizontal padding.
+        assert_close(
+            attr_number(class_rect(&padded_svg), " width")
+                - attr_number(class_rect(&plain_svg), " width"),
+            block_growth,
+        );
+        let header_growth = (HEADER_H_NO_CIRCLE + block_growth).max(HEADER_HEIGHT) - HEADER_HEIGHT;
+        // `MethodsOrFieldsArea.calculateDimensionOnlyMembers` stacks three
+        // independently padded member blocks below that expanded header.
+        assert_close(
+            attr_number(class_rect(&padded_svg), " height")
+                - attr_number(class_rect(&plain_svg), " height"),
+            header_growth + block_growth * 3.0,
+        );
+
+        let plain_name = text_position(&plain_svg, "TelemetryLedger739");
+        let padded_name = text_position(&padded_svg, "TelemetryLedger739");
+        assert_close(padded_name.0 - plain_name.0, padding);
+        assert_close(padded_name.1 - plain_name.1, header_growth / 2.0);
+
+        let plain_first = text_position(&plain_svg, "signalCode: String");
+        let padded_first = text_position(&padded_svg, "signalCode: String");
+        assert_close(padded_first.0 - plain_first.0, padding);
+        assert_close(padded_first.1 - plain_first.1, header_growth + padding);
+
+        let plain_second = text_position(&plain_svg, "statusNote");
+        let padded_second = text_position(&padded_svg, "statusNote");
+        assert_close(
+            padded_second.1 - plain_second.1,
+            header_growth + padding * 3.0,
+        );
+
+        let plain_method = text_position(&plain_svg, "archive(packet: Frame): Result");
+        let padded_method = text_position(&padded_svg, "archive(packet: Frame): Result");
+        assert_close(
+            padded_method.1 - plain_method.1,
+            header_growth + padding * 5.0,
         );
     }
 
