@@ -30858,6 +30858,13 @@ fn render_ftile(
     handwritten: bool,
     defs: &str,
 ) -> Option<String> {
+    // ActivityDiagramFactory.createEmptyDiagram constructs the graph-backed
+    // ActivityDiagram, and CucaDiagram.getTextBlock12026 dispatches it through
+    // CucaDiagramFileMakerSvek.getTextBlock12026. Legacy graph syntax never
+    // enters ActivityDiagram3's FTile pipeline in Java.
+    if is_legacy_activity(diagram) {
+        return None;
+    }
     // DiagramChromeFactory12026.addWarnings wraps the completed raw diagram in
     // WarningBannerBlock. The FTile bridge does not own outer chrome yet, so
     // deprecated handwritten syntax uses the chrome-aware activity renderer.
@@ -31790,6 +31797,26 @@ mod tests {
         assert!(svg.contains("Renamed T14 bridge"));
         assert!(svg.contains("Not in golden corpus"));
         assert!(svg.contains("data-diagram-type=\"ACTIVITY\""));
+    }
+
+    #[test]
+    fn legacy_v1_graph_syntax_bypasses_ftile_for_renamed_deeper_chain() {
+        let input = concat!(
+            "@startuml\n",
+            "(*) --> \"Gather telemetry\"\n",
+            "\"Gather telemetry\" --> \"Normalize records\"\n",
+            "\"Normalize records\" --> \"Archive safely\"\n",
+            "\"Archive safely\" --> (*)\n",
+            "@enduml",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(r#"<g class="start_entity""#));
+        assert!(svg.contains(r#"<g class="link""#));
+        assert!(svg.contains("Gather telemetry"));
+        assert!(svg.contains("Normalize records"));
+        assert!(svg.contains("Archive safely"));
     }
 
     #[test]
