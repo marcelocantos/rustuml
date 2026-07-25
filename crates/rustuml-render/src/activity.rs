@@ -131,6 +131,9 @@ const SWIMLANE_HEADER_OFFSET: f64 = 1.2969;
 /// Extracted from `Swimlanes.drawTitlesBackground`: the measured `UEmpty`
 /// background extends this far beyond the rightmost divider.
 const SWIMLANE_HEADER_OVERHANG: f64 = 1.8476;
+/// `Recentred.getMinMax` enlarges the compressed activity MinMax by this
+/// amount on each horizontal side.
+const ACTIVITY_RECENTRED_MARGIN: f64 = 15.0;
 const WHILE_SPECIAL_COND_LEAD: f64 = 13.0;
 const WHILE_SPECIAL_BODY_LEAD: f64 = 11.0;
 const WHILE_SPECIAL_BODY_X_PULL_RIGHT: f64 = WHILE_SPECIAL_COND_LEAD - WHILE_SPECIAL_BODY_LEAD;
@@ -29460,12 +29463,14 @@ fn typed_ftile_lane_layout(
     let raw_offset: Vec<_> = (0..count)
         .map(|lane| {
             let centering = (raw_width[lane] - 10.0 - content_width[lane]) / 2.0;
-            let divider_inset =
-                if parallel_owner_count.iter().any(|count| *count > 0) && !parallel_input[lane] {
-                    SWIMLANE_CONNECTION_CROSS_INSET
-                } else {
-                    6.0
-                };
+            // `Swimlanes.getHalfMissingSpace` contributes 5px on each side.
+            // Parallel input wrappers retain the extra pixel introduced by
+            // their transformed black block.
+            let divider_inset = if parallel_input[lane] {
+                6.0
+            } else {
+                SWIMLANE_CONNECTION_CROSS_INSET
+            };
             raw_left[lane] + divider_inset + centering - min_x[lane]
         })
         .collect();
@@ -29978,6 +29983,30 @@ fn typed_ftile_emit_connection(
     typed_ftile_emit_polyline(target, points, arrow);
 }
 
+fn typed_ftile_cross_lane_assembly_middle(
+    scene: &TypedFtileScene<'_>,
+    x: f64,
+    y: f64,
+    lanes: &TypedFtileLaneLayout,
+) -> Option<f64> {
+    let TypedFtileKind::Sequence { children } = &scene.kind else {
+        return None;
+    };
+    let [first, second] = children.as_slice() else {
+        return None;
+    };
+    let (out_lane, _, _) = typed_ftile_scene_out(&first.scene, x + first.x, y + first.y, lanes)?;
+    let (in_lane, _, y2) = typed_ftile_scene_in(&second.scene, x + second.x, y + second.y, lanes);
+    if out_lane == in_lane {
+        return None;
+    }
+
+    // `ConnectionVerticalDown.drawTranslate` computes its midpoint before
+    // ON_Y compression. The down-arrow occupies the final 10px and
+    // `SlotSet.smaller(5)` preserves another 5px ahead of the destination.
+    Some(y2 - (ftile::ASSEMBLY_RENDERED_SEPARATION - crate::compress::COMPRESS_MARGIN))
+}
+
 fn typed_ftile_scene_in(
     scene: &TypedFtileScene<'_>,
     x: f64,
@@ -30192,7 +30221,12 @@ fn typed_ftile_emit_connectors(
                 let points = if out_lane == in_lane {
                     vec![(x1, y1), (x2, y2)]
                 } else {
-                    let middle = y1 + 5.0;
+                    // `ConnectionVerticalDown.drawTranslate` computes the
+                    // horizontal segment before ON_Y compression. The
+                    // assembly wrapper retains the 10px arrow plus the 5px
+                    // `SlotSet.smaller` destination clearance.
+                    let middle = y2
+                        - (ftile::ASSEMBLY_RENDERED_SEPARATION - crate::compress::COMPRESS_MARGIN);
                     vec![(x1, y1), (x1, middle), (x2, middle), (x2, y2)]
                 };
                 typed_ftile_emit_connection(
@@ -30384,6 +30418,22 @@ fn typed_ftile_emit_connectors(
                     body_out_y
                 };
                 let loop_arrow_y = (loop_anchor_y + diamond_cy) / 2.0;
+                let loop_arrow_y = if body_out_lane != *lane {
+                    typed_ftile_cross_lane_assembly_middle(
+                        &body.scene,
+                        x + body.x,
+                        y + body.y,
+                        lanes,
+                    )
+                    .map(|middle| {
+                        middle
+                            - (ftile::ASSEMBLY_RENDERED_SEPARATION
+                                - crate::compress::COMPRESS_MARGIN)
+                    })
+                    .unwrap_or(loop_arrow_y)
+                } else {
+                    loop_arrow_y
+                };
                 if body_out_lane != *lane {
                     typed_ftile_emit_polyline(
                         emphasis,
@@ -30559,6 +30609,61 @@ fn typed_ftile_has_top_while_special(scene: &TypedFtileScene<'_>) -> bool {
     }
 }
 
+fn typed_ftile_cross_loop_right_extent(
+    scene: &TypedFtileScene<'_>,
+    x: f64,
+    lanes: &TypedFtileLaneLayout,
+) -> Option<f64> {
+    let nested = match &scene.kind {
+        TypedFtileKind::Leaf { .. } => None,
+        TypedFtileKind::Sequence { children } => children
+            .iter()
+            .filter_map(|child| {
+                typed_ftile_cross_loop_right_extent(&child.scene, x + child.x, lanes)
+            })
+            .reduce(f64::max),
+        TypedFtileKind::If {
+            then_scene,
+            else_scene,
+            ..
+        } => [
+            typed_ftile_cross_loop_right_extent(&then_scene.scene, x + then_scene.x, lanes),
+            typed_ftile_cross_loop_right_extent(&else_scene.scene, x + else_scene.x, lanes),
+        ]
+        .into_iter()
+        .flatten()
+        .reduce(f64::max),
+        TypedFtileKind::While { body, special, .. } => {
+            let body_extent = typed_ftile_cross_loop_right_extent(&body.scene, x + body.x, lanes);
+            let special_extent = special.as_ref().and_then(|special| {
+                typed_ftile_cross_loop_right_extent(&special.scene, x + special.x, lanes)
+            });
+            [body_extent, special_extent]
+                .into_iter()
+                .flatten()
+                .reduce(f64::max)
+        }
+        TypedFtileKind::Fork { branches, .. } => branches
+            .iter()
+            .filter_map(|branch| {
+                typed_ftile_cross_loop_right_extent(&branch.scene, x + branch.x, lanes)
+            })
+            .reduce(f64::max),
+    };
+    let own = match &scene.kind {
+        TypedFtileKind::While { lane, body, .. }
+            if body.scene.geometry.out_y.is_some() && body.scene.out_lane != *lane =>
+        {
+            Some(
+                lanes.cross_loop_rail_x(x, body.scene.out_lane, *lane, scene.geometry.width)
+                    + ARROW_HEAD_HALF,
+            )
+        }
+        _ => None,
+    };
+    [nested, own].into_iter().flatten().reduce(f64::max)
+}
+
 fn render_typed_ftile_swimlanes(
     scene: &TypedFtileScene<'_>,
     lane_names: &[String],
@@ -30665,8 +30770,13 @@ fn render_typed_ftile_swimlanes(
     }
     shapes.push_str(&connectors);
 
-    let total_width =
+    let lane_width =
         (header_span + SWIM_NODE_EXTENT_PAD + MARGIN_LEAD + MARGIN_TRAIL).ceil() as u32;
+    let cross_loop_width = typed_ftile_cross_loop_right_extent(scene, 0.0, &lane_layout)
+        .map_or(0, |right| {
+            (right + 2.0 * ACTIVITY_RECENTRED_MARGIN).ceil() as u32
+        });
+    let total_width = lane_width.max(cross_loop_width);
     let total_height = (content_bottom + SWIM_LEFT_DIVIDER_X).ceil() as u32;
     Some(format_svg(
         total_width,
@@ -31528,7 +31638,7 @@ fn format_svg(
 mod tests {
     use super::*;
     use rustuml_parser::diagram::DiagramMeta;
-    use rustuml_parser::diagram::activity::{IfBlock, RepeatWhileBlock, WhileBlock};
+    use rustuml_parser::diagram::activity::{IfBlock, RepeatWhileBlock, SwimlaneBlock, WhileBlock};
 
     fn render_ftile_steps(steps: Vec<ActivityStep>) -> String {
         let d = ActivityDiagram {
@@ -31630,6 +31740,92 @@ mod tests {
             }),
             ActivityStep::Stop,
         ]);
+    }
+
+    #[test]
+    fn ftile_cross_lane_while_uses_assembly_geometry_for_renamed_perturbation() {
+        let steps = vec![
+            ActivityStep::Swimlane(SwimlaneBlock {
+                name: "Forge".into(),
+                color: None,
+            }),
+            ActivityStep::Start,
+            ActivityStep::While(WhileBlock {
+                condition: "More parcels?".into(),
+                is_label: Some("continue".into()),
+                source_line: 0,
+            }),
+            ActivityStep::Action("Assemble renamed payload".into()),
+            ActivityStep::Swimlane(SwimlaneBlock {
+                name: "Audit".into(),
+                color: None,
+            }),
+            ActivityStep::Action("Verify payload".into()),
+            ActivityStep::Swimlane(SwimlaneBlock {
+                name: "Forge".into(),
+                color: None,
+            }),
+            ActivityStep::EndWhile(Some("finished".into())),
+            ActivityStep::Swimlane(SwimlaneBlock {
+                name: "Audit".into(),
+                color: None,
+            }),
+            ActivityStep::Stop,
+        ];
+        let palette = Palette::default_puml();
+        let tree = build_tree(&steps, &palette);
+        let mut lane = 0;
+        let scene = typed_ftile_sequence(&tree, &mut lane).expect("typed FTile scene");
+        let lane_names = vec!["Forge".to_string(), "Audit".to_string()];
+        let lanes = typed_ftile_lane_layout(&scene, &lane_names).expect("lane layout");
+        assert!(typed_ftile_has_cross_lane_loop(&scene));
+
+        let TypedFtileKind::Sequence { children } = &scene.kind else {
+            panic!("root sequence");
+        };
+        let while_scene = children
+            .iter()
+            .find(|child| matches!(child.scene.kind, TypedFtileKind::While { .. }))
+            .expect("while child");
+        let TypedFtileKind::While {
+            lane: while_lane,
+            body,
+            ..
+        } = &while_scene.scene.kind
+        else {
+            unreachable!();
+        };
+        assert_ne!(body.scene.out_lane, *while_lane);
+
+        let middle = typed_ftile_cross_lane_assembly_middle(
+            &body.scene,
+            while_scene.x + body.x,
+            while_scene.y + body.y,
+            &lanes,
+        )
+        .expect("cross-lane assembly midpoint");
+        let TypedFtileKind::Sequence {
+            children: body_children,
+        } = &body.scene.kind
+        else {
+            panic!("while body sequence");
+        };
+        let destination = &body_children[1];
+        let (_, _, destination_y) = typed_ftile_scene_in(
+            &destination.scene,
+            while_scene.x + body.x + destination.x,
+            while_scene.y + body.y + destination.y,
+            &lanes,
+        );
+        assert_eq!(
+            middle,
+            destination_y
+                - (ftile::ASSEMBLY_RENDERED_SEPARATION - crate::compress::COMPRESS_MARGIN)
+        );
+
+        let right_extent =
+            typed_ftile_cross_loop_right_extent(&scene, 0.0, &lanes).expect("loop rail extent");
+        assert!(right_extent > lanes.right_edge);
     }
 
     #[test]
