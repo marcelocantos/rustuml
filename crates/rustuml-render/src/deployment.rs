@@ -3701,7 +3701,12 @@ fn deployment_node_dim(
     let stereo_width = node
         .stereotype
         .as_ref()
-        .map(|stereo| text_render::measure(&format!("\u{00AB}{stereo}\u{00BB}"), FONT_SIZE, false))
+        .map(|stereo| {
+            // `EntityImageDescription` wraps visible stereotype text in
+            // `TextBlockUtils.withMargin(..., 1, 0)` before `USymbol.asSmall`
+            // measures it: one pixel on each horizontal side.
+            text_render::measure(&format!("\u{00AB}{stereo}\u{00BB}"), FONT_SIZE, false) + 2.0
+        })
         .unwrap_or(0.0);
     let line_count = node.label.lines().count().max(1) + usize::from(node.stereotype.is_some());
     let (text_x_pad, top_pad, _) = entity_text_geom(node.kind, 0.0, &node.label);
@@ -4757,6 +4762,24 @@ mod tests {
         assert!(svg.contains(r#"width="83.8672" x="35.75" y="110.49""#));
         assert!(svg.contains(r#"points="75.6879,210.98,81.6879,205.98"#));
         assert!(svg.contains(r#"id="Throttle167-to-Runtime173""#));
+    }
+
+    #[test]
+    fn no_oracle_stereotype_measurement_includes_entity_image_margin() {
+        let source = "@startuml\n\
+            node \"G\" as Gateway179 <<UnusuallyLongRole179>>\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+        let node = &diagram.nodes[0];
+        let dim = deployment_node_dim(node, &diagram.meta.sprites);
+        let stereo_width =
+            text_render::measure("\u{00AB}UnusuallyLongRole179\u{00BB}", FONT_SIZE, false);
+        let (text_x_pad, _, _) = entity_text_geom(node.kind, 0.0, &node.label);
+
+        assert_eq!(dim.width, stereo_width + 2.0 * text_x_pad + 12.0);
     }
 
     #[test]
