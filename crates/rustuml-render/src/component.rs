@@ -628,6 +628,7 @@ pub fn render_with_oracle(
             }
         }
         add_package_clusters_to_layout(&mut layout, &diagram.packages, "", &group_endpoint_nodes);
+        add_together_groups_to_layout(&mut layout, diagram);
         for conn in &diagram.connections {
             let (logical_from, logical_to, layout_reversed) = no_oracle_layout_edge_ends(conn);
             let layout_from = package_qualified_names
@@ -716,7 +717,24 @@ pub fn render_with_oracle(
                 .find(|position| position.id == raw.id)?;
             Some((translated.x - raw.x, translated.y - raw.y))
         })
-        .unwrap_or((MARGIN, MARGIN + title_h));
+        .unwrap_or_else(|| {
+            layout_result
+                .as_ref()
+                .map(|result| {
+                    let min_x = result
+                        .node_positions
+                        .iter()
+                        .map(|position| position.x)
+                        .fold(f64::INFINITY, f64::min);
+                    let min_y = result
+                        .node_positions
+                        .iter()
+                        .map(|position| position.y)
+                        .fold(f64::INFINITY, f64::min);
+                    (MARGIN - min_x, MARGIN + title_h - min_y)
+                })
+                .unwrap_or((MARGIN, MARGIN + title_h))
+        });
 
     // Estimate package bounding box.
     let pkg_total_w = estimate_packages_width(&diagram.packages);
@@ -2508,6 +2526,22 @@ fn add_package_clusters_to_layout(
     }
 }
 
+fn add_together_groups_to_layout(layout: &mut LayoutGraph, diagram: &ComponentDiagram) {
+    for (index, group) in diagram.together.iter().enumerate() {
+        let id = format!("component_together_{index}");
+        let parent = group
+            .parent
+            .map(|parent| format!("component_together_{parent}"));
+        layout.add_together(&id, group.package.as_deref(), parent.as_deref());
+        for node in &group.nodes {
+            layout.add_together_node(&id, node);
+        }
+        for package in &group.packages {
+            layout.add_together_cluster(&id, package);
+        }
+    }
+}
+
 #[derive(Clone, Copy)]
 struct ComponentClusterFrame {
     origin_x: f64,
@@ -2624,8 +2658,16 @@ fn compute_positions_from_layout(
     let mut positions = Vec::with_capacity(n_comp);
     let mut iface_positions = Vec::with_capacity(diagram.interfaces.len());
     let cluster_frame = component_cluster_frame(&diagram.packages, raw_cluster_positions);
+    let min_node_x = node_positions
+        .iter()
+        .map(|position| position.x)
+        .fold(f64::INFINITY, f64::min);
+    let min_node_y = node_positions
+        .iter()
+        .map(|position| position.y)
+        .fold(f64::INFINITY, f64::min);
     let (layout_dx, layout_dy) = if raw_cluster_positions.is_empty() {
-        (MARGIN, MARGIN + title_h)
+        (MARGIN - min_node_x, MARGIN + title_h - min_node_y)
     } else {
         let min_x = raw_cluster_positions
             .iter()
@@ -2673,8 +2715,14 @@ fn compute_positions_from_layout(
         })
         .fold(0.0_f64, f64::max);
 
-    let content_w = max_x + MARGIN * 2.0;
-    let content_h = max_y + MARGIN * 2.0 + title_h;
+    let (content_w, content_h) = if raw_cluster_positions.is_empty() {
+        (
+            max_x - min_node_x + MARGIN * 2.0,
+            max_y - min_node_y + MARGIN * 2.0 + title_h,
+        )
+    } else {
+        (max_x + MARGIN * 2.0, max_y + MARGIN * 2.0 + title_h)
+    };
 
     let cluster_positions = raw_cluster_positions
         .iter()
@@ -3530,7 +3578,7 @@ fn simulate_compound(
     tail: Option<&ClusterPosition>,
     head: Option<&ClusterPosition>,
 ) -> Vec<(f64, f64)> {
-    if points.len() < 4 || (points.len() - 1) % 3 != 0 {
+    if points.len() < 4 || !(points.len() - 1).is_multiple_of(3) {
         return points;
     }
 
@@ -3606,23 +3654,21 @@ fn simulate_compound(
     // The head-side branch is the exact mirror of the tail-side subdivision.
     if let Some(head) = head
         && curves.last().is_some_and(|curve| contains(head, curve[3]))
+        && let Some(index) = curves.iter().position(|curve| contains(head, curve[3]))
+        && !contains(head, curves[index][0])
     {
-        if let Some(index) = curves.iter().position(|curve| contains(head, curve[3]))
-            && !contains(head, curves[index][0])
-        {
-            let mut current = curves[index];
-            let mut clipped = curves[..index].to_vec();
-            for _ in 0..8 {
-                let (outside_half, inside_half) = subdivide(current);
-                if contains(head, outside_half[3]) {
-                    current = outside_half;
-                } else {
-                    clipped.push(outside_half);
-                    current = inside_half;
-                }
+        let mut current = curves[index];
+        let mut clipped = curves[..index].to_vec();
+        for _ in 0..8 {
+            let (outside_half, inside_half) = subdivide(current);
+            if contains(head, outside_half[3]) {
+                current = outside_half;
+            } else {
+                clipped.push(outside_half);
+                current = inside_half;
             }
-            curves = clipped;
         }
+        curves = clipped;
     }
 
     points_from_curves(&curves)

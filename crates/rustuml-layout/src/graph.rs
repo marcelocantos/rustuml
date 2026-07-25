@@ -73,6 +73,7 @@ pub struct LayoutGraph {
     spacing: Option<GraphSpacing>,
     nodes: Vec<NodeSpec>,
     clusters: Vec<ClusterSpec>,
+    together: Vec<TogetherSpec>,
     edges: Vec<EdgeSpec>,
     same_rank_pairs: Vec<(String, String)>,
 }
@@ -85,6 +86,7 @@ impl LayoutGraph {
             spacing: None,
             nodes: Vec::new(),
             clusters: Vec::new(),
+            together: Vec::new(),
             edges: Vec::new(),
             same_rank_pairs: Vec::new(),
         }
@@ -228,6 +230,47 @@ impl LayoutGraph {
             {
                 cluster.has_svek_endpoint = true;
             }
+        }
+    }
+
+    /// Adds an invisible PlantUML `Together` subgraph.
+    ///
+    /// Java `Cluster.printTogether` emits a dot subgraph named from
+    /// `getClusterId() + "t" + counter`, so Graphviz applies cluster margins.
+    /// PlantUML uses those solved margins but does not paint separate chrome.
+    pub fn add_together(&mut self, id: &str, cluster: Option<&str>, parent: Option<&str>) -> bool {
+        if self.together.iter().any(|group| group.id == id) {
+            return false;
+        }
+        self.together.push(TogetherSpec {
+            id: id.to_string(),
+            cluster: cluster.map(String::from),
+            parent: parent.map(String::from),
+            nodes: Vec::new(),
+            clusters: Vec::new(),
+        });
+        true
+    }
+
+    /// Adds a leaf node to an invisible Together subgraph.
+    pub fn add_together_node(&mut self, together_id: &str, node_id: &str) {
+        if let Some(group) = self
+            .together
+            .iter_mut()
+            .find(|group| group.id == together_id)
+        {
+            group.nodes.push(node_id.to_string());
+        }
+    }
+
+    /// Adds a visible child cluster to an invisible Together subgraph.
+    pub fn add_together_cluster(&mut self, together_id: &str, cluster_id: &str) {
+        if let Some(group) = self
+            .together
+            .iter_mut()
+            .find(|group| group.id == together_id)
+        {
+            group.clusters.push(cluster_id.to_string());
         }
     }
 
@@ -536,6 +579,8 @@ impl LayoutGraph {
         }
 
         let mut cluster_handles: HashMap<String, *mut graphviz_ffi::Agraph_t> = HashMap::new();
+        let mut together_handles: HashMap<String, *mut graphviz_ffi::Agraph_t> = HashMap::new();
+        self.build_together_trees(None, g, &node_handles, &mut together_handles);
         let mut cluster_order: Vec<String> = Vec::new();
         let mut built_clusters = vec![false; self.clusters.len()];
         for idx in 0..self.clusters.len() {
@@ -544,13 +589,19 @@ impl LayoutGraph {
                 .as_ref()
                 .is_some_and(|parent| self.clusters.iter().any(|cluster| &cluster.id == parent));
             if !parent_is_known {
+                let parent = self
+                    .together_parent_for_cluster(&self.clusters[idx].id)
+                    .and_then(|group| together_handles.get(group))
+                    .copied()
+                    .unwrap_or(g);
                 self.build_cluster_tree(
                     idx,
-                    g,
+                    parent,
                     &node_handles,
                     &label_key,
                     &empty,
                     &mut cluster_handles,
+                    &mut together_handles,
                     &mut cluster_order,
                     &mut built_clusters,
                 );
@@ -565,6 +616,7 @@ impl LayoutGraph {
                     &label_key,
                     &empty,
                     &mut cluster_handles,
+                    &mut together_handles,
                     &mut cluster_order,
                     &mut built_clusters,
                 );
@@ -889,6 +941,7 @@ impl LayoutGraph {
         label_key: &CString,
         empty: &CString,
         cluster_handles: &mut HashMap<String, *mut graphviz_ffi::Agraph_t>,
+        together_handles: &mut HashMap<String, *mut graphviz_ffi::Agraph_t>,
         cluster_order: &mut Vec<String>,
         built: &mut [bool],
     ) {
@@ -985,6 +1038,12 @@ impl LayoutGraph {
 
         cluster_handles.insert(cluster.id.clone(), real_cluster);
         cluster_order.push(cluster.id.clone());
+        self.build_together_trees(
+            Some(cluster.id.as_str()),
+            member_parent,
+            node_handles,
+            together_handles,
+        );
         for node_id in &cluster.nodes {
             if let Some(&node) = node_handles.get(node_id) {
                 let node_parent = if cluster.has_svek_endpoint
@@ -1005,16 +1064,69 @@ impl LayoutGraph {
         }
         for (child_idx, child) in self.clusters.iter().enumerate() {
             if child.parent.as_deref() == Some(cluster.id.as_str()) {
+                let child_parent = self
+                    .together_parent_for_cluster(&child.id)
+                    .and_then(|group| together_handles.get(group))
+                    .copied()
+                    .unwrap_or(member_parent);
                 self.build_cluster_tree(
                     child_idx,
-                    member_parent,
+                    child_parent,
                     node_handles,
                     label_key,
                     empty,
                     cluster_handles,
+                    together_handles,
                     cluster_order,
                     built,
                 );
+            }
+        }
+    }
+
+    fn together_parent_for_cluster(&self, cluster_id: &str) -> Option<&str> {
+        self.together
+            .iter()
+            .find(|group| group.clusters.iter().any(|member| member == cluster_id))
+            .map(|group| group.id.as_str())
+    }
+
+    #[allow(unsafe_op_in_unsafe_fn)]
+    unsafe fn build_together_trees(
+        &self,
+        owner_cluster: Option<&str>,
+        parent_graph: *mut graphviz_ffi::Agraph_t,
+        node_handles: &HashMap<String, *mut graphviz_ffi::Agnode_t>,
+        handles: &mut HashMap<String, *mut graphviz_ffi::Agraph_t>,
+    ) {
+        for group in &self.together {
+            if group.cluster.as_deref() == owner_cluster && group.parent.is_none() {
+                self.build_together_tree(group, parent_graph, node_handles, handles);
+            }
+        }
+    }
+
+    #[allow(unsafe_op_in_unsafe_fn)]
+    unsafe fn build_together_tree(
+        &self,
+        group: &TogetherSpec,
+        parent_graph: *mut graphviz_ffi::Agraph_t,
+        node_handles: &HashMap<String, *mut graphviz_ffi::Agnode_t>,
+        handles: &mut HashMap<String, *mut graphviz_ffi::Agraph_t>,
+    ) {
+        // The `cluster` prefix is behavioral: dot only applies the enclosing
+        // margin that PlantUML relies on when the subgraph name has this prefix.
+        let name = CString::new(format!("cluster_together_{}", group.id)).unwrap();
+        let graph = graphviz_ffi::agsubg(parent_graph, name.as_ptr() as *mut _, 1);
+        handles.insert(group.id.clone(), graph);
+        for node_id in &group.nodes {
+            if let Some(&node) = node_handles.get(node_id) {
+                graphviz_ffi::agsubnode(graph, node, 1);
+            }
+        }
+        for child in &self.together {
+            if child.parent.as_deref() == Some(group.id.as_str()) {
+                self.build_together_tree(child, graph, node_handles, handles);
             }
         }
     }
@@ -1128,6 +1240,15 @@ struct ClusterSpec {
     parent: Option<String>,
     nodes: Vec<String>,
     has_svek_endpoint: bool,
+}
+
+#[derive(Debug, Clone)]
+struct TogetherSpec {
+    id: String,
+    cluster: Option<String>,
+    parent: Option<String>,
+    nodes: Vec<String>,
+    clusters: Vec<String>,
 }
 
 #[derive(Debug, Clone)]
@@ -1398,6 +1519,44 @@ mod tests {
         assert!(cluster.y <= node.y);
         assert!(cluster.x + cluster.width >= node.x + node.width);
         assert!(cluster.y + cluster.height >= node.y + node.height);
+    }
+
+    #[test]
+    fn together_subgraph_expands_owning_cluster_without_becoming_visible() {
+        let mut plain = LayoutGraph::new(Direction::TopToBottom).with_plantuml_svek_spacing();
+        let mut grouped = LayoutGraph::new(Direction::TopToBottom).with_plantuml_svek_spacing();
+        for graph in [&mut plain, &mut grouped] {
+            graph.add_node("renamed_alpha_17", "", 49.0, 46.0);
+            graph.add_node("renamed_beta_23", "", 48.0, 46.0);
+            graph.add_node("renamed_sink_29", "", 50.0, 46.0);
+            graph.add_svek_cluster(
+                "renamed_outer_31",
+                None,
+                ClusterTitleSize {
+                    width: 42.0,
+                    height: 17.0,
+                },
+            );
+            for node in ["renamed_alpha_17", "renamed_beta_23", "renamed_sink_29"] {
+                graph.add_cluster_node("renamed_outer_31", node);
+            }
+            graph.add_edge("renamed_alpha_17", "renamed_sink_29", None);
+            graph.add_edge("renamed_beta_23", "renamed_sink_29", None);
+        }
+        grouped.add_together("renamed_group_37", Some("renamed_outer_31"), None);
+        grouped.add_together_node("renamed_group_37", "renamed_alpha_17");
+        grouped.add_together_node("renamed_group_37", "renamed_beta_23");
+
+        let plain_result = plain.layout_full_no_timeout();
+        let grouped_result = grouped.layout_full_no_timeout();
+
+        assert_eq!(grouped_result.cluster_positions.len(), 1);
+        assert!(
+            grouped_result.cluster_positions[0].width > plain_result.cluster_positions[0].width
+        );
+        assert!(
+            grouped_result.cluster_positions[0].height > plain_result.cluster_positions[0].height
+        );
     }
 
     #[test]

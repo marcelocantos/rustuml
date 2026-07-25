@@ -120,16 +120,51 @@ fn parse_link_shape(arrow: &str) -> LinkShape {
     }
 }
 
+#[derive(Clone, Copy)]
+enum ComponentBlock {
+    Package,
+    Together(usize),
+}
+
+fn active_together(blocks: &[ComponentBlock]) -> Option<usize> {
+    match blocks.last() {
+        Some(ComponentBlock::Together(index)) => Some(*index),
+        Some(ComponentBlock::Package) | None => None,
+    }
+}
+
+fn package_qualified_name(packages: &[ComponentPackage]) -> Option<String> {
+    (!packages.is_empty()).then(|| {
+        packages
+            .iter()
+            .map(|package| package.name.as_str())
+            .collect::<Vec<_>>()
+            .join(".")
+    })
+}
+
+fn add_together_node(together: &mut [ComponentTogether], blocks: &[ComponentBlock], node_id: &str) {
+    if let Some(group) = active_together(blocks).and_then(|index| together.get_mut(index))
+        && !group.nodes.iter().any(|member| member == node_id)
+    {
+        group.nodes.push(node_id.to_string());
+    }
+}
+
 pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError> {
     let mut components = Vec::new();
     let mut interfaces = Vec::new();
     let mut connections = Vec::new();
     let mut notes: Vec<ComponentNote> = Vec::new();
+    let mut together: Vec<ComponentTogether> = Vec::new();
     let mut meta = DiagramMeta::default();
 
     // Parse into a nested structure via a stack.
     // Each stack frame is a mutable ComponentPackage under construction.
     let mut package_stack: Vec<ComponentPackage> = Vec::new();
+    // Every brace-bearing construct gets a typed stack entry so closing a
+    // together block cannot accidentally pop a visible package (or vice versa).
+    let mut block_stack: Vec<ComponentBlock> = Vec::new();
     // Names of every block container ever opened, so a connection that targets
     // a container by name is not mistaken for an undeclared interface endpoint.
     let mut known_packages: std::collections::HashSet<String> = std::collections::HashSet::new();
@@ -143,12 +178,6 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
     // `<<stereotype>>` selector.
     let mut hidden_ids: Vec<String> = Vec::new();
     let mut hidden_stereotypes: Vec<String> = Vec::new();
-    // Count of open *transparent* brace blocks (`together { ... }`). These are
-    // layout hints, not containers: the elements inside stay in the enclosing
-    // package, but the matching `}` must not pop a real package frame. We only
-    // track the innermost run, since `together` blocks do not nest in practice.
-    let mut transparent_braces: usize = 0;
-
     // Note buffer for multi-line notes.
     let mut note_target: Option<String> = None;
     let mut note_lines: Vec<String> = Vec::new();
@@ -337,23 +366,28 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             continue;
         }
 
-        // Opening transparent block — `together {` groups elements for layout
-        // but is not a container. Track the brace so its `}` is balanced without
-        // popping a real package frame.
+        // Java `CucaDiagram.gotoTogether` pushes a Together whose parent is the
+        // currently active Together. `Cluster.printTogether` later emits these
+        // as nested cluster-prefixed dot subgraphs.
         if trimmed == "together {" || trimmed == "together{" {
-            transparent_braces += 1;
+            let index = together.len();
+            together.push(ComponentTogether {
+                parent: active_together(&block_stack),
+                package: package_qualified_name(&package_stack),
+                nodes: Vec::new(),
+                packages: Vec::new(),
+            });
+            block_stack.push(ComponentBlock::Together(index));
             continue;
         }
 
         // Closing brace — pop the stack.
         if trimmed == "}" {
-            if transparent_braces > 0 {
-                transparent_braces -= 1;
-                continue;
-            }
-            if let Some(finished) = package_stack.pop() {
-                if let Some(parent) = package_stack.last_mut() {
-                    parent.packages.push(finished);
+            if matches!(block_stack.pop(), Some(ComponentBlock::Package))
+                && let Some(finished) = package_stack.pop()
+            {
+                if let Some(parent_package) = package_stack.last_mut() {
+                    parent_package.packages.push(finished);
                 } else {
                     top_packages.push(finished);
                 }
@@ -369,6 +403,14 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 let rest = &container_clean[kw.len()..];
                 let (id, label) = parse_container_label(kw, rest);
                 known_packages.insert(id.clone());
+                let qname = package_qualified_name(&package_stack)
+                    .map(|parent| format!("{parent}.{id}"))
+                    .unwrap_or_else(|| id.clone());
+                if let Some(group) =
+                    active_together(&block_stack).and_then(|index| together.get_mut(index))
+                {
+                    group.packages.push(qname);
+                }
                 package_stack.push(ComponentPackage {
                     name: id,
                     label,
@@ -379,6 +421,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                     components: Vec::new(),
                     packages: Vec::new(),
                 });
+                block_stack.push(ComponentBlock::Package);
                 continue;
             } else {
                 // A leaf `component ...` declaration has richer syntax than other
@@ -415,8 +458,9 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                     if let Some(pkg) = package_stack.last_mut()
                         && !pkg.components.contains(&id)
                     {
-                        pkg.components.push(id);
+                        pkg.components.push(id.clone());
                     }
+                    add_together_node(&mut together, &block_stack, &id);
                     continue;
                 }
             }
@@ -517,8 +561,9 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             if let Some(pkg) = package_stack.last_mut()
                 && !pkg.components.contains(&id)
             {
-                pkg.components.push(id);
+                pkg.components.push(id.clone());
             }
+            add_together_node(&mut together, &block_stack, &id);
             continue;
         }
 
@@ -540,8 +585,9 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             if let Some(pkg) = package_stack.last_mut()
                 && !pkg.components.contains(&id)
             {
-                pkg.components.push(id);
+                pkg.components.push(id.clone());
             }
+            add_together_node(&mut together, &block_stack, &id);
             continue;
         }
 
@@ -550,16 +596,24 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             let label = caps[1].to_string();
             let id = caps[2].to_string();
             if !interfaces.iter().any(|i: &Interface| i.id == id) {
-                interfaces.push(Interface { id, label });
+                interfaces.push(Interface {
+                    id: id.clone(),
+                    label,
+                });
             }
+            add_together_node(&mut together, &block_stack, &id);
             continue;
         }
         if let Some(caps) = RE_IFACE_BRACKET_AS.captures(trimmed) {
             let label = caps[1].to_string();
             let id = caps[2].to_string();
             if !interfaces.iter().any(|i: &Interface| i.id == id) {
-                interfaces.push(Interface { id, label });
+                interfaces.push(Interface {
+                    id: id.clone(),
+                    label,
+                });
             }
+            add_together_node(&mut together, &block_stack, &id);
             continue;
         }
         if let Some(caps) = RE_IFACE_BARE.captures(trimmed) {
@@ -567,9 +621,10 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             if !interfaces.iter().any(|i: &Interface| i.id == name) {
                 interfaces.push(Interface {
                     id: name.clone(),
-                    label: name,
+                    label: name.clone(),
                 });
             }
+            add_together_node(&mut together, &block_stack, &name);
             continue;
         }
         // `() IFoo` / `() "Label" as ID` — lollipop interface shorthand.
@@ -584,8 +639,12 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 .map(|m| m.as_str().to_string())
                 .unwrap_or_else(|| label.clone());
             if !interfaces.iter().any(|i: &Interface| i.id == id) {
-                interfaces.push(Interface { id, label });
+                interfaces.push(Interface {
+                    id: id.clone(),
+                    label,
+                });
             }
+            add_together_node(&mut together, &block_stack, &id);
             continue;
         }
 
@@ -664,6 +723,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 (&from, from_bracketed || from_quoted),
                 (&to, to_bracketed || to_quoted),
             ] {
+                let mut created = false;
                 if !id.is_empty()
                     && !components.iter().any(|c| c.id == *id)
                     && !interfaces.iter().any(|i| i.id == *id)
@@ -680,12 +740,17 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                             source_line: current_line,
                             kind: ComponentElementKind::Component,
                         });
+                        created = true;
                     } else {
                         interfaces.push(Interface {
                             id: id.clone(),
                             label: id.clone(),
                         });
+                        created = true;
                     }
+                }
+                if created {
+                    add_together_node(&mut together, &block_stack, id);
                 }
             }
 
@@ -733,6 +798,9 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
         components.retain(|c| !drop.contains(&c.id));
         connections.retain(|c| !drop.contains(&c.from) && !drop.contains(&c.to));
         notes.retain(|n| n.target.as_ref().is_none_or(|t| !drop.contains(t)));
+        for group in &mut together {
+            group.nodes.retain(|id| !drop.contains(id));
+        }
         fn prune_pkg(pkg: &mut ComponentPackage, drop: &std::collections::HashSet<String>) {
             pkg.components.retain(|id| !drop.contains(id));
             for child in &mut pkg.packages {
@@ -750,6 +818,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
         interfaces,
         connections,
         packages: top_packages,
+        together,
         notes,
     })
 }
@@ -828,6 +897,25 @@ mod tests {
         assert_eq!(d.packages[0].label, "G1");
         assert_eq!(d.packages[1].label, "G2");
         assert_eq!(d.packages[2].label, "G3");
+    }
+
+    #[test]
+    fn together_tracks_members_package_owner_and_nested_parent() {
+        let d = parse(
+            "package Outer {\n  together {\n    component A\n    together {\n      component B\n    }\n  }\n  component C\n}\ntogether {\n  package Child {\n    component D\n  }\n}",
+        );
+
+        assert_eq!(d.together.len(), 3);
+        assert_eq!(d.together[0].package.as_deref(), Some("Outer"));
+        assert_eq!(d.together[0].parent, None);
+        assert_eq!(d.together[0].nodes, ["A"]);
+        assert_eq!(d.together[1].package.as_deref(), Some("Outer"));
+        assert_eq!(d.together[1].parent, Some(0));
+        assert_eq!(d.together[1].nodes, ["B"]);
+        assert_eq!(d.together[2].package, None);
+        assert_eq!(d.together[2].packages, ["Child"]);
+        assert_eq!(d.packages[0].components, ["A", "B", "C"]);
+        assert_eq!(d.packages[1].components, ["D"]);
     }
 
     #[test]

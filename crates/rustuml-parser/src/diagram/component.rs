@@ -14,7 +14,26 @@ pub struct ComponentDiagram {
     pub interfaces: Vec<Interface>,
     pub connections: Vec<Connection>,
     pub packages: Vec<ComponentPackage>,
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub together: Vec<ComponentTogether>,
     pub notes: Vec<ComponentNote>,
+}
+
+/// An invisible `together { ... }` layout subgraph.
+///
+/// PlantUML attaches the current `Together` object to each entity created
+/// directly inside the block. A group opened directly inside another together
+/// block retains that parent relation; entering a visible package suspends it.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ComponentTogether {
+    /// Index of the directly enclosing together block, when nested.
+    pub parent: Option<usize>,
+    /// Qualified package that owns this subgraph, or `None` for the graph root.
+    pub package: Option<String>,
+    /// Leaf entity ids created directly inside this block.
+    pub nodes: Vec<String>,
+    /// Qualified child-package ids created directly inside this block.
+    pub packages: Vec<String>,
 }
 
 /// The shape an element renders as. A plain `component` draws the UML tab

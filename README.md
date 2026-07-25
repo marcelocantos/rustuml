@@ -7,8 +7,8 @@ JVM, no Graphviz, no external fonts.
 ## Status
 
 Pre-release. 23 parsed diagram models are supported, but release-readiness
-claims are based on the no-oracle product tier: 6,863/11,251 eligible SVG
-goldens currently pass when rendered through the same path as the CLI (61.0%).
+claims are based on the no-oracle product tier: 7,374/11,251 eligible SVG
+goldens currently pass when rendered through the same path as the CLI (65.5%).
 The strict oracle-assisted tier passes 11,130/11,251 eligible SVG goldens and
 remains a regression net, not the headline product metric. The 1,199 Java
 PlantUML error-page goldens are skipped by both tiers and are not counted as
@@ -22,13 +22,13 @@ The table below is derived from `test-diagrams/no_oracle_baseline.txt`.
 | Type | Tag | Baseline family | No-oracle product status |
 |------|-----|-----------------|--------------------------|
 | Sequence | `@startuml` | `sequence` | 1,400/1,411 (99.2%, partial) |
-| Class | `@startuml` | `class` | 1,456/1,971 (73.9%, partial) |
+| Class | `@startuml` | `class` | 1,501/1,971 (76.2%, partial) |
 | Archimate | `@startuml` | `archimate` | 0/48 (0.0%, none) |
 | Activity (new syntax) | `@startuml` | `activity` | 1,266/1,299 (97.5%, partial) |
 | State | `@startuml` | `state` | 1/901 (0.1%, partial) |
-| Component | `@startuml` | `component` | 57/663 (8.6%, partial) |
-| Deployment | `@startuml` | `deployment` | 38/495 (7.7%, partial) |
-| Use Case | `@startuml` | `usecase` | 62/315 (19.7%, partial) |
+| Component | `@startuml` | `component` | 464/663 (70.0%, partial) |
+| Deployment | `@startuml` | `deployment` | 44/495 (8.9%, partial) |
+| Use Case | `@startuml` | `usecase` | 86/315 (27.3%, partial) |
 | Object | `@startuml` | `object` | 48/155 (31.0%, partial) |
 | Timing | `@startuml` | `timing` | 141/141 (100.0%, exact) |
 | ER (crow's foot) | `@startuml` | `er` | 1/157 (0.6%, partial) |
@@ -150,7 +150,7 @@ There are two golden tiers:
   and 1,299 are skipped.
 - No-oracle product tier: `cargo test --test golden_no_oracle --release`. This
   renders through the same source-only path the CLI uses. Current baseline:
-  6,863/11,251 eligible SVG goldens pass.
+  7,374/11,251 eligible SVG goldens pass.
 
 The 1,199 Java PlantUML error-page goldens are skips, not successes, and do
 not contribute to either headline pass count. The test files live in a
