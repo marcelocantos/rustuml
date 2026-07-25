@@ -814,6 +814,38 @@ fn collect_entities_dfs<'a>(
     }
 }
 
+/// Collect leaves in `GraphvizImageBuilder.printGroups` order: each group's
+/// direct leaves first, then each child group recursively. Unpackaged root
+/// leaves are emitted separately after all groups.
+fn collect_entities_svek_order<'a>(
+    node: &'a DeploymentNode,
+    all: &'a [DeploymentNode],
+    parent_qname: Option<&str>,
+    depth: usize,
+    out: &mut Vec<(usize, usize, &'a DeploymentNode, String)>,
+) {
+    let qname = qualified_name(node, parent_qname);
+    for child_id in &node.children {
+        if let Some(child) = all.iter().find(|candidate| candidate.id == *child_id)
+            && child.children.is_empty()
+        {
+            out.push((
+                depth + 1,
+                child.source_line,
+                child,
+                qualified_name(child, Some(&qname)),
+            ));
+        }
+    }
+    for child_id in &node.children {
+        if let Some(child) = all.iter().find(|candidate| candidate.id == *child_id)
+            && !child.children.is_empty()
+        {
+            collect_entities_svek_order(child, all, Some(&qname), depth + 1, out);
+        }
+    }
+}
+
 fn emit_entity(
     svg: &mut SvgBuilder,
     node: &DeploymentNode,
@@ -3654,16 +3686,14 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
         emit_clusters_dfs(&mut svg, root, &diagram.nodes, None, &ctx);
     }
     let mut leaves = Vec::new();
-    for root in &roots {
-        collect_entities_dfs(root, &diagram.nodes, None, 0, &mut leaves);
+    // Java `GraphvizImageBuilder.buildImage` runs `printGroups(root)` before
+    // `printEntities(getUnpackagedEntities())`. `printGroup` itself emits the
+    // group's direct leaves before recursing into child groups.
+    for root in roots.iter().filter(|root| !root.children.is_empty()) {
+        collect_entities_svek_order(root, &diagram.nodes, None, 0, &mut leaves);
     }
-    if cluster_endpoint_nodes.is_empty() {
-        leaves.sort_by_key(|(_, source_line, _, _)| *source_line);
-    } else {
-        // Linked groups add SVEK special-point entities. In that path,
-        // `GraphvizImageBuilder.printEntities` emits direct members of outer
-        // groups before descending, preserving source order within each depth.
-        leaves.sort_by_key(|(depth, source_line, _, _)| (*depth, *source_line));
+    for root in roots.iter().filter(|root| root.children.is_empty()) {
+        leaves.push((0, root.source_line, root, qualified_name(root, None)));
     }
     for (_, _, node, qname) in leaves {
         emit_entity(&mut svg, node, &qname, &ctx);
@@ -4256,28 +4286,35 @@ fn deployment_cluster_frame(
         else {
             continue;
         };
-        let (origin_x, origin_y) = match node.kind {
+        let (cluster_width, cluster_height) = result
+            .cluster_serialized_sizes
+            .get(&node.id)
+            .copied()
+            .unwrap_or((position.width, position.height));
+        let (local_min_x, local_min_y) = match node.kind {
             // `USymbolNode.drawNode` paints a polygon whose LimitFinder X
             // bounds extend ten pixels beyond the visible cluster.
-            DeploymentNodeKind::Node => (16.0, SVEK_ENVELOPE_ORIGIN),
+            DeploymentNodeKind::Node => (-10.0, 0.0),
             DeploymentNodeKind::Cloud => {
-                let (min_x, min_y) =
-                    crate::cloud_shape::generate(position.width, position.height).min_xy();
-                (SVEK_ENVELOPE_ORIGIN - min_x, SVEK_ENVELOPE_ORIGIN - min_y)
+                crate::cloud_shape::generate(cluster_width, cluster_height).min_xy()
             }
             // These `asBig` implementations draw a full-size `URectangle`;
             // `LimitFinder.drawRectangle` expands its top-left by one pixel.
             DeploymentNodeKind::Rectangle
             | DeploymentNodeKind::Agent
             | DeploymentNodeKind::Frame
-            | DeploymentNodeKind::Card => (SVEK_ENVELOPE_ORIGIN + 1.0, SVEK_ENVELOPE_ORIGIN + 1.0),
+            | DeploymentNodeKind::Card => (-1.0, -1.0),
             // `USymbolStack.drawQueue` paints a full-width UPath, while its
             // inset `URectangle` extends the top LimitFinder bound by one.
-            DeploymentNodeKind::Stack => (SVEK_ENVELOPE_ORIGIN, SVEK_ENVELOPE_ORIGIN + 1.0),
-            _ => (SVEK_ENVELOPE_ORIGIN, SVEK_ENVELOPE_ORIGIN),
+            DeploymentNodeKind::Stack => (0.0, -1.0),
+            _ => (0.0, 0.0),
         };
-        required_dx = required_dx.max(origin_x - position.x);
-        required_dy = required_dy.max(origin_y - position.y);
+        // `LimitFinder` measures the already translated primitive, then
+        // `SvekResult.calculateDimension` subtracts that world-coordinate
+        // minimum from six. Preserve Java's evaluation order because the ULP
+        // feeds the final seeded cloud width after `Cluster.move`.
+        required_dx = required_dx.max(SVEK_ENVELOPE_ORIGIN - (position.x + local_min_x));
+        required_dy = required_dy.max(SVEK_ENVELOPE_ORIGIN - (position.y + local_min_y));
     }
     if !required_dx.is_finite() || !required_dy.is_finite() {
         return None;
@@ -4297,18 +4334,23 @@ fn deployment_cluster_frame(
                 .cluster_positions
                 .iter()
                 .find(|position| position.id == node.id)?;
+            let (cluster_width, cluster_height) = result
+                .cluster_serialized_sizes
+                .get(&node.id)
+                .copied()
+                .unwrap_or((position.width, position.height));
             let bounds = match node.kind {
                 DeploymentNodeKind::Cloud => {
-                    crate::cloud_shape::generate(position.width, position.height).bounds()
+                    crate::cloud_shape::generate(cluster_width, cluster_height).bounds()
                 }
-                DeploymentNodeKind::Folder => (0.0, 0.0, position.width, position.height),
+                DeploymentNodeKind::Folder => (0.0, 0.0, cluster_width, cluster_height),
                 DeploymentNodeKind::Rectangle
                 | DeploymentNodeKind::Agent
                 | DeploymentNodeKind::Frame
                 | DeploymentNodeKind::Card => {
-                    (-1.0, -1.0, position.width - 1.0, position.height - 1.0)
+                    (-1.0, -1.0, cluster_width - 1.0, cluster_height - 1.0)
                 }
-                DeploymentNodeKind::Stack => (0.0, -1.0, position.width, position.height),
+                DeploymentNodeKind::Stack => (0.0, -1.0, cluster_width, cluster_height),
                 _ => return None,
             };
             Some((position, bounds))
@@ -4743,11 +4785,28 @@ fn layout_deployment_rects(
         for (node, dim) in diagram.nodes.iter().zip(dims) {
             if cluster_ids.contains(node.id.as_str()) {
                 if let Some(pos) = cluster_positions.get(node.id.as_str()) {
+                    let (cluster_width, cluster_height) = result
+                        .cluster_serialized_sizes
+                        .get(&node.id)
+                        .copied()
+                        .unwrap_or((pos.width, pos.height));
+                    // Java `SvekResult.calculateDimension` calls
+                    // `DotStringFactory.moveDelta`, whose `Cluster.move`
+                    // translates both rectangle endpoints independently.
+                    // Recompute the final extent from those moved endpoints:
+                    // for seeded clouds, the resulting ULP can intentionally
+                    // change the `(long) width` seed used by `USymbolCloud`.
+                    let x = pos.x + body_margin_x;
+                    let y = pos.y + body_margin_y;
                     rects.push(LayoutRect {
-                        x: pos.x + body_margin_x,
-                        y: pos.y + body_margin_y,
-                        width: pos.width,
-                        height: pos.height,
+                        x,
+                        y,
+                        width: translated_serialized_layout_extent(
+                            pos.x,
+                            cluster_width,
+                            body_margin_x,
+                        ),
+                        height: translated_layout_extent(pos.y, cluster_height, body_margin_y),
                     });
                 } else {
                     rects.push(LayoutRect {
@@ -4789,6 +4848,20 @@ fn layout_deployment_rects(
     let content_w = rects.iter().map(|r| r.x + r.width).fold(0.0_f64, f64::max);
     let content_h = rects.iter().map(|r| r.y + r.height).fold(0.0_f64, f64::max);
     (rects, content_w, content_h)
+}
+
+fn translated_layout_extent(origin: f64, extent: f64, delta: f64) -> f64 {
+    let moved_origin = origin + delta;
+    let moved_max = (origin + extent) + delta;
+    moved_max - moved_origin
+}
+
+fn translated_serialized_layout_extent(origin: f64, extent: f64, delta: f64) -> f64 {
+    // `DotStringFactory.solve` recovers cluster X endpoints from Graphviz's
+    // two-decimal SVG polygon before `Cluster.move` translates them.
+    let serialized_origin = (origin * 100.0).round() / 100.0;
+    let serialized_max = ((origin + extent) * 100.0).round() / 100.0;
+    (serialized_max + delta) - (serialized_origin + delta)
 }
 
 fn empty_entity_rect(x: f64, y: f64, width: f64, height: f64) -> EntityRect {
@@ -5591,6 +5664,66 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
         assert!(svg.contains(r#"fill="none" style="stroke:#181818;stroke-width:1;"/>"#));
         assert!(!svg.contains(r#"<polygon fill="none""#));
         assert!(svg.contains(r#"data-qualified-name="Renamed Edge 109.Worker113""#));
+    }
+
+    #[test]
+    fn translated_cluster_extent_preserves_java_seed_boundary() {
+        // Java `Cluster.move` translates each endpoint before
+        // `RectangleArea.getWidth` subtracts them for the final render.
+        let moved = translated_layout_extent(16.0, 116.0, -3.8);
+
+        assert_eq!(moved.to_bits() + 1, 116.0_f64.to_bits());
+    }
+
+    #[test]
+    fn no_oracle_cloud_cluster_regenerates_after_svek_translation() {
+        let source = "@startuml\n\
+            cloud \"Zone 731\" {\n\
+              node \"API-733\"\n\
+              database \"DB-739\"\n\
+              \"API-733\" --> \"DB-739\"\n\
+            }\n\
+            cloud \"Zone 743\" {\n\
+              node \"API-747\"\n\
+              database \"DB-751\"\n\
+              \"API-747\" --> \"DB-751\"\n\
+            }\n\
+            \"DB-739\" --> \"DB-751\" : mirror\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+
+        let svg = render(&diagram, &Theme::default());
+
+        assert_eq!(svg.matches(r#"<g class="cluster""#).count(), 2);
+        assert!(svg.contains(r#"data-qualified-name="Zone 731.API-733""#));
+        assert!(svg.contains(r#"data-qualified-name="Zone 743.DB-751""#));
+    }
+
+    #[test]
+    fn no_oracle_nested_groups_emit_direct_leaves_before_child_group_leaves() {
+        let source = "@startuml\n\
+            cloud \"Fabric 761\" {\n\
+              node \"Nested 773\" {\n\
+                component \"Deep 787\"\n\
+                component \"Deep 797\"\n\
+              }\n\
+              database \"Ledger 809\"\n\
+              queue \"Bus 811\"\n\
+            }\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+
+        let svg = render(&diagram, &Theme::default());
+        let direct = svg.find("<!--entity Ledger 809-->").unwrap();
+        let nested = svg.find("<!--entity Deep 787-->").unwrap();
+
+        assert!(direct < nested);
     }
 
     #[test]

@@ -806,6 +806,7 @@ impl LayoutGraph {
         }
 
         let mut cluster_positions = Vec::with_capacity(cluster_order.len());
+        let mut cluster_serialized_sizes = HashMap::with_capacity(cluster_order.len());
         for id in &cluster_order {
             let cluster = cluster_handles[id];
             let mut ll_x: f64 = 0.0;
@@ -813,6 +814,17 @@ impl LayoutGraph {
             let mut ur_x: f64 = 0.0;
             let mut ur_y: f64 = 0.0;
             graphviz_ffi::rustuml_graph_bb(cluster, &mut ll_x, &mut ll_y, &mut ur_x, &mut ur_y);
+            // Java `DotStringFactory.solve` reconstructs cluster rectangles
+            // from Graphviz's two-decimal SVG polygon, not its internal
+            // floating-point bounding box.
+            let serialized = |value: f64| (value * 100.0).round() / 100.0;
+            cluster_serialized_sizes.insert(
+                id.clone(),
+                (
+                    serialized(ur_x) - serialized(ll_x),
+                    serialized(ur_y) - serialized(ll_y),
+                ),
+            );
             cluster_positions.push(ClusterPosition {
                 id: id.clone(),
                 x: ll_x,
@@ -875,6 +887,7 @@ impl LayoutGraph {
         LayoutResult {
             node_positions,
             cluster_positions,
+            cluster_serialized_sizes,
             edge_paths,
             width: graph_ur_x - graph_ll_x,
             height: graph_ur_y - graph_ll_y,
@@ -1198,6 +1211,8 @@ fn cluster_title_table(size: ClusterTitleSize) -> String {
 pub struct LayoutResult {
     pub node_positions: Vec<NodePosition>,
     pub cluster_positions: Vec<ClusterPosition>,
+    /// Cluster dimensions after Graphviz's two-decimal SVG serialization.
+    pub cluster_serialized_sizes: HashMap<String, (f64, f64)>,
     pub edge_paths: Vec<EdgePath>,
     /// Full solved Graphviz envelope, including edge-label constraints.
     pub width: f64,
