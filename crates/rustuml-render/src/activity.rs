@@ -29527,8 +29527,12 @@ fn typed_ftile_lane_layout(
         }
         if parallel_input[lane] && parallel_output[lane] && lane + 1 < count {
             // The two owner-lane black blocks each replay a two-pixel edge
-            // band through `URectangle.drawWhenCompressed(ON_X)`.
-            left[lane + 1] -= 1.0;
+            // band through `URectangle.drawWhenCompressed(ON_X)`;
+            // `CompressionTransform.getCompressDelta` carries that consumed
+            // width into every downstream lane coordinate.
+            for downstream in left.iter_mut().skip(lane + 1) {
+                *downstream -= 1.0;
+            }
             width[lane] -= 1.0;
             right_edge -= 1.0;
         }
@@ -31908,6 +31912,57 @@ mod tests {
             out_x,
             lanes.x(fork.scene.out_lane, fork.x + fork.scene.geometry.left)
         );
+    }
+
+    #[test]
+    fn ftile_owner_bars_keep_downstream_lane_boundaries_contiguous() {
+        let lane = |name: &str| {
+            ActivityStep::Swimlane(SwimlaneBlock {
+                name: name.into(),
+                color: None,
+            })
+        };
+        let steps = vec![
+            lane("Forge"),
+            ActivityStep::Start,
+            ActivityStep::Fork,
+            lane("Forge"),
+            ActivityStep::Action("Compile alpha".into()),
+            ActivityStep::ForkAgain,
+            lane("Audit"),
+            ActivityStep::Action("Inspect beta".into()),
+            ActivityStep::ForkAgain,
+            lane("Verify"),
+            ActivityStep::Action("Check gamma".into()),
+            ActivityStep::ForkAgain,
+            lane("Signoff"),
+            ActivityStep::Action("Sign delta".into()),
+            ActivityStep::ForkAgain,
+            lane("Forge"),
+            ActivityStep::Action("Archive omega".into()),
+            ActivityStep::EndFork,
+            ActivityStep::Stop,
+        ];
+        let palette = Palette::default_puml();
+        let tree = build_tree(&steps, &palette);
+        let mut current_lane = 0;
+        let scene = typed_ftile_sequence(&tree, &mut current_lane).expect("typed FTile scene");
+        let lanes = typed_ftile_lane_layout(
+            &scene,
+            &[
+                "Forge".to_string(),
+                "Audit".to_string(),
+                "Verify".to_string(),
+                "Signoff".to_string(),
+            ],
+        )
+        .expect("lane layout");
+
+        for (pair, width) in lanes.left.windows(2).zip(&lanes.width) {
+            let gap = pair[1] - (pair[0] + width);
+            let scale = pair[1].abs().max(1.0);
+            assert!(gap.abs() <= f64::EPSILON * scale * 4.0, "gap={gap}");
+        }
     }
 
     #[test]
