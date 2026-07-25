@@ -3,7 +3,7 @@
 
 //! State diagram model.
 
-use super::DiagramMeta;
+use super::{DiagramMeta, SkinParam};
 use serde::{Deserialize, Serialize};
 
 /// A complete state diagram.
@@ -13,6 +13,87 @@ pub struct StateDiagram {
     pub states: Vec<State>,
     pub transitions: Vec<Transition>,
     pub notes: Vec<StateNote>,
+}
+
+const TRANSITION_COLOR_KEY: &str = "__stateTransitionColor";
+const TRANSITION_LINE_STYLE_KEY: &str = "__stateTransitionLineStyle";
+const TRANSITION_THICKNESS_KEY: &str = "__stateTransitionThickness";
+
+impl StateDiagram {
+    /// Return the style parsed for a transition at its source-order index.
+    pub fn transition_style(&self, index: usize) -> TransitionStyle {
+        let value = |prefix: &str| {
+            let key = format!("{prefix}{index}");
+            self.meta
+                .skinparams
+                .iter()
+                .rev()
+                .find(|param| param.key == key)
+                .map(|param| param.value.as_str())
+        };
+        TransitionStyle {
+            color: value(TRANSITION_COLOR_KEY).map(str::to_string),
+            line_style: value(TRANSITION_LINE_STYLE_KEY).and_then(TransitionLineStyle::parse),
+            thickness: value(TRANSITION_THICKNESS_KEY).and_then(|value| value.parse().ok()),
+        }
+    }
+}
+
+/// Style carried by a state transition's bracketed arrow specification.
+#[derive(Debug, Clone, Default, PartialEq, Serialize, Deserialize)]
+pub struct TransitionStyle {
+    pub color: Option<String>,
+    pub line_style: Option<TransitionLineStyle>,
+    pub thickness: Option<f64>,
+}
+
+impl TransitionStyle {
+    /// Store parser-only transition metadata without widening `Transition`,
+    /// whose public struct literals are also used by the ASCII renderer.
+    pub(crate) fn record_in(&self, meta: &mut DiagramMeta, index: usize) {
+        let mut record = |prefix: &str, value: String| {
+            meta.skinparams.push(SkinParam {
+                key: format!("{prefix}{index}"),
+                value,
+            });
+        };
+        if let Some(color) = &self.color {
+            record(TRANSITION_COLOR_KEY, color.clone());
+        }
+        if let Some(line_style) = self.line_style {
+            record(TRANSITION_LINE_STYLE_KEY, line_style.as_str().to_string());
+        }
+        if let Some(thickness) = self.thickness {
+            record(TRANSITION_THICKNESS_KEY, thickness.to_string());
+        }
+    }
+}
+
+/// Stroke pattern selected by `dashed`, `dotted`, or `bold` arrow styles.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum TransitionLineStyle {
+    Dashed,
+    Dotted,
+    Bold,
+}
+
+impl TransitionLineStyle {
+    fn parse(value: &str) -> Option<Self> {
+        match value {
+            "dashed" => Some(Self::Dashed),
+            "dotted" => Some(Self::Dotted),
+            "bold" => Some(Self::Bold),
+            _ => None,
+        }
+    }
+
+    fn as_str(self) -> &'static str {
+        match self {
+            Self::Dashed => "dashed",
+            Self::Dotted => "dotted",
+            Self::Bold => "bold",
+        }
+    }
 }
 
 /// A note attached to a state or floating freely.

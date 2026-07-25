@@ -765,7 +765,8 @@ pub fn render_with_oracle(
     let TEXT_COLOR: &str = skin.text_color.as_str();
     #[allow(non_snake_case)]
     let STATE_FILL: &str = skin.state_fill.as_str();
-    let _arrow_color: &str = skin.arrow_color.as_str();
+    #[allow(non_snake_case)]
+    let ARROW_COLOR: &str = skin.arrow_color.as_str();
     let apply_themed_pseudo_colors = bg_is_transparent;
     let start_fill = if apply_themed_pseudo_colors {
         skin.start_color.as_deref().unwrap_or(PSEUDO_COLOR)
@@ -2282,6 +2283,13 @@ pub fn render_with_oracle(
     } else {
         let mut consumed_edge_paths = vec![false; edge_paths.len()];
         for (transition_idx, t) in diagram.transitions.iter().enumerate() {
+            let transition_style = diagram.transition_style(transition_idx);
+            let explicit_color = transition_style
+                .color
+                .as_deref()
+                .map(crate::sequence::resolve_color);
+            let link_color = explicit_color.as_deref().unwrap_or(ARROW_COLOR);
+            let link_stroke = transition_stroke_style(link_color, &transition_style);
             let from_layout = map_id(&t.from, true);
             let to_layout = map_id(&t.to, false);
             let from_name = if t.from == "[*]" { "*start*" } else { &t.from };
@@ -2367,12 +2375,12 @@ pub fn render_with_oracle(
                 }
                 write!(
                     svg,
-                    r#"<path d="{d}" fill="none" id="{from_name}-to-{to_name}" style="stroke:{STROKE_COLOR};stroke-width:1;"/>"#,
+                    r#"<path d="{d}" fill="none" id="{from_name}-to-{to_name}" style="{link_stroke}"/>"#,
                 )
                 .unwrap();
 
                 // Arrowhead polygon.
-                render_arrowhead(&mut svg, arrow_control, arrow_tip);
+                render_arrowhead(&mut svg, arrow_control, arrow_tip, link_color);
 
                 // Label.
                 if let Some(label) = &t.label {
@@ -2407,7 +2415,7 @@ pub fn render_with_oracle(
                 let mid_y = (start_y + end_y) / 2.0;
                 write!(
                     svg,
-                    r#"<path d="M{},{} C{},{} {},{} {},{}" fill="none" id="{from_name}-to-{to_name}" style="stroke:{STROKE_COLOR};stroke-width:1;"/>"#,
+                    r#"<path d="M{},{} C{},{} {},{} {},{}" fill="none" id="{from_name}-to-{to_name}" style="{link_stroke}"/>"#,
                     fmt_f(from_cx), fmt_f(start_y),
                     fmt_f(from_cx), fmt_f(mid_y),
                     fmt_f(to_cx), fmt_f(mid_y),
@@ -2418,7 +2426,7 @@ pub fn render_with_oracle(
                 // Arrowhead.
                 let control = (to_cx, end_y - ARROW_LEN);
                 let endpoint = (to_cx, end_y);
-                render_arrowhead(&mut svg, control, endpoint);
+                render_arrowhead(&mut svg, control, endpoint, link_color);
 
                 // Label.
                 if let Some(label) = &t.label {
@@ -2450,6 +2458,25 @@ pub fn render_with_oracle(
 
     svg.push_str("</g></svg>");
     svg
+}
+
+/// Build the shaft stroke emitted for a state transition.
+///
+/// Java provenance: `Link.applyStyle` delegates to
+/// `WithLinkType.applyOneStyle`, while `LinkStyle.getStroke3` maps dashed to
+/// 7/7, dotted to 1/3, bold to width 2, and otherwise preserves the requested
+/// thickness.
+fn transition_stroke_style(color: &str, style: &TransitionStyle) -> String {
+    let thickness = match style.line_style {
+        Some(TransitionLineStyle::Bold) => 2.0,
+        _ => style.thickness.unwrap_or(1.0),
+    };
+    let dash = match style.line_style {
+        Some(TransitionLineStyle::Dashed) => "stroke-dasharray:7,7;",
+        Some(TransitionLineStyle::Dotted) => "stroke-dasharray:1,3;",
+        _ => "",
+    };
+    format!("stroke:{color};stroke-width:{};{dash}", fmt_f(thickness))
 }
 
 /// Retract the final Bezier segment to make room for a dependency arrow.
@@ -2484,7 +2511,7 @@ fn retract_dependency_arrow_path(points: &mut [(f64, f64)]) {
 
 /// Render a filled arrowhead polygon at the endpoint, pointing in the direction
 /// from control to endpoint.
-fn render_arrowhead(svg: &mut String, control: (f64, f64), endpoint: (f64, f64)) {
+fn render_arrowhead(svg: &mut String, control: (f64, f64), endpoint: (f64, f64), color: &str) {
     let dx = endpoint.0 - control.0;
     let dy = endpoint.1 - control.1;
     let angle = dy.atan2(dx);
@@ -2505,11 +2532,9 @@ fn render_arrowhead(svg: &mut String, control: (f64, f64), endpoint: (f64, f64))
     let indent_x = tip_x - (ARROW_LEN - 4.0) * angle.cos();
     let indent_y = tip_y - (ARROW_LEN - 4.0) * angle.sin();
 
-    #[allow(non_snake_case)]
-    let STROKE_COLOR = DEFAULT_STROKE_COLOR;
     write!(
         svg,
-        r#"<polygon fill="{STROKE_COLOR}" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{STROKE_COLOR};stroke-width:1;"/>"#,
+        r#"<polygon fill="{color}" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{color};stroke-width:1;"/>"#,
         fmt_f(tip_x), fmt_f(tip_y),
         fmt_f(right_x), fmt_f(right_y),
         fmt_f(indent_x), fmt_f(indent_y),
@@ -4412,6 +4437,31 @@ mod tests {
         assert!(svg.contains(
             r#"data-entity-1="ent0002" data-entity-2="ent0004" data-link-type="dependency" data-source-line="3" id="lnk5""#
         ));
+    }
+
+    #[test]
+    fn transition_styles_color_shaft_and_arrowhead() {
+        let input = concat!(
+            "@startuml\n",
+            "skinparam stateArrowColor orange\n",
+            "state \"Signal Amber 71\" as SA71\n",
+            "state \"Signal Violet 29\" as SV29\n",
+            "[*] -[#darkcyan]-> SA71\n",
+            "SA71 -[#7B68EE,dashed]-> SV29\n",
+            "SV29 --> [*]\n",
+            "@enduml",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(r##"id="*start*-to-SA71" style="stroke:#008B8B;stroke-width:1;""##));
+        assert!(svg.contains(
+            r##"id="SA71-to-SV29" style="stroke:#7B68EE;stroke-width:1;stroke-dasharray:7,7;""##
+        ));
+        assert!(svg.contains(r##"id="SV29-to-*end*" style="stroke:#FFA500;stroke-width:1;""##));
+        assert!(svg.contains(r##"<polygon fill="#008B8B""##));
+        assert!(svg.contains(r##"<polygon fill="#7B68EE""##));
+        assert!(svg.contains(r##"<polygon fill="#FFA500""##));
     }
 
     #[test]

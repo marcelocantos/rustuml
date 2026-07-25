@@ -38,6 +38,40 @@ fn is_region_separator(line: &str) -> bool {
         || (line.len() >= 2 && line.bytes().all(|b| b == b'|'))
 }
 
+/// Parse PlantUML's bracketed state-link style into typed transition metadata.
+///
+/// Java provenance: `CommandLinkStateCommon.executeArg` passes
+/// `ARROW_STYLE` to `Link.applyStyle`; `WithLinkType.applyOneStyle` resolves
+/// `#color`, dashed/dotted/bold, and `thickness=N` tokens onto the link.
+fn parse_transition_style(arrow: &str) -> TransitionStyle {
+    static STYLE_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"\[([^\]]*)\]").unwrap());
+
+    let mut style = TransitionStyle::default();
+    for captures in STYLE_RE.captures_iter(arrow) {
+        for token in captures[1].split([',', ';']).map(str::trim) {
+            if let Some(color) = token.strip_prefix('#') {
+                if !color.is_empty() {
+                    style.color = Some(color.to_string());
+                }
+                continue;
+            }
+            if let Some((key, value)) = token.split_once('=')
+                && key.eq_ignore_ascii_case("thickness")
+            {
+                style.thickness = value.trim().parse().ok();
+                continue;
+            }
+            style.line_style = match token.to_ascii_lowercase().as_str() {
+                "dashed" => Some(TransitionLineStyle::Dashed),
+                "dotted" => Some(TransitionLineStyle::Dotted),
+                "bold" => Some(TransitionLineStyle::Bold),
+                _ => style.line_style,
+            };
+        }
+    }
+    style
+}
+
 /// Accumulator for a multi-line note body.
 struct NoteBuffer {
     kind: StateNoteKind,
@@ -305,6 +339,8 @@ impl StateParser {
             let from = self.ensure_state(&caps[1]);
             let to = self.ensure_state(&caps[3]);
             let label = caps.get(4).map(|m| m.as_str().trim().to_string());
+            let transition_style = parse_transition_style(&caps[2]);
+            transition_style.record_in(&mut self.meta, self.transitions.len());
             self.transitions.push(Transition {
                 from,
                 to,
@@ -648,6 +684,31 @@ mod tests {
         assert_eq!(d.transitions[0].from, "[*]");
         assert_eq!(d.transitions[0].to, "Active");
         assert_eq!(d.transitions[1].label.as_deref(), Some("disable"));
+    }
+
+    #[test]
+    fn bracketed_transition_styles_are_typed() {
+        let d = parse(
+            "Alpha -[#darkcyan,dashed,thickness=2]-> Beta\n\
+             Beta -right[#7B68EE,dotted]-> Gamma",
+        );
+
+        assert_eq!(
+            d.transition_style(0),
+            TransitionStyle {
+                color: Some("darkcyan".to_string()),
+                line_style: Some(TransitionLineStyle::Dashed),
+                thickness: Some(2.0),
+            }
+        );
+        assert_eq!(
+            d.transition_style(1),
+            TransitionStyle {
+                color: Some("7B68EE".to_string()),
+                line_style: Some(TransitionLineStyle::Dotted),
+                thickness: None,
+            }
+        );
     }
 
     #[test]
