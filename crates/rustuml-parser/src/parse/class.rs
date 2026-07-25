@@ -38,6 +38,7 @@ pub fn parse_class(lines: &[String]) -> Result<ClassDiagram, ParseError> {
 
 struct ClassParser {
     meta: DiagramMeta,
+    direction: ClassLayoutDirection,
     entities: Vec<ClassEntity>,
     relationships: Vec<Relationship>,
     association_classes: Vec<crate::diagram::class::AssociationClass>,
@@ -74,6 +75,7 @@ impl ClassParser {
     fn new() -> Self {
         Self {
             meta: DiagramMeta::default(),
+            direction: ClassLayoutDirection::TopToBottom,
             entities: Vec::new(),
             relationships: Vec::new(),
             association_classes: Vec::new(),
@@ -129,6 +131,7 @@ impl ClassParser {
         };
         ClassDiagram {
             meta: self.meta,
+            direction: self.direction,
             entities,
             relationships,
             association_classes: self.association_classes,
@@ -397,6 +400,17 @@ impl ClassParser {
         // Closing brace: pop the innermost package scope.
         if line == "}" {
             self.package_stack.pop();
+            return Ok(());
+        }
+
+        // Java `CommandRankDir.executeArg` stores the command in
+        // `SkinParam.rankdir`; `DotStringFactory` emits `rankdir=LR` for SVEK.
+        if line.eq_ignore_ascii_case("left to right direction") {
+            self.direction = ClassLayoutDirection::LeftToRight;
+            return Ok(());
+        }
+        if line.eq_ignore_ascii_case("top to bottom direction") {
+            self.direction = ClassLayoutDirection::TopToBottom;
             return Ok(());
         }
 
@@ -1936,6 +1950,20 @@ mod tests {
     fn parse(input: &str) -> ClassDiagram {
         let lines: Vec<String> = input.lines().map(|s| s.to_string()).collect();
         parse_class(&lines).unwrap()
+    }
+
+    #[test]
+    fn direction_commands_update_class_layout_direction() {
+        let left_to_right = parse("left to right direction\nclass FreshA\nclass FreshB");
+        assert_eq!(left_to_right.direction, ClassLayoutDirection::LeftToRight);
+
+        let reset = parse(
+            "left to right direction\n\
+             top to bottom direction\n\
+             class FreshA\n\
+             class FreshB",
+        );
+        assert_eq!(reset.direction, ClassLayoutDirection::TopToBottom);
     }
 
     #[test]

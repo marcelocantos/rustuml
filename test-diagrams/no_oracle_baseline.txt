@@ -5,14 +5,14 @@
 activity 1287 1299
 archimate 0 48
 chart 25 25
-class 1815 1971
+class 1820 1971
 combo 205 327
 component 610 663
 creole 415 639
 deployment 495 495
 dot 25 25
 ebnf 25 25
-edge-cases 564 777
+edge-cases 568 777
 er 1 157
 gantt 114 114
 git 25 25
@@ -25,7 +25,7 @@ nwdiag 89 89
 object 50 155
 preprocessing 162 307
 regex 45 45
-rendering 48 98
+rendering 51 98
 salt 103 103
 sequence 1400 1411
 skinparam 245 410

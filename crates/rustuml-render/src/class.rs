@@ -1683,8 +1683,14 @@ pub fn render_with_oracle(
         );
     }
 
+    // Java `CommandRankDir.executeArg` updates `SkinParam.rankdir`, which
+    // `DotStringFactory` serializes as Graphviz `rankdir=LR` for SVEK.
+    let direction = match diagram.direction {
+        ClassLayoutDirection::TopToBottom => Direction::TopToBottom,
+        ClassLayoutDirection::LeftToRight => Direction::LeftToRight,
+    };
     // Phase 2: Use layout engine to determine positions.
-    let mut layout = LayoutGraph::new(Direction::TopToBottom).with_plantuml_svek_spacing();
+    let mut layout = LayoutGraph::new(direction).with_plantuml_svek_spacing();
     for (entity, dim) in diagram.entities.iter().zip(&dims) {
         layout.add_node(&entity.id, &entity.label, dim.width, dim.height);
     }
@@ -9363,6 +9369,7 @@ mod tests {
     fn simple_class_diagram() -> ClassDiagram {
         ClassDiagram {
             meta: DiagramMeta::default(),
+            direction: ClassLayoutDirection::TopToBottom,
             entities: vec![
                 ClassEntity {
                     id: "Animal".into(),
@@ -9496,6 +9503,39 @@ mod tests {
     }
 
     #[test]
+    fn renamed_four_node_chain_obeys_left_to_right_rank_direction() {
+        let body = "class FreshNorth\n\
+                    class FreshEast\n\
+                    class FreshSouth\n\
+                    class FreshWest\n\
+                    FreshNorth --> FreshEast\n\
+                    FreshEast --> FreshSouth\n\
+                    FreshSouth --> FreshWest";
+        let left_to_right = rustuml_parser::parse::parse(&format!(
+            "@startuml\nleft to right direction\n{body}\n@enduml"
+        ))
+        .unwrap();
+        let top_to_bottom =
+            rustuml_parser::parse::parse(&format!("@startuml\n{body}\n@enduml")).unwrap();
+
+        let dimensions = |svg: &str| {
+            let view_box = svg
+                .split("viewBox=\"0 0 ")
+                .nth(1)
+                .and_then(|tail| tail.split('"').next())
+                .unwrap();
+            let mut values = view_box
+                .split_whitespace()
+                .map(|value| value.parse::<f64>().unwrap());
+            (values.next().unwrap(), values.next().unwrap())
+        };
+        let horizontal = dimensions(&crate::render_svg(&left_to_right));
+        let vertical = dimensions(&crate::render_svg(&top_to_bottom));
+        assert!(horizontal.0 > horizontal.1, "{horizontal:?}");
+        assert!(vertical.1 > vertical.0, "{vertical:?}");
+    }
+
+    #[test]
     fn has_class_boxes() {
         let svg = render(&simple_class_diagram(), &Theme::default());
         let rect_count = svg.matches("<rect").count();
@@ -9517,6 +9557,7 @@ mod tests {
     fn multiline_member_escape_renders_as_member_rows() {
         let diagram = ClassDiagram {
             meta: DiagramMeta::default(),
+            direction: ClassLayoutDirection::TopToBottom,
             entities: vec![ClassEntity {
                 id: "MyClass".into(),
                 label: "MyClass".into(),
@@ -10201,6 +10242,7 @@ mod tests {
     fn interface_rendering() {
         let diagram = ClassDiagram {
             meta: DiagramMeta::default(),
+            direction: ClassLayoutDirection::TopToBottom,
             entities: vec![ClassEntity {
                 id: "Drawable".into(),
                 label: "Drawable".into(),
@@ -10425,6 +10467,7 @@ mod tests {
     fn empty_diagram() {
         let diagram = ClassDiagram {
             meta: DiagramMeta::default(),
+            direction: ClassLayoutDirection::TopToBottom,
             entities: vec![],
             relationships: vec![],
             association_classes: vec![],

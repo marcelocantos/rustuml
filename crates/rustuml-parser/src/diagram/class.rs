@@ -38,6 +38,8 @@ pub struct Note {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ClassDiagram {
     pub meta: DiagramMeta,
+    #[serde(default)]
+    pub direction: ClassLayoutDirection,
     pub entities: Vec<ClassEntity>,
     pub relationships: Vec<Relationship>,
     /// Association classes declared via `(A, B) .. C` syntax.
@@ -63,6 +65,14 @@ pub struct ClassDiagram {
     pub caption_line: Option<usize>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub legend_line: Option<usize>,
+}
+
+/// Dot/SVEK rank direction selected by the diagram direction command.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
+pub enum ClassLayoutDirection {
+    #[default]
+    TopToBottom,
+    LeftToRight,
 }
 
 /// One `hide`/`show` directive (verbatim arguments).

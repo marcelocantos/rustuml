@@ -296,6 +296,7 @@ mod tests {
     fn make_diagram(entities: Vec<ClassEntity>, relationships: Vec<Relationship>) -> ClassDiagram {
         ClassDiagram {
             meta: DiagramMeta::default(),
+            direction: ClassLayoutDirection::TopToBottom,
             entities,
             relationships,
             association_classes: vec![],
