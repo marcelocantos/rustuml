@@ -3461,7 +3461,7 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
         .or_else(|| {
             cluster_frame.and_then(|frame| {
                 frame
-                    .outer_cloud_painted_max_x
+                    .outer_symbol_painted_max_x
                     .map(|max_x| max_x + SVEK_DIMENSION_DELTA)
             })
         })
@@ -3471,7 +3471,7 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
         .or_else(|| {
             cluster_frame.and_then(|frame| {
                 frame
-                    .outer_cloud_painted_max_y
+                    .outer_symbol_painted_max_y
                     .map(|max_y| max_y + SVEK_DIMENSION_DELTA)
             })
         })
@@ -3911,8 +3911,8 @@ struct DeploymentXFrame {
 struct DeploymentClusterFrame {
     margin_x: f64,
     margin_y: f64,
-    outer_cloud_painted_max_x: Option<f64>,
-    outer_cloud_painted_max_y: Option<f64>,
+    outer_symbol_painted_max_x: Option<f64>,
+    outer_symbol_painted_max_y: Option<f64>,
 }
 
 fn deployment_cluster_frame(
@@ -3957,33 +3957,37 @@ fn deployment_cluster_frame(
         return None;
     }
 
-    // When every outer entity is a cloud cluster, `LimitFinder` sees the
-    // generated UPath as the document envelope. `SvekResult.calculateDimension`
-    // adds its fixed delta after the path's painted maximum, rather than after
-    // the nominal Graphviz cluster rectangle.
-    let outer_cloud_bounds: Option<Vec<_>> = roots
+    // `USymbolCloud.asBig` and `USymbolFolder.asBig` paint paths that define
+    // the outer envelope seen by `LimitFinder`. `SvekResult.calculateDimension`
+    // adds its fixed delta after that painted maximum, rather than after the
+    // nominal Graphviz cluster rectangle.
+    let outer_symbol_bounds: Option<Vec<_>> = roots
         .iter()
         .map(|node| {
-            if node.children.is_empty() || node.kind != DeploymentNodeKind::Cloud {
+            if node.children.is_empty() {
                 return None;
             }
             let position = result
                 .cluster_positions
                 .iter()
                 .find(|position| position.id == node.id)?;
-            Some((
-                position,
-                crate::cloud_shape::generate(position.width, position.height).bounds(),
-            ))
+            let bounds = match node.kind {
+                DeploymentNodeKind::Cloud => {
+                    crate::cloud_shape::generate(position.width, position.height).bounds()
+                }
+                DeploymentNodeKind::Folder => (0.0, 0.0, position.width, position.height),
+                _ => return None,
+            };
+            Some((position, bounds))
         })
         .collect();
-    let outer_cloud_painted_max_x = outer_cloud_bounds.as_ref().map(|bounds| {
+    let outer_symbol_painted_max_x = outer_symbol_bounds.as_ref().map(|bounds| {
         bounds
             .iter()
             .map(|(position, (_, _, max_x, _))| position.x + required_dx + max_x)
             .fold(f64::NEG_INFINITY, f64::max)
     });
-    let outer_cloud_painted_max_y = outer_cloud_bounds.as_ref().map(|bounds| {
+    let outer_symbol_painted_max_y = outer_symbol_bounds.as_ref().map(|bounds| {
         bounds
             .iter()
             .map(|(position, (_, _, _, max_y))| position.y + required_dy + max_y)
@@ -3993,8 +3997,8 @@ fn deployment_cluster_frame(
     Some(DeploymentClusterFrame {
         margin_x: required_dx,
         margin_y: required_dy,
-        outer_cloud_painted_max_x,
-        outer_cloud_painted_max_y,
+        outer_symbol_painted_max_x,
+        outer_symbol_painted_max_y,
     })
 }
 
@@ -4727,6 +4731,28 @@ mod tests {
         assert!(svg.contains(r#"fill="none" style="stroke:#181818;stroke-width:1;"/>"#));
         assert!(!svg.contains(r#"<polygon fill="none""#));
         assert!(svg.contains(r#"data-qualified-name="Renamed Edge 109.Worker113""#));
+    }
+
+    #[test]
+    fn no_oracle_folder_cluster_uses_painted_path_envelope() {
+        let source = "@startuml\n\
+            folder \"Archive Cell 229\" {\n\
+              artifact \"Bundle 233\" as Bundle233\n\
+              queue \"Jobs 239\" as Jobs239\n\
+            }\n\
+            Bundle233 --> Jobs239\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+
+        let svg = render(&diagram, &Theme::default());
+
+        assert!(svg.contains(r#"height="197px""#));
+        assert!(svg.contains(r#"style="width:161px;height:197px;background:#FFFFFF;""#));
+        assert!(svg.contains(r#"data-qualified-name="Archive Cell 229.Bundle233""#));
+        assert!(svg.contains(r#"data-qualified-name="Archive Cell 229.Jobs239""#));
     }
 
     #[test]
