@@ -28735,6 +28735,37 @@ fn typed_ftile_scene_contains_repeat(scene: &TypedFtileScene<'_>) -> bool {
     }
 }
 
+fn typed_ftile_scene_contains_if_note(scene: &TypedFtileScene<'_>) -> bool {
+    match &scene.kind {
+        TypedFtileKind::Leaf { .. } => false,
+        TypedFtileKind::Sequence { children } => children
+            .iter()
+            .any(|child| typed_ftile_scene_contains_if_note(&child.scene)),
+        TypedFtileKind::If {
+            node,
+            then_scene,
+            else_scene,
+            ..
+        } => {
+            matches!(
+                node,
+                LayoutNode::If { attached_notes, .. } if !attached_notes.is_empty()
+            ) || typed_ftile_scene_contains_if_note(&then_scene.scene)
+                || typed_ftile_scene_contains_if_note(&else_scene.scene)
+        }
+        TypedFtileKind::While { body, special, .. } => {
+            typed_ftile_scene_contains_if_note(&body.scene)
+                || special
+                    .as_ref()
+                    .is_some_and(|special| typed_ftile_scene_contains_if_note(&special.scene))
+        }
+        TypedFtileKind::Repeat { body, .. } => typed_ftile_scene_contains_if_note(&body.scene),
+        TypedFtileKind::Fork { branches, .. } => branches
+            .iter()
+            .any(|branch| typed_ftile_scene_contains_if_note(&branch.scene)),
+    }
+}
+
 fn typed_ftile_scene_control_count(
     scene: &TypedFtileScene<'_>,
     allow_terminal_cross_lane_if: bool,
@@ -28783,7 +28814,6 @@ fn typed_ftile_scene_control_count(
             })
         }
         TypedFtileKind::If {
-            node,
             lane,
             then_scene,
             else_scene,
@@ -28795,14 +28825,7 @@ fn typed_ftile_scene_control_count(
                 typed_ftile_scene_control_count(&else_scene.scene, allow_terminal_cross_lane_if)?;
             if then_count + else_count == 0
                 && (then_scene.scene.out_lane != *lane || else_scene.scene.out_lane != *lane)
-                && !(allow_terminal_cross_lane_if
-                    && (then_scene.scene.geometry.out_y.is_none()
-                        && else_scene.scene.geometry.out_y.is_none()
-                        || matches!(
-                            node,
-                            LayoutNode::If { attached_notes, .. }
-                                if !attached_notes.is_empty()
-                        )))
+                && !allow_terminal_cross_lane_if
             {
                 return None;
             }
@@ -31238,6 +31261,68 @@ fn typed_ftile_emit_connection(
     typed_ftile_emit_polyline(target, points, arrow);
 }
 
+struct TypedFtileIfOutRoute {
+    out_lane: usize,
+    in_lane: usize,
+    raw_source: (f64, f64),
+    raw_vertex_x: f64,
+    source: (f64, f64),
+    vertex: (f64, f64),
+}
+
+fn typed_ftile_emit_if_out_connection(
+    emitters: &mut [SvgEmitter],
+    cross: &mut SvgEmitter,
+    route: TypedFtileIfOutRoute,
+) {
+    let TypedFtileIfOutRoute {
+        out_lane,
+        in_lane,
+        raw_source,
+        raw_vertex_x,
+        source,
+        vertex,
+    } = route;
+    let raw_points_right = raw_vertex_x > raw_source.0;
+    let arrow = if raw_points_right {
+        TypedArrowDirection::Right
+    } else {
+        TypedArrowDirection::Left
+    };
+    if out_lane == in_lane {
+        typed_ftile_emit_connection(
+            emitters,
+            cross,
+            out_lane,
+            in_lane,
+            &[source, (source.0, vertex.1), vertex],
+            arrow,
+        );
+        return;
+    }
+
+    // `FtileIfWithLinks.ConnectionVerticalThenHorizontal.drawTranslate`
+    // compares the branch's original direction with its translated swimlane
+    // direction. It approaches the merge through two LIMITED snakes so a
+    // direction reversal clears the diamond before the arrow turns inward.
+    let translated_points_right = vertex.0 > source.0;
+    let delta = if raw_points_right {
+        -1.5 * ftile::HEXAGON_HALF
+    } else {
+        1.5 * ftile::HEXAGON_HALF
+    };
+    let target = &mut *cross;
+    if raw_points_right == translated_points_right {
+        // The two Java snakes share a collinear tail here, so LIMITED merging
+        // collapses their approach point to the ordinary vertical elbow.
+        typed_ftile_emit_polyline(target, &[source, (source.0, vertex.1), vertex], arrow);
+    } else {
+        let approach = (vertex.0 + delta, vertex.1 - 1.5 * ftile::HEXAGON_HALF);
+        typed_ftile_emit_polyline_lines(target, &[source, (source.0, approach.1), approach]);
+        typed_ftile_emit_polyline(target, &[approach, (approach.0, vertex.1), vertex], arrow);
+    }
+}
+
 fn typed_ftile_emit_output_connection(
     source: &TypedFtileScene<'_>,
     emitters: &mut [SvgEmitter],
@@ -31808,17 +31893,25 @@ fn typed_ftile_emit_connectors(
                     else {
                         continue;
                     };
-                    typed_ftile_emit_connection(
+                    let (_, raw_branch_x, raw_branch_y) =
+                        typed_ftile_raw_out(&branch.scene, x + branch.x, y + branch.y)
+                            .expect("live if branch has raw output");
+                    let raw_vertex_x = if matches!(direction, TypedArrowDirection::Right) {
+                        x + merge_at.0
+                    } else {
+                        x + merge_at.0 + 2.0 * DIAMOND_HALF
+                    };
+                    typed_ftile_emit_if_out_connection(
                         emitters,
                         cross,
-                        branch_lane,
-                        *lane,
-                        &[
-                            (branch_x, branch_y),
-                            (branch_x, merge_cy),
-                            (vertex, merge_cy),
-                        ],
-                        direction,
+                        TypedFtileIfOutRoute {
+                            out_lane: branch_lane,
+                            in_lane: *lane,
+                            raw_source: (raw_branch_x, raw_branch_y),
+                            raw_vertex_x,
+                            source: (branch_x, branch_y),
+                            vertex: (vertex, merge_cy),
+                        },
                     );
                 }
             }
@@ -32552,7 +32645,8 @@ fn render_ftile(
         let has_fork = typed_ftile_contains_fork(&compressed_scene);
         let has_expanded_parallel = typed_ftile_has_expanded_parallel(&compressed_scene);
         let natural_repeat = typed_ftile_scene_contains_repeat(&compressed_scene);
-        let allow_terminal_cross_lane_if = !has_fork || has_expanded_parallel || natural_repeat;
+        let allow_terminal_cross_lane_if = (!has_fork || has_expanded_parallel || natural_repeat)
+            && (!natural_repeat || typed_ftile_scene_contains_if_note(&compressed_scene));
         let control_count =
             typed_ftile_scene_control_count(&compressed_scene, allow_terminal_cross_lane_if)?;
         if control_count == 0 {
@@ -34303,6 +34397,75 @@ mod tests {
         )
         .expect("compressed natural recursive scene");
         assert!(natural_rendered.content.contains("Record novel rejection"));
+    }
+
+    #[test]
+    fn translated_if_outputs_preserve_direction_reversal_corridors() {
+        let palette = Palette::default_puml();
+        let mut emitters: Vec<_> = (0..2)
+            .map(|_| SvgEmitter::with_palette(palette.clone(), false))
+            .collect();
+        let mut cross = SvgEmitter::with_palette(palette.clone(), false);
+        typed_ftile_emit_if_out_connection(
+            &mut emitters,
+            &mut cross,
+            TypedFtileIfOutRoute {
+                out_lane: 1,
+                in_lane: 0,
+                raw_source: (40.0, 180.0),
+                raw_vertex_x: 160.0,
+                source: (340.0, 260.0),
+                vertex: (120.0, 300.0),
+            },
+        );
+        assert_eq!(cross.connectors.matches("<line ").count(), 4);
+        assert_eq!(cross.connectors.matches("<polygon ").count(), 1);
+
+        let mut direct_cross = SvgEmitter::with_palette(palette, false);
+        typed_ftile_emit_if_out_connection(
+            &mut emitters,
+            &mut direct_cross,
+            TypedFtileIfOutRoute {
+                out_lane: 1,
+                in_lane: 0,
+                raw_source: (220.0, 180.0),
+                raw_vertex_x: 160.0,
+                source: (340.0, 260.0),
+                vertex: (120.0, 300.0),
+            },
+        );
+        assert_eq!(direct_cross.connectors.matches("<line ").count(), 2);
+        assert_eq!(direct_cross.connectors.matches("<polygon ").count(), 1);
+
+        let input = concat!(
+            "@startuml\n",
+            "|Fresh guest|\n",
+            "start\n",
+            ":Choose renamed option;\n",
+            "|Fresh desk|\n",
+            "if (novel route?) then (coins)\n",
+            "  |Fresh ledger|\n",
+            "  :Record renamed coins;\n",
+            "else (token)\n",
+            "  :Record renamed token;\n",
+            "endif\n",
+            "|Fresh guest|\n",
+            ":Leave renamed venue;\n",
+            "stop\n",
+            "@enduml",
+        );
+        let parsed = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Activity(diagram) = &parsed else {
+            panic!("activity diagram");
+        };
+        let tree = build_tree(&diagram.steps, &Palette::default_puml());
+        let mut lane = 0;
+        let scene = typed_ftile_sequence(&tree, &mut lane).expect("typed FTile scene");
+        assert!(typed_ftile_scene_control_count(&scene, true).is_some());
+        let svg = render_ftile(&tree, diagram, &Palette::default_puml(), false, "")
+            .expect("live typed render");
+        assert!(svg.contains("Record renamed coins"));
+        assert!(svg.contains("Record renamed token"));
     }
 
     #[test]
