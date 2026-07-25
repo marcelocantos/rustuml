@@ -3110,6 +3110,78 @@ fn is_degenerated_single_entity(diagram: &DeploymentDiagram) -> bool {
         && !is_handwritten_enabled(&diagram.meta.skinparams)
 }
 
+fn deployment_no_oracle_entity_rect(
+    node: &DeploymentNode,
+    dim: &DeploymentNodeDim,
+    rect: LayoutRect,
+) -> EntityRect {
+    use DeploymentNodeKind::*;
+
+    let stereo_height = if node.stereotype.is_some() {
+        TEXT_LINE_H
+    } else {
+        0.0
+    };
+    let mut entity_rect = match node.kind {
+        Boundary | Control | Entity => {
+            // `USymbolSimpleAbstract` centres a fixed icon above the label.
+            // The downstream emitter consumes the 24px ellipse box, not the
+            // complete icon-plus-label node box solved by Graphviz.
+            let symbol_width = if node.kind == Boundary { 49.0 } else { 32.0 };
+            let symbol_x = rect.x + (rect.width - symbol_width) / 2.0;
+            let ellipse_x = symbol_x + if node.kind == Boundary { 21.0 } else { 4.0 };
+            empty_entity_rect(ellipse_x, rect.y + stereo_height + 4.0, 24.0, 24.0)
+        }
+        Collections => {
+            // `USymbolCollections.drawCollections` paints the back card at
+            // (+4,+4), then the front card at the overall node origin.
+            let mut result = empty_entity_rect(
+                rect.x + 4.0,
+                rect.y + 4.0,
+                rect.width - 4.0,
+                rect.height - 4.0,
+            );
+            result.aux_rects.push(crate::layout_oracle::AuxRect {
+                x: rect.x,
+                y: rect.y,
+                width: rect.width - 4.0,
+                height: rect.height - 4.0,
+                fill: None,
+                style: None,
+            });
+            result
+        }
+        _ => empty_entity_rect(rect.x, rect.y, rect.width, rect.height),
+    };
+
+    let (text_x, text_y) = match node.kind {
+        Boundary | Control | Entity => (
+            rect.x + (rect.width - dim.label_width) / 2.0,
+            rect.y + stereo_height + 32.0 + ASCENT_14,
+        ),
+        Collections => (
+            rect.x + (rect.width - dim.label_width) / 2.0 - 2.0,
+            rect.y + stereo_height + 8.0 + ASCENT_14,
+        ),
+        _ => (
+            // Java receives node X through Graphviz's two-decimal SVG before
+            // applying the symbol-local text offset.
+            ((entity_text_center(node.kind, rect.x, rect.width) - dim.label_width / 2.0) * 100.0)
+                .round()
+                / 100.0,
+            rect.y + dim.top_pad,
+        ),
+    };
+    entity_rect.text_x_values.push(text_x);
+    entity_rect.text_y_values.push(text_y);
+    entity_rect.texts.push(EntityText {
+        x: text_x,
+        y: text_y,
+        text: node.label.clone(),
+    });
+    entity_rect
+}
+
 fn render_no_oracle_degenerated(diagram: &DeploymentDiagram, dim: &DeploymentNodeDim) -> String {
     let node = &diagram.nodes[0];
     // `GraphvizImageBuilder.buildImage` bypasses Graphviz for one unlinked
@@ -3123,19 +3195,7 @@ fn render_no_oracle_degenerated(diagram: &DeploymentDiagram, dim: &DeploymentNod
     };
     let parent_of = HashMap::new();
     let qnames = deployment_qnames(diagram, &parent_of);
-    let mut entity_rect = empty_entity_rect(rect.x, rect.y, rect.width, rect.height);
-    let text_x = ((entity_text_center(node.kind, rect.x, rect.width) - dim.label_width / 2.0)
-        * 100.0)
-        .round()
-        / 100.0;
-    let text_y = rect.y + dim.top_pad;
-    entity_rect.text_x_values.push(text_x);
-    entity_rect.text_y_values.push(text_y);
-    entity_rect.texts.push(EntityText {
-        x: text_x,
-        y: text_y,
-        text: node.label.clone(),
-    });
+    let mut entity_rect = deployment_no_oracle_entity_rect(node, dim, rect);
     entity_rect.source_line = Some(node.source_line.to_string());
 
     let mut oracle = OracleLayout::default();
@@ -3375,24 +3435,11 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
     for (i, node) in diagram.nodes.iter().enumerate() {
         let dim = &dims[i];
         let rect = rects[i];
-        let mut entity_rect = empty_entity_rect(rect.x, rect.y, rect.width, rect.height);
-        if !cluster_ids.contains(node.id.as_str()) {
-            let text_y = rect.y + dim.top_pad;
-            // Java receives node X through Graphviz's two-decimal SVG before
-            // applying the symbol-local text offset.
-            let text_x = ((entity_text_center(node.kind, rect.x, rect.width)
-                - dim.label_width / 2.0)
-                * 100.0)
-                .round()
-                / 100.0;
-            entity_rect.text_x_values.push(text_x);
-            entity_rect.text_y_values.push(text_y);
-            entity_rect.texts.push(EntityText {
-                x: text_x,
-                y: text_y,
-                text: node.label.clone(),
-            });
-        }
+        let mut entity_rect = if cluster_ids.contains(node.id.as_str()) {
+            empty_entity_rect(rect.x, rect.y, rect.width, rect.height)
+        } else {
+            deployment_no_oracle_entity_rect(node, dim, rect)
+        };
         entity_rect.source_line = Some(node.source_line.to_string());
         oracle
             .entities
@@ -3615,6 +3662,12 @@ fn deployment_node_dim(
         DeploymentNodeKind::Node | DeploymentNodeKind::Artifact | DeploymentNodeKind::Frame => {
             label_width.max(stereo_width) + 2.0 * text_x_pad + 10.0
         }
+        // `USymbolSimpleAbstract` centres the fixed symbol above the text.
+        DeploymentNodeKind::Boundary => label_width.max(stereo_width).max(49.0),
+        DeploymentNodeKind::Control | DeploymentNodeKind::Entity => {
+            label_width.max(stereo_width).max(32.0)
+        }
+        DeploymentNodeKind::Collections => label_width.max(stereo_width) + 20.0,
         DeploymentNodeKind::Cloud => label_width.max(stereo_width) + 2.0 * CLOUD_MARGIN,
         // `USymbolFolder.asSmall` keeps a hidden 40x15 title box when
         // `showTitle` is false, then adds `Margin(10, 20, 13, 10)`.
@@ -3627,6 +3680,12 @@ fn deployment_node_dim(
         _ => label_width.max(stereo_width) + 2.0 * text_x_pad,
     };
     let height = match node.kind {
+        // Boundary/control/entity use a 32px icon stacked between the optional
+        // stereotype and the label (`XDimension2D.mergeLayoutT12B3`).
+        DeploymentNodeKind::Boundary | DeploymentNodeKind::Control | DeploymentNodeKind::Entity => {
+            line_count as f64 * TEXT_LINE_H + 32.0
+        }
+        DeploymentNodeKind::Collections => line_count as f64 * TEXT_LINE_H + 20.0,
         DeploymentNodeKind::Cloud => line_count as f64 * TEXT_LINE_H + 2.0 * CLOUD_MARGIN,
         // `USymbolCard.asSmall` wraps the merged stereotype/label block in
         // `Margin(10, 10, 3, 3)`.
@@ -3764,6 +3823,13 @@ fn deployment_local_painted_y_bounds(
             let (_, min_y, _, max_y) = crate::cloud_shape::generate(dim.width, dim.height).bounds();
             (min_y, max_y)
         }
+        // `Boundary` and `EntityDomain` start their 24px circle four pixels
+        // below the overall image origin. `Control` adds a polygon whose top
+        // wing reaches one pixel above that origin.
+        Boundary | Entity => (4.0, dim.height),
+        Control => (-1.0, dim.height),
+        // Two offset `URectangle`s: the front contributes -1 at the origin.
+        Collections => (-1.0, dim.height - 1.0),
         // These Java symbols are painted as UPath/UPolygon outlines whose
         // vertical bounds are exactly their declared image height.
         // The stack combines an inset `URectangle` (minimum Y at -1) with
@@ -3850,7 +3916,7 @@ fn deployment_body_x_frame(
         // Graphviz's SVG polygon coordinates, which are serialized to two
         // decimal places.
         let x = (position.x * 100.0).round() / 100.0;
-        let (local_min_x, local_max_x) = deployment_local_painted_x_bounds(node.kind, dim);
+        let (local_min_x, local_max_x) = deployment_local_painted_x_bounds(node, dim);
         painted_min_x = painted_min_x.min(x + local_min_x);
         painted_max_x = painted_max_x.max(x + local_max_x);
     }
@@ -3869,12 +3935,9 @@ fn deployment_body_x_frame(
     })
 }
 
-fn deployment_local_painted_x_bounds(
-    kind: DeploymentNodeKind,
-    dim: &DeploymentNodeDim,
-) -> (f64, f64) {
+fn deployment_local_painted_x_bounds(node: &DeploymentNode, dim: &DeploymentNodeDim) -> (f64, f64) {
     use DeploymentNodeKind::*;
-    match kind {
+    match node.kind {
         // `USymbolNode.drawNode` paints the full body as a UPolygon.
         Node => (-10.0, dim.width + 10.0),
         // The artifact's outer rectangle reaches one pixel left in
@@ -3889,6 +3952,32 @@ fn deployment_local_painted_x_bounds(
                 .flat_map(|cubic| [cubic.c1.0, cubic.c2.0, cubic.to.0])
                 .fold(path.start.0, f64::max);
             (min_x, max_x)
+        }
+        Boundary => {
+            let symbol_x = (dim.width - 49.0) / 2.0;
+            let label_x = (dim.width - dim.label_width) / 2.0;
+            (
+                (symbol_x + 4.0).min(label_x),
+                (symbol_x + 45.0).max(label_x + dim.label_width),
+            )
+        }
+        Control => {
+            let symbol_x = (dim.width - 32.0) / 2.0;
+            let label_x = (dim.width - dim.label_width) / 2.0;
+            // `LimitFinder.drawUPolygon` expands the control notch by ten
+            // pixels on either side, producing local X bounds 2..28.
+            (
+                (symbol_x + 2.0).min(label_x),
+                (symbol_x + 28.0).max(label_x + dim.label_width),
+            )
+        }
+        Entity => {
+            let symbol_x = (dim.width - 32.0) / 2.0;
+            let label_x = (dim.width - dim.label_width) / 2.0;
+            (
+                (symbol_x + 4.0).min(label_x),
+                (symbol_x + 28.0).max(label_x + dim.label_width),
+            )
         }
         // Rounded rectangle-like symbols are measured by
         // `LimitFinder.drawRectangle`.
@@ -4484,6 +4573,31 @@ mod tests {
         assert!(svg.contains(r#"width="91.5518" x="21" y="7""#));
         assert!(svg.contains(r#"M6,7 L18.5,7 A2.5,2.5 0 0 1 21,9.5"#));
         assert!(svg.contains(r#"id="Buffer149-to-Archive151""#));
+    }
+
+    #[test]
+    fn no_oracle_specialized_symbols_use_simple_abstract_layout() {
+        let source = "@startuml\n\
+            boundary \"Ingress 157\" as Ingress157\n\
+            collections \"Batch 163\" as Batch163\n\
+            control \"Throttle 167\" as Throttle167\n\
+            node \"Runtime 173\" as Runtime173\n\
+            Ingress157 --> Batch163\n\
+            Batch163 --> Throttle167\n\
+            Throttle167 --> Runtime173\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+
+        let svg = render(&diagram, &Theme::default());
+
+        assert!(svg.contains(r#"style="width:168px;height:386px;background:#FFFFFF;""#));
+        assert!(svg.contains(r#"M59.1801,6 L59.1801,30 M59.1801,18 L76.1801,18"#));
+        assert!(svg.contains(r#"width="83.8672" x="35.75" y="110.49""#));
+        assert!(svg.contains(r#"points="75.6879,210.98,81.6879,205.98"#));
+        assert!(svg.contains(r#"id="Throttle167-to-Runtime173""#));
     }
 
     #[test]
