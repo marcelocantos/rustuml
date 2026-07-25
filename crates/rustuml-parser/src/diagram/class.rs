@@ -235,9 +235,44 @@ pub struct Relationship {
     /// Whether the line is dashed (e.g. `..>` vs `-->`).
     #[serde(default)]
     pub dashed: bool,
+    /// Number of line characters in the arrow body. PlantUML
+    /// `CommandLinkClass.getQueueLength` stores this on `LinkArg`; length one
+    /// is later emitted by `SvekEdge.rankSame` as a horizontal link.
+    #[serde(default = "default_relationship_length")]
+    pub length: usize,
+    /// Visual modifiers attached to the arrow body (`-[#blue,dashed]`,
+    /// `-[thickness=3]`, or `-[hidden]`).
+    ///
+    /// PlantUML parses these in `CommandLinkClass.executeArg`, then delegates
+    /// to `WithLinkType.applyStyle` before `SvekEdge.drawU` resolves the
+    /// effective stroke and color.
+    #[serde(default, skip_serializing_if = "RelationshipStyle::is_default")]
+    pub style: RelationshipStyle,
     /// 1-based line number within the `@startuml` block.
     #[serde(default)]
     pub source_line: usize,
+}
+
+fn default_relationship_length() -> usize {
+    2
+}
+
+#[derive(Debug, Clone, Default, PartialEq, Eq, Serialize, Deserialize)]
+pub struct RelationshipStyle {
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub color: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub line_style: Option<EntityLineStyle>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub thickness: Option<u32>,
+    #[serde(default)]
+    pub hidden: bool,
+}
+
+impl RelationshipStyle {
+    fn is_default(&self) -> bool {
+        self == &Self::default()
+    }
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]

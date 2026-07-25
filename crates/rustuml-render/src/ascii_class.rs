@@ -350,6 +350,8 @@ mod tests {
                 to_decor: None,
                 decorated_end: RelationshipEnd::From,
                 dashed: false,
+                length: 2,
+                style: RelationshipStyle::default(),
                 source_line: 0,
             }],
         );

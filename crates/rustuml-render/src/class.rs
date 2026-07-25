@@ -1714,6 +1714,9 @@ pub fn render_with_oracle(
         }
     }
     for rel in &diagram.relationships {
+        if rel.length == 1 {
+            layout.add_same_rank(&rel.from, &rel.to);
+        }
         let has_center_label = relationship_has_center_label(rel);
         let label_size = has_center_label.then(|| EdgeLabelSize {
             width: rel
@@ -1742,12 +1745,13 @@ pub fn render_with_oracle(
                 height: text_render::label_height(label, RELATIONSHIP_LABEL_FONT_SIZE).floor(),
             })
         };
-        layout.add_edge_with_label_sizes(
+        layout.add_edge_with_label_sizes_and_minlen(
             &rel.from,
             &rel.to,
             label_size,
             endpoint_size(rel.from_multiplicity.as_deref()),
             endpoint_size(rel.to_multiplicity.as_deref()),
+            (rel.length > 1).then_some(rel.length - 1),
         );
     }
 
@@ -7363,6 +7367,9 @@ fn render_relationship_svg(
     } else {
         write!(svg, "<!--link {} to {}-->", rel.from, rel.to).unwrap();
     }
+    if rel.style.hidden {
+        return;
+    }
 
     let entity_1 = no_oracle_entity_id(diagram, &rel.from);
     let entity_2 = no_oracle_entity_id(diagram, &rel.to);
@@ -7373,11 +7380,28 @@ fn render_relationship_svg(
     )
     .unwrap();
 
-    // Build path data from edge points.
-    let dash_style = if rel.dashed {
-        "stroke-dasharray:7,7;"
-    } else {
-        ""
+    // PlantUML `SvekEdge.drawU` resolves `Link.getColors` and
+    // `LinkType.getStroke3` once, then applies that paint to the path and its
+    // endpoint extremities.
+    let edge_color = rel
+        .style
+        .color
+        .as_deref()
+        .map(crate::sequence::resolve_color)
+        .unwrap_or_else(|| BORDER_COLOR.to_string());
+    let stroke_width = rel.style.thickness.map(f64::from).unwrap_or_else(|| {
+        if rel.style.line_style == Some(EntityLineStyle::Bold) {
+            2.0
+        } else {
+            1.0
+        }
+    });
+    let dash_style = match rel.style.line_style {
+        Some(EntityLineStyle::Dashed) => "stroke-dasharray:7,7;",
+        Some(EntityLineStyle::Dotted) => "stroke-dasharray:1,3;",
+        Some(EntityLineStyle::Bold) => "",
+        None if rel.dashed => "stroke-dasharray:7,7;",
+        None => "",
     };
 
     let edge_points: Vec<(f64, f64)> = edge_path
@@ -7442,10 +7466,11 @@ fn render_relationship_svg(
     };
     write!(
         svg,
-        r#"<path{code_line_attr} d="{}" fill="none" id="{}" style="stroke:{};stroke-width:1;{}"/>"#,
+        r#"<path{code_line_attr} d="{}" fill="none" id="{}" style="stroke:{};stroke-width:{};{}"/>"#,
         d,
         escape_xml(&path_id),
-        BORDER_COLOR,
+        edge_color,
+        crate::plantuml_metrics::fmt_coord(stroke_width),
         dash_style,
     )
     .unwrap();
@@ -7455,26 +7480,100 @@ fn render_relationship_svg(
     // `Extremity.getDecorationLength()`. Keep those two coordinate streams
     // separate here: `path_points` feeds the `<path d=...>`, while endpoint
     // decorations use the unshortened Graphviz contacts.
-    emit_no_oracle_endpoint_decor(svg, rel.from_decor, &edge_points, true);
-    emit_no_oracle_endpoint_decor(svg, rel.to_decor, &edge_points, false);
+    emit_no_oracle_endpoint_decor(
+        svg,
+        rel.from_decor,
+        &edge_points,
+        &edge_color,
+        stroke_width,
+        true,
+    );
+    emit_no_oracle_endpoint_decor(
+        svg,
+        rel.to_decor,
+        &edge_points,
+        &edge_color,
+        stroke_width,
+        false,
+    );
 
     // Arrowhead.
     match rel.kind {
         RelationshipKind::Inheritance | RelationshipKind::Implementation => {
-            emit_extends_triangle(svg, &edge_points, true, decorates_from);
-            emit_extends_triangle(svg, &edge_points, false, decorates_to);
+            emit_extends_triangle(
+                svg,
+                &edge_points,
+                &edge_color,
+                stroke_width,
+                true,
+                decorates_from,
+            );
+            emit_extends_triangle(
+                svg,
+                &edge_points,
+                &edge_color,
+                stroke_width,
+                false,
+                decorates_to,
+            );
         }
         RelationshipKind::Dependency => {
-            emit_dependency_arrow(svg, &edge_points, true, decorates_from);
-            emit_dependency_arrow(svg, &edge_points, false, decorates_to);
+            emit_dependency_arrow(
+                svg,
+                &edge_points,
+                &edge_color,
+                stroke_width,
+                true,
+                decorates_from,
+            );
+            emit_dependency_arrow(
+                svg,
+                &edge_points,
+                &edge_color,
+                stroke_width,
+                false,
+                decorates_to,
+            );
         }
         RelationshipKind::Composition => {
-            emit_diamond_extremity(svg, &edge_points, BORDER_COLOR, true, decorates_from);
-            emit_diamond_extremity(svg, &edge_points, BORDER_COLOR, false, decorates_to);
+            emit_diamond_extremity(
+                svg,
+                &edge_points,
+                &edge_color,
+                &edge_color,
+                stroke_width,
+                true,
+                decorates_from,
+            );
+            emit_diamond_extremity(
+                svg,
+                &edge_points,
+                &edge_color,
+                &edge_color,
+                stroke_width,
+                false,
+                decorates_to,
+            );
         }
         RelationshipKind::Aggregation => {
-            emit_diamond_extremity(svg, &edge_points, "none", true, decorates_from);
-            emit_diamond_extremity(svg, &edge_points, "none", false, decorates_to);
+            emit_diamond_extremity(
+                svg,
+                &edge_points,
+                "none",
+                &edge_color,
+                stroke_width,
+                true,
+                decorates_from,
+            );
+            emit_diamond_extremity(
+                svg,
+                &edge_points,
+                "none",
+                &edge_color,
+                stroke_width,
+                false,
+                decorates_to,
+            );
         }
         RelationshipKind::Association => {
             // No arrowhead.
@@ -7663,6 +7762,8 @@ fn emit_link_arrow(svg: &mut String, arrow: LinkArrow, edge_points: &[(f64, f64)
 fn emit_extends_triangle(
     svg: &mut String,
     edge_points: &[(f64, f64)],
+    color: &str,
+    stroke_width: f64,
     at_start: bool,
     enabled: bool,
 ) {
@@ -7681,12 +7782,13 @@ fn emit_extends_triangle(
     let base_b = add(base_center, scale(perp, -EXTENDS_TRIANGLE_HALF_WIDTH));
     write!(
         svg,
-        r#"<polygon fill="none" points="{},{},{},{},{},{},{},{}" style="stroke:{};stroke-width:1;"/>"#,
+        r#"<polygon fill="none" points="{},{},{},{},{},{},{},{}" style="stroke:{};stroke-width:{};"/>"#,
         fmt4(tip.0), fmt4(tip.1),
         fmt4(base_a.0), fmt4(base_a.1),
         fmt4(base_b.0), fmt4(base_b.1),
         fmt4(tip.0), fmt4(tip.1),
-        BORDER_COLOR,
+        color,
+        crate::plantuml_metrics::fmt_coord(stroke_width),
     )
     .unwrap();
 }
@@ -7694,6 +7796,8 @@ fn emit_extends_triangle(
 fn emit_dependency_arrow(
     svg: &mut String,
     edge_points: &[(f64, f64)],
+    color: &str,
+    stroke_width: f64,
     at_start: bool,
     enabled: bool,
 ) {
@@ -7715,14 +7819,15 @@ fn emit_dependency_arrow(
     );
     write!(
         svg,
-        r#"<polygon fill="{}" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{};stroke-width:1;"/>"#,
-        BORDER_COLOR,
+        r#"<polygon fill="{}" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{};stroke-width:{};"/>"#,
+        color,
         fmt4(tip.0), fmt4(tip.1),
         fmt4(side_a.0), fmt4(side_a.1),
         fmt4(notch.0), fmt4(notch.1),
         fmt4(side_b.0), fmt4(side_b.1),
         fmt4(tip.0), fmt4(tip.1),
-        BORDER_COLOR,
+        color,
+        crate::plantuml_metrics::fmt_coord(stroke_width),
     )
     .unwrap();
 }
@@ -7731,6 +7836,8 @@ fn emit_diamond_extremity(
     svg: &mut String,
     edge_points: &[(f64, f64)],
     fill: &str,
+    color: &str,
+    stroke_width: f64,
     at_start: bool,
     enabled: bool,
 ) {
@@ -7752,14 +7859,15 @@ fn emit_diamond_extremity(
     );
     write!(
         svg,
-        r#"<polygon fill="{}" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{};stroke-width:1;"/>"#,
+        r#"<polygon fill="{}" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{};stroke-width:{};"/>"#,
         fill,
         fmt4(tip.0), fmt4(tip.1),
         fmt4(side_a.0), fmt4(side_a.1),
         fmt4(base.0), fmt4(base.1),
         fmt4(side_b.0), fmt4(side_b.1),
         fmt4(tip.0), fmt4(tip.1),
-        BORDER_COLOR,
+        color,
+        crate::plantuml_metrics::fmt_coord(stroke_width),
     )
     .unwrap();
 }
@@ -7951,6 +8059,8 @@ fn emit_no_oracle_endpoint_decor(
     svg: &mut String,
     decor: Option<EndpointDecor>,
     points: &[(f64, f64)],
+    color: &str,
+    stroke_width: f64,
     at_start: bool,
 ) {
     let Some(decor) = decor else {
@@ -7974,12 +8084,47 @@ fn emit_no_oracle_endpoint_decor(
     let perp = (-inside.1, inside.0);
 
     match decor {
-        EndpointDecor::CrowFoot => emit_crowfoot(svg, contact, inside, perp, false, false),
-        EndpointDecor::CircleCrowFoot => emit_crowfoot(svg, contact, inside, perp, true, false),
-        EndpointDecor::CircleLine => emit_circle_line(svg, contact, inside, perp),
-        EndpointDecor::DoubleLine => emit_double_line(svg, contact, inside, perp),
-        EndpointDecor::LineCrowFoot => emit_crowfoot(svg, contact, inside, perp, false, true),
+        EndpointDecor::CrowFoot => emit_crowfoot(
+            svg,
+            contact,
+            inside,
+            perp,
+            color,
+            stroke_width,
+            CrowfootVariant::Plain,
+        ),
+        EndpointDecor::CircleCrowFoot => emit_crowfoot(
+            svg,
+            contact,
+            inside,
+            perp,
+            color,
+            stroke_width,
+            CrowfootVariant::Circle,
+        ),
+        EndpointDecor::CircleLine => {
+            emit_circle_line(svg, contact, inside, perp, color, stroke_width)
+        }
+        EndpointDecor::DoubleLine => {
+            emit_double_line(svg, contact, inside, perp, color, stroke_width)
+        }
+        EndpointDecor::LineCrowFoot => emit_crowfoot(
+            svg,
+            contact,
+            inside,
+            perp,
+            color,
+            stroke_width,
+            CrowfootVariant::Line,
+        ),
     }
+}
+
+#[derive(Clone, Copy)]
+enum CrowfootVariant {
+    Plain,
+    Circle,
+    Line,
 }
 
 fn emit_crowfoot(
@@ -7987,8 +8132,9 @@ fn emit_crowfoot(
     contact: (f64, f64),
     inside: (f64, f64),
     perp: (f64, f64),
-    circle: bool,
-    line: bool,
+    color: &str,
+    stroke_width: f64,
+    variant: CrowfootVariant,
 ) {
     // Ported from PlantUML SVEK `ExtremityCrowfoot`,
     // `ExtremityLineCrowfoot`, and `ExtremityCircleCrowfoot`: the contact
@@ -8001,30 +8147,51 @@ fn emit_crowfoot(
     const LINE_HALF: f64 = 4.0;
     const CIRCLE_RADIUS: f64 = 4.0;
     const CIRCLE_GAP: f64 = 2.0;
-    let aperture = if circle {
+    let aperture = if matches!(variant, CrowfootVariant::Circle) {
         CIRCLE_CROW_APERTURE
     } else {
         CROW_APERTURE
     };
     let base = add(contact, scale(inside, WING));
-    emit_svg_line(svg, base, add(contact, scale(perp, aperture)));
-    emit_svg_line(svg, base, add(contact, scale(perp, -aperture)));
-    emit_svg_line(svg, base, contact);
-    if line {
+    emit_svg_line(
+        svg,
+        base,
+        add(contact, scale(perp, aperture)),
+        color,
+        stroke_width,
+    );
+    emit_svg_line(
+        svg,
+        base,
+        add(contact, scale(perp, -aperture)),
+        color,
+        stroke_width,
+    );
+    emit_svg_line(svg, base, contact, color, stroke_width);
+    if matches!(variant, CrowfootVariant::Line) {
         let c = add(contact, scale(inside, LINE_OFFSET));
         emit_svg_line(
             svg,
             add(c, scale(perp, LINE_HALF)),
             add(c, scale(perp, -LINE_HALF)),
+            color,
+            stroke_width,
         );
     }
-    if circle {
+    if matches!(variant, CrowfootVariant::Circle) {
         let c = add(contact, scale(inside, WING + CIRCLE_RADIUS + CIRCLE_GAP));
-        emit_svg_circle(svg, c, CIRCLE_RADIUS);
+        emit_svg_circle(svg, c, CIRCLE_RADIUS, color, stroke_width);
     }
 }
 
-fn emit_circle_line(svg: &mut String, contact: (f64, f64), inside: (f64, f64), perp: (f64, f64)) {
+fn emit_circle_line(
+    svg: &mut String,
+    contact: (f64, f64),
+    inside: (f64, f64),
+    perp: (f64, f64),
+    color: &str,
+    stroke_width: f64,
+) {
     // PlantUML `ExtremityCircleLine`: xWing=4, radius=4, lineHeight=4, and
     // the circle centre is xWing + radius + 3 px inside the entity boundary.
     const LINE_OFFSET: f64 = 4.0;
@@ -8036,13 +8203,22 @@ fn emit_circle_line(svg: &mut String, contact: (f64, f64), inside: (f64, f64), p
         svg,
         add(line_c, scale(perp, LINE_HALF)),
         add(line_c, scale(perp, -LINE_HALF)),
+        color,
+        stroke_width,
     );
     let circle_c = add(contact, scale(inside, CIRCLE_OFFSET));
-    emit_svg_circle(svg, circle_c, CIRCLE_RADIUS);
-    emit_svg_line(svg, contact, circle_c);
+    emit_svg_circle(svg, circle_c, CIRCLE_RADIUS, color, stroke_width);
+    emit_svg_line(svg, contact, circle_c, color, stroke_width);
 }
 
-fn emit_double_line(svg: &mut String, contact: (f64, f64), inside: (f64, f64), perp: (f64, f64)) {
+fn emit_double_line(
+    svg: &mut String,
+    contact: (f64, f64),
+    inside: (f64, f64),
+    perp: (f64, f64),
+    color: &str,
+    stroke_width: f64,
+) {
     // PlantUML `ExtremityDoubleLine`: xWing=4, second line at xWing+3,
     // lineHeight=4, and a connector ending 8px inside the contact.
     const FIRST_OFFSET: f64 = 4.0;
@@ -8055,9 +8231,17 @@ fn emit_double_line(svg: &mut String, contact: (f64, f64), inside: (f64, f64), p
             svg,
             add(c, scale(perp, LINE_HALF)),
             add(c, scale(perp, -LINE_HALF)),
+            color,
+            stroke_width,
         );
     }
-    emit_svg_line(svg, contact, add(contact, scale(inside, CONNECTOR_OFFSET)));
+    emit_svg_line(
+        svg,
+        contact,
+        add(contact, scale(inside, CONNECTOR_OFFSET)),
+        color,
+        stroke_width,
+    );
 }
 
 fn add(a: (f64, f64), b: (f64, f64)) -> (f64, f64) {
@@ -8068,10 +8252,12 @@ fn scale(v: (f64, f64), k: f64) -> (f64, f64) {
     (v.0 * k, v.1 * k)
 }
 
-fn emit_svg_line(svg: &mut String, a: (f64, f64), b: (f64, f64)) {
+fn emit_svg_line(svg: &mut String, a: (f64, f64), b: (f64, f64), color: &str, stroke_width: f64) {
     write!(
         svg,
-        r#"<line style="stroke:#181818;stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+        r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+        color,
+        crate::plantuml_metrics::fmt_coord(stroke_width),
         crate::plantuml_metrics::fmt_coord(a.0),
         crate::plantuml_metrics::fmt_coord(b.0),
         crate::plantuml_metrics::fmt_coord(a.1),
@@ -8080,14 +8266,16 @@ fn emit_svg_line(svg: &mut String, a: (f64, f64), b: (f64, f64)) {
     .unwrap();
 }
 
-fn emit_svg_circle(svg: &mut String, c: (f64, f64), r: f64) {
+fn emit_svg_circle(svg: &mut String, c: (f64, f64), r: f64, color: &str, stroke_width: f64) {
     write!(
         svg,
-        r#"<ellipse cx="{}" cy="{}" fill="none" rx="{}" ry="{}" style="stroke:#181818;stroke-width:1;"/>"#,
+        r#"<ellipse cx="{}" cy="{}" fill="none" rx="{}" ry="{}" style="stroke:{};stroke-width:{};"/>"#,
         crate::plantuml_metrics::fmt_coord(c.0),
         crate::plantuml_metrics::fmt_coord(c.1),
         crate::plantuml_metrics::fmt_coord(r),
         crate::plantuml_metrics::fmt_coord(r),
+        color,
+        crate::plantuml_metrics::fmt_coord(stroke_width),
     )
     .unwrap();
 }
@@ -8874,6 +9062,8 @@ mod tests {
                 to_decor: None,
                 decorated_end: RelationshipEnd::From,
                 dashed: false,
+                length: 2,
+                style: RelationshipStyle::default(),
                 source_line: 0,
             }],
             association_classes: vec![],
@@ -9479,6 +9669,39 @@ mod tests {
     }
 
     #[test]
+    fn no_oracle_relationship_styles_share_path_and_extremity_paint() {
+        let input = "@startuml\n\
+            class SignalEmitter701\n\
+            class AuditSink709\n\
+            class ColdStore719\n\
+            SignalEmitter701 -[#2E8B57,dotted]-> AuditSink709\n\
+            AuditSink709 -[thickness=3]-> ColdStore719\n\
+            SignalEmitter701 -[hidden]-> ColdStore719\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        let colored = svg
+            .split_once(r#"id="SignalEmitter701-to-AuditSink709""#)
+            .unwrap()
+            .1;
+        assert!(colored.starts_with(
+            r##" style="stroke:#2E8B57;stroke-width:1;stroke-dasharray:1,3;"/><polygon fill="#2E8B57""##
+        ));
+        assert!(colored.contains(r##"style="stroke:#2E8B57;stroke-width:1;"/>"##));
+
+        let thick = svg
+            .split_once(r#"id="AuditSink709-to-ColdStore719""#)
+            .unwrap()
+            .1;
+        assert!(thick.starts_with(r##" style="stroke:#181818;stroke-width:3;"/>"##));
+        assert!(thick.contains(r##"style="stroke:#181818;stroke-width:3;"/>"##));
+
+        assert!(svg.contains("<!--link SignalEmitter701 to ColdStore719-->"));
+        assert!(!svg.contains(r#"id="SignalEmitter701-to-ColdStore719""#));
+    }
+
+    #[test]
     fn no_oracle_er_crowfoot_link_group_is_rendered() {
         let mut diagram = simple_class_diagram();
         let rel = Relationship {
@@ -9493,6 +9716,8 @@ mod tests {
             to_decor: Some(EndpointDecor::CircleCrowFoot),
             decorated_end: RelationshipEnd::None,
             dashed: false,
+            length: 2,
+            style: RelationshipStyle::default(),
             source_line: 17,
         };
         diagram.relationships = vec![rel.clone()];

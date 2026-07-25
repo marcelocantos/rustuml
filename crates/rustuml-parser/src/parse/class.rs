@@ -653,6 +653,8 @@ impl ClassParser {
                 to_decor: None,
                 decorated_end: RelationshipEnd::To,
                 dashed,
+                length: 2,
+                style: RelationshipStyle::default(),
                 source_line: self.current_line,
             });
         }
@@ -741,14 +743,10 @@ impl ClassParser {
         //                   <|--|> (bidirectional inheritance), <..|.> etc.
         // Multiple dashes (e.g. ---- or ------) are treated as plain association.
         //
-        // Colour / direction / bold / thickness modifiers attach to the arrow
-        // and are stripped before kind detection (e.g. `A -[#blue]- B`,
-        // `A -down-> B`, `A -[bold]-> B`). The modifier is matched but
-        // discarded — the kind comes from the surrounding arrow shape.
-        // Strip arrow modifiers like `[#color,bold]`, `down`, `[dashed]` etc.
-        // from the line before matching; replace with a single dash so the
-        // arrow shape continues to match cleanly.
-        let stripped_line = strip_arrow_modifiers(line);
+        // Colour / direction / bold / thickness modifiers attach to the arrow.
+        // Preserve visual modifiers while stripping them from the arrow shape
+        // used for relationship-kind detection.
+        let (stripped_line, style, force_horizontal) = strip_arrow_modifiers(line);
         let line = stripped_line.as_str();
         static RE: LazyLock<Regex> = LazyLock::new(|| {
             // Endpoint may be a bare identifier or a quoted name (`"any text"`)
@@ -761,7 +759,7 @@ impl ClassParser {
             // separator colon flanked by optional space), which a bare endpoint
             // (no spaces) never matches, so `A::B --> C::D : label` still splits.
             Regex::new(
-                r#"^(?:"([^"]+)"|([\w./:]+))\s*(?:"([^"]+)")?\s*((?:<\|--\|>|<\.\.>|<\|--|--\|>|\.\.\|>|<\|\.\.|<\.\.|<-->>|<-->|<->|\*--|--\*|o--|--o|-->>|<-{2,}|-{2,}>|<--|-->|->>|->|<-|-{2,}|\.{2,}>>|\.{2,}>|\.\.))\s*(?:"([^"]+)")?\s*(?:"([^"]+)"|([\w./:]+))(?:\s*:\s*(.+))?$"#,
+                r#"^(?:"([^"]+)"|([\w./:]+))\s*(?:"([^"]+)")?\s*((?:<\|--\|>|<\.\.>|<\|--|--\|>|\.\.\|>|<\|\.\.|<\.\.|<-->>|<-->|<->|\*--|--\*|o--|--o|-->>|<-{2,}|-{2,}>|<--|-->|->>|->|<-|-{1,}|\.{2,}>>|\.{2,}>|\.\.))\s*(?:"([^"]+)")?\s*(?:"([^"]+)"|([\w./:]+))(?:\s*:\s*(.+))?$"#,
             )
             .unwrap()
         });
@@ -792,6 +790,11 @@ impl ClassParser {
             let (label, label_arrow) = parse_label_arrow(caps.get(8).map(|m| m.as_str()));
 
             let (kind, dashed, decorated_end) = parse_relationship_kind(rel_str);
+            let length = if force_horizontal {
+                1
+            } else {
+                relationship_length(rel_str)
+            };
             let from = self.resolve_relationship_endpoint(&from_raw);
             let to = self.resolve_relationship_endpoint(&to_raw);
 
@@ -807,6 +810,8 @@ impl ClassParser {
                 to_decor: None,
                 decorated_end,
                 dashed,
+                length,
+                style,
                 source_line: self.current_line,
             });
             return true;
@@ -836,6 +841,8 @@ impl ClassParser {
                 to_decor,
                 decorated_end: RelationshipEnd::None,
                 dashed: false,
+                length: 2,
+                style: RelationshipStyle::default(),
                 source_line: self.current_line,
             });
             return true;
@@ -885,6 +892,8 @@ impl ClassParser {
                 to_decor: None,
                 decorated_end: RelationshipEnd::None,
                 dashed: false,
+                length: 2,
+                style: RelationshipStyle::default(),
                 source_line: self.current_line,
             });
             return true;
@@ -1462,25 +1471,34 @@ fn parse_entity_kind(s: &str) -> EntityKind {
 /// The replacement collapses bracketed modifiers to nothing and bare
 /// direction keywords to the empty string so the resulting arrow shape
 /// (`--`, `-->`, `..`, etc.) survives untouched.
-fn strip_arrow_modifiers(line: &str) -> String {
+fn strip_arrow_modifiers(line: &str) -> (String, RelationshipStyle, bool) {
     static BRACKETED: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"\[[^\]]*\]").unwrap());
     // Direction keywords appearing between dash/dot runs on the arrow body.
     static DIRECTION: LazyLock<Regex> =
-        LazyLock::new(|| Regex::new(r"([-.])(left|right|up|down|l|r|u|d)([-.])").unwrap());
+        LazyLock::new(|| Regex::new(r"([-.])(left|right|up|down|le?|ri?|up?|do?)([-.])").unwrap());
     // Bracketed `[...]` arrow modifiers must be stripped, but brackets inside a
     // double-quoted endpoint name (e.g. `"Class[WithBrackets]"`) are part of
     // the name. Strip only outside quoted spans by masking quoted regions.
+    let mut style = RelationshipStyle::default();
+    let mut strip_segment = |segment: &str| {
+        BRACKETED
+            .replace_all(segment, |caps: &regex::Captures<'_>| {
+                apply_relationship_style(&caps[0][1..caps[0].len() - 1], &mut style);
+                ""
+            })
+            .into_owned()
+    };
     let s: String = if line.contains('"') {
         let mut out = String::with_capacity(line.len());
         let mut rest = line;
         loop {
             match rest.find('"') {
                 None => {
-                    out.push_str(&BRACKETED.replace_all(rest, ""));
+                    out.push_str(&strip_segment(rest));
                     break;
                 }
                 Some(open) => {
-                    out.push_str(&BRACKETED.replace_all(&rest[..open], ""));
+                    out.push_str(&strip_segment(&rest[..open]));
                     let after = &rest[open + 1..];
                     match after.find('"') {
                         None => {
@@ -1498,17 +1516,56 @@ fn strip_arrow_modifiers(line: &str) -> String {
         }
         out
     } else {
-        BRACKETED.replace_all(line, "").into_owned()
+        strip_segment(line)
     };
-    let s = DIRECTION.replace_all(&s, "$1$3");
-    // Re-promote isolated single-dash arrows (which result from bracketed
-    // modifiers next to a single dash, e.g. `A -[#blue] B`) into standard
-    // two-dash association arrows so the shape regex matches.
-    if s.contains(" - ") {
-        s.replace(" - ", " -- ")
-    } else {
-        s.into_owned()
+    let force_horizontal = DIRECTION.captures_iter(&s).any(|caps| {
+        caps.get(2).is_some_and(|direction| {
+            direction
+                .as_str()
+                .to_ascii_lowercase()
+                .starts_with(['l', 'r'])
+        })
+    });
+    let stripped = DIRECTION.replace_all(&s, "$1$3").into_owned();
+    (stripped, style, force_horizontal)
+}
+
+/// Port of PlantUML `WithLinkType.applyOneStyle`. `CommandLinkClass` accepts
+/// these comma-separated tokens in either arrow-style bracket and applies
+/// them to one generative link model before layout and rendering.
+fn apply_relationship_style(raw: &str, style: &mut RelationshipStyle) {
+    for token in raw
+        .split([',', ';'])
+        .map(str::trim)
+        .filter(|token| !token.is_empty())
+    {
+        let lower = token.to_ascii_lowercase();
+        match lower.as_str() {
+            "dashed" => style.line_style = Some(EntityLineStyle::Dashed),
+            "dotted" => style.line_style = Some(EntityLineStyle::Dotted),
+            "bold" => style.line_style = Some(EntityLineStyle::Bold),
+            "hidden" => style.hidden = true,
+            _ => {
+                if let Some(value) = lower.strip_prefix("thickness=") {
+                    if let Ok(thickness) = value.parse() {
+                        style.thickness = Some(thickness);
+                    }
+                } else if token.starts_with('#') {
+                    style.color = Some(token.to_string());
+                }
+            }
+        }
     }
+}
+
+/// Port of PlantUML `CommandLinkClass.getQueueLength`: endpoint decoration
+/// characters do not affect rank length; only the arrow's line run does.
+fn relationship_length(arrow: &str) -> usize {
+    arrow
+        .chars()
+        .filter(|ch| matches!(ch, '-' | '.' | '='))
+        .count()
+        .max(1)
 }
 
 /// Parse the relationship kind, whether the line style is dashed, and which
@@ -1965,6 +2022,32 @@ mod tests {
         assert_eq!(d.relationships[3].kind, RelationshipKind::Aggregation);
         assert_eq!(d.relationships[4].kind, RelationshipKind::Association);
         assert_eq!(d.relationships[5].kind, RelationshipKind::Dependency);
+    }
+
+    #[test]
+    fn relationship_arrow_styles_form_one_link_model() {
+        let d = parse(
+            "SignalEmitter701 -[#2E8B57,dotted]-> AuditSink709\n\
+             AuditSink709 -[thickness=3]-> ColdStore719\n\
+             SignalEmitter701 -[hidden]-> ColdStore719",
+        );
+        assert_eq!(d.relationships.len(), 3);
+        assert!(
+            d.relationships
+                .iter()
+                .all(|relationship| relationship.length == 2)
+        );
+        assert_eq!(
+            d.relationships[0].style,
+            RelationshipStyle {
+                color: Some("#2E8B57".into()),
+                line_style: Some(EntityLineStyle::Dotted),
+                thickness: None,
+                hidden: false,
+            }
+        );
+        assert_eq!(d.relationships[1].style.thickness, Some(3));
+        assert!(d.relationships[2].style.hidden);
     }
 
     #[test]
