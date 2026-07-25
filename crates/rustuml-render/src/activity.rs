@@ -23509,7 +23509,11 @@ fn route_if_cross_lane_connectors(
         .find(|pl| pl.tip.is_none() && pl.verts.len() == 2)
         .and_then(|pl| match_merge_column(pl.verts[1]));
     if !polylines.iter().any(|pl| pl.tip.is_none()) {
-        let mut lane_local = String::new();
+        // `Swimlanes.drawWhenSwimlanes` redraws the complete FTile once per
+        // lane; `UGraphicInterceptorOneSwimlane.draw` admits a Connection only
+        // when both endpoints belong to that lane, then `Cross` gets a final
+        // whole-tree pass. Preserve traversal order within each lane pass.
+        let mut lane_local = vec![String::new(); n];
         let mut cross_lane = String::new();
         for pl in polylines {
             let (Some(src_pt), Some(tip)) = (pl.verts.first().copied(), pl.tip) else {
@@ -23542,7 +23546,7 @@ fn route_if_cross_lane_connectors(
                 let mut snake = String::new();
                 snake.push_str(&line(sx, sx, sy, tip.1));
                 snake.push_str(&head(sx, tip.1));
-                lane_local.push_str(&snake);
+                lane_local[s.lane].push_str(&snake);
                 continue;
             }
             let Some(ti) = ti else {
@@ -23654,12 +23658,12 @@ fn route_if_cross_lane_connectors(
                 return None;
             }
             if s.lane == t.lane {
-                lane_local.push_str(&snake);
+                lane_local[s.lane].push_str(&snake);
             } else {
                 cross_lane.push_str(&snake);
             }
         }
-        let mut routed = lane_local;
+        let mut routed = lane_local.concat();
         routed.push_str(&cross_lane);
         return Some((routed, false));
     }
@@ -31917,6 +31921,89 @@ mod tests {
         let right_extent =
             typed_ftile_cross_loop_right_extent(&scene, 0.0, &lanes).expect("loop rail extent");
         assert!(right_extent > lanes.right_edge);
+    }
+
+    #[test]
+    fn nested_terminal_if_connectors_follow_swimlane_pass_order() {
+        let input = concat!(
+            "@startuml\n",
+            "title Vendor Clearance Run\n",
+            "|Requester|\n",
+            "start\n",
+            ":File packet;\n",
+            "|Reviewer|\n",
+            ":Screen packet;\n",
+            "if (ready?) then (pass)\n",
+            "  :Assess signal;\n",
+            "  if (signal clear?) then (pass)\n",
+            "    :Draft terms;\n",
+            "    |Requester|\n",
+            "    :Inspect terms;\n",
+            "    if (approve?) then (pass)\n",
+            "      |Reviewer|\n",
+            "      :Authorize payout;\n",
+            "      |Requester|\n",
+            "      :Receive credit;\n",
+            "      stop\n",
+            "    else (decline)\n",
+            "      :Archive offer;\n",
+            "      stop\n",
+            "    endif\n",
+            "  else (fail)\n",
+            "    :Reject packet;\n",
+            "    |Requester|\n",
+            "    :Read rejection;\n",
+            "    stop\n",
+            "  endif\n",
+            "else (retry)\n",
+            "  :Ask for detail;\n",
+            "  |Requester|\n",
+            "  :Supply detail;\n",
+            "  |Reviewer|\n",
+            "  :Screen packet;\n",
+            "  stop\n",
+            "endif\n",
+            "@enduml",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        let shape_before_label = |label: &str, tag: &str| {
+            let label_at = svg.find(&format!(">{label}</text>")).unwrap();
+            let start = svg[..label_at].rfind(tag).unwrap();
+            let end = start + svg[start..].find("/>").unwrap() + 2;
+            &svg[start..end]
+        };
+        let request = shape_before_label("Ask for detail", "<rect");
+        let provide = shape_before_label("Supply detail", "<rect");
+        let request_x =
+            prim_attr(request, " x=\"").unwrap() + prim_attr(request, " width=\"").unwrap() / 2.0;
+        let request_bottom =
+            prim_attr(request, " y=\"").unwrap() + prim_attr(request, " height=\"").unwrap();
+        let provide_top = prim_attr(provide, " y=\"").unwrap();
+        let requester_edge = format!(
+            r#"<line style="stroke:#181818;stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+            f(request_x),
+            f(request_x),
+            f(request_bottom),
+            f(provide_top),
+        );
+
+        let credit = shape_before_label("Assess signal", "<rect");
+        let condition = shape_before_label("signal clear?", "<polygon");
+        let credit_x =
+            prim_attr(credit, " x=\"").unwrap() + prim_attr(credit, " width=\"").unwrap() / 2.0;
+        let credit_bottom =
+            prim_attr(credit, " y=\"").unwrap() + prim_attr(credit, " height=\"").unwrap();
+        let condition_top = polygon_nth_point(condition, 0).unwrap().1;
+        let reviewer_edge = format!(
+            r#"<line style="stroke:#181818;stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+            f(credit_x),
+            f(credit_x),
+            f(credit_bottom),
+            f(condition_top),
+        );
+
+        assert!(svg.find(&requester_edge).unwrap() < svg.find(&reviewer_edge).unwrap());
     }
 
     #[test]
