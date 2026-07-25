@@ -135,6 +135,23 @@ impl LayoutGraph {
         true
     }
 
+    /// Adds the tiny point node SVEK uses as a routable package endpoint.
+    ///
+    /// `ClusterDotString.printInternal` emits
+    /// `shape=point,width=.01,label=""` when a link targets a group.
+    pub fn add_svek_cluster_endpoint(&mut self, id: &str) -> bool {
+        if self.nodes.iter().any(|node| node.id == id) {
+            return false;
+        }
+        self.nodes.push(NodeSpec {
+            id: id.to_string(),
+            width: 0.72,
+            height: 0.72,
+            shape: NodeShape::Point,
+        });
+        true
+    }
+
     /// Adds a fixed-size Graphviz record node with named row ports.
     ///
     /// PlantUML's JSON/YAML Smetana path emits `_dim_...` record labels with
@@ -170,6 +187,7 @@ impl LayoutGraph {
             kind: ClusterKind::NativeLabel(label.to_string()),
             parent: parent.map(String::from),
             nodes: Vec::new(),
+            has_svek_endpoint: false,
         });
         true
     }
@@ -194,6 +212,7 @@ impl LayoutGraph {
             kind: ClusterKind::Svek { title_size },
             parent: parent.map(String::from),
             nodes: Vec::new(),
+            has_svek_endpoint: false,
         });
         true
     }
@@ -202,6 +221,13 @@ impl LayoutGraph {
     pub fn add_cluster_node(&mut self, cluster_id: &str, node_id: &str) {
         if let Some(cluster) = self.clusters.iter_mut().find(|c| c.id == cluster_id) {
             cluster.nodes.push(node_id.to_string());
+            if self
+                .nodes
+                .iter()
+                .any(|node| node.id == node_id && matches!(node.shape, NodeShape::Point))
+            {
+                cluster.has_svek_endpoint = true;
+            }
         }
     }
 
@@ -373,6 +399,7 @@ impl LayoutGraph {
         let fixedsize_val = CString::new("true").unwrap();
         let circle_val = CString::new("circle").unwrap();
         let box_val = CString::new("box").unwrap();
+        let point_val = CString::new("point").unwrap();
         let record_val = CString::new("record").unwrap();
         let arrowhead_key = CString::new("arrowhead").unwrap();
         let arrowtail_key = CString::new("arrowtail").unwrap();
@@ -419,7 +446,7 @@ impl LayoutGraph {
             // layout boxes warn and can feed label bounds back into routing.
             let label_val = match &spec.shape {
                 NodeShape::Record { ports } => CString::new(record_label(ports)).unwrap(),
-                NodeShape::Box | NodeShape::Circle => no_label_val.clone(),
+                NodeShape::Box | NodeShape::Circle | NodeShape::Point => no_label_val.clone(),
             };
             graphviz_ffi::agsafeset(
                 node as *mut c_void,
@@ -430,6 +457,7 @@ impl LayoutGraph {
             let shape = match spec.shape {
                 NodeShape::Box => &box_val,
                 NodeShape::Circle => &circle_val,
+                NodeShape::Point => &point_val,
                 NodeShape::Record { .. } => &record_val,
             };
             graphviz_ffi::agsafeset(
@@ -496,8 +524,10 @@ impl LayoutGraph {
             }
         }
 
-        // Build edges — track insertion order for result mapping.
-        let mut edge_specs: Vec<(String, String)> = Vec::new();
+        // Build edges and retain the actual cgraph object identity. Graphviz
+        // traverses outgoing edges by node order, which is not necessarily the
+        // caller's insertion order.
+        let mut edge_specs: HashMap<usize, (String, String)> = HashMap::new();
         for edge_spec in &self.edges {
             let Some(&from_h) = node_handles.get(&edge_spec.from) else {
                 continue;
@@ -574,7 +604,10 @@ impl LayoutGraph {
                 empty.as_ptr(),
             );
 
-            edge_specs.push((edge_spec.from.clone(), edge_spec.to.clone()));
+            edge_specs.insert(
+                edge as usize,
+                (edge_spec.from.clone(), edge_spec.to.clone()),
+            );
         }
 
         // Run layout.
@@ -608,8 +641,8 @@ impl LayoutGraph {
         // Extract edge paths.
         let mut edge_paths = Vec::with_capacity(edge_specs.len());
 
-        // Walk edges in graph order, matching to our edge_specs.
-        let mut edge_idx = 0;
+        // Walk edges in graph order and recover each caller-owned identity
+        // from the cgraph edge pointer returned by `agedge`.
         let mut n = graphviz_ffi::agfstnode(g);
         while !n.is_null() {
             let mut e = graphviz_ffi::agfstout(g, n);
@@ -641,11 +674,10 @@ impl LayoutGraph {
                     );
                 }
 
-                let (from, to) = if edge_idx < edge_specs.len() {
-                    edge_specs[edge_idx].clone()
-                } else {
-                    (String::new(), String::new())
-                };
+                let (from, to) = edge_specs
+                    .get(&(e as usize))
+                    .cloned()
+                    .unwrap_or_else(|| (String::new(), String::new()));
 
                 edge_paths.push(EdgePath {
                     from,
@@ -660,7 +692,6 @@ impl LayoutGraph {
                     head_label: edge_label_position(e, 2),
                 });
 
-                edge_idx += 1;
                 e = graphviz_ffi::agnxtout(g, e);
             }
             n = graphviz_ffi::agnxtnode(g, n);
@@ -825,8 +856,23 @@ impl LayoutGraph {
                 (real, real)
             }
             ClusterKind::Svek { title_size } => {
+                let cluster_parent = if cluster.has_svek_endpoint {
+                    let protection_name = CString::new(format!("cluster_{}a", cluster.id)).unwrap();
+                    let protection =
+                        graphviz_ffi::agsubg(parent, protection_name.as_ptr() as *mut _, 1);
+                    let no_label = CString::new("").unwrap();
+                    graphviz_ffi::agsafeset(
+                        protection as *mut c_void,
+                        label_key.as_ptr(),
+                        no_label.as_ptr(),
+                        empty.as_ptr(),
+                    );
+                    protection
+                } else {
+                    parent
+                };
                 let p0_name = CString::new(format!("cluster_{}p0", cluster.id)).unwrap();
-                let p0 = graphviz_ffi::agsubg(parent, p0_name.as_ptr() as *mut _, 1);
+                let p0 = graphviz_ffi::agsubg(cluster_parent, p0_name.as_ptr() as *mut _, 1);
                 let no_label = CString::new("").unwrap();
                 graphviz_ffi::agsafeset(
                     p0 as *mut c_void,
@@ -855,8 +901,22 @@ impl LayoutGraph {
                     empty.as_ptr(),
                 );
 
+                let member_parent = if cluster.has_svek_endpoint {
+                    let protection_name = CString::new(format!("cluster_{}i", cluster.id)).unwrap();
+                    let protection =
+                        graphviz_ffi::agsubg(real, protection_name.as_ptr() as *mut _, 1);
+                    graphviz_ffi::agsafeset(
+                        protection as *mut c_void,
+                        label_key.as_ptr(),
+                        no_label.as_ptr(),
+                        empty.as_ptr(),
+                    );
+                    protection
+                } else {
+                    real
+                };
                 let p1_name = CString::new(format!("cluster_{}p1", cluster.id)).unwrap();
-                let p1 = graphviz_ffi::agsubg(real, p1_name.as_ptr() as *mut _, 1);
+                let p1 = graphviz_ffi::agsubg(member_parent, p1_name.as_ptr() as *mut _, 1);
                 graphviz_ffi::agsafeset(
                     p1 as *mut c_void,
                     label_key.as_ptr(),
@@ -871,7 +931,20 @@ impl LayoutGraph {
         cluster_order.push(cluster.id.clone());
         for node_id in &cluster.nodes {
             if let Some(&node) = node_handles.get(node_id) {
-                graphviz_ffi::agsubnode(member_parent, node, 1);
+                let node_parent = if cluster.has_svek_endpoint
+                    && self
+                        .nodes
+                        .iter()
+                        .any(|spec| spec.id == *node_id && matches!(spec.shape, NodeShape::Point))
+                {
+                    // Java emits the package special point directly in the
+                    // real cluster, before opening the inner `i`/`p1`
+                    // protection wrappers around ordinary members.
+                    real_cluster
+                } else {
+                    member_parent
+                };
+                graphviz_ffi::agsubnode(node_parent, node, 1);
             }
         }
         for (child_idx, child) in self.clusters.iter().enumerate() {
@@ -975,6 +1048,7 @@ struct NodeSpec {
 enum NodeShape {
     Box,
     Circle,
+    Point,
     Record { ports: Vec<String> },
 }
 
@@ -996,6 +1070,7 @@ struct ClusterSpec {
     kind: ClusterKind,
     parent: Option<String>,
     nodes: Vec<String>,
+    has_svek_endpoint: bool,
 }
 
 #[derive(Debug, Clone)]
@@ -1099,6 +1174,43 @@ mod tests {
             (path.points.len() - 1).is_multiple_of(3),
             "expected 3N+1 points, got {}",
             path.points.len()
+        );
+    }
+
+    #[test]
+    fn edge_paths_keep_identity_when_graphviz_traversal_reorders_edges() {
+        let mut g = LayoutGraph::new(Direction::TopToBottom);
+        g.add_node("source_a_17", "", 80.0, 40.0);
+        g.add_node("source_b_23", "", 80.0, 40.0);
+        g.add_node("target_a_29", "", 80.0, 40.0);
+        g.add_node("target_b_31", "", 80.0, 40.0);
+        g.add_edge("source_b_23", "target_b_31", None);
+        g.add_edge("source_a_17", "target_a_29", None);
+
+        let result = g.layout_full_no_timeout();
+        let center = |node: &NodePosition| (node.x + node.width / 2.0, node.y + node.height / 2.0);
+        let distance =
+            |point: (f64, f64), node: (f64, f64)| (point.0 - node.0).hypot(point.1 - node.1);
+        let source_a = center(&result.node_positions[0]);
+        let source_b = center(&result.node_positions[1]);
+
+        let edge_a = result
+            .edge_paths
+            .iter()
+            .find(|edge| edge.from == "source_a_17" && edge.to == "target_a_29")
+            .expect("renamed A edge");
+        let edge_b = result
+            .edge_paths
+            .iter()
+            .find(|edge| edge.from == "source_b_23" && edge.to == "target_b_31")
+            .expect("renamed B edge");
+        assert!(
+            distance(edge_a.points[0], source_a) < distance(edge_a.points[0], source_b),
+            "A spline should start at source A"
+        );
+        assert!(
+            distance(edge_b.points[0], source_b) < distance(edge_b.points[0], source_a),
+            "B spline should start at source B"
         );
     }
 

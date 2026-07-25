@@ -162,24 +162,31 @@ pub struct CloudPath {
 }
 
 impl CloudPath {
-    /// Local-coordinate bounding box (min_x, min_y) over the start point and
-    /// every Bézier endpoint/control point.
-    pub fn min_xy(&self) -> (f64, f64) {
+    /// Local-coordinate bounds over the start point and every Bézier endpoint
+    /// and control point.
+    pub fn bounds(&self) -> (f64, f64, f64, f64) {
         let mut min_x = self.start.0;
         let mut min_y = self.start.1;
+        let mut max_x = self.start.0;
+        let mut max_y = self.start.1;
         let mut acc = |x: f64, y: f64| {
-            if x < min_x {
-                min_x = x;
-            }
-            if y < min_y {
-                min_y = y;
-            }
+            min_x = min_x.min(x);
+            min_y = min_y.min(y);
+            max_x = max_x.max(x);
+            max_y = max_y.max(y);
         };
         for c in &self.cubics {
             acc(c.c1.0, c.c1.1);
             acc(c.c2.0, c.c2.1);
             acc(c.to.0, c.to.1);
         }
+        (min_x, min_y, max_x, max_y)
+    }
+
+    /// Local-coordinate bounding box (min_x, min_y) over the start point and
+    /// every Bézier endpoint/control point.
+    pub fn min_xy(&self) -> (f64, f64) {
+        let (min_x, min_y, _, _) = self.bounds();
         (min_x, min_y)
     }
 }

@@ -62,6 +62,154 @@ fn build_qualified_names(
     map
 }
 
+fn build_package_qualified_names(
+    packages: &[ComponentPackage],
+) -> std::collections::HashMap<String, String> {
+    fn walk(
+        packages: &[ComponentPackage],
+        parent: &str,
+        map: &mut std::collections::HashMap<String, String>,
+    ) {
+        for package in packages {
+            let qname = if parent.is_empty() {
+                package.name.clone()
+            } else {
+                format!("{parent}.{}", package.name)
+            };
+            map.insert(package.name.clone(), qname.clone());
+            map.insert(qname.clone(), qname.clone());
+            walk(&package.packages, &qname, map);
+        }
+    }
+
+    let mut map = std::collections::HashMap::new();
+    walk(packages, "", &mut map);
+    map
+}
+
+fn build_package_entity_ids(
+    packages: &[ComponentPackage],
+) -> std::collections::HashMap<String, String> {
+    fn walk(
+        packages: &[ComponentPackage],
+        parent: &str,
+        next_id: &mut usize,
+        map: &mut std::collections::HashMap<String, String>,
+    ) {
+        for package in packages {
+            let qname = if parent.is_empty() {
+                package.name.clone()
+            } else {
+                format!("{parent}.{}", package.name)
+            };
+            let entity_id = format!("ent{:04}", *next_id);
+            *next_id += 1;
+            map.insert(package.name.clone(), entity_id.clone());
+            map.insert(qname.clone(), entity_id);
+            walk(&package.packages, &qname, next_id, map);
+        }
+    }
+
+    let mut map = std::collections::HashMap::new();
+    let mut next_id = 2;
+    walk(packages, "", &mut next_id, &mut map);
+    map
+}
+
+struct NoOracleUidModel {
+    entity_ids: std::collections::HashMap<String, String>,
+    link_ids: Vec<usize>,
+}
+
+fn build_no_oracle_uid_model(diagram: &ComponentDiagram) -> NoOracleUidModel {
+    enum Event {
+        Entity(Vec<String>),
+        Link {
+            index: usize,
+            consumes_inverse: bool,
+        },
+    }
+
+    fn collect_packages(
+        packages: &[ComponentPackage],
+        parent: &str,
+        events: &mut Vec<(usize, usize, Event)>,
+        ordinal: &mut usize,
+    ) {
+        for package in packages {
+            let qname = if parent.is_empty() {
+                package.name.clone()
+            } else {
+                format!("{parent}.{}", package.name)
+            };
+            events.push((
+                package.source_line,
+                *ordinal,
+                Event::Entity(vec![package.name.clone(), qname.clone()]),
+            ));
+            *ordinal += 1;
+            collect_packages(&package.packages, &qname, events, ordinal);
+        }
+    }
+
+    let package_names = build_package_qualified_names(&diagram.packages);
+    let mut events = Vec::new();
+    let mut ordinal = 0;
+    collect_packages(&diagram.packages, "", &mut events, &mut ordinal);
+    for component in &diagram.components {
+        if !package_names.contains_key(component.id.as_str()) {
+            events.push((
+                component.source_line,
+                ordinal,
+                Event::Entity(vec![component.id.clone()]),
+            ));
+            ordinal += 1;
+        }
+    }
+    for (index, connection) in diagram.connections.iter().enumerate() {
+        events.push((
+            connection.source_line,
+            ordinal,
+            Event::Link {
+                index,
+                consumes_inverse: no_oracle_layout_edge_ends(connection).2,
+            },
+        ));
+        ordinal += 1;
+    }
+    events.sort_by_key(|(source_line, stable_ordinal, _)| (*source_line, *stable_ordinal));
+
+    let mut next_uid = 2;
+    let mut entity_ids = std::collections::HashMap::new();
+    let mut link_ids = vec![0; diagram.connections.len()];
+    for (_, _, event) in events {
+        match event {
+            Event::Entity(keys) => {
+                let entity_id = format!("ent{next_uid:04}");
+                for key in keys {
+                    entity_ids.insert(key, entity_id.clone());
+                }
+                next_uid += 1;
+            }
+            Event::Link {
+                index,
+                consumes_inverse,
+            } => {
+                if consumes_inverse {
+                    next_uid += 1;
+                }
+                link_ids[index] = next_uid;
+                next_uid += 1;
+            }
+        }
+    }
+
+    NoOracleUidModel {
+        entity_ids,
+        link_ids,
+    }
+}
+
 fn walk_pkg(
     pkg: &ComponentPackage,
     parent_path: &str,
@@ -460,9 +608,36 @@ pub fn render_with_oracle(
                 IFACE_R * 2.0 + 20.0,
             );
         }
-        add_package_clusters_to_layout(&mut layout, &diagram.packages, "");
+        let package_qualified_names = build_package_qualified_names(&diagram.packages);
+        let mut group_endpoint_nodes = std::collections::HashMap::new();
+        for endpoint in diagram
+            .connections
+            .iter()
+            .flat_map(|connection| [&connection.from, &connection.to])
+        {
+            if let Some(qname) = package_qualified_names.get(endpoint.as_str()) {
+                group_endpoint_nodes
+                    .entry(qname.clone())
+                    .or_insert_with(|| {
+                        let id = format!("__svek_group_endpoint_{}", qname.replace('.', "_"));
+                        layout.add_svek_cluster_endpoint(&id);
+                        id
+                    });
+            }
+        }
+        add_package_clusters_to_layout(&mut layout, &diagram.packages, "", &group_endpoint_nodes);
         for conn in &diagram.connections {
-            let (layout_from, layout_to, _) = no_oracle_layout_edge_ends(conn);
+            let (logical_from, logical_to, _) = no_oracle_layout_edge_ends(conn);
+            let layout_from = package_qualified_names
+                .get(logical_from)
+                .and_then(|qname| group_endpoint_nodes.get(qname))
+                .map(String::as_str)
+                .unwrap_or(logical_from);
+            let layout_to = package_qualified_names
+                .get(logical_to)
+                .and_then(|qname| group_endpoint_nodes.get(qname))
+                .map(String::as_str)
+                .unwrap_or(logical_to);
             if matches!(
                 conn.direction,
                 Some(ConnectionDirection::Left | ConnectionDirection::Right)
@@ -675,13 +850,19 @@ pub fn render_with_oracle(
     // path geometry that we can't realistically reproduce attribute-for-attribute
     // in a strict-XML comparator. The oracle replay sidesteps this entirely.
     let mut pkg_y = title_h + MARGIN;
+    let no_oracle_uids = oracle.is_none().then(|| build_no_oracle_uid_model(diagram));
     let rendered_layout_cluster_count = if let Some(orc) = oracle
         && !orc.clusters.is_empty()
     {
         render_packages_from_oracle(&diagram.packages, &mut svg, orc);
         0
     } else if !cluster_positions.is_empty() {
-        render_packages_from_layout(&diagram.packages, &mut svg, &cluster_positions);
+        render_packages_from_layout(
+            &diagram.packages,
+            &mut svg,
+            &cluster_positions,
+            no_oracle_uids.as_ref(),
+        );
         cluster_positions.len()
     } else {
         render_packages(&diagram.packages, &mut svg, MARGIN, &mut pkg_y, theme);
@@ -766,7 +947,22 @@ pub fn render_with_oracle(
         });
         order
     } else {
-        comp_indices
+        let any_nested = comp_indices.iter().any(|&i| {
+            qualified_names
+                .get(&diagram.components[i].id)
+                .map(|qname| qname.contains('.'))
+                .unwrap_or(false)
+        });
+        let mut order = comp_indices;
+        order.sort_by_key(|&i| {
+            let component = &diagram.components[i];
+            let depth = qualified_names
+                .get(&component.id)
+                .map(|qname| qname.matches('.').count())
+                .unwrap_or(0);
+            (any_nested && depth == 0, depth, component.source_line, i)
+        });
+        order
     };
     // PlantUML emits components and interfaces interleaved in declaration
     // order (by source line), not all-components-then-all-interfaces. The
@@ -863,7 +1059,13 @@ pub fn render_with_oracle(
         let (x, y) = positions[i];
         let dim = &comp_dims[i];
         let oracle_rect_for_id = oracle_comp_rect(comp);
-        let ent_id = if let Some(id) = oracle_rect_for_id.and_then(|r| r.entity_id.clone()) {
+        let ent_id = if let Some(id) = oracle_rect_for_id
+            .and_then(|r| r.entity_id.clone())
+            .or_else(|| {
+                no_oracle_uids
+                    .as_ref()
+                    .and_then(|uids| uids.entity_ids.get(&comp.id).cloned())
+            }) {
             id
         } else {
             // Skip over IDs claimed by oracle clusters.
@@ -1181,9 +1383,33 @@ pub fn render_with_oracle(
             &component_arrow_font_color,
         );
     } else {
+        let package_qualified_names = build_package_qualified_names(&diagram.packages);
+        let package_entity_ids = build_package_entity_ids(&diagram.packages);
+        let group_endpoint_nodes: std::collections::HashMap<String, String> = diagram
+            .connections
+            .iter()
+            .flat_map(|connection| [&connection.from, &connection.to])
+            .filter_map(|endpoint| package_qualified_names.get(endpoint.as_str()))
+            .map(|qname| {
+                (
+                    qname.clone(),
+                    format!("__svek_group_endpoint_{}", qname.replace('.', "_")),
+                )
+            })
+            .collect();
         let mut next_link_counter = entity_counter;
-        for conn in &diagram.connections {
-            let (layout_from, layout_to, layout_reversed) = no_oracle_layout_edge_ends(conn);
+        for (connection_index, conn) in diagram.connections.iter().enumerate() {
+            let (logical_from, logical_to, layout_reversed) = no_oracle_layout_edge_ends(conn);
+            let layout_from = package_qualified_names
+                .get(logical_from)
+                .and_then(|qname| group_endpoint_nodes.get(qname))
+                .map(String::as_str)
+                .unwrap_or(logical_from);
+            let layout_to = package_qualified_names
+                .get(logical_to)
+                .and_then(|qname| group_endpoint_nodes.get(qname))
+                .map(String::as_str)
+                .unwrap_or(logical_to);
             let mut link_counter = next_link_counter;
             next_link_counter += 1;
             if layout_reversed {
@@ -1193,6 +1419,12 @@ pub fn render_with_oracle(
                 link_counter = next_link_counter;
                 next_link_counter += 1;
             }
+            let link_counter = no_oracle_uids
+                .as_ref()
+                .and_then(|uids| uids.link_ids.get(connection_index))
+                .copied()
+                .filter(|uid| *uid != 0)
+                .unwrap_or(link_counter);
             let link_id = format!("lnk{link_counter}");
 
             // Find source and target positions.
@@ -1216,6 +1448,16 @@ pub fn render_with_oracle(
                 .iter()
                 .enumerate()
                 .find(|(_, i)| i.id == conn.to);
+            let from_package = package_qualified_names.get(logical_from).and_then(|qname| {
+                cluster_positions
+                    .iter()
+                    .find(|position| &position.id == qname)
+            });
+            let to_package = package_qualified_names.get(logical_to).and_then(|qname| {
+                cluster_positions
+                    .iter()
+                    .find(|position| &position.id == qname)
+            });
 
             let (from_cx, from_cy, from_bottom) = if let Some((i, _)) = from_comp {
                 let (x, y) = positions[i];
@@ -1224,6 +1466,12 @@ pub fn render_with_oracle(
             } else if let Some((i, _)) = from_iface {
                 let (ix, iy) = iface_positions[i];
                 (ix, iy, iy + IFACE_R)
+            } else if let Some(position) = from_package {
+                (
+                    position.x + position.width / 2.0,
+                    position.y + position.height / 2.0,
+                    position.y + position.height,
+                )
             } else {
                 continue;
             };
@@ -1235,6 +1483,12 @@ pub fn render_with_oracle(
             } else if let Some((i, _)) = to_iface {
                 let (ix, iy) = iface_positions[i];
                 (ix, iy, iy - IFACE_R)
+            } else if let Some(position) = to_package {
+                (
+                    position.x + position.width / 2.0,
+                    position.y + position.height / 2.0,
+                    position.y,
+                )
             } else {
                 continue;
             };
@@ -1259,38 +1513,62 @@ pub fn render_with_oracle(
                 "link"
             };
             svg.raw(&format!(
-                "<!--{comment_prefix} {layout_from} to {layout_to}-->"
+                "<!--{comment_prefix} {logical_from} to {logical_to}-->"
             ));
 
             let from_ent_idx = diagram
                 .components
                 .iter()
-                .position(|c| c.id == layout_from)
+                .position(|c| c.id == logical_from)
                 .map(|i| i + 2 + rendered_layout_cluster_count)
                 .or_else(|| {
                     diagram
                         .interfaces
                         .iter()
-                        .position(|i| i.id == layout_from)
+                        .position(|i| i.id == logical_from)
                         .map(|i| i + 2 + rendered_layout_cluster_count + n_comp)
                 });
             let to_ent_idx = diagram
                 .components
                 .iter()
-                .position(|c| c.id == layout_to)
+                .position(|c| c.id == logical_to)
                 .map(|i| i + 2 + rendered_layout_cluster_count)
                 .or_else(|| {
                     diagram
                         .interfaces
                         .iter()
-                        .position(|i| i.id == layout_to)
+                        .position(|i| i.id == logical_to)
                         .map(|i| i + 2 + rendered_layout_cluster_count + n_comp)
                 });
 
             let from_ent_id = from_ent_idx
-                .map(|i| format!("ent{i:04}"))
+                .and_then(|_| {
+                    no_oracle_uids
+                        .as_ref()
+                        .and_then(|uids| uids.entity_ids.get(logical_from).cloned())
+                })
+                .or_else(|| from_ent_idx.map(|i| format!("ent{i:04}")))
+                .or_else(|| {
+                    no_oracle_uids
+                        .as_ref()
+                        .and_then(|uids| uids.entity_ids.get(logical_from).cloned())
+                })
+                .or_else(|| package_entity_ids.get(logical_from).cloned())
                 .unwrap_or_default();
-            let to_ent_id = to_ent_idx.map(|i| format!("ent{i:04}")).unwrap_or_default();
+            let to_ent_id = to_ent_idx
+                .and_then(|_| {
+                    no_oracle_uids
+                        .as_ref()
+                        .and_then(|uids| uids.entity_ids.get(logical_to).cloned())
+                })
+                .or_else(|| to_ent_idx.map(|i| format!("ent{i:04}")))
+                .or_else(|| {
+                    no_oracle_uids
+                        .as_ref()
+                        .and_then(|uids| uids.entity_ids.get(logical_to).cloned())
+                })
+                .or_else(|| package_entity_ids.get(logical_to).cloned())
+                .unwrap_or_default();
             let source_line_attr = if conn.source_line > 0 {
                 format!(r#" data-source-line="{}""#, conn.source_line)
             } else {
@@ -1316,6 +1594,8 @@ pub fn render_with_oracle(
                     edge_points_input,
                     svek_edge_dx,
                     svek_edge_dy,
+                    from_package,
+                    to_package,
                     arrow_at_start,
                     arrow_at_end,
                 );
@@ -1329,6 +1609,8 @@ pub fn render_with_oracle(
                     edge_points_input,
                     svek_edge_dx,
                     svek_edge_dy,
+                    from_package,
+                    to_package,
                     false,
                     false,
                 );
@@ -2090,6 +2372,7 @@ fn add_package_clusters_to_layout(
     layout: &mut LayoutGraph,
     packages: &[ComponentPackage],
     parent: &str,
+    group_endpoint_nodes: &std::collections::HashMap<String, String>,
 ) {
     for pkg in packages {
         let qname = if parent.is_empty() {
@@ -2128,10 +2411,13 @@ fn add_package_clusters_to_layout(
                 height: title_height + stereotype_height + shape_height,
             },
         );
+        if let Some(endpoint_id) = group_endpoint_nodes.get(&qname) {
+            layout.add_cluster_node(&qname, endpoint_id);
+        }
         for component_id in &pkg.components {
             layout.add_cluster_node(&qname, component_id);
         }
-        add_package_clusters_to_layout(layout, &pkg.packages, &qname);
+        add_package_clusters_to_layout(layout, &pkg.packages, &qname, group_endpoint_nodes);
     }
 }
 
@@ -2139,34 +2425,103 @@ fn add_package_clusters_to_layout(
 struct ComponentClusterFrame {
     origin_x: f64,
     origin_y: f64,
-    canvas_pad_x: f64,
-    canvas_pad_y: f64,
 }
 
-fn component_cluster_frame(packages: &[ComponentPackage]) -> ComponentClusterFrame {
-    match packages.first().map(|package| package.kind) {
-        Some(ComponentPackageKind::Package | ComponentPackageKind::Folder) => {
-            ComponentClusterFrame {
-                origin_x: SVEK_CLUSTER_ORIGIN,
-                origin_y: SVEK_CLUSTER_ORIGIN,
-                canvas_pad_x: 15.0,
-                canvas_pad_y: 15.0,
+fn package_kind_for_qname(
+    packages: &[ComponentPackage],
+    qname: &str,
+) -> Option<ComponentPackageKind> {
+    fn walk(
+        packages: &[ComponentPackage],
+        parent: &str,
+        target: &str,
+    ) -> Option<ComponentPackageKind> {
+        for package in packages {
+            let current = if parent.is_empty() {
+                package.name.clone()
+            } else {
+                format!("{parent}.{}", package.name)
+            };
+            if current == target {
+                return Some(package.kind);
+            }
+            if let Some(kind) = walk(&package.packages, &current, target) {
+                return Some(kind);
             }
         }
-        Some(ComponentPackageKind::Node) => ComponentClusterFrame {
-            // `USymbolNode.drawNode` starts 10px inside the left envelope and
-            // appends `UEmpty(10,10)` at the lower-right corner.
-            origin_x: 16.0,
-            origin_y: SVEK_CLUSTER_ORIGIN,
-            canvas_pad_x: 25.0,
-            canvas_pad_y: 25.0,
-        },
-        _ => ComponentClusterFrame {
+        None
+    }
+
+    walk(packages, "", qname)
+}
+
+fn component_cluster_frame(
+    packages: &[ComponentPackage],
+    cluster_positions: &[ClusterPosition],
+) -> ComponentClusterFrame {
+    if cluster_positions.is_empty() {
+        return ComponentClusterFrame {
             origin_x: MARGIN,
             origin_y: MARGIN,
-            canvas_pad_x: SVEK_CANVAS_PAD,
-            canvas_pad_y: SVEK_CANVAS_PAD,
-        },
+        };
+    }
+
+    let min_raw_x = cluster_positions
+        .iter()
+        .map(|position| position.x)
+        .fold(f64::INFINITY, f64::min);
+    let min_raw_y = cluster_positions
+        .iter()
+        .map(|position| position.y)
+        .fold(f64::INFINITY, f64::min);
+    let mut required_dx = f64::NEG_INFINITY;
+    let mut required_dy = f64::NEG_INFINITY;
+
+    for package in packages {
+        let Some(position) = cluster_positions
+            .iter()
+            .find(|position| position.id == package.name)
+        else {
+            continue;
+        };
+        let (origin_x, origin_y) = match package.kind {
+            ComponentPackageKind::Package | ComponentPackageKind::Folder => {
+                (SVEK_CLUSTER_ORIGIN, SVEK_CLUSTER_ORIGIN)
+            }
+            ComponentPackageKind::Node => {
+                // `USymbolNode.drawNode` starts 10px inside the left envelope
+                // and appends `UEmpty(10,10)` at the lower-right corner.
+                (16.0, SVEK_CLUSTER_ORIGIN)
+            }
+            ComponentPackageKind::Database => {
+                // `USymbolDatabase.drawDatabase` appends `UEmpty(10,10)` at
+                // its lower-right corner.
+                (SVEK_CLUSTER_ORIGIN, SVEK_CLUSTER_ORIGIN)
+            }
+            ComponentPackageKind::Cloud => {
+                let (min_x, min_y) =
+                    crate::cloud_shape::generate(position.width, position.height).min_xy();
+                (SVEK_CLUSTER_ORIGIN - min_x, SVEK_CLUSTER_ORIGIN - min_y)
+            }
+            _ => (MARGIN, MARGIN),
+        };
+        required_dx = required_dx.max(origin_x - position.x);
+        required_dy = required_dy.max(origin_y - position.y);
+    }
+
+    ComponentClusterFrame {
+        origin_x: min_raw_x
+            + if required_dx.is_finite() {
+                required_dx
+            } else {
+                MARGIN - min_raw_x
+            },
+        origin_y: min_raw_y
+            + if required_dy.is_finite() {
+                required_dy
+            } else {
+                MARGIN - min_raw_y
+            },
     }
 }
 
@@ -2181,7 +2536,7 @@ fn compute_positions_from_layout(
     let n_comp = diagram.components.len();
     let mut positions = Vec::with_capacity(n_comp);
     let mut iface_positions = Vec::with_capacity(diagram.interfaces.len());
-    let cluster_frame = component_cluster_frame(&diagram.packages);
+    let cluster_frame = component_cluster_frame(&diagram.packages, raw_cluster_positions);
     let (layout_dx, layout_dy) = if raw_cluster_positions.is_empty() {
         (MARGIN, MARGIN + title_h)
     } else {
@@ -2410,24 +2765,33 @@ fn compute_no_oracle_canvas(input: NoOracleCanvas<'_>) -> (f64, f64) {
         max_x = max_x.max(cx + IFACE_R);
         max_y = max_y.max(cy + IFACE_R + LINE_HEIGHT + 4.0);
     }
+    let mut total_w = max_x + SVEK_CANVAS_PAD;
+    let mut total_h = max_y + SVEK_CANVAS_PAD;
     for cluster in input.cluster_positions {
-        max_x = max_x.max(cluster.x + cluster.width);
-        max_y = max_y.max(cluster.y + cluster.height);
+        let kind = package_kind_for_qname(input.packages, &cluster.id);
+        let (shape_max_x, shape_max_y, pad) = if matches!(kind, Some(ComponentPackageKind::Cloud)) {
+            let (_, _, path_max_x, path_max_y) =
+                crate::cloud_shape::generate(cluster.width, cluster.height).bounds();
+            (path_max_x, path_max_y, SVEK_CANVAS_PAD)
+        } else {
+            let pad = match kind {
+                Some(ComponentPackageKind::Package | ComponentPackageKind::Folder) => 15.0,
+                Some(ComponentPackageKind::Node | ComponentPackageKind::Database) => 25.0,
+                _ => SVEK_CANVAS_PAD,
+            };
+            (cluster.width, cluster.height, pad)
+        };
+        total_w = total_w.max(cluster.x + shape_max_x + pad);
+        total_h = total_h.max(cluster.y + shape_max_y + pad);
     }
     if input.cluster_positions.is_empty() && !input.packages.is_empty() {
         max_x = max_x.max(input.pkg_total_w);
         max_y = max_y.max(input.title_h + MARGIN + input.pkg_total_h);
+        total_w = max_x + SVEK_CANVAS_PAD;
+        total_h = max_y + SVEK_CANVAS_PAD;
     }
 
-    let (canvas_pad_x, canvas_pad_y) = if input.cluster_positions.is_empty() {
-        (SVEK_CANVAS_PAD, SVEK_CANVAS_PAD)
-    } else {
-        let frame = component_cluster_frame(input.packages);
-        (frame.canvas_pad_x, frame.canvas_pad_y)
-    };
-    let total_w = (max_x + canvas_pad_x).max(1.0);
-    let total_h = (max_y + canvas_pad_y).max(1.0);
-    (total_w, total_h)
+    (total_w.max(1.0), total_h.max(1.0))
 }
 
 // ---------------------------------------------------------------------------
@@ -3001,6 +3365,8 @@ fn component_svek_edge_points(
     points: &[(f64, f64)],
     dx: f64,
     dy: f64,
+    tail_cluster: Option<&ClusterPosition>,
+    head_cluster: Option<&ClusterPosition>,
     trim_start_for_arrow: bool,
     trim_end_for_arrow: bool,
 ) -> Vec<(f64, f64)> {
@@ -3013,6 +3379,7 @@ fn component_svek_edge_points(
         .iter()
         .map(|(x, y)| (quantize(*x) + dx, quantize(*y) + dy))
         .collect();
+    out = simulate_compound(out, tail_cluster, head_cluster);
 
     if trim_start_for_arrow && out.len() >= 2 {
         let (tip_x, tip_y) = out[0];
@@ -3058,6 +3425,109 @@ fn component_svek_edge_points(
     }
 
     out
+}
+
+fn simulate_compound(
+    points: Vec<(f64, f64)>,
+    tail: Option<&ClusterPosition>,
+    head: Option<&ClusterPosition>,
+) -> Vec<(f64, f64)> {
+    if points.len() < 4 || (points.len() - 1) % 3 != 0 {
+        return points;
+    }
+
+    type Cubic = [(f64, f64); 4];
+
+    fn contains(rectangle: &ClusterPosition, point: (f64, f64)) -> bool {
+        point.0 >= rectangle.x
+            && point.0 <= rectangle.x + rectangle.width
+            && point.1 >= rectangle.y
+            && point.1 <= rectangle.y + rectangle.height
+    }
+
+    fn subdivide(curve: Cubic) -> (Cubic, Cubic) {
+        let midpoint = |a: (f64, f64), b: (f64, f64)| ((a.0 + b.0) / 2.0, (a.1 + b.1) / 2.0);
+        let p01 = midpoint(curve[0], curve[1]);
+        let p12 = midpoint(curve[1], curve[2]);
+        let p23 = midpoint(curve[2], curve[3]);
+        let p012 = midpoint(p01, p12);
+        let p123 = midpoint(p12, p23);
+        let split = midpoint(p012, p123);
+        ([curve[0], p01, p012, split], [split, p123, p23, curve[3]])
+    }
+
+    fn curves_from_points(points: &[(f64, f64)]) -> Vec<Cubic> {
+        points[1..]
+            .chunks_exact(3)
+            .scan(points[0], |start, chunk| {
+                let curve = [*start, chunk[0], chunk[1], chunk[2]];
+                *start = chunk[2];
+                Some(curve)
+            })
+            .collect()
+    }
+
+    fn points_from_curves(curves: &[Cubic]) -> Vec<(f64, f64)> {
+        let Some(first) = curves.first() else {
+            return Vec::new();
+        };
+        let mut points = Vec::with_capacity(curves.len() * 3 + 1);
+        points.push(first[0]);
+        for curve in curves {
+            points.extend_from_slice(&curve[1..]);
+        }
+        points
+    }
+
+    // PlantUML `DotPath.simulateCompound` clips a spline leaving a group by
+    // bisecting the first boundary-crossing cubic eight times. It retains each
+    // outside half, which deliberately expands one Graphviz cubic into the
+    // sequence visible in PlantUML's SVG.
+    let mut curves = curves_from_points(&points);
+    if let Some(tail) = tail
+        && curves.first().is_some_and(|curve| contains(tail, curve[0]))
+    {
+        let crossing = curves.iter().position(|curve| !contains(tail, curve[3]));
+        if let Some(index) = crossing {
+            let mut current = curves[index];
+            let mut clipped = Vec::new();
+            for _ in 0..8 {
+                let (inside_half, outside_half) = subdivide(current);
+                if contains(tail, inside_half[3]) {
+                    current = outside_half;
+                } else {
+                    clipped.insert(0, outside_half);
+                    current = inside_half;
+                }
+            }
+            clipped.extend_from_slice(&curves[index + 1..]);
+            curves = clipped;
+        }
+    }
+
+    // The head-side branch is the exact mirror of the tail-side subdivision.
+    if let Some(head) = head
+        && curves.last().is_some_and(|curve| contains(head, curve[3]))
+    {
+        if let Some(index) = curves.iter().position(|curve| contains(head, curve[3]))
+            && !contains(head, curves[index][0])
+        {
+            let mut current = curves[index];
+            let mut clipped = curves[..index].to_vec();
+            for _ in 0..8 {
+                let (outside_half, inside_half) = subdivide(current);
+                if contains(head, outside_half[3]) {
+                    current = outside_half;
+                } else {
+                    clipped.push(outside_half);
+                    current = inside_half;
+                }
+            }
+            curves = clipped;
+        }
+    }
+
+    points_from_curves(&curves)
 }
 
 fn build_path_d(points: &[(f64, f64)]) -> String {
@@ -3215,12 +3685,14 @@ fn render_packages_from_layout(
     packages: &[ComponentPackage],
     svg: &mut SvgBuilder,
     cluster_positions: &[ClusterPosition],
+    uids: Option<&NoOracleUidModel>,
 ) {
     fn walk(
         packages: &[ComponentPackage],
         parent_path: &str,
         svg: &mut SvgBuilder,
         cluster_positions: &[ClusterPosition],
+        uids: Option<&NoOracleUidModel>,
         next_entity: &mut usize,
     ) {
         for pkg in packages {
@@ -3230,15 +3702,26 @@ fn render_packages_from_layout(
                 format!("{parent_path}.{}", pkg.name)
             };
             if let Some(pos) = cluster_positions.iter().find(|p| p.id == qname) {
-                emit_layout_package_cluster(svg, pkg, &qname, pos, *next_entity);
+                let entity_id = uids
+                    .and_then(|model| model.entity_ids.get(&qname))
+                    .cloned()
+                    .unwrap_or_else(|| format!("ent{:04}", *next_entity));
+                emit_layout_package_cluster(svg, pkg, &qname, pos, &entity_id);
                 *next_entity += 1;
             }
-            walk(&pkg.packages, &qname, svg, cluster_positions, next_entity);
+            walk(
+                &pkg.packages,
+                &qname,
+                svg,
+                cluster_positions,
+                uids,
+                next_entity,
+            );
         }
     }
 
     let mut next_entity = 2;
-    walk(packages, "", svg, cluster_positions, &mut next_entity);
+    walk(packages, "", svg, cluster_positions, uids, &mut next_entity);
 }
 
 fn emit_layout_package_cluster(
@@ -3246,7 +3729,7 @@ fn emit_layout_package_cluster(
     pkg: &ComponentPackage,
     qname: &str,
     pos: &ClusterPosition,
-    entity_num: usize,
+    entity_id: &str,
 ) {
     let fill = pkg
         .color
@@ -3263,7 +3746,7 @@ fn emit_layout_package_cluster(
         fold_non_ascii(&pkg.name, '?')
     ));
     svg.raw(&format!(
-        r#"<g class="cluster" data-qualified-name="{}"{source_attr} id="ent{entity_num:04}">"#,
+        r#"<g class="cluster" data-qualified-name="{}"{source_attr} id="{entity_id}">"#,
         fold_non_ascii(qname, '.')
     ));
 
@@ -3280,6 +3763,12 @@ fn emit_layout_package_cluster(
         ComponentPackageKind::Node => {
             emit_layout_node_cluster(svg, pos, &pkg.label, pkg.stereotype.as_deref(), &fill);
         }
+        ComponentPackageKind::Cloud => {
+            emit_layout_cloud_cluster(svg, pos, &pkg.label, pkg.stereotype.as_deref(), &fill);
+        }
+        ComponentPackageKind::Database => {
+            emit_layout_database_cluster(svg, pos, &pkg.label, pkg.stereotype.as_deref(), &fill);
+        }
         _ => {
             emit_layout_rectangle_cluster(svg, pos, &pkg.label, None, &fill);
         }
@@ -3291,6 +3780,8 @@ fn emit_layout_package_cluster(
             ComponentPackageKind::Rectangle
                 | ComponentPackageKind::Frame
                 | ComponentPackageKind::Node
+                | ComponentPackageKind::Cloud
+                | ComponentPackageKind::Database
         )
     {
         let label = format!("\u{00AB}{stereo}\u{00BB}");
@@ -3605,6 +4096,163 @@ fn emit_layout_node_cluster(
         &TextBase {
             x: pos.x + title_x_offset + (pos.width - title_width) / 2.0,
             y: pos.y + title_y_offset + stereotype_height + pm::ascent(FONT_SIZE),
+            font_size: FONT_SIZE as u32,
+            font_family: "sans-serif",
+            fill: TEXT_COLOR,
+            bold: true,
+            italic: false,
+            underline: false,
+            skip_underline: false,
+        },
+    );
+    svg.raw(&title_buf);
+}
+
+fn emit_layout_cloud_cluster(
+    svg: &mut SvgBuilder,
+    pos: &ClusterPosition,
+    label: &str,
+    stereotype: Option<&str>,
+    fill: &str,
+) {
+    // `USymbolCloud.getSpecificFrontierForCloudNew` uses a Java-seeded random
+    // frontier for the solved cluster dimensions. `USymbolCloud.asBig` places
+    // the centered stereotype/title block 13px below that local box origin.
+    let path = crate::cloud_shape::generate(pos.width, pos.height);
+    let mut d = format!("M{},{}", fc(pos.x + path.start.0), fc(pos.y + path.start.1),);
+    for cubic in &path.cubics {
+        d.push_str(&format!(
+            " C{},{} {},{} {},{}",
+            fc(pos.x + cubic.c1.0),
+            fc(pos.y + cubic.c1.1),
+            fc(pos.x + cubic.c2.0),
+            fc(pos.y + cubic.c2.1),
+            fc(pos.x + cubic.to.0),
+            fc(pos.y + cubic.to.1),
+        ));
+    }
+    svg.raw(&format!(
+        r##"<path d="{d}" fill="{fill}" style="stroke:#181818;stroke-width:1;"/>"##
+    ));
+
+    let text_y = pos.y + 13.0;
+    let stereotype_height = if let Some(stereotype) = stereotype {
+        let text = format!("\u{00AB}{stereotype}\u{00BB}");
+        let width = text_render::measure_no_underline(&text, FONT_SIZE, false);
+        let mut text_buf = String::new();
+        text_render::emit_text(
+            &mut text_buf,
+            &text,
+            &TextBase {
+                x: pos.x + (pos.width - width) / 2.0,
+                y: text_y + pm::ascent(FONT_SIZE),
+                font_size: FONT_SIZE as u32,
+                font_family: "sans-serif",
+                fill: TEXT_COLOR,
+                bold: false,
+                italic: true,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        svg.raw(&text_buf);
+        text_render::label_height(&text, FONT_SIZE)
+    } else {
+        0.0
+    };
+
+    let title_width = text_render::measure_no_underline(label, FONT_SIZE, true);
+    let mut title_buf = String::new();
+    text_render::emit_text(
+        &mut title_buf,
+        label,
+        &TextBase {
+            x: pos.x + (pos.width - title_width) / 2.0,
+            y: text_y + stereotype_height + pm::ascent(FONT_SIZE),
+            font_size: FONT_SIZE as u32,
+            font_family: "sans-serif",
+            fill: TEXT_COLOR,
+            bold: true,
+            italic: false,
+            underline: false,
+            skip_underline: false,
+        },
+    );
+    svg.raw(&title_buf);
+}
+
+fn emit_layout_database_cluster(
+    svg: &mut SvgBuilder,
+    pos: &ClusterPosition,
+    label: &str,
+    stereotype: Option<&str>,
+    fill: &str,
+) {
+    // `USymbolDatabase.drawDatabase` draws the cylinder with 10px elliptical
+    // caps. `USymbolDatabase.asBig` places its title block below the top cap.
+    let right = pos.x + pos.width;
+    let middle = pos.x + pos.width / 2.0;
+    let bottom = pos.y + pos.height;
+    let cap = 10.0;
+    let outer = format!(
+        "M{x},{top_cap} C{x},{top} {middle},{top} {middle},{top} C{middle},{top} {right},{top} {right},{top_cap} L{right},{bottom_cap} C{right},{bottom} {middle},{bottom} {middle},{bottom} C{middle},{bottom} {x},{bottom} {x},{bottom_cap} L{x},{top_cap}",
+        x = fc(pos.x),
+        top_cap = fc(pos.y + cap),
+        top = fc(pos.y),
+        middle = fc(middle),
+        right = fc(right),
+        bottom_cap = fc(bottom - cap),
+        bottom = fc(bottom),
+    );
+    svg.raw(&format!(
+        r##"<path d="{outer}" fill="{fill}" style="stroke:#181818;stroke-width:1;"/>"##
+    ));
+    let closing = format!(
+        "M{x},{top_cap} C{x},{second_cap} {middle},{second_cap} {middle},{second_cap} C{middle},{second_cap} {right},{second_cap} {right},{top_cap}",
+        x = fc(pos.x),
+        top_cap = fc(pos.y + cap),
+        second_cap = fc(pos.y + cap * 2.0),
+        middle = fc(middle),
+        right = fc(right),
+    );
+    svg.raw(&format!(
+        r##"<path d="{closing}" fill="none" style="stroke:#181818;stroke-width:1;"/>"##
+    ));
+
+    let text_y = pos.y + 22.0;
+    let stereotype_height = if let Some(stereotype) = stereotype {
+        let text = format!("\u{00AB}{stereotype}\u{00BB}");
+        let width = text_render::measure_no_underline(&text, FONT_SIZE, false);
+        let mut text_buf = String::new();
+        text_render::emit_text(
+            &mut text_buf,
+            &text,
+            &TextBase {
+                x: pos.x + (pos.width - width) / 2.0,
+                y: text_y + pm::ascent(FONT_SIZE),
+                font_size: FONT_SIZE as u32,
+                font_family: "sans-serif",
+                fill: TEXT_COLOR,
+                bold: false,
+                italic: true,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        svg.raw(&text_buf);
+        text_render::label_height(&text, FONT_SIZE)
+    } else {
+        0.0
+    };
+
+    let title_width = text_render::measure_no_underline(label, FONT_SIZE, true);
+    let mut title_buf = String::new();
+    text_render::emit_text(
+        &mut title_buf,
+        label,
+        &TextBase {
+            x: pos.x + (pos.width - title_width) / 2.0,
+            y: text_y + stereotype_height + pm::ascent(FONT_SIZE),
             font_size: FONT_SIZE as u32,
             font_family: "sans-serif",
             fill: TEXT_COLOR,
@@ -3984,6 +4632,26 @@ mod tests {
             svg.matches("<line ").count(),
             3,
             "USymbolNode should emit its fold and inner corner lines: {svg}"
+        );
+    }
+
+    #[test]
+    fn no_oracle_nested_group_link_uses_routable_cluster_endpoint() {
+        let input = "@startuml\nfolder OuterTransit71 {\n  folder InnerTransit73 {\n    component Alpha79\n    component Beta83\n    Alpha79 --> Beta83\n  }\n  component Gamma89\n  InnerTransit73 --> Gamma89\n}\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(
+            svg.contains(r#"data-qualified-name="OuterTransit71.InnerTransit73""#),
+            "renamed nested cluster should retain its qualified identity: {svg}"
+        );
+        assert!(
+            svg.contains("<!--link InnerTransit73 to Gamma89-->"),
+            "group link should survive the generative SVEK path: {svg}"
+        );
+        assert!(
+            svg.contains(r#"data-entity-1="ent0003" data-entity-2="ent0007""#),
+            "group link should resolve the nested package and component UIDs: {svg}"
         );
     }
 }
