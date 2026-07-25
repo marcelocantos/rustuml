@@ -1273,6 +1273,28 @@ mod tests {
     }
 
     #[test]
+    fn svek_cluster_title_table_sets_minimum_width() {
+        let mut g = LayoutGraph::new(Direction::TopToBottom);
+        g.add_node("member", "member", 100.0, 40.0);
+        assert!(g.add_svek_cluster(
+            "Renamed_Wide_Title",
+            None,
+            ClusterTitleSize {
+                width: 220.0,
+                height: 21.0,
+            },
+        ));
+        g.add_cluster_node("Renamed_Wide_Title", "member");
+
+        let result = g.layout_full_no_timeout();
+        let cluster = &result.cluster_positions[0];
+
+        // `ClusterDotString.printInternal` emits the title as a fixed 220px
+        // HTML table. Dot adds eight points of cluster margin on each side.
+        assert_eq!(cluster.width, 236.0);
+    }
+
+    #[test]
     fn left_to_right_layout() {
         let mut g = LayoutGraph::new(Direction::LeftToRight);
         g.add_node("a", "Start", 100.0, 40.0);

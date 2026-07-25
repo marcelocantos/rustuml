@@ -8,7 +8,7 @@
 
 use std::fmt::Write;
 
-use rustuml_layout::graph::{ClusterPosition, Direction, EdgePath, LayoutGraph};
+use rustuml_layout::graph::{ClusterPosition, ClusterTitleSize, Direction, EdgePath, LayoutGraph};
 use rustuml_parser::diagram::component::*;
 
 use crate::layout_oracle::{
@@ -232,6 +232,9 @@ const COMPONENT_MIN_W: f64 = 40.0;
 /// already emitted at PlantUML's 7px top/left offset, so the equivalent
 /// no-oracle frame is the maximum rendered bound plus this residual pad.
 const SVEK_CANVAS_PAD: f64 = 14.0;
+/// Painted SVEK clusters are normalized directly to Java's 6px min-bound
+/// translation and retain the full 15px dimension delta.
+const SVEK_CLUSTER_ORIGIN: f64 = 6.0;
 
 // ---------------------------------------------------------------------------
 // Component icon geometry (the "tab" icon at top-right of each component)
@@ -502,6 +505,16 @@ pub fn render_with_oracle(
             .map(|r| r.edge_paths.as_slice())
             .unwrap_or(&[])
     };
+    let (svek_edge_dx, svek_edge_dy) = layout_result
+        .as_ref()
+        .and_then(|result| {
+            let raw = result.cluster_positions.first()?;
+            let translated = cluster_positions
+                .iter()
+                .find(|position| position.id == raw.id)?;
+            Some((translated.x - raw.x, translated.y - raw.y))
+        })
+        .unwrap_or((MARGIN, MARGIN + title_h));
 
     // Estimate package bounding box.
     let pkg_total_w = estimate_packages_width(&diagram.packages);
@@ -1301,8 +1314,8 @@ pub fn render_with_oracle(
                 let (arrow_at_start, arrow_at_end) = no_oracle_effective_arrow_ends(conn);
                 let edge_points = component_svek_edge_points(
                     edge_points_input,
-                    MARGIN,
-                    MARGIN + title_h,
+                    svek_edge_dx,
+                    svek_edge_dy,
                     arrow_at_start,
                     arrow_at_end,
                 );
@@ -1314,8 +1327,8 @@ pub fn render_with_oracle(
 
                 let raw_edge_points = component_svek_edge_points(
                     edge_points_input,
-                    MARGIN,
-                    MARGIN + title_h,
+                    svek_edge_dx,
+                    svek_edge_dy,
                     false,
                     false,
                 );
@@ -2085,11 +2098,75 @@ fn add_package_clusters_to_layout(
             format!("{parent}.{}", pkg.name)
         };
         let parent_id = (!parent.is_empty()).then_some(parent);
-        layout.add_cluster(&qname, &pkg.label, parent_id);
+        let title_width = text_render::measure_no_underline(&pkg.label, FONT_SIZE, true);
+        let title_height = text_render::label_height(&pkg.label, FONT_SIZE);
+        let (stereotype_width, stereotype_height) = pkg
+            .stereotype
+            .as_deref()
+            .map(|stereotype| {
+                let text = format!("\u{00AB}{stereotype}\u{00BB}");
+                (
+                    text_render::measure_no_underline(&text, FONT_SIZE, false),
+                    text_render::label_height(&text, FONT_SIZE),
+                )
+            })
+            .unwrap_or((0.0, 0.0));
+        let (shape_width, shape_height) = match pkg.kind {
+            ComponentPackageKind::Node => (60.0, 5.0),
+            ComponentPackageKind::Database => (0.0, 15.0),
+            _ => (0.0, 0.0),
+        };
+        // Java `ClusterHeader` merges stereotype and title vertically,
+        // truncates their dimensions to integers, then adds the USymbol's
+        // shape supplement before `ClusterDotString.printInternal` emits its
+        // fixed-size title table.
+        layout.add_svek_cluster(
+            &qname,
+            parent_id,
+            ClusterTitleSize {
+                width: title_width.max(stereotype_width) + shape_width,
+                height: title_height + stereotype_height + shape_height,
+            },
+        );
         for component_id in &pkg.components {
             layout.add_cluster_node(&qname, component_id);
         }
         add_package_clusters_to_layout(layout, &pkg.packages, &qname);
+    }
+}
+
+#[derive(Clone, Copy)]
+struct ComponentClusterFrame {
+    origin_x: f64,
+    origin_y: f64,
+    canvas_pad_x: f64,
+    canvas_pad_y: f64,
+}
+
+fn component_cluster_frame(packages: &[ComponentPackage]) -> ComponentClusterFrame {
+    match packages.first().map(|package| package.kind) {
+        Some(ComponentPackageKind::Package | ComponentPackageKind::Folder) => {
+            ComponentClusterFrame {
+                origin_x: SVEK_CLUSTER_ORIGIN,
+                origin_y: SVEK_CLUSTER_ORIGIN,
+                canvas_pad_x: 15.0,
+                canvas_pad_y: 15.0,
+            }
+        }
+        Some(ComponentPackageKind::Node) => ComponentClusterFrame {
+            // `USymbolNode.drawNode` starts 10px inside the left envelope and
+            // appends `UEmpty(10,10)` at the lower-right corner.
+            origin_x: 16.0,
+            origin_y: SVEK_CLUSTER_ORIGIN,
+            canvas_pad_x: 25.0,
+            canvas_pad_y: 25.0,
+        },
+        _ => ComponentClusterFrame {
+            origin_x: MARGIN,
+            origin_y: MARGIN,
+            canvas_pad_x: SVEK_CANVAS_PAD,
+            canvas_pad_y: SVEK_CANVAS_PAD,
+        },
     }
 }
 
@@ -2104,14 +2181,31 @@ fn compute_positions_from_layout(
     let n_comp = diagram.components.len();
     let mut positions = Vec::with_capacity(n_comp);
     let mut iface_positions = Vec::with_capacity(diagram.interfaces.len());
+    let cluster_frame = component_cluster_frame(&diagram.packages);
+    let (layout_dx, layout_dy) = if raw_cluster_positions.is_empty() {
+        (MARGIN, MARGIN + title_h)
+    } else {
+        let min_x = raw_cluster_positions
+            .iter()
+            .map(|position| position.x)
+            .fold(f64::INFINITY, f64::min);
+        let min_y = raw_cluster_positions
+            .iter()
+            .map(|position| position.y)
+            .fold(f64::INFINITY, f64::min);
+        (
+            cluster_frame.origin_x - min_x,
+            cluster_frame.origin_y + title_h - min_y,
+        )
+    };
 
     for (i, _comp) in diagram.components.iter().enumerate() {
         let p = &node_positions[i];
-        positions.push((p.x + MARGIN, p.y + MARGIN + title_h));
+        positions.push((p.x + layout_dx, p.y + layout_dy));
     }
     for (i, _iface) in diagram.interfaces.iter().enumerate() {
         let p = &node_positions[n_comp + i];
-        iface_positions.push((p.x + MARGIN + IFACE_R, p.y + MARGIN + title_h + IFACE_R));
+        iface_positions.push((p.x + layout_dx + IFACE_R, p.y + layout_dy + IFACE_R));
     }
 
     let max_x = node_positions
@@ -2144,8 +2238,8 @@ fn compute_positions_from_layout(
         .iter()
         .map(|p| ClusterPosition {
             id: p.id.clone(),
-            x: p.x + MARGIN,
-            y: p.y + MARGIN + title_h,
+            x: p.x + layout_dx,
+            y: p.y + layout_dy,
             width: p.width,
             height: p.height,
         })
@@ -2325,8 +2419,14 @@ fn compute_no_oracle_canvas(input: NoOracleCanvas<'_>) -> (f64, f64) {
         max_y = max_y.max(input.title_h + MARGIN + input.pkg_total_h);
     }
 
-    let total_w = (max_x + SVEK_CANVAS_PAD).max(1.0);
-    let total_h = (max_y + SVEK_CANVAS_PAD).max(1.0);
+    let (canvas_pad_x, canvas_pad_y) = if input.cluster_positions.is_empty() {
+        (SVEK_CANVAS_PAD, SVEK_CANVAS_PAD)
+    } else {
+        let frame = component_cluster_frame(input.packages);
+        (frame.canvas_pad_x, frame.canvas_pad_y)
+    };
+    let total_w = (max_x + canvas_pad_x).max(1.0);
+    let total_h = (max_y + canvas_pad_y).max(1.0);
     (total_w, total_h)
 }
 
@@ -3172,22 +3272,48 @@ fn emit_layout_package_cluster(
             emit_layout_package_path(svg, pos, &pkg.label, &fill);
         }
         ComponentPackageKind::Rectangle => {
-            emit_layout_rectangle_cluster(svg, pos, &pkg.label, &fill);
+            emit_layout_rectangle_cluster(svg, pos, &pkg.label, pkg.stereotype.as_deref(), &fill);
+        }
+        ComponentPackageKind::Frame => {
+            emit_layout_frame_cluster(svg, pos, &pkg.label, pkg.stereotype.as_deref(), &fill);
+        }
+        ComponentPackageKind::Node => {
+            emit_layout_node_cluster(svg, pos, &pkg.label, pkg.stereotype.as_deref(), &fill);
         }
         _ => {
-            emit_layout_rectangle_cluster(svg, pos, &pkg.label, &fill);
+            emit_layout_rectangle_cluster(svg, pos, &pkg.label, None, &fill);
         }
     }
 
-    if let Some(stereo) = &pkg.stereotype {
+    if let Some(stereo) = &pkg.stereotype
+        && !matches!(
+            pkg.kind,
+            ComponentPackageKind::Rectangle
+                | ComponentPackageKind::Frame
+                | ComponentPackageKind::Node
+        )
+    {
         let label = format!("\u{00AB}{stereo}\u{00BB}");
+        let stereo_width = text_render::measure_no_underline(&label, FONT_SIZE, false);
+        let title_height = text_render::label_height(&pkg.label, FONT_SIZE);
+        let (x, y) = if matches!(
+            pkg.kind,
+            ComponentPackageKind::Package | ComponentPackageKind::Folder
+        ) {
+            (
+                pos.x + 4.0 + (pos.width - stereo_width) / 2.0,
+                pos.y + 2.0 + title_height + 6.0 + pm::ascent(FONT_SIZE),
+            )
+        } else {
+            (pos.x + 4.0, pos.y + pm::ascent(FONT_SIZE) + LINE_HEIGHT)
+        };
         let mut text_buf = String::new();
         text_render::emit_text(
             &mut text_buf,
             &label,
             &TextBase {
-                x: pos.x + 4.0,
-                y: pos.y + pm::ascent(FONT_SIZE) + LINE_HEIGHT,
+                x,
+                y,
                 font_size: FONT_SIZE as u32,
                 font_family: "sans-serif",
                 fill: TEXT_COLOR,
@@ -3249,7 +3375,7 @@ fn emit_layout_package_path(svg: &mut SvgBuilder, pos: &ClusterPosition, label: 
         label,
         &TextBase {
             x: x + 4.0,
-            y: y + pm::ascent(FONT_SIZE),
+            y: y + 2.0 + pm::ascent(FONT_SIZE),
             font_size: FONT_SIZE as u32,
             font_family: "sans-serif",
             fill: TEXT_COLOR,
@@ -3266,6 +3392,7 @@ fn emit_layout_rectangle_cluster(
     svg: &mut SvgBuilder,
     pos: &ClusterPosition,
     label: &str,
+    stereotype: Option<&str>,
     fill: &str,
 ) {
     svg.raw(&format!(
@@ -3275,6 +3402,30 @@ fn emit_layout_rectangle_cluster(
         fc(pos.x),
         fc(pos.y),
     ));
+    let stereotype_height = if let Some(stereotype) = stereotype {
+        let text = format!("\u{00AB}{stereotype}\u{00BB}");
+        let width = text_render::measure_no_underline(&text, FONT_SIZE, false);
+        let mut text_buf = String::new();
+        text_render::emit_text(
+            &mut text_buf,
+            &text,
+            &TextBase {
+                x: pos.x + (pos.width - width) / 2.0,
+                y: pos.y + 2.0 + pm::ascent(FONT_SIZE),
+                font_size: FONT_SIZE as u32,
+                font_family: "sans-serif",
+                fill: TEXT_COLOR,
+                bold: false,
+                italic: true,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        svg.raw(&text_buf);
+        text_render::label_height(&text, FONT_SIZE)
+    } else {
+        0.0
+    };
     let label_w = text_render::measure(label, FONT_SIZE, true);
     let mut text_buf = String::new();
     text_render::emit_text(
@@ -3282,7 +3433,7 @@ fn emit_layout_rectangle_cluster(
         label,
         &TextBase {
             x: pos.x + (pos.width - label_w) / 2.0,
-            y: pos.y + pm::ascent(FONT_SIZE),
+            y: pos.y + 2.0 + stereotype_height + pm::ascent(FONT_SIZE),
             font_size: FONT_SIZE as u32,
             font_family: "sans-serif",
             fill: TEXT_COLOR,
@@ -3293,6 +3444,177 @@ fn emit_layout_rectangle_cluster(
         },
     );
     svg.raw(&text_buf);
+}
+
+fn emit_layout_frame_cluster(
+    svg: &mut SvgBuilder,
+    pos: &ClusterPosition,
+    label: &str,
+    stereotype: Option<&str>,
+    fill: &str,
+) {
+    // `USymbolFrame.drawFrame` draws the solved cluster rectangle, then cuts
+    // the title corner with a 10px vertical/diagonal notch.
+    svg.raw(&format!(
+        r#"<rect fill="{fill}" height="{}" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1;" width="{}" x="{}" y="{}"/>"#,
+        fc(pos.height),
+        fc(pos.width),
+        fc(pos.x),
+        fc(pos.y),
+    ));
+    let title_width = text_render::measure_no_underline(label, FONT_SIZE, true);
+    let title_height = text_render::label_height(label, FONT_SIZE);
+    let notch_x = pos.x + title_width + 10.0;
+    let notch_y = pos.y + title_height + 3.0;
+    let d = format!(
+        "M{},{} L{},{} L{},{} L{},{}",
+        fc(notch_x),
+        fc(pos.y),
+        fc(notch_x),
+        fc(notch_y - 10.0),
+        fc(notch_x - 10.0),
+        fc(notch_y),
+        fc(pos.x),
+        fc(notch_y),
+    );
+    svg.raw(&format!(
+        r##"<path d="{d}" fill="none" style="stroke:#181818;stroke-width:1;"/>"##
+    ));
+
+    let mut title_buf = String::new();
+    text_render::emit_text(
+        &mut title_buf,
+        label,
+        &TextBase {
+            x: pos.x + 3.0,
+            y: pos.y + 1.0 + pm::ascent(FONT_SIZE),
+            font_size: FONT_SIZE as u32,
+            font_family: "sans-serif",
+            fill: TEXT_COLOR,
+            bold: true,
+            italic: false,
+            underline: false,
+            skip_underline: false,
+        },
+    );
+    svg.raw(&title_buf);
+
+    if let Some(stereotype) = stereotype {
+        let text = format!("\u{00AB}{stereotype}\u{00BB}");
+        let width = text_render::measure_no_underline(&text, FONT_SIZE, false);
+        let mut text_buf = String::new();
+        text_render::emit_text(
+            &mut text_buf,
+            &text,
+            &TextBase {
+                x: pos.x + 4.0 + (pos.width - width) / 2.0,
+                y: pos.y + 5.0 + title_height + pm::ascent(FONT_SIZE),
+                font_size: FONT_SIZE as u32,
+                font_family: "sans-serif",
+                fill: TEXT_COLOR,
+                bold: false,
+                italic: true,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        svg.raw(&text_buf);
+    }
+}
+
+fn emit_layout_node_cluster(
+    svg: &mut SvgBuilder,
+    pos: &ClusterPosition,
+    label: &str,
+    stereotype: Option<&str>,
+    fill: &str,
+) {
+    // `USymbolNode.drawNode` folds the top-left and bottom-right corners by
+    // 10px. `USymbolNode.asBig` then translates the title block by (-4, 11).
+    let right = pos.x + pos.width;
+    let bottom = pos.y + pos.height;
+    let fold = 10.0;
+    let points = format!(
+        "{x},{top_fold},{left_fold},{top},{right},{top},{right},{bottom_fold},{right_fold},{bottom},{x},{bottom},{x},{top_fold}",
+        x = fc(pos.x),
+        top_fold = fc(pos.y + fold),
+        left_fold = fc(pos.x + fold),
+        top = fc(pos.y),
+        right = fc(right),
+        bottom_fold = fc(bottom - fold),
+        right_fold = fc(right - fold),
+        bottom = fc(bottom),
+    );
+    svg.raw(&format!(
+        r##"<polygon fill="{fill}" points="{points}" style="stroke:#181818;stroke-width:1;"/>"##
+    ));
+    svg.raw(&format!(
+        r##"<line style="stroke:#181818;stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+        fc(right - fold),
+        fc(right),
+        fc(pos.y + fold),
+        fc(pos.y),
+    ));
+    svg.raw(&format!(
+        r##"<line style="stroke:#181818;stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+        fc(pos.x),
+        fc(right - fold),
+        fc(pos.y + fold),
+        fc(pos.y + fold),
+    ));
+    svg.raw(&format!(
+        r##"<line style="stroke:#181818;stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+        fc(right - fold),
+        fc(right - fold),
+        fc(pos.y + fold),
+        fc(bottom),
+    ));
+
+    let title_x_offset = -4.0;
+    let title_y_offset = 13.0;
+    let stereotype_height = if let Some(stereotype) = stereotype {
+        let text = format!("\u{00AB}{stereotype}\u{00BB}");
+        let width = text_render::measure_no_underline(&text, FONT_SIZE, false);
+        let mut text_buf = String::new();
+        text_render::emit_text(
+            &mut text_buf,
+            &text,
+            &TextBase {
+                x: pos.x + title_x_offset + (pos.width - width) / 2.0,
+                y: pos.y + title_y_offset + pm::ascent(FONT_SIZE),
+                font_size: FONT_SIZE as u32,
+                font_family: "sans-serif",
+                fill: TEXT_COLOR,
+                bold: false,
+                italic: true,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        svg.raw(&text_buf);
+        text_render::label_height(&text, FONT_SIZE)
+    } else {
+        0.0
+    };
+
+    let title_width = text_render::measure_no_underline(label, FONT_SIZE, true);
+    let mut title_buf = String::new();
+    text_render::emit_text(
+        &mut title_buf,
+        label,
+        &TextBase {
+            x: pos.x + title_x_offset + (pos.width - title_width) / 2.0,
+            y: pos.y + title_y_offset + stereotype_height + pm::ascent(FONT_SIZE),
+            font_size: FONT_SIZE as u32,
+            font_family: "sans-serif",
+            fill: TEXT_COLOR,
+            bold: true,
+            italic: false,
+            underline: false,
+            skip_underline: false,
+        },
+    );
+    svg.raw(&title_buf);
 }
 
 #[allow(clippy::only_used_in_recursion)]
@@ -3640,6 +3962,28 @@ mod tests {
         assert!(
             svg.contains("<!--link Southbound to Northbound-->"),
             "link metadata should follow the reversed Java Link model: {svg}"
+        );
+    }
+
+    #[test]
+    fn no_oracle_node_cluster_uses_usymbol_folded_envelope_for_renamed_label() {
+        let input = "@startuml\nnode \"Compute Boundary 53\" {\n  component \"Worker 59\" as W59\n}\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(
+            svg.contains("Compute Boundary 53") && svg.contains("Worker 59"),
+            "renamed node cluster contents should survive the generative path: {svg}"
+        );
+        assert_eq!(
+            svg.matches("<polygon ").count(),
+            1,
+            "USymbolNode should emit one folded envelope polygon: {svg}"
+        );
+        assert_eq!(
+            svg.matches("<line ").count(),
+            3,
+            "USymbolNode should emit its fold and inner corner lines: {svg}"
         );
     }
 }
