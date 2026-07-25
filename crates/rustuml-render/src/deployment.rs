@@ -3948,6 +3948,11 @@ fn deployment_cluster_frame(
                     crate::cloud_shape::generate(position.width, position.height).min_xy();
                 (SVEK_ENVELOPE_ORIGIN - min_x, SVEK_ENVELOPE_ORIGIN - min_y)
             }
+            // `USymbolRectangle.asBig` draws a full-size `URectangle`;
+            // `LimitFinder.drawRectangle` expands its top-left by one pixel.
+            DeploymentNodeKind::Rectangle | DeploymentNodeKind::Agent => {
+                (SVEK_ENVELOPE_ORIGIN + 1.0, SVEK_ENVELOPE_ORIGIN + 1.0)
+            }
             _ => (SVEK_ENVELOPE_ORIGIN, SVEK_ENVELOPE_ORIGIN),
         };
         required_dx = required_dx.max(origin_x - position.x);
@@ -3976,6 +3981,9 @@ fn deployment_cluster_frame(
                     crate::cloud_shape::generate(position.width, position.height).bounds()
                 }
                 DeploymentNodeKind::Folder => (0.0, 0.0, position.width, position.height),
+                DeploymentNodeKind::Rectangle | DeploymentNodeKind::Agent => {
+                    (-1.0, -1.0, position.width - 1.0, position.height - 1.0)
+                }
                 _ => return None,
             };
             Some((position, bounds))
@@ -4795,6 +4803,33 @@ mod tests {
         assert!(svg.contains(r#"style="width:161px;height:197px;background:#FFFFFF;""#));
         assert!(svg.contains(r#"data-qualified-name="Archive Cell 229.Bundle233""#));
         assert!(svg.contains(r#"data-qualified-name="Archive Cell 229.Jobs239""#));
+    }
+
+    #[test]
+    fn no_oracle_rectangle_cluster_uses_rectangle_painted_envelope() {
+        let source = "@startuml\n\
+            rectangle \"Rectangular Zone 263\" {\n\
+              node \"Worker 269\" as Worker269\n\
+              node \"Worker 271\" as Worker271\n\
+              node \"Worker 277\" as Worker277\n\
+              node \"Worker 281\" as Worker281\n\
+              node \"Worker 283\" as Worker283\n\
+            }\n\
+            Worker269 --> Worker271\n\
+            Worker271 --> Worker277\n\
+            Worker277 --> Worker281\n\
+            Worker281 --> Worker283\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+
+        let svg = render(&diagram, &Theme::default());
+
+        assert!(svg.contains(r#"style="width:195px;height:544px;background:#FFFFFF;""#));
+        assert!(svg.contains(r#"data-qualified-name="Rectangular Zone 263.Worker269""#));
+        assert!(svg.contains(r#"data-qualified-name="Rectangular Zone 263.Worker283""#));
     }
 
     #[test]
