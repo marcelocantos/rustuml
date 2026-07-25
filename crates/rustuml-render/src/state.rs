@@ -257,14 +257,18 @@ fn layout_node_size(
     )
 }
 
-/// Recover the Graphviz rank length carried by an explicit `-down...>` arrow.
-///
-/// The state parser deliberately keeps exact arrow syntax in `DiagramMeta::source`
-/// for downstream consumers. PlantUML's `CommandLinkStateCommon.executeArg`
-/// measures the arrow queue and `SvekEdge.appendLine` writes
-/// `minlen = Link.getLength() - 1`; for a named vertical direction, that is the
-/// number of shaft dashes after the direction token.
-fn explicit_down_minlen(diagram: &StateDiagram, transition: &Transition) -> Option<usize> {
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+enum ExplicitTransitionDirection {
+    Up,
+    Down,
+    Left,
+    Right,
+}
+
+fn transition_source_text<'a>(
+    diagram: &'a StateDiagram,
+    transition: &Transition,
+) -> Option<&'a str> {
     let source = diagram.meta.source.as_deref()?;
     let marker_offset = source
         .lines()
@@ -275,9 +279,45 @@ fn explicit_down_minlen(diagram: &StateDiagram, transition: &Transition) -> Opti
         .source_line
         .checked_sub(1)?
         .checked_add(marker_offset)?;
-    let line = source.lines().nth(source_index)?;
+    source.lines().nth(source_index)
+}
+
+/// Recover the named direction carried by an explicit state transition arrow.
+///
+/// Java provenance: `CommandLinkStateCommon.getDirection` passes
+/// `ARROW_DIRECTION` through `StringUtils.getQueueDirection`.
+fn explicit_transition_direction(
+    diagram: &StateDiagram,
+    transition: &Transition,
+) -> Option<ExplicitTransitionDirection> {
+    let lowercase = transition_source_text(diagram, transition)?.to_ascii_lowercase();
+    [
+        ("-left", ExplicitTransitionDirection::Left),
+        ("-right", ExplicitTransitionDirection::Right),
+        ("-up", ExplicitTransitionDirection::Up),
+        ("-down", ExplicitTransitionDirection::Down),
+    ]
+    .into_iter()
+    .find_map(|(token, direction)| lowercase.contains(token).then_some(direction))
+}
+
+/// Recover the Graphviz rank length carried by an explicit vertical arrow.
+///
+/// The state parser deliberately keeps exact arrow syntax in `DiagramMeta::source`
+/// for downstream consumers. PlantUML's `CommandLinkStateCommon.executeArg`
+/// measures the arrow queue and `SvekEdge.appendLine` writes
+/// `minlen = Link.getLength() - 1`; for a named vertical direction, that is the
+/// number of shaft dashes after the direction token.
+fn explicit_vertical_minlen(diagram: &StateDiagram, transition: &Transition) -> Option<usize> {
+    let direction = explicit_transition_direction(diagram, transition)?;
+    let token = match direction {
+        ExplicitTransitionDirection::Up => "-up",
+        ExplicitTransitionDirection::Down => "-down",
+        ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Right => return None,
+    };
+    let line = transition_source_text(diagram, transition)?;
     let lowercase = line.to_ascii_lowercase();
-    let after_direction = line.get(lowercase.find("-down")? + "-down".len()..)?;
+    let after_direction = line.get(lowercase.find(token)? + token.len()..)?;
     let shaft = after_direction.get(..after_direction.find('>')?)?;
     let minlen = shaft.bytes().filter(|byte| *byte == b'-').count();
     (minlen > 0).then_some(minlen)
@@ -614,6 +654,16 @@ fn allocate_state_svg_ids(diagram: &StateDiagram, state_ids: &[String]) -> State
         }
         link_ids[idx] = format!("lnk{pass_two_counter}");
         pass_two_counter += 1;
+        // `CommandLinkStateCommon.executeArg` first constructs the forward
+        // `Link`, then `Link.getInv()` constructs the stored reverse link for
+        // left/up arrows. Both consume a UID from the pass-two counter.
+        if matches!(
+            explicit_transition_direction(diagram, transition),
+            Some(ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Up)
+        ) {
+            pass_two_counter += 1;
+            link_ids[idx] = format!("lnk{}", pass_two_counter - 1);
+        }
     }
 
     for id in state_ids {
@@ -1057,10 +1107,28 @@ pub fn render_with_oracle(
         for t in &diagram.transitions {
             let from = map_id(&t.from, true);
             let to = map_id(&t.to, false);
-            if let Some(minlen) = explicit_down_minlen(diagram, t) {
-                layout.add_edge_with_minlen(&from, &to, t.label.as_deref(), minlen);
+            let direction = explicit_transition_direction(diagram, t);
+            let (layout_from, layout_to) = if matches!(
+                direction,
+                Some(ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Up)
+            ) {
+                (&to, &from)
             } else {
-                layout.add_edge(&from, &to, t.label.as_deref());
+                (&from, &to)
+            };
+            if matches!(
+                direction,
+                Some(ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Right)
+            ) {
+                // `CommandLinkStateCommon.executeArg` forces the queue length
+                // to one for horizontal directions; `SvekEdge.rankSame` then
+                // emits the rank constraint in layout-link order.
+                layout.add_same_rank(layout_from, layout_to);
+                layout.add_edge(layout_from, layout_to, t.label.as_deref());
+            } else if let Some(minlen) = explicit_vertical_minlen(diagram, t) {
+                layout.add_edge_with_minlen(layout_from, layout_to, t.label.as_deref(), minlen);
+            } else {
+                layout.add_edge(layout_from, layout_to, t.label.as_deref());
             }
         }
         layout.layout_full(std::time::Duration::from_secs(5))
@@ -2337,9 +2405,27 @@ pub fn render_with_oracle(
             let to_layout = map_id(&t.to, false);
             let from_name = if t.from == "[*]" { "*start*" } else { &t.from };
             let to_name = if t.to == "[*]" { "*end*" } else { &t.to };
+            let inverted = matches!(
+                explicit_transition_direction(diagram, t),
+                Some(ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Up)
+            );
+            let (edge_from_layout, edge_to_layout, edge_from_name, edge_to_name) = if inverted {
+                (&to_layout, &from_layout, to_name, from_name)
+            } else {
+                (&from_layout, &to_layout, from_name, to_name)
+            };
 
             // HTML comment.
-            write!(svg, "<!--link {} to {}-->", from_name, to_name).unwrap();
+            if inverted {
+                write!(
+                    svg,
+                    "<!--reverse link {} to {}-->",
+                    edge_from_name, edge_to_name
+                )
+                .unwrap();
+            } else {
+                write!(svg, "<!--link {} to {}-->", edge_from_name, edge_to_name).unwrap();
+            }
 
             let link_id = allocated_ids
                 .link_ids
@@ -2347,8 +2433,8 @@ pub fn render_with_oracle(
                 .filter(|id| !id.is_empty())
                 .cloned()
                 .unwrap_or_else(|| ids.next_link());
-            let from_ent = ent_id_of(&from_layout);
-            let to_ent = ent_id_of(&to_layout);
+            let from_ent = ent_id_of(edge_from_layout);
+            let to_ent = ent_id_of(edge_to_layout);
 
             // Use the parser-provided source line from the transition model.
             let source_line = t.source_line;
@@ -2370,8 +2456,8 @@ pub fn render_with_oracle(
             let edge_path = routed_edge_path_for_transition(
                 edge_paths,
                 &mut consumed_edge_paths,
-                &from_layout,
-                &to_layout,
+                edge_from_layout,
+                edge_to_layout,
                 graph_body_x,
                 graph_body_y,
                 &pos_of,
@@ -2394,12 +2480,22 @@ pub fn render_with_oracle(
                         )
                     })
                     .collect();
-                let arrow_tip = points[points.len() - 1];
-                let arrow_control = points
-                    .get(points.len().saturating_sub(2))
-                    .copied()
-                    .unwrap_or((from_cx, from_cy));
-                retract_dependency_arrow_path(&mut points);
+                let (arrow_control, arrow_tip) = if inverted {
+                    (points.get(1).copied().unwrap_or((to_cx, to_cy)), points[0])
+                } else {
+                    (
+                        points
+                            .get(points.len().saturating_sub(2))
+                            .copied()
+                            .unwrap_or((from_cx, from_cy)),
+                        points[points.len() - 1],
+                    )
+                };
+                if inverted {
+                    retract_dependency_arrow_path_start(&mut points);
+                } else {
+                    retract_dependency_arrow_path(&mut points);
+                }
                 let mut d = format!("M{},{}", fmt_f(points[0].0), fmt_f(points[0].1));
                 let mut i = 1;
                 while i + 2 < points.len() {
@@ -2418,7 +2514,12 @@ pub fn render_with_oracle(
                 }
                 write!(
                     svg,
-                    r#"<path d="{d}" fill="none" id="{from_name}-to-{to_name}" style="{link_stroke}"/>"#,
+                    r#"<path d="{d}" fill="none" id="{}" style="{link_stroke}"/>"#,
+                    if inverted {
+                        format!("{edge_from_name}-backto-{edge_to_name}")
+                    } else {
+                        format!("{edge_from_name}-to-{edge_to_name}")
+                    },
                 )
                 .unwrap();
 
@@ -2549,6 +2650,33 @@ fn retract_dependency_arrow_path(points: &mut [(f64, f64)]) {
     if points.len() >= 4 {
         points[adjacent].0 -= shift.0;
         points[adjacent].1 -= shift.1;
+    }
+}
+
+/// Retract the first Bezier segment for a backward dependency arrow.
+///
+/// Java provenance: `Link.getInv()` leaves the SVEK spline in reversed layout
+/// order, while `SvekEdge.getExtremitySimplier` and `DotPath.moveStartPoint`
+/// reserve the same six-pixel decoration length at the first endpoint.
+fn retract_dependency_arrow_path_start(points: &mut [(f64, f64)]) {
+    if points.len() < 2 {
+        return;
+    }
+    let dx = points[1].0 - points[0].0;
+    let dy = points[1].1 - points[0].1;
+    let length = dx.hypot(dy);
+    if length <= f64::EPSILON {
+        return;
+    }
+    let shift = (
+        dx / length * ARROW_DECORATION_LENGTH,
+        dy / length * ARROW_DECORATION_LENGTH,
+    );
+    points[0].0 += shift.0;
+    points[0].1 += shift.1;
+    if points.len() >= 4 {
+        points[1].0 += shift.0;
+        points[1].1 += shift.1;
     }
 }
 
@@ -4533,7 +4661,10 @@ mod tests {
             panic!("expected state diagrams");
         };
 
-        assert_eq!(explicit_down_minlen(long, &long.transitions[1]), Some(4));
+        assert_eq!(
+            explicit_vertical_minlen(long, &long.transitions[1]),
+            Some(4)
+        );
         let short_svg = render(short, &Theme::default());
         let long_svg = render(long, &Theme::default());
         let svg_height = |svg: &str| {
@@ -4543,6 +4674,41 @@ mod tests {
                 .unwrap()
         };
         assert!(svg_height(&long_svg) > svg_height(&short_svg));
+    }
+
+    #[test]
+    fn renamed_cardinal_arrows_preserve_layout_order_and_backward_decoration() {
+        let input = concat!(
+            "@startuml\n",
+            "[*] --> CopperRelay17\n",
+            "CopperRelay17 -left[#darkcyan]-> AzureDepot29\n",
+            "AzureDepot29 -up[#darkcyan]--> VioletHarbor41\n",
+            "VioletHarbor41 --> [*]\n",
+            "@enduml",
+        );
+        let parsed = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::State(diagram) = &parsed else {
+            panic!("expected state diagram");
+        };
+
+        assert_eq!(
+            explicit_transition_direction(diagram, &diagram.transitions[1]),
+            Some(ExplicitTransitionDirection::Left)
+        );
+        assert_eq!(
+            explicit_transition_direction(diagram, &diagram.transitions[2]),
+            Some(ExplicitTransitionDirection::Up)
+        );
+        assert_eq!(
+            explicit_vertical_minlen(diagram, &diagram.transitions[2]),
+            Some(2)
+        );
+
+        let svg = render(diagram, &Theme::default());
+        assert!(svg.contains("<!--reverse link AzureDepot29 to CopperRelay17-->"));
+        assert!(svg.contains(r#"id="AzureDepot29-backto-CopperRelay17""#));
+        assert!(svg.contains("<!--reverse link VioletHarbor41 to AzureDepot29-->"));
+        assert!(svg.contains(r#"id="VioletHarbor41-backto-AzureDepot29""#));
     }
 
     #[test]
