@@ -396,6 +396,15 @@ const LEGEND_TOP_GAP: f64 = 21.0;
 const LEGEND_BOTTOM_GAP: f64 = 23.2696;
 const LEGEND_DEFAULT_SOURCE_LINE: usize = 1;
 const TITLE_FONT_SIZE: f64 = 14.0;
+// `plantuml.skin` gives document titles 5px padding and 5px margin on every
+// side; `DiagramChromeFactory12026.addTitle` then composes that block through
+// `DecorateEntityImage.addTop`. The remaining values are the corresponding
+// `TextBlockExporter` envelope measured across renamed title/body probes.
+const TITLE_CHROME_STYLE_EXTENT: f64 = 20.0;
+const TITLE_CHROME_CANVAS_EXTRA_WIDTH: f64 = 42.0;
+const TITLE_CHROME_TEXT_INSET: f64 = 20.0;
+const TITLE_CHROME_BODY_DRAW_EXTRA_Y: f64 = 1.0;
+const TITLE_CHROME_SPINE_OFFSET: f64 = 1.0;
 const LANE_TITLE_FONT: f64 = 18.0;
 const TEXT_MIN_BOX_HEIGHT: f64 = 10.0;
 
@@ -558,6 +567,8 @@ struct Palette {
     arrow_font_family: String,
     arrow_text_color: String,
     title_font_size: f64,
+    title_font_family: String,
+    title_text_color: String,
     title_bold: bool,
     text_color: String,
     start_fill: String,
@@ -607,6 +618,8 @@ impl Palette {
             arrow_font_family: "sans-serif".into(),
             arrow_text_color: TEXT_COLOR.into(),
             title_font_size: TITLE_FONT_SIZE,
+            title_font_family: "sans-serif".into(),
+            title_text_color: TEXT_COLOR.into(),
             title_bold: true,
             text_color: TEXT_COLOR.into(),
             start_fill: START_FILL.into(),
@@ -658,7 +671,8 @@ impl Palette {
                     let family = canonical_font_family(val);
                     p.action_font_family = family.clone();
                     p.diamond_font_family = family.clone();
-                    p.arrow_font_family = family;
+                    p.arrow_font_family = family.clone();
+                    p.title_font_family = family;
                 }
                 "activityfontname" => {
                     let family = canonical_font_family(val);
@@ -758,6 +772,8 @@ impl Palette {
                         p.title_font_size = v;
                     }
                 }
+                "titlefontname" => p.title_font_family = canonical_font_family(val),
+                "titlefontcolor" => p.title_text_color = resolved,
                 "titlefontstyle" => {
                     let lower = val.to_ascii_lowercase();
                     p.title_bold = lower.contains("bold");
@@ -30718,13 +30734,19 @@ fn typed_ftile_cross_loop_right_extent(
     [nested, own].into_iter().flatten().reduce(f64::max)
 }
 
+struct FtileRender {
+    width: u32,
+    height: u32,
+    content: String,
+    spine_x: Option<f64>,
+}
+
 fn render_typed_ftile_swimlanes(
     scene: &TypedFtileScene<'_>,
     lane_names: &[String],
     palette: &Palette,
     handwritten: bool,
-    defs: &str,
-) -> Option<String> {
+) -> Option<FtileRender> {
     const MARGIN_LEAD: f64 = 16.0;
     const SWIM_NODE_EXTENT_PAD: f64 = 13.0;
     const MARGIN_TRAIL: f64 = 19.0;
@@ -30832,13 +30854,12 @@ fn render_typed_ftile_swimlanes(
         });
     let total_width = lane_width.max(cross_loop_width);
     let total_height = (content_bottom + SWIM_LEFT_DIVIDER_X).ceil() as u32;
-    Some(format_svg(
-        total_width,
-        total_height,
-        &shapes,
-        defs,
-        palette.svg_background.as_deref(),
-    ))
+    Some(FtileRender {
+        width: total_width,
+        height: total_height,
+        content: shapes,
+        spine_x: None,
+    })
 }
 
 /// Render an activity diagram to SVG.
@@ -30875,23 +30896,125 @@ fn render_ftile(
         || diagram.meta.footer.is_some()
         || diagram.meta.caption.is_some()
         || diagram.meta.legend.is_some()
-        || diagram.meta.title.is_some()
     {
         return None;
     }
+    if !ftile_title_chrome_supported(diagram) {
+        return None;
+    }
     let lane_names = typed_ftile_lane_names(diagram);
-    if lane_names.len() > 1 {
+    let body = if lane_names.len() > 1 {
         let mut lane = 0usize;
         let scene = typed_ftile_sequence(tree, &mut lane)?;
         let control_count = typed_ftile_scene_control_count(&scene)?;
         if control_count == 0 {
             return None;
         }
-        return render_typed_ftile_swimlanes(&scene, &lane_names, palette, handwritten, defs);
+        render_typed_ftile_swimlanes(&scene, &lane_names, palette, handwritten)?
+    } else {
+        // Portability gate: bail unless every tile maps to an FtileGeometry.
+        let root = sequence_geometry(tree)?;
+        render_ftile_compatible_sequence(tree, root, palette, handwritten)?
+    };
+    Some(format_ftile_render(body, diagram, palette, defs))
+}
+
+fn ftile_title_chrome_supported(diagram: &ActivityDiagram) -> bool {
+    let Some(title) = diagram.meta.title.as_deref() else {
+        return true;
+    };
+    if title.contains('\n') {
+        return false;
     }
-    // Portability gate: bail unless every tile maps to an FtileGeometry.
-    let root = sequence_geometry(tree)?;
-    render_ftile_compatible_sequence(tree, root, palette, handwritten, defs)
+    !diagram.meta.skinparams.iter().any(|skinparam| {
+        let key = skinparam.key.to_ascii_lowercase();
+        matches!(
+            key.as_str(),
+            "titlebackgroundcolor"
+                | "titlebordercolor"
+                | "titleborderthickness"
+                | "titleborderroundcorner"
+                | "titlepadding"
+                | "titlemargin"
+        ) || (key == "titlefontstyle" && skinparam.value.to_ascii_lowercase().contains("italic"))
+    })
+}
+
+fn format_ftile_render(
+    body: FtileRender,
+    diagram: &ActivityDiagram,
+    palette: &Palette,
+    defs: &str,
+) -> String {
+    let Some(title) = diagram.meta.title.as_deref() else {
+        return format_svg(
+            body.width,
+            body.height,
+            &body.content,
+            defs,
+            palette.svg_background.as_deref(),
+        );
+    };
+
+    // `DiagramChromeFactory12026.addTitle` creates a bordered title block
+    // (default 5px padding + 5px margin) and
+    // `DecorateEntityImage.addTop` centers the completed activity body below
+    // it. The outer activity image contributes the remaining 11px horizontal
+    // envelope on either side of a title-driven canvas.
+    let title_width = text_render::measure_with_family(
+        title,
+        palette.title_font_size,
+        palette.title_bold,
+        &palette.title_font_family,
+    );
+    let title_height = pm::text_height(palette.title_font_size) + TITLE_CHROME_STYLE_EXTENT;
+    let title_canvas_width = title_width + TITLE_CHROME_CANVAS_EXTRA_WIDTH;
+    let title_drives_width = title_canvas_width >= body.width as f64;
+    let width = body.width.max(title_canvas_width as u32);
+    let height = (body.height as f64 + title_height + TITLE_CHROME_BODY_DRAW_EXTRA_Y) as u32;
+    let title_x = if title_drives_width {
+        TITLE_CHROME_TEXT_INSET
+    } else {
+        body.spine_x
+            .map(|spine_x| spine_x + TITLE_CHROME_SPINE_OFFSET - title_width / 2.0)
+            .unwrap_or((width as f64 - title_width) / 2.0)
+    };
+    let body_dx = if title_drives_width {
+        let target_spine_x = title_x + title_width / 2.0 - TITLE_CHROME_SPINE_OFFSET;
+        body.spine_x
+            .map(|spine_x| target_spine_x - spine_x)
+            .unwrap_or((width as f64 - body.width as f64) / 2.0)
+    } else {
+        0.0
+    };
+    let shifted_body = crate::compress::shift_y(
+        &crate::compress::shift_x(&body.content, body_dx),
+        title_height + TITLE_CHROME_BODY_DRAW_EXTRA_Y,
+    );
+    let title_y = TITLE_CHROME_TEXT_INSET + pm::ascent(palette.title_font_size);
+    let source_line = diagram.meta.title_line.unwrap_or(1);
+    let font_weight = if palette.title_bold {
+        r#" font-weight="700""#
+    } else {
+        ""
+    };
+    let content = format!(
+        r#"<g class="title" data-source-line="{source_line}"><text fill="{}" font-family="{}" font-size="{}"{font_weight} lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text></g>{shifted_body}"#,
+        palette.title_text_color,
+        palette.title_font_family,
+        palette.title_font_size as u32,
+        f(title_width),
+        f(title_x),
+        f(title_y),
+        svg_text_escape(title),
+    );
+    format_svg(
+        width,
+        height,
+        &content,
+        defs,
+        palette.svg_background.as_deref(),
+    )
 }
 
 fn render_ftile_compatible_sequence(
@@ -30899,8 +31022,7 @@ fn render_ftile_compatible_sequence(
     root: ftile::FtileGeometry,
     palette: &Palette,
     handwritten: bool,
-    defs: &str,
-) -> Option<String> {
+) -> Option<FtileRender> {
     const MARGIN_LEAD: f64 = 16.0;
     const MARGIN_TRAIL: f64 = 19.0;
     const FTILE_BRIDGE_EPSILON: f64 = 1.0 / 1000.0;
@@ -30975,14 +31097,13 @@ fn render_ftile_compatible_sequence(
     content.push_str(&connectors_c);
     let svg_w = x_tf.transform(svg_w as f64).round() as u32;
     let svg_h = y_tf.transform(svg_h as f64).round() as u32;
-    format_svg(
-        svg_w,
-        svg_h,
-        &content,
-        defs,
-        palette.svg_background.as_deref(),
-    )
-    .into()
+    let spine_x = x_tf.transform(cx);
+    Some(FtileRender {
+        width: svg_w,
+        height: svg_h,
+        content,
+        spine_x: Some(spine_x),
+    })
 }
 
 fn probe_ftile_layouts(nodes: &[LayoutNode]) -> Option<()> {
@@ -31169,7 +31290,18 @@ fn render_inner(
     let mut tree = build_tree(&diagram.steps, &palette);
     mark_nested_partitions(&mut tree, false);
 
-    // Prepend title if present.
+    // incr-4 ftile-geometry render path (dual-path). When the whole tree is
+    // geometry-portable, the diagram can be laid out entirely from the faithful
+    // FtileGeometry port instead of the legacy reverse-engineered extent model.
+    // Returns None (falling through to the legacy renderer) until the emitter
+    // port lands — so this is currently a safe no-op.
+    if let Some(svg) = render_ftile(&tree, diagram, &palette, is_handwritten, defs) {
+        return svg;
+    }
+
+    // The legacy renderer models title chrome as a synthetic layout node. The
+    // typed FTile path above keeps it outside the flow tree and composes it
+    // afterward, matching `DiagramChromeFactory12026.addTitle`.
     if let Some(ref title) = diagram.meta.title {
         tree.insert(
             0,
@@ -31180,15 +31312,6 @@ fn render_inner(
                 source_line: diagram.meta.title_line.unwrap_or(1),
             },
         );
-    }
-
-    // incr-4 ftile-geometry render path (dual-path). When the whole tree is
-    // geometry-portable, the diagram can be laid out entirely from the faithful
-    // FtileGeometry port instead of the legacy reverse-engineered extent model.
-    // Returns None (falling through to the legacy renderer) until the emitter
-    // port lands — so this is currently a safe no-op.
-    if let Some(svg) = render_ftile(&tree, diagram, &palette, is_handwritten, defs) {
-        return svg;
     }
 
     if oracle.is_none()
@@ -31797,6 +31920,45 @@ mod tests {
         assert!(svg.contains("Renamed T14 bridge"));
         assert!(svg.contains("Not in golden corpus"));
         assert!(svg.contains("data-diagram-type=\"ACTIVITY\""));
+    }
+
+    #[test]
+    fn ftile_title_chrome_translates_fresh_body_after_layout() {
+        let plain_input =
+            "@startuml\nstart\n:Fresh body probe;\n:Renamed downstream step;\nstop\n@enduml";
+        let titled_input = "@startuml\ntitle Fresh Post Layout Chrome Verification\nstart\n:Fresh body probe;\n:Renamed downstream step;\nstop\n@enduml";
+        let plain = crate::render_svg(&rustuml_parser::parse::parse(plain_input).unwrap());
+        let titled = crate::render_svg(&rustuml_parser::parse::parse(titled_input).unwrap());
+        fn element_before<'a>(svg: &'a str, label: &str, tag: &str) -> &'a str {
+            let label_at = svg.find(&format!(">{label}</text>")).unwrap();
+            let start = svg[..label_at].rfind(tag).unwrap();
+            let end = start + svg[start..].find("/>").unwrap() + 2;
+            &svg[start..end]
+        }
+        let plain_action = element_before(&plain, "Fresh body probe", "<rect");
+        let titled_action = element_before(&titled, "Fresh body probe", "<rect");
+        let title_text = element_before(&titled, "Fresh Post Layout Chrome Verification", "<text");
+        let plain_y = prim_attr(plain_action, " y=\"").unwrap();
+        let titled_y = prim_attr(titled_action, " y=\"").unwrap();
+        let titled_center = prim_attr(titled_action, " x=\"").unwrap()
+            + prim_attr(titled_action, " width=\"").unwrap() / 2.0;
+        let title_center = prim_attr(title_text, " x=\"").unwrap()
+            + prim_attr(title_text, " textLength=\"").unwrap() / 2.0;
+
+        assert!(
+            (titled_y
+                - plain_y
+                - (pm::text_height(TITLE_FONT_SIZE)
+                    + TITLE_CHROME_STYLE_EXTENT
+                    + TITLE_CHROME_BODY_DRAW_EXTRA_Y))
+                .abs()
+                < 1.0 / 1000.0,
+            "title chrome must translate the completed body by its measured height"
+        );
+        assert!(
+            (titled_center - (title_center - TITLE_CHROME_SPINE_OFFSET)).abs() < 1.0 / 1000.0,
+            "a title-driven canvas keeps the FTile spine one pixel left of the title center"
+        );
     }
 
     #[test]
