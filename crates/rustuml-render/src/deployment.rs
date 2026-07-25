@@ -3711,7 +3711,13 @@ fn deployment_node_dim(
     let line_count = node.label.lines().count().max(1) + usize::from(node.stereotype.is_some());
     let (text_x_pad, top_pad, _) = entity_text_geom(node.kind, 0.0, &node.label);
     let width = match node.kind {
-        DeploymentNodeKind::Node | DeploymentNodeKind::Artifact | DeploymentNodeKind::Frame => {
+        DeploymentNodeKind::Node
+        | DeploymentNodeKind::Artifact
+        | DeploymentNodeKind::Frame
+        | DeploymentNodeKind::Component => {
+            // `USymbolComponent2.getMargin()` uses 15px left and 25px
+            // right. The shared text pad accounts for 15px on each side;
+            // the final ten pixels preserve the asymmetric icon reservation.
             label_width.max(stereo_width) + 2.0 * text_x_pad + 10.0
         }
         // `USymbolSimpleAbstract` centres the fixed symbol above the text.
@@ -4780,6 +4786,30 @@ mod tests {
         let (text_x_pad, _, _) = entity_text_geom(node.kind, 0.0, &node.label);
 
         assert_eq!(dim.width, stereo_width + 2.0 * text_x_pad + 12.0);
+    }
+
+    #[test]
+    fn no_oracle_component_measurement_reserves_usymbol_icon_margin() {
+        let source = "@startuml\n\
+            node \"Build Cell 193\" {\n\
+              component \"Compiler 197\" as Compiler197\n\
+            }\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+        let component = diagram
+            .nodes
+            .iter()
+            .find(|node| node.kind == DeploymentNodeKind::Component)
+            .unwrap();
+        let dim = deployment_node_dim(component, &diagram.meta.sprites);
+
+        assert_eq!(
+            dim.width,
+            text_render::measure(&component.label, FONT_SIZE, false) + 40.0
+        );
     }
 
     #[test]
