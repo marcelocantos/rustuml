@@ -8,7 +8,7 @@
 
 use std::fmt::Write;
 
-use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph, NodePosition};
+use rustuml_layout::graph::{Direction, EdgeLabelSize, EdgePath, LayoutGraph, NodePosition};
 use rustuml_parser::diagram::state::*;
 
 use crate::handwritten::has_deprecated_skinparam as has_deprecated_handwritten_skinparam;
@@ -1149,20 +1149,33 @@ pub fn render_with_oracle(
             } else {
                 (&from, &to)
             };
-            if matches!(
+            let horizontal = matches!(
                 direction,
                 Some(ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Right)
-            ) {
+            );
+            if horizontal {
                 // `CommandLinkStateCommon.executeArg` forces the queue length
                 // to one for horizontal directions; `SvekEdge.rankSame` then
                 // emits the rank constraint in layout-link order.
                 layout.add_same_rank(layout_from, layout_to);
-                layout.add_edge(layout_from, layout_to, t.label.as_deref());
-            } else if let Some(minlen) = explicit_vertical_minlen(diagram, t) {
-                layout.add_edge_with_minlen(layout_from, layout_to, t.label.as_deref(), minlen);
-            } else {
-                layout.add_edge(layout_from, layout_to, t.label.as_deref());
             }
+            let label_size = t.label.as_deref().map(|label| EdgeLabelSize {
+                // `SvekEdge.addVisibilityModifier` gives ordinary center
+                // labels one pixel of margin on every side before
+                // `appendLine` emits the fixed HTML table.
+                width: text_render::measure(label, LINK_FONT_SIZE, false) + 2.0,
+                height: (text_render::label_height(label, LINK_FONT_SIZE) + 2.0).floor(),
+            });
+            layout.add_edge_with_label_sizes_and_minlen(
+                layout_from,
+                layout_to,
+                label_size,
+                None,
+                None,
+                (!horizontal)
+                    .then(|| explicit_vertical_minlen(diagram, t))
+                    .flatten(),
+            );
         }
         layout.layout_full(std::time::Duration::from_secs(5))
     };
@@ -1267,6 +1280,17 @@ pub fn render_with_oracle(
             positions.push((id.clone(), x, y, w, h));
             max_x = max_x.max(layout_x + w);
             max_y = max_y.max(layout_y + h);
+        }
+        if diagram
+            .transitions
+            .iter()
+            .any(|transition| transition.label.is_some())
+            && let Some(result) = layout_result.as_ref()
+        {
+            // Graphviz's solved envelope includes the fixed HTML label boxes
+            // that `SvekEdge.appendLine` contributes to the SVEK image.
+            max_x = max_x.max(result.width);
+            max_y = max_y.max(result.height);
         }
         let tw = graph_body_x + max_x + right_note_space + SVEK_TRAILING_PAD;
         let th = graph_body_y + max_y + SVEK_TRAILING_PAD;
@@ -2564,17 +2588,29 @@ pub fn render_with_oracle(
 
                 // Label.
                 if let Some(label) = &t.label {
-                    let first = points.first().unwrap();
-                    let last = points.last().unwrap();
-                    let mid_x = (first.0 + last.0) / 2.0;
-                    let mid_y = (first.1 + last.1) / 2.0;
+                    let (label_x, label_y) = ep
+                        .label
+                        .map(|position| {
+                            (
+                                position.x + graph_body_x + 1.0,
+                                position.y
+                                    + graph_body_y
+                                    + 1.0
+                                    + text_render::label_ascent(label, LINK_FONT_SIZE),
+                            )
+                        })
+                        .unwrap_or_else(|| {
+                            let first = points.first().unwrap();
+                            let last = points.last().unwrap();
+                            ((first.0 + last.0) / 2.0 + 1.0, (first.1 + last.1) / 2.0)
+                        });
                     let mut text_buf = String::new();
                     text_render::emit_text(
                         &mut text_buf,
                         label,
                         &TextBase {
-                            x: mid_x + 1.0,
-                            y: mid_y,
+                            x: label_x,
+                            y: label_y,
                             font_size: LINK_FONT_SIZE as u32,
                             font_family: "sans-serif",
                             fill: TEXT_COLOR,
@@ -4791,6 +4827,25 @@ mod tests {
         assert!(svg.contains(">phase alpha 709</text>"));
         assert!(svg.contains(">phase beta 719</text>"));
         assert!(svg.contains(">phase gamma 727</text>"));
+    }
+
+    #[test]
+    fn renamed_transition_label_uses_svek_solved_box() {
+        let input = concat!(
+            "@startuml\n",
+            "[*] --> Signal701\n",
+            "Signal701 --> Archive709 : renamed event 719 [gate 727] / commit 733\n",
+            "Archive709 --> [*]\n",
+            "@enduml\n",
+        );
+        let parsed = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::State(diagram) = &parsed else {
+            panic!("expected state diagram");
+        };
+
+        let svg = render(diagram, &Theme::default());
+        assert!(svg.contains(r#"width="354px""#));
+        assert!(svg.contains(">renamed event 719 [gate 727] / commit 733</text>"));
     }
 
     #[test]
