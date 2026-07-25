@@ -78,6 +78,12 @@ const V_GAP: f64 = 60.0;
 const SVEK_ORIGIN_X: f64 = 7.0;
 const SVEK_ORIGIN_Y: f64 = 6.0;
 const SVEK_TRAILING_PAD: f64 = 14.0;
+/// Extra width after the right edge of a painted autonomous edge label.
+///
+/// Java provenance: `SvekResult.calculateDimension` takes the painted
+/// `LimitFinder` span and adds 15px; the translated graph's painted minimum is
+/// x=5, so a rightmost text edge contributes `right - 5 + 15`.
+const AUTONOMOUS_LABEL_TRAILING: f64 = 10.0;
 /// Rank separation used by the autonomous image builder inside a composite.
 ///
 /// Java provenance: `DotStringFactory.getMinRankSep()` falls back to dot's
@@ -1167,6 +1173,38 @@ fn build_autonomous_composite<'a>(
     // pixels; the vertical ellipse bound needs no corresponding allowance.
     inner.width = inner.width - inner.origin_x + 2.0;
     inner.height -= inner.origin_y;
+    for transition_index in &inner.transition_indices {
+        let transition = &diagram.transitions[*transition_index];
+        let Some(label) = transition.label.as_deref() else {
+            continue;
+        };
+        let mut from = state_endpoint_layout_id(&transition.from, true);
+        let mut to = state_endpoint_layout_id(&transition.to, false);
+        if matches!(
+            explicit_transition_direction(diagram, transition),
+            Some(ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Up)
+        ) {
+            std::mem::swap(&mut from, &mut to);
+        }
+        let Some(label_position) = inner
+            .edge_paths
+            .iter()
+            .find(|edge| edge.from == from && edge.to == to)
+            .and_then(|edge| edge.label)
+        else {
+            continue;
+        };
+        let label_right = quantize_svek_coord(label_position.x)
+            + inner.origin_x
+            + 1.0
+            + text_render::measure_with_family(
+                label,
+                arrow_font.size as f64,
+                arrow_font.bold,
+                &arrow_font.family,
+            );
+        inner.width = inner.width.max(label_right + AUTONOMOUS_LABEL_TRAILING);
+    }
     let title_height = crate::plantuml_metrics::text_height(STATE_FONT_SIZE);
     let attribute_height =
         composite.descriptions.len() as f64 * crate::plantuml_metrics::text_height(DESC_FONT_SIZE);
@@ -5514,6 +5552,28 @@ mod tests {
         assert!(svg.contains(">second renamed field</text>"));
         assert!(svg.contains(r#"data-qualified-name="HarborMode.CopperReady""#));
         assert!(svg.contains(r#"data-qualified-name="HarborMode.VioletRunning""#));
+    }
+
+    #[test]
+    fn renamed_composite_edge_labels_expand_the_painted_bound() {
+        let input = concat!(
+            "@startuml\n",
+            "state HarborMode {\n",
+            "  [*] --> CopperReady\n",
+            "  CopperReady --> VioletRunning : unusually wide renamed handoff\n",
+            "  VioletRunning --> AmberDone : final renamed step\n",
+            "  AmberDone --> [*]\n",
+            "}\n",
+            "[*] --> HarborMode\n",
+            "HarborMode --> [*]\n",
+            "@enduml\n",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(r#"width="323px""#), "{svg}");
+        assert!(svg.contains(">unusually wide renamed handoff</text>"));
+        assert!(svg.contains(">final renamed step</text>"));
     }
 
     #[test]
