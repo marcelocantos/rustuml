@@ -939,7 +939,24 @@ fn calc_entity_dims(
     // Hidden compartments contribute nothing to the per-compartment count.
     let eff_field_count = if hide.fields { 0 } else { field_count };
     let eff_method_count = if hide.methods { 0 } else { method_count };
-    let mut width = name_total.max(stereo_width).max(max_member_width);
+    let separator_title_width = entity
+        .members
+        .iter()
+        .filter(|member| member.kind == MemberKind::Separator)
+        .filter(|member| !member.display_text.is_empty())
+        .map(|member| {
+            text_render::measure_no_underline_with_family(
+                &member.display_text,
+                font.attr_font_size.unwrap_or(FONT_SIZE as u32) as f64,
+                false,
+                &font.family,
+            ) + 8.0
+        })
+        .fold(0.0_f64, f64::max);
+    let mut width = name_total
+        .max(stereo_width)
+        .max(max_member_width)
+        .max(separator_title_width);
 
     // Generic type-parameter box widening: when `class Foo<T extends Bar>` has a
     // wide `<...>`, the dashed box at the top-right corner forces the entity
@@ -971,7 +988,9 @@ fn calc_entity_dims(
     let field_padding = visible_field_blocks as f64 * font.text_padding * 2.0;
     let method_padding = visible_method_blocks as f64 * font.text_padding * 2.0;
 
-    let height = if hide.fields && hide.methods {
+    let height = if uses_document_order_body(entity, hide) {
+        header_h + document_order_body_height(entity, font)
+    } else if hide.fields && hide.methods {
         // Both compartments hidden — header only, no body or separators.
         header_h
     } else if entity.kind == EntityKind::Object {
@@ -1029,6 +1048,69 @@ fn calc_entity_dims(
         source_line,
         hide,
     }
+}
+
+fn uses_document_order_body(entity: &ClassEntity, hide: HideFlags) -> bool {
+    if hide.fields || hide.methods {
+        return false;
+    }
+    let separator_count = entity
+        .members
+        .iter()
+        .filter(|member| member.kind == MemberKind::Separator)
+        .count();
+    separator_count >= 2
+        || (entity.kind == EntityKind::Enum
+            && separator_count > 0
+            && has_field_after_method(entity))
+}
+
+fn member_block_height(member: &Member, font: &ClassFontOverrides) -> f64 {
+    member_display_line_count(member, font.monospace_member_spaces()) as f64 * MEMBER_SPACING
+        + font.text_padding * 2.0
+}
+
+fn decorated_body_block_height(
+    content_height: f64,
+    separator: Option<&Member>,
+    font_size: f64,
+    font_family: &str,
+) -> f64 {
+    let Some(separator) = separator else {
+        return content_height + COMPARTMENT_PAD;
+    };
+    if separator.display_text.is_empty() {
+        return content_height + COMPARTMENT_PAD;
+    }
+
+    // Java `BodyEnhancedAbstract.decorate` gives a titled block half the
+    // title height above its content and four pixels below, wraps that in
+    // `TextBlockLineBefore`, then adds another half-title margin above.
+    // `TextBlockLineBefore.calculateDimension` also clamps an empty block to
+    // at least the title height.
+    let title_height =
+        text_render::label_height_with_family(&separator.display_text, font_size, font_family);
+    let half_title = title_height / 2.0;
+    (content_height + half_title + 4.0).max(title_height) + half_title
+}
+
+fn document_order_body_height(entity: &ClassEntity, font: &ClassFontOverrides) -> f64 {
+    let font_size = font.attr_font_size.unwrap_or(FONT_SIZE as u32) as f64;
+    let mut height = 0.0;
+    let mut content_height = 0.0;
+    let mut separator: Option<&Member> = None;
+
+    for member in &entity.members {
+        if member.kind == MemberKind::Separator {
+            height +=
+                decorated_body_block_height(content_height, separator, font_size, &font.family);
+            separator = Some(member);
+            content_height = 0.0;
+        } else {
+            content_height += member_block_height(member, font);
+        }
+    }
+    height + decorated_body_block_height(content_height, separator, font_size, &font.family)
 }
 
 /// Ports PlantUML's class-header height composition:
@@ -5621,14 +5703,7 @@ fn render_entity_content(
     // Re-declared enums can append more constants after a method block. Java
     // keeps those later constants in source order after the methods; the normal
     // class-style field/method split would pull them up before the methods.
-    let block_separator_count = entity
-        .members
-        .iter()
-        .filter(|m| m.kind == MemberKind::Separator)
-        .count();
-    let document_order_body = !any_compartment_hidden
-        && (block_separator_count >= 2
-            || (is_enum_entity && block_separator_count > 0 && has_field_after_method(entity)));
+    let document_order_body = uses_document_order_body(entity, dim.hide);
 
     if header_only {
         // Nothing to emit after the header content.
@@ -5649,19 +5724,36 @@ fn render_entity_content(
             svg.push_str("</a>");
             header_anchor_closed = true;
         }
-        render_body_blocks_replay(
-            svg,
-            entity,
-            x,
-            attr_font,
-            member_fill,
-            text_padding,
-            member_text_offset,
-            oracle_text_y,
-            oracle_vis_y,
-            oracle_rect.map(|r| r.lines.as_slice()).unwrap_or(&[]),
-            text_header_count,
-        );
+        let oracle_lines = oracle_rect.map(|r| r.lines.as_slice()).unwrap_or(&[]);
+        if oracle_lines.is_empty() {
+            render_body_blocks_generated(
+                svg,
+                entity,
+                x,
+                attr_font,
+                member_fill,
+                text_padding,
+                member_text_offset,
+                header_sep_y,
+                sep_x1,
+                sep_x2,
+                sep_style,
+            );
+        } else {
+            render_body_blocks_replay(
+                svg,
+                entity,
+                x,
+                attr_font,
+                member_fill,
+                text_padding,
+                member_text_offset,
+                oracle_text_y,
+                oracle_vis_y,
+                oracle_lines,
+                text_header_count,
+            );
+        }
     } else if collapsing_hide_one_section {
         let visible_members: Vec<&Member> = entity
             .members
@@ -6476,6 +6568,235 @@ fn has_field_after_method(entity: &ClassEntity) -> bool {
         }
     }
     false
+}
+
+/// Render the `BodyEnhanced1` block stack from parsed members alone.
+///
+/// Java provenance: `BodyEnhanced1.getArea` splits the body at block
+/// separators, `BodyEnhancedAbstract.decorate` applies the vertical margins,
+/// and `TextBlockLineBefore.drawU` paints each full or captioned rule.
+#[allow(clippy::too_many_arguments)]
+fn render_body_blocks_generated(
+    svg: &mut String,
+    entity: &ClassEntity,
+    x: f64,
+    attr_font: AttrFont,
+    member_fill: &str,
+    text_pad: f64,
+    member_text_offset: f64,
+    header_sep_y: f64,
+    sep_x1: f64,
+    sep_x2: f64,
+    base_sep_style: &str,
+) {
+    struct Block<'a> {
+        separator: Option<&'a Member>,
+        members: Vec<&'a Member>,
+    }
+
+    let mut blocks = vec![Block {
+        separator: None,
+        members: Vec::new(),
+    }];
+    for member in &entity.members {
+        if member.kind == MemberKind::Separator {
+            blocks.push(Block {
+                separator: Some(member),
+                members: Vec::new(),
+            });
+        } else {
+            blocks.last_mut().unwrap().members.push(member);
+        }
+    }
+
+    let stroke = style_stroke_color(base_sep_style).unwrap_or(BORDER_COLOR);
+    let font_size = attr_font.size as f64;
+    let mut block_top = header_sep_y;
+
+    for (block_index, block) in blocks.iter().enumerate() {
+        let content_height = block
+            .members
+            .iter()
+            .map(|member| {
+                member_display_line_count(member, attr_font.monospace_spaces) as f64
+                    * MEMBER_SPACING
+                    + text_pad * 2.0
+            })
+            .sum();
+        let narrow_default = !block
+            .members
+            .iter()
+            .any(|member| visibility_modifier(member).is_some());
+
+        if block_index == 0 {
+            // Class bodies use `lineFirst = true`. The caller already emitted
+            // that leading `_` rule as the header/body divider.
+            emit_generated_block_members(
+                svg,
+                &block.members,
+                x,
+                block_top + FIRST_MEMBER_OFFSET + text_pad,
+                narrow_default,
+                attr_font,
+                text_pad,
+                member_text_offset,
+            );
+        } else if let Some(separator) = block.separator {
+            let symbol = separator.return_type.as_deref().unwrap_or("--");
+            let style = match symbol {
+                "--" | "==" => format!("stroke:{stroke};stroke-width:1;"),
+                ".." => format!("stroke:{stroke};stroke-width:1;stroke-dasharray:1,2;"),
+                _ => base_sep_style.to_string(),
+            };
+            let line_count = if symbol == "==" { 2 } else { 1 };
+
+            if separator.display_text.is_empty() {
+                for line_index in 0..line_count {
+                    let line_y = block_top + line_index as f64 * 2.0;
+                    write!(
+                        svg,
+                        r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                        style,
+                        fmt4(sep_x1),
+                        fmt4(sep_x2),
+                        fmt_tl(line_y),
+                        fmt_tl(line_y),
+                    )
+                    .unwrap();
+                }
+                emit_generated_block_members(
+                    svg,
+                    &block.members,
+                    x,
+                    block_top + FIRST_MEMBER_OFFSET + text_pad,
+                    narrow_default,
+                    attr_font,
+                    text_pad,
+                    member_text_offset,
+                );
+            } else {
+                let title_height = text_render::label_height_with_family(
+                    &separator.display_text,
+                    font_size,
+                    attr_font.family,
+                );
+                let half_title = title_height / 2.0;
+                let line_y = block_top + half_title;
+                emit_generated_block_members(
+                    svg,
+                    &block.members,
+                    x,
+                    block_top + title_height + FIRST_MEMBER_OFFSET - 4.0 + text_pad,
+                    narrow_default,
+                    attr_font,
+                    text_pad,
+                    member_text_offset,
+                );
+
+                let title_width = text_render::measure_no_underline_with_family(
+                    &separator.display_text,
+                    font_size,
+                    false,
+                    attr_font.family,
+                );
+                let title_x = round_4dp(sep_x1 + (sep_x2 - sep_x1 - title_width) / 2.0);
+                let title_right = round_4dp(title_x + title_width);
+                for line_index in 0..line_count {
+                    let y = line_y + line_index as f64 * 2.0;
+                    write!(
+                        svg,
+                        r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                        style,
+                        fmt4(sep_x1),
+                        fmt4(title_x),
+                        fmt_tl(y),
+                        fmt_tl(y),
+                    )
+                    .unwrap();
+                }
+                // `UHorizontalLine.drawTitleInternal` translates the title to
+                // `lineY - titleHeight / 2 - 0.5` before drawing it.
+                let title_baseline = line_y
+                    + text_render::label_ascent_with_family(
+                        &separator.display_text,
+                        font_size,
+                        attr_font.family,
+                    )
+                    - half_title
+                    - 0.5;
+                let mut title_buf = String::new();
+                text_render::emit_text(
+                    &mut title_buf,
+                    &separator.display_text,
+                    &TextBase {
+                        x: title_x,
+                        y: title_baseline,
+                        font_size: attr_font.size,
+                        font_family: attr_font.family,
+                        fill: member_fill,
+                        bold: attr_font.bold,
+                        italic: attr_font.italic,
+                        underline: false,
+                        skip_underline: true,
+                    },
+                );
+                svg.push_str(&title_buf);
+                for line_index in 0..line_count {
+                    let y = line_y + line_index as f64 * 2.0;
+                    write!(
+                        svg,
+                        r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                        style,
+                        fmt4(title_right),
+                        fmt4(sep_x2),
+                        fmt_tl(y),
+                        fmt_tl(y),
+                    )
+                    .unwrap();
+                }
+            }
+        }
+
+        block_top += decorated_body_block_height(
+            content_height,
+            block.separator,
+            font_size,
+            attr_font.family,
+        );
+    }
+}
+
+#[allow(clippy::too_many_arguments)]
+fn emit_generated_block_members(
+    svg: &mut String,
+    members: &[&Member],
+    x: f64,
+    mut member_y: f64,
+    narrow_default: bool,
+    attr_font: AttrFont,
+    text_pad: f64,
+    member_text_offset: f64,
+) {
+    for member in members {
+        render_member_line(
+            svg,
+            member,
+            x,
+            member_y,
+            None,
+            None,
+            None,
+            narrow_default,
+            attr_font,
+            None,
+            None,
+            text_pad,
+            member_text_offset,
+        );
+        member_y += member_display_line_count(member, attr_font.monospace_spaces) as f64
+            * MEMBER_SPACING
+            + text_pad * 2.0;
+    }
 }
 
 #[allow(clippy::too_many_arguments)]
@@ -9533,6 +9854,34 @@ mod tests {
         let vertical = dimensions(&crate::render_svg(&top_to_bottom));
         assert!(horizontal.0 > horizontal.1, "{horizontal:?}");
         assert!(vertical.1 > vertical.0, "{vertical:?}");
+    }
+
+    #[test]
+    fn renamed_five_block_body_generates_separator_geometry() {
+        let input = "@startuml\n\
+                     class FreshLedger2843 {\n\
+                       +String seedValue\n\
+                       --\n\
+                       -int firstRenamedValue\n\
+                       +int secondRenamedValue\n\
+                       .. Fresh dotted review ..\n\
+                       +String reviewedValue\n\
+                       == Deliberately wider renamed approval panel ==\n\
+                       __ Final renamed panel __\n\
+                       -void closeFreshLedger()\n\
+                     }\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert_eq!(svg.matches("<line style=").count(), 10, "{svg}");
+        assert_eq!(svg.matches("stroke-dasharray:1,2;").count(), 2, "{svg}");
+        assert!(svg.contains(">Fresh dotted review</text>"), "{svg}");
+        assert!(
+            svg.contains(">Deliberately wider renamed approval panel</text>"),
+            "{svg}"
+        );
+        assert!(svg.contains(">Final renamed panel</text>"), "{svg}");
     }
 
     #[test]
