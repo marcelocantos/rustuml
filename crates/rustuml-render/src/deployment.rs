@@ -3731,6 +3731,9 @@ fn deployment_node_dim(
         // `USymbolFolder.asSmall` keeps a hidden 40x15 title box when
         // `showTitle` is false, then adds `Margin(10, 20, 13, 10)`.
         DeploymentNodeKind::Folder => 40.0_f64.max(label_width).max(stereo_width) + 30.0,
+        // Package names flow through `BodyEnhanced1` (6px on each side) as
+        // the folder title, then `USymbolFolder.asSmall` adds 10px/20px.
+        DeploymentNodeKind::Package => (label_width + 12.0).max(stereo_width) + 30.0,
         // `USymbolQueue.asSmall` adds `Margin(5, 15, 5, 5)` around the
         // vertically merged stereotype and label.
         DeploymentNodeKind::Queue => label_width.max(stereo_width) + 20.0,
@@ -3753,6 +3756,7 @@ fn deployment_node_dim(
         // 10px top lip, 10px lower cap, and the title spacing between them.
         DeploymentNodeKind::Database => line_count as f64 * TEXT_LINE_H + 29.0,
         DeploymentNodeKind::Folder => 15.0 + line_count as f64 * TEXT_LINE_H + 13.0 + 10.0,
+        DeploymentNodeKind::Package => line_count as f64 * TEXT_LINE_H + 13.0 + 10.0,
         DeploymentNodeKind::Queue => line_count as f64 * TEXT_LINE_H + 10.0,
         _ => {
             top_pad
