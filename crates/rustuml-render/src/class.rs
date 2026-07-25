@@ -2296,22 +2296,23 @@ fn innermost_entity_packages(
 }
 
 fn effective_package_kind(pkg: &Package) -> PackageKind {
-    if matches!(pkg.kind, PackageKind::Package | PackageKind::Namespace)
-        && pkg
-            .stereotypes
-            .iter()
-            .any(|stereotype| stereotype.eq_ignore_ascii_case("database"))
-    {
-        PackageKind::Database
-    } else {
-        pkg.kind
+    if matches!(pkg.kind, PackageKind::Package | PackageKind::Namespace) {
+        for stereotype in &pkg.stereotypes {
+            if stereotype.eq_ignore_ascii_case("database") {
+                return PackageKind::Database;
+            }
+            if stereotype.eq_ignore_ascii_case("folder") {
+                return PackageKind::Folder;
+            }
+        }
     }
+    pkg.kind
 }
 
 fn is_rendered_package_cluster(pkg: &Package) -> bool {
     matches!(
         effective_package_kind(pkg),
-        PackageKind::Package | PackageKind::Namespace | PackageKind::Database
+        PackageKind::Package | PackageKind::Namespace | PackageKind::Database | PackageKind::Folder
     )
 }
 
@@ -2337,18 +2338,30 @@ fn package_skinparam<'a>(
     kind: PackageKind,
     suffix: &str,
 ) -> Option<&'a str> {
-    let prefix = match kind {
-        PackageKind::Database => "Database",
+    let prefixes: &[&str] = match kind {
+        PackageKind::Database => &["Database"],
+        // Java `USymbolFolder.asBig` applies the folder symbol context to
+        // `drawFolder`; only its background retains the legacy Package*
+        // fallback. Border and title font remain Folder* channels.
+        PackageKind::Folder if suffix == "BackgroundColor" => &["Folder", "Package"],
+        PackageKind::Folder => &["Folder"],
+        PackageKind::Package | PackageKind::Namespace => &["Package"],
         _ => return None,
     };
-    let key = format!("{prefix}{suffix}");
-    diagram
-        .meta
-        .skinparams
-        .iter()
-        .rev()
-        .find(|skinparam| skinparam.key.eq_ignore_ascii_case(&key))
-        .map(|skinparam| skinparam.value.trim())
+    for prefix in prefixes {
+        let key = format!("{prefix}{suffix}");
+        if let Some(value) = diagram
+            .meta
+            .skinparams
+            .iter()
+            .rev()
+            .find(|skinparam| skinparam.key.eq_ignore_ascii_case(&key))
+            .map(|skinparam| skinparam.value.trim())
+        {
+            return Some(value);
+        }
+    }
+    None
 }
 
 fn package_qualified_name(
@@ -3362,7 +3375,7 @@ fn emit_layout_package_cluster(svg: &mut String, cluster: &LayoutPackageCluster,
     }
     write!(
         svg,
-        r##"<path d="M{},{} L{},{} A3.75,3.75 0 0 1 {},{} L{},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{}" fill="none" style="stroke:#000000;stroke-width:{};"/>"##,
+        r#"<path d="M{},{} L{},{} A3.75,3.75 0 0 1 {},{} L{},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{}" fill="{}" style="stroke:{};stroke-width:{};"/>"#,
         fmt4(x + 2.5),
         fmt4(y),
         fmt4(tab_join),
@@ -3387,12 +3400,15 @@ fn emit_layout_package_cluster(svg: &mut String, cluster: &LayoutPackageCluster,
         fmt4(y + 2.5),
         fmt4(x + 2.5),
         fmt4(y),
+        cluster.fill,
+        cluster.stroke,
         PACKAGE_STROKE_WIDTH,
     )
     .unwrap();
     write!(
         svg,
-        r##"<line style="stroke:#000000;stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+        r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+        cluster.stroke,
         PACKAGE_STROKE_WIDTH,
         fmt4(x),
         fmt4(tab_right),
@@ -3402,7 +3418,8 @@ fn emit_layout_package_cluster(svg: &mut String, cluster: &LayoutPackageCluster,
     .unwrap();
     write!(
         svg,
-        r##"<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
+        r#"<text fill="{}" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
+        cluster.font_fill,
         fmt4(label_w),
         fmt4(text_x),
         fmt4(text_y),
@@ -8484,6 +8501,40 @@ mod tests {
         assert!(svg.contains(r##"fill="#F0FFF0" style="stroke:#181818;stroke-width:1;""##));
         assert!(svg.contains(r#"data-qualified-name="LedgerVault211.FreshRecord223""#));
         assert!(svg.contains(r#"id="FreshRecord223-to-AuditRow227""#));
+    }
+
+    #[test]
+    fn no_oracle_folder_cluster_routes_symbol_styles() {
+        let input = "@startuml\n\
+            skinparam FolderBorderColor DarkGreen\n\
+            skinparam PackageFontColor Navy\n\
+            folder ArchiveShelf313 #AliceBlue {\n\
+              package Intake317 {\n\
+                class Parcel331 {\n\
+                  +String id\n\
+                }\n\
+                class Ledger337\n\
+                Parcel331 --> Ledger337\n\
+              }\n\
+            }\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(r#"style="width:205px;height:311px;background:#FFFFFF;""#));
+        assert!(svg.contains(r#"<!--cluster ArchiveShelf313--><g class="cluster""#));
+        assert!(svg.contains(r##"fill="#F0F8FF" style="stroke:#006400;stroke-width:1.5;""##));
+        assert!(svg.contains(
+            r##"<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="117.8379" x="10" y="21.5352">ArchiveShelf313</text>"##
+        ));
+        assert!(svg.contains(
+            r#"data-qualified-name="ArchiveShelf313.Intake317" data-source-line="4" id="ent0003""#
+        ));
+        assert!(svg.contains(
+            r##"<text fill="#000080" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="72.5088" x="34" y="64.5352">Intake317</text>"##
+        ));
+        assert!(svg.contains(r#"data-qualified-name="ArchiveShelf313.Intake317.Parcel331""#));
+        assert!(svg.contains(r#"id="Parcel331-to-Ledger337""#));
     }
 
     #[test]
