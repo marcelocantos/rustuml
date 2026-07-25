@@ -3948,12 +3948,15 @@ fn deployment_cluster_frame(
                     crate::cloud_shape::generate(position.width, position.height).min_xy();
                 (SVEK_ENVELOPE_ORIGIN - min_x, SVEK_ENVELOPE_ORIGIN - min_y)
             }
-            // `USymbolRectangle.asBig` and `USymbolFrame.asBig` draw a
-            // full-size `URectangle`; `LimitFinder.drawRectangle` expands
-            // its top-left by one pixel.
+            // These `asBig` implementations draw a full-size `URectangle`;
+            // `LimitFinder.drawRectangle` expands its top-left by one pixel.
             DeploymentNodeKind::Rectangle
             | DeploymentNodeKind::Agent
-            | DeploymentNodeKind::Frame => (SVEK_ENVELOPE_ORIGIN + 1.0, SVEK_ENVELOPE_ORIGIN + 1.0),
+            | DeploymentNodeKind::Frame
+            | DeploymentNodeKind::Card => (SVEK_ENVELOPE_ORIGIN + 1.0, SVEK_ENVELOPE_ORIGIN + 1.0),
+            // `USymbolStack.drawQueue` paints a full-width UPath, while its
+            // inset `URectangle` extends the top LimitFinder bound by one.
+            DeploymentNodeKind::Stack => (SVEK_ENVELOPE_ORIGIN, SVEK_ENVELOPE_ORIGIN + 1.0),
             _ => (SVEK_ENVELOPE_ORIGIN, SVEK_ENVELOPE_ORIGIN),
         };
         required_dx = required_dx.max(origin_x - position.x);
@@ -3963,9 +3966,9 @@ fn deployment_cluster_frame(
         return None;
     }
 
-    // `USymbolCloud.asBig` and `USymbolFolder.asBig` paint paths that define
-    // the outer envelope seen by `LimitFinder`. `SvekResult.calculateDimension`
-    // adds its fixed delta after that painted maximum, rather than after the
+    // Each supported `USymbol.asBig` primitive below defines the outer
+    // envelope seen by `LimitFinder`. `SvekResult.calculateDimension` adds
+    // its fixed delta after that painted maximum, rather than after the
     // nominal Graphviz cluster rectangle.
     let outer_symbol_bounds: Option<Vec<_>> = roots
         .iter()
@@ -3984,9 +3987,11 @@ fn deployment_cluster_frame(
                 DeploymentNodeKind::Folder => (0.0, 0.0, position.width, position.height),
                 DeploymentNodeKind::Rectangle
                 | DeploymentNodeKind::Agent
-                | DeploymentNodeKind::Frame => {
+                | DeploymentNodeKind::Frame
+                | DeploymentNodeKind::Card => {
                     (-1.0, -1.0, position.width - 1.0, position.height - 1.0)
                 }
+                DeploymentNodeKind::Stack => (0.0, -1.0, position.width, position.height),
                 _ => return None,
             };
             Some((position, bounds))
