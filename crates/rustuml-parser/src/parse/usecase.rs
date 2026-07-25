@@ -56,7 +56,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
     // Source line of the `usecase ID as "` opening for a multiline label.
     let mut multiline_start_line: usize = 0;
     // For multiline note blocks.
-    let mut in_note_block = false;
+    let mut note_block: Option<PendingNote> = None;
     let mut note_block_lines: Vec<String> = Vec::new();
     // For `skinparam <prefix> { ... }` blocks: flatten nested `Key Value`
     // entries to `<prefix>Key`.
@@ -117,20 +117,35 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
         .unwrap()
     });
 
-    // Inline note: note <position> of <target> : <text>
+    // Inline entity note. The target is optional; Java attaches an omitted
+    // target to the most recently declared entity.
     static RE_NOTE_INLINE: LazyLock<Regex> = LazyLock::new(|| {
-        Regex::new(r#"^note\s+\w+\s+of\s+(?:"[^"]+"|[(][^)]+[)]|\w+)\s*:\s*(.+)$"#).unwrap()
+        Regex::new(
+            r#"^note\s+(right|left|top|bottom)(?:\s+of\s+("[^"]+"|[(][^)]+[)]|[\w.]+))?\s*:\s*(.*)$"#,
+        )
+        .unwrap()
     });
-    // Note on link: note on link : text
-    static RE_NOTE_ON_LINK: LazyLock<Regex> =
-        LazyLock::new(|| Regex::new(r#"^note on link\s*:\s*(.+)$"#).unwrap());
-    // Block note start: note <position> of <target> (no colon)
-    static RE_NOTE_BLOCK_START: LazyLock<Regex> = LazyLock::new(|| {
-        Regex::new(r#"^note\s+(?:\w+\s+of\s+)?(?:"[^"]+"|[(][^)]+[)]|\w+)?\s*$"#).unwrap()
+    // Link note; position defaults to bottom in PlantUML.
+    static RE_NOTE_ON_LINK: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(r#"^note(?:\s+(right|left|top|bottom))?\s+(?:on|of)\s+link\s*:\s*(.*)$"#)
+            .unwrap()
     });
-    // Floating note start: note "text"
+    // Multiline entity note start.
+    static RE_NOTE_BLOCK_ENTITY: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(
+            r#"^note\s+(right|left|top|bottom)(?:\s+of\s+("[^"]+"|[(][^)]+[)]|[\w.]+))?\s*$"#,
+        )
+        .unwrap()
+    });
+    // Multiline note-on-link start.
+    static RE_NOTE_BLOCK_LINK: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(r#"^note(?:\s+(right|left|top|bottom))?\s+(?:on|of)\s+link\s*$"#).unwrap()
+    });
+    // Floating note declarations.
     static RE_NOTE_FLOAT: LazyLock<Regex> =
-        LazyLock::new(|| Regex::new(r#"^note\s+"([^"]+)""#).unwrap());
+        LazyLock::new(|| Regex::new(r#"^note\s+"([^"]+)"\s+as\s+([\w.]+)\s*$"#).unwrap());
+    static RE_NOTE_FLOAT_BLOCK: LazyLock<Regex> =
+        LazyLock::new(|| Regex::new(r#"^note\s+as\s+([\w.]+)\s*$"#).unwrap());
 
     // Package/rectangle opening (with optional color/style modifiers). The
     // optional `#color` modifier (named or hex) before the brace is captured.
@@ -218,16 +233,18 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
         }
 
         // Handle multiline note block body.
-        if in_note_block {
+        if let Some(pending) = note_block.as_ref() {
             if trimmed == "end note" {
                 let text = note_block_lines.join("\n");
                 if !text.trim().is_empty() {
                     notes.push(UseCaseNote {
                         text: text.trim().to_string(),
-                        target: None,
+                        kind: pending.kind.clone(),
+                        position: pending.position,
+                        source_line: pending.source_line,
                     });
                 }
-                in_note_block = false;
+                note_block = None;
                 note_block_lines.clear();
             } else {
                 note_block_lines.push(trimmed.to_string());
@@ -295,39 +312,89 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
             continue;
         }
 
-        // Inline note: note X of Y : text
-        if let Some(caps) = RE_NOTE_INLINE.captures(trimmed) {
-            let note_text = caps[1].trim().to_string();
-            notes.push(UseCaseNote {
-                text: note_text,
-                target: None,
-            });
-            continue;
-        }
-
-        // Note on link: note on link : text
+        // A link note belongs to the most recently declared connection.
         if let Some(caps) = RE_NOTE_ON_LINK.captures(trimmed) {
-            let note_text = caps[1].trim().to_string();
+            let Some(connection) = connections.len().checked_sub(1) else {
+                continue;
+            };
             notes.push(UseCaseNote {
-                text: note_text,
-                target: None,
+                text: caps[2].trim().to_string(),
+                kind: UseCaseNoteKind::OnLink { connection },
+                position: note_position(caps.get(1).map(|m| m.as_str()).unwrap_or("bottom")),
+                source_line: current_line,
             });
             continue;
         }
 
-        // Floating note: note "text"
+        // Inline note attached to an explicit target or the last entity.
+        if let Some(caps) = RE_NOTE_INLINE.captures(trimmed) {
+            let target = caps
+                .get(2)
+                .map(|m| normalize_endpoint(m.as_str()))
+                .or_else(|| last_entity_id(&actors, &use_cases));
+            let Some(target) = target else {
+                continue;
+            };
+            notes.push(UseCaseNote {
+                text: caps[3].trim().to_string(),
+                kind: UseCaseNoteKind::Attached { target },
+                position: note_position(&caps[1]),
+                source_line: current_line,
+            });
+            continue;
+        }
+
+        // Floating notes are ordinary explicitly named note entities.
         if let Some(caps) = RE_NOTE_FLOAT.captures(trimmed) {
-            let note_text = caps[1].trim().to_string();
             notes.push(UseCaseNote {
-                text: note_text,
-                target: None,
+                text: caps[1].trim().to_string(),
+                kind: UseCaseNoteKind::Floating {
+                    id: caps[2].to_string(),
+                },
+                position: UseCaseNotePosition::Bottom,
+                source_line: current_line,
             });
             continue;
         }
 
-        // Block note start: note X of Y (no colon).
-        if RE_NOTE_BLOCK_START.is_match(trimmed) && trimmed.starts_with("note") {
-            in_note_block = true;
+        if let Some(caps) = RE_NOTE_BLOCK_LINK.captures(trimmed) {
+            let Some(connection) = connections.len().checked_sub(1) else {
+                continue;
+            };
+            note_block = Some(PendingNote {
+                kind: UseCaseNoteKind::OnLink { connection },
+                position: note_position(caps.get(1).map(|m| m.as_str()).unwrap_or("bottom")),
+                source_line: current_line,
+            });
+            note_block_lines.clear();
+            continue;
+        }
+
+        if let Some(caps) = RE_NOTE_BLOCK_ENTITY.captures(trimmed) {
+            let target = caps
+                .get(2)
+                .map(|m| normalize_endpoint(m.as_str()))
+                .or_else(|| last_entity_id(&actors, &use_cases));
+            let Some(target) = target else {
+                continue;
+            };
+            note_block = Some(PendingNote {
+                kind: UseCaseNoteKind::Attached { target },
+                position: note_position(&caps[1]),
+                source_line: current_line,
+            });
+            note_block_lines.clear();
+            continue;
+        }
+
+        if let Some(caps) = RE_NOTE_FLOAT_BLOCK.captures(trimmed) {
+            note_block = Some(PendingNote {
+                kind: UseCaseNoteKind::Floating {
+                    id: caps[1].to_string(),
+                },
+                position: UseCaseNotePosition::Bottom,
+                source_line: current_line,
+            });
             note_block_lines.clear();
             continue;
         }
@@ -606,6 +673,35 @@ fn normalize_endpoint(ep: &str) -> String {
     }
 }
 
+#[derive(Clone)]
+struct PendingNote {
+    kind: UseCaseNoteKind,
+    position: UseCaseNotePosition,
+    source_line: usize,
+}
+
+fn note_position(position: &str) -> UseCaseNotePosition {
+    match position {
+        "right" => UseCaseNotePosition::Right,
+        "left" => UseCaseNotePosition::Left,
+        "top" => UseCaseNotePosition::Top,
+        _ => UseCaseNotePosition::Bottom,
+    }
+}
+
+fn last_entity_id(actors: &[Actor], use_cases: &[UseCase]) -> Option<String> {
+    actors
+        .iter()
+        .map(|actor| (actor.source_line, actor.id.as_str()))
+        .chain(
+            use_cases
+                .iter()
+                .map(|use_case| (use_case.source_line, use_case.id.as_str())),
+        )
+        .max_by_key(|(line, _)| *line)
+        .map(|(_, id)| id.to_string())
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -737,6 +833,66 @@ mod tests {
             d.use_cases[0]
                 .description
                 .contains(&"Description text here".to_string())
+        );
+    }
+
+    #[test]
+    fn renamed_notes_preserve_svek_ownership_and_source_lines() {
+        let d = parse(
+            "actor \"Night Auditor\" as Auditor\n\
+             usecase \"Reconcile Archived Statements\" as Reconcile\n\
+             note left of Auditor : Reviews the overnight queue\n\
+             note bottom of Reconcile\n\
+               First pass\n\
+               Second pass\n\
+             end note\n\
+             note \"Detached checklist\" as Checklist\n\
+             Auditor --> Reconcile\n\
+             note top on link : Escalates discrepancies",
+        );
+
+        assert_eq!(d.notes.len(), 4);
+        assert_eq!(
+            d.notes[0].kind,
+            UseCaseNoteKind::Attached {
+                target: "Auditor".to_string()
+            }
+        );
+        assert_eq!(d.notes[0].position, UseCaseNotePosition::Left);
+        assert_eq!(d.notes[0].source_line, 3);
+        assert_eq!(d.notes[1].text, "First pass\nSecond pass");
+        assert_eq!(
+            d.notes[1].kind,
+            UseCaseNoteKind::Attached {
+                target: "Reconcile".to_string()
+            }
+        );
+        assert_eq!(d.notes[1].position, UseCaseNotePosition::Bottom);
+        assert_eq!(d.notes[1].source_line, 4);
+        assert_eq!(
+            d.notes[2].kind,
+            UseCaseNoteKind::Floating {
+                id: "Checklist".to_string()
+            }
+        );
+        assert_eq!(d.notes[3].kind, UseCaseNoteKind::OnLink { connection: 0 });
+        assert_eq!(d.notes[3].position, UseCaseNotePosition::Top);
+        assert_eq!(d.notes[3].source_line, 10);
+    }
+
+    #[test]
+    fn targetless_note_attaches_to_last_renamed_entity() {
+        let d = parse(
+            "actor \"Queue Steward\" as Steward\n\
+             usecase \"Archive Reviewed Batch\" as Archive\n\
+             note right : This follows the last entity",
+        );
+
+        assert_eq!(
+            d.notes[0].kind,
+            UseCaseNoteKind::Attached {
+                target: "Archive".to_string()
+            }
         );
     }
 }

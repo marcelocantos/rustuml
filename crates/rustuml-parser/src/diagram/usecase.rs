@@ -33,12 +33,35 @@ pub enum UseCaseLayoutDirection {
     LeftToRight,
 }
 
-/// An inline note attached to a diagram element or floating.
+/// A note position as declared in the source.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum UseCaseNotePosition {
+    Right,
+    Left,
+    Top,
+    Bottom,
+}
+
+/// The SVEK owner of a note.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub enum UseCaseNoteKind {
+    /// An auto-named `GMN*` entity joined to a diagram entity by an opale link.
+    Attached { target: String },
+    /// A normal note entity declared with an explicit id.
+    Floating { id: String },
+    /// A note component owned by an existing connection.
+    OnLink { connection: usize },
+}
+
+/// A note attached to an entity/link or declared as a floating entity.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct UseCaseNote {
     pub text: String,
-    /// The element id this note is attached to (None for floating notes).
-    pub target: Option<String>,
+    pub kind: UseCaseNoteKind,
+    pub position: UseCaseNotePosition,
+    /// 1-based line number within the `@startuml` block.
+    #[serde(default)]
+    pub source_line: usize,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

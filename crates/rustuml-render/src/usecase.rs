@@ -10,7 +10,7 @@
 use std::collections::HashMap;
 use std::fmt::Write as _;
 
-use rustuml_layout::graph::{ClusterPosition, Direction, EdgePath, LayoutGraph};
+use rustuml_layout::graph::{ClusterPosition, Direction, EdgeLabelSize, EdgePath, LayoutGraph};
 use rustuml_parser::diagram::usecase::*;
 
 use crate::layout_oracle::{OracleLayout, wrap_oracle_envelope};
@@ -56,6 +56,15 @@ const DEPENDENCY_ARROW_PATH_GAP: f64 = 6.0;
 const NOTE_FILL: &str = "#FEFFDD";
 const NOTE_FOLD: f64 = 10.0;
 const NOTE_FONT_SIZE: u32 = 13;
+/// Java provenance: `EntityImageNote` and `Opale` use 6px left, 15px right,
+/// and 5px vertical text margins.
+const NOTE_MARGIN_LEFT: f64 = 6.0;
+const NOTE_MARGIN_RIGHT: f64 = 15.0;
+const NOTE_MARGIN_Y: f64 = 5.0;
+/// Java provenance: `Opale.delta` makes every leader base eight pixels wide.
+const NOTE_LEADER_HALF: f64 = 4.0;
+/// Java provenance: `Rose` gives link-owned note components 5px padding.
+const LINK_NOTE_PADDING: f64 = 5.0;
 
 /// Which box edge carries the note's leader (callout) notch.
 enum LeaderSide {
@@ -325,7 +334,8 @@ pub fn render_with_oracle(
         .iter()
         .map(|u| use_case_dim(u, &skin))
         .collect();
-    let positions = resolve_positions(diagram, &actor_dims, &uc_dims, oracle);
+    let note_dims: Vec<NoteDim> = diagram.notes.iter().map(note_dim).collect();
+    let positions = resolve_positions(diagram, &actor_dims, &uc_dims, &note_dims, &skin, oracle);
     let id_map = build_entity_id_map(diagram);
 
     let (total_w, total_h) = if let Some(orc) = oracle
@@ -334,7 +344,7 @@ pub fn render_with_oracle(
     {
         (orc.canvas_width, orc.canvas_height)
     } else {
-        compute_canvas(&positions, &actor_dims, &uc_dims)
+        compute_canvas(&positions, &actor_dims, &uc_dims, &note_dims)
     };
 
     let mut svg = SvgBuilder::new_plantuml_with_background_and_defs(
@@ -472,6 +482,13 @@ pub fn render_with_oracle(
             .unwrap_or(usize::MAX);
         top.push((line, 2, i));
     }
+    if oracle.is_none() {
+        for (i, note) in diagram.notes.iter().enumerate() {
+            if !matches!(note.kind, UseCaseNoteKind::OnLink { .. }) {
+                top.push((note.source_line, 3, i));
+            }
+        }
+    }
     // Stable sort by source line; on ties keep declaration order (notes after
     // their target on the same conceptual line never collide in practice).
     top.sort_by_key(|m| m.0);
@@ -479,7 +496,19 @@ pub fn render_with_oracle(
         match kind {
             0 => render_actor_i(&mut svg, i),
             1 => render_uc_i(&mut svg, i),
-            _ => emit_note(&mut svg, top_notes[i]),
+            2 => emit_note(&mut svg, top_notes[i]),
+            _ => {
+                if let Some(placement) = positions.notes.get(i).and_then(Option::as_ref) {
+                    emit_model_note(
+                        &mut svg,
+                        &diagram.notes[i],
+                        &note_dims[i],
+                        placement,
+                        i,
+                        &id_map,
+                    );
+                }
+            }
         }
     }
 
@@ -577,51 +606,79 @@ fn render_title(svg: &mut SvgBuilder, diagram: &UseCaseDiagram, total_w: f64) {
     svg.raw("</g>");
 }
 
-/// Assign PlantUML-compatible entity IDs by sorting actors, use cases, and
-/// packages by `source_line` and numbering sequentially from `ent0002`.
+/// Assign PlantUML-compatible entity IDs by sorting declarations and links by
+/// `source_line` and numbering sequentially from `ent0002`.
 ///
 /// PlantUML draws entity *and* link uids from a single monotonic counter in
-/// source-line order, so a connection declared between two entity declarations
-/// consumes a counter slot (it becomes a `lnk` id) and pushes later entities to
-/// higher `ent` numbers. We model this by interleaving connections as
-/// slot-consuming entries that produce no `ent` mapping.
+/// source-line order. `CommandFactoryNoteOnEntity` additionally consumes one
+/// uid for the generated `GMN*` quark, one for the note entity, and one for its
+/// hidden opale link.
 fn build_entity_id_map(diagram: &UseCaseDiagram) -> HashMap<String, String> {
+    enum EntryKind {
+        Entity(String),
+        AttachedNote(usize),
+        FloatingNote(usize),
+        Connection,
+    }
     struct Entry {
-        /// `None` for a connection (consumes a counter slot but emits no `ent` id).
-        key: Option<String>,
+        kind: EntryKind,
         line: usize,
     }
     let mut entries: Vec<Entry> = Vec::new();
     for a in &diagram.actors {
         entries.push(Entry {
-            key: Some(format!("actor::{}", a.id)),
+            kind: EntryKind::Entity(format!("actor::{}", a.id)),
             line: a.source_line,
         });
     }
     for uc in &diagram.use_cases {
         entries.push(Entry {
-            key: Some(format!("uc::{}", uc.id)),
+            kind: EntryKind::Entity(format!("uc::{}", uc.id)),
             line: uc.source_line,
         });
     }
     for c in &diagram.connections {
         entries.push(Entry {
-            key: None,
+            kind: EntryKind::Connection,
             line: c.source_line,
         });
     }
     for p in &diagram.packages {
-        let line = p.source_line;
         entries.push(Entry {
-            key: Some(format!("pkg::{}", p.name)),
-            line,
+            kind: EntryKind::Entity(format!("pkg::{}", p.name)),
+            line: p.source_line,
+        });
+    }
+    for (index, note) in diagram.notes.iter().enumerate() {
+        let kind = match note.kind {
+            UseCaseNoteKind::Attached { .. } => EntryKind::AttachedNote(index),
+            UseCaseNoteKind::Floating { .. } => EntryKind::FloatingNote(index),
+            UseCaseNoteKind::OnLink { .. } => continue,
+        };
+        entries.push(Entry {
+            kind,
+            line: note.source_line,
         });
     }
     entries.sort_by_key(|e| e.line);
     let mut map = HashMap::new();
-    for (counter, e) in (2usize..).zip(entries) {
-        if let Some(key) = e.key {
-            map.insert(key, format!("ent{counter:04}"));
+    let mut counter = 2usize;
+    for entry in entries {
+        match entry.kind {
+            EntryKind::Entity(key) => {
+                map.insert(key, format!("ent{counter:04}"));
+                counter += 1;
+            }
+            EntryKind::AttachedNote(index) => {
+                map.insert(format!("note-qname::{index}"), format!("GMN{counter}"));
+                map.insert(format!("note::{index}"), format!("ent{:04}", counter + 1));
+                counter += 3;
+            }
+            EntryKind::FloatingNote(index) => {
+                map.insert(format!("note::{index}"), format!("ent{counter:04}"));
+                counter += 1;
+            }
+            EntryKind::Connection => counter += 1,
         }
     }
     map
@@ -644,6 +701,32 @@ struct UseCaseDim {
     line_count: usize,
     rx: f64,
     ry: f64,
+}
+
+struct NoteDim {
+    width: f64,
+    height: f64,
+}
+
+#[derive(Clone)]
+struct NotePlacement {
+    x: f64,
+    y: f64,
+    apex: Option<(f64, f64)>,
+    leader_base: Option<((f64, f64), (f64, f64))>,
+}
+
+fn note_dim(note: &UseCaseNote) -> NoteDim {
+    let lines: Vec<&str> = note.text.split('\n').collect();
+    let text_width = lines
+        .iter()
+        .map(|line| text_render::measure(line, NOTE_FONT_SIZE as f64, false))
+        .fold(0.0_f64, f64::max);
+    let line_count = lines.len().max(1);
+    NoteDim {
+        width: text_width + NOTE_MARGIN_LEFT + NOTE_MARGIN_RIGHT,
+        height: line_count as f64 * pm::text_height(NOTE_FONT_SIZE as f64) + NOTE_MARGIN_Y * 2.0,
+    }
 }
 
 fn actor_dim(actor: &Actor, skin: &SkinColors) -> ActorDim {
@@ -748,6 +831,7 @@ fn use_case_ellipse_radii(text_w: f64, text_h: f64) -> (f64, f64) {
 struct Positions {
     actors: Vec<(f64, f64)>,
     use_cases: Vec<(f64, f64)>,
+    notes: Vec<Option<NotePlacement>>,
     cluster_positions: Vec<ClusterPosition>,
     edge_paths: Vec<EdgePath>,
 }
@@ -756,6 +840,8 @@ fn resolve_positions(
     diagram: &UseCaseDiagram,
     actor_dims: &[ActorDim],
     uc_dims: &[UseCaseDim],
+    note_dims: &[NoteDim],
+    skin: &SkinColors,
     oracle: Option<&OracleLayout>,
 ) -> Positions {
     if let Some(orc) = oracle {
@@ -780,25 +866,34 @@ fn resolve_positions(
         return Positions {
             actors,
             use_cases,
+            notes: vec![None; diagram.notes.len()],
             cluster_positions: Vec::new(),
             edge_paths: Vec::new(),
         };
     }
-    layout_usecase_positions(diagram, actor_dims, uc_dims)
-        .unwrap_or_else(|| fallback_positions(actor_dims, uc_dims))
+    layout_usecase_positions(diagram, actor_dims, uc_dims, note_dims, skin)
+        .unwrap_or_else(|| fallback_positions(actor_dims, uc_dims, diagram.notes.len()))
 }
 
 fn layout_usecase_positions(
     diagram: &UseCaseDiagram,
     actor_dims: &[ActorDim],
     uc_dims: &[UseCaseDim],
+    note_dims: &[NoteDim],
+    skin: &SkinColors,
 ) -> Option<Positions> {
     // Java path: `CucaDiagramFileMakerSvek` builds measured SVEK nodes,
     // `DotStringFactory` serialises fixed-size nodes/clusters to dot, and
     // `GeneralImageBuilder` paints the returned positions. This mirrors that
     // flow with the vendored Graphviz wrapper rather than the old hand-stacked
     // fallback.
-    if diagram.actors.is_empty() && diagram.use_cases.is_empty() {
+    if diagram.actors.is_empty()
+        && diagram.use_cases.is_empty()
+        && !diagram
+            .notes
+            .iter()
+            .any(|note| !matches!(note.kind, UseCaseNoteKind::OnLink { .. }))
+    {
         return None;
     }
     let direction = match diagram.direction {
@@ -812,21 +907,95 @@ fn layout_usecase_positions(
     for (uc, dim) in diagram.use_cases.iter().zip(uc_dims) {
         layout.add_node(&uc.id, &uc.label, dim.rx * 2.0, dim.ry * 2.0);
     }
+    let entity_note_indices: Vec<usize> = diagram
+        .notes
+        .iter()
+        .enumerate()
+        .filter_map(|(index, note)| {
+            (!matches!(note.kind, UseCaseNoteKind::OnLink { .. })).then_some(index)
+        })
+        .collect();
+    for &note_index in &entity_note_indices {
+        let note_id = note_node_id(&diagram.notes[note_index], note_index);
+        let dim = &note_dims[note_index];
+        layout.add_node(
+            &note_id,
+            &diagram.notes[note_index].text,
+            dim.width,
+            dim.height,
+        );
+    }
     for pkg in &diagram.packages {
         layout.add_cluster(&pkg.name, &pkg.name, None);
         for member in &pkg.elements {
             layout.add_cluster_node(&pkg.name, member);
         }
     }
-    for conn in &diagram.connections {
-        layout.add_edge(
-            &conn.from,
-            &conn.to,
-            conn.label.as_deref().or(conn.stereotype.as_deref()),
-        );
+
+    // `CommandFactoryNoteOnEntity.executeInternal` creates a real note leaf and
+    // a hidden Link. Feed both hidden and visible links to dot in source order
+    // so note nodes participate in the same rank/routing model as Java SVEK.
+    enum LayoutEdge {
+        Connection(usize),
+        AttachedNote(usize),
+    }
+    let mut layout_edges: Vec<(usize, LayoutEdge)> = diagram
+        .connections
+        .iter()
+        .enumerate()
+        .map(|(index, connection)| (connection.source_line, LayoutEdge::Connection(index)))
+        .collect();
+    layout_edges.extend(
+        diagram
+            .notes
+            .iter()
+            .enumerate()
+            .filter_map(|(index, note)| {
+                matches!(note.kind, UseCaseNoteKind::Attached { .. })
+                    .then_some((note.source_line, LayoutEdge::AttachedNote(index)))
+            }),
+    );
+    layout_edges.sort_by_key(|(line, _)| *line);
+
+    for (_, edge) in layout_edges {
+        match edge {
+            LayoutEdge::Connection(index) => {
+                let conn = &diagram.connections[index];
+                if let Some((note_index, note)) = note_on_connection(diagram, index) {
+                    let size = link_note_label_size(conn, note, &note_dims[note_index], skin);
+                    layout.add_edge_with_label_sizes(&conn.from, &conn.to, Some(size), None, None);
+                } else {
+                    layout.add_edge(
+                        &conn.from,
+                        &conn.to,
+                        conn.label.as_deref().or(conn.stereotype.as_deref()),
+                    );
+                }
+            }
+            LayoutEdge::AttachedNote(index) => {
+                let note = &diagram.notes[index];
+                let UseCaseNoteKind::Attached { target } = &note.kind else {
+                    continue;
+                };
+                let note_id = note_node_id(note, index);
+                match effective_note_position(note.position, diagram.direction) {
+                    UseCaseNotePosition::Right => {
+                        layout.add_same_rank(target, &note_id);
+                        layout.add_edge(target, &note_id, None);
+                    }
+                    UseCaseNotePosition::Left => {
+                        layout.add_same_rank(&note_id, target);
+                        layout.add_edge(&note_id, target, None);
+                    }
+                    UseCaseNotePosition::Bottom => layout.add_edge(target, &note_id, None),
+                    UseCaseNotePosition::Top => layout.add_edge(&note_id, target, None),
+                }
+            }
+        }
     }
     let mut result = layout.layout_full(LAYOUT_TIMEOUT)?;
-    let degenerated = diagram.actors.len() + diagram.use_cases.len() == 1
+    let degenerated = diagram.actors.len() + diagram.use_cases.len() + entity_note_indices.len()
+        == 1
         && diagram.packages.is_empty()
         && diagram.connections.is_empty();
     let origin_x = if degenerated {
@@ -850,6 +1019,14 @@ fn layout_usecase_positions(
                 .take(diagram.use_cases.len())
                 .map(|p| p.y),
         )
+        .chain(
+            result
+                .node_positions
+                .iter()
+                .skip(actor_count + diagram.use_cases.len())
+                .take(entity_note_indices.len())
+                .map(|p| p.y),
+        )
         .chain(result.cluster_positions.iter().map(|p| p.y))
         .fold(f64::INFINITY, f64::min);
     let origin_y = if min_painted_y.is_finite() {
@@ -869,6 +1046,18 @@ fn layout_usecase_positions(
         if let Some(point) = &mut edge.end_point {
             point.0 += origin_x;
             point.1 += origin_y;
+        }
+        if let Some(label) = &mut edge.label {
+            label.x += origin_x;
+            label.y += origin_y;
+        }
+        if let Some(label) = &mut edge.tail_label {
+            label.x += origin_x;
+            label.y += origin_y;
+        }
+        if let Some(label) = &mut edge.head_label {
+            label.x += origin_x;
+            label.y += origin_y;
         }
     }
     for cluster in &mut result.cluster_positions {
@@ -895,15 +1084,51 @@ fn layout_usecase_positions(
         .zip(uc_dims)
         .map(|(p, dim)| (p.x + origin_x + dim.rx, p.y + origin_y + dim.ry))
         .collect();
+
+    let note_ids: Vec<String> = entity_note_indices
+        .iter()
+        .map(|&index| note_node_id(&diagram.notes[index], index))
+        .collect();
+    let mut notes = vec![None; diagram.notes.len()];
+    let note_node_offset = actor_count + diagram.use_cases.len();
+    for (slot, &note_index) in entity_note_indices.iter().enumerate() {
+        let note_id = &note_ids[slot];
+        let p = &result.node_positions[note_node_offset + slot];
+        let edge = result
+            .edge_paths
+            .iter()
+            .find(|edge| edge.from == *note_id || edge.to == *note_id);
+        notes[note_index] = Some(note_placement(
+            p.x + origin_x,
+            p.y + origin_y,
+            &note_dims[note_index],
+            note_id,
+            edge,
+        ));
+    }
+    let edge_paths = result
+        .edge_paths
+        .into_iter()
+        .filter(|edge| {
+            !note_ids
+                .iter()
+                .any(|note_id| edge.from == *note_id || edge.to == *note_id)
+        })
+        .collect();
     Some(Positions {
         actors,
         use_cases,
+        notes,
         cluster_positions: result.cluster_positions,
-        edge_paths: result.edge_paths,
+        edge_paths,
     })
 }
 
-fn fallback_positions(actor_dims: &[ActorDim], uc_dims: &[UseCaseDim]) -> Positions {
+fn fallback_positions(
+    actor_dims: &[ActorDim],
+    uc_dims: &[UseCaseDim],
+    note_count: usize,
+) -> Positions {
     let actors: Vec<(f64, f64)> = actor_dims
         .iter()
         .enumerate()
@@ -917,8 +1142,147 @@ fn fallback_positions(actor_dims: &[ActorDim], uc_dims: &[UseCaseDim]) -> Positi
     Positions {
         actors,
         use_cases,
+        notes: vec![None; note_count],
         cluster_positions: Vec::new(),
         edge_paths: Vec::new(),
+    }
+}
+
+fn note_node_id(note: &UseCaseNote, index: usize) -> String {
+    match &note.kind {
+        UseCaseNoteKind::Floating { id } => id.clone(),
+        UseCaseNoteKind::Attached { .. } => format!("__rustuml_note_{index}"),
+        UseCaseNoteKind::OnLink { .. } => format!("__rustuml_link_note_{index}"),
+    }
+}
+
+fn effective_note_position(
+    position: UseCaseNotePosition,
+    direction: UseCaseLayoutDirection,
+) -> UseCaseNotePosition {
+    if direction == UseCaseLayoutDirection::TopToBottom {
+        return position;
+    }
+    // Java provenance: `Position.withRankdir` rotates entity-note placement
+    // when DESCRIPTION diagrams use `left to right direction`.
+    match position {
+        UseCaseNotePosition::Right => UseCaseNotePosition::Bottom,
+        UseCaseNotePosition::Left => UseCaseNotePosition::Top,
+        UseCaseNotePosition::Bottom => UseCaseNotePosition::Right,
+        UseCaseNotePosition::Top => UseCaseNotePosition::Left,
+    }
+}
+
+fn note_on_connection(
+    diagram: &UseCaseDiagram,
+    connection: usize,
+) -> Option<(usize, &UseCaseNote)> {
+    diagram.notes.iter().enumerate().find(|(_, note)| {
+        matches!(
+            note.kind,
+            UseCaseNoteKind::OnLink {
+                connection: owner
+            } if owner == connection
+        )
+    })
+}
+
+fn link_note_label_size(
+    connection: &UseCaseConnection,
+    note: &UseCaseNote,
+    note_dim: &NoteDim,
+    skin: &SkinColors,
+) -> EdgeLabelSize {
+    // `EntityImageNoteLink` delegates to `ComponentRoseNote`, whose preferred
+    // size includes the EntityImageNote text margins plus Rose's 5px padding.
+    let note_width = note_dim.width + LINK_NOTE_PADDING * 2.0;
+    let note_height = note_dim.height + LINK_NOTE_PADDING * 2.0;
+    let label = connection
+        .label
+        .as_deref()
+        .or(connection.stereotype.as_deref());
+    let Some(label) = label else {
+        return EdgeLabelSize {
+            width: note_width,
+            height: note_height,
+        };
+    };
+    let label_width = text_render::measure_with_family(
+        label,
+        skin.arrow_font_size as f64,
+        false,
+        &skin.arrow_font_family,
+    ) + 2.0;
+    let label_height = pm::text_height(skin.arrow_font_size as f64) + 2.0;
+    match note.position {
+        UseCaseNotePosition::Left | UseCaseNotePosition::Right => EdgeLabelSize {
+            width: note_width + label_width,
+            height: note_height.max(label_height),
+        },
+        UseCaseNotePosition::Top | UseCaseNotePosition::Bottom => EdgeLabelSize {
+            width: note_width.max(label_width),
+            height: note_height + label_height,
+        },
+    }
+}
+
+fn note_placement(
+    x: f64,
+    y: f64,
+    dim: &NoteDim,
+    note_id: &str,
+    edge: Option<&EdgePath>,
+) -> NotePlacement {
+    let Some(edge) = edge else {
+        return NotePlacement {
+            x,
+            y,
+            apex: None,
+            leader_base: None,
+        };
+    };
+    let Some(start) = edge.points.first().copied() else {
+        return NotePlacement {
+            x,
+            y,
+            apex: None,
+            leader_base: None,
+        };
+    };
+    let Some(end) = edge.points.last().copied() else {
+        return NotePlacement {
+            x,
+            y,
+            apex: None,
+            leader_base: None,
+        };
+    };
+    let (contact, apex) = if edge.from == note_id {
+        (start, end)
+    } else {
+        (end, start)
+    };
+    let right = x + dim.width;
+    let bottom = y + dim.height;
+    let leader_base = if apex.1 < y {
+        let x1 = (contact.0 - x - NOTE_LEADER_HALF).clamp(0.0, dim.width - NOTE_FOLD);
+        Some(((x + x1 + NOTE_LEADER_HALF * 2.0, y), (x + x1, y)))
+    } else if apex.1 > bottom {
+        let x1 = (contact.0 - x - NOTE_LEADER_HALF).clamp(0.0, dim.width);
+        Some(((x + x1, bottom), (x + x1 + NOTE_LEADER_HALF * 2.0, bottom)))
+    } else if apex.0 < x {
+        let y1 = (contact.1 - y - NOTE_LEADER_HALF).clamp(0.0, dim.height - NOTE_LEADER_HALF * 2.0);
+        Some(((x, y + y1), (x, y + y1 + NOTE_LEADER_HALF * 2.0)))
+    } else {
+        let y1 = (contact.1 - y - NOTE_LEADER_HALF)
+            .clamp(NOTE_FOLD, dim.height - NOTE_LEADER_HALF * 2.0);
+        Some(((right, y + y1 + NOTE_LEADER_HALF * 2.0), (right, y + y1)))
+    };
+    NotePlacement {
+        x,
+        y,
+        apex: Some(apex),
+        leader_base,
     }
 }
 
@@ -1019,6 +1383,7 @@ fn compute_canvas(
     positions: &Positions,
     actor_dims: &[ActorDim],
     uc_dims: &[UseCaseDim],
+    note_dims: &[NoteDim],
 ) -> (f64, f64) {
     let degenerated = actor_dims.len() + uc_dims.len() == 1
         && positions.edge_paths.is_empty()
@@ -1048,10 +1413,19 @@ fn compute_canvas(
         max_x = max_x.max(cx + uc_dims[i].rx + canvas_pad);
         max_y = max_y.max(cy + uc_dims[i].ry + canvas_pad);
     }
+    for (index, note) in positions.notes.iter().enumerate() {
+        let Some(note) = note else { continue };
+        max_x = max_x.max(note.x + note_dims[index].width + SVEK_CANVAS_PAD);
+        max_y = max_y.max(note.y + note_dims[index].height + SVEK_CANVAS_PAD);
+    }
     for edge in &positions.edge_paths {
         for (x, y) in &edge.points {
             max_x = max_x.max(x + SVEK_CANVAS_PAD);
             max_y = max_y.max(y + SVEK_CANVAS_PAD);
+        }
+        if let Some(label) = edge.label {
+            max_x = max_x.max(label.x + label.width + SVEK_CANVAS_PAD);
+            max_y = max_y.max(label.y + label.height + SVEK_CANVAS_PAD);
         }
     }
     for cluster in &positions.cluster_positions {
@@ -1555,72 +1929,13 @@ fn render_use_case(
 /// Render a note entity, reconstructing the box-plus-leader path locally from
 /// the oracle-captured geometry (box rect, leader apex/base, text baselines).
 fn emit_note(svg: &mut SvgBuilder, note: &crate::layout_oracle::OracleNoteEntity) {
-    use std::fmt::Write;
-
     let Some(g) = note.box_geom.as_ref() else {
         return;
     };
-    let bx = g.x;
-    let by = g.y;
+    let d = note_outline(g.x, g.y, g.width, g.height, g.apex, g.leader_base);
     let right = g.x + g.width;
-    let bottom = g.y + g.height;
-    let rf = right - NOTE_FOLD; // fold inner x
-    let yf = by + NOTE_FOLD; // fold inner y
-
-    // The leader sits on whichever box edge the apex points toward.
-    let side = g.apex.map(|(ax, ay)| {
-        if ay < by {
-            LeaderSide::Top
-        } else if ay > bottom {
-            LeaderSide::Bottom
-        } else if ax < bx {
-            LeaderSide::Left
-        } else {
-            LeaderSide::Right
-        }
-    });
-
-    // PlantUML does not place the leader base points symmetrically about the
-    // apex, so emit them verbatim from the captured geometry.
-    let leader = |d: &mut String| {
-        if let (Some((ax, ay)), Some((b0, b1))) = (g.apex, g.leader_base) {
-            let _ = write!(
-                d,
-                "L{},{} L{},{} L{},{} ",
-                fc(b0.0),
-                fc(b0.1),
-                fc(ax),
-                fc(ay),
-                fc(b1.0),
-                fc(b1.1),
-            );
-        }
-    };
-
-    // Walk the outline counter-clockwise from the top-left corner, splicing the
-    // leader into the appropriate edge.
-    let mut d = String::new();
-    let _ = write!(d, "M{},{} ", fc(bx), fc(by));
-    if matches!(side, Some(LeaderSide::Left)) {
-        leader(&mut d);
-    }
-    let _ = write!(d, "L{},{} ", fc(bx), fc(bottom));
-    let _ = write!(d, "A0,0 0 0 0 {},{} ", fc(bx), fc(bottom));
-    if matches!(side, Some(LeaderSide::Bottom)) {
-        leader(&mut d);
-    }
-    let _ = write!(d, "L{},{} ", fc(right), fc(bottom));
-    let _ = write!(d, "A0,0 0 0 0 {},{} ", fc(right), fc(bottom));
-    if matches!(side, Some(LeaderSide::Right)) {
-        leader(&mut d);
-    }
-    let _ = write!(d, "L{},{} ", fc(right), fc(yf));
-    let _ = write!(d, "L{},{} ", fc(rf), fc(by));
-    if matches!(side, Some(LeaderSide::Top)) {
-        leader(&mut d);
-    }
-    let _ = write!(d, "L{},{} ", fc(bx), fc(by));
-    let _ = write!(d, "A0,0 0 0 0 {},{}", fc(bx), fc(by));
+    let rf = right - NOTE_FOLD;
+    let yf = g.y + NOTE_FOLD;
 
     let src_attr = note
         .source_line
@@ -1639,7 +1954,7 @@ fn emit_note(svg: &mut SvgBuilder, note: &crate::layout_oracle::OracleNoteEntity
     svg.raw(&format!(
         r#"<path d="M{rf_s},{by_s} L{rf_s},{yf_s} L{r_s},{yf_s} L{rf_s},{by_s}" fill="{NOTE_FILL}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
         rf_s = fc(rf),
-        by_s = fc(by),
+        by_s = fc(g.y),
         yf_s = fc(yf),
         r_s = fc(right),
     ));
@@ -1662,6 +1977,140 @@ fn emit_note(svg: &mut SvgBuilder, note: &crate::layout_oracle::OracleNoteEntity
             },
         );
         svg.raw(&buf);
+    }
+    svg.raw("</g>");
+}
+
+fn note_outline(
+    bx: f64,
+    by: f64,
+    width: f64,
+    height: f64,
+    apex: Option<(f64, f64)>,
+    leader_base: Option<((f64, f64), (f64, f64))>,
+) -> String {
+    let right = bx + width;
+    let bottom = by + height;
+    let rf = right - NOTE_FOLD;
+    let yf = by + NOTE_FOLD;
+    let side = apex.map(|(ax, ay)| {
+        if ay < by {
+            LeaderSide::Top
+        } else if ay > bottom {
+            LeaderSide::Bottom
+        } else if ax < bx {
+            LeaderSide::Left
+        } else {
+            LeaderSide::Right
+        }
+    });
+    let leader = |d: &mut String| {
+        if let (Some((ax, ay)), Some((b0, b1))) = (apex, leader_base) {
+            let _ = write!(
+                d,
+                "L{},{} L{},{} L{},{} ",
+                fc(b0.0),
+                fc(b0.1),
+                fc(ax),
+                fc(ay),
+                fc(b1.0),
+                fc(b1.1),
+            );
+        }
+    };
+
+    // `Opale.getPolygon*` walks the outline counter-clockwise and splices the
+    // hidden link into the nearest box edge.
+    let mut d = String::new();
+    let _ = write!(d, "M{},{} ", fc(bx), fc(by));
+    if matches!(side, Some(LeaderSide::Left)) {
+        leader(&mut d);
+    }
+    let _ = write!(d, "L{},{} ", fc(bx), fc(bottom));
+    let _ = write!(d, "A0,0 0 0 0 {},{} ", fc(bx), fc(bottom));
+    if matches!(side, Some(LeaderSide::Bottom)) {
+        leader(&mut d);
+    }
+    let _ = write!(d, "L{},{} ", fc(right), fc(bottom));
+    let _ = write!(d, "A0,0 0 0 0 {},{} ", fc(right), fc(bottom));
+    if matches!(side, Some(LeaderSide::Right)) {
+        leader(&mut d);
+    }
+    let _ = write!(d, "L{},{} ", fc(right), fc(yf));
+    let _ = write!(d, "L{},{} ", fc(rf), fc(by));
+    if matches!(side, Some(LeaderSide::Top)) {
+        leader(&mut d);
+    }
+    let _ = write!(d, "L{},{} ", fc(bx), fc(by));
+    let _ = write!(d, "A0,0 0 0 0 {},{}", fc(bx), fc(by));
+    d
+}
+
+fn emit_model_note(
+    svg: &mut SvgBuilder,
+    note: &UseCaseNote,
+    dim: &NoteDim,
+    placement: &NotePlacement,
+    index: usize,
+    id_map: &HashMap<String, String>,
+) {
+    let qname = match &note.kind {
+        UseCaseNoteKind::Attached { .. } => id_map
+            .get(&format!("note-qname::{index}"))
+            .map(String::as_str)
+            .unwrap_or("GMN"),
+        UseCaseNoteKind::Floating { id } => id.as_str(),
+        UseCaseNoteKind::OnLink { .. } => return,
+    };
+    let entity_id = id_map
+        .get(&format!("note::{index}"))
+        .map(String::as_str)
+        .unwrap_or("");
+    let d = note_outline(
+        placement.x,
+        placement.y,
+        dim.width,
+        dim.height,
+        placement.apex,
+        placement.leader_base,
+    );
+    let right = placement.x + dim.width;
+    let fold_x = right - NOTE_FOLD;
+    let fold_y = placement.y + NOTE_FOLD;
+    svg.raw(&format!(
+        r#"<g class="entity" data-qualified-name="{qname}"{} id="{entity_id}">"#,
+        source_line_attr(note.source_line),
+    ));
+    svg.raw(&format!(
+        r#"<path d="{d}" fill="{NOTE_FILL}" style="stroke:{STROKE};stroke-width:0.5;"/>"#
+    ));
+    svg.raw(&format!(
+        r#"<path d="M{fold_x},{top} L{fold_x},{fold_y} L{right},{fold_y} L{fold_x},{top}" fill="{NOTE_FILL}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+        fold_x = fc(fold_x),
+        top = fc(placement.y),
+        fold_y = fc(fold_y),
+        right = fc(right),
+    ));
+    let mut baseline = placement.y + NOTE_MARGIN_Y + pm::ascent(NOTE_FONT_SIZE as f64);
+    for line in note.text.split('\n') {
+        let mut buf = String::new();
+        text_render::emit_text(
+            &mut buf,
+            line,
+            &TextBase {
+                x: placement.x + NOTE_MARGIN_LEFT,
+                y: baseline,
+                font_size: NOTE_FONT_SIZE,
+                font_family: "sans-serif",
+                fill: TEXT_COLOR,
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        svg.raw(&buf);
+        baseline += pm::text_height(NOTE_FONT_SIZE as f64);
     }
     svg.raw("</g>");
 }
@@ -1827,6 +2276,124 @@ fn render_oracle_connections(
     }
 }
 
+fn link_note_blocks(
+    x: f64,
+    y: f64,
+    connection: &UseCaseConnection,
+    note: &UseCaseNote,
+    note_dim: &NoteDim,
+    skin: &SkinColors,
+) -> ((f64, f64), (f64, f64)) {
+    let note_width = note_dim.width + LINK_NOTE_PADDING * 2.0;
+    let note_height = note_dim.height + LINK_NOTE_PADDING * 2.0;
+    let label = connection
+        .label
+        .as_deref()
+        .or(connection.stereotype.as_deref());
+    let Some(label) = label else {
+        return ((x, y), (x, y));
+    };
+    // `SvekEdge.getLabel` wraps the edge label in a one-pixel margin before
+    // merging it with `EntityImageNoteLink`.
+    let label_width = text_render::measure_with_family(
+        label,
+        skin.arrow_font_size as f64,
+        false,
+        &skin.arrow_font_family,
+    ) + 2.0;
+    let label_height = pm::text_height(skin.arrow_font_size as f64) + 2.0;
+    let ascent = pm::ascent(skin.arrow_font_size as f64);
+    match note.position {
+        UseCaseNotePosition::Left => {
+            let merged_height = note_height.max(label_height);
+            let note_y = y + (merged_height - note_height) / 2.0;
+            let label_y = y + (merged_height - label_height) / 2.0;
+            ((x + note_width + 1.0, label_y + 1.0 + ascent), (x, note_y))
+        }
+        UseCaseNotePosition::Right => {
+            let merged_height = note_height.max(label_height);
+            let note_y = y + (merged_height - note_height) / 2.0;
+            let label_y = y + (merged_height - label_height) / 2.0;
+            ((x + 1.0, label_y + 1.0 + ascent), (x + label_width, note_y))
+        }
+        UseCaseNotePosition::Top => {
+            let merged_width = note_width.max(label_width);
+            let note_x = x + (merged_width - note_width) / 2.0;
+            let label_x = x + (merged_width - label_width) / 2.0;
+            ((label_x + 1.0, y + note_height + 1.0 + ascent), (note_x, y))
+        }
+        UseCaseNotePosition::Bottom => {
+            let merged_width = note_width.max(label_width);
+            let note_x = x + (merged_width - note_width) / 2.0;
+            let label_x = x + (merged_width - label_width) / 2.0;
+            (
+                (label_x + 1.0, y + 1.0 + ascent),
+                (note_x, y + label_height),
+            )
+        }
+    }
+}
+
+fn emit_link_note(
+    svg: &mut SvgBuilder,
+    connection: &UseCaseConnection,
+    note: &UseCaseNote,
+    dim: &NoteDim,
+    label_x: f64,
+    label_y: f64,
+    skin: &SkinColors,
+) {
+    let (_, (component_x, component_y)) =
+        link_note_blocks(label_x, label_y, connection, note, dim, skin);
+    let x = component_x + LINK_NOTE_PADDING;
+    let y = component_y + LINK_NOTE_PADDING;
+    // `ComponentRoseNote.drawInternalU` truncates its text-box dimensions
+    // before asking Opale for the folded rectangle.
+    let width = dim.width.floor();
+    let height = dim.height.floor();
+    let right = x + width;
+    let bottom = y + height;
+    let fold_x = right - NOTE_FOLD;
+    let fold_y = y + NOTE_FOLD;
+    svg.raw(&format!(
+        r#"<path d="M{x},{y} L{x},{bottom} L{right},{bottom} L{right},{fold_y} L{fold_x},{y} L{x},{y}" fill="{NOTE_FILL}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+        x = fc(x),
+        y = fc(y),
+        bottom = fc(bottom),
+        right = fc(right),
+        fold_y = fc(fold_y),
+        fold_x = fc(fold_x),
+    ));
+    svg.raw(&format!(
+        r#"<path d="M{fold_x},{y} L{fold_x},{fold_y} L{right},{fold_y} L{fold_x},{y}" fill="{NOTE_FILL}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+        fold_x = fc(fold_x),
+        y = fc(y),
+        fold_y = fc(fold_y),
+        right = fc(right),
+    ));
+    let mut baseline = y + NOTE_MARGIN_Y + pm::ascent(NOTE_FONT_SIZE as f64);
+    for line in note.text.split('\n') {
+        let mut buf = String::new();
+        text_render::emit_text(
+            &mut buf,
+            line,
+            &TextBase {
+                x: x + NOTE_MARGIN_LEFT,
+                y: baseline,
+                font_size: NOTE_FONT_SIZE,
+                font_family: "sans-serif",
+                fill: TEXT_COLOR,
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        svg.raw(&buf);
+        baseline += pm::text_height(NOTE_FONT_SIZE as f64);
+    }
+}
+
 fn render_no_oracle_connections(
     svg: &mut SvgBuilder,
     diagram: &UseCaseDiagram,
@@ -1834,7 +2401,7 @@ fn render_no_oracle_connections(
     edge_paths: &[EdgePath],
     skin: &SkinColors,
 ) {
-    for conn in &diagram.connections {
+    for (connection_index, conn) in diagram.connections.iter().enumerate() {
         let Some(edge) = edge_paths
             .iter()
             .find(|edge| edge.from == conn.from && edge.to == conn.to)
@@ -1894,16 +2461,36 @@ fn render_no_oracle_connections(
                     s.to_string()
                 }
             });
-        if let Some(label) = label_text
-            && let Some((x, y)) = edge.points.get(edge.points.len() / 2).copied()
-        {
+        let link_note = note_on_connection(diagram, connection_index);
+        if let Some(label) = label_text {
+            let position = if let Some((note_index, note)) = link_note {
+                edge.label.map(|label_box| {
+                    link_note_blocks(
+                        label_box.x,
+                        label_box.y,
+                        conn,
+                        note,
+                        &note_dim(&diagram.notes[note_index]),
+                        skin,
+                    )
+                    .0
+                })
+            } else {
+                edge.points
+                    .get(edge.points.len() / 2)
+                    .map(|(x, y)| (*x + 4.0, *y - 4.0))
+            };
+            let Some((x, y)) = position else {
+                svg.raw("</g>");
+                continue;
+            };
             let mut buf = String::new();
             text_render::emit_text(
                 &mut buf,
                 &label,
                 &TextBase {
-                    x: x + 4.0,
-                    y: y - 4.0,
+                    x,
+                    y,
                     font_size: skin.arrow_font_size,
                     font_family: &skin.arrow_font_family,
                     fill: &skin.arrow_font_color,
@@ -1914,6 +2501,19 @@ fn render_no_oracle_connections(
                 },
             );
             svg.raw(&buf);
+        }
+        if let Some((note_index, note)) = link_note
+            && let Some(label_box) = edge.label
+        {
+            emit_link_note(
+                svg,
+                conn,
+                note,
+                &note_dim(&diagram.notes[note_index]),
+                label_box.x,
+                label_box.y,
+                skin,
+            );
         }
         svg.raw("</g>");
     }
@@ -1948,17 +2548,25 @@ fn link_comment_name<'a>(diagram: &'a UseCaseDiagram, id: &'a str) -> &'a str {
 
 fn no_oracle_link_id(diagram: &UseCaseDiagram, source_line: usize) -> String {
     let mut counter = 2usize;
-    let mut items: Vec<(usize, bool)> = Vec::new();
-    items.extend(diagram.actors.iter().map(|a| (a.source_line, false)));
-    items.extend(diagram.use_cases.iter().map(|u| (u.source_line, false)));
-    items.extend(diagram.packages.iter().map(|p| (p.source_line, false)));
-    items.extend(diagram.connections.iter().map(|c| (c.source_line, true)));
-    items.sort_by_key(|(line, _)| *line);
-    for (line, is_link) in items {
+    let mut items: Vec<(usize, usize, bool)> = Vec::new();
+    items.extend(diagram.actors.iter().map(|a| (a.source_line, 1, false)));
+    items.extend(diagram.use_cases.iter().map(|u| (u.source_line, 1, false)));
+    items.extend(diagram.packages.iter().map(|p| (p.source_line, 1, false)));
+    items.extend(diagram.notes.iter().filter_map(|note| {
+        let slots = match note.kind {
+            UseCaseNoteKind::Attached { .. } => 3,
+            UseCaseNoteKind::Floating { .. } => 1,
+            UseCaseNoteKind::OnLink { .. } => return None,
+        };
+        Some((note.source_line, slots, false))
+    }));
+    items.extend(diagram.connections.iter().map(|c| (c.source_line, 1, true)));
+    items.sort_by_key(|(line, _, _)| *line);
+    for (line, slots, is_link) in items {
         if is_link && line == source_line {
             return format!("lnk{counter}");
         }
-        counter += 1;
+        counter += slots;
     }
     format!("lnk{counter}")
 }
