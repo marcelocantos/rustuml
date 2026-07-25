@@ -78,6 +78,11 @@ const V_GAP: f64 = 60.0;
 const SVEK_ORIGIN_X: f64 = 7.0;
 const SVEK_ORIGIN_Y: f64 = 6.0;
 const SVEK_TRAILING_PAD: f64 = 14.0;
+/// Rank separation used by the autonomous image builder inside a composite.
+///
+/// Java provenance: `DotStringFactory.getMinRankSep()` falls back to dot's
+/// 36-pixel default when `InnerStateAutonom` creates its independent builder.
+const AUTONOMOUS_RANK_SEP: f64 = 36.0;
 
 /// Title font size.
 const TITLE_FONT_SIZE: f64 = 14.0;
@@ -239,10 +244,10 @@ fn layout_node_size(
     state_def: Option<&State>,
     hide_empty_desc: bool,
 ) -> (f64, f64, bool) {
-    if id == "__start__" {
+    if id == "__start__" || id.starts_with("__start__:") {
         return (START_RADIUS * 2.0, START_RADIUS * 2.0, true);
     }
-    if id == "__end__" {
+    if id == "__end__" || id.starts_with("__end__:") {
         return (END_OUTER_RADIUS * 2.0, END_OUTER_RADIUS * 2.0, true);
     }
     let is_circle =
@@ -638,6 +643,25 @@ struct StateSvgIds {
     next_counter: usize,
 }
 
+/// Map one parsed transition endpoint to its renderer-owned layout identity.
+///
+/// Composite-local `[*]` references arrive from the parser as `[*]Outer`.
+/// They still denote two distinct entities: the source occurrence is
+/// `Outer..start.Outer`, while the target occurrence is
+/// `Outer..end.Outer`.
+fn state_endpoint_layout_id(id: &str, is_source: bool) -> String {
+    if let Some(scope) = id.strip_prefix("[*]") {
+        let kind = if is_source { "__start__" } else { "__end__" };
+        if scope.is_empty() {
+            kind.to_string()
+        } else {
+            format!("{kind}:{scope}")
+        }
+    } else {
+        id.to_string()
+    }
+}
+
 /// Allocate state entity/link ids in PlantUML's construction order.
 ///
 /// Java provenance: `CucaDiagram.startingPass` resets `cpt1` to one for every
@@ -673,15 +697,16 @@ fn allocate_state_svg_ids(diagram: &StateDiagram, state_ids: &[String]) -> State
     transitions.sort_by_key(|(idx, transition)| (transition.source_line, *idx));
     for (idx, transition) in transitions {
         for (endpoint, is_source) in [(&transition.from, true), (&transition.to, false)] {
-            let id = if endpoint == "[*]" {
-                if is_source { "__start__" } else { "__end__" }
+            let mapped_id = state_endpoint_layout_id(endpoint, is_source);
+            let id = if state_ids.iter().any(|state_id| state_id == &mapped_id) {
+                mapped_id
             } else {
-                endpoint.as_str()
+                endpoint.clone()
             };
-            if state_ids.iter().any(|state_id| state_id == id)
-                && !entity_ids.iter().any(|(seen, _)| seen == id)
+            if state_ids.iter().any(|state_id| state_id == &id)
+                && !entity_ids.iter().any(|(seen, _)| seen == &id)
             {
-                entity_ids.push((id.to_string(), format!("ent{pass_two_counter:04}")));
+                entity_ids.push((id, format!("ent{pass_two_counter:04}")));
                 pass_two_counter += 1;
             }
         }
@@ -835,6 +860,780 @@ impl StateArrowFont {
     }
 }
 
+#[derive(Clone)]
+struct AutonomousScopeLayout {
+    ids: Vec<String>,
+    positions: Vec<(String, f64, f64, f64, f64)>,
+    edge_paths: Vec<EdgePath>,
+    transition_indices: Vec<usize>,
+    origin_x: f64,
+    origin_y: f64,
+    width: f64,
+    height: f64,
+}
+
+struct AutonomousComposite<'a> {
+    state: &'a State,
+    inner: AutonomousScopeLayout,
+    width: f64,
+    height: f64,
+}
+
+struct AutonomousRenderContext<'a> {
+    diagram: &'a StateDiagram,
+    entity_ids: &'a [(String, String)],
+    allocated_ids: &'a StateSvgIds,
+    skin: &'a StateSkin,
+    arrow_font: &'a StateArrowFont,
+}
+
+fn endpoint_is_in_composite(diagram: &StateDiagram, endpoint: &str, scope: &str) -> bool {
+    endpoint
+        .strip_prefix("[*]")
+        .is_some_and(|pseudo_scope| pseudo_scope == scope)
+        || diagram
+            .states
+            .iter()
+            .find(|state| state.id == endpoint)
+            .and_then(|state| state.parent.as_deref())
+            == Some(scope)
+}
+
+fn collect_autonomous_scope_ids<F>(
+    diagram: &StateDiagram,
+    transition_indices: &[usize],
+    include_state: F,
+) -> Vec<String>
+where
+    F: Fn(&State) -> bool,
+{
+    let mut ids = Vec::new();
+    let mut seen = std::collections::HashSet::new();
+    let mut declared: Vec<(usize, usize, &State)> = diagram
+        .states
+        .iter()
+        .enumerate()
+        .filter(|(_, state)| include_state(state))
+        .filter_map(|(index, state)| state.decl_line.map(|line| (line, index, state)))
+        .collect();
+    declared.sort_by_key(|(line, index, _)| (*line, *index));
+    for (_, _, state) in declared {
+        if seen.insert(state.id.clone()) {
+            ids.push(state.id.clone());
+        }
+    }
+
+    let mut ordered_transitions = transition_indices.to_vec();
+    ordered_transitions.sort_by_key(|index| (diagram.transitions[*index].source_line, *index));
+    for index in ordered_transitions {
+        let transition = &diagram.transitions[index];
+        for (endpoint, is_source) in [(&transition.from, true), (&transition.to, false)] {
+            let id = state_endpoint_layout_id(endpoint, is_source);
+            if seen.insert(id.clone()) {
+                ids.push(id);
+            }
+        }
+    }
+
+    for state in &diagram.states {
+        if include_state(state) && seen.insert(state.id.clone()) {
+            ids.push(state.id.clone());
+        }
+    }
+    ids
+}
+
+fn layout_autonomous_scope(
+    diagram: &StateDiagram,
+    ids: Vec<String>,
+    transition_indices: Vec<usize>,
+    node_sizes: &[(String, f64, f64, bool)],
+    arrow_font: &StateArrowFont,
+    plantuml_spacing: bool,
+) -> Option<AutonomousScopeLayout> {
+    let mut layout = LayoutGraph::new(Direction::TopToBottom);
+    if plantuml_spacing {
+        layout = layout.with_plantuml_svek_spacing();
+    } else {
+        layout = layout.with_spacing_pixels(
+            rustuml_layout::graph::GraphSpacing::PLANTUML_SVEK_DEFAULTS.node_sep_px,
+            AUTONOMOUS_RANK_SEP,
+        );
+    }
+    for id in &ids {
+        let (_, width, height, circle) = node_sizes.iter().find(|entry| &entry.0 == id)?;
+        if *circle {
+            layout.add_circle_node(id, id, width.max(*height));
+        } else {
+            layout.add_node(id, id, *width, *height);
+        }
+    }
+    for index in &transition_indices {
+        let transition = &diagram.transitions[*index];
+        let from = state_endpoint_layout_id(&transition.from, true);
+        let to = state_endpoint_layout_id(&transition.to, false);
+        let direction = explicit_transition_direction(diagram, transition);
+        let (layout_from, layout_to) = if matches!(
+            direction,
+            Some(ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Up)
+        ) {
+            (&to, &from)
+        } else {
+            (&from, &to)
+        };
+        let horizontal = matches!(
+            direction,
+            Some(ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Right)
+        );
+        if horizontal {
+            layout.add_same_rank(layout_from, layout_to);
+        }
+        let label_size = transition.label.as_deref().map(|label| EdgeLabelSize {
+            width: text_render::measure_with_family(
+                label,
+                arrow_font.size as f64,
+                arrow_font.bold,
+                &arrow_font.family,
+            ) + 2.0,
+            height: (text_render::label_height(label, arrow_font.size as f64) + 2.0).floor(),
+        });
+        layout.add_edge_with_label_sizes_and_minlen(
+            layout_from,
+            layout_to,
+            label_size,
+            None,
+            None,
+            (!horizontal)
+                .then(|| explicit_vertical_minlen(diagram, transition))
+                .flatten(),
+        );
+    }
+
+    let result = layout.layout_full(std::time::Duration::from_secs(5))?;
+    if result.node_positions.len() < ids.len() {
+        return None;
+    }
+    let top = result
+        .node_positions
+        .iter()
+        .map(|position| quantize_svek_coord(position.y))
+        .reduce(f64::min)
+        .unwrap_or(0.0);
+    let rectangle_on_top = ids
+        .iter()
+        .zip(&result.node_positions)
+        .any(|(id, position)| {
+            (quantize_svek_coord(position.y) - top).abs() <= f64::EPSILON
+                && node_sizes
+                    .iter()
+                    .find(|entry| &entry.0 == id)
+                    .is_some_and(|entry| !entry.3)
+        });
+    let origin_x = SVEK_ORIGIN_X;
+    let origin_y = SVEK_ORIGIN_Y + f64::from(rectangle_on_top);
+    let mut positions = Vec::with_capacity(ids.len());
+    let mut max_x = 0.0_f64;
+    let mut max_y = 0.0_f64;
+    for (id, position) in ids.iter().zip(&result.node_positions) {
+        let (_, width, height, _) = node_sizes.iter().find(|entry| &entry.0 == id)?;
+        let x = quantize_svek_coord(position.x);
+        let y = quantize_svek_coord(position.y);
+        positions.push((
+            id.clone(),
+            x + origin_x + width / 2.0,
+            y + origin_y + height / 2.0,
+            *width,
+            *height,
+        ));
+        max_x = max_x.max(x + width);
+        max_y = max_y.max(y + height);
+    }
+    if transition_indices
+        .iter()
+        .any(|index| diagram.transitions[*index].label.is_some())
+    {
+        max_x = max_x.max(result.width);
+        max_y = max_y.max(result.height);
+    }
+
+    Some(AutonomousScopeLayout {
+        ids,
+        positions,
+        edge_paths: result.edge_paths,
+        transition_indices,
+        origin_x,
+        origin_y,
+        width: origin_x + max_x + SVEK_TRAILING_PAD,
+        height: origin_y + max_y + SVEK_TRAILING_PAD,
+    })
+}
+
+/// Build the one-level autonomous state image used by
+/// `GroupMakerState.getImage` and `InnerStateAutonom`.
+///
+/// This first generative slice deliberately accepts one unstyled composite
+/// with direct normal-state children. Unsupported nested/concurrent/annotated
+/// forms stay on the existing renderer until their own Java mechanism is
+/// ported.
+fn build_autonomous_composite<'a>(
+    diagram: &'a StateDiagram,
+    arrow_font: &StateArrowFont,
+) -> Option<(AutonomousComposite<'a>, AutonomousScopeLayout)> {
+    if !diagram.notes.is_empty()
+        || diagram.meta.title.is_some()
+        || !diagram.meta.skinparams.is_empty()
+    {
+        return None;
+    }
+    let composites: Vec<&State> = diagram
+        .states
+        .iter()
+        .filter(|state| state.composite)
+        .collect();
+    let [composite] = composites.as_slice() else {
+        return None;
+    };
+    if composite.parent.is_some()
+        || composite.stereotype.is_some()
+        || composite.fill.is_some()
+        || composite.stroke.is_some()
+        || composite.url.is_some()
+        || !composite.descriptions.is_empty()
+    {
+        return None;
+    }
+    let children: Vec<&State> = diagram
+        .states
+        .iter()
+        .filter(|state| state.parent.as_deref() == Some(composite.id.as_str()))
+        .collect();
+    if children.is_empty()
+        || children.iter().any(|state| {
+            state.composite
+                || !matches!(state.kind, StateKind::Normal)
+                || state.stereotype.is_some()
+                || state.fill.is_some()
+                || state.stroke.is_some()
+                || state.url.is_some()
+                || !state.descriptions.is_empty()
+        })
+        || diagram.states.iter().any(|state| {
+            state.parent.is_some() && state.parent.as_deref() != Some(composite.id.as_str())
+                || !matches!(state.kind, StateKind::Normal)
+        })
+    {
+        return None;
+    }
+
+    let mut inner_transition_indices = Vec::new();
+    let mut outer_transition_indices = Vec::new();
+    for (index, transition) in diagram.transitions.iter().enumerate() {
+        let from_inner = endpoint_is_in_composite(diagram, &transition.from, &composite.id);
+        let to_inner = endpoint_is_in_composite(diagram, &transition.to, &composite.id);
+        match (from_inner, to_inner) {
+            (true, true) => inner_transition_indices.push(index),
+            (false, false) => outer_transition_indices.push(index),
+            _ => return None,
+        }
+    }
+    if inner_transition_indices.is_empty() || outer_transition_indices.is_empty() {
+        return None;
+    }
+
+    let inner_ids = collect_autonomous_scope_ids(diagram, &inner_transition_indices, |state| {
+        state.parent.as_deref() == Some(composite.id.as_str())
+    });
+    let inner_sizes: Vec<(String, f64, f64, bool)> = inner_ids
+        .iter()
+        .map(|id| {
+            let state = diagram.states.iter().find(|state| state.id == *id);
+            let (width, height, circle) = layout_node_size(id, state, false);
+            (id.clone(), width, height, circle)
+        })
+        .collect();
+    // Java creates a fresh `GeneralImageBuilder` for the composite's children.
+    // It uses dot's default 36px rank separation, not the outer SVEK minimum.
+    let mut inner = layout_autonomous_scope(
+        diagram,
+        inner_ids,
+        inner_transition_indices,
+        &inner_sizes,
+        arrow_font,
+        false,
+    )?;
+    // `SvekResult.calculateDimension` measures the autonomous image from its
+    // painted `MinMax`, rather than from the translated outer-canvas origin.
+    // `LimitFinder.drawRectangle` contributes the two horizontal stroke-limit
+    // pixels; the vertical ellipse bound needs no corresponding allowance.
+    inner.width = inner.width - inner.origin_x + 2.0;
+    inner.height -= inner.origin_y;
+    let title_height = crate::plantuml_metrics::text_height(STATE_FONT_SIZE);
+    let width = inner.width.max(text_render::measure(
+        &composite.label,
+        STATE_FONT_SIZE,
+        false,
+    )) + STATE_DIMENSION_PADDING;
+    let height = inner.height + title_height + STATE_DIMENSION_PADDING;
+
+    let outer_ids = collect_autonomous_scope_ids(diagram, &outer_transition_indices, |state| {
+        state.parent.is_none()
+    });
+    let outer_sizes: Vec<(String, f64, f64, bool)> = outer_ids
+        .iter()
+        .map(|id| {
+            if id == &composite.id {
+                (id.clone(), width, height, false)
+            } else {
+                let state = diagram.states.iter().find(|state| state.id == *id);
+                let (node_width, node_height, circle) = layout_node_size(id, state, false);
+                (id.clone(), node_width, node_height, circle)
+            }
+        })
+        .collect();
+    let outer = layout_autonomous_scope(
+        diagram,
+        outer_ids,
+        outer_transition_indices,
+        &outer_sizes,
+        arrow_font,
+        true,
+    )?;
+
+    Some((
+        AutonomousComposite {
+            state: composite,
+            inner,
+            width,
+            height,
+        },
+        outer,
+    ))
+}
+
+fn autonomous_entity_id<'a>(entity_ids: &'a [(String, String)], id: &str) -> &'a str {
+    entity_ids
+        .iter()
+        .find(|(entity_id, _)| entity_id == id)
+        .map(|(_, svg_id)| svg_id.as_str())
+        .unwrap_or("ent0002")
+}
+
+fn autonomous_pseudo_name(id: &str) -> Option<String> {
+    if id == "__start__" {
+        Some(".start.".to_string())
+    } else if id == "__end__" {
+        Some(".end.".to_string())
+    } else if let Some(scope) = id.strip_prefix("__start__:") {
+        Some(format!("{scope}..start.{scope}"))
+    } else {
+        id.strip_prefix("__end__:")
+            .map(|scope| format!("{scope}..end.{scope}"))
+    }
+}
+
+fn autonomous_pseudo_source_line(diagram: &StateDiagram, id: &str) -> usize {
+    diagram
+        .transitions
+        .iter()
+        .find_map(|transition| {
+            (state_endpoint_layout_id(&transition.from, true) == id
+                || state_endpoint_layout_id(&transition.to, false) == id)
+                .then_some(transition.source_line)
+        })
+        .unwrap_or(1)
+}
+
+fn autonomous_endpoint_display(diagram: &StateDiagram, endpoint: &str, is_source: bool) -> String {
+    if let Some(scope) = endpoint.strip_prefix("[*]") {
+        let pseudo = if is_source { "*start*" } else { "*end*" };
+        let scope_label = diagram
+            .states
+            .iter()
+            .find(|state| state.id == scope)
+            .map(|state| state.label.as_str())
+            .unwrap_or(scope);
+        format!("{pseudo}{scope_label}")
+    } else {
+        diagram
+            .states
+            .iter()
+            .find(|state| state.id == endpoint)
+            .map(|state| state.label.clone())
+            .unwrap_or_else(|| endpoint.to_string())
+    }
+}
+
+fn emit_autonomous_scope_entities(
+    svg: &mut String,
+    context: &AutonomousRenderContext<'_>,
+    scope: &AutonomousScopeLayout,
+    offset: (f64, f64),
+    skip_id: Option<&str>,
+) {
+    let (offset_x, offset_y) = offset;
+    for (id, cx, cy, width, height) in &scope.positions {
+        if skip_id == Some(id.as_str()) {
+            continue;
+        }
+        let cx = cx + offset_x;
+        let cy = cy + offset_y;
+        if let Some(qualified_name) = autonomous_pseudo_name(id) {
+            let source_line = autonomous_pseudo_source_line(context.diagram, id);
+            if id.starts_with("__start__") {
+                write!(
+                    svg,
+                    r#"<g class="start_entity" data-qualified-name="{qualified_name}" data-source-line="{source_line}" id="{}"><ellipse cx="{}" cy="{}" fill="{PSEUDO_COLOR}" rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/></g>"#,
+                    autonomous_entity_id(context.entity_ids, id),
+                    fmt_f(cx),
+                    fmt_f(cy),
+                )
+                .unwrap();
+            } else {
+                write!(
+                    svg,
+                    r#"<g class="end_entity" data-qualified-name="{qualified_name}" data-source-line="{source_line}" id="{}"><ellipse cx="{}" cy="{}" fill="none" rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/><ellipse cx="{}" cy="{}" fill="{PSEUDO_COLOR}" rx="{END_INNER_RADIUS}" ry="{END_INNER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/></g>"#,
+                    autonomous_entity_id(context.entity_ids, id),
+                    fmt_f(cx),
+                    fmt_f(cy),
+                    fmt_f(cx),
+                    fmt_f(cy),
+                )
+                .unwrap();
+            }
+            continue;
+        }
+
+        let Some(state) = context.diagram.states.iter().find(|state| state.id == *id) else {
+            continue;
+        };
+        let box_x = cx - width / 2.0;
+        let box_y = cy - height / 2.0;
+        let fill = state
+            .fill
+            .as_deref()
+            .map(crate::sequence::resolve_color)
+            .unwrap_or_else(|| context.skin.state_fill.clone());
+        write!(
+            svg,
+            r#"<g class="entity" data-qualified-name="{}" id="{}"><rect fill="{fill}" height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/><line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+            escape_attr(&state.id),
+            autonomous_entity_id(context.entity_ids, id),
+            fmt_f(*height),
+            context.skin.stroke,
+            context.skin.border_thickness,
+            fmt_f(*width),
+            fmt_f(box_x),
+            fmt_f(box_y),
+            context.skin.stroke,
+            context.skin.border_thickness,
+            fmt_f(box_x),
+            fmt_f(box_x + width),
+            fmt_f(box_y + DIVIDER_OFFSET),
+            fmt_f(box_y + DIVIDER_OFFSET),
+        )
+        .unwrap();
+        let text_width = text_render::measure(&state.label, STATE_FONT_SIZE, false);
+        let mut text = String::new();
+        text_render::emit_text(
+            &mut text,
+            &state.label,
+            &TextBase {
+                x: cx - text_width / 2.0,
+                y: box_y + NAME_BASELINE_OFFSET,
+                font_size: STATE_FONT_SIZE as u32,
+                font_family: "sans-serif",
+                fill: &context.skin.text_color,
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        svg.push_str(&text);
+        svg.push_str("</g>");
+    }
+}
+
+fn emit_autonomous_scope_links(
+    svg: &mut String,
+    context: &AutonomousRenderContext<'_>,
+    scope: &AutonomousScopeLayout,
+    offset: (f64, f64),
+) {
+    let (offset_x, offset_y) = offset;
+    let pos_of = |id: &str| -> (f64, f64, f64, f64) {
+        scope
+            .positions
+            .iter()
+            .find(|(position_id, _, _, _, _)| position_id == id)
+            .map(|(_, x, y, width, height)| (x + offset_x, y + offset_y, *width, *height))
+            .unwrap_or((offset_x, offset_y, STATE_MIN_WIDTH, STATE_BOX_HEIGHT))
+    };
+    let mut consumed_edge_paths = vec![false; scope.edge_paths.len()];
+    for transition_index in &scope.transition_indices {
+        let transition = &context.diagram.transitions[*transition_index];
+        let style = context.diagram.transition_style(*transition_index);
+        let explicit_color = style.color.as_deref().map(crate::sequence::resolve_color);
+        let color = explicit_color
+            .as_deref()
+            .unwrap_or(&context.skin.arrow_color);
+        let stroke = transition_stroke_style(color, &style);
+        let from = state_endpoint_layout_id(&transition.from, true);
+        let to = state_endpoint_layout_id(&transition.to, false);
+        let inverted = matches!(
+            explicit_transition_direction(context.diagram, transition),
+            Some(ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Up)
+        );
+        let (edge_from, edge_to) = if inverted { (&to, &from) } else { (&from, &to) };
+        let from_name = autonomous_endpoint_display(context.diagram, &transition.from, true);
+        let to_name = autonomous_endpoint_display(context.diagram, &transition.to, false);
+        let (edge_from_name, edge_to_name) = if inverted {
+            (&to_name, &from_name)
+        } else {
+            (&from_name, &to_name)
+        };
+        if inverted {
+            write!(
+                svg,
+                "<!--reverse link {edge_from_name} to {edge_to_name}-->"
+            )
+            .unwrap();
+        } else {
+            write!(svg, "<!--link {edge_from_name} to {edge_to_name}-->").unwrap();
+        }
+        write!(
+            svg,
+            r#"<g class="link" data-entity-1="{}" data-entity-2="{}" data-link-type="dependency" data-source-line="{}" id="{}">"#,
+            autonomous_entity_id(context.entity_ids, edge_from),
+            autonomous_entity_id(context.entity_ids, edge_to),
+            transition.source_line,
+            context
+                .allocated_ids
+                .link_ids
+                .get(*transition_index)
+                .map(String::as_str)
+                .unwrap_or("lnk2"),
+        )
+        .unwrap();
+
+        let edge_path = routed_edge_path_for_transition(
+            &scope.edge_paths,
+            &mut consumed_edge_paths,
+            edge_from,
+            edge_to,
+            scope.origin_x + offset_x,
+            scope.origin_y + offset_y,
+            &pos_of,
+        );
+        if let Some(edge_path) = edge_path
+            && !edge_path.points.is_empty()
+        {
+            let mut points: Vec<(f64, f64)> = edge_path
+                .points
+                .iter()
+                .map(|(x, y)| {
+                    (
+                        quantize_svek_coord(*x) + scope.origin_x + offset_x,
+                        quantize_svek_coord(*y) + scope.origin_y + offset_y,
+                    )
+                })
+                .collect();
+            let (arrow_control, arrow_tip) = if inverted {
+                (points.get(1).copied().unwrap_or(points[0]), points[0])
+            } else {
+                (
+                    points
+                        .get(points.len().saturating_sub(2))
+                        .copied()
+                        .unwrap_or(points[0]),
+                    points[points.len() - 1],
+                )
+            };
+            if inverted {
+                retract_dependency_arrow_path_start(&mut points);
+            } else {
+                retract_dependency_arrow_path(&mut points);
+            }
+            let mut path = format!("M{},{}", fmt_f(points[0].0), fmt_f(points[0].1));
+            let mut point_index = 1;
+            while point_index + 2 < points.len() {
+                write!(
+                    path,
+                    " C{},{} {},{} {},{}",
+                    fmt_f(points[point_index].0),
+                    fmt_f(points[point_index].1),
+                    fmt_f(points[point_index + 1].0),
+                    fmt_f(points[point_index + 1].1),
+                    fmt_f(points[point_index + 2].0),
+                    fmt_f(points[point_index + 2].1),
+                )
+                .unwrap();
+                point_index += 3;
+            }
+            write!(
+                svg,
+                r#"<path d="{path}" fill="none" id="{edge_from_name}-{}-{edge_to_name}" style="{stroke}"/>"#,
+                if inverted { "backto" } else { "to" },
+            )
+            .unwrap();
+            render_arrowhead(svg, arrow_control, arrow_tip, color);
+
+            if let Some(label) = &transition.label {
+                let (label_x, label_y) = edge_path
+                    .label
+                    .map(|position| {
+                        (
+                            quantize_svek_coord(position.x) + scope.origin_x + offset_x + 1.0,
+                            quantize_svek_coord(position.y)
+                                + scope.origin_y
+                                + offset_y
+                                + 1.0
+                                + text_render::label_ascent(label, context.arrow_font.size as f64),
+                        )
+                    })
+                    .unwrap_or_else(|| {
+                        let first = points[0];
+                        let last = points[points.len() - 1];
+                        ((first.0 + last.0) / 2.0 + 1.0, (first.1 + last.1) / 2.0)
+                    });
+                let mut text = String::new();
+                text_render::emit_text(
+                    &mut text,
+                    label,
+                    &TextBase {
+                        x: label_x,
+                        y: label_y,
+                        font_size: context.arrow_font.size,
+                        font_family: &context.arrow_font.family,
+                        fill: &context.arrow_font.color,
+                        bold: context.arrow_font.bold,
+                        italic: context.arrow_font.italic,
+                        underline: false,
+                        skip_underline: false,
+                    },
+                );
+                svg.push_str(&text);
+            }
+        }
+        svg.push_str("</g>");
+    }
+}
+
+fn render_autonomous_composite(diagram: &StateDiagram) -> Option<String> {
+    let skin = StateSkin::from_diagram(diagram);
+    let arrow_font = StateArrowFont::from_diagram(diagram);
+    let (composite, outer) = build_autonomous_composite(diagram, &arrow_font)?;
+    let mut all_ids = outer.ids.clone();
+    for id in &composite.inner.ids {
+        if !all_ids.contains(id) {
+            all_ids.push(id.clone());
+        }
+    }
+    let allocated_ids = allocate_state_svg_ids(diagram, &all_ids);
+    let context = AutonomousRenderContext {
+        diagram,
+        entity_ids: &allocated_ids.entity_ids,
+        allocated_ids: &allocated_ids,
+        skin: &skin,
+        arrow_font: &arrow_font,
+    };
+    let width = outer.width.ceil() as i64;
+    let height = outer.height.ceil() as i64;
+    let mut svg = String::with_capacity(4096);
+    write!(
+        svg,
+        r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="STATE" height="{height}px" preserveAspectRatio="none" style="width:{width}px;height:{height}px;background:#FFFFFF;" version="1.1" viewBox="0 0 {width} {height}" width="{width}px" zoomAndPan="magnify"><?plantuml ?><defs/><g>"#,
+    )
+    .unwrap();
+
+    let (_, composite_cx, composite_cy, _, _) = outer
+        .positions
+        .iter()
+        .find(|(id, _, _, _, _)| id == &composite.state.id)?;
+    let box_x = composite_cx - composite.width / 2.0;
+    let box_y = composite_cy - composite.height / 2.0;
+    let divider_y = box_y + DIVIDER_OFFSET;
+    let right = box_x + composite.width;
+    write!(
+        svg,
+        r#"<path d="M{},{} L{},{} A{STATE_RX},{STATE_RX} 0 0 1 {},{} L{},{} L{},{} L{},{} A{STATE_RX},{STATE_RX} 0 0 1 {},{}" fill="{}"/><rect fill="none" height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/><line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+        fmt_f(box_x + STATE_RX),
+        fmt_f(box_y),
+        fmt_f(right - STATE_RX),
+        fmt_f(box_y),
+        fmt_f(right),
+        fmt_f(box_y + STATE_RX),
+        fmt_f(right),
+        fmt_f(divider_y),
+        fmt_f(box_x),
+        fmt_f(divider_y),
+        fmt_f(box_x),
+        fmt_f(box_y + STATE_RX),
+        fmt_f(box_x + STATE_RX),
+        fmt_f(box_y),
+        skin.state_fill,
+        fmt_f(composite.height),
+        skin.stroke,
+        skin.border_thickness,
+        fmt_f(composite.width),
+        fmt_f(box_x),
+        fmt_f(box_y),
+        skin.stroke,
+        skin.border_thickness,
+        fmt_f(box_x),
+        fmt_f(right),
+        fmt_f(divider_y),
+        fmt_f(divider_y),
+    )
+    .unwrap();
+    let title_width = text_render::measure(&composite.state.label, STATE_FONT_SIZE, false);
+    let mut title = String::new();
+    text_render::emit_text(
+        &mut title,
+        &composite.state.label,
+        &TextBase {
+            x: composite_cx - title_width / 2.0,
+            y: box_y + NAME_BASELINE_OFFSET,
+            font_size: STATE_FONT_SIZE as u32,
+            font_family: "sans-serif",
+            fill: &skin.text_color,
+            bold: false,
+            italic: false,
+            underline: false,
+            skip_underline: false,
+        },
+    );
+    svg.push_str(&title);
+
+    // Java `InnerStateAutonom.drawU` paints the autonomous inner image at
+    // x=MARGIN and y=titreHeight+MARGIN_LINE. Both margins are five pixels.
+    let inner_offset_x = box_x + 5.0;
+    let inner_offset_y = box_y + DIVIDER_OFFSET + 5.0;
+    emit_autonomous_scope_entities(
+        &mut svg,
+        &context,
+        &composite.inner,
+        (inner_offset_x, inner_offset_y),
+        None,
+    );
+    emit_autonomous_scope_links(
+        &mut svg,
+        &context,
+        &composite.inner,
+        (inner_offset_x, inner_offset_y),
+    );
+    emit_autonomous_scope_entities(
+        &mut svg,
+        &context,
+        &outer,
+        (0.0, 0.0),
+        Some(&composite.state.id),
+    );
+    emit_autonomous_scope_links(&mut svg, &context, &outer, (0.0, 0.0));
+    svg.push_str("</g></svg>");
+    Some(svg)
+}
+
 /// Build a PlantUML-compatible SVG for a state diagram.
 ///
 /// The output uses inline formatting (no extra whitespace) to match PlantUML's
@@ -873,6 +1672,11 @@ pub fn render_with_oracle(
         && diagram.states.iter().any(|s| s.composite)
     {
         return render_composite_with_oracle(diagram, orc);
+    }
+    if oracle.is_none()
+        && let Some(svg) = render_autonomous_composite(diagram)
+    {
+        return svg;
     }
 
     // Resolve skinparam-driven colour overrides. Format-string sites inside
@@ -4601,6 +5405,33 @@ mod tests {
         assert!(svg.contains("disable"));
         assert!(svg.contains(r#"data-diagram-type="STATE""#));
         assert!(svg.contains(r#"class="end_entity""#));
+    }
+
+    #[test]
+    fn renamed_two_child_composite_uses_an_autonomous_inner_layout() {
+        let input = concat!(
+            "@startuml\n",
+            "[*] --> HarborMode\n",
+            "state HarborMode {\n",
+            "  [*] --> CopperReady\n",
+            "  CopperReady --> VioletRunning\n",
+            "  VioletRunning --> [*]\n",
+            "}\n",
+            "HarborMode --> [*]\n",
+            "@enduml\n",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(r#"data-qualified-name="HarborMode..start.HarborMode""#));
+        assert!(svg.contains(r#"data-qualified-name="HarborMode.CopperReady""#));
+        assert!(svg.contains(r#"data-qualified-name="HarborMode.VioletRunning""#));
+        assert!(svg.contains(r#"data-qualified-name="HarborMode..end.HarborMode""#));
+        assert!(svg.contains(r#"id="*start*HarborMode-to-CopperReady""#));
+        assert!(svg.contains(r#"id="VioletRunning-to-*end*HarborMode""#));
+        let composite_header = svg.find(">HarborMode</text>").unwrap();
+        let outer_start = svg.find(r#"data-qualified-name=".start.""#).unwrap();
+        assert!(composite_header < outer_start);
     }
 
     #[test]
