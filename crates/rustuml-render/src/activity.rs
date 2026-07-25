@@ -29861,27 +29861,20 @@ fn typed_ftile_emit_shapes(
             input_lane,
             output_lane,
             branches,
-            decorated,
             bottom_bar_y,
+            ..
         } => {
-            let first = branches.first().expect("fork has a branch");
-            let last = branches.last().expect("fork has a branch");
-            let first_decorated = decorated.first().expect("fork has decorated geometry");
-            let last_decorated = decorated.last().expect("fork has decorated geometry");
-            let first_axis = x + first.x - ftile::PARALLEL_X_MARGIN + first_decorated.left;
-            let last_axis = x + last.x - ftile::PARALLEL_X_MARGIN + last_decorated.left;
-
-            // `FtileBlackBlock` is ignored by ON_X compression. Reconstruct
-            // its visible span from `ParallelBuilderFork`'s transformed
-            // first/last decorated branch axes, clipped by the owner lane.
+            // `ParallelBuilderFork.doStep1`/`doStep2` give each
+            // `FtileBlackBlock` the assembled result width.
+            // `FtileAssemblySimple.getTranslated1`/`getTranslated2` then
+            // replay that full span through the block's owner lane.
             let bar_fill = emitters[*input_lane].palette.bar_color.clone();
             let input_lane_left = lanes.left[*input_lane];
             let input_lane_right = input_lane_left + lanes.width[*input_lane];
-            let input_left = (input_lane_left + 6.0)
-                .max(lanes.x(*input_lane, first_axis) - first_decorated.left + 2.0);
+            let input_left = (input_lane_left + 6.0).max(lanes.x(*input_lane, x));
             let right_inset = 4.0;
             let input_right = (input_lane_right - right_inset)
-                .min(lanes.x(*input_lane, last_axis) + last_decorated.right());
+                .min(lanes.x(*input_lane, x + scene.geometry.width));
             emitters[*input_lane].fork_bar(
                 &bar_fill,
                 &bar_fill,
@@ -29896,10 +29889,9 @@ fn typed_ftile_emit_shapes(
             let bar_fill = emitters[*output_lane].palette.bar_color.clone();
             let output_lane_left = lanes.left[*output_lane];
             let output_lane_right = output_lane_left + lanes.width[*output_lane];
-            let output_left = (output_lane_left + 6.0)
-                .max(lanes.x(*output_lane, first_axis) - first_decorated.left + 2.0);
+            let output_left = (output_lane_left + 6.0).max(lanes.x(*output_lane, x));
             let output_right = (output_lane_right - right_inset)
-                .min(lanes.x(*output_lane, last_axis) + last_decorated.right());
+                .min(lanes.x(*output_lane, x + scene.geometry.width));
             emitters[*output_lane].fork_bar(
                 &bar_fill,
                 &bar_fill,
