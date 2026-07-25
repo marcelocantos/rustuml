@@ -1070,6 +1070,7 @@ fn emit_cluster_shape(
         // top-right, identical to the leaf component shape but drawn with the
         // cluster stroke-width (1) instead of the leaf 0.5.
         Component => emit_component_cluster(svg, x, y, w, h, fill, stroke),
+        Cloud => emit_cloud_cluster(svg, x, y, w, h, fill, stroke),
         Frame => emit_frame_cluster(svg, x, y, w, h, fill, stroke),
         Folder => emit_folder_cluster(svg, x, y, w, h, fill, label),
         Package => emit_package_cluster(svg, x, y, w, h, fill, label),
@@ -1089,6 +1090,38 @@ fn emit_oracle_cloud_cluster_path(svg: &mut SvgBuilder, glyph: &str, fill: &str,
         style.to_string()
     };
     svg.raw(&format!(r#"<path d="{d}" fill="{fill}" style="{style}"/>"#,));
+}
+
+fn emit_cloud_cluster(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    stroke: &str,
+) {
+    // `USymbolCloud.drawCloud` generates the same seeded local path for
+    // clusters and leaves; only the surrounding SVEK translation and cluster
+    // stroke width differ.
+    let path = crate::cloud_shape::generate(w, h);
+    let mut d = String::new();
+    let _ = write!(d, "M{},{}", fc(path.start.0 + x), fc(path.start.1 + y));
+    for cubic in &path.cubics {
+        let _ = write!(
+            d,
+            " C{},{} {},{} {},{}",
+            fc(cubic.c1.0 + x),
+            fc(cubic.c1.1 + y),
+            fc(cubic.c2.0 + x),
+            fc(cubic.c2.1 + y),
+            fc(cubic.to.0 + x),
+            fc(cubic.to.1 + y),
+        );
+    }
+    svg.raw(&format!(
+        r#"<path d="{d}" fill="{fill}" style="stroke:{stroke};stroke-width:1;"/>"#,
+    ));
 }
 
 fn emit_plain_rect_cluster(
@@ -3425,9 +3458,23 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
         .unwrap_or_default();
     let total_w = x_frame
         .map(|frame| frame.painted_max_x + frame.margin + SVEK_DIMENSION_DELTA)
+        .or_else(|| {
+            cluster_frame.and_then(|frame| {
+                frame
+                    .outer_cloud_painted_max_x
+                    .map(|max_x| max_x + SVEK_DIMENSION_DELTA)
+            })
+        })
         .unwrap_or(content_w + BODY_RIGHT_MARGIN);
     let total_h = y_frame
         .map(|frame| frame.painted_max_y + frame.margin + SVEK_DIMENSION_DELTA)
+        .or_else(|| {
+            cluster_frame.and_then(|frame| {
+                frame
+                    .outer_cloud_painted_max_y
+                    .map(|max_y| max_y + SVEK_DIMENSION_DELTA)
+            })
+        })
         .unwrap_or(content_h + BODY_BOTTOM_MARGIN);
 
     let mut oracle = OracleLayout::default();
@@ -3852,6 +3899,8 @@ struct DeploymentXFrame {
 struct DeploymentClusterFrame {
     margin_x: f64,
     margin_y: f64,
+    outer_cloud_painted_max_x: Option<f64>,
+    outer_cloud_painted_max_y: Option<f64>,
 }
 
 fn deployment_cluster_frame(
@@ -3865,11 +3914,12 @@ fn deployment_cluster_frame(
     let parent_of = deployment_parent_map(diagram);
     let mut required_dx = f64::NEG_INFINITY;
     let mut required_dy = f64::NEG_INFINITY;
-    for node in diagram
+    let roots: Vec<&DeploymentNode> = diagram
         .nodes
         .iter()
-        .filter(|node| !node.children.is_empty() && !parent_of.contains_key(&node.id))
-    {
+        .filter(|node| !parent_of.contains_key(&node.id))
+        .collect();
+    for node in roots.iter().filter(|node| !node.children.is_empty()) {
         let Some(position) = result
             .cluster_positions
             .iter()
@@ -3891,9 +3941,48 @@ fn deployment_cluster_frame(
         required_dx = required_dx.max(origin_x - position.x);
         required_dy = required_dy.max(origin_y - position.y);
     }
-    (required_dx.is_finite() && required_dy.is_finite()).then_some(DeploymentClusterFrame {
+    if !required_dx.is_finite() || !required_dy.is_finite() {
+        return None;
+    }
+
+    // When every outer entity is a cloud cluster, `LimitFinder` sees the
+    // generated UPath as the document envelope. `SvekResult.calculateDimension`
+    // adds its fixed delta after the path's painted maximum, rather than after
+    // the nominal Graphviz cluster rectangle.
+    let outer_cloud_bounds: Option<Vec<_>> = roots
+        .iter()
+        .map(|node| {
+            if node.children.is_empty() || node.kind != DeploymentNodeKind::Cloud {
+                return None;
+            }
+            let position = result
+                .cluster_positions
+                .iter()
+                .find(|position| position.id == node.id)?;
+            Some((
+                position,
+                crate::cloud_shape::generate(position.width, position.height).bounds(),
+            ))
+        })
+        .collect();
+    let outer_cloud_painted_max_x = outer_cloud_bounds.as_ref().map(|bounds| {
+        bounds
+            .iter()
+            .map(|(position, (_, _, max_x, _))| position.x + required_dx + max_x)
+            .fold(f64::NEG_INFINITY, f64::max)
+    });
+    let outer_cloud_painted_max_y = outer_cloud_bounds.as_ref().map(|bounds| {
+        bounds
+            .iter()
+            .map(|(position, (_, _, _, max_y))| position.y + required_dy + max_y)
+            .fold(f64::NEG_INFINITY, f64::max)
+    });
+
+    Some(DeploymentClusterFrame {
         margin_x: required_dx,
         margin_y: required_dy,
+        outer_cloud_painted_max_x,
+        outer_cloud_painted_max_y,
     })
 }
 
@@ -4515,6 +4604,30 @@ mod tests {
         assert!(svg.contains(r#"height="172px""#));
         assert!(svg.contains(r#"data-qualified-name="Jobs101""#));
         assert!(svg.contains(r#"id="Ingress97-to-Jobs101""#));
+    }
+
+    #[test]
+    fn no_oracle_cloud_cluster_uses_seeded_usymbol_outline() {
+        let source = "@startuml\n\
+            cloud \"Renamed Edge 109\" {\n\
+              node \"Worker 113\" as Worker113\n\
+              node \"Cache 127\" as Cache127\n\
+            }\n\
+            Worker113 --> Cache127\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+
+        let svg = render(&diagram, &Theme::default());
+
+        assert!(svg.contains(r#"<!--cluster Renamed Edge 109-->"#));
+        assert!(svg.contains(r#"<g class="cluster""#));
+        assert!(svg.contains(r#"<path d="M"#));
+        assert!(svg.contains(r#"fill="none" style="stroke:#181818;stroke-width:1;"/>"#));
+        assert!(!svg.contains(r#"<polygon fill="none""#));
+        assert!(svg.contains(r#"data-qualified-name="Renamed Edge 109.Worker113""#));
     }
 
     #[test]
