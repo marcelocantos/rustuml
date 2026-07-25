@@ -6673,7 +6673,10 @@ fn render_relationship_svg(
     if relationship_has_center_label(rel)
         && let Some(position) = edge_path.label
     {
-        let block_x = position.x + MARGIN + layout_x_bias + RELATIONSHIP_LABEL_MARGIN;
+        // Java `SvekEdge` margins the text first, then
+        // `StringWithArrow.addMagicArrow` prepends the arrow outside that
+        // margin. Keep the text's one-pixel inset, but not on the arrow block.
+        let block_x = position.x + MARGIN + layout_x_bias;
         let block_y = position.y + MARGIN + RELATIONSHIP_LABEL_MARGIN;
         if rel.label_arrow != LinkArrow::None {
             let content_height = rel
@@ -8537,6 +8540,19 @@ mod tests {
         assert!(svg.contains(">renamed flow</text>"));
         assert!(!svg.contains("renamed flow &gt;"));
         assert_eq!(svg.matches("<polygon ").count(), 1);
+
+        let polygon = svg.split_once("<polygon ").unwrap().1;
+        let tip_x = attr_value(polygon, "points")
+            .unwrap()
+            .split_once(',')
+            .unwrap()
+            .0
+            .parse::<f64>()
+            .unwrap();
+        let text_end = svg.find(">renamed flow</text>").unwrap();
+        let text = &svg[svg[..text_end].rfind("<text ").unwrap()..text_end];
+        let text_x = attr_value(text, "x").unwrap().parse::<f64>().unwrap();
+        assert_eq!(round_4dp(text_x - tip_x), 9.0);
     }
 
     #[test]
