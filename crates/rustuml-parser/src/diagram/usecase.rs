@@ -108,6 +108,11 @@ pub struct UseCaseConnection {
     pub to: String,
     pub label: Option<String>,
     pub stereotype: Option<String>,
+    /// Number of shaft characters in the source relation token. PlantUML
+    /// treats a one-character shaft as a horizontal link and longer shafts as
+    /// vertical links with a corresponding Graphviz rank length.
+    #[serde(default)]
+    pub queue_len: usize,
     /// True for dotted relations such as `..>` / `.>`; PlantUML renders these
     /// with a DESCRIPTION dependency dash pattern.
     #[serde(default, skip_serializing_if = "is_false")]

@@ -1071,15 +1071,34 @@ fn layout_usecase_positions(
         match edge {
             LayoutEdge::Connection(index) => {
                 let conn = &diagram.connections[index];
+                let queue_len = conn.queue_len.max(1);
+                if queue_len == 1 {
+                    // Java provenance: `CommandLinkElement.getDirection`
+                    // delegates to `StringUtils.getQueueDirection`, where a
+                    // one-character queue means RIGHT. `executeArg` preserves
+                    // that length and `SvekEdge.rankSame` emits this constraint.
+                    layout.add_same_rank(&conn.from, &conn.to);
+                }
+                // `SvekEdge.appendLine` serializes every non-horizontal link
+                // as `minlen = Link.getLength() - 1`.
+                let minlen = (queue_len > 1).then_some(queue_len - 1);
                 if let Some((note_index, note)) = note_on_connection(diagram, index) {
                     let size = link_note_label_size(conn, note, &note_dims[note_index], skin);
-                    layout.add_edge_with_label_sizes(&conn.from, &conn.to, Some(size), None, None);
-                } else {
-                    layout.add_edge(
+                    layout.add_edge_with_label_sizes_and_minlen(
                         &conn.from,
                         &conn.to,
-                        conn.label.as_deref().or(conn.stereotype.as_deref()),
+                        Some(size),
+                        None,
+                        None,
+                        minlen,
                     );
+                } else {
+                    let label = conn.label.as_deref().or(conn.stereotype.as_deref());
+                    if let Some(minlen) = minlen {
+                        layout.add_edge_with_minlen(&conn.from, &conn.to, label, minlen);
+                    } else {
+                        layout.add_edge(&conn.from, &conn.to, label);
+                    }
                 }
             }
             LayoutEdge::AttachedNote(index) => {
@@ -2921,6 +2940,27 @@ mod tests {
         assert!(svg.contains(r#"<!--link R to Browse-->"#));
         assert!(svg.contains(r#"<path d="M"#));
         assert!(svg.contains(r##"<polygon fill="#181818""##));
+    }
+
+    #[test]
+    fn renamed_short_queue_link_uses_horizontal_rank() {
+        let input = "@startuml\n\
+                     actor \"Renamed Queue Operator 1201\" as Operator1201\n\
+                     usecase \"Renamed Queue Action 1213\" as Action1213\n\
+                     Operator1201 -> Action1213\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Fresh PlantUML reference for this renamed perturbation. Java
+        // `CommandLinkElement.getDirection` and `SvekEdge.rankSame` place a
+        // one-character relation queue on a horizontal rank.
+        assert!(svg.contains(r#"viewBox="0 0 491 95""#), "{svg}");
+        assert!(svg.contains(r#"<ellipse cx="113.9087" cy="14""#), "{svg}");
+        assert!(
+            svg.contains(r#"<path d="M222.13,43.74 C233.44,43.74 238.75,43.74 250.06,43.74""#),
+            "{svg}"
+        );
     }
 
     #[test]

@@ -626,6 +626,10 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                 to,
                 label,
                 stereotype,
+                queue_len: arrow
+                    .bytes()
+                    .filter(|byte| matches!(byte, b'-' | b'.'))
+                    .count(),
                 dashed: arrow.contains('.'),
                 arrow: arrow.contains('>'),
                 extension: arrow.contains("|>") || arrow.contains("<|"),
@@ -751,6 +755,19 @@ mod tests {
         assert!(d.connections[1].extension);
         assert!(!d.connections[1].arrow);
         assert!(d.connections[1].arrow_at_start);
+    }
+
+    #[test]
+    fn relation_queue_length_preserves_layout_direction() {
+        let d = parse(
+            "actor RenamedQueueSource\n\
+             usecase RenamedHorizontalTarget\n\
+             usecase RenamedVerticalTarget\n\
+             RenamedQueueSource -> RenamedHorizontalTarget\n\
+             RenamedQueueSource ---> RenamedVerticalTarget",
+        );
+        assert_eq!(d.connections[0].queue_len, 1);
+        assert_eq!(d.connections[1].queue_len, 3);
     }
 
     #[test]
