@@ -237,8 +237,9 @@ const DECORATION_TITLE_GAP_ABOVE_BODY: f64 = 20.9531;
 const DECORATION_FOOTER_GAP_BELOW_BODY: f64 = 18.668;
 /// Caption glyph baseline sits this far below the body's bottom edge.
 const DECORATION_CAPTION_GAP_BELOW_BODY: f64 = 23.5352;
-/// Height of a caption block (pushes the footer down when both are present).
-const DECORATION_CAPTION_BLOCK_H: f64 = 23.5352;
+/// `TextBlockBordered.calculateDimension` adds one pixel to both dimensions,
+/// even when the decoration border is transparent.
+const DECORATION_BORDER_EXTENT: f64 = 1.0;
 /// Baseline-to-baseline spacing for multi-line page decorations.
 const DECORATION_LINE_HEIGHT: f64 = MEMBER_LINE_HEIGHT;
 const GRID_MARGIN: f64 = 30.0;
@@ -2790,8 +2791,6 @@ fn render_plantuml_svg(
             }
         }
     }
-    let edge_paths = adjusted_edge_paths.as_slice();
-
     // `skinparam padding N` shifts the in-box header icon and member text.
     // When the directive is present PlantUML offsets the stereotype circle
     // down by `N` (the glyph and name baseline already track this through the
@@ -2806,10 +2805,10 @@ fn render_plantuml_svg(
         .filter_map(|sp| sp.value.trim().parse::<f64>().ok())
         .next_back();
 
-    let layout_x_bias = svek_layout_x_bias(positions, cluster_positions, edge_paths);
+    let layout_x_bias = svek_layout_x_bias(positions, cluster_positions, &adjusted_edge_paths);
 
     // Compute entity positions (offset from layout).
-    let entity_positions: Vec<(f64, f64)> = (0..diagram.entities.len())
+    let mut entity_positions: Vec<(f64, f64)> = (0..diagram.entities.len())
         .map(|i| {
             let (content_dx, content_dy) = package_content_offsets[i];
             (
@@ -2834,6 +2833,94 @@ fn render_plantuml_svg(
         })
         .collect();
 
+    // Java `DiagramChromeFactory12026.create` wraps the SVEK body with title,
+    // caption, then header/footer. Each `DecorateEntityImage.drawU` centres the
+    // wrapped image and translates it by the top text block's height; nested
+    // wrappers accumulate those deltas through `getDeltaX/getDeltaY`.
+    let mut body_min_x = f64::INFINITY;
+    let mut body_max_x = f64::NEG_INFINITY;
+    let mut body_top = f64::INFINITY;
+    let mut body_bottom = f64::NEG_INFINITY;
+    for (i, (x, y)) in entity_positions.iter().enumerate() {
+        body_min_x = body_min_x.min(*x);
+        body_max_x = body_max_x.max(x + dims[i].width);
+        body_top = body_top.min(*y);
+        body_bottom = body_bottom.max(y + dims[i].height);
+    }
+    for cluster in cluster_positions {
+        let x = cluster.x + MARGIN;
+        let y = cluster.y + MARGIN;
+        let cloud_frontier = package_cloud_frontier(diagram, cluster);
+        let (envelope_extra_x, envelope_extra_y) = package_cluster_envelope_extra(diagram, cluster);
+        body_min_x = body_min_x.min(x + cloud_frontier.as_ref().map_or(0.0, |f| f.min_x));
+        body_max_x = body_max_x.max(x + cluster.width + envelope_extra_x);
+        body_top = body_top.min(y + cloud_frontier.as_ref().map_or(0.0, |f| f.min_y));
+        body_bottom = body_bottom.max(y + cluster.height + envelope_extra_y);
+    }
+    for &(_, node_idx, _) in &attached_notes {
+        if let Some(pos) = positions.get(node_idx) {
+            let x = pos.x + MARGIN + layout_x_bias;
+            let y = pos.y + MARGIN;
+            body_min_x = body_min_x.min(x);
+            body_max_x = body_max_x.max(x + pos.width);
+            body_top = body_top.min(y);
+            body_bottom = body_bottom.max(y + pos.height);
+        }
+    }
+    if !body_min_x.is_finite() {
+        body_min_x = 0.0;
+        body_max_x = 0.0;
+        body_top = 0.0;
+        body_bottom = 0.0;
+    }
+    // Rust's effective body dimension excludes the final one-pixel
+    // `TextBlockBordered` extent, so the 7px SVG envelope restores the same
+    // integer canvas size as Java's 6px `ImageBuilder` margin.
+    let body_inner_w = (body_max_x - body_min_x) + BODY_DECORATION_MARGIN;
+    let layout = DecorationLayout::new(diagram, body_inner_w);
+    let (body_dx, body_dy) = if oracle.is_none() {
+        ((layout.dim_total_w - body_inner_w) / 2.0, layout.top_h)
+    } else {
+        (0.0, 0.0)
+    };
+
+    for position in &mut entity_positions {
+        position.0 += body_dx;
+        position.1 += body_dy;
+    }
+    body_top += body_dy;
+    body_bottom += body_dy;
+
+    let mut adjusted_cluster_positions = cluster_positions.to_vec();
+    for position in &mut adjusted_cluster_positions {
+        position.x += body_dx;
+        position.y += body_dy;
+    }
+    let cluster_positions = adjusted_cluster_positions.as_slice();
+
+    for edge in &mut adjusted_edge_paths {
+        for point in &mut edge.points {
+            point.0 += body_dx;
+            point.1 += body_dy;
+        }
+        if let Some(point) = &mut edge.start_point {
+            point.0 += body_dx;
+            point.1 += body_dy;
+        }
+        if let Some(point) = &mut edge.end_point {
+            point.0 += body_dx;
+            point.1 += body_dy;
+        }
+        for label in [&mut edge.label, &mut edge.tail_label, &mut edge.head_label]
+            .into_iter()
+            .flatten()
+        {
+            label.x += body_dx;
+            label.y += body_dy;
+        }
+    }
+    let edge_paths = adjusted_edge_paths.as_slice();
+
     // Compute canvas dimensions.
     let (canvas_w, canvas_h) = if let Some((w, h)) = canvas_override {
         (w.round() as i64, h.round() as i64)
@@ -2846,8 +2933,8 @@ fn render_plantuml_svg(
         }
         for &(_, node_idx, _) in &attached_notes {
             if let Some(pos) = positions.get(node_idx) {
-                max_x = max_x.max(pos.x + MARGIN + layout_x_bias + pos.width);
-                max_y = max_y.max(pos.y + MARGIN + pos.height);
+                max_x = max_x.max(pos.x + MARGIN + layout_x_bias + body_dx + pos.width);
+                max_y = max_y.max(pos.y + MARGIN + body_dy + pos.height);
             }
         }
         for cluster in cluster_positions {
@@ -2857,8 +2944,8 @@ fn render_plantuml_svg(
             max_y = max_y.max(cluster.y + MARGIN + cluster.height + envelope_extra_y);
         }
         if let Some((width, height)) = layout_extent {
-            max_x = max_x.max(width + layout_x_bias);
-            max_y = max_y.max(height);
+            max_x = max_x.max(width + layout_x_bias + body_dx);
+            max_y = max_y.max(height + body_dy);
         }
         for edge in edge_paths {
             for label in [edge.tail_label, edge.head_label].into_iter().flatten() {
@@ -2911,7 +2998,15 @@ fn render_plantuml_svg(
         } else {
             PACKAGE_CANVAS_EXTENT_PAD
         };
-        (max_x as i64 + extent_pad, max_y as i64 + extent_pad)
+        let decorated_w = if layout.has_decorations {
+            layout.dim_total_w as i64 + MARGIN as i64
+        } else {
+            0
+        };
+        (
+            (max_x as i64 + extent_pad).max(decorated_w),
+            (max_y + layout.bottom_h) as i64 + extent_pad,
+        )
     };
 
     let mut svg = String::new();
@@ -2970,51 +3065,6 @@ fn render_plantuml_svg(
     }
     let suppress_header_icon = has_strictuml_style(diagram);
 
-    // Body bounding box (entity rects), used to position the page decorations
-    // and to drive the centring width. PlantUML lays out title/header/caption/
-    // footer over `dimTotal = max(body_width, decoration_widths)` (see
-    // `DecorateEntityImage`); the text baselines are anchored a fixed gap from
-    // the body's top/bottom edges.
-    let mut body_min_x = f64::INFINITY;
-    let mut body_max_x = f64::NEG_INFINITY;
-    let mut body_top = f64::INFINITY;
-    let mut body_bottom = f64::NEG_INFINITY;
-    for (i, (x, y)) in entity_positions.iter().enumerate() {
-        body_min_x = body_min_x.min(*x);
-        body_max_x = body_max_x.max(x + dims[i].width);
-        body_top = body_top.min(*y);
-        body_bottom = body_bottom.max(y + dims[i].height);
-    }
-    for cluster in cluster_positions {
-        let x = cluster.x + MARGIN;
-        let y = cluster.y + MARGIN;
-        let cloud_frontier = package_cloud_frontier(diagram, cluster);
-        let (envelope_extra_x, envelope_extra_y) = package_cluster_envelope_extra(diagram, cluster);
-        body_min_x = body_min_x.min(x + cloud_frontier.as_ref().map_or(0.0, |f| f.min_x));
-        body_max_x = body_max_x.max(x + cluster.width + envelope_extra_x);
-        body_top = body_top.min(y + cloud_frontier.as_ref().map_or(0.0, |f| f.min_y));
-        body_bottom = body_bottom.max(y + cluster.height + envelope_extra_y);
-    }
-    for &(_, node_idx, _) in &attached_notes {
-        if let Some(pos) = positions.get(node_idx) {
-            let x = pos.x + MARGIN + layout_x_bias;
-            let y = pos.y + MARGIN;
-            body_min_x = body_min_x.min(x);
-            body_max_x = body_max_x.max(x + pos.width);
-            body_top = body_top.min(y);
-            body_bottom = body_bottom.max(y + pos.height);
-        }
-    }
-    if !body_min_x.is_finite() {
-        body_min_x = 0.0;
-        body_max_x = 0.0;
-        body_top = 0.0;
-        body_bottom = 0.0;
-    }
-    // The body block (`dimOriginal`) is its rect extent plus PlantUML's left/
-    // right body margins (7 + 8 px).
-    let body_inner_w = (body_max_x - body_min_x) + BODY_DECORATION_MARGIN;
-    let layout = DecorationLayout::new(diagram, body_inner_w);
     let oracle_decoration_texts = |class_name: &str| {
         oracle.and_then(|o| {
             o.decorations
@@ -3345,8 +3395,8 @@ fn render_plantuml_svg(
             render_attached_note(
                 &mut svg,
                 note,
-                pos.x + MARGIN + layout_x_bias,
-                pos.y + MARGIN,
+                pos.x + MARGIN + layout_x_bias + body_dx,
+                pos.y + MARGIN + body_dy,
                 pos.width,
                 pos.height,
                 tip_x + MARGIN + layout_x_bias,
@@ -3400,11 +3450,6 @@ fn render_plantuml_svg(
     // Bottom-of-canvas decorations: caption (above footer), then footer. Both
     // baselines are anchored a fixed gap below the body's bottom edge; when a
     // caption is present it pushes the footer down by the caption block height.
-    let caption_present = diagram
-        .meta
-        .caption
-        .as_deref()
-        .is_some_and(|c| !c.is_empty());
     layout.emit(
         &mut svg,
         "caption",
@@ -3413,13 +3458,7 @@ fn render_plantuml_svg(
         body_bottom + DECORATION_CAPTION_GAP_BELOW_BODY,
         oracle_decoration_texts("caption"),
     );
-    let footer_y = body_bottom
-        + DECORATION_FOOTER_GAP_BELOW_BODY
-        + if caption_present {
-            DECORATION_CAPTION_BLOCK_H
-        } else {
-            0.0
-        };
+    let footer_y = body_bottom + DECORATION_FOOTER_GAP_BELOW_BODY + layout.caption_h;
     layout.emit(
         &mut svg,
         "footer",
@@ -4237,6 +4276,10 @@ fn emit_oracle_legend(svg: &mut String, legend: &OracleLegend, fallback_line: Op
 /// block's own left inset (padding+margin).
 struct DecorationLayout {
     dim_total_w: f64,
+    top_h: f64,
+    bottom_h: f64,
+    caption_h: f64,
+    has_decorations: bool,
 }
 
 /// Per-decoration style: glyph font size, fill, bold, the symmetric
@@ -4301,10 +4344,23 @@ impl DecorationLayout {
             .fold(0.0_f64, f64::max)
     }
 
+    /// Height of the Java bordered text block. `Style.createTextBlockBordered`
+    /// wraps the line box in style padding and margin, while
+    /// `TextBlockBordered.calculateDimension` contributes one final pixel.
+    fn block_height(class_name: &str, text: &str) -> f64 {
+        let st = Self::style(class_name);
+        text.lines()
+            .map(|line| text_render::label_height(line, st.font_size as f64))
+            .sum::<f64>()
+            + 2.0 * st.inset
+            + DECORATION_BORDER_EXTENT
+    }
+
     /// Build the layout, computing `dimTotal` from the body width and any
     /// present decorations.
     fn new(diagram: &ClassDiagram, body_inner_w: f64) -> Self {
         let mut dim_total_w = body_inner_w;
+        let mut has_decorations = false;
         for (class_name, text) in [
             ("title", diagram.meta.title.as_deref()),
             ("header", diagram.meta.header.as_deref()),
@@ -4314,10 +4370,25 @@ impl DecorationLayout {
             if let Some(t) = text
                 && !t.is_empty()
             {
+                has_decorations = true;
                 dim_total_w = dim_total_w.max(Self::block_width(class_name, t));
             }
         }
-        Self { dim_total_w }
+        let block_height = |class_name, text: Option<&str>| {
+            text.filter(|value| !value.is_empty())
+                .map_or(0.0, |value| Self::block_height(class_name, value))
+        };
+        let header_h = block_height("header", diagram.meta.header.as_deref());
+        let title_h = block_height("title", diagram.meta.title.as_deref());
+        let caption_h = block_height("caption", diagram.meta.caption.as_deref());
+        let footer_h = block_height("footer", diagram.meta.footer.as_deref());
+        Self {
+            dim_total_w,
+            top_h: header_h + title_h,
+            bottom_h: caption_h + footer_h,
+            caption_h,
+            has_decorations,
+        }
     }
 
     /// Emit a single decoration's `<g>`/`<text>` at the given glyph baseline `y`.
@@ -9233,6 +9304,106 @@ mod tests {
             ),
             "{svg}"
         );
+    }
+
+    #[test]
+    fn no_oracle_page_chrome_translates_a_fresh_fork_as_nested_decorators() {
+        let body = "class Sensor841\n\
+            class Decoder853\n\
+            class Archive857\n\
+            Sensor841 --> Decoder853\n\
+            Sensor841 --> Archive857\n";
+        let plain = rustuml_parser::parse::parse(&format!("@startuml\n{body}@enduml")).unwrap();
+        let decorated = rustuml_parser::parse::parse(&format!(
+            "@startuml\n\
+             header Observatory 811\n\
+             title\n\
+               Signal Catalog 823\n\
+               Rotation 827\n\
+             end title\n\
+             caption Figure 829: Calibrated Routes\n\
+             footer Build 839\n\
+             {body}@enduml"
+        ))
+        .unwrap();
+        let plain_svg = crate::render_svg(&plain);
+        let decorated_svg = crate::render_svg(&decorated);
+
+        assert!(plain_svg.contains(r#"style="width:280px;height:178px;background:#FFFFFF;""#));
+        assert!(decorated_svg.contains(r#"style="width:280px;height:277px;background:#FFFFFF;""#));
+        // Live PlantUML beta: DiagramChromeFactory12026.create nests header +
+        // a two-line title into DecorateEntityImage, whose drawU accumulates
+        // the two bordered text-block heights for this non-corpus fork.
+        fn sensor_rect(svg: &str) -> &str {
+            svg.split_once("<!--class Sensor841-->")
+                .unwrap()
+                .1
+                .split_once("/>")
+                .unwrap()
+                .0
+        }
+        let plain_y = attr_value(sensor_rect(&plain_svg), " y")
+            .unwrap()
+            .parse::<f64>()
+            .unwrap();
+        let decorated_y = attr_value(sensor_rect(&decorated_svg), " y")
+            .unwrap()
+            .parse::<f64>()
+            .unwrap();
+        let expected_top_h = text_render::label_height("Observatory 811", 10.0)
+            + DECORATION_BORDER_EXTENT
+            + text_render::label_height("Signal Catalog 823", 14.0)
+            + text_render::label_height("Rotation 827", 14.0)
+            + 2.0 * DECORATION_TITLE_INSET
+            + DECORATION_BORDER_EXTENT;
+        let tolerance = 1.0 / 1000.0;
+        assert!(
+            (decorated_y - plain_y - expected_top_h).abs() < tolerance,
+            "plain y={plain_y}, decorated y={decorated_y}"
+        );
+
+        fn link_path(svg: &str) -> &str {
+            svg.split_once(r#"id="Sensor841-to-Decoder853""#)
+                .unwrap()
+                .0
+                .rsplit_once("<path ")
+                .and_then(|(_, tag)| attr_value(tag, "d"))
+                .unwrap()
+        }
+        fn path_coords(path: &str) -> Vec<f64> {
+            path.split(|ch: char| !(ch.is_ascii_digit() || ch == '.' || ch == '-'))
+                .filter_map(|value| value.parse::<f64>().ok())
+                .collect::<Vec<_>>()
+        }
+        let plain_path = path_coords(link_path(&plain_svg));
+        let decorated_path = path_coords(link_path(&decorated_svg));
+        assert_eq!(plain_path.len(), decorated_path.len());
+        for (idx, (plain, decorated)) in plain_path.iter().zip(decorated_path).enumerate() {
+            let expected_delta = if idx % 2 == 0 { 0.0 } else { expected_top_h };
+            assert!((decorated - plain - expected_delta).abs() < tolerance);
+        }
+
+        fn text_y(svg: &str, text: &str) -> f64 {
+            let marker = format!(">{text}</text>");
+            let tag = svg
+                .split_once(&marker)
+                .unwrap()
+                .0
+                .rsplit_once("<text ")
+                .unwrap()
+                .1;
+            attr_value(tag, " y").unwrap().parse::<f64>().unwrap()
+        }
+        let header_y = text_y(&decorated_svg, "Observatory 811");
+        let title_1_y = text_y(&decorated_svg, "Signal Catalog 823");
+        let title_2_y = text_y(&decorated_svg, "Rotation 827");
+        let caption_y = text_y(&decorated_svg, "Figure 829: Calibrated Routes");
+        let footer_y = text_y(&decorated_svg, "Build 839");
+        assert!(header_y < title_1_y);
+        assert!(title_1_y < title_2_y);
+        assert!(title_2_y < decorated_y);
+        assert!(decorated_y < caption_y);
+        assert!(caption_y < footer_y);
     }
 
     #[test]
