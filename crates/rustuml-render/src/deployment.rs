@@ -18,8 +18,11 @@ use rustuml_parser::diagram::deployment::*;
 use rustuml_parser::diagram::{LegendHorizontalAlignment, LegendVerticalAlignment};
 
 use crate::handwritten::{
+    dot_path as handwritten_dot_path,
     has_deprecated_skinparam as has_deprecated_handwritten_skinparam,
-    is_enabled as is_handwritten_enabled,
+    is_enabled as is_handwritten_enabled, line_path as handwritten_line_path,
+    path as handwritten_path, polygon_points as handwritten_polygon_points,
+    rect_points as handwritten_rect_points,
 };
 use crate::layout_oracle::{
     EntityPath, EntityPolygon, EntityRect, EntityText, OracleHandwrittenWarning, OracleLayout,
@@ -59,6 +62,23 @@ const FILL: &str = "#F1F1F1";
 const STROKE: &str = "#181818";
 const TEXT_COLOR: &str = "#000000";
 const RX_RY: f64 = 2.5;
+const WARNING_FONT_SIZE: f64 = 10.0;
+const WARNING_RECT_X: f64 = 3.0;
+const WARNING_TEXT_X: f64 = 10.0;
+const WARNING_RECT_RADIUS: f64 = 2.5;
+const WARNING_RECT_EXTRA_WIDTH: f64 = 10.0;
+const WARNING_BLOCK_EXTRA_WIDTH: f64 = 20.0;
+const WARNING_RECT_EXTRA_HEIGHT: f64 = 5.0;
+const WARNING_BLOCK_EXTRA_HEIGHT: f64 = 10.0;
+const WARNING_BASELINE_LIFT: f64 = 6.0;
+const WARNING_FILL: &str = "#FFFFCC";
+const WARNING_STROKE: &str = "#FFDD88";
+
+// `CommandSkinParam.executeArg` stores a trailing space in the warning. Java
+// `DiagramChromeFactory12026.WarningBannerBlock` measures that space but UText
+// omits it when serialising the visible text. NBSPs preserve PlantUML's SVG
+// text representation.
+const DEPRECATED_HANDWRITTEN_WARNING: &str = "Please\u{a0}use\u{a0}'!option\u{a0}handwritten\u{a0}true'\u{a0}to\u{a0}enable\u{a0}handwritten";
 
 // Title block layout (matches the component renderer's constants).
 const TITLE_FONT_SIZE: f64 = 14.0;
@@ -587,6 +607,59 @@ fn emit_handwritten_warning(svg: &mut SvgBuilder, warning: &OracleHandwrittenWar
     svg.raw(&buf);
 }
 
+fn deprecated_handwritten_warning_text_width() -> f64 {
+    pm::mono_text_width(DEPRECATED_HANDWRITTEN_WARNING, WARNING_FONT_SIZE)
+}
+
+fn deprecated_handwritten_warning_block_width() -> f64 {
+    let trailing_space_width = pm::mono_text_width(" ", WARNING_FONT_SIZE);
+    deprecated_handwritten_warning_text_width() + trailing_space_width + WARNING_BLOCK_EXTRA_WIDTH
+}
+
+fn deprecated_handwritten_warning_rect_height() -> f64 {
+    pm::mono_text_height(WARNING_FONT_SIZE) + WARNING_RECT_EXTRA_HEIGHT
+}
+
+fn deprecated_handwritten_warning_block_height() -> f64 {
+    pm::mono_text_height(WARNING_FONT_SIZE) + WARNING_BLOCK_EXTRA_HEIGHT
+}
+
+/// Paint the deprecated-handwritten warning from the same primitives as
+/// PlantUML's `DiagramChromeFactory12026.WarningBannerBlock`. `force_width`
+/// is the width of the innermost warning/body composition, before the outer
+/// SVEK envelope and title/legend wrappers.
+fn emit_generated_deprecated_handwritten_warning(
+    svg: &mut SvgBuilder,
+    force_width: f64,
+    dx: f64,
+    dy: f64,
+) {
+    let block_width = deprecated_handwritten_warning_block_width().max(force_width);
+    let rect_width = block_width - WARNING_RECT_EXTRA_WIDTH;
+    let rect_height = deprecated_handwritten_warning_rect_height();
+    let points = handwritten_rect_points(
+        dx + WARNING_RECT_X,
+        dy + WARNING_RECT_X,
+        rect_width,
+        rect_height,
+        WARNING_RECT_RADIUS,
+        WARNING_RECT_RADIUS,
+    );
+    svg.raw(&format!(
+        r#"<polygon fill="{WARNING_FILL}" points="{points}" style="stroke:{WARNING_STROKE};stroke-width:3;"/>"#,
+    ));
+
+    let text = escape_xml_text(DEPRECATED_HANDWRITTEN_WARNING).replace('\u{a0}', "&#160;");
+    svg.raw(&format!(
+        r##"<text fill="#000000" font-family="monospace" font-size="10" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{text}</text>"##,
+        fc(deprecated_handwritten_warning_text_width()),
+        fc(dx + WARNING_TEXT_X),
+        fc(
+            dy + WARNING_RECT_X + rect_height - WARNING_BASELINE_LIFT
+        ),
+    ));
+}
+
 fn escape_xml_attr(s: &str) -> String {
     s.replace('&', "&amp;")
         .replace('<', "&lt;")
@@ -892,7 +965,7 @@ fn emit_entity(
         // sit at fixed offsets from the icon centre, so they render their
         // own shape + label together rather than via the generic path.
         use DeploymentNodeKind::*;
-        if ctx.handwritten && emit_handwritten_entity(svg, node, rect, &entity_fill) {
+        if ctx.handwritten && emit_handwritten_entity(svg, node, rect, &entity_fill, stroke) {
             // The handwritten branch consumed oracle-captured primitive
             // geometry and emitted the label using oracle text anchors.
         } else if matches!(node.kind, Boundary | Control | Entity | Default) {
@@ -933,6 +1006,7 @@ fn emit_handwritten_entity(
     node: &DeploymentNode,
     rect: &crate::layout_oracle::EntityRect,
     fill: &str,
+    stroke: &str,
 ) -> bool {
     let mut emitted_shape = false;
     if let Some(polygon) = rect.body_polygon.as_ref() {
@@ -957,6 +1031,19 @@ fn emit_handwritten_entity(
             emitted_shape = true;
         }
     }
+    if !emitted_shape {
+        emitted_shape = emit_generated_handwritten_entity_shape(
+            svg,
+            node.kind,
+            rect.x,
+            rect.y,
+            rect.width,
+            rect.height,
+            fill,
+            stroke,
+            &node.label,
+        );
+    }
     if emitted_shape {
         if let Some(text) = rect.texts.first() {
             emit_text(svg, &text.text, text.x, text.y, FONT_SIZE, false, false);
@@ -969,6 +1056,49 @@ fn emit_handwritten_entity(
         }
     }
     emitted_shape
+}
+
+#[allow(clippy::too_many_arguments)]
+fn emit_generated_handwritten_entity_shape(
+    svg: &mut SvgBuilder,
+    kind: DeploymentNodeKind,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    stroke: &str,
+    label: &str,
+) -> bool {
+    match kind {
+        DeploymentNodeKind::Node => {
+            let vertices = tag_polygon_vertices(x, y, w, h);
+            let points = handwritten_polygon_points(&vertices);
+            svg.raw(&format!(
+                r#"<polygon fill="{fill}" points="{points}" style="stroke:{stroke};stroke-width:0.5;"/>"#,
+            ));
+            for (x1, y1, x2, y2) in tag_polygon_detail_lines(x, y, w, h) {
+                let d = handwritten_line_path(x1, y1, x2, y2);
+                svg.raw(&format!(
+                    r#"<path d="{d}" fill="{fill}" style="stroke:{stroke};stroke-width:0.5;"/>"#,
+                ));
+            }
+            true
+        }
+        DeploymentNodeKind::Database => {
+            let (body, lip) = database_path_data(x, y, w, h, label, true);
+            let body = handwritten_path(&body).unwrap_or(body);
+            let lip = handwritten_path(&lip).unwrap_or(lip);
+            svg.raw(&format!(
+                r#"<path d="{body}" fill="{fill}" style="stroke:{stroke};stroke-width:0.5;"/>"#,
+            ));
+            svg.raw(&format!(
+                r#"<path d="{lip}" fill="none" style="stroke:{stroke};stroke-width:0.5;"/>"#,
+            ));
+            true
+        }
+        _ => false,
+    }
 }
 
 fn emit_oracle_polygon(svg: &mut SvgBuilder, polygon: &EntityPolygon) {
@@ -1206,6 +1336,27 @@ fn emit_plain_rect_cluster(
 
 // ---- Node ("tag" polygon) -------------------------------------------------
 
+fn tag_polygon_vertices(x: f64, y: f64, w: f64, h: f64) -> [(f64, f64); 6] {
+    let offset = 10.0;
+    [
+        (x, y + offset),
+        (x + offset, y),
+        (x + w, y),
+        (x + w, y + h - offset),
+        (x + w - offset, y + h),
+        (x, y + h),
+    ]
+}
+
+fn tag_polygon_detail_lines(x: f64, y: f64, w: f64, h: f64) -> [(f64, f64, f64, f64); 3] {
+    let offset = 10.0;
+    [
+        (x + w - offset, y + offset, x + w, y),
+        (x, y + offset, x + w - offset, y + offset),
+        (x + w - offset, y + offset, x + w - offset, y + h),
+    ]
+}
+
 #[allow(clippy::too_many_arguments)]
 pub(crate) fn emit_tag_polygon(
     svg: &mut SvgBuilder,
@@ -1217,35 +1368,26 @@ pub(crate) fn emit_tag_polygon(
     sw: f64,
     stroke: &str,
 ) {
-    let off = 10.0;
-    let x1 = fc(x);
-    let y1 = fc(y + off);
-    let x2 = fc(x + off);
-    let y2 = fc(y);
-    let x3 = fc(x + w);
-    let y3 = fc(y + h - off);
-    let x4 = fc(x + w - off);
-    let y4 = fc(y + h);
-    let points = format!("{x1},{y1},{x2},{y2},{x3},{y2},{x3},{y3},{x4},{y4},{x1},{y4},{x1},{y1}");
+    let vertices = tag_polygon_vertices(x, y, w, h);
+    let mut points = vertices
+        .iter()
+        .map(|(px, py)| format!("{},{}", fc(*px), fc(*py)))
+        .collect::<Vec<_>>();
+    points.push(points[0].clone());
+    let points = points.join(",");
     svg.raw(&format!(
         r#"<polygon fill="{fill}" points="{points}" style="stroke:{stroke};stroke-width:{sw};"/>"#,
     ));
     // 3 lines for the 3D effect: top-right diagonal, top inner, right inner.
-    let xa = fc(x + w - off);
-    let xb = fc(x + w);
-    let ya = fc(y + off);
-    let yb = fc(y);
-    svg.raw(&format!(
-        r#"<line style="stroke:{stroke};stroke-width:{sw};" x1="{xa}" x2="{xb}" y1="{ya}" y2="{yb}"/>"#,
-    ));
-    let xc = fc(x);
-    svg.raw(&format!(
-        r#"<line style="stroke:{stroke};stroke-width:{sw};" x1="{xc}" x2="{xa}" y1="{ya}" y2="{ya}"/>"#,
-    ));
-    let yc = fc(y + h);
-    svg.raw(&format!(
-        r#"<line style="stroke:{stroke};stroke-width:{sw};" x1="{xa}" x2="{xa}" y1="{ya}" y2="{yc}"/>"#,
-    ));
+    for (x1, y1, x2, y2) in tag_polygon_detail_lines(x, y, w, h) {
+        svg.raw(&format!(
+            r#"<line style="stroke:{stroke};stroke-width:{sw};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+            fc(x1),
+            fc(x2),
+            fc(y1),
+            fc(y2),
+        ));
+    }
 }
 
 // ---- Artifact (rect + folded corner) --------------------------------------
@@ -1813,17 +1955,14 @@ fn recover_db_width(label: &str, oracle_w: f64, x: f64) -> f64 {
     }
 }
 
-#[allow(clippy::too_many_arguments)]
-pub(crate) fn emit_database(
-    svg: &mut SvgBuilder,
+fn database_path_data(
     x: f64,
     y: f64,
     w: f64,
     h: f64,
-    fill: &str,
-    stroke: &str,
     label: &str,
-) {
+    preserve_precision: bool,
+) -> (String, String) {
     // The cylinder midline `cx = x + w/2` must use the full-precision width,
     // not the display-rounded oracle width: a half-integer midpoint (e.g.
     // 70.56225) would otherwise round the wrong way. PlantUML's database
@@ -1842,28 +1981,50 @@ pub(crate) fn emit_database(
     let bot_y = y + h_full;
     let top_low = y + 10.0;
     let bot_low = y + h_full - 10.0;
+    let coord = |value: f64| {
+        if preserve_precision {
+            value.to_string()
+        } else {
+            fc(value)
+        }
+    };
     let d = format!(
         "M{x_s},{tl} C{x_s},{y_s} {cx_s},{y_s} {cx_s},{y_s} C{cx_s},{y_s} {xw_s},{y_s} {xw_s},{tl} L{xw_s},{bl} C{xw_s},{by_s} {cx_s},{by_s} {cx_s},{by_s} C{cx_s},{by_s} {x_s},{by_s} {x_s},{bl} L{x_s},{tl}",
-        x_s = fc(x),
-        y_s = fc(y),
-        cx_s = fc(cx),
-        xw_s = fc(x + w),
-        by_s = fc(bot_y),
-        tl = fc(top_low),
-        bl = fc(bot_low),
+        x_s = coord(x),
+        y_s = coord(y),
+        cx_s = coord(cx),
+        xw_s = coord(x + w),
+        by_s = coord(bot_y),
+        tl = coord(top_low),
+        bl = coord(bot_low),
     );
-    svg.raw(&format!(
-        r#"<path d="{d}" fill="{fill}" style="stroke:{stroke};stroke-width:0.5;"/>"#
-    ));
     // The "top wall" of the cylinder (inner curve under the lip).
     let d2 = format!(
         "M{x_s},{tl} C{x_s},{ml} {cx_s},{ml} {cx_s},{ml} C{cx_s},{ml} {xw_s},{ml} {xw_s},{tl}",
-        x_s = fc(x),
-        cx_s = fc(cx),
-        xw_s = fc(x + w),
-        tl = fc(top_low),
-        ml = fc(y + 20.0),
+        x_s = coord(x),
+        cx_s = coord(cx),
+        xw_s = coord(x + w),
+        tl = coord(top_low),
+        ml = coord(y + 20.0),
     );
+    (d, d2)
+}
+
+#[allow(clippy::too_many_arguments)]
+pub(crate) fn emit_database(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    stroke: &str,
+    label: &str,
+) {
+    let (d, d2) = database_path_data(x, y, w, h, label, false);
+    svg.raw(&format!(
+        r#"<path d="{d}" fill="{fill}" style="stroke:{stroke};stroke-width:0.5;"/>"#
+    ));
     svg.raw(&format!(
         r#"<path d="{d2}" fill="none" style="stroke:{stroke};stroke-width:0.5;"/>"#
     ));
@@ -3610,16 +3771,31 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
             })
         })
         .unwrap_or(content_h + BODY_BOTTOM_MARGIN);
-    let chrome = deployment_chrome_layout(diagram, total_w, total_h);
-    body_margin_x += chrome.body_dx;
-    body_margin_y += chrome.body_dy;
+    let deprecated_handwritten = has_deprecated_handwritten_skinparam(&diagram.meta.skinparams);
+    let warning_height = if deprecated_handwritten {
+        deprecated_handwritten_warning_block_height()
+    } else {
+        0.0
+    };
+    // `WarningBannerBlock.calculateDimension` is part of the decorated text
+    // block; the outer SVEK image envelope contributes its six-pixel origin.
+    let warned_body_width = if deprecated_handwritten {
+        total_w.max(deprecated_handwritten_warning_block_width() + SVEK_ENVELOPE_ORIGIN)
+    } else {
+        total_w
+    };
+    let chrome = deployment_chrome_layout(diagram, warned_body_width, total_h + warning_height);
+    let body_dx = chrome.body_dx;
+    let body_dy = chrome.body_dy + warning_height;
+    body_margin_x += body_dx;
+    body_margin_y += body_dy;
     for rect in &mut rects {
-        rect.x += chrome.body_dx;
-        rect.y += chrome.body_dy;
+        rect.x += body_dx;
+        rect.y += body_dy;
     }
     for note in &mut note_layouts {
-        note.x += chrome.body_dx;
-        note.y += chrome.body_dy;
+        note.x += body_dx;
+        note.y += body_dy;
     }
     let total_w = chrome.canvas_width;
     let total_h = chrome.canvas_height;
@@ -3660,13 +3836,21 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
         skin_strokes: &skin_strokes,
         sprites: &diagram.meta.sprites,
         sprite_cache: &sprite_cache,
-        handwritten: false,
+        handwritten: is_handwritten_enabled(&diagram.meta.skinparams),
     };
 
     let mut svg = SvgBuilder::new_plantuml(total_w, total_h, "DESCRIPTION");
     emit_deployment_chrome_top(&mut svg, diagram, &chrome);
     if diagram.meta.legend_vertical_alignment == LegendVerticalAlignment::Top {
         emit_deployment_legend(&mut svg, diagram, &chrome);
+    }
+    if deprecated_handwritten {
+        emit_generated_deprecated_handwritten_warning(
+            &mut svg,
+            warned_body_width - SVEK_ENVELOPE_ORIGIN,
+            chrome.body_dx,
+            chrome.body_dy,
+        );
     }
     let all_children: HashSet<&str> = diagram
         .nodes
@@ -3751,6 +3935,7 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
             body_margin_y,
             &cluster_endpoint_nodes,
             &cluster_rects,
+            ctx.handwritten,
         );
     }
     if diagram.meta.legend_vertical_alignment == LegendVerticalAlignment::Bottom {
@@ -5212,6 +5397,7 @@ fn render_no_oracle_edges(
     body_margin_y: f64,
     cluster_endpoint_nodes: &HashMap<String, String>,
     cluster_rects: &HashMap<&str, LayoutRect>,
+    handwritten: bool,
 ) {
     for (i, conn) in diagram.connections.iter().enumerate() {
         let (logical_from, logical_to, reversed) = deployment_connection_layout(conn);
@@ -5315,19 +5501,27 @@ fn render_no_oracle_edges(
                 }
                 DeploymentLinkStyle::Bold => "stroke:#181818;stroke-width:2;",
             };
-            svg.raw(&format!(
-                r#"<path d="{d}" fill="none" id="{path_id}" style="{path_style}"/>"#,
-            ));
+            if handwritten {
+                let d = handwritten_dot_path(&points).unwrap_or(d);
+                svg.raw(&format!(
+                    r#"<path d="{d}" fill="none" style="{path_style}"/>"#,
+                ));
+            } else {
+                svg.raw(&format!(
+                    r#"<path d="{d}" fill="none" id="{path_id}" style="{path_style}"/>"#,
+                ));
+            }
         }
         if raw_points.len() >= 2 {
             if raw_start_arrow {
-                emit_deployment_arrowhead(svg, &raw_points[1], &raw_points[0]);
+                emit_deployment_arrowhead(svg, &raw_points[1], &raw_points[0], handwritten);
             }
             if raw_end_arrow {
                 emit_deployment_arrowhead(
                     svg,
                     &raw_points[raw_points.len() - 2],
                     &raw_points[raw_points.len() - 1],
+                    handwritten,
                 );
             }
         }
@@ -5570,7 +5764,12 @@ fn trim_deployment_edge_endpoint(points: &mut Vec<(f64, f64)>, endpoint: usize, 
     }
 }
 
-fn emit_deployment_arrowhead(svg: &mut SvgBuilder, previous: &(f64, f64), endpoint: &(f64, f64)) {
+fn emit_deployment_arrowhead(
+    svg: &mut SvgBuilder,
+    previous: &(f64, f64),
+    endpoint: &(f64, f64),
+    handwritten: bool,
+) {
     let dx = endpoint.0 - previous.0;
     let dy = endpoint.1 - previous.1;
     let length = dx.hypot(dy);
@@ -5592,19 +5791,22 @@ fn emit_deployment_arrowhead(svg: &mut SvgBuilder, previous: &(f64, f64), endpoi
         tip.0 - ux * DEPENDENCY_ARROW_INSET,
         tip.1 - uy * DEPENDENCY_ARROW_INSET,
     );
-    let points = format!(
-        "{},{},{},{},{},{},{},{},{},{}",
-        fc(tip.0),
-        fc(tip.1),
-        fc(rear.0 + perpendicular.0),
-        fc(rear.1 + perpendicular.1),
-        fc(inset.0),
-        fc(inset.1),
-        fc(rear.0 - perpendicular.0),
-        fc(rear.1 - perpendicular.1),
-        fc(tip.0),
-        fc(tip.1),
-    );
+    let vertices = [
+        tip,
+        (rear.0 + perpendicular.0, rear.1 + perpendicular.1),
+        inset,
+        (rear.0 - perpendicular.0, rear.1 - perpendicular.1),
+    ];
+    let points = if handwritten {
+        handwritten_polygon_points(&vertices)
+    } else {
+        let mut points = vertices
+            .iter()
+            .map(|(x, y)| format!("{},{}", fc(*x), fc(*y)))
+            .collect::<Vec<_>>();
+        points.push(points[0].clone());
+        points.join(",")
+    };
     svg.raw(&format!(
         r##"<polygon fill="#181818" points="{points}" style="stroke:#181818;stroke-width:1;"/>"##,
     ));
@@ -5649,6 +5851,34 @@ mod tests {
         assert!(svg.contains(r#"<g class="entity" data-qualified-name="N02""#));
         assert!(svg.contains(r#"<g class="link""#));
         assert!(!svg.contains(r#"<defs/><g></g>"#));
+    }
+
+    #[test]
+    fn no_oracle_handwritten_deployment_generates_warning_and_fresh_geometry() {
+        let source = "@startuml\n\
+            skinparam handwritten true\n\
+            node \"Renamed API Gateway\" as Gateway\n\
+            database \"Fresh Ledger Store\" as Ledger\n\
+            Gateway --> Ledger : writes audit events\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+
+        let svg = render(&diagram, &Theme::default());
+        let warning = svg.find("Please&#160;use").unwrap();
+        let gateway = svg.find("Renamed API Gateway").unwrap();
+        let expected_width =
+            (deprecated_handwritten_warning_block_width() + SVEK_ENVELOPE_ORIGIN) as i64;
+
+        assert!(warning < gateway);
+        assert!(svg.contains(&format!(r#"viewBox="0 0 {expected_width} "#)));
+        assert!(svg.contains(r##"fill="#FFFFCC""##));
+        assert!(svg.contains("Fresh Ledger Store"));
+        assert!(svg.contains("writes audit events"));
+        assert!(!svg.contains("<line"));
+        assert!(!svg.contains(r#"id="Gateway-to-Ledger""#));
     }
 
     #[test]
@@ -6359,6 +6589,7 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
             &mut svg,
             &untrimmed[untrimmed.len() - 2],
             &untrimmed[untrimmed.len() - 1],
+            false,
         );
         let output = svg.finalize();
         assert!(output.contains(r#"points="26,37,30,28,26,32,22,28,26,37""#));

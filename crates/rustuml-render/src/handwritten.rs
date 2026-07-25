@@ -469,3 +469,40 @@ pub(crate) fn path(d: &str) -> Option<String> {
     let mut rnd = JavaRandom::new(424242);
     path_with_rnd(d, &mut rnd)
 }
+
+/// Handwrite a SVEK `DotPath` from its cubic points.
+///
+/// PlantUML routes `DotPath` through `UDotPathHand`, which keeps one
+/// `HandJiggle` across every cubic and serialises its first point as the move
+/// command. This differs subtly from `UPathHand`: it neither repeats the start
+/// as a line command nor rounds each cubic before applying the jiggle.
+pub(crate) fn dot_path(points: &[(f64, f64)]) -> Option<String> {
+    let (&start, rest) = points.split_first()?;
+    if !rest.len().is_multiple_of(3) {
+        return None;
+    }
+
+    let mut jiggle = Jiggle::new(start.0, start.1, HAND_PATH_CURVE_VARIATION);
+    let mut curve_start = start;
+    for chunk in rest.chunks_exact(3) {
+        let curve = Cubic {
+            x1: curve_start.0,
+            y1: curve_start.1,
+            ctrl_x1: chunk[0].0,
+            ctrl_y1: chunk[0].1,
+            ctrl_x2: chunk[1].0,
+            ctrl_y2: chunk[1].1,
+            x2: chunk[2].0,
+            y2: chunk[2].1,
+        };
+        jiggle.curve_to(curve);
+        curve_start = chunk[2];
+    }
+
+    let (jiggled, _) = jiggle.into_parts();
+    let mut out = format!("M{},{}", pm::fmt_coord(start.0), pm::fmt_coord(start.1));
+    for (x, y) in jiggled.into_iter().skip(1) {
+        write!(out, " L{},{}", pm::fmt_coord(x), pm::fmt_coord(y)).unwrap();
+    }
+    Some(out)
+}
