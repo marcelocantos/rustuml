@@ -317,6 +317,50 @@ pub fn linear_translates(tiles: &[FtileGeometry]) -> Vec<(f64, f64)> {
     out
 }
 
+/// Natural connector reserve from
+/// `FtileFactoryDelegatorAssembly.assembly`.
+pub const ASSEMBLY_CONNECTION_HEIGHT: f64 = 35.0;
+
+/// The rendered separation left by PlantUML's activity ON_Y compression.
+///
+/// The 35px assembly reserve contains the 10px down-arrow decoration. The
+/// remaining 25px empty slot is reduced to 10px by
+/// `SlotSet.smaller(5)`, leaving 20px from one drawn tile to the next.
+pub const ASSEMBLY_RENDERED_SEPARATION: f64 = 20.0;
+
+/// A connected linear assembly and the actual origins of its children.
+#[derive(Clone, Debug, PartialEq)]
+pub struct LinearLayout {
+    pub geometry: FtileGeometry,
+    pub translates: Vec<(f64, f64)>,
+}
+
+/// Build the visible layout of a sequence assembled by
+/// `FtileFactoryDelegatorAssembly`.
+///
+/// [`ASSEMBLY_CONNECTION_HEIGHT`] is the natural model reserve. This function
+/// returns the post-compression layout that PlantUML draws, so callers can use
+/// [`linear_translates`] as the authoritative child-origin calculation without
+/// parsing or rewriting emitted SVG.
+pub fn connected_linear_layout(tiles: &[FtileGeometry]) -> Option<LinearLayout> {
+    if tiles.is_empty() {
+        return None;
+    }
+    let mut connected = Vec::with_capacity(tiles.len());
+    for (index, tile) in tiles.iter().enumerate() {
+        let tile = if index + 1 < tiles.len() {
+            tile.add_bottom(ASSEMBLY_RENDERED_SEPARATION)
+        } else {
+            *tile
+        };
+        connected.push(tile);
+    }
+    Some(LinearLayout {
+        geometry: assemble_linear(&connected)?,
+        translates: linear_translates(&connected),
+    })
+}
+
 // --- Composite tiles (calculateDimensionFtile) ---
 
 /// `FtileIfWithDiamonds.calculateDimensionInternalSlow` + the `FtileIfNude`
@@ -622,6 +666,69 @@ pub fn fork_inner_translates(forks: &[FtileGeometry]) -> Vec<(f64, f64)> {
         x += f.width;
     }
     out
+}
+
+/// `AbstractParallelFtilesBuilder.computeNewFtile`.
+pub const PARALLEL_X_MARGIN: f64 = 14.0;
+/// Empty space above and below each equal-height parallel branch.
+pub const PARALLEL_BAR_CLEARANCE: f64 = 20.0;
+/// `AbstractParallelFtilesBuilder.barHeight`.
+pub const PARALLEL_BAR_HEIGHT: f64 = 6.0;
+
+/// Geometry and child origins produced by `ParallelBuilderFork`.
+#[derive(Clone, Debug, PartialEq)]
+pub struct ParallelForkLayout {
+    pub geometry: FtileGeometry,
+    pub decorated_branches: Vec<FtileGeometry>,
+    /// Origin of each decorated branch in the fork.
+    pub branch_translates: Vec<(f64, f64)>,
+    /// Origin of each original branch inside its decorated branch.
+    pub inner_translates: Vec<(f64, f64)>,
+    pub bottom_bar_y: f64,
+}
+
+/// Port of `AbstractParallelFtilesBuilder.computeNewFtile` followed by
+/// `ParallelBuilderFork.doStep1/doStep2`.
+pub fn parallel_fork_layout(branches: &[FtileGeometry]) -> Option<ParallelForkLayout> {
+    let max_height = branches
+        .iter()
+        .map(|branch| branch.height)
+        .reduce(f64::max)?;
+    let fixed_height = max_height + 2.0 * PARALLEL_BAR_CLEARANCE;
+
+    let mut decorated = Vec::with_capacity(branches.len());
+    let mut inner_translates = Vec::with_capacity(branches.len());
+    for branch in branches {
+        let dy = PARALLEL_BAR_CLEARANCE + (max_height - branch.height) / 2.0;
+        inner_translates.push((PARALLEL_X_MARGIN, dy));
+        decorated.push(FtileGeometry::new(
+            branch.width + 2.0 * PARALLEL_X_MARGIN,
+            fixed_height,
+            branch.left + PARALLEL_X_MARGIN,
+            branch.in_y + dy,
+            branch.out_y.map(|out| out + dy),
+        ));
+    }
+
+    let inner = fork_inner(&decorated)?;
+    let mut branch_translates = fork_inner_translates(&decorated);
+    for translate in &mut branch_translates {
+        translate.1 += PARALLEL_BAR_HEIGHT;
+    }
+    let total_height = PARALLEL_BAR_HEIGHT + inner.height + PARALLEL_BAR_HEIGHT;
+    Some(ParallelForkLayout {
+        geometry: FtileGeometry::new(
+            inner.width,
+            total_height,
+            inner.left,
+            0.0,
+            Some(total_height),
+        ),
+        decorated_branches: decorated,
+        branch_translates,
+        inner_translates,
+        bottom_bar_y: PARALLEL_BAR_HEIGHT + inner.height,
+    })
 }
 
 /// Child offsets within an `FtileSwitchWithDiamonds`. `tiles` is one `(dx, dy)`
