@@ -15,6 +15,7 @@ use rustuml_layout::graph::{
     ClusterTitleSize, Direction, EdgeLabelSize, EdgePath, LayoutGraph, LayoutResult,
 };
 use rustuml_parser::diagram::deployment::*;
+use rustuml_parser::diagram::{LegendHorizontalAlignment, LegendVerticalAlignment};
 
 use crate::handwritten::{
     has_deprecated_skinparam as has_deprecated_handwritten_skinparam,
@@ -76,6 +77,17 @@ const TITLE_LINE_H: f64 = 16.48828125;
 const TITLE_BOTTOM_PAD: f64 = 11.0;
 /// `DisplayPositioned.createRibbon` adds one pixel below header/footer text.
 const CAPTION_BOTTOM_PAD: f64 = 1.0;
+// `EntityImageLegend.create` merges the document legend style from
+// `plantuml.skin`: 5px padding, 12px margin, 15px round corner, font 14.
+// Creole table rows use the measured font height and 1.5 descents of cell pad.
+const LEGEND_FONT_SIZE: f64 = 14.0;
+const LEGEND_RECT_PAD_X: f64 = 5.0;
+const LEGEND_RECT_PAD_Y: f64 = 7.0;
+const LEGEND_OUTER_MARGIN: f64 = 12.0;
+const LEGEND_RECT_RX: f64 = 7.5;
+const LEGEND_CELL_PAD_DESCENT_FACTOR: f64 = 1.5;
+// `TextBlockBordered.calculateDimension` adds one pixel beyond its drawn rect.
+const LEGEND_BORDERED_DIMENSION_DELTA: f64 = 1.0;
 
 /// Baseline-y offset within the entity bounding box for a text line.
 ///
@@ -3672,6 +3684,9 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
 
     let mut svg = SvgBuilder::new_plantuml(total_w, total_h, "DESCRIPTION");
     emit_deployment_chrome_top(&mut svg, diagram, &chrome);
+    if diagram.meta.legend_vertical_alignment == LegendVerticalAlignment::Top {
+        emit_deployment_legend(&mut svg, diagram, &chrome);
+    }
     let all_children: HashSet<&str> = diagram
         .nodes
         .iter()
@@ -3757,6 +3772,9 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
             &cluster_rects,
         );
     }
+    if diagram.meta.legend_vertical_alignment == LegendVerticalAlignment::Bottom {
+        emit_deployment_legend(&mut svg, diagram, &chrome);
+    }
     emit_deployment_chrome_bottom(&mut svg, diagram, &chrome);
     svg.finalize_plantuml()
 }
@@ -3769,6 +3787,51 @@ struct DeploymentChromeLayout {
     canvas_height: f64,
     content_width: f64,
     header_height: f64,
+    legend_rect_x: Option<f64>,
+    legend_rect_y: Option<f64>,
+}
+
+fn deployment_legend_rows(text: Option<&str>) -> Vec<Vec<&str>> {
+    text.map(|text| {
+        text.lines()
+            .filter(|line| line.trim().contains('|'))
+            .map(|line| {
+                line.trim()
+                    .trim_matches('|')
+                    .split('|')
+                    .map(str::trim)
+                    .filter(|cell| !cell.is_empty())
+                    .collect::<Vec<_>>()
+            })
+            .filter(|row| !row.is_empty())
+            .collect()
+    })
+    .unwrap_or_default()
+}
+
+fn deployment_legend_column_widths(rows: &[Vec<&str>]) -> Vec<f64> {
+    let column_count = rows.iter().map(Vec::len).max().unwrap_or(0);
+    let cell_pad_x = pm::descent(LEGEND_FONT_SIZE) * LEGEND_CELL_PAD_DESCENT_FACTOR;
+    let mut widths = vec![0.0_f64; column_count];
+    for row in rows {
+        for (index, cell) in row.iter().enumerate() {
+            let text_width = text_render::measure_no_underline(cell, LEGEND_FONT_SIZE, false);
+            widths[index] = widths[index].max(text_width + 2.0 * cell_pad_x);
+        }
+    }
+    widths
+}
+
+fn deployment_legend_rect_size(rows: &[Vec<&str>]) -> Option<(f64, f64)> {
+    if rows.is_empty() {
+        return None;
+    }
+    let grid_width = deployment_legend_column_widths(rows).iter().sum::<f64>();
+    let row_height = pm::text_height(LEGEND_FONT_SIZE);
+    Some((
+        grid_width + 2.0 * LEGEND_RECT_PAD_X,
+        rows.len() as f64 * row_height + 2.0 * LEGEND_RECT_PAD_Y,
+    ))
 }
 
 fn deployment_chrome_layout(
@@ -3776,12 +3839,53 @@ fn deployment_chrome_layout(
     body_canvas_width: f64,
     body_canvas_height: f64,
 ) -> DeploymentChromeLayout {
+    let legend_rows = deployment_legend_rows(diagram.meta.legend.as_deref());
+    let legend_rect_size = deployment_legend_rect_size(&legend_rows);
+    let (
+        decorated_canvas_width,
+        decorated_canvas_height,
+        legend_body_dx,
+        legend_body_dy,
+        base_legend_rect_x,
+        base_legend_rect_y,
+    ) = if let Some((rect_width, rect_height)) = legend_rect_size {
+        // `SvekResult.calculateDimension` has already moved the painted
+        // minimum to six. `DecorateEntityImage` composes the underlying
+        // dimension without that origin, then the outer image builder restores
+        // it around the decorated result.
+        let body_width = (body_canvas_width - SVEK_ENVELOPE_ORIGIN).max(0.0);
+        let body_height = (body_canvas_height - SVEK_ENVELOPE_ORIGIN).max(0.0);
+        let block_width = rect_width + LEGEND_BORDERED_DIMENSION_DELTA + 2.0 * LEGEND_OUTER_MARGIN;
+        let block_height =
+            rect_height + LEGEND_BORDERED_DIMENSION_DELTA + 2.0 * LEGEND_OUTER_MARGIN;
+        let decorated_width = body_width.max(block_width);
+        let block_x = match diagram.meta.legend_horizontal_alignment {
+            LegendHorizontalAlignment::Left => 0.0,
+            LegendHorizontalAlignment::Center => (decorated_width - block_width) / 2.0,
+            LegendHorizontalAlignment::Right => decorated_width - block_width,
+        };
+        let (block_y, body_dy) = match diagram.meta.legend_vertical_alignment {
+            LegendVerticalAlignment::Top => (0.0, block_height),
+            LegendVerticalAlignment::Bottom => (body_height, 0.0),
+        };
+        (
+            decorated_width + SVEK_ENVELOPE_ORIGIN,
+            body_height + block_height + SVEK_ENVELOPE_ORIGIN,
+            (decorated_width - body_width) / 2.0,
+            body_dy,
+            Some(block_x + LEGEND_OUTER_MARGIN),
+            Some(block_y + LEGEND_OUTER_MARGIN),
+        )
+    } else {
+        (body_canvas_width, body_canvas_height, 0.0, 0.0, None, None)
+    };
+
     // Java `DiagramChromeFactory12026` wraps the raw `SvekResult` in
     // `DecorateEntityImage` blocks. Each wrapper takes the wider of the body
     // and its text block, centres the narrower body, and stacks top/bottom
     // block heights. The SVG exporter contributes the established 7px
     // trailing pad after that composition.
-    let body_width = (body_canvas_width - TITLE_RIGHT_PAD).max(0.0);
+    let body_width = (decorated_canvas_width - TITLE_RIGHT_PAD).max(0.0);
     let title_width = diagram
         .meta
         .title
@@ -3818,6 +3922,7 @@ fn deployment_chrome_layout(
         .unwrap_or(0.0);
     let caption_block_width = header_width.max(footer_width);
     let content_width = body_width.max(title_width).max(caption_block_width);
+    let outer_body_dx = (content_width - body_width) / 2.0;
     let title_height = diagram
         .meta
         .title
@@ -3846,12 +3951,14 @@ fn deployment_chrome_layout(
         .unwrap_or(0.0);
 
     DeploymentChromeLayout {
-        body_dx: (content_width - body_width) / 2.0,
-        body_dy: header_height + title_height,
+        body_dx: legend_body_dx + outer_body_dx,
+        body_dy: legend_body_dy + header_height + title_height,
         canvas_width: content_width + TITLE_RIGHT_PAD,
-        canvas_height: body_canvas_height + header_height + title_height + footer_height,
+        canvas_height: decorated_canvas_height + header_height + title_height + footer_height,
         content_width,
         header_height,
+        legend_rect_x: base_legend_rect_x.map(|x| x + outer_body_dx),
+        legend_rect_y: base_legend_rect_y.map(|y| y + header_height + title_height),
     }
 }
 
@@ -3885,6 +3992,92 @@ fn emit_deployment_chrome_top(
         }
         svg.raw("</g>");
     }
+}
+
+fn emit_deployment_legend(
+    svg: &mut SvgBuilder,
+    diagram: &DeploymentDiagram,
+    chrome: &DeploymentChromeLayout,
+) {
+    let rows = deployment_legend_rows(diagram.meta.legend.as_deref());
+    let (Some((rect_width, rect_height)), Some(rect_x), Some(rect_y)) = (
+        deployment_legend_rect_size(&rows),
+        chrome.legend_rect_x,
+        chrome.legend_rect_y,
+    ) else {
+        return;
+    };
+
+    let column_widths = deployment_legend_column_widths(&rows);
+    let row_height = pm::text_height(LEGEND_FONT_SIZE);
+    let cell_pad_x = pm::descent(LEGEND_FONT_SIZE) * LEGEND_CELL_PAD_DESCENT_FACTOR;
+    let grid_left = rect_x + LEGEND_RECT_PAD_X;
+    let grid_top = rect_y + LEGEND_RECT_PAD_Y;
+    let grid_width = column_widths.iter().sum::<f64>();
+    let grid_right = grid_left + grid_width;
+    let grid_bottom = grid_top + rows.len() as f64 * row_height;
+    let source_line = diagram.meta.legend_line.unwrap_or(1);
+
+    svg.raw(&format!(
+        r#"<g class="legend" data-source-line="{source_line}">"#
+    ));
+    svg.raw(&format!(
+        r##"<rect fill="#DDDDDD" height="{}" rx="{}" ry="{}" style="stroke:#000000;stroke-width:1;" width="{}" x="{}" y="{}"/>"##,
+        fc(rect_height),
+        fc(LEGEND_RECT_RX),
+        fc(LEGEND_RECT_RX),
+        fc(rect_width),
+        fc(rect_x),
+        fc(rect_y),
+    ));
+
+    for (row_index, row) in rows.iter().enumerate() {
+        let mut x = grid_left;
+        let baseline = grid_top + pm::ascent(LEGEND_FONT_SIZE) + row_index as f64 * row_height;
+        for (column_index, cell) in row.iter().enumerate() {
+            emit_text(
+                svg,
+                cell,
+                x + cell_pad_x,
+                baseline,
+                LEGEND_FONT_SIZE,
+                false,
+                false,
+            );
+            x += column_widths.get(column_index).copied().unwrap_or(0.0);
+        }
+    }
+
+    for index in 0..=rows.len() {
+        let y = grid_top + index as f64 * row_height;
+        svg.raw(&format!(
+            r##"<line style="stroke:#000000;stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            fc(grid_left),
+            fc(grid_right),
+            fc(y),
+            fc(y),
+        ));
+    }
+
+    let mut x = grid_left;
+    svg.raw(&format!(
+        r##"<line style="stroke:#000000;stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+        fc(x),
+        fc(x),
+        fc(grid_top),
+        fc(grid_bottom),
+    ));
+    for width in column_widths {
+        x += width;
+        svg.raw(&format!(
+            r##"<line style="stroke:#000000;stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            fc(x),
+            fc(x),
+            fc(grid_top),
+            fc(grid_bottom),
+        ));
+    }
+    svg.raw("</g>");
 }
 
 fn emit_deployment_chrome_bottom(
@@ -5637,6 +5830,34 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
         assert!(svg.contains(r#"<g class="footer" data-source-line="2">"#));
         assert!(svg.contains(r#"x="38.5293" y="9.668""#));
         assert!(svg.contains(r#"x="5.3242" y="199.4236""#));
+    }
+
+    #[test]
+    fn no_oracle_top_left_legend_precedes_body_and_keeps_source_line() {
+        let source = "@startuml\n\
+            node \"Ingress 601\" as Ingress601\n\
+            database \"Journal 607\" as Journal607\n\
+            Ingress601 --> Journal607 : stream 613\n\
+            legend top left\n\
+            | Region | Active | Route |\n\
+            | north-19 | 3 | canary-blue |\n\
+            endlegend\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+
+        let svg = render(&diagram, &Theme::default());
+
+        assert!(svg.contains(r#"<g class="legend" data-source-line="4">"#));
+        assert!(svg.contains(r#"width="222.2969" x="12" y="12"/>"#));
+        assert!(svg.contains(r#"points="60.0179,87.9766"#));
+        assert!(svg.contains(">north-19</text>"));
+        assert!(svg.contains(">canary-blue</text>"));
+        let legend = svg.find(r#"<g class="legend""#).expect("legend group");
+        let entity = svg.find(r#"<g class="entity""#).expect("deployment entity");
+        assert!(legend < entity, "top legend must paint before the body");
     }
 
     #[test]

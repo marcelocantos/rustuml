@@ -9,8 +9,8 @@ use std::sync::LazyLock;
 use regex::Regex;
 
 use super::ParseError;
-use crate::diagram::DiagramMeta;
 use crate::diagram::deployment::*;
+use crate::diagram::{DiagramMeta, LegendHorizontalAlignment, LegendVerticalAlignment};
 
 /// All keywords that introduce a deployment diagram element.
 pub const DEPLOYMENT_KEYWORDS: &[&str] = &[
@@ -495,6 +495,20 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
         // Legend block.
         if trimmed == "legend" || trimmed.starts_with("legend ") {
             in_legend = true;
+            legend_lines.clear();
+            meta.legend_line = Some(current_line);
+            for token in trimmed.split_whitespace().skip(1) {
+                match token.to_ascii_lowercase().as_str() {
+                    "left" => meta.legend_horizontal_alignment = LegendHorizontalAlignment::Left,
+                    "center" => {
+                        meta.legend_horizontal_alignment = LegendHorizontalAlignment::Center;
+                    }
+                    "right" => meta.legend_horizontal_alignment = LegendHorizontalAlignment::Right,
+                    "top" => meta.legend_vertical_alignment = LegendVerticalAlignment::Top,
+                    "bottom" => meta.legend_vertical_alignment = LegendVerticalAlignment::Bottom,
+                    _ => {}
+                }
+            }
             continue;
         }
         if trimmed == "endlegend" {
@@ -1000,6 +1014,22 @@ mod tests {
         let d = parse("header My Header\nfooter My Footer\nnode Server");
         assert_eq!(d.meta.header.as_deref(), Some("My Header"));
         assert_eq!(d.meta.footer.as_deref(), Some("My Footer"));
+    }
+
+    #[test]
+    fn legend_preserves_alignment_and_source_line() {
+        let d = parse("node Server\nlegend top right\n| Key | Value |\nendlegend");
+
+        assert_eq!(d.meta.legend.as_deref(), Some("| Key | Value |"));
+        assert_eq!(d.meta.legend_line, Some(2));
+        assert_eq!(
+            d.meta.legend_horizontal_alignment,
+            LegendHorizontalAlignment::Right
+        );
+        assert_eq!(
+            d.meta.legend_vertical_alignment,
+            LegendVerticalAlignment::Top
+        );
     }
 
     #[test]

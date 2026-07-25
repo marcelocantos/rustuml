@@ -146,6 +146,35 @@ pub struct Span {
     pub col: usize,
 }
 
+#[derive(Debug, Default, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum LegendHorizontalAlignment {
+    Left,
+    #[default]
+    Center,
+    Right,
+}
+
+impl LegendHorizontalAlignment {
+    fn is_center(&self) -> bool {
+        *self == Self::Center
+    }
+}
+
+#[derive(Debug, Default, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+#[serde(rename_all = "lowercase")]
+pub enum LegendVerticalAlignment {
+    Top,
+    #[default]
+    Bottom,
+}
+
+impl LegendVerticalAlignment {
+    fn is_bottom(&self) -> bool {
+        *self == Self::Bottom
+    }
+}
+
 /// Common metadata that any diagram can carry.
 #[derive(Debug, Default, Clone, Serialize, Deserialize)]
 pub struct DiagramMeta {
@@ -179,6 +208,10 @@ pub struct DiagramMeta {
     /// legend group's `data-source-line`, defaulting to 1 when unset.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub legend_line: Option<usize>,
+    #[serde(default, skip_serializing_if = "LegendHorizontalAlignment::is_center")]
+    pub legend_horizontal_alignment: LegendHorizontalAlignment,
+    #[serde(default, skip_serializing_if = "LegendVerticalAlignment::is_bottom")]
+    pub legend_vertical_alignment: LegendVerticalAlignment,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub skinparams: Vec<SkinParam>,
     /// Sprite definitions collected from the source (`sprite $name { ... }`).
