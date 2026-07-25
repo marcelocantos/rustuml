@@ -326,12 +326,6 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
             .unwrap_or(0.0);
         hw.max(fw)
     };
-    let sprite_names: HashSet<String> = diagram
-        .meta
-        .sprites
-        .keys()
-        .map(|k| k.to_lowercase())
-        .collect();
     let sprite_cache =
         crate::sprite::SpriteCache::from_sprites_scaled(&diagram.meta.sprites, sprite_scale());
     let ctx = OracleRenderContext {
@@ -339,7 +333,6 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
         id_for_node: &id_for_node,
         skin_fills: &skin_fills,
         skin_strokes: &skin_strokes,
-        sprite_names: &sprite_names,
         sprites: &diagram.meta.sprites,
         sprite_cache: &sprite_cache,
         handwritten: is_handwritten_enabled(&diagram.meta.skinparams),
@@ -705,7 +698,6 @@ struct OracleRenderContext<'a> {
     id_for_node: &'a HashMap<String, String>,
     skin_fills: &'a HashMap<DeploymentNodeKind, String>,
     skin_strokes: &'a HashMap<DeploymentNodeKind, String>,
-    sprite_names: &'a HashSet<String>,
     sprites: &'a HashMap<String, rustuml_parser::diagram::SpriteData>,
     sprite_cache: &'a crate::sprite::SpriteCache,
     handwritten: bool,
@@ -1011,14 +1003,17 @@ fn emit_oracle_path(svg: &mut SvgBuilder, path: &EntityPath) {
     svg.raw(&buf);
 }
 
-fn stereotype_refs_sprite(stereotype: &str, sprite_names: &HashSet<String>) -> bool {
+fn stereotype_refs_sprite(
+    stereotype: &str,
+    sprites: &HashMap<String, rustuml_parser::diagram::SpriteData>,
+) -> bool {
     let lowered = stereotype.trim().trim_start_matches('$').to_lowercase();
-    if sprite_names.contains(&lowered) {
+    if sprites.contains_key(&lowered) {
         return true;
     }
     lowered
         .rsplit_once('_')
-        .is_some_and(|(_, suffix)| sprite_names.contains(suffix))
+        .is_some_and(|(_, suffix)| sprites.contains_key(suffix))
 }
 
 fn qualified_name(node: &DeploymentNode, parent_qname: Option<&str>) -> String {
@@ -2012,7 +2007,7 @@ fn emit_entity_label(
     });
 
     if let Some(stereo) = &node.stereotype
-        && !ctx.is_some_and(|ctx| stereotype_refs_sprite(stereo, ctx.sprite_names))
+        && !ctx.is_some_and(|ctx| stereotype_refs_sprite(stereo, ctx.sprites))
     {
         let stereo_label = format!("\u{00AB}{stereo}\u{00BB}");
         let stereo_w = text_render::measure(&stereo_label, FONT_SIZE, false);
@@ -2129,7 +2124,7 @@ fn emit_cluster_label(
     let center_x = cluster_text_center(kind, x, w);
 
     if let Some(stereo) = &node.stereotype
-        && !ctx.is_some_and(|ctx| stereotype_refs_sprite(stereo, ctx.sprite_names))
+        && !ctx.is_some_and(|ctx| stereotype_refs_sprite(stereo, ctx.sprites))
     {
         let stereo_label = format!("\u{00AB}{stereo}\u{00BB}");
         let stereo_w = text_render::measure(&stereo_label, FONT_SIZE, false);
@@ -3332,12 +3327,6 @@ fn render_no_oracle_degenerated(diagram: &DeploymentDiagram, dim: &DeploymentNod
     let no_oracle_uids = build_deployment_no_oracle_uid_model(diagram);
     let skin_fills = skin_background_fills(&diagram.meta.skinparams);
     let skin_strokes = skin_border_colors(&diagram.meta.skinparams);
-    let sprite_names: HashSet<String> = diagram
-        .meta
-        .sprites
-        .keys()
-        .map(|name| name.to_lowercase())
-        .collect();
     let sprite_cache =
         crate::sprite::SpriteCache::from_sprites_scaled(&diagram.meta.sprites, sprite_scale());
     let ctx = OracleRenderContext {
@@ -3345,7 +3334,6 @@ fn render_no_oracle_degenerated(diagram: &DeploymentDiagram, dim: &DeploymentNod
         id_for_node: &no_oracle_uids.entity_ids,
         skin_fills: &skin_fills,
         skin_strokes: &skin_strokes,
-        sprite_names: &sprite_names,
         sprites: &diagram.meta.sprites,
         sprite_cache: &sprite_cache,
         handwritten: false,
@@ -3663,12 +3651,6 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
     let id_for_node = &no_oracle_uids.entity_ids;
     let skin_fills = skin_background_fills(&diagram.meta.skinparams);
     let skin_strokes = skin_border_colors(&diagram.meta.skinparams);
-    let sprite_names: HashSet<String> = diagram
-        .meta
-        .sprites
-        .keys()
-        .map(|k| k.to_lowercase())
-        .collect();
     let sprite_cache =
         crate::sprite::SpriteCache::from_sprites_scaled(&diagram.meta.sprites, sprite_scale());
     let ctx = OracleRenderContext {
@@ -3676,7 +3658,6 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
         id_for_node,
         skin_fills: &skin_fills,
         skin_strokes: &skin_strokes,
-        sprite_names: &sprite_names,
         sprites: &diagram.meta.sprites,
         sprite_cache: &sprite_cache,
         handwritten: false,
@@ -4217,9 +4198,11 @@ fn deployment_node_dim(
         .lines()
         .map(|line| deployment_label_width_for_sprites(line, FONT_SIZE, bold, sprites))
         .fold(0.0_f64, f64::max);
-    let stereo_width = node
+    let visible_stereotype = node
         .stereotype
         .as_ref()
+        .filter(|stereotype| !stereotype_refs_sprite(stereotype, sprites));
+    let stereo_width = visible_stereotype
         .map(|stereo| {
             // `EntityImageDescription` wraps visible stereotype text in
             // `TextBlockUtils.withMargin(..., 1, 0)` before `USymbol.asSmall`
@@ -4228,7 +4211,7 @@ fn deployment_node_dim(
         })
         .unwrap_or(0.0);
     let label_line_count = node.label.lines().count().max(1);
-    let line_count = label_line_count + usize::from(node.stereotype.is_some());
+    let line_count = label_line_count + usize::from(visible_stereotype.is_some());
     let (text_x_pad, top_pad, _) = entity_text_geom(node.kind, 0.0, &node.label);
     let width = match node.kind {
         DeploymentNodeKind::Node
@@ -4269,7 +4252,7 @@ fn deployment_node_dim(
         // `EntityImageDescription.getShield` reserves the taller of the
         // hidden label and stereotype above and below the 18px symbol.
         DeploymentNodeKind::Default => {
-            let stereo_height = f64::from(node.stereotype.is_some()) * TEXT_LINE_H;
+            let stereo_height = f64::from(visible_stereotype.is_some()) * TEXT_LINE_H;
             INTERFACE_SYMBOL_SIZE
                 + 2.0
                     * (label_line_count as f64 * TEXT_LINE_H)
@@ -6269,6 +6252,31 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
         let (text_x_pad, _, _) = entity_text_geom(node.kind, 0.0, &node.label);
 
         assert_eq!(dim.width, stereo_width + 2.0 * text_x_pad + 12.0);
+    }
+
+    #[test]
+    fn no_oracle_sprite_backed_stereotype_does_not_reserve_text_row() {
+        let source = "@startuml\n\
+            !include <tupadr3/common>\n\
+            !include <tupadr3/font-awesome/server>\n\
+            node \"Fresh Relay 641\" as Relay641 <<FA_SERVER>>\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+        let node = &diagram.nodes[0];
+        let dim = deployment_node_dim(node, &diagram.meta.sprites);
+        let mut plain_node = node.clone();
+        plain_node.stereotype = None;
+        let plain_dim = deployment_node_dim(&plain_node, &diagram.meta.sprites);
+
+        assert_eq!(node.source_line, 3);
+        assert_eq!(dim.width, plain_dim.width);
+        assert_eq!(dim.height, plain_dim.height);
+        let svg = render(&diagram, &Theme::default());
+        assert!(svg.contains(r#"data-source-line="3" id="ent0002">"#));
+        assert!(!svg.contains("FA_SERVER</text>"));
     }
 
     #[test]

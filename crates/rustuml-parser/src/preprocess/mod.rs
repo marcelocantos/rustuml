@@ -817,6 +817,11 @@ impl PreprocessContext {
             if self.is_active() {
                 output.extend(included_lines);
             }
+            // Include expansion changes the output index independently of the
+            // user's source file. Mark every following user line with its
+            // original diagram position so downstream `data-source-line`
+            // attributes do not inherit the included file's length.
+            self.mark_source_lines = true;
             return;
         }
         if let Some(included_lines) = self.try_includesub(trimmed) {
@@ -3265,6 +3270,14 @@ mod tests {
         let input = "@startuml\n!include common.puml\nC -> D : local\n@enduml";
         let lines = preprocess_with_base(input, &dir);
         assert_eq!(lines, vec!["A -> B : included", "C -> D : local"]);
+        let parse_lines = preprocess_full_for_parse(input, Some(dir.clone())).lines;
+        let local = parse_lines
+            .iter()
+            .find_map(|line| {
+                split_source_line_marker(line).filter(|(_, text)| *text == "C -> D : local")
+            })
+            .expect("following user line keeps an explicit source origin");
+        assert_eq!(local.0, 2);
 
         let _ = std::fs::remove_dir_all(&dir);
     }
