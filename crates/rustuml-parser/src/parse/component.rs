@@ -594,8 +594,15 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
         // by RE_CONN. Direction is purely a layout hint in PlantUML; the
         // connection structure is unchanged.
         static RE_DIR: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"-(?:down|up|left|right)([-.>])").unwrap());
-        let trimmed_owned = RE_DIR.replace_all(trimmed, "-$1").to_string();
+            LazyLock::new(|| Regex::new(r"-(down|up|left|right)([-.>])").unwrap());
+        let direction = RE_DIR.captures(trimmed).and_then(|caps| match &caps[1] {
+            "down" => Some(ConnectionDirection::Down),
+            "up" => Some(ConnectionDirection::Up),
+            "left" => Some(ConnectionDirection::Left),
+            "right" => Some(ConnectionDirection::Right),
+            _ => None,
+        });
+        let trimmed_owned = RE_DIR.replace_all(trimmed, "-$2").to_string();
         let trimmed = trimmed_owned.as_str();
 
         if let Some(caps) = RE_CONN.captures(trimmed) {
@@ -673,6 +680,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                     has_arrow,
                     arrow_at_start,
                     arrow_at_end,
+                    direction,
                     shape,
                     source_line: current_line,
                 });
@@ -854,6 +862,19 @@ mod tests {
         assert!(connection.arrow_at_start);
         assert!(connection.arrow_at_end);
         assert!(connection.dashed);
+    }
+
+    #[test]
+    fn preserves_explicit_connection_layout_directions() {
+        let d = parse(
+            "component A\ncomponent B\ncomponent C\ncomponent D\nA -up- B\nA -down-> C\nA <-left- D\nA -right- B",
+        );
+
+        assert_eq!(d.connections[0].direction, Some(ConnectionDirection::Up));
+        assert_eq!(d.connections[1].direction, Some(ConnectionDirection::Down));
+        assert_eq!(d.connections[2].direction, Some(ConnectionDirection::Left));
+        assert!(d.connections[2].arrow_at_start);
+        assert_eq!(d.connections[3].direction, Some(ConnectionDirection::Right));
     }
 
     #[test]

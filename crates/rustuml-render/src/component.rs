@@ -459,7 +459,14 @@ pub fn render_with_oracle(
         }
         add_package_clusters_to_layout(&mut layout, &diagram.packages, "");
         for conn in &diagram.connections {
-            layout.add_edge(&conn.from, &conn.to, conn.label.as_deref());
+            let (layout_from, layout_to, _) = no_oracle_layout_edge_ends(conn);
+            if matches!(
+                conn.direction,
+                Some(ConnectionDirection::Left | ConnectionDirection::Right)
+            ) {
+                layout.add_same_rank(layout_from, layout_to);
+            }
+            layout.add_edge(layout_from, layout_to, conn.label.as_deref());
         }
         layout.layout_full(std::time::Duration::from_secs(5))
     } else {
@@ -1161,7 +1168,18 @@ pub fn render_with_oracle(
             &component_arrow_font_color,
         );
     } else {
-        for (link_counter, conn) in (entity_counter..).zip(diagram.connections.iter()) {
+        let mut next_link_counter = entity_counter;
+        for conn in &diagram.connections {
+            let (layout_from, layout_to, layout_reversed) = no_oracle_layout_edge_ends(conn);
+            let mut link_counter = next_link_counter;
+            next_link_counter += 1;
+            if layout_reversed {
+                // `CommandLinkElement` constructs the source-order `Link`
+                // first, then `Link.getInv()` constructs the reversed link and
+                // consumes the next global `lnk` UID.
+                link_counter = next_link_counter;
+                next_link_counter += 1;
+            }
             let link_id = format!("lnk{link_counter}");
 
             // Find source and target positions.
@@ -1218,32 +1236,41 @@ pub fn render_with_oracle(
             // Try bezier path from layout engine first.
             let edge_path = edge_paths
                 .iter()
-                .find(|ep| ep.from == conn.from && ep.to == conn.to);
+                .find(|ep| ep.from == layout_from && ep.to == layout_to);
 
-            svg.raw(&format!("<!--link {} to {}-->", conn.from, conn.to));
+            let (effective_arrow_at_start, effective_arrow_at_end) =
+                no_oracle_effective_arrow_ends(conn);
+            let comment_prefix = if effective_arrow_at_start && !effective_arrow_at_end {
+                "reverse link"
+            } else {
+                "link"
+            };
+            svg.raw(&format!(
+                "<!--{comment_prefix} {layout_from} to {layout_to}-->"
+            ));
 
             let from_ent_idx = diagram
                 .components
                 .iter()
-                .position(|c| c.id == conn.from)
+                .position(|c| c.id == layout_from)
                 .map(|i| i + 2 + rendered_layout_cluster_count)
                 .or_else(|| {
                     diagram
                         .interfaces
                         .iter()
-                        .position(|i| i.id == conn.from)
+                        .position(|i| i.id == layout_from)
                         .map(|i| i + 2 + rendered_layout_cluster_count + n_comp)
                 });
             let to_ent_idx = diagram
                 .components
                 .iter()
-                .position(|c| c.id == conn.to)
+                .position(|c| c.id == layout_to)
                 .map(|i| i + 2 + rendered_layout_cluster_count)
                 .or_else(|| {
                     diagram
                         .interfaces
                         .iter()
-                        .position(|i| i.id == conn.to)
+                        .position(|i| i.id == layout_to)
                         .map(|i| i + 2 + rendered_layout_cluster_count + n_comp)
                 });
 
@@ -1270,9 +1297,10 @@ pub fn render_with_oracle(
                 // (`SvekResult.calculateDimension` / `SvekEdge.solveLine`).
                 // The final arrow decor also shortens the visible path by
                 // `ExtremityArrow.getDecorationLength()`.
-                let (arrow_at_start, arrow_at_end) = no_oracle_arrow_ends(conn);
+                let edge_points_input = ep.points.as_slice();
+                let (arrow_at_start, arrow_at_end) = no_oracle_effective_arrow_ends(conn);
                 let edge_points = component_svek_edge_points(
-                    &ep.points,
+                    edge_points_input,
                     MARGIN,
                     MARGIN + title_h,
                     arrow_at_start,
@@ -1284,8 +1312,13 @@ pub fn render_with_oracle(
                 r#"<path d="{path_d}" fill="none" id="{path_id}" style="stroke:{STROKE};stroke-width:1;{dash_attr}"/>"#,
             ));
 
-                let raw_edge_points =
-                    component_svek_edge_points(&ep.points, MARGIN, MARGIN + title_h, false, false);
+                let raw_edge_points = component_svek_edge_points(
+                    edge_points_input,
+                    MARGIN,
+                    MARGIN + title_h,
+                    false,
+                    false,
+                );
                 if arrow_at_start {
                     let first = raw_edge_points.first().unwrap();
                     let next = raw_edge_points.get(1).unwrap_or(first);
@@ -1389,7 +1422,7 @@ pub fn render_with_oracle(
                 r#"<path d="{path_d}" fill="none" id="{path_id}" style="stroke:{STROKE};stroke-width:1;{dash_attr}"/>"#,
             ));
 
-                let (arrow_at_start, arrow_at_end) = no_oracle_arrow_ends(conn);
+                let (arrow_at_start, arrow_at_end) = no_oracle_effective_arrow_ends(conn);
                 if arrow_at_start {
                     render_arrowhead_from_coords(&mut svg, to_cx, to_cy, from_cx, from_bottom);
                 }
@@ -2711,16 +2744,19 @@ fn no_oracle_link_type_attr(conn: &Connection) -> String {
 }
 
 fn no_oracle_path_id(conn: &Connection) -> String {
-    let (arrow_at_start, arrow_at_end) = no_oracle_arrow_ends(conn);
+    let (from, to, _) = no_oracle_layout_edge_ends(conn);
+    let (arrow_at_start, arrow_at_end) = no_oracle_effective_arrow_ends(conn);
     if arrow_at_end && !arrow_at_start
         || matches!(
             conn.shape,
             LinkShape::TargetSocket | LinkShape::TargetBallSocket
         )
     {
-        format!("{}-to-{}", conn.from, conn.to)
+        format!("{from}-to-{to}")
+    } else if arrow_at_start && !arrow_at_end {
+        format!("{from}-backto-{to}")
     } else {
-        format!("{}-{}", conn.from, conn.to)
+        format!("{from}-{to}")
     }
 }
 
@@ -2731,6 +2767,26 @@ fn no_oracle_arrow_ends(conn: &Connection) -> (bool, bool) {
         // Preserve compatibility with diagrams deserialized before the
         // endpoint-specific fields were added.
         (false, conn.has_arrow)
+    }
+}
+
+fn no_oracle_effective_arrow_ends(conn: &Connection) -> (bool, bool) {
+    let (arrow_at_start, arrow_at_end) = no_oracle_arrow_ends(conn);
+    if no_oracle_layout_edge_ends(conn).2 {
+        (arrow_at_end, arrow_at_start)
+    } else {
+        (arrow_at_start, arrow_at_end)
+    }
+}
+
+fn no_oracle_layout_edge_ends(conn: &Connection) -> (&str, &str, bool) {
+    if matches!(
+        conn.direction,
+        Some(ConnectionDirection::Up | ConnectionDirection::Left)
+    ) {
+        (&conn.to, &conn.from, true)
+    } else {
+        (&conn.from, &conn.to, false)
     }
 }
 
@@ -3568,6 +3624,22 @@ mod tests {
             svg.matches(r##"<polygon fill="#181818""##).count(),
             2,
             "each decorated endpoint should emit one arrow polygon: {svg}"
+        );
+    }
+
+    #[test]
+    fn no_oracle_left_link_uses_reversed_svek_edge() {
+        let input = "@startuml\ncomponent Northbound\ncomponent Southbound\nNorthbound <-left- Southbound\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(
+            svg.contains(r#"id="Southbound-to-Northbound""#),
+            "left-directed links should use the reversed SVEK endpoint order: {svg}"
+        );
+        assert!(
+            svg.contains("<!--link Southbound to Northbound-->"),
+            "link metadata should follow the reversed Java Link model: {svg}"
         );
     }
 }

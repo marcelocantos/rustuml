@@ -75,11 +75,21 @@ pub struct Connection {
     pub arrow_at_start: bool,
     #[serde(default)]
     pub arrow_at_end: bool,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub direction: Option<ConnectionDirection>,
     #[serde(default)]
     pub shape: LinkShape,
     /// 1-based line number within the `@startuml` block.
     #[serde(default)]
     pub source_line: usize,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum ConnectionDirection {
+    Down,
+    Up,
+    Left,
+    Right,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
