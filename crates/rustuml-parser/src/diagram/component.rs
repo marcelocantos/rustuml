@@ -77,11 +77,19 @@ pub struct Connection {
     pub arrow_at_end: bool,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub direction: Option<ConnectionDirection>,
+    /// PlantUML `Link.getLength()`, derived from the arrow-body character
+    /// count after horizontal arrows are normalized to one.
+    #[serde(default = "default_connection_length")]
+    pub length: usize,
     #[serde(default)]
     pub shape: LinkShape,
     /// 1-based line number within the `@startuml` block.
     #[serde(default)]
     pub source_line: usize,
+}
+
+const fn default_connection_length() -> usize {
+    2
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]

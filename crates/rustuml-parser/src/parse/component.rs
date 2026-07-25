@@ -595,7 +595,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
         // connection structure is unchanged.
         static RE_DIR: LazyLock<Regex> =
             LazyLock::new(|| Regex::new(r"-(down|up|left|right)([-.>])").unwrap());
-        let direction = RE_DIR.captures(trimmed).and_then(|caps| match &caps[1] {
+        let explicit_direction = RE_DIR.captures(trimmed).and_then(|caps| match &caps[1] {
             "down" => Some(ConnectionDirection::Down),
             "up" => Some(ConnectionDirection::Up),
             "left" => Some(ConnectionDirection::Left),
@@ -637,6 +637,26 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             let arrow_at_end = arrow.contains('>');
             let has_arrow = arrow_at_start || arrow_at_end;
             let shape = parse_link_shape(arrow);
+            let queue_length = arrow
+                .chars()
+                .filter(|character| matches!(character, '-' | '.' | '~' | '='))
+                .count();
+            // PlantUML `StringUtils.getQueueDirection` treats a one-character
+            // body as RIGHT and every longer body as DOWN. CommandLinkElement
+            // then normalizes explicit horizontal links to length one.
+            let direction = explicit_direction.or(Some(if queue_length == 1 {
+                ConnectionDirection::Right
+            } else {
+                ConnectionDirection::Down
+            }));
+            let length = if matches!(
+                direction,
+                Some(ConnectionDirection::Left | ConnectionDirection::Right)
+            ) {
+                1
+            } else {
+                queue_length.max(2)
+            };
 
             // Auto-create endpoints if not already declared. Bracketed and
             // quoted endpoints become components; bare ones become interfaces.
@@ -681,6 +701,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                     arrow_at_start,
                     arrow_at_end,
                     direction,
+                    length,
                     shape,
                     source_line: current_line,
                 });
@@ -875,6 +896,30 @@ mod tests {
         assert_eq!(d.connections[2].direction, Some(ConnectionDirection::Left));
         assert!(d.connections[2].arrow_at_start);
         assert_eq!(d.connections[3].direction, Some(ConnectionDirection::Right));
+    }
+
+    #[test]
+    fn derives_connection_direction_and_length_from_arrow_body() {
+        let d = parse(
+            "component A17\ncomponent B23\ncomponent C29\ncomponent D31\nA17 -> B23\nA17 --> C29\nA17 ---> D31\nB23 .-. D31",
+        );
+
+        assert_eq!(
+            (d.connections[0].direction, d.connections[0].length),
+            (Some(ConnectionDirection::Right), 1)
+        );
+        assert_eq!(
+            (d.connections[1].direction, d.connections[1].length),
+            (Some(ConnectionDirection::Down), 2)
+        );
+        assert_eq!(
+            (d.connections[2].direction, d.connections[2].length),
+            (Some(ConnectionDirection::Down), 3)
+        );
+        assert_eq!(
+            (d.connections[3].direction, d.connections[3].length),
+            (Some(ConnectionDirection::Down), 3)
+        );
     }
 
     #[test]

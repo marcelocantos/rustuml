@@ -643,8 +643,15 @@ pub fn render_with_oracle(
                 Some(ConnectionDirection::Left | ConnectionDirection::Right)
             ) {
                 layout.add_same_rank(layout_from, layout_to);
+                layout.add_edge(layout_from, layout_to, conn.label.as_deref());
+            } else {
+                layout.add_edge_with_minlen(
+                    layout_from,
+                    layout_to,
+                    conn.label.as_deref(),
+                    conn.length.saturating_sub(1),
+                );
             }
-            layout.add_edge(layout_from, layout_to, conn.label.as_deref());
         }
         layout.layout_full(std::time::Duration::from_secs(5))
     } else {

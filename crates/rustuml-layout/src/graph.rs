@@ -236,6 +236,30 @@ impl LayoutGraph {
         self.add_edge_with_ports(from, to, label, None, None);
     }
 
+    /// Adds an edge with an explicit Graphviz rank length.
+    ///
+    /// PlantUML `SvekEdge.appendLine` maps `Link.getLength() - 1` to dot's
+    /// `minlen` attribute for non-horizontal links.
+    pub fn add_edge_with_minlen(
+        &mut self,
+        from: &str,
+        to: &str,
+        label: Option<&str>,
+        minlen: usize,
+    ) {
+        self.edges.push(EdgeSpec {
+            from: from.to_string(),
+            to: to.to_string(),
+            label: label.map(String::from),
+            tail_port: None,
+            head_port: None,
+            minlen: Some(minlen),
+            label_size: None,
+            tail_label_size: None,
+            head_label_size: None,
+        });
+    }
+
     /// Constrains two nodes to the same rank, preserving their insertion order.
     pub fn add_same_rank(&mut self, first: &str, second: &str) {
         self.same_rank_pairs
@@ -257,6 +281,7 @@ impl LayoutGraph {
             label: label.map(String::from),
             tail_port: tail_port.map(String::from),
             head_port: head_port.map(String::from),
+            minlen: None,
             label_size: None,
             tail_label_size: None,
             head_label_size: None,
@@ -280,6 +305,7 @@ impl LayoutGraph {
             label: None,
             tail_port: None,
             head_port: None,
+            minlen: None,
             label_size,
             tail_label_size,
             head_label_size,
@@ -405,6 +431,7 @@ impl LayoutGraph {
         let arrowtail_key = CString::new("arrowtail").unwrap();
         let headport_key = CString::new("headport").unwrap();
         let tailport_key = CString::new("tailport").unwrap();
+        let minlen_key = CString::new("minlen").unwrap();
         let headlabel_key = CString::new("headlabel").unwrap();
         let taillabel_key = CString::new("taillabel").unwrap();
         let external_endpoint_labels_key =
@@ -585,6 +612,15 @@ impl LayoutGraph {
                     edge as *mut c_void,
                     headport_key.as_ptr(),
                     port_val.as_ptr(),
+                    empty.as_ptr(),
+                );
+            }
+            if let Some(minlen) = edge_spec.minlen {
+                let minlen_value = CString::new(minlen.to_string()).unwrap();
+                graphviz_ffi::agsafeset(
+                    edge as *mut c_void,
+                    minlen_key.as_ptr(),
+                    minlen_value.as_ptr(),
                     empty.as_ptr(),
                 );
             }
@@ -1059,6 +1095,7 @@ struct EdgeSpec {
     label: Option<String>,
     tail_port: Option<String>,
     head_port: Option<String>,
+    minlen: Option<usize>,
     label_size: Option<EdgeLabelSize>,
     tail_label_size: Option<EdgeLabelSize>,
     head_label_size: Option<EdgeLabelSize>,
@@ -1212,6 +1249,25 @@ mod tests {
             distance(edge_b.points[0], source_b) < distance(edge_b.points[0], source_a),
             "B spline should start at source B"
         );
+    }
+
+    #[test]
+    fn edge_minlen_expands_rank_distance_for_renamed_nodes() {
+        let mut short = LayoutGraph::new(Direction::TopToBottom);
+        short.add_node("source_41", "", 80.0, 40.0);
+        short.add_node("target_43", "", 80.0, 40.0);
+        short.add_edge_with_minlen("source_41", "target_43", None, 1);
+        let short_result = short.layout_full_no_timeout();
+
+        let mut long = LayoutGraph::new(Direction::TopToBottom);
+        long.add_node("source_41", "", 80.0, 40.0);
+        long.add_node("target_43", "", 80.0, 40.0);
+        long.add_edge_with_minlen("source_41", "target_43", None, 3);
+        let long_result = long.layout_full_no_timeout();
+
+        let short_gap = short_result.node_positions[1].y - short_result.node_positions[0].y;
+        let long_gap = long_result.node_positions[1].y - long_result.node_positions[0].y;
+        assert!(long_gap > short_gap);
     }
 
     #[test]
