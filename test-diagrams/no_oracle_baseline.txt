@@ -12,7 +12,7 @@ creole 417 639
 deployment 495 495
 dot 25 25
 ebnf 25 25
-edge-cases 570 777
+edge-cases 571 777
 er 1 157
 gantt 114 114
 git 25 25
