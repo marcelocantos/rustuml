@@ -30027,12 +30027,9 @@ fn typed_ftile_scene_out(
     lanes: &TypedFtileLaneLayout,
 ) -> Option<(usize, f64, f64)> {
     let out_x = if lanes.assembled && typed_ftile_ends_in_expanded_fork(scene) {
-        let translated = lanes.x(scene.out_lane, x + scene.geometry.left);
-        if scene.in_lane == scene.out_lane {
-            translated - 1.0
-        } else {
-            translated
-        }
+        // `FtileAssemblySimple` retains the fork result's translated output
+        // axis; the black block's painted edge does not shift that point.
+        lanes.x(scene.out_lane, x + scene.geometry.left)
     } else if typed_ftile_ends_in_fork(scene)
         && scene.in_lane != scene.out_lane
         && lanes.content_adjust[scene.out_lane] != 0.0
@@ -30563,12 +30560,15 @@ fn typed_ftile_emit_connectors(
                 let decorated_x = branch.x - ftile::PARALLEL_X_MARGIN;
                 let raw_axis = x + decorated_x + decorated[index].left;
                 let target_x = if branch_lane == *output_lane {
+                    // `ParallelBuilderFork.ConnectionOut.drawU` keeps the
+                    // same-lane join on the decorated branch axis.
                     lanes.x(*output_lane, raw_axis)
                 } else {
-                    // `ConnectionOut.drawTranslate` targets the destination bar
-                    // using its swimlane translation, not the branch wrapper.
-                    lanes.owner_x(*output_lane, raw_axis)
-                } - if expanded { 1.0 } else { 0.0 };
+                    // `ConnectionOut.drawTranslate` targets the destination
+                    // owner lane outside the branch wrapper. Expanded forks
+                    // retain the painted-edge correction on this cross path.
+                    lanes.owner_x(*output_lane, raw_axis) - if expanded { 1.0 } else { 0.0 }
+                };
                 let bar_top = y + *bottom_bar_y;
                 let points = if branch_lane == *output_lane {
                     vec![(branch_x, branch_y), (target_x, bar_top)]
@@ -31854,6 +31854,68 @@ mod tests {
             ActivityStep::EndFork,
             ActivityStep::Stop,
         ]);
+    }
+
+    #[test]
+    fn ftile_five_branch_output_keeps_the_assembly_axis() {
+        let lane = |name: &str| {
+            ActivityStep::Swimlane(SwimlaneBlock {
+                name: name.into(),
+                color: None,
+            })
+        };
+        let steps = vec![
+            lane("Forge"),
+            ActivityStep::Start,
+            ActivityStep::Fork,
+            lane("Forge"),
+            ActivityStep::Action("Compile renamed payload".into()),
+            ActivityStep::ForkAgain,
+            lane("Audit"),
+            ActivityStep::Action("Verify fresh artifact".into()),
+            ActivityStep::ForkAgain,
+            lane("Forge"),
+            ActivityStep::Action("Publish renamed release".into()),
+            ActivityStep::ForkAgain,
+            lane("Audit"),
+            ActivityStep::Action("Sign fresh bundle".into()),
+            ActivityStep::ForkAgain,
+            lane("Forge"),
+            ActivityStep::Action("Archive renamed bundle".into()),
+            ActivityStep::EndFork,
+            ActivityStep::Stop,
+        ];
+        let palette = Palette::default_puml();
+        let tree = build_tree(&steps, &palette);
+        let mut current_lane = 0;
+        let scene = typed_ftile_sequence(&tree, &mut current_lane).expect("typed FTile scene");
+        let lanes = typed_ftile_lane_layout(&scene, &["Forge".to_string(), "Audit".to_string()])
+            .expect("lane layout");
+        let TypedFtileKind::Sequence { children } = &scene.kind else {
+            panic!("root sequence");
+        };
+        let fork = children
+            .iter()
+            .find(|child| matches!(child.scene.kind, TypedFtileKind::Fork { .. }))
+            .expect("fork child");
+        let TypedFtileKind::Fork {
+            branches,
+            input_lane,
+            output_lane,
+            ..
+        } = &fork.scene.kind
+        else {
+            unreachable!();
+        };
+        assert_eq!(branches.len(), 5);
+        assert_eq!(input_lane, output_lane);
+
+        let (_, out_x, _) =
+            typed_ftile_scene_out(&fork.scene, fork.x, fork.y, &lanes).expect("fork output");
+        assert_eq!(
+            out_x,
+            lanes.x(fork.scene.out_lane, fork.x + fork.scene.geometry.left)
+        );
     }
 
     #[test]
