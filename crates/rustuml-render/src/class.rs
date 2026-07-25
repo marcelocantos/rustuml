@@ -95,9 +95,6 @@ const FIRST_MEMBER_OFFSET: f64 = 17.53515625;
 const MEMBER_SPACING: f64 = 16.48828125;
 /// Baseline rise of a labelled-separator caption above its divider rule.
 const LABEL_SEP_TEXT_RISE: f64 = 4.791015625;
-/// Offset from entity x to member text start, at the default circled radius
-/// (11): `MEMBER_TEXT_INSET + radius = 9 + 11 = 20`.
-const MEMBER_TEXT_OFFSET: f64 = 20.0;
 /// Member-text left inset relative to the circled icon radius. PlantUML places
 /// member text at `compartment_pad + (circledRadius + 3)`; with the compartment
 /// pad and entity left margin this nets to `entity_x + radius + 9`.
@@ -840,6 +837,32 @@ fn calc_entity_dims(
         0.0
     };
 
+    // Java `MethodsOrFieldsArea.hasSmallIcon()` scans a whole compartment,
+    // then `calculateDimensionOnlyMembers()` adds
+    // `getCircledCharacterRadius() + 3` to its maximum text width. Thus a
+    // default-visibility row still reserves the icon column when a sibling
+    // field or method has a class visibility modifier. Rust's `IeMandatory`
+    // represents ER-table `*` syntax, which is not a Java VisibilityModifier.
+    let has_visibility_modifier = |visibility: Visibility| {
+        matches!(
+            visibility,
+            Visibility::Public | Visibility::Private | Visibility::Protected | Visibility::Package
+        )
+    };
+    let visibility_icons_enabled = font.attr_icon_size != Some(0);
+    let fields_have_small_icon = visibility_icons_enabled
+        && entity.members.iter().any(|m| {
+            m.kind == MemberKind::Field
+                && !hide.hides_member(m)
+                && has_visibility_modifier(m.visibility)
+        });
+    let methods_have_small_icon = visibility_icons_enabled
+        && entity.members.iter().any(|m| {
+            m.kind == MemberKind::Method
+                && !hide.hides_member(m)
+                && has_visibility_modifier(m.visibility)
+        });
+    let member_text_offset = MEMBER_TEXT_INSET + font.circled_radius();
     let member_widths: Vec<f64> = entity
         .members
         .iter()
@@ -861,13 +884,20 @@ fn calc_entity_dims(
                     }
                 })
                 .fold(0.0_f64, f64::max);
-            if m.visibility == Visibility::Default {
-                // Default visibility (including enum constants): no icon.
-                ENUM_TEXT_OFFSET + text_w + MEMBER_RIGHT_PAD
-            } else {
-                // Members with visibility icon (including enum members with explicit visibility).
-                MEMBER_TEXT_OFFSET + text_w + MEMBER_RIGHT_PAD
-            }
+            let compartment_has_small_icon = match m.kind {
+                MemberKind::Field => fields_have_small_icon,
+                MemberKind::Method => methods_have_small_icon,
+                MemberKind::Separator => false,
+            };
+            // ER mandatory markers reserve space only on their own row; they
+            // do not activate the Java class-visibility column for siblings.
+            let text_offset =
+                if compartment_has_small_icon || m.visibility == Visibility::IeMandatory {
+                    member_text_offset
+                } else {
+                    ENUM_TEXT_OFFSET
+                };
+            text_offset + text_w + MEMBER_RIGHT_PAD
         })
         .collect();
 
@@ -5760,7 +5790,8 @@ fn render_member_line(
     // icon-bearing members (enum-constant compartments, lone body
     // stereotypes, inner-class declarations); otherwise default-visibility
     // entries (continuation lines after `+method() { ... }` bodies) align
-    // to MEMBER_TEXT_OFFSET so they sit under the icon-bearing text.
+    // to the radius-derived member-text offset so they sit under the
+    // icon-bearing text.
     let computed_text_x = text_pad
         + if member.visibility == Visibility::Default && default_uses_narrow {
             entity_x + ENUM_TEXT_OFFSET
