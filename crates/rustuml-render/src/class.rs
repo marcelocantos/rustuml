@@ -263,6 +263,15 @@ const PACKAGE_TITLE_MARGIN_X: f64 = 3.0;
 const PACKAGE_TAB_SLOPE_WIDTH: f64 = 7.0;
 const PACKAGE_ROUND_CORNER: f64 = 5.0;
 const PACKAGE_STROKE_WIDTH: &str = "1.5";
+/// Java `USymbolDatabase.suppHeightBecauseOfShape()` reserves 15px above the
+/// ordinary cluster title so the title sits below the cylinder's top ellipse.
+const DATABASE_CLUSTER_TITLE_EXTRA: f64 = 15.0;
+/// `USymbolDatabase.asBig()` translates the title 20px below the ordinary
+/// package-title baseline.
+const DATABASE_CLUSTER_TITLE_OFFSET: f64 = 20.0;
+/// `USymbolDatabase.drawDatabase()` emits `UEmpty(10, 10)` at the shape's
+/// lower-right corner, extending the SVEK painted envelope on both axes.
+const DATABASE_CLUSTER_ENVELOPE_EXTRA: f64 = 10.0;
 /// Package cluster canvases use the full SVEK body side extent (left 6 plus
 /// right-side stroke/body slack) rather than the single-entity 13px formula.
 /// Provenance: Java `SvekResult.drawU` normalises the body at x/y=6 before
@@ -1640,13 +1649,18 @@ pub fn render_with_oracle(
     let parent_pkg = package_parent_indices(diagram);
     let innermost_pkg = innermost_entity_packages(diagram, &parent_pkg);
     for (idx, pkg) in diagram.packages.iter().enumerate() {
-        if !is_default_package_cluster(pkg) {
+        if !is_rendered_package_cluster(pkg) {
             continue;
         }
         let parent = parent_pkg[idx].and_then(|p| {
-            is_default_package_cluster(&diagram.packages[p]).then(|| package_cluster_id(p))
+            is_rendered_package_cluster(&diagram.packages[p]).then(|| package_cluster_id(p))
         });
         let label = package_display_label(pkg);
+        let title_height_extra = if effective_package_kind(pkg) == PackageKind::Database {
+            DATABASE_CLUSTER_TITLE_EXTRA
+        } else {
+            0.0
+        };
         // Java `ClusterHeader` truncates the measured title dimensions to
         // integers; `ClusterDotString.printInternal` sends those dimensions to
         // dot as the real cluster's fixed HTML-table label.
@@ -1655,13 +1669,13 @@ pub fn render_with_oracle(
             parent.as_deref(),
             ClusterTitleSize {
                 width: text_render::measure_no_underline(label, FONT_SIZE, true),
-                height: text_render::label_height(label, FONT_SIZE),
+                height: text_render::label_height(label, FONT_SIZE) + title_height_extra,
             },
         );
     }
     for (entity_idx, entity) in diagram.entities.iter().enumerate() {
         if let Some(pkg_idx) = innermost_pkg[entity_idx]
-            && is_default_package_cluster(&diagram.packages[pkg_idx])
+            && is_rendered_package_cluster(&diagram.packages[pkg_idx])
         {
             layout.add_cluster_node(&package_cluster_id(pkg_idx), &entity.id);
         }
@@ -2281,16 +2295,60 @@ fn innermost_entity_packages(
         .collect()
 }
 
-fn is_default_package_cluster(pkg: &Package) -> bool {
-    matches!(pkg.kind, PackageKind::Package | PackageKind::Namespace)
+fn effective_package_kind(pkg: &Package) -> PackageKind {
+    if matches!(pkg.kind, PackageKind::Package | PackageKind::Namespace)
+        && pkg
+            .stereotypes
+            .iter()
+            .any(|stereotype| stereotype.eq_ignore_ascii_case("database"))
+    {
+        PackageKind::Database
+    } else {
+        pkg.kind
+    }
+}
+
+fn is_rendered_package_cluster(pkg: &Package) -> bool {
+    matches!(
+        effective_package_kind(pkg),
+        PackageKind::Package | PackageKind::Namespace | PackageKind::Database
+    )
 }
 
 fn package_cluster_id(idx: usize) -> String {
     format!("pkg{idx}")
 }
 
+fn package_cluster_envelope_extra(diagram: &ClassDiagram, cluster_id: &str) -> f64 {
+    cluster_id
+        .strip_prefix("pkg")
+        .and_then(|idx| idx.parse::<usize>().ok())
+        .and_then(|idx| diagram.packages.get(idx))
+        .filter(|pkg| effective_package_kind(pkg) == PackageKind::Database)
+        .map_or(0.0, |_| DATABASE_CLUSTER_ENVELOPE_EXTRA)
+}
+
 fn package_display_label(pkg: &Package) -> &str {
     pkg.display_name.as_deref().unwrap_or(&pkg.name)
+}
+
+fn package_skinparam<'a>(
+    diagram: &'a ClassDiagram,
+    kind: PackageKind,
+    suffix: &str,
+) -> Option<&'a str> {
+    let prefix = match kind {
+        PackageKind::Database => "Database",
+        _ => return None,
+    };
+    let key = format!("{prefix}{suffix}");
+    diagram
+        .meta
+        .skinparams
+        .iter()
+        .rev()
+        .find(|skinparam| skinparam.key.eq_ignore_ascii_case(&key))
+        .map(|skinparam| skinparam.value.trim())
 }
 
 fn package_qualified_name(
@@ -2477,7 +2535,7 @@ impl SvekIdAllocator<'_> {
         }
         for child_idx in 0..self.diagram.packages.len() {
             if self.parent_pkg[child_idx] == Some(pkg_idx)
-                && is_default_package_cluster(&self.diagram.packages[child_idx])
+                && is_rendered_package_cluster(&self.diagram.packages[child_idx])
             {
                 self.allocate_package(child_idx);
             }
@@ -2502,12 +2560,12 @@ fn svek_id_allocation(diagram: &ClassDiagram) -> SvekIdAllocation {
     };
 
     for (pkg_idx, parent) in parent_pkg.iter().copied().enumerate() {
-        if !is_default_package_cluster(&diagram.packages[pkg_idx]) {
+        if !is_rendered_package_cluster(&diagram.packages[pkg_idx]) {
             continue;
         }
-        let parent_is_default =
-            parent.is_some_and(|parent| is_default_package_cluster(&diagram.packages[parent]));
-        if !parent_is_default {
+        let parent_is_rendered =
+            parent.is_some_and(|parent| is_rendered_package_cluster(&diagram.packages[parent]));
+        if !parent_is_rendered {
             allocator.allocate_package(pkg_idx);
         }
     }
@@ -2624,8 +2682,9 @@ fn render_plantuml_svg(
             }
         }
         for cluster in cluster_positions {
-            max_x = max_x.max(cluster.x + MARGIN + cluster.width);
-            max_y = max_y.max(cluster.y + MARGIN + cluster.height);
+            let envelope_extra = package_cluster_envelope_extra(diagram, &cluster.id);
+            max_x = max_x.max(cluster.x + MARGIN + cluster.width + envelope_extra);
+            max_y = max_y.max(cluster.y + MARGIN + cluster.height + envelope_extra);
         }
         if let Some((width, height)) = layout_extent {
             max_x = max_x.max(width + layout_x_bias);
@@ -2759,10 +2818,11 @@ fn render_plantuml_svg(
     for cluster in cluster_positions {
         let x = cluster.x + MARGIN;
         let y = cluster.y + MARGIN;
+        let envelope_extra = package_cluster_envelope_extra(diagram, &cluster.id);
         body_min_x = body_min_x.min(x);
-        body_max_x = body_max_x.max(x + cluster.width);
+        body_max_x = body_max_x.max(x + cluster.width + envelope_extra);
         body_top = body_top.min(y);
-        body_bottom = body_bottom.max(y + cluster.height);
+        body_bottom = body_bottom.max(y + cluster.height + envelope_extra);
     }
     for &(_, node_idx, _) in &attached_notes {
         if let Some(pos) = positions.get(node_idx) {
@@ -3205,9 +3265,13 @@ fn render_plantuml_svg(
 
 struct LayoutPackageCluster {
     package_idx: usize,
+    kind: PackageKind,
     qualified_name: String,
     source_line: usize,
     label: String,
+    fill: String,
+    stroke: String,
+    font_fill: String,
     x: f64,
     y: f64,
     width: f64,
@@ -3223,15 +3287,38 @@ fn layout_package_clusters(
         .packages
         .iter()
         .enumerate()
-        .filter(|(_, pkg)| is_default_package_cluster(pkg))
+        .filter(|(_, pkg)| is_rendered_package_cluster(pkg))
         .filter_map(|(idx, pkg)| {
             let id = package_cluster_id(idx);
             let pos = cluster_positions.iter().find(|p| p.id == id)?;
+            let kind = effective_package_kind(pkg);
+            let fill = pkg
+                .color
+                .as_deref()
+                .or_else(|| package_skinparam(diagram, kind, "BackgroundColor"))
+                .map(crate::sequence::resolve_color)
+                .unwrap_or_else(|| "none".to_string());
+            let stroke = package_skinparam(diagram, kind, "BorderColor")
+                .map(crate::sequence::resolve_color)
+                .unwrap_or_else(|| {
+                    if kind == PackageKind::Database {
+                        "#181818".to_string()
+                    } else {
+                        "#000000".to_string()
+                    }
+                });
+            let font_fill = package_skinparam(diagram, kind, "FontColor")
+                .map(crate::sequence::resolve_color)
+                .unwrap_or_else(|| "#000000".to_string());
             Some(LayoutPackageCluster {
                 package_idx: idx,
+                kind,
                 qualified_name: package_qualified_name(diagram, &parent_pkg, idx),
                 source_line: pkg.source_line,
                 label: package_display_label(pkg).to_string(),
+                fill,
+                stroke,
+                font_fill,
                 x: pos.x + MARGIN,
                 y: pos.y + MARGIN,
                 width: pos.width,
@@ -3268,6 +3355,11 @@ fn emit_layout_package_cluster(svg: &mut String, cluster: &LayoutPackageCluster,
         entity_id,
     )
     .unwrap();
+    if cluster.kind == PackageKind::Database {
+        emit_layout_database_cluster(svg, cluster);
+        svg.push_str("</g>");
+        return;
+    }
     write!(
         svg,
         r##"<path d="M{},{} L{},{} A3.75,3.75 0 0 1 {},{} L{},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{}" fill="none" style="stroke:#000000;stroke-width:{};"/>"##,
@@ -3318,6 +3410,87 @@ fn emit_layout_package_cluster(svg: &mut String, cluster: &LayoutPackageCluster,
     )
     .unwrap();
     svg.push_str("</g>");
+}
+
+fn emit_layout_database_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
+    let x = cluster.x;
+    let y = cluster.y;
+    let middle = x + cluster.width / 2.0;
+    let right = x + cluster.width;
+    let bottom = y + cluster.height;
+    let label_w = text_render::measure_no_underline(&cluster.label, FONT_SIZE, true);
+    let text_x = x + (cluster.width - label_w) / 2.0;
+    let text_y = y + PACKAGE_TITLE_BASELINE + DATABASE_CLUSTER_TITLE_OFFSET;
+
+    // Java `USymbolDatabase.asBig()` delegates to `drawDatabase()`: a closed
+    // cylinder path plus the top ellipse's lower half as a separate path.
+    write!(
+        svg,
+        r#"<path d="M{},{} C{},{} {},{} {},{} C{},{} {},{} {},{} L{},{} C{},{} {},{} {},{} C{},{} {},{} {},{} L{},{}" fill="{}" style="stroke:{};stroke-width:1;"/>"#,
+        fmt4(x),
+        fmt4(y + 10.0),
+        fmt4(x),
+        fmt4(y),
+        fmt4(middle),
+        fmt4(y),
+        fmt4(middle),
+        fmt4(y),
+        fmt4(middle),
+        fmt4(y),
+        fmt4(right),
+        fmt4(y),
+        fmt4(right),
+        fmt4(y + 10.0),
+        fmt4(right),
+        fmt4(bottom - 10.0),
+        fmt4(right),
+        fmt4(bottom),
+        fmt4(middle),
+        fmt4(bottom),
+        fmt4(middle),
+        fmt4(bottom),
+        fmt4(middle),
+        fmt4(bottom),
+        fmt4(x),
+        fmt4(bottom),
+        fmt4(x),
+        fmt4(bottom - 10.0),
+        fmt4(x),
+        fmt4(y + 10.0),
+        cluster.fill,
+        cluster.stroke,
+    )
+    .unwrap();
+    write!(
+        svg,
+        r#"<path d="M{},{} C{},{} {},{} {},{} C{},{} {},{} {},{}" fill="none" style="stroke:{};stroke-width:1;"/>"#,
+        fmt4(x),
+        fmt4(y + 10.0),
+        fmt4(x),
+        fmt4(y + 20.0),
+        fmt4(middle),
+        fmt4(y + 20.0),
+        fmt4(middle),
+        fmt4(y + 20.0),
+        fmt4(middle),
+        fmt4(y + 20.0),
+        fmt4(right),
+        fmt4(y + 20.0),
+        fmt4(right),
+        fmt4(y + 10.0),
+        cluster.stroke,
+    )
+    .unwrap();
+    write!(
+        svg,
+        r#"<text fill="{}" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
+        cluster.font_fill,
+        fmt4(label_w),
+        fmt4(text_x),
+        fmt4(text_y),
+        escape_xml(&cluster.label),
+    )
+    .unwrap();
 }
 
 fn emit_oracle_legend(svg: &mut String, legend: &OracleLegend, fallback_line: Option<usize>) {
@@ -8290,6 +8463,27 @@ mod tests {
 
         assert!(svg.contains("background:#FF0000;"));
         assert!(svg.contains(r##"<rect fill="#FF0000""##));
+    }
+
+    #[test]
+    fn no_oracle_database_cluster_uses_usymbol_shape_and_envelope() {
+        let input = "@startuml\n\
+            database LedgerVault211 #HoneyDew {\n\
+              class FreshRecord223 {\n\
+                +UUID key\n\
+              }\n\
+              class AuditRow227\n\
+              FreshRecord223 --> AuditRow227\n\
+            }\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(r#"style="width:205px;height:269px;background:#FFFFFF;""#));
+        assert!(svg.contains(r#"<!--cluster LedgerVault211--><g class="cluster""#));
+        assert!(svg.contains(r##"fill="#F0FFF0" style="stroke:#181818;stroke-width:1;""##));
+        assert!(svg.contains(r#"data-qualified-name="LedgerVault211.FreshRecord223""#));
+        assert!(svg.contains(r#"id="FreshRecord223-to-AuditRow227""#));
     }
 
     #[test]
