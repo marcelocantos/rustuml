@@ -4304,13 +4304,28 @@ fn render_no_oracle_edges(
             continue;
         };
         let link_id = format!("lnk{}", i + diagram.nodes.len() + 2 + usize::from(reversed));
+        let raw_start_arrow = if reversed {
+            conn.arrow_at_end
+        } else {
+            conn.arrow_at_start
+        };
+        let raw_end_arrow = if reversed {
+            conn.arrow_at_start
+        } else {
+            conn.arrow_at_end
+        };
         if reversed {
             svg.raw(&format!("<!--reverse link {} to {}-->", conn.to, conn.from));
         } else {
             svg.raw(&format!("<!--link {} to {}-->", conn.from, conn.to));
         }
+        let link_type = if conn.arrow_at_start || conn.arrow_at_end {
+            "dependency"
+        } else {
+            "association"
+        };
         svg.raw(&format!(
-            r#"<g class="link" data-entity-1="{ent1}" data-entity-2="{ent2}" data-link-type="dependency" data-source-line="{line}" id="{link_id}">"#,
+            r#"<g class="link" data-entity-1="{ent1}" data-entity-2="{ent2}" data-link-type="{link_type}" data-source-line="{line}" id="{link_id}">"#,
             line = conn.source_line,
         ));
         let raw_points =
@@ -4319,10 +4334,11 @@ fn render_no_oracle_edges(
             &edge.points,
             body_margin_x,
             body_margin_y,
-            if reversed {
-                EdgeTrim::Start
-            } else {
-                EdgeTrim::End
+            match (raw_start_arrow, raw_end_arrow) {
+                (false, false) => EdgeTrim::None,
+                (true, false) => EdgeTrim::Start,
+                (false, true) => EdgeTrim::End,
+                (true, true) => EdgeTrim::Both,
             },
         );
         if let Some(d) = edge_path_d(&points) {
@@ -4338,7 +4354,9 @@ fn render_no_oracle_edges(
                 .find(|node| node.id == conn.to)
                 .map(own_qname)
                 .unwrap_or_else(|| conn.to.clone());
-            let path_id = if reversed {
+            let path_id = if conn.arrow_at_start == conn.arrow_at_end {
+                format!("{from_name}-{to_name}")
+            } else if reversed {
                 format!("{to_name}-backto-{from_name}")
             } else {
                 format!("{from_name}-to-{to_name}")
@@ -4360,9 +4378,10 @@ fn render_no_oracle_edges(
             ));
         }
         if raw_points.len() >= 2 {
-            if reversed {
+            if raw_start_arrow {
                 emit_deployment_arrowhead(svg, &raw_points[1], &raw_points[0]);
-            } else {
+            }
+            if raw_end_arrow {
                 emit_deployment_arrowhead(
                     svg,
                     &raw_points[raw_points.len() - 2],
@@ -4414,6 +4433,7 @@ enum EdgeTrim {
     None,
     Start,
     End,
+    Both,
 }
 
 fn deployment_svek_edge_points(
@@ -4430,29 +4450,33 @@ fn deployment_svek_edge_points(
         .iter()
         .map(|(x, y)| (quantize(*x) + body_margin_x, quantize(*y) + body_margin_y))
         .collect();
-    if trim != EdgeTrim::None && points.len() >= 2 {
-        let (endpoint, adjacent) = if trim == EdgeTrim::Start {
-            (0, 1)
-        } else {
-            (points.len() - 1, points.len() - 2)
-        };
-        let dx = points[endpoint].0 - points[adjacent].0;
-        let dy = points[endpoint].1 - points[adjacent].1;
-        let length = dx.hypot(dy);
-        if length > f64::EPSILON {
-            let shift = (
-                dx / length * DEPENDENCY_ARROW_LENGTH,
-                dy / length * DEPENDENCY_ARROW_LENGTH,
-            );
-            points[endpoint].0 -= shift.0;
-            points[endpoint].1 -= shift.1;
-            if points.len() >= 4 {
-                points[adjacent].0 -= shift.0;
-                points[adjacent].1 -= shift.1;
-            }
-        }
+    if points.len() >= 2 && matches!(trim, EdgeTrim::Start | EdgeTrim::Both) {
+        trim_deployment_edge_endpoint(&mut points, 0, 1);
+    }
+    if points.len() >= 2 && matches!(trim, EdgeTrim::End | EdgeTrim::Both) {
+        let endpoint = points.len() - 1;
+        trim_deployment_edge_endpoint(&mut points, endpoint, endpoint - 1);
     }
     points
+}
+
+fn trim_deployment_edge_endpoint(points: &mut [(f64, f64)], endpoint: usize, adjacent: usize) {
+    let dx = points[endpoint].0 - points[adjacent].0;
+    let dy = points[endpoint].1 - points[adjacent].1;
+    let length = dx.hypot(dy);
+    if length <= f64::EPSILON {
+        return;
+    }
+    let shift = (
+        dx / length * DEPENDENCY_ARROW_LENGTH,
+        dy / length * DEPENDENCY_ARROW_LENGTH,
+    );
+    points[endpoint].0 -= shift.0;
+    points[endpoint].1 -= shift.1;
+    if points.len() >= 4 {
+        points[adjacent].0 -= shift.0;
+        points[adjacent].1 -= shift.1;
+    }
 }
 
 fn emit_deployment_arrowhead(svg: &mut SvgBuilder, previous: &(f64, f64), endpoint: &(f64, f64)) {
@@ -4585,6 +4609,28 @@ mod tests {
         assert!(svg.contains(r#"height="305px""#));
         assert!(svg.contains(r#"id="Sender71-to-Receiver73""#));
         assert!(svg.contains(r#"stroke-dasharray:7,7;"#));
+    }
+
+    #[test]
+    fn no_oracle_link_decorations_follow_both_logical_ends() {
+        let source = "@startuml\n\
+            node \"Emitter 137\" as Emitter137\n\
+            node \"Relay 139\" as Relay139\n\
+            node \"Sink 149\" as Sink149\n\
+            Emitter137 -- Relay139\n\
+            Relay139 <-> Sink149\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+
+        let svg = render(&diagram, &Theme::default());
+
+        assert!(svg.contains(r#"data-link-type="association""#));
+        assert!(svg.contains(r#"id="Emitter137-Relay139""#));
+        assert!(svg.contains(r#"data-link-type="dependency""#));
+        assert!(svg.contains(r#"id="Relay139-Sink149""#));
     }
 
     #[test]

@@ -157,6 +157,8 @@ struct ParsedDeploymentConnection {
     raw_from: String,
     raw_to: String,
     label: Option<String>,
+    arrow_at_start: bool,
+    arrow_at_end: bool,
     direction: Option<DeploymentLinkDirection>,
     style: DeploymentLinkStyle,
     length: usize,
@@ -217,6 +219,8 @@ fn try_parse_connection(
                                     raw_from: kw.to_string(),
                                     raw_to: raw_to.to_string(),
                                     label,
+                                    arrow_at_start: arrow.starts_with('<'),
+                                    arrow_at_end: arrow.ends_with('>'),
                                     direction: deployment_link_direction(arrow),
                                     style: deployment_link_style(arrow),
                                     length: deployment_link_length(arrow),
@@ -300,6 +304,8 @@ fn try_parse_connection(
         raw_from: raw_from.to_string(),
         raw_to: raw_to.to_string(),
         label,
+        arrow_at_start: arrow.starts_with('<'),
+        arrow_at_end: arrow.ends_with('>'),
         direction: deployment_link_direction(arrow),
         style: deployment_link_style(arrow),
         length: deployment_link_length(arrow),
@@ -626,6 +632,8 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                     raw_from,
                     raw_to,
                     label,
+                    arrow_at_start,
+                    arrow_at_end,
                     direction,
                     style,
                     length,
@@ -650,6 +658,8 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                     from,
                     to,
                     label,
+                    arrow_at_start,
+                    arrow_at_end,
                     direction,
                     style,
                     length,
@@ -731,6 +741,8 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                 raw_from,
                 raw_to,
                 label,
+                arrow_at_start,
+                arrow_at_end,
                 direction,
                 style,
                 length,
@@ -757,6 +769,8 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                 from,
                 to,
                 label,
+                arrow_at_start,
+                arrow_at_end,
                 direction,
                 style,
                 length,
@@ -881,6 +895,21 @@ mod tests {
             ]
         );
         assert_eq!(diagram.connections.last().unwrap().length, 4);
+    }
+
+    #[test]
+    fn preserves_link_decorations_at_both_ends() {
+        let diagram = parse("node A\nnode B\nA -- B\nA --> B\nA <-- B\nA <-> B");
+        let ends: Vec<_> = diagram
+            .connections
+            .iter()
+            .map(|connection| (connection.arrow_at_start, connection.arrow_at_end))
+            .collect();
+
+        assert_eq!(
+            ends,
+            vec![(false, false), (false, true), (true, false), (true, true)]
+        );
     }
 
     #[test]
