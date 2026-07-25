@@ -257,6 +257,32 @@ fn layout_node_size(
     )
 }
 
+/// Recover the Graphviz rank length carried by an explicit `-down...>` arrow.
+///
+/// The state parser deliberately keeps exact arrow syntax in `DiagramMeta::source`
+/// for downstream consumers. PlantUML's `CommandLinkStateCommon.executeArg`
+/// measures the arrow queue and `SvekEdge.appendLine` writes
+/// `minlen = Link.getLength() - 1`; for a named vertical direction, that is the
+/// number of shaft dashes after the direction token.
+fn explicit_down_minlen(diagram: &StateDiagram, transition: &Transition) -> Option<usize> {
+    let source = diagram.meta.source.as_deref()?;
+    let marker_offset = source
+        .lines()
+        .next()
+        .is_some_and(|line| line.trim_start().starts_with("@start"))
+        as usize;
+    let source_index = transition
+        .source_line
+        .checked_sub(1)?
+        .checked_add(marker_offset)?;
+    let line = source.lines().nth(source_index)?;
+    let lowercase = line.to_ascii_lowercase();
+    let after_direction = line.get(lowercase.find("-down")? + "-down".len()..)?;
+    let shaft = after_direction.get(..after_direction.find('>')?)?;
+    let minlen = shaft.bytes().filter(|byte| *byte == b'-').count();
+    (minlen > 0).then_some(minlen)
+}
+
 /// PlantUML parses Graphviz's SVG, whose node and spline coordinates are
 /// serialized to two decimal places, before `SvekNode`/`SvekEdge` paint them.
 fn quantize_svek_coord(value: f64) -> f64 {
@@ -1031,7 +1057,11 @@ pub fn render_with_oracle(
         for t in &diagram.transitions {
             let from = map_id(&t.from, true);
             let to = map_id(&t.to, false);
-            layout.add_edge(&from, &to, t.label.as_deref());
+            if let Some(minlen) = explicit_down_minlen(diagram, t) {
+                layout.add_edge_with_minlen(&from, &to, t.label.as_deref(), minlen);
+            } else {
+                layout.add_edge(&from, &to, t.label.as_deref());
+            }
         }
         layout.layout_full(std::time::Duration::from_secs(5))
     };
@@ -4475,6 +4505,44 @@ mod tests {
         assert!(svg.contains(r##"<polygon fill="#008B8B""##));
         assert!(svg.contains(r##"<polygon fill="#7B68EE""##));
         assert!(svg.contains(r##"<polygon fill="#FFA500""##));
+    }
+
+    #[test]
+    fn renamed_styled_down_arrow_uses_its_full_rank_length() {
+        let short_input = concat!(
+            "@startuml\n",
+            "[*] --> SignalHarbor17\n",
+            "SignalHarbor17 -down[#darkcyan]-> SignalMesa29\n",
+            "SignalMesa29 --> [*]\n",
+            "@enduml",
+        );
+        let long_input = concat!(
+            "@startuml\n",
+            "[*] --> SignalHarbor17\n",
+            "SignalHarbor17 -down[#darkcyan]----> SignalMesa29\n",
+            "SignalMesa29 --> [*]\n",
+            "@enduml",
+        );
+        let short = rustuml_parser::parse::parse(short_input).unwrap();
+        let long = rustuml_parser::parse::parse(long_input).unwrap();
+        let (
+            rustuml_parser::diagram::Diagram::State(short),
+            rustuml_parser::diagram::Diagram::State(long),
+        ) = (&short, &long)
+        else {
+            panic!("expected state diagrams");
+        };
+
+        assert_eq!(explicit_down_minlen(long, &long.transitions[1]), Some(4));
+        let short_svg = render(short, &Theme::default());
+        let long_svg = render(long, &Theme::default());
+        let svg_height = |svg: &str| {
+            svg.split_once("height=\"")
+                .and_then(|(_, tail)| tail.split_once("px\""))
+                .and_then(|(height, _)| height.parse::<f64>().ok())
+                .unwrap()
+        };
+        assert!(svg_height(&long_svg) > svg_height(&short_svg));
     }
 
     #[test]
