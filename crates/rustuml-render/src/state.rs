@@ -73,10 +73,12 @@ const V_GAP: f64 = 60.0;
 ///
 /// Java provenance: `net.sourceforge.plantuml.svek.SvekResult.calculateDimension`
 /// calls `clusterManager.moveDelta(6 - minX, 6 - minY)` and then returns
-/// `minMax.getDimension().delta(15, 15)`. SVG stroke emission lands the visible
-/// top-left entity coordinates at 7px in the state goldens, with 14px trailing
-/// canvas room.
-const SVEK_ORIGIN: f64 = 7.0;
+/// `minMax.getDimension().delta(15, 15)`. `TextBlockUtils.getMinMax` includes
+/// the state rectangle's horizontal stroke overscan but the start circle's
+/// vertical bound is already integral, yielding visible x=7 and y=6 origins.
+/// The remaining 14px of the dimension delta trails the painted graph.
+const SVEK_ORIGIN_X: f64 = 7.0;
+const SVEK_ORIGIN_Y: f64 = 6.0;
 const SVEK_TRAILING_PAD: f64 = 14.0;
 
 /// Title font size.
@@ -101,6 +103,10 @@ const DEFAULT_TEXT_COLOR: &str = "#000000";
 const ARROW_HALF: f64 = 4.0;
 /// Arrow polygon length.
 const ARROW_LEN: f64 = 9.0;
+/// Java `ExtremityArrow.getDecorationLength` retracts the final Bezier endpoint
+/// and control point by six pixels while leaving the arrow tip at dot's solved
+/// node-boundary contact.
+const ARROW_DECORATION_LENGTH: f64 = 6.0;
 
 /// Horizontal gap between note and state.
 const NOTE_H_GAP: f64 = 10.0;
@@ -224,6 +230,37 @@ fn node_width(id: &str, state_def: Option<&State>) -> f64 {
             }
         }
     }
+}
+
+/// Dimensions and Graphviz shape used for one flat state node.
+///
+/// Java provenance: `EntityImageCircleStart.calculateDimensionSlow` delegates
+/// to the 20px `CircleStart`; `EntityImageCircleEnd.calculateDimensionSlow`
+/// returns 22x22. `SvekNode.appendShape` sends both to dot as circles.
+fn layout_node_size(
+    id: &str,
+    state_def: Option<&State>,
+    hide_empty_desc: bool,
+) -> (f64, f64, bool) {
+    if id == "__start__" {
+        return (START_RADIUS * 2.0, START_RADIUS * 2.0, true);
+    }
+    if id == "__end__" {
+        return (END_OUTER_RADIUS * 2.0, END_OUTER_RADIUS * 2.0, true);
+    }
+    let is_circle =
+        state_def.is_some_and(|state| matches!(state.kind, StateKind::Initial | StateKind::Final));
+    (
+        node_width(id, state_def),
+        node_height(id, state_def, hide_empty_desc),
+        is_circle,
+    )
+}
+
+/// PlantUML parses Graphviz's SVG, whose node and spline coordinates are
+/// serialized to two decimal places, before `SvekNode`/`SvekEdge` paint them.
+fn quantize_svek_coord(value: f64) -> f64 {
+    (value * 100.0).round() / 100.0
 }
 
 /// Note box height.
@@ -504,81 +541,71 @@ struct StateSvgIds {
 
 /// Allocate state entity/link ids in PlantUML's construction order.
 ///
-/// Java provenance: `CommandCreateState.executeArg` creates explicit leaves as
-/// declarations are parsed; `CommandLinkStateCommon.executeArg` then calls
-/// `getEntityStart`, `getEntityEnd`, and `diagram.addLink` for each transition.
-/// SVEK later emits all entities before links, but the shared SVG id counter
-/// has already been consumed by those interleaved create-link events.
+/// Java provenance: `CucaDiagram.startingPass` resets `cpt1` to one for every
+/// parser pass. `CommandCreateState.executeArg` creates explicit leaves in pass
+/// one. In pass two, those leaves already exist, while
+/// `CommandLinkStateCommon.executeArg` lazily creates missing endpoints and
+/// then constructs each `Link`. The reset deliberately permits an explicit
+/// state and a lazy start/end state to share an `entNNNN` value.
 fn allocate_state_svg_ids(diagram: &StateDiagram, state_ids: &[String]) -> StateSvgIds {
-    let mut next_counter = 2usize;
     let mut entity_ids: Vec<(String, String)> = Vec::new();
     let mut link_ids = vec![String::new(); diagram.transitions.len()];
 
-    let mut alloc_entity = |id: &str, next_counter: &mut usize| {
+    let mut declarations: Vec<(usize, usize, &str)> = Vec::new();
+    for (idx, state) in diagram.states.iter().enumerate() {
+        if let Some(line) = state.decl_line {
+            declarations.push((line, idx, state.id.as_str()));
+        }
+    }
+    declarations.sort_by_key(|(line, seq, _)| (*line, *seq));
+    let mut pass_one_counter = 2usize;
+    for (_, _, id) in declarations {
         if state_ids.iter().any(|state_id| state_id == id)
             && !entity_ids.iter().any(|(seen, _)| seen == id)
         {
-            entity_ids.push((id.to_string(), format!("ent{next_counter:04}")));
-            *next_counter += 1;
-        }
-    };
-
-    let mut events: Vec<(usize, usize, IdEvent)> = Vec::new();
-    for (idx, state) in diagram.states.iter().enumerate() {
-        if let Some(line) = state.decl_line {
-            events.push((line, idx, IdEvent::Declaration(state.id.clone())));
+            entity_ids.push((id.to_string(), format!("ent{pass_one_counter:04}")));
+            pass_one_counter += 1;
         }
     }
-    for (idx, transition) in diagram.transitions.iter().enumerate() {
-        events.push((
-            transition.source_line,
-            diagram.states.len() + idx,
-            IdEvent::Transition(idx),
-        ));
-    }
-    events.sort_by_key(|(line, seq, _)| (*line, *seq));
 
-    for (_, _, event) in events {
-        match event {
-            IdEvent::Declaration(id) => alloc_entity(&id, &mut next_counter),
-            IdEvent::Transition(idx) => {
-                let transition = &diagram.transitions[idx];
-                let from = if transition.from == "[*]" {
-                    "__start__"
-                } else {
-                    transition.from.as_str()
-                };
-                let to = if transition.to == "[*]" {
-                    "__end__"
-                } else {
-                    transition.to.as_str()
-                };
-                alloc_entity(from, &mut next_counter);
-                alloc_entity(to, &mut next_counter);
-                link_ids[idx] = format!("lnk{next_counter}");
-                next_counter += 1;
+    let mut pass_two_counter = 2usize;
+    let mut transitions: Vec<(usize, &Transition)> =
+        diagram.transitions.iter().enumerate().collect();
+    transitions.sort_by_key(|(idx, transition)| (transition.source_line, *idx));
+    for (idx, transition) in transitions {
+        for (endpoint, is_source) in [(&transition.from, true), (&transition.to, false)] {
+            let id = if endpoint == "[*]" {
+                if is_source { "__start__" } else { "__end__" }
+            } else {
+                endpoint.as_str()
+            };
+            if state_ids.iter().any(|state_id| state_id == id)
+                && !entity_ids.iter().any(|(seen, _)| seen == id)
+            {
+                entity_ids.push((id.to_string(), format!("ent{pass_two_counter:04}")));
+                pass_two_counter += 1;
             }
         }
+        link_ids[idx] = format!("lnk{pass_two_counter}");
+        pass_two_counter += 1;
     }
 
     for id in state_ids {
-        alloc_entity(id, &mut next_counter);
+        if !entity_ids.iter().any(|(seen, _)| seen == id) {
+            entity_ids.push((id.clone(), format!("ent{pass_two_counter:04}")));
+            pass_two_counter += 1;
+        }
     }
     for id in link_ids.iter_mut().filter(|id| id.is_empty()) {
-        *id = format!("lnk{next_counter}");
-        next_counter += 1;
+        *id = format!("lnk{pass_two_counter}");
+        pass_two_counter += 1;
     }
 
     StateSvgIds {
         entity_ids,
         link_ids,
-        next_counter,
+        next_counter: pass_two_counter,
     }
-}
-
-enum IdEvent {
-    Declaration(String),
-    Transition(usize),
 }
 
 // --- Rendering ---
@@ -957,8 +984,8 @@ pub fn render_with_oracle(
         .filter(|n| matches!(&n.kind, StateNoteKind::LeftOf(_)))
         .map(|n| note_box_width(&n.text) + NOTE_H_GAP)
         .fold(0.0_f64, f64::max);
-    let graph_body_x = SVEK_ORIGIN + left_note_space;
-    let graph_body_y = SVEK_ORIGIN + title_h;
+    let graph_body_x = SVEK_ORIGIN_X + left_note_space;
+    let graph_body_y = SVEK_ORIGIN_Y + title_h;
 
     // Resolve state defs. For layout IDs like "__start__" and "__end__", there's
     // no state definition.
@@ -993,17 +1020,12 @@ pub fn render_with_oracle(
         let mut layout = LayoutGraph::new(Direction::TopToBottom).with_plantuml_svek_spacing();
         for id in &state_ids {
             let state_def = find_state(id);
-            let h = if id == "__start__" || id == "__end__" {
-                START_RADIUS * 2.0
+            let (w, h, is_circle) = layout_node_size(id, state_def, hide_empty_desc);
+            if is_circle {
+                layout.add_circle_node(id, id, w.max(h));
             } else {
-                node_height(id, state_def, hide_empty_desc)
-            };
-            let w = if id == "__start__" || id == "__end__" {
-                START_RADIUS * 2.0
-            } else {
-                node_width(id, state_def)
-            };
-            layout.add_node(id, id, w, h);
+                layout.add_node(id, id, w, h);
+            }
         }
         for t in &diagram.transitions {
             let from = map_id(&t.from, true);
@@ -1073,18 +1095,9 @@ pub fn render_with_oracle(
             } else {
                 // Fallback: use computed dimensions and stack.
                 let state_def = find_state(id);
-                let h = if id == "__start__" || id == "__end__" {
-                    START_RADIUS * 2.0
-                } else {
-                    node_height(id, state_def, hide_empty_desc)
-                };
-                let w = if id == "__start__" || id == "__end__" {
-                    START_RADIUS * 2.0
-                } else {
-                    node_width(id, state_def)
-                };
-                let cy = SVEK_ORIGIN + positions.len() as f64 * 80.0 + h / 2.0;
-                positions.push((id.clone(), SVEK_ORIGIN + w / 2.0, cy, w, h));
+                let (w, h, _) = layout_node_size(id, state_def, hide_empty_desc);
+                let cy = SVEK_ORIGIN_Y + positions.len() as f64 * 80.0 + h / 2.0;
+                positions.push((id.clone(), SVEK_ORIGIN_X + w / 2.0, cy, w, h));
             }
         }
         let tw = if orc.canvas_width > 0.0 {
@@ -1111,21 +1124,14 @@ pub fn render_with_oracle(
         let mut max_y = 0.0_f64;
         for (i, id) in state_ids.iter().enumerate() {
             let state_def = find_state(id);
-            let h = if id == "__start__" || id == "__end__" {
-                START_RADIUS * 2.0
-            } else {
-                node_height(id, state_def, hide_empty_desc)
-            };
-            let w = if id == "__start__" || id == "__end__" {
-                START_RADIUS * 2.0
-            } else {
-                node_width(id, state_def)
-            };
-            let x = lp[i].x + graph_body_x + w / 2.0;
-            let y = lp[i].y + graph_body_y + h / 2.0;
+            let (w, h, _) = layout_node_size(id, state_def, hide_empty_desc);
+            let layout_x = quantize_svek_coord(lp[i].x);
+            let layout_y = quantize_svek_coord(lp[i].y);
+            let x = layout_x + graph_body_x + w / 2.0;
+            let y = layout_y + graph_body_y + h / 2.0;
             positions.push((id.clone(), x, y, w, h));
-            max_x = max_x.max(lp[i].x + w);
-            max_y = max_y.max(lp[i].y + h);
+            max_x = max_x.max(layout_x + w);
+            max_y = max_y.max(layout_y + h);
         }
         let tw = graph_body_x + max_x + right_note_space + SVEK_TRAILING_PAD;
         let th = graph_body_y + max_y + SVEK_TRAILING_PAD;
@@ -1134,30 +1140,15 @@ pub fn render_with_oracle(
         // Vertical stacking fallback.
         let max_w: f64 = state_ids
             .iter()
-            .map(|id| {
-                if id == "__start__" || id == "__end__" {
-                    START_RADIUS * 2.0
-                } else {
-                    node_width(id, find_state(id))
-                }
-            })
+            .map(|id| layout_node_size(id, find_state(id), hide_empty_desc).0)
             .fold(STATE_MIN_WIDTH, f64::max);
-        let tw = SVEK_ORIGIN + left_note_space + max_w + right_note_space + SVEK_TRAILING_PAD;
-        let cx = SVEK_ORIGIN + left_note_space + max_w / 2.0;
+        let tw = SVEK_ORIGIN_X + left_note_space + max_w + right_note_space + SVEK_TRAILING_PAD;
+        let cx = SVEK_ORIGIN_X + left_note_space + max_w / 2.0;
         let mut positions: Vec<(String, f64, f64, f64, f64)> = Vec::new();
-        let mut y_cursor = title_h + SVEK_ORIGIN;
+        let mut y_cursor = title_h + SVEK_ORIGIN_Y;
         for id in &state_ids {
             let state_def = find_state(id);
-            let h = if id == "__start__" || id == "__end__" {
-                START_RADIUS * 2.0
-            } else {
-                node_height(id, state_def, hide_empty_desc)
-            };
-            let w = if id == "__start__" || id == "__end__" {
-                START_RADIUS * 2.0
-            } else {
-                node_width(id, state_def)
-            };
+            let (w, h, _) = layout_node_size(id, state_def, hide_empty_desc);
             let cy = y_cursor + h / 2.0;
             positions.push((id.clone(), cx, cy, w, h));
             y_cursor += h + V_GAP;
@@ -1171,7 +1162,12 @@ pub fn render_with_oracle(
             .iter()
             .find(|(sid, _, _, _, _)| sid == id)
             .map(|(_, x, y, w, h)| (*x, *y, *w, *h))
-            .unwrap_or((SVEK_ORIGIN, SVEK_ORIGIN, STATE_MIN_WIDTH, STATE_BOX_HEIGHT))
+            .unwrap_or((
+                SVEK_ORIGIN_X,
+                SVEK_ORIGIN_Y,
+                STATE_MIN_WIDTH,
+                STATE_BOX_HEIGHT,
+            ))
     };
 
     // --- Build SVG ---
@@ -2148,17 +2144,17 @@ pub fn render_with_oracle(
                 (nx, ny, sx - sw / 2.0, sy)
             }
             StateNoteKind::Floating(_) => (
-                SVEK_ORIGIN,
-                SVEK_ORIGIN + title_h,
-                SVEK_ORIGIN + note_w,
-                SVEK_ORIGIN + title_h,
+                SVEK_ORIGIN_X,
+                SVEK_ORIGIN_Y + title_h,
+                SVEK_ORIGIN_X + note_w,
+                SVEK_ORIGIN_Y + title_h,
             ),
             StateNoteKind::OnLink => {
                 let mid_y = total_height / 2.0;
                 let cx_approx = positions
                     .first()
                     .map(|(_, x, _, _, _)| *x)
-                    .unwrap_or(SVEK_ORIGIN + STATE_MIN_WIDTH / 2.0);
+                    .unwrap_or(SVEK_ORIGIN_X + STATE_MIN_WIDTH / 2.0);
                 let nx = cx_approx + STATE_MIN_WIDTH / 2.0 + NOTE_H_GAP;
                 (
                     nx,
@@ -2172,7 +2168,7 @@ pub fn render_with_oracle(
                 let cx_approx = positions
                     .first()
                     .map(|(_, x, _, _, _)| *x)
-                    .unwrap_or(SVEK_ORIGIN + STATE_MIN_WIDTH / 2.0);
+                    .unwrap_or(SVEK_ORIGIN_X + STATE_MIN_WIDTH / 2.0);
                 let nx = cx_approx + STATE_MIN_WIDTH / 2.0 + NOTE_H_GAP;
                 (
                     nx,
@@ -2186,7 +2182,7 @@ pub fn render_with_oracle(
                 let cx_approx = positions
                     .first()
                     .map(|(_, x, _, _, _)| *x)
-                    .unwrap_or(SVEK_ORIGIN + STATE_MIN_WIDTH / 2.0);
+                    .unwrap_or(SVEK_ORIGIN_X + STATE_MIN_WIDTH / 2.0);
                 let nx = cx_approx - STATE_MIN_WIDTH / 2.0 - NOTE_H_GAP - note_w;
                 (
                     nx,
@@ -2333,12 +2329,26 @@ pub fn render_with_oracle(
             if let Some(ep) = edge_path
                 && !ep.points.is_empty()
             {
-                // Render bezier path.
-                let points: Vec<(f64, f64)> = ep
+                // Java `SvgResult.toDotPath` first receives Graphviz's
+                // two-decimal SVG coordinates. `SvekEdge.getExtremitySimplier`
+                // then retracts the path for the arrow decoration while the
+                // `ExtremityArrow` itself remains at the solved contact point.
+                let mut points: Vec<(f64, f64)> = ep
                     .points
                     .iter()
-                    .map(|(x, y)| (x + graph_body_x, y + graph_body_y))
+                    .map(|(x, y)| {
+                        (
+                            quantize_svek_coord(*x) + graph_body_x,
+                            quantize_svek_coord(*y) + graph_body_y,
+                        )
+                    })
                     .collect();
+                let arrow_tip = points[points.len() - 1];
+                let arrow_control = points
+                    .get(points.len().saturating_sub(2))
+                    .copied()
+                    .unwrap_or((from_cx, from_cy));
+                retract_dependency_arrow_path(&mut points);
                 let mut d = format!("M{},{}", fmt_f(points[0].0), fmt_f(points[0].1));
                 let mut i = 1;
                 while i + 2 < points.len() {
@@ -2362,13 +2372,7 @@ pub fn render_with_oracle(
                 .unwrap();
 
                 // Arrowhead polygon.
-                let endpoint = points[points.len() - 1];
-                let control = if points.len() >= 2 {
-                    points[points.len() - 2]
-                } else {
-                    (from_cx, from_cy)
-                };
-                render_arrowhead(&mut svg, control, endpoint);
+                render_arrowhead(&mut svg, arrow_control, arrow_tip);
 
                 // Label.
                 if let Some(label) = &t.label {
@@ -2446,6 +2450,36 @@ pub fn render_with_oracle(
 
     svg.push_str("</g></svg>");
     svg
+}
+
+/// Retract the final Bezier segment to make room for a dependency arrow.
+///
+/// Java provenance: `SvekEdge.getExtremitySimplier` asks
+/// `ExtremityArrow.getDecorationLength` for six pixels, then
+/// `DotPath.moveEndPoint` translates both the endpoint and its adjacent
+/// control point by that vector.
+fn retract_dependency_arrow_path(points: &mut [(f64, f64)]) {
+    if points.len() < 2 {
+        return;
+    }
+    let endpoint = points.len() - 1;
+    let adjacent = endpoint - 1;
+    let dx = points[endpoint].0 - points[adjacent].0;
+    let dy = points[endpoint].1 - points[adjacent].1;
+    let length = dx.hypot(dy);
+    if length <= f64::EPSILON {
+        return;
+    }
+    let shift = (
+        dx / length * ARROW_DECORATION_LENGTH,
+        dy / length * ARROW_DECORATION_LENGTH,
+    );
+    points[endpoint].0 -= shift.0;
+    points[endpoint].1 -= shift.1;
+    if points.len() >= 4 {
+        points[adjacent].0 -= shift.0;
+        points[adjacent].1 -= shift.1;
+    }
 }
 
 /// Render a filled arrowhead polygon at the endpoint, pointing in the direction
@@ -4346,48 +4380,38 @@ mod tests {
     }
 
     #[test]
-    fn state_svek_origin_and_spline_translation_use_body_coordinates() {
+    fn flat_state_svek_geometry_and_parser_pass_uids() {
         let input = concat!(
             "@startuml\n",
-            "state RenamedIdle\n",
-            "state RenamedReady\n",
-            "[*] --> RenamedReady\n",
-            "RenamedReady --> [*]\n",
+            "state \"Quiescent Delta 43\" as QD43\n",
+            "[*] --> QD43\n",
+            "QD43 --> [*]\n",
             "@enduml",
         );
         let diagram = rustuml_parser::parse::parse(input).unwrap();
         let svg = crate::render_svg(&diagram);
 
-        assert!(
-            svg.contains(r#"x="7" y="7""#),
-            "first declared state should start at PlantUML's SVEK body origin"
-        );
-
-        let start_group = svg.find(r#"data-qualified-name=".start.""#).unwrap();
-        let start_cx = svg[start_group..]
-            .split(r#"cx=""#)
-            .nth(1)
-            .unwrap()
-            .split('"')
-            .next()
-            .unwrap()
-            .parse::<f64>()
-            .unwrap();
-        let start_link = svg.find(r#"id="*start*-to-RenamedReady""#).unwrap();
-        let path_x = svg[..start_link]
-            .rsplit(r#"<path d="M"#)
-            .next()
-            .unwrap()
-            .split(',')
-            .next()
-            .unwrap()
-            .parse::<f64>()
-            .unwrap();
-
-        assert!(
-            (path_x - start_cx).abs() < 0.1,
-            "Graphviz spline x-coordinate should be translated into SVG body coordinates"
-        );
+        assert!(svg.contains(r#"height="232px""#));
+        assert!(svg.contains(
+            r##"data-qualified-name="QD43" id="ent0002"><rect fill="#F1F1F1" height="50""##
+        ));
+        assert!(svg.contains(r#" x="7" y="86""#));
+        assert!(svg.contains(
+            r#"data-qualified-name=".start." data-source-line="2" id="ent0002"><ellipse cx="81.65" cy="16""#
+        ));
+        assert!(svg.contains(
+            r#"data-qualified-name=".end." data-source-line="3" id="ent0004"><ellipse cx="81.65" cy="207""#
+        ));
+        assert!(svg.contains(
+            r#"data-entity-1="ent0002" data-entity-2="ent0002" data-link-type="dependency" data-source-line="2" id="lnk3""#
+        ));
+        assert!(svg.contains(r#"<path d="M81.65,26.26 C81.65,39.95 81.65,60.07 81.65,79.52""#));
+        assert!(svg.contains(
+            r##"<polygon fill="#181818" points="81.65,85.52,85.65,76.52,81.65,80.52,77.65,76.52,81.65,85.52""##
+        ));
+        assert!(svg.contains(
+            r#"data-entity-1="ent0002" data-entity-2="ent0004" data-link-type="dependency" data-source-line="3" id="lnk5""#
+        ));
     }
 
     #[test]
