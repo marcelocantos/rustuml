@@ -1546,7 +1546,12 @@ fn parse_relationship_kind(s: &str) -> (RelationshipKind, bool, RelationshipEnd)
         (RelationshipKind::Aggregation, false, decorated_end)
     } else if s.contains("..>") || s.contains("<..") {
         // Dashed dependency (..>)
-        let decorated_end = if s.contains("<..") {
+        // PlantUML `CommandLinkClass.getLinkType` looks up `ARROW_HEAD1` and
+        // `ARROW_HEAD2` independently through `LinkDecor`, so `<..>` carries
+        // an `ARROW` decoration at both endpoints.
+        let decorated_end = if s.contains("<..") && s.contains("..>") {
+            RelationshipEnd::Both
+        } else if s.contains("<..") {
             RelationshipEnd::From
         } else {
             RelationshipEnd::To
@@ -2207,6 +2212,17 @@ mod tests {
         assert!(!d.relationships[2].dashed);
         assert!(!d.relationships[3].dashed);
         assert!(d.relationships[4].dashed);
+    }
+
+    #[test]
+    fn bidirectional_dashed_dependency_decorates_both_renamed_endpoints() {
+        let d = parse(
+            "@startuml\nclass RenamedSource\nclass RenamedTarget\nRenamedSource <..> RenamedTarget\n@enduml",
+        );
+        assert_eq!(d.relationships.len(), 1);
+        assert_eq!(d.relationships[0].kind, RelationshipKind::Dependency);
+        assert!(d.relationships[0].dashed);
+        assert_eq!(d.relationships[0].decorated_end, RelationshipEnd::Both);
     }
 
     #[test]
