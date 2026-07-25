@@ -8,7 +8,7 @@
 
 use std::fmt::Write;
 
-use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph};
+use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph, NodePosition};
 use rustuml_parser::diagram::state::*;
 
 use crate::handwritten::has_deprecated_skinparam as has_deprecated_handwritten_skinparam;
@@ -255,6 +255,42 @@ fn layout_node_size(
         node_height(id, state_def, hide_empty_desc),
         is_circle,
     )
+}
+
+/// Return the vertical translation applied by `SvekResult.calculateDimension`.
+///
+/// `TextBlockUtils.getMinMax` delegates rectangles to
+/// `LimitFinder.drawRectangle`, whose top bound is `y - 1`, while ellipses use
+/// their unexpanded `y`. Consequently, a state box on Graphviz's top rank
+/// moves the whole SVEK body to y=7; a start/end ellipse on that rank moves it
+/// to y=6.
+fn svek_origin_y_for_layout(
+    diagram: &StateDiagram,
+    state_ids: &[String],
+    positions: &[NodePosition],
+) -> f64 {
+    let Some(top) = positions
+        .iter()
+        .map(|position| quantize_svek_coord(position.y))
+        .reduce(f64::min)
+    else {
+        return SVEK_ORIGIN_Y;
+    };
+
+    let rectangle_on_top_rank = state_ids.iter().zip(positions).any(|(id, position)| {
+        if (quantize_svek_coord(position.y) - top).abs() > f64::EPSILON {
+            return false;
+        }
+        let state = diagram.states.iter().find(|state| state.id == *id);
+        state.is_some_and(|state| {
+            matches!(
+                state.kind,
+                StateKind::Normal | StateKind::Fork | StateKind::Join
+            )
+        })
+    });
+
+    SVEK_ORIGIN_Y + f64::from(rectangle_on_top_rank)
 }
 
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
@@ -1062,7 +1098,7 @@ pub fn render_with_oracle(
         .map(|n| note_box_width(&n.text) + NOTE_H_GAP)
         .fold(0.0_f64, f64::max);
     let graph_body_x = SVEK_ORIGIN_X + left_note_space;
-    let graph_body_y = SVEK_ORIGIN_Y + title_h;
+    let mut graph_body_y = SVEK_ORIGIN_Y + title_h;
 
     // Resolve state defs. For layout IDs like "__start__" and "__end__", there's
     // no state definition.
@@ -1135,6 +1171,9 @@ pub fn render_with_oracle(
     };
 
     let layout_positions = layout_result.as_ref().map(|r| &r.node_positions[..]);
+    if let Some(layout_positions) = layout_positions {
+        graph_body_y = svek_origin_y_for_layout(diagram, &state_ids, layout_positions) + title_h;
+    }
     let edge_paths: &[EdgePath] = if use_oracle {
         &empty_edge_paths
     } else {
@@ -4709,6 +4748,29 @@ mod tests {
         assert!(svg.contains(r#"id="AzureDepot29-backto-CopperRelay17""#));
         assert!(svg.contains("<!--reverse link VioletHarbor41 to AzureDepot29-->"));
         assert!(svg.contains(r#"id="VioletHarbor41-backto-AzureDepot29""#));
+    }
+
+    #[test]
+    fn renamed_up_arrow_uses_rectangle_limit_finder_origin() {
+        let input = concat!(
+            "@startuml\n",
+            "[*] --> CopperRelay701\n",
+            "CopperRelay701 -up[#darkcyan]-> AzureDepot709\n",
+            "AzureDepot709 --> [*]\n",
+            "@enduml\n",
+        );
+        let parsed = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::State(diagram) = &parsed else {
+            panic!("expected state diagram");
+        };
+
+        let svg = render(diagram, &Theme::default());
+        assert!(svg.contains(r#"width="261px""#));
+        assert!(svg.contains(r#"height="181px""#));
+        assert!(svg.contains(r#"data-qualified-name=".start.""#));
+        assert!(svg.contains(r#"<ellipse cx="72.87" cy="32""#));
+        assert!(svg.contains(r#"x="119.17" y="7""#));
+        assert!(svg.contains(r#"id="AzureDepot709-backto-CopperRelay701""#));
     }
 
     #[test]
