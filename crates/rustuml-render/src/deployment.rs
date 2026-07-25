@@ -3527,7 +3527,7 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
     if let Some(result) = result.as_mut() {
         adjust_deployment_endpoint_labels(diagram, &dims, result);
     }
-    let cluster_frame = deployment_cluster_frame(diagram, result.as_ref());
+    let cluster_frame = deployment_cluster_frame(diagram, &dims, result.as_ref());
     let y_frame = deployment_body_y_frame(
         diagram,
         &dims,
@@ -4273,6 +4273,7 @@ struct DeploymentClusterFrame {
 
 fn deployment_cluster_frame(
     diagram: &DeploymentDiagram,
+    dims: &[DeploymentNodeDim],
     result: Option<&LayoutResult>,
 ) -> Option<DeploymentClusterFrame> {
     let result = result?;
@@ -4280,6 +4281,21 @@ fn deployment_cluster_frame(
         return None;
     }
     let parent_of = deployment_parent_map(diagram);
+    let cluster_ids: HashSet<&str> = diagram
+        .nodes
+        .iter()
+        .filter(|node| !node.children.is_empty())
+        .map(|node| node.id.as_str())
+        .collect();
+    let leaf_positions: HashMap<&str, (&rustuml_layout::graph::NodePosition, &DeploymentNodeDim)> =
+        diagram
+            .nodes
+            .iter()
+            .zip(dims)
+            .filter(|(node, _)| !cluster_ids.contains(node.id.as_str()))
+            .zip(&result.node_positions)
+            .map(|((node, dim), position)| (node.id.as_str(), (position, dim)))
+            .collect();
     let mut required_dx = f64::NEG_INFINITY;
     let mut required_dy = f64::NEG_INFINITY;
     let roots: Vec<&DeploymentNode> = diagram
@@ -4287,43 +4303,54 @@ fn deployment_cluster_frame(
         .iter()
         .filter(|node| !parent_of.contains_key(&node.id))
         .collect();
-    for node in roots.iter().filter(|node| !node.children.is_empty()) {
-        let Some(position) = result
-            .cluster_positions
-            .iter()
-            .find(|position| position.id == node.id)
-        else {
-            continue;
-        };
-        let (cluster_width, cluster_height) = result
-            .cluster_serialized_sizes
-            .get(&node.id)
-            .copied()
-            .unwrap_or((position.width, position.height));
-        let (local_min_x, local_min_y) = match node.kind {
-            // `USymbolNode.drawNode` paints a polygon whose LimitFinder X
-            // bounds extend ten pixels beyond the visible cluster.
-            DeploymentNodeKind::Node => (-10.0, 0.0),
-            DeploymentNodeKind::Cloud => {
-                crate::cloud_shape::generate(cluster_width, cluster_height).min_xy()
-            }
-            // These `asBig` implementations draw a full-size `URectangle`;
-            // `LimitFinder.drawRectangle` expands its top-left by one pixel.
-            DeploymentNodeKind::Rectangle
-            | DeploymentNodeKind::Agent
-            | DeploymentNodeKind::Frame
-            | DeploymentNodeKind::Card => (-1.0, -1.0),
-            // `USymbolStack.drawQueue` paints a full-width UPath, while its
-            // inset `URectangle` extends the top LimitFinder bound by one.
-            DeploymentNodeKind::Stack => (0.0, -1.0),
-            _ => (0.0, 0.0),
+    for node in &roots {
+        let (x, y, local_min_x, local_min_y) = if node.children.is_empty() {
+            let (position, dim) = leaf_positions.get(node.id.as_str())?;
+            let (paint_dx, paint_dy) = deployment_layout_paint_offset(node.kind);
+            let (local_min_x, _) = deployment_local_painted_x_bounds(node, dim);
+            let (local_min_y, _) = deployment_local_painted_y_bounds(node.kind, dim);
+            (
+                (position.x * 100.0).round() / 100.0 + paint_dx,
+                (position.y * 100.0).round() / 100.0 + paint_dy,
+                local_min_x,
+                local_min_y,
+            )
+        } else {
+            let position = result
+                .cluster_positions
+                .iter()
+                .find(|position| position.id == node.id)?;
+            let (cluster_width, cluster_height) = result
+                .cluster_serialized_sizes
+                .get(&node.id)
+                .copied()
+                .unwrap_or((position.width, position.height));
+            let (local_min_x, local_min_y) = match node.kind {
+                // `USymbolNode.drawNode` paints a polygon whose LimitFinder X
+                // bounds extend ten pixels beyond the visible cluster.
+                DeploymentNodeKind::Node => (-10.0, 0.0),
+                DeploymentNodeKind::Cloud => {
+                    crate::cloud_shape::generate(cluster_width, cluster_height).min_xy()
+                }
+                // These `asBig` implementations draw a full-size `URectangle`;
+                // `LimitFinder.drawRectangle` expands its top-left by one pixel.
+                DeploymentNodeKind::Rectangle
+                | DeploymentNodeKind::Agent
+                | DeploymentNodeKind::Frame
+                | DeploymentNodeKind::Card => (-1.0, -1.0),
+                // `USymbolStack.drawQueue` paints a full-width UPath, while its
+                // inset `URectangle` extends the top LimitFinder bound by one.
+                DeploymentNodeKind::Stack => (0.0, -1.0),
+                _ => (0.0, 0.0),
+            };
+            (position.x, position.y, local_min_x, local_min_y)
         };
         // `LimitFinder` measures the already translated primitive, then
         // `SvekResult.calculateDimension` subtracts that world-coordinate
-        // minimum from six. Preserve Java's evaluation order because the ULP
-        // feeds the final seeded cloud width after `Cluster.move`.
-        required_dx = required_dx.max(SVEK_ENVELOPE_ORIGIN - (position.x + local_min_x));
-        required_dy = required_dy.max(SVEK_ENVELOPE_ORIGIN - (position.y + local_min_y));
+        // minimum from six. `SvekResult.drawU` includes both clusters and
+        // unpackaged entities in that same LimitFinder pass.
+        required_dx = required_dx.max(SVEK_ENVELOPE_ORIGIN - (x + local_min_x));
+        required_dy = required_dy.max(SVEK_ENVELOPE_ORIGIN - (y + local_min_y));
     }
     if !required_dx.is_finite() || !required_dy.is_finite() {
         return None;
@@ -4337,7 +4364,15 @@ fn deployment_cluster_frame(
         .iter()
         .map(|node| {
             if node.children.is_empty() {
-                return None;
+                let (position, dim) = leaf_positions.get(node.id.as_str())?;
+                let (paint_dx, paint_dy) = deployment_layout_paint_offset(node.kind);
+                let (min_x, max_x) = deployment_local_painted_x_bounds(node, dim);
+                let (min_y, max_y) = deployment_local_painted_y_bounds(node.kind, dim);
+                return Some((
+                    (position.x * 100.0).round() / 100.0 + paint_dx,
+                    (position.y * 100.0).round() / 100.0 + paint_dy,
+                    (min_x, min_y, max_x, max_y),
+                ));
             }
             let position = result
                 .cluster_positions
@@ -4362,19 +4397,19 @@ fn deployment_cluster_frame(
                 DeploymentNodeKind::Stack => (0.0, -1.0, cluster_width, cluster_height),
                 _ => return None,
             };
-            Some((position, bounds))
+            Some((position.x, position.y, bounds))
         })
         .collect();
     let outer_symbol_painted_max_x = outer_symbol_bounds.as_ref().map(|bounds| {
         bounds
             .iter()
-            .map(|(position, (_, _, max_x, _))| position.x + required_dx + max_x)
+            .map(|(x, _, (_, _, max_x, _))| x + required_dx + max_x)
             .fold(f64::NEG_INFINITY, f64::max)
     });
     let outer_symbol_painted_max_y = outer_symbol_bounds.as_ref().map(|bounds| {
         bounds
             .iter()
-            .map(|(position, (_, _, _, max_y))| position.y + required_dy + max_y)
+            .map(|(_, y, (_, _, _, max_y))| y + required_dy + max_y)
             .fold(f64::NEG_INFINITY, f64::max)
     });
 
@@ -5825,6 +5860,39 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
         assert!(svg.contains(r#"style="width:195px;height:544px;background:#FFFFFF;""#));
         assert!(svg.contains(r#"data-qualified-name="Rectangular Zone 263.Worker269""#));
         assert!(svg.contains(r#"data-qualified-name="Rectangular Zone 263.Worker283""#));
+    }
+
+    #[test]
+    fn no_oracle_unpackaged_root_leaf_participates_in_cluster_frame() {
+        let source = "@startuml\n\
+            node \"Ingress 271\"\n\
+            rectangle \"Primary Zone 277\" {\n\
+              node \"Service 281\"\n\
+              database \"Store 283\"\n\
+              \"Service 281\" --> \"Store 283\"\n\
+            }\n\
+            rectangle \"Recovery Zone 293\" {\n\
+              node \"Replica 307\"\n\
+            }\n\
+            \"Ingress 271\" --> \"Service 281\" : live\n\
+            \"Ingress 271\" --> \"Replica 307\" : standby\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+
+        let svg = render(&diagram, &Theme::default());
+        let ingress = svg
+            .split("<!--entity Ingress 271-->")
+            .nth(1)
+            .unwrap()
+            .split("</g>")
+            .next()
+            .unwrap();
+
+        assert!(ingress.contains(",16,"));
+        assert!(ingress.contains(",6,"));
     }
 
     #[test]
