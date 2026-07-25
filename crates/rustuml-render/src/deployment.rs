@@ -1622,34 +1622,31 @@ fn emit_package_cluster(
 // ---- Stack ----------------------------------------------------------------
 
 fn emit_stack(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str, stroke: &str) {
-    // Stack: an inner rect with no stroke (just fill), plus an outline path
-    // that extends 15px on either side. Geometry from goldens:
-    //   rect at (x, y, w, h) — the inner fill
-    //   path: M{x-15},{y} L{x-2.5},{y} A2.5,2.5 0 0 1 {x},{y+2.5}
-    //         L{x},{y+h-2.5} A2.5,2.5 0 0 0 {x+2.5},{y+h}
-    //         L{x+w-2.5},{y+h} A2.5,2.5 0 0 0 {x+w},{y+h-2.5}
-    //         L{x+w},{y+2.5} A2.5,2.5 0 0 1 {x+w+2.5},{y} L{x+w+15},{y}
+    // `USymbolStack.drawQueue` treats `w` as the complete image width and
+    // insets its fill rectangle by the 15px border on each side.
+    let inner_x = x + 15.0;
+    let inner_w = w - 30.0;
     svg.raw(&format!(
         r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:none;stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"#,
         h = fc(h),
-        w = fc(w),
-        x = fc(x),
+        w = fc(inner_w),
+        x = fc(inner_x),
         y = fc(y),
     ));
-    let xl = x - 15.0;
-    let xr = x + w + 15.0;
+    let xl = x;
+    let xr = x + w;
     let d = format!(
         "M{xl},{y_s} L{x_lp1},{y_s} A2.5,2.5 0 0 1 {x_s},{y_p1} L{x_s},{y_pm1} A2.5,2.5 0 0 0 {x_lp2},{yh_s} L{x_rm2},{yh_s} A2.5,2.5 0 0 0 {xw_s},{y_pm1} L{xw_s},{y_p1} A2.5,2.5 0 0 1 {x_rp2},{y_s} L{xr},{y_s}",
         xl = fc(xl),
         xr = fc(xr),
-        x_s = fc(x),
-        xw_s = fc(x + w),
+        x_s = fc(inner_x),
+        xw_s = fc(inner_x + inner_w),
         y_s = fc(y),
         yh_s = fc(y + h),
-        x_lp1 = fc(x - 2.5),
-        x_lp2 = fc(x + 2.5),
-        x_rm2 = fc(x + w - 2.5),
-        x_rp2 = fc(x + w + 2.5),
+        x_lp1 = fc(inner_x - 2.5),
+        x_lp2 = fc(inner_x + 2.5),
+        x_rm2 = fc(inner_x + inner_w - 2.5),
+        x_rp2 = fc(inner_x + inner_w + 2.5),
         y_p1 = fc(y + 2.5),
         y_pm1 = fc(y + h - 2.5),
     );
@@ -1662,27 +1659,29 @@ fn emit_stack(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str, 
 /// outline as the leaf stack, drawn with the cluster stroke width.
 fn emit_stack_cluster(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str) {
     let stroke = "#181818";
+    let inner_x = x + 15.0;
+    let inner_w = w - 30.0;
     svg.raw(&format!(
         r#"<rect fill="{fill}" height="{h}" rx="{RX_RY}" ry="{RX_RY}" style="stroke:none;stroke-width:1;" width="{w}" x="{x}" y="{y}"/>"#,
         h = fc(h),
-        w = fc(w),
-        x = fc(x),
+        w = fc(inner_w),
+        x = fc(inner_x),
         y = fc(y),
     ));
-    let xl = x - 15.0;
-    let xr = x + w + 15.0;
+    let xl = x;
+    let xr = x + w;
     let d = format!(
         "M{xl},{y_s} L{x_lp1},{y_s} A2.5,2.5 0 0 1 {x_s},{y_p1} L{x_s},{y_pm1} A2.5,2.5 0 0 0 {x_lp2},{yh_s} L{x_rm2},{yh_s} A2.5,2.5 0 0 0 {xw_s},{y_pm1} L{xw_s},{y_p1} A2.5,2.5 0 0 1 {x_rp2},{y_s} L{xr},{y_s}",
         xl = fc(xl),
         xr = fc(xr),
-        x_s = fc(x),
-        xw_s = fc(x + w),
+        x_s = fc(inner_x),
+        xw_s = fc(inner_x + inner_w),
         y_s = fc(y),
         yh_s = fc(y + h),
-        x_lp1 = fc(x - 2.5),
-        x_lp2 = fc(x + 2.5),
-        x_rm2 = fc(x + w - 2.5),
-        x_rp2 = fc(x + w + 2.5),
+        x_lp1 = fc(inner_x - 2.5),
+        x_lp2 = fc(inner_x + 2.5),
+        x_rm2 = fc(inner_x + inner_w - 2.5),
+        x_rp2 = fc(inner_x + inner_w + 2.5),
         y_p1 = fc(y + 2.5),
         y_pm1 = fc(y + h - 2.5),
     );
@@ -3623,6 +3622,8 @@ fn deployment_node_dim(
         // `USymbolQueue.asSmall` adds `Margin(5, 15, 5, 5)` around the
         // vertically merged stereotype and label.
         DeploymentNodeKind::Queue => label_width.max(stereo_width) + 20.0,
+        // `USymbolStack.asSmall` adds `Margin(25, 25, 10, 10)`.
+        DeploymentNodeKind::Stack => label_width.max(stereo_width) + 50.0,
         _ => label_width.max(stereo_width) + 2.0 * text_x_pad,
     };
     let height = match node.kind {
@@ -3765,7 +3766,10 @@ fn deployment_local_painted_y_bounds(
         }
         // These Java symbols are painted as UPath/UPolygon outlines whose
         // vertical bounds are exactly their declared image height.
-        Folder | Queue | File | Package | Stack => (0.0, dim.height),
+        // The stack combines an inset `URectangle` (minimum Y at -1) with
+        // a full-height `UPath` (maximum Y at the declared height).
+        Stack => (-1.0, dim.height),
+        Folder | Queue | File | Package => (0.0, dim.height),
         // Preserve the established envelope for symbols whose Java primitive
         // model has not yet been split out above.
         _ => (0.0, dim.height + 10.0),
@@ -4460,6 +4464,26 @@ mod tests {
         assert!(svg.contains(r#"height="22.4883" rx="2.5" ry="2.5""#));
         assert!(svg.contains(r#"M12.19,99.49 C12.19,89.49 60.8506,89.49"#));
         assert!(svg.contains(r#"id="Gateway137-to-Ledger139""#));
+    }
+
+    #[test]
+    fn no_oracle_stack_uses_full_symbol_bounds() {
+        let source = "@startuml\n\
+            stack \"Buffer 149\" as Buffer149\n\
+            database \"Archive 151\" as Archive151\n\
+            Buffer149 --> Archive151\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+
+        let svg = render(&diagram, &Theme::default());
+
+        assert!(svg.contains(r#"style="width:142px;height:173px;background:#FFFFFF;""#));
+        assert!(svg.contains(r#"width="91.5518" x="21" y="7""#));
+        assert!(svg.contains(r#"M6,7 L18.5,7 A2.5,2.5 0 0 1 21,9.5"#));
+        assert!(svg.contains(r#"id="Buffer149-to-Archive151""#));
     }
 
     #[test]
