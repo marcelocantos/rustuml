@@ -160,11 +160,16 @@ fn process_label(raw: &str) -> String {
 ///   - `keyword "From Label" --> to_id : label`  (uses keyword as FROM id)
 ///
 /// The arrow is any combination of `-`, `.`, `<`, `>`, `|` characters (2+ chars).
-/// Returns `(raw_from, raw_to, label)` on success.
+/// Returns `(raw_from, raw_to, label, direction)` on success.
 fn try_parse_connection(
     trimmed: &str,
     keyword_set: &HashSet<&str>,
-) -> Option<(String, String, Option<String>)> {
+) -> Option<(
+    String,
+    String,
+    Option<String>,
+    Option<DeploymentLinkDirection>,
+)> {
     let rest = trimmed;
 
     // Check if the line starts with a deployment keyword followed by a quoted label
@@ -204,7 +209,12 @@ fn try_parse_connection(
                                 } else {
                                     return None;
                                 };
-                                return Some((kw.to_string(), raw_to.to_string(), label));
+                                return Some((
+                                    kw.to_string(),
+                                    raw_to.to_string(),
+                                    label,
+                                    deployment_link_direction(arrow),
+                                ));
                             }
                         }
                     }
@@ -281,7 +291,23 @@ fn try_parse_connection(
         return None;
     };
 
-    Some((raw_from.to_string(), raw_to.to_string(), label))
+    Some((
+        raw_from.to_string(),
+        raw_to.to_string(),
+        label,
+        deployment_link_direction(arrow),
+    ))
+}
+
+fn deployment_link_direction(arrow: &str) -> Option<DeploymentLinkDirection> {
+    [
+        ("down", DeploymentLinkDirection::Down),
+        ("up", DeploymentLinkDirection::Up),
+        ("left", DeploymentLinkDirection::Left),
+        ("right", DeploymentLinkDirection::Right),
+    ]
+    .into_iter()
+    .find_map(|(keyword, direction)| arrow.contains(keyword).then_some(direction))
 }
 
 /// Accumulator for multiline note bodies.
@@ -542,7 +568,9 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
         if keyword_set.contains(first_word) {
             // Check if this is a connection line (keyword "label" --> ...)
             // before treating it as a pure node declaration.
-            if let Some((raw_from, raw_to, label)) = try_parse_connection(trimmed, &keyword_set) {
+            if let Some((raw_from, raw_to, label, direction)) =
+                try_parse_connection(trimmed, &keyword_set)
+            {
                 let from = resolve_id(&nodes, &raw_from);
                 let to = resolve_id(&nodes, &raw_to);
 
@@ -563,6 +591,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                     from,
                     to,
                     label,
+                    direction,
                     source_line: current_line,
                 });
                 continue;
@@ -636,7 +665,9 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
         }
 
         // Connection line (bare identifiers or quoted labels).
-        if let Some((raw_from, raw_to, label)) = try_parse_connection(trimmed, &keyword_set) {
+        if let Some((raw_from, raw_to, label, direction)) =
+            try_parse_connection(trimmed, &keyword_set)
+        {
             let from = resolve_id(&nodes, &raw_from);
             let to = resolve_id(&nodes, &raw_to);
 
@@ -659,6 +690,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                 from,
                 to,
                 label,
+                direction,
                 source_line: current_line,
             });
         }
@@ -740,6 +772,25 @@ mod tests {
             parse("artifact \"app.war\"\nnode Server\nartifact \"app.war\" --> Server : deploy");
         assert_eq!(d.connections.len(), 1);
         assert_eq!(d.connections[0].label.as_deref(), Some("deploy"));
+    }
+
+    #[test]
+    fn preserves_explicit_link_directions() {
+        let diagram = parse("node A\nnode B\nA -left-> B\nA -right-> B\nA -up-> B\nA -down-> B");
+
+        assert_eq!(
+            diagram
+                .connections
+                .iter()
+                .map(|connection| connection.direction)
+                .collect::<Vec<_>>(),
+            vec![
+                Some(DeploymentLinkDirection::Left),
+                Some(DeploymentLinkDirection::Right),
+                Some(DeploymentLinkDirection::Up),
+                Some(DeploymentLinkDirection::Down),
+            ]
+        );
     }
 
     #[test]

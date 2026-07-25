@@ -11,7 +11,7 @@
 use std::collections::{HashMap, HashSet};
 use std::fmt::Write as _;
 
-use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph, LayoutResult};
+use rustuml_layout::graph::{Direction, EdgeLabelSize, EdgePath, LayoutGraph, LayoutResult};
 use rustuml_parser::diagram::deployment::*;
 
 use crate::handwritten::{
@@ -91,9 +91,21 @@ const TEXT_PAD_PACKAGE_LABEL: f64 = ASCENT_14 + 3.0;
 /// Equals `text_height(14)` = 14 * 1.17773...
 const TEXT_LINE_H: f64 = 16.48828125;
 
-const BODY_MARGIN: f64 = 6.0;
+// Connected DESCRIPTION diagrams pass through Java `SvekResult.calculateDimension`
+// after `EntityImageDescription`/USymbol painting. The solved drawing is framed
+// from its painted bounds; these are fallback offsets for unsolved layouts.
+const BODY_FALLBACK_MARGIN_X: f64 = 16.0;
+const BODY_MARGIN_Y: f64 = 7.0;
 const BODY_RIGHT_MARGIN: f64 = 25.0;
-const BODY_BOTTOM_MARGIN: f64 = 24.0;
+const BODY_BOTTOM_MARGIN: f64 = 25.0;
+const SVEK_ENVELOPE_ORIGIN: f64 = 6.0;
+const SVEK_DIMENSION_DELTA: f64 = 15.0;
+// `ExtremityArrow.getDecorationLength` and `ExtremityArrow.drawU` define
+// PlantUML's dependency-arrow tip, rear corners, and center inset.
+const DEPENDENCY_ARROW_LENGTH: f64 = 6.0;
+const DEPENDENCY_ARROW_REAR: f64 = 9.0;
+const DEPENDENCY_ARROW_INSET: f64 = 5.0;
+const DEPENDENCY_ARROW_HALF_WIDTH: f64 = 4.0;
 const LAYOUT_TIMEOUT: std::time::Duration = std::time::Duration::from_secs(5);
 
 // ---------------------------------------------------------------------------
@@ -2232,6 +2244,9 @@ fn entity_text_geom(kind: DeploymentNodeKind, _w: f64, _label: &str) -> (f64, f6
         Queue => (5.0, ASCENT_14 + 5.0, false),
         // Database label sits below the lip: ascent + 24.
         Database => (10.0, ASCENT_14 + 24.0, false),
+        // `USymbolCloud.asSmall` draws the merged stereotype/label block at
+        // the cloud's 15px top and left margin.
+        Cloud => (CLOUD_MARGIN, CLOUD_MARGIN + ASCENT_14, false),
         Package => (10.0, TEXT_PAD_PACKAGE_LABEL, true),
         _ => (10.0, TEXT_PAD_RECTLIKE, false),
     }
@@ -2916,13 +2931,45 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
     }
     for conn in &diagram.connections {
         if !cluster_ids.contains(conn.from.as_str()) && !cluster_ids.contains(conn.to.as_str()) {
-            layout.add_edge(&conn.from, &conn.to, conn.label.as_deref());
+            let (layout_from, layout_to, _) = deployment_connection_layout(conn);
+            let label_size = conn.label.as_deref().map(|label| EdgeLabelSize {
+                // Java `SvekEdge.getLabelText` adds one pixel of margin on
+                // each side before `appendLine` emits a fixed HTML table.
+                width: text_render::measure(label, 13.0, false) + 2.0,
+                height: (text_render::label_height(label, 13.0) + 2.0).floor(),
+            });
+            layout.add_edge_with_label_sizes_and_minlen(
+                layout_from,
+                layout_to,
+                label_size,
+                None,
+                None,
+                match conn.direction {
+                    Some(DeploymentLinkDirection::Left | DeploymentLinkDirection::Right) => Some(0),
+                    Some(DeploymentLinkDirection::Up | DeploymentLinkDirection::Down) => Some(1),
+                    None => None,
+                },
+            );
         }
     }
 
     let result = layout.layout_full(LAYOUT_TIMEOUT);
-    let (rects, content_w, content_h) = layout_deployment_rects(diagram, &dims, result.as_ref());
-    let total_w = (content_w + BODY_RIGHT_MARGIN).max(100.0);
+    let body_margin_y = deployment_body_margin_y(diagram, &dims, result.as_ref());
+    let x_frame = deployment_body_x_frame(diagram, &dims, result.as_ref());
+    let body_margin_x = x_frame
+        .map(|frame| frame.margin)
+        .unwrap_or(BODY_FALLBACK_MARGIN_X);
+    let (rects, content_w, content_h) = layout_deployment_rects(
+        diagram,
+        &dims,
+        result.as_ref(),
+        body_margin_x,
+        body_margin_y,
+    );
+    let total_w = x_frame
+        .map(|frame| frame.painted_max_x + frame.margin + SVEK_DIMENSION_DELTA)
+        .unwrap_or(content_w + BODY_RIGHT_MARGIN)
+        .max(100.0);
     let total_h = (content_h + BODY_BOTTOM_MARGIN).max(50.0);
 
     let mut oracle = OracleLayout::default();
@@ -2933,7 +2980,13 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
         let mut entity_rect = empty_entity_rect(rect.x, rect.y, rect.width, rect.height);
         if !cluster_ids.contains(node.id.as_str()) {
             let text_y = rect.y + dim.top_pad;
-            let text_x = entity_text_center(node.kind, rect.x, rect.width) - dim.label_width / 2.0;
+            // Java receives node X through Graphviz's two-decimal SVG before
+            // applying the symbol-local text offset.
+            let text_x = ((entity_text_center(node.kind, rect.x, rect.width)
+                - dim.label_width / 2.0)
+                * 100.0)
+                .round()
+                / 100.0;
             entity_rect.text_x_values.push(text_x);
             entity_rect.text_y_values.push(text_y);
             entity_rect.texts.push(EntityText {
@@ -2993,7 +3046,14 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
         emit_entity(&mut svg, node, &qname, &ctx);
     }
     if let Some(result) = result.as_ref() {
-        render_no_oracle_edges(&mut svg, diagram, &id_for_node, &result.edge_paths);
+        render_no_oracle_edges(
+            &mut svg,
+            diagram,
+            &id_for_node,
+            &result.edge_paths,
+            body_margin_x,
+            body_margin_y,
+        );
     }
     svg.finalize_plantuml()
 }
@@ -3071,6 +3131,9 @@ fn deployment_node_dim(
     };
     let height = match node.kind {
         DeploymentNodeKind::Cloud => line_count as f64 * TEXT_LINE_H + 2.0 * CLOUD_MARGIN,
+        // `USymbolDatabase.asSmall` adds 29px around the merged text block:
+        // 10px top lip, 10px lower cap, and the title spacing between them.
+        DeploymentNodeKind::Database => line_count as f64 * TEXT_LINE_H + 29.0,
         _ => {
             top_pad
                 + (line_count.saturating_sub(1)) as f64 * TEXT_LINE_H
@@ -3083,6 +3146,137 @@ fn deployment_node_dim(
         height,
         label_width,
         top_pad,
+    }
+}
+
+fn deployment_body_margin_y(
+    diagram: &DeploymentDiagram,
+    dims: &[DeploymentNodeDim],
+    result: Option<&LayoutResult>,
+) -> f64 {
+    if !diagram.nodes.iter().any(|node| !node.children.is_empty())
+        && let Some(result) = result
+    {
+        let painted_min_y = diagram
+            .nodes
+            .iter()
+            .zip(dims)
+            .zip(&result.node_positions)
+            .map(|((node, dim), position)| {
+                let y = (position.y * 100.0).round() / 100.0;
+                y + deployment_local_painted_y_min(node.kind, dim)
+            })
+            .fold(f64::INFINITY, f64::min);
+        if painted_min_y.is_finite() {
+            // `LimitFinder` measures the renderer-owned symbol, then
+            // `SvekResult.calculateDimension` moves that painted minimum to 6.
+            return SVEK_ENVELOPE_ORIGIN - painted_min_y;
+        }
+    }
+
+    let cloud_min_y = diagram
+        .nodes
+        .iter()
+        .zip(dims)
+        .filter(|(node, _)| matches!(node.kind, DeploymentNodeKind::Cloud))
+        .map(|(_, dim)| {
+            crate::cloud_shape::generate(dim.width, dim.height)
+                .min_xy()
+                .1
+        })
+        .fold(0.0_f64, f64::min);
+    if cloud_min_y < 0.0 {
+        // `SvekResult.calculateDimension` moves the painted minimum to 6.
+        6.0 - cloud_min_y
+    } else if diagram
+        .nodes
+        .iter()
+        .any(|node| matches!(node.kind, DeploymentNodeKind::Database))
+    {
+        // `USymbolDatabase.asSmall` starts its cylinder at local y=0.
+        6.0
+    } else {
+        BODY_MARGIN_Y
+    }
+}
+
+fn deployment_local_painted_y_min(kind: DeploymentNodeKind, dim: &DeploymentNodeDim) -> f64 {
+    use DeploymentNodeKind::*;
+    match kind {
+        Artifact | Card | Rectangle | Agent | Component => -1.0,
+        Cloud => {
+            crate::cloud_shape::generate(dim.width, dim.height)
+                .min_xy()
+                .1
+        }
+        _ => 0.0,
+    }
+}
+
+#[derive(Clone, Copy)]
+struct DeploymentXFrame {
+    margin: f64,
+    painted_max_x: f64,
+}
+
+fn deployment_body_x_frame(
+    diagram: &DeploymentDiagram,
+    dims: &[DeploymentNodeDim],
+    result: Option<&LayoutResult>,
+) -> Option<DeploymentXFrame> {
+    let result = result?;
+    if diagram.nodes.iter().any(|node| !node.children.is_empty()) {
+        return None;
+    }
+
+    let mut painted_min_x = f64::INFINITY;
+    let mut painted_max_x = f64::NEG_INFINITY;
+    for ((node, dim), position) in diagram.nodes.iter().zip(dims).zip(&result.node_positions) {
+        // `DotStringFactory.solve` recovers rectangle positions from
+        // Graphviz's SVG polygon coordinates, which are serialized to two
+        // decimal places.
+        let x = (position.x * 100.0).round() / 100.0;
+        let (local_min_x, local_max_x) = deployment_local_painted_x_bounds(node.kind, dim);
+        painted_min_x = painted_min_x.min(x + local_min_x);
+        painted_max_x = painted_max_x.max(x + local_max_x);
+    }
+    painted_min_x.is_finite().then_some(DeploymentXFrame {
+        // `LimitFinder.drawUPolygon` expands polygon bounds by 10px on both
+        // horizontal sides; `SvekResult.calculateDimension` then calls
+        // `moveDelta(6 - minX, 6 - minY)`.
+        margin: SVEK_ENVELOPE_ORIGIN - painted_min_x,
+        painted_max_x,
+    })
+}
+
+fn deployment_local_painted_x_bounds(
+    kind: DeploymentNodeKind,
+    dim: &DeploymentNodeDim,
+) -> (f64, f64) {
+    use DeploymentNodeKind::*;
+    match kind {
+        // `USymbolNode.drawNode` paints the full body as a UPolygon.
+        Node => (-10.0, dim.width + 10.0),
+        // The artifact's outer rectangle reaches one pixel left in
+        // `LimitFinder`; its folded-corner polygon reaches five pixels right.
+        Artifact => (-1.0, dim.width + 5.0),
+        Cloud => {
+            let path = crate::cloud_shape::generate(dim.width, dim.height);
+            let (min_x, _) = path.min_xy();
+            let max_x = path
+                .cubics
+                .iter()
+                .flat_map(|cubic| [cubic.c1.0, cubic.c2.0, cubic.to.0])
+                .fold(path.start.0, f64::max);
+            (min_x, max_x)
+        }
+        // Rounded rectangle-like symbols are measured by
+        // `LimitFinder.drawRectangle`.
+        Card | Rectangle | Agent | Component => (-1.0, dim.width - 1.0),
+        // These symbols paint paths whose local envelope is their declared
+        // image dimension.
+        Database | Storage | Frame | Folder | Queue | File | Package | Stack => (0.0, dim.width),
+        _ => (-1.0, dim.width - 1.0),
     }
 }
 
@@ -3114,6 +3308,8 @@ fn layout_deployment_rects(
     diagram: &DeploymentDiagram,
     dims: &[DeploymentNodeDim],
     result: Option<&LayoutResult>,
+    body_margin_x: f64,
+    body_margin_y: f64,
 ) -> (Vec<LayoutRect>, f64, f64) {
     let mut rects = Vec::new();
     if let Some(result) = result {
@@ -3133,15 +3329,15 @@ fn layout_deployment_rects(
             if cluster_ids.contains(node.id.as_str()) {
                 if let Some(pos) = cluster_positions.get(node.id.as_str()) {
                     rects.push(LayoutRect {
-                        x: pos.x + BODY_MARGIN,
-                        y: pos.y + BODY_MARGIN,
+                        x: pos.x + body_margin_x,
+                        y: pos.y + body_margin_y,
                         width: pos.width,
                         height: pos.height,
                     });
                 } else {
                     rects.push(LayoutRect {
-                        x: BODY_MARGIN,
-                        y: BODY_MARGIN,
+                        x: body_margin_x,
+                        y: body_margin_y,
                         width: dim.width,
                         height: dim.height,
                     });
@@ -3153,8 +3349,8 @@ fn layout_deployment_rects(
                 break;
             };
             rects.push(LayoutRect {
-                x: pos.x + BODY_MARGIN,
-                y: pos.y + BODY_MARGIN,
+                x: (pos.x * 100.0).round() / 100.0 + body_margin_x,
+                y: (pos.y * 100.0).round() / 100.0 + body_margin_y,
                 width: dim.width,
                 height: dim.height,
             });
@@ -3162,10 +3358,10 @@ fn layout_deployment_rects(
     }
     if rects.len() != diagram.nodes.len() {
         rects.clear();
-        let mut y = BODY_MARGIN;
+        let mut y = body_margin_y;
         for dim in dims {
             rects.push(LayoutRect {
-                x: BODY_MARGIN,
+                x: body_margin_x,
                 y,
                 width: dim.width,
                 height: dim.height,
@@ -3241,63 +3437,207 @@ fn render_no_oracle_edges(
     diagram: &DeploymentDiagram,
     id_for_node: &HashMap<String, String>,
     edge_paths: &[EdgePath],
+    body_margin_x: f64,
+    body_margin_y: f64,
 ) {
     for (i, conn) in diagram.connections.iter().enumerate() {
+        let (layout_from, layout_to, reversed) = deployment_connection_layout(conn);
         let Some(edge) = edge_paths
             .iter()
-            .find(|edge| edge.from == conn.from && edge.to == conn.to)
+            .find(|edge| edge.from == layout_from && edge.to == layout_to)
         else {
             continue;
         };
-        let Some(ent1) = id_for_node.get(&conn.from) else {
+        let entity_1_id = if reversed { &conn.to } else { &conn.from };
+        let entity_2_id = if reversed { &conn.from } else { &conn.to };
+        let Some(ent1) = id_for_node.get(entity_1_id) else {
             continue;
         };
-        let Some(ent2) = id_for_node.get(&conn.to) else {
+        let Some(ent2) = id_for_node.get(entity_2_id) else {
             continue;
         };
-        let link_id = format!("lnk{}", i + diagram.nodes.len() + 2);
-        svg.raw(&format!("<!--link {} to {}-->", conn.from, conn.to));
+        let link_id = format!("lnk{}", i + diagram.nodes.len() + 2 + usize::from(reversed));
+        if reversed {
+            svg.raw(&format!("<!--reverse link {} to {}-->", conn.to, conn.from));
+        } else {
+            svg.raw(&format!("<!--link {} to {}-->", conn.from, conn.to));
+        }
         svg.raw(&format!(
             r#"<g class="link" data-entity-1="{ent1}" data-entity-2="{ent2}" data-link-type="dependency" data-source-line="{line}" id="{link_id}">"#,
             line = conn.source_line,
         ));
-        if let Some(d) = edge_path_d(edge) {
+        let raw_points =
+            deployment_svek_edge_points(&edge.points, body_margin_x, body_margin_y, EdgeTrim::None);
+        let points = deployment_svek_edge_points(
+            &edge.points,
+            body_margin_x,
+            body_margin_y,
+            if reversed {
+                EdgeTrim::Start
+            } else {
+                EdgeTrim::End
+            },
+        );
+        if let Some(d) = edge_path_d(&points) {
+            let from_name = diagram
+                .nodes
+                .iter()
+                .find(|node| node.id == conn.from)
+                .map(own_qname)
+                .unwrap_or_else(|| conn.from.clone());
+            let to_name = diagram
+                .nodes
+                .iter()
+                .find(|node| node.id == conn.to)
+                .map(own_qname)
+                .unwrap_or_else(|| conn.to.clone());
+            let path_id = if reversed {
+                format!("{to_name}-backto-{from_name}")
+            } else {
+                format!("{from_name}-to-{to_name}")
+            };
             svg.raw(&format!(
-                r#"<path d="{d}" fill="none" id="{}-to-{}" style="stroke:#181818;stroke-width:1;"/>"#,
-                conn.from, conn.to,
+                r#"<path d="{d}" fill="none" id="{path_id}" style="stroke:#181818;stroke-width:1;"/>"#,
             ));
         }
-        if edge.has_end_arrow
-            && let Some((x, y)) = edge.end_point
-        {
-            let points = format!(
-                "{},{} {},{} {},{} {},{} {},{}",
-                fc(x),
-                fc(y),
-                fc(x + 4.0),
-                fc(y - 9.0),
-                fc(x),
-                fc(y - 5.0),
-                fc(x - 4.0),
-                fc(y - 9.0),
-                fc(x),
-                fc(y),
-            );
-            svg.raw(&format!(
-                r##"<polygon fill="#181818" points="{points}" style="stroke:#181818;stroke-width:1;"/>"##,
-            ));
+        if raw_points.len() >= 2 {
+            if reversed {
+                emit_deployment_arrowhead(svg, &raw_points[1], &raw_points[0]);
+            } else {
+                emit_deployment_arrowhead(
+                    svg,
+                    &raw_points[raw_points.len() - 2],
+                    &raw_points[raw_points.len() - 1],
+                );
+            }
         }
-        if let Some(label) = conn.label.as_deref()
-            && let Some((x, y)) = edge.points.get(edge.points.len() / 2).copied()
-        {
-            emit_text(svg, label, x + 4.0, y - 4.0, 13.0, false, false);
+        if let Some(label) = conn.label.as_deref() {
+            let (x, y) = edge
+                .label
+                .map(|position| {
+                    (
+                        (position.x * 100.0).round() / 100.0 + body_margin_x + 1.0,
+                        (position.y * 100.0).round() / 100.0
+                            + body_margin_y
+                            + 1.0
+                            + text_render::label_ascent(label, 13.0),
+                    )
+                })
+                .unwrap_or_else(|| {
+                    points
+                        .first()
+                        .zip(points.last())
+                        .map(|(first, last)| {
+                            ((first.0 + last.0) / 2.0 + 1.0, (first.1 + last.1) / 2.0)
+                        })
+                        .unwrap_or((body_margin_x, body_margin_y))
+                });
+            emit_text(svg, label, x, y, 13.0, false, false);
         }
         svg.raw("</g>");
     }
 }
 
-fn edge_path_d(edge: &EdgePath) -> Option<String> {
-    let (start, rest) = edge.points.split_first()?;
+fn deployment_connection_layout(conn: &DeploymentConnection) -> (&str, &str, bool) {
+    let reversed = matches!(
+        conn.direction,
+        Some(DeploymentLinkDirection::Up | DeploymentLinkDirection::Left)
+    );
+    if reversed {
+        (&conn.to, &conn.from, true)
+    } else {
+        (&conn.from, &conn.to, false)
+    }
+}
+
+#[derive(Clone, Copy, PartialEq, Eq)]
+enum EdgeTrim {
+    None,
+    Start,
+    End,
+}
+
+fn deployment_svek_edge_points(
+    points: &[(f64, f64)],
+    body_margin_x: f64,
+    body_margin_y: f64,
+    trim: EdgeTrim,
+) -> Vec<(f64, f64)> {
+    // Java `SvekEdge.solveLine` receives the spline through
+    // `SvgResult.toDotPath`; Graphviz has serialized every path coordinate to
+    // two decimal places at that boundary.
+    let quantize = |value: f64| (value * 100.0).round() / 100.0;
+    let mut points: Vec<(f64, f64)> = points
+        .iter()
+        .map(|(x, y)| (quantize(*x) + body_margin_x, quantize(*y) + body_margin_y))
+        .collect();
+    if trim != EdgeTrim::None && points.len() >= 2 {
+        let (endpoint, adjacent) = if trim == EdgeTrim::Start {
+            (0, 1)
+        } else {
+            (points.len() - 1, points.len() - 2)
+        };
+        let dx = points[endpoint].0 - points[adjacent].0;
+        let dy = points[endpoint].1 - points[adjacent].1;
+        let length = dx.hypot(dy);
+        if length > f64::EPSILON {
+            let shift = (
+                dx / length * DEPENDENCY_ARROW_LENGTH,
+                dy / length * DEPENDENCY_ARROW_LENGTH,
+            );
+            points[endpoint].0 -= shift.0;
+            points[endpoint].1 -= shift.1;
+            if points.len() >= 4 {
+                points[adjacent].0 -= shift.0;
+                points[adjacent].1 -= shift.1;
+            }
+        }
+    }
+    points
+}
+
+fn emit_deployment_arrowhead(svg: &mut SvgBuilder, previous: &(f64, f64), endpoint: &(f64, f64)) {
+    let dx = endpoint.0 - previous.0;
+    let dy = endpoint.1 - previous.1;
+    let length = dx.hypot(dy);
+    if length <= f64::EPSILON {
+        return;
+    }
+    let ux = dx / length;
+    let uy = dy / length;
+    let tip = *endpoint;
+    let perpendicular = (
+        uy * DEPENDENCY_ARROW_HALF_WIDTH,
+        -ux * DEPENDENCY_ARROW_HALF_WIDTH,
+    );
+    let rear = (
+        tip.0 - ux * DEPENDENCY_ARROW_REAR,
+        tip.1 - uy * DEPENDENCY_ARROW_REAR,
+    );
+    let inset = (
+        tip.0 - ux * DEPENDENCY_ARROW_INSET,
+        tip.1 - uy * DEPENDENCY_ARROW_INSET,
+    );
+    let points = format!(
+        "{},{},{},{},{},{},{},{},{},{}",
+        fc(tip.0),
+        fc(tip.1),
+        fc(rear.0 + perpendicular.0),
+        fc(rear.1 + perpendicular.1),
+        fc(inset.0),
+        fc(inset.1),
+        fc(rear.0 - perpendicular.0),
+        fc(rear.1 - perpendicular.1),
+        fc(tip.0),
+        fc(tip.1),
+    );
+    svg.raw(&format!(
+        r##"<polygon fill="#181818" points="{points}" style="stroke:#181818;stroke-width:1;"/>"##,
+    ));
+}
+
+fn edge_path_d(points: &[(f64, f64)]) -> Option<String> {
+    let (start, rest) = points.split_first()?;
     let mut d = format!("M{},{}", fc(start.0), fc(start.1));
     for chunk in rest.chunks(3) {
         if let [c1, c2, to] = chunk {
@@ -3335,5 +3675,47 @@ mod tests {
         assert!(svg.contains(r#"<g class="entity" data-qualified-name="N02""#));
         assert!(svg.contains(r#"<g class="link""#));
         assert!(!svg.contains(r#"<defs/><g></g>"#));
+    }
+
+    #[test]
+    fn deployment_svek_edge_translation_trims_path_but_not_arrow_tip() {
+        let raw = vec![(10.0, 0.0), (10.0, 10.0), (10.0, 20.0), (10.0, 30.0)];
+
+        let painted =
+            deployment_svek_edge_points(&raw, BODY_FALLBACK_MARGIN_X, BODY_MARGIN_Y, EdgeTrim::End);
+
+        assert_eq!(
+            painted,
+            vec![(26.0, 7.0), (26.0, 17.0), (26.0, 21.0), (26.0, 31.0)]
+        );
+
+        let untrimmed = deployment_svek_edge_points(
+            &raw,
+            BODY_FALLBACK_MARGIN_X,
+            BODY_MARGIN_Y,
+            EdgeTrim::None,
+        );
+        let mut svg = SvgBuilder::new(100.0, 100.0);
+        emit_deployment_arrowhead(
+            &mut svg,
+            &untrimmed[untrimmed.len() - 2],
+            &untrimmed[untrimmed.len() - 1],
+        );
+        let output = svg.finalize();
+        assert!(output.contains(r#"points="26,37,30,28,26,32,22,28,26,37""#));
+    }
+
+    #[test]
+    fn explicit_left_link_uses_reverse_svek_edge() {
+        let source = "@startuml\nnode Left31\nnode Right37\nLeft31 -left-> Right37\n@enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+
+        let svg = render(&diagram, &Theme::default());
+
+        assert!(svg.contains("<!--reverse link Right37 to Left31-->"));
+        assert!(svg.contains(r#"id="Right37-backto-Left31""#));
     }
 }

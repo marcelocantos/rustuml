@@ -79,7 +79,17 @@ pub struct DeploymentConnection {
     pub from: String,
     pub to: String,
     pub label: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub direction: Option<DeploymentLinkDirection>,
     /// 1-based line number within the `@startuml` block.
     #[serde(default)]
     pub source_line: usize,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum DeploymentLinkDirection {
+    Down,
+    Up,
+    Left,
+    Right,
 }

@@ -7,12 +7,12 @@ archimate 0 48
 chart 25 25
 class 1501 1971
 combo 113 327
-component 464 663
+component 475 663
 creole 403 639
-deployment 44 495
+deployment 185 495
 dot 25 25
 ebnf 25 25
-edge-cases 497 777
+edge-cases 499 777
 er 1 157
 gantt 114 114
 git 25 25
