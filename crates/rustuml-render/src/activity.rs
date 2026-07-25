@@ -29157,18 +29157,12 @@ fn typed_ftile_collect_same_lane_bounds(
             ] {
                 if let Some((branch_lane, _, _, exit_x)) =
                     typed_ftile_raw_terminal_while_exit(&branch.scene, x + branch.x, y + branch.y)
+                    && branch_lane == *lane
                 {
-                    if branch_lane == *lane {
-                        // `FtileWhile.ConnectionOut` emphasizes the vertical
-                        // segment before `UGraphicForSnake` fuses that snake
-                        // into the enclosing if's merge connection.
-                        typed_ftile_add_occupied(
-                            decorations,
-                            branch_lane,
-                            exit_x - 4.0,
-                            exit_x + 4.0,
-                        );
-                    }
+                    // `FtileWhile.ConnectionOut` emphasizes the vertical
+                    // segment before `UGraphicForSnake` fuses that snake
+                    // into the enclosing if's merge connection.
+                    typed_ftile_add_occupied(decorations, branch_lane, exit_x - 4.0, exit_x + 4.0);
                 }
                 let Some((branch_lane, branch_x, branch_y)) =
                     typed_ftile_raw_out(&branch.scene, x + branch.x, y + branch.y)
@@ -30093,9 +30087,7 @@ fn typed_ftile_contains_fork(scene: &TypedFtileScene<'_>) -> bool {
     }
 }
 
-fn typed_ftile_emit_fused_while_exit(
-    emitters: &mut [SvgEmitter],
-    cross: &mut SvgEmitter,
+struct TypedFtileFusedWhileExit {
     out_lane: usize,
     in_lane: usize,
     diamond_left: f64,
@@ -30104,7 +30096,23 @@ fn typed_ftile_emit_fused_while_exit(
     merge_vertex: f64,
     merge_cy: f64,
     direction: TypedArrowDirection,
+}
+
+fn typed_ftile_emit_fused_while_exit(
+    emitters: &mut [SvgEmitter],
+    cross: &mut SvgEmitter,
+    route: TypedFtileFusedWhileExit,
 ) {
+    let TypedFtileFusedWhileExit {
+        out_lane,
+        in_lane,
+        diamond_left,
+        diamond_cy,
+        exit_x,
+        merge_vertex,
+        merge_cy,
+        direction,
+    } = route;
     let target = if out_lane == in_lane {
         &mut emitters[out_lane]
     } else {
@@ -30149,22 +30157,21 @@ fn typed_ftile_emit_fused_while_exit(
 
 fn typed_ftile_emit_connectors(
     scene: &TypedFtileScene<'_>,
-    x: f64,
-    y: f64,
+    origin: (f64, f64),
     lanes: &TypedFtileLaneLayout,
     emitters: &mut [SvgEmitter],
     emphasis: &mut SvgEmitter,
     cross: &mut SvgEmitter,
     suppress_terminal_while_exit: bool,
 ) {
+    let (x, y) = origin;
     match &scene.kind {
         TypedFtileKind::Leaf { .. } => {}
         TypedFtileKind::Sequence { children } => {
             for (index, child) in children.iter().enumerate() {
                 typed_ftile_emit_connectors(
                     &child.scene,
-                    x + child.x,
-                    y + child.y,
+                    (x + child.x, y + child.y),
                     lanes,
                     emitters,
                     emphasis,
@@ -30223,8 +30230,7 @@ fn typed_ftile_emit_connectors(
             .is_some();
             typed_ftile_emit_connectors(
                 &then_scene.scene,
-                x + then_scene.x,
-                y + then_scene.y,
+                (x + then_scene.x, y + then_scene.y),
                 lanes,
                 emitters,
                 emphasis,
@@ -30233,8 +30239,7 @@ fn typed_ftile_emit_connectors(
             );
             typed_ftile_emit_connectors(
                 &else_scene.scene,
-                x + else_scene.x,
-                y + else_scene.y,
+                (x + else_scene.x, y + else_scene.y),
                 lanes,
                 emitters,
                 emphasis,
@@ -30259,14 +30264,16 @@ fn typed_ftile_emit_connectors(
                     typed_ftile_emit_fused_while_exit(
                         emitters,
                         cross,
-                        branch_lane,
-                        *lane,
-                        diamond_left,
-                        diamond_cy,
-                        exit_x,
-                        vertex,
-                        merge_cy,
-                        direction,
+                        TypedFtileFusedWhileExit {
+                            out_lane: branch_lane,
+                            in_lane: *lane,
+                            diamond_left,
+                            diamond_cy,
+                            exit_x,
+                            merge_vertex: vertex,
+                            merge_cy,
+                            direction,
+                        },
                     );
                 }
             }
@@ -30328,8 +30335,7 @@ fn typed_ftile_emit_connectors(
         } => {
             typed_ftile_emit_connectors(
                 &body.scene,
-                x + body.x,
-                y + body.y,
+                (x + body.x, y + body.y),
                 lanes,
                 emitters,
                 emphasis,
@@ -30463,8 +30469,7 @@ fn typed_ftile_emit_connectors(
             for branch in branches {
                 typed_ftile_emit_connectors(
                     &branch.scene,
-                    x + branch.x,
-                    y + branch.y,
+                    (x + branch.x, y + branch.y),
                     lanes,
                     emitters,
                     emphasis,
@@ -30579,8 +30584,7 @@ fn render_typed_ftile_swimlanes(
     typed_ftile_emit_shapes(scene, 0.0, content_top, &lane_layout, &mut emitters);
     typed_ftile_emit_connectors(
         scene,
-        0.0,
-        content_top,
+        (0.0, content_top),
         &lane_layout,
         &mut emitters,
         &mut emphasis,
@@ -30613,8 +30617,8 @@ fn render_typed_ftile_swimlanes(
         f(header_top),
     )
     .unwrap();
-    for lane in 0..lane_names.len() {
-        shapes.push_str(&emitters[lane].shapes);
+    for (lane, emitter) in emitters.iter().enumerate() {
+        shapes.push_str(&emitter.shapes);
         write!(
             shapes,
             r#"<line style="stroke:{};stroke-width:1.5;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
@@ -30644,8 +30648,8 @@ fn render_typed_ftile_swimlanes(
     }
     connectors.push_str(&cross.connectors);
     let title_baseline = header_top + pm::ascent(LANE_TITLE_FONT);
-    for lane in 0..lane_names.len() {
-        let width = text_render::measure(&lane_names[lane], LANE_TITLE_FONT, false);
+    for (lane, lane_name) in lane_names.iter().enumerate() {
+        let width = text_render::measure(lane_name, LANE_TITLE_FONT, false);
         let x = lane_layout.left[lane] + (lane_layout.width[lane] - width) / 2.0;
         write!(
             connectors,
@@ -30655,7 +30659,7 @@ fn render_typed_ftile_swimlanes(
             f(width),
             f(x),
             f(title_baseline),
-            svg_text_escape(&lane_names[lane]),
+            svg_text_escape(lane_name),
         )
         .unwrap();
     }
