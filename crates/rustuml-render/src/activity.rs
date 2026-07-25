@@ -30568,6 +30568,22 @@ fn typed_ftile_emit_fused_while_exit(
     );
 }
 
+fn typed_ftile_cross_sequence_middle(
+    spacing: TypedFtileSpacing,
+    source_y: f64,
+    target_y: f64,
+) -> f64 {
+    if spacing == TypedFtileSpacing::Natural {
+        // `ConnectionVerticalDown.drawTranslate` routes translated swimlane
+        // endpoints through their vertical midpoint before ON_Y compression.
+        (source_y + target_y) / 2.0
+    } else {
+        // The legacy typed scene stores post-compression geometry; its midpoint
+        // has already collapsed to the destination-clearance band.
+        target_y - (spacing.assembly_separation() - crate::compress::COMPRESS_MARGIN)
+    }
+}
+
 fn typed_ftile_emit_connectors(
     scene: &TypedFtileScene<'_>,
     origin: (f64, f64),
@@ -30607,12 +30623,7 @@ fn typed_ftile_emit_connectors(
                 let points = if out_lane == in_lane {
                     vec![(x1, y1), (x2, y2)]
                 } else {
-                    // `ConnectionVerticalDown.drawTranslate` computes the
-                    // horizontal segment before ON_Y compression. The
-                    // assembly wrapper retains the 10px arrow plus the 5px
-                    // `SlotSet.smaller` destination clearance.
-                    let middle = y2
-                        - (scene.spacing.assembly_separation() - crate::compress::COMPRESS_MARGIN);
+                    let middle = typed_ftile_cross_sequence_middle(scene.spacing, y1, y2);
                     vec![(x1, y1), (x1, middle), (x2, middle), (x2, y2)]
                 };
                 typed_ftile_emit_connection(
@@ -31261,16 +31272,17 @@ fn render_ftile(
     let body = if lane_names.len() > 1 {
         let mut lane = 0usize;
         let compressed_scene = typed_ftile_sequence(tree, &mut lane)?;
-        let control_count = typed_ftile_scene_control_count(
-            &compressed_scene,
-            typed_ftile_has_expanded_parallel(&compressed_scene),
-        )?;
+        let has_fork = typed_ftile_contains_fork(&compressed_scene);
+        let has_expanded_parallel = typed_ftile_has_expanded_parallel(&compressed_scene);
+        let allow_terminal_cross_lane_if = !has_fork || has_expanded_parallel;
+        let control_count =
+            typed_ftile_scene_control_count(&compressed_scene, allow_terminal_cross_lane_if)?;
         if control_count == 0 {
             return None;
         }
-        let scene = if typed_ftile_has_expanded_parallel(&compressed_scene)
-            && typed_ftile_scene_has_recursive_if(&compressed_scene, false)
+        let scene = if typed_ftile_scene_has_recursive_if(&compressed_scene, false)
             && !typed_ftile_scene_contains_while(&compressed_scene)
+            && allow_terminal_cross_lane_if
         {
             // `FtileFactoryDelegatorAssembly` constructs every connection with
             // a 35px reserve. `ActivityDiagram3.exportDiagramInternal` then
@@ -32553,36 +32565,40 @@ mod tests {
             &svg[start..end]
         };
         let request = shape_before_label("Ask for detail", "<rect");
-        let provide = shape_before_label("Supply detail", "<rect");
         let request_x =
             prim_attr(request, " x=\"").unwrap() + prim_attr(request, " width=\"").unwrap() / 2.0;
         let request_bottom =
             prim_attr(request, " y=\"").unwrap() + prim_attr(request, " height=\"").unwrap();
-        let provide_top = prim_attr(provide, " y=\"").unwrap();
-        let requester_edge = format!(
-            r#"<line style="stroke:#181818;stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-            f(request_x),
-            f(request_x),
-            f(request_bottom),
-            f(provide_top),
-        );
 
         let credit = shape_before_label("Assess signal", "<rect");
-        let condition = shape_before_label("signal clear?", "<polygon");
         let credit_x =
             prim_attr(credit, " x=\"").unwrap() + prim_attr(credit, " width=\"").unwrap() / 2.0;
         let credit_bottom =
             prim_attr(credit, " y=\"").unwrap() + prim_attr(credit, " height=\"").unwrap();
-        let condition_top = polygon_nth_point(condition, 0).unwrap().1;
-        let reviewer_edge = format!(
-            r#"<line style="stroke:#181818;stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-            f(credit_x),
-            f(credit_x),
-            f(credit_bottom),
-            f(condition_top),
+        let connector_from = |source_x: f64, source_y: f64| {
+            // Shapes and connectors serialize the shared unrounded coordinate
+            // independently, so compare their stable millipixel bucket.
+            let source_x = (source_x * 1_000.0).round();
+            let source_y = (source_y * 1_000.0).round();
+            svg.match_indices("<line ")
+                .find_map(|(at, _)| {
+                    let end = at + svg[at..].find("/>")? + 2;
+                    let line = &svg[at..end];
+                    let x1 = (prim_attr(line, " x1=\"")? * 1_000.0).round();
+                    let x2 = (prim_attr(line, " x2=\"")? * 1_000.0).round();
+                    let y1 = (prim_attr(line, " y1=\"")? * 1_000.0).round();
+                    let y2 = (prim_attr(line, " y2=\"")? * 1_000.0).round();
+                    ((x1 == source_x && y1 == source_y) || (x2 == source_x && y2 == source_y))
+                        .then_some(at)
+                })
+                .expect("connector segment at action boundary")
+        };
+        let requester_edge_at = connector_from(request_x, request_bottom);
+        let reviewer_edge_at = connector_from(credit_x, credit_bottom);
+        assert!(
+            requester_edge_at < reviewer_edge_at,
+            "requester-lane connector pass must precede reviewer-lane connector pass"
         );
-
-        assert!(svg.find(&requester_edge).unwrap() < svg.find(&reviewer_edge).unwrap());
     }
 
     #[test]
@@ -32859,6 +32875,63 @@ mod tests {
         )
         .expect("compressed natural recursive scene");
         assert!(natural_rendered.content.contains("Record novel rejection"));
+    }
+
+    #[test]
+    fn recursive_terminal_if_uses_natural_translated_midpoints_without_a_fork() {
+        let lane = |name: &str| {
+            ActivityStep::Swimlane(SwimlaneBlock {
+                name: name.into(),
+                color: None,
+            })
+        };
+        let steps = vec![
+            lane("Novel intake"),
+            ActivityStep::Start,
+            lane("Novel review"),
+            ActivityStep::If(IfBlock {
+                condition: "fresh limit accepted?".into(),
+                then_label: Some("accepted".into()),
+                source_line: 0,
+            }),
+            lane("Novel treasury"),
+            ActivityStep::Action("Authorize renamed transfer".into()),
+            lane("Novel intake"),
+            ActivityStep::Stop,
+            ActivityStep::Else(Some("escalate".into())),
+            lane("Novel review"),
+            ActivityStep::If(IfBlock {
+                condition: "fresh exception accepted?".into(),
+                then_label: Some("approved".into()),
+                source_line: 0,
+            }),
+            lane("Novel treasury"),
+            ActivityStep::Action("Record renamed exception".into()),
+            lane("Novel intake"),
+            ActivityStep::Stop,
+            ActivityStep::Else(Some("declined".into())),
+            lane("Novel intake"),
+            ActivityStep::Action("Record fresh rejection".into()),
+            ActivityStep::Stop,
+            ActivityStep::EndIf,
+            ActivityStep::EndIf,
+        ];
+        let palette = Palette::default_puml();
+        let tree = build_tree(&steps, &palette);
+        let mut lane_index = 0;
+        let scene = typed_ftile_sequence(&tree, &mut lane_index).expect("typed FTile scene");
+        assert!(typed_ftile_scene_has_recursive_if(&scene, false));
+        assert!(!typed_ftile_contains_fork(&scene));
+        assert!(typed_ftile_scene_control_count(&scene, true).is_some());
+        assert_eq!(
+            typed_ftile_cross_sequence_middle(TypedFtileSpacing::Natural, 100.0, 135.0),
+            117.5
+        );
+
+        let svg = render_ftile_steps(steps);
+        assert!(svg.contains("Authorize renamed transfer"));
+        assert!(svg.contains("Record renamed exception"));
+        assert!(svg.contains("Record fresh rejection"));
     }
 
     #[test]
