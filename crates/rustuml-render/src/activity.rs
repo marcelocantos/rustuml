@@ -2003,9 +2003,11 @@ fn typed_ftile_steps_can_handle(steps: &[ActivityStep], is_swimlane: bool) -> bo
     const IF: u8 = 1;
     const WHILE: u8 = 2;
     const FORK: u8 = 3;
+    const REPEAT: u8 = 4;
     let mut stack = Vec::new();
     let mut if_else_count = Vec::new();
     let mut fork_again_count = 0usize;
+    let mut repeat_count = 0usize;
     for step in steps {
         match step {
             ActivityStep::Start
@@ -2042,6 +2044,16 @@ fn typed_ftile_steps_can_handle(steps: &[ActivityStep], is_swimlane: bool) -> bo
                     return false;
                 }
             }
+            ActivityStep::Repeat => {
+                stack.push(REPEAT);
+                repeat_count += 1;
+            }
+            ActivityStep::Backward(_) if stack.contains(&REPEAT) => {}
+            ActivityStep::RepeatWhile(_) => {
+                if stack.pop() != Some(REPEAT) {
+                    return false;
+                }
+            }
             ActivityStep::Fork => {
                 stack.push(FORK);
             }
@@ -2061,7 +2073,7 @@ fn typed_ftile_steps_can_handle(steps: &[ActivityStep], is_swimlane: bool) -> bo
     }
     // Existing V2 gates cover nested control flow. This extension is only for
     // generalized fan-out beyond their bounded legacy fork path.
-    stack.is_empty() && fork_again_count >= 6
+    stack.is_empty() && (fork_again_count >= 6 || repeat_count > 0)
 }
 
 /// True when the swimlane V2 single-tree path should own this diagram (instead
@@ -28001,6 +28013,17 @@ enum TypedFtileKind<'a> {
         body: TypedPlacedScene<'a>,
         special: Option<TypedPlacedScene<'a>>,
     },
+    Repeat {
+        node: &'a LayoutNode,
+        entry_lane: usize,
+        condition_lane: usize,
+        entry: ftile::FtileGeometry,
+        entry_at: (f64, f64),
+        body: TypedPlacedScene<'a>,
+        condition: ftile::FtileGeometry,
+        condition_at: (f64, f64),
+        backward: Option<(ftile::FtileGeometry, (f64, f64))>,
+    },
     Fork {
         input_lane: usize,
         output_lane: usize,
@@ -28339,6 +28362,69 @@ fn typed_ftile_node<'a>(
                 },
             })
         }
+        LayoutNode::Repeat {
+            body,
+            condition,
+            backward,
+            has_start_label,
+            ..
+        } => {
+            if *has_start_label {
+                return None;
+            }
+            let entry_lane = lane;
+            let mut condition_lane = lane;
+            let body_scene = typed_ftile_sequence_with_spacing(body, &mut condition_lane, spacing)?;
+            body_scene.geometry.out_y?;
+            let entry = ftile::FtileGeometry::diamond_empty(0.0);
+            let condition_geometry = condition_diamond(condition);
+            let backward_geometry = backward.as_ref().map(|label| {
+                ftile::FtileGeometry::box_tile(
+                    text_render::measure(label, FONT_SIZE, false),
+                    text_render::label_height(label, FONT_SIZE),
+                    ACTION_H_PADDING,
+                    ACTION_H_PADDING,
+                    ACTION_H_PADDING,
+                    ACTION_H_PADDING,
+                )
+            });
+            let geometry = ftile::repeat_tile(
+                &entry,
+                &condition_geometry,
+                &body_scene.geometry,
+                text_render::measure(condition, SMALL_FONT, false),
+                backward_geometry.as_ref(),
+            );
+            let layout = ftile::repeat_layout(
+                &geometry,
+                &entry,
+                &condition_geometry,
+                &body_scene.geometry,
+                backward_geometry.as_ref(),
+            );
+            Some(TypedFtileScene {
+                geometry,
+                in_lane: entry_lane,
+                out_lane: condition_lane,
+                continuation_lane: condition_lane,
+                spacing,
+                kind: TypedFtileKind::Repeat {
+                    node,
+                    entry_lane,
+                    condition_lane,
+                    entry,
+                    entry_at: layout.diamond1,
+                    body: TypedPlacedScene {
+                        scene: Box::new(body_scene),
+                        x: layout.repeat.0,
+                        y: layout.repeat.1,
+                    },
+                    condition: condition_geometry,
+                    condition_at: layout.diamond2,
+                    backward: backward_geometry.zip(layout.backward),
+                },
+            })
+        }
         LayoutNode::Fork {
             branches,
             attached_notes,
@@ -28482,9 +28568,10 @@ fn typed_ftile_scene_is_linear(scene: &TypedFtileScene<'_>) -> bool {
         TypedFtileKind::Sequence { children } => children
             .iter()
             .all(|child| typed_ftile_scene_is_linear(&child.scene)),
-        TypedFtileKind::If { .. } | TypedFtileKind::While { .. } | TypedFtileKind::Fork { .. } => {
-            false
-        }
+        TypedFtileKind::If { .. }
+        | TypedFtileKind::While { .. }
+        | TypedFtileKind::Repeat { .. }
+        | TypedFtileKind::Fork { .. } => false,
     }
 }
 
@@ -28502,7 +28589,9 @@ fn typed_ftile_scene_has_loop_or_fork(scene: &TypedFtileScene<'_>) -> bool {
             typed_ftile_scene_has_loop_or_fork(&then_scene.scene)
                 || typed_ftile_scene_has_loop_or_fork(&else_scene.scene)
         }
-        TypedFtileKind::While { .. } | TypedFtileKind::Fork { .. } => true,
+        TypedFtileKind::While { .. }
+        | TypedFtileKind::Repeat { .. }
+        | TypedFtileKind::Fork { .. } => true,
     }
 }
 
@@ -28527,6 +28616,9 @@ fn typed_ftile_scene_has_recursive_if(scene: &TypedFtileScene<'_>, inside_if: bo
                     typed_ftile_scene_has_recursive_if(&special.scene, inside_if)
                 })
         }
+        TypedFtileKind::Repeat { body, .. } => {
+            typed_ftile_scene_has_recursive_if(&body.scene, inside_if)
+        }
         TypedFtileKind::Fork { branches, .. } => branches
             .iter()
             .any(|branch| typed_ftile_scene_has_recursive_if(&branch.scene, inside_if)),
@@ -28548,9 +28640,37 @@ fn typed_ftile_scene_contains_while(scene: &TypedFtileScene<'_>) -> bool {
                 || typed_ftile_scene_contains_while(&else_scene.scene)
         }
         TypedFtileKind::While { .. } => true,
+        TypedFtileKind::Repeat { body, .. } => typed_ftile_scene_contains_while(&body.scene),
         TypedFtileKind::Fork { branches, .. } => branches
             .iter()
             .any(|branch| typed_ftile_scene_contains_while(&branch.scene)),
+    }
+}
+
+fn typed_ftile_scene_contains_repeat(scene: &TypedFtileScene<'_>) -> bool {
+    match &scene.kind {
+        TypedFtileKind::Leaf { .. } => false,
+        TypedFtileKind::Sequence { children } => children
+            .iter()
+            .any(|child| typed_ftile_scene_contains_repeat(&child.scene)),
+        TypedFtileKind::If {
+            then_scene,
+            else_scene,
+            ..
+        } => {
+            typed_ftile_scene_contains_repeat(&then_scene.scene)
+                || typed_ftile_scene_contains_repeat(&else_scene.scene)
+        }
+        TypedFtileKind::While { body, special, .. } => {
+            typed_ftile_scene_contains_repeat(&body.scene)
+                || special
+                    .as_ref()
+                    .is_some_and(|special| typed_ftile_scene_contains_repeat(&special.scene))
+        }
+        TypedFtileKind::Repeat { .. } => true,
+        TypedFtileKind::Fork { branches, .. } => branches
+            .iter()
+            .any(|branch| typed_ftile_scene_contains_repeat(&branch.scene)),
     }
 }
 
@@ -28636,6 +28756,9 @@ fn typed_ftile_scene_control_count(
                 1 + typed_ftile_scene_control_count(&body.scene, allow_terminal_cross_lane_if)?
                     + special_count,
             )
+        }
+        TypedFtileKind::Repeat { body, .. } => {
+            Some(1 + typed_ftile_scene_control_count(&body.scene, allow_terminal_cross_lane_if)?)
         }
         TypedFtileKind::Fork { branches, .. } => {
             // ParallelBuilderFork's ConnectionIn/Out translations are complete
@@ -28758,6 +28881,66 @@ fn typed_ftile_collect_occupied(
                     occupied,
                 );
             }
+        }
+        TypedFtileKind::Repeat {
+            node,
+            entry_lane,
+            condition_lane,
+            entry,
+            entry_at,
+            body,
+            condition,
+            condition_at,
+            backward,
+        } => {
+            typed_ftile_add_occupied(
+                occupied,
+                *entry_lane,
+                x + entry_at.0,
+                x + entry_at.0 + entry.width,
+            );
+            let condition_left = x + condition_at.0;
+            typed_ftile_add_occupied(
+                occupied,
+                *condition_lane,
+                condition_left,
+                condition_left + condition.width,
+            );
+            if let LayoutNode::Repeat {
+                is_label,
+                not_label,
+                arrow_font_size,
+                arrow_font_family,
+                ..
+            } = node
+            {
+                for (label, left) in [
+                    (is_label.as_deref(), condition_left + condition.width),
+                    (
+                        not_label.as_deref(),
+                        x + condition_at.0 + condition.left + 4.0,
+                    ),
+                ] {
+                    if let Some(label) = label {
+                        let width = text_render::measure_with_family(
+                            label,
+                            *arrow_font_size,
+                            false,
+                            arrow_font_family,
+                        );
+                        typed_ftile_add_occupied(occupied, *condition_lane, left, left + width);
+                    }
+                }
+            }
+            if let Some((backward, backward_at)) = backward {
+                typed_ftile_add_occupied(
+                    occupied,
+                    *condition_lane,
+                    x + backward_at.0,
+                    x + backward_at.0 + backward.width,
+                );
+            }
+            typed_ftile_collect_occupied(&body.scene, x + body.x, y + body.y, occupied);
         }
         TypedFtileKind::Fork {
             input_lane,
@@ -28908,6 +29091,66 @@ fn typed_ftile_collect_limit_shapes(
                 );
             }
         }
+        TypedFtileKind::Repeat {
+            node,
+            entry_lane,
+            condition_lane,
+            entry,
+            entry_at,
+            body,
+            condition,
+            condition_at,
+            backward,
+        } => {
+            typed_ftile_add_occupied(
+                bounds,
+                *entry_lane,
+                x + entry_at.0 - 10.0,
+                x + entry_at.0 + entry.width + 10.0,
+            );
+            let condition_left = x + condition_at.0;
+            typed_ftile_add_occupied(
+                bounds,
+                *condition_lane,
+                condition_left - 10.0,
+                condition_left + condition.width + 10.0,
+            );
+            if let LayoutNode::Repeat {
+                is_label,
+                not_label,
+                arrow_font_size,
+                arrow_font_family,
+                ..
+            } = node
+            {
+                for (label, left) in [
+                    (is_label.as_deref(), condition_left + condition.width),
+                    (
+                        not_label.as_deref(),
+                        x + condition_at.0 + condition.left + 4.0,
+                    ),
+                ] {
+                    if let Some(label) = label {
+                        let width = text_render::measure_with_family(
+                            label,
+                            *arrow_font_size,
+                            false,
+                            arrow_font_family,
+                        );
+                        typed_ftile_add_occupied(bounds, *condition_lane, left, left + width);
+                    }
+                }
+            }
+            if let Some((backward, backward_at)) = backward {
+                typed_ftile_add_occupied(
+                    bounds,
+                    *condition_lane,
+                    x + backward_at.0 - 1.0,
+                    x + backward_at.0 + backward.width - 1.0,
+                );
+            }
+            typed_ftile_collect_limit_shapes(&body.scene, x + body.x, y + body.y, bounds);
+        }
         TypedFtileKind::Fork {
             input_lane,
             output_lane,
@@ -28991,6 +29234,12 @@ fn typed_ftile_has_cross_lane_loop(scene: &TypedFtileScene<'_>) -> bool {
                     .as_ref()
                     .is_some_and(|special| typed_ftile_has_cross_lane_loop(&special.scene))
         }
+        TypedFtileKind::Repeat {
+            entry_lane,
+            condition_lane,
+            body,
+            ..
+        } => entry_lane != condition_lane || typed_ftile_has_cross_lane_loop(&body.scene),
         TypedFtileKind::Fork {
             input_lane,
             output_lane,
@@ -29035,6 +29284,9 @@ fn typed_ftile_mark_parallel_owner_lanes(
                 typed_ftile_mark_parallel_owner_lanes(&special.scene, owner_count, input, output);
             }
         }
+        TypedFtileKind::Repeat { body, .. } => {
+            typed_ftile_mark_parallel_owner_lanes(&body.scene, owner_count, input, output);
+        }
         TypedFtileKind::Fork {
             input_lane,
             output_lane,
@@ -29072,6 +29324,7 @@ fn typed_ftile_has_expanded_parallel(scene: &TypedFtileScene<'_>) -> bool {
                     .as_ref()
                     .is_some_and(|special| typed_ftile_has_expanded_parallel(&special.scene))
         }
+        TypedFtileKind::Repeat { body, .. } => typed_ftile_has_expanded_parallel(&body.scene),
         TypedFtileKind::Fork { branches, .. } => branches.len() > 2,
     }
 }
@@ -29097,6 +29350,9 @@ fn typed_ftile_mark_separate_parallel_inputs(scene: &TypedFtileScene<'_>, inputs
             if let Some(special) = special {
                 typed_ftile_mark_separate_parallel_inputs(&special.scene, inputs);
             }
+        }
+        TypedFtileKind::Repeat { body, .. } => {
+            typed_ftile_mark_separate_parallel_inputs(&body.scene, inputs);
         }
         TypedFtileKind::Fork {
             input_lane,
@@ -29160,6 +29416,13 @@ fn typed_ftile_mark_conditional_parallel_boundaries(
                     boundaries,
                 );
             }
+        }
+        TypedFtileKind::Repeat { body, .. } => {
+            typed_ftile_mark_conditional_parallel_boundaries(
+                &body.scene,
+                enclosing_if_lane,
+                boundaries,
+            );
         }
         TypedFtileKind::Fork {
             input_lane,
@@ -29262,6 +29525,36 @@ fn typed_ftile_collect_cross_loop_decorations(
                 );
             }
         }
+        TypedFtileKind::Repeat {
+            entry_lane,
+            condition_lane,
+            entry,
+            entry_at,
+            body,
+            backward,
+            ..
+        } => {
+            if entry_lane != condition_lane {
+                let rail_x = x
+                    + raw_offset[*entry_lane].max(raw_offset[*condition_lane])
+                    + scene.geometry.width;
+                occupied.add_slot(rail_x - ARROW_HEAD_HALF, rail_x + ARROW_HEAD_HALF);
+                let entry_x = raw_offset[*entry_lane] + x + entry_at.0 + entry.width;
+                occupied.add_slot(entry_x, entry_x + 10.0);
+                if let Some((backward, backward_at)) = backward {
+                    let backward_x =
+                        raw_offset[*condition_lane] + x + backward_at.0 + backward.width / 2.0;
+                    occupied.add_slot(backward_x - ARROW_HEAD_HALF, backward_x + ARROW_HEAD_HALF);
+                }
+            }
+            typed_ftile_collect_cross_loop_decorations(
+                &body.scene,
+                x + body.x,
+                y + body.y,
+                raw_offset,
+                occupied,
+            );
+        }
         TypedFtileKind::Fork { branches, .. } => {
             for branch in branches {
                 typed_ftile_collect_cross_loop_decorations(
@@ -29279,6 +29572,7 @@ fn typed_ftile_collect_cross_loop_decorations(
 #[derive(Clone, Copy)]
 enum TypedRawArrowDirection {
     Down,
+    Up,
     Left,
     Right,
 }
@@ -29313,7 +29607,7 @@ fn typed_ftile_add_same_lane_bounds(
     }
     let tip = points.last().expect("nonempty connection").0;
     let (decoration_left, decoration_right) = match arrow {
-        TypedRawArrowDirection::Down => (tip - 4.0, tip + 4.0),
+        TypedRawArrowDirection::Down | TypedRawArrowDirection::Up => (tip - 4.0, tip + 4.0),
         TypedRawArrowDirection::Left => (tip, tip + 10.0),
         TypedRawArrowDirection::Right => (tip - 10.0, tip),
     };
@@ -29329,7 +29623,7 @@ fn typed_ftile_add_same_lane_bounds(
         .map(|point| point.0)
         .fold(f64::NEG_INFINITY, f64::max);
     match arrow {
-        TypedRawArrowDirection::Down => {
+        TypedRawArrowDirection::Down | TypedRawArrowDirection::Up => {
             left = left.min(tip - 14.0);
             right = right.max(tip + 14.0);
         }
@@ -29594,6 +29888,127 @@ fn typed_ftile_collect_same_lane_bounds(
                     ],
                     TypedRawArrowDirection::Right,
                     !suppress_terminal_while_exit,
+                );
+            }
+        }
+        TypedFtileKind::Repeat {
+            entry_lane,
+            condition_lane,
+            entry,
+            entry_at,
+            body,
+            condition,
+            condition_at,
+            backward,
+            ..
+        } => {
+            typed_ftile_collect_same_lane_bounds(
+                &body.scene,
+                x + body.x,
+                y + body.y,
+                bounds,
+                decorations,
+                false,
+            );
+            let entry_cx = x + entry_at.0 + entry.left;
+            let entry_cy = y + entry_at.1 + entry.height / 2.0;
+            let entry_bottom = y + entry_at.1 + entry.height;
+            let (body_in_lane, body_in_x, body_in_y) =
+                typed_ftile_raw_in(&body.scene, x + body.x, y + body.y);
+            typed_ftile_add_same_lane_bounds(
+                bounds,
+                decorations,
+                *entry_lane,
+                body_in_lane,
+                &[(entry_cx, entry_bottom), (body_in_x, body_in_y)],
+                TypedRawArrowDirection::Down,
+                true,
+            );
+
+            let condition_cx = x + condition_at.0 + condition.left;
+            let condition_cy = y + condition_at.1 + condition.height / 2.0;
+            let condition_top = y + condition_at.1;
+            if let Some((body_out_lane, body_out_x, body_out_y)) =
+                typed_ftile_raw_out(&body.scene, x + body.x, y + body.y)
+            {
+                typed_ftile_add_same_lane_bounds(
+                    bounds,
+                    decorations,
+                    body_out_lane,
+                    *condition_lane,
+                    &[(body_out_x, body_out_y), (condition_cx, condition_top)],
+                    TypedRawArrowDirection::Down,
+                    true,
+                );
+            }
+
+            let condition_right = x + condition_at.0 + condition.width;
+            let entry_right = x + entry_at.0 + entry.width;
+            if let Some((backward, backward_at)) = backward {
+                let backward_cx = x + backward_at.0 + backward.left;
+                let backward_top = y + backward_at.1;
+                let backward_bottom = backward_top + backward.height;
+                typed_ftile_add_same_lane_bounds(
+                    bounds,
+                    decorations,
+                    *condition_lane,
+                    *condition_lane,
+                    &[
+                        (condition_right, condition_cy),
+                        (backward_cx, condition_cy),
+                        (backward_cx, backward_bottom),
+                    ],
+                    TypedRawArrowDirection::Up,
+                    true,
+                );
+                typed_ftile_add_same_lane_bounds(
+                    bounds,
+                    decorations,
+                    *condition_lane,
+                    *entry_lane,
+                    &[
+                        (backward_cx, backward_top),
+                        (backward_cx, entry_cy),
+                        (entry_right, entry_cy),
+                    ],
+                    TypedRawArrowDirection::Left,
+                    true,
+                );
+            } else {
+                let rail_x = x + scene.geometry.width;
+                if condition_lane == entry_lane {
+                    // `ConnectionBackSimple2` emphasizes the upward segment;
+                    // `LimitFinder.drawUPolygon` expands the arrowhead by ten
+                    // pixels on each side, while X compression sees only the
+                    // polygon itself. The abstract Repeat frame retains the
+                    // trailing half-hex.
+                    let emphasis_x = rail_x - ftile::HEXAGON_HALF;
+                    typed_ftile_add_occupied(
+                        bounds,
+                        *entry_lane,
+                        emphasis_x - ARROW_HEAD_HALF - 10.0,
+                        emphasis_x + ARROW_HEAD_HALF + 10.0,
+                    );
+                    typed_ftile_add_occupied(
+                        decorations,
+                        *entry_lane,
+                        emphasis_x - ARROW_HEAD_HALF,
+                        emphasis_x + ARROW_HEAD_HALF,
+                    );
+                }
+                typed_ftile_add_same_lane_bounds(
+                    bounds,
+                    decorations,
+                    *condition_lane,
+                    *entry_lane,
+                    &[
+                        (condition_right, condition_cy),
+                        (rail_x, condition_cy),
+                        (rail_x, entry_cy),
+                        (entry_right, entry_cy),
+                    ],
+                    TypedRawArrowDirection::Left,
+                    true,
                 );
             }
         }
@@ -30118,6 +30533,114 @@ fn typed_ftile_emit_while_diamond(
     }
 }
 
+fn typed_ftile_emit_repeat_condition(
+    svg: &mut SvgEmitter,
+    node: &LayoutNode,
+    left: f64,
+    top: f64,
+    width: f64,
+) {
+    let LayoutNode::Repeat {
+        condition,
+        is_label,
+        not_label,
+        arrow_font_size,
+        arrow_font_family,
+        ..
+    } = node
+    else {
+        unreachable!("typed repeat node")
+    };
+    let cx = left + width / 2.0;
+    let cy = top + DIAMOND_HALF;
+    let inner_half = width / 2.0 - DIAMOND_HALF;
+    let fill = svg.palette.diamond_fill.clone();
+    let stroke = svg.palette.diamond_stroke.clone();
+    let stroke_width = svg.palette.diamond_stroke_width.clone();
+    svg.polygon_shape(
+        &fill,
+        &[
+            (cx - inner_half, top),
+            (cx + inner_half, top),
+            (left + width, cy),
+            (cx + inner_half, top + 2.0 * DIAMOND_HALF),
+            (cx - inner_half, top + 2.0 * DIAMOND_HALF),
+            (left, cy),
+        ],
+        &stroke,
+        &stroke_width,
+    );
+
+    let label_color = svg.palette.arrow_text_color.clone();
+    if let Some(label) = not_label {
+        let label_width =
+            text_render::measure_with_family(label, *arrow_font_size, false, arrow_font_family);
+        svg.text_element(
+            &label_color,
+            arrow_font_family,
+            *arrow_font_size,
+            label_width,
+            cx + 4.0,
+            top + 2.0 * DIAMOND_HALF
+                + text_render::ascent_for_family(*arrow_font_size, arrow_font_family),
+            label,
+            false,
+        );
+    }
+    let text_width = text_render::measure(condition, SMALL_FONT, false);
+    let text_color = svg.palette.text_color.clone();
+    svg.text_element(
+        &text_color,
+        "sans-serif",
+        SMALL_FONT,
+        text_width,
+        cx - text_width / 2.0,
+        centered_label_y(condition, cy, SMALL_FONT),
+        condition,
+        false,
+    );
+    if let Some(label) = is_label {
+        let label_width =
+            text_render::measure_with_family(label, *arrow_font_size, false, arrow_font_family);
+        svg.text_element(
+            &label_color,
+            arrow_font_family,
+            *arrow_font_size,
+            label_width,
+            left + width,
+            centerline_label_y_for_family(cy, *arrow_font_size, arrow_font_family),
+            label,
+            false,
+        );
+    }
+}
+
+fn typed_ftile_emit_backward(
+    svg: &mut SvgEmitter,
+    label: &str,
+    geometry: ftile::FtileGeometry,
+    left: f64,
+    top: f64,
+) {
+    let text = action_text_for_family(label, &svg.palette.action_font_family);
+    let node = LayoutNode::Action {
+        text_width: text_render::measure_with_family(
+            &text,
+            svg.palette.action_font_size,
+            svg.palette.action_text_bold,
+            &svg.palette.action_font_family,
+        ),
+        text,
+        pad_x: svg.palette.action_pad_x,
+        pad_y: svg.palette.action_pad_y,
+        font_family: svg.palette.action_font_family.clone(),
+        font_size: svg.palette.action_font_size,
+        bold: svg.palette.action_text_bold,
+        italic: svg.palette.action_text_italic,
+    };
+    typed_ftile_emit_leaf(svg, &node, geometry, left, top);
+}
+
 fn typed_ftile_emit_shapes(
     scene: &TypedFtileScene<'_>,
     x: f64,
@@ -30218,6 +30741,64 @@ fn typed_ftile_emit_shapes(
                     y + special.y,
                     lanes,
                     emitters,
+                );
+            }
+        }
+        TypedFtileKind::Repeat {
+            node,
+            entry_lane,
+            condition_lane,
+            entry,
+            entry_at,
+            body,
+            condition,
+            condition_at,
+            backward,
+        } => {
+            // `FtileRepeat.drawU` paints the body before its framing diamonds.
+            typed_ftile_emit_shapes(&body.scene, x + body.x, y + body.y, lanes, emitters);
+
+            let entry_left = lanes.x(*entry_lane, x + entry_at.0);
+            let entry_cx = entry_left + entry.left;
+            let entry_top = y + entry_at.1;
+            let fill = emitters[*entry_lane].palette.diamond_fill.clone();
+            let stroke = emitters[*entry_lane].palette.diamond_stroke.clone();
+            let stroke_width = emitters[*entry_lane].palette.diamond_stroke_width.clone();
+            emitters[*entry_lane].polygon_shape(
+                &fill,
+                &[
+                    (entry_cx, entry_top),
+                    (entry_left + entry.width, entry_top + DIAMOND_HALF),
+                    (entry_cx, entry_top + entry.height),
+                    (entry_left, entry_top + DIAMOND_HALF),
+                ],
+                &stroke,
+                &stroke_width,
+            );
+
+            let condition_left = lanes.x(*condition_lane, x + condition_at.0);
+            let condition_right = lanes.x(*condition_lane, x + condition_at.0 + condition.width);
+            typed_ftile_emit_repeat_condition(
+                &mut emitters[*condition_lane],
+                node,
+                condition_left,
+                y + condition_at.1,
+                condition_right - condition_left,
+            );
+            if let (
+                LayoutNode::Repeat {
+                    backward: Some(label),
+                    ..
+                },
+                Some((backward, backward_at)),
+            ) = (node, backward)
+            {
+                typed_ftile_emit_backward(
+                    &mut emitters[*condition_lane],
+                    label,
+                    *backward,
+                    lanes.x(*condition_lane, x + backward_at.0),
+                    y + backward_at.1,
                 );
             }
         }
@@ -30496,6 +31077,7 @@ fn typed_ftile_contains_fork(scene: &TypedFtileScene<'_>) -> bool {
                     .as_ref()
                     .is_some_and(|special| typed_ftile_contains_fork(&special.scene))
         }
+        TypedFtileKind::Repeat { body, .. } => typed_ftile_contains_fork(&body.scene),
         TypedFtileKind::Fork { .. } => true,
     }
 }
@@ -30911,6 +31493,193 @@ fn typed_ftile_emit_connectors(
                 }
             }
         }
+        TypedFtileKind::Repeat {
+            entry_lane,
+            condition_lane,
+            entry,
+            entry_at,
+            body,
+            condition,
+            condition_at,
+            backward,
+            ..
+        } => {
+            typed_ftile_emit_connectors(
+                &body.scene,
+                (x + body.x, y + body.y),
+                lanes,
+                emitters,
+                emphasis,
+                cross,
+                false,
+            );
+            let entry_left = lanes.x(*entry_lane, x + entry_at.0);
+            let entry_right = lanes.x(*entry_lane, x + entry_at.0 + entry.width);
+            let entry_cx = lanes.x(*entry_lane, x + entry_at.0 + entry.left);
+            let entry_cy = y + entry_at.1 + entry.height / 2.0;
+            let entry_bottom = y + entry_at.1 + entry.height;
+            let (body_in_lane, body_in_x, body_in_y) =
+                typed_ftile_scene_in(&body.scene, x + body.x, y + body.y, lanes);
+            let in_points = if *entry_lane == body_in_lane {
+                vec![(entry_cx, entry_bottom), (body_in_x, body_in_y)]
+            } else {
+                let middle = (entry_bottom + body_in_y) / 2.0;
+                vec![
+                    (entry_cx, entry_bottom),
+                    (entry_cx, middle),
+                    (body_in_x, middle),
+                    (body_in_x, body_in_y),
+                ]
+            };
+            typed_ftile_emit_connection(
+                emitters,
+                cross,
+                *entry_lane,
+                body_in_lane,
+                &in_points,
+                TypedArrowDirection::Down,
+            );
+
+            let condition_right = lanes.x(*condition_lane, x + condition_at.0 + condition.width);
+            let condition_cx = lanes.x(*condition_lane, x + condition_at.0 + condition.left);
+            let condition_cy = y + condition_at.1 + condition.height / 2.0;
+            let condition_top = y + condition_at.1;
+
+            if let Some((backward, backward_at)) = backward {
+                let backward_cx = lanes.x(*condition_lane, x + backward_at.0 + backward.left);
+                let backward_top = y + backward_at.1;
+                let backward_bottom = y + backward_at.1 + backward.height;
+                typed_ftile_emit_connection(
+                    emitters,
+                    cross,
+                    *condition_lane,
+                    *condition_lane,
+                    &[
+                        (condition_right, condition_cy),
+                        (backward_cx, condition_cy),
+                        (backward_cx, backward_bottom),
+                    ],
+                    TypedArrowDirection::Up,
+                );
+
+                let (target_x, direction) = if entry_cx < backward_cx {
+                    (entry_right, TypedArrowDirection::Left)
+                } else {
+                    (entry_left, TypedArrowDirection::Right)
+                };
+                typed_ftile_emit_connection(
+                    emitters,
+                    cross,
+                    *condition_lane,
+                    *entry_lane,
+                    &[
+                        (backward_cx, backward_top),
+                        (backward_cx, entry_cy),
+                        (target_x, entry_cy),
+                    ],
+                    direction,
+                );
+            } else if *condition_lane == *entry_lane {
+                // `ConnectionBackSimple2.drawU` uses the Repeat frame's right
+                // edge less one hexagon half for its return rail.
+                let rail_x = lanes.x(*entry_lane, x + scene.geometry.width - ftile::HEXAGON_HALF);
+                let target = &mut emitters[*entry_lane];
+                let color = target.palette.arrow_color.clone();
+                let thickness = target.palette.arrow_thickness.clone();
+                target.line_styled(
+                    &color,
+                    &thickness,
+                    condition_right,
+                    rail_x,
+                    condition_cy,
+                    condition_cy,
+                    false,
+                );
+                let emphasis_y = (condition_cy + entry_cy) / 2.0;
+                target.polygon_connector(
+                    &color,
+                    &[
+                        (rail_x - 4.0, emphasis_y + 10.0),
+                        (rail_x, emphasis_y),
+                        (rail_x + 4.0, emphasis_y + 10.0),
+                        (rail_x, emphasis_y + 6.0),
+                    ],
+                    &color,
+                    "1",
+                );
+                target.line_styled(
+                    &color,
+                    &thickness,
+                    rail_x,
+                    rail_x,
+                    entry_cy,
+                    condition_cy,
+                    false,
+                );
+                target.line_styled(
+                    &color,
+                    &thickness,
+                    rail_x,
+                    entry_right,
+                    entry_cy,
+                    entry_cy,
+                    false,
+                );
+                target.left_arrow(entry_right, entry_cy, &color);
+            } else {
+                // `ConnectionBackComplex1.drawTranslate` leaves the closing
+                // diamond to the east, rises on an outer rail, and enters the
+                // nearest side of the entry diamond.
+                let (target_x, direction) = if entry_cx < condition_right {
+                    (entry_right, TypedArrowDirection::Left)
+                } else {
+                    (entry_left, TypedArrowDirection::Right)
+                };
+                let rail_x = lanes.cross_loop_rail_x(
+                    x,
+                    *condition_lane,
+                    *entry_lane,
+                    scene.geometry.width - ftile::HEXAGON_HALF,
+                );
+                typed_ftile_emit_connection(
+                    emitters,
+                    cross,
+                    *condition_lane,
+                    *entry_lane,
+                    &[
+                        (condition_right, condition_cy),
+                        (rail_x, condition_cy),
+                        (rail_x, entry_cy),
+                        (target_x, entry_cy),
+                    ],
+                    direction,
+                );
+            }
+
+            if let Some((body_out_lane, body_out_x, body_out_y)) =
+                typed_ftile_scene_out(&body.scene, x + body.x, y + body.y, lanes)
+            {
+                let out_points = if body_out_lane == *condition_lane {
+                    vec![(body_out_x, body_out_y), (condition_cx, condition_top)]
+                } else {
+                    let middle = (body_out_y + condition_top) / 2.0;
+                    vec![
+                        (body_out_x, body_out_y),
+                        (body_out_x, middle),
+                        (condition_cx, middle),
+                        (condition_cx, condition_top),
+                    ]
+                };
+                typed_ftile_emit_connection(
+                    emitters,
+                    cross,
+                    body_out_lane,
+                    *condition_lane,
+                    &out_points,
+                    TypedArrowDirection::Down,
+                );
+            }
+        }
         TypedFtileKind::Fork {
             input_lane,
             output_lane,
@@ -31049,6 +31818,9 @@ fn typed_ftile_cross_loop_right_extent(
                 .flatten()
                 .reduce(f64::max)
         }
+        TypedFtileKind::Repeat { body, .. } => {
+            typed_ftile_cross_loop_right_extent(&body.scene, x + body.x, lanes)
+        }
         TypedFtileKind::Fork { branches, .. } => branches
             .iter()
             .filter_map(|branch| {
@@ -31065,6 +31837,18 @@ fn typed_ftile_cross_loop_right_extent(
                     + ARROW_HEAD_HALF,
             )
         }
+        TypedFtileKind::Repeat {
+            entry_lane,
+            condition_lane,
+            ..
+        } if entry_lane != condition_lane => Some(
+            lanes.cross_loop_rail_x(
+                x,
+                *condition_lane,
+                *entry_lane,
+                scene.geometry.width - ftile::HEXAGON_HALF,
+            ) + ARROW_HEAD_HALF,
+        ),
         _ => None,
     };
     [nested, own].into_iter().flatten().reduce(f64::max)
@@ -31280,10 +32064,11 @@ fn render_ftile(
         if control_count == 0 {
             return None;
         }
-        let scene = if typed_ftile_scene_has_recursive_if(&compressed_scene, false)
+        let natural_repeat = typed_ftile_scene_contains_repeat(&compressed_scene);
+        let natural_recursive_if = typed_ftile_scene_has_recursive_if(&compressed_scene, false)
             && !typed_ftile_scene_contains_while(&compressed_scene)
-            && allow_terminal_cross_lane_if
-        {
+            && allow_terminal_cross_lane_if;
+        let scene = if natural_repeat || natural_recursive_if {
             // `FtileFactoryDelegatorAssembly` constructs every connection with
             // a 35px reserve. `ActivityDiagram3.exportDiagramInternal` then
             // applies one ON_Y `CompressionXorYBuilder` to the complete
@@ -32426,6 +33211,61 @@ mod tests {
             }),
             ActivityStep::Stop,
         ]);
+    }
+
+    #[test]
+    fn typed_ftile_repeat_tracks_distinct_entry_and_condition_lanes() {
+        let lane = |name: &str| {
+            ActivityStep::Swimlane(SwimlaneBlock {
+                name: name.into(),
+                color: None,
+            })
+        };
+        let steps = vec![
+            lane("Novel intake"),
+            ActivityStep::Start,
+            ActivityStep::Repeat,
+            ActivityStep::Action("Prepare renamed batch".into()),
+            lane("Novel audit"),
+            ActivityStep::Action("Inspect renamed batch".into()),
+            ActivityStep::Backward("Requeue renamed batch".into()),
+            ActivityStep::RepeatWhile(RepeatWhileBlock {
+                condition: "fresh audit complete?".into(),
+                is_label: Some("retry".into()),
+                not_label: Some("done".into()),
+                source_line: 0,
+            }),
+            lane("Novel intake"),
+            ActivityStep::Stop,
+        ];
+        let palette = Palette::default_puml();
+        let tree = build_tree(&steps, &palette);
+        let mut lane_index = 0;
+        let scene = typed_ftile_sequence(&tree, &mut lane_index).expect("typed FTile scene");
+        let TypedFtileKind::Sequence { children } = &scene.kind else {
+            panic!("root sequence")
+        };
+        let repeat = children
+            .iter()
+            .find_map(|child| match &child.scene.kind {
+                TypedFtileKind::Repeat {
+                    entry_lane,
+                    condition_lane,
+                    backward,
+                    ..
+                } => Some((*entry_lane, *condition_lane, backward.is_some())),
+                _ => None,
+            })
+            .expect("typed repeat");
+        assert_eq!(repeat, (0, 1, true));
+        assert!(typed_ftile_has_cross_lane_loop(&scene));
+        assert!(typed_ftile_scene_control_count(&scene, true).is_some());
+
+        let svg = render_ftile_steps(steps);
+        assert!(svg.contains("Prepare renamed batch"));
+        assert!(svg.contains("Inspect renamed batch"));
+        assert!(svg.contains("Requeue renamed batch"));
+        assert!(svg.contains("fresh audit complete?"));
     }
 
     #[test]
