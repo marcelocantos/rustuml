@@ -51,8 +51,22 @@ pub struct ObjectNote {
     /// The object this note is attached to, if any.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target: Option<String>,
+    /// Position relative to the target entity.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub position: Option<ObjectNotePosition>,
     /// Note text content (may contain `\n` for multi-line).
     pub text: String,
+    /// 1-based source line of the note declaration.
+    #[serde(default)]
+    pub source_line: usize,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum ObjectNotePosition {
+    Top,
+    Bottom,
+    Left,
+    Right,
 }
 
 /// A single field/entry within an object or map instance.

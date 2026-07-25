@@ -64,6 +64,15 @@ const ENTITY_FILL: &str = "#F1F1F1";
 const BORDER_COLOR: &str = "#181818";
 const BORDER_WIDTH: &str = "0.5";
 const MAP_LINE_WIDTH: &str = "1";
+// Java `Opale` wraps note text with 6px left, 15px right, and 5px vertical
+// margins. `EntityImageNote` turns its logical SVEK edge into the folded
+// callout polygon instead of painting that edge separately.
+const NOTE_FILL: &str = "#FEFFDD";
+const NOTE_FOLD: f64 = 10.0;
+const NOTE_PAD_X: f64 = 6.0;
+const NOTE_PAD_RIGHT: f64 = 15.0;
+const NOTE_PAD_Y: f64 = 5.0;
+const NOTE_FONT_SIZE: f64 = 13.0;
 
 // ---------------------------------------------------------------------------
 // Public entry points
@@ -107,6 +116,7 @@ pub fn render_with_oracle(
         ObjectLayout {
             positions: oracle_positions(diagram, &mut dims, orc),
             edge_paths: Vec::new(),
+            note_positions: vec![None; diagram.notes.len()],
         }
     } else {
         layout_object(diagram, &dims)
@@ -310,6 +320,15 @@ fn oracle_positions(
 struct ObjectLayout {
     positions: Vec<(f64, f64)>,
     edge_paths: Vec<EdgePath>,
+    note_positions: Vec<Option<NotePlacement>>,
+}
+
+#[derive(Clone, Copy)]
+struct NotePlacement {
+    x: f64,
+    y: f64,
+    width: f64,
+    height: f64,
 }
 
 fn layout_object(diagram: &ObjectDiagram, dims: &[ObjDim]) -> ObjectLayout {
@@ -317,34 +336,100 @@ fn layout_object(diagram: &ObjectDiagram, dims: &[ObjDim]) -> ObjectLayout {
     for (obj, dim) in diagram.objects.iter().zip(dims) {
         layout.add_node(&obj.id, &obj.label, dim.width, dim.height);
     }
-    for link in &diagram.links {
-        let from_base = link.from.split("::").next().unwrap_or(&link.from);
-        let to_base = link.to.split("::").next().unwrap_or(&link.to);
-        layout.add_edge(from_base, to_base, link.label.as_deref());
+    let mut attached_note_nodes = Vec::new();
+    for (note_idx, note) in diagram.notes.iter().enumerate() {
+        if note.target.is_none() || note.position.is_none() {
+            continue;
+        }
+        let note_id = attached_note_layout_id(note_idx);
+        let (width, height) = object_note_dims(note);
+        let node_idx = diagram.objects.len() + attached_note_nodes.len();
+        attached_note_nodes.push((note_idx, node_idx));
+        layout.add_node(&note_id, "", width, height);
+    }
+
+    let mut edge_events = Vec::new();
+    for (idx, link) in diagram.links.iter().enumerate() {
+        edge_events.push((link.source_line, 0_u8, idx));
+    }
+    for (idx, note) in diagram.notes.iter().enumerate() {
+        if note.target.is_some() && note.position.is_some() {
+            edge_events.push((note.source_line, 1_u8, idx));
+        }
+    }
+    edge_events.sort_unstable();
+    for (_, kind, idx) in edge_events {
+        if kind == 0 {
+            let link = &diagram.links[idx];
+            let from_base = link.from.split("::").next().unwrap_or(&link.from);
+            let to_base = link.to.split("::").next().unwrap_or(&link.to);
+            layout.add_edge(from_base, to_base, link.label.as_deref());
+            continue;
+        }
+        let note = &diagram.notes[idx];
+        let target = note.target.as_deref().expect("filtered attached note");
+        let position = note.position.expect("filtered attached note");
+        let note_id = attached_note_layout_id(idx);
+        match position {
+            ObjectNotePosition::Left => {
+                layout.add_same_rank(&note_id, target);
+                layout.add_edge(&note_id, target, None);
+            }
+            ObjectNotePosition::Right => {
+                layout.add_same_rank(target, &note_id);
+                layout.add_edge(target, &note_id, None);
+            }
+            ObjectNotePosition::Top => layout.add_edge(&note_id, target, None),
+            ObjectNotePosition::Bottom => layout.add_edge(target, &note_id, None),
+        }
     }
     match layout.layout_full(std::time::Duration::from_secs(5)) {
         Some(mut result) => {
+            let (origin_x, origin_y) = if attached_note_nodes.is_empty() {
+                (MARGIN, MARGIN)
+            } else {
+                normalize_attached_note_svek_envelope(
+                    &mut result.node_positions,
+                    &mut result.edge_paths,
+                    diagram.objects.len(),
+                )
+            };
             for edge in &mut result.edge_paths {
                 for point in &mut edge.points {
-                    point.0 += MARGIN;
-                    point.1 += MARGIN;
+                    point.0 += origin_x;
+                    point.1 += origin_y;
                 }
                 if let Some(point) = &mut edge.start_point {
-                    point.0 += MARGIN;
-                    point.1 += MARGIN;
+                    point.0 += origin_x;
+                    point.1 += origin_y;
                 }
                 if let Some(point) = &mut edge.end_point {
-                    point.0 += MARGIN;
-                    point.1 += MARGIN;
+                    point.0 += origin_x;
+                    point.1 += origin_y;
                 }
             }
             ObjectLayout {
                 positions: result
                     .node_positions
                     .iter()
-                    .map(|p| (p.x + MARGIN, p.y + MARGIN))
+                    .take(diagram.objects.len())
+                    .map(|p| (p.x + origin_x, p.y + origin_y))
                     .collect(),
                 edge_paths: result.edge_paths,
+                note_positions: {
+                    let mut positions = vec![None; diagram.notes.len()];
+                    for (note_idx, node_idx) in attached_note_nodes {
+                        if let Some(position) = result.node_positions.get(node_idx) {
+                            positions[note_idx] = Some(NotePlacement {
+                                x: position.x + origin_x,
+                                y: position.y + origin_y,
+                                width: position.width,
+                                height: position.height,
+                            });
+                        }
+                    }
+                    positions
+                },
             }
         }
         None => ObjectLayout {
@@ -352,8 +437,70 @@ fn layout_object(diagram: &ObjectDiagram, dims: &[ObjDim]) -> ObjectLayout {
                 .map(|i| (MARGIN, MARGIN + (i as f64) * 100.0))
                 .collect(),
             edge_paths: Vec::new(),
+            note_positions: vec![None; diagram.notes.len()],
         },
     }
+}
+
+/// Java `SvgResult` parses Graphviz's two-decimal SVG coordinates before
+/// `SvekResult.calculateDimension` asks `LimitFinder` for the painted bounds.
+/// Object rectangles reach one pixel beyond their node box; Opale paths do
+/// not, so a top/left note can become the actual envelope minimum.
+fn normalize_attached_note_svek_envelope(
+    nodes: &mut [rustuml_layout::graph::NodePosition],
+    edges: &mut [EdgePath],
+    object_count: usize,
+) -> (f64, f64) {
+    let svg_coord = |value: f64| (value * 100.0).round() / 100.0;
+    for node in nodes.iter_mut() {
+        node.x = svg_coord(node.x);
+        node.y = svg_coord(node.y);
+    }
+    for edge in edges {
+        for point in &mut edge.points {
+            point.0 = svg_coord(point.0);
+            point.1 = svg_coord(point.1);
+        }
+        if let Some(point) = &mut edge.start_point {
+            point.0 = svg_coord(point.0);
+            point.1 = svg_coord(point.1);
+        }
+        if let Some(point) = &mut edge.end_point {
+            point.0 = svg_coord(point.0);
+            point.1 = svg_coord(point.1);
+        }
+    }
+    let min_x = nodes
+        .iter()
+        .enumerate()
+        .map(|(idx, node)| node.x - if idx < object_count { 1.0 } else { 0.0 })
+        .fold(f64::INFINITY, f64::min);
+    let min_y = nodes
+        .iter()
+        .enumerate()
+        .map(|(idx, node)| node.y - if idx < object_count { 1.0 } else { 0.0 })
+        .fold(f64::INFINITY, f64::min);
+    (6.0 - min_x, 6.0 - min_y)
+}
+
+fn attached_note_layout_id(note_idx: usize) -> String {
+    format!("__object_note_{note_idx}")
+}
+
+fn object_note_dims(note: &ObjectNote) -> (f64, f64) {
+    let width = note
+        .text
+        .lines()
+        .map(|line| text_render::measure(line, NOTE_FONT_SIZE, false))
+        .fold(0.0_f64, f64::max)
+        + NOTE_PAD_X
+        + NOTE_PAD_RIGHT;
+    let text_height = note
+        .text
+        .lines()
+        .map(|line| text_render::label_height(line, NOTE_FONT_SIZE))
+        .sum::<f64>();
+    (width, text_height + 2.0 * NOTE_PAD_Y)
 }
 
 // ---------------------------------------------------------------------------
@@ -403,6 +550,76 @@ fn translate_qualified_name(label: &str) -> String {
         .collect()
 }
 
+struct ObjectSvgIds {
+    objects: Vec<String>,
+    notes: Vec<Option<(String, String)>>,
+    links: Vec<String>,
+}
+
+#[derive(Clone, Copy)]
+enum ObjectIdEvent {
+    Object(usize),
+    Link(usize),
+    Note(usize),
+}
+
+/// `CucaDiagram` assigns entity/link sequence ids while commands execute.
+/// Attached notes consume one synthetic `GMN` name and one entity uid; named
+/// floating notes already have a name and consume only the entity uid.
+fn allocate_object_svg_ids(diagram: &ObjectDiagram) -> ObjectSvgIds {
+    let mut events = Vec::new();
+    for (idx, object) in diagram.objects.iter().enumerate() {
+        events.push((object.source_line, 0_u8, idx, ObjectIdEvent::Object(idx)));
+    }
+    for (idx, link) in diagram.links.iter().enumerate() {
+        events.push((link.source_line, 1_u8, idx, ObjectIdEvent::Link(idx)));
+    }
+    for (idx, note) in diagram.notes.iter().enumerate() {
+        events.push((note.source_line, 2_u8, idx, ObjectIdEvent::Note(idx)));
+    }
+    events.sort_by_key(|&(line, kind, idx, _)| (line, kind, idx));
+
+    let mut next = 2;
+    let mut objects = vec![String::new(); diagram.objects.len()];
+    let mut notes = vec![None; diagram.notes.len()];
+    let mut links = vec![String::new(); diagram.links.len()];
+    for (_, _, _, event) in events {
+        match event {
+            ObjectIdEvent::Object(idx) => {
+                objects[idx] = format!("ent{next:04}");
+                next += 1;
+            }
+            ObjectIdEvent::Link(idx) => {
+                links[idx] = format!("lnk{next}");
+                next += 1;
+            }
+            ObjectIdEvent::Note(idx) => {
+                let note = &diagram.notes[idx];
+                let qualified_name = if let Some(id) = note.id.as_deref() {
+                    id.to_string()
+                } else {
+                    let name = format!("GMN{next}");
+                    next += 1;
+                    name
+                };
+                let entity_id = format!("ent{next:04}");
+                next += 1;
+                notes[idx] = Some((qualified_name, entity_id));
+                if note.target.is_some() && note.position.is_some() {
+                    // `CommandFactoryNoteOnEntity.executeInternal` also
+                    // creates the hidden opale link in the shared sequence.
+                    next += 1;
+                }
+            }
+        }
+    }
+    ObjectSvgIds {
+        objects,
+        notes,
+        links,
+    }
+}
+
 fn render_plantuml_svg(
     diagram: &ObjectDiagram,
     dims: &[ObjDim],
@@ -411,6 +628,7 @@ fn render_plantuml_svg(
     font_size: u32,
 ) -> String {
     let positions = &layout.positions;
+    let svg_ids = allocate_object_svg_ids(diagram);
     // Canvas dimensions: prefer oracle (matches PlantUML exactly), otherwise
     // compute from the union of entity rects with the standard 6px right/bottom
     // pad on top of MARGIN.
@@ -426,6 +644,10 @@ fn render_plantuml_svg(
             for (i, (x, y)) in positions.iter().enumerate() {
                 max_x = max_x.max(x + dims[i].width);
                 max_y = max_y.max(y + dims[i].height);
+            }
+            for note in layout.note_positions.iter().flatten() {
+                max_x = max_x.max(note.x + note.width);
+                max_y = max_y.max(note.y + note.height);
             }
             for edge in &layout.edge_paths {
                 for (x, y) in &edge.points {
@@ -465,7 +687,9 @@ fn render_plantuml_svg(
                     max_y = max_y.max(label_y + crate::plantuml_metrics::text_height(13.0));
                 }
             }
-            let canvas_pad = if has_rendered_layout_dependency(diagram, &layout.edge_paths) {
+            let canvas_pad = if has_rendered_layout_dependency(diagram, &layout.edge_paths)
+                || layout.note_positions.iter().any(Option::is_some)
+            {
                 OBJECT_LINK_CANVAS_PAD
             } else {
                 OBJECT_CANVAS_PAD
@@ -594,7 +818,7 @@ fn render_plantuml_svg(
         // clusters and entities.
         let current_ent_id_string = oracle_rect
             .and_then(|r| r.entity_id.clone())
-            .unwrap_or_else(|| format!("ent{:04}", ent_id));
+            .unwrap_or_else(|| svg_ids.objects[i].clone());
 
         write!(
             svg,
@@ -627,13 +851,15 @@ fn render_plantuml_svg(
             );
             ent_id += 1;
         }
+    } else {
+        render_attached_object_notes(&mut svg, diagram, layout, &svg_ids);
     }
 
     // Links: prefer oracle data.
     if let Some(orc) = oracle {
         render_oracle_links(&mut svg, diagram, orc, &mut ent_id);
     } else {
-        render_layout_links(&mut svg, diagram, &layout.edge_paths, &mut ent_id);
+        render_layout_links(&mut svg, diagram, &layout.edge_paths, &svg_ids);
     }
 
     svg.push_str("</g></svg>");
@@ -644,9 +870,9 @@ fn render_layout_links(
     svg: &mut String,
     diagram: &ObjectDiagram,
     edge_paths: &[EdgePath],
-    ent_id: &mut usize,
+    svg_ids: &ObjectSvgIds,
 ) {
-    for link in &diagram.links {
+    for (link_idx, link) in diagram.links.iter().enumerate() {
         if !is_rendered_layout_link(link) {
             continue;
         }
@@ -673,16 +899,16 @@ fn render_layout_links(
         } else {
             0
         };
-        let link_id = format!("lnk{ent_id}");
+        let link_id = &svg_ids.links[link_idx];
         let path_id = object_link_path_id(link, from_base, to_base);
         let link_type = object_link_type(link.kind);
 
         write!(svg, "<!--link {from_base} to {to_base}-->").unwrap();
         write!(
             svg,
-            r#"<g class="link" data-entity-1="ent{:04}" data-entity-2="ent{:04}" data-link-type="{link_type}" data-source-line="{source_line}" id="{link_id}">"#,
-            from_index + 2,
-            to_index + 2,
+            r#"<g class="link" data-entity-1="{}" data-entity-2="{}" data-link-type="{link_type}" data-source-line="{source_line}" id="{link_id}">"#,
+            svg_ids.objects[from_index],
+            svg_ids.objects[to_index],
         )
         .unwrap();
         let path_points = shortened_object_link_points(link, &edge_path.points);
@@ -718,8 +944,240 @@ fn render_layout_links(
             );
         }
         svg.push_str("</g>");
-        *ent_id += 1;
     }
+}
+
+fn render_attached_object_notes(
+    svg: &mut String,
+    diagram: &ObjectDiagram,
+    layout: &ObjectLayout,
+    svg_ids: &ObjectSvgIds,
+) {
+    for (note_idx, note) in diagram.notes.iter().enumerate() {
+        let (Some(target), Some(position), Some(placement), Some((qname, entity_id))) = (
+            note.target.as_deref(),
+            note.position,
+            layout.note_positions[note_idx],
+            svg_ids.notes[note_idx].as_ref(),
+        ) else {
+            continue;
+        };
+        let note_id = attached_note_layout_id(note_idx);
+        let (edge_from, edge_to) = match position {
+            ObjectNotePosition::Left | ObjectNotePosition::Top => (note_id.as_str(), target),
+            ObjectNotePosition::Right | ObjectNotePosition::Bottom => (target, note_id.as_str()),
+        };
+        let Some(edge) = layout
+            .edge_paths
+            .iter()
+            .find(|edge| edge.from == edge_from && edge.to == edge_to)
+        else {
+            continue;
+        };
+        let tip = match position {
+            ObjectNotePosition::Left | ObjectNotePosition::Top => {
+                edge.end_point.or_else(|| edge.points.last().copied())
+            }
+            ObjectNotePosition::Right | ObjectNotePosition::Bottom => {
+                edge.start_point.or_else(|| edge.points.first().copied())
+            }
+        };
+        let Some((tip_x, tip_y)) = tip else {
+            continue;
+        };
+        render_attached_object_note(
+            svg, note, placement, tip_x, tip_y, position, qname, entity_id,
+        );
+    }
+}
+
+/// Port of `EntityImageNote.drawU` and `Opale`'s four linked-note polygons.
+/// Graphviz positions the note and target; the logical edge endpoint becomes
+/// the callout tip and the edge itself is not emitted.
+#[allow(clippy::too_many_arguments)]
+fn render_attached_object_note(
+    svg: &mut String,
+    note: &ObjectNote,
+    placement: NotePlacement,
+    tip_x: f64,
+    tip_y: f64,
+    position: ObjectNotePosition,
+    qualified_name: &str,
+    entity_id: &str,
+) {
+    let x = placement.x;
+    let y = placement.y;
+    let right = x + placement.width;
+    let bottom = y + placement.height;
+    let fold_x = right - NOTE_FOLD;
+    let delta = 4.0;
+    let path = match position {
+        ObjectNotePosition::Left => {
+            let base_y =
+                (placement.height / 2.0 - delta).clamp(NOTE_FOLD, placement.height - 2.0 * delta);
+            format!(
+                "M{},{} L{},{} A0,0 0 0 0 {},{} L{},{} A0,0 0 0 0 {},{} L{},{} L{},{} L{},{} L{},{} L{},{} L{},{} A0,0 0 0 0 {},{}",
+                fmt_tl(x),
+                fmt_tl(y),
+                fmt_tl(x),
+                fmt_tl(bottom),
+                fmt_tl(x),
+                fmt_tl(bottom),
+                fmt_tl(right),
+                fmt_tl(bottom),
+                fmt_tl(right),
+                fmt_tl(bottom),
+                fmt_tl(right),
+                fmt_tl(y + base_y + 2.0 * delta),
+                fmt_tl(tip_x),
+                fmt_tl(tip_y),
+                fmt_tl(right),
+                fmt_tl(y + base_y),
+                fmt_tl(right),
+                fmt_tl(y + NOTE_FOLD),
+                fmt_tl(fold_x),
+                fmt_tl(y),
+                fmt_tl(x),
+                fmt_tl(y),
+                fmt_tl(x),
+                fmt_tl(y),
+            )
+        }
+        ObjectNotePosition::Right => {
+            let base_y =
+                (placement.height / 2.0 - delta).clamp(0.0, placement.height - 2.0 * delta);
+            format!(
+                "M{},{} L{},{} L{},{} L{},{} L{},{} A0,0 0 0 0 {},{} L{},{} A0,0 0 0 0 {},{} L{},{} L{},{} L{},{} A0,0 0 0 0 {},{}",
+                fmt_tl(x),
+                fmt_tl(y),
+                fmt_tl(x),
+                fmt_tl(y + base_y),
+                fmt_tl(tip_x),
+                fmt_tl(tip_y),
+                fmt_tl(x),
+                fmt_tl(y + base_y + 2.0 * delta),
+                fmt_tl(x),
+                fmt_tl(bottom),
+                fmt_tl(x),
+                fmt_tl(bottom),
+                fmt_tl(right),
+                fmt_tl(bottom),
+                fmt_tl(right),
+                fmt_tl(bottom),
+                fmt_tl(right),
+                fmt_tl(y + NOTE_FOLD),
+                fmt_tl(fold_x),
+                fmt_tl(y),
+                fmt_tl(x),
+                fmt_tl(y),
+                fmt_tl(x),
+                fmt_tl(y),
+            )
+        }
+        ObjectNotePosition::Top => {
+            let base_x = (placement.width / 2.0 - delta).clamp(0.0, placement.width);
+            format!(
+                "M{},{} L{},{} A0,0 0 0 0 {},{} L{},{} L{},{} L{},{} L{},{} A0,0 0 0 0 {},{} L{},{} L{},{} L{},{} A0,0 0 0 0 {},{}",
+                fmt_tl(x),
+                fmt_tl(y),
+                fmt_tl(x),
+                fmt_tl(bottom),
+                fmt_tl(x),
+                fmt_tl(bottom),
+                fmt_tl(x + base_x),
+                fmt_tl(bottom),
+                fmt_tl(tip_x),
+                fmt_tl(tip_y),
+                fmt_tl(x + base_x + 2.0 * delta),
+                fmt_tl(bottom),
+                fmt_tl(right),
+                fmt_tl(bottom),
+                fmt_tl(right),
+                fmt_tl(bottom),
+                fmt_tl(right),
+                fmt_tl(y + NOTE_FOLD),
+                fmt_tl(fold_x),
+                fmt_tl(y),
+                fmt_tl(x),
+                fmt_tl(y),
+                fmt_tl(x),
+                fmt_tl(y),
+            )
+        }
+        ObjectNotePosition::Bottom => {
+            let base_x =
+                (placement.width / 2.0 - delta).clamp(0.0, (placement.width - NOTE_FOLD).max(0.0));
+            format!(
+                "M{},{} L{},{} A0,0 0 0 0 {},{} L{},{} A0,0 0 0 0 {},{} L{},{} L{},{} L{},{} L{},{} L{},{} L{},{} A0,0 0 0 0 {},{}",
+                fmt_tl(x),
+                fmt_tl(y),
+                fmt_tl(x),
+                fmt_tl(bottom),
+                fmt_tl(x),
+                fmt_tl(bottom),
+                fmt_tl(right),
+                fmt_tl(bottom),
+                fmt_tl(right),
+                fmt_tl(bottom),
+                fmt_tl(right),
+                fmt_tl(y + NOTE_FOLD),
+                fmt_tl(fold_x),
+                fmt_tl(y),
+                fmt_tl(x + base_x + 2.0 * delta),
+                fmt_tl(y),
+                fmt_tl(tip_x),
+                fmt_tl(tip_y),
+                fmt_tl(x + base_x),
+                fmt_tl(y),
+                fmt_tl(x),
+                fmt_tl(y),
+                fmt_tl(x),
+                fmt_tl(y),
+            )
+        }
+    };
+
+    write!(
+        svg,
+        r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}"><path d="{}" fill="{}" style="stroke:{};stroke-width:0.5;"/><path d="M{},{} L{},{} L{},{} L{},{}" fill="{}" style="stroke:{};stroke-width:0.5;"/>"#,
+        escape_xml(qualified_name),
+        note.source_line,
+        entity_id,
+        path,
+        NOTE_FILL,
+        BORDER_COLOR,
+        fmt_tl(fold_x),
+        fmt_tl(y),
+        fmt_tl(fold_x),
+        fmt_tl(y + NOTE_FOLD),
+        fmt_tl(right),
+        fmt_tl(y + NOTE_FOLD),
+        fmt_tl(fold_x),
+        fmt_tl(y),
+        NOTE_FILL,
+        BORDER_COLOR,
+    )
+    .unwrap();
+    let mut line_top = y + NOTE_PAD_Y;
+    for line in note.text.lines() {
+        text_render::emit_text(
+            svg,
+            line,
+            &TextBase {
+                x: x + NOTE_PAD_X,
+                y: line_top + text_render::label_ascent(line, NOTE_FONT_SIZE),
+                font_size: NOTE_FONT_SIZE as u32,
+                font_family: "sans-serif",
+                fill: "#000000",
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        line_top += text_render::label_height(line, NOTE_FONT_SIZE);
+    }
+    svg.push_str("</g>");
 }
 
 fn link_base(link_end: &str) -> &str {
@@ -1746,6 +2204,33 @@ mod tests {
         let svg = crate::render_svg(&diagram);
         assert!(svg.contains("Car"));
         assert!(svg.contains("Bike"));
+    }
+
+    #[test]
+    fn attached_notes_render_renamed_mixed_side_components() {
+        let input = r#"@startuml
+object RenamedAlpha {
+  code = 17
+}
+object RenamedBeta {
+  ready = true
+}
+object RenamedGamma {
+  owner = "team"
+}
+note left of RenamedAlpha : Left callout
+note right of RenamedBeta : Right callout
+note top of RenamedGamma : Top callout
+@enduml"#;
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        assert_eq!(svg.matches(r##"fill="#FEFFDD""##).count(), 6);
+        assert!(svg.contains(r#"data-qualified-name="GMN5""#));
+        assert!(svg.contains(r#"data-qualified-name="GMN8""#));
+        assert!(svg.contains(r#"data-qualified-name="GMN11""#));
+        assert!(svg.contains("Left callout"));
+        assert!(svg.contains("Right callout"));
+        assert!(svg.contains("Top callout"));
     }
 
     #[test]

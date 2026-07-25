@@ -407,11 +407,11 @@ impl ObjectParser {
             LazyLock::new(|| Regex::new(r#"^note\s+"([^"]+)"\s+as\s+(\w+)\s*$"#).unwrap());
         // note right/left/top/bottom of X : text
         static RE_ATTACHED: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^note\s+(?:right|left|top|bottom)\s+of\s+(\w+)\s*:\s*(.+)$").unwrap()
+            Regex::new(r"^note\s+(right|left|top|bottom)\s+of\s+(\w+)\s*:\s*(.+)$").unwrap()
         });
         // note right : text  (shorthand without "of X", attaches to last object)
         static RE_SHORTHAND: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^note\s+(?:right|left|top|bottom)\s*:\s*(.+)$").unwrap());
+            LazyLock::new(|| Regex::new(r"^note\s+(right|left|top|bottom)\s*:\s*(.+)$").unwrap());
 
         if let Some(caps) = RE_FLOATING.captures(line) {
             let text = caps[1].replace("\\n", "\n");
@@ -419,27 +419,35 @@ impl ObjectParser {
             self.notes.push(ObjectNote {
                 id: Some(id),
                 target: None,
+                position: None,
                 text,
+                source_line: self.current_line,
             });
             return true;
         }
         if let Some(caps) = RE_ATTACHED.captures(line) {
-            let target = caps[1].to_string();
-            let text = caps[2].trim().to_string();
+            let position = parse_object_note_position(&caps[1]);
+            let target = caps[2].to_string();
+            let text = caps[3].trim().replace("\\n", "\n");
             self.notes.push(ObjectNote {
                 id: None,
                 target: Some(target),
+                position: Some(position),
                 text,
+                source_line: self.current_line,
             });
             return true;
         }
         if let Some(caps) = RE_SHORTHAND.captures(line) {
-            let text = caps[1].trim().to_string();
+            let position = parse_object_note_position(&caps[1]);
+            let text = caps[2].trim().replace("\\n", "\n");
             let target = self.objects.last().map(|o| o.id.clone());
             self.notes.push(ObjectNote {
                 id: None,
                 target,
+                position: Some(position),
                 text,
+                source_line: self.current_line,
             });
             return true;
         }
@@ -536,6 +544,16 @@ fn parse_object_link_kind(connector: &str) -> ObjectLinkKind {
     }
 }
 
+fn parse_object_note_position(position: &str) -> ObjectNotePosition {
+    match position {
+        "top" => ObjectNotePosition::Top,
+        "bottom" => ObjectNotePosition::Bottom,
+        "left" => ObjectNotePosition::Left,
+        "right" => ObjectNotePosition::Right,
+        _ => unreachable!("object-note regex restricts position"),
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -590,7 +608,23 @@ mod tests {
         assert_eq!(d.objects[0].id, "Server");
         assert_eq!(d.notes.len(), 1);
         assert_eq!(d.notes[0].id.as_deref(), Some("N1"));
+        assert_eq!(d.notes[0].source_line, 2);
         assert_eq!(d.links.len(), 1);
+    }
+
+    #[test]
+    fn attached_notes_preserve_side_target_and_source_line() {
+        let d = parse(
+            "object Alpha\nobject Beta\nnote left of Alpha : first\\nline\nnote bottom : second",
+        );
+        assert_eq!(d.notes.len(), 2);
+        assert_eq!(d.notes[0].target.as_deref(), Some("Alpha"));
+        assert_eq!(d.notes[0].position, Some(ObjectNotePosition::Left));
+        assert_eq!(d.notes[0].text, "first\nline");
+        assert_eq!(d.notes[0].source_line, 3);
+        assert_eq!(d.notes[1].target.as_deref(), Some("Beta"));
+        assert_eq!(d.notes[1].position, Some(ObjectNotePosition::Bottom));
+        assert_eq!(d.notes[1].source_line, 4);
     }
 
     #[test]
