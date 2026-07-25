@@ -1812,6 +1812,9 @@ struct ClassFontOverrides {
     /// `skinparam classBorderColor` raw value — the entity border/separator
     /// stroke colour, applied when no per-entity style overrides it.
     border_color: Option<String>,
+    /// PlantUML `EntityImageClass` passes the style `RoundCorner` diameter to
+    /// `URectangle.rounded`; `DriverRectangleSvg` emits half of it as rx/ry.
+    round_corner: f64,
     /// Flattened root style values from `<style> root { ... }`. PlantUML
     /// applies the root line colour to visibility modifiers and the root font
     /// colour to the circled-character glyph.
@@ -1915,6 +1918,10 @@ impl ClassFontOverrides {
             header_background: find(&["classHeaderBackgroundColor"]),
             class_background: find(&["classBackgroundColor"]),
             border_color: find(&["classBorderColor"]),
+            round_corner: find(&["classRoundCorner"])
+                .or_else(|| find(&["roundCorner"]))
+                .and_then(|v| v.trim().parse::<f64>().ok())
+                .unwrap_or(5.0),
             root_line_color: find(&["__styleRootLineColor"]),
             root_font_color: find(&["__styleRootFontColor"]).or(default_font_color),
             stereotype_c_background: find(&["stereotypeCBackgroundColor"]).or_else(|| {
@@ -3818,8 +3825,9 @@ fn render_entity_content(
         None => format!("stroke:{};stroke-width:{};", border_col, BORDER_WIDTH),
     };
     let style = oracle_style.unwrap_or(style_default.as_str());
-    let rx_str = oracle_rx.unwrap_or("2.5");
-    let ry_str = oracle_ry.unwrap_or("2.5");
+    let no_oracle_corner_radius = fmt4(font.round_corner / 2.0);
+    let rx_str = oracle_rx.unwrap_or(&no_oracle_corner_radius);
+    let ry_str = oracle_ry.unwrap_or(&no_oracle_corner_radius);
     // `skinparam shadowing true` adds a `filter="url(#...)"` drop-shadow to the
     // background rect. The oracle captures the attribute (and its def lives in
     // the spliced `defs_inner_xml`); echo the id reference so the shape points
@@ -8148,6 +8156,18 @@ mod tests {
             svg.contains(
                 r##"fill="#FFFFFF" rx="9" ry="9" style="stroke:#000000;stroke-width:1;""##
             ),
+            "{svg}"
+        );
+    }
+
+    #[test]
+    fn no_oracle_round_corner_uses_half_the_skinparam_diameter() {
+        let input = "@startuml\nskinparam roundcorner 34\nclass RenamedRoundedClass\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(
+            svg.contains(r##"<rect fill="#F1F1F1" height="48" rx="17" ry="17""##),
             "{svg}"
         );
     }
