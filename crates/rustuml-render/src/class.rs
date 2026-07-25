@@ -2985,16 +2985,17 @@ fn render_plantuml_svg(
                     + text_width,
             );
         }
-        // PlantUML formula: floor(max_extent) + 13 (= MARGIN + 6) for
-        // standalone entity bodies. Once SVEK links or clusters participate,
-        // Java `SvekResult.drawU` sizes from the full SVEK body envelope and
-        // keeps the same 15px trailing extent used by package cluster bodies.
-        let extent_pad = if cluster_positions.is_empty() {
-            if diagram.relationships.is_empty() && attached_notes.is_empty() {
-                13
-            } else {
-                PACKAGE_CANVAS_EXTENT_PAD
-            }
+        // Java `GraphvizImageBuilder.buildImage` selects
+        // `EntityImageDegenerated` only when
+        // `DotData.isDegeneratedWithFewEntities(1)` reports zero groups, zero
+        // links, and exactly one leaf. Every other graph is a `SvekResult`,
+        // whose `calculateDimension` adds 15px to the measured body envelope.
+        let uses_degenerated_entity = cluster_positions.is_empty()
+            && diagram.relationships.is_empty()
+            && attached_notes.is_empty()
+            && diagram.entities.len() == 1;
+        let extent_pad = if uses_degenerated_entity {
+            13
         } else {
             PACKAGE_CANVAS_EXTENT_PAD
         };
@@ -9404,6 +9405,29 @@ mod tests {
         assert!(title_2_y < decorated_y);
         assert!(decorated_y < caption_y);
         assert!(caption_y < footer_y);
+    }
+
+    #[test]
+    fn no_oracle_multi_leaf_canvas_uses_svek_result_envelope() {
+        let input = "@startuml\n\
+            annotation AuditStamp731 {\n\
+              +String token()\n\
+              +long revision() default 7\n\
+            }\n\
+            class LedgerEntry743 <<AuditStamp731>> {\n\
+              +UUID identifier\n\
+              +void archive()\n\
+            }\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Live PlantUML beta: `GraphvizImageBuilder.buildImage` sends this
+        // two-leaf graph through `SvekResult.calculateDimension`.
+        assert!(
+            svg.contains(r#"style="width:384px;height:111px;background:#FFFFFF;""#),
+            "{svg}"
+        );
     }
 
     #[test]
