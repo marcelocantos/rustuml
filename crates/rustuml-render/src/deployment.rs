@@ -3501,6 +3501,14 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
             })
         })
         .unwrap_or(content_w + BODY_RIGHT_MARGIN);
+    let total_w = deployment_edge_label_x_bounds(diagram, result.as_ref())
+        .map(|(_, max_x)| {
+            // Java `SvekResult.calculateDimension` measures the complete
+            // `SvekEdge`, including the one-pixel-margined center-label box,
+            // with `LimitFinder` before adding its fixed dimension delta.
+            total_w.max(max_x + body_margin_x + SVEK_DIMENSION_DELTA)
+        })
+        .unwrap_or(total_w);
     let total_h = y_frame
         .map(|frame| frame.painted_max_y + frame.margin + SVEK_DIMENSION_DELTA)
         .or_else(|| {
@@ -4099,6 +4107,26 @@ fn deployment_body_x_frame(
         painted_min_x = painted_min_x.min(x);
         painted_max_x = painted_max_x.max(x + note_dims[note_index].width);
     }
+    if let Some((min_x, max_x)) = deployment_edge_label_x_bounds(diagram, Some(result)) {
+        painted_min_x = painted_min_x.min(min_x);
+        painted_max_x = painted_max_x.max(max_x);
+    }
+    painted_min_x.is_finite().then_some(DeploymentXFrame {
+        // `LimitFinder.drawUPolygon` expands polygon bounds by 10px on both
+        // horizontal sides; `SvekResult.calculateDimension` then calls
+        // `moveDelta(6 - minX, 6 - minY)`.
+        margin: SVEK_ENVELOPE_ORIGIN - painted_min_x,
+        painted_max_x,
+    })
+}
+
+fn deployment_edge_label_x_bounds(
+    diagram: &DeploymentDiagram,
+    result: Option<&LayoutResult>,
+) -> Option<(f64, f64)> {
+    let result = result?;
+    let mut painted_min_x = f64::INFINITY;
+    let mut painted_max_x = f64::NEG_INFINITY;
     for conn in &diagram.connections {
         let Some(label_text) = conn.label.as_deref() else {
             continue;
@@ -4107,7 +4135,10 @@ fn deployment_body_x_frame(
         let Some(label) = result
             .edge_paths
             .iter()
-            .find(|edge| edge.from == layout_from && edge.to == layout_to)
+            .find(|edge| {
+                deployment_layout_endpoint_matches(&edge.from, layout_from)
+                    && deployment_layout_endpoint_matches(&edge.to, layout_to)
+            })
             .and_then(|edge| edge.label)
         else {
             continue;
@@ -4119,13 +4150,16 @@ fn deployment_body_x_frame(
         painted_min_x = painted_min_x.min(x);
         painted_max_x = painted_max_x.max(x + text_render::measure(label_text, 13.0, false) + 2.0);
     }
-    painted_min_x.is_finite().then_some(DeploymentXFrame {
-        // `LimitFinder.drawUPolygon` expands polygon bounds by 10px on both
-        // horizontal sides; `SvekResult.calculateDimension` then calls
-        // `moveDelta(6 - minX, 6 - minY)`.
-        margin: SVEK_ENVELOPE_ORIGIN - painted_min_x,
-        painted_max_x,
-    })
+    painted_min_x
+        .is_finite()
+        .then_some((painted_min_x, painted_max_x))
+}
+
+fn deployment_layout_endpoint_matches(layout_endpoint: &str, logical_endpoint: &str) -> bool {
+    layout_endpoint == logical_endpoint
+        || layout_endpoint
+            .strip_prefix("__svek_group_endpoint_")
+            .is_some_and(|endpoint| endpoint == logical_endpoint)
 }
 
 fn deployment_local_painted_x_bounds(node: &DeploymentNode, dim: &DeploymentNodeDim) -> (f64, f64) {
@@ -4887,6 +4921,31 @@ mod tests {
             "{svg}"
         );
         assert!(svg.contains(">elongated transport 257</text>"));
+    }
+
+    #[test]
+    fn no_oracle_cluster_edge_label_box_extends_painted_x_envelope() {
+        let source = "@startuml\n\
+            node NorthGate401 {\n\
+              artifact Parcel409\n\
+            }\n\
+            node SouthGate419 {\n\
+              artifact Record421\n\
+            }\n\
+            NorthGate401 --> SouthGate419 : sync431\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+
+        let svg = render(&diagram, &Theme::default());
+
+        assert!(
+            svg.contains(r#"style="width:252px;height:318px;background:#FFFFFF;""#),
+            "{svg}"
+        );
+        assert!(svg.contains(">sync431</text>"));
     }
 
     #[test]
