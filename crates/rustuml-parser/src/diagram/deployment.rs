@@ -7,6 +7,8 @@ use serde::{Deserialize, Serialize};
 
 use super::DiagramMeta;
 
+pub const DEFAULT_DEPLOYMENT_LINK_LENGTH: usize = 2;
+
 #[derive(Debug, Serialize, Deserialize)]
 pub struct DeploymentDiagram {
     pub meta: DiagramMeta,
@@ -81,9 +83,39 @@ pub struct DeploymentConnection {
     pub label: Option<String>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub direction: Option<DeploymentLinkDirection>,
+    #[serde(default, skip_serializing_if = "DeploymentLinkStyle::is_solid")]
+    pub style: DeploymentLinkStyle,
+    #[serde(
+        default = "default_deployment_link_length",
+        skip_serializing_if = "deployment_link_length_is_default"
+    )]
+    pub length: usize,
     /// 1-based line number within the `@startuml` block.
     #[serde(default)]
     pub source_line: usize,
+}
+
+fn default_deployment_link_length() -> usize {
+    DEFAULT_DEPLOYMENT_LINK_LENGTH
+}
+
+fn deployment_link_length_is_default(length: &usize) -> bool {
+    *length == DEFAULT_DEPLOYMENT_LINK_LENGTH
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
+pub enum DeploymentLinkStyle {
+    #[default]
+    Solid,
+    Dashed,
+    Dotted,
+    Bold,
+}
+
+impl DeploymentLinkStyle {
+    fn is_solid(&self) -> bool {
+        *self == Self::Solid
+    }
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]

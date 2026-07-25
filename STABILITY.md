@@ -10,8 +10,8 @@ bump. The pre-1.0 period exists to get these right.
 *Snapshot as of v0.7.0*
 
 Parity claims in this document use the no-oracle product tier, not the
-oracle-assisted strict tier. The current no-oracle baseline is 7,528/11,251
-eligible SVG goldens (66.9%). The strict tier passes 11,130/11,251 eligible SVG
+oracle-assisted strict tier. The current no-oracle baseline is 7,625/11,251
+eligible SVG goldens (67.8%). The strict tier passes 11,130/11,251 eligible SVG
 goldens but uses test-only oracle layout extraction. The 1,199 Java
 PlantUML error-page goldens are skipped by both tiers and are not counted as
 passes.
@@ -64,8 +64,8 @@ passes.
 |------|-----------|
 | Sequence, Activity | Needs review — high no-oracle coverage, still not exact |
 | Timing, Gantt, Mindmap, WBS, Salt, Nwdiag, Regex, EBNF, DOT, Git, Math | Needs review — exact on the current no-oracle baseline |
-| Class, Deployment, Use Case, Object, JSON/YAML | Fluid — partial no-oracle coverage |
-| Archimate, State, Component, ER (crow's foot notation) | Fluid — no current no-oracle passes |
+| Class, Component, Deployment, Use Case, Object, JSON/YAML | Fluid — partial no-oracle coverage |
+| Archimate, State, ER (crow's foot notation) | Fluid — minimal or no current no-oracle coverage |
 | Board | Fluid — no eligible SVG goldens in the no-oracle baseline |
 | Ditaa | Fluid — excluded from SVG parity tiers pending a raster comparator |
 

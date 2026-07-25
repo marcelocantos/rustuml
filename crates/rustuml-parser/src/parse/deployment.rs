@@ -153,23 +153,27 @@ fn process_label(raw: &str) -> String {
     raw.replace("\\n", "\n")
 }
 
+struct ParsedDeploymentConnection {
+    raw_from: String,
+    raw_to: String,
+    label: Option<String>,
+    direction: Option<DeploymentLinkDirection>,
+    style: DeploymentLinkStyle,
+    length: usize,
+}
+
 /// Try to parse a connection from a trimmed line.
 /// Handles:
 ///   - `from_id --> to_id : label`
 ///   - `"From Label" --> "To Label" : label`
 ///   - `keyword "From Label" --> to_id : label`  (uses keyword as FROM id)
 ///
-/// The arrow is any combination of `-`, `.`, `<`, `>`, `|` characters (2+ chars).
-/// Returns `(raw_from, raw_to, label, direction)` on success.
+/// The arrow is any combination of `-`, `.`, `~`, `=`, `<`, `>`, `|`
+/// characters (2+ chars).
 fn try_parse_connection(
     trimmed: &str,
     keyword_set: &HashSet<&str>,
-) -> Option<(
-    String,
-    String,
-    Option<String>,
-    Option<DeploymentLinkDirection>,
-)> {
+) -> Option<ParsedDeploymentConnection> {
     let rest = trimmed;
 
     // Check if the line starts with a deployment keyword followed by a quoted label
@@ -190,13 +194,13 @@ fn try_parse_connection(
                         let after_label = after_open_quote[close_quote + 1..].trim_start();
                         // Check if what follows is an arrow.
                         let arrow_end = after_label
-                            .find(|c: char| !matches!(c, '-' | '.' | '<' | '>' | '|'))
+                            .find(|c: char| !matches!(c, '-' | '.' | '~' | '=' | '<' | '>' | '|'))
                             .unwrap_or(after_label.len());
                         if arrow_end >= 2 {
                             let arrow = &after_label[..arrow_end];
-                            // A valid arrow must have a shaft character (`-` or `.`).
+                            // A valid arrow must have a shaft character.
                             // Pure `<<` is a stereotype opener, not an arrow.
-                            if arrow.chars().any(|c| matches!(c, '-' | '.')) {
+                            if arrow.chars().any(|c| matches!(c, '-' | '.' | '~' | '=')) {
                                 // keyword "label" ARROW target — use keyword as FROM.
                                 let after_arrow = after_label[arrow_end..].trim_start();
                                 let (raw_to, after_to) = parse_endpoint(after_arrow)?;
@@ -209,12 +213,14 @@ fn try_parse_connection(
                                 } else {
                                     return None;
                                 };
-                                return Some((
-                                    kw.to_string(),
-                                    raw_to.to_string(),
+                                return Some(ParsedDeploymentConnection {
+                                    raw_from: kw.to_string(),
+                                    raw_to: raw_to.to_string(),
                                     label,
-                                    deployment_link_direction(arrow),
-                                ));
+                                    direction: deployment_link_direction(arrow),
+                                    style: deployment_link_style(arrow),
+                                    length: deployment_link_length(arrow),
+                                });
                             }
                         }
                     }
@@ -227,23 +233,22 @@ fn try_parse_connection(
     let (raw_from, after_from) = parse_endpoint(rest)?;
     let after_from = after_from.trim_start();
 
-    // Parse arrow: one or more of `-`, `.`, `<`, `>`, `|`, optionally with
+    // Parse arrow: one or more shaft/decor characters, optionally with
     // an embedded direction keyword `-down-`, `-up-`, `-left-`, `-right-`
-    // (PlantUML uses these to hint layout direction; semantically equivalent
-    // to a plain dashed arrow for our purposes).
+    // (PlantUML uses these to hint layout direction).
     let arrow_end = {
         let bytes = after_from.as_bytes();
         let mut i = 0;
         while i < bytes.len() {
             let c = bytes[i] as char;
-            if matches!(c, '-' | '.' | '<' | '>' | '|') {
+            if matches!(c, '-' | '.' | '~' | '=' | '<' | '>' | '|') {
                 i += 1;
             } else if matches!(c, 'd' | 'u' | 'l' | 'r')
                 && i > 0
-                && matches!(bytes[i - 1] as char, '-' | '.')
+                && matches!(bytes[i - 1] as char, '-' | '.' | '~' | '=')
             {
                 // Look for `down`, `up`, `left`, `right` followed by another
-                // shaft char (`-` or `.`).
+                // shaft character.
                 let rest = &after_from[i..];
                 let kw_len = ["down", "up", "left", "right"]
                     .iter()
@@ -252,7 +257,7 @@ fn try_parse_connection(
                     .unwrap_or(0);
                 if kw_len > 0
                     && i + kw_len < bytes.len()
-                    && matches!(bytes[i + kw_len] as char, '-' | '.')
+                    && matches!(bytes[i + kw_len] as char, '-' | '.' | '~' | '=')
                 {
                     i += kw_len;
                 } else {
@@ -269,9 +274,9 @@ fn try_parse_connection(
         return None;
     }
     let arrow = &after_from[..arrow_end];
-    // Must contain at least one shaft character (`-` or `.`).
+    // Must contain at least one shaft character.
     // Pure `<<...>>` is a stereotype, not an arrow.
-    if !arrow.chars().any(|c| matches!(c, '-' | '.')) {
+    if !arrow.chars().any(|c| matches!(c, '-' | '.' | '~' | '=')) {
         return None;
     }
     let after_arrow = after_from[arrow_end..].trim_start();
@@ -291,12 +296,14 @@ fn try_parse_connection(
         return None;
     };
 
-    Some((
-        raw_from.to_string(),
-        raw_to.to_string(),
+    Some(ParsedDeploymentConnection {
+        raw_from: raw_from.to_string(),
+        raw_to: raw_to.to_string(),
         label,
-        deployment_link_direction(arrow),
-    ))
+        direction: deployment_link_direction(arrow),
+        style: deployment_link_style(arrow),
+        length: deployment_link_length(arrow),
+    })
 }
 
 fn deployment_link_direction(arrow: &str) -> Option<DeploymentLinkDirection> {
@@ -308,6 +315,26 @@ fn deployment_link_direction(arrow: &str) -> Option<DeploymentLinkDirection> {
     ]
     .into_iter()
     .find_map(|(keyword, direction)| arrow.contains(keyword).then_some(direction))
+}
+
+fn deployment_link_style(arrow: &str) -> DeploymentLinkStyle {
+    // Java `CommandLinkElement.getLinkType` inspects the combined shaft.
+    if arrow.contains('.') {
+        DeploymentLinkStyle::Dashed
+    } else if arrow.contains('~') {
+        DeploymentLinkStyle::Dotted
+    } else if arrow.contains('=') {
+        DeploymentLinkStyle::Bold
+    } else {
+        DeploymentLinkStyle::Solid
+    }
+}
+
+fn deployment_link_length(arrow: &str) -> usize {
+    arrow
+        .chars()
+        .filter(|character| matches!(character, '-' | '.' | '~' | '='))
+        .count()
 }
 
 /// Accumulator for multiline note bodies.
@@ -568,9 +595,15 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
         if keyword_set.contains(first_word) {
             // Check if this is a connection line (keyword "label" --> ...)
             // before treating it as a pure node declaration.
-            if let Some((raw_from, raw_to, label, direction)) =
-                try_parse_connection(trimmed, &keyword_set)
-            {
+            if let Some(parsed) = try_parse_connection(trimmed, &keyword_set) {
+                let ParsedDeploymentConnection {
+                    raw_from,
+                    raw_to,
+                    label,
+                    direction,
+                    style,
+                    length,
+                } = parsed;
                 let from = resolve_id(&nodes, &raw_from);
                 let to = resolve_id(&nodes, &raw_to);
 
@@ -592,6 +625,8 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                     to,
                     label,
                     direction,
+                    style,
+                    length,
                     source_line: current_line,
                 });
                 continue;
@@ -665,9 +700,15 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
         }
 
         // Connection line (bare identifiers or quoted labels).
-        if let Some((raw_from, raw_to, label, direction)) =
-            try_parse_connection(trimmed, &keyword_set)
-        {
+        if let Some(parsed) = try_parse_connection(trimmed, &keyword_set) {
+            let ParsedDeploymentConnection {
+                raw_from,
+                raw_to,
+                label,
+                direction,
+                style,
+                length,
+            } = parsed;
             let from = resolve_id(&nodes, &raw_from);
             let to = resolve_id(&nodes, &raw_to);
 
@@ -691,6 +732,8 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                 to,
                 label,
                 direction,
+                style,
+                length,
                 source_line: current_line,
             });
         }
@@ -791,6 +834,27 @@ mod tests {
                 Some(DeploymentLinkDirection::Down),
             ]
         );
+    }
+
+    #[test]
+    fn preserves_link_shaft_styles() {
+        let diagram = parse("node A\nnode B\nA --> B\nA -right.> B\nA ~~> B\nA ==> B\nA ....> B");
+
+        assert_eq!(
+            diagram
+                .connections
+                .iter()
+                .map(|connection| connection.style)
+                .collect::<Vec<_>>(),
+            vec![
+                DeploymentLinkStyle::Solid,
+                DeploymentLinkStyle::Dashed,
+                DeploymentLinkStyle::Dotted,
+                DeploymentLinkStyle::Bold,
+                DeploymentLinkStyle::Dashed,
+            ]
+        );
+        assert_eq!(diagram.connections.last().unwrap().length, 4);
     }
 
     #[test]

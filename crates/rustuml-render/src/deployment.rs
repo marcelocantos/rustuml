@@ -11,7 +11,9 @@
 use std::collections::{HashMap, HashSet};
 use std::fmt::Write as _;
 
-use rustuml_layout::graph::{Direction, EdgeLabelSize, EdgePath, LayoutGraph, LayoutResult};
+use rustuml_layout::graph::{
+    ClusterTitleSize, Direction, EdgeLabelSize, EdgePath, LayoutGraph, LayoutResult,
+};
 use rustuml_parser::diagram::deployment::*;
 
 use crate::handwritten::{
@@ -2916,7 +2918,35 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
                 .get(&node.id)
                 .filter(|parent| cluster_ids.contains(parent.as_str()))
                 .map(String::as_str);
-            layout.add_cluster(&node.id, &node.label, parent);
+            let title_width = text_render::measure_no_underline(&node.label, FONT_SIZE, true);
+            let title_height = text_render::label_height(&node.label, FONT_SIZE);
+            let (stereotype_width, stereotype_height) = node
+                .stereotype
+                .as_deref()
+                .map(|stereotype| {
+                    let text = format!("\u{00AB}{stereotype}\u{00BB}");
+                    (
+                        text_render::measure_no_underline(&text, FONT_SIZE, false),
+                        text_render::label_height(&text, FONT_SIZE),
+                    )
+                })
+                .unwrap_or((0.0, 0.0));
+            let (shape_width, shape_height) = match node.kind {
+                DeploymentNodeKind::Node => (60.0, 5.0),
+                DeploymentNodeKind::Database => (0.0, 15.0),
+                _ => (0.0, 0.0),
+            };
+            // Java `ClusterHeader` merges stereotype/title dimensions and
+            // adds the USymbol supplement before `ClusterDotString` emits the
+            // hidden fixed-size title table.
+            layout.add_svek_cluster(
+                &node.id,
+                parent,
+                ClusterTitleSize {
+                    width: title_width.max(stereotype_width) + shape_width,
+                    height: title_height + stereotype_height + shape_height,
+                },
+            );
         }
     }
     for node in &diagram.nodes {
@@ -2929,6 +2959,7 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
             layout.add_cluster_node(parent, &node.id);
         }
     }
+    add_deployment_magma_constraints(&mut layout, diagram, &parent_of, &cluster_ids);
     for conn in &diagram.connections {
         if !cluster_ids.contains(conn.from.as_str()) && !cluster_ids.contains(conn.to.as_str()) {
             let (layout_from, layout_to, _) = deployment_connection_layout(conn);
@@ -2946,18 +2977,27 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
                 None,
                 match conn.direction {
                     Some(DeploymentLinkDirection::Left | DeploymentLinkDirection::Right) => Some(0),
-                    Some(DeploymentLinkDirection::Up | DeploymentLinkDirection::Down) => Some(1),
-                    None => None,
+                    // `CommandLinkElement` stores the shaft's character count
+                    // in `LinkArg`; `SvekEdge.appendLine` emits length - 1.
+                    Some(DeploymentLinkDirection::Up | DeploymentLinkDirection::Down) | None => {
+                        Some(conn.length.saturating_sub(1))
+                    }
                 },
             );
         }
     }
 
     let result = layout.layout_full(LAYOUT_TIMEOUT);
-    let body_margin_y = deployment_body_margin_y(diagram, &dims, result.as_ref());
+    let cluster_frame = deployment_cluster_frame(diagram, result.as_ref());
+    let y_frame = deployment_body_y_frame(diagram, &dims, result.as_ref());
+    let body_margin_y = cluster_frame
+        .map(|frame| frame.margin_y)
+        .or_else(|| y_frame.map(|frame| frame.margin))
+        .unwrap_or_else(|| deployment_body_margin_y(diagram, &dims, result.as_ref()));
     let x_frame = deployment_body_x_frame(diagram, &dims, result.as_ref());
     let body_margin_x = x_frame
         .map(|frame| frame.margin)
+        .or_else(|| cluster_frame.map(|frame| frame.margin_x))
         .unwrap_or(BODY_FALLBACK_MARGIN_X);
     let (rects, content_w, content_h) = layout_deployment_rects(
         diagram,
@@ -2970,7 +3010,10 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
         .map(|frame| frame.painted_max_x + frame.margin + SVEK_DIMENSION_DELTA)
         .unwrap_or(content_w + BODY_RIGHT_MARGIN)
         .max(100.0);
-    let total_h = (content_h + BODY_BOTTOM_MARGIN).max(50.0);
+    let total_h = y_frame
+        .map(|frame| frame.painted_max_y + frame.margin + SVEK_DIMENSION_DELTA)
+        .unwrap_or(content_h + BODY_BOTTOM_MARGIN)
+        .max(50.0);
 
     let mut oracle = OracleLayout::default();
     let qnames = deployment_qnames(diagram, &parent_of);
@@ -3058,6 +3101,64 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
     svg.finalize_plantuml()
 }
 
+fn add_deployment_magma_constraints(
+    layout: &mut LayoutGraph,
+    diagram: &DeploymentDiagram,
+    parent_of: &HashMap<String, String>,
+    cluster_ids: &HashSet<&str>,
+) {
+    let linked: HashSet<&str> = diagram
+        .connections
+        .iter()
+        .flat_map(|connection| [connection.from.as_str(), connection.to.as_str()])
+        .collect();
+    let add_group = |layout: &mut LayoutGraph, members: Vec<&str>| {
+        if members.len() < 3 {
+            return;
+        }
+        // Java `CucaDiagram.applySingleStrategy` delegates standalone
+        // entities to `Magma.putInSquare` / `SquareMaker.putInSquare`.
+        let branch = (members.len() as f64).sqrt().ceil() as usize;
+        let mut head = 0;
+        for index in 1..members.len() {
+            if index - head == branch {
+                layout.add_edge_with_minlen(members[head], members[index], None, 1);
+                head = index;
+            } else {
+                layout.add_edge_with_minlen(members[index - 1], members[index], None, 0);
+            }
+        }
+    };
+
+    let root_members = diagram
+        .nodes
+        .iter()
+        .filter(|node| {
+            !cluster_ids.contains(node.id.as_str())
+                && !parent_of.contains_key(&node.id)
+                && !linked.contains(node.id.as_str())
+        })
+        .map(|node| node.id.as_str())
+        .collect();
+    add_group(layout, root_members);
+
+    for container in diagram
+        .nodes
+        .iter()
+        .filter(|node| cluster_ids.contains(node.id.as_str()))
+    {
+        let members = container
+            .children
+            .iter()
+            .filter(|child| {
+                !cluster_ids.contains(child.as_str()) && !linked.contains(child.as_str())
+            })
+            .map(String::as_str)
+            .collect();
+        add_group(layout, members);
+    }
+}
+
 struct DeploymentNodeDim {
     width: f64,
     height: f64,
@@ -3126,7 +3227,12 @@ fn deployment_node_dim(
             label_width.max(stereo_width) + 2.0 * text_x_pad + 10.0
         }
         DeploymentNodeKind::Cloud => label_width.max(stereo_width) + 2.0 * CLOUD_MARGIN,
-        DeploymentNodeKind::Queue => label_width.max(stereo_width) + 25.0,
+        // `USymbolFolder.asSmall` keeps a hidden 40x15 title box when
+        // `showTitle` is false, then adds `Margin(10, 20, 13, 10)`.
+        DeploymentNodeKind::Folder => 40.0_f64.max(label_width).max(stereo_width) + 30.0,
+        // `USymbolQueue.asSmall` adds `Margin(5, 15, 5, 5)` around the
+        // vertically merged stereotype and label.
+        DeploymentNodeKind::Queue => label_width.max(stereo_width) + 20.0,
         _ => label_width.max(stereo_width) + 2.0 * text_x_pad,
     };
     let height = match node.kind {
@@ -3134,6 +3240,8 @@ fn deployment_node_dim(
         // `USymbolDatabase.asSmall` adds 29px around the merged text block:
         // 10px top lip, 10px lower cap, and the title spacing between them.
         DeploymentNodeKind::Database => line_count as f64 * TEXT_LINE_H + 29.0,
+        DeploymentNodeKind::Folder => 15.0 + line_count as f64 * TEXT_LINE_H + 13.0 + 10.0,
+        DeploymentNodeKind::Queue => line_count as f64 * TEXT_LINE_H + 10.0,
         _ => {
             top_pad
                 + (line_count.saturating_sub(1)) as f64 * TEXT_LINE_H
@@ -3201,15 +3309,65 @@ fn deployment_body_margin_y(
 }
 
 fn deployment_local_painted_y_min(kind: DeploymentNodeKind, dim: &DeploymentNodeDim) -> f64 {
+    deployment_local_painted_y_bounds(kind, dim).0
+}
+
+#[derive(Clone, Copy)]
+struct DeploymentYFrame {
+    margin: f64,
+    painted_max_y: f64,
+}
+
+fn deployment_body_y_frame(
+    diagram: &DeploymentDiagram,
+    dims: &[DeploymentNodeDim],
+    result: Option<&LayoutResult>,
+) -> Option<DeploymentYFrame> {
+    let result = result?;
+    if diagram.nodes.iter().any(|node| !node.children.is_empty()) {
+        return None;
+    }
+
+    let mut painted_min_y = f64::INFINITY;
+    let mut painted_max_y = f64::NEG_INFINITY;
+    for ((node, dim), position) in diagram.nodes.iter().zip(dims).zip(&result.node_positions) {
+        let y = (position.y * 100.0).round() / 100.0;
+        let (local_min_y, local_max_y) = deployment_local_painted_y_bounds(node.kind, dim);
+        painted_min_y = painted_min_y.min(y + local_min_y);
+        painted_max_y = painted_max_y.max(y + local_max_y);
+    }
+    (painted_min_y.is_finite() && painted_max_y.is_finite()).then_some(DeploymentYFrame {
+        // `SvekResult.calculateDimension` moves the `LimitFinder` minimum to
+        // six, then adds its 15px dimension delta after the painted maximum.
+        margin: SVEK_ENVELOPE_ORIGIN - painted_min_y,
+        painted_max_y,
+    })
+}
+
+fn deployment_local_painted_y_bounds(
+    kind: DeploymentNodeKind,
+    dim: &DeploymentNodeDim,
+) -> (f64, f64) {
     use DeploymentNodeKind::*;
     match kind {
-        Artifact | Card | Rectangle | Agent | Component => -1.0,
-        Cloud => {
-            crate::cloud_shape::generate(dim.width, dim.height)
-                .min_xy()
-                .1
+        // `USymbolNode.drawNode` and `USymbolDatabase.drawDatabase` place a
+        // `UEmpty(10,10)` at the lower edge specifically for LimitFinder.
+        Node | Database => (0.0, dim.height + 10.0),
+        // `LimitFinder.drawRectangle` expands a rectangle by one pixel toward
+        // the top/left and ends one pixel before its declared lower edge.
+        Artifact | Card | Rectangle | Agent | Component | Frame | Storage => {
+            (-1.0, dim.height - 1.0)
         }
-        _ => 0.0,
+        Cloud => {
+            let (_, min_y, _, max_y) = crate::cloud_shape::generate(dim.width, dim.height).bounds();
+            (min_y, max_y)
+        }
+        // These Java symbols are painted as UPath/UPolygon outlines whose
+        // vertical bounds are exactly their declared image height.
+        Folder | Queue | File | Package | Stack => (0.0, dim.height),
+        // Preserve the established envelope for symbols whose Java primitive
+        // model has not yet been split out above.
+        _ => (0.0, dim.height + 10.0),
     }
 }
 
@@ -3217,6 +3375,55 @@ fn deployment_local_painted_y_min(kind: DeploymentNodeKind, dim: &DeploymentNode
 struct DeploymentXFrame {
     margin: f64,
     painted_max_x: f64,
+}
+
+#[derive(Clone, Copy)]
+struct DeploymentClusterFrame {
+    margin_x: f64,
+    margin_y: f64,
+}
+
+fn deployment_cluster_frame(
+    diagram: &DeploymentDiagram,
+    result: Option<&LayoutResult>,
+) -> Option<DeploymentClusterFrame> {
+    let result = result?;
+    if result.cluster_positions.is_empty() {
+        return None;
+    }
+    let parent_of = deployment_parent_map(diagram);
+    let mut required_dx = f64::NEG_INFINITY;
+    let mut required_dy = f64::NEG_INFINITY;
+    for node in diagram
+        .nodes
+        .iter()
+        .filter(|node| !node.children.is_empty() && !parent_of.contains_key(&node.id))
+    {
+        let Some(position) = result
+            .cluster_positions
+            .iter()
+            .find(|position| position.id == node.id)
+        else {
+            continue;
+        };
+        let (origin_x, origin_y) = match node.kind {
+            // `USymbolNode.drawNode` paints a polygon whose LimitFinder X
+            // bounds extend ten pixels beyond the visible cluster.
+            DeploymentNodeKind::Node => (16.0, SVEK_ENVELOPE_ORIGIN),
+            DeploymentNodeKind::Cloud => {
+                let (min_x, min_y) =
+                    crate::cloud_shape::generate(position.width, position.height).min_xy();
+                (SVEK_ENVELOPE_ORIGIN - min_x, SVEK_ENVELOPE_ORIGIN - min_y)
+            }
+            _ => (SVEK_ENVELOPE_ORIGIN, SVEK_ENVELOPE_ORIGIN),
+        };
+        required_dx = required_dx.max(origin_x - position.x);
+        required_dy = required_dy.max(origin_y - position.y);
+    }
+    (required_dx.is_finite() && required_dy.is_finite()).then_some(DeploymentClusterFrame {
+        margin_x: required_dx,
+        margin_y: required_dy,
+    })
 }
 
 fn deployment_body_x_frame(
@@ -3496,8 +3703,20 @@ fn render_no_oracle_edges(
             } else {
                 format!("{from_name}-to-{to_name}")
             };
+            // Java `SvekEdge.drawU` applies the stroke returned by
+            // `LinkType.getStroke3`; `LinkStyle` defines these dash patterns.
+            let path_style = match conn.style {
+                DeploymentLinkStyle::Solid => "stroke:#181818;stroke-width:1;",
+                DeploymentLinkStyle::Dashed => {
+                    "stroke:#181818;stroke-width:1;stroke-dasharray:7,7;"
+                }
+                DeploymentLinkStyle::Dotted => {
+                    "stroke:#181818;stroke-width:1;stroke-dasharray:1,3;"
+                }
+                DeploymentLinkStyle::Bold => "stroke:#181818;stroke-width:2;",
+            };
             svg.raw(&format!(
-                r#"<path d="{d}" fill="none" id="{path_id}" style="stroke:#181818;stroke-width:1;"/>"#,
+                r#"<path d="{d}" fill="none" id="{path_id}" style="{path_style}"/>"#,
             ));
         }
         if raw_points.len() >= 2 {
@@ -3675,6 +3894,76 @@ mod tests {
         assert!(svg.contains(r#"<g class="entity" data-qualified-name="N02""#));
         assert!(svg.contains(r#"<g class="link""#));
         assert!(!svg.contains(r#"<defs/><g></g>"#));
+    }
+
+    #[test]
+    fn no_oracle_container_uses_square_packing_and_folder_minimum() {
+        let source = "@startuml\n\
+            node \"Renamed Host 43\" {\n\
+              artifact \"Bundle 47\"\n\
+              artifact \"Config 53\"\n\
+              artifact \"Driver 59\"\n\
+              file \"Trace 61\"\n\
+              folder \"L7\"\n\
+            }\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+        let folder = diagram
+            .nodes
+            .iter()
+            .find(|node| node.kind == DeploymentNodeKind::Folder)
+            .unwrap();
+
+        let folder_dim = deployment_node_dim(folder, &diagram.meta.sprites);
+        assert_eq!(folder_dim.width, 70.0);
+
+        let svg = render(&diagram, &Theme::default());
+        assert!(svg.contains(r#"width="432px""#));
+        assert!(svg.contains(r#"height="240px""#));
+        assert!(svg.contains(r#"x="31.89" y="46""#));
+        assert!(svg.contains(r#"M158.5,145.49"#));
+        assert!(svg.contains(r#"data-qualified-name="Renamed Host 43.L7""#));
+    }
+
+    #[test]
+    fn no_oracle_long_dashed_link_preserves_style_and_rank_length() {
+        let source = "@startuml\n\
+            node \"Sender 71\" as Sender71\n\
+            node \"Receiver 73\" as Receiver73\n\
+            Sender71 ....> Receiver73\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+
+        let svg = render(&diagram, &Theme::default());
+
+        assert!(svg.contains(r#"height="305px""#));
+        assert!(svg.contains(r#"id="Sender71-to-Receiver73""#));
+        assert!(svg.contains(r#"stroke-dasharray:7,7;"#));
+    }
+
+    #[test]
+    fn no_oracle_cloud_queue_uses_painted_y_envelope() {
+        let source = "@startuml\n\
+            cloud \"Ingress 97\" as Ingress97\n\
+            queue \"Jobs 101\" as Jobs101\n\
+            Ingress97 --> Jobs101 : QUIC\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+
+        let svg = render(&diagram, &Theme::default());
+
+        assert!(svg.contains(r#"height="172px""#));
+        assert!(svg.contains(r#"data-qualified-name="Jobs101""#));
+        assert!(svg.contains(r#"id="Ingress97-to-Jobs101""#));
     }
 
     #[test]
