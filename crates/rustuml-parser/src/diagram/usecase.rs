@@ -115,6 +115,14 @@ pub struct UseCaseConnection {
     /// True when the relation token carries an arrow head (`>`).
     #[serde(default, skip_serializing_if = "is_false")]
     pub arrow: bool,
+    /// True when the relation token carries a hollow inheritance triangle
+    /// (`|>` or `<|`).
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub extension: bool,
+    /// True when a dependency or extension decoration points toward the first
+    /// endpoint (`<--` or `<|--`).
+    #[serde(default, skip_serializing_if = "is_false")]
+    pub arrow_at_start: bool,
     /// 1-based line number within the `@startuml` block.
     #[serde(default)]
     pub source_line: usize,

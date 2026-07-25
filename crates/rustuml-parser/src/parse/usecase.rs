@@ -623,6 +623,8 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                 stereotype,
                 dashed: arrow.contains('.'),
                 arrow: arrow.contains('>'),
+                extension: arrow.contains("|>") || arrow.contains("<|"),
+                arrow_at_start: arrow.contains('<'),
                 source_line: current_line,
             });
         } else if let Some(caps) = RE_PKG.captures(trimmed) {
@@ -731,6 +733,19 @@ mod tests {
         assert!(d.connections[0].arrow);
         // Label should be normalized to guillemets.
         assert_eq!(d.connections[0].label.as_deref(), Some("«include»"));
+    }
+
+    #[test]
+    fn inheritance_triangles_preserve_their_endpoint() {
+        let d = parse(
+            "actor Parent\nactor FirstChild\nactor SecondChild\nFirstChild --|> Parent\nParent <|-- SecondChild",
+        );
+        assert!(d.connections[0].extension);
+        assert!(d.connections[0].arrow);
+        assert!(!d.connections[0].arrow_at_start);
+        assert!(d.connections[1].extension);
+        assert!(!d.connections[1].arrow);
+        assert!(d.connections[1].arrow_at_start);
     }
 
     #[test]

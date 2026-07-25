@@ -2421,7 +2421,11 @@ fn render_no_oracle_connections(
         let link_id = no_oracle_link_id(diagram, conn.source_line);
         let from_label = link_comment_name(diagram, &conn.from);
         let to_label = link_comment_name(diagram, &conn.to);
-        let link_type = if conn.arrow {
+        let start_decoration = connection_start_decoration(conn);
+        let end_decoration = connection_end_decoration(conn);
+        let link_type = if conn.extension {
+            "extension"
+        } else if start_decoration.is_some() || end_decoration.is_some() {
             "dependency"
         } else {
             "association"
@@ -2431,13 +2435,21 @@ fn render_no_oracle_connections(
             r#"<g class="link" data-entity-1="{ent1}" data-entity-2="{ent2}" data-link-type="{link_type}" data-source-line="{line}" id="{link_id}">"#,
             line = conn.source_line,
         ));
-        if let Some(d) = edge_path_d(edge, conn.arrow) {
+        let raw_points = quantized_svek_edge_points(edge);
+        let mut path_points = raw_points.clone();
+        if let Some(decoration) = start_decoration {
+            trim_svek_edge_endpoint(&mut path_points, true, decoration.path_gap());
+        }
+        if let Some(decoration) = end_decoration {
+            trim_svek_edge_endpoint(&mut path_points, false, decoration.path_gap());
+        }
+        if let Some(d) = edge_path_d(&path_points) {
             let path_style = if conn.dashed {
                 format!("stroke:{STROKE};stroke-width:1;stroke-dasharray:7,7;")
             } else {
                 format!("stroke:{STROKE};stroke-width:1;")
             };
-            let path_id = if conn.arrow {
+            let path_id = if start_decoration.is_some() || end_decoration.is_some() {
                 format!("{from_label}-to-{to_label}")
             } else {
                 format!("{from_label}-{to_label}")
@@ -2446,13 +2458,21 @@ fn render_no_oracle_connections(
                 r#"<path d="{d}" fill="none" id="{path_id}" style="{path_style}"/>"#,
             ));
         }
-        if conn.arrow
-            && let Some((control, endpoint)) = edge_arrow_basis(edge)
+        if let Some(decoration) = start_decoration
+            && raw_points.len() >= 2
         {
-            let points = dependency_arrow_points(control, endpoint);
-            svg.raw(&format!(
-                r##"<polygon fill="#181818" points="{points}" style="stroke:#181818;stroke-width:1;"/>"##,
-            ));
+            render_usecase_extremity(svg, decoration, raw_points[1], raw_points[0]);
+        }
+        if let Some(decoration) = end_decoration
+            && raw_points.len() >= 2
+        {
+            let endpoint = raw_points.len() - 1;
+            render_usecase_extremity(
+                svg,
+                decoration,
+                raw_points[endpoint - 1],
+                raw_points[endpoint],
+            );
         }
         let label_text = conn
             .label
@@ -2575,24 +2595,70 @@ fn no_oracle_link_id(diagram: &UseCaseDiagram, source_line: usize) -> String {
     format!("lnk{counter}")
 }
 
-fn edge_path_d(edge: &EdgePath, shorten_for_arrow: bool) -> Option<String> {
-    let mut points = edge.points.clone();
-    if shorten_for_arrow && points.len() >= 2 {
-        let end = points.len() - 1;
-        let control =
-            points[..end].iter().rev().copied().find(|p| {
-                (p.0 - points[end].0).abs() > 0.01 || (p.1 - points[end].1).abs() > 0.01
-            })?;
-        let dx = points[end].0 - control.0;
-        let dy = points[end].1 - control.1;
-        let len = (dx * dx + dy * dy).sqrt().max(1.0);
-        let ux = dx / len;
-        let uy = dy / len;
-        for point in &mut points[end.saturating_sub(1)..=end] {
-            point.0 -= ux * DEPENDENCY_ARROW_PATH_GAP;
-            point.1 -= uy * DEPENDENCY_ARROW_PATH_GAP;
+#[derive(Clone, Copy)]
+enum UseCaseExtremity {
+    Dependency,
+    Extension,
+}
+
+impl UseCaseExtremity {
+    fn path_gap(self) -> f64 {
+        match self {
+            Self::Dependency => DEPENDENCY_ARROW_PATH_GAP,
+            // `LinkDecor.EXTENDS.getExtremityFactoryComplete` constructs an
+            // `ExtremityTriangle` with an 18px decoration length.
+            Self::Extension => 18.0,
         }
     }
+}
+
+fn connection_start_decoration(conn: &UseCaseConnection) -> Option<UseCaseExtremity> {
+    conn.arrow_at_start.then_some(if conn.extension {
+        UseCaseExtremity::Extension
+    } else {
+        UseCaseExtremity::Dependency
+    })
+}
+
+fn connection_end_decoration(conn: &UseCaseConnection) -> Option<UseCaseExtremity> {
+    conn.arrow.then_some(if conn.extension {
+        UseCaseExtremity::Extension
+    } else {
+        UseCaseExtremity::Dependency
+    })
+}
+
+fn quantized_svek_edge_points(edge: &EdgePath) -> Vec<(f64, f64)> {
+    // `SvekEdge.solveLine` parses Graphviz's SVG path after Graphviz has
+    // serialized every coordinate to two decimal places.
+    edge.points
+        .iter()
+        .map(|(x, y)| ((x * 100.0).round() / 100.0, (y * 100.0).round() / 100.0))
+        .collect()
+}
+
+fn trim_svek_edge_endpoint(points: &mut [(f64, f64)], start: bool, gap: f64) {
+    if points.len() < 2 {
+        return;
+    }
+    let endpoint = if start { 0 } else { points.len() - 1 };
+    let adjacent = if start { 1 } else { endpoint - 1 };
+    let dx = points[endpoint].0 - points[adjacent].0;
+    let dy = points[endpoint].1 - points[adjacent].1;
+    let len = dx.hypot(dy);
+    if len <= f64::EPSILON {
+        return;
+    }
+    let shift = (dx / len * gap, dy / len * gap);
+    points[endpoint].0 -= shift.0;
+    points[endpoint].1 -= shift.1;
+    if points.len() >= 4 {
+        points[adjacent].0 -= shift.0;
+        points[adjacent].1 -= shift.1;
+    }
+}
+
+fn edge_path_d(points: &[(f64, f64)]) -> Option<String> {
     let (start, rest) = points.split_first()?;
     let mut d = format!("M{},{}", fc(start.0), fc(start.1));
     for chunk in rest.chunks(3) {
@@ -2613,15 +2679,26 @@ fn edge_path_d(edge: &EdgePath, shorten_for_arrow: bool) -> Option<String> {
     Some(d)
 }
 
-fn edge_arrow_basis(edge: &EdgePath) -> Option<((f64, f64), (f64, f64))> {
-    let endpoint = edge.end_point.or_else(|| edge.points.last().copied())?;
-    let control = edge
-        .points
-        .iter()
-        .rev()
-        .copied()
-        .find(|p| (p.0 - endpoint.0).abs() > 0.01 || (p.1 - endpoint.1).abs() > 0.01)?;
-    Some((control, endpoint))
+fn render_usecase_extremity(
+    svg: &mut SvgBuilder,
+    decoration: UseCaseExtremity,
+    control: (f64, f64),
+    endpoint: (f64, f64),
+) {
+    match decoration {
+        UseCaseExtremity::Dependency => {
+            let points = dependency_arrow_points(control, endpoint);
+            svg.raw(&format!(
+                r##"<polygon fill="#181818" points="{points}" style="stroke:#181818;stroke-width:1;"/>"##,
+            ));
+        }
+        UseCaseExtremity::Extension => {
+            let points = extension_arrow_points(control, endpoint);
+            svg.raw(&format!(
+                r##"<polygon fill="none" points="{points}" style="stroke:#181818;stroke-width:1;"/>"##,
+            ));
+        }
+    }
 }
 
 fn dependency_arrow_points(control: (f64, f64), endpoint: (f64, f64)) -> String {
@@ -2659,6 +2736,32 @@ fn dependency_arrow_points(control: (f64, f64), endpoint: (f64, f64)) -> String 
         fc(left_wing.1),
         fc(p1.0),
         fc(p1.1),
+    )
+}
+
+fn extension_arrow_points(control: (f64, f64), endpoint: (f64, f64)) -> String {
+    let dx = endpoint.0 - control.0;
+    let dy = endpoint.1 - control.1;
+    let len = dx.hypot(dy).max(1.0);
+    let ux = dx / len;
+    let uy = dy / len;
+    let px = -uy;
+    let py = ux;
+    // `LinkDecor.EXTENDS.getExtremityFactoryComplete` supplies
+    // `ExtremityTriangle` with xWing=18 and yAperture=6.
+    let back = (endpoint.0 - ux * 18.0, endpoint.1 - uy * 18.0);
+    let left = (back.0 + px * 6.0, back.1 + py * 6.0);
+    let right = (back.0 - px * 6.0, back.1 - py * 6.0);
+    format!(
+        "{},{},{},{},{},{},{},{}",
+        fc(endpoint.0),
+        fc(endpoint.1),
+        fc(right.0),
+        fc(right.1),
+        fc(left.0),
+        fc(left.1),
+        fc(endpoint.0),
+        fc(endpoint.1),
     )
 }
 
@@ -2727,6 +2830,24 @@ mod tests {
     }
 
     #[test]
+    fn reversed_renamed_generalization_keeps_its_hollow_start_triangle() {
+        let input = "@startuml\n\
+                     actor \"Policy Parent 449\" as Parent\n\
+                     actor \"Policy Child 457\" as Child\n\
+                     Parent <|-- Child\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(r#"data-link-type="extension""#));
+        assert!(svg.contains(r#"<polygon fill="none""#));
+        assert_eq!(
+            super::extension_arrow_points((0.0, 0.0), (0.0, 20.0)),
+            "0,20,6,2,-6,2,0,20"
+        );
+    }
+
+    #[test]
     fn diagonal_links_meet_the_renamed_usecase_oval() {
         let input = "@startuml\n\
                      actor \"Audit Reader 431\" as Reader\n\
@@ -2751,20 +2872,17 @@ mod tests {
             .map(|item| super::use_case_dim(item, &skin))
             .collect();
         let note_dims: Vec<_> = usecase.notes.iter().map(super::note_dim).collect();
-        let positions = super::resolve_positions(
-            usecase,
-            &actor_dims,
-            &usecase_dims,
-            &note_dims,
-            &skin,
-            None,
-        );
+        let positions =
+            super::resolve_positions(usecase, &actor_dims, &usecase_dims, &note_dims, &skin, None);
         let (cx, cy) = positions.use_cases[0];
         let oval = &usecase_dims[0];
         let mut diagonal_edges = 0;
 
         for edge in &positions.edge_paths {
-            let endpoint = edge.end_point.or_else(|| edge.points.last().copied()).unwrap();
+            let endpoint = edge
+                .end_point
+                .or_else(|| edge.points.last().copied())
+                .unwrap();
             let normalized =
                 ((endpoint.0 - cx) / oval.rx).powi(2) + ((endpoint.1 - cy) / oval.ry).powi(2);
             assert!(
