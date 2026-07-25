@@ -1403,19 +1403,25 @@ fn compute_canvas(
     let mut max_y: f64 = 0.0;
     for (i, (cx, cy)) in positions.actors.iter().enumerate() {
         let half = actor_dims[i].width / 2.0;
+        let leg_y = cy + ACTOR_HEAD_R + ACTOR_BODY_LEN + ACTOR_LEG_DROP;
+        // Java provenance: `LimitFinder.drawText` moves a `UText` up by
+        // `height - 1.5`, so its measured maximum is the emitted baseline plus
+        // 1.5 rather than the baseline plus a full line box.
+        let label_max_y = leg_y + actor_dims[i].label_gap + 1.5;
+        let stereotype_max_y = if actor_dims[i].stereo_h > 0.0 {
+            cy - ACTOR_STEREO_OFFSET + 1.5
+        } else {
+            f64::NEG_INFINITY
+        };
         max_x = max_x.max(cx + half + canvas_pad);
-        max_y = max_y.max(
-            cy + ACTOR_HEAD_R
-                + ACTOR_BODY_LEN
-                + ACTOR_LEG_DROP
-                + actor_dims[i].label_gap
-                + pm::text_height(FONT_SIZE)
-                + canvas_pad,
-        );
+        max_y = max_y.max(leg_y.max(label_max_y).max(stereotype_max_y) + canvas_pad);
     }
     for (i, (cx, cy)) in positions.use_cases.iter().enumerate() {
-        max_x = max_x.max(cx + uc_dims[i].rx + canvas_pad);
-        max_y = max_y.max(cy + uc_dims[i].ry + canvas_pad);
+        // Java provenance: `LimitFinder.drawEllipse` records the far corner at
+        // `origin + dimension - 1`, so the painted oval's maximum is one pixel
+        // inside its geometric bounding box on both axes.
+        max_x = max_x.max(cx + uc_dims[i].rx - 1.0 + canvas_pad);
+        max_y = max_y.max(cy + uc_dims[i].ry - 1.0 + canvas_pad);
     }
     for (index, note) in positions.notes.iter().enumerate() {
         let Some(note) = note else { continue };
@@ -2845,6 +2851,26 @@ mod tests {
             super::extension_arrow_points((0.0, 0.0), (0.0, 20.0)),
             "0,20,6,2,-6,2,0,20"
         );
+    }
+
+    #[test]
+    fn renamed_generalization_canvas_uses_limit_finder_primitive_bounds() {
+        let input = "@startuml\n\
+                     actor \"Renamed Principal 701\" as Principal701\n\
+                     actor \"Renamed Specialist 709\" as Specialist709\n\
+                     usecase \"Renamed Capability 719\" as Capability719\n\
+                     Specialist709 --|> Principal701\n\
+                     Specialist709 --> Capability719\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Independent PlantUML oracle result for this renamed perturbation.
+        // The dimensions exercise `LimitFinder.drawText` for the lower actor
+        // and `drawEllipse` for the rightmost use case.
+        assert!(svg.contains(r#"viewBox="0 0 402 232""#), "{svg}");
+        assert!(svg.contains(r#"width="402px""#), "{svg}");
+        assert!(svg.contains(r#"height="232px""#), "{svg}");
     }
 
     #[test]
