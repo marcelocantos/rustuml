@@ -163,6 +163,14 @@ const NOTE_NESTED_BULLET_SIZE: f64 = 3.5;
 const NOTE_NESTED_BULLET_DIM_HEIGHT: f64 = 3.0;
 const NOTE_NESTED_BULLET_X: f64 = 1.0;
 const NOTE_NESTED_BULLET_START_ALTITUDE: f64 = -7.0;
+/// `EntityImageAssociationPoint.SIZE`: PlantUML lays out and paints the
+/// synthetic point inserted into an association-class base edge as a 4px
+/// circle.
+const ASSOCIATION_POINT_SIZE: f64 = 4.0;
+/// `Association.createNew` advances CucaDiagram's shared sequence six times:
+/// the `apoint` short name, the point entity uid, a replaced temporary A-B
+/// link, and the three emitted links.
+const ASSOCIATION_SEQUENCE_SLOTS: usize = 6;
 #[allow(dead_code)]
 const SMALL_FONT: f64 = 11.0;
 const TITLE_FONT_SIZE: f64 = 14.0;
@@ -1680,6 +1688,18 @@ pub fn render_with_oracle(
     for (entity, dim) in diagram.entities.iter().zip(&dims) {
         layout.add_node(&entity.id, &entity.label, dim.width, dim.height);
     }
+    // `AbstractClassOrObjectDiagram.Association.createNew` replaces the A-B
+    // association with A->apoint and apoint->B links of the original length,
+    // then connects the 4px point to C. A one-length C link is horizontal in
+    // SVEK, so preserve that rank constraint here.
+    for (idx, association) in diagram.association_classes.iter().enumerate() {
+        let point = association_point_layout_id(idx);
+        layout.add_circle_node(&point, "", ASSOCIATION_POINT_SIZE);
+        layout.add_edge_with_minlen(&association.a, &point, None, 1);
+        layout.add_edge_with_minlen(&point, &association.b, None, 1);
+        layout.add_same_rank(&point, &association.c);
+        layout.add_edge(&point, &association.c, None);
+    }
     for (idx, note) in diagram.notes.iter().enumerate() {
         let (Some(target), Some(position)) = (note.target.as_deref(), note.position) else {
             continue;
@@ -1798,7 +1818,8 @@ pub fn render_with_oracle(
     // body inset. Reproduce that envelope-origin shift on each axis only when
     // an attached note, rather than an ordinary entity, owns the minimum.
     let entity_positions = &result.node_positions[..diagram.entities.len()];
-    let note_positions = &result.node_positions[diagram.entities.len()..];
+    let note_start = diagram.entities.len() + diagram.association_classes.len();
+    let note_positions = &result.node_positions[note_start..];
     let entity_min_x = entity_positions
         .iter()
         .map(|pos| pos.x)
@@ -2755,11 +2776,36 @@ fn svek_id_allocation(diagram: &ClassDiagram) -> SvekIdAllocation {
         }
     }
 
-    SvekIdAllocation {
+    let mut allocation = SvekIdAllocation {
         package_ids: allocator.package_ids,
         entity_ids: allocator.entity_ids,
         entity_order: allocator.entity_order,
+    };
+    // CucaDiagram allocates entity and link uids while parsing. Association
+    // classes therefore move every later entity forward by the six sequence
+    // slots consumed in `Association.createNew`; preserve those externally
+    // visible `entNNNN` values even though RustUML builds SVEK after parsing.
+    for (entity, id) in diagram.entities.iter().zip(&mut allocation.entity_ids) {
+        let preceding = diagram
+            .association_classes
+            .iter()
+            .filter(|association| association.source_line < entity.source_line)
+            .count();
+        if preceding == 0 {
+            continue;
+        }
+        let Some(sequence) = id
+            .strip_prefix("ent")
+            .and_then(|value| value.parse::<usize>().ok())
+        else {
+            continue;
+        };
+        *id = format!(
+            "ent{:04}",
+            sequence + preceding * ASSOCIATION_SEQUENCE_SLOTS
+        );
     }
+    allocation
 }
 
 fn entity_emission_order(diagram: &ClassDiagram) -> Vec<usize> {
@@ -2861,7 +2907,11 @@ fn render_plantuml_svg(
         })
         .enumerate()
         .map(|(ordinal, (note_idx, position))| {
-            (note_idx, diagram.entities.len() + ordinal, position)
+            (
+                note_idx,
+                diagram.entities.len() + diagram.association_classes.len() + ordinal,
+                position,
+            )
         })
         .collect();
 
@@ -3369,23 +3419,37 @@ fn render_plantuml_svg(
         // pseudo-entity at the source line of the `(A, B) .. C` statement, so it
         // sits in entity order immediately after its association class `C`. Emit
         // the captured ellipse here so document order matches the golden.
-        if let Some(orc) = oracle {
-            for (ac_idx, ac) in diagram.association_classes.iter().enumerate() {
-                if ac.c == entity.id
-                    && let Some(ap) = orc.apoints.get(ac_idx)
-                {
-                    write!(
-                        svg,
-                        r#"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="{}"/>"#,
-                        crate::plantuml_metrics::fmt_coord(ap.cx),
-                        crate::plantuml_metrics::fmt_coord(ap.cy),
-                        ap.fill,
-                        crate::plantuml_metrics::fmt_coord(ap.rx),
-                        crate::plantuml_metrics::fmt_coord(ap.ry),
-                        ap.style,
-                    )
-                    .unwrap();
-                }
+        for (ac_idx, ac) in diagram.association_classes.iter().enumerate() {
+            if ac.c != entity.id {
+                continue;
+            }
+            if let Some(ap) = oracle.and_then(|orc| orc.apoints.get(ac_idx)) {
+                write!(
+                    svg,
+                    r#"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="{}"/>"#,
+                    crate::plantuml_metrics::fmt_coord(ap.cx),
+                    crate::plantuml_metrics::fmt_coord(ap.cy),
+                    ap.fill,
+                    crate::plantuml_metrics::fmt_coord(ap.rx),
+                    crate::plantuml_metrics::fmt_coord(ap.ry),
+                    ap.style,
+                )
+                .unwrap();
+            } else if oracle.is_none()
+                && let Some(point) = positions.get(diagram.entities.len() + ac_idx)
+            {
+                let radius = ASSOCIATION_POINT_SIZE / 2.0;
+                write!(
+                    svg,
+                    r##"<ellipse cx="{}" cy="{}" fill="#181818" rx="{}" ry="{}" style="stroke:#181818;stroke-width:1;"/>"##,
+                    crate::plantuml_metrics::fmt_coord(
+                        point.x + MARGIN + layout_x_bias + body_dx + radius
+                    ),
+                    crate::plantuml_metrics::fmt_coord(point.y + MARGIN + body_dy + radius),
+                    crate::plantuml_metrics::fmt_coord(radius),
+                    crate::plantuml_metrics::fmt_coord(radius),
+                )
+                .unwrap();
             }
         }
     }
@@ -3454,6 +3518,8 @@ fn render_plantuml_svg(
     // relationships, matching PlantUML's emission order.
     if let Some(orc) = oracle {
         render_association_class_links(&mut svg, diagram, orc);
+    } else {
+        render_no_oracle_association_class_links(&mut svg, diagram, edge_paths, layout_x_bias);
     }
 
     // Render relationships.
@@ -3461,6 +3527,22 @@ fn render_plantuml_svg(
         render_oracle_relationships(&mut svg, diagram, orc, ent_id);
         render_oracle_note_connectors(&mut svg, orc);
     } else {
+        ent_id = svek_ids
+            .package_ids
+            .iter()
+            .flatten()
+            .chain(svek_ids.entity_ids.iter())
+            .filter_map(|id| id.strip_prefix("ent")?.parse::<usize>().ok())
+            .chain(
+                diagram
+                    .association_classes
+                    .iter()
+                    .enumerate()
+                    .map(|(idx, _)| association_point_sequence(diagram, idx) + 5),
+            )
+            .max()
+            .unwrap_or(1)
+            + 1;
         for rel in &diagram.relationships {
             let edge_path = edge_paths
                 .iter()
@@ -6978,6 +7060,118 @@ fn render_oracle_note_connectors(svg: &mut String, oracle: &OracleLayout) {
     }
 }
 
+fn render_no_oracle_association_class_links(
+    svg: &mut String,
+    diagram: &ClassDiagram,
+    edge_paths: &[EdgePath],
+    layout_x_bias: f64,
+) {
+    let label_of = |id: &str| -> String {
+        diagram
+            .entities
+            .iter()
+            .find(|entity| entity.id == id)
+            .map_or(id.to_string(), |entity| entity.label.clone())
+    };
+
+    for (association_idx, association) in diagram.association_classes.iter().enumerate() {
+        let point_sequence = association_point_sequence(diagram, association_idx);
+        let point_layout_id = association_point_layout_id(association_idx);
+        let point_name = format!("apoint{point_sequence}");
+        // `getUniqueSequence("apoint")` claims the short-name sequence first;
+        // `Bibliotekon.createNode` then claims the following `entNNNN` id.
+        let point_entity_id = format!("ent{:04}", point_sequence + 1);
+        let first_link_id = point_sequence + 3;
+        let a_label = label_of(&association.a);
+        let b_label = label_of(&association.b);
+        let c_label = label_of(&association.c);
+        let a_entity_id = no_oracle_entity_id(diagram, &association.a);
+        let b_entity_id = no_oracle_entity_id(diagram, &association.b);
+        let c_entity_id = no_oracle_entity_id(diagram, &association.c);
+
+        let links = [
+            (
+                association.a.as_str(),
+                point_layout_id.as_str(),
+                a_label.as_str(),
+                point_name.as_str(),
+                a_entity_id.as_str(),
+                point_entity_id.as_str(),
+                false,
+            ),
+            (
+                point_layout_id.as_str(),
+                association.b.as_str(),
+                point_name.as_str(),
+                b_label.as_str(),
+                point_entity_id.as_str(),
+                b_entity_id.as_str(),
+                false,
+            ),
+            (
+                point_layout_id.as_str(),
+                association.c.as_str(),
+                point_name.as_str(),
+                c_label.as_str(),
+                point_entity_id.as_str(),
+                c_entity_id.as_str(),
+                association.dashed,
+            ),
+        ];
+
+        for (link_idx, (from, to, from_label, to_label, from_entity, to_entity, dashed)) in
+            links.into_iter().enumerate()
+        {
+            let Some(edge) = edge_paths
+                .iter()
+                .find(|edge| edge.from == from && edge.to == to)
+            else {
+                continue;
+            };
+            let points: Vec<(f64, f64)> = edge
+                .points
+                .iter()
+                .map(|(x, y)| (x + MARGIN + layout_x_bias, y + MARGIN))
+                .collect();
+            if points.is_empty() {
+                continue;
+            }
+            let mut path = format!("M{},{}", fmt4(points[0].0), fmt4(points[0].1));
+            let mut point_idx = 1;
+            while point_idx + 2 < points.len() {
+                write!(
+                    path,
+                    " C{},{} {},{} {},{}",
+                    fmt4(points[point_idx].0),
+                    fmt4(points[point_idx].1),
+                    fmt4(points[point_idx + 1].0),
+                    fmt4(points[point_idx + 1].1),
+                    fmt4(points[point_idx + 2].0),
+                    fmt4(points[point_idx + 2].1),
+                )
+                .unwrap();
+                point_idx += 3;
+            }
+            let dash = if dashed { "stroke-dasharray:7,7;" } else { "" };
+            write!(
+                svg,
+                r#"<!--link {} to {}--><g class="link" data-entity-1="{}" data-entity-2="{}" data-link-type="association" data-source-line="{}" id="lnk{}"><path d="{}" fill="none" id="{}-{}" style="stroke:#181818;stroke-width:1;{}"/></g>"#,
+                escape_xml(from_label),
+                escape_xml(to_label),
+                from_entity,
+                to_entity,
+                association.source_line,
+                first_link_id + link_idx,
+                path,
+                escape_xml(from_label),
+                escape_xml(to_label),
+                dash,
+            )
+            .unwrap();
+        }
+    }
+}
+
 /// Render association-class connectors. For each `(A, B) .. C`, PlantUML emits
 /// three links sharing the synthesised `apoint` anchor: `A → apoint` and
 /// `apoint → B` (the solid association line) plus `apoint → C` (the dashed /
@@ -8439,6 +8633,36 @@ fn emit_svg_circle(svg: &mut String, c: (f64, f64), r: f64, color: &str, stroke_
 
 fn attached_note_layout_id(note_idx: usize) -> String {
     format!("__attached_note_{note_idx}")
+}
+
+fn association_point_layout_id(association_idx: usize) -> String {
+    format!("__association_point_{association_idx}")
+}
+
+fn association_point_sequence(diagram: &ClassDiagram, association_idx: usize) -> usize {
+    let association = &diagram.association_classes[association_idx];
+    2 + diagram
+        .entities
+        .iter()
+        .filter(|entity| entity.source_line <= association.source_line)
+        .count()
+        + diagram
+            .packages
+            .iter()
+            .filter(|package| package.source_line <= association.source_line)
+            .count()
+        + diagram
+            .relationships
+            .iter()
+            .filter(|relationship| relationship.source_line < association.source_line)
+            .count()
+        + diagram
+            .association_classes
+            .iter()
+            .take(association_idx)
+            .filter(|earlier| earlier.source_line <= association.source_line)
+            .count()
+            * ASSOCIATION_SEQUENCE_SLOTS
 }
 
 /// Port of PlantUML `Opale`'s four linked-note polygons. Graphviz positions the
@@ -10029,6 +10253,34 @@ mod tests {
         let svg = crate::render_svg(&diagram);
         assert!(svg.contains("Animal"));
         assert!(svg.contains("Dog"));
+    }
+
+    #[test]
+    fn renamed_association_class_uses_a_live_svek_anchor() {
+        let input = "@startuml\n\
+            class RenamedApplicant401\n\
+            class RenamedProgram409\n\
+            class RenamedEnrollment419 {\n\
+              +Date acceptedAt\n\
+            }\n\
+            (RenamedApplicant401, RenamedProgram409) .. RenamedEnrollment419\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert_eq!(
+            svg.matches(r##"fill="#181818" rx="2" ry="2" style="stroke:#181818;stroke-width:1;""##)
+                .count(),
+            1
+        );
+        assert!(svg.contains("<!--link RenamedApplicant401 to apoint5-->"));
+        assert!(svg.contains("<!--link apoint5 to RenamedProgram409-->"));
+        assert!(svg.contains("<!--link apoint5 to RenamedEnrollment419-->"));
+        assert!(svg.contains(r#"id="RenamedApplicant401-apoint5""#));
+        assert!(svg.contains(r#"id="apoint5-RenamedProgram409""#));
+        assert!(svg.contains(
+            r#"id="apoint5-RenamedEnrollment419" style="stroke:#181818;stroke-width:1;stroke-dasharray:7,7;""#
+        ));
     }
 
     #[test]
