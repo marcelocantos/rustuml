@@ -357,6 +357,10 @@ const COMPONENT_H: f64 = COMPONENT_BASE_H + LINE_HEIGHT;
 const TEXT_PAD_LEFT: f64 = 15.0;
 /// Right padding inside component (icon area).
 const TEXT_PAD_RIGHT: f64 = 25.0;
+// `EntityImageDescription` wraps its stereotype display with
+// `TextBlockUtils.withMargin(..., 1, 0)` before `USymbolComponent2.asSmall`
+// merges it with the label. The wrapper contributes one pixel on each side.
+const STEREOTYPE_MARGIN_X: f64 = 1.0;
 // PlantUML `USymbolDatabase.getMargin()` returns (10, 10, 24, 5).
 const DATABASE_MARGIN_X: f64 = 10.0;
 const DATABASE_MARGIN_TOP: f64 = 24.0;
@@ -704,8 +708,26 @@ pub fn render_with_oracle(
         .or(default_font_size)
         .unwrap_or(LINK_FONT);
 
-    // Compute dimensions for each component.
-    let comp_dims: Vec<CompDim> = diagram.components.iter().map(calc_component_dim).collect();
+    // Compute the same merged stereotype/label block that
+    // `EntityImageDescription` passes to `USymbolComponent2.asSmall`.
+    let component_text_metrics: Vec<ComponentTextMetrics> = diagram
+        .components
+        .iter()
+        .map(|component| {
+            component_text_metrics(
+                component,
+                component_font_size,
+                &component_font_family,
+                component_font_bold,
+            )
+        })
+        .collect();
+    let comp_dims: Vec<CompDim> = diagram
+        .components
+        .iter()
+        .zip(&component_text_metrics)
+        .map(|(component, metrics)| calc_component_dim_with_metrics(component, metrics))
+        .collect();
     let note_dims: Vec<CompDim> = diagram.notes.iter().map(component_note_dim).collect();
     let package_qualified_names = build_package_qualified_names(&diagram.packages);
     let laid_out_note_indices = laid_out_note_indices(diagram, &package_qualified_names);
@@ -1304,6 +1326,7 @@ pub fn render_with_oracle(
         let comp = &diagram.components[i];
         let (x, y) = positions[i];
         let dim = &comp_dims[i];
+        let text_metrics = &component_text_metrics[i];
         let oracle_rect_for_id = oracle_comp_rect(comp);
         let ent_id = if let Some(id) = oracle_rect_for_id
             .and_then(|r| r.entity_id.clone())
@@ -1519,14 +1542,12 @@ pub fn render_with_oracle(
         // `y + h - LABEL_BASELINE_FROM_BOTTOM`. Use oracle text_y_values when available.
         let oracle_text_y = oracle_rect.map(|r| r.text_y_values.as_slice());
         let oracle_text_x = oracle_rect.map(|r| r.text_x_values.as_slice());
-        let model_text_x = if matches!(comp.kind, ComponentElementKind::Database) {
+        let model_text_block_x = if matches!(comp.kind, ComponentElementKind::Database) {
             x + DATABASE_MARGIN_X
         } else {
             x + TEXT_PAD_LEFT
         };
-        let text_x_default = oracle_rect
-            .and_then(|r| r.name_text_x)
-            .unwrap_or(model_text_x);
+        let oracle_text_x_default = oracle_rect.and_then(|r| r.name_text_x);
         let n_stereo = comp.stereotypes.len();
 
         let model_label_y = if matches!(comp.kind, ComponentElementKind::Database) {
@@ -1546,7 +1567,12 @@ pub fn render_with_oracle(
                 .unwrap_or(stereo_first_y + si as f64 * LINE_HEIGHT);
             let tx = oracle_text_x
                 .and_then(|v| v.get(si).copied())
-                .unwrap_or(text_x_default);
+                .unwrap_or_else(|| {
+                    oracle_text_x_default.unwrap_or_else(|| {
+                        let text_width = text_metrics.stereotype_widths[si];
+                        model_text_block_x + (text_metrics.content_width - text_width) / 2.0
+                    })
+                });
             let label = format!("\u{00AB}{stereo}\u{00BB}"); // «stereo»
             let mut text_buf = String::new();
             text_render::emit_text(
@@ -1570,7 +1596,12 @@ pub fn render_with_oracle(
         // Label (last line).
         let label_tx = oracle_text_x
             .and_then(|v| v.get(n_stereo).copied())
-            .unwrap_or(text_x_default);
+            .unwrap_or_else(|| {
+                oracle_text_x_default.unwrap_or(
+                    model_text_block_x
+                        + (text_metrics.content_width - text_metrics.label_width) / 2.0,
+                )
+            });
         let mut text_buf = String::new();
         text_render::emit_text(
             &mut text_buf,
@@ -2748,30 +2779,71 @@ struct CompDim {
     height: f64,
 }
 
-fn calc_component_dim(comp: &Component) -> CompDim {
-    let n_lines = 1 + comp.stereotypes.len();
+struct ComponentTextMetrics {
+    label_width: f64,
+    stereotype_widths: Vec<f64>,
+    content_width: f64,
+}
 
-    let label_w = text_render::measure(&comp.label, FONT_SIZE, false);
-    let max_stereo_w = comp
+fn component_text_metrics(
+    comp: &Component,
+    font_size: f64,
+    font_family: &str,
+    label_bold: bool,
+) -> ComponentTextMetrics {
+    let label_width =
+        text_render::measure_with_family(&comp.label, font_size, label_bold, font_family);
+    let stereotype_widths: Vec<f64> = comp
         .stereotypes
         .iter()
-        .map(|s| text_render::measure(&format!("\u{00AB}{s}\u{00BB}"), FONT_SIZE, false))
-        .fold(0.0_f64, f64::max);
-    let text_w = label_w.max(max_stereo_w);
+        .map(|stereotype| {
+            text_render::measure_with_family(
+                &format!("\u{00AB}{stereotype}\u{00BB}"),
+                font_size,
+                false,
+                font_family,
+            )
+        })
+        .collect();
+    let stereotype_block_width = stereotype_widths
+        .iter()
+        .copied()
+        .reduce(f64::max)
+        .map(|width| width + STEREOTYPE_MARGIN_X * 2.0)
+        .unwrap_or(0.0);
+
+    ComponentTextMetrics {
+        label_width,
+        stereotype_widths,
+        content_width: label_width.max(stereotype_block_width),
+    }
+}
+
+fn calc_component_dim_with_metrics(
+    comp: &Component,
+    text_metrics: &ComponentTextMetrics,
+) -> CompDim {
+    let n_lines = 1 + comp.stereotypes.len();
 
     let (width, height) = if matches!(comp.kind, ComponentElementKind::Database) {
         (
-            text_w + DATABASE_MARGIN_X * 2.0,
+            text_metrics.content_width + DATABASE_MARGIN_X * 2.0,
             DATABASE_MARGIN_TOP + n_lines as f64 * LINE_HEIGHT + DATABASE_MARGIN_BOTTOM,
         )
     } else {
         (
-            (text_w + TEXT_PAD_LEFT + TEXT_PAD_RIGHT).max(COMPONENT_MIN_W),
+            (text_metrics.content_width + TEXT_PAD_LEFT + TEXT_PAD_RIGHT).max(COMPONENT_MIN_W),
             COMPONENT_BASE_H + n_lines as f64 * LINE_HEIGHT,
         )
     };
 
     CompDim { width, height }
+}
+
+#[cfg(test)]
+fn calc_component_dim(comp: &Component) -> CompDim {
+    let text_metrics = component_text_metrics(comp, FONT_SIZE, "sans-serif", false);
+    calc_component_dim_with_metrics(comp, &text_metrics)
 }
 
 // ---------------------------------------------------------------------------
@@ -5256,6 +5328,45 @@ mod tests {
         let svg = crate::render_svg(&diagram);
         assert!(svg.contains("service"), "first stereotype missing: {svg}");
         assert!(svg.contains("secured"), "second stereotype missing: {svg}");
+    }
+
+    #[test]
+    fn no_oracle_stereotype_block_uses_java_margin_for_renamed_components() {
+        let input = "@startuml\ncomponent RelayNode71 <<edge_service_73>>\ncomponent AuditSink79 <<event_store_83>>\nRelayNode71 --> AuditSink79 : streams\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Component(component_diagram) = &diagram else {
+            panic!("expected component diagram");
+        };
+
+        for component in &component_diagram.components {
+            let metrics =
+                super::component_text_metrics(component, super::FONT_SIZE, "sans-serif", false);
+            let stereotype_width = metrics.stereotype_widths[0];
+            assert!(
+                stereotype_width > metrics.label_width,
+                "the perturbation must exercise a stereotype-dominated text block"
+            );
+            assert_eq!(
+                metrics.content_width,
+                stereotype_width + super::STEREOTYPE_MARGIN_X * 2.0
+            );
+
+            let dim = super::calc_component_dim_with_metrics(component, &metrics);
+            assert_eq!(
+                dim.width,
+                metrics.content_width + super::TEXT_PAD_LEFT + super::TEXT_PAD_RIGHT
+            );
+        }
+
+        let svg = crate::render_svg(&diagram);
+        assert!(
+            svg.contains("edge_service_73"),
+            "first stereotype missing: {svg}"
+        );
+        assert!(
+            svg.contains("event_store_83"),
+            "second stereotype missing: {svg}"
+        );
     }
 
     #[test]
