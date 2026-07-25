@@ -3576,6 +3576,7 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
             &mut svg,
             diagram,
             id_for_node,
+            &no_oracle_uids.link_ids,
             &result.edge_paths,
             body_margin_x,
             body_margin_y,
@@ -4224,6 +4225,7 @@ fn empty_entity_rect(x: f64, y: f64, width: f64, height: f64) -> EntityRect {
 struct DeploymentNoOracleUidModel {
     entity_ids: HashMap<String, String>,
     note_ids: HashMap<usize, DeploymentNoteUid>,
+    link_ids: Vec<String>,
 }
 
 struct DeploymentNoteUid {
@@ -4235,7 +4237,7 @@ fn build_deployment_no_oracle_uid_model(diagram: &DeploymentDiagram) -> Deployme
     enum Item<'a> {
         Node(&'a DeploymentNode),
         Note(usize),
-        Conn,
+        Conn(usize),
     }
     let mut items = Vec::new();
     for node in &diagram.nodes {
@@ -4244,13 +4246,14 @@ fn build_deployment_no_oracle_uid_model(diagram: &DeploymentDiagram) -> Deployme
     for (index, note) in diagram.notes.iter().enumerate() {
         items.push((note.source_line, Item::Note(index)));
     }
-    for conn in &diagram.connections {
-        items.push((conn.source_line, Item::Conn));
+    for (index, conn) in diagram.connections.iter().enumerate() {
+        items.push((conn.source_line, Item::Conn(index)));
     }
     items.sort_by_key(|(line, _)| *line);
     let mut next_uid = 2;
     let mut entity_ids = HashMap::new();
     let mut note_ids = HashMap::new();
+    let mut link_ids = vec![String::new(); diagram.connections.len()];
     for (_, item) in items {
         match item {
             Item::Node(node) => {
@@ -4281,12 +4284,24 @@ fn build_deployment_no_oracle_uid_model(diagram: &DeploymentDiagram) -> Deployme
                 // even though Opale absorbs it into the note outline.
                 next_uid += 1;
             }
-            Item::Conn => next_uid += 1,
+            Item::Conn(index) => {
+                if matches!(
+                    diagram.connections[index].direction,
+                    Some(DeploymentLinkDirection::Up | DeploymentLinkDirection::Left)
+                ) {
+                    // `CommandLinkElement` reverses left/up links by creating
+                    // an intermediate link before the visible SVEK edge.
+                    next_uid += 1;
+                }
+                link_ids[index] = format!("lnk{next_uid}");
+                next_uid += 1;
+            }
         }
     }
     DeploymentNoOracleUidModel {
         entity_ids,
         note_ids,
+        link_ids,
     }
 }
 
@@ -4294,6 +4309,7 @@ fn render_no_oracle_edges(
     svg: &mut SvgBuilder,
     diagram: &DeploymentDiagram,
     id_for_node: &HashMap<String, String>,
+    link_ids: &[String],
     edge_paths: &[EdgePath],
     body_margin_x: f64,
     body_margin_y: f64,
@@ -4314,7 +4330,11 @@ fn render_no_oracle_edges(
         let Some(ent2) = id_for_node.get(entity_2_id) else {
             continue;
         };
-        let link_id = format!("lnk{}", i + diagram.nodes.len() + 2 + usize::from(reversed));
+        let link_id = link_ids
+            .get(i)
+            .filter(|id| !id.is_empty())
+            .cloned()
+            .unwrap_or_else(|| format!("lnk{}", i + diagram.nodes.len() + 2));
         let raw_start_arrow = if reversed {
             conn.arrow_at_end
         } else {
@@ -4642,6 +4662,28 @@ mod tests {
         assert!(svg.contains(r#"id="Emitter137-Relay139""#));
         assert!(svg.contains(r#"data-link-type="dependency""#));
         assert!(svg.contains(r#"id="Relay139-Sink149""#));
+    }
+
+    #[test]
+    fn no_oracle_link_ids_follow_source_order_uid_allocation() {
+        let source = "@startuml\n\
+            node \"Dispatch 211\" as Dispatch211\n\
+            node \"Worker 223\" as Worker223\n\
+            Dispatch211 --> Worker223\n\
+            node \"Archive 227\" as Archive227\n\
+            Worker223 --> Archive227\n\
+            Archive227 -left-> Worker223\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+
+        let svg = render(&diagram, &Theme::default());
+
+        assert!(svg.contains(r#"data-source-line="3" id="lnk4""#));
+        assert!(svg.contains(r#"data-source-line="5" id="lnk6""#));
+        assert!(svg.contains(r#"data-source-line="6" id="lnk8""#));
     }
 
     #[test]
