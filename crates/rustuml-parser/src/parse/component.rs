@@ -664,6 +664,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 interfaces.push(Interface {
                     id: id.clone(),
                     label,
+                    source_line: current_line,
                 });
             }
             add_together_node(&mut together, &block_stack, &id);
@@ -676,6 +677,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 interfaces.push(Interface {
                     id: id.clone(),
                     label,
+                    source_line: current_line,
                 });
             }
             add_together_node(&mut together, &block_stack, &id);
@@ -687,6 +689,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 interfaces.push(Interface {
                     id: name.clone(),
                     label: name.clone(),
+                    source_line: current_line,
                 });
             }
             add_together_node(&mut together, &block_stack, &name);
@@ -707,6 +710,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 interfaces.push(Interface {
                     id: id.clone(),
                     label,
+                    source_line: current_line,
                 });
             }
             add_together_node(&mut together, &block_stack, &id);
@@ -810,6 +814,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                         interfaces.push(Interface {
                             id: id.clone(),
                             label: id.clone(),
+                            source_line: current_line,
                         });
                         created = true;
                     }
@@ -987,8 +992,18 @@ mod tests {
     fn bare_interface_parsed() {
         let d = parse("component Hub\ninterface IA\ninterface IB\nHub - IA\nHub - IB");
         assert_eq!(d.interfaces.len(), 2, "should have 2 interfaces");
-        assert!(d.interfaces.iter().any(|i| i.id == "IA"));
-        assert!(d.interfaces.iter().any(|i| i.id == "IB"));
+        assert_eq!(d.interfaces[0].id, "IA");
+        assert_eq!(d.interfaces[0].source_line, 2);
+        assert_eq!(d.interfaces[1].id, "IB");
+        assert_eq!(d.interfaces[1].source_line, 3);
+    }
+
+    #[test]
+    fn implicit_interface_keeps_connection_creation_line() {
+        let d = parse("component Relay71\nRelay71 - AuditPort73");
+        assert_eq!(d.interfaces.len(), 1);
+        assert_eq!(d.interfaces[0].id, "AuditPort73");
+        assert_eq!(d.interfaces[0].source_line, 2);
     }
 
     #[test]

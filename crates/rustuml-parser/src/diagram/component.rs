@@ -78,6 +78,9 @@ pub struct Component {
 pub struct Interface {
     pub id: String,
     pub label: String,
+    /// 1-based line number within the `@startuml` block.
+    #[serde(default)]
+    pub source_line: usize,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

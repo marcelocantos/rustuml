@@ -222,6 +222,14 @@ fn build_no_oracle_uid_model(diagram: &ComponentDiagram) -> NoOracleUidModel {
             ordinal += 1;
         }
     }
+    for interface in &diagram.interfaces {
+        events.push((
+            interface.source_line,
+            ordinal,
+            Event::Entity(vec![interface.id.clone()]),
+        ));
+        ordinal += 1;
+    }
     for (index, note) in diagram.notes.iter().enumerate() {
         if note.target.is_some() {
             events.push((note.source_line, ordinal, Event::AttachedNote(index)));
@@ -433,6 +441,14 @@ const NOTE_FILL: &str = "#FEFFDD";
 const ROUND_R: f64 = 2.5;
 /// Interface circle radius.
 const IFACE_R: f64 = 8.0;
+// `CircleInterface2` draws the circle inside a one-pixel margin and reports
+// the complete 18x18 block to SVEK.
+const IFACE_MARGIN: f64 = 1.0;
+const IFACE_NODE_SIZE: f64 = (IFACE_R + IFACE_MARGIN) * 2.0;
+const IFACE_CENTER_OFFSET: f64 = IFACE_R + IFACE_MARGIN;
+// `EntityImageDescription.drawU` paints a hidden interface label after an
+// eight-pixel gap below the circle block.
+const IFACE_LABEL_GAP: f64 = 8.0;
 /// Note fold (dog-ear) size.
 const NOTE_FOLD: f64 = 10.0;
 /// Fallback note padding.
@@ -859,12 +875,7 @@ pub fn render_with_oracle(
             layout.add_node(&comp.id, &comp.label, dim.width, dim.height);
         }
         for iface in &diagram.interfaces {
-            layout.add_node(
-                &iface.id,
-                &iface.label,
-                IFACE_R * 2.0 + 20.0,
-                IFACE_R * 2.0 + 20.0,
-            );
+            layout.add_node(&iface.id, &iface.label, IFACE_NODE_SIZE, IFACE_NODE_SIZE);
         }
         for &note_index in &laid_out_note_indices {
             let dim = &note_dims[note_index];
@@ -1071,6 +1082,7 @@ pub fn render_with_oracle(
     } else if oracle.is_none() {
         compute_no_oracle_canvas(NoOracleCanvas {
             components: &diagram.components,
+            interfaces: &diagram.interfaces,
             positions: &positions,
             iface_positions: &iface_positions,
             comp_dims: &comp_dims,
@@ -1341,8 +1353,10 @@ pub fn render_with_oracle(
     // oracle captures each entity's `id` (`ent000N`), which encodes that
     // emission order, so when the oracle is present we merge both collections
     // into a single sequence sorted by the oracle-assigned id and emit in that
-    // order. Without an oracle there is no golden to match, so we keep the
-    // historical components-then-interfaces order.
+    // order. Without an oracle, top-level leaves use their parser-recorded
+    // source lines; package-backed diagrams retain the existing depth-aware
+    // component order because the interface model does not yet carry package
+    // ownership.
     #[derive(Clone, Copy)]
     enum EmitItem {
         Comp(usize),
@@ -1401,6 +1415,17 @@ pub fn render_with_oracle(
             }
         });
         out
+    } else if diagram.packages.is_empty() {
+        let mut out: Vec<EmitItem> = comp_order
+            .iter()
+            .map(|&i| EmitItem::Comp(i))
+            .chain((0..diagram.interfaces.len()).map(EmitItem::Iface))
+            .collect();
+        out.sort_by_key(|item| match *item {
+            EmitItem::Comp(i) => diagram.components[i].source_line,
+            EmitItem::Iface(i) => diagram.interfaces[i].source_line,
+        });
+        out
     } else {
         comp_order
             .iter()
@@ -1422,6 +1447,7 @@ pub fn render_with_oracle(
                     &iface_positions,
                     &interface_fill,
                     &interface_stroke,
+                    no_oracle_uids.as_ref(),
                     &mut entity_counter,
                 );
                 continue;
@@ -2845,6 +2871,7 @@ fn render_interface(
     iface_positions: &[(f64, f64)],
     interface_fill: &str,
     interface_stroke: &str,
+    no_oracle_uids: Option<&NoOracleUidModel>,
     entity_counter: &mut usize,
 ) {
     let iface = &diagram.interfaces[ii];
@@ -2857,6 +2884,7 @@ fn render_interface(
     let qualified_name = resolved.map(|(k, _)| k).unwrap_or(iface.id.as_str());
     let ent_id = oracle_iface
         .and_then(|r| r.entity_id.clone())
+        .or_else(|| no_oracle_uids.and_then(|uids| uids.entity_ids.get(&iface.id).cloned()))
         .unwrap_or_else(|| {
             let id = format!("ent{:04}", *entity_counter);
             *entity_counter += 1;
@@ -2864,7 +2892,9 @@ fn render_interface(
         });
     let source_attr = oracle_iface
         .and_then(|r| r.source_line.as_deref())
-        .map(|s| format!(r#" data-source-line="{s}""#))
+        .map(String::from)
+        .or_else(|| (iface.source_line > 0).then(|| iface.source_line.to_string()))
+        .map(|source_line| format!(r#" data-source-line="{source_line}""#))
         .unwrap_or_default();
 
     svg.raw(&format!("<!--entity {}-->", iface.id));
@@ -2903,7 +2933,13 @@ fn render_interface(
         // exact label positions depend on the surrounding diagram layout.
         let label_y = oracle_iface
             .and_then(|r| r.text_y_values.first().copied())
-            .unwrap_or(iy + IFACE_R + LINE_HEIGHT + 4.0);
+            .unwrap_or(
+                iy + (IFACE_NODE_SIZE - IFACE_CENTER_OFFSET)
+                    + IFACE_LABEL_GAP
+                    + RECTANGLE_MARGIN_Y
+                    + LINE_HEIGHT
+                    - LABEL_BASELINE_FROM_BOTTOM,
+            );
         let lx = oracle_iface
             .and_then(|r| r.text_x_values.first().copied())
             .unwrap_or_else(|| {
@@ -3264,7 +3300,10 @@ fn compute_positions_from_layout(
     }
     for (i, _iface) in diagram.interfaces.iter().enumerate() {
         let p = &node_positions[n_comp + i];
-        iface_positions.push((p.x + layout_dx + IFACE_R, p.y + layout_dy + IFACE_R));
+        iface_positions.push((
+            p.x + layout_dx + IFACE_CENTER_OFFSET,
+            p.y + layout_dy + IFACE_CENTER_OFFSET,
+        ));
     }
 
     let max_x = node_positions
@@ -3274,7 +3313,7 @@ fn compute_positions_from_layout(
             p.x + if i < n_comp {
                 comp_dims[i].width
             } else {
-                IFACE_R * 2.0 + 20.0
+                IFACE_NODE_SIZE
             }
         })
         .fold(0.0_f64, f64::max);
@@ -3285,7 +3324,7 @@ fn compute_positions_from_layout(
             p.y + if i < n_comp {
                 comp_dims[i].height
             } else {
-                IFACE_R * 2.0 + 20.0
+                IFACE_NODE_SIZE
             }
         })
         .fold(0.0_f64, f64::max);
@@ -3457,18 +3496,18 @@ fn compute_positions_grid(
     let iface_y_start = y_start + comp_total_h;
     let mut iface_positions = Vec::with_capacity(diagram.interfaces.len());
     for (ii, _iface) in diagram.interfaces.iter().enumerate() {
-        let ix = MARGIN + ii as f64 * (IFACE_R * 2.0 + GAP) + IFACE_R;
-        let iy = iface_y_start + IFACE_R;
+        let ix = MARGIN + ii as f64 * (IFACE_NODE_SIZE + GAP) + IFACE_CENTER_OFFSET;
+        let iy = iface_y_start + IFACE_CENTER_OFFSET;
         iface_positions.push((ix, iy));
     }
 
     let iface_total_h = if !diagram.interfaces.is_empty() {
-        IFACE_R * 2.0 + 20.0 + GAP
+        IFACE_NODE_SIZE + IFACE_LABEL_GAP + LINE_HEIGHT + GAP
     } else {
         0.0
     };
     let iface_total_w = if !diagram.interfaces.is_empty() {
-        MARGIN * 2.0 + diagram.interfaces.len() as f64 * (IFACE_R * 2.0 + GAP)
+        MARGIN * 2.0 + diagram.interfaces.len() as f64 * (IFACE_NODE_SIZE + GAP)
     } else {
         0.0
     };
@@ -3481,6 +3520,7 @@ fn compute_positions_grid(
 
 struct NoOracleCanvas<'a> {
     components: &'a [Component],
+    interfaces: &'a [Interface],
     positions: &'a [(f64, f64)],
     iface_positions: &'a [(f64, f64)],
     comp_dims: &'a [CompDim],
@@ -3513,9 +3553,11 @@ fn compute_no_oracle_canvas(input: NoOracleCanvas<'_>) -> (f64, f64) {
         max_x = max_x.max(x + dim.width + overflow);
         max_y = max_y.max(y + dim.height + overflow);
     }
-    for (cx, cy) in input.iface_positions {
-        max_x = max_x.max(cx + IFACE_R);
-        max_y = max_y.max(cy + IFACE_R + LINE_HEIGHT + 4.0);
+    for ((cx, cy), interface) in input.iface_positions.iter().zip(input.interfaces) {
+        let label_width = text_render::measure(&interface.label, FONT_SIZE, false);
+        max_x = max_x.max(cx + IFACE_R.max(label_width / 2.0));
+        max_y =
+            max_y.max(cy + (IFACE_NODE_SIZE - IFACE_CENTER_OFFSET) + IFACE_LABEL_GAP + LINE_HEIGHT);
     }
     for note in input.note_layouts {
         max_x = max_x.max(note.x + note.width);
@@ -5532,6 +5574,36 @@ mod tests {
     }
 
     #[test]
+    fn no_oracle_interface_uses_java_circle_block_and_uid_order() {
+        let input = "@startuml\ncomponent \"Telemetry Relay 71\" as Relay71\ninterface \"Audit Port 73\" as Audit73\nRelay71 - Audit73\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Component(component_diagram) = &diagram else {
+            panic!("expected component diagram");
+        };
+        assert_eq!(component_diagram.interfaces[0].source_line, 2);
+
+        let svg = crate::render_svg(&diagram);
+        assert!(
+            svg.contains(
+                r#"<g class="entity" data-qualified-name="Audit73" data-source-line="2" id="ent0003">"#
+            ),
+            "interface must consume its Java declaration UID: {svg}"
+        );
+        assert!(
+            svg.contains(r#"rx="8" ry="8""#),
+            "interface must retain the CircleInterface2 radius: {svg}"
+        );
+        assert!(
+            svg.contains(r#"data-source-line="3" id="lnk4""#),
+            "link UID must follow both declared entities: {svg}"
+        );
+        assert!(
+            svg.contains("Audit Port 73"),
+            "interface label missing: {svg}"
+        );
+    }
+
+    #[test]
     fn multiple_stereotypes_rendered() {
         let input = "@startuml\ncomponent Auth <<service>> <<secured>>\nAuth --> Backend\n@enduml";
         let diagram = rustuml_parser::parse::parse(input).unwrap();
@@ -5740,6 +5812,7 @@ mod tests {
         let dimensions = [dim];
         let (canvas_w, canvas_h) = super::compute_no_oracle_canvas(super::NoOracleCanvas {
             components: std::slice::from_ref(component),
+            interfaces: &[],
             positions: &positions,
             iface_positions: &[],
             comp_dims: &dimensions,
