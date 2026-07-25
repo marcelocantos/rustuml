@@ -39,7 +39,6 @@ const ACTOR_STICKMAN_BASE_HEIGHT: f64 = 59.0;
 /// Vertical offset from head centre to stereotype baseline (measured).
 const ACTOR_STEREO_OFFSET: f64 = 11.4531;
 const LINE_H: f64 = 16.4883;
-const UC_TEXT_OFFSET_SINGLE: f64 = 4.7441;
 
 const MARGIN: f64 = 7.0;
 const GAP: f64 = 40.0;
@@ -698,7 +697,7 @@ struct ActorDim {
 struct UseCaseDim {
     label_w: f64,
     stereo_w: f64,
-    line_count: usize,
+    footprint_center_y: f64,
     rx: f64,
     ry: f64,
 }
@@ -797,35 +796,142 @@ fn use_case_dim(uc: &UseCase, skin: &SkinColors) -> UseCaseDim {
             )
         })
         .unwrap_or(0.0);
-    let desc_max_w = uc
-        .description
-        .iter()
-        .map(|d| text_render::measure_with_family(d, font_size, false, &skin.uc_font_family))
-        .fold(0.0_f64, f64::max);
-    let max_w = label_w.max(stereo_w).max(desc_max_w);
+    let body_widths: Vec<f64> = if uc.description.is_empty() {
+        vec![label_w]
+    } else {
+        uc.description
+            .iter()
+            .map(|d| text_render::measure_with_family(d, font_size, false, &skin.uc_font_family))
+            .collect()
+    };
+    let mut footprint_widths = Vec::with_capacity(body_widths.len() + 1);
+    if uc.stereotype.is_some() {
+        footprint_widths.push(stereo_w);
+    }
+    footprint_widths.extend(body_widths.iter().copied());
+    // Java `Display.getCreole` builds the standalone stereotype through
+    // `SheetBlock1`, whose one-pixel horizontal padding contributes to the
+    // merged block dimension (and therefore alpha). `Footprint` records only
+    // the painted text corners inside that padding.
+    let stereo_block_w = if uc.stereotype.is_some() {
+        stereo_w + 2.0
+    } else {
+        0.0
+    };
+    let body_block_w = body_widths.iter().copied().fold(0.0_f64, f64::max);
+    let block_w = stereo_block_w.max(body_block_w);
     let line_count = uc.description.len().max(1) + if uc.stereotype.is_some() { 1 } else { 0 };
-    let (rx, ry) = use_case_ellipse_radii(max_w, line_count as f64 * LINE_H);
+    let (rx, ry, footprint_center_y) =
+        use_case_ellipse_radii(&footprint_widths, block_w, line_count as f64 * LINE_H);
     UseCaseDim {
         label_w,
         stereo_w,
-        line_count,
+        footprint_center_y,
         rx,
         ry,
     }
 }
 
-fn use_case_ellipse_radii(text_w: f64, text_h: f64) -> (f64, f64) {
+#[derive(Clone, Copy)]
+struct FootprintCircle {
+    center: (f64, f64),
+    radius: f64,
+}
+
+impl FootprintCircle {
+    fn at(center: (f64, f64)) -> Self {
+        Self {
+            center,
+            radius: 0.0,
+        }
+    }
+
+    fn through_two(p1: (f64, f64), p2: (f64, f64)) -> Self {
+        let center = ((p1.0 + p2.0) / 2.0, (p1.1 + p2.1) / 2.0);
+        Self {
+            center,
+            radius: (p1.0 - center.0).hypot(p1.1 - center.1),
+        }
+    }
+
+    fn through_three(p1: (f64, f64), p2: (f64, f64), p3: (f64, f64)) -> Self {
+        if p3.1 == p2.1 {
+            return Self::through_three(p2, p1, p3);
+        }
+        let num_x = p3.0 * p3.0 * (p1.1 - p2.1)
+            + (p1.0 * p1.0 + (p1.1 - p2.1) * (p1.1 - p3.1)) * (p2.1 - p3.1)
+            + p2.0 * p2.0 * (-p1.1 + p3.1);
+        let den_x = 2.0 * (p3.0 * (p1.1 - p2.1) + p1.0 * (p2.1 - p3.1) + p2.0 * (-p1.1 + p3.1));
+        let x = num_x / den_x;
+        let y = (p2.1 + p3.1) / 2.0 - (p3.0 - p2.0) / (p3.1 - p2.1) * (x - (p2.0 + p3.0) / 2.0);
+        Self {
+            center: (x, y),
+            radius: (p1.0 - x).hypot(p1.1 - y),
+        }
+    }
+
+    fn is_outside(self, point: (f64, f64)) -> bool {
+        (point.0 - self.center.0).hypot(point.1 - self.center.1) > self.radius
+    }
+}
+
+fn smallest_enclosing_circle(
+    count: usize,
+    points: &[(f64, f64)],
+    boundary_count: usize,
+    boundary: &mut [(f64, f64)],
+) -> FootprintCircle {
+    let mut circle = match boundary_count {
+        0 => FootprintCircle::at((0.0, 0.0)),
+        1 => FootprintCircle::at(boundary[0]),
+        2 => FootprintCircle::through_two(boundary[0], boundary[1]),
+        3 => {
+            return FootprintCircle::through_three(boundary[0], boundary[1], boundary[2]);
+        }
+        _ => unreachable!(),
+    };
+    for index in 0..count {
+        if circle.is_outside(points[index]) {
+            boundary[boundary_count] = points[index];
+            circle = smallest_enclosing_circle(index, points, boundary_count + 1, boundary);
+        }
+    }
+    circle
+}
+
+fn use_case_ellipse_radii(line_widths: &[f64], text_w: f64, text_h: f64) -> (f64, f64, f64) {
     // Java provenance: `svek.image.EntityImageUseCase.calculateDimensionSlow`
-    // wraps the merged stereotype/body `TextBlock` in
-    // `klimt.shape.TextBlockInEllipse`; that helper clamps
-    // `textDim.height / textDim.width` to [0.2, 0.8], computes the containing
-    // ellipse footprint, then returns `getUEllipse().bigger(6)`.
+    // wraps the merged stereotype/body `TextBlock` in `TextBlockInEllipse`.
+    // `Footprint.getEllipse` records every painted text corner after scaling
+    // y by alpha, then `SmallestEnclosingCircle.findSec` computes the circle
+    // before `getUEllipse().bigger(6)` adds three pixels to each radius.
     let w = text_w.max(1.0);
     let h = text_h.max(1.0);
     let alpha = (h / w).clamp(0.2, 0.8);
-    let inner_rx = ((w / 2.0).powi(2) + (h / 2.0 / alpha).powi(2)).sqrt();
-    let inner_ry = inner_rx * alpha;
-    (inner_rx + 3.0, inner_ry + 3.0)
+    let line_h = h / line_widths.len().max(1) as f64;
+    let ascent = pm::ascent(FONT_SIZE);
+    let mut points = Vec::with_capacity(line_widths.len() * 4);
+    for (index, &line_w) in line_widths.iter().enumerate() {
+        let x = (w - line_w) / 2.0;
+        let baseline = index as f64 * line_h + ascent;
+        // Java `Footprint.MyUGraphic.drawText` shifts the measured line box
+        // upward by `height - 1.5` before recording its four corners.
+        let top = baseline - line_h + 1.5;
+        let bottom = top + line_h;
+        points.extend([
+            (x, top / alpha),
+            (x, bottom / alpha),
+            (x + line_w, top / alpha),
+            (x + line_w, bottom / alpha),
+        ]);
+    }
+    let mut boundary = points.clone();
+    let circle = smallest_enclosing_circle(points.len(), &points, 0, &mut boundary);
+    (
+        circle.radius + 3.0,
+        circle.radius * alpha + 3.0,
+        circle.center.1 * alpha,
+    )
 }
 
 struct Positions {
@@ -1821,12 +1927,11 @@ fn render_use_case(
     let captured_x = orc_rect.map(|r| r.text_x_values.as_slice()).unwrap_or(&[]);
     let captured_y = orc_rect.map(|r| r.text_y_values.as_slice()).unwrap_or(&[]);
     let mut line_idx = 0usize;
-    let n_lines = dim.line_count;
-    let bottom_y = cy + UC_TEXT_OFFSET_SINGLE + (n_lines as f64 - 1.0) * LINE_H;
-    let mut text_y = bottom_y - (n_lines as f64 - 1.0) * LINE_H;
-    if dim.line_count >= 2 && uc.stereotype.is_some() {
-        text_y = cy + 0.0304;
-    }
+    // Java `TextBlockInEllipse.drawU` translates the merged text by
+    // `(ellipseHalfHeight - footprintCenterY - 2)`. Since `cy` already
+    // includes the half-height, each baseline is relative to the computed
+    // painted footprint center rather than a fixed one-line offset.
+    let mut text_y = cy - dim.footprint_center_y - 2.0 + pm::ascent(FONT_SIZE);
     if let Some(stereo) = &uc.stereotype {
         let stereo_text = format!("\u{00AB}{stereo}\u{00BB}");
         let stereo_x = captured_x
@@ -2914,6 +3019,23 @@ mod tests {
         assert!(svg.contains(r#"viewBox="0 0 325 236""#), "{svg}");
         assert!(svg.contains(r#"width="325px""#), "{svg}");
         assert!(svg.contains(r#"height="236px""#), "{svg}");
+    }
+
+    #[test]
+    fn renamed_stereotype_uses_painted_text_footprint() {
+        let input = "@startuml\n\
+                     actor \"Renamed Observer 901\" as Observer901\n\
+                     usecase \"Renamed Approval Path 907\" as Approval907 <<automated-variant-911>>\n\
+                     Observer901 --> Approval907\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Fresh PlantUML oracle result for this renamed perturbation. The
+        // stereotype is narrower than the body, so a bounding-box shortcut
+        // cannot reproduce `Footprint.getEllipse`.
+        assert!(svg.contains(r#"viewBox="0 0 273 211""#), "{svg}");
+        assert!(svg.contains(r#"rx="126.9332" ry="27.7866""#), "{svg}");
     }
 
     #[test]

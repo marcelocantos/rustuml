@@ -33,6 +33,6 @@ sprites 0 49
 state 540 901
 timing 141 141
 type-detection 28 42
-usecase 106 315
+usecase 122 315
 wbs 138 138
 wire 0 0
