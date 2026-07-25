@@ -72,6 +72,10 @@ pub struct Connection {
     #[serde(default)]
     pub has_arrow: bool,
     #[serde(default)]
+    pub arrow_at_start: bool,
+    #[serde(default)]
+    pub arrow_at_end: bool,
+    #[serde(default)]
     pub shape: LinkShape,
     /// 1-based line number within the `@startuml` block.
     #[serde(default)]

@@ -1270,11 +1270,13 @@ pub fn render_with_oracle(
                 // (`SvekResult.calculateDimension` / `SvekEdge.solveLine`).
                 // The final arrow decor also shortens the visible path by
                 // `ExtremityArrow.getDecorationLength()`.
+                let (arrow_at_start, arrow_at_end) = no_oracle_arrow_ends(conn);
                 let edge_points = component_svek_edge_points(
                     &ep.points,
                     MARGIN,
                     MARGIN + title_h,
-                    conn.has_arrow,
+                    arrow_at_start,
+                    arrow_at_end,
                 );
                 let path_d = build_path_d(&edge_points);
                 let path_id = no_oracle_path_id(conn);
@@ -1283,8 +1285,13 @@ pub fn render_with_oracle(
             ));
 
                 let raw_edge_points =
-                    component_svek_edge_points(&ep.points, MARGIN, MARGIN + title_h, false);
-                if conn.has_arrow {
+                    component_svek_edge_points(&ep.points, MARGIN, MARGIN + title_h, false, false);
+                if arrow_at_start {
+                    let first = raw_edge_points.first().unwrap();
+                    let next = raw_edge_points.get(1).unwrap_or(first);
+                    render_arrowhead(&mut svg, next, first);
+                }
+                if arrow_at_end {
                     let last = raw_edge_points.last().unwrap();
                     let prev = if raw_edge_points.len() >= 2 {
                         &raw_edge_points[raw_edge_points.len() - 2]
@@ -1382,7 +1389,11 @@ pub fn render_with_oracle(
                 r#"<path d="{path_d}" fill="none" id="{path_id}" style="stroke:{STROKE};stroke-width:1;{dash_attr}"/>"#,
             ));
 
-                if conn.has_arrow {
+                let (arrow_at_start, arrow_at_end) = no_oracle_arrow_ends(conn);
+                if arrow_at_start {
+                    render_arrowhead_from_coords(&mut svg, to_cx, to_cy, from_cx, from_bottom);
+                }
+                if arrow_at_end {
                     render_arrowhead_from_coords(&mut svg, from_cx, from_bottom, to_cx, to_cy);
                 } else if matches!(
                     conn.shape,
@@ -2681,25 +2692,13 @@ fn render_arrowhead(svg: &mut SvgBuilder, prev: &(f64, f64), tip: &(f64, f64)) {
     render_arrow_at(svg, tip.0, tip.1, angle);
 }
 
-fn render_arrowhead_from_coords(svg: &mut SvgBuilder, _fx: f64, _fy: f64, tx: f64, ty: f64) {
-    // Downward arrow (most common in top-to-bottom layout).
-    let size = 5.0;
-    let pts = format!(
-        "{tx},{ty},{x1},{y1},{tx2},{ty2},{x3},{y3},{tx},{ty}",
-        x1 = tx + size,
-        y1 = ty - size * 2.0,
-        tx2 = tx,
-        ty2 = ty - size * 1.5,
-        x3 = tx - size,
-        y3 = ty - size * 2.0,
-    );
-    svg.raw(&format!(
-        r#"<polygon fill="{STROKE}" points="{pts}" style="stroke:{STROKE};stroke-width:1;"/>"#,
-    ));
+fn render_arrowhead_from_coords(svg: &mut SvgBuilder, fx: f64, fy: f64, tx: f64, ty: f64) {
+    render_arrow_at(svg, tx, ty, (ty - fy).atan2(tx - fx));
 }
 
 fn no_oracle_link_type_attr(conn: &Connection) -> String {
-    if conn.has_arrow {
+    let (arrow_at_start, arrow_at_end) = no_oracle_arrow_ends(conn);
+    if arrow_at_start || arrow_at_end {
         r#" data-link-type="dependency""#.to_string()
     } else if matches!(
         conn.shape,
@@ -2712,7 +2711,8 @@ fn no_oracle_link_type_attr(conn: &Connection) -> String {
 }
 
 fn no_oracle_path_id(conn: &Connection) -> String {
-    if conn.has_arrow
+    let (arrow_at_start, arrow_at_end) = no_oracle_arrow_ends(conn);
+    if arrow_at_end && !arrow_at_start
         || matches!(
             conn.shape,
             LinkShape::TargetSocket | LinkShape::TargetBallSocket
@@ -2721,6 +2721,16 @@ fn no_oracle_path_id(conn: &Connection) -> String {
         format!("{}-to-{}", conn.from, conn.to)
     } else {
         format!("{}-{}", conn.from, conn.to)
+    }
+}
+
+fn no_oracle_arrow_ends(conn: &Connection) -> (bool, bool) {
+    if conn.arrow_at_start || conn.arrow_at_end {
+        (conn.arrow_at_start, conn.arrow_at_end)
+    } else {
+        // Preserve compatibility with diagrams deserialized before the
+        // endpoint-specific fields were added.
+        (false, conn.has_arrow)
     }
 }
 
@@ -2835,9 +2845,39 @@ fn component_svek_edge_points(
     points: &[(f64, f64)],
     dx: f64,
     dy: f64,
+    trim_start_for_arrow: bool,
     trim_end_for_arrow: bool,
 ) -> Vec<(f64, f64)> {
-    let mut out: Vec<(f64, f64)> = points.iter().map(|(x, y)| (x + dx, y + dy)).collect();
+    // `SvekEdge.solveLine` reads the spline back from Graphviz's SVG through
+    // `SvgResult.toDotPath`; Graphviz serializes those path coordinates at two
+    // decimal places. The vendored C API gives us the pre-serialization
+    // doubles, so reproduce that model boundary before applying decorations.
+    let quantize = |value: f64| (value * 100.0).round() / 100.0;
+    let mut out: Vec<(f64, f64)> = points
+        .iter()
+        .map(|(x, y)| (quantize(*x) + dx, quantize(*y) + dy))
+        .collect();
+
+    if trim_start_for_arrow && out.len() >= 2 {
+        let (tip_x, tip_y) = out[0];
+        let (next_x, next_y) = out[1];
+        let vx = next_x - tip_x;
+        let vy = next_y - tip_y;
+        let len = (vx * vx + vy * vy).sqrt();
+        if len > f64::EPSILON {
+            // `SvekEdge.getExtremitySimplier` moves both the start point and
+            // its first control point by `ExtremityArrow`'s 6px decoration
+            // length.
+            let ux = vx / len;
+            let uy = vy / len;
+            let trim = 6.0;
+            out[0] = (tip_x + ux * trim, tip_y + uy * trim);
+            if out.len() >= 4 {
+                let (cx, cy) = out[1];
+                out[1] = (cx + ux * trim, cy + uy * trim);
+            }
+        }
+    }
 
     if trim_end_for_arrow && out.len() >= 2 {
         let n = out.len();
@@ -3511,6 +3551,23 @@ mod tests {
         assert!(
             svg.contains(r##"<polygon fill="#181818" points=""##),
             "dependency link should draw a PlantUML-style extremity polygon: {svg}"
+        );
+    }
+
+    #[test]
+    fn no_oracle_bidirectional_link_decorates_both_spline_ends() {
+        let input = "@startuml\ncomponent \"Renamed ingress\" as EntryPoint\ncomponent \"Renamed archive\" as ArchiveNode\nEntryPoint <..> ArchiveNode\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(
+            svg.contains(r#"id="EntryPoint-ArchiveNode""#),
+            "bidirectional paths use PlantUML's association-style id: {svg}"
+        );
+        assert_eq!(
+            svg.matches(r##"<polygon fill="#181818""##).count(),
+            2,
+            "each decorated endpoint should emit one arrow polygon: {svg}"
         );
     }
 }

@@ -626,7 +626,9 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 .unwrap_or_default();
             let label = caps.get(10).map(|m| m.as_str().trim().to_string());
             let dashed = arrow.contains("..") || arrow.contains('.');
-            let has_arrow = arrow.contains('>') || arrow.contains('<');
+            let arrow_at_start = arrow.contains('<');
+            let arrow_at_end = arrow.contains('>');
+            let has_arrow = arrow_at_start || arrow_at_end;
             let shape = parse_link_shape(arrow);
 
             // Auto-create endpoints if not already declared. Bracketed and
@@ -669,6 +671,8 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                     to_mult,
                     dashed,
                     has_arrow,
+                    arrow_at_start,
+                    arrow_at_end,
                     shape,
                     source_line: current_line,
                 });
@@ -837,6 +841,19 @@ mod tests {
         assert_eq!(d.connections[0].label.as_deref(), Some("uses"));
         assert!(!d.connections[0].has_arrow);
         assert_eq!(d.connections[0].shape, LinkShape::MiddleBallSocket);
+    }
+
+    #[test]
+    fn preserves_arrow_decorations_at_both_connection_ends() {
+        let d = parse(
+            "component RenamedSource\ncomponent RenamedTarget\nRenamedSource <..> RenamedTarget",
+        );
+
+        let connection = &d.connections[0];
+        assert!(connection.has_arrow);
+        assert!(connection.arrow_at_start);
+        assert!(connection.arrow_at_end);
+        assert!(connection.dashed);
     }
 
     #[test]
