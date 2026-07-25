@@ -127,6 +127,7 @@ struct NoOracleUidModel {
 struct NoOracleNoteUid {
     qualified_name: String,
     entity_id: String,
+    link_id: usize,
 }
 
 fn build_no_oracle_uid_model(diagram: &ComponentDiagram) -> NoOracleUidModel {
@@ -215,11 +216,13 @@ fn build_no_oracle_uid_model(diagram: &ComponentDiagram) -> NoOracleUidModel {
                 next_uid += 1;
                 let entity_id = format!("ent{next_uid:04}");
                 next_uid += 1;
+                let link_id = next_uid;
                 note_ids.insert(
                     index,
                     NoOracleNoteUid {
                         qualified_name,
                         entity_id,
+                        link_id,
                     },
                 );
                 next_uid += 1;
@@ -425,7 +428,10 @@ fn component_note_dim(note: &ComponentNote) -> CompDim {
     }
 }
 
-fn attached_component_note_indices(diagram: &ComponentDiagram) -> Vec<usize> {
+fn laid_out_note_indices(
+    diagram: &ComponentDiagram,
+    package_qualified_names: &std::collections::HashMap<String, String>,
+) -> Vec<usize> {
     diagram
         .notes
         .iter()
@@ -438,8 +444,30 @@ fn attached_component_note_indices(diagram: &ComponentDiagram) -> Vec<usize> {
                         .components
                         .iter()
                         .any(|component| component.id == *target)
+                        || package_qualified_names.contains_key(*target)
                 })
                 .map(|_| index)
+        })
+        .collect()
+}
+
+fn component_group_endpoint_nodes(
+    diagram: &ComponentDiagram,
+    package_qualified_names: &std::collections::HashMap<String, String>,
+) -> Vec<(String, String)> {
+    let mut seen = std::collections::HashSet::new();
+    diagram
+        .connections
+        .iter()
+        .flat_map(|connection| [&connection.from, &connection.to])
+        .chain(diagram.notes.iter().filter_map(|note| note.target.as_ref()))
+        .filter_map(|endpoint| package_qualified_names.get(endpoint.as_str()))
+        .filter(|qname| seen.insert((*qname).clone()))
+        .map(|qname| {
+            (
+                qname.clone(),
+                format!("__svek_group_endpoint_{}", qname.replace('.', "_")),
+            )
         })
         .collect()
 }
@@ -679,7 +707,11 @@ pub fn render_with_oracle(
     // Compute dimensions for each component.
     let comp_dims: Vec<CompDim> = diagram.components.iter().map(calc_component_dim).collect();
     let note_dims: Vec<CompDim> = diagram.notes.iter().map(component_note_dim).collect();
-    let attached_note_indices = attached_component_note_indices(diagram);
+    let package_qualified_names = build_package_qualified_names(&diagram.packages);
+    let laid_out_note_indices = laid_out_note_indices(diagram, &package_qualified_names);
+    let group_endpoint_nodes = component_group_endpoint_nodes(diagram, &package_qualified_names);
+    let group_endpoint_node_map: std::collections::HashMap<String, String> =
+        group_endpoint_nodes.iter().cloned().collect();
 
     let title_h = if let Some(title) = &diagram.meta.title {
         // PlantUML title band: 10px top, n line-heights, 11px bottom gap before
@@ -708,7 +740,7 @@ pub fn render_with_oracle(
                 IFACE_R * 2.0 + 20.0,
             );
         }
-        for &note_index in &attached_note_indices {
+        for &note_index in &laid_out_note_indices {
             let dim = &note_dims[note_index];
             layout.add_node(
                 &component_note_layout_id(note_index),
@@ -717,45 +749,49 @@ pub fn render_with_oracle(
                 dim.height,
             );
         }
-        let package_qualified_names = build_package_qualified_names(&diagram.packages);
-        let mut group_endpoint_nodes = std::collections::HashMap::new();
-        for endpoint in diagram
-            .connections
-            .iter()
-            .flat_map(|connection| [&connection.from, &connection.to])
-        {
-            if let Some(qname) = package_qualified_names.get(endpoint.as_str()) {
-                group_endpoint_nodes
-                    .entry(qname.clone())
-                    .or_insert_with(|| {
-                        let id = format!("__svek_group_endpoint_{}", qname.replace('.', "_"));
-                        layout.add_svek_cluster_endpoint(&id);
-                        id
-                    });
-            }
+        for (_, endpoint_id) in &group_endpoint_nodes {
+            layout.add_svek_cluster_endpoint(endpoint_id);
         }
-        add_package_clusters_to_layout(&mut layout, &diagram.packages, "", &group_endpoint_nodes);
+        add_package_clusters_to_layout(
+            &mut layout,
+            &diagram.packages,
+            "",
+            &group_endpoint_node_map,
+        );
         add_together_groups_to_layout(&mut layout, diagram);
-        for &note_index in &attached_note_indices {
+        for &note_index in &laid_out_note_indices {
             let note = &diagram.notes[note_index];
             let Some(target) = note.target.as_deref() else {
                 continue;
             };
             let note_id = component_note_layout_id(note_index);
+            let layout_target = package_qualified_names
+                .get(target)
+                .and_then(|qname| group_endpoint_node_map.get(qname))
+                .map(String::as_str)
+                .unwrap_or(target);
             let (from, to) = match note.position {
                 ComponentNotePosition::Top | ComponentNotePosition::Left => {
-                    (note_id.as_str(), target)
+                    (note_id.as_str(), layout_target)
                 }
                 ComponentNotePosition::Bottom | ComponentNotePosition::Right => {
-                    (target, note_id.as_str())
+                    (layout_target, note_id.as_str())
                 }
             };
             if matches!(
                 note.position,
                 ComponentNotePosition::Left | ComponentNotePosition::Right
             ) {
-                layout.add_same_rank(from, to);
-                layout.add_edge(from, to, None);
+                if package_qualified_names.contains_key(target) {
+                    // `SvekEdge.appendLine` can encode a horizontal
+                    // `LinkArg.noDisplay(1)` edge as `minlen=length-1`, i.e.
+                    // zero. This keeps the special point in Java's protected
+                    // cluster while dot places the outside note beside it.
+                    layout.add_edge_with_minlen(from, to, None, 0);
+                } else {
+                    layout.add_same_rank(from, to);
+                    layout.add_edge(from, to, None);
+                }
             } else {
                 // `CommandFactoryNoteOnEntity.executeInternal` uses
                 // `LinkArg.noDisplay(2)` for vertical note links. SVEK maps
@@ -767,12 +803,12 @@ pub fn render_with_oracle(
             let (logical_from, logical_to, layout_reversed) = no_oracle_layout_edge_ends(conn);
             let layout_from = package_qualified_names
                 .get(logical_from)
-                .and_then(|qname| group_endpoint_nodes.get(qname))
+                .and_then(|qname| group_endpoint_node_map.get(qname))
                 .map(String::as_str)
                 .unwrap_or(logical_from);
             let layout_to = package_qualified_names
                 .get(logical_to)
-                .and_then(|qname| group_endpoint_nodes.get(qname))
+                .and_then(|qname| group_endpoint_node_map.get(qname))
                 .map(String::as_str)
                 .unwrap_or(logical_to);
             let horizontal = matches!(
@@ -828,7 +864,7 @@ pub fn render_with_oracle(
                 &result.node_positions,
                 &result.cluster_positions,
                 title_h,
-                attached_note_indices.len(),
+                laid_out_note_indices.len(),
             )
         } else {
             compute_positions_grid(diagram, &comp_dims, title_h)
@@ -870,7 +906,7 @@ pub fn render_with_oracle(
                         &result.node_positions,
                         n_comp,
                         diagram.interfaces.len(),
-                        attached_note_indices.len(),
+                        laid_out_note_indices.len(),
                     );
                     (origin_x - min_x, origin_y + title_h - min_y)
                 })
@@ -880,7 +916,7 @@ pub fn render_with_oracle(
         .as_ref()
         .map(|result| {
             let first_note_node = n_comp + diagram.interfaces.len();
-            attached_note_indices
+            laid_out_note_indices
                 .iter()
                 .enumerate()
                 .filter_map(|(offset, &note_index)| {
@@ -1590,26 +1626,34 @@ pub fn render_with_oracle(
                 .and_then(|uids| uids.note_ids.get(&note_index));
             if let (Some(layout), Some(uid), Some(target)) = (layout, uid, note.target.as_deref()) {
                 let note_id = component_note_layout_id(note_index);
+                let target_package = package_qualified_names.get(target);
+                let group_endpoint_id = target_package
+                    .map(|qname| format!("__svek_group_endpoint_{}", qname.replace('.', "_")));
+                let layout_target = group_endpoint_id.as_deref().unwrap_or(target);
                 let (from, to) = match note.position {
                     ComponentNotePosition::Top | ComponentNotePosition::Left => {
-                        (note_id.as_str(), target)
+                        (note_id.as_str(), layout_target)
                     }
                     ComponentNotePosition::Bottom | ComponentNotePosition::Right => {
-                        (target, note_id.as_str())
+                        (layout_target, note_id.as_str())
                     }
                 };
                 let edge = edge_paths
                     .iter()
                     .find(|edge| edge.from == from && edge.to == to);
-                render_attached_component_note(
-                    note,
-                    layout,
-                    uid,
-                    edge,
-                    svek_edge_dx,
-                    svek_edge_dy,
-                    &mut svg,
-                );
+                if target_package.is_some() {
+                    render_normal_component_note(note, layout, uid, &mut svg);
+                } else {
+                    render_attached_component_note(
+                        note,
+                        layout,
+                        uid,
+                        edge,
+                        svek_edge_dx,
+                        svek_edge_dy,
+                        &mut svg,
+                    );
+                }
             } else {
                 render_fallback_note(
                     note,
@@ -1621,6 +1665,89 @@ pub fn render_with_oracle(
                     total_h,
                 );
             }
+        }
+    }
+
+    // A note targeting a group cannot be made Opale: Java
+    // `GraphvizImageBuilder.isOpalisable` has no peer `SvekNode` for a group.
+    // Its dashed SVEK edge therefore remains visible and is compound-clipped
+    // against the solved cluster envelope.
+    if oracle.is_none() {
+        for (note_index, note) in diagram.notes.iter().enumerate() {
+            let Some(target) = note.target.as_deref() else {
+                continue;
+            };
+            let Some(qname) = package_qualified_names.get(target) else {
+                continue;
+            };
+            let Some(uid) = no_oracle_uids
+                .as_ref()
+                .and_then(|uids| uids.note_ids.get(&note_index))
+            else {
+                continue;
+            };
+            let endpoint_id = format!("__svek_group_endpoint_{}", qname.replace('.', "_"));
+            let note_id = component_note_layout_id(note_index);
+            let (from, to, from_name, to_name, entity_1, entity_2, tail_cluster, head_cluster) =
+                match note.position {
+                    ComponentNotePosition::Top | ComponentNotePosition::Left => (
+                        note_id.as_str(),
+                        endpoint_id.as_str(),
+                        uid.qualified_name.as_str(),
+                        target,
+                        uid.entity_id.as_str(),
+                        no_oracle_uids
+                            .as_ref()
+                            .and_then(|uids| uids.entity_ids.get(target))
+                            .map(String::as_str)
+                            .unwrap_or(""),
+                        None,
+                        cluster_positions
+                            .iter()
+                            .find(|position| &position.id == qname),
+                    ),
+                    ComponentNotePosition::Bottom | ComponentNotePosition::Right => (
+                        endpoint_id.as_str(),
+                        note_id.as_str(),
+                        target,
+                        uid.qualified_name.as_str(),
+                        no_oracle_uids
+                            .as_ref()
+                            .and_then(|uids| uids.entity_ids.get(target))
+                            .map(String::as_str)
+                            .unwrap_or(""),
+                        uid.entity_id.as_str(),
+                        cluster_positions
+                            .iter()
+                            .find(|position| &position.id == qname),
+                        None,
+                    ),
+                };
+            let Some(edge) = edge_paths
+                .iter()
+                .find(|edge| edge.from == from && edge.to == to)
+            else {
+                continue;
+            };
+            let points = component_svek_edge_points(
+                &edge.points,
+                svek_edge_dx,
+                svek_edge_dy,
+                tail_cluster,
+                head_cluster,
+                false,
+                false,
+            );
+            let path_d = build_path_d(&points);
+            svg.raw(&format!("<!--link {from_name} to {to_name}-->"));
+            svg.raw(&format!(
+                r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="association" data-source-line="{}" id="lnk{}">"#,
+                note.source_line, uid.link_id
+            ));
+            svg.raw(&format!(
+                r#"<path d="{path_d}" fill="none" id="{from_name}-{to_name}" style="stroke:{STROKE};stroke-width:1;stroke-dasharray:7,7;"/>"#
+            ));
+            svg.raw("</g>");
         }
     }
 
@@ -3957,6 +4084,73 @@ fn build_path_d(points: &[(f64, f64)]) -> String {
 // Note rendering
 // ---------------------------------------------------------------------------
 
+fn render_normal_component_note(
+    note: &ComponentNote,
+    layout: &ComponentNoteLayout,
+    uid: &NoOracleNoteUid,
+    svg: &mut SvgBuilder,
+) {
+    let x = layout.x;
+    let y = layout.y;
+    let w = layout.width;
+    let h = layout.height;
+    let fold = NOTE_FOLD;
+    // `EntityImageNote.drawNormal` uses `Opale.getPolygonNormal` when
+    // `GraphvizImageBuilder.isOpalisable` cannot resolve a peer SvekNode.
+    let body_path = format!(
+        "M{x0},{y0} L{x0},{yb} L{xr},{yb} L{xr},{yf} L{xf},{y0} L{x0},{y0}",
+        x0 = fc(x),
+        y0 = fc(y),
+        yb = fc(y + h),
+        xr = fc(x + w),
+        yf = fc(y + fold),
+        xf = fc(x + w - fold),
+    );
+    let fold_path = format!(
+        "M{x1},{y0} L{x1},{y1} L{x2},{y1} L{x1},{y0}",
+        x1 = fc(x + w - fold),
+        y0 = fc(y),
+        y1 = fc(y + fold),
+        x2 = fc(x + w),
+    );
+
+    svg.raw(&format!(
+        r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
+        uid.qualified_name, note.source_line, uid.entity_id
+    ));
+    svg.raw(&format!(
+        r#"<path d="{body_path}" fill="{NOTE_FILL}" style="stroke:{STROKE};stroke-width:0.5;"/>"#
+    ));
+    svg.raw(&format!(
+        r#"<path d="{fold_path}" fill="{NOTE_FILL}" style="stroke:{STROKE};stroke-width:1;"/>"#
+    ));
+
+    let mut text_y = y + NOTE_MARGIN_Y;
+    for line in note.text.lines() {
+        let ascent = text_render::label_ascent(line, LINK_FONT);
+        text_y += ascent;
+        let mut text_buf = String::new();
+        text_render::emit_text(
+            &mut text_buf,
+            line,
+            &TextBase {
+                x: x + NOTE_MARGIN_X1,
+                y: text_y,
+                font_size: LINK_FONT as u32,
+                font_family: "sans-serif",
+                fill: TEXT_COLOR,
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        svg.raw(&text_buf);
+        text_y += text_render::label_height(line, LINK_FONT) - ascent;
+    }
+    svg.raw("</g>");
+}
+
 fn render_attached_component_note(
     note: &ComponentNote,
     layout: &ComponentNoteLayout,
@@ -5015,6 +5209,32 @@ mod tests {
         assert!(
             !svg.contains("<polygon "),
             "the hidden note link should be embedded in the Opale outline: {svg}"
+        );
+    }
+
+    #[test]
+    fn no_oracle_container_note_keeps_protected_endpoint_for_renamed_group() {
+        let input = "@startuml\npackage \"Renamed Boundary 71\" as Boundary71 {\n  component \"Renamed Worker 73\" as Worker73\n}\nnote right of Boundary71 : Fresh group note 79\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(
+            svg.contains(
+                r#"<g class="entity" data-qualified-name="GMN4" data-source-line="4" id="ent0005">"#
+            ),
+            "container note should use Java-compatible generated identities: {svg}"
+        );
+        assert!(
+            svg.contains(
+                r#"<g class="link" data-entity-1="ent0002" data-entity-2="ent0005" data-link-type="association" data-source-line="4" id="lnk6">"#
+            ),
+            "container note should retain its visible dashed SVEK link: {svg}"
+        );
+        assert!(
+            svg.contains(
+                r#"id="Boundary71-GMN4" style="stroke:#181818;stroke-width:1;stroke-dasharray:7,7;""#
+            ),
+            "container note link should route from the protected group endpoint: {svg}"
         );
     }
 
