@@ -263,6 +263,9 @@ const PACKAGE_TITLE_MARGIN_X: f64 = 3.0;
 const PACKAGE_TAB_SLOPE_WIDTH: f64 = 7.0;
 const PACKAGE_ROUND_CORNER: f64 = 5.0;
 const PACKAGE_STROKE_WIDTH: &str = "1.5";
+/// Java `USymbolFrame.drawFrame`, `USymbolRectangle.drawRect`, and
+/// `USymbolNode.drawNode` use the ordinary cluster line thickness.
+const SYMBOL_CLUSTER_STROKE_WIDTH: &str = "1";
 /// Java `USymbolDatabase.suppHeightBecauseOfShape()` reserves 15px above the
 /// ordinary cluster title so the title sits below the cylinder's top ellipse.
 const DATABASE_CLUSTER_TITLE_EXTRA: f64 = 15.0;
@@ -272,6 +275,16 @@ const DATABASE_CLUSTER_TITLE_OFFSET: f64 = 20.0;
 /// `USymbolDatabase.drawDatabase()` emits `UEmpty(10, 10)` at the shape's
 /// lower-right corner, extending the SVEK painted envelope on both axes.
 const DATABASE_CLUSTER_ENVELOPE_EXTRA: f64 = 10.0;
+/// Java `USymbolNode.suppWidthBecauseOfShape()` and
+/// `suppHeightBecauseOfShape()` enlarge the title placeholder fed to SVEK.
+const NODE_CLUSTER_TITLE_WIDTH_EXTRA: f64 = 60.0;
+const NODE_CLUSTER_TITLE_HEIGHT_EXTRA: f64 = 5.0;
+/// `USymbolNode.drawNode()` offsets the visible bevel by ten pixels and emits
+/// a lower-right `UEmpty(10, 10)`, extending the calculated SVEK envelope.
+const NODE_CLUSTER_ENVELOPE_X_EXTRA: f64 = 20.0;
+const NODE_CLUSTER_ENVELOPE_Y_EXTRA: f64 = 10.0;
+const NODE_BEVEL: f64 = 10.0;
+const FRAME_TITLE_CORNER: f64 = 10.0;
 /// Package cluster canvases use the full SVEK body side extent (left 6 plus
 /// right-side stroke/body slack) rather than the single-entity 13px formula.
 /// Provenance: Java `SvekResult.drawU` normalises the body at x/y=6 before
@@ -1656,10 +1669,13 @@ pub fn render_with_oracle(
             is_rendered_package_cluster(&diagram.packages[p]).then(|| package_cluster_id(p))
         });
         let label = package_display_label(pkg);
-        let title_height_extra = if effective_package_kind(pkg) == PackageKind::Database {
-            DATABASE_CLUSTER_TITLE_EXTRA
-        } else {
-            0.0
+        let (title_width_extra, title_height_extra) = match effective_package_kind(pkg) {
+            PackageKind::Database => (0.0, DATABASE_CLUSTER_TITLE_EXTRA),
+            PackageKind::Node => (
+                NODE_CLUSTER_TITLE_WIDTH_EXTRA,
+                NODE_CLUSTER_TITLE_HEIGHT_EXTRA,
+            ),
+            _ => (0.0, 0.0),
         };
         // Java `ClusterHeader` truncates the measured title dimensions to
         // integers; `ClusterDotString.printInternal` sends those dimensions to
@@ -1668,7 +1684,8 @@ pub fn render_with_oracle(
             &package_cluster_id(idx),
             parent.as_deref(),
             ClusterTitleSize {
-                width: text_render::measure_no_underline(label, FONT_SIZE, true),
+                width: text_render::measure_no_underline(label, FONT_SIZE, true)
+                    + title_width_extra,
                 height: text_render::label_height(label, FONT_SIZE) + title_height_extra,
             },
         );
@@ -2304,6 +2321,15 @@ fn effective_package_kind(pkg: &Package) -> PackageKind {
             if stereotype.eq_ignore_ascii_case("folder") {
                 return PackageKind::Folder;
             }
+            if stereotype.eq_ignore_ascii_case("frame") {
+                return PackageKind::Frame;
+            }
+            if stereotype.eq_ignore_ascii_case("rectangle") {
+                return PackageKind::Rectangle;
+            }
+            if stereotype.eq_ignore_ascii_case("node") {
+                return PackageKind::Node;
+            }
         }
     }
     pkg.kind
@@ -2312,7 +2338,13 @@ fn effective_package_kind(pkg: &Package) -> PackageKind {
 fn is_rendered_package_cluster(pkg: &Package) -> bool {
     matches!(
         effective_package_kind(pkg),
-        PackageKind::Package | PackageKind::Namespace | PackageKind::Database | PackageKind::Folder
+        PackageKind::Package
+            | PackageKind::Namespace
+            | PackageKind::Database
+            | PackageKind::Folder
+            | PackageKind::Frame
+            | PackageKind::Rectangle
+            | PackageKind::Node
     )
 }
 
@@ -2320,13 +2352,19 @@ fn package_cluster_id(idx: usize) -> String {
     format!("pkg{idx}")
 }
 
-fn package_cluster_envelope_extra(diagram: &ClassDiagram, cluster_id: &str) -> f64 {
+fn package_cluster_envelope_extra(diagram: &ClassDiagram, cluster_id: &str) -> (f64, f64) {
     cluster_id
         .strip_prefix("pkg")
         .and_then(|idx| idx.parse::<usize>().ok())
         .and_then(|idx| diagram.packages.get(idx))
-        .filter(|pkg| effective_package_kind(pkg) == PackageKind::Database)
-        .map_or(0.0, |_| DATABASE_CLUSTER_ENVELOPE_EXTRA)
+        .map_or((0.0, 0.0), |pkg| match effective_package_kind(pkg) {
+            PackageKind::Database => (
+                DATABASE_CLUSTER_ENVELOPE_EXTRA,
+                DATABASE_CLUSTER_ENVELOPE_EXTRA,
+            ),
+            PackageKind::Node => (NODE_CLUSTER_ENVELOPE_X_EXTRA, NODE_CLUSTER_ENVELOPE_Y_EXTRA),
+            _ => (0.0, 0.0),
+        })
 }
 
 fn package_display_label(pkg: &Package) -> &str {
@@ -2345,6 +2383,9 @@ fn package_skinparam<'a>(
         // fallback. Border and title font remain Folder* channels.
         PackageKind::Folder if suffix == "BackgroundColor" => &["Folder", "Package"],
         PackageKind::Folder => &["Folder"],
+        PackageKind::Frame => &["Frame"],
+        PackageKind::Rectangle => &["Rectangle"],
+        PackageKind::Node => &["Node"],
         PackageKind::Package | PackageKind::Namespace => &["Package"],
         _ => return None,
     };
@@ -2379,6 +2420,30 @@ fn package_qualified_name(
     }
     chain.reverse();
     chain.join(".")
+}
+
+fn package_content_offsets(diagram: &ClassDiagram) -> Vec<(f64, f64)> {
+    let parent_pkg = package_parent_indices(diagram);
+    let innermost_pkg = innermost_entity_packages(diagram, &parent_pkg);
+    innermost_pkg
+        .into_iter()
+        .map(|package_idx| {
+            let Some(mut package_idx) = package_idx else {
+                return (0.0, 0.0);
+            };
+            while let Some(parent) = parent_pkg[package_idx] {
+                if !is_rendered_package_cluster(&diagram.packages[parent]) {
+                    break;
+                }
+                package_idx = parent;
+            }
+            match effective_package_kind(&diagram.packages[package_idx]) {
+                PackageKind::Frame | PackageKind::Rectangle => (1.0, 1.0),
+                PackageKind::Node => (NODE_BEVEL, 0.0),
+                _ => (0.0, 0.0),
+            }
+        })
+        .collect()
 }
 
 /// Java `SvekResult.calculateDimension` measures only renderer-visible shapes
@@ -2636,6 +2701,41 @@ fn render_plantuml_svg(
     }
 
     let font = ClassFontOverrides::from_skinparams(&diagram.meta.skinparams);
+    let package_content_offsets = package_content_offsets(diagram);
+    let mut adjusted_edge_paths = edge_paths.to_vec();
+    for edge in &mut adjusted_edge_paths {
+        let endpoint_offset = |id: &str| {
+            diagram
+                .entities
+                .iter()
+                .position(|entity| entity.id == id)
+                .map(|idx| package_content_offsets[idx])
+                .unwrap_or((0.0, 0.0))
+        };
+        let from_offset = endpoint_offset(&edge.from);
+        if from_offset == endpoint_offset(&edge.to) && from_offset != (0.0, 0.0) {
+            for point in &mut edge.points {
+                point.0 += from_offset.0;
+                point.1 += from_offset.1;
+            }
+            if let Some(point) = &mut edge.start_point {
+                point.0 += from_offset.0;
+                point.1 += from_offset.1;
+            }
+            if let Some(point) = &mut edge.end_point {
+                point.0 += from_offset.0;
+                point.1 += from_offset.1;
+            }
+            for label in [&mut edge.label, &mut edge.tail_label, &mut edge.head_label]
+                .into_iter()
+                .flatten()
+            {
+                label.x += from_offset.0;
+                label.y += from_offset.1;
+            }
+        }
+    }
+    let edge_paths = adjusted_edge_paths.as_slice();
 
     // `skinparam padding N` shifts the in-box header icon and member text.
     // When the directive is present PlantUML offsets the stereotype circle
@@ -2656,9 +2756,10 @@ fn render_plantuml_svg(
     // Compute entity positions (offset from layout).
     let entity_positions: Vec<(f64, f64)> = (0..diagram.entities.len())
         .map(|i| {
+            let (content_dx, content_dy) = package_content_offsets[i];
             (
-                positions[i].x + MARGIN + layout_x_bias,
-                positions[i].y + MARGIN,
+                positions[i].x + MARGIN + layout_x_bias + content_dx,
+                positions[i].y + MARGIN + content_dy,
             )
         })
         .collect();
@@ -2695,9 +2796,10 @@ fn render_plantuml_svg(
             }
         }
         for cluster in cluster_positions {
-            let envelope_extra = package_cluster_envelope_extra(diagram, &cluster.id);
-            max_x = max_x.max(cluster.x + MARGIN + cluster.width + envelope_extra);
-            max_y = max_y.max(cluster.y + MARGIN + cluster.height + envelope_extra);
+            let (envelope_extra_x, envelope_extra_y) =
+                package_cluster_envelope_extra(diagram, &cluster.id);
+            max_x = max_x.max(cluster.x + MARGIN + cluster.width + envelope_extra_x);
+            max_y = max_y.max(cluster.y + MARGIN + cluster.height + envelope_extra_y);
         }
         if let Some((width, height)) = layout_extent {
             max_x = max_x.max(width + layout_x_bias);
@@ -2831,11 +2933,12 @@ fn render_plantuml_svg(
     for cluster in cluster_positions {
         let x = cluster.x + MARGIN;
         let y = cluster.y + MARGIN;
-        let envelope_extra = package_cluster_envelope_extra(diagram, &cluster.id);
+        let (envelope_extra_x, envelope_extra_y) =
+            package_cluster_envelope_extra(diagram, &cluster.id);
         body_min_x = body_min_x.min(x);
-        body_max_x = body_max_x.max(x + cluster.width + envelope_extra);
+        body_max_x = body_max_x.max(x + cluster.width + envelope_extra_x);
         body_top = body_top.min(y);
-        body_bottom = body_bottom.max(y + cluster.height + envelope_extra);
+        body_bottom = body_bottom.max(y + cluster.height + envelope_extra_y);
     }
     for &(_, node_idx, _) in &attached_notes {
         if let Some(pos) = positions.get(node_idx) {
@@ -3314,7 +3417,13 @@ fn layout_package_clusters(
             let stroke = package_skinparam(diagram, kind, "BorderColor")
                 .map(crate::sequence::resolve_color)
                 .unwrap_or_else(|| {
-                    if kind == PackageKind::Database {
+                    if matches!(
+                        kind,
+                        PackageKind::Database
+                            | PackageKind::Frame
+                            | PackageKind::Rectangle
+                            | PackageKind::Node
+                    ) {
                         "#181818".to_string()
                     } else {
                         "#000000".to_string()
@@ -3368,65 +3477,232 @@ fn emit_layout_package_cluster(svg: &mut String, cluster: &LayoutPackageCluster,
         entity_id,
     )
     .unwrap();
-    if cluster.kind == PackageKind::Database {
-        emit_layout_database_cluster(svg, cluster);
-        svg.push_str("</g>");
-        return;
+    match cluster.kind {
+        PackageKind::Database => emit_layout_database_cluster(svg, cluster),
+        PackageKind::Frame => emit_layout_frame_cluster(svg, cluster),
+        PackageKind::Rectangle => emit_layout_rectangle_cluster(svg, cluster),
+        PackageKind::Node => emit_layout_node_cluster(svg, cluster),
+        _ => {
+            write!(
+                svg,
+                r#"<path d="M{},{} L{},{} A3.75,3.75 0 0 1 {},{} L{},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{}" fill="{}" style="stroke:{};stroke-width:{};"/>"#,
+                fmt4(x + 2.5),
+                fmt4(y),
+                fmt4(tab_join),
+                fmt4(y),
+                fmt4(tab_join + 2.5),
+                fmt4(y + 2.5),
+                fmt4(tab_right),
+                fmt4(line_y),
+                fmt4(right - 2.5),
+                fmt4(line_y),
+                fmt4(right),
+                fmt4(line_y + 2.5),
+                fmt4(right),
+                fmt4(bottom - 2.5),
+                fmt4(right - 2.5),
+                fmt4(bottom),
+                fmt4(x + 2.5),
+                fmt4(bottom),
+                fmt4(x),
+                fmt4(bottom - 2.5),
+                fmt4(x),
+                fmt4(y + 2.5),
+                fmt4(x + 2.5),
+                fmt4(y),
+                cluster.fill,
+                cluster.stroke,
+                PACKAGE_STROKE_WIDTH,
+            )
+            .unwrap();
+            write!(
+                svg,
+                r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                cluster.stroke,
+                PACKAGE_STROKE_WIDTH,
+                fmt4(x),
+                fmt4(tab_right),
+                fmt4(line_y),
+                fmt4(line_y),
+            )
+            .unwrap();
+            write!(
+                svg,
+                r#"<text fill="{}" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
+                cluster.font_fill,
+                fmt4(label_w),
+                fmt4(text_x),
+                fmt4(text_y),
+                escape_xml(&cluster.label),
+            )
+            .unwrap();
+        }
     }
+    svg.push_str("</g>");
+}
+
+fn emit_layout_frame_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
+    let x = cluster.x + 1.0;
+    let y = cluster.y + 1.0;
+    let label_w = text_render::measure_no_underline(&cluster.label, FONT_SIZE, true);
+    let path_right = x + label_w + FRAME_TITLE_CORNER;
+    let upper_y = cluster.y + PACKAGE_TAB_H - 12.0;
+    let lower_y = cluster.y + PACKAGE_TAB_H - 2.0;
+
+    // Java `USymbolFrame.asBig()` delegates to `drawFrame()`: a rounded
+    // rectangle plus the title-corner path, then draws the title at (3, 1).
     write!(
         svg,
-        r#"<path d="M{},{} L{},{} A3.75,3.75 0 0 1 {},{} L{},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{}" fill="{}" style="stroke:{};stroke-width:{};"/>"#,
-        fmt4(x + 2.5),
-        fmt4(y),
-        fmt4(tab_join),
-        fmt4(y),
-        fmt4(tab_join + 2.5),
-        fmt4(y + 2.5),
-        fmt4(tab_right),
-        fmt4(line_y),
-        fmt4(right - 2.5),
-        fmt4(line_y),
-        fmt4(right),
-        fmt4(line_y + 2.5),
-        fmt4(right),
-        fmt4(bottom - 2.5),
-        fmt4(right - 2.5),
-        fmt4(bottom),
-        fmt4(x + 2.5),
-        fmt4(bottom),
-        fmt4(x),
-        fmt4(bottom - 2.5),
-        fmt4(x),
-        fmt4(y + 2.5),
-        fmt4(x + 2.5),
-        fmt4(y),
+        r#"<rect fill="{}" height="{}" rx="2.5" ry="2.5" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
         cluster.fill,
+        fmt4(cluster.height),
         cluster.stroke,
-        PACKAGE_STROKE_WIDTH,
+        SYMBOL_CLUSTER_STROKE_WIDTH,
+        fmt4(cluster.width),
+        fmt4(x),
+        fmt4(y),
+    )
+    .unwrap();
+    write!(
+        svg,
+        r#"<path d="M{},{} L{},{} L{},{} L{},{}" fill="none" style="stroke:{};stroke-width:{};"/>"#,
+        fmt4(path_right),
+        fmt4(y),
+        fmt4(path_right),
+        fmt4(upper_y),
+        fmt4(path_right - FRAME_TITLE_CORNER),
+        fmt4(lower_y),
+        fmt4(x),
+        fmt4(lower_y),
+        cluster.stroke,
+        SYMBOL_CLUSTER_STROKE_WIDTH,
+    )
+    .unwrap();
+    emit_layout_symbol_cluster_title(
+        svg,
+        cluster,
+        cluster.x + 4.0,
+        cluster.y + PACKAGE_TITLE_BASELINE,
+    );
+}
+
+fn emit_layout_rectangle_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
+    let x = cluster.x + 1.0;
+    let y = cluster.y + 1.0;
+    let label_w = text_render::measure_no_underline(&cluster.label, FONT_SIZE, true);
+
+    // Java `USymbolRectangle.asBig()` delegates to `drawRect()` and centres
+    // the title independently of the stereotype block.
+    write!(
+        svg,
+        r#"<rect fill="{}" height="{}" rx="2.5" ry="2.5" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
+        cluster.fill,
+        fmt4(cluster.height),
+        cluster.stroke,
+        SYMBOL_CLUSTER_STROKE_WIDTH,
+        fmt4(cluster.width),
+        fmt4(x),
+        fmt4(y),
+    )
+    .unwrap();
+    emit_layout_symbol_cluster_title(
+        svg,
+        cluster,
+        x + (cluster.width - label_w) / 2.0,
+        cluster.y + PACKAGE_TITLE_BASELINE + 1.0,
+    );
+}
+
+fn emit_layout_node_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
+    let x = cluster.x + NODE_BEVEL;
+    let y = cluster.y;
+    let right = x + cluster.width;
+    let front_right = right - NODE_BEVEL;
+    let bottom = y + cluster.height;
+    let label_w = text_render::measure_no_underline(&cluster.label, FONT_SIZE, true);
+
+    // Java `USymbolNode.asBig()` delegates to `drawNode()`: a bevelled
+    // polygon followed by the top-right diagonal, front top, and front side.
+    write!(
+        svg,
+        r#"<polygon fill="{}" points="{},{},{},{},{},{},{},{},{},{},{},{},{},{}" style="stroke:{};stroke-width:{};"/>"#,
+        cluster.fill,
+        fmt4(x),
+        fmt4(y + NODE_BEVEL),
+        fmt4(x + NODE_BEVEL),
+        fmt4(y),
+        fmt4(right),
+        fmt4(y),
+        fmt4(right),
+        fmt4(bottom - NODE_BEVEL),
+        fmt4(front_right),
+        fmt4(bottom),
+        fmt4(x),
+        fmt4(bottom),
+        fmt4(x),
+        fmt4(y + NODE_BEVEL),
+        cluster.stroke,
+        SYMBOL_CLUSTER_STROKE_WIDTH,
     )
     .unwrap();
     write!(
         svg,
         r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
         cluster.stroke,
-        PACKAGE_STROKE_WIDTH,
-        fmt4(x),
-        fmt4(tab_right),
-        fmt4(line_y),
-        fmt4(line_y),
+        SYMBOL_CLUSTER_STROKE_WIDTH,
+        fmt4(front_right),
+        fmt4(right),
+        fmt4(y + NODE_BEVEL),
+        fmt4(y),
     )
     .unwrap();
+    write!(
+        svg,
+        r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+        cluster.stroke,
+        SYMBOL_CLUSTER_STROKE_WIDTH,
+        fmt4(x),
+        fmt4(front_right),
+        fmt4(y + NODE_BEVEL),
+        fmt4(y + NODE_BEVEL),
+    )
+    .unwrap();
+    write!(
+        svg,
+        r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+        cluster.stroke,
+        SYMBOL_CLUSTER_STROKE_WIDTH,
+        fmt4(front_right),
+        fmt4(front_right),
+        fmt4(y + NODE_BEVEL),
+        fmt4(bottom),
+    )
+    .unwrap();
+    emit_layout_symbol_cluster_title(
+        svg,
+        cluster,
+        x - 4.0 + (cluster.width - label_w) / 2.0,
+        y + PACKAGE_TITLE_BASELINE + 11.0,
+    );
+}
+
+fn emit_layout_symbol_cluster_title(
+    svg: &mut String,
+    cluster: &LayoutPackageCluster,
+    x: f64,
+    y: f64,
+) {
+    let label_w = text_render::measure_no_underline(&cluster.label, FONT_SIZE, true);
     write!(
         svg,
         r#"<text fill="{}" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
         cluster.font_fill,
         fmt4(label_w),
-        fmt4(text_x),
-        fmt4(text_y),
+        fmt4(x),
+        fmt4(y),
         escape_xml(&cluster.label),
     )
     .unwrap();
-    svg.push_str("</g>");
 }
 
 fn emit_layout_database_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
@@ -8535,6 +8811,39 @@ mod tests {
         ));
         assert!(svg.contains(r#"data-qualified-name="ArchiveShelf313.Intake317.Parcel331""#));
         assert!(svg.contains(r#"id="Parcel331-to-Ledger337""#));
+    }
+
+    #[test]
+    fn no_oracle_node_cluster_routes_shape_content_and_styles() {
+        let input = "@startuml\n\
+            skinparam NodeBorderColor SeaGreen\n\
+            skinparam NodeFontColor DarkSlateBlue\n\
+            node ComputeRack439 #HoneyDew {\n\
+              class Worker443 {\n\
+                +void run()\n\
+              }\n\
+              class Result449\n\
+              class Cache457\n\
+              Worker443 --> Result449\n\
+              Worker443 --> Cache457\n\
+            }\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(r#"style="width:308px;height:259px;background:#FFFFFF;""#));
+        assert!(svg.contains(r#"<!--cluster ComputeRack439--><g class="cluster""#));
+        assert!(svg.contains(
+            r##"<polygon fill="#F0FFF0" points="16,16,26,6,283,6,283,224.4883,273,234.4883,16,234.4883,16,16" style="stroke:#2E8B57;stroke-width:1;"/>"##
+        ));
+        assert!(svg.contains(
+            r##"<text fill="#483D8B" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="126.7451" x="82.1274" y="32.5352">ComputeRack439</text>"##
+        ));
+        assert!(svg.contains(r#"data-qualified-name="ComputeRack439.Worker443""#));
+        assert!(svg.contains(r#"data-qualified-name="ComputeRack439.Result449""#));
+        assert!(svg.contains(r#"data-qualified-name="ComputeRack439.Cache457""#));
+        assert!(svg.contains(r#"id="Worker443-to-Result449""#));
+        assert!(svg.contains(r#"id="Worker443-to-Cache457""#));
     }
 
     #[test]
