@@ -905,7 +905,11 @@ fn layout_usecase_positions(
         layout.add_node(&actor.id, &actor.label, dim.width, dim.height);
     }
     for (uc, dim) in diagram.use_cases.iter().zip(uc_dims) {
-        layout.add_node(&uc.id, &uc.label, dim.rx * 2.0, dim.ry * 2.0);
+        // Java `EntityImageUseCase.getShapeType` returns `ShapeType.OVAL`;
+        // `SvekNode.appendShapeInternal` therefore gives Graphviz
+        // `shape=ellipse`, so diagonal splines meet the painted oval rather
+        // than its rectangular bounding box.
+        layout.add_ellipse_node(&uc.id, &uc.label, dim.rx * 2.0, dim.ry * 2.0);
     }
     let entity_note_indices: Vec<usize> = diagram
         .notes
@@ -2720,6 +2724,64 @@ mod tests {
             super::dependency_arrow_points((0.0, 0.0), (0.0, 10.0)),
             "0,10,4,1,0,5,-4,1,0,10"
         );
+    }
+
+    #[test]
+    fn diagonal_links_meet_the_renamed_usecase_oval() {
+        let input = "@startuml\n\
+                     actor \"Audit Reader 431\" as Reader\n\
+                     actor \"Policy Writer 433\" as Writer\n\
+                     usecase \"Review Unseen Policy 439\" as Review\n\
+                     Reader --> Review\n\
+                     Writer --> Review\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::UseCase(usecase) = &diagram else {
+            panic!("expected use-case diagram");
+        };
+        let skin = super::SkinColors::from_meta(&usecase.meta.skinparams, None);
+        let actor_dims: Vec<_> = usecase
+            .actors
+            .iter()
+            .map(|actor| super::actor_dim(actor, &skin))
+            .collect();
+        let usecase_dims: Vec<_> = usecase
+            .use_cases
+            .iter()
+            .map(|item| super::use_case_dim(item, &skin))
+            .collect();
+        let note_dims: Vec<_> = usecase.notes.iter().map(super::note_dim).collect();
+        let positions = super::resolve_positions(
+            usecase,
+            &actor_dims,
+            &usecase_dims,
+            &note_dims,
+            &skin,
+            None,
+        );
+        let (cx, cy) = positions.use_cases[0];
+        let oval = &usecase_dims[0];
+        let mut diagonal_edges = 0;
+
+        for edge in &positions.edge_paths {
+            let endpoint = edge.end_point.or_else(|| edge.points.last().copied()).unwrap();
+            let normalized =
+                ((endpoint.0 - cx) / oval.rx).powi(2) + ((endpoint.1 - cy) / oval.ry).powi(2);
+            assert!(
+                (normalized - 1.0).abs() < 0.08,
+                "diagonal endpoint {endpoint:?} must meet oval centered at ({cx}, {cy})"
+            );
+            let source_x = usecase
+                .actors
+                .iter()
+                .position(|actor| actor.id == edge.from)
+                .map(|index| positions.actors[index].0)
+                .unwrap();
+            if (source_x - cx).abs() > 1.0 {
+                diagonal_edges += 1;
+            }
+        }
+        assert!(diagonal_edges > 0);
     }
 
     #[test]

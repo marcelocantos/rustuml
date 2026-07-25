@@ -147,6 +147,20 @@ impl LayoutGraph {
         true
     }
 
+    /// Adds an ellipse-shaped node with independent width and height.
+    pub fn add_ellipse_node(&mut self, id: &str, _label: &str, width: f64, height: f64) -> bool {
+        if self.nodes.iter().any(|node| node.id == id) {
+            return false;
+        }
+        self.nodes.push(NodeSpec {
+            id: id.to_string(),
+            width,
+            height,
+            shape: NodeShape::Ellipse,
+        });
+        true
+    }
+
     /// Adds the tiny point node SVEK uses as a routable package endpoint.
     ///
     /// `ClusterDotString.printInternal` emits
@@ -498,6 +512,7 @@ impl LayoutGraph {
         let no_label_val = CString::new("").unwrap();
         let fixedsize_val = CString::new("true").unwrap();
         let circle_val = CString::new("circle").unwrap();
+        let ellipse_val = CString::new("ellipse").unwrap();
         let box_val = CString::new("box").unwrap();
         let point_val = CString::new("point").unwrap();
         let record_val = CString::new("record").unwrap();
@@ -547,7 +562,9 @@ impl LayoutGraph {
             // layout boxes warn and can feed label bounds back into routing.
             let label_val = match &spec.shape {
                 NodeShape::Record { ports } => CString::new(record_label(ports)).unwrap(),
-                NodeShape::Box | NodeShape::Circle | NodeShape::Point => no_label_val.clone(),
+                NodeShape::Box | NodeShape::Circle | NodeShape::Ellipse | NodeShape::Point => {
+                    no_label_val.clone()
+                }
             };
             graphviz_ffi::agsafeset(
                 node as *mut c_void,
@@ -558,6 +575,7 @@ impl LayoutGraph {
             let shape = match spec.shape {
                 NodeShape::Box => &box_val,
                 NodeShape::Circle => &circle_val,
+                NodeShape::Ellipse => &ellipse_val,
                 NodeShape::Point => &point_val,
                 NodeShape::Record { .. } => &record_val,
             };
@@ -1255,6 +1273,7 @@ struct NodeSpec {
 enum NodeShape {
     Box,
     Circle,
+    Ellipse,
     Point,
     Record { ports: Vec<String> },
 }
@@ -1738,6 +1757,18 @@ mod tests {
 
         let result = g.layout_full_no_timeout();
         assert_eq!(result.node_positions.len(), 1);
+    }
+
+    #[test]
+    fn ellipse_node_keeps_independent_dimensions() {
+        let mut g = LayoutGraph::new(Direction::TopToBottom);
+        assert!(g.add_ellipse_node("oval_renamed", "Review", 120.0, 40.0));
+        assert!(!g.add_ellipse_node("oval_renamed", "Review", 120.0, 40.0));
+
+        let result = g.layout_full_no_timeout();
+        let oval = &result.node_positions[0];
+        assert!((oval.width - 120.0).abs() < 0.01);
+        assert!((oval.height - 40.0).abs() < 0.01);
     }
 
     #[test]
