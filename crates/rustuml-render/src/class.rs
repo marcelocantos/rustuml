@@ -969,15 +969,28 @@ fn calc_entity_dims(
     } else if entity.members.is_empty()
         || (eff_field_count == 0 && eff_method_count == 0 && !enum_classic)
     {
-        // No members: header + empty fields + empty methods.
-        header_h + COMPARTMENT_PAD + COMPARTMENT_PAD
+        // Every visible empty `MethodsOrFieldsArea` contributes its own
+        // `TextBlockLineBefore` margin; a hidden portion contributes no block.
+        header_h
+            + if hide.fields { 0.0 } else { COMPARTMENT_PAD }
+            + if hide.methods { 0.0 } else { COMPARTMENT_PAD }
     } else if enum_classic {
         // Enum: header + values + bottom separator.
         header_h + (COMPARTMENT_PAD + eff_field_count as f64 * MEMBER_LINE_HEIGHT) + COMPARTMENT_PAD
     } else {
         // Class/interface/abstract/annotation.
-        let fields_section = COMPARTMENT_PAD + eff_field_count as f64 * MEMBER_LINE_HEIGHT;
-        let methods_section = COMPARTMENT_PAD + eff_method_count as f64 * MEMBER_LINE_HEIGHT;
+        // Java `BodierLikeClassOrObject.getBody()` returns only the visible
+        // `MethodsOrFieldsArea` block when one entire portion is hidden.
+        let fields_section = if hide.fields {
+            0.0
+        } else {
+            COMPARTMENT_PAD + eff_field_count as f64 * MEMBER_LINE_HEIGHT
+        };
+        let methods_section = if hide.methods {
+            0.0
+        } else {
+            COMPARTMENT_PAD + eff_method_count as f64 * MEMBER_LINE_HEIGHT
+        };
         header_h + fields_section + methods_section
     };
 
@@ -9089,6 +9102,29 @@ mod tests {
 
         assert!(svg.contains("background:#FF0000;"));
         assert!(svg.contains(r##"<rect fill="#FF0000""##));
+    }
+
+    #[test]
+    fn no_oracle_hidden_compartment_contributes_no_body_block() {
+        let input = "@startuml\n\
+            hide attributes\n\
+            abstract class WorkflowLedger607 <<AuditedFlow613>> {\n\
+              +String token\n\
+              #long revision\n\
+              +void reconcile()\n\
+              -boolean verify()\n\
+            }\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(r#"style="width:187px;height:101px;background:#FFFFFF;""#));
+        assert!(svg.contains(r##"<rect fill="#F1F1F1" height="81.5977" rx="2.5" ry="2.5""##));
+        assert!(svg.contains(r#"y1="47.6211" y2="47.6211""#));
+        assert!(svg.contains(">void reconcile()</text>"));
+        assert!(svg.contains(">boolean verify()</text>"));
+        assert!(!svg.contains(">String token</text>"));
+        assert!(!svg.contains(">long revision</text>"));
     }
 
     #[test]
