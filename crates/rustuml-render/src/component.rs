@@ -510,6 +510,10 @@ const COMPONENT_MIN_W: f64 = 40.0;
 /// already emitted at PlantUML's 7px top/left offset, so the equivalent
 /// no-oracle frame is the maximum rendered bound plus this residual pad.
 const SVEK_CANVAS_PAD: f64 = 14.0;
+/// Routed paths remain in SVEK drawing coordinates, so they retain the full
+/// envelope from `SvekResult.calculateDimension`: `LimitFinder.drawUPath`
+/// contributes every `UPath` control-point bound, then SVEK adds 15 pixels.
+const SVEK_PATH_CANVAS_PAD: f64 = 15.0;
 /// Painted SVEK clusters are normalized directly to Java's 6px min-bound
 /// translation and retain the full 15px dimension delta.
 const SVEK_CLUSTER_ORIGIN: f64 = 6.0;
@@ -3345,6 +3349,16 @@ fn compute_no_oracle_canvas(input: NoOracleCanvas<'_>) -> (f64, f64) {
         max_x = max_x.max(note.x + note.width);
         max_y = max_y.max(note.y + note.height);
     }
+    let mut path_max_x: Option<f64> = None;
+    let mut path_max_y: Option<f64> = None;
+    for edge in input.edge_paths {
+        for (x, y) in &edge.points {
+            let x = round_svek_input_coord(*x) + input.edge_dx;
+            let y = round_svek_input_coord(*y) + input.edge_dy;
+            path_max_x = Some(path_max_x.map_or(x, |bound| bound.max(x)));
+            path_max_y = Some(path_max_y.map_or(y, |bound| bound.max(y)));
+        }
+    }
     for position in input.edge_paths.iter().flat_map(|edge| {
         [edge.label, edge.tail_label, edge.head_label]
             .into_iter()
@@ -3355,6 +3369,12 @@ fn compute_no_oracle_canvas(input: NoOracleCanvas<'_>) -> (f64, f64) {
     }
     let mut total_w = max_x + SVEK_CANVAS_PAD;
     let mut total_h = max_y + SVEK_CANVAS_PAD;
+    if let Some(path_max_x) = path_max_x {
+        total_w = total_w.max(path_max_x + SVEK_PATH_CANVAS_PAD);
+    }
+    if let Some(path_max_y) = path_max_y {
+        total_h = total_h.max(path_max_y + SVEK_PATH_CANVAS_PAD);
+    }
     for cluster in input.cluster_positions {
         let kind = package_kind_for_qname(input.packages, &cluster.id);
         let (shape_max_x, shape_max_y, pad) = if matches!(kind, Some(ComponentPackageKind::Cloud)) {
@@ -5366,6 +5386,22 @@ mod tests {
         assert!(
             svg.contains("event_store_83"),
             "second stereotype missing: {svg}"
+        );
+    }
+
+    #[test]
+    fn no_oracle_canvas_includes_routed_return_spline_for_renamed_cycle() {
+        let input = "@startuml\ncomponent E01\ncomponent E02\ncomponent E03\ncomponent E04\ncomponent E05\ncomponent E06\nE01 --> E02\nE02 --> E03\nE03 --> E04\nE04 --> E05\nE05 --> E06\nE06 --> E01\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(
+            svg.contains(r#"width="140px""#),
+            "canvas must include the return spline's rightmost control point: {svg}"
+        );
+        assert!(
+            svg.contains(r#"height="599px""#),
+            "renamed cycle should retain Java's SVEK vertical envelope: {svg}"
         );
     }
 
