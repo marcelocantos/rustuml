@@ -8,7 +8,7 @@ crates/rustuml-render/src/archimate/icons.rs 2531
 crates/rustuml-render/src/board.rs 2
 crates/rustuml-render/src/class.rs 349
 crates/rustuml-render/src/cloud_shape.rs 9
-crates/rustuml-render/src/component.rs 6
+crates/rustuml-render/src/component.rs 18
 crates/rustuml-render/src/compress.rs 2
 crates/rustuml-render/src/deployment.rs 17
 crates/rustuml-render/src/dot_diagram.rs 4
