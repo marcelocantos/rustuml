@@ -1458,10 +1458,17 @@ pub fn render_with_oracle(
                     // `<<start>>` stereotype — render as a filled start
                     // pseudostate but tagged with the user-given name.
                     let source_line = state_def.map_or(1, |s| s.source_line);
-                    // Recover `state X <<start>> #color` from the oracle.
+                    // Java provenance: `EntityImageCircleStart` passes the
+                    // entity's `Colors` to `CircleStart`, whose `drawU`
+                    // resolves `BackGroundColor` through that entity-aware
+                    // color set before falling back to the merged style.
+                    let parser_fill = state_def
+                        .and_then(|state| state.fill.as_deref())
+                        .map(crate::sequence::resolve_color);
                     let fill_color: String = oracle
                         .and_then(|orc| orc.entities.get(id.as_str()))
                         .and_then(|r| r.fill.clone())
+                        .or(parser_fill)
                         .unwrap_or_else(|| PSEUDO_COLOR.to_string());
                     write!(
                         svg,
@@ -1487,11 +1494,17 @@ pub fn render_with_oracle(
                     // `<<end>>` stereotype — render as the bullseye end
                     // pseudostate but tagged with the user-given name.
                     let source_line = state_def.map_or(1, |s| s.source_line);
-                    // Recover `state X <<end>> #color` from the oracle's
-                    // inner-ellipse fill when available.
+                    // Java provenance: `EntityImageCircleEnd` passes the
+                    // entity's `Colors` to `CircleEnd`, whose `drawU` uses
+                    // the entity-aware `BackGroundColor` for the inner
+                    // ellipse while retaining the style's line color.
+                    let parser_fill = state_def
+                        .and_then(|state| state.fill.as_deref())
+                        .map(crate::sequence::resolve_color);
                     let inner_fill: String = oracle
                         .and_then(|orc| orc.entities.get(id.as_str()))
                         .and_then(|r| r.fill.clone())
+                        .or(parser_fill)
                         .unwrap_or_else(|| PSEUDO_COLOR.to_string());
                     write!(
                         svg,
@@ -4462,6 +4475,28 @@ mod tests {
         assert!(svg.contains(r##"<polygon fill="#008B8B""##));
         assert!(svg.contains(r##"<polygon fill="#7B68EE""##));
         assert!(svg.contains(r##"<polygon fill="#FFA500""##));
+    }
+
+    #[test]
+    fn named_start_and_end_states_use_their_entity_background_colors() {
+        let input = concat!(
+            "@startuml\n",
+            "state \"Wake Gate 73\" as WakeGate73 <<start>> #12AB34\n",
+            "state \"Archive Vault 91\" as ArchiveVault91 <<end>> #A1B2C3\n",
+            "[*] --> WakeGate73\n",
+            "WakeGate73 --> ArchiveVault91\n",
+            "ArchiveVault91 --> [*]\n",
+            "@enduml",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(r##"data-qualified-name="WakeGate73""##));
+        assert!(svg.contains(r##"<g class="start_entity""##));
+        assert!(svg.contains(r##"fill="#12AB34" rx="10" ry="10""##));
+        assert!(svg.contains(r##"data-qualified-name="ArchiveVault91""##));
+        assert!(svg.contains(r##"<g class="end_entity""##));
+        assert!(svg.contains(r##"fill="#A1B2C3" rx="6" ry="6""##));
     }
 
     #[test]
