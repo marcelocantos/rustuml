@@ -1029,6 +1029,19 @@ pub fn render_with_oracle(
             .map(|r| r.edge_paths.as_slice())
             .unwrap_or(&[])
     };
+    let svek_svg_y_axis = layout_result.as_ref().map(|result| {
+        result
+            .node_positions
+            .iter()
+            .map(|position| position.y + position.height)
+            .chain(
+                result
+                    .cluster_positions
+                    .iter()
+                    .map(|position| position.y + position.height),
+            )
+            .fold(0.0_f64, f64::max)
+    });
     let svek_edge_translation = layout_result.as_ref().and_then(|result| {
         if let Some(raw) = result.cluster_positions.first() {
             let translated = cluster_positions
@@ -1916,12 +1929,12 @@ pub fn render_with_oracle(
             };
             let points = component_svek_edge_points(
                 &edge.points,
-                svek_edge_dx,
-                svek_edge_dy,
+                (svek_edge_dx, svek_edge_dy),
+                svek_svg_y_axis,
                 tail_cluster,
                 head_cluster,
-                false,
-                false,
+                0.0,
+                0.0,
             );
             let path_d = build_path_d(&points);
             svg.raw(&format!("<!--link {from_name} to {to_name}-->"));
@@ -2154,14 +2167,24 @@ pub fn render_with_oracle(
                 // `ExtremityArrow.getDecorationLength()`.
                 let edge_points_input = ep.points.as_slice();
                 let (arrow_at_start, arrow_at_end) = no_oracle_effective_arrow_ends(conn);
+                let end_decoration_length = if arrow_at_end {
+                    6.0
+                } else if matches!(
+                    conn.shape,
+                    LinkShape::TargetSocket | LinkShape::TargetBallSocket
+                ) {
+                    10.0
+                } else {
+                    0.0
+                };
                 let edge_points = component_svek_edge_points(
                     edge_points_input,
-                    svek_edge_dx,
-                    svek_edge_dy,
+                    (svek_edge_dx, svek_edge_dy),
+                    svek_svg_y_axis,
                     from_package,
                     to_package,
-                    arrow_at_start,
-                    arrow_at_end,
+                    if arrow_at_start { 6.0 } else { 0.0 },
+                    end_decoration_length,
                 );
                 let path_d = build_path_d(&edge_points);
                 let path_id = no_oracle_path_id(conn);
@@ -2171,12 +2194,12 @@ pub fn render_with_oracle(
 
                 let raw_edge_points = component_svek_edge_points(
                     edge_points_input,
-                    svek_edge_dx,
-                    svek_edge_dy,
+                    (svek_edge_dx, svek_edge_dy),
+                    svek_svg_y_axis,
                     from_package,
                     to_package,
-                    false,
-                    false,
+                    0.0,
+                    0.0,
                 );
                 if arrow_at_start {
                     let first = raw_edge_points.first().unwrap();
@@ -4152,8 +4175,14 @@ fn render_target_socket_decoration(
     };
     if matches!(shape, LinkShape::TargetBallSocket) {
         render_socket_ball(svg, tip, stroke);
+        // `MiddleCircleCircled.drawU()` uses its 10px outer radius and a
+        // 90-degree arc for the combined ball/parenthesis endpoint.
+        render_socket_arc(svg, tip, prev, 10.0, 45.0, "#FFFFFF", stroke);
+    } else {
+        // `ExtremityParenthesis.drawU()` paints a 140-degree arc around the
+        // endpoint (`radius2 = 9`, `ang = 70`).
+        render_socket_arc(svg, tip, prev, 9.0, 70.0, "none", stroke);
     }
-    render_socket_arc(svg, tip, prev, 9.0, false, stroke);
 }
 
 fn render_middle_socket_decoration(
@@ -4162,19 +4191,20 @@ fn render_middle_socket_decoration(
     points: &[(f64, f64)],
     stroke: &str,
 ) {
-    let (Some(first), Some(last)) = (points.first(), points.last()) else {
+    let Some((center, tangent)) = component_dot_path_middle(points) else {
         return;
     };
-    let center = ((first.0 + last.0) / 2.0, (first.1 + last.1) / 2.0);
+    let forward = (center.0 + tangent.0, center.1 + tangent.1);
+    let backward = (center.0 - tangent.0, center.1 - tangent.1);
     if matches!(shape, LinkShape::MiddleFullSocket) {
         svg.raw(&format!(
             r##"<ellipse cx="{}" cy="{}" fill="#FFFFFF" rx="10" ry="10" style="stroke:#FFFFFF;stroke-width:1;"/>"##,
             fc(center.0),
             fc(center.1),
         ));
-        render_socket_arc(svg, center, *first, 10.0, true, stroke);
+        render_socket_arc(svg, center, forward, 10.0, 45.0, "none", stroke);
     }
-    render_socket_arc(svg, center, *last, 10.0, false, stroke);
+    render_socket_arc(svg, center, backward, 10.0, 45.0, "none", stroke);
     render_socket_ball(svg, center, stroke);
 }
 
@@ -4191,7 +4221,8 @@ fn render_socket_arc(
     center: (f64, f64),
     toward: (f64, f64),
     radius: f64,
-    opposite: bool,
+    half_angle_degrees: f64,
+    fill: &str,
     stroke: &str,
 ) {
     let dx = toward.0 - center.0;
@@ -4202,23 +4233,21 @@ fn render_socket_arc(
     }
     let ux = dx / len;
     let uy = dy / len;
-    let (ux, uy) = if opposite { (-ux, -uy) } else { (ux, uy) };
-    // Java PlantUML draws socket marks via `svek.extremity.ExtremityParenthesis`
-    // and `ExtremityParenthesis2`: a stroked UEllipse arc centered on the
-    // endpoint or the lollipop midpoint, with 1.5px stroke and radii 9/10.
-    let spread = std::f64::consts::FRAC_1_SQRT_2;
+    let half_angle = half_angle_degrees.to_radians();
+    let along = half_angle.cos();
+    let spread = half_angle.sin();
     let px = -uy;
     let py = ux;
     let start = (
-        center.0 + (ux + px) * radius * spread,
-        center.1 + (uy + py) * radius * spread,
+        center.0 + (ux * along + px * spread) * radius,
+        center.1 + (uy * along + py * spread) * radius,
     );
     let end = (
-        center.0 + (ux - px) * radius * spread,
-        center.1 + (uy - py) * radius * spread,
+        center.0 + (ux * along - px * spread) * radius,
+        center.1 + (uy * along - py * spread) * radius,
     );
     svg.raw(&format!(
-        r##"<path d="M{},{} A{},{} 0 0 0 {},{}" fill="none" style="stroke:{stroke};stroke-width:1.5;"/>"##,
+        r##"<path d="M{},{} A{},{} 0 0 0 {} {}" fill="{fill}" style="stroke:{stroke};stroke-width:1.5;"/>"##,
         fc(start.0),
         fc(start.1),
         fc(radius),
@@ -4226,6 +4255,70 @@ fn render_socket_arc(
         fc(end.0),
         fc(end.1),
     ));
+}
+
+struct DotPathMiddleCandidate {
+    point: (f64, f64),
+    tangent: (f64, f64),
+    cost: f64,
+}
+
+/// Port of `DotPath.getMiddle()`: subdivide each cubic at `t = 0.5`, then
+/// choose the candidate minimizing squared distance to the complete path's
+/// endpoints. The associated angle is `BezierUtils.getEndingAngle(left)`.
+fn component_dot_path_middle(points: &[(f64, f64)]) -> Option<((f64, f64), (f64, f64))> {
+    let (&start, &end) = points.first().zip(points.last())?;
+    if points.len() < 4 {
+        let tangent = (end.0 - start.0, end.1 - start.1);
+        return (tangent.0 != 0.0 || tangent.1 != 0.0)
+            .then_some((((start.0 + end.0) / 2.0, (start.1 + end.1) / 2.0), tangent));
+    }
+
+    let cost = |point: (f64, f64)| {
+        let start_dx = point.0 - start.0;
+        let start_dy = point.1 - start.1;
+        let end_dx = point.0 - end.0;
+        let end_dy = point.1 - end.1;
+        start_dx * start_dx + start_dy * start_dy + end_dx * end_dx + end_dy * end_dy
+    };
+    let mut best: Option<DotPathMiddleCandidate> = None;
+    let mut index = 0;
+    while index + 3 < points.len() {
+        let p0 = points[index];
+        let p1 = points[index + 1];
+        let p2 = points[index + 2];
+        let p3 = points[index + 3];
+        let q0 = ((p0.0 + p1.0) / 2.0, (p0.1 + p1.1) / 2.0);
+        let q1 = ((p1.0 + p2.0) / 2.0, (p1.1 + p2.1) / 2.0);
+        let q2 = ((p2.0 + p3.0) / 2.0, (p2.1 + p3.1) / 2.0);
+        let r0 = ((q0.0 + q1.0) / 2.0, (q0.1 + q1.1) / 2.0);
+        let r1 = ((q1.0 + q2.0) / 2.0, (q1.1 + q2.1) / 2.0);
+        let middle = ((r0.0 + r1.0) / 2.0, (r0.1 + r1.1) / 2.0);
+
+        for (point, tangent) in [
+            (p0, (q0.0 - p0.0, q0.1 - p0.1)),
+            (middle, (middle.0 - r0.0, middle.1 - r0.1)),
+            (p3, (p3.0 - q2.0, p3.1 - q2.1)),
+        ] {
+            let candidate_cost = cost(point);
+            if best
+                .as_ref()
+                .is_none_or(|candidate| candidate_cost < candidate.cost)
+            {
+                best = Some(DotPathMiddleCandidate {
+                    point,
+                    tangent,
+                    cost: candidate_cost,
+                });
+            }
+        }
+        index += 3;
+    }
+
+    best.and_then(|candidate| {
+        (candidate.tangent.0 != 0.0 || candidate.tangent.1 != 0.0)
+            .then_some((candidate.point, candidate.tangent))
+    })
 }
 
 fn render_arrow_at(svg: &mut SvgBuilder, x: f64, y: f64, angle: f64, stroke: &str) {
@@ -4261,37 +4354,44 @@ fn render_arrow_at(svg: &mut SvgBuilder, x: f64, y: f64, angle: f64, stroke: &st
 
 fn component_svek_edge_points(
     points: &[(f64, f64)],
-    dx: f64,
-    dy: f64,
+    translation: (f64, f64),
+    svg_y_axis: Option<f64>,
     tail_cluster: Option<&ClusterPosition>,
     head_cluster: Option<&ClusterPosition>,
-    trim_start_for_arrow: bool,
-    trim_end_for_arrow: bool,
+    start_decoration_length: f64,
+    end_decoration_length: f64,
 ) -> Vec<(f64, f64)> {
     // `SvekEdge.solveLine` reads the spline back from Graphviz's SVG through
     // `SvgResult.toDotPath`; Graphviz serializes those path coordinates at two
-    // decimal places. The vendored C API gives us the pre-serialization
-    // doubles, so reproduce that model boundary before applying decorations.
+    // decimal places. Its SVG transform serializes the Y axis and the
+    // mathematical Y coordinate independently, so reproduce
+    // `round(axis) - round(axis - y)` rather than rounding the flipped result.
+    // The vendored C API gives us the pre-serialization doubles.
     let quantize = |value: f64| (value * 100.0).round() / 100.0;
+    let (dx, dy) = translation;
+    let serialized_y_axis = svg_y_axis.map(quantize);
     let mut out: Vec<(f64, f64)> = points
         .iter()
-        .map(|(x, y)| (quantize(*x) + dx, quantize(*y) + dy))
+        .map(|(x, y)| {
+            let serialized_y = svg_y_axis
+                .zip(serialized_y_axis)
+                .map(|(axis, serialized_axis)| serialized_axis - quantize(axis - *y))
+                .unwrap_or_else(|| quantize(*y));
+            (quantize(*x) + dx, serialized_y + dy)
+        })
         .collect();
     out = simulate_compound(out, tail_cluster, head_cluster);
 
-    if trim_start_for_arrow && out.len() >= 2 {
+    if start_decoration_length > 0.0 && out.len() >= 2 {
         let (tip_x, tip_y) = out[0];
         let (next_x, next_y) = out[1];
         let vx = next_x - tip_x;
         let vy = next_y - tip_y;
         let len = (vx * vx + vy * vy).sqrt();
         if len > f64::EPSILON {
-            // `SvekEdge.getExtremitySimplier` moves both the start point and
-            // its first control point by `ExtremityArrow`'s 6px decoration
-            // length.
             let ux = vx / len;
             let uy = vy / len;
-            let trim = 6.0;
+            let trim = start_decoration_length;
             out[0] = (tip_x + ux * trim, tip_y + uy * trim);
             if out.len() >= 4 {
                 let (cx, cy) = out[1];
@@ -4300,7 +4400,7 @@ fn component_svek_edge_points(
         }
     }
 
-    if trim_end_for_arrow && out.len() >= 2 {
+    if end_decoration_length > 0.0 && out.len() >= 2 {
         let n = out.len();
         let (tip_x, tip_y) = out[n - 1];
         let (prev_x, prev_y) = out[n - 2];
@@ -4308,12 +4408,9 @@ fn component_svek_edge_points(
         let vy = tip_y - prev_y;
         let len = (vx * vx + vy * vy).sqrt();
         if len > f64::EPSILON {
-            // Java PlantUML `ExtremityArrow.getDecorationLength()` returns 6,
-            // so `SvekEdge.solveLine` leaves that much room between the drawn
-            // spline endpoint and the filled arrowhead tip.
             let ux = vx / len;
             let uy = vy / len;
-            let trim = 6.0;
+            let trim = end_decoration_length;
             out[n - 1] = (tip_x - ux * trim, tip_y - uy * trim);
             if n >= 4 {
                 let (cx, cy) = out[n - 2];
@@ -6036,6 +6133,40 @@ mod tests {
             svg.matches(r##"<polygon fill="#181818""##).count(),
             2,
             "each decorated endpoint should emit one arrow polygon: {svg}"
+        );
+    }
+
+    #[test]
+    fn no_oracle_socket_extremities_follow_java_geometry_for_renamed_links() {
+        // Coordinates below were captured from the Java PlantUML oracle:
+        // `DotPath.getMiddle`, `MiddleCircleCircled.drawU`, and
+        // `ExtremityParenthesis.drawU/getDecorationLength`.
+        let middle_input = "@startuml\ncomponent \"Renamed Socket Producer 1009\" as Producer1009\ncomponent \"Renamed Socket Consumer 1013\" as Consumer1013\nProducer1009 -(0)- Consumer1013\n@enduml";
+        let middle_diagram = rustuml_parser::parse::parse(middle_input).unwrap();
+        let middle_svg = crate::render_svg(&middle_diagram);
+
+        assert!(
+            middle_svg.contains(r#"width="286px""#) && middle_svg.contains(r#"height="173px""#),
+            "renamed middle-eye probe must retain Java's canvas: {middle_svg}"
+        );
+        assert!(
+            middle_svg.contains(r#"M132.6189,90.5898 A10,10 0 0 0 146.7611 90.5898"#)
+                && middle_svg.contains(r#"M146.7611,76.4477 A10,10 0 0 0 132.6189 76.4477"#),
+            "MiddleCircleCircled arcs must follow DotPath.getMiddle(): {middle_svg}"
+        );
+
+        let endpoint_input = "@startuml\ncomponent \"Renamed Parenthesis Source 1021\" as Source1021\ncomponent \"Renamed Parenthesis Sink 1031\" as Sink1031\nSource1021 -( Sink1031\n@enduml";
+        let endpoint_diagram = rustuml_parser::parse::parse(endpoint_input).unwrap();
+        let endpoint_svg = crate::render_svg(&endpoint_diagram);
+
+        assert!(
+            endpoint_svg.contains(r#"width="588px""#) && endpoint_svg.contains(r#"height="67px""#),
+            "renamed endpoint-parenthesis probe must retain Java's canvas: {endpoint_svg}"
+        );
+        assert!(
+            endpoint_svg.contains(r#"M281.92,30.25 C293.31,30.25 294.69,30.25 306.08,30.25"#)
+                && endpoint_svg.contains(r#"M313.0018,21.7928 A9,9 0 0 0 313.0018 38.7072"#),
+            "ExtremityParenthesis must trim by 10px and paint its 140-degree arc: {endpoint_svg}"
         );
     }
 
