@@ -2364,6 +2364,28 @@ fn class_header_positions(
     }
 }
 
+/// Port of PlantUML `HeaderLayout.drawU` for a class header with a generic
+/// badge. `EntityImageClassHeader` adds two outer pixels around the generic
+/// box, so its layout width is the rendered box width plus those margins.
+fn generic_header_positions(
+    x: f64,
+    width: f64,
+    icon_radius: f64,
+    name_text_width: f64,
+    generic_text_width: f64,
+) -> HeaderPositions {
+    let circle_width = icon_radius * 2.0 + HEADER_CIRCLE_LEFT_MARGIN + HEADER_CIRCLE_RIGHT_MARGIN;
+    let name_width = name_text_width + HEADER_NAME_MARGIN_X * 2.0;
+    let generic_width = generic_text_width + GENERIC_BOX_PAD * 2.0 + 2.0;
+    let supp_width = (width - circle_width - name_width - generic_width).max(0.0);
+    let h2 = (circle_width / 4.0).min(supp_width * HEADER_SECONDARY_GAP_RATIO);
+    let h1 = (supp_width - h2) / 2.0;
+    HeaderPositions {
+        icon_cx: x + h1 + HEADER_CIRCLE_LEFT_MARGIN + icon_radius,
+        name_x: x + circle_width + h1 + h2 + HEADER_NAME_MARGIN_X,
+    }
+}
+
 /// Port of PlantUML `HeaderLayout.drawU` for stereotype headers. The
 /// dimensions include `EntityImageClassHeader`'s circled-character, stereotype,
 /// and name margins. RustUML's Graphviz node envelope is one pixel wider than
@@ -3986,6 +4008,21 @@ fn render_entity_content(
         && !is_object_entity
         && entity.generic.is_none())
     .then(|| class_header_positions(x, dim.width, icon_radius, name_tl));
+    let generic_header_positions = entity
+        .generic
+        .as_deref()
+        .filter(|_| {
+            !dim.has_stereotypes && !dim.hide.circle && !suppress_header_icon && !is_object_entity
+        })
+        .map(|generic| {
+            generic_header_positions(
+                x,
+                dim.width,
+                icon_radius,
+                name_tl,
+                text_render::measure(generic, GENERIC_FONT_SIZE as f64, false),
+            )
+        });
     let stereo_width = format_stereotype_lines(&entity.stereotypes)
         .iter()
         .map(|line| text_render::measure_with_family(line, 12.0, false, &font.name_family))
@@ -4001,6 +4038,7 @@ fn render_entity_content(
             .as_ref()
             .map(|p| p.icon_cx)
             .or_else(|| header_positions.as_ref().map(|p| p.icon_cx))
+            .or_else(|| generic_header_positions.as_ref().map(|p| p.icon_cx))
             .unwrap_or(x + ICON_CX_OFFSET)
     });
     let icon_cy = if let Some(cy) = icon_cy_override {
@@ -4249,6 +4287,7 @@ fn render_entity_content(
         let default_name_x = header_positions
             .as_ref()
             .map(|p| p.name_x)
+            .or_else(|| generic_header_positions.as_ref().map(|p| p.name_x))
             .unwrap_or(icon_cx + ICON_RX + ICON_TEXT_GAP);
         name_text_x_override.unwrap_or(default_name_x)
     };
@@ -8168,6 +8207,20 @@ mod tests {
 
         assert!(
             svg.contains(r##"<rect fill="#F1F1F1" height="48" rx="17" ry="17""##),
+            "{svg}"
+        );
+    }
+
+    #[test]
+    fn generic_body_recenters_the_header_before_its_badge() {
+        let input = "@startuml\nclass RenamedEnvelope<Payload, ErrorCode> {\n  +Result<Payload, ErrorCode> transform(InputPacket packet)\n}\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(">Payload, ErrorCode</text>"), "{svg}");
+        assert!(!svg.contains(r#"<ellipse cx="22""#), "{svg}");
+        assert!(
+            !svg.contains(r#"x="36" y="28.291">RenamedEnvelope</text>"#),
             "{svg}"
         );
     }
