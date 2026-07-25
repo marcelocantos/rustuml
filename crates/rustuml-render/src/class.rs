@@ -285,6 +285,9 @@ const NODE_CLUSTER_ENVELOPE_X_EXTRA: f64 = 20.0;
 const NODE_CLUSTER_ENVELOPE_Y_EXTRA: f64 = 10.0;
 const NODE_BEVEL: f64 = 10.0;
 const FRAME_TITLE_CORNER: f64 = 10.0;
+/// Java `USymbolCloud.asBig()` draws the title at y=13 within the symbol;
+/// the title text block's 14px bold baseline is another 13.5352px below it.
+const CLOUD_TITLE_BASELINE: f64 = 26.5352;
 /// Package cluster canvases use the full SVEK body side extent (left 6 plus
 /// right-side stroke/body slack) rather than the single-entity 13px formula.
 /// Provenance: Java `SvekResult.drawU` normalises the body at x/y=6 before
@@ -1742,6 +1745,7 @@ pub fn render_with_oracle(
         }
     };
     normalize_svek_package_envelope(
+        diagram,
         &mut result.node_positions,
         &mut result.cluster_positions,
         &mut result.edge_paths,
@@ -2330,6 +2334,9 @@ fn effective_package_kind(pkg: &Package) -> PackageKind {
             if stereotype.eq_ignore_ascii_case("node") {
                 return PackageKind::Node;
             }
+            if stereotype.eq_ignore_ascii_case("cloud") {
+                return PackageKind::Cloud;
+            }
         }
     }
     pkg.kind
@@ -2345,6 +2352,7 @@ fn is_rendered_package_cluster(pkg: &Package) -> bool {
             | PackageKind::Frame
             | PackageKind::Rectangle
             | PackageKind::Node
+            | PackageKind::Cloud
     )
 }
 
@@ -2352,8 +2360,9 @@ fn package_cluster_id(idx: usize) -> String {
     format!("pkg{idx}")
 }
 
-fn package_cluster_envelope_extra(diagram: &ClassDiagram, cluster_id: &str) -> (f64, f64) {
-    cluster_id
+fn package_cluster_envelope_extra(diagram: &ClassDiagram, cluster: &ClusterPosition) -> (f64, f64) {
+    cluster
+        .id
         .strip_prefix("pkg")
         .and_then(|idx| idx.parse::<usize>().ok())
         .and_then(|idx| diagram.packages.get(idx))
@@ -2363,8 +2372,28 @@ fn package_cluster_envelope_extra(diagram: &ClassDiagram, cluster_id: &str) -> (
                 DATABASE_CLUSTER_ENVELOPE_EXTRA,
             ),
             PackageKind::Node => (NODE_CLUSTER_ENVELOPE_X_EXTRA, NODE_CLUSTER_ENVELOPE_Y_EXTRA),
+            PackageKind::Cloud => {
+                let frontier = cloud_frontier(cluster.width, cluster.height);
+                (
+                    (frontier.max_x - cluster.width).max(0.0),
+                    (frontier.max_y - cluster.height).max(0.0),
+                )
+            }
             _ => (0.0, 0.0),
         })
+}
+
+fn package_cloud_frontier(
+    diagram: &ClassDiagram,
+    cluster: &ClusterPosition,
+) -> Option<CloudFrontier> {
+    cluster
+        .id
+        .strip_prefix("pkg")
+        .and_then(|idx| idx.parse::<usize>().ok())
+        .and_then(|idx| diagram.packages.get(idx))
+        .filter(|pkg| effective_package_kind(pkg) == PackageKind::Cloud)
+        .map(|_| cloud_frontier(cluster.width, cluster.height))
 }
 
 fn package_display_label(pkg: &Package) -> &str {
@@ -2386,8 +2415,8 @@ fn package_skinparam<'a>(
         PackageKind::Frame => &["Frame"],
         PackageKind::Rectangle => &["Rectangle"],
         PackageKind::Node => &["Node"],
+        PackageKind::Cloud => &["Cloud"],
         PackageKind::Package | PackageKind::Namespace => &["Package"],
-        _ => return None,
     };
     for prefix in prefixes {
         let key = format!("{prefix}{suffix}");
@@ -2451,6 +2480,7 @@ fn package_content_offsets(diagram: &ClassDiagram) -> Vec<(f64, f64)> {
 /// influence dot but are not drawn, so normalize from the solved real cluster
 /// boxes rather than Graphviz's root envelope.
 fn normalize_svek_package_envelope(
+    diagram: &ClassDiagram,
     node_positions: &mut [NodePosition],
     cluster_positions: &mut [ClusterPosition],
     edge_paths: &mut [EdgePath],
@@ -2460,12 +2490,20 @@ fn normalize_svek_package_envelope(
     }
     let min_x = cluster_positions
         .iter()
-        .map(|position| position.x)
+        .map(|position| {
+            package_cloud_frontier(diagram, position)
+                .map(|frontier| position.x + frontier.min_x)
+                .unwrap_or(position.x)
+        })
         .chain(node_positions.iter().map(|position| position.x))
         .fold(f64::INFINITY, f64::min);
     let min_y = cluster_positions
         .iter()
-        .map(|position| position.y)
+        .map(|position| {
+            package_cloud_frontier(diagram, position)
+                .map(|frontier| position.y + frontier.min_y)
+                .unwrap_or(position.y)
+        })
         .chain(node_positions.iter().map(|position| position.y))
         .fold(f64::INFINITY, f64::min);
     let target = SVEK_LABEL_ENVELOPE_MARGIN - MARGIN;
@@ -2797,7 +2835,7 @@ fn render_plantuml_svg(
         }
         for cluster in cluster_positions {
             let (envelope_extra_x, envelope_extra_y) =
-                package_cluster_envelope_extra(diagram, &cluster.id);
+                package_cluster_envelope_extra(diagram, cluster);
             max_x = max_x.max(cluster.x + MARGIN + cluster.width + envelope_extra_x);
             max_y = max_y.max(cluster.y + MARGIN + cluster.height + envelope_extra_y);
         }
@@ -2933,11 +2971,11 @@ fn render_plantuml_svg(
     for cluster in cluster_positions {
         let x = cluster.x + MARGIN;
         let y = cluster.y + MARGIN;
-        let (envelope_extra_x, envelope_extra_y) =
-            package_cluster_envelope_extra(diagram, &cluster.id);
-        body_min_x = body_min_x.min(x);
+        let cloud_frontier = package_cloud_frontier(diagram, cluster);
+        let (envelope_extra_x, envelope_extra_y) = package_cluster_envelope_extra(diagram, cluster);
+        body_min_x = body_min_x.min(x + cloud_frontier.as_ref().map_or(0.0, |f| f.min_x));
         body_max_x = body_max_x.max(x + cluster.width + envelope_extra_x);
-        body_top = body_top.min(y);
+        body_top = body_top.min(y + cloud_frontier.as_ref().map_or(0.0, |f| f.min_y));
         body_bottom = body_bottom.max(y + cluster.height + envelope_extra_y);
     }
     for &(_, node_idx, _) in &attached_notes {
@@ -3423,6 +3461,7 @@ fn layout_package_clusters(
                             | PackageKind::Frame
                             | PackageKind::Rectangle
                             | PackageKind::Node
+                            | PackageKind::Cloud
                     ) {
                         "#181818".to_string()
                     } else {
@@ -3482,6 +3521,7 @@ fn emit_layout_package_cluster(svg: &mut String, cluster: &LayoutPackageCluster,
         PackageKind::Frame => emit_layout_frame_cluster(svg, cluster),
         PackageKind::Rectangle => emit_layout_rectangle_cluster(svg, cluster),
         PackageKind::Node => emit_layout_node_cluster(svg, cluster),
+        PackageKind::Cloud => emit_layout_cloud_cluster(svg, cluster),
         _ => {
             write!(
                 svg,
@@ -3683,6 +3723,299 @@ fn emit_layout_node_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
         cluster,
         x - 4.0 + (cluster.width - label_w) / 2.0,
         y + PACKAGE_TITLE_BASELINE + 11.0,
+    );
+}
+
+#[derive(Clone, Copy)]
+struct CloudPoint {
+    x: f64,
+    y: f64,
+}
+
+struct CloudCurve {
+    control1: CloudPoint,
+    control2: CloudPoint,
+    end: CloudPoint,
+}
+
+struct CloudFrontier {
+    start: CloudPoint,
+    curves: Vec<CloudCurve>,
+    min_x: f64,
+    min_y: f64,
+    max_x: f64,
+    max_y: f64,
+}
+
+struct JavaRandom {
+    seed: u64,
+}
+
+impl JavaRandom {
+    const MULTIPLIER: u64 = 0x5DEE_CE66D;
+    const ADDEND: u64 = 0xB;
+    const MASK: u64 = (1_u64 << 48) - 1;
+
+    fn new(seed: i64) -> Self {
+        Self {
+            seed: (seed as u64 ^ Self::MULTIPLIER) & Self::MASK,
+        }
+    }
+
+    fn next(&mut self, bits: u32) -> u64 {
+        self.seed = self
+            .seed
+            .wrapping_mul(Self::MULTIPLIER)
+            .wrapping_add(Self::ADDEND)
+            & Self::MASK;
+        self.seed >> (48 - bits)
+    }
+
+    fn next_double(&mut self) -> f64 {
+        let high = self.next(26) << 27;
+        let low = self.next(27);
+        (high + low) as f64 / (1_u64 << 53) as f64
+    }
+
+    fn between(&mut self, lower: f64, upper: f64) -> f64 {
+        self.next_double() * (upper - lower) + lower
+    }
+}
+
+fn cloud_coordinate(p1: CloudPoint, p2: CloudPoint, along: f64, normal: f64) -> CloudPoint {
+    let dx = p2.x - p1.x;
+    let dy = p2.y - p1.y;
+    let length = dx.hypot(dy);
+    let ux = dx / length;
+    let uy = dy / length;
+    CloudPoint {
+        x: p1.x + along * ux - normal * uy,
+        y: p1.y + along * uy + normal * ux,
+    }
+}
+
+fn cloud_bubble_line(
+    random: &mut JavaRandom,
+    points: &mut Vec<CloudPoint>,
+    p1: CloudPoint,
+    p2: CloudPoint,
+    bubble_size: f64,
+) {
+    let length = (p2.x - p1.x).hypot(p2.y - p1.y);
+    let mut segment_size = bubble_size;
+    let mut count = (length / segment_size) as usize;
+    if count == 0 {
+        segment_size = length / 2.0;
+        count = (length / segment_size) as usize;
+    }
+    for i in 0..count {
+        let mut point = cloud_coordinate(p1, p2, i as f64 * length / count as f64, 0.0);
+        point.x += segment_size * 0.2 * random.next_double();
+        point.y += segment_size * 0.2 * random.next_double();
+        points.push(point);
+    }
+}
+
+fn cloud_special_line(
+    random: &mut JavaRandom,
+    points: &mut Vec<CloudPoint>,
+    p1: CloudPoint,
+    p2: CloudPoint,
+    bubble_size: f64,
+) {
+    let length = (p2.x - p1.x).hypot(p2.y - p1.y);
+    let bulge = random.between(1.0, 1.0 + 12.0_f64.min(bubble_size * 0.8));
+    let middle = cloud_coordinate(p1, p2, length / 2.0, -bulge);
+    cloud_bubble_line(random, points, p1, middle, bubble_size);
+    cloud_bubble_line(random, points, middle, p2, bubble_size);
+}
+
+fn cloud_frontier(width: f64, height: f64) -> CloudFrontier {
+    let seed = width as i64 + 7919 * height as i64;
+    let mut random = JavaRandom::new(seed);
+    let mut points = Vec::new();
+    let mut bubble_size = 11.0;
+    if width.max(height) / bubble_size > 16.0 {
+        bubble_size = width.max(height) / 16.0;
+    }
+
+    let point_a = CloudPoint { x: 8.0, y: 8.0 };
+    let point_b = CloudPoint {
+        x: width - 8.0,
+        y: 8.0,
+    };
+    let point_c = CloudPoint {
+        x: width - 8.0,
+        y: height - 8.0,
+    };
+    let point_d = CloudPoint {
+        x: 8.0,
+        y: height - 8.0,
+    };
+
+    if width > 100.0 && height > 100.0 {
+        let margin = 7.0;
+        cloud_special_line(
+            &mut random,
+            &mut points,
+            CloudPoint {
+                x: point_a.x + margin,
+                ..point_a
+            },
+            CloudPoint {
+                x: point_b.x - margin,
+                ..point_b
+            },
+            bubble_size,
+        );
+        points.push(CloudPoint {
+            y: point_b.y + margin,
+            ..point_b
+        });
+        cloud_special_line(
+            &mut random,
+            &mut points,
+            CloudPoint {
+                y: point_b.y + margin,
+                ..point_b
+            },
+            CloudPoint {
+                y: point_c.y - margin,
+                ..point_c
+            },
+            bubble_size,
+        );
+        points.push(CloudPoint {
+            x: point_c.x - margin,
+            ..point_c
+        });
+        cloud_special_line(
+            &mut random,
+            &mut points,
+            CloudPoint {
+                x: point_c.x - margin,
+                ..point_c
+            },
+            CloudPoint {
+                x: point_d.x + margin,
+                ..point_d
+            },
+            bubble_size,
+        );
+        points.push(CloudPoint {
+            y: point_d.y - margin,
+            ..point_d
+        });
+        cloud_special_line(
+            &mut random,
+            &mut points,
+            CloudPoint {
+                y: point_d.y - margin,
+                ..point_d
+            },
+            CloudPoint {
+                y: point_a.y + margin,
+                ..point_a
+            },
+            bubble_size,
+        );
+        points.push(CloudPoint {
+            x: point_a.x + margin,
+            ..point_a
+        });
+    } else {
+        cloud_special_line(&mut random, &mut points, point_a, point_b, bubble_size);
+        cloud_special_line(&mut random, &mut points, point_b, point_c, bubble_size);
+        cloud_special_line(&mut random, &mut points, point_c, point_d, bubble_size);
+        cloud_special_line(&mut random, &mut points, point_d, point_a, bubble_size);
+    }
+
+    let start = points[0];
+    points.push(start);
+    let mut curves = Vec::with_capacity(points.len() - 1);
+    let mut min_x = start.x;
+    let mut min_y = start.y;
+    let mut max_x = start.x;
+    let mut max_y = start.y;
+    for pair in points.windows(2) {
+        let p1 = pair[0];
+        let p2 = pair[1];
+        let length = (p2.x - p1.x).hypot(p2.y - p1.y);
+        let coefficient = random.between(0.25, 0.35);
+        let control1 = cloud_coordinate(
+            p1,
+            p2,
+            length * coefficient,
+            -length * random.between(0.4, 0.55),
+        );
+        let control2 = cloud_coordinate(
+            p1,
+            p2,
+            length * (1.0 - coefficient),
+            -length * random.between(0.4, 0.55),
+        );
+        for point in [control1, control2, p2] {
+            min_x = min_x.min(point.x);
+            min_y = min_y.min(point.y);
+            max_x = max_x.max(point.x);
+            max_y = max_y.max(point.y);
+        }
+        curves.push(CloudCurve {
+            control1,
+            control2,
+            end: p2,
+        });
+    }
+
+    CloudFrontier {
+        start,
+        curves,
+        min_x,
+        min_y,
+        max_x,
+        max_y,
+    }
+}
+
+fn emit_layout_cloud_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
+    let frontier = cloud_frontier(cluster.width, cluster.height);
+
+    // Java `USymbolCloud.drawCloud()` delegates to
+    // `getSpecificFrontierForCloudNew()`: a dimension-seeded Random builds
+    // bubble points around the four sides and joins them with cubic curves.
+    write!(
+        svg,
+        r#"<path d="M{},{}"#,
+        fmt4(cluster.x + frontier.start.x),
+        fmt4(cluster.y + frontier.start.y),
+    )
+    .unwrap();
+    for curve in frontier.curves {
+        write!(
+            svg,
+            " C{},{} {},{} {},{}",
+            fmt4(cluster.x + curve.control1.x),
+            fmt4(cluster.y + curve.control1.y),
+            fmt4(cluster.x + curve.control2.x),
+            fmt4(cluster.y + curve.control2.y),
+            fmt4(cluster.x + curve.end.x),
+            fmt4(cluster.y + curve.end.y),
+        )
+        .unwrap();
+    }
+    write!(
+        svg,
+        r#"" fill="{}" style="stroke:{};stroke-width:{};"/>"#,
+        cluster.fill, cluster.stroke, SYMBOL_CLUSTER_STROKE_WIDTH,
+    )
+    .unwrap();
+
+    let label_w = text_render::measure_no_underline(&cluster.label, FONT_SIZE, true);
+    emit_layout_symbol_cluster_title(
+        svg,
+        cluster,
+        cluster.x + (cluster.width - label_w) / 2.0,
+        cluster.y + CLOUD_TITLE_BASELINE,
     );
 }
 
@@ -8844,6 +9177,45 @@ mod tests {
         assert!(svg.contains(r#"data-qualified-name="ComputeRack439.Cache457""#));
         assert!(svg.contains(r#"id="Worker443-to-Result449""#));
         assert!(svg.contains(r#"id="Worker443-to-Cache457""#));
+    }
+
+    #[test]
+    fn no_oracle_cloud_cluster_uses_seeded_frontier_and_symbol_styles() {
+        let input = "@startuml\n\
+            skinparam CloudBorderColor SeaGreen\n\
+            skinparam CloudFontColor DarkSlateBlue\n\
+            cloud NimbusVault503 #HoneyDew {\n\
+              class Intake509 {\n\
+                +void accept()\n\
+              }\n\
+              class Archive521\n\
+              class Monitor523\n\
+              Intake509 --> Archive521\n\
+              Intake509 --> Monitor523\n\
+            }\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(r#"style="width:320px;height:259px;background:#FFFFFF;""#));
+        let cluster = svg
+            .split_once("<!--cluster NimbusVault503-->")
+            .unwrap()
+            .1
+            .split_once("</g>")
+            .unwrap()
+            .0;
+        assert!(cluster.contains(r#"<path d="M"#));
+        assert_eq!(cluster.matches(" C").count(), 52);
+        assert!(cluster.contains(r##"fill="#F0FFF0" style="stroke:#2E8B57;stroke-width:1;""##));
+        assert!(cluster.contains(
+            r##"<text fill="#483D8B" font-family="sans-serif" font-size="14" font-weight="700""##
+        ));
+        assert!(svg.contains(r#"data-qualified-name="NimbusVault503.Intake509""#));
+        assert!(svg.contains(r#"data-qualified-name="NimbusVault503.Archive521""#));
+        assert!(svg.contains(r#"data-qualified-name="NimbusVault503.Monitor523""#));
+        assert!(svg.contains(r#"id="Intake509-to-Archive521""#));
+        assert!(svg.contains(r#"id="Intake509-to-Monitor523""#));
     }
 
     #[test]
