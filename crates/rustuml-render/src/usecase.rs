@@ -344,7 +344,7 @@ pub fn render_with_oracle(
     {
         (orc.canvas_width, orc.canvas_height)
     } else {
-        compute_canvas(&positions, &actor_dims, &uc_dims, &note_dims)
+        compute_canvas(diagram, &positions, &actor_dims, &uc_dims, &note_dims)
     };
 
     let mut svg = SvgBuilder::new_plantuml_with_background_and_defs(
@@ -1384,6 +1384,7 @@ fn fallback_use_case_center(i: usize, dim: &UseCaseDim) -> (f64, f64) {
 }
 
 fn compute_canvas(
+    diagram: &UseCaseDiagram,
     positions: &Positions,
     actor_dims: &[ActorDim],
     uc_dims: &[UseCaseDim],
@@ -1434,8 +1435,33 @@ fn compute_canvas(
             max_y = max_y.max(y + SVEK_CANVAS_PAD);
         }
         if let Some(label) = edge.label {
-            max_x = max_x.max(label.x + label.width + SVEK_CANVAS_PAD);
-            max_y = max_y.max(label.y + label.height + SVEK_CANVAS_PAD);
+            let rose_note_trailing_pad = diagram
+                .connections
+                .iter()
+                .enumerate()
+                .filter(|(_, connection)| {
+                    connection.from == edge.from
+                        && connection.to == edge.to
+                        && connection.label.is_none()
+                        && connection.stereotype.is_none()
+                })
+                .find_map(|(connection_index, _)| {
+                    let (note_index, _) = note_on_connection(diagram, connection_index)?;
+                    let expected_width = note_dims[note_index].width + LINK_NOTE_PADDING * 2.0;
+                    let expected_height = note_dims[note_index].height + LINK_NOTE_PADDING * 2.0;
+                    // Graphviz's SVG label rectangle serializes these
+                    // component dimensions at whole-pixel precision.
+                    ((label.width - expected_width.floor()).abs() < 0.01
+                        && (label.height - expected_height.floor()).abs() < 0.01)
+                        .then_some(LINK_NOTE_PADDING)
+                })
+                .unwrap_or(0.0);
+            // Java provenance: `ComponentRoseNote` reports a label box with
+            // five pixels of padding on every side, then paints the Opale note
+            // at `(5,5)`. For a pure note-on-link label, `LimitFinder` sees the
+            // painted note but not the unused trailing padding.
+            max_x = max_x.max(label.x + label.width - rose_note_trailing_pad + SVEK_CANVAS_PAD);
+            max_y = max_y.max(label.y + label.height - rose_note_trailing_pad + SVEK_CANVAS_PAD);
         }
     }
     for cluster in &positions.cluster_positions {
@@ -2871,6 +2897,23 @@ mod tests {
         assert!(svg.contains(r#"viewBox="0 0 402 232""#), "{svg}");
         assert!(svg.contains(r#"width="402px""#), "{svg}");
         assert!(svg.contains(r#"height="232px""#), "{svg}");
+    }
+
+    #[test]
+    fn renamed_link_note_canvas_excludes_rose_trailing_padding() {
+        let input = "@startuml\n\
+                     actor \"Renamed Note Source 811\" as Source811\n\
+                     usecase \"Renamed Note Target 821\" as Target821\n\
+                     Source811 --> Target821\n\
+                     note on link : Renamed approval gate 823\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Independent PlantUML oracle result for this renamed perturbation.
+        assert!(svg.contains(r#"viewBox="0 0 325 236""#), "{svg}");
+        assert!(svg.contains(r#"width="325px""#), "{svg}");
+        assert!(svg.contains(r#"height="236px""#), "{svg}");
     }
 
     #[test]

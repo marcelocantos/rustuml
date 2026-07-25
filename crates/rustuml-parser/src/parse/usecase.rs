@@ -364,7 +364,10 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
             note_block = Some(PendingNote {
                 kind: UseCaseNoteKind::OnLink { connection },
                 position: note_position(caps.get(1).map(|m| m.as_str()).unwrap_or("bottom")),
-                source_line: current_line,
+                // Java provenance: `CommandFactoryNoteOnLink` creates the
+                // synthetic note entity on the line following the block
+                // command, unlike the inline form which keeps the command line.
+                source_line: current_line + 1,
             });
             note_block_lines.clear();
             continue;
@@ -381,7 +384,9 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
             note_block = Some(PendingNote {
                 kind: UseCaseNoteKind::Attached { target },
                 position: note_position(&caps[1]),
-                source_line: current_line,
+                // Java provenance: `CommandFactoryNoteOnEntity` assigns its
+                // synthetic `GMN*` entity to the line after the block command.
+                source_line: current_line + 1,
             });
             note_block_lines.clear();
             continue;
@@ -393,7 +398,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                     id: caps[1].to_string(),
                 },
                 position: UseCaseNotePosition::Bottom,
-                source_line: current_line,
+                source_line: current_line + 1,
             });
             note_block_lines.clear();
             continue;
@@ -883,7 +888,7 @@ mod tests {
             }
         );
         assert_eq!(d.notes[1].position, UseCaseNotePosition::Bottom);
-        assert_eq!(d.notes[1].source_line, 4);
+        assert_eq!(d.notes[1].source_line, 5);
         assert_eq!(
             d.notes[2].kind,
             UseCaseNoteKind::Floating {
