@@ -3948,11 +3948,12 @@ fn deployment_cluster_frame(
                     crate::cloud_shape::generate(position.width, position.height).min_xy();
                 (SVEK_ENVELOPE_ORIGIN - min_x, SVEK_ENVELOPE_ORIGIN - min_y)
             }
-            // `USymbolRectangle.asBig` draws a full-size `URectangle`;
-            // `LimitFinder.drawRectangle` expands its top-left by one pixel.
-            DeploymentNodeKind::Rectangle | DeploymentNodeKind::Agent => {
-                (SVEK_ENVELOPE_ORIGIN + 1.0, SVEK_ENVELOPE_ORIGIN + 1.0)
-            }
+            // `USymbolRectangle.asBig` and `USymbolFrame.asBig` draw a
+            // full-size `URectangle`; `LimitFinder.drawRectangle` expands
+            // its top-left by one pixel.
+            DeploymentNodeKind::Rectangle
+            | DeploymentNodeKind::Agent
+            | DeploymentNodeKind::Frame => (SVEK_ENVELOPE_ORIGIN + 1.0, SVEK_ENVELOPE_ORIGIN + 1.0),
             _ => (SVEK_ENVELOPE_ORIGIN, SVEK_ENVELOPE_ORIGIN),
         };
         required_dx = required_dx.max(origin_x - position.x);
@@ -3981,7 +3982,9 @@ fn deployment_cluster_frame(
                     crate::cloud_shape::generate(position.width, position.height).bounds()
                 }
                 DeploymentNodeKind::Folder => (0.0, 0.0, position.width, position.height),
-                DeploymentNodeKind::Rectangle | DeploymentNodeKind::Agent => {
+                DeploymentNodeKind::Rectangle
+                | DeploymentNodeKind::Agent
+                | DeploymentNodeKind::Frame => {
                     (-1.0, -1.0, position.width - 1.0, position.height - 1.0)
                 }
                 _ => return None,
@@ -4830,6 +4833,27 @@ mod tests {
         assert!(svg.contains(r#"style="width:195px;height:544px;background:#FFFFFF;""#));
         assert!(svg.contains(r#"data-qualified-name="Rectangular Zone 263.Worker269""#));
         assert!(svg.contains(r#"data-qualified-name="Rectangular Zone 263.Worker283""#));
+    }
+
+    #[test]
+    fn no_oracle_frame_cluster_uses_rectangle_painted_envelope() {
+        let source = "@startuml\n\
+            frame \"Frame Lab 293\" {\n\
+              artifact \"Bundle 307\" as Bundle307\n\
+              queue \"Jobs 311\" as Jobs311\n\
+            }\n\
+            Bundle307 --> Jobs311\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+
+        let svg = render(&diagram, &Theme::default());
+
+        assert!(svg.contains(r#"style="width:161px;height:197px;background:#FFFFFF;""#));
+        assert!(svg.contains(r#"data-qualified-name="Frame Lab 293.Bundle307""#));
+        assert!(svg.contains(r#"data-qualified-name="Frame Lab 293.Jobs311""#));
     }
 
     #[test]
