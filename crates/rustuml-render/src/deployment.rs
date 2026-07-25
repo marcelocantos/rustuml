@@ -3689,11 +3689,20 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
     // Java `GraphvizImageBuilder.buildImage` runs `printGroups(root)` before
     // `printEntities(getUnpackagedEntities())`. `printGroup` itself emits the
     // group's direct leaves before recursing into child groups.
-    for root in roots.iter().filter(|root| !root.children.is_empty()) {
-        collect_entities_svek_order(root, &diagram.nodes, None, 0, &mut leaves);
+    for root in &roots {
+        if root.children.is_empty() {
+            if root.declared_container {
+                leaves.push((0, root.source_line, *root, qualified_name(root, None)));
+            }
+        } else {
+            collect_entities_svek_order(root, &diagram.nodes, None, 0, &mut leaves);
+        }
     }
-    for root in roots.iter().filter(|root| root.children.is_empty()) {
-        leaves.push((0, root.source_line, root, qualified_name(root, None)));
+    for root in roots
+        .iter()
+        .filter(|root| root.children.is_empty() && !root.declared_container)
+    {
+        leaves.push((0, root.source_line, *root, qualified_name(root, None)));
     }
     for (_, _, node, qname) in leaves {
         emit_entity(&mut svg, node, &qname, &ctx);
@@ -5315,7 +5324,7 @@ fn simulate_deployment_compound(
     points_from_curves(&curves)
 }
 
-fn trim_deployment_edge_endpoint(points: &mut [(f64, f64)], endpoint: usize, adjacent: usize) {
+fn trim_deployment_edge_endpoint(points: &mut Vec<(f64, f64)>, endpoint: usize, adjacent: usize) {
     let dx = points[endpoint].0 - points[adjacent].0;
     let dy = points[endpoint].1 - points[adjacent].1;
     let length = dx.hypot(dy);
@@ -5326,6 +5335,22 @@ fn trim_deployment_edge_endpoint(points: &mut [(f64, f64)], endpoint: usize, adj
         dx / length * DEPENDENCY_ARROW_LENGTH,
         dy / length * DEPENDENCY_ARROW_LENGTH,
     );
+
+    if endpoint == 0 && points.len() > 4 {
+        // Java `DotPath.moveStartPoint` discards one leading cubic when its
+        // endpoint distance is no longer than the decoration translation.
+        let first_delta = (points[3].0 - points[0].0, points[3].1 - points[0].1);
+        if DEPENDENCY_ARROW_LENGTH >= first_delta.0.hypot(first_delta.1) {
+            points.drain(..3);
+            let residual = (-shift.0 - first_delta.0, -shift.1 - first_delta.1);
+            points[0].0 += residual.0;
+            points[0].1 += residual.1;
+            points[1].0 += residual.0;
+            points[1].1 += residual.1;
+            return;
+        }
+    }
+
     points[endpoint].0 -= shift.0;
     points[endpoint].1 -= shift.1;
     if points.len() >= 4 {
@@ -5727,6 +5752,33 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
     }
 
     #[test]
+    fn no_oracle_empty_deduplicated_group_keeps_group_traversal_position() {
+        let source = "@startuml\n\
+            node \"Primary 821\" {\n\
+              component \"Shared 823\"\n\
+            }\n\
+            node \"Vacated 827\" {\n\
+              component \"Shared 823\"\n\
+            }\n\
+            node \"Later 829\" {\n\
+              component \"Unique 839\"\n\
+            }\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+
+        let svg = render(&diagram, &Theme::default());
+        let first_group_leaf = svg.find("<!--entity Shared 823-->").unwrap();
+        let empty_group = svg.find("<!--entity Vacated 827-->").unwrap();
+        let later_group_leaf = svg.find("<!--entity Unique 839-->").unwrap();
+
+        assert!(first_group_leaf < empty_group);
+        assert!(empty_group < later_group_leaf);
+    }
+
+    #[test]
     fn no_oracle_folder_cluster_uses_painted_path_envelope() {
         let source = "@startuml\n\
             folder \"Archive Cell 229\" {\n\
@@ -6013,6 +6065,26 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
         );
         let output = svg.finalize();
         assert!(output.contains(r#"points="26,37,30,28,26,32,22,28,26,37""#));
+    }
+
+    #[test]
+    fn deployment_svek_start_decoration_discards_a_short_leading_cubic() {
+        let raw = vec![
+            (0.0, 0.0),
+            (-1.0, 0.0),
+            (1.0, 0.0),
+            (2.0, 0.0),
+            (3.0, 0.0),
+            (7.0, 0.0),
+            (8.0, 0.0),
+        ];
+
+        let painted = deployment_svek_edge_points(&raw, 0.0, 0.0, None, None, EdgeTrim::Start);
+
+        assert_eq!(
+            painted,
+            vec![(-6.0, 0.0), (-5.0, 0.0), (7.0, 0.0), (8.0, 0.0)]
+        );
     }
 
     #[test]

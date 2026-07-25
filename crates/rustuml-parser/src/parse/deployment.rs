@@ -101,6 +101,7 @@ fn push_node(
     kind: DeploymentNodeKind,
     stereotype: Option<String>,
     color: Option<String>,
+    declared_container: bool,
     source_line: usize,
 ) -> bool {
     if !nodes.iter().any(|n| n.id == id) {
@@ -110,6 +111,7 @@ fn push_node(
             kind,
             stereotype,
             color,
+            declared_container,
             children: Vec::new(),
             source_line,
         });
@@ -570,6 +572,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                 DeploymentNodeKind::Component,
                 stereotype,
                 color,
+                false,
                 current_line,
             );
             if created && let Some(parent_id) = stack.last().cloned() {
@@ -677,6 +680,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                             kind: DeploymentNodeKind::Default,
                             stereotype: None,
                             color: None,
+                            declared_container: false,
                             children: Vec::new(),
                             source_line: current_line,
                         });
@@ -711,6 +715,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                     let stereotype = caps.get(4).map(|m| m.as_str().trim().to_string());
                     let color = caps.get(5).map(|m| m.as_str().to_string());
                     let kind = kind_from_keyword(keyword);
+                    let declared_container = trimmed.contains('{');
 
                     let created = push_node(
                         &mut nodes,
@@ -719,6 +724,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                         kind,
                         stereotype,
                         color,
+                        declared_container,
                         current_line,
                     );
                     if created && let Some(parent_id) = stack.last().cloned() {
@@ -744,6 +750,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                     let stereotype = caps.get(4).map(|m| m.as_str().trim().to_string());
                     let color = caps.get(5).map(|m| m.as_str().to_string());
                     let kind = kind_from_keyword(keyword);
+                    let declared_container = trimmed.contains('{');
 
                     let created = push_node(
                         &mut nodes,
@@ -752,6 +759,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                         kind,
                         stereotype,
                         color,
+                        declared_container,
                         current_line,
                     );
                     if created && let Some(parent_id) = stack.last().cloned() {
@@ -791,6 +799,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                         kind: DeploymentNodeKind::Node,
                         stereotype: None,
                         color: None,
+                        declared_container: false,
                         children: Vec::new(),
                         source_line: current_line,
                     });
@@ -1030,6 +1039,7 @@ node "Validator Node 2" {
             .iter()
             .find(|n| n.label == "Validator Node 1")
             .unwrap();
+        assert!(first.declared_container);
         assert_eq!(
             first.children,
             vec!["Consensus_Engine".to_string(), "Ledger".to_string()]
@@ -1040,6 +1050,7 @@ node "Validator Node 2" {
             .find(|n| n.label == "Validator Node 2")
             .unwrap();
         assert!(second.children.is_empty());
+        assert!(second.declared_container);
     }
 
     #[test]

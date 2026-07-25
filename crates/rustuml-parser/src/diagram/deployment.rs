@@ -57,6 +57,10 @@ pub struct DeploymentNode {
     /// colours to hex.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub color: Option<String>,
+    /// The declaration opened a `{ ... }` container, even if every child was
+    /// deduplicated against an earlier entity and `children` is empty.
+    #[serde(default)]
+    pub declared_container: bool,
     pub children: Vec<String>,
     /// 1-based line number within the `@startuml` block.
     #[serde(default)]
