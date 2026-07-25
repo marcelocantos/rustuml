@@ -96,6 +96,10 @@ pub struct DeploymentConnection {
     pub from: String,
     pub to: String,
     pub label: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub tail_label: Option<String>,
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub head_label: Option<String>,
     #[serde(default, skip_serializing_if = "std::ops::Not::not")]
     pub arrow_at_start: bool,
     #[serde(default, skip_serializing_if = "std::ops::Not::not")]

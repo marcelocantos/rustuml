@@ -111,6 +111,26 @@ const DEPENDENCY_ARROW_LENGTH: f64 = 6.0;
 const DEPENDENCY_ARROW_REAR: f64 = 9.0;
 const DEPENDENCY_ARROW_INSET: f64 = 5.0;
 const DEPENDENCY_ARROW_HALF_WIDTH: f64 = 4.0;
+// `CircleInterface2` paints a 16px circle inside a one-pixel margin;
+// `USymbolSimpleAbstract` places the description block 26px below its origin.
+const INTERFACE_CIRCLE_SIZE: f64 = 16.0;
+const INTERFACE_SYMBOL_SIZE: f64 = 18.0;
+const INTERFACE_LABEL_Y: f64 = 26.0;
+// `SvekNode.appendLabelHtml` wraps the symbol and its shield in a 3x3
+// zero-padding Graphviz table. Its fixed-cell bookkeeping adds this envelope
+// around the shield while keeping the `h` cell centered.
+const INTERFACE_TABLE_EXTRA_WIDTH: f64 = 16.0;
+const INTERFACE_TABLE_EXTRA_HEIGHT: f64 = 7.0;
+// Graphviz's serialized `h` cell and tail-label table leave this gap between
+// their lower edges (`SvekNode.appendLabelHtml` / `SvekEdge.appendTable`).
+const INTERFACE_ENDPOINT_LABEL_BOTTOM_GAP: f64 = 0.04;
+// Extracted from `SvekNode.appendLabelHtml` plus `SvekEdge.solveLine`: dot
+// routes a vertical `h`-port spline through the inner-cell bottom, the outer
+// table boundary, the center-label box, and the target clip boundary.
+const INTERFACE_PORT_START_INSET: f64 = 0.05;
+const INTERFACE_TABLE_CONTROL_INSET: f64 = 0.99;
+const INTERFACE_LABEL_CONTROL_GAP: f64 = 0.76;
+const INTERFACE_TARGET_ENDPOINT_DELTA: f64 = 0.11;
 const LAYOUT_TIMEOUT: std::time::Duration = std::time::Duration::from_secs(5);
 
 // ---------------------------------------------------------------------------
@@ -3166,6 +3186,18 @@ fn deployment_no_oracle_entity_rect(
         0.0
     };
     let mut entity_rect = match node.kind {
+        Default => {
+            // `CircleInterface2` reserves an 18px symbol box inside the
+            // overlap shield and draws its 16px ellipse one pixel inward.
+            let symbol_x = rect.x + (dim.width - INTERFACE_SYMBOL_SIZE) / 2.0;
+            let symbol_y = rect.y + (dim.height - INTERFACE_SYMBOL_SIZE) / 2.0;
+            empty_entity_rect(
+                symbol_x + 1.0,
+                symbol_y + 1.0,
+                INTERFACE_CIRCLE_SIZE,
+                INTERFACE_CIRCLE_SIZE,
+            )
+        }
         Boundary | Control | Entity => {
             // `USymbolSimpleAbstract` centres a fixed icon above the label.
             // The downstream emitter consumes the 24px ellipse box, not the
@@ -3198,6 +3230,14 @@ fn deployment_no_oracle_entity_rect(
     };
 
     let (text_x, text_y) = match node.kind {
+        Default => {
+            let symbol_x = rect.x + (dim.width - INTERFACE_SYMBOL_SIZE) / 2.0;
+            let symbol_y = rect.y + (dim.height - INTERFACE_SYMBOL_SIZE) / 2.0;
+            (
+                symbol_x + (INTERFACE_SYMBOL_SIZE - dim.label_width) / 2.0,
+                symbol_y + INTERFACE_LABEL_Y + ASCENT_14,
+            )
+        }
         Boundary | Control | Entity => (
             rect.x + (rect.width - dim.label_width) / 2.0,
             rect.y + stereo_height + 32.0 + ASCENT_14,
@@ -3309,7 +3349,8 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
     let mut layout = LayoutGraph::new(Direction::TopToBottom).with_plantuml_svek_spacing();
     for (node, dim) in diagram.nodes.iter().zip(&dims) {
         if !cluster_ids.contains(node.id.as_str()) {
-            layout.add_node(&node.id, &node.label, dim.width, dim.height);
+            let (width, height) = deployment_layout_node_size(node.kind, dim);
+            layout.add_node(&node.id, &node.label, width, height);
         }
     }
     for &note_index in &laid_out_note_indices {
@@ -3406,7 +3447,7 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
         }
     }
     for conn in &diagram.connections {
-        let (layout_from, layout_to, _) =
+        let (layout_from, layout_to, reversed) =
             deployment_connection_layout_with_endpoints(conn, &cluster_endpoint_nodes);
         let label_size = conn.label.as_deref().map(|label| EdgeLabelSize {
             // Java `SvekEdge.getLabelText` adds one pixel of margin on
@@ -3414,12 +3455,31 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
             width: text_render::measure(label, 13.0, false) + 2.0,
             height: (text_render::label_height(label, 13.0) + 2.0).floor(),
         });
+        let endpoint_label_size = |label: Option<&str>| {
+            label.map(|label| EdgeLabelSize {
+                // `SvekEdge.appendLine` sends cardinality text dimensions
+                // directly to `appendTable`, without the center-label shield.
+                width: text_render::measure(label, 13.0, false),
+                height: text_render::label_height(label, 13.0).floor(),
+            })
+        };
+        let (tail_label_size, head_label_size) = if reversed {
+            (
+                endpoint_label_size(conn.head_label.as_deref()),
+                endpoint_label_size(conn.tail_label.as_deref()),
+            )
+        } else {
+            (
+                endpoint_label_size(conn.tail_label.as_deref()),
+                endpoint_label_size(conn.head_label.as_deref()),
+            )
+        };
         layout.add_edge_with_label_sizes_and_minlen(
             layout_from,
             layout_to,
             label_size,
-            None,
-            None,
+            tail_label_size,
+            head_label_size,
             match conn.direction {
                 Some(DeploymentLinkDirection::Left | DeploymentLinkDirection::Right) => Some(0),
                 // `CommandLinkElement` stores the shaft's character count
@@ -3431,7 +3491,10 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
         );
     }
 
-    let result = layout.layout_full(LAYOUT_TIMEOUT);
+    let mut result = layout.layout_full(LAYOUT_TIMEOUT);
+    if let Some(result) = result.as_mut() {
+        adjust_deployment_endpoint_labels(diagram, &dims, result);
+    }
     let cluster_frame = deployment_cluster_frame(diagram, result.as_ref());
     let y_frame = deployment_body_y_frame(
         diagram,
@@ -3932,7 +3995,8 @@ fn deployment_node_dim(
             text_render::measure(&format!("\u{00AB}{stereo}\u{00BB}"), FONT_SIZE, false) + 2.0
         })
         .unwrap_or(0.0);
-    let line_count = node.label.lines().count().max(1) + usize::from(node.stereotype.is_some());
+    let label_line_count = node.label.lines().count().max(1);
+    let line_count = label_line_count + usize::from(node.stereotype.is_some());
     let (text_x_pad, top_pad, _) = entity_text_geom(node.kind, 0.0, &node.label);
     let width = match node.kind {
         DeploymentNodeKind::Node
@@ -3944,7 +4008,12 @@ fn deployment_node_dim(
             // the final ten pixels preserve the asymmetric icon reservation.
             label_width.max(stereo_width) + 2.0 * text_x_pad + 10.0
         }
-        // `USymbolSimpleAbstract` centres the fixed symbol above the text.
+        // `EntityImageDescription.getShield` places an interface's hidden
+        // label around the fixed 18px symbol so Graphviz reserves the label.
+        DeploymentNodeKind::Default => {
+            INTERFACE_SYMBOL_SIZE
+                + 2.0 * ((label_width.max(stereo_width) - INTERFACE_SYMBOL_SIZE).max(1.0) / 2.0)
+        }
         DeploymentNodeKind::Boundary => label_width.max(stereo_width).max(49.0),
         DeploymentNodeKind::Control | DeploymentNodeKind::Entity => {
             label_width.max(stereo_width).max(32.0)
@@ -3965,6 +4034,16 @@ fn deployment_node_dim(
         _ => label_width.max(stereo_width) + 2.0 * text_x_pad,
     };
     let height = match node.kind {
+        // `EntityImageDescription.getShield` reserves the taller of the
+        // hidden label and stereotype above and below the 18px symbol.
+        DeploymentNodeKind::Default => {
+            let stereo_height = f64::from(node.stereotype.is_some()) * TEXT_LINE_H;
+            INTERFACE_SYMBOL_SIZE
+                + 2.0
+                    * (label_line_count as f64 * TEXT_LINE_H)
+                        .max(stereo_height)
+                        .max(1.0)
+        }
         // Boundary/control/entity use a 32px icon stacked between the optional
         // stereotype and the label (`XDimension2D.mergeLayoutT12B3`).
         DeploymentNodeKind::Boundary | DeploymentNodeKind::Control | DeploymentNodeKind::Entity => {
@@ -4011,7 +4090,8 @@ fn deployment_body_margin_y(
             .zip(&result.node_positions)
             .map(|((node, dim), position)| {
                 let y = (position.y * 100.0).round() / 100.0;
-                y + deployment_local_painted_y_min(node.kind, dim)
+                let (_, paint_dy) = deployment_layout_paint_offset(node.kind);
+                y + paint_dy + deployment_local_painted_y_min(node.kind, dim)
             })
             .fold(f64::INFINITY, f64::min);
         if painted_min_y.is_finite() {
@@ -4073,9 +4153,10 @@ fn deployment_body_y_frame(
     let mut painted_max_y = f64::NEG_INFINITY;
     for ((node, dim), position) in diagram.nodes.iter().zip(dims).zip(&result.node_positions) {
         let y = (position.y * 100.0).round() / 100.0;
+        let (_, paint_dy) = deployment_layout_paint_offset(node.kind);
         let (local_min_y, local_max_y) = deployment_local_painted_y_bounds(node.kind, dim);
-        painted_min_y = painted_min_y.min(y + local_min_y);
-        painted_max_y = painted_max_y.max(y + local_max_y);
+        painted_min_y = painted_min_y.min(y + paint_dy + local_min_y);
+        painted_max_y = painted_max_y.max(y + paint_dy + local_max_y);
     }
     for (offset, &note_index) in laid_out_note_indices.iter().enumerate() {
         let position = result.node_positions.get(diagram.nodes.len() + offset)?;
@@ -4100,6 +4181,15 @@ fn deployment_local_painted_y_bounds(
         // `USymbolNode.drawNode` and `USymbolDatabase.drawDatabase` place a
         // `UEmpty(10,10)` at the lower edge specifically for LimitFinder.
         Node | Database => (0.0, dim.height + 10.0),
+        // `CircleInterface2` paints its ellipse one pixel inside the symbol
+        // box. `LimitFinder.drawText` reaches 1.5px below the text baseline.
+        Default => {
+            let shield_y = (dim.height - INTERFACE_SYMBOL_SIZE) / 2.0;
+            (
+                shield_y + 1.0,
+                shield_y + INTERFACE_LABEL_Y + ASCENT_14 + 1.5,
+            )
+        }
         // `LimitFinder.drawRectangle` expands a rectangle by one pixel toward
         // the top/left and ends one pixel before its declared lower edge.
         Artifact | Card | Rectangle | Agent | Component | Frame | Storage => {
@@ -4264,9 +4354,10 @@ fn deployment_body_x_frame(
         // Graphviz's SVG polygon coordinates, which are serialized to two
         // decimal places.
         let x = (position.x * 100.0).round() / 100.0;
+        let (paint_dx, _) = deployment_layout_paint_offset(node.kind);
         let (local_min_x, local_max_x) = deployment_local_painted_x_bounds(node, dim);
-        painted_min_x = painted_min_x.min(x + local_min_x);
-        painted_max_x = painted_max_x.max(x + local_max_x);
+        painted_min_x = painted_min_x.min(x + paint_dx + local_min_x);
+        painted_max_x = painted_max_x.max(x + paint_dx + local_max_x);
     }
     for (offset, &note_index) in laid_out_note_indices.iter().enumerate() {
         let position = result.node_positions.get(diagram.nodes.len() + offset)?;
@@ -4295,27 +4386,37 @@ fn deployment_edge_label_x_bounds(
     let mut painted_min_x = f64::INFINITY;
     let mut painted_max_x = f64::NEG_INFINITY;
     for conn in &diagram.connections {
-        let Some(label_text) = conn.label.as_deref() else {
+        let (layout_from, layout_to, reversed) = deployment_connection_layout(conn);
+        let Some(edge) = result.edge_paths.iter().find(|edge| {
+            deployment_layout_endpoint_matches(&edge.from, layout_from)
+                && deployment_layout_endpoint_matches(&edge.to, layout_to)
+        }) else {
             continue;
         };
-        let (layout_from, layout_to, _) = deployment_connection_layout(conn);
-        let Some(label) = result
-            .edge_paths
-            .iter()
-            .find(|edge| {
-                deployment_layout_endpoint_matches(&edge.from, layout_from)
-                    && deployment_layout_endpoint_matches(&edge.to, layout_to)
-            })
-            .and_then(|edge| edge.label)
-        else {
-            continue;
+        if let (Some(label_text), Some(label)) = (conn.label.as_deref(), edge.label) {
+            // `SvekEdge.getLabelText` wraps center labels in one-pixel margins.
+            // Graphviz solves their origin from an integer-truncated placeholder,
+            // then `LimitFinder` sees the original renderer width when drawing.
+            let x = (label.x * 100.0).round() / 100.0;
+            painted_min_x = painted_min_x.min(x);
+            painted_max_x =
+                painted_max_x.max(x + text_render::measure(label_text, 13.0, false) + 2.0);
+        }
+        let (tail_text, head_text) = if reversed {
+            (conn.head_label.as_deref(), conn.tail_label.as_deref())
+        } else {
+            (conn.tail_label.as_deref(), conn.head_label.as_deref())
         };
-        // `SvekEdge.getLabelText` wraps center labels in one-pixel margins.
-        // Graphviz solves their origin from an integer-truncated placeholder,
-        // then `LimitFinder` sees the original renderer width when drawing.
-        let x = (label.x * 100.0).round() / 100.0;
-        painted_min_x = painted_min_x.min(x);
-        painted_max_x = painted_max_x.max(x + text_render::measure(label_text, 13.0, false) + 2.0);
+        for (text, position) in [(tail_text, edge.tail_label), (head_text, edge.head_label)] {
+            let (Some(text), Some(position)) = (text, position) else {
+                continue;
+            };
+            // `manageCollision` runs after Graphviz parsing, so its moved
+            // position is not serialized through dot a second time.
+            let x = position.x;
+            painted_min_x = painted_min_x.min(x);
+            painted_max_x = painted_max_x.max(x + text_render::measure(text, 13.0, false));
+        }
     }
     painted_min_x
         .is_finite()
@@ -4329,11 +4430,219 @@ fn deployment_layout_endpoint_matches(layout_endpoint: &str, logical_endpoint: &
             .is_some_and(|endpoint| endpoint == logical_endpoint)
 }
 
+fn adjust_deployment_endpoint_labels(
+    diagram: &DeploymentDiagram,
+    dims: &[DeploymentNodeDim],
+    result: &mut LayoutResult,
+) {
+    let cluster_ids: HashSet<&str> = diagram
+        .nodes
+        .iter()
+        .filter(|node| !node.children.is_empty())
+        .map(|node| node.id.as_str())
+        .collect();
+    let mut positions = Vec::new();
+    let mut leaf_positions = result.node_positions.iter();
+    for (node, dim) in diagram.nodes.iter().zip(dims) {
+        if cluster_ids.contains(node.id.as_str()) {
+            continue;
+        }
+        let Some(position) = leaf_positions.next() else {
+            return;
+        };
+        let outer_rect = LayoutRect {
+            x: position.x,
+            y: position.y,
+            width: position.width,
+            height: position.height,
+        };
+        let rect = if node.kind == DeploymentNodeKind::Default {
+            // `DotStringFactory.solve` records the black `h` cell polygon,
+            // rather than the surrounding HTML-table node.
+            LayoutRect {
+                x: ((position.x + (position.width - INTERFACE_SYMBOL_SIZE) / 2.0) * 100.0).round()
+                    / 100.0,
+                y: ((position.y + (position.height - INTERFACE_SYMBOL_SIZE) / 2.0) * 100.0).round()
+                    / 100.0,
+                width: INTERFACE_SYMBOL_SIZE,
+                height: INTERFACE_SYMBOL_SIZE,
+            }
+        } else {
+            LayoutRect {
+                x: (position.x * 100.0).round() / 100.0,
+                y: (position.y * 100.0).round() / 100.0,
+                width: dim.width,
+                height: dim.height,
+            }
+        };
+        positions.push((node.id.as_str(), rect, outer_rect));
+    }
+
+    let intersects = |fixed: LayoutRect, moving: LayoutRect| {
+        fixed.x < moving.x + moving.width
+            && fixed.x + fixed.width > moving.x
+            && fixed.y < moving.y + moving.height
+            && fixed.y + fixed.height > moving.y
+    };
+    let move_away = |fixed: LayoutRect, moving: LayoutRect| {
+        let delta_x = moving.x + moving.width / 2.0 - (fixed.x + fixed.width / 2.0);
+        let delta_y = moving.y + moving.height / 2.0 - (fixed.y + fixed.height / 2.0);
+        let moved = |coefficient: f64| LayoutRect {
+            x: moving.x + delta_x * coefficient,
+            y: moving.y + delta_y * coefficient,
+            ..moving
+        };
+        if delta_x == 0.0 && delta_y == 0.0 {
+            return moving;
+        }
+        let mut min = 0.0;
+        let mut max = 0.1;
+        for _ in 0..64 {
+            if !intersects(fixed, moved(max)) {
+                break;
+            }
+            max *= 2.0;
+        }
+        // Java `PositionableUtils.moveAwayFrom` intentionally uses five
+        // bisection rounds, and its resulting slack is visible in SVEK output.
+        for _ in 0..5 {
+            let candidate = (min + max) / 2.0;
+            if intersects(fixed, moved(candidate)) {
+                min = candidate;
+            } else {
+                max = candidate;
+            }
+        }
+        moved((min + max) / 2.0)
+    };
+
+    for conn in &diagram.connections {
+        let (layout_from, layout_to, reversed) = deployment_connection_layout(conn);
+        let Some(edge) = result
+            .edge_paths
+            .iter_mut()
+            .find(|edge| edge.from == layout_from && edge.to == layout_to)
+        else {
+            continue;
+        };
+        let (tail_text, head_text) = if reversed {
+            (conn.head_label.as_deref(), conn.tail_label.as_deref())
+        } else {
+            (conn.tail_label.as_deref(), conn.head_label.as_deref())
+        };
+        for (is_tail, endpoint, text, position) in [
+            (true, layout_from, tail_text, edge.tail_label.as_mut()),
+            (false, layout_to, head_text, edge.head_label.as_mut()),
+        ] {
+            let (Some(text), Some(position)) = (text, position) else {
+                continue;
+            };
+            let width = text_render::measure(text, 13.0, false);
+            let height = text_render::label_height(text, 13.0);
+            let mut moving = LayoutRect {
+                x: (position.x * 100.0).round() / 100.0,
+                y: (position.y * 100.0).round() / 100.0,
+                width,
+                height,
+            };
+            if let Some((_, endpoint_rect, _)) = positions.iter().find(|(id, _, _)| *id == endpoint)
+                && diagram
+                    .nodes
+                    .iter()
+                    .any(|node| node.id == endpoint && node.kind == DeploymentNodeKind::Default)
+                && is_tail
+            {
+                // A vertical edge from the HTML `h` port aligns its tail
+                // cardinality's right and bottom sides with that 18px cell.
+                // This is the record-cell placement dot performs before
+                // `SvekEdge.manageCollision`.
+                moving.x = endpoint_rect.x + endpoint_rect.width / 2.0 - position.width;
+                moving.y = endpoint_rect.y + endpoint_rect.height
+                    - position.height
+                    - INTERFACE_ENDPOINT_LABEL_BOTTOM_GAP;
+            }
+            for (_, node_rect, _) in &positions {
+                let fixed = LayoutRect {
+                    x: node_rect.x - 8.0,
+                    y: node_rect.y - 8.0,
+                    width: node_rect.width + 16.0,
+                    height: node_rect.height + 16.0,
+                };
+                if intersects(fixed, moving) {
+                    moving = move_away(fixed, moving);
+                }
+            }
+            position.x = moving.x;
+            position.y = moving.y;
+        }
+
+        if let Some((_, port_rect, outer_rect)) =
+            positions.iter().find(|(id, _, _)| *id == layout_from)
+            && diagram
+                .nodes
+                .iter()
+                .any(|node| node.id == layout_from && node.kind == DeploymentNodeKind::Default)
+            && edge.points.len() == 4
+            && (edge.points[0].0 - edge.points[3].0).abs() < 1.0
+            && let Some(label) = edge.label
+        {
+            let quantize = |value: f64| (value * 100.0).round() / 100.0;
+            let center_x = quantize(port_rect.x + port_rect.width / 2.0);
+            edge.points[0] = (
+                center_x,
+                quantize(port_rect.y + port_rect.height - INTERFACE_PORT_START_INSET),
+            );
+            edge.points[1] = (
+                center_x,
+                quantize(outer_rect.y + outer_rect.height - INTERFACE_TABLE_CONTROL_INSET),
+            );
+            edge.points[2] = (
+                center_x,
+                quantize(label.y + label.height + INTERFACE_LABEL_CONTROL_GAP),
+            );
+            edge.points[3] = (
+                center_x,
+                quantize(edge.points[3].1 + INTERFACE_TARGET_ENDPOINT_DELTA),
+            );
+        }
+    }
+}
+
+fn deployment_layout_node_size(kind: DeploymentNodeKind, dim: &DeploymentNodeDim) -> (f64, f64) {
+    if kind == DeploymentNodeKind::Default {
+        (
+            dim.width + INTERFACE_TABLE_EXTRA_WIDTH,
+            dim.height + INTERFACE_TABLE_EXTRA_HEIGHT,
+        )
+    } else {
+        (dim.width, dim.height)
+    }
+}
+
+fn deployment_layout_paint_offset(kind: DeploymentNodeKind) -> (f64, f64) {
+    if kind == DeploymentNodeKind::Default {
+        (
+            INTERFACE_TABLE_EXTRA_WIDTH / 2.0,
+            INTERFACE_TABLE_EXTRA_HEIGHT / 2.0,
+        )
+    } else {
+        (0.0, 0.0)
+    }
+}
+
 fn deployment_local_painted_x_bounds(node: &DeploymentNode, dim: &DeploymentNodeDim) -> (f64, f64) {
     use DeploymentNodeKind::*;
     match node.kind {
         // `USymbolNode.drawNode` paints the full body as a UPolygon.
         Node => (-10.0, dim.width + 10.0),
+        Default => {
+            let shield_x = (dim.width - INTERFACE_SYMBOL_SIZE) / 2.0;
+            let label_x = shield_x + (INTERFACE_SYMBOL_SIZE - dim.label_width) / 2.0;
+            (
+                (shield_x + 1.0).min(label_x),
+                (shield_x + INTERFACE_CIRCLE_SIZE).max(label_x + dim.label_width),
+            )
+        }
         // The artifact's outer rectangle reaches one pixel left in
         // `LimitFinder`; its folded-corner polygon reaches five pixels right.
         Artifact => (-1.0, dim.width + 5.0),
@@ -4454,9 +4763,10 @@ fn layout_deployment_rects(
                 rects.clear();
                 break;
             };
+            let (paint_dx, paint_dy) = deployment_layout_paint_offset(node.kind);
             rects.push(LayoutRect {
-                x: (pos.x * 100.0).round() / 100.0 + body_margin_x,
-                y: (pos.y * 100.0).round() / 100.0 + body_margin_y,
+                x: (pos.x * 100.0).round() / 100.0 + body_margin_x + paint_dx,
+                y: (pos.y * 100.0).round() / 100.0 + body_margin_y + paint_dy,
                 width: dim.width,
                 height: dim.height,
             });
@@ -4750,6 +5060,21 @@ fn render_no_oracle_edges(
                         .unwrap_or((body_margin_x, body_margin_y))
                 });
             emit_text(svg, label, x, y, 13.0, false, false);
+        }
+        let (tail_text, head_text) = if reversed {
+            (conn.head_label.as_deref(), conn.tail_label.as_deref())
+        } else {
+            (conn.tail_label.as_deref(), conn.head_label.as_deref())
+        };
+        for (text, position) in [(tail_text, edge.tail_label), (head_text, edge.head_label)] {
+            let (Some(text), Some(position)) = (text, position) else {
+                continue;
+            };
+            // `SvekEdge.drawU` paints endpoint cardinalities directly at the
+            // solved tail/head table origin.
+            let x = position.x + body_margin_x;
+            let y = position.y + body_margin_y + text_render::label_ascent(text, 13.0);
+            emit_text(svg, text, x, y, 13.0, false, false);
         }
         svg.raw("</g>");
     }
@@ -5088,6 +5413,29 @@ mod tests {
             "{svg}"
         );
         assert!(svg.contains(">elongated transport 257</text>"));
+    }
+
+    #[test]
+    fn no_oracle_interface_port_routes_fresh_endpoint_quantifier() {
+        let source = r#"@startuml
+node "gateway-prod"
+node "ledger_replica"
+artifact "payload-v2.7.war"
+"gateway-prod" --> "ledger_replica" : tcp 6432
+artifact "payload-v2.7.war" --> "gateway-prod" : rollout
+@enduml"#;
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+
+        let svg = render(&diagram, &Theme::default());
+
+        assert!(
+            svg.contains(r#"d="M133.4212,35.7 C133.4212,54.75 133.4212,97.5 133.4212,126.44""#)
+        );
+        assert!(svg.contains(r#"textLength="110.6904" x="6""#));
+        assert!(svg.contains(">payload-v2.7.war</text>"));
     }
 
     #[test]

@@ -157,6 +157,8 @@ struct ParsedDeploymentConnection {
     raw_from: String,
     raw_to: String,
     label: Option<String>,
+    tail_label: Option<String>,
+    head_label: Option<String>,
     arrow_at_start: bool,
     arrow_at_end: bool,
     direction: Option<DeploymentLinkDirection>,
@@ -191,8 +193,10 @@ fn try_parse_connection(
             if keyword_set.contains(kw) {
                 let after_kw = rest[kw_end..].trim_start();
                 if let Some(after_open_quote) = after_kw.strip_prefix('"') {
-                    // keyword "label" ... — skip the quoted label, then look for arrow.
+                    // `CommandLinkElement` parses the quoted text between the
+                    // first endpoint and arrow as the tail quantifier.
                     if let Some(close_quote) = after_open_quote.find('"') {
+                        let tail_label = process_label(&after_open_quote[..close_quote]);
                         let after_label = after_open_quote[close_quote + 1..].trim_start();
                         // Check if what follows is an arrow.
                         let arrow_end = after_label
@@ -219,6 +223,8 @@ fn try_parse_connection(
                                     raw_from: kw.to_string(),
                                     raw_to: raw_to.to_string(),
                                     label,
+                                    tail_label: Some(tail_label),
+                                    head_label: None,
                                     arrow_at_start: arrow.starts_with('<'),
                                     arrow_at_end: arrow.ends_with('>'),
                                     direction: deployment_link_direction(arrow),
@@ -235,7 +241,15 @@ fn try_parse_connection(
 
     // Parse FROM endpoint.
     let (raw_from, after_from) = parse_endpoint(rest)?;
-    let after_from = after_from.trim_start();
+    let mut after_from = after_from.trim_start();
+    let tail_label = if let Some(inner) = after_from.strip_prefix('"') {
+        let close = inner.find('"')?;
+        let label = process_label(&inner[..close]);
+        after_from = inner[close + 1..].trim_start();
+        Some(label)
+    } else {
+        None
+    };
 
     // Parse arrow: one or more shaft/decor characters, optionally with
     // an embedded direction keyword `-down-`, `-up-`, `-left-`, `-right-`
@@ -285,8 +299,18 @@ fn try_parse_connection(
     }
     let after_arrow = after_from[arrow_end..].trim_start();
 
-    // Parse TO endpoint.
-    let (raw_to, after_to) = parse_endpoint(after_arrow)?;
+    // A quoted head quantifier is distinguishable from a quoted endpoint when
+    // another endpoint follows it.
+    let (first_to, first_rest) = parse_endpoint(after_arrow)?;
+    let first_rest = first_rest.trim_start();
+    let (head_label, raw_to, after_to) = if !first_rest.is_empty()
+        && !first_rest.starts_with(':')
+        && let Some((raw_to, after_to)) = parse_endpoint(first_rest)
+    {
+        (Some(process_label(first_to)), raw_to, after_to.trim_start())
+    } else {
+        (None, first_to, first_rest)
+    };
     let after_to = after_to.trim_start();
 
     // Optional label after colon.
@@ -304,6 +328,8 @@ fn try_parse_connection(
         raw_from: raw_from.to_string(),
         raw_to: raw_to.to_string(),
         label,
+        tail_label,
+        head_label,
         arrow_at_start: arrow.starts_with('<'),
         arrow_at_end: arrow.ends_with('>'),
         direction: deployment_link_direction(arrow),
@@ -632,6 +658,8 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                     raw_from,
                     raw_to,
                     label,
+                    tail_label,
+                    head_label,
                     arrow_at_start,
                     arrow_at_end,
                     direction,
@@ -658,6 +686,8 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                     from,
                     to,
                     label,
+                    tail_label,
+                    head_label,
                     arrow_at_start,
                     arrow_at_end,
                     direction,
@@ -741,6 +771,8 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                 raw_from,
                 raw_to,
                 label,
+                tail_label,
+                head_label,
                 arrow_at_start,
                 arrow_at_end,
                 direction,
@@ -769,6 +801,8 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                 from,
                 to,
                 label,
+                tail_label,
+                head_label,
                 arrow_at_start,
                 arrow_at_end,
                 direction,
@@ -855,6 +889,18 @@ mod tests {
             parse("artifact \"app.war\"\nnode Server\nartifact \"app.war\" --> Server : deploy");
         assert_eq!(d.connections.len(), 1);
         assert_eq!(d.connections[0].label.as_deref(), Some("deploy"));
+        assert_eq!(d.connections[0].tail_label.as_deref(), Some("app.war"));
+    }
+
+    #[test]
+    fn preserves_endpoint_quantifiers() {
+        let d = parse("node A\nnode B\nA \"one\" --> \"many\" B : owns");
+        let connection = &d.connections[0];
+        assert_eq!(connection.from, "A");
+        assert_eq!(connection.to, "B");
+        assert_eq!(connection.tail_label.as_deref(), Some("one"));
+        assert_eq!(connection.head_label.as_deref(), Some("many"));
+        assert_eq!(connection.label.as_deref(), Some("owns"));
     }
 
     #[test]
