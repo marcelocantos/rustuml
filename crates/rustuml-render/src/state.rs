@@ -875,6 +875,8 @@ struct AutonomousScopeLayout {
 struct AutonomousComposite<'a> {
     state: &'a State,
     inner: AutonomousScopeLayout,
+    attribute_height: f64,
+    field_margin: f64,
     width: f64,
     height: f64,
 }
@@ -1095,10 +1097,8 @@ fn build_autonomous_composite<'a>(
     };
     if composite.parent.is_some()
         || composite.stereotype.is_some()
-        || composite.fill.is_some()
         || composite.stroke.is_some()
         || composite.url.is_some()
-        || !composite.descriptions.is_empty()
     {
         return None;
     }
@@ -1168,12 +1168,26 @@ fn build_autonomous_composite<'a>(
     inner.width = inner.width - inner.origin_x + 2.0;
     inner.height -= inner.origin_y;
     let title_height = crate::plantuml_metrics::text_height(STATE_FONT_SIZE);
-    let width = inner.width.max(text_render::measure(
-        &composite.label,
-        STATE_FONT_SIZE,
-        false,
-    )) + STATE_DIMENSION_PADDING;
-    let height = inner.height + title_height + STATE_DIMENSION_PADDING;
+    let attribute_height =
+        composite.descriptions.len() as f64 * crate::plantuml_metrics::text_height(DESC_FONT_SIZE);
+    let attribute_width = composite
+        .descriptions
+        .iter()
+        .map(|description| text_render::measure(description, DESC_FONT_SIZE, false))
+        .fold(0.0_f64, f64::max);
+    let field_margin = if attribute_height > 0.0 { 5.0 } else { 0.0 };
+    let width = inner
+        .width
+        .max(text_render::measure(
+            &composite.label,
+            STATE_FONT_SIZE,
+            false,
+        ))
+        .max(attribute_width)
+        + STATE_DIMENSION_PADDING
+        + field_margin;
+    let height =
+        inner.height + title_height + attribute_height + STATE_DIMENSION_PADDING + field_margin;
 
     let outer_ids = collect_autonomous_scope_ids(diagram, &outer_transition_indices, |state| {
         state.parent.is_none()
@@ -1203,6 +1217,8 @@ fn build_autonomous_composite<'a>(
         AutonomousComposite {
             state: composite,
             inner,
+            attribute_height,
+            field_margin,
             width,
             height,
         },
@@ -1552,8 +1568,15 @@ fn render_autonomous_composite(diagram: &StateDiagram) -> Option<String> {
         .find(|(id, _, _, _, _)| id == &composite.state.id)?;
     let box_x = composite_cx - composite.width / 2.0;
     let box_y = composite_cy - composite.height / 2.0;
-    let divider_y = box_y + DIVIDER_OFFSET;
+    let title_divider_y = box_y + DIVIDER_OFFSET;
+    let header_divider_y = title_divider_y + composite.attribute_height + composite.field_margin;
     let right = box_x + composite.width;
+    let header_fill = composite
+        .state
+        .fill
+        .as_deref()
+        .map(crate::sequence::resolve_color)
+        .unwrap_or_else(|| skin.state_fill.clone());
     write!(
         svg,
         r#"<path d="M{},{} L{},{} A{STATE_RX},{STATE_RX} 0 0 1 {},{} L{},{} L{},{} L{},{} A{STATE_RX},{STATE_RX} 0 0 1 {},{}" fill="{}"/><rect fill="none" height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/><line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
@@ -1564,14 +1587,14 @@ fn render_autonomous_composite(diagram: &StateDiagram) -> Option<String> {
         fmt_f(right),
         fmt_f(box_y + STATE_RX),
         fmt_f(right),
-        fmt_f(divider_y),
+        fmt_f(header_divider_y),
         fmt_f(box_x),
-        fmt_f(divider_y),
+        fmt_f(header_divider_y),
         fmt_f(box_x),
         fmt_f(box_y + STATE_RX),
         fmt_f(box_x + STATE_RX),
         fmt_f(box_y),
-        skin.state_fill,
+        header_fill,
         fmt_f(composite.height),
         skin.stroke,
         skin.border_thickness,
@@ -1582,10 +1605,23 @@ fn render_autonomous_composite(diagram: &StateDiagram) -> Option<String> {
         skin.border_thickness,
         fmt_f(box_x),
         fmt_f(right),
-        fmt_f(divider_y),
-        fmt_f(divider_y),
+        fmt_f(header_divider_y),
+        fmt_f(header_divider_y),
     )
     .unwrap();
+    if composite.attribute_height > 0.0 {
+        write!(
+            svg,
+            r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+            skin.stroke,
+            skin.border_thickness,
+            fmt_f(box_x),
+            fmt_f(right),
+            fmt_f(title_divider_y),
+            fmt_f(title_divider_y),
+        )
+        .unwrap();
+    }
     let title_width = text_render::measure(&composite.state.label, STATE_FONT_SIZE, false);
     let mut title = String::new();
     text_render::emit_text(
@@ -1604,11 +1640,32 @@ fn render_autonomous_composite(diagram: &StateDiagram) -> Option<String> {
         },
     );
     svg.push_str(&title);
+    for (index, attribute) in composite.state.descriptions.iter().enumerate() {
+        let mut text = String::new();
+        text_render::emit_text(
+            &mut text,
+            attribute,
+            &TextBase {
+                x: box_x + 5.0,
+                y: title_divider_y
+                    + crate::plantuml_metrics::ascent(DESC_FONT_SIZE)
+                    + index as f64 * crate::plantuml_metrics::text_height(DESC_FONT_SIZE),
+                font_size: DESC_FONT_SIZE as u32,
+                font_family: "sans-serif",
+                fill: &skin.text_color,
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        svg.push_str(&text);
+    }
 
     // Java `InnerStateAutonom.drawU` paints the autonomous inner image at
-    // x=MARGIN and y=titreHeight+MARGIN_LINE. Both margins are five pixels.
+    // x=MARGIN and y=titreHeight+field-margin+attribute-height+MARGIN_LINE.
     let inner_offset_x = box_x + 5.0;
-    let inner_offset_y = box_y + DIVIDER_OFFSET + 5.0;
+    let inner_offset_y = header_divider_y + 5.0;
     emit_autonomous_scope_entities(
         &mut svg,
         &context,
@@ -5432,6 +5489,31 @@ mod tests {
         let composite_header = svg.find(">HarborMode</text>").unwrap();
         let outer_start = svg.find(r#"data-qualified-name=".start.""#).unwrap();
         assert!(composite_header < outer_start);
+    }
+
+    #[test]
+    fn renamed_composite_header_measures_fields_and_explicit_fill() {
+        let input = concat!(
+            "@startuml\n",
+            "state HarborMode : first renamed field\n",
+            "state HarborMode : second renamed field\n",
+            "state HarborMode #PaleGreen {\n",
+            "  [*] --> CopperReady\n",
+            "  CopperReady --> VioletRunning\n",
+            "  VioletRunning --> [*]\n",
+            "}\n",
+            "[*] --> HarborMode\n",
+            "HarborMode --> [*]\n",
+            "@enduml\n",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(r##"fill="#98FB98""##));
+        assert!(svg.contains(">first renamed field</text>"));
+        assert!(svg.contains(">second renamed field</text>"));
+        assert!(svg.contains(r#"data-qualified-name="HarborMode.CopperReady""#));
+        assert!(svg.contains(r#"data-qualified-name="HarborMode.VioletRunning""#));
     }
 
     #[test]
