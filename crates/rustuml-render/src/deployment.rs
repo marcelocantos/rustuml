@@ -3098,6 +3098,78 @@ fn laid_out_deployment_note_indices(diagram: &DeploymentDiagram) -> Vec<usize> {
         .collect()
 }
 
+fn is_degenerated_single_entity(diagram: &DeploymentDiagram) -> bool {
+    diagram.nodes.len() == 1
+        && diagram.nodes[0].children.is_empty()
+        && diagram.connections.is_empty()
+        && diagram.notes.is_empty()
+        && diagram.meta.title.is_none()
+        && diagram.meta.header.is_none()
+        && diagram.meta.footer.is_none()
+        && diagram.meta.caption.is_none()
+        && diagram.meta.legend.is_none()
+        && !is_handwritten_enabled(&diagram.meta.skinparams)
+}
+
+fn render_no_oracle_degenerated(diagram: &DeploymentDiagram, dim: &DeploymentNodeDim) -> String {
+    let node = &diagram.nodes[0];
+    // `GraphvizImageBuilder.buildImage` bypasses Graphviz for one unlinked
+    // root leaf. `EntityImageDegenerated` translates the image by seven
+    // pixels; the surrounding image builder leaves six more trailing pixels.
+    let rect = LayoutRect {
+        x: 7.0,
+        y: 7.0,
+        width: dim.width,
+        height: dim.height,
+    };
+    let parent_of = HashMap::new();
+    let qnames = deployment_qnames(diagram, &parent_of);
+    let mut entity_rect = empty_entity_rect(rect.x, rect.y, rect.width, rect.height);
+    let text_x = ((entity_text_center(node.kind, rect.x, rect.width) - dim.label_width / 2.0)
+        * 100.0)
+        .round()
+        / 100.0;
+    let text_y = rect.y + dim.top_pad;
+    entity_rect.text_x_values.push(text_x);
+    entity_rect.text_y_values.push(text_y);
+    entity_rect.texts.push(EntityText {
+        x: text_x,
+        y: text_y,
+        text: node.label.clone(),
+    });
+    entity_rect.source_line = Some(node.source_line.to_string());
+
+    let mut oracle = OracleLayout::default();
+    oracle
+        .entities
+        .insert(qnames[&node.id].clone(), entity_rect);
+    let no_oracle_uids = build_deployment_no_oracle_uid_model(diagram);
+    let skin_fills = skin_background_fills(&diagram.meta.skinparams);
+    let skin_strokes = skin_border_colors(&diagram.meta.skinparams);
+    let sprite_names: HashSet<String> = diagram
+        .meta
+        .sprites
+        .keys()
+        .map(|name| name.to_lowercase())
+        .collect();
+    let sprite_cache =
+        crate::sprite::SpriteCache::from_sprites_scaled(&diagram.meta.sprites, sprite_scale());
+    let ctx = OracleRenderContext {
+        oracle: &oracle,
+        id_for_node: &no_oracle_uids.entity_ids,
+        skin_fills: &skin_fills,
+        skin_strokes: &skin_strokes,
+        sprite_names: &sprite_names,
+        sprites: &diagram.meta.sprites,
+        sprite_cache: &sprite_cache,
+        handwritten: false,
+    };
+
+    let mut svg = SvgBuilder::new_plantuml(dim.width + 20.0, dim.height + 20.0, "DESCRIPTION");
+    emit_entity(&mut svg, node, &qnames[&node.id], &ctx);
+    svg.finalize_plantuml()
+}
+
 fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
     // Java path: CucaDiagramFileMakerSvek builds a Bibliotekon of measured
     // SvekNodes, DotStringFactory serialises those node boxes to dot, then
@@ -3108,6 +3180,9 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
         .iter()
         .map(|node| deployment_node_dim(node, &diagram.meta.sprites))
         .collect();
+    if is_degenerated_single_entity(diagram) {
+        return render_no_oracle_degenerated(diagram, &dims[0]);
+    }
     let note_dims: Vec<DeploymentNoteDim> = diagram.notes.iter().map(deployment_note_dim).collect();
     let laid_out_note_indices = laid_out_deployment_note_indices(diagram);
     let parent_of = deployment_parent_map(diagram);
@@ -4343,6 +4418,24 @@ mod tests {
         assert!(svg.contains(r#"height="172px""#));
         assert!(svg.contains(r#"data-qualified-name="Jobs101""#));
         assert!(svg.contains(r#"id="Ingress97-to-Jobs101""#));
+    }
+
+    #[test]
+    fn no_oracle_single_entity_uses_degenerated_envelope() {
+        let source = "@startuml\nartifact \"Solo Runtime 127\" as Runtime127 #LightGreen\n@enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+
+        let svg = render(&diagram, &Theme::default());
+
+        assert!(svg.contains(r#"style="width:170px;height:59px;background:#FFFFFF;""#));
+        assert!(svg.contains(
+            r#"<g class="entity" data-qualified-name="Runtime127" data-source-line="1" id="ent0002">"#
+        ));
+        assert!(svg.contains(r##"fill="#90EE90" height="39.4883""##));
+        assert!(svg.contains(r#"width="150.5859" x="7" y="7""#));
     }
 
     #[test]
