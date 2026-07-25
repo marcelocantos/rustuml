@@ -337,10 +337,21 @@ fn deployment_link_length(arrow: &str) -> usize {
         .count()
 }
 
+fn deployment_note_position(value: &str) -> DeploymentNotePosition {
+    match value {
+        "top" => DeploymentNotePosition::Top,
+        "bottom" => DeploymentNotePosition::Bottom,
+        "left" => DeploymentNotePosition::Left,
+        _ => DeploymentNotePosition::Right,
+    }
+}
+
 /// Accumulator for multiline note bodies.
 struct NoteAccum {
     target: Option<String>,
     id: Option<String>,
+    position: DeploymentNotePosition,
+    source_line: usize,
     lines: Vec<String>,
 }
 
@@ -394,12 +405,12 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
 
     // note direction of target : text  (inline attached note)
     static RE_NOTE_ATTACHED: LazyLock<Regex> = LazyLock::new(|| {
-        Regex::new(r#"^note\s+(?:top|bottom|left|right)\s+of\s+("?[^":]+?"?)\s*:\s*(.+)$"#).unwrap()
+        Regex::new(r#"^note\s+(top|bottom|left|right)\s+of\s+("?[^":]+?"?)\s*:\s*(.+)$"#).unwrap()
     });
 
     // note direction of target  (multiline attached note — no colon)
     static RE_NOTE_ATTACHED_MULTI: LazyLock<Regex> = LazyLock::new(|| {
-        Regex::new(r#"^note\s+(?:top|bottom|left|right)\s+of\s+("?[^"]+?"?)\s*$"#).unwrap()
+        Regex::new(r#"^note\s+(top|bottom|left|right)\s+of\s+("?[^"]+?"?)\s*$"#).unwrap()
     });
 
     // N1 .. N2  — note link (N1 is the note ID, N2 is the target)
@@ -438,6 +449,8 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                     id: accum.id,
                     target: accum.target,
                     text,
+                    position: accum.position,
+                    source_line: accum.source_line,
                 });
             } else {
                 note_accum.as_mut().unwrap().lines.push(trimmed.to_string());
@@ -541,30 +554,38 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                 id: Some(id),
                 target: None,
                 text,
+                position: DeploymentNotePosition::Right,
+                source_line: current_line,
             });
             continue;
         }
 
         // Attached note: note direction of target : text  (inline)
         if let Some(caps) = RE_NOTE_ATTACHED.captures(trimmed) {
-            let target_raw = caps[1].trim().trim_matches('"').to_string();
+            let position = deployment_note_position(&caps[1]);
+            let target_raw = caps[2].trim().trim_matches('"').to_string();
             let target = resolve_id(&nodes, &target_raw);
-            let text = caps[2].trim().to_string();
+            let text = caps[3].trim().to_string();
             notes.push(DeploymentNote {
                 id: None,
                 target: Some(target),
                 text,
+                position,
+                source_line: current_line,
             });
             continue;
         }
 
         // Multiline attached note: note direction of target  (no colon)
         if let Some(caps) = RE_NOTE_ATTACHED_MULTI.captures(trimmed) {
-            let target_raw = caps[1].trim().trim_matches('"').to_string();
+            let position = deployment_note_position(&caps[1]);
+            let target_raw = caps[2].trim().trim_matches('"').to_string();
             let target = resolve_id(&nodes, &target_raw);
             note_accum = Some(NoteAccum {
                 id: None,
                 target: Some(target),
+                position,
+                source_line: current_line + 1,
                 lines: Vec::new(),
             });
             continue;
@@ -580,9 +601,14 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
             let rhs_note = notes.iter().any(|n| n.id.as_deref() == Some(rhs.as_str()));
             if lhs_note || rhs_note {
                 // Attach the note to the non-note endpoint.
-                let (note_id, target_id) = if lhs_note { (lhs, rhs) } else { (rhs, lhs) };
+                let (note_id, target_id, position) = if lhs_note {
+                    (lhs, rhs, DeploymentNotePosition::Top)
+                } else {
+                    (rhs, lhs, DeploymentNotePosition::Bottom)
+                };
                 if let Some(note) = notes.iter_mut().find(|n| n.id.as_deref() == Some(&note_id)) {
                     note.target = Some(target_id);
+                    note.position = position;
                 }
                 continue;
             }
@@ -863,6 +889,8 @@ mod tests {
         assert_eq!(d.notes.len(), 1);
         assert_eq!(d.notes[0].text, "16 cores");
         assert_eq!(d.notes[0].target.as_deref(), Some("AppServer"));
+        assert_eq!(d.notes[0].position, DeploymentNotePosition::Right);
+        assert_eq!(d.notes[0].source_line, 2);
     }
 
     #[test]
@@ -871,6 +899,16 @@ mod tests {
         assert_eq!(d.notes.len(), 1);
         assert_eq!(d.notes[0].text, "Primary server");
         assert_eq!(d.notes[0].target.as_deref(), Some("Server"));
+        assert_eq!(d.notes[0].position, DeploymentNotePosition::Top);
+        assert_eq!(d.notes[0].source_line, 2);
+    }
+
+    #[test]
+    fn multiline_note_preserves_side_and_first_body_line() {
+        let d = parse("node Server\nnote left of Server\n  first\n  second\nend note");
+        assert_eq!(d.notes[0].text, "first\nsecond");
+        assert_eq!(d.notes[0].position, DeploymentNotePosition::Left);
+        assert_eq!(d.notes[0].source_line, 3);
     }
 
     #[test]

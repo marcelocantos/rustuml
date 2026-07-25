@@ -29,6 +29,21 @@ pub struct DeploymentNote {
     pub target: Option<String>,
     /// The note text.
     pub text: String,
+    /// Requested side of an attached note.
+    #[serde(default)]
+    pub position: DeploymentNotePosition,
+    /// 1-based line number within the `@startuml` block.
+    #[serde(default)]
+    pub source_line: usize,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
+pub enum DeploymentNotePosition {
+    Top,
+    Bottom,
+    Left,
+    #[default]
+    Right,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

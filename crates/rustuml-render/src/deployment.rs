@@ -2568,6 +2568,11 @@ fn emit_cloud_entity(
 const NOTE_FILL: &str = "#FEFFDD";
 const NOTE_FOLD: f64 = 10.0;
 const NOTE_FONT_SIZE: f64 = 13.0;
+const NOTE_MARGIN_X1: f64 = 6.0;
+const NOTE_MARGIN_X2: f64 = 15.0;
+const NOTE_MARGIN_Y: f64 = 5.0;
+const NOTE_CONNECTOR_HALF: f64 = 4.0;
+const NOTE_GAP: f64 = 10.0;
 
 /// Which edge of the note box the leader notch is spliced into, derived
 /// from the apex position relative to the box.
@@ -2689,6 +2694,156 @@ fn emit_note(svg: &mut SvgBuilder, note: &crate::layout_oracle::OracleNoteEntity
         for (tx, ty, line) in &g.text_lines {
             emit_text(svg, line, *tx, *ty, NOTE_FONT_SIZE, false, false);
         }
+    }
+    svg.raw("</g>");
+}
+
+fn render_attached_deployment_note(
+    svg: &mut SvgBuilder,
+    note: &DeploymentNote,
+    layout: &DeploymentNoteLayout,
+    uid: &DeploymentNoteUid,
+    edge: Option<&EdgePath>,
+    body_margin_x: f64,
+    body_margin_y: f64,
+) {
+    let center = (
+        layout.x + layout.width / 2.0,
+        layout.y + layout.height / 2.0,
+    );
+    let fallback = match note.position {
+        DeploymentNotePosition::Top => (
+            (center.0, layout.y + layout.height),
+            (center.0, layout.y + layout.height + NOTE_GAP),
+        ),
+        DeploymentNotePosition::Bottom => ((center.0, layout.y), (center.0, layout.y - NOTE_GAP)),
+        DeploymentNotePosition::Left => (
+            (layout.x + layout.width, center.1),
+            (layout.x + layout.width + NOTE_GAP, center.1),
+        ),
+        DeploymentNotePosition::Right => ((layout.x, center.1), (layout.x - NOTE_GAP, center.1)),
+    };
+    let (note_point, target_point) = edge
+        .map(|path| {
+            deployment_svek_edge_points(&path.points, body_margin_x, body_margin_y, EdgeTrim::None)
+        })
+        .and_then(|points| points.first().copied().zip(points.last().copied()))
+        .map(|(first, last)| match note.position {
+            DeploymentNotePosition::Top | DeploymentNotePosition::Left => (first, last),
+            DeploymentNotePosition::Bottom | DeploymentNotePosition::Right => (last, first),
+        })
+        .unwrap_or(fallback);
+    let mouth_x = note_point.0 - layout.x;
+    let mouth_y = note_point.1 - layout.y;
+    let tip_x = target_point.0;
+    let tip_y = target_point.1;
+    let x = layout.x;
+    let y = layout.y;
+    let w = layout.width;
+    let h = layout.height;
+
+    // `EntityImageNote.drawU` delegates to `Opale.getPolygon{Left,Right,Up,Down}`.
+    // The hidden SVEK edge supplies the mouth and tip points embedded below.
+    let path = match note.position {
+        DeploymentNotePosition::Right => {
+            let y1 = (mouth_y - NOTE_CONNECTOR_HALF).clamp(0.0, h - NOTE_CONNECTOR_HALF * 2.0);
+            format!(
+                "M{x0},{y0} L{x0},{y1} L{tx},{ty} L{x0},{y2} L{x0},{yb} A0,0 0 0 0 {x0},{yb} L{xr},{yb} A0,0 0 0 0 {xr},{yb} L{xr},{yf} L{xf},{y0} L{x0},{y0} A0,0 0 0 0 {x0},{y0}",
+                x0 = fc(x),
+                y0 = fc(y),
+                y1 = fc(y + y1),
+                tx = fc(tip_x),
+                ty = fc(tip_y),
+                y2 = fc(y + y1 + NOTE_CONNECTOR_HALF * 2.0),
+                yb = fc(y + h),
+                xr = fc(x + w),
+                yf = fc(y + NOTE_FOLD),
+                xf = fc(x + w - NOTE_FOLD),
+            )
+        }
+        DeploymentNotePosition::Left => {
+            let y1 =
+                (mouth_y - NOTE_CONNECTOR_HALF).clamp(NOTE_FOLD, h - NOTE_CONNECTOR_HALF * 2.0);
+            format!(
+                "M{x0},{y0} L{x0},{yb} A0,0 0 0 0 {x0},{yb} L{xr},{yb} A0,0 0 0 0 {xr},{yb} L{xr},{y2} L{tx},{ty} L{xr},{y1} L{xr},{yf} L{xf},{y0} L{x0},{y0} A0,0 0 0 0 {x0},{y0}",
+                x0 = fc(x),
+                y0 = fc(y),
+                yb = fc(y + h),
+                xr = fc(x + w),
+                y2 = fc(y + y1 + NOTE_CONNECTOR_HALF * 2.0),
+                tx = fc(tip_x),
+                ty = fc(tip_y),
+                y1 = fc(y + y1),
+                yf = fc(y + NOTE_FOLD),
+                xf = fc(x + w - NOTE_FOLD),
+            )
+        }
+        DeploymentNotePosition::Bottom => {
+            let x1 = (mouth_x - NOTE_CONNECTOR_HALF).clamp(0.0, w - NOTE_FOLD);
+            format!(
+                "M{x0},{y0} L{x0},{yb} A0,0 0 0 0 {x0},{yb} L{xr},{yb} A0,0 0 0 0 {xr},{yb} L{xr},{yf} L{xf},{y0} L{x2},{y0} L{tx},{ty} L{x1},{y0} L{x0},{y0} A0,0 0 0 0 {x0},{y0}",
+                x0 = fc(x),
+                y0 = fc(y),
+                yb = fc(y + h),
+                xr = fc(x + w),
+                yf = fc(y + NOTE_FOLD),
+                xf = fc(x + w - NOTE_FOLD),
+                x2 = fc(x + x1 + NOTE_CONNECTOR_HALF * 2.0),
+                tx = fc(tip_x),
+                ty = fc(tip_y),
+                x1 = fc(x + x1),
+            )
+        }
+        DeploymentNotePosition::Top => {
+            let x1 = (mouth_x - NOTE_CONNECTOR_HALF).clamp(0.0, w);
+            format!(
+                "M{x0},{y0} L{x0},{yb} A0,0 0 0 0 {x0},{yb} L{x1},{yb} L{tx},{ty} L{x2},{yb} L{xr},{yb} A0,0 0 0 0 {xr},{yb} L{xr},{yf} L{xf},{y0} L{x0},{y0} A0,0 0 0 0 {x0},{y0}",
+                x0 = fc(x),
+                y0 = fc(y),
+                yb = fc(y + h),
+                x1 = fc(x + x1),
+                tx = fc(tip_x),
+                ty = fc(tip_y),
+                x2 = fc(x + x1 + NOTE_CONNECTOR_HALF * 2.0),
+                xr = fc(x + w),
+                yf = fc(y + NOTE_FOLD),
+                xf = fc(x + w - NOTE_FOLD),
+            )
+        }
+    };
+    let fold_path = format!(
+        "M{x1},{y0} L{x1},{y1} L{x2},{y1} L{x1},{y0}",
+        x1 = fc(x + w - NOTE_FOLD),
+        y0 = fc(y),
+        y1 = fc(y + NOTE_FOLD),
+        x2 = fc(x + w),
+    );
+
+    svg.raw(&format!(
+        r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
+        uid.qualified_name, note.source_line, uid.entity_id
+    ));
+    svg.raw(&format!(
+        r#"<path d="{path}" fill="{NOTE_FILL}" style="stroke:{STROKE};stroke-width:0.5;"/>"#
+    ));
+    svg.raw(&format!(
+        r#"<path d="{fold_path}" fill="{NOTE_FILL}" style="stroke:{STROKE};stroke-width:0.5;"/>"#
+    ));
+
+    let mut text_y = y + NOTE_MARGIN_Y;
+    for line in note.text.lines() {
+        let ascent = text_render::label_ascent(line, NOTE_FONT_SIZE);
+        text_y += ascent;
+        emit_text(
+            svg,
+            line,
+            x + NOTE_MARGIN_X1,
+            text_y,
+            NOTE_FONT_SIZE,
+            false,
+            false,
+        );
+        text_y += text_render::label_height(line, NOTE_FONT_SIZE) - ascent;
     }
     svg.raw("</g>");
 }
@@ -2889,6 +3044,60 @@ fn render_connection(
 // Non-oracle fallback (minimal)
 // ---------------------------------------------------------------------------
 
+#[derive(Clone, Copy)]
+struct DeploymentNoteDim {
+    width: f64,
+    height: f64,
+}
+
+#[derive(Clone, Copy)]
+struct DeploymentNoteLayout {
+    note_index: usize,
+    x: f64,
+    y: f64,
+    width: f64,
+    height: f64,
+}
+
+fn deployment_note_layout_id(index: usize) -> String {
+    format!("__deployment_note_{index}")
+}
+
+fn deployment_note_dim(note: &DeploymentNote) -> DeploymentNoteDim {
+    // `EntityImageNote` delegates text measurement and asymmetric margins to
+    // `Opale`: six pixels left, fifteen right, and five on each vertical side.
+    let width = note
+        .text
+        .lines()
+        .map(|line| text_render::measure(line, NOTE_FONT_SIZE, false))
+        .fold(0.0_f64, f64::max)
+        + NOTE_MARGIN_X1
+        + NOTE_MARGIN_X2;
+    let text_height = note
+        .text
+        .lines()
+        .map(|line| text_render::label_height(line, NOTE_FONT_SIZE))
+        .sum::<f64>();
+    DeploymentNoteDim {
+        width,
+        height: text_height + NOTE_MARGIN_Y * 2.0,
+    }
+}
+
+fn laid_out_deployment_note_indices(diagram: &DeploymentDiagram) -> Vec<usize> {
+    diagram
+        .notes
+        .iter()
+        .enumerate()
+        .filter_map(|(index, note)| {
+            note.target
+                .as_deref()
+                .filter(|target| diagram.nodes.iter().any(|node| node.id == *target))
+                .map(|_| index)
+        })
+        .collect()
+}
+
 fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
     // Java path: CucaDiagramFileMakerSvek builds a Bibliotekon of measured
     // SvekNodes, DotStringFactory serialises those node boxes to dot, then
@@ -2899,6 +3108,8 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
         .iter()
         .map(|node| deployment_node_dim(node, &diagram.meta.sprites))
         .collect();
+    let note_dims: Vec<DeploymentNoteDim> = diagram.notes.iter().map(deployment_note_dim).collect();
+    let laid_out_note_indices = laid_out_deployment_note_indices(diagram);
     let parent_of = deployment_parent_map(diagram);
     let cluster_ids: HashSet<&str> = diagram
         .nodes
@@ -2911,6 +3122,15 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
         if !cluster_ids.contains(node.id.as_str()) {
             layout.add_node(&node.id, &node.label, dim.width, dim.height);
         }
+    }
+    for &note_index in &laid_out_note_indices {
+        let dim = note_dims[note_index];
+        layout.add_node(
+            &deployment_note_layout_id(note_index),
+            "",
+            dim.width,
+            dim.height,
+        );
     }
     for node in &diagram.nodes {
         if cluster_ids.contains(node.id.as_str()) {
@@ -2960,6 +3180,32 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
         }
     }
     add_deployment_magma_constraints(&mut layout, diagram, &parent_of, &cluster_ids);
+    for &note_index in &laid_out_note_indices {
+        let note = &diagram.notes[note_index];
+        let Some(target) = note.target.as_deref() else {
+            continue;
+        };
+        let note_id = deployment_note_layout_id(note_index);
+        let (from, to) = match note.position {
+            DeploymentNotePosition::Top | DeploymentNotePosition::Left => {
+                (note_id.as_str(), target)
+            }
+            DeploymentNotePosition::Bottom | DeploymentNotePosition::Right => {
+                (target, note_id.as_str())
+            }
+        };
+        if matches!(
+            note.position,
+            DeploymentNotePosition::Left | DeploymentNotePosition::Right
+        ) {
+            layout.add_same_rank(from, to);
+            layout.add_edge(from, to, None);
+        } else {
+            // `CommandFactoryNoteOnEntity.executeInternal` uses
+            // `LinkArg.noDisplay(2)` for vertical note links.
+            layout.add_edge_with_minlen(from, to, None, 1);
+        }
+    }
     for conn in &diagram.connections {
         if !cluster_ids.contains(conn.from.as_str()) && !cluster_ids.contains(conn.to.as_str()) {
             let (layout_from, layout_to, _) = deployment_connection_layout(conn);
@@ -2989,12 +3235,24 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
 
     let result = layout.layout_full(LAYOUT_TIMEOUT);
     let cluster_frame = deployment_cluster_frame(diagram, result.as_ref());
-    let y_frame = deployment_body_y_frame(diagram, &dims, result.as_ref());
+    let y_frame = deployment_body_y_frame(
+        diagram,
+        &dims,
+        &note_dims,
+        &laid_out_note_indices,
+        result.as_ref(),
+    );
     let body_margin_y = cluster_frame
         .map(|frame| frame.margin_y)
         .or_else(|| y_frame.map(|frame| frame.margin))
         .unwrap_or_else(|| deployment_body_margin_y(diagram, &dims, result.as_ref()));
-    let x_frame = deployment_body_x_frame(diagram, &dims, result.as_ref());
+    let x_frame = deployment_body_x_frame(
+        diagram,
+        &dims,
+        &note_dims,
+        &laid_out_note_indices,
+        result.as_ref(),
+    );
     let body_margin_x = x_frame
         .map(|frame| frame.margin)
         .or_else(|| cluster_frame.map(|frame| frame.margin_x))
@@ -3006,6 +3264,31 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
         body_margin_x,
         body_margin_y,
     );
+    let leaf_count = diagram
+        .nodes
+        .iter()
+        .filter(|node| !cluster_ids.contains(node.id.as_str()))
+        .count();
+    let note_layouts: Vec<DeploymentNoteLayout> = result
+        .as_ref()
+        .map(|result| {
+            laid_out_note_indices
+                .iter()
+                .enumerate()
+                .filter_map(|(offset, &note_index)| {
+                    let position = result.node_positions.get(leaf_count + offset)?;
+                    let dim = note_dims[note_index];
+                    Some(DeploymentNoteLayout {
+                        note_index,
+                        x: (position.x * 100.0).round() / 100.0 + body_margin_x,
+                        y: (position.y * 100.0).round() / 100.0 + body_margin_y,
+                        width: dim.width,
+                        height: dim.height,
+                    })
+                })
+                .collect()
+        })
+        .unwrap_or_default();
     let total_w = x_frame
         .map(|frame| frame.painted_max_x + frame.margin + SVEK_DIMENSION_DELTA)
         .unwrap_or(content_w + BODY_RIGHT_MARGIN)
@@ -3044,7 +3327,8 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
             .insert(qnames[&node.id].clone(), entity_rect);
     }
 
-    let id_for_node = no_oracle_node_ids(diagram);
+    let no_oracle_uids = build_deployment_no_oracle_uid_model(diagram);
+    let id_for_node = &no_oracle_uids.entity_ids;
     let skin_fills = skin_background_fills(&diagram.meta.skinparams);
     let skin_strokes = skin_border_colors(&diagram.meta.skinparams);
     let sprite_names: HashSet<String> = diagram
@@ -3057,7 +3341,7 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
         crate::sprite::SpriteCache::from_sprites_scaled(&diagram.meta.sprites, sprite_scale());
     let ctx = OracleRenderContext {
         oracle: &oracle,
-        id_for_node: &id_for_node,
+        id_for_node,
         skin_fills: &skin_fills,
         skin_strokes: &skin_strokes,
         sprite_names: &sprite_names,
@@ -3089,10 +3373,43 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
         emit_entity(&mut svg, node, &qname, &ctx);
     }
     if let Some(result) = result.as_ref() {
+        for layout in &note_layouts {
+            let note = &diagram.notes[layout.note_index];
+            let Some(uid) = no_oracle_uids.note_ids.get(&layout.note_index) else {
+                continue;
+            };
+            let Some(target) = note.target.as_deref() else {
+                continue;
+            };
+            let note_id = deployment_note_layout_id(layout.note_index);
+            let (from, to) = match note.position {
+                DeploymentNotePosition::Top | DeploymentNotePosition::Left => {
+                    (note_id.as_str(), target)
+                }
+                DeploymentNotePosition::Bottom | DeploymentNotePosition::Right => {
+                    (target, note_id.as_str())
+                }
+            };
+            let edge = result
+                .edge_paths
+                .iter()
+                .find(|edge| edge.from == from && edge.to == to);
+            render_attached_deployment_note(
+                &mut svg,
+                note,
+                layout,
+                uid,
+                edge,
+                body_margin_x,
+                body_margin_y,
+            );
+        }
+    }
+    if let Some(result) = result.as_ref() {
         render_no_oracle_edges(
             &mut svg,
             diagram,
-            &id_for_node,
+            id_for_node,
             &result.edge_paths,
             body_margin_x,
             body_margin_y,
@@ -3321,6 +3638,8 @@ struct DeploymentYFrame {
 fn deployment_body_y_frame(
     diagram: &DeploymentDiagram,
     dims: &[DeploymentNodeDim],
+    note_dims: &[DeploymentNoteDim],
+    laid_out_note_indices: &[usize],
     result: Option<&LayoutResult>,
 ) -> Option<DeploymentYFrame> {
     let result = result?;
@@ -3335,6 +3654,12 @@ fn deployment_body_y_frame(
         let (local_min_y, local_max_y) = deployment_local_painted_y_bounds(node.kind, dim);
         painted_min_y = painted_min_y.min(y + local_min_y);
         painted_max_y = painted_max_y.max(y + local_max_y);
+    }
+    for (offset, &note_index) in laid_out_note_indices.iter().enumerate() {
+        let position = result.node_positions.get(diagram.nodes.len() + offset)?;
+        let y = (position.y * 100.0).round() / 100.0;
+        painted_min_y = painted_min_y.min(y);
+        painted_max_y = painted_max_y.max(y + note_dims[note_index].height);
     }
     (painted_min_y.is_finite() && painted_max_y.is_finite()).then_some(DeploymentYFrame {
         // `SvekResult.calculateDimension` moves the `LimitFinder` minimum to
@@ -3429,6 +3754,8 @@ fn deployment_cluster_frame(
 fn deployment_body_x_frame(
     diagram: &DeploymentDiagram,
     dims: &[DeploymentNodeDim],
+    note_dims: &[DeploymentNoteDim],
+    laid_out_note_indices: &[usize],
     result: Option<&LayoutResult>,
 ) -> Option<DeploymentXFrame> {
     let result = result?;
@@ -3446,6 +3773,12 @@ fn deployment_body_x_frame(
         let (local_min_x, local_max_x) = deployment_local_painted_x_bounds(node.kind, dim);
         painted_min_x = painted_min_x.min(x + local_min_x);
         painted_max_x = painted_max_x.max(x + local_max_x);
+    }
+    for (offset, &note_index) in laid_out_note_indices.iter().enumerate() {
+        let position = result.node_positions.get(diagram.nodes.len() + offset)?;
+        let x = (position.x * 100.0).round() / 100.0;
+        painted_min_x = painted_min_x.min(x);
+        painted_max_x = painted_max_x.max(x + note_dims[note_index].width);
     }
     painted_min_x.is_finite().then_some(DeploymentXFrame {
         // `LimitFinder.drawUPolygon` expands polygon bounds by 10px on both
@@ -3479,10 +3812,10 @@ fn deployment_local_painted_x_bounds(
         }
         // Rounded rectangle-like symbols are measured by
         // `LimitFinder.drawRectangle`.
-        Card | Rectangle | Agent | Component => (-1.0, dim.width - 1.0),
+        Card | Rectangle | Agent | Component | Storage => (-1.0, dim.width - 1.0),
         // These symbols paint paths whose local envelope is their declared
         // image dimension.
-        Database | Storage | Frame | Folder | Queue | File | Package | Stack => (0.0, dim.width),
+        Database | Frame | Folder | Queue | File | Package | Stack => (0.0, dim.width),
         _ => (-1.0, dim.width - 1.0),
     }
 }
@@ -3616,27 +3949,73 @@ fn empty_entity_rect(x: f64, y: f64, width: f64, height: f64) -> EntityRect {
     }
 }
 
-fn no_oracle_node_ids(diagram: &DeploymentDiagram) -> HashMap<String, String> {
-    #[derive(Copy, Clone)]
+struct DeploymentNoOracleUidModel {
+    entity_ids: HashMap<String, String>,
+    note_ids: HashMap<usize, DeploymentNoteUid>,
+}
+
+struct DeploymentNoteUid {
+    qualified_name: String,
+    entity_id: String,
+}
+
+fn build_deployment_no_oracle_uid_model(diagram: &DeploymentDiagram) -> DeploymentNoOracleUidModel {
     enum Item<'a> {
         Node(&'a DeploymentNode),
+        Note(usize),
         Conn,
     }
     let mut items = Vec::new();
     for node in &diagram.nodes {
         items.push((node.source_line, Item::Node(node)));
     }
+    for (index, note) in diagram.notes.iter().enumerate() {
+        items.push((note.source_line, Item::Note(index)));
+    }
     for conn in &diagram.connections {
         items.push((conn.source_line, Item::Conn));
     }
     items.sort_by_key(|(line, _)| *line);
-    let mut ids = HashMap::new();
-    for (counter, (_, item)) in (2usize..).zip(items) {
-        if let Item::Node(node) = item {
-            ids.insert(node.id.clone(), format!("ent{counter:04}"));
+    let mut next_uid = 2;
+    let mut entity_ids = HashMap::new();
+    let mut note_ids = HashMap::new();
+    for (_, item) in items {
+        match item {
+            Item::Node(node) => {
+                entity_ids.insert(node.id.clone(), format!("ent{next_uid:04}"));
+                next_uid += 1;
+            }
+            Item::Note(index) => {
+                let note = &diagram.notes[index];
+                let qualified_name = if let Some(id) = note.id.as_ref() {
+                    id.clone()
+                } else {
+                    // `CommandFactoryNoteOnEntity.executeInternal` obtains a
+                    // generated name before creating the note leaf.
+                    let name = format!("GMN{next_uid}");
+                    next_uid += 1;
+                    name
+                };
+                let entity_id = format!("ent{next_uid:04}");
+                next_uid += 1;
+                note_ids.insert(
+                    index,
+                    DeploymentNoteUid {
+                        qualified_name,
+                        entity_id,
+                    },
+                );
+                // The hidden note-to-target Link consumes the next global UID
+                // even though Opale absorbs it into the note outline.
+                next_uid += 1;
+            }
+            Item::Conn => next_uid += 1,
         }
     }
-    ids
+    DeploymentNoOracleUidModel {
+        entity_ids,
+        note_ids,
+    }
 }
 
 fn render_no_oracle_edges(
@@ -3964,6 +4343,31 @@ mod tests {
         assert!(svg.contains(r#"height="172px""#));
         assert!(svg.contains(r#"data-qualified-name="Jobs101""#));
         assert!(svg.contains(r#"id="Ingress97-to-Jobs101""#));
+    }
+
+    #[test]
+    fn no_oracle_attached_note_uses_svek_opale_geometry() {
+        let source = "@startuml\n\
+            artifact \"Renamed Runtime 107\" as Runtime107\n\
+            note left of Runtime107\n\
+              owner: team 109\n\
+              mode: warm 113\n\
+            end note\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+
+        let svg = render(&diagram, &Theme::default());
+
+        assert!(svg.contains(r#"style="width:373px;height:62px;background:#FFFFFF;""#));
+        assert!(svg.contains(
+            r#"<g class="entity" data-qualified-name="GMN3" data-source-line="3" id="ent0004">"#
+        ));
+        assert!(svg.contains(r#"L134.1992,30.74 L168.72,26.74 L134.1992,22.74"#));
+        assert!(svg.contains(r#">owner: team 109</text>"#));
+        assert!(svg.contains(r#">mode: warm 113</text>"#));
     }
 
     #[test]
