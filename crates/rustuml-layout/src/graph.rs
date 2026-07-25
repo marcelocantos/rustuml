@@ -6,7 +6,7 @@
 //! Uses vendored Graphviz (dot algorithm) for hierarchical layout with
 //! proper edge routing via cubic bezier splines.
 
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::ffi::CString;
 use std::os::raw::c_void;
 use std::sync::{Mutex, mpsc};
@@ -71,6 +71,7 @@ impl GraphSpacing {
 pub struct LayoutGraph {
     direction: Direction,
     spacing: Option<GraphSpacing>,
+    plantuml_svek_node_order: bool,
     nodes: Vec<NodeSpec>,
     clusters: Vec<ClusterSpec>,
     together: Vec<TogetherSpec>,
@@ -84,6 +85,7 @@ impl LayoutGraph {
         Self {
             direction,
             spacing: None,
+            plantuml_svek_node_order: false,
             nodes: Vec::new(),
             clusters: Vec::new(),
             together: Vec::new(),
@@ -101,6 +103,14 @@ impl LayoutGraph {
     /// Opts in to PlantUML's non-activity SVEK dot spacing minima.
     pub fn with_plantuml_svek_spacing(self) -> Self {
         self.with_spacing(GraphSpacing::PLANTUML_SVEK_DEFAULTS)
+    }
+
+    /// Uses the node order emitted by PlantUML's
+    /// `DotStringFactory.createDotString`: root leaves first, then cluster
+    /// trees with each cluster's direct leaves before its children.
+    pub fn with_plantuml_svek_node_order(mut self) -> Self {
+        self.plantuml_svek_node_order = true;
+        self
     }
 
     /// Sets graph-level dot spacing.
@@ -471,11 +481,12 @@ impl LayoutGraph {
             );
         }
 
-        // SVEK creates every package tree before unpackaged entities
-        // (`GraphvizImageBuilder.printGroups`, then `printEntities`). Within a
-        // package, direct leaves precede child packages (`Cluster.printCluster2`).
-        // Preserve that node insertion order while keeping result positions in
-        // the caller's original node order.
+        // Opted-in SVEK clients follow `DotStringFactory.createDotString`,
+        // which serialises the root cluster's direct leaves before child
+        // clusters (`Cluster.printCluster2`). `GraphvizImageBuilder` collects
+        // package members first, but that Bibliotekon insertion order is not
+        // the order Graphviz receives. Preserve the selected creation order
+        // while returning positions in the caller's original node order.
         let mut node_handles: HashMap<String, *mut graphviz_ffi::Agnode_t> = HashMap::new();
         let node_order: Vec<String> = self.nodes.iter().map(|spec| spec.id.clone()).collect();
 
@@ -928,6 +939,19 @@ impl LayoutGraph {
 
         let mut seen = vec![false; self.nodes.len()];
         let mut order = Vec::with_capacity(self.nodes.len());
+        if self.plantuml_svek_node_order {
+            let clustered_nodes: HashSet<&str> = self
+                .clusters
+                .iter()
+                .flat_map(|cluster| cluster.nodes.iter().map(String::as_str))
+                .collect();
+            for (idx, node) in self.nodes.iter().enumerate() {
+                if !clustered_nodes.contains(node.id.as_str()) {
+                    seen[idx] = true;
+                    order.push(idx);
+                }
+            }
+        }
         for (idx, cluster) in self.clusters.iter().enumerate() {
             let parent_is_known = cluster
                 .parent
@@ -1575,8 +1599,8 @@ mod tests {
     }
 
     #[test]
-    fn svek_clusters_follow_group_first_recursive_order() {
-        let mut g = LayoutGraph::new(Direction::TopToBottom);
+    fn svek_clusters_follow_dot_serialization_order() {
+        let mut g = LayoutGraph::new(Direction::TopToBottom).with_plantuml_svek_node_order();
         for id in [
             "RootBefore_7",
             "DirectZulu_19",
@@ -1608,7 +1632,7 @@ mod tests {
         g.add_cluster_node("Inner_Q", "LeafBeta_23");
         g.add_cluster_node("Inner_Q", "LeafAlpha_29");
 
-        assert_eq!(g.graphviz_node_creation_order(), vec![1, 4, 2, 3, 0, 5]);
+        assert_eq!(g.graphviz_node_creation_order(), vec![0, 5, 1, 4, 2, 3]);
         assert_eq!(
             cluster_title_table(ClusterTitleSize {
                 width: 81.9,

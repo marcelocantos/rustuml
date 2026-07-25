@@ -3539,7 +3539,9 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
             )
         })
         .collect();
-    let mut layout = LayoutGraph::new(Direction::TopToBottom).with_plantuml_svek_spacing();
+    let mut layout = LayoutGraph::new(Direction::TopToBottom)
+        .with_plantuml_svek_spacing()
+        .with_plantuml_svek_node_order();
     for (node, dim) in diagram.nodes.iter().zip(&dims) {
         if !cluster_ids.contains(node.id.as_str()) {
             let (width, height) = deployment_layout_node_size(node.kind, dim);
@@ -4747,6 +4749,12 @@ fn deployment_cluster_frame(
             let bounds = match node.kind {
                 DeploymentNodeKind::Cloud => {
                     crate::cloud_shape::generate(cluster_width, cluster_height).bounds()
+                }
+                // `USymbolNode.drawNode` paints its outer `UPolygon` plus a
+                // lower-edge `UEmpty(10,10)`. `LimitFinder.drawUPolygon`
+                // expands the polygon horizontally by ten pixels.
+                DeploymentNodeKind::Node => {
+                    (-10.0, 0.0, cluster_width + 10.0, cluster_height + 10.0)
                 }
                 DeploymentNodeKind::Folder => (0.0, 0.0, cluster_width, cluster_height),
                 DeploymentNodeKind::Rectangle
