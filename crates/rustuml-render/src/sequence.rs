@@ -127,7 +127,8 @@ pub(crate) fn resolve_color(color: &str) -> String {
         "mediumaquamarine" => "#66CDAA".to_string(),
         "mediumblue" => "#0000CD".to_string(),
         "mediumorchid" => "#BA55D3".to_string(),
-        "mediumpurple" => "#9370DB".to_string(),
+        // PlantUML's legacy `HColorSet` palette predates the CSS spelling.
+        "mediumpurple" => "#9370D8".to_string(),
         "mediumseagreen" => "#3CB371".to_string(),
         "mediumslateblue" => "#7B68EE".to_string(),
         "mediumspringgreen" => "#00FA9A".to_string(),
@@ -148,7 +149,7 @@ pub(crate) fn resolve_color(color: &str) -> String {
         "palegoldenrod" => "#EEE8AA".to_string(),
         "palegreen" => "#98FB98".to_string(),
         "paleturquoise" => "#AFEEEE".to_string(),
-        "palevioletred" => "#DB7093".to_string(),
+        "palevioletred" => "#D87093".to_string(),
         "papayawhip" => "#FFEFD5".to_string(),
         "peachpuff" => "#FFDAB9".to_string(),
         "peru" => "#CD853F".to_string(),
@@ -12366,6 +12367,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 mod tests {
     use super::*;
     use rustuml_parser::diagram::DiagramMeta;
+
+    #[test]
+    fn legacy_plantuml_palette_preserves_non_css_values() {
+        assert_eq!(resolve_color("MediumPurple"), "#9370D8");
+        assert_eq!(resolve_color("PaleVioletRed"), "#D87093");
+    }
 
     fn simple_diagram() -> SequenceDiagram {
         SequenceDiagram {

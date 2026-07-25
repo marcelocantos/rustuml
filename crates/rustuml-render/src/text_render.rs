@@ -1408,7 +1408,8 @@ fn css_color_hex(name: &str) -> Option<&'static str> {
         "mediumaquamarine" => Some("#66CDAA"),
         "mediumblue" => Some("#0000CD"),
         "mediumorchid" => Some("#BA55D3"),
-        "mediumpurple" => Some("#9370DB"),
+        // PlantUML's legacy `HColorSet` palette predates the CSS spelling.
+        "mediumpurple" => Some("#9370D8"),
         "mediumseagreen" => Some("#3CB371"),
         "mediumslateblue" => Some("#7B68EE"),
         "mediumspringgreen" => Some("#00FA9A"),
@@ -1429,7 +1430,7 @@ fn css_color_hex(name: &str) -> Option<&'static str> {
         "palegoldenrod" => Some("#EEE8AA"),
         "palegreen" => Some("#98FB98"),
         "paleturquoise" => Some("#AFEEEE"),
-        "palevioletred" => Some("#DB7093"),
+        "palevioletred" => Some("#D87093"),
         "papayawhip" => Some("#FFEFD5"),
         "peachpuff" => Some("#FFDAB9"),
         "peru" => Some("#CD853F"),
@@ -1616,6 +1617,12 @@ fn escape_xml_attr(s: &str) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn inline_colors_use_the_legacy_plantuml_palette() {
+        assert_eq!(normalize_color("MediumPurple"), "#9370D8");
+        assert_eq!(normalize_color("PaleVioletRed"), "#D87093");
+    }
 
     fn base(x: f64, y: f64) -> TextBase<'static> {
         TextBase {
