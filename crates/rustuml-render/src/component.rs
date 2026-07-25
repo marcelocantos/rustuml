@@ -6187,6 +6187,24 @@ mod tests {
     }
 
     #[test]
+    fn no_oracle_cluster_rank_same_wraps_a_renamed_four_node_chain() {
+        // Fresh Java PlantUML reference. `Cluster.appendRankSame/getRankSame`
+        // emits these horizontal constraints inside the owning cluster.
+        let input = "@startuml\nfolder \"Renamed Integration Fleet 2026\" as Fleet2026 {\n  component \"Ingress North 17\" as Ingress17\n  component \"Policy Middle 23\" as Policy23\n  component \"Transform Middle 31\" as Transform31\n  component \"Archive South 43\" as Archive43\n}\nIngress17 -right-> Policy23\nPolicy23 -right-> Transform31\nTransform31 -right-> Archive43\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(
+            svg.contains(r#"width="802px""#) && svg.contains(r#"height="118px""#),
+            "the owning folder must wrap the complete horizontal rank: {svg}"
+        );
+        assert!(
+            svg.contains(r#"d="M176.48,"#) && svg.contains(r#"d="M580.64,"#),
+            "the four-node perturbation must retain Java's in-cluster routing: {svg}"
+        );
+    }
+
+    #[test]
     fn no_oracle_node_cluster_uses_usymbol_folded_envelope_for_renamed_label() {
         let input = "@startuml\nnode \"Compute Boundary 53\" {\n  component \"Worker 59\" as W59\n}\n@enduml";
         let diagram = rustuml_parser::parse::parse(input).unwrap();
