@@ -4031,6 +4031,26 @@ fn deployment_body_x_frame(
         painted_min_x = painted_min_x.min(x);
         painted_max_x = painted_max_x.max(x + note_dims[note_index].width);
     }
+    for conn in &diagram.connections {
+        let Some(label_text) = conn.label.as_deref() else {
+            continue;
+        };
+        let (layout_from, layout_to, _) = deployment_connection_layout(conn);
+        let Some(label) = result
+            .edge_paths
+            .iter()
+            .find(|edge| edge.from == layout_from && edge.to == layout_to)
+            .and_then(|edge| edge.label)
+        else {
+            continue;
+        };
+        // `SvekEdge.getLabelText` wraps center labels in one-pixel margins.
+        // Graphviz solves their origin from an integer-truncated placeholder,
+        // then `LimitFinder` sees the original renderer width when drawing.
+        let x = (label.x * 100.0).round() / 100.0;
+        painted_min_x = painted_min_x.min(x);
+        painted_max_x = painted_max_x.max(x + text_render::measure(label_text, 13.0, false) + 2.0);
+    }
     painted_min_x.is_finite().then_some(DeploymentXFrame {
         // `LimitFinder.drawUPolygon` expands polygon bounds by 10px on both
         // horizontal sides; `SvekResult.calculateDimension` then calls
@@ -4644,6 +4664,28 @@ mod tests {
         assert!(svg.contains(r#"height="305px""#));
         assert!(svg.contains(r#"id="Sender71-to-Receiver73""#));
         assert!(svg.contains(r#"stroke-dasharray:7,7;"#));
+    }
+
+    #[test]
+    fn no_oracle_edge_label_box_extends_painted_x_envelope() {
+        let source = "@startuml\n\
+            node \"Relay 241\" as Relay241 <<cloud>>\n\
+            artifact \"Payload 251\" as Payload251\n\
+            Payload251 --> Relay241 : elongated transport 257\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+
+        let svg = render(&diagram, &Theme::default());
+
+        assert!(svg.contains(r#"height="211px""#));
+        assert!(
+            svg.contains(r#"style="width:240px;height:211px;background:#FFFFFF;""#),
+            "{svg}"
+        );
+        assert!(svg.contains(">elongated transport 257</text>"));
     }
 
     #[test]
