@@ -22,6 +22,52 @@ use crate::style::Theme;
 use crate::svg::SvgBuilder;
 use crate::text_render::{self, TextBase};
 
+#[derive(Clone, Copy, Default)]
+enum ComponentLineStyle {
+    #[default]
+    Solid,
+    Dashed,
+    Dotted,
+}
+
+impl ComponentLineStyle {
+    fn from_skinparam(value: &str) -> Option<Self> {
+        match value.trim().to_ascii_lowercase().as_str() {
+            "solid" => Some(Self::Solid),
+            "dashed" | "7;7" => Some(Self::Dashed),
+            "dotted" | "1;3" => Some(Self::Dotted),
+            _ => None,
+        }
+    }
+
+    fn svg_suffix(self) -> &'static str {
+        match self {
+            Self::Solid => "",
+            Self::Dashed => "stroke-dasharray:7,7;",
+            // `FromSkinparamToStyle.convertNow` rewrites dotted to `1;3`,
+            // then its complex-value branch retains only `1`;
+            // `Style.getStroke` duplicates that lone token.
+            Self::Dotted => "stroke-dasharray:1,1;",
+        }
+    }
+}
+
+#[derive(Default)]
+struct ComponentStereotypeStyle {
+    fill: Option<String>,
+    stroke: Option<String>,
+    stroke_width: Option<f64>,
+    round_corner: Option<f64>,
+    line_style: Option<ComponentLineStyle>,
+}
+
+fn component_stereotype_skinparam<'a>(key: &'a str, property: &str) -> Option<&'a str> {
+    key.strip_prefix(property)?
+        .strip_prefix("<<")?
+        .strip_suffix(">>")
+        .filter(|stereotype| !stereotype.is_empty())
+}
+
 fn fc(v: f64) -> String {
     pm::fmt_coord(v)
 }
@@ -580,6 +626,12 @@ pub fn render_with_oracle(
     let mut component_stroke = STROKE.to_string();
     let mut component_stroke_width = 0.5;
     let mut component_round_corner: Option<f64> = None;
+    let mut component_line_style = ComponentLineStyle::Solid;
+    let mut component_stereotype_styles: std::collections::HashMap<
+        String,
+        ComponentStereotypeStyle,
+    > = std::collections::HashMap::new();
+    let mut component_arrow_stroke = STROKE.to_string();
     // `skinparam componentStyle rectangle` draws components as plain rectangles
     // with no UML "tab" icon.
     let mut component_style_rectangle = false;
@@ -609,6 +661,41 @@ pub fn render_with_oracle(
         let key = sp.key.to_ascii_lowercase();
         let val = sp.value.trim();
         if val.is_empty() {
+            continue;
+        }
+        let scoped_property = [
+            "componentbackgroundcolor",
+            "componentbordercolor",
+            "componentborderthickness",
+            "componentroundcorner",
+            "componentborderstyle",
+        ]
+        .into_iter()
+        .find_map(|property| {
+            component_stereotype_skinparam(&key, property).map(|stereotype| (property, stereotype))
+        });
+        if let Some((property, stereotype)) = scoped_property {
+            let style = component_stereotype_styles
+                .entry(stereotype.to_string())
+                .or_default();
+            match property {
+                "componentbackgroundcolor" => {
+                    style.fill = Some(crate::sequence::gradient_fill_or(val, gradient_defs));
+                }
+                "componentbordercolor" => {
+                    style.stroke = Some(crate::sequence::resolve_color(val));
+                }
+                "componentborderthickness" => {
+                    style.stroke_width = val.parse::<f64>().ok();
+                }
+                "componentroundcorner" => {
+                    style.round_corner = val.parse::<f64>().ok().map(|value| value / 2.0);
+                }
+                "componentborderstyle" => {
+                    style.line_style = ComponentLineStyle::from_skinparam(val);
+                }
+                _ => unreachable!(),
+            }
             continue;
         }
         match key.as_str() {
@@ -649,6 +736,11 @@ pub fn render_with_oracle(
                     component_stroke_width = v;
                 }
             }
+            "componentborderstyle" => {
+                if let Some(style) = ComponentLineStyle::from_skinparam(val) {
+                    component_line_style = style;
+                }
+            }
             "componentroundcorner" | "roundcorner" => {
                 if let Ok(v) = val.parse::<f64>() {
                     component_round_corner = Some(v / 2.0);
@@ -676,6 +768,9 @@ pub fn render_with_oracle(
             }
             "arrowfontcolor" | "componentarrowfontcolor" => {
                 component_arrow_font_color_sp = Some(crate::sequence::resolve_color(val));
+            }
+            "arrowcolor" | "componentarrowcolor" => {
+                component_arrow_stroke = crate::sequence::resolve_color(val);
             }
             "componentarrowfontsize" => {
                 component_arrow_font_size_sp = val.parse::<f64>().ok();
@@ -1387,9 +1482,17 @@ pub fn render_with_oracle(
 
         // Determine fill: use oracle fill if available, otherwise default.
         let oracle_rect = oracle_comp_rect(comp);
+        let stereotype_style = matches!(comp.kind, ComponentElementKind::Component)
+            .then(|| {
+                comp.stereotypes.iter().find_map(|stereotype| {
+                    component_stereotype_styles.get(&stereotype.to_ascii_lowercase())
+                })
+            })
+            .flatten();
         let fill_owned = oracle_rect
             .and_then(|r| r.fill.clone())
-            .or_else(|| comp.color.as_deref().map(crate::sequence::resolve_color));
+            .or_else(|| comp.color.as_deref().map(crate::sequence::resolve_color))
+            .or_else(|| stereotype_style.and_then(|style| style.fill.clone()));
         let fill = fill_owned.as_deref().unwrap_or(&component_fill);
 
         // Use oracle width/height when available — they're authoritative.
@@ -1402,9 +1505,19 @@ pub fn render_with_oracle(
         let body_style = oracle_rect
             .and_then(|r| r.body_style.clone())
             .unwrap_or_else(|| {
+                let stroke = stereotype_style
+                    .and_then(|style| style.stroke.as_deref())
+                    .unwrap_or(&component_stroke);
+                let stroke_width = stereotype_style
+                    .and_then(|style| style.stroke_width)
+                    .unwrap_or(component_stroke_width);
+                let line_style = stereotype_style
+                    .and_then(|style| style.line_style)
+                    .unwrap_or(component_line_style);
                 format!(
-                    "stroke:{component_stroke};stroke-width:{};",
-                    fc(component_stroke_width)
+                    "stroke:{stroke};stroke-width:{};{}",
+                    fc(stroke_width),
+                    line_style.svg_suffix()
                 )
             });
         // Corner radius: honour the oracle's captured rx/ry when present. A
@@ -1413,7 +1526,10 @@ pub fn render_with_oracle(
         // body `<rect>`. Fall back to skinparam corner radius, then default.
         let oracle_rx = oracle_rect.and_then(|r| r.rect_rx.as_deref());
         let oracle_ry = oracle_rect.and_then(|r| r.rect_ry.as_deref());
-        let round_r = component_round_corner.unwrap_or(ROUND_R);
+        let round_r = stereotype_style
+            .and_then(|style| style.round_corner)
+            .or(component_round_corner)
+            .unwrap_or(ROUND_R);
         let rx_s = oracle_rx.map(String::from).unwrap_or_else(|| fc(round_r));
         let ry_s = oracle_ry.map(String::from).unwrap_or_else(|| fc(round_r));
 
@@ -1500,7 +1616,7 @@ pub fn render_with_oracle(
                         .style
                         .as_deref()
                         .map(String::from)
-                        .unwrap_or_else(|| format!("stroke:{STROKE};stroke-width:0.5;"));
+                        .unwrap_or_else(|| body_style.clone());
                     let rect_fill = r.fill.as_deref().unwrap_or(fill);
                     svg.raw(&format!(
                     r#"<rect fill="{rect_fill}" height="{h_s}" style="{style}" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
@@ -1514,7 +1630,7 @@ pub fn render_with_oracle(
                 let tab_x = x + w - ICON_TAB_RIGHT_OFFSET;
                 let tab_y = y + ICON_TAB_TOP_OFFSET;
                 svg.raw(&format!(
-                r#"<rect fill="{fill}" height="{h_s}" style="stroke:{STROKE};stroke-width:0.5;" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
+                r#"<rect fill="{fill}" height="{h_s}" style="{body_style}" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
                 h_s = fc(ICON_TAB_H),
                 w_s = fc(ICON_TAB_W),
                 x_s = fc(tab_x),
@@ -1525,14 +1641,14 @@ pub fn render_with_oracle(
                 let bar_y1 = tab_y + ICON_BAR_TOP_OFFSET_1;
                 let bar_y2 = tab_y + ICON_BAR_TOP_OFFSET_2;
                 svg.raw(&format!(
-                r#"<rect fill="{fill}" height="{h_s}" style="stroke:{STROKE};stroke-width:0.5;" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
+                r#"<rect fill="{fill}" height="{h_s}" style="{body_style}" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
                 h_s = fc(ICON_BAR_H),
                 w_s = fc(ICON_BAR_W),
                 x_s = fc(bar_x),
                 y_s = fc(bar_y1),
             ));
                 svg.raw(&format!(
-                r#"<rect fill="{fill}" height="{h_s}" style="stroke:{STROKE};stroke-width:0.5;" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
+                r#"<rect fill="{fill}" height="{h_s}" style="{body_style}" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
                 h_s = fc(ICON_BAR_H),
                 w_s = fc(ICON_BAR_W),
                 x_s = fc(bar_x),
@@ -2016,7 +2132,7 @@ pub fn render_with_oracle(
                 let path_d = build_path_d(&edge_points);
                 let path_id = no_oracle_path_id(conn);
                 svg.raw(&format!(
-                r#"<path d="{path_d}" fill="none" id="{path_id}" style="stroke:{STROKE};stroke-width:1;{dash_attr}"/>"#,
+                r#"<path d="{path_d}" fill="none" id="{path_id}" style="stroke:{component_arrow_stroke};stroke-width:1;{dash_attr}"/>"#,
             ));
 
                 let raw_edge_points = component_svek_edge_points(
@@ -2031,7 +2147,7 @@ pub fn render_with_oracle(
                 if arrow_at_start {
                     let first = raw_edge_points.first().unwrap();
                     let next = raw_edge_points.get(1).unwrap_or(first);
-                    render_arrowhead(&mut svg, next, first);
+                    render_arrowhead(&mut svg, next, first, &component_arrow_stroke);
                 }
                 if arrow_at_end {
                     let last = raw_edge_points.last().unwrap();
@@ -2040,12 +2156,17 @@ pub fn render_with_oracle(
                     } else {
                         last
                     };
-                    render_arrowhead(&mut svg, prev, last);
+                    render_arrowhead(&mut svg, prev, last, &component_arrow_stroke);
                 } else if matches!(
                     conn.shape,
                     LinkShape::TargetSocket | LinkShape::TargetBallSocket
                 ) {
-                    render_target_socket_decoration(&mut svg, conn.shape, &raw_edge_points);
+                    render_target_socket_decoration(
+                        &mut svg,
+                        conn.shape,
+                        &raw_edge_points,
+                        &component_arrow_stroke,
+                    );
                 }
 
                 // Labels.
@@ -2174,7 +2295,12 @@ pub fn render_with_oracle(
                     conn.shape,
                     LinkShape::MiddleBallSocket | LinkShape::MiddleFullSocket
                 ) {
-                    render_middle_socket_decoration(&mut svg, conn.shape, &raw_edge_points);
+                    render_middle_socket_decoration(
+                        &mut svg,
+                        conn.shape,
+                        &raw_edge_points,
+                        &component_arrow_stroke,
+                    );
                 }
             } else {
                 // Straight line fallback.
@@ -2185,21 +2311,40 @@ pub fn render_with_oracle(
                 );
                 let path_id = no_oracle_path_id(conn);
                 svg.raw(&format!(
-                r#"<path d="{path_d}" fill="none" id="{path_id}" style="stroke:{STROKE};stroke-width:1;{dash_attr}"/>"#,
+                r#"<path d="{path_d}" fill="none" id="{path_id}" style="stroke:{component_arrow_stroke};stroke-width:1;{dash_attr}"/>"#,
             ));
 
                 let (arrow_at_start, arrow_at_end) = no_oracle_effective_arrow_ends(conn);
                 if arrow_at_start {
-                    render_arrowhead_from_coords(&mut svg, to_cx, to_cy, from_cx, from_bottom);
+                    render_arrowhead_from_coords(
+                        &mut svg,
+                        to_cx,
+                        to_cy,
+                        from_cx,
+                        from_bottom,
+                        &component_arrow_stroke,
+                    );
                 }
                 if arrow_at_end {
-                    render_arrowhead_from_coords(&mut svg, from_cx, from_bottom, to_cx, to_cy);
+                    render_arrowhead_from_coords(
+                        &mut svg,
+                        from_cx,
+                        from_bottom,
+                        to_cx,
+                        to_cy,
+                        &component_arrow_stroke,
+                    );
                 } else if matches!(
                     conn.shape,
                     LinkShape::TargetSocket | LinkShape::TargetBallSocket
                 ) {
                     let points = [(from_cx, from_bottom), (to_cx, to_cy)];
-                    render_target_socket_decoration(&mut svg, conn.shape, &points);
+                    render_target_socket_decoration(
+                        &mut svg,
+                        conn.shape,
+                        &points,
+                        &component_arrow_stroke,
+                    );
                 }
 
                 // Labels.
@@ -2269,7 +2414,12 @@ pub fn render_with_oracle(
                     LinkShape::MiddleBallSocket | LinkShape::MiddleFullSocket
                 ) {
                     let points = [(from_cx, from_bottom), (to_cx, to_cy)];
-                    render_middle_socket_decoration(&mut svg, conn.shape, &points);
+                    render_middle_socket_decoration(
+                        &mut svg,
+                        conn.shape,
+                        &points,
+                        &component_arrow_stroke,
+                    );
                 }
             }
 
@@ -3790,15 +3940,22 @@ fn emit_oracle_edge(
     }
 }
 
-fn render_arrowhead(svg: &mut SvgBuilder, prev: &(f64, f64), tip: &(f64, f64)) {
+fn render_arrowhead(svg: &mut SvgBuilder, prev: &(f64, f64), tip: &(f64, f64), stroke: &str) {
     let dx = tip.0 - prev.0;
     let dy = tip.1 - prev.1;
     let angle = dy.atan2(dx);
-    render_arrow_at(svg, tip.0, tip.1, angle);
+    render_arrow_at(svg, tip.0, tip.1, angle, stroke);
 }
 
-fn render_arrowhead_from_coords(svg: &mut SvgBuilder, fx: f64, fy: f64, tx: f64, ty: f64) {
-    render_arrow_at(svg, tx, ty, (ty - fy).atan2(tx - fx));
+fn render_arrowhead_from_coords(
+    svg: &mut SvgBuilder,
+    fx: f64,
+    fy: f64,
+    tx: f64,
+    ty: f64,
+    stroke: &str,
+) {
+    render_arrow_at(svg, tx, ty, (ty - fy).atan2(tx - fx), stroke);
 }
 
 fn no_oracle_link_type_attr(conn: &Connection) -> String {
@@ -3862,17 +4019,27 @@ fn no_oracle_layout_edge_ends(conn: &Connection) -> (&str, &str, bool) {
     }
 }
 
-fn render_target_socket_decoration(svg: &mut SvgBuilder, shape: LinkShape, points: &[(f64, f64)]) {
+fn render_target_socket_decoration(
+    svg: &mut SvgBuilder,
+    shape: LinkShape,
+    points: &[(f64, f64)],
+    stroke: &str,
+) {
     let Some((&tip, &prev)) = points.last().zip(points.iter().rev().nth(1)) else {
         return;
     };
     if matches!(shape, LinkShape::TargetBallSocket) {
-        render_socket_ball(svg, tip);
+        render_socket_ball(svg, tip, stroke);
     }
-    render_socket_arc(svg, tip, prev, 9.0, false);
+    render_socket_arc(svg, tip, prev, 9.0, false, stroke);
 }
 
-fn render_middle_socket_decoration(svg: &mut SvgBuilder, shape: LinkShape, points: &[(f64, f64)]) {
+fn render_middle_socket_decoration(
+    svg: &mut SvgBuilder,
+    shape: LinkShape,
+    points: &[(f64, f64)],
+    stroke: &str,
+) {
     let (Some(first), Some(last)) = (points.first(), points.last()) else {
         return;
     };
@@ -3883,15 +4050,15 @@ fn render_middle_socket_decoration(svg: &mut SvgBuilder, shape: LinkShape, point
             fc(center.0),
             fc(center.1),
         ));
-        render_socket_arc(svg, center, *first, 10.0, true);
+        render_socket_arc(svg, center, *first, 10.0, true, stroke);
     }
-    render_socket_arc(svg, center, *last, 10.0, false);
-    render_socket_ball(svg, center);
+    render_socket_arc(svg, center, *last, 10.0, false, stroke);
+    render_socket_ball(svg, center, stroke);
 }
 
-fn render_socket_ball(svg: &mut SvgBuilder, center: (f64, f64)) {
+fn render_socket_ball(svg: &mut SvgBuilder, center: (f64, f64), stroke: &str) {
     svg.raw(&format!(
-        r##"<ellipse cx="{}" cy="{}" fill="#FFFFFF" rx="6" ry="6" style="stroke:#181818;stroke-width:1.5;"/>"##,
+        r##"<ellipse cx="{}" cy="{}" fill="#FFFFFF" rx="6" ry="6" style="stroke:{stroke};stroke-width:1.5;"/>"##,
         fc(center.0),
         fc(center.1),
     ));
@@ -3903,6 +4070,7 @@ fn render_socket_arc(
     toward: (f64, f64),
     radius: f64,
     opposite: bool,
+    stroke: &str,
 ) {
     let dx = toward.0 - center.0;
     let dy = toward.1 - center.1;
@@ -3928,7 +4096,7 @@ fn render_socket_arc(
         center.1 + (uy - py) * radius * spread,
     );
     svg.raw(&format!(
-        r##"<path d="M{},{} A{},{} 0 0 0 {},{}" fill="none" style="stroke:#181818;stroke-width:1.5;"/>"##,
+        r##"<path d="M{},{} A{},{} 0 0 0 {},{}" fill="none" style="stroke:{stroke};stroke-width:1.5;"/>"##,
         fc(start.0),
         fc(start.1),
         fc(radius),
@@ -3938,7 +4106,7 @@ fn render_socket_arc(
     ));
 }
 
-fn render_arrow_at(svg: &mut SvgBuilder, x: f64, y: f64, angle: f64) {
+fn render_arrow_at(svg: &mut SvgBuilder, x: f64, y: f64, angle: f64, stroke: &str) {
     // Java PlantUML `svek.extremity.ExtremityArrow.buildPolygon()` uses:
     // tip (0,0), wing (-9,-4), contact (-5,0), wing (-9,4), tip (0,0),
     // rotated by the path angle and translated to the spline endpoint.
@@ -3961,7 +4129,7 @@ fn render_arrow_at(svg: &mut SvgBuilder, x: f64, y: f64, angle: f64) {
         write!(pts, "{},{}", fc(rx), fc(ry)).unwrap();
     }
     svg.raw(&format!(
-        r#"<polygon fill="{STROKE}" points="{pts}" style="stroke:{STROKE};stroke-width:1;"/>"#,
+        r#"<polygon fill="{stroke}" points="{pts}" style="stroke:{stroke};stroke-width:1;"/>"#,
     ));
 }
 
@@ -5435,6 +5603,28 @@ mod tests {
         assert!(
             svg.contains(r##"fill="#F1F1F1""##),
             "missing #F1F1F1 fill: {svg}"
+        );
+    }
+
+    #[test]
+    fn grouped_skinparam_cascade_styles_scoped_and_default_components() {
+        let input = "@startuml\nskinparam component {\n  BackgroundColor LightBlue\n  BorderColor DarkBlue\n  BorderStyle dotted\n  BackgroundColor<<relay_71>> PaleGreen\n  BorderColor<<relay_71>> DarkGreen\n}\ncomponent \"Relay Node 71\" as Relay71 <<relay_71>>\ncomponent \"Audit Node 73\" as Audit73\nRelay71 --> Audit73 : forwards\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert_eq!(svg.matches(r##"fill="#98FB98""##).count(), 4, "{svg}");
+        assert_eq!(svg.matches(r##"fill="#ADD8E6""##).count(), 4, "{svg}");
+        assert_eq!(
+            svg.matches("stroke:#006400;stroke-width:0.5;stroke-dasharray:1,1;")
+                .count(),
+            4,
+            "{svg}"
+        );
+        assert_eq!(
+            svg.matches("stroke:#00008B;stroke-width:0.5;stroke-dasharray:1,1;")
+                .count(),
+            4,
+            "{svg}"
         );
     }
 

@@ -190,6 +190,11 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
     // Legend block accumulation.
     let mut in_legend: bool = false;
     let mut legend_lines: Vec<String> = Vec::new();
+    // Java `SkinLoader` concatenates the active group names with each leaf
+    // key, so `skinparam component { BorderColor Red }` is stored as
+    // `componentBorderColor`. The first entry is also the block sentinel:
+    // an empty string represents a root `skinparam { ... }` block.
+    let mut skinparam_context: Option<Vec<String>> = None;
 
     static RE_COMP: LazyLock<Regex> = LazyLock::new(|| {
         Regex::new(
@@ -284,6 +289,29 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             continue;
         }
 
+        if let Some(context) = &mut skinparam_context {
+            if trimmed == "}" {
+                context.pop();
+                if context.is_empty() {
+                    skinparam_context = None;
+                }
+                continue;
+            }
+            if let Some(group) = trimmed.strip_suffix('{').map(str::trim)
+                && !group.is_empty()
+            {
+                context.push(group.to_string());
+                continue;
+            }
+            if let Some((key, value)) = trimmed.split_once(char::is_whitespace) {
+                meta.skinparams.push(crate::diagram::SkinParam {
+                    key: format!("{}{key}", context.concat()),
+                    value: value.trim().to_string(),
+                });
+            }
+            continue;
+        }
+
         // Parse title directive — single-line form.
         if let Some(rest) = trimmed.strip_prefix("title ") {
             meta.title = Some(super::strip_title_quotes(rest).to_string());
@@ -313,7 +341,11 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
         }
         // Collect skinparam directives into metadata.
         if let Some(rest) = trimmed.strip_prefix("skinparam ") {
-            if let Some((key, value)) = rest.split_once(' ') {
+            if let Some(group) = rest.strip_suffix('{').map(str::trim) {
+                skinparam_context = Some(vec![group.to_string()]);
+                continue;
+            }
+            if let Some((key, value)) = rest.split_once(char::is_whitespace) {
                 meta.skinparams.push(crate::diagram::SkinParam {
                     key: key.trim().to_string(),
                     value: value.trim().to_string(),
@@ -965,6 +997,29 @@ mod tests {
         assert_eq!(d.components.len(), 1);
         assert!(d.components[0].stereotypes.contains(&"service".to_string()));
         assert!(d.components[0].stereotypes.contains(&"secured".to_string()));
+    }
+
+    #[test]
+    fn grouped_skinparams_follow_java_context_concatenation() {
+        let d = parse(
+            "skinparam component {\n  BackgroundColor<<relay_71>> PaleGreen\n  BorderStyle dashed\n  arrow {\n    FontColor Navy\n  }\n}\ncomponent Relay71 <<relay_71>>",
+        );
+        let params: Vec<_> = d
+            .meta
+            .skinparams
+            .iter()
+            .map(|param| (param.key.as_str(), param.value.as_str()))
+            .collect();
+
+        assert_eq!(
+            params,
+            [
+                ("componentBackgroundColor<<relay_71>>", "PaleGreen"),
+                ("componentBorderStyle", "dashed"),
+                ("componentarrowFontColor", "Navy"),
+            ]
+        );
+        assert_eq!(d.components[0].id, "Relay71");
     }
 
     #[test]
