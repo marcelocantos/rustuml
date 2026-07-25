@@ -2757,7 +2757,14 @@ fn render_attached_deployment_note(
     };
     let (note_point, target_point) = edge
         .map(|path| {
-            deployment_svek_edge_points(&path.points, body_margin_x, body_margin_y, EdgeTrim::None)
+            deployment_svek_edge_points(
+                &path.points,
+                body_margin_x,
+                body_margin_y,
+                None,
+                None,
+                EdgeTrim::None,
+            )
         })
         .and_then(|points| points.first().copied().zip(points.last().copied()))
         .map(|(first, last)| match note.position {
@@ -3284,6 +3291,18 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
         .filter(|node| !node.children.is_empty())
         .map(|node| node.id.as_str())
         .collect();
+    let cluster_endpoint_nodes: HashMap<String, String> = diagram
+        .connections
+        .iter()
+        .flat_map(|connection| [&connection.from, &connection.to])
+        .filter(|endpoint| cluster_ids.contains(endpoint.as_str()))
+        .map(|endpoint| {
+            (
+                endpoint.clone(),
+                format!("__svek_group_endpoint_{endpoint}"),
+            )
+        })
+        .collect();
     let mut layout = LayoutGraph::new(Direction::TopToBottom).with_plantuml_svek_spacing();
     for (node, dim) in diagram.nodes.iter().zip(&dims) {
         if !cluster_ids.contains(node.id.as_str()) {
@@ -3298,6 +3317,9 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
             dim.width,
             dim.height,
         );
+    }
+    for endpoint_id in cluster_endpoint_nodes.values() {
+        layout.add_svek_cluster_endpoint(endpoint_id);
     }
     for node in &diagram.nodes {
         if cluster_ids.contains(node.id.as_str()) {
@@ -3334,6 +3356,9 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
                     height: title_height + stereotype_height + shape_height,
                 },
             );
+            if let Some(endpoint_id) = cluster_endpoint_nodes.get(&node.id) {
+                layout.add_cluster_node(&node.id, endpoint_id);
+            }
         }
     }
     for node in &diagram.nodes {
@@ -3353,12 +3378,16 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
             continue;
         };
         let note_id = deployment_note_layout_id(note_index);
+        let layout_target = cluster_endpoint_nodes
+            .get(target)
+            .map(String::as_str)
+            .unwrap_or(target);
         let (from, to) = match note.position {
             DeploymentNotePosition::Top | DeploymentNotePosition::Left => {
-                (note_id.as_str(), target)
+                (note_id.as_str(), layout_target)
             }
             DeploymentNotePosition::Bottom | DeploymentNotePosition::Right => {
-                (target, note_id.as_str())
+                (layout_target, note_id.as_str())
             }
         };
         if matches!(
@@ -3374,30 +3403,29 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
         }
     }
     for conn in &diagram.connections {
-        if !cluster_ids.contains(conn.from.as_str()) && !cluster_ids.contains(conn.to.as_str()) {
-            let (layout_from, layout_to, _) = deployment_connection_layout(conn);
-            let label_size = conn.label.as_deref().map(|label| EdgeLabelSize {
-                // Java `SvekEdge.getLabelText` adds one pixel of margin on
-                // each side before `appendLine` emits a fixed HTML table.
-                width: text_render::measure(label, 13.0, false) + 2.0,
-                height: (text_render::label_height(label, 13.0) + 2.0).floor(),
-            });
-            layout.add_edge_with_label_sizes_and_minlen(
-                layout_from,
-                layout_to,
-                label_size,
-                None,
-                None,
-                match conn.direction {
-                    Some(DeploymentLinkDirection::Left | DeploymentLinkDirection::Right) => Some(0),
-                    // `CommandLinkElement` stores the shaft's character count
-                    // in `LinkArg`; `SvekEdge.appendLine` emits length - 1.
-                    Some(DeploymentLinkDirection::Up | DeploymentLinkDirection::Down) | None => {
-                        Some(conn.length.saturating_sub(1))
-                    }
-                },
-            );
-        }
+        let (layout_from, layout_to, _) =
+            deployment_connection_layout_with_endpoints(conn, &cluster_endpoint_nodes);
+        let label_size = conn.label.as_deref().map(|label| EdgeLabelSize {
+            // Java `SvekEdge.getLabelText` adds one pixel of margin on
+            // each side before `appendLine` emits a fixed HTML table.
+            width: text_render::measure(label, 13.0, false) + 2.0,
+            height: (text_render::label_height(label, 13.0) + 2.0).floor(),
+        });
+        layout.add_edge_with_label_sizes_and_minlen(
+            layout_from,
+            layout_to,
+            label_size,
+            None,
+            None,
+            match conn.direction {
+                Some(DeploymentLinkDirection::Left | DeploymentLinkDirection::Right) => Some(0),
+                // `CommandLinkElement` stores the shaft's character count
+                // in `LinkArg`; `SvekEdge.appendLine` emits length - 1.
+                Some(DeploymentLinkDirection::Up | DeploymentLinkDirection::Down) | None => {
+                    Some(conn.length.saturating_sub(1))
+                }
+            },
+        );
     }
 
     let result = layout.layout_full(LAYOUT_TIMEOUT);
@@ -3431,6 +3459,13 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
         body_margin_x,
         body_margin_y,
     );
+    let cluster_rects: HashMap<&str, LayoutRect> = diagram
+        .nodes
+        .iter()
+        .zip(&rects)
+        .filter(|(node, _)| cluster_ids.contains(node.id.as_str()))
+        .map(|(node, rect)| (node.id.as_str(), *rect))
+        .collect();
     let leaf_count = diagram
         .nodes
         .iter()
@@ -3534,7 +3569,14 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
     for root in &roots {
         collect_entities_dfs(root, &diagram.nodes, None, 0, &mut leaves);
     }
-    leaves.sort_by_key(|(_, source_line, _, _)| *source_line);
+    if cluster_endpoint_nodes.is_empty() {
+        leaves.sort_by_key(|(_, source_line, _, _)| *source_line);
+    } else {
+        // Linked groups add SVEK special-point entities. In that path,
+        // `GraphvizImageBuilder.printEntities` emits direct members of outer
+        // groups before descending, preserving source order within each depth.
+        leaves.sort_by_key(|(depth, source_line, _, _)| (*depth, *source_line));
+    }
     for (_, _, node, qname) in leaves {
         emit_entity(&mut svg, node, &qname, &ctx);
     }
@@ -3548,12 +3590,16 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
                 continue;
             };
             let note_id = deployment_note_layout_id(layout.note_index);
+            let layout_target = cluster_endpoint_nodes
+                .get(target)
+                .map(String::as_str)
+                .unwrap_or(target);
             let (from, to) = match note.position {
                 DeploymentNotePosition::Top | DeploymentNotePosition::Left => {
-                    (note_id.as_str(), target)
+                    (note_id.as_str(), layout_target)
                 }
                 DeploymentNotePosition::Bottom | DeploymentNotePosition::Right => {
-                    (target, note_id.as_str())
+                    (layout_target, note_id.as_str())
                 }
             };
             let edge = result
@@ -3580,6 +3626,8 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
             &result.edge_paths,
             body_margin_x,
             body_margin_y,
+            &cluster_endpoint_nodes,
+            &cluster_rects,
         );
     }
     svg.finalize_plantuml()
@@ -4349,6 +4397,7 @@ fn build_deployment_no_oracle_uid_model(diagram: &DeploymentDiagram) -> Deployme
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 fn render_no_oracle_edges(
     svg: &mut SvgBuilder,
     diagram: &DeploymentDiagram,
@@ -4357,9 +4406,13 @@ fn render_no_oracle_edges(
     edge_paths: &[EdgePath],
     body_margin_x: f64,
     body_margin_y: f64,
+    cluster_endpoint_nodes: &HashMap<String, String>,
+    cluster_rects: &HashMap<&str, LayoutRect>,
 ) {
     for (i, conn) in diagram.connections.iter().enumerate() {
-        let (layout_from, layout_to, reversed) = deployment_connection_layout(conn);
+        let (logical_from, logical_to, reversed) = deployment_connection_layout(conn);
+        let (layout_from, layout_to, _) =
+            deployment_connection_layout_with_endpoints(conn, cluster_endpoint_nodes);
         let Some(edge) = edge_paths
             .iter()
             .find(|edge| edge.from == layout_from && edge.to == layout_to)
@@ -4403,12 +4456,22 @@ fn render_no_oracle_edges(
             r#"<g class="link" data-entity-1="{ent1}" data-entity-2="{ent2}" data-link-type="{link_type}" data-source-line="{line}" id="{link_id}">"#,
             line = conn.source_line,
         ));
-        let raw_points =
-            deployment_svek_edge_points(&edge.points, body_margin_x, body_margin_y, EdgeTrim::None);
+        let tail_cluster = cluster_rects.get(logical_from);
+        let head_cluster = cluster_rects.get(logical_to);
+        let raw_points = deployment_svek_edge_points(
+            &edge.points,
+            body_margin_x,
+            body_margin_y,
+            tail_cluster,
+            head_cluster,
+            EdgeTrim::None,
+        );
         let points = deployment_svek_edge_points(
             &edge.points,
             body_margin_x,
             body_margin_y,
+            tail_cluster,
+            head_cluster,
             match (raw_start_arrow, raw_end_arrow) {
                 (false, false) => EdgeTrim::None,
                 (true, false) => EdgeTrim::Start,
@@ -4503,6 +4566,24 @@ fn deployment_connection_layout(conn: &DeploymentConnection) -> (&str, &str, boo
     }
 }
 
+fn deployment_connection_layout_with_endpoints<'a>(
+    conn: &'a DeploymentConnection,
+    cluster_endpoint_nodes: &'a HashMap<String, String>,
+) -> (&'a str, &'a str, bool) {
+    let (from, to, reversed) = deployment_connection_layout(conn);
+    (
+        cluster_endpoint_nodes
+            .get(from)
+            .map(String::as_str)
+            .unwrap_or(from),
+        cluster_endpoint_nodes
+            .get(to)
+            .map(String::as_str)
+            .unwrap_or(to),
+        reversed,
+    )
+}
+
 #[derive(Clone, Copy, PartialEq, Eq)]
 enum EdgeTrim {
     None,
@@ -4515,6 +4596,8 @@ fn deployment_svek_edge_points(
     points: &[(f64, f64)],
     body_margin_x: f64,
     body_margin_y: f64,
+    tail_cluster: Option<&LayoutRect>,
+    head_cluster: Option<&LayoutRect>,
     trim: EdgeTrim,
 ) -> Vec<(f64, f64)> {
     // Java `SvekEdge.solveLine` receives the spline through
@@ -4525,6 +4608,7 @@ fn deployment_svek_edge_points(
         .iter()
         .map(|(x, y)| (quantize(*x) + body_margin_x, quantize(*y) + body_margin_y))
         .collect();
+    points = simulate_deployment_compound(points, tail_cluster, head_cluster);
     if points.len() >= 2 && matches!(trim, EdgeTrim::Start | EdgeTrim::Both) {
         trim_deployment_edge_endpoint(&mut points, 0, 1);
     }
@@ -4533,6 +4617,103 @@ fn deployment_svek_edge_points(
         trim_deployment_edge_endpoint(&mut points, endpoint, endpoint - 1);
     }
     points
+}
+
+fn simulate_deployment_compound(
+    points: Vec<(f64, f64)>,
+    tail: Option<&LayoutRect>,
+    head: Option<&LayoutRect>,
+) -> Vec<(f64, f64)> {
+    if points.len() < 4 || !(points.len() - 1).is_multiple_of(3) {
+        return points;
+    }
+
+    type Cubic = [(f64, f64); 4];
+
+    fn contains(rectangle: &LayoutRect, point: (f64, f64)) -> bool {
+        point.0 >= rectangle.x
+            && point.0 <= rectangle.x + rectangle.width
+            && point.1 >= rectangle.y
+            && point.1 <= rectangle.y + rectangle.height
+    }
+
+    fn subdivide(curve: Cubic) -> (Cubic, Cubic) {
+        let midpoint = |a: (f64, f64), b: (f64, f64)| ((a.0 + b.0) / 2.0, (a.1 + b.1) / 2.0);
+        let p01 = midpoint(curve[0], curve[1]);
+        let p12 = midpoint(curve[1], curve[2]);
+        let p23 = midpoint(curve[2], curve[3]);
+        let p012 = midpoint(p01, p12);
+        let p123 = midpoint(p12, p23);
+        let split = midpoint(p012, p123);
+        ([curve[0], p01, p012, split], [split, p123, p23, curve[3]])
+    }
+
+    fn curves_from_points(points: &[(f64, f64)]) -> Vec<Cubic> {
+        points[1..]
+            .chunks_exact(3)
+            .scan(points[0], |start, chunk| {
+                let curve = [*start, chunk[0], chunk[1], chunk[2]];
+                *start = chunk[2];
+                Some(curve)
+            })
+            .collect()
+    }
+
+    fn points_from_curves(curves: &[Cubic]) -> Vec<(f64, f64)> {
+        let Some(first) = curves.first() else {
+            return Vec::new();
+        };
+        let mut points = Vec::with_capacity(curves.len() * 3 + 1);
+        points.push(first[0]);
+        for curve in curves {
+            points.extend_from_slice(&curve[1..]);
+        }
+        points
+    }
+
+    // `DotPath.simulateCompound` clips the first boundary-crossing cubic by
+    // bisecting it eight times. It retains every outside half, so one Graphviz
+    // cubic deliberately expands into the sequence emitted by PlantUML.
+    let mut curves = curves_from_points(&points);
+    if let Some(tail) = tail
+        && curves.first().is_some_and(|curve| contains(tail, curve[0]))
+        && let Some(index) = curves.iter().position(|curve| !contains(tail, curve[3]))
+    {
+        let mut current = curves[index];
+        let mut clipped = Vec::new();
+        for _ in 0..8 {
+            let (inside_half, outside_half) = subdivide(current);
+            if contains(tail, inside_half[3]) {
+                current = outside_half;
+            } else {
+                clipped.insert(0, outside_half);
+                current = inside_half;
+            }
+        }
+        clipped.extend_from_slice(&curves[index + 1..]);
+        curves = clipped;
+    }
+
+    if let Some(head) = head
+        && curves.last().is_some_and(|curve| contains(head, curve[3]))
+        && let Some(index) = curves.iter().position(|curve| contains(head, curve[3]))
+        && !contains(head, curves[index][0])
+    {
+        let mut current = curves[index];
+        let mut clipped = curves[..index].to_vec();
+        for _ in 0..8 {
+            let (outside_half, inside_half) = subdivide(current);
+            if contains(head, outside_half[3]) {
+                current = outside_half;
+            } else {
+                clipped.push(outside_half);
+                current = inside_half;
+            }
+        }
+        curves = clipped;
+    }
+
+    points_from_curves(&curves)
 }
 
 fn trim_deployment_edge_endpoint(points: &mut [(f64, f64)], endpoint: usize, adjacent: usize) {
@@ -4866,6 +5047,39 @@ mod tests {
     }
 
     #[test]
+    fn no_oracle_compound_group_links_scale_to_four_levels() {
+        let source = "@startuml\n\
+            cloud Boundary317 {\n\
+              folder Domain331 {\n\
+                node Cell337 {\n\
+                  frame Pod347 {\n\
+                    artifact Binary349\n\
+                    database Ledger353\n\
+                  }\n\
+                  node Relay359\n\
+                  Pod347 --> Relay359\n\
+                }\n\
+                node Gateway367\n\
+                Cell337 --> Gateway367\n\
+              }\n\
+              node Observer373\n\
+              Domain331 --> Observer373\n\
+            }\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+
+        let svg = render(&diagram, &Theme::default());
+
+        assert!(svg.contains(r#"style="width:883px;height:541px;background:#FFFFFF;""#));
+        assert!(svg.contains(r#"id="Pod347-to-Relay359""#));
+        assert!(svg.contains(r#"id="Cell337-to-Gateway367""#));
+        assert!(svg.contains(r#"id="Domain331-to-Observer373""#));
+    }
+
+    #[test]
     fn no_oracle_single_entity_uses_degenerated_envelope() {
         let source = "@startuml\nartifact \"Solo Runtime 127\" as Runtime127 #LightGreen\n@enduml";
         let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
@@ -5019,8 +5233,14 @@ mod tests {
     fn deployment_svek_edge_translation_trims_path_but_not_arrow_tip() {
         let raw = vec![(10.0, 0.0), (10.0, 10.0), (10.0, 20.0), (10.0, 30.0)];
 
-        let painted =
-            deployment_svek_edge_points(&raw, BODY_FALLBACK_MARGIN_X, BODY_MARGIN_Y, EdgeTrim::End);
+        let painted = deployment_svek_edge_points(
+            &raw,
+            BODY_FALLBACK_MARGIN_X,
+            BODY_MARGIN_Y,
+            None,
+            None,
+            EdgeTrim::End,
+        );
 
         assert_eq!(
             painted,
@@ -5031,6 +5251,8 @@ mod tests {
             &raw,
             BODY_FALLBACK_MARGIN_X,
             BODY_MARGIN_Y,
+            None,
+            None,
             EdgeTrim::None,
         );
         let mut svg = SvgBuilder::new(100.0, 100.0);
