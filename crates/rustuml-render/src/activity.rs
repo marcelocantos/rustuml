@@ -382,7 +382,6 @@ const DECORATION_COLOR: &str = "#888888";
 const HEADER_BODY_GAP: f64 = 10.0;
 const FOOTER_BASELINE_GAP: f64 = 18.668;
 const FOOTER_BOTTOM_GAP: f64 = 31.957;
-const HANDWRITTEN_WARNING_BAND_H: f64 = 21.6406;
 const CAPTION_FONT_SIZE: f64 = 14.0;
 const CAPTION_BASELINE_GAP: f64 = 23.5352;
 const CAPTION_BOTTOM_GAP: f64 = 38.8672;
@@ -428,6 +427,21 @@ const FORK_BAR_COLOR: &str = "#555555";
 const TEXT_COLOR: &str = "#000000";
 const DEPRECATED_FILL: &str = "#FFFFCC";
 const DEPRECATED_STROKE: &str = "#FFDD88";
+const WARNING_FONT_SIZE: f64 = 10.0;
+const WARNING_X: f64 = 13.0;
+const WARNING_TEXT_X: f64 = 20.0;
+const WARNING_RECT_RADIUS: f64 = 2.5;
+const WARNING_RECT_EXTRA_WIDTH: f64 = 10.0;
+const WARNING_RECT_EXTRA_HEIGHT: f64 = 5.0;
+const WARNING_BANNER_EXTRA_HEIGHT: f64 = 10.0;
+const WARNING_CANVAS_TRAIL: f64 = 17.0;
+const WARNING_BASELINE_LIFT: f64 = 6.0;
+
+// CommandSkinParam.executeArg registers this warning with a trailing space.
+// DiagramChromeFactory12026.WarningBannerBlock.calculateDimension measures that
+// space for the banner width, while WarningBannerBlock.drawU trims it from the
+// rendered UText. NBSPs preserve PlantUML's monospaced SVG serialization.
+const DEPRECATED_HANDWRITTEN_WARNING: &str = "Please\u{a0}use\u{a0}'!option\u{a0}handwritten\u{a0}true'\u{a0}to\u{a0}enable\u{a0}handwritten";
 
 fn canonical_font_family(value: &str) -> String {
     let raw = value.trim();
@@ -817,6 +831,23 @@ fn deprecated_warning(color: &str) -> String {
     format!(
         "This\u{a0}syntax\u{a0}is\u{a0}deprecated,\u{a0}you\u{a0}must\u{a0}add\u{a0}<<{color}>>\u{a0}at\u{a0}the\u{a0}end\u{a0}of\u{a0}the\u{a0}line,\u{a0}after\u{a0}the\u{a0}';'"
     )
+}
+
+fn deprecated_handwritten_warning_text_width() -> f64 {
+    pm::mono_text_width(DEPRECATED_HANDWRITTEN_WARNING, WARNING_FONT_SIZE)
+}
+
+fn deprecated_handwritten_warning_rect_width() -> f64 {
+    let trailing_space_width = pm::mono_text_width(" ", WARNING_FONT_SIZE);
+    deprecated_handwritten_warning_text_width() + trailing_space_width + WARNING_RECT_EXTRA_WIDTH
+}
+
+fn deprecated_handwritten_warning_rect_height() -> f64 {
+    pm::mono_text_height(WARNING_FONT_SIZE) + WARNING_RECT_EXTRA_HEIGHT
+}
+
+fn deprecated_handwritten_warning_banner_height() -> f64 {
+    pm::mono_text_height(WARNING_FONT_SIZE) + WARNING_BANNER_EXTRA_HEIGHT
 }
 
 /// Per-arrow visual style. Derived from the parser's `Arrow.color` field,
@@ -9885,6 +9916,29 @@ fn emit_handwritten_warning(svg: &mut SvgEmitter, warning: &OracleHandwrittenWar
             text,
         )),
     }
+}
+
+fn emit_generated_deprecated_handwritten_warning(svg: &mut SvgEmitter) {
+    let rect_height = deprecated_handwritten_warning_rect_height();
+    svg.rect_styled(
+        DEPRECATED_FILL,
+        rect_height,
+        WARNING_RECT_RADIUS,
+        WARNING_RECT_RADIUS,
+        DEPRECATED_STROKE,
+        "3",
+        deprecated_handwritten_warning_rect_width(),
+        WARNING_X,
+        WARNING_X,
+    );
+    svg.monospace_text_element(
+        TEXT_COLOR,
+        WARNING_FONT_SIZE,
+        deprecated_handwritten_warning_text_width(),
+        WARNING_TEXT_X,
+        WARNING_X + rect_height - WARNING_BASELINE_LIFT,
+        DEPRECATED_HANDWRITTEN_WARNING,
+    );
 }
 
 fn f(v: f64) -> String {
@@ -30800,6 +30854,12 @@ fn render_ftile(
     handwritten: bool,
     defs: &str,
 ) -> Option<String> {
+    // DiagramChromeFactory12026.addWarnings wraps the completed raw diagram in
+    // WarningBannerBlock. The FTile bridge does not own outer chrome yet, so
+    // deprecated handwritten syntax uses the chrome-aware activity renderer.
+    if has_deprecated_handwritten_skinparam(&diagram.meta.skinparams) {
+        return None;
+    }
     if diagram.meta.header.is_some()
         || diagram.meta.footer.is_some()
         || diagram.meta.caption.is_some()
@@ -31207,11 +31267,17 @@ fn render_inner(
         .iter()
         .map(|(_, w)| *w + 10.0) // warning rect = text + 7 left + 3 right
         .fold(0.0f64, f64::max);
-    let warning_total_w = if has_deprecated {
+    let color_warning_total_w = if has_deprecated {
         13.0 + max_warning_w + 17.0
     } else {
         0.0
     };
+    let handwritten_warning_total_w = if has_deprecated_handwritten {
+        WARNING_X + deprecated_handwritten_warning_rect_width() + WARNING_CANVAS_TRAIL
+    } else {
+        0.0
+    };
+    let warning_total_w = color_warning_total_w.max(handwritten_warning_total_w);
 
     // Vertical extent of the warning band: starts at y=13, contains one
     // rect spanning all warnings ((n-1) * 21.6406 + 16.6406), then 17 px
@@ -31224,7 +31290,7 @@ fn render_inner(
     };
     let starts_with_start = matches!(first_flow_node(&tree), Some(LayoutNode::Start));
     let handwritten_warning_band_h = if has_deprecated_handwritten {
-        HANDWRITTEN_WARNING_BAND_H
+        deprecated_handwritten_warning_banner_height()
             + if starts_with_start {
                 START_CY - MARGIN_LEAD
             } else {
@@ -31442,6 +31508,8 @@ fn render_inner(
 
     if let Some(warning) = handwritten_warning {
         emit_handwritten_warning(&mut svg, warning);
+    } else if has_deprecated_handwritten {
+        emit_generated_deprecated_handwritten_warning(&mut svg);
     }
 
     // A leading note is drawn first (before the start ellipse) so its
@@ -31677,6 +31745,33 @@ mod tests {
         assert!(svg.contains("data-diagram-type=\"ACTIVITY\""));
         assert!(svg.contains("<ellipse"));
         assert!(svg.contains("<polygon"));
+    }
+
+    #[test]
+    fn deprecated_handwritten_skinparam_generates_java_warning_chrome() {
+        let input = concat!(
+            "@startuml\n",
+            "skinparam handwritten true\n",
+            "start\n",
+            ":Fresh warning probe;\n",
+            "stop\n",
+            "@enduml",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        let warning = svg.find("Please&#xA0;use").unwrap();
+        let start = svg.find(r##"fill="#222222""##).unwrap();
+        let expected_width =
+            (WARNING_X + deprecated_handwritten_warning_rect_width() + WARNING_CANVAS_TRAIL).ceil()
+                as u32;
+
+        assert!(warning < start);
+        assert!(svg.contains(r##"fill="#FFFFCC""##));
+        assert!(svg.contains(&format!(r#"viewBox="0 0 {expected_width} "#)));
+        assert!(svg.contains(&format!(
+            r#"textLength="{}""#,
+            f(deprecated_handwritten_warning_text_width())
+        )));
     }
 
     #[test]
