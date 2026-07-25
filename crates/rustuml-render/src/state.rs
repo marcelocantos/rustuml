@@ -790,6 +790,51 @@ impl StateSkin {
     }
 }
 
+struct StateArrowFont {
+    color: String,
+    family: String,
+    size: u32,
+    bold: bool,
+    italic: bool,
+}
+
+impl StateArrowFont {
+    fn from_diagram(diagram: &StateDiagram) -> Self {
+        let find = |keys: &[&str]| {
+            diagram
+                .meta
+                .skinparams
+                .iter()
+                .rev()
+                .find(|sp| keys.iter().any(|key| sp.key.eq_ignore_ascii_case(key)))
+        };
+        let color = find(&["stateArrowFontColor", "arrowFontColor"])
+            .map(|sp| crate::sequence::resolve_color(sp.value.trim()))
+            .unwrap_or_else(|| DEFAULT_TEXT_COLOR.to_string());
+        let family = find(&[
+            "stateArrowFontName",
+            "arrowFontName",
+            "defaultFontName",
+            "fontName",
+        ])
+        .map(|sp| canonical_state_font_family(sp.value.trim()))
+        .unwrap_or_else(|| "sans-serif".to_string());
+        let size = find(&["stateArrowFontSize", "arrowFontSize", "defaultFontSize"])
+            .and_then(|sp| sp.value.trim().parse::<u32>().ok())
+            .unwrap_or(LINK_FONT_SIZE as u32);
+        let style = find(&["stateArrowFontStyle", "arrowFontStyle"])
+            .map(|sp| sp.value.to_ascii_lowercase())
+            .unwrap_or_default();
+        Self {
+            color,
+            family,
+            size,
+            bold: style.contains("bold"),
+            italic: style.contains("italic"),
+        }
+    }
+}
+
 /// Build a PlantUML-compatible SVG for a state diagram.
 ///
 /// The output uses inline formatting (no extra whitespace) to match PlantUML's
@@ -835,6 +880,7 @@ pub fn render_with_oracle(
     // override is picked up automatically. Local names intentionally shadow
     // the module-level `DEFAULT_*` constants.
     let skin = StateSkin::from_diagram(diagram);
+    let arrow_font = StateArrowFont::from_diagram(diagram);
     // `skinparam backgroundColor <c>` paints the whole canvas: it sets the
     // SVG root `background:` and emits a full-size `<rect>` just inside the
     // root `<g>`. PlantUML keeps the default `#FFFFFF` when unset.
@@ -1163,8 +1209,13 @@ pub fn render_with_oracle(
                 // `SvekEdge.addVisibilityModifier` gives ordinary center
                 // labels one pixel of margin on every side before
                 // `appendLine` emits the fixed HTML table.
-                width: text_render::measure(label, LINK_FONT_SIZE, false) + 2.0,
-                height: (text_render::label_height(label, LINK_FONT_SIZE) + 2.0).floor(),
+                width: text_render::measure_with_family(
+                    label,
+                    arrow_font.size as f64,
+                    arrow_font.bold,
+                    &arrow_font.family,
+                ) + 2.0,
+                height: (text_render::label_height(label, arrow_font.size as f64) + 2.0).floor(),
             });
             layout.add_edge_with_label_sizes_and_minlen(
                 layout_from,
@@ -2592,11 +2643,11 @@ pub fn render_with_oracle(
                         .label
                         .map(|position| {
                             (
-                                position.x + graph_body_x + 1.0,
-                                position.y
+                                quantize_svek_coord(position.x) + graph_body_x + 1.0,
+                                quantize_svek_coord(position.y)
                                     + graph_body_y
                                     + 1.0
-                                    + text_render::label_ascent(label, LINK_FONT_SIZE),
+                                    + text_render::label_ascent(label, arrow_font.size as f64),
                             )
                         })
                         .unwrap_or_else(|| {
@@ -2611,11 +2662,11 @@ pub fn render_with_oracle(
                         &TextBase {
                             x: label_x,
                             y: label_y,
-                            font_size: LINK_FONT_SIZE as u32,
-                            font_family: "sans-serif",
-                            fill: TEXT_COLOR,
-                            bold: false,
-                            italic: false,
+                            font_size: arrow_font.size,
+                            font_family: &arrow_font.family,
+                            fill: &arrow_font.color,
+                            bold: arrow_font.bold,
+                            italic: arrow_font.italic,
                             underline: false,
                             skip_underline: false,
                         },
@@ -2655,11 +2706,11 @@ pub fn render_with_oracle(
                         &TextBase {
                             x: label_x,
                             y: label_y,
-                            font_size: LINK_FONT_SIZE as u32,
-                            font_family: "sans-serif",
-                            fill: TEXT_COLOR,
-                            bold: false,
-                            italic: false,
+                            font_size: arrow_font.size,
+                            font_family: &arrow_font.family,
+                            fill: &arrow_font.color,
+                            bold: arrow_font.bold,
+                            italic: arrow_font.italic,
                             underline: false,
                             skip_underline: false,
                         },
@@ -4846,6 +4897,28 @@ mod tests {
         let svg = render(diagram, &Theme::default());
         assert!(svg.contains(r#"width="354px""#));
         assert!(svg.contains(">renamed event 719 [gate 727] / commit 733</text>"));
+    }
+
+    #[test]
+    fn renamed_state_and_arrow_fonts_resolve_independently() {
+        let input = concat!(
+            "@startuml\n",
+            "skinparam stateFontColor DarkRed\n",
+            "skinparam ArrowFontColor DarkCyan\n",
+            "[*] --> Signal809\n",
+            "Signal809 --> Archive811 : renamed event 821\n",
+            "Archive811 --> [*]\n",
+            "@enduml\n",
+        );
+        let parsed = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::State(diagram) = &parsed else {
+            panic!("expected state diagram");
+        };
+
+        let svg = render(diagram, &Theme::default());
+        assert!(svg.contains(r##"<text fill="#8B0000""##));
+        assert!(svg.contains(r##"<text fill="#008B8B""##));
+        assert!(svg.contains(">renamed event 821</text>"));
     }
 
     #[test]
