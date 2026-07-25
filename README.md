@@ -7,9 +7,9 @@ JVM, no Graphviz, no external fonts.
 ## Status
 
 Pre-release. 23 parsed diagram models are supported, but release-readiness
-claims are based on the no-oracle product tier: 6,698/11,251 eligible SVG
-goldens currently pass when rendered through the same path as the CLI (59.5%).
-The strict oracle-assisted tier passes 11,022/11,251 eligible SVG goldens and
+claims are based on the no-oracle product tier: 6,801/11,251 eligible SVG
+goldens currently pass when rendered through the same path as the CLI (60.4%).
+The strict oracle-assisted tier passes 11,130/11,251 eligible SVG goldens and
 remains a regression net, not the headline product metric. The 1,199 Java
 PlantUML error-page goldens are skipped by both tiers and are not counted as
 passes.
@@ -22,11 +22,11 @@ The table below is derived from `test-diagrams/no_oracle_baseline.txt`.
 | Type | Tag | Baseline family | No-oracle product status |
 |------|-----|-----------------|--------------------------|
 | Sequence | `@startuml` | `sequence` | 1,400/1,411 (99.2%, partial) |
-| Class | `@startuml` | `class` | 1,373/1,971 (69.7%, partial) |
+| Class | `@startuml` | `class` | 1,456/1,971 (73.9%, partial) |
 | Archimate | `@startuml` | `archimate` | 0/48 (0.0%, none) |
 | Activity (new syntax) | `@startuml` | `activity` | 1,266/1,299 (97.5%, partial) |
 | State | `@startuml` | `state` | 1/901 (0.1%, partial) |
-| Component | `@startuml` | `component` | 56/663 (8.4%, partial) |
+| Component | `@startuml` | `component` | 57/663 (8.6%, partial) |
 | Deployment | `@startuml` | `deployment` | 38/495 (7.7%, partial) |
 | Use Case | `@startuml` | `usecase` | 2/315 (0.6%, partial) |
 | Object | `@startuml` | `object` | 48/155 (31.0%, partial) |
@@ -146,11 +146,11 @@ There are two golden tiers:
 
 - Strict oracle-assisted tier: `cargo test --test golden_pairs`. This compares
   against Java PlantUML reference SVGs while allowing test-only oracle layout
-  extraction. Current state: 11,022/11,251 eligible SVG goldens pass, 229 fail,
+  extraction. Current state: 11,130/11,251 eligible SVG goldens pass, 121 fail,
   and 1,299 are skipped.
 - No-oracle product tier: `cargo test --test golden_no_oracle --release`. This
   renders through the same source-only path the CLI uses. Current baseline:
-  6,476/11,251 eligible SVG goldens pass.
+  6,801/11,251 eligible SVG goldens pass.
 
 The 1,199 Java PlantUML error-page goldens are skips, not successes, and do
 not contribute to either headline pass count. The test files live in a

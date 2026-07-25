@@ -13,7 +13,6 @@
 #include "config.h"
 
 #include <common/render.h>
-#include <rustuml_helpers.h>
 #include <common/geomprocs.h>
 #include <common/htmltable.h>
 #include <common/entities.h>
@@ -544,8 +543,6 @@ void common_init_edge(edge_t *e) {
 				lfi.fontsize, lfi.fontname, lfi.fontcolor);
 	GD_has_labels(sg) |= TAIL_LABEL;
     }
-
-    rustuml_override_edge_label_dimensions(e);
 
     /* We still accept ports beginning with colons but this is deprecated
      * That is, we allow tailport = ":abc" as well as the preferred

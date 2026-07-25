@@ -4,6 +4,7 @@
 #include "rustuml_helpers.h"
 
 #include <stdlib.h>
+#include <string.h>
 
 void rustuml_node_pos(Agnode_t *n, double *x, double *y) {
     pointf p = ND_coord(n);
@@ -81,24 +82,40 @@ int rustuml_edge_label_box(Agedge_t *e, int kind,
     return 1;
 }
 
-static void override_label_dimensions(Agedge_t *e, textlabel_t *label,
-                                      const char *width_name,
-                                      const char *height_name) {
-    if (!label) return;
-    const char *width = agget(e, (char *)width_name);
-    const char *height = agget(e, (char *)height_name);
-    if (!width || !height || !*width || !*height) return;
+int rustuml_make_fixed_html_table_label(textlabel_t *label) {
+    static const char *const prefix = "<TABLE BGCOLOR=\"#00000";
+    static const char *const body = "\"><TR><TD></TD></TR></TABLE>";
+    const char *width_attr;
+    const char *height_attr;
+    char *width_end;
+    char *height_end;
+    unsigned long width;
+    unsigned long height;
 
-    label->dimen.x = strtod(width, NULL);
-    label->dimen.y = strtod(height, NULL);
-    label->space = label->dimen;
-}
+    if (!label || !label->text || strncmp(label->text, prefix, strlen(prefix)) != 0)
+        return 0;
+    if (!strstr(label->text, " FIXEDSIZE=\"TRUE\" ") || !strstr(label->text, body))
+        return 0;
 
-void rustuml_override_edge_label_dimensions(Agedge_t *e) {
-    override_label_dimensions(e, ED_label(e),
-                              "rustuml_label_width", "rustuml_label_height");
-    override_label_dimensions(e, ED_tail_label(e),
-                              "rustuml_tail_label_width", "rustuml_tail_label_height");
-    override_label_dimensions(e, ED_head_label(e),
-                              "rustuml_head_label_width", "rustuml_head_label_height");
+    width_attr = strstr(label->text, " WIDTH=\"");
+    height_attr = strstr(label->text, " HEIGHT=\"");
+    if (!width_attr || !height_attr)
+        return 0;
+
+    width = strtoul(width_attr + strlen(" WIDTH=\""), &width_end, 10);
+    height = strtoul(height_attr + strlen(" HEIGHT=\""), &height_end, 10);
+    if (width == 0 || height == 0 || *width_end != '"' || *height_end != '"')
+        return 0;
+
+    // RustUML uses Graphviz only for layout. This is the no-Expat equivalent
+    // of Graphviz's fixed HTML table sizing, not a renderer side channel.
+    label->html = false;
+    label->dimen.x = (double)width;
+    label->dimen.y = (double)height;
+    // `make_html_label` sets table dimensions but leaves `space` at the zero
+    // value allocated by `make_label`. External endpoint-label placement
+    // observes that distinction.
+    label->space.x = 0.0;
+    label->space.y = 0.0;
+    return 1;
 }

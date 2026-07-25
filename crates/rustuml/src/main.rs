@@ -247,11 +247,11 @@ fn print_agent_guide() {
     println!();
     println!("## Parity Claims");
     println!(
-        "Product truth is the no-oracle tier: `cargo test --test golden_no_oracle --release`."
+        "Product truth is the no-oracle product tier: `cargo test --test golden_no_oracle --release`."
     );
-    println!("Current no-oracle baseline: 5,005/11,251 eligible SVG goldens pass (44.5%).");
+    println!("Current no-oracle baseline: 6,801/11,251 eligible SVG goldens pass (60.4%).");
     println!(
-        "The strict tier is oracle-assisted: `cargo test --test golden_pairs` currently passes 11,251/11,251 eligible SVG goldens."
+        "The strict tier is oracle-assisted: `cargo test --test golden_pairs` currently passes 11,130/11,251 eligible SVG goldens."
     );
     println!("The 1,199 Java PlantUML error-page goldens are skips, not headline pass claims.");
     println!();

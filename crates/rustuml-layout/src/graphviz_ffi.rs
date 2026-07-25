@@ -82,6 +82,12 @@ unsafe extern "C" {
         val: *const c_char,
         def: *const c_char,
     ) -> c_int;
+    pub fn agsafeset_html(
+        obj: *mut c_void,
+        name: *const c_char,
+        val: *const c_char,
+        def: *const c_char,
+    ) -> c_int;
 
     // ── Layout ──
     pub fn gvLayout(gvc: *mut GVC_t, g: *mut Agraph_t, engine: *const c_char) -> c_int;

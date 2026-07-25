@@ -14,6 +14,7 @@
 
 #include <common/render.h>
 #include <common/htmltable.h>
+#include <rustuml_helpers.h>
 #include <limits.h>
 #include <stdbool.h>
 #include <stddef.h>
@@ -145,7 +146,7 @@ textlabel_t *make_label(void *obj, char *str, bool is_html, bool is_record,
     else if (is_html) {
 	rv->text = gv_strdup(str);
 	rv->html = true;
-	if (make_html_label(obj, rv)) {
+	if (!rustuml_make_fixed_html_table_label(rv) && make_html_label(obj, rv)) {
 	    switch (agobjkind(obj)) {
 	    case AGRAPH:
 	        agerr(AGPREV, "in label of graph %s\n",agnameof(sg));

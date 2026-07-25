@@ -275,19 +275,29 @@ fn docs_name_the_product_truth_metric_and_error_skips() {
     let baseline = read_baseline();
     let total_pass: usize = baseline.values().map(|(pass, _)| pass).sum();
     let total_eligible: usize = baseline.values().map(|(_, eligible)| eligible).sum();
-    assert_eq!((total_pass, total_eligible), (6_698, 11_251));
+    assert_eq!((total_pass, total_eligible), (6_801, 11_251));
 
     let readme = std::fs::read_to_string(repo_root().join("README.md")).expect("read README");
     let stability =
         std::fs::read_to_string(repo_root().join("STABILITY.md")).expect("read STABILITY");
-    for (name, text) in [("README.md", readme), ("STABILITY.md", stability)] {
+    let help_agent = std::fs::read_to_string(repo_root().join("crates/rustuml/src/main.rs"))
+        .expect("read CLI source");
+    for (name, text) in [
+        ("README.md", readme),
+        ("STABILITY.md", stability),
+        ("--help-agent", help_agent),
+    ] {
         assert!(
             text.contains("no-oracle product tier"),
             "{name} must identify no-oracle as the product metric"
         );
         assert!(
-            text.contains("6,698/11,251"),
+            text.contains("6,801/11,251"),
             "{name} must carry the current no-oracle total from the baseline"
+        );
+        assert!(
+            text.contains("11,130/11,251"),
+            "{name} must carry the current strict-tier total"
         );
         assert!(
             text.contains("1,199 Java"),

@@ -294,6 +294,16 @@ impl LayoutGraph {
             rankdir_val.as_ptr(),
             empty.as_ptr(),
         );
+        for (key, value) in [("remincross", "true"), ("searchsize", "500")] {
+            let key = CString::new(key).unwrap();
+            let value = CString::new(value).unwrap();
+            graphviz_ffi::agsafeset(
+                g as *mut c_void,
+                key.as_ptr(),
+                value.as_ptr(),
+                empty.as_ptr(),
+            );
+        }
 
         if let Some(spacing) = self.spacing {
             let nodesep_key = CString::new("nodesep").unwrap();
@@ -335,16 +345,9 @@ impl LayoutGraph {
         let tailport_key = CString::new("tailport").unwrap();
         let headlabel_key = CString::new("headlabel").unwrap();
         let taillabel_key = CString::new("taillabel").unwrap();
-        let label_width_key = CString::new("rustuml_label_width").unwrap();
-        let label_height_key = CString::new("rustuml_label_height").unwrap();
-        let tail_label_width_key = CString::new("rustuml_tail_label_width").unwrap();
-        let tail_label_height_key = CString::new("rustuml_tail_label_height").unwrap();
-        let head_label_width_key = CString::new("rustuml_head_label_width").unwrap();
-        let head_label_height_key = CString::new("rustuml_head_label_height").unwrap();
         let external_endpoint_labels_key =
             CString::new("rustuml_external_endpoint_labels").unwrap();
         let true_val = CString::new("true").unwrap();
-        let placeholder_label_val = CString::new(" ").unwrap();
         let no_arrow_val = CString::new("none").unwrap();
 
         for spec in &self.nodes {
@@ -354,8 +357,8 @@ impl LayoutGraph {
             // Graphviz uses inches for width/height.
             let w_inches = spec.width / DOT_POINTS_PER_INCH;
             let h_inches = spec.height / DOT_POINTS_PER_INCH;
-            let w_str = CString::new(format!("{w_inches:.4}")).unwrap();
-            let h_str = CString::new(format!("{h_inches:.4}")).unwrap();
+            let w_str = CString::new(format!("{w_inches:.6}")).unwrap();
+            let h_str = CString::new(format!("{h_inches:.6}")).unwrap();
 
             graphviz_ffi::agsafeset(
                 node as *mut c_void,
@@ -475,45 +478,17 @@ impl LayoutGraph {
                     empty.as_ptr(),
                 );
             }
-            for (label_key, width_key, height_key, size) in [
-                (
-                    &label_key,
-                    &label_width_key,
-                    &label_height_key,
-                    edge_spec.label_size,
-                ),
-                (
-                    &taillabel_key,
-                    &tail_label_width_key,
-                    &tail_label_height_key,
-                    edge_spec.tail_label_size,
-                ),
-                (
-                    &headlabel_key,
-                    &head_label_width_key,
-                    &head_label_height_key,
-                    edge_spec.head_label_size,
-                ),
+            for (label_key, color, size) in [
+                (&label_key, "#000001", edge_spec.label_size),
+                (&taillabel_key, "#000002", edge_spec.tail_label_size),
+                (&headlabel_key, "#000003", edge_spec.head_label_size),
             ] {
                 let Some(size) = size else { continue };
-                let width_val = CString::new(size.width.max(1.0).to_string()).unwrap();
-                let height_val = CString::new(size.height.max(1.0).to_string()).unwrap();
-                graphviz_ffi::agsafeset(
+                let table = CString::new(edge_label_table(size, color)).unwrap();
+                graphviz_ffi::agsafeset_html(
                     edge as *mut c_void,
                     label_key.as_ptr(),
-                    placeholder_label_val.as_ptr(),
-                    empty.as_ptr(),
-                );
-                graphviz_ffi::agsafeset(
-                    edge as *mut c_void,
-                    width_key.as_ptr(),
-                    width_val.as_ptr(),
-                    empty.as_ptr(),
-                );
-                graphviz_ffi::agsafeset(
-                    edge as *mut c_void,
-                    height_key.as_ptr(),
-                    height_val.as_ptr(),
+                    table.as_ptr(),
                     empty.as_ptr(),
                 );
             }
@@ -767,6 +742,17 @@ fn dot_inches(pixel: f64) -> String {
     format!("{:.6}", pixel / DOT_POINTS_PER_INCH)
 }
 
+/// PlantUML `SvekEdge.appendTable` passes integer-truncated renderer dimensions
+/// to dot as a fixed-size HTML table. The unique fill is how Java later locates
+/// the solved table origin in Graphviz's SVG; Rust reads the solved box directly.
+fn edge_label_table(size: EdgeLabelSize, color: &str) -> String {
+    let width = size.width.max(1.0) as u64;
+    let height = size.height.max(1.0) as u64;
+    format!(
+        r#"<TABLE BGCOLOR="{color}" FIXEDSIZE="TRUE" WIDTH="{width}" HEIGHT="{height}"><TR><TD></TD></TR></TABLE>"#
+    )
+}
+
 /// Full layout result with both node positions and edge routing.
 #[derive(Debug, Clone)]
 pub struct LayoutResult {
@@ -945,6 +931,28 @@ mod tests {
         assert!(edge.tail_label.is_some());
         assert!(edge.head_label.is_some());
         assert!(labeled_result.width > plain_result.width);
+    }
+
+    #[test]
+    fn sized_edge_labels_use_integer_truncated_html_table_dimensions() {
+        let mut graph = LayoutGraph::new(Direction::TopToBottom);
+        graph.add_node("renamed_a", "A", 40.0, 48.0);
+        graph.add_node("renamed_b", "B", 40.0, 48.0);
+        graph.add_edge_with_label_sizes(
+            "renamed_a",
+            "renamed_b",
+            Some(EdgeLabelSize {
+                width: 25.9,
+                height: 15.9,
+            }),
+            None,
+            None,
+        );
+
+        let result = graph.layout_full_no_timeout();
+        let label = result.edge_paths[0].label.unwrap();
+        assert_eq!(label.width, 25.0);
+        assert_eq!(label.height, 15.0);
     }
 
     #[test]

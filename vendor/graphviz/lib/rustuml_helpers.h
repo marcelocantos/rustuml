@@ -53,8 +53,9 @@ int rustuml_edge_label_box(Agedge_t *e, int kind,
                            double *x, double *y,
                            double *width, double *height);
 
-// Apply renderer-measured dimensions carried in rustuml_* edge attributes.
-void rustuml_override_edge_label_dimensions(Agedge_t *e);
+// Apply the dimensions of RustUML's generated empty fixed-size HTML table.
+// Returns 1 only for the exact internal placeholder shape.
+int rustuml_make_fixed_html_table_label(textlabel_t *label);
 
 #ifdef __cplusplus
 }

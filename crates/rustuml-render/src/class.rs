@@ -212,45 +212,21 @@ const ARROW_POLYGON_HALF_WIDTH: f64 = 4.0;
 /// Java `SvekEdge` measures relationship, cardinality, and role labels with the
 /// arrow font before passing fixed-size HTML-table placeholders to Graphviz.
 const RELATIONSHIP_LABEL_FONT_SIZE: f64 = 13.0;
-const RELATIONSHIP_LABEL_MARGIN_X: f64 = 1.0;
-/// Standalone center/endpoint tables contribute a one-pixel outer edge.
-/// When endpoint roles share a corridor with a center label, Smetana also
-/// applies the default 2px cell padding on each side (5px total chrome).
-const RELATIONSHIP_CENTER_TABLE_EDGE: f64 = 1.0;
-const RELATIONSHIP_ENDPOINT_TABLE_EDGE: f64 = 1.0;
-const COMBINED_ENDPOINT_TABLE_CHROME: f64 = 5.0;
-const RELATIONSHIP_TABLE_HEIGHT_EDGES: f64 = 2.0;
+/// `SvekEdge.addVisibilityModifier` wraps center labels in a one-pixel shield.
+const RELATIONSHIP_LABEL_MARGIN: f64 = 1.0;
 /// Java `TextBlockArrow2` reserves one font-size square before the label. Its
 /// triangle size is `(int)(fontSize * .80)`, hence 10px at the 13px arrow font.
 const LINK_ARROW_BLOCK_SIZE: f64 = RELATIONSHIP_LABEL_FONT_SIZE;
 const LINK_ARROW_TRIANGLE_SIZE: f64 = 10.0;
-/// Extracted from the Smetana edge-label metrics matrix (aggregation,
-/// dependency, inheritance; both directions): center-label baselines sit one
-/// quarter pixel above the raw dot control-point convention.
-const RELATIONSHIP_LABEL_BASELINE_BIAS: f64 = 0.25;
-/// The same matrix shows Smetana's endpoint anchor solver advancing one eighth
-/// pixel beyond the measured text-block height along the local tangent.
-const ENDPOINT_LABEL_ANCHOR_BIAS: f64 = 0.125;
-/// Smetana `placeLabels` rounds tail/head external-label x anchors
-/// asymmetrically. Values are extracted across the arrowhead multiplicity
-/// matrix, including reversed links.
-const ENDPOINT_TAIL_LABEL_X_BIAS: f64 = 0.05;
-const ENDPOINT_HEAD_LABEL_X_BIAS: f64 = 0.25;
-/// When a middle label shares the corridor with endpoint roles, Smetana's
-/// collision pass moves the tail anchor outward by a quarter pixel and the
-/// head anchor inward by 0.16px. Extracted across all 16 role fixtures.
-const COMBINED_TAIL_LABEL_ANCHOR_BIAS: f64 = -0.25;
-const COMBINED_HEAD_LABEL_ANCHOR_BIAS: f64 = 0.16;
-/// Extracted across the role matrix: Smetana's combined head-role box rounds
-/// 0.087px left of the integer external-label envelope.
-const COMBINED_HEAD_LABEL_X_BIAS: f64 = -0.087;
 /// `SvekResult.drawU` normalises a label-bearing SVEK envelope at x=6 rather
 /// than the ordinary entity margin at x=7.
 const SVEK_LABEL_ENVELOPE_MARGIN: f64 = 6.0;
-/// With the full Smetana center-table chrome, the combined center/endpoint
-/// label matrix solves 2.2162px to the right of Java's final SVEK envelope.
-/// This normalization is extracted across all relationship kinds/directions.
-const COMBINED_LABEL_LAYOUT_X_BIAS: f64 = -2.2162;
+/// `SvekEdge.manageCollision` expands each node by eight pixels before moving
+/// intersecting endpoint-label rectangles away from it.
+const ENDPOINT_LABEL_COLLISION_MARGIN: f64 = 8.0;
+const COLLISION_INITIAL_COEFFICIENT: f64 = 0.1;
+const COLLISION_SEARCH_STEPS: usize = 5;
+const COLLISION_MAX_DOUBLINGS: usize = 64;
 /// document.title style: Padding 5 + Margin 5 on each side.
 const DECORATION_TITLE_INSET: f64 = 10.0;
 /// document.caption style: Padding 0 + Margin 1 on each side.
@@ -1678,30 +1654,20 @@ pub fn render_with_oracle(
                 } else {
                     LINK_ARROW_BLOCK_SIZE
                 }
-                + 2.0 * RELATIONSHIP_LABEL_MARGIN_X
-                + RELATIONSHIP_CENTER_TABLE_EDGE,
+                + 2.0 * RELATIONSHIP_LABEL_MARGIN,
             height: (rel
                 .label
                 .as_deref()
                 .map(|label| text_render::label_height(label, RELATIONSHIP_LABEL_FONT_SIZE))
                 .unwrap_or(0.0)
                 .max(LINK_ARROW_BLOCK_SIZE)
-                + RELATIONSHIP_TABLE_HEIGHT_EDGES)
+                + 2.0 * RELATIONSHIP_LABEL_MARGIN)
                 .floor(),
         });
-        let endpoint_table_chrome = if has_center_label {
-            COMBINED_ENDPOINT_TABLE_CHROME
-        } else {
-            RELATIONSHIP_ENDPOINT_TABLE_EDGE
-        };
         let endpoint_size = |label: Option<&str>| {
             label.map(|label| EdgeLabelSize {
-                width: (text_render::measure(label, RELATIONSHIP_LABEL_FONT_SIZE, false)
-                    + endpoint_table_chrome)
-                    .floor(),
-                height: (text_render::label_height(label, RELATIONSHIP_LABEL_FONT_SIZE)
-                    + RELATIONSHIP_TABLE_HEIGHT_EDGES)
-                    .floor(),
+                width: text_render::measure(label, RELATIONSHIP_LABEL_FONT_SIZE, false).floor(),
+                height: text_render::label_height(label, RELATIONSHIP_LABEL_FONT_SIZE).floor(),
             })
         };
         layout.add_edge_with_label_sizes(
@@ -1772,8 +1738,16 @@ pub fn render_with_oracle(
                 point.0 += note_dx;
                 point.1 += note_dy;
             }
+            for label in [&mut path.label, &mut path.tail_label, &mut path.head_label]
+                .into_iter()
+                .flatten()
+            {
+                label.x += note_dx;
+                label.y += note_dy;
+            }
         }
     }
+    resolve_endpoint_label_collisions(diagram, &result.node_positions, &mut result.edge_paths);
 
     // Phase 3: Render with PlantUML-compatible SVG structure.
     render_plantuml_svg(
@@ -2637,7 +2611,7 @@ fn render_plantuml_svg(
         .filter_map(|sp| sp.value.trim().parse::<f64>().ok())
         .next_back();
 
-    let layout_x_bias = combined_label_layout_x_bias(diagram);
+    let layout_x_bias = svek_layout_x_bias(positions, cluster_positions, edge_paths);
 
     // Compute entity positions (offset from layout).
     let entity_positions: Vec<(f64, f64)> = (0..diagram.entities.len())
@@ -2704,7 +2678,9 @@ fn render_plantuml_svg(
             else {
                 continue;
             };
-            let (x, _) = edge_midpoint(&edge.points);
+            let Some(position) = edge.label else {
+                continue;
+            };
             let text_width = relationship
                 .label
                 .as_deref()
@@ -2716,9 +2692,10 @@ fn render_plantuml_svg(
                 LINK_ARROW_BLOCK_SIZE
             };
             max_x = max_x.max(
-                x + MARGIN
+                position.x
+                    + MARGIN
                     + layout_x_bias
-                    + 2.0 * RELATIONSHIP_LABEL_MARGIN_X
+                    + 2.0 * RELATIONSHIP_LABEL_MARGIN
                     + arrow_width
                     + text_width,
             );
@@ -3198,7 +3175,7 @@ fn render_plantuml_svg(
                 .iter()
                 .find(|ep| ep.from == rel.from && ep.to == rel.to);
             if let Some(ep) = edge_path {
-                render_relationship_svg(&mut svg, rel, ep, diagram, ent_id);
+                render_relationship_svg(&mut svg, rel, ep, diagram, ent_id, layout_x_bias);
                 ent_id += 1;
             }
         }
@@ -6546,6 +6523,7 @@ fn render_relationship_svg(
     edge_path: &EdgePath,
     diagram: &ClassDiagram,
     ent_id: usize,
+    layout_x_bias: f64,
 ) {
     if edge_path.points.is_empty() {
         return;
@@ -6592,7 +6570,6 @@ fn render_relationship_svg(
         ""
     };
 
-    let layout_x_bias = combined_label_layout_x_bias(diagram);
     let edge_points: Vec<(f64, f64)> = edge_path
         .points
         .iter()
@@ -6726,110 +6703,58 @@ fn render_relationship_svg(
         );
     };
 
-    if relationship_has_center_label(rel) {
-        let (x, y) = edge_midpoint(&edge_path.points);
-        let label_x = x + MARGIN + layout_x_bias + RELATIONSHIP_LABEL_MARGIN_X;
-        let label_baseline = y - 4.0 - RELATIONSHIP_LABEL_BASELINE_BIAS;
+    if relationship_has_center_label(rel)
+        && let Some(position) = edge_path.label
+    {
+        let block_x = position.x + MARGIN + layout_x_bias + RELATIONSHIP_LABEL_MARGIN;
+        let block_y = position.y + MARGIN + RELATIONSHIP_LABEL_MARGIN;
         if rel.label_arrow != LinkArrow::None {
-            let block_top = rel
+            let content_height = rel
                 .label
                 .as_deref()
-                .map(|label| {
-                    label_baseline - text_render::label_ascent(label, RELATIONSHIP_LABEL_FONT_SIZE)
-                        + (text_render::label_height(label, RELATIONSHIP_LABEL_FONT_SIZE)
-                            - LINK_ARROW_BLOCK_SIZE)
-                            / 2.0
-                })
-                .unwrap_or(label_baseline - LINK_ARROW_BLOCK_SIZE);
-            emit_link_arrow(
-                svg,
-                rel.label_arrow,
-                &edge_points,
-                label_x - RELATIONSHIP_LABEL_MARGIN_X,
-                block_top,
-            );
+                .map(|label| text_render::label_height(label, RELATIONSHIP_LABEL_FONT_SIZE))
+                .unwrap_or(0.0)
+                .max(LINK_ARROW_BLOCK_SIZE);
+            let block_top = block_y + (content_height - LINK_ARROW_BLOCK_SIZE) / 2.0;
+            emit_link_arrow(svg, rel.label_arrow, &edge_points, block_x, block_top);
         }
         if let Some(label) = rel.label.as_deref() {
             emit_label(
                 svg,
                 label,
-                None,
-                RELATIONSHIP_LABEL_MARGIN_X,
-                (
-                    label_x
+                Some(rustuml_layout::graph::EdgeLabelPosition {
+                    x: position.x
                         + if rel.label_arrow == LinkArrow::None {
                             0.0
                         } else {
                             LINK_ARROW_BLOCK_SIZE
                         },
-                    label_baseline,
-                ),
+                    y: position.y + RELATIONSHIP_LABEL_MARGIN,
+                    width: position.width,
+                    height: position.height,
+                }),
+                RELATIONSHIP_LABEL_MARGIN + layout_x_bias,
+                (0.0, 0.0),
             );
         }
     }
-    // Smetana's `postproc__c.addXLabels` hands endpoint labels to
-    // `placeLabels` with the spline contacts as anchors. In the unobstructed
-    // corridor, each label center advances one measured text-block height
-    // inward along the local edge tangent.
     if let Some(label) = rel.from_multiplicity.as_deref() {
-        let label_height = text_render::label_height(label, RELATIONSHIP_LABEL_FONT_SIZE);
-        let combined_labels = relationship_has_center_label(rel);
-        let anchor_offset = label_height
-            + if combined_labels {
-                COMBINED_TAIL_LABEL_ANCHOR_BIAS
-            } else {
-                ENDPOINT_LABEL_ANCHOR_BIAS
-            };
-        let center = edge_points
-            .first()
-            .zip(edge_points.get(1))
-            .map(|(&start, &next)| add(start, scale(unit_vector(start, next), anchor_offset)))
-            .unwrap_or((0.0, 0.0));
-        let fallback_x = edge_points.first().map(|point| point.0).unwrap_or(0.0);
-        let x = edge_path
-            .tail_label
-            .map(|position| {
-                position.x
-                    + if combined_labels {
-                        SVEK_LABEL_ENVELOPE_MARGIN
-                    } else {
-                        MARGIN + ENDPOINT_TAIL_LABEL_X_BIAS
-                    }
-            })
-            .unwrap_or(fallback_x);
-        let y = center.1 - label_height / 2.0
-            + text_render::label_ascent(label, RELATIONSHIP_LABEL_FONT_SIZE);
-        emit_label(svg, label, None, 0.0, (x, y));
+        emit_label(
+            svg,
+            label,
+            edge_path.tail_label,
+            layout_x_bias,
+            edge_points.first().copied().unwrap_or((0.0, 0.0)),
+        );
     }
     if let Some(label) = rel.to_multiplicity.as_deref() {
-        let label_height = text_render::label_height(label, RELATIONSHIP_LABEL_FONT_SIZE);
-        let combined_labels = relationship_has_center_label(rel);
-        let anchor_offset = label_height
-            + if combined_labels {
-                COMBINED_HEAD_LABEL_ANCHOR_BIAS
-            } else {
-                ENDPOINT_LABEL_ANCHOR_BIAS
-            };
-        let center = edge_points
-            .last()
-            .zip(edge_points.iter().rev().nth(1))
-            .map(|(&end, &previous)| add(end, scale(unit_vector(end, previous), anchor_offset)))
-            .unwrap_or((0.0, 0.0));
-        let fallback_x = edge_points.last().map(|point| point.0).unwrap_or(0.0);
-        let x = edge_path
-            .head_label
-            .map(|position| {
-                position.x
-                    + if combined_labels {
-                        SVEK_LABEL_ENVELOPE_MARGIN + COMBINED_HEAD_LABEL_X_BIAS
-                    } else {
-                        MARGIN + ENDPOINT_HEAD_LABEL_X_BIAS
-                    }
-            })
-            .unwrap_or(fallback_x);
-        let y = center.1 - label_height / 2.0
-            + text_render::label_ascent(label, RELATIONSHIP_LABEL_FONT_SIZE);
-        emit_label(svg, label, None, 0.0, (x, y));
+        emit_label(
+            svg,
+            label,
+            edge_path.head_label,
+            layout_x_bias,
+            edge_points.last().copied().unwrap_or((0.0, 0.0)),
+        );
     }
 
     svg.push_str("</g>");
@@ -7035,19 +6960,126 @@ fn no_oracle_entity_id(diagram: &ClassDiagram, id: &str) -> String {
         .unwrap_or_else(|| "ent0002".to_string())
 }
 
-fn edge_midpoint(points: &[(f64, f64)]) -> (f64, f64) {
-    points.get(points.len() / 2).copied().unwrap_or(points[0])
+fn resolve_endpoint_label_collisions(
+    diagram: &ClassDiagram,
+    nodes: &[NodePosition],
+    edge_paths: &mut [EdgePath],
+) {
+    let mut cursor = 0;
+    for relationship in &diagram.relationships {
+        let Some(relative_idx) = edge_paths[cursor..]
+            .iter()
+            .position(|edge| edge.from == relationship.from && edge.to == relationship.to)
+        else {
+            continue;
+        };
+        let edge_idx = cursor + relative_idx;
+        cursor = edge_idx + 1;
+        let edge = &mut edge_paths[edge_idx];
+
+        for (position, label) in [
+            (
+                &mut edge.tail_label,
+                relationship.from_multiplicity.as_deref(),
+            ),
+            (
+                &mut edge.head_label,
+                relationship.to_multiplicity.as_deref(),
+            ),
+        ] {
+            let (Some(position), Some(label)) = (position.as_mut(), label) else {
+                continue;
+            };
+            position.width = text_render::measure(label, RELATIONSHIP_LABEL_FONT_SIZE, false);
+            position.height = text_render::label_height(label, RELATIONSHIP_LABEL_FONT_SIZE);
+            for node in nodes {
+                move_label_away_from_node(position, node);
+            }
+        }
+    }
 }
 
-fn combined_label_layout_x_bias(diagram: &ClassDiagram) -> f64 {
-    if diagram.relationships.iter().any(|relationship| {
-        relationship_has_center_label(relationship)
-            && (relationship.from_multiplicity.is_some() || relationship.to_multiplicity.is_some())
-    }) {
-        COMBINED_LABEL_LAYOUT_X_BIAS
-    } else {
-        0.0
+fn move_label_away_from_node(
+    label: &mut rustuml_layout::graph::EdgeLabelPosition,
+    node: &NodePosition,
+) {
+    let fixed = (
+        node.x - ENDPOINT_LABEL_COLLISION_MARGIN,
+        node.y - ENDPOINT_LABEL_COLLISION_MARGIN,
+        node.width + 2.0 * ENDPOINT_LABEL_COLLISION_MARGIN,
+        node.height + 2.0 * ENDPOINT_LABEL_COLLISION_MARGIN,
+    );
+    if !rectangles_intersect(fixed, (label.x, label.y, label.width, label.height)) {
+        return;
     }
+
+    let delta_x = label.x + label.width / 2.0 - (fixed.0 + fixed.2 / 2.0);
+    let delta_y = label.y + label.height / 2.0 - (fixed.1 + fixed.3 / 2.0);
+    if delta_x == 0.0 && delta_y == 0.0 {
+        return;
+    }
+
+    let intersects_at = |coefficient: f64| {
+        rectangles_intersect(
+            fixed,
+            (
+                label.x + delta_x * coefficient,
+                label.y + delta_y * coefficient,
+                label.width,
+                label.height,
+            ),
+        )
+    };
+    let mut min = 0.0;
+    let mut max = COLLISION_INITIAL_COEFFICIENT;
+    for _ in 0..COLLISION_MAX_DOUBLINGS {
+        if !intersects_at(max) {
+            break;
+        }
+        max *= 2.0;
+    }
+    for _ in 0..COLLISION_SEARCH_STEPS {
+        let candidate = (min + max) / 2.0;
+        if intersects_at(candidate) {
+            min = candidate;
+        } else {
+            max = candidate;
+        }
+    }
+    let coefficient = (min + max) / 2.0;
+    label.x += delta_x * coefficient;
+    label.y += delta_y * coefficient;
+}
+
+fn rectangles_intersect(first: (f64, f64, f64, f64), second: (f64, f64, f64, f64)) -> bool {
+    first.0 < second.0 + second.2
+        && first.0 + first.2 > second.0
+        && first.1 < second.1 + second.3
+        && first.1 + first.3 > second.1
+}
+
+fn svek_layout_x_bias(
+    positions: &[NodePosition],
+    cluster_positions: &[ClusterPosition],
+    edge_paths: &[EdgePath],
+) -> f64 {
+    let min_x = positions
+        .iter()
+        .map(|position| position.x)
+        .chain(cluster_positions.iter().map(|position| position.x))
+        .chain(
+            edge_paths
+                .iter()
+                .flat_map(|edge| edge.points.iter().map(|point| point.0)),
+        )
+        .chain(edge_paths.iter().flat_map(|edge| {
+            [edge.label, edge.tail_label, edge.head_label]
+                .into_iter()
+                .flatten()
+                .map(|label| label.x)
+        }))
+        .fold(0.0_f64, f64::min);
+    (SVEK_LABEL_ENVELOPE_MARGIN - min_x).max(MARGIN) - MARGIN
 }
 
 fn relationship_has_center_label(relationship: &Relationship) -> bool {
@@ -8437,12 +8469,17 @@ mod tests {
             start_point: None,
             has_end_arrow: false,
             end_point: None,
-            label: None,
+            label: Some(rustuml_layout::graph::EdgeLabelPosition {
+                x: 40.0,
+                y: 90.0,
+                width: 109.0,
+                height: 17.0,
+            }),
             tail_label: None,
             head_label: None,
         };
         let mut svg = String::new();
-        render_relationship_svg(&mut svg, &rel, &edge_path, &diagram, 4);
+        render_relationship_svg(&mut svg, &rel, &edge_path, &diagram, 4, 0.0);
 
         assert!(svg.contains(r#"data-link-type="crowfoot""#));
         assert!(svg.contains(r#"id="Animal-Dog""#));
@@ -8461,6 +8498,39 @@ mod tests {
         assert!(svg.contains(">renamed flow</text>"));
         assert!(!svg.contains("renamed flow &gt;"));
         assert_eq!(svg.matches("<polygon ").count(), 1);
+    }
+
+    #[test]
+    fn renamed_endpoint_roles_expand_the_svek_envelope() {
+        let plain = rustuml_parser::parse::parse(
+            "@startuml\nclass PerturbedAlpha\nclass PerturbedBeta\nPerturbedAlpha o-- PerturbedBeta : relationship\n@enduml",
+        )
+        .unwrap();
+        let with_roles = rustuml_parser::parse::parse(
+            "@startuml\nclass PerturbedAlpha\nclass PerturbedBeta\nPerturbedAlpha \"upstream-role-renamed\" o-- \"downstream-role-renamed\" PerturbedBeta : relationship\n@enduml",
+        )
+        .unwrap();
+
+        let plain_svg = crate::render_svg(&plain);
+        let roles_svg = crate::render_svg(&with_roles);
+        let text_x = |svg: &str, text: &str| {
+            let end = svg.find(&format!(">{text}</text>")).unwrap();
+            let start = svg[..end].rfind("<text ").unwrap();
+            attr_value(&svg[start..end], "x")
+                .unwrap()
+                .parse::<f64>()
+                .unwrap()
+        };
+
+        assert!(plain_svg.contains(">relationship</text>"));
+        assert!(roles_svg.contains(">upstream-role-renamed</text>"));
+        assert!(roles_svg.contains(">downstream-role-renamed</text>"));
+        let leftmost_role_x = text_x(&roles_svg, "upstream-role-renamed")
+            .min(text_x(&roles_svg, "downstream-role-renamed"));
+        assert!(
+            (leftmost_role_x - SVEK_LABEL_ENVELOPE_MARGIN).abs() < 0.01,
+            "the leftmost collision-moved role must normalize to the SVEK margin"
+        );
     }
 
     #[test]

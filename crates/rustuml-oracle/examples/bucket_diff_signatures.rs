@@ -3,7 +3,7 @@
 
 //! Aggregate first-diff signatures across a golden bucket, mirroring the
 //! golden_pairs harness oracle-extraction logic exactly.
-//! Usage: cargo run --release -p rustuml-oracle --example bucket_diff_signatures -- <bucket> [max]
+//! Usage: cargo run --release -p rustuml-oracle --example bucket_diff_signatures -- [--no-oracle] <bucket> [max]
 
 use rustuml_oracle::compare;
 use std::collections::HashMap;
@@ -101,12 +101,14 @@ fn coarse(sig: &str) -> String {
 fn main() {
     unsafe { std::env::set_var("RUSTUML_DEBUG", "date=1774210426000,tz=AEDT+1100") };
     std::panic::set_hook(Box::new(|_| {}));
-    let args: Vec<_> = std::env::args().collect();
-    let bucket_name = args
-        .get(1)
-        .cloned()
+    let args: Vec<_> = std::env::args().skip(1).collect();
+    let no_oracle = args.iter().any(|arg| arg == "--no-oracle");
+    let positional: Vec<_> = args.iter().filter(|arg| !arg.starts_with("--")).collect();
+    let bucket_name = positional
+        .first()
+        .map(|arg| (*arg).clone())
         .unwrap_or_else(|| "activity".to_string());
-    let max: usize = args.get(2).and_then(|s| s.parse().ok()).unwrap_or(0);
+    let max: usize = positional.get(1).and_then(|s| s.parse().ok()).unwrap_or(0);
 
     let root = golden_dir();
     let bucket = root.join(&bucket_name);
@@ -146,7 +148,7 @@ fn main() {
         let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
             let blocks = rustuml_parser::parse::split_blocks(&source);
             let is_multi_block = blocks.len() > 1;
-            let oracle = if golden.contains("<?plantuml ") {
+            let oracle = if !no_oracle && golden.contains("<?plantuml ") {
                 rustuml_oracle::extract::extract_oracle_layout(&golden)
             } else {
                 None
@@ -154,11 +156,19 @@ fn main() {
             let rust_svg = if is_multi_block {
                 let b =
                     rustuml_parser::parse::parse_block(&source, 0).map_err(|e| format!("{e}"))?;
-                rustuml_render::render_svg_with_oracle(&b, oracle.as_ref())
+                if no_oracle {
+                    rustuml_render::render_svg(&b)
+                } else {
+                    rustuml_render::render_svg_with_oracle(&b, oracle.as_ref())
+                }
             } else {
                 let d = rustuml_parser::parse::parse_auto_with_base(&source, None)
                     .map_err(|e| format!("{e}"))?;
-                rustuml_render::render_svg_with_oracle(&d, oracle.as_ref())
+                if no_oracle {
+                    rustuml_render::render_svg(&d)
+                } else {
+                    rustuml_render::render_svg_with_oracle(&d, oracle.as_ref())
+                }
             };
             let cmp =
                 compare::compare_svg_strict(&golden, &rust_svg).map_err(|e| format!("cmp: {e}"))?;
@@ -208,7 +218,8 @@ fn main() {
         }
     }
 
-    println!("\n=== {bucket_name}: {failed}/{total} failures ===");
+    let tier = if no_oracle { "no-oracle" } else { "strict" };
+    println!("\n=== {bucket_name} ({tier}): {failed}/{total} failures ===");
     println!("\n-- first-diff signature buckets --");
     let mut sigs: Vec<_> = sig_count.iter().collect();
     sigs.sort_by(|a, b| b.1.cmp(a.1));
