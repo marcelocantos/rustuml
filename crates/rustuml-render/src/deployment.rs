@@ -73,6 +73,9 @@ const TITLE_MARGIN_X: f64 = 10.0;
 const TITLE_RIGHT_PAD: f64 = 7.0;
 const TITLE_TOP_PAD: f64 = 10.0;
 const TITLE_LINE_H: f64 = 16.48828125;
+const TITLE_BOTTOM_PAD: f64 = 11.0;
+/// `DisplayPositioned.createRibbon` adds one pixel below header/footer text.
+const CAPTION_BOTTOM_PAD: f64 = 1.0;
 
 /// Baseline-y offset within the entity bounding box for a text line.
 ///
@@ -3437,7 +3440,7 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
         &laid_out_note_indices,
         result.as_ref(),
     );
-    let body_margin_y = cluster_frame
+    let mut body_margin_y = cluster_frame
         .map(|frame| frame.margin_y)
         .or_else(|| y_frame.map(|frame| frame.margin))
         .unwrap_or_else(|| deployment_body_margin_y(diagram, &dims, result.as_ref()));
@@ -3448,30 +3451,23 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
         &laid_out_note_indices,
         result.as_ref(),
     );
-    let body_margin_x = x_frame
+    let mut body_margin_x = x_frame
         .map(|frame| frame.margin)
         .or_else(|| cluster_frame.map(|frame| frame.margin_x))
         .unwrap_or(BODY_FALLBACK_MARGIN_X);
-    let (rects, content_w, content_h) = layout_deployment_rects(
+    let (mut rects, content_w, content_h) = layout_deployment_rects(
         diagram,
         &dims,
         result.as_ref(),
         body_margin_x,
         body_margin_y,
     );
-    let cluster_rects: HashMap<&str, LayoutRect> = diagram
-        .nodes
-        .iter()
-        .zip(&rects)
-        .filter(|(node, _)| cluster_ids.contains(node.id.as_str()))
-        .map(|(node, rect)| (node.id.as_str(), *rect))
-        .collect();
     let leaf_count = diagram
         .nodes
         .iter()
         .filter(|node| !cluster_ids.contains(node.id.as_str()))
         .count();
-    let note_layouts: Vec<DeploymentNoteLayout> = result
+    let mut note_layouts: Vec<DeploymentNoteLayout> = result
         .as_ref()
         .map(|result| {
             laid_out_note_indices
@@ -3519,6 +3515,26 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
             })
         })
         .unwrap_or(content_h + BODY_BOTTOM_MARGIN);
+    let chrome = deployment_chrome_layout(diagram, total_w, total_h);
+    body_margin_x += chrome.body_dx;
+    body_margin_y += chrome.body_dy;
+    for rect in &mut rects {
+        rect.x += chrome.body_dx;
+        rect.y += chrome.body_dy;
+    }
+    for note in &mut note_layouts {
+        note.x += chrome.body_dx;
+        note.y += chrome.body_dy;
+    }
+    let total_w = chrome.canvas_width;
+    let total_h = chrome.canvas_height;
+    let cluster_rects: HashMap<&str, LayoutRect> = diagram
+        .nodes
+        .iter()
+        .zip(&rects)
+        .filter(|(node, _)| cluster_ids.contains(node.id.as_str()))
+        .map(|(node, rect)| (node.id.as_str(), *rect))
+        .collect();
 
     let mut oracle = OracleLayout::default();
     let qnames = deployment_qnames(diagram, &parent_of);
@@ -3560,6 +3576,7 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
     };
 
     let mut svg = SvgBuilder::new_plantuml(total_w, total_h, "DESCRIPTION");
+    emit_deployment_chrome_top(&mut svg, diagram, &chrome);
     let all_children: HashSet<&str> = diagram
         .nodes
         .iter()
@@ -3638,7 +3655,157 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
             &cluster_rects,
         );
     }
+    emit_deployment_chrome_bottom(&mut svg, diagram, &chrome);
     svg.finalize_plantuml()
+}
+
+#[derive(Clone, Copy)]
+struct DeploymentChromeLayout {
+    body_dx: f64,
+    body_dy: f64,
+    canvas_width: f64,
+    canvas_height: f64,
+    content_width: f64,
+    header_height: f64,
+}
+
+fn deployment_chrome_layout(
+    diagram: &DeploymentDiagram,
+    body_canvas_width: f64,
+    body_canvas_height: f64,
+) -> DeploymentChromeLayout {
+    // Java `DiagramChromeFactory12026` wraps the raw `SvekResult` in
+    // `DecorateEntityImage` blocks. Each wrapper takes the wider of the body
+    // and its text block, centres the narrower body, and stacks top/bottom
+    // block heights. The SVG exporter contributes the established 7px
+    // trailing pad after that composition.
+    let body_width = (body_canvas_width - TITLE_RIGHT_PAD).max(0.0);
+    let title_width = diagram
+        .meta
+        .title
+        .as_deref()
+        .map(|title| {
+            title
+                .lines()
+                .map(|line| text_render::measure(line, TITLE_FONT_SIZE, true))
+                .fold(0.0_f64, f64::max)
+                + 2.0 * TITLE_MARGIN_X
+        })
+        .unwrap_or(0.0);
+    let header_width = diagram
+        .meta
+        .header
+        .as_deref()
+        .map(|header| {
+            header
+                .lines()
+                .map(|line| text_render::measure(line, HEADER_FONT_SIZE, false))
+                .fold(0.0_f64, f64::max)
+        })
+        .unwrap_or(0.0);
+    let footer_width = diagram
+        .meta
+        .footer
+        .as_deref()
+        .map(|footer| {
+            footer
+                .lines()
+                .map(|line| text_render::measure(line, HEADER_FONT_SIZE, false))
+                .fold(0.0_f64, f64::max)
+        })
+        .unwrap_or(0.0);
+    let caption_block_width = header_width.max(footer_width);
+    let content_width = body_width.max(title_width).max(caption_block_width);
+    let title_height = diagram
+        .meta
+        .title
+        .as_deref()
+        .map(|title| {
+            TITLE_TOP_PAD + title.lines().count().max(1) as f64 * TITLE_LINE_H + TITLE_BOTTOM_PAD
+        })
+        .unwrap_or(0.0);
+    let header_height = diagram
+        .meta
+        .header
+        .as_deref()
+        .map(|header| {
+            header.lines().count().max(1) as f64 * pm::text_height(HEADER_FONT_SIZE)
+                + CAPTION_BOTTOM_PAD
+        })
+        .unwrap_or(0.0);
+    let footer_height = diagram
+        .meta
+        .footer
+        .as_deref()
+        .map(|footer| {
+            footer.lines().count().max(1) as f64 * pm::text_height(HEADER_FONT_SIZE)
+                + CAPTION_BOTTOM_PAD
+        })
+        .unwrap_or(0.0);
+
+    DeploymentChromeLayout {
+        body_dx: (content_width - body_width) / 2.0,
+        body_dy: header_height + title_height,
+        canvas_width: content_width + TITLE_RIGHT_PAD,
+        canvas_height: body_canvas_height + header_height + title_height + footer_height,
+        content_width,
+        header_height,
+    }
+}
+
+fn emit_deployment_chrome_top(
+    svg: &mut SvgBuilder,
+    diagram: &DeploymentDiagram,
+    chrome: &DeploymentChromeLayout,
+) {
+    if let Some(header) = diagram.meta.header.as_deref() {
+        svg.raw(r#"<g class="header" data-source-line="1">"#);
+        for (index, line) in header.lines().enumerate() {
+            let width = text_render::measure(line, HEADER_FONT_SIZE, false);
+            // `DisplayPositioned` defaults headers to RIGHT alignment.
+            let x = chrome.content_width - width;
+            let y = pm::ascent(HEADER_FONT_SIZE) + index as f64 * pm::text_height(HEADER_FONT_SIZE);
+            emit_grey_text(svg, line, x, y);
+        }
+        svg.raw("</g>");
+    }
+
+    if let Some(title) = diagram.meta.title.as_deref() {
+        svg.raw(r#"<g class="title" data-source-line="1">"#);
+        for (index, line) in title.lines().enumerate() {
+            let width = text_render::measure(line, TITLE_FONT_SIZE, true);
+            let x = TITLE_MARGIN_X.max((chrome.content_width - width) / 2.0);
+            let y = chrome.header_height
+                + TITLE_TOP_PAD
+                + pm::ascent(TITLE_FONT_SIZE)
+                + index as f64 * TITLE_LINE_H;
+            emit_text(svg, line, x, y, TITLE_FONT_SIZE, true, false);
+        }
+        svg.raw("</g>");
+    }
+}
+
+fn emit_deployment_chrome_bottom(
+    svg: &mut SvgBuilder,
+    diagram: &DeploymentDiagram,
+    chrome: &DeploymentChromeLayout,
+) {
+    let Some(footer) = diagram.meta.footer.as_deref() else {
+        return;
+    };
+    let line_count = footer.lines().count().max(1);
+    svg.raw(r#"<g class="footer" data-source-line="2">"#);
+    for (index, line) in footer.lines().enumerate() {
+        let width = text_render::measure(line, HEADER_FONT_SIZE, false);
+        // `DisplayPositioned` defaults footers to CENTER alignment.
+        let x = (chrome.content_width - width) / 2.0;
+        let lines_below = line_count - index - 1;
+        let y = chrome.canvas_height.trunc()
+            - FOOTER_BOTTOM_GAP
+            - lines_below as f64 * pm::text_height(HEADER_FONT_SIZE);
+        emit_grey_text(svg, line, x, y);
+    }
+    svg.raw("</g>");
 }
 
 fn add_deployment_magma_constraints(
@@ -4946,6 +5113,49 @@ mod tests {
             "{svg}"
         );
         assert!(svg.contains(">sync431</text>"));
+    }
+
+    #[test]
+    fn no_oracle_title_chrome_centres_the_svek_body() {
+        let source = "@startuml\n\
+            title Resilient Staging Mesh 503\n\
+            node Edge503\n\
+            database Store509\n\
+            Edge503 --> Store509\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+
+        let svg = render(&diagram, &Theme::default());
+
+        assert!(svg.contains(r#"style="width:223px;height:220px;background:#FFFFFF;""#));
+        assert!(svg.contains(r#"<g class="title" data-source-line="1">"#));
+        assert!(svg.contains(">Resilient Staging Mesh 503</text>"));
+    }
+
+    #[test]
+    fn no_oracle_header_footer_chrome_uses_positioned_alignment() {
+        let source = "@startuml\n\
+            header Restricted Build 521\n\
+            footer Generated for Canary 523\n\
+            node Relay521\n\
+            database Ledger523\n\
+            Relay521 --> Ledger523\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+
+        let svg = render(&diagram, &Theme::default());
+
+        assert!(svg.contains(r#"style="width:143px;height:208px;background:#FFFFFF;""#));
+        assert!(svg.contains(r#"<g class="header" data-source-line="1">"#));
+        assert!(svg.contains(r#"<g class="footer" data-source-line="2">"#));
+        assert!(svg.contains(r#"x="38.5293" y="9.668""#));
+        assert!(svg.contains(r#"x="5.3242" y="199.4236""#));
     }
 
     #[test]
