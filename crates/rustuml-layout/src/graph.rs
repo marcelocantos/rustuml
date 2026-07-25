@@ -42,6 +42,13 @@ pub struct EdgeLabelSize {
     pub height: f64,
 }
 
+/// Pixel dimensions of a renderer-owned SVEK cluster title placeholder.
+#[derive(Clone, Copy, Debug)]
+pub struct ClusterTitleSize {
+    pub width: f64,
+    pub height: f64,
+}
+
 impl GraphSpacing {
     /// Non-activity SVEK minima from PlantUML
     /// `net.sourceforge.plantuml.svek.DotStringFactory`:
@@ -160,7 +167,31 @@ impl LayoutGraph {
         }
         self.clusters.push(ClusterSpec {
             id: id.to_string(),
-            label: label.to_string(),
+            kind: ClusterKind::NativeLabel(label.to_string()),
+            parent: parent.map(String::from),
+            nodes: Vec::new(),
+        });
+        true
+    }
+
+    /// Adds a PlantUML SVEK cluster with renderer-measured title geometry.
+    ///
+    /// `ClusterDotString.printInternal` wraps the real cluster in an unlabeled
+    /// `p0` cluster and wraps its contents in an unlabeled `p1` cluster. The
+    /// real title is represented to dot by an integer-sized fixed HTML table;
+    /// the renderer draws the package title and chrome from the solved box.
+    pub fn add_svek_cluster(
+        &mut self,
+        id: &str,
+        parent: Option<&str>,
+        title_size: ClusterTitleSize,
+    ) -> bool {
+        if self.clusters.iter().any(|c| c.id == id) {
+            return false;
+        }
+        self.clusters.push(ClusterSpec {
+            id: id.to_string(),
+            kind: ClusterKind::Svek { title_size },
             parent: parent.map(String::from),
             nodes: Vec::new(),
         });
@@ -325,9 +356,13 @@ impl LayoutGraph {
             );
         }
 
-        // Build nodes.
+        // SVEK creates every package tree before unpackaged entities
+        // (`GraphvizImageBuilder.printGroups`, then `printEntities`). Within a
+        // package, direct leaves precede child packages (`Cluster.printCluster2`).
+        // Preserve that node insertion order while keeping result positions in
+        // the caller's original node order.
         let mut node_handles: HashMap<String, *mut graphviz_ffi::Agnode_t> = HashMap::new();
-        let mut node_order: Vec<String> = Vec::new();
+        let node_order: Vec<String> = self.nodes.iter().map(|spec| spec.id.clone()).collect();
 
         let width_key = CString::new("width").unwrap();
         let height_key = CString::new("height").unwrap();
@@ -350,7 +385,8 @@ impl LayoutGraph {
         let true_val = CString::new("true").unwrap();
         let no_arrow_val = CString::new("none").unwrap();
 
-        for spec in &self.nodes {
+        for node_idx in self.graphviz_node_creation_order() {
+            let spec = &self.nodes[node_idx];
             let cid = CString::new(spec.id.as_str()).unwrap();
             let node = graphviz_ffi::agnode(g, cid.as_ptr(), 1);
 
@@ -404,7 +440,6 @@ impl LayoutGraph {
             );
 
             node_handles.insert(spec.id.clone(), node);
-            node_order.push(spec.id.clone());
         }
 
         let rank_key = CString::new("rank").unwrap();
@@ -425,35 +460,40 @@ impl LayoutGraph {
             }
         }
 
-        // Build package clusters after nodes so each subgraph can include the
-        // already-created node handles. Java SVEK writes `subgraph cluster...`
-        // blocks around member shapes in `ClusterDotString.printInternal`;
-        // Graphviz recognises the `cluster` prefix and computes `GD_bb` for
-        // those package bounds.
         let mut cluster_handles: HashMap<String, *mut graphviz_ffi::Agraph_t> = HashMap::new();
         let mut cluster_order: Vec<String> = Vec::new();
-        for cluster in &self.clusters {
-            let parent = cluster
+        let mut built_clusters = vec![false; self.clusters.len()];
+        for idx in 0..self.clusters.len() {
+            let parent_is_known = self.clusters[idx]
                 .parent
                 .as_ref()
-                .and_then(|id| cluster_handles.get(id).copied())
-                .unwrap_or(g);
-            let name = CString::new(format!("cluster_{}", cluster.id)).unwrap();
-            let subgraph = graphviz_ffi::agsubg(parent, name.as_ptr() as *mut _, 1);
-            let label_val = CString::new(cluster.label.as_str()).unwrap();
-            graphviz_ffi::agsafeset(
-                subgraph as *mut c_void,
-                label_key.as_ptr(),
-                label_val.as_ptr(),
-                empty.as_ptr(),
-            );
-            for node_id in &cluster.nodes {
-                if let Some(&node) = node_handles.get(node_id) {
-                    graphviz_ffi::agsubnode(subgraph, node, 1);
-                }
+                .is_some_and(|parent| self.clusters.iter().any(|cluster| &cluster.id == parent));
+            if !parent_is_known {
+                self.build_cluster_tree(
+                    idx,
+                    g,
+                    &node_handles,
+                    &label_key,
+                    &empty,
+                    &mut cluster_handles,
+                    &mut cluster_order,
+                    &mut built_clusters,
+                );
             }
-            cluster_handles.insert(cluster.id.clone(), subgraph);
-            cluster_order.push(cluster.id.clone());
+        }
+        for idx in 0..self.clusters.len() {
+            if !built_clusters[idx] {
+                self.build_cluster_tree(
+                    idx,
+                    g,
+                    &node_handles,
+                    &label_key,
+                    &empty,
+                    &mut cluster_handles,
+                    &mut cluster_order,
+                    &mut built_clusters,
+                );
+            }
         }
 
         // Build edges — track insertion order for result mapping.
@@ -701,6 +741,154 @@ impl LayoutGraph {
             height: graph_ur_y - graph_ll_y,
         }
     }
+
+    fn graphviz_node_creation_order(&self) -> Vec<usize> {
+        if !self
+            .clusters
+            .iter()
+            .any(|cluster| matches!(cluster.kind, ClusterKind::Svek { .. }))
+        {
+            return (0..self.nodes.len()).collect();
+        }
+
+        fn visit(
+            cluster_idx: usize,
+            clusters: &[ClusterSpec],
+            nodes: &[NodeSpec],
+            seen: &mut [bool],
+            order: &mut Vec<usize>,
+        ) {
+            let cluster = &clusters[cluster_idx];
+            for node_id in &cluster.nodes {
+                if let Some(node_idx) = nodes.iter().position(|node| &node.id == node_id)
+                    && !seen[node_idx]
+                {
+                    seen[node_idx] = true;
+                    order.push(node_idx);
+                }
+            }
+            for (child_idx, child) in clusters.iter().enumerate() {
+                if child.parent.as_deref() == Some(cluster.id.as_str()) {
+                    visit(child_idx, clusters, nodes, seen, order);
+                }
+            }
+        }
+
+        let mut seen = vec![false; self.nodes.len()];
+        let mut order = Vec::with_capacity(self.nodes.len());
+        for (idx, cluster) in self.clusters.iter().enumerate() {
+            let parent_is_known = cluster
+                .parent
+                .as_ref()
+                .is_some_and(|parent| self.clusters.iter().any(|item| &item.id == parent));
+            if !parent_is_known {
+                visit(idx, &self.clusters, &self.nodes, &mut seen, &mut order);
+            }
+        }
+        for (idx, was_seen) in seen.iter().enumerate() {
+            if !was_seen {
+                order.push(idx);
+            }
+        }
+        order
+    }
+
+    #[allow(clippy::too_many_arguments, unsafe_op_in_unsafe_fn)]
+    unsafe fn build_cluster_tree(
+        &self,
+        cluster_idx: usize,
+        parent: *mut graphviz_ffi::Agraph_t,
+        node_handles: &HashMap<String, *mut graphviz_ffi::Agnode_t>,
+        label_key: &CString,
+        empty: &CString,
+        cluster_handles: &mut HashMap<String, *mut graphviz_ffi::Agraph_t>,
+        cluster_order: &mut Vec<String>,
+        built: &mut [bool],
+    ) {
+        if built[cluster_idx] {
+            return;
+        }
+        built[cluster_idx] = true;
+        let cluster = &self.clusters[cluster_idx];
+
+        let (real_cluster, member_parent) = match &cluster.kind {
+            ClusterKind::NativeLabel(label) => {
+                let name = CString::new(format!("cluster_{}", cluster.id)).unwrap();
+                let real = graphviz_ffi::agsubg(parent, name.as_ptr() as *mut _, 1);
+                let label = CString::new(label.as_str()).unwrap();
+                graphviz_ffi::agsafeset(
+                    real as *mut c_void,
+                    label_key.as_ptr(),
+                    label.as_ptr(),
+                    empty.as_ptr(),
+                );
+                (real, real)
+            }
+            ClusterKind::Svek { title_size } => {
+                let p0_name = CString::new(format!("cluster_{}p0", cluster.id)).unwrap();
+                let p0 = graphviz_ffi::agsubg(parent, p0_name.as_ptr() as *mut _, 1);
+                let no_label = CString::new("").unwrap();
+                graphviz_ffi::agsafeset(
+                    p0 as *mut c_void,
+                    label_key.as_ptr(),
+                    no_label.as_ptr(),
+                    empty.as_ptr(),
+                );
+
+                let name = CString::new(format!("cluster_{}", cluster.id)).unwrap();
+                let real = graphviz_ffi::agsubg(p0, name.as_ptr() as *mut _, 1);
+                for (key, value) in [("style", "solid"), ("color", "#000004"), ("labeljust", "l")] {
+                    let key = CString::new(key).unwrap();
+                    let value = CString::new(value).unwrap();
+                    graphviz_ffi::agsafeset(
+                        real as *mut c_void,
+                        key.as_ptr(),
+                        value.as_ptr(),
+                        empty.as_ptr(),
+                    );
+                }
+                let table = CString::new(cluster_title_table(*title_size)).unwrap();
+                graphviz_ffi::agsafeset_html(
+                    real as *mut c_void,
+                    label_key.as_ptr(),
+                    table.as_ptr(),
+                    empty.as_ptr(),
+                );
+
+                let p1_name = CString::new(format!("cluster_{}p1", cluster.id)).unwrap();
+                let p1 = graphviz_ffi::agsubg(real, p1_name.as_ptr() as *mut _, 1);
+                graphviz_ffi::agsafeset(
+                    p1 as *mut c_void,
+                    label_key.as_ptr(),
+                    no_label.as_ptr(),
+                    empty.as_ptr(),
+                );
+                (real, p1)
+            }
+        };
+
+        cluster_handles.insert(cluster.id.clone(), real_cluster);
+        cluster_order.push(cluster.id.clone());
+        for node_id in &cluster.nodes {
+            if let Some(&node) = node_handles.get(node_id) {
+                graphviz_ffi::agsubnode(member_parent, node, 1);
+            }
+        }
+        for (child_idx, child) in self.clusters.iter().enumerate() {
+            if child.parent.as_deref() == Some(cluster.id.as_str()) {
+                self.build_cluster_tree(
+                    child_idx,
+                    member_parent,
+                    node_handles,
+                    label_key,
+                    empty,
+                    cluster_handles,
+                    cluster_order,
+                    built,
+                );
+            }
+        }
+    }
 }
 
 #[allow(unsafe_op_in_unsafe_fn)]
@@ -753,6 +941,17 @@ fn edge_label_table(size: EdgeLabelSize, color: &str) -> String {
     )
 }
 
+/// `ClusterHeader` truncates title dimensions to integers before
+/// `ClusterDotString.printInternal` subtracts five pixels from the height and
+/// sends the result through `SvekEdge.appendTable`.
+fn cluster_title_table(size: ClusterTitleSize) -> String {
+    let width = size.width.max(1.0) as u64;
+    let height = (size.height as i64 - 5).max(1) as u64;
+    format!(
+        r##"<TABLE BGCOLOR="#000004" FIXEDSIZE="TRUE" WIDTH="{width}" HEIGHT="{height}"><TR><TD></TD></TR></TABLE>"##
+    )
+}
+
 /// Full layout result with both node positions and edge routing.
 #[derive(Debug, Clone)]
 pub struct LayoutResult {
@@ -794,9 +993,15 @@ struct EdgeSpec {
 #[derive(Debug, Clone)]
 struct ClusterSpec {
     id: String,
-    label: String,
+    kind: ClusterKind,
     parent: Option<String>,
     nodes: Vec<String>,
+}
+
+#[derive(Debug, Clone)]
+enum ClusterKind {
+    NativeLabel(String),
+    Svek { title_size: ClusterTitleSize },
 }
 
 /// Position of a laid-out cluster/subgraph (top-left corner).
@@ -1005,6 +1210,66 @@ mod tests {
         assert!(cluster.y <= node.y);
         assert!(cluster.x + cluster.width >= node.x + node.width);
         assert!(cluster.y + cluster.height >= node.y + node.height);
+    }
+
+    #[test]
+    fn svek_clusters_follow_group_first_recursive_order() {
+        let mut g = LayoutGraph::new(Direction::TopToBottom);
+        for id in [
+            "RootBefore_7",
+            "DirectZulu_19",
+            "LeafBeta_23",
+            "LeafAlpha_29",
+            "DirectAlpha_31",
+            "RootAfter_37",
+        ] {
+            g.add_node(id, id, 80.0, 40.0);
+        }
+        assert!(g.add_svek_cluster(
+            "Outer_Renamed_17",
+            None,
+            ClusterTitleSize {
+                width: 121.9,
+                height: 16.9,
+            },
+        ));
+        assert!(g.add_svek_cluster(
+            "Inner_Q",
+            Some("Outer_Renamed_17"),
+            ClusterTitleSize {
+                width: 53.9,
+                height: 16.9,
+            },
+        ));
+        g.add_cluster_node("Outer_Renamed_17", "DirectZulu_19");
+        g.add_cluster_node("Outer_Renamed_17", "DirectAlpha_31");
+        g.add_cluster_node("Inner_Q", "LeafBeta_23");
+        g.add_cluster_node("Inner_Q", "LeafAlpha_29");
+
+        assert_eq!(g.graphviz_node_creation_order(), vec![1, 4, 2, 3, 0, 5]);
+        assert_eq!(
+            cluster_title_table(ClusterTitleSize {
+                width: 81.9,
+                height: 16.9,
+            }),
+            r##"<TABLE BGCOLOR="#000004" FIXEDSIZE="TRUE" WIDTH="81" HEIGHT="11"><TR><TD></TD></TR></TABLE>"##
+        );
+
+        let result = g.layout_full_no_timeout();
+        assert_eq!(
+            result
+                .cluster_positions
+                .iter()
+                .map(|cluster| cluster.id.as_str())
+                .collect::<Vec<_>>(),
+            ["Outer_Renamed_17", "Inner_Q"]
+        );
+        let outer = &result.cluster_positions[0];
+        let inner = &result.cluster_positions[1];
+        assert!(outer.x < inner.x);
+        assert!(outer.y < inner.y);
+        assert!(outer.x + outer.width > inner.x + inner.width);
+        assert!(outer.y + outer.height > inner.y + inner.height);
     }
 
     #[test]

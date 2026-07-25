@@ -16,7 +16,8 @@ use std::collections::HashMap;
 use std::fmt::Write;
 
 use rustuml_layout::graph::{
-    ClusterPosition, Direction, EdgeLabelSize, EdgePath, LayoutGraph, NodePosition,
+    ClusterPosition, ClusterTitleSize, Direction, EdgeLabelSize, EdgePath, LayoutGraph,
+    NodePosition,
 };
 use rustuml_parser::diagram::SpriteData;
 use rustuml_parser::diagram::class::*;
@@ -259,28 +260,12 @@ const PACKAGE_TAB_H: f64 = 22.4883;
 /// package top + 15.5352 for 14px bold sans-serif package labels.
 const PACKAGE_TITLE_BASELINE: f64 = 15.5352;
 const PACKAGE_TAB_TEXT_X: f64 = 4.0;
-const PACKAGE_TAB_TEXT_RIGHT_PAD: f64 = 9.0;
+/// Java `USymbolFolder`: `marginTitleX1 = marginTitleX2 = 3`,
+/// `marginTitleX3 = 7`; default package round-corner is 5px.
+const PACKAGE_TITLE_MARGIN_X: f64 = 3.0;
+const PACKAGE_TAB_SLOPE_WIDTH: f64 = 7.0;
+const PACKAGE_ROUND_CORNER: f64 = 5.0;
 const PACKAGE_STROKE_WIDTH: &str = "1.5";
-/// PlantUML normalises the laid-out SVEK body to min x/y = 6 in
-/// `SvekResult.drawU`, which calls `moveDelta(6 - minX, 6 - minY)`.
-const PLANTUML_BODY_MIN: f64 = 6.0;
-/// Direct entity insets inside a default package.
-///
-/// Provenance: Java SVEK builds package rectangles through
-/// `ClusterDotString.printInternal` and draws them with
-/// `Cluster.drawU`/`ClusterDecoration`; the default class package goldens show
-/// the child entity body starts 35px below the package top and about 16px from
-/// the other sides after SVEK's body normalisation.
-const PACKAGE_ENTITY_PAD_X: f64 = 16.0;
-const PACKAGE_ENTITY_PAD_TOP: f64 = 35.0;
-const PACKAGE_ENTITY_PAD_BOTTOM: f64 = 16.0;
-/// Nested package insets. `ClusterDotString.printInternal` wraps clusters in
-/// protection subgraphs (`p0`/`p1`) before Graphviz layout; the drawn package
-/// rectangle therefore leaves a larger gutter around child clusters than
-/// Graphviz's raw cluster bbox exposes.
-const PACKAGE_CHILD_CLUSTER_PAD_X: f64 = 24.0;
-const PACKAGE_CHILD_CLUSTER_PAD_TOP: f64 = 43.0;
-const PACKAGE_CHILD_CLUSTER_PAD_BOTTOM: f64 = 24.0;
 /// Package cluster canvases use the full SVEK body side extent (left 6 plus
 /// right-side stroke/body slack) rather than the single-entity 13px formula.
 /// Provenance: Java `SvekResult.drawU` normalises the body at x/y=6 before
@@ -1632,7 +1617,17 @@ pub fn render_with_oracle(
             is_default_package_cluster(&diagram.packages[p]).then(|| package_cluster_id(p))
         });
         let label = package_display_label(pkg);
-        layout.add_cluster(&package_cluster_id(idx), label, parent.as_deref());
+        // Java `ClusterHeader` truncates the measured title dimensions to
+        // integers; `ClusterDotString.printInternal` sends those dimensions to
+        // dot as the real cluster's fixed HTML-table label.
+        layout.add_svek_cluster(
+            &package_cluster_id(idx),
+            parent.as_deref(),
+            ClusterTitleSize {
+                width: text_render::measure_no_underline(label, FONT_SIZE, true),
+                height: text_render::label_height(label, FONT_SIZE),
+            },
+        );
     }
     for (entity_idx, entity) in diagram.entities.iter().enumerate() {
         if let Some(pkg_idx) = innermost_pkg[entity_idx]
@@ -1685,8 +1680,7 @@ pub fn render_with_oracle(
             return render_grid_fallback(diagram, cs);
         }
     };
-    expand_default_package_clusters(
-        diagram,
+    normalize_svek_package_envelope(
         &mut result.node_positions,
         &mut result.cluster_positions,
         &mut result.edge_paths,
@@ -1756,7 +1750,10 @@ pub fn render_with_oracle(
         &result.node_positions,
         &result.cluster_positions,
         &result.edge_paths,
-        Some((result.width, result.height)),
+        result
+            .cluster_positions
+            .is_empty()
+            .then_some((result.width, result.height)),
         None,
         None,
         None,
@@ -2276,29 +2273,59 @@ fn package_qualified_name(
     chain.join(".")
 }
 
-#[derive(Clone, Copy)]
-struct Bounds {
-    x1: f64,
-    y1: f64,
-    x2: f64,
-    y2: f64,
-}
-
-impl Bounds {
-    fn from_rect(x: f64, y: f64, width: f64, height: f64) -> Self {
-        Self {
-            x1: x,
-            y1: y,
-            x2: x + width,
-            y2: y + height,
-        }
+/// Java `SvekResult.calculateDimension` measures only renderer-visible shapes
+/// and moves that envelope to `(6, 6)`. SVEK's outer `p0` protection clusters
+/// influence dot but are not drawn, so normalize from the solved real cluster
+/// boxes rather than Graphviz's root envelope.
+fn normalize_svek_package_envelope(
+    node_positions: &mut [NodePosition],
+    cluster_positions: &mut [ClusterPosition],
+    edge_paths: &mut [EdgePath],
+) {
+    if cluster_positions.is_empty() {
+        return;
     }
-
-    fn include(&mut self, other: Bounds) {
-        self.x1 = self.x1.min(other.x1);
-        self.y1 = self.y1.min(other.y1);
-        self.x2 = self.x2.max(other.x2);
-        self.y2 = self.y2.max(other.y2);
+    let min_x = cluster_positions
+        .iter()
+        .map(|position| position.x)
+        .chain(node_positions.iter().map(|position| position.x))
+        .fold(f64::INFINITY, f64::min);
+    let min_y = cluster_positions
+        .iter()
+        .map(|position| position.y)
+        .chain(node_positions.iter().map(|position| position.y))
+        .fold(f64::INFINITY, f64::min);
+    let target = SVEK_LABEL_ENVELOPE_MARGIN - MARGIN;
+    let dx = target - min_x;
+    let dy = target - min_y;
+    for position in node_positions {
+        position.x += dx;
+        position.y += dy;
+    }
+    for position in cluster_positions {
+        position.x += dx;
+        position.y += dy;
+    }
+    for path in edge_paths {
+        for point in &mut path.points {
+            point.0 += dx;
+            point.1 += dy;
+        }
+        if let Some(point) = &mut path.start_point {
+            point.0 += dx;
+            point.1 += dy;
+        }
+        if let Some(point) = &mut path.end_point {
+            point.0 += dx;
+            point.1 += dy;
+        }
+        for label in [&mut path.label, &mut path.tail_label, &mut path.head_label]
+            .into_iter()
+            .flatten()
+        {
+            label.x += dx;
+            label.y += dy;
+        }
     }
 }
 
@@ -2362,203 +2389,86 @@ fn stereotyped_header_positions(
     }
 }
 
-fn expand_default_package_clusters(
-    diagram: &ClassDiagram,
-    node_positions: &mut [NodePosition],
-    cluster_positions: &mut [ClusterPosition],
-    edge_paths: &mut [EdgePath],
-) {
-    if cluster_positions.is_empty() {
-        return;
-    }
+struct SvekIdAllocation {
+    package_ids: Vec<Option<String>>,
+    entity_ids: Vec<String>,
+    entity_order: Vec<usize>,
+}
 
-    let parent_pkg = package_parent_indices(diagram);
-    let innermost_pkg = innermost_entity_packages(diagram, &parent_pkg);
-    let cluster_index_by_id: HashMap<String, usize> = cluster_positions
-        .iter()
-        .enumerate()
-        .map(|(i, p)| (p.id.clone(), i))
-        .collect();
-    let mut package_indices: Vec<usize> = diagram
-        .packages
-        .iter()
-        .enumerate()
-        .filter_map(|(idx, pkg)| is_default_package_cluster(pkg).then_some(idx))
-        .collect();
-    package_indices.sort_by_key(|idx| std::cmp::Reverse(package_depth(&parent_pkg, *idx)));
+struct SvekIdAllocator<'a> {
+    diagram: &'a ClassDiagram,
+    parent_pkg: &'a [Option<usize>],
+    innermost_pkg: &'a [Option<usize>],
+    package_ids: Vec<Option<String>>,
+    entity_ids: Vec<String>,
+    entity_order: Vec<usize>,
+    next_id: usize,
+}
 
-    for pkg_idx in package_indices {
-        let mut bounds: Option<Bounds> = None;
-
-        for (entity_idx, _) in diagram.entities.iter().enumerate() {
-            if innermost_pkg[entity_idx] != Some(pkg_idx) {
-                continue;
-            }
-            let p = node_positions[entity_idx];
-            let child = Bounds::from_rect(
-                p.x - PACKAGE_ENTITY_PAD_X,
-                p.y - PACKAGE_ENTITY_PAD_TOP,
-                p.width + PACKAGE_ENTITY_PAD_X * 2.0,
-                p.height + PACKAGE_ENTITY_PAD_TOP + PACKAGE_ENTITY_PAD_BOTTOM,
-            );
-            if let Some(b) = &mut bounds {
-                b.include(child);
-            } else {
-                bounds = Some(child);
+impl SvekIdAllocator<'_> {
+    fn allocate_package(&mut self, pkg_idx: usize) {
+        self.package_ids[pkg_idx] = Some(format!("ent{:04}", self.next_id));
+        self.next_id += 1;
+        for (entity_idx, _) in self.diagram.entities.iter().enumerate() {
+            if self.innermost_pkg[entity_idx] == Some(pkg_idx) {
+                self.entity_ids[entity_idx] = format!("ent{:04}", self.next_id);
+                self.next_id += 1;
+                self.entity_order.push(entity_idx);
             }
         }
-
-        for child_pkg_idx in (0..diagram.packages.len()).filter(|&i| parent_pkg[i] == Some(pkg_idx))
-        {
-            if !is_default_package_cluster(&diagram.packages[child_pkg_idx]) {
-                continue;
+        for child_idx in 0..self.diagram.packages.len() {
+            if self.parent_pkg[child_idx] == Some(pkg_idx)
+                && is_default_package_cluster(&self.diagram.packages[child_idx])
+            {
+                self.allocate_package(child_idx);
             }
-            let child_id = package_cluster_id(child_pkg_idx);
-            let Some(&cluster_pos_idx) = cluster_index_by_id.get(&child_id) else {
-                continue;
-            };
-            let p = &cluster_positions[cluster_pos_idx];
-            let child = Bounds::from_rect(
-                p.x - PACKAGE_CHILD_CLUSTER_PAD_X,
-                p.y - PACKAGE_CHILD_CLUSTER_PAD_TOP,
-                p.width + PACKAGE_CHILD_CLUSTER_PAD_X * 2.0,
-                p.height + PACKAGE_CHILD_CLUSTER_PAD_TOP + PACKAGE_CHILD_CLUSTER_PAD_BOTTOM,
-            );
-            if let Some(b) = &mut bounds {
-                b.include(child);
-            } else {
-                bounds = Some(child);
-            }
-        }
-
-        let Some(bounds) = bounds else {
-            continue;
-        };
-        let id = package_cluster_id(pkg_idx);
-        let Some(&cluster_pos_idx) = cluster_index_by_id.get(&id) else {
-            continue;
-        };
-        let pos = &mut cluster_positions[cluster_pos_idx];
-        pos.x = bounds.x1;
-        pos.y = bounds.y1;
-        pos.width = bounds.x2 - bounds.x1;
-        pos.height = bounds.y2 - bounds.y1;
-    }
-
-    let mut min_x = f64::INFINITY;
-    let mut min_y = f64::INFINITY;
-    for pos in node_positions.iter() {
-        min_x = min_x.min(pos.x);
-        min_y = min_y.min(pos.y);
-    }
-    for pos in cluster_positions.iter() {
-        min_x = min_x.min(pos.x);
-        min_y = min_y.min(pos.y);
-    }
-    if !min_x.is_finite() || !min_y.is_finite() {
-        return;
-    }
-
-    let dx = (PLANTUML_BODY_MIN - MARGIN) - min_x;
-    let dy = (PLANTUML_BODY_MIN - MARGIN) - min_y;
-    for pos in node_positions {
-        pos.x += dx;
-        pos.y += dy;
-    }
-    for pos in cluster_positions {
-        pos.x += dx;
-        pos.y += dy;
-    }
-    for path in edge_paths {
-        for point in &mut path.points {
-            point.0 += dx;
-            point.1 += dy;
-        }
-        if let Some(point) = &mut path.start_point {
-            point.0 += dx;
-            point.1 += dy;
-        }
-        if let Some(point) = &mut path.end_point {
-            point.0 += dx;
-            point.1 += dy;
         }
     }
 }
 
-fn entity_emission_order(diagram: &ClassDiagram) -> Vec<usize> {
+/// Port of `GraphvizImageBuilder.printGroups`: package trees are allocated
+/// before unpackaged entities; each group allocates itself, its direct leaves,
+/// then its child groups.
+fn svek_id_allocation(diagram: &ClassDiagram) -> SvekIdAllocation {
     let parent_pkg = package_parent_indices(diagram);
     let innermost_pkg = innermost_entity_packages(diagram, &parent_pkg);
-
-    let pkg_sort_key = |pi: usize| -> usize {
-        diagram
-            .entities
-            .iter()
-            .filter(|e| diagram.packages[pi].entities.iter().any(|m| m == &e.id))
-            .map(|e| e.source_line)
-            .min()
-            .unwrap_or(usize::MAX)
+    let mut allocator = SvekIdAllocator {
+        diagram,
+        parent_pkg: &parent_pkg,
+        innermost_pkg: &innermost_pkg,
+        package_ids: vec![None; diagram.packages.len()],
+        entity_ids: vec![String::new(); diagram.entities.len()],
+        entity_order: Vec::with_capacity(diagram.entities.len()),
+        next_id: 2,
     };
 
-    fn emit_pkg(
-        pkg_idx: usize,
-        diagram: &ClassDiagram,
-        innermost_pkg: &[Option<usize>],
-        parent_pkg: &[Option<usize>],
-        pkg_sort_key: &dyn Fn(usize) -> usize,
-        order: &mut Vec<usize>,
-    ) {
-        for (i, _) in diagram.entities.iter().enumerate() {
-            if innermost_pkg[i] == Some(pkg_idx) {
-                order.push(i);
-            }
+    for (pkg_idx, parent) in parent_pkg.iter().copied().enumerate() {
+        if !is_default_package_cluster(&diagram.packages[pkg_idx]) {
+            continue;
         }
-        let mut children: Vec<usize> = (0..diagram.packages.len())
-            .filter(|&c| parent_pkg[c] == Some(pkg_idx))
-            .collect();
-        children.sort_by_key(|&c| (pkg_sort_key(c), c));
-        for c in children {
-            emit_pkg(c, diagram, innermost_pkg, parent_pkg, pkg_sort_key, order);
+        let parent_is_default =
+            parent.is_some_and(|parent| is_default_package_cluster(&diagram.packages[parent]));
+        if !parent_is_default {
+            allocator.allocate_package(pkg_idx);
         }
     }
-
-    enum Item {
-        Entity(usize),
-        Package(usize),
-    }
-    let mut items: Vec<(usize, Item)> = Vec::new();
-    for (i, e) in diagram.entities.iter().enumerate() {
-        if innermost_pkg[i].is_none() {
-            items.push((e.source_line, Item::Entity(i)));
-        }
-    }
-    for (pi, parent) in parent_pkg.iter().enumerate() {
-        if parent.is_none() {
-            items.push((pkg_sort_key(pi), Item::Package(pi)));
-        }
-    }
-    items.sort_by_key(|(line, _)| *line);
-
-    let mut order = Vec::with_capacity(diagram.entities.len());
-    for (_, item) in items {
-        match item {
-            Item::Entity(i) => order.push(i),
-            Item::Package(pi) => emit_pkg(
-                pi,
-                diagram,
-                &innermost_pkg,
-                &parent_pkg,
-                &pkg_sort_key,
-                &mut order,
-            ),
-        }
-    }
-    let placed: std::collections::HashSet<usize> = order.iter().copied().collect();
     for (i, _) in diagram.entities.iter().enumerate() {
-        if !placed.contains(&i) {
-            order.push(i);
+        if allocator.entity_ids[i].is_empty() {
+            allocator.entity_ids[i] = format!("ent{:04}", allocator.next_id);
+            allocator.next_id += 1;
+            allocator.entity_order.push(i);
         }
     }
-    order
+
+    SvekIdAllocation {
+        package_ids: allocator.package_ids,
+        entity_ids: allocator.entity_ids,
+        entity_order: allocator.entity_order,
+    }
+}
+
+fn entity_emission_order(diagram: &ClassDiagram) -> Vec<usize> {
+    svek_id_allocation(diagram).entity_order
 }
 
 /// Read the value of a double-quoted attribute `name="…"` from an element's
@@ -2877,6 +2787,7 @@ fn render_plantuml_svg(
     } else {
         Vec::new()
     };
+    let svek_ids = svek_id_allocation(diagram);
     // Note entities (alias-named like `N1` AND auto-generated `GMNn`) are
     // captured separately in `note_entities`. The legacy `clusters`
     // collection only picks up GMN-prefixed qnames; reading from
@@ -2906,8 +2817,11 @@ fn render_plantuml_svg(
         emit_oracle_cluster_children(&mut svg, cluster);
         svg.push_str("</g>");
     }
-    for (idx, cluster) in layout_pkg_clusters.iter().enumerate() {
-        emit_layout_package_cluster(&mut svg, cluster, idx);
+    for cluster in &layout_pkg_clusters {
+        let entity_id = svek_ids.package_ids[cluster.package_idx]
+            .as_deref()
+            .unwrap_or("ent0002");
+        emit_layout_package_cluster(&mut svg, cluster, entity_id);
     }
     if let Some(oracle) = oracle {
         for cluster in &oracle.loose_clusters {
@@ -2983,10 +2897,14 @@ fn render_plantuml_svg(
         // our left-to-right entity walk, so reconstructing the counter
         // ourselves drifts. Consume the captured id like other verbatim oracle
         // data, falling back to the sequential counter when absent.
-        let current_ent_id = oracle_rect
-            .and_then(|r| r.entity_id.clone())
-            .or_else(|| oracle_lollipop.and_then(|(_, r)| r.entity_id.clone()))
-            .unwrap_or(seq_ent_id);
+        let current_ent_id = if oracle.is_none() {
+            svek_ids.entity_ids[i].clone()
+        } else {
+            oracle_rect
+                .and_then(|r| r.entity_id.clone())
+                .or_else(|| oracle_lollipop.and_then(|(_, r)| r.entity_id.clone()))
+                .unwrap_or(seq_ent_id)
+        };
 
         // Flush any note entities whose emission counter precedes this entity's
         // (e.g. a `note … as N` declared before the first `entity`).
@@ -3227,6 +3145,7 @@ fn render_plantuml_svg(
 }
 
 struct LayoutPackageCluster {
+    package_idx: usize,
     qualified_name: String,
     source_line: usize,
     label: String,
@@ -3250,6 +3169,7 @@ fn layout_package_clusters(
             let id = package_cluster_id(idx);
             let pos = cluster_positions.iter().find(|p| p.id == id)?;
             Some(LayoutPackageCluster {
+                package_idx: idx,
                 qualified_name: package_qualified_name(diagram, &parent_pkg, idx),
                 source_line: pkg.source_line,
                 label: package_display_label(pkg).to_string(),
@@ -3262,15 +3182,15 @@ fn layout_package_clusters(
         .collect()
 }
 
-fn emit_layout_package_cluster(svg: &mut String, cluster: &LayoutPackageCluster, idx: usize) {
+fn emit_layout_package_cluster(svg: &mut String, cluster: &LayoutPackageCluster, entity_id: &str) {
     let label_w = text_render::measure_no_underline(&cluster.label, FONT_SIZE, true);
-    let tab_w = (label_w + PACKAGE_TAB_TEXT_X + PACKAGE_TAB_TEXT_RIGHT_PAD)
-        .min((cluster.width - PACKAGE_TAB_TEXT_RIGHT_PAD).max(0.0));
+    let title_w = label_w + 2.0 * PACKAGE_TITLE_MARGIN_X;
+    let tab_w = (title_w + PACKAGE_TAB_SLOPE_WIDTH).min(cluster.width.max(0.0));
     let x = cluster.x;
     let y = cluster.y;
     let right = cluster.x + cluster.width;
     let bottom = cluster.y + cluster.height;
-    let tab_join = x + tab_w - 7.0;
+    let tab_join = x + title_w - PACKAGE_ROUND_CORNER / 2.0;
     let tab_right = x + tab_w;
     let line_y = y + PACKAGE_TAB_H;
     let text_x = x + PACKAGE_TAB_TEXT_X;
@@ -3283,10 +3203,10 @@ fn emit_layout_package_cluster(svg: &mut String, cluster: &LayoutPackageCluster,
     .unwrap();
     write!(
         svg,
-        r#"<g class="cluster" data-qualified-name="{}" data-source-line="{}" id="ent{:04}">"#,
+        r#"<g class="cluster" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
         escape_xml(&cluster.qualified_name),
         cluster.source_line,
-        idx + 2,
+        entity_id,
     )
     .unwrap();
     write!(
@@ -6952,11 +6872,12 @@ fn emit_diamond_extremity(
 }
 
 fn no_oracle_entity_id(diagram: &ClassDiagram, id: &str) -> String {
+    let allocation = svek_id_allocation(diagram);
     diagram
         .entities
         .iter()
         .position(|e| e.id == id)
-        .map(|i| format!("ent{:04}", i + 2))
+        .map(|i| allocation.entity_ids[i].clone())
         .unwrap_or_else(|| "ent0002".to_string())
 }
 
@@ -8265,7 +8186,7 @@ mod tests {
     }
 
     #[test]
-    fn nested_package_clusters_use_plantuml_svek_gutters() {
+    fn nested_package_clusters_use_solved_svek_boxes() {
         let input = "@startuml\npackage alpha {\n  package beta {\n    package gamma {\n      package delta {\n        class RenamedDeep {\n          +void go()\n        }\n      }\n    }\n  }\n}\n@enduml";
         let diagram = rustuml_parser::parse::parse(input).unwrap();
         let svg = crate::render_svg(&diagram);
@@ -8275,15 +8196,60 @@ mod tests {
         let (gamma_x, gamma_y) = cluster_path_origin(&svg, "alpha.beta.gamma");
         let (delta_x, delta_y) = cluster_path_origin(&svg, "alpha.beta.gamma.delta");
 
-        assert_eq!(alpha_x, PLANTUML_BODY_MIN);
-        assert_eq!(alpha_y, PLANTUML_BODY_MIN);
-        assert_eq!(beta_x - alpha_x, PACKAGE_CHILD_CLUSTER_PAD_X);
-        assert_eq!(gamma_x - beta_x, PACKAGE_CHILD_CLUSTER_PAD_X);
-        assert_eq!(delta_x - gamma_x, PACKAGE_CHILD_CLUSTER_PAD_X);
-        assert_eq!(beta_y - alpha_y, PACKAGE_CHILD_CLUSTER_PAD_TOP);
-        assert_eq!(gamma_y - beta_y, PACKAGE_CHILD_CLUSTER_PAD_TOP);
-        assert_eq!(delta_y - gamma_y, PACKAGE_CHILD_CLUSTER_PAD_TOP);
+        assert_eq!(
+            (alpha_x, alpha_y),
+            (SVEK_LABEL_ENVELOPE_MARGIN, SVEK_LABEL_ENVELOPE_MARGIN)
+        );
+        assert!(alpha_x < beta_x && beta_x < gamma_x && gamma_x < delta_x);
+        assert!(alpha_y < beta_y && beta_y < gamma_y && gamma_y < delta_y);
         assert!(svg.contains(r#"data-qualified-name="alpha.beta.gamma.delta.RenamedDeep""#));
+    }
+
+    #[test]
+    fn renamed_nested_packages_allocate_svek_ids_recursively() {
+        let input = "@startuml\nclass RootBefore_7\npackage Outer_Renamed_17 {\n  class DirectZulu_19\n  package Inner_Q {\n    class LeafBeta_23\n    class LeafAlpha_29\n  }\n  class DirectAlpha_31\n}\nclass RootAfter_37\nRootBefore_7 --> LeafBeta_23\nDirectZulu_19 --> RootAfter_37\nLeafAlpha_29 --> DirectAlpha_31\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Class(diagram) = diagram else {
+            panic!("expected class diagram");
+        };
+        let allocation = svek_id_allocation(&diagram);
+
+        assert_eq!(
+            allocation.package_ids,
+            [Some("ent0002".to_string()), Some("ent0005".to_string())]
+        );
+        assert_eq!(allocation.entity_order, [1, 4, 2, 3, 0, 5]);
+        assert_eq!(
+            allocation.entity_ids,
+            [
+                "ent0008", "ent0003", "ent0006", "ent0007", "ent0004", "ent0009"
+            ]
+        );
+
+        let svg = render(&diagram, &Theme::default());
+        for (qualified_name, entity_id) in [
+            ("Outer_Renamed_17", "ent0002"),
+            ("Outer_Renamed_17.DirectZulu_19", "ent0003"),
+            ("Outer_Renamed_17.DirectAlpha_31", "ent0004"),
+            ("Outer_Renamed_17.Inner_Q", "ent0005"),
+            ("Outer_Renamed_17.Inner_Q.LeafBeta_23", "ent0006"),
+            ("Outer_Renamed_17.Inner_Q.LeafAlpha_29", "ent0007"),
+            ("RootBefore_7", "ent0008"),
+            ("RootAfter_37", "ent0009"),
+        ] {
+            let marker = format!(r#"data-qualified-name="{qualified_name}""#);
+            let opening_tag = svg
+                .split_once(&marker)
+                .unwrap_or_else(|| panic!("missing SVEK item {qualified_name}"))
+                .1
+                .split_once('>')
+                .unwrap()
+                .0;
+            assert!(
+                opening_tag.contains(&format!(r#"id="{entity_id}""#)),
+                "wrong recursive SVEK id for {qualified_name}: {opening_tag}"
+            );
+        }
     }
 
     fn cluster_path_origin(svg: &str, qualified_name: &str) -> (f64, f64) {
