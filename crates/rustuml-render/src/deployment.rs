@@ -3366,12 +3366,10 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
         .unwrap_or_default();
     let total_w = x_frame
         .map(|frame| frame.painted_max_x + frame.margin + SVEK_DIMENSION_DELTA)
-        .unwrap_or(content_w + BODY_RIGHT_MARGIN)
-        .max(100.0);
+        .unwrap_or(content_w + BODY_RIGHT_MARGIN);
     let total_h = y_frame
         .map(|frame| frame.painted_max_y + frame.margin + SVEK_DIMENSION_DELTA)
-        .unwrap_or(content_h + BODY_BOTTOM_MARGIN)
-        .max(50.0);
+        .unwrap_or(content_h + BODY_BOTTOM_MARGIN);
 
     let mut oracle = OracleLayout::default();
     let qnames = deployment_qnames(diagram, &parent_of);
@@ -3629,6 +3627,9 @@ fn deployment_node_dim(
     };
     let height = match node.kind {
         DeploymentNodeKind::Cloud => line_count as f64 * TEXT_LINE_H + 2.0 * CLOUD_MARGIN,
+        // `USymbolCard.asSmall` wraps the merged stereotype/label block in
+        // `Margin(10, 10, 3, 3)`.
+        DeploymentNodeKind::Card => line_count as f64 * TEXT_LINE_H + 6.0,
         // `USymbolDatabase.asSmall` adds 29px around the merged text block:
         // 10px top lip, 10px lower cap, and the title spacing between them.
         DeploymentNodeKind::Database => line_count as f64 * TEXT_LINE_H + 29.0,
@@ -3890,7 +3891,10 @@ fn deployment_local_painted_x_bounds(
         Card | Rectangle | Agent | Component | Storage => (-1.0, dim.width - 1.0),
         // These symbols paint paths whose local envelope is their declared
         // image dimension.
-        Database | Frame | Folder | Queue | File | Package | Stack => (0.0, dim.width),
+        // `USymbolDatabase.drawDatabase` places `UEmpty(10, 10)` at the
+        // lower-right corner so `LimitFinder` extends past the cylinder.
+        Database => (0.0, dim.width + 10.0),
+        Frame | Folder | Queue | File | Package | Stack => (0.0, dim.width),
         _ => (-1.0, dim.width - 1.0),
     }
 }
@@ -4436,6 +4440,26 @@ mod tests {
         ));
         assert!(svg.contains(r##"fill="#90EE90" height="39.4883""##));
         assert!(svg.contains(r#"width="150.5859" x="7" y="7""#));
+    }
+
+    #[test]
+    fn no_oracle_card_database_uses_symbol_bounds() {
+        let source = "@startuml\n\
+            card \"Gateway 137\" as Gateway137\n\
+            database \"Ledger 139\" as Ledger139\n\
+            Gateway137 --> Ledger139\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+
+        let svg = render(&diagram, &Theme::default());
+
+        assert!(svg.contains(r#"style="width:134px;height:159px;background:#FFFFFF;""#));
+        assert!(svg.contains(r#"height="22.4883" rx="2.5" ry="2.5""#));
+        assert!(svg.contains(r#"M12.19,99.49 C12.19,89.49 60.8506,89.49"#));
+        assert!(svg.contains(r#"id="Gateway137-to-Ledger139""#));
     }
 
     #[test]
