@@ -1000,6 +1000,7 @@ pub fn render_with_oracle(
                 &comp_dims,
                 &result.node_positions,
                 &result.cluster_positions,
+                &result.edge_paths,
                 title_h,
                 laid_out_note_indices.len(),
             )
@@ -1016,39 +1017,26 @@ pub fn render_with_oracle(
             .map(|r| r.edge_paths.as_slice())
             .unwrap_or(&[])
     };
-    let (svek_edge_dx, svek_edge_dy) = layout_result
-        .as_ref()
-        .and_then(|result| {
-            let raw = result.cluster_positions.first()?;
+    let svek_edge_translation = layout_result.as_ref().and_then(|result| {
+        if let Some(raw) = result.cluster_positions.first() {
             let translated = cluster_positions
                 .iter()
                 .find(|position| position.id == raw.id)?;
             Some((translated.x - raw.x, translated.y - raw.y))
-        })
-        .unwrap_or_else(|| {
-            layout_result
-                .as_ref()
-                .map(|result| {
-                    let min_x = result
-                        .node_positions
-                        .iter()
-                        .map(|position| position.x)
-                        .fold(f64::INFINITY, f64::min);
-                    let min_y = result
-                        .node_positions
-                        .iter()
-                        .map(|position| position.y)
-                        .fold(f64::INFINITY, f64::min);
-                    let (origin_x, origin_y) = component_layout_origins(
-                        &result.node_positions,
-                        n_comp,
-                        diagram.interfaces.len(),
-                        laid_out_note_indices.len(),
-                    );
-                    (origin_x - min_x, origin_y + title_h - min_y)
-                })
-                .unwrap_or((MARGIN, MARGIN + title_h))
-        });
+        } else if let (Some(raw), Some(&(x, y))) =
+            (result.node_positions.first(), positions.first())
+        {
+            Some((x - raw.x, y - raw.y))
+        } else {
+            let raw = result.node_positions.first()?;
+            let &(cx, cy) = iface_positions.first()?;
+            Some((
+                cx - IFACE_CENTER_OFFSET - raw.x,
+                cy - IFACE_CENTER_OFFSET - raw.y,
+            ))
+        }
+    });
+    let (svek_edge_dx, svek_edge_dy) = svek_edge_translation.unwrap_or((MARGIN, MARGIN + title_h));
     let note_layouts: Vec<ComponentNoteLayout> = layout_result
         .as_ref()
         .map(|result| {
@@ -3250,6 +3238,7 @@ fn compute_positions_from_layout(
     comp_dims: &[CompDim],
     node_positions: &[rustuml_layout::graph::NodePosition],
     raw_cluster_positions: &[ClusterPosition],
+    edge_paths: &[EdgePath],
     title_h: f64,
     attached_note_count: usize,
 ) -> ComponentLayoutResult {
@@ -3265,7 +3254,7 @@ fn compute_positions_from_layout(
         .iter()
         .map(|position| position.y)
         .fold(f64::INFINITY, f64::min);
-    let (layout_dx, layout_dy) = if raw_cluster_positions.is_empty() {
+    let (mut layout_dx, mut layout_dy) = if raw_cluster_positions.is_empty() {
         let (origin_x, origin_y) = component_layout_origins(
             node_positions,
             n_comp,
@@ -3287,6 +3276,26 @@ fn compute_positions_from_layout(
             cluster_frame.origin_y + title_h - min_y,
         )
     };
+    // `SvekResult.calculateDimension` measures every painted `DotPath` through
+    // `LimitFinder.drawDotPath`, then `DotStringFactory.moveDelta` moves the
+    // complete graph so that painted minimum is at (6, 6). Graphviz's SVG
+    // serialization is the model boundary consumed by SVEK.
+    let path_min_x = edge_paths
+        .iter()
+        .flat_map(|edge| &edge.points)
+        .map(|(x, _)| round_svek_input_coord(*x))
+        .fold(f64::INFINITY, f64::min);
+    let path_min_y = edge_paths
+        .iter()
+        .flat_map(|edge| &edge.points)
+        .map(|(_, y)| round_svek_input_coord(*y))
+        .fold(f64::INFINITY, f64::min);
+    if path_min_x.is_finite() {
+        layout_dx += (SVEK_CLUSTER_ORIGIN - (path_min_x + layout_dx)).max(0.0);
+    }
+    if path_min_y.is_finite() {
+        layout_dy += (title_h + SVEK_CLUSTER_ORIGIN - (path_min_y + layout_dy)).max(0.0);
+    }
 
     for (i, _comp) in diagram.components.iter().enumerate() {
         let p = &node_positions[i];
@@ -5664,6 +5673,22 @@ mod tests {
         assert!(
             svg.contains(r#"height="599px""#),
             "renamed cycle should retain Java's SVEK vertical envelope: {svg}"
+        );
+    }
+
+    #[test]
+    fn no_oracle_svek_translation_includes_renamed_fanout_splines() {
+        let input = "@startuml\ncomponent \"Telemetry Router 947\" as Router947\ninterface IngressAlpha947\ninterface IngressBeta947\ninterface AuditGamma947\ninterface MetricsDelta947\ninterface ControlEpsilon947\ninterface RecoveryZeta947\nRouter947 - IngressAlpha947\nRouter947 - IngressBeta947\nRouter947 - AuditGamma947\nRouter947 - MetricsDelta947\nRouter947 - ControlEpsilon947\nRouter947 - RecoveryZeta947\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(
+            svg.contains(r#"height="150px""#),
+            "canvas should include Java's translated dense-fanout envelope: {svg}"
+        );
+        assert!(
+            svg.contains("C330.77,30 368.13,6 460.49,49.81"),
+            "SvekResult should move the upper spline control point to y=6: {svg}"
         );
     }
 
