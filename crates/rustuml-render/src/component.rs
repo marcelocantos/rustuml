@@ -3255,13 +3255,7 @@ fn compute_positions_from_layout(
         .map(|position| position.y)
         .fold(f64::INFINITY, f64::min);
     let (mut layout_dx, mut layout_dy) = if raw_cluster_positions.is_empty() {
-        let (origin_x, origin_y) = component_layout_origins(
-            node_positions,
-            n_comp,
-            diagram.interfaces.len(),
-            attached_note_count,
-        );
-        (origin_x - min_node_x, origin_y + title_h - min_node_y)
+        component_svek_translation(diagram, node_positions, attached_note_count, title_h)
     } else {
         let min_x = raw_cluster_positions
             .iter()
@@ -3367,41 +3361,45 @@ fn compute_positions_from_layout(
     )
 }
 
-fn component_layout_origins(
+fn component_svek_translation(
+    diagram: &ComponentDiagram,
     node_positions: &[rustuml_layout::graph::NodePosition],
-    component_count: usize,
-    interface_count: usize,
     attached_note_count: usize,
+    title_h: f64,
 ) -> (f64, f64) {
+    let component_count = diagram.components.len();
+    let interface_count = diagram.interfaces.len();
     let note_start = component_count + interface_count;
     let note_end = note_start + attached_note_count;
-    let min_x_index = node_positions
-        .iter()
-        .enumerate()
-        .min_by(|(_, left), (_, right)| left.x.total_cmp(&right.x))
-        .map(|(index, _)| index);
-    let min_y_index = node_positions
-        .iter()
-        .enumerate()
-        .min_by(|(_, left), (_, right)| left.y.total_cmp(&right.y))
-        .map(|(index, _)| index);
-    let is_note = |index: Option<usize>| index.is_some_and(|i| (note_start..note_end).contains(&i));
+    let mut painted_min_x = f64::INFINITY;
+    let mut painted_min_y = f64::INFINITY;
 
-    // `SvekResult.calculateDimension` moves the painted minimum to 6px.
-    // Ordinary component chrome begins one pixel inside its Graphviz box, so
-    // those graphs retain the historical 7px entity origin. Notes paint to
-    // their node boundary and therefore own the 6px origin on that axis.
+    for (index, position) in node_positions.iter().enumerate() {
+        let (local_min_x, local_min_y) = if index < component_count {
+            match diagram.components[index].kind {
+                // `USymbolNode.drawNode` paints its body as a `UPolygon`.
+                // `LimitFinder.drawUPolygon` applies its 10px horizontal
+                // measurement guard, while the polygon starts at local y=0.
+                ComponentElementKind::Node => (-10.0, 0.0),
+                // `USymbolComponent2.drawComponent2` and the remaining leaf
+                // symbols retain the established `URectangle` top-left
+                // envelope until their primitive models are split out.
+                _ => (-1.0, -1.0),
+            }
+        } else if (note_start..note_end).contains(&index) {
+            // Notes paint their polygon directly to the Graphviz node bounds.
+            (0.0, 0.0)
+        } else {
+            // `CircleInterface2` is measured one pixel inside its SVEK table.
+            (-1.0, -1.0)
+        };
+        painted_min_x = painted_min_x.min(position.x + local_min_x);
+        painted_min_y = painted_min_y.min(position.y + local_min_y);
+    }
+
     (
-        if is_note(min_x_index) {
-            SVEK_CLUSTER_ORIGIN
-        } else {
-            MARGIN
-        },
-        if is_note(min_y_index) {
-            SVEK_CLUSTER_ORIGIN
-        } else {
-            MARGIN
-        },
+        SVEK_CLUSTER_ORIGIN - painted_min_x,
+        title_h + SVEK_CLUSTER_ORIGIN - painted_min_y,
     )
 }
 
@@ -3554,13 +3552,26 @@ fn compute_no_oracle_canvas(input: NoOracleCanvas<'_>) -> (f64, f64) {
         .zip(input.comp_dims)
         .zip(input.components)
     {
-        let overflow = if matches!(comp.kind, ComponentElementKind::Database) {
-            DATABASE_RENDER_OVERFLOW
-        } else {
-            0.0
+        let (painted_max_x, painted_max_y) = match comp.kind {
+            // Java `LimitFinder.drawUPolygon` measures ten pixels beyond both
+            // horizontal sides of `USymbolNode`'s body. Its lower-edge
+            // `UEmpty(10,10)` also extends the vertical envelope by ten. Add
+            // one here because the shared tail below is 14px: rectangles end
+            // at `dimension - 1`, making that equivalent to SVEK's 15px
+            // dimension delta, while polygon/UEmpty maxima do not.
+            ComponentElementKind::Node => (dim.width + 11.0, dim.height + 11.0),
+            // `LimitFinder.drawRectangle` records width/height minus one for
+            // the outer `USymbolComponent2` rectangle; the shared 14px tail
+            // already incorporates that one-pixel difference.
+            ComponentElementKind::Component => (dim.width, dim.height),
+            ComponentElementKind::Database => (
+                dim.width + DATABASE_RENDER_OVERFLOW,
+                dim.height + DATABASE_RENDER_OVERFLOW,
+            ),
+            _ => (dim.width, dim.height),
         };
-        max_x = max_x.max(x + dim.width + overflow);
-        max_y = max_y.max(y + dim.height + overflow);
+        max_x = max_x.max(x + painted_max_x);
+        max_y = max_y.max(y + painted_max_y);
     }
     for ((cx, cy), interface) in input.iface_positions.iter().zip(input.interfaces) {
         let label_width = text_render::measure(&interface.label, FONT_SIZE, false);
@@ -5872,6 +5883,32 @@ mod tests {
         assert!(
             svg.contains(r##"<polygon fill="#181818" points=""##),
             "dependency link should draw a PlantUML-style extremity polygon: {svg}"
+        );
+    }
+
+    #[test]
+    fn no_oracle_mixed_node_component_uses_limit_finder_frame_for_renamed_symbols() {
+        let input = "@startuml\nnode \"Renamed Source Gateway 71\" as Source71\ncomponent \"Target 73\" as Target73\nSource71 --> Target73\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Component(component_diagram) = &diagram else {
+            panic!("expected component diagram");
+        };
+        let node = component_diagram
+            .components
+            .iter()
+            .find(|component| matches!(component.kind, super::ComponentElementKind::Node))
+            .expect("renamed node");
+        let node_dim = super::calc_component_dim(node);
+        let expected_width = (16.0 + node_dim.width + 11.0 + super::SVEK_CANVAS_PAD) as i64;
+        let svg = crate::render_svg(&diagram);
+
+        assert!(
+            svg.contains(r#"points="16,16,26,6,"#),
+            "LimitFinder's polygon guard should place the renamed node at x=16, y=6: {svg}"
+        );
+        assert!(
+            svg.contains(&format!(r#"width="{expected_width}px""#)),
+            "the node's guarded painted maximum should own the canvas width: {svg}"
         );
     }
 
