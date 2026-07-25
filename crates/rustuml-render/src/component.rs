@@ -403,6 +403,9 @@ const COMPONENT_H: f64 = COMPONENT_BASE_H + LINE_HEIGHT;
 const TEXT_PAD_LEFT: f64 = 15.0;
 /// Right padding inside component (icon area).
 const TEXT_PAD_RIGHT: f64 = 25.0;
+// PlantUML `USymbolRectangle.getMargin()` returns 10 on all four sides.
+const RECTANGLE_MARGIN_X: f64 = 10.0;
+const RECTANGLE_MARGIN_Y: f64 = 10.0;
 // `EntityImageDescription` wraps its stereotype display with
 // `TextBlockUtils.withMargin(..., 1, 0)` before `USymbolComponent2.asSmall`
 // merges it with the label. The wrapper contributes one pixel on each side.
@@ -825,7 +828,9 @@ pub fn render_with_oracle(
         .components
         .iter()
         .zip(&component_text_metrics)
-        .map(|(component, metrics)| calc_component_dim_with_metrics(component, metrics))
+        .map(|(component, metrics)| {
+            calc_component_dim_with_symbol_style(component, metrics, component_style_rectangle)
+        })
         .collect();
     let note_dims: Vec<CompDim> = diagram.notes.iter().map(component_note_dim).collect();
     let package_qualified_names = build_package_qualified_names(&diagram.packages);
@@ -1664,6 +1669,9 @@ pub fn render_with_oracle(
         let oracle_text_x = oracle_rect.map(|r| r.text_x_values.as_slice());
         let model_text_block_x = if matches!(comp.kind, ComponentElementKind::Database) {
             x + DATABASE_MARGIN_X
+        } else if component_style_rectangle && matches!(comp.kind, ComponentElementKind::Component)
+        {
+            x + RECTANGLE_MARGIN_X
         } else {
             x + TEXT_PAD_LEFT
         };
@@ -2973,9 +2981,18 @@ fn component_text_metrics(
     }
 }
 
+#[cfg(test)]
 fn calc_component_dim_with_metrics(
     comp: &Component,
     text_metrics: &ComponentTextMetrics,
+) -> CompDim {
+    calc_component_dim_with_symbol_style(comp, text_metrics, false)
+}
+
+fn calc_component_dim_with_symbol_style(
+    comp: &Component,
+    text_metrics: &ComponentTextMetrics,
+    component_style_rectangle: bool,
 ) -> CompDim {
     let n_lines = 1 + comp.stereotypes.len();
 
@@ -2983,6 +3000,11 @@ fn calc_component_dim_with_metrics(
         (
             text_metrics.content_width + DATABASE_MARGIN_X * 2.0,
             DATABASE_MARGIN_TOP + n_lines as f64 * LINE_HEIGHT + DATABASE_MARGIN_BOTTOM,
+        )
+    } else if component_style_rectangle && matches!(comp.kind, ComponentElementKind::Component) {
+        (
+            text_metrics.content_width + RECTANGLE_MARGIN_X * 2.0,
+            n_lines as f64 * LINE_HEIGHT + RECTANGLE_MARGIN_Y * 2.0,
         )
     } else {
         (
@@ -5625,6 +5647,44 @@ mod tests {
                 .count(),
             4,
             "{svg}"
+        );
+    }
+
+    #[test]
+    fn rectangle_component_symbol_uses_java_margins_for_renamed_stereotype_block() {
+        let input = "@startuml\nskinparam componentStyle rectangle\ncomponent \"Relay 71\" as Relay71 <<telemetry_gateway_profile_731>>\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Component(component_diagram) = &diagram else {
+            panic!("expected component diagram");
+        };
+        let component = &component_diagram.components[0];
+        let metrics =
+            super::component_text_metrics(component, super::FONT_SIZE, "sans-serif", false);
+        assert!(
+            metrics.stereotype_widths[0] > metrics.label_width,
+            "the perturbation must exercise a stereotype-dominated text block"
+        );
+
+        let dim = super::calc_component_dim_with_symbol_style(component, &metrics, true);
+        assert_eq!(
+            dim.width,
+            metrics.content_width + super::RECTANGLE_MARGIN_X * 2.0
+        );
+        assert_eq!(
+            dim.height,
+            super::LINE_HEIGHT * 2.0 + super::RECTANGLE_MARGIN_Y * 2.0
+        );
+
+        let svg = crate::render_svg(&diagram);
+        assert_eq!(
+            svg.matches("<rect ").count(),
+            1,
+            "rectangle style must suppress the UML component icon: {svg}"
+        );
+        assert!(svg.contains("Relay 71"), "renamed label missing: {svg}");
+        assert!(
+            svg.contains("telemetry_gateway_profile_731"),
+            "renamed stereotype missing: {svg}"
         );
     }
 
