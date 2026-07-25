@@ -401,6 +401,10 @@ const HEADER_FOOTER_FONT: f64 = 10.0;
 const FOOTER_BOTTOM_GAP: f64 = 8.5764;
 /// Font size for arrow/link labels.
 const LINK_FONT: f64 = 13.0;
+// Java `SvekEdge.addVisibilityModifier` wraps center labels with
+// `TextBlockUtils.withMargin(block, 1, 1)`. `TextBlockMarged.drawU` then
+// paints a full-size `UEmpty`, so the margin participates in SVEK bounds.
+const LINK_LABEL_MARGIN: f64 = 1.0;
 /// Line height per text line in a component box.
 const LINE_HEIGHT: f64 = 16.4883;
 /// Base component box height (padding around one line of text).
@@ -958,8 +962,11 @@ pub fn render_with_oracle(
             let center_label_size = conn.label.as_deref().map(|label| EdgeLabelSize {
                 // `SvekEdge.getLabelText` wraps the center label in one pixel
                 // of margin before `appendLine` emits its fixed HTML table.
-                width: text_render::measure(label, component_arrow_font_size, false) + 2.0,
-                height: (text_render::label_height(label, component_arrow_font_size) + 2.0).floor(),
+                width: text_render::measure(label, component_arrow_font_size, false)
+                    + LINK_LABEL_MARGIN * 2.0,
+                height: (text_render::label_height(label, component_arrow_font_size)
+                    + LINK_LABEL_MARGIN * 2.0)
+                    .floor(),
             });
             let endpoint_size = |label: Option<&str>| {
                 label.map(|label| EdgeLabelSize {
@@ -3593,11 +3600,18 @@ fn compute_no_oracle_canvas(input: NoOracleCanvas<'_>) -> (f64, f64) {
             path_max_y = Some(path_max_y.map_or(y, |bound| bound.max(y)));
         }
     }
-    for position in input.edge_paths.iter().flat_map(|edge| {
-        [edge.label, edge.tail_label, edge.head_label]
-            .into_iter()
-            .flatten()
-    }) {
+    for position in input.edge_paths.iter().filter_map(|edge| edge.label) {
+        // `SvekEdge.addVisibilityModifier` wraps only the center label.
+        // Graphviz reports the inner label box here; Java's subsequent
+        // `TextBlockMarged.drawU` contributes the full two-sided `UEmpty`.
+        max_x = max_x.max(position.x + input.edge_dx + position.width + LINK_LABEL_MARGIN * 2.0);
+        max_y = max_y.max(position.y + input.edge_dy + position.height + LINK_LABEL_MARGIN * 2.0);
+    }
+    for position in input
+        .edge_paths
+        .iter()
+        .flat_map(|edge| [edge.tail_label, edge.head_label].into_iter().flatten())
+    {
         max_x = max_x.max(position.x + input.edge_dx + position.width);
         max_y = max_y.max(position.y + input.edge_dy + position.height);
     }
@@ -5499,6 +5513,19 @@ fn estimate_package_height(pkg: &ComponentPackage) -> f64 {
 
 #[cfg(test)]
 mod tests {
+    fn numeric_attr(tag: &str, name: &str) -> f64 {
+        let marker = format!(r#"{name}=""#);
+        let value = tag
+            .split_once(&marker)
+            .and_then(|(_, rest)| rest.split_once('"'))
+            .map(|(value, _)| value)
+            .unwrap_or_else(|| panic!("missing {name} in {tag}"));
+        value
+            .trim_end_matches("px")
+            .parse()
+            .unwrap_or_else(|_| panic!("non-numeric {name} in {tag}"))
+    }
+
     #[test]
     fn parsed_then_rendered() {
         let input = "@startuml\ncomponent \"Web\" as WS\ncomponent \"DB\" as DB\nWS --> DB : query\n@enduml";
@@ -5883,6 +5910,31 @@ mod tests {
         assert!(
             svg.contains(r##"<polygon fill="#181818" points=""##),
             "dependency link should draw a PlantUML-style extremity polygon: {svg}"
+        );
+    }
+
+    #[test]
+    fn no_oracle_center_label_margin_extends_svek_frame_for_renamed_link() {
+        let label = "Renamed telemetry exchange 967";
+        let input = format!(
+            "@startuml\nskinparam componentArrowFontSize 17\ncomponent \"Ingress 947\" as Ingress947\ncomponent \"Archive 953\" as Archive953\nIngress947 --> Archive953 : {label}\n@enduml"
+        );
+        let diagram = rustuml_parser::parse::parse(&input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        let root = svg.split_once('>').map(|(root, _)| root).expect("SVG root");
+        let label_tag = svg
+            .split("<text ")
+            .find(|tag| tag.contains(&format!(">{label}</text>")))
+            .expect("renamed center label");
+        let canvas_width = numeric_attr(root, "width");
+        let text_right = numeric_attr(label_tag, "x") + numeric_attr(label_tag, "textLength");
+        let required_width =
+            (text_right + super::LINK_LABEL_MARGIN + super::SVEK_CANVAS_PAD).ceil();
+
+        assert_eq!(
+            canvas_width, required_width,
+            "SvekEdge's one-pixel right label margin must participate in the canvas: {svg}"
         );
     }
 
