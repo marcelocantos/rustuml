@@ -261,7 +261,7 @@ targets:
     discovered: 2026-07-03
   T14.5:
     name: Docs and release claims are driven by the no-oracle metric
-    status: identified
+    status: achieved
     value: 0.0
     cost: 0.0
     acceptance:
@@ -278,6 +278,7 @@ targets:
     - truth
     origin: manual
     discovered: 2026-07-03
+    achieved: 2026-07-25
   T2:
     name: Ditaa rendering engine ported to Rust
     status: set_aside
