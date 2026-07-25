@@ -165,4 +165,19 @@ pub struct ComponentNote {
     pub text: String,
     /// The id of the element this note is attached to, if any.
     pub target: Option<String>,
+    /// Requested side of an attached note.
+    #[serde(default)]
+    pub position: ComponentNotePosition,
+    /// 1-based line number within the `@startuml` block.
+    #[serde(default)]
+    pub source_line: usize,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
+pub enum ComponentNotePosition {
+    Top,
+    Bottom,
+    Left,
+    #[default]
+    Right,
 }

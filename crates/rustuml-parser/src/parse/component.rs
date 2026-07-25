@@ -180,6 +180,8 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
     let mut hidden_stereotypes: Vec<String> = Vec::new();
     // Note buffer for multi-line notes.
     let mut note_target: Option<String> = None;
+    let mut note_position = ComponentNotePosition::Right;
+    let mut note_source_line = 0;
     let mut note_lines: Vec<String> = Vec::new();
     let mut in_note: bool = false;
     // Multiline title accumulation.
@@ -211,7 +213,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
     });
     // Note: `note right of ID : text` or `note right of ID` (multiline)
     static RE_NOTE_OF: LazyLock<Regex> = LazyLock::new(|| {
-        Regex::new(r"^note\s+(?:right|left|top|bottom)\s+of\s+(\w+|\[[\w\s]+\])(?:\s*:\s*(.+))?$")
+        Regex::new(r"^note\s+(right|left|top|bottom)\s+of\s+(\w+|\[[\w\s]+\])(?:\s*:\s*(.+))?$")
             .unwrap()
     });
     // Floating note: `note "text" as ID` or `note : text`
@@ -270,6 +272,8 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                     notes.push(ComponentNote {
                         text,
                         target: note_target.take(),
+                        position: note_position,
+                        source_line: note_source_line,
                     });
                 }
                 note_lines.clear();
@@ -468,22 +472,35 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
 
         // Note attached to an element: `note right of ID : text`
         if let Some(caps) = RE_NOTE_OF.captures(trimmed) {
-            let target_raw = caps[1].to_string();
+            let position = match &caps[1] {
+                "top" => ComponentNotePosition::Top,
+                "bottom" => ComponentNotePosition::Bottom,
+                "left" => ComponentNotePosition::Left,
+                _ => ComponentNotePosition::Right,
+            };
+            let target_raw = caps[2].to_string();
             // Strip brackets if present: `[ID]` → `ID`.
             let target = target_raw
                 .trim_matches(|c| c == '[' || c == ']')
                 .replace(' ', "_");
             if let Some(inline_text) = caps
-                .get(2)
+                .get(3)
                 .map(|m| m.as_str().trim().to_string())
                 .filter(|t| !t.is_empty())
             {
                 notes.push(ComponentNote {
                     text: inline_text,
                     target: Some(target),
+                    position,
+                    source_line: current_line,
                 });
             } else {
                 note_target = Some(target);
+                note_position = position;
+                // `CommandFactoryNoteOnEntity.createMultiLine` creates the
+                // entity at the body `BlocLines` location after removing the
+                // opening command line.
+                note_source_line = current_line + 1;
                 note_lines.clear();
                 in_note = true;
             }
@@ -495,6 +512,8 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             notes.push(ComponentNote {
                 text: caps[1].to_string(),
                 target: None,
+                position: ComponentNotePosition::Right,
+                source_line: current_line,
             });
             continue;
         }
@@ -502,10 +521,17 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
         if let Some(rest) = trimmed.strip_prefix("note on link") {
             let text = rest.trim_start_matches([' ', ':']).trim().to_string();
             if !text.is_empty() {
-                notes.push(ComponentNote { text, target: None });
+                notes.push(ComponentNote {
+                    text,
+                    target: None,
+                    position: ComponentNotePosition::Right,
+                    source_line: current_line,
+                });
             } else {
                 // Multi-line note on link.
                 note_target = None;
+                note_position = ComponentNotePosition::Right;
+                note_source_line = current_line;
                 note_lines.clear();
                 in_note = true;
             }
@@ -518,13 +544,20 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
         {
             let text = rest.trim().to_string();
             if !text.is_empty() {
-                notes.push(ComponentNote { text, target: None });
+                notes.push(ComponentNote {
+                    text,
+                    target: None,
+                    position: ComponentNotePosition::Right,
+                    source_line: current_line,
+                });
                 continue;
             }
         }
         // Multi-line floating note: `note as ID` or plain `note`
         if trimmed.starts_with("note ") || trimmed == "note" {
             note_target = None;
+            note_position = ComponentNotePosition::Right;
+            note_source_line = current_line;
             note_lines.clear();
             in_note = true;
             continue;
@@ -940,6 +973,21 @@ mod tests {
         assert_eq!(d.notes.len(), 1);
         assert_eq!(d.notes[0].text, "Tagged component");
         assert_eq!(d.notes[0].target.as_deref(), Some("MyComp"));
+        assert_eq!(d.notes[0].position, ComponentNotePosition::Right);
+        assert_eq!(d.notes[0].source_line, 2);
+    }
+
+    #[test]
+    fn attached_note_preserves_side_and_source_for_renamed_target() {
+        let d = parse(
+            "component \"Renamed Relay 71\" as Relay71\nnote left of Relay71\n  A fresh perturbation\nend note",
+        );
+
+        assert_eq!(d.notes.len(), 1);
+        assert_eq!(d.notes[0].text, "A fresh perturbation");
+        assert_eq!(d.notes[0].target.as_deref(), Some("Relay71"));
+        assert_eq!(d.notes[0].position, ComponentNotePosition::Left);
+        assert_eq!(d.notes[0].source_line, 3);
     }
 
     #[test]

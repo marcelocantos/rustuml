@@ -120,12 +120,19 @@ fn build_package_entity_ids(
 
 struct NoOracleUidModel {
     entity_ids: std::collections::HashMap<String, String>,
+    note_ids: std::collections::HashMap<usize, NoOracleNoteUid>,
     link_ids: Vec<usize>,
+}
+
+struct NoOracleNoteUid {
+    qualified_name: String,
+    entity_id: String,
 }
 
 fn build_no_oracle_uid_model(diagram: &ComponentDiagram) -> NoOracleUidModel {
     enum Event {
         Entity(Vec<String>),
+        AttachedNote(usize),
         Link {
             index: usize,
             consumes_inverse: bool,
@@ -168,6 +175,12 @@ fn build_no_oracle_uid_model(diagram: &ComponentDiagram) -> NoOracleUidModel {
             ordinal += 1;
         }
     }
+    for (index, note) in diagram.notes.iter().enumerate() {
+        if note.target.is_some() {
+            events.push((note.source_line, ordinal, Event::AttachedNote(index)));
+            ordinal += 1;
+        }
+    }
     for (index, connection) in diagram.connections.iter().enumerate() {
         events.push((
             connection.source_line,
@@ -183,6 +196,7 @@ fn build_no_oracle_uid_model(diagram: &ComponentDiagram) -> NoOracleUidModel {
 
     let mut next_uid = 2;
     let mut entity_ids = std::collections::HashMap::new();
+    let mut note_ids = std::collections::HashMap::new();
     let mut link_ids = vec![0; diagram.connections.len()];
     for (_, _, event) in events {
         match event {
@@ -191,6 +205,23 @@ fn build_no_oracle_uid_model(diagram: &ComponentDiagram) -> NoOracleUidModel {
                 for key in keys {
                     entity_ids.insert(key, entity_id.clone());
                 }
+                next_uid += 1;
+            }
+            Event::AttachedNote(index) => {
+                // `CommandFactoryNoteOnEntity.executeInternal` obtains a
+                // generated GMN name, creates the note leaf, then creates its
+                // hidden Link. Each operation consumes one global UID.
+                let qualified_name = format!("GMN{next_uid}");
+                next_uid += 1;
+                let entity_id = format!("ent{next_uid:04}");
+                next_uid += 1;
+                note_ids.insert(
+                    index,
+                    NoOracleNoteUid {
+                        qualified_name,
+                        entity_id,
+                    },
+                );
                 next_uid += 1;
             }
             Event::Link {
@@ -208,6 +239,7 @@ fn build_no_oracle_uid_model(diagram: &ComponentDiagram) -> NoOracleUidModel {
 
     NoOracleUidModel {
         entity_ids,
+        note_ids,
         link_ids,
     }
 }
@@ -347,12 +379,76 @@ const ROUND_R: f64 = 2.5;
 const IFACE_R: f64 = 8.0;
 /// Note fold (dog-ear) size.
 const NOTE_FOLD: f64 = 10.0;
-/// Note padding.
+/// Fallback note padding.
 const NOTE_PAD: f64 = 6.0;
-/// Note line height.
+/// Fallback note line height.
 const NOTE_LINE_H: f64 = 18.0;
-/// Note gap from attached element.
+/// Fallback note gap from attached element.
 const NOTE_GAP: f64 = 10.0;
+// `EntityImageNote` and `Opale` use asymmetric horizontal margins and a
+// five-pixel vertical margin around the measured 13-point text block.
+const NOTE_MARGIN_X1: f64 = 6.0;
+const NOTE_MARGIN_X2: f64 = 15.0;
+const NOTE_MARGIN_Y: f64 = 5.0;
+// `Opale.getPolygon*` inserts an eight-pixel-wide connector mouth.
+const NOTE_CONNECTOR_HALF: f64 = 4.0;
+
+#[derive(Clone, Copy)]
+struct ComponentNoteLayout {
+    note_index: usize,
+    x: f64,
+    y: f64,
+    width: f64,
+    height: f64,
+}
+
+fn component_note_layout_id(index: usize) -> String {
+    format!("__component_note_{index}")
+}
+
+fn component_note_dim(note: &ComponentNote) -> CompDim {
+    let width = note
+        .text
+        .lines()
+        .map(|line| text_render::measure(line, LINK_FONT, false))
+        .fold(0.0_f64, f64::max)
+        + NOTE_MARGIN_X1
+        + NOTE_MARGIN_X2;
+    let text_height = note
+        .text
+        .lines()
+        .map(|line| text_render::label_height(line, LINK_FONT))
+        .sum::<f64>();
+    CompDim {
+        width,
+        height: text_height + NOTE_MARGIN_Y * 2.0,
+    }
+}
+
+fn attached_component_note_indices(diagram: &ComponentDiagram) -> Vec<usize> {
+    diagram
+        .notes
+        .iter()
+        .enumerate()
+        .filter_map(|(index, note)| {
+            note.target
+                .as_deref()
+                .filter(|target| {
+                    diagram
+                        .components
+                        .iter()
+                        .any(|component| component.id == *target)
+                })
+                .map(|_| index)
+        })
+        .collect()
+}
+
+fn round_svek_input_coord(value: f64) -> f64 {
+    // `SvgResult.getFirstPoint` consumes coordinates serialized by Graphviz's
+    // SVG renderer at hundredth-pixel precision before SVEK positions entities.
+    (value * 100.0).round() / 100.0
+}
 
 /// Title font size.
 const TITLE_FONT_SIZE: f64 = 14.0;
@@ -582,6 +678,8 @@ pub fn render_with_oracle(
 
     // Compute dimensions for each component.
     let comp_dims: Vec<CompDim> = diagram.components.iter().map(calc_component_dim).collect();
+    let note_dims: Vec<CompDim> = diagram.notes.iter().map(component_note_dim).collect();
+    let attached_note_indices = attached_component_note_indices(diagram);
 
     let title_h = if let Some(title) = &diagram.meta.title {
         // PlantUML title band: 10px top, n line-heights, 11px bottom gap before
@@ -610,6 +708,15 @@ pub fn render_with_oracle(
                 IFACE_R * 2.0 + 20.0,
             );
         }
+        for &note_index in &attached_note_indices {
+            let dim = &note_dims[note_index];
+            layout.add_node(
+                &component_note_layout_id(note_index),
+                "",
+                dim.width,
+                dim.height,
+            );
+        }
         let package_qualified_names = build_package_qualified_names(&diagram.packages);
         let mut group_endpoint_nodes = std::collections::HashMap::new();
         for endpoint in diagram
@@ -629,6 +736,33 @@ pub fn render_with_oracle(
         }
         add_package_clusters_to_layout(&mut layout, &diagram.packages, "", &group_endpoint_nodes);
         add_together_groups_to_layout(&mut layout, diagram);
+        for &note_index in &attached_note_indices {
+            let note = &diagram.notes[note_index];
+            let Some(target) = note.target.as_deref() else {
+                continue;
+            };
+            let note_id = component_note_layout_id(note_index);
+            let (from, to) = match note.position {
+                ComponentNotePosition::Top | ComponentNotePosition::Left => {
+                    (note_id.as_str(), target)
+                }
+                ComponentNotePosition::Bottom | ComponentNotePosition::Right => {
+                    (target, note_id.as_str())
+                }
+            };
+            if matches!(
+                note.position,
+                ComponentNotePosition::Left | ComponentNotePosition::Right
+            ) {
+                layout.add_same_rank(from, to);
+                layout.add_edge(from, to, None);
+            } else {
+                // `CommandFactoryNoteOnEntity.executeInternal` uses
+                // `LinkArg.noDisplay(2)` for vertical note links. SVEK maps
+                // `Link.getLength() - 1` to Graphviz's `minlen`.
+                layout.add_edge_with_minlen(from, to, None, 1);
+            }
+        }
         for conn in &diagram.connections {
             let (logical_from, logical_to, layout_reversed) = no_oracle_layout_edge_ends(conn);
             let layout_from = package_qualified_names
@@ -694,6 +828,7 @@ pub fn render_with_oracle(
                 &result.node_positions,
                 &result.cluster_positions,
                 title_h,
+                attached_note_indices.len(),
             )
         } else {
             compute_positions_grid(diagram, &comp_dims, title_h)
@@ -731,10 +866,36 @@ pub fn render_with_oracle(
                         .iter()
                         .map(|position| position.y)
                         .fold(f64::INFINITY, f64::min);
-                    (MARGIN - min_x, MARGIN + title_h - min_y)
+                    let (origin_x, origin_y) = component_layout_origins(
+                        &result.node_positions,
+                        n_comp,
+                        diagram.interfaces.len(),
+                        attached_note_indices.len(),
+                    );
+                    (origin_x - min_x, origin_y + title_h - min_y)
                 })
                 .unwrap_or((MARGIN, MARGIN + title_h))
         });
+    let note_layouts: Vec<ComponentNoteLayout> = layout_result
+        .as_ref()
+        .map(|result| {
+            let first_note_node = n_comp + diagram.interfaces.len();
+            attached_note_indices
+                .iter()
+                .enumerate()
+                .filter_map(|(offset, &note_index)| {
+                    let position = result.node_positions.get(first_note_node + offset)?;
+                    Some(ComponentNoteLayout {
+                        note_index,
+                        x: round_svek_input_coord(position.x + svek_edge_dx),
+                        y: round_svek_input_coord(position.y + svek_edge_dy),
+                        width: note_dims[note_index].width,
+                        height: note_dims[note_index].height,
+                    })
+                })
+                .collect()
+        })
+        .unwrap_or_default();
 
     // Estimate package bounding box.
     let pkg_total_w = estimate_packages_width(&diagram.packages);
@@ -759,6 +920,7 @@ pub fn render_with_oracle(
             edge_paths,
             edge_dx: svek_edge_dx,
             edge_dy: svek_edge_dy,
+            note_layouts: &note_layouts,
         })
     } else {
         (
@@ -1418,6 +1580,48 @@ pub fn render_with_oracle(
             );
             svg.raw(&group);
         }
+    } else if oracle.is_none() {
+        for (note_index, note) in diagram.notes.iter().enumerate() {
+            let layout = note_layouts
+                .iter()
+                .find(|layout| layout.note_index == note_index);
+            let uid = no_oracle_uids
+                .as_ref()
+                .and_then(|uids| uids.note_ids.get(&note_index));
+            if let (Some(layout), Some(uid), Some(target)) = (layout, uid, note.target.as_deref()) {
+                let note_id = component_note_layout_id(note_index);
+                let (from, to) = match note.position {
+                    ComponentNotePosition::Top | ComponentNotePosition::Left => {
+                        (note_id.as_str(), target)
+                    }
+                    ComponentNotePosition::Bottom | ComponentNotePosition::Right => {
+                        (target, note_id.as_str())
+                    }
+                };
+                let edge = edge_paths
+                    .iter()
+                    .find(|edge| edge.from == from && edge.to == to);
+                render_attached_component_note(
+                    note,
+                    layout,
+                    uid,
+                    edge,
+                    svek_edge_dx,
+                    svek_edge_dy,
+                    &mut svg,
+                );
+            } else {
+                render_fallback_note(
+                    note,
+                    &positions,
+                    &comp_dims,
+                    &diagram.components,
+                    &mut svg,
+                    total_w,
+                    total_h,
+                );
+            }
+        }
     }
 
     // Render connections (links).
@@ -1910,23 +2114,6 @@ pub fn render_with_oracle(
             svg.raw("</g>");
         }
     } // end else (non-oracle connections)
-
-    // When oracle is absent (Sugiyama path), fall back to our own note
-    // rendering. When oracle is present, notes have already been replayed
-    // verbatim before connections (see above).
-    if oracle.is_none() {
-        for note in &diagram.notes {
-            render_note(
-                note,
-                &positions,
-                &comp_dims,
-                &diagram.components,
-                &mut svg,
-                total_w,
-                total_h,
-            );
-        }
-    }
 
     // Footer — wrap in <g class="footer">. Centred within the caption block
     // and pinned a fixed gap above the bottom canvas edge.
@@ -2653,6 +2840,7 @@ fn compute_positions_from_layout(
     node_positions: &[rustuml_layout::graph::NodePosition],
     raw_cluster_positions: &[ClusterPosition],
     title_h: f64,
+    attached_note_count: usize,
 ) -> ComponentLayoutResult {
     let n_comp = diagram.components.len();
     let mut positions = Vec::with_capacity(n_comp);
@@ -2667,7 +2855,13 @@ fn compute_positions_from_layout(
         .map(|position| position.y)
         .fold(f64::INFINITY, f64::min);
     let (layout_dx, layout_dy) = if raw_cluster_positions.is_empty() {
-        (MARGIN - min_node_x, MARGIN + title_h - min_node_y)
+        let (origin_x, origin_y) = component_layout_origins(
+            node_positions,
+            n_comp,
+            diagram.interfaces.len(),
+            attached_note_count,
+        );
+        (origin_x - min_node_x, origin_y + title_h - min_node_y)
     } else {
         let min_x = raw_cluster_positions
             .iter()
@@ -2685,7 +2879,13 @@ fn compute_positions_from_layout(
 
     for (i, _comp) in diagram.components.iter().enumerate() {
         let p = &node_positions[i];
-        positions.push((p.x + layout_dx, p.y + layout_dy));
+        let x = p.x + layout_dx;
+        let y = p.y + layout_dy;
+        positions.push(if attached_note_count == 0 {
+            (x, y)
+        } else {
+            (round_svek_input_coord(x), round_svek_input_coord(y))
+        });
     }
     for (i, _iface) in diagram.interfaces.iter().enumerate() {
         let p = &node_positions[n_comp + i];
@@ -2741,6 +2941,44 @@ fn compute_positions_from_layout(
         cluster_positions,
         content_w,
         content_h,
+    )
+}
+
+fn component_layout_origins(
+    node_positions: &[rustuml_layout::graph::NodePosition],
+    component_count: usize,
+    interface_count: usize,
+    attached_note_count: usize,
+) -> (f64, f64) {
+    let note_start = component_count + interface_count;
+    let note_end = note_start + attached_note_count;
+    let min_x_index = node_positions
+        .iter()
+        .enumerate()
+        .min_by(|(_, left), (_, right)| left.x.total_cmp(&right.x))
+        .map(|(index, _)| index);
+    let min_y_index = node_positions
+        .iter()
+        .enumerate()
+        .min_by(|(_, left), (_, right)| left.y.total_cmp(&right.y))
+        .map(|(index, _)| index);
+    let is_note = |index: Option<usize>| index.is_some_and(|i| (note_start..note_end).contains(&i));
+
+    // `SvekResult.calculateDimension` moves the painted minimum to 6px.
+    // Ordinary component chrome begins one pixel inside its Graphviz box, so
+    // those graphs retain the historical 7px entity origin. Notes paint to
+    // their node boundary and therefore own the 6px origin on that axis.
+    (
+        if is_note(min_x_index) {
+            SVEK_CLUSTER_ORIGIN
+        } else {
+            MARGIN
+        },
+        if is_note(min_y_index) {
+            SVEK_CLUSTER_ORIGIN
+        } else {
+            MARGIN
+        },
     )
 }
 
@@ -2879,6 +3117,7 @@ struct NoOracleCanvas<'a> {
     edge_paths: &'a [EdgePath],
     edge_dx: f64,
     edge_dy: f64,
+    note_layouts: &'a [ComponentNoteLayout],
 }
 
 fn compute_no_oracle_canvas(input: NoOracleCanvas<'_>) -> (f64, f64) {
@@ -2902,6 +3141,10 @@ fn compute_no_oracle_canvas(input: NoOracleCanvas<'_>) -> (f64, f64) {
     for (cx, cy) in input.iface_positions {
         max_x = max_x.max(cx + IFACE_R);
         max_y = max_y.max(cy + IFACE_R + LINE_HEIGHT + 4.0);
+    }
+    for note in input.note_layouts {
+        max_x = max_x.max(note.x + note.width);
+        max_y = max_y.max(note.y + note.height);
     }
     for position in input.edge_paths.iter().flat_map(|edge| {
         [edge.label, edge.tail_label, edge.head_label]
@@ -3714,7 +3957,173 @@ fn build_path_d(points: &[(f64, f64)]) -> String {
 // Note rendering
 // ---------------------------------------------------------------------------
 
-fn render_note(
+fn render_attached_component_note(
+    note: &ComponentNote,
+    layout: &ComponentNoteLayout,
+    uid: &NoOracleNoteUid,
+    edge: Option<&EdgePath>,
+    edge_dx: f64,
+    edge_dy: f64,
+    svg: &mut SvgBuilder,
+) {
+    let center = (
+        layout.x + layout.width / 2.0,
+        layout.y + layout.height / 2.0,
+    );
+    let fallback = match note.position {
+        ComponentNotePosition::Top => (
+            (center.0, layout.y + layout.height),
+            (center.0, layout.y + layout.height + NOTE_GAP),
+        ),
+        ComponentNotePosition::Bottom => ((center.0, layout.y), (center.0, layout.y - NOTE_GAP)),
+        ComponentNotePosition::Left => (
+            (layout.x + layout.width, center.1),
+            (layout.x + layout.width + NOTE_GAP, center.1),
+        ),
+        ComponentNotePosition::Right => ((layout.x, center.1), (layout.x - NOTE_GAP, center.1)),
+    };
+    let (note_point, target_point) = edge
+        .and_then(|path| path.points.first().zip(path.points.last()))
+        .map(|(first, last)| {
+            let first = (
+                round_svek_input_coord(first.0 + edge_dx),
+                round_svek_input_coord(first.1 + edge_dy),
+            );
+            let last = (
+                round_svek_input_coord(last.0 + edge_dx),
+                round_svek_input_coord(last.1 + edge_dy),
+            );
+            match note.position {
+                ComponentNotePosition::Top | ComponentNotePosition::Left => (first, last),
+                ComponentNotePosition::Bottom | ComponentNotePosition::Right => (last, first),
+            }
+        })
+        .unwrap_or(fallback);
+    let mouth_x = note_point.0 - layout.x;
+    let mouth_y = note_point.1 - layout.y;
+    let tip_x = target_point.0;
+    let tip_y = target_point.1;
+    let x = layout.x;
+    let y = layout.y;
+    let w = layout.width;
+    let h = layout.height;
+    let fold = NOTE_FOLD;
+    let connector = NOTE_CONNECTOR_HALF;
+
+    // `EntityImageNote.drawU` delegates to `Opale.getPolygon{Left,Right,Up,Down}`.
+    // The hidden SVEK edge supplies the mouth and tip points embedded below.
+    let path = match note.position {
+        ComponentNotePosition::Right => {
+            let y1 = (mouth_y - connector).clamp(0.0, h - connector * 2.0);
+            format!(
+                "M{x0},{y0} L{x0},{y1} L{tx},{ty} L{x0},{y2} L{x0},{yb} A0,0 0 0 0 {x0},{yb} L{xr},{yb} A0,0 0 0 0 {xr},{yb} L{xr},{yf} L{xf},{y0} L{x0},{y0} A0,0 0 0 0 {x0},{y0}",
+                x0 = fc(x),
+                y0 = fc(y),
+                y1 = fc(y + y1),
+                tx = fc(tip_x),
+                ty = fc(tip_y),
+                y2 = fc(y + y1 + connector * 2.0),
+                yb = fc(y + h),
+                xr = fc(x + w),
+                yf = fc(y + fold),
+                xf = fc(x + w - fold),
+            )
+        }
+        ComponentNotePosition::Left => {
+            let y1 = (mouth_y - connector).clamp(fold, h - connector * 2.0);
+            format!(
+                "M{x0},{y0} L{x0},{yb} A0,0 0 0 0 {x0},{yb} L{xr},{yb} A0,0 0 0 0 {xr},{yb} L{xr},{y2} L{tx},{ty} L{xr},{y1} L{xr},{yf} L{xf},{y0} L{x0},{y0} A0,0 0 0 0 {x0},{y0}",
+                x0 = fc(x),
+                y0 = fc(y),
+                yb = fc(y + h),
+                xr = fc(x + w),
+                y2 = fc(y + y1 + connector * 2.0),
+                tx = fc(tip_x),
+                ty = fc(tip_y),
+                y1 = fc(y + y1),
+                yf = fc(y + fold),
+                xf = fc(x + w - fold),
+            )
+        }
+        ComponentNotePosition::Bottom => {
+            let x1 = (mouth_x - connector).clamp(0.0, w - fold);
+            format!(
+                "M{x0},{y0} L{x0},{yb} A0,0 0 0 0 {x0},{yb} L{xr},{yb} A0,0 0 0 0 {xr},{yb} L{xr},{yf} L{xf},{y0} L{x2},{y0} L{tx},{ty} L{x1},{y0} L{x0},{y0} A0,0 0 0 0 {x0},{y0}",
+                x0 = fc(x),
+                y0 = fc(y),
+                yb = fc(y + h),
+                xr = fc(x + w),
+                yf = fc(y + fold),
+                xf = fc(x + w - fold),
+                x2 = fc(x + x1 + connector * 2.0),
+                tx = fc(tip_x),
+                ty = fc(tip_y),
+                x1 = fc(x + x1),
+            )
+        }
+        ComponentNotePosition::Top => {
+            let x1 = (mouth_x - connector).clamp(0.0, w);
+            format!(
+                "M{x0},{y0} L{x0},{yb} A0,0 0 0 0 {x0},{yb} L{x1},{yb} L{tx},{ty} L{x2},{yb} L{xr},{yb} A0,0 0 0 0 {xr},{yb} L{xr},{yf} L{xf},{y0} L{x0},{y0} A0,0 0 0 0 {x0},{y0}",
+                x0 = fc(x),
+                y0 = fc(y),
+                yb = fc(y + h),
+                x1 = fc(x + x1),
+                tx = fc(tip_x),
+                ty = fc(tip_y),
+                x2 = fc(x + x1 + connector * 2.0),
+                xr = fc(x + w),
+                yf = fc(y + fold),
+                xf = fc(x + w - fold),
+            )
+        }
+    };
+    let fold_path = format!(
+        "M{x1},{y0} L{x1},{y1} L{x2},{y1} L{x1},{y0}",
+        x1 = fc(x + w - fold),
+        y0 = fc(y),
+        y1 = fc(y + fold),
+        x2 = fc(x + w),
+    );
+
+    svg.raw(&format!(
+        r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
+        uid.qualified_name, note.source_line, uid.entity_id
+    ));
+    svg.raw(&format!(
+        r#"<path d="{path}" fill="{NOTE_FILL}" style="stroke:{STROKE};stroke-width:0.5;"/>"#
+    ));
+    svg.raw(&format!(
+        r#"<path d="{fold_path}" fill="{NOTE_FILL}" style="stroke:{STROKE};stroke-width:0.5;"/>"#
+    ));
+
+    let mut text_y = y + NOTE_MARGIN_Y;
+    for line in note.text.lines() {
+        let ascent = text_render::label_ascent(line, LINK_FONT);
+        text_y += ascent;
+        let mut text_buf = String::new();
+        text_render::emit_text(
+            &mut text_buf,
+            line,
+            &TextBase {
+                x: x + NOTE_MARGIN_X1,
+                y: text_y,
+                font_size: LINK_FONT as u32,
+                font_family: "sans-serif",
+                fill: TEXT_COLOR,
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        svg.raw(&text_buf);
+        text_y += text_render::label_height(line, LINK_FONT) - ascent;
+    }
+    svg.raw("</g>");
+}
+
+fn render_fallback_note(
     note: &ComponentNote,
     positions: &[(f64, f64)],
     comp_dims: &[CompDim],
@@ -4587,6 +4996,29 @@ mod tests {
     }
 
     #[test]
+    fn no_oracle_attached_note_uses_svek_entity_for_renamed_target() {
+        let input = "@startuml\ncomponent \"Renamed Relay 71\" as Relay71\nnote left of Relay71 : Fresh perturbation 73\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(
+            svg.contains(
+                r#"<g class="entity" data-qualified-name="GMN3" data-source-line="2" id="ent0004">"#
+            ),
+            "attached note should consume Java-compatible GMN/entity identities: {svg}"
+        );
+        assert_eq!(
+            svg.matches(r##"<path d="M"##).count(),
+            2,
+            "Opale note body and fold should be path-based: {svg}"
+        );
+        assert!(
+            !svg.contains("<polygon "),
+            "the hidden note link should be embedded in the Opale outline: {svg}"
+        );
+    }
+
+    #[test]
     fn interface_label_rendered() {
         let input =
             "@startuml\ncomponent Hub\ninterface IA\ninterface IB\nHub - IA\nHub - IB\n@enduml";
@@ -4702,6 +5134,7 @@ mod tests {
             edge_paths: &[],
             edge_dx: 0.0,
             edge_dy: 0.0,
+            note_layouts: &[],
         });
         assert_eq!(canvas_w, expected_w);
         assert_eq!(canvas_h, expected_h);
