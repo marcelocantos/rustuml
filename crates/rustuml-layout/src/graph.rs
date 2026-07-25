@@ -299,13 +299,33 @@ impl LayoutGraph {
         tail_label_size: Option<EdgeLabelSize>,
         head_label_size: Option<EdgeLabelSize>,
     ) {
+        self.add_edge_with_label_sizes_and_minlen(
+            from,
+            to,
+            label_size,
+            tail_label_size,
+            head_label_size,
+            None,
+        );
+    }
+
+    /// Adds a measured-label edge with an optional explicit dot rank length.
+    pub fn add_edge_with_label_sizes_and_minlen(
+        &mut self,
+        from: &str,
+        to: &str,
+        label_size: Option<EdgeLabelSize>,
+        tail_label_size: Option<EdgeLabelSize>,
+        head_label_size: Option<EdgeLabelSize>,
+        minlen: Option<usize>,
+    ) {
         self.edges.push(EdgeSpec {
             from: from.to_string(),
             to: to.to_string(),
             label: None,
             tail_port: None,
             head_port: None,
-            minlen: None,
+            minlen,
             label_size,
             tail_label_size,
             head_label_size,

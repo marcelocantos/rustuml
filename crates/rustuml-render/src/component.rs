@@ -8,7 +8,9 @@
 
 use std::fmt::Write;
 
-use rustuml_layout::graph::{ClusterPosition, ClusterTitleSize, Direction, EdgePath, LayoutGraph};
+use rustuml_layout::graph::{
+    ClusterPosition, ClusterTitleSize, Direction, EdgeLabelSize, EdgePath, LayoutGraph,
+};
 use rustuml_parser::diagram::component::*;
 
 use crate::layout_oracle::{
@@ -627,7 +629,7 @@ pub fn render_with_oracle(
         }
         add_package_clusters_to_layout(&mut layout, &diagram.packages, "", &group_endpoint_nodes);
         for conn in &diagram.connections {
-            let (logical_from, logical_to, _) = no_oracle_layout_edge_ends(conn);
+            let (logical_from, logical_to, layout_reversed) = no_oracle_layout_edge_ends(conn);
             let layout_from = package_qualified_names
                 .get(logical_from)
                 .and_then(|qname| group_endpoint_nodes.get(qname))
@@ -638,20 +640,38 @@ pub fn render_with_oracle(
                 .and_then(|qname| group_endpoint_nodes.get(qname))
                 .map(String::as_str)
                 .unwrap_or(logical_to);
-            if matches!(
+            let horizontal = matches!(
                 conn.direction,
                 Some(ConnectionDirection::Left | ConnectionDirection::Right)
-            ) {
+            );
+            if horizontal {
                 layout.add_same_rank(layout_from, layout_to);
-                layout.add_edge(layout_from, layout_to, conn.label.as_deref());
-            } else {
-                layout.add_edge_with_minlen(
-                    layout_from,
-                    layout_to,
-                    conn.label.as_deref(),
-                    conn.length.saturating_sub(1),
-                );
             }
+            let center_label_size = conn.label.as_deref().map(|label| EdgeLabelSize {
+                // `SvekEdge.getLabelText` wraps the center label in one pixel
+                // of margin before `appendLine` emits its fixed HTML table.
+                width: text_render::measure(label, component_arrow_font_size, false) + 2.0,
+                height: (text_render::label_height(label, component_arrow_font_size) + 2.0).floor(),
+            });
+            let endpoint_size = |label: Option<&str>| {
+                label.map(|label| EdgeLabelSize {
+                    width: text_render::measure(label, component_arrow_font_size, false).floor(),
+                    height: text_render::label_height(label, component_arrow_font_size).floor(),
+                })
+            };
+            let (tail_label, head_label) = if layout_reversed {
+                (conn.to_mult.as_deref(), conn.from_mult.as_deref())
+            } else {
+                (conn.from_mult.as_deref(), conn.to_mult.as_deref())
+            };
+            layout.add_edge_with_label_sizes_and_minlen(
+                layout_from,
+                layout_to,
+                center_label_size,
+                endpoint_size(tail_label),
+                endpoint_size(head_label),
+                (!horizontal).then(|| conn.length.saturating_sub(1)),
+            );
         }
         layout.layout_full(std::time::Duration::from_secs(5))
     } else {
@@ -718,6 +738,9 @@ pub fn render_with_oracle(
             pkg_total_w,
             pkg_total_h,
             title_h,
+            edge_paths,
+            edge_dx: svek_edge_dx,
+            edge_dy: svek_edge_dy,
         })
     } else {
         (
@@ -1644,19 +1667,38 @@ pub fn render_with_oracle(
                 // Labels.
                 let first = edge_points.first().unwrap();
                 if let Some(label) = &conn.label {
-                    let path_last = edge_points.last().unwrap();
-                    let mx = (first.0 + path_last.0) / 2.0;
-                    let my = (first.1 + path_last.1) / 2.0;
+                    let (x, y) = ep
+                        .label
+                        .map(|position| {
+                            (
+                                position.x + svek_edge_dx + 1.0,
+                                position.y
+                                    + svek_edge_dy
+                                    + 1.0
+                                    + text_render::label_ascent_with_family(
+                                        label,
+                                        component_arrow_font_size,
+                                        &component_arrow_font_family,
+                                    ),
+                            )
+                        })
+                        .unwrap_or_else(|| {
+                            let path_last = edge_points.last().unwrap();
+                            (
+                                (first.0 + path_last.0) / 2.0 + 1.0,
+                                (first.1 + path_last.1) / 2.0 - 4.0,
+                            )
+                        });
                     let mut text_buf = String::new();
                     text_render::emit_text(
                         &mut text_buf,
                         label,
                         &TextBase {
-                            x: mx + 1.0,
-                            y: my - 4.0,
-                            font_size: LINK_FONT as u32,
-                            font_family: "sans-serif",
-                            fill: TEXT_COLOR,
+                            x,
+                            y,
+                            font_size: component_arrow_font_size as u32,
+                            font_family: &component_arrow_font_family,
+                            fill: &component_arrow_font_color,
                             bold: false,
                             italic: false,
                             underline: false,
@@ -1665,18 +1707,41 @@ pub fn render_with_oracle(
                     );
                     svg.raw(&text_buf);
                 }
-                if let Some(from_mult) = &conn.from_mult {
-                    let mw = text_render::measure(from_mult, LINK_FONT, false);
+                let (tail_mult, head_mult) = if layout_reversed {
+                    (conn.to_mult.as_deref(), conn.from_mult.as_deref())
+                } else {
+                    (conn.from_mult.as_deref(), conn.to_mult.as_deref())
+                };
+                if let Some(tail_mult) = tail_mult {
+                    let mw = text_render::measure(tail_mult, component_arrow_font_size, false);
+                    let (x, y) = ep
+                        .tail_label
+                        .map(|position| {
+                            (
+                                position.x + svek_edge_dx,
+                                position.y
+                                    + svek_edge_dy
+                                    + text_render::label_ascent_with_family(
+                                        tail_mult,
+                                        component_arrow_font_size,
+                                        &component_arrow_font_family,
+                                    ),
+                            )
+                        })
+                        .unwrap_or((
+                            first.0 - mw - 1.0,
+                            first.1 + component_arrow_font_size + 2.0,
+                        ));
                     let mut text_buf = String::new();
                     text_render::emit_text(
                         &mut text_buf,
-                        from_mult,
+                        tail_mult,
                         &TextBase {
-                            x: first.0 - mw - 1.0,
-                            y: first.1 + LINK_FONT + 2.0,
-                            font_size: LINK_FONT as u32,
-                            font_family: "sans-serif",
-                            fill: TEXT_COLOR,
+                            x,
+                            y,
+                            font_size: component_arrow_font_size as u32,
+                            font_family: &component_arrow_font_family,
+                            fill: &component_arrow_font_color,
                             bold: false,
                             italic: false,
                             underline: false,
@@ -1685,19 +1750,34 @@ pub fn render_with_oracle(
                     );
                     svg.raw(&text_buf);
                 }
-                if let Some(to_mult) = &conn.to_mult {
-                    let mw = text_render::measure(to_mult, LINK_FONT, false);
+                if let Some(head_mult) = head_mult {
+                    let mw = text_render::measure(head_mult, component_arrow_font_size, false);
                     let path_last = edge_points.last().unwrap();
+                    let (x, y) = ep
+                        .head_label
+                        .map(|position| {
+                            (
+                                position.x + svek_edge_dx,
+                                position.y
+                                    + svek_edge_dy
+                                    + text_render::label_ascent_with_family(
+                                        head_mult,
+                                        component_arrow_font_size,
+                                        &component_arrow_font_family,
+                                    ),
+                            )
+                        })
+                        .unwrap_or((path_last.0 - mw - 1.0, path_last.1 - 4.0));
                     let mut text_buf = String::new();
                     text_render::emit_text(
                         &mut text_buf,
-                        to_mult,
+                        head_mult,
                         &TextBase {
-                            x: path_last.0 - mw - 1.0,
-                            y: path_last.1 - 4.0,
-                            font_size: LINK_FONT as u32,
-                            font_family: "sans-serif",
-                            fill: TEXT_COLOR,
+                            x,
+                            y,
+                            font_size: component_arrow_font_size as u32,
+                            font_family: &component_arrow_font_family,
+                            fill: &component_arrow_font_color,
                             bold: false,
                             italic: false,
                             underline: false,
@@ -2748,6 +2828,9 @@ struct NoOracleCanvas<'a> {
     pkg_total_w: f64,
     pkg_total_h: f64,
     title_h: f64,
+    edge_paths: &'a [EdgePath],
+    edge_dx: f64,
+    edge_dy: f64,
 }
 
 fn compute_no_oracle_canvas(input: NoOracleCanvas<'_>) -> (f64, f64) {
@@ -2771,6 +2854,14 @@ fn compute_no_oracle_canvas(input: NoOracleCanvas<'_>) -> (f64, f64) {
     for (cx, cy) in input.iface_positions {
         max_x = max_x.max(cx + IFACE_R);
         max_y = max_y.max(cy + IFACE_R + LINE_HEIGHT + 4.0);
+    }
+    for position in input.edge_paths.iter().flat_map(|edge| {
+        [edge.label, edge.tail_label, edge.head_label]
+            .into_iter()
+            .flatten()
+    }) {
+        max_x = max_x.max(position.x + input.edge_dx + position.width);
+        max_y = max_y.max(position.y + input.edge_dy + position.height);
     }
     let mut total_w = max_x + SVEK_CANVAS_PAD;
     let mut total_h = max_y + SVEK_CANVAS_PAD;
@@ -4562,6 +4653,9 @@ mod tests {
             pkg_total_w: 0.0,
             pkg_total_h: 0.0,
             title_h: 0.0,
+            edge_paths: &[],
+            edge_dx: 0.0,
+            edge_dy: 0.0,
         });
         assert_eq!(canvas_w, expected_w);
         assert_eq!(canvas_h, expected_h);
