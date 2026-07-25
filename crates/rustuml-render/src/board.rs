@@ -141,7 +141,8 @@ pub fn render(diagram: &BoardDiagram, _theme: &Theme) -> String {
     svg.push_str("<?plantuml ?>");
     write!(
         svg,
-        r#"<defs><filter height="300%" id="{shadow_id}" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4" dy="4" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter></defs>"#
+        "<defs>{}</defs>",
+        filter_registry::shadow_filter_def(&shadow_id)
     )
     .unwrap();
     svg.push_str("<g>");

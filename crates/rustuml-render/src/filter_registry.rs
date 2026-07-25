@@ -109,6 +109,17 @@ pub fn shadow_id_for(source: &str) -> String {
     format!("f{}", abs_base36(plantuml_seed(source)))
 }
 
+/// Emit PlantUML's SVG drop-shadow filter body for `shadow_id`.
+///
+/// This is the `defs` child constructed by
+/// `SvgGraphics.createXmlDocument`, using the fixed blur, color-matrix,
+/// offset, and blend pipeline that backs shapes with `deltaShadow > 0`.
+pub fn shadow_filter_def(shadow_id: &str) -> String {
+    format!(
+        r#"<filter height="300%" id="{shadow_id}" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4" dy="4" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter>"#
+    )
+}
+
 /// Look up an id from the current registry, if any. Used by the text-
 /// emission path: a segment with `style.background = Some(_)` calls this
 /// to obtain the `filter="url(#...)"` value.
@@ -133,6 +144,35 @@ fn normalize_back_color(color: &str) -> String {
 /// Mersenne-ish prime `1125899906842597`, taken modulo 2^64 with Java's
 /// signed-overflow semantics.
 fn plantuml_seed(s: &str) -> i64 {
+    // PlantUML hashes `UmlSource.getPlainString("\n")`, after its source
+    // reader has discarded empty lines immediately following `@start...`.
+    // Preserve every other byte because comments, indentation, and the final
+    // newline all participate in `StringUtils.seed`.
+    let mut normalized;
+    let s = if let Some(first_newline) = s.find('\n')
+        && s[..first_newline].trim_start().starts_with("@start")
+    {
+        let mut content_start = first_newline + 1;
+        while content_start < s.len() {
+            let line_end = s[content_start..]
+                .find('\n')
+                .map_or(s.len(), |offset| content_start + offset + 1);
+            if !s[content_start..line_end].trim().is_empty() {
+                break;
+            }
+            content_start = line_end;
+        }
+        if content_start > first_newline + 1 {
+            normalized = String::with_capacity(s.len());
+            normalized.push_str(&s[..first_newline + 1]);
+            normalized.push_str(&s[content_start..]);
+            normalized.as_str()
+        } else {
+            s
+        }
+    } else {
+        s
+    };
     let mut h: u64 = 1_125_899_906_842_597;
     for c in s.chars() {
         // Java's `long h = 31 * h + s.charAt(i)` — `charAt` returns a 16-bit
@@ -180,6 +220,12 @@ mod tests {
         let src = "@startuml\nclass MyClass {\n  <back:cyan>cyan bg</back>: field\n}\n@enduml\n";
         let reg = FilterRegistry::for_source(src);
         assert_eq!(reg.uid_prefix, "bjdpys1nesotu");
+    }
+
+    #[test]
+    fn seed_uses_plantuml_plain_source_without_initial_blank_lines() {
+        let src = "@startuml\n\nskinparam shadowing true\n:Fresh seeded shadow;\n@enduml\n";
+        assert_eq!(shadow_id_for(src), "f8uac2ses7vez");
     }
 
     #[test]

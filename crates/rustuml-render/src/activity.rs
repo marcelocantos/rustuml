@@ -31487,7 +31487,26 @@ fn node_contains_action(node: &LayoutNode) -> bool {
 }
 
 pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
-    render_inner(diagram, theme, "", None, None, None, None)
+    let shadowing = diagram
+        .meta
+        .skinparams
+        .iter()
+        .fold(false, |enabled, skinparam| {
+            let key = skinparam.key.to_ascii_lowercase();
+            if matches!(key.as_str(), "shadowing" | "activityshadowing") {
+                skinparam.value.eq_ignore_ascii_case("true")
+            } else {
+                enabled
+            }
+        });
+    if shadowing {
+        let source = diagram.meta.source.as_deref().unwrap_or("");
+        let filter_id = crate::filter_registry::shadow_id_for(source);
+        let defs = crate::filter_registry::shadow_filter_def(&filter_id);
+        render_inner(diagram, theme, &defs, None, None, Some(filter_id), None)
+    } else {
+        render_inner(diagram, theme, "", None, None, None, None)
+    }
 }
 
 fn render_inner(
@@ -32684,6 +32703,27 @@ mod tests {
         )
         .expect("fresh cross-lane if scene");
         assert!(rendered.content.contains("renamed request valid?"));
+    }
+
+    #[test]
+    fn explicit_shadowing_builds_the_seeded_svg_filter_without_oracle_data() {
+        let input = concat!(
+            "@startuml\n",
+            "skinparam shadowing true\n",
+            "start\n",
+            ":Fresh shadow action;\n",
+            "stop\n",
+            "@enduml\n",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        let filter_id = crate::filter_registry::shadow_id_for(input);
+
+        assert!(svg.contains(&format!(
+            r#"<filter height="300%" id="{filter_id}" width="300%" x="-1" y="-1">"#
+        )));
+        assert!(svg.contains(&format!(r#"filter="url(#{filter_id})""#)));
+        assert!(svg.contains("Fresh shadow action"));
     }
 
     #[test]
