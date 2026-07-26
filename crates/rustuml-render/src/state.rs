@@ -131,9 +131,10 @@ const LINK_FONT_SIZE: f64 = 13.0;
 const DIVIDER_OFFSET: f64 = 26.48828125;
 /// Vertical position of the state name text baseline relative to box top.
 const NAME_BASELINE_OFFSET: f64 = 18.53515625;
-// Extracted from Java `ClusterHeader` output: the state cluster title sheet is
-// one pixel shallower than an ordinary `EntityImageState` header.
-const CLUSTER_HEADER_DIVIDER_OFFSET: f64 = DIVIDER_OFFSET - 1.0;
+// Java `Cluster.drawUState` gives `RoundedContainer` a header height of
+// `titleHeight + IEntityImage.MARGIN`, while `EntityImageState.drawU` places
+// its divider at `MARGIN + titleHeight + MARGIN_LINE`. `MARGIN_LINE` is 5px.
+const CLUSTER_HEADER_DIVIDER_OFFSET: f64 = DIVIDER_OFFSET - 5.0;
 const CLUSTER_TITLE_BASELINE_OFFSET: f64 = NAME_BASELINE_OFFSET - 1.0;
 /// Vertical position of first description line baseline relative to divider.
 const FIRST_DESC_OFFSET: f64 = 16.6015625;
