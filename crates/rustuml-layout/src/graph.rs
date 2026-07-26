@@ -756,6 +756,63 @@ impl LayoutGraph {
         let style_key = CString::new("style").unwrap();
         let invisible_val = CString::new("invis").unwrap();
 
+        // Java `SmetanaForJson.createNode` leaves every record naturally
+        // sized. Native Graphviz needs that freedom specifically when a flat
+        // row record routes into a nested key/value record; forcing either
+        // endpoint label into its measured box can put the source point
+        // outside the routing triangles. Keep the established fixed geometry
+        // for other relationships while allowing the connected record
+        // component to expand to its label minima.
+        let mut natural_record_nodes = HashSet::new();
+        for edge in &self.edges {
+            let Some(source) = self.nodes.iter().find(|node| node.id == edge.from) else {
+                continue;
+            };
+            let Some(target) = self.nodes.iter().find(|node| node.id == edge.to) else {
+                continue;
+            };
+            if matches!(
+                source.shape,
+                NodeShape::Record {
+                    has_key_column: false,
+                    ..
+                }
+            ) && matches!(
+                target.shape,
+                NodeShape::Record {
+                    has_key_column: true,
+                    ..
+                }
+            ) {
+                natural_record_nodes.insert(source.id.clone());
+                natural_record_nodes.insert(target.id.clone());
+            }
+        }
+        loop {
+            let previous_len = natural_record_nodes.len();
+            for edge in &self.edges {
+                let Some(source) = self.nodes.iter().find(|node| node.id == edge.from) else {
+                    continue;
+                };
+                let Some(target) = self.nodes.iter().find(|node| node.id == edge.to) else {
+                    continue;
+                };
+                let source_is_record = matches!(source.shape, NodeShape::Record { .. });
+                let target_is_record = matches!(target.shape, NodeShape::Record { .. });
+                if source_is_record
+                    && target_is_record
+                    && (natural_record_nodes.contains(&source.id)
+                        || natural_record_nodes.contains(&target.id))
+                {
+                    natural_record_nodes.insert(source.id.clone());
+                    natural_record_nodes.insert(target.id.clone());
+                }
+            }
+            if natural_record_nodes.len() == previous_len {
+                break;
+            }
+        }
+
         macro_rules! create_node {
             ($node_idx:expr) => {{
                 let spec = &self.nodes[$node_idx];
@@ -845,18 +902,21 @@ impl LayoutGraph {
                             h_str.as_ptr(),
                             empty.as_ptr(),
                         );
-                        graphviz_ffi::agsafeset(
-                            node as *mut c_void,
-                            fixedsize_key.as_ptr(),
-                            fixedsize_val.as_ptr(),
-                            empty.as_ptr(),
-                        );
+                        if !natural_record_nodes.contains(&spec.id) {
+                            graphviz_ffi::agsafeset(
+                                node as *mut c_void,
+                                fixedsize_key.as_ptr(),
+                                fixedsize_val.as_ptr(),
+                                empty.as_ptr(),
+                            );
+                        }
                         // PlantUML SVEK uses dot for geometry and renders
                         // entity labels itself.
                         let label_val = match &spec.shape {
                             NodeShape::Record {
                                 ports,
                                 has_key_column,
+                                ..
                             } => CString::new(record_label(ports, *has_key_column)).unwrap(),
                             NodeShape::Box
                             | NodeShape::Circle
@@ -2439,6 +2499,59 @@ mod tests {
         let result = graph.layout_full_no_timeout();
         assert_eq!(result.edge_paths.len(), 2);
         assert!(result.edge_paths.iter().all(|edge| !edge.points.is_empty()));
+    }
+
+    #[test]
+    fn renamed_flat_record_routes_three_keyed_item_branches() {
+        let mut graph = LayoutGraph::new(Direction::TopToBottom);
+        assert!(graph.add_keyed_record_node(
+            "renamed_root",
+            21.0,
+            132.0,
+            &["collection_slot".to_string()],
+        ));
+        assert!(graph.add_record_node(
+            "renamed_collection",
+            61.0,
+            31.0,
+            &[
+                "alpha_value".to_string(),
+                "beta_value".to_string(),
+                "gamma_value".to_string(),
+            ],
+        ));
+        graph.add_edge_with_ports(
+            "renamed_root",
+            "renamed_collection",
+            None,
+            Some("collection_slot"),
+            None,
+        );
+
+        for branch in ["alpha", "beta", "gamma"] {
+            let item = format!("{branch}_item");
+            let item_port = format!("{branch}_value");
+            assert!(graph.add_keyed_record_node(
+                &item,
+                41.0,
+                101.0,
+                &["renamed_key".to_string(), "second_key".to_string()],
+            ));
+            graph.add_edge_with_ports(
+                "renamed_collection",
+                &item,
+                None,
+                Some(&item_port),
+                None,
+            );
+        }
+
+        let result = graph.layout_full_no_timeout();
+        assert_eq!(result.edge_paths.len(), 4);
+        assert!(
+            result.edge_paths.iter().all(|edge| edge.points.len() >= 4),
+            "all perturbed record branches must retain routed cubic splines"
+        );
     }
 
     #[test]
