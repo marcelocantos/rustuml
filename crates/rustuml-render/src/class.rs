@@ -2111,8 +2111,11 @@ fn render_with_oracle_uid_origin(
         ClassLayoutDirection::TopToBottom => Direction::TopToBottom,
         ClassLayoutDirection::LeftToRight => Direction::LeftToRight,
     };
-    // Phase 2: Use layout engine to determine positions.
-    let mut layout = LayoutGraph::new(direction).with_plantuml_svek_spacing();
+    // `DotStringFactory.createDotString` starts from the non-activity SVEK
+    // minima, then independently replaces each axis when SkinParam's raw
+    // integer nodesep/ranksep value is nonzero.
+    let (node_sep, rank_sep) = class_svek_spacing(diagram);
+    let mut layout = LayoutGraph::new(direction).with_spacing_pixels(node_sep, rank_sep);
     let floating_note_indices: Vec<usize> = diagram
         .notes
         .iter()
@@ -8850,6 +8853,28 @@ fn has_strictuml_style(diagram: &ClassDiagram) -> bool {
     })
 }
 
+fn class_svek_spacing(diagram: &ClassDiagram) -> (f64, f64) {
+    const MIN_NODE_SEP: f64 = 35.0;
+    const MIN_RANK_SEP: f64 = 60.0;
+
+    let explicit_nonzero = |key: &str| {
+        diagram
+            .meta
+            .skinparams
+            .iter()
+            .rev()
+            .find(|skinparam| skinparam.key.eq_ignore_ascii_case(key))
+            .and_then(|skinparam| skinparam.value.trim().parse::<i32>().ok())
+            .filter(|value| *value != 0)
+            .map(f64::from)
+    };
+
+    (
+        explicit_nonzero("nodesep").unwrap_or(MIN_NODE_SEP),
+        explicit_nonzero("ranksep").unwrap_or(MIN_RANK_SEP),
+    )
+}
+
 fn has_ortho_linetype(diagram: &ClassDiagram) -> bool {
     diagram
         .meta
@@ -14442,6 +14467,52 @@ mod tests {
         assert!(svg.contains(r#"id="FreshAuditAlias7321-to-FreshPlainArchive7331""#));
         assert!(!svg.contains("Fresh_Billing_Portal_7319-to-FreshAuditAlias7321"));
         assert!(!svg.contains("Fresh Audit View 7321-to-FreshPlainArchive7331"));
+    }
+
+    #[test]
+    fn explicit_svek_spacing_overrides_only_its_named_axis() {
+        let nodesep_only = rustuml_parser::parse::parse(
+            "@startuml\n\
+             skinparam nodesep 47\n\
+             class FreshNodeAlpha7411\n\
+             class FreshNodeBeta7417\n\
+             FreshNodeAlpha7411 --> FreshNodeBeta7417\n\
+             @enduml",
+        )
+        .unwrap();
+        let ranksep_only = rustuml_parser::parse::parse(
+            "@startuml\n\
+             skinparam ranksep 83\n\
+             class FreshRankAlpha7421\n\
+             class FreshRankBeta7433\n\
+             FreshRankAlpha7421 --> FreshRankBeta7433\n\
+             @enduml",
+        )
+        .unwrap();
+        let explicit_zero = rustuml_parser::parse::parse(
+            "@startuml\n\
+             skinparam nodesep 0\n\
+             skinparam ranksep 0\n\
+             class FreshDefaultAlpha7451\n\
+             class FreshDefaultBeta7457\n\
+             FreshDefaultAlpha7451 --> FreshDefaultBeta7457\n\
+             @enduml",
+        )
+        .unwrap();
+
+        let rustuml_parser::diagram::Diagram::Class(nodesep_only) = nodesep_only else {
+            panic!("expected class diagram");
+        };
+        let rustuml_parser::diagram::Diagram::Class(ranksep_only) = ranksep_only else {
+            panic!("expected class diagram");
+        };
+        let rustuml_parser::diagram::Diagram::Class(explicit_zero) = explicit_zero else {
+            panic!("expected class diagram");
+        };
+
+        assert_eq!(class_svek_spacing(&nodesep_only), (47.0, 60.0));
+        assert_eq!(class_svek_spacing(&ranksep_only), (35.0, 83.0));
+        assert_eq!(class_svek_spacing(&explicit_zero), (35.0, 60.0));
     }
 
     #[test]
