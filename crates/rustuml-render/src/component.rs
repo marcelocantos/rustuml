@@ -554,6 +554,9 @@ const NOTE_GAP: f64 = 10.0;
 const NOTE_MARGIN_X1: f64 = 6.0;
 const NOTE_MARGIN_X2: f64 = 15.0;
 const NOTE_MARGIN_Y: f64 = 5.0;
+// Java provenance: `EntityImageNoteLink` delegates to `ComponentRoseNote`,
+// whose preferred size adds Rose's five-pixel padding on every side.
+const LINK_NOTE_PADDING: f64 = 5.0;
 // `Opale.getPolygon*` inserts an eight-pixel-wide connector mouth.
 const NOTE_CONNECTOR_HALF: f64 = 4.0;
 
@@ -587,6 +590,102 @@ fn component_note_dim(note: &ComponentNote) -> CompDim {
         width,
         height: text_height + NOTE_MARGIN_Y * 2.0,
     }
+}
+
+fn component_note_on_connection(
+    diagram: &ComponentDiagram,
+    connection: usize,
+) -> Option<(usize, &ComponentNote)> {
+    diagram
+        .notes
+        .iter()
+        .enumerate()
+        .find(|(_, note)| note.connection == Some(connection))
+}
+
+fn component_link_note_label_size(
+    note: &ComponentNote,
+    note_dim: &CompDim,
+    label_size: Option<EdgeLabelSize>,
+) -> EdgeLabelSize {
+    let note_width = note_dim.width + LINK_NOTE_PADDING * 2.0;
+    let note_height = note_dim.height + LINK_NOTE_PADDING * 2.0;
+    let Some(label_size) = label_size else {
+        return EdgeLabelSize {
+            width: note_width,
+            height: note_height,
+        };
+    };
+
+    match note.position {
+        ComponentNotePosition::Left | ComponentNotePosition::Right => EdgeLabelSize {
+            width: note_width + label_size.width,
+            height: note_height.max(label_size.height),
+        },
+        ComponentNotePosition::Top | ComponentNotePosition::Bottom => EdgeLabelSize {
+            width: note_width.max(label_size.width),
+            height: note_height + label_size.height,
+        },
+    }
+}
+
+fn component_link_note_blocks(
+    x: f64,
+    y: f64,
+    note: &ComponentNote,
+    note_dim: &CompDim,
+    label_size: Option<EdgeLabelSize>,
+) -> (Option<(f64, f64)>, (f64, f64)) {
+    let note_width = note_dim.width + LINK_NOTE_PADDING * 2.0;
+    let note_height = note_dim.height + LINK_NOTE_PADDING * 2.0;
+    let Some(label_size) = label_size else {
+        return (None, (x + LINK_NOTE_PADDING, y + LINK_NOTE_PADDING));
+    };
+
+    let (label_origin, note_origin) = match note.position {
+        ComponentNotePosition::Left => {
+            let merged_height = note_height.max(label_size.height);
+            (
+                (
+                    x + note_width,
+                    y + (merged_height - label_size.height) / 2.0,
+                ),
+                (x, y + (merged_height - note_height) / 2.0),
+            )
+        }
+        ComponentNotePosition::Right => {
+            let merged_height = note_height.max(label_size.height);
+            (
+                (x, y + (merged_height - label_size.height) / 2.0),
+                (
+                    x + label_size.width,
+                    y + (merged_height - note_height) / 2.0,
+                ),
+            )
+        }
+        ComponentNotePosition::Top => {
+            let merged_width = note_width.max(label_size.width);
+            (
+                (x + (merged_width - label_size.width) / 2.0, y + note_height),
+                (x + (merged_width - note_width) / 2.0, y),
+            )
+        }
+        ComponentNotePosition::Bottom => {
+            let merged_width = note_width.max(label_size.width);
+            (
+                (x + (merged_width - label_size.width) / 2.0, y),
+                (x + (merged_width - note_width) / 2.0, y + label_size.height),
+            )
+        }
+    };
+
+    (
+        Some(label_origin),
+        (
+            note_origin.0 + LINK_NOTE_PADDING,
+            note_origin.1 + LINK_NOTE_PADDING,
+        ),
+    )
 }
 
 fn laid_out_note_indices(
@@ -1049,7 +1148,7 @@ pub fn render_with_oracle(
                 layout.add_edge_with_minlen(from, to, None, 1);
             }
         }
-        for conn in &diagram.connections {
+        for (connection_index, conn) in diagram.connections.iter().enumerate() {
             let (logical_from, logical_to, layout_reversed) = no_oracle_layout_edge_ends(conn);
             let horizontal = matches!(
                 conn.direction,
@@ -1080,7 +1179,7 @@ pub fn render_with_oracle(
                 layout.add_same_rank(layout_from, layout_to);
             }
             let center_label_margin = svek_link_label_margin(logical_from, logical_to);
-            let center_label_size = conn.label.as_deref().map(|label| EdgeLabelSize {
+            let ordinary_center_label_size = conn.label.as_deref().map(|label| EdgeLabelSize {
                 // `SvekEdge.addVisibilityModifier` wraps ordinary center
                 // labels by one pixel and autolink labels by six before
                 // `appendLine` emits its fixed HTML table.
@@ -1094,6 +1193,27 @@ pub fn render_with_oracle(
                     + center_label_margin * 2.0)
                     .floor(),
             });
+            let center_label_size = if let Some((note_index, note)) =
+                component_note_on_connection(diagram, connection_index)
+            {
+                let exact_label_size = conn.label.as_deref().map(|label| EdgeLabelSize {
+                    width: component_edge_label_layout_width(
+                        label,
+                        component_arrow_font_size,
+                        center_label_margin,
+                        short_label_compat,
+                    ),
+                    height: text_render::label_height(label, component_arrow_font_size)
+                        + center_label_margin * 2.0,
+                });
+                Some(component_link_note_label_size(
+                    note,
+                    &note_dims[note_index],
+                    exact_label_size,
+                ))
+            } else {
+                ordinary_center_label_size
+            };
             let endpoint_size = |label: Option<&str>| {
                 label.map(|label| EdgeLabelSize {
                     width: text_render::measure(label, component_arrow_font_size, false).floor(),
@@ -1214,6 +1334,46 @@ pub fn render_with_oracle(
                 .collect()
         })
         .unwrap_or_default();
+    let link_note_unpainted_right_edges: Vec<(String, String)> = diagram
+        .connections
+        .iter()
+        .enumerate()
+        .filter_map(|(connection_index, connection)| {
+            let (note_index, note) = component_note_on_connection(diagram, connection_index)?;
+            if !matches!(
+                note.position,
+                ComponentNotePosition::Top | ComponentNotePosition::Bottom
+            ) {
+                return None;
+            }
+            let margin = svek_link_label_margin(&connection.from, &connection.to);
+            let label_width = connection
+                .label
+                .as_deref()
+                .map(|label| {
+                    component_edge_label_layout_width(
+                        label,
+                        component_arrow_font_size,
+                        margin,
+                        short_label_compat,
+                    )
+                })
+                .unwrap_or(0.0);
+            let note_width = note_dims[note_index].width + LINK_NOTE_PADDING * 2.0;
+            if note_width < label_width {
+                return None;
+            }
+            let (logical_from, logical_to, _) = no_oracle_layout_edge_ends(connection);
+            let layout_endpoint = |logical: &str| {
+                package_qualified_names
+                    .get(logical)
+                    .and_then(|qname| group_endpoint_node_map.get(qname))
+                    .cloned()
+                    .unwrap_or_else(|| logical.to_string())
+            };
+            Some((layout_endpoint(logical_from), layout_endpoint(logical_to)))
+        })
+        .collect();
 
     // Estimate package bounding box.
     let pkg_total_w = estimate_packages_width(&diagram.packages);
@@ -1240,6 +1400,7 @@ pub fn render_with_oracle(
             edge_dx: svek_edge_dx,
             edge_dy: svek_edge_dy,
             note_layouts: &note_layouts,
+            link_note_unpainted_right_edges: &link_note_unpainted_right_edges,
         })
     } else {
         (
@@ -2017,6 +2178,9 @@ pub fn render_with_oracle(
         }
     } else if oracle.is_none() {
         for (note_index, note) in diagram.notes.iter().enumerate() {
+            if note.connection.is_some() {
+                continue;
+            }
             if note
                 .target
                 .as_deref()
@@ -2442,8 +2606,20 @@ pub fn render_with_oracle(
 
                 // Labels.
                 let first = edge_points.first().unwrap();
+                let link_note = component_note_on_connection(diagram, connection_index);
+                let center_label_margin = svek_link_label_margin(logical_from, logical_to);
+                let exact_center_label_size = conn.label.as_deref().map(|label| EdgeLabelSize {
+                    width: component_edge_label_layout_width(
+                        label,
+                        component_arrow_font_size,
+                        center_label_margin,
+                        short_label_compat,
+                    ),
+                    height: text_render::label_height(label, component_arrow_font_size)
+                        + center_label_margin * 2.0,
+                });
                 if let Some(label) = &conn.label {
-                    let label_margin = svek_link_label_margin(logical_from, logical_to);
+                    let label_margin = center_label_margin;
                     let label_ascent = text_render::label_ascent_with_family(
                         label,
                         component_arrow_font_size,
@@ -2465,9 +2641,23 @@ pub fn render_with_oracle(
                     let (x, y) = ep
                         .label
                         .map(|position| {
+                            let solved_origin =
+                                (position.x + svek_edge_dx, position.y + svek_edge_dy);
+                            let label_origin = if let Some((note_index, note)) = link_note {
+                                component_link_note_blocks(
+                                    solved_origin.0,
+                                    solved_origin.1,
+                                    note,
+                                    &note_dims[note_index],
+                                    exact_center_label_size,
+                                )
+                                .0
+                                .unwrap_or(solved_origin)
+                            } else {
+                                solved_origin
+                            };
                             (
-                                position.x
-                                    + svek_edge_dx
+                                label_origin.0
                                     + label_margin
                                     + (placeholder_width - measured_layout_width) / 2.0,
                                 if short_label_compat && horizontal {
@@ -2475,7 +2665,7 @@ pub fn render_with_oracle(
                                         + label_margin
                                         + label_ascent
                                 } else {
-                                    position.y + svek_edge_dy + label_margin + label_ascent
+                                    label_origin.1 + label_margin + label_ascent
                                 },
                             )
                         })
@@ -2503,6 +2693,24 @@ pub fn render_with_oracle(
                         },
                     );
                     svg.raw(&text_buf);
+                }
+                if let Some((note_index, note)) = link_note
+                    && let Some(position) = ep.label
+                {
+                    let (_, (note_x, note_y)) = component_link_note_blocks(
+                        position.x + svek_edge_dx,
+                        position.y + svek_edge_dy,
+                        note,
+                        &note_dims[note_index],
+                        exact_center_label_size,
+                    );
+                    render_component_link_note(
+                        note,
+                        note_x,
+                        note_y,
+                        &note_dims[note_index],
+                        &mut svg,
+                    );
                 }
                 let (tail_mult, head_mult) = if layout_reversed {
                     (conn.to_mult.as_deref(), conn.from_mult.as_deref())
@@ -3934,6 +4142,7 @@ struct NoOracleCanvas<'a> {
     edge_dx: f64,
     edge_dy: f64,
     note_layouts: &'a [ComponentNoteLayout],
+    link_note_unpainted_right_edges: &'a [(String, String)],
 }
 
 fn compute_no_oracle_canvas(input: NoOracleCanvas<'_>) -> (f64, f64) {
@@ -3999,7 +4208,15 @@ fn compute_no_oracle_canvas(input: NoOracleCanvas<'_>) -> (f64, f64) {
         // wrapper; `SvekResult.calculateDimension` therefore sees only the
         // usual one-pixel painted tail beyond the reported box.
         let margin = svek_link_label_margin(&edge.from, &edge.to);
-        let painted_tail = if edge.from == edge.to {
+        let painted_tail = if input
+            .link_note_unpainted_right_edges
+            .iter()
+            .any(|(from, to)| from == &edge.from && to == &edge.to)
+        {
+            // The fixed HTML table reserves Rose's trailing five-pixel
+            // padding, but `LimitFinder` sees only the folded Opale body.
+            -LINK_NOTE_PADDING
+        } else if edge.from == edge.to {
             LINK_LABEL_MARGIN
         } else {
             margin * 2.0
@@ -5122,6 +5339,61 @@ fn render_normal_component_note(
         text_y += text_render::label_height(line, LINK_FONT) - ascent;
     }
     svg.raw("</g>");
+}
+
+fn render_component_link_note(
+    note: &ComponentNote,
+    x: f64,
+    y: f64,
+    dim: &CompDim,
+    svg: &mut SvgBuilder,
+) {
+    // `ComponentRoseNote.drawInternalU` truncates the text-box dimensions
+    // before delegating the folded rectangle to `Opale`.
+    let width = dim.width.floor();
+    let height = dim.height.floor();
+    let right = x + width;
+    let bottom = y + height;
+    let fold_x = right - NOTE_FOLD;
+    let fold_y = y + NOTE_FOLD;
+    svg.raw(&format!(
+        r#"<path d="M{x},{y} L{x},{bottom} L{right},{bottom} L{right},{fold_y} L{fold_x},{y} L{x},{y}" fill="{NOTE_FILL}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+        x = fc(x),
+        y = fc(y),
+        bottom = fc(bottom),
+        right = fc(right),
+        fold_y = fc(fold_y),
+        fold_x = fc(fold_x),
+    ));
+    svg.raw(&format!(
+        r#"<path d="M{fold_x},{y} L{fold_x},{fold_y} L{right},{fold_y} L{fold_x},{y}" fill="{NOTE_FILL}" style="stroke:{STROKE};stroke-width:0.5;"/>"#,
+        fold_x = fc(fold_x),
+        y = fc(y),
+        fold_y = fc(fold_y),
+        right = fc(right),
+    ));
+
+    let mut baseline = y + NOTE_MARGIN_Y + pm::ascent(LINK_FONT);
+    for line in note.text.lines() {
+        let mut text_buf = String::new();
+        text_render::emit_text(
+            &mut text_buf,
+            line,
+            &TextBase {
+                x: x + NOTE_MARGIN_X1,
+                y: baseline,
+                font_size: LINK_FONT as u32,
+                font_family: "sans-serif",
+                fill: TEXT_COLOR,
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        svg.raw(&text_buf);
+        baseline += text_render::label_height(line, LINK_FONT);
+    }
 }
 
 fn render_attached_component_note(
@@ -6573,6 +6845,7 @@ mod tests {
             edge_dx: 0.0,
             edge_dy: 0.0,
             note_layouts: &[],
+            link_note_unpainted_right_edges: &[],
         });
         assert_eq!(canvas_w, expected_w);
         assert_eq!(canvas_h, expected_h);
@@ -7027,6 +7300,47 @@ mod tests {
         assert!(
             svg.contains(r#"data-entity-1="ent0003" data-entity-2="ent0007""#),
             "group link should resolve the nested package and component UIDs: {svg}"
+        );
+    }
+
+    #[test]
+    fn no_oracle_link_note_uses_renamed_svek_label_component() {
+        let input = "@startuml\n\
+                     component \"Ingress Relay 941\" as Ingress941\n\
+                     component \"Archive Sink 947\" as Archive947\n\
+                     Ingress941 --> Archive947 : streams batches\n\
+                     note on link\n\
+                       Validates renamed stream 953\n\
+                       before durable handoff 967\n\
+                     end note\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Fresh Java PlantUML beta reference. In
+        // `CommandFactoryNoteOnLink.executeInternal`, the note is owned by the
+        // preceding Link; `SvekEdge.appendLine` solves its merged label table.
+        assert!(
+            svg.contains(r#"viewBox="0 0 320 240""#) || svg.contains(r#"viewBox="0 0 321 240""#),
+            "debug and release layout builds may round the right edge to adjacent pixels: {svg}"
+        );
+        let label = svg.find(">streams batches</text>").unwrap();
+        let note_body = svg.find(r#"<path d="M92."#).unwrap();
+        let note_text = svg.find(">Validates renamed stream 953</text>").unwrap();
+        assert!(
+            label < note_body && note_body < note_text,
+            "the link label, folded note, and note text must share Java's link group order: {svg}"
+        );
+        assert_eq!(
+            svg.matches(r##"fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/>"##)
+                .count(),
+            2,
+            "the link-owned note must paint one body and one folded corner: {svg}"
+        );
+        assert_eq!(
+            svg.matches(r#"<g class="entity""#).count(),
+            2,
+            "a link-owned note must not become a standalone SVEK entity: {svg}"
         );
     }
 }

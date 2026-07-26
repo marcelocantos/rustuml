@@ -182,6 +182,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
     let mut removed_stereotypes: Vec<String> = Vec::new();
     // Note buffer for multi-line notes.
     let mut note_target: Option<String> = None;
+    let mut note_connection: Option<usize> = None;
     let mut note_position = ComponentNotePosition::Right;
     let mut note_source_line = 0;
     let mut note_lines: Vec<String> = Vec::new();
@@ -279,6 +280,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                     notes.push(ComponentNote {
                         text,
                         target: note_target.take(),
+                        connection: note_connection.take(),
                         position: note_position,
                         source_line: note_source_line,
                     });
@@ -540,11 +542,13 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 notes.push(ComponentNote {
                     text: inline_text,
                     target: Some(target),
+                    connection: None,
                     position,
                     source_line: current_line,
                 });
             } else {
                 note_target = Some(target);
+                note_connection = None;
                 note_position = position;
                 // `CommandFactoryNoteOnEntity.createMultiLine` creates the
                 // entity at the body `BlocLines` location after removing the
@@ -561,6 +565,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             notes.push(ComponentNote {
                 text: caps[1].to_string(),
                 target: None,
+                connection: None,
                 position: ComponentNotePosition::Right,
                 source_line: current_line,
             });
@@ -568,19 +573,26 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
         }
         // `note on link : text` — inline note on the last link.
         if let Some(rest) = trimmed.strip_prefix("note on link") {
+            let Some(connection) = connections.len().checked_sub(1) else {
+                continue;
+            };
             let text = rest.trim_start_matches([' ', ':']).trim().to_string();
             if !text.is_empty() {
                 notes.push(ComponentNote {
                     text,
                     target: None,
-                    position: ComponentNotePosition::Right,
+                    connection: Some(connection),
+                    position: ComponentNotePosition::Bottom,
                     source_line: current_line,
                 });
             } else {
                 // Multi-line note on link.
                 note_target = None;
-                note_position = ComponentNotePosition::Right;
-                note_source_line = current_line;
+                note_connection = Some(connection);
+                note_position = ComponentNotePosition::Bottom;
+                // `CommandFactoryNoteOnLink.createMultiLine` creates its note
+                // component from the body `BlocLines`, after the command.
+                note_source_line = current_line + 1;
                 note_lines.clear();
                 in_note = true;
             }
@@ -596,6 +608,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 notes.push(ComponentNote {
                     text,
                     target: None,
+                    connection: None,
                     position: ComponentNotePosition::Right,
                     source_line: current_line,
                 });
@@ -605,6 +618,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
         // Multi-line floating note: `note as ID` or plain `note`
         if trimmed.starts_with("note ") || trimmed == "note" {
             note_target = None;
+            note_connection = None;
             note_position = ComponentNotePosition::Right;
             note_source_line = current_line;
             note_lines.clear();
@@ -1197,6 +1211,29 @@ mod tests {
         assert_eq!(d.notes[0].target.as_deref(), Some("Relay71"));
         assert_eq!(d.notes[0].position, ComponentNotePosition::Left);
         assert_eq!(d.notes[0].source_line, 3);
+    }
+
+    #[test]
+    fn renamed_link_note_preserves_connection_ownership() {
+        let d = parse(
+            "component \"Ingress Relay 941\" as Ingress941\n\
+             component \"Archive Sink 947\" as Archive947\n\
+             Ingress941 --> Archive947 : streams batches\n\
+             note on link\n\
+               Validates renamed stream 953\n\
+               before durable handoff 967\n\
+             end note",
+        );
+
+        assert_eq!(d.notes.len(), 1);
+        assert_eq!(d.notes[0].connection, Some(0));
+        assert_eq!(d.notes[0].target, None);
+        assert_eq!(d.notes[0].position, ComponentNotePosition::Bottom);
+        assert_eq!(d.notes[0].source_line, 5);
+        assert_eq!(
+            d.notes[0].text,
+            "Validates renamed stream 953\nbefore durable handoff 967"
+        );
     }
 
     #[test]
