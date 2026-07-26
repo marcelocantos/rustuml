@@ -132,6 +132,8 @@ const NAME_BASELINE_OFFSET: f64 = 18.53515625;
 const FIRST_DESC_OFFSET: f64 = 16.6015625;
 /// Vertical spacing between description lines.
 const DESC_LINE_SPACING: f64 = 14.1328125;
+/// Java `EntityImageState.drawU`: the fields block starts below its divider.
+const STATE_FIELD_TOP_PADDING: f64 = 5.0;
 /// Radius of the start pseudo-state circle.
 const START_RADIUS: f64 = 10.0;
 /// Outer radius of the end pseudo-state circle.
@@ -3515,7 +3517,7 @@ pub fn render_with_oracle(
                                     // must not inherit the 12pt default
                                     // baseline.
                                     div_y
-                                        + 5.0
+                                        + STATE_FIELD_TOP_PADDING
                                         + text_render::label_first_baseline_ascent_with_family(
                                             desc,
                                             state_desc_font_size,
