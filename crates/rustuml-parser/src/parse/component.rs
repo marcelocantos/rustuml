@@ -181,7 +181,6 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
     let mut removed_ids: Vec<String> = Vec::new();
     let mut removed_stereotypes: Vec<String> = Vec::new();
     // Note buffer for multi-line notes.
-    let mut note_id: Option<String> = None;
     let mut note_target: Option<String> = None;
     let mut note_connection: Option<usize> = None;
     let mut note_position = ComponentNotePosition::Right;
@@ -279,7 +278,6 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 let text = note_lines.join("\n").trim().to_string();
                 if !text.is_empty() {
                     notes.push(ComponentNote {
-                        id: note_id.take(),
                         text,
                         target: note_target.take(),
                         connection: note_connection.take(),
@@ -287,7 +285,6 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                         source_line: note_source_line,
                     });
                 }
-                note_id = None;
                 note_lines.clear();
                 in_note = false;
             } else {
@@ -557,7 +554,6 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 .filter(|t| !t.is_empty())
             {
                 notes.push(ComponentNote {
-                    id: None,
                     text: inline_text,
                     target: Some(target),
                     connection: None,
@@ -565,7 +561,6 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                     source_line: current_line,
                 });
             } else {
-                note_id = None;
                 note_target = Some(target);
                 note_connection = None;
                 note_position = position;
@@ -580,10 +575,8 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
         }
         // Floating inline note: `note "text" as ID`
         if let Some(caps) = RE_NOTE_INLINE.captures(trimmed) {
-            let id = caps[2].to_string();
-            known_note_ids.insert(id.clone());
+            known_note_ids.insert(caps[2].to_string());
             notes.push(ComponentNote {
-                id: Some(id),
                 text: caps[1].to_string(),
                 target: None,
                 connection: None,
@@ -600,7 +593,6 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             let text = rest.trim_start_matches([' ', ':']).trim().to_string();
             if !text.is_empty() {
                 notes.push(ComponentNote {
-                    id: None,
                     text,
                     target: None,
                     connection: Some(connection),
@@ -609,7 +601,6 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 });
             } else {
                 // Multi-line note on link.
-                note_id = None;
                 note_target = None;
                 note_connection = Some(connection);
                 note_position = ComponentNotePosition::Bottom;
@@ -629,7 +620,6 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             let text = rest.trim().to_string();
             if !text.is_empty() {
                 notes.push(ComponentNote {
-                    id: None,
                     text,
                     target: None,
                     connection: None,
@@ -641,14 +631,6 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
         }
         // Multi-line floating note: `note as ID` or plain `note`
         if trimmed.starts_with("note ") || trimmed == "note" {
-            note_id = trimmed
-                .strip_prefix("note as ")
-                .map(str::trim)
-                .filter(|id| !id.is_empty())
-                .map(str::to_string);
-            if let Some(id) = &note_id {
-                known_note_ids.insert(id.clone());
-            }
             note_target = None;
             note_connection = None;
             note_position = ComponentNotePosition::Right;
@@ -1322,31 +1304,6 @@ mod tests {
             d.notes[0].text,
             "Validates renamed stream 953\nbefore durable handoff 967"
         );
-    }
-
-    #[test]
-    fn renamed_floating_note_ids_survive_inline_and_multiline_forms() {
-        let inline = parse(
-            "component \"Renamed Relay 977\" as Relay977\n\
-             note \"Fresh inline memo 983\" as Memo983\n\
-             Memo983 .. Relay977",
-        );
-        assert_eq!(inline.notes[0].id.as_deref(), Some("Memo983"));
-        assert_eq!(inline.notes[0].text, "Fresh inline memo 983");
-        assert_eq!(inline.connections[0].from, "Memo983");
-        assert_eq!(inline.connections[0].to, "Relay977");
-
-        let multiline = parse(
-            "component \"Renamed Archive 991\" as Archive991\n\
-             note as Memo997\n\
-               Fresh multiline memo 1009\n\
-             end note\n\
-             Archive991 .. Memo997",
-        );
-        assert_eq!(multiline.notes[0].id.as_deref(), Some("Memo997"));
-        assert_eq!(multiline.notes[0].text, "Fresh multiline memo 1009");
-        assert_eq!(multiline.connections[0].from, "Archive991");
-        assert_eq!(multiline.connections[0].to, "Memo997");
     }
 
     #[test]
