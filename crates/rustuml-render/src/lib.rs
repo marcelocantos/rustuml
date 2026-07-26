@@ -111,7 +111,7 @@ pub fn render_svg_with_theme(diagram: &Diagram, theme: &Theme) -> String {
         match directive {
             scale::ScaleDirective::Factor(k) if k != 1.0 => {
                 let svg = plantuml_metrics::with_full_precision(|| {
-                    render_under_filter_registry(diagram, |d| {
+                    render_under_filter_registry(diagram, k, |d| {
                         render_with_theme(d, &effective_theme)
                     })
                 });
@@ -121,7 +121,7 @@ pub fn render_svg_with_theme(diagram: &Diagram, theme: &Theme) -> String {
             | scale::ScaleDirective::FitMaxWidth(_)
             | scale::ScaleDirective::FitMaxHeight(_) => {
                 let svg = plantuml_metrics::with_full_precision(|| {
-                    render_under_filter_registry(diagram, |d| {
+                    render_under_filter_registry(diagram, 1.0, |d| {
                         render_with_theme(d, &effective_theme)
                     })
                 });
@@ -136,7 +136,7 @@ pub fn render_svg_with_theme(diagram: &Diagram, theme: &Theme) -> String {
             _ => {}
         }
     }
-    render_under_filter_registry(diagram, |d| render_with_theme(d, &effective_theme))
+    render_under_filter_registry(diagram, 1.0, |d| render_with_theme(d, &effective_theme))
 }
 
 /// Render a parsed diagram to SVG with optional oracle layout data.
@@ -181,7 +181,7 @@ pub fn render_svg_with_oracle(diagram: &Diagram, oracle: Option<&OracleLayout>) 
                 b
             });
             let svg = plantuml_metrics::with_full_precision(|| {
-                render_under_filter_registry(diagram, |d| {
+                render_under_filter_registry(diagram, k, |d| {
                     render_with_theme_and_oracle(d, &theme, base_oracle.as_ref())
                 })
             });
@@ -190,7 +190,7 @@ pub fn render_svg_with_oracle(diagram: &Diagram, oracle: Option<&OracleLayout>) 
         }
         if oracle.is_none() {
             let svg = plantuml_metrics::with_full_precision(|| {
-                render_under_filter_registry(diagram, |d| {
+                render_under_filter_registry(diagram, 1.0, |d| {
                     render_with_theme_and_oracle(d, &theme, None)
                 })
             });
@@ -202,7 +202,9 @@ pub fn render_svg_with_oracle(diagram: &Diagram, oracle: Option<&OracleLayout>) 
             return svg;
         }
     }
-    render_under_filter_registry(diagram, |d| render_with_theme_and_oracle(d, &theme, oracle))
+    render_under_filter_registry(diagram, 1.0, |d| {
+        render_with_theme_and_oracle(d, &theme, oracle)
+    })
 }
 
 #[cfg(feature = "oracle-layout")]
@@ -228,6 +230,7 @@ fn restore_oracle_root_open_tag(svg: &str, oracle: Option<&OracleLayout>) -> Str
 /// block holding the filters in insertion order.
 fn render_under_filter_registry(
     diagram: &Diagram,
+    document_scale: f64,
     render: impl FnOnce(&Diagram) -> String,
 ) -> String {
     let source = diagram.meta().source.as_deref().unwrap_or("");
@@ -242,6 +245,7 @@ fn render_under_filter_registry(
         let replacement = format!("<defs>{defs_content}</defs>");
         svg.replacen("<defs/>", &replacement, 1)
     };
+    let svg = filter_registry::finalize_painted_resources(&svg, source, document_scale);
     apply_monochrome(rebrand_in_svg(svg), diagram)
 }
 
