@@ -8,8 +8,8 @@ use std::sync::LazyLock;
 use regex::Regex;
 
 use super::ParseError;
-use crate::diagram::DiagramMeta;
 use crate::diagram::component::*;
+use crate::diagram::{DiagramMeta, LegendHorizontalAlignment, LegendVerticalAlignment};
 
 /// Container keywords recognised by the component diagram parser.
 const CONTAINER_KEYWORDS: &[&str] = &[
@@ -343,6 +343,20 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
         }
         // Parse legend block start: `legend`, `legend right`, `legend left`, etc.
         if trimmed == "legend" || trimmed.starts_with("legend ") {
+            let words: Vec<_> = trimmed.split_ascii_whitespace().collect();
+            meta.legend_line = Some(current_line);
+            meta.legend_horizontal_alignment = if words.contains(&"left") {
+                LegendHorizontalAlignment::Left
+            } else if words.contains(&"right") {
+                LegendHorizontalAlignment::Right
+            } else {
+                LegendHorizontalAlignment::Center
+            };
+            meta.legend_vertical_alignment = if words.contains(&"top") {
+                LegendVerticalAlignment::Top
+            } else {
+                LegendVerticalAlignment::Bottom
+            };
             in_legend = true;
             legend_lines.clear();
             continue;
@@ -817,7 +831,14 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 .map(|m| m.as_str().to_string())
                 .or_else(|| caps.get(9).map(|m| m.as_str().replace(' ', "_")))
                 .unwrap_or_default();
-            let label = caps.get(10).map(|m| m.as_str().trim().to_string());
+            // PlantUML `descdiagram.command.Labels.init` normalizes a
+            // relationship's center label before `StringWithArrow` receives
+            // it, removing one matching pair of surrounding double quotes.
+            let label = caps.get(10).map(|m| {
+                super::strip_title_quotes(m.as_str().trim())
+                    .trim()
+                    .to_string()
+            });
             let dashed = arrow.contains("..") || arrow.contains('.');
             let arrow_at_start = arrow.contains('<');
             let arrow_at_end = arrow.contains('>');
@@ -1109,6 +1130,37 @@ mod tests {
         assert_eq!(d.interfaces[0].source_line, 2);
         assert_eq!(d.interfaces[1].id, "IB");
         assert_eq!(d.interfaces[1].source_line, 3);
+    }
+
+    #[test]
+    fn renamed_quoted_link_label_is_normalized_like_java_labels_init() {
+        let d = parse(
+            "component RenamedIngress9803\n\
+             component RenamedArchive9811\n\
+             RenamedIngress9803 --> RenamedArchive9811 : \"renamed-link-9817\"",
+        );
+
+        assert_eq!(d.connections[0].label.as_deref(), Some("renamed-link-9817"));
+    }
+
+    #[test]
+    fn renamed_legend_keeps_alignment_and_source_line() {
+        let d = parse(
+            "component RenamedIngress9803\n\
+             legend top right\n\
+               | Signal 9817 | Meaning 9829 |\n\
+             endlegend",
+        );
+
+        assert_eq!(d.meta.legend_line, Some(2));
+        assert_eq!(
+            d.meta.legend_horizontal_alignment,
+            LegendHorizontalAlignment::Right
+        );
+        assert_eq!(
+            d.meta.legend_vertical_alignment,
+            LegendVerticalAlignment::Top
+        );
     }
 
     #[test]
