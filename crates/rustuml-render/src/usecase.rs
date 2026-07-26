@@ -1254,10 +1254,33 @@ fn layout_usecase_positions(
                     );
                 } else {
                     let label = conn.label.as_deref().or(conn.stereotype.as_deref());
-                    if let Some(minlen) = minlen {
-                        layout.add_edge_with_minlen(&conn.from, &conn.to, label, minlen);
+                    if let Some(label) = label {
+                        // Java `SvekEdge.getLabel` wraps an ordinary relation
+                        // label in a one-pixel margin. `appendLine` serializes
+                        // that renderer-owned size as a fixed HTML table so
+                        // Graphviz solves the same label obstacle Java later
+                        // replaces with painted text.
+                        let label_size = EdgeLabelSize {
+                            width: text_render::measure_with_family(
+                                label,
+                                skin.arrow_font_size as f64,
+                                false,
+                                &skin.arrow_font_family,
+                            ) + 2.0,
+                            height: pm::text_height(skin.arrow_font_size as f64) + 2.0,
+                        };
+                        layout.add_edge_with_label_sizes_and_minlen(
+                            &conn.from,
+                            &conn.to,
+                            Some(label_size),
+                            None,
+                            None,
+                            minlen,
+                        );
+                    } else if let Some(minlen) = minlen {
+                        layout.add_edge_with_minlen(&conn.from, &conn.to, None, minlen);
                     } else {
-                        layout.add_edge(&conn.from, &conn.to, label);
+                        layout.add_edge(&conn.from, &conn.to, None);
                     }
                 }
             }
@@ -2919,9 +2942,14 @@ fn render_no_oracle_connections(
                     .0
                 })
             } else {
-                edge.points
-                    .get(edge.points.len() / 2)
-                    .map(|(x, y)| (*x + 4.0, *y - 4.0))
+                // `SvekEdge.solveLine` captures the fixed-table origin, then
+                // `drawU` replaces it with the real one-pixel-margined label.
+                edge.label.map(|label_box| {
+                    (
+                        label_box.x + 1.0,
+                        label_box.y + 1.0 + pm::ascent(skin.arrow_font_size as f64),
+                    )
+                })
             };
             let Some((x, y)) = position else {
                 svg.raw("</g>");
@@ -3282,6 +3310,35 @@ mod tests {
             "{svg}"
         );
         assert_eq!(svg.matches(r#"class="entity""#).count(), 5, "{svg}");
+    }
+
+    #[test]
+    fn renamed_relation_labels_use_svek_solved_table_origins() {
+        let input = "@startuml\n\
+                     actor \"Fresh Relation Auditor 413\" as Audit413\n\
+                     usecase \"Queue Fresh Transfer 419\" as Transfer419\n\
+                     usecase \"Queue Fresh Approval 421\" as Approval421\n\
+                     Audit413 --> Transfer419 : initiates freshly\n\
+                     Transfer419 ..> Approval421 : <<include>>\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Fresh Java PlantUML reference for this renamed topology.
+        // `SvekEdge.getLabel` adds the one-pixel margin, `appendTable` gives
+        // Graphviz the integer renderer dimensions, and `solveLine` recovers
+        // the two solved table origins used by `drawU`.
+        assert!(svg.contains(r#"viewBox="0 0 225 340""#), "{svg}");
+        assert!(
+            svg.contains(r#"x="109.53"#)
+                && svg.contains(r#"y="125.55"#)
+                && svg.contains(">initiates freshly</text>"),
+            "{svg}"
+        );
+        assert!(
+            svg.contains(r#"y="247.67"#) && svg.contains(">«include»</text>"),
+            "{svg}"
+        );
     }
 
     #[test]
