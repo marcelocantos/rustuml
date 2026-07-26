@@ -27,8 +27,8 @@ crates/rustuml-render/src/openiconic.rs 3
 crates/rustuml-render/src/plantuml_metrics.rs 1050
 crates/rustuml-render/src/salt.rs 1
 crates/rustuml-render/src/scale.rs 39
-crates/rustuml-render/src/sequence.rs 111
-crates/rustuml-render/src/state.rs 38
+crates/rustuml-render/src/sequence.rs 112
+crates/rustuml-render/src/state.rs 51
 crates/rustuml-render/src/text_render.rs 409
 crates/rustuml-render/src/timing.rs 3
 crates/rustuml-render/src/usecase.rs 33
