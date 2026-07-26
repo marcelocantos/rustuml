@@ -448,6 +448,26 @@ impl LayoutGraph {
             tail_port: None,
             head_port: None,
             minlen: Some(minlen),
+            invisible: false,
+            label_size: None,
+            tail_label_size: None,
+            head_label_size: None,
+        });
+    }
+
+    /// Adds a layout-only edge with an explicit Graphviz rank length.
+    ///
+    /// PlantUML's `Magma`/`SquareMaker` uses invisible links to arrange
+    /// otherwise disconnected entities while still leaving placement to dot.
+    pub fn add_invisible_edge_with_minlen(&mut self, from: &str, to: &str, minlen: usize) {
+        self.edges.push(EdgeSpec {
+            from: from.to_string(),
+            to: to.to_string(),
+            label: None,
+            tail_port: None,
+            head_port: None,
+            minlen: Some(minlen),
+            invisible: true,
             label_size: None,
             tail_label_size: None,
             head_label_size: None,
@@ -499,6 +519,7 @@ impl LayoutGraph {
             tail_port: tail_port.map(String::from),
             head_port: head_port.map(String::from),
             minlen: None,
+            invisible: false,
             label_size: None,
             tail_label_size: None,
             head_label_size: None,
@@ -543,6 +564,7 @@ impl LayoutGraph {
             tail_port: ports.tail.map(String::from),
             head_port: ports.head.map(String::from),
             minlen: None,
+            invisible: false,
             label_size,
             tail_label_size,
             head_label_size,
@@ -566,6 +588,7 @@ impl LayoutGraph {
             tail_port: None,
             head_port: None,
             minlen,
+            invisible: false,
             label_size,
             tail_label_size,
             head_label_size,
@@ -703,6 +726,8 @@ impl LayoutGraph {
             CString::new("rustuml_external_endpoint_labels").unwrap();
         let true_val = CString::new("true").unwrap();
         let no_arrow_val = CString::new("none").unwrap();
+        let style_key = CString::new("style").unwrap();
+        let invisible_val = CString::new("invis").unwrap();
 
         macro_rules! create_node {
             ($node_idx:expr) => {{
@@ -840,7 +865,7 @@ impl LayoutGraph {
             create_node!(node_idx);
         }
 
-        let mut edge_specs: HashMap<usize, (String, String)> = HashMap::new();
+        let mut edge_specs: HashMap<usize, (String, String, bool)> = HashMap::new();
         macro_rules! create_edge {
             ($edge_idx:expr) => {{
                 let edge_spec = &self.edges[$edge_idx];
@@ -915,6 +940,14 @@ impl LayoutGraph {
                             empty.as_ptr(),
                         );
                     }
+                    if edge_spec.invisible {
+                        graphviz_ffi::agsafeset(
+                            edge as *mut c_void,
+                            style_key.as_ptr(),
+                            invisible_val.as_ptr(),
+                            empty.as_ptr(),
+                        );
+                    }
                     // SVEK renders link decorations itself after dot routes
                     // the undecorated spline.
                     graphviz_ffi::agsafeset(
@@ -932,7 +965,11 @@ impl LayoutGraph {
 
                     edge_specs.insert(
                         edge as usize,
-                        (edge_spec.from.clone(), edge_spec.to.clone()),
+                        (
+                            edge_spec.from.clone(),
+                            edge_spec.to.clone(),
+                            edge_spec.invisible,
+                        ),
                     );
                 }
             }};
@@ -1096,23 +1133,25 @@ impl LayoutGraph {
                     );
                 }
 
-                let (from, to) = edge_specs
+                let (from, to, invisible) = edge_specs
                     .get(&(e as usize))
                     .cloned()
-                    .unwrap_or_else(|| (String::new(), String::new()));
+                    .unwrap_or_else(|| (String::new(), String::new(), false));
 
-                edge_paths.push(EdgePath {
-                    from,
-                    to,
-                    points,
-                    has_start_arrow: sflag != 0,
-                    start_point: if sflag != 0 { Some((sp_x, sp_y)) } else { None },
-                    has_end_arrow: eflag != 0,
-                    end_point: if eflag != 0 { Some((ep_x, ep_y)) } else { None },
-                    label: edge_label_position(e, 0),
-                    tail_label: edge_label_position(e, 1),
-                    head_label: edge_label_position(e, 2),
-                });
+                if !invisible {
+                    edge_paths.push(EdgePath {
+                        from,
+                        to,
+                        points,
+                        has_start_arrow: sflag != 0,
+                        start_point: if sflag != 0 { Some((sp_x, sp_y)) } else { None },
+                        has_end_arrow: eflag != 0,
+                        end_point: if eflag != 0 { Some((ep_x, ep_y)) } else { None },
+                        label: edge_label_position(e, 0),
+                        tail_label: edge_label_position(e, 1),
+                        head_label: edge_label_position(e, 2),
+                    });
+                }
 
                 e = graphviz_ffi::agnxtout(g, e);
             }
@@ -1669,6 +1708,7 @@ struct EdgeSpec {
     tail_port: Option<String>,
     head_port: Option<String>,
     minlen: Option<usize>,
+    invisible: bool,
     label_size: Option<EdgeLabelSize>,
     tail_label_size: Option<EdgeLabelSize>,
     head_label_size: Option<EdgeLabelSize>,
@@ -2401,6 +2441,44 @@ mod tests {
             table,
             r##"<TABLE BGCOLOR="#000001" BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD FIXEDSIZE="TRUE" WIDTH="118" HEIGHT="20"></TD></TR><TR><TD FIXEDSIZE="TRUE" WIDTH="118" HEIGHT="20" PORT="top_row"></TD></TR><TR><TD FIXEDSIZE="TRUE" WIDTH="118" HEIGHT="21"></TD></TR><TR><TD FIXEDSIZE="TRUE" WIDTH="118" HEIGHT="20" PORT="bottom_row"></TD></TR><TR><TD FIXEDSIZE="TRUE" WIDTH="118" HEIGHT="1"></TD></TR></TABLE>"##
         );
+    }
+
+    #[test]
+    fn invisible_square_links_shape_layout_without_returning_render_paths() {
+        let mut graph = LayoutGraph::new(Direction::TopToBottom).with_plantuml_svek_spacing();
+        let ids = (0..14)
+            .map(|index| format!("DetachedNode{index:02}"))
+            .collect::<Vec<_>>();
+        for id in &ids {
+            graph.add_node(id, "", 103.0, 48.0);
+        }
+
+        let branch = 4usize;
+        let mut row_head = 0usize;
+        for index in 1..ids.len() {
+            if index - row_head == branch {
+                graph.add_invisible_edge_with_minlen(&ids[row_head], &ids[index], 1);
+                row_head = index;
+            } else {
+                graph.add_plantuml_svek_line0_edge(&ids[index - 1], &ids[index]);
+                graph.add_invisible_edge_with_minlen(&ids[index - 1], &ids[index], 0);
+            }
+        }
+
+        let result = graph.layout_full_no_timeout();
+        let xs = result
+            .node_positions
+            .iter()
+            .map(|position| position.x.round() as i64)
+            .collect::<std::collections::BTreeSet<_>>();
+        let ys = result
+            .node_positions
+            .iter()
+            .map(|position| position.y.round() as i64)
+            .collect::<std::collections::BTreeSet<_>>();
+        assert_eq!(xs.len(), 4);
+        assert_eq!(ys.len(), 4);
+        assert!(result.edge_paths.is_empty());
     }
 
     #[test]
