@@ -12,7 +12,7 @@ creole 639 639
 deployment 495 495
 dot 25 25
 ebnf 25 25
-edge-cases 706 777
+edge-cases 708 777
 er 153 157
 gantt 114 114
 git 25 25
@@ -20,10 +20,10 @@ json-yaml 145 147
 links 50 50
 math 50 50
 mindmap 157 157
-multi-diagram 50 53
+multi-diagram 53 53
 nwdiag 89 89
 object 155 155
-preprocessing 239 307
+preprocessing 250 307
 regex 45 45
 rendering 72 98
 salt 103 103
@@ -32,7 +32,7 @@ skinparam 395 410
 sprites 49 49
 state 829 901
 timing 141 141
-type-detection 39 42
+type-detection 40 42
 usecase 315 315
 wbs 138 138
 wire 0 0

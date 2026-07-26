@@ -254,13 +254,17 @@ pub fn label_ascent_with_family(content: &str, font_size: f64, font_family: &str
     base_ascent + sub_extra_space(&segments)
 }
 
-/// Distance from the line top to the first `<text>` element's baseline.
+/// Distance from the line top to the `TextBase.y` anchor needed to emit the
+/// first `<text>` element at PlantUML's aligned baseline.
 ///
-/// [`emit_text`] treats `TextBase.y` as the first emitted run's baseline, not
-/// as the maximum ascent baseline for the whole mixed-metric line. When the
-/// first run is shorter than a later run (for example `""mono"" text` in a
-/// sans-serif box), callers that place a whole label inside a known line box
-/// need this value instead of [`label_ascent_with_family`].
+/// [`emit_text`] adds `FontPosition.getSpace()` and the reduced-font descent
+/// correction to positioned runs. Java's `Sea.doAlign` and
+/// `Sea.translateMinYto`, however, align the atom before `AtomText.drawU`
+/// emits its baseline. Subtracting the first run's emission offset here keeps
+/// that offset relative to the aligned atom instead of applying it twice.
+/// When the first run is shorter than a later run (for example `""mono"" text`
+/// in a sans-serif box), callers that place a whole label inside a known line
+/// box need this value instead of [`label_ascent_with_family`].
 pub fn label_first_baseline_ascent_with_family(
     content: &str,
     font_size: f64,
@@ -291,7 +295,8 @@ pub fn label_first_baseline_ascent_with_family(
     let first_family = segment_metric_family_for_family(first, font_family);
     let first_height = family_text_height(first_size, first_family).max(10.0);
     let first_top = -first_height + segment_starting_altitude(first);
-    first_top - min_y + family_ascent(first_size, first_family)
+    let emitted_baseline = first_top - min_y + family_ascent(first_size, first_family);
+    emitted_baseline - positioned_segment_emission_offset(first, font_size)
 }
 
 /// Distance from a Creole line's top to the lowest point reported by Java's
@@ -310,6 +315,7 @@ pub(crate) fn label_limit_finder_height_with_family(
     let Some(first) = segments.first() else {
         return first_baseline + 1.5;
     };
+    let first_baseline = first_baseline + positioned_segment_emission_offset(first, font_size);
     let first_size = first.style.size.map(f64::from).unwrap_or(font_size);
     let line_bottom_drop = clamp_drop(
         first_size,
@@ -361,6 +367,17 @@ fn segment_starting_altitude(segment: &Segment) -> f64 {
     match segment.style.baseline_shift {
         Some("sub") => 3.0,
         Some("super") => -6.0,
+        _ => 0.0,
+    }
+}
+
+fn positioned_segment_emission_offset(segment: &Segment, base_size: f64) -> f64 {
+    let nominal = segment.style.size.map(f64::from).unwrap_or(base_size);
+    let reduced = (nominal - 3.0).max(2.0);
+    let descent_correction = pm::descent(nominal) - pm::descent(reduced);
+    match segment.style.baseline_shift {
+        Some("sub") => 3.0 + descent_correction,
+        Some("super") => -6.0 + descent_correction,
         _ => 0.0,
     }
 }
@@ -1784,6 +1801,26 @@ mod tests {
         let max_ascent = label_ascent_with_family(small_plain, 8.0, "sans-serif");
         let first_ascent = label_first_baseline_ascent_with_family(small_plain, 8.0, "sans-serif");
         assert_eq!(pm::fmt_coord(max_ascent - first_ascent), "0");
+    }
+
+    #[test]
+    fn positioned_first_run_uses_sea_aligned_baseline_for_renamed_notes() {
+        let line_top = 17.0;
+        for content in ["<sub>renamed-index</sub>", "<sup>renamed-power</sup>"] {
+            let anchor =
+                line_top + label_first_baseline_ascent_with_family(content, 13.0, "sans-serif");
+            let mut b = base(11.0, anchor);
+            b.font_size = 13;
+            let mut buf = String::new();
+            emit_text(&mut buf, content, &b);
+
+            let expected_baseline =
+                pm::fmt_coord(line_top + family_ascent(10.0, MetricFamily::Sans));
+            assert!(
+                buf.contains(&format!(r#" y="{expected_baseline}">"#)),
+                "{content} emitted at the wrong baseline: {buf}"
+            );
+        }
     }
 
     #[test]

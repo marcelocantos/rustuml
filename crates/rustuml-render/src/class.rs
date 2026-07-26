@@ -2249,6 +2249,11 @@ fn render_with_oracle_uid_origin(
         let from = relationship_layout_id(diagram, &rel.from);
         let to = relationship_layout_id(diagram, &rel.to);
         if rel.length == 1 {
+            // Java `Bibliotekon.addLine` stores every one-rank link in
+            // `lines0`, and `DotStringFactory.createDotString` serializes
+            // those edges before `Cluster.printCluster2` emits ordinary
+            // nodes. Preserve that lazy endpoint-creation order in SVEK.
+            layout.add_plantuml_svek_line0_edge(&from, &to);
             layout.add_same_rank(&from, &to);
         }
         // Java `SvekEdge.appendDotString` sends center labels through
@@ -2274,7 +2279,7 @@ fn render_with_oracle_uid_origin(
             label_size,
             endpoint_size(rel.from_multiplicity.as_deref()),
             endpoint_size(rel.to_multiplicity.as_deref()),
-            (rel.length > 1).then_some(rel.length - 1),
+            Some(rel.length.saturating_sub(1)),
         );
     }
 
@@ -15275,6 +15280,41 @@ mod tests {
             height > 250.0,
             "square layout should span multiple ranks: {svg}"
         );
+    }
+
+    #[test]
+    fn short_svek_links_create_endpoints_before_wide_disconnected_entities() {
+        let input = "@startuml\n\
+            class FreshDetachedLedger {\n\
+              a deliberately widened standalone record\n\
+            }\n\
+            class FreshIngress\n\
+            class FreshEgress\n\
+            FreshIngress -> FreshEgress : renamed flow\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        let entity_x = |name: &str| {
+            let marker = format!(r#"data-qualified-name="{name}""#);
+            svg.split_once(&marker)
+                .unwrap()
+                .1
+                .split_once("<rect ")
+                .unwrap()
+                .1
+                .split_once(r#" x=""#)
+                .unwrap()
+                .1
+                .split_once('"')
+                .unwrap()
+                .0
+                .parse::<f64>()
+                .unwrap()
+        };
+
+        let detached_x = entity_x("FreshDetachedLedger");
+        assert!(entity_x("FreshIngress") < detached_x, "{svg}");
+        assert!(entity_x("FreshEgress") < detached_x, "{svg}");
     }
 
     #[test]
