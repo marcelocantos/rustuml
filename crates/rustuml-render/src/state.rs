@@ -1789,7 +1789,13 @@ impl StateSkin {
             .unwrap_or_else(|| DEFAULT_TEXT_COLOR.to_string());
         let state_fill =
             color("stateBackgroundColor").unwrap_or_else(|| DEFAULT_STATE_FILL.to_string());
-        let arrow_color = color("stateArrowColor").unwrap_or_else(|| stroke.clone());
+        // Java provenance: `SvekEdge.getDefaultStyleDefinition` merges
+        // `root.element.stateDiagram.arrow`; `FromSkinparamToStyle` maps the
+        // global `arrowColor` to that arrow style's `LineColor`. A
+        // state-specific arrow value remains the more specific declaration.
+        let arrow_color = color("stateArrowColor")
+            .or_else(|| color("ArrowColor"))
+            .unwrap_or_else(|| stroke.clone());
         // Java provenance: `FromSkinparamToStyle` maps `arrowThickness` to
         // `root.element.<diagram>.arrow.LineThickness`; `SvekEdge.drawU`
         // retrieves that merged style through `getDefaultStyleDefinition`.
@@ -9236,6 +9242,43 @@ mod tests {
         assert!(svg.contains(r##"<polygon fill="#008B8B""##));
         assert!(svg.contains(r##"<polygon fill="#7B68EE""##));
         assert!(svg.contains(r##"<polygon fill="#FFA500""##));
+    }
+
+    #[test]
+    fn global_arrow_color_cascades_below_state_override() {
+        let global_input = concat!(
+            "@startuml\n",
+            "skinparam ArrowColor #2468AC\n",
+            "[*] --> CopperDormant\n",
+            "CopperDormant --> VioletReady : awaken\n",
+            "VioletReady --> [*]\n",
+            "@enduml\n",
+        );
+        let global_diagram = rustuml_parser::parse::parse(global_input).unwrap();
+        let global_svg = crate::render_svg(&global_diagram);
+        assert_eq!(
+            global_svg.matches("stroke:#2468AC;stroke-width:1;").count(),
+            6
+        );
+
+        let override_input = concat!(
+            "@startuml\n",
+            "skinparam ArrowColor #2468AC\n",
+            "skinparam stateArrowColor #C13584\n",
+            "[*] --> AmberWaiting\n",
+            "AmberWaiting --> IndigoRunning : dispatch\n",
+            "IndigoRunning --> [*]\n",
+            "@enduml\n",
+        );
+        let override_diagram = rustuml_parser::parse::parse(override_input).unwrap();
+        let override_svg = crate::render_svg(&override_diagram);
+        assert_eq!(
+            override_svg
+                .matches("stroke:#C13584;stroke-width:1;")
+                .count(),
+            6
+        );
+        assert!(!override_svg.contains("#2468AC"));
     }
 
     #[test]
