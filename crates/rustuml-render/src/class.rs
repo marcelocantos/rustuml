@@ -167,6 +167,14 @@ const NOTE_NESTED_BULLET_START_ALTITUDE: f64 = -7.0;
 /// 13px note font: the marker run (`1.`) is followed by this fixed gap before
 /// the item text, independent of its label and nesting level.
 const NOTE_ORDERED_NUMBER_GAP: f64 = 4.1133;
+/// PlantUML's table cells use the same extracted 13px-font atom gap on both
+/// sides of their text run.
+const NOTE_TABLE_CELL_PAD_X: f64 = 4.1133;
+/// `SheetBlock1` bold table headers shift inward by this font-metric residual;
+/// the column width reserves the same amount on the opposite side.
+const NOTE_TABLE_HEADER_X_ADJUST: f64 = 0.1714;
+const NOTE_TABLE_GRID_TOP_PAD: f64 = 2.0;
+const NOTE_TABLE_BODY_EXTRA: f64 = 4.0;
 /// `EntityImageAssociationPoint.SIZE`: PlantUML lays out and paints the
 /// synthetic point inserted into an association-class base edge as a 4px
 /// circle.
@@ -9693,6 +9701,59 @@ struct NoteBodyBlock<'a> {
     lines: Vec<&'a str>,
 }
 
+struct NoteTableLayout {
+    rows: Vec<crate::creole::TableRow>,
+    column_widths: Vec<f64>,
+    row_heights: Vec<f64>,
+    row_ascents: Vec<f64>,
+    width: f64,
+}
+
+fn note_table_layout(lines: &[&str]) -> Option<NoteTableLayout> {
+    let rows = lines
+        .iter()
+        .map(|line| match crate::creole::parse_line(line.trim()) {
+            crate::creole::CreoleLine::Table(row) => Some(row),
+            _ => None,
+        })
+        .collect::<Option<Vec<_>>>()?;
+    if rows.is_empty() {
+        return None;
+    }
+
+    let column_count = rows.iter().map(|row| row.cells.len()).max().unwrap_or(0);
+    let mut column_widths = vec![0.0_f64; column_count];
+    let mut row_heights = Vec::with_capacity(rows.len());
+    let mut row_ascents = Vec::with_capacity(rows.len());
+    for row in &rows {
+        let mut row_height = 10.0_f64;
+        let mut row_ascent = 0.0_f64;
+        for (column, cell) in row.cells.iter().enumerate() {
+            let adjustment = if cell.is_header {
+                NOTE_TABLE_HEADER_X_ADJUST * 2.0
+            } else {
+                0.0
+            };
+            let width = text_render::measure(&cell.text, NOTE_FONT_SIZE, cell.is_header)
+                + 2.0 * NOTE_TABLE_CELL_PAD_X
+                + adjustment;
+            column_widths[column] = column_widths[column].max(width);
+            row_height = row_height.max(text_render::label_height(&cell.text, NOTE_FONT_SIZE));
+            row_ascent = row_ascent.max(text_render::label_ascent(&cell.text, NOTE_FONT_SIZE));
+        }
+        row_heights.push(row_height);
+        row_ascents.push(row_ascent);
+    }
+    let width = column_widths.iter().sum();
+    Some(NoteTableLayout {
+        rows,
+        column_widths,
+        row_heights,
+        row_ascents,
+        width,
+    })
+}
+
 fn parse_note_body_separator(line: &str) -> Option<NoteBodySeparator<'_>> {
     let style = if line.starts_with("--") && line.ends_with("--") {
         '-'
@@ -9776,20 +9837,30 @@ fn note_body_dimensions(note: &Note) -> (f64, f64) {
     let mut width = 0.0_f64;
     let mut height = 0.0_f64;
     for block in note_body_blocks(note) {
-        let mut number_counters = Vec::new();
-        let line_dimensions = block
-            .lines
-            .iter()
-            .map(|line| note_line_dimensions(line, &mut number_counters))
-            .collect::<Vec<_>>();
-        let body_width = line_dimensions
-            .iter()
-            .map(|(line_width, _)| *line_width)
-            .fold(0.0_f64, f64::max);
-        let body_height = line_dimensions
-            .iter()
-            .map(|(_, line_height)| *line_height)
-            .sum::<f64>();
+        let table = note_table_layout(&block.lines);
+        let (body_width, body_height) = if let Some(table) = &table {
+            (
+                table.width,
+                table.row_heights.iter().sum::<f64>() + NOTE_TABLE_BODY_EXTRA,
+            )
+        } else {
+            let mut number_counters = Vec::new();
+            let line_dimensions = block
+                .lines
+                .iter()
+                .map(|line| note_line_dimensions(line, &mut number_counters))
+                .collect::<Vec<_>>();
+            (
+                line_dimensions
+                    .iter()
+                    .map(|(line_width, _)| *line_width)
+                    .fold(0.0_f64, f64::max),
+                line_dimensions
+                    .iter()
+                    .map(|(_, line_height)| *line_height)
+                    .sum::<f64>(),
+            )
+        };
         let (block_width, block_height) = match block.separator {
             None => (body_width, body_height),
             Some(NoteBodySeparator { title: None, .. }) => (body_width, body_height + 8.0),
@@ -9819,9 +9890,91 @@ fn note_box_dims(note: &Note) -> (f64, f64) {
     )
 }
 
+fn emit_note_table(svg: &mut String, table: &NoteTableLayout, x: f64, y: f64) {
+    let f = crate::plantuml_metrics::fmt_coord;
+    let grid_left = x + NOTE_PAD_X;
+    let grid_top = y + NOTE_TABLE_GRID_TOP_PAD;
+    let mut row_top = grid_top;
+    for (row_index, row) in table.rows.iter().enumerate() {
+        let mut cell_left = grid_left;
+        for (column, cell) in row.cells.iter().enumerate() {
+            let cell_width = table.column_widths.get(column).copied().unwrap_or_default();
+            if let Some(background) = cell.bg_color.as_deref() {
+                let fill = crate::sequence::resolve_color(background);
+                write!(
+                    svg,
+                    r#"<rect fill="{}" height="{}" style="stroke:none;stroke-width:1;" width="{}" x="{}" y="{}"/>"#,
+                    fill,
+                    f(table.row_heights[row_index]),
+                    f(cell_width),
+                    f(cell_left),
+                    f(row_top),
+                )
+                .unwrap();
+            }
+            let x_adjust = if cell.is_header {
+                NOTE_TABLE_HEADER_X_ADJUST
+            } else {
+                0.0
+            };
+            text_render::emit_text(
+                svg,
+                &cell.text,
+                &TextBase {
+                    x: cell_left + NOTE_TABLE_CELL_PAD_X + x_adjust,
+                    y: row_top + table.row_ascents[row_index],
+                    font_size: NOTE_FONT_SIZE as u32,
+                    font_family: "sans-serif",
+                    fill: "#000000",
+                    bold: cell.is_header,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
+            cell_left += cell_width;
+        }
+        row_top += table.row_heights[row_index];
+    }
+
+    let grid_right = grid_left + table.width;
+    let grid_bottom = grid_top + table.row_heights.iter().sum::<f64>();
+    let mut line_y = grid_top;
+    for row_height in std::iter::once(0.0).chain(table.row_heights.iter().copied()) {
+        line_y += row_height;
+        write!(
+            svg,
+            r##"<line style="stroke:#000000;stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            f(grid_left),
+            f(grid_right),
+            f(line_y),
+            f(line_y),
+        )
+        .unwrap();
+    }
+    let mut line_x = grid_left;
+    for column_width in std::iter::once(0.0).chain(table.column_widths.iter().copied()) {
+        line_x += column_width;
+        write!(
+            svg,
+            r##"<line style="stroke:#000000;stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            f(line_x),
+            f(line_x),
+            f(grid_top),
+            f(grid_bottom),
+        )
+        .unwrap();
+    }
+}
+
 fn emit_note_body(svg: &mut String, note: &Note, x: f64, y: f64, width: f64) {
     let mut block_top = y + NOTE_PAD_Y;
     for block in note_body_blocks(note) {
+        if let Some(table) = note_table_layout(&block.lines) {
+            emit_note_table(svg, &table, x, block_top);
+            block_top += table.row_heights.iter().sum::<f64>() + NOTE_TABLE_BODY_EXTRA;
+            continue;
+        }
         let mut measure_counters = Vec::new();
         let body_height = block
             .lines
@@ -11072,6 +11225,22 @@ mod tests {
         assert!(svg.contains(">2.</text>"));
         assert!(svg.contains(">3.</text>"));
         assert!(svg.contains(">nested</text>"));
+    }
+
+    #[test]
+    fn standalone_note_table_sizes_columns_and_cell_backgrounds() {
+        let input = "@startuml\nnote as FreshMatrix739\n  |= **Signal** |= Value |\n  |<#LightBlue> renamed | 41 |\n  |<#LightGreen> stable | 42 |\nend note\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(r##"<rect fill="#ADD8E6""##));
+        assert!(svg.contains(r##"<rect fill="#90EE90""##));
+        assert!(svg.contains(r#"font-weight="700""#));
+        assert_eq!(
+            svg.matches(r#"style="stroke:#000000;stroke-width:1;""#)
+                .count(),
+            7
+        );
     }
 
     #[test]
