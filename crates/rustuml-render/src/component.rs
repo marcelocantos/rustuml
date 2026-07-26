@@ -3555,6 +3555,17 @@ fn compute_positions_from_layout(
             cluster_frame.origin_y + title_h - min_y,
         )
     };
+    if !raw_cluster_positions.is_empty() {
+        // Java `SvekResult.calculateDimension` asks `TextBlockUtils.getMinMax`
+        // for one painted envelope spanning clusters and ordinary root
+        // entities before `DotStringFactory.moveDelta` translates the graph.
+        // A cluster must therefore not hide a root leaf that paints farther
+        // left or above its frame.
+        let node_translation =
+            component_svek_translation(diagram, node_positions, attached_note_count, title_h);
+        layout_dx = layout_dx.max(node_translation.0);
+        layout_dy = layout_dy.max(node_translation.1);
+    }
     // `SvekResult.calculateDimension` measures every painted `DotPath` through
     // `LimitFinder.drawDotPath`, then `DotStringFactory.moveDelta` moves the
     // complete graph so that painted minimum is at (6, 6). Graphviz's SVG
@@ -6373,6 +6384,34 @@ mod tests {
         assert!(
             svg.contains("C330.77,30 368.13,6 460.49,49.81"),
             "SvekResult should move the upper spline control point to y=6: {svg}"
+        );
+    }
+
+    #[test]
+    fn no_oracle_mixed_root_and_cluster_share_svek_painted_envelope() {
+        let input = "@startuml\nfolder \"Renamed Processing Vault 4103\" {\n  component \"Primary Relay 4111\" as Relay4111\n  component \"Audit Relay 4127\" as Audit4127\n  component \"Cold Archive 4133\" as Archive4133\n  Relay4111 --> Audit4127 : mirrors\n  Audit4127 --> Archive4133 : seals\n}\ncomponent \"External Coordinator 4153\" as Coordinator4153\nCoordinator4153 --> Relay4111 : dispatches\nCoordinator4153 --> Archive4133 : verifies\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Fresh Java PlantUML reference. `SvekResult.calculateDimension`
+        // measures the root coordinator together with the folder and moves
+        // their shared painted minimum to the six-pixel SVEK frame.
+        assert!(svg.contains(r#"viewBox="0 0 367 475""#), "{svg}");
+        let coordinator = svg
+            .split("<!--entity Coordinator4153-->")
+            .nth(1)
+            .and_then(|tail| tail.split_once("</g>"))
+            .map(|(entity, _)| entity)
+            .expect("renamed root coordinator entity");
+        assert!(
+            coordinator.contains(r#"data-qualified-name="Coordinator4153""#)
+                && coordinator.contains(r#"y="7""#),
+            "the root leaf must remain inside the shared painted envelope: {svg}"
+        );
+        assert!(
+            svg.contains(r#"data-qualified-name="Renamed Processing Vault 4103""#)
+                && svg.contains(r#"M8.5,116.48"#),
+            "the cluster must keep its solved position after normalization: {svg}"
         );
     }
 
