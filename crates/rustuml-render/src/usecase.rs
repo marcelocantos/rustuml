@@ -1414,18 +1414,15 @@ fn layout_usecase_positions(
         .map(String::as_str)
         .zip(result.node_positions.iter())
         .collect();
+    // Java provenance: `SvekResult.calculateDimension` asks
+    // `TextBlockUtils.getMinMax` for the complete painted image before
+    // `moveDelta(6 - minX, ...)`. Every actor image contributes its actual
+    // `LimitFinder` minimum, whether the root leaf is connected or detached.
     let min_painted_x = diagram
         .actors
         .iter()
         .zip(actor_dims)
-        .map(|(actor, dim)| {
-            node_positions[actor.id.as_str()].x
-                + if uses_detached_root_order {
-                    dim.paint_min_x
-                } else {
-                    0.0
-                }
-        })
+        .map(|(actor, dim)| node_positions[actor.id.as_str()].x + dim.paint_min_x)
         .chain(
             diagram
                 .use_cases
@@ -3506,6 +3503,48 @@ mod tests {
             "{svg}"
         );
         assert_eq!(svg.matches(r#"class="entity""#).count(), 5, "{svg}");
+    }
+
+    #[test]
+    fn renamed_connected_short_actors_use_painted_bounds_for_clustered_canvas() {
+        let input = "@startuml\n\
+                     left to right direction\n\
+                     actor R1\n\
+                     actor R2\n\
+                     package \"Fresh Intake Zone\" {\n\
+                       usecase \"Queue Amber\" as QA\n\
+                       usecase \"Review Birch\" as RB\n\
+                       usecase \"Archive Cedar\" as AC\n\
+                     }\n\
+                     package \"Novel Export Zone\" {\n\
+                       usecase \"Publish Dogwood\" as PD\n\
+                       usecase \"Verify Elm\" as VE\n\
+                       usecase \"Store Fir\" as SF\n\
+                     }\n\
+                     R1 --> QA\n\
+                     R2 --> QA\n\
+                     R1 --> PD\n\
+                     R2 --> PD\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Fresh Java PlantUML reference for a renamed two-package topology
+        // with three leaves per package, absent from the golden corpus.
+        // `SvekResult.calculateDimension` normalizes from the stickman's arm
+        // endpoint at x=6, not the half-pixel-wider Graphviz actor box.
+        // Debug Graphviz retains one extra fractional far-edge pixel; release
+        // serialization matches Java's 273px canvas exactly.
+        assert!(
+            svg.contains(r#"viewBox="0 0 273 471""#) || svg.contains(r#"viewBox="0 0 274 471""#),
+            "{svg}"
+        );
+        assert!(svg.contains(r#"<path d="M88.34,6 "#), "{svg}");
+        assert!(svg.contains(r#"<path d="M79,242 "#), "{svg}");
+        assert!(svg.contains(r#"<ellipse cx="19" "#), "{svg}");
+        assert_eq!(svg.matches(r#"class="cluster""#).count(), 2, "{svg}");
+        assert_eq!(svg.matches(r#"class="entity""#).count(), 8, "{svg}");
+        assert_eq!(svg.matches(r#"class="link""#).count(), 4, "{svg}");
     }
 
     #[test]
