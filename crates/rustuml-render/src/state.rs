@@ -1426,23 +1426,13 @@ fn autonomous_pseudo_source_line(diagram: &StateDiagram, id: &str) -> usize {
         .unwrap_or(1)
 }
 
-fn autonomous_endpoint_display(diagram: &StateDiagram, endpoint: &str, is_source: bool) -> String {
+fn autonomous_endpoint_svg_name(endpoint: &str, is_source: bool) -> String {
     if let Some(scope) = endpoint.strip_prefix("[*]") {
         let pseudo = if is_source { "*start*" } else { "*end*" };
-        let scope_label = diagram
-            .states
-            .iter()
-            .find(|state| state.id == scope)
-            .map(|state| state.label.as_str())
-            .unwrap_or(scope);
-        format!("{pseudo}{scope_label}")
+        let name = scope.rsplit('.').next().unwrap_or(scope);
+        format!("{pseudo}{name}")
     } else {
-        diagram
-            .states
-            .iter()
-            .find(|state| state.id == endpoint)
-            .map(|state| state.label.clone())
-            .unwrap_or_else(|| endpoint.to_string())
+        endpoint.rsplit('.').next().unwrap_or(endpoint).to_string()
     }
 }
 
@@ -1568,8 +1558,10 @@ fn emit_autonomous_scope_links(
             Some(ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Up)
         );
         let (edge_from, edge_to) = if inverted { (&to, &from) } else { (&from, &to) };
-        let from_name = autonomous_endpoint_display(context.diagram, &transition.from, true);
-        let to_name = autonomous_endpoint_display(context.diagram, &transition.to, false);
+        // Java provenance: `Link.commentForSvg` and `Link.idCommentForSvg`
+        // build both values from `Entity.getName()`, not the display label.
+        let from_name = autonomous_endpoint_svg_name(&transition.from, true);
+        let to_name = autonomous_endpoint_svg_name(&transition.to, false);
         let (edge_from_name, edge_to_name) = if inverted {
             (&to_name, &from_name)
         } else {
@@ -5671,6 +5663,32 @@ mod tests {
         let composite_header = svg.find(">HarborMode</text>").unwrap();
         let outer_start = svg.find(r#"data-qualified-name=".start.""#).unwrap();
         assert!(composite_header < outer_start);
+    }
+
+    #[test]
+    fn aliased_composite_links_use_entity_names_in_svg_ids() {
+        let input = concat!(
+            "@startuml\n",
+            "state \"Renamed Harbor Mode 701\" as HarborMode701 {\n",
+            "  [*] --> CopperReady709\n",
+            "  CopperReady709 --> VioletRunning719\n",
+            "  VioletRunning719 --> [*]\n",
+            "}\n",
+            "[*] --> HarborMode701\n",
+            "HarborMode701 --> [*]\n",
+            "@enduml\n",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(
+            svg.contains(r#"id="*start*HarborMode701-to-CopperReady709""#),
+            "{svg}"
+        );
+        assert!(svg.contains(r#"id="VioletRunning719-to-*end*HarborMode701""#));
+        assert!(svg.contains(r#"id="*start*-to-HarborMode701""#));
+        assert!(svg.contains(r#"id="HarborMode701-to-*end*""#));
+        assert!(!svg.contains("*start*Renamed Harbor Mode 701"));
     }
 
     #[test]
