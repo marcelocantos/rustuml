@@ -465,9 +465,19 @@ const STEREOTYPE_MARGIN_X: f64 = 1.0;
 const DATABASE_MARGIN_X: f64 = 10.0;
 const DATABASE_MARGIN_TOP: f64 = 24.0;
 const DATABASE_MARGIN_BOTTOM: f64 = 5.0;
+// `USymbolQueue.getMargin()` returns (5, 15, 5, 5).
+const QUEUE_MARGIN_LEFT: f64 = 5.0;
+const QUEUE_MARGIN_RIGHT: f64 = 15.0;
+const QUEUE_MARGIN_Y: f64 = 5.0;
+// `USymbolStorage.getMargin()` returns ten pixels on every side and
+// `drawStorage()` applies `URectangle.rounded(70)`.
+const STORAGE_MARGIN: f64 = 10.0;
+const STORAGE_RADIUS: f64 = 35.0;
 // `USymbolDatabase.drawDatabase()` appends `UEmpty(10, 10)` at (width, height),
 // extending the rendered envelope without changing the Graphviz node size.
-const DATABASE_RENDER_OVERFLOW: f64 = 10.0;
+// `LimitFinder` includes the UEmpty origin on X and its ten-pixel extent on Y.
+const DATABASE_RENDER_OVERFLOW_X: f64 = 11.0;
+const DATABASE_RENDER_OVERFLOW_Y: f64 = 10.0;
 /// Margin around the entire diagram.
 const MARGIN: f64 = 7.0;
 /// Gap between entities when laid out by Sugiyama.
@@ -1727,9 +1737,18 @@ pub fn render_with_oracle(
                 | ComponentElementKind::Collections
                 | ComponentElementKind::Component
                 | ComponentElementKind::Cloud
-                | ComponentElementKind::Node => unreachable!(),
+                | ComponentElementKind::Node
+                | ComponentElementKind::Storage => unreachable!(),
             }
             // Skip the rect body and tab-icon block below.
+        } else if matches!(comp.kind, ComponentElementKind::Storage) {
+            svg.raw(&format!(
+                r#"<rect fill="{fill}" height="{h_s}" rx="{STORAGE_RADIUS}" ry="{STORAGE_RADIUS}" style="{body_style}" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
+                h_s = fc(h),
+                w_s = fc(w),
+                x_s = fc(x),
+                y_s = fc(y),
+            ));
         } else {
             svg.raw(&format!(
             r#"<rect fill="{fill}" height="{h_s}" rx="{rx_s}" ry="{ry_s}" style="{body_style}" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
@@ -1803,21 +1822,25 @@ pub fn render_with_oracle(
         // `y + h - LABEL_BASELINE_FROM_BOTTOM`. Use oracle text_y_values when available.
         let oracle_text_y = oracle_rect.map(|r| r.text_y_values.as_slice());
         let oracle_text_x = oracle_rect.map(|r| r.text_x_values.as_slice());
-        let model_text_block_x = if matches!(comp.kind, ComponentElementKind::Database) {
-            x + DATABASE_MARGIN_X
-        } else if component_style_rectangle && matches!(comp.kind, ComponentElementKind::Component)
-        {
-            x + RECTANGLE_MARGIN_X
-        } else {
-            x + TEXT_PAD_LEFT
+        let model_text_block_x = match comp.kind {
+            ComponentElementKind::Database => x + DATABASE_MARGIN_X,
+            ComponentElementKind::Queue => x + QUEUE_MARGIN_LEFT,
+            ComponentElementKind::Storage => x + STORAGE_MARGIN,
+            ComponentElementKind::Component if component_style_rectangle => x + RECTANGLE_MARGIN_X,
+            _ => x + TEXT_PAD_LEFT,
         };
         let oracle_text_x_default = oracle_rect.and_then(|r| r.name_text_x);
         let n_stereo = comp.stereotypes.len();
 
-        let model_label_y = if matches!(comp.kind, ComponentElementKind::Database) {
-            y + h - (LABEL_BASELINE_FROM_BOTTOM - DATABASE_MARGIN_BOTTOM)
-        } else {
-            y + h - LABEL_BASELINE_FROM_BOTTOM
+        let model_label_y = match comp.kind {
+            ComponentElementKind::Database => {
+                y + h - (LABEL_BASELINE_FROM_BOTTOM - DATABASE_MARGIN_BOTTOM)
+            }
+            ComponentElementKind::Queue => {
+                let text_descent = LABEL_BASELINE_FROM_BOTTOM - RECTANGLE_MARGIN_Y;
+                y + h - (QUEUE_MARGIN_Y + text_descent)
+            }
+            _ => y + h - LABEL_BASELINE_FROM_BOTTOM,
         };
         let label_y = oracle_text_y
             .and_then(|v| v.get(n_stereo).copied())
@@ -3178,21 +3201,27 @@ fn calc_component_dim_with_symbol_style(
 ) -> CompDim {
     let n_lines = 1 + comp.stereotypes.len();
 
-    let (width, height) = if matches!(comp.kind, ComponentElementKind::Database) {
-        (
+    let (width, height) = match comp.kind {
+        ComponentElementKind::Database => (
             text_metrics.content_width + DATABASE_MARGIN_X * 2.0,
             DATABASE_MARGIN_TOP + n_lines as f64 * LINE_HEIGHT + DATABASE_MARGIN_BOTTOM,
-        )
-    } else if component_style_rectangle && matches!(comp.kind, ComponentElementKind::Component) {
-        (
+        ),
+        ComponentElementKind::Queue => (
+            text_metrics.content_width + QUEUE_MARGIN_LEFT + QUEUE_MARGIN_RIGHT,
+            n_lines as f64 * LINE_HEIGHT + QUEUE_MARGIN_Y * 2.0,
+        ),
+        ComponentElementKind::Storage => (
+            text_metrics.content_width + STORAGE_MARGIN * 2.0,
+            n_lines as f64 * LINE_HEIGHT + STORAGE_MARGIN * 2.0,
+        ),
+        ComponentElementKind::Component if component_style_rectangle => (
             text_metrics.content_width + RECTANGLE_MARGIN_X * 2.0,
             n_lines as f64 * LINE_HEIGHT + RECTANGLE_MARGIN_Y * 2.0,
-        )
-    } else {
-        (
+        ),
+        _ => (
             (text_metrics.content_width + TEXT_PAD_LEFT + TEXT_PAD_RIGHT).max(COMPONENT_MIN_W),
             COMPONENT_BASE_H + n_lines as f64 * LINE_HEIGHT,
-        )
+        ),
     };
 
     CompDim { width, height }
@@ -3539,6 +3568,10 @@ fn component_svek_translation(
                 // `LimitFinder.drawUPolygon` applies its 10px horizontal
                 // measurement guard, while the polygon starts at local y=0.
                 ComponentElementKind::Node => (-10.0, 0.0),
+                // `USymbolDatabase.drawDatabase` and
+                // `USymbolQueue.drawQueue` paint UPath primitives whose
+                // minimum is their declared image origin.
+                ComponentElementKind::Database | ComponentElementKind::Queue => (0.0, 0.0),
                 // `USymbolComponent2.drawComponent2` and the remaining leaf
                 // symbols retain the established `URectangle` top-left
                 // envelope until their primitive models are split out.
@@ -3796,9 +3829,12 @@ fn compute_no_oracle_canvas(input: NoOracleCanvas<'_>) -> (f64, f64) {
             // already incorporates that one-pixel difference.
             ComponentElementKind::Component => (dim.width, dim.height),
             ComponentElementKind::Database => (
-                dim.width + DATABASE_RENDER_OVERFLOW,
-                dim.height + DATABASE_RENDER_OVERFLOW,
+                dim.width + DATABASE_RENDER_OVERFLOW_X,
+                dim.height + DATABASE_RENDER_OVERFLOW_Y,
             ),
+            // `LimitFinder.drawUPath` includes the queue's rightmost path
+            // boundary when converting the painted SVEK bounds to dimensions.
+            ComponentElementKind::Queue => (dim.width + 1.0, dim.height),
             _ => (dim.width, dim.height),
         };
         max_x = max_x.max(x + painted_max_x);
@@ -6242,9 +6278,9 @@ mod tests {
         );
 
         let expected_w =
-            super::MARGIN + dim.width + super::DATABASE_RENDER_OVERFLOW + super::SVEK_CANVAS_PAD;
+            super::MARGIN + dim.width + super::DATABASE_RENDER_OVERFLOW_X + super::SVEK_CANVAS_PAD;
         let expected_h =
-            super::MARGIN + dim.height + super::DATABASE_RENDER_OVERFLOW + super::SVEK_CANVAS_PAD;
+            super::MARGIN + dim.height + super::DATABASE_RENDER_OVERFLOW_Y + super::SVEK_CANVAS_PAD;
         let positions = [(super::MARGIN, super::MARGIN)];
         let dimensions = [dim];
         let (canvas_w, canvas_h) = super::compute_no_oracle_canvas(super::NoOracleCanvas {
@@ -6265,6 +6301,38 @@ mod tests {
         });
         assert_eq!(canvas_w, expected_w);
         assert_eq!(canvas_h, expected_h);
+    }
+
+    #[test]
+    fn no_oracle_queue_and_storage_use_java_leaf_symbol_margins() {
+        // Fresh Java PlantUML reference. `USymbolQueue.asSmall/drawQueue`
+        // applies (5,15,5,5) margins; `USymbolStorage.asSmall/drawStorage`
+        // applies ten-pixel margins and a 70px rounded diameter.
+        let input = "@startuml\n\
+                     queue \"Telemetry Buffer 8803\" as Buffer8803\n\
+                     storage \"Archive Capsule 8819\" as Archive8819\n\
+                     component \"Relay 8831\" as Relay8831\n\
+                     Buffer8803 --> Archive8819\n\
+                     Archive8819 --> Relay8831\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(
+            svg.contains(r#"width="193px""#) && svg.contains(r#"height="249px""#),
+            "the renamed leaf-symbol chain must retain Java's envelope: {svg}"
+        );
+        assert!(
+            svg.contains(r#"M11,6 L173"#)
+                && svg.contains(r##"<rect fill="#F1F1F1" height=""##)
+                && svg.contains(r#"rx="35" ry="35""#),
+            "queue and storage primitives must follow their USymbol models: {svg}"
+        );
+        assert!(
+            svg.contains(r#"d="M92.24,32.68 C92.24,48.15 92.24,68.63 92.24,86.16""#)
+                && svg.contains(r#"d="M92.24,129.06 C92.24,145.54 92.24,164.42 92.24,182.48""#),
+            "the SVEK layout must consume the symbol-specific dimensions: {svg}"
+        );
     }
 
     #[test]

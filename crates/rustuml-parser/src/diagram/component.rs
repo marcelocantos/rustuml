@@ -48,6 +48,7 @@ pub enum ComponentElementKind {
     Database,
     Node,
     Queue,
+    Storage,
     /// A leaf `cloud "X" as Y` element — drawn as a bumpy cloud outline rather
     /// than the rounded component body. (Container clouds, `cloud X { … }`,
     /// become packages/clusters and never reach this enum.)
