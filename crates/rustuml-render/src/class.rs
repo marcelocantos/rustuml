@@ -3276,16 +3276,16 @@ fn package_qualified_name(
 }
 
 fn relationship_endpoint_name<'a>(diagram: &'a ClassDiagram, id: &'a str) -> &'a str {
+    // Java `Link.idCommentForSvg` builds path ids from `Entity.getName()`,
+    // which is the Quark name. `NameAndCodeParser.CODE4` makes a bare quoted
+    // name the Quark name, while `DISPLAY as CODE` makes the explicit code the
+    // Quark name. Rust normalizes bare quoted ids for lookup, so recover their
+    // display label here but preserve true aliases.
     diagram
         .entities
         .iter()
         .find(|entity| entity.id == id)
-        .filter(|entity| {
-            !entity.explicit_alias
-                && diagram.packages.iter().any(|package| {
-                    package.phantom && package.entities.iter().any(|member| member == id)
-                })
-        })
+        .filter(|entity| !entity.explicit_alias)
         .map_or(id, |entity| entity.label.as_str())
 }
 
@@ -14420,6 +14420,28 @@ mod tests {
         assert!(
             !svg.contains(r#"data-qualified-name="FreshDomain761...Renamed Ledger.. .service.""#)
         );
+    }
+
+    #[test]
+    fn relationship_ids_use_bare_quoted_names_but_preserve_true_aliases() {
+        let input = "@startuml\n\
+            package FreshDomain7301 {\n\
+              package FreshLayer7307 {\n\
+                class \"Fresh Billing Portal 7319\"\n\
+                class \"Fresh Audit View 7321\" as FreshAuditAlias7321\n\
+                class FreshPlainArchive7331\n\
+                \"Fresh Billing Portal 7319\" --> FreshAuditAlias7321\n\
+                FreshAuditAlias7321 ..> FreshPlainArchive7331\n\
+              }\n\
+            }\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(r#"id="Fresh Billing Portal 7319-to-FreshAuditAlias7321""#));
+        assert!(svg.contains(r#"id="FreshAuditAlias7321-to-FreshPlainArchive7331""#));
+        assert!(!svg.contains("Fresh_Billing_Portal_7319-to-FreshAuditAlias7321"));
+        assert!(!svg.contains("Fresh Audit View 7321-to-FreshPlainArchive7331"));
     }
 
     #[test]
