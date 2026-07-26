@@ -1950,13 +1950,13 @@ fn parse_filter_id(defs: &str) -> Option<String> {
     Some(rest[start..start + end].to_string())
 }
 
-fn split_gradient_colors(val: &str) -> Option<(&str, &str)> {
-    for sep in ['/', '\\', '|', '-'] {
-        if let Some((left, right)) = val.split_once(sep) {
+fn split_gradient_colors(val: &str) -> Option<(&str, &str, char)> {
+    for policy in ['-', '\\', '|', '/'] {
+        if let Some((left, right)) = val.split_once(policy) {
             let left = left.trim();
             let right = right.trim();
             if !left.is_empty() && !right.is_empty() {
-                return Some((left, right));
+                return Some((left, right, policy));
             }
         }
     }
@@ -1970,9 +1970,21 @@ fn attr_value<'a>(elem: &'a str, name: &str) -> Option<&'a str> {
     v.find('"').map(|q| &v[..q])
 }
 
-fn resolve_gradient_id(defs: &str, c1: &str, c2: &str) -> Option<String> {
+fn gradient_endpoints(policy: char) -> (&'static str, &'static str, &'static str, &'static str) {
+    // Java provenance: `SvgGraphics.createSvgGradient` maps
+    // `HColorGradient.getPolicy()` to these endpoint pairs.
+    match policy {
+        '|' => ("0%", "100%", "50%", "50%"),
+        '\\' => ("0%", "100%", "100%", "0%"),
+        '-' => ("50%", "50%", "0%", "100%"),
+        _ => ("0%", "100%", "0%", "100%"),
+    }
+}
+
+fn resolve_gradient_id(defs: &str, c1: &str, c2: &str, policy: char) -> Option<String> {
     let c1 = c1.trim_start_matches('#');
     let c2 = c2.trim_start_matches('#');
+    let (x1, x2, y1, y2) = gradient_endpoints(policy);
     let mut rest = defs;
     while let Some(start) = rest.find("<linearGradient") {
         rest = &rest[start..];
@@ -1996,6 +2008,10 @@ fn resolve_gradient_id(defs: &str, c1: &str, c2: &str) -> Option<String> {
         if let (Some(id), [s0, s1, ..]) = (id, stops.as_slice())
             && s0.trim_start_matches('#').eq_ignore_ascii_case(c1)
             && s1.trim_start_matches('#').eq_ignore_ascii_case(c2)
+            && attr_value(elem, "x1").is_none_or(|value| value == x1)
+            && attr_value(elem, "x2").is_none_or(|value| value == x2)
+            && attr_value(elem, "y1").is_none_or(|value| value == y1)
+            && attr_value(elem, "y2").is_none_or(|value| value == y2)
         {
             return Some(id.to_string());
         }
@@ -2012,15 +2028,93 @@ fn resolve_gradient_id(defs: &str, c1: &str, c2: &str) -> Option<String> {
 pub(crate) fn gradient_fill_or(val: &str, gradient_defs: Option<&str>) -> String {
     if val.trim().eq_ignore_ascii_case("transparent") {
         "none".to_string()
-    } else if let Some((c1, c2)) = split_gradient_colors(val)
-        && let Some(id) = gradient_defs.and_then(|defs| resolve_gradient_id(defs, c1, c2))
+    } else if let Some((c1, c2, policy)) = split_gradient_colors(val)
+        && let Some(id) = gradient_defs.and_then(|defs| resolve_gradient_id(defs, c1, c2, policy))
     {
         format!("url(#{id})")
-    } else if let Some((first, _)) = split_gradient_colors(val) {
+    } else if let Some((first, _, _)) = split_gradient_colors(val) {
         resolve_color(first)
     } else {
         resolve_color(val)
     }
+}
+
+#[derive(Debug, PartialEq, Eq)]
+struct SequenceGradient {
+    color1: String,
+    color2: String,
+    policy: char,
+    id: String,
+}
+
+fn sequence_gradient_key(key: &str) -> bool {
+    matches!(
+        key,
+        "backgroundcolor"
+            | "participantbackgroundcolor"
+            | "sequenceparticipantbackgroundcolor"
+            | "actorbackgroundcolor"
+            | "sequenceactorbackgroundcolor"
+            | "boundarybackgroundcolor"
+            | "sequenceboundarybackgroundcolor"
+            | "controlbackgroundcolor"
+            | "sequencecontrolbackgroundcolor"
+            | "entitybackgroundcolor"
+            | "sequenceentitybackgroundcolor"
+            | "databasebackgroundcolor"
+            | "sequencedatabasebackgroundcolor"
+            | "collectionsbackgroundcolor"
+            | "sequencecollectionsbackgroundcolor"
+            | "queuebackgroundcolor"
+            | "sequencequeuebackgroundcolor"
+            | "notebackgroundcolor"
+            | "sequencenotebackgroundcolor"
+            | "sequencelifelinebackgroundcolor"
+            | "sequencedividerbackgroundcolor"
+            | "sequencegroupbackgroundcolor"
+    )
+}
+
+fn sequence_gradients(diagram: &SequenceDiagram) -> Vec<SequenceGradient> {
+    let source = diagram.meta.source.as_deref().unwrap_or("");
+    let mut gradients: Vec<SequenceGradient> = Vec::new();
+    for skinparam in &diagram.meta.skinparams {
+        let key = skinparam.key.to_ascii_lowercase();
+        if !sequence_gradient_key(&key) {
+            continue;
+        }
+        let Some((raw1, raw2, policy)) = split_gradient_colors(skinparam.value.trim()) else {
+            continue;
+        };
+        let color1 = resolve_color(raw1);
+        let color2 = resolve_color(raw2);
+        if gradients.iter().any(|gradient| {
+            gradient.color1 == color1 && gradient.color2 == color2 && gradient.policy == policy
+        }) {
+            continue;
+        }
+        gradients.push(SequenceGradient {
+            color1,
+            color2,
+            policy,
+            id: crate::filter_registry::gradient_id_for(source, gradients.len()),
+        });
+    }
+    gradients
+}
+
+fn sequence_gradient_defs(gradients: &[SequenceGradient]) -> String {
+    let mut defs = String::new();
+    for gradient in gradients {
+        let (x1, x2, y1, y2) = gradient_endpoints(gradient.policy);
+        write!(
+            defs,
+            r#"<linearGradient id="{}" x1="{x1}" x2="{x2}" y1="{y1}" y2="{y2}"><stop offset="0%" stop-color="{}"/><stop offset="100%" stop-color="{}"/></linearGradient>"#,
+            gradient.id, gradient.color1, gradient.color2,
+        )
+        .unwrap();
+    }
+    defs
 }
 
 /// Font size of a named participant box title (bold).
@@ -5150,10 +5244,17 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // the box rx/ry to N/2 (default 2.5 = RoundCorner 5 / 2).
     let mut head_box_rx = HEAD_BOX_RX;
     let mut note_corner_radius = 0.0;
-    // Gradient (`#c1/c2`) backgrounds reference captured `<linearGradient>`
-    // ids by their stop colours. The defs themselves are spliced into `<defs>`
-    // by `open_svg`; the renderer only needs the matching id.
-    let gradient_defs = oracle.map(|o| o.defs_inner_xml.as_str());
+    // `SvgGraphics.createSvgGradient` assigns source-seeded ids in first-use
+    // order. Sequence skinparams are resolved before painting, so retain their
+    // declaration order while deduplicating the same colour/policy tuple.
+    let generated_gradients = oracle.is_none().then(|| sequence_gradients(diagram));
+    let generated_gradient_defs = generated_gradients
+        .as_deref()
+        .map(sequence_gradient_defs)
+        .filter(|defs| !defs.is_empty());
+    let gradient_defs = oracle
+        .map(|o| o.defs_inner_xml.as_str())
+        .or(generated_gradient_defs.as_deref());
     let filter_id: Option<String> = oracle
         .map(|o| o.defs_inner_xml.as_str())
         .and_then(parse_filter_id)
@@ -5313,7 +5414,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 lifeline_border = resolve_color(val);
             }
             "sequencelifelinebackgroundcolor" => {
-                lifeline_background = resolve_color(val);
+                lifeline_background = gradient_fill_or(val, gradient_defs);
             }
             "sequencelifelineborderthickness" => {
                 // PlantUML honours the lifeline border *colour* but not this
@@ -5322,43 +5423,43 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 // effect so it doesn't fall through to unknown-skinparam paths.
             }
             "actorbackgroundcolor" | "sequenceactorbackgroundcolor" => {
-                actor_fill_override = Some(resolve_color(val));
+                actor_fill_override = Some(gradient_fill_or(val, gradient_defs));
             }
             "actorbordercolor" | "sequenceactorbordercolor" => {
                 actor_border_override = Some(resolve_color(val));
             }
             "boundarybackgroundcolor" | "sequenceboundarybackgroundcolor" => {
-                boundary_fill_override = Some(resolve_color(val));
+                boundary_fill_override = Some(gradient_fill_or(val, gradient_defs));
             }
             "boundarybordercolor" | "sequenceboundarybordercolor" => {
                 boundary_border_override = Some(resolve_color(val));
             }
             "controlbackgroundcolor" | "sequencecontrolbackgroundcolor" => {
-                control_fill_override = Some(resolve_color(val));
+                control_fill_override = Some(gradient_fill_or(val, gradient_defs));
             }
             "controlbordercolor" | "sequencecontrolbordercolor" => {
                 control_border_override = Some(resolve_color(val));
             }
             "entitybackgroundcolor" | "sequenceentitybackgroundcolor" => {
-                entity_fill_override = Some(resolve_color(val));
+                entity_fill_override = Some(gradient_fill_or(val, gradient_defs));
             }
             "entitybordercolor" | "sequenceentitybordercolor" => {
                 entity_border_override = Some(resolve_color(val));
             }
             "databasebackgroundcolor" | "sequencedatabasebackgroundcolor" => {
-                database_fill_override = Some(resolve_color(val));
+                database_fill_override = Some(gradient_fill_or(val, gradient_defs));
             }
             "databasebordercolor" | "sequencedatabasebordercolor" => {
                 database_border_override = Some(resolve_color(val));
             }
             "collectionsbackgroundcolor" | "sequencecollectionsbackgroundcolor" => {
-                collections_fill_override = Some(resolve_color(val));
+                collections_fill_override = Some(gradient_fill_or(val, gradient_defs));
             }
             "collectionsbordercolor" | "sequencecollectionsbordercolor" => {
                 collections_border_override = Some(resolve_color(val));
             }
             "queuebackgroundcolor" | "sequencequeuebackgroundcolor" => {
-                queue_fill_override = Some(resolve_color(val));
+                queue_fill_override = Some(gradient_fill_or(val, gradient_defs));
             }
             "queuebordercolor" | "sequencequeuebordercolor" => {
                 queue_border_override = Some(resolve_color(val));
@@ -5405,7 +5506,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 }
             }
             "sequencedividerbackgroundcolor" => {
-                divider_fill = resolve_color(val);
+                divider_fill = gradient_fill_or(val, gradient_defs);
             }
             "sequencedividerbordercolor" => {
                 divider_border = resolve_color(val);
@@ -9261,19 +9362,17 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // `SvgGraphics.createXmlDocument` derives one source-seeded shadow id and
     // emits its fixed blur/matrix/offset/blend pipeline when any shape requests
     // a delta shadow. Oracle mode already carries that definition verbatim.
-    let generated_shadow_defs = (oracle.is_none()
-        && (participant_shadow_filter.is_some() || note_shadow_filter.is_some()))
-    .then(|| {
-        crate::filter_registry::shadow_filter_def(
+    let mut generated_defs = generated_gradient_defs.unwrap_or_default();
+    if oracle.is_none() && (participant_shadow_filter.is_some() || note_shadow_filter.is_some()) {
+        generated_defs.push_str(&crate::filter_registry::shadow_filter_def(
             filter_id
                 .as_deref()
                 .expect("shadow filter id must exist for generated sequence SVG"),
-        )
-    });
+        ));
+    }
     let defs = oracle
         .map(|o| o.defs_inner_xml.as_str())
-        .or(generated_shadow_defs.as_deref())
-        .unwrap_or("");
+        .unwrap_or(generated_defs.as_str());
     svg.open_svg(svg_width, svg_height, bg_color.as_deref(), defs);
 
     // Emit the deprecated handwritten skinparam warning before the diagram body.
@@ -12440,7 +12539,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 #[cfg(test)]
 mod tests {
     use super::*;
-    use rustuml_parser::diagram::DiagramMeta;
+    use rustuml_parser::diagram::{DiagramMeta, SkinParam};
 
     #[test]
     fn legacy_plantuml_palette_preserves_non_css_values() {
@@ -12615,6 +12714,70 @@ mod tests {
     #[test]
     fn gradient_fill_transparent_is_svg_none() {
         assert_eq!(gradient_fill_or("transparent", None), "none");
+    }
+
+    #[test]
+    fn generated_sequence_gradients_are_seeded_deduplicated_and_policy_aware() {
+        let mut diagram = simple_diagram();
+        let source = concat!(
+            "@startuml\n",
+            "skinparam sequenceParticipantBackgroundColor #00FFFF/#FFC0CB\n",
+            "skinparam sequenceGroupBackgroundColor #FF0000|#0000FF\n",
+            "Alice -> Bob : renamed payload\n",
+            "@enduml\n",
+        );
+        diagram.meta.source = Some(source.to_string());
+        diagram.meta.skinparams = vec![
+            SkinParam {
+                key: "sequenceParticipantBackgroundColor".into(),
+                value: "#00FFFF/#FFC0CB".into(),
+            },
+            SkinParam {
+                key: "sequenceGroupBackgroundColor".into(),
+                value: "#FF0000|#0000FF".into(),
+            },
+            SkinParam {
+                key: "participantBackgroundColor".into(),
+                value: "#00FFFF/#FFC0CB".into(),
+            },
+        ];
+
+        let gradients = sequence_gradients(&diagram);
+        assert_eq!(gradients.len(), 2);
+        let defs = sequence_gradient_defs(&gradients);
+        let gradient0 = crate::filter_registry::gradient_id_for(source, 0);
+        let gradient1 = crate::filter_registry::gradient_id_for(source, 1);
+        assert!(defs.contains(&format!(
+            r##"<linearGradient id="{gradient0}" x1="0%" x2="100%" y1="0%" y2="100%"><stop offset="0%" stop-color="#00FFFF"/><stop offset="100%" stop-color="#FFC0CB"/></linearGradient>"##
+        )));
+        assert!(defs.contains(&format!(
+            r##"<linearGradient id="{gradient1}" x1="0%" x2="100%" y1="50%" y2="50%"><stop offset="0%" stop-color="#FF0000"/><stop offset="100%" stop-color="#0000FF"/></linearGradient>"##
+        )));
+    }
+
+    #[test]
+    fn no_oracle_sequence_gradient_def_drives_renamed_participant_fill() {
+        let mut diagram = simple_diagram();
+        let source = concat!(
+            "@startuml\n",
+            "skinparam sequenceParticipantBackgroundColor #00FFFF/#FFC0CB\n",
+            "Alice -> Bob : renamed payload\n",
+            "@enduml\n",
+        );
+        diagram.meta.source = Some(source.to_string());
+        diagram.meta.skinparams = vec![SkinParam {
+            key: "sequenceParticipantBackgroundColor".into(),
+            value: "#00FFFF/#FFC0CB".into(),
+        }];
+
+        let svg = render(&diagram, &Theme::default(), None);
+        let gradient = crate::filter_registry::gradient_id_for(source, 0);
+        assert!(svg.contains(&format!(r##"<linearGradient id="{gradient}""##)));
+        assert_eq!(
+            svg.matches(&format!(r##"fill="url(#{gradient})""##))
+                .count(),
+            4
+        );
     }
 
     #[test]
