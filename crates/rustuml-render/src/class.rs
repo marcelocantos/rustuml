@@ -252,6 +252,10 @@ const PACKAGE_TAB_H: f64 = 22.4883;
 /// package top + 15.5352 for 14px bold sans-serif package labels.
 const PACKAGE_TITLE_BASELINE: f64 = 15.5352;
 const PACKAGE_TAB_TEXT_X: f64 = 4.0;
+/// `USymbolFolder.asBig` places the stereotype block two pixels below the
+/// cluster origin plus the tab height; its 14px text then uses the ordinary
+/// package-title baseline.
+const PACKAGE_STEREOTYPE_BASELINE: f64 = PACKAGE_TAB_H + PACKAGE_TITLE_BASELINE;
 /// Java `USymbolFolder`: `marginTitleX1 = marginTitleX2 = 3`,
 /// `marginTitleX3 = 7`; default package round-corner is 5px.
 const PACKAGE_TITLE_MARGIN_X: f64 = 3.0;
@@ -1831,6 +1835,18 @@ pub fn render_with_oracle(
             is_rendered_package_cluster(&diagram.packages[p]).then(|| package_cluster_id(p))
         });
         let label = package_display_label(pkg);
+        // Java `ClusterHeader` merges the visible stereotype block above the
+        // title before `ClusterDotString.printInternal` serializes the
+        // integer-truncated combined dimensions as Graphviz's cluster label.
+        let stereotype_lines = visible_package_stereotype_lines(pkg);
+        let stereotype_width = stereotype_lines
+            .iter()
+            .map(|line| text_render::measure_no_underline(line, FONT_SIZE, false))
+            .fold(0.0_f64, f64::max);
+        let stereotype_height = stereotype_lines
+            .iter()
+            .map(|line| text_render::label_height(line, FONT_SIZE))
+            .sum::<f64>();
         let (title_width_extra, title_height_extra) = match effective_package_kind(pkg) {
             PackageKind::Database => (0.0, DATABASE_CLUSTER_TITLE_EXTRA),
             PackageKind::Node => (
@@ -1846,9 +1862,12 @@ pub fn render_with_oracle(
             &package_cluster_id(idx),
             parent.as_deref(),
             ClusterTitleSize {
-                width: text_render::measure_no_underline(label, FONT_SIZE, true)
-                    + title_width_extra,
-                height: text_render::label_height(label, FONT_SIZE) + title_height_extra,
+                width: (text_render::measure_no_underline(label, FONT_SIZE, true)
+                    + title_width_extra)
+                    .max(stereotype_width),
+                height: text_render::label_height(label, FONT_SIZE)
+                    + title_height_extra
+                    + stereotype_height,
             },
         );
     }
@@ -2514,6 +2533,19 @@ fn effective_package_kind(pkg: &Package) -> PackageKind {
         }
     }
     pkg.kind
+}
+
+fn visible_package_stereotype_lines(pkg: &Package) -> Vec<String> {
+    pkg.stereotypes
+        .iter()
+        .filter(|stereotype| {
+            !matches!(
+                stereotype.to_ascii_lowercase().as_str(),
+                "database" | "folder" | "frame" | "rectangle" | "node" | "cloud"
+            )
+        })
+        .map(|stereotype| format!("\u{00AB}{stereotype}\u{00BB}"))
+        .collect()
 }
 
 fn is_rendered_package_cluster(pkg: &Package) -> bool {
@@ -3705,6 +3737,7 @@ struct LayoutPackageCluster {
     qualified_name: String,
     source_line: usize,
     label: String,
+    stereotype_lines: Vec<String>,
     fill: String,
     stroke: String,
     font_fill: String,
@@ -3759,6 +3792,7 @@ fn layout_package_clusters(
                 qualified_name: package_qualified_name(diagram, &parent_pkg, idx),
                 source_line: pkg.source_line,
                 label: package_display_label(pkg).to_string(),
+                stereotype_lines: visible_package_stereotype_lines(pkg),
                 fill,
                 stroke,
                 font_fill,
@@ -3858,6 +3892,27 @@ fn emit_layout_package_cluster(svg: &mut String, cluster: &LayoutPackageCluster,
                 escape_xml(&cluster.label),
             )
             .unwrap();
+            for (line_index, stereotype) in cluster.stereotype_lines.iter().enumerate() {
+                let width = text_render::measure_no_underline(stereotype, FONT_SIZE, false);
+                let mut text = String::new();
+                text_render::emit_text(
+                    &mut text,
+                    stereotype,
+                    &TextBase {
+                        x: x + PACKAGE_TAB_TEXT_X + (cluster.width - width) / 2.0,
+                        y: y + PACKAGE_STEREOTYPE_BASELINE
+                            + line_index as f64 * text_render::label_height(stereotype, FONT_SIZE),
+                        font_size: FONT_SIZE as u32,
+                        font_family: "sans-serif",
+                        fill: &cluster.font_fill,
+                        bold: false,
+                        italic: true,
+                        underline: false,
+                        skip_underline: false,
+                    },
+                );
+                svg.push_str(&text);
+            }
         }
     }
     svg.push_str("</g>");
@@ -10625,6 +10680,36 @@ mod tests {
         ));
         assert!(svg.contains(r#"data-qualified-name="ArchiveShelf313.Intake317.Parcel331""#));
         assert!(svg.contains(r#"id="Parcel331-to-Ledger337""#));
+    }
+
+    #[test]
+    fn renamed_nested_package_stereotype_reserves_cluster_label_block() {
+        let input = "@startuml\n\
+            package FreshOuterArchive701 {\n\
+              package FreshInnerLedger709 <<LongRunningAuditService>> {\n\
+                class FreshEntry719 {\n\
+                  +String renamedKey\n\
+                }\n\
+                class FreshSink727\n\
+                FreshEntry719 --> FreshSink727\n\
+              }\n\
+            }\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Java `ClusterHeader` merges the stereotype and title dimensions,
+        // `ClusterDotString.printInternal` feeds that block to Graphviz, and
+        // `USymbolFolder.asBig` centres the stereotype below the folder tab.
+        assert!(svg.contains(r#"viewBox="0 0 273 327""#), "{svg}");
+        assert!(svg.contains(r#"<!--cluster FreshOuterArchive701-->"#));
+        assert!(svg.contains(r#"<!--cluster FreshOuterArchive701.FreshInnerLedger709-->"#));
+        assert!(svg.contains(r#"font-style="italic""#));
+        assert!(svg.contains("LongRunningAuditService"));
+        assert!(svg.contains(
+            r#"data-qualified-name="FreshOuterArchive701.FreshInnerLedger709.FreshEntry719""#
+        ));
+        assert!(svg.contains(r#"id="FreshEntry719-to-FreshSink727""#));
     }
 
     #[test]
