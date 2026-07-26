@@ -363,4 +363,8 @@ pub struct Package {
     /// is the full qualified path but we only want to show the short last segment).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub display_name: Option<String>,
+    /// Whether this package is a parent Quark synthesized when a leaf is
+    /// created beneath a dotted namespace.
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub phantom: bool,
 }

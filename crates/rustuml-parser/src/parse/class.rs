@@ -246,6 +246,7 @@ impl ClassParser {
                     source_line: self.current_line,
                     stereotypes: Vec::new(),
                     display_name: Some(pkg_label),
+                    phantom: true,
                 });
                 // Register this pkg in its parent package's entity list.
                 if let Some(p_idx) = parent_pkg_idx {
@@ -298,6 +299,19 @@ impl ClassParser {
 
         let entity_label = parts[parts.len() - 1].to_string();
         (entity_id, entity_label)
+    }
+
+    fn materialize_active_phantom_packages(&mut self) {
+        for package_idx in self.package_stack.clone() {
+            let mut parent = self.packages[package_idx].parent;
+            while let Some(parent_idx) = parent {
+                let package = &mut self.packages[parent_idx];
+                if package.phantom && package.source_line == 0 {
+                    package.source_line = self.current_line;
+                }
+                parent = package.parent;
+            }
+        }
     }
 
     fn parse_line(&mut self, line_num: usize, line: &str) -> Result<(), ParseError> {
@@ -614,11 +628,23 @@ impl ClassParser {
                 });
             }
 
+            self.materialize_active_phantom_packages();
+
             // Register entity in ALL active packages (innermost to outermost),
             // so that outer container bounding boxes include entities from inner
             // nested packages.
             // (Note: namespace package registration was already done in ensure_namespace_packages)
-            for &pkg_idx in &self.package_stack {
+            let mut active_packages = self.package_stack.clone();
+            let mut cursor = 0;
+            while cursor < active_packages.len() {
+                if let Some(parent) = self.packages[active_packages[cursor]].parent
+                    && !active_packages.contains(&parent)
+                {
+                    active_packages.push(parent);
+                }
+                cursor += 1;
+            }
+            for pkg_idx in active_packages {
                 let pkg = &mut self.packages[pkg_idx];
                 if !pkg.entities.contains(&final_id) {
                     pkg.entities.push(final_id.clone());
@@ -993,6 +1019,47 @@ impl ClassParser {
                 "node" => PackageKind::Node,
                 _ => PackageKind::Package,
             };
+            let mut package_parent = self.package_stack.last().copied();
+            let mut display_name = None;
+            if kind == PackageKind::Namespace
+                && caps.get(2).is_none()
+                && let Some(separator) = self.namespace_sep.as_deref()
+            {
+                let parts = name.split(separator).collect::<Vec<_>>();
+                if parts.len() > 1 && parts.iter().all(|part| !part.is_empty()) {
+                    let mut prefix = String::new();
+                    for part in &parts[..parts.len() - 1] {
+                        if !prefix.is_empty() {
+                            prefix.push_str(separator);
+                        }
+                        prefix.push_str(part);
+                        let pkg_idx = if let Some(idx) = self.packages.iter().position(|package| {
+                            package.name == prefix && package.parent == package_parent
+                        }) {
+                            idx
+                        } else {
+                            let idx = self.packages.len();
+                            self.packages.push(Package {
+                                name: prefix.clone(),
+                                kind: PackageKind::Package,
+                                color: None,
+                                entities: Vec::new(),
+                                parent: package_parent,
+                                // `CucaDiagram.eventuallyBuildPhantomGroups`
+                                // creates this parent when the first leaf is
+                                // built, not when the namespace is declared.
+                                source_line: 0,
+                                stereotypes: Vec::new(),
+                                display_name: Some((*part).to_string()),
+                                phantom: true,
+                            });
+                            idx
+                        };
+                        package_parent = Some(pkg_idx);
+                    }
+                    display_name = parts.last().map(|part| (*part).to_string());
+                }
+            }
             let pkg_idx = self.packages.len();
             self.package_stack.push(pkg_idx);
             self.packages.push(Package {
@@ -1000,10 +1067,11 @@ impl ClassParser {
                 kind,
                 color,
                 entities: Vec::new(),
-                parent: self.package_stack.iter().rev().nth(1).copied(),
+                parent: package_parent,
                 source_line: self.current_line,
                 stereotypes,
-                display_name: None,
+                display_name,
+                phantom: false,
             });
             true
         } else {
@@ -2173,6 +2241,33 @@ mod tests {
         assert_eq!(d.packages.len(), 1);
         assert_eq!(d.packages[0].name, "com.example");
         assert_eq!(d.entities.len(), 2);
+    }
+
+    #[test]
+    fn explicit_dotted_namespace_materializes_parent_quarks_on_first_leaf() {
+        let d = parse(
+            "namespace telemetry.pipeline.archive {\n\
+             skinparam classBorderColor DarkGreen\n\
+             class FreshPacket1301\n\
+             class FreshLedger1303\n\
+             }",
+        );
+
+        assert_eq!(d.packages.len(), 3);
+        assert_eq!(d.packages[0].name, "telemetry");
+        assert_eq!(d.packages[0].source_line, 3);
+        assert!(d.packages[0].phantom);
+        assert_eq!(d.packages[1].name, "telemetry.pipeline");
+        assert_eq!(d.packages[1].source_line, 3);
+        assert!(d.packages[1].phantom);
+        assert_eq!(d.packages[2].name, "telemetry.pipeline.archive");
+        assert_eq!(d.packages[2].source_line, 1);
+        assert!(!d.packages[2].phantom);
+        assert_eq!(d.packages[2].parent, Some(1));
+        assert_eq!(
+            d.packages[2].entities,
+            ["FreshPacket1301", "FreshLedger1303"]
+        );
     }
 
     #[test]

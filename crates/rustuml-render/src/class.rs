@@ -3034,6 +3034,9 @@ fn visible_package_stereotype_lines(pkg: &Package) -> Vec<String> {
 }
 
 fn is_rendered_package_cluster(pkg: &Package) -> bool {
+    if pkg.phantom && pkg.source_line == 0 {
+        return false;
+    }
     matches!(
         effective_package_kind(pkg),
         PackageKind::Package
@@ -3136,7 +3139,18 @@ fn package_qualified_name(
         // the backing Quark path. `Cluster.drawU` consequently serializes
         // `Quark.getQualifiedName()`, including the configured namespace
         // separator after SVG's punctuation translation.
-        return translate_qualified_name(&package.name);
+        let translated = translate_qualified_name(&package.name);
+        let Some(parent_idx) = parent_pkg[idx] else {
+            return translated;
+        };
+        let parent = &diagram.packages[parent_idx];
+        let parent_qualified = package_qualified_name(diagram, parent_pkg, parent_idx);
+        if let Some(suffix) = package.name.strip_prefix(&parent.name)
+            && suffix.starts_with(|ch: char| !ch.is_ascii_alphanumeric() && ch != '_')
+        {
+            return format!("{parent_qualified}{}", translate_qualified_name(suffix));
+        }
+        return format!("{parent_qualified}.{translated}");
     }
 
     let mut chain = Vec::new();
@@ -3159,8 +3173,7 @@ fn relationship_endpoint_name<'a>(diagram: &'a ClassDiagram, id: &'a str) -> &'a
         .filter(|entity| {
             !entity.explicit_alias
                 && diagram.packages.iter().any(|package| {
-                    package.display_name.is_some()
-                        && package.entities.iter().any(|member| member == id)
+                    package.phantom && package.entities.iter().any(|member| member == id)
                 })
         })
         .map_or(id, |entity| entity.label.as_str())
@@ -3400,7 +3413,7 @@ impl CucaUidEvent {
                 // `CucaDiagram.reallyCreateLeaf` materializes missing Quarks
                 // through `eventuallyBuildPhantomGroups`. Explicit package
                 // commands still create their group before later contents.
-                let same_line_order = if package.display_name.is_some() { 2 } else { 0 };
+                let same_line_order = if package.phantom { 2 } else { 0 };
                 (package.source_line, same_line_order, idx)
             }
             // `CommandLinkClass` creates any missing endpoint entities before
@@ -13104,6 +13117,47 @@ mod tests {
         assert!(svg.contains(r#"data-qualified-name="atlas.sector.archive""#));
         assert!(svg.contains(r#"id="RenamedEntry1229-to-RenamedLedger1231""#));
         assert!(svg.contains(r#"id="RenamedLedger1231-to-RenamedAudit1237""#));
+    }
+
+    #[test]
+    fn explicit_deep_namespace_allocates_declared_group_before_leaf_and_phantoms() {
+        let input = "@startuml\n\
+            namespace aurora.sector.catalog {\n\
+              class FreshIndex1319\n\
+              class FreshRecord1321\n\
+              class FreshAudit1327\n\
+            }\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Class(diagram) = diagram else {
+            panic!("expected class diagram");
+        };
+        let allocation = svek_id_allocation(&diagram);
+
+        assert_eq!(
+            allocation.package_ids,
+            [
+                Some("ent0004".to_string()),
+                Some("ent0005".to_string()),
+                Some("ent0002".to_string()),
+            ]
+        );
+        assert_eq!(allocation.entity_ids, ["ent0003", "ent0006", "ent0007"]);
+
+        let svg = render(&diagram, &Theme::default());
+        for qualified_name in [
+            "aurora",
+            "aurora.sector",
+            "aurora.sector.catalog",
+            "aurora.sector.catalog.FreshIndex1319",
+            "aurora.sector.catalog.FreshRecord1321",
+            "aurora.sector.catalog.FreshAudit1327",
+        ] {
+            assert!(
+                svg.contains(&format!(r#"data-qualified-name="{qualified_name}""#)),
+                "missing {qualified_name}"
+            );
+        }
     }
 
     #[test]
