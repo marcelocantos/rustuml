@@ -289,6 +289,13 @@ pub struct RelationshipStyle {
     /// constructor's shared UID allocation.
     #[serde(default)]
     pub inverted: bool,
+    /// The link was synthesized from an `extends`/`implements` clause on an
+    /// entity declaration, rather than parsed from an explicit arrow command.
+    ///
+    /// Java's `CommandCreateClassMultilines.manageExtends` gives these links
+    /// entity/source provenance but no SVG path `codeLine` attribute.
+    #[serde(default)]
+    pub declaration: bool,
 }
 
 impl RelationshipStyle {
