@@ -698,6 +698,7 @@ struct ActorDim {
     stereo_h: f64,
     stroke_thickness: f64,
     label_gap: f64,
+    paint_min_x: f64,
     paint_min_y: f64,
     width: f64,
     height: f64,
@@ -795,6 +796,15 @@ fn actor_dim(actor: &Actor, skin: &SkinColors) -> ActorDim {
     // bound, not the node box. A stereotype's AWT line box overhangs the image
     // origin by the remainder after its baseline; without one, the stickman's
     // first painted point is one stroke thickness below the image origin.
+    // Horizontally, `LimitFinder` takes the minimum of the stickman's arm
+    // endpoint and each painted text block. A short label leaves the 26px arm
+    // half a pixel inside its 27px fixed node; a wider label reaches the node
+    // box edge and therefore owns normalization instead.
+    let mut paint_min_x = ((width - ACTOR_ARM_HALF * 2.0) / 2.0).min((width - label_w) / 2.0);
+    if actor.stereotype.is_some() {
+        let painted_stereo_w = stereo_w - ACTOR_STEREOTYPE_MARGIN_X * 2.0;
+        paint_min_x = paint_min_x.min((width - painted_stereo_w) / 2.0);
+    }
     let paint_min_y = if actor.stereotype.is_some() {
         -(text_block_h - label_gap)
     } else {
@@ -807,6 +817,7 @@ fn actor_dim(actor: &Actor, skin: &SkinColors) -> ActorDim {
         stereo_h,
         stroke_thickness,
         label_gap,
+        paint_min_x,
         paint_min_y,
         width,
         height,
@@ -1155,7 +1166,24 @@ fn layout_usecase_positions(
         UseCaseLayoutDirection::TopToBottom => Direction::TopToBottom,
         UseCaseLayoutDirection::LeftToRight => Direction::LeftToRight,
     };
+    // Java provenance: `DotStringFactory.createDotString` emits links between
+    // `Cluster.printCluster1` and `Cluster.printCluster2`. A detached root
+    // actor cannot be introduced by those link statements, so printCluster2
+    // creates it before the child-cluster tree. Connected roots may already
+    // have been created implicitly by a link; the layout helper's simpler
+    // root-before-cluster mode is therefore correct only for this detached
+    // topology.
     let mut layout = LayoutGraph::new(direction).with_plantuml_svek_spacing();
+    let uses_detached_root_order = !diagram.packages.is_empty()
+        && diagram.actors.iter().any(|actor| {
+            !diagram
+                .connections
+                .iter()
+                .any(|connection| connection.from == actor.id || connection.to == actor.id)
+        });
+    if uses_detached_root_order {
+        layout = layout.with_plantuml_svek_node_order();
+    }
     for (actor, dim) in diagram.actors.iter().zip(actor_dims) {
         layout.add_node(&actor.id, &actor.label, dim.width, dim.height);
     }
@@ -1338,7 +1366,16 @@ fn layout_usecase_positions(
     let min_painted_x = result
         .node_positions
         .iter()
-        .map(|p| p.x)
+        .take(actor_count)
+        .zip(actor_dims)
+        .map(|(p, dim)| {
+            p.x + if uses_detached_root_order {
+                dim.paint_min_x
+            } else {
+                0.0
+            }
+        })
+        .chain(result.node_positions.iter().skip(actor_count).map(|p| p.x))
         .chain(
             result
                 .cluster_positions
@@ -3448,6 +3485,47 @@ mod tests {
         assert!(svg.contains(r#"<path d="M788.53,6 "#), "{svg}");
         assert_eq!(svg.matches(r#"class="cluster""#).count(), 2, "{svg}");
         assert_eq!(svg.matches(r#"class="entity""#).count(), 6, "{svg}");
+    }
+
+    #[test]
+    fn renamed_root_leaves_precede_package_members_in_svek_node_order() {
+        let input = "@startuml\n\
+                     actor B1\n\
+                     actor B2\n\
+                     actor B3\n\
+                     actor B4\n\
+                     rectangle ModuleZ {\n\
+                       usecase \"VX01\" as VX01\n\
+                       usecase \"VX02\" as VX02\n\
+                       usecase \"VX03\" as VX03\n\
+                     }\n\
+                     B2 --> VX01\n\
+                     B3 --> VX02\n\
+                     B4 --> VX03\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Fresh Java PlantUML reference. `DotStringFactory.createDotString`
+        // emits root leaves through `Cluster.printCluster1` before
+        // `Cluster.printCluster2` emits the child package tree, preserving the
+        // detached actor as the leftmost root leaf.
+        // Debug Graphviz keeps one extra fractional bottom pixel that release
+        // serialization rounds away; width and all ordering coordinates match
+        // the fresh Java SVG in both profiles.
+        assert!(svg.contains(r#"viewBox="0 0 321 "#), "{svg}");
+        assert!(
+            svg.contains(
+                r#"<rect fill="none" height="80.32" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1;" width="270" x="37" y="106.99""#
+            ),
+            "{svg}"
+        );
+        for cx in ["19", "81", "172", "263"] {
+            assert!(
+                svg.contains(&format!(r#"<ellipse cx="{cx}" cy="14""#)),
+                "{svg}"
+            );
+        }
     }
 
     #[test]
