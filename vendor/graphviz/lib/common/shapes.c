@@ -21,6 +21,7 @@
 #include <math.h>
 #include <stddef.h>
 #include <stdbool.h>
+#include <stdlib.h>
 #include <string.h>
 #include <rustuml_helpers.h>
 #include <util/alloc.h>
@@ -35,6 +36,11 @@ typedef struct {
     pointf (*size_gen) (pointf);
     void (*vertex_gen) (pointf*, pointf*);
 } poly_desc_t;
+
+typedef struct {
+    Agrec_t header;
+    boxf box;
+} rustuml_center_port_record_t;
 
 static port Center = {.theta = -1, .clip = true};
 
@@ -2897,7 +2903,27 @@ static port poly_port(node_t * n, char *portname, char *compass)
     if (compass == NULL)
 	compass = "_";
     sides = BOTTOM | RIGHT | TOP | LEFT;
-    if (ND_label(n)->html && (bp = html_port(n, portname, &sides))) {
+    const char *rustuml_center_port = agget(n, "rustuml_svek_center_port");
+    if (strcmp(portname, "h") == 0 && rustuml_center_port != NULL &&
+	rustuml_center_port[0] != '\0') {
+	rustuml_center_port_record_t *record =
+	    agbindrec(n, "rustuml_svek_center_port_box", sizeof(*record), false);
+	/*
+	 * PlantUML's SvekNode.appendLabelHtml names its centered image cell
+	 * "h". RustUML's dependency-free Graphviz build cannot parse HTML
+	 * ports, so recreate html_port's persistent center-cell box for
+	 * explicitly marked shielded nodes.
+	 */
+	const double half_width = strtod(rustuml_center_port, NULL) / 2.0;
+	const double half_height = half_width;
+	const double center_offset =
+	    strtod(agget(n, "rustuml_svek_center_port_offset"), NULL);
+	record->box.LL.x = -half_width + center_offset;
+	record->box.UR.x = half_width + center_offset;
+	record->box.LL.y = -half_height;
+	record->box.UR.y = half_height;
+	(void)compassPort(n, &record->box, &rv, "_", 0, NULL);
+    } else if (ND_label(n)->html && (bp = html_port(n, portname, &sides))) {
 	if (compassPort(n, bp, &rv, compass, sides, NULL)) {
 	    agwarningf(
 		  "node %s, port %s, unrecognized compass point '%s' - ignored\n",

@@ -639,13 +639,35 @@ impl LayoutGraph {
         tail_label_size: Option<EdgeLabelSize>,
         head_label_size: Option<EdgeLabelSize>,
     ) {
+        self.add_edge_with_ports_and_label_sizes_and_minlen(
+            from,
+            to,
+            ports,
+            label_size,
+            tail_label_size,
+            head_label_size,
+            None,
+        );
+    }
+
+    /// Adds a measured-label edge bound to ports with an optional dot rank length.
+    pub fn add_edge_with_ports_and_label_sizes_and_minlen(
+        &mut self,
+        from: &str,
+        to: &str,
+        ports: EdgePorts<'_>,
+        label_size: Option<EdgeLabelSize>,
+        tail_label_size: Option<EdgeLabelSize>,
+        head_label_size: Option<EdgeLabelSize>,
+        minlen: Option<usize>,
+    ) {
         self.edges.push(EdgeSpec {
             from: from.to_string(),
             to: to.to_string(),
             label: None,
             tail_port: ports.tail.map(String::from),
             head_port: ports.head.map(String::from),
-            minlen: None,
+            minlen,
             invisible: false,
             label_size,
             tail_label_size,
@@ -789,6 +811,8 @@ impl LayoutGraph {
         let fixedsize_key = CString::new("fixedsize").unwrap();
         let margin_key = CString::new("margin").unwrap();
         let text_span_dimensions_key = CString::new("rustuml_text_span_dimensions").unwrap();
+        let svek_center_port_key = CString::new("rustuml_svek_center_port").unwrap();
+        let svek_center_port_offset_key = CString::new("rustuml_svek_center_port_offset").unwrap();
         let no_label_val = CString::new("").unwrap();
         let fixedsize_val = CString::new("true").unwrap();
         let zero_val = CString::new("0").unwrap();
@@ -913,6 +937,19 @@ impl LayoutGraph {
                         node as *mut c_void,
                         shape_key.as_ptr(),
                         box_val.as_ptr(),
+                        empty.as_ptr(),
+                    );
+                    graphviz_ffi::agsafeset(
+                        node as *mut c_void,
+                        svek_center_port_key.as_ptr(),
+                        CString::new(spec.width.to_string()).unwrap().as_ptr(),
+                        empty.as_ptr(),
+                    );
+                    let center_offset = shield_x.round() - shield_x.floor();
+                    graphviz_ffi::agsafeset(
+                        node as *mut c_void,
+                        svek_center_port_offset_key.as_ptr(),
+                        CString::new(center_offset.to_string()).unwrap().as_ptr(),
                         empty.as_ptr(),
                     );
                     let table =
@@ -1834,20 +1871,20 @@ fn append_fixed_html_row(table: &mut String, width: f64, height: i64, port: Opti
     table.push_str("\"></TD></TR>");
 }
 
-fn svek_shielded_node_table(spec: &NodeSpec, shield_x: f64, shield_y: f64) -> String {
-    // Graphviz's HTML parser reads each fixed cell dimension as an integer.
-    // Java `SvekNode.appendHtml` emits two shield cells around the image cell.
-    let width = spec.width + shield_x.floor() * 2.0;
-    let height = spec.height + shield_y.floor() * 2.0;
-    format!(
-        r##"<TABLE BGCOLOR="#000005" FIXEDSIZE="TRUE" WIDTH="{width}" HEIGHT="{height}"><TR><TD></TD></TR></TABLE>"##,
-    )
-}
-
 fn escape_record_port(port: &str) -> String {
     port.chars()
         .filter(|c| c.is_ascii_alphanumeric() || *c == '_')
         .collect()
+}
+
+fn svek_shielded_node_table(spec: &NodeSpec, shield_x: f64, shield_y: f64) -> String {
+    // Smetana solves the complete fixed-width table to integer points after
+    // composing the two fractional shield cells around the image cell.
+    let width = (spec.width + shield_x * 2.0).round();
+    let height = spec.height + shield_y.floor() * 2.0;
+    format!(
+        r##"<TABLE BGCOLOR="#000005" FIXEDSIZE="TRUE" WIDTH="{width}" HEIGHT="{height}"><TR><TD></TD></TR></TABLE>"##,
+    )
 }
 
 fn dot_inches(pixel: f64) -> String {

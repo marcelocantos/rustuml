@@ -9,7 +9,7 @@
 use std::fmt::Write;
 
 use rustuml_layout::graph::{
-    ClusterPosition, ClusterTitleSize, Direction, EdgeLabelSize, EdgePath, GraphSpacing,
+    ClusterPosition, ClusterTitleSize, Direction, EdgeLabelSize, EdgePath, EdgePorts, GraphSpacing,
     LayoutGraph,
 };
 use rustuml_parser::diagram::component::*;
@@ -1250,12 +1250,7 @@ pub fn render_with_oracle(
             )
             .with_plantuml_svek_node_order();
         for (component, dim) in diagram.components.iter().zip(&comp_dims) {
-            layout.add_node(
-                &component.id,
-                &component.label,
-                dim.width,
-                dim.height,
-            );
+            layout.add_node(&component.id, &component.label, dim.width, dim.height);
         }
         for interface in &diagram.interfaces {
             if component_interface_uses_class_box(diagram, interface) {
@@ -1452,9 +1447,26 @@ pub fn render_with_oracle(
             } else {
                 (conn.from_mult.as_deref(), conn.to_mult.as_deref())
             };
-            layout.add_edge_with_label_sizes_and_minlen(
+            // Java `SvekNode.appendShapeInternal` puts shielded lollipop
+            // interfaces in an HTML table whose center cell is `PORT="h"`.
+            // `SvekEdge.appendLine` addresses that port on every incident edge;
+            // routing to the generic node center changes dot's crossing order
+            // in symmetric nested clusters.
+            let interface_port = |endpoint: &str| {
+                diagram
+                    .interfaces
+                    .iter()
+                    .find(|interface| interface.id == endpoint)
+                    .and_then(|interface| component_interface_shield(diagram, interface))
+                    .map(|_| "h")
+            };
+            layout.add_edge_with_ports_and_label_sizes_and_minlen(
                 layout_from,
                 layout_to,
+                EdgePorts {
+                    tail: interface_port(layout_logical_from),
+                    head: interface_port(layout_logical_to),
+                },
                 center_label_size,
                 endpoint_size(tail_label),
                 endpoint_size(head_label),
@@ -1500,18 +1512,13 @@ pub fn render_with_oracle(
         } else {
             compute_positions_grid(diagram, &comp_dims, title_h)
         };
-    let cluster_shield_dx = component_cluster_shield_rounding_dx(diagram);
-    if cluster_shield_dx > 0.0 {
-        // Java's three-cell HTML labels accumulate positive per-cell rounding
-        // surplus within a cluster rank. The layout wrapper models only the
-        // combined envelope, so restore that solved leaf-frame offset while
-        // leaving cluster chrome in its Graphviz frame.
-        for (x, _) in &mut positions {
-            *x = round_svek_input_coord(*x + cluster_shield_dx);
-        }
-        for (x, y) in &mut iface_positions {
-            *x = round_svek_input_coord(*x + cluster_shield_dx);
-            *y = round_svek_input_coord(*y);
+    for (position, interface) in iface_positions.iter_mut().zip(&diagram.interfaces) {
+        if let Some((shield_x, _)) = component_interface_shield(diagram, interface) {
+            // Java's three fixed table cells round independently. When the
+            // left shield cell receives the remainder, the painted `h` cell
+            // is one point right of the combined table envelope.
+            position.0 = round_svek_input_coord(position.0 + shield_x.round() - shield_x.floor());
+            position.1 = round_svek_input_coord(position.1);
         }
     }
     let empty_edge_paths: Vec<EdgePath> = Vec::new();
@@ -1557,7 +1564,6 @@ pub fn render_with_oracle(
     });
     let (mut svek_edge_dx, mut svek_edge_dy) =
         svek_edge_translation.unwrap_or((MARGIN, MARGIN + title_h));
-    svek_edge_dx += cluster_shield_dx;
     let mut note_layouts: Vec<ComponentNoteLayout> = layout_result
         .as_ref()
         .map(|result| {
@@ -5763,36 +5769,10 @@ fn component_interface_shield(
     // serializes these values directly into its three-row HTML table.
     let label_width = text_render::measure(&interface.label, FONT_SIZE, false);
     // Java `EntityImageDescription.getShield` returns the fractional
-    // half-margin and `SvekNode.appendHtml` serializes it unchanged. Extracted
-    // Graphviz SVG metrics show each fixed side cell solving to the nearest
-    // pixel; the layout wrapper accepts that effective cell width.
-    let shield_x = (((label_width - IFACE_NODE_SIZE).max(1.0)) / 2.0).round();
+    // half-margin and `SvekNode.appendHtml` serializes it unchanged.
+    let shield_x = ((label_width - IFACE_NODE_SIZE).max(1.0)) / 2.0;
     let shield_y = text_render::label_height(&interface.label, FONT_SIZE).max(1.0);
     Some((shield_x, shield_y))
-}
-
-fn component_cluster_shield_rounding_dx(diagram: &ComponentDiagram) -> f64 {
-    let qualified_names = build_qualified_names(&diagram.packages);
-    let mut surplus_by_owner: std::collections::HashMap<&str, f64> =
-        std::collections::HashMap::new();
-    for interface in &diagram.interfaces {
-        let Some(owner) = qualified_names
-            .get(&interface.id)
-            .and_then(|qualified| qualified.rsplit_once('.').map(|(owner, _)| owner))
-        else {
-            continue;
-        };
-        let Some((shield_x, _)) = component_interface_shield(diagram, interface) else {
-            continue;
-        };
-        let label_width = text_render::measure(&interface.label, FONT_SIZE, false);
-        let table_width = IFACE_NODE_SIZE + shield_x * 2.0;
-        *surplus_by_owner.entry(owner).or_default() += (table_width - label_width).max(0.0);
-    }
-    surplus_by_owner
-        .into_values()
-        .map(f64::round)
-        .fold(0.0_f64, f64::max)
 }
 
 fn component_no_oracle_spacing(diagram: &ComponentDiagram, arrow_font_size: f64) -> (f64, bool) {
@@ -8086,66 +8066,42 @@ mod tests {
     }
 
     #[test]
-    fn cluster_shield_rounding_is_driven_by_renamed_label_geometry_not_count() {
-        fn diagram_with_labels(labels: &[&str], grouped: bool) -> rustuml_parser::diagram::Diagram {
-            let mut source = String::from("@startuml\n");
-            if grouped {
-                source.push_str("component RenamedShell9701 {\n");
-            }
-            for (index, label) in labels.iter().enumerate() {
-                source.push_str(&format!("interface \"{label}\" as Port{}\n", 9703 + index));
-            }
-            if grouped {
-                source.push_str("}\n");
-            }
-            source.push_str("component RenamedClient9791\n");
-            for index in 0..labels.len() {
-                source.push_str(&format!("RenamedClient9791 --( Port{}\n", 9703 + index));
-            }
-            source.push_str("@enduml");
-            rustuml_parser::parse::parse(&source).unwrap()
+    fn shield_center_offsets_follow_display_metrics_not_aliases_or_owners() {
+        fn offsets(grouped: bool) -> Vec<f64> {
+            let wrapper = if grouped {
+                ("component RenamedShell9701 {\n", "}\n")
+            } else {
+                ("", "")
+            };
+            let source = format!(
+                "@startuml\n{}\
+                 interface \"IStorage\" as RenamedArchivePort9703\n\
+                 interface \"IMessaging\" as RenamedDispatchPort9709\n\
+                 {}\
+                 component RenamedClient9719\n\
+                 RenamedClient9719 --> RenamedArchivePort9703\n\
+                 RenamedClient9719 --> RenamedDispatchPort9709\n\
+                 @enduml",
+                wrapper.0, wrapper.1
+            );
+            let rustuml_parser::diagram::Diagram::Component(diagram) =
+                rustuml_parser::parse::parse(&source).unwrap()
+            else {
+                panic!("expected component diagram");
+            };
+            diagram
+                .interfaces
+                .iter()
+                .map(|interface| {
+                    let (shield_x, _) =
+                        super::component_interface_shield(&diagram, interface).unwrap();
+                    shield_x.round() - shield_x.floor()
+                })
+                .collect()
         }
 
-        let heterogeneous = [
-            "Renamed Alpha 9701",
-            "Renamed Beta Endpoint 9703",
-            "Gamma 9709",
-            "Very Wide Heterogeneous Port 9719",
-        ];
-        let uniform = ["Tiny 9721", "Tiny 9721", "Tiny 9721", "Tiny 9721"];
-        let rustuml_parser::diagram::Diagram::Component(grouped) =
-            diagram_with_labels(&heterogeneous, true)
-        else {
-            panic!("expected grouped component diagram");
-        };
-        let rustuml_parser::diagram::Diagram::Component(same_count) =
-            diagram_with_labels(&uniform, true)
-        else {
-            panic!("expected same-count component diagram");
-        };
-        let rustuml_parser::diagram::Diagram::Component(two_labels) =
-            diagram_with_labels(&heterogeneous[..2], true)
-        else {
-            panic!("expected two-interface component diagram");
-        };
-        let rustuml_parser::diagram::Diagram::Component(root) =
-            diagram_with_labels(&heterogeneous, false)
-        else {
-            panic!("expected root component diagram");
-        };
-
-        // Fresh Java DOT/SVG extraction: fixed side cells round independently,
-        // and only positive surplus from one cluster rank moves its leaf frame.
-        assert_eq!(super::component_cluster_shield_rounding_dx(&grouped), 1.0);
-        assert_eq!(
-            super::component_cluster_shield_rounding_dx(&same_count),
-            0.0
-        );
-        assert_eq!(
-            super::component_cluster_shield_rounding_dx(&two_labels),
-            0.0
-        );
-        assert_eq!(super::component_cluster_shield_rounding_dx(&root), 0.0);
+        assert_eq!(offsets(false), [1.0, 0.0]);
+        assert_eq!(offsets(true), [1.0, 0.0]);
     }
 
     #[test]
