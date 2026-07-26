@@ -2137,7 +2137,7 @@ fn render_with_oracle_uid_origin(
     for (_, is_note, idx) in source_nodes {
         if is_note {
             let note = &diagram.notes[idx];
-            let (width, height) = note_box_dims(note, &diagram.meta.sprites);
+            let (width, height) = note_box_dims(diagram, note, &diagram.meta.sprites);
             layout.add_node(&floating_note_layout_id(idx), "", width, height);
             floating_layout_slots[idx] = Some(next_layout_slot);
         } else {
@@ -2170,7 +2170,7 @@ fn render_with_oracle_uid_origin(
             continue;
         };
         let note_id = attached_note_layout_id(idx);
-        let (width, height) = note_box_dims(note, &diagram.meta.sprites);
+        let (width, height) = note_box_dims(diagram, note, &diagram.meta.sprites);
         layout.add_node(&note_id, "", width, height);
         attached_layout_slots.push(next_layout_slot);
         next_layout_slot += 1;
@@ -2253,7 +2253,7 @@ fn render_with_oracle_uid_origin(
         // reserve rank space.
         let note = relationship_note_indices[rel_idx].map(|idx| &diagram.notes[idx]);
         let label_size = (!uses_ortho_labels)
-            .then(|| relationship_center_layout(rel, note, &diagram.meta.sprites))
+            .then(|| relationship_center_layout(diagram, rel, note, &diagram.meta.sprites))
             .flatten()
             .map(|center| EdgeLabelSize {
                 width: center.width,
@@ -4059,7 +4059,7 @@ fn render_plantuml_svg(
         {
             let note = note_idx.map(|idx| &diagram.notes[idx]);
             let Some(center) =
-                relationship_center_layout(relationship, note, &diagram.meta.sprites)
+                relationship_center_layout(diagram, relationship, note, &diagram.meta.sprites)
             else {
                 continue;
             };
@@ -9583,7 +9583,7 @@ fn render_relationship_svg(
         }
     };
 
-    let center_layout = relationship_center_layout(rel, note, &diagram.meta.sprites);
+    let center_layout = relationship_center_layout(diagram, rel, note, &diagram.meta.sprites);
     if relationship_has_center_label(rel)
         && let Some(position) = edge_path.label
         && let Some(center) = center_layout
@@ -10227,6 +10227,7 @@ fn relationship_note_indices(diagram: &ClassDiagram) -> Vec<Option<usize>> {
 /// merged below it. `appendTable` truncates the final dimensions before dot
 /// solves the label box.
 fn relationship_center_layout(
+    diagram: &ClassDiagram,
     relationship: &Relationship,
     note: Option<&Note>,
     sprites: &HashMap<String, SpriteData>,
@@ -10266,7 +10267,7 @@ fn relationship_center_layout(
         0.0
     };
     let (note_width, note_height) = note
-        .map(|note| note_box_dims(note, sprites))
+        .map(|note| note_box_dims(diagram, note, sprites))
         .map(|(width, height)| (width.floor(), height.floor()))
         .unwrap_or((0.0, 0.0));
     let note_component_padding = if note.is_some() {
@@ -10697,12 +10698,27 @@ struct ResolvedNoteStyle {
     border: String,
     border_width: f64,
     font_color: String,
+    font_size: u32,
+    font_family: String,
+    bold: bool,
+    italic: bool,
+    alignment: NoteTextAlignment,
+}
+
+#[derive(Clone, Copy)]
+enum NoteTextAlignment {
+    Left,
+    Center,
+    Right,
 }
 
 impl ResolvedNoteStyle {
     /// `EntityImageNote` merges
     /// `StyleSignature(root, element, classDiagram, note)` and reads the
-    /// resulting BackGroundColor, LineColor, LineThickness and FontColor.
+    /// resulting paint properties, `FontConfiguration`, and
+    /// `HorizontalAlignment`. Its single `TextBlock` supplies both preferred
+    /// dimensions and drawing, so these values must drive measurement and
+    /// paint together.
     fn for_note(diagram: &ClassDiagram, note: &Note) -> Self {
         let solid_color = |value: &str| {
             (!value.contains(['/', '|'])).then(|| crate::sequence::resolve_color(value.trim()))
@@ -10722,11 +10738,50 @@ impl ResolvedNoteStyle {
         let font_color = note_skinparam(diagram, "FontColor")
             .and_then(solid_color)
             .unwrap_or_else(|| "#000000".to_string());
+        let font_size = note_skinparam(diagram, "FontSize")
+            .and_then(|value| value.parse().ok())
+            .filter(|&value| value > 0)
+            .unwrap_or(NOTE_FONT_SIZE as u32);
+        let font_family = note_skinparam(diagram, "FontName")
+            .filter(|value| !value.is_empty())
+            .unwrap_or("sans-serif")
+            .to_string();
+        let font_style = note_skinparam(diagram, "FontStyle")
+            .unwrap_or_default()
+            .to_ascii_lowercase();
+        let alignment = match note_skinparam(diagram, "TextAlignment") {
+            Some(value) if value.eq_ignore_ascii_case("center") => NoteTextAlignment::Center,
+            Some(value) if value.eq_ignore_ascii_case("right") => NoteTextAlignment::Right,
+            _ => NoteTextAlignment::Left,
+        };
         Self {
             background,
             border,
             border_width,
             font_color,
+            font_size,
+            font_family,
+            bold: font_style.contains("bold"),
+            italic: font_style.contains("italic"),
+            alignment,
+        }
+    }
+
+    fn line_x(&self, note_x: f64, note_width: f64, line_width: f64) -> f64 {
+        let text_block_width = (note_width - NOTE_PAD_X - NOTE_PAD_RIGHT).max(0.0);
+        let offset = match self.alignment {
+            NoteTextAlignment::Left => 0.0,
+            NoteTextAlignment::Center => (text_block_width - line_width) / 2.0,
+            NoteTextAlignment::Right => text_block_width - line_width,
+        };
+        note_x + offset.max(0.0)
+    }
+
+    fn text_content(&self, content: String) -> String {
+        if is_monospace_font(&self.font_family) {
+            content.replace(' ', "\u{00a0}")
+        } else {
+            content
         }
     }
 }
@@ -11128,7 +11183,7 @@ fn render_notes_only(
         .notes
         .iter()
         .map(|note| {
-            let (nw, nh) = note_box_dims(note, &diagram.meta.sprites);
+            let (nw, nh) = note_box_dims(diagram, note, &diagram.meta.sprites);
             let nx = x;
             let ny = GRID_MARGIN + title_h;
             x += nw + GRID_MARGIN;
@@ -11412,7 +11467,7 @@ fn render_single_named_note(
     sprites: &HashMap<String, SpriteData>,
 ) -> String {
     let style = ResolvedNoteStyle::for_note(diagram, note);
-    let (width, height) = note_box_dims(note, sprites);
+    let (width, height) = note_box_dims(diagram, note, sprites);
     let x = 7.0;
     let y = 7.0;
     let latex_image_right = note
@@ -11676,7 +11731,7 @@ fn note_table_cell_content(cell: &crate::creole::TableCell) -> String {
     format!(" {} ", cell.text)
 }
 
-fn note_table_layout(lines: &[&str]) -> Option<NoteTableLayout> {
+fn note_table_layout(lines: &[&str], style: &ResolvedNoteStyle) -> Option<NoteTableLayout> {
     let rows = lines
         .iter()
         .map(|line| match crate::creole::parse_line(line.trim()) {
@@ -11697,10 +11752,23 @@ fn note_table_layout(lines: &[&str]) -> Option<NoteTableLayout> {
         let mut row_ascent = 0.0_f64;
         for (column, cell) in row.cells.iter().enumerate() {
             let content = note_table_cell_content(cell);
-            let width = text_render::measure(&content, NOTE_FONT_SIZE, cell.is_header);
+            let width = text_render::measure_with_family(
+                &content,
+                style.font_size as f64,
+                style.bold || cell.is_header,
+                &style.font_family,
+            );
             column_widths[column] = column_widths[column].max(width);
-            row_height = row_height.max(text_render::label_height(&content, NOTE_FONT_SIZE));
-            row_ascent = row_ascent.max(text_render::label_ascent(&content, NOTE_FONT_SIZE));
+            row_height = row_height.max(text_render::label_height_with_family(
+                &content,
+                style.font_size as f64,
+                &style.font_family,
+            ));
+            row_ascent = row_ascent.max(text_render::label_ascent_with_family(
+                &content,
+                style.font_size as f64,
+                &style.font_family,
+            ));
         }
         row_heights.push(row_height);
         row_ascents.push(row_ascent);
@@ -11767,14 +11835,14 @@ fn note_code_line_parts(line: &str) -> (usize, &str) {
     (indent, line.trim())
 }
 
-fn note_code_line_width(line: &str) -> f64 {
+fn note_code_line_width(line: &str, font_size: f64) -> f64 {
     let (indent, content) = note_code_line_parts(line);
-    crate::plantuml_metrics::mono_text_width(&" ".repeat(indent), NOTE_FONT_SIZE)
-        + crate::plantuml_metrics::mono_text_width(content, NOTE_FONT_SIZE)
+    crate::plantuml_metrics::mono_text_width(&" ".repeat(indent), font_size)
+        + crate::plantuml_metrics::mono_text_width(content, font_size)
 }
 
-fn note_code_line_height() -> f64 {
-    text_render::label_height_with_family("", NOTE_FONT_SIZE, "monospace").max(10.0)
+fn note_code_line_height(font_size: f64) -> f64 {
+    text_render::label_height_with_family("", font_size, "monospace").max(10.0)
 }
 
 fn parse_note_body_separator(line: &str) -> Option<NoteBodySeparator<'_>> {
@@ -11822,8 +11890,9 @@ fn next_note_number(level: usize, number_counters: &mut Vec<usize>) -> usize {
     number_counters[level - 1]
 }
 
-fn note_ordered_indent(level: usize) -> f64 {
-    (text_render::measure("1.", NOTE_FONT_SIZE, false) + NOTE_ORDERED_NUMBER_GAP)
+fn note_ordered_indent(level: usize, style: &ResolvedNoteStyle) -> f64 {
+    (text_render::measure_with_family("1.", style.font_size as f64, style.bold, &style.font_family)
+        + NOTE_ORDERED_NUMBER_GAP)
         * level.saturating_sub(1) as f64
 }
 
@@ -11842,14 +11911,28 @@ fn note_creole_content(content: String) -> String {
 /// Port of PlantUML's `AtomSprite` inside `Sea`: each atom contributes its
 /// natural width, while the row takes the tallest atom and bottom-aligns the
 /// remaining atoms in that shared line box.
-fn note_sprite_line_dimensions(content: &str, sprites: &HashMap<String, SpriteData>) -> (f64, f64) {
+fn note_sprite_line_dimensions(
+    content: &str,
+    sprites: &HashMap<String, SpriteData>,
+    style: &ResolvedNoteStyle,
+) -> (f64, f64) {
     crate::sprite::parse_sprite_segments(content).iter().fold(
         (0.0_f64, 0.0_f64),
         |(width, height), segment| {
             let (segment_width, segment_height) = match segment {
                 crate::sprite::TextSegment::Text(text) => (
-                    text_render::measure(text, NOTE_FONT_SIZE, false),
-                    text_render::label_height(text, NOTE_FONT_SIZE).max(10.0),
+                    text_render::measure_with_family(
+                        text,
+                        style.font_size as f64,
+                        style.bold,
+                        &style.font_family,
+                    ),
+                    text_render::label_height_with_family(
+                        text,
+                        style.font_size as f64,
+                        &style.font_family,
+                    )
+                    .max(10.0),
                 ),
                 crate::sprite::TextSegment::Sprite(name) => sprites
                     .get(name)
@@ -11860,7 +11943,7 @@ fn note_sprite_line_dimensions(content: &str, sprites: &HashMap<String, SpriteDa
                     .unwrap_or_default(),
                 crate::sprite::TextSegment::OpenIcon(name) => crate::openiconic::lookup(name)
                     .map(|icon| {
-                        let scale = NOTE_FONT_SIZE / icon.height;
+                        let scale = style.font_size as f64 / icon.height;
                         (icon.width * scale, icon.height * scale)
                     })
                     .unwrap_or_default(),
@@ -11877,18 +11960,24 @@ fn emit_note_sprite_line(
     line_top: f64,
     sprites: &HashMap<String, SpriteData>,
     background: &str,
+    style: &ResolvedNoteStyle,
 ) -> f64 {
-    let (_, line_height) = note_sprite_line_dimensions(content, sprites);
+    let (_, line_height) = note_sprite_line_dimensions(content, sprites, style);
     let mut cursor = x;
     for segment in crate::sprite::parse_sprite_segments(content) {
         match segment {
             crate::sprite::TextSegment::Text(text) => {
-                let text_height = text_render::label_height(&text, NOTE_FONT_SIZE).max(10.0);
+                let text_height = text_render::label_height_with_family(
+                    &text,
+                    style.font_size as f64,
+                    &style.font_family,
+                )
+                .max(10.0);
                 let baseline = line_top + line_height - text_height
                     + text_render::label_first_baseline_ascent_with_family(
                         &text,
-                        NOTE_FONT_SIZE,
-                        "sans-serif",
+                        style.font_size as f64,
+                        &style.font_family,
                     );
                 cursor += text_render::emit_text(
                     svg,
@@ -11896,11 +11985,11 @@ fn emit_note_sprite_line(
                     &TextBase {
                         x: cursor,
                         y: baseline,
-                        font_size: NOTE_FONT_SIZE as u32,
-                        font_family: "sans-serif",
-                        fill: "#000000",
-                        bold: false,
-                        italic: false,
+                        font_size: style.font_size,
+                        font_family: &style.font_family,
+                        fill: &style.font_color,
+                        bold: style.bold,
+                        italic: style.italic,
                         underline: false,
                         skip_underline: false,
                     },
@@ -11933,7 +12022,7 @@ fn emit_note_sprite_line(
             }
             crate::sprite::TextSegment::OpenIcon(name) => {
                 if let Some(icon) = crate::openiconic::lookup(&name) {
-                    let scale = NOTE_FONT_SIZE / icon.height;
+                    let scale = style.font_size as f64 / icon.height;
                     let icon_height = icon.height * scale;
                     write!(
                         svg,
@@ -11958,6 +12047,7 @@ fn note_line_dimensions(
     line: &str,
     number_counters: &mut Vec<usize>,
     sprites: &HashMap<String, SpriteData>,
+    style: &ResolvedNoteStyle,
 ) -> (f64, f64) {
     if let Some(latex) = latex_member_content(line) {
         number_counters.clear();
@@ -11978,51 +12068,79 @@ fn note_line_dimensions(
     {
         let number = next_note_number(level, number_counters);
         let marker = format!("{number}.");
-        let indent = note_ordered_indent(level);
+        let indent = note_ordered_indent(level, style);
         (
-            indent + text_render::measure(&marker, NOTE_FONT_SIZE, false) + NOTE_ORDERED_NUMBER_GAP,
+            indent
+                + text_render::measure_with_family(
+                    &marker,
+                    style.font_size as f64,
+                    style.bold,
+                    &style.font_family,
+                )
+                + NOTE_ORDERED_NUMBER_GAP,
             content,
         )
     } else {
         number_counters.clear();
         (0.0, line.to_string())
     };
-    let content = note_creole_content(content);
+    let content = style.text_content(note_creole_content(content));
     if content.contains("<$") {
-        let (width, height) = note_sprite_line_dimensions(&content, sprites);
+        let (width, height) = note_sprite_line_dimensions(&content, sprites, style);
         return (header_width + width, height);
     }
     (
-        header_width + text_render::measure(&content, NOTE_FONT_SIZE, false),
-        text_render::label_height(&content, NOTE_FONT_SIZE).max(10.0),
+        header_width
+            + text_render::measure_with_family(
+                &content,
+                style.font_size as f64,
+                style.bold,
+                &style.font_family,
+            ),
+        text_render::label_height_with_family(&content, style.font_size as f64, &style.font_family)
+            .max(10.0),
     )
 }
 
-fn note_body_dimensions(note: &Note, sprites: &HashMap<String, SpriteData>) -> (f64, f64) {
+fn note_body_dimensions(
+    note: &Note,
+    sprites: &HashMap<String, SpriteData>,
+    style: &ResolvedNoteStyle,
+) -> (f64, f64) {
     let mut width = 0.0_f64;
     let mut height = 0.0_f64;
     for block in note_body_blocks(note) {
         let code = note_code_lines(&block.lines);
         let tree = note_tree_rows(&block.lines);
-        let table = note_table_layout(&block.lines);
+        let table = note_table_layout(&block.lines, style);
         let (body_width, body_height) = if let Some(code) = &code {
             (
                 code.iter()
-                    .map(|line| note_code_line_width(line))
+                    .map(|line| note_code_line_width(line, style.font_size as f64))
                     .fold(0.0_f64, f64::max),
-                code.len() as f64 * note_code_line_height(),
+                code.len() as f64 * note_code_line_height(style.font_size as f64),
             )
         } else if let Some(tree) = &tree {
             (
                 tree.iter()
                     .map(|node| {
                         note_tree_text_offset(node)
-                            + text_render::measure(&note_tree_text(node), NOTE_FONT_SIZE, false)
+                            + text_render::measure_with_family(
+                                &note_tree_text(node),
+                                style.font_size as f64,
+                                style.bold,
+                                &style.font_family,
+                            )
                     })
                     .fold(0.0_f64, f64::max),
                 tree.iter()
                     .map(|node| {
-                        text_render::label_height(&note_tree_text(node), NOTE_FONT_SIZE).max(10.0)
+                        text_render::label_height_with_family(
+                            &note_tree_text(node),
+                            style.font_size as f64,
+                            &style.font_family,
+                        )
+                        .max(10.0)
                     })
                     .sum::<f64>()
                     + NOTE_TREE_BODY_EXTRA,
@@ -12037,7 +12155,7 @@ fn note_body_dimensions(note: &Note, sprites: &HashMap<String, SpriteData>) -> (
             let line_dimensions = block
                 .lines
                 .iter()
-                .map(|line| note_line_dimensions(line, &mut number_counters, sprites))
+                .map(|line| note_line_dimensions(line, &mut number_counters, sprites, style))
                 .collect::<Vec<_>>();
             (
                 line_dimensions
@@ -12056,8 +12174,17 @@ fn note_body_dimensions(note: &Note, sprites: &HashMap<String, SpriteData>) -> (
             Some(NoteBodySeparator {
                 title: Some(title), ..
             }) => {
-                let title_width = text_render::measure(title, NOTE_FONT_SIZE, false);
-                let title_height = text_render::label_height(title, NOTE_FONT_SIZE);
+                let title_width = text_render::measure_with_family(
+                    title,
+                    style.font_size as f64,
+                    style.bold,
+                    &style.font_family,
+                );
+                let title_height = text_render::label_height_with_family(
+                    title,
+                    style.font_size as f64,
+                    &style.font_family,
+                );
                 let half_title = title_height / 2.0;
                 (
                     (body_width + 6.0).max(title_width + 8.0),
@@ -12071,15 +12198,26 @@ fn note_body_dimensions(note: &Note, sprites: &HashMap<String, SpriteData>) -> (
     (width, height)
 }
 
-fn note_box_dims(note: &Note, sprites: &HashMap<String, SpriteData>) -> (f64, f64) {
-    let (body_width, body_height) = note_body_dimensions(note, sprites);
+fn note_box_dims(
+    diagram: &ClassDiagram,
+    note: &Note,
+    sprites: &HashMap<String, SpriteData>,
+) -> (f64, f64) {
+    let style = ResolvedNoteStyle::for_note(diagram, note);
+    let (body_width, body_height) = note_body_dimensions(note, sprites, &style);
     (
         body_width + NOTE_PAD_X + NOTE_PAD_RIGHT,
         body_height + NOTE_PAD_Y * 2.0,
     )
 }
 
-fn emit_note_table(svg: &mut String, table: &NoteTableLayout, x: f64, y: f64) {
+fn emit_note_table(
+    svg: &mut String,
+    table: &NoteTableLayout,
+    x: f64,
+    y: f64,
+    style: &ResolvedNoteStyle,
+) {
     let f = crate::plantuml_metrics::fmt_coord;
     let grid_left = x + NOTE_PAD_X;
     let grid_top = y + NOTE_TABLE_GRID_TOP_PAD;
@@ -12108,11 +12246,11 @@ fn emit_note_table(svg: &mut String, table: &NoteTableLayout, x: f64, y: f64) {
                 &TextBase {
                     x: cell_left,
                     y: row_top + table.row_ascents[row_index],
-                    font_size: NOTE_FONT_SIZE as u32,
-                    font_family: "sans-serif",
-                    fill: "#000000",
-                    bold: cell.is_header,
-                    italic: false,
+                    font_size: style.font_size,
+                    font_family: &style.font_family,
+                    fill: &style.font_color,
+                    bold: style.bold || cell.is_header,
+                    italic: style.italic,
                     underline: false,
                     skip_underline: false,
                 },
@@ -12152,7 +12290,14 @@ fn emit_note_table(svg: &mut String, table: &NoteTableLayout, x: f64, y: f64) {
     }
 }
 
-fn emit_note_tree(svg: &mut String, rows: &[crate::creole::TreeNode], x: f64, y: f64, fill: &str) {
+fn emit_note_tree(
+    svg: &mut String,
+    rows: &[crate::creole::TreeNode],
+    x: f64,
+    y: f64,
+    fill: &str,
+    style: &ResolvedNoteStyle,
+) {
     let f = crate::plantuml_metrics::fmt_coord;
     let body_left = x + NOTE_PAD_X;
     let trunk_x = body_left + NOTE_TREE_TRUNK_X;
@@ -12163,19 +12308,29 @@ fn emit_note_tree(svg: &mut String, rows: &[crate::creole::TreeNode], x: f64, y:
     let mut branches = Vec::with_capacity(rows.len());
     for node in rows {
         let text = note_tree_text(node);
-        let row_height = text_render::label_height(&text, NOTE_FONT_SIZE).max(10.0);
+        let row_height = text_render::label_height_with_family(
+            &text,
+            style.font_size as f64,
+            &style.font_family,
+        )
+        .max(10.0);
         let branch_y = row_top + row_height / 2.0;
         text_render::emit_text(
             svg,
             &text,
             &TextBase {
                 x: body_left + note_tree_text_offset(node),
-                y: row_top + text_render::label_ascent(&text, NOTE_FONT_SIZE),
-                font_size: NOTE_FONT_SIZE as u32,
-                font_family: "sans-serif",
-                fill: "#000000",
-                bold: false,
-                italic: false,
+                y: row_top
+                    + text_render::label_ascent_with_family(
+                        &text,
+                        style.font_size as f64,
+                        &style.font_family,
+                    ),
+                font_size: style.font_size,
+                font_family: &style.font_family,
+                fill: &style.font_color,
+                bold: style.bold,
+                italic: style.italic,
                 underline: false,
                 skip_underline: false,
             },
@@ -12214,20 +12369,24 @@ fn emit_note_tree(svg: &mut String, rows: &[crate::creole::TreeNode], x: f64, y:
     }
 }
 
-fn emit_note_code(svg: &mut String, lines: &[&str], x: f64, y: f64) {
+fn emit_note_code(svg: &mut String, lines: &[&str], x: f64, y: f64, style: &ResolvedNoteStyle) {
     let f = crate::plantuml_metrics::fmt_coord;
     let mut row_top = y;
     for line in lines {
         let (indent, content) = note_code_line_parts(line);
-        let indent_width =
-            crate::plantuml_metrics::mono_text_width(&" ".repeat(indent), NOTE_FONT_SIZE);
-        let content_width = crate::plantuml_metrics::mono_text_width(content, NOTE_FONT_SIZE);
+        let font_size = style.font_size as f64;
+        let indent_width = crate::plantuml_metrics::mono_text_width(&" ".repeat(indent), font_size);
+        let content_width = crate::plantuml_metrics::mono_text_width(content, font_size);
         let baseline =
-            row_top + text_render::label_ascent_with_family(content, NOTE_FONT_SIZE, "monospace");
+            row_top + text_render::label_ascent_with_family(content, font_size, "monospace");
         let escaped = crate::creole::escape_creole_text(content).replace(' ', "&#160;");
         write!(
             svg,
-            r##"<text fill="#000000" font-family="monospace" font-size="13" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
+            r#"<text fill="{}" font-family="monospace" font-size="{}"{}{} lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
+            style.font_color,
+            style.font_size,
+            if style.italic { r#" font-style="italic""# } else { "" },
+            if style.bold { r#" font-weight="700""# } else { "" },
             f(content_width),
             f(x + NOTE_PAD_X + indent_width),
             f(baseline),
@@ -12237,13 +12396,17 @@ fn emit_note_code(svg: &mut String, lines: &[&str], x: f64, y: f64) {
         if indent > 0 {
             write!(
                 svg,
-                r##"<text fill="#000000" font-family="monospace" font-size="13" lengthAdjust="spacing" textLength="0" x="{}" y="{}"></text>"##,
+                r#"<text fill="{}" font-family="monospace" font-size="{}"{}{} lengthAdjust="spacing" textLength="0" x="{}" y="{}"></text>"#,
+                style.font_color,
+                style.font_size,
+                if style.italic { r#" font-style="italic""# } else { "" },
+                if style.bold { r#" font-weight="700""# } else { "" },
                 f(x + NOTE_PAD_X),
                 f(baseline),
             )
             .unwrap();
         }
-        row_top += note_code_line_height();
+        row_top += note_code_line_height(font_size);
     }
 }
 
@@ -12259,23 +12422,28 @@ fn emit_note_body(
     let mut block_top = y + NOTE_PAD_Y;
     for block in note_body_blocks(note) {
         if let Some(code) = note_code_lines(&block.lines) {
-            emit_note_code(svg, &code, x, block_top);
-            block_top += code.len() as f64 * note_code_line_height();
+            emit_note_code(svg, &code, x, block_top, style);
+            block_top += code.len() as f64 * note_code_line_height(style.font_size as f64);
             continue;
         }
         if let Some(tree) = note_tree_rows(&block.lines) {
-            emit_note_tree(svg, &tree, x, block_top, &style.background);
+            emit_note_tree(svg, &tree, x, block_top, &style.background, style);
             block_top += tree
                 .iter()
                 .map(|node| {
-                    text_render::label_height(&note_tree_text(node), NOTE_FONT_SIZE).max(10.0)
+                    text_render::label_height_with_family(
+                        &note_tree_text(node),
+                        style.font_size as f64,
+                        &style.font_family,
+                    )
+                    .max(10.0)
                 })
                 .sum::<f64>()
                 + NOTE_TREE_BODY_EXTRA;
             continue;
         }
-        if let Some(table) = note_table_layout(&block.lines) {
-            emit_note_table(svg, &table, x, block_top);
+        if let Some(table) = note_table_layout(&block.lines, style) {
+            emit_note_table(svg, &table, x, block_top, style);
             block_top += table.row_heights.iter().sum::<f64>() + NOTE_TABLE_BODY_EXTRA;
             continue;
         }
@@ -12283,7 +12451,7 @@ fn emit_note_body(
         let body_height = block
             .lines
             .iter()
-            .map(|line| note_line_dimensions(line, &mut measure_counters, sprites).1)
+            .map(|line| note_line_dimensions(line, &mut measure_counters, sprites, style).1)
             .sum::<f64>();
         let mut content_top = block_top;
         let mut separator_height = 0.0;
@@ -12295,7 +12463,7 @@ fn emit_note_body(
                 style: separator_style,
                 title: None,
             }) => {
-                emit_note_separator(svg, x, width, block_top, separator_style, None);
+                emit_note_separator(svg, x, width, block_top, separator_style, None, style);
                 content_top += 4.0;
                 separator_height = 8.0;
             }
@@ -12303,7 +12471,11 @@ fn emit_note_body(
                 style: separator_style,
                 title: Some(title),
             }) => {
-                let title_height = text_render::label_height(title, NOTE_FONT_SIZE);
+                let title_height = text_render::label_height_with_family(
+                    title,
+                    style.font_size as f64,
+                    &style.font_family,
+                );
                 let half_title = title_height / 2.0;
                 content_top += title_height;
                 let inner_height = (body_height + half_title + 4.0).max(title_height);
@@ -12315,6 +12487,7 @@ fn emit_note_body(
                         svg,
                         line,
                         x,
+                        width,
                         line_top,
                         &mut number_counters,
                         note,
@@ -12329,6 +12502,7 @@ fn emit_note_body(
                     block_top + half_title,
                     separator_style,
                     Some(title),
+                    style,
                 );
                 block_top += body_height + separator_height;
                 continue;
@@ -12341,6 +12515,7 @@ fn emit_note_body(
                 svg,
                 line,
                 x,
+                width,
                 line_top,
                 &mut number_counters,
                 note,
@@ -12359,6 +12534,7 @@ fn emit_note_separator(
     line_y: f64,
     style: char,
     title: Option<&str>,
+    note_style: &ResolvedNoteStyle,
 ) {
     let f = crate::plantuml_metrics::fmt_coord;
     let stroke_style = match style {
@@ -12371,7 +12547,12 @@ fn emit_note_separator(
     let start_x = x + 1.0;
     let end_x = x + width - 1.0;
     let (first_end, second_start) = if let Some(title) = title {
-        let title_width = text_render::measure(title, NOTE_FONT_SIZE, false);
+        let title_width = text_render::measure_with_family(
+            title,
+            note_style.font_size as f64,
+            note_style.bold,
+            &note_style.font_family,
+        );
         let half_line = (end_x - start_x - title_width) / 2.0;
         (start_x + half_line, end_x - half_line)
     } else {
@@ -12395,20 +12576,28 @@ fn emit_note_separator(
         return;
     };
 
-    let title_height = text_render::label_height(title, NOTE_FONT_SIZE);
-    let baseline =
-        line_y - title_height / 2.0 - 0.5 + text_render::label_ascent(title, NOTE_FONT_SIZE);
+    let title_height = text_render::label_height_with_family(
+        title,
+        note_style.font_size as f64,
+        &note_style.font_family,
+    );
+    let baseline = line_y - title_height / 2.0 - 0.5
+        + text_render::label_ascent_with_family(
+            title,
+            note_style.font_size as f64,
+            &note_style.font_family,
+        );
     text_render::emit_text(
         svg,
         title,
         &TextBase {
             x: first_end,
             y: baseline,
-            font_size: NOTE_FONT_SIZE as u32,
-            font_family: "sans-serif",
-            fill: "#000000",
-            bold: false,
-            italic: false,
+            font_size: note_style.font_size,
+            font_family: &note_style.font_family,
+            fill: &note_style.font_color,
+            bold: note_style.bold,
+            italic: note_style.italic,
             underline: false,
             skip_underline: false,
         },
@@ -12433,12 +12622,16 @@ fn emit_note_line(
     svg: &mut String,
     line: &str,
     x: f64,
+    width: f64,
     line_top: f64,
     number_counters: &mut Vec<usize>,
     note: &Note,
     sprites: &HashMap<String, SpriteData>,
     style: &ResolvedNoteStyle,
 ) -> f64 {
+    let mut alignment_counters = number_counters.clone();
+    let line_width = note_line_dimensions(line, &mut alignment_counters, sprites, style).0;
+    let line_x = style.line_x(x, width, line_width);
     if let Some(latex) = latex_member_content(line) {
         number_counters.clear();
         let image = crate::math::raw_latex_image(latex);
@@ -12447,7 +12640,7 @@ fn emit_note_line(
             r#"<image height="{}" width="{}" x="{}" xlink:href="{}" y="{}"/>"#,
             image.height,
             image.width,
-            crate::plantuml_metrics::fmt_coord(x + NOTE_PAD_X),
+            crate::plantuml_metrics::fmt_coord(line_x + NOTE_PAD_X),
             image.href,
             crate::plantuml_metrics::fmt_coord(line_top),
         )
@@ -12458,9 +12651,13 @@ fn emit_note_line(
     let f = crate::plantuml_metrics::fmt_coord;
     let (content, text_x) = if let Some((order, content)) = parse_note_bullet(line) {
         number_counters.clear();
-        let text_height = text_render::label_height(content, NOTE_FONT_SIZE);
+        let text_height = text_render::label_height_with_family(
+            content,
+            style.font_size as f64,
+            &style.font_family,
+        );
         if order == 0 {
-            let ellipse_x = x + NOTE_PAD_X + NOTE_BULLET_ELLIPSE_X;
+            let ellipse_x = line_x + NOTE_PAD_X + NOTE_BULLET_ELLIPSE_X;
             let ellipse_y = line_top + text_height - NOTE_BULLET_ELLIPSE_SIZE
                 + NOTE_BULLET_START_ALTITUDE
                 + NOTE_BULLET_ELLIPSE_SIZE / 2.0;
@@ -12476,11 +12673,11 @@ fn emit_note_line(
             .unwrap();
             (
                 content.to_string(),
-                x + NOTE_PAD_X + NOTE_BULLET_HEADER_WIDTH,
+                line_x + NOTE_PAD_X + NOTE_BULLET_HEADER_WIDTH,
             )
         } else {
             let order_width = NOTE_NESTED_BULLET_INDENT * order as f64;
-            let rect_x = x + NOTE_PAD_X + NOTE_NESTED_BULLET_X + order_width;
+            let rect_x = line_x + NOTE_PAD_X + NOTE_NESTED_BULLET_X + order_width;
             let rect_y = line_top + text_height - NOTE_NESTED_BULLET_DIM_HEIGHT
                 + NOTE_NESTED_BULLET_START_ALTITUDE;
             write!(
@@ -12495,7 +12692,7 @@ fn emit_note_line(
             .unwrap();
             (
                 content.to_string(),
-                x + NOTE_PAD_X + NOTE_NESTED_BULLET_BASE_WIDTH + order_width,
+                line_x + NOTE_PAD_X + NOTE_NESTED_BULLET_BASE_WIDTH + order_width,
             )
         }
     } else if let crate::creole::CreoleLine::Numbered { level, content } =
@@ -12503,20 +12700,25 @@ fn emit_note_line(
     {
         let number = next_note_number(level, number_counters);
         let marker = format!("{number}.");
-        let indent = note_ordered_indent(level);
-        let marker_x = x + NOTE_PAD_X + indent;
-        let baseline = line_top + text_render::label_ascent(&marker, NOTE_FONT_SIZE);
+        let indent = note_ordered_indent(level, style);
+        let marker_x = line_x + NOTE_PAD_X + indent;
+        let baseline = line_top
+            + text_render::label_ascent_with_family(
+                &marker,
+                style.font_size as f64,
+                &style.font_family,
+            );
         let marker_width = text_render::emit_text(
             svg,
             &marker,
             &TextBase {
                 x: marker_x,
                 y: baseline,
-                font_size: NOTE_FONT_SIZE as u32,
-                font_family: "sans-serif",
+                font_size: style.font_size,
+                font_family: &style.font_family,
                 fill: &style.font_color,
-                bold: false,
-                italic: false,
+                bold: style.bold,
+                italic: style.italic,
                 underline: false,
                 skip_underline: false,
             },
@@ -12524,25 +12726,25 @@ fn emit_note_line(
         (content, marker_x + marker_width + NOTE_ORDERED_NUMBER_GAP)
     } else {
         number_counters.clear();
-        (line.to_string(), x + NOTE_PAD_X)
+        (line.to_string(), line_x + NOTE_PAD_X)
     };
     // `Sea.doAlign` bottom-aligns mixed Creole atoms. The line origin must use
     // the first run's ascent within that shared line box, not the maximum
     // ascent of every run (notably monospace followed by sans-serif).
-    let content = note_creole_content(content);
+    let content = style.text_content(note_creole_content(content));
     if content.contains("<$") {
         let fill = note
             .color
             .as_deref()
             .map(crate::sequence::resolve_color)
             .unwrap_or_else(|| NOTE_FILL.to_string());
-        return emit_note_sprite_line(svg, &content, text_x, line_top, sprites, &fill);
+        return emit_note_sprite_line(svg, &content, text_x, line_top, sprites, &fill, style);
     }
     let baseline = line_top
         + text_render::label_first_baseline_ascent_with_family(
             &content,
-            NOTE_FONT_SIZE,
-            "sans-serif",
+            style.font_size as f64,
+            &style.font_family,
         );
     text_render::emit_text(
         svg,
@@ -12550,16 +12752,17 @@ fn emit_note_line(
         &TextBase {
             x: text_x,
             y: baseline,
-            font_size: NOTE_FONT_SIZE as u32,
-            font_family: "sans-serif",
+            font_size: style.font_size,
+            font_family: &style.font_family,
             fill: &style.font_color,
-            bold: false,
-            italic: false,
+            bold: style.bold,
+            italic: style.italic,
             underline: false,
             skip_underline: false,
         },
     );
-    text_render::label_height(&content, NOTE_FONT_SIZE).max(10.0)
+    text_render::label_height_with_family(&content, style.font_size as f64, &style.font_family)
+        .max(10.0)
 }
 
 /// Match `CreoleStripeSimpleParser.ASTERISK_PREFIXED_LINE_PATTERN` without
@@ -14054,6 +14257,67 @@ mod tests {
 
         assert!(svg.contains(r##"fill="#90EE90" style="stroke:#13579B;stroke-width:2;""##));
         assert!(svg.contains(r##"<text fill="#000080""##));
+    }
+
+    #[test]
+    fn named_note_typography_drives_measurement_and_centered_paint() {
+        let input = "@startuml\n\
+            skinparam note {\n\
+              FontSize 17\n\
+              FontStyle bold\n\
+              TextAlignment center\n\
+            }\n\
+            note as FreshCenteredTypography4513\n\
+              renamed short row\n\
+              renamed substantially wider typography row\n\
+            end note\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        let text_x = |text: &str| {
+            let end = svg.find(&format!(">{text}</text>")).unwrap();
+            let start = svg[..end].rfind("<text ").unwrap();
+            attr_value(&svg[start..end], " x")
+                .unwrap()
+                .parse::<f64>()
+                .unwrap()
+        };
+
+        assert!(svg.contains(r#"font-family="sans-serif" font-size="17" font-weight="700""#));
+        assert!(text_x("renamed short row") > text_x("renamed substantially wider typography row"));
+    }
+
+    #[test]
+    fn named_note_typography_preserves_monospace_style_and_right_alignment() {
+        let input = "@startuml\n\
+            skinparam note {\n\
+              FontSize 11\n\
+              FontName Courier\n\
+              FontStyle italic\n\
+              TextAlignment right\n\
+            }\n\
+            note as FreshRightTypography4517\n\
+              renamed compact row\n\
+              renamed wider monospace typography row\n\
+            end note\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        let text_x = |text: &str| {
+            let end = svg.find(&format!(">{text}</text>")).unwrap();
+            let start = svg[..end].rfind("<text ").unwrap();
+            attr_value(&svg[start..end], " x")
+                .unwrap()
+                .parse::<f64>()
+                .unwrap()
+        };
+
+        assert!(svg.contains(r#"font-family="Courier" font-size="11" font-style="italic""#));
+        assert!(svg.contains(">renamed&#160;compact&#160;row</text>"));
+        assert!(
+            text_x("renamed&#160;compact&#160;row")
+                > text_x("renamed&#160;wider&#160;monospace&#160;typography&#160;row")
+        );
     }
 
     #[test]
