@@ -150,6 +150,9 @@ const NOTE_PAD_X: f64 = 6.0;
 const NOTE_PAD_RIGHT: f64 = 15.0;
 const NOTE_PAD_Y: f64 = 5.0;
 const NOTE_FONT_SIZE: f64 = 13.0;
+/// Java `Rose.paddingX/paddingY`: `ComponentRoseNote` reserves five pixels
+/// around the visible folded note when used as an `EntityImageNoteLink`.
+const RELATIONSHIP_NOTE_COMPONENT_PADDING: f64 = 5.0;
 // Java `Bullet`: the level-one ellipse occupies a 12x5 atom, translated 3px
 // right, with starting altitude -5. Deeper bullets occupy `8 + 8 * order`
 // by 3 atoms, translate right by `1 + 8 * order`, and start at altitude -7.
@@ -2091,40 +2094,22 @@ pub fn render_with_oracle(
         }
     }
     let uses_ortho_labels = has_ortho_linetype(diagram);
-    for rel in &diagram.relationships {
+    let relationship_note_indices = relationship_note_indices(diagram);
+    for (rel_idx, rel) in diagram.relationships.iter().enumerate() {
         if rel.length == 1 {
             layout.add_same_rank(&rel.from, &rel.to);
         }
-        let has_center_label = relationship_has_center_label(rel);
-        // Java `SvekEdge.addVisibilityModifier` uses a 6px margin on both
-        // axes for self-link labels and 1px for every other relationship.
-        let label_margin = relationship_label_margin(rel);
         // Java `SvekEdge.appendDotString` sends center labels through
         // Graphviz's `xlabel` channel for `DotSplines.ORTHO`, so they do not
         // reserve rank space.
-        let label_size = (has_center_label && !uses_ortho_labels).then(|| EdgeLabelSize {
-            width: rel
-                .label
-                .as_deref()
-                .map(|label| {
-                    text_render::measure_no_underline(label, RELATIONSHIP_LABEL_FONT_SIZE, false)
-                })
-                .unwrap_or(0.0)
-                + if rel.label_arrow == LinkArrow::None {
-                    0.0
-                } else {
-                    LINK_ARROW_BLOCK_SIZE
-                }
-                + 2.0 * label_margin,
-            height: (rel
-                .label
-                .as_deref()
-                .map(|label| text_render::label_height(label, RELATIONSHIP_LABEL_FONT_SIZE))
-                .unwrap_or(0.0)
-                .max(LINK_ARROW_BLOCK_SIZE)
-                + 2.0 * label_margin)
-                .floor(),
-        });
+        let note = relationship_note_indices[rel_idx].map(|idx| &diagram.notes[idx]);
+        let label_size = (!uses_ortho_labels)
+            .then(|| relationship_center_layout(rel, note, &diagram.meta.sprites))
+            .flatten()
+            .map(|center| EdgeLabelSize {
+                width: center.width,
+                height: center.height,
+            });
         let endpoint_size = |label: Option<&str>| {
             label.map(|label| EdgeLabelSize {
                 width: text_render::measure(label, RELATIONSHIP_LABEL_FONT_SIZE, false).floor(),
@@ -3688,36 +3673,45 @@ fn render_plantuml_svg(
                 max_x = max_x.max(decor_max_x + MARGIN + layout_x_bias + body_dx);
             }
         }
-        for (relationship, edge_idx) in diagram
+        let relationship_note_indices = relationship_note_indices(diagram);
+        for ((relationship, note_idx), edge_idx) in diagram
             .relationships
             .iter()
+            .zip(&relationship_note_indices)
             .zip(relationship_edge_indices(diagram, edge_paths))
         {
-            if !relationship_has_center_label(relationship) {
+            let note = note_idx.map(|idx| &diagram.notes[idx]);
+            let Some(center) =
+                relationship_center_layout(relationship, note, &diagram.meta.sprites)
+            else {
                 continue;
-            }
+            };
             let Some(edge) = edge_idx.and_then(|idx| edge_paths.get(idx)) else {
                 continue;
             };
             let Some(position) = edge.label else {
                 continue;
             };
-            let text_width = relationship
-                .label
-                .as_deref()
-                .map(|label| {
-                    text_render::measure_no_underline(label, RELATIONSHIP_LABEL_FONT_SIZE, false)
-                })
-                .unwrap_or(0.0);
-            let arrow_width = if relationship.label_arrow == LinkArrow::None {
-                0.0
-            } else {
-                LINK_ARROW_BLOCK_SIZE
-            };
-            let label_margin = relationship_label_margin(relationship);
-            max_x = max_x.max(
-                position.x + MARGIN + layout_x_bias + 2.0 * label_margin + arrow_width + text_width,
-            );
+            if relationship_has_center_label(relationship) {
+                max_x = max_x.max(
+                    position.x
+                        + MARGIN
+                        + layout_x_bias
+                        + (center.width - center.label_width) / 2.0
+                        + center.label_width,
+                );
+            }
+            if note.is_some() {
+                let note_x =
+                    position.x + MARGIN + layout_x_bias + (center.width - center.note_width) / 2.0;
+                let note_y =
+                    position.y + MARGIN + center.label_height + RELATIONSHIP_NOTE_COMPONENT_PADDING;
+                // `SvekResult.calculateDimension` measures the rendered graph
+                // through `LimitFinder`; its `drawUPath` includes the visible
+                // `ComponentRoseNote` polygon in the final envelope.
+                max_x = max_x.max(note_x + center.note_width);
+                max_y = max_y.max(note_y + center.note_height);
+            }
         }
         // Java `GraphvizImageBuilder.buildImage` selects
         // `EntityImageDegenerated` only when
@@ -4251,12 +4245,14 @@ fn render_plantuml_svg(
         render_oracle_note_connectors(&mut svg, orc);
     } else {
         let edge_indices = relationship_edge_indices(diagram, edge_paths);
+        let relationship_note_indices = relationship_note_indices(diagram);
         let mut duplicate_counts = HashMap::<(&str, &str), usize>::new();
-        for ((rel, edge_idx), &link_id) in diagram
+        for (rel_idx, ((rel, edge_idx), &link_id)) in diagram
             .relationships
             .iter()
             .zip(edge_indices)
             .zip(&svek_ids.relationship_ids)
+            .enumerate()
         {
             let duplicate_index = duplicate_counts
                 .entry((rel.from.as_str(), rel.to.as_str()))
@@ -4266,8 +4262,11 @@ fn render_plantuml_svg(
                 render_relationship_svg(
                     &mut svg,
                     rel,
+                    RelationshipRenderContext {
+                        diagram,
+                        note: relationship_note_indices[rel_idx].map(|idx| &diagram.notes[idx]),
+                    },
                     ep,
-                    diagram,
                     link_id,
                     layout_x_bias,
                     *duplicate_index,
@@ -8785,15 +8784,21 @@ fn oracle_polygon_fill(fill: Option<&str>, monochrome: bool) -> &str {
     }
 }
 
+struct RelationshipRenderContext<'a> {
+    diagram: &'a ClassDiagram,
+    note: Option<&'a Note>,
+}
+
 fn render_relationship_svg(
     svg: &mut String,
     rel: &Relationship,
+    context: RelationshipRenderContext<'_>,
     edge_path: &EdgePath,
-    diagram: &ClassDiagram,
     ent_id: usize,
     layout_x_bias: f64,
     duplicate_index: usize,
 ) {
+    let RelationshipRenderContext { diagram, note } = context;
     if edge_path.points.is_empty() {
         return;
     }
@@ -9101,14 +9106,17 @@ fn render_relationship_svg(
         }
     };
 
+    let center_layout = relationship_center_layout(rel, note, &diagram.meta.sprites);
     if relationship_has_center_label(rel)
         && let Some(position) = edge_path.label
+        && let Some(center) = center_layout
     {
         // Java `SvekEdge` margins the text first, then
         // `StringWithArrow.addMagicArrow` prepends the arrow outside that
         // margin. Keep the text's one-pixel inset, but not on the arrow block.
         let label_margin = relationship_label_margin(rel);
-        let block_x = position.x + MARGIN + layout_x_bias;
+        let label_x = position.x + (center.width - center.label_width) / 2.0;
+        let block_x = label_x + MARGIN + layout_x_bias;
         let block_y = position.y + MARGIN + label_margin;
         if rel.label_arrow != LinkArrow::None {
             let content_height = rel
@@ -9125,7 +9133,7 @@ fn render_relationship_svg(
                 svg,
                 label,
                 Some(rustuml_layout::graph::EdgeLabelPosition {
-                    x: position.x
+                    x: label_x
                         + if rel.label_arrow == LinkArrow::None {
                             0.0
                         } else {
@@ -9140,6 +9148,19 @@ fn render_relationship_svg(
                 true,
             );
         }
+    }
+    if let (Some(note), Some(position), Some(center)) = (note, edge_path.label, center_layout) {
+        let note_x = position.x + (center.width - center.note_width) / 2.0;
+        let note_y = position.y + center.label_height + RELATIONSHIP_NOTE_COMPONENT_PADDING;
+        render_relationship_note(
+            svg,
+            note,
+            note_x + MARGIN + layout_x_bias,
+            note_y + MARGIN,
+            center.note_width,
+            center.note_height,
+            &diagram.meta.sprites,
+        );
     }
     if let Some(label) = rel.from_multiplicity.as_deref() {
         emit_label(
@@ -9607,6 +9628,102 @@ fn svek_layout_x_bias(
 
 fn relationship_has_center_label(relationship: &Relationship) -> bool {
     relationship.label.is_some() || relationship.label_arrow != LinkArrow::None
+}
+
+#[derive(Clone, Copy)]
+struct RelationshipCenterLayout {
+    width: f64,
+    height: f64,
+    label_width: f64,
+    label_height: f64,
+    note_width: f64,
+    note_height: f64,
+}
+
+/// Mirrors `CommandFactoryNoteOnLink.executeInternal`: each relationship note
+/// belongs to the most recently created link, and a later note replaces the
+/// earlier one through `Link.addNote`.
+fn relationship_note_indices(diagram: &ClassDiagram) -> Vec<Option<usize>> {
+    let mut owners = vec![None; diagram.relationships.len()];
+    for (note_idx, note) in diagram.notes.iter().enumerate() {
+        if note.target.is_some() || note.alias.is_some() || note.position.is_some() {
+            continue;
+        }
+        let owner = diagram
+            .relationships
+            .iter()
+            .enumerate()
+            .filter(|(_, relationship)| relationship.source_line < note.source_line)
+            .max_by_key(|(idx, relationship)| (relationship.source_line, *idx))
+            .map(|(idx, _)| idx);
+        if let Some(owner) = owner {
+            owners[owner] = Some(note_idx);
+        }
+    }
+    owners
+}
+
+/// Port of `SvekEdge`'s `labelText` construction. A relation label is wrapped
+/// in its standard margin, then the default-bottom `EntityImageNoteLink` is
+/// merged below it. `appendTable` truncates the final dimensions before dot
+/// solves the label box.
+fn relationship_center_layout(
+    relationship: &Relationship,
+    note: Option<&Note>,
+    sprites: &HashMap<String, SpriteData>,
+) -> Option<RelationshipCenterLayout> {
+    let has_label = relationship_has_center_label(relationship);
+    if !has_label && note.is_none() {
+        return None;
+    }
+
+    let margin = relationship_label_margin(relationship);
+    let label_width = if has_label {
+        relationship
+            .label
+            .as_deref()
+            .map(|label| {
+                text_render::measure_no_underline(label, RELATIONSHIP_LABEL_FONT_SIZE, false)
+            })
+            .unwrap_or(0.0)
+            + if relationship.label_arrow == LinkArrow::None {
+                0.0
+            } else {
+                LINK_ARROW_BLOCK_SIZE
+            }
+            + 2.0 * margin
+    } else {
+        0.0
+    };
+    let label_height = if has_label {
+        relationship
+            .label
+            .as_deref()
+            .map(|label| text_render::label_height(label, RELATIONSHIP_LABEL_FONT_SIZE))
+            .unwrap_or(0.0)
+            .max(LINK_ARROW_BLOCK_SIZE)
+            + 2.0 * margin
+    } else {
+        0.0
+    };
+    let (note_width, note_height) = note
+        .map(|note| note_box_dims(note, sprites))
+        .map(|(width, height)| (width.floor(), height.floor()))
+        .unwrap_or((0.0, 0.0));
+    let note_component_padding = if note.is_some() {
+        RELATIONSHIP_NOTE_COMPONENT_PADDING
+    } else {
+        0.0
+    };
+
+    Some(RelationshipCenterLayout {
+        width: label_width.max(note_width + 2.0 * note_component_padding),
+        height: label_height + note_height + 2.0 * note_component_padding,
+        label_width,
+        label_height,
+        note_width,
+        note_height,
+    })
 }
 
 fn relationship_label_margin(relationship: &Relationship) -> f64 {
@@ -10452,6 +10569,64 @@ fn render_floating_note_entity(
     .unwrap();
     emit_note_body(svg, note, x, y, width, sprites);
     svg.push_str("</g>");
+}
+
+/// `EntityImageNoteLink.drawU` paints directly inside the owning `SvekEdge`
+/// group. Unlike standalone `Opale`, both the outer outline and folded corner
+/// use the note component's half-width border stroke.
+fn render_relationship_note(
+    svg: &mut String,
+    note: &Note,
+    x: f64,
+    y: f64,
+    width: f64,
+    height: f64,
+    sprites: &HashMap<String, SpriteData>,
+) {
+    let right = x + width;
+    let bottom = y + height;
+    let fold_x = right - NOTE_FOLD;
+    let fold_y = y + NOTE_FOLD;
+    let fill = note
+        .color
+        .as_deref()
+        .map(crate::sequence::resolve_color)
+        .unwrap_or_else(|| NOTE_FILL.to_string());
+    let f = crate::plantuml_metrics::fmt_coord;
+
+    write!(
+        svg,
+        r#"<path d="M{},{} L{},{} L{},{} L{},{} L{},{} L{},{}" fill="{}" style="stroke:#181818;stroke-width:0.5;"/>"#,
+        f(x),
+        f(y),
+        f(x),
+        f(bottom),
+        f(right),
+        f(bottom),
+        f(right),
+        f(fold_y),
+        f(fold_x),
+        f(y),
+        f(x),
+        f(y),
+        fill,
+    )
+    .unwrap();
+    write!(
+        svg,
+        r#"<path d="M{},{} L{},{} L{},{} L{},{}" fill="{}" style="stroke:#181818;stroke-width:0.5;"/>"#,
+        f(fold_x),
+        f(y),
+        f(fold_x),
+        f(fold_y),
+        f(right),
+        f(fold_y),
+        f(fold_x),
+        f(y),
+        fill,
+    )
+    .unwrap();
+    emit_note_body(svg, note, x, y, width, sprites);
 }
 
 fn render_single_named_note(note: &Note, sprites: &HashMap<String, SpriteData>) -> String {
@@ -12644,6 +12819,82 @@ mod tests {
         assert_eq!(&allocation.relationship_ids[5..], [18, 19, 20, 21, 22]);
     }
 
+    #[test]
+    fn changed_count_relationship_notes_follow_the_last_source_link() {
+        let input = "@startuml\n\
+            class FreshAlpha1103\n\
+            class FreshBeta1109\n\
+            class FreshGamma1117\n\
+            class FreshDelta1123\n\
+            FreshAlpha1103 --> FreshBeta1109\n\
+            note on link : first renamed memo\n\
+            FreshBeta1109 --> FreshGamma1117\n\
+            FreshGamma1117 <-- FreshDelta1123\n\
+            note on link\n\
+              final renamed line one\n\
+              final renamed line two\n\
+            end note\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Class(diagram) = diagram else {
+            panic!("expected class diagram");
+        };
+
+        assert_eq!(
+            relationship_note_indices(&diagram),
+            [Some(0), None, Some(1)]
+        );
+    }
+
+    #[test]
+    fn renamed_relationship_note_renders_inside_its_solved_edge_label_box() {
+        let input = "@startuml\n\
+            class FreshSender1129\n\
+            class FreshReceiver1151\n\
+            FreshSender1129 --> FreshReceiver1151\n\
+            note on link : renamed ownership memo\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        let link = svg
+            .split_once(r#"<g class="link""#)
+            .unwrap()
+            .1
+            .split_once("</g>")
+            .unwrap()
+            .0;
+
+        assert!(link.contains(">renamed ownership memo</text>"));
+        assert_eq!(link.matches("<path ").count(), 3);
+        assert!(link.contains("stroke:#181818;stroke-width:0.5;"));
+    }
+
+    #[test]
+    fn reversed_relationship_owns_and_renders_a_multiline_note() {
+        let input = "@startuml\n\
+            class FreshLeft1153\n\
+            class FreshRight1163\n\
+            FreshLeft1153 <-- FreshRight1163\n\
+            note on link\n\
+              renamed upper row\n\
+              renamed lower row\n\
+            end note\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        let link = svg
+            .split_once(r#"<g class="link""#)
+            .unwrap()
+            .1
+            .split_once("</g>")
+            .unwrap()
+            .0;
+
+        assert!(link.contains(">renamed upper row</text>"));
+        assert!(link.contains(">renamed lower row</text>"));
+        assert_eq!(link.matches("<path ").count(), 3);
+    }
+
     fn cluster_path_origin(svg: &str, qualified_name: &str) -> (f64, f64) {
         let marker = format!("<!--cluster {qualified_name}-->");
         let after_marker = svg
@@ -13092,7 +13343,18 @@ mod tests {
             head_label: None,
         };
         let mut svg = String::new();
-        render_relationship_svg(&mut svg, &rel, &edge_path, &diagram, 4, 0.0, 0);
+        render_relationship_svg(
+            &mut svg,
+            &rel,
+            RelationshipRenderContext {
+                diagram: &diagram,
+                note: None,
+            },
+            &edge_path,
+            4,
+            0.0,
+            0,
+        );
 
         assert!(svg.contains(r#"data-link-type="crowfoot""#));
         assert!(svg.contains(r#"id="Animal-Dog""#));
