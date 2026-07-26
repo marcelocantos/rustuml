@@ -22,4 +22,4 @@ if [ -z "$JAR" ] || [ ! -f "$JAR" ]; then
 fi
 
 echo "Starting PlantUML server on port $PORT (JAR: $JAR)"
-exec java -jar "$JAR" "-picoweb:$PORT"
+exec java -Djava.awt.headless=true -jar "$JAR" "-picoweb:$PORT"

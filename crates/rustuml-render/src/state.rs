@@ -6053,7 +6053,10 @@ pub fn render_with_oracle(
     } else {
         let mut consumed_edge_paths = vec![false; edge_paths.len()];
         let mut used_path_ids = std::collections::HashSet::new();
-        for (transition_idx, t) in diagram.transitions.iter().enumerate() {
+        let transition_order =
+            plantuml_svek_transition_order(diagram, 0..diagram.transitions.len());
+        for transition_idx in transition_order {
+            let t = &diagram.transitions[transition_idx];
             let link_note = link_note_for_transition(diagram, transition_idx);
             let transition_style = diagram.transition_style(transition_idx);
             let explicit_color = transition_style

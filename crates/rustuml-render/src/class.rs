@@ -2806,6 +2806,27 @@ fn stereotype_class_color_param(
     param: &rustuml_parser::diagram::SkinParam,
 ) -> Option<(String, bool)> {
     let key = param.key.trim();
+
+    const GROUPED_PREFIX: &str = "class<<";
+    if key.len() >= GROUPED_PREFIX.len()
+        && key[..GROUPED_PREFIX.len()].eq_ignore_ascii_case(GROUPED_PREFIX)
+    {
+        let after_prefix = &key[GROUPED_PREFIX.len()..];
+        let end = after_prefix.find(">>")?;
+        let property = after_prefix[end + 2..].trim();
+        let background = if property.eq_ignore_ascii_case("BackgroundColor") {
+            true
+        } else if property.eq_ignore_ascii_case("BorderColor") {
+            false
+        } else {
+            return None;
+        };
+        let stereotype = after_prefix[..end].trim();
+        if !stereotype.is_empty() {
+            return Some((stereotype.to_string(), background));
+        }
+    }
+
     for (prefix, background) in [
         ("classBackgroundColor<<", true),
         ("classBorderColor<<", false),
@@ -15059,6 +15080,50 @@ mod tests {
                 .contains(r##"style="stroke:#000080;stroke-width:0.5;""##)
         );
         assert!(entity_body("FreshPlain1427").contains(r##"<rect fill="#F1F1F1""##));
+    }
+
+    #[test]
+    fn grouped_stereotype_class_colors_apply_inside_nested_packages() {
+        let input = "@startuml\n\
+            skinparam class<<freshservice7517>> {\n\
+              BackgroundColor #DDEEFF\n\
+              BorderColor #335577\n\
+            }\n\
+            skinparam class<<fresharchive7523>> {\n\
+              BackgroundColor HoneyDew\n\
+              BorderColor SeaGreen\n\
+            }\n\
+            package FreshOuter7529 {\n\
+              package FreshInner7537 {\n\
+                class FreshWorker7541 <<freshservice7517>>\n\
+                class FreshStore7547 <<fresharchive7523>>\n\
+                class FreshPlain7559\n\
+                FreshWorker7541 --> FreshStore7547\n\
+              }\n\
+            }\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        let entity_body = |name: &str| {
+            let marker = format!("<!--class {name}-->");
+            svg.split_once(&marker)
+                .unwrap_or_else(|| panic!("missing {name}"))
+                .1
+                .split_once("</g>")
+                .unwrap()
+                .0
+        };
+        assert!(entity_body("FreshWorker7541").contains(r##"<rect fill="#DDEEFF""##));
+        assert!(
+            entity_body("FreshWorker7541")
+                .contains(r##"style="stroke:#335577;stroke-width:0.5;""##)
+        );
+        assert!(entity_body("FreshStore7547").contains(r##"<rect fill="#F0FFF0""##));
+        assert!(
+            entity_body("FreshStore7547").contains(r##"style="stroke:#2E8B57;stroke-width:0.5;""##)
+        );
+        assert!(entity_body("FreshPlain7559").contains(r##"<rect fill="#F1F1F1""##));
     }
 
     #[test]

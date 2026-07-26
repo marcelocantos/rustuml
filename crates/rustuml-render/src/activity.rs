@@ -29739,7 +29739,22 @@ fn typed_ftile_node<'a>(
                 } else {
                     20.0
                 };
-            let conditional_margin = branch_separation + 10.0;
+            // Java `FtileIfWithDiamonds.getYdelta1b` keeps 10px below
+            // multi-lane branches, 6px below two live same-lane branches,
+            // and no reserve when either same-lane branch terminates.
+            // Natural/SingleLane scenes still feed the later whole-diagram
+            // SlotSet pass, so their raw corridor retains the assembly reserve;
+            // the direct compressed scene models the post-pass values here.
+            let branch_bottom_separation = if !spacing.uses_compressed_geometry()
+                || conditional_spans_lanes
+            {
+                10.0
+            } else if then_scene.geometry.out_y.is_some() && else_scene.geometry.out_y.is_some() {
+                6.0
+            } else {
+                0.0
+            };
+            let conditional_margin = branch_separation + branch_bottom_separation;
             let unnoted_geometry = ftile::if_with_diamonds(
                 &diamond,
                 &then_tile,
@@ -29816,6 +29831,24 @@ fn typed_ftile_node<'a>(
                 - base_geometry.width)
                 .max(0.0);
             let mut geometry = base_geometry.add_margin_x2(margin_left, margin_right);
+            let has_single_live_branch =
+                then_scene.geometry.out_y.is_some() ^ else_scene.geometry.out_y.is_some();
+            if spacing.uses_compressed_geometry()
+                && conditional_spans_lanes
+                && has_single_live_branch
+                && !typed_ftile_scene_contains_conditional(&then_scene)
+                && !typed_ftile_scene_contains_conditional(&else_scene)
+            {
+                // The diagram-wide ON_Y `SlotFinder`/`SlotSet` pass sees no
+                // painted shape in the trailing `getYdelta1b` reserve or the
+                // 6px `FtileEmpty` merge. The following sequence tile therefore
+                // starts directly after the terminal branch's painted extent.
+                let reclaimed = branch_bottom_separation + merge.height;
+                geometry.height -= reclaimed;
+                if let Some(out_y) = &mut geometry.out_y {
+                    *out_y -= reclaimed;
+                }
+            }
             let nested_single_live_with_terminal_peer =
                 (typed_ftile_scene_ends_in_single_live_if(&then_scene)
                     && else_scene.geometry.out_y.is_none())
@@ -30391,6 +30424,23 @@ fn typed_ftile_lane_names(diagram: &ActivityDiagram) -> Vec<String> {
     lanes
 }
 
+fn typed_ftile_lane_colors(
+    diagram: &ActivityDiagram,
+    lane_names: &[String],
+) -> Vec<Option<String>> {
+    lane_names
+        .iter()
+        .map(|name| {
+            diagram.steps.iter().find_map(|step| {
+                let ActivityStep::Swimlane(lane) = step else {
+                    return None;
+                };
+                (lane.name == *name).then(|| lane.color.clone()).flatten()
+            })
+        })
+        .collect()
+}
+
 fn typed_ftile_scene_is_linear(scene: &TypedFtileScene<'_>) -> bool {
     match &scene.kind {
         TypedFtileKind::Leaf { .. } => true,
@@ -30482,6 +30532,45 @@ fn typed_ftile_scene_has_recursive_if(scene: &TypedFtileScene<'_>, inside_if: bo
             .iter()
             .any(|case| typed_ftile_scene_has_recursive_if(&case.scene, inside_if)),
     }
+}
+
+fn typed_ftile_scene_contains_conditional(scene: &TypedFtileScene<'_>) -> bool {
+    match &scene.kind {
+        TypedFtileKind::If { .. } | TypedFtileKind::IfDown { .. } => true,
+        TypedFtileKind::WithNote { child, .. } => {
+            typed_ftile_scene_contains_conditional(&child.scene)
+        }
+        TypedFtileKind::Sequence { children } => children
+            .iter()
+            .any(|child| typed_ftile_scene_contains_conditional(&child.scene)),
+        TypedFtileKind::While { body, special, .. } => {
+            typed_ftile_scene_contains_conditional(&body.scene)
+                || special
+                    .as_ref()
+                    .is_some_and(|special| typed_ftile_scene_contains_conditional(&special.scene))
+        }
+        TypedFtileKind::Repeat { body, .. } => typed_ftile_scene_contains_conditional(&body.scene),
+        TypedFtileKind::Fork { branches, .. } => branches
+            .iter()
+            .any(|branch| typed_ftile_scene_contains_conditional(&branch.scene)),
+        TypedFtileKind::Switch { cases, .. } => cases
+            .iter()
+            .any(|case| typed_ftile_scene_contains_conditional(&case.scene)),
+        TypedFtileKind::Leaf { .. } => false,
+    }
+}
+
+fn typed_ftile_if_has_nested_conditional(scene: &TypedFtileScene<'_>) -> bool {
+    let TypedFtileKind::If {
+        then_scene,
+        else_scene,
+        ..
+    } = &scene.kind
+    else {
+        return false;
+    };
+    typed_ftile_scene_contains_conditional(&then_scene.scene)
+        || typed_ftile_scene_contains_conditional(&else_scene.scene)
 }
 
 fn typed_ftile_has_fork_in_while_in_if(
@@ -35713,6 +35802,17 @@ fn typed_ftile_emit_connectors(
                         // destination owner through the 15px assembly tail.
                         y2 - (ftile::ASSEMBLY_RENDERED_SEPARATION
                             - crate::compress::COMPRESS_MARGIN)
+                    } else if typed_ftile_scene_ends_in_single_live_if(&first.scene)
+                        && first.scene.spacing.uses_compressed_geometry()
+                        && typed_ftile_scene_uses_other_lane(&first.scene, first.scene.in_lane)
+                        && !typed_ftile_if_has_nested_conditional(&first.scene)
+                    {
+                        // `ConnectionVerticalDown.drawTranslate` is evaluated
+                        // before ON_Y reclaims the single-live conditional's
+                        // empty merge tail. The compressed elbow retains the
+                        // standard destination-owner clearance.
+                        y2 - (ftile::ASSEMBLY_RENDERED_SEPARATION
+                            - crate::compress::COMPRESS_MARGIN)
                     } else if typed_ftile_scene_ends_in_single_live_if(&first.scene) {
                         // LIMITED merging keeps
                         // `ConnectionVerticalDown.drawTranslate`'s midpoint;
@@ -37158,6 +37258,7 @@ fn apply_typed_ftile_y(
 fn render_typed_ftile_swimlanes(
     scene: &TypedFtileScene<'_>,
     lane_names: &[String],
+    lane_colors: &[Option<String>],
     palette: &Palette,
     handwritten: bool,
 ) -> Option<FtileRender> {
@@ -37245,6 +37346,20 @@ fn render_typed_ftile_swimlanes(
     )
     .unwrap();
     for (lane, emitter) in emitters.iter().enumerate() {
+        if let Some(color) = lane_colors.get(lane).and_then(Option::as_deref) {
+            let fill = crate::sequence::resolve_color(color);
+            write!(
+                shapes,
+                r#"<rect fill="{}" height="{}" style="stroke:{};stroke-width:1;" width="{}" x="{}" y="{}"/>"#,
+                fill,
+                f(content_bottom - header_top),
+                fill,
+                f(lane_layout.width[lane]),
+                f(lane_layout.left[lane]),
+                f(header_top),
+            )
+            .unwrap();
+        }
         shapes.push_str(&apply_typed_ftile_shapes_y(emitter, &y_transform));
         write!(
             shapes,
@@ -37437,6 +37552,7 @@ fn render_ftile(
         return None;
     }
     let lane_names = typed_ftile_lane_names(diagram);
+    let lane_colors = typed_ftile_lane_colors(diagram, &lane_names);
     if std::env::var("RUSTUML_EXT_DBG").is_ok() {
         eprintln!("ftile lanes={lane_names:?}");
     }
@@ -37515,7 +37631,7 @@ fn render_ftile(
         } else {
             compressed_scene
         };
-        render_typed_ftile_swimlanes(&scene, &lane_names, palette, handwritten)?
+        render_typed_ftile_swimlanes(&scene, &lane_names, &lane_colors, palette, handwritten)?
     } else if single_lane_welding_repeat {
         let mut lane = 0usize;
         let scene =
@@ -38557,8 +38673,8 @@ mod tests {
     }
 
     #[test]
-    fn conditional_branch_gap_depends_on_its_own_swimlanes() {
-        fn branch_gaps(source: &str) -> Vec<f64> {
+    fn conditional_branch_margins_depend_on_own_swimlanes_and_live_outputs() {
+        fn branch_margins(source: &str) -> Vec<(f64, f64)> {
             let rustuml_parser::diagram::Diagram::Activity(diagram) =
                 rustuml_parser::parse::parse(source).unwrap()
             else {
@@ -38577,13 +38693,20 @@ mod tests {
                     let TypedFtileKind::If {
                         diamond,
                         diamond_at,
+                        merge_at,
                         then_scene,
+                        else_scene,
                         ..
                     } = &child.scene.kind
                     else {
                         return None;
                     };
-                    Some(then_scene.y - diamond_at.1 - diamond.height)
+                    let branch_bottom = (then_scene.y + then_scene.scene.geometry.height)
+                        .max(else_scene.y + else_scene.scene.geometry.height);
+                    Some((
+                        then_scene.y - diamond_at.1 - diamond.height,
+                        merge_at.1 - branch_bottom,
+                    ))
                 })
                 .collect()
         }
@@ -38611,7 +38734,7 @@ mod tests {
             "@enduml",
         );
 
-        assert_eq!(branch_gaps(source), vec![20.0, 10.0]);
+        assert_eq!(branch_margins(source), vec![(20.0, 10.0), (10.0, 6.0)]);
     }
 
     #[test]
@@ -38646,12 +38769,16 @@ mod tests {
         let TypedFtileKind::Sequence { children } = &scene.kind else {
             panic!("expected root sequence");
         };
-        let TypedFtileKind::If { else_scene, .. } = &children
+        let conditional = &children
             .iter()
             .find(|child| matches!(child.scene.kind, TypedFtileKind::If { .. }))
             .expect("conditional")
-            .scene
-            .kind
+            .scene;
+        let TypedFtileKind::If {
+            then_scene,
+            else_scene,
+            ..
+        } = &conditional.kind
         else {
             unreachable!();
         };
@@ -38665,6 +38792,61 @@ mod tests {
                 pair[0].y + pair[0].scene.geometry.height + ftile::ASSEMBLY_RENDERED_SEPARATION
             );
         }
+        let painted_bottom = (then_scene.y + then_scene.scene.geometry.height)
+            .max(else_scene.y + else_scene.scene.geometry.height);
+        assert_eq!(conditional.geometry.height, painted_bottom);
+
+        let svg = crate::render_svg(&rustuml_parser::parse::parse(source).unwrap());
+        let label_at = svg.find(">Ship renamed packet</text>").unwrap();
+        let rect_start = svg[..label_at].rfind("<rect").unwrap();
+        let rect_end = rect_start + svg[rect_start..].find("/>").unwrap() + 2;
+        let destination_y = prim_attr(&svg[rect_start..rect_end], " y=\"").unwrap();
+        let expected_middle = destination_y
+            - (ftile::ASSEMBLY_RENDERED_SEPARATION - crate::compress::COMPRESS_MARGIN);
+        assert!(svg.match_indices("<line ").any(|(start, _)| {
+            let Some(end) = svg[start..].find("/>").map(|end| start + end + 2) else {
+                return false;
+            };
+            let line = &svg[start..end];
+            let Some(x1) = prim_attr(line, " x1=\"") else {
+                return false;
+            };
+            let Some(x2) = prim_attr(line, " x2=\"") else {
+                return false;
+            };
+            let Some(y1) = prim_attr(line, " y1=\"") else {
+                return false;
+            };
+            let Some(y2) = prim_attr(line, " y2=\"") else {
+                return false;
+            };
+            x1 != x2 && y1 == expected_middle && y2 == expected_middle
+        }));
+    }
+
+    #[test]
+    fn typed_swimlanes_paint_explicit_lane_backgrounds() {
+        let source = concat!(
+            "@startuml\n",
+            "|#LightCoral|Fresh Intake|\n",
+            "start\n",
+            ":Queue renamed parcel;\n",
+            "|#LightCyan|Fresh Review|\n",
+            "if (Fresh parcel ready?) then (yes)\n",
+            "  :Approve renamed parcel;\n",
+            "else (no)\n",
+            "  :Hold renamed parcel;\n",
+            "endif\n",
+            "stop\n",
+            "@enduml",
+        );
+        let svg = crate::render_svg(&rustuml_parser::parse::parse(source).unwrap());
+        let coral = r##"<rect fill="#F08080""##;
+        let cyan = r##"<rect fill="#E0FFFF""##;
+        assert_eq!(svg.matches(coral).count(), 1);
+        assert_eq!(svg.matches(cyan).count(), 1);
+        assert!(svg.find(coral).unwrap() < svg.find(">Queue renamed parcel</text>").unwrap());
+        assert!(svg.find(cyan).unwrap() < svg.find(">Fresh parcel ready?</text>").unwrap());
     }
 
     #[test]
@@ -39622,6 +39804,7 @@ mod tests {
                 "Fresh archive".to_string(),
                 "Fresh dispatch".to_string(),
             ],
+            &[None, None, None, None],
             &Palette::default_puml(),
             false,
         )
@@ -39642,6 +39825,7 @@ mod tests {
                 "Fresh archive".to_string(),
                 "Fresh dispatch".to_string(),
             ],
+            &[None, None, None, None],
             &Palette::default_puml(),
             false,
         )
