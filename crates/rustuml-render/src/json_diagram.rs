@@ -11,16 +11,13 @@
 //! rect closes the box.
 //!
 //! Nested objects/arrays are laid out by PlantUML via its Smetana (graphviz)
-//! engine as detached boxes joined by dashed bezier connectors. That geometry
-//! is infeasible to recompute byte-for-byte, so when an oracle layout is
-//! available the renderer computes each box's content and size locally and
-//! consumes the box positions and connector splines from the oracle (see
-//! `render_nested`). Without an oracle, nested diagrams fall through to a
-//! best-effort single-box render.
+//! engine as detached boxes joined by dashed bezier connectors. The no-oracle
+//! path builds that record-node graph locally; the strict path can still
+//! consume captured box positions and connector splines (see `render_nested`).
 
 use std::fmt::Write;
 
-use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph};
+use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph, NodePosition};
 use rustuml_parser::diagram::json_diagram::{DataFormat, JsonDiagram, JsonNode, JsonNodeValue};
 
 use crate::layout_oracle::{OracleLayout, wrap_oracle_envelope};
@@ -54,9 +51,8 @@ pub fn render(diagram: &JsonDiagram, theme: &Theme) -> String {
 
 /// Render a JSON/YAML diagram. For a flat single box the renderer computes all
 /// geometry from PlantUML-compatible font metrics. For nested structures it
-/// computes each box's content and size locally but consumes the box positions
-/// and connector spline geometry from the oracle (PlantUML's Smetana layout is
-/// infeasible to recompute byte-for-byte).
+/// uses oracle geometry when supplied and otherwise builds PlantUML's Smetana
+/// record-node model locally.
 pub fn render_with_oracle(
     diagram: &JsonDiagram,
     _theme: &Theme,
@@ -99,7 +95,26 @@ struct BoxSpec {
 struct LayoutBoxSpec {
     id: String,
     rows: Vec<FlatRow>,
+    is_array: bool,
     parent: Option<String>,
+    parent_port: Option<usize>,
+}
+
+fn postorder_edges(specs: &[LayoutBoxSpec]) -> Vec<usize> {
+    fn visit(parent: &str, specs: &[LayoutBoxSpec], out: &mut Vec<usize>) {
+        for (index, spec) in specs.iter().enumerate() {
+            if spec.parent.as_deref() == Some(parent) {
+                visit(&spec.id, specs, out);
+                out.push(index);
+            }
+        }
+    }
+
+    let mut result = Vec::new();
+    if let Some(root) = specs.first() {
+        visit(&root.id, specs, &mut result);
+    }
+    result
 }
 
 /// Walk the data tree in PlantUML's box-emission order (DFS pre-order: a node,
@@ -180,7 +195,7 @@ fn render_nested(
 
 fn render_nested_no_oracle(diagram: &JsonDiagram, diagram_type: &str) -> Option<String> {
     let mut specs = Vec::new();
-    collect_layout_boxes(&diagram.root, diagram.format, None, &mut specs);
+    collect_layout_boxes(&diagram.root, diagram.format, None, None, &mut specs);
     if specs.len() <= 1 {
         return None;
     }
@@ -193,16 +208,62 @@ fn render_nested_no_oracle(diagram: &JsonDiagram, diagram_type: &str) -> Option<
         .iter()
         .map(|spec| box_dimensions(&spec.rows))
         .collect();
-    let mut graph = LayoutGraph::new(Direction::LeftToRight).with_plantuml_svek_spacing();
+    // PlantUML `SmetanaForJson.initGraph` submits the graph without the SVEK
+    // spacing overrides. Its `createNode` uses record nodes and `createEdge`
+    // binds each child to the parent row's P{index} port.
+    let mut graph = LayoutGraph::new(Direction::TopToBottom);
     for (spec, (width, height)) in specs.iter().zip(&dims) {
-        graph.add_node(&spec.id, "", *width, *height);
+        let ports = (0..spec.rows.len())
+            .map(|index| format!("P{index}"))
+            .collect::<Vec<_>>();
+        // Smetana's Graphviz coordinates are point-valued. `createNode`
+        // deliberately swaps width and height before layout; `getPosition`
+        // and `JsonCurve` swap the solved axes back for rendering.
+        let graph_width = if spec.is_array {
+            *height
+        } else {
+            height.round()
+        };
+        graph.add_record_node(&spec.id, graph_width, width.round(), &ports);
     }
-    for spec in &specs {
-        if let Some(parent) = &spec.parent {
-            graph.add_edge(parent, &spec.id, None);
+    for index in postorder_edges(&specs) {
+        let spec = &specs[index];
+        if let (Some(parent), Some(parent_port)) = (&spec.parent, spec.parent_port) {
+            let port = format!("P{parent_port}");
+            graph.add_edge_with_ports(parent, &spec.id, None, Some(&port), None);
         }
     }
-    let layout = graph.layout_full(std::time::Duration::from_secs(5))?;
+    // `LayoutGraph` serializes Graphviz FFI internally. A per-call timeout
+    // starts before that lock is acquired, so a parallel golden census can
+    // time out valid JSON trees merely while they wait in the queue.
+    let mut layout = graph.layout_full_no_timeout();
+    for position in &mut layout.node_positions {
+        (position.x, position.y) = (position.y, position.x);
+        (position.width, position.height) = (position.height, position.width);
+        position.x = snap_smetana_point(position.x);
+        position.y = snap_smetana_point(position.y);
+    }
+    for edge in &mut layout.edge_paths {
+        for point in &mut edge.points {
+            *point = (point.1, point.0);
+        }
+        if let Some(point) = &mut edge.start_point {
+            *point = (point.1, point.0);
+        }
+        if let Some(point) = &mut edge.end_point {
+            *point = (point.1, point.0);
+        }
+    }
+    let edge_order = postorder_edges(&specs);
+    layout.edge_paths.sort_by_key(|edge| {
+        edge_order
+            .iter()
+            .position(|index| {
+                let target = &specs[*index];
+                target.id == edge.to && target.parent.as_deref() == Some(edge.from.as_str())
+            })
+            .unwrap_or(usize::MAX)
+    });
 
     let mut body = String::new();
     let mut max_x = 0.0_f64;
@@ -216,7 +277,27 @@ fn render_nested_no_oracle(diagram: &JsonDiagram, diagram_type: &str) -> Option<
         body.push_str(&render_box_rows_at(&spec.rows, x, y));
     }
     for edge in &layout.edge_paths {
-        let rendered = render_nested_connector(edge, MARGIN, MARGIN);
+        let target = specs.iter().find(|spec| spec.id == edge.to);
+        let target_position = specs
+            .iter()
+            .position(|spec| spec.id == edge.to)
+            .map(|index| layout.node_positions[index]);
+        let source_index = specs.iter().position(|spec| spec.id == edge.from);
+        let source_y = source_index.and_then(|source_index| {
+            target.and_then(|target| target.parent_port).map(|port| {
+                let row_h = text_height(FONT_SIZE) + ROW_EXTRA;
+                let first_row_center = if specs[source_index].rows.len() == 1 {
+                    row_h / 2.0
+                } else {
+                    row_h.ceil() / 2.0
+                };
+                layout.node_positions[source_index].y
+                    + first_row_center
+                    + port as f64 * row_h.floor()
+            })
+        });
+        let rendered =
+            render_nested_connector(edge, MARGIN, MARGIN, source_y, target_position.as_ref());
         if let Some((x, y)) = edge.end_point {
             max_x = max_x.max(x + MARGIN);
             max_y = max_y.max(y + MARGIN);
@@ -233,10 +314,24 @@ fn render_nested_no_oracle(diagram: &JsonDiagram, diagram_type: &str) -> Option<
     Some(svg.finalize_plantuml())
 }
 
+fn snap_smetana_point(value: f64) -> f64 {
+    // Smetana stores solved node coordinates on Graphviz's half-point grid.
+    // Preserve genuinely fractional text-derived positions while normalizing
+    // values that only differ from that grid by float conversion noise.
+    const HALF_POINT_GRID: f64 = 0.5;
+    let snapped = (value / HALF_POINT_GRID).round() * HALF_POINT_GRID;
+    if (value - snapped).abs() <= HALF_POINT_GRID / 4.0 {
+        snapped
+    } else {
+        value
+    }
+}
+
 fn collect_layout_boxes(
     node: &JsonNode,
     format: DataFormat,
     parent: Option<String>,
+    parent_port: Option<usize>,
     out: &mut Vec<LayoutBoxSpec>,
 ) {
     let id = format!("json{}", out.len());
@@ -262,15 +357,17 @@ fn collect_layout_boxes(
     out.push(LayoutBoxSpec {
         id: id.clone(),
         rows,
+        is_array: matches!(node.value, JsonNodeValue::Array { .. }),
         parent,
+        parent_port,
     });
 
-    for child in children {
+    for (index, child) in children.into_iter().enumerate() {
         if matches!(
             child.value,
             JsonNodeValue::Object { .. } | JsonNodeValue::Array { .. }
         ) {
-            collect_layout_boxes(child, format, Some(id.clone()), out);
+            collect_layout_boxes(child, format, Some(id.clone()), Some(index), out);
         }
     }
 }
@@ -472,25 +569,75 @@ fn render_box_rows_at(rows: &[FlatRow], box_x: f64, box_y: f64) -> String {
     out
 }
 
-fn render_nested_connector(edge: &EdgePath, dx: f64, dy: f64) -> String {
+fn render_nested_connector(
+    edge: &EdgePath,
+    dx: f64,
+    dy: f64,
+    source_port_y: Option<f64>,
+    direct_target: Option<&NodePosition>,
+) -> String {
+    // `SmetanaForJson.createEdge` asks dot for a normal .75-size arrow.
+    // `JsonCurve` then starts 13px behind the first spline point, draws a
+    // straight lead-in, the clipped cubic, the arrow, and finally a 3px spot.
+    const LEAD_IN: f64 = 13.0;
     let mut out = String::new();
-    if !edge.points.is_empty() {
-        let mut d = format!(
-            "M{},{}",
-            fmt_coord(edge.points[0].0 + dx),
-            fmt_coord(edge.points[0].1 + dy)
-        );
+    if edge.points.len() >= 4 {
+        let mut points = edge.points.clone();
+        if let Some(source_port_y) = source_port_y {
+            let delta_y = source_port_y - points[0].1;
+            for point in &mut points {
+                point.1 += delta_y;
+            }
+        }
+        let last = points.len() - 1;
+        let mut arrow_tip = points[last];
+        if (points[0].1 - points[last].1).abs() < 1.0
+            && let Some(source_port_y) = source_port_y
+        {
+            for point in &mut points {
+                point.1 = source_port_y;
+            }
+            arrow_tip.1 = source_port_y;
+        }
+        if let Some(target) = direct_target
+            && points.len() == 4
+            && (points[0].1 - points[last].1).abs() < f64::EPSILON
+        {
+            points = smetana_direct_cubic(points[0], target);
+            arrow_tip = points[3];
+        }
+
+        // Dot clips its last cubic at the arrow base. Reproduce that operation
+        // with the same de Casteljau subdivision as Smetana.
+        let segment_start = last - 3;
+        let clipped = clip_cubic_for_smetana_arrow([
+            points[segment_start],
+            points[segment_start + 1],
+            points[segment_start + 2],
+            points[segment_start + 3],
+        ]);
+        points[segment_start..=last].copy_from_slice(&clipped);
+
+        let lead = extend_back(points[0], points[1], LEAD_IN);
+        let mut d = format!("M{},{}", fmt_coord(lead.0 + dx), fmt_coord(lead.1 + dy));
+        write!(
+            d,
+            " L{},{}",
+            fmt_coord(points[0].0 + dx),
+            fmt_coord(points[0].1 + dy)
+        )
+        .unwrap();
         let mut i = 1;
-        while i + 2 < edge.points.len() {
+        while i + 2 < points.len() {
             write!(
                 d,
                 " C{},{} {},{} {},{}",
-                fmt_coord(edge.points[i].0 + dx),
-                fmt_coord(edge.points[i].1 + dy),
-                fmt_coord(edge.points[i + 1].0 + dx),
-                fmt_coord(edge.points[i + 1].1 + dy),
-                fmt_coord(edge.points[i + 2].0 + dx),
-                fmt_coord(edge.points[i + 2].1 + dy),
+                fmt_coord(points[i].0 + dx),
+                fmt_coord(points[i].1 + dy),
+                fmt_coord(points[i + 1].0 + dx),
+                fmt_coord(points[i + 1].1 + dy),
+                fmt_coord(points[i + 2].0 + dx),
+                fmt_coord(points[i + 2].1 + dy),
             )
             .unwrap();
             i += 3;
@@ -498,30 +645,174 @@ fn render_nested_connector(edge: &EdgePath, dx: f64, dy: f64) -> String {
         out.push_str(&format!(
             r#"<path d="{d}" fill="none" style="stroke:#000000;stroke-width:1;stroke-dasharray:3,3;"/>"#
         ));
-    }
-    if let Some((x, y)) = edge.end_point {
-        let (x, y) = (x + dx, y + dy);
-        let points = format!(
-            "M{},{} L{},{} L{},{} L{},{} Z",
-            fmt_coord(x - 7.5),
-            fmt_coord(y + 3.0),
-            fmt_coord(x - 5.0),
-            fmt_coord(y),
-            fmt_coord(x - 7.5),
-            fmt_coord(y - 3.0),
-            fmt_coord(x),
-            fmt_coord(y),
-        );
-        out.push_str(&format!(r##"<path d="{points}" fill="#000000"/>"##));
-    }
-    if let Some((x, y)) = edge.start_point.or_else(|| edge.points.first().copied()) {
+        out.push_str(&json_arrow_path(
+            (points[last].0 + dx, points[last].1 + dy),
+            (arrow_tip.0 + dx, arrow_tip.1 + dy),
+        ));
         out.push_str(&format!(
             r##"<ellipse cx="{}" cy="{}" fill="#000000" rx="3" ry="3" style="stroke:#000000;stroke-width:1;"/>"##,
-            fmt_coord(x + dx),
-            fmt_coord(y + dy),
+            fmt_coord(lead.0 + dx),
+            fmt_coord(lead.1 + dy),
         ));
     }
     out
+}
+
+fn smetana_direct_cubic(source: (f64, f64), target: &NodePosition) -> Vec<(f64, f64)> {
+    // Graphviz 2.38's `route__c.mkspline`/`splinefits` direct-edge solution
+    // enters a record at its internal route point with a 4:9 source control
+    // span. `splines__c.shape_clip0` then keeps the last outside subdivision
+    // at the record's half-point stroke boundary.
+    let target_internal = (target.x + target.width / 2.0 - 1.0, source.1);
+    let source_control = (
+        source.0 + (target_internal.0 - source.0) * 4.0 / 9.0,
+        source.1,
+    );
+    let raw = [source, source_control, target_internal, target_internal];
+    clip_cubic_to_record(raw, target.x + 0.5).to_vec()
+}
+
+fn clip_cubic_to_record(points: [(f64, f64); 4], record_boundary: f64) -> [(f64, f64); 4] {
+    const PROBE_TOLERANCE: f64 = 0.5;
+    const MAX_CLIP_STEPS: usize = 64;
+
+    let mut low = 0.0;
+    let mut high = 1.0;
+    let mut previous = points[3];
+    let mut latest = points;
+    let mut best = None;
+    for _ in 0..MAX_CLIP_STEPS {
+        let middle = (low + high) / 2.0;
+        let point = cubic_point(points, middle);
+        latest = split_cubic_left(points, middle);
+        if point.0 >= record_boundary {
+            high = middle;
+        } else {
+            low = middle;
+            best = Some(latest);
+        }
+        if (previous.0 - point.0).abs() <= PROBE_TOLERANCE
+            && (previous.1 - point.1).abs() <= PROBE_TOLERANCE
+        {
+            break;
+        }
+        previous = point;
+    }
+    best.unwrap_or(latest)
+}
+
+fn unit_vector(from: (f64, f64), to: (f64, f64)) -> (f64, f64) {
+    let dx = to.0 - from.0;
+    let dy = to.1 - from.1;
+    let length = dx.hypot(dy);
+    if length == 0.0 {
+        (1.0, 0.0)
+    } else {
+        (dx / length, dy / length)
+    }
+}
+
+fn extend_back(center: (f64, f64), direction: (f64, f64), length: f64) -> (f64, f64) {
+    let unit = unit_vector(direction, center);
+    (center.0 + unit.0 * length, center.1 + unit.1 * length)
+}
+
+fn cubic_point(points: [(f64, f64); 4], t: f64) -> (f64, f64) {
+    let u = 1.0 - t;
+    let weights = [u * u * u, 3.0 * u * u * t, 3.0 * u * t * t, t * t * t];
+    (
+        points
+            .iter()
+            .zip(weights)
+            .map(|(point, weight)| point.0 * weight)
+            .sum(),
+        points
+            .iter()
+            .zip(weights)
+            .map(|(point, weight)| point.1 * weight)
+            .sum(),
+    )
+}
+
+fn clip_cubic_for_smetana_arrow(points: [(f64, f64); 4]) -> [(f64, f64); 4] {
+    // `SmetanaForJson.createEdge` selects a normal arrow at .75 scale.
+    // `arrows__c.arrow_length` therefore clips at 10 * .75 points, while
+    // `splines__c.bezier_clip` keeps the last outside subdivision and stops
+    // once consecutive probe coordinates differ by at most .5 points.
+    const ARROW_LENGTH: f64 = 10.0 * 0.75;
+    const PROBE_TOLERANCE: f64 = 0.5;
+    const MAX_CLIP_STEPS: usize = 64;
+
+    let end = points[3];
+    let mut low = 0.0;
+    let mut high = 1.0;
+    let mut previous = end;
+    let mut latest = points;
+    let mut best = None;
+    for _ in 0..MAX_CLIP_STEPS {
+        let middle = (low + high) / 2.0;
+        let point = cubic_point(points, middle);
+        latest = split_cubic_left(points, middle);
+        if (end.0 - point.0).hypot(end.1 - point.1) <= ARROW_LENGTH {
+            high = middle;
+        } else {
+            low = middle;
+            best = Some(latest);
+        }
+        if (previous.0 - point.0).abs() <= PROBE_TOLERANCE
+            && (previous.1 - point.1).abs() <= PROBE_TOLERANCE
+        {
+            break;
+        }
+        previous = point;
+    }
+    best.unwrap_or(latest)
+}
+
+fn split_cubic_left(points: [(f64, f64); 4], t: f64) -> [(f64, f64); 4] {
+    let lerp = |a: (f64, f64), b: (f64, f64)| (a.0 + (b.0 - a.0) * t, a.1 + (b.1 - a.1) * t);
+    let p01 = lerp(points[0], points[1]);
+    let p12 = lerp(points[1], points[2]);
+    let p23 = lerp(points[2], points[3]);
+    let p012 = lerp(p01, p12);
+    let p123 = lerp(p12, p23);
+    [points[0], p01, p012, lerp(p012, p123)]
+}
+
+fn json_arrow_path(base: (f64, f64), tip: (f64, f64)) -> String {
+    // Java `jsondiagram.Arrow.drawArrow`.
+    let dx = tip.0 - base.0;
+    let dy = tip.1 - base.1;
+    let distance = dx.hypot(dy);
+    let along = unit_vector(base, tip);
+    let perpendicular = (-along.1, along.0);
+    let factor = distance * 0.4;
+    let notch = (
+        base.0 + along.0 * distance * 0.3,
+        base.1 + along.1 * distance * 0.3,
+    );
+    let lower = (
+        base.0 + perpendicular.0 * factor,
+        base.1 + perpendicular.1 * factor,
+    );
+    let upper = (
+        base.0 - perpendicular.0 * factor,
+        base.1 - perpendicular.1 * factor,
+    );
+    let d = format!(
+        "M{},{} L{},{} L{},{} L{},{} L{},{}",
+        fmt_coord(lower.0),
+        fmt_coord(lower.1),
+        fmt_coord(notch.0),
+        fmt_coord(notch.1),
+        fmt_coord(upper.0),
+        fmt_coord(upper.1),
+        fmt_coord(tip.0),
+        fmt_coord(tip.1),
+        fmt_coord(lower.0),
+        fmt_coord(lower.1),
+    );
+    format!(r##"<path d="{d}" fill="#000000"/>"##)
 }
 
 // ── Single-box (flat) rendering ───────────────────────────────────────────────
@@ -913,6 +1204,63 @@ mod tests {
             assert!(svg.contains(r#"textLength="4.4297""#), "{svg}");
             assert!(svg.contains("&#160;"), "{svg}");
         }
+    }
+
+    #[test]
+    fn renamed_branching_json_uses_record_ports_and_postorder_edges() {
+        let source = r#"@startjson
+{
+  "quasar_ledger": {
+    "checkpoint": {"epoch": 17, "sealed": true},
+    "owner": "delta"
+  },
+  "batches": [
+    {"token": "r9", "ready": false},
+    {"token": "s4", "ready": true}
+  ]
+}
+@endjson"#;
+        let diagram = rustuml_parser::parse::parse(source).unwrap();
+        let Diagram::Json(diagram) = diagram else {
+            panic!("expected JSON diagram");
+        };
+        let mut specs = Vec::new();
+        super::collect_layout_boxes(&diagram.root, diagram.format, None, None, &mut specs);
+
+        assert_eq!(specs.len(), 6);
+        assert_eq!(super::postorder_edges(&specs), vec![2, 1, 4, 5, 3]);
+
+        let svg = crate::render_svg(&Diagram::Json(diagram));
+        assert_eq!(svg.matches("stroke-dasharray:3,3").count(), 5);
+        assert_eq!(svg.matches("<ellipse").count(), 5);
+        assert_eq!(svg.matches(r##"fill="#000000"/>"##).count(), 5);
+        assert!(!svg.contains("{...}"));
+        assert!(svg.contains("quasar_ledger"));
+        assert!(svg.contains("checkpoint"));
+        assert!(svg.contains("token"));
+    }
+
+    #[test]
+    fn renamed_nested_yaml_layout_is_deterministic() {
+        let source = r#"@startyaml
+observatory:
+  instruments:
+    - name: heliograph
+      online: true
+    - name: spectrometer
+      online: false
+  region: south
+revision: 23
+@endyaml"#;
+        let first = render_input(source);
+        let second = render_input(source);
+
+        assert_eq!(first, second);
+        assert_eq!(first.matches("stroke-dasharray:3,3").count(), 4);
+        assert_eq!(first.matches("<ellipse").count(), 4);
+        assert!(first.contains("heliograph"));
+        assert!(first.contains("spectrometer"));
+        assert!(!first.contains("[...]"));
     }
 
     #[test]

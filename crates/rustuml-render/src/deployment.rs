@@ -148,6 +148,16 @@ const DEPENDENCY_ARROW_HALF_WIDTH: f64 = 4.0;
 const INTERFACE_CIRCLE_SIZE: f64 = 16.0;
 const INTERFACE_SYMBOL_SIZE: f64 = 18.0;
 const INTERFACE_LABEL_Y: f64 = 26.0;
+// `ActorStickMan`: 16px head, 27px body, 15px legs, and a half-pixel
+// `Fashion` stroke around the 26px arm/leg span.
+const ACTOR_SYMBOL_WIDTH: f64 = 27.0;
+const ACTOR_SYMBOL_HEIGHT: f64 = 60.0;
+const ACTOR_HEAD_DIAMETER: f64 = 16.0;
+const ACTOR_STROKE_WIDTH: f64 = 0.5;
+const ACTOR_LIMB_HALF_WIDTH: f64 = 13.0;
+const ACTOR_ARM_Y: f64 = 8.0;
+const ACTOR_BODY_LENGTH: f64 = 27.0;
+const ACTOR_LEG_HEIGHT: f64 = 15.0;
 // `SvekNode.appendLabelHtml` wraps the symbol and its shield in a 3x3
 // zero-padding Graphviz table. Its fixed-cell bookkeeping adds this envelope
 // around the shield while keeping the `h` cell centered.
@@ -346,8 +356,12 @@ fn render_oracle(diagram: &DeploymentDiagram, _theme: &Theme, oracle: &OracleLay
             .unwrap_or(0.0);
         hw.max(fw)
     };
-    let sprite_cache =
-        crate::sprite::SpriteCache::from_sprites_scaled(&diagram.meta.sprites, sprite_scale());
+    let sprite_cache = crate::sprite::SpriteCache::from_sprites_scaled_with_colors(
+        &diagram.meta.sprites,
+        sprite_scale(),
+        [0xF1, 0xF1, 0xF1],
+        [0, 0, 0],
+    );
     let ctx = OracleRenderContext {
         oracle,
         id_for_node: &id_for_node,
@@ -971,8 +985,9 @@ fn emit_entity(
         } else if matches!(node.kind, Boundary | Control | Entity | Default) {
             emit_icon_entity(svg, node, rect, &entity_fill);
         } else if matches!(node.kind, Actor) {
-            emit_actor_entity(svg, rect, &entity_fill);
-            if !emit_oracle_image_label_children(svg, rect)
+            let generated_label = emit_actor_entity(svg, node, rect, &entity_fill, ctx);
+            if !generated_label
+                && !emit_oracle_image_label_children(svg, rect)
                 && let Some(text) = rect.texts.first()
             {
                 emit_text(svg, &text.text, text.x, text.y, FONT_SIZE, false, false);
@@ -2150,7 +2165,13 @@ fn emit_entity_label(
     w: f64,
     ctx: Option<&OracleRenderContext<'_>>,
 ) {
-    let (text_x_pad, top_pad, bold) = entity_text_geom(kind, w, &node.label);
+    let (text_x_pad, mut top_pad, bold) = entity_text_geom(kind, w, &node.label);
+    if let Some(ctx) = ctx {
+        let first_line = node.label.lines().next().unwrap_or_default();
+        top_pad += (deployment_label_line_height_for_sprites(first_line, FONT_SIZE, ctx.sprites)
+            - TEXT_LINE_H)
+            .max(0.0);
+    }
     let label_w = deployment_label_width(&node.label, FONT_SIZE, bold, ctx);
     let center_x = entity_text_center(kind, x, w);
     // Folder and package labels are left-aligned with a 10px indent rather
@@ -2350,7 +2371,7 @@ fn deployment_label_width(
             crate::sprite::TextSegment::Sprite(name) => ctx
                 .sprites
                 .get(name)
-                .map(|sprite| deployment_sprite_dimensions(sprite).0)
+                .map(|sprite| deployment_sprite_logical_dimensions(sprite, font_size).0)
                 .unwrap_or(0.0),
             crate::sprite::TextSegment::OpenIcon(name) => crate::openiconic::lookup(name)
                 .map(|icon| icon.width * (font_size / icon.height))
@@ -2423,12 +2444,16 @@ fn emit_deployment_label(
                     && let Some(uri) = ctx.sprite_cache.get(&name)
                 {
                     let (width, height) = deployment_sprite_dimensions(sprite);
-                    // Java DESCRIPTION sprite labels use the sprite as an
-                    // inline image centered on the text baseline; the baseline
-                    // offset matches PlantUML's `TextBlockSprite` emission.
-                    let image_y = y - height * 0.63;
+                    let (_, logical_height) =
+                        deployment_sprite_logical_dimensions(sprite, style.font_size);
+                    // Java `Sea.doAlign` bottom-aligns `AtomSprite` against
+                    // the text atom's logical line box. The raster itself is
+                    // independently rounded by `PortableImageAwt.scale`.
+                    let image_y = y - pm::ascent(style.font_size)
+                        + pm::text_height(style.font_size)
+                        - logical_height;
                     svg.image(cursor, image_y, width, height, uri);
-                    cursor += width;
+                    cursor += deployment_sprite_logical_dimensions(sprite, style.font_size).0;
                 }
             }
             crate::sprite::TextSegment::OpenIcon(name) => {
@@ -2447,6 +2472,15 @@ fn sprite_scale() -> f64 {
 fn deployment_sprite_dimensions(sprite: &rustuml_parser::diagram::SpriteData) -> (f64, f64) {
     let (width, height) = crate::sprite::scaled_sprite_dimensions(sprite, sprite_scale());
     (width as f64, height as f64)
+}
+
+fn deployment_sprite_logical_dimensions(
+    sprite: &rustuml_parser::diagram::SpriteData,
+    font_size: f64,
+) -> (f64, f64) {
+    let (width, height) = crate::sprite::sprite_dimensions(sprite);
+    let scale = font_size / SPRITE_BASE_FONT_SIZE;
+    (width as f64 * scale, height as f64 * scale)
 }
 
 fn cluster_top_pad(kind: DeploymentNodeKind) -> f64 {
@@ -2554,7 +2588,57 @@ fn emit_multiline_text<'a>(
     }
 }
 
-fn emit_actor_entity(svg: &mut SvgBuilder, rect: &crate::layout_oracle::EntityRect, fill: &str) {
+fn emit_actor_entity(
+    svg: &mut SvgBuilder,
+    node: &DeploymentNode,
+    rect: &crate::layout_oracle::EntityRect,
+    fill: &str,
+    ctx: &OracleRenderContext<'_>,
+) -> bool {
+    if rect.glyph_path_d.is_none() {
+        // `USymbolSimpleAbstract.asSmall` centers `ActorStickMan` above the
+        // complete sprite/text label block.
+        let symbol_x = rect.x + (rect.width - ACTOR_SYMBOL_WIDTH) / 2.0;
+        let symbol_y = rect.y;
+        let center_x = symbol_x + ACTOR_SYMBOL_WIDTH / 2.0;
+        let head_x =
+            symbol_x + ACTOR_LIMB_HALF_WIDTH - ACTOR_HEAD_DIAMETER / 2.0 + ACTOR_STROKE_WIDTH;
+        let head_y = symbol_y + ACTOR_STROKE_WIDTH;
+        let head_center_y = head_y + ACTOR_HEAD_DIAMETER / 2.0;
+        svg.raw(&format!(
+            r#"<ellipse cx="{}" cy="{}" fill="{}" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>"#,
+            fc(head_x + ACTOR_HEAD_DIAMETER / 2.0),
+            fc(head_center_y),
+            fill,
+        ));
+        let body_top = symbol_y + ACTOR_HEAD_DIAMETER + ACTOR_STROKE_WIDTH;
+        let body_bottom = body_top + ACTOR_BODY_LENGTH;
+        svg.raw(&format!(
+            r#"<path d="M{cx},{top} L{cx},{bottom} M{left},{arms} L{right},{arms} M{cx},{bottom} L{left},{legs} M{cx},{bottom} L{right},{legs}" fill="none" style="stroke:#181818;stroke-width:0.5;"/>"#,
+            cx = fc(center_x),
+            top = fc(body_top),
+            bottom = fc(body_bottom),
+            left = fc(center_x - ACTOR_LIMB_HALF_WIDTH),
+            right = fc(center_x + ACTOR_LIMB_HALF_WIDTH),
+            arms = fc(body_top + ACTOR_ARM_Y),
+            legs = fc(body_bottom + ACTOR_LEG_HEIGHT),
+        ));
+        let label_width = deployment_label_width(&node.label, FONT_SIZE, false, Some(ctx));
+        emit_deployment_label(
+            svg,
+            &node.label,
+            rect.x + (rect.width - label_width) / 2.0,
+            rect.y + ACTOR_SYMBOL_HEIGHT + ASCENT_14,
+            DeploymentLabelStyle {
+                font_size: FONT_SIZE,
+                bold: false,
+                italic: false,
+            },
+            Some(ctx),
+        );
+        return true;
+    }
+
     let r = rect.width / 2.0;
     let cx = rect.x + r;
     let cy = rect.y + r;
@@ -2576,6 +2660,7 @@ fn emit_actor_entity(svg: &mut SvgBuilder, rect: &crate::layout_oracle::EntityRe
             r#"<path d="{d}" fill="none" style="stroke:#181818;stroke-width:0.5;"/>"#
         ));
     }
+    false
 }
 
 // ---------------------------------------------------------------------------
@@ -3488,8 +3573,12 @@ fn render_no_oracle_degenerated(diagram: &DeploymentDiagram, dim: &DeploymentNod
     let no_oracle_uids = build_deployment_no_oracle_uid_model(diagram);
     let skin_fills = skin_background_fills(&diagram.meta.skinparams);
     let skin_strokes = skin_border_colors(&diagram.meta.skinparams);
-    let sprite_cache =
-        crate::sprite::SpriteCache::from_sprites_scaled(&diagram.meta.sprites, sprite_scale());
+    let sprite_cache = crate::sprite::SpriteCache::from_sprites_scaled_with_colors(
+        &diagram.meta.sprites,
+        sprite_scale(),
+        [0xF1, 0xF1, 0xF1],
+        [0, 0, 0],
+    );
     let ctx = OracleRenderContext {
         oracle: &oracle,
         id_for_node: &no_oracle_uids.entity_ids,
@@ -3829,8 +3918,12 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
     let id_for_node = &no_oracle_uids.entity_ids;
     let skin_fills = skin_background_fills(&diagram.meta.skinparams);
     let skin_strokes = skin_border_colors(&diagram.meta.skinparams);
-    let sprite_cache =
-        crate::sprite::SpriteCache::from_sprites_scaled(&diagram.meta.sprites, sprite_scale());
+    let sprite_cache = crate::sprite::SpriteCache::from_sprites_scaled_with_colors(
+        &diagram.meta.sprites,
+        sprite_scale(),
+        [0xF1, 0xF1, 0xF1],
+        [0, 0, 0],
+    );
     let ctx = OracleRenderContext {
         oracle: &oracle,
         id_for_node,
@@ -4380,6 +4473,19 @@ fn deployment_node_dim(
     sprites: &HashMap<String, rustuml_parser::diagram::SpriteData>,
 ) -> DeploymentNodeDim {
     let bold = matches!(node.kind, DeploymentNodeKind::Package);
+    let label_line_heights = node
+        .label
+        .lines()
+        .map(|line| deployment_label_line_height_for_sprites(line, FONT_SIZE, sprites))
+        .collect::<Vec<_>>();
+    let label_height_extra = label_line_heights
+        .iter()
+        .map(|height| (height - TEXT_LINE_H).max(0.0))
+        .sum::<f64>();
+    let first_label_height_extra = label_line_heights
+        .first()
+        .map(|height| (height - TEXT_LINE_H).max(0.0))
+        .unwrap_or(0.0);
     let label_width = node
         .label
         .lines()
@@ -4399,7 +4505,8 @@ fn deployment_node_dim(
         .unwrap_or(0.0);
     let label_line_count = node.label.lines().count().max(1);
     let line_count = label_line_count + usize::from(visible_stereotype.is_some());
-    let (text_x_pad, top_pad, _) = entity_text_geom(node.kind, 0.0, &node.label);
+    let (text_x_pad, base_top_pad, _) = entity_text_geom(node.kind, 0.0, &node.label);
+    let top_pad = base_top_pad + first_label_height_extra;
     let width = match node.kind {
         DeploymentNodeKind::Node
         | DeploymentNodeKind::Artifact
@@ -4421,6 +4528,7 @@ fn deployment_node_dim(
             label_width.max(stereo_width).max(32.0)
         }
         DeploymentNodeKind::Collections => label_width.max(stereo_width) + 20.0,
+        DeploymentNodeKind::Actor => label_width.max(stereo_width).max(ACTOR_SYMBOL_WIDTH),
         DeploymentNodeKind::Cloud => label_width.max(stereo_width) + 2.0 * CLOUD_MARGIN,
         // `USymbolFolder.asSmall` keeps a hidden 40x15 title box when
         // `showTitle` is false, then adds `Margin(10, 20, 13, 10)`.
@@ -4445,28 +4553,41 @@ fn deployment_node_dim(
                     * (label_line_count as f64 * TEXT_LINE_H)
                         .max(stereo_height)
                         .max(1.0)
+                + label_height_extra
         }
         // Boundary/control/entity use a 32px icon stacked between the optional
         // stereotype and the label (`XDimension2D.mergeLayoutT12B3`).
         DeploymentNodeKind::Boundary | DeploymentNodeKind::Control | DeploymentNodeKind::Entity => {
-            line_count as f64 * TEXT_LINE_H + 32.0
+            line_count as f64 * TEXT_LINE_H + label_height_extra + 32.0
         }
-        DeploymentNodeKind::Collections => line_count as f64 * TEXT_LINE_H + 20.0,
-        DeploymentNodeKind::Cloud => line_count as f64 * TEXT_LINE_H + 2.0 * CLOUD_MARGIN,
+        DeploymentNodeKind::Collections => {
+            line_count as f64 * TEXT_LINE_H + label_height_extra + 20.0
+        }
+        DeploymentNodeKind::Actor => {
+            ACTOR_SYMBOL_HEIGHT + line_count as f64 * TEXT_LINE_H + label_height_extra
+        }
+        DeploymentNodeKind::Cloud => {
+            line_count as f64 * TEXT_LINE_H + label_height_extra + 2.0 * CLOUD_MARGIN
+        }
         // `USymbolCard.asSmall` wraps the merged stereotype/label block in
         // `Margin(10, 10, 3, 3)`.
-        DeploymentNodeKind::Card => line_count as f64 * TEXT_LINE_H + 6.0,
+        DeploymentNodeKind::Card => line_count as f64 * TEXT_LINE_H + label_height_extra + 6.0,
         // `USymbolDatabase.asSmall` adds 29px around the merged text block:
         // 10px top lip, 10px lower cap, and the title spacing between them.
-        DeploymentNodeKind::Database => line_count as f64 * TEXT_LINE_H + 29.0,
-        DeploymentNodeKind::Folder => 15.0 + line_count as f64 * TEXT_LINE_H + 13.0 + 10.0,
-        DeploymentNodeKind::Package => line_count as f64 * TEXT_LINE_H + 13.0 + 10.0,
-        DeploymentNodeKind::Queue => line_count as f64 * TEXT_LINE_H + 10.0,
+        DeploymentNodeKind::Database => line_count as f64 * TEXT_LINE_H + label_height_extra + 29.0,
+        DeploymentNodeKind::Folder => {
+            15.0 + line_count as f64 * TEXT_LINE_H + label_height_extra + 13.0 + 10.0
+        }
+        DeploymentNodeKind::Package => {
+            line_count as f64 * TEXT_LINE_H + label_height_extra + 13.0 + 10.0
+        }
+        DeploymentNodeKind::Queue => line_count as f64 * TEXT_LINE_H + label_height_extra + 10.0,
         _ => {
-            top_pad
+            base_top_pad
                 + (line_count.saturating_sub(1)) as f64 * TEXT_LINE_H
                 + (pm::text_height(FONT_SIZE) - ASCENT_14)
                 + 10.0
+                + label_height_extra
         }
     };
     DeploymentNodeDim {
@@ -4606,6 +4727,9 @@ fn deployment_local_painted_y_bounds(
         // wing reaches one pixel above that origin.
         Boundary | Entity => (4.0, dim.height),
         Control => (-1.0, dim.height),
+        // `ActorStickMan` draws the head half a stroke below its local origin;
+        // the label line ends at the symbol's declared 60px height.
+        Actor => (ACTOR_STROKE_WIDTH, dim.height),
         // Two offset `URectangle`s: the front contributes -1 at the origin.
         Collections => (-1.0, dim.height - 1.0),
         // These Java symbols are painted as UPath/UPolygon outlines whose
@@ -4614,9 +4738,6 @@ fn deployment_local_painted_y_bounds(
         // a full-height `UPath` (maximum Y at the declared height).
         Stack => (-1.0, dim.height),
         Folder | Queue | File | Package => (0.0, dim.height),
-        // Preserve the established envelope for symbols whose Java primitive
-        // model has not yet been split out above.
-        _ => (0.0, dim.height + 10.0),
     }
 }
 
@@ -5119,6 +5240,7 @@ fn deployment_local_painted_x_bounds(node: &DeploymentNode, dim: &DeploymentNode
                 (symbol_x + 45.0).max(label_x + dim.label_width),
             )
         }
+        Actor => (0.0, dim.width),
         Control => {
             let symbol_x = (dim.width - 32.0) / 2.0;
             let label_x = (dim.width - dim.label_width) / 2.0;
@@ -5165,13 +5287,29 @@ fn deployment_label_width_for_sprites(
             crate::sprite::TextSegment::Text(text) => text_render::measure(text, font_size, bold),
             crate::sprite::TextSegment::Sprite(name) => sprites
                 .get(name)
-                .map(|sprite| deployment_sprite_dimensions(sprite).0)
+                .map(|sprite| deployment_sprite_logical_dimensions(sprite, font_size).0)
                 .unwrap_or(0.0),
             crate::sprite::TextSegment::OpenIcon(name) => crate::openiconic::lookup(name)
                 .map(|icon| icon.width * (font_size / icon.height))
                 .unwrap_or(0.0),
         })
         .sum()
+}
+
+fn deployment_label_line_height_for_sprites(
+    label: &str,
+    font_size: f64,
+    sprites: &HashMap<String, rustuml_parser::diagram::SpriteData>,
+) -> f64 {
+    crate::sprite::parse_sprite_segments(label)
+        .iter()
+        .filter_map(|segment| match segment {
+            crate::sprite::TextSegment::Sprite(name) => sprites
+                .get(name)
+                .map(|sprite| deployment_sprite_logical_dimensions(sprite, font_size).1),
+            _ => None,
+        })
+        .fold(pm::text_height(font_size), f64::max)
 }
 
 fn layout_deployment_rects(
@@ -6564,6 +6702,46 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
         assert!(svg.contains(r#"L134.1992,30.74 L168.72,26.74 L134.1992,22.74"#));
         assert!(svg.contains(r#">owner: team 109</text>"#));
         assert!(svg.contains(r#">mode: warm 113</text>"#));
+    }
+
+    #[test]
+    fn renamed_sprite_actor_uses_stickman_above_the_complete_label_block() {
+        let source = "@startuml\n\
+            sprite $fresh_actor [6x4/16] {\n\
+            011110\n\
+            110011\n\
+            101101\n\
+            011110\n\
+            }\n\
+            actor \"<$fresh_actor> Renamed operator\" as Operator773\n\
+            node \"<$fresh_actor> Renamed service\" as Service787\n\
+            Operator773 --> Service787\n\
+            Service787 --> Operator773\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+        let actor = diagram
+            .nodes
+            .iter()
+            .find(|node| node.kind == DeploymentNodeKind::Actor)
+            .unwrap();
+        let dim = deployment_node_dim(actor, &diagram.meta.sprites);
+        let label_width = deployment_label_width_for_sprites(
+            &actor.label,
+            FONT_SIZE,
+            false,
+            &diagram.meta.sprites,
+        );
+
+        assert_eq!(dim.width, label_width.max(ACTOR_SYMBOL_WIDTH));
+        assert_eq!(dim.height, ACTOR_SYMBOL_HEIGHT + TEXT_LINE_H);
+
+        let svg = render(&diagram, &Theme::default());
+        assert!(svg.contains(r#"rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;""#));
+        assert!(svg.contains(r#"width="6" height="4""#));
+        assert!(!svg.contains("&lt;$fresh_actor&gt;"));
     }
 
     #[test]

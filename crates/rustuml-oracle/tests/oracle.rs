@@ -26,15 +26,15 @@ fn simple_sequence_produces_valid_svg() {
     let texts: Vec<&str> = elements.iter().filter_map(|e| e.text.as_deref()).collect();
 
     assert!(
-        texts.iter().any(|t| *t == "Alice"),
+        texts.contains(&"Alice"),
         "should contain 'Alice', got: {texts:?}"
     );
     assert!(
-        texts.iter().any(|t| *t == "Bob"),
+        texts.contains(&"Bob"),
         "should contain 'Bob', got: {texts:?}"
     );
     assert!(
-        texts.iter().any(|t| *t == "hello"),
+        texts.contains(&"hello"),
         "should contain 'hello', got: {texts:?}"
     );
 }
@@ -146,11 +146,11 @@ fn class_diagram_produces_valid_svg() {
     let texts: Vec<&str> = elements.iter().filter_map(|e| e.text.as_deref()).collect();
 
     assert!(
-        texts.iter().any(|t| *t == "Animal"),
+        texts.contains(&"Animal"),
         "should contain 'Animal' text, got: {texts:?}"
     );
     assert!(
-        texts.iter().any(|t| *t == "Dog"),
+        texts.contains(&"Dog"),
         "should contain 'Dog' text, got: {texts:?}"
     );
 }
@@ -184,11 +184,11 @@ fn state_diagram_produces_valid_svg() {
     let texts: Vec<&str> = elements.iter().filter_map(|e| e.text.as_deref()).collect();
 
     assert!(
-        texts.iter().any(|t| *t == "Active"),
+        texts.contains(&"Active"),
         "should contain 'Active' state, got: {texts:?}"
     );
     assert!(
-        texts.iter().any(|t| *t == "Inactive"),
+        texts.contains(&"Inactive"),
         "should contain 'Inactive' state, got: {texts:?}"
     );
 }
@@ -202,7 +202,7 @@ fn state_diagram_nested_produces_valid_svg() {
     let texts: Vec<&str> = elements.iter().filter_map(|e| e.text.as_deref()).collect();
 
     assert!(
-        texts.iter().any(|t| *t == "Running"),
+        texts.contains(&"Running"),
         "should contain 'Running' state, got: {texts:?}"
     );
 }

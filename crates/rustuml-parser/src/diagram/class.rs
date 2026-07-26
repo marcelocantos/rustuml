@@ -94,6 +94,12 @@ pub struct HideShow {
 pub struct ClassEntity {
     pub id: String,
     pub label: String,
+    /// Whether the declaration supplied a distinct `as` alias. PlantUML
+    /// creates the backing Quark from that alias (`CommandCreateClass` via
+    /// `NameAndCodeParser`), so metadata uses it even though the display label
+    /// remains the quoted name.
+    #[serde(default)]
+    pub explicit_alias: bool,
     pub kind: EntityKind,
     pub members: Vec<Member>,
     pub stereotypes: Vec<String>,

@@ -12,6 +12,18 @@ use proptest::prelude::*;
 use rustuml_oracle::compare;
 use rustuml_oracle::runner;
 
+type SequenceCase = (
+    Vec<String>,
+    Vec<(usize, usize, &'static str, String)>,
+    bool,
+    bool,
+    bool,
+);
+type ClassCase = (
+    Vec<(String, Vec<(&'static str, String, &'static str)>)>,
+    Vec<(usize, usize, &'static str)>,
+);
+
 // ---------------------------------------------------------------------------
 // Strategies for generating random PlantUML diagrams
 // ---------------------------------------------------------------------------
@@ -43,13 +55,7 @@ fn sequence_diagram_strategy() -> impl Strategy<Value = String> {
         proptest::bool::ANY,
     )
         .prop_map(
-            |(participants, messages, divider, note, autonumber): (
-                Vec<String>,
-                Vec<(usize, usize, &str, String)>,
-                bool,
-                bool,
-                bool,
-            )| {
+            |(participants, messages, divider, note, autonumber): SequenceCase| {
                 let participants: Vec<String> = participants
                     .into_iter()
                     .collect::<std::collections::HashSet<_>>()
@@ -124,37 +130,32 @@ fn class_diagram_strategy() -> impl Strategy<Value = String> {
         ),
         prop::collection::vec((0..6usize, 0..6usize, relationship()), 0..=4),
     )
-        .prop_map(
-            |(classes, rels): (
-                Vec<(String, Vec<(&str, String, &str)>)>,
-                Vec<(usize, usize, &str)>,
-            )| {
-                let mut body = String::new();
-                let n = classes.len();
+        .prop_map(|(classes, rels): ClassCase| {
+            let mut body = String::new();
+            let n = classes.len();
 
-                for (name, members) in &classes {
-                    writeln!(body, "class {name} {{").unwrap();
-                    for (vis, mname, mtype) in members {
-                        writeln!(body, "  {vis}{mname} : {mtype}").unwrap();
-                    }
-                    writeln!(body, "}}").unwrap();
+            for (name, members) in &classes {
+                writeln!(body, "class {name} {{").unwrap();
+                for (vis, mname, mtype) in members {
+                    writeln!(body, "  {vis}{mname} : {mtype}").unwrap();
                 }
+                writeln!(body, "}}").unwrap();
+            }
 
-                let names: Vec<&str> = classes.iter().map(|(name, _)| name.as_str()).collect();
-                for (from_raw, to_raw, rel) in &rels {
-                    let from_i = from_raw % n;
-                    let mut to_i = to_raw % n;
-                    if to_i == from_i {
-                        to_i = (to_i + 1) % n;
-                    }
-                    let from = names[from_i];
-                    let to = names[to_i];
-                    writeln!(body, "{from} {rel} {to}").unwrap();
+            let names: Vec<&str> = classes.iter().map(|(name, _)| name.as_str()).collect();
+            for (from_raw, to_raw, rel) in &rels {
+                let from_i = from_raw % n;
+                let mut to_i = to_raw % n;
+                if to_i == from_i {
+                    to_i = (to_i + 1) % n;
                 }
+                let from = names[from_i];
+                let to = names[to_i];
+                writeln!(body, "{from} {rel} {to}").unwrap();
+            }
 
-                format!("@startuml\n{body}@enduml\n")
-            },
-        )
+            format!("@startuml\n{body}@enduml\n")
+        })
 }
 
 fn state_name() -> impl Strategy<Value = String> {

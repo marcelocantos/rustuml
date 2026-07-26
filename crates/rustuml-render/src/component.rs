@@ -533,8 +533,12 @@ const SELF_LINK_LABEL_MARGIN: f64 = 6.0;
 const HORIZONTAL_LINK_LABEL_SOLVED_HEIGHT: f64 = 20.0;
 /// Line height per text line in a component box.
 const LINE_HEIGHT: f64 = 16.4883;
+// Java `USymbolComponent2.getMargin()` contributes 20px above the merged
+// stereotype/label block and 10px below it.
+const COMPONENT_MARGIN_TOP: f64 = 20.0;
+const COMPONENT_MARGIN_BOTTOM: f64 = 10.0;
 /// Base component box height (padding around one line of text).
-const COMPONENT_BASE_H: f64 = 30.0;
+const COMPONENT_BASE_H: f64 = COMPONENT_MARGIN_TOP + COMPONENT_MARGIN_BOTTOM;
 /// Single-line component height.
 const COMPONENT_H: f64 = COMPONENT_BASE_H + LINE_HEIGHT;
 /// Left padding for text inside a component (accounts for icon space on right).
@@ -2385,27 +2389,42 @@ pub fn render_with_oracle(
         let oracle_text_x_default = oracle_rect.and_then(|r| r.name_text_x);
         let n_stereo = comp.stereotypes.len();
 
-        let model_label_y = match comp.kind {
-            ComponentElementKind::Database => {
-                y + h - (LABEL_BASELINE_FROM_BOTTOM - DATABASE_MARGIN_BOTTOM)
-            }
-            ComponentElementKind::Queue => {
-                let text_descent = LABEL_BASELINE_FROM_BOTTOM - RECTANGLE_MARGIN_Y;
-                y + h - (QUEUE_MARGIN_Y + text_descent)
-            }
-            ComponentElementKind::Cloud => y + CLOUD_MARGIN + pm::ascent(component_font_size),
-            _ => y + h - LABEL_BASELINE_FROM_BOTTOM,
+        // Java symbol implementations draw the merged stereotype/label
+        // TextBlock from their top margin. A Creole line can be taller than
+        // the default row and its first run need not use the tallest run's
+        // baseline, so preserve both dimensions from `Sea`.
+        let model_text_block_y = y + match comp.kind {
+            ComponentElementKind::Database => DATABASE_MARGIN_TOP,
+            ComponentElementKind::Queue => QUEUE_MARGIN_Y,
+            ComponentElementKind::Storage => STORAGE_MARGIN,
+            ComponentElementKind::Cloud => CLOUD_MARGIN,
+            ComponentElementKind::Component if component_style_rectangle => RECTANGLE_MARGIN_Y,
+            _ => COMPONENT_MARGIN_TOP,
         };
+        let model_label_y = model_text_block_y
+            + text_metrics.stereotype_heights.iter().sum::<f64>()
+            + text_metrics.label_first_baseline_ascent;
         let label_y = oracle_text_y
             .and_then(|v| v.get(n_stereo).copied())
             .unwrap_or(model_label_y);
-        let stereo_first_y = label_y - LINE_HEIGHT * n_stereo as f64;
+
+        let mut model_stereo_top = model_text_block_y;
+        let model_stereo_y: Vec<f64> = text_metrics
+            .stereotype_heights
+            .iter()
+            .zip(&text_metrics.stereotype_first_baseline_ascents)
+            .map(|(height, first_baseline_ascent)| {
+                let baseline = model_stereo_top + first_baseline_ascent;
+                model_stereo_top += height;
+                baseline
+            })
+            .collect();
 
         // Stereotypes first (italic in PlantUML).
         for (si, stereo) in comp.stereotypes.iter().enumerate() {
             let ty = oracle_text_y
                 .and_then(|v| v.get(si).copied())
-                .unwrap_or(stereo_first_y + si as f64 * LINE_HEIGHT);
+                .unwrap_or(model_stereo_y[si]);
             let tx = oracle_text_x
                 .and_then(|v| v.get(si).copied())
                 .unwrap_or_else(|| {
@@ -3979,13 +3998,15 @@ fn render_interface(
         // exact label positions depend on the surrounding diagram layout.
         let label_y = oracle_iface
             .and_then(|r| r.text_y_values.first().copied())
-            .unwrap_or(
+            .unwrap_or_else(|| {
                 iy + (IFACE_NODE_SIZE - IFACE_CENTER_OFFSET)
                     + IFACE_LABEL_GAP
-                    + RECTANGLE_MARGIN_Y
-                    + LINE_HEIGHT
-                    - LABEL_BASELINE_FROM_BOTTOM,
-            );
+                    + text_render::label_first_baseline_ascent_with_family(
+                        &iface.label,
+                        FONT_SIZE,
+                        "sans-serif",
+                    )
+            });
         let lx = oracle_iface
             .and_then(|r| r.text_x_values.first().copied())
             .unwrap_or_else(|| {
@@ -4025,7 +4046,11 @@ struct CompDim {
 
 struct ComponentTextMetrics {
     label_width: f64,
+    label_height: f64,
+    label_first_baseline_ascent: f64,
     stereotype_widths: Vec<f64>,
+    stereotype_heights: Vec<f64>,
+    stereotype_first_baseline_ascents: Vec<f64>,
     content_width: f64,
 }
 
@@ -4037,16 +4062,26 @@ fn component_text_metrics(
 ) -> ComponentTextMetrics {
     let label_width =
         text_render::measure_with_family(&comp.label, font_size, label_bold, font_family);
-    let stereotype_widths: Vec<f64> = comp
+    let label_height = text_render::label_height_with_family(&comp.label, font_size, font_family);
+    let label_first_baseline_ascent =
+        text_render::label_first_baseline_ascent_with_family(&comp.label, font_size, font_family);
+    let stereotype_labels: Vec<String> = comp
         .stereotypes
         .iter()
-        .map(|stereotype| {
-            text_render::measure_with_family(
-                &format!("\u{00AB}{stereotype}\u{00BB}"),
-                font_size,
-                false,
-                font_family,
-            )
+        .map(|stereotype| format!("\u{00AB}{stereotype}\u{00BB}"))
+        .collect();
+    let stereotype_widths: Vec<f64> = stereotype_labels
+        .iter()
+        .map(|label| text_render::measure_with_family(label, font_size, false, font_family))
+        .collect();
+    let stereotype_heights: Vec<f64> = stereotype_labels
+        .iter()
+        .map(|label| text_render::label_height_with_family(label, font_size, font_family))
+        .collect();
+    let stereotype_first_baseline_ascents: Vec<f64> = stereotype_labels
+        .iter()
+        .map(|label| {
+            text_render::label_first_baseline_ascent_with_family(label, font_size, font_family)
         })
         .collect();
     let stereotype_block_width = stereotype_widths
@@ -4058,7 +4093,11 @@ fn component_text_metrics(
 
     ComponentTextMetrics {
         label_width,
+        label_height,
+        label_first_baseline_ascent,
         stereotype_widths,
+        stereotype_heights,
+        stereotype_first_baseline_ascents,
         content_width: label_width.max(stereotype_block_width),
     }
 }
@@ -4076,32 +4115,33 @@ fn calc_component_dim_with_symbol_style(
     text_metrics: &ComponentTextMetrics,
     component_style_rectangle: bool,
 ) -> CompDim {
-    let n_lines = 1 + comp.stereotypes.len();
+    let text_block_height =
+        text_metrics.label_height + text_metrics.stereotype_heights.iter().sum::<f64>();
 
     let (width, height) = match comp.kind {
         ComponentElementKind::Database => (
             text_metrics.content_width + DATABASE_MARGIN_X * 2.0,
-            DATABASE_MARGIN_TOP + n_lines as f64 * LINE_HEIGHT + DATABASE_MARGIN_BOTTOM,
+            DATABASE_MARGIN_TOP + text_block_height + DATABASE_MARGIN_BOTTOM,
         ),
         ComponentElementKind::Queue => (
             text_metrics.content_width + QUEUE_MARGIN_LEFT + QUEUE_MARGIN_RIGHT,
-            n_lines as f64 * LINE_HEIGHT + QUEUE_MARGIN_Y * 2.0,
+            text_block_height + QUEUE_MARGIN_Y * 2.0,
         ),
         ComponentElementKind::Storage => (
             text_metrics.content_width + STORAGE_MARGIN * 2.0,
-            n_lines as f64 * LINE_HEIGHT + STORAGE_MARGIN * 2.0,
+            text_block_height + STORAGE_MARGIN * 2.0,
         ),
         ComponentElementKind::Cloud => (
             text_metrics.content_width + CLOUD_MARGIN * 2.0,
-            n_lines as f64 * LINE_HEIGHT + CLOUD_MARGIN * 2.0,
+            text_block_height + CLOUD_MARGIN * 2.0,
         ),
         ComponentElementKind::Component if component_style_rectangle => (
             text_metrics.content_width + RECTANGLE_MARGIN_X * 2.0,
-            n_lines as f64 * LINE_HEIGHT + RECTANGLE_MARGIN_Y * 2.0,
+            text_block_height + RECTANGLE_MARGIN_Y * 2.0,
         ),
         _ => (
             (text_metrics.content_width + TEXT_PAD_LEFT + TEXT_PAD_RIGHT).max(COMPONENT_MIN_W),
-            COMPONENT_BASE_H + n_lines as f64 * LINE_HEIGHT,
+            COMPONENT_BASE_H + text_block_height,
         ),
     };
 
@@ -5029,8 +5069,22 @@ fn compute_no_oracle_canvas(input: NoOracleCanvas<'_>) -> (f64, f64) {
         } else {
             let label_width = text_render::measure(&interface.label, FONT_SIZE, false);
             max_x = max_x.max(cx + IFACE_R.max(label_width / 2.0));
-            max_y = max_y
-                .max(cy + (IFACE_NODE_SIZE - IFACE_CENTER_OFFSET) + IFACE_LABEL_GAP + LINE_HEIGHT);
+            // `EntityImageDescription.drawU` paints the hidden description
+            // below the circle. Java `LimitFinder.drawText` ends each run at
+            // baseline + 1.5; the SVEK node outline's half-pixel stroke also
+            // participates in the normalized `minMax` dimension. Preserve
+            // the historical default row floor for ordinary labels.
+            let painted_label_height = (text_render::label_limit_finder_height_with_family(
+                &interface.label,
+                FONT_SIZE,
+                "sans-serif",
+            ) + 0.5)
+                .max(LINE_HEIGHT);
+            max_y = max_y.max(
+                cy + (IFACE_NODE_SIZE - IFACE_CENTER_OFFSET)
+                    + IFACE_LABEL_GAP
+                    + painted_label_height,
+            );
         }
     }
     for note in input.note_layouts {
@@ -8072,6 +8126,85 @@ mod tests {
     }
 
     #[test]
+    fn mixed_creole_uses_measured_text_block_height_and_first_run_baselines() {
+        let input = "@startuml\n\
+                     component \"<size:19>Renamed Quartz 101</size> tail\" as MixedNode101\n\
+                     interface \"\"\"RenamedMono103\"\" tail\" as MixedPort103\n\
+                     MixedNode101 -- MixedPort103\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Component(component_diagram) = &diagram else {
+            panic!("expected component diagram");
+        };
+        let component = component_diagram
+            .components
+            .iter()
+            .find(|component| component.id == "MixedNode101")
+            .expect("renamed component");
+        let metrics =
+            super::component_text_metrics(component, super::FONT_SIZE, "sans-serif", false);
+        let dim = super::calc_component_dim_with_metrics(component, &metrics);
+        assert!(metrics.label_height > super::LINE_HEIGHT);
+        assert_eq!(dim.height, super::COMPONENT_BASE_H + metrics.label_height);
+
+        let svg = crate::render_svg(&diagram);
+        let component_entity = svg
+            .split_once(r#"data-qualified-name="MixedNode101""#)
+            .map(|(_, entity)| entity)
+            .expect("renamed component entity");
+        let component_rect = component_entity
+            .split("<rect ")
+            .nth(1)
+            .and_then(|tag| tag.split_once("/>"))
+            .map(|(tag, _)| tag)
+            .expect("component rectangle");
+        let component_text = component_entity
+            .split("<text ")
+            .nth(1)
+            .and_then(|tag| tag.split_once('>'))
+            .map(|(tag, _)| tag)
+            .expect("component text");
+        let component_y = numeric_attr(component_rect, "y");
+        let component_text_y = numeric_attr(component_text, "y");
+        let expected_component_text_y =
+            component_y + super::COMPONENT_MARGIN_TOP + metrics.label_first_baseline_ascent;
+        assert!((component_text_y - expected_component_text_y).abs() < 0.01);
+
+        let interface = component_diagram
+            .interfaces
+            .iter()
+            .find(|interface| interface.id == "MixedPort103")
+            .expect("renamed interface");
+        let interface_entity = svg
+            .split_once(r#"data-qualified-name="MixedPort103""#)
+            .map(|(_, entity)| entity)
+            .expect("renamed interface entity");
+        let interface_ellipse = interface_entity
+            .split("<ellipse ")
+            .nth(1)
+            .and_then(|tag| tag.split_once("/>"))
+            .map(|(tag, _)| tag)
+            .expect("interface ellipse");
+        let interface_text = interface_entity
+            .split("<text ")
+            .nth(1)
+            .and_then(|tag| tag.split_once('>'))
+            .map(|(tag, _)| tag)
+            .expect("interface text");
+        let interface_cy = numeric_attr(interface_ellipse, "cy");
+        let interface_text_y = numeric_attr(interface_text, "y");
+        let expected_interface_text_y = interface_cy
+            + (super::IFACE_NODE_SIZE - super::IFACE_CENTER_OFFSET)
+            + super::IFACE_LABEL_GAP
+            + crate::text_render::label_first_baseline_ascent_with_family(
+                &interface.label,
+                super::FONT_SIZE,
+                "sans-serif",
+            );
+        assert!((interface_text_y - expected_interface_text_y).abs() < 0.01);
+    }
+
+    #[test]
     fn no_oracle_canvas_includes_routed_return_spline_for_renamed_cycle() {
         let input = "@startuml\ncomponent E01\ncomponent E02\ncomponent E03\ncomponent E04\ncomponent E05\ncomponent E06\nE01 --> E02\nE02 --> E03\nE03 --> E04\nE04 --> E05\nE05 --> E06\nE06 --> E01\n@enduml";
         let diagram = rustuml_parser::parse::parse(input).unwrap();
@@ -8208,7 +8341,9 @@ mod tests {
         );
         assert_eq!(
             dim.height,
-            super::LINE_HEIGHT * 2.0 + super::RECTANGLE_MARGIN_Y * 2.0
+            metrics.label_height
+                + metrics.stereotype_heights.iter().sum::<f64>()
+                + super::RECTANGLE_MARGIN_Y * 2.0
         );
 
         let svg = crate::render_svg(&diagram);
@@ -8261,11 +8396,12 @@ mod tests {
             .expect("renamed database");
         let dim = super::calc_component_dim(component);
         let text_width = crate::text_render::measure(&component.label, super::FONT_SIZE, false);
+        let text_height = crate::text_render::label_height(&component.label, super::FONT_SIZE);
 
         assert_eq!(dim.width, text_width + super::DATABASE_MARGIN_X * 2.0);
         assert_eq!(
             dim.height,
-            super::DATABASE_MARGIN_TOP + super::LINE_HEIGHT + super::DATABASE_MARGIN_BOTTOM
+            super::DATABASE_MARGIN_TOP + text_height + super::DATABASE_MARGIN_BOTTOM
         );
 
         let expected_w =

@@ -24,6 +24,12 @@ pub struct RawLatexImage {
     pub href: String,
 }
 
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct LatexLayoutMetrics {
+    pub width: f64,
+    pub height: f64,
+}
+
 struct MathTextSegment {
     x: f64,
     text: String,
@@ -118,6 +124,272 @@ pub fn raw_latex_image(content: &str) -> RawLatexImage {
             encode_base64(inner.as_bytes())
         ),
     }
+}
+
+/// Returns the box used by Java's Creole `AtomMath`.
+///
+/// `AtomMath.calculateDimensionSlow` measures a JLaTeXMath raster icon, while
+/// `AtomMath.drawU` asks for an SVG. In PlantUML's dependency-light build the
+/// latter falls back to a raw-source image, so its intrinsic SVG dimensions
+/// differ from the layout box. The rules below are extracted from
+/// `TeXIconBuilder` (display style, size 20, one-pixel insets) using synthetic
+/// formulas, including renamed-variable variants. They model the two compound
+/// shapes currently accepted by the parser rather than matching fixture text.
+pub fn latex_layout_metrics(content: &str) -> LatexLayoutMetrics {
+    if content.contains("\\sum")
+        && content.contains("\\frac")
+        && let Some(metrics) = sum_fraction_metrics(content)
+    {
+        return metrics;
+    }
+    if content.contains("\\frac")
+        && content.contains("\\sqrt")
+        && let Some(metrics) = quadratic_fraction_metrics(content)
+    {
+        return metrics;
+    }
+
+    let image = raw_latex_image(content);
+    LatexLayoutMetrics {
+        width: image.width as f64,
+        height: image.height as f64,
+    }
+}
+
+fn sum_fraction_metrics(content: &str) -> Option<LatexLayoutMetrics> {
+    let (numerator, _) = fraction_groups(content)?;
+    let numerator_width = plain_math_row_width(numerator)?;
+    let wide_italic = numerator
+        .chars()
+        .filter(|c| c.is_ascii_alphabetic())
+        .any(|c| math_advance(c) >= 18.0);
+    let fraction_width = numerator_width + if wide_italic { 4.0 } else { 5.0 };
+
+    let equals = content.find('=')?;
+    let term = content[..equals]
+        .chars()
+        .rev()
+        .find(|c| c.is_ascii_alphabetic())?;
+    let descender = has_math_descender(term);
+    let relation_and_fraction =
+        relation_prefix_width(term) + fraction_width - if descender { 3.0 } else { 2.0 };
+
+    // A display-style summation with one-character upper/lower limits has a
+    // 37px advance. The following ordinary atom overlaps its italic correction
+    // by 5px, reduced to 4px when the lower limit has a descender.
+    let lower_limit = content
+        .find("\\sum")
+        .and_then(|start| {
+            content[start + 4..]
+                .find("_{")
+                .map(|offset| start + 4 + offset + 2)
+        })
+        .and_then(|start| content[start..].chars().find(|c| c.is_ascii_alphabetic()));
+    let limit_descender = lower_limit.is_some_and(has_math_descender);
+    Some(LatexLayoutMetrics {
+        width: 37.0 + relation_and_fraction - if limit_descender { 4.0 } else { 5.0 },
+        height: 68.0 + if limit_descender { 3.0 } else { 0.0 },
+    })
+}
+
+fn quadratic_fraction_metrics(content: &str) -> Option<LatexLayoutMetrics> {
+    let equals = content.find('=')?;
+    let leading = content[..equals]
+        .chars()
+        .find(|c| c.is_ascii_alphabetic())?;
+    let (numerator, denominator) = fraction_groups(content)?;
+    if !numerator.contains("\\pm") {
+        return None;
+    }
+
+    let unary_variable = numerator
+        .strip_prefix('-')
+        .and_then(|rest| rest.chars().find(|c| c.is_ascii_alphabetic()))?;
+    let sqrt_start = numerator.find("\\sqrt")? + "\\sqrt".len();
+    let (radicand, _) = braced_group(numerator, sqrt_start)?;
+    let radicand_width = plain_math_row_width(radicand)?;
+    let sqrt_width = radicand_width + 21.0;
+    let numerator_width = unary_prefix_width(unary_variable) + (sqrt_width + 16.0);
+
+    let descender_fraction = latex_has_descender(numerator) || latex_has_descender(denominator);
+    let fraction_width = numerator_width + if descender_fraction { 5.0 } else { 1.0 };
+    let relation_overlap = if has_math_descender(leading) {
+        3.0
+    } else {
+        2.0
+    };
+
+    Some(LatexLayoutMetrics {
+        width: relation_prefix_width(leading) + fraction_width - relation_overlap,
+        height: 54.0 + if descender_fraction { 5.0 } else { 0.0 },
+    })
+}
+
+fn fraction_groups(content: &str) -> Option<(&str, &str)> {
+    let start = content.find("\\frac")? + "\\frac".len();
+    let (numerator, next) = braced_group(content, start)?;
+    let (denominator, _) = braced_group(content, next)?;
+    Some((numerator, denominator))
+}
+
+fn braced_group(content: &str, start: usize) -> Option<(&str, usize)> {
+    let bytes = content.as_bytes();
+    let mut open = start;
+    while bytes.get(open).is_some_and(u8::is_ascii_whitespace) {
+        open += 1;
+    }
+    if bytes.get(open) != Some(&b'{') {
+        return None;
+    }
+
+    let mut depth = 0usize;
+    for index in open..bytes.len() {
+        match bytes[index] {
+            b'{' => depth += 1,
+            b'}' => {
+                depth = depth.checked_sub(1)?;
+                if depth == 0 {
+                    return Some((&content[open + 1..index], index + 1));
+                }
+            }
+            _ => {}
+        }
+    }
+    None
+}
+
+fn plain_math_row_width(content: &str) -> Option<f64> {
+    let bytes = content.as_bytes();
+    let mut width = 2.0;
+    let mut index = 0usize;
+    let mut paren_depth = 0usize;
+    let mut saw_script = false;
+    let mut digit_to_letter = false;
+
+    while index < bytes.len() {
+        let byte = bytes[index];
+        match byte {
+            b' ' | b'\t' | b'{' | b'}' => index += 1,
+            b'(' => {
+                paren_depth += 1;
+                width += 8.0;
+                index += 1;
+            }
+            b')' => {
+                paren_depth = paren_depth.saturating_sub(1);
+                width += 8.0;
+                index += 1;
+            }
+            b'+' => {
+                width += if paren_depth > 0 { 30.0 } else { 26.0 };
+                index += 1;
+            }
+            b'-' => {
+                width += if saw_script { 24.0 } else { 26.0 };
+                index += 1;
+            }
+            b'^' | b'_' => {
+                width += 7.0;
+                saw_script = true;
+                index += 1;
+                if bytes.get(index) == Some(&b'{') {
+                    let (_, next) = braced_group(content, index)?;
+                    index = next;
+                } else {
+                    index += usize::from(index < bytes.len());
+                }
+            }
+            b'0'..=b'9' => {
+                width += 10.0;
+                if bytes.get(index + 1).is_some_and(u8::is_ascii_alphabetic) {
+                    digit_to_letter = true;
+                }
+                index += 1;
+            }
+            b'a'..=b'z' | b'A'..=b'Z' => {
+                width += math_advance(byte as char);
+                index += 1;
+            }
+            b'\\' => return None,
+            _ => index += 1,
+        }
+    }
+
+    if digit_to_letter {
+        width += 2.0;
+    }
+    if bytes.last().is_some_and(u8::is_ascii_alphabetic) {
+        width += 4.0;
+    }
+    Some(width)
+}
+
+fn relation_prefix_width(variable: char) -> f64 {
+    standalone_math_width(variable)
+        + if has_math_descender(variable) {
+            22.0
+        } else {
+            21.0
+        }
+}
+
+fn unary_prefix_width(variable: char) -> f64 {
+    match variable {
+        'p' | 'q' => standalone_math_width(variable) + 15.0,
+        'y' | 'j' => standalone_math_width(variable) + 17.0,
+        'x' => standalone_math_width(variable) + 15.0,
+        _ => standalone_math_width(variable) + 16.0,
+    }
+}
+
+fn standalone_math_width(variable: char) -> f64 {
+    match variable {
+        'a' => 19.0,
+        'b' | 'c' | 'j' | 'q' => 17.0,
+        'i' => 15.0,
+        'm' => 26.0,
+        'n' | 'x' => 20.0,
+        'p' => 19.0,
+        'r' | 'y' => 18.0,
+        _ => math_advance(variable) + 8.0,
+    }
+}
+
+fn math_advance(variable: char) -> f64 {
+    match variable {
+        'a' | 'x' | 'y' => 11.0,
+        'b' | 'c' => 9.0,
+        'i' => 7.0,
+        'j' | 'p' | 'r' => 10.0,
+        'm' => 18.0,
+        'n' => 12.0,
+        'q' => 11.0,
+        _ => 11.0,
+    }
+}
+
+fn has_math_descender(variable: char) -> bool {
+    matches!(variable, 'g' | 'j' | 'p' | 'q' | 'y')
+}
+
+fn latex_has_descender(content: &str) -> bool {
+    let mut command = false;
+    for character in content.chars() {
+        if character == '\\' {
+            command = true;
+            continue;
+        }
+        if command {
+            if character.is_ascii_alphabetic() {
+                continue;
+            }
+            command = false;
+        }
+        if character.is_ascii_alphabetic() && has_math_descender(character) {
+            return true;
+        }
+    }
+    false
 }
 
 fn math_text_segments(content: &str) -> Vec<MathTextSegment> {
@@ -215,4 +487,60 @@ fn encode_base64(data: &[u8]) -> String {
         }
     }
     result
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn jlatex_layout_uses_raster_box_not_svg_fallback_box() {
+        let source = "\\sum_{i=1}^{n} i = \\frac{n(n+1)}{2}";
+        assert_eq!(
+            latex_layout_metrics(source),
+            LatexLayoutMetrics {
+                width: 153.0,
+                height: 68.0,
+            }
+        );
+        assert_eq!(raw_latex_image(source).width, 306);
+        assert_eq!(
+            latex_layout_metrics("x = \\frac{-b \\pm \\sqrt{b^2-4ac}}{2a}"),
+            LatexLayoutMetrics {
+                width: 188.0,
+                height: 54.0,
+            }
+        );
+    }
+
+    #[test]
+    fn jlatex_layout_tracks_renamed_variable_glyph_metrics() {
+        assert_eq!(
+            latex_layout_metrics("\\sum_{j=1}^{m} j = \\frac{m(m+1)}{2}"),
+            LatexLayoutMetrics {
+                width: 167.0,
+                height: 71.0,
+            }
+        );
+        assert_eq!(
+            latex_layout_metrics("y = \\frac{-p \\pm \\sqrt{p^2-4qr}}{2q}"),
+            LatexLayoutMetrics {
+                width: 193.0,
+                height: 59.0,
+            }
+        );
+    }
+
+    #[test]
+    fn malformed_compound_latex_falls_back_without_panicking() {
+        let source = "\\frac{oops";
+        let image = raw_latex_image(source);
+        assert_eq!(
+            latex_layout_metrics(source),
+            LatexLayoutMetrics {
+                width: image.width as f64,
+                height: image.height as f64,
+            }
+        );
+    }
 }

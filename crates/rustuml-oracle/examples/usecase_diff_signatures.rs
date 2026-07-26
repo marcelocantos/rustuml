@@ -65,7 +65,7 @@ fn first_diff_signature(diff: &compare::Difference) -> String {
                     None => diff_keys.push(format!("{k}=missing")),
                 }
             }
-            for (k, _) in &act_map {
+            for k in act_map.keys() {
                 if !exp_map.contains_key(k) {
                     diff_keys.push(format!("{k}=extra"));
                 }
@@ -150,29 +150,26 @@ fn main() {
                 compare::compare_svg_strict(&golden, &rust_svg).map_err(|e| format!("cmp: {e}"))?;
             Ok::<_, String>(cmp)
         }));
-        match result {
-            Ok(Ok(cmp)) => {
-                if !cmp.is_match() {
-                    failed += 1;
-                    let n_diffs = cmp.differences.len();
-                    let first = &cmp.differences[0];
-                    let sig = first_diff_signature(first);
-                    let bucket = sig.split('{').next().unwrap_or(&sig).trim().to_string();
-                    *sig_count.entry(bucket.clone()).or_default() += 1;
-                    sig_examples
-                        .entry(bucket.clone())
-                        .or_default()
-                        .push(format!("{name} ({n_diffs}d): {sig}"));
-                    if shown < max {
-                        println!("FAIL {name} ({n_diffs} diffs)");
-                        for (i, d) in cmp.differences.iter().take(3).enumerate() {
-                            println!("  #{i} {}", first_diff_signature(d));
-                        }
-                        shown += 1;
-                    }
+        if let Ok(Ok(cmp)) = result
+            && !cmp.is_match()
+        {
+            failed += 1;
+            let n_diffs = cmp.differences.len();
+            let first = &cmp.differences[0];
+            let sig = first_diff_signature(first);
+            let bucket = sig.split('{').next().unwrap_or(&sig).trim().to_string();
+            *sig_count.entry(bucket.clone()).or_default() += 1;
+            sig_examples
+                .entry(bucket.clone())
+                .or_default()
+                .push(format!("{name} ({n_diffs}d): {sig}"));
+            if shown < max {
+                println!("FAIL {name} ({n_diffs} diffs)");
+                for (i, d) in cmp.differences.iter().take(3).enumerate() {
+                    println!("  #{i} {}", first_diff_signature(d));
                 }
+                shown += 1;
             }
-            Ok(Err(_)) | Err(_) => {}
         }
     }
 

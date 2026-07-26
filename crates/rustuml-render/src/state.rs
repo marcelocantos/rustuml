@@ -1094,9 +1094,16 @@ struct AutonomousScopeLayout {
     height: f64,
 }
 
+struct AutonomousRegion {
+    layout: AutonomousScopeLayout,
+}
+
 struct AutonomousComposite<'a> {
     state: &'a State,
-    inner: AutonomousScopeLayout,
+    regions: Vec<AutonomousRegion>,
+    separator: Option<char>,
+    inner_width: f64,
+    inner_height: f64,
     attribute_height: f64,
     field_margin: f64,
     width: f64,
@@ -1111,16 +1118,31 @@ struct AutonomousRenderContext<'a> {
     arrow_font: &'a StateArrowFont,
 }
 
-fn endpoint_is_in_composite(diagram: &StateDiagram, endpoint: &str, scope: &str) -> bool {
-    endpoint
-        .strip_prefix("[*]")
-        .is_some_and(|pseudo_scope| pseudo_scope == scope)
-        || diagram
+fn is_direct_concurrent_scope(composite: &str, scope: &str) -> bool {
+    if scope == composite {
+        return true;
+    }
+    scope
+        .strip_prefix(composite)
+        .and_then(|suffix| suffix.strip_prefix(".CONC"))
+        .is_some_and(|index| !index.is_empty() && index.chars().all(|ch| ch.is_ascii_digit()))
+}
+
+fn endpoint_concurrent_scope<'a>(
+    diagram: &'a StateDiagram,
+    endpoint: &'a str,
+    composite: &str,
+) -> Option<&'a str> {
+    let scope = if let Some(scope) = endpoint.strip_prefix("[*]") {
+        scope
+    } else {
+        diagram
             .states
             .iter()
             .find(|state| state.id == endpoint)
-            .and_then(|state| state.parent.as_deref())
-            == Some(scope)
+            .and_then(|state| state.parent.as_deref())?
+    };
+    is_direct_concurrent_scope(composite, scope).then_some(scope)
 }
 
 fn collect_autonomous_scope_ids<F>(
@@ -1298,13 +1320,58 @@ fn layout_autonomous_scope(
     })
 }
 
+fn normalize_autonomous_scope(
+    diagram: &StateDiagram,
+    arrow_font: &StateArrowFont,
+    mut scope: AutonomousScopeLayout,
+) -> AutonomousScopeLayout {
+    // `SvekResult.calculateDimension` measures an autonomous image from its
+    // painted `MinMax`, rather than from the translated outer-canvas origin.
+    // `LimitFinder.drawRectangle` contributes the two horizontal stroke-limit
+    // pixels; the vertical ellipse bound needs no corresponding allowance.
+    scope.width = scope.width - scope.origin_x + 2.0;
+    scope.height -= scope.origin_y;
+    for transition_index in &scope.transition_indices {
+        let transition = &diagram.transitions[*transition_index];
+        let Some(label) = transition.label.as_deref() else {
+            continue;
+        };
+        let mut from = state_endpoint_layout_id(&transition.from, true);
+        let mut to = state_endpoint_layout_id(&transition.to, false);
+        if matches!(
+            explicit_transition_direction(diagram, transition),
+            Some(ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Up)
+        ) {
+            std::mem::swap(&mut from, &mut to);
+        }
+        let Some(label_position) = scope
+            .edge_paths
+            .iter()
+            .find(|edge| edge.from == from && edge.to == to)
+            .and_then(|edge| edge.label)
+        else {
+            continue;
+        };
+        let label_right = quantize_svek_coord(label_position.x)
+            + scope.origin_x
+            + 1.0
+            + text_render::measure_with_family(
+                label,
+                arrow_font.size as f64,
+                arrow_font.bold,
+                &arrow_font.family,
+            );
+        scope.width = scope.width.max(label_right + AUTONOMOUS_LABEL_TRAILING);
+    }
+    scope
+}
+
 /// Build the one-level autonomous state image used by
 /// `GroupMakerState.getImage` and `InnerStateAutonom`.
 ///
-/// This first generative slice deliberately accepts one unstyled composite
-/// with direct normal-state children. Unsupported nested/concurrent/annotated
-/// forms stay on the existing renderer until their own Java mechanism is
-/// ported.
+/// Each concurrent region gets its own `GeneralImageBuilder`, then
+/// `ConcurrentStates` combines those autonomous images along the separator
+/// axis before `InnerStateAutonom` wraps the result in the owning state.
 fn build_autonomous_composite<'a>(
     diagram: &'a StateDiagram,
     arrow_font: &StateArrowFont,
@@ -1333,7 +1400,12 @@ fn build_autonomous_composite<'a>(
     let children: Vec<&State> = diagram
         .states
         .iter()
-        .filter(|state| state.parent.as_deref() == Some(composite.id.as_str()))
+        .filter(|state| {
+            state
+                .parent
+                .as_deref()
+                .is_some_and(|scope| is_direct_concurrent_scope(&composite.id, scope))
+        })
         .collect();
     if children.is_empty()
         || children.iter().any(|state| {
@@ -1346,87 +1418,91 @@ fn build_autonomous_composite<'a>(
                 || !state.descriptions.is_empty()
         })
         || diagram.states.iter().any(|state| {
-            state.parent.is_some() && state.parent.as_deref() != Some(composite.id.as_str())
+            state
+                .parent
+                .as_deref()
+                .is_some_and(|scope| !is_direct_concurrent_scope(&composite.id, scope))
                 || !matches!(state.kind, StateKind::Normal)
         })
     {
         return None;
     }
 
-    let mut inner_transition_indices = Vec::new();
+    let mut region_scopes = vec![composite.id.clone()];
+    for child in &children {
+        let scope = child.parent.as_ref()?;
+        if !region_scopes.contains(scope) {
+            region_scopes.push(scope.clone());
+        }
+    }
+    if region_scopes.len() > 1 && composite.concurrent_separator.is_none() {
+        return None;
+    }
+    let mut region_transition_indices = vec![Vec::new(); region_scopes.len()];
     let mut outer_transition_indices = Vec::new();
     for (index, transition) in diagram.transitions.iter().enumerate() {
-        let from_inner = endpoint_is_in_composite(diagram, &transition.from, &composite.id);
-        let to_inner = endpoint_is_in_composite(diagram, &transition.to, &composite.id);
-        match (from_inner, to_inner) {
-            (true, true) => inner_transition_indices.push(index),
-            (false, false) => outer_transition_indices.push(index),
+        let from_scope = endpoint_concurrent_scope(diagram, &transition.from, &composite.id);
+        let to_scope = endpoint_concurrent_scope(diagram, &transition.to, &composite.id);
+        match (from_scope, to_scope) {
+            (Some(from), Some(to)) if from == to => {
+                let region_index = region_scopes.iter().position(|scope| scope == from)?;
+                region_transition_indices[region_index].push(index);
+            }
+            (None, None) => outer_transition_indices.push(index),
             _ => return None,
         }
     }
-    if inner_transition_indices.is_empty() || outer_transition_indices.is_empty() {
+    if region_transition_indices.iter().any(Vec::is_empty) || outer_transition_indices.is_empty() {
         return None;
     }
 
-    let inner_ids = collect_autonomous_scope_ids(diagram, &inner_transition_indices, |state| {
-        state.parent.as_deref() == Some(composite.id.as_str())
-    });
-    let inner_sizes: Vec<(String, f64, f64, StateLayoutShape)> = inner_ids
-        .iter()
-        .map(|id| {
-            let state = diagram.states.iter().find(|state| state.id == *id);
-            let (width, height, shape) = layout_node_size(id, state, false);
-            (id.clone(), width, height, shape)
-        })
-        .collect();
-    // Java creates a fresh `GeneralImageBuilder` for the composite's children.
-    // It uses dot's default 36px rank separation, not the outer SVEK minimum.
-    let mut inner = layout_autonomous_scope(
-        diagram,
-        inner_ids,
-        inner_transition_indices,
-        &inner_sizes,
-        arrow_font,
-        false,
-    )?;
-    // `SvekResult.calculateDimension` measures the autonomous image from its
-    // painted `MinMax`, rather than from the translated outer-canvas origin.
-    // `LimitFinder.drawRectangle` contributes the two horizontal stroke-limit
-    // pixels; the vertical ellipse bound needs no corresponding allowance.
-    inner.width = inner.width - inner.origin_x + 2.0;
-    inner.height -= inner.origin_y;
-    for transition_index in &inner.transition_indices {
-        let transition = &diagram.transitions[*transition_index];
-        let Some(label) = transition.label.as_deref() else {
-            continue;
-        };
-        let mut from = state_endpoint_layout_id(&transition.from, true);
-        let mut to = state_endpoint_layout_id(&transition.to, false);
-        if matches!(
-            explicit_transition_direction(diagram, transition),
-            Some(ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Up)
-        ) {
-            std::mem::swap(&mut from, &mut to);
-        }
-        let Some(label_position) = inner
-            .edge_paths
+    let mut regions = Vec::with_capacity(region_scopes.len());
+    for (scope, transition_indices) in region_scopes.into_iter().zip(region_transition_indices) {
+        let inner_ids = collect_autonomous_scope_ids(diagram, &transition_indices, |state| {
+            state.parent.as_deref() == Some(scope.as_str())
+        });
+        let inner_sizes: Vec<(String, f64, f64, StateLayoutShape)> = inner_ids
             .iter()
-            .find(|edge| edge.from == from && edge.to == to)
-            .and_then(|edge| edge.label)
-        else {
-            continue;
-        };
-        let label_right = quantize_svek_coord(label_position.x)
-            + inner.origin_x
-            + 1.0
-            + text_render::measure_with_family(
-                label,
-                arrow_font.size as f64,
-                arrow_font.bold,
-                &arrow_font.family,
-            );
-        inner.width = inner.width.max(label_right + AUTONOMOUS_LABEL_TRAILING);
+            .map(|id| {
+                let state = diagram.states.iter().find(|state| state.id == *id);
+                let (width, height, shape) = layout_node_size(id, state, false);
+                (id.clone(), width, height, shape)
+            })
+            .collect();
+        // `GroupMakerState.createGeneralImageBuilder` creates one independent
+        // builder per region, using dot's 36px autonomous rank separation.
+        let layout = layout_autonomous_scope(
+            diagram,
+            inner_ids,
+            transition_indices,
+            &inner_sizes,
+            arrow_font,
+            false,
+        )?;
+        regions.push(AutonomousRegion {
+            layout: normalize_autonomous_scope(diagram, arrow_font, layout),
+        });
     }
+    let separator = composite.concurrent_separator;
+    let (inner_width, inner_height) = match separator {
+        // `ConcurrentStates.Separator.VERTICAL.add`: images advance on x.
+        Some('|') => (
+            regions.iter().map(|region| region.layout.width).sum(),
+            regions
+                .iter()
+                .map(|region| region.layout.height)
+                .fold(0.0_f64, f64::max),
+        ),
+        // `ConcurrentStates.Separator.HORIZONTAL.add`: images advance on y.
+        Some('-') | None => (
+            regions
+                .iter()
+                .map(|region| region.layout.width)
+                .fold(0.0_f64, f64::max),
+            regions.iter().map(|region| region.layout.height).sum(),
+        ),
+        Some(_) => return None,
+    };
     let title_height = crate::plantuml_metrics::text_height(STATE_FONT_SIZE);
     let attribute_height =
         composite.descriptions.len() as f64 * crate::plantuml_metrics::text_height(DESC_FONT_SIZE);
@@ -1436,8 +1512,7 @@ fn build_autonomous_composite<'a>(
         .map(|description| text_render::measure(description, DESC_FONT_SIZE, false))
         .fold(0.0_f64, f64::max);
     let field_margin = if attribute_height > 0.0 { 5.0 } else { 0.0 };
-    let width = inner
-        .width
+    let width = inner_width
         .max(text_render::measure(
             &composite.label,
             STATE_FONT_SIZE,
@@ -1447,7 +1522,7 @@ fn build_autonomous_composite<'a>(
         + STATE_DIMENSION_PADDING
         + field_margin;
     let height =
-        inner.height + title_height + attribute_height + STATE_DIMENSION_PADDING + field_margin;
+        inner_height + title_height + attribute_height + STATE_DIMENSION_PADDING + field_margin;
 
     let outer_ids = collect_autonomous_scope_ids(diagram, &outer_transition_indices, |state| {
         state.parent.is_none()
@@ -1476,7 +1551,10 @@ fn build_autonomous_composite<'a>(
     Some((
         AutonomousComposite {
             state: composite,
-            inner,
+            regions,
+            separator,
+            inner_width,
+            inner_height,
             attribute_height,
             field_margin,
             width,
@@ -1500,10 +1578,16 @@ fn autonomous_pseudo_name(id: &str) -> Option<String> {
     } else if id == "__end__" {
         Some(".end.".to_string())
     } else if let Some(scope) = id.strip_prefix("__start__:") {
-        Some(format!("{scope}..start.{scope}"))
+        // `StateDiagram.concurrentState` nests the synthetic CONC group under
+        // the owning state, but its lazily-created pseudo leaf uses the group's
+        // local name (`CONC2`) as the suffix.
+        let local_name = scope.rsplit('.').next().unwrap_or(scope);
+        Some(format!("{scope}..start.{local_name}"))
     } else {
-        id.strip_prefix("__end__:")
-            .map(|scope| format!("{scope}..end.{scope}"))
+        id.strip_prefix("__end__:").map(|scope| {
+            let local_name = scope.rsplit('.').next().unwrap_or(scope);
+            format!("{scope}..end.{local_name}")
+        })
     }
 }
 
@@ -1800,9 +1884,11 @@ fn render_autonomous_composite(diagram: &StateDiagram) -> Option<String> {
     let arrow_font = StateArrowFont::from_diagram(diagram);
     let (composite, outer) = build_autonomous_composite(diagram, &arrow_font)?;
     let mut all_ids = outer.ids.clone();
-    for id in &composite.inner.ids {
-        if !all_ids.contains(id) {
-            all_ids.push(id.clone());
+    for region in &composite.regions {
+        for id in &region.layout.ids {
+            if !all_ids.contains(id) {
+                all_ids.push(id.clone());
+            }
         }
     }
     let allocated_ids = allocate_state_svg_ids(diagram, &all_ids);
@@ -1926,19 +2012,51 @@ fn render_autonomous_composite(diagram: &StateDiagram) -> Option<String> {
     // x=MARGIN and y=titreHeight+field-margin+attribute-height+MARGIN_LINE.
     let inner_offset_x = box_x + 5.0;
     let inner_offset_y = header_divider_y + 5.0;
-    emit_autonomous_scope_entities(
-        &mut svg,
-        &context,
-        &composite.inner,
-        (inner_offset_x, inner_offset_y),
-        None,
-    );
-    emit_autonomous_scope_links(
-        &mut svg,
-        &context,
-        &composite.inner,
-        (inner_offset_x, inner_offset_y),
-    );
+    let mut region_offset_x = inner_offset_x;
+    let mut region_offset_y = inner_offset_y;
+    for (index, region) in composite.regions.iter().enumerate() {
+        let offset = (region_offset_x, region_offset_y);
+        emit_autonomous_scope_entities(&mut svg, &context, &region.layout, offset, None);
+        emit_autonomous_scope_links(&mut svg, &context, &region.layout, offset);
+        match composite.separator {
+            Some('|') => region_offset_x += region.layout.width,
+            Some('-') | None => region_offset_y += region.layout.height,
+            Some(_) => unreachable!("validated concurrent separator"),
+        }
+        if index + 1 < composite.regions.len() {
+            // Java provenance: `ConcurrentStates.Separator.drawSeparator`
+            // uses UStroke(8, 10, 1.5) and extends the line eight pixels past
+            // the composed image's orthogonal dimension.
+            match composite.separator {
+                Some('|') => {
+                    write!(
+                        svg,
+                        r#"<line style="stroke:{};stroke-width:1.5;stroke-dasharray:8,10;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                        skin.stroke,
+                        fmt_f(region_offset_x),
+                        fmt_f(region_offset_x),
+                        fmt_f(inner_offset_y),
+                        fmt_f(inner_offset_y + composite.inner_height + 8.0),
+                    )
+                    .unwrap();
+                }
+                Some('-') => {
+                    write!(
+                        svg,
+                        r#"<line style="stroke:{};stroke-width:1.5;stroke-dasharray:8,10;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                        skin.stroke,
+                        fmt_f(inner_offset_x),
+                        fmt_f(inner_offset_x + composite.inner_width + 8.0),
+                        fmt_f(region_offset_y),
+                        fmt_f(region_offset_y),
+                    )
+                    .unwrap();
+                }
+                None => {}
+                Some(_) => unreachable!("validated concurrent separator"),
+            }
+        }
+    }
     emit_autonomous_scope_entities(
         &mut svg,
         &context,
@@ -5918,6 +6036,42 @@ mod tests {
         let composite_header = svg.find(">HarborMode</text>").unwrap();
         let outer_start = svg.find(r#"data-qualified-name=".start.""#).unwrap();
         assert!(composite_header < outer_start);
+    }
+
+    #[test]
+    fn renamed_three_region_composite_composes_independent_branch_layouts() {
+        let input = concat!(
+            "@startuml\n",
+            "state \"Renamed Signal Observatory 809\" as SignalObservatory809 {\n",
+            "  [*] --> Copper811\n",
+            "  Copper811 --> [*]\n",
+            "  --\n",
+            "  [*] --> Violet821\n",
+            "  Violet821 --> Indigo823\n",
+            "  Indigo823 --> [*]\n",
+            "  --\n",
+            "  [*] --> Amber827\n",
+            "  Amber827 --> Quartz829\n",
+            "  Amber827 --> Silver839\n",
+            "  Quartz829 --> [*]\n",
+            "  Silver839 --> [*]\n",
+            "}\n",
+            "[*] --> SignalObservatory809\n",
+            "SignalObservatory809 --> [*]\n",
+            "@enduml\n",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(
+            svg.contains(
+                r#"data-qualified-name="SignalObservatory809..start.SignalObservatory809""#,
+            )
+        );
+        assert!(svg.contains(r#"data-qualified-name="SignalObservatory809.CONC2..start.CONC2""#,));
+        assert!(svg.contains(r#"data-qualified-name="SignalObservatory809.CONC3..start.CONC3""#,));
+        assert!(svg.contains(r#"data-qualified-name="SignalObservatory809.CONC3.Silver839""#));
+        assert_eq!(svg.matches("stroke-dasharray:8,10;").count(), 2);
     }
 
     #[test]

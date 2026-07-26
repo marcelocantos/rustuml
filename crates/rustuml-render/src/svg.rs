@@ -482,7 +482,7 @@ impl SvgBuilder {
                         // Centre the sprite on the text baseline.
                         let iy = baseline_y - ih * 0.75;
                         self.image(cx, iy, iw, ih, uri);
-                        cx += iw + 1.0; // 1px gap after sprite
+                        cx += iw;
                     }
                 }
                 crate::sprite::TextSegment::OpenIcon(name) => {
@@ -601,7 +601,7 @@ impl SvgBuilder {
                     path = icon.path_d,
                 ));
             }
-            iw + 1.0 // 1px gap
+            iw
         } else {
             0.0
         }

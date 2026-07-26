@@ -283,9 +283,16 @@ impl StateParser {
         // `[*]` pseudo-states. Only meaningful inside a composite — at top level
         // the line is ignored.
         if is_region_separator(line) {
-            self.conc_counter += 1;
-            let n = self.conc_counter;
             if let Some(frame) = self.scope_stack.last_mut() {
+                // Java provenance: `StateDiagram.concurrentState` stores
+                // `direction` on both the owning state and each synthetic
+                // concurrent group. The renderer only needs the owner's value
+                // because all of its region images share one composition axis.
+                if let Some(state) = self.states.iter_mut().find(|state| state.id == frame.base) {
+                    state.concurrent_separator = line.chars().next();
+                }
+                self.conc_counter += 1;
+                let n = self.conc_counter;
                 frame.current = format!("{}.CONC{}", frame.base, n);
             }
             return Ok(());
@@ -675,6 +682,49 @@ mod tests {
     fn parse(input: &str) -> StateDiagram {
         let lines: Vec<String> = input.lines().map(|s| s.to_string()).collect();
         parse_state(&lines).unwrap()
+    }
+
+    #[test]
+    fn concurrent_separator_is_recorded_on_owning_composite() {
+        let d = parse(
+            "state ParallelHarbor {\n\
+             [*] --> Copper\n\
+             Copper --> [*]\n\
+             ||\n\
+             [*] --> Violet\n\
+             Violet --> [*]\n\
+             }",
+        );
+
+        let composite = d
+            .states
+            .iter()
+            .find(|state| state.id == "ParallelHarbor")
+            .unwrap();
+        assert_eq!(composite.concurrent_separator, Some('|'));
+        assert_eq!(
+            d.states
+                .iter()
+                .find(|state| state.label == "Violet")
+                .and_then(|state| state.parent.as_deref()),
+            Some("ParallelHarbor.CONC2"),
+        );
+    }
+
+    #[test]
+    fn top_level_separator_does_not_consume_a_concurrent_scope_number() {
+        let d = parse(
+            "--\n\
+             state ParallelHarbor {\n\
+             [*] --> Copper\n\
+             --\n\
+             [*] --> Violet\n\
+             }",
+        );
+
+        assert!(d.states.iter().any(|state| {
+            state.label == "Violet" && state.parent.as_deref() == Some("ParallelHarbor.CONC2")
+        }));
     }
 
     #[test]

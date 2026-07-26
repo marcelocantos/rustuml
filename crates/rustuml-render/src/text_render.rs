@@ -209,14 +209,21 @@ pub fn label_height_with_family(content: &str, font_size: f64, font_family: &str
     if segments.is_empty() {
         return family_text_height(font_size, metric_family(font_family));
     }
-    let base_height = segments
+    let (min_y, max_y) = segments
         .iter()
-        .map(|seg| {
-            let size = seg.style.size.map(|s| s as f64).unwrap_or(font_size);
-            family_text_height(size, segment_metric_family_for_family(seg, font_family))
+        .map(|segment| {
+            let size = positioned_segment_size(segment, font_size);
+            let height =
+                family_text_height(size, segment_metric_family_for_family(segment, font_family))
+                    .max(10.0);
+            let altitude = segment_starting_altitude(segment);
+            (-height + altitude, altitude)
         })
-        .fold(0.0f64, f64::max);
-    base_height + line_extra_space(&segments)
+        .fold(
+            (f64::INFINITY, f64::NEG_INFINITY),
+            |(min_y, max_y), (top, bottom)| (min_y.min(top), max_y.max(bottom)),
+        );
+    max_y - min_y
 }
 
 /// Ascent for vertical positioning of the text baseline within a label box.
@@ -264,21 +271,73 @@ pub fn label_first_baseline_ascent_with_family(
         return family_ascent(font_size, metric_family(font_family));
     }
 
-    let line_box_height = segments
+    // Java `Sea.doAlign` places each atom at
+    // `-atomHeight + AtomText.getStartingAltitude()`, where sub/sup altitudes
+    // are +3/-6 (`FontPosition.getSpace`). `translateMinYto(0)` then pins the
+    // shared line top. Derive the first atom's baseline from those positions
+    // rather than treating sub/sup space as a blanket line offset.
+    let min_y = segments
         .iter()
-        .map(|seg| {
-            let size = seg.style.size.map(|s| s as f64).unwrap_or(font_size);
-            family_text_height(size, segment_metric_family_for_family(seg, font_family)).max(10.0)
+        .map(|segment| {
+            let size = positioned_segment_size(segment, font_size);
+            let height =
+                family_text_height(size, segment_metric_family_for_family(segment, font_family))
+                    .max(10.0);
+            -height + segment_starting_altitude(segment)
         })
-        .fold(0.0f64, f64::max);
+        .fold(f64::INFINITY, f64::min);
     let first = &segments[0];
-    let first_size = first.style.size.map(|s| s as f64).unwrap_or(font_size);
-    line_box_height
-        - clamp_drop(
-            first_size,
-            segment_metric_family_for_family(first, font_family),
-        )
-        + sub_extra_space(&segments)
+    let first_size = positioned_segment_size(first, font_size);
+    let first_family = segment_metric_family_for_family(first, font_family);
+    let first_height = family_text_height(first_size, first_family).max(10.0);
+    let first_top = -first_height + segment_starting_altitude(first);
+    first_top - min_y + family_ascent(first_size, first_family)
+}
+
+/// Distance from a Creole line's top to the lowest point reported by Java's
+/// `LimitFinder.drawText`.
+///
+/// `LimitFinder` records every `UText` run through `baseline + 1.5`, so this
+/// follows the same mixed-family, mixed-size, and sub/sup baseline offsets as
+/// [`emit_text`] and returns the largest painted bound.
+pub(crate) fn label_limit_finder_height_with_family(
+    content: &str,
+    font_size: f64,
+    font_family: &str,
+) -> f64 {
+    let segments = creole::parse_segments(content);
+    let first_baseline = label_first_baseline_ascent_with_family(content, font_size, font_family);
+    let Some(first) = segments.first() else {
+        return first_baseline + 1.5;
+    };
+    let first_size = first.style.size.map(f64::from).unwrap_or(font_size);
+    let line_bottom_drop = clamp_drop(
+        first_size,
+        segment_metric_family_for_family(first, font_family),
+    );
+    let max_baseline_offset = segments
+        .iter()
+        .map(|segment| {
+            let nominal_size = segment.style.size.map(f64::from).unwrap_or(font_size);
+            let own_drop = clamp_drop(
+                nominal_size,
+                segment_metric_family_for_family(segment, font_family),
+            );
+            let line_descent_diff = line_bottom_drop - own_drop;
+            match segment.style.baseline_shift {
+                Some("sub") => {
+                    let small = (nominal_size as i32 - 3).max(2) as f64;
+                    3.0 + pm::descent(nominal_size) - pm::descent(small) + line_descent_diff
+                }
+                Some("super") => {
+                    let small = (nominal_size as i32 - 3).max(2) as f64;
+                    -6.0 + pm::descent(nominal_size) - pm::descent(small) + line_descent_diff
+                }
+                _ => line_descent_diff,
+            }
+        })
+        .fold(0.0_f64, f64::max);
+    first_baseline + max_baseline_offset + 1.5
 }
 
 pub(crate) fn text_height_for_family(font_size: f64, font_family: &str) -> f64 {
@@ -289,21 +348,21 @@ pub(crate) fn ascent_for_family(font_size: f64, font_family: &str) -> f64 {
     family_ascent(font_size, metric_family(font_family))
 }
 
-/// Extra vertical space the line needs beyond the maximum atom height to
-/// fit `<sub>` descenders and `<sup>` ascenders — matches Java's
-/// `TileText.spaceBottom = abs(getSpace())` per atom kind. We treat sub
-/// and sup as additive (line can host both), capped at one each.
-fn line_extra_space(segments: &[Segment]) -> f64 {
-    let mut has_sub = false;
-    let mut has_sup = false;
-    for s in segments {
-        match s.style.baseline_shift {
-            Some("sub") => has_sub = true,
-            Some("super") => has_sup = true,
-            _ => {}
-        }
+fn positioned_segment_size(segment: &Segment, base_size: f64) -> f64 {
+    let nominal = segment.style.size.map(f64::from).unwrap_or(base_size);
+    if segment.style.baseline_shift.is_some() {
+        (nominal - 3.0).max(2.0)
+    } else {
+        nominal
     }
-    (if has_sub { 3.0 } else { 0.0 }) + (if has_sup { 6.0 } else { 0.0 })
+}
+
+fn segment_starting_altitude(segment: &Segment) -> f64 {
+    match segment.style.baseline_shift {
+        Some("sub") => 3.0,
+        Some("super") => -6.0,
+        _ => 0.0,
+    }
 }
 
 /// Portion of the extra space that pushes the baseline down (sub glyphs

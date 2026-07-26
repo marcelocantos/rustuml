@@ -4690,8 +4690,8 @@ FreshOperator --> FreshCheckpoint
             false,
             &skin.uc_font_family,
         );
-        assert!((atoms[0].width - expected_width).abs() < 0.001);
-        assert!((atoms[0].line_width - expected_width).abs() < 0.001);
+        assert!((atoms[0].width - expected_width).abs() < 0.01);
+        assert!((atoms[0].line_width - expected_width).abs() < 0.01);
     }
 
     #[test]

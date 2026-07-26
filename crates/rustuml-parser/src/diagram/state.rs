@@ -151,6 +151,13 @@ pub struct State {
     /// i.e. it contains nested states. Rendered as a cluster.
     #[serde(default)]
     pub composite: bool,
+    /// Separator used between this composite's concurrent regions.
+    ///
+    /// PlantUML records the first character of `--` / `||` on the owning
+    /// state group and lets `ConcurrentStates.Separator` choose whether the
+    /// independently-laid-out region images stack vertically or horizontally.
+    #[serde(default)]
+    pub concurrent_separator: Option<char>,
     /// Qualified id of the immediately-enclosing composite state, if this
     /// state is nested inside one. `None` for top-level states.
     #[serde(default)]

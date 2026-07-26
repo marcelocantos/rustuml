@@ -12,7 +12,7 @@
 //! - Visibility modifier markers with `data-visibility-modifier` attributes
 //! - Inline `style` attributes for strokes (not `stroke="..."` attributes)
 
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::fmt::Write;
 
 use rustuml_layout::graph::{
@@ -167,14 +167,13 @@ const NOTE_NESTED_BULLET_START_ALTITUDE: f64 = -7.0;
 /// 13px note font: the marker run (`1.`) is followed by this fixed gap before
 /// the item text, independent of its label and nesting level.
 const NOTE_ORDERED_NUMBER_GAP: f64 = 4.1133;
-/// PlantUML's table cells use the same extracted 13px-font atom gap on both
-/// sides of their text run.
-const NOTE_TABLE_CELL_PAD_X: f64 = 4.1133;
-/// `SheetBlock1` bold table headers shift inward by this font-metric residual;
-/// the column width reserves the same amount on the opposite side.
-const NOTE_TABLE_HEADER_X_ADJUST: f64 = 0.1714;
 const NOTE_TABLE_GRID_TOP_PAD: f64 = 2.0;
 const NOTE_TABLE_BODY_EXTRA: f64 = 4.0;
+const NOTE_TREE_TRUNK_X: f64 = 8.0;
+const NOTE_TREE_BRANCH_WIDTH: f64 = 8.0;
+const NOTE_TREE_TEXT_X: f64 = 18.0;
+const NOTE_TREE_GRID_TOP_PAD: f64 = 2.0;
+const NOTE_TREE_BODY_EXTRA: f64 = 4.0;
 /// `EntityImageAssociationPoint.SIZE`: PlantUML lays out and paints the
 /// synthetic point inserted into an association-class base edge as a 4px
 /// circle.
@@ -391,6 +390,8 @@ struct EntityDims {
     has_stereotypes: bool,
     /// Number of visible stereotype lines in the header.
     stereotype_count: usize,
+    /// Whether an inline sprite replaces the ordinary circled header badge.
+    has_header_sprite: bool,
     /// Source line number from the parser (1-based).
     source_line: usize,
     /// Visibility flags from `hide`/`show` directives applied to this entity.
@@ -760,6 +761,7 @@ fn calc_entity_dims(
             name_width,
             has_stereotypes: false,
             stereotype_count: 0,
+            has_header_sprite: false,
             hide,
             source_line,
         };
@@ -784,6 +786,7 @@ fn calc_entity_dims(
             name_width,
             has_stereotypes: false,
             stereotype_count: 0,
+            has_header_sprite: false,
             hide,
             source_line,
         };
@@ -800,6 +803,7 @@ fn calc_entity_dims(
     } else {
         0
     };
+    let header_sprite = entity_header_sprite(entity, sprites);
 
     // Split members into fields and methods. For enums with method members
     // (or any explicit visibility marker), PlantUML uses the standard
@@ -853,7 +857,10 @@ fn calc_entity_dims(
     // Compute width from icon area + name + member text widths. When the
     // circle is hidden the icon contributes no horizontal real estate; the
     // name is centred in the available header instead.
-    let icon_area = if hide.circle {
+    let icon_area = if let Some((_, sprite)) = header_sprite {
+        let (width, _) = crate::sprite::sprite_dimensions(sprite);
+        HEADER_CIRCLE_LEFT_MARGIN + width as f64 + ICON_TEXT_GAP
+    } else if hide.circle {
         // `MyType` etc. golden output shows the name horizontally centred
         // inside a 2*HEADER_RIGHT_PAD-padded box; treat the icon area as
         // empty padding to recover the matching width.
@@ -923,7 +930,7 @@ fn calc_entity_dims(
                 .iter()
                 .map(|text| {
                     if let Some(latex) = latex_member_content(text) {
-                        crate::math::raw_latex_image(latex).width as f64
+                        crate::math::latex_layout_metrics(latex).width
                     } else {
                         text_render::measure_no_underline_with_family(
                             text,
@@ -999,10 +1006,32 @@ fn calc_entity_dims(
         hide,
         has_stereotypes,
         stereotype_count,
+        header_sprite.is_some(),
         font.text_padding,
+        font.attr_font_size.or(font.font_size).unwrap_or(14),
+        &font.name_family,
     );
     let field_padding = visible_field_blocks as f64 * font.text_padding * 2.0;
     let method_padding = visible_method_blocks as f64 * font.text_padding * 2.0;
+    let member_font_size = font.attr_font_size.unwrap_or(FONT_SIZE as u32) as f64;
+    let field_content_height = members_content_height(
+        entity
+            .members
+            .iter()
+            .filter(|member| member.kind == MemberKind::Field && !hide.hides_member(member)),
+        member_font_size,
+        &font.family,
+        font.monospace_member_spaces(),
+    );
+    let method_content_height = members_content_height(
+        entity
+            .members
+            .iter()
+            .filter(|member| member.kind == MemberKind::Method && !hide.hides_member(member)),
+        member_font_size,
+        &font.family,
+        font.monospace_member_spaces(),
+    );
 
     let height = if uses_document_order_body(entity, hide) {
         header_h + document_order_body_height(entity, font)
@@ -1010,7 +1039,7 @@ fn calc_entity_dims(
         // Both compartments hidden — header only, no body or separators.
         header_h
     } else if entity.kind == EntityKind::Object {
-        header_h + COMPARTMENT_PAD + eff_field_count as f64 * MEMBER_LINE_HEIGHT + field_padding
+        header_h + COMPARTMENT_PAD + field_content_height + field_padding
     } else if entity.members.is_empty()
         || (eff_field_count == 0 && eff_method_count == 0 && !enum_classic)
     {
@@ -1021,9 +1050,7 @@ fn calc_entity_dims(
             + if hide.methods { 0.0 } else { COMPARTMENT_PAD }
     } else if enum_classic {
         // Enum: header + values + bottom separator.
-        header_h
-            + (COMPARTMENT_PAD + eff_field_count as f64 * MEMBER_LINE_HEIGHT + field_padding)
-            + COMPARTMENT_PAD
+        header_h + (COMPARTMENT_PAD + field_content_height + field_padding) + COMPARTMENT_PAD
     } else {
         // Class/interface/abstract/annotation.
         // Java `BodierLikeClassOrObject.getBody()` returns only the visible
@@ -1031,12 +1058,12 @@ fn calc_entity_dims(
         let fields_section = if hide.fields {
             0.0
         } else {
-            COMPARTMENT_PAD + eff_field_count as f64 * MEMBER_LINE_HEIGHT + field_padding
+            COMPARTMENT_PAD + field_content_height + field_padding
         };
         let methods_section = if hide.methods {
             0.0
         } else {
-            COMPARTMENT_PAD + eff_method_count as f64 * MEMBER_LINE_HEIGHT + method_padding
+            COMPARTMENT_PAD + method_content_height + method_padding
         };
         header_h + fields_section + methods_section
     };
@@ -1061,6 +1088,7 @@ fn calc_entity_dims(
         name_width,
         has_stereotypes,
         stereotype_count,
+        has_header_sprite: header_sprite.is_some(),
         source_line,
         hide,
     }
@@ -1082,8 +1110,81 @@ fn uses_document_order_body(entity: &ClassEntity, hide: HideFlags) -> bool {
 }
 
 fn member_block_height(member: &Member, font: &ClassFontOverrides) -> f64 {
-    member_display_line_count(member, font.monospace_member_spaces()) as f64 * MEMBER_SPACING
-        + font.text_padding * 2.0
+    member_content_height(
+        member,
+        font.attr_font_size.unwrap_or(FONT_SIZE as u32) as f64,
+        &font.family,
+        font.monospace_member_spaces(),
+    ) + font.text_padding * 2.0
+}
+
+/// Height allocated by PlantUML's `MethodsOrFieldsArea` for one member.
+/// Each display line is a `SheetBlock1` row whose atoms are measured by
+/// `AtomText.calculateDimensionSlow`; that calculation honours resolved
+/// Creole size/family and clamps short atoms to a 10px minimum.
+fn member_content_height(
+    member: &Member,
+    font_size: f64,
+    font_family: &str,
+    monospace_spaces: bool,
+) -> f64 {
+    member_display_lines(member, monospace_spaces)
+        .iter()
+        .map(|line| {
+            latex_member_content(line).map_or_else(
+                || text_render::label_height_with_family(line, font_size, font_family).max(10.0),
+                |latex| crate::math::latex_layout_metrics(latex).height,
+            )
+        })
+        .sum()
+}
+
+fn members_content_height<'a>(
+    members: impl IntoIterator<Item = &'a Member>,
+    font_size: f64,
+    font_family: &str,
+    monospace_spaces: bool,
+) -> f64 {
+    members
+        .into_iter()
+        .map(|member| member_content_height(member, font_size, font_family, monospace_spaces))
+        .sum()
+}
+
+fn member_first_baseline_ascent(member: &Member, attr_font: AttrFont<'_>) -> f64 {
+    member_display_lines(member, attr_font.monospace_spaces)
+        .first()
+        .map(|line| {
+            text_render::label_first_baseline_ascent_with_family(
+                line,
+                attr_font.size as f64,
+                attr_font.family,
+            )
+        })
+        .unwrap_or_else(|| text_render::ascent_for_family(attr_font.size as f64, attr_font.family))
+}
+
+fn member_line_baseline_offset(
+    lines: &[String],
+    line_index: usize,
+    attr_font: AttrFont<'_>,
+) -> f64 {
+    lines[..line_index]
+        .iter()
+        .map(|line| {
+            latex_member_content(line).map_or_else(
+                || {
+                    text_render::label_height_with_family(
+                        line,
+                        attr_font.size as f64,
+                        attr_font.family,
+                    )
+                    .max(10.0)
+                },
+                |latex| crate::math::latex_layout_metrics(latex).height,
+            )
+        })
+        .sum()
 }
 
 fn decorated_body_block_height(
@@ -1134,19 +1235,35 @@ fn document_order_body_height(entity: &ClassEntity, font: &ClassFontOverrides) -
 /// `HeaderLayout.getDimension` takes the maximum of the circled-character
 /// block and `stereotype + name + 10`. `SheetBlock1.calculateDimensionSlow`
 /// adds twice the global padding to each Display block.
+#[allow(clippy::too_many_arguments)]
 fn class_header_height(
     entity: &ClassEntity,
     hide: HideFlags,
     has_stereotypes: bool,
     stereotype_count: usize,
+    has_header_sprite: bool,
     text_padding: f64,
+    name_font_size: u32,
+    name_font_family: &str,
 ) -> f64 {
+    let name_content_height: f64 = escaped_newline_lines(&entity.label)
+        .iter()
+        .map(|line| {
+            text_render::label_height_with_family(line, name_font_size as f64, name_font_family)
+                .max(10.0)
+        })
+        .sum();
+    // `EntityImageClassHeader` composes the name's `SheetBlock1` with the
+    // 10px `HeaderLayout` vertical envelope, then takes the maximum with the
+    // complete circled-character block. Multi-line or enlarged names can
+    // therefore grow the header beyond the default 32px icon envelope.
+    let name_driven_height = name_content_height + 10.0 + text_padding * 2.0;
     if has_stereotypes {
         HEADER_HEIGHT + stereotype_header_extra_height(stereotype_count) + text_padding * 4.0
-    } else if hide.circle || entity.kind == EntityKind::Object {
-        HEADER_H_NO_CIRCLE + text_padding * 2.0
+    } else if has_header_sprite || hide.circle || entity.kind == EntityKind::Object {
+        (HEADER_H_NO_CIRCLE + text_padding * 2.0).max(name_driven_height)
     } else {
-        HEADER_HEIGHT.max(HEADER_H_NO_CIRCLE + text_padding * 2.0)
+        HEADER_HEIGHT.max(name_driven_height)
     }
 }
 
@@ -1169,6 +1286,29 @@ fn format_stereotype_lines(stereotypes: &[String]) -> Vec<String> {
 fn stereotype_refs_sprite(stereotype: &str, sprites: &HashMap<String, SpriteData>) -> bool {
     let name = stereotype.trim().trim_start_matches('$');
     sprites.contains_key(name)
+}
+
+fn entity_header_sprite<'a>(
+    entity: &ClassEntity,
+    sprites: &'a HashMap<String, SpriteData>,
+) -> Option<(&'a str, &'a SpriteData)> {
+    entity.stereotypes.iter().find_map(|stereotype| {
+        let name = stereotype.trim().trim_start_matches('$');
+        sprites
+            .get_key_value(name)
+            .map(|(name, sprite)| (name.as_str(), sprite))
+    })
+}
+
+fn sprite_surface_rgb(color: &str) -> [u8; 3] {
+    let hex = color.strip_prefix('#').unwrap_or(color);
+    if hex.len() == 6 {
+        let channel = |offset| u8::from_str_radix(&hex[offset..offset + 2], 16).ok();
+        if let (Some(red), Some(green), Some(blue)) = (channel(0), channel(2), channel(4)) {
+            return [red, green, blue];
+        }
+    }
+    [255, 255, 255]
 }
 
 // ---------------------------------------------------------------------------
@@ -1206,6 +1346,16 @@ pub(crate) fn translate_qualified_name(label: &str) -> String {
 /// To handle both, drop any containing package whose path is a prefix of a
 /// deeper containing package, then join the survivors (outermost first).
 fn qualify_entity(diagram: &ClassDiagram, entity: &ClassEntity, translated_label: &str) -> String {
+    // `CommandCreateClass.executeArg` builds the Quark from
+    // `NameAndCodeParser.CODE`; when `DISPLAY as CODE` was used, the alias is
+    // therefore the qualified-name leaf while DISPLAY remains presentation.
+    let translated_alias;
+    let translated_label = if entity.explicit_alias {
+        translated_alias = translate_qualified_name(&entity.id);
+        translated_alias.as_str()
+    } else {
+        translated_label
+    };
     // Containing packages, in declaration (outermost → innermost nesting)
     // order, which `diagram.packages` preserves.
     let pkgs: Vec<&str> = diagram
@@ -1805,6 +1955,7 @@ pub fn render_with_oracle(
     for (entity, dim) in diagram.entities.iter().zip(&dims) {
         layout.add_node(&entity.id, &entity.label, dim.width, dim.height);
     }
+    add_single_strategy_links(&mut layout, diagram);
     // `AbstractClassOrObjectDiagram.Association.createNew` replaces the A-B
     // association with A->apoint and apoint->B links of the original length,
     // then connects the 4px point to C. A one-length C link is horizontal in
@@ -1822,7 +1973,7 @@ pub fn render_with_oracle(
             continue;
         };
         let note_id = attached_note_layout_id(idx);
-        let (width, height) = note_box_dims(note);
+        let (width, height) = note_box_dims(note, &diagram.meta.sprites);
         layout.add_node(&note_id, "", width, height);
         match position {
             NotePosition::Left => {
@@ -1899,7 +2050,9 @@ pub fn render_with_oracle(
             width: rel
                 .label
                 .as_deref()
-                .map(|label| text_render::measure(label, RELATIONSHIP_LABEL_FONT_SIZE, false))
+                .map(|label| {
+                    text_render::measure_no_underline(label, RELATIONSHIP_LABEL_FONT_SIZE, false)
+                })
                 .unwrap_or(0.0)
                 + if rel.label_arrow == LinkArrow::None {
                     0.0
@@ -2019,6 +2172,71 @@ pub fn render_with_oracle(
         None,
         cs,
     )
+}
+
+/// Port of `CucaDiagram.applySingleStrategy` via `Magma` and `SquareMaker`.
+///
+/// Each container's entities that have no links are joined by invisible
+/// length-one rows and length-two columns. The links are layout inputs only:
+/// dot still chooses every coordinate and route.
+fn add_single_strategy_links(layout: &mut LayoutGraph, diagram: &ClassDiagram) {
+    let mut linked = HashSet::new();
+    for relationship in &diagram.relationships {
+        linked.insert(relationship.from.as_str());
+        linked.insert(relationship.to.as_str());
+    }
+    for association in &diagram.association_classes {
+        linked.insert(association.a.as_str());
+        linked.insert(association.b.as_str());
+        linked.insert(association.c.as_str());
+    }
+    for target in diagram
+        .notes
+        .iter()
+        .filter_map(|note| note.target.as_deref())
+    {
+        linked.insert(target);
+    }
+
+    let packaged = diagram
+        .packages
+        .iter()
+        .flat_map(|package| package.entities.iter().map(String::as_str))
+        .collect::<HashSet<_>>();
+    let root = diagram
+        .entities
+        .iter()
+        .map(|entity| entity.id.as_str())
+        .filter(|id| !packaged.contains(id) && !linked.contains(id))
+        .collect::<Vec<_>>();
+    add_square_invisible_links(layout, &root);
+
+    for package in &diagram.packages {
+        let standalones = package
+            .entities
+            .iter()
+            .map(String::as_str)
+            .filter(|id| !linked.contains(id))
+            .collect::<Vec<_>>();
+        add_square_invisible_links(layout, &standalones);
+    }
+}
+
+fn add_square_invisible_links(layout: &mut LayoutGraph, entities: &[&str]) {
+    if entities.len() < 3 {
+        return;
+    }
+    let branch = (entities.len() as f64).sqrt().ceil() as usize;
+    let mut row_head = 0usize;
+    for index in 1..entities.len() {
+        if index - row_head == branch {
+            layout.add_invisible_edge_with_minlen(entities[row_head], entities[index], 1);
+            row_head = index;
+        } else {
+            layout.add_plantuml_svek_line0_edge(entities[index - 1], entities[index]);
+            layout.add_invisible_edge_with_minlen(entities[index - 1], entities[index], 0);
+        }
+    }
 }
 
 /// Class font overrides derived from explicit `skinparam Class*Font*` settings.
@@ -3157,9 +3375,32 @@ fn render_plantuml_svg(
     } else {
         let mut max_x = 0.0_f64;
         let mut max_y = 0.0_f64;
+        let mut latex_image_max_x = 0.0_f64;
         for (i, (x, y)) in entity_positions.iter().enumerate() {
             max_x = max_x.max(x + dims[i].width);
             max_y = max_y.max(y + dims[i].height);
+            let entity = &diagram.entities[i];
+            let hide = resolve_hide(entity, &diagram.hide_show);
+            for member in entity
+                .members
+                .iter()
+                .filter(|member| !hide.hides_member(member))
+            {
+                let text_offset = if member.visibility == Visibility::Default {
+                    ENUM_TEXT_OFFSET
+                } else {
+                    MEMBER_TEXT_INSET + font.circled_radius()
+                };
+                for line in member_display_lines(member, font.monospace_member_spaces()) {
+                    if let Some(latex) = latex_member_content(&line) {
+                        latex_image_max_x = latex_image_max_x.max(
+                            x + font.text_padding
+                                + text_offset
+                                + crate::math::raw_latex_image(latex).width as f64,
+                        );
+                    }
+                }
+            }
         }
         for &(_, node_idx, _) in &attached_notes {
             if let Some(pos) = positions.get(node_idx) {
@@ -3199,7 +3440,9 @@ fn render_plantuml_svg(
             let text_width = relationship
                 .label
                 .as_deref()
-                .map(|label| text_render::measure(label, RELATIONSHIP_LABEL_FONT_SIZE, false))
+                .map(|label| {
+                    text_render::measure_no_underline(label, RELATIONSHIP_LABEL_FONT_SIZE, false)
+                })
                 .unwrap_or(0.0);
             let arrow_width = if relationship.label_arrow == LinkArrow::None {
                 0.0
@@ -3234,8 +3477,14 @@ fn render_plantuml_svg(
         } else {
             0
         };
+        // Java's SVG backend expands the canvas around the fallback image
+        // payload even though `AtomMath` contributed the smaller raster box to
+        // entity layout. One pixel is retained beyond the image's right edge.
+        let latex_image_w = latex_image_max_x.ceil() as i64 + i64::from(latex_image_max_x > 0.0);
         (
-            (max_x as i64 + extent_pad).max(decorated_w),
+            (max_x as i64 + extent_pad)
+                .max(decorated_w)
+                .max(latex_image_w),
             (max_y + layout.bottom_h) as i64 + extent_pad,
         )
     };
@@ -3566,6 +3815,7 @@ fn render_plantuml_svg(
             header_gradient_fill.as_deref(),
             entity_suppress_header_icon,
             shadow_filter_id.as_deref(),
+            &diagram.meta.sprites,
         );
 
         svg.push_str("</g>");
@@ -3647,8 +3897,10 @@ fn render_plantuml_svg(
             render_attached_note(
                 &mut svg,
                 note,
-                pos.x + MARGIN + layout_x_bias + body_dx,
-                pos.y + MARGIN + body_dy,
+                // SVEK consumes Graphviz's two-decimal SVG coordinates before
+                // `Opale` adds its local note and atom margins.
+                ((pos.x + MARGIN + layout_x_bias + body_dx) * 100.0).round() / 100.0,
+                ((pos.y + MARGIN + body_dy) * 100.0).round() / 100.0,
                 pos.width,
                 pos.height,
                 tip_x + MARGIN + layout_x_bias,
@@ -3656,6 +3908,7 @@ fn render_plantuml_svg(
                 position,
                 &qualified_name,
                 &entity_id,
+                &diagram.meta.sprites,
             );
         }
     }
@@ -3894,16 +4147,25 @@ fn emit_layout_package_cluster(svg: &mut String, cluster: &LayoutPackageCluster,
                 fmt4(line_y),
             )
             .unwrap();
-            write!(
+            // `ClusterHeader` renders the title through the normal Creole
+            // `Display` pipeline with a bold base font. Segment-level colour,
+            // italic and other inline styles therefore split into adjacent
+            // atoms while inheriting the package title's bold weight.
+            text_render::emit_text(
                 svg,
-                r#"<text fill="{}" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
-                cluster.font_fill,
-                fmt4(label_w),
-                fmt4(text_x),
-                fmt4(text_y),
-                escape_xml(&cluster.label),
-            )
-            .unwrap();
+                &cluster.label,
+                &TextBase {
+                    x: text_x,
+                    y: text_y,
+                    font_size: FONT_SIZE as u32,
+                    font_family: "sans-serif",
+                    fill: &cluster.font_fill,
+                    bold: true,
+                    italic: false,
+                    underline: false,
+                    skip_underline: true,
+                },
+            );
             for (line_index, stereotype) in cluster.stereotype_lines.iter().enumerate() {
                 let width = text_render::measure_no_underline(stereotype, FONT_SIZE, false);
                 let mut text = String::new();
@@ -4767,6 +5029,7 @@ fn render_entity_content(
     header_gradient_fill: Option<&str>,
     suppress_header_icon: bool,
     shadow_filter_id: Option<&str>,
+    sprites: &HashMap<String, SpriteData>,
 ) {
     if matches!(entity.kind, EntityKind::Circle | EntityKind::Diamond) {
         if let Some(anchor) = link_anchor {
@@ -5116,7 +5379,10 @@ fn render_entity_content(
             dim.hide,
             dim.has_stereotypes,
             dim.stereotype_count,
+            dim.has_header_sprite,
             text_padding,
+            font.attr_font_size.or(font.font_size).unwrap_or(14),
+            &font.name_family,
         );
         Some(
             oracle_rect
@@ -5215,6 +5481,36 @@ fn render_entity_content(
             )
         })
         .fold(0.0_f64, f64::max);
+    let header_sprite = entity_header_sprite(entity, sprites);
+    let header_sprite_position = header_sprite.map(|(_, sprite)| {
+        let (sprite_width, sprite_height) = crate::sprite::sprite_dimensions(sprite);
+        let content_width = HEADER_CIRCLE_LEFT_MARGIN
+            + sprite_width as f64
+            + ICON_TEXT_GAP
+            + name_tl
+            + HEADER_RIGHT_PAD
+            + text_padding * 2.0;
+        let slack = (dim.width - content_width).max(0.0) / 2.0;
+        (
+            x + slack + HEADER_CIRCLE_LEFT_MARGIN + text_padding,
+            y + (class_header_height(
+                entity,
+                dim.hide,
+                dim.has_stereotypes,
+                dim.stereotype_count,
+                dim.has_header_sprite,
+                text_padding,
+                name_font_size,
+                &font.name_family,
+            ) - sprite_height as f64)
+                / 2.0,
+            x + slack
+                + HEADER_CIRCLE_LEFT_MARGIN
+                + sprite_width as f64
+                + ICON_TEXT_GAP
+                + text_padding,
+        )
+    });
     let is_object_entity = entity.kind == EntityKind::Object;
     let header_positions = (!dim.hide.circle
         && !suppress_header_icon
@@ -5276,7 +5572,10 @@ fn render_entity_content(
             dim.hide,
             dim.has_stereotypes,
             dim.stereotype_count,
+            dim.has_header_sprite,
             text_padding,
+            name_font_size,
+            &font.name_family,
         );
         // Java `HeaderLayout.drawU` vertically centres the complete
         // circled-character block inside the measured header.
@@ -5414,6 +5713,29 @@ fn render_entity_content(
         write!(svg, r#"<path d="{}" fill="{}"/>"#, glyph_path, glyph_fill).unwrap();
     }
 
+    if oracle_images.is_empty()
+        && let Some(((_, sprite), (image_x, image_y, _))) =
+            header_sprite.zip(header_sprite_position)
+        && let Ok(uri) = crate::sprite::sprite_to_data_uri_scaled_with_colors(
+            sprite,
+            1.0,
+            sprite_surface_rgb(fill),
+            [0, 0, 0],
+        )
+    {
+        let (width, height) = crate::sprite::scaled_sprite_dimensions(sprite, 1.0);
+        write!(
+            svg,
+            r#"<image height="{}" width="{}" x="{}" xlink:href="{}" y="{}"/>"#,
+            height,
+            width,
+            crate::plantuml_metrics::fmt_coord(image_x),
+            uri,
+            crate::plantuml_metrics::fmt_coord(image_y),
+        )
+        .unwrap();
+    }
+
     // Stereotype text (if present).
     // Name font size/style honour `skinparam ClassFontSize`/`ClassFontStyle`.
     // PlantUML sizes the entity name from `ClassFontSize`; when that is unset
@@ -5510,6 +5832,8 @@ fn render_entity_content(
                 .or_else(|| header_positions.as_ref().map(|p| p.name_x))
                 .unwrap_or(icon_cx + ICON_RX + ICON_TEXT_GAP)
         }
+    } else if let Some((_, _, sprite_name_x)) = header_sprite_position {
+        sprite_name_x
     } else if dim.hide.circle {
         // With the icon hidden the name is centred inside the rectangle.
         x + (dim.width - round_4dp(name_tl)) / 2.0
@@ -5529,7 +5853,10 @@ fn render_entity_content(
         dim.hide,
         dim.has_stereotypes,
         dim.stereotype_count,
+        dim.has_header_sprite,
         text_padding,
+        name_font_size,
+        &font.name_family,
     );
     let name_y_default = if dim.has_stereotypes {
         let stereo_content_height = dim.stereotype_count as f64 * STEREOTYPE_LINE_HEIGHT;
@@ -5564,10 +5891,17 @@ fn render_entity_content(
     let mut text_buf = String::new();
     for (line_index, line) in name_lines.iter().enumerate() {
         let anchor_index = dim.stereotype_count + line_index;
+        let line_width = text_render::measure_no_underline_with_family(
+            line,
+            name_font_size as f64,
+            name_bold,
+            &font.name_family,
+        );
+        let centered_line_x = name_x + (name_tl - line_width) / 2.0;
         let (line_x, line_y) = oracle_name_line_anchors
             .get(anchor_index)
             .copied()
-            .unwrap_or((name_x, name_y + line_index as f64 * name_line_step));
+            .unwrap_or((centered_line_x, name_y + line_index as f64 * name_line_step));
         text_render::emit_text(
             &mut text_buf,
             line,
@@ -5764,7 +6098,10 @@ fn render_entity_content(
         dim.hide,
         dim.has_stereotypes,
         dim.stereotype_count,
+        dim.has_header_sprite,
         text_padding,
+        name_font_size,
+        &font.name_family,
     );
 
     // `dim.is_enum` is true only for the classic enum-constants layout
@@ -6222,10 +6559,16 @@ fn render_entity_content(
                 && user_separator_symbol.as_deref() != Some("==")
                 && inline_field_separators.is_empty()
             {
+                let fields_content_height = members_content_height(
+                    fields.iter().copied(),
+                    attr_font.size as f64,
+                    attr_font.family,
+                    attr_font.monospace_spaces,
+                );
                 let methods_sep_y = oracle_sep_y.get(1).copied().unwrap_or(
                     header_sep_y
                         + COMPARTMENT_PAD
-                        + dim.field_count as f64 * MEMBER_LINE_HEIGHT
+                        + fields_content_height
                         + fields.len() as f64 * text_padding * 2.0,
                 );
                 Some(format!(
@@ -6247,17 +6590,17 @@ fn render_entity_content(
             // the matching field and switch subsequent default-visibility
             // members to the narrow ENUM_TEXT_OFFSET inset.
             let last_field_idx = fields.len().saturating_sub(1);
-            let mut member_y = header_sep_y + FIRST_MEMBER_OFFSET + text_padding;
             let mut oracle_field_text_idx = text_header_count;
             // `inline_sep_consumed_idx` walks `oracle_sep_y` past the header
             // separator. Index 1 is the first inline separator y from oracle.
             let mut inline_sep_oracle_idx = 1usize;
             let mut narrow_after_separator = fields_narrow_default;
+            let mut member_top = header_sep_y + COMPARTMENT_PAD / 2.0 + text_padding;
             for (fi, member) in fields.iter().enumerate() {
                 let eff_y = oracle_text_y
                     .get(oracle_field_text_idx)
                     .copied()
-                    .unwrap_or(member_y);
+                    .unwrap_or(member_top + member_first_baseline_ascent(member, attr_font));
                 let oracle_text_count = member_oracle_text_y_count(member, &attr_font);
                 let oracle_text_element_count =
                     member_oracle_text_element_count(member, &attr_font);
@@ -6297,9 +6640,12 @@ fn render_entity_content(
                     member_text_offset,
                 );
                 oracle_field_text_idx += oracle_text_count;
-                member_y += member_display_line_count(member, attr_font.monospace_spaces) as f64
-                    * MEMBER_SPACING
-                    + text_padding * 2.0;
+                member_top += member_content_height(
+                    member,
+                    attr_font.size as f64,
+                    attr_font.family,
+                    attr_font.monospace_spaces,
+                ) + text_padding * 2.0;
                 // Emit any inline separators that fall AFTER this field.
                 for (_, sym) in inline_field_separators
                     .iter()
@@ -6316,7 +6662,7 @@ fn render_entity_content(
                     let sep_inline_y = oracle_sep_y
                         .get(inline_sep_oracle_idx)
                         .copied()
-                        .unwrap_or(member_y - FIRST_MEMBER_OFFSET - text_padding + COMPARTMENT_PAD);
+                        .unwrap_or(member_top + COMPARTMENT_PAD / 2.0 - text_padding);
                     inline_sep_oracle_idx += 1;
                     write!(
                         svg,
@@ -6331,7 +6677,7 @@ fn render_entity_content(
                     // PlantUML's entity-table divider starts a fresh
                     // compartment; following rows are measured from the
                     // divider line, not from the previous field baseline.
-                    member_y = sep_inline_y + FIRST_MEMBER_OFFSET + text_padding;
+                    member_top = sep_inline_y + COMPARTMENT_PAD / 2.0 + text_padding;
                     // After an inline divider, subsequent default-visibility
                     // fields move to the narrow inset ONLY when the whole
                     // post-divider sub-compartment is default-visibility. If
@@ -6351,13 +6697,19 @@ fn render_entity_content(
             let skip_methods_sep =
                 !inline_field_separators.is_empty() && methods.is_empty() && !dim.hide.methods;
             if !skip_methods_sep {
+                let fields_content_height = members_content_height(
+                    fields.iter().copied(),
+                    attr_font.size as f64,
+                    attr_font.family,
+                    attr_font.monospace_spaces,
+                );
                 let methods_sep_y = oracle_sep_y
                     .get(1 + inline_field_separators.len())
                     .copied()
                     .unwrap_or(
                         header_sep_y
                             + COMPARTMENT_PAD
-                            + dim.field_count as f64 * MEMBER_LINE_HEIGHT
+                            + fields_content_height
                             + fields.len() as f64 * text_padding * 2.0,
                     );
                 // A labelled divider is drawn AFTER the member text (centred
@@ -6410,12 +6762,12 @@ fn render_entity_content(
                 // Method members (text_y index continues after header + fields).
                 let method_text_offset = oracle_field_text_idx;
                 let mut oracle_method_text_idx = method_text_offset;
-                let mut method_y = methods_sep_y + FIRST_MEMBER_OFFSET + text_padding;
+                let mut method_top = methods_sep_y + COMPARTMENT_PAD / 2.0 + text_padding;
                 for member in methods {
                     let eff_y = oracle_text_y
                         .get(oracle_method_text_idx)
                         .copied()
-                        .unwrap_or(method_y);
+                        .unwrap_or(method_top + member_first_baseline_ascent(member, attr_font));
                     let oracle_text_count = member_oracle_text_y_count(member, &attr_font);
                     let oracle_text_element_count =
                         member_oracle_text_element_count(member, &attr_font);
@@ -6449,10 +6801,12 @@ fn render_entity_content(
                         member_text_offset,
                     );
                     oracle_method_text_idx += oracle_text_count;
-                    method_y += member_display_line_count(member, attr_font.monospace_spaces)
-                        as f64
-                        * MEMBER_SPACING
-                        + text_padding * 2.0;
+                    method_top += member_content_height(
+                        member,
+                        attr_font.size as f64,
+                        attr_font.family,
+                        attr_font.monospace_spaces,
+                    ) + text_padding * 2.0;
                 }
 
                 // Emit a labelled divider after the members: two short rules
@@ -6551,13 +6905,13 @@ fn render_entity_content(
                 header_anchor_closed = true;
             }
 
-            let mut method_y = methods_sep_y + FIRST_MEMBER_OFFSET + text_padding;
+            let mut method_top = methods_sep_y + COMPARTMENT_PAD / 2.0 + text_padding;
             let mut oracle_method_text_idx = text_header_count;
             for member in methods {
                 let eff_y = oracle_text_y
                     .get(oracle_method_text_idx)
                     .copied()
-                    .unwrap_or(method_y);
+                    .unwrap_or(method_top + member_first_baseline_ascent(member, attr_font));
                 let oracle_text_count = member_oracle_text_y_count(member, &attr_font);
                 let oracle_text_element_count =
                     member_oracle_text_element_count(member, &attr_font);
@@ -6592,9 +6946,12 @@ fn render_entity_content(
                     member_text_offset,
                 );
                 oracle_method_text_idx += oracle_text_count;
-                method_y += member_display_line_count(member, attr_font.monospace_spaces) as f64
-                    * MEMBER_SPACING
-                    + text_padding * 2.0;
+                method_top += member_content_height(
+                    member,
+                    attr_font.size as f64,
+                    attr_font.family,
+                    attr_font.monospace_spaces,
+                ) + text_padding * 2.0;
             }
         } else {
             // No members at all (already handled above, but just in case).
@@ -7271,7 +7628,7 @@ fn render_member_line(
 
     let mut text_buf = String::new();
     for (line_index, text) in lines.iter().enumerate() {
-        let y = baseline_y + line_index as f64 * MEMBER_SPACING;
+        let y = baseline_y + member_line_baseline_offset(&lines, line_index, attr_font);
         if let Some(latex) = latex_member_content(text) {
             let image = crate::math::raw_latex_image(latex);
             write!(
@@ -8349,7 +8706,8 @@ fn render_relationship_svg(
                       label: &str,
                       position: Option<rustuml_layout::graph::EdgeLabelPosition>,
                       horizontal_margin: f64,
-                      fallback: (f64, f64)| {
+                      fallback: (f64, f64),
+                      center_label: bool| {
         let (x, y) = position
             .map(|position| {
                 (
@@ -8360,21 +8718,24 @@ fn render_relationship_svg(
                 )
             })
             .unwrap_or(fallback);
-        text_render::emit_text(
-            svg,
-            label.trim_matches('"'),
-            &TextBase {
-                x,
-                y,
-                font_size: RELATIONSHIP_LABEL_FONT_SIZE as u32,
-                font_family: "sans-serif",
-                fill: "#000000",
-                bold: false,
-                italic: false,
-                underline: false,
-                skip_underline: false,
-            },
-        );
+        let base = TextBase {
+            x,
+            y,
+            font_size: RELATIONSHIP_LABEL_FONT_SIZE as u32,
+            font_family: "sans-serif",
+            fill: "#000000",
+            bold: false,
+            italic: false,
+            underline: false,
+            skip_underline: center_label,
+        };
+        if center_label {
+            // `SvekEdge` center labels use Creole styling, but preserve `__`
+            // and neutralize the `""` monospace delimiter.
+            text_render::emit_text_no_mono(svg, label.trim_matches('"'), &base);
+        } else {
+            text_render::emit_text(svg, label.trim_matches('"'), &base);
+        }
     };
 
     if relationship_has_center_label(rel)
@@ -8412,6 +8773,7 @@ fn render_relationship_svg(
                 }),
                 RELATIONSHIP_LABEL_MARGIN + layout_x_bias,
                 (0.0, 0.0),
+                true,
             );
         }
     }
@@ -8422,6 +8784,7 @@ fn render_relationship_svg(
             edge_path.tail_label,
             layout_x_bias,
             edge_points.first().copied().unwrap_or((0.0, 0.0)),
+            false,
         );
     }
     if let Some(label) = rel.to_multiplicity.as_deref() {
@@ -8431,6 +8794,7 @@ fn render_relationship_svg(
             edge_path.head_label,
             layout_x_bias,
             edge_points.last().copied().unwrap_or((0.0, 0.0)),
+            false,
         );
     }
 
@@ -9101,6 +9465,7 @@ fn render_attached_note(
     position: NotePosition,
     qualified_name: &str,
     entity_id: &str,
+    sprites: &HashMap<String, SpriteData>,
 ) {
     let f = crate::plantuml_metrics::fmt_coord;
     let right = x + width;
@@ -9260,7 +9625,7 @@ fn render_attached_note(
         NOTE_BORDER,
     )
     .unwrap();
-    emit_note_body(svg, note, x, y, width);
+    emit_note_body(svg, note, x, y, width, sprites);
     svg.push_str("</g>");
 }
 
@@ -9411,7 +9776,7 @@ fn render_notes_only(
         && diagram.relationships.is_empty()
         && diagram.notes[0].alias.is_some()
     {
-        return render_single_named_note(&diagram.notes[0]);
+        return render_single_named_note(&diagram.notes[0], &diagram.meta.sprites);
     }
 
     // Non-oracle fallback (used by the CLI and unit tests). Keeps a working
@@ -9428,7 +9793,7 @@ fn render_notes_only(
         .notes
         .iter()
         .map(|note| {
-            let (nw, nh) = note_box_dims(note);
+            let (nw, nh) = note_box_dims(note, &diagram.meta.sprites);
             let nx = x;
             let ny = GRID_MARGIN + title_h;
             x += nw + GRID_MARGIN;
@@ -9450,7 +9815,7 @@ fn render_notes_only(
         );
     }
     for (note, (nx, ny, nw, nh)) in diagram.notes.iter().zip(&note_data) {
-        render_note_box(&mut svg, note, *nx, *ny, *nw, *nh);
+        render_note_box(&mut svg, note, *nx, *ny, *nw, *nh, &diagram.meta.sprites);
     }
     svg.finalize()
 }
@@ -9459,12 +9824,20 @@ fn render_notes_only(
 /// paints the folded note with a half-width outer stroke and a one-pixel fold
 /// stroke; `CucaDiagramFileMakerSvek` gives a lone named note the standard
 /// PlantUML envelope with the entity at `(7, 7)`.
-fn render_single_named_note(note: &Note) -> String {
-    let (width, height) = note_box_dims(note);
-    let canvas_width = (width + 20.0).round();
-    let canvas_height = (height + 20.0).round();
+fn render_single_named_note(note: &Note, sprites: &HashMap<String, SpriteData>) -> String {
+    let (width, height) = note_box_dims(note, sprites);
     let x = 7.0;
     let y = 7.0;
+    let latex_image_right = note
+        .lines
+        .iter()
+        .filter_map(|line| latex_member_content(line))
+        .map(|latex| x + NOTE_PAD_X + crate::math::raw_latex_image(latex).width as f64)
+        .fold(0.0_f64, f64::max);
+    let canvas_width = (width + 20.0)
+        .round()
+        .max(latex_image_right.ceil() + f64::from(latex_image_right > 0.0));
+    let canvas_height = (height + 20.0).round();
     let right = x + width;
     let bottom = y + height;
     let fold_x = right - NOTE_FOLD;
@@ -9518,7 +9891,7 @@ fn render_single_named_note(note: &Note) -> String {
         fill,
     )
     .unwrap();
-    emit_note_body(&mut body, note, x, y, width);
+    emit_note_body(&mut body, note, x, y, width, sprites);
     body.push_str("</g>");
     svg.raw_inline(&body);
     svg.finalize_plantuml()
@@ -9709,6 +10082,13 @@ struct NoteTableLayout {
     width: f64,
 }
 
+fn note_table_cell_content(cell: &crate::creole::TableCell) -> String {
+    // `StripeTable` keeps the delimiter-adjacent cell spaces as atoms. They
+    // collapse into the surrounding run for plain cells, but remain separate
+    // text atoms around inline Creole style changes.
+    format!(" {} ", cell.text)
+}
+
 fn note_table_layout(lines: &[&str]) -> Option<NoteTableLayout> {
     let rows = lines
         .iter()
@@ -9729,17 +10109,11 @@ fn note_table_layout(lines: &[&str]) -> Option<NoteTableLayout> {
         let mut row_height = 10.0_f64;
         let mut row_ascent = 0.0_f64;
         for (column, cell) in row.cells.iter().enumerate() {
-            let adjustment = if cell.is_header {
-                NOTE_TABLE_HEADER_X_ADJUST * 2.0
-            } else {
-                0.0
-            };
-            let width = text_render::measure(&cell.text, NOTE_FONT_SIZE, cell.is_header)
-                + 2.0 * NOTE_TABLE_CELL_PAD_X
-                + adjustment;
+            let content = note_table_cell_content(cell);
+            let width = text_render::measure(&content, NOTE_FONT_SIZE, cell.is_header);
             column_widths[column] = column_widths[column].max(width);
-            row_height = row_height.max(text_render::label_height(&cell.text, NOTE_FONT_SIZE));
-            row_ascent = row_ascent.max(text_render::label_ascent(&cell.text, NOTE_FONT_SIZE));
+            row_height = row_height.max(text_render::label_height(&content, NOTE_FONT_SIZE));
+            row_ascent = row_ascent.max(text_render::label_ascent(&content, NOTE_FONT_SIZE));
         }
         row_heights.push(row_height);
         row_ascents.push(row_ascent);
@@ -9752,6 +10126,68 @@ fn note_table_layout(lines: &[&str]) -> Option<NoteTableLayout> {
         row_ascents,
         width,
     })
+}
+
+fn note_tree_rows(lines: &[&str]) -> Option<Vec<crate::creole::TreeNode>> {
+    let rows = lines
+        .iter()
+        .map(|line| match crate::creole::parse_line(line.trim()) {
+            crate::creole::CreoleLine::Tree(node) => Some(node),
+            _ => None,
+        })
+        .collect::<Option<Vec<_>>>()?;
+    (!rows.is_empty()).then_some(rows)
+}
+
+fn note_tree_text(node: &crate::creole::TreeNode) -> String {
+    if node.depth == 1 {
+        node.text.clone()
+    } else {
+        format!("{} {}", "_".repeat(node.depth - 1), node.text)
+    }
+}
+
+fn note_tree_text_offset(node: &crate::creole::TreeNode) -> f64 {
+    NOTE_TREE_TEXT_X
+        + if node.depth == 1 {
+            NOTE_ORDERED_NUMBER_GAP
+        } else {
+            0.0
+        }
+}
+
+fn note_code_lines<'a>(lines: &[&'a str]) -> Option<Vec<&'a str>> {
+    let (first, rest) = lines.split_first()?;
+    let (last, middle) = rest.split_last()?;
+    if !first.trim().eq_ignore_ascii_case("<code>") || !last.trim().eq_ignore_ascii_case("</code>")
+    {
+        return None;
+    }
+    Some(
+        middle
+            .iter()
+            .copied()
+            .filter(|line| !line.trim().is_empty())
+            .collect(),
+    )
+}
+
+fn note_code_line_parts(line: &str) -> (usize, &str) {
+    let indent = line
+        .bytes()
+        .take_while(|byte| matches!(byte, b' ' | b'\t'))
+        .count();
+    (indent, line.trim())
+}
+
+fn note_code_line_width(line: &str) -> f64 {
+    let (indent, content) = note_code_line_parts(line);
+    crate::plantuml_metrics::mono_text_width(&" ".repeat(indent), NOTE_FONT_SIZE)
+        + crate::plantuml_metrics::mono_text_width(content, NOTE_FONT_SIZE)
+}
+
+fn note_code_line_height() -> f64 {
+    text_render::label_height_with_family("", NOTE_FONT_SIZE, "monospace").max(10.0)
 }
 
 fn parse_note_body_separator(line: &str) -> Option<NoteBodySeparator<'_>> {
@@ -9804,7 +10240,144 @@ fn note_ordered_indent(level: usize) -> f64 {
         * level.saturating_sub(1) as f64
 }
 
-fn note_line_dimensions(line: &str, number_counters: &mut Vec<usize>) -> (f64, f64) {
+fn note_creole_content(content: String) -> String {
+    if crate::creole::parse_segments(&content).is_empty() {
+        // `StripeSimple.getAtoms()` inserts one plain-space `AtomText` when
+        // parsing produced no atoms (including an empty styled span). The
+        // placeholder inherits the stripe's base font after style commands
+        // restore their previous `FontConfiguration`.
+        " ".to_string()
+    } else {
+        content
+    }
+}
+
+/// Port of PlantUML's `AtomSprite` inside `Sea`: each atom contributes its
+/// natural width, while the row takes the tallest atom and bottom-aligns the
+/// remaining atoms in that shared line box.
+fn note_sprite_line_dimensions(content: &str, sprites: &HashMap<String, SpriteData>) -> (f64, f64) {
+    crate::sprite::parse_sprite_segments(content).iter().fold(
+        (0.0_f64, 0.0_f64),
+        |(width, height), segment| {
+            let (segment_width, segment_height) = match segment {
+                crate::sprite::TextSegment::Text(text) => (
+                    text_render::measure(text, NOTE_FONT_SIZE, false),
+                    text_render::label_height(text, NOTE_FONT_SIZE).max(10.0),
+                ),
+                crate::sprite::TextSegment::Sprite(name) => sprites
+                    .get(name)
+                    .map(|sprite| {
+                        let (width, height) = crate::sprite::sprite_dimensions(sprite);
+                        (width as f64, height as f64)
+                    })
+                    .unwrap_or_default(),
+                crate::sprite::TextSegment::OpenIcon(name) => crate::openiconic::lookup(name)
+                    .map(|icon| {
+                        let scale = NOTE_FONT_SIZE / icon.height;
+                        (icon.width * scale, icon.height * scale)
+                    })
+                    .unwrap_or_default(),
+            };
+            (width + segment_width, height.max(segment_height))
+        },
+    )
+}
+
+fn emit_note_sprite_line(
+    svg: &mut String,
+    content: &str,
+    x: f64,
+    line_top: f64,
+    sprites: &HashMap<String, SpriteData>,
+    background: &str,
+) -> f64 {
+    let (_, line_height) = note_sprite_line_dimensions(content, sprites);
+    let mut cursor = x;
+    for segment in crate::sprite::parse_sprite_segments(content) {
+        match segment {
+            crate::sprite::TextSegment::Text(text) => {
+                let text_height = text_render::label_height(&text, NOTE_FONT_SIZE).max(10.0);
+                let baseline = line_top + line_height - text_height
+                    + text_render::label_first_baseline_ascent_with_family(
+                        &text,
+                        NOTE_FONT_SIZE,
+                        "sans-serif",
+                    );
+                cursor += text_render::emit_text(
+                    svg,
+                    &text,
+                    &TextBase {
+                        x: cursor,
+                        y: baseline,
+                        font_size: NOTE_FONT_SIZE as u32,
+                        font_family: "sans-serif",
+                        fill: "#000000",
+                        bold: false,
+                        italic: false,
+                        underline: false,
+                        skip_underline: false,
+                    },
+                );
+            }
+            crate::sprite::TextSegment::Sprite(name) => {
+                if let Some(sprite) = sprites.get(&name) {
+                    let (width, height) = crate::sprite::sprite_dimensions(sprite);
+                    if let Ok(uri) = crate::sprite::sprite_to_data_uri_scaled_with_colors(
+                        sprite,
+                        1.0,
+                        sprite_surface_rgb(background),
+                        [0, 0, 0],
+                    ) {
+                        write!(
+                            svg,
+                            r#"<image height="{}" width="{}" x="{}" xlink:href="{}" y="{}"/>"#,
+                            height,
+                            width,
+                            crate::plantuml_metrics::fmt_coord(cursor),
+                            uri,
+                            crate::plantuml_metrics::fmt_coord(
+                                line_top + line_height - height as f64
+                            ),
+                        )
+                        .unwrap();
+                    }
+                    cursor += width as f64;
+                }
+            }
+            crate::sprite::TextSegment::OpenIcon(name) => {
+                if let Some(icon) = crate::openiconic::lookup(&name) {
+                    let scale = NOTE_FONT_SIZE / icon.height;
+                    let icon_height = icon.height * scale;
+                    write!(
+                        svg,
+                        r##"<path d="{}" fill="#000000" transform="translate({} {}) scale({})"/>"##,
+                        icon.path_d,
+                        crate::plantuml_metrics::fmt_coord(cursor + icon.translate_x * scale),
+                        crate::plantuml_metrics::fmt_coord(
+                            line_top + line_height - icon_height + icon.translate_y * scale
+                        ),
+                        crate::plantuml_metrics::fmt_coord(scale),
+                    )
+                    .unwrap();
+                    cursor += icon.width * scale;
+                }
+            }
+        }
+    }
+    line_height
+}
+
+fn note_line_dimensions(
+    line: &str,
+    number_counters: &mut Vec<usize>,
+    sprites: &HashMap<String, SpriteData>,
+) -> (f64, f64) {
+    if let Some(latex) = latex_member_content(line) {
+        number_counters.clear();
+        let metrics = crate::math::latex_layout_metrics(latex);
+        return (metrics.width, metrics.height);
+    }
+
     let (header_width, content) = if let Some((order, content)) = parse_note_bullet(line) {
         number_counters.clear();
         let header_width = if order == 0 {
@@ -9827,18 +10400,47 @@ fn note_line_dimensions(line: &str, number_counters: &mut Vec<usize>) -> (f64, f
         number_counters.clear();
         (0.0, line.to_string())
     };
+    let content = note_creole_content(content);
+    if content.contains("<$") {
+        let (width, height) = note_sprite_line_dimensions(&content, sprites);
+        return (header_width + width, height);
+    }
     (
         header_width + text_render::measure(&content, NOTE_FONT_SIZE, false),
         text_render::label_height(&content, NOTE_FONT_SIZE).max(10.0),
     )
 }
 
-fn note_body_dimensions(note: &Note) -> (f64, f64) {
+fn note_body_dimensions(note: &Note, sprites: &HashMap<String, SpriteData>) -> (f64, f64) {
     let mut width = 0.0_f64;
     let mut height = 0.0_f64;
     for block in note_body_blocks(note) {
+        let code = note_code_lines(&block.lines);
+        let tree = note_tree_rows(&block.lines);
         let table = note_table_layout(&block.lines);
-        let (body_width, body_height) = if let Some(table) = &table {
+        let (body_width, body_height) = if let Some(code) = &code {
+            (
+                code.iter()
+                    .map(|line| note_code_line_width(line))
+                    .fold(0.0_f64, f64::max),
+                code.len() as f64 * note_code_line_height(),
+            )
+        } else if let Some(tree) = &tree {
+            (
+                tree.iter()
+                    .map(|node| {
+                        note_tree_text_offset(node)
+                            + text_render::measure(&note_tree_text(node), NOTE_FONT_SIZE, false)
+                    })
+                    .fold(0.0_f64, f64::max),
+                tree.iter()
+                    .map(|node| {
+                        text_render::label_height(&note_tree_text(node), NOTE_FONT_SIZE).max(10.0)
+                    })
+                    .sum::<f64>()
+                    + NOTE_TREE_BODY_EXTRA,
+            )
+        } else if let Some(table) = &table {
             (
                 table.width,
                 table.row_heights.iter().sum::<f64>() + NOTE_TABLE_BODY_EXTRA,
@@ -9848,7 +10450,7 @@ fn note_body_dimensions(note: &Note) -> (f64, f64) {
             let line_dimensions = block
                 .lines
                 .iter()
-                .map(|line| note_line_dimensions(line, &mut number_counters))
+                .map(|line| note_line_dimensions(line, &mut number_counters, sprites))
                 .collect::<Vec<_>>();
             (
                 line_dimensions
@@ -9882,8 +10484,8 @@ fn note_body_dimensions(note: &Note) -> (f64, f64) {
     (width, height)
 }
 
-fn note_box_dims(note: &Note) -> (f64, f64) {
-    let (body_width, body_height) = note_body_dimensions(note);
+fn note_box_dims(note: &Note, sprites: &HashMap<String, SpriteData>) -> (f64, f64) {
+    let (body_width, body_height) = note_body_dimensions(note, sprites);
     (
         body_width + NOTE_PAD_X + NOTE_PAD_RIGHT,
         body_height + NOTE_PAD_Y * 2.0,
@@ -9912,16 +10514,12 @@ fn emit_note_table(svg: &mut String, table: &NoteTableLayout, x: f64, y: f64) {
                 )
                 .unwrap();
             }
-            let x_adjust = if cell.is_header {
-                NOTE_TABLE_HEADER_X_ADJUST
-            } else {
-                0.0
-            };
+            let content = note_table_cell_content(cell);
             text_render::emit_text(
                 svg,
-                &cell.text,
+                &content,
                 &TextBase {
-                    x: cell_left + NOTE_TABLE_CELL_PAD_X + x_adjust,
+                    x: cell_left,
                     y: row_top + table.row_ascents[row_index],
                     font_size: NOTE_FONT_SIZE as u32,
                     font_family: "sans-serif",
@@ -9967,9 +10565,132 @@ fn emit_note_table(svg: &mut String, table: &NoteTableLayout, x: f64, y: f64) {
     }
 }
 
-fn emit_note_body(svg: &mut String, note: &Note, x: f64, y: f64, width: f64) {
+fn emit_note_tree(svg: &mut String, rows: &[crate::creole::TreeNode], x: f64, y: f64, fill: &str) {
+    let f = crate::plantuml_metrics::fmt_coord;
+    let body_left = x + NOTE_PAD_X;
+    let trunk_x = body_left + NOTE_TREE_TRUNK_X;
+    let branch_right = trunk_x + NOTE_TREE_BRANCH_WIDTH;
+    let grid_top = y + NOTE_TREE_GRID_TOP_PAD;
+    let mut row_top = grid_top;
+    let mut previous_branch_y = grid_top;
+    let mut branches = Vec::with_capacity(rows.len());
+    for node in rows {
+        let text = note_tree_text(node);
+        let row_height = text_render::label_height(&text, NOTE_FONT_SIZE).max(10.0);
+        let branch_y = row_top + row_height / 2.0;
+        text_render::emit_text(
+            svg,
+            &text,
+            &TextBase {
+                x: body_left + note_tree_text_offset(node),
+                y: row_top + text_render::label_ascent(&text, NOTE_FONT_SIZE),
+                font_size: NOTE_FONT_SIZE as u32,
+                font_family: "sans-serif",
+                fill: "#000000",
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        branches.push((previous_branch_y, branch_y));
+        previous_branch_y = branch_y;
+        row_top += row_height;
+    }
+    for (vertical_top, branch_y) in branches {
+        write!(
+            svg,
+            r#"<rect fill="{}" height="2" style="stroke:#000000;stroke-width:1;" width="2" x="{}" y="{}"/>"#,
+            fill,
+            f(branch_right - 1.0),
+            f(branch_y - 1.0),
+        )
+        .unwrap();
+        write!(
+            svg,
+            r##"<line style="stroke:#000000;stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            f(trunk_x),
+            f(branch_right),
+            f(branch_y),
+            f(branch_y),
+        )
+        .unwrap();
+        write!(
+            svg,
+            r##"<line style="stroke:#000000;stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            f(trunk_x),
+            f(trunk_x),
+            f(vertical_top),
+            f(branch_y),
+        )
+        .unwrap();
+    }
+}
+
+fn emit_note_code(svg: &mut String, lines: &[&str], x: f64, y: f64) {
+    let f = crate::plantuml_metrics::fmt_coord;
+    let mut row_top = y;
+    for line in lines {
+        let (indent, content) = note_code_line_parts(line);
+        let indent_width =
+            crate::plantuml_metrics::mono_text_width(&" ".repeat(indent), NOTE_FONT_SIZE);
+        let content_width = crate::plantuml_metrics::mono_text_width(content, NOTE_FONT_SIZE);
+        let baseline =
+            row_top + text_render::label_ascent_with_family(content, NOTE_FONT_SIZE, "monospace");
+        let escaped = crate::creole::escape_creole_text(content).replace(' ', "&#160;");
+        write!(
+            svg,
+            r##"<text fill="#000000" font-family="monospace" font-size="13" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
+            f(content_width),
+            f(x + NOTE_PAD_X + indent_width),
+            f(baseline),
+            escaped,
+        )
+        .unwrap();
+        if indent > 0 {
+            write!(
+                svg,
+                r##"<text fill="#000000" font-family="monospace" font-size="13" lengthAdjust="spacing" textLength="0" x="{}" y="{}"></text>"##,
+                f(x + NOTE_PAD_X),
+                f(baseline),
+            )
+            .unwrap();
+        }
+        row_top += note_code_line_height();
+    }
+}
+
+fn emit_note_body(
+    svg: &mut String,
+    note: &Note,
+    x: f64,
+    y: f64,
+    width: f64,
+    sprites: &HashMap<String, SpriteData>,
+) {
     let mut block_top = y + NOTE_PAD_Y;
     for block in note_body_blocks(note) {
+        if let Some(code) = note_code_lines(&block.lines) {
+            emit_note_code(svg, &code, x, block_top);
+            block_top += code.len() as f64 * note_code_line_height();
+            continue;
+        }
+        if let Some(tree) = note_tree_rows(&block.lines) {
+            let fill = note
+                .color
+                .as_deref()
+                .map(crate::sequence::resolve_color)
+                .unwrap_or_else(|| NOTE_FILL.to_string());
+            emit_note_tree(svg, &tree, x, block_top, &fill);
+            block_top += tree
+                .iter()
+                .map(|node| {
+                    text_render::label_height(&note_tree_text(node), NOTE_FONT_SIZE).max(10.0)
+                })
+                .sum::<f64>()
+                + NOTE_TREE_BODY_EXTRA;
+            continue;
+        }
         if let Some(table) = note_table_layout(&block.lines) {
             emit_note_table(svg, &table, x, block_top);
             block_top += table.row_heights.iter().sum::<f64>() + NOTE_TABLE_BODY_EXTRA;
@@ -9979,7 +10700,7 @@ fn emit_note_body(svg: &mut String, note: &Note, x: f64, y: f64, width: f64) {
         let body_height = block
             .lines
             .iter()
-            .map(|line| note_line_dimensions(line, &mut measure_counters).1)
+            .map(|line| note_line_dimensions(line, &mut measure_counters, sprites).1)
             .sum::<f64>();
         let mut content_top = block_top;
         let mut separator_height = 0.0;
@@ -10004,7 +10725,8 @@ fn emit_note_body(svg: &mut String, note: &Note, x: f64, y: f64, width: f64) {
 
                 let mut line_top = content_top;
                 for line in &block.lines {
-                    line_top += emit_note_line(svg, line, x, line_top, &mut number_counters);
+                    line_top +=
+                        emit_note_line(svg, line, x, line_top, &mut number_counters, note, sprites);
                 }
                 emit_note_separator(svg, x, width, block_top + half_title, style, Some(title));
                 block_top += body_height + separator_height;
@@ -10014,7 +10736,7 @@ fn emit_note_body(svg: &mut String, note: &Note, x: f64, y: f64, width: f64) {
 
         let mut line_top = content_top;
         for line in &block.lines {
-            line_top += emit_note_line(svg, line, x, line_top, &mut number_counters);
+            line_top += emit_note_line(svg, line, x, line_top, &mut number_counters, note, sprites);
         }
         block_top += body_height + separator_height;
     }
@@ -10102,7 +10824,25 @@ fn emit_note_line(
     x: f64,
     line_top: f64,
     number_counters: &mut Vec<usize>,
+    note: &Note,
+    sprites: &HashMap<String, SpriteData>,
 ) -> f64 {
+    if let Some(latex) = latex_member_content(line) {
+        number_counters.clear();
+        let image = crate::math::raw_latex_image(latex);
+        write!(
+            svg,
+            r#"<image height="{}" width="{}" x="{}" xlink:href="{}" y="{}"/>"#,
+            image.height,
+            image.width,
+            crate::plantuml_metrics::fmt_coord(x + NOTE_PAD_X),
+            image.href,
+            crate::plantuml_metrics::fmt_coord(line_top),
+        )
+        .unwrap();
+        return crate::math::latex_layout_metrics(latex).height;
+    }
+
     let f = crate::plantuml_metrics::fmt_coord;
     let (content, text_x) = if let Some((order, content)) = parse_note_bullet(line) {
         number_counters.clear();
@@ -10172,7 +10912,24 @@ fn emit_note_line(
         number_counters.clear();
         (line.to_string(), x + NOTE_PAD_X)
     };
-    let baseline = line_top + text_render::label_ascent(&content, NOTE_FONT_SIZE);
+    // `Sea.doAlign` bottom-aligns mixed Creole atoms. The line origin must use
+    // the first run's ascent within that shared line box, not the maximum
+    // ascent of every run (notably monospace followed by sans-serif).
+    let content = note_creole_content(content);
+    if content.contains("<$") {
+        let fill = note
+            .color
+            .as_deref()
+            .map(crate::sequence::resolve_color)
+            .unwrap_or_else(|| NOTE_FILL.to_string());
+        return emit_note_sprite_line(svg, &content, text_x, line_top, sprites, &fill);
+    }
+    let baseline = line_top
+        + text_render::label_first_baseline_ascent_with_family(
+            &content,
+            NOTE_FONT_SIZE,
+            "sans-serif",
+        );
     text_render::emit_text(
         svg,
         &content,
@@ -10222,7 +10979,15 @@ fn parse_note_bullet(line: &str) -> Option<(usize, &str)> {
     Some((star_count - 1, rest.trim()))
 }
 
-fn render_note_box(svg: &mut SvgBuilder, note: &Note, x: f64, y: f64, w: f64, h: f64) {
+fn render_note_box(
+    svg: &mut SvgBuilder,
+    note: &Note,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    sprites: &HashMap<String, SpriteData>,
+) {
     let fold = NOTE_FOLD;
     let points = &[
         (x, y),
@@ -10240,7 +11005,7 @@ fn render_note_box(svg: &mut SvgBuilder, note: &Note, x: f64, y: f64, w: f64, h:
     svg.polygon(fold_pts, NOTE_FILL, NOTE_BORDER);
 
     let mut body = String::new();
-    emit_note_body(&mut body, note, x, y, w);
+    emit_note_body(&mut body, note, x, y, w, sprites);
     svg.raw_inline(&body);
 }
 
@@ -10261,6 +11026,7 @@ mod tests {
                 ClassEntity {
                     id: "Animal".into(),
                     label: "Animal".into(),
+                    explicit_alias: false,
                     kind: EntityKind::Class,
                     members: vec![
                         Member {
@@ -10297,6 +11063,7 @@ mod tests {
                 ClassEntity {
                     id: "Dog".into(),
                     label: "Dog".into(),
+                    explicit_alias: false,
                     kind: EntityKind::Class,
                     members: vec![Member {
                         name: "fetch()".into(),
@@ -10545,6 +11312,7 @@ mod tests {
             entities: vec![ClassEntity {
                 id: "MyClass".into(),
                 label: "MyClass".into(),
+                explicit_alias: false,
                 kind: EntityKind::Class,
                 members: vec![Member {
                     name: "multiLineMethod(".into(),
@@ -11244,6 +12012,145 @@ mod tests {
     }
 
     #[test]
+    fn standalone_note_tree_uses_one_structural_trunk_for_deeper_rows() {
+        let input = "@startuml\nnote as FreshTree743\n  |_ renamed root\n  |__ second level\n  |___ third level\nend note\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(">renamed root</text>"));
+        assert!(svg.contains(">_ second level</text>"));
+        assert!(svg.contains(">__ third level</text>"));
+        assert_eq!(
+            svg.matches(r#"<line style="stroke:#000000;stroke-width:1;""#)
+                .count(),
+            6
+        );
+    }
+
+    #[test]
+    fn standalone_note_code_uses_monospace_atoms_and_preserves_indent() {
+        let input = "@startuml\nnote as FreshCode751\n  <code>\n  fn audit() {\n      record(\"renamed value\");\n  }\n  </code>\nend note\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(r#"font-family="monospace""#));
+        assert!(svg.contains(r#"record(&quot;renamed&#160;value&quot;);"#));
+        assert!(svg.contains(r#"textLength="0""#));
+        assert!(!svg.contains("&lt;code&gt;"));
+    }
+
+    #[test]
+    fn quoted_display_alias_is_the_qualified_name_leaf() {
+        let input = "@startuml\npackage FreshDomain761 {\n  class \"**Renamed Ledger** <<service>>\" as LedgerAlias769\n}\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(
+            r#"data-qualified-name="FreshDomain761.LedgerAlias769" data-source-line="2""#
+        ));
+        assert!(
+            !svg.contains(r#"data-qualified-name="FreshDomain761...Renamed Ledger.. .service.""#)
+        );
+    }
+
+    #[test]
+    fn class_member_rows_follow_resolved_atom_metrics() {
+        fn entity_rect_height(svg: &str, name: &str) -> f64 {
+            let marker = format!("<!--class {name}-->");
+            let rect = svg
+                .split_once(&marker)
+                .unwrap()
+                .1
+                .split_once("/>")
+                .unwrap()
+                .0;
+            attr_value(rect, " height").unwrap().parse().unwrap()
+        }
+        fn text_y(svg: &str, text: &str) -> f64 {
+            let end = svg.find(&format!(">{text}</text>")).unwrap();
+            let start = svg[..end].rfind("<text ").unwrap();
+            attr_value(&svg[start..end], " y").unwrap().parse().unwrap()
+        }
+
+        let plain = rustuml_parser::parse::parse(
+            "@startuml\nclass FreshAtom773 {\n  renamed payload: String\n}\n@enduml",
+        )
+        .unwrap();
+        let enlarged = rustuml_parser::parse::parse(
+            "@startuml\nclass FreshAtom773 {\n  <size:22>renamed payload</size>: String\n}\n@enduml",
+        )
+        .unwrap();
+        let plain_svg = crate::render_svg(&plain);
+        let enlarged_svg = crate::render_svg(&enlarged);
+        let expected_growth =
+            text_render::label_height("<size:22>renamed payload</size>: String", 14.0)
+                - text_render::label_height("renamed payload: String", 14.0);
+
+        assert!(
+            (entity_rect_height(&enlarged_svg, "FreshAtom773")
+                - entity_rect_height(&plain_svg, "FreshAtom773")
+                - expected_growth)
+                .abs()
+                < 0.01
+        );
+        assert!(
+            text_y(&enlarged_svg, "renamed payload")
+                > text_y(&plain_svg, "renamed payload: String")
+        );
+    }
+
+    #[test]
+    fn multiline_class_name_grows_header_and_centers_each_line() {
+        let input =
+            "@startuml\nclass \"Fresh\\n**substantially wider renamed heading**\" {\n}\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        let x = |text: &str| {
+            let end = svg.find(&format!(">{text}</text>")).unwrap();
+            let start = svg[..end].rfind("<text ").unwrap();
+            attr_value(&svg[start..end], " x")
+                .unwrap()
+                .parse::<f64>()
+                .unwrap()
+        };
+
+        assert!(x("Fresh") > x("substantially wider renamed heading"));
+        assert!(svg.contains(r#">Fresh</text>"#));
+        assert!(svg.contains(r#">substantially wider renamed heading</text>"#));
+    }
+
+    #[test]
+    fn multiline_named_note_uses_first_content_source_line() {
+        let input = "@startuml\nnote as FreshNested779\n  @startuml renamed nested @enduml\nend note\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Class(class) = diagram else {
+            panic!("class diagram");
+        };
+
+        assert_eq!(
+            class.notes[0].source_line, 2,
+            "parsed note: {:?}",
+            class.notes[0]
+        );
+    }
+
+    #[test]
+    fn package_title_creole_inherits_the_bold_title_font() {
+        let input = "@startuml\npackage \"//renamed// <color:#2457A6>ledger</color>\" {\n  class FreshEntry787\n}\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        let renamed_end = svg.find(">renamed</text>").unwrap();
+        let renamed_tag = &svg[svg[..renamed_end].rfind("<text ").unwrap()..renamed_end];
+        let ledger_end = svg.find(">ledger</text>").unwrap();
+        let ledger_tag = &svg[svg[..ledger_end].rfind("<text ").unwrap()..ledger_end];
+
+        assert!(renamed_tag.contains(r#"font-style="italic""#));
+        assert!(renamed_tag.contains(r#"font-weight="700""#));
+        assert!(ledger_tag.contains(r##"fill="#2457A6""##));
+        assert!(ledger_tag.contains(r#"font-weight="700""#));
+    }
+
+    #[test]
     fn custom_spot_uses_arbitrary_character_outline() {
         let input = "@startuml\nclass Renamed << (G,#12ABEF) NewKind >>\n@enduml";
         let diagram = rustuml_parser::parse::parse(input).unwrap();
@@ -11311,6 +12218,7 @@ mod tests {
             entities: vec![ClassEntity {
                 id: "Drawable".into(),
                 label: "Drawable".into(),
+                explicit_alias: false,
                 kind: EntityKind::Interface,
                 members: vec![Member {
                     name: "draw()".into(),
@@ -11526,6 +12434,87 @@ mod tests {
             (leftmost_role_x - SVEK_LABEL_ENVELOPE_MARGIN).abs() < 0.01,
             "the leftmost collision-moved role must normalize to the SVEK margin"
         );
+    }
+
+    #[test]
+    fn disconnected_renamed_classes_are_constrained_by_squaremaker_links() {
+        let mut input = String::from("@startuml\n");
+        for index in 0..14 {
+            writeln!(input, "class DetachedModel{index:02}").unwrap();
+        }
+        input.push_str("@enduml");
+
+        let diagram = rustuml_parser::parse::parse(&input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        let view_box = svg
+            .split_once("viewBox=\"0 0 ")
+            .unwrap()
+            .1
+            .split_once('"')
+            .unwrap()
+            .0;
+        let mut dimensions = view_box
+            .split_whitespace()
+            .map(|value| value.parse::<f64>().unwrap());
+        let width = dimensions.next().unwrap();
+        let height = dimensions.next().unwrap();
+
+        assert_eq!(svg.matches(r#"<g class="entity""#).count(), 14);
+        assert!(
+            width < 800.0,
+            "square layout should not form one long row: {svg}"
+        );
+        assert!(
+            height > 250.0,
+            "square layout should span multiple ranks: {svg}"
+        );
+    }
+
+    #[test]
+    fn renamed_sprite_replaces_class_badge_and_bottom_aligns_in_note() {
+        let input = "@startuml\n\
+            sprite $fresh_badge [5x3/16] {\n\
+            01234\n\
+            43210\n\
+            13531\n\
+            }\n\
+            class Q <<$fresh_badge>>\n\
+            note right of Q : <$fresh_badge> Renamed warning\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(input, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Class(diagram) = diagram else {
+            panic!("expected class diagram");
+        };
+        let entity = &diagram.entities[0];
+        let font = ClassFontOverrides::from_skinparams(&diagram.meta.skinparams);
+        let with_sprite = calc_entity_dims(
+            entity,
+            0,
+            resolve_hide(entity, &diagram.hide_show),
+            &font,
+            &diagram.meta.sprites,
+        );
+        let mut plain_entity = entity.clone();
+        plain_entity.stereotypes.clear();
+        let without_sprite = calc_entity_dims(
+            &plain_entity,
+            0,
+            resolve_hide(&plain_entity, &diagram.hide_show),
+            &font,
+            &diagram.meta.sprites,
+        );
+
+        assert!(with_sprite.has_header_sprite);
+        assert!(
+            ((without_sprite.height - with_sprite.height) - (HEADER_HEIGHT - HEADER_H_NO_CIRCLE))
+                .abs()
+                < 1e-9
+        );
+        assert_eq!(without_sprite.width - with_sprite.width, 17.0);
+
+        let svg = render(&diagram, &Theme::default());
+        assert_eq!(svg.matches(r#"<image height="3" width="5""#).count(), 2);
+        assert!(!svg.contains("&lt;$fresh_badge&gt;"));
     }
 
     #[test]

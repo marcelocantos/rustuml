@@ -161,10 +161,6 @@ const WHILE_LOOP_EMPHASIS_ON_Y_RESTORE: f64 = 3.58984375;
 /// `CompressionXorYBuilder`: the emphasized DOWN decoration retains this
 /// offset below the midpoint of the compressed while point-out corridor.
 const WHILE_CROSS_ASSEMBLY_EMPHASIS_RESTORE: f64 = 7.33984375;
-/// Extracted from `CompressionXorYBuilder(ON_Y)` around
-/// `FtileSwitchWithManyLinks` when one or two flow tiles follow the switch in a
-/// while body. The trailing tile occupies part of the nominal 20px merge band.
-const WHILE_SWITCH_SHORT_TAIL_RECLAIM: f64 = 8.4990234375;
 /// Extracted from `FtileFactoryDelegatorAssembly` followed by the diagram-level
 /// ON_Y pass: an all-terminal conditional assembled to a new-lane continuation
 /// loses this final font-metric-derived fraction of its connection slot.
@@ -2041,9 +2037,10 @@ fn typed_ftile_steps_can_handle(steps: &[ActivityStep], is_swimlane: bool) -> bo
     const SWITCH: u8 = 5;
     let mut stack = Vec::new();
     let mut if_else_count = Vec::new();
-    let mut fork_again_count = 0usize;
-    let mut repeat_count = 0usize;
-    let mut switch_count = 0usize;
+    let mut has_typed_control = false;
+    let mut has_non_fork_typed_control = false;
+    let mut fork_branch_counts = Vec::new();
+    let mut has_fanout_fork = false;
     for step in steps {
         match step {
             ActivityStep::Start
@@ -2086,7 +2083,8 @@ fn typed_ftile_steps_can_handle(steps: &[ActivityStep], is_swimlane: bool) -> bo
             }
             ActivityStep::Repeat => {
                 stack.push(REPEAT);
-                repeat_count += 1;
+                has_typed_control = true;
+                has_non_fork_typed_control = true;
             }
             ActivityStep::Backward(_) if stack.contains(&REPEAT) => {}
             ActivityStep::RepeatWhile(_) => {
@@ -2097,7 +2095,8 @@ fn typed_ftile_steps_can_handle(steps: &[ActivityStep], is_swimlane: bool) -> bo
             ActivityStep::Note(_) => {}
             ActivityStep::Switch(_) => {
                 stack.push(SWITCH);
-                switch_count += 1;
+                has_typed_control = true;
+                has_non_fork_typed_control = true;
             }
             ActivityStep::Case(_) if stack.last() == Some(&SWITCH) => {}
             ActivityStep::EndSwitch => {
@@ -2107,24 +2106,38 @@ fn typed_ftile_steps_can_handle(steps: &[ActivityStep], is_swimlane: bool) -> bo
             }
             ActivityStep::Fork => {
                 stack.push(FORK);
+                fork_branch_counts.push(1usize);
+                has_typed_control = true;
             }
             ActivityStep::ForkAgain => {
                 if stack.last() != Some(&FORK) {
                     return false;
                 }
-                fork_again_count += 1;
+                let Some(branch_count) = fork_branch_counts.last_mut() else {
+                    return false;
+                };
+                *branch_count += 1;
             }
             ActivityStep::EndFork => {
                 if stack.pop() != Some(FORK) {
                     return false;
                 }
+                let Some(branch_count) = fork_branch_counts.pop() else {
+                    return false;
+                };
+                has_fanout_fork |= branch_count > 2;
             }
             _ => return false,
         }
     }
-    // Existing V2 gates cover nested control flow. This extension is only for
-    // generalized fan-out beyond their bounded legacy fork path.
-    stack.is_empty() && (fork_again_count >= 6 || repeat_count > 0 || switch_count > 0)
+    // The legacy segment model already ports ordinary binary fork assembly
+    // for any number of sequential or nested forks. The typed
+    // `ParallelBuilderFork` model owns genuine fan-out and every loop/switch
+    // composition that needs a single recursive FTile tree.
+    stack.is_empty()
+        && fork_branch_counts.is_empty()
+        && has_typed_control
+        && (has_non_fork_typed_control || has_fanout_fork)
 }
 
 /// True when the swimlane V2 single-tree path should own this diagram (instead
@@ -2290,7 +2303,6 @@ fn swimlane_v2_can_handle_simple_fork_flow(steps: &[ActivityStep]) -> bool {
         || fork_count > 2
         || (fork_count > 1 && !has_while)
         || fork_again_count < fork_count
-        || fork_again_count > 5
         || end_fork_count != fork_count
     {
         return false;
@@ -4629,6 +4641,54 @@ fn switch_while_merge_extra(
     } else {
         ARROW_LEN
     }
+}
+
+/// Typed-swimlane correction for a short tail after an in-while switch.
+///
+/// `FtileWhile.ConnectionBackSimple` contributes an invisible
+/// `UEmpty(5, Hexagon.hexagonHalfSize)` at the loop-frame turn. In the
+/// all-swimlane interceptor genealogy that guard overlaps the SMALL nude-switch
+/// reserve: the retained extra is the uncompressed SMALL corridor after the
+/// while-frame reclaim and one arrow lead. This is the symbolic form of the
+/// SlotFinder result and is independent of labels and case count.
+fn typed_switch_while_merge_extra(
+    node: &LayoutNode,
+    is_terminal_in_body: bool,
+    following_flow: usize,
+) -> f64 {
+    if !is_terminal_in_body
+        && (1..SWITCH_WHILE_MERGE_COMPRESS_MIN_FOLLOWING).contains(&following_flow)
+        && matches!(node, LayoutNode::Switch { .. })
+    {
+        SWITCH_MERGE_GAP_UNCOMPRESSED_SMALL - WHILE_TERMINAL_SWITCH_MERGE_RECLAIM - ARROW_LEN
+    } else {
+        switch_while_merge_extra(node, is_terminal_in_body, following_flow)
+    }
+}
+
+/// Raw merge-band slack retained before the diagram-wide ON_Y compression pass.
+///
+/// `FtileSwitchNude` advertises its uncompressed merge corridor; Java then lets
+/// `SlotFinder`, `SlotSet.reverse().smaller(5)`, and `CompressionTransform`
+/// remove only the unoccupied part. This is deliberately independent of how
+/// many sibling tiles follow the switch.
+fn switch_uncompressed_merge_extra(node: &LayoutNode) -> f64 {
+    let LayoutNode::Switch { cases, condition } = node else {
+        return 0.0;
+    };
+    if cases.len() < 2
+        || switch_all_branches_terminate(cases)
+        || switch_needs_empty_merge_gap(cases)
+    {
+        return 0.0;
+    }
+    let layout = switch_x_layout(cases, condition);
+    let uncompressed = if layout.big_diamond {
+        SWITCH_MERGE_GAP_UNCOMPRESSED_BIG
+    } else {
+        SWITCH_MERGE_GAP_UNCOMPRESSED_SMALL
+    };
+    uncompressed - switch_merge_gap(cases, condition, &layout)
 }
 
 /// Extra added to a multi-case switch's merge gap when the switch is the
@@ -28865,6 +28925,10 @@ impl TypedFtileSpacing {
             Self::Natural | Self::SingleLane => ftile::ASSEMBLY_CONNECTION_HEIGHT,
         }
     }
+
+    fn uses_compressed_geometry(self) -> bool {
+        self == Self::Compressed
+    }
 }
 
 struct TypedFtileScene<'a> {
@@ -29254,7 +29318,7 @@ fn typed_ftile_if_down<'a>(
             typed_ftile_sequence_with_spacing(plan.survivor, &mut continuation_lane, spacing)?;
         (survivor, terminal_lane)
     };
-    if spacing == TypedFtileSpacing::Compressed {
+    if spacing.uses_compressed_geometry() {
         typed_ftile_preserve_nested_fork_if_gap(&mut survivor_scene);
         typed_ftile_preserve_translated_terminal_owner_gap(&mut survivor_scene);
         typed_ftile_preserve_terminal_branch_gap(&mut survivor_scene);
@@ -29439,7 +29503,7 @@ fn typed_ftile_node<'a>(
                 &mut continuation_lane,
                 spacing,
             )?;
-            if spacing == TypedFtileSpacing::Compressed {
+            if spacing.uses_compressed_geometry() {
                 typed_ftile_preserve_nested_fork_if_gap(&mut then_scene);
                 typed_ftile_preserve_nested_fork_if_gap(&mut else_scene);
                 typed_ftile_translate_terminal_branch_from_owner(&mut then_scene, lane);
@@ -29565,7 +29629,7 @@ fn typed_ftile_node<'a>(
                     && else_scene.geometry.out_y.is_none())
                     || (typed_ftile_scene_ends_in_single_live_if(&else_scene)
                         && then_scene.geometry.out_y.is_none());
-            if spacing == TypedFtileSpacing::Compressed && nested_single_live_with_terminal_peer {
+            if spacing.uses_compressed_geometry() && nested_single_live_with_terminal_peer {
                 // `ConditionalBuilder.getShape2` uses a 6px FtileEmpty when
                 // one branch terminates. When the survivor ends in another
                 // single-live conditional, its owner-translated SlotFinder
@@ -29615,12 +29679,15 @@ fn typed_ftile_node<'a>(
             let mut body_scene = typed_ftile_sequence_with_spacing(body, &mut body_lane, spacing)?;
             let last_body_flow = last_flow_index(body);
             for (index, child) in body.iter().enumerate() {
-                let following = following_flow_count(body, index);
-                let mut extra =
-                    switch_while_merge_extra(child, Some(index) == last_body_flow, following);
-                if matches!(child, LayoutNode::Switch { .. }) && (1..=2).contains(&following) {
-                    extra -= WHILE_SWITCH_SHORT_TAIL_RECLAIM;
-                }
+                let extra = if spacing == TypedFtileSpacing::Natural {
+                    switch_uncompressed_merge_extra(child)
+                } else {
+                    typed_switch_while_merge_extra(
+                        child,
+                        Some(index) == last_body_flow,
+                        following_flow_count(body, index),
+                    )
+                };
                 if extra != 0.0 {
                     typed_ftile_stretch_direct_switch(&mut body_scene, child, extra);
                 }
@@ -30306,6 +30373,53 @@ fn typed_ftile_scene_contains_while(scene: &TypedFtileScene<'_>) -> bool {
         TypedFtileKind::Switch { cases, .. } => cases
             .iter()
             .any(|case| typed_ftile_scene_contains_while(&case.scene)),
+    }
+}
+
+#[cfg(test)]
+fn typed_ftile_scene_has_switch_in_while(scene: &TypedFtileScene<'_>, inside_while: bool) -> bool {
+    match &scene.kind {
+        TypedFtileKind::Leaf { .. } => false,
+        TypedFtileKind::WithNote { child, .. } => {
+            typed_ftile_scene_has_switch_in_while(&child.scene, inside_while)
+        }
+        TypedFtileKind::Sequence { children } => children
+            .iter()
+            .any(|child| typed_ftile_scene_has_switch_in_while(&child.scene, inside_while)),
+        TypedFtileKind::If {
+            then_scene,
+            else_scene,
+            ..
+        } => {
+            typed_ftile_scene_has_switch_in_while(&then_scene.scene, inside_while)
+                || typed_ftile_scene_has_switch_in_while(&else_scene.scene, inside_while)
+        }
+        TypedFtileKind::IfDown {
+            survivor, terminal, ..
+        } => {
+            typed_ftile_scene_has_switch_in_while(&survivor.scene, inside_while)
+                || terminal.as_ref().is_some_and(|terminal| {
+                    typed_ftile_scene_has_switch_in_while(&terminal.scene, inside_while)
+                })
+        }
+        TypedFtileKind::While { body, special, .. } => {
+            typed_ftile_scene_has_switch_in_while(&body.scene, true)
+                || special.as_ref().is_some_and(|special| {
+                    typed_ftile_scene_has_switch_in_while(&special.scene, inside_while)
+                })
+        }
+        TypedFtileKind::Repeat { body, .. } => {
+            typed_ftile_scene_has_switch_in_while(&body.scene, inside_while)
+        }
+        TypedFtileKind::Fork { branches, .. } => branches
+            .iter()
+            .any(|branch| typed_ftile_scene_has_switch_in_while(&branch.scene, inside_while)),
+        TypedFtileKind::Switch { cases, .. } => {
+            inside_while
+                || cases
+                    .iter()
+                    .any(|case| typed_ftile_scene_has_switch_in_while(&case.scene, inside_while))
+        }
     }
 }
 
@@ -38760,6 +38874,210 @@ mod tests {
         assert_eq!(
             out_x,
             lanes.x(fork.scene.out_lane, fork.x + fork.scene.geometry.left)
+        );
+    }
+
+    #[test]
+    fn typed_fork_geometry_is_continuous_across_five_and_six_branches() {
+        let geometry = |branch_count: usize| {
+            let lane = |name: &str| {
+                ActivityStep::Swimlane(SwimlaneBlock {
+                    name: name.into(),
+                    color: None,
+                })
+            };
+            let mut steps = vec![lane("Fresh forge"), ActivityStep::Start, ActivityStep::Fork];
+            for index in 0..branch_count {
+                if index > 0 {
+                    steps.push(ActivityStep::ForkAgain);
+                }
+                steps.push(lane(if index.is_multiple_of(2) {
+                    "Fresh forge"
+                } else {
+                    "Novel audit"
+                }));
+                steps.push(ActivityStep::Action(format!(
+                    "Process renamed shard {index}"
+                )));
+            }
+            steps.extend([ActivityStep::EndFork, ActivityStep::Stop]);
+
+            assert!(typed_ftile_steps_can_handle(&steps, true));
+            let tree = build_tree(&steps, &Palette::default_puml());
+            let mut current_lane = 0;
+            let scene = typed_ftile_sequence(&tree, &mut current_lane).expect("typed FTile scene");
+            let TypedFtileKind::Sequence { children } = &scene.kind else {
+                panic!("root sequence");
+            };
+            let fork = children
+                .iter()
+                .find(|child| matches!(child.scene.kind, TypedFtileKind::Fork { .. }))
+                .expect("fork child");
+            let TypedFtileKind::Fork {
+                branches,
+                bottom_bar_y,
+                ..
+            } = &fork.scene.kind
+            else {
+                unreachable!();
+            };
+            assert_eq!(branches.len(), branch_count);
+            (
+                fork.scene.geometry.width,
+                fork.scene.geometry.height,
+                *bottom_bar_y,
+            )
+        };
+
+        let five = geometry(5);
+        let six = geometry(6);
+        assert!(six.0 > five.0, "an added branch must extend the fork bar");
+        assert_eq!(six.1, five.1, "equal-height branches share one bar height");
+        assert_eq!(
+            six.2, five.2,
+            "the lower bar follows branch geometry, not count"
+        );
+    }
+
+    #[test]
+    fn switch_while_tail_geometry_comes_from_occupancy_for_zero_through_three_tiles() {
+        let geometry = |tail_count: usize| {
+            let lane = |name: &str| {
+                ActivityStep::Swimlane(SwimlaneBlock {
+                    name: name.into(),
+                    color: None,
+                })
+            };
+            let mut steps = vec![
+                lane("Fresh intake"),
+                ActivityStep::Start,
+                ActivityStep::While(WhileBlock {
+                    condition: "More renamed events?".into(),
+                    is_label: Some("yes".into()),
+                    source_line: 0,
+                }),
+                ActivityStep::Switch("Fresh event kind?".into()),
+                ActivityStep::Case("alpha".into()),
+                ActivityStep::Action("Handle renamed alpha".into()),
+                ActivityStep::Case("beta".into()),
+                ActivityStep::Action("Handle renamed beta".into()),
+                ActivityStep::EndSwitch,
+            ];
+            for index in 0..tail_count {
+                steps.push(ActivityStep::Action(format!(
+                    "Process novel tail stage {index}"
+                )));
+            }
+            steps.extend([
+                ActivityStep::EndWhile(Some("no".into())),
+                lane("Novel archive"),
+                ActivityStep::Stop,
+            ]);
+
+            assert!(typed_ftile_steps_can_handle(&steps, true));
+            let diagram = ActivityDiagram {
+                meta: DiagramMeta::default(),
+                steps,
+            };
+            let palette = Palette::default_puml();
+            let tree = build_tree(&diagram.steps, &palette);
+            let mut compressed_lane = 0;
+            let compressed =
+                typed_ftile_sequence(&tree, &mut compressed_lane).expect("compressed typed scene");
+            assert!(typed_ftile_scene_has_switch_in_while(&compressed, false));
+            let TypedFtileKind::Sequence {
+                children: compressed_children,
+            } = &compressed.kind
+            else {
+                panic!("compressed root sequence");
+            };
+            let compressed_while = compressed_children
+                .iter()
+                .find(|child| matches!(child.scene.kind, TypedFtileKind::While { .. }))
+                .expect("compressed while child");
+            let TypedFtileKind::While {
+                body: compressed_body,
+                ..
+            } = &compressed_while.scene.kind
+            else {
+                unreachable!();
+            };
+            let TypedFtileKind::Sequence {
+                children: compressed_body_children,
+            } = &compressed_body.scene.kind
+            else {
+                panic!("compressed while body sequence");
+            };
+            let compressed_switch = compressed_body_children
+                .iter()
+                .find(|child| matches!(child.scene.kind, TypedFtileKind::Switch { .. }))
+                .expect("compressed switch child");
+            let TypedFtileKind::Switch {
+                diamond2_at: compressed_diamond2_at,
+                ..
+            } = &compressed_switch.scene.kind
+            else {
+                unreachable!();
+            };
+
+            let mut natural_lane = 0;
+            let natural = typed_ftile_sequence_with_spacing(
+                &tree,
+                &mut natural_lane,
+                TypedFtileSpacing::Natural,
+            )
+            .expect("natural typed scene");
+            let TypedFtileKind::Sequence { children } = &natural.kind else {
+                panic!("root sequence");
+            };
+            let while_scene = children
+                .iter()
+                .find(|child| matches!(child.scene.kind, TypedFtileKind::While { .. }))
+                .expect("while child");
+            let TypedFtileKind::While { body, .. } = &while_scene.scene.kind else {
+                unreachable!();
+            };
+            let TypedFtileKind::Sequence {
+                children: body_children,
+            } = &body.scene.kind
+            else {
+                panic!("while body sequence");
+            };
+            let switch = body_children
+                .iter()
+                .find(|child| matches!(child.scene.kind, TypedFtileKind::Switch { .. }))
+                .expect("switch child");
+            let TypedFtileKind::Switch { diamond2_at, .. } = &switch.scene.kind else {
+                unreachable!();
+            };
+
+            (
+                diamond2_at.1,
+                body.scene.geometry.height,
+                compressed_diamond2_at.1,
+            )
+        };
+
+        let measured: Vec<_> = (0..=3).map(geometry).collect();
+        assert!(
+            measured.windows(2).all(|pair| pair[0].0 == pair[1].0),
+            "the raw switch merge corridor must not depend on tail count"
+        );
+        let raw_steps: Vec<_> = measured
+            .windows(2)
+            .map(|pair| pair[1].1 - pair[0].1)
+            .collect();
+        assert!(
+            raw_steps.windows(2).all(|pair| pair[0] == pair[1]),
+            "equal tail tiles must add equal raw FTile height"
+        );
+        assert_eq!(
+            measured[1].2, measured[2].2,
+            "one and two trailing tiles share the loop-frame-protected corridor"
+        );
+        assert_ne!(
+            measured[2].2, measured[3].2,
+            "the third trailing tile enters PlantUML's compressed corridor state"
         );
     }
 

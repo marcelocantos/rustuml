@@ -21,19 +21,24 @@
 
 use std::collections::HashMap;
 
-use resvg::tiny_skia::{self, FilterQuality, PixmapPaint, Transform};
 use rustuml_parser::diagram::SpriteData;
 
 const PLANTUML_GRAY_LEVELS: u32 = 16;
 const PLANTUML_MAX_CHANNEL: u8 = 255;
 const PLANTUML_ALPHA_RAMP_DIVISOR: f64 = 4.0;
+const DEFAULT_BACKGROUND: [u8; 3] = [255, 255, 255];
+const DEFAULT_FOREGROUND: [u8; 3] = [0, 0, 0];
 
 /// Render a sprite's pixel data to a raw RGBA pixel buffer.
 ///
 /// This follows PlantUML's `SpriteMonochrome.toUImage`: pixels are a
 /// white-to-foreground gradient, and low gray values ramp alpha relative to
 /// the maximum gray coefficient present in the sprite.
-fn sprite_to_rgba(sprite: &SpriteData) -> (u32, u32, Vec<u8>) {
+fn sprite_to_rgba_with_colors(
+    sprite: &SpriteData,
+    background: [u8; 3],
+    foreground: [u8; 3],
+) -> (u32, u32, Vec<u8>) {
     let rows = &sprite.rows;
     let height = rows.len() as u32;
     let width = rows.first().map(|r| r.len()).unwrap_or(0) as u32;
@@ -79,95 +84,141 @@ fn sprite_to_rgba(sprite: &SpriteData) -> (u32, u32, Vec<u8>) {
         } else {
             (PLANTUML_MAX_CHANNEL as f64 * (coef * PLANTUML_ALPHA_RAMP_DIVISOR / max_coef)) as u8
         };
-        let channel = PLANTUML_MAX_CHANNEL - (coef * PLANTUML_MAX_CHANNEL as f64).trunc() as u8;
         let base_idx = idx * 4;
-        rgba[base_idx] = channel;
-        rgba[base_idx + 1] = channel;
-        rgba[base_idx + 2] = channel;
+        for channel in 0..3 {
+            // Java `HColorGradient.getColor` truncates the signed channel delta
+            // before adding it to color1; truncating the final positive blend
+            // instead is one level darker for non-divisible channel ranges.
+            let delta = foreground[channel] as i32 - background[channel] as i32;
+            rgba[base_idx + channel] =
+                (background[channel] as i32 + (coef * delta as f64) as i32) as u8;
+        }
         rgba[base_idx + 3] = alpha;
     }
 
     (w, h, rgba)
 }
 
-fn rgba_to_pixmap(w: u32, h: u32, rgba: &[u8]) -> Result<tiny_skia::Pixmap, String> {
-    if w == 0 || h == 0 {
-        return Err("sprite has no pixel data".to_string());
-    }
-
-    let mut pixmap =
-        tiny_skia::Pixmap::new(w, h).ok_or_else(|| format!("failed to create pixmap {w}x{h}"))?;
-
-    // tiny-skia stores premultiplied RGBA; PlantUML's PortableImage stores
-    // straight ARGB, so premultiply here before handing pixels to the encoder.
-    let dst = pixmap.data_mut();
-    for (i, chunk) in rgba.chunks_exact(4).enumerate() {
-        let r = chunk[0];
-        let g = chunk[1];
-        let b = chunk[2];
-        let a = chunk[3];
-        // Premultiply: tiny_skia stores premultiplied alpha.
-        let pm_r = ((r as u32 * a as u32 + 127) / 255) as u8;
-        let pm_g = ((g as u32 * a as u32 + 127) / 255) as u8;
-        let pm_b = ((b as u32 * a as u32 + 127) / 255) as u8;
-        dst[i * 4] = pm_r;
-        dst[i * 4 + 1] = pm_g;
-        dst[i * 4 + 2] = pm_b;
-        dst[i * 4 + 3] = a;
-    }
-
-    Ok(pixmap)
+fn sprite_to_rgba(sprite: &SpriteData) -> (u32, u32, Vec<u8>) {
+    sprite_to_rgba_with_colors(sprite, DEFAULT_BACKGROUND, DEFAULT_FOREGROUND)
 }
 
-fn scale_pixmap(
-    pixmap: &tiny_skia::Pixmap,
+fn scale_straight_rgba(
+    rgba: &[u8],
+    source_w: u32,
+    source_h: u32,
     target_w: u32,
     target_h: u32,
-) -> Result<tiny_skia::Pixmap, String> {
-    if pixmap.width() == target_w && pixmap.height() == target_h {
-        return Ok(pixmap.clone());
+    scale: f64,
+) -> Result<Vec<u8>, String> {
+    if source_w == 0 || source_h == 0 {
+        return Err("sprite has no pixel data".to_string());
     }
     if target_w == 0 || target_h == 0 {
         return Err("sprite scale produced an empty image".to_string());
     }
-
-    let mut scaled = tiny_skia::Pixmap::new(target_w, target_h)
-        .ok_or_else(|| format!("failed to create scaled pixmap {target_w}x{target_h}"))?;
-    let paint = PixmapPaint {
-        quality: FilterQuality::Bilinear,
-        ..PixmapPaint::default()
+    // Directly preserve `mlib_AffineEdges`' operation order: it computes the
+    // inverse through the determinant, converts the first sample to 16.16,
+    // then advances X by one separately truncated fixed-point delta.
+    let determinant = scale * scale;
+    let inverse_determinant = 1.0 / determinant;
+    let first_x = (((0.5 * scale) * inverse_determinant - 0.5) * 65536.0) as i64;
+    let delta_x = (scale * inverse_determinant * 65536.0) as i64;
+    let source_y_fixed = |target: u32| {
+        ((((target as f64 + 0.5) * scale) * inverse_determinant - 0.5) * 65536.0) as i64
     };
-    let sx = target_w as f32 / pixmap.width() as f32;
-    let sy = target_h as f32 / pixmap.height() as f32;
-    scaled.draw_pixmap(
-        0,
-        0,
-        pixmap.as_ref(),
-        &paint,
-        Transform::from_scale(sx, sy),
-        None,
-    );
+    let mut scaled = vec![0; (target_w * target_h * 4) as usize];
+    for target_y in 0..target_h {
+        let fixed_y = source_y_fixed(target_y);
+        let source_y = fixed_y >> 16;
+        let fy = fixed_y & 0xffff;
+        let y0 = source_y.clamp(0, source_h as i64 - 1) as u32;
+        let y1 = (source_y + 1).clamp(0, source_h as i64 - 1) as u32;
+        for target_x in 0..target_w {
+            let fixed_x = first_x + target_x as i64 * delta_x;
+            let source_x = fixed_x >> 16;
+            let fx = fixed_x & 0xffff;
+            let x0 = source_x.clamp(0, source_w as i64 - 1) as u32;
+            let x1 = (source_x + 1).clamp(0, source_w as i64 - 1) as u32;
+
+            let output = ((target_y * target_w + target_x) * 4) as usize;
+            let top_left = ((y0 * source_w + x0) * 4) as usize;
+            let top_right = ((y0 * source_w + x1) * 4) as usize;
+            let bottom_left = ((y1 * source_w + x0) * 4) as usize;
+            let bottom_right = ((y1 * source_w + x1) * 4) as usize;
+            let is_edge = source_x < 0
+                || source_x + 1 >= source_w as i64
+                || source_y < 0
+                || source_y + 1 >= source_h as i64;
+            for channel in 0..4 {
+                let a00 = rgba[top_left + channel] as i64;
+                let a01 = rgba[top_right + channel] as i64;
+                let a10 = rgba[bottom_left + channel] as i64;
+                let a11 = rgba[bottom_right + channel] as i64;
+                scaled[output + channel] = if is_edge {
+                    // `mlib_ImageAffineEdgeExtend_BL` interpolates in double
+                    // precision and truncates when assigning to `mlib_u8`.
+                    let t = fx as f64 / 65536.0;
+                    let u = fy as f64 / 65536.0;
+                    (((a00 as f64 * (1.0 - t) + a01 as f64 * t) * (1.0 - u)
+                        + (a10 as f64 * (1.0 - t) + a11 as f64 * t) * u)
+                        as i64) as u8
+                } else {
+                    // `mlib_c_ImageAffine_BL` rounds each 16.16 interpolation
+                    // stage independently through its `COUNT` macro.
+                    let vertical_left = a00 + ((fy * (a10 - a00) + 32768) >> 16);
+                    let vertical_right = a01 + ((fy * (a11 - a01) + 32768) >> 16);
+                    (vertical_left + ((fx * (vertical_right - vertical_left) + 32768) >> 16)) as u8
+                };
+            }
+        }
+    }
     Ok(scaled)
+}
+
+fn encode_java_png(w: u32, h: u32, rgba: &[u8]) -> Result<Vec<u8>, String> {
+    if w == 0 || h == 0 {
+        return Err("sprite has no pixel data".to_string());
+    }
+    let mut output = Vec::new();
+    let mut encoder = png::Encoder::new(&mut output, w, h);
+    encoder.set_color(png::ColorType::Rgba);
+    encoder.set_depth(png::BitDepth::Eight);
+    // Java ImageIO's PNG writer emits unfiltered scanlines and zlib level 4
+    // for these small TYPE_INT_ARGB images.
+    encoder.set_filter(png::Filter::NoFilter);
+    encoder.set_deflate_compression(png::DeflateCompression::Level(4));
+    let mut writer = encoder
+        .write_header()
+        .map_err(|e| format!("PNG header error: {e}"))?;
+    writer
+        .write_image_data(rgba)
+        .map_err(|e| format!("PNG encoding error: {e}"))?;
+    drop(writer);
+    Ok(output)
 }
 
 /// Encode a sprite to a PNG byte vector.
 pub fn sprite_to_png(sprite: &SpriteData) -> Result<Vec<u8>, String> {
     let (w, h, rgba) = sprite_to_rgba(sprite);
-    let pixmap = rgba_to_pixmap(w, h, &rgba)?;
-    pixmap
-        .encode_png()
-        .map_err(|e| format!("PNG encoding error: {e}"))
+    encode_java_png(w, h, &rgba)
 }
 
 /// Encode a sprite to a PNG byte vector after PlantUML-style image scaling.
 pub fn sprite_to_png_scaled(sprite: &SpriteData, scale: f64) -> Result<Vec<u8>, String> {
-    let (w, h, rgba) = sprite_to_rgba(sprite);
-    let pixmap = rgba_to_pixmap(w, h, &rgba)?;
+    sprite_to_png_scaled_with_colors(sprite, scale, DEFAULT_BACKGROUND, DEFAULT_FOREGROUND)
+}
+
+fn sprite_to_png_scaled_with_colors(
+    sprite: &SpriteData,
+    scale: f64,
+    background: [u8; 3],
+    foreground: [u8; 3],
+) -> Result<Vec<u8>, String> {
+    let (w, h, rgba) = sprite_to_rgba_with_colors(sprite, background, foreground);
     let (target_w, target_h) = scaled_sprite_dimensions(sprite, scale);
-    let scaled = scale_pixmap(&pixmap, target_w, target_h)?;
-    scaled
-        .encode_png()
-        .map_err(|e| format!("PNG encoding error: {e}"))
+    let scaled = scale_straight_rgba(&rgba, w, h, target_w, target_h, scale)?;
+    encode_java_png(target_w, target_h, &scaled)
 }
 
 /// Encode a sprite to a base64-encoded PNG data URI suitable for `xlink:href`.
@@ -180,6 +231,18 @@ pub fn sprite_to_data_uri(sprite: &SpriteData) -> Result<String, String> {
 /// Encode a scaled sprite to a base64-encoded PNG data URI.
 pub fn sprite_to_data_uri_scaled(sprite: &SpriteData, scale: f64) -> Result<String, String> {
     let png = sprite_to_png_scaled(sprite, scale)?;
+    let encoded = encode_base64(&png);
+    Ok(format!("data:image/png;base64,{encoded}"))
+}
+
+/// Encode a scaled sprite with the drawing surface's gradient endpoints.
+pub fn sprite_to_data_uri_scaled_with_colors(
+    sprite: &SpriteData,
+    scale: f64,
+    background: [u8; 3],
+    foreground: [u8; 3],
+) -> Result<String, String> {
+    let png = sprite_to_png_scaled_with_colors(sprite, scale, background, foreground)?;
     let encoded = encode_base64(&png);
     Ok(format!("data:image/png;base64,{encoded}"))
 }
@@ -204,10 +267,26 @@ impl SpriteCache {
 
     /// Build a cache whose PNG payloads use PlantUML-style image scaling.
     pub fn from_sprites_scaled(sprites: &HashMap<String, SpriteData>, scale: f64) -> Self {
+        Self::from_sprites_scaled_with_colors(
+            sprites,
+            scale,
+            DEFAULT_BACKGROUND,
+            DEFAULT_FOREGROUND,
+        )
+    }
+
+    /// Build a scaled cache using the active drawing surface's colors.
+    pub fn from_sprites_scaled_with_colors(
+        sprites: &HashMap<String, SpriteData>,
+        scale: f64,
+        background: [u8; 3],
+        foreground: [u8; 3],
+    ) -> Self {
         let uris = sprites
             .iter()
             .map(|(name, data)| {
-                let uri = sprite_to_data_uri_scaled(data, scale).ok();
+                let uri =
+                    sprite_to_data_uri_scaled_with_colors(data, scale, background, foreground).ok();
                 (name.clone(), uri)
             })
             .collect();
@@ -296,10 +375,6 @@ pub fn parse_sprite_segments(text: &str) -> Vec<TextSegment> {
                 segments.push(TextSegment::Sprite(name.to_string()));
             }
             rest = &after[end + 1..];
-            // Skip a single trailing space after the reference (matches PlantUML behaviour).
-            if rest.starts_with(' ') {
-                rest = &rest[1..];
-            }
         } else {
             // No closing '>'; treat from the marker onwards as text.
             segments.push(TextSegment::Text(rest[start..].to_string()));
@@ -328,7 +403,7 @@ pub fn measure_segments(
             TextSegment::Sprite(name) => {
                 if let Some(sd) = sprites.get(name) {
                     let (w, _h) = sprite_dimensions(sd);
-                    total += w as f64 + 1.0; // 1px gap
+                    total += w as f64;
                 }
             }
             TextSegment::OpenIcon(name) => {
@@ -336,7 +411,7 @@ pub fn measure_segments(
                     // Scale icon to match text size.  The icon viewBox is 8x8;
                     // PlantUML scales it proportionally to the font size.
                     let scale = font_size / icon.height;
-                    total += icon.width * scale + 1.0; // 1px gap
+                    total += icon.width * scale;
                 }
             }
         }
@@ -441,6 +516,13 @@ mod tests {
     }
 
     #[test]
+    fn gradient_truncates_the_signed_delta_before_adding_background() {
+        let sprite = make_sprite(&["1"]);
+        let (_, _, rgba) = sprite_to_rgba_with_colors(&sprite, [0xFE, 0xFF, 0xDD], [0, 0, 0]);
+        assert_eq!(&rgba[..4], &[238, 238, 207, 255]);
+    }
+
+    #[test]
     fn sprite_cache_lookup() {
         let sprite = make_sprite(&["FF"]);
         let mut map = HashMap::new();
@@ -458,7 +540,7 @@ mod tests {
             vec![
                 TextSegment::Text("Hello ".to_string()),
                 TextSegment::OpenIcon("heart".to_string()),
-                TextSegment::Text("world".to_string()),
+                TextSegment::Text(" world".to_string()),
             ]
         );
     }
@@ -470,8 +552,21 @@ mod tests {
             segs,
             vec![
                 TextSegment::Sprite("disk".to_string()),
+                TextSegment::Text(" ".to_string()),
                 TextSegment::OpenIcon("check".to_string()),
-                TextSegment::Text("done".to_string()),
+                TextSegment::Text(" done".to_string()),
+            ]
+        );
+    }
+
+    #[test]
+    fn parser_preserves_the_source_gap_after_a_sprite() {
+        let segments = parse_sprite_segments("<$fresh_mark> Renamed service");
+        assert_eq!(
+            segments,
+            vec![
+                TextSegment::Sprite("fresh_mark".to_string()),
+                TextSegment::Text(" Renamed service".to_string()),
             ]
         );
     }

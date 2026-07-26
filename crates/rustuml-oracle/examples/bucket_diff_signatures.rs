@@ -66,7 +66,7 @@ fn first_diff_signature(diff: &compare::Difference) -> String {
                     None => diff_keys.push(format!("{k}=missing")),
                 }
             }
-            for (k, _) in &act_map {
+            for k in act_map.keys() {
                 if !exp_map.contains_key(k) {
                     diff_keys.push(format!("{k}=extra"));
                 }

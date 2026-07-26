@@ -96,10 +96,10 @@ fn collect_recursive(dir: &Path, files: &mut Vec<PathBuf>) {
         let path = entry.path();
         if path.is_dir() {
             collect_recursive(&path, files);
-        } else if path.extension().is_some_and(|e| e == "puml") {
-            if path.with_extension("svg").exists() {
-                files.push(path);
-            }
+        } else if path.extension().is_some_and(|e| e == "puml")
+            && path.with_extension("svg").exists()
+        {
+            files.push(path);
         }
     }
 }
@@ -111,7 +111,7 @@ struct FormatResult {
 
 enum FormatOutcome {
     Pass,
-    Skip(String),
+    Skip,
     Fail(String),
 }
 
@@ -127,10 +127,10 @@ fn run_one(puml_path: &Path, root: &Path, eps_sample: bool) -> FormatResult {
 
     let source = match std::fs::read_to_string(puml_path) {
         Ok(s) => s,
-        Err(e) => {
+        Err(_) => {
             return FormatResult {
                 name: rel,
-                outcome: FormatOutcome::Skip(format!("read puml: {e}")),
+                outcome: FormatOutcome::Skip,
             };
         }
     };
@@ -138,10 +138,10 @@ fn run_one(puml_path: &Path, root: &Path, eps_sample: bool) -> FormatResult {
     // Check golden SVG for known errors.
     let golden_svg = match std::fs::read_to_string(puml_path.with_extension("svg")) {
         Ok(s) => s,
-        Err(e) => {
+        Err(_) => {
             return FormatResult {
                 name: rel,
-                outcome: FormatOutcome::Skip(format!("read svg: {e}")),
+                outcome: FormatOutcome::Skip,
             };
         }
     };
@@ -149,13 +149,13 @@ fn run_one(puml_path: &Path, root: &Path, eps_sample: bool) -> FormatResult {
     if golden_has_syntax_error(&golden_svg) {
         return FormatResult {
             name: rel,
-            outcome: FormatOutcome::Skip("golden SVG contains error".into()),
+            outcome: FormatOutcome::Skip,
         };
     }
     if !has_supported_start_keyword(&source) {
         return FormatResult {
             name: rel,
-            outcome: FormatOutcome::Skip("unsupported keyword".into()),
+            outcome: FormatOutcome::Skip,
         };
     }
 
@@ -178,7 +178,7 @@ fn run_one(puml_path: &Path, root: &Path, eps_sample: bool) -> FormatResult {
         // PNG conversion.
         match rustuml_render::png::svg_to_png(&svg) {
             Ok(png) => {
-                if png.len() < 8 || &png[..4] != &[137, 80, 78, 71] {
+                if png.len() < 8 || png[..4] != [137, 80, 78, 71] {
                     errors.push("PNG: missing magic bytes".to_string());
                 } else if let Some((w, h)) = rustuml_render::png::png_dimensions(&png) {
                     if w == 0 || h == 0 {
@@ -232,7 +232,7 @@ fn run_one(puml_path: &Path, root: &Path, eps_sample: bool) -> FormatResult {
         },
         Ok(Err(msg)) => {
             let outcome = if msg.starts_with("parse:") {
-                FormatOutcome::Skip(msg)
+                FormatOutcome::Skip
             } else {
                 FormatOutcome::Fail(msg)
             };
@@ -304,7 +304,7 @@ fn golden_format_smoke() {
                         pass.fetch_add(1, Ordering::Relaxed);
                         None
                     }
-                    FormatOutcome::Skip(_) => {
+                    FormatOutcome::Skip => {
                         skip.fetch_add(1, Ordering::Relaxed);
                         None
                     }
@@ -318,7 +318,7 @@ fn golden_format_smoke() {
     let pass = pass.load(Ordering::Relaxed);
     let skip = skip.load(Ordering::Relaxed);
     let fail_count = failures.len();
-    let eps_count = (total + EPS_SAMPLE_STRIDE - 1) / EPS_SAMPLE_STRIDE;
+    let eps_count = total.div_ceil(EPS_SAMPLE_STRIDE);
 
     eprintln!(
         "\ngolden_format_smoke: {total} total, {pass} passed, {fail_count} failed, {skip} skipped"

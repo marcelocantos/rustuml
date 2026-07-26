@@ -319,53 +319,6 @@ fn is_transparent_fill_hex(bytes: &[u8], hash_idx: usize) -> bool {
         .any(|w| w == TRANSPARENT_ATTR)
 }
 
-#[cfg(test)]
-mod post_process_tests {
-    use super::grey_hex_colors;
-
-    /// Guards the byte-as-char bug class: an SVG-colour post-process must
-    /// preserve multibyte UTF-8 text content byte-for-byte while rewriting
-    /// only the ASCII hex colours. (Regression guard for the whole family of
-    /// final-SVG byte-scan passes — monochrome and any future scaler.)
-    #[test]
-    fn grey_hex_preserves_multibyte_text() {
-        // Guillemets, CJK, Cyrillic, accented Latin, emoji — all multibyte.
-        let svg = "<text fill=\"#ADD1B2\">«service» 客户端 Пользователь Ärger 🚀</text>\
-                   <rect style=\"stroke:#181818;fill:#FF0000\"/>";
-        let out = grey_hex_colors(svg.to_string(), false);
-        // Multibyte text content is untouched.
-        assert!(
-            out.contains("«service» 客户端 Пользователь Ärger 🚀"),
-            "text corrupted: {out}"
-        );
-        // Colours greyed: #ADD1B2 -> #C2C2C2, #181818 -> #181818, #FF0000 -> #4C4C4C.
-        assert!(out.contains("#C2C2C2"), "ADD1B2 not greyed: {out}");
-        assert!(out.contains("#4C4C4C"), "FF0000 not greyed: {out}");
-        // Output is valid UTF-8 and the same char count of the text run.
-        assert!(out.is_char_boundary(0));
-        // Reverse maps #FFFFFF->#000000 and #000000->#FFFFFF.
-        let rev = grey_hex_colors(
-            "<a fill=\"#FFFFFF\" stroke=\"#000000\">é</a>".to_string(),
-            true,
-        );
-        assert!(
-            rev.contains("#000000") && rev.contains("#FFFFFF") && rev.contains('é'),
-            "{rev}"
-        );
-    }
-
-    #[test]
-    fn grey_hex_preserves_transparent_hitbox_fill() {
-        let svg = r##"<rect fill="#000000" fill-opacity="0.00000" height="10"/><rect fill="#000000" height="10"/>"##;
-        let out = grey_hex_colors(svg.to_string(), true);
-        assert!(
-            out.contains(r##"fill="#000000" fill-opacity="0.00000""##),
-            "{out}"
-        );
-        assert!(out.contains(r##"fill="#FFFFFF" height="10""##), "{out}");
-    }
-}
-
 /// Swap PlantUML's own brand self-references for rustuml equivalents in
 /// the rendered SVG. Targets only the specific welcome-screen phrases
 /// that PlantUML emits when describing itself — never bare "PlantUML" or
@@ -448,5 +401,52 @@ fn render_with_theme(diagram: &Diagram, theme: &Theme) -> String {
         Diagram::Board(b) => board::render(b, theme),
         Diagram::Ebnf(e) => ebnf::render(e, theme),
         Diagram::Archimate(a) => archimate::render(a, theme),
+    }
+}
+
+#[cfg(test)]
+mod post_process_tests {
+    use super::grey_hex_colors;
+
+    /// Guards the byte-as-char bug class: an SVG-colour post-process must
+    /// preserve multibyte UTF-8 text content byte-for-byte while rewriting
+    /// only the ASCII hex colours. (Regression guard for the whole family of
+    /// final-SVG byte-scan passes — monochrome and any future scaler.)
+    #[test]
+    fn grey_hex_preserves_multibyte_text() {
+        // Guillemets, CJK, Cyrillic, accented Latin, emoji — all multibyte.
+        let svg = "<text fill=\"#ADD1B2\">«service» 客户端 Пользователь Ärger 🚀</text>\
+                   <rect style=\"stroke:#181818;fill:#FF0000\"/>";
+        let out = grey_hex_colors(svg.to_string(), false);
+        // Multibyte text content is untouched.
+        assert!(
+            out.contains("«service» 客户端 Пользователь Ärger 🚀"),
+            "text corrupted: {out}"
+        );
+        // Colours greyed: #ADD1B2 -> #C2C2C2, #181818 -> #181818, #FF0000 -> #4C4C4C.
+        assert!(out.contains("#C2C2C2"), "ADD1B2 not greyed: {out}");
+        assert!(out.contains("#4C4C4C"), "FF0000 not greyed: {out}");
+        // Output is valid UTF-8 and the same char count of the text run.
+        assert!(out.is_char_boundary(0));
+        // Reverse maps #FFFFFF->#000000 and #000000->#FFFFFF.
+        let rev = grey_hex_colors(
+            "<a fill=\"#FFFFFF\" stroke=\"#000000\">é</a>".to_string(),
+            true,
+        );
+        assert!(
+            rev.contains("#000000") && rev.contains("#FFFFFF") && rev.contains('é'),
+            "{rev}"
+        );
+    }
+
+    #[test]
+    fn grey_hex_preserves_transparent_hitbox_fill() {
+        let svg = r##"<rect fill="#000000" fill-opacity="0.00000" height="10"/><rect fill="#000000" height="10"/>"##;
+        let out = grey_hex_colors(svg.to_string(), true);
+        assert!(
+            out.contains(r##"fill="#000000" fill-opacity="0.00000""##),
+            "{out}"
+        );
+        assert!(out.contains(r##"fill="#FFFFFF" height="10""##), "{out}");
     }
 }

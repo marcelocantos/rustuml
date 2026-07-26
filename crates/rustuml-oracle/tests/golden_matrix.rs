@@ -25,7 +25,7 @@ fn render_rust(input: &str) -> String {
 }
 
 fn validate_case(case: &MatrixCase) -> Result<(), String> {
-    let safe_name = case.name.replace('/', "_").replace(' ', "_");
+    let safe_name = case.name.replace(['/', ' '], "_");
     let path = golden_dir().join(format!("{safe_name}.svg"));
 
     let golden = match std::fs::read_to_string(&path) {

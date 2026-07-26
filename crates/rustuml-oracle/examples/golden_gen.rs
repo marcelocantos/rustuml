@@ -56,7 +56,7 @@ fn main() {
         if idx > 0 && idx % 10 == 0 {
             std::thread::sleep(std::time::Duration::from_millis(100));
         }
-        let safe_name = case.name.replace('/', "_").replace(' ', "_");
+        let safe_name = case.name.replace(['/', ' '], "_");
         let dir = output_dir.join("matrix");
         std::fs::create_dir_all(&dir).expect("create dir");
         let path = dir.join(format!("{safe_name}.svg"));

@@ -27,6 +27,10 @@ pub fn parse_class(lines: &[String]) -> Result<ClassDiagram, ParseError> {
 
     for (i, line) in lines.iter().enumerate() {
         let (source_line, trimmed) = super::source_line_and_trimmed(i + 1, line);
+        if parser.current_note.is_some() {
+            parser.parse_line(source_line, super::source_text(line).trim_end())?;
+            continue;
+        }
         if trimmed.is_empty() {
             continue;
         }
@@ -152,6 +156,7 @@ impl ClassParser {
             self.entities.push(ClassEntity {
                 id: id.clone(),
                 label: id.clone(),
+                explicit_alias: false,
                 kind: EntityKind::Class,
                 members: Vec::new(),
                 stereotypes: Vec::new(),
@@ -376,11 +381,29 @@ impl ClassParser {
 
         // Inside a multi-line note?
         if self.current_note.is_some() {
-            if line == "end note" {
-                self.notes.push(self.current_note.take().unwrap());
+            if line.trim() == "end note" {
+                let mut note = self.current_note.take().unwrap();
+                if note.lines.is_empty() {
+                    // A body line that is itself an inline diagram directive
+                    // is consumed by preprocessing. Java still attributes the
+                    // empty note entity to that body location, immediately
+                    // after the declaration.
+                    note.source_line = note.source_line.saturating_add(1);
+                }
+                dedent_note_lines(&mut note.lines);
+                self.notes.push(note);
             } else if let Some(note) = self.current_note.as_mut() {
                 if note.lines.is_empty() {
-                    note.source_line = self.current_line;
+                    // `CommandFactoryNote` attributes a multiline note entity
+                    // to its first body line. An inline nested `@startuml ...
+                    // @enduml` can retain the declaration's preprocessor
+                    // marker; advance to the adjacent body line in that one
+                    // ambiguous case.
+                    note.source_line = if self.current_line == note.source_line {
+                        note.source_line + 1
+                    } else {
+                        self.current_line
+                    };
                 }
                 note.lines.push(line.to_string());
             }
@@ -574,6 +597,7 @@ impl ClassParser {
                 self.entities.push(ClassEntity {
                     id: final_id.clone(),
                     label: display_label,
+                    explicit_alias: caps.get(2).is_some(),
                     kind,
                     members: Vec::new(),
                     stereotypes,
@@ -683,6 +707,7 @@ impl ClassParser {
                 self.entities.push(ClassEntity {
                     id: id.clone(),
                     label: id.clone(),
+                    explicit_alias: false,
                     kind: EntityKind::Enum,
                     members: Vec::new(),
                     stereotypes: Vec::new(),
@@ -878,6 +903,7 @@ impl ClassParser {
                 self.entities.push(ClassEntity {
                     id: to_raw.clone(),
                     label: to_raw.clone(),
+                    explicit_alias: false,
                     kind: EntityKind::Interface,
                     members: Vec::new(),
                     stereotypes: Vec::new(),
@@ -1172,6 +1198,7 @@ impl ClassParser {
                     self.entities.push(ClassEntity {
                         id: "note".to_string(),
                         label: "note".to_string(),
+                        explicit_alias: false,
                         kind: EntityKind::Class,
                         members: vec![member],
                         stereotypes: Vec::new(),
@@ -1398,6 +1425,26 @@ impl ClassParser {
                 member.kind = MemberKind::Field;
             }
             entity.members.push(member);
+        }
+    }
+}
+
+fn dedent_note_lines(lines: &mut [String]) {
+    let indent = lines
+        .iter()
+        .filter(|line| !line.trim().is_empty())
+        .map(|line| {
+            line.bytes()
+                .take_while(|byte| matches!(byte, b' ' | b'\t'))
+                .count()
+        })
+        .min()
+        .unwrap_or(0);
+    for line in lines {
+        if line.trim().is_empty() {
+            line.clear();
+        } else {
+            line.drain(..indent);
         }
     }
 }
@@ -2180,6 +2227,7 @@ mod tests {
         let e = &d.entities[0];
         assert_eq!(e.id, "C");
         assert_eq!(e.label, "**BoundaryClass** «boundary»");
+        assert!(e.explicit_alias);
         assert!(e.stereotypes.is_empty());
     }
 
@@ -2189,6 +2237,7 @@ mod tests {
         let e = &d.entities[0];
         assert_eq!(e.id, "C");
         assert_eq!(e.label, "Service");
+        assert!(e.explicit_alias);
         assert_eq!(e.stereotypes, vec!["service"]);
     }
 
@@ -2477,6 +2526,25 @@ mod tests {
         assert_eq!(
             d.notes[0].lines,
             ["First content line", "Second content line"]
+        );
+    }
+
+    #[test]
+    fn multiline_note_dedents_common_margin_but_preserves_code_structure() {
+        let d = parse(
+            "note as FreshCode759\n  <code>\n  fn audit() {\n      record();\n\n  }\n  </code>\nend note",
+        );
+
+        assert_eq!(
+            d.notes[0].lines,
+            [
+                "<code>",
+                "fn audit() {",
+                "    record();",
+                "",
+                "}",
+                "</code>"
+            ]
         );
     }
 }

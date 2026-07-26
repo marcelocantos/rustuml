@@ -1480,9 +1480,11 @@ mod tests {
     #[test]
     fn segments_nested_bold_italic() {
         // **//bold italic//** → one segment with both flags.
-        let mut s = Style::default();
-        s.bold = true;
-        s.italic = true;
+        let s = Style {
+            bold: true,
+            italic: true,
+            ..Style::default()
+        };
         assert_eq!(
             parse_segments("**//bold italic//**"),
             vec![seg("bold italic", s)]
@@ -1511,8 +1513,10 @@ mod tests {
 
     #[test]
     fn segments_quoted_font_attrs_become_family() {
-        let mut style = Style::default();
-        style.font_family = Some("color='red'".to_string());
+        let style = Style {
+            font_family: Some("color='red'".to_string()),
+            ..Style::default()
+        };
         assert_eq!(
             parse_segments("<font color='red'>font color</font>"),
             vec![seg("font color", style)]
@@ -1521,8 +1525,10 @@ mod tests {
 
     #[test]
     fn segments_unquoted_font_color_becomes_fill() {
-        let mut style = Style::default();
-        style.fill = Some("red".to_string());
+        let style = Style {
+            fill: Some("red".to_string()),
+            ..Style::default()
+        };
         assert_eq!(
             parse_segments("<font color=red>Red Title</font>"),
             vec![seg("Red Title", style)]
@@ -1558,8 +1564,10 @@ mod tests {
     #[test]
     fn segments_strike_html_tag() {
         let segs = parse_segments("<s>gone</s>");
-        let mut s = Style::default();
-        s.line_through = true;
+        let s = Style {
+            line_through: true,
+            ..Style::default()
+        };
         assert_eq!(segs, vec![seg("gone", s)]);
     }
 
@@ -1585,8 +1593,10 @@ mod tests {
 
     #[test]
     fn uppercase_underline_tag_consumes_rest() {
-        let mut underlined = Style::default();
-        underlined.underline = true;
+        let underlined = Style {
+            underline: true,
+            ..Style::default()
+        };
         assert_eq!(
             parse_segments_no_underline("Future<U> thenApply(Function<T,U> f)"),
             vec![

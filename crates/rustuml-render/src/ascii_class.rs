@@ -265,6 +265,7 @@ mod tests {
         ClassEntity {
             id: name.to_string(),
             label: name.to_string(),
+            explicit_alias: false,
             kind: EntityKind::Class,
             members,
             stereotypes: vec![],
