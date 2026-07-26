@@ -970,6 +970,8 @@ struct StateSkin {
     state_fill: String,
     /// Resolved transition arrow stroke colour.
     arrow_color: String,
+    /// Resolved transition shaft and arrowhead stroke width.
+    arrow_thickness: f64,
     /// Root style line colour from modern themes, used by pseudo-state chrome.
     root_line_color: Option<String>,
     /// Theme/skinparam colour for the start pseudo-state, when specified.
@@ -1013,6 +1015,12 @@ impl StateSkin {
         let state_fill =
             color("stateBackgroundColor").unwrap_or_else(|| DEFAULT_STATE_FILL.to_string());
         let arrow_color = color("stateArrowColor").unwrap_or_else(|| stroke.clone());
+        // Java provenance: `FromSkinparamToStyle` maps `arrowThickness` to
+        // `root.element.<diagram>.arrow.LineThickness`; `SvekEdge.drawU`
+        // retrieves that merged style through `getDefaultStyleDefinition`.
+        let arrow_thickness = find("arrowThickness")
+            .and_then(|value| value.parse::<f64>().ok())
+            .unwrap_or(1.0);
         let start_color = color("stateStartColor");
         let end_color = color("stateEndColor");
         Self {
@@ -1021,6 +1029,7 @@ impl StateSkin {
             text_color,
             state_fill,
             arrow_color,
+            arrow_thickness,
             root_line_color,
             start_color,
             end_color,
@@ -1634,7 +1643,8 @@ fn emit_autonomous_scope_links(
         let color = explicit_color
             .as_deref()
             .unwrap_or(&context.skin.arrow_color);
-        let stroke = transition_stroke_style(color, &style);
+        let thickness = transition_stroke_thickness(&style, context.skin.arrow_thickness);
+        let stroke = transition_stroke_style(color, &style, context.skin.arrow_thickness);
         let from = state_endpoint_layout_id(&transition.from, true);
         let to = state_endpoint_layout_id(&transition.to, false);
         let inverted = matches!(
@@ -1735,7 +1745,7 @@ fn emit_autonomous_scope_links(
                 if inverted { "backto" } else { "to" },
             )
             .unwrap();
-            render_arrowhead(svg, arrow_control, arrow_tip, color);
+            render_arrowhead(svg, arrow_control, arrow_tip, color, thickness);
 
             if let Some(label) = &transition.label {
                 let (label_x, label_y) = edge_path
@@ -3742,7 +3752,10 @@ pub fn render_with_oracle(
                 .as_deref()
                 .map(crate::sequence::resolve_color);
             let link_color = explicit_color.as_deref().unwrap_or(ARROW_COLOR);
-            let link_stroke = transition_stroke_style(link_color, &transition_style);
+            let link_thickness =
+                transition_stroke_thickness(&transition_style, skin.arrow_thickness);
+            let link_stroke =
+                transition_stroke_style(link_color, &transition_style, skin.arrow_thickness);
             let from_layout = map_id(&t.from, true);
             let to_layout = map_id(&t.to, false);
             let from_name = if t.from == "[*]" { "*start*" } else { &t.from };
@@ -3866,7 +3879,13 @@ pub fn render_with_oracle(
                 .unwrap();
 
                 // Arrowhead polygon.
-                render_arrowhead(&mut svg, arrow_control, arrow_tip, link_color);
+                render_arrowhead(
+                    &mut svg,
+                    arrow_control,
+                    arrow_tip,
+                    link_color,
+                    link_thickness,
+                );
 
                 // Label.
                 if let Some(label) = &t.label {
@@ -3924,7 +3943,7 @@ pub fn render_with_oracle(
                 // Arrowhead.
                 let control = (to_cx, end_y - ARROW_LEN);
                 let endpoint = (to_cx, end_y);
-                render_arrowhead(&mut svg, control, endpoint, link_color);
+                render_arrowhead(&mut svg, control, endpoint, link_color, link_thickness);
 
                 // Label.
                 if let Some(label) = &t.label {
@@ -3964,11 +3983,15 @@ pub fn render_with_oracle(
 /// `WithLinkType.applyOneStyle`, while `LinkStyle.getStroke3` maps dashed to
 /// 7/7, dotted to 1/3, bold to width 2, and otherwise preserves the requested
 /// thickness.
-fn transition_stroke_style(color: &str, style: &TransitionStyle) -> String {
-    let thickness = match style.line_style {
+fn transition_stroke_thickness(style: &TransitionStyle, default_thickness: f64) -> f64 {
+    match style.line_style {
         Some(TransitionLineStyle::Bold) => 2.0,
-        _ => style.thickness.unwrap_or(1.0),
-    };
+        _ => style.thickness.unwrap_or(default_thickness),
+    }
+}
+
+fn transition_stroke_style(color: &str, style: &TransitionStyle, default_thickness: f64) -> String {
+    let thickness = transition_stroke_thickness(style, default_thickness);
     let dash = match style.line_style {
         Some(TransitionLineStyle::Dashed) => "stroke-dasharray:7,7;",
         Some(TransitionLineStyle::Dotted) => "stroke-dasharray:1,3;",
@@ -4036,7 +4059,13 @@ fn retract_dependency_arrow_path_start(points: &mut [(f64, f64)]) {
 
 /// Render a filled arrowhead polygon at the endpoint, pointing in the direction
 /// from control to endpoint.
-fn render_arrowhead(svg: &mut String, control: (f64, f64), endpoint: (f64, f64), color: &str) {
+fn render_arrowhead(
+    svg: &mut String,
+    control: (f64, f64),
+    endpoint: (f64, f64),
+    color: &str,
+    thickness: f64,
+) {
     let dx = endpoint.0 - control.0;
     let dy = endpoint.1 - control.1;
     let angle = dy.atan2(dx);
@@ -4059,12 +4088,13 @@ fn render_arrowhead(svg: &mut String, control: (f64, f64), endpoint: (f64, f64),
 
     write!(
         svg,
-        r#"<polygon fill="{color}" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{color};stroke-width:1;"/>"#,
+        r#"<polygon fill="{color}" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{color};stroke-width:{};"/>"#,
         fmt_f(tip_x), fmt_f(tip_y),
         fmt_f(right_x), fmt_f(right_y),
         fmt_f(indent_x), fmt_f(indent_y),
         fmt_f(left_x), fmt_f(left_y),
         fmt_f(tip_x), fmt_f(tip_y),
+        fmt_f(thickness),
     )
     .unwrap();
 }
@@ -6173,6 +6203,26 @@ mod tests {
         assert!(svg.contains(r##"<polygon fill="#008B8B""##));
         assert!(svg.contains(r##"<polygon fill="#7B68EE""##));
         assert!(svg.contains(r##"<polygon fill="#FFA500""##));
+    }
+
+    #[test]
+    fn global_arrow_thickness_styles_shafts_and_extremities() {
+        let input = concat!(
+            "@startuml\n",
+            "skinparam ArrowThickness 2.5\n",
+            "[*] --> CopperIdle701\n",
+            "CopperIdle701 --> VioletReady709 : advance\n",
+            "VioletReady709 --> [*]\n",
+            "@enduml\n",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Fresh PlantUML 1.2026.3beta6 reference. `SvekEdge.drawU` applies the
+        // arrow style's merged stroke to each path and its extremity.
+        assert_eq!(svg.matches("stroke:#181818;stroke-width:2.5;").count(), 6);
+        assert!(svg.contains(r#"id="CopperIdle701-to-VioletReady709""#));
+        assert!(svg.contains(">advance</text>"));
     }
 
     #[test]
