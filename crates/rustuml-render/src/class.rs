@@ -9426,7 +9426,7 @@ fn render_relationship_svg(
         write!(path_id, "-{duplicate_index}").unwrap();
     }
 
-    let code_line_attr = if rel.source_line > 0 {
+    let code_line_attr = if rel.source_line > 0 && !rel.style.declaration {
         format!(r#" codeLine="{}""#, rel.source_line)
     } else {
         String::new()
@@ -14028,6 +14028,38 @@ mod tests {
             ["ent0013", "ent0014", "ent0015", "ent0016", "ent0017"]
         );
         assert_eq!(&allocation.relationship_ids[5..], [18, 19, 20, 21, 22]);
+    }
+
+    #[test]
+    fn declaration_multi_supertypes_keep_parent_to_child_svek_identity() {
+        let input = "@startuml\n\
+            skinparam class {\n\
+              BackgroundColor #E8F4F8\n\
+              BorderColor #2468AC\n\
+            }\n\
+            class FreshBase4651\n\
+            interface FreshReadable4603\n\
+            interface FreshWritable4621\n\
+            class FreshRecord4637 extends FreshBase4651 implements FreshReadable4603, FreshWritable4621 {\n\
+              +renamedValue: String\n\
+            }\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        for parent in ["FreshBase4651", "FreshReadable4603", "FreshWritable4621"] {
+            assert!(svg.contains(&format!(r#"id="{parent}-backto-FreshRecord4637""#)));
+        }
+        assert_eq!(svg.matches(r#"data-source-line="9" id="lnk"#).count(), 3);
+        for path_id in [
+            "FreshBase4651-backto-FreshRecord4637",
+            "FreshReadable4603-backto-FreshRecord4637",
+            "FreshWritable4621-backto-FreshRecord4637",
+        ] {
+            let path = svg.split_once(&format!(r#"id="{path_id}""#)).unwrap().0;
+            assert!(!path.rsplit_once("<path").unwrap().1.contains("codeLine="));
+        }
+        assert!(!svg.contains("FreshRecord4637-to-FreshBase4651"));
     }
 
     #[test]

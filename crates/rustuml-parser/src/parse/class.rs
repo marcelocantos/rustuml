@@ -54,6 +54,9 @@ struct ClassParser {
     notes: Vec<Note>,
     /// Entity currently being parsed (inside { ... } block).
     current_entity: Option<String>,
+    /// The next non-closing line supplies the location used by Java's
+    /// multiline class command for the entity and its declaration links.
+    current_entity_needs_body_location: bool,
     /// Stack of active package indices (innermost last), supporting nested packages.
     package_stack: Vec<usize>,
     /// Note currently being accumulated (multi-line `note ... end note`).
@@ -90,6 +93,7 @@ impl ClassParser {
             packages: Vec::new(),
             notes: Vec::new(),
             current_entity: None,
+            current_entity_needs_body_location: false,
             package_stack: Vec::new(),
             current_note: None,
             last_entity_id: None,
@@ -423,7 +427,12 @@ impl ClassParser {
         if self.current_entity.is_some() {
             if line == "}" || line == "}}" {
                 self.current_entity = None;
+                self.current_entity_needs_body_location = false;
                 return Ok(());
+            }
+            if self.current_entity_needs_body_location {
+                self.attribute_multiline_declaration_to_first_body_line();
+                self.current_entity_needs_body_location = false;
             }
             self.parse_member_line(line);
             return Ok(());
@@ -646,13 +655,16 @@ impl ClassParser {
                 }
             }
 
-            // `class Child extends Parent[, P2]` / `... implements I1[, I2]`
-            // create inheritance / realization relationships, exactly as
-            // `Child --|> Parent` / `Child ..|> Iface` would.
+            // `CommandCreateClassMultilines.manageExtends` constructs each
+            // declaration relationship as parent -> child with
+            // `LinkType(NONE, EXTENDS)`. Preserve that SVEK orientation:
+            // reversing an otherwise equivalent child -> parent edge changes
+            // Graphviz ranks, endpoint UIDs, and the SVG path identity.
             self.parse_supertypes(line, &final_id);
 
             if line.ends_with('{') || line.ends_with("{{") {
                 self.current_entity = Some(final_id.clone());
+                self.current_entity_needs_body_location = true;
             }
             self.last_entity_id = Some(final_id);
             true
@@ -699,10 +711,10 @@ impl ClassParser {
             }
         }
         for (name, kind, dashed) in supers {
-            let to = self.ensure_entity(&name);
+            let parent = self.ensure_entity(&name);
             self.relationships.push(Relationship {
-                from: child_id.to_string(),
-                to,
+                from: parent,
+                to: child_id.to_string(),
                 kind,
                 label: None,
                 label_arrow: LinkArrow::None,
@@ -710,12 +722,38 @@ impl ClassParser {
                 to_multiplicity: None,
                 from_decor: None,
                 to_decor: None,
-                decorated_end: RelationshipEnd::To,
+                decorated_end: RelationshipEnd::From,
                 dashed,
                 length: 2,
-                style: RelationshipStyle::default(),
+                style: RelationshipStyle {
+                    declaration: true,
+                    ..RelationshipStyle::default()
+                },
                 source_line: self.current_line,
             });
+        }
+    }
+
+    fn attribute_multiline_declaration_to_first_body_line(&mut self) {
+        let Some(entity_id) = self.current_entity.as_deref() else {
+            return;
+        };
+        let Some(entity) = self
+            .entities
+            .iter_mut()
+            .find(|entity| entity.id == entity_id)
+        else {
+            return;
+        };
+        let declaration_line = entity.source_line;
+
+        for relationship in &mut self.relationships {
+            if relationship.style.declaration
+                && relationship.to == entity_id
+                && relationship.source_line == declaration_line
+            {
+                relationship.source_line = self.current_line;
+            }
         }
     }
 
@@ -746,6 +784,7 @@ impl ClassParser {
             }
             if line.ends_with('{') {
                 self.current_entity = Some(id.clone());
+                self.current_entity_needs_body_location = true;
             }
             self.last_entity_id = Some(id);
             true
@@ -2247,6 +2286,7 @@ mod tests {
                 thickness: None,
                 hidden: false,
                 inverted: false,
+                declaration: false,
             }
         );
         assert_eq!(d.relationships[1].style.thickness, Some(3));
@@ -2478,10 +2518,68 @@ mod tests {
         assert!(!d.entities.iter().any(|e| e.id == "{}"));
         assert!(!d.entities.iter().any(|e| e.id == "{"));
         assert_eq!(d.relationships.len(), 2);
+        assert!(d.relationships.iter().all(|rel| {
+            rel.from == "Animal"
+                && matches!(rel.to.as_str(), "Dog" | "Cat")
+                && rel.kind == RelationshipKind::Inheritance
+                && rel.decorated_end == RelationshipEnd::From
+        }));
+    }
+
+    #[test]
+    fn declaration_supertypes_follow_java_parent_to_child_svek_orientation() {
+        let d = parse(
+            "interface FreshReadable4603\n\
+             interface FreshWritable4621\n\
+             class FreshRecord4637 extends FreshBase4651 implements FreshReadable4603, FreshWritable4621 {\n\
+               +renamedValue: String\n\
+             }",
+        );
+
+        assert_eq!(d.relationships.len(), 3);
+        assert_eq!(
+            d.entities
+                .iter()
+                .find(|entity| entity.id == "FreshRecord4637")
+                .unwrap()
+                .source_line,
+            3
+        );
         assert!(
             d.relationships
                 .iter()
-                .all(|rel| rel.to == "Animal" && rel.kind == RelationshipKind::Inheritance)
+                .all(|rel| { rel.style.declaration && rel.source_line == 4 })
+        );
+        assert_eq!(
+            d.relationships
+                .iter()
+                .map(|rel| (
+                    rel.from.as_str(),
+                    rel.to.as_str(),
+                    rel.kind,
+                    rel.decorated_end
+                ))
+                .collect::<Vec<_>>(),
+            [
+                (
+                    "FreshBase4651",
+                    "FreshRecord4637",
+                    RelationshipKind::Inheritance,
+                    RelationshipEnd::From
+                ),
+                (
+                    "FreshReadable4603",
+                    "FreshRecord4637",
+                    RelationshipKind::Implementation,
+                    RelationshipEnd::From
+                ),
+                (
+                    "FreshWritable4621",
+                    "FreshRecord4637",
+                    RelationshipKind::Implementation,
+                    RelationshipEnd::From
+                ),
+            ]
         );
     }
 
