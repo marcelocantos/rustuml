@@ -315,10 +315,12 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
         // Parse title directive — single-line form.
         if let Some(rest) = trimmed.strip_prefix("title ") {
             meta.title = Some(super::strip_title_quotes(rest).to_string());
+            meta.title_line = Some(current_line);
             continue;
         }
         // Multiline title: bare `title` on its own line.
         if trimmed == "title" {
+            meta.title_line = Some(current_line);
             in_title = true;
             title_lines.clear();
             continue;
@@ -326,11 +328,13 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
         // Parse header directive.
         if let Some(rest) = trimmed.strip_prefix("header ") {
             meta.header = Some(rest.trim().to_string());
+            meta.header_line = Some(current_line);
             continue;
         }
         // Parse footer directive.
         if let Some(rest) = trimmed.strip_prefix("footer ") {
             meta.footer = Some(rest.trim().to_string());
+            meta.footer_line = Some(current_line);
             continue;
         }
         // Parse legend block start: `legend`, `legend right`, `legend left`, etc.
