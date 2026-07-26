@@ -4394,10 +4394,78 @@ static const char *closestSide(node_t *n, node_t *other, port *oldport) {
     return rv;
 }
 
+/* PlantUML's generated Graphviz 2.38 `shapes__c.closestSide` evaluates
+ * dynamic record sides after PF2P conversion to integer points. */
+static const char *closestSide238(node_t *n, node_t *other, port *oldport) {
+    boxf b;
+    int rkd = GD_rankdir(agraphof(n)->root);
+    pointf ptf = cvtPt(ND_coord(n), rkd);
+    pointf optf = cvtPt(ND_coord(other), rkd);
+    point pt = {ROUND(ptf.x), ROUND(ptf.y)};
+    point opt = {ROUND(optf.x), ROUND(optf.y)};
+    int sides = oldport->side;
+    const char *rv = NULL;
+    int mind = 0;
+
+    if (sides == 0 || sides == (TOP | BOTTOM | LEFT | RIGHT))
+	return rv;
+
+    if (oldport->bp) {
+	b = *oldport->bp;
+    } else if (GD_flip(agraphof(n))) {
+	b.UR.x = ND_ht(n) / 2;
+	b.LL.x = -b.UR.x;
+	b.UR.y = ND_lw(n);
+	b.LL.y = -b.UR.y;
+    } else {
+	b.UR.y = ND_ht(n) / 2;
+	b.LL.y = -b.UR.y;
+	b.UR.x = ND_lw(n);
+	b.LL.x = -b.UR.x;
+    }
+
+    for (int i = 0; i < 4; i++) {
+	if ((sides & (1 << i)) == 0)
+	    continue;
+
+	point p = {0};
+	switch (i) {
+	case BOTTOM_IX:
+	    p.y = (int)b.LL.y;
+	    p.x = (int)(b.LL.x + b.UR.x) / 2;
+	    break;
+	case RIGHT_IX:
+	    p.x = (int)b.UR.x;
+	    p.y = (int)(b.LL.y + b.UR.y) / 2;
+	    break;
+	case TOP_IX:
+	    p.y = (int)b.UR.y;
+	    p.x = (int)(b.LL.x + b.UR.x) / 2;
+	    break;
+	case LEFT_IX:
+	    p.x = (int)b.LL.x;
+	    p.y = (int)(b.LL.y + b.UR.y) / 2;
+	    break;
+	default:
+	    UNREACHABLE();
+	}
+	p.x += pt.x;
+	p.y += pt.y;
+	const int d = (int)DIST2(p, opt);
+	if (!rv || d < mind) {
+	    mind = d;
+	    rv = side_port[i];
+	}
+    }
+    return rv;
+}
+
 port resolvePort(node_t * n, node_t * other, port * oldport)
 {
     port rv;
-    const char *compass = closestSide(n, other, oldport);
+    const char *compass = rustuml_node_uses_text_span_dimensions(n)
+			      ? closestSide238(n, other, oldport)
+			      : closestSide(n, other, oldport);
 
     /* transfer name pointer; all other necessary fields will be regenerated */
     rv.name = oldport->name;

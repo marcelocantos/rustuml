@@ -1421,6 +1421,34 @@ revision: 23
     }
 
     #[test]
+    fn renamed_changed_array_rows_choose_legacy_horizontal_record_side() {
+        let source = r#"@startjson
+{
+  "renamed_pair": [2, 3],
+  "renamed_quartet": [5, 7, 11, 13],
+  "renamed_sextet": [17, 19, 23, 29, 31, 37]
+}
+@endjson"#;
+        let svg = render_input(source);
+        let style = svg.find("stroke-dasharray:3,3").unwrap();
+        let path_start = svg[..style].rfind("<path d=\"").unwrap() + "<path d=\"".len();
+        let path = &svg[path_start..path_start + svg[path_start..].find('"').unwrap()];
+        let (move_to, remainder) = path.strip_prefix('M').unwrap().split_once(" L").unwrap();
+        let line_to = remainder.split_once(" C").unwrap().0;
+        let parse_point = |point: &str| {
+            let (x, y) = point.split_once(',').unwrap();
+            (x.parse::<f64>().unwrap(), y.parse::<f64>().unwrap())
+        };
+        let lead = parse_point(move_to);
+        let boundary = parse_point(line_to);
+
+        assert_eq!(svg.matches("stroke-dasharray:3,3").count(), 3);
+        assert!((lead.1 - boundary.1).abs() < 0.001);
+        assert!((lead.0 - boundary.0).abs() > 1.0);
+        assert!(svg.contains("renamed_sextet"));
+    }
+
+    #[test]
     fn renamed_rectangular_matrix_routes_changed_row_and_column_counts() {
         let source = r#"@startjson
 {
