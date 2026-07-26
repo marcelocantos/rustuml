@@ -564,6 +564,16 @@ const QUEUE_MARGIN_Y: f64 = 5.0;
 // `drawStorage()` applies `URectangle.rounded(70)`.
 const STORAGE_MARGIN: f64 = 10.0;
 const STORAGE_RADIUS: f64 = 35.0;
+// Java `USymbolArtifact.getMargin()` returns
+// `new Margin(10, 20, 13, 10)`.
+const ARTIFACT_MARGIN_LEFT: f64 = 10.0;
+const ARTIFACT_MARGIN_RIGHT: f64 = 20.0;
+const ARTIFACT_MARGIN_TOP: f64 = 13.0;
+const ARTIFACT_MARGIN_BOTTOM: f64 = 10.0;
+// `SvekNode.appendShape` submits the artifact as a non-fixed, empty-label
+// Graphviz rectangle. Fresh renamed Java renders show that its solved graph
+// envelope extends six pixels beyond the painted `USymbolArtifact` block.
+const ARTIFACT_GRAPH_ENVELOPE_RIGHT: f64 = 6.0;
 // `USymbolDatabase.drawDatabase()` appends `UEmpty(10, 10)` at (width, height),
 // extending the rendered envelope without changing the Graphviz node size.
 // `LimitFinder` includes the UEmpty origin on X and its ten-pixel extent on Y.
@@ -2407,6 +2417,7 @@ pub fn render_with_oracle(
             ComponentElementKind::Database => x + DATABASE_MARGIN_X,
             ComponentElementKind::Queue => x + QUEUE_MARGIN_LEFT,
             ComponentElementKind::Storage => x + STORAGE_MARGIN,
+            ComponentElementKind::Artifact => x + ARTIFACT_MARGIN_LEFT,
             ComponentElementKind::Component if component_style_rectangle => x + RECTANGLE_MARGIN_X,
             _ => x + TEXT_PAD_LEFT,
         };
@@ -2421,6 +2432,7 @@ pub fn render_with_oracle(
             ComponentElementKind::Database => DATABASE_MARGIN_TOP,
             ComponentElementKind::Queue => QUEUE_MARGIN_Y,
             ComponentElementKind::Storage => STORAGE_MARGIN,
+            ComponentElementKind::Artifact => ARTIFACT_MARGIN_TOP,
             ComponentElementKind::Cloud => CLOUD_MARGIN,
             ComponentElementKind::Component if component_style_rectangle => RECTANGLE_MARGIN_Y,
             _ => COMPONENT_MARGIN_TOP,
@@ -4173,6 +4185,10 @@ fn calc_component_dim_with_symbol_style(
             text_metrics.content_width + STORAGE_MARGIN * 2.0,
             text_block_height + STORAGE_MARGIN * 2.0,
         ),
+        ComponentElementKind::Artifact => (
+            text_metrics.content_width + ARTIFACT_MARGIN_LEFT + ARTIFACT_MARGIN_RIGHT,
+            text_block_height + ARTIFACT_MARGIN_TOP + ARTIFACT_MARGIN_BOTTOM,
+        ),
         ComponentElementKind::Cloud => (
             text_metrics.content_width + CLOUD_MARGIN * 2.0,
             text_block_height + CLOUD_MARGIN * 2.0,
@@ -5098,6 +5114,9 @@ fn compute_no_oracle_canvas(input: NoOracleCanvas<'_>) -> (f64, f64) {
             // `LimitFinder.drawUPath` includes the queue's rightmost path
             // boundary when converting the painted SVEK bounds to dimensions.
             ComponentElementKind::Queue => (dim.width + 1.0, dim.height),
+            ComponentElementKind::Artifact => {
+                (dim.width + ARTIFACT_GRAPH_ENVELOPE_RIGHT, dim.height)
+            }
             _ => (dim.width, dim.height),
         };
         max_x = max_x.max(x + painted_max_x);
@@ -8504,6 +8523,38 @@ mod tests {
         });
         assert_eq!(canvas_w, expected_w);
         assert_eq!(canvas_h, expected_h);
+    }
+
+    #[test]
+    fn artifact_symbol_uses_java_margins_and_svek_envelope_for_renamed_label() {
+        let input = "@startuml\ncomponent RenamedGateway\nartifact RenamedBuildManifest\nRenamedGateway --> RenamedBuildManifest\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Component(component_diagram) = &diagram else {
+            panic!("expected component diagram");
+        };
+        let artifact = component_diagram
+            .components
+            .iter()
+            .find(|component| matches!(component.kind, super::ComponentElementKind::Artifact))
+            .expect("renamed artifact");
+        let dim = super::calc_component_dim(artifact);
+        let text_width = crate::text_render::measure(&artifact.label, super::FONT_SIZE, false);
+        let text_height = crate::text_render::label_height(&artifact.label, super::FONT_SIZE);
+
+        assert_eq!(
+            dim.width,
+            text_width + super::ARTIFACT_MARGIN_LEFT + super::ARTIFACT_MARGIN_RIGHT
+        );
+        assert_eq!(
+            dim.height,
+            text_height + super::ARTIFACT_MARGIN_TOP + super::ARTIFACT_MARGIN_BOTTOM
+        );
+
+        // Fresh Java 1.2026.3beta6 render of this renamed perturbation.
+        let svg = crate::render_svg(&diagram);
+        assert!(svg.contains(r#"width="211px""#), "{svg}");
+        assert!(svg.contains(r#"height="166px""#), "{svg}");
+        assert!(svg.contains(">RenamedBuildManifest</text>"), "{svg}");
     }
 
     #[test]
