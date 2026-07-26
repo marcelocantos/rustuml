@@ -19,7 +19,9 @@
 //! it falls back to a simple geometry-driven grid renderer (kept below for
 //! standalone use).
 
-use rustuml_layout::graph::{Direction, EdgeLabelSize, EdgePath, LayoutGraph};
+use rustuml_layout::graph::{
+    ClusterPosition, ClusterTitleSize, Direction, EdgeLabelSize, EdgePath, LayoutGraph,
+};
 use rustuml_parser::diagram::archimate::*;
 
 use crate::layout_oracle::{
@@ -68,6 +70,14 @@ const ELEMENT_MARGIN_X: f64 = 10.0;
 /// Default Archimate entity height from PlantUML's DESCRIPTION renderer
 /// (e.g. `archimate_basic.svg`: Motivation boxes are 53.584px tall).
 const ELEMENT_H: f64 = 53.584;
+/// Height of a Motivation Driver element.
+///
+/// PlantUML `EntityImageDescription.calculateDimensionSlow` delegates to
+/// `USymbolRectangle.asSmall.calculateDimension`, which vertically merges the
+/// stereotype sprite and label before adding its margins. The Archimate Driver
+/// sprite's extracted Java SVG metric is one pixel taller than the other
+/// Motivation sprites, producing 54.584px instead of 53.584px.
+const MOTIVATION_DRIVER_H: f64 = 54.584;
 
 fn fc(v: f64) -> String {
     pm::fmt_coord(v)
@@ -86,12 +96,11 @@ fn is_octagon(elem: &ArchimateElement) -> bool {
 /// Archimate's `<<behavior>>` style applies `RoundCorner 25`.
 ///
 /// The stdlib assigns that stereotype to process, function, interaction,
-/// event, and service elements across the Business, Application, and
-/// Technology layers.
+/// event, service, and implementation work-package elements.
 fn is_behavior(elem: &ArchimateElement) -> bool {
     matches!(
         elem.kind.as_str(),
-        "Process" | "Function" | "Interaction" | "Event" | "Service"
+        "Process" | "Function" | "Interaction" | "Event" | "Service" | "WorkPackage"
     )
 }
 
@@ -291,9 +300,14 @@ fn label_total_width(label: &str) -> f64 {
 /// first applies the Archimate style's 120px `MinimumWidth`, then
 /// `USymbolRectangle.getMargin` adds ten pixels on each horizontal side.
 fn element_dimensions(elem: &ArchimateElement) -> (f64, f64) {
+    let height = if elem.layer == ArchimateLayer::Motivation && elem.kind == "Driver" {
+        MOTIVATION_DRIVER_H
+    } else {
+        ELEMENT_H
+    };
     (
         label_total_width(&elem.label).max(ELEMENT_MIN_CONTENT_W) + ELEMENT_MARGIN_X * 2.0,
-        ELEMENT_H,
+        height,
     )
 }
 
@@ -453,17 +467,181 @@ fn layer_fill(layer: ArchimateLayer) -> &'static str {
     }
 }
 
+struct NoOracleArchimateUids {
+    group_ids: Vec<String>,
+    entity_ids: std::collections::HashMap<String, String>,
+}
+
+/// Reproduce Java's global entity UID allocation across groups and leaves.
+///
+/// `CucaDiagram.createGroup` consumes a UID when each rectangle group opens,
+/// then the Archimate macro calls inside it consume the following leaf UIDs.
+fn no_oracle_uids(diagram: &ArchimateDiagram) -> NoOracleArchimateUids {
+    let mut counter = 2;
+    let mut group_ids = Vec::with_capacity(diagram.groups.len());
+    let mut entity_ids = std::collections::HashMap::new();
+    for group in &diagram.groups {
+        group_ids.push(format!("ent{counter:04}"));
+        counter += 1;
+        for element_id in &group.element_ids {
+            if !entity_ids.contains_key(element_id) {
+                entity_ids.insert(element_id.clone(), format!("ent{counter:04}"));
+                counter += 1;
+            }
+        }
+    }
+    for element in &diagram.elements {
+        if !entity_ids.contains_key(&element.id) {
+            entity_ids.insert(element.id.clone(), format!("ent{counter:04}"));
+            counter += 1;
+        }
+    }
+    NoOracleArchimateUids {
+        group_ids,
+        entity_ids,
+    }
+}
+
+fn add_groups_to_layout(layout: &mut LayoutGraph, diagram: &ArchimateDiagram) {
+    for (index, group) in diagram.groups.iter().enumerate() {
+        let cluster_id = format!("archimate_group_{index}");
+        let title_width =
+            text_render::measure_with_family(&group.label, FONT_SIZE, true, FONT_FAMILY);
+        let title_height =
+            text_render::label_height_with_family(&group.label, FONT_SIZE, FONT_FAMILY);
+        // Java `ClusterHeader` measures and integer-truncates the bold title
+        // before `ClusterDotString.printInternal` emits its fixed HTML table.
+        layout.add_svek_cluster(
+            &cluster_id,
+            None,
+            ClusterTitleSize {
+                width: title_width,
+                height: title_height,
+            },
+        );
+        for element_id in &group.element_ids {
+            layout.add_cluster_node(&cluster_id, element_id);
+        }
+    }
+}
+
+fn no_oracle_cluster_positions(
+    result: &rustuml_layout::graph::LayoutResult,
+) -> (Vec<ClusterPosition>, (f64, f64)) {
+    let min_x = result
+        .cluster_positions
+        .iter()
+        .map(|position| round_svek_coord(position.x))
+        .fold(f64::INFINITY, f64::min);
+    let min_y = result
+        .cluster_positions
+        .iter()
+        .map(|position| round_svek_coord(position.y))
+        .fold(f64::INFINITY, f64::min);
+    let layout_offset = if min_x.is_finite() && min_y.is_finite() {
+        (-min_x, -min_y)
+    } else {
+        (0.0, 0.0)
+    };
+    let positions = result
+        .cluster_positions
+        .iter()
+        .map(|position| {
+            let (width, height) = result
+                .cluster_serialized_sizes
+                .get(&position.id)
+                .copied()
+                .unwrap_or((position.width, position.height));
+            ClusterPosition {
+                id: position.id.clone(),
+                x: round_svek_coord(position.x) + layout_offset.0,
+                y: round_svek_coord(position.y) + layout_offset.1,
+                width,
+                height,
+            }
+        })
+        .collect();
+    (positions, layout_offset)
+}
+
+fn archimate_group_fill(diagram: &ArchimateDiagram) -> String {
+    diagram
+        .meta
+        .skinparams
+        .iter()
+        .rev()
+        .find(|skinparam| {
+            skinparam
+                .key
+                .eq_ignore_ascii_case("rectangleBackgroundColor")
+        })
+        .map(|skinparam| crate::sequence::resolve_color(skinparam.value.trim()))
+        .unwrap_or_else(|| "none".to_string())
+}
+
+fn emit_no_oracle_clusters(
+    svg: &mut SvgBuilder,
+    diagram: &ArchimateDiagram,
+    positions: &[ClusterPosition],
+    uids: &NoOracleArchimateUids,
+    paint_offset: f64,
+) {
+    let fill = archimate_group_fill(diagram);
+    for (index, group) in diagram.groups.iter().enumerate() {
+        let cluster_id = format!("archimate_group_{index}");
+        let Some(position) = positions.iter().find(|position| position.id == cluster_id) else {
+            continue;
+        };
+        let x = position.x + BODY_MARGIN + paint_offset;
+        let y = position.y + BODY_MARGIN + paint_offset;
+        let title_width =
+            text_render::measure_with_family(&group.label, FONT_SIZE, true, FONT_FAMILY);
+        let title_x = x + (position.width - title_width) / 2.0;
+        let title_y =
+            y + 2.0 + text_render::label_ascent_with_family(&group.label, FONT_SIZE, FONT_FAMILY);
+        let source_attr = if group.source_line > 0 {
+            format!(r#" data-source-line="{}""#, group.source_line)
+        } else {
+            String::new()
+        };
+        let entity_id = &uids.group_ids[index];
+        svg.raw(&format!("<!--cluster {}-->", escape_text(&group.label)));
+        svg.raw(&format!(
+            r#"<g class="cluster" data-qualified-name="{}"{source_attr} id="{entity_id}">"#,
+            escape_text(&group.label),
+        ));
+        svg.raw(&format!(
+            r#"<rect fill="{fill}" height="{}" rx="0.5" ry="0.5" style="stroke:#181818;stroke-width:1;" width="{}" x="{}" y="{}"/>"#,
+            fc(position.height),
+            fc(position.width),
+            fc(x),
+            fc(y),
+        ));
+        svg.raw(&format!(
+            r##"<text fill="#000000" font-family="{FONT_FAMILY}" font-size="12" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
+            fc(title_width),
+            fc(title_x),
+            fc(title_y),
+            escape_text(&group.label),
+        ));
+        svg.raw("</g>");
+    }
+}
+
 pub fn render(diagram: &ArchimateDiagram, _theme: &Theme) -> String {
     if diagram.elements.is_empty() {
         return "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"50\"></svg>\n"
             .to_string();
     }
 
-    let mut layout = LayoutGraph::new(Direction::TopToBottom).with_plantuml_svek_spacing();
+    let mut layout = LayoutGraph::new(Direction::TopToBottom)
+        .with_plantuml_svek_spacing()
+        .with_plantuml_svek_node_order();
     for elem in &diagram.elements {
         let (width, height) = element_dimensions(elem);
         layout.add_node(&elem.id, &elem.label, width, height);
     }
+    add_groups_to_layout(&mut layout, diagram);
     for rel in &diagram.relations {
         let (from, to) = relation_layout_endpoints(rel);
         let label = archimate_relation_label(rel);
@@ -484,7 +662,13 @@ pub fn render(diagram: &ArchimateDiagram, _theme: &Theme) -> String {
 
     let result = layout.layout_full(LAYOUT_TIMEOUT);
     let positions = result.as_ref().map(|r| r.node_positions.as_slice());
-    let mut entities = no_oracle_entities(diagram, positions);
+    let uids = no_oracle_uids(diagram);
+    let (cluster_positions, layout_offset) = result
+        .as_ref()
+        .map(no_oracle_cluster_positions)
+        .unwrap_or_default();
+    let mut entities = no_oracle_entities(diagram, positions, &uids, layout_offset);
+    let paint_offset = svek_paint_offset(diagram);
     let mut painted_max_x = entities
         .iter()
         .map(|e| e.rect.x + e.rect.width)
@@ -493,15 +677,36 @@ pub fn render(diagram: &ArchimateDiagram, _theme: &Theme) -> String {
         .iter()
         .map(|e| e.rect.y + e.rect.height)
         .fold(0.0_f64, f64::max);
+    for cluster in &cluster_positions {
+        painted_max_x = painted_max_x.max(cluster.x + BODY_MARGIN + cluster.width);
+        painted_max_y = painted_max_y.max(cluster.y + BODY_MARGIN + cluster.height);
+    }
     if let Some(layout) = result.as_ref() {
         for edge in &layout.edge_paths {
             for (x, y) in &edge.points {
-                painted_max_x = painted_max_x.max(x + BODY_MARGIN);
-                painted_max_y = painted_max_y.max(y + BODY_MARGIN);
+                painted_max_x = painted_max_x.max(x + layout_offset.0 + BODY_MARGIN);
+                painted_max_y = painted_max_y.max(y + layout_offset.1 + BODY_MARGIN);
             }
             if let Some(label) = edge.label {
-                painted_max_x = painted_max_x.max(label.x + BODY_MARGIN + label.width);
-                painted_max_y = painted_max_y.max(label.y + BODY_MARGIN + label.height);
+                // `SvekResult.calculateDimension` measures the emitted label,
+                // including the body translation and the one-pixel wrapper
+                // added by `SvekEdge.appendTable`.
+                painted_max_x = painted_max_x.max(
+                    label.x
+                        + layout_offset.0
+                        + BODY_MARGIN
+                        + paint_offset
+                        + EDGE_LABEL_MARGIN
+                        + label.width,
+                );
+                painted_max_y = painted_max_y.max(
+                    label.y
+                        + layout_offset.1
+                        + BODY_MARGIN
+                        + paint_offset
+                        + EDGE_LABEL_MARGIN
+                        + label.height,
+                );
             }
         }
     }
@@ -511,12 +716,12 @@ pub fn render(diagram: &ArchimateDiagram, _theme: &Theme) -> String {
         "DESCRIPTION",
     );
 
-    let paint_offset = svek_paint_offset(diagram);
     for entity in &mut entities {
         entity.rect.x += paint_offset;
         entity.rect.y += paint_offset;
     }
 
+    emit_no_oracle_clusters(&mut svg, diagram, &cluster_positions, &uids, paint_offset);
     for (ent, elem) in entities.iter().zip(&diagram.elements) {
         emit_entity(&mut svg, ent, elem);
     }
@@ -525,10 +730,16 @@ pub fn render(diagram: &ArchimateDiagram, _theme: &Theme) -> String {
         let id_to_name = entities
             .iter()
             .filter_map(|e| {
-                e.rect
-                    .entity_id
-                    .as_ref()
-                    .map(|id| (id.clone(), e.qualified_name.clone()))
+                e.rect.entity_id.as_ref().map(|id| {
+                    (
+                        id.clone(),
+                        e.qualified_name
+                            .rsplit('.')
+                            .next()
+                            .unwrap_or(&e.qualified_name)
+                            .to_string(),
+                    )
+                })
             })
             .collect();
         for (i, rel) in diagram.relations.iter().enumerate() {
@@ -536,7 +747,15 @@ pub fn render(diagram: &ArchimateDiagram, _theme: &Theme) -> String {
                 edge.from == relation_layout_endpoints(rel).0
                     && edge.to == relation_layout_endpoints(rel).1
             }) {
-                let oracle_edge = no_oracle_edge(diagram, rel, i, edge, &entities, paint_offset);
+                let oracle_edge = no_oracle_edge(
+                    diagram,
+                    rel,
+                    i,
+                    edge,
+                    &entities,
+                    paint_offset,
+                    layout_offset,
+                );
                 emit_link(&mut svg, &oracle_edge, &id_to_name);
             }
         }
@@ -586,6 +805,8 @@ fn svek_paint_offset(diagram: &ArchimateDiagram) -> f64 {
 fn no_oracle_entities(
     diagram: &ArchimateDiagram,
     positions: Option<&[rustuml_layout::graph::NodePosition]>,
+    uids: &NoOracleArchimateUids,
+    layout_offset: (f64, f64),
 ) -> Vec<OracleEntity> {
     diagram
         .elements
@@ -595,10 +816,22 @@ fn no_oracle_entities(
             let (width, height) = element_dimensions(elem);
             let (x, y) = positions
                 .and_then(|p| p.get(i))
-                .map(|p| (p.x + BODY_MARGIN, p.y + BODY_MARGIN))
+                .map(|p| {
+                    let (x, y) = if diagram.groups.is_empty() {
+                        (p.x, p.y)
+                    } else {
+                        // Java `DotStringFactory.solve` reconstructs grouped
+                        // nodes from Graphviz's two-decimal SVG coordinates.
+                        (round_svek_coord(p.x), round_svek_coord(p.y))
+                    };
+                    (
+                        x + layout_offset.0 + BODY_MARGIN,
+                        y + layout_offset.1 + BODY_MARGIN,
+                    )
+                })
                 .unwrap_or((BODY_MARGIN, BODY_MARGIN + i as f64 * (ELEMENT_H + 50.0)));
             let mut rect = empty_entity_rect(x, y, width, height);
-            rect.entity_id = Some(format!("ent{:04}", i + 2));
+            rect.entity_id = uids.entity_ids.get(&elem.id).cloned();
             rect.source_line = (elem.source_line > 0).then(|| elem.source_line.to_string());
             rect.fill = Some(layer_fill(elem.layer).to_string());
             rect.body_style = Some(ELEMENT_STROKE_STYLE.to_string());
@@ -606,7 +839,12 @@ fn no_oracle_entities(
             rect.rect_rx = Some(radius.to_string());
             rect.rect_ry = Some(radius.to_string());
             OracleEntity {
-                qualified_name: elem.id.clone(),
+                qualified_name: diagram
+                    .groups
+                    .iter()
+                    .find(|group| group.element_ids.iter().any(|id| id == &elem.id))
+                    .map(|group| format!("{}.{}", group.label, elem.id))
+                    .unwrap_or_else(|| elem.id.clone()),
                 rect,
             }
         })
@@ -654,6 +892,7 @@ fn no_oracle_edge(
     edge: &EdgePath,
     entities: &[OracleEntity],
     paint_offset: f64,
+    layout_offset: (f64, f64),
 ) -> OracleEdgePath {
     let (layout_from, layout_to) = relation_layout_endpoints(rel);
     let layout_is_inverted = layout_from == rel.to;
@@ -671,9 +910,15 @@ fn no_oracle_edge(
     let text = archimate_relation_label(rel);
     let measured_text = if text == EMPTY_EDGE_LABEL { " " } else { text };
     let label = edge.label.map(|position| {
+        let (label_x, label_y) = if diagram.groups.is_empty() {
+            (position.x, position.y)
+        } else {
+            (round_svek_coord(position.x), round_svek_coord(position.y))
+        };
         (
-            position.x + BODY_MARGIN + paint_offset + EDGE_LABEL_MARGIN,
-            position.y
+            label_x + layout_offset.0 + BODY_MARGIN + paint_offset + EDGE_LABEL_MARGIN,
+            label_y
+                + layout_offset.1
                 + BODY_MARGIN
                 + paint_offset
                 + EDGE_LABEL_MARGIN
@@ -681,7 +926,7 @@ fn no_oracle_edge(
             text.to_string(),
         )
     });
-    let mut path_points = archimate_edge_points(edge, paint_offset);
+    let mut path_points = archimate_edge_points(edge, paint_offset, layout_offset);
     if let Some(depth) = archimate_extremity_depth(rel.kind) {
         // Java SVEK moves both the decorated endpoint and its adjacent Bézier
         // control by the extremity depth before drawing the decoration.
@@ -691,7 +936,13 @@ fn no_oracle_edge(
         id: id.clone(),
         path_id: Some(id),
         d: edge_path_d(&path_points),
-        arrow_points: archimate_arrow_points(rel.kind, edge, decor_at_start, paint_offset),
+        arrow_points: archimate_arrow_points(
+            rel.kind,
+            edge,
+            decor_at_start,
+            paint_offset,
+            layout_offset,
+        ),
         second_arrow_points: None,
         second_arrow_fill: None,
         second_polygon_style: None,
@@ -801,12 +1052,12 @@ fn archimate_edge_style(
 fn entity_id(entities: &[OracleEntity], id: &str) -> Option<String> {
     entities
         .iter()
-        .find(|e| e.qualified_name == id)
+        .find(|e| e.qualified_name.rsplit('.').next() == Some(id))
         .and_then(|e| e.rect.entity_id.clone())
 }
 
 fn no_oracle_link_id(diagram: &ArchimateDiagram, index: usize) -> String {
-    let mut counter = diagram.elements.len() + 2;
+    let mut counter = diagram.elements.len() + diagram.groups.len() + 2;
     for (relation_index, relation) in diagram.relations.iter().enumerate() {
         // `CommandLinkElement.executeArg` replaces LEFT/UP links with
         // `Link.getInv()`. The inverse Link consumes the next UID before
@@ -825,15 +1076,19 @@ fn no_oracle_link_id(diagram: &ArchimateDiagram, index: usize) -> String {
     format!("lnk{counter}")
 }
 
-fn archimate_edge_points(edge: &EdgePath, paint_offset: f64) -> Vec<(f64, f64)> {
+fn archimate_edge_points(
+    edge: &EdgePath,
+    paint_offset: f64,
+    layout_offset: (f64, f64),
+) -> Vec<(f64, f64)> {
     edge.points
         .iter()
         // Java `SvgResult` parses Graphviz's two-decimal SVG coordinates
         // before SVEK applies its six-pixel normalization.
         .map(|(x, y)| {
             (
-                round_svek_coord(*x) + BODY_MARGIN + paint_offset,
-                round_svek_coord(*y) + BODY_MARGIN + paint_offset,
+                round_svek_coord(*x) + layout_offset.0 + BODY_MARGIN + paint_offset,
+                round_svek_coord(*y) + layout_offset.1 + BODY_MARGIN + paint_offset,
             )
         })
         .collect()
@@ -869,11 +1124,12 @@ fn archimate_arrow_points(
     edge: &EdgePath,
     decor_at_start: bool,
     paint_offset: f64,
+    layout_offset: (f64, f64),
 ) -> Option<String> {
     if matches!(kind, ArchimateRelationKind::Association) {
         return None;
     }
-    let points = archimate_edge_points(edge, paint_offset);
+    let points = archimate_edge_points(edge, paint_offset, layout_offset);
     let (control, endpoint) = archimate_extremity_basis(&points, decor_at_start)?;
     match kind {
         ArchimateRelationKind::Aggregation | ArchimateRelationKind::Composition => {
@@ -1131,6 +1387,70 @@ mod tests {
         assert_eq!(
             short,
             (ELEMENT_MIN_CONTENT_W + ELEMENT_MARGIN_X * 2.0, ELEMENT_H)
+        );
+    }
+
+    #[test]
+    fn renamed_sprite_metrics_and_behavior_style_drive_element_geometry() {
+        let input = "@startuml\n\
+                     !include <archimate/Archimate>\n\
+                     Motivation_Driver(fresh_driver_307, \"Novel Pressure\")\n\
+                     Motivation_Goal(fresh_goal_311, \"Novel Outcome\")\n\
+                     Implementation_WorkPackage(fresh_package_313, \"Novel Delivery\")\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Archimate(diagram) = diagram else {
+            panic!("expected Archimate diagram");
+        };
+
+        // Fresh PlantUML 1.2026.3beta6 reference. The Driver stereotype sprite
+        // contributes one extra vertical pixel through
+        // `USymbolRectangle.asSmall.calculateDimension`; WorkPackage receives
+        // the Archimate stdlib's `<<behavior>>` RoundCorner 25 style.
+        assert_eq!(element_dimensions(&diagram.elements[0]).1, 54.584);
+        assert_eq!(element_dimensions(&diagram.elements[1]).1, 53.584);
+        assert!(is_behavior(&diagram.elements[2]));
+
+        let svg = crate::render_svg(&rustuml_parser::diagram::Diagram::Archimate(diagram));
+        assert!(svg.contains(r#"rx="12.5" ry="12.5""#), "{svg}");
+    }
+
+    #[test]
+    fn renamed_rectangle_groups_use_svek_clusters_and_block_skinparams() {
+        let input = "@startuml\n\
+                     !include <archimate/Archimate>\n\
+                     skinparam rectangle {\n\
+                       BackgroundColor #E6F4EA\n\
+                     }\n\
+                     rectangle \"Fresh Operations 331\" {\n\
+                       Business_Process(novel_flow_337, \"Novel Intake\")\n\
+                       Business_Actor(novel_owner_347, \"Novel Owner\")\n\
+                     }\n\
+                     rectangle \"Fresh Platform 349\" {\n\
+                       Application_Service(novel_api_353, \"Novel API\")\n\
+                       Technology_Node(novel_host_359, \"Novel Host\")\n\
+                     }\n\
+                     Rel_Serving(novel_api_353, novel_flow_337, \"enables\")\n\
+                     Rel_Association(novel_host_359, novel_api_353, \"runs\")\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Fresh PlantUML 1.2026.3beta6 reference. These bounds exercise
+        // `ClusterHeader`, `ClusterDotString.printInternal`, and
+        // `SvekResult.calculateDimension` with labels and topology absent from
+        // the golden corpus.
+        assert!(svg.contains(r#"viewBox="0 0 368 403""#), "{svg}");
+        assert_eq!(svg.matches(r#"<g class="cluster""#).count(), 2);
+        assert!(svg.contains(r##"fill="#E6F4EA" height="102.58""##), "{svg}");
+        assert!(svg.contains(r##"fill="#E6F4EA" height="232.17""##), "{svg}");
+        assert!(
+            svg.contains(r#"data-qualified-name="Fresh Operations 331.novel_flow_337""#),
+            "{svg}"
+        );
+        assert!(
+            svg.contains(r#"data-qualified-name="Fresh Platform 349.novel_api_353""#),
+            "{svg}"
         );
     }
 

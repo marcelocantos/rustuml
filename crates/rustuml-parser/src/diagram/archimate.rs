@@ -157,5 +157,7 @@ impl ArchimateRelationKind {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ArchimateGroup {
     pub label: String,
+    #[serde(default)]
+    pub source_line: usize,
     pub element_ids: Vec<String>,
 }

@@ -16,8 +16,9 @@ pub fn parse_archimate(lines: &[String]) -> Result<ArchimateDiagram, ParseError>
     let mut relations = Vec::new();
     let mut groups: Vec<ArchimateGroup> = Vec::new();
     let mut meta = DiagramMeta::default();
-    let mut group_stack: Vec<(String, Vec<String>)> = Vec::new();
-    let mut skinparam_depth: usize = 0;
+    let mut group_stack: Vec<(String, usize, Vec<String>)> = Vec::new();
+    // Java `SkinLoader` concatenates nested block names with leaf keys.
+    let mut skinparam_context: Option<Vec<String>> = None;
 
     static RE_ELEM: LazyLock<Regex> = LazyLock::new(|| {
         Regex::new(r#"^archimate_element\s+(\w+)\s+(\w+)\s+(\w+)\s+"([^"]*)""#).unwrap()
@@ -40,19 +41,31 @@ pub fn parse_archimate(lines: &[String]) -> Result<ArchimateDiagram, ParseError>
             meta.title = Some(super::strip_title_quotes(rest).to_string());
             continue;
         }
-        // Track multi-line skinparam blocks: `skinparam ... {` opens a block
-        // whose `}` should NOT be treated as a group close.
-        if skinparam_depth > 0 {
+        if let Some(context) = &mut skinparam_context {
             if trimmed == "}" {
-                skinparam_depth -= 1;
-            } else if trimmed.ends_with('{') {
-                skinparam_depth += 1;
+                context.pop();
+                if context.is_empty() {
+                    skinparam_context = None;
+                }
+                continue;
+            }
+            if let Some(group) = trimmed.strip_suffix('{').map(str::trim)
+                && !group.is_empty()
+            {
+                context.push(group.to_string());
+                continue;
+            }
+            if let Some((key, value)) = trimmed.split_once(char::is_whitespace) {
+                meta.skinparams.push(crate::diagram::SkinParam {
+                    key: format!("{}{key}", context.concat()),
+                    value: value.trim().to_string(),
+                });
             }
             continue;
         }
         if let Some(rest) = trimmed.strip_prefix("skinparam ") {
-            if trimmed.ends_with('{') {
-                skinparam_depth += 1;
+            if let Some(group) = rest.strip_suffix('{').map(str::trim) {
+                skinparam_context = Some(vec![group.to_string()]);
             } else if let Some((key, value)) = rest.split_once(' ') {
                 meta.skinparams.push(crate::diagram::SkinParam {
                     key: key.trim().to_string(),
@@ -65,13 +78,17 @@ pub fn parse_archimate(lines: &[String]) -> Result<ArchimateDiagram, ParseError>
             continue;
         }
         if trimmed == "}" {
-            if let Some((label, element_ids)) = group_stack.pop() {
-                groups.push(ArchimateGroup { label, element_ids });
+            if let Some((label, source_line, element_ids)) = group_stack.pop() {
+                groups.push(ArchimateGroup {
+                    label,
+                    source_line,
+                    element_ids,
+                });
             }
             continue;
         }
         if let Some(caps) = RE_GROUP.captures(trimmed) {
-            group_stack.push((caps[1].to_string(), Vec::new()));
+            group_stack.push((caps[1].to_string(), source_line, Vec::new()));
             continue;
         }
         if let Some(caps) = RE_ELEM.captures(trimmed) {
@@ -88,7 +105,7 @@ pub fn parse_archimate(lines: &[String]) -> Result<ArchimateDiagram, ParseError>
                     kind,
                 });
             }
-            if let Some((_, ids)) = group_stack.last_mut() {
+            if let Some((_, _, ids)) = group_stack.last_mut() {
                 ids.push(id);
             }
             continue;
@@ -129,8 +146,12 @@ pub fn parse_archimate(lines: &[String]) -> Result<ArchimateDiagram, ParseError>
         }
     }
 
-    while let Some((label, element_ids)) = group_stack.pop() {
-        groups.push(ArchimateGroup { label, element_ids });
+    while let Some((label, source_line, element_ids)) = group_stack.pop() {
+        groups.push(ArchimateGroup {
+            label,
+            source_line,
+            element_ids,
+        });
     }
 
     Ok(ArchimateDiagram {
@@ -188,11 +209,14 @@ mod tests {
     #[test]
     fn grouping_rectangles() {
         let d = parse(
-            "rectangle \"Business Layer\" {\narchimate_element Business Actor a \"A\"\narchimate_element Business Process b \"B\"\n}\n",
+            "skinparam rectangle {\nBackgroundColor #E6F4EA\n}\nrectangle \"Business Layer\" {\narchimate_element Business Actor a \"A\"\narchimate_element Business Process b \"B\"\n}\n",
         );
         assert_eq!(d.groups.len(), 1);
         assert_eq!(d.groups[0].label, "Business Layer");
+        assert_eq!(d.groups[0].source_line, 4);
         assert_eq!(d.groups[0].element_ids, vec!["a", "b"]);
+        assert_eq!(d.meta.skinparams[0].key, "rectangleBackgroundColor");
+        assert_eq!(d.meta.skinparams[0].value, "#E6F4EA");
     }
 
     #[test]
