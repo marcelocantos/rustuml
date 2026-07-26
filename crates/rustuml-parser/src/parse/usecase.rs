@@ -308,6 +308,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
             let title = super::strip_title_quotes(t).to_string();
             if !title.is_empty() {
                 meta.title = Some(title);
+                meta.title_line.get_or_insert(current_line);
             }
             continue;
         }
@@ -317,6 +318,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
             let header = h.trim().to_string();
             if !header.is_empty() {
                 meta.header = Some(header);
+                meta.header_line.get_or_insert(current_line);
             }
             continue;
         }
@@ -326,6 +328,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
             let footer = f.trim().to_string();
             if !footer.is_empty() {
                 meta.footer = Some(footer);
+                meta.footer_line.get_or_insert(current_line);
             }
             continue;
         }
@@ -1010,5 +1013,19 @@ mod tests {
                 target: "Archive".to_string()
             }
         );
+    }
+
+    #[test]
+    fn document_chrome_preserves_directive_source_lines() {
+        let d = parse(
+            "header Renamed Header\n\
+             title Renamed Title\n\
+             footer Renamed Footer\n\
+             actor Reviewer",
+        );
+
+        assert_eq!(d.meta.header_line, Some(1));
+        assert_eq!(d.meta.title_line, Some(2));
+        assert_eq!(d.meta.footer_line, Some(3));
     }
 }

@@ -55,6 +55,18 @@ const DOUBLE_SEPARATOR_GAP: f64 = 2.0;
 /// Java's `EntityImageDegenerated` wraps a lone non-state entity in 7px.
 const DEGENERATED_MARGIN: f64 = 7.0;
 const SVEK_CANVAS_PAD: f64 = 14.0;
+/// `TextBlockExporter12026` retains six horizontal and five vertical pixels
+/// outside the decorated diagram block after `SvekResult.calculateDimension`.
+const CHROME_EXPORT_PAD_X: f64 = 6.0;
+const CHROME_EXPORT_PAD_Y: f64 = 5.0;
+const CHROME_CAPTION_FONT_SIZE: f64 = 10.0;
+/// Java `DisplayPositioned.createRibbon` adds one pixel below its line box.
+const CHROME_CAPTION_BOTTOM_PAD: f64 = 1.0;
+/// Java `Style.createTextBlockBordered` applies the document-title margins
+/// consumed by `DiagramChromeFactory12026.addTitle`.
+const CHROME_TITLE_MARGIN_X: f64 = 10.0;
+const CHROME_TITLE_TOP_PAD: f64 = 10.0;
+const CHROME_TITLE_BOTTOM_PAD: f64 = 11.0;
 const LAYOUT_TIMEOUT: std::time::Duration = std::time::Duration::from_secs(5);
 const DEPENDENCY_ARROW_BACK: f64 = 9.0;
 const DEPENDENCY_ARROW_NOTCH: f64 = 5.0;
@@ -303,6 +315,126 @@ fn round_coord(v: f64) -> f64 {
     rounded / 10000.0
 }
 
+#[derive(Clone, Copy)]
+struct UseCaseChromeLayout {
+    body_dx: f64,
+    body_dy: f64,
+    canvas_width: f64,
+    canvas_height: f64,
+    header_x: f64,
+    title_x: f64,
+    title_y: f64,
+    footer_x: f64,
+    footer_y: f64,
+}
+
+impl UseCaseChromeLayout {
+    fn identity(diagram: &UseCaseDiagram, canvas_width: f64, canvas_height: f64) -> Self {
+        let title_width = diagram
+            .meta
+            .title
+            .as_deref()
+            .map(|title| text_render::measure(title, FONT_SIZE, true))
+            .unwrap_or(0.0);
+        Self {
+            body_dx: 0.0,
+            body_dy: 0.0,
+            canvas_width,
+            canvas_height,
+            header_x: 0.0,
+            title_x: (canvas_width - MARGIN - title_width) / 2.0,
+            title_y: CHROME_TITLE_TOP_PAD + pm::ascent(FONT_SIZE),
+            footer_x: 0.0,
+            // Legacy oracle fallback: exported footer baselines include the
+            // SVG writer's bottom extent, not just the ribbon line box.
+            footer_y: canvas_height - 9.0241,
+        }
+    }
+}
+
+fn usecase_chrome_layout(
+    diagram: &UseCaseDiagram,
+    body_canvas_width: f64,
+    body_canvas_height: f64,
+) -> UseCaseChromeLayout {
+    // Java provenance: `DiagramChromeFactory12026.create` applies
+    // `addTitle`, then `addHeaderAndFooter`. `DecorateEntityImage.drawU`
+    // centers each narrower child and stacks the top/bottom text dimensions.
+    // `SvekResult.calculateDimension` retains the cluster rectangle's far
+    // stroke pixel (the same primitive guard used by `compute_canvas`) in the
+    // exported envelope, outside the TextBlock dimension being decorated.
+    let cluster_extent_guard = if diagram.packages.is_empty() {
+        0.0
+    } else {
+        1.0
+    };
+    let export_pad_x = CHROME_EXPORT_PAD_X + cluster_extent_guard;
+    let body_width = (body_canvas_width - export_pad_x).max(0.0);
+    let body_height = (body_canvas_height - CHROME_EXPORT_PAD_Y).max(0.0);
+    let title_text_width = diagram
+        .meta
+        .title
+        .as_deref()
+        .map(|title| text_render::measure(title, FONT_SIZE, true))
+        .unwrap_or(0.0);
+    let title_width = if diagram.meta.title.is_some() {
+        title_text_width + CHROME_TITLE_MARGIN_X * 2.0
+    } else {
+        0.0
+    };
+    let title_height = if diagram.meta.title.is_some() {
+        CHROME_TITLE_TOP_PAD + pm::text_height(FONT_SIZE) + CHROME_TITLE_BOTTOM_PAD
+    } else {
+        0.0
+    };
+    let title_wrapped_width = body_width.max(title_width);
+    let title_body_dx = (title_wrapped_width - body_width) / 2.0;
+
+    let header_width = diagram
+        .meta
+        .header
+        .as_deref()
+        .map(|header| text_render::measure(header, CHROME_CAPTION_FONT_SIZE, false))
+        .unwrap_or(0.0);
+    let footer_width = diagram
+        .meta
+        .footer
+        .as_deref()
+        .map(|footer| text_render::measure(footer, CHROME_CAPTION_FONT_SIZE, false))
+        .unwrap_or(0.0);
+    let caption_width = header_width.max(footer_width);
+    let ribbon_height = |present: bool| {
+        if present {
+            pm::text_height(CHROME_CAPTION_FONT_SIZE) + CHROME_CAPTION_BOTTOM_PAD
+        } else {
+            0.0
+        }
+    };
+    let header_height = ribbon_height(diagram.meta.header.is_some());
+    let footer_height = ribbon_height(diagram.meta.footer.is_some());
+    let content_width = title_wrapped_width.max(caption_width);
+    let outer_dx = (content_width - title_wrapped_width) / 2.0;
+
+    UseCaseChromeLayout {
+        body_dx: outer_dx + title_body_dx,
+        body_dy: header_height + title_height,
+        canvas_width: (content_width + export_pad_x).ceil(),
+        canvas_height: (body_height
+            + header_height
+            + title_height
+            + footer_height
+            + CHROME_EXPORT_PAD_Y)
+            .ceil(),
+        // `DisplayPositioned` defaults plain headers to RIGHT and plain
+        // footers to CENTER before `addTopAndBottom` calls `getTextX`.
+        header_x: content_width - header_width,
+        title_x: outer_dx + (title_wrapped_width - title_text_width) / 2.0,
+        title_y: header_height + CHROME_TITLE_TOP_PAD + pm::ascent(FONT_SIZE),
+        footer_x: (content_width - footer_width) / 2.0,
+        footer_y: header_height + title_height + body_height + pm::ascent(CHROME_CAPTION_FONT_SIZE),
+    }
+}
+
 pub fn render(diagram: &UseCaseDiagram, theme: &Theme) -> String {
     render_with_oracle(diagram, theme, None)
 }
@@ -343,16 +475,25 @@ pub fn render_with_oracle(
         .map(|u| use_case_dim(u, &skin))
         .collect();
     let note_dims: Vec<NoteDim> = diagram.notes.iter().map(note_dim).collect();
-    let positions = resolve_positions(diagram, &actor_dims, &uc_dims, &note_dims, &skin, oracle);
+    let mut positions =
+        resolve_positions(diagram, &actor_dims, &uc_dims, &note_dims, &skin, oracle);
     let id_map = build_entity_id_map(diagram);
 
-    let (total_w, total_h) = if let Some(orc) = oracle
+    let (total_w, total_h, chrome) = if let Some(orc) = oracle
         && orc.canvas_width > 0.0
         && orc.canvas_height > 0.0
     {
-        (orc.canvas_width, orc.canvas_height)
+        (
+            orc.canvas_width,
+            orc.canvas_height,
+            UseCaseChromeLayout::identity(diagram, orc.canvas_width, orc.canvas_height),
+        )
     } else {
-        compute_canvas(diagram, &positions, &actor_dims, &uc_dims, &note_dims)
+        let (body_width, body_height) =
+            compute_canvas(diagram, &positions, &actor_dims, &uc_dims, &note_dims);
+        let chrome = usecase_chrome_layout(diagram, body_width, body_height);
+        positions.translate(chrome.body_dx, chrome.body_dy);
+        (chrome.canvas_width, chrome.canvas_height, chrome)
     };
 
     let mut svg = SvgBuilder::new_plantuml_with_background_and_defs(
@@ -370,8 +511,8 @@ pub fn render_with_oracle(
         ));
     }
 
-    render_header(&mut svg, diagram);
-    render_title(&mut svg, diagram, total_w);
+    render_header(&mut svg, diagram, &chrome);
+    render_title(&mut svg, diagram, &chrome);
 
     // PlantUML renders each cluster group followed immediately by its member
     // entities (in source-line order), then the top-level (non-member)
@@ -526,27 +667,28 @@ pub fn render_with_oracle(
         render_no_oracle_connections(&mut svg, diagram, &id_map, &positions.edge_paths, &skin);
     }
 
-    render_footer(&mut svg, diagram, total_h);
+    render_footer(&mut svg, diagram, &chrome);
 
     svg.finalize_plantuml()
 }
 
 /// Render a `header` directive as `<g class="header"><text>…</text></g>`.
-fn render_header(svg: &mut SvgBuilder, diagram: &UseCaseDiagram) {
+fn render_header(svg: &mut SvgBuilder, diagram: &UseCaseDiagram, chrome: &UseCaseChromeLayout) {
     let Some(header) = &diagram.meta.header else {
         return;
     };
-    svg.raw(r#"<g class="header" data-source-line="1">"#);
-    let tw = text_render::measure(header, 10.0, false);
-    let _ = tw;
+    let source_line = diagram.meta.header_line.unwrap_or(1);
+    svg.raw(&format!(
+        r#"<g class="header" data-source-line="{source_line}">"#
+    ));
     let mut buf = String::new();
     text_render::emit_text(
         &mut buf,
         header,
         &TextBase {
-            x: 0.0,
-            y: 9.668,
-            font_size: 10,
+            x: chrome.header_x,
+            y: pm::ascent(CHROME_CAPTION_FONT_SIZE),
+            font_size: CHROME_CAPTION_FONT_SIZE as u32,
             font_family: "sans-serif",
             fill: "#888888",
             bold: false,
@@ -560,19 +702,22 @@ fn render_header(svg: &mut SvgBuilder, diagram: &UseCaseDiagram) {
 }
 
 /// Render a `footer` directive as `<g class="footer"><text>…</text></g>`.
-fn render_footer(svg: &mut SvgBuilder, diagram: &UseCaseDiagram, total_h: f64) {
+fn render_footer(svg: &mut SvgBuilder, diagram: &UseCaseDiagram, chrome: &UseCaseChromeLayout) {
     let Some(footer) = &diagram.meta.footer else {
         return;
     };
-    svg.raw(r#"<g class="footer" data-source-line="1">"#);
+    let source_line = diagram.meta.footer_line.unwrap_or(1);
+    svg.raw(&format!(
+        r#"<g class="footer" data-source-line="{source_line}">"#
+    ));
     let mut buf = String::new();
     text_render::emit_text(
         &mut buf,
         footer,
         &TextBase {
-            x: 0.0,
-            y: total_h - 9.0241,
-            font_size: 10,
+            x: chrome.footer_x,
+            y: chrome.footer_y,
+            font_size: CHROME_CAPTION_FONT_SIZE as u32,
             font_family: "sans-serif",
             fill: "#888888",
             bold: false,
@@ -586,21 +731,21 @@ fn render_footer(svg: &mut SvgBuilder, diagram: &UseCaseDiagram, total_h: f64) {
 }
 
 /// Render a `title` directive as `<g class="title"><text>…</text></g>`.
-fn render_title(svg: &mut SvgBuilder, diagram: &UseCaseDiagram, total_w: f64) {
+fn render_title(svg: &mut SvgBuilder, diagram: &UseCaseDiagram, chrome: &UseCaseChromeLayout) {
     let Some(title) = &diagram.meta.title else {
         return;
     };
-    svg.raw(r#"<g class="title" data-source-line="1">"#);
-    let tw = text_render::measure(title, FONT_SIZE, true);
+    let source_line = diagram.meta.title_line.unwrap_or(1);
+    svg.raw(&format!(
+        r#"<g class="title" data-source-line="{source_line}">"#
+    ));
     let mut buf = String::new();
     text_render::emit_text(
         &mut buf,
         title,
         &TextBase {
-            // PlantUML centres the title over the content area, which is inset
-            // by one MARGIN from the right canvas edge.
-            x: (total_w - MARGIN - tw) / 2.0,
-            y: 23.5352,
+            x: chrome.title_x,
+            y: chrome.title_y,
             font_size: FONT_SIZE as u32,
             font_family: "sans-serif",
             fill: TEXT_COLOR,
@@ -1100,6 +1245,58 @@ struct Positions {
     notes: Vec<Option<NotePlacement>>,
     cluster_positions: Vec<ClusterPosition>,
     edge_paths: Vec<EdgePath>,
+}
+
+impl Positions {
+    fn translate(&mut self, dx: f64, dy: f64) {
+        let translate_point = |point: &mut (f64, f64)| {
+            point.0 += dx;
+            point.1 += dy;
+        };
+        for point in &mut self.actors {
+            translate_point(point);
+        }
+        for point in &mut self.use_cases {
+            translate_point(point);
+        }
+        for note in self.notes.iter_mut().flatten() {
+            note.x += dx;
+            note.y += dy;
+            if let Some(apex) = &mut note.apex {
+                translate_point(apex);
+            }
+            if let Some((start, end)) = &mut note.leader_base {
+                translate_point(start);
+                translate_point(end);
+            }
+        }
+        for cluster in &mut self.cluster_positions {
+            cluster.x += dx;
+            cluster.y += dy;
+        }
+        for edge in &mut self.edge_paths {
+            for point in &mut edge.points {
+                translate_point(point);
+            }
+            if let Some(point) = &mut edge.start_point {
+                translate_point(point);
+            }
+            if let Some(point) = &mut edge.end_point {
+                translate_point(point);
+            }
+            for label in [
+                edge.label.as_mut(),
+                edge.tail_label.as_mut(),
+                edge.head_label.as_mut(),
+            ]
+            .into_iter()
+            .flatten()
+            {
+                label.x += dx;
+                label.y += dy;
+            }
+        }
+    }
 }
 
 fn resolve_positions(
@@ -1916,7 +2113,7 @@ fn compute_canvas(
         max_x = max_x.max(painted_max_x + SVEK_CANVAS_PAD + 1.0);
         max_y = max_y.max(painted_max_y + SVEK_CANVAS_PAD + 1.0);
     }
-    (max_x.ceil().max(1.0), max_y.ceil().max(1.0))
+    (max_x.max(1.0), max_y.max(1.0))
 }
 
 fn cluster_painted_bounds(
@@ -3877,6 +4074,53 @@ mod tests {
         assert!(svg.contains(&format!(
             r#"<ellipse cx="{expected_cx}" cy="{expected_cy}""#
         )));
+    }
+
+    #[test]
+    fn renamed_document_chrome_wraps_and_centers_the_svek_body() {
+        let input = "@startuml\n\
+                     header Renamed Audit Ribbon 314159\n\
+                     title Fresh Access Review 271828\n\
+                     footer Renamed Audit Ribbon 314159\n\
+                     actor \"Novel Reviewer\" as Reviewer\n\
+                     usecase \"Inspect Unseen Record\" as Inspect\n\
+                     Reviewer --> Inspect\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Fresh Java PlantUML reference for renamed content absent from the
+        // corpus. This exercises both wrappers in
+        // `DiagramChromeFactory12026.create`: title first, then ribbons.
+        assert!(svg.contains(r#"viewBox="0 0 236 260""#), "{svg}");
+        assert!(
+            svg.contains(r#"class="header" data-source-line="1""#),
+            "{svg}"
+        );
+        assert!(
+            svg.contains(r#"textLength="152.4365" x="76.7842" y="9.668""#),
+            "{svg}"
+        );
+        assert!(
+            svg.contains(r#"class="title" data-source-line="2""#),
+            "{svg}"
+        );
+        assert!(
+            svg.contains(r#"textLength="209.2207" x="10" y="36.3125""#),
+            "{svg}"
+        );
+        assert!(
+            svg.contains(r#"<ellipse cx=""#) && svg.contains(r#"cy="64.2656""#),
+            "{svg}"
+        );
+        assert!(
+            svg.contains(r#"class="footer" data-source-line="3""#),
+            "{svg}"
+        );
+        assert!(
+            svg.contains(r#"textLength="152.4365" x="38.3921""#),
+            "{svg}"
+        );
     }
 
     #[test]
