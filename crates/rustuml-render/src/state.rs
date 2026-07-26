@@ -4168,39 +4168,50 @@ pub fn render_with_oracle(
             .collect::<Vec<_>>()
     });
     if let Some(layout_positions) = layout_positions {
-        if !attached_notes.is_empty() || !floating_notes.is_empty() {
-            // Java `SvekResult.calculateDimension` measures the painted
-            // `SvekResult` and moves it by `6 - minX`. `LimitFinder` expands
-            // rectangles one pixel to the left, while Opale's UPath begins at
-            // its actual x coordinate. A leftmost note therefore changes the
-            // translation by one pixel without changing Graphviz geometry.
-            let state_min_x = state_ids
-                .iter()
-                .filter_map(|id| {
-                    let index = layout_index_of(id)?;
-                    let state_def = find_state(id);
-                    let (_, _, shape) = state_node_size(id, state_def);
-                    Some(
-                        layout_positions[index].x
-                            - if shape == StateLayoutShape::Box {
-                                1.0
-                            } else {
-                                0.0
-                            },
-                    )
-                })
-                .fold(f64::INFINITY, f64::min);
-            let attached_min_x = attached_notes
-                .iter()
-                .filter_map(|note| layout_index_of(&note.id).map(|index| layout_positions[index].x))
-                .fold(f64::INFINITY, f64::min);
-            let floating_min_x = floating_notes
-                .iter()
-                .filter_map(|note| {
-                    layout_index_of(&note.alias).map(|index| layout_positions[index].x)
-                })
-                .fold(f64::INFINITY, f64::min);
-            graph_body_x = 6.0 - state_min_x.min(attached_min_x).min(floating_min_x);
+        // `SvekResult.calculateDimension` measures the complete painted body
+        // and moves it by `6 - minX`. `LimitFinder.drawRectangle` contributes
+        // the one-pixel state overscan, while `drawDotPath` includes every
+        // routed cubic control point. This translation is unconditional in
+        // Java; notes are only another painter in the same envelope.
+        let state_min_x = state_ids
+            .iter()
+            .filter_map(|id| {
+                let index = layout_index_of(id)?;
+                let state_def = find_state(id);
+                let (_, _, shape) = state_node_size(id, state_def);
+                Some(
+                    quantize_svek_coord(layout_positions[index].x)
+                        - if shape == StateLayoutShape::Box {
+                            1.0
+                        } else {
+                            0.0
+                        },
+                )
+            })
+            .fold(f64::INFINITY, f64::min);
+        let attached_min_x = attached_notes
+            .iter()
+            .filter_map(|note| layout_index_of(&note.id).map(|index| layout_positions[index].x))
+            .map(quantize_svek_coord)
+            .fold(f64::INFINITY, f64::min);
+        let floating_min_x = floating_notes
+            .iter()
+            .filter_map(|note| layout_index_of(&note.alias).map(|index| layout_positions[index].x))
+            .map(quantize_svek_coord)
+            .fold(f64::INFINITY, f64::min);
+        let edge_min_x = layout_result
+            .as_ref()
+            .into_iter()
+            .flat_map(|result| &result.edge_paths)
+            .flat_map(|edge| &edge.points)
+            .map(|point| quantize_svek_coord(point.0))
+            .fold(f64::INFINITY, f64::min);
+        let painted_min_x = state_min_x
+            .min(attached_min_x)
+            .min(floating_min_x)
+            .min(edge_min_x);
+        if painted_min_x.is_finite() {
+            graph_body_x = 6.0 - painted_min_x;
         }
         graph_body_y = state_layout_positions
             .as_deref()
@@ -4460,8 +4471,7 @@ pub fn render_with_oracle(
                         let inverted = matches!(
                             explicit_transition_direction(diagram, transition),
                             Some(
-                                ExplicitTransitionDirection::Left
-                                    | ExplicitTransitionDirection::Up
+                                ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Up
                             )
                         );
                         let (edge_from, edge_to) = if inverted {
@@ -8456,6 +8466,35 @@ mod tests {
         );
         assert!(
             svg.contains(r#"textLength="96.5415" x="92.4373" y="218.0566""#),
+            "{svg}"
+        );
+    }
+
+    #[test]
+    fn renamed_cycle_uses_the_painted_svek_minimum() {
+        let input = concat!(
+            "@startuml\n",
+            "state QuartzDock\n",
+            "state VelvetTransit\n",
+            "[*] --> QuartzDock\n",
+            "QuartzDock --> VelvetTransit : dispatch_packet\n",
+            "VelvetTransit --> QuartzDock : retry_window\n",
+            "VelvetTransit --> [*] : archived\n",
+            "@enduml\n",
+        );
+        let diagram = rustuml_parser::parse::parse_auto_with_base(input, None).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Fresh headless PlantUML 1.2026.3beta6 reference. The left cubic
+        // control reaches x=-6.09 before `SvekResult.calculateDimension`
+        // asks `LimitFinder` to translate the painted minimum to x=6.
+        assert!(svg.contains(r#"viewBox="0 0 224 377""#), "{svg}");
+        assert!(
+            svg.contains(r#"width="100.7256" x="38.91" y="87""#),
+            "{svg}"
+        );
+        assert!(
+            svg.contains(r#"M42.14,137.24 C31.37,145.18 21.33,155.09 15.27,167 C6,185.25"#),
             "{svg}"
         );
     }
