@@ -60,7 +60,7 @@ pub fn preprocess_with_base(input: &str, base_dir: &Path) -> Vec<String> {
 /// Preprocess PlantUML source and return both expanded lines and sprite
 /// definitions collected from `sprite $name { ... }` blocks.
 pub fn preprocess_full(input: &str, base_dir: Option<PathBuf>) -> PreprocessOutput {
-    let mut output = preprocess_full_inner(input, base_dir, false);
+    let mut output = preprocess_full_inner(input, base_dir, false, false);
     output.lines = strip_source_line_markers(output.lines);
     output
 }
@@ -69,23 +69,24 @@ pub(crate) fn preprocess_full_for_parse(
     input: &str,
     base_dir: Option<PathBuf>,
 ) -> PreprocessOutput {
-    preprocess_full_inner(input, base_dir, false)
+    preprocess_full_inner(input, base_dir, true, false)
 }
 
 pub(crate) fn preprocess_full_for_sequence_parse(
     input: &str,
     base_dir: Option<PathBuf>,
 ) -> PreprocessOutput {
-    preprocess_full_inner(input, base_dir, true)
+    preprocess_full_inner(input, base_dir, true, true)
 }
 
 fn preprocess_full_inner(
     input: &str,
     base_dir: Option<PathBuf>,
     mark_function_body_source_lines: bool,
+    preserve_teoz_pragma: bool,
 ) -> PreprocessOutput {
     let mut ctx = PreprocessContext::new(base_dir, mark_function_body_source_lines);
-    ctx.preserve_teoz_pragma = mark_function_body_source_lines;
+    ctx.preserve_teoz_pragma = preserve_teoz_pragma;
     let mut lines = ctx.process(input);
     // Append any accumulated theme expansion to the end of the diagram so
     // user-source line numbers are preserved (see `theme_tail`).
@@ -3369,6 +3370,46 @@ mod tests {
         let input = "@startuml\n!function $arrow($to)\nAlice -> $to : msg\n!endfunction\n$arrow(\"Bob\")\n$arrow(\"Charlie\")\n@enduml";
         let lines = pp(input);
         assert_eq!(lines, vec!["Alice -> Bob : msg", "Alice -> Charlie : msg"]);
+    }
+
+    #[test]
+    fn parser_preprocessing_keeps_procedure_body_locations() {
+        // PlantUML TFunctionImpl.addBody stores StringLocated values from the
+        // definition, and executeProcedureInternal passes that same body to
+        // TContext.executeLines. A fresh Java oracle render of these renamed
+        // entities therefore reports data-source-line="2" for both classes.
+        let input = "@startuml\n\
+!procedure $record($name)\n\
+  class $name {\n\
+    +marker: String\n\
+  }\n\
+!endprocedure\n\
+$record(NorthwindLedger)\n\
+$record(SaffronArchive)\n\
+@enduml";
+
+        let lines = preprocess_full_for_parse(input, None).lines;
+        let class_locations: Vec<_> = lines
+            .iter()
+            .filter_map(|line| split_source_line_marker(line))
+            .filter(|(_, text)| text.trim_start().starts_with("class "))
+            .collect();
+
+        assert_eq!(
+            class_locations,
+            vec![
+                (2, "class NorthwindLedger {"),
+                (2, "class SaffronArchive {"),
+            ]
+        );
+    }
+
+    #[test]
+    fn ordinary_parser_preprocessing_still_consumes_teoz_pragma() {
+        let input = "@startuml\n!pragma teoz true\nclass Ledger\n@enduml";
+        let lines = preprocess_full_for_parse(input, None).lines;
+
+        assert!(!lines.iter().any(|line| line.contains("!pragma teoz")));
     }
 
     #[test]

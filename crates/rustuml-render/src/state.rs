@@ -1636,6 +1636,7 @@ fn emit_autonomous_scope_links(
             .unwrap_or((offset_x, offset_y, STATE_MIN_WIDTH, STATE_BOX_HEIGHT))
     };
     let mut consumed_edge_paths = vec![false; scope.edge_paths.len()];
+    let mut used_path_ids = std::collections::HashSet::new();
     for transition_index in &scope.transition_indices {
         let transition = &context.diagram.transitions[*transition_index];
         let style = context.diagram.transition_style(*transition_index);
@@ -1739,10 +1740,16 @@ fn emit_autonomous_scope_links(
                 .unwrap();
                 point_index += 3;
             }
+            let path_id = unique_svek_path_id(
+                &mut used_path_ids,
+                &format!(
+                    "{edge_from_name}-{}-{edge_to_name}",
+                    if inverted { "backto" } else { "to" },
+                ),
+            );
             write!(
                 svg,
-                r#"<path d="{path}" fill="none" id="{edge_from_name}-{}-{edge_to_name}" style="{stroke}"/>"#,
-                if inverted { "backto" } else { "to" },
+                r#"<path d="{path}" fill="none" id="{path_id}" style="{stroke}"/>"#,
             )
             .unwrap();
             render_arrowhead(svg, arrow_control, arrow_tip, color, thickness);
@@ -3745,6 +3752,7 @@ pub fn render_with_oracle(
         render_oracle_transitions(&mut svg, diagram, orc);
     } else {
         let mut consumed_edge_paths = vec![false; edge_paths.len()];
+        let mut used_path_ids = std::collections::HashSet::new();
         for (transition_idx, t) in diagram.transitions.iter().enumerate() {
             let transition_style = diagram.transition_style(transition_idx);
             let explicit_color = transition_style
@@ -3769,6 +3777,14 @@ pub fn render_with_oracle(
             } else {
                 (&from_layout, &to_layout, from_name, to_name)
             };
+            let path_id = unique_svek_path_id(
+                &mut used_path_ids,
+                &if inverted {
+                    format!("{edge_from_name}-backto-{edge_to_name}")
+                } else {
+                    format!("{edge_from_name}-to-{edge_to_name}")
+                },
+            );
 
             // HTML comment.
             if inverted {
@@ -3869,12 +3885,7 @@ pub fn render_with_oracle(
                 }
                 write!(
                     svg,
-                    r#"<path d="{d}" fill="none" id="{}" style="{link_stroke}"/>"#,
-                    if inverted {
-                        format!("{edge_from_name}-backto-{edge_to_name}")
-                    } else {
-                        format!("{edge_from_name}-to-{edge_to_name}")
-                    },
+                    r#"<path d="{d}" fill="none" id="{path_id}" style="{link_stroke}"/>"#,
                 )
                 .unwrap();
 
@@ -3932,7 +3943,7 @@ pub fn render_with_oracle(
                 let mid_y = (start_y + end_y) / 2.0;
                 write!(
                     svg,
-                    r#"<path d="M{},{} C{},{} {},{} {},{}" fill="none" id="{from_name}-to-{to_name}" style="{link_stroke}"/>"#,
+                    r#"<path d="M{},{} C{},{} {},{} {},{}" fill="none" id="{path_id}" style="{link_stroke}"/>"#,
                     fmt_f(from_cx), fmt_f(start_y),
                     fmt_f(from_cx), fmt_f(mid_y),
                     fmt_f(to_cx), fmt_f(mid_y),
@@ -3988,6 +3999,24 @@ fn transition_stroke_thickness(style: &TransitionStyle, default_thickness: f64) 
         Some(TransitionLineStyle::Bold) => 2.0,
         _ => style.thickness.unwrap_or(default_thickness),
     }
+}
+
+/// Allocate the SVG comment id shared by every SVEK edge in one result.
+///
+/// Java provenance: `SvekEdge.drawU` calls `uniq(ids,
+/// Link.idCommentForSvg())`; `uniq` preserves the first id and probes `-1`,
+/// `-2`, and so on for repeated links.
+fn unique_svek_path_id(ids: &mut std::collections::HashSet<String>, base: &str) -> String {
+    if ids.insert(base.to_string()) {
+        return base.to_string();
+    }
+    for suffix in 1usize.. {
+        let candidate = format!("{base}-{suffix}");
+        if ids.insert(candidate.clone()) {
+            return candidate;
+        }
+    }
+    unreachable!("the monotonically increasing suffix must become unique")
 }
 
 fn transition_stroke_style(color: &str, style: &TransitionStyle, default_thickness: f64) -> String {
@@ -6223,6 +6252,27 @@ mod tests {
         assert_eq!(svg.matches("stroke:#181818;stroke-width:2.5;").count(), 6);
         assert!(svg.contains(r#"id="CopperIdle701-to-VioletReady709""#));
         assert!(svg.contains(">advance</text>"));
+    }
+
+    #[test]
+    fn repeated_renamed_links_receive_monotonic_svg_id_suffixes() {
+        let input = concat!(
+            "@startuml\n",
+            "[*] --> CopperReady701\n",
+            "CopperReady701 --> [*]\n",
+            "CopperReady701 --> [*]\n",
+            "CopperReady701 --> [*]\n",
+            "@enduml\n",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Fresh PlantUML 1.2026.3beta6 reference. `SvekEdge.uniq` owns one id
+        // set per result and appends the first available numeric suffix.
+        assert!(svg.contains(r#"id="CopperReady701-to-*end*""#));
+        assert!(svg.contains(r#"id="CopperReady701-to-*end*-1""#));
+        assert!(svg.contains(r#"id="CopperReady701-to-*end*-2""#));
+        assert!(!svg.contains(r#"id="CopperReady701-to-*end*-3""#));
     }
 
     #[test]
