@@ -3130,6 +3130,15 @@ fn package_qualified_name(
     parent_pkg: &[Option<usize>],
     idx: usize,
 ) -> String {
+    let package = &diagram.packages[idx];
+    if package.display_name.is_some() {
+        // `CucaDiagram.eventuallyBuildPhantomGroups` creates these groups from
+        // the backing Quark path. `Cluster.drawU` consequently serializes
+        // `Quark.getQualifiedName()`, including the configured namespace
+        // separator after SVG's punctuation translation.
+        return translate_qualified_name(&package.name);
+    }
+
     let mut chain = Vec::new();
     let mut cur = Some(idx);
     while let Some(i) = cur {
@@ -3140,6 +3149,21 @@ fn package_qualified_name(
     }
     chain.reverse();
     chain.join(".")
+}
+
+fn relationship_endpoint_name<'a>(diagram: &'a ClassDiagram, id: &'a str) -> &'a str {
+    diagram
+        .entities
+        .iter()
+        .find(|entity| entity.id == id)
+        .filter(|entity| {
+            !entity.explicit_alias
+                && diagram.packages.iter().any(|package| {
+                    package.display_name.is_some()
+                        && package.entities.iter().any(|member| member == id)
+                })
+        })
+        .map_or(id, |entity| entity.label.as_str())
 }
 
 fn package_content_offsets(diagram: &ClassDiagram) -> Vec<(f64, f64)> {
@@ -3370,14 +3394,22 @@ enum CucaUidEvent {
 impl CucaUidEvent {
     fn sort_key(self, diagram: &ClassDiagram) -> (usize, usize, usize) {
         match self {
-            Self::Package(idx) => (diagram.packages[idx].source_line, 0, idx),
+            Self::Package(idx) => {
+                let package = &diagram.packages[idx];
+                // `CommandCreateClass.executeArg` creates the leaf before
+                // `CucaDiagram.reallyCreateLeaf` materializes missing Quarks
+                // through `eventuallyBuildPhantomGroups`. Explicit package
+                // commands still create their group before later contents.
+                let same_line_order = if package.display_name.is_some() { 2 } else { 0 };
+                (package.source_line, same_line_order, idx)
+            }
             // `CommandLinkClass` creates any missing endpoint entities before
             // constructing its `Link`, so entities win same-line ties.
             Self::Entity(idx) => (diagram.entities[idx].source_line, 1, idx),
-            Self::FloatingNote(idx) => (diagram.notes[idx].source_line, 2, idx),
-            Self::AttachedNote(idx) => (diagram.notes[idx].source_line, 2, idx),
-            Self::Association(idx) => (diagram.association_classes[idx].source_line, 3, idx),
-            Self::Relationship(idx) => (diagram.relationships[idx].source_line, 4, idx),
+            Self::FloatingNote(idx) => (diagram.notes[idx].source_line, 3, idx),
+            Self::AttachedNote(idx) => (diagram.notes[idx].source_line, 3, idx),
+            Self::Association(idx) => (diagram.association_classes[idx].source_line, 4, idx),
+            Self::Relationship(idx) => (diagram.relationships[idx].source_line, 5, idx),
         }
     }
 }
@@ -9168,16 +9200,21 @@ fn render_relationship_svg(
         i += 3;
     }
 
+    // `Link.idCommentForSvg` uses `Entity.getName()`, which is the short
+    // Quark name for a namespace-separated entity, while explicit aliases
+    // remain the Quark name themselves.
+    let from_name = relationship_endpoint_name(context.diagram, &rel.from);
+    let to_name = relationship_endpoint_name(context.diagram, &rel.to);
     let mut path_id = if rel.from_decor.is_some()
         || rel.to_decor.is_some()
         || matches!(rel.kind, RelationshipKind::Association)
         || (decorates_from && decorates_to)
     {
-        format!("{}-{}", rel.from, rel.to)
+        format!("{from_name}-{to_name}")
     } else if is_reverse {
-        format!("{}-backto-{}", rel.from, rel.to)
+        format!("{from_name}-backto-{to_name}")
     } else {
-        format!("{}-to-{}", rel.from, rel.to)
+        format!("{from_name}-to-{to_name}")
     };
     if duplicate_index > 0 {
         write!(path_id, "-{duplicate_index}").unwrap();
@@ -13007,6 +13044,66 @@ mod tests {
                 "wrong recursive SVEK id for {qualified_name}: {opening_tag}"
             );
         }
+    }
+
+    #[test]
+    fn phantom_namespace_groups_follow_the_leaf_uid_and_keep_separator_identity() {
+        let input = "@startuml\n\
+            set namespaceSeparator ::\n\
+            class observatory::catalog::FreshSignal1201\n\
+            class observatory::catalog::FreshArchive1213\n\
+            observatory::catalog::FreshSignal1201 --> observatory::catalog::FreshArchive1213\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Class(diagram) = diagram else {
+            panic!("expected class diagram");
+        };
+        let allocation = svek_id_allocation(&diagram);
+
+        assert_eq!(
+            allocation.package_ids,
+            [Some("ent0003".to_string()), Some("ent0004".to_string())]
+        );
+        assert_eq!(allocation.entity_ids, ["ent0002", "ent0005"]);
+        assert_eq!(allocation.relationship_ids, [6]);
+
+        let svg = render(&diagram, &Theme::default());
+        assert!(svg.contains(
+            r#"data-qualified-name="observatory..catalog" data-source-line="2" id="ent0004""#
+        ));
+        assert!(svg.contains(r#"id="FreshSignal1201-to-FreshArchive1213""#));
+    }
+
+    #[test]
+    fn deeper_phantom_namespace_reuses_groups_without_consuming_more_uids() {
+        let input = "@startuml\n\
+            class atlas.sector.archive.RenamedEntry1229\n\
+            class atlas.sector.archive.RenamedLedger1231\n\
+            class atlas.sector.archive.RenamedAudit1237\n\
+            atlas.sector.archive.RenamedEntry1229 --> atlas.sector.archive.RenamedLedger1231\n\
+            atlas.sector.archive.RenamedLedger1231 --> atlas.sector.archive.RenamedAudit1237\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Class(diagram) = diagram else {
+            panic!("expected class diagram");
+        };
+        let allocation = svek_id_allocation(&diagram);
+
+        assert_eq!(
+            allocation.package_ids,
+            [
+                Some("ent0003".to_string()),
+                Some("ent0004".to_string()),
+                Some("ent0005".to_string())
+            ]
+        );
+        assert_eq!(allocation.entity_ids, ["ent0002", "ent0006", "ent0007"]);
+        assert_eq!(allocation.relationship_ids, [8, 9]);
+
+        let svg = render(&diagram, &Theme::default());
+        assert!(svg.contains(r#"data-qualified-name="atlas.sector.archive""#));
+        assert!(svg.contains(r#"id="RenamedEntry1229-to-RenamedLedger1231""#));
+        assert!(svg.contains(r#"id="RenamedLedger1231-to-RenamedAudit1237""#));
     }
 
     #[test]
