@@ -2341,9 +2341,6 @@ fn build_autonomous_composite<'a>(
             (transition_parent_scope(diagram, transition) == Some(None)).then_some(index)
         })
         .collect();
-    if outer_transition_indices.is_empty() {
-        return None;
-    }
     let outer_ids = collect_autonomous_scope_ids(diagram, &outer_transition_indices, |state| {
         state.parent.is_none()
     });
@@ -2565,9 +2562,6 @@ fn build_one_level_concurrent_composites<'a>(
             (transition_parent_scope(diagram, transition) == Some(None)).then_some(index)
         })
         .collect::<Vec<_>>();
-    if outer_transition_indices.is_empty() {
-        return None;
-    }
     let outer_ids = collect_autonomous_scope_ids(diagram, &outer_transition_indices, |state| {
         state.parent.is_none()
     });
@@ -8353,6 +8347,67 @@ mod tests {
             "HarborRoot701.CopperLayer709..start.CopperLayer709",
             "HarborRoot701.CopperLayer709.VioletLayer719..start.VioletLayer719",
             "HarborRoot701.CopperLayer709.VioletLayer719.AmberLayer727..start.AmberLayer727",
+        ] {
+            assert!(
+                svg.contains(&format!(r#"data-qualified-name="{qualified_name}""#)),
+                "{qualified_name} missing from {svg}"
+            );
+        }
+    }
+
+    #[test]
+    fn renamed_depth_five_isolated_composite_builds_a_root_image() {
+        let input = concat!(
+            "@startuml\n",
+            "state ObservatoryRoot911 {\n",
+            "  state CopperLayer919 {\n",
+            "    state VioletLayer929 {\n",
+            "      state AmberLayer937 {\n",
+            "        state QuartzLayer941 {\n",
+            "          [*] --> SilverLeaf947\n",
+            "          SilverLeaf947 --> [*]\n",
+            "        }\n",
+            "        [*] --> QuartzLayer941\n",
+            "        QuartzLayer941 --> [*]\n",
+            "      }\n",
+            "      [*] --> AmberLayer937\n",
+            "      AmberLayer937 --> [*]\n",
+            "    }\n",
+            "    [*] --> VioletLayer929\n",
+            "    VioletLayer929 --> [*]\n",
+            "  }\n",
+            "  [*] --> CopperLayer919\n",
+            "  CopperLayer919 --> [*]\n",
+            "}\n",
+            "@enduml\n",
+        );
+        let parsed = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::State(diagram) = &parsed else {
+            panic!("expected state diagram");
+        };
+        let arrow_font = StateArrowFont::from_diagram(diagram);
+        let (roots, outer_layout) = build_autonomous_composite(diagram, &arrow_font).unwrap();
+        let [root] = roots.as_slice() else {
+            panic!("expected one isolated root composite");
+        };
+
+        assert!(outer_layout.transition_indices.is_empty());
+        assert_eq!(root.state.id, "ObservatoryRoot911");
+        assert_eq!(
+            root.children[0].children[0].children[0].children[0]
+                .state
+                .id,
+            "ObservatoryRoot911.CopperLayer919.VioletLayer929.AmberLayer937.QuartzLayer941"
+        );
+
+        let svg = crate::render_svg(&parsed);
+        for qualified_name in [
+            "ObservatoryRoot911..start.ObservatoryRoot911",
+            "ObservatoryRoot911.CopperLayer919..start.CopperLayer919",
+            "ObservatoryRoot911.CopperLayer919.VioletLayer929..start.VioletLayer929",
+            "ObservatoryRoot911.CopperLayer919.VioletLayer929.AmberLayer937..start.AmberLayer937",
+            "ObservatoryRoot911.CopperLayer919.VioletLayer929.AmberLayer937.QuartzLayer941..start.QuartzLayer941",
+            "ObservatoryRoot911.CopperLayer919.VioletLayer929.AmberLayer937.QuartzLayer941.SilverLeaf947",
         ] {
             assert!(
                 svg.contains(&format!(r#"data-qualified-name="{qualified_name}""#)),
