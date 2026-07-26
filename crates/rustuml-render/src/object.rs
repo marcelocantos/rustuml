@@ -472,15 +472,15 @@ fn layout_object(diagram: &ObjectDiagram, dims: &[ObjDim]) -> ObjectLayout {
             layout.add_cluster_node(&cluster.qname, object_id);
         }
     }
-    let mut attached_note_nodes = Vec::new();
+    let mut layout_note_nodes = Vec::new();
     for (note_idx, note) in diagram.notes.iter().enumerate() {
-        if note.target.is_none() || note.position.is_none() {
+        if !is_layout_object_note(note) {
             continue;
         }
-        let note_id = attached_note_layout_id(note_idx);
+        let note_id = object_note_layout_id(note, note_idx);
         let (width, height) = object_note_dims(note);
-        let node_idx = diagram.objects.len() + attached_note_nodes.len();
-        attached_note_nodes.push((note_idx, node_idx));
+        let node_idx = diagram.objects.len() + layout_note_nodes.len();
+        layout_note_nodes.push((note_idx, node_idx));
         layout.add_node(&note_id, "", width, height);
     }
 
@@ -535,7 +535,7 @@ fn layout_object(diagram: &ObjectDiagram, dims: &[ObjDim]) -> ObjectLayout {
         let note = &diagram.notes[idx];
         let target = note.target.as_deref().expect("filtered attached note");
         let position = note.position.expect("filtered attached note");
-        let note_id = attached_note_layout_id(idx);
+        let note_id = object_note_layout_id(note, idx);
         match position {
             ObjectNotePosition::Left => {
                 // `CommandFactoryNoteOnEntity` assigns length one and
@@ -566,7 +566,7 @@ fn layout_object(diagram: &ObjectDiagram, dims: &[ObjDim]) -> ObjectLayout {
                     .map(|cluster| cluster.y)
                     .fold(f64::INFINITY, f64::min);
                 (6.0 - min_x, 6.0 - min_y)
-            } else if attached_note_nodes.is_empty() {
+            } else if layout_note_nodes.is_empty() {
                 (MARGIN, MARGIN)
             } else {
                 normalize_attached_note_svek_envelope(
@@ -612,7 +612,7 @@ fn layout_object(diagram: &ObjectDiagram, dims: &[ObjDim]) -> ObjectLayout {
                 edge_paths: result.edge_paths,
                 note_positions: {
                     let mut positions = vec![None; diagram.notes.len()];
-                    for (note_idx, node_idx) in attached_note_nodes {
+                    for (note_idx, node_idx) in layout_note_nodes {
                         if let Some(position) = result.node_positions.get(node_idx) {
                             positions[note_idx] = Some(NotePlacement {
                                 x: position.x + origin_x,
@@ -789,8 +789,14 @@ fn normalize_attached_note_svek_envelope(
     (6.0 - min_x, 6.0 - min_y)
 }
 
-fn attached_note_layout_id(note_idx: usize) -> String {
-    format!("__object_note_{note_idx}")
+fn is_layout_object_note(note: &ObjectNote) -> bool {
+    note.id.is_some() || note.target.is_some() && note.position.is_some()
+}
+
+fn object_note_layout_id(note: &ObjectNote, note_idx: usize) -> String {
+    note.id
+        .clone()
+        .unwrap_or_else(|| format!("__object_note_{note_idx}"))
 }
 
 fn object_note_dims(note: &ObjectNote) -> (f64, f64) {
@@ -1088,7 +1094,7 @@ fn render_plantuml_svg(
             }
         }
         for (link_idx, link) in diagram.links.iter().enumerate() {
-            if !is_rendered_layout_link(link) {
+            if !is_rendered_layout_link(link) || link_touches_object_note(diagram, link) {
                 continue;
             }
             let Some(edge_path) = find_layout_edge(diagram, &layout.edge_paths, link_idx) else {
@@ -1290,7 +1296,7 @@ fn render_plantuml_svg(
             ent_id += 1;
         }
     } else {
-        render_attached_object_notes(&mut svg, diagram, layout, &svg_ids);
+        render_object_notes(&mut svg, diagram, layout, &svg_ids, dims);
     }
 
     // Links: prefer oracle data.
@@ -1311,7 +1317,7 @@ fn render_layout_links(
     svg_ids: &ObjectSvgIds,
 ) {
     for (link_idx, link) in diagram.links.iter().enumerate() {
-        if !is_rendered_layout_link(link) {
+        if !is_rendered_layout_link(link) || link_touches_object_note(diagram, link) {
             continue;
         }
         let from_base = link_base(&link.from);
@@ -1428,11 +1434,12 @@ fn emit_object_endpoint_label(
     );
 }
 
-fn render_attached_object_notes(
+fn render_object_notes(
     svg: &mut String,
     diagram: &ObjectDiagram,
     layout: &ObjectLayout,
     svg_ids: &ObjectSvgIds,
+    dims: &[ObjDim],
 ) {
     for (note_idx, note) in diagram.notes.iter().enumerate() {
         let (Some(target), Some(position), Some(placement), Some((qname, entity_id))) = (
@@ -1443,7 +1450,7 @@ fn render_attached_object_notes(
         ) else {
             continue;
         };
-        let note_id = attached_note_layout_id(note_idx);
+        let note_id = object_note_layout_id(note, note_idx);
         let (edge_from, edge_to) = match position {
             ObjectNotePosition::Left | ObjectNotePosition::Top => (note_id.as_str(), target),
             ObjectNotePosition::Right | ObjectNotePosition::Bottom => (target, note_id.as_str()),
@@ -1465,6 +1472,76 @@ fn render_attached_object_notes(
         };
         let Some((tip_x, tip_y)) = tip else {
             continue;
+        };
+        render_attached_object_note(
+            svg, note, placement, tip_x, tip_y, position, qname, entity_id,
+        );
+    }
+
+    for (note_idx, note) in diagram.notes.iter().enumerate() {
+        let (Some(note_name), Some(placement), Some((qname, entity_id))) = (
+            note.id.as_deref(),
+            layout.note_positions[note_idx],
+            svg_ids.notes[note_idx].as_ref(),
+        ) else {
+            continue;
+        };
+        let linked = diagram
+            .links
+            .iter()
+            .filter(|link| link_base(&link.from) == note_name || link_base(&link.to) == note_name)
+            .collect::<Vec<_>>();
+        let [link] = linked.as_slice() else {
+            continue;
+        };
+        let note_is_from = link_base(&link.from) == note_name;
+        let target = if note_is_from {
+            link_base(&link.to)
+        } else {
+            link_base(&link.from)
+        };
+        let Some(target_idx) = diagram
+            .objects
+            .iter()
+            .position(|object| object.id == target)
+        else {
+            continue;
+        };
+        let Some(edge) = layout
+            .edge_paths
+            .iter()
+            .find(|edge| edge.from == link_base(&link.from) && edge.to == link_base(&link.to))
+        else {
+            continue;
+        };
+        let tip = if note_is_from {
+            edge.end_point.or_else(|| edge.points.last().copied())
+        } else {
+            edge.start_point.or_else(|| edge.points.first().copied())
+        };
+        let Some((tip_x, tip_y)) = tip else {
+            continue;
+        };
+        let note_center = (
+            placement.x + placement.width / 2.0,
+            placement.y + placement.height / 2.0,
+        );
+        let target_center = (
+            layout.positions[target_idx].0 + dims[target_idx].width / 2.0,
+            layout.positions[target_idx].1 + dims[target_idx].height / 2.0,
+        );
+        let delta_x = note_center.0 - target_center.0;
+        let delta_y = note_center.1 - target_center.1;
+        let position = if delta_y.abs() >= delta_x.abs() {
+            if delta_y < 0.0 {
+                ObjectNotePosition::Top
+            } else {
+                ObjectNotePosition::Bottom
+            }
+        } else if delta_x < 0.0 {
+            ObjectNotePosition::Left
+        } else {
+            ObjectNotePosition::Right
         };
         render_attached_object_note(
             svg, note, placement, tip_x, tip_y, position, qname, entity_id,
@@ -1669,6 +1746,14 @@ fn is_rendered_layout_link(link: &ObjectLink) -> bool {
     !link.from.contains("::") && !link.to.contains("::")
 }
 
+fn link_touches_object_note(diagram: &ObjectDiagram, link: &ObjectLink) -> bool {
+    diagram.notes.iter().any(|note| {
+        note.id
+            .as_deref()
+            .is_some_and(|id| id == link_base(&link.from) || id == link_base(&link.to))
+    })
+}
+
 fn find_layout_edge<'a>(
     diagram: &ObjectDiagram,
     edge_paths: &'a [EdgePath],
@@ -1681,6 +1766,7 @@ fn find_layout_edge<'a>(
         .iter()
         .filter(|previous| {
             is_rendered_layout_link(previous)
+                && !link_touches_object_note(diagram, previous)
                 && link_base(&previous.from) == from
                 && link_base(&previous.to) == to
         })
@@ -1705,6 +1791,7 @@ fn find_layout_edge<'a>(
 fn has_rendered_layout_dependency(diagram: &ObjectDiagram, edge_paths: &[EdgePath]) -> bool {
     diagram.links.iter().any(|link| {
         is_rendered_layout_link(link)
+            && !link_touches_object_note(diagram, link)
             && edge_paths.iter().any(|edge| {
                 edge.from == link_base(&link.from)
                     && edge.to == link_base(&link.to)
@@ -2835,6 +2922,28 @@ object RenamedLongObject <<db>> {
         // AWT text blocks at these widths.
         assert!((stereo_dominant.width - 165.8594).abs() < 0.001);
         assert!((name_dominant.width - 154.3896).abs() < 0.001);
+    }
+
+    #[test]
+    fn renamed_reverse_link_floating_note_becomes_an_opale_callout() {
+        let input = r#"object RenamedLedger {
+  code = 47
+  state = open
+}
+note "Fresh memo 47\nsecond renamed line\nthird line" as Memo_47
+Memo_47 .. RenamedLedger"#;
+        let lines = input.lines().map(str::to_owned).collect::<Vec<_>>();
+        let diagram = rustuml_parser::parse::object::parse_object(&lines).unwrap();
+        let svg = render(&diagram, &Theme::default());
+
+        assert!(svg.contains(r#"width="173px""#));
+        assert!(svg.contains(r#"height="198px""#));
+        assert!(svg.contains(r#"data-qualified-name="Memo_47" data-source-line="5" id="ent0003""#));
+        assert!(!svg.contains(r#"class="link""#));
+        // Fresh Java PlantUML reference. `GraphvizImageBuilder.isOpalisable`
+        // and `EntityImageNote.setOpaleLine` absorb the reverse logical edge
+        // into the top note's callout polygon.
+        assert!(svg.contains(r#"L82.09,121.61"#));
     }
 
     #[test]
