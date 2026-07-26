@@ -1597,6 +1597,19 @@ fn last_background_value(diagram: &ClassDiagram) -> Option<&str> {
         .map(|sp| sp.value.trim())
 }
 
+fn has_shadowing_skinparam(diagram: &ClassDiagram) -> bool {
+    diagram
+        .meta
+        .skinparams
+        .iter()
+        .rev()
+        .find(|sp| {
+            sp.key.eq_ignore_ascii_case("shadowing")
+                || sp.key.eq_ignore_ascii_case("classShadowing")
+        })
+        .is_some_and(|sp| sp.value.trim().eq_ignore_ascii_case("true"))
+}
+
 fn render_empty_skinparam_canvas(diagram: &ClassDiagram) -> String {
     let bg_value = last_background_value(diagram);
     let bg_color = bg_value
@@ -2935,6 +2948,9 @@ fn render_plantuml_svg(
     }
 
     let font = ClassFontOverrides::from_skinparams(&diagram.meta.skinparams);
+    let shadow_filter_id = has_shadowing_skinparam(diagram).then(|| {
+        crate::filter_registry::shadow_id_for(diagram.meta.source.as_deref().unwrap_or(""))
+    });
     let package_content_offsets = package_content_offsets(diagram);
     let mut adjusted_edge_paths = edge_paths.to_vec();
     for edge in &mut adjusted_edge_paths {
@@ -3167,7 +3183,7 @@ fn render_plantuml_svg(
         let extent_pad = if uses_degenerated_entity {
             13
         } else {
-            PACKAGE_CANVAS_EXTENT_PAD
+            PACKAGE_CANVAS_EXTENT_PAD + i64::from(shadow_filter_id.is_some()) * 5
         };
         let decorated_w = if layout.has_decorations {
             layout.dim_total_w as i64 + MARGIN as i64
@@ -3213,7 +3229,13 @@ fn render_plantuml_svg(
     // `<linearGradient>` PlantUML generates for a `#c1/c2` gradient
     // background, or background-colour filters). The entity rects reference
     // these via oracle-captured `fill="url(#...)"`, so the ids must be live.
-    match oracle.map(|o| o.defs_inner_xml.as_str()) {
+    let generated_shadow_defs = shadow_filter_id
+        .as_deref()
+        .map(crate::filter_registry::shadow_filter_def);
+    match oracle
+        .map(|o| o.defs_inner_xml.as_str())
+        .or(generated_shadow_defs.as_deref())
+    {
         Some(defs) if !defs.is_empty() => {
             svg.push_str("<defs>");
             svg.push_str(defs);
@@ -3499,6 +3521,7 @@ fn render_plantuml_svg(
             body_gradient_fill.as_deref(),
             header_gradient_fill.as_deref(),
             entity_suppress_header_icon,
+            shadow_filter_id.as_deref(),
         );
 
         svg.push_str("</g>");
@@ -4676,6 +4699,7 @@ fn render_entity_content(
     body_gradient_fill: Option<&str>,
     header_gradient_fill: Option<&str>,
     suppress_header_icon: bool,
+    shadow_filter_id: Option<&str>,
 ) {
     if matches!(entity.kind, EntityKind::Circle | EntityKind::Diamond) {
         if let Some(anchor) = link_anchor {
@@ -4978,6 +5002,7 @@ fn render_entity_content(
     let filter_attr = oracle_rect
         .and_then(|r| r.rect_filter.as_deref())
         .map(|f| format!(r#" filter="{f}""#))
+        .or_else(|| shadow_filter_id.map(|id| format!(r#" filter="url(#{id})""#)))
         .unwrap_or_default();
     let has_body_polygon = oracle_rect.and_then(|r| r.body_polygon.as_ref()).is_some();
     if let Some(polygon) = oracle_rect.and_then(|r| r.body_polygon.as_ref()) {
@@ -10100,6 +10125,41 @@ mod tests {
         );
         assert!(!svg.contains(">----</text>"), "{svg}");
         assert!(!svg.contains(">....</text>"), "{svg}");
+    }
+
+    #[test]
+    fn renamed_class_chain_shares_generated_shadow_filter() {
+        let input = "@startuml\n\
+                     skinparam shadowing true\n\
+                     class FreshShadowLedger2939 {\n\
+                       +String renamedKey\n\
+                       +void rotateFreshly()\n\
+                     }\n\
+                     class FreshShadowArchive2953\n\
+                     class FreshShadowAudit2963 {\n\
+                       -int retainedCount\n\
+                     }\n\
+                     FreshShadowLedger2939 --> FreshShadowArchive2953\n\
+                     FreshShadowArchive2953 ..> FreshShadowAudit2963\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        let filter_id =
+            crate::filter_registry::shadow_id_for(diagram.meta().source.as_deref().unwrap_or(""));
+
+        // `SvgGraphics.createXmlDocument` emits one source-seeded definition;
+        // `SvekResult.calculateDimension` includes the painted shadow extent.
+        assert!(svg.contains(r#"viewBox="0 0 233 340""#), "{svg}");
+        assert!(
+            svg.contains(&crate::filter_registry::shadow_filter_def(&filter_id)),
+            "{svg}"
+        );
+        assert_eq!(
+            svg.matches(&format!(r#"filter="url(#{filter_id})""#))
+                .count(),
+            3,
+            "{svg}"
+        );
     }
 
     #[test]
