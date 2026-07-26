@@ -1232,16 +1232,22 @@ fn layout_usecase_positions(
             LayoutEdge::Connection(index) => {
                 let conn = &diagram.connections[index];
                 let queue_len = conn.queue_len.max(1);
-                if queue_len == 1 {
-                    // Java provenance: `CommandLinkElement.getDirection`
-                    // delegates to `StringUtils.getQueueDirection`, where a
-                    // one-character queue means RIGHT. `executeArg` preserves
-                    // that length and `SvekEdge.rankSame` emits this constraint.
+                if queue_len == 1
+                    && diagram.packages.iter().any(|package| {
+                        package.elements.iter().any(|element| element == &conn.from)
+                            && package.elements.iter().any(|element| element == &conn.to)
+                    })
+                {
+                    // Java `Cluster.getRankSame` calls `SvekEdge.rankSame`
+                    // only when both endpoints are leaves of that cluster.
+                    // Root-level one-character links rely on `minlen=0`
+                    // without an explicit same-rank subgraph.
                     layout.add_same_rank(&conn.from, &conn.to);
                 }
                 // `SvekEdge.appendLine` serializes every non-horizontal link
-                // as `minlen = Link.getLength() - 1`.
-                let minlen = (queue_len > 1).then_some(queue_len - 1);
+                // as `minlen = Link.getLength() - 1`, including zero for a
+                // one-character relation queue.
+                let minlen = Some(queue_len - 1);
                 if let Some((note_index, note)) = note_on_connection(diagram, index) {
                     let size = link_note_label_size(conn, note, &note_dims[note_index], skin);
                     layout.add_edge_with_label_sizes_and_minlen(
@@ -3306,6 +3312,48 @@ mod tests {
             svg.contains(r#"<path d="M222.13,43.74 C233.44,43.74 238.75,43.74 250.06,43.74""#),
             "{svg}"
         );
+    }
+
+    #[test]
+    fn renamed_mixed_root_queue_lengths_follow_svek_minlen() {
+        let input = "@startuml\n\
+                     left to right direction\n\
+                     actor \"Fresh Intake Auditor 2213\" as Auditor2213\n\
+                     usecase \"Queue Novel Claim 2221\" as Queue2221\n\
+                     usecase \"Verify Unseen Claim 2237\" as Verify2237\n\
+                     usecase \"Archive Fresh Claim 2243\" as Archive2243\n\
+                     Auditor2213 -> Queue2221\n\
+                     Auditor2213 --> Verify2237\n\
+                     Queue2221 .> Archive2243 : <<include>>\n\
+                     Verify2237 ..> Archive2243 : <<extend>>\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Fresh PlantUML reference. `SvekEdge.appendLine` emits minlen zero
+        // for each one-character root relation, while `Cluster.getRankSame`
+        // does not add a root-level rank subgraph.
+        assert!(svg.contains(r#"viewBox="0 0 970 144""#), "{svg}");
+        assert!(
+            svg.contains(
+                r#"<path d="M184.32,48.38 C199.98,45.82 210.2784,44.137 225.6484,41.627""#
+            ),
+            "{svg}"
+        );
+        assert!(
+            svg.contains(
+                r#"<path d="M405.03,33.62 C504.29,39.83 654.8417,49.2358 755.0117,55.4958""#
+            ),
+            "{svg}"
+        );
+        assert!(
+            svg.contains(
+                r#"<path d="M623.56,95.61 C669.75,88.91 720.9123,81.4721 766.9923,74.7821""#
+            ),
+            "{svg}"
+        );
+        assert_eq!(svg.matches(r#"class="entity""#).count(), 4, "{svg}");
+        assert_eq!(svg.matches(r#"class="link""#).count(), 4, "{svg}");
     }
 
     #[test]
