@@ -285,6 +285,32 @@ impl LayoutGraph {
     /// `tailport=P{row}`. RustUML still renders the box itself; the record shape
     /// is used only to give dot row-level anchor points for splines.
     pub fn add_record_node(&mut self, id: &str, width: f64, height: f64, ports: &[String]) -> bool {
+        self.add_record_node_with_key_column(id, width, height, ports, false)
+    }
+
+    /// Adds a fixed-size Graphviz record whose named rows occupy a nested
+    /// value column beside an unported key column.
+    ///
+    /// PlantUML `SmetanaForJson.getDotLabelMap` uses this topology for JSON
+    /// objects and YAML mappings; arrays use [`add_record_node`] instead.
+    pub fn add_keyed_record_node(
+        &mut self,
+        id: &str,
+        width: f64,
+        height: f64,
+        ports: &[String],
+    ) -> bool {
+        self.add_record_node_with_key_column(id, width, height, ports, true)
+    }
+
+    fn add_record_node_with_key_column(
+        &mut self,
+        id: &str,
+        width: f64,
+        height: f64,
+        ports: &[String],
+        has_key_column: bool,
+    ) -> bool {
         if self.nodes.iter().any(|node| node.id == id) {
             return false;
         }
@@ -294,6 +320,7 @@ impl LayoutGraph {
             height,
             shape: NodeShape::Record {
                 ports: ports.to_vec(),
+                has_key_column,
             },
         });
         true
@@ -827,9 +854,10 @@ impl LayoutGraph {
                         // PlantUML SVEK uses dot for geometry and renders
                         // entity labels itself.
                         let label_val = match &spec.shape {
-                            NodeShape::Record { ports } => {
-                                CString::new(record_label(ports)).unwrap()
-                            }
+                            NodeShape::Record {
+                                ports,
+                                has_key_column,
+                            } => CString::new(record_label(ports, *has_key_column)).unwrap(),
                             NodeShape::Box
                             | NodeShape::Circle
                             | NodeShape::Ellipse
@@ -1572,15 +1600,20 @@ unsafe fn edge_label_position(
         })
 }
 
-fn record_label(ports: &[String]) -> String {
+fn record_label(ports: &[String], has_key_column: bool) -> String {
     if ports.is_empty() {
         return " ".to_string();
     }
-    ports
+    let rows = ports
         .iter()
         .map(|port| format!("<{}> ", escape_record_port(port)))
         .collect::<Vec<_>>()
-        .join("|")
+        .join("|");
+    if has_key_column {
+        format!("{{ |{{{rows}}}}}")
+    } else {
+        rows
+    }
 }
 
 /// Faithful serialization of PlantUML
@@ -1695,9 +1728,17 @@ enum NodeShape {
     Ellipse,
     Diamond,
     Point,
-    Record { ports: Vec<String> },
-    FixedHtmlRows { ports: Vec<HtmlRowPort> },
-    SvekShielded { shield_x: f64, shield_y: f64 },
+    Record {
+        ports: Vec<String>,
+        has_key_column: bool,
+    },
+    FixedHtmlRows {
+        ports: Vec<HtmlRowPort>,
+    },
+    SvekShielded {
+        shield_x: f64,
+        shield_y: f64,
+    },
 }
 
 #[derive(Debug, Clone)]
@@ -2348,14 +2389,21 @@ mod tests {
     #[test]
     fn record_label_sanitizes_port_names() {
         assert_eq!(
-            record_label(&[
-                "P0".to_string(),
-                "row:1".to_string(),
-                "bad|port".to_string()
-            ]),
+            record_label(
+                &[
+                    "P0".to_string(),
+                    "row:1".to_string(),
+                    "bad|port".to_string()
+                ],
+                false,
+            ),
             "<P0> |<row1> |<badport> "
         );
-        assert_eq!(record_label(&[]), " ");
+        assert_eq!(record_label(&[], false), " ");
+        assert_eq!(
+            record_label(&["P0".to_string(), "P1".to_string()], true),
+            "{ |{<P0> |<P1> }}"
+        );
     }
 
     #[test]
@@ -2372,6 +2420,25 @@ mod tests {
             !result.edge_paths[0].points.is_empty(),
             "record tail port should still produce a routed spline"
         );
+    }
+
+    #[test]
+    fn keyed_record_routes_named_rows_from_the_value_column() {
+        let mut graph = LayoutGraph::new(Direction::LeftToRight);
+        assert!(graph.add_keyed_record_node(
+            "renamed_map",
+            82.0,
+            118.0,
+            &["north_row".to_string(), "south_row".to_string()],
+        ));
+        graph.add_node("north_target", "", 54.0, 30.0);
+        graph.add_node("south_target", "", 54.0, 30.0);
+        graph.add_edge_with_ports("renamed_map", "north_target", None, Some("north_row"), None);
+        graph.add_edge_with_ports("renamed_map", "south_target", None, Some("south_row"), None);
+
+        let result = graph.layout_full_no_timeout();
+        assert_eq!(result.edge_paths.len(), 2);
+        assert!(result.edge_paths.iter().all(|edge| !edge.points.is_empty()));
     }
 
     #[test]

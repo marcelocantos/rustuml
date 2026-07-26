@@ -219,12 +219,11 @@ fn render_nested_no_oracle(diagram: &JsonDiagram, diagram_type: &str) -> Option<
         // Smetana's Graphviz coordinates are point-valued. `createNode`
         // deliberately swaps width and height before layout; `getPosition`
         // and `JsonCurve` swap the solved axes back for rendering.
-        let graph_width = if spec.is_array {
-            *height
+        if spec.is_array {
+            graph.add_record_node(&spec.id, *height, width.round(), &ports);
         } else {
-            height.round()
-        };
-        graph.add_record_node(&spec.id, graph_width, width.round(), &ports);
+            graph.add_keyed_record_node(&spec.id, *height, width.round(), &ports);
+        }
     }
     for index in postorder_edges(&specs) {
         let spec = &specs[index];
@@ -283,6 +282,8 @@ fn render_nested_no_oracle(diagram: &JsonDiagram, diagram_type: &str) -> Option<
             .position(|spec| spec.id == edge.to)
             .map(|index| layout.node_positions[index]);
         let source_index = specs.iter().position(|spec| spec.id == edge.from);
+        let source_position = source_index.map(|index| layout.node_positions[index]);
+        let source_width = source_index.map(|index| dims[index].0);
         let source_y = source_index.and_then(|source_index| {
             target.and_then(|target| target.parent_port).map(|port| {
                 let row_h = text_height(FONT_SIZE) + ROW_EXTRA;
@@ -296,8 +297,15 @@ fn render_nested_no_oracle(diagram: &JsonDiagram, diagram_type: &str) -> Option<
                     + port as f64 * row_h.floor()
             })
         });
-        let rendered =
-            render_nested_connector(edge, MARGIN, MARGIN, source_y, target_position.as_ref());
+        let rendered = render_nested_connector(
+            edge,
+            MARGIN,
+            MARGIN,
+            source_y,
+            source_position.as_ref(),
+            source_width,
+            target_position.as_ref(),
+        );
         if let Some((x, y)) = edge.end_point {
             max_x = max_x.max(x + MARGIN);
             max_y = max_y.max(y + MARGIN);
@@ -574,6 +582,8 @@ fn render_nested_connector(
     dx: f64,
     dy: f64,
     source_port_y: Option<f64>,
+    source_position: Option<&NodePosition>,
+    source_width: Option<f64>,
     direct_target: Option<&NodePosition>,
 ) -> String {
     // `SmetanaForJson.createEdge` asks dot for a normal .75-size arrow.
@@ -603,6 +613,9 @@ fn render_nested_connector(
             && points.len() == 4
             && (points[0].1 - points[last].1).abs() < f64::EPSILON
         {
+            if let (Some(source), Some(width)) = (source_position, source_width) {
+                points[0].0 = source.x + smetana_record_exit_offset(width);
+            }
             points = smetana_direct_cubic(points[0], target);
             arrow_tip = points[3];
         }
@@ -656,6 +669,21 @@ fn render_nested_connector(
         ));
     }
     out
+}
+
+fn smetana_record_exit_offset(rendered_width: f64) -> f64 {
+    // Java `shapes__c.record_init` centers the record, applies its one-point
+    // height kluge after sizing, then Graphviz `PF2P` rounds the routed
+    // boundary. When a width rounds down, an even point extent leaves that
+    // centered boundary on a half point while an odd extent lands on a whole
+    // point. Widths that round up reach the following whole point.
+    let graph_width = rendered_width.round();
+    graph_width
+        + if graph_width < rendered_width && graph_width as i64 % 2 == 0 {
+            0.5
+        } else {
+            1.0
+        }
 }
 
 fn smetana_direct_cubic(source: (f64, f64), target: &NodePosition) -> Vec<(f64, f64)> {
@@ -1261,6 +1289,38 @@ revision: 23
         assert!(first.contains("heliograph"));
         assert!(first.contains("spectrometer"));
         assert!(!first.contains("[...]"));
+    }
+
+    #[test]
+    fn renamed_keyed_map_routes_four_branches_with_deeper_mixed_nesting() {
+        let source = r#"@startjson
+{
+  "aurora_relay": {"reading": 11},
+  "borealis_relay": {"reading": 23},
+  "comet_relay": {"inner_beacon": {"reading": 37}},
+  "drift_relay": [
+    {"reading": 41},
+    {"reading": 53}
+  ]
+}
+@endjson"#;
+        let first = render_input(source);
+        let second = render_input(source);
+
+        assert_eq!(first, second);
+        assert_eq!(first.matches("stroke-dasharray:3,3").count(), 7);
+        assert_eq!(first.matches("<ellipse").count(), 7);
+        assert!(first.contains("aurora_relay"));
+        assert!(first.contains("inner_beacon"));
+        assert!(!first.contains("{...}"));
+    }
+
+    #[test]
+    fn direct_record_exit_tracks_width_rounding_not_labels() {
+        assert_eq!(super::smetana_record_exit_offset(78.2), 78.5);
+        assert_eq!(super::smetana_record_exit_offset(77.2), 78.0);
+        assert_eq!(super::smetana_record_exit_offset(77.7), 79.0);
+        assert_eq!(super::smetana_record_exit_offset(95.0), 96.0);
     }
 
     #[test]
