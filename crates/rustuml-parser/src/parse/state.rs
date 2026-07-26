@@ -166,6 +166,47 @@ impl StateParser {
         }
     }
 
+    /// Resolve an ordinary state name through PlantUML's shared quark tree.
+    ///
+    /// Java provenance: `StateDiagram` installs `.` as its namespace
+    /// separator, and every state/link command calls
+    /// `CucaDiagram.quarkInContextSafe(true, name)`. For an unqualified name,
+    /// that method reuses the sole existing quark with the same short name
+    /// before considering the current composite. State diagrams therefore
+    /// share an already-created `Inner` across later sibling composites.
+    ///
+    /// `StateDiagram.checkConcurrentStateOk` rejects that reuse across
+    /// concurrent-region boundaries, so those scopes retain independent
+    /// children.
+    fn resolve_state_id(&self, raw: &str) -> String {
+        let raw = raw.trim();
+        if raw.starts_with('[') && raw.ends_with(']') || raw.contains('.') {
+            return self.qualify(raw);
+        }
+
+        let mut matches = self.states.iter().filter(|state| {
+            let existing_is_concurrent = state
+                .parent
+                .as_deref()
+                .and_then(|parent| parent.rsplit('.').next())
+                .is_some_and(|segment| segment.starts_with("CONC"));
+            let current_is_concurrent = self
+                .current_scope()
+                .and_then(|scope| scope.rsplit('.').next())
+                .is_some_and(|segment| segment.starts_with("CONC"));
+            state.id.rsplit('.').next() == Some(raw)
+                && (!(existing_is_concurrent || current_is_concurrent)
+                    || state.parent.as_deref() == self.current_scope())
+        });
+        if let Some(sole) = matches.next()
+            && matches.next().is_none()
+        {
+            return sole.id.clone();
+        }
+
+        self.qualify(raw)
+    }
+
     fn flush_note(&mut self) {
         if let Some(buf) = self.note_buffer.take() {
             let text = buf.text.trim().to_string();
@@ -205,7 +246,7 @@ impl StateParser {
         if raw.starts_with('[') && raw.ends_with(']') {
             return self.qualify(raw);
         }
-        let id = self.qualify(raw);
+        let id = self.resolve_state_id(raw);
         let parent = self.current_scope().map(String::from);
         if !self.states.iter().any(|s| s.id == id) {
             self.states.push(State {
@@ -423,7 +464,7 @@ impl StateParser {
                 .get(1)
                 .map_or_else(|| caps[2].to_string(), |m| m.as_str().to_string());
             let raw_id = caps[2].to_string();
-            let id = self.qualify(&raw_id);
+            let id = self.resolve_state_id(&raw_id);
             let parent = self.current_scope().map(String::from);
             let stereotype = caps.get(3).map(|m| m.as_str());
             // A trailing `{` opens a composite block; mark the state and push
@@ -530,7 +571,7 @@ impl StateParser {
             let label = caps
                 .get(1)
                 .map_or_else(|| caps[2].to_string(), |m| m.as_str().to_string());
-            let id = self.qualify(&caps[2]);
+            let id = self.resolve_state_id(&caps[2]);
             let parent = self.current_scope().map(String::from);
             let desc = caps[3].trim().to_string();
             if let Some(state) = self.states.iter_mut().find(|s| s.id == id) {
@@ -811,6 +852,53 @@ mod tests {
         assert!(d.states.iter().any(|state| {
             state.label == "Violet" && state.parent.as_deref() == Some("ParallelHarbor.CONC2")
         }));
+    }
+
+    #[test]
+    fn sibling_composites_reuse_the_sole_existing_short_name_quark() {
+        let d = parse(
+            "state CopperVault {\n\
+             [*] --> SharedRelay\n\
+             SharedRelay --> [*]\n\
+             }\n\
+             state VioletVault {\n\
+             [*] --> SharedRelay\n\
+             SharedRelay --> [*]\n\
+             }",
+        );
+
+        assert_eq!(
+            d.states
+                .iter()
+                .filter(|state| state.label == "SharedRelay")
+                .map(|state| state.id.as_str())
+                .collect::<Vec<_>>(),
+            vec!["CopperVault.SharedRelay"]
+        );
+        assert_eq!(d.transitions[2].to, "CopperVault.SharedRelay");
+        assert_eq!(d.transitions[3].from, "CopperVault.SharedRelay");
+    }
+
+    #[test]
+    fn concurrent_regions_keep_same_named_children_scope_local() {
+        let d = parse(
+            "state ParallelVault {\n\
+             [*] --> SharedRelay\n\
+             --\n\
+             [*] --> SharedRelay\n\
+             }",
+        );
+
+        assert!(
+            d.states
+                .iter()
+                .any(|state| state.id == "ParallelVault.SharedRelay")
+        );
+        assert!(
+            d.states
+                .iter()
+                .any(|state| state.id == "ParallelVault.CONC2.SharedRelay")
+        );
     }
 
     #[test]

@@ -9,7 +9,8 @@
 use std::fmt::Write;
 
 use rustuml_layout::graph::{
-    Direction, EdgeLabelSize, EdgePath, GraphSpacing, LayoutGraph, NodePosition,
+    ClusterPosition, ClusterTitleSize, Direction, EdgeLabelSize, EdgePath, GraphSpacing,
+    LayoutGraph, NodePosition,
 };
 use rustuml_parser::diagram::state::*;
 
@@ -130,6 +131,10 @@ const LINK_FONT_SIZE: f64 = 13.0;
 const DIVIDER_OFFSET: f64 = 26.48828125;
 /// Vertical position of the state name text baseline relative to box top.
 const NAME_BASELINE_OFFSET: f64 = 18.53515625;
+// Extracted from Java `ClusterHeader` output: the state cluster title sheet is
+// one pixel shallower than an ordinary `EntityImageState` header.
+const CLUSTER_HEADER_DIVIDER_OFFSET: f64 = DIVIDER_OFFSET - 1.0;
+const CLUSTER_TITLE_BASELINE_OFFSET: f64 = NAME_BASELINE_OFFSET - 1.0;
 /// Vertical position of first description line baseline relative to divider.
 const FIRST_DESC_OFFSET: f64 = 16.6015625;
 /// Vertical spacing between description lines.
@@ -1818,6 +1823,7 @@ struct AutonomousScopeLayout {
     origin_y: f64,
     width: f64,
     height: f64,
+    compound_clusters: bool,
 }
 
 struct AutonomousRegion {
@@ -2070,6 +2076,7 @@ fn layout_autonomous_scope(
         origin_y,
         width: origin_x + max_x + SVEK_TRAILING_PAD,
         height: origin_y + max_y + SVEK_TRAILING_PAD,
+        compound_clusters: false,
     })
 }
 
@@ -2719,6 +2726,13 @@ fn emit_autonomous_scope_links(
 
         let edge_path = if edge_from == edge_to {
             routed_self_edge_path(&scope.edge_paths, &mut consumed_edge_paths, edge_from)
+        } else if scope.compound_clusters {
+            routed_compound_edge_path(
+                &scope.edge_paths,
+                &mut consumed_edge_paths,
+                edge_from,
+                edge_to,
+            )
         } else {
             routed_edge_path_for_transition(
                 &scope.edge_paths,
@@ -2733,13 +2747,24 @@ fn emit_autonomous_scope_links(
         if let Some(edge_path) = edge_path
             && !edge_path.points.is_empty()
         {
+            let compound_endpoint = scope.compound_clusters
+                && context.diagram.states.iter().any(|state| {
+                    state.composite && (state.id == *edge_from || state.id == *edge_to)
+                });
+            let serialized_coord = |value: f64| {
+                if compound_endpoint {
+                    (value * 10_000.0).round() / 10_000.0
+                } else {
+                    quantize_svek_coord(value)
+                }
+            };
             let mut points: Vec<(f64, f64)> = edge_path
                 .points
                 .iter()
                 .map(|(x, y)| {
                     (
-                        quantize_svek_coord(*x) + scope.origin_x + offset_x,
-                        quantize_svek_coord(*y) + scope.origin_y + offset_y,
+                        serialized_coord(*x) + scope.origin_x + offset_x,
+                        serialized_coord(*y) + scope.origin_y + offset_y,
                     )
                 })
                 .collect();
@@ -3054,6 +3079,623 @@ fn render_autonomous_composite(diagram: &StateDiagram) -> Option<String> {
     Some(svg)
 }
 
+/// Preserve PlantUML's stable SVEK link grouping.
+///
+/// Java provenance: `CucaDiagramFileMakerSvek.addLinkNew` inserts a new link
+/// immediately after the existing contiguous block with the same two
+/// endpoints, treating the pair as undirected. Shared state quarks can make
+/// source-separated links in sibling composites such a pair.
+fn plantuml_svek_transition_order(
+    diagram: &StateDiagram,
+    transition_indices: impl IntoIterator<Item = usize>,
+) -> Vec<usize> {
+    let endpoints = |index: usize| {
+        let transition = &diagram.transitions[index];
+        (
+            state_endpoint_layout_id(&transition.from, true),
+            state_endpoint_layout_id(&transition.to, false),
+        )
+    };
+    let same_connections = |first: usize, second: usize| {
+        let (first_from, first_to) = endpoints(first);
+        let (second_from, second_to) = endpoints(second);
+        (first_from == second_from && first_to == second_to)
+            || (first_from == second_to && first_to == second_from)
+    };
+
+    let mut ordered = Vec::new();
+    for transition_index in transition_indices {
+        let Some(mut insertion) = ordered
+            .iter()
+            .position(|existing| same_connections(*existing, transition_index))
+        else {
+            ordered.push(transition_index);
+            continue;
+        };
+        while insertion < ordered.len() && same_connections(ordered[insertion], transition_index) {
+            insertion += 1;
+        }
+        ordered.insert(insertion, transition_index);
+    }
+    ordered
+}
+
+/// Restore declaration identity for parallel SVEK lanes.
+///
+/// Java's `SvekEdge.appendLine` gives every DOT statement a unique marker
+/// color, and `SvekEdge.solveLine` finds that same color in Graphviz's SVG.
+/// The C API exposes the same lane geometry without the marker identity.
+/// Graphviz lays parallel lanes monotonically across the flow axis, so sorting
+/// each directed bundle by that axis recovers the marker-stable association
+/// without changing any solved coordinate.
+fn order_parallel_svek_paths(edge_paths: &mut [EdgePath]) {
+    let mut visited = std::collections::HashSet::new();
+    for edge_index in 0..edge_paths.len() {
+        let key = (
+            edge_paths[edge_index].from.clone(),
+            edge_paths[edge_index].to.clone(),
+        );
+        if !visited.insert(key.clone()) {
+            continue;
+        }
+        let indices = edge_paths
+            .iter()
+            .enumerate()
+            .filter_map(|(index, edge)| (edge.from == key.0 && edge.to == key.1).then_some(index))
+            .collect::<Vec<_>>();
+        if indices.len() < 2 {
+            continue;
+        }
+        let mut lanes = indices
+            .iter()
+            .map(|index| edge_paths[*index].clone())
+            .collect::<Vec<_>>();
+        lanes.sort_by(|first, second| {
+            let first_start = first.points.first().copied().unwrap_or_default();
+            let first_end = first.points.last().copied().unwrap_or(first_start);
+            let second_start = second.points.first().copied().unwrap_or_default();
+            let second_end = second.points.last().copied().unwrap_or(second_start);
+            let vertical =
+                (first_end.1 - first_start.1).abs() >= (first_end.0 - first_start.0).abs();
+            let first_key = if vertical {
+                (first_start.0, first_start.1, first_end.0, first_end.1)
+            } else {
+                (first_start.1, first_start.0, first_end.1, first_end.0)
+            };
+            let second_key = if vertical {
+                (second_start.0, second_start.1, second_end.0, second_end.1)
+            } else {
+                (second_start.1, second_start.0, second_end.1, second_end.0)
+            };
+            first_key
+                .0
+                .total_cmp(&second_key.0)
+                .then(first_key.1.total_cmp(&second_key.1))
+                .then(first_key.2.total_cmp(&second_key.2))
+                .then(first_key.3.total_cmp(&second_key.3))
+        });
+        for (index, lane) in indices.into_iter().zip(lanes) {
+            edge_paths[index] = lane;
+        }
+    }
+}
+
+/// Render root state groups that remain connected to entities in sibling
+/// groups and therefore cannot be simplified into autonomous image nodes.
+///
+/// Java provenance: `CucaDiagramSimplifierState.simplify` leaves a group
+/// untouched when `Entity.isAutarkic()` is false. The root
+/// `GraphvizImageBuilder` then sends it through
+/// `ClusterDotString.printInternal`, including the tiny routable group
+/// endpoint and the `p0`/`p1` protection clusters represented by
+/// `LayoutGraph::add_svek_cluster`.
+fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
+    if !diagram.notes.is_empty()
+        || diagram.meta.title.is_some()
+        || !diagram.meta.skinparams.is_empty()
+        || diagram.transitions.iter().any(|transition| {
+            transition.label.is_some()
+                || matches!(
+                    explicit_transition_direction(diagram, transition),
+                    Some(ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Up)
+                )
+        })
+        || diagram.states.iter().any(|state| {
+            !matches!(state.kind, StateKind::Normal)
+                || state.concurrent_separator.is_some()
+                || state.stereotype.is_some()
+                || state.fill.is_some()
+                || state.stroke.is_some()
+                || state.url.is_some()
+                || !state.descriptions.is_empty()
+        })
+    {
+        return None;
+    }
+
+    let composites = diagram
+        .states
+        .iter()
+        .filter(|state| state.composite)
+        .collect::<Vec<_>>();
+    if composites.len() < 2
+        || composites.iter().any(|state| state.parent.is_some())
+        || diagram.states.iter().any(|state| {
+            state
+                .parent
+                .as_deref()
+                .is_some_and(|parent| !composites.iter().any(|group| group.id == parent))
+        })
+        || !diagram
+            .transitions
+            .iter()
+            .any(|transition| transition_parent_scope(diagram, transition).is_none())
+    {
+        return None;
+    }
+
+    let arrow_font = StateArrowFont::from_diagram(diagram);
+    let transition_indices = plantuml_svek_transition_order(diagram, 0..diagram.transitions.len());
+    let ids = collect_autonomous_scope_ids(diagram, &transition_indices, |_| true);
+    let mut layout = LayoutGraph::new(Direction::TopToBottom)
+        .with_plantuml_svek_spacing()
+        .with_plantuml_svek_node_order();
+    let node_sizes = ids
+        .iter()
+        .map(|id| {
+            if composites.iter().any(|composite| composite.id == *id) {
+                layout.add_svek_cluster_endpoint(id);
+                (id.clone(), 0.72, 0.72, StateLayoutShape::Circle)
+            } else {
+                let state = diagram.states.iter().find(|state| state.id == *id);
+                let (width, height, shape) = layout_node_size(id, state, false);
+                add_state_layout_node(&mut layout, id, width, height, shape);
+                (id.clone(), width, height, shape)
+            }
+        })
+        .collect::<Vec<_>>();
+
+    for composite in &composites {
+        layout.add_svek_cluster(
+            &composite.id,
+            None,
+            ClusterTitleSize {
+                width: text_render::measure(&composite.label, STATE_FONT_SIZE, false),
+                height: text_render::label_height(&composite.label, STATE_FONT_SIZE),
+            },
+        );
+    }
+    for id in &ids {
+        let owner = if composites.iter().any(|composite| composite.id == *id) {
+            Some(id.as_str())
+        } else if let Some(scope) = id
+            .strip_prefix("__start__:")
+            .or_else(|| id.strip_prefix("__end__:"))
+        {
+            Some(scope)
+        } else {
+            diagram
+                .states
+                .iter()
+                .find(|state| state.id == *id)
+                .and_then(|state| state.parent.as_deref())
+        };
+        if let Some(owner) = owner
+            && composites.iter().any(|composite| composite.id == owner)
+        {
+            layout.add_cluster_node(owner, id);
+        }
+    }
+
+    for transition_index in &transition_indices {
+        let transition = &diagram.transitions[*transition_index];
+        let from = state_endpoint_layout_id(&transition.from, true);
+        let to = state_endpoint_layout_id(&transition.to, false);
+        let direction = explicit_transition_direction(diagram, transition);
+        let (layout_from, layout_to) = if matches!(
+            direction,
+            Some(ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Up)
+        ) {
+            (&to, &from)
+        } else {
+            (&from, &to)
+        };
+        if matches!(
+            direction,
+            Some(ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Up)
+        ) {
+            layout.add_plantuml_svek_inverted_start(layout_from);
+        }
+        if matches!(
+            direction,
+            Some(ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Right)
+        ) {
+            layout.add_plantuml_svek_line0_edge(layout_from, layout_to);
+        }
+        let label_size = transition.label.as_deref().map(|label| EdgeLabelSize {
+            width: text_render::measure_with_family(
+                label,
+                arrow_font.size as f64,
+                arrow_font.bold,
+                &arrow_font.family,
+            ) + 2.0,
+            height: (text_render::label_height(label, arrow_font.size as f64) + 2.0).floor(),
+        });
+        layout.add_edge_with_label_sizes_and_minlen(
+            layout_from,
+            layout_to,
+            label_size,
+            None,
+            None,
+            transition_svek_minlen(diagram, transition),
+        );
+    }
+
+    let mut result = layout.layout_full(std::time::Duration::from_secs(5))?;
+    if result.node_positions.len() != ids.len()
+        || result.cluster_positions.len() != composites.len()
+    {
+        return None;
+    }
+    order_parallel_svek_paths(&mut result.edge_paths);
+    for edge in &mut result.edge_paths {
+        let tail = result
+            .cluster_positions
+            .iter()
+            .find(|cluster| cluster.id == edge.from);
+        let head = result
+            .cluster_positions
+            .iter()
+            .find(|cluster| cluster.id == edge.to);
+        if tail.is_some() || head.is_some() {
+            edge.points = simulate_state_compound(&edge.points, tail, head);
+        }
+    }
+
+    // `SvekResult.calculateDimension` measures the painted result through
+    // `LimitFinder`, then asks `DotStringFactory.moveDelta` to place its
+    // minimum at (6, 6). In particular, this excludes Graphviz's unpainted
+    // p0/p1 protection envelope and includes `UPolygon`'s 10px horizontal
+    // overscan around each arrowhead.
+    let mut painted_min_x = f64::INFINITY;
+    let mut painted_min_y = f64::INFINITY;
+    let mut painted_max_x = f64::NEG_INFINITY;
+    let mut painted_max_y = f64::NEG_INFINITY;
+    let mut include_point = |x: f64, y: f64| {
+        painted_min_x = painted_min_x.min(x);
+        painted_min_y = painted_min_y.min(y);
+        painted_max_x = painted_max_x.max(x);
+        painted_max_y = painted_max_y.max(y);
+    };
+    for (index, id) in ids.iter().enumerate() {
+        if composites.iter().any(|composite| composite.id == *id) {
+            continue;
+        }
+        let position = result.node_positions[index];
+        let (_, width, height, _) = node_sizes.iter().find(|entry| &entry.0 == id)?;
+        let center_x = quantize_svek_coord(position.x + position.width / 2.0);
+        let center_y = quantize_svek_coord(position.y + position.height / 2.0);
+        if id == "__start__" || id.starts_with("__start__:") {
+            include_point(center_x - START_RADIUS, center_y - START_RADIUS);
+            include_point(center_x + START_RADIUS - 1.0, center_y + START_RADIUS - 1.0);
+        } else if id == "__end__" || id.starts_with("__end__:") {
+            include_point(center_x - END_OUTER_RADIUS, center_y - END_OUTER_RADIUS);
+            include_point(
+                center_x + END_OUTER_RADIUS - 1.0,
+                center_y + END_OUTER_RADIUS - 1.0,
+            );
+        } else {
+            let image_x = center_x - width / 2.0;
+            let image_y = center_y - height / 2.0;
+            // `LimitFinder.drawRectangle` expands one pixel above/left and
+            // stops one pixel inside the calculated lower/right dimension.
+            include_point(image_x - 1.0, image_y - 1.0);
+            include_point(image_x + width, image_y + height - 1.0);
+        }
+    }
+    for cluster in &result.cluster_positions {
+        let x = quantize_svek_coord(cluster.x);
+        let y = quantize_svek_coord(cluster.y);
+        let width = quantize_svek_coord(cluster.width);
+        let height = quantize_svek_coord(cluster.height);
+        include_point(x - 1.0, y - 1.0);
+        include_point(x + width, y + height - 1.0);
+    }
+    for edge in &result.edge_paths {
+        let compound_endpoint = composites
+            .iter()
+            .any(|state| state.id == edge.from || state.id == edge.to);
+        let serialized_coord = |value: f64| {
+            if compound_endpoint {
+                (value * 10_000.0).round() / 10_000.0
+            } else {
+                quantize_svek_coord(value)
+            }
+        };
+        let mut points = edge
+            .points
+            .iter()
+            .map(|(x, y)| (serialized_coord(*x), serialized_coord(*y)))
+            .collect::<Vec<_>>();
+        if points.is_empty() {
+            continue;
+        }
+        let arrow_control = points
+            .get(points.len().saturating_sub(2))
+            .copied()
+            .unwrap_or(points[0]);
+        let arrow_tip = points[points.len() - 1];
+        retract_dependency_arrow_path(&mut points);
+        for (x, y) in points {
+            include_point(x, y);
+        }
+        let arrow = arrowhead_points(arrow_control, arrow_tip);
+        let arrow_min_x = arrow
+            .iter()
+            .map(|point| point.0)
+            .fold(f64::INFINITY, f64::min);
+        let arrow_max_x = arrow
+            .iter()
+            .map(|point| point.0)
+            .fold(f64::NEG_INFINITY, f64::max);
+        let arrow_min_y = arrow
+            .iter()
+            .map(|point| point.1)
+            .fold(f64::INFINITY, f64::min);
+        let arrow_max_y = arrow
+            .iter()
+            .map(|point| point.1)
+            .fold(f64::NEG_INFINITY, f64::max);
+        include_point(arrow_min_x - 10.0, arrow_min_y);
+        include_point(arrow_max_x + 10.0, arrow_max_y);
+    }
+    if !painted_min_x.is_finite()
+        || !painted_min_y.is_finite()
+        || !painted_max_x.is_finite()
+        || !painted_max_y.is_finite()
+    {
+        return None;
+    }
+    let origin_x = 6.0 - painted_min_x;
+    let origin_y = 6.0 - painted_min_y;
+    let width = origin_x + painted_max_x + 15.0;
+    let height = origin_y + painted_max_y + 15.0;
+    if width <= 0.0 || height <= 0.0 {
+        return None;
+    }
+    let positions = ids
+        .iter()
+        .zip(&result.node_positions)
+        .map(|(id, position)| {
+            let (_, width, height, _) = node_sizes.iter().find(|entry| &entry.0 == id)?;
+            Some((
+                id.clone(),
+                quantize_svek_coord(position.x + position.width / 2.0),
+                quantize_svek_coord(position.y + position.height / 2.0),
+                *width,
+                *height,
+            ))
+        })
+        .collect::<Option<Vec<_>>>()?;
+    let scope = AutonomousScopeLayout {
+        ids: ids.clone(),
+        positions,
+        edge_paths: result.edge_paths,
+        transition_indices,
+        origin_x,
+        origin_y,
+        width,
+        height,
+        compound_clusters: true,
+    };
+    let allocated_ids = allocate_state_svg_ids(diagram, &ids);
+    let skin = StateSkin::from_diagram(diagram);
+    let context = AutonomousRenderContext {
+        diagram,
+        entity_ids: &allocated_ids.entity_ids,
+        allocated_ids: &allocated_ids,
+        skin: &skin,
+        arrow_font: &arrow_font,
+    };
+    let width = scope.width.ceil() as i64;
+    let height = scope.height.ceil() as i64;
+    let mut svg = String::with_capacity(4096);
+    write!(
+        svg,
+        r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="STATE" height="{height}px" preserveAspectRatio="none" style="width:{width}px;height:{height}px;background:#FFFFFF;" version="1.1" viewBox="0 0 {width} {height}" width="{width}px" zoomAndPan="magnify"><?plantuml ?><defs/><g>"#,
+    )
+    .unwrap();
+
+    for composite in &composites {
+        let cluster = result
+            .cluster_positions
+            .iter()
+            .find(|cluster| cluster.id == composite.id)?;
+        emit_root_state_cluster(
+            &mut svg,
+            &context,
+            composite,
+            cluster,
+            (scope.origin_x, scope.origin_y),
+        );
+    }
+    // `DotStringFactory.solve` reads node positions from Graphviz's serialized
+    // SVG, whose root transform already contains the same moveDelta applied to
+    // clusters and splines. The C API node boxes are pre-transform, so apply
+    // that delta once more when positioning renderer-owned state images.
+    emit_autonomous_scope_entities(
+        &mut svg,
+        &context,
+        &scope,
+        (scope.origin_x, scope.origin_y),
+        true,
+    );
+    emit_autonomous_scope_links(&mut svg, &context, &scope, (0.0, 0.0));
+    svg.push_str("</g></svg>");
+    Some(svg)
+}
+
+fn emit_root_state_cluster(
+    svg: &mut String,
+    context: &AutonomousRenderContext<'_>,
+    composite: &State,
+    cluster: &ClusterPosition,
+    offset: (f64, f64),
+) {
+    let x = quantize_svek_coord(cluster.x) + offset.0;
+    let y = quantize_svek_coord(cluster.y) + offset.1;
+    let width = quantize_svek_coord(cluster.width);
+    let height = quantize_svek_coord(cluster.height);
+    let right = x + width;
+    let divider_y = y + CLUSTER_HEADER_DIVIDER_OFFSET;
+    write!(
+        svg,
+        r#"<g class="cluster" data-qualified-name="{}" data-source-line="{}" id="{}"><path d="M{},{} L{},{} A{STATE_RX},{STATE_RX} 0 0 1 {},{} L{},{} L{},{} L{},{} A{STATE_RX},{STATE_RX} 0 0 1 {},{}" fill="{}"/><rect fill="none" height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/><line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+        escape_attr(&composite.id),
+        composite.source_line,
+        autonomous_entity_id(context.entity_ids, &composite.id),
+        fmt_f(x + STATE_RX),
+        fmt_f(y),
+        fmt_f(right - STATE_RX),
+        fmt_f(y),
+        fmt_f(right),
+        fmt_f(y + STATE_RX),
+        fmt_f(right),
+        fmt_f(divider_y),
+        fmt_f(x),
+        fmt_f(divider_y),
+        fmt_f(x),
+        fmt_f(y + STATE_RX),
+        fmt_f(x + STATE_RX),
+        fmt_f(y),
+        context.skin.state_fill,
+        fmt_f(height),
+        context.skin.stroke,
+        context.skin.border_thickness,
+        fmt_f(width),
+        fmt_f(x),
+        fmt_f(y),
+        context.skin.stroke,
+        context.skin.border_thickness,
+        fmt_f(x),
+        fmt_f(right),
+        fmt_f(divider_y),
+        fmt_f(divider_y),
+    )
+    .unwrap();
+    let title_width = text_render::measure(&composite.label, STATE_FONT_SIZE, false);
+    text_render::emit_text(
+        svg,
+        &composite.label,
+        &TextBase {
+            x: x + (width - title_width) / 2.0,
+            y: y + CLUSTER_TITLE_BASELINE_OFFSET,
+            font_size: STATE_FONT_SIZE as u32,
+            font_family: "sans-serif",
+            fill: &context.skin.text_color,
+            bold: false,
+            italic: false,
+            underline: false,
+            skip_underline: false,
+        },
+    );
+    svg.push_str("</g>");
+}
+
+/// Clip a spline routed through a group's tiny endpoint node to the visible
+/// cluster boundary.
+///
+/// Java provenance: `DotPath.simulateCompound` bisects the first
+/// boundary-crossing cubic eight times and retains the outside halves. The
+/// head-side operation mirrors the tail side exactly.
+fn simulate_state_compound(
+    points: &[(f64, f64)],
+    tail: Option<&ClusterPosition>,
+    head: Option<&ClusterPosition>,
+) -> Vec<(f64, f64)> {
+    if points.len() < 4 || !(points.len() - 1).is_multiple_of(3) {
+        return points.to_vec();
+    }
+
+    type Cubic = [(f64, f64); 4];
+
+    let contains = |rectangle: &ClusterPosition, point: (f64, f64)| {
+        point.0 >= rectangle.x
+            && point.0 <= rectangle.x + rectangle.width
+            && point.1 >= rectangle.y
+            && point.1 <= rectangle.y + rectangle.height
+    };
+    let subdivide = |curve: Cubic| {
+        let midpoint = |a: (f64, f64), b: (f64, f64)| ((a.0 + b.0) / 2.0, (a.1 + b.1) / 2.0);
+        let p01 = midpoint(curve[0], curve[1]);
+        let p12 = midpoint(curve[1], curve[2]);
+        let p23 = midpoint(curve[2], curve[3]);
+        let p012 = midpoint(p01, p12);
+        let p123 = midpoint(p12, p23);
+        let split = midpoint(p012, p123);
+        ([curve[0], p01, p012, split], [split, p123, p23, curve[3]])
+    };
+    let serialized = points
+        .iter()
+        .map(|(x, y)| (quantize_svek_coord(*x), quantize_svek_coord(*y)))
+        .collect::<Vec<_>>();
+    let mut curves = serialized[1..]
+        .chunks_exact(3)
+        .scan(serialized[0], |start, chunk| {
+            let curve = [*start, chunk[0], chunk[1], chunk[2]];
+            *start = chunk[2];
+            Some(curve)
+        })
+        .collect::<Vec<_>>();
+
+    if let Some(tail) = tail
+        && curves.first().is_some_and(|curve| contains(tail, curve[0]))
+        && let Some(index) = curves.iter().position(|curve| !contains(tail, curve[3]))
+    {
+        let mut current = curves[index];
+        let mut clipped = Vec::new();
+        for _ in 0..8 {
+            let (inside_half, outside_half) = subdivide(current);
+            if contains(tail, inside_half[3]) {
+                current = outside_half;
+            } else {
+                clipped.insert(0, outside_half);
+                current = inside_half;
+            }
+        }
+        clipped.extend_from_slice(&curves[index + 1..]);
+        curves = clipped;
+    }
+
+    if let Some(head) = head
+        && curves.last().is_some_and(|curve| contains(head, curve[3]))
+        && let Some(index) = curves.iter().position(|curve| contains(head, curve[3]))
+        && !contains(head, curves[index][0])
+    {
+        let mut current = curves[index];
+        let mut clipped = curves[..index].to_vec();
+        for _ in 0..8 {
+            let (outside_half, inside_half) = subdivide(current);
+            if contains(head, outside_half[3]) {
+                current = outside_half;
+            } else {
+                clipped.push(outside_half);
+                current = inside_half;
+            }
+        }
+        curves = clipped;
+    }
+
+    let mut result = Vec::with_capacity(curves.len() * 3 + 1);
+    if let Some(first) = curves.first() {
+        result.push(first[0]);
+        for curve in curves {
+            result.extend_from_slice(&curve[1..]);
+        }
+    }
+    result
+}
+
 /// Build a PlantUML-compatible SVG for a state diagram.
 ///
 /// The output uses inline formatting (no extra whitespace) to match PlantUML's
@@ -3095,6 +3737,11 @@ pub fn render_with_oracle(
     }
     if oracle.is_none()
         && let Some(svg) = render_autonomous_composite(diagram)
+    {
+        return svg;
+    }
+    if oracle.is_none()
+        && let Some(svg) = render_non_autarkic_root_clusters(diagram)
     {
         return svg;
     }
@@ -5444,15 +6091,7 @@ fn retract_dependency_arrow_path_start(points: &mut [(f64, f64)]) {
     }
 }
 
-/// Render a filled arrowhead polygon at the endpoint, pointing in the direction
-/// from control to endpoint.
-fn render_arrowhead(
-    svg: &mut String,
-    control: (f64, f64),
-    endpoint: (f64, f64),
-    color: &str,
-    thickness: f64,
-) {
+fn arrowhead_points(control: (f64, f64), endpoint: (f64, f64)) -> [(f64, f64); 5] {
     let dx = endpoint.0 - control.0;
     let dy = endpoint.1 - control.1;
     let angle = dy.atan2(dx);
@@ -5473,14 +6112,33 @@ fn render_arrowhead(
     let indent_x = tip_x - (ARROW_LEN - 4.0) * angle.cos();
     let indent_y = tip_y - (ARROW_LEN - 4.0) * angle.sin();
 
+    [
+        (tip_x, tip_y),
+        (right_x, right_y),
+        (indent_x, indent_y),
+        (left_x, left_y),
+        (tip_x, tip_y),
+    ]
+}
+
+/// Render a filled arrowhead polygon at the endpoint, pointing in the direction
+/// from control to endpoint.
+fn render_arrowhead(
+    svg: &mut String,
+    control: (f64, f64),
+    endpoint: (f64, f64),
+    color: &str,
+    thickness: f64,
+) {
+    let points = arrowhead_points(control, endpoint);
     write!(
         svg,
         r#"<polygon fill="{color}" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{color};stroke-width:{};"/>"#,
-        fmt_f(tip_x), fmt_f(tip_y),
-        fmt_f(right_x), fmt_f(right_y),
-        fmt_f(indent_x), fmt_f(indent_y),
-        fmt_f(left_x), fmt_f(left_y),
-        fmt_f(tip_x), fmt_f(tip_y),
+        fmt_f(points[0].0), fmt_f(points[0].1),
+        fmt_f(points[1].0), fmt_f(points[1].1),
+        fmt_f(points[2].0), fmt_f(points[2].1),
+        fmt_f(points[3].0), fmt_f(points[3].1),
+        fmt_f(points[4].0), fmt_f(points[4].1),
         fmt_f(thickness),
     )
     .unwrap();
@@ -5520,6 +6178,24 @@ where
     let (idx, _) = best?;
     consumed[idx] = true;
     edge_paths.get(idx)
+}
+
+/// Bind a root-cluster transition to the next marker-ordered route for its
+/// exact DOT statement endpoints.
+fn routed_compound_edge_path<'a>(
+    edge_paths: &'a [EdgePath],
+    consumed: &mut [bool],
+    from: &str,
+    to: &str,
+) -> Option<&'a EdgePath> {
+    let index = edge_paths.iter().enumerate().position(|(index, edge)| {
+        !consumed.get(index).copied().unwrap_or(true)
+            && edge.from == from
+            && edge.to == to
+            && !edge.points.is_empty()
+    })?;
+    consumed[index] = true;
+    edge_paths.get(index)
 }
 
 /// Bind one parallel self-loop back to its declaration-order transition.
@@ -7229,6 +7905,41 @@ fn short_name_match(ep: &str, edge_id: &str, is_from: bool) -> bool {
 mod tests {
     use super::*;
     use rustuml_parser::diagram::DiagramMeta;
+
+    #[test]
+    fn renamed_six_cluster_shared_quarks_keep_svek_link_identity() {
+        let mut input = String::from("@startuml\n");
+        let vaults = [
+            "CopperVault",
+            "VioletVault",
+            "AmberVault",
+            "SilverVault",
+            "CobaltVault",
+            "JadeVault",
+        ];
+        for vault in vaults {
+            writeln!(
+                input,
+                "state {vault} {{\n  [*] --> RelayAlpha\n  RelayAlpha --> RelayBeta\n  RelayBeta --> RelayGamma\n  RelayGamma --> [*]\n}}"
+            )
+            .unwrap();
+        }
+        input.push_str("[*] --> CopperVault\n");
+        for pair in vaults.windows(2) {
+            writeln!(input, "{} --> {}", pair[0], pair[1]).unwrap();
+        }
+        input.push_str("JadeVault --> [*]\n@enduml\n");
+
+        let diagram = rustuml_parser::parse::parse(&input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Fresh PlantUML beta oracle reference with a sibling and parallel edge
+        // count outside the golden composite matrix.
+        assert!(svg.contains(r#"viewBox="0 0 627 692""#), "{svg}");
+        assert_eq!(svg.matches(r#"<g class="cluster""#).count(), vaults.len());
+        assert!(svg.contains(r#"id="RelayAlpha-to-RelayBeta-5""#));
+        assert!(svg.contains(r#"id="RelayBeta-to-RelayGamma-5""#));
+    }
 
     #[test]
     fn simple_state_diagram() {
