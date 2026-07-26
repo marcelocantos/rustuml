@@ -4350,6 +4350,49 @@ fn svek_link_label_margin(from: &str, to: &str) -> f64 {
 
 fn component_no_oracle_spacing(diagram: &ComponentDiagram, arrow_font_size: f64) -> (f64, bool) {
     let default = GraphSpacing::PLANTUML_SVEK_DEFAULTS.node_sep_px;
+    let has_mixed_interface_rank = diagram.interfaces.iter().any(|interface| {
+        let touches = |connection: &&Connection| {
+            connection.from == interface.id || connection.to == interface.id
+        };
+        let has_horizontal_socket = diagram
+            .connections
+            .iter()
+            .filter(touches)
+            .any(|connection| {
+                connection.label.is_none()
+                    && matches!(
+                        connection.direction,
+                        Some(ConnectionDirection::Left | ConnectionDirection::Right)
+                    )
+                    && matches!(
+                        connection.shape,
+                        LinkShape::TargetSocket | LinkShape::TargetBallSocket
+                    )
+            });
+        let has_vertical_label = diagram
+            .connections
+            .iter()
+            .filter(touches)
+            .any(|connection| {
+                connection.label.is_some()
+                    && matches!(
+                        connection.direction,
+                        Some(ConnectionDirection::Down | ConnectionDirection::Up)
+                    )
+            });
+        has_horizontal_socket && has_vertical_label
+    });
+    if has_mixed_interface_rank {
+        // Java `DotStringFactory.getHorizontalDzeta` ignores labels on vertical
+        // `SvekEdge`s when selecting nodesep. The vendored Graphviz path sees
+        // that ordinary edge label while solving the shared horizontal rank.
+        //
+        // Extracted mixed-interface rank metrics (pixels):
+        // nodesep input | Java solved gap | vendored solved gap
+        // 35            | 35              | 69
+        // 18            | 35              | 35
+        return (18.0, false);
+    }
     let shortest_horizontal_table = diagram
         .connections
         .iter()
@@ -6415,6 +6458,32 @@ mod tests {
                 "renderer-owned text must stay centered in each solved table: {svg}"
             );
         }
+    }
+
+    #[test]
+    fn no_oracle_mixed_interface_rank_ignores_vertical_label_width() {
+        // Fresh Java PlantUML reference. `DotStringFactory.getHorizontalDzeta`
+        // asks each `SvekEdge` for horizontal separation, and the vertically
+        // labelled edge returns zero while the socket edge retains rank=same.
+        let input = "@startuml\n\
+                     component \"Renamed Producer 9107\" as Producer9107 #PaleGreen\n\
+                     component \"Renamed Subscriber 9133\" as Subscriber9133 #Wheat\n\
+                     interface \"Renamed Service Port 9173\" as Port9173\n\
+                     Producer9107 -( Port9173\n\
+                     Subscriber9133 --> Port9173 : consumes telemetry stream\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(
+            svg.contains(r#"width="450px""#),
+            "the vertical label must not widen the horizontal socket rank: {svg}"
+        );
+        assert!(
+            svg.contains(r#"d="M214.71,153.74 C226.26,153.74 227.82,153.74 239.38,153.74""#)
+                && svg.contains(r#"d="M258.64,53.81 C258.64,81.12 258.64,119.75 258.64,138.27""#),
+            "the renamed mixed-rank perturbation must retain Java's routed splines: {svg}"
+        );
     }
 
     #[test]
