@@ -81,8 +81,6 @@ const MEMBER_LINE_HEIGHT: f64 = 16.48828125;
 const FIRST_MEMBER_OFFSET: f64 = 17.53515625;
 /// Subsequent member baseline spacing.
 const MEMBER_SPACING: f64 = 16.48828125;
-/// Baseline rise of a labelled-separator caption above its divider rule.
-const LABEL_SEP_TEXT_RISE: f64 = 4.791015625;
 /// Member-text left inset relative to the circled icon radius. PlantUML places
 /// member text at `compartment_pad + (circledRadius + 3)`; with the compartment
 /// pad and entity left margin this nets to `entity_x + radius + 9`.
@@ -1153,7 +1151,26 @@ fn calc_entity_dims(
         let methods_section = if hide.methods {
             0.0
         } else {
-            COMPARTMENT_PAD + method_content_height + method_padding
+            // Java `BodyEnhancedAbstract.decorate` wraps a titled separator
+            // block in half the title height above `TextBlockLineBefore`, then
+            // gives the member block another half-title top margin and 4px at
+            // the bottom. An untitled block instead keeps the ordinary 4px
+            // margins on both sides.
+            let block_padding = methods_separator_member(entity)
+                .filter(|separator| {
+                    !separator.display_text.is_empty()
+                        && !hide.fields
+                        && visible_field_blocks > 0
+                        && visible_method_blocks > 0
+                })
+                .map_or(COMPARTMENT_PAD, |separator| {
+                    text_render::label_height_with_family(
+                        &separator.display_text,
+                        member_font_size,
+                        &font.family,
+                    ) + 4.0
+                });
+            block_padding + method_content_height + method_padding
         };
         header_h + fields_section + methods_section
     };
@@ -1197,6 +1214,23 @@ fn uses_document_order_body(entity: &ClassEntity, hide: HideFlags) -> bool {
         || (entity.kind == EntityKind::Enum
             && separator_count > 0
             && has_field_after_method(entity))
+}
+
+fn methods_separator_member(entity: &ClassEntity) -> Option<&Member> {
+    let last_field = entity
+        .members
+        .iter()
+        .rposition(|member| member.kind == MemberKind::Field)?;
+    let first_method = entity
+        .members
+        .iter()
+        .position(|member| member.kind == MemberKind::Method)?;
+    if first_method <= last_field + 1 {
+        return None;
+    }
+    entity.members[last_field + 1..first_method]
+        .iter()
+        .find(|member| member.kind == MemberKind::Separator)
 }
 
 fn member_block_height(member: &Member, font: &ClassFontOverrides) -> f64 {
@@ -7091,32 +7125,7 @@ fn render_entity_content(
         // Detect whether an explicit `--`-style separator appears between
         // the field and method compartments. When present, Java draws the
         // methods compartment divider at stroke-width 1 instead of 0.5.
-        let fields_have_idx: Vec<usize> = entity
-            .members
-            .iter()
-            .enumerate()
-            .filter(|(_, m)| m.kind == MemberKind::Field)
-            .map(|(i, _)| i)
-            .collect();
-        let methods_have_idx: Vec<usize> = entity
-            .members
-            .iter()
-            .enumerate()
-            .filter(|(_, m)| m.kind == MemberKind::Method)
-            .map(|(i, _)| i)
-            .collect();
-        let methods_separator_member: Option<&Member> = match (
-            fields_have_idx.last().copied(),
-            methods_have_idx.first().copied(),
-        ) {
-            (Some(last_f), Some(first_m)) if first_m > last_f + 1 => entity
-                .members
-                .iter()
-                .skip(last_f + 1)
-                .take(first_m - last_f - 1)
-                .find(|m| m.kind == MemberKind::Separator),
-            _ => None,
-        };
+        let methods_separator_member = methods_separator_member(entity);
         let user_separator_symbol: Option<String> =
             methods_separator_member.and_then(|m| m.return_type.clone());
         // A labelled divider (`-- label --`) carries non-empty text. PlantUML
@@ -7125,6 +7134,9 @@ fn render_entity_content(
         let methods_sep_label: Option<&str> = methods_separator_member
             .map(|m| m.display_text.as_str())
             .filter(|s| !s.is_empty());
+        let methods_sep_title_height = methods_sep_label.map(|label| {
+            text_render::label_height_with_family(label, attr_font.size as f64, attr_font.family)
+        });
         // PlantUML styles the methods-divider differently depending on the
         // explicit separator symbol the user wrote between fields and
         // methods:
@@ -7346,12 +7358,13 @@ fn render_entity_content(
                 let methods_sep_y = oracle_sep_y
                     .get(1 + inline_field_separators.len())
                     .copied()
-                    .unwrap_or(
+                    .unwrap_or_else(|| {
                         header_sep_y
                             + COMPARTMENT_PAD
                             + fields_content_height
-                            + fields.len() as f64 * text_padding * 2.0,
-                    );
+                            + fields.len() as f64 * text_padding * 2.0
+                            + methods_sep_title_height.unwrap_or(0.0) / 2.0
+                    });
                 // A labelled divider is drawn AFTER the member text (centred
                 // caption flanked by two short rules), so suppress the normal
                 // full-width line here when a label is present. When the
@@ -7402,7 +7415,9 @@ fn render_entity_content(
                 // Method members (text_y index continues after header + fields).
                 let method_text_offset = oracle_field_text_idx;
                 let mut oracle_method_text_idx = method_text_offset;
-                let mut method_top = methods_sep_y + COMPARTMENT_PAD / 2.0 + text_padding;
+                let method_top_padding = methods_sep_title_height
+                    .map_or(COMPARTMENT_PAD / 2.0, |title_height| title_height / 2.0);
+                let mut method_top = methods_sep_y + method_top_padding + text_padding;
                 for member in methods {
                     let eff_y = oracle_text_y
                         .get(oracle_method_text_idx)
@@ -7453,10 +7468,16 @@ fn render_entity_content(
                 }
 
                 // Emit a labelled divider after the members: two short rules
-                // flanking a centred caption. PlantUML measures the caption at
-                // 14px and centres it across the entity's interior width.
+                // flanking a centred caption. `BodyEnhancedAbstract` uses the
+                // effective class-attribute font configuration for both its
+                // title metrics and the `UHorizontalLine` title block.
                 if let Some(label) = methods_sep_label {
-                    let label_len = text_render::measure_no_underline(label, 14.0, false);
+                    let label_len = text_render::measure_no_underline_with_family(
+                        label,
+                        attr_font.size as f64,
+                        attr_font.bold,
+                        attr_font.family,
+                    );
                     let text_left = round_4dp(sep_x1 + (sep_x2 - sep_x1 - label_len) / 2.0);
                     let text_right = round_4dp(text_left + label_len);
                     // A `==` caption divider doubles each flanking rule (a
@@ -7478,18 +7499,33 @@ fn render_entity_content(
                         )
                         .unwrap();
                     }
+                    let title_height = methods_sep_title_height.unwrap_or_else(|| {
+                        text_render::label_height_with_family(
+                            label,
+                            attr_font.size as f64,
+                            attr_font.family,
+                        )
+                    });
+                    let title_baseline = methods_sep_y
+                        + text_render::label_ascent_with_family(
+                            label,
+                            attr_font.size as f64,
+                            attr_font.family,
+                        )
+                        - title_height / 2.0
+                        - 0.5;
                     let mut label_buf = String::new();
                     text_render::emit_text(
                         &mut label_buf,
                         label,
                         &TextBase {
                             x: text_left,
-                            y: methods_sep_y + LABEL_SEP_TEXT_RISE,
-                            font_size: 14,
-                            font_family: "sans-serif",
+                            y: title_baseline,
+                            font_size: attr_font.size,
+                            font_family: attr_font.family,
                             fill: member_fill,
-                            bold: false,
-                            italic: false,
+                            bold: attr_font.bold,
+                            italic: attr_font.italic,
                             underline: false,
                             skip_underline: true,
                         },
@@ -12423,6 +12459,53 @@ mod tests {
             "{svg}"
         );
         assert!(svg.contains(">Final renamed panel</text>"), "{svg}");
+    }
+
+    #[test]
+    fn renamed_labelled_separator_uses_dynamic_title_block_height() {
+        fn render_with_separator(separator: &str) -> String {
+            let input = format!(
+                "@startuml\n\
+                 skinparam classAttributeFontSize 11\n\
+                 class FreshSeparatorLedger3149 {{\n\
+                   +String freshKey\n\
+                   -int retainedCount\n\
+                   {separator}\n\
+                   +void rotateFreshKey()\n\
+                   -boolean hasRetainedValue()\n\
+                   #String summarizeFreshState()\n\
+                 }}\n\
+                 @enduml"
+            );
+            let diagram = rustuml_parser::parse::parse(&input).unwrap();
+            crate::render_svg(&diagram)
+        }
+
+        fn entity_height(svg: &str) -> f64 {
+            svg.split("<rect fill=\"#F1F1F1\" height=\"")
+                .nth(1)
+                .and_then(|tail| tail.split('"').next())
+                .unwrap()
+                .parse()
+                .unwrap()
+        }
+
+        let plain = render_with_separator("--");
+        let labelled = render_with_separator(".. Fresh renamed audit lane ..");
+        let title_height =
+            text_render::label_height_with_family("Fresh renamed audit lane", 11.0, "sans-serif");
+
+        assert!(
+            (entity_height(&labelled) - entity_height(&plain) - (title_height - 4.0)).abs()
+                < 0.0002,
+            "{plain}\n{labelled}"
+        );
+        assert!(
+            labelled.contains(r#"font-size="11""#)
+                && labelled.contains(">Fresh renamed audit lane</text>")
+                && labelled.contains("stroke-dasharray:1,2;"),
+            "{labelled}"
+        );
     }
 
     #[test]
