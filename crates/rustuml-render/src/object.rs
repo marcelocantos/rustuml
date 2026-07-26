@@ -272,8 +272,11 @@ fn calc_obj_dim(obj: &ObjectInstance, font_size: u32) -> ObjDim {
             })
             .fold(0.0_f64, f64::max);
 
-        // Header width: name (or stereotype) centred with 2 * 7px padding.
-        let header_w = label_w.max(stereo_width) + 14.0;
+        // Java `EntityImageObject` builds the name and stereotype as separate
+        // text blocks before `BodyEnhanced2.calculateDimension`: the 14px
+        // name keeps seven pixels per side, while the 12px stereotype keeps
+        // five. Their independently padded widths are then unioned.
+        let header_w = (label_w + 14.0).max(stereo_width + 10.0);
         // Body width: max field text + 2 * 6px padding.
         let body_w = if obj.fields.is_empty() {
             0.0
@@ -2811,6 +2814,27 @@ namespace alpha.beta.gamma {
         assert!(svg.contains(r#"M8.5,6 L48.9844,6"#));
         assert!(svg.contains(r#"M56.5,92 L110.3486,92"#));
         assert!(svg.contains("state = &quot;ready&quot;"));
+    }
+
+    #[test]
+    fn renamed_stereotypes_keep_independent_name_and_stereo_padding() {
+        let input = r#"object Z <<renamed_boundary_type>> {
+  code = 17
+}
+object RenamedLongObject <<db>> {
+  state = ready
+}"#;
+        let lines = input.lines().map(str::to_owned).collect::<Vec<_>>();
+        let diagram = rustuml_parser::parse::object::parse_object(&lines).unwrap();
+        let font_size = Theme::default().class.font_size as u32;
+        let stereo_dominant = calc_obj_dim(&diagram.objects[0], font_size);
+        let name_dominant = calc_obj_dim(&diagram.objects[1], font_size);
+
+        // Fresh Java PlantUML reference. `EntityImageObject` and
+        // `BodyEnhanced2.calculateDimension` union the independently padded
+        // AWT text blocks at these widths.
+        assert!((stereo_dominant.width - 165.8594).abs() < 0.001);
+        assert!((name_dominant.width - 154.3896).abs() < 0.001);
     }
 
     #[test]

@@ -22,7 +22,7 @@ crates/rustuml-render/src/math.rs 3
 crates/rustuml-render/src/metrics.rs 305
 crates/rustuml-render/src/mindmap.rs 4
 crates/rustuml-render/src/non_ascii_widths.rs 818
-crates/rustuml-render/src/object.rs 15
+crates/rustuml-render/src/object.rs 19
 crates/rustuml-render/src/openiconic.rs 3
 crates/rustuml-render/src/plantuml_metrics.rs 1066
 crates/rustuml-render/src/salt.rs 1
