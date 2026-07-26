@@ -245,24 +245,67 @@ fn node_width(id: &str, state_def: Option<&State>) -> f64 {
 /// Java provenance: `EntityImageCircleStart.calculateDimensionSlow` delegates
 /// to the 20px `CircleStart`; `EntityImageCircleEnd.calculateDimensionSlow`
 /// returns 22x22. `SvekNode.appendShape` sends both to dot as circles.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+enum StateLayoutShape {
+    Box,
+    Circle,
+    Diamond,
+}
+
 fn layout_node_size(
     id: &str,
     state_def: Option<&State>,
     hide_empty_desc: bool,
-) -> (f64, f64, bool) {
+) -> (f64, f64, StateLayoutShape) {
     if id == "__start__" || id.starts_with("__start__:") {
-        return (START_RADIUS * 2.0, START_RADIUS * 2.0, true);
+        return (
+            START_RADIUS * 2.0,
+            START_RADIUS * 2.0,
+            StateLayoutShape::Circle,
+        );
     }
     if id == "__end__" || id.starts_with("__end__:") {
-        return (END_OUTER_RADIUS * 2.0, END_OUTER_RADIUS * 2.0, true);
+        return (
+            END_OUTER_RADIUS * 2.0,
+            END_OUTER_RADIUS * 2.0,
+            StateLayoutShape::Circle,
+        );
     }
-    let is_circle =
-        state_def.is_some_and(|state| matches!(state.kind, StateKind::Initial | StateKind::Final));
+    let shape = match state_def.map(|state| state.kind) {
+        Some(StateKind::Initial | StateKind::Final) => StateLayoutShape::Circle,
+        Some(StateKind::Choice) => StateLayoutShape::Diamond,
+        _ => StateLayoutShape::Box,
+    };
     (
         node_width(id, state_def),
         node_height(id, state_def, hide_empty_desc),
-        is_circle,
+        shape,
     )
+}
+
+/// Register a State entity with Graphviz using PlantUML's SVEK shape.
+///
+/// Java provenance: `SvekNode.appendShapeInternal` maps
+/// `ShapeType.DIAMOND` to Graphviz's native `shape=diamond`, so incident
+/// splines clip against the diagonal boundary rather than its bounding box.
+fn add_state_layout_node(
+    layout: &mut LayoutGraph,
+    id: &str,
+    width: f64,
+    height: f64,
+    shape: StateLayoutShape,
+) {
+    match shape {
+        StateLayoutShape::Box => {
+            layout.add_node(id, id, width, height);
+        }
+        StateLayoutShape::Circle => {
+            layout.add_circle_node(id, id, width.max(height));
+        }
+        StateLayoutShape::Diamond => {
+            layout.add_diamond_node(id, id, width, height);
+        }
+    }
 }
 
 /// Return the vertical translation applied by `SvekResult.calculateDimension`.
@@ -954,7 +997,7 @@ fn layout_autonomous_scope(
     diagram: &StateDiagram,
     ids: Vec<String>,
     transition_indices: Vec<usize>,
-    node_sizes: &[(String, f64, f64, bool)],
+    node_sizes: &[(String, f64, f64, StateLayoutShape)],
     arrow_font: &StateArrowFont,
     plantuml_spacing: bool,
 ) -> Option<AutonomousScopeLayout> {
@@ -968,12 +1011,8 @@ fn layout_autonomous_scope(
         );
     }
     for id in &ids {
-        let (_, width, height, circle) = node_sizes.iter().find(|entry| &entry.0 == id)?;
-        if *circle {
-            layout.add_circle_node(id, id, width.max(*height));
-        } else {
-            layout.add_node(id, id, *width, *height);
-        }
+        let (_, width, height, shape) = node_sizes.iter().find(|entry| &entry.0 == id)?;
+        add_state_layout_node(&mut layout, id, *width, *height, *shape);
     }
     for index in &transition_indices {
         let transition = &diagram.transitions[*index];
@@ -1034,7 +1073,7 @@ fn layout_autonomous_scope(
                 && node_sizes
                     .iter()
                     .find(|entry| &entry.0 == id)
-                    .is_some_and(|entry| !entry.3)
+                    .is_some_and(|entry| entry.3 == StateLayoutShape::Box)
         });
     let origin_x = SVEK_ORIGIN_X;
     let origin_y = SVEK_ORIGIN_Y + f64::from(rectangle_on_top);
@@ -1148,12 +1187,12 @@ fn build_autonomous_composite<'a>(
     let inner_ids = collect_autonomous_scope_ids(diagram, &inner_transition_indices, |state| {
         state.parent.as_deref() == Some(composite.id.as_str())
     });
-    let inner_sizes: Vec<(String, f64, f64, bool)> = inner_ids
+    let inner_sizes: Vec<(String, f64, f64, StateLayoutShape)> = inner_ids
         .iter()
         .map(|id| {
             let state = diagram.states.iter().find(|state| state.id == *id);
-            let (width, height, circle) = layout_node_size(id, state, false);
-            (id.clone(), width, height, circle)
+            let (width, height, shape) = layout_node_size(id, state, false);
+            (id.clone(), width, height, shape)
         })
         .collect();
     // Java creates a fresh `GeneralImageBuilder` for the composite's children.
@@ -1229,15 +1268,15 @@ fn build_autonomous_composite<'a>(
     let outer_ids = collect_autonomous_scope_ids(diagram, &outer_transition_indices, |state| {
         state.parent.is_none()
     });
-    let outer_sizes: Vec<(String, f64, f64, bool)> = outer_ids
+    let outer_sizes: Vec<(String, f64, f64, StateLayoutShape)> = outer_ids
         .iter()
         .map(|id| {
             if id == &composite.id {
-                (id.clone(), width, height, false)
+                (id.clone(), width, height, StateLayoutShape::Box)
             } else {
                 let state = diagram.states.iter().find(|state| state.id == *id);
-                let (node_width, node_height, circle) = layout_node_size(id, state, false);
-                (id.clone(), node_width, node_height, circle)
+                let (node_width, node_height, shape) = layout_node_size(id, state, false);
+                (id.clone(), node_width, node_height, shape)
             }
         })
         .collect();
@@ -2074,12 +2113,8 @@ pub fn render_with_oracle(
         let mut layout = LayoutGraph::new(Direction::TopToBottom).with_plantuml_svek_spacing();
         for id in &state_ids {
             let state_def = find_state(id);
-            let (w, h, is_circle) = layout_node_size(id, state_def, hide_empty_desc);
-            if is_circle {
-                layout.add_circle_node(id, id, w.max(h));
-            } else {
-                layout.add_node(id, id, w, h);
-            }
+            let (w, h, shape) = layout_node_size(id, state_def, hide_empty_desc);
+            add_state_layout_node(&mut layout, id, w, h, shape);
         }
         for t in &diagram.transitions {
             let from = map_id(&t.from, true);
@@ -5606,6 +5641,37 @@ mod tests {
         let choice = svg.find(r#"data-qualified-name="choice""#).unwrap();
         let start = svg.find(r#"data-qualified-name=".start.""#).unwrap();
         assert!(choice < start);
+    }
+
+    #[test]
+    fn renamed_choice_uses_native_svek_diamond_for_routing() {
+        let input = concat!(
+            "@startuml\n",
+            "[*] --> DecisionHarbor733\n",
+            "state DecisionHarbor733 <<choice>>\n",
+            "DecisionHarbor733 --> AmberRoute739\n",
+            "DecisionHarbor733 --> IndigoRoute743\n",
+            "DecisionHarbor733 --> QuartzRoute751\n",
+            "@enduml\n",
+        );
+        let parsed = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::State(diagram) = &parsed else {
+            panic!("expected state diagram");
+        };
+        let choice = diagram
+            .states
+            .iter()
+            .find(|state| state.id == "DecisionHarbor733")
+            .unwrap();
+
+        assert_eq!(
+            layout_node_size(&choice.id, Some(choice), false).2,
+            StateLayoutShape::Diamond
+        );
+        let svg = render(diagram, &Theme::default());
+        assert!(svg.contains(r#"data-qualified-name="DecisionHarbor733""#));
+        assert!(svg.contains("<polygon"));
+        assert!(svg.matches(r#"<g class="link""#).count() >= 4);
     }
 
     #[test]
