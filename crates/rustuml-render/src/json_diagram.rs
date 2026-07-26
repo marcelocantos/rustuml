@@ -261,10 +261,10 @@ fn render_nested_no_oracle(diagram: &JsonDiagram, diagram_type: &str) -> Option<
     // time out valid JSON trees merely while they wait in the queue.
     let mut layout = graph.layout_full_no_timeout();
     for position in &mut layout.node_positions {
+        // Java `SmetanaForJson.getPosition` swaps the solved Graphviz axes
+        // without quantizing the point-valued coordinates.
         (position.x, position.y) = (position.y, position.x);
         (position.width, position.height) = (position.height, position.width);
-        position.x = snap_smetana_point(position.x);
-        position.y = snap_smetana_point(position.y);
     }
     for edge in &mut layout.edge_paths {
         for point in &mut edge.points {
@@ -338,19 +338,6 @@ fn render_nested_no_oracle(diagram: &JsonDiagram, diagram_type: &str) -> Option<
     );
     svg.raw_inline(&body);
     Some(svg.finalize_plantuml())
-}
-
-fn snap_smetana_point(value: f64) -> f64 {
-    // Smetana stores solved node coordinates on Graphviz's half-point grid.
-    // Preserve genuinely fractional text-derived positions while normalizing
-    // values that only differ from that grid by float conversion noise.
-    const HALF_POINT_GRID: f64 = 0.5;
-    let snapped = (value / HALF_POINT_GRID).round() * HALF_POINT_GRID;
-    if (value - snapped).abs() <= HALF_POINT_GRID / 4.0 {
-        snapped
-    } else {
-        value
-    }
 }
 
 fn smetana_record_port_y(record_top: f64, row_heights: &[f64], port: usize) -> Option<f64> {
