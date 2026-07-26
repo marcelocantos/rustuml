@@ -7,7 +7,7 @@ archimate 1 48
 chart 25 25
 class 1838 1971
 combo 261 327
-component 644 663
+component 645 663
 creole 423 639
 deployment 495 495
 dot 25 25

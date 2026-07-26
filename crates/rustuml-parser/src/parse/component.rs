@@ -684,6 +684,11 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                     source_line: current_line,
                 });
             }
+            if let Some(pkg) = package_stack.last_mut()
+                && !pkg.components.contains(&id)
+            {
+                pkg.components.push(id.clone());
+            }
             add_together_node(&mut together, &block_stack, &id);
             continue;
         }
@@ -697,6 +702,11 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                     source_line: current_line,
                 });
             }
+            if let Some(pkg) = package_stack.last_mut()
+                && !pkg.components.contains(&id)
+            {
+                pkg.components.push(id.clone());
+            }
             add_together_node(&mut together, &block_stack, &id);
             continue;
         }
@@ -708,6 +718,11 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                     label: name.clone(),
                     source_line: current_line,
                 });
+            }
+            if let Some(pkg) = package_stack.last_mut()
+                && !pkg.components.contains(&name)
+            {
+                pkg.components.push(name.clone());
             }
             add_together_node(&mut together, &block_stack, &name);
             continue;
@@ -729,6 +744,11 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                     label,
                     source_line: current_line,
                 });
+            }
+            if let Some(pkg) = package_stack.last_mut()
+                && !pkg.components.contains(&id)
+            {
+                pkg.components.push(id.clone());
             }
             add_together_node(&mut together, &block_stack, &id);
             continue;
@@ -837,6 +857,11 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                     }
                 }
                 if created {
+                    if let Some(pkg) = package_stack.last_mut()
+                        && !pkg.components.contains(id)
+                    {
+                        pkg.components.push(id.clone());
+                    }
                     add_together_node(&mut together, &block_stack, id);
                 }
             }
@@ -1063,6 +1088,24 @@ mod tests {
         assert_eq!(d.interfaces[0].source_line, 2);
         assert_eq!(d.interfaces[1].id, "IB");
         assert_eq!(d.interfaces[1].source_line, 3);
+    }
+
+    #[test]
+    fn interface_declarations_keep_their_renamed_container_owner() {
+        let d = parse(
+            "component RenamedShell9701 {\n\
+               interface \"Quoted Port 9703\" as Quoted9703\n\
+               interface [Bracket Port 9709] as Bracket9709\n\
+               interface BarePort9719\n\
+               () \"Parenthesized Port 9721\" as Paren9721\n\
+             }",
+        );
+
+        assert_eq!(d.packages.len(), 1);
+        assert_eq!(
+            d.packages[0].components,
+            ["Quoted9703", "Bracket9709", "BarePort9719", "Paren9721"]
+        );
     }
 
     #[test]

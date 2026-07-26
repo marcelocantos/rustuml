@@ -1533,10 +1533,8 @@ pub fn render_with_oracle(
     // oracle captures each entity's `id` (`ent000N`), which encodes that
     // emission order, so when the oracle is present we merge both collections
     // into a single sequence sorted by the oracle-assigned id and emit in that
-    // order. Without an oracle, top-level leaves use their parser-recorded
-    // source lines; package-backed diagrams retain the existing depth-aware
-    // component order because the interface model does not yet carry package
-    // ownership.
+    // order. Without an oracle, package membership supplies the same qualified
+    // depth for both components and interfaces.
     #[derive(Clone, Copy)]
     enum EmitItem {
         Comp(usize),
@@ -1595,23 +1593,42 @@ pub fn render_with_oracle(
             }
         });
         out
-    } else if diagram.packages.is_empty() {
+    } else {
+        let any_nested_all = comp_order.iter().any(|&i| {
+            qualified_names
+                .get(&diagram.components[i].id)
+                .map(|q| q.contains('.'))
+                .unwrap_or(false)
+        }) || diagram.interfaces.iter().any(|interface| {
+            qualified_names
+                .get(&interface.id)
+                .map(|q| q.contains('.'))
+                .unwrap_or(false)
+        });
         let mut out: Vec<EmitItem> = comp_order
             .iter()
             .map(|&i| EmitItem::Comp(i))
             .chain((0..diagram.interfaces.len()).map(EmitItem::Iface))
             .collect();
         out.sort_by_key(|item| match *item {
-            EmitItem::Comp(i) => diagram.components[i].source_line,
-            EmitItem::Iface(i) => diagram.interfaces[i].source_line,
+            EmitItem::Comp(i) => {
+                let component = &diagram.components[i];
+                let depth = qualified_names
+                    .get(&component.id)
+                    .map(|q| q.matches('.').count())
+                    .unwrap_or(0);
+                (any_nested_all && depth == 0, depth, component.source_line)
+            }
+            EmitItem::Iface(i) => {
+                let interface = &diagram.interfaces[i];
+                let depth = qualified_names
+                    .get(&interface.id)
+                    .map(|q| q.matches('.').count())
+                    .unwrap_or(0);
+                (any_nested_all && depth == 0, depth, interface.source_line)
+            }
         });
         out
-    } else {
-        comp_order
-            .iter()
-            .map(|&i| EmitItem::Comp(i))
-            .chain((0..diagram.interfaces.len()).map(EmitItem::Iface))
-            .collect()
     };
 
     let mut entity_counter: usize = 2 + rendered_layout_cluster_count;
@@ -1623,6 +1640,7 @@ pub fn render_with_oracle(
                     &mut svg,
                     diagram,
                     oracle,
+                    &qualified_names,
                     ii,
                     &iface_positions,
                     &interface_fill,
@@ -3112,6 +3130,7 @@ fn render_interface(
     svg: &mut SvgBuilder,
     diagram: &ComponentDiagram,
     oracle: Option<&OracleLayout>,
+    qualified_names: &std::collections::HashMap<String, String>,
     ii: usize,
     iface_positions: &[(f64, f64)],
     interface_fill: &str,
@@ -3126,7 +3145,10 @@ fn render_interface(
     // matched key is the qualified name PlantUML emits in `data-qualified-name`.
     let resolved = oracle.and_then(|o| resolve_iface_entity(o, &iface.id));
     let oracle_iface = resolved.map(|(_, r)| r);
-    let qualified_name = resolved.map(|(k, _)| k).unwrap_or(iface.id.as_str());
+    let qualified_name = resolved
+        .map(|(k, _)| k)
+        .or_else(|| qualified_names.get(&iface.id).map(String::as_str))
+        .unwrap_or(iface.id.as_str());
     let ent_id = oracle_iface
         .and_then(|r| r.entity_id.clone())
         .or_else(|| no_oracle_uids.and_then(|uids| uids.entity_ids.get(&iface.id).cloned()))
@@ -6229,6 +6251,24 @@ mod tests {
         assert!(
             svg.contains("Audit Port 73"),
             "interface label missing: {svg}"
+        );
+    }
+
+    #[test]
+    fn no_oracle_interface_keeps_renamed_java_group_context() {
+        let input = "@startuml\ncomponent RenamedShell9701 {\n  interface \"Renamed Audit Port 9703\" as Port9703\n  component \"Renamed Worker 9709\" as Worker9709\n  Worker9709 - Port9703\n}\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // `CommandCreateElementFull.executeArg` creates the interface through
+        // `AbstractEntityDiagram.reallyCreateLeaf` in the current quark group.
+        assert!(
+            svg.contains(r#"data-qualified-name="RenamedShell9701.Port9703""#),
+            "the interface must retain its Java group-qualified identity: {svg}"
+        );
+        assert!(
+            svg.contains(r#"data-qualified-name="RenamedShell9701.Worker9709""#),
+            "the component peer must share the same Java group context: {svg}"
         );
     }
 
