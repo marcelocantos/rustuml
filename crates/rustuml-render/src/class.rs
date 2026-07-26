@@ -3954,6 +3954,18 @@ fn render_plantuml_svg(
         }
     }
     let edge_paths = adjusted_edge_paths.as_slice();
+    let resolved_relationship_edges = relationship_edge_indices(diagram, edge_paths);
+    let floating_note_opale_relationships = diagram
+        .notes
+        .iter()
+        .enumerate()
+        .map(|(note_idx, _)| floating_note_opale_relationship(diagram, note_idx))
+        .collect::<Vec<_>>();
+    let opale_relationships = floating_note_opale_relationships
+        .iter()
+        .flatten()
+        .copied()
+        .collect::<HashSet<_>>();
 
     // Compute canvas dimensions.
     let (canvas_w, canvas_h) = if let Some((w, h)) = canvas_override {
@@ -4373,15 +4385,18 @@ fn render_plantuml_svg(
         {
             let (note_idx, node_idx, entity_id) = layout_floating_notes[layout_note_cursor];
             if let Some(pos) = positions.get(node_idx) {
-                render_floating_note_entity(
+                render_svek_floating_note(
                     &mut svg,
-                    &diagram.notes[note_idx],
-                    pos.x + MARGIN + layout_x_bias + body_dx,
-                    pos.y + MARGIN + body_dy,
-                    pos.width,
-                    pos.height,
+                    diagram,
+                    note_idx,
+                    pos,
                     entity_id,
-                    &diagram.meta.sprites,
+                    edge_paths,
+                    &resolved_relationship_edges,
+                    floating_note_opale_relationships[note_idx],
+                    layout_x_bias,
+                    body_dx,
+                    body_dy,
                 );
             }
             layout_note_cursor += 1;
@@ -4518,15 +4533,18 @@ fn render_plantuml_svg(
     while oracle.is_none() && layout_note_cursor < layout_floating_notes.len() {
         let (note_idx, node_idx, entity_id) = layout_floating_notes[layout_note_cursor];
         if let Some(pos) = positions.get(node_idx) {
-            render_floating_note_entity(
+            render_svek_floating_note(
                 &mut svg,
-                &diagram.notes[note_idx],
-                pos.x + MARGIN + layout_x_bias + body_dx,
-                pos.y + MARGIN + body_dy,
-                pos.width,
-                pos.height,
+                diagram,
+                note_idx,
+                pos,
                 entity_id,
-                &diagram.meta.sprites,
+                edge_paths,
+                &resolved_relationship_edges,
+                floating_note_opale_relationships[note_idx],
+                layout_x_bias,
+                body_dx,
+                body_dy,
             );
         }
         layout_note_cursor += 1;
@@ -4568,15 +4586,23 @@ fn render_plantuml_svg(
             };
             let qualified_name = format!("GMN{note_start}");
             let entity_id = format!("ent{:04}", note_start + 1);
+            let x = ((pos.x + MARGIN + layout_x_bias + body_dx) * 100.0).round() / 100.0;
+            let y = ((pos.y + MARGIN + body_dy) * 100.0).round() / 100.0;
+            let (anchor_x, anchor_y) = match position {
+                NotePosition::Left | NotePosition::Right => (x, y + pos.height / 2.0),
+                NotePosition::Top | NotePosition::Bottom => (x + pos.width / 2.0, y),
+            };
             render_attached_note(
                 &mut svg,
                 note,
                 // SVEK consumes Graphviz's two-decimal SVG coordinates before
                 // `Opale` adds its local note and atom margins.
-                ((pos.x + MARGIN + layout_x_bias + body_dx) * 100.0).round() / 100.0,
-                ((pos.y + MARGIN + body_dy) * 100.0).round() / 100.0,
+                x,
+                y,
                 pos.width,
                 pos.height,
+                anchor_x,
+                anchor_y,
                 tip_x + MARGIN + layout_x_bias,
                 tip_y + MARGIN,
                 position,
@@ -4619,6 +4645,9 @@ fn render_plantuml_svg(
             .zip(&svek_ids.relationship_ids)
             .enumerate()
         {
+            if opale_relationships.contains(&rel_idx) {
+                continue;
+            }
             let duplicate_index = duplicate_counts
                 .entry((rel.from.as_str(), rel.to.as_str()))
                 .and_modify(|count| *count += 1)
@@ -10661,6 +10690,38 @@ fn relationship_layout_id<'a>(
         .unwrap_or(std::borrow::Cow::Borrowed(endpoint))
 }
 
+/// Port of `GraphvizImageBuilder.isOpalisable`: only a real note entity with
+/// exactly one link to a non-note entity consumes its `SvekEdge`.
+fn floating_note_opale_relationship(diagram: &ClassDiagram, note_idx: usize) -> Option<usize> {
+    if has_strictuml_style(diagram) {
+        return None;
+    }
+    let note = diagram.notes.get(note_idx)?;
+    if note.target.is_some() {
+        return None;
+    }
+    let alias = note.alias.as_deref()?;
+    let mut links = diagram
+        .relationships
+        .iter()
+        .enumerate()
+        .filter(|(_, relationship)| relationship.from == alias || relationship.to == alias);
+    let (relationship_idx, relationship) = links.next()?;
+    if links.next().is_some() {
+        return None;
+    }
+    let other = if relationship.from == alias {
+        relationship.to.as_str()
+    } else {
+        relationship.from.as_str()
+    };
+    (!diagram
+        .notes
+        .iter()
+        .any(|candidate| candidate.alias.as_deref() == Some(other)))
+    .then_some(relationship_idx)
+}
+
 fn association_point_layout_id(association_idx: usize) -> String {
     format!("__association_point_{association_idx}")
 }
@@ -10681,6 +10742,8 @@ fn render_attached_note(
     y: f64,
     width: f64,
     height: f64,
+    anchor_x: f64,
+    anchor_y: f64,
     tip_x: f64,
     tip_y: f64,
     position: NotePosition,
@@ -10701,7 +10764,7 @@ fn render_attached_note(
     let path = match position {
         // Note is left of its target: callout leaves the folded right side.
         NotePosition::Left => {
-            let base_y = (height / 2.0 - delta).clamp(NOTE_FOLD, height - 2.0 * delta);
+            let base_y = (anchor_y - y - delta).clamp(NOTE_FOLD, height - 2.0 * delta);
             format!(
                 "M{},{} L{},{} A0,0 0 0 0 {},{} L{},{} A0,0 0 0 0 {},{} L{},{} L{},{} L{},{} L{},{} L{},{} L{},{} A0,0 0 0 0 {},{}",
                 f(x),
@@ -10732,7 +10795,7 @@ fn render_attached_note(
         }
         // Note is right of its target: callout leaves the plain left side.
         NotePosition::Right => {
-            let base_y = (height / 2.0 - delta).clamp(0.0, height - 2.0 * delta);
+            let base_y = (anchor_y - y - delta).clamp(0.0, height - 2.0 * delta);
             format!(
                 "M{},{} L{},{} L{},{} L{},{} L{},{} A0,0 0 0 0 {},{} L{},{} A0,0 0 0 0 {},{} L{},{} L{},{} L{},{} A0,0 0 0 0 {},{}",
                 f(x),
@@ -10763,7 +10826,7 @@ fn render_attached_note(
         }
         // Note is above its target: callout leaves the bottom side.
         NotePosition::Top => {
-            let base_x = (width / 2.0 - delta).clamp(0.0, width);
+            let base_x = (anchor_x - x - delta).clamp(0.0, width);
             format!(
                 "M{},{} L{},{} A0,0 0 0 0 {},{} L{},{} L{},{} L{},{} L{},{} A0,0 0 0 0 {},{} L{},{} L{},{} L{},{} A0,0 0 0 0 {},{}",
                 f(x),
@@ -10794,7 +10857,7 @@ fn render_attached_note(
         }
         // Note is below its target: callout leaves the folded top side.
         NotePosition::Bottom => {
-            let base_x = (width / 2.0 - delta).clamp(0.0, (width - NOTE_FOLD).max(0.0));
+            let base_x = (anchor_x - x - delta).clamp(0.0, (width - NOTE_FOLD).max(0.0));
             format!(
                 "M{},{} L{},{} A0,0 0 0 0 {},{} L{},{} A0,0 0 0 0 {},{} L{},{} L{},{} L{},{} L{},{} L{},{} L{},{} A0,0 0 0 0 {},{}",
                 f(x),
@@ -11045,6 +11108,116 @@ fn render_notes_only(
 /// paints the folded note with a half-width outer stroke and a one-pixel fold
 /// stroke; `CucaDiagramFileMakerSvek` gives a lone named note the standard
 /// PlantUML envelope with the entity at `(7, 7)`.
+#[allow(clippy::too_many_arguments)]
+fn render_svek_floating_note(
+    svg: &mut String,
+    diagram: &ClassDiagram,
+    note_idx: usize,
+    pos: &NodePosition,
+    entity_id: &str,
+    edge_paths: &[EdgePath],
+    relationship_edges: &[Option<usize>],
+    opale_relationship: Option<usize>,
+    layout_x_bias: f64,
+    body_dx: f64,
+    body_dy: f64,
+) {
+    let note = &diagram.notes[note_idx];
+    let x = pos.x + MARGIN + layout_x_bias + body_dx;
+    let y = pos.y + MARGIN + body_dy;
+    if let Some(relationship_idx) = opale_relationship
+        && let Some(edge_idx) = relationship_edges.get(relationship_idx).copied().flatten()
+        && let Some(edge) = edge_paths.get(edge_idx)
+        && let Some(geometry) =
+            floating_note_opale_geometry(edge, x, y, pos.width, pos.height, layout_x_bias)
+    {
+        let alias = note.alias.as_deref().expect("floating named note");
+        render_attached_note(
+            svg,
+            note,
+            (x * 100.0).round() / 100.0,
+            (y * 100.0).round() / 100.0,
+            pos.width,
+            pos.height,
+            geometry.anchor.0,
+            geometry.anchor.1,
+            geometry.tip.0,
+            geometry.tip.1,
+            geometry.position,
+            alias,
+            entity_id,
+            &diagram.meta.sprites,
+        );
+        return;
+    }
+
+    render_floating_note_entity(
+        svg,
+        note,
+        x,
+        y,
+        pos.width,
+        pos.height,
+        entity_id,
+        &diagram.meta.sprites,
+    );
+}
+
+struct FloatingNoteOpaleGeometry {
+    anchor: (f64, f64),
+    tip: (f64, f64),
+    position: NotePosition,
+}
+
+/// `EntityImageNote.drawU` reverses the solved `SmetanaEdge` when necessary
+/// so the endpoint nearest the note is `pp1`, then chooses the closest note
+/// side with `getOpaleStrategy`. PlantUML consumes Graphviz's SVG coordinates
+/// at two-decimal precision before constructing the Opale polygon.
+fn floating_note_opale_geometry(
+    edge: &EdgePath,
+    x: f64,
+    y: f64,
+    width: f64,
+    height: f64,
+    layout_x_bias: f64,
+) -> Option<FloatingNoteOpaleGeometry> {
+    let transform = |(point_x, point_y): (f64, f64)| {
+        (
+            ((point_x + MARGIN + layout_x_bias) * 100.0).round() / 100.0,
+            ((point_y + MARGIN) * 100.0).round() / 100.0,
+        )
+    };
+    let first = transform(*edge.points.first()?);
+    let last = transform(*edge.points.last()?);
+    let center = (x + width / 2.0, y + height / 2.0);
+    let distance_sq =
+        |point: (f64, f64)| (point.0 - center.0).powi(2) + (point.1 - center.1).powi(2);
+    let (anchor, tip) = if distance_sq(first) <= distance_sq(last) {
+        (first, last)
+    } else {
+        (last, first)
+    };
+
+    let left = (anchor.0 - x).abs();
+    let right = (anchor.0 - (x + width)).abs();
+    let top = (anchor.1 - y).abs();
+    let bottom = (anchor.1 - (y + height)).abs();
+    let position = if left <= right && left <= top && left <= bottom {
+        NotePosition::Right
+    } else if right <= top && right <= bottom {
+        NotePosition::Left
+    } else if top <= bottom {
+        NotePosition::Bottom
+    } else {
+        NotePosition::Top
+    };
+    Some(FloatingNoteOpaleGeometry {
+        anchor,
+        tip,
+        position,
+    })
+}
+
 #[allow(clippy::too_many_arguments)]
 fn render_floating_note_entity(
     svg: &mut String,
@@ -13728,6 +13901,43 @@ mod tests {
         assert!(svg.contains(r##"fill="#2457A6""##));
         assert!(svg.contains(r#"font-weight="700""#));
         assert!(svg.contains(r#"style="stroke:#181818;stroke-width:0.5;""#));
+    }
+
+    #[test]
+    fn singly_linked_named_note_consumes_its_svek_edge_as_an_opale_pointer() {
+        let input = "@startuml\n\
+            class FreshAnchor4297\n\
+            note \"renamed pointer memo\" as FreshMemo4303\n\
+            FreshAnchor4297 .. FreshMemo4303\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        let note = svg
+            .split_once(r#"data-qualified-name="FreshMemo4303""#)
+            .unwrap()
+            .1
+            .split_once("</g>")
+            .unwrap()
+            .0;
+
+        assert!(note.contains("A0,0 0 0 0"));
+        assert_eq!(note.matches("stroke-width:0.5").count(), 2);
+        assert!(!svg.contains(r#"<g class="link""#));
+    }
+
+    #[test]
+    fn multiply_linked_named_note_keeps_ordinary_svek_edges() {
+        let input = "@startuml\n\
+            class FreshNorth4313\n\
+            class FreshSouth4327\n\
+            note \"renamed shared memo\" as FreshMemo4337\n\
+            FreshNorth4313 .. FreshMemo4337\n\
+            FreshSouth4327 .. FreshMemo4337\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert_eq!(svg.matches(r#"<g class="link""#).count(), 2);
     }
 
     #[test]
