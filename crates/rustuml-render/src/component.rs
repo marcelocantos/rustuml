@@ -978,7 +978,17 @@ pub fn render_with_oracle(
             layout.add_node(&comp.id, &comp.label, dim.width, dim.height);
         }
         for iface in &diagram.interfaces {
-            layout.add_node(&iface.id, &iface.label, IFACE_NODE_SIZE, IFACE_NODE_SIZE);
+            if let Some((shield_x, shield_y)) = component_interface_shield(diagram, iface) {
+                layout.add_svek_shielded_node(
+                    &iface.id,
+                    IFACE_NODE_SIZE,
+                    IFACE_NODE_SIZE,
+                    shield_x,
+                    shield_y,
+                );
+            } else {
+                layout.add_node(&iface.id, &iface.label, IFACE_NODE_SIZE, IFACE_NODE_SIZE);
+            }
         }
         for &note_index in &laid_out_note_indices {
             let dim = &note_dims[note_index];
@@ -3548,11 +3558,19 @@ fn compute_positions_from_layout(
             (round_svek_input_coord(x), round_svek_input_coord(y))
         });
     }
-    for (i, _iface) in diagram.interfaces.iter().enumerate() {
+    for (i, iface) in diagram.interfaces.iter().enumerate() {
         let p = &node_positions[n_comp + i];
+        let (image_dx, image_dy) = if component_interface_shield(diagram, iface).is_some() {
+            (
+                (p.width - IFACE_NODE_SIZE) / 2.0,
+                (p.height - IFACE_NODE_SIZE) / 2.0,
+            )
+        } else {
+            (0.0, 0.0)
+        };
         iface_positions.push((
-            p.x + layout_dx + IFACE_CENTER_OFFSET,
-            p.y + layout_dy + IFACE_CENTER_OFFSET,
+            p.x + image_dx + layout_dx + IFACE_CENTER_OFFSET,
+            p.y + image_dy + layout_dy + IFACE_CENTER_OFFSET,
         ));
     }
 
@@ -3637,11 +3655,24 @@ fn component_svek_translation(
                 // envelope until their primitive models are split out.
                 _ => (-1.0, -1.0),
             }
+        } else if index < note_start {
+            let interface = &diagram.interfaces[index - component_count];
+            // `CircleInterface2.drawU` translates its ellipse by the one-pixel
+            // image margin, so `SvekResult.calculateDimension` sees the
+            // interface's painted minimum one pixel inside the image origin.
+            if component_interface_shield(diagram, interface).is_some() {
+                (
+                    (position.width - IFACE_NODE_SIZE) / 2.0 + IFACE_MARGIN,
+                    (position.height - IFACE_NODE_SIZE) / 2.0 + IFACE_MARGIN,
+                )
+            } else {
+                (IFACE_MARGIN, IFACE_MARGIN)
+            }
         } else if (note_start..note_end).contains(&index) {
             // Notes paint their polygon directly to the Graphviz node bounds.
             (0.0, 0.0)
         } else {
-            // `CircleInterface2` is measured one pixel inside its SVEK table.
+            // Protected package endpoints retain the pre-existing point guard.
             (-1.0, -1.0)
         };
         painted_min_x = painted_min_x.min(position.x + local_min_x);
@@ -4406,6 +4437,38 @@ fn svek_link_label_margin(from: &str, to: &str) -> f64 {
     } else {
         LINK_LABEL_MARGIN
     }
+}
+
+fn component_interface_shield(
+    diagram: &ComponentDiagram,
+    interface: &Interface,
+) -> Option<(f64, f64)> {
+    let mut linked_entities = std::collections::HashSet::new();
+    for connection in diagram
+        .connections
+        .iter()
+        .filter(|connection| connection.from == interface.id || connection.to == interface.id)
+    {
+        let other = if connection.from == interface.id {
+            &connection.to
+        } else {
+            &connection.from
+        };
+        // Java `EntityImageDescription.getShield` disables the label shield
+        // for duplicate links to the same peer and for visible one-rank links.
+        if !linked_entities.insert(other.as_str()) || connection.length == 1 {
+            return None;
+        }
+    }
+
+    // `EntityImageDescription.getShield` compares the hidden description
+    // block against `CircleInterface2`'s 18px image, then reserves the same
+    // description height above and below the center cell. `SvekNode.appendHtml`
+    // serializes these values directly into its three-row HTML table.
+    let label_width = text_render::measure(&interface.label, FONT_SIZE, false);
+    let shield_x = ((label_width - IFACE_NODE_SIZE).max(1.0)) / 2.0;
+    let shield_y = text_render::label_height(&interface.label, FONT_SIZE).max(1.0);
+    Some((shield_x, shield_y))
 }
 
 fn component_no_oracle_spacing(diagram: &ComponentDiagram, arrow_font_size: f64) -> (f64, bool) {
@@ -6160,6 +6223,30 @@ mod tests {
         assert!(
             svg.contains("Audit Port 73"),
             "interface label missing: {svg}"
+        );
+    }
+
+    #[test]
+    fn no_oracle_vertical_interface_reserves_hidden_label_shield_for_renamed_port() {
+        let input = "@startuml\ncomponent \"Renamed Telemetry Sink 7301\" as Sink7301\ninterface \"Renamed Audit Port 7303\" as Port7303\nSink7301 -- Port7303\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Fresh Java PlantUML reference. `EntityImageDescription.getShield`
+        // measures the hidden interface label, `SvekNode.appendHtml` reserves
+        // its table envelope, and `Bibliotekon.getNodeUid` targets port `h`.
+        assert!(svg.contains(r#"viewBox="0 0 268 189""#), "{svg}");
+        let interface = svg
+            .split("<ellipse")
+            .nth(1)
+            .and_then(|tag| tag.split_once("/>"))
+            .map(|(tag, _)| tag)
+            .expect("renamed interface ellipse");
+        assert!((numeric_attr(interface, "cx") - 130.78).abs() < 0.01);
+        assert!((numeric_attr(interface, "cy") - 142.49).abs() < 0.01);
+        assert!(
+            svg.contains(r#"d="M130.78,53.82 C130.78,78.64 130.78,117.18 130.78,133.62""#),
+            "{svg}"
         );
     }
 

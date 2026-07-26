@@ -147,6 +147,32 @@ impl LayoutGraph {
         true
     }
 
+    /// Adds a SVEK node whose painted image sits inside an HTML-table shield.
+    ///
+    /// PlantUML `SvekNode.appendHtml` uses this shape for images whose labels
+    /// are painted outside their Graphviz image bounds. Graphviz's
+    /// `fixedsize=shape` keeps edges on the image boundary while the generated
+    /// fixed-size label reserves the same surrounding layout room.
+    pub fn add_svek_shielded_node(
+        &mut self,
+        id: &str,
+        width: f64,
+        height: f64,
+        shield_x: f64,
+        shield_y: f64,
+    ) -> bool {
+        if self.nodes.iter().any(|node| node.id == id) {
+            return false;
+        }
+        self.nodes.push(NodeSpec {
+            id: id.to_string(),
+            width,
+            height,
+            shape: NodeShape::SvekShielded { shield_x, shield_y },
+        });
+        true
+    }
+
     /// Adds a circle-shaped node. Returns true if new, false if duplicate.
     pub fn add_circle_node(&mut self, id: &str, _label: &str, diameter: f64) -> bool {
         if self.nodes.iter().any(|node| node.id == id) {
@@ -623,6 +649,7 @@ impl LayoutGraph {
         let point_val = CString::new("point").unwrap();
         let record_val = CString::new("record").unwrap();
         let plaintext_val = CString::new("plaintext").unwrap();
+        let shape_fixedsize_val = CString::new("shape").unwrap();
         let arrowhead_key = CString::new("arrowhead").unwrap();
         let arrowtail_key = CString::new("arrowtail").unwrap();
         let headport_key = CString::new("headport").unwrap();
@@ -640,6 +667,47 @@ impl LayoutGraph {
             let cid = CString::new(spec.id.as_str()).unwrap();
             let node = graphviz_ffi::agnode(g, cid.as_ptr(), 1);
 
+            if let NodeShape::SvekShielded { shield_x, shield_y } = spec.shape {
+                let w_inches = spec.width / DOT_POINTS_PER_INCH;
+                let h_inches = spec.height / DOT_POINTS_PER_INCH;
+                let w_str = CString::new(format!("{w_inches:.6}")).unwrap();
+                let h_str = CString::new(format!("{h_inches:.6}")).unwrap();
+                graphviz_ffi::agsafeset(
+                    node as *mut c_void,
+                    width_key.as_ptr(),
+                    w_str.as_ptr(),
+                    empty.as_ptr(),
+                );
+                graphviz_ffi::agsafeset(
+                    node as *mut c_void,
+                    height_key.as_ptr(),
+                    h_str.as_ptr(),
+                    empty.as_ptr(),
+                );
+                graphviz_ffi::agsafeset(
+                    node as *mut c_void,
+                    fixedsize_key.as_ptr(),
+                    shape_fixedsize_val.as_ptr(),
+                    empty.as_ptr(),
+                );
+                graphviz_ffi::agsafeset(
+                    node as *mut c_void,
+                    shape_key.as_ptr(),
+                    box_val.as_ptr(),
+                    empty.as_ptr(),
+                );
+                let table =
+                    CString::new(svek_shielded_node_table(spec, shield_x, shield_y)).unwrap();
+                graphviz_ffi::agsafeset_html(
+                    node as *mut c_void,
+                    label_key.as_ptr(),
+                    table.as_ptr(),
+                    empty.as_ptr(),
+                );
+                node_handles.insert(spec.id.clone(), node);
+                continue;
+            }
+
             let shape = match &spec.shape {
                 NodeShape::Box => &box_val,
                 NodeShape::Circle => &circle_val,
@@ -648,6 +716,7 @@ impl LayoutGraph {
                 NodeShape::Point => &point_val,
                 NodeShape::Record { .. } => &record_val,
                 NodeShape::FixedHtmlRows { .. } => &plaintext_val,
+                NodeShape::SvekShielded { .. } => &box_val,
             };
             graphviz_ffi::agsafeset(
                 node as *mut c_void,
@@ -699,7 +768,9 @@ impl LayoutGraph {
                     | NodeShape::Ellipse
                     | NodeShape::Diamond
                     | NodeShape::Point => no_label_val.clone(),
-                    NodeShape::FixedHtmlRows { .. } => unreachable!(),
+                    NodeShape::FixedHtmlRows { .. } | NodeShape::SvekShielded { .. } => {
+                        unreachable!()
+                    }
                 };
                 graphviz_ffi::agsafeset(
                     node as *mut c_void,
@@ -1415,6 +1486,16 @@ fn append_fixed_html_row(table: &mut String, width: f64, height: i64, port: Opti
     table.push_str("\"></TD></TR>");
 }
 
+fn svek_shielded_node_table(spec: &NodeSpec, shield_x: f64, shield_y: f64) -> String {
+    // Graphviz's HTML parser reads each fixed cell dimension as an integer.
+    // Java `SvekNode.appendHtml` emits two shield cells around the image cell.
+    let width = spec.width + shield_x.floor() * 2.0;
+    let height = spec.height + shield_y.floor() * 2.0;
+    format!(
+        r##"<TABLE BGCOLOR="#000005" FIXEDSIZE="TRUE" WIDTH="{width}" HEIGHT="{height}"><TR><TD></TD></TR></TABLE>"##,
+    )
+}
+
 fn escape_record_port(port: &str) -> String {
     port.chars()
         .filter(|c| c.is_ascii_alphanumeric() || *c == '_')
@@ -1480,6 +1561,7 @@ enum NodeShape {
     Point,
     Record { ports: Vec<String> },
     FixedHtmlRows { ports: Vec<HtmlRowPort> },
+    SvekShielded { shield_x: f64, shield_y: f64 },
 }
 
 #[derive(Debug, Clone)]
