@@ -3504,7 +3504,12 @@ fn render_no_oracle_connections(
             } else {
                 format!("stroke:{};stroke-width:1;", skin.arrow_color)
             };
-            let path_id = if start_decoration.is_some() || end_decoration.is_some() {
+            // Java `Link.idCommentForSvg()` uses `-backto-` whenever
+            // `LinkType.looksLikeRevertedForSvg()` reports a decoration at
+            // the source endpoint.
+            let path_id = if start_decoration.is_some() {
+                format!("{from_label}-backto-{to_label}")
+            } else if end_decoration.is_some() {
                 format!("{from_label}-to-{to_label}")
             } else {
                 format!("{from_label}-{to_label}")
@@ -4388,10 +4393,25 @@ mod tests {
 
         assert!(svg.contains(r#"data-link-type="extension""#));
         assert!(svg.contains(r#"<polygon fill="none""#));
+        assert!(svg.contains(r#"id="Parent-backto-Child""#));
         assert_eq!(
             super::extension_arrow_points((0.0, 0.0), (0.0, 20.0)),
             "0,20,6,2,-6,2,0,20"
         );
+    }
+
+    #[test]
+    fn reversed_renamed_dependency_uses_java_backto_path_identity() {
+        let input = "@startuml\n\
+                     usecase \"Fresh Origin 461\" as Origin\n\
+                     usecase \"Fresh Reminder 463\" as Reminder\n\
+                     Origin <.. Reminder : renamed extension\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(r#"id="Origin-backto-Reminder""#));
+        assert!(svg.contains("stroke-dasharray:7,7;"));
     }
 
     #[test]
