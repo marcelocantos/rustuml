@@ -4947,6 +4947,36 @@ fn deployment_body_x_frame(
         painted_min_x = painted_min_x.min(x);
         painted_max_x = painted_max_x.max(x + note_dims[note_index].width);
     }
+    // Java `SvekResult.calculateDimension` delegates to
+    // `TextBlockUtils.getMinMax`; `LimitFinder.drawDotPath` includes every
+    // solved cubic control point, including routes that bend beyond all
+    // entity rectangles.
+    for (conn_index, conn) in diagram.connections.iter().enumerate() {
+        let (layout_from, layout_to, _) = deployment_connection_layout(conn);
+        let matching_index = diagram.connections[..conn_index]
+            .iter()
+            .filter(|previous| {
+                let (previous_from, previous_to, _) = deployment_connection_layout(previous);
+                previous_from == layout_from && previous_to == layout_to
+            })
+            .count();
+        let Some(edge) = result
+            .edge_paths
+            .iter()
+            .filter(|edge| {
+                deployment_layout_endpoint_matches(&edge.from, layout_from)
+                    && deployment_layout_endpoint_matches(&edge.to, layout_to)
+            })
+            .nth(matching_index)
+        else {
+            continue;
+        };
+        for &(x, _) in &edge.points {
+            let x = (x * 100.0).round() / 100.0;
+            painted_min_x = painted_min_x.min(x);
+            painted_max_x = painted_max_x.max(x);
+        }
+    }
     if let Some((min_x, max_x)) = deployment_edge_label_x_bounds(diagram, Some(result)) {
         painted_min_x = painted_min_x.min(min_x);
         painted_max_x = painted_max_x.max(max_x);
@@ -4967,12 +4997,24 @@ fn deployment_edge_label_x_bounds(
     let result = result?;
     let mut painted_min_x = f64::INFINITY;
     let mut painted_max_x = f64::NEG_INFINITY;
-    for conn in &diagram.connections {
+    for (conn_index, conn) in diagram.connections.iter().enumerate() {
         let (layout_from, layout_to, reversed) = deployment_connection_layout(conn);
-        let Some(edge) = result.edge_paths.iter().find(|edge| {
-            deployment_layout_endpoint_matches(&edge.from, layout_from)
-                && deployment_layout_endpoint_matches(&edge.to, layout_to)
-        }) else {
+        let matching_index = diagram.connections[..conn_index]
+            .iter()
+            .filter(|previous| {
+                let (previous_from, previous_to, _) = deployment_connection_layout(previous);
+                previous_from == layout_from && previous_to == layout_to
+            })
+            .count();
+        let Some(edge) = result
+            .edge_paths
+            .iter()
+            .filter(|edge| {
+                deployment_layout_endpoint_matches(&edge.from, layout_from)
+                    && deployment_layout_endpoint_matches(&edge.to, layout_to)
+            })
+            .nth(matching_index)
+        else {
             continue;
         };
         if let (Some(label_text), Some(label)) = (conn.label.as_deref(), edge.label) {
@@ -5555,9 +5597,18 @@ fn render_no_oracle_edges(
         let (logical_from, logical_to, reversed) = deployment_connection_layout(conn);
         let (layout_from, layout_to, _) =
             deployment_connection_layout_with_endpoints(conn, cluster_endpoint_nodes);
+        let matching_index = diagram.connections[..i]
+            .iter()
+            .filter(|previous| {
+                let (previous_from, previous_to, _) =
+                    deployment_connection_layout_with_endpoints(previous, cluster_endpoint_nodes);
+                previous_from == layout_from && previous_to == layout_to
+            })
+            .count();
         let Some(edge) = edge_paths
             .iter()
-            .find(|edge| edge.from == layout_from && edge.to == layout_to)
+            .filter(|edge| edge.from == layout_from && edge.to == layout_to)
+            .nth(matching_index)
         else {
             continue;
         };
@@ -5622,25 +5673,18 @@ fn render_no_oracle_edges(
             },
         );
         if let Some(d) = edge_path_d(&points) {
-            let from_name = diagram
-                .nodes
+            let mut path_id = deployment_connection_path_base_id(diagram, conn, reversed);
+            let duplicate_index = diagram.connections[..i]
                 .iter()
-                .find(|node| node.id == conn.from)
-                .map(own_qname)
-                .unwrap_or_else(|| conn.from.clone());
-            let to_name = diagram
-                .nodes
-                .iter()
-                .find(|node| node.id == conn.to)
-                .map(own_qname)
-                .unwrap_or_else(|| conn.to.clone());
-            let path_id = if conn.arrow_at_start == conn.arrow_at_end {
-                format!("{from_name}-{to_name}")
-            } else if reversed {
-                format!("{to_name}-backto-{from_name}")
-            } else {
-                format!("{from_name}-to-{to_name}")
-            };
+                .filter(|previous| {
+                    let (_, _, previous_reversed) = deployment_connection_layout(previous);
+                    deployment_connection_path_base_id(diagram, previous, previous_reversed)
+                        == path_id
+                })
+                .count();
+            if duplicate_index > 0 {
+                write!(path_id, "-{duplicate_index}").unwrap();
+            }
             // Java `SvekEdge.drawU` applies the stroke returned by
             // `LinkType.getStroke3`; `LinkStyle` defines these dash patterns.
             let path_style = match conn.style {
@@ -5728,6 +5772,32 @@ fn deployment_connection_layout(conn: &DeploymentConnection) -> (&str, &str, boo
         (&conn.to, &conn.from, true)
     } else {
         (&conn.from, &conn.to, false)
+    }
+}
+
+fn deployment_connection_path_base_id(
+    diagram: &DeploymentDiagram,
+    conn: &DeploymentConnection,
+    reversed: bool,
+) -> String {
+    let from_name = diagram
+        .nodes
+        .iter()
+        .find(|node| node.id == conn.from)
+        .map(own_qname)
+        .unwrap_or_else(|| conn.from.clone());
+    let to_name = diagram
+        .nodes
+        .iter()
+        .find(|node| node.id == conn.to)
+        .map(own_qname)
+        .unwrap_or_else(|| conn.to.clone());
+    if conn.arrow_at_start == conn.arrow_at_end {
+        format!("{from_name}-{to_name}")
+    } else if reversed {
+        format!("{to_name}-backto-{from_name}")
+    } else {
+        format!("{from_name}-to-{to_name}")
     }
 }
 
@@ -6785,6 +6855,32 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
         assert!(svg.contains(r#"rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;""#));
         assert!(svg.contains(r#"width="6" height="4""#));
         assert!(!svg.contains("&lt;$fresh_actor&gt;"));
+    }
+
+    #[test]
+    fn renamed_parallel_links_consume_distinct_svek_edges_in_source_order() {
+        let source = "@startuml\n\
+            node FreshSender811\n\
+            node FreshReceiver821\n\
+            FreshSender811 --> FreshReceiver821 : primary channel\n\
+            FreshSender811 --> FreshReceiver821 : fallback channel\n\
+            FreshSender811 ..> FreshReceiver821 : probe channel\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+
+        let svg = render(&diagram, &Theme::default());
+
+        // Java `SvekEdge` consumes Graphviz's parallel edge results in the
+        // same order they were appended and suffixes repeated SVG identities.
+        assert!(svg.contains(r#"id="FreshSender811-to-FreshReceiver821""#));
+        assert!(svg.contains(r#"id="FreshSender811-to-FreshReceiver821-1""#));
+        assert!(svg.contains(r#"id="FreshSender811-to-FreshReceiver821-2""#));
+        assert!(svg.contains(">primary channel</text>"));
+        assert!(svg.contains(">fallback channel</text>"));
+        assert!(svg.contains(">probe channel</text>"));
     }
 
     #[test]
