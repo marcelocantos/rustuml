@@ -794,6 +794,15 @@ fn ordinary_edge_label_size(label: &str, arrow_font: &StateArrowFont) -> EdgeLab
     }
 }
 
+/// Arrow-decoration clearance used by Java SVEK when Graphviz routes a
+/// labeled edge back to the same state.
+///
+/// Provenance: `LinkDecor.ARROW.getMargin()` is ten pixels, and
+/// `SvekEdge.getHorizontalDzeta` returns the decoration clearance directly
+/// when both UIDs are equal. Reserving it in the fixed label table preserves
+/// declaration identity and separation across parallel self-loops.
+const SELF_EDGE_ARROW_MARGIN: f64 = 10.0;
+
 fn compose_link_label_size(
     label: Option<EdgeLabelSize>,
     note: Option<(&StateNote, StateNotePosition)>,
@@ -2697,15 +2706,19 @@ fn emit_autonomous_scope_links(
         )
         .unwrap();
 
-        let edge_path = routed_edge_path_for_transition(
-            &scope.edge_paths,
-            &mut consumed_edge_paths,
-            edge_from,
-            edge_to,
-            scope.origin_x + offset_x,
-            scope.origin_y + offset_y,
-            &pos_of,
-        );
+        let edge_path = if edge_from == edge_to {
+            routed_self_edge_path(&scope.edge_paths, &mut consumed_edge_paths, edge_from)
+        } else {
+            routed_edge_path_for_transition(
+                &scope.edge_paths,
+                &mut consumed_edge_paths,
+                edge_from,
+                edge_to,
+                scope.origin_x + offset_x,
+                scope.origin_y + offset_y,
+                &pos_of,
+            )
+        };
         if let Some(edge_path) = edge_path
             && !edge_path.points.is_empty()
         {
@@ -3445,10 +3458,13 @@ pub fn render_with_oracle(
             if horizontal {
                 layout.add_plantuml_svek_line0_edge(layout_from, layout_to);
             }
-            let ordinary_label_size = t
-                .label
-                .as_deref()
-                .map(|label| ordinary_edge_label_size(label, &arrow_font));
+            let ordinary_label_size = t.label.as_deref().map(|label| {
+                let mut size = ordinary_edge_label_size(label, &arrow_font);
+                if layout_from == layout_to {
+                    size.width += SELF_EDGE_ARROW_MARGIN;
+                }
+                size
+            });
             let label_size = compose_link_label_size(
                 ordinary_label_size,
                 link_note_for_transition(diagram, transition_index),
@@ -3727,17 +3743,52 @@ pub fn render_with_oracle(
                     max_y = max_y.max(painted.1);
                     painted_max_y = painted_max_y.max(painted.1);
                 }
-            } else if diagram
-                .transitions
-                .iter()
-                .any(|transition| transition.label.is_some())
-            {
-                // Graphviz's solved envelope includes the fixed HTML label
-                // boxes that `SvekEdge.appendLine` contributes.
-                max_x = max_x.max(result.width);
-                painted_max_x = painted_max_x.max(result.width);
-                max_y = max_y.max(result.height);
-                painted_max_y = painted_max_y.max(result.height);
+            } else {
+                let labeled = diagram
+                    .transitions
+                    .iter()
+                    .filter(|transition| transition.label.is_some())
+                    .collect::<Vec<_>>();
+                let self_only_labels = !labeled.is_empty()
+                    && labeled.iter().all(|transition| {
+                        map_id(&transition.from, true) == map_id(&transition.to, false)
+                    });
+                if self_only_labels {
+                    // Java measures the painted `SvekEdge` through
+                    // `SvekResult.calculateDimension`; the hidden fixed HTML
+                    // marker itself is not part of that MinMax. Bind each
+                    // loop as `SvekEdge.solveLine` does, then include its
+                    // rendered label block and arrow-decoration clearance.
+                    let mut consumed = vec![false; result.edge_paths.len()];
+                    for transition in labeled {
+                        let id = map_id(&transition.from, true);
+                        let Some(edge) =
+                            routed_self_edge_path(&result.edge_paths, &mut consumed, &id)
+                        else {
+                            continue;
+                        };
+                        let Some(label_position) = edge.label else {
+                            continue;
+                        };
+                        let label = transition.label.as_deref().unwrap();
+                        let label_size = ordinary_edge_label_size(label, &arrow_font);
+                        let label_right = quantize_svek_coord(label_position.x)
+                            + label_size.width
+                            + SELF_EDGE_ARROW_MARGIN;
+                        max_x = max_x.max(label_right);
+                        painted_max_x = painted_max_x.max(label_right);
+                    }
+                    // The bottom row of the fixed marker is layout-only.
+                    max_y = max_y.max(result.height - 1.0);
+                    painted_max_y = painted_max_y.max(result.height - 1.0);
+                } else if !labeled.is_empty() {
+                    // Graphviz's solved envelope includes the fixed HTML label
+                    // boxes that `SvekEdge.appendLine` contributes.
+                    max_x = max_x.max(result.width);
+                    painted_max_x = painted_max_x.max(result.width);
+                    max_y = max_y.max(result.height);
+                    painted_max_y = painted_max_y.max(result.height);
+                }
             }
         }
         let tw = graph_body_x + max_x + right_note_space + SVEK_TRAILING_PAD;
@@ -5138,15 +5189,19 @@ pub fn render_with_oracle(
             // (`net.sourceforge.plantuml.svek.SvekEdge.solveLine`). Match by
             // routed endpoint geometry so a state registered before its lazy
             // `.start.` node does not swap the start/end transition paths.
-            let edge_path = routed_edge_path_for_transition(
-                edge_paths,
-                &mut consumed_edge_paths,
-                edge_from_layout,
-                edge_to_layout,
-                graph_body_x,
-                graph_body_y,
-                &pos_of,
-            );
+            let edge_path = if edge_from_layout == edge_to_layout {
+                routed_self_edge_path(edge_paths, &mut consumed_edge_paths, edge_from_layout)
+            } else {
+                routed_edge_path_for_transition(
+                    edge_paths,
+                    &mut consumed_edge_paths,
+                    edge_from_layout,
+                    edge_to_layout,
+                    graph_body_x,
+                    graph_body_y,
+                    &pos_of,
+                )
+            };
 
             if let Some(ep) = edge_path
                 && !ep.points.is_empty()
@@ -5215,7 +5270,7 @@ pub fn render_with_oracle(
                 // Ordinary transition text and `note on link` share one SVEK
                 // center-label block.
                 if t.label.is_some() || link_note.is_some() {
-                    let label_origin = ep
+                    let mut label_origin = ep
                         .label
                         .map(|position| {
                             (
@@ -5228,6 +5283,9 @@ pub fn render_with_oracle(
                             let last = points.last().unwrap();
                             ((first.0 + last.0) / 2.0, (first.1 + last.1) / 2.0)
                         });
+                    if edge_from_layout == edge_to_layout {
+                        label_origin.0 += SELF_EDGE_ARROW_MARGIN / 2.0;
+                    }
                     emit_link_label_composition(&mut svg, t, link_note, label_origin, &arrow_font);
                 }
             } else {
@@ -5445,6 +5503,41 @@ where
     let (idx, _) = best?;
     consumed[idx] = true;
     edge_paths.get(idx)
+}
+
+/// Bind one parallel self-loop back to its declaration-order transition.
+///
+/// Java `SvekEdge.solveLine` identifies every routed edge by its unique marker
+/// color, so Graphviz's internal edge traversal order is irrelevant. The
+/// layout wrapper exposes geometry without those colors; Graphviz nests
+/// parallel self-loops monotonically, so consuming them from the innermost
+/// loop outward recovers the same stable identity without endpoint names or
+/// branch-count assumptions.
+fn routed_self_edge_path<'a>(
+    edge_paths: &'a [EdgePath],
+    consumed: &mut [bool],
+    id: &str,
+) -> Option<&'a EdgePath> {
+    let (index, _) = edge_paths
+        .iter()
+        .enumerate()
+        .filter(|(index, edge)| {
+            !consumed.get(*index).copied().unwrap_or(true)
+                && edge.from == id
+                && edge.to == id
+                && !edge.points.is_empty()
+        })
+        .map(|(index, edge)| {
+            let max_x = edge
+                .points
+                .iter()
+                .map(|point| quantize_svek_coord(point.0))
+                .fold(f64::NEG_INFINITY, f64::max);
+            (index, max_x)
+        })
+        .min_by(|(_, left), (_, right)| left.total_cmp(right))?;
+    consumed[index] = true;
+    edge_paths.get(index)
 }
 
 fn distance_to_node_border(point: (f64, f64), rect: (f64, f64, f64, f64)) -> f64 {
@@ -7805,6 +7898,38 @@ mod tests {
                     "{text} missing from {link_id}: {group}"
                 );
             }
+        }
+    }
+
+    #[test]
+    fn renamed_parallel_self_loops_keep_svek_identity_with_changed_count() {
+        let input = concat!(
+            "@startuml\n",
+            "[*] --> CopperRelay\n",
+            "CopperRelay --> CopperRelay : brief\n",
+            "CopperRelay --> CopperRelay : renamed event with a much longer label\n",
+            "CopperRelay --> CopperRelay : medium guard [ready]\n",
+            "CopperRelay --> CopperRelay : final\n",
+            "CopperRelay --> [*]\n",
+            "@enduml\n",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Fresh Java 1.2026.3beta6 reference. Non-monotonic label widths make
+        // declaration identity observable independently of loop span.
+        assert!(svg.contains(r#"height="234px""#));
+        assert!(svg.contains(r#"width="658px""#));
+        for (label, x) in [
+            ("brief", "153.18"),
+            ("renamed event with a much longer label", "194.18"),
+            ("medium guard [ready]", "459.18"),
+            ("final", "610.18"),
+        ] {
+            assert!(
+                svg.contains(&format!(r#" x="{x}" y="117.0684">{label}</text>"#)),
+                "{label} lost its declaration-order self-loop: {svg}"
+            );
         }
     }
 
