@@ -32,7 +32,7 @@ skinparam 344 410
 sprites 49 49
 state 799 901
 timing 141 141
-type-detection 34 42
+type-detection 35 42
 usecase 315 315
 wbs 138 138
 wire 0 0
