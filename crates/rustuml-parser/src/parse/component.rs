@@ -481,6 +481,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                         "database" => ComponentElementKind::Database,
                         "node" => ComponentElementKind::Node,
                         "queue" => ComponentElementKind::Queue,
+                        "storage" => ComponentElementKind::Storage,
                         "cloud" => ComponentElementKind::Cloud,
                         _ => ComponentElementKind::Component,
                     };
@@ -1165,6 +1166,15 @@ mod tests {
         assert_eq!(d.components.len(), 2);
         assert_eq!(d.components[0].kind, ComponentElementKind::Artifact);
         assert_eq!(d.components[1].kind, ComponentElementKind::Node);
+    }
+
+    #[test]
+    fn queue_and_storage_keep_distinct_leaf_symbols() {
+        let d = parse("queue Buffer\nstorage Archive\nBuffer --> Archive");
+        assert_eq!(d.interfaces.len(), 0);
+        assert_eq!(d.components.len(), 2);
+        assert_eq!(d.components[0].kind, ComponentElementKind::Queue);
+        assert_eq!(d.components[1].kind, ComponentElementKind::Storage);
     }
 
     #[test]
