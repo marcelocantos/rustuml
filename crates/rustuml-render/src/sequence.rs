@@ -2988,6 +2988,8 @@ impl ActivationTracker {
 // SVG writer — produces PlantUML-identical SVG output
 // ---------------------------------------------------------------------------
 
+const PLANTUML_PROCESSING_INSTRUCTION: &str = "<?plantuml 1.2026.3beta6?>";
+
 struct PlantUmlSvg {
     buf: String,
     /// Whether shape primitives should be passed through PlantUML's
@@ -3120,7 +3122,7 @@ impl PlantUmlSvg {
         )
         .unwrap();
         // Processing instruction
-        self.buf.push_str("<?plantuml 1.2026.3beta6?>");
+        self.buf.push_str(PLANTUML_PROCESSING_INSTRUCTION);
         // Emit any oracle-captured <defs> (e.g. the <linearGradient> for a
         // `#c1/c2` gradient background), else an empty placeholder.
         if defs.is_empty() {
@@ -4867,45 +4869,206 @@ impl PlantUmlSvg {
 // Main render function
 // ---------------------------------------------------------------------------
 
-/// Render the PlantUML empty-diagram welcome screen.
+/// Render the empty-diagram welcome screen.
+///
+/// Java provenance:
+/// - `PSystemWelcomeFactory.createSystem` selects this diagram for an empty
+///   two-line `@startuml` block.
+/// - `PSystemWelcome.getTextBlock12026` supplies the logical text lines and
+///   requests a bottom-right product image.
+/// - `GraphicStrings.createBlackOnWhite`, `calculateDimensionInternal22`, and
+///   `drawU` supply the 12px text, 5px margin, 30px image gutter, and image
+///   placement formulas.
+///
+/// PlantUML's bundled `version/logo.png` is project artwork, not a diagram
+/// generated from user-owned source. RustUML therefore keeps the generative
+/// layout but substitutes its own Apache-2.0 product asset.
 fn render_empty_welcome() -> String {
-    // Delegate to the old SvgBuilder-based renderer for the welcome screen.
-    // The welcome screen doesn't need to match PlantUML exactly.
-    let w = 480.0_f64;
-    let h = 260.0_f64;
-    let mut svg = crate::svg::SvgBuilder::new(w, h);
-    let x = 10.0;
-    let lh = 14.0;
-    let mut y = 20.0;
+    const FONT_SIZE: u32 = 12;
+    const MARGIN: f64 = 5.0;
+    const IMAGE_PADDING: f64 = 30.0;
+    const IMAGE_WIDTH: f64 = 80.0;
+    const IMAGE_HEIGHT: f64 = 71.0;
 
-    let welcome = format!("Welcome to {}!", crate::product_name());
-    let info = format!(
-        "You will find more information about {} syntax on",
+    #[derive(Clone, Copy)]
+    enum WelcomeLine {
+        Heading,
+        Information,
+        Sans(&'static str),
+        Mono(&'static str),
+    }
+
+    use WelcomeLine::{Heading, Information, Mono, Sans};
+    let lines = [
+        Heading,
+        Sans(" "),
+        Sans("You can start with a simple UML Diagram like:"),
+        Sans(" "),
+        Mono("\"\"Bob->Alice: Hello\"\""),
+        Sans(" "),
+        Sans("Or"),
+        Sans(" "),
+        Mono("\"\"class Example\"\""),
+        Sans(" "),
+        Information,
+        Sans(" "),
+        Sans("(Details by typing \"\"license\"\" keyword)"),
+        Sans(" "),
+        Sans(" "),
+        Sans(" "),
+        Sans(" "),
+        Sans(" "),
+    ];
+
+    let line_text = |line: WelcomeLine| match line {
+        Heading => "<b>Welcome to PlantUML!",
+        Information => {
+            "You will find more information about PlantUML syntax on <u>https://plantuml.com</u>"
+        }
+        Sans(text) | Mono(text) => text,
+    };
+    let line_metrics = |line: WelcomeLine| match line {
+        Heading | Information | Sans(_) => (
+            crate::plantuml_metrics::ascent(FONT_SIZE as f64),
+            crate::plantuml_metrics::text_height(FONT_SIZE as f64),
+        ),
+        Mono(_) => (
+            crate::plantuml_metrics::mono_ascent(FONT_SIZE as f64),
+            crate::plantuml_metrics::mono_text_height(FONT_SIZE as f64),
+        ),
+    };
+
+    let text_width = lines
+        .iter()
+        .map(|&line| text_render::measure(line_text(line), FONT_SIZE as f64, false))
+        .fold(0.0_f64, f64::max);
+    let text_height: f64 = lines.iter().map(|&line| line_metrics(line).1).sum();
+    let content_width = text_width + IMAGE_PADDING + IMAGE_WIDTH;
+    let width = (content_width + 2.0 * MARGIN).ceil() as u32;
+    let height = (text_height + 2.0 * MARGIN).ceil() as u32;
+
+    let mut svg = String::with_capacity(4096);
+    write!(
+        svg,
+        r##"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="{height}px" preserveAspectRatio="none" style="width:{width}px;height:{height}px;background:#FFFFFF;" version="1.1" viewBox="0 0 {width} {height}" width="{width}px" zoomAndPan="magnify">"##,
+    )
+    .unwrap();
+    svg.push_str(PLANTUML_PROCESSING_INSTRUCTION);
+    svg.push_str("<defs/><g>");
+
+    let heading = format!("<b>Welcome to {}!", crate::product_name());
+    let information_prefix = format!(
+        "You will find more information about {} syntax on ",
         crate::product_name(),
     );
-    let lines: &[&str] = &[
-        &welcome,
-        "\u{00a0}",
-        "You can start with a simple UML Diagram like:",
-        "\u{00a0}",
-        "Bob->Alice:\u{00a0}Hello",
-        "\u{00a0}",
-        "Or",
-        "\u{00a0}",
-        "class\u{00a0}Example",
-        "\u{00a0}",
-        &info,
-        crate::product_url(),
-        "\u{00a0}",
-        "(Details by typing",
-        "license",
-        "keyword)",
-    ];
+    let mut line_top = MARGIN;
     for line in lines {
-        svg.text(x, y, line, "start", 11.0);
-        y += lh;
+        let (line_ascent, line_height) = line_metrics(line);
+        let baseline = line_top + line_ascent;
+        if matches!(line, Information) {
+            text_render::emit_text(
+                &mut svg,
+                &information_prefix,
+                &TextBase {
+                    x: MARGIN,
+                    y: baseline,
+                    font_size: FONT_SIZE,
+                    font_family: "sans-serif",
+                    fill: "#000000",
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                    skip_underline: true,
+                },
+            );
+            let canonical_prefix = "You will find more information about PlantUML syntax on ";
+            let url_x = MARGIN + text_render::measure(canonical_prefix, FONT_SIZE as f64, false);
+            text_render::emit_text(
+                &mut svg,
+                crate::product_url(),
+                &TextBase {
+                    x: url_x,
+                    y: baseline,
+                    font_size: FONT_SIZE,
+                    font_family: "sans-serif",
+                    fill: "#000000",
+                    bold: false,
+                    italic: false,
+                    underline: true,
+                    skip_underline: true,
+                },
+            );
+            line_top += line_height;
+            continue;
+        }
+        let rendered_text = match line {
+            Heading => heading.as_str(),
+            Information => unreachable!(),
+            Sans(text) | Mono(text) => text,
+        };
+        text_render::emit_text(
+            &mut svg,
+            rendered_text,
+            &TextBase {
+                x: MARGIN,
+                y: baseline,
+                font_size: FONT_SIZE,
+                font_family: "sans-serif",
+                fill: "#000000",
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: true,
+            },
+        );
+        line_top += line_height;
     }
-    svg.finalize()
+
+    let image_x = MARGIN + content_width - IMAGE_WIDTH;
+    let image_y = MARGIN + text_height - IMAGE_HEIGHT;
+    write!(
+        svg,
+        r#"<image height="{}" width="{}" x="{}" xlink:href="{}" y="{}"/>"#,
+        IMAGE_HEIGHT as u32,
+        IMAGE_WIDTH as u32,
+        fmt_coord(image_x),
+        welcome_asset_uri(),
+        fmt_coord(image_y),
+    )
+    .unwrap();
+    svg.push_str("</g></svg>");
+    svg
+}
+
+fn welcome_asset_uri() -> &'static str {
+    static URI: std::sync::OnceLock<String> = std::sync::OnceLock::new();
+    URI.get_or_init(|| {
+        let asset = include_bytes!("../assets/rustuml-welcome.svg");
+        format!("data:image/svg+xml;base64,{}", encode_base64(asset))
+    })
+}
+
+fn encode_base64(data: &[u8]) -> String {
+    const ALPHABET: &[u8; 64] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+    let mut encoded = String::with_capacity(data.len().div_ceil(3) * 4);
+    for chunk in data.chunks(3) {
+        let bits = (u32::from(chunk[0]) << 16)
+            | (u32::from(*chunk.get(1).unwrap_or(&0)) << 8)
+            | u32::from(*chunk.get(2).unwrap_or(&0));
+        encoded.push(ALPHABET[((bits >> 18) & 0x3f) as usize] as char);
+        encoded.push(ALPHABET[((bits >> 12) & 0x3f) as usize] as char);
+        encoded.push(if chunk.len() > 1 {
+            ALPHABET[((bits >> 6) & 0x3f) as usize] as char
+        } else {
+            '='
+        });
+        encoded.push(if chunk.len() > 2 {
+            ALPHABET[(bits & 0x3f) as usize] as char
+        } else {
+            '='
+        });
+    }
+    encoded
 }
 
 /// Dispatch participant shape rendering based on kind.
@@ -12689,6 +12852,64 @@ mod tests {
         );
         assert!(svg.contains("participant-head"), "should have head groups");
         assert!(svg.contains("participant-tail"), "should have tail groups");
+    }
+
+    #[test]
+    fn empty_welcome_ports_graphic_strings_geometry_with_owned_branding() {
+        let svg = render_empty_welcome();
+
+        // Fresh Java references for empty, comment-only, and whitespace-only
+        // blocks all use the same `PSystemWelcome` geometry.
+        let font_size = 12.0;
+        let canonical_information =
+            "You will find more information about PlantUML syntax on <u>https://plantuml.com</u>";
+        let canonical_prefix = "You will find more information about PlantUML syntax on ";
+        let expected_image_x =
+            5.0 + text_render::measure(canonical_information, font_size, false) + 30.0;
+        let expected_image_y = 5.0
+            + 16.0 * crate::plantuml_metrics::text_height(font_size)
+            + 2.0 * crate::plantuml_metrics::mono_text_height(font_size)
+            - 71.0;
+        let expected_url_x = 5.0 + text_render::measure(canonical_prefix, font_size, false);
+
+        assert!(svg.contains(r#"viewBox="0 0 585 265""#), "{svg}");
+        assert_eq!(svg.matches("<text ").count(), 21, "{svg}");
+        assert!(
+            svg.contains(&format!(r#"x="{}""#, fmt_coord(expected_image_x))),
+            "{svg}"
+        );
+        assert!(
+            svg.contains(&format!(r#"y="{}""#, fmt_coord(expected_image_y))),
+            "{svg}"
+        );
+        assert!(
+            svg.contains(&format!(r#"x="{}""#, fmt_coord(expected_url_x))),
+            "{svg}"
+        );
+        assert!(svg.contains("Welcome to RustUML!"), "{svg}");
+        assert!(svg.contains(crate::product_url()), "{svg}");
+        assert!(!svg.contains("https://plantuml.com"), "{svg}");
+        assert!(svg.contains("data:image/svg+xml;base64,"), "{svg}");
+        assert!(!svg.contains("data:image/png;base64,"), "{svg}");
+    }
+
+    #[test]
+    fn fresh_empty_comment_and_whitespace_blocks_share_generated_welcome_chrome() {
+        let sources = [
+            "@startuml fresh_empty_2719\n@enduml\n",
+            "@startuml\n' renamed comment-only perturbation 2729\n' no entities follow\n@enduml\n",
+            "@startuml\n \t \n   \n@enduml\n",
+        ];
+
+        for source in sources {
+            let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+            let svg = crate::render_svg(&diagram);
+            assert!(svg.contains(r#"viewBox="0 0 585 265""#), "{source}\n{svg}");
+            assert_eq!(svg.matches("<text ").count(), 21, "{source}\n{svg}");
+            assert_eq!(svg.matches("<image ").count(), 1, "{source}\n{svg}");
+            assert!(svg.contains("Welcome to RustUML!"), "{source}\n{svg}");
+            assert!(svg.contains(crate::product_url()), "{source}\n{svg}");
+        }
     }
 
     #[test]
