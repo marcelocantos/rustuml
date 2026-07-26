@@ -173,11 +173,13 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
     let mut known_note_ids: std::collections::HashSet<String> = std::collections::HashSet::new();
     // Top-level packages collected.
     let mut top_packages: Vec<ComponentPackage> = Vec::new();
-    // `hide`/`remove` directives. PlantUML drops the targeted elements entirely
-    // (and any links touching them). We accept either a bare element id or a
-    // `<<stereotype>>` selector.
+    // `hide` and `remove` have distinct SVEK lifecycles. Hidden elements still
+    // participate in layout, whereas removed elements are excluded after
+    // their declarations and links have consumed global UIDs.
     let mut hidden_ids: Vec<String> = Vec::new();
     let mut hidden_stereotypes: Vec<String> = Vec::new();
+    let mut removed_ids: Vec<String> = Vec::new();
+    let mut removed_stereotypes: Vec<String> = Vec::new();
     // Note buffer for multi-line notes.
     let mut note_target: Option<String> = None;
     let mut note_position = ComponentNotePosition::Right;
@@ -357,16 +359,21 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             }
             continue;
         }
-        // `hide`/`remove` directives that target an element or stereotype drop
-        // it from the diagram. Other `hide` forms (e.g. `hide stereotype`,
-        // `hide empty members`) are display hints handled as skips below.
-        if let Some(arg) = trimmed
+        // Element and stereotype selectors are resolved after parsing because
+        // PlantUML commands can precede their declarations.
+        let suppression = trimmed
             .strip_prefix("hide ")
-            .or_else(|| trimmed.strip_prefix("remove "))
-        {
+            .map(|arg| (arg, false))
+            .or_else(|| trimmed.strip_prefix("remove ").map(|arg| (arg, true)));
+        if let Some((arg, is_remove)) = suppression {
             let arg = arg.trim();
             if let Some(stereo) = arg.strip_prefix("<<").and_then(|s| s.strip_suffix(">>")) {
-                hidden_stereotypes.push(stereo.trim().to_string());
+                let stereotypes = if is_remove {
+                    &mut removed_stereotypes
+                } else {
+                    &mut hidden_stereotypes
+                };
+                stereotypes.push(stereo.trim().to_string());
                 continue;
             }
             // A bare identifier (optionally bracketed `[Name]`) names an element.
@@ -388,7 +395,12 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                 && !id.contains(char::is_whitespace)
                 && !DISPLAY_HINTS.contains(&first_word)
             {
-                hidden_ids.push(id.replace(' ', "_"));
+                let ids = if is_remove {
+                    &mut removed_ids
+                } else {
+                    &mut hidden_ids
+                };
+                ids.push(id.replace(' ', "_"));
             }
             continue;
         }
@@ -858,43 +870,93 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
         }
     }
 
-    // Apply `hide`/`remove` directives: drop matching components and any links
-    // or package memberships referencing them.
-    if !hidden_ids.is_empty() || !hidden_stereotypes.is_empty() {
-        let mut drop: std::collections::HashSet<String> = hidden_ids.iter().cloned().collect();
-        for c in &components {
-            if c.stereotypes
+    let mut hidden: std::collections::HashSet<String> = hidden_ids.into_iter().collect();
+    let mut removed: std::collections::HashSet<String> = removed_ids.into_iter().collect();
+    for component in &components {
+        if component
+            .stereotypes
+            .iter()
+            .any(|stereotype| hidden_stereotypes.iter().any(|hidden| hidden == stereotype))
+        {
+            hidden.insert(component.id.clone());
+        }
+        if component.stereotypes.iter().any(|stereotype| {
+            removed_stereotypes
                 .iter()
-                .any(|s| hidden_stereotypes.iter().any(|h| h == s))
-            {
-                drop.insert(c.id.clone());
-            }
+                .any(|removed| removed == stereotype)
+        }) {
+            removed.insert(component.id.clone());
         }
-        components.retain(|c| !drop.contains(&c.id));
-        connections.retain(|c| !drop.contains(&c.from) && !drop.contains(&c.to));
-        notes.retain(|n| n.target.as_ref().is_none_or(|t| !drop.contains(t)));
+    }
+
+    // `GraphvizImageBuilder.printEntities` and its link loop skip removed
+    // objects, but the objects already exist and retain their global UID
+    // positions. Preserve those objects separately from the active graph.
+    let mut removed_components = Vec::new();
+    components.retain(|component| {
+        if removed.contains(&component.id) {
+            removed_components.push(component.clone());
+            false
+        } else {
+            true
+        }
+    });
+    let hidden_components = components
+        .iter()
+        .filter(|component| hidden.contains(&component.id))
+        .map(|component| component.id.clone())
+        .collect();
+
+    let mut removed_connections = Vec::new();
+    connections.retain(|connection| {
+        if removed.contains(&connection.from) || removed.contains(&connection.to) {
+            removed_connections.push(connection.clone());
+            false
+        } else {
+            true
+        }
+    });
+    let mut removed_notes = Vec::new();
+    notes.retain(|note| {
+        if note
+            .target
+            .as_ref()
+            .is_some_and(|target| removed.contains(target))
+        {
+            removed_notes.push(note.clone());
+            false
+        } else {
+            true
+        }
+    });
+
+    if !removed.is_empty() {
         for group in &mut together {
-            group.nodes.retain(|id| !drop.contains(id));
+            group.nodes.retain(|id| !removed.contains(id));
         }
-        fn prune_pkg(pkg: &mut ComponentPackage, drop: &std::collections::HashSet<String>) {
-            pkg.components.retain(|id| !drop.contains(id));
+        fn prune_pkg(pkg: &mut ComponentPackage, removed: &std::collections::HashSet<String>) {
+            pkg.components.retain(|id| !removed.contains(id));
             for child in &mut pkg.packages {
-                prune_pkg(child, drop);
+                prune_pkg(child, removed);
             }
         }
         for pkg in &mut top_packages {
-            prune_pkg(pkg, &drop);
+            prune_pkg(pkg, &removed);
         }
     }
 
     Ok(ComponentDiagram {
         meta,
         components,
+        hidden_components,
+        removed_components,
         interfaces,
         connections,
+        removed_connections,
         packages: top_packages,
         together,
         notes,
+        removed_notes,
     })
 }
 
@@ -1017,6 +1079,35 @@ mod tests {
         assert_eq!(d.components.len(), 1);
         assert!(d.components[0].stereotypes.contains(&"service".to_string()));
         assert!(d.components[0].stereotypes.contains(&"secured".to_string()));
+    }
+
+    #[test]
+    fn hide_and_remove_preserve_distinct_component_lifecycles() {
+        let d = parse(
+            "component \"Renamed Hidden Relay 9101\" as Hidden9101 <<retired_9101>>\n\
+             component \"Renamed Visible Broker 9103\" as Broker9103\n\
+             component \"Renamed Removed Sink 9109\" as Removed9109\n\
+             component \"Renamed Visible Archive 9113\" as Archive9113\n\
+             Hidden9101 --> Broker9103\n\
+             Broker9103 --> Removed9109\n\
+             Broker9103 --> Archive9113\n\
+             hide <<retired_9101>>\n\
+             remove Removed9109",
+        );
+
+        assert_eq!(d.hidden_components, ["Hidden9101"]);
+        assert_eq!(
+            d.components
+                .iter()
+                .map(|component| component.id.as_str())
+                .collect::<Vec<_>>(),
+            ["Hidden9101", "Broker9103", "Archive9113"]
+        );
+        assert_eq!(d.removed_components.len(), 1);
+        assert_eq!(d.removed_components[0].id, "Removed9109");
+        assert_eq!(d.connections.len(), 2);
+        assert_eq!(d.removed_connections.len(), 1);
+        assert_eq!(d.removed_connections[0].to, "Removed9109");
     }
 
     #[test]
