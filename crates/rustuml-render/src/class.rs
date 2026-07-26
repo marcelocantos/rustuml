@@ -9395,6 +9395,13 @@ fn render_notes_only(
         return out;
     }
 
+    if diagram.notes.len() == 1
+        && diagram.relationships.is_empty()
+        && diagram.notes[0].alias.is_some()
+    {
+        return render_single_named_note(&diagram.notes[0]);
+    }
+
     // Non-oracle fallback (used by the CLI and unit tests). Keeps a working
     // — though structurally non-PlantUML — rendering so the binary keeps
     // producing useful output when no oracle data is available.
@@ -9434,6 +9441,75 @@ fn render_notes_only(
         render_note_box(&mut svg, note, *nx, *ny, *nw, *nh);
     }
     svg.finalize()
+}
+
+/// Port of the standalone `EntityImageNote` path through SVEK. `Opale.drawU`
+/// paints the folded note with a half-width outer stroke and a one-pixel fold
+/// stroke; `CucaDiagramFileMakerSvek` gives a lone named note the standard
+/// PlantUML envelope with the entity at `(7, 7)`.
+fn render_single_named_note(note: &Note) -> String {
+    let (width, height) = note_box_dims(note);
+    let canvas_width = (width + 20.0).round();
+    let canvas_height = (height + 20.0).round();
+    let x = 7.0;
+    let y = 7.0;
+    let right = x + width;
+    let bottom = y + height;
+    let fold_x = right - NOTE_FOLD;
+    let fold_y = y + NOTE_FOLD;
+    let fill = note
+        .color
+        .as_deref()
+        .map(crate::sequence::resolve_color)
+        .unwrap_or_else(|| NOTE_FILL.to_string());
+    let alias = note.alias.as_deref().expect("named-note path");
+    let f = crate::plantuml_metrics::fmt_coord;
+
+    let mut svg = SvgBuilder::new_plantuml(canvas_width, canvas_height, "CLASS");
+    let mut body = String::new();
+    write!(
+        body,
+        r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="ent0002">"#,
+        escape_xml(alias),
+        note.source_line,
+    )
+    .unwrap();
+    write!(
+        body,
+        r#"<path d="M{},{} L{},{} L{},{} L{},{} L{},{} L{},{}" fill="{}" style="stroke:#181818;stroke-width:0.5;"/>"#,
+        f(x),
+        f(y),
+        f(x),
+        f(bottom),
+        f(right),
+        f(bottom),
+        f(right),
+        f(fold_y),
+        f(fold_x),
+        f(y),
+        f(x),
+        f(y),
+        fill,
+    )
+    .unwrap();
+    write!(
+        body,
+        r#"<path d="M{},{} L{},{} L{},{} L{},{}" fill="{}" style="stroke:#181818;stroke-width:1;"/>"#,
+        f(fold_x),
+        f(y),
+        f(fold_x),
+        f(fold_y),
+        f(right),
+        f(fold_y),
+        f(fold_x),
+        f(y),
+        fill,
+    )
+    .unwrap();
+    emit_note_body(&mut body, note, x, y, width);
+    body.push_str("</g>");
+    svg.raw_inline(&body);
+    svg.finalize_plantuml()
 }
 
 /// Render a class-diagram that has no entities/notes but does carry one or
@@ -10892,15 +10968,25 @@ mod tests {
 
     #[test]
     fn legacy_double_hash_border_keeps_a_separate_background_channel() {
-        let input =
-            "@startuml\nclass FreshLedger719 #azure ##[dashed]12ABEF {\n  +entry: String\n}\n@enduml";
+        let input = "@startuml\nclass FreshLedger719 #azure ##[dashed]12ABEF {\n  +entry: String\n}\n@enduml";
         let diagram = rustuml_parser::parse::parse(input).unwrap();
         let svg = crate::render_svg(&diagram);
 
         assert!(svg.contains(r##"<rect fill="#F0FFFF""##));
-        assert!(svg.contains(
-            r##"style="stroke:#12ABEF;stroke-width:1;stroke-dasharray:7,7;""##
-        ));
+        assert!(svg.contains(r##"style="stroke:#12ABEF;stroke-width:1;stroke-dasharray:7,7;""##));
+    }
+
+    #[test]
+    fn standalone_named_note_uses_opale_entity_geometry_for_fresh_markup() {
+        let input = "@startuml\nnote as FreshMemo727\n  <color:#2457A6>**reviewed text**</color>\nend note\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(r#"data-qualified-name="FreshMemo727""#));
+        assert!(svg.contains(r#"id="ent0002"><path d="M7,7 L7,"#));
+        assert!(svg.contains(r##"fill="#2457A6""##));
+        assert!(svg.contains(r#"font-weight="700""#));
+        assert!(svg.contains(r#"style="stroke:#181818;stroke-width:0.5;""#));
     }
 
     #[test]
