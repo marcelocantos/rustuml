@@ -102,6 +102,10 @@ const VIS_ICON_ANGLED_HALF: f64 = 4.0;
 const VIS_ICON_SIZE_RADIUS_DIVISOR: u32 = 3;
 /// Diamond/triangle horizontal half-size is one pixel inside half the icon box.
 const VIS_ICON_ANGLED_INSET: f64 = 1.0;
+/// `LimitFinder.drawUPolygon` expands every polygon by 10px horizontally
+/// while measuring a SVEK image. Protected/package visibility icons are the
+/// only class-body polygons that can own the left envelope.
+const LIMIT_FINDER_POLYGON_OVERSCAN_X: f64 = 10.0;
 /// PlantUML draws angled class-member visibility glyphs one pixel above the
 /// round/square icon center. This follows the `USymbol` polygon coordinates
 /// used for protected/package member markers after `classAttributeIconSize`
@@ -475,6 +479,9 @@ fn resolve_hide(entity: &ClassEntity, directives: &[HideShow]) -> HideFlags {
         EntityKind::Diamond => "diamond",
     };
     for d in directives {
+        if d.remove {
+            continue;
+        }
         // Tokenise: optional selector (entity kind keyword, `<<stereo>>`, or
         // entity name) followed by the visibility keyword(s).
         let arg = d.arg.trim();
@@ -632,6 +639,10 @@ fn split_hide_selector(arg: &str) -> (Option<&str>, &str) {
         if KINDS.contains(&f.as_str()) {
             return (Some(first), rest.trim_start());
         }
+        const QUALIFIERS: &[&str] = &["empty", "private", "protected", "public", "package"];
+        if !QUALIFIERS.contains(&f.as_str()) {
+            return (Some(first), rest.trim_start());
+        }
     }
     (None, arg)
 }
@@ -655,16 +666,48 @@ fn whole_entity_selector(arg: &str, entities: &[ClassEntity]) -> Option<EntitySe
         }
         return None;
     }
-    // A bare single token that exactly names a known entity (by id or label).
+    // A bare single token names an entity pattern. PlantUML `HideOrShow.match`
+    // accepts `*` wildcards as well as exact qualified-name leaves.
     if !arg.is_empty()
         && !arg.contains(char::is_whitespace)
-        && entities
-            .iter()
-            .any(|e| e.id.eq_ignore_ascii_case(arg) || e.label.eq_ignore_ascii_case(arg))
+        && (arg.contains('*') || entities.iter().any(|e| lifecycle_name_matches(arg, e)))
     {
         return Some(EntitySelector::Name(arg.to_string()));
     }
     None
+}
+
+fn wildcard_matches(pattern: &str, value: &str) -> bool {
+    let mut remainder = value;
+    let mut anchored_start = true;
+    for (index, part) in pattern.split('*').enumerate() {
+        if part.is_empty() {
+            anchored_start = false;
+            continue;
+        }
+        let Some(position) = remainder.find(part) else {
+            return false;
+        };
+        if index == 0 && anchored_start && position != 0 {
+            return false;
+        }
+        remainder = &remainder[position + part.len()..];
+        anchored_start = false;
+    }
+    pattern.ends_with('*') || remainder.is_empty()
+}
+
+fn lifecycle_name_matches(pattern: &str, entity: &ClassEntity) -> bool {
+    [entity.id.as_str(), entity.label.as_str()]
+        .into_iter()
+        .any(|name| {
+            let leaf = name.rsplit(['.', ':']).next().unwrap_or(name);
+            if pattern.contains('*') {
+                wildcard_matches(pattern, leaf)
+            } else {
+                leaf.eq_ignore_ascii_case(pattern)
+            }
+        })
 }
 
 /// A whole-entity selector resolved from a `hide`/`remove`/`show` directive.
@@ -676,22 +719,30 @@ enum EntitySelector {
 impl EntitySelector {
     fn matches(&self, entity: &ClassEntity) -> bool {
         match self {
-            EntitySelector::Name(n) => {
-                entity.id.eq_ignore_ascii_case(n) || entity.label.eq_ignore_ascii_case(n)
-            }
-            EntitySelector::Stereotype(s) => {
-                entity.stereotypes.iter().any(|t| t.eq_ignore_ascii_case(s))
-            }
+            EntitySelector::Name(n) => lifecycle_name_matches(n, entity),
+            EntitySelector::Stereotype(s) => entity.stereotypes.iter().any(|t| {
+                if s.contains('*') {
+                    wildcard_matches(s, t)
+                } else {
+                    t.eq_ignore_ascii_case(s)
+                }
+            }),
         }
     }
 }
 
-/// Compute the set of entity indices suppressed by whole-entity
-/// `hide`/`remove` directives, honouring later `show` directives that
-/// re-enable them (in source order).
-fn suppressed_entities(diagram: &ClassDiagram) -> std::collections::HashSet<usize> {
+/// Resolve either the `HideOrShow` or remove/restore lifecycle stream.
+///
+/// Java keeps these as separate lists in `CucaDiagram`: hidden entities still
+/// enter SVEK and influence layout, while removed entities never enter the
+/// graph. Later show/restore directives replace the earlier state.
+fn lifecycle_entities(diagram: &ClassDiagram, remove: bool) -> std::collections::HashSet<usize> {
     let mut suppressed = std::collections::HashSet::new();
-    for d in &diagram.hide_show {
+    for d in diagram
+        .hide_show
+        .iter()
+        .filter(|directive| directive.remove == remove)
+    {
         let Some(sel) = whole_entity_selector(&d.arg, &diagram.entities) else {
             continue;
         };
@@ -708,10 +759,25 @@ fn suppressed_entities(diagram: &ClassDiagram) -> std::collections::HashSet<usiz
     suppressed
 }
 
+fn relationship_touches_hidden_entity(
+    relationship: &Relationship,
+    diagram: &ClassDiagram,
+    hidden_entities: &std::collections::HashSet<usize>,
+) -> bool {
+    [&relationship.from, &relationship.to]
+        .into_iter()
+        .any(|endpoint| {
+            diagram.entities.iter().enumerate().any(|(index, entity)| {
+                hidden_entities.contains(&index)
+                    && (entity.id == *endpoint || entity.label == *endpoint)
+            })
+        })
+}
+
 /// Build a copy of `diagram` with the given entity indices removed, along with
 /// any relationships and notes that reference them, and any package membership
 /// entries. Relationships/notes whose endpoints survive are kept verbatim.
-fn filter_suppressed(
+fn filter_removed(
     diagram: &ClassDiagram,
     suppressed: &std::collections::HashSet<usize>,
 ) -> ClassDiagram {
@@ -1862,6 +1928,15 @@ pub fn render_with_oracle(
     theme: &Theme,
     oracle: Option<&OracleLayout>,
 ) -> String {
+    render_with_oracle_uid_origin(diagram, theme, oracle, diagram)
+}
+
+fn render_with_oracle_uid_origin(
+    diagram: &ClassDiagram,
+    theme: &Theme,
+    oracle: Option<&OracleLayout>,
+    uid_origin: &ClassDiagram,
+) -> String {
     let cs = &theme.class;
 
     // When the oracle captured the root <g> body verbatim, replay it inside
@@ -1875,15 +1950,19 @@ pub fn render_with_oracle(
         return wrap_oracle_envelope(orc, body, "CLASS");
     }
 
-    // Apply whole-entity `hide`/`remove` directives by dropping the targeted
-    // entities (and their links/notes/package memberships) before layout. The
-    // `ent000N` ids of surviving entities are taken from the oracle by name,
-    // so the dropped entity's slot in the id sequence is preserved naturally.
-    let suppressed = suppressed_entities(diagram);
-    if !suppressed.is_empty() {
-        let filtered = filter_suppressed(diagram, &suppressed);
-        return render_with_oracle(&filtered, theme, oracle);
+    // `CucaDiagram.removeOrRestore` excludes entities and incident links from
+    // graph construction. Keep the unfiltered diagram as the cpt1 UID origin:
+    // constructors consumed their slots before a later remove command.
+    let removed = lifecycle_entities(diagram, true);
+    if !removed.is_empty() {
+        let filtered = filter_removed(diagram, &removed);
+        return render_with_oracle_uid_origin(&filtered, theme, oracle, uid_origin);
     }
+    // `CucaDiagram.hideOrShow2` is deliberately different: hidden entities
+    // and incident links still enter SVEK, then `SvekResult.drawU` paints them
+    // through `UHidden.HIDDEN`. Their geometry therefore remains in layout and
+    // in LimitFinder's measured canvas even though no SVG elements are emitted.
+    let hidden = lifecycle_entities(diagram, false);
 
     if diagram.entities.is_empty() {
         if !diagram.notes.is_empty() {
@@ -1979,6 +2058,8 @@ pub fn render_with_oracle(
             canvas_dims,
             Some(&oracle_entities),
             Some(oracle),
+            &hidden,
+            uid_origin,
             cs,
         );
     }
@@ -2252,6 +2333,8 @@ pub fn render_with_oracle(
         None,
         None,
         None,
+        &hidden,
+        uid_origin,
         cs,
     )
 }
@@ -3416,6 +3499,68 @@ fn svek_id_allocation(diagram: &ClassDiagram) -> SvekIdAllocation {
     allocation
 }
 
+/// Preserve `CucaDiagram.cpt1` allocations consumed before a later
+/// `removeOrRestore` command. Graph construction uses the filtered diagram,
+/// while surviving SVG ids retain their slots from the source model.
+fn svek_id_allocation_from_origin(
+    diagram: &ClassDiagram,
+    origin: &ClassDiagram,
+) -> SvekIdAllocation {
+    if std::ptr::eq(diagram, origin) {
+        return svek_id_allocation(diagram);
+    }
+
+    let mut allocation = svek_id_allocation(diagram);
+    let original = svek_id_allocation(origin);
+
+    for (index, entity) in diagram.entities.iter().enumerate() {
+        if let Some(original_index) = origin.entities.iter().position(|candidate| {
+            candidate.source_line == entity.source_line && candidate.id == entity.id
+        }) {
+            allocation.entity_ids[index] = original.entity_ids[original_index].clone();
+        }
+    }
+    for (index, package) in diagram.packages.iter().enumerate() {
+        if let Some(original_index) = origin
+            .packages
+            .iter()
+            .position(|candidate| candidate.source_line == package.source_line)
+        {
+            allocation.package_ids[index] = original.package_ids[original_index].clone();
+        }
+    }
+    for (index, note) in diagram.notes.iter().enumerate() {
+        if let Some(original_index) = origin.notes.iter().position(|candidate| {
+            candidate.source_line == note.source_line
+                && candidate.alias == note.alias
+                && candidate.target == note.target
+        }) {
+            allocation.note_ids[index] = original.note_ids[original_index].clone();
+            allocation.attached_note_starts[index] = original.attached_note_starts[original_index];
+        }
+    }
+    for (index, relationship) in diagram.relationships.iter().enumerate() {
+        if let Some(original_index) = origin.relationships.iter().position(|candidate| {
+            candidate.source_line == relationship.source_line
+                && candidate.from == relationship.from
+                && candidate.to == relationship.to
+        }) {
+            allocation.relationship_ids[index] = original.relationship_ids[original_index];
+        }
+    }
+    for (index, association) in diagram.association_classes.iter().enumerate() {
+        if let Some(original_index) = origin.association_classes.iter().position(|candidate| {
+            candidate.source_line == association.source_line
+                && candidate.a == association.a
+                && candidate.b == association.b
+                && candidate.c == association.c
+        }) {
+            allocation.association_starts[index] = original.association_starts[original_index];
+        }
+    }
+    allocation
+}
+
 fn entity_emission_order(diagram: &ClassDiagram) -> Vec<usize> {
     svek_id_allocation(diagram).entity_order
 }
@@ -3448,6 +3593,8 @@ fn render_plantuml_svg(
     canvas_override: Option<(f64, f64)>,
     oracle_entities: Option<&[Option<OracleEntity>]>,
     oracle: Option<&OracleLayout>,
+    hidden_entities: &std::collections::HashSet<usize>,
+    uid_origin: &ClassDiagram,
     cs: &crate::style::ClassStyle,
 ) -> String {
     if positions.len() < diagram.entities.len() {
@@ -3494,8 +3641,13 @@ fn render_plantuml_svg(
     }
     let text_padding = font.text_padding;
 
-    let layout_x_bias =
-        svek_layout_x_bias(diagram, positions, cluster_positions, &adjusted_edge_paths);
+    let layout_x_bias = svek_layout_x_bias(
+        diagram,
+        positions,
+        cluster_positions,
+        &adjusted_edge_paths,
+        &font,
+    );
 
     // Compute entity positions (offset from layout).
     let mut entity_positions: Vec<(f64, f64)> = (0..diagram.entities.len())
@@ -3763,11 +3915,7 @@ fn render_plantuml_svg(
         // `DotData.isDegeneratedWithFewEntities(1)` reports zero groups, zero
         // links, and exactly one leaf. Every other graph is a `SvekResult`,
         // whose `calculateDimension` adds 15px to the measured body envelope.
-        let uses_degenerated_entity = cluster_positions.is_empty()
-            && diagram.relationships.is_empty()
-            && attached_notes.is_empty()
-            && floating_notes.is_empty()
-            && diagram.entities.len() == 1;
+        let uses_degenerated_entity = uses_degenerated_entity(diagram, cluster_positions);
         let extent_pad = if uses_degenerated_entity {
             13
         } else {
@@ -3919,7 +4067,7 @@ fn render_plantuml_svg(
     } else {
         Vec::new()
     };
-    let svek_ids = svek_id_allocation(diagram);
+    let svek_ids = svek_id_allocation_from_origin(diagram, uid_origin);
     // Note entities (alias-named like `N1` AND auto-generated `GMNn`) are
     // captured separately in `note_entities`. The legacy `clusters`
     // collection only picks up GMN-prefixed qnames; reading from
@@ -4076,6 +4224,10 @@ fn render_plantuml_svg(
             emit_note(&mut svg, oracle_note_entities[note_cursor]);
             note_cursor += 1;
             ent_id += 1;
+        }
+
+        if hidden_entities.contains(&i) {
+            continue;
         }
 
         if let Some((lollipop_name, lollipop_rect)) = oracle_lollipop {
@@ -4303,6 +4455,9 @@ fn render_plantuml_svg(
                 .entry((rel.from.as_str(), rel.to.as_str()))
                 .and_modify(|count| *count += 1)
                 .or_insert(0);
+            if relationship_touches_hidden_entity(rel, diagram, hidden_entities) {
+                continue;
+            }
             if let Some(ep) = edge_idx.and_then(|idx| edge_paths.get(idx)) {
                 render_relationship_svg(
                     &mut svg,
@@ -4310,6 +4465,7 @@ fn render_plantuml_svg(
                     RelationshipRenderContext {
                         diagram,
                         note: relationship_note_indices[rel_idx].map(|idx| &diagram.notes[idx]),
+                        entity_ids: Some(&svek_ids.entity_ids),
                     },
                     ep,
                     link_id,
@@ -6035,6 +6191,14 @@ fn render_entity_content(
         // Letter glyph path — use oracle override if available to avoid float precision issues.
         let glyph_path = if let Some(d) = glyph_path_override {
             d.to_string()
+        } else if entity.spot_character.is_none()
+            && entity.kind == EntityKind::Annotation
+            && font.circled_font_size == 17
+        {
+            // The default `@` has two closed AWT contours. Keep the extracted
+            // Java path so SVG preserves the `Z M` contour boundary; custom or
+            // resized spots continue through generative centered metrics.
+            annotation_glyph(icon_cx, icon_cy)
         } else {
             let character = entity.spot_character.unwrap_or(match entity.kind {
                 EntityKind::Class | EntityKind::Object | EntityKind::State => 'C',
@@ -8852,6 +9016,7 @@ fn oracle_polygon_fill(fill: Option<&str>, monochrome: bool) -> &str {
 struct RelationshipRenderContext<'a> {
     diagram: &'a ClassDiagram,
     note: Option<&'a Note>,
+    entity_ids: Option<&'a [String]>,
 }
 
 fn render_relationship_svg(
@@ -8863,7 +9028,11 @@ fn render_relationship_svg(
     layout_x_bias: f64,
     duplicate_index: usize,
 ) {
-    let RelationshipRenderContext { diagram, note } = context;
+    let RelationshipRenderContext {
+        diagram,
+        note,
+        entity_ids,
+    } = context;
     if edge_path.points.is_empty() {
         return;
     }
@@ -8908,8 +9077,8 @@ fn render_relationship_svg(
         return;
     }
 
-    let entity_1 = no_oracle_entity_id(diagram, &rel.from);
-    let entity_2 = no_oracle_entity_id(diagram, &rel.to);
+    let entity_1 = no_oracle_entity_id_from(diagram, entity_ids, &rel.from);
+    let entity_2 = no_oracle_entity_id_from(diagram, entity_ids, &rel.to);
     write!(
         svg,
         r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="{link_type}" data-source-line="{}" id="lnk{}">"#,
@@ -9453,11 +9622,19 @@ fn emit_diamond_extremity(
 
 fn no_oracle_entity_id(diagram: &ClassDiagram, id: &str) -> String {
     let allocation = svek_id_allocation(diagram);
+    no_oracle_entity_id_from(diagram, Some(&allocation.entity_ids), id)
+}
+
+fn no_oracle_entity_id_from(
+    diagram: &ClassDiagram,
+    entity_ids: Option<&[String]>,
+    id: &str,
+) -> String {
     diagram
         .entities
         .iter()
         .position(|e| e.id == id)
-        .map(|i| allocation.entity_ids[i].clone())
+        .and_then(|index| entity_ids.and_then(|ids| ids.get(index)).cloned())
         .unwrap_or_else(|| "ent0002".to_string())
 }
 
@@ -9660,7 +9837,36 @@ fn svek_layout_x_bias(
     positions: &[NodePosition],
     cluster_positions: &[ClusterPosition],
     edge_paths: &[EdgePath],
+    font: &ClassFontOverrides,
 ) -> f64 {
+    let package_offsets = package_content_offsets(diagram);
+    let visibility_polygon_min_x = (!uses_degenerated_entity(diagram, cluster_positions))
+        .then(|| {
+            let icon = font.visibility_icon_geom();
+            diagram
+                .entities
+                .iter()
+                .enumerate()
+                .filter(|(_, entity)| {
+                    let hide = resolve_hide(entity, &diagram.hide_show);
+                    entity.members.iter().any(|member| {
+                        !hide.hides_member(member)
+                            && matches!(
+                                member.visibility,
+                                Visibility::Protected | Visibility::Package
+                            )
+                    })
+                })
+                .filter_map(|(index, _)| {
+                    positions.get(index).map(|position| {
+                        position.x + package_offsets[index].0 + icon.center_offset
+                            - icon.angled_half
+                            - LIMIT_FINDER_POLYGON_OVERSCAN_X
+                    })
+                })
+                .fold(f64::INFINITY, f64::min)
+        })
+        .filter(|min_x| min_x.is_finite());
     let min_x = positions
         .iter()
         .map(|position| position.x)
@@ -9687,8 +9893,20 @@ fn svek_layout_x_bias(
                         .map(|(min_x, _)| min_x)
                 }),
         )
+        .chain(visibility_polygon_min_x)
         .fold(0.0_f64, f64::min);
     (SVEK_LABEL_ENVELOPE_MARGIN - min_x).max(MARGIN) - MARGIN
+}
+
+fn uses_degenerated_entity(diagram: &ClassDiagram, cluster_positions: &[ClusterPosition]) -> bool {
+    let has_layout_note = diagram.notes.iter().any(|note| {
+        (note.target.is_some() && note.position.is_some())
+            || (note.target.is_none() && note.alias.is_some())
+    });
+    cluster_positions.is_empty()
+        && diagram.relationships.is_empty()
+        && !has_layout_note
+        && diagram.entities.len() == 1
 }
 
 fn relationship_has_center_label(relationship: &Relationship) -> bool {
@@ -13414,6 +13632,7 @@ mod tests {
             RelationshipRenderContext {
                 diagram: &diagram,
                 note: None,
+                entity_ids: None,
             },
             &edge_path,
             4,
@@ -13730,6 +13949,109 @@ mod tests {
         );
         assert!(nineteen_svg.contains(r##"<ellipse cx="18" cy="155.1963" fill="#84BE84""##));
         assert!(nineteen_svg.contains(r#"width="6" x="15" y="174.5732"/>"#));
+    }
+
+    #[test]
+    fn renamed_hide_and_remove_lifecycles_preserve_layout_and_source_uids() {
+        let hidden = "@startuml\n\
+            class HiddenLedgerAlpha <<internal-zone>> {\n\
+              #secretToken: String\n\
+              +rotateSecret()\n\
+            }\n\
+            class PublicRegistryBeta <<public-zone>> {\n\
+              +primaryKey: UUID\n\
+              -retryCount: int\n\
+              #refreshCache()\n\
+              ~expireEntry()\n\
+            }\n\
+            class AuditTailGamma\n\
+            HiddenLedgerAlpha --> PublicRegistryBeta\n\
+            PublicRegistryBeta --> AuditTailGamma\n\
+            hide <<internal-zone>>\n\
+            @enduml";
+        let removed = "@startuml\n\
+            class OriginLedgerDelta\n\
+            class RemovedBridgeEpsilon\n\
+            class SurvivorRegistryZeta {\n\
+              +lookup()\n\
+              #refresh()\n\
+            }\n\
+            class TailArchiveEta\n\
+            OriginLedgerDelta --> RemovedBridgeEpsilon\n\
+            RemovedBridgeEpsilon --> SurvivorRegistryZeta\n\
+            SurvivorRegistryZeta --> TailArchiveEta\n\
+            remove RemovedBridgeEpsilon\n\
+            @enduml";
+
+        let hidden_svg =
+            crate::render_svg(&rustuml_parser::parse::parse(hidden).expect("hide input parses"));
+        let removed_svg =
+            crate::render_svg(&rustuml_parser::parse::parse(removed).expect("remove input parses"));
+
+        assert!(!hidden_svg.contains(r#"data-qualified-name="HiddenLedgerAlpha""#));
+        assert!(hidden_svg.contains(
+            r#"data-qualified-name="PublicRegistryBeta" data-source-line="5" id="ent0003""#
+        ));
+        assert!(!hidden_svg.contains("HiddenLedgerAlpha-to-PublicRegistryBeta"));
+        assert!(hidden_svg.contains(r#"id="lnk6""#));
+
+        assert!(!removed_svg.contains(r#"data-qualified-name="RemovedBridgeEpsilon""#));
+        assert!(removed_svg.contains(
+            r#"data-qualified-name="SurvivorRegistryZeta" data-source-line="3" id="ent0004""#
+        ));
+        assert!(removed_svg.contains(r#"data-entity-1="ent0004" data-entity-2="ent0005""#));
+        assert!(removed_svg.contains(r#"id="lnk8""#));
+    }
+
+    #[test]
+    fn renamed_target_and_wildcard_selectors_apply_without_fixture_names() {
+        let targeted = "@startuml\n\
+            class TargetedVaultTheta {\n\
+              +publicField: String\n\
+              -privateField: int\n\
+              +open()\n\
+              -seal()\n\
+              #audit()\n\
+            }\n\
+            class UntouchedLedgerIota {\n\
+              +retainedField: UUID\n\
+              +retain()\n\
+              ~archive()\n\
+            }\n\
+            hide TargetedVaultTheta methods\n\
+            @enduml";
+        let wildcard = "@startuml\n\
+            class RenamedTransientKappa\n\
+            class RenamedTransientLambda\n\
+            class DurableRegistryMu\n\
+            hide *Transient*\n\
+            @enduml";
+
+        let targeted_svg = crate::render_svg(
+            &rustuml_parser::parse::parse(targeted).expect("target input parses"),
+        );
+        let wildcard_svg =
+            crate::render_svg(&rustuml_parser::parse::parse(wildcard).expect("wildcard parses"));
+
+        for field in [
+            "publicField: String",
+            "privateField: int",
+            "retainedField: UUID",
+        ] {
+            assert!(targeted_svg.contains(&format!(">{field}</text>")));
+        }
+        for hidden_method in ["open()", "seal()", "audit()"] {
+            assert!(!targeted_svg.contains(&format!(">{hidden_method}</text>")));
+        }
+        for visible_method in ["retain()", "archive()"] {
+            assert!(targeted_svg.contains(&format!(">{visible_method}</text>")));
+        }
+
+        assert!(!wildcard_svg.contains(r#"data-qualified-name="RenamedTransientKappa""#));
+        assert!(!wildcard_svg.contains(r#"data-qualified-name="RenamedTransientLambda""#));
+        assert!(wildcard_svg.contains(
+            r#"data-qualified-name="DurableRegistryMu" data-source-line="3" id="ent0004""#
+        ));
     }
 
     #[test]
