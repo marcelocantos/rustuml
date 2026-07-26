@@ -5749,6 +5749,9 @@ fn emit_layout_package_cluster(
         ComponentPackageKind::Rectangle => {
             emit_layout_rectangle_cluster(svg, pos, &pkg.label, pkg.stereotype.as_deref(), &fill);
         }
+        ComponentPackageKind::Component => {
+            emit_layout_component_cluster(svg, pos, &pkg.label, pkg.stereotype.as_deref(), &fill);
+        }
         ComponentPackageKind::Frame => {
             emit_layout_frame_cluster(svg, pos, &pkg.label, pkg.stereotype.as_deref(), &fill);
         }
@@ -5859,6 +5862,87 @@ fn emit_layout_package_path(svg: &mut SvgBuilder, pos: &ClusterPosition, label: 
         &TextBase {
             x: x + 4.0,
             y: y + 2.0 + pm::ascent(FONT_SIZE),
+            font_size: FONT_SIZE as u32,
+            font_family: "sans-serif",
+            fill: TEXT_COLOR,
+            bold: true,
+            italic: false,
+            underline: false,
+            skip_underline: false,
+        },
+    );
+    svg.raw(&text_buf);
+}
+
+fn emit_layout_component_cluster(
+    svg: &mut SvgBuilder,
+    pos: &ClusterPosition,
+    label: &str,
+    stereotype: Option<&str>,
+    fill: &str,
+) {
+    // PlantUML `ClusterDecoration.getTextBlock` delegates component groups to
+    // `USymbolComponent2.asBig`. Its `drawComponent2` method paints the same
+    // three-tab UML component mark used by a component leaf, while `asBig`
+    // places stereotype/title content 13px below the solved cluster top.
+    svg.raw(&format!(
+        r#"<rect fill="{fill}" height="{}" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1;" width="{}" x="{}" y="{}"/>"#,
+        fc(pos.height),
+        fc(pos.width),
+        fc(pos.x),
+        fc(pos.y),
+    ));
+    let tab_x = pos.x + pos.width - ICON_TAB_RIGHT_OFFSET;
+    let tab_y = pos.y + ICON_TAB_TOP_OFFSET;
+    svg.raw(&format!(
+        r#"<rect fill="{fill}" height="{}" style="stroke:#181818;stroke-width:1;" width="{}" x="{}" y="{}"/>"#,
+        fc(ICON_TAB_H),
+        fc(ICON_TAB_W),
+        fc(tab_x),
+        fc(tab_y),
+    ));
+    for bar_top in [ICON_BAR_TOP_OFFSET_1, ICON_BAR_TOP_OFFSET_2] {
+        svg.raw(&format!(
+            r#"<rect fill="{fill}" height="{}" style="stroke:#181818;stroke-width:1;" width="{}" x="{}" y="{}"/>"#,
+            fc(ICON_BAR_H),
+            fc(ICON_BAR_W),
+            fc(tab_x - ICON_BAR_LEFT_OFFSET),
+            fc(tab_y + bar_top),
+        ));
+    }
+
+    let stereotype_height = if let Some(stereotype) = stereotype {
+        let text = format!("\u{00AB}{stereotype}\u{00BB}");
+        let width = text_render::measure_no_underline(&text, FONT_SIZE, false);
+        let mut text_buf = String::new();
+        text_render::emit_text(
+            &mut text_buf,
+            &text,
+            &TextBase {
+                x: pos.x + (pos.width - width) / 2.0,
+                y: pos.y + 13.0 + pm::ascent(FONT_SIZE),
+                font_size: FONT_SIZE as u32,
+                font_family: "sans-serif",
+                fill: TEXT_COLOR,
+                bold: false,
+                italic: true,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        svg.raw(&text_buf);
+        text_render::label_height(&text, FONT_SIZE)
+    } else {
+        0.0
+    };
+    let label_w = text_render::measure(label, FONT_SIZE, true);
+    let mut text_buf = String::new();
+    text_render::emit_text(
+        &mut text_buf,
+        label,
+        &TextBase {
+            x: pos.x + (pos.width - label_w) / 2.0,
+            y: pos.y + 13.0 + stereotype_height + pm::ascent(FONT_SIZE),
             font_size: FONT_SIZE as u32,
             font_family: "sans-serif",
             fill: TEXT_COLOR,
@@ -7341,6 +7425,33 @@ mod tests {
             svg.matches(r#"<g class="entity""#).count(),
             2,
             "a link-owned note must not become a standalone SVEK entity: {svg}"
+        );
+    }
+
+    #[test]
+    fn renamed_bracket_interface_and_container_share_component_symbol() {
+        let input = "@startuml\n\
+                     component RenamedShell9803 {\n\
+                       interface [Renamed Audit Store 9817] as Store9817\n\
+                     }\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(
+            svg.contains(r#"data-qualified-name="RenamedShell9803.Store9817""#),
+            "{svg}"
+        );
+        assert!(svg.contains(">Renamed Audit Store 9817</text>"));
+        assert_eq!(
+            svg.matches(r#"height="10" style="stroke:#181818;"#).count(),
+            2,
+            "the group and bracket-selected component leaf each paint one large tab: {svg}"
+        );
+        assert_eq!(
+            svg.matches(r#"height="2" style="stroke:#181818;"#).count(),
+            4,
+            "the group and leaf each paint two small tab bars: {svg}"
         );
     }
 }

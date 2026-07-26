@@ -709,11 +709,18 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
         if let Some(caps) = RE_IFACE_BRACKET_AS.captures(trimmed) {
             let label = caps[1].to_string();
             let id = caps[2].to_string();
-            if !interfaces.iter().any(|i: &Interface| i.id == id) {
-                interfaces.push(Interface {
+            // PlantUML `CommandCreateElementFull.executeArg` selects
+            // `USymbolComponent2` whenever either the code or display starts
+            // with `[`. The `interface` keyword does not override that symbol.
+            if !components.iter().any(|c: &Component| c.id == id) {
+                components.push(Component {
                     id: id.clone(),
                     label,
+                    stereotypes: parse_stereotypes(trimmed),
+                    color: parse_container_color(trimmed),
+                    url: None,
                     source_line: current_line,
+                    kind: ComponentElementKind::Component,
                 });
             }
             if let Some(pkg) = package_stack.last_mut()
@@ -1119,6 +1126,17 @@ mod tests {
         assert_eq!(
             d.packages[0].components,
             ["Quoted9703", "Bracket9709", "BarePort9719", "Paren9721"]
+        );
+        assert!(
+            d.components.iter().any(|component| {
+                component.id == "Bracket9709" && component.label == "Bracket Port 9709"
+            }),
+            "bracketed interface syntax selects PlantUML's component symbol"
+        );
+        assert!(
+            !d.interfaces
+                .iter()
+                .any(|interface| interface.id == "Bracket9709")
         );
     }
 
