@@ -4447,8 +4447,48 @@ pub fn render_with_oracle(
                     max_y = max_y.max(result.height - 1.0);
                     painted_max_y = painted_max_y.max(result.height - 1.0);
                 } else if !labeled.is_empty() {
-                    // Graphviz's solved envelope includes the fixed HTML label
-                    // boxes that `SvekEdge.appendLine` contributes.
+                    // `SvekEdge.appendTable` truncates the renderer label
+                    // dimension for Graphviz's fixed HTML marker, but
+                    // `SvekResult.calculateDimension` measures the original
+                    // fractional `labelText` block after `solveLine` places
+                    // it. Keep both extents: either may be the rightmost
+                    // painter depending on the glyph advances.
+                    let mut consumed = vec![false; result.edge_paths.len()];
+                    for transition in labeled {
+                        let from = map_id(&transition.from, true);
+                        let to = map_id(&transition.to, false);
+                        let inverted = matches!(
+                            explicit_transition_direction(diagram, transition),
+                            Some(
+                                ExplicitTransitionDirection::Left
+                                    | ExplicitTransitionDirection::Up
+                            )
+                        );
+                        let (edge_from, edge_to) = if inverted {
+                            (to.as_str(), from.as_str())
+                        } else {
+                            (from.as_str(), to.as_str())
+                        };
+                        let Some((edge_index, label_position)) = result
+                            .edge_paths
+                            .iter()
+                            .enumerate()
+                            .find_map(|(edge_index, edge)| {
+                                (!consumed[edge_index]
+                                    && edge.from == edge_from
+                                    && edge.to == edge_to)
+                                    .then_some((edge_index, edge.label?))
+                            })
+                        else {
+                            continue;
+                        };
+                        consumed[edge_index] = true;
+                        let label = transition.label.as_deref().unwrap();
+                        let label_right = quantize_svek_coord(label_position.x)
+                            + ordinary_edge_label_size(label, &arrow_font).width;
+                        max_x = max_x.max(label_right);
+                        painted_max_x = painted_max_x.max(label_right);
+                    }
                     max_x = max_x.max(result.width);
                     painted_max_x = painted_max_x.max(result.width);
                     max_y = max_y.max(result.height);
@@ -8381,6 +8421,41 @@ mod tests {
         );
         assert!(
             svg.contains(r#"width="70.4561" x="77.2759" y="123.4883""#),
+            "{svg}"
+        );
+    }
+
+    #[test]
+    fn renamed_titled_chain_keeps_fractional_svek_label_envelope() {
+        let input = concat!(
+            "@startuml\n",
+            "title \"Fresh Relay Observatory 847\"\n",
+            "state CopperRelay\n",
+            "state IndigoQueue\n",
+            "state FinalArchive\n",
+            "[*] --> CopperRelay\n",
+            "CopperRelay --> IndigoQueue : accept_payload\n",
+            "IndigoQueue --> FinalArchive : seal_batch\n",
+            "FinalArchive --> [*] : archived\n",
+            "@enduml\n",
+        );
+        let diagram = rustuml_parser::parse::parse_auto_with_base(input, None).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Fresh headless PlantUML 1.2026.3beta6 reference. `SvekEdge.appendTable`
+        // sends an integer 98px marker to Graphviz for `accept_payload`, while
+        // `SvekResult.calculateDimension` measures the original fractional
+        // label block when `DecorateEntityImage.addTop` centers the body.
+        assert!(
+            svg.contains(r#"width="105.1826" x="38.8473" y="124.4883""#),
+            "{svg}"
+        );
+        assert!(
+            svg.contains(r#"<ellipse cx="91.4373" cy="53.4883""#),
+            "{svg}"
+        );
+        assert!(
+            svg.contains(r#"textLength="96.5415" x="92.4373" y="218.0566""#),
             "{svg}"
         );
     }
