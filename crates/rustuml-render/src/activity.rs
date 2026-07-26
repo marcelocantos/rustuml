@@ -8,7 +8,9 @@
 
 use std::collections::{HashMap, HashSet};
 use std::fmt::Write;
+use std::time::Duration;
 
+use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph, NodePosition};
 use rustuml_parser::diagram::activity::{ActivityDiagram, ActivityStep, NotePosition};
 
 use crate::creole;
@@ -26270,6 +26272,35 @@ struct LegacyActionNode {
     y: f64,
 }
 
+#[derive(Clone)]
+enum LegacyGraphNodeKind {
+    Start,
+    End,
+    Action(String),
+    Bar(String),
+}
+
+struct LegacyGraphNode {
+    key: String,
+    kind: LegacyGraphNodeKind,
+    entity_id: usize,
+    source_line: usize,
+    width: f64,
+    height: f64,
+}
+
+struct LegacyGraphEdge {
+    from: String,
+    to: String,
+    source_line: usize,
+    link_id: usize,
+}
+
+struct LegacyActivityGraph {
+    nodes: Vec<LegacyGraphNode>,
+    edges: Vec<LegacyGraphEdge>,
+}
+
 #[derive(Clone, Copy)]
 enum LegacyNoteSide {
     Left,
@@ -26297,6 +26328,404 @@ const LEGACY_V1_ACTION_ROW_STEP: f64 = 74.14;
 const LEGACY_V1_END_CY_FROM_ACTION_Y: f64 = 85.13;
 const LEGACY_V1_BOTTOM_PAD_FROM_END_CY: f64 = 24.73;
 const LEGACY_V1_RIGHT_PAD: f64 = 13.0;
+
+fn render_legacy_activity_graph(diagram: &ActivityDiagram) -> Option<String> {
+    let graph = parse_legacy_activity_graph(diagram.meta.source.as_deref()?)?;
+    let mut layout = LayoutGraph::new(Direction::TopToBottom).with_spacing_pixels(20.0, 40.0);
+    for node in &graph.nodes {
+        match node.kind {
+            LegacyGraphNodeKind::Start | LegacyGraphNodeKind::End => {
+                layout.add_circle_node(&node.key, "", node.width);
+            }
+            LegacyGraphNodeKind::Action(_) | LegacyGraphNodeKind::Bar(_) => {
+                layout.add_node(&node.key, "", node.width, node.height);
+            }
+        }
+    }
+    for edge in &graph.edges {
+        layout.add_edge(&edge.from, &edge.to, None);
+    }
+    let mut solved = layout.layout_full(Duration::from_secs(2))?;
+
+    // PlantUML `DotStringFactory.createDotString` uses 20 px nodesep and 40 px
+    // ranksep for ACTIVITY. `SvekEdge.solveLine` consumes Graphviz's two-decimal
+    // SVG coordinates before `SvekResult.calculateDimension` translates the
+    // painted envelope to its 6 px top and 7 px left rails.
+    quantize_legacy_svek_layout(&mut solved.node_positions, &mut solved.edge_paths);
+    let min_x = solved
+        .node_positions
+        .iter()
+        .map(|node| node.x)
+        .fold(f64::INFINITY, f64::min);
+    let min_y = solved
+        .node_positions
+        .iter()
+        .map(|node| node.y)
+        .fold(f64::INFINITY, f64::min);
+    let dx = 7.0 - min_x;
+    let dy = 6.0 - min_y;
+    translate_legacy_svek_layout(&mut solved.node_positions, &mut solved.edge_paths, dx, dy);
+
+    let mut body = String::new();
+    for (node, position) in graph.nodes.iter().zip(&solved.node_positions) {
+        match &node.kind {
+            LegacyGraphNodeKind::Start => {
+                let cx = position.x + node.width / 2.0;
+                let cy = position.y + node.height / 2.0;
+                write!(
+                    body,
+                    r##"<g class="start_entity" data-qualified-name="start" data-source-line="{}" id="ent{:04}"><ellipse cx="{}" cy="{}" fill="#222222" rx="10" ry="10" style="stroke:#222222;stroke-width:1;"/></g>"##,
+                    node.source_line,
+                    node.entity_id,
+                    f(cx),
+                    f(cy),
+                )
+                .unwrap();
+            }
+            LegacyGraphNodeKind::End => {
+                let cx = position.x + node.width / 2.0;
+                let cy = position.y + node.height / 2.0;
+                write!(
+                    body,
+                    r##"<g class="end_entity" data-qualified-name="end" data-source-line="{}" id="ent{:04}"><ellipse cx="{}" cy="{}" fill="none" rx="11" ry="11" style="stroke:#222222;stroke-width:1.5;"/><ellipse cx="{}" cy="{}" fill="#222222" rx="6" ry="6" style="stroke:#222222;stroke-width:1;"/></g>"##,
+                    node.source_line,
+                    node.entity_id,
+                    f(cx),
+                    f(cy),
+                    f(cx),
+                    f(cy),
+                )
+                .unwrap();
+            }
+            LegacyGraphNodeKind::Action(label) => {
+                emit_legacy_v1_action(
+                    &mut body,
+                    label,
+                    position.x,
+                    position.y,
+                    node.width,
+                    node.height,
+                );
+            }
+            LegacyGraphNodeKind::Bar(_) => {
+                write!(
+                    body,
+                    r##"<rect fill="#555555" height="8" style="stroke:none;stroke-width:1;" width="80" x="{}" y="{}"/>"##,
+                    f(position.x),
+                    f(position.y),
+                )
+                .unwrap();
+            }
+        }
+    }
+
+    let mut used_paths = vec![false; solved.edge_paths.len()];
+    for edge in &graph.edges {
+        let path_idx = solved
+            .edge_paths
+            .iter()
+            .enumerate()
+            .find(|(idx, path)| !used_paths[*idx] && path.from == edge.from && path.to == edge.to)
+            .map(|(idx, _)| idx)?;
+        used_paths[path_idx] = true;
+        emit_legacy_graph_edge(&mut body, edge, &solved.edge_paths[path_idx], &graph.nodes)?;
+    }
+
+    let max_right = graph
+        .nodes
+        .iter()
+        .zip(&solved.node_positions)
+        .map(|(node, position)| position.x + node.width)
+        .fold(0.0, f64::max);
+    let max_bottom = graph
+        .nodes
+        .iter()
+        .zip(&solved.node_positions)
+        .map(|(node, position)| position.y + node.height)
+        .fold(0.0, f64::max);
+    let width = (max_right + LEGACY_V1_RIGHT_PAD).ceil() as u32;
+    let height = (max_bottom + LEGACY_V1_RIGHT_PAD).ceil() as u32;
+    Some(format_svg(width, height, &body, "", Some("#FFFFFF")))
+}
+
+fn parse_legacy_activity_graph(source: &str) -> Option<LegacyActivityGraph> {
+    let mut graph = LegacyActivityGraph {
+        nodes: Vec::new(),
+        edges: Vec::new(),
+    };
+    let mut node_indexes = HashMap::<String, usize>::new();
+    let mut sequence = 2;
+    let mut source_line = 0;
+
+    for line in source.lines() {
+        let line = line.trim();
+        if line.is_empty() || line.starts_with("@start") || line.starts_with("@end") {
+            continue;
+        }
+        source_line += 1;
+        let (from_key, from_kind, to_key, to_kind) = parse_legacy_graph_edge(line)?;
+        for (key, kind) in [(from_key.clone(), from_kind), (to_key.clone(), to_kind)] {
+            if node_indexes.contains_key(&key) {
+                continue;
+            }
+            let (width, height) = legacy_graph_node_dimensions(&kind);
+            node_indexes.insert(key.clone(), graph.nodes.len());
+            graph.nodes.push(LegacyGraphNode {
+                key,
+                kind,
+                entity_id: sequence,
+                source_line,
+                width,
+                height,
+            });
+            sequence += 1;
+        }
+        graph.edges.push(LegacyGraphEdge {
+            from: from_key,
+            to: to_key,
+            source_line,
+            link_id: sequence,
+        });
+        sequence += 1;
+    }
+
+    let starts = graph
+        .nodes
+        .iter()
+        .filter(|node| matches!(node.kind, LegacyGraphNodeKind::Start))
+        .count();
+    let ends = graph
+        .nodes
+        .iter()
+        .filter(|node| matches!(node.kind, LegacyGraphNodeKind::End))
+        .count();
+    let mut has_fork = false;
+    let mut has_join = false;
+    for node in &graph.nodes {
+        if !matches!(node.kind, LegacyGraphNodeKind::Bar(_)) {
+            continue;
+        }
+        let incoming = graph
+            .edges
+            .iter()
+            .filter(|edge| edge.to == node.key)
+            .count();
+        let outgoing = graph
+            .edges
+            .iter()
+            .filter(|edge| edge.from == node.key)
+            .count();
+        has_fork |= incoming == 1 && outgoing >= 2;
+        has_join |= incoming >= 2 && outgoing == 1;
+    }
+    (starts == 1 && ends == 1 && has_fork && has_join).then_some(graph)
+}
+
+fn parse_legacy_graph_edge(
+    line: &str,
+) -> Option<(String, LegacyGraphNodeKind, String, LegacyGraphNodeKind)> {
+    let (from_key, from_kind, rest) = parse_legacy_graph_endpoint(line, true)?;
+    let rest = rest.trim_start();
+    let arrow_len = if rest.starts_with("-->") {
+        3
+    } else if rest.starts_with("-down->") {
+        7
+    } else {
+        return None;
+    };
+    let (to_key, to_kind, trailing) = parse_legacy_graph_endpoint(&rest[arrow_len..], false)?;
+    trailing
+        .trim()
+        .is_empty()
+        .then_some((from_key, from_kind, to_key, to_kind))
+}
+
+fn parse_legacy_graph_endpoint(
+    input: &str,
+    source: bool,
+) -> Option<(String, LegacyGraphNodeKind, &str)> {
+    let input = input.trim_start();
+    if let Some(rest) = input.strip_prefix("(*)") {
+        return if source {
+            Some(("terminal:start".into(), LegacyGraphNodeKind::Start, rest))
+        } else {
+            Some(("terminal:end".into(), LegacyGraphNodeKind::End, rest))
+        };
+    }
+    if let Some(rest) = input.strip_prefix("===") {
+        let end = rest.find("===")?;
+        let label = rest[..end].trim();
+        if label.is_empty() {
+            return None;
+        }
+        return Some((
+            format!("bar:{label}"),
+            LegacyGraphNodeKind::Bar(label.to_string()),
+            &rest[end + 3..],
+        ));
+    }
+    let rest = input.strip_prefix('"')?;
+    let end = rest.find('"')?;
+    let label = &rest[..end];
+    Some((
+        format!("action:{label}"),
+        LegacyGraphNodeKind::Action(label.to_string()),
+        &rest[end + 1..],
+    ))
+}
+
+fn legacy_graph_node_dimensions(kind: &LegacyGraphNodeKind) -> (f64, f64) {
+    match kind {
+        LegacyGraphNodeKind::Start => (20.0, 20.0),
+        LegacyGraphNodeKind::End => (22.0, 22.0),
+        LegacyGraphNodeKind::Bar(_) => (80.0, 8.0),
+        LegacyGraphNodeKind::Action(label) => (
+            text_render::measure(label, FONT_SIZE, false) + ACTION_H_PADDING * 2.0,
+            ACTION_PADDING + pm::text_height(FONT_SIZE),
+        ),
+    }
+}
+
+fn quantize_legacy_svek_layout(nodes: &mut [NodePosition], edges: &mut [EdgePath]) {
+    let quantize = |value: f64| (value * 100.0).round() / 100.0;
+    for node in nodes {
+        node.x = quantize(node.x);
+        node.y = quantize(node.y);
+    }
+    for edge in edges {
+        for point in &mut edge.points {
+            point.0 = quantize(point.0);
+            point.1 = quantize(point.1);
+        }
+    }
+}
+
+fn translate_legacy_svek_layout(
+    nodes: &mut [NodePosition],
+    edges: &mut [EdgePath],
+    dx: f64,
+    dy: f64,
+) {
+    for node in nodes {
+        node.x += dx;
+        node.y += dy;
+    }
+    for edge in edges {
+        for point in &mut edge.points {
+            point.0 += dx;
+            point.1 += dy;
+        }
+    }
+}
+
+fn legacy_graph_node_label<'a>(nodes: &'a [LegacyGraphNode], key: &str) -> Option<&'a str> {
+    let node = nodes.iter().find(|node| node.key == key)?;
+    Some(match &node.kind {
+        LegacyGraphNodeKind::Start => "start",
+        LegacyGraphNodeKind::End => "end",
+        LegacyGraphNodeKind::Action(label) | LegacyGraphNodeKind::Bar(label) => label,
+    })
+}
+
+fn emit_legacy_graph_edge(
+    body: &mut String,
+    edge: &LegacyGraphEdge,
+    path: &EdgePath,
+    nodes: &[LegacyGraphNode],
+) -> Option<()> {
+    if path.points.len() < 4 {
+        return None;
+    }
+    let from_node = nodes.iter().find(|node| node.key == edge.from)?;
+    let to_node = nodes.iter().find(|node| node.key == edge.to)?;
+    let from_label = legacy_graph_node_label(nodes, &edge.from)?;
+    let to_label = legacy_graph_node_label(nodes, &edge.to)?;
+    let contact = *path.points.last()?;
+    let control = path.points[path.points.len() - 2];
+    let mut shortened = path.points.clone();
+    let tangent_x = control.0 - contact.0;
+    let tangent_y = control.1 - contact.1;
+    let tangent_length = tangent_x.hypot(tangent_y);
+    if tangent_length <= f64::EPSILON {
+        return None;
+    }
+    let shift = (
+        tangent_x / tangent_length * 6.0,
+        tangent_y / tangent_length * 6.0,
+    );
+    let last = shortened.len() - 1;
+    shortened[last].0 += shift.0;
+    shortened[last].1 += shift.1;
+    shortened[last - 1].0 += shift.0;
+    shortened[last - 1].1 += shift.1;
+
+    write!(
+        body,
+        r##"<!--link {} to {}--><g class="link" data-entity-1="ent{:04}" data-entity-2="ent{:04}" data-link-type="dependency" data-source-line="{}" id="lnk{}"><path d="{}" fill="none" id="{}-to-{}" style="stroke:#181818;stroke-width:1;"/><polygon fill="#181818" points="{}" style="stroke:#181818;stroke-width:1;"/></g>"##,
+        escape_xml_attr_local(from_label),
+        escape_xml_attr_local(to_label),
+        from_node.entity_id,
+        to_node.entity_id,
+        edge.source_line,
+        edge.link_id,
+        legacy_graph_edge_path(&shortened),
+        escape_xml_attr_local(from_label),
+        escape_xml_attr_local(to_label),
+        legacy_graph_arrow_points(control, contact),
+    )
+    .unwrap();
+    Some(())
+}
+
+fn legacy_graph_edge_path(points: &[(f64, f64)]) -> String {
+    let mut path = format!("M{},{}", f(points[0].0), f(points[0].1));
+    for segment in points[1..].chunks(3) {
+        if let [c1, c2, end] = segment {
+            write!(
+                path,
+                " C{},{} {},{} {},{}",
+                f(c1.0),
+                f(c1.1),
+                f(c2.0),
+                f(c2.1),
+                f(end.0),
+                f(end.1),
+            )
+            .unwrap();
+        }
+    }
+    path
+}
+
+fn legacy_graph_arrow_points(control: (f64, f64), contact: (f64, f64)) -> String {
+    let dx = contact.0 - control.0;
+    let dy = contact.1 - control.1;
+    let length = dx.hypot(dy);
+    let (ux, uy) = (dx / length, dy / length);
+    let (px, py) = (-uy, ux);
+    let side_1 = (
+        contact.0 - ux * 9.0 - px * 4.0,
+        contact.1 - uy * 9.0 - py * 4.0,
+    );
+    let notch = (contact.0 - ux * 5.0, contact.1 - uy * 5.0);
+    let side_2 = (
+        contact.0 - ux * 9.0 + px * 4.0,
+        contact.1 - uy * 9.0 + py * 4.0,
+    );
+    format!(
+        "{},{},{},{},{},{},{},{},{},{}",
+        f(contact.0),
+        f(contact.1),
+        f(side_1.0),
+        f(side_1.1),
+        f(notch.0),
+        f(notch.1),
+        f(side_2.0),
+        f(side_2.1),
+        f(contact.0),
+        f(contact.1),
+    )
+}
 
 fn render_legacy_activity_partition(diagram: &ActivityDiagram) -> Option<String> {
     let source = diagram.meta.source.as_deref()?;
@@ -33090,6 +33519,12 @@ fn render_inner(
 
     if oracle.is_none()
         && defs.is_empty()
+        && let Some(svg) = render_legacy_activity_graph(diagram)
+    {
+        return svg;
+    }
+    if oracle.is_none()
+        && defs.is_empty()
         && let Some(svg) = render_legacy_activity_partition(diagram)
     {
         return svg;
@@ -33753,6 +34188,38 @@ mod tests {
         assert!(svg.contains("Gather telemetry"));
         assert!(svg.contains("Normalize records"));
         assert!(svg.contains("Archive safely"));
+    }
+
+    #[test]
+    fn legacy_v1_svek_graph_renders_renamed_three_way_fork() {
+        let input = concat!(
+            "@startuml\n",
+            "(*) --> \"Prime novel work\"\n",
+            "\"Prime novel work\" --> ===SPLIT_X===\n",
+            "===SPLIT_X=== --> \"Fresh alpha path\"\n",
+            "===SPLIT_X=== --> \"Fresh beta path\"\n",
+            "===SPLIT_X=== --> \"Fresh gamma path\"\n",
+            "\"Fresh alpha path\" --> ===MERGE_X===\n",
+            "\"Fresh beta path\" --> ===MERGE_X===\n",
+            "\"Fresh gamma path\" --> ===MERGE_X===\n",
+            "===MERGE_X=== --> \"Finish novel work\"\n",
+            "\"Finish novel work\" --> (*)\n",
+            "@enduml",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        for label in [
+            "Prime novel work",
+            "Fresh alpha path",
+            "Fresh beta path",
+            "Fresh gamma path",
+            "Finish novel work",
+        ] {
+            assert!(svg.contains(label), "missing renamed action {label}");
+        }
+        assert_eq!(svg.matches(r##"<rect fill="#555555""##).count(), 2);
+        assert_eq!(svg.matches(r#"<g class="link""#).count(), 10);
     }
 
     #[test]
