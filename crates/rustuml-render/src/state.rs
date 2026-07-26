@@ -1563,6 +1563,7 @@ fn allocate_state_svg_ids(diagram: &StateDiagram, state_ids: &[String]) -> State
 
     enum PassOneEvent<'a> {
         State(&'a str),
+        ConcurrentRegion,
         FloatingNote { index: usize, alias: &'a str },
     }
 
@@ -1573,6 +1574,34 @@ fn allocate_state_svg_ids(diagram: &StateDiagram, state_ids: &[String]) -> State
         }
     }
     let state_sequence_end = diagram.states.len();
+    let mut concurrent_regions = std::collections::BTreeMap::<&str, usize>::new();
+    for state in &diagram.states {
+        let Some(parent) = state.parent.as_deref() else {
+            continue;
+        };
+        if parent
+            .rsplit('.')
+            .next()
+            .is_some_and(|name| name.starts_with("CONC"))
+        {
+            concurrent_regions
+                .entry(parent)
+                .and_modify(|line| *line = (*line).min(state.source_line))
+                .or_insert(state.source_line);
+        }
+    }
+    let concurrent_region_count = concurrent_regions.len();
+    for (sequence, (_, first_member_line)) in concurrent_regions.into_iter().enumerate() {
+        // Java provenance: `StateDiagram.concurrentState` calls `gotoGroup`
+        // for a synthetic `CONC<n>` group during pass one. That hidden group
+        // consumes an entity UID before any explicit member in the new region.
+        pass_one_events.push((
+            first_member_line.saturating_sub(1),
+            state_sequence_end + sequence,
+            PassOneEvent::ConcurrentRegion,
+        ));
+    }
+    let concurrent_sequence_end = state_sequence_end + concurrent_region_count;
     for (index, note) in diagram.notes.iter().enumerate() {
         if let StateNoteKind::Floating(Some(alias)) = &note.kind {
             let command_line = if note.command_line == 0 {
@@ -1582,7 +1611,7 @@ fn allocate_state_svg_ids(diagram: &StateDiagram, state_ids: &[String]) -> State
             };
             pass_one_events.push((
                 command_line,
-                state_sequence_end + note.creation_order,
+                concurrent_sequence_end + note.creation_order,
                 PassOneEvent::FloatingNote {
                     index,
                     alias: alias.as_str(),
@@ -1599,6 +1628,9 @@ fn allocate_state_svg_ids(diagram: &StateDiagram, state_ids: &[String]) -> State
                     && !entity_ids.iter().any(|(seen, _)| seen == id) =>
             {
                 entity_ids.push((id.to_string(), format!("ent{pass_one_counter:04}")));
+                pass_one_counter += 1;
+            }
+            PassOneEvent::ConcurrentRegion => {
                 pass_one_counter += 1;
             }
             PassOneEvent::FloatingNote { index, alias } => {
@@ -2341,26 +2373,13 @@ fn build_autonomous_composite<'a>(
     Some((composites, outer))
 }
 
-/// Preserve the existing one-level concurrent-state path while recursive
-/// autonomous layout grows support for `ConcurrentStates` at every depth.
-fn build_one_level_concurrent_composite<'a>(
+/// Build one root concurrent image using the same independent region images
+/// that Java passes to `ConcurrentStates`.
+fn build_one_level_concurrent_node<'a>(
     diagram: &'a StateDiagram,
+    composite: &'a State,
     arrow_font: &StateArrowFont,
-) -> Option<(AutonomousComposite<'a>, AutonomousScopeLayout)> {
-    if !diagram.notes.is_empty()
-        || diagram.meta.title.is_some()
-        || !diagram.meta.skinparams.is_empty()
-    {
-        return None;
-    }
-    let composites: Vec<&State> = diagram
-        .states
-        .iter()
-        .filter(|state| state.composite)
-        .collect();
-    let [composite] = composites.as_slice() else {
-        return None;
-    };
+) -> Option<AutonomousComposite<'a>> {
     if composite.parent.is_some()
         || composite.concurrent_separator.is_none()
         || composite.stereotype.is_some()
@@ -2381,23 +2400,20 @@ fn build_one_level_concurrent_composite<'a>(
         .collect();
     if children.is_empty()
         || children.iter().any(|state| {
-            state.composite
-                || !matches!(state.kind, StateKind::Normal)
+            matches!(state.kind, StateKind::EntryPoint | StateKind::ExitPoint)
                 || state.stereotype.is_some()
                 || state.fill.is_some()
                 || state.stroke.is_some()
                 || state.url.is_some()
-                || !state.descriptions.is_empty()
-        })
-        || diagram.states.iter().any(|state| {
-            state
-                .parent
-                .as_deref()
-                .is_some_and(|scope| !is_direct_concurrent_scope(&composite.id, scope))
-                || !matches!(state.kind, StateKind::Normal)
+                || (!state.composite && !state.descriptions.is_empty())
         })
     {
         return None;
+    }
+
+    let mut child_composites = Vec::new();
+    for state in children.iter().copied().filter(|state| state.composite) {
+        child_composites.push(build_autonomous_composite_node(diagram, state, arrow_font)?);
     }
 
     let mut region_scopes = vec![composite.id.clone()];
@@ -2408,7 +2424,6 @@ fn build_one_level_concurrent_composite<'a>(
         }
     }
     let mut region_transition_indices = vec![Vec::new(); region_scopes.len()];
-    let mut outer_transition_indices = Vec::new();
     for (index, transition) in diagram.transitions.iter().enumerate() {
         let from_scope = endpoint_concurrent_scope(diagram, &transition.from, &composite.id);
         let to_scope = endpoint_concurrent_scope(diagram, &transition.to, &composite.id);
@@ -2417,12 +2432,9 @@ fn build_one_level_concurrent_composite<'a>(
                 let region_index = region_scopes.iter().position(|scope| scope == from)?;
                 region_transition_indices[region_index].push(index);
             }
-            (None, None) => outer_transition_indices.push(index),
+            (None, None) => {}
             _ => return None,
         }
-    }
-    if region_transition_indices.iter().any(Vec::is_empty) || outer_transition_indices.is_empty() {
-        return None;
     }
 
     let mut regions = Vec::with_capacity(region_scopes.len());
@@ -2433,9 +2445,13 @@ fn build_one_level_concurrent_composite<'a>(
         let inner_sizes: Vec<(String, f64, f64, StateLayoutShape)> = inner_ids
             .iter()
             .map(|id| {
-                let state = diagram.states.iter().find(|state| state.id == *id);
-                let (width, height, shape) = layout_node_size(id, state, false);
-                (id.clone(), width, height, shape)
+                if let Some(child) = child_composites.iter().find(|child| child.state.id == *id) {
+                    (id.clone(), child.width, child.height, StateLayoutShape::Box)
+                } else {
+                    let state = diagram.states.iter().find(|state| state.id == *id);
+                    let (width, height, shape) = layout_node_size(id, state, false);
+                    (id.clone(), width, height, shape)
+                }
             })
             .collect();
         let layout = layout_autonomous_scope(
@@ -2489,14 +2505,79 @@ fn build_one_level_concurrent_composite<'a>(
     let height =
         inner_height + title_height + attribute_height + STATE_DIMENSION_PADDING + field_margin;
 
+    Some(AutonomousComposite {
+        state: composite,
+        regions,
+        children: child_composites,
+        separator,
+        inner_width,
+        inner_height,
+        attribute_height,
+        field_margin,
+        width,
+        height,
+    })
+}
+
+/// Build every root concurrent image and their shared outer SVEK layout.
+///
+/// Java provenance: `CucaDiagramSimplifierState.simplify` walks all autarkic
+/// groups deepest-first, and `GroupMakerState.getImage` wraps each region set
+/// in `ConcurrentStates`. The root graph therefore receives every simplified
+/// concurrent group as an independent image node, not only a sole group.
+fn build_one_level_concurrent_composites<'a>(
+    diagram: &'a StateDiagram,
+    arrow_font: &StateArrowFont,
+) -> Option<(Vec<AutonomousComposite<'a>>, AutonomousScopeLayout)> {
+    if !diagram.notes.is_empty()
+        || diagram.meta.title.is_some()
+        || !diagram.meta.skinparams.is_empty()
+    {
+        return None;
+    }
+    let root_composites = diagram
+        .states
+        .iter()
+        .filter(|state| state.composite && state.parent.is_none())
+        .collect::<Vec<_>>();
+    if root_composites.is_empty()
+        || root_composites
+            .iter()
+            .any(|state| state.concurrent_separator.is_none())
+    {
+        return None;
+    }
+    let composites = root_composites
+        .into_iter()
+        .map(|composite| build_one_level_concurrent_node(diagram, composite, arrow_font))
+        .collect::<Option<Vec<_>>>()?;
+    let outer_transition_indices = diagram
+        .transitions
+        .iter()
+        .enumerate()
+        .filter_map(|(index, transition)| {
+            (transition_parent_scope(diagram, transition) == Some(None)).then_some(index)
+        })
+        .collect::<Vec<_>>();
+    if outer_transition_indices.is_empty() {
+        return None;
+    }
     let outer_ids = collect_autonomous_scope_ids(diagram, &outer_transition_indices, |state| {
         state.parent.is_none()
     });
     let outer_sizes: Vec<(String, f64, f64, StateLayoutShape)> = outer_ids
         .iter()
         .map(|id| {
-            if id == &composite.id {
-                (id.clone(), width, height, StateLayoutShape::Box)
+            if let Some(composite) = composites
+                .iter()
+                .find(|composite| id == &composite.state.id)
+            {
+                (
+                    id.clone(),
+                    composite.width,
+                    composite.height,
+                    StateLayoutShape::Box,
+                )
             } else {
                 let state = diagram.states.iter().find(|state| state.id == *id);
                 let (node_width, node_height, shape) = layout_node_size(id, state, false);
@@ -2513,21 +2594,7 @@ fn build_one_level_concurrent_composite<'a>(
         true,
     )?;
 
-    Some((
-        AutonomousComposite {
-            state: composite,
-            regions,
-            children: Vec::new(),
-            separator,
-            inner_width,
-            inner_height,
-            attribute_height,
-            field_margin,
-            width,
-            height,
-        },
-        outer,
-    ))
+    Some((composites, outer))
 }
 
 fn autonomous_entity_id<'a>(entity_ids: &'a [(String, String)], id: &str) -> &'a str {
@@ -3166,10 +3233,8 @@ fn emit_autonomous_composite(
 fn render_autonomous_composite(diagram: &StateDiagram) -> Option<String> {
     let skin = StateSkin::from_diagram(diagram);
     let arrow_font = StateArrowFont::from_diagram(diagram);
-    let (composites, outer) = build_autonomous_composite(diagram, &arrow_font).or_else(|| {
-        build_one_level_concurrent_composite(diagram, &arrow_font)
-            .map(|(composite, outer)| (vec![composite], outer))
-    })?;
+    let (composites, outer) = build_autonomous_composite(diagram, &arrow_font)
+        .or_else(|| build_one_level_concurrent_composites(diagram, &arrow_font))?;
     let mut all_ids = outer.ids.clone();
     for composite in &composites {
         collect_autonomous_composite_ids(composite, &mut all_ids);
@@ -8407,6 +8472,84 @@ mod tests {
             "QuartzHub.QuartzD",
         ] {
             assert!(svg.contains(&format!(r#"data-qualified-name="{qualified_name}""#)));
+        }
+    }
+
+    #[test]
+    fn renamed_five_root_concurrent_chain_consumes_hidden_region_uids() {
+        let input = concat!(
+            "@startuml\n",
+            "state CopperLane {\n",
+            "  [*] --> CopperIdle\n",
+            "  CopperIdle --> [*]\n",
+            "  --\n",
+            "  [*] --> CopperRun\n",
+            "  CopperRun --> [*]\n",
+            "}\n",
+            "state IndigoLane {\n",
+            "  [*] --> IndigoIdle\n",
+            "  IndigoIdle --> [*]\n",
+            "  --\n",
+            "  [*] --> IndigoRun\n",
+            "  IndigoRun --> [*]\n",
+            "}\n",
+            "state JadeLane {\n",
+            "  [*] --> JadeIdle\n",
+            "  JadeIdle --> [*]\n",
+            "  --\n",
+            "  [*] --> JadeRun\n",
+            "  JadeRun --> [*]\n",
+            "}\n",
+            "state SilverLane {\n",
+            "  [*] --> SilverIdle\n",
+            "  SilverIdle --> [*]\n",
+            "  --\n",
+            "  [*] --> SilverRun\n",
+            "  SilverRun --> [*]\n",
+            "}\n",
+            "state VioletLane {\n",
+            "  [*] --> VioletIdle\n",
+            "  VioletIdle --> [*]\n",
+            "  --\n",
+            "  [*] --> VioletRun\n",
+            "  VioletRun --> [*]\n",
+            "}\n",
+            "[*] --> CopperLane\n",
+            "CopperLane --> IndigoLane\n",
+            "IndigoLane --> JadeLane\n",
+            "JadeLane --> SilverLane\n",
+            "SilverLane --> VioletLane\n",
+            "VioletLane --> [*]\n",
+            "@enduml\n",
+        );
+        let parsed = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::State(diagram) = &parsed else {
+            panic!("expected state diagram");
+        };
+        let arrow_font = StateArrowFont::from_diagram(diagram);
+        let (roots, _) = build_one_level_concurrent_composites(diagram, &arrow_font).unwrap();
+        assert_eq!(
+            roots
+                .iter()
+                .map(|root| root.state.id.as_str())
+                .collect::<Vec<_>>(),
+            [
+                "CopperLane",
+                "IndigoLane",
+                "JadeLane",
+                "SilverLane",
+                "VioletLane",
+            ]
+        );
+
+        let svg = crate::render_svg(&parsed);
+        for (from, to) in [
+            ("ent0002", "ent0004"),
+            ("ent0004", "ent0006"),
+            ("ent0006", "ent0008"),
+            ("ent0008", "ent0010"),
+        ] {
+            assert!(svg.contains(&format!(r#"data-entity-1="{from}" data-entity-2="{to}""#)));
         }
     }
 
