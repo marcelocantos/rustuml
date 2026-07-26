@@ -29694,8 +29694,10 @@ fn typed_ftile_node<'a>(
                 typed_ftile_preserve_nested_fork_if_gap(&mut else_scene);
                 typed_ftile_translate_terminal_branch_from_owner(&mut then_scene, lane);
                 typed_ftile_translate_terminal_branch_from_owner(&mut else_scene, lane);
-                typed_ftile_preserve_translated_terminal_owner_gap(&mut then_scene);
-                typed_ftile_preserve_translated_terminal_owner_gap(&mut else_scene);
+                // `ConnectionCross.draw` supplies lane translations to
+                // `ConnectionVerticalDown.drawTranslate`, which changes only
+                // the Snake midpoint. `FtileIfWithDiamonds` keeps both branch
+                // child placements unchanged.
                 // A branch-local same-lane terminator has no downstream ON_Y
                 // slot to collapse the natural 35px assembly reserve.
                 typed_ftile_preserve_terminal_branch_gap(&mut then_scene);
@@ -38610,6 +38612,59 @@ mod tests {
         );
 
         assert_eq!(branch_gaps(source), vec![20.0, 10.0]);
+    }
+
+    #[test]
+    fn cross_lane_terminal_if_keeps_branch_child_assembly_positions() {
+        let source = concat!(
+            "@startuml\n",
+            "|Fresh Gate|\n",
+            "start\n",
+            ":Inspect renamed packet;\n",
+            "if (Fresh packet valid?) then (yes)\n",
+            "  :Accept renamed packet;\n",
+            "else (no)\n",
+            "  :Reject renamed packet;\n",
+            "  |Fresh Requester|\n",
+            "  :Revise renamed packet;\n",
+            "  stop\n",
+            "endif\n",
+            "|Fresh Fulfillment|\n",
+            ":Ship renamed packet;\n",
+            "stop\n",
+            "@enduml",
+        );
+        let rustuml_parser::diagram::Diagram::Activity(diagram) =
+            rustuml_parser::parse::parse(source).unwrap()
+        else {
+            panic!("expected activity diagram");
+        };
+        let palette = Palette::default_puml();
+        let tree = build_tree(&diagram.steps, &palette);
+        let mut lane = 0;
+        let scene = typed_ftile_sequence(&tree, &mut lane).unwrap();
+        let TypedFtileKind::Sequence { children } = &scene.kind else {
+            panic!("expected root sequence");
+        };
+        let TypedFtileKind::If { else_scene, .. } = &children
+            .iter()
+            .find(|child| matches!(child.scene.kind, TypedFtileKind::If { .. }))
+            .expect("conditional")
+            .scene
+            .kind
+        else {
+            unreachable!();
+        };
+        let TypedFtileKind::Sequence { children: branch } = &else_scene.scene.kind else {
+            panic!("expected terminal branch sequence");
+        };
+        assert_eq!(branch.len(), 3);
+        for pair in branch.windows(2) {
+            assert_eq!(
+                pair[1].y,
+                pair[0].y + pair[0].scene.geometry.height + ftile::ASSEMBLY_RENDERED_SEPARATION
+            );
+        }
     }
 
     #[test]
