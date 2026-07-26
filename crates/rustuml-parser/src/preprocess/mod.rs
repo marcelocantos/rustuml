@@ -521,7 +521,13 @@ impl PreprocessContext {
     }
 
     fn push_content_line(&self, output: &mut Vec<String>, line: String) {
-        if self.mark_source_lines && !line.is_empty() {
+        // Macro expanders may already attribute a generated statement to the
+        // defining stdlib procedure body. Preserve that explicit marker
+        // instead of nesting the caller's source line around it; downstream
+        // subtype detection and parsers consume exactly one marker layer.
+        if split_source_line_marker(&line).is_some() {
+            output.push(line);
+        } else if self.mark_source_lines && !line.is_empty() {
             output.push(source_line_marker(
                 self.source_line_override
                     .unwrap_or_else(|| self.current_diagram_source_line()),
@@ -3681,6 +3687,37 @@ mod tests {
         let input = "@startuml\n!theme sketchy\nstart\n@enduml";
         let lines = pp(input);
         assert!(lines.contains(&"skinparam __optionHandwritten true".to_string()));
+    }
+
+    #[test]
+    fn archimate_include_expands_renamed_element_and_relation_macros() {
+        let output = preprocess(
+            "@startuml\n\
+             !include <archimate/Archimate>\n\
+             Business_Process(novel_process_41, \"Fresh Process\")\n\
+             Technology_Node(novel_node_43, \"Fresh Node\")\n\
+             Rel_Serving(novel_node_43, novel_process_41, \"supports\")\n\
+             @enduml",
+        );
+
+        assert!(
+            output.iter().any(|line| line
+                == "archimate_element Business Process novel_process_41 \"Fresh Process\""),
+            "{output:?}"
+        );
+        assert!(
+            output.iter().any(
+                |line| line == "archimate_element Technology Node novel_node_43 \"Fresh Node\""
+            ),
+            "{output:?}"
+        );
+        assert!(
+            output
+                .iter()
+                .any(|line| line
+                    == "archimate_rel Serving novel_node_43 novel_process_41 \"supports\""),
+            "{output:?}"
+        );
     }
 
     #[test]
