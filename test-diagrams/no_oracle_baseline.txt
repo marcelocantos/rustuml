@@ -5,7 +5,7 @@
 activity 1287 1299
 archimate 0 48
 chart 25 25
-class 1827 1971
+class 1832 1971
 combo 205 327
 component 613 663
 creole 417 639

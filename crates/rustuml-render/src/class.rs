@@ -9168,65 +9168,7 @@ fn render_attached_note(
         NOTE_BORDER,
     )
     .unwrap();
-    let mut line_top = y + NOTE_PAD_Y;
-    for line in &note.lines {
-        let (content, text_x) = if let Some((order, content)) = parse_note_bullet(line) {
-            let text_height = text_render::label_height(content, NOTE_FONT_SIZE);
-            if order == 0 {
-                let ellipse_x = x + NOTE_PAD_X + NOTE_BULLET_ELLIPSE_X;
-                let ellipse_y = line_top + text_height - NOTE_BULLET_ELLIPSE_SIZE
-                    + NOTE_BULLET_START_ALTITUDE
-                    + NOTE_BULLET_ELLIPSE_SIZE / 2.0;
-                write!(
-                    svg,
-                    r##"<ellipse cx="{}" cy="{}" fill="#000000" rx="{}" ry="{}"/>"##,
-                    f(ellipse_x + NOTE_BULLET_ELLIPSE_SIZE / 2.0),
-                    f(ellipse_y),
-                    f(NOTE_BULLET_ELLIPSE_SIZE / 2.0),
-                    f(NOTE_BULLET_ELLIPSE_SIZE / 2.0),
-                )
-                .unwrap();
-                (content, x + NOTE_PAD_X + NOTE_BULLET_HEADER_WIDTH)
-            } else {
-                let order_width = NOTE_NESTED_BULLET_INDENT * order as f64;
-                let rect_x = x + NOTE_PAD_X + NOTE_NESTED_BULLET_X + order_width;
-                let rect_y = line_top + text_height - NOTE_NESTED_BULLET_DIM_HEIGHT
-                    + NOTE_NESTED_BULLET_START_ALTITUDE;
-                write!(
-                    svg,
-                    r##"<rect fill="#000000" height="{}" width="{}" x="{}" y="{}"/>"##,
-                    f(NOTE_NESTED_BULLET_SIZE),
-                    f(NOTE_NESTED_BULLET_SIZE),
-                    f(rect_x),
-                    f(rect_y),
-                )
-                .unwrap();
-                (
-                    content,
-                    x + NOTE_PAD_X + NOTE_NESTED_BULLET_BASE_WIDTH + order_width,
-                )
-            }
-        } else {
-            (line.as_str(), x + NOTE_PAD_X)
-        };
-        let baseline = line_top + text_render::label_ascent(content, NOTE_FONT_SIZE);
-        text_render::emit_text(
-            svg,
-            content,
-            &TextBase {
-                x: text_x,
-                y: baseline,
-                font_size: NOTE_FONT_SIZE as u32,
-                font_family: "sans-serif",
-                fill: "#000000",
-                bold: false,
-                italic: false,
-                underline: false,
-                skip_underline: false,
-            },
-        );
-        line_top += text_render::label_height(content, NOTE_FONT_SIZE);
-    }
+    emit_note_body(svg, note, x, y, width);
     svg.push_str("</g>");
 }
 
@@ -9580,36 +9522,291 @@ fn render_meta_only(diagram: &ClassDiagram) -> String {
     svg.finalize_plantuml()
 }
 
-fn note_box_dims(note: &Note) -> (f64, f64) {
-    let max_width = note
-        .lines
-        .iter()
-        .map(|line| {
-            if let Some((order, content)) = parse_note_bullet(line) {
-                let header_width = if order == 0 {
-                    NOTE_BULLET_HEADER_WIDTH
-                } else {
-                    NOTE_NESTED_BULLET_BASE_WIDTH + NOTE_NESTED_BULLET_INDENT * order as f64
-                };
-                header_width + text_render::measure(content, NOTE_FONT_SIZE, false)
-            } else {
-                text_render::measure(line, NOTE_FONT_SIZE, false)
+#[derive(Clone, Copy)]
+struct NoteBodySeparator<'a> {
+    style: char,
+    title: Option<&'a str>,
+}
+
+struct NoteBodyBlock<'a> {
+    separator: Option<NoteBodySeparator<'a>>,
+    lines: Vec<&'a str>,
+}
+
+fn parse_note_body_separator(line: &str) -> Option<NoteBodySeparator<'_>> {
+    let style = if line.starts_with("--") && line.ends_with("--") {
+        '-'
+    } else if line.starts_with("==") && line.ends_with("==") {
+        '='
+    } else if line != "..." && line.starts_with("..") && line.ends_with("..") {
+        '.'
+    } else if line.starts_with("__") && line.ends_with("__") {
+        '_'
+    } else {
+        return None;
+    };
+    let title = (line.len() > 4).then(|| line[2..line.len() - 2].trim());
+    Some(NoteBodySeparator { style, title })
+}
+
+fn note_body_blocks(note: &Note) -> Vec<NoteBodyBlock<'_>> {
+    let mut blocks = vec![NoteBodyBlock {
+        separator: None,
+        lines: Vec::new(),
+    }];
+    for line in &note.lines {
+        if let Some(separator) = parse_note_body_separator(line) {
+            blocks.push(NoteBodyBlock {
+                separator: Some(separator),
+                lines: Vec::new(),
+            });
+        } else {
+            blocks.last_mut().unwrap().lines.push(line);
+        }
+    }
+    blocks
+}
+
+fn note_line_dimensions(line: &str) -> (f64, f64) {
+    let (header_width, content) = if let Some((order, content)) = parse_note_bullet(line) {
+        let header_width = if order == 0 {
+            NOTE_BULLET_HEADER_WIDTH
+        } else {
+            NOTE_NESTED_BULLET_BASE_WIDTH + NOTE_NESTED_BULLET_INDENT * order as f64
+        };
+        (header_width, content)
+    } else {
+        (0.0, line)
+    };
+    (
+        header_width + text_render::measure(content, NOTE_FONT_SIZE, false),
+        text_render::label_height(content, NOTE_FONT_SIZE),
+    )
+}
+
+fn note_body_dimensions(note: &Note) -> (f64, f64) {
+    let mut width = 0.0_f64;
+    let mut height = 0.0_f64;
+    for block in note_body_blocks(note) {
+        let body_width = block
+            .lines
+            .iter()
+            .map(|line| note_line_dimensions(line).0)
+            .fold(0.0_f64, f64::max);
+        let body_height = block
+            .lines
+            .iter()
+            .map(|line| note_line_dimensions(line).1)
+            .sum::<f64>();
+        let (block_width, block_height) = match block.separator {
+            None => (body_width, body_height),
+            Some(NoteBodySeparator { title: None, .. }) => (body_width, body_height + 8.0),
+            Some(NoteBodySeparator {
+                title: Some(title), ..
+            }) => {
+                let title_width = text_render::measure(title, NOTE_FONT_SIZE, false);
+                let title_height = text_render::label_height(title, NOTE_FONT_SIZE);
+                let half_title = title_height / 2.0;
+                (
+                    (body_width + 6.0).max(title_width + 8.0),
+                    half_title + (body_height + half_title + 4.0).max(title_height),
+                )
             }
-        })
-        .fold(0.0_f64, f64::max)
-        + NOTE_PAD_X
-        + NOTE_PAD_RIGHT;
-    let text_height: f64 = note
-        .lines
-        .iter()
-        .map(|line| {
-            let content = parse_note_bullet(line)
-                .map(|(_, content)| content)
-                .unwrap_or(line);
-            text_render::label_height(content, NOTE_FONT_SIZE)
-        })
-        .sum();
-    (max_width, text_height + NOTE_PAD_Y * 2.0)
+        };
+        width = width.max(block_width);
+        height += block_height;
+    }
+    (width, height)
+}
+
+fn note_box_dims(note: &Note) -> (f64, f64) {
+    let (body_width, body_height) = note_body_dimensions(note);
+    (
+        body_width + NOTE_PAD_X + NOTE_PAD_RIGHT,
+        body_height + NOTE_PAD_Y * 2.0,
+    )
+}
+
+fn emit_note_body(svg: &mut String, note: &Note, x: f64, y: f64, width: f64) {
+    let mut block_top = y + NOTE_PAD_Y;
+    for block in note_body_blocks(note) {
+        let body_height = block
+            .lines
+            .iter()
+            .map(|line| note_line_dimensions(line).1)
+            .sum::<f64>();
+        let mut content_top = block_top;
+        let mut separator_height = 0.0;
+
+        match block.separator {
+            None => {}
+            Some(NoteBodySeparator { style, title: None }) => {
+                emit_note_separator(svg, x, width, block_top, style, None);
+                content_top += 4.0;
+                separator_height = 8.0;
+            }
+            Some(NoteBodySeparator {
+                style,
+                title: Some(title),
+            }) => {
+                let title_height = text_render::label_height(title, NOTE_FONT_SIZE);
+                let half_title = title_height / 2.0;
+                content_top += title_height;
+                let inner_height = (body_height + half_title + 4.0).max(title_height);
+                separator_height = half_title + inner_height - body_height;
+
+                let mut line_top = content_top;
+                for line in &block.lines {
+                    line_top += emit_note_line(svg, line, x, line_top);
+                }
+                emit_note_separator(svg, x, width, block_top + half_title, style, Some(title));
+                block_top += body_height + separator_height;
+                continue;
+            }
+        }
+
+        let mut line_top = content_top;
+        for line in &block.lines {
+            line_top += emit_note_line(svg, line, x, line_top);
+        }
+        block_top += body_height + separator_height;
+    }
+}
+
+fn emit_note_separator(
+    svg: &mut String,
+    x: f64,
+    width: f64,
+    line_y: f64,
+    style: char,
+    title: Option<&str>,
+) {
+    let f = crate::plantuml_metrics::fmt_coord;
+    let stroke_style = match style {
+        '.' => "stroke:#181818;stroke-width:1;stroke-dasharray:1,2;",
+        '_' => "stroke:#181818;stroke-width:0.5;",
+        '-' | '=' => "stroke:#181818;stroke-width:1;",
+        _ => unreachable!(),
+    };
+    let line_count = usize::from(style == '=') + 1;
+    let start_x = x + 1.0;
+    let end_x = x + width - 1.0;
+    let (first_end, second_start) = if let Some(title) = title {
+        let title_width = text_render::measure(title, NOTE_FONT_SIZE, false);
+        let half_line = (end_x - start_x - title_width) / 2.0;
+        (start_x + half_line, end_x - half_line)
+    } else {
+        (end_x, end_x)
+    };
+
+    for line_index in 0..line_count {
+        let y = line_y + line_index as f64 * 2.0;
+        write!(
+            svg,
+            r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+            stroke_style,
+            f(start_x),
+            f(first_end),
+            f(y),
+            f(y),
+        )
+        .unwrap();
+    }
+    let Some(title) = title else {
+        return;
+    };
+
+    let title_height = text_render::label_height(title, NOTE_FONT_SIZE);
+    let baseline =
+        line_y - title_height / 2.0 - 0.5 + text_render::label_ascent(title, NOTE_FONT_SIZE);
+    text_render::emit_text(
+        svg,
+        title,
+        &TextBase {
+            x: first_end,
+            y: baseline,
+            font_size: NOTE_FONT_SIZE as u32,
+            font_family: "sans-serif",
+            fill: "#000000",
+            bold: false,
+            italic: false,
+            underline: false,
+            skip_underline: false,
+        },
+    );
+    for line_index in 0..line_count {
+        let y = line_y + line_index as f64 * 2.0;
+        write!(
+            svg,
+            r#"<line style="{}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+            stroke_style,
+            f(second_start),
+            f(end_x),
+            f(y),
+            f(y),
+        )
+        .unwrap();
+    }
+}
+
+fn emit_note_line(svg: &mut String, line: &str, x: f64, line_top: f64) -> f64 {
+    let f = crate::plantuml_metrics::fmt_coord;
+    let (content, text_x) = if let Some((order, content)) = parse_note_bullet(line) {
+        let text_height = text_render::label_height(content, NOTE_FONT_SIZE);
+        if order == 0 {
+            let ellipse_x = x + NOTE_PAD_X + NOTE_BULLET_ELLIPSE_X;
+            let ellipse_y = line_top + text_height - NOTE_BULLET_ELLIPSE_SIZE
+                + NOTE_BULLET_START_ALTITUDE
+                + NOTE_BULLET_ELLIPSE_SIZE / 2.0;
+            write!(
+                svg,
+                r##"<ellipse cx="{}" cy="{}" fill="#000000" rx="{}" ry="{}"/>"##,
+                f(ellipse_x + NOTE_BULLET_ELLIPSE_SIZE / 2.0),
+                f(ellipse_y),
+                f(NOTE_BULLET_ELLIPSE_SIZE / 2.0),
+                f(NOTE_BULLET_ELLIPSE_SIZE / 2.0),
+            )
+            .unwrap();
+            (content, x + NOTE_PAD_X + NOTE_BULLET_HEADER_WIDTH)
+        } else {
+            let order_width = NOTE_NESTED_BULLET_INDENT * order as f64;
+            let rect_x = x + NOTE_PAD_X + NOTE_NESTED_BULLET_X + order_width;
+            let rect_y = line_top + text_height - NOTE_NESTED_BULLET_DIM_HEIGHT
+                + NOTE_NESTED_BULLET_START_ALTITUDE;
+            write!(
+                svg,
+                r##"<rect fill="#000000" height="{}" width="{}" x="{}" y="{}"/>"##,
+                f(NOTE_NESTED_BULLET_SIZE),
+                f(NOTE_NESTED_BULLET_SIZE),
+                f(rect_x),
+                f(rect_y),
+            )
+            .unwrap();
+            (
+                content,
+                x + NOTE_PAD_X + NOTE_NESTED_BULLET_BASE_WIDTH + order_width,
+            )
+        }
+    } else {
+        (line, x + NOTE_PAD_X)
+    };
+    let baseline = line_top + text_render::label_ascent(content, NOTE_FONT_SIZE);
+    text_render::emit_text(
+        svg,
+        content,
+        &TextBase {
+            x: text_x,
+            y: baseline,
+            font_size: NOTE_FONT_SIZE as u32,
+            font_family: "sans-serif",
+            fill: "#000000",
+            bold: false,
+            italic: false,
+            underline: false,
+            skip_underline: false,
+        },
+    );
+    text_render::label_height(content, NOTE_FONT_SIZE)
 }
 
 /// Match `CreoleStripeSimpleParser.ASTERISK_PREFIXED_LINE_PATTERN` without
@@ -9660,22 +9857,9 @@ fn render_note_box(svg: &mut SvgBuilder, note: &Note, x: f64, y: f64, w: f64, h:
     ];
     svg.polygon(fold_pts, NOTE_FILL, NOTE_BORDER);
 
-    let mut ty = y
-        + NOTE_PAD_Y
-        + note
-            .lines
-            .first()
-            .map(|line| text_render::label_ascent(line, NOTE_FONT_SIZE))
-            .unwrap_or(0.0);
-    for line in &note.lines {
-        let trimmed = line.trim();
-        if trimmed.is_empty() {
-            ty += text_render::label_height(line, NOTE_FONT_SIZE);
-            continue;
-        }
-        svg.text(x + NOTE_PAD_X, ty, trimmed, "start", NOTE_FONT_SIZE);
-        ty += text_render::label_height(line, NOTE_FONT_SIZE);
-    }
+    let mut body = String::new();
+    emit_note_body(&mut body, note, x, y, w);
+    svg.raw_inline(&body);
 }
 
 // ---------------------------------------------------------------------------
@@ -9882,6 +10066,40 @@ mod tests {
             "{svg}"
         );
         assert!(svg.contains(">Final renamed panel</text>"), "{svg}");
+    }
+
+    #[test]
+    fn renamed_attached_note_generates_mixed_body_separator_geometry() {
+        let input = "@startuml\n\
+                     class FreshLedgerNoteTarget2843\n\
+                     note right of FreshLedgerNoteTarget2843\n\
+                       opening fresh line\n\
+                       ----\n\
+                       short body\n\
+                       == Renamed approval lane 2851 ==\n\
+                       first uneven detail\n\
+                       second uneven detail\n\
+                       ....\n\
+                       after dotted lane\n\
+                       __ Final renamed lane 2879 __\n\
+                       closing fresh line\n\
+                     end note\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Java `BodyEnhanced2.getArea` splits the Display into decorated
+        // blocks; `TextBlockLineBefore` and `UHorizontalLine` then own both
+        // block dimensions and rule/title drawing.
+        assert!(svg.contains(r#"viewBox="0 0 496 177""#), "{svg}");
+        assert_eq!(svg.matches("stroke-dasharray:1,2;").count(), 1, "{svg}");
+        assert!(
+            svg.contains(">Renamed approval lane 2851</text>")
+                && svg.contains(">Final renamed lane 2879</text>"),
+            "{svg}"
+        );
+        assert!(!svg.contains(">----</text>"), "{svg}");
+        assert!(!svg.contains(">....</text>"), "{svg}");
     }
 
     #[test]
