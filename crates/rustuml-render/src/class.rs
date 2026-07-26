@@ -8674,7 +8674,7 @@ fn resolve_endpoint_label_collisions(
     }
 }
 
-fn move_label_away_from_node(
+pub(crate) fn move_label_away_from_node(
     label: &mut rustuml_layout::graph::EdgeLabelPosition,
     node: &NodePosition,
 ) {

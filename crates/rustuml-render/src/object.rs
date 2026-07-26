@@ -13,7 +13,7 @@ use std::fmt::Write;
 
 use rustuml_layout::graph::{
     ClusterPosition, ClusterTitleSize, Direction, EdgeLabelPosition, EdgeLabelSize, EdgePath,
-    LayoutGraph,
+    LayoutGraph, NodePosition,
 };
 use rustuml_parser::diagram::object::*;
 
@@ -34,6 +34,9 @@ const OBJECT_CANVAS_PAD: i64 = 13;
 /// Linked object diagrams in PlantUML's SVEK path keep an extra two pixels of
 /// right/bottom slack beyond the entity-only envelope.
 const OBJECT_LINK_CANVAS_PAD: i64 = 15;
+/// When `SvekResult.calculateDimension` moves an endpoint label outside the
+/// entity envelope, its integer SVG width retains one more pixel of right pad.
+const OBJECT_EXPANDED_LABEL_CANVAS_PAD: i64 = 16;
 /// Header separator y relative to rect top (no stereotype).
 const HEADER_SEP_Y: f64 = 20.4883;
 /// Stereotype baseline y relative to rect top.
@@ -551,6 +554,11 @@ fn layout_object(diagram: &ObjectDiagram, dims: &[ObjDim]) -> ObjectLayout {
     }
     match layout.layout_full(std::time::Duration::from_secs(5)) {
         Some(mut result) => {
+            resolve_object_endpoint_label_collisions(
+                diagram,
+                &result.node_positions,
+                &mut result.edge_paths,
+            );
             let (origin_x, origin_y) = if !result.cluster_positions.is_empty() {
                 // `DotStringFactory.solve` normalizes the complete SVEK
                 // cluster envelope to the six-pixel diagram margin. Native
@@ -567,7 +575,14 @@ fn layout_object(diagram: &ObjectDiagram, dims: &[ObjDim]) -> ObjectLayout {
                     .fold(f64::INFINITY, f64::min);
                 (6.0 - min_x, 6.0 - min_y)
             } else if layout_note_nodes.is_empty() {
-                (MARGIN, MARGIN)
+                (
+                    object_svek_painted_x_origin(
+                        &result.node_positions,
+                        &result.edge_paths,
+                        diagram.objects.len(),
+                    ),
+                    MARGIN,
+                )
             } else {
                 normalize_attached_note_svek_envelope(
                     &mut result.node_positions,
@@ -722,6 +737,68 @@ fn apply_map_html_port_routes(
             ),
             (x, contact_y),
         ];
+    }
+}
+
+/// Ports `SvekEdge.manageCollision` for object endpoint cardinalities.
+fn resolve_object_endpoint_label_collisions(
+    diagram: &ObjectDiagram,
+    nodes: &[NodePosition],
+    edge_paths: &mut [EdgePath],
+) {
+    let mut cursor = 0;
+    for link in &diagram.links {
+        let from = link_base(&link.from);
+        let to = link_base(&link.to);
+        let Some(relative_idx) = edge_paths[cursor..]
+            .iter()
+            .position(|edge| edge.from == from && edge.to == to)
+        else {
+            continue;
+        };
+        let edge_idx = cursor + relative_idx;
+        cursor = edge_idx + 1;
+        let edge = &mut edge_paths[edge_idx];
+        for (position, label) in [
+            (&mut edge.tail_label, link.from_multiplicity.as_deref()),
+            (&mut edge.head_label, link.to_multiplicity.as_deref()),
+        ] {
+            let (Some(position), Some(label)) = (position.as_mut(), label) else {
+                continue;
+            };
+            position.width = text_render::measure(label, LINK_LABEL_FONT_SIZE, false);
+            position.height = text_render::label_height(label, LINK_LABEL_FONT_SIZE);
+            for node in nodes.iter().take(diagram.objects.len()) {
+                crate::class::move_label_away_from_node(position, node);
+            }
+        }
+    }
+}
+
+/// `SvekResult.calculateDimension` asks `LimitFinder` for the painted
+/// envelope after `SvekEdge.manageCollision`, then translates its minimum to
+/// x=6. Object rectangles paint one pixel beyond their Graphviz node box.
+fn object_svek_painted_x_origin(
+    nodes: &[NodePosition],
+    edge_paths: &[EdgePath],
+    object_count: usize,
+) -> f64 {
+    let min_x = nodes
+        .iter()
+        .take(object_count)
+        .map(|node| node.x - 1.0)
+        .chain(
+            edge_paths
+                .iter()
+                .flat_map(|edge| [edge.label, edge.tail_label, edge.head_label])
+                .flatten()
+                .map(|label| label.x),
+        )
+        .fold(f64::INFINITY, f64::min);
+    if min_x.is_finite() {
+        6.0 - min_x
+    } else {
+        MARGIN
     }
 }
 
@@ -1118,7 +1195,18 @@ fn render_plantuml_svg(
                 }
             }
         }
-        let canvas_pad = if has_rendered_layout_dependency(diagram, &layout.edge_paths)
+        let node_painted_min_x = positions
+            .iter()
+            .map(|(x, _)| x - 1.0)
+            .fold(f64::INFINITY, f64::min);
+        let endpoint_label_min_x = layout
+            .edge_paths
+            .iter()
+            .flat_map(|edge| [edge.tail_label, edge.head_label])
+            .flatten()
+            .map(|label| label.x)
+            .fold(f64::INFINITY, f64::min);
+        let base_canvas_pad = if has_rendered_layout_dependency(diagram, &layout.edge_paths)
             || layout.note_positions.iter().any(Option::is_some)
             || !layout.cluster_positions.is_empty()
         {
@@ -1126,7 +1214,12 @@ fn render_plantuml_svg(
         } else {
             OBJECT_CANVAS_PAD
         };
-        (max_x as i64 + canvas_pad, max_y as i64 + canvas_pad)
+        let canvas_pad_x = if endpoint_label_min_x < node_painted_min_x {
+            OBJECT_EXPANDED_LABEL_CANVAS_PAD
+        } else {
+            base_canvas_pad
+        };
+        (max_x as i64 + canvas_pad_x, max_y as i64 + base_canvas_pad)
     };
 
     let mut svg = String::new();
@@ -3050,6 +3143,34 @@ audit_61 --> sink_73
         assert!(svg.contains(r#"height="699px""#));
         assert!(svg.contains(r#"d="M83.5,91.81 C83.5,110.87 83.5,127.2 83.5,146.25""#));
         assert!(svg.contains(r#"d="M83.5,538.81 C83.5,557.87 83.5,574.2 83.5,593.25""#));
+    }
+
+    #[test]
+    fn renamed_cardinalities_clear_svek_endpoint_collision_boxes() {
+        let input = r#"object RenamedParent {
+  code = 17
+}
+object RenamedChild {
+  state = ready
+}
+object RenamedPeer {
+  owner = team
+}
+RenamedParent "one" --> "zero to many" RenamedChild : owns
+RenamedChild "many" --> "exactly one" RenamedPeer : hands off"#;
+        let lines = input.lines().map(str::to_owned).collect::<Vec<_>>();
+        let diagram = rustuml_parser::parse::object::parse_object(&lines).unwrap();
+        let svg = render(&diagram, &Theme::default());
+
+        assert!(svg.contains(r#"width="176px""#));
+        assert!(svg.contains(r#"height="310px""#));
+        // Fresh Java PlantUML reference. `SvekEdge.manageCollision` expands
+        // each entity by eight pixels before moving these four differently
+        // sized cardinality boxes away from the renamed chain.
+        assert!(svg.contains(r#"textLength="83.2495" x="6""#));
+        assert!(svg.contains(">one</text>"));
+        assert!(svg.contains(">many</text>"));
+        assert!(svg.contains(">exactly one</text>"));
     }
 
     #[test]
