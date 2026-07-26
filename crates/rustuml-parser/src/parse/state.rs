@@ -365,7 +365,7 @@ impl StateParser {
                 // The colour token accepts plain (`#color`), stroke
                 // (`##color`), styled (`##[dashed]color`) and gradient
                 // (`#c1/c2`, `#c1-c2`, `#c1\c2`) forms.
-                r#"^state\s+(?:"([^"]+)"\s+as\s+)?(\w+)(?:\s*<<(\w+\*?)>>)?(?:\s*(##?(?:\[[^\]]*\])?\w+(?:[/\\-]\w+)?))*(?:\s*\{)?$"#,
+                r#"^state\s+(?:"([^"]+)"\s+as\s+)?(\w+)(?:\s*<<(\w+\*?)>>)?(?:\s*(##?(?:\[[^\]]*\])?\w+(?:[/\\|-]\w+)?))*(?:\s*\{)?$"#,
             )
             .unwrap()
         });
@@ -373,7 +373,7 @@ impl StateParser {
         // the state id so the renderer can recover fill / stroke styling
         // without an oracle.
         static COLOR_RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"(##?)(?:\[([^\]]*)\])?(\w+)").unwrap());
+            LazyLock::new(|| Regex::new(r"(##?)(?:\[([^\]]*)\])?(\w+(?:[/\\|-]\w+)?)").unwrap());
         // Also handles: state ID : description
         static RE_DESC: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(r#"^state\s+(?:"([^"]+)"\s+as\s+)?(\w+)\s*:\s*(.+)$"#).unwrap()
@@ -731,6 +731,18 @@ mod tests {
         let d = parse("state A <<important>>");
         assert_eq!(d.states[0].kind, StateKind::Normal);
         assert_eq!(d.states[0].stereotype.as_deref(), Some("important"));
+    }
+
+    #[test]
+    fn state_gradient_fill_preserves_colors_and_policy() {
+        let d = parse(
+            "state CopperRelay #cyan/pink\n\
+             state AmberRelay #red|blue\n\
+             state VioletRelay #green-yellow",
+        );
+        assert_eq!(d.states[0].fill.as_deref(), Some("cyan/pink"));
+        assert_eq!(d.states[1].fill.as_deref(), Some("red|blue"));
+        assert_eq!(d.states[2].fill.as_deref(), Some("green-yellow"));
     }
 
     #[test]

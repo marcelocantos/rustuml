@@ -19,6 +19,87 @@ use crate::layout_oracle::{
 use crate::style::Theme;
 use crate::text_render::{self, TextBase};
 
+#[derive(Debug)]
+struct StateGradient {
+    color1: String,
+    color2: String,
+    policy: char,
+    id: String,
+}
+
+fn split_state_gradient(value: &str) -> Option<(&str, &str, char)> {
+    for policy in ['-', '\\', '|', '/'] {
+        if let Some((color1, color2)) = value.split_once(policy) {
+            let color1 = color1.trim();
+            let color2 = color2.trim();
+            if !color1.is_empty() && !color2.is_empty() {
+                return Some((color1, color2, policy));
+            }
+        }
+    }
+    None
+}
+
+fn state_gradients(diagram: &StateDiagram) -> Vec<StateGradient> {
+    let source = diagram.meta.source.as_deref().unwrap_or("");
+    let mut gradients: Vec<StateGradient> = Vec::new();
+    for state in &diagram.states {
+        let Some((raw1, raw2, policy)) = state.fill.as_deref().and_then(split_state_gradient)
+        else {
+            continue;
+        };
+        let color1 = crate::sequence::resolve_color(raw1);
+        let color2 = crate::sequence::resolve_color(raw2);
+        if gradients.iter().any(|gradient| {
+            gradient.color1 == color1 && gradient.color2 == color2 && gradient.policy == policy
+        }) {
+            continue;
+        }
+        let id = crate::filter_registry::gradient_id_for(source, gradients.len());
+        gradients.push(StateGradient {
+            color1,
+            color2,
+            policy,
+            id,
+        });
+    }
+    gradients
+}
+
+fn state_gradient_fill(value: &str, gradients: &[StateGradient]) -> String {
+    let Some((raw1, raw2, policy)) = split_state_gradient(value) else {
+        return crate::sequence::resolve_color(value);
+    };
+    let color1 = crate::sequence::resolve_color(raw1);
+    let color2 = crate::sequence::resolve_color(raw2);
+    gradients
+        .iter()
+        .find(|gradient| {
+            gradient.color1 == color1 && gradient.color2 == color2 && gradient.policy == policy
+        })
+        .map_or(color1, |gradient| format!("url(#{})", gradient.id))
+}
+
+fn emit_state_gradient_defs(svg: &mut String, gradients: &[StateGradient]) {
+    for gradient in gradients {
+        // Java provenance: `SvgGraphics.createSvgGradient` maps the
+        // HColorGradient separator policy to these four endpoint pairs. The
+        // DOM serializer emits attributes alphabetically.
+        let (x1, x2, y1, y2) = match gradient.policy {
+            '|' => ("0%", "100%", "50%", "50%"),
+            '\\' => ("0%", "100%", "100%", "0%"),
+            '-' => ("50%", "50%", "0%", "100%"),
+            _ => ("0%", "100%", "0%", "100%"),
+        };
+        write!(
+            svg,
+            r#"<linearGradient id="{}" x1="{x1}" x2="{x2}" y1="{y1}" y2="{y2}"><stop offset="0%" stop-color="{}"/><stop offset="100%" stop-color="{}"/></linearGradient>"#,
+            gradient.id, gradient.color1, gradient.color2,
+        )
+        .unwrap();
+    }
+}
+
 // --- PlantUML state diagram constants ---
 
 /// Fixed height for a state box without descriptions.
@@ -2339,6 +2420,7 @@ pub fn render_with_oracle(
     // --- Build SVG ---
     let w = total_width.ceil() as i64;
     let h = total_height.ceil() as i64;
+    let gradients = state_gradients(diagram);
 
     let mut svg = String::with_capacity(4096);
     let root_style = if bg_is_transparent {
@@ -2363,7 +2445,12 @@ pub fn render_with_oracle(
             svg.push_str(defs);
             svg.push_str("</defs>");
         }
-        _ => svg.push_str("<defs/>"),
+        _ if gradients.is_empty() => svg.push_str("<defs/>"),
+        _ => {
+            svg.push_str("<defs>");
+            emit_state_gradient_defs(&mut svg, &gradients);
+            svg.push_str("</defs>");
+        }
     }
     svg.push_str("<g>");
 
@@ -2860,7 +2947,7 @@ pub fn render_with_oracle(
                     // path; oracle wins when both exist.
                     let parser_fill = state_def
                         .and_then(|s| s.fill.as_deref())
-                        .map(crate::sequence::resolve_color);
+                        .map(|fill| state_gradient_fill(fill, &gradients));
                     let fill_color: String = oracle
                         .and_then(|orc| orc.entities.get(id.as_str()))
                         .and_then(|r| r.fill.clone())
@@ -6004,6 +6091,43 @@ mod tests {
         assert!(svg.contains(r##"<text fill="#8B0000""##));
         assert!(svg.contains(r##"<text fill="#008B8B""##));
         assert!(svg.contains(">renamed event 821</text>"));
+    }
+
+    #[test]
+    fn renamed_state_gradients_are_seeded_deduplicated_and_policy_aware() {
+        let input = concat!(
+            "@startuml\n",
+            "state CopperRelay701 #cyan/pink\n",
+            "state AmberRelay709 #cyan/pink\n",
+            "state VioletRelay719 #red|blue\n",
+            "[*] --> CopperRelay701\n",
+            "CopperRelay701 --> AmberRelay709\n",
+            "AmberRelay709 --> VioletRelay719\n",
+            "VioletRelay719 --> [*]\n",
+            "@enduml\n",
+        );
+        let parsed = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::State(diagram) = &parsed else {
+            panic!("expected state diagram");
+        };
+        let gradient0 = crate::filter_registry::gradient_id_for(input, 0);
+        let gradient1 = crate::filter_registry::gradient_id_for(input, 1);
+
+        let svg = render(diagram, &Theme::default());
+        assert!(svg.contains(&format!(
+            r##"<linearGradient id="{gradient0}" x1="0%" x2="100%" y1="0%" y2="100%"><stop offset="0%" stop-color="#00FFFF"/><stop offset="100%" stop-color="#FFC0CB"/></linearGradient>"##
+        )));
+        assert!(svg.contains(&format!(
+            r##"<linearGradient id="{gradient1}" x1="0%" x2="100%" y1="50%" y2="50%"><stop offset="0%" stop-color="#FF0000"/><stop offset="100%" stop-color="#0000FF"/></linearGradient>"##
+        )));
+        assert_eq!(
+            svg.matches(&format!(r#"fill="url(#{gradient0})""#)).count(),
+            2
+        );
+        assert_eq!(
+            svg.matches(&format!(r#"fill="url(#{gradient1})""#)).count(),
+            1
+        );
     }
 
     #[test]

@@ -109,6 +109,15 @@ pub fn shadow_id_for(source: &str) -> String {
     format!("f{}", abs_base36(plantuml_seed(source)))
 }
 
+/// Derive the id for the `index`th unique SVG gradient in paint order.
+///
+/// Java provenance: `SvgGraphics` initializes `gradientId` to
+/// `"g" + getSeed(seed)`, and `createSvgGradient` appends
+/// `gradients.size()` when it first sees a unique color/policy tuple.
+pub fn gradient_id_for(source: &str, index: usize) -> String {
+    format!("g{}{index}", abs_base36(plantuml_seed(source)))
+}
+
 /// Emit PlantUML's SVG drop-shadow filter body for `shadow_id`.
 ///
 /// This is the `defs` child constructed by
@@ -226,6 +235,13 @@ mod tests {
     fn seed_uses_plantuml_plain_source_without_initial_blank_lines() {
         let src = "@startuml\n\nskinparam shadowing true\n:Fresh seeded shadow;\n@enduml\n";
         assert_eq!(shadow_id_for(src), "f8uac2ses7vez");
+    }
+
+    #[test]
+    fn gradient_id_shares_the_source_seed_and_uses_paint_order() {
+        let src = "@startuml\nstate Copper #red/blue\n@enduml\n";
+        assert_eq!(gradient_id_for(src, 0), "gdxt0vbudmxt10");
+        assert_eq!(gradient_id_for(src, 3), "gdxt0vbudmxt13");
     }
 
     #[test]
