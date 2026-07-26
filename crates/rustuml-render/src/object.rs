@@ -13,7 +13,7 @@ use std::fmt::Write;
 
 use rustuml_layout::graph::{
     ClusterPosition, ClusterTitleSize, Direction, EdgeLabelPosition, EdgeLabelSize, EdgePath,
-    LayoutGraph,
+    EdgePorts, HtmlRowPort, LayoutGraph,
 };
 use rustuml_parser::diagram::object::*;
 
@@ -56,6 +56,11 @@ const ENTITY_FILL: &str = "#F1F1F1";
 const BORDER_COLOR: &str = "#181818";
 const BORDER_WIDTH: &str = "0.5";
 const MAP_LINE_WIDTH: &str = "1";
+// Graphviz's plaintext shape adds 4 points horizontally and 2 points
+// vertically on each side (`poly_init` in shapes.c). Java SVEK normalizes
+// HTML-table nodes from the table content rather than that outer envelope.
+const HTML_PLAINTEXT_MARGIN_X: f64 = 8.0;
+const HTML_PLAINTEXT_MARGIN_Y: f64 = 4.0;
 // Java `Opale` wraps note text with 6px left, 15px right, and 5px vertical
 // margins. `EntityImageNote` turns its logical SVEK edge into the folded
 // callout polygon instead of painting that edge separately.
@@ -119,7 +124,7 @@ pub fn render_with_oracle(
             cluster_positions: Vec::new(),
         }
     } else {
-        layout_object(diagram, &dims)
+        layout_object(diagram, &dims, font_size)
     };
 
     render_plantuml_svg(diagram, &dims, &layout, oracle, &style)
@@ -224,20 +229,17 @@ fn calc_obj_dim(obj: &ObjectInstance, font_size: u32) -> ObjDim {
             })
             .fold(0.0_f64, f64::max);
 
-        // Header label is centred in the rect; row-content width comes from
-        // key + value columns plus padding. Width is max of the two.
-        let header_w = label_w.max(stereo_width);
+        // `EntityImageMap` wraps the name with 2px margins on each side, then
+        // adds `xMarginCircle = 5` on each side in
+        // `calculateDimensionSlow`: label width + 14 for a title-dominant map.
+        let header_w = (label_w + 14.0).max(stereo_width);
         let row_w = MAP_TEXT_X_OFFSET
             + key_w
             + MAP_TEXT_X_OFFSET
             + MAP_TEXT_X_OFFSET
             + value_w
             + MAP_TEXT_X_OFFSET;
-        let mut width = header_w.max(row_w);
-        // Header padding: label centred with header padding on both sides.
-        // The header width contribution is `label_w + 2 * header_pad`; using
-        // 5px of header padding matches PlantUML for short labels.
-        width = width.max(label_w + 10.0);
+        let width = header_w.max(row_w);
 
         let header_h = if has_stereo {
             HEADER_SEP_Y_WITH_STEREO
@@ -319,6 +321,46 @@ fn format_field(f: &ObjectField) -> String {
 
 fn map_key_column_text_width(dim: &ObjDim) -> f64 {
     (dim.map_divider_x - 2.0 * MAP_TEXT_X_OFFSET).max(0.0)
+}
+
+fn map_row_port_id(index: usize) -> String {
+    format!("map_row_{index}")
+}
+
+/// Port rows passed to the layout engine, following Java
+/// `EntityImageMap.getPorts` -> `TextBlockMap.getPorts`.
+fn map_row_ports(obj: &ObjectInstance, font_size: u32) -> Vec<HtmlRowPort> {
+    let header_height = if obj.stereotype.is_some() {
+        HEADER_SEP_Y_WITH_STEREO
+    } else {
+        object_header_height(font_size)
+    };
+    let row_height = map_row_height(font_size);
+    obj.fields
+        .iter()
+        .enumerate()
+        .map(|(index, _)| HtmlRowPort {
+            id: map_row_port_id(index),
+            position: header_height + index as f64 * row_height,
+            height: row_height,
+        })
+        .collect()
+}
+
+fn map_layout_endpoint<'a>(
+    diagram: &'a ObjectDiagram,
+    endpoint: &'a str,
+) -> (&'a str, Option<String>) {
+    let Some((base, field)) = endpoint.split_once("::") else {
+        return (endpoint, None);
+    };
+    let port = diagram
+        .objects
+        .iter()
+        .find(|object| object.id == base && object.kind == ObjectKind::Map)
+        .and_then(|object| object.fields.iter().position(|item| item.name == field))
+        .map(map_row_port_id);
+    (base, port)
 }
 
 // ---------------------------------------------------------------------------
@@ -443,19 +485,15 @@ fn object_cluster_specs(diagram: &ObjectDiagram) -> Vec<ObjectClusterSpec> {
     specs
 }
 
-fn layout_object(diagram: &ObjectDiagram, dims: &[ObjDim]) -> ObjectLayout {
+fn layout_object(diagram: &ObjectDiagram, dims: &[ObjDim], font_size: u32) -> ObjectLayout {
     let mut layout = LayoutGraph::new(Direction::TopToBottom).with_plantuml_svek_spacing();
     for (obj, dim) in diagram.objects.iter().zip(dims) {
-        let layout_height = if obj.kind == ObjectKind::Map {
-            // Java `SvekNode.appendLabelHtmlSpecialForLink` represents every
-            // map as a plaintext HTML table so member ports can anchor links.
-            // Its fixed-size rows are integer-truncated, and Graphviz adds the
-            // eight-pixel plaintext-label envelope around their total.
-            dim.height.floor() + 8.0
+        if obj.kind == ObjectKind::Map {
+            let ports = map_row_ports(obj, font_size);
+            layout.add_fixed_html_row_node(&obj.id, dim.width, dim.height, &ports);
         } else {
-            dim.height
-        };
-        layout.add_node(&obj.id, &obj.label, dim.width, layout_height);
+            layout.add_node(&obj.id, &obj.label, dim.width, dim.height);
+        }
     }
     for cluster in object_cluster_specs(diagram) {
         // `ClusterHeader.getTitleAndAttribute{Width,Height}` supplies the
@@ -505,8 +543,8 @@ fn layout_object(diagram: &ObjectDiagram, dims: &[ObjDim]) -> ObjectLayout {
     for (_, _, kind, idx) in edge_events {
         if kind == 0 {
             let link = &diagram.links[idx];
-            let from_base = link.from.split("::").next().unwrap_or(&link.from);
-            let to_base = link.to.split("::").next().unwrap_or(&link.to);
+            let (from_base, tail_port) = map_layout_endpoint(diagram, &link.from);
+            let (to_base, head_port) = map_layout_endpoint(diagram, &link.to);
             // Java `SvekEdge.appendLine` / `appendTable` gives dot measured,
             // integer-truncated HTML placeholders rather than the raw label.
             // The solved boxes drive both routing and final text placement.
@@ -523,9 +561,13 @@ fn layout_object(diagram: &ObjectDiagram, dims: &[ObjDim]) -> ObjectLayout {
                     height: text_render::label_height(label, LINK_LABEL_FONT_SIZE).floor(),
                 })
             };
-            layout.add_edge_with_label_sizes(
+            layout.add_edge_with_ports_and_label_sizes(
                 from_base,
                 to_base,
+                EdgePorts {
+                    tail: tail_port.as_deref(),
+                    head: head_port.as_deref(),
+                },
                 label_size,
                 endpoint_size(link.from_multiplicity.as_deref()),
                 endpoint_size(link.to_multiplicity.as_deref()),
@@ -551,6 +593,12 @@ fn layout_object(diagram: &ObjectDiagram, dims: &[ObjDim]) -> ObjectLayout {
     }
     match layout.layout_full(std::time::Duration::from_secs(5)) {
         Some(mut result) => {
+            let normalize_html_plaintext = diagram
+                .objects
+                .iter()
+                .any(|object| object.kind == ObjectKind::Map)
+                && result.cluster_positions.is_empty()
+                && layout_note_nodes.is_empty();
             let (origin_x, origin_y) = if !result.cluster_positions.is_empty() {
                 // `DotStringFactory.solve` normalizes the complete SVEK
                 // cluster envelope to the six-pixel diagram margin. Native
@@ -566,6 +614,11 @@ fn layout_object(diagram: &ObjectDiagram, dims: &[ObjDim]) -> ObjectLayout {
                     .map(|cluster| cluster.y)
                     .fold(f64::INFINITY, f64::min);
                 (6.0 - min_x, 6.0 - min_y)
+            } else if normalize_html_plaintext {
+                (
+                    MARGIN - HTML_PLAINTEXT_MARGIN_X,
+                    MARGIN - HTML_PLAINTEXT_MARGIN_Y,
+                )
             } else if layout_note_nodes.is_empty() {
                 (MARGIN, MARGIN)
             } else {
@@ -604,9 +657,18 @@ fn layout_object(diagram: &ObjectDiagram, dims: &[ObjDim]) -> ObjectLayout {
                 .node_positions
                 .iter()
                 .take(diagram.objects.len())
-                .map(|p| (p.x + origin_x, p.y + origin_y))
+                .enumerate()
+                .map(|(index, p)| {
+                    let (html_x, html_y) = if normalize_html_plaintext
+                        && diagram.objects[index].kind == ObjectKind::Map
+                    {
+                        (HTML_PLAINTEXT_MARGIN_X, HTML_PLAINTEXT_MARGIN_Y)
+                    } else {
+                        (0.0, 0.0)
+                    };
+                    (p.x + origin_x + html_x, p.y + origin_y + html_y)
+                })
                 .collect::<Vec<_>>();
-            apply_map_html_port_routes(diagram, dims, &positions, &mut result.edge_paths);
             ObjectLayout {
                 positions,
                 edge_paths: result.edge_paths,
@@ -635,93 +697,6 @@ fn layout_object(diagram: &ObjectDiagram, dims: &[ObjDim]) -> ObjectLayout {
             note_positions: vec![None; diagram.notes.len()],
             cluster_positions: Vec::new(),
         },
-    }
-}
-
-/// Reconstructs the vertical spline solved for SVEK's map-port HTML table.
-///
-/// Java `SvekNode.appendLabelHtmlSpecialForLink` integer-truncates map rows
-/// before dot lays out the plaintext table. The vendored Graphviz build has no
-/// HTML-table parser, so rectangular nodes provide rank placement while this
-/// function supplies the corresponding port spline. Metrics extracted from
-/// Java/Graphviz for a fresh equal-width map pair are:
-///
-/// | painted height | HTML envelope | tail clip | head contact |
-/// | about 82       | 89            | 4.19      | 3.75         |
-///
-/// Graphviz places the two cubic controls at 35% of the shortened vertical
-/// span, rounded outward to hundredths in its SVG serialization.
-fn apply_map_html_port_routes(
-    diagram: &ObjectDiagram,
-    dims: &[ObjDim],
-    positions: &[(f64, f64)],
-    edges: &mut [EdgePath],
-) {
-    const HTML_LABEL_ENVELOPE_Y: f64 = 8.0;
-    const TAIL_CLIP: f64 = 4.19;
-    const HEAD_CONTACT_GAP: f64 = 3.75;
-    const CONTROL_RATIO: f64 = 0.35;
-
-    for link in &diagram.links {
-        if link.kind != ObjectLinkKind::Dependency
-            || link.dashed
-            || link.label.is_some()
-            || link.from_multiplicity.is_some()
-            || link.to_multiplicity.is_some()
-            || link.from.contains("::")
-            || link.to.contains("::")
-        {
-            continue;
-        }
-        let Some(from_idx) = diagram.objects.iter().position(|obj| obj.id == link.from) else {
-            continue;
-        };
-        let Some(to_idx) = diagram.objects.iter().position(|obj| obj.id == link.to) else {
-            continue;
-        };
-        let from = &diagram.objects[from_idx];
-        let to = &diagram.objects[to_idx];
-        if from.kind != ObjectKind::Map
-            || to.kind != ObjectKind::Map
-            || from.stereotype.is_some()
-            || to.stereotype.is_some()
-            || (dims[from_idx].width - dims[to_idx].width).abs() > 0.02
-            || (dims[from_idx].height - dims[to_idx].height).abs() > 0.02
-        {
-            continue;
-        }
-
-        let from_center = positions[from_idx].0 + dims[from_idx].width / 2.0;
-        let to_center = positions[to_idx].0 + dims[to_idx].width / 2.0;
-        if (from_center - to_center).abs() > 0.02 || positions[from_idx].1 >= positions[to_idx].1 {
-            continue;
-        }
-        let Some(edge) = edges
-            .iter_mut()
-            .find(|edge| edge.from == link.from && edge.to == link.to)
-        else {
-            continue;
-        };
-
-        // The HTML cell's FIXEDSIZE width is parsed as an integer before its
-        // named port is centred, while the painted map keeps its full width.
-        let x = positions[from_idx].0 + dims[from_idx].width.floor() / 2.0;
-        let start_y = positions[from_idx].1 + dims[from_idx].height.floor() + HTML_LABEL_ENVELOPE_Y
-            - TAIL_CLIP;
-        let contact_y = positions[to_idx].1 - HEAD_CONTACT_GAP;
-        let shortened_end_y = contact_y - DEPENDENCY_ARROW_PATH_INSET;
-        let control = (shortened_end_y - start_y) * CONTROL_RATIO;
-        let first_control = (control * 100.0).ceil() / 100.0;
-        let second_control = (control * 100.0).floor() / 100.0;
-        edge.points = vec![
-            (x, start_y),
-            (x, start_y + first_control),
-            (
-                x,
-                shortened_end_y - second_control + DEPENDENCY_ARROW_PATH_INSET,
-            ),
-            (x, contact_y),
-        ];
     }
 }
 
@@ -1094,7 +1069,7 @@ fn render_plantuml_svg(
             }
         }
         for (link_idx, link) in diagram.links.iter().enumerate() {
-            if !is_rendered_layout_link(link) || link_touches_object_note(diagram, link) {
+            if !is_rendered_layout_link(diagram, link) || link_touches_object_note(diagram, link) {
                 continue;
             }
             let Some(edge_path) = find_layout_edge(diagram, &layout.edge_paths, link_idx) else {
@@ -1317,7 +1292,7 @@ fn render_layout_links(
     svg_ids: &ObjectSvgIds,
 ) {
     for (link_idx, link) in diagram.links.iter().enumerate() {
-        if !is_rendered_layout_link(link) || link_touches_object_note(diagram, link) {
+        if !is_rendered_layout_link(diagram, link) || link_touches_object_note(diagram, link) {
             continue;
         }
         let from_base = link_base(&link.from);
@@ -1742,8 +1717,10 @@ fn link_base(link_end: &str) -> &str {
     link_end.split("::").next().unwrap_or(link_end)
 }
 
-fn is_rendered_layout_link(link: &ObjectLink) -> bool {
-    !link.from.contains("::") && !link.to.contains("::")
+fn is_rendered_layout_link(diagram: &ObjectDiagram, link: &ObjectLink) -> bool {
+    [&link.from, &link.to].into_iter().all(|endpoint| {
+        !endpoint.contains("::") || map_layout_endpoint(diagram, endpoint).1.is_some()
+    })
 }
 
 fn link_touches_object_note(diagram: &ObjectDiagram, link: &ObjectLink) -> bool {
@@ -1765,7 +1742,7 @@ fn find_layout_edge<'a>(
     let occurrence = diagram.links[..link_idx]
         .iter()
         .filter(|previous| {
-            is_rendered_layout_link(previous)
+            is_rendered_layout_link(diagram, previous)
                 && !link_touches_object_note(diagram, previous)
                 && link_base(&previous.from) == from
                 && link_base(&previous.to) == to
@@ -1790,7 +1767,7 @@ fn find_layout_edge<'a>(
 
 fn has_rendered_layout_dependency(diagram: &ObjectDiagram, edge_paths: &[EdgePath]) -> bool {
     diagram.links.iter().any(|link| {
-        is_rendered_layout_link(link)
+        is_rendered_layout_link(diagram, link)
             && !link_touches_object_note(diagram, link)
             && edge_paths.iter().any(|edge| {
                 edge.from == link_base(&link.from)
@@ -2997,7 +2974,7 @@ note right of Ledger_47 : Fresh source note 47
             .iter()
             .map(|object| calc_obj_dim(object, font_size))
             .collect();
-        let layout = layout_object(&diagram, &dims);
+        let layout = layout_object(&diagram, &dims, font_size);
         let edge = find_layout_edge(&diagram, &layout.edge_paths, 0).unwrap();
         assert!(edge.label.is_some(), "expected a solved SVEK label box");
 
@@ -3011,45 +2988,83 @@ note right of Ledger_47 : Fresh source note 47
     }
 
     #[test]
-    fn no_oracle_map_port_chain_uses_html_table_envelope_and_spline() {
+    fn renamed_seven_to_eight_row_maps_route_between_named_rows() {
         let input = r#"@startuml
-map "Node47" as ledger_47 {
-  route_code => item_47
-  checksum => hash_47
-  retention => zone_47
+map "Dispatch Ledger" as dispatch_renamed {
+  alpha_route => north
+  beta_route => south
+  gamma_route => east
+  delta_route => west
+  epsilon_route => central
+  zeta_route => archive
+  eta_route => audit
 }
-map "Node83" as archive_83 {
-  route_code => item_83
-  checksum => hash_83
-  retention => zone_83
+map "Receipt Matrix" as receipt_renamed {
+  first_slot => one
+  second_slot => two
+  third_slot => three
+  fourth_slot => four
+  fifth_slot => five
+  sixth_slot => six
+  seventh_slot => seven
+  eighth_slot => eight
 }
-map "Node29" as policy_29 {
-  route_code => item_29
-  checksum => hash_29
-  retention => zone_29
-}
-map "Node61" as audit_61 {
-  route_code => item_61
-  checksum => hash_61
-  retention => zone_61
-}
-map "Node73" as sink_73 {
-  route_code => item_73
-  checksum => hash_73
-  retention => zone_73
-}
-ledger_47 --> archive_83
-archive_83 --> policy_29
-policy_29 --> audit_61
-audit_61 --> sink_73
+dispatch_renamed::zeta_route --> receipt_renamed::seventh_slot
 @enduml"#;
         let Diagram::Object(diagram) = rustuml_parser::parse::parse(input).unwrap() else {
             panic!("expected object diagram");
         };
         let svg = render(&diagram, &Theme::default());
-        assert!(svg.contains(r#"height="699px""#));
-        assert!(svg.contains(r#"d="M83.5,91.81 C83.5,110.87 83.5,127.2 83.5,146.25""#));
-        assert!(svg.contains(r#"d="M83.5,538.81 C83.5,557.87 83.5,574.2 83.5,593.25""#));
+
+        // Fresh Java PlantUML commit 71806a2 reference. The seven/eight row
+        // counts and row-to-row topology are absent from the golden corpus.
+        assert!(svg.contains(r#"width="240px""#));
+        assert!(svg.contains(r#"height="437px""#));
+        assert!(svg.contains(r#"d="M169,139 C"#));
+        assert!(svg.contains(r#"166,391" fill="none""#));
+    }
+
+    #[test]
+    fn renamed_eight_row_map_routes_three_distinct_fanout_rows() {
+        let input = r#"@startuml
+map "Routing Hub" as hub_renamed {
+  ingress_alpha => A
+  ingress_beta => B
+  ingress_gamma => C
+  ingress_delta => D
+  ingress_epsilon => E
+  ingress_zeta => F
+  ingress_eta => G
+  ingress_theta => H
+}
+map "North Worker" as north_renamed {
+  endpoint => north.worker.internal
+  token => north-queue
+}
+map "Middle Worker" as middle_renamed {
+  endpoint => middle.worker.internal
+  token => middle-queue
+}
+map "South Worker" as south_renamed {
+  endpoint => south.worker.internal
+  token => south-queue
+}
+hub_renamed::ingress_alpha --> north_renamed
+hub_renamed::ingress_delta --> middle_renamed
+hub_renamed::ingress_theta --> south_renamed
+@enduml"#;
+        let Diagram::Object(diagram) = rustuml_parser::parse::parse(input).unwrap() else {
+            panic!("expected object diagram");
+        };
+        let svg = render(&diagram, &Theme::default());
+
+        // Fresh Java PlantUML commit 71806a2 reference. Three links leaving
+        // rows zero, three, and seven produce distinct named-port contacts.
+        assert!(svg.contains(r#"width="810px""#));
+        assert!(svg.contains(r#"height="335px""#));
+        assert!(svg.contains(r#"d="M331,37 C"#));
+        assert!(svg.contains(r#"d="M470,98 C"#));
+        assert!(svg.contains(r#"d="M470,180 C"#));
     }
 
     #[test]

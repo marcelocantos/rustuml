@@ -49,6 +49,20 @@ pub struct ClusterTitleSize {
     pub height: f64,
 }
 
+/// One named row in a renderer-owned fixed HTML-table node.
+#[derive(Clone, Debug)]
+pub struct HtmlRowPort {
+    pub id: String,
+    pub position: f64,
+    pub height: f64,
+}
+
+#[derive(Clone, Copy, Debug, Default)]
+pub struct EdgePorts<'a> {
+    pub tail: Option<&'a str>,
+    pub head: Option<&'a str>,
+}
+
 impl GraphSpacing {
     /// Non-activity SVEK minima from PlantUML
     /// `net.sourceforge.plantuml.svek.DotStringFactory`:
@@ -211,6 +225,33 @@ impl LayoutGraph {
             width,
             height,
             shape: NodeShape::Record {
+                ports: ports.to_vec(),
+            },
+        });
+        true
+    }
+
+    /// Adds a plaintext node backed by a fixed-size HTML table with named rows.
+    ///
+    /// PlantUML SVEK's `SvekNode.appendLabelHtmlSpecialForLink` uses this
+    /// shape for entities whose links target individual members. Graphviz
+    /// owns the table envelope and routes edges to the named row ports; the
+    /// renderer still draws the visible entity.
+    pub fn add_fixed_html_row_node(
+        &mut self,
+        id: &str,
+        width: f64,
+        height: f64,
+        ports: &[HtmlRowPort],
+    ) -> bool {
+        if self.nodes.iter().any(|node| node.id == id) {
+            return false;
+        }
+        self.nodes.push(NodeSpec {
+            id: id.to_string(),
+            width,
+            height,
+            shape: NodeShape::FixedHtmlRows {
                 ports: ports.to_vec(),
             },
         });
@@ -417,6 +458,29 @@ impl LayoutGraph {
         );
     }
 
+    /// Adds a measured-label edge bound to optional named node ports.
+    pub fn add_edge_with_ports_and_label_sizes(
+        &mut self,
+        from: &str,
+        to: &str,
+        ports: EdgePorts<'_>,
+        label_size: Option<EdgeLabelSize>,
+        tail_label_size: Option<EdgeLabelSize>,
+        head_label_size: Option<EdgeLabelSize>,
+    ) {
+        self.edges.push(EdgeSpec {
+            from: from.to_string(),
+            to: to.to_string(),
+            label: None,
+            tail_port: ports.tail.map(String::from),
+            head_port: ports.head.map(String::from),
+            minlen: None,
+            label_size,
+            tail_label_size,
+            head_label_size,
+        });
+    }
+
     /// Adds a measured-label edge with an optional explicit dot rank length.
     pub fn add_edge_with_label_sizes_and_minlen(
         &mut self,
@@ -558,6 +622,7 @@ impl LayoutGraph {
         let box_val = CString::new("box").unwrap();
         let point_val = CString::new("point").unwrap();
         let record_val = CString::new("record").unwrap();
+        let plaintext_val = CString::new("plaintext").unwrap();
         let arrowhead_key = CString::new("arrowhead").unwrap();
         let arrowtail_key = CString::new("arrowtail").unwrap();
         let headport_key = CString::new("headport").unwrap();
@@ -575,54 +640,14 @@ impl LayoutGraph {
             let cid = CString::new(spec.id.as_str()).unwrap();
             let node = graphviz_ffi::agnode(g, cid.as_ptr(), 1);
 
-            // Graphviz uses inches for width/height.
-            let w_inches = spec.width / DOT_POINTS_PER_INCH;
-            let h_inches = spec.height / DOT_POINTS_PER_INCH;
-            let w_str = CString::new(format!("{w_inches:.6}")).unwrap();
-            let h_str = CString::new(format!("{h_inches:.6}")).unwrap();
-
-            graphviz_ffi::agsafeset(
-                node as *mut c_void,
-                width_key.as_ptr(),
-                w_str.as_ptr(),
-                empty.as_ptr(),
-            );
-            graphviz_ffi::agsafeset(
-                node as *mut c_void,
-                height_key.as_ptr(),
-                h_str.as_ptr(),
-                empty.as_ptr(),
-            );
-            graphviz_ffi::agsafeset(
-                node as *mut c_void,
-                fixedsize_key.as_ptr(),
-                fixedsize_val.as_ptr(),
-                empty.as_ptr(),
-            );
-            // PlantUML SVEK uses dot for geometry and renders entity labels
-            // itself. Leaving Graphviz's default label (the node id) makes fixed
-            // layout boxes warn and can feed label bounds back into routing.
-            let label_val = match &spec.shape {
-                NodeShape::Record { ports } => CString::new(record_label(ports)).unwrap(),
-                NodeShape::Box
-                | NodeShape::Circle
-                | NodeShape::Ellipse
-                | NodeShape::Diamond
-                | NodeShape::Point => no_label_val.clone(),
-            };
-            graphviz_ffi::agsafeset(
-                node as *mut c_void,
-                label_key.as_ptr(),
-                label_val.as_ptr(),
-                empty.as_ptr(),
-            );
-            let shape = match spec.shape {
+            let shape = match &spec.shape {
                 NodeShape::Box => &box_val,
                 NodeShape::Circle => &circle_val,
                 NodeShape::Ellipse => &ellipse_val,
                 NodeShape::Diamond => &diamond_val,
                 NodeShape::Point => &point_val,
                 NodeShape::Record { .. } => &record_val,
+                NodeShape::FixedHtmlRows { .. } => &plaintext_val,
             };
             graphviz_ffi::agsafeset(
                 node as *mut c_void,
@@ -630,6 +655,59 @@ impl LayoutGraph {
                 shape.as_ptr(),
                 empty.as_ptr(),
             );
+            if let NodeShape::FixedHtmlRows { ports } = &spec.shape {
+                let table =
+                    CString::new(fixed_html_row_table(spec.width, spec.height, ports)).unwrap();
+                graphviz_ffi::agsafeset_html(
+                    node as *mut c_void,
+                    label_key.as_ptr(),
+                    table.as_ptr(),
+                    empty.as_ptr(),
+                );
+            } else {
+                // Graphviz uses inches for width/height.
+                let w_inches = spec.width / DOT_POINTS_PER_INCH;
+                let h_inches = spec.height / DOT_POINTS_PER_INCH;
+                let w_str = CString::new(format!("{w_inches:.6}")).unwrap();
+                let h_str = CString::new(format!("{h_inches:.6}")).unwrap();
+
+                graphviz_ffi::agsafeset(
+                    node as *mut c_void,
+                    width_key.as_ptr(),
+                    w_str.as_ptr(),
+                    empty.as_ptr(),
+                );
+                graphviz_ffi::agsafeset(
+                    node as *mut c_void,
+                    height_key.as_ptr(),
+                    h_str.as_ptr(),
+                    empty.as_ptr(),
+                );
+                graphviz_ffi::agsafeset(
+                    node as *mut c_void,
+                    fixedsize_key.as_ptr(),
+                    fixedsize_val.as_ptr(),
+                    empty.as_ptr(),
+                );
+                // PlantUML SVEK uses dot for geometry and renders entity labels
+                // itself. Leaving Graphviz's default label (the node id) makes
+                // fixed layout boxes warn and can feed label bounds into routing.
+                let label_val = match &spec.shape {
+                    NodeShape::Record { ports } => CString::new(record_label(ports)).unwrap(),
+                    NodeShape::Box
+                    | NodeShape::Circle
+                    | NodeShape::Ellipse
+                    | NodeShape::Diamond
+                    | NodeShape::Point => no_label_val.clone(),
+                    NodeShape::FixedHtmlRows { .. } => unreachable!(),
+                };
+                graphviz_ffi::agsafeset(
+                    node as *mut c_void,
+                    label_key.as_ptr(),
+                    label_val.as_ptr(),
+                    empty.as_ptr(),
+                );
+            }
 
             node_handles.insert(spec.id.clone(), node);
         }
@@ -1292,6 +1370,45 @@ fn record_label(ports: &[String]) -> String {
         .join("|")
 }
 
+/// Faithful serialization of PlantUML
+/// `SvekNode.appendLabelHtmlSpecialForLink` and `appendTr`.
+fn fixed_html_row_table(width: f64, height: f64, ports: &[HtmlRowPort]) -> String {
+    let mut sorted = ports.to_vec();
+    sorted.sort_by(|left, right| left.position.total_cmp(&right.position));
+
+    let mut table = String::from(
+        r##"<TABLE BGCOLOR="#000001" BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0">"##,
+    );
+    let mut sum = 0_i64;
+    for port in sorted {
+        let missing = (port.position - sum as f64) as i64;
+        append_fixed_html_row(&mut table, width, missing, None);
+        sum += missing;
+
+        let row_height = port.height as i64;
+        append_fixed_html_row(&mut table, width, row_height, Some(&port.id));
+        sum += row_height;
+    }
+    append_fixed_html_row(&mut table, width, (height - sum as f64) as i64, None);
+    table.push_str("</TABLE>");
+    table
+}
+
+fn append_fixed_html_row(table: &mut String, width: f64, height: i64, port: Option<&str>) {
+    if height <= 0 {
+        return;
+    }
+    table.push_str("<TR><TD FIXEDSIZE=\"TRUE\" WIDTH=\"");
+    table.push_str(&width.to_string());
+    table.push_str("\" HEIGHT=\"");
+    table.push_str(&height.to_string());
+    if let Some(port) = port {
+        table.push_str("\" PORT=\"");
+        table.push_str(port);
+    }
+    table.push_str("\"></TD></TR>");
+}
+
 fn escape_record_port(port: &str) -> String {
     port.chars()
         .filter(|c| c.is_ascii_alphanumeric() || *c == '_')
@@ -1356,6 +1473,7 @@ enum NodeShape {
     Diamond,
     Point,
     Record { ports: Vec<String> },
+    FixedHtmlRows { ports: Vec<HtmlRowPort> },
 }
 
 #[derive(Debug, Clone)]
@@ -1916,6 +2034,75 @@ mod tests {
         assert!(
             !result.edge_paths[0].points.is_empty(),
             "record tail port should still produce a routed spline"
+        );
+    }
+
+    #[test]
+    fn fixed_html_row_node_routes_distinct_named_rows() {
+        let mut g = LayoutGraph::new(Direction::LeftToRight);
+        assert!(g.add_fixed_html_row_node(
+            "map",
+            118.0,
+            82.0,
+            &[
+                HtmlRowPort {
+                    id: "row_top".to_string(),
+                    position: 20.48,
+                    height: 20.48,
+                },
+                HtmlRowPort {
+                    id: "row_bottom".to_string(),
+                    position: 61.46,
+                    height: 20.48,
+                },
+            ],
+        ));
+        g.add_node("top_target", "", 60.0, 40.0);
+        g.add_node("bottom_target", "", 60.0, 40.0);
+        g.add_edge_with_ports("map", "top_target", None, Some("row_top"), None);
+        g.add_edge_with_ports("map", "bottom_target", None, Some("row_bottom"), None);
+
+        let result = g.layout_full_no_timeout();
+        let map = &result.node_positions[0];
+        assert!((map.width - 134.0).abs() < 0.01);
+        assert!((map.height - 90.0).abs() < 0.01);
+        let top = result
+            .edge_paths
+            .iter()
+            .find(|edge| edge.to == "top_target")
+            .unwrap();
+        let bottom = result
+            .edge_paths
+            .iter()
+            .find(|edge| edge.to == "bottom_target")
+            .unwrap();
+        assert!(
+            top.points[0].1 < bottom.points[0].1,
+            "named HTML rows must expose distinct vertical ports"
+        );
+    }
+
+    #[test]
+    fn fixed_html_rows_follow_java_integer_gap_serialization() {
+        let table = fixed_html_row_table(
+            118.0,
+            82.0,
+            &[
+                HtmlRowPort {
+                    id: "top_row".to_string(),
+                    position: 20.48,
+                    height: 20.48,
+                },
+                HtmlRowPort {
+                    id: "bottom_row".to_string(),
+                    position: 61.46,
+                    height: 20.48,
+                },
+            ],
+        );
+        assert_eq!(
+            table,
+            r##"<TABLE BGCOLOR="#000001" BORDER="0" CELLBORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD FIXEDSIZE="TRUE" WIDTH="118" HEIGHT="20"></TD></TR><TR><TD FIXEDSIZE="TRUE" WIDTH="118" HEIGHT="20" PORT="top_row"></TD></TR><TR><TD FIXEDSIZE="TRUE" WIDTH="118" HEIGHT="21"></TD></TR><TR><TD FIXEDSIZE="TRUE" WIDTH="118" HEIGHT="20" PORT="bottom_row"></TD></TR><TR><TD FIXEDSIZE="TRUE" WIDTH="118" HEIGHT="1"></TD></TR></TABLE>"##
         );
     }
 
