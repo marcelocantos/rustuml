@@ -619,6 +619,7 @@ struct AttachedNoteSpec {
     link_id: String,
     anchor: String,
     right: bool,
+    opale: bool,
     width: f64,
     height: f64,
 }
@@ -630,6 +631,27 @@ struct AttachedNotePosition {
     entity_id: String,
     anchor: String,
     right: bool,
+    opale: bool,
+    x: f64,
+    y: f64,
+    width: f64,
+    height: f64,
+}
+
+#[derive(Clone)]
+struct FloatingNoteSpec {
+    note_index: usize,
+    alias: String,
+    entity_id: String,
+    width: f64,
+    height: f64,
+}
+
+#[derive(Clone)]
+struct FloatingNotePosition {
+    note_index: usize,
+    alias: String,
+    entity_id: String,
     x: f64,
     y: f64,
     width: f64,
@@ -673,6 +695,21 @@ fn attached_note_specs(
                 _ => return None,
             };
             let ids = allocated_ids.note_ids[note_index].as_ref()?;
+            let matching_anchor = |candidate: &StateNote| match &candidate.kind {
+                StateNoteKind::RightOf(candidate) | StateNoteKind::LeftOf(candidate) => {
+                    candidate == anchor
+                }
+                _ => false,
+            };
+            let repeated_anchor = diagram
+                .notes
+                .iter()
+                .filter(|note| matching_anchor(note))
+                .count()
+                > 1;
+            let first_for_anchor = diagram.notes[..note_index]
+                .iter()
+                .all(|note| !matching_anchor(note));
             let (width, height) = attached_note_size(&note.text);
             Some(AttachedNoteSpec {
                 note_index,
@@ -681,11 +718,248 @@ fn attached_note_specs(
                 link_id: ids.link_id.clone(),
                 anchor: anchor.to_string(),
                 right,
+                // Java `GraphvizImageBuilder.isOpalisable/onlyOneLink`
+                // leaves the first entity image normal when an anchor has
+                // repeated note attachments; later siblings receive Opale.
+                opale: !repeated_anchor || !first_for_anchor,
                 width,
                 height,
             })
         })
         .collect()
+}
+
+fn floating_note_specs(
+    diagram: &StateDiagram,
+    allocated_ids: &StateSvgIds,
+) -> Vec<FloatingNoteSpec> {
+    diagram
+        .notes
+        .iter()
+        .enumerate()
+        .filter_map(|(note_index, note)| {
+            let StateNoteKind::Floating(Some(alias)) = &note.kind else {
+                return None;
+            };
+            let entity_id = allocated_ids.floating_note_ids[note_index].clone()?;
+            let (width, height) = attached_note_size(&note.text);
+            Some(FloatingNoteSpec {
+                note_index,
+                alias: alias.clone(),
+                entity_id,
+                width,
+                height,
+            })
+        })
+        .collect()
+}
+
+fn link_note_for_transition(
+    diagram: &StateDiagram,
+    transition_index: usize,
+) -> Option<(&StateNote, StateNotePosition)> {
+    diagram.notes.iter().find_map(|note| {
+        let StateNoteKind::OnLink {
+            transition_index: owner,
+            position,
+        } = &note.kind
+        else {
+            return None;
+        };
+        (*owner == transition_index).then_some((note, *position))
+    })
+}
+
+fn link_note_component_size(note: &StateNote) -> EdgeLabelSize {
+    let (body_width, body_height) = attached_note_size(&note.text);
+    // Java provenance: `ComponentRoseNote.getPreferredWidth/Height` adds
+    // Rose's five-pixel component padding on every side around the note body.
+    EdgeLabelSize {
+        width: body_width + 10.0,
+        height: body_height + 10.0,
+    }
+}
+
+fn ordinary_edge_label_size(label: &str, arrow_font: &StateArrowFont) -> EdgeLabelSize {
+    EdgeLabelSize {
+        // Java provenance: `SvekEdge.addVisibilityModifier` gives ordinary
+        // center labels one pixel of margin on every side.
+        width: text_render::measure_with_family(
+            label,
+            arrow_font.size as f64,
+            arrow_font.bold,
+            &arrow_font.family,
+        ) + 2.0,
+        height: text_render::label_height(label, arrow_font.size as f64) + 2.0,
+    }
+}
+
+fn compose_link_label_size(
+    label: Option<EdgeLabelSize>,
+    note: Option<(&StateNote, StateNotePosition)>,
+) -> Option<EdgeLabelSize> {
+    let Some((note, position)) = note else {
+        return label;
+    };
+    let note = link_note_component_size(note);
+    Some(match (label, position) {
+        (Some(label), StateNotePosition::Left | StateNotePosition::Right) => EdgeLabelSize {
+            width: label.width + note.width,
+            height: label.height.max(note.height),
+        },
+        (Some(label), StateNotePosition::Top | StateNotePosition::Bottom) => EdgeLabelSize {
+            width: label.width.max(note.width),
+            height: label.height + note.height,
+        },
+        (None, _) => note,
+    })
+}
+
+fn emit_link_label_composition(
+    svg: &mut String,
+    transition: &Transition,
+    note: Option<(&StateNote, StateNotePosition)>,
+    label_origin: (f64, f64),
+    arrow_font: &StateArrowFont,
+) {
+    let ordinary_size = transition
+        .label
+        .as_deref()
+        .map(|label| ordinary_edge_label_size(label, arrow_font));
+    let note_size = note.map(|(note, _)| link_note_component_size(note));
+
+    let (ordinary_offset, note_offset) = match (ordinary_size, note_size, note.map(|(_, p)| p)) {
+        (Some(label), Some(note), Some(StateNotePosition::Left)) => (
+            Some((note.width, (note.height - label.height) / 2.0)),
+            Some((0.0, 0.0)),
+        ),
+        (Some(label), Some(note), Some(StateNotePosition::Right)) => (
+            Some((0.0, (note.height - label.height) / 2.0)),
+            Some((label.width, 0.0)),
+        ),
+        (Some(label), Some(note), Some(StateNotePosition::Top)) => (
+            Some(((note.width - label.width) / 2.0, note.height)),
+            Some((0.0, 0.0)),
+        ),
+        (Some(label), Some(note), Some(StateNotePosition::Bottom)) => (
+            Some(((note.width - label.width) / 2.0, 0.0)),
+            Some((0.0, label.height)),
+        ),
+        (Some(_), None, None) => (Some((0.0, 0.0)), None),
+        (None, Some(_), Some(_)) => (None, Some((0.0, 0.0))),
+        _ => (None, None),
+    };
+
+    let emit_label = |svg: &mut String| {
+        let (Some(label), Some((offset_x, offset_y))) =
+            (transition.label.as_deref(), ordinary_offset)
+        else {
+            return;
+        };
+        text_render::emit_text(
+            svg,
+            label,
+            &TextBase {
+                x: label_origin.0 + offset_x + 1.0,
+                y: label_origin.1
+                    + offset_y
+                    + 1.0
+                    + text_render::label_ascent(label, arrow_font.size as f64),
+                font_size: arrow_font.size,
+                font_family: &arrow_font.family,
+                fill: &arrow_font.color,
+                bold: arrow_font.bold,
+                italic: arrow_font.italic,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+    };
+    let emit_note = |svg: &mut String| {
+        let (Some((note, _)), Some((offset_x, offset_y))) = (note, note_offset) else {
+            return;
+        };
+        let (body_width, body_height) = attached_note_size(&note.text);
+        emit_plain_note_body(
+            svg,
+            note,
+            label_origin.0 + offset_x + 5.0,
+            label_origin.1 + offset_y + 5.0,
+            body_width.floor(),
+            body_height.floor(),
+            0.5,
+        );
+    };
+
+    match note.map(|(_, position)| position) {
+        Some(StateNotePosition::Left | StateNotePosition::Top) => {
+            emit_note(svg);
+            emit_label(svg);
+        }
+        _ => {
+            emit_label(svg);
+            emit_note(svg);
+        }
+    }
+}
+
+fn link_label_painted_max(
+    transition: &Transition,
+    note: Option<(&StateNote, StateNotePosition)>,
+    label_origin: (f64, f64),
+    arrow_font: &StateArrowFont,
+) -> (f64, f64) {
+    let ordinary_size = transition
+        .label
+        .as_deref()
+        .map(|label| ordinary_edge_label_size(label, arrow_font));
+    let note_size = note.map(|(note, _)| link_note_component_size(note));
+    let (ordinary_offset, note_offset) = match (ordinary_size, note_size, note.map(|(_, p)| p)) {
+        (Some(label), Some(note), Some(StateNotePosition::Left)) => (
+            Some((note.width, (note.height - label.height) / 2.0)),
+            Some((0.0, 0.0)),
+        ),
+        (Some(label), Some(note), Some(StateNotePosition::Right)) => (
+            Some((0.0, (note.height - label.height) / 2.0)),
+            Some((label.width, 0.0)),
+        ),
+        (Some(label), Some(note), Some(StateNotePosition::Top)) => (
+            Some(((note.width - label.width) / 2.0, note.height)),
+            Some((0.0, 0.0)),
+        ),
+        (Some(label), Some(note), Some(StateNotePosition::Bottom)) => (
+            Some(((note.width - label.width) / 2.0, 0.0)),
+            Some((0.0, label.height)),
+        ),
+        (Some(_), None, None) => (Some((0.0, 0.0)), None),
+        (None, Some(_), Some(_)) => (None, Some((0.0, 0.0))),
+        _ => (None, None),
+    };
+
+    let mut max_x = label_origin.0;
+    let mut max_y = label_origin.1;
+    if let (Some(label), Some((offset_x, offset_y)), Some(size)) =
+        (transition.label.as_deref(), ordinary_offset, ordinary_size)
+    {
+        max_x = max_x.max(
+            label_origin.0
+                + offset_x
+                + 1.0
+                + text_render::measure_with_family(
+                    label,
+                    arrow_font.size as f64,
+                    arrow_font.bold,
+                    &arrow_font.family,
+                ),
+        );
+        max_y = max_y.max(label_origin.1 + offset_y + size.height - 1.0);
+    }
+    if let (Some((note, _)), Some((offset_x, offset_y))) = (note, note_offset) {
+        let (body_width, body_height) = attached_note_size(&note.text);
+        max_x = max_x.max(label_origin.0 + offset_x + 5.0 + body_width.floor());
+        max_y = max_y.max(label_origin.1 + offset_y + 5.0 + body_height.floor());
+    }
+    (max_x, max_y)
 }
 
 fn emit_attached_svek_note(
@@ -695,6 +969,26 @@ fn emit_attached_svek_note(
     edge_paths: &[EdgePath],
     graph_origin: (f64, f64),
 ) {
+    if !position.opale {
+        write!(
+            svg,
+            r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
+            position.id, note.source_line, position.entity_id,
+        )
+        .unwrap();
+        emit_plain_note_body(
+            svg,
+            note,
+            position.x,
+            position.y,
+            position.width,
+            position.height,
+            1.0,
+        );
+        svg.push_str("</g>");
+        return;
+    }
+
     let (from, to) = if position.right {
         (position.anchor.as_str(), position.id.as_str())
     } else {
@@ -856,6 +1150,92 @@ fn emit_attached_svek_note(
         );
         text_y += crate::plantuml_metrics::text_height(LINK_FONT_SIZE);
     }
+    svg.push_str("</g>");
+}
+
+fn emit_plain_note_body(
+    svg: &mut String,
+    note: &StateNote,
+    x: f64,
+    y: f64,
+    width: f64,
+    height: f64,
+    corner_stroke_width: f64,
+) {
+    write!(
+        svg,
+        r#"<path d="M{},{} L{},{} L{},{} L{},{} L{},{} L{},{}" fill="{NOTE_FILL}" style="stroke:{DEFAULT_STROKE_COLOR};stroke-width:0.5;"/>"#,
+        fmt_f(x),
+        fmt_f(y),
+        fmt_f(x),
+        fmt_f(y + height),
+        fmt_f(x + width),
+        fmt_f(y + height),
+        fmt_f(x + width),
+        fmt_f(y + NOTE_EAR),
+        fmt_f(x + width - NOTE_EAR),
+        fmt_f(y),
+        fmt_f(x),
+        fmt_f(y),
+    )
+    .unwrap();
+    write!(
+        svg,
+        r#"<path d="M{},{} L{},{} L{},{} L{},{}" fill="{NOTE_FILL}" style="stroke:{DEFAULT_STROKE_COLOR};stroke-width:{};"/>"#,
+        fmt_f(x + width - NOTE_EAR),
+        fmt_f(y),
+        fmt_f(x + width - NOTE_EAR),
+        fmt_f(y + NOTE_EAR),
+        fmt_f(x + width),
+        fmt_f(y + NOTE_EAR),
+        fmt_f(x + width - NOTE_EAR),
+        fmt_f(y),
+        fmt_f(corner_stroke_width),
+    )
+    .unwrap();
+
+    let mut text_y = y + 5.0 + crate::plantuml_metrics::ascent(LINK_FONT_SIZE);
+    for line in note
+        .text
+        .lines()
+        .map(str::trim)
+        .filter(|line| !line.is_empty())
+    {
+        text_render::emit_text(
+            svg,
+            line,
+            &TextBase {
+                x: x + NOTE_PADDING,
+                y: text_y,
+                font_size: LINK_FONT_SIZE as u32,
+                font_family: "sans-serif",
+                fill: DEFAULT_TEXT_COLOR,
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        text_y += crate::plantuml_metrics::text_height(LINK_FONT_SIZE);
+    }
+}
+
+fn emit_floating_svek_note(svg: &mut String, note: &StateNote, position: &FloatingNotePosition) {
+    write!(
+        svg,
+        r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
+        position.alias, note.source_line, position.entity_id,
+    )
+    .unwrap();
+    emit_plain_note_body(
+        svg,
+        note,
+        position.x,
+        position.y,
+        position.width,
+        position.height,
+        1.0,
+    );
     svg.push_str("</g>");
 }
 
@@ -1113,6 +1493,7 @@ struct StateSvgIds {
     entity_ids: Vec<(String, String)>,
     link_ids: Vec<String>,
     note_ids: Vec<Option<StateNoteSvgIds>>,
+    floating_note_ids: Vec<Option<String>>,
     next_counter: usize,
 }
 
@@ -1139,7 +1520,9 @@ fn state_endpoint_layout_id(id: &str, is_source: bool) -> String {
 ///
 /// Java provenance: `CucaDiagram.startingPass` resets `cpt1` to one for every
 /// parser pass. `CommandCreateState.executeArg` creates explicit leaves in pass
-/// one. In pass two, those leaves already exist, while
+/// one. `CommandFactoryNote` also creates named floating-note leaves in pass
+/// one, interleaved with explicit states by source order. In pass two, those
+/// leaves already exist, while
 /// `CommandLinkStateCommon.executeArg` lazily creates missing endpoints and
 /// then constructs each `Link`. `StateDiagramFactory` schedules
 /// `CommandFactoryNoteOnEntity` in pass three, after another reset; each
@@ -1150,21 +1533,55 @@ fn allocate_state_svg_ids(diagram: &StateDiagram, state_ids: &[String]) -> State
     let mut entity_ids: Vec<(String, String)> = Vec::new();
     let mut link_ids = vec![String::new(); diagram.transitions.len()];
     let mut note_ids = vec![None; diagram.notes.len()];
+    let mut floating_note_ids = vec![None; diagram.notes.len()];
 
-    let mut declarations: Vec<(usize, usize, &str)> = Vec::new();
+    enum PassOneEvent<'a> {
+        State(&'a str),
+        FloatingNote { index: usize, alias: &'a str },
+    }
+
+    let mut pass_one_events = Vec::new();
     for (idx, state) in diagram.states.iter().enumerate() {
         if let Some(line) = state.decl_line {
-            declarations.push((line, idx, state.id.as_str()));
+            pass_one_events.push((line, idx, PassOneEvent::State(state.id.as_str())));
         }
     }
-    declarations.sort_by_key(|(line, seq, _)| (*line, *seq));
+    let state_sequence_end = diagram.states.len();
+    for (index, note) in diagram.notes.iter().enumerate() {
+        if let StateNoteKind::Floating(Some(alias)) = &note.kind {
+            let command_line = if note.command_line == 0 {
+                note.source_line
+            } else {
+                note.command_line
+            };
+            pass_one_events.push((
+                command_line,
+                state_sequence_end + note.creation_order,
+                PassOneEvent::FloatingNote {
+                    index,
+                    alias: alias.as_str(),
+                },
+            ));
+        }
+    }
+    pass_one_events.sort_by_key(|(line, seq, _)| (*line, *seq));
     let mut pass_one_counter = 2usize;
-    for (_, _, id) in declarations {
-        if state_ids.iter().any(|state_id| state_id == id)
-            && !entity_ids.iter().any(|(seen, _)| seen == id)
-        {
-            entity_ids.push((id.to_string(), format!("ent{pass_one_counter:04}")));
-            pass_one_counter += 1;
+    for (_, _, event) in pass_one_events {
+        match event {
+            PassOneEvent::State(id)
+                if state_ids.iter().any(|state_id| state_id == id)
+                    && !entity_ids.iter().any(|(seen, _)| seen == id) =>
+            {
+                entity_ids.push((id.to_string(), format!("ent{pass_one_counter:04}")));
+                pass_one_counter += 1;
+            }
+            PassOneEvent::FloatingNote { index, alias } => {
+                let entity_id = format!("ent{pass_one_counter:04}");
+                pass_one_counter += 1;
+                entity_ids.push((alias.to_string(), entity_id.clone()));
+                floating_note_ids[index] = Some(entity_id);
+            }
+            PassOneEvent::State(_) => {}
         }
     }
 
@@ -1250,6 +1667,7 @@ fn allocate_state_svg_ids(diagram: &StateDiagram, state_ids: &[String]) -> State
         entity_ids,
         link_ids,
         note_ids,
+        floating_note_ids,
         next_counter: pass_two_counter,
     }
 }
@@ -2936,14 +3354,21 @@ pub fn render_with_oracle(
 
     let allocated_ids = allocate_state_svg_ids(diagram, &state_ids);
     let attached_notes = attached_note_specs(diagram, &allocated_ids);
-
-    // Compute note space.
-    let right_note_space: f64 = diagram
-        .notes
+    let floating_notes = floating_note_specs(diagram, &allocated_ids);
+    let mut layout_node_ids = allocated_ids
+        .entity_ids
         .iter()
-        .filter(|n| matches!(&n.kind, StateNoteKind::OnLink))
-        .map(|n| note_box_width(&n.text) + NOTE_H_GAP)
-        .fold(0.0_f64, f64::max);
+        .filter_map(|(id, _)| {
+            (state_ids.iter().any(|state_id| state_id == id)
+                || floating_notes.iter().any(|note| note.alias == *id))
+            .then_some(id.clone())
+        })
+        .collect::<Vec<_>>();
+    layout_node_ids.extend(attached_notes.iter().map(|note| note.id.clone()));
+    let layout_index_of = |id: &str| layout_node_ids.iter().position(|node_id| node_id == id);
+
+    // Attached and link notes now participate directly in SVEK.
+    let right_note_space = 0.0;
     let left_note_space = 0.0;
     let mut graph_body_x = SVEK_ORIGIN_X + left_note_space;
     let mut graph_body_y = SVEK_ORIGIN_Y + title_h;
@@ -2982,15 +3407,18 @@ pub fn render_with_oracle(
         None
     } else {
         let mut layout = LayoutGraph::new(Direction::TopToBottom).with_plantuml_svek_spacing();
-        for id in &state_ids {
-            let state_def = find_state(id);
-            let (w, h, shape) = state_node_size(id, state_def);
-            add_state_layout_node(&mut layout, id, w, h, shape);
+        for id in &layout_node_ids {
+            if let Some(note) = floating_notes.iter().find(|note| note.alias == *id) {
+                layout.add_node(id, "", note.width, note.height);
+            } else if let Some(note) = attached_notes.iter().find(|note| note.id == *id) {
+                layout.add_node(id, "", note.width, note.height);
+            } else {
+                let state_def = find_state(id);
+                let (w, h, shape) = state_node_size(id, state_def);
+                add_state_layout_node(&mut layout, id, w, h, shape);
+            }
         }
-        for note in &attached_notes {
-            layout.add_node(&note.id, "", note.width, note.height);
-        }
-        for t in &diagram.transitions {
+        for (transition_index, t) in diagram.transitions.iter().enumerate() {
             let from = map_id(&t.from, true);
             let to = map_id(&t.to, false);
             let direction = explicit_transition_direction(diagram, t);
@@ -3017,18 +3445,14 @@ pub fn render_with_oracle(
             if horizontal {
                 layout.add_plantuml_svek_line0_edge(layout_from, layout_to);
             }
-            let label_size = t.label.as_deref().map(|label| EdgeLabelSize {
-                // `SvekEdge.addVisibilityModifier` gives ordinary center
-                // labels one pixel of margin on every side before
-                // `appendLine` emits the fixed HTML table.
-                width: text_render::measure_with_family(
-                    label,
-                    arrow_font.size as f64,
-                    arrow_font.bold,
-                    &arrow_font.family,
-                ) + 2.0,
-                height: (text_render::label_height(label, arrow_font.size as f64) + 2.0).floor(),
-            });
+            let ordinary_label_size = t
+                .label
+                .as_deref()
+                .map(|label| ordinary_edge_label_size(label, &arrow_font));
+            let label_size = compose_link_label_size(
+                ordinary_label_size,
+                link_note_for_transition(diagram, transition_index),
+            );
             layout.add_edge_with_label_sizes_and_minlen(
                 layout_from,
                 layout_to,
@@ -3056,8 +3480,14 @@ pub fn render_with_oracle(
     };
 
     let layout_positions = layout_result.as_ref().map(|r| &r.node_positions[..]);
+    let state_layout_positions = layout_positions.map(|positions| {
+        state_ids
+            .iter()
+            .filter_map(|id| layout_index_of(id).map(|index| positions[index]))
+            .collect::<Vec<_>>()
+    });
     if let Some(layout_positions) = layout_positions {
-        if !attached_notes.is_empty() {
+        if !attached_notes.is_empty() || !floating_notes.is_empty() {
             // Java `SvekResult.calculateDimension` measures the painted
             // `SvekResult` and moves it by `6 - minX`. `LimitFinder` expands
             // rectangles one pixel to the left, while Opale's UPath begins at
@@ -3065,26 +3495,37 @@ pub fn render_with_oracle(
             // translation by one pixel without changing Graphviz geometry.
             let state_min_x = state_ids
                 .iter()
-                .enumerate()
-                .map(|(index, id)| {
+                .filter_map(|id| {
+                    let index = layout_index_of(id)?;
                     let state_def = find_state(id);
                     let (_, _, shape) = state_node_size(id, state_def);
-                    layout_positions[index].x
-                        - if shape == StateLayoutShape::Box {
-                            1.0
-                        } else {
-                            0.0
-                        }
+                    Some(
+                        layout_positions[index].x
+                            - if shape == StateLayoutShape::Box {
+                                1.0
+                            } else {
+                                0.0
+                            },
+                    )
                 })
                 .fold(f64::INFINITY, f64::min);
-            let note_min_x = attached_notes
+            let attached_min_x = attached_notes
                 .iter()
-                .enumerate()
-                .map(|(offset, _)| layout_positions[state_ids.len() + offset].x)
+                .filter_map(|note| layout_index_of(&note.id).map(|index| layout_positions[index].x))
                 .fold(f64::INFINITY, f64::min);
-            graph_body_x = 6.0 - state_min_x.min(note_min_x);
+            let floating_min_x = floating_notes
+                .iter()
+                .filter_map(|note| {
+                    layout_index_of(&note.alias).map(|index| layout_positions[index].x)
+                })
+                .fold(f64::INFINITY, f64::min);
+            graph_body_x = 6.0 - state_min_x.min(attached_min_x).min(floating_min_x);
         }
-        graph_body_y = svek_origin_y_for_layout(diagram, &state_ids, layout_positions) + title_h;
+        graph_body_y = state_layout_positions
+            .as_deref()
+            .map(|positions| svek_origin_y_for_layout(diagram, &state_ids, positions))
+            .unwrap_or(SVEK_ORIGIN_Y)
+            + title_h;
     }
     let edge_paths: &[EdgePath] = if use_oracle {
         &empty_edge_paths
@@ -3096,8 +3537,10 @@ pub fn render_with_oracle(
     };
 
     let use_sugiyama = !use_oracle
-        && layout_positions
-            .is_some_and(|positions| positions.len() >= state_ids.len() + attached_notes.len());
+        && layout_positions.is_some_and(|positions| positions.len() >= layout_node_ids.len())
+        && state_layout_positions
+            .as_ref()
+            .is_some_and(|positions| positions.len() == state_ids.len());
     let history_entity_keys: Vec<String> = oracle
         .map(|orc| {
             let mut keys: Vec<String> = orc
@@ -3170,7 +3613,7 @@ pub fn render_with_oracle(
         };
         (positions, tw, th, tw, th)
     } else if use_sugiyama {
-        let lp = layout_positions.unwrap();
+        let lp = state_layout_positions.as_deref().unwrap();
         let mut positions: Vec<(String, f64, f64, f64, f64)> = Vec::new();
         let mut max_x = 0.0_f64;
         let mut painted_max_x = 0.0_f64;
@@ -3205,8 +3648,17 @@ pub fn render_with_oracle(
             max_y = max_y.max(layout_y + h);
             painted_max_y = painted_max_y.max(layout_y + h - 1.0);
         }
-        for (offset, note) in attached_notes.iter().enumerate() {
-            let note_position = lp[state_ids.len() + offset];
+        for note in &attached_notes {
+            let note_position = layout_positions.unwrap()[layout_index_of(&note.id).unwrap()];
+            let layout_x = quantize_svek_coord(note_position.x);
+            let layout_y = quantize_svek_coord(note_position.y);
+            max_x = max_x.max(layout_x + note.width);
+            painted_max_x = painted_max_x.max(layout_x + note.width);
+            max_y = max_y.max(layout_y + note.height);
+            painted_max_y = painted_max_y.max(layout_y + note.height);
+        }
+        for note in &floating_notes {
+            let note_position = layout_positions.unwrap()[layout_index_of(&note.alias).unwrap()];
             let layout_x = quantize_svek_coord(note_position.x);
             let layout_y = quantize_svek_coord(note_position.y);
             max_x = max_x.max(layout_x + note.width);
@@ -3226,7 +3678,56 @@ pub fn render_with_oracle(
                     painted_max_y = painted_max_y.max(quantize_svek_coord(y));
                 }
             }
-            if diagram
+            let has_link_notes = diagram
+                .transitions
+                .iter()
+                .enumerate()
+                .any(|(index, _)| link_note_for_transition(diagram, index).is_some());
+            if has_link_notes {
+                let mut consumed = vec![false; result.edge_paths.len()];
+                for (index, transition) in diagram.transitions.iter().enumerate() {
+                    let note = link_note_for_transition(diagram, index);
+                    if transition.label.is_none() && note.is_none() {
+                        continue;
+                    }
+                    let from = map_id(&transition.from, true);
+                    let to = map_id(&transition.to, false);
+                    let inverted = matches!(
+                        explicit_transition_direction(diagram, transition),
+                        Some(ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Up)
+                    );
+                    let (edge_from, edge_to) = if inverted {
+                        (to.as_str(), from.as_str())
+                    } else {
+                        (from.as_str(), to.as_str())
+                    };
+                    let Some((edge_index, label)) =
+                        result
+                            .edge_paths
+                            .iter()
+                            .enumerate()
+                            .find_map(|(edge_index, edge)| {
+                                (!consumed[edge_index]
+                                    && edge.from == edge_from
+                                    && edge.to == edge_to)
+                                    .then_some((edge_index, edge.label?))
+                            })
+                    else {
+                        continue;
+                    };
+                    consumed[edge_index] = true;
+                    let painted = link_label_painted_max(
+                        transition,
+                        note,
+                        (quantize_svek_coord(label.x), quantize_svek_coord(label.y)),
+                        &arrow_font,
+                    );
+                    max_x = max_x.max(painted.0);
+                    painted_max_x = painted_max_x.max(painted.0);
+                    max_y = max_y.max(painted.1);
+                    painted_max_y = painted_max_y.max(painted.1);
+                }
+            } else if diagram
                 .transitions
                 .iter()
                 .any(|transition| transition.label.is_some())
@@ -3270,15 +3771,35 @@ pub fn render_with_oracle(
         let layout_positions = layout_positions.unwrap();
         attached_notes
             .iter()
-            .enumerate()
-            .map(|(offset, note)| {
-                let position = layout_positions[state_ids.len() + offset];
+            .map(|note| {
+                let position = layout_positions[layout_index_of(&note.id).unwrap()];
                 AttachedNotePosition {
                     note_index: note.note_index,
                     id: note.id.clone(),
                     entity_id: note.entity_id.clone(),
                     anchor: note.anchor.clone(),
                     right: note.right,
+                    opale: note.opale,
+                    x: quantize_svek_coord(position.x) + graph_body_x,
+                    y: quantize_svek_coord(position.y) + graph_body_y,
+                    width: note.width,
+                    height: note.height,
+                }
+            })
+            .collect::<Vec<_>>()
+    } else {
+        Vec::new()
+    };
+    let mut floating_note_positions = if use_sugiyama {
+        let layout_positions = layout_positions.unwrap();
+        floating_notes
+            .iter()
+            .map(|note| {
+                let position = layout_positions[layout_index_of(&note.alias).unwrap()];
+                FloatingNotePosition {
+                    note_index: note.note_index,
+                    alias: note.alias.clone(),
+                    entity_id: note.entity_id.clone(),
                     x: quantize_svek_coord(position.x) + graph_body_x,
                     y: quantize_svek_coord(position.y) + graph_body_y,
                     width: note.width,
@@ -3297,6 +3818,9 @@ pub fn render_with_oracle(
             *x += body_shift_x;
         }
         for note in &mut attached_note_positions {
+            note.x += body_shift_x;
+        }
+        for note in &mut floating_note_positions {
             note.x += body_shift_x;
         }
         graph_body_x += body_shift_x;
@@ -3444,7 +3968,7 @@ pub fn render_with_oracle(
             })
             .collect()
     } else {
-        allocated_ids.entity_ids
+        allocated_ids.entity_ids.clone()
     };
 
     let ent_id_of = |id: &str| -> &str {
@@ -3481,9 +4005,32 @@ pub fn render_with_oracle(
         })
         .unwrap_or_default();
     let mut emitted_named_notes = vec![false; named_floating_notes.len()];
+    let mut emitted_floating_notes = vec![false; floating_note_positions.len()];
 
     // Render entities.
     for (id, cx, cy, bw, bh) in &positions {
+        if !floating_note_positions.is_empty() {
+            let entity_order = allocated_ids
+                .entity_ids
+                .iter()
+                .position(|(entity, _)| entity == id)
+                .unwrap_or(usize::MAX);
+            for (index, position) in floating_note_positions.iter().enumerate() {
+                let note_order = allocated_ids
+                    .entity_ids
+                    .iter()
+                    .position(|(entity, _)| entity == &position.alias)
+                    .unwrap_or(usize::MAX);
+                if !emitted_floating_notes[index] && note_order < entity_order {
+                    emit_floating_svek_note(
+                        &mut svg,
+                        &diagram.notes[position.note_index],
+                        position,
+                    );
+                    emitted_floating_notes[index] = true;
+                }
+            }
+        }
         if !named_floating_notes.is_empty() {
             let oracle_name = if let Some(key) = history_key_for(id) {
                 key
@@ -4218,6 +4765,12 @@ pub fn render_with_oracle(
             }
         }
     }
+    for (index, position) in floating_note_positions.iter().enumerate() {
+        if !emitted_floating_notes[index] {
+            emit_floating_svek_note(&mut svg, &diagram.notes[position.note_index], position);
+            emitted_floating_notes[index] = true;
+        }
+    }
     for (idx, (alias, note, rect, _)) in named_floating_notes.iter().enumerate() {
         if !emitted_named_notes[idx] {
             emit_oracle_named_floating_note(&mut svg, alias, rect, &note.text, TEXT_COLOR);
@@ -4249,16 +4802,13 @@ pub fn render_with_oracle(
         .notes
         .iter()
         .filter(|n| {
-            !(oracle.is_some()
-                && matches!(
-                    &n.kind,
-                    // Named floating notes are emitted up front under their
-                    // alias; `note on link` shapes are emitted inside the
-                    // preceding link's `<g class="link">` group. Neither has a
-                    // standalone `GMN*` entity, so skip both here to keep the
-                    // positional GMN pairing aligned.
-                    StateNoteKind::Floating(Some(_)) | StateNoteKind::OnLink
-                ))
+            !matches!(
+                &n.kind,
+                // Named floating notes are pass-one entities; `note on link`
+                // shapes are emitted inside their owning link group. Neither
+                // has a standalone `GMN*` entity.
+                StateNoteKind::Floating(Some(_)) | StateNoteKind::OnLink { .. }
+            )
         })
         .enumerate()
     {
@@ -4383,7 +4933,7 @@ pub fn render_with_oracle(
                 SVEK_ORIGIN_X + note_w,
                 SVEK_ORIGIN_Y + title_h,
             ),
-            StateNoteKind::OnLink => {
+            StateNoteKind::OnLink { .. } => {
                 let mid_y = total_height / 2.0;
                 let cx_approx = positions
                     .first()
@@ -4517,6 +5067,7 @@ pub fn render_with_oracle(
         let mut consumed_edge_paths = vec![false; edge_paths.len()];
         let mut used_path_ids = std::collections::HashSet::new();
         for (transition_idx, t) in diagram.transitions.iter().enumerate() {
+            let link_note = link_note_for_transition(diagram, transition_idx);
             let transition_style = diagram.transition_style(transition_idx);
             let explicit_color = transition_style
                 .color
@@ -4661,41 +5212,23 @@ pub fn render_with_oracle(
                     link_thickness,
                 );
 
-                // Label.
-                if let Some(label) = &t.label {
-                    let (label_x, label_y) = ep
+                // Ordinary transition text and `note on link` share one SVEK
+                // center-label block.
+                if t.label.is_some() || link_note.is_some() {
+                    let label_origin = ep
                         .label
                         .map(|position| {
                             (
-                                quantize_svek_coord(position.x) + graph_body_x + 1.0,
-                                quantize_svek_coord(position.y)
-                                    + graph_body_y
-                                    + 1.0
-                                    + text_render::label_ascent(label, arrow_font.size as f64),
+                                quantize_svek_coord(position.x) + graph_body_x,
+                                quantize_svek_coord(position.y) + graph_body_y,
                             )
                         })
                         .unwrap_or_else(|| {
                             let first = points.first().unwrap();
                             let last = points.last().unwrap();
-                            ((first.0 + last.0) / 2.0 + 1.0, (first.1 + last.1) / 2.0)
+                            ((first.0 + last.0) / 2.0, (first.1 + last.1) / 2.0)
                         });
-                    let mut text_buf = String::new();
-                    text_render::emit_text(
-                        &mut text_buf,
-                        label,
-                        &TextBase {
-                            x: label_x,
-                            y: label_y,
-                            font_size: arrow_font.size,
-                            font_family: &arrow_font.family,
-                            fill: &arrow_font.color,
-                            bold: arrow_font.bold,
-                            italic: arrow_font.italic,
-                            underline: false,
-                            skip_underline: false,
-                        },
-                    );
-                    svg.push_str(&text_buf);
+                    emit_link_label_composition(&mut svg, t, link_note, label_origin, &arrow_font);
                 }
             } else {
                 // Straight line fallback.
@@ -4719,27 +5252,14 @@ pub fn render_with_oracle(
                 let endpoint = (to_cx, end_y);
                 render_arrowhead(&mut svg, control, endpoint, link_color, link_thickness);
 
-                // Label.
-                if let Some(label) = &t.label {
-                    let label_x = from_cx.max(to_cx) + 1.0;
-                    let label_y = (start_y + end_y) / 2.0;
-                    let mut text_buf = String::new();
-                    text_render::emit_text(
-                        &mut text_buf,
-                        label,
-                        &TextBase {
-                            x: label_x,
-                            y: label_y,
-                            font_size: arrow_font.size,
-                            font_family: &arrow_font.family,
-                            fill: &arrow_font.color,
-                            bold: arrow_font.bold,
-                            italic: arrow_font.italic,
-                            underline: false,
-                            skip_underline: false,
-                        },
+                if t.label.is_some() || link_note.is_some() {
+                    emit_link_label_composition(
+                        &mut svg,
+                        t,
+                        link_note,
+                        (from_cx.max(to_cx), (start_y + end_y) / 2.0),
+                        &arrow_font,
                     );
-                    svg.push_str(&text_buf);
                 }
             }
 
@@ -6517,7 +7037,7 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
         let anchored = diagram.notes.iter().filter(|n| {
             !matches!(
                 &n.kind,
-                StateNoteKind::Floating(Some(_)) | StateNoteKind::OnLink
+                StateNoteKind::Floating(Some(_)) | StateNoteKind::OnLink { .. }
             )
         });
         for (note, (gmn_name, rect)) in anchored.zip(gmns.iter()) {
@@ -7123,6 +7643,13 @@ mod tests {
                 },
             ]
         );
+        assert_eq!(
+            attached_note_specs(state_diagram, &allocated)
+                .iter()
+                .map(|note| note.opale)
+                .collect::<Vec<_>>(),
+            [false, true, true]
+        );
         let svg = crate::render_svg(&diagram);
 
         for (name, source_line, entity_id) in [
@@ -7168,6 +7695,117 @@ mod tests {
             svg.contains("Floating note 1"),
             "floating note text should appear in SVG"
         );
+    }
+
+    #[test]
+    fn renamed_floating_notes_keep_pass_one_uids_and_document_order() {
+        let input = concat!(
+            "@startuml\n",
+            "note as AzureMemo\n",
+            "  renamed first line\n",
+            "  renamed second line\n",
+            "end note\n",
+            "[*] --> CopperRelay\n",
+            "CopperRelay --> VioletRelay\n",
+            "note \"second renamed alias\" as BrassMemo\n",
+            "VioletRelay --> [*]\n",
+            "@enduml\n",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::State(state_diagram) = &diagram else {
+            panic!("expected state diagram");
+        };
+        let state_ids = vec![
+            "__start__".to_string(),
+            "CopperRelay".to_string(),
+            "VioletRelay".to_string(),
+            "__end__".to_string(),
+        ];
+        let allocated = allocate_state_svg_ids(state_diagram, &state_ids);
+
+        assert_eq!(
+            allocated.floating_note_ids,
+            [Some("ent0002".to_string()), Some("ent0003".to_string())]
+        );
+
+        let svg = crate::render_svg(&diagram);
+        let first_note = svg
+            .find(r#"data-qualified-name="AzureMemo""#)
+            .expect("first floating note");
+        let second_note = svg
+            .find(r#"data-qualified-name="BrassMemo""#)
+            .expect("second floating note");
+        let start = svg
+            .find(r#"data-qualified-name=".start.""#)
+            .expect("start pseudo-state");
+        assert!(first_note < second_note && second_note < start);
+        assert!(
+            svg.contains(r#"data-qualified-name="AzureMemo" data-source-line="2" id="ent0002""#)
+        );
+        assert!(
+            svg.contains(r#"data-qualified-name="BrassMemo" data-source-line="7" id="ent0003""#)
+        );
+        for text in [
+            "renamed first line",
+            "renamed second line",
+            "second renamed alias",
+        ] {
+            assert!(svg.contains(text), "{text} missing from {svg}");
+        }
+    }
+
+    #[test]
+    fn renamed_link_notes_share_their_owning_link_without_consuming_uids() {
+        let input = concat!(
+            "@startuml\n",
+            "[*] --> RenamedAlpha\n",
+            "RenamedAlpha --> RenamedBeta : renamed event\n",
+            "note left on link\n",
+            "  first link line\n",
+            "  second link line\n",
+            "end note\n",
+            "RenamedBeta --> RenamedGamma\n",
+            "note right on link : second link note\n",
+            "RenamedGamma --> [*]\n",
+            "@enduml\n",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::State(state_diagram) = &diagram else {
+            panic!("expected state diagram");
+        };
+        let state_ids = vec![
+            "__start__".to_string(),
+            "RenamedAlpha".to_string(),
+            "RenamedBeta".to_string(),
+            "RenamedGamma".to_string(),
+            "__end__".to_string(),
+        ];
+        let allocated = allocate_state_svg_ids(state_diagram, &state_ids);
+        assert_eq!(allocated.link_ids, ["lnk4", "lnk6", "lnk8", "lnk10"]);
+        assert!(allocated.note_ids.iter().all(Option::is_none));
+        assert!(allocated.floating_note_ids.iter().all(Option::is_none));
+
+        let svg = crate::render_svg(&diagram);
+        assert!(!svg.contains("data-qualified-name=\"GMN"));
+        for (link_id, texts) in [
+            ("lnk6", ["first link line", "second link line"]),
+            ("lnk8", ["second link note", "second link note"]),
+        ] {
+            let group_start = svg
+                .find(&format!(r#"id="{link_id}""#))
+                .expect("owning link group");
+            let group_end = group_start
+                + svg[group_start..]
+                    .find("</g>")
+                    .expect("owning link group end");
+            let group = &svg[group_start..group_end];
+            for text in texts {
+                assert!(
+                    group.contains(text),
+                    "{text} missing from {link_id}: {group}"
+                );
+            }
+        }
     }
 
     #[test]

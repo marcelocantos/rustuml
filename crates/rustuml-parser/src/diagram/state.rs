@@ -127,8 +127,22 @@ pub enum StateNoteKind {
     /// alias (`as FN1`) when present so the renderer can pair it with the
     /// oracle entity of the same qualified name.
     Floating(Option<String>),
-    /// `note on link` — attached to the most recent transition
-    OnLink,
+    /// `note [position] on link` — attached to the most recent transition.
+    OnLink {
+        /// Index of the transition owned by this note.
+        transition_index: usize,
+        /// Placement relative to the transition's ordinary label.
+        position: StateNotePosition,
+    },
+}
+
+/// Placement of a note composed into a transition label.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum StateNotePosition {
+    Left,
+    Right,
+    Top,
+    Bottom,
 }
 
 /// A state in a state diagram.

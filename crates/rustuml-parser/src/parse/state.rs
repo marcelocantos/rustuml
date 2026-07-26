@@ -583,24 +583,38 @@ impl StateParser {
             return false;
         }
 
-        // `note on link` — note on the most recent transition.
-        if line == "note on link"
-            || line.starts_with("note on link ")
-            || line.starts_with("note on link:")
+        // `note [left|right|top|bottom] on link` mutates the most recently
+        // created transition during PlantUML's second parser pass.
         {
-            let inline = line
-                .strip_prefix("note on link")
-                .and_then(|r| {
-                    r.strip_prefix(" : ")
-                        .or_else(|| r.strip_prefix(": "))
-                        .or_else(|| r.strip_prefix(':'))
-                })
-                .map(|s| s.trim());
+            static RE: LazyLock<Regex> = LazyLock::new(|| {
+                Regex::new(
+                    r"^note(?:\s+(left|right|top|bottom))?\s+(?:on|of)\s+link(?:\s*:\s*(.*))?$",
+                )
+                .unwrap()
+            });
+            let Some(caps) = RE.captures(line) else {
+                return self.parse_non_link_note(line);
+            };
+            let Some(transition_index) = self.transitions.len().checked_sub(1) else {
+                return true;
+            };
+            let position = match caps.get(1).map(|capture| capture.as_str()) {
+                Some("left") => StateNotePosition::Left,
+                Some("right") => StateNotePosition::Right,
+                Some("top") => StateNotePosition::Top,
+                Some("bottom") | None => StateNotePosition::Bottom,
+                Some(_) => unreachable!("note-link regex validates position"),
+            };
+            let kind = StateNoteKind::OnLink {
+                transition_index,
+                position,
+            };
+            let inline = caps.get(2).map(|capture| capture.as_str().trim());
             if let Some(text) = inline.filter(|t| !t.is_empty()) {
                 let (source_line, creation_order) = self.note_metadata();
                 self.notes.push(StateNote {
                     text: text.to_string(),
-                    kind: StateNoteKind::OnLink,
+                    kind,
                     source_line,
                     command_line: source_line,
                     creation_order,
@@ -608,14 +622,20 @@ impl StateParser {
             } else {
                 let (source_line, creation_order) = self.note_metadata();
                 self.note_buffer = Some(NoteBuffer {
-                    kind: StateNoteKind::OnLink,
+                    kind,
                     text: String::new(),
                     source_line: source_line + 1,
                     command_line: source_line,
                     creation_order,
                 });
             }
-            return true;
+            true
+        }
+    }
+
+    fn parse_non_link_note(&mut self, line: &str) -> bool {
+        if !line.starts_with("note") {
+            return false;
         }
 
         // `note "floating text" as ALIAS`
@@ -630,6 +650,23 @@ impl StateParser {
                     text,
                     kind: StateNoteKind::Floating(Some(alias)),
                     source_line,
+                    command_line: source_line,
+                    creation_order,
+                });
+                return true;
+            }
+        }
+
+        // `note as ALIAS` followed by a multiline body.
+        {
+            static RE: LazyLock<Regex> =
+                LazyLock::new(|| Regex::new(r"^note\s+as\s+([\w.]+)$").unwrap());
+            if let Some(caps) = RE.captures(line) {
+                let (source_line, creation_order) = self.note_metadata();
+                self.note_buffer = Some(NoteBuffer {
+                    kind: StateNoteKind::Floating(Some(caps[1].to_string())),
+                    text: String::new(),
+                    source_line: source_line + 1,
                     command_line: source_line,
                     creation_order,
                 });
@@ -926,6 +963,47 @@ mod tests {
         let d = parse("[*] --> A\nA --> [*]\nnote on link\n  link note\nend note");
         assert_eq!(d.notes.len(), 1);
         assert_eq!(d.notes[0].text, "link note");
-        assert!(matches!(&d.notes[0].kind, StateNoteKind::OnLink));
+        assert!(matches!(
+            &d.notes[0].kind,
+            StateNoteKind::OnLink {
+                transition_index: 1,
+                position: StateNotePosition::Bottom,
+            }
+        ));
+    }
+
+    #[test]
+    fn positioned_link_note_keeps_transition_ownership() {
+        let d = parse(
+            "[*] --> RenamedAlpha\n\
+             RenamedAlpha --> RenamedBeta : event\n\
+             note left on link : owned note\n\
+             RenamedBeta --> [*]",
+        );
+        assert!(matches!(
+            &d.notes[0].kind,
+            StateNoteKind::OnLink {
+                transition_index: 1,
+                position: StateNotePosition::Left,
+            }
+        ));
+    }
+
+    #[test]
+    fn multiline_named_floating_note_keeps_alias_and_locations() {
+        let d = parse(
+            "note as FloatingAlias\n\
+               renamed first line\n\
+               renamed second line\n\
+             end note\n\
+             [*] --> A\n\
+             A --> [*]",
+        );
+        assert!(matches!(
+            &d.notes[0].kind,
+            StateNoteKind::Floating(Some(alias)) if alias == "FloatingAlias"
+        ));
+        assert_eq!(d.notes[0].source_line, 2);
+        assert_eq!(d.notes[0].command_line, 1);
     }
 }
