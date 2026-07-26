@@ -10,7 +10,9 @@ use std::collections::{HashMap, HashSet};
 use std::fmt::Write;
 use std::time::Duration;
 
-use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph, NodePosition};
+use rustuml_layout::graph::{
+    Direction, EdgeLabelPosition, EdgeLabelSize, EdgePath, LayoutGraph, NodePosition,
+};
 use rustuml_parser::diagram::activity::{ActivityDiagram, ActivityStep, NotePosition};
 
 use crate::creole;
@@ -26277,6 +26279,7 @@ enum LegacyGraphNodeKind {
     Start,
     End,
     Action(String),
+    Decision { qualified_id: usize },
     Bar(String),
 }
 
@@ -26292,8 +26295,17 @@ struct LegacyGraphNode {
 struct LegacyGraphEdge {
     from: String,
     to: String,
+    center_label: Option<String>,
+    head_label: Option<String>,
     source_line: usize,
     link_id: usize,
+}
+
+struct ParsedLegacyGraphLink {
+    explicit_from: Option<(String, LegacyGraphNodeKind)>,
+    center_label: Option<String>,
+    to_key: String,
+    to_kind: LegacyGraphNodeKind,
 }
 
 struct LegacyActivityGraph {
@@ -26340,10 +26352,35 @@ fn render_legacy_activity_graph(diagram: &ActivityDiagram) -> Option<String> {
             LegacyGraphNodeKind::Action(_) | LegacyGraphNodeKind::Bar(_) => {
                 layout.add_node(&node.key, "", node.width, node.height);
             }
+            LegacyGraphNodeKind::Decision { .. } => {
+                // `GeneralImageBuilder.createEntityImageBlockInternal` selects
+                // `EntityImageBranch`, whose `ShapeType.DIAMOND` is passed
+                // through `SvekNode.appendShapeInternal` to DOT.
+                layout.add_diamond_node(&node.key, "", node.width, node.height);
+            }
         }
     }
     for edge in &graph.edges {
-        layout.add_edge(&edge.from, &edge.to, None);
+        let label_size = |label: Option<&str>, margin: f64| {
+            label.map(|label| EdgeLabelSize {
+                width: (text_render::measure(label, 11.0, false) + margin * 2.0).floor(),
+                height: (text_render::label_height(label, 11.0) + margin * 2.0).floor(),
+            })
+        };
+        if edge.center_label.is_some() || edge.head_label.is_some() {
+            layout.add_edge_with_label_sizes(
+                &edge.from,
+                &edge.to,
+                // `SvekEdge.addVisibilityModifier` wraps ordinary center
+                // labels in a one-pixel margin before serializing the fixed
+                // HTML-table obstacle. Endpoint quantifiers are unwrapped.
+                label_size(edge.center_label.as_deref(), 1.0),
+                None,
+                label_size(edge.head_label.as_deref(), 0.0),
+            );
+        } else {
+            layout.add_edge(&edge.from, &edge.to, None);
+        }
     }
     let mut solved = layout.layout_full(Duration::from_secs(2))?;
 
@@ -26351,7 +26388,11 @@ fn render_legacy_activity_graph(diagram: &ActivityDiagram) -> Option<String> {
     // ranksep for ACTIVITY. `SvekEdge.solveLine` consumes Graphviz's two-decimal
     // SVG coordinates before `SvekResult.calculateDimension` translates the
     // painted envelope to its 6 px top and 7 px left rails.
-    quantize_legacy_svek_layout(&mut solved.node_positions, &mut solved.edge_paths);
+    quantize_legacy_svek_layout(
+        &mut solved.node_positions,
+        &mut solved.edge_paths,
+        solved.svg_y_origin,
+    );
     let min_x = solved
         .node_positions
         .iter()
@@ -26365,6 +26406,11 @@ fn render_legacy_activity_graph(diagram: &ActivityDiagram) -> Option<String> {
     let dx = 7.0 - min_x;
     let dy = 6.0 - min_y;
     translate_legacy_svek_layout(&mut solved.node_positions, &mut solved.edge_paths, dx, dy);
+    manage_legacy_graph_endpoint_label_collisions(
+        &graph,
+        &solved.node_positions,
+        &mut solved.edge_paths,
+    );
 
     let mut body = String::new();
     for (node, position) in graph.nodes.iter().zip(&solved.node_positions) {
@@ -26407,6 +26453,27 @@ fn render_legacy_activity_graph(diagram: &ActivityDiagram) -> Option<String> {
                     node.height,
                 );
             }
+            LegacyGraphNodeKind::Decision { qualified_id, .. } => {
+                let cx = position.x + node.width / 2.0;
+                let cy = position.y + node.height / 2.0;
+                write!(
+                    body,
+                    r##"<g class="entity" data-qualified-name=".{}" id="ent{:04}"><polygon fill="#F1F1F1" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:#181818;stroke-width:0.5;"/></g>"##,
+                    qualified_id,
+                    node.entity_id,
+                    f(cx),
+                    f(position.y),
+                    f(position.x + node.width),
+                    f(cy),
+                    f(cx),
+                    f(position.y + node.height),
+                    f(position.x),
+                    f(cy),
+                    f(cx),
+                    f(position.y),
+                )
+                .unwrap();
+            }
             LegacyGraphNodeKind::Bar(_) => {
                 write!(
                     body,
@@ -26443,7 +26510,35 @@ fn render_legacy_activity_graph(diagram: &ActivityDiagram) -> Option<String> {
         .zip(&solved.node_positions)
         .map(|(node, position)| position.y + node.height)
         .fold(0.0, f64::max);
-    let width = (max_right + LEGACY_V1_RIGHT_PAD).ceil() as u32;
+    let mut used_label_paths = vec![false; solved.edge_paths.len()];
+    let mut max_label_right = 0.0f64;
+    for edge in &graph.edges {
+        let Some(path_idx) = solved
+            .edge_paths
+            .iter()
+            .enumerate()
+            .find(|(idx, path)| {
+                !used_label_paths[*idx] && path.from == edge.from && path.to == edge.to
+            })
+            .map(|(idx, _)| idx)
+        else {
+            continue;
+        };
+        used_label_paths[path_idx] = true;
+        let path = &solved.edge_paths[path_idx];
+        if let (Some(text), Some(position)) = (edge.center_label.as_deref(), path.label) {
+            max_label_right =
+                max_label_right.max(position.x + 1.0 + text_render::measure(text, 11.0, false));
+        }
+        if let (Some(text), Some(position)) = (edge.head_label.as_deref(), path.head_label) {
+            max_label_right =
+                max_label_right.max(position.x + text_render::measure(text, 11.0, false));
+        }
+    }
+    // `SvekResult.calculateDimension` measures the painted `SvekEdge` labels
+    // through `LimitFinder`, then applies its 15 px outer dimension delta.
+    let label_width = (max_label_right + 15.0).floor() as u32;
+    let width = ((max_right + LEGACY_V1_RIGHT_PAD).ceil() as u32).max(label_width);
     let height = (max_bottom + LEGACY_V1_RIGHT_PAD).ceil() as u32;
     Some(format_svg(width, height, &body, "", Some("#FFFFFF")))
 }
@@ -26456,15 +26551,76 @@ fn parse_legacy_activity_graph(source: &str) -> Option<LegacyActivityGraph> {
     let mut node_indexes = HashMap::<String, usize>::new();
     let mut sequence = 2;
     let mut source_line = 0;
+    let mut saw_statement = false;
+    let mut last_node = None::<String>;
+    let mut decisions = Vec::<String>::new();
 
-    for line in source.lines() {
-        let line = line.trim();
-        if line.is_empty() || line.starts_with("@start") || line.starts_with("@end") {
+    for raw_line in source.lines() {
+        let line = raw_line.trim();
+        if line.starts_with("@start") || line.starts_with("@end") {
+            continue;
+        }
+        if line.is_empty() {
+            if saw_statement {
+                source_line += 1;
+            }
             continue;
         }
         source_line += 1;
-        let (from_key, from_kind, to_key, to_kind) = parse_legacy_graph_edge(line)?;
-        for (key, kind) in [(from_key.clone(), from_kind), (to_key.clone(), to_kind)] {
+        saw_statement = true;
+        if let Some(condition) = parse_legacy_graph_if(line) {
+            let from = last_node.clone()?;
+            let qualified_id = sequence;
+            sequence += 1;
+            let key = format!("decision:{qualified_id}");
+            node_indexes.insert(key.clone(), graph.nodes.len());
+            graph.nodes.push(LegacyGraphNode {
+                key: key.clone(),
+                kind: LegacyGraphNodeKind::Decision { qualified_id },
+                entity_id: sequence,
+                source_line,
+                width: 24.0,
+                height: 24.0,
+            });
+            sequence += 1;
+            graph.edges.push(LegacyGraphEdge {
+                from,
+                to: key.clone(),
+                center_label: None,
+                head_label: Some(condition.to_string()),
+                source_line,
+                link_id: sequence,
+            });
+            sequence += 1;
+            last_node = Some(key.clone());
+            decisions.push(key);
+            continue;
+        }
+        if line == "else" {
+            last_node = decisions.last().cloned();
+            continue;
+        }
+        if line == "endif" {
+            decisions.pop()?;
+            continue;
+        }
+
+        let parsed_link = parse_legacy_graph_link(line)?;
+        let (from_key, from_kind) = match parsed_link.explicit_from {
+            Some(endpoint) => endpoint,
+            None => {
+                let key = last_node.clone()?;
+                let kind = graph
+                    .nodes
+                    .get(*node_indexes.get(&key)?)
+                    .map(|node| node.kind.clone())?;
+                (key, kind)
+            }
+        };
+        for (key, kind) in [
+            (from_key.clone(), from_kind),
+            (parsed_link.to_key.clone(), parsed_link.to_kind),
+        ] {
             if node_indexes.contains_key(&key) {
                 continue;
             }
@@ -26482,11 +26638,17 @@ fn parse_legacy_activity_graph(source: &str) -> Option<LegacyActivityGraph> {
         }
         graph.edges.push(LegacyGraphEdge {
             from: from_key,
-            to: to_key,
+            to: parsed_link.to_key.clone(),
+            center_label: parsed_link.center_label,
+            head_label: None,
             source_line,
             link_id: sequence,
         });
         sequence += 1;
+        last_node = Some(parsed_link.to_key);
+    }
+    if !decisions.is_empty() {
+        return None;
     }
 
     let starts = graph
@@ -26518,13 +26680,23 @@ fn parse_legacy_activity_graph(source: &str) -> Option<LegacyActivityGraph> {
         has_fork |= incoming == 1 && outgoing >= 2;
         has_join |= incoming >= 2 && outgoing == 1;
     }
-    (starts == 1 && ends == 1 && has_fork && has_join).then_some(graph)
+    (starts == 1
+        && ends == 1
+        && (graph
+            .nodes
+            .iter()
+            .any(|node| matches!(node.kind, LegacyGraphNodeKind::Decision { .. }))
+            || (has_fork && has_join)))
+        .then_some(graph)
 }
 
-fn parse_legacy_graph_edge(
-    line: &str,
-) -> Option<(String, LegacyGraphNodeKind, String, LegacyGraphNodeKind)> {
-    let (from_key, from_kind, rest) = parse_legacy_graph_endpoint(line, true)?;
+fn parse_legacy_graph_link(line: &str) -> Option<ParsedLegacyGraphLink> {
+    let (explicit_from, rest) = if line.trim_start().starts_with('-') {
+        (None, line.trim_start())
+    } else {
+        let (key, kind, rest) = parse_legacy_graph_endpoint(line, true)?;
+        (Some((key, kind)), rest.trim_start())
+    };
     let rest = rest.trim_start();
     let arrow_len = if rest.starts_with("-->") {
         3
@@ -26533,11 +26705,36 @@ fn parse_legacy_graph_edge(
     } else {
         return None;
     };
-    let (to_key, to_kind, trailing) = parse_legacy_graph_endpoint(&rest[arrow_len..], false)?;
-    trailing
-        .trim()
-        .is_empty()
-        .then_some((from_key, from_kind, to_key, to_kind))
+    let mut rest = rest[arrow_len..].trim_start();
+    let center_label = if let Some(label_rest) = rest.strip_prefix('[') {
+        let end = label_rest.find(']')?;
+        let label = label_rest[..end].trim().to_string();
+        rest = label_rest[end + 1..].trim_start();
+        Some(label)
+    } else {
+        None
+    };
+    let (to_key, to_kind, trailing) = parse_legacy_graph_endpoint(rest, false)?;
+    trailing.trim().is_empty().then_some(ParsedLegacyGraphLink {
+        explicit_from,
+        center_label,
+        to_key,
+        to_kind,
+    })
+}
+
+fn parse_legacy_graph_if(line: &str) -> Option<&str> {
+    let rest = line.strip_prefix("if ")?;
+    let rest = rest.trim_start();
+    if let Some(rest) = rest.strip_prefix('"') {
+        let end = rest.find('"')?;
+        rest[end + 1..]
+            .trim()
+            .eq_ignore_ascii_case("then")
+            .then_some(&rest[..end])
+    } else {
+        rest.strip_suffix(" then").map(str::trim)
+    }
 }
 
 fn parse_legacy_graph_endpoint(
@@ -26578,6 +26775,7 @@ fn legacy_graph_node_dimensions(kind: &LegacyGraphNodeKind) -> (f64, f64) {
     match kind {
         LegacyGraphNodeKind::Start => (20.0, 20.0),
         LegacyGraphNodeKind::End => (22.0, 22.0),
+        LegacyGraphNodeKind::Decision { .. } => (24.0, 24.0),
         LegacyGraphNodeKind::Bar(_) => (80.0, 8.0),
         LegacyGraphNodeKind::Action(label) => (
             text_render::measure(label, FONT_SIZE, false) + ACTION_H_PADDING * 2.0,
@@ -26586,16 +26784,32 @@ fn legacy_graph_node_dimensions(kind: &LegacyGraphNodeKind) -> (f64, f64) {
     }
 }
 
-fn quantize_legacy_svek_layout(nodes: &mut [NodePosition], edges: &mut [EdgePath]) {
+fn quantize_legacy_svek_layout(
+    nodes: &mut [NodePosition],
+    edges: &mut [EdgePath],
+    svg_y_origin: f64,
+) {
     let quantize = |value: f64| (value * 100.0).round() / 100.0;
+    // Graphviz serializes its mathematical Y coordinate before the SVG
+    // transform flips it. Java's `SvgResult.YDelta` flips the parsed decimal
+    // afterward, so rounding a normalized screen Y directly can land on the
+    // adjacent hundredth.
+    let quantize_y = |value: f64| svg_y_origin - quantize(svg_y_origin - value);
     for node in nodes {
         node.x = quantize(node.x);
-        node.y = quantize(node.y);
+        node.y = quantize_y(node.y);
     }
     for edge in edges {
         for point in &mut edge.points {
             point.0 = quantize(point.0);
-            point.1 = quantize(point.1);
+            point.1 = quantize_y(point.1);
+        }
+        for label in [&mut edge.label, &mut edge.tail_label, &mut edge.head_label]
+            .into_iter()
+            .flatten()
+        {
+            label.x = quantize(label.x);
+            label.y = quantize_y(label.y);
         }
     }
 }
@@ -26615,15 +26829,104 @@ fn translate_legacy_svek_layout(
             point.0 += dx;
             point.1 += dy;
         }
+        for label in [&mut edge.label, &mut edge.tail_label, &mut edge.head_label]
+            .into_iter()
+            .flatten()
+        {
+            label.x += dx;
+            label.y += dy;
+        }
     }
 }
 
-fn legacy_graph_node_label<'a>(nodes: &'a [LegacyGraphNode], key: &str) -> Option<&'a str> {
+fn manage_legacy_graph_endpoint_label_collisions(
+    graph: &LegacyActivityGraph,
+    nodes: &[NodePosition],
+    edges: &mut [EdgePath],
+) {
+    let mut used_paths = vec![false; edges.len()];
+    for graph_edge in &graph.edges {
+        let Some(text) = graph_edge.head_label.as_deref() else {
+            continue;
+        };
+        let Some(path_idx) = edges
+            .iter()
+            .enumerate()
+            .find(|(idx, path)| {
+                !used_paths[*idx] && path.from == graph_edge.from && path.to == graph_edge.to
+            })
+            .map(|(idx, _)| idx)
+        else {
+            continue;
+        };
+        used_paths[path_idx] = true;
+        let Some(label) = edges[path_idx].head_label.as_mut() else {
+            continue;
+        };
+        let label_width = text_render::measure(text, 11.0, false);
+        let label_height = text_render::label_height(text, 11.0);
+        for node in nodes {
+            let fixed = (
+                node.x - 8.0,
+                node.y - 8.0,
+                node.width + 16.0,
+                node.height + 16.0,
+            );
+            if legacy_rectangles_intersect(fixed, (label.x, label.y, label_width, label_height)) {
+                (label.x, label.y) =
+                    move_legacy_label_away(fixed, (label.x, label.y, label_width, label_height));
+            }
+        }
+    }
+}
+
+fn legacy_rectangles_intersect(first: (f64, f64, f64, f64), second: (f64, f64, f64, f64)) -> bool {
+    first.0 < second.0 + second.2
+        && second.0 < first.0 + first.2
+        && first.1 < second.1 + second.3
+        && second.1 < first.1 + first.3
+}
+
+fn move_legacy_label_away(fixed: (f64, f64, f64, f64), label: (f64, f64, f64, f64)) -> (f64, f64) {
+    let delta_x = label.0 + label.2 / 2.0 - (fixed.0 + fixed.2 / 2.0);
+    let delta_y = label.1 + label.3 / 2.0 - (fixed.1 + fixed.3 / 2.0);
+    let intersects_at = |coefficient: f64| {
+        legacy_rectangles_intersect(
+            fixed,
+            (
+                label.0 + delta_x * coefficient,
+                label.1 + delta_y * coefficient,
+                label.2,
+                label.3,
+            ),
+        )
+    };
+    let mut min = 0.0;
+    let mut max = 0.1;
+    while intersects_at(max) {
+        max *= 2.0;
+    }
+    // Java `PositionableUtils.moveAwayFrom` performs five bisections and uses
+    // the midpoint of the final intersecting/non-intersecting interval.
+    for _ in 0..5 {
+        let candidate = (min + max) / 2.0;
+        if intersects_at(candidate) {
+            min = candidate;
+        } else {
+            max = candidate;
+        }
+    }
+    let candidate = (min + max) / 2.0;
+    (label.0 + delta_x * candidate, label.1 + delta_y * candidate)
+}
+
+fn legacy_graph_node_label(nodes: &[LegacyGraphNode], key: &str) -> Option<String> {
     let node = nodes.iter().find(|node| node.key == key)?;
     Some(match &node.kind {
-        LegacyGraphNodeKind::Start => "start",
-        LegacyGraphNodeKind::End => "end",
-        LegacyGraphNodeKind::Action(label) | LegacyGraphNodeKind::Bar(label) => label,
+        LegacyGraphNodeKind::Start => "start".into(),
+        LegacyGraphNodeKind::End => "end".into(),
+        LegacyGraphNodeKind::Action(label) | LegacyGraphNodeKind::Bar(label) => label.clone(),
+        LegacyGraphNodeKind::Decision { qualified_id, .. } => format!("#{qualified_id}"),
     })
 }
 
@@ -26661,20 +26964,49 @@ fn emit_legacy_graph_edge(
 
     write!(
         body,
-        r##"<!--link {} to {}--><g class="link" data-entity-1="ent{:04}" data-entity-2="ent{:04}" data-link-type="dependency" data-source-line="{}" id="lnk{}"><path d="{}" fill="none" id="{}-to-{}" style="stroke:#181818;stroke-width:1;"/><polygon fill="#181818" points="{}" style="stroke:#181818;stroke-width:1;"/></g>"##,
-        escape_xml_attr_local(from_label),
-        escape_xml_attr_local(to_label),
+        r##"<!--link {} to {}--><g class="link" data-entity-1="ent{:04}" data-entity-2="ent{:04}" data-link-type="dependency" data-source-line="{}" id="lnk{}"><path d="{}" fill="none" id="{}-to-{}" style="stroke:#181818;stroke-width:1;"/><polygon fill="#181818" points="{}" style="stroke:#181818;stroke-width:1;"/>"##,
+        escape_xml_attr_local(&from_label),
+        escape_xml_attr_local(&to_label),
         from_node.entity_id,
         to_node.entity_id,
         edge.source_line,
         edge.link_id,
         legacy_graph_edge_path(&shortened),
-        escape_xml_attr_local(from_label),
-        escape_xml_attr_local(to_label),
+        escape_xml_attr_local(&from_label),
+        escape_xml_attr_local(&to_label),
         legacy_graph_arrow_points(control, contact),
     )
     .unwrap();
+    emit_legacy_graph_edge_label(body, edge.center_label.as_deref(), path.label, 1.0);
+    emit_legacy_graph_edge_label(body, edge.head_label.as_deref(), path.head_label, 0.0);
+    body.push_str("</g>");
     Some(())
+}
+
+fn emit_legacy_graph_edge_label(
+    body: &mut String,
+    text: Option<&str>,
+    position: Option<EdgeLabelPosition>,
+    margin: f64,
+) {
+    let (Some(text), Some(position)) = (text, position) else {
+        return;
+    };
+    text_render::emit_text(
+        body,
+        text,
+        &TextBase {
+            x: position.x + margin,
+            y: position.y + margin + text_render::label_ascent(text, 11.0),
+            font_size: 11,
+            font_family: "sans-serif",
+            fill: "#000000",
+            bold: false,
+            italic: false,
+            underline: false,
+            skip_underline: false,
+        },
+    );
 }
 
 fn legacy_graph_edge_path(points: &[(f64, f64)]) -> String {
@@ -34220,6 +34552,38 @@ mod tests {
         }
         assert_eq!(svg.matches(r##"<rect fill="#555555""##).count(), 2);
         assert_eq!(svg.matches(r#"<g class="link""#).count(), 10);
+    }
+
+    #[test]
+    fn legacy_v1_svek_graph_renders_renamed_nested_if_with_loopback() {
+        let input = concat!(
+            "@startuml\n",
+            "(*) --> \"Acquire fresh signal\"\n",
+            "\"Acquire fresh signal\" --> \"Inspect novel payload\"\n",
+            "if \"primary route ready?\" then\n",
+            "  -->[advance] \"Transform renamed payload\"\n",
+            "  if \"checksum sound?\" then\n",
+            "    -->[clean] \"Publish fresh record\"\n",
+            "    --> (*)\n",
+            "  else\n",
+            "    -->[repair] \"Repair renamed payload\"\n",
+            "    --> \"Inspect novel payload\"\n",
+            "  endif\n",
+            "else\n",
+            "  -->[hold] \"Queue renamed review\"\n",
+            "  --> (*)\n",
+            "endif\n",
+            "@enduml",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Fresh Java PlantUML reference: 441x592, two `EntityImageBranch`
+        // diamonds, and eleven `SvekEdge` links.
+        assert!(svg.contains(r#"viewBox="0 0 441 592""#), "{svg}");
+        assert_eq!(svg.matches(r#"<g class="entity""#).count(), 2);
+        assert_eq!(svg.matches(r#"<g class="link""#).count(), 11);
+        assert!(svg.contains(r#"id="Repair renamed payload-to-Inspect novel payload""#));
     }
 
     #[test]

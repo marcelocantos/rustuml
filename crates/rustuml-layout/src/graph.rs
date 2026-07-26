@@ -161,6 +161,24 @@ impl LayoutGraph {
         true
     }
 
+    /// Adds a diamond-shaped node.
+    ///
+    /// PlantUML's `SvekNode.appendShapeInternal` maps
+    /// `ShapeType.DIAMOND` to Graphviz's native `shape=diamond`, so routed
+    /// splines contact the diagonal boundary rather than its bounding box.
+    pub fn add_diamond_node(&mut self, id: &str, _label: &str, width: f64, height: f64) -> bool {
+        if self.nodes.iter().any(|node| node.id == id) {
+            return false;
+        }
+        self.nodes.push(NodeSpec {
+            id: id.to_string(),
+            width,
+            height,
+            shape: NodeShape::Diamond,
+        });
+        true
+    }
+
     /// Adds the tiny point node SVEK uses as a routable package endpoint.
     ///
     /// `ClusterDotString.printInternal` emits
@@ -536,6 +554,7 @@ impl LayoutGraph {
         let fixedsize_val = CString::new("true").unwrap();
         let circle_val = CString::new("circle").unwrap();
         let ellipse_val = CString::new("ellipse").unwrap();
+        let diamond_val = CString::new("diamond").unwrap();
         let box_val = CString::new("box").unwrap();
         let point_val = CString::new("point").unwrap();
         let record_val = CString::new("record").unwrap();
@@ -585,9 +604,11 @@ impl LayoutGraph {
             // layout boxes warn and can feed label bounds back into routing.
             let label_val = match &spec.shape {
                 NodeShape::Record { ports } => CString::new(record_label(ports)).unwrap(),
-                NodeShape::Box | NodeShape::Circle | NodeShape::Ellipse | NodeShape::Point => {
-                    no_label_val.clone()
-                }
+                NodeShape::Box
+                | NodeShape::Circle
+                | NodeShape::Ellipse
+                | NodeShape::Diamond
+                | NodeShape::Point => no_label_val.clone(),
             };
             graphviz_ffi::agsafeset(
                 node as *mut c_void,
@@ -599,6 +620,7 @@ impl LayoutGraph {
                 NodeShape::Box => &box_val,
                 NodeShape::Circle => &circle_val,
                 NodeShape::Ellipse => &ellipse_val,
+                NodeShape::Diamond => &diamond_val,
                 NodeShape::Point => &point_val,
                 NodeShape::Record { .. } => &record_val,
             };
@@ -946,6 +968,7 @@ impl LayoutGraph {
             edge_paths,
             width: graph_ur_x - graph_ll_x,
             height: graph_ur_y - graph_ll_y,
+            svg_y_origin: max_y,
         }
     }
 
@@ -1312,6 +1335,9 @@ pub struct LayoutResult {
     /// Full solved Graphviz envelope, including edge-label constraints.
     pub width: f64,
     pub height: f64,
+    /// Y origin used to convert Graphviz's mathematical coordinates to the
+    /// normalized screen coordinates above.
+    pub svg_y_origin: f64,
 }
 
 #[derive(Debug, Clone)]
@@ -1327,6 +1353,7 @@ enum NodeShape {
     Box,
     Circle,
     Ellipse,
+    Diamond,
     Point,
     Record { ports: Vec<String> },
 }
