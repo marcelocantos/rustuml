@@ -209,35 +209,9 @@ fn normalize_back_color(color: &str) -> String {
 /// Mersenne-ish prime `1125899906842597`, taken modulo 2^64 with Java's
 /// signed-overflow semantics.
 fn plantuml_seed(s: &str) -> i64 {
-    // PlantUML hashes `UmlSource.getPlainString("\n")`, after its source
-    // reader has discarded empty lines immediately following `@start...`.
-    // Preserve every other byte because comments, indentation, and the final
-    // newline all participate in `StringUtils.seed`.
-    let mut normalized;
-    let s = if let Some(first_newline) = s.find('\n')
-        && s[..first_newline].trim_start().starts_with("@start")
-    {
-        let mut content_start = first_newline + 1;
-        while content_start < s.len() {
-            let line_end = s[content_start..]
-                .find('\n')
-                .map_or(s.len(), |offset| content_start + offset + 1);
-            if !s[content_start..line_end].trim().is_empty() {
-                break;
-            }
-            content_start = line_end;
-        }
-        if content_start > first_newline + 1 {
-            normalized = String::with_capacity(s.len());
-            normalized.push_str(&s[..first_newline + 1]);
-            normalized.push_str(&s[content_start..]);
-            normalized.as_str()
-        } else {
-            s
-        }
-    } else {
-        s
-    };
+    // Java provenance: `UmlSource.getPlainString("\n")` appends every
+    // post-TIM source line, including blank lines, before `StringUtils.seed`
+    // hashes the resulting string.
     let mut h: u64 = 1_125_899_906_842_597;
     for c in s.chars() {
         // Java's `long h = 31 * h + s.charAt(i)` — `charAt` returns a 16-bit
@@ -288,9 +262,9 @@ mod tests {
     }
 
     #[test]
-    fn seed_uses_plantuml_plain_source_without_initial_blank_lines() {
+    fn seed_preserves_blank_lines_in_plantuml_plain_source() {
         let src = "@startuml\n\nskinparam shadowing true\n:Fresh seeded shadow;\n@enduml\n";
-        assert_eq!(shadow_id_for(src), "f8uac2ses7vez");
+        assert_eq!(shadow_id_for(src), "f11pg9m4y9hc3p");
     }
 
     #[test]

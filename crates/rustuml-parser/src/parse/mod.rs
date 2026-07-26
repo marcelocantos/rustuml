@@ -969,6 +969,7 @@ pub fn parse_with_base(
     }
     let lines = preprocess_out.lines;
     let sprites = preprocess_out.sprites;
+    let uml_source = preprocess_out.uml_source;
 
     // For non-sequence UML diagrams a `newpage` directive splits the diagram
     // into multiple pages, but PlantUML's SVG output renders only the first
@@ -1095,61 +1096,16 @@ pub fn parse_with_base(
         meta.sprites = sprites;
     }
 
-    // Stash the diagram source for downstream seed computation (filter
-    // UIDs, gradient/shadow ids). Mirrors PlantUML's
-    // `UmlSource.getPlainString("\n")` — every line of the @startuml ...
-    // @enduml block (including the markers) joined by `\n` with a trailing
-    // `\n`. PlantUML's preprocessor preserves these markers; ours strips
-    // them, so we rebuild the equivalent string from the raw input.
+    // Stash PlantUML's post-TIM `UmlSource.getPlainString("\n")` for
+    // downstream seed computation (filter UIDs, gradient/shadow ids).
+    // `PSystemBuilder.createPSystem` constructs `UmlSource` from the expanded
+    // preprocessor stream rather than the raw input.
     {
         let meta = diagram.meta_mut();
-        meta.source = Some(seed_source_string(input));
+        meta.source = Some(uml_source);
     }
 
     Ok(diagram)
-}
-
-/// Reconstruct the seed-source string that PlantUML's
-/// `UmlSource.getPlainString("\n")` would have produced for `input`. That
-/// string is built from the `source` list inside `UmlSource`, which in
-/// practice is "every line between (and including) `@startXXX` and
-/// `@endXXX`, with a trailing `\n`". For inputs that omit the markers we
-/// take the input as-is. The output is used purely to derive deterministic
-/// element ids (filter UIDs etc.) via `StringUtils.seed`.
-fn seed_source_string(input: &str) -> String {
-    let mut out = String::new();
-    let mut in_block = false;
-    let mut saw_marker = false;
-    for line in input.lines() {
-        let trimmed = line.trim_start();
-        if !in_block {
-            if trimmed.starts_with("@start") {
-                in_block = true;
-                saw_marker = true;
-                out.push_str(line);
-                out.push('\n');
-            }
-            continue;
-        }
-        out.push_str(line);
-        out.push('\n');
-        if trimmed.starts_with("@end") {
-            break;
-        }
-    }
-    let _ = in_block;
-    if saw_marker {
-        out
-    } else {
-        // Headerless input — match PlantUML's `\n`-joined form with a
-        // trailing newline.
-        let mut joined = String::new();
-        for line in input.lines() {
-            joined.push_str(line);
-            joined.push('\n');
-        }
-        joined
-    }
 }
 
 #[cfg(test)]
@@ -1176,6 +1132,39 @@ mod tests {
         let input = "@startuml\nAlice -> Bob : hello\n@enduml";
         let diagram = parse(input).unwrap();
         assert!(matches!(diagram, Diagram::Sequence(_)));
+    }
+
+    #[test]
+    fn parse_carries_post_tim_uml_source_for_svg_identity() {
+        let input = concat!(
+            "@startuml\n",
+            "!procedure $emit_badge($alias, $tone, $label, $message)\n",
+            "  !if $message != \"\"\n",
+            "    note as $alias\n",
+            "      <back:$tone>**$label**: $message</back>\n",
+            "    end note\n",
+            "  !endif\n",
+            "!endprocedure\n",
+            "\n",
+            "!$enabled = true\n",
+            "!if $enabled\n",
+            "$emit_badge(N_FreshLedger, LightCyan, \"AUDIT\", \"fresh payload\")\n",
+            "!endif\n",
+            "@enduml\n",
+        );
+        let diagram = parse(input).unwrap();
+
+        assert_eq!(
+            diagram.meta().source.as_deref(),
+            Some(concat!(
+                "@startuml\n",
+                "\n",
+                "    note as N_FreshLedger\n",
+                "      <back:LightCyan>**AUDIT**: fresh payload</back>\n",
+                "    end note\n",
+                "@enduml\n",
+            )),
+        );
     }
 
     #[test]

@@ -22,6 +22,11 @@ use debug::{RenderClock, TzSpec};
 pub struct PreprocessOutput {
     pub lines: Vec<String>,
     pub sprites: HashMap<String, SpriteData>,
+    /// PlantUML's post-TIM `UmlSource.getPlainString("\n")`.
+    ///
+    /// SVG resources hash this expanded source, rather than the raw input,
+    /// when deriving deterministic filter and gradient identifiers.
+    pub uml_source: String,
 }
 
 const SOURCE_LINE_PREFIX: &str = "\x1ERSL:";
@@ -85,13 +90,15 @@ fn preprocess_full_inner(
     mark_function_body_source_lines: bool,
     preserve_teoz_pragma: bool,
 ) -> PreprocessOutput {
+    let identity_base_dir = base_dir.clone();
     let mut ctx = PreprocessContext::new(base_dir, mark_function_body_source_lines);
     ctx.preserve_teoz_pragma = preserve_teoz_pragma;
     let mut lines = ctx.process(input);
-    if let Some(seed_source) = expanded_theme_seed_source(input, &ctx.theme_seed_expansions) {
+    let expanded_theme_source = expanded_theme_seed_source(input, &ctx.theme_seed_expansions);
+    if let Some(seed_source) = &expanded_theme_source {
         ctx.theme_tail.push(format!(
             "skinparam __svgIdSeed {}",
-            svg_id_seed_prefix(&seed_source)
+            svg_id_seed_prefix(seed_source)
         ));
     }
     // Append any accumulated theme expansion to the end of the diagram so
@@ -108,9 +115,17 @@ fn preprocess_full_inner(
             lines.insert(insert_at + i, line);
         }
     }
+    let uml_source = expanded_theme_source.unwrap_or_else(|| {
+        let mut identity_ctx = PreprocessContext::new(identity_base_dir, false);
+        identity_ctx.source_identity_mode = true;
+        identity_ctx.preserve_teoz_pragma = preserve_teoz_pragma;
+        let identity_lines = strip_source_line_markers(identity_ctx.process(input));
+        uml_source_string(&identity_lines, preserve_teoz_pragma)
+    });
     PreprocessOutput {
         lines,
         sprites: ctx.sprites,
+        uml_source,
     }
 }
 
@@ -183,6 +198,29 @@ fn svg_id_seed_prefix(source: &str) -> String {
     }
     result.reverse();
     String::from_utf8(result).expect("base36 digits are ASCII")
+}
+
+fn uml_source_string(lines: &[String], collapse_ending_backslashes: bool) -> String {
+    let mut source = String::new();
+    if collapse_ending_backslashes {
+        let mut pending = String::new();
+        for line in lines {
+            if line.ends_with('\\') && !line.ends_with("\\\\") {
+                pending.push_str(&line[..line.len() - 1]);
+            } else {
+                pending.push_str(line);
+                source.push_str(&pending);
+                source.push('\n');
+                pending.clear();
+            }
+        }
+    } else {
+        for line in lines {
+            source.push_str(line);
+            source.push('\n');
+        }
+    }
+    source
 }
 
 /// Preprocess with a base directory, returning full output including sprites.
@@ -485,6 +523,9 @@ struct PreprocessContext {
     source_line_override: Option<usize>,
     mark_function_body_source_lines: bool,
     preserve_teoz_pragma: bool,
+    /// Emit Java's post-TIM `UmlSource` stream instead of parser line-number
+    /// placeholders. Used only by the deterministic SVG identity pass.
+    source_identity_mode: bool,
 }
 
 struct ThemeSeedExpansion {
@@ -578,6 +619,7 @@ impl PreprocessContext {
             source_line_override: None,
             mark_function_body_source_lines,
             preserve_teoz_pragma: false,
+            source_identity_mode: false,
         }
     }
 
@@ -594,6 +636,9 @@ impl PreprocessContext {
     /// Placeholders are only emitted while collecting a single top-level
     /// diagram block; nested includes manage their own numbering.
     fn push_directive_placeholder(&self, output: &mut Vec<String>) {
+        if self.source_identity_mode {
+            return;
+        }
         // PlantUML `TFunctionImpl.executeReturnFunction` and
         // `executeProcedureInternal` feed their body through
         // `TContext.executeLines`; consumed body directives do not enter the
@@ -769,10 +814,16 @@ impl PreprocessContext {
                     self.seen_start_tag = true;
                     self.in_diagram_block = true;
                     self.in_ebnf_block = trimmed.starts_with("@startebnf");
+                    if self.source_identity_mode {
+                        output.push(line_no_comment);
+                    }
                 }
                 return;
             }
             if trimmed.starts_with("@end") {
+                if self.source_identity_mode && self.in_diagram_block {
+                    output.push(line_no_comment);
+                }
                 self.in_diagram_block = false;
                 self.in_ebnf_block = false;
                 return;
@@ -1421,6 +1472,7 @@ impl PreprocessContext {
             // after the call so following source lines still retain file-line
             // attribution.
             if !returned_value
+                && !self.source_identity_mode
                 && self.include_depth == 0
                 && self.in_diagram_block
                 && self.local_vars.is_empty()
@@ -3851,6 +3903,38 @@ $record(SaffronArchive)\n\
         let input = "@startuml\n!procedure $setup($name)\nparticipant $name\n!endprocedure\n$setup(\"Alice\")\n@enduml";
         let lines = pp(input);
         assert_eq!(lines, vec!["participant Alice"]);
+    }
+
+    #[test]
+    fn procedure_identity_matches_java_post_tim_uml_source() {
+        let input = concat!(
+            "@startuml\n",
+            "!procedure $emit_badge($alias, $tone, $label, $message)\n",
+            "  !if $message != \"\"\n",
+            "    note as $alias\n",
+            "      <back:$tone>**$label**: $message</back>\n",
+            "    end note\n",
+            "  !endif\n",
+            "!endprocedure\n",
+            "\n",
+            "!$enabled = true\n",
+            "!if $enabled\n",
+            "$emit_badge(N_FreshLedger, LightCyan, \"AUDIT\", \"fresh payload\")\n",
+            "!endif\n",
+            "@enduml\n",
+        );
+        let output = preprocess_full(input, None);
+        let expected = concat!(
+            "@startuml\n",
+            "\n",
+            "    note as N_FreshLedger\n",
+            "      <back:LightCyan>**AUDIT**: fresh payload</back>\n",
+            "    end note\n",
+            "@enduml\n",
+        );
+
+        assert_eq!(output.uml_source, expected);
+        assert_eq!(svg_id_seed_prefix(&output.uml_source), "sm7v2tneejd6");
     }
 
     // New tests for added features.
