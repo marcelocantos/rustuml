@@ -416,6 +416,15 @@ pub(crate) const NON_ASCII_WIDTHS: &[(u32, f64, f64)] = &[
     (129514, 1.357142857142857e+00, 1.357142857142857e+00),
 ];
 
+// Java AWT resolves unseen precomposed Hangul syllables through the same
+// fallback face as the extracted Korean rows above. FontMetrics measurements
+// at 10..=15 pt give `font_size * 865 / 1000` for both plain and bold.
+pub(crate) const HANGUL_SYLLABLE_ADVANCE_PER_SIZE: f64 = 865.0 / 1000.0;
+
+// AWT's Apple Color Emoji fallback selects fixed bitmap strikes whose advance
+// is `round(font_size * 4 / 3)` at the PlantUML sizes (10..=15 pt).
+pub(crate) const COLOR_EMOJI_STRIKE_SCALE: f64 = 4.0 / 3.0;
+
 // Contextual Arabic advances extracted from the glyph vectors produced by
 // `Font.layoutGlyphVector` using the same logical SansSerif font and
 // fractional FontRenderContext as PlantUML's `FileFormat.getJavaDimension`

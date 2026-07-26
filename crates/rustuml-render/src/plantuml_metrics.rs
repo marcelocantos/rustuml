@@ -178,11 +178,11 @@ fn char_width(c: char, table: &[f64; 95], bold: bool, font_size: f64) -> f64 {
     if (32..=126).contains(&code) {
         return table[(code - 32) as usize];
     }
-    if c == '\u{FE0F}' {
+    if matches!(c, '\u{200D}' | '\u{FE0E}' | '\u{FE0F}') || is_emoji_modifier(code) {
         return 0.0;
     }
-    if is_emoji_fallback(code) && (font_size - 13.0).abs() < f64::EPSILON {
-        return 17.0;
+    if is_color_emoji_fallback(code) {
+        return (font_size * crate::non_ascii_widths::COLOR_EMOJI_STRIKE_SCALE).round();
     }
     // Exact AWT advance for any non-ASCII codepoint that appears in the golden
     // corpus, extracted from java.awt.FontMetrics on the JVM SansSerif logical
@@ -220,6 +220,9 @@ fn char_width(c: char, table: &[f64; 95], bold: bool, font_size: f64) -> f64 {
     } else if c == '\u{00A9}' {
         // Copyright sign (©) — exact AWT advance, size-proportional.
         font_size * 0.85546875
+    } else if (0xac00..=0xd7a3).contains(&code) {
+        // Unlisted precomposed Hangul syllables use AWT's Korean fallback face.
+        font_size * crate::non_ascii_widths::HANGUL_SYLLABLE_ADVANCE_PER_SIZE
     } else if code >= 0x3000 {
         // CJK Unified Ideographs, Hiragana, Katakana, full-width Latin,
         // and other East Asian scripts have roughly square advance equal
@@ -232,22 +235,22 @@ fn char_width(c: char, table: &[f64; 95], bold: bool, font_size: f64) -> f64 {
     }
 }
 
-fn is_emoji_fallback(code: u32) -> bool {
+fn is_color_emoji_fallback(code: u32) -> bool {
     matches!(
         code,
-        9989 | 127754
-            | 127757
-            | 127881
-            | 128100
-            | 128190
-            | 128232
-            | 128293
-            | 128421
-            | 128512
-            | 128640
-            | 128760
-            | 129514
+        0x2705
+            | 0x1f1e6..=0x1f1ff
+            | 0x1f300..=0x1f6ff
+            | 0x1f900..=0x1faff
     )
+}
+
+fn is_emoji_modifier(code: u32) -> bool {
+    (0x1f3fb..=0x1f3ff).contains(&code)
+}
+
+fn is_regional_indicator(code: u32) -> bool {
+    (0x1f1e6..=0x1f1ff).contains(&code)
 }
 
 #[derive(Clone, Copy)]
@@ -267,6 +270,16 @@ fn shaped_text_width(text: &str, font_size: f64, bold: bool) -> Option<f64> {
 
     while index < characters.len() {
         let (byte_index, current) = characters[index];
+        if is_regional_indicator(current as u32)
+            && index + 1 < characters.len()
+            && is_regional_indicator(characters[index + 1].1 as u32)
+        {
+            width += (font_size * crate::non_ascii_widths::COLOR_EMOJI_STRIKE_SCALE).round();
+            used_shaping = true;
+            index += 2;
+            continue;
+        }
+
         let joins_previous = index > 0
             && arabic_joins_next(characters[index - 1].1)
             && arabic_accepts_previous(current);
@@ -347,7 +360,11 @@ fn arabic_context_widths(c: char, bold: bool) -> Option<&'static [f64; 4]> {
         .ok()
         .map(|index| {
             let (_, plain, bold_widths) = &crate::non_ascii_widths::ARABIC_CONTEXT_WIDTHS[index];
-            if bold { bold_widths } else { plain }
+            if bold {
+                bold_widths
+            } else {
+                plain
+            }
         })
 }
 
@@ -1655,6 +1672,48 @@ mod tests {
         .concat();
         assert_eq!(fmt_coord(text_width(&thai, 13.0, false)), "82.1234");
         assert_eq!(fmt_coord(text_width(&thai, 14.0, true)), "88.3038");
+    }
+
+    #[test]
+    fn fallback_metrics_generalize_to_unseen_codepoints_and_recombinations() {
+        // Expected advances come from Java AWT FontMetrics.getStringBounds
+        // with PlantUML's SansSerif logical font and fractional metrics.
+        let emoji = [
+            "\u{1f984}",
+            " Probe ",
+            "\u{1f9ed}",
+            " Target ",
+            "\u{1fa90}",
+            " 27",
+        ]
+        .concat();
+        assert_eq!(fmt_coord(text_width(&emoji, 12.0, false)), "153.0938");
+        assert_eq!(fmt_coord(text_width(&emoji, 13.0, false)), "164.8516");
+        assert_eq!(fmt_coord(text_width(&emoji, 14.0, true)), "187.2793");
+
+        let hangul = ["\u{ac00}", "\u{d7a3}", "\u{b620}", "\u{bdc1}", " 27"].concat();
+        for c in hangul
+            .chars()
+            .filter(|c| ('\u{ac00}'..='\u{d7a3}').contains(c))
+        {
+            assert!(
+                crate::non_ascii_widths::NON_ASCII_WIDTHS
+                    .binary_search_by_key(&(c as u32), |(code, _, _)| *code)
+                    .is_err(),
+                "perturbation must exercise the generative Hangul fallback"
+            );
+        }
+        assert_eq!(fmt_coord(text_width(&hangul, 13.0, false)), "65.5337");
+        assert_eq!(fmt_coord(text_width(&hangul, 14.0, true)), "71.525");
+
+        let flag = ["\u{1f1e6}", "\u{1f1fa}", " Probe 27"].concat();
+        assert_eq!(fmt_coord(text_width(&flag, 14.0, false)), "84.2422");
+
+        let modified = ["\u{1f44d}", "\u{1f3fd}"].concat();
+        assert_eq!(fmt_coord(text_width(&modified, 14.0, false)), "19");
+
+        let zwj = ["\u{1f469}", "\u{200d}", "\u{1f4bb}"].concat();
+        assert_eq!(fmt_coord(text_width(&zwj, 14.0, false)), "38");
     }
 
     #[test]
