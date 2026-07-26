@@ -6,9 +6,9 @@ crates/rustuml-render/src/activity.rs 711
 crates/rustuml-render/src/archimate.rs 26
 crates/rustuml-render/src/archimate/icons.rs 2531
 crates/rustuml-render/src/board.rs 2
-crates/rustuml-render/src/class.rs 378
+crates/rustuml-render/src/class.rs 380
 crates/rustuml-render/src/cloud_shape.rs 9
-crates/rustuml-render/src/component.rs 46
+crates/rustuml-render/src/component.rs 47
 crates/rustuml-render/src/compress.rs 2
 crates/rustuml-render/src/deployment.rs 43
 crates/rustuml-render/src/dot_diagram.rs 4
@@ -21,10 +21,10 @@ crates/rustuml-render/src/lib.rs 3
 crates/rustuml-render/src/math.rs 3
 crates/rustuml-render/src/metrics.rs 309
 crates/rustuml-render/src/mindmap.rs 4
-crates/rustuml-render/src/non_ascii_widths.rs 818
+crates/rustuml-render/src/non_ascii_widths.rs 1159
 crates/rustuml-render/src/object.rs 21
 crates/rustuml-render/src/openiconic.rs 3
-crates/rustuml-render/src/plantuml_metrics.rs 1066
+crates/rustuml-render/src/plantuml_metrics.rs 1050
 crates/rustuml-render/src/salt.rs 1
 crates/rustuml-render/src/scale.rs 39
 crates/rustuml-render/src/sequence.rs 111
