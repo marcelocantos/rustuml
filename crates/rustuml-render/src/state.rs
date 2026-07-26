@@ -364,6 +364,73 @@ fn layout_node_size(
     )
 }
 
+struct StateNodeFont<'a> {
+    name_size: f64,
+    desc_size: f64,
+    name: Option<&'a str>,
+    monospace: bool,
+    bold: bool,
+}
+
+fn layout_node_size_with_font(
+    id: &str,
+    state_def: Option<&State>,
+    hide_empty_desc: bool,
+    font: &StateNodeFont<'_>,
+) -> (f64, f64, StateLayoutShape) {
+    let (_, _, shape) = layout_node_size(id, state_def, hide_empty_desc);
+    if shape != StateLayoutShape::Box
+        || state_def.is_some_and(|state| {
+            matches!(
+                state.kind,
+                StateKind::Fork | StateKind::Join | StateKind::Choice
+            )
+        })
+    {
+        return layout_node_size(id, state_def, hide_empty_desc);
+    }
+
+    let label = state_def.map_or(id, |state| state.label.as_str());
+    let descriptions = state_def.map_or(&[][..], |state| state.descriptions.as_slice());
+    let family = font.name.unwrap_or("sans-serif");
+    let title_width =
+        state_text_width_with_family(label, font.name_size, font.bold, font.name, font.monospace);
+    let fields_width = descriptions
+        .iter()
+        .map(|description| {
+            state_text_width_with_family(
+                description,
+                font.desc_size,
+                font.bold,
+                font.name,
+                font.monospace,
+            )
+        })
+        .fold(0.0_f64, f64::max);
+    let title_height = text_render::label_height_with_family(label, font.name_size, family);
+    let fields_height = descriptions
+        .iter()
+        .map(|description| {
+            text_render::label_height_with_family(description, font.desc_size, family)
+        })
+        .sum::<f64>();
+
+    // Java provenance: `EntityImageState.calculateDimensionSlow` merges the
+    // title and fields, adds 2*MARGIN + 2*MARGIN_LINE, then applies the 50px
+    // minimum. `EntityImageStateEmptyDescription` adds only 2*MARGIN and uses
+    // a 40px minimum.
+    let (padding, minimum_height) = if hide_empty_desc && descriptions.is_empty() {
+        (10.0, STATE_EMPTY_BOX_HEIGHT)
+    } else {
+        (STATE_DIMENSION_PADDING, STATE_BOX_HEIGHT)
+    };
+    (
+        (title_width.max(fields_width) + padding).max(STATE_MIN_WIDTH),
+        (title_height + fields_height + padding).max(minimum_height),
+        shape,
+    )
+}
+
 /// Register a State entity with Graphviz using PlantUML's SVEK shape.
 ///
 /// Java provenance: `SvekNode.appendShapeInternal` maps
@@ -2031,6 +2098,7 @@ pub fn render_with_oracle(
         .unwrap_or_default();
     let state_font_bold = state_font_style.contains("bold");
     let state_font_italic = state_font_style.contains("italic");
+    let state_metric_family = state_font_name.as_deref().unwrap_or("sans-serif");
 
     let (has_start, _has_end) = classify_star_nodes(&diagram.transitions);
 
@@ -2040,6 +2108,13 @@ pub fn render_with_oracle(
             || (sp.key.eq_ignore_ascii_case("hide")
                 && sp.value.eq_ignore_ascii_case("empty description"))
     });
+    let state_node_font = StateNodeFont {
+        name_size: state_name_font_size,
+        desc_size: state_desc_font_size,
+        name: state_font_name.as_deref(),
+        monospace: state_name_is_mono,
+        bold: state_font_bold,
+    };
 
     // Collect ordered unique entity IDs in PlantUML's render order.
     //
@@ -2172,6 +2247,9 @@ pub fn render_with_oracle(
             .unwrap_or(id);
         diagram.states.iter().find(|s| s.id == lookup_id)
     };
+    let state_node_size = |id: &str, state_def: Option<&State>| {
+        layout_node_size_with_font(id, state_def, hide_empty_desc, &state_node_font)
+    };
 
     // Map transition state IDs to layout IDs.
     let map_id = |id: &str, is_source: bool| -> String {
@@ -2196,7 +2274,7 @@ pub fn render_with_oracle(
         let mut layout = LayoutGraph::new(Direction::TopToBottom).with_plantuml_svek_spacing();
         for id in &state_ids {
             let state_def = find_state(id);
-            let (w, h, shape) = layout_node_size(id, state_def, hide_empty_desc);
+            let (w, h, shape) = state_node_size(id, state_def);
             add_state_layout_node(&mut layout, id, w, h, shape);
         }
         for t in &diagram.transitions {
@@ -2313,7 +2391,7 @@ pub fn render_with_oracle(
             } else {
                 // Fallback: use computed dimensions and stack.
                 let state_def = find_state(id);
-                let (w, h, _) = layout_node_size(id, state_def, hide_empty_desc);
+                let (w, h, _) = state_node_size(id, state_def);
                 let cy = SVEK_ORIGIN_Y + positions.len() as f64 * 80.0 + h / 2.0;
                 positions.push((id.clone(), SVEK_ORIGIN_X + w / 2.0, cy, w, h));
             }
@@ -2342,7 +2420,7 @@ pub fn render_with_oracle(
         let mut max_y = 0.0_f64;
         for (i, id) in state_ids.iter().enumerate() {
             let state_def = find_state(id);
-            let (w, h, _) = layout_node_size(id, state_def, hide_empty_desc);
+            let (w, h, _) = state_node_size(id, state_def);
             let layout_x = quantize_svek_coord(lp[i].x);
             let layout_y = quantize_svek_coord(lp[i].y);
             let x = layout_x + graph_body_x + w / 2.0;
@@ -2379,7 +2457,7 @@ pub fn render_with_oracle(
         // Vertical stacking fallback.
         let max_w: f64 = state_ids
             .iter()
-            .map(|id| layout_node_size(id, find_state(id), hide_empty_desc).0)
+            .map(|id| state_node_size(id, find_state(id)).0)
             .fold(STATE_MIN_WIDTH, f64::max);
         let tw = SVEK_ORIGIN_X + left_note_space + max_w + right_note_space + SVEK_TRAILING_PAD;
         let cx = SVEK_ORIGIN_X + left_note_space + max_w / 2.0;
@@ -2387,7 +2465,7 @@ pub fn render_with_oracle(
         let mut y_cursor = title_h + SVEK_ORIGIN_Y;
         for id in &state_ids {
             let state_def = find_state(id);
-            let (w, h, _) = layout_node_size(id, state_def, hide_empty_desc);
+            let (w, h, _) = state_node_size(id, state_def);
             let cy = y_cursor + h / 2.0;
             positions.push((id.clone(), cx, cy, w, h));
             y_cursor += h + V_GAP;
@@ -2992,13 +3070,29 @@ pub fn render_with_oracle(
                             .unwrap();
                         }
 
-                        let text_w = text_render::measure(label, state_name_font_size, false);
+                        let text_w = state_text_width_with_family(
+                            label,
+                            state_name_font_size,
+                            state_font_bold,
+                            state_font_name.as_deref(),
+                            state_name_is_mono,
+                        );
                         let text_x = cx - text_w / 2.0;
-                        // Centred baseline: (bh - text_height) / 2 + ascent.
+                        // Java `EntityImageStateEmptyDescription.drawU`
+                        // centers the measured title block, then draws it from
+                        // that top edge.
+                        let title_height = text_render::label_height_with_family(
+                            label,
+                            state_name_font_size,
+                            state_metric_family,
+                        );
                         let text_y = box_y
-                            + (*bh - crate::plantuml_metrics::text_height(state_name_font_size))
-                                / 2.0
-                            + crate::plantuml_metrics::ascent(state_name_font_size);
+                            + (*bh - title_height) / 2.0
+                            + text_render::label_ascent_with_family(
+                                label,
+                                state_name_font_size,
+                                state_metric_family,
+                            );
                         let mut text_buf = String::new();
                         text_render::emit_text(
                             &mut text_buf,
@@ -3007,10 +3101,10 @@ pub fn render_with_oracle(
                                 x: text_x,
                                 y: text_y,
                                 font_size: state_name_font_size as u32,
-                                font_family: "sans-serif",
+                                font_family: state_metric_family,
                                 fill: state_text_color,
-                                bold: false,
-                                italic: false,
+                                bold: state_font_bold,
+                                italic: state_font_italic,
                                 underline: false,
                                 skip_underline: false,
                             },
@@ -3062,7 +3156,15 @@ pub fn render_with_oracle(
                         // the 14pt default) is wrong. The oracle value is exact.
                         let div_y = orc_rect
                             .and_then(|r| r.sep_y_values.first().copied())
-                            .unwrap_or(box_y + DIVIDER_OFFSET);
+                            .unwrap_or_else(|| {
+                                box_y
+                                    + 10.0
+                                    + text_render::label_height_with_family(
+                                        label,
+                                        state_name_font_size,
+                                        state_metric_family,
+                                    )
+                            });
                         if let Some(rect) = orc_rect
                             && !rect.separator_paths.is_empty()
                         {
@@ -3101,7 +3203,15 @@ pub fn render_with_oracle(
                         // one ULP (e.g. 142.0234 vs 142.0235).
                         let text_y = orc_rect
                             .and_then(|r| r.text_y_values.first().copied())
-                            .unwrap_or(box_y + NAME_BASELINE_OFFSET);
+                            .unwrap_or_else(|| {
+                                box_y
+                                    + 5.0
+                                    + text_render::label_ascent_with_family(
+                                        label,
+                                        state_name_font_size,
+                                        state_metric_family,
+                                    )
+                            });
                         if let Some(font_name) = state_font_name.as_deref() {
                             // Custom font name (`skinparam stateFontName ...` /
                             // global `defaultFontName ...`): emit the
@@ -5753,6 +5863,31 @@ mod tests {
 
         assert!(svg.contains(r#"font-family="Verdana""#));
         assert!(svg.contains(">start</text>"));
+    }
+
+    #[test]
+    fn renamed_state_uses_family_metrics_for_layout_divider_and_baseline() {
+        let input = concat!(
+            "@startuml\n",
+            "skinparam defaultFontSize 17\n",
+            "skinparam defaultFontName Courier\n",
+            "[*] --> CopperRelay701\n",
+            "CopperRelay701 --> [*]\n",
+            "@enduml\n",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Fresh PlantUML 1.2026.3beta6 reference. `EntityImageState` sizes the
+        // node before SVEK, then places the divider and title from the same
+        // Courier title metrics.
+        assert!(svg.contains(r#"viewBox="0 0 185 232""#), "{svg}");
+        assert!(svg.contains(r#"width="163.2881" x="7" y="86""#), "{svg}");
+        assert!(svg.contains(r#"y1="115.7891" y2="115.7891""#), "{svg}");
+        assert!(
+            svg.contains(r#"textLength="143.2881" x="17" y="106.7798""#),
+            "{svg}"
+        );
     }
 
     #[test]
