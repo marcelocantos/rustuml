@@ -7,7 +7,7 @@
 //! PlantUML emits use-case diagrams as `data-diagram-type="DESCRIPTION"` —
 //! the same envelope used by component and deployment diagrams.
 
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::fmt::Write as _;
 
 use rustuml_layout::graph::{
@@ -1184,16 +1184,62 @@ fn layout_usecase_positions(
     if uses_detached_root_order {
         layout = layout.with_plantuml_svek_node_order();
     }
-    for (actor, dim) in diagram.actors.iter().zip(actor_dims) {
-        layout.add_node(&actor.id, &actor.label, dim.width, dim.height);
+    let mut layout_node_ids =
+        Vec::with_capacity(diagram.actors.len() + diagram.use_cases.len() + diagram.notes.len());
+    {
+        let mut materialized = HashSet::new();
+        let mut add_entity_node = |id: &str| {
+            if !materialized.insert(id.to_string()) {
+                return;
+            }
+            if let Some((index, actor)) = diagram
+                .actors
+                .iter()
+                .enumerate()
+                .find(|(_, actor)| actor.id == id)
+            {
+                let dim = &actor_dims[index];
+                layout.add_node(&actor.id, &actor.label, dim.width, dim.height);
+                layout_node_ids.push(actor.id.clone());
+                return;
+            }
+            if let Some((index, uc)) = diagram
+                .use_cases
+                .iter()
+                .enumerate()
+                .find(|(_, uc)| uc.id == id)
+            {
+                let dim = &uc_dims[index];
+                // Java `EntityImageUseCase.getShapeType` returns
+                // `ShapeType.OVAL`; `SvekNode.appendShapeInternal` therefore
+                // gives Graphviz `shape=ellipse`, so diagonal splines meet the
+                // painted oval rather than its rectangular bounding box.
+                layout.add_ellipse_node(&uc.id, &uc.label, dim.rx * 2.0, dim.ry * 2.0);
+                layout_node_ids.push(uc.id.clone());
+            }
+        };
+
+        if diagram.packages.is_empty() {
+            // Java provenance: `Bibliotekon.addLine/lines0` classifies every
+            // length-one relation as an early SVEK edge. `DotStringFactory
+            // .createDotString` writes those edges before
+            // `Cluster.printCluster2`, so Graphviz lazily materializes their
+            // endpoints in relation order before the remaining root leaves.
+            for connection in &diagram.connections {
+                if connection.queue_len.max(1) == 1 {
+                    add_entity_node(&connection.from);
+                    add_entity_node(&connection.to);
+                }
+            }
+        }
+        for actor in &diagram.actors {
+            add_entity_node(&actor.id);
+        }
+        for uc in &diagram.use_cases {
+            add_entity_node(&uc.id);
+        }
     }
-    for (uc, dim) in diagram.use_cases.iter().zip(uc_dims) {
-        // Java `EntityImageUseCase.getShapeType` returns `ShapeType.OVAL`;
-        // `SvekNode.appendShapeInternal` therefore gives Graphviz
-        // `shape=ellipse`, so diagonal splines meet the painted oval rather
-        // than its rectangular bounding box.
-        layout.add_ellipse_node(&uc.id, &uc.label, dim.rx * 2.0, dim.ry * 2.0);
-    }
+
     let entity_note_indices: Vec<usize> = diagram
         .notes
         .iter()
@@ -1211,6 +1257,7 @@ fn layout_usecase_positions(
             dim.width,
             dim.height,
         );
+        layout_node_ids.push(note_id);
     }
     for pkg in &diagram.packages {
         // Java `ClusterHeader.getTitleAndAttribute{Width,Height}` truncates
@@ -1362,20 +1409,35 @@ fn layout_usecase_positions(
         BODY_MARGIN
     };
     let base_origin_y = base_origin_x;
-    let actor_count = diagram.actors.len();
-    let min_painted_x = result
-        .node_positions
+    let node_positions: HashMap<&str, _> = layout_node_ids
         .iter()
-        .take(actor_count)
+        .map(String::as_str)
+        .zip(result.node_positions.iter())
+        .collect();
+    let min_painted_x = diagram
+        .actors
+        .iter()
         .zip(actor_dims)
-        .map(|(p, dim)| {
-            p.x + if uses_detached_root_order {
-                dim.paint_min_x
-            } else {
-                0.0
-            }
+        .map(|(actor, dim)| {
+            node_positions[actor.id.as_str()].x
+                + if uses_detached_root_order {
+                    dim.paint_min_x
+                } else {
+                    0.0
+                }
         })
-        .chain(result.node_positions.iter().skip(actor_count).map(|p| p.x))
+        .chain(
+            diagram
+                .use_cases
+                .iter()
+                .map(|uc| node_positions[uc.id.as_str()].x),
+        )
+        .chain(
+            entity_note_indices
+                .iter()
+                .map(|&index| note_node_id(&diagram.notes[index], index))
+                .map(|id| node_positions[id.as_str()].x),
+        )
         .chain(
             result
                 .cluster_positions
@@ -1394,27 +1456,22 @@ fn layout_usecase_positions(
     } else {
         base_origin_x
     };
-    let min_painted_y = result
-        .node_positions
+    let min_painted_y = diagram
+        .actors
         .iter()
-        .take(actor_count)
         .zip(actor_dims)
-        .map(|(p, dim)| p.y + dim.paint_min_y)
+        .map(|(actor, dim)| node_positions[actor.id.as_str()].y + dim.paint_min_y)
         .chain(
-            result
-                .node_positions
+            diagram
+                .use_cases
                 .iter()
-                .skip(actor_count)
-                .take(diagram.use_cases.len())
-                .map(|p| p.y),
+                .map(|uc| node_positions[uc.id.as_str()].y),
         )
         .chain(
-            result
-                .node_positions
+            entity_note_indices
                 .iter()
-                .skip(actor_count + diagram.use_cases.len())
-                .take(entity_note_indices.len())
-                .map(|p| p.y),
+                .map(|&index| note_node_id(&diagram.notes[index], index))
+                .map(|id| node_positions[id.as_str()].y),
         )
         .chain(
             result
@@ -1458,25 +1515,26 @@ fn layout_usecase_positions(
         cluster.x += origin_x;
         cluster.y += origin_y;
     }
-    let actors = result
-        .node_positions
+    let actors = diagram
+        .actors
         .iter()
-        .take(actor_count)
         .zip(actor_dims)
-        .map(|(p, dim)| {
+        .map(|(actor, dim)| {
+            let p = node_positions[actor.id.as_str()];
             (
                 p.x + origin_x + p.width / 2.0,
                 p.y + origin_y + dim.stereo_h + dim.stroke_thickness + ACTOR_HEAD_R,
             )
         })
         .collect();
-    let use_cases = result
-        .node_positions
+    let use_cases = diagram
+        .use_cases
         .iter()
-        .skip(actor_count)
-        .take(diagram.use_cases.len())
         .zip(uc_dims)
-        .map(|(p, dim)| (p.x + origin_x + dim.rx, p.y + origin_y + dim.ry))
+        .map(|(uc, dim)| {
+            let p = node_positions[uc.id.as_str()];
+            (p.x + origin_x + dim.rx, p.y + origin_y + dim.ry)
+        })
         .collect();
 
     let note_ids: Vec<String> = entity_note_indices
@@ -1484,10 +1542,9 @@ fn layout_usecase_positions(
         .map(|&index| note_node_id(&diagram.notes[index], index))
         .collect();
     let mut notes = vec![None; diagram.notes.len()];
-    let note_node_offset = actor_count + diagram.use_cases.len();
     for (slot, &note_index) in entity_note_indices.iter().enumerate() {
         let note_id = &note_ids[slot];
-        let p = &result.node_positions[note_node_offset + slot];
+        let p = node_positions[note_id.as_str()];
         let edge = result
             .edge_paths
             .iter()
@@ -3526,6 +3583,44 @@ mod tests {
                 "{svg}"
             );
         }
+    }
+
+    #[test]
+    fn renamed_short_relations_materialize_root_nodes_before_remaining_leaves() {
+        let input = "@startuml\n\
+                     actor \"Fresh Review Steward\" as StewardQ\n\
+                     usecase \"Novel Base Amber\" as BaseAmber\n\
+                     usecase \"Novel Base Birch\" as BaseBirch\n\
+                     usecase \"Novel Base Cedar\" as BaseCedar\n\
+                     usecase \"Novel Base Dogwood\" as BaseDogwood\n\
+                     usecase \"Unseen Branch Elm\" as BranchElm\n\
+                     usecase \"Unseen Branch Fir\" as BranchFir\n\
+                     usecase \"Unseen Branch Gum\" as BranchGum\n\
+                     usecase \"Unseen Branch Hazel\" as BranchHazel\n\
+                     usecase \"Unseen Branch Iris\" as BranchIris\n\
+                     BranchElm .> BaseCedar : <<include>>\n\
+                     BranchFir .> BaseAmber : <<include>>\n\
+                     BranchGum .> BaseDogwood : <<include>>\n\
+                     BranchHazel .> BaseBirch : <<include>>\n\
+                     BranchIris .> BaseCedar : <<include>>\n\
+                     StewardQ --> BaseAmber\n\
+                     StewardQ --> BaseBirch\n\
+                     StewardQ --> BaseCedar\n\
+                     StewardQ --> BaseDogwood\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Fresh Java PlantUML reference with a 4-base/5-branch topology absent
+        // from the corpus. `Bibliotekon.lines0` emits the five short relations
+        // first, so their endpoint order controls the solved horizontal rank.
+        assert!(svg.contains(r#"viewBox="0 0 1904 211""#), "{svg}");
+        for cx in ["85.73", "335.73", "521.73", "770.73", "1228.73"] {
+            assert!(svg.contains(&format!(r#"<ellipse cx="{cx}"#)), "{svg}");
+        }
+        assert!(svg.contains(r#"id="BranchElm-to-BaseCedar""#), "{svg}");
+        assert_eq!(svg.matches(r#"class="entity""#).count(), 10, "{svg}");
+        assert_eq!(svg.matches(r#"class="link""#).count(), 9, "{svg}");
     }
 
     #[test]
