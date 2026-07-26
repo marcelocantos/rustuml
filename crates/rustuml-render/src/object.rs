@@ -1482,10 +1482,15 @@ fn render_layout_links(
             0
         };
         let link_id = &svg_ids.links[link_idx];
+        let base_path_id = object_link_base_path_id(link, from_base, to_base);
         let parallel_index = diagram.links[..link_idx]
             .iter()
             .filter(|previous| {
-                link_base(&previous.from) == from_base && link_base(&previous.to) == to_base
+                object_link_base_path_id(
+                    previous,
+                    link_base(&previous.from),
+                    link_base(&previous.to),
+                ) == base_path_id
             })
             .count();
         let path_id = object_link_path_id(link, from_base, to_base, parallel_index);
@@ -1499,7 +1504,14 @@ fn render_layout_links(
             svg_ids.objects[to_index],
         )
         .unwrap();
-        let path_points = shortened_object_link_points(link, &edge_path.points);
+        // Java `SvgResult` parses Graphviz's two-decimal SVG coordinates
+        // before `SvekEdge` shortens paths for endpoint decorations.
+        let raw_points = edge_path
+            .points
+            .iter()
+            .map(|&(x, y)| ((x * 100.0).round() / 100.0, (y * 100.0).round() / 100.0))
+            .collect::<Vec<_>>();
+        let path_points = shortened_object_link_points(link, &raw_points);
         let dash_style = if link.dashed {
             "stroke-dasharray:7,7;"
         } else {
@@ -1511,8 +1523,8 @@ fn render_layout_links(
             edge_path_d(&path_points),
         )
         .unwrap();
-        emit_object_link_start_decor(svg, link, &edge_path.points);
-        emit_object_link_end_decor(svg, link, &edge_path.points);
+        emit_object_link_start_decor(svg, link, &raw_points);
+        emit_object_link_end_decor(svg, link, &raw_points);
         if let Some(label) = link.label.as_deref() {
             let (x, y) = edge_path
                 .label
@@ -1954,7 +1966,15 @@ fn object_link_type(kind: ObjectLinkKind) -> &'static str {
 }
 
 fn object_link_path_id(link: &ObjectLink, from: &str, to: &str, parallel_index: usize) -> String {
-    let mut id = match link.kind {
+    let mut id = object_link_base_path_id(link, from, to);
+    if parallel_index > 0 {
+        write!(id, "-{parallel_index}").unwrap();
+    }
+    id
+}
+
+fn object_link_base_path_id(link: &ObjectLink, from: &str, to: &str) -> String {
+    match link.kind {
         // `SvekEdge` names links from the combined decoration state: a
         // source-only decoration is `backto`, a target-only decoration is
         // `to`, and decorations at both ends use the neutral endpoint pair.
@@ -1974,11 +1994,7 @@ fn object_link_path_id(link: &ObjectLink, from: &str, to: &str, parallel_index: 
                 (false, true) => format!("{from}-to-{to}"),
             }
         }
-    };
-    if parallel_index > 0 {
-        write!(id, "-{parallel_index}").unwrap();
     }
-    id
 }
 
 fn shortened_object_link_points(link: &ObjectLink, points: &[(f64, f64)]) -> Vec<(f64, f64)> {
@@ -3343,6 +3359,23 @@ ParallelOrigin --* ParallelTarget : gamma edge"#;
         assert!(svg.contains(r#"id="ParallelOrigin-to-ParallelTarget-1""#));
         assert!(svg.contains(r#"id="ParallelOrigin-to-ParallelTarget-2""#));
         assert!(!svg.contains(r#"id="ParallelOrigin-backto-ParallelTarget-2""#));
+    }
+
+    #[test]
+    fn renamed_mixed_parallel_links_suffix_only_repeated_svg_identities() {
+        let input = r#"object FreshOrigin
+object FreshTarget
+FreshOrigin --> FreshTarget : directed
+FreshOrigin -- FreshTarget : neutral"#;
+        let lines = input.lines().map(str::to_owned).collect::<Vec<_>>();
+        let diagram = rustuml_parser::parse::object::parse_object(&lines).unwrap();
+        let svg = render(&diagram, &Theme::default());
+
+        // Java `Link.idCommentForSvg()` derives the base identity from the
+        // decorations before `SvekEdge` disambiguates duplicate identities.
+        assert!(svg.contains(r#"id="FreshOrigin-to-FreshTarget""#));
+        assert!(svg.contains(r#"id="FreshOrigin-FreshTarget""#));
+        assert!(!svg.contains(r#"id="FreshOrigin-FreshTarget-1""#));
     }
 
     #[test]
