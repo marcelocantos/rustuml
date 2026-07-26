@@ -427,6 +427,10 @@ const SMALL_FONT: f64 = 14.0;
 const HEADER_FOOTER_FONT: f64 = 10.0;
 /// Vertical gap between the footer baseline and the bottom canvas edge.
 const FOOTER_BOTTOM_GAP: f64 = 8.5764;
+/// Trailing width retained by the SVG envelope outside decorated content.
+const CHROME_RIGHT_PAD: f64 = 7.0;
+/// `DisplayPositioned.createRibbon` adds one pixel below caption text.
+const CAPTION_BOTTOM_PAD: f64 = 1.0;
 /// Font size for arrow/link labels.
 const LINK_FONT: f64 = 13.0;
 // Java `SvekEdge.addVisibilityModifier` wraps center labels with
@@ -1045,7 +1049,7 @@ pub fn render_with_oracle(
     let n_comp = diagram.components.len();
 
     // Compute positions from oracle, layout engine, or grid fallback.
-    let (positions, iface_positions, cluster_positions, content_w, content_h) =
+    let (mut positions, mut iface_positions, mut cluster_positions, content_w, content_h) =
         if let Some(orc) = oracle {
             compute_positions_from_oracle(diagram, &comp_dims, orc, title_h)
         } else if let Some(ref result) = layout_result
@@ -1105,8 +1109,9 @@ pub fn render_with_oracle(
             ))
         }
     });
-    let (svek_edge_dx, svek_edge_dy) = svek_edge_translation.unwrap_or((MARGIN, MARGIN + title_h));
-    let note_layouts: Vec<ComponentNoteLayout> = layout_result
+    let (mut svek_edge_dx, mut svek_edge_dy) =
+        svek_edge_translation.unwrap_or((MARGIN, MARGIN + title_h));
+    let mut note_layouts: Vec<ComponentNoteLayout> = layout_result
         .as_ref()
         .map(|result| {
             let first_note_node = n_comp + diagram.interfaces.len();
@@ -1131,7 +1136,7 @@ pub fn render_with_oracle(
     let pkg_total_w = estimate_packages_width(&diagram.packages);
     let pkg_total_h = estimate_packages_height(&diagram.packages);
 
-    let (total_w, total_h) = if let Some(orc) = oracle
+    let (mut total_w, mut total_h) = if let Some(orc) = oracle
         && orc.canvas_width > 0.0
         && orc.canvas_height > 0.0
     {
@@ -1158,6 +1163,32 @@ pub fn render_with_oracle(
             content_w.max(pkg_total_w).max(100.0),
             (content_h + pkg_total_h + title_h).max(50.0),
         )
+    };
+    let chrome = if oracle.is_none() {
+        let chrome = component_chrome_layout(diagram, total_w, total_h);
+        for (x, y) in &mut positions {
+            *x += chrome.body_dx;
+            *y += chrome.body_dy;
+        }
+        for (x, y) in &mut iface_positions {
+            *x += chrome.body_dx;
+            *y += chrome.body_dy;
+        }
+        for cluster in &mut cluster_positions {
+            cluster.x += chrome.body_dx;
+            cluster.y += chrome.body_dy;
+        }
+        for note in &mut note_layouts {
+            note.x += chrome.body_dx;
+            note.y += chrome.body_dy;
+        }
+        svek_edge_dx += chrome.body_dx;
+        svek_edge_dy += chrome.body_dy;
+        total_w = chrome.canvas_width;
+        total_h = chrome.canvas_height;
+        chrome
+    } else {
+        ComponentChromeLayout::identity(total_w, total_h)
     };
 
     // PlantUML emits `data-diagram-type="DESCRIPTION"` for ordinary component
@@ -1193,51 +1224,6 @@ pub fn render_with_oracle(
         ));
     }
 
-    // Title — wrap in <g class="title"> and route through creole segmenter.
-    // In oracle mode, consume PlantUML's page-decoration anchors so the title
-    // is centred over the rendered body, not over only its own text block.
-    if let Some(title) = &diagram.meta.title {
-        let oracle_title =
-            oracle.and_then(|o| o.decorations.iter().find(|d| d.class_name == "title"));
-        let widths: Vec<f64> = title
-            .lines()
-            .map(|t| text_render::measure(t, TITLE_FONT_SIZE, true))
-            .collect();
-        let block_w = widths.iter().cloned().fold(0.0_f64, f64::max);
-        let mut buf = String::new();
-        let source_line = oracle_title
-            .and_then(|d| d.source_line.as_deref())
-            .unwrap_or("1");
-        buf.push_str(&format!(
-            r#"<g class="title" data-source-line="{source_line}">"#
-        ));
-        for (i, tline) in title.lines().enumerate() {
-            let oracle_text = oracle_title.and_then(|d| d.texts.get(i));
-            let ty = oracle_text.map_or(
-                TITLE_TOP_PAD + pm::ascent(TITLE_FONT_SIZE) + i as f64 * TITLE_LINE_H,
-                |t| t.y,
-            );
-            let x = oracle_text.map_or(TITLE_MARGIN_X + (block_w - widths[i]) / 2.0, |t| t.x);
-            text_render::emit_text(
-                &mut buf,
-                tline,
-                &text_render::TextBase {
-                    x,
-                    y: ty,
-                    font_size: TITLE_FONT_SIZE as u32,
-                    font_family: "sans-serif",
-                    fill: "#000000",
-                    bold: true,
-                    italic: false,
-                    underline: false,
-                    skip_underline: false,
-                },
-            );
-        }
-        buf.push_str("</g>");
-        svg.raw_inline(&buf);
-    }
-
     // Header/footer captions are font-10 grey text. PlantUML centres each
     // caption within a block whose width is the wider of the header and footer
     // text widths (not the canvas), so a single-caption diagram left-aligns at
@@ -1263,7 +1249,10 @@ pub fn render_with_oracle(
         let tl = text_render::measure(header, HEADER_FOOTER_FONT, false);
         let x = (caption_block_w - tl) / 2.0;
         let mut buf = String::new();
-        buf.push_str(r#"<g class="header" data-source-line="1">"#);
+        let source_line = diagram.meta.header_line.unwrap_or(1);
+        buf.push_str(&format!(
+            r#"<g class="header" data-source-line="{source_line}">"#
+        ));
         text_render::emit_text(
             &mut buf,
             header,
@@ -1279,6 +1268,57 @@ pub fn render_with_oracle(
                 skip_underline: false,
             },
         );
+        buf.push_str("</g>");
+        svg.raw_inline(&buf);
+    }
+
+    // `DiagramChromeFactory12026.create` applies the title before the outer
+    // header/footer decorator, so the header draws first and the title is
+    // translated by the header ribbon height.
+    if let Some(title) = &diagram.meta.title {
+        let oracle_title =
+            oracle.and_then(|o| o.decorations.iter().find(|d| d.class_name == "title"));
+        let widths: Vec<f64> = title
+            .lines()
+            .map(|t| text_render::measure(t, TITLE_FONT_SIZE, true))
+            .collect();
+        let mut buf = String::new();
+        let oracle_source_line = oracle_title.and_then(|d| d.source_line.as_deref());
+        let source_line = oracle_source_line
+            .map(str::to_string)
+            .unwrap_or_else(|| diagram.meta.title_line.unwrap_or(1).to_string());
+        buf.push_str(&format!(
+            r#"<g class="title" data-source-line="{source_line}">"#
+        ));
+        for (i, tline) in title.lines().enumerate() {
+            let oracle_text = oracle_title.and_then(|d| d.texts.get(i));
+            let ty = oracle_text.map_or(
+                chrome.header_height
+                    + TITLE_TOP_PAD
+                    + pm::ascent(TITLE_FONT_SIZE)
+                    + i as f64 * TITLE_LINE_H,
+                |t| t.y,
+            );
+            let x = oracle_text.map_or(
+                TITLE_MARGIN_X.max((chrome.content_width - widths[i]) / 2.0),
+                |t| t.x,
+            );
+            text_render::emit_text(
+                &mut buf,
+                tline,
+                &text_render::TextBase {
+                    x,
+                    y: ty,
+                    font_size: TITLE_FONT_SIZE as u32,
+                    font_family: "sans-serif",
+                    fill: "#000000",
+                    bold: true,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
+        }
         buf.push_str("</g>");
         svg.raw_inline(&buf);
     }
@@ -2535,13 +2575,18 @@ pub fn render_with_oracle(
         let tl = text_render::measure(footer, HEADER_FOOTER_FONT, false);
         let x = (caption_block_w - tl) / 2.0;
         let mut buf = String::new();
-        buf.push_str(r#"<g class="footer" data-source-line="2">"#);
+        let source_line = diagram.meta.footer_line.unwrap_or(1);
+        buf.push_str(&format!(
+            r#"<g class="footer" data-source-line="{source_line}">"#
+        ));
         text_render::emit_text(
             &mut buf,
             footer,
             &text_render::TextBase {
                 x,
-                y: total_h - FOOTER_BOTTOM_GAP,
+                // The SVG exporter serializes the decorated dimension as an
+                // integer canvas before the footer ribbon is pinned to it.
+                y: total_h.floor() - FOOTER_BOTTOM_GAP,
                 font_size: HEADER_FOOTER_FONT as u32,
                 font_family: "sans-serif",
                 fill: "#888888",
@@ -3603,6 +3648,79 @@ fn compute_positions_grid(
     let content_h = comp_total_h + iface_total_h + title_h;
 
     (positions, iface_positions, Vec::new(), content_w, content_h)
+}
+
+#[derive(Clone, Copy)]
+struct ComponentChromeLayout {
+    body_dx: f64,
+    body_dy: f64,
+    canvas_width: f64,
+    canvas_height: f64,
+    content_width: f64,
+    header_height: f64,
+}
+
+impl ComponentChromeLayout {
+    fn identity(canvas_width: f64, canvas_height: f64) -> Self {
+        Self {
+            body_dx: 0.0,
+            body_dy: 0.0,
+            canvas_width,
+            canvas_height,
+            content_width: (canvas_width - CHROME_RIGHT_PAD).max(0.0),
+            header_height: 0.0,
+        }
+    }
+}
+
+fn component_chrome_layout(
+    diagram: &ComponentDiagram,
+    body_canvas_width: f64,
+    body_canvas_height: f64,
+) -> ComponentChromeLayout {
+    // Java `DiagramChromeFactory12026.create` composes the raw `SvekResult`
+    // through `DecorateEntityImage.addTitle` and `addHeaderAndFooter`. Each
+    // wrapper takes the widest child, centers the narrower body, and stacks
+    // ribbon heights above or below it.
+    let body_width = (body_canvas_width - CHROME_RIGHT_PAD).max(0.0);
+    let title_width = diagram
+        .meta
+        .title
+        .as_deref()
+        .map(|title| {
+            title
+                .lines()
+                .map(|line| text_render::measure(line, TITLE_FONT_SIZE, true))
+                .fold(0.0_f64, f64::max)
+                + TITLE_MARGIN_X * 2.0
+        })
+        .unwrap_or(0.0);
+    let caption_width = [&diagram.meta.header, &diagram.meta.footer]
+        .into_iter()
+        .filter_map(|caption| caption.as_deref())
+        .flat_map(str::lines)
+        .map(|line| text_render::measure(line, HEADER_FOOTER_FONT, false))
+        .fold(0.0_f64, f64::max);
+    let content_width = body_width.max(title_width).max(caption_width);
+    let ribbon_height = |caption: Option<&str>| {
+        caption
+            .map(|text| {
+                text.lines().count().max(1) as f64 * pm::text_height(HEADER_FOOTER_FONT)
+                    + CAPTION_BOTTOM_PAD
+            })
+            .unwrap_or(0.0)
+    };
+    let header_height = ribbon_height(diagram.meta.header.as_deref());
+    let footer_height = ribbon_height(diagram.meta.footer.as_deref());
+
+    ComponentChromeLayout {
+        body_dx: (content_width - body_width) / 2.0,
+        body_dy: header_height,
+        canvas_width: content_width + CHROME_RIGHT_PAD,
+        canvas_height: body_canvas_height + header_height + footer_height,
+        content_width,
+        header_height,
+    }
 }
 
 struct NoOracleCanvas<'a> {
@@ -6270,6 +6388,36 @@ mod tests {
             svg.contains(r#"id="Relay277-to-Sink283""#),
             "the cross-cluster spline must retain Java's logical endpoints: {svg}"
         );
+    }
+
+    #[test]
+    fn no_oracle_page_chrome_centers_a_renamed_pair_inside_header_and_title() {
+        let input = "@startuml\n\
+                     header Observatory transport channel 421 for the southern relay\n\
+                     title\n\
+                       Fresh Relay Catalogue 431\n\
+                       Revision 433\n\
+                     end title\n\
+                     component \"Ingress 443\" as Ingress443\n\
+                     component \"Archive 449\" as Archive449\n\
+                     Ingress443 --> Archive449 : forwards\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Fresh Java PlantUML reference. `DiagramChromeFactory12026.create`
+        // applies the title decorator before the outer header/footer decorator;
+        // `DecorateEntityImage` uses the widest block and centers the raw body.
+        assert!(svg.contains(r#"viewBox="0 0 285 257""#), "{svg}");
+        let header = svg
+            .find(r#"<g class="header" data-source-line="1">"#)
+            .unwrap();
+        let title = svg
+            .find(r#"<g class="title" data-source-line="2">"#)
+            .unwrap();
+        let ingress = svg.find(r#"data-qualified-name="Ingress443""#).unwrap();
+        assert!(header < title && title < ingress, "{svg}");
+        assert!(svg.contains(r#"id="Ingress443-to-Archive449""#), "{svg}");
     }
 
     #[test]
