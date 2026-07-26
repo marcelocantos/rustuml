@@ -500,7 +500,12 @@ impl PreprocessContext {
     /// Placeholders are only emitted while collecting a single top-level
     /// diagram block; nested includes manage their own numbering.
     fn push_directive_placeholder(&self, output: &mut Vec<String>) {
-        if self.include_depth == 0 && self.in_diagram_block {
+        // PlantUML `TFunctionImpl.executeReturnFunction` and
+        // `executeProcedureInternal` feed their body through
+        // `TContext.executeLines`; consumed body directives do not enter the
+        // resulting diagram stream. Placeholders only represent directives
+        // from the user's top-level source, never generated function bodies.
+        if self.include_depth == 0 && self.in_diagram_block && self.local_vars.is_empty() {
             output.push(String::new());
         }
     }
@@ -1223,6 +1228,7 @@ impl PreprocessContext {
 
             let args = parse_call_args(args_str);
             let (ret, lines) = self.call_function(&name, &args);
+            let returned_value = ret.is_some();
             if lines.is_empty() {
                 // If the function produced no output lines but returned a value,
                 // emit the return value as an output line (e.g. note body calls).
@@ -1239,7 +1245,11 @@ impl PreprocessContext {
             // Procedure bodies keep their own definition-line attribution; pad
             // after the call so following source lines still retain file-line
             // attribution.
-            if self.include_depth == 0 && self.in_diagram_block && self.local_vars.is_empty() {
+            if !returned_value
+                && self.include_depth == 0
+                && self.in_diagram_block
+                && self.local_vars.is_empty()
+            {
                 while output.len() < self.current_source_line {
                     output.push(String::new());
                 }
@@ -3370,6 +3380,47 @@ mod tests {
         let input = "@startuml\n!function $arrow($to)\nAlice -> $to : msg\n!endfunction\n$arrow(\"Bob\")\n$arrow(\"Charlie\")\n@enduml";
         let lines = pp(input);
         assert_eq!(lines, vec!["Alice -> Bob : msg", "Alice -> Charlie : msg"]);
+    }
+
+    #[test]
+    fn return_function_calls_do_not_emit_body_directive_placeholders() {
+        let input = r#"@startuml
+!function $compose_badge($label = "Harbor")
+  !return "[" + $label + "]"
+!endfunction
+note as Ledger
+  $compose_badge()
+  $compose_badge("Quartz")
+end note
+@enduml"#;
+
+        assert_eq!(
+            preprocess(input),
+            vec![
+                "",
+                "",
+                "",
+                "note as Ledger",
+                "[Harbor]",
+                "[Quartz]",
+                "end note",
+            ]
+        );
+    }
+
+    #[test]
+    fn nested_return_functions_expand_with_renamed_arguments() {
+        let input = r#"@startuml
+!function $inner_token($seed)
+  !return "<" + $seed + ">"
+!endfunction
+!function $outer_token($payload)
+  !return "{" + $payload + "}"
+!endfunction
+note : $outer_token($inner_token("Saffron"))
+@enduml"#;
+
+        assert_eq!(pp(input), vec!["note : {<Saffron>}"]);
     }
 
     #[test]
