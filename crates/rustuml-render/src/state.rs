@@ -173,8 +173,25 @@ const AUTONOMOUS_RANK_SEP: f64 = 36.0;
 
 /// Title font size.
 const TITLE_FONT_SIZE: f64 = 14.0;
-/// Title height allocation.
-const TITLE_HEIGHT: f64 = TITLE_FONT_SIZE + 10.0;
+/// Horizontal inset contributed by the title style's 5px padding and 5px
+/// margin on each side.
+const TITLE_TEXT_INSET_X: f64 = 10.0;
+/// Extra extent from `TextBlockBordered.calculateDimension`.
+const TITLE_BORDER_EXTENT: f64 = 1.0;
+/// Difference between the title's `SheetBlock1` layout width and the SVG
+/// driver's emitted `textLength`.
+///
+/// Java provenance: `Display.create0` builds a `SheetBlock1`,
+/// `Style.createTextBlockBordered` wraps it in `TextBlockBordered`, and
+/// `DecorateEntityImage.addTop` uses that calculated width. Extracting the
+/// envelope for "Test Diagram", "My State Diagram", and the fresh
+/// perturbation "Fresh State Observatory 701" gives the same 5px layout
+/// allowance after removing the style's 20px inset and 1px border extent.
+const TITLE_LAYOUT_WIDTH_ALLOWANCE: f64 = 5.0;
+/// Vertical title style extents: 5px padding plus 5px margin above, and the
+/// same below plus `TextBlockBordered`'s one-pixel dimension extent.
+const TITLE_TOP_PAD: f64 = 10.0;
+const TITLE_BOTTOM_PAD: f64 = 11.0;
 
 /// PlantUML default state background.
 const DEFAULT_STATE_FILL: &str = "#F1F1F1";
@@ -2216,8 +2233,31 @@ pub fn render_with_oracle(
         compute_first_appearance_order(diagram)
     };
 
+    let title_line_widths: Vec<f64> = diagram
+        .meta
+        .title
+        .as_deref()
+        .map(|title| {
+            title
+                .lines()
+                .map(|line| text_render::measure(line, TITLE_FONT_SIZE, true))
+                .collect()
+        })
+        .unwrap_or_default();
+    let title_text_width = title_line_widths.iter().copied().fold(0.0_f64, f64::max);
+    let title_block_width = if diagram.meta.title.is_some() {
+        title_text_width
+            + 2.0 * TITLE_TEXT_INSET_X
+            + TITLE_BORDER_EXTENT
+            + TITLE_LAYOUT_WIDTH_ALLOWANCE
+    } else {
+        0.0
+    };
     let title_h = if diagram.meta.title.is_some() {
-        TITLE_HEIGHT
+        TITLE_TOP_PAD
+            + title_line_widths.len().max(1) as f64
+                * crate::plantuml_metrics::text_height(TITLE_FONT_SIZE)
+            + TITLE_BOTTOM_PAD
     } else {
         0.0
     };
@@ -2235,7 +2275,7 @@ pub fn render_with_oracle(
         .filter(|n| matches!(&n.kind, StateNoteKind::LeftOf(_)))
         .map(|n| note_box_width(&n.text) + NOTE_H_GAP)
         .fold(0.0_f64, f64::max);
-    let graph_body_x = SVEK_ORIGIN_X + left_note_space;
+    let mut graph_body_x = SVEK_ORIGIN_X + left_note_space;
     let mut graph_body_y = SVEK_ORIGIN_Y + title_h;
 
     // Resolve state defs. For layout IDs like "__start__" and "__end__", there's
@@ -2370,7 +2410,7 @@ pub fn render_with_oracle(
     };
 
     // Compute positions: (id, center_x, center_y, box_width, box_height).
-    let (positions, total_width, total_height) = if let Some(orc) = oracle {
+    let position_data = if let Some(orc) = oracle {
         // Oracle mode: extract positions from oracle entity data.
         let mut positions: Vec<(String, f64, f64, f64, f64)> = Vec::new();
         for id in &state_ids {
@@ -2412,22 +2452,42 @@ pub fn render_with_oracle(
                 .map(|(_, _, cy, _, h)| cy + h / 2.0 + SVEK_TRAILING_PAD)
                 .fold(0.0_f64, f64::max)
         };
-        (positions, tw, th)
+        (positions, tw, th, tw, th)
     } else if use_sugiyama {
         let lp = layout_positions.unwrap();
         let mut positions: Vec<(String, f64, f64, f64, f64)> = Vec::new();
         let mut max_x = 0.0_f64;
+        let mut painted_max_x = 0.0_f64;
         let mut max_y = 0.0_f64;
+        let mut painted_max_y = 0.0_f64;
         for (i, id) in state_ids.iter().enumerate() {
             let state_def = find_state(id);
-            let (w, h, _) = state_node_size(id, state_def);
+            let (w, h, shape) = state_node_size(id, state_def);
             let layout_x = quantize_svek_coord(lp[i].x);
             let layout_y = quantize_svek_coord(lp[i].y);
             let x = layout_x + graph_body_x + w / 2.0;
             let y = layout_y + graph_body_y + h / 2.0;
             positions.push((id.clone(), x, y, w, h));
             max_x = max_x.max(layout_x + w);
+            let descriptions_are_hidden =
+                hide_empty_desc && state_def.is_none_or(|state| state.descriptions.is_empty());
+            let has_full_width_divider = shape == StateLayoutShape::Box
+                && !state_def.is_some_and(|state| {
+                    matches!(
+                        state.kind,
+                        StateKind::Fork | StateKind::Join | StateKind::Choice
+                    )
+                })
+                && !descriptions_are_hidden;
+            // `LimitFinder.drawRectangle` and `drawEllipse` stop at
+            // `x + width - 1`; an ordinary state's divider is the painter that
+            // reaches `x + width`. This distinction is observable when
+            // `hide empty description` removes that divider and
+            // `DecorateEntityImage.addTop` centers the body under a title.
+            let painted_node_right = layout_x + w - if has_full_width_divider { 0.0 } else { 1.0 };
+            painted_max_x = painted_max_x.max(painted_node_right);
             max_y = max_y.max(layout_y + h);
+            painted_max_y = painted_max_y.max(layout_y + h - 1.0);
         }
         if let Some(result) = layout_result.as_ref() {
             // Java `SvekResult.calculateDimension` measures every painted
@@ -2436,7 +2496,9 @@ pub fn render_with_oracle(
             for edge in &result.edge_paths {
                 for &(x, y) in &edge.points {
                     max_x = max_x.max(quantize_svek_coord(x));
+                    painted_max_x = painted_max_x.max(quantize_svek_coord(x));
                     max_y = max_y.max(quantize_svek_coord(y));
+                    painted_max_y = painted_max_y.max(quantize_svek_coord(y));
                 }
             }
             if diagram
@@ -2447,12 +2509,16 @@ pub fn render_with_oracle(
                 // Graphviz's solved envelope includes the fixed HTML label
                 // boxes that `SvekEdge.appendLine` contributes.
                 max_x = max_x.max(result.width);
+                painted_max_x = painted_max_x.max(result.width);
                 max_y = max_y.max(result.height);
+                painted_max_y = painted_max_y.max(result.height);
             }
         }
         let tw = graph_body_x + max_x + right_note_space + SVEK_TRAILING_PAD;
+        let title_tw = graph_body_x + painted_max_x + right_note_space + SVEK_TRAILING_PAD;
         let th = graph_body_y + max_y + SVEK_TRAILING_PAD;
-        (positions, tw, th)
+        let title_th = graph_body_y + painted_max_y + SVEK_TRAILING_PAD;
+        (positions, tw, th, title_tw, title_th)
     } else {
         // Vertical stacking fallback.
         let max_w: f64 = state_ids
@@ -2471,8 +2537,23 @@ pub fn render_with_oracle(
             y_cursor += h + V_GAP;
         }
         let th = y_cursor - V_GAP + SVEK_TRAILING_PAD;
-        (positions, tw, th)
+        (positions, tw, th, tw, th - 1.0)
     };
+    let (mut positions, mut total_width, mut total_height, title_body_width, title_body_height) =
+        position_data;
+
+    let decorated_content_width = title_block_width.max(title_body_width);
+    if oracle.is_none() && title_block_width > title_body_width {
+        let body_shift_x = (title_block_width - title_body_width) / 2.0;
+        for (_, x, _, _, _) in &mut positions {
+            *x += body_shift_x;
+        }
+        graph_body_x += body_shift_x;
+        total_width = title_block_width;
+    }
+    if oracle.is_none() && diagram.meta.title.is_some() {
+        total_height = title_body_height;
+    }
 
     let pos_of = |id: &str| -> (f64, f64, f64, f64) {
         positions
@@ -2556,28 +2637,33 @@ pub fn render_with_oracle(
     }
 
     if let Some(title) = &diagram.meta.title {
-        // PlantUML wraps the title in `<g class="title" data-source-line="N">`
-        // and positions the text at a fixed `x="10"`, `y="23.5352"`. The
-        // `font-weight="700"` (numeric) form is what `text_render::emit_text`
-        // already produces for bold text.
+        // `DiagramChromeFactory12026.addTitle` builds a bordered title block,
+        // then `DecorateEntityImage.addTop` centers that complete block over
+        // the body. Each line remains centered inside the title block.
         svg.push_str(r#"<g class="title" data-source-line="1">"#);
-        let mut text_buf = String::new();
-        text_render::emit_text(
-            &mut text_buf,
-            title,
-            &TextBase {
-                x: 10.0,
-                y: 23.5352,
-                font_size: TITLE_FONT_SIZE as u32,
-                font_family: "sans-serif",
-                fill: TEXT_COLOR,
-                bold: true,
-                italic: false,
-                underline: false,
-                skip_underline: false,
-            },
-        );
-        svg.push_str(&text_buf);
+        let title_block_x = (decorated_content_width - title_block_width) / 2.0;
+        let title_line_height = crate::plantuml_metrics::text_height(TITLE_FONT_SIZE);
+        for (index, line) in title.lines().enumerate() {
+            text_render::emit_text(
+                &mut svg,
+                line,
+                &TextBase {
+                    x: title_block_x
+                        + TITLE_TEXT_INSET_X
+                        + (title_text_width - title_line_widths[index]) / 2.0,
+                    y: TITLE_TOP_PAD
+                        + crate::plantuml_metrics::ascent(TITLE_FONT_SIZE)
+                        + index as f64 * title_line_height,
+                    font_size: TITLE_FONT_SIZE as u32,
+                    font_family: "sans-serif",
+                    fill: TEXT_COLOR,
+                    bold: true,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
+        }
         svg.push_str("</g>");
     }
 
@@ -5886,6 +5972,36 @@ mod tests {
         assert!(svg.contains(r#"y1="115.7891" y2="115.7891""#), "{svg}");
         assert!(
             svg.contains(r#"textLength="143.2881" x="17" y="106.7798""#),
+            "{svg}"
+        );
+    }
+
+    #[test]
+    fn renamed_title_decorates_the_painted_state_envelope() {
+        let input = concat!(
+            "@startuml\n",
+            "title Fresh State Observatory 701\n",
+            "[*] --> Waiting\n",
+            "Waiting --> [*]\n",
+            "@enduml\n",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Fresh PlantUML 1.2026.3beta6 reference. The title block is wider
+        // than the 91.4561px SVEK body, so `DecorateEntityImage.addTop`
+        // centers the body's painted envelope below it.
+        assert!(svg.contains(r#"viewBox="0 0 233 269""#), "{svg}");
+        assert!(
+            svg.contains(r#"textLength="206.0078" x="10" y="23.5352""#),
+            "{svg}"
+        );
+        assert!(
+            svg.contains(r#"<ellipse cx="112.5059" cy="53.4883""#),
+            "{svg}"
+        );
+        assert!(
+            svg.contains(r#"width="70.4561" x="77.2759" y="123.4883""#),
             "{svg}"
         );
     }
