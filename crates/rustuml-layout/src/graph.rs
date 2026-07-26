@@ -1025,12 +1025,13 @@ impl LayoutGraph {
                                 metrics: Some(_),
                                 ..
                             }
-                        ) {
+                        ) || is_empty_record
+                        {
                             // PlantUML's Smetana `shapes__c.size_reclbl`
                             // suppresses Graphviz's XPAD/YPAD around `_dim_`
-                            // spans. A zero record margin is the native,
-                            // per-node equivalent and leaves other record
-                            // users unchanged.
+                            // spans, and its `record_inside` clips against the
+                            // raw field box. Empty JSON records have no spans
+                            // but still use those record semantics.
                             graphviz_ffi::agsafeset(
                                 node as *mut c_void,
                                 margin_key.as_ptr(),
