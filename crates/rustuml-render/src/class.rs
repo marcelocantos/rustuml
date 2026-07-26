@@ -3214,28 +3214,23 @@ struct SvekIdAllocation {
     package_ids: Vec<Option<String>>,
     entity_ids: Vec<String>,
     note_ids: Vec<Option<String>>,
+    attached_note_starts: Vec<Option<usize>>,
+    relationship_ids: Vec<usize>,
+    association_starts: Vec<Option<usize>>,
     entity_order: Vec<usize>,
 }
 
-struct SvekIdAllocator<'a> {
+struct SvekEmissionOrder<'a> {
     diagram: &'a ClassDiagram,
     parent_pkg: &'a [Option<usize>],
     innermost_pkg: &'a [Option<usize>],
-    package_ids: Vec<Option<String>>,
-    entity_ids: Vec<String>,
-    note_ids: Vec<Option<String>>,
     entity_order: Vec<usize>,
-    next_id: usize,
 }
 
-impl SvekIdAllocator<'_> {
-    fn allocate_package(&mut self, pkg_idx: usize) {
-        self.package_ids[pkg_idx] = Some(format!("ent{:04}", self.next_id));
-        self.next_id += 1;
+impl SvekEmissionOrder<'_> {
+    fn collect_package(&mut self, pkg_idx: usize) {
         for (entity_idx, _) in self.diagram.entities.iter().enumerate() {
             if self.innermost_pkg[entity_idx] == Some(pkg_idx) {
-                self.entity_ids[entity_idx] = format!("ent{:04}", self.next_id);
-                self.next_id += 1;
                 self.entity_order.push(entity_idx);
             }
         }
@@ -3243,27 +3238,49 @@ impl SvekIdAllocator<'_> {
             if self.parent_pkg[child_idx] == Some(pkg_idx)
                 && is_rendered_package_cluster(&self.diagram.packages[child_idx])
             {
-                self.allocate_package(child_idx);
+                self.collect_package(child_idx);
             }
         }
     }
 }
 
-/// Port of `GraphvizImageBuilder.printGroups`: package trees are allocated
-/// before unpackaged entities; each group allocates itself, its direct leaves,
-/// then its child groups.
+#[derive(Clone, Copy)]
+enum CucaUidEvent {
+    Package(usize),
+    Entity(usize),
+    FloatingNote(usize),
+    AttachedNote(usize),
+    Relationship(usize),
+    Association(usize),
+}
+
+impl CucaUidEvent {
+    fn sort_key(self, diagram: &ClassDiagram) -> (usize, usize, usize) {
+        match self {
+            Self::Package(idx) => (diagram.packages[idx].source_line, 0, idx),
+            // `CommandLinkClass` creates any missing endpoint entities before
+            // constructing its `Link`, so entities win same-line ties.
+            Self::Entity(idx) => (diagram.entities[idx].source_line, 1, idx),
+            Self::FloatingNote(idx) => (diagram.notes[idx].source_line, 2, idx),
+            Self::AttachedNote(idx) => (diagram.notes[idx].source_line, 2, idx),
+            Self::Association(idx) => (diagram.association_classes[idx].source_line, 3, idx),
+            Self::Relationship(idx) => (diagram.relationships[idx].source_line, 4, idx),
+        }
+    }
+}
+
+/// Port of the shared `CucaDiagram.cpt1` UID stream. `Entity` and `Link`
+/// constructors both advance that counter, while
+/// `CommandFactoryNoteOnEntity.executeInternal` advances it for the generated
+/// GMN name, note entity, and connector link in that order.
 fn svek_id_allocation(diagram: &ClassDiagram) -> SvekIdAllocation {
     let parent_pkg = package_parent_indices(diagram);
     let innermost_pkg = innermost_entity_packages(diagram, &parent_pkg);
-    let mut allocator = SvekIdAllocator {
+    let mut emission = SvekEmissionOrder {
         diagram,
         parent_pkg: &parent_pkg,
         innermost_pkg: &innermost_pkg,
-        package_ids: vec![None; diagram.packages.len()],
-        entity_ids: vec![String::new(); diagram.entities.len()],
-        note_ids: vec![None; diagram.notes.len()],
         entity_order: Vec::with_capacity(diagram.entities.len()),
-        next_id: 2,
     };
 
     for (pkg_idx, parent) in parent_pkg.iter().copied().enumerate() {
@@ -3273,59 +3290,98 @@ fn svek_id_allocation(diagram: &ClassDiagram) -> SvekIdAllocation {
         let parent_is_rendered =
             parent.is_some_and(|parent| is_rendered_package_cluster(&diagram.packages[parent]));
         if !parent_is_rendered {
-            allocator.allocate_package(pkg_idx);
+            emission.collect_package(pkg_idx);
         }
     }
-    let mut root_leaves = diagram
+    let mut root_entities = diagram
         .entities
         .iter()
         .enumerate()
-        .filter(|(idx, _)| allocator.entity_ids[*idx].is_empty())
-        .map(|(idx, entity)| (entity.source_line, false, idx))
-        .chain(diagram.notes.iter().enumerate().filter_map(|(idx, note)| {
-            (note.target.is_none() && note.alias.is_some()).then_some((note.source_line, true, idx))
-        }))
+        .filter(|(idx, _)| innermost_pkg[*idx].is_none())
+        .map(|(idx, entity)| (entity.source_line, idx))
         .collect::<Vec<_>>();
-    root_leaves.sort_by_key(|&(source_line, is_note, idx)| (source_line, is_note, idx));
-    for (_, is_note, idx) in root_leaves {
-        if is_note {
-            allocator.note_ids[idx] = Some(format!("ent{:04}", allocator.next_id));
-        } else {
-            allocator.entity_ids[idx] = format!("ent{:04}", allocator.next_id);
-            allocator.entity_order.push(idx);
-        }
-        allocator.next_id += 1;
-    }
+    root_entities.sort_by_key(|&(source_line, idx)| (source_line, idx));
+    emission
+        .entity_order
+        .extend(root_entities.into_iter().map(|(_, idx)| idx));
+
+    let mut events = diagram
+        .packages
+        .iter()
+        .enumerate()
+        .filter_map(|(idx, package)| {
+            is_rendered_package_cluster(package).then_some(CucaUidEvent::Package(idx))
+        })
+        .chain(
+            diagram
+                .entities
+                .iter()
+                .enumerate()
+                .map(|(idx, _)| CucaUidEvent::Entity(idx)),
+        )
+        .chain(diagram.notes.iter().enumerate().filter_map(|(idx, note)| {
+            if note.target.is_some() && note.position.is_some() {
+                Some(CucaUidEvent::AttachedNote(idx))
+            } else if note.target.is_none() && note.alias.is_some() {
+                Some(CucaUidEvent::FloatingNote(idx))
+            } else {
+                None
+            }
+        }))
+        .chain(
+            diagram
+                .association_classes
+                .iter()
+                .enumerate()
+                .map(|(idx, _)| CucaUidEvent::Association(idx)),
+        )
+        .chain(
+            diagram
+                .relationships
+                .iter()
+                .enumerate()
+                .map(|(idx, _)| CucaUidEvent::Relationship(idx)),
+        )
+        .collect::<Vec<_>>();
+    events.sort_by_key(|event| event.sort_key(diagram));
 
     let mut allocation = SvekIdAllocation {
-        package_ids: allocator.package_ids,
-        entity_ids: allocator.entity_ids,
-        note_ids: allocator.note_ids,
-        entity_order: allocator.entity_order,
+        package_ids: vec![None; diagram.packages.len()],
+        entity_ids: vec![String::new(); diagram.entities.len()],
+        note_ids: vec![None; diagram.notes.len()],
+        attached_note_starts: vec![None; diagram.notes.len()],
+        relationship_ids: vec![0; diagram.relationships.len()],
+        association_starts: vec![None; diagram.association_classes.len()],
+        entity_order: emission.entity_order,
     };
-    // CucaDiagram allocates entity and link uids while parsing. Association
-    // classes therefore move every later entity forward by the six sequence
-    // slots consumed in `Association.createNew`; preserve those externally
-    // visible `entNNNN` values even though RustUML builds SVEK after parsing.
-    for (entity, id) in diagram.entities.iter().zip(&mut allocation.entity_ids) {
-        let preceding = diagram
-            .association_classes
-            .iter()
-            .filter(|association| association.source_line < entity.source_line)
-            .count();
-        if preceding == 0 {
-            continue;
+    let mut next_id = 2;
+    for event in events {
+        match event {
+            CucaUidEvent::Package(idx) => {
+                allocation.package_ids[idx] = Some(format!("ent{next_id:04}"));
+                next_id += 1;
+            }
+            CucaUidEvent::Entity(idx) => {
+                allocation.entity_ids[idx] = format!("ent{next_id:04}");
+                next_id += 1;
+            }
+            CucaUidEvent::FloatingNote(idx) => {
+                allocation.note_ids[idx] = Some(format!("ent{next_id:04}"));
+                next_id += 1;
+            }
+            CucaUidEvent::AttachedNote(idx) => {
+                allocation.attached_note_starts[idx] = Some(next_id);
+                next_id += 3;
+            }
+            CucaUidEvent::Relationship(idx) => {
+                allocation.relationship_ids[idx] = next_id;
+                next_id += 1;
+            }
+            CucaUidEvent::Association(idx) => {
+                allocation.association_starts[idx] = Some(next_id);
+                next_id += ASSOCIATION_SEQUENCE_SLOTS;
+            }
         }
-        let Some(sequence) = id
-            .strip_prefix("ent")
-            .and_then(|value| value.parse::<usize>().ok())
-        else {
-            continue;
-        };
-        *id = format!(
-            "ent{:04}",
-            sequence + preceding * ASSOCIATION_SEQUENCE_SLOTS
-        );
     }
     allocation
 }
@@ -4148,10 +4204,11 @@ fn render_plantuml_svg(
             let Some(pos) = positions.get(node_idx) else {
                 continue;
             };
-            let qualified_name = format!("GMN{ent_id}");
-            ent_id += 1;
-            let entity_id = format!("ent{ent_id:04}");
-            ent_id += 1;
+            let Some(note_start) = svek_ids.attached_note_starts[note_idx] else {
+                continue;
+            };
+            let qualified_name = format!("GMN{note_start}");
+            let entity_id = format!("ent{:04}", note_start + 1);
             render_attached_note(
                 &mut svg,
                 note,
@@ -4193,26 +4250,14 @@ fn render_plantuml_svg(
         render_oracle_relationships(&mut svg, diagram, orc, ent_id);
         render_oracle_note_connectors(&mut svg, orc);
     } else {
-        ent_id = svek_ids
-            .package_ids
-            .iter()
-            .flatten()
-            .chain(svek_ids.entity_ids.iter())
-            .chain(svek_ids.note_ids.iter().flatten())
-            .filter_map(|id| id.strip_prefix("ent")?.parse::<usize>().ok())
-            .chain(
-                diagram
-                    .association_classes
-                    .iter()
-                    .enumerate()
-                    .map(|(idx, _)| association_point_sequence(diagram, idx) + 5),
-            )
-            .max()
-            .unwrap_or(1)
-            + 1;
         let edge_indices = relationship_edge_indices(diagram, edge_paths);
         let mut duplicate_counts = HashMap::<(&str, &str), usize>::new();
-        for (rel, edge_idx) in diagram.relationships.iter().zip(edge_indices) {
+        for ((rel, edge_idx), &link_id) in diagram
+            .relationships
+            .iter()
+            .zip(edge_indices)
+            .zip(&svek_ids.relationship_ids)
+        {
             let duplicate_index = duplicate_counts
                 .entry((rel.from.as_str(), rel.to.as_str()))
                 .and_modify(|count| *count += 1)
@@ -4223,11 +4268,10 @@ fn render_plantuml_svg(
                     rel,
                     ep,
                     diagram,
-                    ent_id,
+                    link_id,
                     layout_x_bias,
                     *duplicate_index,
                 );
-                ent_id += 1;
             }
         }
     }
@@ -9965,29 +10009,7 @@ fn association_point_layout_id(association_idx: usize) -> String {
 }
 
 fn association_point_sequence(diagram: &ClassDiagram, association_idx: usize) -> usize {
-    let association = &diagram.association_classes[association_idx];
-    2 + diagram
-        .entities
-        .iter()
-        .filter(|entity| entity.source_line <= association.source_line)
-        .count()
-        + diagram
-            .packages
-            .iter()
-            .filter(|package| package.source_line <= association.source_line)
-            .count()
-        + diagram
-            .relationships
-            .iter()
-            .filter(|relationship| relationship.source_line < association.source_line)
-            .count()
-        + diagram
-            .association_classes
-            .iter()
-            .take(association_idx)
-            .filter(|earlier| earlier.source_line <= association.source_line)
-            .count()
-            * ASSOCIATION_SEQUENCE_SLOTS
+    svek_id_allocation(diagram).association_starts[association_idx].unwrap_or(2)
 }
 
 /// Port of PlantUML `Opale`'s four linked-note polygons. Graphviz positions the
@@ -12493,25 +12515,25 @@ mod tests {
 
         assert_eq!(
             allocation.package_ids,
-            [Some("ent0002".to_string()), Some("ent0005".to_string())]
+            [Some("ent0003".to_string()), Some("ent0005".to_string())]
         );
         assert_eq!(allocation.entity_order, [1, 4, 2, 3, 0, 5]);
         assert_eq!(
             allocation.entity_ids,
             [
-                "ent0008", "ent0003", "ent0006", "ent0007", "ent0004", "ent0009"
+                "ent0002", "ent0004", "ent0006", "ent0007", "ent0008", "ent0009"
             ]
         );
 
         let svg = render(&diagram, &Theme::default());
         for (qualified_name, entity_id) in [
-            ("Outer_Renamed_17", "ent0002"),
-            ("Outer_Renamed_17.DirectZulu_19", "ent0003"),
-            ("Outer_Renamed_17.DirectAlpha_31", "ent0004"),
+            ("Outer_Renamed_17", "ent0003"),
+            ("Outer_Renamed_17.DirectZulu_19", "ent0004"),
+            ("Outer_Renamed_17.DirectAlpha_31", "ent0008"),
             ("Outer_Renamed_17.Inner_Q", "ent0005"),
             ("Outer_Renamed_17.Inner_Q.LeafBeta_23", "ent0006"),
             ("Outer_Renamed_17.Inner_Q.LeafAlpha_29", "ent0007"),
-            ("RootBefore_7", "ent0008"),
+            ("RootBefore_7", "ent0002"),
             ("RootAfter_37", "ent0009"),
         ] {
             let marker = format!(r#"data-qualified-name="{qualified_name}""#);
@@ -12527,6 +12549,99 @@ mod tests {
                 "wrong recursive SVEK id for {qualified_name}: {opening_tag}"
             );
         }
+    }
+
+    #[test]
+    fn attached_note_before_relationship_claims_three_shared_uid_slots() {
+        let input = "@startuml\n\
+            class FreshOrigin1009\n\
+            class FreshTarget1013\n\
+            note right of FreshOrigin1009 : renamed before\n\
+            FreshOrigin1009 --> FreshTarget1013\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Class(diagram) = diagram else {
+            panic!("expected class diagram");
+        };
+        let allocation = svek_id_allocation(&diagram);
+
+        assert_eq!(allocation.entity_ids, ["ent0002", "ent0003"]);
+        assert_eq!(allocation.attached_note_starts, [Some(4)]);
+        assert_eq!(allocation.relationship_ids, [7]);
+    }
+
+    #[test]
+    fn attached_note_after_relationship_continues_shared_uid_stream() {
+        let input = "@startuml\n\
+            class FreshSender1019\n\
+            class FreshReceiver1021\n\
+            FreshSender1019 --> FreshReceiver1021\n\
+            note left of FreshReceiver1021 : renamed after\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Class(diagram) = diagram else {
+            panic!("expected class diagram");
+        };
+        let allocation = svek_id_allocation(&diagram);
+
+        assert_eq!(allocation.entity_ids, ["ent0002", "ent0003"]);
+        assert_eq!(allocation.relationship_ids, [4]);
+        assert_eq!(allocation.attached_note_starts, [Some(5)]);
+    }
+
+    #[test]
+    fn changed_count_attached_notes_each_claim_gmn_entity_and_link_uids() {
+        let input = "@startuml\n\
+            class FreshNoted1031\n\
+            note left of FreshNoted1031 : west memo\n\
+            note top of FreshNoted1031 : north memo\n\
+            note right of FreshNoted1031 : east memo\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Class(diagram) = diagram else {
+            panic!("expected class diagram");
+        };
+        let allocation = svek_id_allocation(&diagram);
+
+        assert_eq!(allocation.entity_ids, ["ent0002"]);
+        assert_eq!(allocation.attached_note_starts, [Some(3), Some(6), Some(9)]);
+    }
+
+    #[test]
+    fn deeper_hierarchy_interleaves_entities_and_links_in_source_order() {
+        let mut input = String::from("@startuml\n");
+        for depth in 1..=6 {
+            writeln!(input, "class FreshLevel{depth}").unwrap();
+        }
+        for depth in 1..6 {
+            writeln!(input, "FreshLevel{depth} <|-- FreshLevel{}", depth + 1).unwrap();
+        }
+        for branch in 1..=5 {
+            writeln!(input, "interface FreshPort{branch}").unwrap();
+        }
+        for branch in 1..=5 {
+            writeln!(input, "FreshLevel6 ..|> FreshPort{branch}").unwrap();
+        }
+        input.push_str("@enduml");
+
+        let diagram = rustuml_parser::parse::parse(&input).unwrap();
+        let rustuml_parser::diagram::Diagram::Class(diagram) = diagram else {
+            panic!("expected class diagram");
+        };
+        let allocation = svek_id_allocation(&diagram);
+
+        assert_eq!(
+            &allocation.entity_ids[..6],
+            [
+                "ent0002", "ent0003", "ent0004", "ent0005", "ent0006", "ent0007"
+            ]
+        );
+        assert_eq!(&allocation.relationship_ids[..5], [8, 9, 10, 11, 12]);
+        assert_eq!(
+            &allocation.entity_ids[6..],
+            ["ent0013", "ent0014", "ent0015", "ent0016", "ent0017"]
+        );
+        assert_eq!(&allocation.relationship_ids[5..], [18, 19, 20, 21, 22]);
     }
 
     fn cluster_path_origin(svg: &str, qualified_name: &str) -> (f64, f64) {
