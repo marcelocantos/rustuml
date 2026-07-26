@@ -407,8 +407,39 @@ fn aligned_note_content_width_raw(max_text_w: f64, shape: NoteShape, align: Mess
 
 const HEAD_BOX_Y: f64 = 5.0;
 const DEFAULT_PARTICIPANT_BORDER_THICKNESS: f64 = 0.5;
-const HANDWRITTEN_WARNING_BAND_H: f64 = 21.6406;
+const WARNING_FONT_SIZE: f64 = 10.0;
+const WARNING_RECT_X: f64 = 3.0;
+const WARNING_TEXT_X: f64 = 10.0;
+const WARNING_RECT_RADIUS: f64 = 2.5;
+const WARNING_RECT_EXTRA_WIDTH: f64 = 10.0;
+const WARNING_BLOCK_EXTRA_WIDTH: f64 = 20.0;
+const WARNING_RECT_EXTRA_HEIGHT: f64 = 5.0;
+const WARNING_BLOCK_EXTRA_HEIGHT: f64 = 10.0;
+const WARNING_BASELINE_LIFT: f64 = 6.0;
+const WARNING_FILL: &str = "#FFFFCC";
+const WARNING_STROKE: &str = "#FFDD88";
+// CommandSkinParam.executeArg stores this warning with one trailing space.
+// WarningBannerBlock measures that space, while UText omits it from the SVG.
+const DEPRECATED_HANDWRITTEN_WARNING: &str = "Please\u{a0}use\u{a0}'!option\u{a0}handwritten\u{a0}true'\u{a0}to\u{a0}enable\u{a0}handwritten";
 const HEAD_BOX_H: f64 = 30.488281250; // exact Java double
+
+fn deprecated_handwritten_warning_text_width() -> f64 {
+    plantuml_metrics::mono_text_width(DEPRECATED_HANDWRITTEN_WARNING, WARNING_FONT_SIZE)
+}
+
+fn deprecated_handwritten_warning_block_width() -> f64 {
+    deprecated_handwritten_warning_text_width()
+        + plantuml_metrics::mono_text_width(" ", WARNING_FONT_SIZE)
+        + WARNING_BLOCK_EXTRA_WIDTH
+}
+
+fn deprecated_handwritten_warning_rect_height() -> f64 {
+    plantuml_metrics::mono_text_height(WARNING_FONT_SIZE) + WARNING_RECT_EXTRA_HEIGHT
+}
+
+fn deprecated_handwritten_warning_block_height() -> f64 {
+    plantuml_metrics::mono_text_height(WARNING_FONT_SIZE) + WARNING_BLOCK_EXTRA_HEIGHT
+}
 
 // Create-message layout (reverse-engineered from golden SVGs).
 // When `create X` precedes a message targeting X, PlantUML draws X's head box
@@ -2680,6 +2711,43 @@ fn emit_handwritten_warning(svg: &mut String, warning: &OracleHandwrittenWarning
         ),
     }
     .unwrap();
+}
+
+/// Port of `DiagramChromeFactory12026.WarningBannerBlock`.
+///
+/// `dx` carries the raw diagram's horizontal translation. Teoz applies five
+/// pixels in `SequenceDiagramFileMakerTeoz.getTextBlock12026`; Puma2 does not.
+fn emit_generated_handwritten_warning(svg: &mut String, dx: f64) {
+    let rect_height = deprecated_handwritten_warning_rect_height();
+    let points = handwritten_rect_points(
+        dx + WARNING_RECT_X,
+        HEAD_BOX_Y + WARNING_RECT_X,
+        deprecated_handwritten_warning_block_width() - WARNING_RECT_EXTRA_WIDTH,
+        rect_height,
+        WARNING_RECT_RADIUS,
+        WARNING_RECT_RADIUS,
+    );
+    write!(
+        svg,
+        r#"<polygon fill="{WARNING_FILL}" points="{points}" style="stroke:{WARNING_STROKE};stroke-width:3;"/>"#
+    )
+    .unwrap();
+
+    text_render::emit_text(
+        svg,
+        DEPRECATED_HANDWRITTEN_WARNING,
+        &TextBase {
+            x: dx + WARNING_TEXT_X,
+            y: HEAD_BOX_Y + WARNING_RECT_X + rect_height - WARNING_BASELINE_LIFT,
+            font_size: WARNING_FONT_SIZE as u32,
+            font_family: "monospace",
+            fill: "#000000",
+            bold: false,
+            italic: false,
+            underline: false,
+            skip_underline: false,
+        },
+    );
 }
 
 // ---------------------------------------------------------------------------
@@ -5490,7 +5558,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let has_deprecated_handwritten = has_deprecated_handwritten_skinparam(&diagram.meta.skinparams);
     let is_handwritten = is_handwritten_enabled(&diagram.meta.skinparams);
     let handwritten_warning_band_h = if has_deprecated_handwritten {
-        HANDWRITTEN_WARNING_BAND_H
+        deprecated_handwritten_warning_block_height()
     } else {
         0.0
     };
@@ -8030,11 +8098,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         } else {
             0.0
         };
-    if has_deprecated_handwritten
-        && let Some(orc) = oracle
-        && orc.handwritten_warning.is_some()
-    {
-        svg_width_exact = svg_width_exact.max(orc.canvas_width);
+    if has_deprecated_handwritten {
+        let teoz_warning_shift = if diagram.teoz { HEAD_BOX_Y } else { 0.0 };
+        svg_width_exact = svg_width_exact
+            .max(teoz_warning_shift + deprecated_handwritten_warning_block_width() + HEAD_BOX_Y);
+        if let Some(orc) = oracle
+            && orc.handwritten_warning.is_some()
+        {
+            svg_width_exact = svg_width_exact.max(orc.canvas_width);
+        }
     }
     let svg_width = svg_width_exact.ceil() as u32;
     // A `footer` directive reserves a band below the content (text_height(10)
@@ -9189,26 +9261,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         if let Some(warning) = oracle.and_then(|orc| orc.handwritten_warning.as_ref()) {
             emit_handwritten_warning(&mut svg.buf, warning);
         } else {
-            let nbsp = '\u{00a0}';
-            let msg = format!(
-                "Please{n}use{n}'!option{n}handwritten{n}true'{n}to{n}enable{n}handwritten",
-                n = nbsp
-            );
-            text_render::emit_text(
-                &mut svg.buf,
-                &msg,
-                &TextBase {
-                    x: 10.0,
-                    y: 18.6406,
-                    font_size: 10,
-                    font_family: "monospace",
-                    fill: "#000000",
-                    bold: false,
-                    italic: false,
-                    underline: false,
-                    skip_underline: false,
-                },
-            );
+            let teoz_warning_shift = if diagram.teoz { HEAD_BOX_Y } else { 0.0 };
+            emit_generated_handwritten_warning(&mut svg.buf, teoz_warning_shift);
         }
     }
 
@@ -12566,6 +12620,28 @@ mod tests {
         assert!(svg.contains("Alice"));
         assert!(svg.contains("hello"));
         assert!(svg.contains("hi"));
+    }
+
+    #[test]
+    fn teoz_deprecated_handwritten_warning_is_generated_without_oracle() {
+        let input = concat!(
+            "@startuml\n",
+            "!pragma teoz true\n",
+            "skinparam handwritten true\n",
+            "participant \"Nova 47\" as N47\n",
+            "participant \"Quill 83\" as Q83\n",
+            "N47 -> Q83 : recalibrate\n",
+            "Q83 --> N47 : acknowledged\n",
+            "@enduml",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(r#"width="392px""#));
+        assert!(svg.contains(r##"<polygon fill="#FFFFCC" points="10.5,8,"##));
+        assert!(svg.contains(
+            r##"<text fill="#000000" font-family="monospace" font-size="10" lengthAdjust="spacing" textLength="355.21" x="15" y="18.6406">"##
+        ));
     }
 
     #[test]
