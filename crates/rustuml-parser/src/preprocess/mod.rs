@@ -446,7 +446,7 @@ struct FuncParam {
 #[derive(Clone)]
 struct DefineLongDef {
     params: Vec<String>,
-    body: Vec<String>,
+    body: Vec<BufferedLine>,
 }
 
 impl PreprocessContext {
@@ -727,10 +727,11 @@ impl PreprocessContext {
         if self.collecting_definelong.is_some() {
             if trimmed == "!enddefinelong" {
                 self.collecting_definelong = None;
-            } else if let Some(name) = self.collecting_definelong.clone()
-                && let Some(dl) = self.definelong_macros.get_mut(&name)
-            {
-                dl.body.push(line.to_string());
+            } else if let Some(name) = self.collecting_definelong.clone() {
+                let buffered = self.current_buffered_line(line);
+                if let Some(dl) = self.definelong_macros.get_mut(&name) {
+                    dl.body.push(buffered);
+                }
             }
             self.push_directive_placeholder(output);
             return;
@@ -789,6 +790,7 @@ impl PreprocessContext {
 
         // Definelong.
         if self.try_definelong(trimmed) {
+            self.push_directive_placeholder(output);
             return;
         }
 
@@ -892,7 +894,16 @@ impl PreprocessContext {
                 } else {
                     // Try definelong macro expansion.
                     let subst = self.substitute_vars(&line_no_comment);
-                    let after_definelong = self.try_expand_definelong(&subst).unwrap_or(subst);
+                    let (after_definelong, expanded_multiline) =
+                        self.try_expand_definelong(&subst).unwrap_or((subst, false));
+                    if expanded_multiline {
+                        // Java TFunctionImpl.executeProcedureInternal feeds
+                        // multiline LEGACY_DEFINELONG bodies back through
+                        // TContext.executeLines with their StringLocated
+                        // definition origins. Following caller lines therefore
+                        // need explicit origins once expansion changes length.
+                        self.mark_source_lines = true;
+                    }
                     // Expand any inline $func(args) calls in output content.
                     self.expand_inline_func_calls_in_line(&after_definelong)
                 };
@@ -962,6 +973,7 @@ impl PreprocessContext {
                     .filter(|p| !p.is_empty())
                     .collect();
                 let body = caps[3].to_string();
+                let body = self.current_buffered_line(&body);
                 // Store as a definelong with a single-line body.
                 self.definelong_macros.insert(
                     name,
@@ -1044,7 +1056,7 @@ impl PreprocessContext {
         false
     }
 
-    fn try_expand_definelong(&self, line: &str) -> Option<String> {
+    fn try_expand_definelong(&self, line: &str) -> Option<(String, bool)> {
         let trimmed = line.trim();
         // Try each definelong macro.
         for (name, dl) in &self.definelong_macros {
@@ -1060,7 +1072,7 @@ impl PreprocessContext {
                     // substring inside another param name (e.g. "label").
                     let mut result_lines = Vec::new();
                     for body_line in &dl.body {
-                        let mut expanded = body_line.clone();
+                        let mut expanded = body_line.text.clone();
                         for (i, param) in dl.params.iter().enumerate() {
                             if let Some(arg) = args.get(i) {
                                 // Use word-boundary regex so that a param like
@@ -1074,15 +1086,22 @@ impl PreprocessContext {
                         }
                         // Apply ## token-pasting: collapse "foo##bar" → "foobar".
                         expanded = expanded.replace("##", "");
+                        // TFunctionImpl.finalizeEnddefinelong converts a
+                        // one-line body to LEGACY_DEFINE, which expands inline
+                        // at the caller. Multiline bodies remain procedures and
+                        // retain each StringLocated definition line.
+                        if dl.body.len() > 1 {
+                            expanded = source_line_marker(body_line.source_line, &expanded);
+                        }
                         result_lines.push(expanded);
                     }
                     // For single-line macros, replace inline.
                     if result_lines.len() == 1 {
                         let prefix = &trimmed[..idx];
                         let suffix = &trimmed[idx + name.len() + end + 1..];
-                        return Some(format!("{prefix}{}{suffix}", result_lines[0]));
+                        return Some((format!("{prefix}{}{suffix}", result_lines[0]), false));
                     }
-                    return Some(result_lines.join("\n"));
+                    return Some((result_lines.join("\n"), true));
                 }
             }
             // Bare name match (no parens, no params).
@@ -1091,9 +1110,20 @@ impl PreprocessContext {
                 if let Ok(re) = Regex::new(&format!(r"\b{}\b", regex::escape(name)))
                     && re.is_match(trimmed)
                 {
-                    let body = dl.body.join("\n");
+                    let body = dl
+                        .body
+                        .iter()
+                        .map(|line| {
+                            if dl.body.len() > 1 {
+                                source_line_marker(line.source_line, &line.text)
+                            } else {
+                                line.text.clone()
+                            }
+                        })
+                        .collect::<Vec<_>>()
+                        .join("\n");
                     let result = re.replace_all(trimmed, body.as_str()).to_string();
-                    return Some(result);
+                    return Some((result, dl.body.len() > 1));
                 }
             }
         }
@@ -1618,12 +1648,16 @@ impl PreprocessContext {
 
     fn try_undefine(&mut self, line: &str) -> bool {
         static RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^!undef(?:ine)?\s+(\w+)$").unwrap());
+            LazyLock::new(|| Regex::new(r"^!undef(?:ine)?\s+\$?(\w+)$").unwrap());
 
         if let Some(caps) = RE.captures(line) {
-            let name = &caps[1];
-            self.defines.remove(name);
-            self.token_defines.remove(name);
+            // CodeIteratorIf suppresses inactive lines before TContext reaches
+            // EaterUndef. An inactive branch must not mutate outer memory.
+            if self.is_active() {
+                let name = &caps[1];
+                self.defines.remove(name);
+                self.token_defines.remove(name);
+            }
             return true;
         }
         false
@@ -1634,15 +1668,21 @@ impl PreprocessContext {
         static RE_ELSEIF: LazyLock<Regex> =
             LazyLock::new(|| Regex::new(r#"^!elseif\s+(.+)$"#).unwrap());
         static RE_IFDEF: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"^!ifdef\s+\$?(\w+)$").unwrap());
+            LazyLock::new(|| Regex::new(r"^!ifdef\s+(.+)$").unwrap());
         static RE_IFNDEF: LazyLock<Regex> =
             LazyLock::new(|| Regex::new(r"^!ifndef\s+\$?(\w+)$").unwrap());
 
         if let Some(caps) = RE_IFDEF.captures(line) {
-            let name = &caps[1];
-            let defined = self.defines.contains_key(name)
-                || self.token_defines.contains_key(name)
-                || self.get_var(name).is_some();
+            // PlantUML EaterIfdef delegates the complete expression to
+            // EvalBoolean, whose Truth callback checks variables and
+            // functions. Preserve its !, &&, || and parenthesis grammar.
+            let defined = eval_defined_expression(&caps[1], |symbol| {
+                let name = symbol.strip_prefix('$').unwrap_or(symbol);
+                self.get_var(name).is_some()
+                    || self.token_defines.contains_key(name)
+                    || self.functions.contains_key(name)
+            })
+            .unwrap_or(false);
             self.cond_stack.push(CondState {
                 active: defined && self.is_active(),
                 has_matched: defined,
@@ -3063,6 +3103,97 @@ fn find_top_level_comparison(expr: &str, op: &str) -> Option<usize> {
     None
 }
 
+fn eval_defined_expression(expression: &str, truth: impl FnMut(&str) -> bool) -> Option<bool> {
+    DefinedExpressionParser {
+        input: expression.as_bytes(),
+        pos: 0,
+        truth,
+    }
+    .eval()
+}
+
+/// Recursive-descent port of PlantUML `preproc.EvalBoolean`, used by
+/// `EaterIfdef`: `!` binds tighter than `&`, which binds tighter than `|`.
+struct DefinedExpressionParser<'a, F> {
+    input: &'a [u8],
+    pos: usize,
+    truth: F,
+}
+
+impl<F> DefinedExpressionParser<'_, F>
+where
+    F: FnMut(&str) -> bool,
+{
+    fn eval(mut self) -> Option<bool> {
+        let value = self.parse_expression()?;
+        self.skip_spaces();
+        (self.pos == self.input.len()).then_some(value)
+    }
+
+    fn parse_expression(&mut self) -> Option<bool> {
+        let mut value = self.parse_term()?;
+        while self.eat(b'|') {
+            self.eat(b'|');
+            value |= self.parse_term()?;
+        }
+        Some(value)
+    }
+
+    fn parse_term(&mut self) -> Option<bool> {
+        let mut value = self.parse_factor()?;
+        while self.eat(b'&') {
+            self.eat(b'&');
+            value &= self.parse_factor()?;
+        }
+        Some(value)
+    }
+
+    fn parse_factor(&mut self) -> Option<bool> {
+        if self.eat(b'!') {
+            return self.parse_factor().map(|value| !value);
+        }
+        if self.eat(b'(') {
+            let value = self.parse_expression()?;
+            return self.eat(b')').then_some(value);
+        }
+
+        self.skip_spaces();
+        let start = self.pos;
+        while self
+            .input
+            .get(self.pos)
+            .is_some_and(|byte| byte.is_ascii_alphanumeric() || matches!(byte, b'_' | b'$'))
+        {
+            self.pos += 1;
+        }
+        if self.pos == start {
+            return None;
+        }
+        let symbol = std::str::from_utf8(&self.input[start..self.pos]).ok()?;
+        Some((self.truth)(symbol))
+    }
+
+    fn eat(&mut self, expected: u8) -> bool {
+        self.skip_spaces();
+        if self.input.get(self.pos) == Some(&expected) {
+            self.pos += 1;
+            true
+        } else {
+            false
+        }
+    }
+
+    fn skip_spaces(&mut self) {
+        while self
+            .input
+            .get(self.pos)
+            .is_some_and(u8::is_ascii_whitespace)
+        {
+            self.pos += 1;
+        }
+    }
+}
+
 fn parens_balanced(s: &str) -> bool {
     let mut depth = 0;
     let mut in_quotes = false;
@@ -3215,6 +3346,50 @@ mod tests {
         let input = "@startuml\n!define MODE dev\n!if $MODE == \"prod\"\nA -> B : production\n!else\nA -> B : dev\n!endif\n@enduml";
         let lines = pp(input);
         assert_eq!(lines, vec!["A -> B : dev"]);
+    }
+
+    #[test]
+    fn logical_conditions_keep_renamed_and_or_branches() {
+        let input = r#"@startuml
+!$quartz = 7
+!$saffron = 12
+!if ($quartz > 3) && ($saffron > 9)
+both
+!endif
+!if ($quartz > 99) || ($saffron == 12)
+either
+!endif
+@enduml"#;
+
+        assert_eq!(pp(input), vec!["both", "either"]);
+    }
+
+    #[test]
+    fn ifdef_expression_and_inactive_undef_follow_java_truth_model() {
+        let input = r#"@startuml
+!define QUARTZ amber
+!define SAFFRON gold
+!ifdef QUARTZ && (!$MISSING || SAFFRON)
+compound
+!endif
+!ifdef MISSING
+!undef $QUARTZ
+!endif
+!ifdef QUARTZ
+still-defined
+!endif
+!define QUARTZ violet
+value-QUARTZ
+!undef QUARTZ
+!ifndef QUARTZ
+now-undefined
+!endif
+@enduml"#;
+
+        assert_eq!(
+            pp(input),
+            vec!["compound", "still-defined", "value-violet", "now-undefined"]
+        );
     }
 
     #[test]
@@ -3380,6 +3555,51 @@ mod tests {
         let input = "@startuml\n!function $arrow($to)\nAlice -> $to : msg\n!endfunction\n$arrow(\"Bob\")\n$arrow(\"Charlie\")\n@enduml";
         let lines = pp(input);
         assert_eq!(lines, vec!["Alice -> Bob : msg", "Alice -> Charlie : msg"]);
+    }
+
+    #[test]
+    fn multiline_definelong_keeps_definition_and_caller_source_locations() {
+        let input = r#"@startuml
+!definelong RECORD_CLASS(name, field)
+class name {
+  +field: String
+}
+!enddefinelong
+RECORD_CLASS(QuartzLedger, token)
+RECORD_CLASS(SaffronArchive, label)
+QuartzLedger --> SaffronArchive
+@enduml"#;
+
+        let lines = preprocess_full_for_parse(input, None).lines;
+        let classes: Vec<_> = lines
+            .iter()
+            .filter_map(|line| split_source_line_marker(line))
+            .filter(|(_, text)| text.starts_with("class "))
+            .collect();
+        assert_eq!(
+            classes,
+            vec![(2, "class QuartzLedger {"), (2, "class SaffronArchive {")]
+        );
+        assert!(lines.iter().any(|line| {
+            split_source_line_marker(line) == Some((8, "QuartzLedger --> SaffronArchive"))
+        }));
+    }
+
+    #[test]
+    fn one_line_definelong_remains_inline_at_the_caller() {
+        let input = r#"@startuml
+!definelong FIELD(name, kind)
+  +name: kind
+!enddefinelong
+
+class QuartzLedger {
+  FIELD(token, String)
+}
+@enduml"#;
+
+        let lines = preprocess_full_for_parse(input, None).lines;
+        assert_eq!(lines[4], "class QuartzLedger {");
+        assert_eq!(lines[5], "  +token: String");
     }
 
     #[test]
