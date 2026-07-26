@@ -887,11 +887,19 @@ fn render_plantuml_svg(
             if edge_path.points.len() < 4 {
                 continue;
             }
-            let endpoint = edge_path.points[edge_path.points.len() - 1];
-            let control = edge_path.points[edge_path.points.len() - 2];
-            for (x, y) in dependency_arrow_polygon(control, endpoint) {
-                max_x = max_x.max(x);
-                max_y = max_y.max(y);
+            if link.arrow_at_to {
+                let endpoint = edge_path.points[edge_path.points.len() - 1];
+                let control = edge_path.points[edge_path.points.len() - 2];
+                for (x, y) in dependency_arrow_polygon(control, endpoint) {
+                    max_x = max_x.max(x);
+                    max_y = max_y.max(y);
+                }
+            }
+            if link.arrow_at_from {
+                for (x, y) in dependency_arrow_polygon(edge_path.points[1], edge_path.points[0]) {
+                    max_x = max_x.max(x);
+                    max_y = max_y.max(y);
+                }
             }
         }
         let canvas_pad = if has_rendered_layout_dependency(diagram, &layout.edge_paths)
@@ -1494,10 +1502,19 @@ fn object_link_type(kind: ObjectLinkKind) -> &'static str {
 
 fn object_link_path_id(link: &ObjectLink, from: &str, to: &str, parallel_index: usize) -> String {
     let mut id = match link.kind {
-        ObjectLinkKind::Aggregation | ObjectLinkKind::Composition | ObjectLinkKind::Association => {
-            format!("{from}-{to}")
+        // `SvekEdge` names links with a source-side diamond as reversed
+        // decorations, even when the opposite endpoint is undecorated.
+        ObjectLinkKind::Aggregation | ObjectLinkKind::Composition if !link.arrow_at_to => {
+            format!("{from}-backto-{to}")
         }
-        ObjectLinkKind::Dependency | ObjectLinkKind::Extension => format!("{from}-to-{to}"),
+        ObjectLinkKind::Aggregation | ObjectLinkKind::Composition => format!("{from}-{to}"),
+        ObjectLinkKind::Dependency | ObjectLinkKind::Extension | ObjectLinkKind::Association => {
+            match (link.arrow_at_from, link.arrow_at_to) {
+                (true, false) => format!("{from}-backto-{to}"),
+                (true, true) | (false, false) => format!("{from}-{to}"),
+                (false, true) => format!("{from}-to-{to}"),
+            }
+        }
     };
     if parallel_index > 0 {
         write!(id, "-{parallel_index}").unwrap();
@@ -1508,12 +1525,20 @@ fn object_link_path_id(link: &ObjectLink, from: &str, to: &str, parallel_index: 
 fn shortened_object_link_points(link: &ObjectLink, points: &[(f64, f64)]) -> Vec<(f64, f64)> {
     let start_len = match link.kind {
         ObjectLinkKind::Aggregation | ObjectLinkKind::Composition => OBJECT_DIAMOND_LENGTH,
+        ObjectLinkKind::Dependency if link.arrow_at_from => DEPENDENCY_ARROW_PATH_INSET,
+        ObjectLinkKind::Extension if link.arrow_at_from => OBJECT_TRIANGLE_LENGTH,
         ObjectLinkKind::Dependency | ObjectLinkKind::Extension | ObjectLinkKind::Association => 0.0,
     };
     let end_len = match link.kind {
-        ObjectLinkKind::Dependency => DEPENDENCY_ARROW_PATH_INSET,
-        ObjectLinkKind::Extension => OBJECT_TRIANGLE_LENGTH,
-        ObjectLinkKind::Aggregation | ObjectLinkKind::Composition => DEPENDENCY_ARROW_PATH_INSET,
+        ObjectLinkKind::Dependency if link.arrow_at_to => DEPENDENCY_ARROW_PATH_INSET,
+        ObjectLinkKind::Extension if link.arrow_at_to => OBJECT_TRIANGLE_LENGTH,
+        ObjectLinkKind::Aggregation | ObjectLinkKind::Composition if link.arrow_at_to => {
+            DEPENDENCY_ARROW_PATH_INSET
+        }
+        ObjectLinkKind::Dependency
+        | ObjectLinkKind::Extension
+        | ObjectLinkKind::Aggregation
+        | ObjectLinkKind::Composition => 0.0,
         ObjectLinkKind::Association => 0.0,
     };
     shorten_edge_points(points, start_len, end_len)
@@ -1546,27 +1571,86 @@ fn emit_object_link_start_decor(svg: &mut String, link: &ObjectLink, points: &[(
     match link.kind {
         ObjectLinkKind::Aggregation => emit_diamond(svg, points, true, "none"),
         ObjectLinkKind::Composition => emit_diamond(svg, points, true, BORDER_COLOR),
+        ObjectLinkKind::Dependency if link.arrow_at_from => {
+            emit_dependency_arrow(svg, points, true)
+        }
+        ObjectLinkKind::Extension if link.arrow_at_from => {
+            emit_extension_triangle(svg, points, true)
+        }
         ObjectLinkKind::Dependency | ObjectLinkKind::Extension | ObjectLinkKind::Association => {}
     }
 }
 
 fn emit_object_link_end_decor(svg: &mut String, link: &ObjectLink, points: &[(f64, f64)]) {
     match link.kind {
-        ObjectLinkKind::Dependency | ObjectLinkKind::Aggregation | ObjectLinkKind::Composition => {
-            if points.len() >= 2 {
-                let endpoint = points[points.len() - 1];
-                let control = points[points.len() - 2];
-                let arrow = dependency_arrow_points(control, endpoint);
-                write!(
-                    svg,
-                    r#"<polygon fill="{BORDER_COLOR}" points="{arrow}" style="stroke:{BORDER_COLOR};stroke-width:1;"/>"#,
-                )
-                .unwrap();
-            }
+        ObjectLinkKind::Dependency | ObjectLinkKind::Aggregation | ObjectLinkKind::Composition
+            if link.arrow_at_to =>
+        {
+            emit_dependency_arrow(svg, points, false);
         }
-        ObjectLinkKind::Extension => emit_extension_triangle(svg, points),
-        ObjectLinkKind::Association => {}
+        ObjectLinkKind::Extension if link.arrow_at_to => {
+            emit_extension_triangle(svg, points, false)
+        }
+        ObjectLinkKind::Dependency
+        | ObjectLinkKind::Extension
+        | ObjectLinkKind::Aggregation
+        | ObjectLinkKind::Composition
+        | ObjectLinkKind::Association => {}
     }
+}
+
+fn emit_dependency_arrow(svg: &mut String, points: &[(f64, f64)], at_start: bool) {
+    if points.len() >= 2 {
+        let (control, endpoint) = if at_start {
+            (points[1], points[0])
+        } else {
+            (points[points.len() - 2], points[points.len() - 1])
+        };
+        let arrow = dependency_arrow_points(control, endpoint);
+        write!(
+            svg,
+            r#"<polygon fill="{BORDER_COLOR}" points="{arrow}" style="stroke:{BORDER_COLOR};stroke-width:1;"/>"#,
+        )
+        .unwrap();
+    }
+}
+
+fn emit_extension_triangle(svg: &mut String, points: &[(f64, f64)], at_start: bool) {
+    if points.len() < 2 {
+        return;
+    }
+    let (contact, neighbor) = if at_start {
+        (points[0], points[1])
+    } else {
+        (points[points.len() - 1], points[points.len() - 2])
+    };
+    let inside = unit_vector(contact, neighbor);
+    let perp = (-inside.1, inside.0);
+    let base = (
+        contact.0 + inside.0 * OBJECT_TRIANGLE_LENGTH,
+        contact.1 + inside.1 * OBJECT_TRIANGLE_LENGTH,
+    );
+    let side1 = (
+        base.0 + perp.0 * OBJECT_TRIANGLE_HALF_WIDTH,
+        base.1 + perp.1 * OBJECT_TRIANGLE_HALF_WIDTH,
+    );
+    let side2 = (
+        base.0 - perp.0 * OBJECT_TRIANGLE_HALF_WIDTH,
+        base.1 - perp.1 * OBJECT_TRIANGLE_HALF_WIDTH,
+    );
+    write!(
+        svg,
+        r#"<polygon fill="none" points="{},{},{},{},{},{},{},{}" style="stroke:{BORDER_COLOR};stroke-width:1;"/>"#,
+        fmt_tl(contact.0),
+        fmt_tl(contact.1),
+        fmt_tl(side1.0),
+        fmt_tl(side1.1),
+        fmt_tl(side2.0),
+        fmt_tl(side2.1),
+        fmt_tl(contact.0),
+        fmt_tl(contact.1),
+    )
+    .unwrap();
 }
 
 const OBJECT_DIAMOND_LENGTH: f64 = 12.0;
@@ -1610,41 +1694,6 @@ fn emit_diamond(svg: &mut String, points: &[(f64, f64)], at_start: bool, fill: &
         fmt_tl(side1.1),
         fmt_tl(far.0),
         fmt_tl(far.1),
-        fmt_tl(side2.0),
-        fmt_tl(side2.1),
-        fmt_tl(contact.0),
-        fmt_tl(contact.1),
-    )
-    .unwrap();
-}
-
-fn emit_extension_triangle(svg: &mut String, points: &[(f64, f64)]) {
-    if points.len() < 2 {
-        return;
-    }
-    let contact = points[points.len() - 1];
-    let neighbor = points[points.len() - 2];
-    let inside = unit_vector(contact, neighbor);
-    let perp = (-inside.1, inside.0);
-    let base = (
-        contact.0 + inside.0 * OBJECT_TRIANGLE_LENGTH,
-        contact.1 + inside.1 * OBJECT_TRIANGLE_LENGTH,
-    );
-    let side1 = (
-        base.0 + perp.0 * OBJECT_TRIANGLE_HALF_WIDTH,
-        base.1 + perp.1 * OBJECT_TRIANGLE_HALF_WIDTH,
-    );
-    let side2 = (
-        base.0 - perp.0 * OBJECT_TRIANGLE_HALF_WIDTH,
-        base.1 - perp.1 * OBJECT_TRIANGLE_HALF_WIDTH,
-    );
-    write!(
-        svg,
-        r#"<polygon fill="none" points="{},{},{},{},{},{},{},{}" style="stroke:{BORDER_COLOR};stroke-width:1;"/>"#,
-        fmt_tl(contact.0),
-        fmt_tl(contact.1),
-        fmt_tl(side1.0),
-        fmt_tl(side1.1),
         fmt_tl(side2.0),
         fmt_tl(side2.1),
         fmt_tl(contact.0),
@@ -2380,6 +2429,8 @@ mod tests {
                 from_multiplicity: None,
                 to_multiplicity: None,
                 dashed: false,
+                arrow_at_from: false,
+                arrow_at_to: true,
                 source_line: 9,
             }],
             notes: vec![],
@@ -2639,6 +2690,39 @@ RenamedLedger --> RenamedArchive"#
         assert!(svg.contains(r#"y="19.6348">RenamedLedger"#));
         assert!(svg.contains(r#"y1="23.9551" y2="23.9551""#));
         assert!(svg.contains(r#"y="64.5">gamma = 30"#));
+    }
+
+    #[test]
+    fn link_endpoint_decorations_remain_orthogonal_to_relation_kind() {
+        let input = r#"@startuml
+object RenamedAlpha
+object RenamedBeta
+object RenamedGamma
+object RenamedDelta
+object RenamedEpsilon
+RenamedAlpha <-- RenamedBeta
+RenamedBeta <--> RenamedGamma
+RenamedGamma o-- RenamedDelta
+RenamedDelta *-- RenamedEpsilon
+@enduml"#;
+        let Diagram::Object(diagram) = rustuml_parser::parse::parse(input).unwrap() else {
+            panic!("expected object diagram");
+        };
+        assert_eq!(
+            diagram
+                .links
+                .iter()
+                .map(|link| (link.arrow_at_from, link.arrow_at_to))
+                .collect::<Vec<_>>(),
+            [(true, false), (true, true), (false, false), (false, false)]
+        );
+
+        let svg = render(&diagram, &Theme::default());
+        assert!(svg.contains(r#"id="RenamedAlpha-backto-RenamedBeta""#));
+        assert!(svg.contains(r#"id="RenamedBeta-RenamedGamma""#));
+        assert!(svg.contains(r#"id="RenamedGamma-backto-RenamedDelta""#));
+        assert!(svg.contains(r#"id="RenamedDelta-backto-RenamedEpsilon""#));
+        assert_eq!(svg.matches("<polygon").count(), 5);
     }
 
     #[test]

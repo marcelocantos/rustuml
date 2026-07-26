@@ -106,6 +106,12 @@ pub struct ObjectLink {
     /// Whether the line is dashed (e.g. `..>` / `..|>`).
     #[serde(default)]
     pub dashed: bool,
+    /// Whether the connector carries an arrow decoration at the source end.
+    #[serde(default)]
+    pub arrow_at_from: bool,
+    /// Whether the connector carries an arrow decoration at the target end.
+    #[serde(default)]
+    pub arrow_at_to: bool,
     /// 1-based line number within the `@startuml` block.
     #[serde(default)]
     pub source_line: usize,

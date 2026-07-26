@@ -339,6 +339,8 @@ impl ObjectParser {
                 from_multiplicity,
                 to_multiplicity,
                 dashed: connector.contains(".."),
+                arrow_at_from: connector.starts_with('<'),
+                arrow_at_to: connector.ends_with('>'),
                 source_line: self.current_line,
             });
             true
