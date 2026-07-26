@@ -19,7 +19,7 @@
 //! it falls back to a simple geometry-driven grid renderer (kept below for
 //! standalone use).
 
-use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph};
+use rustuml_layout::graph::{Direction, EdgeLabelSize, EdgePath, LayoutGraph};
 use rustuml_parser::diagram::archimate::*;
 
 use crate::layout_oracle::{
@@ -45,6 +45,16 @@ const MOTIVATION_FILL: &str = "#CCCCFF";
 const ELEMENT_STROKE_STYLE: &str = "stroke:#181818;stroke-width:0.5;";
 const LAYOUT_TIMEOUT: std::time::Duration = std::time::Duration::from_secs(5);
 const BODY_MARGIN: f64 = 6.0;
+/// Trailing canvas space after the translated painted envelope.
+///
+/// PlantUML `SvekResult.calculateDimension` measures the complete drawing
+/// through `LimitFinder`, moves its minimum to `(6, 6)`, and returns the
+/// measured dimension with a 15px delta. Archimate bodies are `UPath`s, whose
+/// extrema are recorded exactly by `LimitFinder.drawUPath`.
+const SVEK_CANVAS_PAD: f64 = 15.0;
+/// `SvekEdge.appendTable` wraps the real edge label by one pixel on each
+/// side before sending its integer-truncated fixed-size table to dot.
+const EDGE_LABEL_MARGIN: f64 = 1.0;
 /// PlantUML Archimate entities are `RoundedContainer`/`DiagonalCorner`
 /// stereotype boxes with this default DESCRIPTION minimum width.
 const ELEMENT_W: f64 = 140.0;
@@ -423,23 +433,42 @@ pub fn render(diagram: &ArchimateDiagram, _theme: &Theme) -> String {
     }
     for rel in &diagram.relations {
         let (from, to) = relation_layout_endpoints(rel);
-        layout.add_edge(from, to, rel.label.as_deref());
+        let label_size = rel.label.as_deref().map(|label| EdgeLabelSize {
+            width: text_render::measure_with_family(label, FONT_SIZE, false, FONT_FAMILY)
+                + EDGE_LABEL_MARGIN * 2.0,
+            height: (text_render::label_height_with_family(label, FONT_SIZE, FONT_FAMILY)
+                + EDGE_LABEL_MARGIN * 2.0)
+                .floor(),
+        });
+        layout.add_edge_with_label_sizes(from, to, label_size, None, None);
     }
 
     let result = layout.layout_full(LAYOUT_TIMEOUT);
     let positions = result.as_ref().map(|r| r.node_positions.as_slice());
     let entities = no_oracle_entities(diagram, positions);
-    let content_w = entities
+    let mut painted_max_x = entities
         .iter()
         .map(|e| e.rect.x + e.rect.width)
         .fold(0.0_f64, f64::max);
-    let content_h = entities
+    let mut painted_max_y = entities
         .iter()
         .map(|e| e.rect.y + e.rect.height)
         .fold(0.0_f64, f64::max);
+    if let Some(layout) = result.as_ref() {
+        for edge in &layout.edge_paths {
+            for (x, y) in &edge.points {
+                painted_max_x = painted_max_x.max(x + BODY_MARGIN);
+                painted_max_y = painted_max_y.max(y + BODY_MARGIN);
+            }
+            if let Some(label) = edge.label {
+                painted_max_x = painted_max_x.max(label.x + BODY_MARGIN + label.width);
+                painted_max_y = painted_max_y.max(label.y + BODY_MARGIN + label.height);
+            }
+        }
+    }
     let mut svg = SvgBuilder::new_plantuml(
-        (content_w + BODY_MARGIN).max(100.0),
-        (content_h + BODY_MARGIN).max(50.0),
+        (painted_max_x + SVEK_CANVAS_PAD).max(100.0),
+        (painted_max_y + SVEK_CANVAS_PAD).max(50.0),
         "DESCRIPTION",
     );
 
@@ -557,12 +586,18 @@ fn no_oracle_edge(
         format!("{layout_from}-{layout_to}")
     };
     let (link_type, path_style, arrow_fill) = archimate_edge_style(rel.kind);
-    let mut labels = Vec::new();
-    if let Some(label) = rel.label.as_deref()
-        && let Some((x, y)) = edge.points.get(edge.points.len() / 2).copied()
-    {
-        labels.push((x + BODY_MARGIN, y + BODY_MARGIN, label.to_string()));
-    }
+    let label = rel.label.as_deref().and_then(|text| {
+        edge.label.map(|position| {
+            (
+                position.x + BODY_MARGIN + EDGE_LABEL_MARGIN,
+                position.y
+                    + BODY_MARGIN
+                    + EDGE_LABEL_MARGIN
+                    + text_render::label_ascent_with_family(text, FONT_SIZE, FONT_FAMILY),
+                text.to_string(),
+            )
+        })
+    });
     let decor_at_start = uses_backto_id;
     let mut path_points = archimate_edge_points(edge);
     if matches!(rel.kind, ArchimateRelationKind::Realization) {
@@ -583,12 +618,12 @@ fn no_oracle_edge(
         entity_1: entity_id(entities, layout_from),
         entity_2: entity_id(entities, layout_to),
         source_line: (rel.source_line > 0).then(|| rel.source_line.to_string()),
-        link_id: Some(no_oracle_link_id(diagram, rel.source_line, index)),
+        link_id: Some(no_oracle_link_id(diagram, index)),
         path_style: Some(path_style.to_string()),
         code_line: None,
         polygon_style: Some("stroke:#000000;stroke-width:1;".to_string()),
-        label: None,
-        labels,
+        label,
+        labels: vec![],
         label_links: vec![],
         extra_paths: vec![],
         crow_lines: vec![],
@@ -652,32 +687,42 @@ fn entity_id(entities: &[OracleEntity], id: &str) -> Option<String> {
         .and_then(|e| e.rect.entity_id.clone())
 }
 
-fn no_oracle_link_id(diagram: &ArchimateDiagram, source_line: usize, index: usize) -> String {
-    let mut items = Vec::new();
-    for elem in &diagram.elements {
-        items.push((elem.source_line, false));
-    }
-    for rel in &diagram.relations {
-        items.push((rel.source_line, true));
-    }
-    items.sort_by_key(|(line, _)| *line);
-    let mut seen_same_line = 0usize;
-    for (counter, (line, is_link)) in (2usize..).zip(items) {
-        if is_link && line == source_line {
-            if seen_same_line == index {
-                return format!("lnk{counter}");
-            }
-            seen_same_line += 1;
+fn no_oracle_link_id(diagram: &ArchimateDiagram, index: usize) -> String {
+    let mut counter = diagram.elements.len() + 2;
+    for (relation_index, relation) in diagram.relations.iter().enumerate() {
+        // `CommandLinkElement.executeArg` replaces LEFT/UP links with
+        // `Link.getInv()`. The inverse Link consumes the next UID before
+        // `SvekEdge` receives its own identifier.
+        if matches!(
+            relation.direction,
+            ArchimateRelationDirection::Up | ArchimateRelationDirection::Left
+        ) {
+            counter += 1;
         }
+        if relation_index == index {
+            return format!("lnk{counter}");
+        }
+        counter += 1;
     }
-    format!("lnk{}", diagram.elements.len() + index + 2)
+    format!("lnk{counter}")
 }
 
 fn archimate_edge_points(edge: &EdgePath) -> Vec<(f64, f64)> {
     edge.points
         .iter()
-        .map(|(x, y)| (x + BODY_MARGIN, y + BODY_MARGIN))
+        // Java `SvgResult` parses Graphviz's two-decimal SVG coordinates
+        // before SVEK applies its six-pixel normalization.
+        .map(|(x, y)| {
+            (
+                round_svek_coord(*x) + BODY_MARGIN,
+                round_svek_coord(*y) + BODY_MARGIN,
+            )
+        })
         .collect()
+}
+
+fn round_svek_coord(value: f64) -> f64 {
+    (value * 100.0).round() / 100.0
 }
 
 fn edge_path_d(points: &[(f64, f64)]) -> String {
@@ -746,11 +791,18 @@ fn shorten_archimate_endpoint(points: &mut [(f64, f64)], at_start: bool, length:
     }
     if at_start {
         let tangent = unit_vector(points[0], points[1]);
-        points[0] = add(points[0], scale(tangent, length));
+        let delta = scale(tangent, length);
+        // `DotPath.moveStartPoint` translates both the first endpoint and its
+        // adjacent Bezier control point.
+        points[0] = add(points[0], delta);
+        points[1] = add(points[1], delta);
     } else {
         let last = points.len() - 1;
         let tangent = unit_vector(points[last], points[last - 1]);
-        points[last] = add(points[last], scale(tangent, length));
+        let delta = scale(tangent, length);
+        // `DotPath.moveEndPoint` likewise translates the final control point.
+        points[last] = add(points[last], delta);
+        points[last - 1] = add(points[last - 1], delta);
     }
 }
 
@@ -770,7 +822,7 @@ fn dependency_arrow_points(control: (f64, f64), endpoint: (f64, f64)) -> String 
         endpoint.1 - uy * DEPENDENCY_ARROW_BACK - py * DEPENDENCY_ARROW_HALF_WIDTH,
     );
     format!(
-        "{},{} {},{} {},{} {},{} {},{}",
+        "{},{},{},{},{},{},{},{},{},{}",
         fc(endpoint.0),
         fc(endpoint.1),
         fc(side1.0),
@@ -800,13 +852,13 @@ fn realization_triangle_points(control: (f64, f64), endpoint: (f64, f64)) -> Str
         base.1 - py * REALIZATION_TRIANGLE_HALF_WIDTH,
     );
     format!(
-        "{},{} {},{} {},{} {},{}",
+        "{},{},{},{},{},{},{},{}",
         fc(endpoint.0),
         fc(endpoint.1),
-        fc(side1.0),
-        fc(side1.1),
         fc(side2.0),
         fc(side2.1),
+        fc(side1.0),
+        fc(side1.1),
         fc(endpoint.0),
         fc(endpoint.1),
     )
@@ -861,6 +913,37 @@ mod tests {
         assert!(
             svg.contains("<path"),
             "Archimate icon/body path missing: {svg}"
+        );
+    }
+
+    #[test]
+    fn renamed_reversed_relations_use_svek_label_and_extremity_geometry() {
+        let input = "@startuml\n\
+                     !include <archimate/Archimate>\n\
+                     Motivation_Stakeholder(client_71, \"Fresh Client\")\n\
+                     Motivation_Goal(goal_73, \"Lower Spend\")\n\
+                     Motivation_Requirement(req_79, \"48h Ready\")\n\
+                     Rel_Association_Up(client_71, goal_73, \"owns\")\n\
+                     Rel_Realization_Up(req_79, goal_73, \"meets\")\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Fresh PlantUML 1.2026.3beta6 reference. These values exercise
+        // `SvekEdge.appendTable/solveLine`, `Link.getInv`, and
+        // `DotPath.moveStartPoint` without relying on a corpus fixture.
+        assert!(
+            svg.contains(r#"viewBox="0 0 336 204""#)
+                && svg.contains(r#"d="M191.2409,74.7366 C206.4309,96.7566"#),
+            "{svg}"
+        );
+        assert!(
+            svg.contains(r#"id="lnk6""#)
+                && svg.contains(r#"id="lnk8""#)
+                && svg.contains(
+                    r#"points="181.02,59.92,186.302,78.1436,196.1798,71.3297,181.02,59.92""#
+                ),
+            "{svg}"
         );
     }
 }
