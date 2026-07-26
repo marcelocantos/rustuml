@@ -87,6 +87,8 @@ pub struct LayoutGraph {
     spacing: Option<GraphSpacing>,
     plantuml_svek_node_order: bool,
     plantuml_svek_inverted_starts: Vec<String>,
+    plantuml_svek_line0_nodes: Vec<String>,
+    plantuml_svek_line0_edges: Vec<(String, String)>,
     nodes: Vec<NodeSpec>,
     clusters: Vec<ClusterSpec>,
     together: Vec<TogetherSpec>,
@@ -102,6 +104,8 @@ impl LayoutGraph {
             spacing: None,
             plantuml_svek_node_order: false,
             plantuml_svek_inverted_starts: Vec::new(),
+            plantuml_svek_line0_nodes: Vec::new(),
+            plantuml_svek_line0_edges: Vec::new(),
             nodes: Vec::new(),
             clusters: Vec::new(),
             together: Vec::new(),
@@ -143,6 +147,26 @@ impl LayoutGraph {
             self.plantuml_svek_inverted_starts
                 .insert(0, node_id.to_string());
         }
+    }
+
+    /// Creates endpoints of a length-one SVEK edge before ordinary nodes.
+    ///
+    /// PlantUML's `DotStringFactory.createDotString` emits `lines0` after
+    /// `Cluster.getNodesOrderedTop` but before
+    /// `Cluster.getNodesOrderedWithoutTop`. Graphviz therefore creates any
+    /// not-yet-declared endpoints in length-one edge order.
+    pub fn add_plantuml_svek_line0_edge(&mut self, from: &str, to: &str) {
+        for node_id in [from, to] {
+            if !self
+                .plantuml_svek_line0_nodes
+                .iter()
+                .any(|existing| existing == node_id)
+            {
+                self.plantuml_svek_line0_nodes.push(node_id.to_string());
+            }
+        }
+        self.plantuml_svek_line0_edges
+            .push((from.to_string(), to.to_string()));
     }
 
     /// Sets graph-level dot spacing.
@@ -680,125 +704,259 @@ impl LayoutGraph {
         let true_val = CString::new("true").unwrap();
         let no_arrow_val = CString::new("none").unwrap();
 
-        for node_idx in self.graphviz_node_creation_order() {
-            let spec = &self.nodes[node_idx];
-            let cid = CString::new(spec.id.as_str()).unwrap();
-            let node = graphviz_ffi::agnode(g, cid.as_ptr(), 1);
+        macro_rules! create_node {
+            ($node_idx:expr) => {{
+                let spec = &self.nodes[$node_idx];
+                let cid = CString::new(spec.id.as_str()).unwrap();
+                let node = graphviz_ffi::agnode(g, cid.as_ptr(), 1);
 
-            if let NodeShape::SvekShielded { shield_x, shield_y } = spec.shape {
-                let w_inches = spec.width / DOT_POINTS_PER_INCH;
-                let h_inches = spec.height / DOT_POINTS_PER_INCH;
-                let w_str = CString::new(format!("{w_inches:.6}")).unwrap();
-                let h_str = CString::new(format!("{h_inches:.6}")).unwrap();
-                graphviz_ffi::agsafeset(
-                    node as *mut c_void,
-                    width_key.as_ptr(),
-                    w_str.as_ptr(),
-                    empty.as_ptr(),
-                );
-                graphviz_ffi::agsafeset(
-                    node as *mut c_void,
-                    height_key.as_ptr(),
-                    h_str.as_ptr(),
-                    empty.as_ptr(),
-                );
-                graphviz_ffi::agsafeset(
-                    node as *mut c_void,
-                    fixedsize_key.as_ptr(),
-                    shape_fixedsize_val.as_ptr(),
-                    empty.as_ptr(),
-                );
-                graphviz_ffi::agsafeset(
-                    node as *mut c_void,
-                    shape_key.as_ptr(),
-                    box_val.as_ptr(),
-                    empty.as_ptr(),
-                );
-                let table =
-                    CString::new(svek_shielded_node_table(spec, shield_x, shield_y)).unwrap();
-                graphviz_ffi::agsafeset_html(
-                    node as *mut c_void,
-                    label_key.as_ptr(),
-                    table.as_ptr(),
-                    empty.as_ptr(),
-                );
-                node_handles.insert(spec.id.clone(), node);
-                continue;
-            }
+                if let NodeShape::SvekShielded { shield_x, shield_y } = spec.shape {
+                    let w_inches = spec.width / DOT_POINTS_PER_INCH;
+                    let h_inches = spec.height / DOT_POINTS_PER_INCH;
+                    let w_str = CString::new(format!("{w_inches:.6}")).unwrap();
+                    let h_str = CString::new(format!("{h_inches:.6}")).unwrap();
+                    graphviz_ffi::agsafeset(
+                        node as *mut c_void,
+                        width_key.as_ptr(),
+                        w_str.as_ptr(),
+                        empty.as_ptr(),
+                    );
+                    graphviz_ffi::agsafeset(
+                        node as *mut c_void,
+                        height_key.as_ptr(),
+                        h_str.as_ptr(),
+                        empty.as_ptr(),
+                    );
+                    graphviz_ffi::agsafeset(
+                        node as *mut c_void,
+                        fixedsize_key.as_ptr(),
+                        shape_fixedsize_val.as_ptr(),
+                        empty.as_ptr(),
+                    );
+                    graphviz_ffi::agsafeset(
+                        node as *mut c_void,
+                        shape_key.as_ptr(),
+                        box_val.as_ptr(),
+                        empty.as_ptr(),
+                    );
+                    let table =
+                        CString::new(svek_shielded_node_table(spec, shield_x, shield_y)).unwrap();
+                    graphviz_ffi::agsafeset_html(
+                        node as *mut c_void,
+                        label_key.as_ptr(),
+                        table.as_ptr(),
+                        empty.as_ptr(),
+                    );
+                } else {
+                    let shape = match &spec.shape {
+                        NodeShape::Box => &box_val,
+                        NodeShape::Circle => &circle_val,
+                        NodeShape::Ellipse => &ellipse_val,
+                        NodeShape::Diamond => &diamond_val,
+                        NodeShape::Point => &point_val,
+                        NodeShape::Record { .. } => &record_val,
+                        NodeShape::FixedHtmlRows { .. } => &plaintext_val,
+                        NodeShape::SvekShielded { .. } => unreachable!(),
+                    };
+                    graphviz_ffi::agsafeset(
+                        node as *mut c_void,
+                        shape_key.as_ptr(),
+                        shape.as_ptr(),
+                        empty.as_ptr(),
+                    );
+                    if let NodeShape::FixedHtmlRows { ports } = &spec.shape {
+                        let table =
+                            CString::new(fixed_html_row_table(spec.width, spec.height, ports))
+                                .unwrap();
+                        graphviz_ffi::agsafeset_html(
+                            node as *mut c_void,
+                            label_key.as_ptr(),
+                            table.as_ptr(),
+                            empty.as_ptr(),
+                        );
+                    } else {
+                        // Graphviz uses inches for width/height.
+                        let w_inches = spec.width / DOT_POINTS_PER_INCH;
+                        let h_inches = spec.height / DOT_POINTS_PER_INCH;
+                        let w_str = CString::new(format!("{w_inches:.6}")).unwrap();
+                        let h_str = CString::new(format!("{h_inches:.6}")).unwrap();
 
-            let shape = match &spec.shape {
-                NodeShape::Box => &box_val,
-                NodeShape::Circle => &circle_val,
-                NodeShape::Ellipse => &ellipse_val,
-                NodeShape::Diamond => &diamond_val,
-                NodeShape::Point => &point_val,
-                NodeShape::Record { .. } => &record_val,
-                NodeShape::FixedHtmlRows { .. } => &plaintext_val,
-                NodeShape::SvekShielded { .. } => &box_val,
-            };
-            graphviz_ffi::agsafeset(
-                node as *mut c_void,
-                shape_key.as_ptr(),
-                shape.as_ptr(),
-                empty.as_ptr(),
-            );
-            if let NodeShape::FixedHtmlRows { ports } = &spec.shape {
-                let table =
-                    CString::new(fixed_html_row_table(spec.width, spec.height, ports)).unwrap();
-                graphviz_ffi::agsafeset_html(
-                    node as *mut c_void,
-                    label_key.as_ptr(),
-                    table.as_ptr(),
-                    empty.as_ptr(),
-                );
-            } else {
-                // Graphviz uses inches for width/height.
-                let w_inches = spec.width / DOT_POINTS_PER_INCH;
-                let h_inches = spec.height / DOT_POINTS_PER_INCH;
-                let w_str = CString::new(format!("{w_inches:.6}")).unwrap();
-                let h_str = CString::new(format!("{h_inches:.6}")).unwrap();
-
-                graphviz_ffi::agsafeset(
-                    node as *mut c_void,
-                    width_key.as_ptr(),
-                    w_str.as_ptr(),
-                    empty.as_ptr(),
-                );
-                graphviz_ffi::agsafeset(
-                    node as *mut c_void,
-                    height_key.as_ptr(),
-                    h_str.as_ptr(),
-                    empty.as_ptr(),
-                );
-                graphviz_ffi::agsafeset(
-                    node as *mut c_void,
-                    fixedsize_key.as_ptr(),
-                    fixedsize_val.as_ptr(),
-                    empty.as_ptr(),
-                );
-                // PlantUML SVEK uses dot for geometry and renders entity labels
-                // itself. Leaving Graphviz's default label (the node id) makes
-                // fixed layout boxes warn and can feed label bounds into routing.
-                let label_val = match &spec.shape {
-                    NodeShape::Record { ports } => CString::new(record_label(ports)).unwrap(),
-                    NodeShape::Box
-                    | NodeShape::Circle
-                    | NodeShape::Ellipse
-                    | NodeShape::Diamond
-                    | NodeShape::Point => no_label_val.clone(),
-                    NodeShape::FixedHtmlRows { .. } | NodeShape::SvekShielded { .. } => {
-                        unreachable!()
+                        graphviz_ffi::agsafeset(
+                            node as *mut c_void,
+                            width_key.as_ptr(),
+                            w_str.as_ptr(),
+                            empty.as_ptr(),
+                        );
+                        graphviz_ffi::agsafeset(
+                            node as *mut c_void,
+                            height_key.as_ptr(),
+                            h_str.as_ptr(),
+                            empty.as_ptr(),
+                        );
+                        graphviz_ffi::agsafeset(
+                            node as *mut c_void,
+                            fixedsize_key.as_ptr(),
+                            fixedsize_val.as_ptr(),
+                            empty.as_ptr(),
+                        );
+                        // PlantUML SVEK uses dot for geometry and renders
+                        // entity labels itself.
+                        let label_val = match &spec.shape {
+                            NodeShape::Record { ports } => {
+                                CString::new(record_label(ports)).unwrap()
+                            }
+                            NodeShape::Box
+                            | NodeShape::Circle
+                            | NodeShape::Ellipse
+                            | NodeShape::Diamond
+                            | NodeShape::Point => no_label_val.clone(),
+                            NodeShape::FixedHtmlRows { .. } | NodeShape::SvekShielded { .. } => {
+                                unreachable!()
+                            }
+                        };
+                        graphviz_ffi::agsafeset(
+                            node as *mut c_void,
+                            label_key.as_ptr(),
+                            label_val.as_ptr(),
+                            empty.as_ptr(),
+                        );
                     }
-                };
-                graphviz_ffi::agsafeset(
-                    node as *mut c_void,
-                    label_key.as_ptr(),
-                    label_val.as_ptr(),
-                    empty.as_ptr(),
-                );
-            }
+                }
 
-            node_handles.insert(spec.id.clone(), node);
+                node_handles.insert(spec.id.clone(), node);
+            }};
+        }
+
+        let graphviz_node_order = self.graphviz_node_creation_order();
+        let early_node_count = graphviz_node_order
+            .iter()
+            .take_while(|&&node_idx| {
+                let id = &self.nodes[node_idx].id;
+                self.plantuml_svek_inverted_starts.contains(id)
+                    || self.plantuml_svek_line0_nodes.contains(id)
+            })
+            .count();
+        for &node_idx in &graphviz_node_order[..early_node_count] {
+            create_node!(node_idx);
+        }
+
+        let mut edge_specs: HashMap<usize, (String, String)> = HashMap::new();
+        macro_rules! create_edge {
+            ($edge_idx:expr) => {{
+                let edge_spec = &self.edges[$edge_idx];
+                if let (Some(&from_h), Some(&to_h)) = (
+                    node_handles.get(&edge_spec.from),
+                    node_handles.get(&edge_spec.to),
+                ) {
+                    // PlantUML emits every relationship as a separate dot
+                    // edge statement, so preserve caller-owned identity.
+                    let edge_name = CString::new(format!(
+                        "{}__{}__{}",
+                        edge_spec.from, edge_spec.to, $edge_idx
+                    ))
+                    .unwrap();
+                    let edge = graphviz_ffi::agedge(g, from_h, to_h, edge_name.as_ptr(), 1);
+
+                    if let Some(lbl) = &edge_spec.label {
+                        let label_val = CString::new(lbl.as_str()).unwrap();
+                        graphviz_ffi::agsafeset(
+                            edge as *mut c_void,
+                            label_key.as_ptr(),
+                            label_val.as_ptr(),
+                            empty.as_ptr(),
+                        );
+                    }
+                    for (edge_label_key, color, size) in [
+                        (&label_key, "#000001", edge_spec.label_size),
+                        (&taillabel_key, "#000002", edge_spec.tail_label_size),
+                        (&headlabel_key, "#000003", edge_spec.head_label_size),
+                    ] {
+                        let Some(size) = size else { continue };
+                        let table = CString::new(edge_label_table(size, color)).unwrap();
+                        graphviz_ffi::agsafeset_html(
+                            edge as *mut c_void,
+                            edge_label_key.as_ptr(),
+                            table.as_ptr(),
+                            empty.as_ptr(),
+                        );
+                    }
+                    if edge_spec.tail_label_size.is_some() || edge_spec.head_label_size.is_some() {
+                        graphviz_ffi::agsafeset(
+                            edge as *mut c_void,
+                            external_endpoint_labels_key.as_ptr(),
+                            true_val.as_ptr(),
+                            empty.as_ptr(),
+                        );
+                    }
+                    if let Some(port) = &edge_spec.tail_port {
+                        let port_val = CString::new(port.as_str()).unwrap();
+                        graphviz_ffi::agsafeset(
+                            edge as *mut c_void,
+                            tailport_key.as_ptr(),
+                            port_val.as_ptr(),
+                            empty.as_ptr(),
+                        );
+                    }
+                    if let Some(port) = &edge_spec.head_port {
+                        let port_val = CString::new(port.as_str()).unwrap();
+                        graphviz_ffi::agsafeset(
+                            edge as *mut c_void,
+                            headport_key.as_ptr(),
+                            port_val.as_ptr(),
+                            empty.as_ptr(),
+                        );
+                    }
+                    if let Some(minlen) = edge_spec.minlen {
+                        let minlen_value = CString::new(minlen.to_string()).unwrap();
+                        graphviz_ffi::agsafeset(
+                            edge as *mut c_void,
+                            minlen_key.as_ptr(),
+                            minlen_value.as_ptr(),
+                            empty.as_ptr(),
+                        );
+                    }
+                    // SVEK renders link decorations itself after dot routes
+                    // the undecorated spline.
+                    graphviz_ffi::agsafeset(
+                        edge as *mut c_void,
+                        arrowhead_key.as_ptr(),
+                        no_arrow_val.as_ptr(),
+                        empty.as_ptr(),
+                    );
+                    graphviz_ffi::agsafeset(
+                        edge as *mut c_void,
+                        arrowtail_key.as_ptr(),
+                        no_arrow_val.as_ptr(),
+                        empty.as_ptr(),
+                    );
+
+                    edge_specs.insert(
+                        edge as usize,
+                        (edge_spec.from.clone(), edge_spec.to.clone()),
+                    );
+                }
+            }};
+        }
+
+        let mut early_edge_indices = Vec::new();
+        let mut claimed_edges = vec![false; self.edges.len()];
+        for (from, to) in &self.plantuml_svek_line0_edges {
+            if let Some((edge_idx, (_, claimed))) =
+                self.edges.iter().zip(&mut claimed_edges).enumerate().find(
+                    |(_, (edge, claimed))| {
+                        !**claimed && edge.from == *from && edge.to == *to && edge.minlen == Some(0)
+                    },
+                )
+            {
+                *claimed = true;
+                early_edge_indices.push(edge_idx);
+            }
+        }
+        for &edge_idx in &early_edge_indices {
+            create_edge!(edge_idx);
+        }
+        for &node_idx in &graphviz_node_order[early_node_count..] {
+            create_node!(node_idx);
         }
 
         let rank_key = CString::new("rank").unwrap();
@@ -867,105 +1025,11 @@ impl LayoutGraph {
             }
         }
 
-        // Build edges and retain the actual cgraph object identity. Graphviz
-        // traverses outgoing edges by node order, which is not necessarily the
-        // caller's insertion order.
-        let mut edge_specs: HashMap<usize, (String, String)> = HashMap::new();
-        for (edge_idx, edge_spec) in self.edges.iter().enumerate() {
-            let Some(&from_h) = node_handles.get(&edge_spec.from) else {
-                continue;
-            };
-            let Some(&to_h) = node_handles.get(&edge_spec.to) else {
-                continue;
-            };
-            // PlantUML `SvekEdge.appendLine` emits every relationship as a
-            // separate dot edge statement. cgraph identifies named parallel
-            // edges by (tail, head, name), so include the insertion ordinal
-            // instead of letting a later relationship reopen and overwrite
-            // the first edge object.
-            let edge_name =
-                CString::new(format!("{}__{}__{edge_idx}", edge_spec.from, edge_spec.to)).unwrap();
-            let edge = graphviz_ffi::agedge(g, from_h, to_h, edge_name.as_ptr(), 1);
-
-            if let Some(lbl) = &edge_spec.label {
-                let label_key = CString::new("label").unwrap();
-                let label_val = CString::new(lbl.as_str()).unwrap();
-                graphviz_ffi::agsafeset(
-                    edge as *mut c_void,
-                    label_key.as_ptr(),
-                    label_val.as_ptr(),
-                    empty.as_ptr(),
-                );
+        // PlantUML emits the remaining `lines1` edges after ordinary nodes.
+        for (edge_idx, claimed) in claimed_edges.iter().enumerate() {
+            if !claimed {
+                create_edge!(edge_idx);
             }
-            for (label_key, color, size) in [
-                (&label_key, "#000001", edge_spec.label_size),
-                (&taillabel_key, "#000002", edge_spec.tail_label_size),
-                (&headlabel_key, "#000003", edge_spec.head_label_size),
-            ] {
-                let Some(size) = size else { continue };
-                let table = CString::new(edge_label_table(size, color)).unwrap();
-                graphviz_ffi::agsafeset_html(
-                    edge as *mut c_void,
-                    label_key.as_ptr(),
-                    table.as_ptr(),
-                    empty.as_ptr(),
-                );
-            }
-            if edge_spec.tail_label_size.is_some() || edge_spec.head_label_size.is_some() {
-                graphviz_ffi::agsafeset(
-                    edge as *mut c_void,
-                    external_endpoint_labels_key.as_ptr(),
-                    true_val.as_ptr(),
-                    empty.as_ptr(),
-                );
-            }
-            if let Some(port) = &edge_spec.tail_port {
-                let port_val = CString::new(port.as_str()).unwrap();
-                graphviz_ffi::agsafeset(
-                    edge as *mut c_void,
-                    tailport_key.as_ptr(),
-                    port_val.as_ptr(),
-                    empty.as_ptr(),
-                );
-            }
-            if let Some(port) = &edge_spec.head_port {
-                let port_val = CString::new(port.as_str()).unwrap();
-                graphviz_ffi::agsafeset(
-                    edge as *mut c_void,
-                    headport_key.as_ptr(),
-                    port_val.as_ptr(),
-                    empty.as_ptr(),
-                );
-            }
-            if let Some(minlen) = edge_spec.minlen {
-                let minlen_value = CString::new(minlen.to_string()).unwrap();
-                graphviz_ffi::agsafeset(
-                    edge as *mut c_void,
-                    minlen_key.as_ptr(),
-                    minlen_value.as_ptr(),
-                    empty.as_ptr(),
-                );
-            }
-            // PlantUML SVEK lets dot route splines, then renders link
-            // decorations itself (`SvekEdge.solveLine`). Keep Graphviz from
-            // shortening splines for its own built-in arrowheads.
-            graphviz_ffi::agsafeset(
-                edge as *mut c_void,
-                arrowhead_key.as_ptr(),
-                no_arrow_val.as_ptr(),
-                empty.as_ptr(),
-            );
-            graphviz_ffi::agsafeset(
-                edge as *mut c_void,
-                arrowtail_key.as_ptr(),
-                no_arrow_val.as_ptr(),
-                empty.as_ptr(),
-            );
-
-            edge_specs.insert(
-                edge as usize,
-                (edge_spec.from.clone(), edge_spec.to.clone()),
-            );
         }
 
         // Run layout.
@@ -1177,6 +1241,14 @@ impl LayoutGraph {
         let mut seen = vec![false; self.nodes.len()];
         let mut order = Vec::with_capacity(self.nodes.len());
         for node_id in &self.plantuml_svek_inverted_starts {
+            if let Some(node_idx) = self.nodes.iter().position(|node| &node.id == node_id)
+                && !seen[node_idx]
+            {
+                seen[node_idx] = true;
+                order.push(node_idx);
+            }
+        }
+        for node_id in &self.plantuml_svek_line0_nodes {
             if let Some(node_idx) = self.nodes.iter().position(|node| &node.id == node_id)
                 && !seen[node_idx]
             {
@@ -2082,6 +2154,26 @@ mod tests {
         graph.add_plantuml_svek_inverted_start("InvertedStartTwo");
 
         assert_eq!(graph.graphviz_node_creation_order(), vec![2, 1, 0]);
+    }
+
+    #[test]
+    fn svek_line0_edges_create_endpoints_after_inverted_starts() {
+        let mut graph = LayoutGraph::new(Direction::TopToBottom);
+        graph.add_node("DeclaredFirst", "", 40.0, 30.0);
+        graph.add_node("InvertedStart", "", 40.0, 30.0);
+        graph.add_node("LineZeroFrom", "", 40.0, 30.0);
+        graph.add_node("LineZeroTo", "", 40.0, 30.0);
+        graph.add_node("DeclaredLast", "", 40.0, 30.0);
+
+        graph.add_plantuml_svek_inverted_start("InvertedStart");
+        graph.add_plantuml_svek_line0_edge("LineZeroFrom", "LineZeroTo");
+        graph.add_edge_with_minlen("LineZeroFrom", "LineZeroTo", None, 0);
+
+        assert_eq!(graph.graphviz_node_creation_order(), vec![1, 2, 3, 0, 4]);
+        let result = graph.layout_full_no_timeout();
+        assert_eq!(result.edge_paths.len(), 1);
+        assert_eq!(result.edge_paths[0].from, "LineZeroFrom");
+        assert_eq!(result.edge_paths[0].to, "LineZeroTo");
     }
 
     #[test]

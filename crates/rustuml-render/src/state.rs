@@ -1031,8 +1031,20 @@ fn layout_autonomous_scope(
             direction,
             Some(ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Right)
         );
+        if matches!(
+            direction,
+            Some(ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Up)
+        ) {
+            // `CommandLinkStateCommon.executeArg` calls `Link.getInv` for
+            // LEFT/UP transitions. `Cluster.getNodesOrderedTop` emits that
+            // inverted link's start before ordinary SVEK nodes.
+            layout.add_plantuml_svek_inverted_start(layout_from);
+        }
         if horizontal {
-            layout.add_same_rank(layout_from, layout_to);
+            // Horizontal State arrows have queue length one. PlantUML emits
+            // those `lines0` edges before ordinary nodes, without forcing a
+            // rank-same block under the default `SkinParam.useRankSame`.
+            layout.add_plantuml_svek_line0_edge(layout_from, layout_to);
         }
         let label_size = transition.label.as_deref().map(|label| EdgeLabelSize {
             width: text_render::measure_with_family(
@@ -1049,9 +1061,7 @@ fn layout_autonomous_scope(
             label_size,
             None,
             None,
-            (!horizontal)
-                .then(|| transition_svek_minlen(diagram, transition))
-                .flatten(),
+            transition_svek_minlen(diagram, transition),
         );
     }
 
@@ -2132,11 +2142,16 @@ pub fn render_with_oracle(
                 direction,
                 Some(ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Right)
             );
+            if matches!(
+                direction,
+                Some(ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Up)
+            ) {
+                // Java's inverted State links participate in the same
+                // `Cluster.getNodesOrderedTop` pass as other SVEK diagrams.
+                layout.add_plantuml_svek_inverted_start(layout_from);
+            }
             if horizontal {
-                // `CommandLinkStateCommon.executeArg` forces the queue length
-                // to one for horizontal directions; `SvekEdge.rankSame` then
-                // emits the rank constraint in layout-link order.
-                layout.add_same_rank(layout_from, layout_to);
+                layout.add_plantuml_svek_line0_edge(layout_from, layout_to);
             }
             let label_size = t.label.as_deref().map(|label| EdgeLabelSize {
                 // `SvekEdge.addVisibilityModifier` gives ordinary center
@@ -2156,9 +2171,7 @@ pub fn render_with_oracle(
                 label_size,
                 None,
                 None,
-                (!horizontal)
-                    .then(|| transition_svek_minlen(diagram, t))
-                    .flatten(),
+                transition_svek_minlen(diagram, t),
             );
         }
         layout.layout_full(std::time::Duration::from_secs(5))
@@ -2265,16 +2278,26 @@ pub fn render_with_oracle(
             max_x = max_x.max(layout_x + w);
             max_y = max_y.max(layout_y + h);
         }
-        if diagram
-            .transitions
-            .iter()
-            .any(|transition| transition.label.is_some())
-            && let Some(result) = layout_result.as_ref()
-        {
-            // Graphviz's solved envelope includes the fixed HTML label boxes
-            // that `SvekEdge.appendLine` contributes to the SVEK image.
-            max_x = max_x.max(result.width);
-            max_y = max_y.max(result.height);
+        if let Some(result) = layout_result.as_ref() {
+            // Java `SvekResult.calculateDimension` measures every painted
+            // edge through `LimitFinder.drawDotPath`; `DotPath.getMinMax`
+            // includes endpoints and both cubic control points.
+            for edge in &result.edge_paths {
+                for &(x, y) in &edge.points {
+                    max_x = max_x.max(quantize_svek_coord(x));
+                    max_y = max_y.max(quantize_svek_coord(y));
+                }
+            }
+            if diagram
+                .transitions
+                .iter()
+                .any(|transition| transition.label.is_some())
+            {
+                // Graphviz's solved envelope includes the fixed HTML label
+                // boxes that `SvekEdge.appendLine` contributes.
+                max_x = max_x.max(result.width);
+                max_y = max_y.max(result.height);
+            }
         }
         let tw = graph_body_x + max_x + right_note_space + SVEK_TRAILING_PAD;
         let th = graph_body_y + max_y + SVEK_TRAILING_PAD;
@@ -5886,6 +5909,10 @@ mod tests {
         );
 
         let svg = render(diagram, &Theme::default());
+        // Fresh PlantUML reference. The mixed LEFT/UP inversions exercise
+        // promoted starts, the intervening length-one edge stream, and the
+        // complete routed-path envelope.
+        assert!(svg.contains(r#"viewBox="0 0 298 263""#), "{svg}");
         assert!(svg.contains("<!--reverse link AzureDepot29 to CopperRelay17-->"));
         assert!(svg.contains(r#"id="AzureDepot29-backto-CopperRelay17""#));
         assert!(svg.contains("<!--reverse link VioletHarbor41 to AzureDepot29-->"));
