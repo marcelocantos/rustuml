@@ -17,7 +17,7 @@
 
 use std::fmt::Write;
 
-use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph, NodePosition, RecordLayoutMetrics};
+use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph, RecordLayoutMetrics};
 use rustuml_parser::diagram::json_diagram::{DataFormat, JsonDiagram, JsonNode, JsonNodeValue};
 
 use crate::layout_oracle::{OracleLayout, wrap_oracle_envelope};
@@ -219,24 +219,14 @@ fn render_nested_no_oracle(diagram: &JsonDiagram, diagram_type: &str) -> Option<
         let ports = (0..spec.rows.len())
             .map(|index| format!("P{index}"))
             .collect::<Vec<_>>();
-        // Smetana's Graphviz coordinates are point-valued. `createNode`
-        // deliberately swaps width and height before layout; `getPosition`
-        // and `JsonCurve` swap the solved axes back for rendering.
+        // `SmetanaForJson.createNode` serializes the measured dimensions
+        // without rounding and deliberately swaps width and height before
+        // layout; `getPosition` and `JsonCurve` swap the solved axes back.
         if metrics.row_heights.is_empty() {
             if spec.is_array {
-                graph.add_record_node(
-                    &spec.id,
-                    metrics.height,
-                    metrics.graph_width.round(),
-                    &ports,
-                );
+                graph.add_record_node(&spec.id, metrics.height, metrics.graph_width, &ports);
             } else {
-                graph.add_keyed_record_node(
-                    &spec.id,
-                    metrics.height,
-                    metrics.graph_width.round(),
-                    &ports,
-                );
+                graph.add_keyed_record_node(&spec.id, metrics.height, metrics.graph_width, &ports);
             }
         } else {
             let record_metrics = RecordLayoutMetrics {
@@ -248,7 +238,7 @@ fn render_nested_no_oracle(diagram: &JsonDiagram, diagram_type: &str) -> Option<
             graph.add_dimensional_record_node(
                 &spec.id,
                 metrics.height,
-                metrics.graph_width.round(),
+                metrics.graph_width,
                 &ports,
                 record_metrics,
             );
@@ -305,21 +295,7 @@ fn render_nested_no_oracle(diagram: &JsonDiagram, diagram_type: &str) -> Option<
         body.push_str(&render_box_rows_at(&spec.rows, x, y));
     }
     for edge in &layout.edge_paths {
-        let target_position = specs
-            .iter()
-            .position(|spec| spec.id == edge.to)
-            .map(|index| layout.node_positions[index]);
-        let source_index = specs.iter().position(|spec| spec.id == edge.from);
-        let source_position = source_index.map(|index| layout.node_positions[index]);
-        let source_width = source_index.map(|index| metrics[index].width);
-        let rendered = render_nested_connector(
-            edge,
-            MARGIN,
-            MARGIN,
-            source_position.as_ref(),
-            source_width,
-            target_position.as_ref(),
-        );
+        let rendered = render_nested_connector(edge, MARGIN, MARGIN);
         if let Some((x, y)) = edge.end_point {
             max_x = max_x.max(x + MARGIN);
             max_y = max_y.max(y + MARGIN);
@@ -611,33 +587,20 @@ fn render_box_rows_at(rows: &[FlatRow], box_x: f64, box_y: f64) -> String {
     out
 }
 
-fn render_nested_connector(
-    edge: &EdgePath,
-    dx: f64,
-    dy: f64,
-    source_position: Option<&NodePosition>,
-    source_width: Option<f64>,
-    direct_target: Option<&NodePosition>,
-) -> String {
+fn render_nested_connector(edge: &EdgePath, dx: f64, dy: f64) -> String {
     // `SmetanaForJson.createEdge` asks dot for a normal .75-size arrow.
     // `JsonCurve` then starts 13px behind the first spline point, draws a
     // straight lead-in, the clipped cubic, the arrow, and finally a 3px spot.
     const LEAD_IN: f64 = 13.0;
     let mut out = String::new();
     if edge.points.len() >= 4 {
+        // Java `SmetanaForJson.createEdge` delegates the control polygon to
+        // Graphviz and `JsonCurve.drawCurve` consumes it verbatim. Preserve
+        // the vendored router's points here; rebuilding a direct cubic from
+        // visible box bounds loses Graphviz's sub-point record-port geometry.
         let mut points = edge.points.clone();
         let last = points.len() - 1;
-        let mut arrow_tip = points[last];
-        if let Some(target) = direct_target
-            && points.len() == 4
-            && (points[0].1 - points[last].1).abs() < f64::EPSILON
-        {
-            if let (Some(source), Some(width)) = (source_position, source_width) {
-                points[0].0 = source.x + smetana_record_exit_offset(width);
-            }
-            points = smetana_direct_cubic(points[0], target);
-            arrow_tip = points[3];
-        }
+        let arrow_tip = points[last];
 
         // Dot clips its last cubic at the arrow base. Reproduce that operation
         // with the same de Casteljau subdivision as Smetana.
@@ -688,64 +651,6 @@ fn render_nested_connector(
         ));
     }
     out
-}
-
-fn smetana_record_exit_offset(rendered_width: f64) -> f64 {
-    // Java `shapes__c.record_init` centers the record, applies its one-point
-    // height kluge after sizing, then Graphviz `PF2P` rounds the routed
-    // boundary. When a width rounds down, an even point extent leaves that
-    // centered boundary on a half point while an odd extent lands on a whole
-    // point. Widths that round up reach the following whole point.
-    let graph_width = rendered_width.round();
-    graph_width
-        + if graph_width < rendered_width && graph_width as i64 % 2 == 0 {
-            0.5
-        } else {
-            1.0
-        }
-}
-
-fn smetana_direct_cubic(source: (f64, f64), target: &NodePosition) -> Vec<(f64, f64)> {
-    // Graphviz 2.38's `route__c.mkspline`/`splinefits` direct-edge solution
-    // enters a record at its internal route point with a 4:9 source control
-    // span. `splines__c.shape_clip0` then keeps the last outside subdivision
-    // at the record's half-point stroke boundary.
-    let target_internal = (target.x + target.width / 2.0 - 1.0, source.1);
-    let source_control = (
-        source.0 + (target_internal.0 - source.0) * 4.0 / 9.0,
-        source.1,
-    );
-    let raw = [source, source_control, target_internal, target_internal];
-    clip_cubic_to_record(raw, target.x + 0.5).to_vec()
-}
-
-fn clip_cubic_to_record(points: [(f64, f64); 4], record_boundary: f64) -> [(f64, f64); 4] {
-    const PROBE_TOLERANCE: f64 = 0.5;
-    const MAX_CLIP_STEPS: usize = 64;
-
-    let mut low = 0.0;
-    let mut high = 1.0;
-    let mut previous = points[3];
-    let mut latest = points;
-    let mut best = None;
-    for _ in 0..MAX_CLIP_STEPS {
-        let middle = (low + high) / 2.0;
-        let point = cubic_point(points, middle);
-        latest = split_cubic_left(points, middle);
-        if point.0 >= record_boundary {
-            high = middle;
-        } else {
-            low = middle;
-            best = Some(latest);
-        }
-        if (previous.0 - point.0).abs() <= PROBE_TOLERANCE
-            && (previous.1 - point.1).abs() <= PROBE_TOLERANCE
-        {
-            break;
-        }
-        previous = point;
-    }
-    best.unwrap_or(latest)
 }
 
 fn unit_vector(from: (f64, f64), to: (f64, f64)) -> (f64, f64) {
@@ -1473,14 +1378,6 @@ revision: 23
         assert!(first.contains("renamed_root"));
         assert!(first.contains("layer_two"));
         assert!(first.contains("renamed_grid"));
-    }
-
-    #[test]
-    fn direct_record_exit_tracks_width_rounding_not_labels() {
-        assert_eq!(super::smetana_record_exit_offset(78.2), 78.5);
-        assert_eq!(super::smetana_record_exit_offset(77.2), 78.0);
-        assert_eq!(super::smetana_record_exit_offset(77.7), 79.0);
-        assert_eq!(super::smetana_record_exit_offset(95.0), 96.0);
     }
 
     #[test]
