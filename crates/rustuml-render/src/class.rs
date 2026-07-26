@@ -3633,8 +3633,13 @@ fn svek_id_allocation(diagram: &ClassDiagram) -> SvekIdAllocation {
                 next_id += 3;
             }
             CucaUidEvent::Relationship(idx) => {
-                allocation.relationship_ids[idx] = next_id;
-                next_id += 1;
+                // `CommandLinkClass.executeArg` constructs a Link before
+                // applying direction. LEFT/UP then call `Link.getInv()`, whose
+                // Link constructor consumes the next `CucaDiagram.cpt1` UID;
+                // only that replacement link reaches SVEK.
+                let inverted = usize::from(diagram.relationships[idx].style.inverted);
+                allocation.relationship_ids[idx] = next_id + inverted;
+                next_id += 1 + inverted;
             }
             CucaUidEvent::Association(idx) => {
                 allocation.association_starts[idx] = Some(next_id);
@@ -13404,6 +13409,41 @@ mod tests {
             ["ent0013", "ent0014", "ent0015", "ent0016", "ent0017"]
         );
         assert_eq!(&allocation.relationship_ids[5..], [18, 19, 20, 21, 22]);
+    }
+
+    #[test]
+    fn inverted_direction_links_consume_both_source_order_uids() {
+        let input = "@startuml\n\
+            class FreshCompassOrigin3299\n\
+            class FreshCompassWest3301\n\
+            class FreshCompassNorth3307\n\
+            FreshCompassOrigin3299 -left-> FreshCompassWest3301\n\
+            FreshCompassOrigin3299 -u-> FreshCompassNorth3307\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Class(diagram) = diagram else {
+            panic!("expected class diagram");
+        };
+        let allocation = svek_id_allocation(&diagram);
+
+        // Each Java `Link.getInv()` constructs a replacement Link after the
+        // discarded source Link, so the visible IDs advance by two.
+        assert_eq!(allocation.entity_ids, ["ent0002", "ent0003", "ent0004"]);
+        assert_eq!(allocation.relationship_ids, [6, 8]);
+
+        let svg = render(&diagram, &Theme::default());
+        assert!(
+            svg.contains(r#"id="FreshCompassWest3301-backto-FreshCompassOrigin3299""#),
+            "{svg}"
+        );
+        assert!(
+            svg.contains(r#"id="FreshCompassNorth3307-backto-FreshCompassOrigin3299""#),
+            "{svg}"
+        );
+        assert!(
+            svg.contains(r#"id="lnk6""#) && svg.contains(r#"id="lnk8""#),
+            "{svg}"
+        );
     }
 
     #[test]

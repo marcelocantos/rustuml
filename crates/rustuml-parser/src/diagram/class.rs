@@ -283,6 +283,12 @@ pub struct RelationshipStyle {
     pub thickness: Option<u32>,
     #[serde(default)]
     pub hidden: bool,
+    /// `CommandLinkClass.executeArg` replaces links carrying `left` or `up`
+    /// direction modifiers with `Link.getInv()`. The parser stores the
+    /// already-inverted endpoints; this flag preserves the second Link
+    /// constructor's shared UID allocation.
+    #[serde(default)]
+    pub inverted: bool,
 }
 
 impl RelationshipStyle {

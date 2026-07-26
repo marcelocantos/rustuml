@@ -811,7 +811,7 @@ impl ClassParser {
         // Colour / direction / bold / thickness modifiers attach to the arrow.
         // Preserve visual modifiers while stripping them from the arrow shape
         // used for relationship-kind detection.
-        let (stripped_line, style, force_horizontal) = strip_arrow_modifiers(line);
+        let (stripped_line, mut style, direction) = strip_arrow_modifiers(line);
         let line = stripped_line.as_str();
         static RE: LazyLock<Regex> = LazyLock::new(|| {
             // Endpoint may be a bare identifier or a quoted name (`"any text"`)
@@ -854,14 +854,26 @@ impl ClassParser {
             };
             let (label, label_arrow) = parse_label_arrow(caps.get(8).map(|m| m.as_str()));
 
-            let (kind, dashed, decorated_end) = parse_relationship_kind(rel_str);
-            let length = if force_horizontal {
+            let (kind, dashed, mut decorated_end) = parse_relationship_kind(rel_str);
+            let length = if direction.is_some_and(QueueDirection::is_horizontal) {
                 1
             } else {
                 relationship_length(rel_str)
             };
-            let from = self.resolve_relationship_endpoint(&from_raw);
-            let to = self.resolve_relationship_endpoint(&to_raw);
+            let mut from = self.resolve_relationship_endpoint(&from_raw);
+            let mut to = self.resolve_relationship_endpoint(&to_raw);
+            let mut from_mult = from_mult;
+            let mut to_mult = to_mult;
+            if direction.is_some_and(QueueDirection::inverts_link) {
+                // Java `CommandLinkClass.executeArg` constructs the source
+                // link first, then replaces it with `Link.getInv()` for left
+                // and up. `Link.getInv` swaps entities, quantifiers, roles and
+                // ports while `LinkType.getInversed` swaps its decorations.
+                std::mem::swap(&mut from, &mut to);
+                std::mem::swap(&mut from_mult, &mut to_mult);
+                decorated_end = invert_relationship_end(decorated_end);
+                style.inverted = true;
+            }
 
             self.relationships.push(Relationship {
                 from,
@@ -1600,7 +1612,25 @@ fn parse_entity_kind(s: &str) -> EntityKind {
 /// The replacement collapses bracketed modifiers to nothing and bare
 /// direction keywords to the empty string so the resulting arrow shape
 /// (`--`, `-->`, `..`, etc.) survives untouched.
-fn strip_arrow_modifiers(line: &str) -> (String, RelationshipStyle, bool) {
+#[derive(Clone, Copy)]
+enum QueueDirection {
+    Left,
+    Right,
+    Up,
+    Down,
+}
+
+impl QueueDirection {
+    fn is_horizontal(self) -> bool {
+        matches!(self, Self::Left | Self::Right)
+    }
+
+    fn inverts_link(self) -> bool {
+        matches!(self, Self::Left | Self::Up)
+    }
+}
+
+fn strip_arrow_modifiers(line: &str) -> (String, RelationshipStyle, Option<QueueDirection>) {
     static BRACKETED: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"\[[^\]]*\]").unwrap());
     // Direction keywords appearing between dash/dot runs on the arrow body.
     static DIRECTION: LazyLock<Regex> =
@@ -1647,16 +1677,26 @@ fn strip_arrow_modifiers(line: &str) -> (String, RelationshipStyle, bool) {
     } else {
         strip_segment(line)
     };
-    let force_horizontal = DIRECTION.captures_iter(&s).any(|caps| {
-        caps.get(2).is_some_and(|direction| {
-            direction
-                .as_str()
-                .to_ascii_lowercase()
-                .starts_with(['l', 'r'])
-        })
+    let direction = DIRECTION.captures_iter(&s).find_map(|caps| {
+        let direction = caps.get(2)?.as_str().as_bytes()[0].to_ascii_lowercase();
+        match direction {
+            b'l' => Some(QueueDirection::Left),
+            b'r' => Some(QueueDirection::Right),
+            b'u' => Some(QueueDirection::Up),
+            b'd' => Some(QueueDirection::Down),
+            _ => None,
+        }
     });
     let stripped = DIRECTION.replace_all(&s, "$1$3").into_owned();
-    (stripped, style, force_horizontal)
+    (stripped, style, direction)
+}
+
+fn invert_relationship_end(end: RelationshipEnd) -> RelationshipEnd {
+    match end {
+        RelationshipEnd::From => RelationshipEnd::To,
+        RelationshipEnd::To => RelationshipEnd::From,
+        RelationshipEnd::None | RelationshipEnd::Both => end,
+    }
 }
 
 /// Port of PlantUML `WithLinkType.applyOneStyle`. `CommandLinkClass` accepts
@@ -2211,6 +2251,7 @@ mod tests {
                 line_style: Some(EntityLineStyle::Dotted),
                 thickness: None,
                 hidden: false,
+                inverted: false,
             }
         );
         assert_eq!(d.relationships[1].style.thickness, Some(3));
@@ -2474,6 +2515,52 @@ mod tests {
         assert_eq!(d.relationships[1].kind, RelationshipKind::Dependency);
         assert!(!d.relationships[0].dashed);
         assert!(!d.relationships[1].dashed);
+    }
+
+    #[test]
+    fn command_link_directions_invert_left_and_up_with_endpoint_metadata() {
+        let d = parse(
+            "class FreshCompassOrigin3251\n\
+             class FreshCompassWest3253\n\
+             class FreshCompassNorth3257\n\
+             class FreshCompassEast3259\n\
+             class FreshCompassSouth3271\n\
+             FreshCompassOrigin3251 \"origin-west\" -left-> \"west-origin\" FreshCompassWest3253\n\
+             FreshCompassOrigin3251 -u-> FreshCompassNorth3257\n\
+             FreshCompassOrigin3251 -right-> FreshCompassEast3259\n\
+             FreshCompassOrigin3251 -d-> FreshCompassSouth3271",
+        );
+
+        assert_eq!(d.relationships.len(), 4);
+        let left = &d.relationships[0];
+        assert_eq!(left.from, "FreshCompassWest3253");
+        assert_eq!(left.to, "FreshCompassOrigin3251");
+        assert_eq!(left.from_multiplicity.as_deref(), Some("west-origin"));
+        assert_eq!(left.to_multiplicity.as_deref(), Some("origin-west"));
+        assert_eq!(left.decorated_end, RelationshipEnd::From);
+        assert_eq!(left.length, 1);
+        assert!(left.style.inverted);
+
+        let up = &d.relationships[1];
+        assert_eq!(up.from, "FreshCompassNorth3257");
+        assert_eq!(up.to, "FreshCompassOrigin3251");
+        assert_eq!(up.decorated_end, RelationshipEnd::From);
+        assert_eq!(up.length, 2);
+        assert!(up.style.inverted);
+
+        let right = &d.relationships[2];
+        assert_eq!(right.from, "FreshCompassOrigin3251");
+        assert_eq!(right.to, "FreshCompassEast3259");
+        assert_eq!(right.decorated_end, RelationshipEnd::To);
+        assert_eq!(right.length, 1);
+        assert!(!right.style.inverted);
+
+        let down = &d.relationships[3];
+        assert_eq!(down.from, "FreshCompassOrigin3251");
+        assert_eq!(down.to, "FreshCompassSouth3271");
+        assert_eq!(down.decorated_end, RelationshipEnd::To);
+        assert_eq!(down.length, 2);
+        assert!(!down.style.inverted);
     }
 
     #[test]
