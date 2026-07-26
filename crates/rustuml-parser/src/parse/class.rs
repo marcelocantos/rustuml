@@ -28,7 +28,11 @@ pub fn parse_class(lines: &[String]) -> Result<ClassDiagram, ParseError> {
     for (i, line) in lines.iter().enumerate() {
         let (source_line, trimmed) = super::source_line_and_trimmed(i + 1, line);
         if parser.current_note.is_some() {
-            parser.parse_line(source_line, super::source_text(line).trim_end())?;
+            // Java `CommandFactoryNote.createMultiLine` delegates to
+            // `BlocLines.removeEmptyColumns`, which removes only common
+            // leading columns. Terminal spaces remain in the Display and
+            // therefore contribute to note layout.
+            parser.parse_line(source_line, super::source_text(line))?;
             continue;
         }
         if trimmed.is_empty() {
@@ -2728,5 +2732,12 @@ mod tests {
                 "</code>"
             ]
         );
+    }
+
+    #[test]
+    fn multiline_note_preserves_terminal_spaces_after_common_dedent() {
+        let d = parse("note as FreshWhitespaceLedger4171\n  renamed audit value:   \nend note");
+
+        assert_eq!(d.notes[0].lines, ["renamed audit value:   "]);
     }
 }

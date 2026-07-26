@@ -2001,21 +2001,26 @@ fn render_with_oracle_uid_origin(
     let hidden = lifecycle_entities(diagram, false);
 
     if diagram.entities.is_empty() {
-        if !diagram.notes.is_empty() {
+        // Java `GraphvizImageBuilder.buildImage` takes its degenerate image
+        // path only when the diagram has exactly one leaf. Multiple note
+        // entities still flow through SVEK like ordinary graph nodes.
+        if diagram.notes.len() == 1 {
             return render_notes_only(diagram, cs, oracle);
         }
-        let has_meta = diagram.meta.header.is_some()
-            || diagram.meta.footer.is_some()
-            || diagram.meta.legend.is_some()
-            || diagram.meta.title.is_some();
-        if has_meta {
-            return render_meta_only(diagram);
+        if diagram.notes.is_empty() {
+            let has_meta = diagram.meta.header.is_some()
+                || diagram.meta.footer.is_some()
+                || diagram.meta.legend.is_some()
+                || diagram.meta.title.is_some();
+            if has_meta {
+                return render_meta_only(diagram);
+            }
+            if !diagram.meta.skinparams.is_empty() {
+                return render_empty_skinparam_canvas(diagram);
+            }
+            return "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"50\"></svg>\n"
+                .to_string();
         }
-        if !diagram.meta.skinparams.is_empty() {
-            return render_empty_skinparam_canvas(diagram);
-        }
-        return "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"100\" height=\"50\"></svg>\n"
-            .to_string();
     }
 
     let font = ClassFontOverrides::from_skinparams(&diagram.meta.skinparams);
@@ -11141,10 +11146,12 @@ fn render_single_named_note(note: &Note, sprites: &HashMap<String, SpriteData>) 
         .filter_map(|line| latex_member_content(line))
         .map(|latex| x + NOTE_PAD_X + crate::math::raw_latex_image(latex).width as f64)
         .fold(0.0_f64, f64::max);
+    // Java `EntityImageDegenerated` adds its border before the SVG backend
+    // narrows the resulting dimensions to an integer viewport.
     let canvas_width = (width + 20.0)
-        .round()
+        .floor()
         .max(latex_image_right.ceil() + f64::from(latex_image_right > 0.0));
-    let canvas_height = (height + 20.0).round();
+    let canvas_height = (height + 20.0).floor();
     let right = x + width;
     let bottom = y + height;
     let fold_x = right - NOTE_FOLD;
@@ -12603,6 +12610,54 @@ mod tests {
         );
         assert!(!svg.contains(">----</text>"), "{svg}");
         assert!(!svg.contains(">....</text>"), "{svg}");
+    }
+
+    #[test]
+    fn renamed_multiline_note_terminal_spaces_expand_layout_only() {
+        fn render_note(body: &str) -> String {
+            let input = format!(
+                "@startuml\nnote as FreshWhitespaceLedger4171\n  {body}\nend note\n@enduml"
+            );
+            let diagram = rustuml_parser::parse::parse(&input).unwrap();
+            crate::render_svg(&diagram)
+        }
+
+        let plain = render_note("renamed audit value:");
+        let padded = render_note("renamed audit value:   ");
+
+        // Java `CommandFactoryNote.createMultiLine` retains the terminal
+        // spaces for `SheetBlock1.calculateDimension`, while `AtomText.drawU`
+        // emits only the visible run. A headless Java render of this renamed
+        // perturbation produces 173px and 186px canvases respectively.
+        assert!(plain.contains(r#"viewBox="0 0 173 45""#), "{plain}");
+        assert!(padded.contains(r#"viewBox="0 0 186 45""#), "{padded}");
+        assert!(padded.contains(">renamed audit value:</text>"), "{padded}");
+        assert!(
+            !padded.contains("renamed audit value:   </text>"),
+            "{padded}"
+        );
+    }
+
+    #[test]
+    fn renamed_multiple_floating_notes_use_svek_layout() {
+        let input = "@startuml\n\
+                     note as FreshAuditQueue4211\n\
+                       first renamed floating note\n\
+                     end note\n\
+                     note as FreshArchiveQueue4217 #lightblue\n\
+                       second renamed floating note\n\
+                     end note\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Java `EntityImageNote` contributes one SVEK leaf per named note,
+        // with horizontal margins 6 and 15 and vertical margin 5.
+        assert!(svg.contains(r#"viewBox="0 0 456 46""#), "{svg}");
+        assert_eq!(svg.matches(r#"<g class="entity""#).count(), 2, "{svg}");
+        assert!(svg.contains(r#"data-qualified-name="FreshAuditQueue4211""#));
+        assert!(svg.contains(r#"data-qualified-name="FreshArchiveQueue4217""#));
+        assert!(svg.contains(r##"fill="#ADD8E6""##), "{svg}");
     }
 
     #[test]
