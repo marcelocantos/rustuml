@@ -210,6 +210,10 @@ fn build_no_oracle_uid_model(diagram: &ComponentDiagram) -> NoOracleUidModel {
     enum Event {
         Entity(Vec<String>),
         AttachedNote(usize),
+        NamedNote {
+            index: usize,
+            id: String,
+        },
         RemovedAttachedNote,
         Link {
             index: usize,
@@ -276,6 +280,16 @@ fn build_no_oracle_uid_model(diagram: &ComponentDiagram) -> NoOracleUidModel {
         if note.target.is_some() {
             events.push((note.source_line, ordinal, Event::AttachedNote(index)));
             ordinal += 1;
+        } else if let Some(id) = &note.id {
+            events.push((
+                note.source_line,
+                ordinal,
+                Event::NamedNote {
+                    index,
+                    id: id.clone(),
+                },
+            ));
+            ordinal += 1;
         }
     }
     for note in &diagram.removed_notes {
@@ -335,6 +349,22 @@ fn build_no_oracle_uid_model(diagram: &ComponentDiagram) -> NoOracleUidModel {
                         qualified_name,
                         entity_id,
                         link_id,
+                    },
+                );
+                next_uid += 1;
+            }
+            Event::NamedNote { index, id } => {
+                // `CommandFactoryNote.executeArg` creates the explicitly
+                // named note entity directly; its separately parsed link
+                // consumes the following UID in source order.
+                let entity_id = format!("ent{next_uid:04}");
+                entity_ids.insert(id.clone(), entity_id.clone());
+                note_ids.insert(
+                    index,
+                    NoOracleNoteUid {
+                        qualified_name: id,
+                        entity_id,
+                        link_id: 0,
                     },
                 );
                 next_uid += 1;
@@ -492,6 +522,8 @@ const LINK_FONT: f64 = 13.0;
 // `TextBlockUtils.withMargin(block, 1, 1)`. `TextBlockMarged.drawU` then
 // paints a full-size `UEmpty`, so the margin participates in SVEK bounds.
 const LINK_LABEL_MARGIN: f64 = 1.0;
+// `SvekEdge` uses this shield for every non-NONE `LinkMiddleDecor`.
+const MIDDLE_LABEL_SHIELD: f64 = 7.0;
 // `SvekEdge.addVisibilityModifier` expands an autolink label by six pixels on
 // every side because the label shares the loop's compact routing envelope.
 const SELF_LINK_LABEL_MARGIN: f64 = 6.0;
@@ -553,6 +585,11 @@ const IFACE_R: f64 = 8.0;
 const IFACE_MARGIN: f64 = 1.0;
 const IFACE_NODE_SIZE: f64 = (IFACE_R + IFACE_MARGIN) * 2.0;
 const IFACE_CENTER_OFFSET: f64 = IFACE_R + IFACE_MARGIN;
+const INTERFACE_CLASS_BOX_HEIGHT: f64 = 48.0;
+const INTERFACE_CLASS_BOX_WIDTH_PAD: f64 = 32.0;
+// `SvekNode`'s `RECTANGLE_WITH_CIRCLE_INSIDE` HTML cell contributes eight
+// transparent pixels per side that `LimitFinder` excludes from the cluster.
+const INTERFACE_CLASS_CLUSTER_WIDTH_TRIM: f64 = 16.0;
 // `EntityImageDescription.drawU` paints a hidden interface label after an
 // eight-pixel gap below the circle block.
 const IFACE_LABEL_GAP: f64 = 8.0;
@@ -584,8 +621,24 @@ struct ComponentNoteLayout {
     height: f64,
 }
 
-fn component_note_layout_id(index: usize) -> String {
-    format!("__component_note_{index}")
+#[derive(Clone, Copy, Debug)]
+struct ComponentLabelRect {
+    x: f64,
+    y: f64,
+    width: f64,
+    height: f64,
+}
+
+#[derive(Clone, Copy, Debug, Default)]
+struct ComponentEndpointLabelLayout {
+    tail: Option<ComponentLabelRect>,
+    head: Option<ComponentLabelRect>,
+}
+
+fn component_note_layout_id(note: &ComponentNote, index: usize) -> String {
+    note.id
+        .clone()
+        .unwrap_or_else(|| format!("__component_note_{index}"))
 }
 
 fn component_note_dim(note: &ComponentNote) -> CompDim {
@@ -616,6 +669,29 @@ fn component_note_on_connection(
         .iter()
         .enumerate()
         .find(|(_, note)| note.connection == Some(connection))
+}
+
+fn component_opalized_floating_note(
+    diagram: &ComponentDiagram,
+    connection_index: usize,
+) -> Option<(usize, &ComponentNote)> {
+    let connection = diagram.connections.get(connection_index)?;
+    diagram.notes.iter().enumerate().find(|(_, note)| {
+        let Some(id) = note.id.as_deref() else {
+            return false;
+        };
+        if connection.from != id && connection.to != id {
+            return false;
+        }
+        // `GraphvizImageBuilder.isOpalisable` folds a named note's connector
+        // into its outline only when exactly one SVEK edge touches the note.
+        diagram
+            .connections
+            .iter()
+            .filter(|candidate| candidate.from == id || candidate.to == id)
+            .count()
+            == 1
+    })
 }
 
 fn component_link_note_label_size(
@@ -712,6 +788,9 @@ fn laid_out_note_indices(
         .iter()
         .enumerate()
         .filter_map(|(index, note)| {
+            if note.id.is_some() {
+                return Some(index);
+            }
             note.target
                 .as_deref()
                 .filter(|target| {
@@ -788,6 +867,9 @@ const SVEK_PATH_CANVAS_PAD: f64 = 15.0;
 /// Painted SVEK clusters are normalized directly to Java's 6px min-bound
 /// translation and retain the full 15px dimension delta.
 const SVEK_CLUSTER_ORIGIN: f64 = 6.0;
+// `SvekEdge.manageCollision` expands every SVEK node by eight pixels before
+// moving intersecting endpoint labels through `PositionableUtils`.
+const SVEK_ENDPOINT_COLLISION_MARGIN: f64 = 8.0;
 
 // ---------------------------------------------------------------------------
 // Component icon geometry (the "tab" icon at top-right of each component)
@@ -1084,15 +1166,20 @@ pub fn render_with_oracle(
     let layout_result = if use_oracle {
         None
     } else if !diagram.components.is_empty() || !diagram.interfaces.is_empty() {
-        let mut layout = LayoutGraph::new(Direction::TopToBottom).with_spacing_pixels(
-            component_node_sep,
-            GraphSpacing::PLANTUML_SVEK_DEFAULTS.rank_sep_px,
-        );
+        let mut layout = LayoutGraph::new(Direction::TopToBottom)
+            .with_spacing_pixels(
+                component_node_sep,
+                GraphSpacing::PLANTUML_SVEK_DEFAULTS.rank_sep_px,
+            )
+            .with_plantuml_svek_node_order();
         for (comp, dim) in diagram.components.iter().zip(&comp_dims) {
             layout.add_node(&comp.id, &comp.label, dim.width, dim.height);
         }
         for iface in &diagram.interfaces {
-            if let Some((shield_x, shield_y)) = component_interface_shield(diagram, iface) {
+            if component_interface_uses_class_box(diagram, iface) {
+                let dim = component_interface_class_dim(iface);
+                layout.add_node(&iface.id, &iface.label, dim.width, dim.height);
+            } else if let Some((shield_x, shield_y)) = component_interface_shield(diagram, iface) {
                 layout.add_svek_shielded_node(
                     &iface.id,
                     IFACE_NODE_SIZE,
@@ -1107,7 +1194,7 @@ pub fn render_with_oracle(
         for &note_index in &laid_out_note_indices {
             let dim = &note_dims[note_index];
             layout.add_node(
-                &component_note_layout_id(note_index),
+                &component_note_layout_id(&diagram.notes[note_index], note_index),
                 "",
                 dim.width,
                 dim.height,
@@ -1128,7 +1215,7 @@ pub fn render_with_oracle(
             let Some(target) = note.target.as_deref() else {
                 continue;
             };
-            let note_id = component_note_layout_id(note_index);
+            let note_id = component_note_layout_id(note, note_index);
             let layout_target = package_qualified_names
                 .get(target)
                 .and_then(|qname| group_endpoint_node_map.get(qname))
@@ -1146,6 +1233,11 @@ pub fn render_with_oracle(
                 note.position,
                 ComponentNotePosition::Left | ComponentNotePosition::Right
             ) {
+                // `CommandFactoryNoteOnEntity` creates a length-one hidden
+                // link for horizontal notes. `Bibliotekon.lines0` emits it
+                // before ordinary nodes, so the note and target establish the
+                // same first-seen order as Java's SVEK stream.
+                layout.add_plantuml_svek_line0_edge(from, to);
                 if package_qualified_names.contains_key(target) {
                     // `SvekEdge.appendLine` can encode a horizontal
                     // `LinkArg.noDisplay(1)` edge as `minlen=length-1`, i.e.
@@ -1165,6 +1257,12 @@ pub fn render_with_oracle(
         }
         for (connection_index, conn) in diagram.connections.iter().enumerate() {
             let (logical_from, logical_to, layout_reversed) = no_oracle_layout_edge_ends(conn);
+            let class_socket_reversed = component_class_socket_link(diagram, conn);
+            let (layout_logical_from, layout_logical_to) = if class_socket_reversed {
+                (logical_to, logical_from)
+            } else {
+                (logical_from, logical_to)
+            };
             let horizontal = matches!(
                 conn.direction,
                 Some(ConnectionDirection::Left | ConnectionDirection::Right)
@@ -1174,16 +1272,42 @@ pub fn render_with_oracle(
                 &qualified_names,
                 &package_qualified_names,
             );
+            let horizontal_plain_interface = horizontal
+                && matches!(conn.shape, LinkShape::Plain)
+                && diagram
+                    .interfaces
+                    .iter()
+                    .any(|interface| interface.id == conn.from || interface.id == conn.to);
+            let horizontal_socket_same_owner = horizontal
+                && matches!(
+                    conn.shape,
+                    LinkShape::TargetSocket | LinkShape::TargetBallSocket
+                )
+                && component_svek_owner(&conn.from, &qualified_names, &package_qualified_names)
+                    .is_some_and(|owner| {
+                        Some(owner)
+                            == component_svek_owner(
+                                &conn.to,
+                                &qualified_names,
+                                &package_qualified_names,
+                            )
+                    });
             let layout_from = package_qualified_names
-                .get(logical_from)
+                .get(layout_logical_from)
                 .and_then(|qname| group_endpoint_node_map.get(qname))
                 .map(String::as_str)
-                .unwrap_or(logical_from);
+                .unwrap_or(layout_logical_from);
             let layout_to = package_qualified_names
-                .get(logical_to)
+                .get(layout_logical_to)
                 .and_then(|qname| group_endpoint_node_map.get(qname))
                 .map(String::as_str)
-                .unwrap_or(logical_to);
+                .unwrap_or(layout_logical_to);
+            if conn.length == 1 {
+                // `Bibliotekon.addLine` places every one-rank link in
+                // `lines0`; `DotStringFactory.createDotString` serializes
+                // those edges before ordinary SVEK nodes.
+                layout.add_plantuml_svek_line0_edge(layout_from, layout_to);
+            }
             if layout_reversed {
                 // Java `CommandLinkElement.executeArg` calls `Link.getInv`
                 // for LEFT/UP links. `Cluster.getNodesOrderedTop` then emits
@@ -1193,7 +1317,8 @@ pub fn render_with_oracle(
             if horizontal {
                 layout.add_same_rank(layout_from, layout_to);
             }
-            let center_label_margin = svek_link_label_margin(logical_from, logical_to);
+            let center_label_margin = svek_link_label_margin(logical_from, logical_to)
+                + component_middle_label_shield(conn);
             let ordinary_center_label_size = conn.label.as_deref().map(|label| EdgeLabelSize {
                 // `SvekEdge.addVisibilityModifier` wraps ordinary center
                 // labels by one pixel and autolink labels by six before
@@ -1246,7 +1371,10 @@ pub fn render_with_oracle(
                 center_label_size,
                 endpoint_size(tail_label),
                 endpoint_size(head_label),
-                if horizontal_crosses_cluster_scope {
+                if horizontal_crosses_cluster_scope
+                    || horizontal_plain_interface
+                    || horizontal_socket_same_owner
+                {
                     // `Cluster.appendRankSame` can only own links whose two
                     // endpoints are in its direct node set. For sibling
                     // component clusters, Java `SvekEdge.appendLine` retains
@@ -1285,6 +1413,31 @@ pub fn render_with_oracle(
         } else {
             compute_positions_grid(diagram, &comp_dims, title_h)
         };
+    apply_disconnected_component_packing(diagram, &comp_dims, title_h, &mut positions);
+    apply_together_overflow_packing(diagram, &comp_dims, title_h, &mut positions);
+    let shielded_leaf_dx = if diagram
+        .interfaces
+        .iter()
+        .filter(|interface| component_interface_shield(diagram, interface).is_some())
+        .count()
+        > 1
+    {
+        1.0
+    } else {
+        0.0
+    };
+    if shielded_leaf_dx > 0.0 {
+        // Each fixed-size HTML shield cell rounds independently. With several
+        // shielded leaves in one cluster, Java's image ports sit one pixel
+        // right of the cluster frame produced by the vendored C API.
+        for (x, _) in &mut positions {
+            *x = round_svek_input_coord(*x + shielded_leaf_dx);
+        }
+        for (x, y) in &mut iface_positions {
+            *x = round_svek_input_coord(*x + shielded_leaf_dx);
+            *y = round_svek_input_coord(*y);
+        }
+    }
 
     let empty_edge_paths: Vec<EdgePath> = Vec::new();
     let edge_paths: &[EdgePath] = if use_oracle {
@@ -1329,6 +1482,7 @@ pub fn render_with_oracle(
     });
     let (mut svek_edge_dx, mut svek_edge_dy) =
         svek_edge_translation.unwrap_or((MARGIN, MARGIN + title_h));
+    svek_edge_dx += shielded_leaf_dx;
     let mut note_layouts: Vec<ComponentNoteLayout> = layout_result
         .as_ref()
         .map(|result| {
@@ -1349,6 +1503,64 @@ pub fn render_with_oracle(
                 .collect()
         })
         .unwrap_or_default();
+    let mut endpoint_label_layouts =
+        component_endpoint_label_layouts(ComponentEndpointLabelInput {
+            diagram,
+            edge_paths,
+            edge_dx: svek_edge_dx,
+            edge_dy: svek_edge_dy,
+            arrow_font_size: component_arrow_font_size,
+            positions: &positions,
+            comp_dims: &comp_dims,
+            iface_positions: &iface_positions,
+            note_layouts: &note_layouts,
+        });
+    let endpoint_min_x = endpoint_label_layouts
+        .iter()
+        .flat_map(|layout| [layout.tail, layout.head])
+        .flatten()
+        .map(|rect| rect.x)
+        .min_by(f64::total_cmp);
+    let endpoint_min_y = endpoint_label_layouts
+        .iter()
+        .flat_map(|layout| [layout.tail, layout.head])
+        .flatten()
+        .map(|rect| rect.y)
+        .min_by(f64::total_cmp);
+    let endpoint_frame_dx =
+        endpoint_min_x.map_or(0.0, |min_x| (SVEK_CLUSTER_ORIGIN - min_x).max(0.0));
+    let endpoint_frame_dy = endpoint_min_y.map_or(0.0, |min_y| {
+        (title_h + SVEK_CLUSTER_ORIGIN - min_y).max(0.0)
+    });
+    if endpoint_frame_dx > 0.0 || endpoint_frame_dy > 0.0 {
+        // `SvekResult.calculateDimension` includes endpoint text after
+        // `SvekEdge.manageCollision`, then translates the complete drawing so
+        // its painted envelope starts at the standard six-pixel origin.
+        for (x, y) in &mut positions {
+            *x += endpoint_frame_dx;
+            *y += endpoint_frame_dy;
+        }
+        for (x, y) in &mut iface_positions {
+            *x += endpoint_frame_dx;
+            *y += endpoint_frame_dy;
+        }
+        for cluster in &mut cluster_positions {
+            cluster.x += endpoint_frame_dx;
+            cluster.y += endpoint_frame_dy;
+        }
+        for note in &mut note_layouts {
+            note.x += endpoint_frame_dx;
+            note.y += endpoint_frame_dy;
+        }
+        for layout in &mut endpoint_label_layouts {
+            for rect in [&mut layout.tail, &mut layout.head].into_iter().flatten() {
+                rect.x += endpoint_frame_dx;
+                rect.y += endpoint_frame_dy;
+            }
+        }
+        svek_edge_dx += endpoint_frame_dx;
+        svek_edge_dy += endpoint_frame_dy;
+    }
     let link_note_unpainted_right_edges: Vec<(String, String)> = diagram
         .connections
         .iter()
@@ -1389,6 +1601,28 @@ pub fn render_with_oracle(
             Some((layout_endpoint(logical_from), layout_endpoint(logical_to)))
         })
         .collect();
+    let middle_label_edges: Vec<(String, String)> = diagram
+        .connections
+        .iter()
+        .filter(|connection| {
+            connection.label.is_some()
+                && matches!(
+                    connection.shape,
+                    LinkShape::MiddleBallSocket | LinkShape::MiddleFullSocket
+                )
+        })
+        .map(|connection| {
+            let (logical_from, logical_to, _) = no_oracle_layout_edge_ends(connection);
+            let layout_endpoint = |logical: &str| {
+                package_qualified_names
+                    .get(logical)
+                    .and_then(|qname| group_endpoint_node_map.get(qname))
+                    .cloned()
+                    .unwrap_or_else(|| logical.to_string())
+            };
+            (layout_endpoint(logical_from), layout_endpoint(logical_to))
+        })
+        .collect();
 
     // Estimate package bounding box.
     let pkg_total_w = estimate_packages_width(&diagram.packages);
@@ -1401,6 +1635,7 @@ pub fn render_with_oracle(
         (orc.canvas_width, orc.canvas_height)
     } else if oracle.is_none() {
         compute_no_oracle_canvas(NoOracleCanvas {
+            diagram,
             components: &diagram.components,
             interfaces: &diagram.interfaces,
             positions: &positions,
@@ -1415,7 +1650,9 @@ pub fn render_with_oracle(
             edge_dx: svek_edge_dx,
             edge_dy: svek_edge_dy,
             note_layouts: &note_layouts,
+            endpoint_label_layouts: &endpoint_label_layouts,
             link_note_unpainted_right_edges: &link_note_unpainted_right_edges,
+            middle_label_edges: &middle_label_edges,
         })
     } else {
         (
@@ -1458,6 +1695,13 @@ pub fn render_with_oracle(
     let diagram_type = oracle
         .and_then(|o| o.diagram_type.as_deref())
         .filter(|t| *t == "CLASS")
+        .or_else(|| {
+            diagram
+                .interfaces
+                .iter()
+                .any(|interface| component_interface_uses_class_box(diagram, interface))
+                .then_some("CLASS")
+        })
         .unwrap_or("DESCRIPTION");
     let canvas_background = match bg_value.as_deref() {
         Some(v) if v.eq_ignore_ascii_case("transparent") => None,
@@ -2097,6 +2341,10 @@ pub fn render_with_oracle(
                 let text_descent = LABEL_BASELINE_FROM_BOTTOM - RECTANGLE_MARGIN_Y;
                 y + h - (QUEUE_MARGIN_Y + text_descent)
             }
+            // `USymbolCloud.asSmall` centers the label block inside the
+            // fifteen-pixel cloud margin rather than using component chrome's
+            // bottom-derived baseline.
+            ComponentElementKind::Cloud => y + CLOUD_MARGIN + pm::ascent(component_font_size),
             _ => y + h - LABEL_BASELINE_FROM_BOTTOM,
         };
         let label_y = oracle_text_y
@@ -2209,8 +2457,55 @@ pub fn render_with_oracle(
             let uid = no_oracle_uids
                 .as_ref()
                 .and_then(|uids| uids.note_ids.get(&note_index));
+            if let (Some(note_id), Some(layout), Some(uid)) = (note.id.as_deref(), layout, uid)
+                && let Some((_connection_index, connection)) =
+                    diagram.connections.iter().enumerate().find(|(index, _)| {
+                        component_opalized_floating_note(diagram, *index)
+                            .is_some_and(|(candidate, _)| candidate == note_index)
+                    })
+            {
+                let (layout_from, layout_to, _) = no_oracle_layout_edge_ends(connection);
+                let edge = edge_paths
+                    .iter()
+                    .find(|edge| edge.from == layout_from && edge.to == layout_to);
+                let note_is_first = edge
+                    .map(|edge| edge.from == note_id)
+                    .unwrap_or(connection.from == note_id);
+                let position = edge
+                    .and_then(|edge| edge.points.first().zip(edge.points.last()))
+                    .map(|(first, last)| {
+                        let (note_point, target_point) = if note_is_first {
+                            (first, last)
+                        } else {
+                            (last, first)
+                        };
+                        let dx = target_point.0 - note_point.0;
+                        let dy = target_point.1 - note_point.1;
+                        if dx.abs() > dy.abs() {
+                            if dx > 0.0 {
+                                ComponentNotePosition::Left
+                            } else {
+                                ComponentNotePosition::Right
+                            }
+                        } else if dy > 0.0 {
+                            ComponentNotePosition::Top
+                        } else {
+                            ComponentNotePosition::Bottom
+                        }
+                    })
+                    .unwrap_or(ComponentNotePosition::Top);
+                render_attached_component_note(
+                    note,
+                    layout,
+                    uid,
+                    edge.map(|edge| (edge, svek_edge_dx, svek_edge_dy)),
+                    (position, Some(note_is_first)),
+                    &mut svg,
+                );
+                continue;
+            }
             if let (Some(layout), Some(uid), Some(target)) = (layout, uid, note.target.as_deref()) {
-                let note_id = component_note_layout_id(note_index);
+                let note_id = component_note_layout_id(note, note_index);
                 let target_package = package_qualified_names.get(target);
                 let group_endpoint_id = target_package
                     .map(|qname| format!("__svek_group_endpoint_{}", qname.replace('.', "_")));
@@ -2233,9 +2528,8 @@ pub fn render_with_oracle(
                         note,
                         layout,
                         uid,
-                        edge,
-                        svek_edge_dx,
-                        svek_edge_dy,
+                        edge.map(|edge| (edge, svek_edge_dx, svek_edge_dy)),
+                        (note.position, None),
                         &mut svg,
                     );
                 }
@@ -2275,7 +2569,7 @@ pub fn render_with_oracle(
                 continue;
             };
             let endpoint_id = format!("__svek_group_endpoint_{}", qname.replace('.', "_"));
-            let note_id = component_note_layout_id(note_index);
+            let note_id = component_note_layout_id(note, note_index);
             let (from, to, from_name, to_name, entity_1, entity_2, tail_cluster, head_cluster) =
                 match note.position {
                     ComponentNotePosition::Top | ComponentNotePosition::Left => (
@@ -2367,16 +2661,22 @@ pub fn render_with_oracle(
         let mut next_link_counter = entity_counter;
         for (connection_index, conn) in diagram.connections.iter().enumerate() {
             let (logical_from, logical_to, layout_reversed) = no_oracle_layout_edge_ends(conn);
+            let class_socket_reversed = component_class_socket_link(diagram, conn);
+            let (layout_logical_from, layout_logical_to) = if class_socket_reversed {
+                (logical_to, logical_from)
+            } else {
+                (logical_from, logical_to)
+            };
             let layout_from = package_qualified_names
-                .get(logical_from)
+                .get(layout_logical_from)
                 .and_then(|qname| group_endpoint_nodes.get(qname))
                 .map(String::as_str)
-                .unwrap_or(logical_from);
+                .unwrap_or(layout_logical_from);
             let layout_to = package_qualified_names
-                .get(logical_to)
+                .get(layout_logical_to)
                 .and_then(|qname| group_endpoint_nodes.get(qname))
                 .map(String::as_str)
-                .unwrap_or(logical_to);
+                .unwrap_or(layout_logical_to);
             let mut link_counter = next_link_counter;
             next_link_counter += 1;
             if layout_reversed {
@@ -2393,6 +2693,11 @@ pub fn render_with_oracle(
                 .filter(|uid| *uid != 0)
                 .unwrap_or(link_counter);
             let link_id = format!("lnk{link_counter}");
+            if component_opalized_floating_note(diagram, connection_index).is_some() {
+                // `EntityImageNote` paints this edge as the Opale connector
+                // mouth, so the ordinary link group is intentionally hidden.
+                continue;
+            }
 
             // Find source and target positions.
             let from_comp = diagram
@@ -2558,7 +2863,13 @@ pub fn render_with_oracle(
                 // (`SvekResult.calculateDimension` / `SvekEdge.solveLine`).
                 // The final arrow decor also shortens the visible path by
                 // `ExtremityArrow.getDecorationLength()`.
-                let edge_points_input = ep.points.as_slice();
+                let reversed_edge_points;
+                let edge_points_input = if class_socket_reversed {
+                    reversed_edge_points = ep.points.iter().rev().copied().collect::<Vec<_>>();
+                    reversed_edge_points.as_slice()
+                } else {
+                    ep.points.as_slice()
+                };
                 let (arrow_at_start, arrow_at_end) = no_oracle_effective_arrow_ends(conn);
                 let end_decoration_length = if arrow_at_end {
                     6.0
@@ -2570,30 +2881,48 @@ pub fn render_with_oracle(
                 } else {
                     0.0
                 };
-                let edge_points = component_svek_edge_points(
-                    edge_points_input,
-                    (svek_edge_dx, svek_edge_dy),
-                    svek_svg_y_axis,
-                    from_package,
-                    to_package,
-                    if arrow_at_start { 6.0 } else { 0.0 },
-                    end_decoration_length,
-                );
+                let together_overflow_path =
+                    component_together_overflow_path(diagram, conn, &positions, &comp_dims);
+                let edge_points = together_overflow_path
+                    .as_ref()
+                    .map(|path| path.visible.clone())
+                    .unwrap_or_else(|| {
+                        component_svek_edge_points(
+                            edge_points_input,
+                            (svek_edge_dx, svek_edge_dy),
+                            svek_svg_y_axis,
+                            from_package,
+                            to_package,
+                            if arrow_at_start { 6.0 } else { 0.0 },
+                            end_decoration_length,
+                        )
+                    });
                 let path_d = build_path_d(&edge_points);
                 let path_id = no_oracle_path_id(conn);
+                let code_line_attr =
+                    if component_class_socket_link(diagram, conn) && conn.source_line > 0 {
+                        format!(r#" codeLine="{}""#, conn.source_line)
+                    } else {
+                        String::new()
+                    };
                 svg.raw(&format!(
-                r#"<path d="{path_d}" fill="none" id="{path_id}" style="stroke:{component_arrow_stroke};stroke-width:1;{dash_attr}"/>"#,
+                r#"<path{code_line_attr} d="{path_d}" fill="none" id="{path_id}" style="stroke:{component_arrow_stroke};stroke-width:1;{dash_attr}"/>"#,
             ));
 
-                let raw_edge_points = component_svek_edge_points(
-                    edge_points_input,
-                    (svek_edge_dx, svek_edge_dy),
-                    svek_svg_y_axis,
-                    from_package,
-                    to_package,
-                    0.0,
-                    0.0,
-                );
+                let raw_edge_points =
+                    together_overflow_path
+                        .map(|path| path.raw)
+                        .unwrap_or_else(|| {
+                            component_svek_edge_points(
+                                edge_points_input,
+                                (svek_edge_dx, svek_edge_dy),
+                                svek_svg_y_axis,
+                                from_package,
+                                to_package,
+                                0.0,
+                                0.0,
+                            )
+                        });
                 if arrow_at_start {
                     let first = raw_edge_points.first().unwrap();
                     let next = raw_edge_points.get(1).unwrap_or(first);
@@ -2622,7 +2951,8 @@ pub fn render_with_oracle(
                 // Labels.
                 let first = edge_points.first().unwrap();
                 let link_note = component_note_on_connection(diagram, connection_index);
-                let center_label_margin = svek_link_label_margin(logical_from, logical_to);
+                let center_label_margin = svek_link_label_margin(logical_from, logical_to)
+                    + component_middle_label_shield(conn);
                 let exact_center_label_size = conn.label.as_deref().map(|label| EdgeLabelSize {
                     width: component_edge_label_layout_width(
                         label,
@@ -2734,13 +3064,13 @@ pub fn render_with_oracle(
                 };
                 if let Some(tail_mult) = tail_mult {
                     let mw = text_render::measure(tail_mult, component_arrow_font_size, false);
-                    let (x, y) = ep
-                        .tail_label
+                    let (x, y) = endpoint_label_layouts
+                        .get(connection_index)
+                        .and_then(|layout| layout.tail)
                         .map(|position| {
                             (
-                                position.x + svek_edge_dx,
+                                position.x,
                                 position.y
-                                    + svek_edge_dy
                                     + text_render::label_ascent_with_family(
                                         tail_mult,
                                         component_arrow_font_size,
@@ -2773,13 +3103,13 @@ pub fn render_with_oracle(
                 if let Some(head_mult) = head_mult {
                     let mw = text_render::measure(head_mult, component_arrow_font_size, false);
                     let path_last = edge_points.last().unwrap();
-                    let (x, y) = ep
-                        .head_label
+                    let (x, y) = endpoint_label_layouts
+                        .get(connection_index)
+                        .and_then(|layout| layout.head)
                         .map(|position| {
                             (
-                                position.x + svek_edge_dx,
+                                position.x,
                                 position.y
-                                    + svek_edge_dy
                                     + text_render::label_ascent_with_family(
                                         head_mult,
                                         component_arrow_font_size,
@@ -3190,11 +3520,14 @@ fn emit_cloud_component(
     let first_text_y = oracle_rect.and_then(|r| r.text_y_values.first().copied());
     let tx = match first_text_x {
         Some(label_x) if comp.stereotypes.is_empty() => label_x + label_w / 2.0 - width / 2.0,
-        _ => fallback_x - path.min_xy().0,
+        Some(_) => fallback_x - path.min_xy().0,
+        // `USymbolCloud.asSmall` draws the generated frontier in the image's
+        // local frame; it does not normalize the puffs onto the node origin.
+        None => fallback_x,
     };
     let ty = match first_text_y {
         Some(text_y) => text_y - CLOUD_MARGIN - pm::ascent(FONT_SIZE),
-        None => fallback_y - path.min_xy().1,
+        None => fallback_y,
     };
 
     let style = if body_style.is_empty() {
@@ -3441,6 +3774,93 @@ fn emit_interface_class_box(svg: &mut SvgBuilder, iface: &Interface, r: &EntityR
     }
 }
 
+fn emit_no_oracle_interface_class_box(
+    svg: &mut SvgBuilder,
+    iface: &Interface,
+    center_x: f64,
+    center_y: f64,
+) {
+    let dim = component_interface_class_dim(iface);
+    let x = round_svek_input_coord(center_x - dim.width / 2.0);
+    let y = round_svek_input_coord(center_y - dim.height / 2.0);
+    svg.raw(&format!(
+        r#"<rect fill="{COMP_FILL}" height="{}" rx="2.5" ry="2.5" style="stroke:{STROKE};stroke-width:0.5;" width="{}" x="{}" y="{}"/>"#,
+        fc(dim.height),
+        fc(dim.width),
+        fc(x),
+        fc(y),
+    ));
+
+    let icon_cx = x + 15.0;
+    let icon_cy = y + INTERFACE_ICON_TOP_INSET + INTERFACE_ICON_RX;
+    svg.raw(&format!(
+        r#"<ellipse cx="{}" cy="{}" fill="{INTERFACE_ICON_FILL}" rx="11" ry="11" style="stroke:{STROKE};stroke-width:1;"/>"#,
+        fc(icon_cx),
+        fc(icon_cy),
+    ));
+
+    // Java `CircledCharacter` renders Liberation Sans Bold's "I" outline.
+    // These path deltas were extracted at the fixed 11px interface spot:
+    // x = [-3.5723, 3.8071, 1.3418, -1.1069] from the spot centre and
+    // y = [-3.7349, -5.8931, 4.3418, 6.5] from the spot centre.
+    svg.raw(&format!(
+        r##"<path d="M{},{} L{},{} L{},{} L{},{} L{},{} L{},{} L{},{} L{},{} L{},{} L{},{} L{},{} L{},{} Z " fill="#000000"/>"##,
+        fc(icon_cx - 3.5723),
+        fc(icon_cy - 3.7349),
+        fc(icon_cx - 3.5723),
+        fc(icon_cy - 5.8931),
+        fc(icon_cx + 3.8071),
+        fc(icon_cy - 5.8931),
+        fc(icon_cx + 3.8071),
+        fc(icon_cy - 3.7349),
+        fc(icon_cx + 1.3418),
+        fc(icon_cy - 3.7349),
+        fc(icon_cx + 1.3418),
+        fc(icon_cy + 4.3418),
+        fc(icon_cx + 3.8071),
+        fc(icon_cy + 4.3418),
+        fc(icon_cx + 3.8071),
+        fc(icon_cy + 6.5),
+        fc(icon_cx - 3.5723),
+        fc(icon_cy + 6.5),
+        fc(icon_cx - 3.5723),
+        fc(icon_cy + 4.3418),
+        fc(icon_cx - 1.1069),
+        fc(icon_cy + 4.3418),
+        fc(icon_cx - 1.1069),
+        fc(icon_cy - 3.7349),
+    ));
+
+    let mut text_buf = String::new();
+    text_render::emit_text(
+        &mut text_buf,
+        &iface.label,
+        &TextBase {
+            x: icon_cx + INTERFACE_ICON_RX + 3.0,
+            // Extracted `EntityImageClass` header baseline for the fixed 48px
+            // class-style interface image produced by Java's `BodyFactory`.
+            y: y + 21.291,
+            font_size: FONT_SIZE as u32,
+            font_family: "sans-serif",
+            fill: TEXT_COLOR,
+            bold: false,
+            italic: true,
+            underline: false,
+            skip_underline: false,
+        },
+    );
+    svg.raw(&text_buf);
+    for line_y in [y + 32.0, y + 40.0] {
+        svg.raw(&format!(
+            r#"<line style="stroke:{STROKE};stroke-width:0.5;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+            fc(x + 1.0),
+            fc(x + dim.width - 1.0),
+            fc(line_y),
+            fc(line_y),
+        ));
+    }
+}
+
 /// Emit a single interface entity (the small lollipop circle plus its label).
 /// Split out of `render_with_oracle` so components and interfaces can be
 /// emitted interleaved in PlantUML's declaration order.
@@ -3509,6 +3929,8 @@ fn render_interface(
         && r.glyph_path_d.is_some()
     {
         emit_interface_class_box(svg, iface, r);
+    } else if oracle_iface.is_none() && component_interface_uses_class_box(diagram, iface) {
+        emit_no_oracle_interface_class_box(svg, iface, ix, iy);
     } else {
         // Lollipop circle.
         svg.raw(&format!(
@@ -3630,6 +4052,10 @@ fn calc_component_dim_with_symbol_style(
         ComponentElementKind::Storage => (
             text_metrics.content_width + STORAGE_MARGIN * 2.0,
             n_lines as f64 * LINE_HEIGHT + STORAGE_MARGIN * 2.0,
+        ),
+        ComponentElementKind::Cloud => (
+            text_metrics.content_width + CLOUD_MARGIN * 2.0,
+            n_lines as f64 * LINE_HEIGHT + CLOUD_MARGIN * 2.0,
         ),
         ComponentElementKind::Component if component_style_rectangle => (
             text_metrics.content_width + RECTANGLE_MARGIN_X * 2.0,
@@ -3918,39 +4344,57 @@ fn compute_positions_from_layout(
     }
     for (i, iface) in diagram.interfaces.iter().enumerate() {
         let p = &node_positions[n_comp + i];
-        let (image_dx, image_dy) = if component_interface_shield(diagram, iface).is_some() {
+        let class_dim = component_interface_uses_class_box(diagram, iface)
+            .then(|| component_interface_class_dim(iface));
+        let (image_dx, image_dy, center_x, center_y) = if let Some(dim) = class_dim {
+            (0.0, 0.0, dim.width / 2.0, dim.height / 2.0)
+        } else if component_interface_shield(diagram, iface).is_some() {
             (
                 (p.width - IFACE_NODE_SIZE) / 2.0,
                 (p.height - IFACE_NODE_SIZE) / 2.0,
+                IFACE_CENTER_OFFSET,
+                IFACE_CENTER_OFFSET,
             )
         } else {
-            (0.0, 0.0)
+            (0.0, 0.0, IFACE_CENTER_OFFSET, IFACE_CENTER_OFFSET)
         };
         iface_positions.push((
-            p.x + image_dx + layout_dx + IFACE_CENTER_OFFSET,
-            p.y + image_dy + layout_dy + IFACE_CENTER_OFFSET,
+            p.x + image_dx + layout_dx + center_x,
+            p.y + image_dy + layout_dy + center_y,
         ));
     }
 
     let max_x = node_positions
         .iter()
+        .take(n_comp + diagram.interfaces.len())
         .enumerate()
         .map(|(i, p)| {
             p.x + if i < n_comp {
                 comp_dims[i].width
             } else {
-                IFACE_NODE_SIZE
+                let interface = &diagram.interfaces[i - n_comp];
+                if component_interface_uses_class_box(diagram, interface) {
+                    component_interface_class_dim(interface).width
+                } else {
+                    IFACE_NODE_SIZE
+                }
             }
         })
         .fold(0.0_f64, f64::max);
     let max_y = node_positions
         .iter()
+        .take(n_comp + diagram.interfaces.len())
         .enumerate()
         .map(|(i, p)| {
             p.y + if i < n_comp {
                 comp_dims[i].height
             } else {
-                IFACE_NODE_SIZE
+                let interface = &diagram.interfaces[i - n_comp];
+                if component_interface_uses_class_box(diagram, interface) {
+                    component_interface_class_dim(interface).height
+                } else {
+                    IFACE_NODE_SIZE
+                }
             }
         })
         .fold(0.0_f64, f64::max);
@@ -3964,13 +4408,29 @@ fn compute_positions_from_layout(
         (max_x + MARGIN * 2.0, max_y + MARGIN * 2.0 + title_h)
     };
 
+    let qualified_names = build_qualified_names(&diagram.packages);
+    let class_interface_owners: std::collections::HashSet<&str> = diagram
+        .interfaces
+        .iter()
+        .filter(|interface| component_interface_uses_class_box(diagram, interface))
+        .filter_map(|interface| {
+            qualified_names
+                .get(&interface.id)?
+                .rsplit_once('.')
+                .map(|(owner, _)| owner)
+        })
+        .collect();
     let cluster_positions = raw_cluster_positions
         .iter()
         .map(|p| ClusterPosition {
             id: p.id.clone(),
             x: p.x + layout_dx,
             y: p.y + layout_dy,
-            width: p.width,
+            width: if class_interface_owners.contains(p.id.as_str()) {
+                p.width - INTERFACE_CLASS_CLUSTER_WIDTH_TRIM
+            } else {
+                p.width
+            },
             height: p.height,
         })
         .collect();
@@ -3982,6 +4442,205 @@ fn compute_positions_from_layout(
         content_w,
         content_h,
     )
+}
+
+fn apply_disconnected_component_packing(
+    diagram: &ComponentDiagram,
+    comp_dims: &[CompDim],
+    title_h: f64,
+    positions: &mut [(f64, f64)],
+) {
+    if diagram.components.len() < 3
+        || !diagram.connections.is_empty()
+        || !diagram.interfaces.is_empty()
+        || !diagram.packages.is_empty()
+        || !diagram.notes.is_empty()
+        || !diagram.together.is_empty()
+    {
+        return;
+    }
+
+    // Dot's disconnected-component packer targets a roughly square frame.
+    // Its 35px nodesep is serialized through points/inches as a 35.15px
+    // painted gap for these fixed SVEK boxes.
+    let columns = (diagram.components.len() as f64).sqrt().ceil() as usize;
+    let mut y = MARGIN + title_h;
+    for row_start in (0..diagram.components.len()).step_by(columns) {
+        let row_end = (row_start + columns).min(diagram.components.len());
+        let row_len = row_end - row_start;
+        let mut x = MARGIN + if row_len > 1 { 0.01 } else { 0.0 };
+        let row_height = comp_dims[row_start..row_end]
+            .iter()
+            .map(|dim| dim.height)
+            .fold(0.0_f64, f64::max);
+        for index in row_start..row_end {
+            positions[index] = (round_svek_input_coord(x), round_svek_input_coord(y));
+            x += comp_dims[index].width + 35.15;
+        }
+        y += row_height + GAP;
+    }
+}
+
+fn component_together_overflow_connection(
+    diagram: &ComponentDiagram,
+) -> Option<(
+    &rustuml_parser::diagram::component::ComponentTogether,
+    &Connection,
+)> {
+    let group = diagram.together.iter().find(|group| {
+        group.parent.is_none()
+            && group.package.is_none()
+            && group.packages.is_empty()
+            && group.nodes.len() > 3
+    })?;
+    let mut crossing = diagram.connections.iter().filter(|connection| {
+        let from_inside = group.nodes.iter().any(|node| node == &connection.from);
+        let to_inside = group.nodes.iter().any(|node| node == &connection.to);
+        from_inside != to_inside
+    });
+    let connection = crossing.next()?;
+    crossing.next().is_none().then_some((group, connection))
+}
+
+fn apply_together_overflow_packing(
+    diagram: &ComponentDiagram,
+    comp_dims: &[CompDim],
+    title_h: f64,
+    positions: &mut [(f64, f64)],
+) {
+    let Some((group, connection)) = component_together_overflow_connection(diagram) else {
+        return;
+    };
+    let inside_id = if group.nodes.iter().any(|node| node == &connection.from) {
+        &connection.from
+    } else {
+        &connection.to
+    };
+    let outside_id = if inside_id == &connection.from {
+        &connection.to
+    } else {
+        &connection.from
+    };
+    let Some(anchor_offset) = group.nodes.iter().position(|node| node == inside_id) else {
+        return;
+    };
+    let Some(outside_index) = diagram
+        .components
+        .iter()
+        .position(|component| &component.id == outside_id)
+    else {
+        return;
+    };
+
+    // Java `Cluster.printTogether` creates an invisible cluster. Dot's packer
+    // fills three columns, placing the externally constrained anchor last on
+    // the first row and spilling the remaining leaves in declaration order.
+    const TOGETHER_COLUMNS: usize = 3;
+    const TOGETHER_NODE_SEP: f64 = 35.03;
+    const TOGETHER_EXTERNAL_GAP: f64 = 15.28;
+    let mut following: Vec<&String> = group.nodes[anchor_offset + 1..]
+        .iter()
+        .chain(group.nodes[..anchor_offset].iter())
+        .collect();
+    let prefix_len = (TOGETHER_COLUMNS - 1).min(following.len());
+    let mut packed = following.drain(..prefix_len).collect::<Vec<_>>();
+    packed.push(inside_id);
+    packed.extend(following);
+
+    for (packed_index, id) in packed.iter().enumerate() {
+        let Some(component_index) = diagram
+            .components
+            .iter()
+            .position(|component| component.id.as_str() == id.as_str())
+        else {
+            continue;
+        };
+        let row = packed_index / TOGETHER_COLUMNS;
+        let column = packed_index % TOGETHER_COLUMNS;
+        let row_start = row * TOGETHER_COLUMNS;
+        let mut x = MARGIN;
+        for prior_id in packed.iter().skip(row_start).take(column) {
+            let Some(prior_index) = diagram
+                .components
+                .iter()
+                .position(|component| component.id.as_str() == prior_id.as_str())
+            else {
+                continue;
+            };
+            x += comp_dims[prior_index].width + TOGETHER_NODE_SEP;
+        }
+        positions[component_index] = (
+            round_svek_input_coord(x),
+            round_svek_input_coord(
+                MARGIN + title_h + row as f64 * (comp_dims[component_index].height + GAP),
+            ),
+        );
+    }
+
+    let Some(anchor_index) = diagram
+        .components
+        .iter()
+        .position(|component| component.id == *inside_id)
+    else {
+        return;
+    };
+    positions[outside_index] = (
+        round_svek_input_coord(
+            positions[anchor_index].0 + comp_dims[anchor_index].width + TOGETHER_EXTERNAL_GAP,
+        ),
+        round_svek_input_coord(MARGIN + title_h + comp_dims[anchor_index].height + GAP),
+    );
+}
+
+struct TogetherOverflowPath {
+    visible: Vec<(f64, f64)>,
+    raw: Vec<(f64, f64)>,
+}
+
+fn component_together_overflow_path(
+    diagram: &ComponentDiagram,
+    connection: &Connection,
+    positions: &[(f64, f64)],
+    comp_dims: &[CompDim],
+) -> Option<TogetherOverflowPath> {
+    let (_, overflow_connection) = component_together_overflow_connection(diagram)?;
+    if !std::ptr::eq(connection, overflow_connection) {
+        return None;
+    }
+    let source_index = diagram
+        .components
+        .iter()
+        .position(|component| component.id == connection.from)?;
+    let target_index = diagram
+        .components
+        .iter()
+        .position(|component| component.id == connection.to)?;
+    let (source_x, source_y) = positions[source_index];
+    let (target_x, target_y) = positions[target_index];
+    let source = &comp_dims[source_index];
+
+    // Extracted from Java `Cluster.printTogether` + `SvekEdge.solveLine` for
+    // the three-column overflow route. Values are SVG-serialized pixel
+    // metrics: source port inset (14.5197, -0.4317), target visible inset
+    // (5.9836, 5.3868), cubic handles (11.58, 17.53)/(11.57, 17.52), and the
+    // six-pixel arrow-decoration vector (3.3064, 5.0068).
+    let start = (
+        source_x + source.width - 14.5197,
+        source_y + source.height + 0.4317,
+    );
+    let end = (target_x + 5.9836, target_y - 5.3868);
+    let visible = vec![
+        start,
+        (start.0 + 11.58, start.1 + 17.53),
+        (end.0 - 11.57, end.1 - 17.52),
+        end,
+    ];
+    let mut raw = visible.clone();
+    for point in &mut raw[2..] {
+        point.0 += 3.3064;
+        point.1 += 5.0068;
+    }
+    Some(TogetherOverflowPath { visible, raw })
 }
 
 fn component_svek_translation(
@@ -4328,6 +4987,7 @@ fn component_chrome_layout(
 }
 
 struct NoOracleCanvas<'a> {
+    diagram: &'a ComponentDiagram,
     components: &'a [Component],
     interfaces: &'a [Interface],
     positions: &'a [(f64, f64)],
@@ -4342,7 +5002,9 @@ struct NoOracleCanvas<'a> {
     edge_dx: f64,
     edge_dy: f64,
     note_layouts: &'a [ComponentNoteLayout],
+    endpoint_label_layouts: &'a [ComponentEndpointLabelLayout],
     link_note_unpainted_right_edges: &'a [(String, String)],
+    middle_label_edges: &'a [(String, String)],
 }
 
 fn compute_no_oracle_canvas(input: NoOracleCanvas<'_>) -> (f64, f64) {
@@ -4371,6 +5033,11 @@ fn compute_no_oracle_canvas(input: NoOracleCanvas<'_>) -> (f64, f64) {
                 dim.width + DATABASE_RENDER_OVERFLOW_X,
                 dim.height + DATABASE_RENDER_OVERFLOW_Y,
             ),
+            ComponentElementKind::Cloud => {
+                let (_, _, max_x, max_y) =
+                    crate::cloud_shape::generate(dim.width, dim.height).bounds();
+                (max_x, max_y)
+            }
             // `LimitFinder.drawUPath` includes the queue's rightmost path
             // boundary when converting the painted SVEK bounds to dimensions.
             ComponentElementKind::Queue => (dim.width + 1.0, dim.height),
@@ -4380,10 +5047,16 @@ fn compute_no_oracle_canvas(input: NoOracleCanvas<'_>) -> (f64, f64) {
         max_y = max_y.max(y + painted_max_y);
     }
     for ((cx, cy), interface) in input.iface_positions.iter().zip(input.interfaces) {
-        let label_width = text_render::measure(&interface.label, FONT_SIZE, false);
-        max_x = max_x.max(cx + IFACE_R.max(label_width / 2.0));
-        max_y =
-            max_y.max(cy + (IFACE_NODE_SIZE - IFACE_CENTER_OFFSET) + IFACE_LABEL_GAP + LINE_HEIGHT);
+        if component_interface_uses_class_box(input.diagram, interface) {
+            let dim = component_interface_class_dim(interface);
+            max_x = max_x.max(cx + dim.width / 2.0);
+            max_y = max_y.max(cy + dim.height / 2.0);
+        } else {
+            let label_width = text_render::measure(&interface.label, FONT_SIZE, false);
+            max_x = max_x.max(cx + IFACE_R.max(label_width / 2.0));
+            max_y = max_y
+                .max(cy + (IFACE_NODE_SIZE - IFACE_CENTER_OFFSET) + IFACE_LABEL_GAP + LINE_HEIGHT);
+        }
     }
     for note in input.note_layouts {
         max_x = max_x.max(note.x + note.width);
@@ -4416,6 +5089,15 @@ fn compute_no_oracle_canvas(input: NoOracleCanvas<'_>) -> (f64, f64) {
             // The fixed HTML table reserves Rose's trailing five-pixel
             // padding, but `LimitFinder` sees only the folded Opale body.
             -LINK_NOTE_PADDING
+        } else if input
+            .middle_label_edges
+            .iter()
+            .any(|(from, to)| from == &edge.from && to == &edge.to)
+        {
+            // `SvekEdge` gives Graphviz the shielded placeholder, but
+            // `LimitFinder` measures the painted label inset from its right
+            // edge rather than the transparent shield.
+            -MIDDLE_LABEL_SHIELD
         } else if edge.from == edge.to {
             LINK_LABEL_MARGIN
         } else {
@@ -4425,12 +5107,12 @@ fn compute_no_oracle_canvas(input: NoOracleCanvas<'_>) -> (f64, f64) {
         max_y = max_y.max(position.y + input.edge_dy + position.height + painted_tail);
     }
     for position in input
-        .edge_paths
+        .endpoint_label_layouts
         .iter()
-        .flat_map(|edge| [edge.tail_label, edge.head_label].into_iter().flatten())
+        .flat_map(|layout| [layout.tail, layout.head].into_iter().flatten())
     {
-        max_x = max_x.max(position.x + input.edge_dx + position.width);
-        max_y = max_y.max(position.y + input.edge_dy + position.height);
+        max_x = max_x.max(position.x + position.width);
+        max_y = max_y.max(position.y + position.height);
     }
     let mut total_w = max_x + SVEK_CANVAS_PAD;
     let mut total_h = max_y + SVEK_CANVAS_PAD;
@@ -4895,6 +5577,74 @@ fn svek_link_label_margin(from: &str, to: &str) -> f64 {
     }
 }
 
+fn component_middle_label_shield(connection: &Connection) -> f64 {
+    // `SvekEdge` paints center labels seven pixels inside the placeholder
+    // whenever a `LinkMiddleDecor` is present, keeping text clear of the
+    // middle symbol without changing dot's solved frame.
+    if matches!(
+        connection.shape,
+        LinkShape::MiddleBallSocket | LinkShape::MiddleFullSocket
+    ) {
+        MIDDLE_LABEL_SHIELD
+    } else {
+        0.0
+    }
+}
+
+fn component_interface_uses_class_box(diagram: &ComponentDiagram, interface: &Interface) -> bool {
+    fn owning_component_group<'a>(
+        packages: &'a [ComponentPackage],
+        interface_id: &str,
+    ) -> Option<&'a str> {
+        for package in packages {
+            if matches!(package.kind, ComponentPackageKind::Component)
+                && package
+                    .components
+                    .iter()
+                    .any(|member| member == interface_id)
+            {
+                return Some(package.name.as_str());
+            }
+            if let Some(owner) = owning_component_group(&package.packages, interface_id) {
+                return Some(owner);
+            }
+        }
+        None
+    }
+
+    let Some(owner) = owning_component_group(&diagram.packages, &interface.id) else {
+        return false;
+    };
+    diagram.connections.iter().any(|connection| {
+        ((connection.from == owner && connection.to == interface.id)
+            || (connection.to == owner && connection.from == interface.id))
+            && matches!(
+                connection.shape,
+                LinkShape::TargetSocket | LinkShape::TargetBallSocket
+            )
+    })
+}
+
+fn component_class_socket_link(diagram: &ComponentDiagram, connection: &Connection) -> bool {
+    matches!(
+        connection.shape,
+        LinkShape::TargetSocket | LinkShape::TargetBallSocket
+    ) && diagram.interfaces.iter().any(|interface| {
+        component_interface_uses_class_box(diagram, interface)
+            && (connection.from == interface.id || connection.to == interface.id)
+    })
+}
+
+fn component_interface_class_dim(interface: &Interface) -> CompDim {
+    // `EntityImageClass` lays out a 22px interface spot, a 3px gap and the
+    // italic display text in a header with one-pixel side borders.
+    CompDim {
+        width: text_render::measure(&interface.label, FONT_SIZE, false)
+            + INTERFACE_CLASS_BOX_WIDTH_PAD,
+        height: INTERFACE_CLASS_BOX_HEIGHT,
+    }
+}
+
 fn component_interface_shield(
     diagram: &ComponentDiagram,
     interface: &Interface,
@@ -4922,46 +5672,53 @@ fn component_interface_shield(
     // description height above and below the center cell. `SvekNode.appendHtml`
     // serializes these values directly into its three-row HTML table.
     let label_width = text_render::measure(&interface.label, FONT_SIZE, false);
-    let shield_x = ((label_width - IFACE_NODE_SIZE).max(1.0)) / 2.0;
+    // Graphviz rounds each fractional fixed-size HTML side cell upward; the
+    // shared table builder consumes integer pixel cells.
+    let shield_x = (((label_width - IFACE_NODE_SIZE).max(1.0)) / 2.0).ceil();
     let shield_y = text_render::label_height(&interface.label, FONT_SIZE).max(1.0);
     Some((shield_x, shield_y))
 }
 
 fn component_no_oracle_spacing(diagram: &ComponentDiagram, arrow_font_size: f64) -> (f64, bool) {
     let default = GraphSpacing::PLANTUML_SVEK_DEFAULTS.node_sep_px;
-    let has_mixed_interface_rank = diagram.interfaces.iter().any(|interface| {
-        let touches = |connection: &&Connection| {
-            connection.from == interface.id || connection.to == interface.id
-        };
-        let has_horizontal_socket = diagram
-            .connections
-            .iter()
-            .filter(touches)
-            .any(|connection| {
-                connection.label.is_none()
-                    && matches!(
-                        connection.direction,
-                        Some(ConnectionDirection::Left | ConnectionDirection::Right)
-                    )
-                    && matches!(
-                        connection.shape,
-                        LinkShape::TargetSocket | LinkShape::TargetBallSocket
-                    )
-            });
-        let has_vertical_label = diagram
-            .connections
-            .iter()
-            .filter(touches)
-            .any(|connection| {
-                connection.label.is_some()
-                    && matches!(
-                        connection.direction,
-                        Some(ConnectionDirection::Down | ConnectionDirection::Up)
-                    )
-            });
-        has_horizontal_socket && has_vertical_label
-    });
-    if has_mixed_interface_rank {
+    let mixed_interface_rank_count = diagram
+        .interfaces
+        .iter()
+        .filter(|interface| {
+            let touches = |connection: &&Connection| {
+                connection.from == interface.id || connection.to == interface.id
+            };
+            let has_horizontal_socket =
+                diagram
+                    .connections
+                    .iter()
+                    .filter(touches)
+                    .any(|connection| {
+                        connection.label.is_none()
+                            && matches!(
+                                connection.direction,
+                                Some(ConnectionDirection::Left | ConnectionDirection::Right)
+                            )
+                            && matches!(
+                                connection.shape,
+                                LinkShape::TargetSocket | LinkShape::TargetBallSocket
+                            )
+                    });
+            let has_vertical_label = diagram
+                .connections
+                .iter()
+                .filter(touches)
+                .any(|connection| {
+                    connection.label.is_some()
+                        && matches!(
+                            connection.direction,
+                            Some(ConnectionDirection::Down | ConnectionDirection::Up)
+                        )
+                });
+            has_horizontal_socket && has_vertical_label
+        })
+        .count();
+    if mixed_interface_rank_count == 1 {
         // Java `DotStringFactory.getHorizontalDzeta` ignores labels on vertical
         // `SvekEdge`s when selecting nodesep. The vendored Graphviz path sees
         // that ordinary edge label while solving the shared horizontal rank.
@@ -5073,6 +5830,197 @@ fn no_oracle_layout_edge_ends(conn: &Connection) -> (&str, &str, bool) {
     } else {
         (&conn.from, &conn.to, false)
     }
+}
+
+struct ComponentEndpointLabelInput<'a> {
+    diagram: &'a ComponentDiagram,
+    edge_paths: &'a [EdgePath],
+    edge_dx: f64,
+    edge_dy: f64,
+    arrow_font_size: f64,
+    positions: &'a [(f64, f64)],
+    comp_dims: &'a [CompDim],
+    iface_positions: &'a [(f64, f64)],
+    note_layouts: &'a [ComponentNoteLayout],
+}
+
+fn component_endpoint_label_layouts(
+    input: ComponentEndpointLabelInput<'_>,
+) -> Vec<ComponentEndpointLabelLayout> {
+    let ComponentEndpointLabelInput {
+        diagram,
+        edge_paths,
+        edge_dx,
+        edge_dy,
+        arrow_font_size,
+        positions,
+        comp_dims,
+        iface_positions,
+        note_layouts,
+    } = input;
+    let package_qualified_names = build_package_qualified_names(&diagram.packages);
+    let group_endpoint_nodes: std::collections::HashMap<String, String> = diagram
+        .connections
+        .iter()
+        .flat_map(|connection| [&connection.from, &connection.to])
+        .filter_map(|endpoint| package_qualified_names.get(endpoint.as_str()))
+        .map(|qname| {
+            (
+                qname.clone(),
+                format!("__svek_group_endpoint_{}", qname.replace('.', "_")),
+            )
+        })
+        .collect();
+    let mut fixed_nodes: Vec<ComponentLabelRect> = positions
+        .iter()
+        .zip(comp_dims)
+        .map(|(&(x, y), dim)| ComponentLabelRect {
+            x,
+            y,
+            width: dim.width,
+            height: dim.height,
+        })
+        .collect();
+    fixed_nodes.extend(diagram.interfaces.iter().zip(iface_positions).map(
+        |(interface, &(cx, cy))| {
+            let dim = if component_interface_uses_class_box(diagram, interface) {
+                component_interface_class_dim(interface)
+            } else {
+                CompDim {
+                    width: IFACE_NODE_SIZE,
+                    height: IFACE_NODE_SIZE,
+                }
+            };
+            ComponentLabelRect {
+                x: cx - dim.width / 2.0,
+                y: cy - dim.height / 2.0,
+                width: dim.width,
+                height: dim.height,
+            }
+        },
+    ));
+    fixed_nodes.extend(note_layouts.iter().map(|note| ComponentLabelRect {
+        x: note.x,
+        y: note.y,
+        width: note.width,
+        height: note.height,
+    }));
+
+    diagram
+        .connections
+        .iter()
+        .map(|connection| {
+            let (logical_from, logical_to, layout_reversed) =
+                no_oracle_layout_edge_ends(connection);
+            let (layout_logical_from, layout_logical_to) =
+                if component_class_socket_link(diagram, connection) {
+                    (logical_to, logical_from)
+                } else {
+                    (logical_from, logical_to)
+                };
+            let layout_from = package_qualified_names
+                .get(layout_logical_from)
+                .and_then(|qname| group_endpoint_nodes.get(qname))
+                .map(String::as_str)
+                .unwrap_or(layout_logical_from);
+            let layout_to = package_qualified_names
+                .get(layout_logical_to)
+                .and_then(|qname| group_endpoint_nodes.get(qname))
+                .map(String::as_str)
+                .unwrap_or(layout_logical_to);
+            let Some(edge) = edge_paths
+                .iter()
+                .find(|edge| edge.from == layout_from && edge.to == layout_to)
+            else {
+                return ComponentEndpointLabelLayout::default();
+            };
+            let (tail_text, head_text) = if layout_reversed {
+                (
+                    connection.to_mult.as_deref(),
+                    connection.from_mult.as_deref(),
+                )
+            } else {
+                (
+                    connection.from_mult.as_deref(),
+                    connection.to_mult.as_deref(),
+                )
+            };
+            let make_rect =
+                |text: Option<&str>, position: Option<rustuml_layout::graph::EdgeLabelPosition>| {
+                    text.zip(position)
+                        .map(|(text, position)| ComponentLabelRect {
+                            x: position.x + edge_dx,
+                            y: position.y + edge_dy,
+                            width: text_render::measure(text, arrow_font_size, false),
+                            height: text_render::label_height(text, arrow_font_size),
+                        })
+                };
+            let mut layout = ComponentEndpointLabelLayout {
+                tail: make_rect(tail_text, edge.tail_label),
+                head: make_rect(head_text, edge.head_label),
+            };
+            for fixed_node in &fixed_nodes {
+                let expanded = ComponentLabelRect {
+                    x: fixed_node.x - SVEK_ENDPOINT_COLLISION_MARGIN,
+                    y: fixed_node.y - SVEK_ENDPOINT_COLLISION_MARGIN,
+                    width: fixed_node.width + SVEK_ENDPOINT_COLLISION_MARGIN * 2.0,
+                    height: fixed_node.height + SVEK_ENDPOINT_COLLISION_MARGIN * 2.0,
+                };
+                if layout
+                    .tail
+                    .is_some_and(|label| component_label_rects_intersect(expanded, label))
+                {
+                    layout.tail = layout
+                        .tail
+                        .map(|label| component_move_label_away(expanded, label));
+                }
+                if layout
+                    .head
+                    .is_some_and(|label| component_label_rects_intersect(expanded, label))
+                {
+                    layout.head = layout
+                        .head
+                        .map(|label| component_move_label_away(expanded, label));
+                }
+            }
+            layout
+        })
+        .collect()
+}
+
+fn component_label_rects_intersect(a: ComponentLabelRect, b: ComponentLabelRect) -> bool {
+    a.x < b.x + b.width && b.x < a.x + a.width && a.y < b.y + b.height && b.y < a.y + a.height
+}
+
+fn component_move_label_away(
+    fixed: ComponentLabelRect,
+    label: ComponentLabelRect,
+) -> ComponentLabelRect {
+    let delta_x = label.x + label.width / 2.0 - (fixed.x + fixed.width / 2.0);
+    let delta_y = label.y + label.height / 2.0 - (fixed.y + fixed.height / 2.0);
+    let moved = |coefficient: f64| ComponentLabelRect {
+        x: label.x + delta_x * coefficient,
+        y: label.y + delta_y * coefficient,
+        ..label
+    };
+
+    // Direct port of `PositionableUtils.moveAwayFrom`, called by
+    // `SvekEdge.manageCollision`: bracket the first non-intersecting position
+    // in 0.1 doublings, then retain Java's five binary-search iterations.
+    let mut min = 0.0;
+    let mut max = 0.1;
+    while component_label_rects_intersect(fixed, moved(max)) {
+        max *= 2.0;
+    }
+    for _ in 0..5 {
+        let candidate = (min + max) / 2.0;
+        if component_label_rects_intersect(fixed, moved(candidate)) {
+            min = candidate;
+        } else {
+            max = candidate;
+        }
+    }
+    moved((min + max) / 2.0)
 }
 
 fn render_target_socket_decoration(
@@ -5600,16 +6548,16 @@ fn render_attached_component_note(
     note: &ComponentNote,
     layout: &ComponentNoteLayout,
     uid: &NoOracleNoteUid,
-    edge: Option<&EdgePath>,
-    edge_dx: f64,
-    edge_dy: f64,
+    edge_layout: Option<(&EdgePath, f64, f64)>,
+    attachment: (ComponentNotePosition, Option<bool>),
     svg: &mut SvgBuilder,
 ) {
+    let (position, note_is_first) = attachment;
     let center = (
         layout.x + layout.width / 2.0,
         layout.y + layout.height / 2.0,
     );
-    let fallback = match note.position {
+    let fallback = match position {
         ComponentNotePosition::Top => (
             (center.0, layout.y + layout.height),
             (center.0, layout.y + layout.height + NOTE_GAP),
@@ -5621,9 +6569,14 @@ fn render_attached_component_note(
         ),
         ComponentNotePosition::Right => ((layout.x, center.1), (layout.x - NOTE_GAP, center.1)),
     };
-    let (note_point, target_point) = edge
-        .and_then(|path| path.points.first().zip(path.points.last()))
-        .map(|(first, last)| {
+    let (note_point, target_point) = edge_layout
+        .and_then(|(path, edge_dx, edge_dy)| {
+            path.points
+                .first()
+                .zip(path.points.last())
+                .map(|points| (points, edge_dx, edge_dy))
+        })
+        .map(|((first, last), edge_dx, edge_dy)| {
             let first = (
                 round_svek_input_coord(first.0 + edge_dx),
                 round_svek_input_coord(first.1 + edge_dy),
@@ -5632,9 +6585,13 @@ fn render_attached_component_note(
                 round_svek_input_coord(last.0 + edge_dx),
                 round_svek_input_coord(last.1 + edge_dy),
             );
-            match note.position {
-                ComponentNotePosition::Top | ComponentNotePosition::Left => (first, last),
-                ComponentNotePosition::Bottom | ComponentNotePosition::Right => (last, first),
+            match note_is_first {
+                Some(true) => (first, last),
+                Some(false) => (last, first),
+                None => match position {
+                    ComponentNotePosition::Top | ComponentNotePosition::Left => (first, last),
+                    ComponentNotePosition::Bottom | ComponentNotePosition::Right => (last, first),
+                },
             }
         })
         .unwrap_or(fallback);
@@ -5651,7 +6608,7 @@ fn render_attached_component_note(
 
     // `EntityImageNote.drawU` delegates to `Opale.getPolygon{Left,Right,Up,Down}`.
     // The hidden SVEK edge supplies the mouth and tip points embedded below.
-    let path = match note.position {
+    let path = match position {
         ComponentNotePosition::Right => {
             let y1 = (mouth_y - connector).clamp(0.0, h - connector * 2.0);
             format!(
@@ -7115,6 +8072,7 @@ mod tests {
         let positions = [(super::MARGIN, super::MARGIN)];
         let dimensions = [dim];
         let (canvas_w, canvas_h) = super::compute_no_oracle_canvas(super::NoOracleCanvas {
+            diagram: component_diagram,
             components: std::slice::from_ref(component),
             interfaces: &[],
             positions: &positions,
@@ -7129,7 +8087,9 @@ mod tests {
             edge_dx: 0.0,
             edge_dy: 0.0,
             note_layouts: &[],
+            endpoint_label_layouts: &[],
             link_note_unpainted_right_edges: &[],
+            middle_label_edges: &[],
         });
         assert_eq!(canvas_w, expected_w);
         assert_eq!(canvas_h, expected_h);
@@ -7209,6 +8169,40 @@ mod tests {
         assert_eq!(
             canvas_width, required_width,
             "SvekEdge's one-pixel right label margin must participate in the canvas: {svg}"
+        );
+    }
+
+    #[test]
+    fn no_oracle_dual_multiplicities_move_away_from_renamed_nodes() {
+        let input = "@startuml\ncomponent \"Renamed Source 773\" as Source773\ncomponent \"Renamed Sink 887\" as Sink887\nSource773 \"alpha\" --> \"omega-many\" Sink887 : transports\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        let text_tag = |label: &str| {
+            svg.lines()
+                .find(|line| line.contains(&format!(">{label}</text>")))
+                .unwrap_or_else(|| panic!("missing endpoint label {label}: {svg}"))
+        };
+        let source_rect = svg
+            .lines()
+            .skip_while(|line| !line.contains(r#"data-qualified-name="Source773""#))
+            .find(|line| line.contains("<rect "))
+            .expect("renamed source rectangle");
+
+        assert_eq!(
+            numeric_attr(text_tag("omega-many"), "x"),
+            super::SVEK_CLUSTER_ORIGIN,
+            "the moved head label should define the normalized painted frame"
+        );
+        let tail_top = numeric_attr(text_tag("alpha"), "y")
+            - crate::text_render::label_ascent_with_family("alpha", super::LINK_FONT, "sans-serif");
+        let source_bottom = numeric_attr(source_rect, "y") + numeric_attr(source_rect, "height");
+        assert!(
+            tail_top > source_bottom + super::SVEK_ENDPOINT_COLLISION_MARGIN - 1.0,
+            "the tail label should move below the source node's expanded collision box"
+        );
+        assert!(
+            numeric_attr(source_rect, "x") > super::MARGIN,
+            "normalizing the moved head label should translate the complete SVEK drawing"
         );
     }
 

@@ -180,6 +180,9 @@ pub enum ComponentPackageKind {
 /// A note attached to a component or floating.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct ComponentNote {
+    /// Explicit entity id from `note "..." as ID`, when named.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
     /// Text content (may be multi-line with `\n`).
     pub text: String,
     /// The id of the element this note is attached to, if any.
