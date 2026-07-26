@@ -877,9 +877,12 @@ struct UseCaseSeparatorPlacement {
 
 #[derive(Clone, Copy)]
 struct FootprintLine {
+    line_width: f64,
+    x: f64,
     width: f64,
     top: f64,
     height: f64,
+    first_baseline_ascent: f64,
 }
 
 #[derive(Clone, Copy)]
@@ -915,10 +918,14 @@ fn note_dim(note: &UseCaseNote) -> NoteDim {
 }
 
 fn actor_dim(actor: &Actor, skin: &SkinColors) -> ActorDim {
-    let label_w = text_render::measure_with_family(
+    let font_size = skin.actor_font_size as f64;
+    let label_w =
+        text_render::measure_with_family(&actor.label, font_size, false, &skin.actor_font_family);
+    let label_h =
+        text_render::label_height_with_family(&actor.label, font_size, &skin.actor_font_family);
+    let label_first_baseline_ascent = text_render::label_first_baseline_ascent_with_family(
         &actor.label,
-        skin.actor_font_size as f64,
-        false,
+        font_size,
         &skin.actor_font_family,
     );
     let stereo_w = actor
@@ -934,7 +941,7 @@ fn actor_dim(actor: &Actor, skin: &SkinColors) -> ActorDim {
         })
         .unwrap_or(0.0);
     let stroke_thickness = skin.actor_border_thickness.parse::<f64>().unwrap_or(0.5);
-    let text_block_h = pm::text_height(skin.actor_font_size as f64);
+    let text_block_h = pm::text_height(font_size);
     let stereo_h = if actor.stereotype.is_some() {
         text_block_h
     } else {
@@ -943,7 +950,11 @@ fn actor_dim(actor: &Actor, skin: &SkinColors) -> ActorDim {
     let stickman_width = ACTOR_ARM_HALF * 2.0 + stroke_thickness * 2.0;
     let width = label_w.max(stereo_w).max(stickman_width);
     let stickman_height = ACTOR_STICKMAN_BASE_HEIGHT + stroke_thickness * 2.0;
-    let label_gap = pm::ascent(skin.actor_font_size as f64) + 1.0 + stroke_thickness;
+    // Java provenance: `EntityImageDescription` draws the actor label as a
+    // Creole `SheetBlock1`; `Sea.doAlign` bottom-aligns mixed `AtomText`
+    // families, so the first run's baseline comes from its own descent within
+    // the tallest atom box rather than from the surrounding sans-serif font.
+    let label_gap = label_first_baseline_ascent + 1.0 + stroke_thickness;
     // `SvekResult.calculateDimension` normalizes from the minimum painted
     // bound, not the node box. A stereotype's AWT line box overhangs the image
     // origin by the remainder after its baseline; without one, the stickman's
@@ -962,7 +973,7 @@ fn actor_dim(actor: &Actor, skin: &SkinColors) -> ActorDim {
     } else {
         stroke_thickness
     };
-    let height = stickman_height + text_block_h + stereo_h;
+    let height = stickman_height + label_h + stereo_h;
     ActorDim {
         label_w,
         stereo_w,
@@ -992,39 +1003,37 @@ fn use_case_dim(uc: &UseCase, skin: &SkinColors) -> UseCaseDim {
             )
         })
         .unwrap_or(0.0);
-    let body_widths: Vec<f64> = if uc.description.is_empty() {
-        vec![label_w]
+    let body_lines: Vec<&str> = if uc.description.is_empty() {
+        vec![uc.label.as_str()]
     } else {
-        uc.description
-            .iter()
-            .map(|d| text_render::measure_with_family(d, font_size, false, &skin.uc_font_family))
-            .collect()
+        uc.description.iter().map(String::as_str).collect()
     };
-    let (body_line_tops, separators, compartment_bounds, body_height, line_height) =
-        use_case_body_layout(&body_widths, &uc.separators);
+    let body_widths: Vec<f64> = body_lines
+        .iter()
+        .map(|line| text_render::measure_with_family(line, font_size, false, &skin.uc_font_family))
+        .collect();
+    let body_heights: Vec<f64> = body_lines
+        .iter()
+        .map(|line| text_render::label_height_with_family(line, font_size, &skin.uc_font_family))
+        .collect();
+    let (body_line_tops, separators, compartment_bounds, body_height) =
+        use_case_body_layout(&body_widths, &body_heights, &uc.separators);
+    let stereo_height = uc
+        .stereotype
+        .as_ref()
+        .map(|stereo| {
+            text_render::label_height_with_family(
+                &format!("\u{00AB}{stereo}\u{00BB}"),
+                font_size,
+                &skin.uc_font_family,
+            )
+        })
+        .unwrap_or(0.0);
     let body_offset_y = if uc.stereotype.is_some() {
-        line_height
+        stereo_height
     } else {
         0.0
     };
-    let mut footprint_lines = Vec::with_capacity(body_widths.len() + 1);
-    if uc.stereotype.is_some() {
-        footprint_lines.push(FootprintLine {
-            width: stereo_w,
-            top: 0.0,
-            height: line_height,
-        });
-    }
-    footprint_lines.extend(
-        body_widths
-            .iter()
-            .zip(&body_line_tops)
-            .map(|(&width, &top)| FootprintLine {
-                width,
-                top: body_offset_y + top,
-                height: line_height,
-            }),
-    );
     // Java `Display.getCreole` builds the standalone stereotype through
     // `SheetBlock1`, whose one-pixel horizontal padding contributes to the
     // merged block dimension (and therefore alpha). `Footprint` records only
@@ -1037,6 +1046,23 @@ fn use_case_dim(uc: &UseCase, skin: &SkinColors) -> UseCaseDim {
     let body_block_w = body_widths.iter().copied().fold(0.0_f64, f64::max);
     let block_w = stereo_block_w.max(body_block_w);
     let block_h = body_offset_y + body_height;
+    let mut footprint_lines = Vec::with_capacity(body_widths.len() + 1);
+    if let Some(stereotype) = &uc.stereotype {
+        footprint_lines.extend(use_case_footprint_atoms(
+            &format!("\u{00AB}{stereotype}\u{00BB}"),
+            0.0,
+            font_size,
+            &skin.uc_font_family,
+        ));
+    }
+    for (line, &top) in body_lines.iter().zip(&body_line_tops) {
+        footprint_lines.extend(use_case_footprint_atoms(
+            line,
+            body_offset_y + top,
+            font_size,
+            &skin.uc_font_family,
+        ));
+    }
     let body_x = (block_w - body_block_w) / 2.0;
     let footprint_bounds: Vec<_> = compartment_bounds
         .iter()
@@ -1060,14 +1086,77 @@ fn use_case_dim(uc: &UseCase, skin: &SkinColors) -> UseCaseDim {
     }
 }
 
+fn use_case_footprint_atoms(
+    content: &str,
+    top: f64,
+    font_size: f64,
+    font_family: &str,
+) -> Vec<FootprintLine> {
+    // Java provenance: `BodyFactory.create2` builds the use-case body through
+    // `CreoleStripeSimpleParser`, whose `StripeSimple.drawU` emits one
+    // `AtomText` per style run. `Footprint.MyUGraphic.drawText` records each
+    // resulting `UText` rectangle independently before
+    // `TextBlockInEllipse` fits the oval.
+    let segments = crate::creole::parse_segments(content);
+    if segments.is_empty() {
+        return vec![FootprintLine {
+            line_width: 0.0,
+            x: 0.0,
+            width: 0.0,
+            top,
+            height: text_render::label_height_with_family("", font_size, font_family),
+            first_baseline_ascent: text_render::label_first_baseline_ascent_with_family(
+                "",
+                font_size,
+                font_family,
+            ),
+        }];
+    }
+
+    let line_height = text_render::label_height_with_family(content, font_size, font_family);
+    let first_baseline =
+        text_render::label_first_baseline_ascent_with_family(content, font_size, font_family);
+    let first_drop = line_height - first_baseline;
+    let mut x = 0.0;
+    let mut atoms = Vec::with_capacity(segments.len());
+    for segment in segments {
+        let size = segment.style.size.map(f64::from).unwrap_or(font_size);
+        let family = if let Some(family) = segment.style.font_family.as_deref() {
+            family
+        } else if segment.style.monospace {
+            "monospace"
+        } else {
+            font_family
+        };
+        let width =
+            text_render::measure_with_family(&segment.text, size, segment.style.bold, family);
+        let height = text_render::label_height_with_family(&segment.text, size, family);
+        let ascent = text_render::label_ascent_with_family(&segment.text, size, family);
+        let own_drop = height - ascent;
+        atoms.push(FootprintLine {
+            line_width: 0.0,
+            x,
+            width,
+            top,
+            height,
+            first_baseline_ascent: first_baseline + first_drop - own_drop,
+        });
+        x += width;
+    }
+    for atom in &mut atoms {
+        atom.line_width = x;
+    }
+    atoms
+}
+
 fn use_case_body_layout(
     line_widths: &[f64],
+    line_heights: &[f64],
     separators: &[UseCaseSeparator],
 ) -> (
     Vec<f64>,
     Vec<UseCaseSeparatorPlacement>,
     Vec<FootprintBounds>,
-    f64,
     f64,
 ) {
     let line_count = line_widths.len();
@@ -1075,12 +1164,6 @@ fn use_case_body_layout(
     let mut placements = Vec::with_capacity(separators.len());
     let mut y = 0.0;
     let mut decorated = false;
-    let line_height = if separators.is_empty() {
-        LINE_H
-    } else {
-        pm::text_height(FONT_SIZE)
-    };
-
     for line_index in 0..=line_count {
         for separator in separators
             .iter()
@@ -1099,7 +1182,7 @@ fn use_case_body_layout(
         }
         if line_index < line_count {
             line_tops.push(y);
-            y += line_height;
+            y += line_heights.get(line_index).copied().unwrap_or(LINE_H);
         }
     }
     if decorated {
@@ -1129,7 +1212,7 @@ fn use_case_body_layout(
             }
         })
         .collect();
-    (line_tops, placements, compartment_bounds, y, line_height)
+    (line_tops, placements, compartment_bounds, y)
 }
 
 #[derive(Clone, Copy)]
@@ -1213,11 +1296,10 @@ fn use_case_ellipse_radii(
     let w = text_w.max(1.0);
     let h = text_h.max(1.0);
     let alpha = (h / w).clamp(0.2, 0.8);
-    let ascent = pm::ascent(FONT_SIZE);
     let mut points = Vec::with_capacity(lines.len() * 4 + bounds.len() * 2);
     for line in lines {
-        let x = (w - line.width) / 2.0;
-        let baseline = line.top + ascent;
+        let x = (w - line.line_width) / 2.0 + line.x;
+        let baseline = line.top + line.first_baseline_ascent;
         // Java `Footprint.MyUGraphic.drawText` shifts the measured line box
         // upward by `height - 1.5` before recording its four corners.
         let top = baseline - line.height + 1.5;
@@ -2629,9 +2711,14 @@ fn render_use_case(
     // includes the half-height, each baseline is relative to the computed
     // painted footprint center rather than a fixed one-line offset.
     let text_origin_y = cy - dim.footprint_center_y - 2.0;
-    let mut text_y = text_origin_y + pm::ascent(FONT_SIZE);
     if let Some(stereo) = &uc.stereotype {
         let stereo_text = format!("\u{00AB}{stereo}\u{00BB}");
+        let text_y = text_origin_y
+            + text_render::label_first_baseline_ascent_with_family(
+                &stereo_text,
+                skin.uc_font_size as f64,
+                &skin.uc_font_family,
+            );
         let stereo_x = captured_x
             .get(line_idx)
             .copied()
@@ -2656,10 +2743,18 @@ fn render_use_case(
         );
         svg.raw(&buf);
     }
-    text_y = text_origin_y
+    let text_y = text_origin_y
         + dim.body_offset_y
         + dim.body_line_tops.first().copied().unwrap_or(0.0)
-        + pm::ascent(FONT_SIZE);
+        + text_render::label_first_baseline_ascent_with_family(
+            if uc.description.is_empty() {
+                &uc.label
+            } else {
+                uc.description.first().map(String::as_str).unwrap_or("")
+            },
+            skin.uc_font_size as f64,
+            &skin.uc_font_family,
+        );
     if uc.description.is_empty() {
         let label_x = captured_x
             .get(line_idx)
@@ -2748,7 +2843,11 @@ fn render_use_case(
                         .get(body_line)
                         .copied()
                         .unwrap_or(body_line as f64 * pm::text_height(FONT_SIZE))
-                    + pm::ascent(FONT_SIZE)
+                    + text_render::label_first_baseline_ascent_with_family(
+                        line,
+                        skin.uc_font_size as f64,
+                        &skin.uc_font_family,
+                    )
             });
             if orc_rect.is_some() {
                 flush_seps(svg, &mut sep_idx, ly);
@@ -4523,6 +4622,36 @@ mod tests {
             svg.contains(r#"textLength="152.4365" x="38.3921""#),
             "{svg}"
         );
+    }
+
+    #[test]
+    fn renamed_mixed_monospace_atoms_drive_actor_baselines_and_usecase_ellipse() {
+        let input = r#"@startuml
+actor """fixed"" Auditor" as FreshActor
+usecase """fixed"" Review" as FreshReview
+FreshActor --> FreshReview
+@enduml"#;
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Fresh Java PlantUML reference absent from the golden corpus.
+        // `CreoleStripeSimpleParser` emits separate `AtomText` runs;
+        // `Sea.doAlign` bottom-aligns them and
+        // `Footprint.MyUGraphic.drawText` contributes each rectangle to
+        // `TextBlockInEllipse`.
+        let rustuml_parser::diagram::Diagram::UseCase(usecase) = &diagram else {
+            panic!("expected use-case diagram");
+        };
+        let skin = super::SkinColors::from_meta(&usecase.meta.skinparams, None);
+        let actor = super::actor_dim(&usecase.actors[0], &skin);
+        let usecase = super::use_case_dim(&usecase.use_cases[0], &skin);
+        assert!((actor.label_gap - 14.69).abs() < 0.01);
+        assert!((usecase.rx - 65.44).abs() < 0.01);
+        assert!((usecase.ry - 15.49).abs() < 0.01);
+        assert!(svg.contains(r#"viewBox="0 0 150 186""#), "{svg}");
+        assert_eq!(svg.matches(r#"font-family="monospace""#).count(), 2);
+        assert!(svg.contains(">Auditor</text>"), "{svg}");
+        assert!(svg.contains(">Review</text>"), "{svg}");
     }
 
     #[test]
