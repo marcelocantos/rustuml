@@ -4594,6 +4594,7 @@ fn render_plantuml_svg(
             };
             render_attached_note(
                 &mut svg,
+                diagram,
                 note,
                 // SVEK consumes Graphviz's two-decimal SVG coordinates before
                 // `Opale` adds its local note and atom margins.
@@ -9630,6 +9631,7 @@ fn render_relationship_svg(
         let note_y = position.y + center.label_height + RELATIONSHIP_NOTE_COMPONENT_PADDING;
         render_relationship_note(
             svg,
+            diagram,
             note,
             note_x + MARGIN + layout_x_bias,
             note_y + MARGIN,
@@ -10690,6 +10692,56 @@ fn relationship_layout_id<'a>(
         .unwrap_or(std::borrow::Cow::Borrowed(endpoint))
 }
 
+struct ResolvedNoteStyle {
+    background: String,
+    border: String,
+    border_width: f64,
+    font_color: String,
+}
+
+impl ResolvedNoteStyle {
+    /// `EntityImageNote` merges
+    /// `StyleSignature(root, element, classDiagram, note)` and reads the
+    /// resulting BackGroundColor, LineColor, LineThickness and FontColor.
+    fn for_note(diagram: &ClassDiagram, note: &Note) -> Self {
+        let solid_color = |value: &str| {
+            (!value.contains(['/', '|'])).then(|| crate::sequence::resolve_color(value.trim()))
+        };
+        let background = note
+            .color
+            .as_deref()
+            .map(crate::sequence::resolve_color)
+            .or_else(|| note_skinparam(diagram, "BackgroundColor").and_then(solid_color))
+            .unwrap_or_else(|| NOTE_FILL.to_string());
+        let border = note_skinparam(diagram, "BorderColor")
+            .and_then(solid_color)
+            .unwrap_or_else(|| NOTE_BORDER.to_string());
+        let border_width = note_skinparam(diagram, "BorderThickness")
+            .and_then(|value| value.parse().ok())
+            .unwrap_or(0.5);
+        let font_color = note_skinparam(diagram, "FontColor")
+            .and_then(solid_color)
+            .unwrap_or_else(|| "#000000".to_string());
+        Self {
+            background,
+            border,
+            border_width,
+            font_color,
+        }
+    }
+}
+
+fn note_skinparam<'a>(diagram: &'a ClassDiagram, suffix: &str) -> Option<&'a str> {
+    let key = format!("note{suffix}");
+    diagram
+        .meta
+        .skinparams
+        .iter()
+        .rev()
+        .find(|skinparam| skinparam.key.eq_ignore_ascii_case(&key))
+        .map(|skinparam| skinparam.value.trim())
+}
+
 /// Port of `GraphvizImageBuilder.isOpalisable`: only a real note entity with
 /// exactly one link to a non-note entity consumes its `SvekEdge`.
 fn floating_note_opale_relationship(diagram: &ClassDiagram, note_idx: usize) -> Option<usize> {
@@ -10737,6 +10789,7 @@ fn association_point_sequence(diagram: &ClassDiagram, association_idx: usize) ->
 #[allow(clippy::too_many_arguments)]
 fn render_attached_note(
     svg: &mut String,
+    diagram: &ClassDiagram,
     note: &Note,
     x: f64,
     y: f64,
@@ -10751,16 +10804,12 @@ fn render_attached_note(
     entity_id: &str,
     sprites: &HashMap<String, SpriteData>,
 ) {
+    let style = ResolvedNoteStyle::for_note(diagram, note);
     let f = crate::plantuml_metrics::fmt_coord;
     let right = x + width;
     let bottom = y + height;
     let fold_x = right - NOTE_FOLD;
     let delta = 4.0;
-    let note_fill = note
-        .color
-        .as_deref()
-        .map(crate::sequence::resolve_color)
-        .unwrap_or_else(|| NOTE_FILL.to_string());
     let path = match position {
         // Note is left of its target: callout leaves the folded right side.
         NotePosition::Left => {
@@ -10890,13 +10939,14 @@ fn render_attached_note(
 
     write!(
         svg,
-        r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}"><path d="{}" fill="{}" style="stroke:{};stroke-width:0.5;"/><path d="M{},{} L{},{} L{},{} L{},{}" fill="{}" style="stroke:{};stroke-width:0.5;"/>"#,
+        r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}"><path d="{}" fill="{}" style="stroke:{};stroke-width:{};"/><path d="M{},{} L{},{} L{},{} L{},{}" fill="{}" style="stroke:{};stroke-width:{};"/>"#,
         escape_xml(qualified_name),
         note.source_line,
         entity_id,
         path,
-        note_fill,
-        NOTE_BORDER,
+        style.background,
+        style.border,
+        f(style.border_width),
         f(fold_x),
         f(y),
         f(fold_x),
@@ -10905,11 +10955,12 @@ fn render_attached_note(
         f(y + NOTE_FOLD),
         f(fold_x),
         f(y),
-        note_fill,
-        NOTE_BORDER,
+        style.background,
+        style.border,
+        f(style.border_width),
     )
     .unwrap();
-    emit_note_body(svg, note, x, y, width, sprites);
+    emit_note_body(svg, note, x, y, width, sprites, &style);
     svg.push_str("</g>");
 }
 
@@ -11060,7 +11111,7 @@ fn render_notes_only(
         && diagram.relationships.is_empty()
         && diagram.notes[0].alias.is_some()
     {
-        return render_single_named_note(&diagram.notes[0], &diagram.meta.sprites);
+        return render_single_named_note(diagram, &diagram.notes[0], &diagram.meta.sprites);
     }
 
     // Non-oracle fallback (used by the CLI and unit tests). Keeps a working
@@ -11099,7 +11150,16 @@ fn render_notes_only(
         );
     }
     for (note, (nx, ny, nw, nh)) in diagram.notes.iter().zip(&note_data) {
-        render_note_box(&mut svg, note, *nx, *ny, *nw, *nh, &diagram.meta.sprites);
+        render_note_box(
+            &mut svg,
+            diagram,
+            note,
+            *nx,
+            *ny,
+            *nw,
+            *nh,
+            &diagram.meta.sprites,
+        );
     }
     svg.finalize()
 }
@@ -11134,6 +11194,7 @@ fn render_svek_floating_note(
         let alias = note.alias.as_deref().expect("floating named note");
         render_attached_note(
             svg,
+            diagram,
             note,
             (x * 100.0).round() / 100.0,
             (y * 100.0).round() / 100.0,
@@ -11153,6 +11214,7 @@ fn render_svek_floating_note(
 
     render_floating_note_entity(
         svg,
+        diagram,
         note,
         x,
         y,
@@ -11221,6 +11283,7 @@ fn floating_note_opale_geometry(
 #[allow(clippy::too_many_arguments)]
 fn render_floating_note_entity(
     svg: &mut String,
+    diagram: &ClassDiagram,
     note: &Note,
     x: f64,
     y: f64,
@@ -11229,15 +11292,11 @@ fn render_floating_note_entity(
     entity_id: &str,
     sprites: &HashMap<String, SpriteData>,
 ) {
+    let style = ResolvedNoteStyle::for_note(diagram, note);
     let right = x + width;
     let bottom = y + height;
     let fold_x = right - NOTE_FOLD;
     let fold_y = y + NOTE_FOLD;
-    let fill = note
-        .color
-        .as_deref()
-        .map(crate::sequence::resolve_color)
-        .unwrap_or_else(|| NOTE_FILL.to_string());
     let alias = note.alias.as_deref().expect("floating named note");
     let f = crate::plantuml_metrics::fmt_coord;
 
@@ -11250,7 +11309,7 @@ fn render_floating_note_entity(
     .unwrap();
     write!(
         svg,
-        r#"<path d="M{},{} L{},{} L{},{} L{},{} L{},{} L{},{}" fill="{}" style="stroke:#181818;stroke-width:0.5;"/>"#,
+        r#"<path d="M{},{} L{},{} L{},{} L{},{} L{},{} L{},{}" fill="{}" style="stroke:{};stroke-width:{};"/>"#,
         f(x),
         f(y),
         f(x),
@@ -11263,12 +11322,14 @@ fn render_floating_note_entity(
         f(y),
         f(x),
         f(y),
-        fill,
+        style.background,
+        style.border,
+        f(style.border_width),
     )
     .unwrap();
     write!(
         svg,
-        r#"<path d="M{},{} L{},{} L{},{} L{},{}" fill="{}" style="stroke:#181818;stroke-width:1;"/>"#,
+        r#"<path d="M{},{} L{},{} L{},{} L{},{}" fill="{}" style="stroke:{};stroke-width:1;"/>"#,
         f(fold_x),
         f(y),
         f(fold_x),
@@ -11277,18 +11338,21 @@ fn render_floating_note_entity(
         f(fold_y),
         f(fold_x),
         f(y),
-        fill,
+        style.background,
+        style.border,
     )
     .unwrap();
-    emit_note_body(svg, note, x, y, width, sprites);
+    emit_note_body(svg, note, x, y, width, sprites, &style);
     svg.push_str("</g>");
 }
 
 /// `EntityImageNoteLink.drawU` paints directly inside the owning `SvekEdge`
 /// group. Unlike standalone `Opale`, both the outer outline and folded corner
 /// use the note component's half-width border stroke.
+#[allow(clippy::too_many_arguments)]
 fn render_relationship_note(
     svg: &mut String,
+    diagram: &ClassDiagram,
     note: &Note,
     x: f64,
     y: f64,
@@ -11296,20 +11360,16 @@ fn render_relationship_note(
     height: f64,
     sprites: &HashMap<String, SpriteData>,
 ) {
+    let style = ResolvedNoteStyle::for_note(diagram, note);
     let right = x + width;
     let bottom = y + height;
     let fold_x = right - NOTE_FOLD;
     let fold_y = y + NOTE_FOLD;
-    let fill = note
-        .color
-        .as_deref()
-        .map(crate::sequence::resolve_color)
-        .unwrap_or_else(|| NOTE_FILL.to_string());
     let f = crate::plantuml_metrics::fmt_coord;
 
     write!(
         svg,
-        r#"<path d="M{},{} L{},{} L{},{} L{},{} L{},{} L{},{}" fill="{}" style="stroke:#181818;stroke-width:0.5;"/>"#,
+        r#"<path d="M{},{} L{},{} L{},{} L{},{} L{},{} L{},{}" fill="{}" style="stroke:{};stroke-width:{};"/>"#,
         f(x),
         f(y),
         f(x),
@@ -11322,12 +11382,14 @@ fn render_relationship_note(
         f(y),
         f(x),
         f(y),
-        fill,
+        style.background,
+        style.border,
+        f(style.border_width),
     )
     .unwrap();
     write!(
         svg,
-        r#"<path d="M{},{} L{},{} L{},{} L{},{}" fill="{}" style="stroke:#181818;stroke-width:0.5;"/>"#,
+        r#"<path d="M{},{} L{},{} L{},{} L{},{}" fill="{}" style="stroke:{};stroke-width:{};"/>"#,
         f(fold_x),
         f(y),
         f(fold_x),
@@ -11336,13 +11398,20 @@ fn render_relationship_note(
         f(fold_y),
         f(fold_x),
         f(y),
-        fill,
+        style.background,
+        style.border,
+        f(style.border_width),
     )
     .unwrap();
-    emit_note_body(svg, note, x, y, width, sprites);
+    emit_note_body(svg, note, x, y, width, sprites, &style);
 }
 
-fn render_single_named_note(note: &Note, sprites: &HashMap<String, SpriteData>) -> String {
+fn render_single_named_note(
+    diagram: &ClassDiagram,
+    note: &Note,
+    sprites: &HashMap<String, SpriteData>,
+) -> String {
+    let style = ResolvedNoteStyle::for_note(diagram, note);
     let (width, height) = note_box_dims(note, sprites);
     let x = 7.0;
     let y = 7.0;
@@ -11362,11 +11431,6 @@ fn render_single_named_note(note: &Note, sprites: &HashMap<String, SpriteData>) 
     let bottom = y + height;
     let fold_x = right - NOTE_FOLD;
     let fold_y = y + NOTE_FOLD;
-    let fill = note
-        .color
-        .as_deref()
-        .map(crate::sequence::resolve_color)
-        .unwrap_or_else(|| NOTE_FILL.to_string());
     let alias = note.alias.as_deref().expect("named-note path");
     let f = crate::plantuml_metrics::fmt_coord;
 
@@ -11381,7 +11445,7 @@ fn render_single_named_note(note: &Note, sprites: &HashMap<String, SpriteData>) 
     .unwrap();
     write!(
         body,
-        r#"<path d="M{},{} L{},{} L{},{} L{},{} L{},{} L{},{}" fill="{}" style="stroke:#181818;stroke-width:0.5;"/>"#,
+        r#"<path d="M{},{} L{},{} L{},{} L{},{} L{},{} L{},{}" fill="{}" style="stroke:{};stroke-width:{};"/>"#,
         f(x),
         f(y),
         f(x),
@@ -11394,12 +11458,14 @@ fn render_single_named_note(note: &Note, sprites: &HashMap<String, SpriteData>) 
         f(y),
         f(x),
         f(y),
-        fill,
+        style.background,
+        style.border,
+        f(style.border_width),
     )
     .unwrap();
     write!(
         body,
-        r#"<path d="M{},{} L{},{} L{},{} L{},{}" fill="{}" style="stroke:#181818;stroke-width:1;"/>"#,
+        r#"<path d="M{},{} L{},{} L{},{} L{},{}" fill="{}" style="stroke:{};stroke-width:1;"/>"#,
         f(fold_x),
         f(y),
         f(fold_x),
@@ -11408,10 +11474,11 @@ fn render_single_named_note(note: &Note, sprites: &HashMap<String, SpriteData>) 
         f(fold_y),
         f(fold_x),
         f(y),
-        fill,
+        style.background,
+        style.border,
     )
     .unwrap();
-    emit_note_body(&mut body, note, x, y, width, sprites);
+    emit_note_body(&mut body, note, x, y, width, sprites, &style);
     body.push_str("</g>");
     svg.raw_inline(&body);
     svg.finalize_plantuml()
@@ -12187,6 +12254,7 @@ fn emit_note_body(
     y: f64,
     width: f64,
     sprites: &HashMap<String, SpriteData>,
+    style: &ResolvedNoteStyle,
 ) {
     let mut block_top = y + NOTE_PAD_Y;
     for block in note_body_blocks(note) {
@@ -12196,12 +12264,7 @@ fn emit_note_body(
             continue;
         }
         if let Some(tree) = note_tree_rows(&block.lines) {
-            let fill = note
-                .color
-                .as_deref()
-                .map(crate::sequence::resolve_color)
-                .unwrap_or_else(|| NOTE_FILL.to_string());
-            emit_note_tree(svg, &tree, x, block_top, &fill);
+            emit_note_tree(svg, &tree, x, block_top, &style.background);
             block_top += tree
                 .iter()
                 .map(|node| {
@@ -12228,13 +12291,16 @@ fn emit_note_body(
 
         match block.separator {
             None => {}
-            Some(NoteBodySeparator { style, title: None }) => {
-                emit_note_separator(svg, x, width, block_top, style, None);
+            Some(NoteBodySeparator {
+                style: separator_style,
+                title: None,
+            }) => {
+                emit_note_separator(svg, x, width, block_top, separator_style, None);
                 content_top += 4.0;
                 separator_height = 8.0;
             }
             Some(NoteBodySeparator {
-                style,
+                style: separator_style,
                 title: Some(title),
             }) => {
                 let title_height = text_render::label_height(title, NOTE_FONT_SIZE);
@@ -12245,10 +12311,25 @@ fn emit_note_body(
 
                 let mut line_top = content_top;
                 for line in &block.lines {
-                    line_top +=
-                        emit_note_line(svg, line, x, line_top, &mut number_counters, note, sprites);
+                    line_top += emit_note_line(
+                        svg,
+                        line,
+                        x,
+                        line_top,
+                        &mut number_counters,
+                        note,
+                        sprites,
+                        style,
+                    );
                 }
-                emit_note_separator(svg, x, width, block_top + half_title, style, Some(title));
+                emit_note_separator(
+                    svg,
+                    x,
+                    width,
+                    block_top + half_title,
+                    separator_style,
+                    Some(title),
+                );
                 block_top += body_height + separator_height;
                 continue;
             }
@@ -12256,7 +12337,16 @@ fn emit_note_body(
 
         let mut line_top = content_top;
         for line in &block.lines {
-            line_top += emit_note_line(svg, line, x, line_top, &mut number_counters, note, sprites);
+            line_top += emit_note_line(
+                svg,
+                line,
+                x,
+                line_top,
+                &mut number_counters,
+                note,
+                sprites,
+                style,
+            );
         }
         block_top += body_height + separator_height;
     }
@@ -12338,6 +12428,7 @@ fn emit_note_separator(
     }
 }
 
+#[allow(clippy::too_many_arguments)]
 fn emit_note_line(
     svg: &mut String,
     line: &str,
@@ -12346,6 +12437,7 @@ fn emit_note_line(
     number_counters: &mut Vec<usize>,
     note: &Note,
     sprites: &HashMap<String, SpriteData>,
+    style: &ResolvedNoteStyle,
 ) -> f64 {
     if let Some(latex) = latex_member_content(line) {
         number_counters.clear();
@@ -12374,9 +12466,10 @@ fn emit_note_line(
                 + NOTE_BULLET_ELLIPSE_SIZE / 2.0;
             write!(
                 svg,
-                r##"<ellipse cx="{}" cy="{}" fill="#000000" rx="{}" ry="{}"/>"##,
+                r#"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}"/>"#,
                 f(ellipse_x + NOTE_BULLET_ELLIPSE_SIZE / 2.0),
                 f(ellipse_y),
+                style.font_color,
                 f(NOTE_BULLET_ELLIPSE_SIZE / 2.0),
                 f(NOTE_BULLET_ELLIPSE_SIZE / 2.0),
             )
@@ -12392,7 +12485,8 @@ fn emit_note_line(
                 + NOTE_NESTED_BULLET_START_ALTITUDE;
             write!(
                 svg,
-                r##"<rect fill="#000000" height="{}" width="{}" x="{}" y="{}"/>"##,
+                r#"<rect fill="{}" height="{}" width="{}" x="{}" y="{}"/>"#,
+                style.font_color,
                 f(NOTE_NESTED_BULLET_SIZE),
                 f(NOTE_NESTED_BULLET_SIZE),
                 f(rect_x),
@@ -12420,7 +12514,7 @@ fn emit_note_line(
                 y: baseline,
                 font_size: NOTE_FONT_SIZE as u32,
                 font_family: "sans-serif",
-                fill: "#000000",
+                fill: &style.font_color,
                 bold: false,
                 italic: false,
                 underline: false,
@@ -12458,7 +12552,7 @@ fn emit_note_line(
             y: baseline,
             font_size: NOTE_FONT_SIZE as u32,
             font_family: "sans-serif",
-            fill: "#000000",
+            fill: &style.font_color,
             bold: false,
             italic: false,
             underline: false,
@@ -12499,8 +12593,10 @@ fn parse_note_bullet(line: &str) -> Option<(usize, &str)> {
     Some((star_count - 1, rest.trim()))
 }
 
+#[allow(clippy::too_many_arguments)]
 fn render_note_box(
     svg: &mut SvgBuilder,
+    diagram: &ClassDiagram,
     note: &Note,
     x: f64,
     y: f64,
@@ -12508,6 +12604,7 @@ fn render_note_box(
     h: f64,
     sprites: &HashMap<String, SpriteData>,
 ) {
+    let style = ResolvedNoteStyle::for_note(diagram, note);
     let fold = NOTE_FOLD;
     let points = &[
         (x, y),
@@ -12516,16 +12613,16 @@ fn render_note_box(
         (x + w, y + fold),
         (x + w - fold, y),
     ];
-    svg.polygon(points, NOTE_FILL, NOTE_BORDER);
+    svg.polygon(points, &style.background, &style.border);
     let fold_pts = &[
         (x + w - fold, y),
         (x + w - fold, y + fold),
         (x + w, y + fold),
     ];
-    svg.polygon(fold_pts, NOTE_FILL, NOTE_BORDER);
+    svg.polygon(fold_pts, &style.background, &style.border);
 
     let mut body = String::new();
-    emit_note_body(&mut body, note, x, y, w, sprites);
+    emit_note_body(&mut body, note, x, y, w, sprites, &style);
     svg.raw_inline(&body);
 }
 
@@ -13938,6 +14035,25 @@ mod tests {
         let svg = crate::render_svg(&diagram);
 
         assert_eq!(svg.matches(r#"<g class="link""#).count(), 2);
+    }
+
+    #[test]
+    fn named_notes_resolve_shared_solid_style_channels() {
+        let input = "@startuml\n\
+            skinparam note {\n\
+              BackgroundColor LightGreen\n\
+              BorderColor #13579B\n\
+              BorderThickness 2\n\
+              FontColor Navy\n\
+            }\n\
+            note \"renamed styled memo 4421\" as FreshStyledMemo4421\n\
+            note \"renamed peer memo 4423\" as FreshStyledPeer4423\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(r##"fill="#90EE90" style="stroke:#13579B;stroke-width:2;""##));
+        assert!(svg.contains(r##"<text fill="#000080""##));
     }
 
     #[test]
