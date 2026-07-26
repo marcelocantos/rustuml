@@ -8182,6 +8182,78 @@ mod tests {
     use rustuml_parser::diagram::DiagramMeta;
 
     #[test]
+    fn renamed_six_state_graph_groups_noncontiguous_reverse_transitions() {
+        let states = [
+            "CopperHarbor701",
+            "VioletRelay709",
+            "AmberDepot719",
+            "IndigoMesa727",
+            "SilverGate733",
+            "QuartzVault739",
+        ];
+        let mut input = format!("@startuml\n[*] --> {}\n", states[0]);
+        for (from_index, from) in states.iter().enumerate() {
+            for (to_index, to) in states.iter().enumerate() {
+                if from_index != to_index {
+                    writeln!(input, "{from} --> {to} : edge-{from_index}-{to_index}").unwrap();
+                }
+            }
+        }
+        writeln!(input, "{} --> [*]\n@enduml", states.last().unwrap()).unwrap();
+
+        let parsed = rustuml_parser::parse::parse(&input).unwrap();
+        let rustuml_parser::diagram::Diagram::State(diagram) = &parsed else {
+            panic!("expected state diagram");
+        };
+        let ordered = plantuml_svek_transition_order(diagram, 0..diagram.transitions.len());
+
+        let transition_index = |from_index: usize, to_index: usize| {
+            diagram
+                .transitions
+                .iter()
+                .position(|transition| {
+                    transition.from == states[from_index] && transition.to == states[to_index]
+                })
+                .unwrap()
+        };
+        assert!(
+            transition_index(0, 5).abs_diff(transition_index(5, 0)) > 1,
+            "the perturbation must keep a reverse pair noncontiguous in source order"
+        );
+
+        let mut expected = vec![0];
+        for from_index in 0..states.len() {
+            for to_index in (from_index + 1)..states.len() {
+                expected.push(transition_index(from_index, to_index));
+                expected.push(transition_index(to_index, from_index));
+            }
+        }
+        expected.push(diagram.transitions.len() - 1);
+
+        // Fresh headless PlantUML 1.2026.3beta6 renders this generated
+        // six-state graph structurally identically. `getOrderedLinks` and
+        // `addLinkNew` preserve the first pair's position while grouping its
+        // later reverse edge immediately after it.
+        assert_eq!(ordered, expected);
+
+        let svg = render(diagram, &Theme::default());
+        let label_positions = expected[1..expected.len() - 1]
+            .iter()
+            .map(|transition_index| {
+                let label = diagram.transitions[*transition_index]
+                    .label
+                    .as_deref()
+                    .unwrap();
+                svg.find(&format!(">{label}</text>")).unwrap()
+            })
+            .collect::<Vec<_>>();
+        assert!(
+            label_positions.windows(2).all(|pair| pair[0] < pair[1]),
+            "rendered links must follow PlantUML's grouped SVEK order"
+        );
+    }
+
+    #[test]
     fn renamed_six_cluster_shared_quarks_keep_svek_link_identity() {
         let mut input = String::from("@startuml\n");
         let vaults = [
