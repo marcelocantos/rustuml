@@ -1070,6 +1070,12 @@ pub fn render_with_oracle(
                 .and_then(|qname| group_endpoint_node_map.get(qname))
                 .map(String::as_str)
                 .unwrap_or(logical_to);
+            if layout_reversed {
+                // Java `CommandLinkElement.executeArg` calls `Link.getInv`
+                // for LEFT/UP links. `Cluster.getNodesOrderedTop` then emits
+                // that inverted link's start before ordinary SVEK nodes.
+                layout.add_plantuml_svek_inverted_start(layout_from);
+            }
             if horizontal {
                 layout.add_same_rank(layout_from, layout_to);
             }
@@ -6757,6 +6763,34 @@ mod tests {
         assert!(
             svg.contains("<!--link Southbound to Northbound-->"),
             "link metadata should follow the reversed Java Link model: {svg}"
+        );
+    }
+
+    #[test]
+    fn no_oracle_left_link_prioritizes_renamed_inverted_cluster_start() {
+        let input = "@startuml\n\
+                     package \"Renamed Intake Boundary 701\" as Intake701 {\n\
+                       component \"Telemetry Worker 709\" as Worker709\n\
+                     }\n\
+                     package \"Renamed Archive Boundary 719\" as Archive719 {\n\
+                       component \"Audit Worker 727\" as Worker727\n\
+                     }\n\
+                     Worker709 -left-> Worker727\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Fresh Java PlantUML 1.2026.3beta6 reference. The complete SVG is
+        // structurally equivalent; these values pin `CommandLinkElement.executeArg`
+        // plus `Cluster.getNodesOrderedTop/getNodesOrderedWithoutTop`.
+        assert!(
+            svg.contains(r#"viewBox="0 0 527 118""#)
+                && svg.contains(r#"d="M242.2,64.25 C260.88,64.25 273.56,64.25 292.24,64.25""#),
+            "the inverted start must place Archive719 left of Intake701: {svg}"
+        );
+        assert!(
+            svg.contains(r#"id="Worker727-backto-Worker709""#),
+            "the renamed perturbation must retain Java's inverted link identity: {svg}"
         );
     }
 

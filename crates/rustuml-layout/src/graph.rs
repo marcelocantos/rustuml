@@ -86,6 +86,7 @@ pub struct LayoutGraph {
     direction: Direction,
     spacing: Option<GraphSpacing>,
     plantuml_svek_node_order: bool,
+    plantuml_svek_inverted_starts: Vec<String>,
     nodes: Vec<NodeSpec>,
     clusters: Vec<ClusterSpec>,
     together: Vec<TogetherSpec>,
@@ -100,6 +101,7 @@ impl LayoutGraph {
             direction,
             spacing: None,
             plantuml_svek_node_order: false,
+            plantuml_svek_inverted_starts: Vec::new(),
             nodes: Vec::new(),
             clusters: Vec::new(),
             together: Vec::new(),
@@ -125,6 +127,22 @@ impl LayoutGraph {
     pub fn with_plantuml_svek_node_order(mut self) -> Self {
         self.plantuml_svek_node_order = true;
         self
+    }
+
+    /// Creates an inverted SVEK link's start node before ordinary nodes.
+    ///
+    /// PlantUML `Cluster.getNodesOrderedTop` inserts each inverted link start
+    /// at the front of the dot node stream before
+    /// `Cluster.getNodesOrderedWithoutTop` emits the remaining nodes.
+    pub fn add_plantuml_svek_inverted_start(&mut self, node_id: &str) {
+        if !self
+            .plantuml_svek_inverted_starts
+            .iter()
+            .any(|existing| existing == node_id)
+        {
+            self.plantuml_svek_inverted_starts
+                .insert(0, node_id.to_string());
+        }
     }
 
     /// Sets graph-level dot spacing.
@@ -1128,13 +1146,10 @@ impl LayoutGraph {
     }
 
     fn graphviz_node_creation_order(&self) -> Vec<usize> {
-        if !self
+        let has_svek_clusters = self
             .clusters
             .iter()
-            .any(|cluster| matches!(cluster.kind, ClusterKind::Svek { .. }))
-        {
-            return (0..self.nodes.len()).collect();
-        }
+            .any(|cluster| matches!(cluster.kind, ClusterKind::Svek { .. }));
 
         fn visit(
             cluster_idx: usize,
@@ -1161,7 +1176,15 @@ impl LayoutGraph {
 
         let mut seen = vec![false; self.nodes.len()];
         let mut order = Vec::with_capacity(self.nodes.len());
-        if self.plantuml_svek_node_order {
+        for node_id in &self.plantuml_svek_inverted_starts {
+            if let Some(node_idx) = self.nodes.iter().position(|node| &node.id == node_id)
+                && !seen[node_idx]
+            {
+                seen[node_idx] = true;
+                order.push(node_idx);
+            }
+        }
+        if self.plantuml_svek_node_order && has_svek_clusters {
             let clustered_nodes: HashSet<&str> = self
                 .clusters
                 .iter()
@@ -1174,13 +1197,15 @@ impl LayoutGraph {
                 }
             }
         }
-        for (idx, cluster) in self.clusters.iter().enumerate() {
-            let parent_is_known = cluster
-                .parent
-                .as_ref()
-                .is_some_and(|parent| self.clusters.iter().any(|item| &item.id == parent));
-            if !parent_is_known {
-                visit(idx, &self.clusters, &self.nodes, &mut seen, &mut order);
+        if has_svek_clusters {
+            for (idx, cluster) in self.clusters.iter().enumerate() {
+                let parent_is_known = cluster
+                    .parent
+                    .as_ref()
+                    .is_some_and(|parent| self.clusters.iter().any(|item| &item.id == parent));
+                if !parent_is_known {
+                    visit(idx, &self.clusters, &self.nodes, &mut seen, &mut order);
+                }
             }
         }
         for (idx, was_seen) in seen.iter().enumerate() {
@@ -2042,6 +2067,21 @@ mod tests {
         assert!(outer.y < inner.y);
         assert!(outer.x + outer.width > inner.x + inner.width);
         assert!(outer.y + outer.height > inner.y + inner.height);
+    }
+
+    #[test]
+    fn inverted_svek_starts_precede_ordinary_node_creation() {
+        let mut graph = LayoutGraph::new(Direction::TopToBottom);
+        graph.add_node("DeclaredFirst", "", 40.0, 30.0);
+        graph.add_node("InvertedStartOne", "", 40.0, 30.0);
+        graph.add_node("InvertedStartTwo", "", 40.0, 30.0);
+
+        // Java `Cluster.getNodesOrderedTop` uses `firsts.add(0, start)`, so
+        // later inverted links precede earlier ones.
+        graph.add_plantuml_svek_inverted_start("InvertedStartOne");
+        graph.add_plantuml_svek_inverted_start("InvertedStartTwo");
+
+        assert_eq!(graph.graphviz_node_creation_order(), vec![2, 1, 0]);
     }
 
     #[test]
