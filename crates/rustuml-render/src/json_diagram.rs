@@ -300,7 +300,6 @@ fn render_nested_no_oracle(diagram: &JsonDiagram, diagram_type: &str) -> Option<
         body.push_str(&render_box_rows_at(&spec.rows, x, y));
     }
     for edge in &layout.edge_paths {
-        let target = specs.iter().find(|spec| spec.id == edge.to);
         let target_position = specs
             .iter()
             .position(|spec| spec.id == edge.to)
@@ -308,18 +307,10 @@ fn render_nested_no_oracle(diagram: &JsonDiagram, diagram_type: &str) -> Option<
         let source_index = specs.iter().position(|spec| spec.id == edge.from);
         let source_position = source_index.map(|index| layout.node_positions[index]);
         let source_width = source_index.map(|index| metrics[index].width);
-        let source_y = source_index.and_then(|source_index| {
-            smetana_record_port_y(
-                layout.node_positions[source_index].y,
-                &metrics[source_index].row_heights,
-                target?.parent_port?,
-            )
-        });
         let rendered = render_nested_connector(
             edge,
             MARGIN,
             MARGIN,
-            source_y,
             source_position.as_ref(),
             source_width,
             target_position.as_ref(),
@@ -338,17 +329,6 @@ fn render_nested_no_oracle(diagram: &JsonDiagram, diagram_type: &str) -> Option<
     );
     svg.raw_inline(&body);
     Some(svg.finalize_plantuml())
-}
-
-fn smetana_record_port_y(record_top: f64, row_heights: &[f64], port: usize) -> Option<f64> {
-    let row_height = *row_heights.get(port)?;
-    let total_height = row_heights.iter().sum::<f64>();
-    let preceding_height = row_heights[..port].iter().sum::<f64>();
-    let field_center = -total_height / 2.0 + preceding_height + row_height / 2.0;
-
-    // Graphviz 2.38 `compassPort` used PF2P, and PlantUML's
-    // `Macro.PF2P` rounds the field center before adding the node center.
-    Some(record_top + total_height / 2.0 + field_center.round())
 }
 
 fn collect_layout_boxes(
@@ -623,7 +603,6 @@ fn render_nested_connector(
     edge: &EdgePath,
     dx: f64,
     dy: f64,
-    source_port_y: Option<f64>,
     source_position: Option<&NodePosition>,
     source_width: Option<f64>,
     direct_target: Option<&NodePosition>,
@@ -635,22 +614,8 @@ fn render_nested_connector(
     let mut out = String::new();
     if edge.points.len() >= 4 {
         let mut points = edge.points.clone();
-        if let Some(source_port_y) = source_port_y {
-            let delta_y = source_port_y - points[0].1;
-            for point in &mut points {
-                point.1 += delta_y;
-            }
-        }
         let last = points.len() - 1;
         let mut arrow_tip = points[last];
-        if (points[0].1 - points[last].1).abs() < 1.0
-            && let Some(source_port_y) = source_port_y
-        {
-            for point in &mut points {
-                point.1 = source_port_y;
-            }
-            arrow_tip.1 = source_port_y;
-        }
         if let Some(target) = direct_target
             && points.len() == 4
             && (points[0].1 - points[last].1).abs() < f64::EPSILON
@@ -1504,19 +1469,6 @@ revision: 23
         assert_eq!(super::smetana_record_exit_offset(77.2), 78.0);
         assert_eq!(super::smetana_record_exit_offset(77.7), 79.0);
         assert_eq!(super::smetana_record_exit_offset(95.0), 96.0);
-    }
-
-    #[test]
-    fn record_port_position_rounds_field_center_before_translation() {
-        assert_eq!(
-            super::smetana_record_port_y(71.5, &[20.5, 20.5], 0),
-            Some(82.0)
-        );
-        assert_eq!(
-            super::smetana_record_port_y(0.0, &[20.5, 20.5, 20.5], 2),
-            Some(51.75)
-        );
-        assert_eq!(super::smetana_record_port_y(0.0, &[20.5], 1), None);
     }
 
     #[test]
