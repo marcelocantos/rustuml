@@ -3836,8 +3836,15 @@ static int record_path(node_t * n, port * prt, int side, boxf rv[],
 
     for (i = 0; i < info->n_flds; i++) {
 	if (!GD_flip(agraphof(n))) {
-	    ls = info->fld[i]->b.LL.x;
-	    rs = info->fld[i]->b.UR.x;
+	    if (rustuml_node_uses_text_span_dimensions(n)) {
+		/* Graphviz 2.38 `record_path` stored these bounds in ints.
+		 * Keep its PF2P port and routing corridor in the same space. */
+		ls = (int)info->fld[i]->b.LL.x;
+		rs = (int)info->fld[i]->b.UR.x;
+	    } else {
+		ls = info->fld[i]->b.LL.x;
+		rs = info->fld[i]->b.UR.x;
+	    }
 	} else {
 	    ls = info->fld[i]->b.LL.y;
 	    rs = info->fld[i]->b.UR.y;

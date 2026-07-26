@@ -1411,6 +1411,29 @@ revision: 23
     }
 
     #[test]
+    fn dimensional_array_fanout_keeps_every_renamed_connector() {
+        let source = r#"@startjson
+{
+  "parts": [
+    {"stock_id": "string", "amount": "integer"}
+  ],
+  "delivery": {"location": "string", "carrier": "string"},
+  "invoice": {"channel": "string"},
+  "revision": 7
+}
+@endjson"#;
+        let first = render_input(source);
+        let second = render_input(source);
+
+        assert_eq!(first, second);
+        assert_eq!(first.matches("stroke-dasharray:3,3").count(), 4);
+        assert_eq!(first.matches("<ellipse").count(), 4);
+        assert!(first.contains("parts"));
+        assert!(first.contains("stock_id"));
+        assert!(first.contains("revision"));
+    }
+
+    #[test]
     fn direct_record_exit_tracks_width_rounding_not_labels() {
         assert_eq!(super::smetana_record_exit_offset(78.2), 78.5);
         assert_eq!(super::smetana_record_exit_offset(77.2), 78.0);
