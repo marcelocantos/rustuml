@@ -341,6 +341,7 @@ impl ObjectParser {
                 dashed: connector.contains(".."),
                 arrow_at_from: connector.starts_with('<'),
                 arrow_at_to: connector.ends_with('>'),
+                diamond_at_from: connector.starts_with(['o', '*']),
                 source_line: self.current_line,
             });
             true
@@ -662,6 +663,9 @@ mod tests {
         assert_eq!(d.links[3].kind, ObjectLinkKind::Extension);
         assert_eq!(d.links[4].kind, ObjectLinkKind::Association);
         assert_eq!(d.links[5].kind, ObjectLinkKind::Composition);
+        assert!(d.links[0].diamond_at_from);
+        assert!(d.links[1].diamond_at_from);
+        assert!(!d.links[5].diamond_at_from);
     }
 
     #[test]

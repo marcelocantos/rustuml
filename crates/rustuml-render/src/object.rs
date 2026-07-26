@@ -794,6 +794,11 @@ fn object_svek_painted_x_origin(
                 .flatten()
                 .map(|label| label.x),
         )
+        .chain(
+            edge_paths
+                .iter()
+                .flat_map(|edge| edge.points.iter().map(|point| point.0)),
+        )
         .fold(f64::INFINITY, f64::min);
     if min_x.is_finite() {
         6.0 - min_x
@@ -1905,12 +1910,18 @@ fn object_link_type(kind: ObjectLinkKind) -> &'static str {
 
 fn object_link_path_id(link: &ObjectLink, from: &str, to: &str, parallel_index: usize) -> String {
     let mut id = match link.kind {
-        // `SvekEdge` names links with a source-side diamond as reversed
-        // decorations, even when the opposite endpoint is undecorated.
-        ObjectLinkKind::Aggregation | ObjectLinkKind::Composition if !link.arrow_at_to => {
-            format!("{from}-backto-{to}")
+        // `SvekEdge` names links from the combined decoration state: a
+        // source-only decoration is `backto`, a target-only decoration is
+        // `to`, and decorations at both ends use the neutral endpoint pair.
+        ObjectLinkKind::Aggregation | ObjectLinkKind::Composition => {
+            let decorated_from = link.diamond_at_from || link.arrow_at_from;
+            let decorated_to = !link.diamond_at_from || link.arrow_at_to;
+            match (decorated_from, decorated_to) {
+                (true, false) => format!("{from}-backto-{to}"),
+                (false, true) => format!("{from}-to-{to}"),
+                (true, true) | (false, false) => format!("{from}-{to}"),
+            }
         }
-        ObjectLinkKind::Aggregation | ObjectLinkKind::Composition => format!("{from}-{to}"),
         ObjectLinkKind::Dependency | ObjectLinkKind::Extension | ObjectLinkKind::Association => {
             match (link.arrow_at_from, link.arrow_at_to) {
                 (true, false) => format!("{from}-backto-{to}"),
@@ -1927,14 +1938,23 @@ fn object_link_path_id(link: &ObjectLink, from: &str, to: &str, parallel_index: 
 
 fn shortened_object_link_points(link: &ObjectLink, points: &[(f64, f64)]) -> Vec<(f64, f64)> {
     let start_len = match link.kind {
-        ObjectLinkKind::Aggregation | ObjectLinkKind::Composition => OBJECT_DIAMOND_LENGTH,
+        ObjectLinkKind::Aggregation | ObjectLinkKind::Composition if link.diamond_at_from => {
+            OBJECT_DIAMOND_LENGTH
+        }
         ObjectLinkKind::Dependency if link.arrow_at_from => DEPENDENCY_ARROW_PATH_INSET,
         ObjectLinkKind::Extension if link.arrow_at_from => OBJECT_TRIANGLE_LENGTH,
-        ObjectLinkKind::Dependency | ObjectLinkKind::Extension | ObjectLinkKind::Association => 0.0,
+        ObjectLinkKind::Dependency
+        | ObjectLinkKind::Extension
+        | ObjectLinkKind::Aggregation
+        | ObjectLinkKind::Composition
+        | ObjectLinkKind::Association => 0.0,
     };
     let end_len = match link.kind {
         ObjectLinkKind::Dependency if link.arrow_at_to => DEPENDENCY_ARROW_PATH_INSET,
         ObjectLinkKind::Extension if link.arrow_at_to => OBJECT_TRIANGLE_LENGTH,
+        ObjectLinkKind::Aggregation | ObjectLinkKind::Composition if !link.diamond_at_from => {
+            OBJECT_DIAMOND_LENGTH
+        }
         ObjectLinkKind::Aggregation | ObjectLinkKind::Composition if link.arrow_at_to => {
             DEPENDENCY_ARROW_PATH_INSET
         }
@@ -1972,20 +1992,37 @@ fn shorten_edge_points(points: &[(f64, f64)], start_len: f64, end_len: f64) -> V
 
 fn emit_object_link_start_decor(svg: &mut String, link: &ObjectLink, points: &[(f64, f64)]) {
     match link.kind {
-        ObjectLinkKind::Aggregation => emit_diamond(svg, points, true, "none"),
-        ObjectLinkKind::Composition => emit_diamond(svg, points, true, BORDER_COLOR),
+        ObjectLinkKind::Aggregation if link.diamond_at_from => {
+            emit_diamond(svg, points, true, "none")
+        }
+        ObjectLinkKind::Composition if link.diamond_at_from => {
+            emit_diamond(svg, points, true, BORDER_COLOR)
+        }
+        ObjectLinkKind::Aggregation | ObjectLinkKind::Composition if link.arrow_at_from => {
+            emit_dependency_arrow(svg, points, true)
+        }
         ObjectLinkKind::Dependency if link.arrow_at_from => {
             emit_dependency_arrow(svg, points, true)
         }
         ObjectLinkKind::Extension if link.arrow_at_from => {
             emit_extension_triangle(svg, points, true)
         }
-        ObjectLinkKind::Dependency | ObjectLinkKind::Extension | ObjectLinkKind::Association => {}
+        ObjectLinkKind::Dependency
+        | ObjectLinkKind::Extension
+        | ObjectLinkKind::Aggregation
+        | ObjectLinkKind::Composition
+        | ObjectLinkKind::Association => {}
     }
 }
 
 fn emit_object_link_end_decor(svg: &mut String, link: &ObjectLink, points: &[(f64, f64)]) {
     match link.kind {
+        ObjectLinkKind::Aggregation if !link.diamond_at_from => {
+            emit_diamond(svg, points, false, "none")
+        }
+        ObjectLinkKind::Composition if !link.diamond_at_from => {
+            emit_diamond(svg, points, false, BORDER_COLOR)
+        }
         ObjectLinkKind::Dependency | ObjectLinkKind::Aggregation | ObjectLinkKind::Composition
             if link.arrow_at_to =>
         {
@@ -2834,6 +2871,7 @@ mod tests {
                 dashed: false,
                 arrow_at_from: false,
                 arrow_at_to: true,
+                diamond_at_from: false,
                 source_line: 9,
             }],
             notes: vec![],
@@ -3171,6 +3209,27 @@ RenamedChild "many" --> "exactly one" RenamedPeer : hands off"#;
         assert!(svg.contains(">one</text>"));
         assert!(svg.contains(">many</text>"));
         assert!(svg.contains(">exactly one</text>"));
+    }
+
+    #[test]
+    fn renamed_parallel_links_keep_distinct_routes_and_target_diamond() {
+        let input = r#"object ParallelOrigin
+object ParallelTarget
+ParallelOrigin --> ParallelTarget : alpha edge
+ParallelOrigin ..> ParallelTarget : beta edge
+ParallelOrigin --* ParallelTarget : gamma edge"#;
+        let lines = input.lines().map(str::to_owned).collect::<Vec<_>>();
+        let diagram = rustuml_parser::parse::object::parse_object(&lines).unwrap();
+        let svg = render(&diagram, &Theme::default());
+
+        // Fresh Java PlantUML reference. `SvekEdge.appendLine` emits three
+        // independent dot edges, and `LinkType.getDecor2` puts the filled
+        // composition diamond on the target end of `--*`.
+        assert!(svg.contains(r#"width="304px""#));
+        assert!(svg.contains(r#"id="ParallelOrigin-to-ParallelTarget""#));
+        assert!(svg.contains(r#"id="ParallelOrigin-to-ParallelTarget-1""#));
+        assert!(svg.contains(r#"id="ParallelOrigin-to-ParallelTarget-2""#));
+        assert!(!svg.contains(r#"id="ParallelOrigin-backto-ParallelTarget-2""#));
     }
 
     #[test]
