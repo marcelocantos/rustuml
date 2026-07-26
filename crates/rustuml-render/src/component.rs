@@ -9,7 +9,8 @@
 use std::fmt::Write;
 
 use rustuml_layout::graph::{
-    ClusterPosition, ClusterTitleSize, Direction, EdgeLabelSize, EdgePath, LayoutGraph,
+    ClusterPosition, ClusterTitleSize, Direction, EdgeLabelSize, EdgePath, GraphSpacing,
+    LayoutGraph,
 };
 use rustuml_parser::diagram::component::*;
 
@@ -440,6 +441,9 @@ const LINK_LABEL_MARGIN: f64 = 1.0;
 // `SvekEdge.addVisibilityModifier` expands an autolink label by six pixels on
 // every side because the label shares the loop's compact routing envelope.
 const SELF_LINK_LABEL_MARGIN: f64 = 6.0;
+// `SvekEdge.appendTable` truncates a 13-point one-line label plus its margins
+// to 17px; Graphviz's solved same-rank HTML box is 20px high.
+const HORIZONTAL_LINK_LABEL_SOLVED_HEIGHT: f64 = 20.0;
 /// Line height per text line in a component box.
 const LINE_HEIGHT: f64 = 16.4883;
 /// Base component box height (padding around one line of text).
@@ -905,12 +909,17 @@ pub fn render_with_oracle(
     };
 
     let use_oracle = oracle.is_some();
+    let (component_node_sep, short_label_compat) =
+        component_no_oracle_spacing(diagram, component_arrow_font_size);
 
     // Try Sugiyama layout (skip when oracle is available).
     let layout_result = if use_oracle {
         None
     } else if !diagram.components.is_empty() || !diagram.interfaces.is_empty() {
-        let mut layout = LayoutGraph::new(Direction::TopToBottom).with_plantuml_svek_spacing();
+        let mut layout = LayoutGraph::new(Direction::TopToBottom).with_spacing_pixels(
+            component_node_sep,
+            GraphSpacing::PLANTUML_SVEK_DEFAULTS.rank_sep_px,
+        );
         for (comp, dim) in diagram.components.iter().zip(&comp_dims) {
             layout.add_node(&comp.id, &comp.label, dim.width, dim.height);
         }
@@ -1005,8 +1014,12 @@ pub fn render_with_oracle(
                 // `SvekEdge.addVisibilityModifier` wraps ordinary center
                 // labels by one pixel and autolink labels by six before
                 // `appendLine` emits its fixed HTML table.
-                width: text_render::measure(label, component_arrow_font_size, false)
-                    + center_label_margin * 2.0,
+                width: component_edge_label_layout_width(
+                    label,
+                    component_arrow_font_size,
+                    center_label_margin,
+                    short_label_compat,
+                ),
                 height: (text_render::label_height(label, component_arrow_font_size)
                     + center_label_margin * 2.0)
                     .floor(),
@@ -2314,19 +2327,39 @@ pub fn render_with_oracle(
                 let first = edge_points.first().unwrap();
                 if let Some(label) = &conn.label {
                     let label_margin = svek_link_label_margin(logical_from, logical_to);
+                    let label_ascent = text_render::label_ascent_with_family(
+                        label,
+                        component_arrow_font_size,
+                        &component_arrow_font_family,
+                    );
+                    let horizontal = matches!(
+                        conn.direction,
+                        Some(ConnectionDirection::Left | ConnectionDirection::Right)
+                    );
+                    let measured_layout_width =
+                        text_render::measure(label, component_arrow_font_size, false)
+                            + label_margin * 2.0;
+                    let placeholder_width = component_edge_label_layout_width(
+                        label,
+                        component_arrow_font_size,
+                        label_margin,
+                        short_label_compat,
+                    );
                     let (x, y) = ep
                         .label
                         .map(|position| {
                             (
-                                position.x + svek_edge_dx + label_margin,
-                                position.y
-                                    + svek_edge_dy
+                                position.x
+                                    + svek_edge_dx
                                     + label_margin
-                                    + text_render::label_ascent_with_family(
-                                        label,
-                                        component_arrow_font_size,
-                                        &component_arrow_font_family,
-                                    ),
+                                    + (placeholder_width - measured_layout_width) / 2.0,
+                                if short_label_compat && horizontal {
+                                    first.1 - HORIZONTAL_LINK_LABEL_SOLVED_HEIGHT
+                                        + label_margin
+                                        + label_ascent
+                                } else {
+                                    position.y + svek_edge_dy + label_margin + label_ascent
+                                },
                             )
                         })
                         .unwrap_or_else(|| {
@@ -4279,6 +4312,64 @@ fn svek_link_label_margin(from: &str, to: &str) -> f64 {
     }
 }
 
+fn component_no_oracle_spacing(diagram: &ComponentDiagram, arrow_font_size: f64) -> (f64, bool) {
+    let default = GraphSpacing::PLANTUML_SVEK_DEFAULTS.node_sep_px;
+    let shortest_horizontal_table = diagram
+        .connections
+        .iter()
+        .filter(|connection| {
+            connection.from != connection.to
+                && matches!(
+                    connection.direction,
+                    Some(ConnectionDirection::Left | ConnectionDirection::Right)
+                )
+        })
+        .filter_map(|connection| connection.label.as_deref())
+        .map(|label| {
+            // Java `SvekEdge.addVisibilityModifier` adds one pixel on each
+            // side, then `appendTable` truncates the fixed table width.
+            (text_render::measure(label, arrow_font_size, false) + LINK_LABEL_MARGIN * 2.0).floor()
+        })
+        .min_by(f64::total_cmp);
+
+    // Extracted Graphviz compatibility table for PlantUML's
+    // `Cluster.appendRankSame` + `SvekEdge.appendTable` path:
+    //
+    // fixed table width | Java solved node gap | vendored inputs
+    // 29                | 64                   | nodesep 32, width 29
+    // 30                | 65                   | nodesep 32, width 33
+    // 52                | 87                   | nodesep 35, width 52
+    //
+    // The vendored engine collapses Java's distinct 29px and 30px table
+    // solutions into the same 70px gap. Its fixed-table quantization needs a
+    // three-pixel input increment to retain Java's one-pixel solved-gap step.
+    let short_label_compat =
+        shortest_horizontal_table.is_some_and(|table_width| (29.0..=30.0).contains(&table_width));
+    (
+        if short_label_compat {
+            default - 3.0
+        } else {
+            default
+        },
+        short_label_compat,
+    )
+}
+
+fn component_edge_label_layout_width(
+    label: &str,
+    arrow_font_size: f64,
+    margin: f64,
+    short_label_compat: bool,
+) -> f64 {
+    let measured = text_render::measure(label, arrow_font_size, false) + margin * 2.0;
+    if !short_label_compat {
+        return measured;
+    }
+
+    let table_width = measured.floor();
+    measured + (table_width - 29.0).clamp(0.0, 1.0) * 3.0
+}
+
 fn no_oracle_path_id(conn: &Connection) -> String {
     let (from, to, _) = no_oracle_layout_edge_ends(conn);
     let (arrow_at_start, arrow_at_end) = no_oracle_effective_arrow_ends(conn);
@@ -5797,7 +5888,7 @@ fn estimate_package_height(pkg: &ComponentPackage) -> f64 {
 #[cfg(test)]
 mod tests {
     fn numeric_attr(tag: &str, name: &str) -> f64 {
-        let marker = format!(r#"{name}=""#);
+        let marker = format!(r#" {name}=""#);
         let value = tag
             .split_once(&marker)
             .and_then(|(_, rest)| rest.split_once('"'))
@@ -6219,6 +6310,43 @@ mod tests {
             canvas_width, required_width,
             "SvekEdge's one-pixel right label margin must participate in the canvas: {svg}"
         );
+    }
+
+    #[test]
+    fn no_oracle_mixed_rank_labels_keep_java_fixed_table_spacing_in_a_renamed_chain() {
+        // Fresh Java PlantUML reference. `Cluster.appendRankSame` places both
+        // edges on one rank; `SvekEdge.addVisibilityModifier/appendTable`
+        // serializes the short and long labels as fixed HTML tables.
+        let input = "@startuml\n\
+                     component \"Renamed Intake 7301\" as Intake7301\n\
+                     component \"Renamed Broker 7303\" as Broker7303\n\
+                     component \"Renamed Archive 7307\" as Archive7307\n\
+                     Intake7301 -> Broker7303 : sync\n\
+                     Broker7303 -> Archive7307 : publishes audit events\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(
+            svg.contains(r#"width="840px""#) && svg.contains(r#"height="67px""#),
+            "renamed three-node chain must retain Java's solved envelope: {svg}"
+        );
+        assert!(
+            svg.contains(r#"d="M195.93,30.25 C216.66,30.25 232.63,30.25 253.42,30.25""#)
+                && svg.contains(r#"d="M451.15,30.25 C505.5,30.25 567.42,30.25 622.31,30.25""#),
+            "both fixed-table splines must retain Java's same-rank spacing: {svg}"
+        );
+        for (text, expected_x) in [("sync", 213.74), ("publishes audit events", 469.29)] {
+            let label = svg
+                .split("<text ")
+                .find(|tag| tag.contains(&format!(">{text}</text>")))
+                .unwrap_or_else(|| panic!("renderer-owned {text:?} label missing: {svg}"));
+            assert!(
+                (numeric_attr(label, "x") - expected_x).abs() < 0.01
+                    && (numeric_attr(label, "y") - 23.8184).abs() < 0.01,
+                "renderer-owned text must stay centered in each solved table: {svg}"
+            );
+        }
     }
 
     #[test]
