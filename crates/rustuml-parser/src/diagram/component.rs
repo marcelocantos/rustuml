@@ -184,6 +184,9 @@ pub struct ComponentNote {
     pub text: String,
     /// The id of the element this note is attached to, if any.
     pub target: Option<String>,
+    /// The connection that owns a `note on link`, if any.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub connection: Option<usize>,
     /// Requested side of an attached note.
     #[serde(default)]
     pub position: ComponentNotePosition,
