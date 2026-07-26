@@ -628,13 +628,29 @@ fn layout_object(diagram: &ObjectDiagram, dims: &[ObjDim], font_size: u32) -> Ob
                     MARGIN - HTML_PLAINTEXT_MARGIN_Y,
                 )
             } else if layout_note_nodes.is_empty() {
+                // `GraphvizImageBuilder.buildImage` bypasses SVEK through
+                // `DotData.isDegeneratedWithFewEntities(1)` for one ungrouped,
+                // unlinked leaf, so `SvekResult` does not apply its painted
+                // envelope translation in that case.
+                let origin_y = if diagram.objects.len() == 1
+                    && diagram.links.is_empty()
+                    && diagram.packages.is_empty()
+                {
+                    MARGIN
+                } else {
+                    object_svek_painted_y_origin(
+                        diagram,
+                        &result.node_positions,
+                        &result.edge_paths,
+                    )
+                };
                 (
                     object_svek_painted_x_origin(
                         &result.node_positions,
                         &result.edge_paths,
                         diagram.objects.len(),
                     ),
-                    MARGIN,
+                    origin_y,
                 )
             } else {
                 normalize_attached_note_svek_envelope(
@@ -777,6 +793,58 @@ fn object_svek_painted_x_origin(
         .fold(f64::INFINITY, f64::min);
     if min_x.is_finite() {
         6.0 - min_x
+    } else {
+        MARGIN
+    }
+}
+
+/// Ports the Y half of Java `SvekResult.calculateDimension`:
+/// `TextBlockUtils.getMinMax` visits every painted primitive before moving the
+/// result to the six-pixel margin. In `LimitFinder.drawText`, the text top is
+/// `baseline - height + 1.5`; at 12px this lets a stereotype extend slightly
+/// above the object's one-pixel rectangle bound. `LayoutGraph` has already
+/// normalized the top native node box to zero, so only that extra painted
+/// overhang is added to the renderer's standard rectangle margin.
+fn object_svek_painted_y_origin(
+    diagram: &ObjectDiagram,
+    nodes: &[NodePosition],
+    edge_paths: &[EdgePath],
+) -> f64 {
+    let rectangle_min_y = nodes
+        .iter()
+        .take(diagram.objects.len())
+        .map(|node| node.y - 1.0)
+        .fold(f64::INFINITY, f64::min);
+    let object_min_y = nodes
+        .iter()
+        .take(diagram.objects.len())
+        .enumerate()
+        .map(|(idx, node)| {
+            let mut painted_min = node.y - 1.0;
+            if let Some(stereotype) = diagram.objects[idx].stereotype.as_deref() {
+                let text = format!("\u{00ab}{stereotype}\u{00bb}");
+                painted_min = painted_min.min(
+                    node.y + STEREO_BASELINE_Y
+                        - text_render::label_height(&text, STEREO_FONT_SIZE as f64)
+                        + 1.5,
+                );
+            }
+            painted_min
+        })
+        .fold(f64::INFINITY, f64::min);
+    let label_min_y = edge_paths
+        .iter()
+        .flat_map(|edge| [edge.label, edge.tail_label, edge.head_label])
+        .flatten()
+        .map(|label| label.y)
+        .fold(f64::INFINITY, f64::min);
+    let path_min_y = edge_paths
+        .iter()
+        .flat_map(|edge| edge.points.iter().map(|point| point.1))
+        .fold(f64::INFINITY, f64::min);
+    let painted_min_y = object_min_y.min(label_min_y).min(path_min_y);
+    if rectangle_min_y.is_finite() && painted_min_y.is_finite() {
+        MARGIN + (rectangle_min_y - painted_min_y).max(0.0)
     } else {
         MARGIN
     }
@@ -3079,6 +3147,36 @@ note top of RenamedGamma : Top callout
         assert!(svg.contains("Left callout"));
         assert!(svg.contains("Right callout"));
         assert!(svg.contains("Top callout"));
+    }
+
+    #[test]
+    fn linked_stereotypes_use_the_painted_svek_y_envelope() {
+        let input = r#"@startuml
+object CacheNode <<hot tier>> #palegreen {
+  shard = "north"
+  ttl = "90s"
+}
+object ArchiveNode <<cold vault>> #wheat {
+  engine = "zstd"
+  retention = "30d"
+}
+CacheNode --> ArchiveNode : drains
+@enduml"#;
+        let Diagram::Object(diagram) = rustuml_parser::parse::parse(input).unwrap() else {
+            panic!("expected object diagram");
+        };
+        let svg = render(&diagram, &Theme::default());
+
+        // Fresh Java PlantUML reference. `SvekResult.calculateDimension`
+        // delegates to `TextBlockUtils.getMinMax`; `LimitFinder.drawText`
+        // places the 12px stereotype top just above the rectangle bound.
+        assert!(svg.contains(r##"<rect fill="#98FB98""##));
+        assert!(svg.contains(r##"fill="#F5DEB3""##));
+        assert!(svg.contains(concat!(
+            r#"y="18.6328">"#,
+            "\u{00ab}hot tier\u{00bb}</text>"
+        )));
+        assert!(svg.contains(">drains</text>"));
     }
 
     #[test]
