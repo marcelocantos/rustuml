@@ -673,6 +673,7 @@ pub fn apply_skinparams(theme: &Theme, params: &[SkinParam]) -> Theme {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use rustuml_parser::parse::parse_auto;
 
     #[test]
     fn apply_background_color() {
@@ -1041,6 +1042,52 @@ mod tests {
         assert_eq!(t.global.title_font_style, "bold");
         assert_eq!(t.global.arrow_font_style, "italic");
         assert_eq!(t.global.svg_link_target, "_blank");
+    }
+
+    #[test]
+    fn embedded_theme_reaches_a_freshly_named_diagram() {
+        let diagram = parse_auto(
+            "@startuml\n\
+             !theme cerulean\n\
+             class FreshThemeProbe {\n\
+               +novelField: String\n\
+             }\n\
+             @enduml",
+        )
+        .expect("fresh class diagram should parse");
+
+        let effective = apply_skinparams(&Theme::default(), &diagram.meta().skinparams);
+
+        assert_eq!(effective.class.border_color, "#2FA4E7");
+        assert_eq!(effective.class.class_background, "#59B6EC-#2FA4E7");
+        assert_eq!(effective.class.attribute_font_size, 11.0);
+        assert_eq!(effective.global.font_family, "\"Verdana\"");
+    }
+
+    #[test]
+    fn explicit_override_wins_after_builtin_theme_defaults() {
+        // ThemeUtils loads the theme at the directive; SkinParam.muteStyle
+        // then overwrites it with later declarations.
+        let params = vec![
+            SkinParam {
+                key: "__theme".into(),
+                value: "default".into(),
+            },
+            SkinParam {
+                key: "classBorderColor".into(),
+                value: "#13579B".into(),
+            },
+            SkinParam {
+                key: "classBackgroundColor".into(),
+                value: "#F0E1D2".into(),
+            },
+        ];
+
+        let effective = apply_skinparams(&Theme::default(), &params);
+
+        assert_eq!(effective.name, "default");
+        assert_eq!(effective.class.border_color, "#13579B");
+        assert_eq!(effective.class.class_background, "#F0E1D2");
     }
 
     #[test]
