@@ -135,6 +135,34 @@ fn build_package_qualified_names(
     map
 }
 
+fn component_svek_owner<'a>(
+    id: &str,
+    qualified_names: &'a std::collections::HashMap<String, String>,
+    package_qualified_names: &'a std::collections::HashMap<String, String>,
+) -> Option<&'a str> {
+    qualified_names
+        .get(id)
+        .and_then(|qualified| qualified.rsplit_once('.').map(|(owner, _)| owner))
+        .or_else(|| package_qualified_names.get(id).map(String::as_str))
+}
+
+fn horizontal_link_crosses_component_cluster_scope(
+    connection: &Connection,
+    qualified_names: &std::collections::HashMap<String, String>,
+    package_qualified_names: &std::collections::HashMap<String, String>,
+) -> bool {
+    if !matches!(
+        connection.direction,
+        Some(ConnectionDirection::Left | ConnectionDirection::Right)
+    ) {
+        return false;
+    }
+    let from_owner =
+        component_svek_owner(&connection.from, qualified_names, package_qualified_names);
+    let to_owner = component_svek_owner(&connection.to, qualified_names, package_qualified_names);
+    from_owner != to_owner && (from_owner.is_some() || to_owner.is_some())
+}
+
 fn build_package_entity_ids(
     packages: &[ComponentPackage],
 ) -> std::collections::HashMap<String, String> {
@@ -856,6 +884,7 @@ pub fn render_with_oracle(
         })
         .collect();
     let note_dims: Vec<CompDim> = diagram.notes.iter().map(component_note_dim).collect();
+    let qualified_names = build_qualified_names(&diagram.packages);
     let package_qualified_names = build_package_qualified_names(&diagram.packages);
     let laid_out_note_indices = laid_out_note_indices(diagram, &package_qualified_names);
     let group_endpoint_nodes = component_group_endpoint_nodes(diagram, &package_qualified_names);
@@ -945,6 +974,15 @@ pub fn render_with_oracle(
         }
         for conn in &diagram.connections {
             let (logical_from, logical_to, layout_reversed) = no_oracle_layout_edge_ends(conn);
+            let horizontal = matches!(
+                conn.direction,
+                Some(ConnectionDirection::Left | ConnectionDirection::Right)
+            );
+            let horizontal_crosses_cluster_scope = horizontal_link_crosses_component_cluster_scope(
+                conn,
+                &qualified_names,
+                &package_qualified_names,
+            );
             let layout_from = package_qualified_names
                 .get(logical_from)
                 .and_then(|qname| group_endpoint_node_map.get(qname))
@@ -955,10 +993,6 @@ pub fn render_with_oracle(
                 .and_then(|qname| group_endpoint_node_map.get(qname))
                 .map(String::as_str)
                 .unwrap_or(logical_to);
-            let horizontal = matches!(
-                conn.direction,
-                Some(ConnectionDirection::Left | ConnectionDirection::Right)
-            );
             if horizontal {
                 layout.add_same_rank(layout_from, layout_to);
             }
@@ -990,7 +1024,17 @@ pub fn render_with_oracle(
                 center_label_size,
                 endpoint_size(tail_label),
                 endpoint_size(head_label),
-                (!horizontal).then(|| conn.length.saturating_sub(1)),
+                if horizontal_crosses_cluster_scope {
+                    // `Cluster.appendRankSame` can only own links whose two
+                    // endpoints are in its direct node set. For sibling
+                    // component clusters, Java `SvekEdge.appendLine` retains
+                    // the one-step queue as `minlen=0`, letting dot align the
+                    // cluster members without reparenting them into a root
+                    // rank subgraph.
+                    Some(0)
+                } else {
+                    (!horizontal).then(|| conn.length.saturating_sub(1))
+                },
             );
         }
         layout.layout_full(std::time::Duration::from_secs(5))
@@ -6201,6 +6245,30 @@ mod tests {
         assert!(
             svg.contains(r#"d="M176.48,"#) && svg.contains(r#"d="M580.64,"#),
             "the four-node perturbation must retain Java's in-cluster routing: {svg}"
+        );
+    }
+
+    #[test]
+    fn no_oracle_cross_cluster_horizontal_link_uses_svek_zero_minlen() {
+        // Fresh Java PlantUML reference. `SvekEdge.appendLine` emits
+        // `minlen=0` when a one-step horizontal link crosses sibling
+        // `Cluster.appendRankSame` scopes.
+        let input = "@startuml\ncloud \"Renamed Intake Cloud 271\" as Intake271 {\n  component \"Ingress Relay 277\" as Relay277 #PaleGreen\n}\nnode \"Renamed Archive Node 281\" as Archive281 {\n  component \"Audit Sink 283\" as Sink283 #LightBlue\n}\nRelay277 -right-> Sink283\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(
+            svg.contains(r#"width="548px""#) && svg.contains(r#"height="133px""#),
+            "sibling clusters must retain Java's horizontal SVEK canvas: {svg}"
+        );
+        assert!(
+            svg.contains(r#"data-qualified-name="Intake271.Relay277""#)
+                && svg.contains(r#"data-qualified-name="Archive281.Sink283""#),
+            "renamed members must remain owned by their source clusters: {svg}"
+        );
+        assert!(
+            svg.contains(r#"id="Relay277-to-Sink283""#),
+            "the cross-cluster spline must retain Java's logical endpoints: {svg}"
         );
     }
 
