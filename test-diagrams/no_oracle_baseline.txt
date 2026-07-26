@@ -22,7 +22,7 @@ math 50 50
 mindmap 157 157
 multi-diagram 45 53
 nwdiag 89 89
-object 90 155
+object 120 155
 preprocessing 162 307
 regex 45 45
 rendering 51 98

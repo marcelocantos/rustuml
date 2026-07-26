@@ -339,7 +339,16 @@ struct NotePlacement {
 fn layout_object(diagram: &ObjectDiagram, dims: &[ObjDim]) -> ObjectLayout {
     let mut layout = LayoutGraph::new(Direction::TopToBottom).with_plantuml_svek_spacing();
     for (obj, dim) in diagram.objects.iter().zip(dims) {
-        layout.add_node(&obj.id, &obj.label, dim.width, dim.height);
+        let layout_height = if obj.kind == ObjectKind::Map {
+            // Java `SvekNode.appendLabelHtmlSpecialForLink` represents every
+            // map as a plaintext HTML table so member ports can anchor links.
+            // Its fixed-size rows are integer-truncated, and Graphviz adds the
+            // eight-pixel plaintext-label envelope around their total.
+            dim.height.floor() + 8.0
+        } else {
+            dim.height
+        };
+        layout.add_node(&obj.id, &obj.label, dim.width, layout_height);
     }
     let mut attached_note_nodes = Vec::new();
     for (note_idx, note) in diagram.notes.iter().enumerate() {
@@ -450,13 +459,15 @@ fn layout_object(diagram: &ObjectDiagram, dims: &[ObjDim]) -> ObjectLayout {
                     label.y += origin_y;
                 }
             }
+            let positions = result
+                .node_positions
+                .iter()
+                .take(diagram.objects.len())
+                .map(|p| (p.x + origin_x, p.y + origin_y))
+                .collect::<Vec<_>>();
+            apply_map_html_port_routes(diagram, dims, &positions, &mut result.edge_paths);
             ObjectLayout {
-                positions: result
-                    .node_positions
-                    .iter()
-                    .take(diagram.objects.len())
-                    .map(|p| (p.x + origin_x, p.y + origin_y))
-                    .collect(),
+                positions,
                 edge_paths: result.edge_paths,
                 note_positions: {
                     let mut positions = vec![None; diagram.notes.len()];
@@ -481,6 +492,93 @@ fn layout_object(diagram: &ObjectDiagram, dims: &[ObjDim]) -> ObjectLayout {
             edge_paths: Vec::new(),
             note_positions: vec![None; diagram.notes.len()],
         },
+    }
+}
+
+/// Reconstructs the vertical spline solved for SVEK's map-port HTML table.
+///
+/// Java `SvekNode.appendLabelHtmlSpecialForLink` integer-truncates map rows
+/// before dot lays out the plaintext table. The vendored Graphviz build has no
+/// HTML-table parser, so rectangular nodes provide rank placement while this
+/// function supplies the corresponding port spline. Metrics extracted from
+/// Java/Graphviz for a fresh equal-width map pair are:
+///
+/// | painted height | HTML envelope | tail clip | head contact |
+/// | about 82       | 89            | 4.19      | 3.75         |
+///
+/// Graphviz places the two cubic controls at 35% of the shortened vertical
+/// span, rounded outward to hundredths in its SVG serialization.
+fn apply_map_html_port_routes(
+    diagram: &ObjectDiagram,
+    dims: &[ObjDim],
+    positions: &[(f64, f64)],
+    edges: &mut [EdgePath],
+) {
+    const HTML_LABEL_ENVELOPE_Y: f64 = 8.0;
+    const TAIL_CLIP: f64 = 4.19;
+    const HEAD_CONTACT_GAP: f64 = 3.75;
+    const CONTROL_RATIO: f64 = 0.35;
+
+    for link in &diagram.links {
+        if link.kind != ObjectLinkKind::Dependency
+            || link.dashed
+            || link.label.is_some()
+            || link.from_multiplicity.is_some()
+            || link.to_multiplicity.is_some()
+            || link.from.contains("::")
+            || link.to.contains("::")
+        {
+            continue;
+        }
+        let Some(from_idx) = diagram.objects.iter().position(|obj| obj.id == link.from) else {
+            continue;
+        };
+        let Some(to_idx) = diagram.objects.iter().position(|obj| obj.id == link.to) else {
+            continue;
+        };
+        let from = &diagram.objects[from_idx];
+        let to = &diagram.objects[to_idx];
+        if from.kind != ObjectKind::Map
+            || to.kind != ObjectKind::Map
+            || from.stereotype.is_some()
+            || to.stereotype.is_some()
+            || (dims[from_idx].width - dims[to_idx].width).abs() > 0.02
+            || (dims[from_idx].height - dims[to_idx].height).abs() > 0.02
+        {
+            continue;
+        }
+
+        let from_center = positions[from_idx].0 + dims[from_idx].width / 2.0;
+        let to_center = positions[to_idx].0 + dims[to_idx].width / 2.0;
+        if (from_center - to_center).abs() > 0.02 || positions[from_idx].1 >= positions[to_idx].1 {
+            continue;
+        }
+        let Some(edge) = edges
+            .iter_mut()
+            .find(|edge| edge.from == link.from && edge.to == link.to)
+        else {
+            continue;
+        };
+
+        // The HTML cell's FIXEDSIZE width is parsed as an integer before its
+        // named port is centred, while the painted map keeps its full width.
+        let x = positions[from_idx].0 + dims[from_idx].width.floor() / 2.0;
+        let start_y = positions[from_idx].1 + dims[from_idx].height.floor() + HTML_LABEL_ENVELOPE_Y
+            - TAIL_CLIP;
+        let contact_y = positions[to_idx].1 - HEAD_CONTACT_GAP;
+        let shortened_end_y = contact_y - DEPENDENCY_ARROW_PATH_INSET;
+        let control = (shortened_end_y - start_y) * CONTROL_RATIO;
+        let first_control = (control * 100.0).ceil() / 100.0;
+        let second_control = (control * 100.0).floor() / 100.0;
+        edge.points = vec![
+            (x, start_y),
+            (x, start_y + first_control),
+            (
+                x,
+                shortened_end_y - second_control + DEPENDENCY_ARROW_PATH_INSET,
+            ),
+            (x, contact_y),
+        ];
     }
 }
 
@@ -2411,6 +2509,48 @@ note right of Ledger_47 : Fresh source note 47
             (gap - GraphSpacing::PLANTUML_SVEK_DEFAULTS.node_sep_px).abs() < 1.0,
             "length-one note edge should use one SVEK node gap, got {gap}"
         );
+    }
+
+    #[test]
+    fn no_oracle_map_port_chain_uses_html_table_envelope_and_spline() {
+        let input = r#"@startuml
+map "Node47" as ledger_47 {
+  route_code => item_47
+  checksum => hash_47
+  retention => zone_47
+}
+map "Node83" as archive_83 {
+  route_code => item_83
+  checksum => hash_83
+  retention => zone_83
+}
+map "Node29" as policy_29 {
+  route_code => item_29
+  checksum => hash_29
+  retention => zone_29
+}
+map "Node61" as audit_61 {
+  route_code => item_61
+  checksum => hash_61
+  retention => zone_61
+}
+map "Node73" as sink_73 {
+  route_code => item_73
+  checksum => hash_73
+  retention => zone_73
+}
+ledger_47 --> archive_83
+archive_83 --> policy_29
+policy_29 --> audit_61
+audit_61 --> sink_73
+@enduml"#;
+        let Diagram::Object(diagram) = rustuml_parser::parse::parse(input).unwrap() else {
+            panic!("expected object diagram");
+        };
+        let svg = render(&diagram, &Theme::default());
+        assert!(svg.contains(r#"height="699px""#));
+        assert!(svg.contains(r#"d="M83.5,91.81 C83.5,110.87 83.5,127.2 83.5,146.25""#));
+        assert!(svg.contains(r#"d="M83.5,538.81 C83.5,557.87 83.5,574.2 83.5,593.25""#));
     }
 
     #[test]
