@@ -1103,6 +1103,7 @@ struct AutonomousRegion {
 struct AutonomousComposite<'a> {
     state: &'a State,
     regions: Vec<AutonomousRegion>,
+    children: Vec<AutonomousComposite<'a>>,
     separator: Option<char>,
     inner_width: f64,
     inner_height: f64,
@@ -1145,6 +1146,32 @@ fn endpoint_concurrent_scope<'a>(
             .and_then(|state| state.parent.as_deref())?
     };
     is_direct_concurrent_scope(composite, scope).then_some(scope)
+}
+
+fn endpoint_parent_scope<'a>(
+    diagram: &'a StateDiagram,
+    endpoint: &'a str,
+) -> Option<Option<&'a str>> {
+    if endpoint == "[*]" {
+        return Some(None);
+    }
+    if let Some(scope) = endpoint.strip_prefix("[*]") {
+        return Some(Some(scope));
+    }
+    diagram
+        .states
+        .iter()
+        .find(|state| state.id == endpoint)
+        .map(|state| state.parent.as_deref())
+}
+
+fn transition_parent_scope<'a>(
+    diagram: &'a StateDiagram,
+    transition: &'a Transition,
+) -> Option<Option<&'a str>> {
+    let from = endpoint_parent_scope(diagram, &transition.from)?;
+    let to = endpoint_parent_scope(diagram, &transition.to)?;
+    (from == to).then_some(from)
 }
 
 fn collect_autonomous_scope_ids<F>(
@@ -1368,13 +1395,201 @@ fn normalize_autonomous_scope(
     scope
 }
 
-/// Build the one-level autonomous state image used by
-/// `GroupMakerState.getImage` and `InnerStateAutonom`.
+/// Recursively build the autonomous image for one composite state.
 ///
-/// Each concurrent region gets its own `GeneralImageBuilder`, then
-/// `ConcurrentStates` combines those autonomous images along the separator
-/// axis before `InnerStateAutonom` wraps the result in the owning state.
+/// Java provenance: `GroupMakerState.getImage` first materializes every nested
+/// group's SVEK image, then `createGeneralImageBuilder` lays out only the
+/// immediate leaves of the current group. `InnerStateAutonom` wraps that
+/// independently-laid-out image and its resulting dimensions become the node
+/// dimensions seen by the parent group's `GraphvizImageBuilder`.
+fn build_autonomous_composite_node<'a>(
+    diagram: &'a StateDiagram,
+    composite: &'a State,
+    arrow_font: &StateArrowFont,
+) -> Option<AutonomousComposite<'a>> {
+    if !composite.composite
+        || composite.concurrent_separator.is_some()
+        || composite.stereotype.is_some()
+        || composite.stroke.is_some()
+        || composite.url.is_some()
+    {
+        return None;
+    }
+
+    let direct_children: Vec<&State> = diagram
+        .states
+        .iter()
+        .filter(|state| state.parent.as_deref() == Some(composite.id.as_str()))
+        .collect();
+    if direct_children.is_empty()
+        || direct_children.iter().any(|state| {
+            !matches!(state.kind, StateKind::Normal)
+                || state.stereotype.is_some()
+                || state.stroke.is_some()
+                || state.url.is_some()
+                || (!state.composite && !state.descriptions.is_empty())
+        })
+    {
+        return None;
+    }
+
+    let mut children = Vec::new();
+    for state in direct_children
+        .iter()
+        .copied()
+        .filter(|state| state.composite)
+    {
+        children.push(build_autonomous_composite_node(diagram, state, arrow_font)?);
+    }
+
+    let transition_indices: Vec<usize> = diagram
+        .transitions
+        .iter()
+        .enumerate()
+        .filter_map(|(index, transition)| {
+            (transition_parent_scope(diagram, transition) == Some(Some(composite.id.as_str())))
+                .then_some(index)
+        })
+        .collect();
+    if transition_indices.is_empty() {
+        return None;
+    }
+
+    let inner_ids = collect_autonomous_scope_ids(diagram, &transition_indices, |state| {
+        state.parent.as_deref() == Some(composite.id.as_str())
+    });
+    let inner_sizes: Vec<(String, f64, f64, StateLayoutShape)> = inner_ids
+        .iter()
+        .map(|id| {
+            if let Some(child) = children.iter().find(|child| child.state.id == *id) {
+                (id.clone(), child.width, child.height, StateLayoutShape::Box)
+            } else {
+                let state = diagram.states.iter().find(|state| state.id == *id);
+                let (width, height, shape) = layout_node_size(id, state, false);
+                (id.clone(), width, height, shape)
+            }
+        })
+        .collect();
+    let layout = layout_autonomous_scope(
+        diagram,
+        inner_ids,
+        transition_indices,
+        &inner_sizes,
+        arrow_font,
+        false,
+    )?;
+    let layout = normalize_autonomous_scope(diagram, arrow_font, layout);
+    let inner_width = layout.width;
+    let inner_height = layout.height;
+    let title_height = crate::plantuml_metrics::text_height(STATE_FONT_SIZE);
+    let attribute_height =
+        composite.descriptions.len() as f64 * crate::plantuml_metrics::text_height(DESC_FONT_SIZE);
+    let attribute_width = composite
+        .descriptions
+        .iter()
+        .map(|description| text_render::measure(description, DESC_FONT_SIZE, false))
+        .fold(0.0_f64, f64::max);
+    let field_margin = if attribute_height > 0.0 { 5.0 } else { 0.0 };
+    let width = inner_width
+        .max(text_render::measure(
+            &composite.label,
+            STATE_FONT_SIZE,
+            false,
+        ))
+        .max(attribute_width)
+        + STATE_DIMENSION_PADDING
+        + field_margin;
+    let height =
+        inner_height + title_height + attribute_height + STATE_DIMENSION_PADDING + field_margin;
+
+    Some(AutonomousComposite {
+        state: composite,
+        regions: vec![AutonomousRegion { layout }],
+        children,
+        separator: None,
+        inner_width,
+        inner_height,
+        attribute_height,
+        field_margin,
+        width,
+        height,
+    })
+}
+
+/// Build the root autonomous image and its outer SVEK layout.
 fn build_autonomous_composite<'a>(
+    diagram: &'a StateDiagram,
+    arrow_font: &StateArrowFont,
+) -> Option<(AutonomousComposite<'a>, AutonomousScopeLayout)> {
+    if !diagram.notes.is_empty()
+        || diagram.meta.title.is_some()
+        || !diagram.meta.skinparams.is_empty()
+        || diagram
+            .states
+            .iter()
+            .any(|state| !matches!(state.kind, StateKind::Normal))
+        || diagram
+            .transitions
+            .iter()
+            .any(|transition| transition_parent_scope(diagram, transition).is_none())
+    {
+        return None;
+    }
+    let root_composites: Vec<&State> = diagram
+        .states
+        .iter()
+        .filter(|state| state.composite && state.parent.is_none())
+        .collect();
+    let [root_composite] = root_composites.as_slice() else {
+        return None;
+    };
+    let composite = build_autonomous_composite_node(diagram, root_composite, arrow_font)?;
+    let outer_transition_indices: Vec<usize> = diagram
+        .transitions
+        .iter()
+        .enumerate()
+        .filter_map(|(index, transition)| {
+            (transition_parent_scope(diagram, transition) == Some(None)).then_some(index)
+        })
+        .collect();
+    if outer_transition_indices.is_empty() {
+        return None;
+    }
+    let outer_ids = collect_autonomous_scope_ids(diagram, &outer_transition_indices, |state| {
+        state.parent.is_none()
+    });
+    let outer_sizes: Vec<(String, f64, f64, StateLayoutShape)> = outer_ids
+        .iter()
+        .map(|id| {
+            if id == &composite.state.id {
+                (
+                    id.clone(),
+                    composite.width,
+                    composite.height,
+                    StateLayoutShape::Box,
+                )
+            } else {
+                let state = diagram.states.iter().find(|state| state.id == *id);
+                let (node_width, node_height, shape) = layout_node_size(id, state, false);
+                (id.clone(), node_width, node_height, shape)
+            }
+        })
+        .collect();
+    let outer = layout_autonomous_scope(
+        diagram,
+        outer_ids,
+        outer_transition_indices,
+        &outer_sizes,
+        arrow_font,
+        true,
+    )?;
+
+    Some((composite, outer))
+}
+
+/// Preserve the existing one-level concurrent-state path while recursive
+/// autonomous layout grows support for `ConcurrentStates` at every depth.
+fn build_one_level_concurrent_composite<'a>(
     diagram: &'a StateDiagram,
     arrow_font: &StateArrowFont,
 ) -> Option<(AutonomousComposite<'a>, AutonomousScopeLayout)> {
@@ -1393,6 +1608,7 @@ fn build_autonomous_composite<'a>(
         return None;
     };
     if composite.parent.is_some()
+        || composite.concurrent_separator.is_none()
         || composite.stereotype.is_some()
         || composite.stroke.is_some()
         || composite.url.is_some()
@@ -1437,9 +1653,6 @@ fn build_autonomous_composite<'a>(
             region_scopes.push(scope.clone());
         }
     }
-    if region_scopes.len() > 1 && composite.concurrent_separator.is_none() {
-        return None;
-    }
     let mut region_transition_indices = vec![Vec::new(); region_scopes.len()];
     let mut outer_transition_indices = Vec::new();
     for (index, transition) in diagram.transitions.iter().enumerate() {
@@ -1471,8 +1684,6 @@ fn build_autonomous_composite<'a>(
                 (id.clone(), width, height, shape)
             })
             .collect();
-        // `GroupMakerState.createGeneralImageBuilder` creates one independent
-        // builder per region, using dot's 36px autonomous rank separation.
         let layout = layout_autonomous_scope(
             diagram,
             inner_ids,
@@ -1487,7 +1698,6 @@ fn build_autonomous_composite<'a>(
     }
     let separator = composite.concurrent_separator;
     let (inner_width, inner_height) = match separator {
-        // `ConcurrentStates.Separator.VERTICAL.add`: images advance on x.
         Some('|') => (
             regions.iter().map(|region| region.layout.width).sum(),
             regions
@@ -1495,15 +1705,14 @@ fn build_autonomous_composite<'a>(
                 .map(|region| region.layout.height)
                 .fold(0.0_f64, f64::max),
         ),
-        // `ConcurrentStates.Separator.HORIZONTAL.add`: images advance on y.
-        Some('-') | None => (
+        Some('-') => (
             regions
                 .iter()
                 .map(|region| region.layout.width)
                 .fold(0.0_f64, f64::max),
             regions.iter().map(|region| region.layout.height).sum(),
         ),
-        Some(_) => return None,
+        Some(_) | None => return None,
     };
     let title_height = crate::plantuml_metrics::text_height(STATE_FONT_SIZE);
     let attribute_height =
@@ -1554,6 +1763,7 @@ fn build_autonomous_composite<'a>(
         AutonomousComposite {
             state: composite,
             regions,
+            children: Vec::new(),
             separator,
             inner_width,
             inner_height,
@@ -1620,13 +1830,10 @@ fn emit_autonomous_scope_entities(
     context: &AutonomousRenderContext<'_>,
     scope: &AutonomousScopeLayout,
     offset: (f64, f64),
-    skip_id: Option<&str>,
+    skip_composites: bool,
 ) {
     let (offset_x, offset_y) = offset;
     for (id, cx, cy, width, height) in &scope.positions {
-        if skip_id == Some(id.as_str()) {
-            continue;
-        }
         let cx = cx + offset_x;
         let cy = cy + offset_y;
         if let Some(qualified_name) = autonomous_pseudo_name(id) {
@@ -1658,6 +1865,9 @@ fn emit_autonomous_scope_entities(
         let Some(state) = context.diagram.states.iter().find(|state| state.id == *id) else {
             continue;
         };
+        if skip_composites && state.composite {
+            continue;
+        }
         let box_x = cx - width / 2.0;
         let box_y = cy - height / 2.0;
         let fill = state
@@ -1881,18 +2091,191 @@ fn emit_autonomous_scope_links(
     }
 }
 
-fn render_autonomous_composite(diagram: &StateDiagram) -> Option<String> {
-    let skin = StateSkin::from_diagram(diagram);
-    let arrow_font = StateArrowFont::from_diagram(diagram);
-    let (composite, outer) = build_autonomous_composite(diagram, &arrow_font)?;
-    let mut all_ids = outer.ids.clone();
+fn collect_autonomous_composite_ids(composite: &AutonomousComposite<'_>, ids: &mut Vec<String>) {
     for region in &composite.regions {
         for id in &region.layout.ids {
-            if !all_ids.contains(id) {
-                all_ids.push(id.clone());
+            if !ids.contains(id) {
+                ids.push(id.clone());
             }
         }
     }
+    for child in &composite.children {
+        collect_autonomous_composite_ids(child, ids);
+    }
+}
+
+fn emit_autonomous_composite(
+    svg: &mut String,
+    context: &AutonomousRenderContext<'_>,
+    composite: &AutonomousComposite<'_>,
+    center: (f64, f64),
+) {
+    let (composite_cx, composite_cy) = center;
+    let box_x = composite_cx - composite.width / 2.0;
+    let box_y = composite_cy - composite.height / 2.0;
+    let title_divider_y = box_y + DIVIDER_OFFSET;
+    let header_divider_y = title_divider_y + composite.attribute_height + composite.field_margin;
+    let right = box_x + composite.width;
+    let header_fill = composite
+        .state
+        .fill
+        .as_deref()
+        .map(crate::sequence::resolve_color)
+        .unwrap_or_else(|| context.skin.state_fill.clone());
+    write!(
+        svg,
+        r#"<path d="M{},{} L{},{} A{STATE_RX},{STATE_RX} 0 0 1 {},{} L{},{} L{},{} L{},{} A{STATE_RX},{STATE_RX} 0 0 1 {},{}" fill="{}"/><rect fill="none" height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/><line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+        fmt_f(box_x + STATE_RX),
+        fmt_f(box_y),
+        fmt_f(right - STATE_RX),
+        fmt_f(box_y),
+        fmt_f(right),
+        fmt_f(box_y + STATE_RX),
+        fmt_f(right),
+        fmt_f(header_divider_y),
+        fmt_f(box_x),
+        fmt_f(header_divider_y),
+        fmt_f(box_x),
+        fmt_f(box_y + STATE_RX),
+        fmt_f(box_x + STATE_RX),
+        fmt_f(box_y),
+        header_fill,
+        fmt_f(composite.height),
+        context.skin.stroke,
+        context.skin.border_thickness,
+        fmt_f(composite.width),
+        fmt_f(box_x),
+        fmt_f(box_y),
+        context.skin.stroke,
+        context.skin.border_thickness,
+        fmt_f(box_x),
+        fmt_f(right),
+        fmt_f(header_divider_y),
+        fmt_f(header_divider_y),
+    )
+    .unwrap();
+    if composite.attribute_height > 0.0 {
+        write!(
+            svg,
+            r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+            context.skin.stroke,
+            context.skin.border_thickness,
+            fmt_f(box_x),
+            fmt_f(right),
+            fmt_f(title_divider_y),
+            fmt_f(title_divider_y),
+        )
+        .unwrap();
+    }
+    let title_width = text_render::measure(&composite.state.label, STATE_FONT_SIZE, false);
+    let mut title = String::new();
+    text_render::emit_text(
+        &mut title,
+        &composite.state.label,
+        &TextBase {
+            x: composite_cx - title_width / 2.0,
+            y: box_y + NAME_BASELINE_OFFSET,
+            font_size: STATE_FONT_SIZE as u32,
+            font_family: "sans-serif",
+            fill: &context.skin.text_color,
+            bold: false,
+            italic: false,
+            underline: false,
+            skip_underline: false,
+        },
+    );
+    svg.push_str(&title);
+    for (index, attribute) in composite.state.descriptions.iter().enumerate() {
+        let mut text = String::new();
+        text_render::emit_text(
+            &mut text,
+            attribute,
+            &TextBase {
+                x: box_x + 5.0,
+                y: title_divider_y
+                    + crate::plantuml_metrics::ascent(DESC_FONT_SIZE)
+                    + index as f64 * crate::plantuml_metrics::text_height(DESC_FONT_SIZE),
+                font_size: DESC_FONT_SIZE as u32,
+                font_family: "sans-serif",
+                fill: &context.skin.text_color,
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        svg.push_str(&text);
+    }
+
+    // `GroupMakerState.getImage` renders child group images before the current
+    // scope's ordinary entities. Each child's already-computed dimensions are
+    // the node dimensions used by this region's SVEK layout.
+    let inner_offset_x = box_x + 5.0;
+    let inner_offset_y = header_divider_y + 5.0;
+    let mut region_offset_x = inner_offset_x;
+    let mut region_offset_y = inner_offset_y;
+    for (index, region) in composite.regions.iter().enumerate() {
+        let offset = (region_offset_x, region_offset_y);
+        for child in &composite.children {
+            if let Some((_, cx, cy, _, _)) = region
+                .layout
+                .positions
+                .iter()
+                .find(|(id, _, _, _, _)| id == &child.state.id)
+            {
+                emit_autonomous_composite(svg, context, child, (cx + offset.0, cy + offset.1));
+            }
+        }
+        emit_autonomous_scope_entities(svg, context, &region.layout, offset, true);
+        emit_autonomous_scope_links(svg, context, &region.layout, offset);
+        match composite.separator {
+            Some('|') => region_offset_x += region.layout.width,
+            Some('-') | None => region_offset_y += region.layout.height,
+            Some(_) => unreachable!("validated concurrent separator"),
+        }
+        if index + 1 < composite.regions.len() {
+            // Java provenance: `ConcurrentStates.Separator.drawSeparator`
+            // uses UStroke(8, 10, 1.5) and extends the line eight pixels past
+            // the composed image's orthogonal dimension.
+            match composite.separator {
+                Some('|') => {
+                    write!(
+                        svg,
+                        r#"<line style="stroke:{};stroke-width:1.5;stroke-dasharray:8,10;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                        context.skin.stroke,
+                        fmt_f(region_offset_x),
+                        fmt_f(region_offset_x),
+                        fmt_f(inner_offset_y),
+                        fmt_f(inner_offset_y + composite.inner_height + 8.0),
+                    )
+                    .unwrap();
+                }
+                Some('-') => {
+                    write!(
+                        svg,
+                        r#"<line style="stroke:{};stroke-width:1.5;stroke-dasharray:8,10;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                        context.skin.stroke,
+                        fmt_f(inner_offset_x),
+                        fmt_f(inner_offset_x + composite.inner_width + 8.0),
+                        fmt_f(region_offset_y),
+                        fmt_f(region_offset_y),
+                    )
+                    .unwrap();
+                }
+                None => {}
+                Some(_) => unreachable!("validated concurrent separator"),
+            }
+        }
+    }
+}
+
+fn render_autonomous_composite(diagram: &StateDiagram) -> Option<String> {
+    let skin = StateSkin::from_diagram(diagram);
+    let arrow_font = StateArrowFont::from_diagram(diagram);
+    let (composite, outer) = build_autonomous_composite(diagram, &arrow_font)
+        .or_else(|| build_one_level_concurrent_composite(diagram, &arrow_font))?;
+    let mut all_ids = outer.ids.clone();
+    collect_autonomous_composite_ids(&composite, &mut all_ids);
     let allocated_ids = allocate_state_svg_ids(diagram, &all_ids);
     let context = AutonomousRenderContext {
         diagram,
@@ -1914,158 +2297,13 @@ fn render_autonomous_composite(diagram: &StateDiagram) -> Option<String> {
         .positions
         .iter()
         .find(|(id, _, _, _, _)| id == &composite.state.id)?;
-    let box_x = composite_cx - composite.width / 2.0;
-    let box_y = composite_cy - composite.height / 2.0;
-    let title_divider_y = box_y + DIVIDER_OFFSET;
-    let header_divider_y = title_divider_y + composite.attribute_height + composite.field_margin;
-    let right = box_x + composite.width;
-    let header_fill = composite
-        .state
-        .fill
-        .as_deref()
-        .map(crate::sequence::resolve_color)
-        .unwrap_or_else(|| skin.state_fill.clone());
-    write!(
-        svg,
-        r#"<path d="M{},{} L{},{} A{STATE_RX},{STATE_RX} 0 0 1 {},{} L{},{} L{},{} L{},{} A{STATE_RX},{STATE_RX} 0 0 1 {},{}" fill="{}"/><rect fill="none" height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/><line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-        fmt_f(box_x + STATE_RX),
-        fmt_f(box_y),
-        fmt_f(right - STATE_RX),
-        fmt_f(box_y),
-        fmt_f(right),
-        fmt_f(box_y + STATE_RX),
-        fmt_f(right),
-        fmt_f(header_divider_y),
-        fmt_f(box_x),
-        fmt_f(header_divider_y),
-        fmt_f(box_x),
-        fmt_f(box_y + STATE_RX),
-        fmt_f(box_x + STATE_RX),
-        fmt_f(box_y),
-        header_fill,
-        fmt_f(composite.height),
-        skin.stroke,
-        skin.border_thickness,
-        fmt_f(composite.width),
-        fmt_f(box_x),
-        fmt_f(box_y),
-        skin.stroke,
-        skin.border_thickness,
-        fmt_f(box_x),
-        fmt_f(right),
-        fmt_f(header_divider_y),
-        fmt_f(header_divider_y),
-    )
-    .unwrap();
-    if composite.attribute_height > 0.0 {
-        write!(
-            svg,
-            r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-            skin.stroke,
-            skin.border_thickness,
-            fmt_f(box_x),
-            fmt_f(right),
-            fmt_f(title_divider_y),
-            fmt_f(title_divider_y),
-        )
-        .unwrap();
-    }
-    let title_width = text_render::measure(&composite.state.label, STATE_FONT_SIZE, false);
-    let mut title = String::new();
-    text_render::emit_text(
-        &mut title,
-        &composite.state.label,
-        &TextBase {
-            x: composite_cx - title_width / 2.0,
-            y: box_y + NAME_BASELINE_OFFSET,
-            font_size: STATE_FONT_SIZE as u32,
-            font_family: "sans-serif",
-            fill: &skin.text_color,
-            bold: false,
-            italic: false,
-            underline: false,
-            skip_underline: false,
-        },
-    );
-    svg.push_str(&title);
-    for (index, attribute) in composite.state.descriptions.iter().enumerate() {
-        let mut text = String::new();
-        text_render::emit_text(
-            &mut text,
-            attribute,
-            &TextBase {
-                x: box_x + 5.0,
-                y: title_divider_y
-                    + crate::plantuml_metrics::ascent(DESC_FONT_SIZE)
-                    + index as f64 * crate::plantuml_metrics::text_height(DESC_FONT_SIZE),
-                font_size: DESC_FONT_SIZE as u32,
-                font_family: "sans-serif",
-                fill: &skin.text_color,
-                bold: false,
-                italic: false,
-                underline: false,
-                skip_underline: false,
-            },
-        );
-        svg.push_str(&text);
-    }
-
-    // Java `InnerStateAutonom.drawU` paints the autonomous inner image at
-    // x=MARGIN and y=titreHeight+field-margin+attribute-height+MARGIN_LINE.
-    let inner_offset_x = box_x + 5.0;
-    let inner_offset_y = header_divider_y + 5.0;
-    let mut region_offset_x = inner_offset_x;
-    let mut region_offset_y = inner_offset_y;
-    for (index, region) in composite.regions.iter().enumerate() {
-        let offset = (region_offset_x, region_offset_y);
-        emit_autonomous_scope_entities(&mut svg, &context, &region.layout, offset, None);
-        emit_autonomous_scope_links(&mut svg, &context, &region.layout, offset);
-        match composite.separator {
-            Some('|') => region_offset_x += region.layout.width,
-            Some('-') | None => region_offset_y += region.layout.height,
-            Some(_) => unreachable!("validated concurrent separator"),
-        }
-        if index + 1 < composite.regions.len() {
-            // Java provenance: `ConcurrentStates.Separator.drawSeparator`
-            // uses UStroke(8, 10, 1.5) and extends the line eight pixels past
-            // the composed image's orthogonal dimension.
-            match composite.separator {
-                Some('|') => {
-                    write!(
-                        svg,
-                        r#"<line style="stroke:{};stroke-width:1.5;stroke-dasharray:8,10;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                        skin.stroke,
-                        fmt_f(region_offset_x),
-                        fmt_f(region_offset_x),
-                        fmt_f(inner_offset_y),
-                        fmt_f(inner_offset_y + composite.inner_height + 8.0),
-                    )
-                    .unwrap();
-                }
-                Some('-') => {
-                    write!(
-                        svg,
-                        r#"<line style="stroke:{};stroke-width:1.5;stroke-dasharray:8,10;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                        skin.stroke,
-                        fmt_f(inner_offset_x),
-                        fmt_f(inner_offset_x + composite.inner_width + 8.0),
-                        fmt_f(region_offset_y),
-                        fmt_f(region_offset_y),
-                    )
-                    .unwrap();
-                }
-                None => {}
-                Some(_) => unreachable!("validated concurrent separator"),
-            }
-        }
-    }
-    emit_autonomous_scope_entities(
+    emit_autonomous_composite(
         &mut svg,
         &context,
-        &outer,
-        (0.0, 0.0),
-        Some(&composite.state.id),
+        &composite,
+        (*composite_cx, *composite_cy),
     );
+    emit_autonomous_scope_entities(&mut svg, &context, &outer, (0.0, 0.0), true);
     emit_autonomous_scope_links(&mut svg, &context, &outer, (0.0, 0.0));
     svg.push_str("</g></svg>");
     Some(svg)
@@ -6053,6 +6291,112 @@ mod tests {
         let composite_header = svg.find(">HarborMode</text>").unwrap();
         let outer_start = svg.find(r#"data-qualified-name=".start.""#).unwrap();
         assert!(composite_header < outer_start);
+    }
+
+    #[test]
+    fn renamed_depth_four_composites_build_recursive_autonomous_images() {
+        let input = concat!(
+            "@startuml\n",
+            "[*] --> HarborRoot701\n",
+            "state HarborRoot701 {\n",
+            "  [*] --> CopperLayer709\n",
+            "  state CopperLayer709 {\n",
+            "    [*] --> VioletLayer719\n",
+            "    state VioletLayer719 {\n",
+            "      [*] --> AmberLayer727\n",
+            "      state AmberLayer727 {\n",
+            "        [*] --> QuartzLeaf733\n",
+            "        QuartzLeaf733 --> [*]\n",
+            "      }\n",
+            "      AmberLayer727 --> [*]\n",
+            "    }\n",
+            "    VioletLayer719 --> [*]\n",
+            "  }\n",
+            "  CopperLayer709 --> [*]\n",
+            "}\n",
+            "HarborRoot701 --> [*]\n",
+            "@enduml\n",
+        );
+        let parsed = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::State(diagram) = &parsed else {
+            panic!("expected state diagram");
+        };
+        let arrow_font = StateArrowFont::from_diagram(diagram);
+        let (root, _) = build_autonomous_composite(diagram, &arrow_font).unwrap();
+
+        assert_eq!(root.state.id, "HarborRoot701");
+        assert_eq!(root.children[0].state.id, "HarborRoot701.CopperLayer709");
+        assert_eq!(
+            root.children[0].children[0].state.id,
+            "HarborRoot701.CopperLayer709.VioletLayer719"
+        );
+        assert_eq!(
+            root.children[0].children[0].children[0].state.id,
+            "HarborRoot701.CopperLayer709.VioletLayer719.AmberLayer727"
+        );
+
+        let svg = crate::render_svg(&parsed);
+        for qualified_name in [
+            "HarborRoot701..start.HarborRoot701",
+            "HarborRoot701.CopperLayer709..start.CopperLayer709",
+            "HarborRoot701.CopperLayer709.VioletLayer719..start.VioletLayer719",
+            "HarborRoot701.CopperLayer709.VioletLayer719.AmberLayer727..start.AmberLayer727",
+        ] {
+            assert!(
+                svg.contains(&format!(r#"data-qualified-name="{qualified_name}""#)),
+                "{qualified_name} missing from {svg}"
+            );
+        }
+    }
+
+    #[test]
+    fn renamed_nested_composite_layout_scales_with_changed_child_count() {
+        let input = concat!(
+            "@startuml\n",
+            "[*] --> Observatory811\n",
+            "state Observatory811 {\n",
+            "  [*] --> Relay821\n",
+            "  state Relay821 {\n",
+            "    [*] --> Copper823\n",
+            "    Copper823 --> Violet827\n",
+            "    Violet827 --> Amber829\n",
+            "    Amber829 --> Quartz839\n",
+            "    Quartz839 --> [*]\n",
+            "  }\n",
+            "  Relay821 --> [*]\n",
+            "}\n",
+            "Observatory811 --> [*]\n",
+            "@enduml\n",
+        );
+        let parsed = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::State(diagram) = &parsed else {
+            panic!("expected state diagram");
+        };
+        let arrow_font = StateArrowFont::from_diagram(diagram);
+        let (root, _) = build_autonomous_composite(diagram, &arrow_font).unwrap();
+        let relay = &root.children[0];
+
+        assert_eq!(relay.state.id, "Observatory811.Relay821");
+        assert_eq!(
+            relay.regions[0]
+                .layout
+                .ids
+                .iter()
+                .filter(|id| !id.starts_with("__"))
+                .count(),
+            4
+        );
+        assert!(root.height > relay.height);
+
+        let svg = crate::render_svg(&parsed);
+        for child in ["Copper823", "Violet827", "Amber829", "Quartz839"] {
+            assert!(
+                svg.contains(&format!(
+                    r#"data-qualified-name="Observatory811.Relay821.{child}""#
+                )),
+                "{child} missing from {svg}"
+            );
+        }
     }
 
     #[test]
