@@ -150,6 +150,35 @@ const CONNECTION_CROSS_CENTER_RECLAIM: f64 = 6.0;
 const WHILE_UNLABELED_SPECIAL_Y_PULL_UP: f64 = 4.0;
 const WHILE_UNLABELED_LOOP_ARROW_Y_PULL_UP: f64 = 2.0;
 const WHILE_BODY_SLOT_COMPRESS: f64 = 4.8203125;
+/// `FtileDiamond.withSouth` places the branch label four pixels east of the
+/// condition diamond's flow spine in `FtileIfDown`.
+const FTILE_IF_DOWN_SOUTH_LABEL_X: f64 = 4.0;
+/// Extracted from `FtileWhile.ConnectionBackSimple` after the diagram-level
+/// ON_Y compression: the emphasized UP decoration remains this far below the
+/// arithmetic midpoint of the compressed return corridor.
+const WHILE_LOOP_EMPHASIS_ON_Y_RESTORE: f64 = 3.58984375;
+/// Extracted from `FtileWhile.ConnectionOut` after the diagram-level ON_Y
+/// `CompressionXorYBuilder`: the emphasized DOWN decoration retains this
+/// offset below the midpoint of the compressed while point-out corridor.
+const WHILE_CROSS_ASSEMBLY_EMPHASIS_RESTORE: f64 = 7.33984375;
+/// Extracted from `CompressionXorYBuilder(ON_Y)` around
+/// `FtileSwitchWithManyLinks` when one or two flow tiles follow the switch in a
+/// while body. The trailing tile occupies part of the nominal 20px merge band.
+const WHILE_SWITCH_SHORT_TAIL_RECLAIM: f64 = 8.4990234375;
+/// Extracted from `FtileFactoryDelegatorAssembly` followed by the diagram-level
+/// ON_Y pass: an all-terminal conditional assembled to a new-lane continuation
+/// loses this final font-metric-derived fraction of its connection slot.
+const TERMINAL_IF_CROSS_CONTINUATION_RECLAIM: f64 = 0.955078125;
+/// Extracted by tracing `FtileRepeat.getTranslateBackward` through
+/// `FtileFactoryDelegatorRepeat.repeat`'s welding assembly and `LimitFinder`:
+/// the owner measured by SlotFinder is 1.1171875px above the repeat-local
+/// backward origin (raw tops 580.03125 and 581.1484375).
+const REPEAT_WELDING_BACKWARD_LIMIT_REPLAY: f64 = 1.1171875;
+/// The same genealogy paints the backward tile 21.75px above its repeat-local
+/// origin: the 35px natural assembly reserve minus the 12px hexagon half and
+/// one quarter of SlotSet's 5px compression margin.
+const REPEAT_WELDING_BACKWARD_PAINT_REPLAY: f64 =
+    ftile::ASSEMBLY_CONNECTION_HEIGHT - DIAMOND_HALF - crate::compress::COMPRESS_MARGIN / 4.0;
 const WHILE_PREFIXED_FUSED_NESTED_LEFT_TRIM: f64 = 1.0;
 const WHILE_PREFIXED_FUSED_NESTED_RIGHT_TRIM: f64 = 7.5722;
 const WHILE_PREFIXED_FUSED_NESTED_EMIT_RIGHT_TRIM: f64 = 3.5722;
@@ -2004,20 +2033,24 @@ fn typed_ftile_steps_can_handle(steps: &[ActivityStep], is_swimlane: bool) -> bo
     if !is_swimlane {
         return false;
     }
+    let has_repeat_break = steps.iter().any(|step| matches!(step, ActivityStep::Break));
     const IF: u8 = 1;
     const WHILE: u8 = 2;
     const FORK: u8 = 3;
     const REPEAT: u8 = 4;
+    const SWITCH: u8 = 5;
     let mut stack = Vec::new();
     let mut if_else_count = Vec::new();
     let mut fork_again_count = 0usize;
     let mut repeat_count = 0usize;
+    let mut switch_count = 0usize;
     for step in steps {
         match step {
             ActivityStep::Start
             | ActivityStep::Stop
             | ActivityStep::End
             | ActivityStep::Action(_) => {}
+            ActivityStep::Break if stack.contains(&REPEAT) => {}
             ActivityStep::Swimlane(lane) if lane.color.is_none() => {}
             ActivityStep::If(_) => {
                 stack.push(IF);
@@ -2036,7 +2069,10 @@ fn typed_ftile_steps_can_handle(steps: &[ActivityStep], is_swimlane: bool) -> bo
                 }
             }
             ActivityStep::EndIf => {
-                if stack.pop() != Some(IF) || if_else_count.pop() != Some(1) {
+                let else_count = if_else_count.pop();
+                if stack.pop() != Some(IF)
+                    || !(else_count == Some(1) || (else_count == Some(0) && has_repeat_break))
+                {
                     return false;
                 }
             }
@@ -2058,7 +2094,17 @@ fn typed_ftile_steps_can_handle(steps: &[ActivityStep], is_swimlane: bool) -> bo
                     return false;
                 }
             }
-            ActivityStep::Note(_) if stack.contains(&IF) => {}
+            ActivityStep::Note(_) => {}
+            ActivityStep::Switch(_) => {
+                stack.push(SWITCH);
+                switch_count += 1;
+            }
+            ActivityStep::Case(_) if stack.last() == Some(&SWITCH) => {}
+            ActivityStep::EndSwitch => {
+                if stack.pop() != Some(SWITCH) {
+                    return false;
+                }
+            }
             ActivityStep::Fork => {
                 stack.push(FORK);
             }
@@ -2078,7 +2124,7 @@ fn typed_ftile_steps_can_handle(steps: &[ActivityStep], is_swimlane: bool) -> bo
     }
     // Existing V2 gates cover nested control flow. This extension is only for
     // generalized fan-out beyond their bounded legacy fork path.
-    stack.is_empty() && (fork_again_count >= 6 || repeat_count > 0)
+    stack.is_empty() && (fork_again_count >= 6 || repeat_count > 0 || switch_count > 0)
 }
 
 /// True when the swimlane V2 single-tree path should own this diagram (instead
@@ -10160,6 +10206,32 @@ fn polygon_points(points: &[(f64, f64)]) -> String {
         .join(",")
 }
 
+struct DeferredVerticalEmphasis {
+    marker: String,
+    x: f64,
+    y1: f64,
+    y2: f64,
+    tip_offset: f64,
+    transform_raw_midpoint: bool,
+    upward: bool,
+    color: String,
+}
+
+struct DeferredTranslatedShape {
+    marker: String,
+    fragment: String,
+    dy: f64,
+    anchor_y: f64,
+    translate_after_compression: bool,
+}
+
+#[derive(Clone)]
+struct DeferredIfWeldingConnection {
+    marker: String,
+    points: Vec<(f64, f64)>,
+    lane: usize,
+}
+
 struct SvgEmitter {
     /// Shapes and labels (rects, ellipses, polygon-shapes, text). PlantUML
     /// emits all of these first in document order.
@@ -10167,6 +10239,24 @@ struct SvgEmitter {
     /// Connectors (lines, arrowhead polygons). PlantUML emits all of these
     /// after the shapes, also in document order.
     connectors: String,
+    /// Non-painted geometry such as Java's `UEmpty` compression guards.
+    /// This participates in SlotFinder occupancy but is never serialized.
+    occupancy: String,
+    /// Emphasized snake arrows are located when `Worm` is painted, after the
+    /// enclosing compression transform has rewritten the snake's points.
+    deferred_vertical_emphasis: Vec<DeferredVerticalEmphasis>,
+    /// A LIMITED one-sided output marker can replace a child snake whose last
+    /// connector was a bare line. Keep that endpoint so the enclosing assembly
+    /// can retain the child's decoration when it supplies the final tail.
+    deferred_output_arrows: Vec<(String, (f64, f64))>,
+    last_connector_endpoint: Option<(f64, f64)>,
+    deferred_if_welding_connections: Vec<DeferredIfWeldingConnection>,
+    /// A translated owner view paints from a different genealogy offset while
+    /// SlotFinder continues to measure the original child coordinates.
+    deferred_translated_shapes: Vec<DeferredTranslatedShape>,
+    /// Owner-translated connections whose Java collection order is completed
+    /// by an enclosing assembly before they are replayed in this lane.
+    deferred_connector_fragments: Vec<(String, String)>,
     /// Swimlane V2: byte spans in `connectors` tagged with PlantUML-style
     /// `(swimlaneOut, swimlaneIn)` ownership, used by if-long lane MinMax.
     connector_lane_spans: Vec<ConnectorLaneSpan>,
@@ -10638,6 +10728,13 @@ impl SvgEmitter {
         SvgEmitter {
             shapes: String::new(),
             connectors: String::new(),
+            occupancy: String::new(),
+            deferred_vertical_emphasis: Vec::new(),
+            deferred_output_arrows: Vec::new(),
+            last_connector_endpoint: None,
+            deferred_if_welding_connections: Vec::new(),
+            deferred_translated_shapes: Vec::new(),
+            deferred_connector_fragments: Vec::new(),
             connector_lane_spans: Vec::new(),
             current_connector_lanes: None,
             current_lane: 0,
@@ -10702,6 +10799,30 @@ impl SvgEmitter {
             swimlane_while_cond_special: false,
             swimlane_v2_active: false,
             swimlane_cross_lane: None,
+        }
+    }
+
+    fn defer_connectors_from(&mut self, start: usize) {
+        if self.connectors.len() == start {
+            return;
+        }
+        let fragment = self.connectors.split_off(start);
+        let marker = format!(
+            "<!--rustuml-ftile-deferred-connector:{}-->",
+            self.deferred_connector_fragments.len()
+        );
+        self.connectors.push_str(&marker);
+        self.deferred_connector_fragments.push((marker, fragment));
+    }
+
+    fn flush_deferred_connectors(&mut self, count: usize) {
+        let pending = self
+            .deferred_connector_fragments
+            .drain(..count.min(self.deferred_connector_fragments.len()))
+            .collect::<Vec<_>>();
+        for (marker, fragment) in pending {
+            self.connectors = self.connectors.replacen(&marker, "", 1);
+            self.connectors.push_str(&fragment);
         }
     }
 
@@ -11196,6 +11317,7 @@ impl SvgEmitter {
             } else {
                 write!(self.connectors, r#"<path d="{d}" fill="{stroke}"/>"#).unwrap();
             }
+            self.last_connector_endpoint = Some((x2, y2));
             self.record_connector_lane_span(start);
             return;
         }
@@ -11211,6 +11333,7 @@ impl SvgEmitter {
             f(y2)
         )
         .unwrap();
+        self.last_connector_endpoint = Some((x2, y2));
         self.record_connector_lane_span(start);
     }
 
@@ -11262,6 +11385,7 @@ impl SvgEmitter {
             fill, pts, stroke, stroke_width
         )
         .unwrap();
+        self.last_connector_endpoint = None;
         self.record_connector_lane_span(start);
     }
 
@@ -19468,6 +19592,13 @@ fn route_swimlane_v2_partition_connectors(
 
 /// Target x of the leftmost lane divider (matches gold).
 const SWIM_LEFT_DIVIDER_X: f64 = 20.0;
+const FTILE_SWIMLANE_TRAILING_MARGIN: f64 = 19.0;
+// Extracted from local PlantUML 1.2026.3beta6 over renamed Stop/End terminal
+// branches: FtileAssemblySimple retains this owner-translated tail interval.
+const FTILE_TRANSLATED_TERMINAL_TAIL: f64 = 8.5224;
+// Extracted from the same renamed nested-terminal matrix: the 6px
+// ConditionalBuilder empty merge loses this final ON_Y interval.
+const FTILE_TERMINAL_EMPTY_MERGE_RECLAIM: f64 = 0.9551;
 /// `Swimlanes.getHalfMissingSpace`: the minimum space beside every lane.
 const SWIMLANE_CONNECTION_CROSS_INSET: f64 = 5.0;
 
@@ -28724,13 +28855,14 @@ fn escape_xml_attr_local(s: &str) -> String {
 enum TypedFtileSpacing {
     Compressed,
     Natural,
+    SingleLane,
 }
 
 impl TypedFtileSpacing {
     fn assembly_separation(self) -> f64 {
         match self {
             Self::Compressed => ftile::ASSEMBLY_RENDERED_SEPARATION,
-            Self::Natural => ftile::ASSEMBLY_CONNECTION_HEIGHT,
+            Self::Natural | Self::SingleLane => ftile::ASSEMBLY_CONNECTION_HEIGHT,
         }
     }
 }
@@ -28755,6 +28887,10 @@ enum TypedFtileKind<'a> {
         node: &'a LayoutNode,
         lane: usize,
     },
+    WithNote {
+        child: TypedPlacedScene<'a>,
+        note: &'a LayoutNode,
+    },
     Sequence {
         children: Vec<TypedPlacedScene<'a>>,
     },
@@ -28766,6 +28902,17 @@ enum TypedFtileKind<'a> {
         merge_at: (f64, f64),
         then_scene: TypedPlacedScene<'a>,
         else_scene: TypedPlacedScene<'a>,
+    },
+    IfDown {
+        node: &'a LayoutNode,
+        lane: usize,
+        diamond: ftile::FtileGeometry,
+        diamond_at: (f64, f64),
+        survivor: TypedPlacedScene<'a>,
+        survivor_label: Option<&'a str>,
+        merge: Option<(ftile::FtileGeometry, (f64, f64))>,
+        terminal: Option<TypedPlacedScene<'a>>,
+        terminal_label: Option<&'a str>,
     },
     While {
         node: &'a LayoutNode,
@@ -28785,6 +28932,7 @@ enum TypedFtileKind<'a> {
         condition: ftile::FtileGeometry,
         condition_at: (f64, f64),
         backward: Option<(ftile::FtileGeometry, (f64, f64))>,
+        break_merge: Option<(ftile::FtileGeometry, (f64, f64), usize)>,
     },
     Fork {
         input_lane: usize,
@@ -28793,6 +28941,15 @@ enum TypedFtileKind<'a> {
         decorated: Vec<ftile::FtileGeometry>,
         bottom_bar_y: f64,
     },
+    Switch {
+        node: &'a LayoutNode,
+        lane: usize,
+        diamond1: ftile::FtileGeometry,
+        diamond1_at: (f64, f64),
+        diamond2: ftile::FtileGeometry,
+        diamond2_at: (f64, f64),
+        cases: Vec<TypedPlacedScene<'a>>,
+    },
 }
 
 fn typed_ftile_leaf(
@@ -28800,8 +28957,16 @@ fn typed_ftile_leaf(
     lane: usize,
     spacing: TypedFtileSpacing,
 ) -> Option<TypedFtileScene<'_>> {
+    let geometry = if matches!(node, LayoutNode::Break) {
+        // `FtileBreak.calculateDimensionFtile` delegates to the empty tile
+        // geometry and removes its pointOut. Its origin remains meaningful as
+        // a `WeldingPoint` even though it paints no shape.
+        ftile::FtileGeometry::new(0.0, 0.0, 0.0, 0.0, None)
+    } else {
+        node_geometry(node)?
+    };
     Some(TypedFtileScene {
-        geometry: node_geometry(node)?,
+        geometry,
         in_lane: lane,
         out_lane: lane,
         continuation_lane: lane,
@@ -28830,6 +28995,44 @@ fn typed_ftile_stretch_sequence_gap(
     }
 }
 
+fn typed_ftile_stretch_direct_switch(
+    scene: &mut TypedFtileScene<'_>,
+    target: &LayoutNode,
+    amount: f64,
+) -> bool {
+    if amount == 0.0 {
+        return false;
+    }
+    match &mut scene.kind {
+        TypedFtileKind::Switch {
+            node, diamond2_at, ..
+        } if std::ptr::eq(*node, target) => {
+            diamond2_at.1 += amount;
+            scene.geometry.height += amount;
+            if let Some(out_y) = &mut scene.geometry.out_y {
+                *out_y += amount;
+            }
+            true
+        }
+        TypedFtileKind::Sequence { children } => {
+            for index in 0..children.len() {
+                if typed_ftile_stretch_direct_switch(&mut children[index].scene, target, amount) {
+                    for child in children.iter_mut().skip(index + 1) {
+                        child.y += amount;
+                    }
+                    scene.geometry.height += amount;
+                    if let Some(out_y) = &mut scene.geometry.out_y {
+                        *out_y += amount;
+                    }
+                    return true;
+                }
+            }
+            false
+        }
+        _ => false,
+    }
+}
+
 fn typed_ftile_preserve_terminal_branch_gap(scene: &mut TypedFtileScene<'_>) {
     let TypedFtileKind::Sequence { children } = &scene.kind else {
         return;
@@ -28855,6 +29058,74 @@ fn typed_ftile_preserve_terminal_branch_gap(scene: &mut TypedFtileScene<'_>) {
         terminal_index,
         ftile::ASSEMBLY_CONNECTION_HEIGHT - ftile::ASSEMBLY_RENDERED_SEPARATION,
     );
+}
+
+fn typed_ftile_preserve_translated_terminal_owner_gap(scene: &mut TypedFtileScene<'_>) {
+    let TypedFtileKind::Sequence { children } = &scene.kind else {
+        return;
+    };
+    if !children.last().is_some_and(|last| {
+        matches!(
+            last.scene.kind,
+            TypedFtileKind::Leaf {
+                node: LayoutNode::Stop | LayoutNode::End,
+                ..
+            }
+        )
+    }) {
+        return;
+    }
+    let Some(following_child) = children
+        .windows(2)
+        .position(|pair| pair[0].scene.in_lane != pair[1].scene.in_lane)
+        .map(|index| index + 1)
+    else {
+        return;
+    };
+    // `ConnectionVerticalDown.drawTranslate` replays the destination owner
+    // after the natural 19px assembly separation loses one 4px ON_Y
+    // compression margin. This is a translated owner view, so it moves the
+    // painted children without changing the branch's FTile dimensions.
+    let amount = ftile::ASSEMBLY_RENDERED_SEPARATION - crate::compress::COMPRESS_MARGIN;
+    let TypedFtileKind::Sequence { children } = &mut scene.kind else {
+        unreachable!("terminal owner gap requires sequence")
+    };
+    for child in children.iter_mut().skip(following_child) {
+        child.y += amount;
+    }
+    children
+        .last_mut()
+        .expect("translated terminal sequence is non-empty")
+        .y += FTILE_TRANSLATED_TERMINAL_TAIL;
+}
+
+fn typed_ftile_translate_terminal_branch_from_owner(
+    scene: &mut TypedFtileScene<'_>,
+    owner_lane: usize,
+) {
+    if scene.in_lane == owner_lane {
+        return;
+    }
+    let TypedFtileKind::Sequence { children } = &mut scene.kind else {
+        return;
+    };
+    if !children.last().is_some_and(|last| {
+        matches!(
+            last.scene.kind,
+            TypedFtileKind::Leaf {
+                node: LayoutNode::Stop | LayoutNode::End,
+                ..
+            }
+        )
+    }) {
+        return;
+    }
+    // `ConnectionVerticalDown.drawTranslate` replays the whole branch when
+    // its first tile is already owned by a lane other than the test diamond.
+    let amount = ftile::ASSEMBLY_RENDERED_SEPARATION - crate::compress::COMPRESS_MARGIN;
+    for child in children.iter_mut().skip(1) {
+        child.y += amount;
+    }
 }
 
 fn typed_ftile_preserve_nested_fork_if_gap(scene: &mut TypedFtileScene<'_>) {
@@ -28893,6 +29164,239 @@ fn typed_ftile_positioned_notes(notes: &[ActivityNote]) -> [Option<&ActivityNote
     [left, right]
 }
 
+struct TypedIfDownPlan<'a> {
+    survivor: &'a [LayoutNode],
+    survivor_is_then: bool,
+    survivor_label: Option<&'a str>,
+    terminal: Option<&'a LayoutNode>,
+    terminal_label: Option<&'a str>,
+}
+
+/// `ConditionalBuilder.create` selects `FtileIfDown` when one branch is
+/// populated and the other is empty or a lone circle terminal. The populated
+/// branch becomes the south spine; the other branch is the east corridor.
+fn typed_ftile_if_down_plan<'a>(
+    then_label: Option<&'a String>,
+    then_branch: &'a [LayoutNode],
+    else_branches: &'a [ElseBranch],
+) -> Option<TypedIfDownPlan<'a>> {
+    let else_branch = match else_branches {
+        [] => None,
+        [else_branch] if else_branch.condition.is_none() => Some(else_branch),
+        _ => return None,
+    };
+    if else_branch.is_some_and(|branch| branch.condition.is_some()) {
+        return None;
+    }
+    let else_body = else_branch.map_or(&[][..], |branch| branch.body.as_slice());
+    // `InstructionBreak` is intentionally not a normal flow node, but its
+    // `FtileBreak` welding point is still a populated branch for
+    // `ConditionalBuilder.createDown`.
+    let then_simple = (branch_is_empty(then_branch) && !nodes_contain_break(then_branch))
+        || lone_circle_terminal(then_branch).is_some();
+    let else_simple = (branch_is_empty(else_body) && !nodes_contain_break(else_body))
+        || lone_circle_terminal(else_body).is_some();
+    match (then_simple, else_simple) {
+        (false, true) => Some(TypedIfDownPlan {
+            survivor: then_branch,
+            survivor_is_then: true,
+            survivor_label: then_label.map(String::as_str),
+            terminal: lone_circle_terminal(else_body),
+            terminal_label: else_branch.and_then(|branch| branch.label.as_deref()),
+        }),
+        (true, false) => Some(TypedIfDownPlan {
+            survivor: else_body,
+            survivor_is_then: false,
+            survivor_label: else_branch.and_then(|branch| branch.label.as_deref()),
+            terminal: lone_circle_terminal(then_branch),
+            terminal_label: then_label.map(String::as_str),
+        }),
+        _ => None,
+    }
+}
+
+fn typed_ftile_if_down<'a>(
+    node: &'a LayoutNode,
+    lane: usize,
+    spacing: TypedFtileSpacing,
+) -> Option<TypedFtileScene<'a>> {
+    let LayoutNode::If {
+        condition,
+        then_branch,
+        then_label,
+        else_branches,
+        attached_notes,
+        arrow_font_size,
+        diamond_font_family,
+        diamond_font_size,
+        diamond_text_bold,
+        ..
+    } = node
+    else {
+        return None;
+    };
+    if !attached_notes.is_empty() {
+        return None;
+    }
+    let plan = typed_ftile_if_down_plan(then_label.as_ref(), then_branch, else_branches)?;
+
+    // InstructionList mutates the current swimlane while building branches in
+    // source order, even though createDown may swap which branch is the south
+    // survivor. Preserve that order when assigning the optional terminal.
+    let mut continuation_lane = lane;
+    let (mut survivor_scene, terminal_lane) = if plan.survivor_is_then {
+        let survivor =
+            typed_ftile_sequence_with_spacing(plan.survivor, &mut continuation_lane, spacing)?;
+        (survivor, continuation_lane)
+    } else {
+        let terminal_lane = continuation_lane;
+        let survivor =
+            typed_ftile_sequence_with_spacing(plan.survivor, &mut continuation_lane, spacing)?;
+        (survivor, terminal_lane)
+    };
+    if spacing == TypedFtileSpacing::Compressed {
+        typed_ftile_preserve_nested_fork_if_gap(&mut survivor_scene);
+        typed_ftile_preserve_translated_terminal_owner_gap(&mut survivor_scene);
+        typed_ftile_preserve_terminal_branch_gap(&mut survivor_scene);
+    }
+
+    let diamond = condition_diamond_styled(
+        condition,
+        *diamond_font_size,
+        *diamond_text_bold,
+        diamond_font_family,
+    );
+    let survivor_tile = survivor_scene.geometry.add_margin_x(10.0);
+    let terminal_scene = match plan.terminal {
+        Some(terminal) => Some(typed_ftile_leaf(terminal, terminal_lane, spacing)?),
+        None => None,
+    };
+    let merge = if terminal_scene.is_some() {
+        ftile::FtileGeometry::new(0.0, 0.0, 0.0, 0.0, Some(0.0))
+    } else if survivor_scene.geometry.out_y.is_some() {
+        ftile::FtileGeometry::diamond_empty(0.0)
+    } else {
+        ftile::FtileGeometry::new(0.0, DIAMOND_HALF / 2.0, 0.0, 0.0, Some(DIAMOND_HALF / 2.0))
+    };
+    let stacked = diamond.append_bottom(&survivor_tile).append_bottom(&merge);
+    let south_label_height = plan
+        .survivor_label
+        .map_or(0.0, |_| pm::text_height(*arrow_font_size));
+    let height = stacked.height + 3.0 * DIAMOND_HALF + DIAMOND_HALF.max(south_label_height);
+    let mut width = stacked.width + DIAMOND_HALF;
+    if let Some(terminal) = &terminal_scene {
+        let east_label_width = plan.terminal_label.map_or(0.0, |label| {
+            text_render::measure(label, *arrow_font_size, false)
+        });
+        width += terminal.geometry.width
+            + terminal
+                .geometry
+                .width
+                .max(east_label_width + terminal.geometry.width / 2.0);
+    }
+    let mut geometry =
+        ftile::FtileGeometry::new(width, height, stacked.left, diamond.in_y, Some(height));
+    if terminal_scene.is_some() && survivor_scene.geometry.out_y.is_none() {
+        geometry = geometry.without_point_out();
+    }
+    if std::env::var("RUSTUML_EXT_DBG").is_ok() {
+        eprintln!(
+            "typed if-down condition={condition:?} lane={lane} continuation={continuation_lane} survivor_in={} survivor_out={}",
+            survivor_scene.in_lane, survivor_scene.out_lane
+        );
+    }
+
+    let diamond_at = (geometry.left - diamond.left, 0.0);
+    let survivor_at = (
+        geometry.left - survivor_tile.left + 10.0,
+        diamond.height
+            + (geometry.height - diamond.height - merge.height - survivor_tile.height) / 2.0,
+    );
+    let merge_at = (geometry.left - merge.left, geometry.height - merge.height);
+    let terminal = terminal_scene.map(|scene| {
+        let east_label_width = plan.terminal_label.map_or(0.0, |label| {
+            text_render::measure(label, *arrow_font_size, false)
+        });
+        let additional = scene
+            .geometry
+            .width
+            .max(east_label_width + scene.geometry.width / 2.0);
+        let x = geometry.left - diamond.left + diamond.width + additional;
+        let y = diamond.in_y + (diamond.height - diamond.in_y - scene.geometry.height) / 2.0;
+        TypedPlacedScene {
+            scene: Box::new(scene),
+            x,
+            y,
+        }
+    });
+
+    Some(TypedFtileScene {
+        geometry,
+        in_lane: lane,
+        out_lane: terminal.as_ref().map_or(lane, |_| survivor_scene.out_lane),
+        continuation_lane,
+        spacing,
+        kind: TypedFtileKind::IfDown {
+            node,
+            lane,
+            diamond,
+            diamond_at,
+            survivor: TypedPlacedScene {
+                scene: Box::new(survivor_scene),
+                x: survivor_at.0,
+                y: survivor_at.1,
+            },
+            survivor_label: plan.survivor_label,
+            merge: (merge.width > 0.0).then_some((merge, merge_at)),
+            terminal,
+            terminal_label: plan.terminal_label,
+        },
+    })
+}
+
+/// `FtileWithNoteOpale.calculateDimensionFtile` lays a single note beside the
+/// tile it follows, keeping the wrapped tile's flow anchors.
+fn typed_ftile_with_note<'a>(
+    child: TypedFtileScene<'a>,
+    note: &'a LayoutNode,
+) -> Option<TypedFtileScene<'a>> {
+    let LayoutNode::Note { text, position, .. } = note else {
+        return None;
+    };
+    let note_width = note_box_width(text);
+    let note_height = note_box_height(text);
+    let width = child.geometry.width + NOTE_GAP + note_width;
+    let height = child.geometry.height.max(note_height);
+    let child_x = if matches!(position, NotePosition::Left) {
+        note_width + NOTE_GAP
+    } else {
+        0.0
+    };
+    let child_y = (height - child.geometry.height) / 2.0;
+    let geometry = ftile::FtileGeometry::new(
+        width,
+        height,
+        child.geometry.left + child_x,
+        child.geometry.in_y + child_y,
+        child.geometry.out_y.map(|out| out + child_y),
+    );
+    Some(TypedFtileScene {
+        geometry,
+        in_lane: child.in_lane,
+        out_lane: child.out_lane,
+        continuation_lane: child.continuation_lane,
+        spacing: child.spacing,
+        kind: TypedFtileKind::WithNote {
+            child: TypedPlacedScene {
+                scene: Box::new(child),
+                x: child_x,
+                y: child_y,
+            },
+            note,
+        },
+    })
+}
+
 fn typed_ftile_node<'a>(
     node: &'a LayoutNode,
     lane: usize,
@@ -28900,9 +29404,11 @@ fn typed_ftile_node<'a>(
     spacing: TypedFtileSpacing,
 ) -> Option<TypedFtileScene<'a>> {
     match node {
-        LayoutNode::Start | LayoutNode::Action { .. } | LayoutNode::Stop | LayoutNode::End => {
-            typed_ftile_leaf(node, lane, spacing)
-        }
+        LayoutNode::Start
+        | LayoutNode::Action { .. }
+        | LayoutNode::Stop
+        | LayoutNode::End
+        | LayoutNode::Break => typed_ftile_leaf(node, lane, spacing),
         LayoutNode::If {
             condition,
             then_branch,
@@ -28915,6 +29421,9 @@ fn typed_ftile_node<'a>(
             diamond_text_bold,
             ..
         } => {
+            if let Some(scene) = typed_ftile_if_down(node, lane, spacing) {
+                return Some(scene);
+            }
             if else_branches.len() != 1 {
                 return None;
             }
@@ -28933,6 +29442,10 @@ fn typed_ftile_node<'a>(
             if spacing == TypedFtileSpacing::Compressed {
                 typed_ftile_preserve_nested_fork_if_gap(&mut then_scene);
                 typed_ftile_preserve_nested_fork_if_gap(&mut else_scene);
+                typed_ftile_translate_terminal_branch_from_owner(&mut then_scene, lane);
+                typed_ftile_translate_terminal_branch_from_owner(&mut else_scene, lane);
+                typed_ftile_preserve_translated_terminal_owner_gap(&mut then_scene);
+                typed_ftile_preserve_translated_terminal_owner_gap(&mut else_scene);
                 // A branch-local same-lane terminator has no downstream ON_Y
                 // slot to collapse the natural 35px assembly reserve.
                 typed_ftile_preserve_terminal_branch_gap(&mut then_scene);
@@ -28962,14 +29475,21 @@ fn typed_ftile_node<'a>(
                     )
                 };
 
-            // ConditionalBuilder's swimlane path keeps 20px below the test
-            // diamond and 10px above the merge diamond.
+            // ConditionalBuilder's direct path keeps 10px below the test
+            // diamond. ConnectionVerticalDown's translated swimlane path
+            // retains another 10px before whole-diagram compression.
+            let branch_separation = if spacing == TypedFtileSpacing::SingleLane {
+                10.0
+            } else {
+                20.0
+            };
+            let conditional_margin = branch_separation + 10.0;
             let unnoted_geometry = ftile::if_with_diamonds(
                 &diamond,
                 &then_tile,
                 &else_tile,
                 &merge,
-                30.0,
+                conditional_margin,
                 (0.0, 0.0, 0.0),
             );
             let unnoted_layout = ftile::if_layout(
@@ -28977,7 +29497,7 @@ fn typed_ftile_node<'a>(
                 &diamond,
                 &merge,
                 &else_tile,
-                20.0,
+                branch_separation,
                 (0.0, 0.0, 0.0),
             );
             let [left_note, right_note] = typed_ftile_positioned_notes(attached_notes);
@@ -28994,7 +29514,7 @@ fn typed_ftile_node<'a>(
                 &then_tile,
                 &else_tile,
                 &merge,
-                30.0,
+                conditional_margin,
                 (x_delta_note, y_delta_note, 0.0),
             );
             let partial_note_layout = ftile::if_layout(
@@ -29002,7 +29522,7 @@ fn typed_ftile_node<'a>(
                 &diamond,
                 &merge,
                 &else_tile,
-                20.0,
+                branch_separation,
                 (x_delta_note, y_delta_note, 0.0),
             );
             let supp_width_note = right_note.map_or(0.0, |note| {
@@ -29016,7 +29536,7 @@ fn typed_ftile_node<'a>(
                 &then_tile,
                 &else_tile,
                 &merge,
-                30.0,
+                conditional_margin,
                 note_layout,
             );
             let layout = ftile::if_layout(
@@ -29024,7 +29544,7 @@ fn typed_ftile_node<'a>(
                 &diamond,
                 &merge,
                 &else_tile,
-                20.0,
+                branch_separation,
                 note_layout,
             );
             // `ConditionalBuilder.createWithLinks` applies
@@ -29039,7 +29559,22 @@ fn typed_ftile_node<'a>(
             let margin_right = (layout.diamond1.0 + diamond.width + else_label_width
                 - base_geometry.width)
                 .max(0.0);
-            let geometry = base_geometry.add_margin_x2(margin_left, margin_right);
+            let mut geometry = base_geometry.add_margin_x2(margin_left, margin_right);
+            let nested_single_live_with_terminal_peer =
+                (typed_ftile_scene_ends_in_single_live_if(&then_scene)
+                    && else_scene.geometry.out_y.is_none())
+                    || (typed_ftile_scene_ends_in_single_live_if(&else_scene)
+                        && then_scene.geometry.out_y.is_none());
+            if spacing == TypedFtileSpacing::Compressed && nested_single_live_with_terminal_peer {
+                // `ConditionalBuilder.getShape2` uses a 6px FtileEmpty when
+                // one branch terminates. When the survivor ends in another
+                // single-live conditional, its owner-translated SlotFinder
+                // reclaims the measured residual.
+                geometry.height -= FTILE_TERMINAL_EMPTY_MERGE_RECLAIM;
+                if let Some(out_y) = &mut geometry.out_y {
+                    *out_y -= FTILE_TERMINAL_EMPTY_MERGE_RECLAIM;
+                }
+            }
             Some(TypedFtileScene {
                 geometry,
                 in_lane: lane,
@@ -29078,6 +29613,18 @@ fn typed_ftile_node<'a>(
         } => {
             let mut body_lane = lane;
             let mut body_scene = typed_ftile_sequence_with_spacing(body, &mut body_lane, spacing)?;
+            let last_body_flow = last_flow_index(body);
+            for (index, child) in body.iter().enumerate() {
+                let following = following_flow_count(body, index);
+                let mut extra =
+                    switch_while_merge_extra(child, Some(index) == last_body_flow, following);
+                if matches!(child, LayoutNode::Switch { .. }) && (1..=2).contains(&following) {
+                    extra -= WHILE_SWITCH_SHORT_TAIL_RECLAIM;
+                }
+                if extra != 0.0 {
+                    typed_ftile_stretch_direct_switch(&mut body_scene, child, extra);
+                }
+            }
             if let Some((following_child, stretch)) =
                 while_body_mid_stretch(body, is_label.is_some())
             {
@@ -29210,24 +29757,68 @@ fn typed_ftile_node<'a>(
                     ACTION_H_PADDING,
                 )
             });
-            let geometry = ftile::repeat_tile(
+            let break_condition_drop =
+                if nodes_contain_break(body) && spacing == TypedFtileSpacing::SingleLane {
+                    crate::compress::COMPRESS_MARGIN / 2.0
+                } else {
+                    0.0
+                };
+            let unframed_geometry = ftile::repeat_tile(
                 &entry,
                 &condition_geometry,
                 &body_scene.geometry,
                 text_render::measure(condition, SMALL_FONT, false),
                 backward_geometry.as_ref(),
             );
-            let layout = ftile::repeat_layout(
-                &geometry,
+            let mut layout = ftile::repeat_layout(
+                &unframed_geometry,
                 &entry,
                 &condition_geometry,
                 &body_scene.geometry,
                 backward_geometry.as_ref(),
             );
+            let base_geometry = unframed_geometry.add_bottom(break_condition_drop);
+            // `InstructionIf.createFtile` explicitly re-wraps branch welding
+            // points in `FtileDecorateWelding`, so breaks nested in a
+            // conditional still trigger the repeat's exit merge.
+            let has_break = nodes_contain_break(body);
+            if break_condition_drop != 0.0 {
+                // `FtileFactoryDelegatorRepeat.repeat` translates the
+                // `FtileDecorateWelding` condition with the half-margin kept
+                // by the direct ActivityDiagram3 ON_Y pass. Its backward tile
+                // is drawn from the pre-decoration genealogy translation.
+                layout.diamond2.1 += break_condition_drop;
+                if let Some((_, backward_y)) = &mut layout.backward {
+                    *backward_y += break_condition_drop - 2.0 * crate::compress::COMPRESS_MARGIN;
+                }
+            }
+            let (geometry, x_shift, break_merge) = if has_break {
+                // `FtileFactoryDelegatorRepeat.repeat` keeps every
+                // `FtileBreak` as a welding point, adds 10px on the left of
+                // the repeat frame, then assembles a `FtileDiamond` below it.
+                let framed = base_geometry.add_margin_x2(10.0, 0.0);
+                let merge = ftile::FtileGeometry::diamond_empty(0.0);
+                let merge_separation = spacing.assembly_separation();
+                let merge_at = (framed.left - merge.left, framed.height + merge_separation);
+                (
+                    framed.add_bottom(merge_separation).append_bottom(&merge),
+                    10.0,
+                    Some((merge, merge_at, entry_lane)),
+                )
+            } else {
+                (base_geometry, 0.0, None)
+            };
             Some(TypedFtileScene {
                 geometry,
                 in_lane: entry_lane,
-                out_lane: condition_lane,
+                // The appended break-merge diamond owns the repeat's pointOut;
+                // the instruction builder's mutable continuation lane remains
+                // the lane reached while constructing the body.
+                out_lane: if has_break {
+                    entry_lane
+                } else {
+                    condition_lane
+                },
                 continuation_lane: condition_lane,
                 spacing,
                 kind: TypedFtileKind::Repeat {
@@ -29235,15 +29826,20 @@ fn typed_ftile_node<'a>(
                     entry_lane,
                     condition_lane,
                     entry,
-                    entry_at: layout.diamond1,
+                    entry_at: (layout.diamond1.0 + x_shift, layout.diamond1.1),
                     body: TypedPlacedScene {
                         scene: Box::new(body_scene),
-                        x: layout.repeat.0,
+                        x: layout.repeat.0 + x_shift,
                         y: layout.repeat.1,
                     },
                     condition: condition_geometry,
-                    condition_at: layout.diamond2,
-                    backward: backward_geometry.zip(layout.backward),
+                    condition_at: (layout.diamond2.0 + x_shift, layout.diamond2.1),
+                    backward: backward_geometry.zip(
+                        layout
+                            .backward
+                            .map(|(backward_x, backward_y)| (backward_x + x_shift, backward_y)),
+                    ),
+                    break_merge,
                 },
             })
         }
@@ -29260,7 +29856,16 @@ fn typed_ftile_node<'a>(
             let mut branch_geometries = Vec::with_capacity(branches.len());
             let mut branch_lane = lane;
             for branch in branches {
-                let scene = typed_ftile_sequence_with_spacing(branch, &mut branch_lane, spacing)?;
+                // ParallelBuilderFork builds each branch as an independent
+                // InstructionList before the fork bars are assembled. Those
+                // bars occupy the branch's vertical slots, so the outer ON_Y
+                // CompressionXorYBuilder cannot reclaim the 35px assembly
+                // reserves within a branch.
+                let scene = typed_ftile_sequence_with_spacing(
+                    branch,
+                    &mut branch_lane,
+                    TypedFtileSpacing::Natural,
+                )?;
                 branch_geometries.push(scene.geometry);
                 branch_scenes.push(scene);
             }
@@ -29286,6 +29891,82 @@ fn typed_ftile_node<'a>(
                     branches: placed,
                     decorated: layout.decorated_branches,
                     bottom_bar_y: layout.bottom_bar_y,
+                },
+            })
+        }
+        LayoutNode::Switch { condition, cases } if !cases.is_empty() => {
+            let mut case_scenes = Vec::with_capacity(cases.len());
+            let mut case_tiles = Vec::with_capacity(cases.len());
+            let mut continuation_lane = lane;
+            for case in cases {
+                let mut case_lane = lane;
+                let scene = typed_ftile_sequence_with_spacing(&case.body, &mut case_lane, spacing)?;
+                let label_width = text_render::measure(&case.label, SMALL_FONT, false);
+                let label_height = if case.label.is_empty() {
+                    0.0
+                } else {
+                    pm::text_height(SMALL_FONT)
+                };
+                let mut tile = scene.geometry.add_top(label_height);
+                let missing = label_width - tile.right();
+                if missing > 0.0 {
+                    tile = tile.inc_right(missing);
+                }
+                continuation_lane = case_lane;
+                case_tiles.push(tile);
+                case_scenes.push(scene);
+            }
+            let diamond1 = condition_diamond(condition);
+            let diamond2 = ftile::FtileGeometry::diamond_empty(0.0);
+            let raw_geometry = ftile::switch_with_diamonds(&diamond1, &diamond2, &case_tiles, 20.0);
+            let raw_layout =
+                ftile::switch_layout(&raw_geometry, &diamond1, &diamond2, &case_tiles, 20.0);
+            let x_layout = switch_x_layout(cases, condition);
+            let cases_top = diamond1.height + switch_below_diamond(cases, x_layout.big_diamond);
+            let max_case_height = case_scenes
+                .iter()
+                .map(|scene| scene.geometry.height)
+                .fold(0.0_f64, f64::max);
+            let all_terminate = case_scenes
+                .iter()
+                .all(|scene| scene.geometry.out_y.is_none());
+            let merge_top =
+                cases_top + max_case_height + switch_merge_gap(cases, condition, &x_layout);
+            let height = if all_terminate {
+                cases_top + max_case_height
+            } else {
+                merge_top + diamond2.height
+            };
+            let geometry = ftile::FtileGeometry::new(
+                raw_geometry.width,
+                height,
+                raw_geometry.left,
+                raw_geometry.in_y,
+                (!all_terminate).then_some(height),
+            );
+            let placed = case_scenes
+                .into_iter()
+                .zip(raw_layout.tiles.iter().zip(case_tiles.iter()))
+                .map(|(scene, ((case_x, _), tile))| TypedPlacedScene {
+                    x: *case_x + tile.left - scene.geometry.left,
+                    y: cases_top,
+                    scene: Box::new(scene),
+                })
+                .collect();
+            Some(TypedFtileScene {
+                geometry,
+                in_lane: lane,
+                out_lane: lane,
+                continuation_lane,
+                spacing,
+                kind: TypedFtileKind::Switch {
+                    node,
+                    lane,
+                    diamond1,
+                    diamond1_at: raw_layout.diamond1,
+                    diamond2,
+                    diamond2_at: (raw_layout.diamond2.0, merge_top),
+                    cases: placed,
                 },
             })
         }
@@ -29320,6 +30001,11 @@ fn typed_ftile_sequence_with_spacing<'a>(
             } => {
                 index += 1;
             }
+            note @ LayoutNode::Note { .. } => {
+                let child = scenes.pop()?;
+                scenes.push(typed_ftile_with_note(child, note)?);
+                index += 1;
+            }
             node => {
                 // Java's manageSpecialStopEndAfterEndWhile crosses a swimlane
                 // marker before absorbing the terminator into FtileWhile.
@@ -29340,7 +30026,15 @@ fn typed_ftile_sequence_with_spacing<'a>(
                 } else {
                     None
                 };
-                let scene = typed_ftile_node(node, *lane, special, spacing)?;
+                let scene = match typed_ftile_node(node, *lane, special, spacing) {
+                    Some(scene) => scene,
+                    None => {
+                        if std::env::var("RUSTUML_EXT_DBG").is_ok() {
+                            eprintln!("typed node rejected lane={} node={node:#?}", *lane);
+                        }
+                        return None;
+                    }
+                };
                 *lane = scene.continuation_lane;
                 scenes.push(scene);
                 index += consumed;
@@ -29362,14 +30056,68 @@ fn typed_ftile_sequence_with_spacing<'a>(
             y,
         })
         .collect();
-    Some(TypedFtileScene {
+    let mut scene = TypedFtileScene {
         geometry: layout.geometry,
         in_lane,
         out_lane,
         continuation_lane,
         spacing,
         kind: TypedFtileKind::Sequence { children },
-    })
+    };
+    let break_following_indices = match &scene.kind {
+        TypedFtileKind::Sequence { children } => children
+            .windows(2)
+            .enumerate()
+            .filter_map(|(index, pair)| {
+                typed_ftile_contains_break(&pair[0].scene).then_some((
+                    index + 1,
+                    matches!(pair[0].scene.kind, TypedFtileKind::IfDown { .. }),
+                ))
+            })
+            .collect::<Vec<_>>(),
+        _ => unreachable!("typed sequence"),
+    };
+    for (following_child, one_sided_if) in break_following_indices {
+        // The break tile has no pointOut, so the global ON_Y pass retains the
+        // welding snake's one-pixel edge before the next assembled tile.
+        // When `FtileIfDown` owns that welding point, its empty south corridor
+        // lets `InstructionList.createFtile` reclaim the two arrowhead
+        // half-bands before an adjacent tile.
+        let amount = if one_sided_if {
+            1.0 - 4.0 * ARROW_HEAD_HALF
+        } else {
+            1.0
+        };
+        typed_ftile_stretch_sequence_gap(&mut scene, following_child, amount);
+    }
+    let reclaim_indices = match &scene.kind {
+        TypedFtileKind::Sequence { children } => children
+            .windows(2)
+            .enumerate()
+            .filter_map(|(index, pair)| {
+                (typed_ftile_scene_is_all_terminal_if(&pair[0].scene)
+                    && pair[0].scene.out_lane != pair[1].scene.in_lane)
+                    .then_some(index + 1)
+            })
+            .collect::<Vec<_>>(),
+        _ => unreachable!("typed sequence"),
+    };
+    for following_child in reclaim_indices {
+        typed_ftile_stretch_sequence_gap(
+            &mut scene,
+            following_child,
+            -TERMINAL_IF_CROSS_CONTINUATION_RECLAIM,
+        );
+    }
+    Some(scene)
+}
+
+fn typed_ftile_scene_is_all_terminal_if(scene: &TypedFtileScene<'_>) -> bool {
+    let node = match &scene.kind {
+        TypedFtileKind::If { node, .. } | TypedFtileKind::IfDown { node, .. } => node,
+        _ => return false,
+    };
+    node_terminates(node)
 }
 
 fn typed_ftile_lane_names(diagram: &ActivityDiagram) -> Vec<String> {
@@ -29387,19 +30135,23 @@ fn typed_ftile_lane_names(diagram: &ActivityDiagram) -> Vec<String> {
 fn typed_ftile_scene_is_linear(scene: &TypedFtileScene<'_>) -> bool {
     match &scene.kind {
         TypedFtileKind::Leaf { .. } => true,
+        TypedFtileKind::WithNote { child, .. } => typed_ftile_scene_is_linear(&child.scene),
         TypedFtileKind::Sequence { children } => children
             .iter()
             .all(|child| typed_ftile_scene_is_linear(&child.scene)),
         TypedFtileKind::If { .. }
+        | TypedFtileKind::IfDown { .. }
         | TypedFtileKind::While { .. }
         | TypedFtileKind::Repeat { .. }
-        | TypedFtileKind::Fork { .. } => false,
+        | TypedFtileKind::Fork { .. }
+        | TypedFtileKind::Switch { .. } => false,
     }
 }
 
 fn typed_ftile_scene_has_loop_or_fork(scene: &TypedFtileScene<'_>) -> bool {
     match &scene.kind {
         TypedFtileKind::Leaf { .. } => false,
+        TypedFtileKind::WithNote { child, .. } => typed_ftile_scene_has_loop_or_fork(&child.scene),
         TypedFtileKind::Sequence { children } => children
             .iter()
             .any(|child| typed_ftile_scene_has_loop_or_fork(&child.scene)),
@@ -29411,15 +30163,29 @@ fn typed_ftile_scene_has_loop_or_fork(scene: &TypedFtileScene<'_>) -> bool {
             typed_ftile_scene_has_loop_or_fork(&then_scene.scene)
                 || typed_ftile_scene_has_loop_or_fork(&else_scene.scene)
         }
+        TypedFtileKind::IfDown {
+            survivor, terminal, ..
+        } => {
+            typed_ftile_scene_has_loop_or_fork(&survivor.scene)
+                || terminal
+                    .as_ref()
+                    .is_some_and(|terminal| typed_ftile_scene_has_loop_or_fork(&terminal.scene))
+        }
         TypedFtileKind::While { .. }
         | TypedFtileKind::Repeat { .. }
         | TypedFtileKind::Fork { .. } => true,
+        TypedFtileKind::Switch { cases, .. } => cases
+            .iter()
+            .any(|case| typed_ftile_scene_has_loop_or_fork(&case.scene)),
     }
 }
 
 fn typed_ftile_scene_has_recursive_if(scene: &TypedFtileScene<'_>, inside_if: bool) -> bool {
     match &scene.kind {
         TypedFtileKind::Leaf { .. } => false,
+        TypedFtileKind::WithNote { child, .. } => {
+            typed_ftile_scene_has_recursive_if(&child.scene, inside_if)
+        }
         TypedFtileKind::Sequence { children } => children
             .iter()
             .any(|child| typed_ftile_scene_has_recursive_if(&child.scene, inside_if)),
@@ -29431,6 +30197,15 @@ fn typed_ftile_scene_has_recursive_if(scene: &TypedFtileScene<'_>, inside_if: bo
             inside_if
                 || typed_ftile_scene_has_recursive_if(&then_scene.scene, true)
                 || typed_ftile_scene_has_recursive_if(&else_scene.scene, true)
+        }
+        TypedFtileKind::IfDown {
+            survivor, terminal, ..
+        } => {
+            inside_if
+                || typed_ftile_scene_has_recursive_if(&survivor.scene, true)
+                || terminal.as_ref().is_some_and(|terminal| {
+                    typed_ftile_scene_has_recursive_if(&terminal.scene, true)
+                })
         }
         TypedFtileKind::While { body, special, .. } => {
             typed_ftile_scene_has_recursive_if(&body.scene, inside_if)
@@ -29444,12 +30219,66 @@ fn typed_ftile_scene_has_recursive_if(scene: &TypedFtileScene<'_>, inside_if: bo
         TypedFtileKind::Fork { branches, .. } => branches
             .iter()
             .any(|branch| typed_ftile_scene_has_recursive_if(&branch.scene, inside_if)),
+        TypedFtileKind::Switch { cases, .. } => cases
+            .iter()
+            .any(|case| typed_ftile_scene_has_recursive_if(&case.scene, inside_if)),
+    }
+}
+
+fn typed_ftile_has_fork_in_while_in_if(
+    scene: &TypedFtileScene<'_>,
+    inside_if: bool,
+    inside_while: bool,
+) -> bool {
+    match &scene.kind {
+        TypedFtileKind::Leaf { .. } => false,
+        TypedFtileKind::WithNote { child, .. } => {
+            typed_ftile_has_fork_in_while_in_if(&child.scene, inside_if, inside_while)
+        }
+        TypedFtileKind::Sequence { children } => children.iter().any(|child| {
+            typed_ftile_has_fork_in_while_in_if(&child.scene, inside_if, inside_while)
+        }),
+        TypedFtileKind::If {
+            then_scene,
+            else_scene,
+            ..
+        } => {
+            typed_ftile_has_fork_in_while_in_if(&then_scene.scene, true, inside_while)
+                || typed_ftile_has_fork_in_while_in_if(&else_scene.scene, true, inside_while)
+        }
+        TypedFtileKind::IfDown {
+            survivor, terminal, ..
+        } => {
+            typed_ftile_has_fork_in_while_in_if(&survivor.scene, true, inside_while)
+                || terminal.as_ref().is_some_and(|terminal| {
+                    typed_ftile_has_fork_in_while_in_if(&terminal.scene, true, inside_while)
+                })
+        }
+        TypedFtileKind::While { body, special, .. } => {
+            typed_ftile_has_fork_in_while_in_if(&body.scene, inside_if, true)
+                || special.as_ref().is_some_and(|special| {
+                    typed_ftile_has_fork_in_while_in_if(&special.scene, inside_if, true)
+                })
+        }
+        TypedFtileKind::Repeat { body, .. } => {
+            typed_ftile_has_fork_in_while_in_if(&body.scene, inside_if, inside_while)
+        }
+        TypedFtileKind::Fork { branches, .. } => {
+            (inside_if && inside_while)
+                || branches.iter().any(|branch| {
+                    typed_ftile_has_fork_in_while_in_if(&branch.scene, inside_if, inside_while)
+                })
+        }
+        TypedFtileKind::Switch { cases, .. } => cases
+            .iter()
+            .any(|case| typed_ftile_has_fork_in_while_in_if(&case.scene, inside_if, inside_while)),
     }
 }
 
 fn typed_ftile_scene_contains_while(scene: &TypedFtileScene<'_>) -> bool {
     match &scene.kind {
         TypedFtileKind::Leaf { .. } => false,
+        TypedFtileKind::WithNote { child, .. } => typed_ftile_scene_contains_while(&child.scene),
         TypedFtileKind::Sequence { children } => children
             .iter()
             .any(|child| typed_ftile_scene_contains_while(&child.scene)),
@@ -29461,17 +30290,29 @@ fn typed_ftile_scene_contains_while(scene: &TypedFtileScene<'_>) -> bool {
             typed_ftile_scene_contains_while(&then_scene.scene)
                 || typed_ftile_scene_contains_while(&else_scene.scene)
         }
+        TypedFtileKind::IfDown {
+            survivor, terminal, ..
+        } => {
+            typed_ftile_scene_contains_while(&survivor.scene)
+                || terminal
+                    .as_ref()
+                    .is_some_and(|terminal| typed_ftile_scene_contains_while(&terminal.scene))
+        }
         TypedFtileKind::While { .. } => true,
         TypedFtileKind::Repeat { body, .. } => typed_ftile_scene_contains_while(&body.scene),
         TypedFtileKind::Fork { branches, .. } => branches
             .iter()
             .any(|branch| typed_ftile_scene_contains_while(&branch.scene)),
+        TypedFtileKind::Switch { cases, .. } => cases
+            .iter()
+            .any(|case| typed_ftile_scene_contains_while(&case.scene)),
     }
 }
 
 fn typed_ftile_scene_contains_repeat(scene: &TypedFtileScene<'_>) -> bool {
     match &scene.kind {
         TypedFtileKind::Leaf { .. } => false,
+        TypedFtileKind::WithNote { child, .. } => typed_ftile_scene_contains_repeat(&child.scene),
         TypedFtileKind::Sequence { children } => children
             .iter()
             .any(|child| typed_ftile_scene_contains_repeat(&child.scene)),
@@ -29483,6 +30324,14 @@ fn typed_ftile_scene_contains_repeat(scene: &TypedFtileScene<'_>) -> bool {
             typed_ftile_scene_contains_repeat(&then_scene.scene)
                 || typed_ftile_scene_contains_repeat(&else_scene.scene)
         }
+        TypedFtileKind::IfDown {
+            survivor, terminal, ..
+        } => {
+            typed_ftile_scene_contains_repeat(&survivor.scene)
+                || terminal
+                    .as_ref()
+                    .is_some_and(|terminal| typed_ftile_scene_contains_repeat(&terminal.scene))
+        }
         TypedFtileKind::While { body, special, .. } => {
             typed_ftile_scene_contains_repeat(&body.scene)
                 || special
@@ -29493,12 +30342,200 @@ fn typed_ftile_scene_contains_repeat(scene: &TypedFtileScene<'_>) -> bool {
         TypedFtileKind::Fork { branches, .. } => branches
             .iter()
             .any(|branch| typed_ftile_scene_contains_repeat(&branch.scene)),
+        TypedFtileKind::Switch { cases, .. } => cases
+            .iter()
+            .any(|case| typed_ftile_scene_contains_repeat(&case.scene)),
+    }
+}
+
+fn typed_ftile_scene_has_nested_repeat(scene: &TypedFtileScene<'_>) -> bool {
+    match &scene.kind {
+        TypedFtileKind::Leaf { .. } => false,
+        TypedFtileKind::WithNote { child, .. } => typed_ftile_scene_has_nested_repeat(&child.scene),
+        TypedFtileKind::Sequence { children } => children
+            .iter()
+            .any(|child| typed_ftile_scene_has_nested_repeat(&child.scene)),
+        TypedFtileKind::If {
+            then_scene,
+            else_scene,
+            ..
+        } => {
+            typed_ftile_scene_has_nested_repeat(&then_scene.scene)
+                || typed_ftile_scene_has_nested_repeat(&else_scene.scene)
+        }
+        TypedFtileKind::IfDown {
+            survivor, terminal, ..
+        } => {
+            typed_ftile_scene_has_nested_repeat(&survivor.scene)
+                || terminal
+                    .as_ref()
+                    .is_some_and(|terminal| typed_ftile_scene_has_nested_repeat(&terminal.scene))
+        }
+        TypedFtileKind::While { body, special, .. } => {
+            typed_ftile_scene_has_nested_repeat(&body.scene)
+                || special
+                    .as_ref()
+                    .is_some_and(|special| typed_ftile_scene_has_nested_repeat(&special.scene))
+        }
+        TypedFtileKind::Repeat { body, .. } => {
+            typed_ftile_scene_contains_repeat(&body.scene)
+                || typed_ftile_scene_has_nested_repeat(&body.scene)
+        }
+        TypedFtileKind::Fork { branches, .. } => branches
+            .iter()
+            .any(|branch| typed_ftile_scene_has_nested_repeat(&branch.scene)),
+        TypedFtileKind::Switch { cases, .. } => cases
+            .iter()
+            .any(|case| typed_ftile_scene_has_nested_repeat(&case.scene)),
+    }
+}
+
+fn typed_ftile_has_adjacent_if_down(scene: &TypedFtileScene<'_>) -> bool {
+    let TypedFtileKind::Sequence { children } = &scene.kind else {
+        return false;
+    };
+    children.windows(2).any(|pair| {
+        matches!(pair[0].scene.kind, TypedFtileKind::IfDown { .. })
+            && matches!(pair[1].scene.kind, TypedFtileKind::IfDown { .. })
+    })
+}
+
+fn typed_ftile_switch_lane(scene: &TypedFtileScene<'_>) -> Option<usize> {
+    match &scene.kind {
+        TypedFtileKind::Leaf { .. } => None,
+        TypedFtileKind::WithNote { child, .. } => typed_ftile_switch_lane(&child.scene),
+        TypedFtileKind::Sequence { children } => children
+            .iter()
+            .find_map(|child| typed_ftile_switch_lane(&child.scene)),
+        TypedFtileKind::If {
+            then_scene,
+            else_scene,
+            ..
+        } => typed_ftile_switch_lane(&then_scene.scene)
+            .or_else(|| typed_ftile_switch_lane(&else_scene.scene)),
+        TypedFtileKind::IfDown {
+            survivor, terminal, ..
+        } => typed_ftile_switch_lane(&survivor.scene).or_else(|| {
+            terminal
+                .as_ref()
+                .and_then(|terminal| typed_ftile_switch_lane(&terminal.scene))
+        }),
+        TypedFtileKind::While { body, special, .. } => typed_ftile_switch_lane(&body.scene)
+            .or_else(|| {
+                special
+                    .as_ref()
+                    .and_then(|special| typed_ftile_switch_lane(&special.scene))
+            }),
+        TypedFtileKind::Repeat { body, .. } => typed_ftile_switch_lane(&body.scene),
+        TypedFtileKind::Fork { branches, .. } => branches
+            .iter()
+            .find_map(|branch| typed_ftile_switch_lane(&branch.scene)),
+        TypedFtileKind::Switch { lane, .. } => Some(*lane),
+    }
+}
+
+fn typed_ftile_switch_merge_top(scene: &TypedFtileScene<'_>, y: f64) -> Option<f64> {
+    match &scene.kind {
+        TypedFtileKind::WithNote { child, .. } => {
+            typed_ftile_switch_merge_top(&child.scene, y + child.y)
+        }
+        TypedFtileKind::Sequence { children } => children
+            .iter()
+            .find_map(|child| typed_ftile_switch_merge_top(&child.scene, y + child.y)),
+        TypedFtileKind::Switch { diamond2_at, .. } => Some(y + diamond2_at.1),
+        _ => None,
+    }
+}
+
+fn typed_ftile_break_repeat_lane(scene: &TypedFtileScene<'_>) -> Option<usize> {
+    match &scene.kind {
+        TypedFtileKind::Repeat {
+            entry_lane, body, ..
+        } if typed_ftile_contains_break(&body.scene) => Some(*entry_lane),
+        TypedFtileKind::Leaf { .. } => None,
+        TypedFtileKind::WithNote { child, .. } => typed_ftile_break_repeat_lane(&child.scene),
+        TypedFtileKind::Sequence { children } => children
+            .iter()
+            .find_map(|child| typed_ftile_break_repeat_lane(&child.scene)),
+        TypedFtileKind::If {
+            then_scene,
+            else_scene,
+            ..
+        } => typed_ftile_break_repeat_lane(&then_scene.scene)
+            .or_else(|| typed_ftile_break_repeat_lane(&else_scene.scene)),
+        TypedFtileKind::IfDown {
+            survivor, terminal, ..
+        } => typed_ftile_break_repeat_lane(&survivor.scene).or_else(|| {
+            terminal
+                .as_ref()
+                .and_then(|terminal| typed_ftile_break_repeat_lane(&terminal.scene))
+        }),
+        TypedFtileKind::While { body, special, .. } => typed_ftile_break_repeat_lane(&body.scene)
+            .or_else(|| {
+                special
+                    .as_ref()
+                    .and_then(|special| typed_ftile_break_repeat_lane(&special.scene))
+            }),
+        TypedFtileKind::Repeat { body, .. } => typed_ftile_break_repeat_lane(&body.scene),
+        TypedFtileKind::Fork { branches, .. } => branches
+            .iter()
+            .find_map(|branch| typed_ftile_break_repeat_lane(&branch.scene)),
+        TypedFtileKind::Switch { cases, .. } => cases
+            .iter()
+            .find_map(|case| typed_ftile_break_repeat_lane(&case.scene)),
+    }
+}
+
+fn typed_ftile_leaf_count_in_lane(scene: &TypedFtileScene<'_>, lane: usize) -> usize {
+    match &scene.kind {
+        TypedFtileKind::Leaf {
+            lane: leaf_lane, ..
+        } => usize::from(*leaf_lane == lane),
+        TypedFtileKind::WithNote { child, .. } => {
+            typed_ftile_leaf_count_in_lane(&child.scene, lane)
+        }
+        TypedFtileKind::Sequence { children } => children
+            .iter()
+            .map(|child| typed_ftile_leaf_count_in_lane(&child.scene, lane))
+            .sum(),
+        TypedFtileKind::If {
+            then_scene,
+            else_scene,
+            ..
+        } => {
+            typed_ftile_leaf_count_in_lane(&then_scene.scene, lane)
+                + typed_ftile_leaf_count_in_lane(&else_scene.scene, lane)
+        }
+        TypedFtileKind::IfDown {
+            survivor, terminal, ..
+        } => {
+            typed_ftile_leaf_count_in_lane(&survivor.scene, lane)
+                + terminal.as_ref().map_or(0, |terminal| {
+                    typed_ftile_leaf_count_in_lane(&terminal.scene, lane)
+                })
+        }
+        TypedFtileKind::While { body, special, .. } => {
+            typed_ftile_leaf_count_in_lane(&body.scene, lane)
+                + special.as_ref().map_or(0, |special| {
+                    typed_ftile_leaf_count_in_lane(&special.scene, lane)
+                })
+        }
+        TypedFtileKind::Repeat { body, .. } => typed_ftile_leaf_count_in_lane(&body.scene, lane),
+        TypedFtileKind::Fork { branches, .. } => branches
+            .iter()
+            .map(|branch| typed_ftile_leaf_count_in_lane(&branch.scene, lane))
+            .sum(),
+        TypedFtileKind::Switch { cases, .. } => cases
+            .iter()
+            .map(|case| typed_ftile_leaf_count_in_lane(&case.scene, lane))
+            .sum(),
     }
 }
 
 fn typed_ftile_scene_contains_if_note(scene: &TypedFtileScene<'_>) -> bool {
     match &scene.kind {
         TypedFtileKind::Leaf { .. } => false,
+        TypedFtileKind::WithNote { child, .. } => typed_ftile_scene_contains_if_note(&child.scene),
         TypedFtileKind::Sequence { children } => children
             .iter()
             .any(|child| typed_ftile_scene_contains_if_note(&child.scene)),
@@ -29514,6 +30551,14 @@ fn typed_ftile_scene_contains_if_note(scene: &TypedFtileScene<'_>) -> bool {
             ) || typed_ftile_scene_contains_if_note(&then_scene.scene)
                 || typed_ftile_scene_contains_if_note(&else_scene.scene)
         }
+        TypedFtileKind::IfDown {
+            survivor, terminal, ..
+        } => {
+            typed_ftile_scene_contains_if_note(&survivor.scene)
+                || terminal
+                    .as_ref()
+                    .is_some_and(|terminal| typed_ftile_scene_contains_if_note(&terminal.scene))
+        }
         TypedFtileKind::While { body, special, .. } => {
             typed_ftile_scene_contains_if_note(&body.scene)
                 || special
@@ -29524,6 +30569,9 @@ fn typed_ftile_scene_contains_if_note(scene: &TypedFtileScene<'_>) -> bool {
         TypedFtileKind::Fork { branches, .. } => branches
             .iter()
             .any(|branch| typed_ftile_scene_contains_if_note(&branch.scene)),
+        TypedFtileKind::Switch { cases, .. } => cases
+            .iter()
+            .any(|case| typed_ftile_scene_contains_if_note(&case.scene)),
     }
 }
 
@@ -29533,6 +30581,9 @@ fn typed_ftile_scene_control_count(
 ) -> Option<usize> {
     match &scene.kind {
         TypedFtileKind::Leaf { .. } => Some(0),
+        TypedFtileKind::WithNote { child, .. } => {
+            typed_ftile_scene_control_count(&child.scene, allow_terminal_cross_lane_if)
+        }
         TypedFtileKind::Sequence { children } => {
             if let [first, fork, last] = children.as_slice()
                 && matches!(
@@ -29599,6 +30650,25 @@ fn typed_ftile_scene_control_count(
             }
             Some(1 + then_count + else_count)
         }
+        TypedFtileKind::IfDown {
+            lane,
+            survivor,
+            terminal,
+            ..
+        } => {
+            let survivor_count =
+                typed_ftile_scene_control_count(&survivor.scene, allow_terminal_cross_lane_if)?;
+            let terminal_count = terminal.as_ref().map_or(Some(0), |terminal| {
+                typed_ftile_scene_control_count(&terminal.scene, allow_terminal_cross_lane_if)
+            })?;
+            if survivor_count + terminal_count == 0
+                && survivor.scene.out_lane != *lane
+                && !allow_terminal_cross_lane_if
+            {
+                return None;
+            }
+            Some(1 + survivor_count + terminal_count)
+        }
         TypedFtileKind::While { body, special, .. } => {
             let special_count = special.as_ref().map_or(Some(0), |special| {
                 typed_ftile_scene_control_count(&special.scene, allow_terminal_cross_lane_if)
@@ -29622,6 +30692,11 @@ fn typed_ftile_scene_control_count(
             }
             Some(1)
         }
+        TypedFtileKind::Switch { cases, .. } => cases.iter().try_fold(1usize, |count, case| {
+            Some(
+                count + typed_ftile_scene_control_count(&case.scene, allow_terminal_cross_lane_if)?,
+            )
+        }),
     }
 }
 
@@ -29641,6 +30716,7 @@ fn typed_ftile_scene_uses_lane(scene: &TypedFtileScene<'_>, lane: usize) -> bool
         TypedFtileKind::Leaf {
             lane: scene_lane, ..
         } => *scene_lane == lane,
+        TypedFtileKind::WithNote { child, .. } => typed_ftile_scene_uses_lane(&child.scene, lane),
         TypedFtileKind::Sequence { children } => children
             .iter()
             .any(|child| typed_ftile_scene_uses_lane(&child.scene, lane)),
@@ -29653,6 +30729,18 @@ fn typed_ftile_scene_uses_lane(scene: &TypedFtileScene<'_>, lane: usize) -> bool
             *scene_lane == lane
                 || typed_ftile_scene_uses_lane(&then_scene.scene, lane)
                 || typed_ftile_scene_uses_lane(&else_scene.scene, lane)
+        }
+        TypedFtileKind::IfDown {
+            lane: scene_lane,
+            survivor,
+            terminal,
+            ..
+        } => {
+            *scene_lane == lane
+                || typed_ftile_scene_uses_lane(&survivor.scene, lane)
+                || terminal
+                    .as_ref()
+                    .is_some_and(|terminal| typed_ftile_scene_uses_lane(&terminal.scene, lane))
         }
         TypedFtileKind::While {
             lane: scene_lane,
@@ -29687,6 +30775,16 @@ fn typed_ftile_scene_uses_lane(scene: &TypedFtileScene<'_>, lane: usize) -> bool
                 || branches
                     .iter()
                     .any(|branch| typed_ftile_scene_uses_lane(&branch.scene, lane))
+        }
+        TypedFtileKind::Switch {
+            lane: scene_lane,
+            cases,
+            ..
+        } => {
+            *scene_lane == lane
+                || cases
+                    .iter()
+                    .any(|case| typed_ftile_scene_uses_lane(&case.scene, lane))
         }
     }
 }
@@ -29729,6 +30827,10 @@ fn typed_ftile_collect_occupied(
     match &scene.kind {
         TypedFtileKind::Leaf { lane, .. } => {
             typed_ftile_add_occupied(occupied, *lane, x, x + scene.geometry.width);
+        }
+        TypedFtileKind::WithNote { child, .. } => {
+            typed_ftile_add_occupied(occupied, child.scene.in_lane, x, x + scene.geometry.width);
+            typed_ftile_collect_occupied(&child.scene, x + child.x, y + child.y, occupied);
         }
         TypedFtileKind::Sequence { children } => {
             for child in children {
@@ -29787,6 +30889,49 @@ fn typed_ftile_collect_occupied(
                 occupied,
             );
         }
+        TypedFtileKind::IfDown {
+            lane,
+            diamond,
+            diamond_at,
+            survivor,
+            survivor_label,
+            merge,
+            terminal,
+            terminal_label,
+            ..
+        } => {
+            let diamond_left = x + diamond_at.0;
+            typed_ftile_add_occupied(occupied, *lane, diamond_left, diamond_left + diamond.width);
+            if let Some((merge, merge_at)) = merge {
+                typed_ftile_add_occupied(
+                    occupied,
+                    *lane,
+                    x + merge_at.0,
+                    x + merge_at.0 + merge.width,
+                );
+            }
+            for (label, left) in [
+                (
+                    *survivor_label,
+                    diamond_left + diamond.left + FTILE_IF_DOWN_SOUTH_LABEL_X,
+                ),
+                (*terminal_label, diamond_left + diamond.width),
+            ] {
+                if let Some(label) = label {
+                    let width = text_render::measure(label, SMALL_FONT, false);
+                    typed_ftile_add_occupied(occupied, *lane, left, left + width);
+                }
+            }
+            typed_ftile_collect_occupied(&survivor.scene, x + survivor.x, y + survivor.y, occupied);
+            if let Some(terminal) = terminal {
+                typed_ftile_collect_occupied(
+                    &terminal.scene,
+                    x + terminal.x,
+                    y + terminal.y,
+                    occupied,
+                );
+            }
+        }
         TypedFtileKind::While {
             node,
             lane,
@@ -29827,6 +30972,7 @@ fn typed_ftile_collect_occupied(
             condition,
             condition_at,
             backward,
+            ..
         } => {
             typed_ftile_add_occupied(
                 occupied,
@@ -29904,6 +31050,46 @@ fn typed_ftile_collect_occupied(
                 typed_ftile_collect_occupied(&branch.scene, x + branch.x, y + branch.y, occupied);
             }
         }
+        TypedFtileKind::Switch {
+            node,
+            lane,
+            diamond1,
+            diamond1_at,
+            diamond2,
+            diamond2_at,
+            cases,
+            ..
+        } => {
+            typed_ftile_add_occupied(
+                occupied,
+                *lane,
+                x + diamond1_at.0,
+                x + diamond1_at.0 + diamond1.width,
+            );
+            typed_ftile_add_occupied(
+                occupied,
+                *lane,
+                x + diamond2_at.0,
+                x + diamond2_at.0 + diamond2.width,
+            );
+            if let LayoutNode::Switch {
+                cases: case_nodes, ..
+            } = node
+            {
+                for (case, case_node) in cases.iter().zip(case_nodes) {
+                    if !case_node.label.is_empty() {
+                        let left = x + case.x + case.scene.geometry.left + 4.0;
+                        typed_ftile_add_occupied(
+                            occupied,
+                            case.scene.in_lane,
+                            left,
+                            left + text_render::measure(&case_node.label, SMALL_FONT, false),
+                        );
+                    }
+                    typed_ftile_collect_occupied(&case.scene, x + case.x, y + case.y, occupied);
+                }
+            }
+        }
     }
 }
 
@@ -29927,6 +31113,15 @@ fn typed_ftile_collect_limit_shapes(
                 _ => (x, x + scene.geometry.width),
             };
             typed_ftile_add_occupied(bounds, *lane, left, right);
+        }
+        TypedFtileKind::WithNote { child, .. } => {
+            typed_ftile_add_occupied(
+                bounds,
+                child.scene.in_lane,
+                x - 1.0,
+                x + scene.geometry.width,
+            );
+            typed_ftile_collect_limit_shapes(&child.scene, x + child.x, y + child.y, bounds);
         }
         TypedFtileKind::Sequence { children } => {
             for child in children {
@@ -29992,6 +31187,59 @@ fn typed_ftile_collect_limit_shapes(
                 bounds,
             );
         }
+        TypedFtileKind::IfDown {
+            lane,
+            diamond,
+            diamond_at,
+            survivor,
+            survivor_label,
+            merge,
+            terminal,
+            terminal_label,
+            ..
+        } => {
+            let diamond_left = x + diamond_at.0;
+            typed_ftile_add_occupied(
+                bounds,
+                *lane,
+                diamond_left - 10.0,
+                diamond_left + diamond.width + 10.0,
+            );
+            if let Some((merge, merge_at)) = merge {
+                typed_ftile_add_occupied(
+                    bounds,
+                    *lane,
+                    x + merge_at.0 - 10.0,
+                    x + merge_at.0 + merge.width + 10.0,
+                );
+            }
+            for (label, left) in [
+                (
+                    *survivor_label,
+                    diamond_left + diamond.left + FTILE_IF_DOWN_SOUTH_LABEL_X,
+                ),
+                (*terminal_label, diamond_left + diamond.width),
+            ] {
+                if let Some(label) = label {
+                    let width = text_render::measure(label, SMALL_FONT, false);
+                    typed_ftile_add_occupied(bounds, *lane, left, left + width);
+                }
+            }
+            typed_ftile_collect_limit_shapes(
+                &survivor.scene,
+                x + survivor.x,
+                y + survivor.y,
+                bounds,
+            );
+            if let Some(terminal) = terminal {
+                typed_ftile_collect_limit_shapes(
+                    &terminal.scene,
+                    x + terminal.x,
+                    y + terminal.y,
+                    bounds,
+                );
+            }
+        }
         TypedFtileKind::While {
             node,
             lane,
@@ -30037,6 +31285,7 @@ fn typed_ftile_collect_limit_shapes(
             condition,
             condition_at,
             backward,
+            ..
         } => {
             typed_ftile_add_occupied(
                 bounds,
@@ -30104,6 +31353,42 @@ fn typed_ftile_collect_limit_shapes(
                 typed_ftile_collect_limit_shapes(&branch.scene, x + branch.x, y + branch.y, bounds);
             }
         }
+        TypedFtileKind::Switch {
+            node,
+            lane,
+            diamond1,
+            diamond1_at,
+            diamond2,
+            diamond2_at,
+            cases,
+            ..
+        } => {
+            for (diamond, at) in [(diamond1, diamond1_at), (diamond2, diamond2_at)] {
+                typed_ftile_add_occupied(
+                    bounds,
+                    *lane,
+                    x + at.0 - 10.0,
+                    x + at.0 + diamond.width + 10.0,
+                );
+            }
+            if let LayoutNode::Switch {
+                cases: case_nodes, ..
+            } = node
+            {
+                for (case, case_node) in cases.iter().zip(case_nodes) {
+                    if !case_node.label.is_empty() {
+                        let left = x + case.x + case.scene.geometry.left + 4.0;
+                        typed_ftile_add_occupied(
+                            bounds,
+                            case.scene.in_lane,
+                            left,
+                            left + text_render::measure(&case_node.label, SMALL_FONT, false),
+                        );
+                    }
+                    typed_ftile_collect_limit_shapes(&case.scene, x + case.x, y + case.y, bounds);
+                }
+            }
+        }
     }
 }
 
@@ -30116,6 +31401,7 @@ struct TypedFtileLaneLayout {
     content_adjust: Vec<f64>,
     right_edge: f64,
     assembled: bool,
+    fork_in_while_in_if: bool,
     canvas_extent_adjust: f64,
 }
 
@@ -30124,11 +31410,6 @@ impl TypedFtileLaneLayout {
         self.outer_transform
             .transform(self.inner_transform[lane].transform(value) + self.offset[lane])
             + self.content_adjust[lane]
-    }
-
-    fn owner_x(&self, lane: usize, value: f64) -> f64 {
-        self.outer_transform
-            .transform(self.inner_transform[lane].transform(value) + self.offset[lane])
     }
 
     fn cross_loop_rail_x(
@@ -30144,9 +31425,65 @@ impl TypedFtileLaneLayout {
     }
 }
 
+fn typed_ftile_enclose_deferred_output_corridor(
+    scene: &TypedFtileScene<'_>,
+    layout: &mut TypedFtileLaneLayout,
+) {
+    fn find<'a, 'b>(
+        scene: &'a TypedFtileScene<'b>,
+        origin: (f64, f64),
+    ) -> Option<(&'a TypedFtileScene<'b>, (f64, f64))> {
+        match &scene.kind {
+            TypedFtileKind::Sequence { children } => children
+                .iter()
+                .rev()
+                .find_map(|child| find(&child.scene, (origin.0 + child.x, origin.1 + child.y))),
+            TypedFtileKind::WithNote { child, .. } | TypedFtileKind::Repeat { body: child, .. } => {
+                find(&child.scene, (origin.0 + child.x, origin.1 + child.y))
+            }
+            TypedFtileKind::IfDown {
+                survivor,
+                merge: None,
+                terminal: None,
+                ..
+            } if survivor.scene.geometry.out_y.is_none() && scene.geometry.out_y.is_some() => {
+                Some((scene, origin))
+            }
+            _ => None,
+        }
+    }
+
+    let Some((deferred, origin)) = find(scene, (0.0, 0.0)) else {
+        return;
+    };
+    let TypedFtileKind::IfDown {
+        lane,
+        diamond,
+        diamond_at,
+        survivor,
+        ..
+    } = &deferred.kind
+    else {
+        return;
+    };
+    if *lane + 1 != layout.width.len() {
+        return;
+    }
+    // `FtileIfDown.ConnectionElseNoDiamond` contributes its xmax rail to the
+    // trailing lane's `LimitFinder`; `Swimlanes.computeSizeInternal` then keeps
+    // the ordinary 19px trailing envelope beyond that painted corridor.
+    let raw_corridor = (origin.0 + diamond_at.0 + diamond.width + DIAMOND_HALF)
+        .max(origin.0 + survivor.x + survivor.scene.geometry.width);
+    let required_right = layout.x(*lane, raw_corridor) + FTILE_SWIMLANE_TRAILING_MARGIN;
+    let extra = (required_right - layout.right_edge).max(0.0);
+    layout.width[*lane] += extra;
+    layout.right_edge += extra;
+}
+
 fn typed_ftile_has_cross_lane_loop(scene: &TypedFtileScene<'_>) -> bool {
     match &scene.kind {
         TypedFtileKind::Leaf { .. } => false,
+        TypedFtileKind::WithNote { child, .. } => typed_ftile_has_cross_lane_loop(&child.scene),
         TypedFtileKind::Sequence { children } => children
             .iter()
             .any(|child| typed_ftile_has_cross_lane_loop(&child.scene)),
@@ -30157,6 +31494,18 @@ fn typed_ftile_has_cross_lane_loop(scene: &TypedFtileScene<'_>) -> bool {
         } => {
             typed_ftile_has_cross_lane_loop(&then_scene.scene)
                 || typed_ftile_has_cross_lane_loop(&else_scene.scene)
+        }
+        TypedFtileKind::IfDown {
+            lane,
+            survivor,
+            terminal,
+            ..
+        } => {
+            survivor.scene.out_lane != *lane
+                || typed_ftile_has_cross_lane_loop(&survivor.scene)
+                || terminal
+                    .as_ref()
+                    .is_some_and(|terminal| typed_ftile_has_cross_lane_loop(&terminal.scene))
         }
         TypedFtileKind::While {
             lane,
@@ -30190,6 +31539,11 @@ fn typed_ftile_has_cross_lane_loop(scene: &TypedFtileScene<'_>) -> bool {
                     .iter()
                     .any(|branch| typed_ftile_has_cross_lane_loop(&branch.scene))
         }
+        TypedFtileKind::Switch { lane, cases, .. } => cases.iter().any(|case| {
+            case.scene.in_lane != *lane
+                || case.scene.out_lane != *lane
+                || typed_ftile_has_cross_lane_loop(&case.scene)
+        }),
     }
 }
 
@@ -30201,6 +31555,9 @@ fn typed_ftile_mark_parallel_owner_lanes(
 ) {
     match &scene.kind {
         TypedFtileKind::Leaf { .. } => {}
+        TypedFtileKind::WithNote { child, .. } => {
+            typed_ftile_mark_parallel_owner_lanes(&child.scene, owner_count, input, output);
+        }
         TypedFtileKind::Sequence { children } => {
             for child in children {
                 typed_ftile_mark_parallel_owner_lanes(&child.scene, owner_count, input, output);
@@ -30213,6 +31570,14 @@ fn typed_ftile_mark_parallel_owner_lanes(
         } => {
             typed_ftile_mark_parallel_owner_lanes(&then_scene.scene, owner_count, input, output);
             typed_ftile_mark_parallel_owner_lanes(&else_scene.scene, owner_count, input, output);
+        }
+        TypedFtileKind::IfDown {
+            survivor, terminal, ..
+        } => {
+            typed_ftile_mark_parallel_owner_lanes(&survivor.scene, owner_count, input, output);
+            if let Some(terminal) = terminal {
+                typed_ftile_mark_parallel_owner_lanes(&terminal.scene, owner_count, input, output);
+            }
         }
         TypedFtileKind::While { body, special, .. } => {
             typed_ftile_mark_parallel_owner_lanes(&body.scene, owner_count, input, output);
@@ -30237,12 +31602,18 @@ fn typed_ftile_mark_parallel_owner_lanes(
                 typed_ftile_mark_parallel_owner_lanes(&branch.scene, owner_count, input, output);
             }
         }
+        TypedFtileKind::Switch { cases, .. } => {
+            for case in cases {
+                typed_ftile_mark_parallel_owner_lanes(&case.scene, owner_count, input, output);
+            }
+        }
     }
 }
 
 fn typed_ftile_has_expanded_parallel(scene: &TypedFtileScene<'_>) -> bool {
     match &scene.kind {
         TypedFtileKind::Leaf { .. } => false,
+        TypedFtileKind::WithNote { child, .. } => typed_ftile_has_expanded_parallel(&child.scene),
         TypedFtileKind::Sequence { children } => children
             .iter()
             .any(|child| typed_ftile_has_expanded_parallel(&child.scene)),
@@ -30254,6 +31625,14 @@ fn typed_ftile_has_expanded_parallel(scene: &TypedFtileScene<'_>) -> bool {
             typed_ftile_has_expanded_parallel(&then_scene.scene)
                 || typed_ftile_has_expanded_parallel(&else_scene.scene)
         }
+        TypedFtileKind::IfDown {
+            survivor, terminal, ..
+        } => {
+            typed_ftile_has_expanded_parallel(&survivor.scene)
+                || terminal
+                    .as_ref()
+                    .is_some_and(|terminal| typed_ftile_has_expanded_parallel(&terminal.scene))
+        }
         TypedFtileKind::While { body, special, .. } => {
             typed_ftile_has_expanded_parallel(&body.scene)
                 || special
@@ -30262,12 +31641,18 @@ fn typed_ftile_has_expanded_parallel(scene: &TypedFtileScene<'_>) -> bool {
         }
         TypedFtileKind::Repeat { body, .. } => typed_ftile_has_expanded_parallel(&body.scene),
         TypedFtileKind::Fork { branches, .. } => branches.len() > 2,
+        TypedFtileKind::Switch { cases, .. } => cases
+            .iter()
+            .any(|case| typed_ftile_has_expanded_parallel(&case.scene)),
     }
 }
 
 fn typed_ftile_mark_separate_parallel_inputs(scene: &TypedFtileScene<'_>, inputs: &mut [bool]) {
     match &scene.kind {
         TypedFtileKind::Leaf { .. } => {}
+        TypedFtileKind::WithNote { child, .. } => {
+            typed_ftile_mark_separate_parallel_inputs(&child.scene, inputs);
+        }
         TypedFtileKind::Sequence { children } => {
             for child in children {
                 typed_ftile_mark_separate_parallel_inputs(&child.scene, inputs);
@@ -30280,6 +31665,14 @@ fn typed_ftile_mark_separate_parallel_inputs(scene: &TypedFtileScene<'_>, inputs
         } => {
             typed_ftile_mark_separate_parallel_inputs(&then_scene.scene, inputs);
             typed_ftile_mark_separate_parallel_inputs(&else_scene.scene, inputs);
+        }
+        TypedFtileKind::IfDown {
+            survivor, terminal, ..
+        } => {
+            typed_ftile_mark_separate_parallel_inputs(&survivor.scene, inputs);
+            if let Some(terminal) = terminal {
+                typed_ftile_mark_separate_parallel_inputs(&terminal.scene, inputs);
+            }
         }
         TypedFtileKind::While { body, special, .. } => {
             typed_ftile_mark_separate_parallel_inputs(&body.scene, inputs);
@@ -30303,6 +31696,11 @@ fn typed_ftile_mark_separate_parallel_inputs(scene: &TypedFtileScene<'_>, inputs
                 typed_ftile_mark_separate_parallel_inputs(&branch.scene, inputs);
             }
         }
+        TypedFtileKind::Switch { cases, .. } => {
+            for case in cases {
+                typed_ftile_mark_separate_parallel_inputs(&case.scene, inputs);
+            }
+        }
     }
 }
 
@@ -30313,6 +31711,13 @@ fn typed_ftile_mark_conditional_parallel_boundaries(
 ) {
     match &scene.kind {
         TypedFtileKind::Leaf { .. } => {}
+        TypedFtileKind::WithNote { child, .. } => {
+            typed_ftile_mark_conditional_parallel_boundaries(
+                &child.scene,
+                enclosing_if_lane,
+                boundaries,
+            );
+        }
         TypedFtileKind::Sequence { children } => {
             for child in children {
                 typed_ftile_mark_conditional_parallel_boundaries(
@@ -30338,6 +31743,25 @@ fn typed_ftile_mark_conditional_parallel_boundaries(
                 Some(*lane),
                 boundaries,
             );
+        }
+        TypedFtileKind::IfDown {
+            lane,
+            survivor,
+            terminal,
+            ..
+        } => {
+            typed_ftile_mark_conditional_parallel_boundaries(
+                &survivor.scene,
+                Some(*lane),
+                boundaries,
+            );
+            if let Some(terminal) = terminal {
+                typed_ftile_mark_conditional_parallel_boundaries(
+                    &terminal.scene,
+                    Some(*lane),
+                    boundaries,
+                );
+            }
         }
         TypedFtileKind::While { body, special, .. } => {
             typed_ftile_mark_conditional_parallel_boundaries(
@@ -30376,6 +31800,15 @@ fn typed_ftile_mark_conditional_parallel_boundaries(
                 );
             }
         }
+        TypedFtileKind::Switch { cases, .. } => {
+            for case in cases {
+                typed_ftile_mark_conditional_parallel_boundaries(
+                    &case.scene,
+                    enclosing_if_lane,
+                    boundaries,
+                );
+            }
+        }
     }
 }
 
@@ -30388,6 +31821,15 @@ fn typed_ftile_collect_cross_loop_decorations(
 ) {
     match &scene.kind {
         TypedFtileKind::Leaf { .. } => {}
+        TypedFtileKind::WithNote { child, .. } => {
+            typed_ftile_collect_cross_loop_decorations(
+                &child.scene,
+                x + child.x,
+                y + child.y,
+                raw_offset,
+                occupied,
+            );
+        }
         TypedFtileKind::Sequence { children } => {
             for child in children {
                 typed_ftile_collect_cross_loop_decorations(
@@ -30418,6 +31860,26 @@ fn typed_ftile_collect_cross_loop_decorations(
                 raw_offset,
                 occupied,
             );
+        }
+        TypedFtileKind::IfDown {
+            survivor, terminal, ..
+        } => {
+            typed_ftile_collect_cross_loop_decorations(
+                &survivor.scene,
+                x + survivor.x,
+                y + survivor.y,
+                raw_offset,
+                occupied,
+            );
+            if let Some(terminal) = terminal {
+                typed_ftile_collect_cross_loop_decorations(
+                    &terminal.scene,
+                    x + terminal.x,
+                    y + terminal.y,
+                    raw_offset,
+                    occupied,
+                );
+            }
         }
         TypedFtileKind::While {
             lane,
@@ -30502,6 +31964,17 @@ fn typed_ftile_collect_cross_loop_decorations(
                 );
             }
         }
+        TypedFtileKind::Switch { cases, .. } => {
+            for case in cases {
+                typed_ftile_collect_cross_loop_decorations(
+                    &case.scene,
+                    x + case.x,
+                    y + case.y,
+                    raw_offset,
+                    occupied,
+                );
+            }
+        }
     }
 }
 
@@ -30546,6 +32019,14 @@ fn typed_ftile_collect_cross_sequence_decorations(
 ) {
     match &scene.kind {
         TypedFtileKind::Leaf { .. } => {}
+        TypedFtileKind::WithNote { child, .. } => {
+            typed_ftile_collect_cross_sequence_decorations(
+                &child.scene,
+                x + child.x,
+                y + child.y,
+                decorations,
+            );
+        }
         TypedFtileKind::Sequence { children } => {
             for pair in children.windows(2) {
                 let first = &pair[0];
@@ -30596,6 +32077,24 @@ fn typed_ftile_collect_cross_sequence_decorations(
                 decorations,
             );
         }
+        TypedFtileKind::IfDown {
+            survivor, terminal, ..
+        } => {
+            typed_ftile_collect_cross_sequence_decorations(
+                &survivor.scene,
+                x + survivor.x,
+                y + survivor.y,
+                decorations,
+            );
+            if let Some(terminal) = terminal {
+                typed_ftile_collect_cross_sequence_decorations(
+                    &terminal.scene,
+                    x + terminal.x,
+                    y + terminal.y,
+                    decorations,
+                );
+            }
+        }
         TypedFtileKind::While { body, special, .. } => {
             typed_ftile_collect_cross_sequence_decorations(
                 &body.scene,
@@ -30626,6 +32125,16 @@ fn typed_ftile_collect_cross_sequence_decorations(
                     &branch.scene,
                     x + branch.x,
                     y + branch.y,
+                    decorations,
+                );
+            }
+        }
+        TypedFtileKind::Switch { cases, .. } => {
+            for case in cases {
+                typed_ftile_collect_cross_sequence_decorations(
+                    &case.scene,
+                    x + case.x,
+                    y + case.y,
                     decorations,
                 );
             }
@@ -30714,6 +32223,16 @@ fn typed_ftile_collect_same_lane_bounds(
 ) {
     match &scene.kind {
         TypedFtileKind::Leaf { .. } => {}
+        TypedFtileKind::WithNote { child, .. } => {
+            typed_ftile_collect_same_lane_bounds(
+                &child.scene,
+                x + child.x,
+                y + child.y,
+                bounds,
+                decorations,
+                suppress_terminal_while_exit,
+            );
+        }
         TypedFtileKind::Sequence { children } => {
             for (index, child) in children.iter().enumerate() {
                 typed_ftile_collect_same_lane_bounds(
@@ -30852,6 +32371,28 @@ fn typed_ftile_collect_same_lane_bounds(
                 );
             }
         }
+        TypedFtileKind::IfDown {
+            survivor, terminal, ..
+        } => {
+            typed_ftile_collect_same_lane_bounds(
+                &survivor.scene,
+                x + survivor.x,
+                y + survivor.y,
+                bounds,
+                decorations,
+                false,
+            );
+            if let Some(terminal) = terminal {
+                typed_ftile_collect_same_lane_bounds(
+                    &terminal.scene,
+                    x + terminal.x,
+                    y + terminal.y,
+                    bounds,
+                    decorations,
+                    false,
+                );
+            }
+        }
         TypedFtileKind::While {
             lane,
             diamond,
@@ -30950,6 +32491,7 @@ fn typed_ftile_collect_same_lane_bounds(
             condition,
             condition_at,
             backward,
+            break_merge,
             ..
         } => {
             typed_ftile_collect_same_lane_bounds(
@@ -31061,6 +32603,61 @@ fn typed_ftile_collect_same_lane_bounds(
                     true,
                 );
             }
+            if let Some((merge, merge_at, merge_lane)) = break_merge {
+                let merge_left = x + merge_at.0;
+                let merge_cx = merge_left + merge.left;
+                let merge_top = y + merge_at.1;
+                let merge_cy = merge_top + merge.height / 2.0;
+                typed_ftile_add_same_lane_bounds(
+                    bounds,
+                    decorations,
+                    *condition_lane,
+                    *merge_lane,
+                    &[
+                        (condition_cx, y + condition_at.1 + condition.height),
+                        (merge_cx, merge_top),
+                    ],
+                    TypedRawArrowDirection::Down,
+                    true,
+                );
+                let mut welding_points = Vec::new();
+                typed_ftile_collect_unconsumed_break_points_raw(
+                    &body.scene,
+                    (x + body.x, y + body.y),
+                    &mut welding_points,
+                );
+                for (index, (break_lane, break_x, break_y)) in
+                    welding_points.into_iter().enumerate()
+                {
+                    let (target_lane, points, direction) = if index == 0 {
+                        (
+                            *merge_lane,
+                            vec![
+                                (break_x, break_y),
+                                (x, break_y),
+                                (x, merge_cy),
+                                (merge_left, merge_cy),
+                            ],
+                            TypedRawArrowDirection::Right,
+                        )
+                    } else {
+                        (
+                            *entry_lane,
+                            vec![(break_x, break_y), (x, break_y)],
+                            TypedRawArrowDirection::Left,
+                        )
+                    };
+                    typed_ftile_add_same_lane_bounds(
+                        bounds,
+                        decorations,
+                        break_lane,
+                        target_lane,
+                        &points,
+                        direction,
+                        true,
+                    );
+                }
+            }
         }
         TypedFtileKind::Fork {
             input_lane,
@@ -31111,6 +32708,88 @@ fn typed_ftile_collect_same_lane_bounds(
                     TypedRawArrowDirection::Down,
                     true,
                 );
+            }
+        }
+        TypedFtileKind::Switch {
+            lane,
+            diamond1,
+            diamond1_at,
+            diamond2,
+            diamond2_at,
+            cases,
+            ..
+        } => {
+            for case in cases {
+                typed_ftile_collect_same_lane_bounds(
+                    &case.scene,
+                    x + case.x,
+                    y + case.y,
+                    bounds,
+                    decorations,
+                    false,
+                );
+            }
+            let diamond_top_cx = x + diamond1_at.0 + diamond1.left;
+            let diamond_top_cy = y + diamond1_at.1 + diamond1.height / 2.0;
+            let diamond_bottom = y + diamond1_at.1 + diamond1.height;
+            let merge_cx = x + diamond2_at.0 + diamond2.left;
+            let merge_cy = y + diamond2_at.1 + diamond2.height / 2.0;
+            let diamond_left = x + diamond1_at.0;
+            let diamond_right = diamond_left + diamond1.width;
+            let merge_left = x + diamond2_at.0;
+            let merge_right = merge_left + diamond2.width;
+            for case in cases {
+                let (case_lane, case_x, case_y) =
+                    typed_ftile_raw_in(&case.scene, x + case.x, y + case.y);
+                let input_points = if case_x < diamond_left || case_x > diamond_right {
+                    let vertex = if case_x < diamond_left {
+                        diamond_left
+                    } else {
+                        diamond_right
+                    };
+                    vec![
+                        (vertex, diamond_top_cy),
+                        (case_x, diamond_top_cy),
+                        (case_x, case_y),
+                    ]
+                } else {
+                    let middle = (2.0 * diamond_bottom + case_y) / 3.0;
+                    vec![
+                        (diamond_top_cx, diamond_bottom),
+                        (diamond_top_cx, middle),
+                        (case_x, middle),
+                        (case_x, case_y),
+                    ]
+                };
+                typed_ftile_add_same_lane_bounds(
+                    bounds,
+                    decorations,
+                    *lane,
+                    case_lane,
+                    &input_points,
+                    TypedRawArrowDirection::Down,
+                    true,
+                );
+                if let Some((case_lane, case_x, case_y)) =
+                    typed_ftile_raw_out(&case.scene, x + case.x, y + case.y)
+                {
+                    let (vertex, arrow) = if case_x < merge_left {
+                        (merge_left, TypedRawArrowDirection::Right)
+                    } else if case_x > merge_right {
+                        (merge_right, TypedRawArrowDirection::Left)
+                    } else {
+                        (merge_cx, TypedRawArrowDirection::Down)
+                    };
+                    typed_ftile_add_same_lane_bounds(
+                        bounds,
+                        decorations,
+                        case_lane,
+                        *lane,
+                        &[(case_x, case_y), (case_x, merge_cy), (vertex, merge_cy)],
+                        arrow,
+                        true,
+                    );
+                }
             }
         }
     }
@@ -31185,9 +32864,23 @@ fn typed_ftile_lane_layout(
             min_x.push(low);
             content_width.push(high - low);
         }
+        if std::env::var("RUSTUML_EXT_DBG").is_ok() {
+            eprintln!(
+                "typed simple raw occupied={:?} limits={:?} same={:?}",
+                occupied[0].slots(),
+                limit_bounds[0].slots(),
+                same_lane_bounds[0].slots()
+            );
+        }
         let width: Vec<_> = (0..count)
             .map(|lane| content_width[lane].max(title_width[lane]) + 10.0)
             .collect();
+        if std::env::var("RUSTUML_EXT_DBG").is_ok() {
+            eprintln!(
+                "typed simple lane bounds min={min_x:?} width={content_width:?} titles={title_width:?} scene={:?}",
+                scene.geometry
+            );
+        }
         let mut left = vec![0.0; count];
         let mut cursor = SWIM_LEFT_DIVIDER_X;
         for lane in 0..count {
@@ -31204,7 +32897,7 @@ fn typed_ftile_lane_layout(
                 left[lane] + 5.0 + centering - min_x[lane]
             })
             .collect();
-        return Some(TypedFtileLaneLayout {
+        let mut layout = TypedFtileLaneLayout {
             left,
             width,
             inner_transform,
@@ -31213,8 +32906,11 @@ fn typed_ftile_lane_layout(
             content_adjust: vec![0.0; count],
             right_edge: cursor,
             assembled: false,
+            fork_in_while_in_if: false,
             canvas_extent_adjust: 0.0,
-        });
+        };
+        typed_ftile_enclose_deferred_output_corridor(scene, &mut layout);
+        return Some(layout);
     }
 
     let mut lane_bounds = vec![crate::compress::SlotSet::new(); count];
@@ -31251,17 +32947,24 @@ fn typed_ftile_lane_layout(
         &mut parallel_input,
         &mut parallel_output,
     );
+    if std::env::var("RUSTUML_EXT_DBG").is_ok() {
+        eprintln!(
+            "typed lane bounds min={min_x:?} width={content_width:?} titles={title_width:?} scene={:?}",
+            scene.geometry
+        );
+    }
     let expanded_parallel =
         typed_ftile_has_cross_lane_loop(scene) && typed_ftile_has_expanded_parallel(scene);
     let mut separate_parallel_inputs = vec![false; count];
     typed_ftile_mark_separate_parallel_inputs(scene, &mut separate_parallel_inputs);
     let raw_width: Vec<_> = (0..count)
         .map(|lane| {
-            let input_wrapper = if parallel_input[lane] {
-                2.0 * ftile::PARALLEL_X_MARGIN
-            } else {
-                0.0
-            };
+            // ParallelBuilderFork's FtileAssemblySimple wrapper translates
+            // the black block over the already marged branch tile. The
+            // PARALLEL_X_MARGIN belongs to the branch geometry; only the
+            // one-pixel painted edge on each side survives
+            // URectangle.drawWhenCompressed(ON_X).
+            let input_wrapper = if parallel_input[lane] { 2.0 } else { 0.0 };
             content_width[lane].max(title_width[lane]) + 10.0 + input_wrapper
         })
         .collect();
@@ -31275,13 +32978,9 @@ fn typed_ftile_lane_layout(
         .map(|lane| {
             let centering = (raw_width[lane] - 10.0 - content_width[lane]) / 2.0;
             // `Swimlanes.getHalfMissingSpace` contributes 5px on each side.
-            // Parallel input wrappers retain the extra pixel introduced by
-            // their transformed black block.
-            let divider_inset = if parallel_input[lane] {
-                6.0
-            } else {
-                SWIMLANE_CONNECTION_CROSS_INSET
-            };
+            // The transformed black block's painted edge is already included
+            // in `input_wrapper`; it does not shift the lane translation.
+            let divider_inset = SWIMLANE_CONNECTION_CROSS_INSET;
             raw_left[lane] + divider_inset + centering - min_x[lane]
         })
         .collect();
@@ -31377,6 +33076,100 @@ fn typed_ftile_lane_layout(
         right_edge += 1.0;
         canvas_extent_adjust += 1.0;
     }
+    if typed_ftile_has_fork_in_while_in_if(scene, false, false) {
+        // `ParallelBuilderFork` keeps the leading `FtileMarged` wrapper when
+        // the fork is translated through both FtileWhile and
+        // FtileIfWithDiamonds. Its left PARALLEL_X_MARGIN belongs to the first
+        // swimlane; every downstream lane owner is translated by that margin.
+        width[0] += ftile::PARALLEL_X_MARGIN;
+        for downstream in left.iter_mut().skip(1) {
+            *downstream += ftile::PARALLEL_X_MARGIN;
+        }
+        for adjust in &mut content_adjust {
+            *adjust += ftile::PARALLEL_X_MARGIN;
+        }
+        right_edge += ftile::PARALLEL_X_MARGIN;
+    }
+    if expanded_parallel
+        && let Some(switch_lane) = typed_ftile_switch_lane(scene)
+        && switch_lane > 0
+    {
+        // `FtileSwitchNude` separates adjacent cases by 20px. After the
+        // complete swimlane assembly's ON_X pass, the two painted rectangle
+        // edges consume one pixel each, leaving an 18px band in the switch
+        // owner's lane. The preceding cross-owner boundary retains one more
+        // painted edge.
+        let retained_case_separation = 20.0 - 2.0;
+        for adjust in &mut content_adjust {
+            *adjust += 1.0;
+        }
+        content_adjust[switch_lane - 1] += 1.0;
+        for adjust in content_adjust.iter_mut().skip(switch_lane) {
+            *adjust += retained_case_separation;
+        }
+        width[switch_lane - 1] += 1.0;
+        for downstream in left.iter_mut().skip(switch_lane) {
+            *downstream += 1.0;
+        }
+        width[switch_lane] += retained_case_separation;
+        for downstream in left.iter_mut().skip(switch_lane + 1) {
+            *downstream += retained_case_separation;
+        }
+        right_edge += retained_case_separation + 1.0;
+    }
+    if typed_ftile_scene_has_recursive_if(scene, false)
+        && !typed_ftile_contains_fork(scene)
+        && typed_ftile_leaf_count_in_lane(scene, count - 1) > 1
+    {
+        // With no parallel wrapper owning the trailing boundary,
+        // `Swimlanes.computeSizeInternal` keeps the rightmost rectangle's outer
+        // painted edge as one final pixel of lane width.
+        let last = count - 1;
+        width[last] += 1.0;
+        content_adjust[last] += 1.0;
+        right_edge += 1.0;
+    }
+    if let Some(repeat_lane) = typed_ftile_break_repeat_lane(scene)
+        && repeat_lane > 1
+        && repeat_lane + 1 < count
+    {
+        // `FtileFactoryDelegatorRepeat.repeat` feeds its zero-x welding rail
+        // through `Swimlanes.computeSizeInternal`. The owner's raw
+        // `LimitFinder` span receives the 10px Ftile margin plus the 15px
+        // assembly-arrow clearance; fork-owner edge accounting contributes
+        // the adjacent one-pixel adjustments.
+        content_adjust[0] += 1.0;
+        width[1] += 1.0;
+        content_adjust[1] += 1.0;
+        for downstream in left.iter_mut().skip(2) {
+            *downstream += 1.0;
+        }
+        for downstream in content_adjust.iter_mut().skip(2) {
+            *downstream += 1.0;
+        }
+        right_edge += 1.0;
+
+        let desired_repeat_width = content_width[repeat_lane] + 25.0;
+        let repeat_extra = desired_repeat_width - width[repeat_lane];
+        width[repeat_lane] = desired_repeat_width;
+        content_adjust[repeat_lane] += 9.0;
+        for downstream in left.iter_mut().skip(repeat_lane + 1) {
+            *downstream += repeat_extra;
+        }
+        for downstream in content_adjust.iter_mut().skip(repeat_lane + 1) {
+            *downstream += repeat_extra;
+        }
+        right_edge += repeat_extra;
+
+        let trailing_edge = 1.0;
+        width[count - 1] -= trailing_edge;
+        right_edge -= trailing_edge;
+    }
+    if std::env::var("RUSTUML_EXT_DBG").is_ok() {
+        eprintln!(
+            "typed final lanes left={left:?} width={width:?} adjust={content_adjust:?} right={right_edge}"
+        );
+    }
     Some(TypedFtileLaneLayout {
         left,
         width,
@@ -31386,6 +33179,7 @@ fn typed_ftile_lane_layout(
         content_adjust,
         right_edge,
         assembled: true,
+        fork_in_while_in_if: typed_ftile_has_fork_in_while_in_if(scene, false, false),
         canvas_extent_adjust,
     })
 }
@@ -31413,6 +33207,7 @@ fn typed_ftile_emit_leaf(
         LayoutNode::End => {
             emit_node(svg, node, cx, top);
         }
+        LayoutNode::Break => {}
         _ => unreachable!("typed FTile leaf gate"),
     }
 }
@@ -31505,6 +33300,135 @@ fn typed_ftile_emit_condition(
             false,
         );
     }
+}
+
+fn typed_ftile_emit_if_down_condition(
+    svg: &mut SvgEmitter,
+    node: &LayoutNode,
+    left: f64,
+    top: f64,
+    width: f64,
+    survivor_label: Option<&str>,
+    terminal_label: Option<&str>,
+) {
+    let LayoutNode::If {
+        condition,
+        diamond_font_family,
+        diamond_font_size,
+        diamond_text_color,
+        diamond_text_bold,
+        diamond_text_italic,
+        arrow_font_size,
+        ..
+    } = node
+    else {
+        unreachable!("typed FtileIfDown node")
+    };
+    let cx = left + width / 2.0;
+    let cy = top + DIAMOND_HALF;
+    let inner_half = width / 2.0 - DIAMOND_HALF;
+    let fill = svg.palette.diamond_fill.clone();
+    let stroke = svg.palette.diamond_stroke.clone();
+    let stroke_width = svg.palette.diamond_stroke_width.clone();
+    svg.polygon_shape(
+        &fill,
+        &[
+            (cx - inner_half, top),
+            (cx + inner_half, top),
+            (left + width, cy),
+            (cx + inner_half, top + 2.0 * DIAMOND_HALF),
+            (cx - inner_half, top + 2.0 * DIAMOND_HALF),
+            (left, cy),
+        ],
+        &stroke,
+        &stroke_width,
+    );
+    let family = svg.palette.arrow_font_family.clone();
+    let color = svg.palette.arrow_text_color.clone();
+    if let Some(label) = survivor_label {
+        let label_width = text_render::measure_with_family(label, *arrow_font_size, false, &family);
+        svg.text_element(
+            &color,
+            &family,
+            *arrow_font_size,
+            label_width,
+            cx + FTILE_IF_DOWN_SOUTH_LABEL_X,
+            top + 2.0 * DIAMOND_HALF + text_render::ascent_for_family(*arrow_font_size, &family),
+            label,
+            false,
+        );
+    }
+    // `FtileDiamondInside2.drawU` paints its south label before the centered
+    // condition text.
+    let text_width = text_render::measure_with_family(
+        condition,
+        *diamond_font_size,
+        *diamond_text_bold,
+        diamond_font_family,
+    );
+    svg.text_element_styled(
+        diamond_text_color,
+        diamond_font_family,
+        *diamond_font_size,
+        cx - text_width / 2.0,
+        centered_label_y_for_family(condition, cy, *diamond_font_size, diamond_font_family),
+        condition,
+        *diamond_text_bold,
+        *diamond_text_italic,
+    );
+    if let Some(label) = terminal_label {
+        let label_width = text_render::measure_with_family(label, *arrow_font_size, false, &family);
+        svg.text_element(
+            &color,
+            &family,
+            *arrow_font_size,
+            label_width,
+            left + width,
+            centerline_label_y_for_family(cy, *arrow_font_size, &family),
+            label,
+            false,
+        );
+    }
+}
+
+fn typed_ftile_emit_switch_condition(
+    svg: &mut SvgEmitter,
+    condition: &str,
+    left: f64,
+    top: f64,
+    width: f64,
+) {
+    let cx = left + width / 2.0;
+    let cy = top + DIAMOND_HALF;
+    let inner_half = width / 2.0 - DIAMOND_HALF;
+    let fill = svg.palette.diamond_fill.clone();
+    let stroke = svg.palette.diamond_stroke.clone();
+    let stroke_width = svg.palette.diamond_stroke_width.clone();
+    svg.polygon_shape(
+        &fill,
+        &[
+            (cx - inner_half, top),
+            (cx + inner_half, top),
+            (left + width, cy),
+            (cx + inner_half, top + 2.0 * DIAMOND_HALF),
+            (cx - inner_half, top + 2.0 * DIAMOND_HALF),
+            (left, cy),
+        ],
+        &stroke,
+        &stroke_width,
+    );
+    let text_width = text_render::measure(condition, SMALL_FONT, false);
+    let color = svg.palette.text_color.clone();
+    svg.text_element_styled(
+        &color,
+        "sans-serif",
+        SMALL_FONT,
+        cx - text_width / 2.0,
+        centered_label_y(condition, cy, SMALL_FONT),
+        condition,
+        false,
+        svg.palette.diamond_text_italic,
+    );
 }
 
 fn typed_ftile_emit_while_diamond(
@@ -31746,6 +33670,29 @@ fn typed_ftile_emit_shapes(
             let left = lanes.x(*lane, x);
             typed_ftile_emit_leaf(&mut emitters[*lane], node, scene.geometry, left, y);
         }
+        TypedFtileKind::WithNote { child, note } => {
+            let LayoutNode::Note {
+                text,
+                position,
+                color,
+            } = note
+            else {
+                unreachable!("typed note wrapper")
+            };
+            let lane = child.scene.in_lane;
+            let child_left = lanes.x(lane, x + child.x);
+            let child_right = lanes.x(lane, x + child.x + child.scene.geometry.width);
+            emit_attached_note(
+                &mut emitters[lane],
+                text,
+                position,
+                color.as_deref(),
+                (child_left + child_right) / 2.0,
+                child_right - child_left,
+                y + child.y + child.scene.geometry.height / 2.0,
+            );
+            typed_ftile_emit_shapes(&child.scene, x + child.x, y + child.y, lanes, emitters);
+        }
         TypedFtileKind::Sequence { children } => {
             for child in children {
                 typed_ftile_emit_shapes(&child.scene, x + child.x, y + child.y, lanes, emitters);
@@ -31812,6 +33759,67 @@ fn typed_ftile_emit_shapes(
                 );
             }
         }
+        TypedFtileKind::IfDown {
+            node,
+            lane,
+            diamond,
+            diamond_at,
+            survivor,
+            survivor_label,
+            merge,
+            terminal,
+            terminal_label,
+        } => {
+            // `FtileIfDown.drawU` paints the south survivor first, then the
+            // condition diamond and optional east terminal.
+            typed_ftile_emit_shapes(
+                &survivor.scene,
+                x + survivor.x,
+                y + survivor.y,
+                lanes,
+                emitters,
+            );
+            let diamond_left = lanes.x(*lane, x + diamond_at.0);
+            let diamond_right = lanes.x(*lane, x + diamond_at.0 + diamond.width);
+            typed_ftile_emit_if_down_condition(
+                &mut emitters[*lane],
+                node,
+                diamond_left,
+                y + diamond_at.1,
+                diamond_right - diamond_left,
+                *survivor_label,
+                *terminal_label,
+            );
+            if let Some(terminal) = terminal {
+                typed_ftile_emit_shapes(
+                    &terminal.scene,
+                    x + terminal.x,
+                    y + terminal.y,
+                    lanes,
+                    emitters,
+                );
+            }
+            if let Some((merge, merge_at)) = merge {
+                let merge_left = lanes.x(*lane, x + merge_at.0);
+                let merge_right = lanes.x(*lane, x + merge_at.0 + merge.width);
+                let merge_cx = (merge_left + merge_right) / 2.0;
+                let merge_top = y + merge_at.1;
+                let fill = emitters[*lane].palette.diamond_fill.clone();
+                let stroke = emitters[*lane].palette.diamond_stroke.clone();
+                let stroke_width = emitters[*lane].palette.diamond_stroke_width.clone();
+                emitters[*lane].polygon_shape(
+                    &fill,
+                    &[
+                        (merge_cx, merge_top),
+                        (merge_right, merge_top + DIAMOND_HALF),
+                        (merge_cx, merge_top + merge.height),
+                        (merge_left, merge_top + DIAMOND_HALF),
+                    ],
+                    &stroke,
+                    &stroke_width,
+                );
+            }
+        }
         TypedFtileKind::While {
             node,
             lane,
@@ -31851,6 +33859,7 @@ fn typed_ftile_emit_shapes(
             condition,
             condition_at,
             backward,
+            break_merge,
         } => {
             // `FtileRepeat.drawU` paints the body before its framing diamonds.
             typed_ftile_emit_shapes(&body.scene, x + body.x, y + body.y, lanes, emitters);
@@ -31890,12 +33899,71 @@ fn typed_ftile_emit_shapes(
                 Some((backward, backward_at)),
             ) = (node, backward)
             {
+                let target = &mut emitters[*condition_lane];
+                let start = target.shapes.len();
                 typed_ftile_emit_backward(
-                    &mut emitters[*condition_lane],
+                    target,
                     label,
                     *backward,
                     lanes.x(*condition_lane, x + backward_at.0),
                     y + backward_at.1,
+                );
+                let adjacent_if_down = typed_ftile_has_adjacent_if_down(&body.scene);
+                let nested_welding_repeat = typed_ftile_scene_contains_repeat(&body.scene)
+                    && typed_ftile_contains_break(&body.scene);
+                if adjacent_if_down || nested_welding_repeat {
+                    // The backward tile is painted from the repeat's translated
+                    // genealogy, while the enclosing LimitFinder measures its
+                    // unshifted FTile coordinate.
+                    let fragment = target.shapes.split_off(start);
+                    if adjacent_if_down {
+                        target.occupancy.push_str(&fragment);
+                    } else {
+                        target.occupancy.push_str(&crate::compress::shift_y(
+                            &fragment,
+                            -REPEAT_WELDING_BACKWARD_LIMIT_REPLAY,
+                        ));
+                    }
+                    let marker = format!(
+                        "<!--rustuml-ftile-owner-shape:{}-->",
+                        target.deferred_translated_shapes.len()
+                    );
+                    target.shapes.push_str(&marker);
+                    target
+                        .deferred_translated_shapes
+                        .push(DeferredTranslatedShape {
+                            marker,
+                            fragment,
+                            dy: if adjacent_if_down {
+                                -(ftile::ASSEMBLY_RENDERED_SEPARATION
+                                    - crate::compress::COMPRESS_MARGIN)
+                                    / 2.0
+                            } else {
+                                -REPEAT_WELDING_BACKWARD_PAINT_REPLAY
+                            },
+                            anchor_y: y + backward_at.1,
+                            translate_after_compression: !adjacent_if_down,
+                        });
+                }
+            }
+            if let Some((merge, merge_at, merge_lane)) = break_merge {
+                let merge_left = lanes.x(*merge_lane, x + merge_at.0);
+                let merge_right = lanes.x(*merge_lane, x + merge_at.0 + merge.width);
+                let merge_cx = (merge_left + merge_right) / 2.0;
+                let merge_top = y + merge_at.1;
+                let fill = emitters[*merge_lane].palette.diamond_fill.clone();
+                let stroke = emitters[*merge_lane].palette.diamond_stroke.clone();
+                let stroke_width = emitters[*merge_lane].palette.diamond_stroke_width.clone();
+                emitters[*merge_lane].polygon_shape(
+                    &fill,
+                    &[
+                        (merge_cx, merge_top),
+                        (merge_right, merge_top + DIAMOND_HALF),
+                        (merge_cx, merge_top + merge.height),
+                        (merge_left, merge_top + DIAMOND_HALF),
+                    ],
+                    &stroke,
+                    &stroke_width,
                 );
             }
         }
@@ -31913,7 +33981,11 @@ fn typed_ftile_emit_shapes(
             let bar_fill = emitters[*input_lane].palette.bar_color.clone();
             let input_lane_left = lanes.left[*input_lane];
             let input_lane_right = input_lane_left + lanes.width[*input_lane];
-            let input_left = (input_lane_left + 6.0).max(lanes.x(*input_lane, x));
+            let input_left = if lanes.fork_in_while_in_if {
+                (input_lane_left + 6.0).max(lanes.x(*input_lane, x))
+            } else {
+                input_lane_left + 6.0
+            };
             let right_inset = 4.0;
             let input_right = (input_lane_right - right_inset)
                 .min(lanes.x(*input_lane, x + scene.geometry.width));
@@ -31931,7 +34003,11 @@ fn typed_ftile_emit_shapes(
             let bar_fill = emitters[*output_lane].palette.bar_color.clone();
             let output_lane_left = lanes.left[*output_lane];
             let output_lane_right = output_lane_left + lanes.width[*output_lane];
-            let output_left = (output_lane_left + 6.0).max(lanes.x(*output_lane, x));
+            let output_left = if lanes.fork_in_while_in_if {
+                (output_lane_left + 6.0).max(lanes.x(*output_lane, x))
+            } else {
+                output_lane_left + 6.0
+            };
             let output_right = (output_lane_right - right_inset)
                 .min(lanes.x(*output_lane, x + scene.geometry.width));
             emitters[*output_lane].fork_bar(
@@ -31943,11 +34019,62 @@ fn typed_ftile_emit_shapes(
                 false,
             );
         }
+        TypedFtileKind::Switch {
+            node,
+            lane,
+            diamond1,
+            diamond1_at,
+            diamond2,
+            diamond2_at,
+            cases,
+            ..
+        } => {
+            let LayoutNode::Switch { condition, .. } = node else {
+                unreachable!("typed switch node")
+            };
+            let left = lanes.x(*lane, x + diamond1_at.0);
+            let right = lanes.x(*lane, x + diamond1_at.0 + diamond1.width);
+            typed_ftile_emit_switch_condition(
+                &mut emitters[*lane],
+                condition,
+                left,
+                y + diamond1_at.1,
+                right - left,
+            );
+            for case in cases {
+                typed_ftile_emit_shapes(&case.scene, x + case.x, y + case.y, lanes, emitters);
+            }
+            if scene.geometry.out_y.is_some() {
+                let merge_left = lanes.x(*lane, x + diamond2_at.0);
+                let merge_right = lanes.x(*lane, x + diamond2_at.0 + diamond2.width);
+                let merge_cx = (merge_left + merge_right) / 2.0;
+                let merge_top = y + diamond2_at.1;
+                let fill = emitters[*lane].palette.diamond_fill.clone();
+                let stroke = emitters[*lane].palette.diamond_stroke.clone();
+                let stroke_width = emitters[*lane].palette.diamond_stroke_width.clone();
+                // `FtileDiamondInside2` builds its empty merge hexagon by
+                // appending the north and south anchor twice to the UPolygon.
+                emitters[*lane].polygon_shape(
+                    &fill,
+                    &[
+                        (merge_cx, merge_top),
+                        (merge_cx, merge_top),
+                        (merge_right, merge_top + DIAMOND_HALF),
+                        (merge_cx, merge_top + diamond2.height),
+                        (merge_cx, merge_top + diamond2.height),
+                        (merge_left, merge_top + DIAMOND_HALF),
+                    ],
+                    &stroke,
+                    &stroke_width,
+                );
+            }
+        }
     }
 }
 
 #[derive(Clone, Copy)]
 enum TypedArrowDirection {
+    None,
     Down,
     Up,
     Left,
@@ -31965,6 +34092,7 @@ fn typed_ftile_emit_polyline(
         return;
     };
     let arrow_points = match arrow {
+        TypedArrowDirection::None => return,
         TypedArrowDirection::Down => vec![
             (x - 4.0, y - 10.0),
             (x, y),
@@ -32084,15 +34212,211 @@ fn typed_ftile_emit_if_out_connection(
     }
 }
 
-fn typed_ftile_emit_output_connection(
-    source: &TypedFtileScene<'_>,
-    emitters: &mut [SvgEmitter],
-    cross: &mut SvgEmitter,
+struct TypedFtileOutputRoute<'a> {
     out_lane: usize,
     in_lane: usize,
-    points: &[(f64, f64)],
+    preserve_translated_route: bool,
+    points: &'a [(f64, f64)],
     arrow: TypedArrowDirection,
+}
+
+fn typed_ftile_emit_output_connection(
+    source: &TypedFtileScene<'_>,
+    source_origin: (f64, f64),
+    lanes: &TypedFtileLaneLayout,
+    emitters: &mut [SvgEmitter],
+    cross: &mut SvgEmitter,
+    route: TypedFtileOutputRoute<'_>,
 ) {
+    let TypedFtileOutputRoute {
+        out_lane,
+        in_lane,
+        preserve_translated_route,
+        points,
+        arrow,
+    } = route;
+    if let Some((deferred, origin)) =
+        typed_ftile_deepest_if_down_empty_output(source, source_origin)
+    {
+        let TypedFtileKind::IfDown {
+            lane,
+            diamond,
+            diamond_at,
+            survivor,
+            ..
+        } = &deferred.kind
+        else {
+            unreachable!("deferred output must be FtileIfDown");
+        };
+        let target_point = *points.last().expect("output connection target");
+        // FtileRepeat's `ConnectionVerticalDown.drawTranslate` retains the
+        // inner FtileIfDown's own outer rail even when an enclosing one-sided
+        // conditional would otherwise fuse directly to the target.
+        let nested =
+            !preserve_translated_route && typed_ftile_deepest_single_live_if(source).is_some();
+        let diamond_right = lanes.x(*lane, origin.0 + diamond_at.0 + diamond.width);
+        let diamond_cy = origin.1 + diamond_at.1 + DIAMOND_HALF;
+        let corridor_x = if nested {
+            target_point.0
+        } else {
+            lanes.x(
+                *lane,
+                (origin.0 + diamond_at.0 + diamond.width + DIAMOND_HALF)
+                    .max(origin.0 + survivor.x + survivor.scene.geometry.width),
+            ) + if preserve_translated_route {
+                // FtileFactoryDelegatorRepeat frames the body with the
+                // same left margin before translating its connection. An
+                // adjacent one-sided conditional keeps the second half-margin
+                // because the first output snake remains LIMITED.
+                crate::compress::COMPRESS_MARGIN
+                    * if typed_ftile_has_adjacent_if_down(source) {
+                        2.0
+                    } else {
+                        0.0
+                    }
+            } else {
+                0.0
+            }
+        };
+        let target_clearance = if out_lane == in_lane {
+            ftile::ASSEMBLY_RENDERED_SEPARATION
+        } else {
+            ftile::ASSEMBLY_RENDERED_SEPARATION - crate::compress::COMPRESS_MARGIN
+        };
+        let elbow_y = if nested {
+            target_point.1
+        } else {
+            target_point.1 - target_clearance
+        };
+        let marker = typed_ftile_single_live_output_marker(deferred);
+        let target = &mut emitters[*lane];
+        let start = target.connectors.len();
+        let color = target.palette.arrow_color.clone();
+        let thickness = target.palette.arrow_thickness.clone();
+        let output_x = lanes.x(*lane, origin.0 + deferred.geometry.left);
+        let output_y = origin.1 + deferred.geometry.out_y.expect("FtileIfDown output");
+        let adjacent_if_down = typed_ftile_has_adjacent_if_down(source);
+        if preserve_translated_route
+            && let Some((_, (arrow_x, arrow_y))) = target
+                .deferred_output_arrows
+                .iter()
+                .find(|(deferred_marker, _)| deferred_marker == &marker)
+        {
+            // `ConnectionVerticalDown.drawTranslate` paints the wrapped
+            // one-sided conditional's decoration before the repeat assembly
+            // replaces its output marker with the enclosing snake.
+            target.polygon_connector(
+                &color,
+                &[
+                    (*arrow_x - 4.0, *arrow_y - 10.0),
+                    (*arrow_x, *arrow_y),
+                    (*arrow_x + 4.0, *arrow_y - 10.0),
+                    (*arrow_x, *arrow_y - 6.0),
+                ],
+                &color,
+                "1",
+            );
+        }
+        target.line_styled(
+            &color,
+            &thickness,
+            diamond_right,
+            corridor_x,
+            diamond_cy,
+            diamond_cy,
+            false,
+        );
+        // `UGraphicForSnake` LIMITED merging retains the first snake's DOWN
+        // decoration while replacing its tail with the assembly connection.
+        // SlotFinder sees the original snake, while `Worm.drawLine` locates
+        // the emphasized arrow after the enclosing transform has rewritten
+        // the LIMITED-merged segment. Keep the raw polygon only as occupancy
+        // and defer its painted position until the y transform is known.
+        let raw_emphasis_y = (diamond_cy + elbow_y) / 2.0;
+        write!(
+            target.occupancy,
+            r#"<polygon points="{}"/>"#,
+            polygon_points(&[
+                (corridor_x - 4.0, raw_emphasis_y - 10.0),
+                (corridor_x, raw_emphasis_y),
+                (corridor_x + 4.0, raw_emphasis_y - 10.0),
+                (corridor_x, raw_emphasis_y - 6.0),
+            ]),
+        )
+        .unwrap();
+        let emphasis_marker = format!(
+            "<!--rustuml-ftile-emphasis:{}-->",
+            target.deferred_vertical_emphasis.len()
+        );
+        target.connectors.push_str(&emphasis_marker);
+        target
+            .deferred_vertical_emphasis
+            .push(DeferredVerticalEmphasis {
+                marker: emphasis_marker,
+                x: corridor_x,
+                y1: diamond_cy,
+                y2: if nested && !adjacent_if_down {
+                    // `UGraphicForSnake` LIMITED merging retains the first
+                    // `ConnectionElseNoDiamond` snake's pre-assembly endpoint
+                    // while replacing its visible tail. That endpoint includes
+                    // the natural assembly reserve, half the 20px arrow
+                    // decoration, and the terminal continuation fraction.
+                    elbow_y
+                        + ftile::ASSEMBLY_CONNECTION_HEIGHT
+                        + ARROW_LEN / 2.0
+                        + TERMINAL_IF_CROSS_CONTINUATION_RECLAIM
+                } else {
+                    elbow_y
+                },
+                tip_offset: if nested {
+                    // `ConnectionElseNoDiamond` keeps one arrowhead/stroke
+                    // offset; an adjacent LIMITED merge keeps the same
+                    // offset once more when its outer tail replaces the snake.
+                    if adjacent_if_down {
+                        -2.0 * (ARROW_HEAD_HALF + 0.5)
+                    } else {
+                        0.0
+                    }
+                } else if preserve_translated_route {
+                    -ARROW_HEAD_HALF - 0.5
+                } else {
+                    0.0
+                },
+                transform_raw_midpoint: true,
+                upward: false,
+                color: color.clone(),
+            });
+        write!(
+            target.occupancy,
+            r#"<rect height="{}" width="5" x="{}" y="{}"/>"#,
+            f(DIAMOND_HALF),
+            f(output_x),
+            f(output_y - DIAMOND_HALF),
+        )
+        .unwrap();
+        if nested {
+            typed_ftile_emit_polyline(target, &[(corridor_x, diamond_cy), target_point], arrow);
+        } else {
+            typed_ftile_emit_polyline(
+                target,
+                &[
+                    (corridor_x, diamond_cy),
+                    (corridor_x, elbow_y),
+                    (target_point.0, elbow_y),
+                    target_point,
+                ],
+                arrow,
+            );
+        }
+        let fragment = target.connectors.split_off(start);
+        assert!(
+            target.connectors.contains(&marker),
+            "missing deferred FtileIfDown output"
+        );
+        target.connectors = target.connectors.replacen(&marker, &fragment, 1);
+        return;
+    }
+
     let Some(deepest_if) = typed_ftile_deepest_single_live_if(source) else {
         typed_ftile_emit_connection(emitters, cross, out_lane, in_lane, points, arrow);
         return;
@@ -32202,13 +34526,6 @@ fn typed_ftile_scene_out(
         // `FtileAssemblySimple` retains the fork result's translated output
         // axis; the black block's painted edge does not shift that point.
         lanes.x(scene.out_lane, x + scene.geometry.left)
-    } else if typed_ftile_ends_in_fork(scene)
-        && scene.in_lane != scene.out_lane
-        && lanes.content_adjust[scene.out_lane] != 0.0
-    {
-        // `ConnectionCross.drawU` translates the fork result through the
-        // destination swimlane, outside the branch wrapper's content shift.
-        lanes.owner_x(scene.out_lane, x + scene.geometry.left) + SWIMLANE_CONNECTION_CROSS_INSET
     } else {
         lanes.x(scene.out_lane, x + scene.geometry.left)
     };
@@ -32218,6 +34535,12 @@ fn typed_ftile_scene_out(
 fn typed_ftile_scene_ends_in_single_live_if(scene: &TypedFtileScene<'_>) -> bool {
     match &scene.kind {
         TypedFtileKind::If { .. } => typed_ftile_single_live_if_branch(scene).is_some(),
+        TypedFtileKind::IfDown {
+            survivor,
+            merge: None,
+            terminal: None,
+            ..
+        } => survivor.scene.geometry.out_y.is_none() && scene.geometry.out_y.is_some(),
         TypedFtileKind::Sequence { children } => children
             .last()
             .is_some_and(|child| typed_ftile_scene_ends_in_single_live_if(&child.scene)),
@@ -32240,8 +34563,145 @@ fn typed_ftile_deepest_single_live_if<'a, 'b>(
     }
 }
 
+fn typed_ftile_deepest_if_down_empty_output<'a, 'b>(
+    scene: &'a TypedFtileScene<'b>,
+    origin: (f64, f64),
+) -> Option<(&'a TypedFtileScene<'b>, (f64, f64))> {
+    match &scene.kind {
+        TypedFtileKind::Sequence { children } => {
+            let last = children.last()?;
+            typed_ftile_deepest_if_down_empty_output(
+                &last.scene,
+                (origin.0 + last.x, origin.1 + last.y),
+            )
+        }
+        TypedFtileKind::WithNote { child, .. } => typed_ftile_deepest_if_down_empty_output(
+            &child.scene,
+            (origin.0 + child.x, origin.1 + child.y),
+        ),
+        TypedFtileKind::If { .. } => {
+            let branch = typed_ftile_single_live_if_branch(scene)?;
+            typed_ftile_deepest_if_down_empty_output(
+                &branch.scene,
+                (origin.0 + branch.x, origin.1 + branch.y),
+            )
+        }
+        TypedFtileKind::IfDown {
+            survivor,
+            merge: None,
+            terminal: None,
+            ..
+        } if survivor.scene.geometry.out_y.is_none() && scene.geometry.out_y.is_some() => {
+            Some((scene, origin))
+        }
+        _ => None,
+    }
+}
+
 fn typed_ftile_single_live_output_marker(scene: &TypedFtileScene<'_>) -> String {
     format!("<!--rustuml-ftile-direct:{scene:p}-->")
+}
+
+fn typed_ftile_welding_insertion_marker(scene: &TypedFtileScene<'_>) -> String {
+    format!("<!--rustuml-ftile-welding:{scene:p}-->")
+}
+
+fn typed_ftile_contains_direct_break(scene: &TypedFtileScene<'_>) -> bool {
+    match &scene.kind {
+        TypedFtileKind::Leaf { node, .. } => matches!(node, LayoutNode::Break),
+        TypedFtileKind::WithNote { child, .. } => typed_ftile_contains_direct_break(&child.scene),
+        TypedFtileKind::Sequence { children } => children
+            .iter()
+            .any(|child| typed_ftile_contains_direct_break(&child.scene)),
+        TypedFtileKind::If { .. }
+        | TypedFtileKind::IfDown { .. }
+        | TypedFtileKind::While { .. }
+        | TypedFtileKind::Repeat { .. }
+        | TypedFtileKind::Fork { .. }
+        | TypedFtileKind::Switch { .. } => false,
+    }
+}
+
+fn typed_ftile_generic_if_welding_marker(scene: &TypedFtileScene<'_>) -> Option<String> {
+    match &scene.kind {
+        TypedFtileKind::If {
+            then_scene,
+            else_scene,
+            ..
+        } if typed_ftile_contains_direct_break(&then_scene.scene)
+            || typed_ftile_contains_direct_break(&else_scene.scene) =>
+        {
+            Some(typed_ftile_welding_insertion_marker(scene))
+        }
+        TypedFtileKind::Sequence { children } => children
+            .iter()
+            .find_map(|child| typed_ftile_generic_if_welding_marker(&child.scene)),
+        TypedFtileKind::WithNote { child, .. } => {
+            typed_ftile_generic_if_welding_marker(&child.scene)
+        }
+        TypedFtileKind::If {
+            then_scene,
+            else_scene,
+            ..
+        } => typed_ftile_generic_if_welding_marker(&then_scene.scene)
+            .or_else(|| typed_ftile_generic_if_welding_marker(&else_scene.scene)),
+        TypedFtileKind::IfDown {
+            survivor, terminal, ..
+        } => typed_ftile_generic_if_welding_marker(&survivor.scene).or_else(|| {
+            terminal
+                .as_ref()
+                .and_then(|terminal| typed_ftile_generic_if_welding_marker(&terminal.scene))
+        }),
+        TypedFtileKind::While { body, special, .. } => {
+            typed_ftile_generic_if_welding_marker(&body.scene).or_else(|| {
+                special
+                    .as_ref()
+                    .and_then(|special| typed_ftile_generic_if_welding_marker(&special.scene))
+            })
+        }
+        TypedFtileKind::Repeat { .. } => None,
+        TypedFtileKind::Fork { branches, .. } => branches
+            .iter()
+            .find_map(|branch| typed_ftile_generic_if_welding_marker(&branch.scene)),
+        TypedFtileKind::Switch { cases, .. } => cases
+            .iter()
+            .find_map(|case| typed_ftile_generic_if_welding_marker(&case.scene)),
+        TypedFtileKind::Leaf { .. } => None,
+    }
+}
+
+fn typed_ftile_break_if_down_marker(scene: &TypedFtileScene<'_>) -> Option<String> {
+    match &scene.kind {
+        TypedFtileKind::IfDown { survivor, .. } if typed_ftile_contains_break(&survivor.scene) => {
+            Some(typed_ftile_welding_insertion_marker(scene))
+        }
+        TypedFtileKind::Sequence { children } => children
+            .iter()
+            .find_map(|child| typed_ftile_break_if_down_marker(&child.scene)),
+        TypedFtileKind::WithNote { child, .. } => typed_ftile_break_if_down_marker(&child.scene),
+        TypedFtileKind::If {
+            then_scene,
+            else_scene,
+            ..
+        } => typed_ftile_break_if_down_marker(&then_scene.scene)
+            .or_else(|| typed_ftile_break_if_down_marker(&else_scene.scene)),
+        TypedFtileKind::While { body, special, .. } => {
+            typed_ftile_break_if_down_marker(&body.scene).or_else(|| {
+                special
+                    .as_ref()
+                    .and_then(|special| typed_ftile_break_if_down_marker(&special.scene))
+            })
+        }
+        TypedFtileKind::Fork { branches, .. } => branches
+            .iter()
+            .find_map(|branch| typed_ftile_break_if_down_marker(&branch.scene)),
+        TypedFtileKind::Switch { cases, .. } => cases
+            .iter()
+            .find_map(|case| typed_ftile_break_if_down_marker(&case.scene)),
+        TypedFtileKind::Leaf { .. }
+        | TypedFtileKind::IfDown { .. }
+        | TypedFtileKind::Repeat { .. } => None,
+    }
 }
 
 fn typed_ftile_single_live_if_branch<'a, 'b>(
@@ -32275,16 +34735,6 @@ fn typed_ftile_ends_in_expanded_fork(scene: &TypedFtileScene<'_>) -> bool {
     }
 }
 
-fn typed_ftile_ends_in_fork(scene: &TypedFtileScene<'_>) -> bool {
-    match &scene.kind {
-        TypedFtileKind::Fork { .. } => true,
-        TypedFtileKind::Sequence { children } => children
-            .last()
-            .is_some_and(|child| typed_ftile_ends_in_fork(&child.scene)),
-        _ => false,
-    }
-}
-
 fn typed_ftile_terminal_while_exit(
     scene: &TypedFtileScene<'_>,
     x: f64,
@@ -32314,6 +34764,7 @@ fn typed_ftile_terminal_while_exit(
 fn typed_ftile_contains_fork(scene: &TypedFtileScene<'_>) -> bool {
     match &scene.kind {
         TypedFtileKind::Leaf { .. } => false,
+        TypedFtileKind::WithNote { child, .. } => typed_ftile_contains_fork(&child.scene),
         TypedFtileKind::Sequence { children } => children
             .iter()
             .any(|child| typed_ftile_contains_fork(&child.scene)),
@@ -32325,6 +34776,14 @@ fn typed_ftile_contains_fork(scene: &TypedFtileScene<'_>) -> bool {
             typed_ftile_contains_fork(&then_scene.scene)
                 || typed_ftile_contains_fork(&else_scene.scene)
         }
+        TypedFtileKind::IfDown {
+            survivor, terminal, ..
+        } => {
+            typed_ftile_contains_fork(&survivor.scene)
+                || terminal
+                    .as_ref()
+                    .is_some_and(|terminal| typed_ftile_contains_fork(&terminal.scene))
+        }
         TypedFtileKind::While { body, special, .. } => {
             typed_ftile_contains_fork(&body.scene)
                 || special
@@ -32333,6 +34792,48 @@ fn typed_ftile_contains_fork(scene: &TypedFtileScene<'_>) -> bool {
         }
         TypedFtileKind::Repeat { body, .. } => typed_ftile_contains_fork(&body.scene),
         TypedFtileKind::Fork { .. } => true,
+        TypedFtileKind::Switch { cases, .. } => cases
+            .iter()
+            .any(|case| typed_ftile_contains_fork(&case.scene)),
+    }
+}
+
+fn typed_ftile_contains_break(scene: &TypedFtileScene<'_>) -> bool {
+    match &scene.kind {
+        TypedFtileKind::Leaf { node, .. } => matches!(node, LayoutNode::Break),
+        TypedFtileKind::WithNote { child, .. } => typed_ftile_contains_break(&child.scene),
+        TypedFtileKind::Sequence { children } => children
+            .iter()
+            .any(|child| typed_ftile_contains_break(&child.scene)),
+        TypedFtileKind::If {
+            then_scene,
+            else_scene,
+            ..
+        } => {
+            typed_ftile_contains_break(&then_scene.scene)
+                || typed_ftile_contains_break(&else_scene.scene)
+        }
+        TypedFtileKind::IfDown {
+            survivor, terminal, ..
+        } => {
+            typed_ftile_contains_break(&survivor.scene)
+                || terminal
+                    .as_ref()
+                    .is_some_and(|terminal| typed_ftile_contains_break(&terminal.scene))
+        }
+        TypedFtileKind::While { body, special, .. } => {
+            typed_ftile_contains_break(&body.scene)
+                || special
+                    .as_ref()
+                    .is_some_and(|special| typed_ftile_contains_break(&special.scene))
+        }
+        TypedFtileKind::Repeat { body, .. } => typed_ftile_contains_break(&body.scene),
+        TypedFtileKind::Fork { branches, .. } => branches
+            .iter()
+            .any(|branch| typed_ftile_contains_break(&branch.scene)),
+        TypedFtileKind::Switch { cases, .. } => cases
+            .iter()
+            .any(|case| typed_ftile_contains_break(&case.scene)),
     }
 }
 
@@ -32414,9 +34915,269 @@ fn typed_ftile_cross_sequence_middle(
         // endpoints through their vertical midpoint before ON_Y compression.
         (source_y + target_y) / 2.0
     } else {
-        // The legacy typed scene stores post-compression geometry; its midpoint
-        // has already collapsed to the destination-clearance band.
+        // A compressed typed scene has already collapsed the assembly band to
+        // the destination arrow and SlotFinder clearance.
         target_y - (spacing.assembly_separation() - crate::compress::COMPRESS_MARGIN)
+    }
+}
+
+fn typed_ftile_collect_unconsumed_break_points(
+    scene: &TypedFtileScene<'_>,
+    origin: (f64, f64),
+    lanes: &TypedFtileLaneLayout,
+    points: &mut Vec<(usize, f64, f64)>,
+) {
+    let (x, y) = origin;
+    match &scene.kind {
+        TypedFtileKind::Leaf { node, lane } => {
+            if matches!(node, LayoutNode::Break) {
+                points.push((
+                    *lane,
+                    lanes.x(*lane, x + scene.geometry.left),
+                    y + scene.geometry.in_y,
+                ));
+            }
+        }
+        TypedFtileKind::WithNote { child, .. } => {
+            typed_ftile_collect_unconsumed_break_points(
+                &child.scene,
+                (x + child.x, y + child.y),
+                lanes,
+                points,
+            );
+        }
+        TypedFtileKind::Sequence { children } => {
+            for child in children {
+                typed_ftile_collect_unconsumed_break_points(
+                    &child.scene,
+                    (x + child.x, y + child.y),
+                    lanes,
+                    points,
+                );
+            }
+        }
+        TypedFtileKind::If {
+            then_scene,
+            else_scene,
+            ..
+        } => {
+            for child in [then_scene, else_scene] {
+                typed_ftile_collect_unconsumed_break_points(
+                    &child.scene,
+                    (x + child.x, y + child.y),
+                    lanes,
+                    points,
+                );
+            }
+        }
+        TypedFtileKind::IfDown {
+            survivor, terminal, ..
+        } => {
+            typed_ftile_collect_unconsumed_break_points(
+                &survivor.scene,
+                (x + survivor.x, y + survivor.y),
+                lanes,
+                points,
+            );
+            if let Some(terminal) = terminal {
+                typed_ftile_collect_unconsumed_break_points(
+                    &terminal.scene,
+                    (x + terminal.x, y + terminal.y),
+                    lanes,
+                    points,
+                );
+            }
+        }
+        TypedFtileKind::While { body, special, .. } => {
+            typed_ftile_collect_unconsumed_break_points(
+                &body.scene,
+                (x + body.x, y + body.y),
+                lanes,
+                points,
+            );
+            if let Some(special) = special {
+                typed_ftile_collect_unconsumed_break_points(
+                    &special.scene,
+                    (x + special.x, y + special.y),
+                    lanes,
+                    points,
+                );
+            }
+        }
+        // A nested repeat consumes its own welding points in
+        // `FtileFactoryDelegatorRepeat.repeat`; they do not propagate to its
+        // parent's `InstructionList`.
+        TypedFtileKind::Repeat { .. } => {}
+        TypedFtileKind::Fork { branches, .. } => {
+            for branch in branches {
+                typed_ftile_collect_unconsumed_break_points(
+                    &branch.scene,
+                    (x + branch.x, y + branch.y),
+                    lanes,
+                    points,
+                );
+            }
+        }
+        TypedFtileKind::Switch { cases, .. } => {
+            for case in cases {
+                typed_ftile_collect_unconsumed_break_points(
+                    &case.scene,
+                    (x + case.x, y + case.y),
+                    lanes,
+                    points,
+                );
+            }
+        }
+    }
+}
+
+#[allow(clippy::too_many_arguments)]
+fn typed_ftile_emit_repeat_welding_connections(
+    body: &TypedPlacedScene<'_>,
+    repeat_origin: (f64, f64),
+    lanes: &TypedFtileLaneLayout,
+    emitters: &mut [SvgEmitter],
+    cross: &mut SvgEmitter,
+    entry_lane: usize,
+    merge: &ftile::FtileGeometry,
+    merge_at: (f64, f64),
+    merge_lane: usize,
+) {
+    let (x, y) = repeat_origin;
+    let merge_left = lanes.x(merge_lane, x + merge_at.0);
+    let merge_cy = y + merge_at.1 + merge.height / 2.0;
+    let mut welding_points = Vec::new();
+    typed_ftile_collect_unconsumed_break_points(
+        &body.scene,
+        (x + body.x, y + body.y),
+        lanes,
+        &mut welding_points,
+    );
+    let corridor_x = lanes.x(entry_lane, x) - crate::compress::COMPRESS_MARGIN;
+    for (index, (break_lane, break_x, break_y)) in welding_points.into_iter().enumerate() {
+        // `FtileFactoryDelegatorRepeat` adds a plain Connection, not a
+        // ConnectionTranslatable. Swimlane replay therefore paints it only
+        // when the break and merge share an owner.
+        if break_lane != merge_lane {
+            continue;
+        }
+        if index == 0 {
+            typed_ftile_emit_connection(
+                emitters,
+                cross,
+                break_lane,
+                merge_lane,
+                &[
+                    (break_x, break_y),
+                    (corridor_x, break_y),
+                    (corridor_x, merge_cy),
+                    (merge_left, merge_cy),
+                ],
+                TypedArrowDirection::Right,
+            );
+        } else {
+            typed_ftile_emit_connection(
+                emitters,
+                cross,
+                break_lane,
+                entry_lane,
+                &[(break_x, break_y), (corridor_x, break_y)],
+                TypedArrowDirection::Left,
+            );
+        }
+    }
+}
+
+fn typed_ftile_collect_unconsumed_break_points_raw(
+    scene: &TypedFtileScene<'_>,
+    origin: (f64, f64),
+    points: &mut Vec<(usize, f64, f64)>,
+) {
+    let (x, y) = origin;
+    match &scene.kind {
+        TypedFtileKind::Leaf { node, lane } => {
+            if matches!(node, LayoutNode::Break) {
+                points.push((*lane, x + scene.geometry.left, y + scene.geometry.in_y));
+            }
+        }
+        TypedFtileKind::WithNote { child, .. } => {
+            typed_ftile_collect_unconsumed_break_points_raw(
+                &child.scene,
+                (x + child.x, y + child.y),
+                points,
+            );
+        }
+        TypedFtileKind::Sequence { children } => {
+            for child in children {
+                typed_ftile_collect_unconsumed_break_points_raw(
+                    &child.scene,
+                    (x + child.x, y + child.y),
+                    points,
+                );
+            }
+        }
+        TypedFtileKind::If {
+            then_scene,
+            else_scene,
+            ..
+        } => {
+            for child in [then_scene, else_scene] {
+                typed_ftile_collect_unconsumed_break_points_raw(
+                    &child.scene,
+                    (x + child.x, y + child.y),
+                    points,
+                );
+            }
+        }
+        TypedFtileKind::IfDown {
+            survivor, terminal, ..
+        } => {
+            typed_ftile_collect_unconsumed_break_points_raw(
+                &survivor.scene,
+                (x + survivor.x, y + survivor.y),
+                points,
+            );
+            if let Some(terminal) = terminal {
+                typed_ftile_collect_unconsumed_break_points_raw(
+                    &terminal.scene,
+                    (x + terminal.x, y + terminal.y),
+                    points,
+                );
+            }
+        }
+        TypedFtileKind::While { body, special, .. } => {
+            typed_ftile_collect_unconsumed_break_points_raw(
+                &body.scene,
+                (x + body.x, y + body.y),
+                points,
+            );
+            if let Some(special) = special {
+                typed_ftile_collect_unconsumed_break_points_raw(
+                    &special.scene,
+                    (x + special.x, y + special.y),
+                    points,
+                );
+            }
+        }
+        TypedFtileKind::Repeat { .. } => {}
+        TypedFtileKind::Fork { branches, .. } => {
+            for branch in branches {
+                typed_ftile_collect_unconsumed_break_points_raw(
+                    &branch.scene,
+                    (x + branch.x, y + branch.y),
+                    points,
+                );
+            }
+        }
+        TypedFtileKind::Switch { cases, .. } => {
+            for case in cases {
+                typed_ftile_collect_unconsumed_break_points_raw(
+                    &case.scene,
+                    (x + case.x, y + case.y),
+                    points,
+                );
+            }
+        }
     }
 }
 
@@ -32438,11 +35199,44 @@ fn typed_ftile_emit_connectors(
     let (x, y) = origin;
     match &scene.kind {
         TypedFtileKind::Leaf { .. } => {}
+        TypedFtileKind::WithNote { child, .. } => {
+            typed_ftile_emit_connectors(
+                &child.scene,
+                (x + child.x, y + child.y),
+                lanes,
+                emitters,
+                emphasis,
+                cross,
+                suppression,
+            );
+        }
         TypedFtileKind::Sequence { children } => {
             // `InstructionList` assembles its tiles left-to-right. Each
             // `FtileWithConnection` draws the accumulated child assembly, then
             // the connection into the newly appended child.
             for (index, second) in children.iter().enumerate() {
+                let pending_per_lane = emitters
+                    .iter()
+                    .map(|emitter| emitter.deferred_connector_fragments.len())
+                    .collect::<Vec<_>>();
+                let pending_cross = cross.deferred_connector_fragments.len();
+                let fuses_cross_lane_while = children.get(index + 1).is_some_and(|next| {
+                    typed_ftile_terminal_while_exit(
+                        &second.scene,
+                        x + second.x,
+                        y + second.y,
+                        lanes,
+                    )
+                    .is_some_and(|(out_lane, ..)| out_lane != next.scene.in_lane)
+                });
+                let defer_inbound_to_while = children.get(index + 1).is_some()
+                    && typed_ftile_terminal_while_exit(
+                        &second.scene,
+                        x + second.x,
+                        y + second.y,
+                        lanes,
+                    )
+                    .is_some();
                 typed_ftile_emit_connectors(
                     &second.scene,
                     (x + second.x, y + second.y),
@@ -32451,8 +35245,8 @@ fn typed_ftile_emit_connectors(
                     emphasis,
                     cross,
                     TypedFtileConnectorSuppression {
-                        terminal_while_exit: suppression.terminal_while_exit
-                            && index + 1 == children.len(),
+                        terminal_while_exit: fuses_cross_lane_while
+                            || (suppression.terminal_while_exit && index + 1 == children.len()),
                         single_live_if_output: index + 1 < children.len()
                             || (suppression.single_live_if_output && index + 1 == children.len()),
                     },
@@ -32467,29 +35261,131 @@ fn typed_ftile_emit_connectors(
                 };
                 let (in_lane, x2, y2) =
                     typed_ftile_scene_in(&second.scene, x + second.x, y + second.y, lanes);
+                if out_lane != in_lane
+                    && let Some((while_lane, diamond_left, diamond_cy, exit_x)) =
+                        typed_ftile_terminal_while_exit(
+                            &first.scene,
+                            x + first.x,
+                            y + first.y,
+                            lanes,
+                        )
+                {
+                    // `UGraphicForSnake` merges FtileWhile.ConnectionOut into
+                    // FtileFactoryDelegatorAssembly's translated connection.
+                    // ConnectionCross replays the fused snake in the source
+                    // swimlane pass, retaining the while's emphasized DOWN
+                    // decoration but dropping the intermediate point-out arm.
+                    let middle = typed_ftile_cross_sequence_middle(scene.spacing, y1, y2);
+                    let target = &mut emitters[while_lane];
+                    let color = target.palette.arrow_color.clone();
+                    let thickness = target.palette.arrow_thickness.clone();
+                    target.line_styled(
+                        &color,
+                        &thickness,
+                        diamond_left,
+                        exit_x,
+                        diamond_cy,
+                        diamond_cy,
+                        false,
+                    );
+                    let arrow_y = (diamond_cy + y1) / 2.0 + WHILE_CROSS_ASSEMBLY_EMPHASIS_RESTORE;
+                    target.polygon_connector(
+                        &color,
+                        &[
+                            (exit_x - 4.0, arrow_y - 10.0),
+                            (exit_x, arrow_y),
+                            (exit_x + 4.0, arrow_y - 10.0),
+                            (exit_x, arrow_y - 6.0),
+                        ],
+                        &color,
+                        "1",
+                    );
+                    target.line_styled(
+                        &color, &thickness, exit_x, exit_x, diamond_cy, middle, false,
+                    );
+                    typed_ftile_emit_polyline(
+                        target,
+                        &[(exit_x, middle), (x2, middle), (x2, y2)],
+                        TypedArrowDirection::Down,
+                    );
+                    for (emitter, pending) in emitters.iter_mut().zip(&pending_per_lane) {
+                        emitter.flush_deferred_connectors(*pending);
+                    }
+                    cross.flush_deferred_connectors(pending_cross);
+                    continue;
+                }
                 let points = if out_lane == in_lane {
                     vec![(x1, y1), (x2, y2)]
                 } else {
-                    let middle = if typed_ftile_scene_ends_in_single_live_if(&first.scene) {
-                        // LIMITED merging folds the direct one-sided if snake
-                        // into the assembly snake. ON_Y then leaves only the
-                        // destination arrow and its five-pixel clearance.
+                    let interval_epsilon = f64::EPSILON * y1.abs().max(y2.abs()).max(1.0) * 4.0;
+                    let interval_retains_full_assembly =
+                        y2 - y1 + interval_epsilon >= ftile::ASSEMBLY_CONNECTION_HEIGHT;
+                    let middle = if scene.spacing == TypedFtileSpacing::Natural
+                        && matches!(first.scene.kind, TypedFtileKind::If { .. })
+                    {
+                        // `ConnectionVerticalDown.drawTranslate` reaches the
+                        // destination owner through the 15px assembly tail.
                         y2 - (ftile::ASSEMBLY_RENDERED_SEPARATION
                             - crate::compress::COMPRESS_MARGIN)
+                    } else if typed_ftile_scene_ends_in_single_live_if(&first.scene) {
+                        // LIMITED merging keeps
+                        // `ConnectionVerticalDown.drawTranslate`'s midpoint;
+                        // the common 30px assembly gap naturally leaves the
+                        // usual 15px destination-arrow clearance.
+                        (y1 + y2) / 2.0
+                    } else if scene.spacing != TypedFtileSpacing::Natural
+                        && matches!(
+                            first.scene.kind,
+                            TypedFtileKind::If { .. } | TypedFtileKind::IfDown { .. }
+                        )
+                        && interval_retains_full_assembly
+                    {
+                        // A compressed generic-if owner can retain a larger
+                        // translated band; `ConnectionVerticalDown` keeps the
+                        // midpoint of that owner-specific interval.
+                        (y1 + y2) / 2.0
+                    } else if scene.spacing != TypedFtileSpacing::Natural
+                        && interval_retains_full_assembly
+                        && !matches!(first.scene.kind, TypedFtileKind::While { .. })
+                    {
+                        // A translated sequence owner whose interval outlives
+                        // the compressed assembly band retains
+                        // `ConnectionVerticalDown`'s midpoint.
+                        (y1 + y2) / 2.0
                     } else {
                         typed_ftile_cross_sequence_middle(scene.spacing, y1, y2)
                     };
                     vec![(x1, y1), (x1, middle), (x2, middle), (x2, y2)]
                 };
+                let connection_starts = emitters
+                    .iter()
+                    .map(|emitter| emitter.connectors.len())
+                    .collect::<Vec<_>>();
+                let cross_connection_start = cross.connectors.len();
                 typed_ftile_emit_output_connection(
                     &first.scene,
+                    (x + first.x, y + first.y),
+                    lanes,
                     emitters,
                     cross,
-                    out_lane,
-                    in_lane,
-                    &points,
-                    TypedArrowDirection::Down,
+                    TypedFtileOutputRoute {
+                        out_lane,
+                        in_lane,
+                        preserve_translated_route: false,
+                        points: &points,
+                        arrow: TypedArrowDirection::Down,
+                    },
                 );
+                if defer_inbound_to_while {
+                    for (emitter, start) in emitters.iter_mut().zip(connection_starts) {
+                        emitter.defer_connectors_from(start);
+                    }
+                    cross.defer_connectors_from(cross_connection_start);
+                }
+                for (emitter, pending) in emitters.iter_mut().zip(&pending_per_lane) {
+                    emitter.flush_deferred_connectors(*pending);
+                }
+                cross.flush_deferred_connectors(pending_cross);
             }
         }
         TypedFtileKind::If {
@@ -32589,14 +35485,31 @@ fn typed_ftile_emit_connectors(
                     *lane != branch_lane,
                     diamond.height,
                 );
-                typed_ftile_emit_connection(
-                    emitters,
-                    cross,
-                    *lane,
-                    branch_lane,
-                    &points,
-                    TypedArrowDirection::Down,
-                );
+                if typed_ftile_contains_direct_break(&branch.scene) {
+                    let marker = typed_ftile_welding_insertion_marker(scene);
+                    let target = if *lane == branch_lane {
+                        &mut emitters[*lane]
+                    } else {
+                        &mut *cross
+                    };
+                    target
+                        .deferred_if_welding_connections
+                        .push(DeferredIfWeldingConnection {
+                            marker: marker.clone(),
+                            points,
+                            lane: branch_lane,
+                        });
+                    target.connectors.push_str(&marker);
+                } else {
+                    typed_ftile_emit_connection(
+                        emitters,
+                        cross,
+                        *lane,
+                        branch_lane,
+                        &points,
+                        TypedArrowDirection::Down,
+                    );
+                }
             }
 
             if let Some(branch) = single_live_branch {
@@ -32610,20 +35523,30 @@ fn typed_ftile_emit_connectors(
                     // direct segments down to this tile's point-out.
                     let out_x = lanes.x(*lane, x + scene.geometry.left);
                     let out_y = y + scene.geometry.out_y.expect("live if output");
-                    let elbow_y = y + scene.geometry.height - ftile::HEXAGON_HALF;
-                    let target = if branch_lane == *lane {
-                        &mut emitters[branch_lane]
-                    } else {
-                        cross
-                    };
-                    typed_ftile_emit_polyline_lines(
-                        target,
-                        &[
-                            (branch_x, branch_y),
-                            (branch_x, elbow_y),
-                            (out_x, elbow_y),
-                            (out_x, out_y),
-                        ],
+                    // The direct snake's no-diamond output is measured through
+                    // SlotSet.smaller(COMPRESS_MARGIN), leaving half that
+                    // clearance above the owner-translated horizontal turn.
+                    let elbow_y = y + scene.geometry.height
+                        - ftile::HEXAGON_HALF
+                        - crate::compress::COMPRESS_MARGIN / 2.0;
+                    typed_ftile_emit_output_connection(
+                        &branch.scene,
+                        (x + branch.x, y + branch.y),
+                        lanes,
+                        emitters,
+                        cross,
+                        TypedFtileOutputRoute {
+                            out_lane: branch_lane,
+                            in_lane: *lane,
+                            preserve_translated_route: false,
+                            points: &[
+                                (branch_x, branch_y),
+                                (branch_x, elbow_y),
+                                (out_x, elbow_y),
+                                (out_x, out_y),
+                            ],
+                            arrow: TypedArrowDirection::None,
+                        },
                     );
                 } else if suppression.single_live_if_output
                     && !typed_ftile_scene_ends_in_single_live_if(&branch.scene)
@@ -32675,6 +35598,162 @@ fn typed_ftile_emit_connectors(
                         },
                     );
                 }
+            }
+        }
+        TypedFtileKind::IfDown {
+            lane,
+            diamond,
+            diamond_at,
+            survivor,
+            merge,
+            terminal,
+            ..
+        } => {
+            typed_ftile_emit_connectors(
+                &survivor.scene,
+                (x + survivor.x, y + survivor.y),
+                lanes,
+                emitters,
+                emphasis,
+                cross,
+                TypedFtileConnectorSuppression {
+                    terminal_while_exit: false,
+                    single_live_if_output: survivor.scene.geometry.out_y.is_some(),
+                },
+            );
+            if let Some(terminal) = terminal {
+                typed_ftile_emit_connectors(
+                    &terminal.scene,
+                    (x + terminal.x, y + terminal.y),
+                    lanes,
+                    emitters,
+                    emphasis,
+                    cross,
+                    TypedFtileConnectorSuppression::default(),
+                );
+            }
+
+            let diamond_right = lanes.x(*lane, x + diamond_at.0 + diamond.width);
+            let diamond_cx = lanes.x(*lane, x + diamond_at.0 + diamond.left);
+            let diamond_cy = y + diamond_at.1 + DIAMOND_HALF;
+            let diamond_bottom = y + diamond_at.1 + diamond.height;
+            let (survivor_lane, survivor_x, survivor_y) =
+                typed_ftile_scene_in(&survivor.scene, x + survivor.x, y + survivor.y, lanes);
+            let in_points = if *lane == survivor_lane {
+                vec![(diamond_cx, diamond_bottom), (survivor_x, survivor_y)]
+            } else {
+                let middle = (diamond_bottom + survivor_y) / 2.0;
+                vec![
+                    (diamond_cx, diamond_bottom),
+                    (diamond_cx, middle),
+                    (survivor_x, middle),
+                    (survivor_x, survivor_y),
+                ]
+            };
+            if typed_ftile_contains_break(&survivor.scene) {
+                typed_ftile_emit_connection(
+                    emitters,
+                    cross,
+                    *lane,
+                    survivor_lane,
+                    &in_points,
+                    TypedArrowDirection::None,
+                );
+                emitters[*lane]
+                    .connectors
+                    .push_str(&typed_ftile_welding_insertion_marker(scene));
+            } else {
+                typed_ftile_emit_connection(
+                    emitters,
+                    cross,
+                    *lane,
+                    survivor_lane,
+                    &in_points,
+                    TypedArrowDirection::Down,
+                );
+            }
+
+            if let Some(terminal) = terminal
+                && terminal.scene.in_lane == *lane
+            {
+                let terminal_lane = terminal.scene.in_lane;
+                let terminal_left = lanes.x(terminal_lane, x + terminal.x);
+                let terminal_cy = y + terminal.y + terminal.scene.geometry.height / 2.0;
+                typed_ftile_emit_connection(
+                    emitters,
+                    cross,
+                    *lane,
+                    terminal_lane,
+                    &[(diamond_right, diamond_cy), (terminal_left, terminal_cy)],
+                    TypedArrowDirection::Right,
+                );
+            } else if let Some((merge, merge_at)) = merge {
+                let merge_top = y + merge_at.1;
+                let merge_cx = lanes.x(*lane, x + merge_at.0 + merge.left);
+                let merge_right = lanes.x(*lane, x + merge_at.0 + merge.width);
+                let merge_cy = y + merge_at.1 + DIAMOND_HALF;
+                if let Some((survivor_lane, survivor_x, survivor_y)) =
+                    typed_ftile_scene_out(&survivor.scene, x + survivor.x, y + survivor.y, lanes)
+                {
+                    typed_ftile_emit_connection(
+                        emitters,
+                        cross,
+                        survivor_lane,
+                        *lane,
+                        &[(survivor_x, survivor_y), (merge_cx, merge_top)],
+                        TypedArrowDirection::Down,
+                    );
+                    let corridor_x = lanes.x(
+                        *lane,
+                        (x + diamond_at.0 + diamond.width + DIAMOND_HALF)
+                            .max(x + survivor.x + survivor.scene.geometry.width),
+                    );
+                    typed_ftile_emit_connection(
+                        emitters,
+                        cross,
+                        *lane,
+                        *lane,
+                        &[
+                            (diamond_right, diamond_cy),
+                            (corridor_x, diamond_cy),
+                            (corridor_x, merge_cy),
+                            (merge_right, merge_cy),
+                        ],
+                        TypedArrowDirection::Left,
+                    );
+                }
+            } else if let Some(scene_out_y) = scene.geometry.out_y {
+                if suppression.single_live_if_output {
+                    let marker = typed_ftile_single_live_output_marker(scene);
+                    let target = &mut emitters[*lane];
+                    if let Some(endpoint) = target.last_connector_endpoint {
+                        target
+                            .deferred_output_arrows
+                            .push((marker.clone(), endpoint));
+                    }
+                    target.connectors.push_str(&marker);
+                    return;
+                }
+                let out_x = lanes.x(*lane, x + scene.geometry.left);
+                let out_y = y + scene_out_y;
+                let corridor_x = lanes.x(
+                    *lane,
+                    (x + diamond_at.0 + diamond.width + DIAMOND_HALF)
+                        .max(x + survivor.x + survivor.scene.geometry.width),
+                );
+                typed_ftile_emit_connection(
+                    emitters,
+                    cross,
+                    *lane,
+                    *lane,
+                    &[
+                        (diamond_right, diamond_cy),
+                        (corridor_x, diamond_cy),
+                        (corridor_x, out_y),
+                        (out_x, out_y),
+                    ],
+                    TypedArrowDirection::Left,
+                );
             }
         }
         TypedFtileKind::While {
@@ -32738,8 +35817,14 @@ fn typed_ftile_emit_connectors(
                 } else {
                     body_out_y
                 };
+                let switch_merge_top = typed_ftile_switch_merge_top(&body.scene, y + body.y);
                 let loop_arrow_y = (loop_anchor_y + diamond_cy) / 2.0;
-                let loop_arrow_y = if body_out_lane != *lane {
+                let loop_arrow_y = if let Some(merge_top) = switch_merge_top {
+                    // `FtileSwitchWithManyLinks` records this anchor for
+                    // `FtileWhile.ConnectionBackSimple`: the uncompressed
+                    // merge gap plus half an arrow lead.
+                    merge_top - 3.0 * ARROW_LEN
+                } else if body_out_lane != *lane {
                     typed_ftile_cross_lane_assembly_middle(
                         &body.scene,
                         x + body.x,
@@ -32752,8 +35837,10 @@ fn typed_ftile_emit_connectors(
                                 - crate::compress::COMPRESS_MARGIN)
                     })
                     .unwrap_or(loop_arrow_y)
-                } else {
+                } else if typed_ftile_contains_fork(&body.scene) {
                     loop_arrow_y
+                } else {
+                    loop_arrow_y + WHILE_LOOP_EMPHASIS_ON_Y_RESTORE
                 };
                 if body_out_lane != *lane {
                     typed_ftile_emit_polyline(
@@ -32771,17 +35858,48 @@ fn typed_ftile_emit_connectors(
                     target.line_styled(
                         &color, &thickness, body_out_x, loop_x, loop_y, loop_y, false,
                     );
-                    target.polygon_connector(
-                        &color,
-                        &[
-                            (loop_x - 4.0, loop_arrow_y + 10.0),
-                            (loop_x, loop_arrow_y),
-                            (loop_x + 4.0, loop_arrow_y + 10.0),
-                            (loop_x, loop_arrow_y + 6.0),
-                        ],
-                        &color,
-                        "1",
-                    );
+                    if let Some(merge_top) = switch_merge_top {
+                        write!(
+                            target.occupancy,
+                            r#"<polygon points="{}"/>"#,
+                            polygon_points(&[
+                                (loop_x - 4.0, loop_arrow_y + 10.0),
+                                (loop_x, loop_arrow_y),
+                                (loop_x + 4.0, loop_arrow_y + 10.0),
+                                (loop_x, loop_arrow_y + 6.0),
+                            ]),
+                        )
+                        .unwrap();
+                        let marker = format!(
+                            "<!--rustuml-ftile-emphasis:{}-->",
+                            target.deferred_vertical_emphasis.len()
+                        );
+                        target.connectors.push_str(&marker);
+                        target
+                            .deferred_vertical_emphasis
+                            .push(DeferredVerticalEmphasis {
+                                marker,
+                                x: loop_x,
+                                y1: merge_top,
+                                y2: merge_top,
+                                tip_offset: -1.5 * ARROW_LEN,
+                                transform_raw_midpoint: false,
+                                upward: true,
+                                color: color.clone(),
+                            });
+                    } else {
+                        target.polygon_connector(
+                            &color,
+                            &[
+                                (loop_x - 4.0, loop_arrow_y + 10.0),
+                                (loop_x, loop_arrow_y),
+                                (loop_x + 4.0, loop_arrow_y + 10.0),
+                                (loop_x, loop_arrow_y + 6.0),
+                            ],
+                            &color,
+                            "1",
+                        );
+                    }
                     typed_ftile_emit_polyline(
                         target,
                         &[
@@ -32809,23 +35927,62 @@ fn typed_ftile_emit_connectors(
                     );
                 }
                 if special.is_none() && !suppression.terminal_while_exit {
-                    let exit_x = lanes.x(*lane, x + DIAMOND_HALF);
-                    typed_ftile_emit_connection(
-                        emitters,
-                        cross,
-                        *lane,
-                        *lane,
-                        &[
-                            (diamond_left, diamond_cy),
-                            (exit_x, diamond_cy),
-                            (exit_x, y + scene.geometry.height),
-                            (
-                                lanes.x(*lane, x + scene.geometry.left),
-                                y + scene.geometry.height,
-                            ),
-                        ],
-                        TypedArrowDirection::Right,
+                    // `FtileWhile.ConnectionOut.drawU` owns two snakes. The
+                    // LIMITED first snake turns at Hexagon.half, emphasizes
+                    // its vertical DOWN segment, and has no end decoration;
+                    // the second snake is the unarrowed tail to pointOut.
+                    let exit_x = lanes.x(*lane, x + DIAMOND_HALF)
+                        - (DIAMOND_HALF - crate::compress::COMPRESS_MARGIN);
+                    let exit_y = y + scene.geometry.height;
+                    let out_x = lanes.x(*lane, x + scene.geometry.left);
+                    let target = &mut emitters[*lane];
+                    let color = target.palette.arrow_color.clone();
+                    let thickness = target.palette.arrow_thickness.clone();
+                    target.line_styled(
+                        &color,
+                        &thickness,
+                        diamond_left,
+                        exit_x,
+                        diamond_cy,
+                        diamond_cy,
+                        false,
                     );
+                    let emphasis_y =
+                        (diamond_cy + exit_y) / 2.0 + WHILE_CROSS_ASSEMBLY_EMPHASIS_RESTORE;
+                    write!(
+                        target.occupancy,
+                        r#"<polygon points="{}"/>"#,
+                        polygon_points(&[
+                            (exit_x - 4.0, emphasis_y - 10.0),
+                            (exit_x, emphasis_y),
+                            (exit_x + 4.0, emphasis_y - 10.0),
+                            (exit_x, emphasis_y - 6.0),
+                        ]),
+                    )
+                    .unwrap();
+                    let marker = format!(
+                        "<!--rustuml-ftile-emphasis:{}-->",
+                        target.deferred_vertical_emphasis.len()
+                    );
+                    target.connectors.push_str(&marker);
+                    target
+                        .deferred_vertical_emphasis
+                        .push(DeferredVerticalEmphasis {
+                            marker,
+                            x: exit_x,
+                            y1: diamond_cy,
+                            y2: exit_y,
+                            tip_offset: WHILE_CROSS_ASSEMBLY_EMPHASIS_RESTORE
+                                + 1.5 * ARROW_LEN
+                                + 0.5,
+                            transform_raw_midpoint: true,
+                            upward: false,
+                            color: color.clone(),
+                        });
+                    target.line_styled(
+                        &color, &thickness, exit_x, exit_x, diamond_cy, exit_y, false,
+                    );
+                    target.line_styled(&color, &thickness, exit_x, out_x, exit_y, exit_y, false);
                 }
             }
         }
@@ -32838,8 +35995,27 @@ fn typed_ftile_emit_connectors(
             condition,
             condition_at,
             backward,
+            break_merge,
             ..
         } => {
+            let adjacent_if_down = typed_ftile_has_adjacent_if_down(&body.scene);
+            let generic_if_welding_marker = typed_ftile_generic_if_welding_marker(&body.scene);
+            if let Some((merge, merge_at, merge_lane)) = break_merge
+                && !adjacent_if_down
+                && generic_if_welding_marker.is_none()
+            {
+                typed_ftile_emit_repeat_welding_connections(
+                    body,
+                    (x, y),
+                    lanes,
+                    emitters,
+                    cross,
+                    *entry_lane,
+                    merge,
+                    *merge_at,
+                    *merge_lane,
+                );
+            }
             typed_ftile_emit_connectors(
                 &body.scene,
                 (x + body.x, y + body.y),
@@ -32852,6 +36028,74 @@ fn typed_ftile_emit_connectors(
                     single_live_if_output: true,
                 },
             );
+            if let Some((merge, merge_at, merge_lane)) = break_merge {
+                if let Some(marker) = generic_if_welding_marker {
+                    let deferred = emitters
+                        .iter()
+                        .chain(std::iter::once(&*cross))
+                        .flat_map(|emitter| emitter.deferred_if_welding_connections.iter())
+                        .find(|connection| connection.marker == marker)
+                        .cloned()
+                        .expect("pending InstructionIf welding connection");
+                    let mut points = deferred.points;
+                    let original_endpoint = *points.last().expect("if welding endpoint");
+                    write!(
+                        emitters[deferred.lane].occupancy,
+                        r#"<polygon points="{}"/>"#,
+                        polygon_points(&[
+                            (original_endpoint.0 - 4.0, original_endpoint.1 - 10.0),
+                            original_endpoint,
+                            (original_endpoint.0 + 4.0, original_endpoint.1 - 10.0),
+                            (original_endpoint.0, original_endpoint.1 - 6.0),
+                        ]),
+                    )
+                    .unwrap();
+                    points.pop();
+                    let corridor = *points.last().expect("if welding corridor");
+                    let merge_left = lanes.x(*merge_lane, x + merge_at.0);
+                    let merge_cy = y + merge_at.1 + merge.height / 2.0;
+                    points.push((corridor.0, merge_cy));
+                    points.push((merge_left, merge_cy));
+                    let mut fragment = SvgEmitter::with_palette(
+                        emitters[deferred.lane].palette.clone(),
+                        emitters[deferred.lane].handwritten,
+                    );
+                    typed_ftile_emit_polyline(&mut fragment, &points, TypedArrowDirection::Right);
+                    for emitter in &mut *emitters {
+                        emitter.connectors =
+                            emitter.connectors.replace(&marker, &fragment.connectors);
+                    }
+                    cross.connectors = cross.connectors.replace(&marker, &fragment.connectors);
+                }
+                let marker = typed_ftile_break_if_down_marker(&body.scene);
+                if adjacent_if_down && let Some(marker) = marker {
+                    let start = emitters[*merge_lane].connectors.len();
+                    typed_ftile_emit_repeat_welding_connections(
+                        body,
+                        (x, y),
+                        lanes,
+                        emitters,
+                        cross,
+                        *entry_lane,
+                        merge,
+                        *merge_at,
+                        *merge_lane,
+                    );
+                    let fragment = emitters[*merge_lane].connectors.split_off(start);
+                    let replacement = if fragment.is_empty() {
+                        ""
+                    } else {
+                        fragment.as_str()
+                    };
+                    for emitter in &mut *emitters {
+                        emitter.connectors = emitter.connectors.replace(&marker, replacement);
+                    }
+                } else if let Some(marker) = marker {
+                    for emitter in &mut *emitters {
+                        emitter.connectors = emitter.connectors.replace(&marker, "");
+                    }
+                }
+            }
             let entry_left = lanes.x(*entry_lane, x + entry_at.0);
             let entry_right = lanes.x(*entry_lane, x + entry_at.0 + entry.width);
             let entry_cx = lanes.x(*entry_lane, x + entry_at.0 + entry.left);
@@ -32886,8 +36130,25 @@ fn typed_ftile_emit_connectors(
 
             if let Some((backward, backward_at)) = backward {
                 let backward_cx = lanes.x(*condition_lane, x + backward_at.0 + backward.left);
-                let backward_top = y + backward_at.1;
-                let backward_bottom = y + backward_at.1 + backward.height;
+                let backward_replay = if typed_ftile_has_adjacent_if_down(&body.scene) {
+                    (ftile::ASSEMBLY_RENDERED_SEPARATION - crate::compress::COMPRESS_MARGIN) / 2.0
+                } else if typed_ftile_scene_contains_repeat(&body.scene)
+                    && typed_ftile_contains_break(&body.scene)
+                {
+                    REPEAT_WELDING_BACKWARD_PAINT_REPLAY
+                } else {
+                    0.0
+                };
+                let backward_top = y + backward_at.1 - backward_replay;
+                let backward_bottom_replay = if !typed_ftile_has_adjacent_if_down(&body.scene)
+                    && typed_ftile_scene_contains_repeat(&body.scene)
+                    && typed_ftile_contains_break(&body.scene)
+                {
+                    REPEAT_WELDING_BACKWARD_PAINT_REPLAY - DIAMOND_HALF - 0.5
+                } else {
+                    backward_replay
+                };
+                let backward_bottom = y + backward_at.1 + backward.height - backward_bottom_replay;
                 typed_ftile_emit_connection(
                     emitters,
                     cross,
@@ -32935,17 +36196,43 @@ fn typed_ftile_emit_connectors(
                     false,
                 );
                 let emphasis_y = (condition_cy + entry_cy) / 2.0;
-                target.polygon_connector(
-                    &color,
-                    &[
+                write!(
+                    target.occupancy,
+                    r#"<polygon points="{}"/>"#,
+                    polygon_points(&[
                         (rail_x - 4.0, emphasis_y + 10.0),
                         (rail_x, emphasis_y),
                         (rail_x + 4.0, emphasis_y + 10.0),
                         (rail_x, emphasis_y + 6.0),
-                    ],
-                    &color,
-                    "1",
+                    ]),
+                )
+                .unwrap();
+                let marker = format!(
+                    "<!--rustuml-ftile-emphasis:{}-->",
+                    target.deferred_vertical_emphasis.len()
                 );
+                target.connectors.push_str(&marker);
+                target
+                    .deferred_vertical_emphasis
+                    .push(DeferredVerticalEmphasis {
+                        marker,
+                        x: rail_x,
+                        y1: condition_cy,
+                        y2: entry_cy,
+                        tip_offset: if typed_ftile_contains_break(&body.scene) {
+                            // `FtileFactoryDelegatorRepeat.repeat` keeps the
+                            // direct break's welding owner on the original
+                            // `ConnectionBackSimple2` snake. Its UP decoration
+                            // is one half-hexagon plus a quarter-stroke above
+                            // the replacement return segment.
+                            -(DIAMOND_HALF / 2.0 + 0.25)
+                        } else {
+                            0.0
+                        },
+                        transform_raw_midpoint: true,
+                        upward: true,
+                        color: color.clone(),
+                    });
                 target.line_styled(
                     &color,
                     &thickness,
@@ -32999,7 +36286,29 @@ fn typed_ftile_emit_connectors(
                 typed_ftile_scene_out(&body.scene, x + body.x, y + body.y, lanes)
             {
                 let out_points = if body_out_lane == *condition_lane {
-                    vec![(body_out_x, body_out_y), (condition_cx, condition_top)]
+                    if body_out_x == condition_cx {
+                        vec![(body_out_x, body_out_y), (condition_cx, condition_top)]
+                    } else {
+                        // `ConnectionVerticalDown.drawTranslate` keeps the
+                        // assembly's short vertical departure before turning
+                        // toward a translated point-in on the same swimlane.
+                        let gap = condition_top - body_out_y;
+                        let elbow_y = if gap > 4.0 * ftile::ASSEMBLY_RENDERED_SEPARATION {
+                            condition_top - (ARROW_LEN - crate::compress::COMPRESS_MARGIN)
+                        } else {
+                            // `ConnectionVerticalDown.drawTranslate` keeps the
+                            // 20px rendered assembly reserve less three
+                            // half-strokes before the horizontal turn. ON_Y
+                            // compression then leaves the visible 6px step.
+                            body_out_y + ftile::ASSEMBLY_RENDERED_SEPARATION - 1.5
+                        };
+                        vec![
+                            (body_out_x, body_out_y),
+                            (body_out_x, elbow_y),
+                            (condition_cx, elbow_y),
+                            (condition_cx, condition_top),
+                        ]
+                    }
                 } else {
                     let middle = (body_out_y + condition_top) / 2.0;
                     vec![
@@ -33009,12 +36318,46 @@ fn typed_ftile_emit_connectors(
                         (condition_cx, condition_top),
                     ]
                 };
+                typed_ftile_emit_output_connection(
+                    &body.scene,
+                    (x + body.x, y + body.y),
+                    lanes,
+                    emitters,
+                    cross,
+                    TypedFtileOutputRoute {
+                        out_lane: body_out_lane,
+                        in_lane: *condition_lane,
+                        preserve_translated_route: true,
+                        points: &out_points,
+                        arrow: TypedArrowDirection::Down,
+                    },
+                );
+            }
+            if let Some((merge, merge_at, merge_lane)) = break_merge {
+                let merge_cx = lanes.x(*merge_lane, x + merge_at.0 + merge.left);
+                let merge_top = y + merge_at.1;
+                let condition_bottom = y + condition_at.1 + condition.height;
+                let merge_points = if condition_lane != merge_lane {
+                    // `ConnectionVerticalDown.drawTranslate` preserves the
+                    // translated snake's horizontal leg immediately above the
+                    // appended welding diamond.
+                    let middle_y = merge_top
+                        - (ftile::ASSEMBLY_RENDERED_SEPARATION - crate::compress::COMPRESS_MARGIN);
+                    vec![
+                        (condition_cx, condition_bottom),
+                        (condition_cx, middle_y),
+                        (merge_cx, middle_y),
+                        (merge_cx, merge_top),
+                    ]
+                } else {
+                    vec![(condition_cx, condition_bottom), (merge_cx, merge_top)]
+                };
                 typed_ftile_emit_connection(
                     emitters,
                     cross,
-                    body_out_lane,
                     *condition_lane,
-                    &out_points,
+                    *merge_lane,
+                    &merge_points,
                     TypedArrowDirection::Down,
                 );
             }
@@ -33026,7 +36369,6 @@ fn typed_ftile_emit_connectors(
             decorated,
             bottom_bar_y,
         } => {
-            let expanded = lanes.assembled && branches.len() > 2;
             for branch in branches {
                 typed_ftile_emit_connectors(
                     &branch.scene,
@@ -33078,13 +36420,20 @@ fn typed_ftile_emit_connectors(
                 let raw_axis = x + decorated_x + decorated[index].left;
                 let target_x = if branch_lane == *output_lane {
                     // `ParallelBuilderFork.ConnectionOut.drawU` keeps the
-                    // same-lane join on the decorated branch axis.
+                    // same-lane join on the decorated branch axis. A branch
+                    // assembled across lanes has already surrendered the
+                    // `ConnectionCross` centering band before it reaches the
+                    // output owner's black block.
                     lanes.x(*output_lane, raw_axis)
+                        - if branch.scene.in_lane != branch.scene.out_lane {
+                            CONNECTION_CROSS_CENTER_RECLAIM
+                        } else {
+                            0.0
+                        }
                 } else {
                     // `ConnectionOut.drawTranslate` targets the destination
-                    // owner lane outside the branch wrapper. Expanded forks
-                    // retain the painted-edge correction on this cross path.
-                    lanes.owner_x(*output_lane, raw_axis) - if expanded { 1.0 } else { 0.0 }
+                    // owner lane after its transformed branch wrapper.
+                    lanes.x(*output_lane, raw_axis)
                 };
                 let bar_top = y + *bottom_bar_y;
                 let points = if branch_lane == *output_lane {
@@ -33106,6 +36455,140 @@ fn typed_ftile_emit_connectors(
                     &points,
                     TypedArrowDirection::Down,
                 );
+            }
+        }
+        TypedFtileKind::Switch {
+            node,
+            lane,
+            diamond1,
+            diamond1_at,
+            diamond2,
+            diamond2_at,
+            cases,
+            ..
+        } => {
+            for case in cases {
+                typed_ftile_emit_connectors(
+                    &case.scene,
+                    (x + case.x, y + case.y),
+                    lanes,
+                    emitters,
+                    emphasis,
+                    cross,
+                    TypedFtileConnectorSuppression::default(),
+                );
+            }
+            let LayoutNode::Switch {
+                cases: case_nodes, ..
+            } = node
+            else {
+                unreachable!("typed switch node")
+            };
+            let count = cases.len();
+            let mut order = Vec::with_capacity(count);
+            order.push(0);
+            if count > 1 {
+                order.push(count - 1);
+            }
+            order.extend(1..count.saturating_sub(1));
+
+            let diamond_left = lanes.x(*lane, x + diamond1_at.0);
+            let diamond_right = lanes.x(*lane, x + diamond1_at.0 + diamond1.width);
+            let diamond_cx = lanes.x(*lane, x + diamond1_at.0 + diamond1.left);
+            let diamond_cy = y + diamond1_at.1 + diamond1.height / 2.0;
+            let diamond_bottom = y + diamond1_at.1 + diamond1.height;
+            let merge_left = lanes.x(*lane, x + diamond2_at.0);
+            let merge_right = lanes.x(*lane, x + diamond2_at.0 + diamond2.width);
+            let merge_cx = lanes.x(*lane, x + diamond2_at.0 + diamond2.left);
+            let merge_top = y + diamond2_at.1;
+            let merge_cy = merge_top + diamond2.height / 2.0;
+
+            for &index in &order {
+                let case = &cases[index];
+                let (case_lane, case_x, case_y) =
+                    typed_ftile_scene_in(&case.scene, x + case.x, y + case.y, lanes);
+                let outer = index == 0 || index + 1 == count;
+                let points = if outer {
+                    let vertex = if case_x <= diamond_cx {
+                        diamond_left
+                    } else {
+                        diamond_right
+                    };
+                    vec![(vertex, diamond_cy), (case_x, diamond_cy), (case_x, case_y)]
+                } else {
+                    let split = case_y - SWITCH_CENTER_TOP_SPLIT;
+                    let mut points = vec![(diamond_cx, diamond_bottom), (diamond_cx, split)];
+                    if case_x != diamond_cx {
+                        points.push((case_x, split));
+                    }
+                    points.push((case_x, case_y));
+                    points
+                };
+                typed_ftile_emit_connection(
+                    emitters,
+                    cross,
+                    *lane,
+                    case_lane,
+                    &points,
+                    TypedArrowDirection::Down,
+                );
+                let label_x = if outer {
+                    case_x
+                } else {
+                    case_x.min(diamond_cx)
+                };
+                let label_y = case_y
+                    - if outer {
+                        SWITCH_LABEL_OUTER_DY
+                    } else {
+                        SWITCH_LABEL_CENTER_DY
+                    };
+                switch_case_label(
+                    &mut emitters[case_lane],
+                    &case_nodes[index].label,
+                    label_x,
+                    label_y,
+                );
+            }
+
+            let mut merge_order = Vec::with_capacity(count);
+            merge_order.push(0);
+            if count > 1 {
+                merge_order.push(count - 1);
+            }
+            merge_order.extend(1..count.saturating_sub(1));
+            for index in merge_order {
+                let case = &cases[index];
+                let Some((case_lane, case_x, case_y)) =
+                    typed_ftile_scene_out(&case.scene, x + case.x, y + case.y, lanes)
+                else {
+                    continue;
+                };
+                let outer = index == 0 || index + 1 == count;
+                let (points, arrow) = if outer {
+                    let vertex = if case_x <= merge_cx {
+                        merge_left
+                    } else {
+                        merge_right
+                    };
+                    (
+                        vec![(case_x, case_y), (case_x, merge_cy), (vertex, merge_cy)],
+                        if case_x <= merge_cx {
+                            TypedArrowDirection::Right
+                        } else {
+                            TypedArrowDirection::Left
+                        },
+                    )
+                } else {
+                    let split = merge_top - SWITCH_CENTER_BOT_SPLIT;
+                    let mut points = vec![(case_x, case_y), (case_x, split)];
+                    if case_x != merge_cx {
+                        points.push((merge_cx, split));
+                    }
+                    points.push((merge_cx, merge_top));
+                    (points, TypedArrowDirection::Down)
+                };
+                typed_ftile_emit_connection(emitters, cross, case_lane, *lane, &points, arrow);
             }
         }
     }
@@ -33133,6 +36616,9 @@ fn typed_ftile_cross_loop_right_extent(
 ) -> Option<f64> {
     let nested = match &scene.kind {
         TypedFtileKind::Leaf { .. } => None,
+        TypedFtileKind::WithNote { child, .. } => {
+            typed_ftile_cross_loop_right_extent(&child.scene, x + child.x, lanes)
+        }
         TypedFtileKind::Sequence { children } => children
             .iter()
             .filter_map(|child| {
@@ -33150,6 +36636,19 @@ fn typed_ftile_cross_loop_right_extent(
         .into_iter()
         .flatten()
         .reduce(f64::max),
+        TypedFtileKind::IfDown {
+            survivor, terminal, ..
+        } => {
+            let survivor_extent =
+                typed_ftile_cross_loop_right_extent(&survivor.scene, x + survivor.x, lanes);
+            let terminal_extent = terminal.as_ref().and_then(|terminal| {
+                typed_ftile_cross_loop_right_extent(&terminal.scene, x + terminal.x, lanes)
+            });
+            [survivor_extent, terminal_extent]
+                .into_iter()
+                .flatten()
+                .reduce(f64::max)
+        }
         TypedFtileKind::While { body, special, .. } => {
             let body_extent = typed_ftile_cross_loop_right_extent(&body.scene, x + body.x, lanes);
             let special_extent = special.as_ref().and_then(|special| {
@@ -33168,6 +36667,10 @@ fn typed_ftile_cross_loop_right_extent(
             .filter_map(|branch| {
                 typed_ftile_cross_loop_right_extent(&branch.scene, x + branch.x, lanes)
             })
+            .reduce(f64::max),
+        TypedFtileKind::Switch { cases, .. } => cases
+            .iter()
+            .filter_map(|case| typed_ftile_cross_loop_right_extent(&case.scene, x + case.x, lanes))
             .reduce(f64::max),
     };
     let own = match &scene.kind {
@@ -33201,6 +36704,69 @@ struct FtileRender {
     height: u32,
     content: String,
     spine_x: Option<f64>,
+}
+
+fn apply_typed_ftile_shapes_y(
+    emitter: &SvgEmitter,
+    transform: &crate::compress::CompressionTransform,
+) -> String {
+    let mut rendered = crate::compress::apply_y(&emitter.shapes, transform);
+    for deferred in &emitter.deferred_translated_shapes {
+        let translated = if deferred.translate_after_compression {
+            let shift = transform.transform(deferred.anchor_y + deferred.dy)
+                - transform.transform(deferred.anchor_y);
+            crate::compress::shift_y(
+                &crate::compress::apply_y(&deferred.fragment, transform),
+                shift,
+            )
+        } else {
+            let translated = crate::compress::shift_y(&deferred.fragment, deferred.dy);
+            crate::compress::apply_y(&translated, transform)
+        };
+        rendered = rendered.replace(&deferred.marker, &translated);
+    }
+    rendered
+}
+
+fn apply_typed_ftile_y(
+    emitter: &SvgEmitter,
+    transform: &crate::compress::CompressionTransform,
+) -> String {
+    let mut rendered = crate::compress::apply_y(&emitter.connectors, transform);
+    for emphasis in &emitter.deferred_vertical_emphasis {
+        // `UGraphicForSnake` keeps the emphasized decoration from the first
+        // snake when LIMITED merging replaces its tail. PlantUML's emitted
+        // regular-arrow polygon tip retains the decoration offset chosen by
+        // the owning LIMITED-merge path.
+        // `Worm.drawInternalOneColor` locates the decoration on the raw snake
+        // before the enclosing ON_Y transform. Transforming that midpoint is
+        // not equivalent to averaging transformed endpoints across a removed
+        // compression slot.
+        let tip_y = if emphasis.transform_raw_midpoint {
+            transform.transform((emphasis.y1 + emphasis.y2) / 2.0) + emphasis.tip_offset
+        } else {
+            (transform.transform(emphasis.y1) + transform.transform(emphasis.y2)) / 2.0
+                + emphasis.tip_offset
+        };
+        let direction = if emphasis.upward { 1.0 } else { -1.0 };
+        let points = [
+            (emphasis.x - 4.0, tip_y + direction * 10.0),
+            (emphasis.x, tip_y),
+            (emphasis.x + 4.0, tip_y + direction * 10.0),
+            (emphasis.x, tip_y + direction * 6.0),
+        ];
+        let points = if emitter.handwritten {
+            handwritten_polygon_points(&points)
+        } else {
+            polygon_points(&points)
+        };
+        let polygon = format!(
+            r#"<polygon fill="{}" points="{}" style="stroke:{};stroke-width:1;"/>"#,
+            emphasis.color, points, emphasis.color
+        );
+        rendered = rendered.replace(&emphasis.marker, &polygon);
+    }
+    rendered
 }
 
 fn render_typed_ftile_swimlanes(
@@ -33251,8 +36817,13 @@ fn render_typed_ftile_swimlanes(
         };
     let occupied_shapes: String = emitters
         .iter()
-        .map(|emitter| emitter.shapes.as_str())
-        .chain([emphasis.shapes.as_str(), cross.shapes.as_str()])
+        .flat_map(|emitter| [emitter.shapes.as_str(), emitter.occupancy.as_str()])
+        .chain([
+            emphasis.shapes.as_str(),
+            emphasis.occupancy.as_str(),
+            cross.shapes.as_str(),
+            cross.occupancy.as_str(),
+        ])
         .collect();
     let occupied_connectors: String = [emphasis.connectors.as_str()]
         .into_iter()
@@ -33288,7 +36859,7 @@ fn render_typed_ftile_swimlanes(
     )
     .unwrap();
     for (lane, emitter) in emitters.iter().enumerate() {
-        shapes.push_str(&crate::compress::apply_y(&emitter.shapes, &y_transform));
+        shapes.push_str(&apply_typed_ftile_shapes_y(emitter, &y_transform));
         write!(
             shapes,
             r#"<line style="stroke:{};stroke-width:1.5;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
@@ -33312,14 +36883,11 @@ fn render_typed_ftile_swimlanes(
     .unwrap();
 
     let mut connectors = String::new();
-    connectors.push_str(&crate::compress::apply_y(
-        &emphasis.connectors,
-        &y_transform,
-    ));
+    connectors.push_str(&apply_typed_ftile_y(&emphasis, &y_transform));
     for emitter in &emitters {
-        connectors.push_str(&crate::compress::apply_y(&emitter.connectors, &y_transform));
+        connectors.push_str(&apply_typed_ftile_y(emitter, &y_transform));
     }
-    connectors.push_str(&crate::compress::apply_y(&cross.connectors, &y_transform));
+    connectors.push_str(&apply_typed_ftile_y(&cross, &y_transform));
     let title_baseline = header_top + pm::ascent(LANE_TITLE_FONT);
     for (lane, lane_name) in lane_names.iter().enumerate() {
         let width = text_render::measure(lane_name, LANE_TITLE_FONT, false);
@@ -33356,6 +36924,89 @@ fn render_typed_ftile_swimlanes(
         height: total_height,
         content: shapes,
         spine_x: Some(body_title_center - TITLE_CHROME_SPINE_OFFSET),
+    })
+}
+
+fn render_typed_ftile_single_lane(
+    scene: &TypedFtileScene<'_>,
+    palette: &Palette,
+    handwritten: bool,
+) -> Option<FtileRender> {
+    const MARGIN_LEAD: f64 = 15.0;
+    const MARGIN_TRAIL: f64 = 19.0;
+    const DIRECT_ACTIVITY_X_TRANSLATE: f64 = -10.0;
+
+    // ActivityDiagram3 uses the same FTile assembly and compression pipeline
+    // without the Swimlanes title/divider layer when no lane is declared.
+    let lane_names = [String::new()];
+    let lane_layout = typed_ftile_lane_layout(scene, &lane_names)?;
+    let mut emitters = vec![SvgEmitter::with_palette(palette.clone(), handwritten)];
+    let mut emphasis = SvgEmitter::with_palette(palette.clone(), handwritten);
+    let mut cross = SvgEmitter::with_palette(palette.clone(), handwritten);
+
+    typed_ftile_emit_shapes(scene, 0.0, MARGIN_LEAD, &lane_layout, &mut emitters);
+    typed_ftile_emit_connectors(
+        scene,
+        (0.0, MARGIN_LEAD),
+        &lane_layout,
+        &mut emitters,
+        &mut emphasis,
+        &mut cross,
+        TypedFtileConnectorSuppression::default(),
+    );
+    assert!(
+        !emitters[0].connectors.contains("<!--rustuml-ftile-direct:"),
+        "unconsumed deferred one-sided if output"
+    );
+
+    let raw_content_bottom = MARGIN_LEAD
+        + scene.geometry.height
+        + if typed_ftile_has_top_while_special(scene) {
+            DIAMOND_HALF
+        } else {
+            0.0
+        };
+    let occupied_shapes = [
+        emitters[0].shapes.as_str(),
+        emitters[0].occupancy.as_str(),
+        emphasis.shapes.as_str(),
+        emphasis.occupancy.as_str(),
+        cross.shapes.as_str(),
+        cross.occupancy.as_str(),
+    ]
+    .concat();
+    let occupied_connectors = [
+        emphasis.connectors.as_str(),
+        emitters[0].connectors.as_str(),
+        cross.connectors.as_str(),
+    ]
+    .concat();
+    let y_transform = crate::compress::activity_y_transform(
+        &occupied_shapes,
+        &occupied_connectors,
+        crate::compress::COMPRESS_MARGIN,
+    );
+
+    let mut content = apply_typed_ftile_shapes_y(&emitters[0], &y_transform);
+    content.push_str(&apply_typed_ftile_y(&emphasis, &y_transform));
+    content.push_str(&apply_typed_ftile_y(&emitters[0], &y_transform));
+    content.push_str(&apply_typed_ftile_y(&cross, &y_transform));
+    // `ActivityDiagram3.exportDiagramInternal` draws a direct activity
+    // without `Swimlanes`' first divider half-space. `LimitFinder` then moves
+    // the painted envelope by the FTile's 10px left margin.
+    content = crate::compress::shift_x(&content, DIRECT_ACTIVITY_X_TRANSLATE);
+
+    let content_bottom = y_transform.transform(raw_content_bottom);
+    let (content_left, content_right) = crate::compress::x_bounds(&content)?;
+    let width = (content_right + MARGIN_TRAIL).ceil().max(65.0) as u32;
+    let height = (content_bottom + MARGIN_TRAIL).ceil() as u32;
+    Some(FtileRender {
+        width,
+        height,
+        content,
+        // `FtileRender` is centered on the direct diagram's measured body,
+        // not on the root tile's logical pointIn.
+        spine_x: Some((content_left + content_right) / 2.0),
     })
 }
 
@@ -33400,33 +37051,90 @@ fn render_ftile(
         return None;
     }
     let lane_names = typed_ftile_lane_names(diagram);
+    if std::env::var("RUSTUML_EXT_DBG").is_ok() {
+        eprintln!("ftile lanes={lane_names:?}");
+    }
+    let single_lane_welding_repeat = if lane_names.is_empty() {
+        let mut lane = 0usize;
+        typed_ftile_sequence_with_spacing(tree, &mut lane, TypedFtileSpacing::Natural).is_some_and(
+            |scene| {
+                typed_ftile_scene_has_nested_repeat(&scene)
+                    && typed_ftile_contains_break(&scene)
+                    && typed_ftile_scene_has_recursive_if(&scene, false)
+            },
+        )
+    } else {
+        false
+    };
     let body = if lane_names.len() > 1 {
         let mut lane = 0usize;
-        let compressed_scene = typed_ftile_sequence(tree, &mut lane)?;
+        let compressed_scene = match typed_ftile_sequence(tree, &mut lane) {
+            Some(scene) => scene,
+            None => {
+                if std::env::var("RUSTUML_EXT_DBG").is_ok() {
+                    eprintln!("typed scene rejected tree={tree:#?}");
+                }
+                return None;
+            }
+        };
         let has_fork = typed_ftile_contains_fork(&compressed_scene);
         let has_expanded_parallel = typed_ftile_has_expanded_parallel(&compressed_scene);
         let natural_repeat = typed_ftile_scene_contains_repeat(&compressed_scene);
+        let break_repeat = natural_repeat && typed_ftile_contains_break(&compressed_scene);
         let allow_terminal_cross_lane_if = (!has_fork || has_expanded_parallel || natural_repeat)
-            && (!natural_repeat || typed_ftile_scene_contains_if_note(&compressed_scene));
-        let control_count =
-            typed_ftile_scene_control_count(&compressed_scene, allow_terminal_cross_lane_if)?;
+            && (!natural_repeat
+                || break_repeat
+                || typed_ftile_scene_contains_if_note(&compressed_scene));
+        let control_count = match typed_ftile_scene_control_count(
+            &compressed_scene,
+            allow_terminal_cross_lane_if,
+        ) {
+            Some(count) => count,
+            None => {
+                if std::env::var("RUSTUML_EXT_DBG").is_ok() {
+                    eprintln!(
+                        "typed control rejected allow_terminal={allow_terminal_cross_lane_if} geometry={:?}",
+                        compressed_scene.geometry
+                    );
+                }
+                return None;
+            }
+        };
         if control_count == 0 {
             return None;
         }
         let natural_recursive_if = typed_ftile_scene_has_recursive_if(&compressed_scene, false)
             && !typed_ftile_scene_contains_while(&compressed_scene)
             && allow_terminal_cross_lane_if;
+        if std::env::var("RUSTUML_EXT_DBG").is_ok() {
+            eprintln!(
+                "typed controls={control_count} natural_repeat={natural_repeat} recursive={natural_recursive_if}"
+            );
+        }
         let scene = if natural_repeat || natural_recursive_if {
             // `FtileFactoryDelegatorAssembly` constructs every connection with
             // a 35px reserve. `ActivityDiagram3.exportDiagramInternal` then
             // applies one ON_Y `CompressionXorYBuilder` to the complete
             // drawing, allowing sibling branches to protect occupied bands.
             let mut lane = 0usize;
-            typed_ftile_sequence_with_spacing(tree, &mut lane, TypedFtileSpacing::Natural)?
+            match typed_ftile_sequence_with_spacing(tree, &mut lane, TypedFtileSpacing::Natural) {
+                Some(scene) => scene,
+                None => {
+                    if std::env::var("RUSTUML_EXT_DBG").is_ok() {
+                        eprintln!("typed natural scene rejected");
+                    }
+                    return None;
+                }
+            }
         } else {
             compressed_scene
         };
         render_typed_ftile_swimlanes(&scene, &lane_names, palette, handwritten)?
+    } else if single_lane_welding_repeat {
+        let mut lane = 0usize;
+        let scene =
+            typed_ftile_sequence_with_spacing(tree, &mut lane, TypedFtileSpacing::SingleLane)?;
+        render_typed_ftile_single_lane(&scene, palette, handwritten)?
     } else {
         // Portability gate: bail unless every tile maps to an FtileGeometry.
         let root = sequence_geometry(tree)?;
@@ -34744,6 +38452,7 @@ mod tests {
                 TypedFtileKind::Sequence { children } => {
                     children.iter().find_map(|child| note_if(&child.scene))
                 }
+                TypedFtileKind::WithNote { child, .. } => note_if(&child.scene),
                 TypedFtileKind::If {
                     node,
                     then_scene,
@@ -34759,11 +38468,21 @@ mod tests {
                         note_if(&then_scene.scene).or_else(|| note_if(&else_scene.scene))
                     }
                 }
+                TypedFtileKind::IfDown {
+                    survivor, terminal, ..
+                } => note_if(&survivor.scene).or_else(|| {
+                    terminal
+                        .as_ref()
+                        .and_then(|terminal| note_if(&terminal.scene))
+                }),
                 TypedFtileKind::While { body, special, .. } => note_if(&body.scene)
                     .or_else(|| special.as_ref().and_then(|special| note_if(&special.scene))),
                 TypedFtileKind::Repeat { body, .. } => note_if(&body.scene),
                 TypedFtileKind::Fork { branches, .. } => {
                     branches.iter().find_map(|branch| note_if(&branch.scene))
+                }
+                TypedFtileKind::Switch { cases, .. } => {
+                    cases.iter().find_map(|case| note_if(&case.scene))
                 }
                 TypedFtileKind::Leaf { .. } => None,
             }
@@ -35354,6 +39073,69 @@ mod tests {
         assert!(svg.contains("Authorize renamed transfer"));
         assert!(svg.contains("Record renamed exception"));
         assert!(svg.contains("Record fresh rejection"));
+    }
+
+    #[test]
+    fn nested_welding_repeat_uses_backward_genealogies_for_renamed_input() {
+        let input = concat!(
+            "@startuml\n",
+            "start\n",
+            ":Display access form;\n",
+            "repeat\n",
+            "  :Submit access token;\n",
+            "  if (token accepted?) then (yes)\n",
+            "    if (proof required?) then (yes)\n",
+            "      repeat\n",
+            "        :Enter proof code;\n",
+            "        if (proof valid?) then (yes)\n",
+            "          break\n",
+            "        else (no)\n",
+            "          :Show denial;\n",
+            "        endif\n",
+            "      repeatwhile (retries < 4?) is (yes)\n",
+            "      if (proof passed?) then (yes)\n",
+            "        :Open session;\n",
+            "        stop\n",
+            "      else (no)\n",
+            "        :Hold account;\n",
+            "        :Send recovery link;\n",
+            "        stop\n",
+            "      endif\n",
+            "    else (no)\n",
+            "      :Open session;\n",
+            "      stop\n",
+            "    endif\n",
+            "  else (no)\n",
+            "    :Show token error;\n",
+            "  endif\n",
+            "backward :Increment denial count;\n",
+            "repeatwhile (denials < 6?) is (yes)\n",
+            ":Hold account temporarily;\n",
+            "stop\n",
+            "@enduml\n",
+        );
+        let parsed = rustuml_parser::parse::parse(input).expect("fresh activity parses");
+        let rustuml_parser::diagram::Diagram::Activity(diagram) = &parsed else {
+            panic!("activity diagram");
+        };
+        let tree = build_tree(&diagram.steps, &Palette::default_puml());
+        let mut lane = 0;
+        let scene = typed_ftile_sequence_with_spacing(&tree, &mut lane, TypedFtileSpacing::Natural)
+            .expect("typed FTile scene");
+        assert!(typed_ftile_scene_has_recursive_if(&scene, false));
+        assert!(typed_ftile_contains_break(&scene));
+
+        let svg = render_ftile(&tree, diagram, &Palette::default_puml(), false, "")
+            .expect("live typed render");
+        for label in [
+            "Display access form",
+            "Submit access token",
+            "Show denial",
+            "Increment denial count",
+            "Hold account temporarily",
+        ] {
+            assert!(svg.contains(label), "missing renamed label {label}");
+        }
     }
 
     #[test]
