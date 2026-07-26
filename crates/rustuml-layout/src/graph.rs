@@ -2142,6 +2142,41 @@ mod tests {
     }
 
     #[test]
+    fn svek_early_edge_nodes_precede_root_and_cluster_streams() {
+        let mut g = LayoutGraph::new(Direction::TopToBottom).with_plantuml_svek_node_order();
+        for id in [
+            "RootBefore_7",
+            "DirectZulu_19",
+            "LeafBeta_23",
+            "LeafAlpha_29",
+            "DirectAlpha_31",
+            "RootAfter_37",
+        ] {
+            g.add_node(id, id, 80.0, 40.0);
+        }
+        assert!(g.add_svek_cluster(
+            "Outer_Renamed_17",
+            None,
+            ClusterTitleSize {
+                width: 121.9,
+                height: 16.9,
+            },
+        ));
+        g.add_cluster_node("Outer_Renamed_17", "DirectZulu_19");
+        g.add_cluster_node("Outer_Renamed_17", "LeafBeta_23");
+        g.add_cluster_node("Outer_Renamed_17", "LeafAlpha_29");
+        g.add_cluster_node("Outer_Renamed_17", "DirectAlpha_31");
+
+        // Mirrors a `Bibliotekon.lines0` edge whose first-seen endpoints are
+        // clustered nodes, followed by root and remaining cluster leaves.
+        g.add_plantuml_svek_line0_edge("LeafBeta_23", "DirectAlpha_31");
+        g.add_edge_with_minlen("LeafBeta_23", "DirectAlpha_31", None, 0);
+
+        assert_eq!(g.graphviz_node_creation_order(), vec![2, 4, 0, 5, 1, 3]);
+        assert_eq!(g.layout_full_no_timeout().edge_paths.len(), 1);
+    }
+
+    #[test]
     fn inverted_svek_starts_precede_ordinary_node_creation() {
         let mut graph = LayoutGraph::new(Direction::TopToBottom);
         graph.add_node("DeclaredFirst", "", 40.0, 30.0);

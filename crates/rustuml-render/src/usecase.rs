@@ -1366,22 +1366,11 @@ fn layout_usecase_positions(
         UseCaseLayoutDirection::TopToBottom => Direction::TopToBottom,
         UseCaseLayoutDirection::LeftToRight => Direction::LeftToRight,
     };
-    // Java provenance: `DotStringFactory.createDotString` emits links between
-    // `Cluster.printCluster1` and `Cluster.printCluster2`. A detached root
-    // actor cannot be introduced by those link statements, so printCluster2
-    // creates it before the child-cluster tree. Connected roots may already
-    // have been created implicitly by a link; the layout helper's simpler
-    // root-before-cluster mode is therefore correct only for this detached
-    // topology.
+    // Java provenance: `DotStringFactory.createDotString` emits `lines0`
+    // before `Cluster.printCluster2`. Package graphs therefore use SVEK's
+    // root/cluster stream after any endpoints created by those early edges.
     let mut layout = LayoutGraph::new(direction).with_plantuml_svek_spacing();
-    let uses_detached_root_order = !diagram.packages.is_empty()
-        && diagram.actors.iter().any(|actor| {
-            !diagram
-                .connections
-                .iter()
-                .any(|connection| connection.from == actor.id || connection.to == actor.id)
-        });
-    if uses_detached_root_order {
+    if !diagram.packages.is_empty() {
         layout = layout.with_plantuml_svek_node_order();
     }
     let mut layout_node_ids =
@@ -1501,6 +1490,20 @@ fn layout_usecase_positions(
             }),
     );
     layout_edges.sort_by_key(|(line, _)| *line);
+
+    if !diagram.packages.is_empty() {
+        // Java `Bibliotekon.lines0` contains every length-one SVEK edge.
+        // `DotStringFactory.createDotString` writes those edge statements
+        // before `Cluster.printCluster2`, lazily creating first-seen endpoints
+        // before root leaves and the remaining package members.
+        for connection in diagram
+            .connections
+            .iter()
+            .filter(|connection| connection.queue_len.max(1) == 1)
+        {
+            layout.add_plantuml_svek_line0_edge(&connection.from, &connection.to);
+        }
+    }
 
     for (_, edge) in layout_edges {
         match edge {
@@ -3887,6 +3890,47 @@ mod tests {
                 "{svg}"
             );
         }
+    }
+
+    #[test]
+    fn renamed_short_package_relations_create_svek_nodes_before_root_stream() {
+        let input = "@startuml\n\
+                     actor \"Fresh Operator 1201\" as Operator1201\n\
+                     actor \"Novel Auditor 1213\" as Auditor1213\n\
+                     rectangle \"Renamed Workflow 1223\" {\n\
+                       usecase \"Prepare Entry 1231\" as Entry1231\n\
+                       usecase \"Review Entry 1237\" as Review1237\n\
+                       usecase \"Publish Entry 1249\" as Publish1249\n\
+                       usecase \"Archive Entry 1259\" as Archive1259\n\
+                       usecase \"Validate Entry 1277\" as Validate1277\n\
+                     }\n\
+                     Operator1201 --> Entry1231\n\
+                     Auditor1213 --> Review1237\n\
+                     Entry1231 .> Validate1277 : <<include>>\n\
+                     Publish1249 .> Validate1277 : <<include>>\n\
+                     Archive1259 .> Review1237 : <<extend>>\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Fresh Java PlantUML reference absent from the golden corpus.
+        // `Bibliotekon.addLine` classifies the three short relations into
+        // `lines0`; `DotStringFactory.createDotString` emits them before
+        // `Cluster.printCluster2`, creating their endpoints before the two
+        // root actors and the remaining package member.
+        assert!(
+            svg.contains(r#"viewBox="0 0 1108 266""#) || svg.contains(r#"viewBox="0 0 1108 267""#),
+            "{svg}"
+        );
+        for cx in ["103", "297", "553", "749", "1000"] {
+            assert!(
+                svg.contains(&format!(r#"<ellipse cx="{cx}" cy="217"#)),
+                "{svg}"
+            );
+        }
+        assert!(svg.contains(r#"id="Entry1231-to-Validate1277""#), "{svg}");
+        assert_eq!(svg.matches(r#"class="entity""#).count(), 7, "{svg}");
+        assert_eq!(svg.matches(r#"class="link""#).count(), 5, "{svg}");
     }
 
     #[test]
