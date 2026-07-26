@@ -263,8 +263,36 @@ mod tests {
 
     #[test]
     fn seed_preserves_blank_lines_in_plantuml_plain_source() {
+        // This represents a blank emitted by TIM after the source reader, not
+        // a raw empty line immediately following `@startuml`.
         let src = "@startuml\n\nskinparam shadowing true\n:Fresh seeded shadow;\n@enduml\n";
         assert_eq!(shadow_id_for(src), "f11pg9m4y9hc3p");
+    }
+
+    #[test]
+    fn parser_source_identity_matches_java_shadow_id_after_initial_blanks() {
+        let input = concat!(
+            "@startuml\n",
+            "\n",
+            "\n",
+            "skinparam shadowing true\n",
+            "start\n",
+            ":Fresh intake;\n",
+            "if (route?) then (north)\n",
+            "  :North alpha;\n",
+            "  :North beta;\n",
+            "else (south)\n",
+            "  :South gamma;\n",
+            "endif\n",
+            ":Fresh archive;\n",
+            "stop\n",
+            "@enduml\n",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let source = diagram.meta().source.as_deref().unwrap();
+
+        // `SvgGraphics.shadowId`: StringUtils.seed over the post-reader source.
+        assert_eq!(shadow_id_for(source), "fbdz2fx1jlqnt");
     }
 
     #[test]

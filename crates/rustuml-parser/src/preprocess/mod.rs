@@ -119,7 +119,8 @@ fn preprocess_full_inner(
         let mut identity_ctx = PreprocessContext::new(identity_base_dir, false);
         identity_ctx.source_identity_mode = true;
         identity_ctx.preserve_teoz_pragma = preserve_teoz_pragma;
-        let identity_lines = strip_source_line_markers(identity_ctx.process(input));
+        let input_lines = source_identity_input_lines(input);
+        let identity_lines = strip_source_line_markers(identity_ctx.process_lines(&input_lines));
         uml_source_string(&identity_lines, preserve_teoz_pragma)
     });
     PreprocessOutput {
@@ -141,6 +142,7 @@ fn expanded_theme_seed_source(input: &str, expansions: &[ThemeSeedExpansion]) ->
     // relocation happen only after this representation is captured.
     let mut source = String::new();
     let mut in_block = false;
+    let mut skip_initial_empty_lines = false;
     for (index, line) in input.lines().enumerate() {
         let source_line = index + 1;
         let trimmed = line.trim_start();
@@ -149,6 +151,11 @@ fn expanded_theme_seed_source(input: &str, expansions: &[ThemeSeedExpansion]) ->
                 continue;
             }
             in_block = true;
+            skip_initial_empty_lines = true;
+        } else if skip_initial_empty_lines && trimmed.is_empty() {
+            continue;
+        } else {
+            skip_initial_empty_lines = false;
         }
 
         if let Some(expansion) = expansions
@@ -171,6 +178,33 @@ fn expanded_theme_seed_source(input: &str, expansions: &[ThemeSeedExpansion]) ->
         }
     }
     Some(source)
+}
+
+/// Mirror the source reader that runs before Java's TIM expansion.
+///
+/// PlantUML drops empty lines immediately after the `@start…` marker. Empty
+/// lines that appear later in TIM output remain part of `UmlSource` and must
+/// still participate in deterministic SVG resource hashes.
+fn source_identity_input_lines(input: &str) -> Vec<&str> {
+    let mut result = Vec::new();
+    let mut in_block = false;
+    let mut skip_initial_empty_lines = false;
+
+    for line in input.lines() {
+        let trimmed = line.trim_start();
+        if !in_block && trimmed.starts_with("@start") {
+            in_block = true;
+            skip_initial_empty_lines = true;
+            result.push(line);
+        } else if skip_initial_empty_lines && trimmed.is_empty() {
+            continue;
+        } else {
+            skip_initial_empty_lines = false;
+            result.push(line);
+        }
+    }
+
+    result
 }
 
 fn svg_id_seed_prefix(source: &str) -> String {
@@ -3935,6 +3969,47 @@ $record(SaffronArchive)\n\
 
         assert_eq!(output.uml_source, expected);
         assert_eq!(svg_id_seed_prefix(&output.uml_source), "sm7v2tneejd6");
+    }
+
+    #[test]
+    fn source_identity_drops_only_raw_empty_lines_after_start() {
+        let input = concat!(
+            "@startuml\n",
+            "\n",
+            "\n",
+            "skinparam shadowing true\n",
+            "start\n",
+            ":Fresh intake;\n",
+            "if (route?) then (north)\n",
+            "  :North alpha;\n",
+            "  :North beta;\n",
+            "else (south)\n",
+            "  :South gamma;\n",
+            "endif\n",
+            ":Fresh archive;\n",
+            "stop\n",
+            "@enduml\n",
+        );
+        let output = preprocess_full(input, None);
+
+        assert_eq!(
+            output.uml_source,
+            concat!(
+                "@startuml\n",
+                "skinparam shadowing true\n",
+                "start\n",
+                ":Fresh intake;\n",
+                "if (route?) then (north)\n",
+                "  :North alpha;\n",
+                "  :North beta;\n",
+                "else (south)\n",
+                "  :South gamma;\n",
+                "endif\n",
+                ":Fresh archive;\n",
+                "stop\n",
+                "@enduml\n",
+            ),
+        );
     }
 
     // New tests for added features.
