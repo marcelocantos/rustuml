@@ -2243,8 +2243,10 @@ fn render_with_oracle_uid_origin(
     let uses_ortho_labels = has_ortho_linetype(diagram);
     let relationship_note_indices = relationship_note_indices(diagram);
     for (rel_idx, rel) in diagram.relationships.iter().enumerate() {
+        let from = relationship_layout_id(diagram, &rel.from);
+        let to = relationship_layout_id(diagram, &rel.to);
         if rel.length == 1 {
-            layout.add_same_rank(&rel.from, &rel.to);
+            layout.add_same_rank(&from, &to);
         }
         // Java `SvekEdge.appendDotString` sends center labels through
         // Graphviz's `xlabel` channel for `DotSplines.ORTHO`, so they do not
@@ -2264,8 +2266,8 @@ fn render_with_oracle_uid_origin(
             })
         };
         layout.add_edge_with_label_sizes_and_minlen(
-            &rel.from,
-            &rel.to,
+            &from,
+            &to,
             label_size,
             endpoint_size(rel.from_multiplicity.as_deref()),
             endpoint_size(rel.to_multiplicity.as_deref()),
@@ -4632,6 +4634,7 @@ fn render_plantuml_svg(
                         diagram,
                         note: relationship_note_indices[rel_idx].map(|idx| &diagram.notes[idx]),
                         entity_ids: Some(&svek_ids.entity_ids),
+                        note_ids: Some(&svek_ids.note_ids),
                     },
                     ep,
                     link_id,
@@ -9188,6 +9191,7 @@ struct RelationshipRenderContext<'a> {
     diagram: &'a ClassDiagram,
     note: Option<&'a Note>,
     entity_ids: Option<&'a [String]>,
+    note_ids: Option<&'a [Option<String>]>,
 }
 
 fn render_relationship_svg(
@@ -9203,6 +9207,7 @@ fn render_relationship_svg(
         diagram,
         note,
         entity_ids,
+        note_ids,
     } = context;
     if edge_path.points.is_empty() {
         return;
@@ -9248,8 +9253,8 @@ fn render_relationship_svg(
         return;
     }
 
-    let entity_1 = no_oracle_entity_id_from(diagram, entity_ids, &rel.from);
-    let entity_2 = no_oracle_entity_id_from(diagram, entity_ids, &rel.to);
+    let entity_1 = no_oracle_entity_id_from(diagram, entity_ids, note_ids, &rel.from);
+    let entity_2 = no_oracle_entity_id_from(diagram, entity_ids, note_ids, &rel.to);
     write!(
         svg,
         r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="{link_type}" data-source-line="{}" id="lnk{}">"#,
@@ -9830,12 +9835,18 @@ fn emit_diamond_extremity(
 
 fn no_oracle_entity_id(diagram: &ClassDiagram, id: &str) -> String {
     let allocation = svek_id_allocation(diagram);
-    no_oracle_entity_id_from(diagram, Some(&allocation.entity_ids), id)
+    no_oracle_entity_id_from(
+        diagram,
+        Some(&allocation.entity_ids),
+        Some(&allocation.note_ids),
+        id,
+    )
 }
 
 fn no_oracle_entity_id_from(
     diagram: &ClassDiagram,
     entity_ids: Option<&[String]>,
+    note_ids: Option<&[Option<String>]>,
     id: &str,
 ) -> String {
     diagram
@@ -9843,6 +9854,13 @@ fn no_oracle_entity_id_from(
         .iter()
         .position(|e| e.id == id)
         .and_then(|index| entity_ids.and_then(|ids| ids.get(index)).cloned())
+        .or_else(|| {
+            diagram
+                .notes
+                .iter()
+                .position(|note| note.alias.as_deref() == Some(id))
+                .and_then(|index| note_ids.and_then(|ids| ids.get(index)).cloned().flatten())
+        })
         .unwrap_or_else(|| "ent0002".to_string())
 }
 
@@ -9858,9 +9876,12 @@ fn relationship_edge_indices(
         .relationships
         .iter()
         .map(|relationship| {
-            let edge_idx = edge_paths.iter().enumerate().position(|(idx, edge)| {
-                !used[idx] && edge.from == relationship.from && edge.to == relationship.to
-            });
+            let from = relationship_layout_id(diagram, &relationship.from);
+            let to = relationship_layout_id(diagram, &relationship.to);
+            let edge_idx = edge_paths
+                .iter()
+                .enumerate()
+                .position(|(idx, edge)| !used[idx] && edge.from == from && edge.to == to);
             if let Some(idx) = edge_idx {
                 used[idx] = true;
             }
@@ -10626,6 +10647,18 @@ fn attached_note_layout_id(note_idx: usize) -> String {
 
 fn floating_note_layout_id(note_idx: usize) -> String {
     format!("__floating_note_{note_idx}")
+}
+
+fn relationship_layout_id<'a>(
+    diagram: &ClassDiagram,
+    endpoint: &'a str,
+) -> std::borrow::Cow<'a, str> {
+    diagram
+        .notes
+        .iter()
+        .position(|note| note.alias.as_deref() == Some(endpoint))
+        .map(|note_idx| std::borrow::Cow::Owned(floating_note_layout_id(note_idx)))
+        .unwrap_or(std::borrow::Cow::Borrowed(endpoint))
 }
 
 fn association_point_layout_id(association_idx: usize) -> String {
@@ -14090,6 +14123,7 @@ mod tests {
                 diagram: &diagram,
                 note: None,
                 entity_ids: None,
+                note_ids: None,
             },
             &edge_path,
             4,

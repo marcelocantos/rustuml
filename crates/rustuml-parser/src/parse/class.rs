@@ -111,9 +111,10 @@ impl ClassParser {
         // Filter out phantom entities created by `ensure_entity` on
         // relationship endpoints when the endpoint is a note alias
         // (e.g. `A .. N1` after `note "..." as N1`). These should not be
-        // rendered as classes — they are notes. Their relationships are
-        // dropped too (PlantUML expresses the connector via the note's
-        // shape, not a separate relationship).
+        // rendered as classes — they are notes. Keep their relationships:
+        // Java `CommandFactoryNote` creates real note entities, and
+        // `GraphvizImageBuilder` sends every `Link` involving them through
+        // SVEK (where a singly linked class note may become an Opale).
         let note_aliases: std::collections::HashSet<&str> = self
             .notes
             .iter()
@@ -127,21 +128,11 @@ impl ClassParser {
                 .filter(|e| !note_aliases.contains(e.id.as_str()))
                 .collect()
         };
-        let relationships = if note_aliases.is_empty() {
-            self.relationships
-        } else {
-            self.relationships
-                .into_iter()
-                .filter(|r| {
-                    !note_aliases.contains(r.from.as_str()) && !note_aliases.contains(r.to.as_str())
-                })
-                .collect()
-        };
         ClassDiagram {
             meta: self.meta,
             direction: self.direction,
             entities,
-            relationships,
+            relationships: self.relationships,
             association_classes: self.association_classes,
             packages: self.packages,
             notes: self.notes,
@@ -2739,5 +2730,24 @@ mod tests {
         let d = parse("note as FreshWhitespaceLedger4171\n  renamed audit value:   \nend note");
 
         assert_eq!(d.notes[0].lines, ["renamed audit value:   "]);
+    }
+
+    #[test]
+    fn named_note_relationships_survive_without_phantom_classes() {
+        let d = parse(
+            "class FreshArchive4211\n\
+             note \"renamed archive memo\" as FreshMemo4217\n\
+             note \"renamed peer memo\" as FreshPeer4219\n\
+             FreshArchive4211 .. FreshMemo4217\n\
+             FreshMemo4217 .. FreshPeer4219",
+        );
+
+        assert_eq!(d.entities.len(), 1);
+        assert_eq!(d.entities[0].id, "FreshArchive4211");
+        assert_eq!(d.relationships.len(), 2);
+        assert_eq!(d.relationships[0].from, "FreshArchive4211");
+        assert_eq!(d.relationships[0].to, "FreshMemo4217");
+        assert_eq!(d.relationships[1].from, "FreshMemo4217");
+        assert_eq!(d.relationships[1].to, "FreshPeer4219");
     }
 }
