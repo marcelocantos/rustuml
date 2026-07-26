@@ -5156,7 +5156,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let gradient_defs = oracle.map(|o| o.defs_inner_xml.as_str());
     let filter_id: Option<String> = oracle
         .map(|o| o.defs_inner_xml.as_str())
-        .and_then(parse_filter_id);
+        .and_then(parse_filter_id)
+        .or_else(|| {
+            Some(crate::filter_registry::shadow_id_for(
+                diagram.meta.source.as_deref().unwrap_or(""),
+            ))
+        });
     for sp in &diagram.meta.skinparams {
         let key = sp.key.to_ascii_lowercase();
         let val = sp.value.trim();
@@ -7580,8 +7585,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             y + NOTE_GAP_AFTER_MSG
                         };
                         let note_event_y = note_top + note_y_extra + metrics.total_height;
-                        y = note_event_y;
-                        event_y_positions.push(y);
+                        event_y_positions.push(note_event_y);
+                        // `AbstractUGraphic.getMaxY` includes the note's delta
+                        // shadow in the painted extent. Keep the note anchored
+                        // at its logical y, but advance subsequent events past
+                        // the three-pixel shadow tail.
+                        y = note_event_y + shadow_vertical_pad;
                         msg_count += 1; // note counts as an event for spacing
                     }
                 }
@@ -9249,12 +9258,23 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     if explicit_nonshadowed_theme_head && !compact_nonshadowed_theme_head {
         svg.message_label_component_left_shift = theme_margin_padding;
     }
-    svg.open_svg(
-        svg_width,
-        svg_height,
-        bg_color.as_deref(),
-        oracle.map(|o| o.defs_inner_xml.as_str()).unwrap_or(""),
-    );
+    // `SvgGraphics.createXmlDocument` derives one source-seeded shadow id and
+    // emits its fixed blur/matrix/offset/blend pipeline when any shape requests
+    // a delta shadow. Oracle mode already carries that definition verbatim.
+    let generated_shadow_defs = (oracle.is_none()
+        && (participant_shadow_filter.is_some() || note_shadow_filter.is_some()))
+    .then(|| {
+        crate::filter_registry::shadow_filter_def(
+            filter_id
+                .as_deref()
+                .expect("shadow filter id must exist for generated sequence SVG"),
+        )
+    });
+    let defs = oracle
+        .map(|o| o.defs_inner_xml.as_str())
+        .or(generated_shadow_defs.as_deref())
+        .unwrap_or("");
+    svg.open_svg(svg_width, svg_height, bg_color.as_deref(), defs);
 
     // Emit the deprecated handwritten skinparam warning before the diagram body.
     if has_deprecated_handwritten {
@@ -12642,6 +12662,40 @@ mod tests {
         assert!(svg.contains(
             r##"<text fill="#000000" font-family="monospace" font-size="10" lengthAdjust="spacing" textLength="355.21" x="15" y="18.6406">"##
         ));
+    }
+
+    #[test]
+    fn renamed_participants_and_note_share_generated_shadow_filter() {
+        let input = concat!(
+            "@startuml\n",
+            "skinparam shadowing true\n",
+            "participant \"Fresh Sender 2903\" as Sender2903\n",
+            "participant \"Fresh Receiver 2909\" as Receiver2909\n",
+            "Sender2903 -> Receiver2909 : recalibrate freshly\n",
+            "note right of Receiver2909\n",
+            "  renamed shadow note 2917\n",
+            "end note\n",
+            "Receiver2909 --> Sender2903 : acknowledged freshly\n",
+            "@enduml",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        let filter_id =
+            crate::filter_registry::shadow_id_for(diagram.meta().source.as_deref().unwrap_or(""));
+
+        // `SvgGraphics.createXmlDocument` emits one source-seeded definition;
+        // all four participant boxes and the standalone note share it.
+        assert!(svg.contains(r#"viewBox="0 0 454 196""#), "{svg}");
+        assert!(
+            svg.contains(&crate::filter_registry::shadow_filter_def(&filter_id)),
+            "{svg}"
+        );
+        assert_eq!(
+            svg.matches(&format!(r#"filter="url(#{filter_id})""#))
+                .count(),
+            5,
+            "{svg}"
+        );
     }
 
     #[test]
