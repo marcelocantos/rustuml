@@ -19,6 +19,11 @@ use crate::graphviz_ffi;
 static GRAPHVIZ_LOCK: Mutex<()> = Mutex::new(());
 
 const DOT_POINTS_PER_INCH: f64 = 72.0;
+/// `SmetanaForJson.createNode` requests a 15-point empty-row axis, while
+/// `shapes__c.record_init` resolves the omitted `\N` label to 16 points on the
+/// other axis before its final one-point `ND_height` correction.
+/// `TextBlockJson.drawU` later paints the record 30 points wide.
+const SMETANA_EMPTY_RECORD_LABEL_DEPTH: f64 = 16.0;
 
 /// Direction of the graph layout.
 #[derive(Clone, Copy, Debug, Default)]
@@ -989,8 +994,16 @@ impl LayoutGraph {
                         );
                     } else {
                         // Graphviz uses inches for width/height.
+                        let is_empty_record = matches!(
+                            &spec.shape,
+                            NodeShape::Record { ports, .. } if ports.is_empty()
+                        );
                         let w_inches = spec.width / DOT_POINTS_PER_INCH;
-                        let h_inches = spec.height / DOT_POINTS_PER_INCH;
+                        let h_inches = if is_empty_record {
+                            SMETANA_EMPTY_RECORD_LABEL_DEPTH / DOT_POINTS_PER_INCH
+                        } else {
+                            spec.height / DOT_POINTS_PER_INCH
+                        };
                         let w_str = CString::new(format!("{w_inches:.6}")).unwrap();
                         let h_str = CString::new(format!("{h_inches:.6}")).unwrap();
 
@@ -1031,7 +1044,7 @@ impl LayoutGraph {
                                 empty.as_ptr(),
                             );
                         }
-                        if !natural_record_nodes.contains(&spec.id) {
+                        if !natural_record_nodes.contains(&spec.id) || is_empty_record {
                             graphviz_ffi::agsafeset(
                                 node as *mut c_void,
                                 fixedsize_key.as_ptr(),
@@ -2720,6 +2733,24 @@ mod tests {
 
         assert!((solved_sizes[0].0 - solved_sizes[1].0).abs() < 0.001);
         assert!((solved_sizes[0].1 - solved_sizes[1].1).abs() < 0.001);
+    }
+
+    #[test]
+    fn empty_records_keep_smetana_extent_and_sibling_packing() {
+        let mut graph = LayoutGraph::new(Direction::TopToBottom);
+        assert!(graph.add_node("renamed_parent", "", 40.0, 20.0));
+        assert!(graph.add_record_node("empty_alpha", 15.0, 0.0, &[]));
+        assert!(graph.add_record_node("empty_beta", 15.0, 0.0, &[]));
+        graph.add_edge("renamed_parent", "empty_alpha", None);
+        graph.add_edge("renamed_parent", "empty_beta", None);
+
+        let result = graph.layout_full_no_timeout();
+        let alpha = &result.node_positions[1];
+        let beta = &result.node_positions[2];
+        assert!((alpha.width - 15.0).abs() < 0.01);
+        assert!((alpha.height - (SMETANA_EMPTY_RECORD_LABEL_DEPTH + 1.0)).abs() < 0.01);
+        let center_gap = (alpha.x + alpha.width / 2.0 - beta.x - beta.width / 2.0).abs();
+        assert!((center_gap - 33.0).abs() < 0.01);
     }
 
     #[test]
