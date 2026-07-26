@@ -30,6 +30,31 @@ pub mod wbs;
 use crate::diagram::Diagram;
 use crate::preprocess;
 
+/// Apply PlantUML's `SkinParam.setParam` replacement semantics to parsed
+/// metadata. Java stores ordinary skinparams in a `LinkedHashMap`, so a later
+/// assignment replaces the value without moving the key's insertion position.
+///
+/// `__theme` is a RustUML preprocessing marker whose position represents a
+/// theme reset; it is not a Java skinparam key and must remain ordered.
+fn collapse_reassigned_skinparams(diagram: &mut Diagram) {
+    let params = &mut diagram.meta_mut().skinparams;
+    let mut effective: Vec<crate::diagram::SkinParam> = Vec::with_capacity(params.len());
+
+    for param in params.drain(..) {
+        if !param.key.eq_ignore_ascii_case("__theme")
+            && let Some(existing) = effective
+                .iter_mut()
+                .find(|existing| existing.key.eq_ignore_ascii_case(&param.key))
+        {
+            existing.value = param.value;
+        } else {
+            effective.push(param);
+        }
+    }
+
+    *params = effective;
+}
+
 /// Parse error with location context.
 #[derive(Debug)]
 pub struct ParseError {
@@ -1090,6 +1115,8 @@ pub fn parse_with_base(
         }),
     }?;
 
+    collapse_reassigned_skinparams(&mut diagram);
+
     // Inject sprite definitions from the preprocessor into the diagram's meta.
     if !sprites.is_empty() {
         let meta = diagram.meta_mut();
@@ -1172,6 +1199,32 @@ mod tests {
         let input = "@startuml\nskinparam backgroundColor #FFFEF0\n@enduml";
         let diagram = parse(input).unwrap();
         assert!(matches!(diagram, Diagram::Class(_)));
+    }
+
+    #[test]
+    fn repeated_skinparams_keep_first_position_with_last_value() {
+        let input = concat!(
+            "@startuml\n",
+            "skinparam ClassBackgroundColor #13579B\n",
+            "class FreshLedgerOne {}\n",
+            "class FreshLedgerTwo {}\n",
+            "skinparam classBackgroundColor #2468AC\n",
+            "class FreshLedgerThree {}\n",
+            "class FreshLedgerFour {}\n",
+            "class FreshLedgerFive {}\n",
+            "@enduml\n",
+        );
+        let diagram = parse(input).unwrap();
+        let matching: Vec<_> = diagram
+            .meta()
+            .skinparams
+            .iter()
+            .filter(|param| param.key.eq_ignore_ascii_case("classBackgroundColor"))
+            .collect();
+
+        assert_eq!(matching.len(), 1);
+        assert_eq!(matching[0].key, "ClassBackgroundColor");
+        assert_eq!(matching[0].value, "#2468AC");
     }
 
     #[test]
