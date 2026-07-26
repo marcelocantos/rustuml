@@ -250,73 +250,121 @@ fn is_emoji_fallback(code: u32) -> bool {
     )
 }
 
+#[derive(Clone, Copy)]
+enum ArabicForm {
+    Isolated = 0,
+    Final = 1,
+    Initial = 2,
+    Medial = 3,
+}
+
 fn shaped_text_width(text: &str, font_size: f64, bold: bool) -> Option<f64> {
-    match (text, font_size as u32, bold) {
-        ("\u{0639}\u{0631}\u{0628}\u{064A}", 14, false) => Some(26.1835),
-        ("\u{0645}\u{0633}\u{062A}\u{062E}\u{062F}\u{0645}", 14, false) => Some(40.6139),
-        ("\u{0646}\u{0638}\u{0627}\u{0645}", 14, false) => Some(22.3291),
-        ("\u{0627}\u{062E}\u{062A}\u{0628}\u{0627}\u{0631}", 14, true) => Some(36.6962),
-        ("\u{0627}\u{062E}\u{062A}\u{0628}\u{0627}\u{0631}", 13, false) => Some(28.6035),
-        ("\u{0628}\u{064A}\u{0627}\u{0646}\u{0627}\u{062A}: String", 14, false) => Some(78.4303),
-        ("\u{0628}\u{064A}\u{0627}\u{0646}\u{0627}\u{062A}: int", 14, false) => Some(56.4323),
-        ("\u{0637}\u{0631}\u{064A}\u{0642}\u{0629}(): void", 14, false) => Some(74.4474),
-        (
-            "\u{0637}\u{0644}\u{0628} \u{062A}\u{0633}\u{062C}\u{064A}\u{0644} \u{0627}\u{0644}\u{062F}\u{062E}\u{0648}\u{0644}",
-            13,
-            false,
-        ) => Some(90.1582),
-        (
-            "\u{0646}\u{062C}\u{062D} \u{062A}\u{0633}\u{062C}\u{064A}\u{0644} \u{0627}\u{0644}\u{062F}\u{062E}\u{0648}\u{0644}",
-            13,
-            false,
-        ) => Some(89.6821),
-        ("text with some Arabic: \u{0645}\u{0631}\u{062D}\u{0628}\u{0627}", 13, false) => {
-            Some(172.9213)
+    let table = char_width_table(font_size, bold);
+    let characters: Vec<(usize, char)> = text.char_indices().collect();
+    let mut width = 0.0;
+    let mut used_shaping = false;
+    let mut index = 0;
+
+    while index < characters.len() {
+        let (byte_index, current) = characters[index];
+        let joins_previous = index > 0
+            && arabic_joins_next(characters[index - 1].1)
+            && arabic_accepts_previous(current);
+        if joins_previous {
+            let rest = &text[byte_index..];
+            if let Some((cluster, plain, bold_width, plain_13)) =
+                crate::non_ascii_widths::ARABIC_CONNECTED_CLUSTERS
+                    .iter()
+                    .filter(|(cluster, _, _, _)| rest.starts_with(cluster))
+                    .max_by_key(|(cluster, _, _, _)| cluster.len())
+            {
+                width += if !bold && (font_size - 13.0).abs() < f64::EPSILON {
+                    *plain_13
+                } else {
+                    (if bold { *bold_width } else { *plain }) * font_size
+                };
+                used_shaping = true;
+                index += cluster.chars().count();
+                continue;
+            }
         }
-        ("normal text with \u{0645}\u{0632}\u{064A}\u{062C} Arabic mixed in", 13, false) => {
-            Some(233.6114)
+
+        if arabic_context_widths(current, bold).is_some() {
+            let joins_next = index + 1 < characters.len()
+                && arabic_joins_next(current)
+                && arabic_accepts_previous(characters[index + 1].1);
+            let form = match (joins_previous, joins_next) {
+                (false, false) => ArabicForm::Isolated,
+                (true, false) => ArabicForm::Final,
+                (false, true) => ArabicForm::Initial,
+                (true, true) => ArabicForm::Medial,
+            };
+            width += arabic_context_advance(current, form, font_size, bold)
+                .expect("supported Arabic character has contextual metrics");
+            used_shaping = true;
+            index += 1;
+            continue;
         }
-        (
-            "\u{0645}\u{0631}\u{062D}\u{0628}\u{0627} \u{0628}\u{0627}\u{0644}\u{0639}\u{0627}\u{0644}\u{0645}",
-            12,
-            false,
-        ) => Some(54.5364),
-        (
-            "\u{0631}\u{0633}\u{0627}\u{0644}\u{0629} \u{0639}\u{0631}\u{0628}\u{064A}\u{0629}",
-            13,
-            false,
-        ) => Some(53.3158),
-        (
-            "\u{0631}\u{0633}\u{0627}\u{0644}\u{0629} \u{0639}\u{0631}\u{0628}\u{064A}\u{0629} reply",
-            13,
-            false,
-        ) => Some(88.723),
-        ("\u{0627}\u{0644}\u{0639}\u{0631}\u{0628}\u{064A}\u{0629}", 14, false) => Some(31.8164),
-        ("\u{0628}\u{064A}\u{0627}\u{0646}\u{0627}\u{062A}", 13, false) => Some(27.4868),
-        ("\u{092A}\u{0930}\u{0940}\u{0915}\u{094D}\u{0937}\u{0923}", 14, true) => Some(40.628),
-        ("\u{092A}\u{0930}\u{0940}\u{0915}\u{094D}\u{0937}\u{0923}", 13, false) => Some(35.646),
-        (
-            "\u{0909}\u{092A}\u{092F}\u{094B}\u{0917}\u{0915}\u{0930}\u{094D}\u{0924}\u{093E}",
-            14,
-            false,
-        ) => Some(57.0499),
-        ("\u{092A}\u{094D}\u{0930}\u{0923}\u{093E}\u{0932}\u{0940}", 14, false) => Some(36.372),
-        ("\u{0921}\u{0947}\u{091F}\u{093E}", 13, false) => Some(17.16),
-        ("\u{0E1C}\u{0E39}\u{0E49}\u{0E43}\u{0E0A}\u{0E49}", 14, false) => Some(24.3141),
-        ("\u{0E23}\u{0E30}\u{0E1A}\u{0E1A}", 14, false) => Some(31.0296),
-        ("\u{0E17}\u{0E14}\u{0E2A}\u{0E2D}\u{0E1A}", 13, false) => Some(40.1222),
-        ("\u{0E02}\u{0E49}\u{0E2D}\u{0E21}\u{0E39}\u{0E25}", 13, false) => Some(30.7328),
-        (
-            "\u{0E01}\u{0E32}\u{0E23}\u{0E1B}\u{0E23}\u{0E30}\u{0E21}\u{0E27}\u{0E25}\u{0E1C}\u{0E25}\u{0E02}\u{0E49}\u{0E2D}\u{0E21}\u{0E39}\u{0E25}",
-            12,
-            false,
-        ) => Some(100.9734),
-        ("field2: \u{0645}\u{062A}\u{0646}", 14, false) => Some(63.8682),
-        ("arabicLabel: \"\u{0646}\u{0635} \u{0639}\u{0631}\u{0628}\u{064A}\"", 14, false) => {
-            Some(146.6903)
+
+        if is_cluster_shaped_script(current) {
+            let rest = &text[byte_index..];
+            if let Some((cluster, plain, bold_width)) =
+                crate::non_ascii_widths::COMPLEX_SCRIPT_CLUSTERS
+                    .iter()
+                    .filter(|(cluster, _, _)| rest.starts_with(cluster))
+                    .max_by_key(|(cluster, _, _)| cluster.len())
+            {
+                width += (if bold { *bold_width } else { *plain }) * font_size;
+                used_shaping = true;
+                index += cluster.chars().count();
+                continue;
+            }
         }
-        _ => None,
+
+        width += char_width(current, table, bold, font_size);
+        index += 1;
     }
+
+    used_shaping.then_some(width)
+}
+
+fn arabic_context_advance(c: char, form: ArabicForm, font_size: f64, bold: bool) -> Option<f64> {
+    let code = c as u32;
+    let form = form as usize;
+    if !bold && (font_size - 13.0).abs() < f64::EPSILON {
+        return crate::non_ascii_widths::ARABIC_CONTEXT_WIDTHS_13
+            .binary_search_by_key(&code, |(code, _)| *code)
+            .ok()
+            .map(|index| crate::non_ascii_widths::ARABIC_CONTEXT_WIDTHS_13[index].1[form]);
+    }
+    arabic_context_widths(c, bold).map(|widths| widths[form] * font_size)
+}
+
+fn arabic_context_widths(c: char, bold: bool) -> Option<&'static [f64; 4]> {
+    let code = c as u32;
+    crate::non_ascii_widths::ARABIC_CONTEXT_WIDTHS
+        .binary_search_by_key(&code, |(code, _, _)| *code)
+        .ok()
+        .map(|index| {
+            let (_, plain, bold_widths) = &crate::non_ascii_widths::ARABIC_CONTEXT_WIDTHS[index];
+            if bold { bold_widths } else { plain }
+        })
+}
+
+fn arabic_accepts_previous(c: char) -> bool {
+    arabic_context_widths(c, false).is_some()
+}
+
+fn arabic_joins_next(c: char) -> bool {
+    arabic_context_widths(c, false).is_some()
+        && !matches!(
+            c,
+            '\u{0627}' | '\u{0629}' | '\u{062F}' | '\u{0631}' | '\u{0632}' | '\u{0648}'
+        )
+}
+
+fn is_cluster_shaped_script(c: char) -> bool {
+    matches!(c as u32, 0x0900..=0x097f | 0x0e00..=0x0e7f)
 }
 
 /// Map a Latin-1 supplement character (U+00A0..U+00FF) to an ASCII
@@ -1544,14 +1592,17 @@ mod tests {
                 "146.6903",
             ),
         ];
+        let mut mismatches = Vec::new();
         for (text, size, expected_str) in &tests {
             let got = text_width(text, *size, false);
             let formatted = fmt_coord(got);
-            assert_eq!(
-                &formatted, expected_str,
-                "{text}: expected format={expected_str}, got={formatted} (raw={got})"
-            );
+            if &formatted != expected_str {
+                mismatches.push(format!(
+                    "{text}: expected format={expected_str}, got={formatted} (raw={got})"
+                ));
+            }
         }
+        assert!(mismatches.is_empty(), "{}", mismatches.join("\n"));
         assert_eq!(
             fmt_coord(text_width(
                 "\u{0627}\u{062E}\u{062A}\u{0628}\u{0627}\u{0631}",
@@ -1568,6 +1619,42 @@ mod tests {
             )),
             "40.628"
         );
+    }
+
+    #[test]
+    fn shaped_widths_recombine_out_of_corpus_words() {
+        // Expected advances were extracted through PlantUML's Java pipeline:
+        // FileFormat.getJavaDimension / UFontContext.createTextLayout.
+        let arabic = [
+            "\u{0646}\u{0638}\u{0627}\u{0645}",
+            " ",
+            "\u{0639}\u{0631}\u{0628}\u{064A}",
+            " ",
+            "\u{0645}\u{0633}\u{062A}\u{062E}\u{062F}\u{0645}",
+        ]
+        .concat();
+        assert_eq!(fmt_coord(text_width(&arabic, 13.0, false)), "90.9868");
+        assert_eq!(fmt_coord(text_width(&arabic, 14.0, true)), "113.4626");
+
+        let devanagari = [
+            "\u{0921}\u{0947}\u{091F}\u{093E}",
+            " ",
+            "\u{092A}\u{094D}\u{0930}\u{0923}\u{093E}\u{0932}\u{0940}",
+            " ",
+            "\u{092A}\u{0930}\u{0940}\u{0915}\u{094D}\u{0937}\u{0923}",
+        ]
+        .concat();
+        assert_eq!(fmt_coord(text_width(&devanagari, 13.0, false)), "94.8065");
+        assert_eq!(fmt_coord(text_width(&devanagari, 14.0, true)), "107.4664");
+
+        let thai = [
+            "\u{0E23}\u{0E30}\u{0E1A}\u{0E1A}",
+            "\u{0E02}\u{0E49}\u{0E2D}\u{0E21}\u{0E39}\u{0E25}",
+            "\u{0E1C}\u{0E39}\u{0E49}\u{0E43}\u{0E0A}\u{0E49}",
+        ]
+        .concat();
+        assert_eq!(fmt_coord(text_width(&thai, 13.0, false)), "82.1234");
+        assert_eq!(fmt_coord(text_width(&thai, 14.0, true)), "88.3038");
     }
 
     #[test]
