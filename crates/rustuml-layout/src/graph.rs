@@ -87,6 +87,7 @@ pub struct LayoutGraph {
     spacing: Option<GraphSpacing>,
     plantuml_svek_node_order: bool,
     plantuml_svek_inverted_starts: Vec<String>,
+    plantuml_svek_early_nodes: Vec<String>,
     nodes: Vec<NodeSpec>,
     clusters: Vec<ClusterSpec>,
     together: Vec<TogetherSpec>,
@@ -102,6 +103,7 @@ impl LayoutGraph {
             spacing: None,
             plantuml_svek_node_order: false,
             plantuml_svek_inverted_starts: Vec::new(),
+            plantuml_svek_early_nodes: Vec::new(),
             nodes: Vec::new(),
             clusters: Vec::new(),
             together: Vec::new(),
@@ -142,6 +144,21 @@ impl LayoutGraph {
         {
             self.plantuml_svek_inverted_starts
                 .insert(0, node_id.to_string());
+        }
+    }
+
+    /// Creates a node before PlantUML's ordinary root and cluster node stream.
+    ///
+    /// `DotStringFactory.createDotString` emits `Bibliotekon.lines0` before
+    /// `Cluster.printCluster2`, so length-one edge statements lazily create
+    /// their endpoints before the remaining declared nodes.
+    pub fn add_plantuml_svek_early_node(&mut self, node_id: &str) {
+        if !self
+            .plantuml_svek_early_nodes
+            .iter()
+            .any(|existing| existing == node_id)
+        {
+            self.plantuml_svek_early_nodes.push(node_id.to_string());
         }
     }
 
@@ -1184,6 +1201,14 @@ impl LayoutGraph {
                 order.push(node_idx);
             }
         }
+        for node_id in &self.plantuml_svek_early_nodes {
+            if let Some(node_idx) = self.nodes.iter().position(|node| &node.id == node_id)
+                && !seen[node_idx]
+            {
+                seen[node_idx] = true;
+                order.push(node_idx);
+            }
+        }
         if self.plantuml_svek_node_order && has_svek_clusters {
             let clustered_nodes: HashSet<&str> = self
                 .clusters
@@ -2067,6 +2092,40 @@ mod tests {
         assert!(outer.y < inner.y);
         assert!(outer.x + outer.width > inner.x + inner.width);
         assert!(outer.y + outer.height > inner.y + inner.height);
+    }
+
+    #[test]
+    fn svek_early_edge_nodes_precede_root_and_cluster_streams() {
+        let mut g = LayoutGraph::new(Direction::TopToBottom).with_plantuml_svek_node_order();
+        for id in [
+            "RootBefore_7",
+            "DirectZulu_19",
+            "LeafBeta_23",
+            "LeafAlpha_29",
+            "DirectAlpha_31",
+            "RootAfter_37",
+        ] {
+            g.add_node(id, id, 80.0, 40.0);
+        }
+        assert!(g.add_svek_cluster(
+            "Outer_Renamed_17",
+            None,
+            ClusterTitleSize {
+                width: 121.9,
+                height: 16.9,
+            },
+        ));
+        g.add_cluster_node("Outer_Renamed_17", "DirectZulu_19");
+        g.add_cluster_node("Outer_Renamed_17", "LeafBeta_23");
+        g.add_cluster_node("Outer_Renamed_17", "LeafAlpha_29");
+        g.add_cluster_node("Outer_Renamed_17", "DirectAlpha_31");
+
+        // Mirrors two `Bibliotekon.lines0` edges whose first-seen endpoints
+        // are clustered nodes, followed by root and remaining cluster leaves.
+        g.add_plantuml_svek_early_node("LeafBeta_23");
+        g.add_plantuml_svek_early_node("DirectAlpha_31");
+
+        assert_eq!(g.graphviz_node_creation_order(), vec![2, 4, 0, 5, 1, 3]);
     }
 
     #[test]
