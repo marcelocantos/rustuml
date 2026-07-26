@@ -1120,6 +1120,14 @@ fn use_case_footprint_atoms(
     let mut x = 0.0;
     let mut atoms = Vec::with_capacity(segments.len());
     for segment in segments {
+        // Java provenance: `StripeSimple.modifyStripe` hides syntax while it
+        // builds an `AtomText`, then `AtomText` calls `CharHidder.unhide`
+        // before asking the string bounder for dimensions. `parse_segments`
+        // stores the equivalent atom payload XML-escaped for SVG emission, so
+        // decode that payload once here instead of parsing it as Creole again.
+        // In particular, measuring `&amp;` recursively would measure the five
+        // literal characters `&amp;`, expanding the fitted ellipse.
+        let atom_text = text_render::single_pass_unescape(&segment.text);
         let size = segment.style.size.map(f64::from).unwrap_or(font_size);
         let family = if let Some(family) = segment.style.font_family.as_deref() {
             family
@@ -1128,10 +1136,9 @@ fn use_case_footprint_atoms(
         } else {
             font_family
         };
-        let width =
-            text_render::measure_with_family(&segment.text, size, segment.style.bold, family);
-        let height = text_render::label_height_with_family(&segment.text, size, family);
-        let ascent = text_render::label_ascent_with_family(&segment.text, size, family);
+        let width = text_render::measure_with_family(&atom_text, size, segment.style.bold, family);
+        let height = text_render::label_height_with_family(&atom_text, size, family);
+        let ascent = text_render::label_ascent_with_family(&atom_text, size, family);
         let own_drop = height - ascent;
         atoms.push(FootprintLine {
             line_width: 0.0,
@@ -4652,6 +4659,39 @@ FreshActor --> FreshReview
         assert_eq!(svg.matches(r#"font-family="monospace""#).count(), 2);
         assert!(svg.contains(">Auditor</text>"), "{svg}");
         assert!(svg.contains(">Review</text>"), "{svg}");
+    }
+
+    #[test]
+    fn renamed_plain_special_characters_keep_single_atom_footprints() {
+        let input = r#"@startuml
+actor "Ops+Lead" as FreshOperator
+usecase "Review > Queue_2 + Confirm" as FreshCheckpoint
+FreshOperator --> FreshCheckpoint
+@enduml"#;
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::UseCase(usecase) = &diagram else {
+            panic!("expected use-case diagram");
+        };
+        let skin = super::SkinColors::from_meta(&usecase.meta.skinparams, None);
+        let label = &usecase.use_cases[0].label;
+        let atoms = super::use_case_footprint_atoms(
+            label,
+            0.0,
+            skin.uc_font_size as f64,
+            &skin.uc_font_family,
+        );
+
+        // Java's `CreoleStripeSimpleParser` leaves this plain line in one
+        // `AtomText`; `Footprint.MyUGraphic` therefore records one rectangle.
+        assert_eq!(atoms.len(), 1);
+        let expected_width = crate::text_render::measure_with_family(
+            label,
+            skin.uc_font_size as f64,
+            false,
+            &skin.uc_font_family,
+        );
+        assert!((atoms[0].width - expected_width).abs() < 0.001);
+        assert!((atoms[0].line_width - expected_width).abs() < 0.001);
     }
 
     #[test]
