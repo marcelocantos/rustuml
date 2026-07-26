@@ -31,5 +31,5 @@ crates/rustuml-render/src/sequence.rs 111
 crates/rustuml-render/src/state.rs 22
 crates/rustuml-render/src/text_render.rs 409
 crates/rustuml-render/src/timing.rs 3
-crates/rustuml-render/src/usecase.rs 29
+crates/rustuml-render/src/usecase.rs 33
 crates/rustuml-render/src/wbs.rs 3

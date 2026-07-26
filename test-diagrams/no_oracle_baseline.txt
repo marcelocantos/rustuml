@@ -23,7 +23,7 @@ mindmap 157 157
 multi-diagram 45 53
 nwdiag 89 89
 object 155 155
-preprocessing 162 307
+preprocessing 163 307
 regex 45 45
 rendering 52 98
 salt 103 103
@@ -33,6 +33,6 @@ sprites 0 49
 state 637 901
 timing 141 141
 type-detection 31 42
-usecase 310 315
+usecase 315 315
 wbs 138 138
 wire 0 0
