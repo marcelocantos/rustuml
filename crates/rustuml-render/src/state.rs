@@ -345,26 +345,25 @@ fn explicit_transition_direction(
     .find_map(|(token, direction)| lowercase.contains(token).then_some(direction))
 }
 
-/// Recover the Graphviz rank length carried by an explicit vertical arrow.
+/// Recover the Graphviz rank length carried by a vertical transition arrow.
 ///
-/// The state parser deliberately keeps exact arrow syntax in `DiagramMeta::source`
-/// for downstream consumers. PlantUML's `CommandLinkStateCommon.executeArg`
-/// measures the arrow queue and `SvekEdge.appendLine` writes
-/// `minlen = Link.getLength() - 1`; for a named vertical direction, that is the
-/// number of shaft dashes after the direction token.
-fn explicit_vertical_minlen(diagram: &StateDiagram, transition: &Transition) -> Option<usize> {
-    let direction = explicit_transition_direction(diagram, transition)?;
-    let token = match direction {
-        ExplicitTransitionDirection::Up => "-up",
-        ExplicitTransitionDirection::Down => "-down",
-        ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Right => return None,
-    };
+/// The state parser deliberately keeps exact arrow syntax in
+/// `DiagramMeta::source` for downstream consumers. Java's
+/// `CommandLinkStateCommon.executeArg` concatenates `ARROW_BODY1` and
+/// `ARROW_BODY2` into the link queue, while `SvekEdge.appendLine` serialises
+/// `minlen = Link.getLength() - 1`. Direction and style tokens sit between
+/// those two dash runs, so counting the dashes recovers the same queue length.
+fn transition_svek_minlen(diagram: &StateDiagram, transition: &Transition) -> Option<usize> {
+    if matches!(
+        explicit_transition_direction(diagram, transition),
+        Some(ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Right)
+    ) {
+        return Some(0);
+    }
     let line = transition_source_text(diagram, transition)?;
-    let lowercase = line.to_ascii_lowercase();
-    let after_direction = line.get(lowercase.find(token)? + token.len()..)?;
-    let shaft = after_direction.get(..after_direction.find('>')?)?;
-    let minlen = shaft.bytes().filter(|byte| *byte == b'-').count();
-    (minlen > 0).then_some(minlen)
+    let arrow_clause = line.split_once(" :").map_or(line, |(arrow, _)| arrow);
+    let queue_len = arrow_clause.bytes().filter(|byte| *byte == b'-').count();
+    queue_len.checked_sub(1)
 }
 
 /// PlantUML parses Graphviz's SVG, whose node and spline coordinates are
@@ -1012,7 +1011,7 @@ fn layout_autonomous_scope(
             None,
             None,
             (!horizontal)
-                .then(|| explicit_vertical_minlen(diagram, transition))
+                .then(|| transition_svek_minlen(diagram, transition))
                 .flatten(),
         );
     }
@@ -2123,7 +2122,7 @@ pub fn render_with_oracle(
                 None,
                 None,
                 (!horizontal)
-                    .then(|| explicit_vertical_minlen(diagram, t))
+                    .then(|| transition_svek_minlen(diagram, t))
                     .flatten(),
             );
         }
@@ -5757,10 +5756,7 @@ mod tests {
             panic!("expected state diagrams");
         };
 
-        assert_eq!(
-            explicit_vertical_minlen(long, &long.transitions[1]),
-            Some(4)
-        );
+        assert_eq!(transition_svek_minlen(long, &long.transitions[1]), Some(4));
         let short_svg = render(short, &Theme::default());
         let long_svg = render(long, &Theme::default());
         let svg_height = |svg: &str| {
@@ -5770,6 +5766,29 @@ mod tests {
                 .unwrap()
         };
         assert!(svg_height(&long_svg) > svg_height(&short_svg));
+    }
+
+    #[test]
+    fn renamed_ordinary_arrow_queues_preserve_each_svek_minlen() {
+        let input = concat!(
+            "@startuml\n",
+            "[*] --> QuartzHarbor701\n",
+            "QuartzHarbor701 -> AmberRelay709\n",
+            "AmberRelay709 ----> IndigoMesa719\n",
+            "IndigoMesa719 --> [*]\n",
+            "@enduml\n",
+        );
+        let parsed = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::State(diagram) = &parsed else {
+            panic!("expected state diagram");
+        };
+
+        let minlens = diagram
+            .transitions
+            .iter()
+            .map(|transition| transition_svek_minlen(diagram, transition))
+            .collect::<Vec<_>>();
+        assert_eq!(minlens, vec![Some(1), Some(0), Some(3), Some(1)]);
     }
 
     #[test]
@@ -5796,7 +5815,7 @@ mod tests {
             Some(ExplicitTransitionDirection::Up)
         );
         assert_eq!(
-            explicit_vertical_minlen(diagram, &diagram.transitions[2]),
+            transition_svek_minlen(diagram, &diagram.transitions[2]),
             Some(2)
         );
 
