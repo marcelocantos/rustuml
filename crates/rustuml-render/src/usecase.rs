@@ -1306,6 +1306,18 @@ fn layout_usecase_positions(
         }
     }
     let mut result = layout.layout_full(LAYOUT_TIMEOUT)?;
+    for cluster in &mut result.cluster_positions {
+        // `DotStringFactory.solve` recovers cluster rectangles from
+        // Graphviz's two-decimal SVG polygon, not the internal floating-point
+        // box. The layout crate retains those serialized dimensions so every
+        // package count and title width follows the same reconstruction.
+        cluster.x = (cluster.x * 100.0).round() / 100.0;
+        cluster.y = (cluster.y * 100.0).round() / 100.0;
+        if let Some(&(width, height)) = result.cluster_serialized_sizes.get(&cluster.id) {
+            cluster.width = width;
+            cluster.height = height;
+        }
+    }
     let degenerated = diagram.actors.len() + diagram.use_cases.len() + entity_note_indices.len()
         == 1
         && diagram.packages.is_empty()
@@ -1321,10 +1333,12 @@ fn layout_usecase_positions(
         .node_positions
         .iter()
         .map(|p| p.x)
-        // `LimitFinder.drawRectangle` expands cluster chrome one pixel
-        // toward the top-left before `SvekResult.calculateDimension` moves
-        // the painted minimum to (6, 6).
-        .chain(result.cluster_positions.iter().map(|p| p.x - 1.0))
+        .chain(
+            result
+                .cluster_positions
+                .iter()
+                .map(|p| cluster_painted_bounds(diagram, p).0),
+        )
         .chain(
             result
                 .edge_paths
@@ -1359,7 +1373,12 @@ fn layout_usecase_positions(
                 .take(entity_note_indices.len())
                 .map(|p| p.y),
         )
-        .chain(result.cluster_positions.iter().map(|p| p.y))
+        .chain(
+            result
+                .cluster_positions
+                .iter()
+                .map(|p| cluster_painted_bounds(diagram, p).1),
+        )
         .fold(f64::INFINITY, f64::min);
     let origin_y = if min_painted_y.is_finite() {
         base_origin_y - min_painted_y
@@ -1793,10 +1812,45 @@ fn compute_canvas(
         }
     }
     for cluster in &positions.cluster_positions {
-        max_x = max_x.max(cluster.x + cluster.width + SVEK_CANVAS_PAD);
-        max_y = max_y.max(cluster.y + cluster.height + SVEK_CANVAS_PAD);
+        let (_, _, painted_max_x, painted_max_y) = cluster_painted_bounds(diagram, cluster);
+        // `SvekResult.calculateDimension` adds 15 to the complete painted
+        // span. Since normalization has already moved the minimum to six,
+        // the translated painted maximum receives the remaining 15 pixels.
+        max_x = max_x.max(painted_max_x + SVEK_CANVAS_PAD + 1.0);
+        max_y = max_y.max(painted_max_y + SVEK_CANVAS_PAD + 1.0);
     }
     (max_x.ceil().max(1.0), max_y.ceil().max(1.0))
+}
+
+fn cluster_painted_bounds(
+    diagram: &UseCaseDiagram,
+    cluster: &ClusterPosition,
+) -> (f64, f64, f64, f64) {
+    let kind = diagram
+        .packages
+        .iter()
+        .find(|package| package.name == cluster.id)
+        .map(|package| package.kind)
+        .unwrap_or(PackageKind::Rectangle);
+    match kind {
+        // `USymbolRectangle.asBig` draws a `URectangle`.
+        // `LimitFinder.drawRectangle` expands its top-left by one pixel and
+        // records the far corner one pixel inside the nominal box.
+        PackageKind::Rectangle => (
+            cluster.x - 1.0,
+            cluster.y - 1.0,
+            cluster.x + cluster.width - 1.0,
+            cluster.y + cluster.height - 1.0,
+        ),
+        // `USymbolFolder.drawFolder` draws the package outline as a `UPath`;
+        // `LimitFinder.drawUPath` uses the path's exact extrema.
+        PackageKind::Package => (
+            cluster.x,
+            cluster.y,
+            cluster.x + cluster.width,
+            cluster.y + cluster.height,
+        ),
+    }
 }
 
 fn render_package_group(
@@ -3310,6 +3364,42 @@ mod tests {
             "{svg}"
         );
         assert_eq!(svg.matches(r#"class="entity""#).count(), 5, "{svg}");
+    }
+
+    #[test]
+    fn renamed_mixed_clusters_use_primitive_specific_painted_bounds() {
+        let input = "@startuml\n\
+                     left to right direction\n\
+                     actor \"Fresh Bounds Auditor 1811\" as Auditor1811\n\
+                     rectangle \"Renamed Intake Boundary 1823\" #LightBlue {\n\
+                       usecase \"Queue unseen claim 1831\" as Queue1831\n\
+                       usecase \"Review irregular batch 1847\" as Review1847\n\
+                       usecase \"Archive fresh outcome 1861\" as Archive1861\n\
+                     }\n\
+                     package \"Renamed Archive Folder 1871\" {\n\
+                       usecase \"Store novel snapshot 1873\" as Store1873\n\
+                       usecase \"Verify unseen checksum 1877\" as Verify1877\n\
+                     }\n\
+                     Auditor1811 --> Queue1831\n\
+                     Auditor1811 --> Review1847\n\
+                     Review1847 --> Archive1861\n\
+                     Archive1861 --> Store1873\n\
+                     Store1873 --> Verify1877\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // A fresh Java render is structurally equivalent. Its rectangle starts
+        // at y=7 because `LimitFinder.drawRectangle` contributes a -1 minimum;
+        // the folder's `UPath` starts at y=6 because its extrema are exact.
+        assert!(
+            svg.contains(r##"<rect fill="#ADD8E6" height="179""##),
+            "{svg}"
+        );
+        assert!(svg.contains(r#"x="236.31" y="7"/>"#), "{svg}");
+        assert!(svg.contains(r#"<path d="M788.53,6 "#), "{svg}");
+        assert_eq!(svg.matches(r#"class="cluster""#).count(), 2, "{svg}");
+        assert_eq!(svg.matches(r#"class="entity""#).count(), 6, "{svg}");
     }
 
     #[test]
