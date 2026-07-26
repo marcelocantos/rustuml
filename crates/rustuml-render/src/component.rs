@@ -209,8 +209,12 @@ fn build_no_oracle_uid_model(diagram: &ComponentDiagram) -> NoOracleUidModel {
     enum Event {
         Entity(Vec<String>),
         AttachedNote(usize),
+        RemovedAttachedNote,
         Link {
             index: usize,
+            consumes_inverse: bool,
+        },
+        RemovedLink {
             consumes_inverse: bool,
         },
     }
@@ -251,6 +255,14 @@ fn build_no_oracle_uid_model(diagram: &ComponentDiagram) -> NoOracleUidModel {
             ordinal += 1;
         }
     }
+    for component in &diagram.removed_components {
+        events.push((
+            component.source_line,
+            ordinal,
+            Event::Entity(vec![component.id.clone()]),
+        ));
+        ordinal += 1;
+    }
     for interface in &diagram.interfaces {
         events.push((
             interface.source_line,
@@ -265,12 +277,28 @@ fn build_no_oracle_uid_model(diagram: &ComponentDiagram) -> NoOracleUidModel {
             ordinal += 1;
         }
     }
+    for note in &diagram.removed_notes {
+        if note.target.is_some() {
+            events.push((note.source_line, ordinal, Event::RemovedAttachedNote));
+            ordinal += 1;
+        }
+    }
     for (index, connection) in diagram.connections.iter().enumerate() {
         events.push((
             connection.source_line,
             ordinal,
             Event::Link {
                 index,
+                consumes_inverse: no_oracle_layout_edge_ends(connection).2,
+            },
+        ));
+        ordinal += 1;
+    }
+    for connection in &diagram.removed_connections {
+        events.push((
+            connection.source_line,
+            ordinal,
+            Event::RemovedLink {
                 consumes_inverse: no_oracle_layout_edge_ends(connection).2,
             },
         ));
@@ -310,6 +338,11 @@ fn build_no_oracle_uid_model(diagram: &ComponentDiagram) -> NoOracleUidModel {
                 );
                 next_uid += 1;
             }
+            Event::RemovedAttachedNote => {
+                // The generated GMN name, note entity, and hidden attachment
+                // link are allocated while parsing, before removal is applied.
+                next_uid += 3;
+            }
             Event::Link {
                 index,
                 consumes_inverse,
@@ -318,6 +351,12 @@ fn build_no_oracle_uid_model(diagram: &ComponentDiagram) -> NoOracleUidModel {
                     next_uid += 1;
                 }
                 link_ids[index] = next_uid;
+                next_uid += 1;
+            }
+            Event::RemovedLink { consumes_inverse } => {
+                if consumes_inverse {
+                    next_uid += 1;
+                }
                 next_uid += 1;
             }
         }
@@ -687,6 +726,11 @@ pub fn render_with_oracle(
     {
         return r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="50px" preserveAspectRatio="none" style="width:100px;height:50px;background:#FFFFFF;" version="1.1" viewBox="0 0 100 50" width="100px" zoomAndPan="magnify"><defs/><g></g></svg>"#.to_string();
     }
+    let hidden_components: std::collections::HashSet<&str> = diagram
+        .hidden_components
+        .iter()
+        .map(String::as_str)
+        .collect();
 
     // Resolve component-specific skinparams. We read these directly from the
     // diagram's `skinparams` rather than the cascading `Theme` so the
@@ -1608,6 +1652,9 @@ pub fn render_with_oracle(
 
         // HTML comment.
         svg.raw(&format!("<!--entity {}-->", fold_non_ascii(&comp.id, '?')));
+        if hidden_components.contains(comp.id.as_str()) {
+            continue;
+        }
 
         // Open entity group. Use qualified name when component lives inside a package.
         let qualified = fold_non_ascii(
@@ -1936,6 +1983,13 @@ pub fn render_with_oracle(
         }
     } else if oracle.is_none() {
         for (note_index, note) in diagram.notes.iter().enumerate() {
+            if note
+                .target
+                .as_deref()
+                .is_some_and(|target| hidden_components.contains(target))
+            {
+                continue;
+            }
             let layout = note_layouts
                 .iter()
                 .find(|layout| layout.note_index == note_index);
@@ -1995,6 +2049,9 @@ pub fn render_with_oracle(
             let Some(target) = note.target.as_deref() else {
                 continue;
             };
+            if hidden_components.contains(target) {
+                continue;
+            }
             let Some(qname) = package_qualified_names.get(target) else {
                 continue;
             };
@@ -2212,6 +2269,9 @@ pub fn render_with_oracle(
             svg.raw(&format!(
                 "<!--{comment_prefix} {logical_from} to {logical_to}-->"
             ));
+            if hidden_components.contains(logical_from) || hidden_components.contains(logical_to) {
+                continue;
+            }
 
             let from_ent_idx = diagram
                 .components
@@ -6652,6 +6712,49 @@ mod tests {
         assert!(
             svg.contains(r#"id="Relay277-to-Sink283""#),
             "the cross-cluster spline must retain Java's logical endpoints: {svg}"
+        );
+    }
+
+    #[test]
+    fn no_oracle_hide_and_remove_follow_distinct_svek_lifecycles() {
+        let input = "@startuml\n\
+                     component \"Renamed Hidden Relay 9101\" as Hidden9101 <<retired_9101>>\n\
+                     component \"Renamed Visible Broker 9103\" as Broker9103\n\
+                     component \"Renamed Removed Sink 9109\" as Removed9109\n\
+                     component \"Renamed Visible Archive 9113\" as Archive9113\n\
+                     Hidden9101 --> Broker9103\n\
+                     Broker9103 --> Removed9109\n\
+                     Broker9103 --> Archive9113\n\
+                     hide <<retired_9101>>\n\
+                     remove Removed9109\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Fresh Java PlantUML beta reference. `GraphvizImageBuilder`
+        // excludes removed nodes and links before layout. `SvekResult.drawU`
+        // instead paints hidden nodes and inherited-hidden links through
+        // `UHidden`, which `LimitFinder` deliberately ignores.
+        assert!(svg.contains(r#"viewBox="0 0 267 296""#), "{svg}");
+        assert!(
+            svg.contains("<!--entity Hidden9101-->")
+                && svg.contains("<!--entity Broker9103-->")
+                && !svg.contains("Renamed Hidden Relay 9101")
+                && !svg.contains("Removed9109"),
+            "{svg}"
+        );
+        assert!(
+            svg.contains(r#"data-qualified-name="Broker9103" data-source-line="2" id="ent0003""#)
+                && svg.contains(
+                    r#"data-qualified-name="Archive9113" data-source-line="4" id="ent0005""#
+                ),
+            "{svg}"
+        );
+        assert!(
+            svg.contains("<!--link Hidden9101 to Broker9103-->")
+                && svg.contains("<!--link Broker9103 to Archive9113-->")
+                && svg.contains(r#"data-source-line="7" id="lnk8""#),
+            "{svg}"
         );
     }
 

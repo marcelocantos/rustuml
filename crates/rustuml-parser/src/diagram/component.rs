@@ -11,12 +11,27 @@ use super::DiagramMeta;
 pub struct ComponentDiagram {
     pub meta: DiagramMeta,
     pub components: Vec<Component>,
+    /// Component ids hidden by `hide` selectors.
+    ///
+    /// Java keeps these entities in SVEK layout and applies `UHidden` only
+    /// while drawing, so they must remain in `components`.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub hidden_components: Vec<String>,
+    /// Removed declarations retained only for parse-time UID sequencing.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub removed_components: Vec<Component>,
     pub interfaces: Vec<Interface>,
     pub connections: Vec<Connection>,
+    /// Removed links retained only for parse-time UID sequencing.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub removed_connections: Vec<Connection>,
     pub packages: Vec<ComponentPackage>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub together: Vec<ComponentTogether>,
     pub notes: Vec<ComponentNote>,
+    /// Notes inherited from removed targets, retained for UID sequencing.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub removed_notes: Vec<ComponentNote>,
 }
 
 /// An invisible `together { ... }` layout subgraph.
