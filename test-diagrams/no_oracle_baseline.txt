@@ -7,7 +7,7 @@ archimate 48 48
 chart 25 25
 class 1838 1971
 combo 261 327
-component 649 663
+component 650 663
 creole 423 639
 deployment 495 495
 dot 25 25
@@ -32,7 +32,7 @@ skinparam 249 410
 sprites 0 49
 state 637 901
 timing 141 141
-type-detection 30 42
+type-detection 31 42
 usecase 310 315
 wbs 138 138
 wire 0 0
