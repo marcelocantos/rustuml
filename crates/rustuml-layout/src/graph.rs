@@ -704,14 +704,20 @@ impl LayoutGraph {
         // traverses outgoing edges by node order, which is not necessarily the
         // caller's insertion order.
         let mut edge_specs: HashMap<usize, (String, String)> = HashMap::new();
-        for edge_spec in &self.edges {
+        for (edge_idx, edge_spec) in self.edges.iter().enumerate() {
             let Some(&from_h) = node_handles.get(&edge_spec.from) else {
                 continue;
             };
             let Some(&to_h) = node_handles.get(&edge_spec.to) else {
                 continue;
             };
-            let edge_name = CString::new(format!("{}__{}", edge_spec.from, edge_spec.to)).unwrap();
+            // PlantUML `SvekEdge.appendLine` emits every relationship as a
+            // separate dot edge statement. cgraph identifies named parallel
+            // edges by (tail, head, name), so include the insertion ordinal
+            // instead of letting a later relationship reopen and overwrite
+            // the first edge object.
+            let edge_name =
+                CString::new(format!("{}__{}__{edge_idx}", edge_spec.from, edge_spec.to)).unwrap();
             let edge = graphviz_ffi::agedge(g, from_h, to_h, edge_name.as_ptr(), 1);
 
             if let Some(lbl) = &edge_spec.label {
@@ -1534,6 +1540,48 @@ mod tests {
             distance(edge_b.points[0], source_b) < distance(edge_b.points[0], source_a),
             "B spline should start at source B"
         );
+    }
+
+    #[test]
+    fn parallel_renamed_edges_keep_distinct_splines_and_label_boxes() {
+        let mut graph = LayoutGraph::new(Direction::TopToBottom);
+        graph.add_node("renamed_source_47", "", 53.0, 41.0);
+        graph.add_node("renamed_target_53", "", 61.0, 43.0);
+        for width in [37.0, 43.0, 59.0] {
+            graph.add_edge_with_label_sizes(
+                "renamed_source_47",
+                "renamed_target_53",
+                Some(EdgeLabelSize {
+                    width,
+                    height: 17.0,
+                }),
+                None,
+                None,
+            );
+        }
+
+        let result = graph.layout_full_no_timeout();
+        assert_eq!(result.edge_paths.len(), 3);
+        let mut label_x = result
+            .edge_paths
+            .iter()
+            .map(|edge| edge.label.expect("parallel label").x)
+            .collect::<Vec<_>>();
+        label_x.sort_by(f64::total_cmp);
+        label_x.dedup();
+        assert_eq!(label_x.len(), 3);
+        let mut starts = result
+            .edge_paths
+            .iter()
+            .map(|edge| edge.points.first().copied().expect("parallel spline"))
+            .collect::<Vec<_>>();
+        starts.sort_by(|left, right| {
+            left.0
+                .total_cmp(&right.0)
+                .then_with(|| left.1.total_cmp(&right.1))
+        });
+        starts.dedup();
+        assert_eq!(starts.len(), 3);
     }
 
     #[test]

@@ -124,6 +124,10 @@ pub struct ObjectLink {
     /// Whether the connector carries an arrow decoration at the target end.
     #[serde(default)]
     pub arrow_at_to: bool,
+    /// Whether an aggregation/composition diamond is attached to the source
+    /// end. A false value places that diamond at the target end.
+    #[serde(default)]
+    pub diamond_at_from: bool,
     /// 1-based line number within the `@startuml` block.
     #[serde(default)]
     pub source_line: usize,
