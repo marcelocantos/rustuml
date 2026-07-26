@@ -10891,6 +10891,19 @@ mod tests {
     }
 
     #[test]
+    fn legacy_double_hash_border_keeps_a_separate_background_channel() {
+        let input =
+            "@startuml\nclass FreshLedger719 #azure ##[dashed]12ABEF {\n  +entry: String\n}\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(r##"<rect fill="#F0FFFF""##));
+        assert!(svg.contains(
+            r##"style="stroke:#12ABEF;stroke-width:1;stroke-dasharray:7,7;""##
+        ));
+    }
+
+    #[test]
     fn custom_spot_uses_arbitrary_character_outline() {
         let input = "@startuml\nclass Renamed << (G,#12ABEF) NewKind >>\n@enduml";
         let diagram = rustuml_parser::parse::parse(input).unwrap();

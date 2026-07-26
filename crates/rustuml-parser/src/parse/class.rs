@@ -1713,31 +1713,55 @@ struct ParsedEntityColors {
 /// the specific line stroke. The terminating-character check excludes custom
 /// spot colors inside `<< (X,#RRGGBB) Name >>`.
 fn parse_entity_colors(line: &str) -> ParsedEntityColors {
+    // `CommandCreateClass.getRegexConcat` parses this suffix separately from
+    // `ColorParser.simpleColor(BACK)`, then adds it as `ColorType.LINE`.
+    static LEGACY_LINE_RE: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(r"##(?:\[(dotted|dashed|bold)\])?([A-Za-z0-9_-]+)?(?:\s|\{|$)").unwrap()
+    });
     static RE: LazyLock<Regex> =
         LazyLock::new(|| Regex::new(r"#([A-Za-z0-9.:;|/\\#-]+)(?:\s|\{|$)").unwrap());
-    let Some(raw) = RE
-        .captures_iter(line)
+    let legacy_line = LEGACY_LINE_RE.captures(line);
+    let color_scope = legacy_line
+        .as_ref()
+        .and_then(|caps| caps.get(0))
+        .map_or(line, |suffix| &line[..suffix.start()]);
+    let raw = RE
+        .captures_iter(color_scope)
         .last()
-        .map(|caps| caps[1].replace('#', ""))
-    else {
-        return ParsedEntityColors::default();
-    };
+        .map(|caps| caps[1].replace('#', ""));
 
-    let lower = raw.to_ascii_lowercase();
-    let line_style = if lower.contains("line.dashed") {
+    let lower = raw.as_deref().unwrap_or_default().to_ascii_lowercase();
+    let mut colors = ParsedEntityColors {
+        line: legacy_line
+            .as_ref()
+            .and_then(|caps| caps.get(2))
+            .map(|color| color.as_str().to_string()),
+        line_style: legacy_line
+            .as_ref()
+            .and_then(|caps| caps.get(1))
+            .and_then(|style| match style.as_str() {
+                "dotted" => Some(EntityLineStyle::Dotted),
+                "dashed" => Some(EntityLineStyle::Dashed),
+                "bold" => Some(EntityLineStyle::Bold),
+                _ => None,
+            }),
+        ..ParsedEntityColors::default()
+    };
+    colors.line_style = if lower.contains("line.dashed") {
         Some(EntityLineStyle::Dashed)
     } else if lower.contains("line.dotted") {
         Some(EntityLineStyle::Dotted)
     } else if lower.contains("line.bold") {
         Some(EntityLineStyle::Bold)
     } else {
-        None
+        colors.line_style
     };
-    let mut colors = ParsedEntityColors {
-        line_style,
-        ..ParsedEntityColors::default()
-    };
-    for token in raw.split(';').filter(|token| !token.is_empty()) {
+    for token in raw
+        .as_deref()
+        .unwrap_or_default()
+        .split(';')
+        .filter(|token| !token.is_empty())
+    {
         let Some((name, value)) = token.split_once(':') else {
             if !token.contains('.') {
                 colors.back = Some(format!("#{token}"));
@@ -2139,6 +2163,14 @@ mod tests {
         assert_eq!(entity.color.as_deref(), Some("azure"));
         assert_eq!(entity.line_color.as_deref(), Some("12ABEF"));
         assert_eq!(entity.text_color.as_deref(), Some("navy"));
+        assert_eq!(entity.line_style, Some(EntityLineStyle::Dashed));
+    }
+
+    #[test]
+    fn legacy_double_hash_routes_border_separately_from_background() {
+        let entity = &parse("class Renamed #azure ##[dashed]12ABEF").entities[0];
+        assert_eq!(entity.color.as_deref(), Some("#azure"));
+        assert_eq!(entity.line_color.as_deref(), Some("12ABEF"));
         assert_eq!(entity.line_style, Some(EntityLineStyle::Dashed));
     }
 
