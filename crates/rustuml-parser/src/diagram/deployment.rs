@@ -12,10 +12,20 @@ pub const DEFAULT_DEPLOYMENT_LINK_LENGTH: usize = 2;
 #[derive(Debug, Serialize, Deserialize)]
 pub struct DeploymentDiagram {
     pub meta: DiagramMeta,
+    #[serde(default)]
+    pub direction: DeploymentLayoutDirection,
     pub nodes: Vec<DeploymentNode>,
     pub connections: Vec<DeploymentConnection>,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub notes: Vec<DeploymentNote>,
+}
+
+/// Dot/SVEK rank direction selected by the diagram direction command.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
+pub enum DeploymentLayoutDirection {
+    #[default]
+    TopToBottom,
+    LeftToRight,
 }
 
 /// A note attached to or near a node, or a floating note.

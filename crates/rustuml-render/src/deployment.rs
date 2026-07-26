@@ -3628,7 +3628,13 @@ fn render_no_oracle(diagram: &DeploymentDiagram, _theme: &Theme) -> String {
             )
         })
         .collect();
-    let mut layout = LayoutGraph::new(Direction::TopToBottom)
+    // Java provenance: `AbstractEntityDiagram.getRankdir()` carries
+    // `left to right direction` into SVEK's DOT `rankdir`.
+    let layout_direction = match diagram.direction {
+        DeploymentLayoutDirection::TopToBottom => Direction::TopToBottom,
+        DeploymentLayoutDirection::LeftToRight => Direction::LeftToRight,
+    };
+    let mut layout = LayoutGraph::new(layout_direction)
         .with_plantuml_svek_spacing()
         .with_plantuml_svek_node_order();
     for (node, dim) in diagram.nodes.iter().zip(&dims) {
@@ -5983,6 +5989,17 @@ fn edge_path_d(points: &[(f64, f64)]) -> Option<String> {
 mod tests {
     use super::*;
 
+    fn root_numeric_attr(svg: &str, name: &str) -> f64 {
+        let root = svg.split_once('>').map_or(svg, |(root, _)| root);
+        let marker = format!(r#" {name}=""#);
+        root.split_once(&marker)
+            .and_then(|(_, rest)| rest.split_once('"'))
+            .map(|(value, _)| value.trim_end_matches("px"))
+            .unwrap_or_else(|| panic!("missing {name} in {root}"))
+            .parse()
+            .unwrap_or_else(|_| panic!("non-numeric {name} in {root}"))
+    }
+
     #[test]
     fn no_oracle_deployment_renders_entities_and_links() {
         let source = "@startuml\nnode N01\nnode N02\nN01 --> N02\n@enduml";
@@ -5997,6 +6014,32 @@ mod tests {
         assert!(svg.contains(r#"<g class="entity" data-qualified-name="N02""#));
         assert!(svg.contains(r#"<g class="link""#));
         assert!(!svg.contains(r#"<defs/><g></g>"#));
+    }
+
+    #[test]
+    fn global_left_to_right_direction_controls_fresh_deployment_chain() {
+        let source = concat!(
+            "@startuml\n",
+            "left to right direction\n",
+            "node CopperHost\n",
+            "node VioletHost\n",
+            "node SaffronHost\n",
+            "node TealHost\n",
+            "CopperHost --> VioletHost\n",
+            "VioletHost --> SaffronHost\n",
+            "SaffronHost --> TealHost\n",
+            "@enduml\n",
+        );
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+        let svg = render(&diagram, &Theme::default());
+
+        assert!(
+            root_numeric_attr(&svg, "width") > root_numeric_attr(&svg, "height"),
+            "left-to-right rank direction must make a four-node chain wider than tall: {svg}"
+        );
     }
 
     #[test]

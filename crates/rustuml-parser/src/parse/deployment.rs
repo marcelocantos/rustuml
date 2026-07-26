@@ -394,6 +394,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
     let mut connections = Vec::new();
     let mut notes = Vec::new();
     let mut meta = DiagramMeta::default();
+    let mut direction = DeploymentLayoutDirection::TopToBottom;
 
     // Stack of node IDs for tracking nesting depth.
     let mut stack: Vec<String> = Vec::new();
@@ -553,12 +554,17 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
             }
             continue;
         }
+        if trimmed == "left to right direction" {
+            direction = DeploymentLayoutDirection::LeftToRight;
+            continue;
+        }
+        if trimmed == "top to bottom direction" {
+            direction = DeploymentLayoutDirection::TopToBottom;
+            continue;
+        }
+
         // Skip other decoration lines.
-        if trimmed.starts_with("hide ")
-            || trimmed.starts_with("show ")
-            || trimmed.starts_with("left to right direction")
-            || trimmed.starts_with("top to bottom direction")
-        {
+        if trimmed.starts_with("hide ") || trimmed.starts_with("show ") {
             continue;
         }
 
@@ -838,6 +844,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
 
     Ok(DeploymentDiagram {
         meta,
+        direction,
         nodes,
         connections,
         notes,
@@ -851,6 +858,22 @@ mod tests {
     fn parse(input: &str) -> DeploymentDiagram {
         let lines: Vec<String> = input.lines().map(|s| s.to_string()).collect();
         parse_deployment(&lines).unwrap()
+    }
+
+    #[test]
+    fn preserves_global_layout_direction_and_allows_reset() {
+        let left_to_right = parse(
+            "left to right direction\nnode RenamedOne\nnode RenamedTwo\nRenamedOne --> RenamedTwo",
+        );
+        assert_eq!(
+            left_to_right.direction,
+            DeploymentLayoutDirection::LeftToRight
+        );
+
+        let reset = parse(
+            "left to right direction\ntop to bottom direction\nnode RenamedOne\nnode RenamedTwo",
+        );
+        assert_eq!(reset.direction, DeploymentLayoutDirection::TopToBottom);
     }
 
     #[test]

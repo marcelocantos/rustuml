@@ -10,6 +10,8 @@ use super::DiagramMeta;
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ComponentDiagram {
     pub meta: DiagramMeta,
+    #[serde(default)]
+    pub direction: ComponentLayoutDirection,
     pub components: Vec<Component>,
     /// Component ids hidden by `hide` selectors.
     ///
@@ -32,6 +34,14 @@ pub struct ComponentDiagram {
     /// Notes inherited from removed targets, retained for UID sequencing.
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub removed_notes: Vec<ComponentNote>,
+}
+
+/// Dot/SVEK rank direction selected by the diagram direction command.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize, Default)]
+pub enum ComponentLayoutDirection {
+    #[default]
+    TopToBottom,
+    LeftToRight,
 }
 
 /// An invisible `together { ... }` layout subgraph.

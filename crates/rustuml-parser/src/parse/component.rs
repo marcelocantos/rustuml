@@ -158,6 +158,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
     let mut notes: Vec<ComponentNote> = Vec::new();
     let mut together: Vec<ComponentTogether> = Vec::new();
     let mut meta = DiagramMeta::default();
+    let mut direction = ComponentLayoutDirection::TopToBottom;
 
     // Parse into a nested structure via a stack.
     // Each stack frame is a mutable ComponentPackage under construction.
@@ -362,6 +363,14 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             continue;
         }
         // Collect skinparam directives into metadata.
+        if trimmed == "left to right direction" {
+            direction = ComponentLayoutDirection::LeftToRight;
+            continue;
+        }
+        if trimmed == "top to bottom direction" {
+            direction = ComponentLayoutDirection::TopToBottom;
+            continue;
+        }
         if let Some(rest) = trimmed.strip_prefix("skinparam ") {
             if let Some(group) = rest.strip_suffix('{').map(str::trim) {
                 skinparam_context = Some(vec![group.to_string()]);
@@ -1014,6 +1023,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
 
     Ok(ComponentDiagram {
         meta,
+        direction,
         components,
         hidden_components,
         removed_components,
@@ -1034,6 +1044,22 @@ mod tests {
     fn parse(input: &str) -> ComponentDiagram {
         let lines: Vec<String> = input.lines().map(|s| s.to_string()).collect();
         parse_component(&lines).unwrap()
+    }
+
+    #[test]
+    fn preserves_global_layout_direction_and_allows_reset() {
+        let left_to_right = parse(
+            "left to right direction\ncomponent RenamedOne\ncomponent RenamedTwo\nRenamedOne --> RenamedTwo",
+        );
+        assert_eq!(
+            left_to_right.direction,
+            ComponentLayoutDirection::LeftToRight
+        );
+
+        let reset = parse(
+            "left to right direction\ntop to bottom direction\ncomponent RenamedOne\ncomponent RenamedTwo",
+        );
+        assert_eq!(reset.direction, ComponentLayoutDirection::TopToBottom);
     }
 
     #[test]

@@ -1237,7 +1237,13 @@ pub fn render_with_oracle(
     let layout_result = if use_oracle {
         None
     } else if !diagram.components.is_empty() || !diagram.interfaces.is_empty() {
-        let mut layout = LayoutGraph::new(Direction::TopToBottom)
+        // Java provenance: `AbstractEntityDiagram.getRankdir()` carries
+        // `left to right direction` into SVEK's DOT `rankdir`.
+        let layout_direction = match diagram.direction {
+            ComponentLayoutDirection::TopToBottom => Direction::TopToBottom,
+            ComponentLayoutDirection::LeftToRight => Direction::LeftToRight,
+        };
+        let mut layout = LayoutGraph::new(layout_direction)
             .with_spacing_pixels(
                 component_node_sep,
                 GraphSpacing::PLANTUML_SVEK_DEFAULTS.rank_sep_px,
@@ -7721,6 +7727,30 @@ mod tests {
         assert!(svg.contains("Web"));
         assert!(svg.contains("DB"));
         assert!(svg.contains("query"));
+    }
+
+    #[test]
+    fn global_left_to_right_direction_controls_fresh_component_chain() {
+        let input = concat!(
+            "@startuml\n",
+            "left to right direction\n",
+            "component CopperRelay\n",
+            "component VioletRelay\n",
+            "component SaffronRelay\n",
+            "component TealRelay\n",
+            "CopperRelay --> VioletRelay\n",
+            "VioletRelay --> SaffronRelay\n",
+            "SaffronRelay --> TealRelay\n",
+            "@enduml\n",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        let root = svg.split_once('>').map_or(svg.as_str(), |(root, _)| root);
+
+        assert!(
+            numeric_attr(root, "width") > numeric_attr(root, "height"),
+            "left-to-right rank direction must make a four-node chain wider than tall: {svg}"
+        );
     }
 
     #[test]
