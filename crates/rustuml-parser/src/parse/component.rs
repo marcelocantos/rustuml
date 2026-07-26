@@ -851,6 +851,8 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             let dashed = arrow.contains("..") || arrow.contains('.');
             let arrow_at_start = arrow.contains('<');
             let arrow_at_end = arrow.contains('>');
+            let extension_at_start = arrow.contains("<|");
+            let extension_at_end = arrow.contains("|>");
             let has_arrow = arrow_at_start || arrow_at_end;
             let shape = parse_link_shape(arrow);
             let queue_length = arrow
@@ -928,6 +930,8 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
                     has_arrow,
                     arrow_at_start,
                     arrow_at_end,
+                    extension_at_start,
+                    extension_at_end,
                     direction,
                     length,
                     shape,
@@ -1060,6 +1064,18 @@ mod tests {
             "left to right direction\ntop to bottom direction\ncomponent RenamedOne\ncomponent RenamedTwo",
         );
         assert_eq!(reset.direction, ComponentLayoutDirection::TopToBottom);
+    }
+
+    #[test]
+    fn preserves_extension_decorations_at_both_link_ends() {
+        let diagram = parse(
+            "interface RenamedPort\ncomponent FreshAdapter\nFreshAdapter ..|> RenamedPort\nRenamedPort <|.. FreshAdapter",
+        );
+
+        assert!(diagram.connections[0].extension_at_end);
+        assert!(!diagram.connections[0].extension_at_start);
+        assert!(diagram.connections[1].extension_at_start);
+        assert!(!diagram.connections[1].extension_at_end);
     }
 
     #[test]

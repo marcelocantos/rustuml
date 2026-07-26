@@ -1249,23 +1249,35 @@ pub fn render_with_oracle(
                 GraphSpacing::PLANTUML_SVEK_DEFAULTS.rank_sep_px,
             )
             .with_plantuml_svek_node_order();
-        for (comp, dim) in diagram.components.iter().zip(&comp_dims) {
-            layout.add_node(&comp.id, &comp.label, dim.width, dim.height);
+        for (component, dim) in diagram.components.iter().zip(&comp_dims) {
+            layout.add_node(
+                &component.id,
+                &component.label,
+                dim.width,
+                dim.height,
+            );
         }
-        for iface in &diagram.interfaces {
-            if component_interface_uses_class_box(diagram, iface) {
-                let dim = component_interface_class_dim(iface);
-                layout.add_node(&iface.id, &iface.label, dim.width, dim.height);
-            } else if let Some((shield_x, shield_y)) = component_interface_shield(diagram, iface) {
+        for interface in &diagram.interfaces {
+            if component_interface_uses_class_box(diagram, interface) {
+                let dim = component_interface_class_dim(interface);
+                layout.add_node(&interface.id, &interface.label, dim.width, dim.height);
+            } else if let Some((shield_x, shield_y)) =
+                component_interface_shield(diagram, interface)
+            {
                 layout.add_svek_shielded_node(
-                    &iface.id,
+                    &interface.id,
                     IFACE_NODE_SIZE,
                     IFACE_NODE_SIZE,
                     shield_x,
                     shield_y,
                 );
             } else {
-                layout.add_node(&iface.id, &iface.label, IFACE_NODE_SIZE, IFACE_NODE_SIZE);
+                layout.add_node(
+                    &interface.id,
+                    &interface.label,
+                    IFACE_NODE_SIZE,
+                    IFACE_NODE_SIZE,
+                );
             }
         }
         for &note_index in &laid_out_note_indices {
@@ -2948,7 +2960,11 @@ pub fn render_with_oracle(
                     ep.points.as_slice()
                 };
                 let (arrow_at_start, arrow_at_end) = no_oracle_effective_arrow_ends(conn);
-                let end_decoration_length = if arrow_at_end {
+                let (extension_at_start, extension_at_end) =
+                    no_oracle_effective_extension_ends(conn);
+                let end_decoration_length = if extension_at_end {
+                    18.0
+                } else if arrow_at_end {
                     6.0
                 } else if matches!(
                     conn.shape,
@@ -2964,7 +2980,13 @@ pub fn render_with_oracle(
                     svek_svg_y_axis,
                     from_package,
                     to_package,
-                    if arrow_at_start { 6.0 } else { 0.0 },
+                    if extension_at_start {
+                        18.0
+                    } else if arrow_at_start {
+                        6.0
+                    } else {
+                        0.0
+                    },
                     end_decoration_length,
                 );
                 let path_d = build_path_d(&edge_points);
@@ -2990,7 +3012,11 @@ pub fn render_with_oracle(
                 if arrow_at_start {
                     let first = raw_edge_points.first().unwrap();
                     let next = raw_edge_points.get(1).unwrap_or(first);
-                    render_arrowhead(&mut svg, next, first, &component_arrow_stroke);
+                    if extension_at_start {
+                        render_extension_head(&mut svg, next, first, &component_arrow_stroke);
+                    } else {
+                        render_arrowhead(&mut svg, next, first, &component_arrow_stroke);
+                    }
                 }
                 if arrow_at_end {
                     let last = raw_edge_points.last().unwrap();
@@ -2999,7 +3025,11 @@ pub fn render_with_oracle(
                     } else {
                         last
                     };
-                    render_arrowhead(&mut svg, prev, last, &component_arrow_stroke);
+                    if extension_at_end {
+                        render_extension_head(&mut svg, prev, last, &component_arrow_stroke);
+                    } else {
+                        render_arrowhead(&mut svg, prev, last, &component_arrow_stroke);
+                    }
                 } else if matches!(
                     conn.shape,
                     LinkShape::TargetSocket | LinkShape::TargetBallSocket
@@ -5578,6 +5608,33 @@ fn render_arrowhead(svg: &mut SvgBuilder, prev: &(f64, f64), tip: &(f64, f64), s
     render_arrow_at(svg, tip.0, tip.1, angle, stroke);
 }
 
+fn render_extension_head(svg: &mut SvgBuilder, prev: &(f64, f64), tip: &(f64, f64), stroke: &str) {
+    // Java provenance: `LinkDecor.EXTENDS.getExtremityFactoryComplete`
+    // constructs `ExtremityFactoryTriangle(null, 18, 6, 18)`.
+    let angle = (tip.1 - prev.1).atan2(tip.0 - prev.0);
+    let cos = angle.cos();
+    let sin = angle.sin();
+    let mut points = String::new();
+    for (index, (x, y)) in [(0.0, 0.0), (-18.0, -6.0), (-18.0, 6.0), (0.0, 0.0)]
+        .iter()
+        .enumerate()
+    {
+        if index > 0 {
+            points.push(',');
+        }
+        write!(
+            points,
+            "{},{}",
+            fc(tip.0 + x * cos - y * sin),
+            fc(tip.1 + x * sin + y * cos),
+        )
+        .unwrap();
+    }
+    svg.raw(&format!(
+        r#"<polygon fill="none" points="{points}" style="stroke:{stroke};stroke-width:1;"/>"#,
+    ));
+}
+
 fn render_arrowhead_from_coords(
     svg: &mut SvgBuilder,
     fx: f64,
@@ -5591,7 +5648,9 @@ fn render_arrowhead_from_coords(
 
 fn no_oracle_link_type_attr(conn: &Connection) -> String {
     let (arrow_at_start, arrow_at_end) = no_oracle_arrow_ends(conn);
-    if arrow_at_start || arrow_at_end {
+    if conn.extension_at_start || conn.extension_at_end {
+        r#" data-link-type="extension""#.to_string()
+    } else if arrow_at_start || arrow_at_end {
         r#" data-link-type="dependency""#.to_string()
     } else if matches!(
         conn.shape,
@@ -5871,6 +5930,14 @@ fn no_oracle_effective_arrow_ends(conn: &Connection) -> (bool, bool) {
         (arrow_at_end, arrow_at_start)
     } else {
         (arrow_at_start, arrow_at_end)
+    }
+}
+
+fn no_oracle_effective_extension_ends(conn: &Connection) -> (bool, bool) {
+    if no_oracle_layout_edge_ends(conn).2 {
+        (conn.extension_at_end, conn.extension_at_start)
+    } else {
+        (conn.extension_at_start, conn.extension_at_end)
     }
 }
 
@@ -7750,6 +7817,25 @@ mod tests {
         assert!(
             numeric_attr(root, "width") > numeric_attr(root, "height"),
             "left-to-right rank direction must make a four-node chain wider than tall: {svg}"
+        );
+    }
+
+    #[test]
+    fn extension_link_uses_hollow_triangle_and_semantic_type() {
+        let input = concat!(
+            "@startuml\n",
+            "interface RenamedPort\n",
+            "component FreshAdapter\n",
+            "FreshAdapter ..|> RenamedPort\n",
+            "@enduml\n",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(r#"data-link-type="extension""#), "{svg}");
+        assert!(
+            svg.contains(r#"<polygon fill="none" points=""#),
+            "extension must use PlantUML's hollow 18x6 triangle: {svg}"
         );
     }
 

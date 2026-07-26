@@ -123,6 +123,12 @@ pub struct Connection {
     pub arrow_at_start: bool,
     #[serde(default)]
     pub arrow_at_end: bool,
+    /// The start marker is PlantUML's hollow inheritance triangle (`<|`).
+    #[serde(default)]
+    pub extension_at_start: bool,
+    /// The end marker is PlantUML's hollow inheritance triangle (`|>`).
+    #[serde(default)]
+    pub extension_at_end: bool,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub direction: Option<ConnectionDirection>,
     /// PlantUML `Link.getLength()`, derived from the arrow-body character
