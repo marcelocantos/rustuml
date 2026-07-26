@@ -13,6 +13,7 @@ use rustuml_layout::graph::{
     LayoutGraph,
 };
 use rustuml_parser::diagram::component::*;
+use rustuml_parser::diagram::{LegendHorizontalAlignment, LegendVerticalAlignment};
 
 use crate::layout_oracle::{
     CrowMark, EntityRect, OracleLayout, emit_oracle_cluster_children, emit_oracle_note_entity,
@@ -471,6 +472,20 @@ const FOOTER_BOTTOM_GAP: f64 = 8.5764;
 const CHROME_RIGHT_PAD: f64 = 7.0;
 /// `DisplayPositioned.createRibbon` adds one pixel below caption text.
 const CAPTION_BOTTOM_PAD: f64 = 1.0;
+// `EntityImageLegend.create` merges the document legend style from
+// `plantuml.skin`: 5px/7px table padding, 12px outer margin, 15px round
+// corner, and 1.5 font descents of horizontal cell padding.
+const LEGEND_FONT_SIZE: f64 = 14.0;
+const LEGEND_RECT_PAD_X: f64 = 5.0;
+const LEGEND_RECT_PAD_Y: f64 = 7.0;
+const LEGEND_OUTER_MARGIN: f64 = 12.0;
+const LEGEND_RECT_RX: f64 = 7.5;
+const LEGEND_CELL_PAD_DESCENT_FACTOR: f64 = 1.5;
+// `TextBlockBordered.calculateDimension` adds one pixel below the drawn
+// legend rectangle when `DecorateEntityImage` stacks the bottom band.
+const LEGEND_BORDERED_HEIGHT_DELTA: f64 = 1.0;
+// `SvekResult.calculateDimension` normalizes its painted top-left to (6, 6).
+const SVEK_ENVELOPE_ORIGIN: f64 = 6.0;
 /// Font size for arrow/link labels.
 const LINK_FONT: f64 = 13.0;
 // Java `SvekEdge.addVisibilityModifier` wraps center labels with
@@ -2963,8 +2978,10 @@ pub fn render_with_oracle(
             && !orc.legends.is_empty()
         {
             render_oracle_legends(&mut svg, orc);
-        } else {
+        } else if component_legend_rows(Some(legend)).is_empty() {
             svg.render_legend(MARGIN, total_h / 2.0, legend, SMALL_FONT);
+        } else {
+            emit_component_legend(&mut svg, diagram, &chrome);
         }
     }
 
@@ -3037,6 +3054,100 @@ fn render_oracle_legends(svg: &mut SvgBuilder, oracle: &OracleLayout) {
 
         svg.raw("</g>");
     }
+}
+
+fn emit_component_legend(
+    svg: &mut SvgBuilder,
+    diagram: &ComponentDiagram,
+    chrome: &ComponentChromeLayout,
+) {
+    let rows = component_legend_rows(diagram.meta.legend.as_deref());
+    let (Some((rect_width, rect_height)), Some(rect_x), Some(rect_y)) = (
+        component_legend_rect_size(&rows),
+        chrome.legend_rect_x,
+        chrome.legend_rect_y,
+    ) else {
+        return;
+    };
+
+    let column_widths = component_legend_column_widths(&rows);
+    let row_height = pm::text_height(LEGEND_FONT_SIZE);
+    let cell_pad_x = pm::descent(LEGEND_FONT_SIZE) * LEGEND_CELL_PAD_DESCENT_FACTOR;
+    let grid_left = rect_x + LEGEND_RECT_PAD_X;
+    let grid_top = rect_y + LEGEND_RECT_PAD_Y;
+    let grid_width = column_widths.iter().sum::<f64>();
+    let grid_right = grid_left + grid_width;
+    let grid_bottom = grid_top + rows.len() as f64 * row_height;
+    let source_line = diagram.meta.legend_line.unwrap_or(1);
+
+    svg.raw(&format!(
+        r#"<g class="legend" data-source-line="{source_line}">"#
+    ));
+    svg.raw(&format!(
+        r##"<rect fill="#DDDDDD" height="{}" rx="{}" ry="{}" style="stroke:#000000;stroke-width:1;" width="{}" x="{}" y="{}"/>"##,
+        fc(rect_height),
+        fc(LEGEND_RECT_RX),
+        fc(LEGEND_RECT_RX),
+        fc(rect_width),
+        fc(rect_x),
+        fc(rect_y),
+    ));
+
+    for (row_index, row) in rows.iter().enumerate() {
+        let mut x = grid_left;
+        let baseline = grid_top + pm::ascent(LEGEND_FONT_SIZE) + row_index as f64 * row_height;
+        for (column_index, cell) in row.iter().enumerate() {
+            let mut text_buf = String::new();
+            text_render::emit_text(
+                &mut text_buf,
+                cell,
+                &TextBase {
+                    x: x + cell_pad_x,
+                    y: baseline,
+                    font_size: LEGEND_FONT_SIZE as u32,
+                    font_family: "sans-serif",
+                    fill: TEXT_COLOR,
+                    bold: false,
+                    italic: false,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
+            svg.raw(&text_buf);
+            x += column_widths.get(column_index).copied().unwrap_or(0.0);
+        }
+    }
+
+    for index in 0..=rows.len() {
+        let y = grid_top + index as f64 * row_height;
+        svg.raw(&format!(
+            r##"<line style="stroke:#000000;stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            fc(grid_left),
+            fc(grid_right),
+            fc(y),
+            fc(y),
+        ));
+    }
+
+    let mut x = grid_left;
+    svg.raw(&format!(
+        r##"<line style="stroke:#000000;stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+        fc(x),
+        fc(x),
+        fc(grid_top),
+        fc(grid_bottom),
+    ));
+    for width in column_widths {
+        x += width;
+        svg.raw(&format!(
+            r##"<line style="stroke:#000000;stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            fc(x),
+            fc(x),
+            fc(grid_top),
+            fc(grid_bottom),
+        ));
+    }
+    svg.raw("</g>");
 }
 
 /// Margin PlantUML adds around the label block of a `cloud` element on every
@@ -4062,6 +4173,8 @@ struct ComponentChromeLayout {
     canvas_height: f64,
     content_width: f64,
     header_height: f64,
+    legend_rect_x: Option<f64>,
+    legend_rect_y: Option<f64>,
 }
 
 impl ComponentChromeLayout {
@@ -4073,8 +4186,52 @@ impl ComponentChromeLayout {
             canvas_height,
             content_width: (canvas_width - CHROME_RIGHT_PAD).max(0.0),
             header_height: 0.0,
+            legend_rect_x: None,
+            legend_rect_y: None,
         }
     }
+}
+
+fn component_legend_rows(text: Option<&str>) -> Vec<Vec<&str>> {
+    text.map(|text| {
+        text.lines()
+            .filter(|line| line.trim().contains('|'))
+            .map(|line| {
+                line.trim()
+                    .trim_matches('|')
+                    .split('|')
+                    .map(str::trim)
+                    .collect::<Vec<_>>()
+            })
+            .filter(|row| row.iter().any(|cell| !cell.is_empty()))
+            .collect()
+    })
+    .unwrap_or_default()
+}
+
+fn component_legend_column_widths(rows: &[Vec<&str>]) -> Vec<f64> {
+    let column_count = rows.iter().map(Vec::len).max().unwrap_or(0);
+    let cell_pad_x = pm::descent(LEGEND_FONT_SIZE) * LEGEND_CELL_PAD_DESCENT_FACTOR;
+    let mut widths = vec![0.0_f64; column_count];
+    for row in rows {
+        for (index, cell) in row.iter().enumerate() {
+            let text_width = text_render::measure_no_underline(cell, LEGEND_FONT_SIZE, false);
+            widths[index] = widths[index].max(text_width + 2.0 * cell_pad_x);
+        }
+    }
+    widths
+}
+
+fn component_legend_rect_size(rows: &[Vec<&str>]) -> Option<(f64, f64)> {
+    if rows.is_empty() {
+        return None;
+    }
+    let grid_width = component_legend_column_widths(rows).iter().sum::<f64>();
+    let row_height = pm::text_height(LEGEND_FONT_SIZE);
+    Some((
+        grid_width + 2.0 * LEGEND_RECT_PAD_X,
+        rows.len() as f64 * row_height + 2.0 * LEGEND_RECT_PAD_Y,
+    ))
 }
 
 fn component_chrome_layout(
@@ -4082,11 +4239,52 @@ fn component_chrome_layout(
     body_canvas_width: f64,
     body_canvas_height: f64,
 ) -> ComponentChromeLayout {
+    let legend_rows = component_legend_rows(diagram.meta.legend.as_deref());
+    let legend_rect_size = component_legend_rect_size(&legend_rows);
+    let (
+        decorated_canvas_width,
+        decorated_canvas_height,
+        legend_body_dx,
+        legend_body_dy,
+        base_legend_rect_x,
+        base_legend_rect_y,
+    ) = if let Some((rect_width, rect_height)) = legend_rect_size {
+        // `DiagramChromeFactory12026.create` wraps SVEK's normalized envelope
+        // in `DecorateEntityImage`. The legend's outer block widens/centers
+        // the body and stacks above or below it; the bordered block's extra
+        // dimension is vertical because its drawn rectangle already owns the
+        // full horizontal table width.
+        let body_width = (body_canvas_width - CHROME_RIGHT_PAD).max(0.0);
+        let body_height = (body_canvas_height - SVEK_ENVELOPE_ORIGIN).max(0.0);
+        let block_width = rect_width + 2.0 * LEGEND_OUTER_MARGIN;
+        let block_height = rect_height + LEGEND_BORDERED_HEIGHT_DELTA + 2.0 * LEGEND_OUTER_MARGIN;
+        let decorated_width = body_width.max(block_width);
+        let block_x = match diagram.meta.legend_horizontal_alignment {
+            LegendHorizontalAlignment::Left => 0.0,
+            LegendHorizontalAlignment::Center => (decorated_width - block_width) / 2.0,
+            LegendHorizontalAlignment::Right => decorated_width - block_width,
+        };
+        let (block_y, body_dy) = match diagram.meta.legend_vertical_alignment {
+            LegendVerticalAlignment::Top => (0.0, block_height),
+            LegendVerticalAlignment::Bottom => (body_height, 0.0),
+        };
+        (
+            decorated_width + CHROME_RIGHT_PAD,
+            body_height + block_height + SVEK_ENVELOPE_ORIGIN,
+            (decorated_width - body_width) / 2.0,
+            body_dy,
+            Some(block_x + LEGEND_OUTER_MARGIN),
+            Some(block_y + LEGEND_OUTER_MARGIN),
+        )
+    } else {
+        (body_canvas_width, body_canvas_height, 0.0, 0.0, None, None)
+    };
+
     // Java `DiagramChromeFactory12026.create` composes the raw `SvekResult`
     // through `DecorateEntityImage.addTitle` and `addHeaderAndFooter`. Each
     // wrapper takes the widest child, centers the narrower body, and stacks
     // ribbon heights above or below it.
-    let body_width = (body_canvas_width - CHROME_RIGHT_PAD).max(0.0);
+    let body_width = (decorated_canvas_width - CHROME_RIGHT_PAD).max(0.0);
     let title_width = diagram
         .meta
         .title
@@ -4118,12 +4316,14 @@ fn component_chrome_layout(
     let footer_height = ribbon_height(diagram.meta.footer.as_deref());
 
     ComponentChromeLayout {
-        body_dx: (content_width - body_width) / 2.0,
-        body_dy: header_height,
+        body_dx: legend_body_dx + (content_width - body_width) / 2.0,
+        body_dy: legend_body_dy + header_height,
         canvas_width: content_width + CHROME_RIGHT_PAD,
-        canvas_height: body_canvas_height + header_height + footer_height,
+        canvas_height: decorated_canvas_height + header_height + footer_height,
         content_width,
         header_height,
+        legend_rect_x: base_legend_rect_x.map(|x| x + (content_width - body_width) / 2.0),
+        legend_rect_y: base_legend_rect_y.map(|y| y + header_height),
     }
 }
 
@@ -7453,5 +7653,69 @@ mod tests {
             4,
             "the group and leaf each paint two small tab bars: {svg}"
         );
+    }
+
+    #[test]
+    fn renamed_quoted_link_label_uses_java_labels_normalization() {
+        let input = "@startuml\n\
+                     component \"Renamed Ingress 9803\" as Ingress9803\n\
+                     component \"Renamed Archive 9811\" as Archive9811\n\
+                     Ingress9803 --> Archive9811 : \"renamed-link-9817\"\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Fresh PlantUML reference generated from this non-corpus source.
+        assert!(svg.contains(r#"textLength="126.4771""#), "{svg}");
+        assert!(svg.contains(">renamed-link-9817</text>"), "{svg}");
+        assert!(!svg.contains("&quot;renamed-link-9817&quot;"), "{svg}");
+    }
+
+    #[test]
+    fn renamed_right_legend_composes_a_bordered_table_band() {
+        let input = "@startuml\n\
+                     component RenamedIngress9803\n\
+                     component RenamedArchive9811\n\
+                     RenamedIngress9803 --> RenamedArchive9811\n\
+                     legend right\n\
+                       | Signal 9817 | Meaning 9829 |\n\
+                       | ==> | Fresh route 9833 |\n\
+                     endlegend\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Fresh PlantUML reference generated from this non-corpus source.
+        assert!(svg.contains(r#"viewBox="0 0 256 245""#), "{svg}");
+        assert!(
+            svg.contains(r#"<g class="legend" data-source-line="4">"#),
+            "{svg}"
+        );
+        assert!(
+            svg.contains(
+                r##"<rect fill="#DDDDDD" height="46.9766" rx="7.5" ry="7.5" style="stroke:#000000;stroke-width:1;" width="225.5234" x="12" y=""##
+            ),
+            "{svg}"
+        );
+        assert_eq!(
+            svg.matches(r##"<line style="stroke:#000000;stroke-width:1;""##)
+                .count(),
+            6,
+            "{svg}"
+        );
+    }
+
+    #[test]
+    fn renamed_plain_legend_keeps_the_existing_fallback() {
+        let input = "@startuml\n\
+                     component RenamedGateway9851\n\
+                     legend\n\
+                       Renamed plain key 9857\n\
+                     endlegend\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(">Renamed plain key 9857</text>"), "{svg}");
     }
 }
