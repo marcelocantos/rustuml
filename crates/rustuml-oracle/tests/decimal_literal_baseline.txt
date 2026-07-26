@@ -2,15 +2,15 @@
 # Ratchet: counts may only grow alongside a provenance comment citing the Java
 # source or an extracted metrics table, reviewed in the same change.
 # Regenerate: HARNESS_WRITE_BASELINES=1 cargo test --test harness_guards
-crates/rustuml-render/src/activity.rs 707
+crates/rustuml-render/src/activity.rs 701
 crates/rustuml-render/src/archimate.rs 4
 crates/rustuml-render/src/archimate/icons.rs 2531
 crates/rustuml-render/src/board.rs 2
-crates/rustuml-render/src/class.rs 349
+crates/rustuml-render/src/class.rs 355
 crates/rustuml-render/src/cloud_shape.rs 9
 crates/rustuml-render/src/component.rs 18
 crates/rustuml-render/src/compress.rs 2
-crates/rustuml-render/src/deployment.rs 17
+crates/rustuml-render/src/deployment.rs 43
 crates/rustuml-render/src/dot_diagram.rs 4
 crates/rustuml-render/src/font_metrics.rs 218
 crates/rustuml-render/src/gantt.rs 19
@@ -22,14 +22,14 @@ crates/rustuml-render/src/math.rs 3
 crates/rustuml-render/src/metrics.rs 305
 crates/rustuml-render/src/mindmap.rs 4
 crates/rustuml-render/src/non_ascii_widths.rs 818
-crates/rustuml-render/src/object.rs 10
+crates/rustuml-render/src/object.rs 9
 crates/rustuml-render/src/openiconic.rs 3
 crates/rustuml-render/src/plantuml_metrics.rs 1066
 crates/rustuml-render/src/salt.rs 1
 crates/rustuml-render/src/scale.rs 39
-crates/rustuml-render/src/sequence.rs 112
-crates/rustuml-render/src/state.rs 18
+crates/rustuml-render/src/sequence.rs 111
+crates/rustuml-render/src/state.rs 16
 crates/rustuml-render/src/text_render.rs 409
 crates/rustuml-render/src/timing.rs 3
-crates/rustuml-render/src/usecase.rs 11
+crates/rustuml-render/src/usecase.rs 23
 crates/rustuml-render/src/wbs.rs 3

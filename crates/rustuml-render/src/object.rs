@@ -31,8 +31,6 @@ const OBJECT_CANVAS_PAD: i64 = 13;
 /// Linked object diagrams in PlantUML's SVEK path keep an extra two pixels of
 /// right/bottom slack beyond the entity-only envelope.
 const OBJECT_LINK_CANVAS_PAD: i64 = 15;
-/// Name baseline y relative to rect top (no stereotype).
-const NAME_BASELINE_Y: f64 = 15.5352;
 /// Header separator y relative to rect top (no stereotype).
 const HEADER_SEP_Y: f64 = 20.4883;
 /// Stereotype baseline y relative to rect top.
@@ -41,10 +39,6 @@ const STEREO_BASELINE_Y: f64 = 11.6016;
 const NAME_BASELINE_Y_WITH_STEREO: f64 = 29.668;
 /// Header separator y relative to rect top when stereotype is present.
 const HEADER_SEP_Y_WITH_STEREO: f64 = 34.6211;
-/// Vertical advance between member baselines.
-const MEMBER_SPACING: f64 = 16.4883;
-/// First member baseline offset below the header separator.
-const FIRST_MEMBER_OFFSET: f64 = 17.5351;
 /// Empty body section height (objects with no fields).
 const EMPTY_BODY_HEIGHT: f64 = 16.0;
 /// Padding below last field to rect bottom.
@@ -53,11 +47,6 @@ const BODY_PAD_BOTTOM: f64 = 8.0;
 const FIELD_TEXT_X_OFFSET: f64 = 6.0;
 /// X offset of map field text relative to rect/column left.
 const MAP_TEXT_X_OFFSET: f64 = 5.0;
-/// Map row baseline advance.
-const MAP_ROW_HEIGHT: f64 = 20.4883;
-/// Map first row baseline offset below header separator.
-const MAP_FIRST_ROW_OFFSET: f64 = 15.5351;
-
 const STEREO_FONT_SIZE: u32 = 12;
 
 const ENTITY_FILL: &str = "#F1F1F1";
@@ -107,7 +96,8 @@ pub fn render_with_oracle(
             .to_string();
     }
 
-    let font_size = theme.class.font_size as u32;
+    let style = ObjectRenderStyle::from_diagram(diagram, theme);
+    let font_size = style.font_size;
 
     // Compute intrinsic per-object dimensions. Oracle overrides apply later.
     let mut dims: Vec<ObjDim> = diagram
@@ -127,12 +117,67 @@ pub fn render_with_oracle(
         layout_object(diagram, &dims)
     };
 
-    render_plantuml_svg(diagram, &dims, &layout, oracle, font_size)
+    render_plantuml_svg(diagram, &dims, &layout, oracle, &style)
 }
 
 // ---------------------------------------------------------------------------
 // Object dimensions
 // ---------------------------------------------------------------------------
+
+struct ObjectRenderStyle {
+    font_size: u32,
+    fill: String,
+    border: String,
+}
+
+impl ObjectRenderStyle {
+    fn from_diagram(diagram: &ObjectDiagram, theme: &Theme) -> Self {
+        let find = |key: &str| {
+            diagram
+                .meta
+                .skinparams
+                .iter()
+                .rev()
+                .find(|param| param.key.eq_ignore_ascii_case(key))
+                .map(|param| param.value.trim())
+        };
+        Self {
+            font_size: find("objectFontSize")
+                .and_then(|value| value.parse().ok())
+                .unwrap_or(theme.class.font_size as u32),
+            fill: find("objectBackgroundColor")
+                .map(crate::sequence::resolve_color)
+                .unwrap_or_else(|| ENTITY_FILL.to_string()),
+            border: find("objectBorderColor")
+                .map(crate::sequence::resolve_color)
+                .unwrap_or_else(|| BORDER_COLOR.to_string()),
+        }
+    }
+}
+
+fn object_text_height(font_size: u32) -> f64 {
+    crate::plantuml_metrics::text_height(font_size as f64)
+}
+
+fn object_header_height(font_size: u32) -> f64 {
+    object_text_height(font_size) + 4.0
+}
+
+fn object_name_baseline(font_size: u32) -> f64 {
+    crate::plantuml_metrics::ascent(font_size as f64) + 2.0
+}
+
+fn object_first_member_offset(font_size: u32) -> f64 {
+    crate::plantuml_metrics::ascent(font_size as f64) + 4.0
+}
+
+fn map_row_height(font_size: u32) -> f64 {
+    object_text_height(font_size) + 4.0
+}
+
+fn map_first_row_offset(font_size: u32) -> f64 {
+    crate::plantuml_metrics::ascent(font_size as f64) + 2.0
+}
 
 struct ObjDim {
     width: f64,
@@ -192,12 +237,12 @@ fn calc_obj_dim(obj: &ObjectInstance, font_size: u32) -> ObjDim {
         let header_h = if has_stereo {
             HEADER_SEP_Y_WITH_STEREO
         } else {
-            HEADER_SEP_Y
+            object_header_height(font_size)
         };
         let body_h = if obj.fields.is_empty() {
             EMPTY_BODY_HEIGHT
         } else {
-            obj.fields.len() as f64 * MAP_ROW_HEIGHT
+            obj.fields.len() as f64 * map_row_height(font_size)
         };
         let height = header_h + body_h;
 
@@ -235,12 +280,12 @@ fn calc_obj_dim(obj: &ObjectInstance, font_size: u32) -> ObjDim {
         let header_h = if has_stereo {
             HEADER_SEP_Y_WITH_STEREO
         } else {
-            HEADER_SEP_Y
+            object_header_height(font_size)
         };
         let body_h = if obj.fields.is_empty() {
             EMPTY_BODY_HEIGHT
         } else {
-            obj.fields.len() as f64 * MEMBER_SPACING + BODY_PAD_BOTTOM
+            obj.fields.len() as f64 * object_text_height(font_size) + BODY_PAD_BOTTOM
         };
         let height = header_h + body_h;
 
@@ -788,7 +833,7 @@ fn render_plantuml_svg(
     dims: &[ObjDim],
     layout: &ObjectLayout,
     oracle: Option<&OracleLayout>,
-    font_size: u32,
+    object_style: &ObjectRenderStyle,
 ) -> String {
     let positions = &layout.positions;
     let svg_ids = allocate_object_svg_ids(diagram);
@@ -991,7 +1036,7 @@ fn render_plantuml_svg(
         )
         .unwrap();
 
-        render_object_content(&mut svg, obj, x, y, dim, oracle_rect, font_size);
+        render_object_content(&mut svg, obj, x, y, dim, oracle_rect, object_style);
 
         svg.push_str("</g>");
         ent_id += 1;
@@ -1701,8 +1746,9 @@ fn render_object_content(
     y: f64,
     dim: &ObjDim,
     oracle_rect: Option<&crate::layout_oracle::EntityRect>,
-    font_size: u32,
+    object_style: &ObjectRenderStyle,
 ) {
+    let font_size = object_style.font_size;
     let has_stereo = obj.stereotype.is_some();
     let is_map = obj.kind == ObjectKind::Map;
 
@@ -1715,9 +1761,12 @@ fn render_object_content(
         .color
         .as_ref()
         .map(|c| crate::sequence::resolve_color(c))
-        .unwrap_or_else(|| ENTITY_FILL.to_string());
+        .unwrap_or_else(|| object_style.fill.clone());
     let fill = oracle_fill.unwrap_or(&fill_default);
-    let style_default = format!("stroke:{BORDER_COLOR};stroke-width:{BORDER_WIDTH};");
+    let style_default = format!(
+        "stroke:{};stroke-width:{BORDER_WIDTH};",
+        object_style.border
+    );
     let style = oracle_style.unwrap_or(style_default.as_str());
     let rx = oracle_rx.unwrap_or("2.5");
     let ry = oracle_ry.unwrap_or("2.5");
@@ -1769,7 +1818,7 @@ fn render_object_content(
     let name_baseline_offset = if has_stereo {
         NAME_BASELINE_Y_WITH_STEREO
     } else {
-        NAME_BASELINE_Y
+        object_name_baseline(font_size)
     };
     // When the oracle is present, the name's y/x come from text_y_values:
     //   without stereotype: index 0
@@ -1825,7 +1874,7 @@ fn render_object_content(
     let header_sep_y = y + if has_stereo {
         HEADER_SEP_Y_WITH_STEREO
     } else {
-        HEADER_SEP_Y
+        object_header_height(font_size)
     };
     let (sep_x1, sep_x2, sep_w) = if is_map {
         (x, x + dim.width, MAP_LINE_WIDTH)
@@ -1834,7 +1883,8 @@ fn render_object_content(
     };
     write!(
         svg,
-        r#"<line style="stroke:{BORDER_COLOR};stroke-width:{sep_w};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+        r#"<line style="stroke:{};stroke-width:{sep_w};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+        object_style.border,
         fmt_tl(sep_x1),
         fmt_tl(sep_x2),
         fmt_tl(header_sep_y),
@@ -1843,7 +1893,7 @@ fn render_object_content(
     .unwrap();
 
     if is_map {
-        render_map_rows(svg, obj, x, y, dim, header_sep_y, oracle_rect, font_size);
+        render_map_rows(svg, obj, x, y, dim, header_sep_y, oracle_rect, object_style);
     } else {
         render_object_rows(svg, obj, x, y, dim, header_sep_y, oracle_rect, font_size);
     }
@@ -1957,7 +2007,11 @@ fn render_object_rows(
         let text_idx = 1 + stereo_offset + i;
         let field_y = oracle_rect
             .and_then(|r| r.text_y_values.get(text_idx).copied())
-            .unwrap_or(header_sep_y + FIRST_MEMBER_OFFSET + (i as f64) * MEMBER_SPACING);
+            .unwrap_or(
+                header_sep_y
+                    + object_first_member_offset(font_size)
+                    + (i as f64) * object_text_height(font_size),
+            );
         let field_x = oracle_rect
             .and_then(|r| r.text_x_values.get(text_idx).copied())
             .unwrap_or(x + FIELD_TEXT_X_OFFSET);
@@ -1990,8 +2044,10 @@ fn render_map_rows(
     dim: &ObjDim,
     header_sep_y: f64,
     oracle_rect: Option<&crate::layout_oracle::EntityRect>,
-    font_size: u32,
+    object_style: &ObjectRenderStyle,
 ) {
+    let font_size = object_style.font_size;
+    let row_height = map_row_height(font_size);
     let has_stereo = obj.stereotype.is_some();
     let stereo_offset = if has_stereo { 1 } else { 0 };
     let rect_bottom = y + dim.height;
@@ -2004,7 +2060,7 @@ fn render_map_rows(
         // Row baseline.
         let row_y = oracle_rect
             .and_then(|r| r.text_y_values.get(1 + stereo_offset + i * 2).copied())
-            .unwrap_or(header_sep_y + MAP_FIRST_ROW_OFFSET + (i as f64) * MAP_ROW_HEIGHT);
+            .unwrap_or(header_sep_y + map_first_row_offset(font_size) + (i as f64) * row_height);
 
         // Key text (left column).
         let key_x = oracle_rect
@@ -2061,17 +2117,18 @@ fn render_map_rows(
             header_sep_y
         } else {
             // Prior horizontal separator. Compute by stepping from header_sep_y.
-            header_sep_y + (i as f64) * MAP_ROW_HEIGHT
+            header_sep_y + (i as f64) * row_height
         };
         let row_bottom = if i + 1 < obj.fields.len() {
-            header_sep_y + ((i + 1) as f64) * MAP_ROW_HEIGHT
+            header_sep_y + ((i + 1) as f64) * row_height
         } else {
             rect_bottom
         };
 
         write!(
             svg,
-            r#"<line style="stroke:{BORDER_COLOR};stroke-width:{MAP_LINE_WIDTH};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+            r#"<line style="stroke:{};stroke-width:{MAP_LINE_WIDTH};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+            object_style.border,
             fmt_tl(divider_x),
             fmt_tl(divider_x),
             fmt_tl(row_top),
@@ -2084,7 +2141,8 @@ fn render_map_rows(
             let h_sep_y = row_bottom;
             write!(
                 svg,
-                r#"<line style="stroke:{BORDER_COLOR};stroke-width:{MAP_LINE_WIDTH};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                r#"<line style="stroke:{};stroke-width:{MAP_LINE_WIDTH};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                object_style.border,
                 fmt_tl(x),
                 fmt_tl(x + dim.width),
                 fmt_tl(h_sep_y),
@@ -2551,6 +2609,36 @@ audit_61 --> sink_73
         assert!(svg.contains(r#"height="699px""#));
         assert!(svg.contains(r#"d="M83.5,91.81 C83.5,110.87 83.5,127.2 83.5,146.25""#));
         assert!(svg.contains(r#"d="M83.5,538.81 C83.5,557.87 83.5,574.2 83.5,593.25""#));
+    }
+
+    #[test]
+    fn object_skinparams_drive_awt_metrics_and_entity_colors() {
+        let lines = r#"skinparam object {
+  BackgroundColor AliceBlue
+  BorderColor FireBrick
+  FontSize 11
+}
+object RenamedLedger {
+  alpha = 10
+  beta = 20
+  gamma = 30
+}
+object RenamedArchive {
+  state = ready
+}
+RenamedLedger --> RenamedArchive"#
+            .lines()
+            .map(str::to_string)
+            .collect::<Vec<_>>();
+        let diagram = rustuml_parser::parse::object::parse_object(&lines).unwrap();
+        let svg = render(&diagram, &Theme::default());
+
+        assert!(svg.contains(r##"fill="#F0F8FF" height="63.8203""##));
+        assert!(svg.contains(r##"style="stroke:#B22222;stroke-width:0.5;""##));
+        assert!(svg.contains(r#"font-size="11""#));
+        assert!(svg.contains(r#"y="19.6348">RenamedLedger"#));
+        assert!(svg.contains(r#"y1="23.9551" y2="23.9551""#));
+        assert!(svg.contains(r#"y="64.5">gamma = 30"#));
     }
 
     #[test]
