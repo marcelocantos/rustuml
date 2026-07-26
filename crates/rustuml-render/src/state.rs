@@ -3505,9 +3505,24 @@ pub fn render_with_oracle(
                             let desc_x = box_x + 5.0;
                             let desc_y = orc_rect
                                 .and_then(|r| r.text_y_values.get(oracle_text_y_index).copied())
-                                .unwrap_or(
-                                    div_y + FIRST_DESC_OFFSET + j as f64 * DESC_LINE_SPACING,
-                                );
+                                .unwrap_or_else(|| {
+                                    // Java provenance:
+                                    // `EntityImageState.drawU` places the
+                                    // fields `SheetBlock1` five pixels below
+                                    // the divider. `Sea.doAlign` then uses the
+                                    // first run's actual ascent within each
+                                    // Creole line, so an enlarged first run
+                                    // must not inherit the 12pt default
+                                    // baseline.
+                                    div_y
+                                        + 5.0
+                                        + text_render::label_first_baseline_ascent_with_family(
+                                            desc,
+                                            state_desc_font_size,
+                                            state_metric_family,
+                                        )
+                                        + j as f64 * DESC_LINE_SPACING
+                                });
                             if let Some(font_name) = state_font_name.as_deref() {
                                 let fam = escape_attr(font_name);
                                 let style_attr = if state_font_italic {
@@ -6573,6 +6588,35 @@ mod tests {
         assert!(svg.contains(">phase alpha 709</text>"));
         assert!(svg.contains(">phase beta 719</text>"));
         assert!(svg.contains(">phase gamma 727</text>"));
+    }
+
+    #[test]
+    fn renamed_state_description_uses_each_rich_lines_first_run_ascent() {
+        let input = concat!(
+            "@startuml\n",
+            "state \"<size:23>expanded</size> Waiting\" as WaitingRelay\n",
+            "[*] --> WaitingRelay\n",
+            "WaitingRelay : <size:18>larger</size> payload\n",
+            "@enduml\n",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // `EntityImageState.drawU` starts the field block five pixels below
+        // its divider. The 18pt run supplies the first baseline; the following
+        // 12pt run bottom-aligns to it through `Sea.doAlign`.
+        assert!(
+            svg.contains(
+                r##"<text fill="#000000" font-family="sans-serif" font-size="18" lengthAdjust="spacing" textLength="51.126" x="12" y="145.4902">larger</text>"##
+            ),
+            "{svg}"
+        );
+        assert!(
+            svg.contains(
+                r##"<text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="45.4688" x="66.9229" y="146.7578">payload</text>"##
+            ),
+            "{svg}"
+        );
     }
 
     #[test]
