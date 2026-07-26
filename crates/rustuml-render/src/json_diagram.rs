@@ -1434,6 +1434,28 @@ revision: 23
     }
 
     #[test]
+    fn renamed_rectangular_matrix_routes_changed_row_and_column_counts() {
+        let source = r#"@startjson
+{
+  "renamed_matrix": [
+    [2, 3, 5, 7],
+    [11, 13, 17, 19],
+    [23, 29, 31, 37]
+  ],
+  "matrix_rows": 3
+}
+@endjson"#;
+        let first = render_input(source);
+        let second = render_input(source);
+
+        assert_eq!(first, second);
+        assert_eq!(first.matches("stroke-dasharray:3,3").count(), 4);
+        assert_eq!(first.matches("<ellipse").count(), 4);
+        assert!(first.contains("renamed_matrix"));
+        assert!(first.contains("matrix_rows"));
+    }
+
+    #[test]
     fn direct_record_exit_tracks_width_rounding_not_labels() {
         assert_eq!(super::smetana_record_exit_offset(78.2), 78.5);
         assert_eq!(super::smetana_record_exit_offset(77.2), 78.0);

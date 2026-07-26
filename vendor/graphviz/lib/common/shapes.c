@@ -3717,8 +3717,15 @@ static void record_init(node_t * n)
     }
     free(textbuf);
     size_reclbl(n, info);
-    sz.x = INCH2PS(ND_width(n));
-    sz.y = INCH2PS(ND_height(n));
+    if (rustuml_node_uses_text_span_dimensions(n)) {
+	/* PlantUML's Graphviz 2.38 `record_init` uses POINTS here, which
+	 * rounds requested record dimensions before comparing label minima. */
+	sz.x = ROUND(INCH2PS(ND_width(n)));
+	sz.y = ROUND(INCH2PS(ND_height(n)));
+    } else {
+	sz.x = INCH2PS(ND_width(n));
+	sz.y = INCH2PS(ND_height(n));
+    }
     if (mapbool(late_string(n, N_fixed, "false"))) {
 	if (sz.x < info->size.x || sz.y < info->size.y) {
 /* should check that the record really won't fit, e.g., there may be no text.

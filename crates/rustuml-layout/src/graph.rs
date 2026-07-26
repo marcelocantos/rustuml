@@ -2653,6 +2653,39 @@ mod tests {
     }
 
     #[test]
+    fn dimensional_record_requests_share_smetana_integer_point_sizes() {
+        let mut solved_sizes = Vec::new();
+        for (id, width, height) in [
+            ("fractional_matrix_a", 180.2, 140.2),
+            ("fractional_matrix_b", 180.4, 140.4),
+        ] {
+            let mut graph = LayoutGraph::new(Direction::TopToBottom);
+            let ports = ["renamed_north", "renamed_mid", "renamed_south"].map(str::to_string);
+            assert!(graph.add_dimensional_record_node(
+                id,
+                width,
+                height,
+                &ports,
+                RecordLayoutMetrics {
+                    row_heights: vec![17.0, 21.0, 25.0],
+                    key_width: Some(43.0),
+                    value_width: 37.0,
+                },
+            ));
+
+            let result = graph.layout_full_no_timeout();
+            assert_eq!(result.node_positions.len(), 1);
+            solved_sizes.push((
+                result.node_positions[0].width,
+                result.node_positions[0].height,
+            ));
+        }
+
+        assert!((solved_sizes[0].0 - solved_sizes[1].0).abs() < 0.001);
+        assert!((solved_sizes[0].1 - solved_sizes[1].1).abs() < 0.001);
+    }
+
+    #[test]
     fn record_node_tail_port_routes_edge() {
         let mut g = LayoutGraph::new(Direction::LeftToRight);
         assert!(g.add_record_node("record", 90.0, 90.0, &["P0".to_string(), "P1".to_string()]));
