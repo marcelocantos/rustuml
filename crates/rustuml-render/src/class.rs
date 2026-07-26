@@ -4002,6 +4002,14 @@ fn render_plantuml_svg(
             max_y = max_y.max(height + body_dy);
         }
         for edge in edge_paths {
+            // Java `SvekResult.calculateDimension` delegates to
+            // `TextBlockUtils.getMinMax`, so `LimitFinder.drawDotPath` includes
+            // every solved DotPath control point in the painted envelope.
+            // Graphviz's layout extent can be narrower than those splines in
+            // dense and cyclic graphs.
+            for &(x, _) in &edge.points {
+                max_x = max_x.max(x + MARGIN + layout_x_bias);
+            }
             for label in [edge.tail_label, edge.head_label].into_iter().flatten() {
                 max_x = max_x.max(label.x + MARGIN + label.width);
                 max_y = max_y.max(label.y + MARGIN + label.height);
@@ -14286,6 +14294,38 @@ mod tests {
             (leftmost_role_x - SVEK_LABEL_ENVELOPE_MARGIN).abs() < 0.01,
             "the leftmost collision-moved role must normalize to the SVEK margin"
         );
+    }
+
+    #[test]
+    fn renamed_nine_node_ring_includes_painted_dotpath_envelope() {
+        let input = "@startuml\n\
+            class NovaA\n\
+            class NovaB\n\
+            class NovaC\n\
+            class NovaD\n\
+            class NovaE\n\
+            class NovaF\n\
+            class NovaG\n\
+            class NovaH\n\
+            class NovaI\n\
+            NovaA --> NovaB\n\
+            NovaB --> NovaC\n\
+            NovaC --> NovaD\n\
+            NovaD --> NovaE\n\
+            NovaE --> NovaF\n\
+            NovaF --> NovaG\n\
+            NovaG --> NovaH\n\
+            NovaH --> NovaI\n\
+            NovaI --> NovaA\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Fresh Java 21 / PlantUML 1.2026.3beta6 render. The return edge's
+        // DotPath reaches x=136.2; `SvekResult.calculateDimension` adds 15px.
+        assert!(svg.contains(r#"viewBox="0 0 151 934""#), "{svg}");
+        assert_eq!(svg.matches(r#"<g class="entity""#).count(), 9);
+        assert_eq!(svg.matches(r#"<g class="link""#).count(), 9);
     }
 
     #[test]
