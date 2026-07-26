@@ -3,7 +3,7 @@
 # Regenerate ONLY to lock in verified progress:
 #   HARNESS_WRITE_BASELINES=1 cargo test --test golden_no_oracle --release
 activity 1294 1299
-archimate 1 48
+archimate 45 48
 chart 25 25
 class 1838 1971
 combo 261 327

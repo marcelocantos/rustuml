@@ -55,6 +55,9 @@ const SVEK_CANVAS_PAD: f64 = 15.0;
 /// `SvekEdge.appendTable` wraps the real edge label by one pixel on each
 /// side before sending its integer-truncated fixed-size table to dot.
 const EDGE_LABEL_MARGIN: f64 = 1.0;
+/// PlantUML preserves an explicitly empty Archimate macro label as a one-space
+/// `Display`, rendered as NBSP rather than treating it as a missing label.
+const EMPTY_EDGE_LABEL: &str = "\u{00a0}";
 /// Minimum label-block width from the Archimate stdlib's
 /// `element.MinimumWidth`.
 const ELEMENT_MIN_CONTENT_W: f64 = 120.0;
@@ -78,6 +81,18 @@ fn kind_key(elem: &ArchimateElement) -> String {
 /// Whether an element renders as an octagon (Motivation `DiagonalCorner`).
 fn is_octagon(elem: &ArchimateElement) -> bool {
     matches!(elem.layer, ArchimateLayer::Motivation)
+}
+
+/// Archimate's `<<behavior>>` style applies `RoundCorner 25`.
+///
+/// The stdlib assigns that stereotype to process, function, interaction,
+/// event, and service elements across the Business, Application, and
+/// Technology layers.
+fn is_behavior(elem: &ArchimateElement) -> bool {
+    matches!(
+        elem.kind.as_str(),
+        "Process" | "Function" | "Interaction" | "Event" | "Service"
+    )
 }
 
 /// Render an Archimate diagram, using an oracle layout when available.
@@ -451,10 +466,16 @@ pub fn render(diagram: &ArchimateDiagram, _theme: &Theme) -> String {
     }
     for rel in &diagram.relations {
         let (from, to) = relation_layout_endpoints(rel);
-        let label_size = rel.label.as_deref().map(|label| EdgeLabelSize {
-            width: text_render::measure_with_family(label, FONT_SIZE, false, FONT_FAMILY)
+        let label = archimate_relation_label(rel);
+        let measured_label = if label == EMPTY_EDGE_LABEL {
+            " "
+        } else {
+            label
+        };
+        let label_size = Some(EdgeLabelSize {
+            width: text_render::measure_with_family(measured_label, FONT_SIZE, false, FONT_FAMILY)
                 + EDGE_LABEL_MARGIN * 2.0,
-            height: (text_render::label_height_with_family(label, FONT_SIZE, FONT_FAMILY)
+            height: (text_render::label_height_with_family(measured_label, FONT_SIZE, FONT_FAMILY)
                 + EDGE_LABEL_MARGIN * 2.0)
                 .floor(),
         });
@@ -463,7 +484,7 @@ pub fn render(diagram: &ArchimateDiagram, _theme: &Theme) -> String {
 
     let result = layout.layout_full(LAYOUT_TIMEOUT);
     let positions = result.as_ref().map(|r| r.node_positions.as_slice());
-    let entities = no_oracle_entities(diagram, positions);
+    let mut entities = no_oracle_entities(diagram, positions);
     let mut painted_max_x = entities
         .iter()
         .map(|e| e.rect.x + e.rect.width)
@@ -490,6 +511,12 @@ pub fn render(diagram: &ArchimateDiagram, _theme: &Theme) -> String {
         "DESCRIPTION",
     );
 
+    let paint_offset = svek_paint_offset(diagram);
+    for entity in &mut entities {
+        entity.rect.x += paint_offset;
+        entity.rect.y += paint_offset;
+    }
+
     for (ent, elem) in entities.iter().zip(&diagram.elements) {
         emit_entity(&mut svg, ent, elem);
     }
@@ -509,7 +536,7 @@ pub fn render(diagram: &ArchimateDiagram, _theme: &Theme) -> String {
                 edge.from == relation_layout_endpoints(rel).0
                     && edge.to == relation_layout_endpoints(rel).1
             }) {
-                let oracle_edge = no_oracle_edge(diagram, rel, i, edge, &entities);
+                let oracle_edge = no_oracle_edge(diagram, rel, i, edge, &entities, paint_offset);
                 emit_link(&mut svg, &oracle_edge, &id_to_name);
             }
         }
@@ -524,6 +551,35 @@ fn relation_layout_endpoints(rel: &ArchimateRelation) -> (&str, &str) {
         ArchimateRelationDirection::Default
         | ArchimateRelationDirection::Down
         | ArchimateRelationDirection::Right => (&rel.from, &rel.to),
+    }
+}
+
+/// Return the label block passed through PlantUML's Archimate relation macros.
+///
+/// `SvekEdge`'s constructor treats `Display.isNull(link.getLabel())` and an
+/// explicitly empty `Display` differently. The stdlib macros always supply a
+/// label argument; when it is `""`, `Display.create0` produces one NBSP run,
+/// `addVisibilityModifier` adds one pixel on each side, and `appendLine` gives
+/// that fixed-size table to Graphviz. The parser intentionally normalizes the
+/// empty string to `None`, so Archimate restores the macro-level distinction
+/// here.
+fn archimate_relation_label(rel: &ArchimateRelation) -> &str {
+    rel.label
+        .as_deref()
+        .filter(|label| !label.is_empty())
+        .unwrap_or(EMPTY_EDGE_LABEL)
+}
+
+/// `SvekResult.calculateDimension` uses `LimitFinder` to translate the painted
+/// minimum to its six-pixel body margin. `URectangle` includes one extra pixel
+/// of stroked minimum extent, while Motivation's diagonal-corner `UPath` does
+/// not. Keep canvas dimensions based on the unshifted envelope and apply this
+/// normalization only to emitted coordinates.
+fn svek_paint_offset(diagram: &ArchimateDiagram) -> f64 {
+    if diagram.elements.iter().any(|elem| !is_octagon(elem)) {
+        1.0
+    } else {
+        0.0
     }
 }
 
@@ -546,8 +602,9 @@ fn no_oracle_entities(
             rect.source_line = (elem.source_line > 0).then(|| elem.source_line.to_string());
             rect.fill = Some(layer_fill(elem.layer).to_string());
             rect.body_style = Some(ELEMENT_STROKE_STYLE.to_string());
-            rect.rect_rx = Some("0.5".to_string());
-            rect.rect_ry = Some("0.5".to_string());
+            let radius = if is_behavior(elem) { "12.5" } else { "0.5" };
+            rect.rect_rx = Some(radius.to_string());
+            rect.rect_ry = Some(radius.to_string());
             OracleEntity {
                 qualified_name: elem.id.clone(),
                 rect,
@@ -596,39 +653,45 @@ fn no_oracle_edge(
     index: usize,
     edge: &EdgePath,
     entities: &[OracleEntity],
+    paint_offset: f64,
 ) -> OracleEdgePath {
     let (layout_from, layout_to) = relation_layout_endpoints(rel);
-    let uses_backto_id = layout_from == rel.to && archimate_relation_has_endpoint_decor(rel.kind);
-    let id = if uses_backto_id {
+    let layout_is_inverted = layout_from == rel.to;
+    let has_endpoint_decor = archimate_relation_has_endpoint_decor(rel.kind);
+    let decor_at_start =
+        has_endpoint_decor && (archimate_relation_decor_at_source(rel.kind) ^ layout_is_inverted);
+    let id = if decor_at_start {
         format!("{layout_from}-backto-{layout_to}")
+    } else if archimate_relation_has_endpoint_decor(rel.kind) {
+        format!("{layout_from}-to-{layout_to}")
     } else {
         format!("{layout_from}-{layout_to}")
     };
     let (link_type, path_style, arrow_fill) = archimate_edge_style(rel.kind);
-    let label = rel.label.as_deref().and_then(|text| {
-        edge.label.map(|position| {
-            (
-                position.x + BODY_MARGIN + EDGE_LABEL_MARGIN,
-                position.y
-                    + BODY_MARGIN
-                    + EDGE_LABEL_MARGIN
-                    + text_render::label_ascent_with_family(text, FONT_SIZE, FONT_FAMILY),
-                text.to_string(),
-            )
-        })
+    let text = archimate_relation_label(rel);
+    let measured_text = if text == EMPTY_EDGE_LABEL { " " } else { text };
+    let label = edge.label.map(|position| {
+        (
+            position.x + BODY_MARGIN + paint_offset + EDGE_LABEL_MARGIN,
+            position.y
+                + BODY_MARGIN
+                + paint_offset
+                + EDGE_LABEL_MARGIN
+                + text_render::label_ascent_with_family(measured_text, FONT_SIZE, FONT_FAMILY),
+            text.to_string(),
+        )
     });
-    let decor_at_start = uses_backto_id;
-    let mut path_points = archimate_edge_points(edge);
-    if matches!(rel.kind, ArchimateRelationKind::Realization) {
-        // Java SVEK shortens `dotPath` by the triangle extremity length before
-        // drawing `ExtremityExtends`, whose triangle is 18px deep and 12px wide.
-        shorten_archimate_endpoint(&mut path_points, decor_at_start, REALIZATION_TRIANGLE_DEPTH);
+    let mut path_points = archimate_edge_points(edge, paint_offset);
+    if let Some(depth) = archimate_extremity_depth(rel.kind) {
+        // Java SVEK moves both the decorated endpoint and its adjacent Bézier
+        // control by the extremity depth before drawing the decoration.
+        shorten_archimate_endpoint(&mut path_points, decor_at_start, depth);
     }
     OracleEdgePath {
         id: id.clone(),
         path_id: Some(id),
         d: edge_path_d(&path_points),
-        arrow_points: archimate_arrow_points(rel.kind, edge, decor_at_start),
+        arrow_points: archimate_arrow_points(rel.kind, edge, decor_at_start, paint_offset),
         second_arrow_points: None,
         second_arrow_fill: None,
         second_polygon_style: None,
@@ -650,14 +713,50 @@ fn no_oracle_edge(
     }
 }
 
+// PlantUML `SvekEdge.getExtremitySimplier` shortens `DotPath` by each
+// extremity's `getDecorationLength`; the corresponding polygon coordinates
+// come from `ExtremityDiamond.buildPolygon`/constructor, `ExtremityArrow`
+// `buildPolygon`, and `ExtremityExtends`. Triggering's narrow filled triangle
+// follows `ExtremityExtendsLike`.
 const REALIZATION_TRIANGLE_DEPTH: f64 = 18.0;
 const REALIZATION_TRIANGLE_HALF_WIDTH: f64 = 6.0;
-const DEPENDENCY_ARROW_BACK: f64 = 9.0;
-const DEPENDENCY_ARROW_NOTCH: f64 = 5.0;
-const DEPENDENCY_ARROW_HALF_WIDTH: f64 = 4.0;
+const DIAMOND_DEPTH: f64 = 12.0;
+const DIAMOND_HALF_WIDTH: f64 = 4.0;
+const FILLED_ARROW_DEPTH: f64 = 8.0;
+const FILLED_ARROW_HALF_WIDTH: f64 = 3.0;
+const STANDARD_ARROW_LINE_DEPTH: f64 = 6.0;
+const STANDARD_ARROW_BACK: f64 = 9.0;
+const STANDARD_ARROW_NOTCH: f64 = 5.0;
+const STANDARD_ARROW_HALF_WIDTH: f64 = 4.0;
+
+fn archimate_relation_decor_at_source(kind: ArchimateRelationKind) -> bool {
+    matches!(
+        kind,
+        ArchimateRelationKind::Aggregation | ArchimateRelationKind::Composition
+    )
+}
 
 fn archimate_relation_has_endpoint_decor(kind: ArchimateRelationKind) -> bool {
-    !matches!(kind, ArchimateRelationKind::Association)
+    !matches!(
+        kind,
+        ArchimateRelationKind::Association | ArchimateRelationKind::Access
+    )
+}
+
+fn archimate_extremity_depth(kind: ArchimateRelationKind) -> Option<f64> {
+    match kind {
+        ArchimateRelationKind::Aggregation | ArchimateRelationKind::Composition => {
+            Some(DIAMOND_DEPTH)
+        }
+        ArchimateRelationKind::Realization => Some(REALIZATION_TRIANGLE_DEPTH),
+        ArchimateRelationKind::Association | ArchimateRelationKind::Access => None,
+        ArchimateRelationKind::Triggering | ArchimateRelationKind::Assignment => {
+            Some(FILLED_ARROW_DEPTH)
+        }
+        ArchimateRelationKind::Influence
+        | ArchimateRelationKind::Serving
+        | ArchimateRelationKind::Other => Some(STANDARD_ARROW_LINE_DEPTH),
+    }
 }
 
 fn archimate_edge_style(
@@ -726,15 +825,15 @@ fn no_oracle_link_id(diagram: &ArchimateDiagram, index: usize) -> String {
     format!("lnk{counter}")
 }
 
-fn archimate_edge_points(edge: &EdgePath) -> Vec<(f64, f64)> {
+fn archimate_edge_points(edge: &EdgePath, paint_offset: f64) -> Vec<(f64, f64)> {
     edge.points
         .iter()
         // Java `SvgResult` parses Graphviz's two-decimal SVG coordinates
         // before SVEK applies its six-pixel normalization.
         .map(|(x, y)| {
             (
-                round_svek_coord(*x) + BODY_MARGIN,
-                round_svek_coord(*y) + BODY_MARGIN,
+                round_svek_coord(*x) + BODY_MARGIN + paint_offset,
+                round_svek_coord(*y) + BODY_MARGIN + paint_offset,
             )
         })
         .collect()
@@ -769,16 +868,25 @@ fn archimate_arrow_points(
     kind: ArchimateRelationKind,
     edge: &EdgePath,
     decor_at_start: bool,
+    paint_offset: f64,
 ) -> Option<String> {
     if matches!(kind, ArchimateRelationKind::Association) {
         return None;
     }
-    let points = archimate_edge_points(edge);
+    let points = archimate_edge_points(edge, paint_offset);
     let (control, endpoint) = archimate_extremity_basis(&points, decor_at_start)?;
-    if matches!(kind, ArchimateRelationKind::Realization) {
-        Some(realization_triangle_points(control, endpoint))
-    } else {
-        Some(dependency_arrow_points(control, endpoint))
+    match kind {
+        ArchimateRelationKind::Aggregation | ArchimateRelationKind::Composition => {
+            Some(diamond_points(control, endpoint))
+        }
+        ArchimateRelationKind::Realization => Some(realization_triangle_points(control, endpoint)),
+        ArchimateRelationKind::Association | ArchimateRelationKind::Access => None,
+        ArchimateRelationKind::Triggering | ArchimateRelationKind::Assignment => {
+            Some(filled_arrow_points(control, endpoint))
+        }
+        ArchimateRelationKind::Influence
+        | ArchimateRelationKind::Serving
+        | ArchimateRelationKind::Other => Some(standard_arrow_points(control, endpoint)),
     }
 }
 
@@ -825,20 +933,82 @@ fn shorten_archimate_endpoint(points: &mut [(f64, f64)], at_start: bool, length:
     }
 }
 
-fn dependency_arrow_points(control: (f64, f64), endpoint: (f64, f64)) -> String {
+fn diamond_points(control: (f64, f64), endpoint: (f64, f64)) -> String {
+    let (ux, uy) = unit_vector(endpoint, control);
+    let (px, py) = (-uy, ux);
+    let middle = (
+        endpoint.0 + ux * DIAMOND_DEPTH / 2.0,
+        endpoint.1 + uy * DIAMOND_DEPTH / 2.0,
+    );
+    let inner = (
+        endpoint.0 + ux * DIAMOND_DEPTH,
+        endpoint.1 + uy * DIAMOND_DEPTH,
+    );
+    let side1 = (
+        middle.0 + px * DIAMOND_HALF_WIDTH,
+        middle.1 + py * DIAMOND_HALF_WIDTH,
+    );
+    let side2 = (
+        middle.0 - px * DIAMOND_HALF_WIDTH,
+        middle.1 - py * DIAMOND_HALF_WIDTH,
+    );
+    format!(
+        "{},{},{},{},{},{},{},{},{},{}",
+        fc(endpoint.0),
+        fc(endpoint.1),
+        fc(side1.0),
+        fc(side1.1),
+        fc(inner.0),
+        fc(inner.1),
+        fc(side2.0),
+        fc(side2.1),
+        fc(endpoint.0),
+        fc(endpoint.1),
+    )
+}
+
+fn filled_arrow_points(control: (f64, f64), endpoint: (f64, f64)) -> String {
+    let (ux, uy) = unit_vector(control, endpoint);
+    let (px, py) = (-uy, ux);
+    let base = (
+        endpoint.0 - ux * FILLED_ARROW_DEPTH,
+        endpoint.1 - uy * FILLED_ARROW_DEPTH,
+    );
+    let side1 = (
+        base.0 - px * FILLED_ARROW_HALF_WIDTH,
+        base.1 - py * FILLED_ARROW_HALF_WIDTH,
+    );
+    let side2 = (
+        base.0 + px * FILLED_ARROW_HALF_WIDTH,
+        base.1 + py * FILLED_ARROW_HALF_WIDTH,
+    );
+    format!(
+        "{},{},{},{},{},{},{},{}",
+        fc(endpoint.0),
+        fc(endpoint.1),
+        fc(side1.0),
+        fc(side1.1),
+        fc(side2.0),
+        fc(side2.1),
+        fc(endpoint.0),
+        fc(endpoint.1),
+    )
+}
+
+fn standard_arrow_points(control: (f64, f64), endpoint: (f64, f64)) -> String {
     let (ux, uy) = unit_vector(control, endpoint);
     let (px, py) = (-uy, ux);
     let side1 = (
-        endpoint.0 - ux * DEPENDENCY_ARROW_BACK + px * DEPENDENCY_ARROW_HALF_WIDTH,
-        endpoint.1 - uy * DEPENDENCY_ARROW_BACK + py * DEPENDENCY_ARROW_HALF_WIDTH,
+        endpoint.0 - ux * STANDARD_ARROW_BACK - px * STANDARD_ARROW_HALF_WIDTH,
+        endpoint.1 - uy * STANDARD_ARROW_BACK - py * STANDARD_ARROW_HALF_WIDTH,
     );
     let notch = (
-        endpoint.0 - ux * DEPENDENCY_ARROW_NOTCH,
-        endpoint.1 - uy * DEPENDENCY_ARROW_NOTCH,
+        endpoint.0 - ux * STANDARD_ARROW_NOTCH,
+        endpoint.1 - uy * STANDARD_ARROW_NOTCH,
     );
     let side2 = (
-        endpoint.0 - ux * DEPENDENCY_ARROW_BACK - px * DEPENDENCY_ARROW_HALF_WIDTH,
-        endpoint.1 - uy * DEPENDENCY_ARROW_BACK - py * DEPENDENCY_ARROW_HALF_WIDTH,
+        endpoint.0 - ux * STANDARD_ARROW_BACK + px * STANDARD_ARROW_HALF_WIDTH,
+        endpoint.1 - uy * STANDARD_ARROW_BACK + py * STANDARD_ARROW_HALF_WIDTH,
     );
     format!(
         "{},{},{},{},{},{},{},{},{},{}",
@@ -962,6 +1132,29 @@ mod tests {
             short,
             (ELEMENT_MIN_CONTENT_W + ELEMENT_MARGIN_X * 2.0, ELEMENT_H)
         );
+    }
+
+    #[test]
+    fn renamed_empty_relation_labels_keep_svek_blank_display_spacing() {
+        let input = "@startuml\n\
+                     !include <archimate/Archimate>\n\
+                     Business_Process(fresh_order_271, \"Novel Order\")\n\
+                     Application_Service(fresh_service_277, \"Novel Service\")\n\
+                     Technology_Node(fresh_node_281, \"Novel Node\")\n\
+                     Rel_Aggregation(fresh_order_271, fresh_service_277, \"\")\n\
+                     Rel_Triggering(fresh_service_277, fresh_node_281, \"\")\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Fresh PlantUML 1.2026.3beta6 reference. `SvekEdge` keeps each
+        // explicitly empty Display as a 4.2188px NBSP label, and its
+        // fixed-size Graphviz table contributes 16px to each rank gap.
+        assert!(svg.contains(r#"viewBox="0 0 161 333""#), "{svg}");
+        assert_eq!(svg.matches(r#"rx="12.5" ry="12.5""#).count(), 2);
+        assert_eq!(svg.matches(r#"rx="0.5" ry="0.5""#).count(), 1);
+        assert_eq!(svg.matches(r#"textLength="4.2188" x="78""#).count(), 2);
+        assert_eq!(svg.matches("&#160;</text>").count(), 5);
     }
 
     #[test]
