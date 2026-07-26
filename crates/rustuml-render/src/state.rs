@@ -8,7 +8,9 @@
 
 use std::fmt::Write;
 
-use rustuml_layout::graph::{Direction, EdgeLabelSize, EdgePath, LayoutGraph, NodePosition};
+use rustuml_layout::graph::{
+    Direction, EdgeLabelSize, EdgePath, GraphSpacing, LayoutGraph, NodePosition,
+};
 use rustuml_parser::diagram::state::*;
 
 use crate::handwritten::has_deprecated_skinparam as has_deprecated_handwritten_skinparam;
@@ -609,6 +611,254 @@ fn note_box_width(text: &str) -> f64 {
     (max_chars as f64 * NOTE_CHAR_WIDTH + NOTE_PADDING * 2.0 + NOTE_EAR).max(NOTE_MIN_WIDTH)
 }
 
+#[derive(Clone)]
+struct AttachedNoteSpec {
+    note_index: usize,
+    id: String,
+    entity_id: String,
+    link_id: String,
+    anchor: String,
+    right: bool,
+    width: f64,
+    height: f64,
+}
+
+#[derive(Clone)]
+struct AttachedNotePosition {
+    note_index: usize,
+    id: String,
+    entity_id: String,
+    anchor: String,
+    right: bool,
+    x: f64,
+    y: f64,
+    width: f64,
+    height: f64,
+}
+
+/// Exact `EntityImageNote` dimensions for an attached SVEK note.
+///
+/// Java provenance: `EntityImageNote.getTextWidth/getTextHeight` adds left
+/// and right margins of 6px/15px and 5px above and below the measured
+/// `TextBlock`.
+fn attached_note_size(text: &str) -> (f64, f64) {
+    let lines = text
+        .lines()
+        .map(str::trim)
+        .filter(|line| !line.is_empty())
+        .collect::<Vec<_>>();
+    let line_count = lines.len().max(1);
+    let text_width = lines
+        .iter()
+        .map(|line| text_render::measure(line, LINK_FONT_SIZE, false))
+        .fold(0.0_f64, f64::max);
+    (
+        text_width + NOTE_PADDING + 15.0,
+        line_count as f64 * crate::plantuml_metrics::text_height(LINK_FONT_SIZE) + 10.0,
+    )
+}
+
+fn attached_note_specs(
+    diagram: &StateDiagram,
+    allocated_ids: &StateSvgIds,
+) -> Vec<AttachedNoteSpec> {
+    diagram
+        .notes
+        .iter()
+        .enumerate()
+        .filter_map(|(note_index, note)| {
+            let (anchor, right) = match &note.kind {
+                StateNoteKind::RightOf(anchor) if !anchor.is_empty() => (anchor.as_str(), true),
+                StateNoteKind::LeftOf(anchor) if !anchor.is_empty() => (anchor.as_str(), false),
+                _ => return None,
+            };
+            let ids = allocated_ids.note_ids[note_index].as_ref()?;
+            let (width, height) = attached_note_size(&note.text);
+            Some(AttachedNoteSpec {
+                note_index,
+                id: ids.qualified_name.clone(),
+                entity_id: ids.entity_id.clone(),
+                link_id: ids.link_id.clone(),
+                anchor: anchor.to_string(),
+                right,
+                width,
+                height,
+            })
+        })
+        .collect()
+}
+
+fn emit_attached_svek_note(
+    svg: &mut String,
+    note: &StateNote,
+    position: &AttachedNotePosition,
+    edge_paths: &[EdgePath],
+    graph_origin: (f64, f64),
+) {
+    let (from, to) = if position.right {
+        (position.anchor.as_str(), position.id.as_str())
+    } else {
+        (position.id.as_str(), position.anchor.as_str())
+    };
+    let edge = edge_paths
+        .iter()
+        .find(|edge| edge.from == from && edge.to == to);
+    let transform = |point: (f64, f64)| {
+        (
+            quantize_svek_coord(point.0) + graph_origin.0,
+            quantize_svek_coord(point.1) + graph_origin.1,
+        )
+    };
+    let fallback_note_contact = if position.right {
+        (position.x, position.y + position.height / 2.0)
+    } else {
+        (
+            position.x + position.width,
+            position.y + position.height / 2.0,
+        )
+    };
+    let fallback_target = if position.right {
+        (
+            position.x - GraphSpacing::PLANTUML_SVEK_DEFAULTS.node_sep_px,
+            fallback_note_contact.1,
+        )
+    } else {
+        (
+            position.x + position.width + GraphSpacing::PLANTUML_SVEK_DEFAULTS.node_sep_px,
+            fallback_note_contact.1,
+        )
+    };
+    let (note_contact, target) = edge
+        .and_then(|edge| Some((edge.points.first().copied()?, edge.points.last().copied()?)))
+        .map(|(first, last)| {
+            if position.right {
+                (transform(last), transform(first))
+            } else {
+                (transform(first), transform(last))
+            }
+        })
+        .unwrap_or((fallback_note_contact, fallback_target));
+
+    let x = position.x;
+    let y = position.y;
+    let width = position.width;
+    let height = position.height;
+    let pointer_y = if position.right {
+        (note_contact.1 - y - 4.0).clamp(0.0, height - 8.0)
+    } else {
+        (note_contact.1 - y - 4.0).clamp(NOTE_EAR, height - 8.0)
+    };
+    write!(
+        svg,
+        r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
+        position.id, note.source_line, position.entity_id,
+    )
+    .unwrap();
+
+    // Java provenance: `Opale.getPolygonLeft/getPolygonRight` splices the
+    // hidden edge's note-side and state-side endpoints into the note outline.
+    if position.right {
+        write!(
+            svg,
+            r#"<path d="M{},{} L{},{} L{},{} L{},{} L{},{} A0,0 0 0 0 {},{} L{},{} A0,0 0 0 0 {},{} L{},{} L{},{} L{},{} A0,0 0 0 0 {},{}" fill="{NOTE_FILL}" style="stroke:{DEFAULT_STROKE_COLOR};stroke-width:0.5;"/>"#,
+            fmt_f(x),
+            fmt_f(y),
+            fmt_f(x),
+            fmt_f(y + pointer_y),
+            fmt_f(target.0),
+            fmt_f(target.1),
+            fmt_f(x),
+            fmt_f(y + pointer_y + 8.0),
+            fmt_f(x),
+            fmt_f(y + height),
+            fmt_f(x),
+            fmt_f(y + height),
+            fmt_f(x + width),
+            fmt_f(y + height),
+            fmt_f(x + width),
+            fmt_f(y + height),
+            fmt_f(x + width),
+            fmt_f(y + NOTE_EAR),
+            fmt_f(x + width - NOTE_EAR),
+            fmt_f(y),
+            fmt_f(x),
+            fmt_f(y),
+            fmt_f(x),
+            fmt_f(y),
+        )
+        .unwrap();
+    } else {
+        write!(
+            svg,
+            r#"<path d="M{},{} L{},{} A0,0 0 0 0 {},{} L{},{} A0,0 0 0 0 {},{} L{},{} L{},{} L{},{} L{},{} L{},{} L{},{} A0,0 0 0 0 {},{}" fill="{NOTE_FILL}" style="stroke:{DEFAULT_STROKE_COLOR};stroke-width:0.5;"/>"#,
+            fmt_f(x),
+            fmt_f(y),
+            fmt_f(x),
+            fmt_f(y + height),
+            fmt_f(x),
+            fmt_f(y + height),
+            fmt_f(x + width),
+            fmt_f(y + height),
+            fmt_f(x + width),
+            fmt_f(y + height),
+            fmt_f(x + width),
+            fmt_f(y + pointer_y + 8.0),
+            fmt_f(target.0),
+            fmt_f(target.1),
+            fmt_f(x + width),
+            fmt_f(y + pointer_y),
+            fmt_f(x + width),
+            fmt_f(y + NOTE_EAR),
+            fmt_f(x + width - NOTE_EAR),
+            fmt_f(y),
+            fmt_f(x),
+            fmt_f(y),
+            fmt_f(x),
+            fmt_f(y),
+        )
+        .unwrap();
+    }
+    write!(
+        svg,
+        r#"<path d="M{},{} L{},{} L{},{} L{},{}" fill="{NOTE_FILL}" style="stroke:{DEFAULT_STROKE_COLOR};stroke-width:0.5;"/>"#,
+        fmt_f(x + width - NOTE_EAR),
+        fmt_f(y),
+        fmt_f(x + width - NOTE_EAR),
+        fmt_f(y + NOTE_EAR),
+        fmt_f(x + width),
+        fmt_f(y + NOTE_EAR),
+        fmt_f(x + width - NOTE_EAR),
+        fmt_f(y),
+    )
+    .unwrap();
+
+    let mut text_y = y + 5.0 + crate::plantuml_metrics::ascent(LINK_FONT_SIZE);
+    for line in note
+        .text
+        .lines()
+        .map(str::trim)
+        .filter(|line| !line.is_empty())
+    {
+        text_render::emit_text(
+            svg,
+            line,
+            &TextBase {
+                x: x + NOTE_PADDING,
+                y: text_y,
+                font_size: LINK_FONT_SIZE as u32,
+                font_family: "sans-serif",
+                fill: DEFAULT_TEXT_COLOR,
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        text_y += crate::plantuml_metrics::text_height(LINK_FONT_SIZE);
+    }
+    svg.push_str("</g>");
+}
+
 /// Format a float with PlantUML-style precision (4-decimal HALF_EVEN, trailing zeros stripped).
 fn fmt_f(v: f64) -> String {
     crate::plantuml_metrics::fmt_coord(v)
@@ -852,9 +1102,17 @@ fn compute_first_appearance_order(diagram: &StateDiagram) -> Vec<String> {
     ordered.into_iter().map(|(_, _, id)| id).collect()
 }
 
+#[derive(Clone, Debug, PartialEq, Eq)]
+struct StateNoteSvgIds {
+    qualified_name: String,
+    entity_id: String,
+    link_id: String,
+}
+
 struct StateSvgIds {
     entity_ids: Vec<(String, String)>,
     link_ids: Vec<String>,
+    note_ids: Vec<Option<StateNoteSvgIds>>,
     next_counter: usize,
 }
 
@@ -883,11 +1141,15 @@ fn state_endpoint_layout_id(id: &str, is_source: bool) -> String {
 /// parser pass. `CommandCreateState.executeArg` creates explicit leaves in pass
 /// one. In pass two, those leaves already exist, while
 /// `CommandLinkStateCommon.executeArg` lazily creates missing endpoints and
-/// then constructs each `Link`. The reset deliberately permits an explicit
-/// state and a lazy start/end state to share an `entNNNN` value.
+/// then constructs each `Link`. `StateDiagramFactory` schedules
+/// `CommandFactoryNoteOnEntity` in pass three, after another reset; each
+/// attached note then consumes GMN, entity, and hidden-link UIDs in source
+/// order. The resets deliberately permit entities from different passes to
+/// share an `entNNNN` value.
 fn allocate_state_svg_ids(diagram: &StateDiagram, state_ids: &[String]) -> StateSvgIds {
     let mut entity_ids: Vec<(String, String)> = Vec::new();
     let mut link_ids = vec![String::new(); diagram.transitions.len()];
+    let mut note_ids = vec![None; diagram.notes.len()];
 
     let mut declarations: Vec<(usize, usize, &str)> = Vec::new();
     for (idx, state) in diagram.states.iter().enumerate() {
@@ -907,9 +1169,8 @@ fn allocate_state_svg_ids(diagram: &StateDiagram, state_ids: &[String]) -> State
     }
 
     let mut pass_two_counter = 2usize;
-    let mut transitions: Vec<(usize, &Transition)> =
-        diagram.transitions.iter().enumerate().collect();
-    transitions.sort_by_key(|(idx, transition)| (transition.source_line, *idx));
+    let mut transitions = diagram.transitions.iter().enumerate().collect::<Vec<_>>();
+    transitions.sort_by_key(|(index, transition)| (transition.source_line, *index));
     for (idx, transition) in transitions {
         for (endpoint, is_source) in [(&transition.from, true), (&transition.to, false)] {
             let mapped_id = state_endpoint_layout_id(endpoint, is_source);
@@ -929,7 +1190,7 @@ fn allocate_state_svg_ids(diagram: &StateDiagram, state_ids: &[String]) -> State
         pass_two_counter += 1;
         // `CommandLinkStateCommon.executeArg` first constructs the forward
         // `Link`, then `Link.getInv()` constructs the stored reverse link for
-        // left/up arrows. Both consume a UID from the pass-two counter.
+        // left/up arrows.
         if matches!(
             explicit_transition_direction(diagram, transition),
             Some(ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Up)
@@ -950,9 +1211,45 @@ fn allocate_state_svg_ids(diagram: &StateDiagram, state_ids: &[String]) -> State
         pass_two_counter += 1;
     }
 
+    let mut attached_notes = diagram
+        .notes
+        .iter()
+        .enumerate()
+        .filter(|(_, note)| {
+            matches!(
+                note.kind,
+                StateNoteKind::LeftOf(ref anchor) | StateNoteKind::RightOf(ref anchor)
+                    if !anchor.is_empty()
+            )
+        })
+        .collect::<Vec<_>>();
+    attached_notes.sort_by_key(|(index, note)| {
+        let command_line = if note.command_line == 0 {
+            note.source_line
+        } else {
+            note.command_line
+        };
+        (command_line, note.creation_order, *index)
+    });
+    let mut pass_three_counter = 2usize;
+    for (idx, _) in attached_notes {
+        let qualified_name = format!("GMN{pass_three_counter}");
+        pass_three_counter += 1;
+        let entity_id = format!("ent{pass_three_counter:04}");
+        pass_three_counter += 1;
+        let link_id = format!("lnk{pass_three_counter}");
+        pass_three_counter += 1;
+        note_ids[idx] = Some(StateNoteSvgIds {
+            qualified_name,
+            entity_id,
+            link_id,
+        });
+    }
+
     StateSvgIds {
         entity_ids,
         link_ids,
+        note_ids,
         next_counter: pass_two_counter,
     }
 }
@@ -2637,19 +2934,17 @@ pub fn render_with_oracle(
         0.0
     };
 
+    let allocated_ids = allocate_state_svg_ids(diagram, &state_ids);
+    let attached_notes = attached_note_specs(diagram, &allocated_ids);
+
     // Compute note space.
     let right_note_space: f64 = diagram
         .notes
         .iter()
-        .filter(|n| matches!(&n.kind, StateNoteKind::RightOf(_) | StateNoteKind::OnLink))
+        .filter(|n| matches!(&n.kind, StateNoteKind::OnLink))
         .map(|n| note_box_width(&n.text) + NOTE_H_GAP)
         .fold(0.0_f64, f64::max);
-    let left_note_space: f64 = diagram
-        .notes
-        .iter()
-        .filter(|n| matches!(&n.kind, StateNoteKind::LeftOf(_)))
-        .map(|n| note_box_width(&n.text) + NOTE_H_GAP)
-        .fold(0.0_f64, f64::max);
+    let left_note_space = 0.0;
     let mut graph_body_x = SVEK_ORIGIN_X + left_note_space;
     let mut graph_body_y = SVEK_ORIGIN_Y + title_h;
 
@@ -2691,6 +2986,9 @@ pub fn render_with_oracle(
             let state_def = find_state(id);
             let (w, h, shape) = state_node_size(id, state_def);
             add_state_layout_node(&mut layout, id, w, h, shape);
+        }
+        for note in &attached_notes {
+            layout.add_node(&note.id, "", note.width, note.height);
         }
         for t in &diagram.transitions {
             let from = map_id(&t.from, true);
@@ -2740,11 +3038,52 @@ pub fn render_with_oracle(
                 transition_svek_minlen(diagram, t),
             );
         }
+        for note in &attached_notes {
+            let (from, to) = if note.right {
+                (note.anchor.as_str(), note.id.as_str())
+            } else {
+                (note.id.as_str(), note.anchor.as_str())
+            };
+            // `CommandFactoryNoteOnEntity` creates a length-one horizontal
+            // solitary link. `SvekEdge.appendLine` emits minlen=0 and
+            // `GraphvizImageBuilder` marks the routed edge as Opale, retaining
+            // its layout effect while suppressing independent link painting.
+            debug_assert!(note.link_id.starts_with("lnk"));
+            layout.add_plantuml_svek_line0_edge(from, to);
+            layout.add_edge_with_minlen(from, to, None, 0);
+        }
         layout.layout_full(std::time::Duration::from_secs(5))
     };
 
     let layout_positions = layout_result.as_ref().map(|r| &r.node_positions[..]);
     if let Some(layout_positions) = layout_positions {
+        if !attached_notes.is_empty() {
+            // Java `SvekResult.calculateDimension` measures the painted
+            // `SvekResult` and moves it by `6 - minX`. `LimitFinder` expands
+            // rectangles one pixel to the left, while Opale's UPath begins at
+            // its actual x coordinate. A leftmost note therefore changes the
+            // translation by one pixel without changing Graphviz geometry.
+            let state_min_x = state_ids
+                .iter()
+                .enumerate()
+                .map(|(index, id)| {
+                    let state_def = find_state(id);
+                    let (_, _, shape) = state_node_size(id, state_def);
+                    layout_positions[index].x
+                        - if shape == StateLayoutShape::Box {
+                            1.0
+                        } else {
+                            0.0
+                        }
+                })
+                .fold(f64::INFINITY, f64::min);
+            let note_min_x = attached_notes
+                .iter()
+                .enumerate()
+                .map(|(offset, _)| layout_positions[state_ids.len() + offset].x)
+                .fold(f64::INFINITY, f64::min);
+            graph_body_x = 6.0 - state_min_x.min(note_min_x);
+        }
         graph_body_y = svek_origin_y_for_layout(diagram, &state_ids, layout_positions) + title_h;
     }
     let edge_paths: &[EdgePath] = if use_oracle {
@@ -2756,7 +3095,9 @@ pub fn render_with_oracle(
             .unwrap_or(&[])
     };
 
-    let use_sugiyama = !use_oracle && layout_positions.is_some_and(|p| p.len() >= state_ids.len());
+    let use_sugiyama = !use_oracle
+        && layout_positions
+            .is_some_and(|positions| positions.len() >= state_ids.len() + attached_notes.len());
     let history_entity_keys: Vec<String> = oracle
         .map(|orc| {
             let mut keys: Vec<String> = orc
@@ -2864,6 +3205,15 @@ pub fn render_with_oracle(
             max_y = max_y.max(layout_y + h);
             painted_max_y = painted_max_y.max(layout_y + h - 1.0);
         }
+        for (offset, note) in attached_notes.iter().enumerate() {
+            let note_position = lp[state_ids.len() + offset];
+            let layout_x = quantize_svek_coord(note_position.x);
+            let layout_y = quantize_svek_coord(note_position.y);
+            max_x = max_x.max(layout_x + note.width);
+            painted_max_x = painted_max_x.max(layout_x + note.width);
+            max_y = max_y.max(layout_y + note.height);
+            painted_max_y = painted_max_y.max(layout_y + note.height);
+        }
         if let Some(result) = layout_result.as_ref() {
             // Java `SvekResult.calculateDimension` measures every painted
             // edge through `LimitFinder.drawDotPath`; `DotPath.getMinMax`
@@ -2916,12 +3266,38 @@ pub fn render_with_oracle(
     };
     let (mut positions, mut total_width, mut total_height, title_body_width, title_body_height) =
         position_data;
+    let mut attached_note_positions = if use_sugiyama {
+        let layout_positions = layout_positions.unwrap();
+        attached_notes
+            .iter()
+            .enumerate()
+            .map(|(offset, note)| {
+                let position = layout_positions[state_ids.len() + offset];
+                AttachedNotePosition {
+                    note_index: note.note_index,
+                    id: note.id.clone(),
+                    entity_id: note.entity_id.clone(),
+                    anchor: note.anchor.clone(),
+                    right: note.right,
+                    x: quantize_svek_coord(position.x) + graph_body_x,
+                    y: quantize_svek_coord(position.y) + graph_body_y,
+                    width: note.width,
+                    height: note.height,
+                }
+            })
+            .collect::<Vec<_>>()
+    } else {
+        Vec::new()
+    };
 
     let decorated_content_width = title_block_width.max(title_body_width);
     if oracle.is_none() && title_block_width > title_body_width {
         let body_shift_x = (title_block_width - title_body_width) / 2.0;
         for (_, x, _, _, _) in &mut positions {
             *x += body_shift_x;
+        }
+        for note in &mut attached_note_positions {
+            note.x += body_shift_x;
         }
         graph_body_x += body_shift_x;
         total_width = title_block_width;
@@ -3045,7 +3421,6 @@ pub fn render_with_oracle(
     // Assign SVG ids using PlantUML's construction-time counter. Fork/join bars
     // do not emit a `<g class="entity">` wrapper; PlantUML still tracks them in
     // its counter, so the preallocation includes every positioned node.
-    let allocated_ids = allocate_state_svg_ids(diagram, &state_ids);
     let mut ids = IdCounter::from_next(allocated_ids.next_counter);
     let entity_ids: Vec<(String, String)> = if let Some(orc) = oracle {
         positions
@@ -3958,6 +4333,21 @@ pub fn render_with_oracle(
                 svg.push_str(&text_buf);
             }
             svg.push_str("</g>");
+            continue;
+        }
+
+        if oracle.is_none()
+            && let Some(position) = attached_note_positions
+                .iter()
+                .find(|position| position.note_index == note_idx)
+        {
+            emit_attached_svek_note(
+                &mut svg,
+                note,
+                position,
+                edge_paths,
+                (graph_body_x, graph_body_y),
+            );
             continue;
         }
 
@@ -6675,6 +7065,97 @@ mod tests {
         assert!(
             svg.contains("line 2"),
             "second note line should appear in SVG"
+        );
+    }
+
+    #[test]
+    fn renamed_attached_notes_keep_multiline_side_and_changed_count() {
+        let input = concat!(
+            "@startuml\n",
+            "state CopperRelay\n",
+            "note right of CopperRelay\n",
+            "  first renamed line\n",
+            "  second renamed line\n",
+            "end note\n",
+            "[*] --> CopperRelay\n",
+            "state VioletRelay\n",
+            "CopperRelay --> VioletRelay\n",
+            "note left of VioletRelay : reversed side\n",
+            "VioletRelay --> IndigoRelay\n",
+            "IndigoRelay --> [*]\n",
+            "note right of CopperRelay : changed count\n",
+            "@enduml\n",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::State(state_diagram) = &diagram else {
+            panic!("expected state diagram");
+        };
+        let state_ids = vec![
+            "CopperRelay".to_string(),
+            "__start__".to_string(),
+            "VioletRelay".to_string(),
+            "IndigoRelay".to_string(),
+            "__end__".to_string(),
+        ];
+        let allocated = allocate_state_svg_ids(state_diagram, &state_ids);
+        let note_ids = allocated
+            .note_ids
+            .iter()
+            .map(|ids| ids.as_ref().unwrap())
+            .collect::<Vec<_>>();
+        assert_eq!(
+            note_ids,
+            [
+                &StateNoteSvgIds {
+                    qualified_name: "GMN2".to_string(),
+                    entity_id: "ent0003".to_string(),
+                    link_id: "lnk4".to_string(),
+                },
+                &StateNoteSvgIds {
+                    qualified_name: "GMN5".to_string(),
+                    entity_id: "ent0006".to_string(),
+                    link_id: "lnk7".to_string(),
+                },
+                &StateNoteSvgIds {
+                    qualified_name: "GMN8".to_string(),
+                    entity_id: "ent0009".to_string(),
+                    link_id: "lnk10".to_string(),
+                },
+            ]
+        );
+        let svg = crate::render_svg(&diagram);
+
+        for (name, source_line, entity_id) in [
+            ("GMN2", 3, "ent0003"),
+            ("GMN5", 9, "ent0006"),
+            ("GMN8", 12, "ent0009"),
+        ] {
+            assert!(svg.contains(&format!(
+                r#"data-qualified-name="{name}" data-source-line="{source_line}" id="{entity_id}""#
+            )));
+        }
+        for text in [
+            "first renamed line",
+            "second renamed line",
+            "reversed side",
+            "changed count",
+        ] {
+            assert!(svg.contains(text), "{text} missing from {svg}");
+        }
+    }
+
+    #[test]
+    fn attached_note_dimensions_follow_entity_image_note_margins() {
+        let text = "renamed longest line\nshort";
+        let (width, height) = attached_note_size(text);
+
+        assert_eq!(
+            width,
+            text_render::measure("renamed longest line", LINK_FONT_SIZE, false) + 21.0
+        );
+        assert_eq!(
+            height,
+            crate::plantuml_metrics::text_height(LINK_FONT_SIZE) * 2.0 + 10.0
         );
     }
 

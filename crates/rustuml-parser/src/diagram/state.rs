@@ -103,6 +103,17 @@ pub struct StateNote {
     pub text: String,
     /// Where the note is positioned relative to its anchor.
     pub kind: StateNoteKind,
+    /// 1-based line number within the parsed diagram body.
+    #[serde(default)]
+    pub source_line: usize,
+    /// 1-based line containing the opening note command. Multi-line notes use
+    /// the first body line for `source_line`, matching PlantUML's entity
+    /// metadata, while UID allocation still follows this command location.
+    #[serde(default)]
+    pub command_line: usize,
+    /// Zero-based order in which note commands created their model entities.
+    #[serde(default)]
+    pub creation_order: usize,
 }
 
 /// Where the note is anchored.

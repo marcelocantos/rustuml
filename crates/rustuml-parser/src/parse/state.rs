@@ -76,6 +76,9 @@ fn parse_transition_style(arrow: &str) -> TransitionStyle {
 struct NoteBuffer {
     kind: StateNoteKind,
     text: String,
+    source_line: usize,
+    command_line: usize,
+    creation_order: usize,
 }
 
 struct StateParser {
@@ -85,6 +88,8 @@ struct StateParser {
     notes: Vec<StateNote>,
     /// Active multi-line note being accumulated.
     note_buffer: Option<NoteBuffer>,
+    /// Stable creation order assigned when a note command starts.
+    next_note_creation_order: usize,
     /// Current 1-based source line number (set before each parse_line call).
     current_line: usize,
     /// Active prefix when inside a `skinparam <prefix> { ... }` block.
@@ -120,6 +125,7 @@ impl StateParser {
             transitions: Vec::new(),
             notes: Vec::new(),
             note_buffer: None,
+            next_note_creation_order: 0,
             current_line: 0,
             skinparam_block_prefix: None,
             scope_stack: Vec::new(),
@@ -167,9 +173,18 @@ impl StateParser {
                 self.notes.push(StateNote {
                     text,
                     kind: buf.kind,
+                    source_line: buf.source_line,
+                    command_line: buf.command_line,
+                    creation_order: buf.creation_order,
                 });
             }
         }
+    }
+
+    fn note_metadata(&mut self) -> (usize, usize) {
+        let creation_order = self.next_note_creation_order;
+        self.next_note_creation_order += 1;
+        (self.current_line, creation_order)
     }
 
     fn finish(self) -> StateDiagram {
@@ -582,14 +597,22 @@ impl StateParser {
                 })
                 .map(|s| s.trim());
             if let Some(text) = inline.filter(|t| !t.is_empty()) {
+                let (source_line, creation_order) = self.note_metadata();
                 self.notes.push(StateNote {
                     text: text.to_string(),
                     kind: StateNoteKind::OnLink,
+                    source_line,
+                    command_line: source_line,
+                    creation_order,
                 });
             } else {
+                let (source_line, creation_order) = self.note_metadata();
                 self.note_buffer = Some(NoteBuffer {
                     kind: StateNoteKind::OnLink,
                     text: String::new(),
+                    source_line: source_line + 1,
+                    command_line: source_line,
+                    creation_order,
                 });
             }
             return true;
@@ -602,9 +625,13 @@ impl StateParser {
             if let Some(caps) = RE.captures(line) {
                 let text = caps[1].to_string();
                 let alias = caps[2].to_string();
+                let (source_line, creation_order) = self.note_metadata();
                 self.notes.push(StateNote {
                     text,
                     kind: StateNoteKind::Floating(Some(alias)),
+                    source_line,
+                    command_line: source_line,
+                    creation_order,
                 });
                 return true;
             }
@@ -628,11 +655,22 @@ impl StateParser {
                     .map(|m| m.as_str().trim().to_string())
                     .filter(|t| !t.is_empty())
                 {
-                    self.notes.push(StateNote { text, kind });
+                    let (source_line, creation_order) = self.note_metadata();
+                    self.notes.push(StateNote {
+                        text,
+                        kind,
+                        source_line,
+                        command_line: source_line,
+                        creation_order,
+                    });
                 } else {
+                    let (source_line, creation_order) = self.note_metadata();
                     self.note_buffer = Some(NoteBuffer {
                         kind,
                         text: String::new(),
+                        source_line: source_line + 1,
+                        command_line: source_line,
+                        creation_order,
                     });
                 }
                 return true;
@@ -655,11 +693,22 @@ impl StateParser {
                     .map(|m| m.as_str().trim().to_string())
                     .filter(|t| !t.is_empty())
                 {
-                    self.notes.push(StateNote { text, kind });
+                    let (source_line, creation_order) = self.note_metadata();
+                    self.notes.push(StateNote {
+                        text,
+                        kind,
+                        source_line,
+                        command_line: source_line,
+                        creation_order,
+                    });
                 } else {
+                    let (source_line, creation_order) = self.note_metadata();
                     self.note_buffer = Some(NoteBuffer {
                         kind,
                         text: String::new(),
+                        source_line: source_line + 1,
+                        command_line: source_line,
+                        creation_order,
                     });
                 }
                 return true;
@@ -837,6 +886,31 @@ mod tests {
         assert_eq!(d.notes.len(), 1);
         assert!(d.notes[0].text.contains("line 1"));
         assert!(d.notes[0].text.contains("line 2"));
+        assert_eq!(d.notes[0].source_line, 3);
+        assert_eq!(d.notes[0].command_line, 2);
+        assert_eq!(d.notes[0].creation_order, 0);
+    }
+
+    #[test]
+    fn notes_keep_command_lines_and_creation_order_across_multiline_flushes() {
+        let d = parse(
+            "[*] --> RenamedAlpha\n\
+             note right of RenamedAlpha\n\
+               first line\n\
+               second line\n\
+             end note\n\
+             RenamedAlpha --> RenamedBeta\n\
+             note left of RenamedBeta : third note\n\
+             RenamedBeta --> [*]",
+        );
+
+        assert_eq!(
+            d.notes
+                .iter()
+                .map(|note| (note.source_line, note.command_line, note.creation_order))
+                .collect::<Vec<_>>(),
+            [(3, 2, 0), (7, 7, 1)]
+        );
     }
 
     #[test]
