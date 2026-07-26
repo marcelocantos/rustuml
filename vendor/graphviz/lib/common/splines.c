@@ -24,6 +24,7 @@
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <rustuml_helpers.h>
 #include <util/agxbuf.h>
 #include <util/alloc.h>
 #include <util/gv_math.h>
@@ -106,9 +107,10 @@ arrow_clip(edge_t * fe, node_t * hn,
  * else sp[3] is taken as inside.
  * The points p are in node coordinates.
  */
-void bezier_clip(inside_t * inside_context,
-		 bool(*inside) (inside_t * inside_context, pointf p),
-		 pointf * sp, bool left_inside)
+static void bezier_clip_impl(inside_t *inside_context,
+			     bool (*inside)(inside_t *, pointf),
+			     pointf *sp, bool left_inside,
+			     bool keep_outside)
 {
     pointf seg[4], best[4], pt, opt, *left, *right;
     double low, high, t, *idir, *odir;
@@ -135,13 +137,16 @@ void bezier_clip(inside_t * inside_context,
 	opt = pt;
 	t = (high + low) / 2.0;
 	pt = Bezier(sp, t, left, right);
-	if (inside(inside_context, pt)) {
+	bool point_inside = inside(inside_context, pt);
+	if (point_inside) {
 	    *idir = t;
+	} else {
+	    *odir = t;
+	}
+	if (point_inside != keep_outside) {
 	    for (i = 0; i < 4; i++)
 		best[i] = seg[i];
 	    found = true;
-	} else {
-	    *odir = t;
 	}
     } while (fabs(opt.x - pt.x) > .5 || fabs(opt.y - pt.y) > .5);
     if (found)
@@ -150,6 +155,13 @@ void bezier_clip(inside_t * inside_context,
     else
 	for (i = 0; i < 4; i++)
 	    sp[i] = seg[i];
+}
+
+void bezier_clip(inside_t * inside_context,
+		 bool(*inside) (inside_t * inside_context, pointf p),
+		 pointf * sp, bool left_inside)
+{
+    bezier_clip_impl(inside_context, inside, sp, left_inside, false);
 }
 
 /* Clip Bézier to node shape using binary search.
@@ -172,7 +184,14 @@ shape_clip0(inside_t * inside_context, node_t * n, pointf curve[4],
 	c[i].y = curve[i].y - ND_coord(n).y;
     }
 
-    bezier_clip(inside_context, ND_shape(n)->fns->insidefn, c, left_inside);
+    if (rustuml_node_uses_text_span_dimensions(n)) {
+	/* PlantUML's generated Graphviz 2.38 `splines__c.bezier_clip`
+	 * retains the first outside subdivision for record shape clipping. */
+	bezier_clip_impl(inside_context, ND_shape(n)->fns->insidefn, c,
+			 left_inside, true);
+    } else {
+	bezier_clip(inside_context, ND_shape(n)->fns->insidefn, c, left_inside);
+    }
 
     for (i = 0; i < 4; i++) {
 	curve[i].x = c[i].x + ND_coord(n).x;

@@ -3840,12 +3840,16 @@ static bool record_inside(inside_t * inside_context, pointf p)
     } else
 	bbox = *bp;
 
-    // adjust bbox to outline, i.e., the periphery with penwidth taken into account
-    const double penwidth = late_double(n, N_penwidth, DEFAULT_NODEPENWIDTH,
-                                        MIN_NODEPENWIDTH);
-    const pointf extension = {penwidth / 2, penwidth / 2};
-    bbox.LL = sub_pointf(bbox.LL, extension);
-    bbox.UR = add_pointf(bbox.UR, extension);
+    /* PlantUML's generated Graphviz 2.38 `shapes__c.record_inside` tests the
+     * raw record field box; the later pen-width extension is not present. */
+    if (!rustuml_node_uses_text_span_dimensions(n)) {
+	// adjust bbox to outline, i.e., the periphery with penwidth taken into account
+	const double penwidth = late_double(n, N_penwidth, DEFAULT_NODEPENWIDTH,
+					   MIN_NODEPENWIDTH);
+	const pointf extension = {penwidth / 2, penwidth / 2};
+	bbox.LL = sub_pointf(bbox.LL, extension);
+	bbox.UR = add_pointf(bbox.UR, extension);
+    }
 
     return INSIDE(p, bbox);
 }

@@ -1456,6 +1456,34 @@ revision: 23
     }
 
     #[test]
+    fn renamed_deeper_records_keep_every_boundary_connector() {
+        let source = r#"@startjson
+{
+  "renamed_root": {
+    "layer_two": {
+      "renamed_grid": [
+        [41, 43, 47],
+        [53, 59, 61]
+      ],
+      "layer_value": 67
+    },
+    "renamed_sibling": {"leaf_value": 71}
+  },
+  "revision": 73
+}
+@endjson"#;
+        let first = render_input(source);
+        let second = render_input(source);
+
+        assert_eq!(first, second);
+        assert_eq!(first.matches("stroke-dasharray:3,3").count(), 6);
+        assert_eq!(first.matches("<ellipse").count(), 6);
+        assert!(first.contains("renamed_root"));
+        assert!(first.contains("layer_two"));
+        assert!(first.contains("renamed_grid"));
+    }
+
+    #[test]
     fn direct_record_exit_tracks_width_rounding_not_labels() {
         assert_eq!(super::smetana_record_exit_offset(78.2), 78.5);
         assert_eq!(super::smetana_record_exit_offset(77.2), 78.0);
