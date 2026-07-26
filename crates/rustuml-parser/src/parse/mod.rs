@@ -154,6 +154,13 @@ fn detect_type(input: &str) -> &str {
 
 /// For @startuml, detect the specific UML subtype by scanning ALL lines
 /// and counting indicator keywords. The type with the strongest signal wins.
+///
+/// This models `PSystemBuilder.createPSystem`, which tries
+/// `SequenceDiagramFactory`, `ClassDiagramFactory`, and the later UML command
+/// factories in order, accepting the first factory whose commands parse the
+/// complete source. Explicit JSON and YAML starts bypass this competition via
+/// `UmlSource.getDiagramTypes` and their dedicated `JsonDiagramFactory` or
+/// `YamlDiagramFactory`.
 fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     let mut scores = [0i32; 10]; // Seq, Class, Object, State, Activity, Component, UseCase, Deployment, Timing
 
@@ -1330,6 +1337,71 @@ Application --> RR
         let input = "@startuml\nnote as N\n  file: example.puml\nend note\n@enduml";
         let diagram = parse(input).unwrap();
         assert!(matches!(diagram, Diagram::Class(_)));
+    }
+
+    #[test]
+    fn ambiguous_and_markerless_inputs_follow_plantuml_factory_selection() {
+        // `ClassDiagramFactory.initCommandsList` owns `CommandAllowMixing`, so
+        // mixed states remain elements in a class diagram.
+        let mixed = r#"@startuml
+allowmixing
+class Scheduler {
+  +dispatch()
+}
+state Waiting
+state Executing
+Waiting --> Executing : submit
+Scheduler .. Executing : controls
+@enduml"#;
+        assert!(matches!(parse(mixed).unwrap(), Diagram::Class(_)));
+
+        let class_arrow =
+            "@startuml\nclass Origin\nclass Destination\nOrigin -> Destination : sends\n@enduml";
+        assert!(matches!(parse(class_arrow).unwrap(), Diagram::Class(_)));
+
+        let state_arrows = r#"@startuml
+state Queued
+state Working
+state Complete
+Queued -> Working : claim
+Working -> Complete : finish
+Complete -> Queued : retry
+@enduml"#;
+        assert!(matches!(parse(state_arrows).unwrap(), Diagram::State(_)));
+
+        // Markerless input still goes through the UML factory ordering. The
+        // class factory accepts floating notes and their association, while
+        // the state factory accepts pseudostate transitions.
+        let notes = r#"note "Primary diagnostic" as First
+note "Secondary diagnostic" as Second
+First .. Second"#;
+        assert!(matches!(parse(notes).unwrap(), Diagram::Class(_)));
+
+        let states = r#"[*] --> Ready
+Ready --> Suspended : hold
+Suspended --> Ready : resume
+Ready --> [*] : close"#;
+        assert!(matches!(parse(states).unwrap(), Diagram::State(_)));
+    }
+
+    #[test]
+    fn explicit_and_named_starts_preserve_their_semantic_family() {
+        assert!(matches!(
+            parse("@startjson\n{\"renamed\": [1, 2, 3]}\n@endjson").unwrap(),
+            Diagram::Json(_)
+        ));
+        assert!(matches!(
+            parse("@startyaml\nrenamed:\n  - one\n  - two\n@endyaml").unwrap(),
+            Diagram::Json(_)
+        ));
+
+        let named_class =
+            "@startuml renamed_model\nclass Parent\nclass Child extends Parent\n@enduml";
+        assert!(matches!(parse(named_class).unwrap(), Diagram::Class(_)));
+
+        let explicit_state =
+            "@startuml\n[*] --> Open\nOpen --> Closed : finish\nClosed --> [*]\n@enduml";
+        assert!(matches!(parse(explicit_state).unwrap(), Diagram::State(_)));
     }
 
     #[test]
