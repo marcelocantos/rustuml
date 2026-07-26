@@ -11,7 +11,7 @@
 
 use std::fmt::Write;
 
-use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph};
+use rustuml_layout::graph::{Direction, EdgeLabelPosition, EdgeLabelSize, EdgePath, LayoutGraph};
 use rustuml_parser::diagram::object::*;
 
 use crate::layout_oracle::{
@@ -73,6 +73,11 @@ const NOTE_PAD_X: f64 = 6.0;
 const NOTE_PAD_RIGHT: f64 = 15.0;
 const NOTE_PAD_Y: f64 = 5.0;
 const NOTE_FONT_SIZE: f64 = 13.0;
+/// Java `SvekEdge` measures object-link labels with the arrow font before
+/// serialising fixed-size HTML-table placeholders to dot.
+const LINK_LABEL_FONT_SIZE: f64 = 13.0;
+/// `SvekEdge.addVisibilityModifier` wraps center labels in a one-pixel margin.
+const LINK_LABEL_MARGIN: f64 = 1.0;
 
 // ---------------------------------------------------------------------------
 // Public entry points
@@ -350,20 +355,50 @@ fn layout_object(diagram: &ObjectDiagram, dims: &[ObjDim]) -> ObjectLayout {
 
     let mut edge_events = Vec::new();
     for (idx, link) in diagram.links.iter().enumerate() {
-        edge_events.push((link.source_line, 0_u8, idx));
+        edge_events.push((1_u8, link.source_line, 0_u8, idx));
     }
     for (idx, note) in diagram.notes.iter().enumerate() {
         if note.target.is_some() && note.position.is_some() {
-            edge_events.push((note.source_line, 1_u8, idx));
+            // Java `CommandFactoryNoteOnEntity` gives left/right note links
+            // length one and top/bottom links length two. `Bibliotekon.addLine`
+            // partitions length-one edges into `lines0`, which
+            // `DotStringFactory.createDotString` emits before ordinary links.
+            let length_bucket = match note.position {
+                Some(ObjectNotePosition::Left | ObjectNotePosition::Right) => 0,
+                Some(ObjectNotePosition::Top | ObjectNotePosition::Bottom) | None => 1,
+            };
+            edge_events.push((length_bucket, note.source_line, 1_u8, idx));
         }
     }
     edge_events.sort_unstable();
-    for (_, kind, idx) in edge_events {
+    for (_, _, kind, idx) in edge_events {
         if kind == 0 {
             let link = &diagram.links[idx];
             let from_base = link.from.split("::").next().unwrap_or(&link.from);
             let to_base = link.to.split("::").next().unwrap_or(&link.to);
-            layout.add_edge(from_base, to_base, link.label.as_deref());
+            // Java `SvekEdge.appendLine` / `appendTable` gives dot measured,
+            // integer-truncated HTML placeholders rather than the raw label.
+            // The solved boxes drive both routing and final text placement.
+            let label_size = link.label.as_deref().map(|label| EdgeLabelSize {
+                width: text_render::measure(label, LINK_LABEL_FONT_SIZE, false)
+                    + 2.0 * LINK_LABEL_MARGIN,
+                height: (text_render::label_height(label, LINK_LABEL_FONT_SIZE)
+                    + 2.0 * LINK_LABEL_MARGIN)
+                    .floor(),
+            });
+            let endpoint_size = |label: Option<&str>| {
+                label.map(|label| EdgeLabelSize {
+                    width: text_render::measure(label, LINK_LABEL_FONT_SIZE, false).floor(),
+                    height: text_render::label_height(label, LINK_LABEL_FONT_SIZE).floor(),
+                })
+            };
+            layout.add_edge_with_label_sizes(
+                from_base,
+                to_base,
+                label_size,
+                endpoint_size(link.from_multiplicity.as_deref()),
+                endpoint_size(link.to_multiplicity.as_deref()),
+            );
             continue;
         }
         let note = &diagram.notes[idx];
@@ -372,15 +407,15 @@ fn layout_object(diagram: &ObjectDiagram, dims: &[ObjDim]) -> ObjectLayout {
         let note_id = attached_note_layout_id(idx);
         match position {
             ObjectNotePosition::Left => {
-                layout.add_same_rank(&note_id, target);
-                layout.add_edge(&note_id, target, None);
+                // `CommandFactoryNoteOnEntity` assigns length one and
+                // `SvekEdge.appendLine` serialises `minlen=length-1`.
+                layout.add_edge_with_minlen(&note_id, target, None, 0);
             }
             ObjectNotePosition::Right => {
-                layout.add_same_rank(target, &note_id);
-                layout.add_edge(target, &note_id, None);
+                layout.add_edge_with_minlen(target, &note_id, None, 0);
             }
-            ObjectNotePosition::Top => layout.add_edge(&note_id, target, None),
-            ObjectNotePosition::Bottom => layout.add_edge(target, &note_id, None),
+            ObjectNotePosition::Top => layout.add_edge_with_minlen(&note_id, target, None, 1),
+            ObjectNotePosition::Bottom => layout.add_edge_with_minlen(target, &note_id, None, 1),
         }
     }
     match layout.layout_full(std::time::Duration::from_secs(5)) {
@@ -391,7 +426,7 @@ fn layout_object(diagram: &ObjectDiagram, dims: &[ObjDim]) -> ObjectLayout {
                 normalize_attached_note_svek_envelope(
                     &mut result.node_positions,
                     &mut result.edge_paths,
-                    diagram.objects.len(),
+                    diagram,
                 )
             };
             for edge in &mut result.edge_paths {
@@ -406,6 +441,13 @@ fn layout_object(diagram: &ObjectDiagram, dims: &[ObjDim]) -> ObjectLayout {
                 if let Some(point) = &mut edge.end_point {
                     point.0 += origin_x;
                     point.1 += origin_y;
+                }
+                for label in [&mut edge.label, &mut edge.tail_label, &mut edge.head_label]
+                    .into_iter()
+                    .flatten()
+                {
+                    label.x += origin_x;
+                    label.y += origin_y;
                 }
             }
             ObjectLayout {
@@ -449,7 +491,7 @@ fn layout_object(diagram: &ObjectDiagram, dims: &[ObjDim]) -> ObjectLayout {
 fn normalize_attached_note_svek_envelope(
     nodes: &mut [rustuml_layout::graph::NodePosition],
     edges: &mut [EdgePath],
-    object_count: usize,
+    diagram: &ObjectDiagram,
 ) -> (f64, f64) {
     let svg_coord = |value: f64| (value * 100.0).round() / 100.0;
     for node in nodes.iter_mut() {
@@ -473,12 +515,35 @@ fn normalize_attached_note_svek_envelope(
     let min_x = nodes
         .iter()
         .enumerate()
-        .map(|(idx, node)| node.x - if idx < object_count { 1.0 } else { 0.0 })
+        .map(|(idx, node)| {
+            node.x
+                - if idx < diagram.objects.len() {
+                    1.0
+                } else {
+                    0.0
+                }
+        })
         .fold(f64::INFINITY, f64::min);
     let min_y = nodes
         .iter()
         .enumerate()
-        .map(|(idx, node)| node.y - if idx < object_count { 1.0 } else { 0.0 })
+        .map(|(idx, node)| {
+            let Some(object) = diagram.objects.get(idx) else {
+                return node.y;
+            };
+            let mut painted_offset: f64 = -1.0;
+            if let Some(stereotype) = object.stereotype.as_deref() {
+                let text = format!("\u{00ab}{stereotype}\u{00bb}");
+                // Java `LimitFinder.drawText` moves the text top up by its
+                // measured height minus 1.5px. A stereotype can therefore
+                // extend slightly above `LimitFinder.drawRectangle`'s y-1.
+                painted_offset = painted_offset.min(
+                    STEREO_BASELINE_Y - text_render::label_height(&text, STEREO_FONT_SIZE as f64)
+                        + 1.5,
+                );
+            }
+            node.y + painted_offset
+        })
         .fold(f64::INFINITY, f64::min);
     (6.0 - min_x, 6.0 - min_y)
 }
@@ -632,70 +697,69 @@ fn render_plantuml_svg(
     // Canvas dimensions: prefer oracle (matches PlantUML exactly), otherwise
     // compute from the union of entity rects with the standard 6px right/bottom
     // pad on top of MARGIN.
-    let (canvas_w, canvas_h) =
-        if let Some(orc) = oracle
-            && orc.canvas_width > 0.0
-            && orc.canvas_height > 0.0
-        {
-            (orc.canvas_width as i64, orc.canvas_height as i64)
-        } else {
-            let mut max_x = 0.0_f64;
-            let mut max_y = 0.0_f64;
-            for (i, (x, y)) in positions.iter().enumerate() {
-                max_x = max_x.max(x + dims[i].width);
-                max_y = max_y.max(y + dims[i].height);
+    let (canvas_w, canvas_h) = if let Some(orc) = oracle
+        && orc.canvas_width > 0.0
+        && orc.canvas_height > 0.0
+    {
+        (orc.canvas_width as i64, orc.canvas_height as i64)
+    } else {
+        let mut max_x = 0.0_f64;
+        let mut max_y = 0.0_f64;
+        for (i, (x, y)) in positions.iter().enumerate() {
+            max_x = max_x.max(x + dims[i].width);
+            max_y = max_y.max(y + dims[i].height);
+        }
+        for note in layout.note_positions.iter().flatten() {
+            max_x = max_x.max(note.x + note.width);
+            max_y = max_y.max(note.y + note.height);
+        }
+        for edge in &layout.edge_paths {
+            for (x, y) in &edge.points {
+                max_x = max_x.max(*x);
+                max_y = max_y.max(*y);
             }
-            for note in layout.note_positions.iter().flatten() {
-                max_x = max_x.max(note.x + note.width);
-                max_y = max_y.max(note.y + note.height);
+            if let Some((x, y)) = edge.start_point {
+                max_x = max_x.max(x);
+                max_y = max_y.max(y);
             }
-            for edge in &layout.edge_paths {
-                for (x, y) in &edge.points {
-                    max_x = max_x.max(*x);
-                    max_y = max_y.max(*y);
-                }
-                if let Some((x, y)) = edge.start_point {
-                    max_x = max_x.max(x);
-                    max_y = max_y.max(y);
-                }
-                if let Some((x, y)) = edge.end_point {
-                    max_x = max_x.max(x);
-                    max_y = max_y.max(y);
-                }
+            if let Some((x, y)) = edge.end_point {
+                max_x = max_x.max(x);
+                max_y = max_y.max(y);
             }
-            for link in &diagram.links {
-                if !is_rendered_layout_link(link) {
-                    continue;
-                }
-                let Some(edge_path) = layout.edge_paths.iter().find(|edge| {
-                    edge.from == link_base(&link.from) && edge.to == link_base(&link.to)
-                }) else {
-                    continue;
-                };
-                if edge_path.points.len() < 4 {
-                    continue;
-                }
-                let endpoint = edge_path.points[edge_path.points.len() - 1];
-                let control = edge_path.points[edge_path.points.len() - 2];
-                for (x, y) in dependency_arrow_polygon(control, endpoint) {
-                    max_x = max_x.max(x);
-                    max_y = max_y.max(y);
-                }
-                if let Some(label) = link.label.as_deref() {
-                    let (label_x, label_y) = edge_label_position(&edge_path.points);
-                    max_x = max_x.max(label_x + text_render::measure(label, 13.0, false) + 1.0);
-                    max_y = max_y.max(label_y + crate::plantuml_metrics::text_height(13.0));
-                }
-            }
-            let canvas_pad = if has_rendered_layout_dependency(diagram, &layout.edge_paths)
-                || layout.note_positions.iter().any(Option::is_some)
+            for label in [edge.label, edge.tail_label, edge.head_label]
+                .into_iter()
+                .flatten()
             {
-                OBJECT_LINK_CANVAS_PAD
-            } else {
-                OBJECT_CANVAS_PAD
+                max_x = max_x.max(label.x + label.width);
+                max_y = max_y.max(label.y + label.height);
+            }
+        }
+        for (link_idx, link) in diagram.links.iter().enumerate() {
+            if !is_rendered_layout_link(link) {
+                continue;
+            }
+            let Some(edge_path) = find_layout_edge(diagram, &layout.edge_paths, link_idx) else {
+                continue;
             };
-            (max_x as i64 + canvas_pad, max_y as i64 + canvas_pad)
+            if edge_path.points.len() < 4 {
+                continue;
+            }
+            let endpoint = edge_path.points[edge_path.points.len() - 1];
+            let control = edge_path.points[edge_path.points.len() - 2];
+            for (x, y) in dependency_arrow_polygon(control, endpoint) {
+                max_x = max_x.max(x);
+                max_y = max_y.max(y);
+            }
+        }
+        let canvas_pad = if has_rendered_layout_dependency(diagram, &layout.edge_paths)
+            || layout.note_positions.iter().any(Option::is_some)
+        {
+            OBJECT_LINK_CANVAS_PAD
+        } else {
+            OBJECT_CANVAS_PAD
         };
+        (max_x as i64 + canvas_pad, max_y as i64 + canvas_pad)
+    };
 
     let mut svg = String::new();
 
@@ -878,10 +942,7 @@ fn render_layout_links(
         }
         let from_base = link_base(&link.from);
         let to_base = link_base(&link.to);
-        let Some(edge_path) = edge_paths
-            .iter()
-            .find(|edge| edge.from == from_base && edge.to == to_base)
-        else {
+        let Some(edge_path) = find_layout_edge(diagram, edge_paths, link_idx) else {
             continue;
         };
         if edge_path.points.len() < 4 {
@@ -900,7 +961,13 @@ fn render_layout_links(
             0
         };
         let link_id = &svg_ids.links[link_idx];
-        let path_id = object_link_path_id(link, from_base, to_base);
+        let parallel_index = diagram.links[..link_idx]
+            .iter()
+            .filter(|previous| {
+                link_base(&previous.from) == from_base && link_base(&previous.to) == to_base
+            })
+            .count();
+        let path_id = object_link_path_id(link, from_base, to_base, parallel_index);
         let link_type = object_link_type(link.kind);
 
         write!(svg, "<!--link {from_base} to {to_base}-->").unwrap();
@@ -926,14 +993,27 @@ fn render_layout_links(
         emit_object_link_start_decor(svg, link, &edge_path.points);
         emit_object_link_end_decor(svg, link, &edge_path.points);
         if let Some(label) = link.label.as_deref() {
-            let (x, y) = edge_label_position(&edge_path.points);
+            let (x, y) = edge_path
+                .label
+                .map(|position| {
+                    (
+                        position.x + LINK_LABEL_MARGIN,
+                        position.y
+                            + LINK_LABEL_MARGIN
+                            + text_render::label_ascent(label, LINK_LABEL_FONT_SIZE),
+                    )
+                })
+                .unwrap_or_else(|| {
+                    let (x, y) = edge_label_position(&edge_path.points);
+                    (x + 1.0, y - 4.0)
+                });
             text_render::emit_text(
                 svg,
                 label,
                 &TextBase {
-                    x: x + 1.0,
-                    y: y - 4.0,
-                    font_size: 13,
+                    x,
+                    y,
+                    font_size: LINK_LABEL_FONT_SIZE as u32,
                     font_family: "sans-serif",
                     fill: "#000000",
                     bold: false,
@@ -943,8 +1023,35 @@ fn render_layout_links(
                 },
             );
         }
+        emit_object_endpoint_label(svg, link.from_multiplicity.as_deref(), edge_path.tail_label);
+        emit_object_endpoint_label(svg, link.to_multiplicity.as_deref(), edge_path.head_label);
         svg.push_str("</g>");
     }
+}
+
+fn emit_object_endpoint_label(
+    svg: &mut String,
+    text: Option<&str>,
+    position: Option<EdgeLabelPosition>,
+) {
+    let (Some(text), Some(position)) = (text, position) else {
+        return;
+    };
+    text_render::emit_text(
+        svg,
+        text,
+        &TextBase {
+            x: position.x,
+            y: position.y + text_render::label_ascent(text, LINK_LABEL_FONT_SIZE),
+            font_size: LINK_LABEL_FONT_SIZE as u32,
+            font_family: "sans-serif",
+            fill: "#000000",
+            bold: false,
+            italic: false,
+            underline: false,
+            skip_underline: false,
+        },
+    );
 }
 
 fn render_attached_object_notes(
@@ -1185,10 +1292,40 @@ fn link_base(link_end: &str) -> &str {
 }
 
 fn is_rendered_layout_link(link: &ObjectLink) -> bool {
-    !link.from.contains("::")
-        && !link.to.contains("::")
-        && link.from_multiplicity.is_none()
-        && link.to_multiplicity.is_none()
+    !link.from.contains("::") && !link.to.contains("::")
+}
+
+fn find_layout_edge<'a>(
+    diagram: &ObjectDiagram,
+    edge_paths: &'a [EdgePath],
+    link_idx: usize,
+) -> Option<&'a EdgePath> {
+    let link = diagram.links.get(link_idx)?;
+    let from = link_base(&link.from);
+    let to = link_base(&link.to);
+    let occurrence = diagram.links[..link_idx]
+        .iter()
+        .filter(|previous| {
+            is_rendered_layout_link(previous)
+                && link_base(&previous.from) == from
+                && link_base(&previous.to) == to
+        })
+        .count();
+    let mut first = None;
+    for (seen, edge) in edge_paths
+        .iter()
+        .filter(|edge| edge.from == from && edge.to == to)
+        .enumerate()
+    {
+        first.get_or_insert(edge);
+        if seen == occurrence {
+            return Some(edge);
+        }
+    }
+    // The vendored cgraph path currently coalesces parallel endpoint pairs.
+    // Until it exposes every spline, retain the first solved route so later
+    // source links still render instead of disappearing.
+    first
 }
 
 fn has_rendered_layout_dependency(diagram: &ObjectDiagram, edge_paths: &[EdgePath]) -> bool {
@@ -1212,13 +1349,17 @@ fn object_link_type(kind: ObjectLinkKind) -> &'static str {
     }
 }
 
-fn object_link_path_id(link: &ObjectLink, from: &str, to: &str) -> String {
-    match link.kind {
+fn object_link_path_id(link: &ObjectLink, from: &str, to: &str, parallel_index: usize) -> String {
+    let mut id = match link.kind {
         ObjectLinkKind::Aggregation | ObjectLinkKind::Composition | ObjectLinkKind::Association => {
             format!("{from}-{to}")
         }
         ObjectLinkKind::Dependency | ObjectLinkKind::Extension => format!("{from}-to-{to}"),
+    };
+    if parallel_index > 0 {
+        write!(id, "-{parallel_index}").unwrap();
     }
+    id
 }
 
 fn shortened_object_link_points(link: &ObjectLink, points: &[(f64, f64)]) -> Vec<(f64, f64)> {
@@ -2009,6 +2150,8 @@ fn find_oracle_object_edge<'a>(
 #[cfg(test)]
 mod tests {
     use super::*;
+    use rustuml_layout::graph::GraphSpacing;
+    use rustuml_parser::diagram::Diagram;
     use rustuml_parser::diagram::DiagramMeta;
 
     fn oracle_edge(id: &str, source_line: &str) -> OracleEdgePath {
@@ -2175,8 +2318,8 @@ mod tests {
             packages: vec![],
         };
         let svg = render(&diagram, &Theme::default());
-        let host_w = text_render::measure("host", Theme::default().class.font_size as f64, false);
-        let debug_w = text_render::measure("debug", Theme::default().class.font_size as f64, false);
+        let host_w = text_render::measure("host", Theme::default().class.font_size, false);
+        let debug_w = text_render::measure("debug", Theme::default().class.font_size, false);
         let host_x = MARGIN + MAP_TEXT_X_OFFSET + (debug_w - host_w) / 2.0;
         let debug_x = MARGIN + MAP_TEXT_X_OFFSET;
         assert!(svg.contains(&format!(r#"x="{}""#, fmt_tl(host_x))));
@@ -2231,6 +2374,43 @@ note top of RenamedGamma : Top callout
         assert!(svg.contains("Left callout"));
         assert!(svg.contains("Right callout"));
         assert!(svg.contains("Top callout"));
+    }
+
+    #[test]
+    fn labeled_link_and_right_note_use_svek_boxes_for_renamed_nodes() {
+        let input = r#"@startuml
+object "Ledger Root" as Ledger_47 <<boundary>> {
+  key = 47
+  status = "open"
+  retries = 3
+}
+object "Archive Sink" as Archive_83 {
+  slot = 83
+  retained = true
+}
+Ledger_47 --> Archive_83 : "archives into"
+note right of Ledger_47 : Fresh source note 47
+@enduml"#;
+        let Diagram::Object(diagram) = rustuml_parser::parse::parse(input).unwrap() else {
+            panic!("expected object diagram");
+        };
+        let font_size = Theme::default().class.font_size as u32;
+        let dims: Vec<_> = diagram
+            .objects
+            .iter()
+            .map(|object| calc_obj_dim(object, font_size))
+            .collect();
+        let layout = layout_object(&diagram, &dims);
+        let edge = find_layout_edge(&diagram, &layout.edge_paths, 0).unwrap();
+        assert!(edge.label.is_some(), "expected a solved SVEK label box");
+
+        let note = layout.note_positions[0].expect("expected attached note placement");
+        let source_right = layout.positions[0].0 + dims[0].width;
+        let gap = note.x - source_right;
+        assert!(
+            (gap - GraphSpacing::PLANTUML_SVEK_DEFAULTS.node_sep_px).abs() < 1.0,
+            "length-one note edge should use one SVEK node gap, got {gap}"
+        );
     }
 
     #[test]
