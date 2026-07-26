@@ -4,6 +4,10 @@ version.workspace = true
 edition.workspace = true
 license.workspace = true
 
+[features]
+# Development-only layout injection used by rustuml-oracle diff tooling.
+oracle-layout = []
+
 [dependencies]
 ab_glyph = "0.2"
 flate2 = { version = "1", default-features = false, features = ["zlib"] }

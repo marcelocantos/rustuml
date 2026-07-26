@@ -70,6 +70,7 @@ pub mod timing;
 pub mod usecase;
 pub mod wbs;
 
+#[cfg(feature = "oracle-layout")]
 use layout_oracle::OracleLayout;
 use rustuml_parser::diagram::Diagram;
 use style::Theme;
@@ -143,6 +144,7 @@ pub fn render_svg_with_theme(diagram: &Diagram, theme: &Theme) -> String {
 /// When `oracle` is `Some`, layout coordinates are taken from the oracle
 /// instead of running the Graphviz layout engine. Currently supported for
 /// class diagrams; other types ignore the oracle.
+#[cfg(feature = "oracle-layout")]
 pub fn render_svg_with_oracle(diagram: &Diagram, oracle: Option<&OracleLayout>) -> String {
     let meta_params = &diagram.meta().skinparams;
     let theme = if meta_params.is_empty() {
@@ -203,6 +205,7 @@ pub fn render_svg_with_oracle(diagram: &Diagram, oracle: Option<&OracleLayout>) 
     render_under_filter_registry(diagram, |d| render_with_theme_and_oracle(d, &theme, oracle))
 }
 
+#[cfg(feature = "oracle-layout")]
 fn restore_oracle_root_open_tag(svg: &str, oracle: Option<&OracleLayout>) -> String {
     let Some(open) = oracle.and_then(|o| o.root_open_tag.as_deref()) else {
         return svg.to_string();
@@ -346,6 +349,7 @@ fn rebrand_in_svg(svg: String) -> String {
     out
 }
 
+#[cfg(feature = "oracle-layout")]
 fn render_with_theme_and_oracle(
     diagram: &Diagram,
     theme: &Theme,
