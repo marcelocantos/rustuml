@@ -498,17 +498,203 @@ fn canonical_font_family(value: &str) -> String {
     }
 }
 
-fn split_gradient_colors(val: &str) -> Option<(&str, &str)> {
-    for sep in ['/', '\\', '|', '-'] {
-        if let Some((left, right)) = val.split_once(sep) {
+fn split_gradient_colors(val: &str) -> Option<(&str, &str, char)> {
+    for policy in ['-', '\\', '|', '/'] {
+        if let Some((left, right)) = val.split_once(policy) {
             let left = left.trim();
             let right = right.trim();
             if !left.is_empty() && !right.is_empty() {
-                return Some((left, right));
+                return Some((left, right, policy));
             }
         }
     }
     None
+}
+
+fn gradient_endpoints(policy: char) -> (&'static str, &'static str, &'static str, &'static str) {
+    // Java provenance: `SvgGraphics.createSvgGradient` maps
+    // `HColorGradient.getPolicy()` to these endpoint pairs.
+    match policy {
+        '|' => ("0%", "100%", "50%", "50%"),
+        '\\' => ("0%", "100%", "100%", "0%"),
+        '-' => ("50%", "50%", "0%", "100%"),
+        _ => ("0%", "100%", "0%", "100%"),
+    }
+}
+
+#[derive(Debug, PartialEq, Eq)]
+struct ActivityGradient {
+    color1: String,
+    color2: String,
+    policy: char,
+    id: String,
+}
+
+struct ActivityDefRegistry {
+    seed_prefix: String,
+    svg_scale: f64,
+    defs: String,
+    gradients: Vec<ActivityGradient>,
+    shadow_id: Option<String>,
+}
+
+impl ActivityDefRegistry {
+    fn new(diagram: &ActivityDiagram) -> Self {
+        let source = diagram.meta.source.as_deref().unwrap_or("");
+        let seed_prefix = diagram
+            .meta
+            .skinparams
+            .iter()
+            .rev()
+            .find(|skinparam| skinparam.key.eq_ignore_ascii_case("__svgidseed"))
+            .map(|skinparam| skinparam.value.trim().to_string())
+            .filter(|seed| !seed.is_empty())
+            .unwrap_or_else(|| crate::filter_registry::id_seed_prefix_for_source(source));
+        let svg_scale = diagram
+            .meta
+            .skinparams
+            .iter()
+            .rev()
+            .find(|skinparam| skinparam.key.eq_ignore_ascii_case("dpi"))
+            .and_then(|skinparam| skinparam.value.trim().parse::<f64>().ok())
+            .filter(|dpi| *dpi > 0.0)
+            .map_or(1.0, |dpi| dpi / 96.0);
+        Self {
+            seed_prefix,
+            svg_scale,
+            defs: String::new(),
+            gradients: Vec::new(),
+            shadow_id: None,
+        }
+    }
+
+    fn ensure_gradient(&mut self, value: Option<&str>) -> Option<String> {
+        let (raw1, raw2, policy) = split_gradient_colors(value?)?;
+        let color1 = crate::sequence::resolve_color(raw1);
+        let color2 = crate::sequence::resolve_color(raw2);
+        if let Some(gradient) = self.gradients.iter().find(|gradient| {
+            gradient.color1 == color1 && gradient.color2 == color2 && gradient.policy == policy
+        }) {
+            return Some(gradient.id.clone());
+        }
+
+        let id =
+            crate::filter_registry::gradient_id_for_prefix(&self.seed_prefix, self.gradients.len());
+        let (x1, x2, y1, y2) = gradient_endpoints(policy);
+        write!(
+            self.defs,
+            r#"<linearGradient id="{id}" x1="{x1}" x2="{x2}" y1="{y1}" y2="{y2}"><stop offset="0%" stop-color="{color1}"/><stop offset="100%" stop-color="{color2}"/></linearGradient>"#,
+        )
+        .unwrap();
+        self.gradients.push(ActivityGradient {
+            color1,
+            color2,
+            policy,
+            id: id.clone(),
+        });
+        Some(id)
+    }
+
+    fn ensure_shadow(&mut self) -> String {
+        if let Some(id) = &self.shadow_id {
+            return id.clone();
+        }
+        let id = crate::filter_registry::shadow_id_for_prefix(&self.seed_prefix);
+        self.defs.push_str(
+            &crate::filter_registry::shadow_filter_def_before_document_scale(&id, self.svg_scale),
+        );
+        self.shadow_id = Some(id.clone());
+        id
+    }
+}
+
+struct ActivityPaintProperties<'a> {
+    action: Option<&'a str>,
+    diamond: Option<&'a str>,
+    shadowing: bool,
+}
+
+fn activity_paint_properties(diagram: &ActivityDiagram) -> ActivityPaintProperties<'_> {
+    let mut action = None;
+    let mut diamond = None;
+    let mut shadowing = false;
+    for skinparam in &diagram.meta.skinparams {
+        let value = skinparam.value.trim();
+        match skinparam.key.to_ascii_lowercase().as_str() {
+            "activitybackgroundcolor" => {
+                action = Some(value);
+                diamond = Some(value);
+            }
+            "activitydiamondbackgroundcolor" => diamond = Some(value),
+            "shadowing" | "activityshadowing" => shadowing = value.eq_ignore_ascii_case("true"),
+            _ => {}
+        }
+    }
+    ActivityPaintProperties {
+        action,
+        diamond,
+        shadowing,
+    }
+}
+
+struct ActivityDefs {
+    xml: String,
+    action_gradient_id: Option<String>,
+    diamond_gradient_id: Option<String>,
+    shadow_id: Option<String>,
+}
+
+fn activity_defs_in_paint_order(diagram: &ActivityDiagram) -> ActivityDefs {
+    let properties = activity_paint_properties(diagram);
+    let mut registry = ActivityDefRegistry::new(diagram);
+    let mut action_gradient_id = None;
+    let mut diamond_gradient_id = None;
+
+    // Java's SVG drivers create a gradient while applying a shape's fill,
+    // then `SvgGraphics.manageShadow` creates the shared filter when that
+    // shape is painted. Walking source-order activity shapes mirrors the FTile
+    // emitter order for these resources and naturally omits unused paints.
+    for step in &diagram.steps {
+        match step {
+            ActivityStep::Start | ActivityStep::Stop | ActivityStep::End => {
+                if properties.shadowing {
+                    registry.ensure_shadow();
+                }
+            }
+            ActivityStep::Action(_)
+            | ActivityStep::DeprecatedColorAction(_)
+            | ActivityStep::Backward(_)
+            | ActivityStep::RepeatStart(_) => {
+                action_gradient_id = registry
+                    .ensure_gradient(properties.action)
+                    .or(action_gradient_id);
+                if properties.shadowing {
+                    registry.ensure_shadow();
+                }
+            }
+            ActivityStep::If(_)
+            | ActivityStep::ElseIf(_)
+            | ActivityStep::Switch(_)
+            | ActivityStep::Case(_)
+            | ActivityStep::While(_)
+            | ActivityStep::RepeatWhile(_) => {
+                diamond_gradient_id = registry
+                    .ensure_gradient(properties.diamond)
+                    .or(diamond_gradient_id);
+                if properties.shadowing {
+                    registry.ensure_shadow();
+                }
+            }
+            _ => {}
+        }
+    }
+
+    ActivityDefs {
+        xml: registry.defs,
+        action_gradient_id,
+        diamond_gradient_id,
+        shadow_id: registry.shadow_id,
+    }
 }
 
 fn parse_gradient_ids(defs: &str) -> Vec<String> {
@@ -542,7 +728,7 @@ fn gradient_fill_or(val: &str, gradient_id: &Option<String>) -> String {
         && let Some(id) = gradient_id
     {
         format!("url(#{id})")
-    } else if let Some((first, _)) = split_gradient_colors(val) {
+    } else if let Some((first, _, _)) = split_gradient_colors(val) {
         crate::sequence::resolve_color(first)
     } else {
         crate::sequence::resolve_color(val)
@@ -37279,11 +37465,20 @@ fn ftile_title_chrome_supported(diagram: &ActivityDiagram) -> bool {
 }
 
 fn format_ftile_render(
-    body: FtileRender,
+    mut body: FtileRender,
     diagram: &ActivityDiagram,
     palette: &Palette,
     defs: &str,
 ) -> String {
+    if palette.shadow_filter.is_some() {
+        // Java provenance: `LimitFinder.drawRectangle`/`drawEllipse` add
+        // `2 * shape.getDeltaShadow()` to the trailing bounds. Activity
+        // styles resolve shadowing to 3, so a painted shadow extends both
+        // FTile canvas axes by six units without moving the content.
+        body.width += SHADOW_BOUNDS_PAD as u32;
+        body.height += SHADOW_BOUNDS_PAD as u32;
+    }
+
     let Some(title) = diagram.meta.title.as_deref() else {
         return format_svg(
             body.width,
@@ -37588,26 +37783,16 @@ fn node_contains_action(node: &LayoutNode) -> bool {
 }
 
 pub fn render(diagram: &ActivityDiagram, theme: &Theme) -> String {
-    let shadowing = diagram
-        .meta
-        .skinparams
-        .iter()
-        .fold(false, |enabled, skinparam| {
-            let key = skinparam.key.to_ascii_lowercase();
-            if matches!(key.as_str(), "shadowing" | "activityshadowing") {
-                skinparam.value.eq_ignore_ascii_case("true")
-            } else {
-                enabled
-            }
-        });
-    if shadowing {
-        let source = diagram.meta.source.as_deref().unwrap_or("");
-        let filter_id = crate::filter_registry::shadow_id_for(source);
-        let defs = crate::filter_registry::shadow_filter_def(&filter_id);
-        render_inner(diagram, theme, &defs, None, None, Some(filter_id), None)
-    } else {
-        render_inner(diagram, theme, "", None, None, None, None)
-    }
+    let defs = activity_defs_in_paint_order(diagram);
+    render_inner(
+        diagram,
+        theme,
+        &defs.xml,
+        defs.action_gradient_id,
+        defs.diamond_gradient_id,
+        defs.shadow_id,
+        None,
+    )
 }
 
 fn render_inner(
@@ -39475,6 +39660,156 @@ mod tests {
         )));
         assert!(svg.contains(&format!(r#"filter="url(#{filter_id})""#)));
         assert!(svg.contains("Fresh shadow action"));
+    }
+
+    #[test]
+    fn ftile_shadow_envelope_scales_with_dpi() {
+        fn root_px(svg: &str, attribute: &str) -> f64 {
+            let root = &svg[..svg.find('>').expect("SVG root closes")];
+            let marker = format!(r#"{attribute}=""#);
+            let value = root
+                .split_once(&marker)
+                .and_then(|(_, rest)| rest.split_once('"'))
+                .map(|(value, _)| value.trim_end_matches("px"))
+                .expect("root attribute");
+            value.parse().expect("numeric root attribute")
+        }
+
+        let plain = rustuml_parser::parse::parse(concat!(
+            "@startuml\n",
+            "skinparam dpi 100\n",
+            "start\n",
+            ":Measure renamed parcel;\n",
+            ":Archive renamed parcel;\n",
+            "stop\n",
+            "@enduml\n",
+        ))
+        .unwrap();
+        let shadowed = rustuml_parser::parse::parse(concat!(
+            "@startuml\n",
+            "skinparam dpi 100\n",
+            "skinparam shadowing true\n",
+            "start\n",
+            ":Measure renamed parcel;\n",
+            ":Archive renamed parcel;\n",
+            "stop\n",
+            "@enduml\n",
+        ))
+        .unwrap();
+        let plain_svg = crate::render_svg(&plain);
+        let shadowed_svg = crate::render_svg(&shadowed);
+
+        assert_eq!(
+            root_px(&shadowed_svg, "width") - root_px(&plain_svg, "width"),
+            6.25
+        );
+        assert_eq!(
+            root_px(&shadowed_svg, "height") - root_px(&plain_svg, "height"),
+            6.25
+        );
+    }
+
+    #[test]
+    fn explicit_activity_defs_are_lazy_seeded_and_paint_ordered() {
+        let input = concat!(
+            "@startuml\n",
+            "skinparam dpi 125\n",
+            "skinparam shadowing true\n",
+            "skinparam activityBackgroundColor #123456|#ABCDEF\n",
+            "skinparam activityDiamondBackgroundColor #FEDCBA\\#654321\n",
+            "start\n",
+            ":Receive renamed manifest;\n",
+            "if (fresh route?) then (primary)\n",
+            "  :Inspect primary lane;\n",
+            "elseif (alternate route?) then (alternate)\n",
+            "  if (deeper check?) then (pass)\n",
+            "    :Inspect deeper lane;\n",
+            "  else (hold)\n",
+            "    :Hold deeper lane;\n",
+            "  endif\n",
+            "else (fallback)\n",
+            "  :Record fallback lane;\n",
+            "endif\n",
+            "stop\n",
+            "@enduml\n",
+        );
+        let parsed = rustuml_parser::parse::parse(input).expect("fresh themed activity parses");
+        let rustuml_parser::diagram::Diagram::Activity(activity) = &parsed else {
+            panic!("activity diagram");
+        };
+        assert!(
+            !activity
+                .meta
+                .skinparams
+                .iter()
+                .any(|skinparam| skinparam.key.eq_ignore_ascii_case("__svgidseed"))
+        );
+        let seed = crate::filter_registry::id_seed_prefix_for_source(input);
+        let filter_id = crate::filter_registry::shadow_id_for_prefix(&seed);
+        let action_gradient = crate::filter_registry::gradient_id_for_prefix(&seed, 0);
+        let diamond_gradient = crate::filter_registry::gradient_id_for_prefix(&seed, 1);
+        let svg = crate::render_svg(&parsed);
+
+        let filter_pos = svg
+            .find(&format!(r#"<filter height="300%" id="{filter_id}""#))
+            .expect("painted start creates the filter");
+        let action_pos = svg
+            .find(&format!(r#"<linearGradient id="{action_gradient}""#))
+            .expect("painted action creates its gradient");
+        let diamond_pos = svg
+            .find(&format!(r#"<linearGradient id="{diamond_gradient}""#))
+            .expect("painted branch creates its gradient");
+        assert!(filter_pos < action_pos && action_pos < diamond_pos);
+        assert_eq!(svg.matches("<filter ").count(), 1);
+        assert_eq!(svg.matches("<linearGradient ").count(), 2);
+        assert!(svg.contains(r#"x="-1" y="-1""#));
+        let blur = crate::filter_registry::format_svg_number(2.0 * 125.0 / 96.0);
+        let offset = crate::filter_registry::format_svg_number(4.0 * 125.0 / 96.0);
+        assert!(svg.contains(&format!(r#"stdDeviation="{blur}""#)));
+        assert!(svg.contains(&format!(r#"dx="{offset}" dy="{offset}""#)));
+        assert!(svg.contains(r#"x1="0%" x2="100%" y1="50%" y2="50%""#));
+        assert!(svg.contains(r#"x1="0%" x2="100%" y1="100%" y2="0%""#));
+    }
+
+    #[test]
+    fn theme_expanded_seed_drives_fresh_deep_activity_gradient() {
+        let input = concat!(
+            "@startuml\n",
+            "!theme aws-orange\n",
+            "start\n",
+            ":Receive renamed manifest;\n",
+            "if (fresh route?) then (primary)\n",
+            "  :Inspect primary lane;\n",
+            "elseif (alternate route?) then (alternate)\n",
+            "  if (deeper check?) then (pass)\n",
+            "    :Inspect deeper lane;\n",
+            "  else (hold)\n",
+            "    :Hold deeper lane;\n",
+            "  endif\n",
+            "else (fallback)\n",
+            "  :Record fallback lane;\n",
+            "endif\n",
+            "stop\n",
+            "@enduml\n",
+        );
+        let parsed = rustuml_parser::parse::parse(input).expect("fresh themed activity parses");
+        let rustuml_parser::diagram::Diagram::Activity(activity) = &parsed else {
+            panic!("activity diagram");
+        };
+        let seed = activity
+            .meta
+            .skinparams
+            .iter()
+            .rev()
+            .find(|skinparam| skinparam.key.eq_ignore_ascii_case("__svgidseed"))
+            .map(|skinparam| skinparam.value.as_str())
+            .expect("theme-expanded source seed");
+        let gradient_id = crate::filter_registry::gradient_id_for_prefix(seed, 0);
+        let svg = crate::render_svg(&parsed);
+
+        assert!(svg.contains(&format!(r#"<linearGradient id="{gradient_id}""#)));
+        assert!(svg.contains(&format!(r#"fill="url(#{gradient_id})""#)));
+        assert!(!svg.contains("<filter "));
     }
 
     #[test]

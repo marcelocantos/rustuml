@@ -106,7 +106,17 @@ pub fn with_registry<R>(source: &str, body: impl FnOnce() -> R) -> (R, FilterReg
 /// base36(abs(seed))`, mirroring `SvgGraphics.shadowId`. Shares the same
 /// seed as the `b`-prefixed back-colour filter ids.
 pub fn shadow_id_for(source: &str) -> String {
-    format!("f{}", abs_base36(plantuml_seed(source)))
+    shadow_id_for_prefix(&id_seed_prefix_for_source(source))
+}
+
+/// Compute the base-36 prefix shared by SVG filters and gradients.
+pub fn id_seed_prefix_for_source(source: &str) -> String {
+    abs_base36(plantuml_seed(source))
+}
+
+/// Derive a shadow id from an already-computed `SvgGraphics.getSeed` prefix.
+pub fn shadow_id_for_prefix(seed_prefix: &str) -> String {
+    format!("f{seed_prefix}")
 }
 
 /// Derive the id for the `index`th unique SVG gradient in paint order.
@@ -115,7 +125,12 @@ pub fn shadow_id_for(source: &str) -> String {
 /// `"g" + getSeed(seed)`, and `createSvgGradient` appends
 /// `gradients.size()` when it first sees a unique color/policy tuple.
 pub fn gradient_id_for(source: &str, index: usize) -> String {
-    format!("g{}{index}", abs_base36(plantuml_seed(source)))
+    gradient_id_for_prefix(&id_seed_prefix_for_source(source), index)
+}
+
+/// Derive a gradient id from an already-computed `SvgGraphics.getSeed` prefix.
+pub fn gradient_id_for_prefix(seed_prefix: &str, index: usize) -> String {
+    format!("g{seed_prefix}{index}")
 }
 
 /// Emit PlantUML's SVG drop-shadow filter body for `shadow_id`.
@@ -124,9 +139,50 @@ pub fn gradient_id_for(source: &str, index: usize) -> String {
 /// `SvgGraphics.createXmlDocument`, using the fixed blur, color-matrix,
 /// offset, and blend pipeline that backs shapes with `deltaShadow > 0`.
 pub fn shadow_filter_def(shadow_id: &str) -> String {
+    shadow_filter_def_scaled(shadow_id, 1.0)
+}
+
+/// Emit the drop-shadow filter using the same SVG scale as shape coordinates.
+///
+/// Java provenance: `SvgGraphics.manageShadow` keeps the filter region at
+/// literal `-1` and passes only blur `2` and offset `4` through
+/// `SvgGraphics.format`, which multiplies by `SvgOption.getScale()`.
+pub fn shadow_filter_def_scaled(shadow_id: &str, scale: f64) -> String {
+    shadow_filter_def_with_region(shadow_id, scale, "-1")
+}
+
+/// Encode a Java-scaled shadow def before Rust's finished-SVG scale pass.
+///
+/// The final pass scales geometric `x`/`y` attributes but does not scale SVG
+/// filter primitives. Pre-dividing the literal filter region preserves
+/// `SvgGraphics.manageShadow`'s `-1`, while blur and offset are emitted at
+/// their final `SvgOption` scale.
+pub fn shadow_filter_def_before_document_scale(shadow_id: &str, scale: f64) -> String {
+    let region = format_svg_number(-1.0 / scale);
+    shadow_filter_def_with_region(shadow_id, scale, &region)
+}
+
+fn shadow_filter_def_with_region(shadow_id: &str, scale: f64, region: &str) -> String {
+    let blur = format_svg_number(2.0 * scale);
+    let offset = format_svg_number(4.0 * scale);
     format!(
-        r#"<filter height="300%" id="{shadow_id}" width="300%" x="-1" y="-1"><feGaussianBlur result="blurOut" stdDeviation="2"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="4" dy="4" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter>"#
+        r#"<filter height="300%" id="{shadow_id}" width="300%" x="{region}" y="{region}"><feGaussianBlur result="blurOut" stdDeviation="{blur}"/><feColorMatrix in="blurOut" result="blurOut2" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .4 0"/><feOffset dx="{offset}" dy="{offset}" in="blurOut2" result="blurOut3"/><feBlend in="SourceGraphic" in2="blurOut3" mode="normal"/></filter>"#
     )
+}
+
+pub(crate) fn format_svg_number(value: f64) -> String {
+    let mut formatted = format!("{value:.4}");
+    while formatted.ends_with('0') {
+        formatted.pop();
+    }
+    if formatted.ends_with('.') {
+        formatted.pop();
+    }
+    if formatted == "-0" {
+        "0".to_string()
+    } else {
+        formatted
+    }
 }
 
 /// Look up an id from the current registry, if any. Used by the text-
@@ -242,6 +298,21 @@ mod tests {
         let src = "@startuml\nstate Copper #red/blue\n@enduml\n";
         assert_eq!(gradient_id_for(src, 0), "gdxt0vbudmxt10");
         assert_eq!(gradient_id_for(src, 3), "gdxt0vbudmxt13");
+    }
+
+    #[test]
+    fn prefixed_ids_and_dpi_scaled_shadow_match_svg_graphics_contract() {
+        assert_eq!(shadow_id_for_prefix("freshseed"), "ffreshseed");
+        assert_eq!(gradient_id_for_prefix("freshseed", 2), "gfreshseed2");
+        let defs = shadow_filter_def_scaled("ffreshseed", 100.0 / 96.0);
+        assert!(defs.contains(r#"x="-1" y="-1""#));
+        let blur = format_svg_number(2.0 * 100.0 / 96.0);
+        let offset = format_svg_number(4.0 * 100.0 / 96.0);
+        assert!(defs.contains(&format!(r#"stdDeviation="{blur}""#)));
+        assert!(defs.contains(&format!(r#"dx="{offset}" dy="{offset}""#)));
+        let pre_scaled = shadow_filter_def_before_document_scale("ffreshseed", 100.0 / 96.0);
+        assert!(pre_scaled.contains(r#"x="-0.96" y="-0.96""#));
+        assert!(pre_scaled.contains(&format!(r#"stdDeviation="{blur}""#)));
     }
 
     #[test]

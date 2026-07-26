@@ -88,6 +88,12 @@ fn preprocess_full_inner(
     let mut ctx = PreprocessContext::new(base_dir, mark_function_body_source_lines);
     ctx.preserve_teoz_pragma = preserve_teoz_pragma;
     let mut lines = ctx.process(input);
+    if let Some(seed_source) = expanded_theme_seed_source(input, &ctx.theme_seed_expansions) {
+        ctx.theme_tail.push(format!(
+            "skinparam __svgIdSeed {}",
+            svg_id_seed_prefix(&seed_source)
+        ));
+    }
     // Append any accumulated theme expansion to the end of the diagram so
     // user-source line numbers are preserved (see `theme_tail`).
     if !ctx.theme_tail.is_empty() {
@@ -106,6 +112,77 @@ fn preprocess_full_inner(
         lines,
         sprites: ctx.sprites,
     }
+}
+
+fn expanded_theme_seed_source(input: &str, expansions: &[ThemeSeedExpansion]) -> Option<String> {
+    if expansions.is_empty() {
+        return None;
+    }
+
+    // Java provenance: `PSystemBuilder.createPSystem` builds `UmlSource` from
+    // the preprocessor output, and `UmlSource.seed` hashes
+    // `getPlainString("\n")`. Theme includes occupy the original `!theme`
+    // position in that source; parser-oriented flattening and `theme_tail`
+    // relocation happen only after this representation is captured.
+    let mut source = String::new();
+    let mut in_block = false;
+    for (index, line) in input.lines().enumerate() {
+        let source_line = index + 1;
+        let trimmed = line.trim_start();
+        if !in_block {
+            if !trimmed.starts_with("@start") {
+                continue;
+            }
+            in_block = true;
+        }
+
+        if let Some(expansion) = expansions
+            .iter()
+            .find(|expansion| expansion.source_line == source_line)
+        {
+            for expanded in &expansion.lines {
+                let expanded =
+                    split_source_line_marker(expanded).map_or(expanded.as_str(), |(_, text)| text);
+                source.push_str(expanded);
+                source.push('\n');
+            }
+        } else {
+            source.push_str(line);
+            source.push('\n');
+        }
+
+        if trimmed.starts_with("@end") {
+            break;
+        }
+    }
+    Some(source)
+}
+
+fn svg_id_seed_prefix(source: &str) -> String {
+    // Java provenance: `StringUtils.seed` is a wrapping signed-long 31x hash
+    // over UTF-16 code units; `SvgGraphics.getSeed` formats its absolute value
+    // in radix 36.
+    let mut hash: u64 = 1_125_899_906_842_597;
+    for unit in source.encode_utf16() {
+        hash = hash.wrapping_mul(31).wrapping_add(u64::from(unit));
+    }
+    let signed = hash as i64;
+    let mut value = if signed == i64::MIN {
+        i64::MAX as u64 + 1
+    } else {
+        signed.unsigned_abs()
+    };
+    if value == 0 {
+        return "0".to_string();
+    }
+    let digits = b"0123456789abcdefghijklmnopqrstuvwxyz";
+    let mut result = Vec::new();
+    while value > 0 {
+        result.push(digits[(value % 36) as usize]);
+        value /= 36;
+    }
+    result.reverse();
+    String::from_utf8(result).expect("base36 digits are ASCII")
 }
 
 /// Preprocess with a base directory, returning full output including sprites.
@@ -369,6 +446,9 @@ struct PreprocessContext {
     sub_blocks: Vec<SubBlock>,
     collecting_sub: Option<String>,
     collecting_sub_lines: Vec<String>,
+    /// Seed-only pass: consume `!startsub` markers while processing their
+    /// bodies in place, matching PlantUML's theme include source.
+    expand_subs_inline: bool,
     /// Local variable scopes for function calls (stack of saved scopes).
     local_vars: Vec<HashMap<String, String>>,
     /// Pending return value from a `!return` inside a function body.
@@ -391,6 +471,13 @@ struct PreprocessContext {
     /// output — skinparams are position-insensitive so this is semantically
     /// equivalent to in-place expansion for everything we currently render.
     theme_tail: Vec<String>,
+    /// Unflattened theme expansions keyed by their top-level source line.
+    ///
+    /// PlantUML seeds SVG resource IDs from `UmlSource.source`, after TIM has
+    /// expanded `!theme` in place but before grouped skinparams are flattened
+    /// for individual diagram parsers. Keep only this transient representation;
+    /// the resulting seed prefix is carried as parser metadata.
+    theme_seed_expansions: Vec<ThemeSeedExpansion>,
     /// Once loop expansion produces generated content, subsequent original
     /// lines need explicit source-origin markers because output position no
     /// longer equals PlantUML's `data-source-line`.
@@ -398,6 +485,11 @@ struct PreprocessContext {
     source_line_override: Option<usize>,
     mark_function_body_source_lines: bool,
     preserve_teoz_pragma: bool,
+}
+
+struct ThemeSeedExpansion {
+    source_line: usize,
+    lines: Vec<String>,
 }
 
 const MAX_INCLUDE_DEPTH: usize = 10;
@@ -475,11 +567,13 @@ impl PreprocessContext {
             sub_blocks: Vec::new(),
             collecting_sub: None,
             collecting_sub_lines: Vec::new(),
+            expand_subs_inline: false,
             local_vars: Vec::new(),
             return_signal: None,
             current_source_line: 0,
             render_clock: RenderClock::from_env(),
             theme_tail: Vec::new(),
+            theme_seed_expansions: Vec::new(),
             mark_source_lines: false,
             source_line_override: None,
             mark_function_body_source_lines,
@@ -638,14 +732,14 @@ impl PreprocessContext {
             if trimmed.contains("'/") {
                 self.in_block_comment = false;
             }
-            output.push(String::new());
+            self.push_directive_placeholder(output);
             return;
         }
         if trimmed.starts_with("/'") {
             if !trimmed.contains("'/") || trimmed.ends_with("/'") {
                 self.in_block_comment = true;
             }
-            output.push(String::new());
+            self.push_directive_placeholder(output);
             return;
         }
 
@@ -653,7 +747,7 @@ impl PreprocessContext {
         // single quotes delimit terminals. Emit a placeholder so source
         // line numbers stay aligned downstream.
         if !self.in_ebnf_block && trimmed.starts_with('\'') {
-            output.push(String::new());
+            self.push_directive_placeholder(output);
             return;
         }
 
@@ -738,7 +832,7 @@ impl PreprocessContext {
         }
 
         // Collecting sub.
-        if self.collecting_sub.is_some() {
+        if !self.expand_subs_inline && self.collecting_sub.is_some() {
             if trimmed == "!endsub" {
                 if self.collecting_sub.take().is_some() {
                     self.sub_blocks.push(SubBlock {
@@ -755,7 +849,7 @@ impl PreprocessContext {
         }
 
         // Function definition collection.
-        if self.try_function_def(trimmed) {
+        if self.try_function_def(&line_no_comment) {
             self.push_directive_placeholder(output);
             return;
         }
@@ -778,8 +872,10 @@ impl PreprocessContext {
 
         // Startsub.
         if let Some(name) = trimmed.strip_prefix("!startsub ") {
-            self.collecting_sub = Some(name.trim().to_string());
-            self.collecting_sub_lines.clear();
+            if !self.expand_subs_inline {
+                self.collecting_sub = Some(name.trim().to_string());
+                self.collecting_sub_lines.clear();
+            }
             self.push_directive_placeholder(output);
             return;
         }
@@ -881,7 +977,7 @@ impl PreprocessContext {
         }
 
         // Function/procedure invocation as standalone line.
-        if self.try_function_call(trimmed, output) {
+        if self.try_function_call(&line_no_comment, output) {
             return;
         }
 
@@ -959,6 +1055,8 @@ impl PreprocessContext {
             LazyLock::new(|| Regex::new(r"^!define\s+(\w+)(?:\s+(.+))?$").unwrap());
         static RE_VAR: LazyLock<Regex> =
             LazyLock::new(|| Regex::new(r"^!\$(\w+)\s*=\s*(.+)$").unwrap());
+        static RE_LEGACY_VAR: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"^!(\w+)\s*=\s*(.+)$").unwrap());
 
         // !define with args: !define MACRO(a,b) body
         static RE_DEFINE_ARGS: LazyLock<Regex> =
@@ -1000,6 +1098,13 @@ impl PreprocessContext {
                 let raw_value = caps[2].trim();
                 let value = self.eval_expr_to_value(raw_value);
                 self.set_var(&name, &value.to_display());
+            }
+            return true;
+        }
+        if let Some(caps) = RE_LEGACY_VAR.captures(line) {
+            if self.is_active() {
+                self.token_defines
+                    .insert(caps[1].to_string(), caps[2].trim().to_string());
             }
             return true;
         }
@@ -1131,9 +1236,10 @@ impl PreprocessContext {
     }
 
     fn try_function_def(&mut self, line: &str) -> bool {
+        let trimmed = line.trim();
         // Currently collecting a function body?
         if let Some(func_name) = &self.collecting_function.clone() {
-            if line == "!endfunction" || line == "!endprocedure" {
+            if trimmed == "!endfunction" || trimmed == "!endprocedure" {
                 self.collecting_function = None;
             } else {
                 let raw_source_line = self.current_source_line;
@@ -1150,13 +1256,35 @@ impl PreprocessContext {
             return true;
         }
 
+        // TIM also accepts a complete unquoted function on one line:
+        // `!unquoted function $name($arg) !return expression`.
+        static INLINE_RETURN_RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(r"^!(?:unquoted\s+)?function\s+\$?(\w+)\s*\(([^)]*)\)\s+!return\s+(.+)$")
+                .unwrap()
+        });
+        if let Some(caps) = INLINE_RETURN_RE.captures(trimmed) {
+            let name = caps[1].to_string();
+            self.functions.insert(
+                name,
+                FunctionDef {
+                    params: parse_func_params(&caps[2]),
+                    body: vec![BufferedLine {
+                        text: format!("!return {}", &caps[3]),
+                        raw_source_line: self.current_source_line,
+                        source_line: self.current_diagram_source_line(),
+                    }],
+                },
+            );
+            return true;
+        }
+
         // !function $name($param1, $param2 = "default")
         // !procedure name() is also accepted by PlantUML themes.
         static RE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(r"^!(?:function|procedure)\s+\$?(\w+)\s*\(([^)]*)\)$").unwrap()
         });
 
-        if let Some(caps) = RE.captures(line) {
+        if let Some(caps) = RE.captures(trimmed) {
             let name = caps[1].to_string();
             let params = parse_func_params(&caps[2]);
 
@@ -1244,7 +1372,8 @@ impl PreprocessContext {
         static RE: LazyLock<Regex> =
             LazyLock::new(|| Regex::new(r"^\$?(\w+)\s*\(([^)]*)\)$").unwrap());
 
-        if let Some(caps) = RE.captures(line) {
+        let trimmed = line.trim();
+        if let Some(caps) = RE.captures(trimmed) {
             let name = caps[1].to_string();
             let args_str = &caps[2];
 
@@ -1257,7 +1386,23 @@ impl PreprocessContext {
             }
 
             let args = parse_call_args(args_str);
-            let (ret, lines) = self.call_function(&name, &args);
+            let (ret, mut lines) = self.call_function(&name, &args);
+            let indent = &line[..line.len() - line.trim_start().len()];
+            if !indent.is_empty()
+                && let Some(generated) = lines.first_mut()
+            {
+                if let Some((source_line, text)) = split_source_line_marker(generated) {
+                    *generated = source_line_marker(source_line, &format!("{indent}{text}"));
+                } else {
+                    generated.insert_str(0, indent);
+                }
+            }
+            let trailing = &line[line.trim_end().len()..];
+            if !trailing.is_empty()
+                && let Some(generated) = lines.last_mut()
+            {
+                generated.push_str(trailing);
+            }
             let returned_value = ret.is_some();
             if lines.is_empty() {
                 // If the function produced no output lines but returned a value,
@@ -1300,7 +1445,8 @@ impl PreprocessContext {
 
     /// Expand inline `$func(args)` calls within a content line (output line).
     /// This allows function return values to appear inline in notes and messages.
-    /// Only user-defined functions (not procedures) that return a value are expanded.
+    /// Procedures expand to their output lines, matching TIM's textual
+    /// replacement when a procedure call appears after a property name.
     fn expand_inline_func_calls_in_line(&mut self, line: &str) -> String {
         static INLINE_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"\$(\w+)\(").unwrap());
 
@@ -1330,8 +1476,12 @@ impl PreprocessContext {
                 break;
             };
             let args_str = result[after_open..close].to_string();
-            let ret_val = self.eval_function_call(func_name, &args_str);
-            let replacement = ret_val.to_display();
+            let args = parse_call_args(&args_str);
+            let (return_value, output_lines) = self.call_function(func_name, &args);
+            let replacement = return_value.map_or_else(
+                || output_lines.join("\n"),
+                |return_value| return_value.to_display(),
+            );
             result = format!("{}{replacement}{}", &result[..start], &result[close + 1..]);
         }
 
@@ -1576,6 +1726,8 @@ impl PreprocessContext {
     /// (see the `theme_tail` doc comment for the rationale).
     fn try_theme(&mut self, line: &str) -> Option<Vec<String>> {
         let rest = line.strip_prefix("!theme ")?;
+        let source_line = self.current_source_line;
+        let top_level = self.include_depth == 0;
         let mut name_part = rest.trim();
         // `!theme NAME from URL` — strip the `from URL` portion. We always
         // resolve from the embedded bundle regardless of the URL.
@@ -1625,6 +1777,17 @@ impl PreprocessContext {
                     self.include_depth -= 1;
                     self.theme_tail
                         .extend(themes::flatten_theme_output(&expanded));
+                }
+                if top_level {
+                    self.expand_subs_inline = true;
+                    self.include_depth += 1;
+                    let seed_expansion = self.process(body);
+                    self.include_depth -= 1;
+                    self.expand_subs_inline = false;
+                    self.theme_seed_expansions.push(ThemeSeedExpansion {
+                        source_line,
+                        lines: seed_expansion,
+                    });
                 }
                 self.mark_function_body_source_lines = saved_mark_function_body_source_lines;
             }
@@ -3985,6 +4148,51 @@ $record(SaffronArchive)\n\
         assert!(lines.contains(&"skinparam activityStartColor #0073bb".to_string()));
         assert!(lines.contains(&"skinparam arrowThickness 3".to_string()));
         assert!(lines.contains(&"skinparam sequenceArrowThickness 3".to_string()));
+    }
+
+    #[test]
+    fn theme_preserves_java_svg_seed_for_fresh_three_branch_activity() {
+        let input = concat!(
+            "@startuml\n",
+            "!theme aws-orange\n",
+            "start\n",
+            ":Receive renamed parcel;\n",
+            "if (fresh route?) then (primary)\n",
+            "  :Validate primary lane;\n",
+            "elseif (secondary route?) then (secondary)\n",
+            "  :Validate secondary lane;\n",
+            "else (fallback)\n",
+            "  :Record fallback lane;\n",
+            "endif\n",
+            "stop\n",
+            "@enduml\n",
+        );
+        let output = preprocess_full_for_parse(input, None);
+        let seed_line = output
+            .lines
+            .iter()
+            .find(|line| line.starts_with("skinparam __svgIdSeed "));
+        assert!(
+            seed_line.is_some_and(|line| line == "skinparam __svgIdSeed 1unuin6l8h5nq"),
+            "SVG IDs use StringUtils.seed over the unflattened in-place theme expansion: {seed_line:?}"
+        );
+    }
+
+    #[test]
+    fn one_line_unquoted_function_expands_in_theme_style_content() {
+        let output = preprocess(
+            "@startuml\n\
+             !unquoted function $join($left, $right) !return $left + $right\n\
+             skinparam activityBackgroundColor $join(#123456, |#ABCDEF)\n\
+             start\n\
+             :Renamed action;\n\
+             @enduml",
+        );
+        assert!(
+            output
+                .iter()
+                .any(|line| line == "skinparam activityBackgroundColor #123456|#ABCDEF")
+        );
     }
 
     #[test]
