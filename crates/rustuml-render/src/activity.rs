@@ -29725,14 +29725,18 @@ fn typed_ftile_node<'a>(
                     )
                 };
 
-            // ConditionalBuilder's direct path keeps 10px below the test
-            // diamond. ConnectionVerticalDown's translated swimlane path
-            // retains another 10px before whole-diagram compression.
-            let branch_separation = if spacing == TypedFtileSpacing::SingleLane {
-                10.0
-            } else {
-                20.0
-            };
+            // Java `FtileIfWithDiamonds.getYdelta1a` selects 20px only when
+            // this conditional's own tile tree spans multiple swimlanes. A
+            // same-lane conditional remains at 10px even when siblings make
+            // the overall diagram multi-lane.
+            let conditional_spans_lanes = typed_ftile_scene_uses_other_lane(&then_scene, lane)
+                || typed_ftile_scene_uses_other_lane(&else_scene, lane);
+            let branch_separation =
+                if spacing == TypedFtileSpacing::SingleLane || !conditional_spans_lanes {
+                    10.0
+                } else {
+                    20.0
+                };
             let conditional_margin = branch_separation + 10.0;
             let unnoted_geometry = ftile::if_with_diamonds(
                 &diamond,
@@ -31085,6 +31089,86 @@ fn typed_ftile_scene_uses_lane(scene: &TypedFtileScene<'_>, lane: usize) -> bool
                 || cases
                     .iter()
                     .any(|case| typed_ftile_scene_uses_lane(&case.scene, lane))
+        }
+    }
+}
+
+fn typed_ftile_scene_uses_other_lane(scene: &TypedFtileScene<'_>, lane: usize) -> bool {
+    match &scene.kind {
+        TypedFtileKind::Leaf {
+            lane: scene_lane, ..
+        } => *scene_lane != lane,
+        TypedFtileKind::WithNote { child, .. } => {
+            typed_ftile_scene_uses_other_lane(&child.scene, lane)
+        }
+        TypedFtileKind::Sequence { children } => children
+            .iter()
+            .any(|child| typed_ftile_scene_uses_other_lane(&child.scene, lane)),
+        TypedFtileKind::If {
+            lane: scene_lane,
+            then_scene,
+            else_scene,
+            ..
+        } => {
+            *scene_lane != lane
+                || typed_ftile_scene_uses_other_lane(&then_scene.scene, lane)
+                || typed_ftile_scene_uses_other_lane(&else_scene.scene, lane)
+        }
+        TypedFtileKind::IfDown {
+            lane: scene_lane,
+            survivor,
+            terminal,
+            ..
+        } => {
+            *scene_lane != lane
+                || typed_ftile_scene_uses_other_lane(&survivor.scene, lane)
+                || terminal.as_ref().is_some_and(|terminal| {
+                    typed_ftile_scene_uses_other_lane(&terminal.scene, lane)
+                })
+        }
+        TypedFtileKind::While {
+            lane: scene_lane,
+            body,
+            special,
+            ..
+        } => {
+            *scene_lane != lane
+                || typed_ftile_scene_uses_other_lane(&body.scene, lane)
+                || special
+                    .as_ref()
+                    .is_some_and(|special| typed_ftile_scene_uses_other_lane(&special.scene, lane))
+        }
+        TypedFtileKind::Repeat {
+            entry_lane,
+            condition_lane,
+            body,
+            ..
+        } => {
+            *entry_lane != lane
+                || *condition_lane != lane
+                || typed_ftile_scene_uses_other_lane(&body.scene, lane)
+        }
+        TypedFtileKind::Fork {
+            input_lane,
+            output_lane,
+            branches,
+            ..
+        } => {
+            *input_lane != lane
+                || *output_lane != lane
+                || branches
+                    .iter()
+                    .any(|branch| typed_ftile_scene_uses_other_lane(&branch.scene, lane))
+        }
+        TypedFtileKind::Switch {
+            lane: scene_lane,
+            cases,
+            ..
+        } => {
+            *scene_lane != lane
+                || cases
+                    .iter()
+                    .any(|case| typed_ftile_scene_uses_other_lane(&case.scene, lane))
         }
     }
 }
@@ -38468,6 +38552,64 @@ mod tests {
         assert!(svg.contains("Renamed T14 bridge"));
         assert!(svg.contains("Not in golden corpus"));
         assert!(svg.contains("data-diagram-type=\"ACTIVITY\""));
+    }
+
+    #[test]
+    fn conditional_branch_gap_depends_on_its_own_swimlanes() {
+        fn branch_gaps(source: &str) -> Vec<f64> {
+            let rustuml_parser::diagram::Diagram::Activity(diagram) =
+                rustuml_parser::parse::parse(source).unwrap()
+            else {
+                panic!("expected activity diagram");
+            };
+            let palette = Palette::default_puml();
+            let tree = build_tree(&diagram.steps, &palette);
+            let mut lane = 0;
+            let scene = typed_ftile_sequence(&tree, &mut lane).unwrap();
+            let TypedFtileKind::Sequence { children } = &scene.kind else {
+                panic!("expected root sequence");
+            };
+            children
+                .iter()
+                .filter_map(|child| {
+                    let TypedFtileKind::If {
+                        diamond,
+                        diamond_at,
+                        then_scene,
+                        ..
+                    } = &child.scene.kind
+                    else {
+                        return None;
+                    };
+                    Some(then_scene.y - diamond_at.1 - diamond.height)
+                })
+                .collect()
+        }
+
+        let source = concat!(
+            "@startuml\n",
+            "|Fresh Entry Lane|\n",
+            "start\n",
+            ":Prime renamed request;\n",
+            "|Fresh Review Lane|\n",
+            "if (Fresh routing?) then (accept)\n",
+            "  :Approve renamed request;\n",
+            "else (reject)\n",
+            "  |Fresh Escalation Lane|\n",
+            "  :Escalate renamed request;\n",
+            "endif\n",
+            "|Fresh Exit Lane|\n",
+            ":Archive renamed request;\n",
+            "if (Fresh archive check?) then (keep)\n",
+            "  :Keep renamed request;\n",
+            "else (discard)\n",
+            "  :Discard renamed request;\n",
+            "endif\n",
+            "stop\n",
+            "@enduml",
+        );
+
+        assert_eq!(branch_gaps(source), vec![20.0, 10.0]);
     }
 
     #[test]
