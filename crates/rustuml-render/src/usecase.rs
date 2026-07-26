@@ -72,6 +72,9 @@ const DEPENDENCY_ARROW_BACK: f64 = 9.0;
 const DEPENDENCY_ARROW_NOTCH: f64 = 5.0;
 const DEPENDENCY_ARROW_WING: f64 = 4.0;
 const DEPENDENCY_ARROW_PATH_GAP: f64 = 6.0;
+/// Java `LimitFinder.drawUPolygon` expands every polygon by ten pixels on
+/// either horizontal side while measuring the complete painted diagram.
+const LIMIT_FINDER_POLYGON_X_GUARD: f64 = 10.0;
 
 const NOTE_FILL: &str = "#FEFFDD";
 const NOTE_FOLD: f64 = 10.0;
@@ -1611,6 +1614,17 @@ fn layout_usecase_positions(
         .map(String::as_str)
         .zip(result.node_positions.iter())
         .collect();
+    let extension_polygon_min_x = diagram
+        .connections
+        .iter()
+        .filter(|connection| connection.extension)
+        .filter_map(|connection| {
+            let edge = result
+                .edge_paths
+                .iter()
+                .find(|edge| edge.from == connection.from && edge.to == connection.to)?;
+            extension_polygon_min_x(connection, edge)
+        });
     // Java provenance: `SvekResult.calculateDimension` asks
     // `TextBlockUtils.getMinMax` for the complete painted image before
     // `moveDelta(6 - minX, ...)`. Every actor image contributes its actual
@@ -1644,8 +1658,20 @@ fn layout_usecase_positions(
                 .iter()
                 .flat_map(|edge| edge.points.iter().map(|point| point.0)),
         )
+        .chain(extension_polygon_min_x)
         .fold(f64::INFINITY, f64::min);
-    let origin_x = if !result.cluster_positions.is_empty() && min_painted_x.is_finite() {
+    // Java `SvekResult.calculateDimension` normalizes the complete painted
+    // image after clusters, nodes, and `SvekEdge.drawU` have all contributed
+    // limits. Clusters already require that dynamic normalization. A hollow
+    // `ExtremityTriangle` is a `UPolygon`, so `LimitFinder.drawUPolygon` can
+    // likewise move an unclustered generalization's measured minimum outside
+    // the visible triangle.
+    let has_generalization = diagram
+        .connections
+        .iter()
+        .any(|connection| connection.extension);
+    let needs_painted_x_normalization = !result.cluster_positions.is_empty() || has_generalization;
+    let origin_x = if needs_painted_x_normalization && min_painted_x.is_finite() {
         base_origin_x - min_painted_x
     } else {
         base_origin_x
@@ -3496,6 +3522,34 @@ fn render_usecase_extremity(
     }
 }
 
+fn extension_polygon_min_x(connection: &UseCaseConnection, edge: &EdgePath) -> Option<f64> {
+    let points = quantized_svek_edge_points(edge);
+    if points.len() < 2 {
+        return None;
+    }
+    let mut min_x = f64::INFINITY;
+    if matches!(
+        connection_start_decoration(connection),
+        Some(UseCaseExtremity::Extension)
+    ) {
+        for (x, _) in extension_arrow_vertices(points[1], points[0]) {
+            min_x = min_x.min(x);
+        }
+    }
+    if matches!(
+        connection_end_decoration(connection),
+        Some(UseCaseExtremity::Extension)
+    ) {
+        let endpoint = points.len() - 1;
+        for (x, _) in extension_arrow_vertices(points[endpoint - 1], points[endpoint]) {
+            min_x = min_x.min(x);
+        }
+    }
+    min_x
+        .is_finite()
+        .then_some(min_x - LIMIT_FINDER_POLYGON_X_GUARD)
+}
+
 fn dependency_arrow_points(control: (f64, f64), endpoint: (f64, f64)) -> String {
     let dx = endpoint.0 - control.0;
     let dy = endpoint.1 - control.1;
@@ -3534,7 +3588,7 @@ fn dependency_arrow_points(control: (f64, f64), endpoint: (f64, f64)) -> String 
     )
 }
 
-fn extension_arrow_points(control: (f64, f64), endpoint: (f64, f64)) -> String {
+fn extension_arrow_vertices(control: (f64, f64), endpoint: (f64, f64)) -> [(f64, f64); 4] {
     let dx = endpoint.0 - control.0;
     let dy = endpoint.1 - control.1;
     let len = dx.hypot(dy).max(1.0);
@@ -3547,16 +3601,21 @@ fn extension_arrow_points(control: (f64, f64), endpoint: (f64, f64)) -> String {
     let back = (endpoint.0 - ux * 18.0, endpoint.1 - uy * 18.0);
     let left = (back.0 + px * 6.0, back.1 + py * 6.0);
     let right = (back.0 - px * 6.0, back.1 - py * 6.0);
+    [endpoint, right, left, endpoint]
+}
+
+fn extension_arrow_points(control: (f64, f64), endpoint: (f64, f64)) -> String {
+    let [tip, right, left, close] = extension_arrow_vertices(control, endpoint);
     format!(
         "{},{},{},{},{},{},{},{}",
-        fc(endpoint.0),
-        fc(endpoint.1),
+        fc(tip.0),
+        fc(tip.1),
         fc(right.0),
         fc(right.1),
         fc(left.0),
         fc(left.1),
-        fc(endpoint.0),
-        fc(endpoint.1),
+        fc(close.0),
+        fc(close.1),
     )
 }
 
@@ -3967,6 +4026,33 @@ mod tests {
         assert!(svg.contains(r#"viewBox="0 0 402 232""#), "{svg}");
         assert!(svg.contains(r#"width="402px""#), "{svg}");
         assert!(svg.contains(r#"height="232px""#), "{svg}");
+    }
+
+    #[test]
+    fn renamed_deep_generalization_normalizes_the_solved_painted_envelope() {
+        let input = "@startuml\n\
+                     actor \"QA\" as Root1201\n\
+                     actor \"RB\" as Branch1213\n\
+                     actor \"SC\" as Branch1217\n\
+                     actor \"TD\" as Branch1223\n\
+                     actor \"UE\" as Leaf1229\n\
+                     usecase \"Fresh Review 1231\" as Review1231\n\
+                     Leaf1229 --> Review1231\n\
+                     Branch1213 --|> Root1201\n\
+                     Branch1217 --|> Branch1213\n\
+                     Branch1223 --|> Branch1217\n\
+                     Leaf1229 --|> Branch1223\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Independent PlantUML result for this renamed depth-five perturbation.
+        // Java `SvekResult.calculateDimension` moves the complete painted
+        // `LimitFinder` envelope, including `ExtremityTriangle`, to x=6.
+        assert!(svg.contains(r#"viewBox="0 0 241 641""#), "{svg}");
+        assert!(svg.contains(r#"<ellipse cx="22" "#), "{svg}");
+        assert!(svg.contains(">Fresh Review 1231</text>"), "{svg}");
+        assert_eq!(svg.matches(r#"class="link""#).count(), 5, "{svg}");
     }
 
     #[test]
