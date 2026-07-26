@@ -2240,11 +2240,16 @@ fn build_autonomous_composite_node<'a>(
     })
 }
 
-/// Build the root autonomous image and its outer SVEK layout.
+/// Build every root autonomous image and their shared outer SVEK layout.
+///
+/// Java provenance: `CucaDiagramSimplifierState.simplify` replaces every
+/// autarkic group with its `GroupMakerState` image, from the deepest groups
+/// outward. The root `GraphvizImageBuilder` therefore receives one solved
+/// image node for each top-level composite, not only when exactly one exists.
 fn build_autonomous_composite<'a>(
     diagram: &'a StateDiagram,
     arrow_font: &StateArrowFont,
-) -> Option<(AutonomousComposite<'a>, AutonomousScopeLayout)> {
+) -> Option<(Vec<AutonomousComposite<'a>>, AutonomousScopeLayout)> {
     if !diagram.notes.is_empty()
         || diagram.meta.title.is_some()
         || !diagram.meta.skinparams.is_empty()
@@ -2264,10 +2269,13 @@ fn build_autonomous_composite<'a>(
         .iter()
         .filter(|state| state.composite && state.parent.is_none())
         .collect();
-    let [root_composite] = root_composites.as_slice() else {
+    if root_composites.is_empty() {
         return None;
-    };
-    let composite = build_autonomous_composite_node(diagram, root_composite, arrow_font)?;
+    }
+    let composites = root_composites
+        .into_iter()
+        .map(|composite| build_autonomous_composite_node(diagram, composite, arrow_font))
+        .collect::<Option<Vec<_>>>()?;
     let outer_transition_indices: Vec<usize> = diagram
         .transitions
         .iter()
@@ -2285,7 +2293,10 @@ fn build_autonomous_composite<'a>(
     let outer_sizes: Vec<(String, f64, f64, StateLayoutShape)> = outer_ids
         .iter()
         .map(|id| {
-            if id == &composite.state.id {
+            if let Some(composite) = composites
+                .iter()
+                .find(|composite| id == &composite.state.id)
+            {
                 (
                     id.clone(),
                     composite.width,
@@ -2308,7 +2319,7 @@ fn build_autonomous_composite<'a>(
         true,
     )?;
 
-    Some((composite, outer))
+    Some((composites, outer))
 }
 
 /// Preserve the existing one-level concurrent-state path while recursive
@@ -3000,10 +3011,14 @@ fn emit_autonomous_composite(
 fn render_autonomous_composite(diagram: &StateDiagram) -> Option<String> {
     let skin = StateSkin::from_diagram(diagram);
     let arrow_font = StateArrowFont::from_diagram(diagram);
-    let (composite, outer) = build_autonomous_composite(diagram, &arrow_font)
-        .or_else(|| build_one_level_concurrent_composite(diagram, &arrow_font))?;
+    let (composites, outer) = build_autonomous_composite(diagram, &arrow_font).or_else(|| {
+        build_one_level_concurrent_composite(diagram, &arrow_font)
+            .map(|(composite, outer)| (vec![composite], outer))
+    })?;
     let mut all_ids = outer.ids.clone();
-    collect_autonomous_composite_ids(&composite, &mut all_ids);
+    for composite in &composites {
+        collect_autonomous_composite_ids(composite, &mut all_ids);
+    }
     let allocated_ids = allocate_state_svg_ids(diagram, &all_ids);
     let context = AutonomousRenderContext {
         diagram,
@@ -3021,16 +3036,18 @@ fn render_autonomous_composite(diagram: &StateDiagram) -> Option<String> {
     )
     .unwrap();
 
-    let (_, composite_cx, composite_cy, _, _) = outer
-        .positions
-        .iter()
-        .find(|(id, _, _, _, _)| id == &composite.state.id)?;
-    emit_autonomous_composite(
-        &mut svg,
-        &context,
-        &composite,
-        (*composite_cx, *composite_cy),
-    );
+    for composite in &composites {
+        let (_, composite_cx, composite_cy, _, _) = outer
+            .positions
+            .iter()
+            .find(|(id, _, _, _, _)| id == &composite.state.id)?;
+        emit_autonomous_composite(
+            &mut svg,
+            &context,
+            composite,
+            (*composite_cx, *composite_cy),
+        );
+    }
     emit_autonomous_scope_entities(&mut svg, &context, &outer, (0.0, 0.0), true);
     emit_autonomous_scope_links(&mut svg, &context, &outer, (0.0, 0.0));
     svg.push_str("</g></svg>");
@@ -7325,7 +7342,10 @@ mod tests {
             panic!("expected state diagram");
         };
         let arrow_font = StateArrowFont::from_diagram(diagram);
-        let (root, _) = build_autonomous_composite(diagram, &arrow_font).unwrap();
+        let (roots, _) = build_autonomous_composite(diagram, &arrow_font).unwrap();
+        let [root] = roots.as_slice() else {
+            panic!("expected one root composite");
+        };
 
         assert_eq!(root.state.id, "HarborRoot701");
         assert_eq!(root.children[0].state.id, "HarborRoot701.CopperLayer709");
@@ -7376,7 +7396,10 @@ mod tests {
             panic!("expected state diagram");
         };
         let arrow_font = StateArrowFont::from_diagram(diagram);
-        let (root, _) = build_autonomous_composite(diagram, &arrow_font).unwrap();
+        let (roots, _) = build_autonomous_composite(diagram, &arrow_font).unwrap();
+        let [root] = roots.as_slice() else {
+            panic!("expected one root composite");
+        };
         let relay = &root.children[0];
 
         assert_eq!(relay.state.id, "Observatory811.Relay821");
@@ -7399,6 +7422,73 @@ mod tests {
                 )),
                 "{child} missing from {svg}"
             );
+        }
+    }
+
+    #[test]
+    fn renamed_root_composite_forest_preserves_changed_group_and_child_counts() {
+        let input = concat!(
+            "@startuml\n",
+            "state CopperHub {\n",
+            "  [*] --> CopperA\n",
+            "  CopperA --> [*]\n",
+            "}\n",
+            "state VioletHub {\n",
+            "  [*] --> VioletA\n",
+            "  VioletA --> VioletB\n",
+            "  VioletB --> [*]\n",
+            "}\n",
+            "state AmberHub {\n",
+            "  [*] --> AmberA\n",
+            "  AmberA --> AmberB\n",
+            "  AmberB --> AmberC\n",
+            "  AmberC --> [*]\n",
+            "}\n",
+            "state QuartzHub {\n",
+            "  [*] --> QuartzA\n",
+            "  QuartzA --> QuartzB\n",
+            "  QuartzB --> QuartzC\n",
+            "  QuartzC --> QuartzD\n",
+            "  QuartzD --> [*]\n",
+            "}\n",
+            "[*] --> CopperHub\n",
+            "CopperHub --> VioletHub\n",
+            "VioletHub --> AmberHub\n",
+            "AmberHub --> QuartzHub\n",
+            "QuartzHub --> [*]\n",
+            "@enduml\n",
+        );
+        let parsed = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::State(diagram) = &parsed else {
+            panic!("expected state diagram");
+        };
+        let arrow_font = StateArrowFont::from_diagram(diagram);
+        let (roots, _) = build_autonomous_composite(diagram, &arrow_font).unwrap();
+
+        assert_eq!(roots.len(), 4);
+        assert_eq!(
+            roots
+                .iter()
+                .map(|root| {
+                    root.regions[0]
+                        .layout
+                        .ids
+                        .iter()
+                        .filter(|id| !id.starts_with("__"))
+                        .count()
+                })
+                .collect::<Vec<_>>(),
+            vec![1, 2, 3, 4]
+        );
+
+        let svg = crate::render_svg(&parsed);
+        for qualified_name in [
+            "CopperHub.CopperA",
+            "VioletHub.VioletB",
+            "AmberHub.AmberC",
+            "QuartzHub.QuartzD",
+        ] {
+            assert!(svg.contains(&format!(r#"data-qualified-name="{qualified_name}""#)));
         }
     }
 
