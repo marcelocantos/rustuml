@@ -17,7 +17,7 @@
 
 use std::fmt::Write;
 
-use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph, NodePosition};
+use rustuml_layout::graph::{Direction, EdgePath, LayoutGraph, NodePosition, RecordLayoutMetrics};
 use rustuml_parser::diagram::json_diagram::{DataFormat, JsonDiagram, JsonNode, JsonNodeValue};
 
 use crate::layout_oracle::{OracleLayout, wrap_oracle_envelope};
@@ -34,6 +34,9 @@ const MARGIN: f64 = 10.0;
 const CELL_PAD: f64 = 5.0;
 /// Extra vertical space added to the text height to form a row.
 const ROW_EXTRA: f64 = 4.0;
+/// `SmetanaForJson.createNode` removes Graphviz's four-point record margin
+/// from both sides before encoding each text span in its `_dim_` label.
+const RECORD_SPAN_HORIZONTAL_MARGIN: f64 = 8.0;
 /// Baseline offset of text below the row top (above the ascent).
 const TEXT_TOP_PAD: f64 = 2.0;
 /// Corner radius of the rounded box.
@@ -204,25 +207,46 @@ fn render_nested_no_oracle(diagram: &JsonDiagram, diagram_type: &str) -> Option<
     // measured boxes become graph nodes and parent-child placeholders become
     // dashed connector edges. This mirrors that graph-construction step with
     // the vendored Graphviz wrapper instead of replaying oracle connector SVG.
-    let dims: Vec<(f64, f64)> = specs
+    let metrics: Vec<BoxLayoutMetrics> = specs
         .iter()
-        .map(|spec| box_dimensions(&spec.rows))
+        .map(|spec| box_layout_metrics(&spec.rows))
         .collect();
     // PlantUML `SmetanaForJson.initGraph` submits the graph without the SVEK
     // spacing overrides. Its `createNode` uses record nodes and `createEdge`
     // binds each child to the parent row's P{index} port.
     let mut graph = LayoutGraph::new(Direction::TopToBottom);
-    for (spec, (width, height)) in specs.iter().zip(&dims) {
+    for (spec, metrics) in specs.iter().zip(&metrics) {
         let ports = (0..spec.rows.len())
             .map(|index| format!("P{index}"))
             .collect::<Vec<_>>();
         // Smetana's Graphviz coordinates are point-valued. `createNode`
         // deliberately swaps width and height before layout; `getPosition`
         // and `JsonCurve` swap the solved axes back for rendering.
-        if spec.is_array {
-            graph.add_record_node(&spec.id, *height, width.round(), &ports);
+        if metrics.row_heights.is_empty() {
+            if spec.is_array {
+                graph.add_record_node(&spec.id, metrics.height, metrics.width.round(), &ports);
+            } else {
+                graph.add_keyed_record_node(
+                    &spec.id,
+                    metrics.height,
+                    metrics.width.round(),
+                    &ports,
+                );
+            }
         } else {
-            graph.add_keyed_record_node(&spec.id, *height, width.round(), &ports);
+            let record_metrics = RecordLayoutMetrics {
+                row_heights: metrics.row_heights.clone(),
+                key_width: (!spec.is_array)
+                    .then_some(metrics.key_width - RECORD_SPAN_HORIZONTAL_MARGIN),
+                value_width: metrics.value_width - RECORD_SPAN_HORIZONTAL_MARGIN,
+            };
+            graph.add_dimensional_record_node(
+                &spec.id,
+                metrics.height,
+                metrics.width.round(),
+                &ports,
+                record_metrics,
+            );
         }
     }
     for index in postorder_edges(&specs) {
@@ -283,19 +307,13 @@ fn render_nested_no_oracle(diagram: &JsonDiagram, diagram_type: &str) -> Option<
             .map(|index| layout.node_positions[index]);
         let source_index = specs.iter().position(|spec| spec.id == edge.from);
         let source_position = source_index.map(|index| layout.node_positions[index]);
-        let source_width = source_index.map(|index| dims[index].0);
+        let source_width = source_index.map(|index| metrics[index].width);
         let source_y = source_index.and_then(|source_index| {
-            target.and_then(|target| target.parent_port).map(|port| {
-                let row_h = text_height(FONT_SIZE) + ROW_EXTRA;
-                let first_row_center = if specs[source_index].rows.len() == 1 {
-                    row_h / 2.0
-                } else {
-                    row_h.ceil() / 2.0
-                };
-                layout.node_positions[source_index].y
-                    + first_row_center
-                    + port as f64 * row_h.floor()
-            })
+            smetana_record_port_y(
+                layout.node_positions[source_index].y,
+                &metrics[source_index].row_heights,
+                target?.parent_port?,
+            )
         });
         let rendered = render_nested_connector(
             edge,
@@ -333,6 +351,17 @@ fn snap_smetana_point(value: f64) -> f64 {
     } else {
         value
     }
+}
+
+fn smetana_record_port_y(record_top: f64, row_heights: &[f64], port: usize) -> Option<f64> {
+    let row_height = *row_heights.get(port)?;
+    let total_height = row_heights.iter().sum::<f64>();
+    let preceding_height = row_heights[..port].iter().sum::<f64>();
+    let field_center = -total_height / 2.0 + preceding_height + row_height / 2.0;
+
+    // Graphviz 2.38 `compassPort` used PF2P, and PlantUML's
+    // `Macro.PF2P` rounds the field center before adding the node center.
+    Some(record_top + total_height / 2.0 + field_center.round())
 }
 
 fn collect_layout_boxes(
@@ -491,8 +520,27 @@ fn render_box_at(rows: &[FlatRow], geom: &crate::layout_oracle::JsonBox) -> Stri
 }
 
 fn box_dimensions(rows: &[FlatRow]) -> (f64, f64) {
+    let metrics = box_layout_metrics(rows);
+    (metrics.width, metrics.height)
+}
+
+struct BoxLayoutMetrics {
+    width: f64,
+    height: f64,
+    key_width: f64,
+    value_width: f64,
+    row_heights: Vec<f64>,
+}
+
+fn box_layout_metrics(rows: &[FlatRow]) -> BoxLayoutMetrics {
     if rows.is_empty() {
-        return (30.0, 15.0);
+        return BoxLayoutMetrics {
+            width: 30.0,
+            height: 15.0,
+            key_width: 0.0,
+            value_width: 30.0,
+            row_heights: Vec::new(),
+        };
     }
     let has_keys = rows.iter().any(|r| !r.key.is_empty());
     let key_text_w = rows
@@ -510,7 +558,14 @@ fn box_dimensions(rows: &[FlatRow]) -> (f64, f64) {
     };
     let val_col_w = val_text_w + 2.0 * CELL_PAD;
     let row_h = text_height(FONT_SIZE) + ROW_EXTRA;
-    (key_col_w + val_col_w, row_h * rows.len() as f64)
+    let row_heights = vec![row_h; rows.len()];
+    BoxLayoutMetrics {
+        width: key_col_w + val_col_w,
+        height: row_heights.iter().sum(),
+        key_width: key_col_w,
+        value_width: val_col_w,
+        row_heights,
+    }
 }
 
 fn render_box_rows_at(rows: &[FlatRow], box_x: f64, box_y: f64) -> String {
@@ -1316,11 +1371,64 @@ revision: 23
     }
 
     #[test]
+    fn dimensional_records_handle_renamed_deeper_changed_row_counts() {
+        let source = r#"@startjson
+{
+  "alpha_scalar": 1,
+  "renamed_branch": {
+    "north": 2,
+    "east": 3,
+    "deeper_branch": {
+      "violet": 5,
+      "indigo": 8,
+      "ultraviolet": 13
+    },
+    "west": 21
+  },
+  "gamma_scalar": 34,
+  "delta_scalar": 55,
+  "epsilon_scalar": 89
+}
+@endjson"#;
+        let diagram = rustuml_parser::parse::parse(source).unwrap();
+        let Diagram::Json(diagram) = diagram else {
+            panic!("expected JSON diagram");
+        };
+        let mut specs = Vec::new();
+        super::collect_layout_boxes(&diagram.root, diagram.format, None, None, &mut specs);
+        let row_counts = specs
+            .iter()
+            .map(|spec| super::box_layout_metrics(&spec.rows).row_heights.len())
+            .collect::<Vec<_>>();
+        assert_eq!(row_counts, vec![5, 4, 3]);
+
+        let first = crate::render_svg(&Diagram::Json(diagram));
+        let second = render_input(source);
+        assert_eq!(first, second);
+        assert_eq!(first.matches("stroke-dasharray:3,3").count(), 2);
+        assert!(first.contains("renamed_branch"));
+        assert!(first.contains("ultraviolet"));
+    }
+
+    #[test]
     fn direct_record_exit_tracks_width_rounding_not_labels() {
         assert_eq!(super::smetana_record_exit_offset(78.2), 78.5);
         assert_eq!(super::smetana_record_exit_offset(77.2), 78.0);
         assert_eq!(super::smetana_record_exit_offset(77.7), 79.0);
         assert_eq!(super::smetana_record_exit_offset(95.0), 96.0);
+    }
+
+    #[test]
+    fn record_port_position_rounds_field_center_before_translation() {
+        assert_eq!(
+            super::smetana_record_port_y(71.5, &[20.5, 20.5], 0),
+            Some(82.0)
+        );
+        assert_eq!(
+            super::smetana_record_port_y(0.0, &[20.5, 20.5, 20.5], 2),
+            Some(51.75)
+        );
+        assert_eq!(super::smetana_record_port_y(0.0, &[20.5], 1), None);
     }
 
     #[test]

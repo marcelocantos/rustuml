@@ -57,6 +57,14 @@ int rustuml_edge_label_box(Agedge_t *e, int kind,
 // Returns 1 only for the exact internal placeholder shape.
 int rustuml_make_fixed_html_table_label(textlabel_t *label);
 
+// Parse PlantUML Smetana's exact `_dim_<width>_<height>_` text-span marker.
+// Returns 1 on success and leaves the outputs unchanged on failure.
+int rustuml_parse_text_span_dimensions(const char *text,
+                                       double *width, double *height);
+
+// Returns 1 when a record node opted into PlantUML text-span dimensions.
+int rustuml_node_uses_text_span_dimensions(Agnode_t *node);
+
 #ifdef __cplusplus
 }
 #endif

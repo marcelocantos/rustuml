@@ -36,11 +36,17 @@ static void storeline(GVC_t *gvc, textlabel_t *lp, char *line,
     span->str = line;
     span->just = terminator;
     if (line && line[0]) {
-	textfont_t tf = {0};
-	tf.name = lp->fontname;
-	tf.size = lp->fontsize;
-	span->font = dtinsert(gvc->textfont_dt, &tf);
-        size = textspan_size(gvc, span);
+        if (rustuml_parse_text_span_dimensions(line, &size.x, &size.y)) {
+            // PlantUML `labels__c.storeline` applies `_dim_` metrics before
+            // `shapes__c.record_init`; its text span stores integral height.
+            span->size.y = (int)size.y;
+        } else {
+	    textfont_t tf = {0};
+	    tf.name = lp->fontname;
+	    tf.size = lp->fontsize;
+	    span->font = dtinsert(gvc->textfont_dt, &tf);
+            size = textspan_size(gvc, span);
+        }
     }
     else {
 	size.x = 0.0;

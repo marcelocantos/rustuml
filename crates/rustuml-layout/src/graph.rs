@@ -57,6 +57,19 @@ pub struct HtmlRowPort {
     pub height: f64,
 }
 
+/// Renderer-provided text-span dimensions for a Graphviz record.
+///
+/// PlantUML's `SmetanaForJson` encodes these metrics in `_dim_...` labels so
+/// `labels__c.storeline` can size each field before `shapes__c.record_init`.
+/// A key width selects the nested key/value topology; without one, all named
+/// rows occupy a single column.
+#[derive(Clone, Debug)]
+pub struct RecordLayoutMetrics {
+    pub row_heights: Vec<f64>,
+    pub key_width: Option<f64>,
+    pub value_width: f64,
+}
+
 #[derive(Clone, Copy, Debug, Default)]
 pub struct EdgePorts<'a> {
     pub tail: Option<&'a str>,
@@ -303,6 +316,35 @@ impl LayoutGraph {
         self.add_record_node_with_key_column(id, width, height, ports, true)
     }
 
+    /// Adds a naturally sized record whose fields use renderer-owned metrics.
+    ///
+    /// The metrics are interpreted by the vendored Graphviz `storeline` hook;
+    /// ordinary record users retain native font measurement and fixed sizing.
+    pub fn add_dimensional_record_node(
+        &mut self,
+        id: &str,
+        width: f64,
+        height: f64,
+        ports: &[String],
+        metrics: RecordLayoutMetrics,
+    ) -> bool {
+        if ports.len() != metrics.row_heights.len()
+            || !metrics.value_width.is_finite()
+            || metrics.value_width < 0.0
+            || metrics
+                .key_width
+                .is_some_and(|key_width| !key_width.is_finite() || key_width < 0.0)
+            || metrics
+                .row_heights
+                .iter()
+                .any(|row_height| !row_height.is_finite() || *row_height < 0.0)
+        {
+            return false;
+        }
+        let has_key_column = metrics.key_width.is_some();
+        self.add_record_node_with_metrics(id, width, height, ports, has_key_column, Some(metrics))
+    }
+
     fn add_record_node_with_key_column(
         &mut self,
         id: &str,
@@ -310,6 +352,18 @@ impl LayoutGraph {
         height: f64,
         ports: &[String],
         has_key_column: bool,
+    ) -> bool {
+        self.add_record_node_with_metrics(id, width, height, ports, has_key_column, None)
+    }
+
+    fn add_record_node_with_metrics(
+        &mut self,
+        id: &str,
+        width: f64,
+        height: f64,
+        ports: &[String],
+        has_key_column: bool,
+        metrics: Option<RecordLayoutMetrics>,
     ) -> bool {
         if self.nodes.iter().any(|node| node.id == id) {
             return false;
@@ -321,6 +375,7 @@ impl LayoutGraph {
             shape: NodeShape::Record {
                 ports: ports.to_vec(),
                 has_key_column,
+                metrics,
             },
         });
         true
@@ -732,8 +787,11 @@ impl LayoutGraph {
         let shape_key = CString::new("shape").unwrap();
         let label_key = CString::new("label").unwrap();
         let fixedsize_key = CString::new("fixedsize").unwrap();
+        let margin_key = CString::new("margin").unwrap();
+        let text_span_dimensions_key = CString::new("rustuml_text_span_dimensions").unwrap();
         let no_label_val = CString::new("").unwrap();
         let fixedsize_val = CString::new("true").unwrap();
+        let zero_val = CString::new("0").unwrap();
         let circle_val = CString::new("circle").unwrap();
         let ellipse_val = CString::new("ellipse").unwrap();
         let diamond_val = CString::new("diamond").unwrap();
@@ -763,7 +821,16 @@ impl LayoutGraph {
         // outside the routing triangles. Keep the established fixed geometry
         // for other relationships while allowing the connected record
         // component to expand to its label minima.
-        let mut natural_record_nodes = HashSet::new();
+        let mut natural_record_nodes = self
+            .nodes
+            .iter()
+            .filter_map(|node| match &node.shape {
+                NodeShape::Record {
+                    metrics: Some(_), ..
+                } => Some(node.id.clone()),
+                _ => None,
+            })
+            .collect::<HashSet<_>>();
         for edge in &self.edges {
             let Some(source) = self.nodes.iter().find(|node| node.id == edge.from) else {
                 continue;
@@ -902,6 +969,31 @@ impl LayoutGraph {
                             h_str.as_ptr(),
                             empty.as_ptr(),
                         );
+                        if matches!(
+                            spec.shape,
+                            NodeShape::Record {
+                                metrics: Some(_),
+                                ..
+                            }
+                        ) {
+                            // PlantUML's Smetana `shapes__c.size_reclbl`
+                            // suppresses Graphviz's XPAD/YPAD around `_dim_`
+                            // spans. A zero record margin is the native,
+                            // per-node equivalent and leaves other record
+                            // users unchanged.
+                            graphviz_ffi::agsafeset(
+                                node as *mut c_void,
+                                margin_key.as_ptr(),
+                                zero_val.as_ptr(),
+                                empty.as_ptr(),
+                            );
+                            graphviz_ffi::agsafeset(
+                                node as *mut c_void,
+                                text_span_dimensions_key.as_ptr(),
+                                true_val.as_ptr(),
+                                empty.as_ptr(),
+                            );
+                        }
                         if !natural_record_nodes.contains(&spec.id) {
                             graphviz_ffi::agsafeset(
                                 node as *mut c_void,
@@ -916,8 +1008,11 @@ impl LayoutGraph {
                             NodeShape::Record {
                                 ports,
                                 has_key_column,
-                                ..
-                            } => CString::new(record_label(ports, *has_key_column)).unwrap(),
+                                metrics,
+                            } => {
+                                CString::new(record_label(ports, *has_key_column, metrics.as_ref()))
+                                    .unwrap()
+                            }
                             NodeShape::Box
                             | NodeShape::Circle
                             | NodeShape::Ellipse
@@ -1660,9 +1755,33 @@ unsafe fn edge_label_position(
         })
 }
 
-fn record_label(ports: &[String], has_key_column: bool) -> String {
+fn record_label(
+    ports: &[String],
+    has_key_column: bool,
+    metrics: Option<&RecordLayoutMetrics>,
+) -> String {
     if ports.is_empty() {
         return " ".to_string();
+    }
+    if let Some(metrics) = metrics {
+        let rows = ports
+            .iter()
+            .zip(&metrics.row_heights)
+            .map(|(port, row_height)| {
+                format!(
+                    "<{}>_dim_{}_{}_",
+                    escape_record_port(port),
+                    row_height,
+                    metrics.value_width
+                )
+            })
+            .collect::<Vec<_>>()
+            .join("|");
+        if let Some(key_width) = metrics.key_width {
+            let total_height = metrics.row_heights.iter().sum::<f64>();
+            return format!("{{_dim_{total_height}_{key_width}_|{{{rows}}}}}");
+        }
+        return rows;
     }
     let rows = ports
         .iter()
@@ -1791,6 +1910,7 @@ enum NodeShape {
     Record {
         ports: Vec<String>,
         has_key_column: bool,
+        metrics: Option<RecordLayoutMetrics>,
     },
     FixedHtmlRows {
         ports: Vec<HtmlRowPort>,
@@ -2456,14 +2576,80 @@ mod tests {
                     "bad|port".to_string()
                 ],
                 false,
+                None,
             ),
             "<P0> |<row1> |<badport> "
         );
-        assert_eq!(record_label(&[], false), " ");
+        assert_eq!(record_label(&[], false, None), " ");
         assert_eq!(
-            record_label(&["P0".to_string(), "P1".to_string()], true),
+            record_label(&["P0".to_string(), "P1".to_string()], true, None),
             "{ |{<P0> |<P1> }}"
         );
+    }
+
+    #[test]
+    fn dimensional_record_label_tracks_renamed_rows_and_count() {
+        let ports = ["north_slot", "middle_slot", "south_slot"].map(str::to_string);
+        let metrics = RecordLayoutMetrics {
+            row_heights: vec![19.0, 23.5, 21.0],
+            key_width: Some(47.0),
+            value_width: 31.25,
+        };
+        assert_eq!(
+            record_label(&ports, true, Some(&metrics)),
+            "{_dim_63.5_47_|{<north_slot>_dim_19_31.25_|<middle_slot>_dim_23.5_31.25_|<south_slot>_dim_21_31.25_}}"
+        );
+    }
+
+    #[test]
+    fn dimensional_records_route_renamed_deeper_changed_row_count() {
+        let mut graph = LayoutGraph::new(Direction::TopToBottom);
+        let root_ports = ["alpha", "beta", "gamma", "delta"].map(str::to_string);
+        assert!(graph.add_dimensional_record_node(
+            "renamed_root",
+            83.0,
+            127.0,
+            &root_ports,
+            RecordLayoutMetrics {
+                row_heights: vec![20.0, 22.0, 24.0, 26.0],
+                key_width: Some(51.0),
+                value_width: 29.0,
+            },
+        ));
+        let child_ports = ["inner_north", "inner_south"].map(str::to_string);
+        assert!(graph.add_dimensional_record_node(
+            "deeper_child",
+            42.0,
+            91.0,
+            &child_ports,
+            RecordLayoutMetrics {
+                row_heights: vec![18.0, 25.0],
+                key_width: Some(43.0),
+                value_width: 44.0,
+            },
+        ));
+        assert!(graph.add_dimensional_record_node(
+            "flat_leaf",
+            61.0,
+            52.0,
+            &[
+                "leaf_a".to_string(),
+                "leaf_b".to_string(),
+                "leaf_c".to_string()
+            ],
+            RecordLayoutMetrics {
+                row_heights: vec![17.0, 19.0, 21.0],
+                key_width: None,
+                value_width: 48.0,
+            },
+        ));
+        graph.add_edge_with_ports("renamed_root", "deeper_child", None, Some("delta"), None);
+        graph.add_edge_with_ports("deeper_child", "flat_leaf", None, Some("inner_south"), None);
+
+        let result = graph.layout_full_no_timeout();
+        assert_eq!(result.node_positions.len(), 3);
+        assert_eq!(result.edge_paths.len(), 2);
+        assert!(result.edge_paths.iter().all(|edge| edge.points.len() >= 4));
     }
 
     #[test]
@@ -2537,13 +2723,7 @@ mod tests {
                 101.0,
                 &["renamed_key".to_string(), "second_key".to_string()],
             ));
-            graph.add_edge_with_ports(
-                "renamed_collection",
-                &item,
-                None,
-                Some(&item_port),
-                None,
-            );
+            graph.add_edge_with_ports("renamed_collection", &item, None, Some(&item_port), None);
         }
 
         let result = graph.layout_full_no_timeout();

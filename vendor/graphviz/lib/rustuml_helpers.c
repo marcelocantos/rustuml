@@ -5,7 +5,9 @@
 
 #include <common/const.h>
 #include <common/htmltable.h>
+#include <errno.h>
 #include <limits.h>
+#include <math.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <string.h>
@@ -84,6 +86,61 @@ int rustuml_edge_label_box(Agedge_t *e, int kind,
     *width = label->dimen.x;
     *height = label->dimen.y;
     return 1;
+}
+
+static int parse_dimension_component(const char **cursor, double *value) {
+    const char *start = *cursor;
+    const char *end = start;
+    char *parsed_end;
+    int has_digit = 0;
+
+    while ((*end >= '0' && *end <= '9') || *end == '.') {
+        if (*end >= '0' && *end <= '9')
+            has_digit = 1;
+        end++;
+    }
+    if (!has_digit || *end != '_')
+        return 0;
+
+    errno = 0;
+    double parsed = strtod(start, &parsed_end);
+    if (errno == ERANGE || parsed_end != end || !isfinite(parsed))
+        return 0;
+
+    *cursor = end + 1;
+    *value = parsed;
+    return 1;
+}
+
+int rustuml_parse_text_span_dimensions(const char *text,
+                                       double *width, double *height) {
+    static const char *const prefix = "_dim_";
+    double parsed_width;
+    double parsed_height;
+
+    if (!text || !width || !height ||
+        strncmp(text, prefix, strlen(prefix)) != 0)
+        return 0;
+
+    const char *cursor = text + strlen(prefix);
+    if (!parse_dimension_component(&cursor, &parsed_width) ||
+        !parse_dimension_component(&cursor, &parsed_height) ||
+        *cursor != '\0')
+        return 0;
+
+    *width = parsed_width;
+    *height = parsed_height;
+    return 1;
+}
+
+int rustuml_node_uses_text_span_dimensions(Agnode_t *node) {
+    static const char *const attribute = "rustuml_text_span_dimensions";
+    char *value;
+
+    if (!node)
+        return 0;
+    value = agget(node, (char *)attribute);
+    return value && strcmp(value, "true") == 0;
 }
 
 int rustuml_make_fixed_html_table_label(textlabel_t *label) {

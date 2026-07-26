@@ -19,6 +19,9 @@ fn main() {
         "cargo:rerun-if-changed={}",
         lib.join("rustuml_helpers.h").display()
     );
+    for source in ["common/labels.c", "common/shapes.c"] {
+        println!("cargo:rerun-if-changed={}", lib.join(source).display());
+    }
 
     let mut build = cc::Build::new();
 

@@ -151,4 +151,70 @@ unsafe extern "C" {
         width: *mut f64,
         height: *mut f64,
     ) -> c_int;
+
+    /// Parse PlantUML Smetana's exact `_dim_<width>_<height>_` span marker.
+    pub fn rustuml_parse_text_span_dimensions(
+        text: *const c_char,
+        width: *mut f64,
+        height: *mut f64,
+    ) -> c_int;
+
+    /// Returns nonzero for a node opted into PlantUML text-span dimensions.
+    pub fn rustuml_node_uses_text_span_dimensions(node: *mut Agnode_t) -> c_int;
+}
+
+#[cfg(test)]
+mod tests {
+    use std::ffi::CString;
+
+    #[test]
+    fn parses_only_exact_dimensional_text_spans_across_ffi() {
+        let encoded = CString::new("_dim_20.5_37.25_").unwrap();
+        let mut width = -1.0;
+        let mut height = -1.0;
+        let parsed = unsafe {
+            super::rustuml_parse_text_span_dimensions(encoded.as_ptr(), &mut width, &mut height)
+        };
+        assert_eq!(parsed, 1);
+        assert_eq!((width, height), (20.5, 37.25));
+
+        for text in [
+            "renamed_record",
+            "_dim_20.5_37.25",
+            "_dim_-20_37_",
+            "_dim_20_37_extra",
+            "_dim_20..5_37_",
+        ] {
+            let encoded = CString::new(text).unwrap();
+            width = -1.0;
+            height = -1.0;
+            let parsed = unsafe {
+                super::rustuml_parse_text_span_dimensions(encoded.as_ptr(), &mut width, &mut height)
+            };
+            assert_eq!(parsed, 0, "{text}");
+            assert_eq!((width, height), (-1.0, -1.0), "{text}");
+        }
+    }
+
+    #[test]
+    fn dimensional_record_marker_crosses_cgraph_boundary() {
+        let graph_name = CString::new("dimension_marker_test").unwrap();
+        let node_name = CString::new("renamed_record").unwrap();
+        let key = CString::new("rustuml_text_span_dimensions").unwrap();
+        let value = CString::new("true").unwrap();
+        let empty = CString::new("").unwrap();
+
+        unsafe {
+            let graph = super::agopen(graph_name.as_ptr(), super::Agdirected, std::ptr::null_mut());
+            assert!(!graph.is_null());
+            let node = super::agnode(graph, node_name.as_ptr(), 1);
+            assert!(!node.is_null());
+            assert_eq!(
+                super::agsafeset(node.cast(), key.as_ptr(), value.as_ptr(), empty.as_ptr(),),
+                0
+            );
+            assert_eq!(super::rustuml_node_uses_text_span_dimensions(node), 1);
+            assert_eq!(super::agclose(graph), 0);
+        }
+    }
 }

@@ -22,6 +22,7 @@
 #include <stddef.h>
 #include <stdbool.h>
 #include <string.h>
+#include <rustuml_helpers.h>
 #include <util/alloc.h>
 #include <util/gv_math.h>
 #include <util/streq.h>
@@ -2859,7 +2860,14 @@ static int compassPort(node_t *n, boxf *bp, port *pp, const char *compass,
     else
 	pp->side = invflip_side(side, GD_rankdir(agraphof(n)));
     pp->bp = bp;
-    pp->p = p;
+    if (rustuml_node_uses_text_span_dimensions(n)) {
+	/* Graphviz 2.38 assigned ports with PF2P. PlantUML Smetana's
+	 * dimensional records therefore route from integral field centers. */
+	pp->p.x = ROUND(p.x);
+	pp->p.y = ROUND(p.y);
+    } else {
+	pp->p = p;
+    }
     pp->theta = invflip_angle(theta, GD_rankdir(agraphof(n)));
     if (p.x == 0 && p.y == 0)
 	pp->order = MC_SCALE / 2;
@@ -3775,7 +3783,6 @@ static port record_port(node_t * n, char *portname, char *compass)
     } else if (compassPort(n, &f->b, &rv, portname, sides, NULL)) {
 	unrecognized(n, portname);
     }
-
     return rv;
 }
 
