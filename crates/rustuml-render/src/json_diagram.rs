@@ -224,12 +224,17 @@ fn render_nested_no_oracle(diagram: &JsonDiagram, diagram_type: &str) -> Option<
         // and `JsonCurve` swap the solved axes back for rendering.
         if metrics.row_heights.is_empty() {
             if spec.is_array {
-                graph.add_record_node(&spec.id, metrics.height, metrics.width.round(), &ports);
+                graph.add_record_node(
+                    &spec.id,
+                    metrics.height,
+                    metrics.graph_width.round(),
+                    &ports,
+                );
             } else {
                 graph.add_keyed_record_node(
                     &spec.id,
                     metrics.height,
-                    metrics.width.round(),
+                    metrics.graph_width.round(),
                     &ports,
                 );
             }
@@ -243,7 +248,7 @@ fn render_nested_no_oracle(diagram: &JsonDiagram, diagram_type: &str) -> Option<
             graph.add_dimensional_record_node(
                 &spec.id,
                 metrics.height,
-                metrics.width.round(),
+                metrics.graph_width.round(),
                 &ports,
                 record_metrics,
             );
@@ -494,6 +499,7 @@ fn box_dimensions(rows: &[FlatRow]) -> (f64, f64) {
 struct BoxLayoutMetrics {
     width: f64,
     height: f64,
+    graph_width: f64,
     key_width: f64,
     value_width: f64,
     row_heights: Vec<f64>,
@@ -504,6 +510,11 @@ fn box_layout_metrics(rows: &[FlatRow]) -> BoxLayoutMetrics {
         return BoxLayoutMetrics {
             width: 30.0,
             height: 15.0,
+            // Java `TextBlockJson.calculateDimensionSlow` reports zero width
+            // for an empty collection. `drawU` alone expands the painted box
+            // to `MIN_WIDTH`, after `SmetanaForJson.createNode` has consumed
+            // the zero-width layout dimension.
+            graph_width: 0.0,
             key_width: 0.0,
             value_width: 30.0,
             row_heights: Vec::new(),
@@ -529,6 +540,7 @@ fn box_layout_metrics(rows: &[FlatRow]) -> BoxLayoutMetrics {
     BoxLayoutMetrics {
         width: key_col_w + val_col_w,
         height: row_heights.iter().sum(),
+        graph_width: key_col_w + val_col_w,
         key_width: key_col_w,
         value_width: val_col_w,
         row_heights,
@@ -1469,6 +1481,14 @@ revision: 23
         assert_eq!(super::smetana_record_exit_offset(77.2), 78.0);
         assert_eq!(super::smetana_record_exit_offset(77.7), 79.0);
         assert_eq!(super::smetana_record_exit_offset(95.0), 96.0);
+    }
+
+    #[test]
+    fn empty_collection_uses_pre_paint_width_for_smetana() {
+        let metrics = super::box_layout_metrics(&[]);
+        assert_eq!(metrics.width, 30.0);
+        assert_eq!(metrics.height, 15.0);
+        assert_eq!(metrics.graph_width, 0.0);
     }
 
     #[test]
