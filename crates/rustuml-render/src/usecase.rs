@@ -1629,7 +1629,7 @@ fn layout_usecase_positions(
     // `TextBlockUtils.getMinMax` for the complete painted image before
     // `moveDelta(6 - minX, ...)`. Every actor image contributes its actual
     // `LimitFinder` minimum, whether the root leaf is connected or detached.
-    let min_painted_x = diagram
+    let min_entity_painted_x = diagram
         .actors
         .iter()
         .zip(actor_dims)
@@ -1652,25 +1652,28 @@ fn layout_usecase_positions(
                 .iter()
                 .map(|p| cluster_painted_bounds(diagram, p).0),
         )
-        .chain(
-            result
-                .edge_paths
-                .iter()
-                .flat_map(|edge| edge.points.iter().map(|point| point.0)),
-        )
+        .fold(f64::INFINITY, f64::min);
+    let min_edge_painted_x = result
+        .edge_paths
+        .iter()
+        .flat_map(|edge| edge.points.iter().map(|point| point.0))
         .chain(extension_polygon_min_x)
         .fold(f64::INFINITY, f64::min);
+    let min_painted_x = min_entity_painted_x.min(min_edge_painted_x);
     // Java `SvekResult.calculateDimension` normalizes the complete painted
     // image after clusters, nodes, and `SvekEdge.drawU` have all contributed
-    // limits. Clusters already require that dynamic normalization. A hollow
-    // `ExtremityTriangle` is a `UPolygon`, so `LimitFinder.drawUPolygon` can
-    // likewise move an unclustered generalization's measured minimum outside
-    // the visible triangle.
+    // limits. A hollow `ExtremityTriangle` is a `UPolygon`, so its horizontal
+    // measurement also includes `LimitFinder.drawUPolygon`'s guard.
     let has_generalization = diagram
         .connections
         .iter()
         .any(|connection| connection.extension);
-    let needs_painted_x_normalization = !result.cluster_positions.is_empty() || has_generalization;
+    let edge_owns_left_envelope = min_edge_painted_x < min_entity_painted_x;
+    // Root entity-only diagrams retain `GraphvizImageBuilder`'s established
+    // node-box offset. Recompute X when a non-node primitive owns the minimum,
+    // as `SvekResult` must for clusters, solved edges, and polygon extremities.
+    let needs_painted_x_normalization =
+        !result.cluster_positions.is_empty() || has_generalization || edge_owns_left_envelope;
     let origin_x = if needs_painted_x_normalization && min_painted_x.is_finite() {
         base_origin_x - min_painted_x
     } else {
@@ -1698,6 +1701,12 @@ fn layout_usecase_positions(
                 .cluster_positions
                 .iter()
                 .map(|p| cluster_painted_bounds(diagram, p).1),
+        )
+        .chain(
+            result
+                .edge_paths
+                .iter()
+                .flat_map(|edge| edge.points.iter().map(|point| point.1)),
         )
         .fold(f64::INFINITY, f64::min);
     let origin_y = if min_painted_y.is_finite() {
@@ -4053,6 +4062,42 @@ mod tests {
         assert!(svg.contains(r#"<ellipse cx="22" "#), "{svg}");
         assert!(svg.contains(">Fresh Review 1231</text>"), "{svg}");
         assert_eq!(svg.matches(r#"class="link""#).count(), 5, "{svg}");
+    }
+
+    #[test]
+    fn renamed_deeper_rank_directions_normalize_edge_owned_envelopes() {
+        let body = "actor \"Renamed Analyst 401\" as Analyst401\n\
+                    usecase \"Fresh Intake 409\" as Intake409\n\
+                    usecase \"Novel Review 419\" as Review419\n\
+                    usecase \"Final Check 431\" as Check431\n\
+                    Analyst401 -> Intake409\n\
+                    Analyst401 -> Review419\n\
+                    Intake409 .> Review419 : <<include>>\n\
+                    Review419 .> Check431 : <<extend>>";
+        for (direction, view_box, painted_guard) in [
+            (
+                "top to bottom direction",
+                r#"viewBox="0 0 833 134""#,
+                "C289.25,6 ",
+            ),
+            (
+                "left to right direction",
+                r#"viewBox="0 0 191 336""#,
+                "C6,130.",
+            ),
+        ] {
+            let input = format!("@startuml\n{direction}\n{body}\n@enduml");
+            let diagram = rustuml_parser::parse::parse(&input).unwrap();
+            let svg = crate::render_svg(&diagram);
+
+            // Fresh PlantUML references generated for both rank directions.
+            // `CommandRankDir.executeArg` selects the rank, then
+            // `SvekResult.calculateDimension` normalizes `SvekEdge.drawU`'s
+            // complete `LimitFinder` envelope before exporting the canvas.
+            assert!(svg.contains(view_box), "{direction}: {svg}");
+            assert!(svg.contains(painted_guard), "{direction}: {svg}");
+            assert_eq!(svg.matches(r#"class="link""#).count(), 4, "{svg}");
+        }
     }
 
     #[test]
