@@ -104,6 +104,8 @@ const VIS_ICON_ANGLED_INSET: f64 = 1.0;
 /// while measuring a SVEK image. Protected/package visibility icons are the
 /// only class-body polygons that can own the left envelope.
 const LIMIT_FINDER_POLYGON_OVERSCAN_X: f64 = 10.0;
+/// `LimitFinder.drawRectangle` measures a `URectangle` from `(x - 1, y - 1)`.
+const LIMIT_FINDER_RECTANGLE_INSET: f64 = 1.0;
 /// PlantUML draws angled class-member visibility glyphs one pixel above the
 /// round/square icon center. This follows the `USymbol` polygon coordinates
 /// used for protected/package member markers after `classAttributeIconSize`
@@ -10070,7 +10072,15 @@ fn svek_layout_x_bias(
         .filter(|min_x| min_x.is_finite());
     let min_x = positions
         .iter()
-        .map(|position| position.x)
+        .enumerate()
+        .map(|(idx, position)| {
+            position.x
+                - if idx < diagram.entities.len() {
+                    LIMIT_FINDER_RECTANGLE_INSET
+                } else {
+                    0.0
+                }
+        })
         .chain(cluster_positions.iter().map(|position| position.x))
         .chain(
             edge_paths
@@ -10096,7 +10106,15 @@ fn svek_layout_x_bias(
         )
         .chain(visibility_polygon_min_x)
         .fold(0.0_f64, f64::min);
-    (SVEK_LABEL_ENVELOPE_MARGIN - min_x).max(MARGIN) - MARGIN
+    let envelope_bias = SVEK_LABEL_ENVELOPE_MARGIN - min_x - MARGIN;
+    if cluster_positions.is_empty() {
+        envelope_bias
+    } else {
+        // `normalize_svek_package_envelope` has already translated rendered
+        // cluster frontiers to Java's SVEK origin. Do not apply that move a
+        // second time merely because an enclosed class rectangle starts later.
+        envelope_bias.max(0.0)
+    }
 }
 
 fn uses_degenerated_entity(diagram: &ClassDiagram, cluster_positions: &[ClusterPosition]) -> bool {
@@ -14326,6 +14344,34 @@ mod tests {
         assert!(svg.contains(r#"viewBox="0 0 151 934""#), "{svg}");
         assert_eq!(svg.matches(r#"<g class="entity""#).count(), 9);
         assert_eq!(svg.matches(r#"<g class="link""#).count(), 9);
+    }
+
+    #[test]
+    fn renamed_seven_node_complete_graph_uses_rectangle_limitfinder_inset() {
+        let mut input = String::from("@startuml\n");
+        for suffix in ["A", "B", "C", "D", "E", "F", "G"] {
+            writeln!(input, "class Nova{suffix}").unwrap();
+        }
+        for from in ["A", "B", "C", "D", "E", "F"] {
+            for to in ["A", "B", "C", "D", "E", "F", "G"]
+                .into_iter()
+                .skip_while(|suffix| *suffix != from)
+                .skip(1)
+            {
+                writeln!(input, "Nova{from} --> Nova{to}").unwrap();
+            }
+        }
+        input.push_str("@enduml");
+
+        let diagram = rustuml_parser::parse::parse(&input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Fresh Java 21 / PlantUML 1.2026.3beta6 render. The leftmost DotPath
+        // is the envelope minimum, so `SvekResult` moves it left of the normal
+        // class-box margin after `LimitFinder.drawRectangle` applies x - 1.
+        assert!(svg.contains(r#"viewBox="0 0 731 718""#), "{svg}");
+        assert_eq!(svg.matches(r#"<g class="entity""#).count(), 7);
+        assert_eq!(svg.matches(r#"<g class="link""#).count(), 21);
     }
 
     #[test]
