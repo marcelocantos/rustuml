@@ -9250,14 +9250,20 @@ fn render_relationship_svg(
         .skinparams
         .iter()
         .rev()
-        .find(|skinparam| skinparam.key.eq_ignore_ascii_case("classArrowColor"))
+        .find(|skinparam| {
+            skinparam.key.eq_ignore_ascii_case("classArrowColor")
+                || skinparam.key.eq_ignore_ascii_case("ArrowColor")
+        })
         .map(|skinparam| crate::sequence::resolve_color(skinparam.value.trim()));
     let default_arrow_thickness = diagram
         .meta
         .skinparams
         .iter()
         .rev()
-        .find(|skinparam| skinparam.key.eq_ignore_ascii_case("classArrowThickness"))
+        .find(|skinparam| {
+            skinparam.key.eq_ignore_ascii_case("classArrowThickness")
+                || skinparam.key.eq_ignore_ascii_case("ArrowThickness")
+        })
         .and_then(|skinparam| skinparam.value.trim().parse::<f64>().ok());
     let edge_color = rel
         .style
@@ -9281,10 +9287,36 @@ fn render_relationship_svg(
         None => "",
     };
 
+    // Java SVEK receives Graphviz through `SvgResult`, whose dot-generated
+    // straight routes have already been serialized to two decimal places.
+    // Preserve full native doubles for curved routes (their later Bezier
+    // mutations need that trajectory) and for scaled output (which rounds once
+    // after the graphics transform).
+    let first_point = edge_path.points[0];
+    let straight_route = edge_path
+        .points
+        .iter()
+        .all(|point| (point.0 - first_point.0).abs() < 0.000_001)
+        || edge_path
+            .points
+            .iter()
+            .all(|point| (point.1 - first_point.1).abs() < 0.000_001);
+    let graphviz_svg_coord = |value: f64| {
+        if straight_route && !crate::plantuml_metrics::full_precision_active() {
+            (value * 100.0).round() / 100.0
+        } else {
+            value
+        }
+    };
     let edge_points: Vec<(f64, f64)> = edge_path
         .points
         .iter()
-        .map(|(x, y)| (x + MARGIN + layout_x_bias, y + MARGIN))
+        .map(|(x, y)| {
+            (
+                graphviz_svg_coord(*x) + MARGIN + layout_x_bias,
+                graphviz_svg_coord(*y) + MARGIN,
+            )
+        })
         .collect();
     let start_decoration_len = if decorates_from {
         relationship_decoration_length(rel.kind)
@@ -14040,6 +14072,43 @@ mod tests {
     }
 
     #[test]
+    fn graphviz_edge_points_enter_svek_at_svg_precision() {
+        let input = "@startuml\n\
+            class FreshRoundedOrigin3371\n\
+            class FreshRoundedMiddle3373\n\
+            class FreshRoundedTarget3379\n\
+            FreshRoundedOrigin3371 --> FreshRoundedMiddle3373\n\
+            FreshRoundedMiddle3373 --> FreshRoundedTarget3379\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        let paths = svg
+            .split("<path codeLine=")
+            .skip(1)
+            .map(|tail| {
+                tail.split_once(" d=\"")
+                    .and_then(|(_, tail)| tail.split_once('"'))
+                    .map(|(path, _)| path)
+                    .unwrap()
+            })
+            .collect::<Vec<_>>();
+
+        assert_eq!(paths.len(), 2, "{svg}");
+        for path in paths {
+            for coordinate in path
+                .split(|ch: char| !(ch.is_ascii_digit() || matches!(ch, '-' | '.')))
+                .filter(|part| !part.is_empty())
+            {
+                let value = coordinate.parse::<f64>().unwrap();
+                assert!(
+                    (value * 100.0 - (value * 100.0).round()).abs() < 0.000_001,
+                    "non-SVG dot coordinate {coordinate} in {path}"
+                );
+            }
+        }
+    }
+
+    #[test]
     fn no_oracle_class_arrow_defaults_paint_path_and_extremities() {
         let input = "@startuml\n\
             skinparam classArrowColor #13579B\n\
@@ -14055,6 +14124,30 @@ mod tests {
         assert!(svg.contains(r##"<polygon fill="none""##));
         let polygon = svg.split_once(r##"<polygon fill="none""##).unwrap().1;
         assert!(polygon.contains(r##"style="stroke:#13579B;stroke-width:4;""##));
+    }
+
+    #[test]
+    fn global_arrow_style_paints_changed_count_class_links() {
+        let input = "@startuml\n\
+            skinparam ArrowColor #2468AC\n\
+            skinparam ArrowThickness 3\n\
+            class FreshPaintOrigin3407\n\
+            class FreshPaintMiddle3413\n\
+            class FreshPaintTarget3433\n\
+            FreshPaintOrigin3407 --> FreshPaintMiddle3413\n\
+            FreshPaintMiddle3413 <|.. FreshPaintTarget3433\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert_eq!(
+            svg.matches(r##"style="stroke:#2468AC;stroke-width:3;"##)
+                .count(),
+            4,
+            "{svg}"
+        );
+        assert!(svg.contains(r##"<polygon fill="#2468AC""##), "{svg}");
+        assert!(svg.contains(r##"<polygon fill="none""##), "{svg}");
     }
 
     #[test]
