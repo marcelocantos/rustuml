@@ -8088,16 +8088,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         };
                         let mut note_right = note_left + note_content_w;
                         // A message-attached note sits inside a message tile, which
-                        // reserves an extra NOTE_LIFELINE_GAP of right margin.
-                        // Its note box is drawn with the ceiled preferred width,
-                        // while the tile/canvas reservation follows PlantUML's
-                        // rounded raw-width extent. This can add one more pixel to
-                        // the full-canvas background rect without moving the note.
+                        // reserves the arrow's endpoint plus the note component's
+                        // raw preferred width and `NoteBox.getRightShift`. Java
+                        // combines those fractional values before the image
+                        // envelope is rounded (`ArrowAndNoteBox.getPreferredWidth`
+                        // and `DrawableSetInitializer.prepareMissingSpace`).
                         if note.on_message {
-                            note_right += NOTE_LIFELINE_GAP;
-                            if raw_note_content_w.fract() > 0.57 {
-                                note_right += 1.0;
-                            }
+                            note_right =
+                                (anchor_x + raw_note_content_w).ceil() + 2.0 * NOTE_LIFELINE_GAP;
                         } else if diagram.teoz {
                             note_right += NOTE_LIFELINE_GAP - 1.0;
                         }
@@ -8284,12 +8282,20 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         }
     }
     // Add 1.0 for note stroke width when notes extend the right edge.
-    let effective_right = last_box_right
-        .max(if max_note_right > 0.0 {
-            max_note_right + 1.0
-        } else {
-            0.0
-        })
+    // `ParticipantPadding` is part of `ComponentRoseParticipant`'s preferred
+    // width, while notes report an independent preferred extent. Java compares
+    // those envelopes in `DrawableSetInitializer.prepareMissingSpace`; padding
+    // therefore grows only the participant candidate, not whichever element
+    // ultimately dominates the canvas.
+    let participant_envelope_right = last_box_right + participant_outer_padding;
+    let note_envelope_right = if max_note_right > 0.0 {
+        max_note_right + 1.0
+    } else {
+        0.0
+    };
+    let note_envelope_dominates = note_envelope_right > participant_envelope_right;
+    let effective_right = participant_envelope_right
+        .max(note_envelope_right)
         .max(max_self_msg_right)
         // A wide divider strip ends at max_divider_right; the canvas adds
         // RIGHT_MARGIN (10) but the divider only needs +5, so offset by -5.
@@ -8364,8 +8370,19 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // A title/caption/footer band wider than the participant span shifted the
     // participants right by `meta_shift` (so `effective_right` already grew by
     // that much); add it once more to keep the band centred and symmetric.
-    let mut svg_width_exact = svg_width_exact + meta_shift + participant_outer_padding
-        - theme_top_padding
+    // The resolved theme margin surrounds an event envelope expanded by
+    // `prepareMissingSpace`, but is already represented on the participant
+    // envelope's left edge. Preserve the historical subtraction when padded
+    // participants dominate; mirror it on the right only when an attached note
+    // extends beyond them.
+    let theme_horizontal_margin = if note_envelope_dominates {
+        theme_top_padding
+    } else {
+        -theme_top_padding
+    };
+    let mut svg_width_exact = svg_width_exact
+        + meta_shift
+        + theme_horizontal_margin
         + if sequence_shadowing {
             SHADOW_CANVAS_RIGHT_PAD
         } else {
@@ -13097,6 +13114,30 @@ mod tests {
 
         assert!(svg.contains(r#"y1="94.8096" y2="94.8096""#));
         assert!(svg.contains(r#"M86,77.2656 L86,102.2656"#));
+    }
+
+    #[test]
+    fn themed_attached_note_competes_with_padded_participant_envelope() {
+        let input = concat!(
+            "@startuml\n",
+            "!theme metal\n",
+            "participant \"Quartz Intake 7301\" as Intake7301\n",
+            "participant \"Lumen Archive 7303\" as Archive7303\n",
+            "participant \"Audit Fork 7307\" as Audit7307\n",
+            "Intake7301 -> Archive7303 : route renamed payload\n",
+            "Archive7303 --> Intake7301 : return renamed payload\n",
+            "Intake7301 -> Audit7307 : branch fresh audit\n",
+            "note right : independent folded envelope 7309\n",
+            "@enduml",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // PlantUML 1.2026.3beta6 rendered this source headlessly at 856.25px.
+        // The width follows ComponentRoseParticipant.getPreferredWidth,
+        // ArrowAndNoteBox.getPreferredWidth, and prepareMissingSpace.
+        assert!(svg.contains(r#"width="856.25px""#), "{svg}");
+        assert!(svg.contains(">independent folded envelope 7309</text>"));
     }
 
     #[test]
