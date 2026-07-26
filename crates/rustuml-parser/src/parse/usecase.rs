@@ -57,6 +57,24 @@ fn label_to_id(label: &str) -> String {
         .collect()
 }
 
+fn remove_common_note_indent(lines: &[String]) -> Vec<String> {
+    let common = lines
+        .iter()
+        .filter(|line| !line.is_empty())
+        .map(|line| {
+            line.as_bytes()
+                .iter()
+                .take_while(|byte| matches!(byte, b' ' | b'\t'))
+                .count()
+        })
+        .min()
+        .unwrap_or(0);
+    lines
+        .iter()
+        .map(|line| line[common.min(line.len())..].to_string())
+        .collect()
+}
+
 pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
     let mut actors: Vec<Actor> = Vec::new();
     let mut use_cases: Vec<UseCase> = Vec::new();
@@ -253,10 +271,16 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
         // Handle multiline note block body.
         if let Some(pending) = note_block.as_ref() {
             if trimmed == "end note" {
-                let text = note_block_lines.join("\n");
+                // Java `CommandFactoryNoteOnEntity.createMultiLine` delegates
+                // to `BlocLines.removeEmptyColumns`: remove only indentation
+                // shared by every body line and retain deeper Creole indents.
+                let text = remove_common_note_indent(&note_block_lines)
+                    .join("\n")
+                    .trim_end()
+                    .to_string();
                 if !text.trim().is_empty() {
                     notes.push(UseCaseNote {
-                        text: text.trim().to_string(),
+                        text,
                         kind: pending.kind.clone(),
                         position: pending.position,
                         source_line: pending.source_line,
@@ -265,7 +289,7 @@ pub fn parse_usecase(lines: &[String]) -> Result<UseCaseDiagram, ParseError> {
                 note_block = None;
                 note_block_lines.clear();
             } else {
-                note_block_lines.push(trimmed.to_string());
+                note_block_lines.push(line.trim_end().to_string());
             }
             continue;
         }
@@ -997,6 +1021,25 @@ mod tests {
         assert_eq!(d.notes[3].kind, UseCaseNoteKind::OnLink { connection: 0 });
         assert_eq!(d.notes[3].position, UseCaseNotePosition::Top);
         assert_eq!(d.notes[3].source_line, 10);
+    }
+
+    #[test]
+    fn multiline_note_removes_only_shared_indent() {
+        let d = parse(concat!(
+            "actor \"Fresh Examiner 5101\" as Examiner5101\n",
+            "note bottom of Examiner5101\n",
+            "   Fresh heading\n",
+            "     * deeper one\n",
+            "       ** deeper two\n",
+            "end note",
+        ));
+
+        // Java `CommandFactoryNoteOnEntity.createMultiLine` passes the body
+        // through `BlocLines.removeEmptyColumns`, preserving relative indents.
+        assert_eq!(
+            d.notes[0].text,
+            "Fresh heading\n  * deeper one\n    ** deeper two"
+        );
     }
 
     #[test]

@@ -197,6 +197,7 @@ struct SkinColors {
     uc_font_family: String,
     uc_font_size: u32,
     uc_stereo_font_color: String,
+    arrow_color: String,
     arrow_font_color: String,
     arrow_font_family: String,
     arrow_font_size: u32,
@@ -287,6 +288,9 @@ impl SkinColors {
             ),
             uc_stereo_font_color: skin_color(skinparams, "usecaseStereotypeFontColor")
                 .unwrap_or(uc_font_color),
+            arrow_color: skin_color(skinparams, "usecaseArrowColor")
+                .or_else(|| skin_color(skinparams, "arrowColor"))
+                .unwrap_or_else(|| STROKE.to_string()),
             arrow_font_color: skin_color(skinparams, "usecaseArrowFontColor")
                 .or_else(|| skin_color(skinparams, "arrowFontColor"))
                 .unwrap_or_else(|| TEXT_COLOR.to_string()),
@@ -1341,6 +1345,44 @@ fn resolve_positions(
         .unwrap_or_else(|| fallback_positions(actor_dims, uc_dims, diagram.notes.len()))
 }
 
+fn add_layout_entity_node(
+    layout: &mut LayoutGraph,
+    layout_node_ids: &mut Vec<String>,
+    materialized: &mut HashSet<String>,
+    id: &str,
+    diagram: &UseCaseDiagram,
+    actor_dims: &[ActorDim],
+    uc_dims: &[UseCaseDim],
+) {
+    if !materialized.insert(id.to_string()) {
+        return;
+    }
+    if let Some((index, actor)) = diagram
+        .actors
+        .iter()
+        .enumerate()
+        .find(|(_, actor)| actor.id == id)
+    {
+        let dim = &actor_dims[index];
+        layout.add_node(&actor.id, &actor.label, dim.width, dim.height);
+        layout_node_ids.push(actor.id.clone());
+        return;
+    }
+    if let Some((index, uc)) = diagram
+        .use_cases
+        .iter()
+        .enumerate()
+        .find(|(_, uc)| uc.id == id)
+    {
+        let dim = &uc_dims[index];
+        // Java `EntityImageUseCase.getShapeType` returns `ShapeType.OVAL`;
+        // `SvekNode.appendShapeInternal` therefore gives Graphviz
+        // `shape=ellipse`, so diagonal splines meet the painted oval.
+        layout.add_ellipse_node(&uc.id, &uc.label, dim.rx * 2.0, dim.ry * 2.0);
+        layout_node_ids.push(uc.id.clone());
+    }
+}
+
 fn layout_usecase_positions(
     diagram: &UseCaseDiagram,
     actor_dims: &[ActorDim],
@@ -1375,60 +1417,6 @@ fn layout_usecase_positions(
     }
     let mut layout_node_ids =
         Vec::with_capacity(diagram.actors.len() + diagram.use_cases.len() + diagram.notes.len());
-    {
-        let mut materialized = HashSet::new();
-        let mut add_entity_node = |id: &str| {
-            if !materialized.insert(id.to_string()) {
-                return;
-            }
-            if let Some((index, actor)) = diagram
-                .actors
-                .iter()
-                .enumerate()
-                .find(|(_, actor)| actor.id == id)
-            {
-                let dim = &actor_dims[index];
-                layout.add_node(&actor.id, &actor.label, dim.width, dim.height);
-                layout_node_ids.push(actor.id.clone());
-                return;
-            }
-            if let Some((index, uc)) = diagram
-                .use_cases
-                .iter()
-                .enumerate()
-                .find(|(_, uc)| uc.id == id)
-            {
-                let dim = &uc_dims[index];
-                // Java `EntityImageUseCase.getShapeType` returns
-                // `ShapeType.OVAL`; `SvekNode.appendShapeInternal` therefore
-                // gives Graphviz `shape=ellipse`, so diagonal splines meet the
-                // painted oval rather than its rectangular bounding box.
-                layout.add_ellipse_node(&uc.id, &uc.label, dim.rx * 2.0, dim.ry * 2.0);
-                layout_node_ids.push(uc.id.clone());
-            }
-        };
-
-        if diagram.packages.is_empty() {
-            // Java provenance: `Bibliotekon.addLine/lines0` classifies every
-            // length-one relation as an early SVEK edge. `DotStringFactory
-            // .createDotString` writes those edges before
-            // `Cluster.printCluster2`, so Graphviz lazily materializes their
-            // endpoints in relation order before the remaining root leaves.
-            for connection in &diagram.connections {
-                if connection.queue_len.max(1) == 1 {
-                    add_entity_node(&connection.from);
-                    add_entity_node(&connection.to);
-                }
-            }
-        }
-        for actor in &diagram.actors {
-            add_entity_node(&actor.id);
-        }
-        for uc in &diagram.use_cases {
-            add_entity_node(&uc.id);
-        }
-    }
-
     let entity_note_indices: Vec<usize> = diagram
         .notes
         .iter()
@@ -1437,16 +1425,91 @@ fn layout_usecase_positions(
             (!matches!(note.kind, UseCaseNoteKind::OnLink { .. })).then_some(index)
         })
         .collect();
-    for &note_index in &entity_note_indices {
-        let note_id = note_node_id(&diagram.notes[note_index], note_index);
-        let dim = &note_dims[note_index];
-        layout.add_node(
-            &note_id,
-            &diagram.notes[note_index].text,
-            dim.width,
-            dim.height,
-        );
-        layout_node_ids.push(note_id);
+
+    let mut materialized = HashSet::new();
+    if diagram.packages.is_empty() {
+        // Java provenance: `Bibliotekon.addLine/lines0` classifies every
+        // length-one relation as an early SVEK edge. `DotStringFactory
+        // .createDotString` writes those edges before
+        // `Cluster.printCluster2`, so Graphviz lazily materializes their
+        // endpoints in relation order before the remaining root leaves.
+        for connection in &diagram.connections {
+            if connection.queue_len.max(1) == 1 {
+                add_layout_entity_node(
+                    &mut layout,
+                    &mut layout_node_ids,
+                    &mut materialized,
+                    &connection.from,
+                    diagram,
+                    actor_dims,
+                    uc_dims,
+                );
+                add_layout_entity_node(
+                    &mut layout,
+                    &mut layout_node_ids,
+                    &mut materialized,
+                    &connection.to,
+                    diagram,
+                    actor_dims,
+                    uc_dims,
+                );
+            }
+        }
+    }
+
+    // `GraphvizImageBuilder.printEntities` creates ordinary SVEK nodes in the
+    // diagram's entity insertion order. Synthetic notes are real entities, so
+    // they remain interleaved with actors and use cases by source location.
+    let mut node_stream = Vec::with_capacity(
+        diagram.actors.len() + diagram.use_cases.len() + entity_note_indices.len(),
+    );
+    node_stream.extend(
+        diagram
+            .actors
+            .iter()
+            .enumerate()
+            .map(|(index, actor)| (actor.source_line, 0_u8, index)),
+    );
+    node_stream.extend(
+        diagram
+            .use_cases
+            .iter()
+            .enumerate()
+            .map(|(index, use_case)| (use_case.source_line, 1_u8, index)),
+    );
+    node_stream.extend(
+        entity_note_indices
+            .iter()
+            .map(|&index| (diagram.notes[index].source_line, 2_u8, index)),
+    );
+    node_stream.sort_by_key(|&(line, kind, _)| (line, kind));
+    for (_, kind, index) in node_stream {
+        match kind {
+            0 => add_layout_entity_node(
+                &mut layout,
+                &mut layout_node_ids,
+                &mut materialized,
+                &diagram.actors[index].id,
+                diagram,
+                actor_dims,
+                uc_dims,
+            ),
+            1 => add_layout_entity_node(
+                &mut layout,
+                &mut layout_node_ids,
+                &mut materialized,
+                &diagram.use_cases[index].id,
+                diagram,
+                actor_dims,
+                uc_dims,
+            ),
+            _ => {
+                let note_id = note_node_id(&diagram.notes[index], index);
+                let dim = &note_dims[index];
+                layout.add_node(&note_id, &diagram.notes[index].text, dim.width, dim.height);
+                layout_node_ids.push(note_id);
+            }
+        }
     }
     for pkg in &diagram.packages {
         // Java `ClusterHeader.getTitleAndAttribute{Width,Height}` truncates
@@ -1711,6 +1774,32 @@ fn layout_usecase_positions(
                 .iter()
                 .flat_map(|edge| edge.points.iter().map(|point| point.1)),
         )
+        .chain(result.edge_paths.iter().filter_map(|edge| {
+            let label = edge.label?;
+            let (connection_index, _) =
+                diagram
+                    .connections
+                    .iter()
+                    .enumerate()
+                    .find(|(_, connection)| {
+                        connection.from == edge.from
+                            && connection.to == edge.to
+                            && (connection.label.is_some() || connection.stereotype.is_some())
+                    })?;
+            if note_on_connection(diagram, connection_index).is_some() {
+                return None;
+            }
+            let (_, solved_y) = quantized_svek_label_origin(label.x, label.y);
+            // `SvekEdge.drawU` paints the real one-pixel-margined text at the
+            // fixed-table origin recovered by `solveLine`.
+            // `LimitFinder.drawText` then moves the UText baseline upward by
+            // its line-box height minus 1.5 pixels.
+            Some(
+                solved_y + 1.0 + pm::ascent(skin.arrow_font_size as f64)
+                    - pm::text_height(skin.arrow_font_size as f64)
+                    + 1.5,
+            )
+        }))
         .fold(f64::INFINITY, f64::min);
     let origin_y = if min_painted_y.is_finite() {
         base_origin_y - min_painted_y
@@ -3226,6 +3315,32 @@ fn emit_link_note(
     }
 }
 
+fn svek_ordered_connection_indices(diagram: &UseCaseDiagram) -> Vec<usize> {
+    let same_connections = |left: &UseCaseConnection, right: &UseCaseConnection| {
+        (left.from == right.from && left.to == right.to)
+            || (left.from == right.to && left.to == right.from)
+    };
+    let mut ordered = Vec::with_capacity(diagram.connections.len());
+    for connection_index in 0..diagram.connections.len() {
+        let connection = &diagram.connections[connection_index];
+        let Some(first) = ordered
+            .iter()
+            .position(|&index| same_connections(&diagram.connections[index], connection))
+        else {
+            ordered.push(connection_index);
+            continue;
+        };
+        let mut insert_at = first + 1;
+        while insert_at < ordered.len()
+            && same_connections(&diagram.connections[ordered[insert_at]], connection)
+        {
+            insert_at += 1;
+        }
+        ordered.insert(insert_at, connection_index);
+    }
+    ordered
+}
+
 fn render_no_oracle_connections(
     svg: &mut SvgBuilder,
     diagram: &UseCaseDiagram,
@@ -3233,7 +3348,10 @@ fn render_no_oracle_connections(
     edge_paths: &[EdgePath],
     skin: &SkinColors,
 ) {
-    for (connection_index, conn) in diagram.connections.iter().enumerate() {
+    // Java `CucaDiagramFileMakerSvek.getOrderedLinks/addLinkNew` keeps links
+    // sharing an unordered endpoint pair adjacent to their first occurrence.
+    for connection_index in svek_ordered_connection_indices(diagram) {
+        let conn = &diagram.connections[connection_index];
         let Some(edge) = edge_paths
             .iter()
             .find(|edge| edge.from == conn.from && edge.to == conn.to)
@@ -3273,9 +3391,12 @@ fn render_no_oracle_connections(
         }
         if let Some(d) = edge_path_d(&path_points) {
             let path_style = if conn.dashed {
-                format!("stroke:{STROKE};stroke-width:1;stroke-dasharray:7,7;")
+                format!(
+                    "stroke:{};stroke-width:1;stroke-dasharray:7,7;",
+                    skin.arrow_color
+                )
             } else {
-                format!("stroke:{STROKE};stroke-width:1;")
+                format!("stroke:{};stroke-width:1;", skin.arrow_color)
             };
             let path_id = if start_decoration.is_some() || end_decoration.is_some() {
                 format!("{from_label}-to-{to_label}")
@@ -3289,7 +3410,13 @@ fn render_no_oracle_connections(
         if let Some(decoration) = start_decoration
             && raw_points.len() >= 2
         {
-            render_usecase_extremity(svg, decoration, raw_points[1], raw_points[0]);
+            render_usecase_extremity(
+                svg,
+                decoration,
+                raw_points[1],
+                raw_points[0],
+                &skin.arrow_color,
+            );
         }
         if let Some(decoration) = end_decoration
             && raw_points.len() >= 2
@@ -3300,6 +3427,7 @@ fn render_no_oracle_connections(
                 decoration,
                 raw_points[endpoint - 1],
                 raw_points[endpoint],
+                &skin.arrow_color,
             );
         }
         let label_text = conn
@@ -3331,10 +3459,8 @@ fn render_no_oracle_connections(
                 // `SvekEdge.solveLine` captures the fixed-table origin, then
                 // `drawU` replaces it with the real one-pixel-margined label.
                 edge.label.map(|label_box| {
-                    (
-                        label_box.x + 1.0,
-                        label_box.y + 1.0 + pm::ascent(skin.arrow_font_size as f64),
-                    )
+                    let (x, y) = quantized_svek_label_origin(label_box.x, label_box.y);
+                    (x + 1.0, y + 1.0 + pm::ascent(skin.arrow_font_size as f64))
                 })
             };
             let Some((x, y)) = position else {
@@ -3470,6 +3596,12 @@ fn quantized_svek_edge_points(edge: &EdgePath) -> Vec<(f64, f64)> {
         .collect()
 }
 
+fn quantized_svek_label_origin(x: f64, y: f64) -> (f64, f64) {
+    // `SvekEdge.solveLine/getXY` recovers the fixed HTML-table origin from
+    // Graphviz's SVG polygon, whose coordinates are serialized to two places.
+    ((x * 100.0).round() / 100.0, (y * 100.0).round() / 100.0)
+}
+
 fn trim_svek_edge_endpoint(points: &mut [(f64, f64)], start: bool, gap: f64) {
     if points.len() < 2 {
         return;
@@ -3517,18 +3649,19 @@ fn render_usecase_extremity(
     decoration: UseCaseExtremity,
     control: (f64, f64),
     endpoint: (f64, f64),
+    color: &str,
 ) {
     match decoration {
         UseCaseExtremity::Dependency => {
             let points = dependency_arrow_points(control, endpoint);
             svg.raw(&format!(
-                r##"<polygon fill="#181818" points="{points}" style="stroke:#181818;stroke-width:1;"/>"##,
+                r#"<polygon fill="{color}" points="{points}" style="stroke:{color};stroke-width:1;"/>"#,
             ));
         }
         UseCaseExtremity::Extension => {
             let points = extension_arrow_points(control, endpoint);
             svg.raw(&format!(
-                r##"<polygon fill="none" points="{points}" style="stroke:#181818;stroke-width:1;"/>"##,
+                r#"<polygon fill="none" points="{points}" style="stroke:{color};stroke-width:1;"/>"#,
             ));
         }
     }
@@ -3998,6 +4131,100 @@ mod tests {
             svg.contains(r#"y="247.67"#) && svg.contains(">«include»</text>"),
             "{svg}"
         );
+    }
+
+    #[test]
+    fn renamed_actorless_labels_expand_the_complete_svek_painted_envelope() {
+        let input = "@startuml\n\
+                     usecase \"Novel Intake 5003\" as Intake5003\n\
+                     usecase \"Fresh Review 5009\" as Review5009\n\
+                     usecase \"Renamed Archive 5011\" as Archive5011\n\
+                     Intake5003 --> Review5009 : initiates unlisted work\n\
+                     Review5009 ..> Archive5011 : <<include>>\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Fresh Java PlantUML reference absent from the golden corpus.
+        // `SvekResult.drawU` includes edge labels in the `LimitFinder`, whose
+        // `drawText` baseline adjustment controls the normalized top edge.
+        assert!(
+            svg.contains(r#"viewBox="0 0 253 287""#) || svg.contains(r#"viewBox="0 0 254 287""#),
+            "{svg}"
+        );
+        assert!(
+            svg.contains(r#"x="98.83" y="85.3484">initiates unlisted work</text>"#),
+            "{svg}"
+        );
+        assert!(
+            svg.contains(r#"x="98.83" y="198.7384">«include»</text>"#),
+            "{svg}"
+        );
+    }
+
+    #[test]
+    fn renamed_bottom_note_keeps_entity_order_and_relative_indents() {
+        let input = concat!(
+            "@startuml\n",
+            "actor \"Fresh Examiner 5101\" as Examiner5101\n",
+            "note bottom of Examiner5101\n",
+            "   Fresh heading\n",
+            "     * deeper one\n",
+            "       ** deeper two\n",
+            "end note\n",
+            "usecase \"Novel Approve 5107\" as Approve5107\n",
+            "usecase \"Renamed Reject 5113\" as Reject5113\n",
+            "Examiner5101 --> Approve5107\n",
+            "Examiner5101 --> Reject5113\n",
+            "@enduml",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Fresh Java reference. `CommandFactoryNoteOnEntity` inserts the
+        // synthetic note at this source position, then
+        // `GraphvizImageBuilder.printEntities` preserves that entity order.
+        assert!(svg.contains(r#"viewBox="0 0 558 212""#), "{svg}");
+        let note = svg.find(r#"data-qualified-name="GMN3""#).unwrap();
+        let approve = svg.find(r#"data-qualified-name="Approve5107""#).unwrap();
+        assert!(note < approve, "{svg}");
+        assert!(
+            svg.contains(r#"x="12" y=""#) && svg.contains(">Fresh heading</text>"),
+            "{svg}"
+        );
+        assert!(
+            svg.contains(r#"x="20.2266" y=""#) && svg.contains(">* deeper one</text>"),
+            "{svg}"
+        );
+        assert!(
+            svg.contains(r#"x="28.4531" y=""#) && svg.contains(">** deeper two</text>"),
+            "{svg}"
+        );
+    }
+
+    #[test]
+    fn renamed_reciprocal_links_group_and_share_arrow_style() {
+        let input = "@startuml\n\
+                     skinparam ArrowColor DarkGreen\n\
+                     usecase \"Fresh Ledger 5209\" as Ledger5209\n\
+                     usecase \"Novel Check 5213\" as Check5213\n\
+                     usecase \"Renamed Archive 5227\" as Archive5227\n\
+                     Ledger5209 ..> Check5213 : first unseen flow\n\
+                     Ledger5209 --> Archive5227 : unrelated renamed flow\n\
+                     Check5213 ..> Ledger5209 : reciprocal unseen flow\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Fresh Java reference. `CucaDiagramFileMakerSvek.addLinkNew` groups
+        // `Link.sameConnections` pairs, while `FromSkinparamToStyle` maps
+        // `arrowColor` to the SVEK arrow line and extremity style.
+        let first = svg.find("<!--link Ledger5209 to Check5213-->").unwrap();
+        let reciprocal = svg.find("<!--link Check5213 to Ledger5209-->").unwrap();
+        let unrelated = svg.find("<!--link Ledger5209 to Archive5227-->").unwrap();
+        assert!(first < reciprocal && reciprocal < unrelated, "{svg}");
+        assert_eq!(svg.matches(r#"stroke:#006400;stroke-width:1;"#).count(), 6);
+        assert_eq!(svg.matches(r##"fill="#006400""##).count(), 3);
     }
 
     #[test]
