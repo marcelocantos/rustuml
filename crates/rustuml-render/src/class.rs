@@ -163,6 +163,10 @@ const NOTE_NESTED_BULLET_SIZE: f64 = 3.5;
 const NOTE_NESTED_BULLET_DIM_HEIGHT: f64 = 3.0;
 const NOTE_NESTED_BULLET_X: f64 = 1.0;
 const NOTE_NESTED_BULLET_START_ALTITUDE: f64 = -7.0;
+/// Extracted from `CreoleStripeSimpleParser` numbered atoms at the default
+/// 13px note font: the marker run (`1.`) is followed by this fixed gap before
+/// the item text, independent of its label and nesting level.
+const NOTE_ORDERED_NUMBER_GAP: f64 = 4.1133;
 /// `EntityImageAssociationPoint.SIZE`: PlantUML lays out and paints the
 /// synthetic point inserted into an association-class base edge as a 4px
 /// circle.
@@ -9723,20 +9727,48 @@ fn note_body_blocks(note: &Note) -> Vec<NoteBodyBlock<'_>> {
     blocks
 }
 
-fn note_line_dimensions(line: &str) -> (f64, f64) {
+fn next_note_number(level: usize, number_counters: &mut Vec<usize>) -> usize {
+    if number_counters.len() > level {
+        number_counters.truncate(level);
+    }
+    while number_counters.len() < level {
+        number_counters.push(0);
+    }
+    number_counters[level - 1] += 1;
+    number_counters[level - 1]
+}
+
+fn note_ordered_indent(level: usize) -> f64 {
+    (text_render::measure("1.", NOTE_FONT_SIZE, false) + NOTE_ORDERED_NUMBER_GAP)
+        * level.saturating_sub(1) as f64
+}
+
+fn note_line_dimensions(line: &str, number_counters: &mut Vec<usize>) -> (f64, f64) {
     let (header_width, content) = if let Some((order, content)) = parse_note_bullet(line) {
+        number_counters.clear();
         let header_width = if order == 0 {
             NOTE_BULLET_HEADER_WIDTH
         } else {
             NOTE_NESTED_BULLET_BASE_WIDTH + NOTE_NESTED_BULLET_INDENT * order as f64
         };
-        (header_width, content)
+        (header_width, content.to_string())
+    } else if let crate::creole::CreoleLine::Numbered { level, content } =
+        crate::creole::parse_line(line.trim())
+    {
+        let number = next_note_number(level, number_counters);
+        let marker = format!("{number}.");
+        let indent = note_ordered_indent(level);
+        (
+            indent + text_render::measure(&marker, NOTE_FONT_SIZE, false) + NOTE_ORDERED_NUMBER_GAP,
+            content,
+        )
     } else {
-        (0.0, line)
+        number_counters.clear();
+        (0.0, line.to_string())
     };
     (
-        header_width + text_render::measure(content, NOTE_FONT_SIZE, false),
-        text_render::label_height(content, NOTE_FONT_SIZE),
+        header_width + text_render::measure(&content, NOTE_FONT_SIZE, false),
+        text_render::label_height(&content, NOTE_FONT_SIZE).max(10.0),
     )
 }
 
@@ -9744,15 +9776,19 @@ fn note_body_dimensions(note: &Note) -> (f64, f64) {
     let mut width = 0.0_f64;
     let mut height = 0.0_f64;
     for block in note_body_blocks(note) {
-        let body_width = block
+        let mut number_counters = Vec::new();
+        let line_dimensions = block
             .lines
             .iter()
-            .map(|line| note_line_dimensions(line).0)
+            .map(|line| note_line_dimensions(line, &mut number_counters))
+            .collect::<Vec<_>>();
+        let body_width = line_dimensions
+            .iter()
+            .map(|(line_width, _)| *line_width)
             .fold(0.0_f64, f64::max);
-        let body_height = block
-            .lines
+        let body_height = line_dimensions
             .iter()
-            .map(|line| note_line_dimensions(line).1)
+            .map(|(_, line_height)| *line_height)
             .sum::<f64>();
         let (block_width, block_height) = match block.separator {
             None => (body_width, body_height),
@@ -9786,13 +9822,15 @@ fn note_box_dims(note: &Note) -> (f64, f64) {
 fn emit_note_body(svg: &mut String, note: &Note, x: f64, y: f64, width: f64) {
     let mut block_top = y + NOTE_PAD_Y;
     for block in note_body_blocks(note) {
+        let mut measure_counters = Vec::new();
         let body_height = block
             .lines
             .iter()
-            .map(|line| note_line_dimensions(line).1)
+            .map(|line| note_line_dimensions(line, &mut measure_counters).1)
             .sum::<f64>();
         let mut content_top = block_top;
         let mut separator_height = 0.0;
+        let mut number_counters = Vec::new();
 
         match block.separator {
             None => {}
@@ -9813,7 +9851,7 @@ fn emit_note_body(svg: &mut String, note: &Note, x: f64, y: f64, width: f64) {
 
                 let mut line_top = content_top;
                 for line in &block.lines {
-                    line_top += emit_note_line(svg, line, x, line_top);
+                    line_top += emit_note_line(svg, line, x, line_top, &mut number_counters);
                 }
                 emit_note_separator(svg, x, width, block_top + half_title, style, Some(title));
                 block_top += body_height + separator_height;
@@ -9823,7 +9861,7 @@ fn emit_note_body(svg: &mut String, note: &Note, x: f64, y: f64, width: f64) {
 
         let mut line_top = content_top;
         for line in &block.lines {
-            line_top += emit_note_line(svg, line, x, line_top);
+            line_top += emit_note_line(svg, line, x, line_top, &mut number_counters);
         }
         block_top += body_height + separator_height;
     }
@@ -9905,9 +9943,16 @@ fn emit_note_separator(
     }
 }
 
-fn emit_note_line(svg: &mut String, line: &str, x: f64, line_top: f64) -> f64 {
+fn emit_note_line(
+    svg: &mut String,
+    line: &str,
+    x: f64,
+    line_top: f64,
+    number_counters: &mut Vec<usize>,
+) -> f64 {
     let f = crate::plantuml_metrics::fmt_coord;
     let (content, text_x) = if let Some((order, content)) = parse_note_bullet(line) {
+        number_counters.clear();
         let text_height = text_render::label_height(content, NOTE_FONT_SIZE);
         if order == 0 {
             let ellipse_x = x + NOTE_PAD_X + NOTE_BULLET_ELLIPSE_X;
@@ -9923,7 +9968,10 @@ fn emit_note_line(svg: &mut String, line: &str, x: f64, line_top: f64) -> f64 {
                 f(NOTE_BULLET_ELLIPSE_SIZE / 2.0),
             )
             .unwrap();
-            (content, x + NOTE_PAD_X + NOTE_BULLET_HEADER_WIDTH)
+            (
+                content.to_string(),
+                x + NOTE_PAD_X + NOTE_BULLET_HEADER_WIDTH,
+            )
         } else {
             let order_width = NOTE_NESTED_BULLET_INDENT * order as f64;
             let rect_x = x + NOTE_PAD_X + NOTE_NESTED_BULLET_X + order_width;
@@ -9939,17 +9987,42 @@ fn emit_note_line(svg: &mut String, line: &str, x: f64, line_top: f64) -> f64 {
             )
             .unwrap();
             (
-                content,
+                content.to_string(),
                 x + NOTE_PAD_X + NOTE_NESTED_BULLET_BASE_WIDTH + order_width,
             )
         }
+    } else if let crate::creole::CreoleLine::Numbered { level, content } =
+        crate::creole::parse_line(line.trim())
+    {
+        let number = next_note_number(level, number_counters);
+        let marker = format!("{number}.");
+        let indent = note_ordered_indent(level);
+        let marker_x = x + NOTE_PAD_X + indent;
+        let baseline = line_top + text_render::label_ascent(&marker, NOTE_FONT_SIZE);
+        let marker_width = text_render::emit_text(
+            svg,
+            &marker,
+            &TextBase {
+                x: marker_x,
+                y: baseline,
+                font_size: NOTE_FONT_SIZE as u32,
+                font_family: "sans-serif",
+                fill: "#000000",
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        (content, marker_x + marker_width + NOTE_ORDERED_NUMBER_GAP)
     } else {
-        (line, x + NOTE_PAD_X)
+        number_counters.clear();
+        (line.to_string(), x + NOTE_PAD_X)
     };
-    let baseline = line_top + text_render::label_ascent(content, NOTE_FONT_SIZE);
+    let baseline = line_top + text_render::label_ascent(&content, NOTE_FONT_SIZE);
     text_render::emit_text(
         svg,
-        content,
+        &content,
         &TextBase {
             x: text_x,
             y: baseline,
@@ -9962,7 +10035,7 @@ fn emit_note_line(svg: &mut String, line: &str, x: f64, line_top: f64) -> f64 {
             skip_underline: false,
         },
     );
-    text_render::label_height(content, NOTE_FONT_SIZE)
+    text_render::label_height(&content, NOTE_FONT_SIZE).max(10.0)
 }
 
 /// Match `CreoleStripeSimpleParser.ASTERISK_PREFIXED_LINE_PATTERN` without
@@ -10987,6 +11060,18 @@ mod tests {
         assert!(svg.contains(r##"fill="#2457A6""##));
         assert!(svg.contains(r#"font-weight="700""#));
         assert!(svg.contains(r#"style="stroke:#181818;stroke-width:0.5;""#));
+    }
+
+    #[test]
+    fn standalone_numbered_note_tracks_each_nesting_level() {
+        let input = "@startuml\nnote as FreshChecklist733\n  # alpha\n  # beta\n  ## nested\n  # gamma\nend note\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert_eq!(svg.matches(">1.</text>").count(), 2);
+        assert!(svg.contains(">2.</text>"));
+        assert!(svg.contains(">3.</text>"));
+        assert!(svg.contains(">nested</text>"));
     }
 
     #[test]
