@@ -91,6 +91,9 @@ const MEMBER_TEXT_INSET: f64 = 9.0;
 const ENUM_TEXT_OFFSET: f64 = 6.0;
 /// Offset from entity x to visibility icon center.
 const VIS_ICON_OFFSET: f64 = 11.0;
+/// PlantUML's default `classAttributeIconSize`; `VisibilityModifier.getUBlock`
+/// exposes this as an 11px-high placement block.
+const VIS_ICON_DEFAULT_SIZE: u32 = 10;
 /// Visibility icon radius (small circle for method visibility).
 const VIS_ICON_R: f64 = 3.0;
 /// Default half-size for diamond and triangle visibility icons.
@@ -134,8 +137,6 @@ const GENERIC_BOX_HEIGHT: f64 = 16.1328;
 const GENERIC_TEXT_BASELINE: f64 = 12.6016;
 // Gap between the header (icon + name) right edge and the generic box left edge.
 const GENERIC_HEADER_GAP: f64 = 8.0;
-/// Extra header height when stereotypes are present.
-const STEREOTYPE_EXTRA_HEIGHT: f64 = 8.6211;
 /// Baseline-to-baseline distance between multiple stereotype lines.
 const STEREOTYPE_LINE_HEIGHT: f64 = 14.1328;
 /// Stereotype text baseline y relative to entity rect top.
@@ -752,12 +753,21 @@ fn calc_entity_dims(
     sprites: &HashMap<String, SpriteData>,
 ) -> EntityDims {
     let is_enum = entity.kind == EntityKind::Enum;
+    let name_font_size = font.name_font_size() as f64;
+    let member_font_size = font.member_font_size() as f64;
+    let (stereotype_bold, _) = font.stereotype_font_style(&entity.stereotypes);
+    let name_bold = font.font_bold || font.attr_font_bold || stereotype_bold;
     // Entity labels treat `__` as literal underscores, not underline markup,
     // so width must include those characters.
     let name_width = escaped_newline_lines(&entity.label)
         .iter()
         .map(|line| {
-            text_render::measure_no_underline_with_family(line, 14.0, false, &font.name_family)
+            text_render::measure_no_underline_with_family(
+                line,
+                name_font_size,
+                name_bold,
+                &font.name_family,
+            )
         })
         .fold(0.0_f64, f64::max);
     if entity.kind == EntityKind::State {
@@ -882,7 +892,7 @@ fn calc_entity_dims(
     } else if entity.kind == EntityKind::Object {
         ENUM_TEXT_OFFSET
     } else {
-        ICON_CX_OFFSET + ICON_RX + ICON_TEXT_GAP // 29
+        HEADER_CIRCLE_LEFT_MARGIN + font.circled_radius() * 2.0 + ICON_TEXT_GAP
     };
     let name_total = icon_area + name_width + HEADER_RIGHT_PAD + font.text_padding * 2.0;
 
@@ -948,8 +958,8 @@ fn calc_entity_dims(
                     } else {
                         text_render::measure_no_underline_with_family(
                             text,
-                            14.0,
-                            false,
+                            member_font_size,
+                            font.attr_font_bold,
                             &font.family,
                         )
                     }
@@ -1022,12 +1032,12 @@ fn calc_entity_dims(
         stereotype_count,
         header_sprite.is_some(),
         font.text_padding,
-        font.attr_font_size.or(font.font_size).unwrap_or(14),
+        font.name_font_size(),
         &font.name_family,
+        font.circled_radius(),
     );
     let field_padding = visible_field_blocks as f64 * font.text_padding * 2.0;
     let method_padding = visible_method_blocks as f64 * font.text_padding * 2.0;
-    let member_font_size = font.attr_font_size.unwrap_or(FONT_SIZE as u32) as f64;
     let field_content_height = members_content_height(
         entity
             .members
@@ -1165,8 +1175,12 @@ fn members_content_height<'a>(
         .sum()
 }
 
-fn member_first_baseline_ascent(member: &Member, attr_font: AttrFont<'_>) -> f64 {
-    member_display_lines(member, attr_font.monospace_spaces)
+fn member_first_baseline_ascent(
+    member: &Member,
+    attr_font: AttrFont<'_>,
+    text_padding: f64,
+) -> f64 {
+    let ascent = member_display_lines(member, attr_font.monospace_spaces)
         .first()
         .map(|line| {
             text_render::label_first_baseline_ascent_with_family(
@@ -1175,7 +1189,21 @@ fn member_first_baseline_ascent(member: &Member, attr_font: AttrFont<'_>) -> f64
                 attr_font.family,
             )
         })
-        .unwrap_or_else(|| text_render::ascent_for_family(attr_font.size as f64, attr_font.family))
+        .unwrap_or_else(|| text_render::ascent_for_family(attr_font.size as f64, attr_font.family));
+    if visibility_modifier(member).is_none() || attr_font.icon.block_height == 0.0 {
+        return ascent;
+    }
+
+    // Java `PlacementStrategyVisibility.getPositions` vertically centres the
+    // text block against `VisibilityModifier.getUBlock(size + 1)`. The member
+    // dimensions still sum text heights, so this affects placement only.
+    let text_height = member_content_height(
+        member,
+        attr_font.size as f64,
+        attr_font.family,
+        attr_font.monospace_spaces,
+    ) + text_padding * 2.0;
+    ascent + (attr_font.icon.block_height.max(text_height) - text_height) / 2.0
 }
 
 fn member_line_baseline_offset(
@@ -1259,6 +1287,7 @@ fn class_header_height(
     text_padding: f64,
     name_font_size: u32,
     name_font_family: &str,
+    circled_radius: f64,
 ) -> f64 {
     let name_content_height: f64 = escaped_newline_lines(&entity.label)
         .iter()
@@ -1272,21 +1301,17 @@ fn class_header_height(
     // complete circled-character block. Multi-line or enlarged names can
     // therefore grow the header beyond the default 32px icon envelope.
     let name_driven_height = name_content_height + 10.0 + text_padding * 2.0;
+    let circle_driven_height = circled_radius * 2.0 + CIRCLED_ICON_TOP_INSET * 2.0;
     if has_stereotypes {
-        HEADER_HEIGHT + stereotype_header_extra_height(stereotype_count) + text_padding * 4.0
+        let stereotype_driven_height = name_content_height
+            + stereotype_count as f64 * STEREOTYPE_LINE_HEIGHT
+            + 10.0
+            + text_padding * 4.0;
+        circle_driven_height.max(stereotype_driven_height)
     } else if has_header_sprite || hide.circle || entity.kind == EntityKind::Object {
         (HEADER_H_NO_CIRCLE + text_padding * 2.0).max(name_driven_height)
     } else {
-        HEADER_HEIGHT.max(name_driven_height)
-    }
-}
-
-fn stereotype_header_extra_height(stereotype_count: usize) -> f64 {
-    if stereotype_count == 0 {
-        0.0
-    } else {
-        STEREOTYPE_EXTRA_HEIGHT
-            + (stereotype_count.saturating_sub(1) as f64) * STEREOTYPE_LINE_HEIGHT
+        circle_driven_height.max(name_driven_height)
     }
 }
 
@@ -2507,6 +2532,14 @@ impl ClassFontOverrides {
             .unwrap_or((self.circled_font_size / 3 + 6) as f64)
     }
 
+    fn name_font_size(&self) -> u32 {
+        self.font_size.unwrap_or(FONT_SIZE as u32)
+    }
+
+    fn member_font_size(&self) -> u32 {
+        self.attr_font_size.unwrap_or(FONT_SIZE as u32)
+    }
+
     fn visibility_icon_geom(&self) -> VisibilityIconGeom {
         VisibilityIconGeom::from_attribute_icon_size(self.attr_icon_size)
     }
@@ -2598,17 +2631,27 @@ struct VisibilityIconGeom {
     round_half: f64,
     angled_half: f64,
     triangle_half_y: f64,
+    block_height: f64,
+    placement_center_bias: f64,
 }
 
 impl VisibilityIconGeom {
     fn from_attribute_icon_size(size: Option<u32>) -> Self {
         if let Some(size) = size {
             let round_half = (size / VIS_ICON_SIZE_RADIUS_DIVISOR) as f64;
+            let even_size = size - size % 2;
+            let block_height = if size == 0 { 0.0 } else { (size + 1) as f64 };
             Self {
                 center_offset: size as f64,
                 round_half,
                 angled_half: (size as f64 / 2.0 - VIS_ICON_ANGLED_INSET).max(round_half),
                 triangle_half_y: round_half,
+                block_height,
+                placement_center_bias: if block_height == 0.0 {
+                    0.0
+                } else {
+                    2.0 + even_size as f64 / 2.0 - block_height / 2.0
+                },
             }
         } else {
             Self {
@@ -2616,6 +2659,8 @@ impl VisibilityIconGeom {
                 round_half: VIS_ICON_R,
                 angled_half: VIS_ICON_ANGLED_HALF,
                 triangle_half_y: VIS_ICON_R,
+                block_height: (VIS_ICON_DEFAULT_SIZE + 1) as f64,
+                placement_center_bias: 1.5,
             }
         }
     }
@@ -5613,7 +5658,7 @@ fn render_entity_content(
         .map(crate::sequence::resolve_color);
     let attr_font = AttrFont {
         fill: member_fill,
-        size: font.attr_font_size.unwrap_or(14),
+        size: font.member_font_size(),
         family: &font.family,
         bold: font.attr_font_bold,
         italic: font.attr_font_italic,
@@ -5687,8 +5732,9 @@ fn render_entity_content(
         dim.stereotype_count,
         dim.has_header_sprite,
         text_padding,
-        font.attr_font_size.or(font.font_size).unwrap_or(14),
+        font.name_font_size(),
         &font.name_family,
+        font.circled_radius(),
     );
     let band_first_sep: Option<f64> = if has_body_polygon {
         None
@@ -5782,7 +5828,7 @@ fn render_entity_content(
     // body members force the class wider than its name.
     let icon_radius = font.circled_radius();
     let member_text_offset = MEMBER_TEXT_INSET + icon_radius;
-    let name_font_size = font.attr_font_size.or(font.font_size).unwrap_or(14);
+    let name_font_size = font.name_font_size();
     let (stereotype_bold, stereotype_italic) = font.stereotype_font_style(&entity.stereotypes);
     let name_bold = font.font_bold || font.attr_font_bold || stereotype_bold;
     let name_italic = is_abstract
@@ -5823,6 +5869,7 @@ fn render_entity_content(
                 text_padding,
                 name_font_size,
                 &font.name_family,
+                icon_radius,
             ) - sprite_height as f64)
                 / 2.0,
             x + slack
@@ -5897,6 +5944,7 @@ fn render_entity_content(
             text_padding,
             name_font_size,
             &font.name_family,
+            icon_radius,
         );
         // Java `HeaderLayout.drawU` vertically centres the complete
         // circled-character block inside the measured header.
@@ -5987,43 +6035,32 @@ fn render_entity_content(
         // Letter glyph path — use oracle override if available to avoid float precision issues.
         let glyph_path = if let Some(d) = glyph_path_override {
             d.to_string()
-        } else if let Some(character) = entity.spot_character {
+        } else {
+            let character = entity.spot_character.unwrap_or(match entity.kind {
+                EntityKind::Class | EntityKind::Object | EntityKind::State => 'C',
+                EntityKind::Interface => 'I',
+                // `EntityImageClassHeader.getCircledChar` maps both leaf
+                // types to the circled `E`.
+                EntityKind::Enum | EntityKind::Entity => 'E',
+                EntityKind::AbstractClass => 'A',
+                EntityKind::Annotation => '@',
+                EntityKind::Circle | EntityKind::Diamond => 'C',
+            });
             crate::metrics::centered_character_path(
                 character,
                 font.circled_font_size as f64,
                 icon_cx,
                 icon_cy,
             )
-            .unwrap_or_else(|| CLASS_GLYPH.to_string())
-        } else {
-            match entity.kind {
-                EntityKind::Class | EntityKind::Object => {
-                    // Offset the C glyph from reference position (cx=22) to actual cx.
-                    let dx = icon_cx - 22.0;
-                    let dy = icon_cy - 23.0;
-                    if dx.abs() < 0.001 && dy.abs() < 0.001 {
-                        CLASS_GLYPH.to_string()
-                    } else {
-                        offset_path(CLASS_GLYPH, dx, dy)
-                    }
-                }
+            .unwrap_or_else(|| match entity.kind {
                 EntityKind::Interface => interface_glyph(icon_cx, icon_cy),
                 EntityKind::Enum | EntityKind::Entity => {
-                    // Java `EntityImageClassHeader.getCircledChar` maps both
-                    // LeafType.ENUM and LeafType.ENTITY to the circled `E`.
-                    let dx = icon_cx - 22.0;
-                    let dy = icon_cy - 23.0;
-                    if dx.abs() < 0.001 && dy.abs() < 0.001 {
-                        ENUM_GLYPH.to_string()
-                    } else {
-                        offset_path(ENUM_GLYPH, dx, dy)
-                    }
+                    offset_path(ENUM_GLYPH, icon_cx - 22.0, icon_cy - 23.0)
                 }
                 EntityKind::AbstractClass => abstract_glyph(icon_cx, icon_cy),
                 EntityKind::Annotation => annotation_glyph(icon_cx, icon_cy),
-                EntityKind::State => CLASS_GLYPH.to_string(),
-                EntityKind::Circle | EntityKind::Diamond => CLASS_GLYPH.to_string(),
-            }
+                _ => offset_path(CLASS_GLYPH, icon_cx - 22.0, icon_cy - 23.0),
+            })
         };
 
         let glyph_fill_owned = font
@@ -6166,8 +6203,10 @@ fn render_entity_content(
             .unwrap_or(icon_cx + ICON_RX + ICON_TEXT_GAP);
         name_text_x_override.unwrap_or(default_name_x)
     };
+    // `AtomText.calculateDimensionSlow` clamps short text atoms to a 10px
+    // block before `HeaderLayout.drawU` vertically centres the class name.
     let name_line_step =
-        text_render::text_height_for_family(name_font_size as f64, &font.name_family);
+        text_render::text_height_for_family(name_font_size as f64, &font.name_family).max(10.0);
     let name_content_height = name_line_step * name_lines.len().max(1) as f64;
     let header_height = class_header_height(
         entity,
@@ -6178,6 +6217,7 @@ fn render_entity_content(
         text_padding,
         name_font_size,
         &font.name_family,
+        icon_radius,
     );
     let name_y_default = if dim.has_stereotypes {
         let stereo_content_height = dim.stereotype_count as f64 * STEREOTYPE_LINE_HEIGHT;
@@ -6423,6 +6463,7 @@ fn render_entity_content(
         text_padding,
         name_font_size,
         &font.name_family,
+        icon_radius,
     );
 
     // `dim.is_enum` is true only for the classic enum-constants layout
@@ -6918,10 +6959,9 @@ fn render_entity_content(
             let mut narrow_after_separator = fields_narrow_default;
             let mut member_top = header_sep_y + COMPARTMENT_PAD / 2.0 + text_padding;
             for (fi, member) in fields.iter().enumerate() {
-                let eff_y = oracle_text_y
-                    .get(oracle_field_text_idx)
-                    .copied()
-                    .unwrap_or(member_top + member_first_baseline_ascent(member, attr_font));
+                let eff_y = oracle_text_y.get(oracle_field_text_idx).copied().unwrap_or(
+                    member_top + member_first_baseline_ascent(member, attr_font, text_padding),
+                );
                 let oracle_text_count = member_oracle_text_y_count(member, &attr_font);
                 let oracle_text_element_count =
                     member_oracle_text_element_count(member, &attr_font);
@@ -7088,7 +7128,10 @@ fn render_entity_content(
                     let eff_y = oracle_text_y
                         .get(oracle_method_text_idx)
                         .copied()
-                        .unwrap_or(method_top + member_first_baseline_ascent(member, attr_font));
+                        .unwrap_or(
+                            method_top
+                                + member_first_baseline_ascent(member, attr_font, text_padding),
+                        );
                     let oracle_text_count = member_oracle_text_y_count(member, &attr_font);
                     let oracle_text_element_count =
                         member_oracle_text_element_count(member, &attr_font);
@@ -7232,7 +7275,9 @@ fn render_entity_content(
                 let eff_y = oracle_text_y
                     .get(oracle_method_text_idx)
                     .copied()
-                    .unwrap_or(method_top + member_first_baseline_ascent(member, attr_font));
+                    .unwrap_or(
+                        method_top + member_first_baseline_ascent(member, attr_font, text_padding),
+                    );
                 let oracle_text_count = member_oracle_text_y_count(member, &attr_font);
                 let oracle_text_element_count =
                     member_oracle_text_element_count(member, &attr_font);
@@ -7813,7 +7858,27 @@ fn render_member_line(
     if let Some(vis_mod) = visibility_modifier(member) {
         // Visibility icon group. When the class carries a link, PlantUML wraps
         // the icon shape (inside the `<g>`) in its own `<a>`.
-        let icon_cy = vis_icon_y_override.unwrap_or(baseline_y - 3.791015625);
+        let first_ascent = lines
+            .first()
+            .map(|line| {
+                text_render::label_first_baseline_ascent_with_family(
+                    line,
+                    attr_font.size as f64,
+                    attr_font.family,
+                )
+            })
+            .unwrap_or_else(|| {
+                text_render::ascent_for_family(attr_font.size as f64, attr_font.family)
+            });
+        let text_height = member_content_height(
+            member,
+            attr_font.size as f64,
+            attr_font.family,
+            attr_font.monospace_spaces,
+        );
+        let icon_cy = vis_icon_y_override.unwrap_or(
+            baseline_y + attr_font.icon.placement_center_bias + text_height / 2.0 - first_ascent,
+        );
 
         write!(svg, r#"<g data-visibility-modifier="{}">"#, vis_mod,).unwrap();
         if let Some(anchor) = link_anchor {
@@ -12494,7 +12559,7 @@ mod tests {
         let svg = crate::render_svg(&diagram);
 
         assert!(svg.contains(r#"style="width:187px;height:101px;background:#FFFFFF;""#));
-        assert!(svg.contains(r##"<rect fill="#F1F1F1" height="81.5977" rx="2.5" ry="2.5""##));
+        assert!(svg.contains(r##"<rect fill="#F1F1F1" height="81.5976" rx="2.5" ry="2.5""##));
         assert!(svg.contains(r#"y1="47.6211" y2="47.6211""#));
         assert!(svg.contains(">void reconcile()</text>"));
         assert!(svg.contains(">boolean verify()</text>"));
@@ -13608,6 +13673,63 @@ mod tests {
         let svg = render(&diagram, &Theme::default());
         assert_eq!(svg.matches(r#"<image height="3" width="5""#).count(), 2);
         assert!(!svg.contains("&lt;$fresh_badge&gt;"));
+    }
+
+    #[test]
+    fn renamed_dynamic_class_fonts_align_headers_and_visibility_rows() {
+        let eleven = "@startuml\n\
+            skinparam defaultFontSize 11\n\
+            class RenamedLedgerEleven {\n\
+              +alphaCode: String\n\
+              -betaCount: long\n\
+              #reconcile()\n\
+              ~archive()\n\
+            }\n\
+            @enduml";
+        let nineteen = "@startuml\n\
+            skinparam defaultFontSize 19\n\
+            class RenamedRegistryNineteen {\n\
+              +primaryKey: UUID\n\
+              -retryCount: int\n\
+              #refreshCache()\n\
+              ~expireEntry()\n\
+              +lookupRecord()\n\
+              -removeRecord()\n\
+            }\n\
+            @enduml";
+
+        let eleven_svg =
+            crate::render_svg(&rustuml_parser::parse::parse(eleven).expect("11px class parses"));
+        let nineteen_svg =
+            crate::render_svg(&rustuml_parser::parse::parse(nineteen).expect("19px class parses"));
+
+        // Coordinates below come from fresh Java 21 PlantUML renders of these
+        // renamed, non-corpus inputs. They exercise `HeaderLayout.drawU` and
+        // `PlacementStrategyVisibility.getPositions` with different row counts.
+        assert!(eleven_svg.contains(r#"style="width:167px;height:115px;background:#FFFFFF;""#));
+        assert!(eleven_svg.contains(r##"<ellipse cx="20" cy="21" fill="#ADD1B2" rx="9" ry="9""##));
+        assert!(eleven_svg.contains(
+            r#"font-size="11" lengthAdjust="spacing" textLength="119.6304" x="32" y="25.1572">RenamedLedgerEleven</text>"#
+        ));
+        assert!(eleven_svg.contains(r#"<ellipse cx="18" cy="46.9775" fill="none""#));
+        assert!(eleven_svg.contains(r#"width="6" x="15" y="56.9326"/>"#));
+        assert!(eleven_svg.contains(r#"points="18,75.8877,22,79.8877,18,83.8877,14,79.8877""#));
+        assert!(eleven_svg.contains(r#"points="18,89.8428,14,95.8428,22,95.8428""#));
+
+        assert!(nineteen_svg.contains(r#"style="width:295px;height:204px;background:#FFFFFF;""#));
+        assert!(
+            nineteen_svg.contains(r##"<ellipse cx="23" cy="24" fill="#ADD1B2" rx="12" ry="12""##)
+        );
+        assert!(nineteen_svg.contains(
+            r#"font-size="19" lengthAdjust="spacing" textLength="241.5728" x="38" y="31.1807">RenamedRegistryNineteen</text>"#
+        ));
+        assert!(nineteen_svg.contains(r#"<ellipse cx="18" cy="57.6885" fill="none""#));
+        assert!(nineteen_svg.contains(r#"width="6" x="15" y="77.0654"/>"#));
+        assert!(
+            nineteen_svg.contains(r#"points="18,105.4424,22,109.4424,18,113.4424,14,109.4424""#)
+        );
+        assert!(nineteen_svg.contains(r##"<ellipse cx="18" cy="155.1963" fill="#84BE84""##));
+        assert!(nineteen_svg.contains(r#"width="6" x="15" y="174.5732"/>"#));
     }
 
     #[test]
