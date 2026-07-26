@@ -55,9 +55,13 @@ const SVEK_CANVAS_PAD: f64 = 15.0;
 /// `SvekEdge.appendTable` wraps the real edge label by one pixel on each
 /// side before sending its integer-truncated fixed-size table to dot.
 const EDGE_LABEL_MARGIN: f64 = 1.0;
-/// PlantUML Archimate entities are `RoundedContainer`/`DiagonalCorner`
-/// stereotype boxes with this default DESCRIPTION minimum width.
-const ELEMENT_W: f64 = 140.0;
+/// Minimum label-block width from the Archimate stdlib's
+/// `element.MinimumWidth`.
+const ELEMENT_MIN_CONTENT_W: f64 = 120.0;
+/// Horizontal margin on each side of a DESCRIPTION element.
+///
+/// PlantUML `USymbolRectangle.getMargin` returns ten pixels on every side.
+const ELEMENT_MARGIN_X: f64 = 10.0;
 /// Default Archimate entity height from PlantUML's DESCRIPTION renderer
 /// (e.g. `archimate_basic.svg`: Motivation boxes are 53.584px tall).
 const ELEMENT_H: f64 = 53.584;
@@ -265,6 +269,19 @@ fn label_total_width(label: &str) -> f64 {
     total
 }
 
+/// DESCRIPTION element dimensions from Java's text-block composition.
+///
+/// `EntityImageDescription.calculateDimensionSlow` delegates to
+/// `USymbolRectangle.asSmall.calculateDimension`. `BodyEnhanced2.getArea`
+/// first applies the Archimate style's 120px `MinimumWidth`, then
+/// `USymbolRectangle.getMargin` adds ten pixels on each horizontal side.
+fn element_dimensions(elem: &ArchimateElement) -> (f64, f64) {
+    (
+        label_total_width(&elem.label).max(ELEMENT_MIN_CONTENT_W) + ELEMENT_MARGIN_X * 2.0,
+        ELEMENT_H,
+    )
+}
+
 /// Emit a label as word `<text>` runs (each its own `textLength`) separated by
 /// `&#160;` runs, starting at `(x, y)` and advancing rightward. An empty (or
 /// NBSP-only) label — PlantUML's sentinel for "no label" — renders as a single
@@ -429,7 +446,8 @@ pub fn render(diagram: &ArchimateDiagram, _theme: &Theme) -> String {
 
     let mut layout = LayoutGraph::new(Direction::TopToBottom).with_plantuml_svek_spacing();
     for elem in &diagram.elements {
-        layout.add_node(&elem.id, &elem.label, ELEMENT_W, ELEMENT_H);
+        let (width, height) = element_dimensions(elem);
+        layout.add_node(&elem.id, &elem.label, width, height);
     }
     for rel in &diagram.relations {
         let (from, to) = relation_layout_endpoints(rel);
@@ -518,11 +536,12 @@ fn no_oracle_entities(
         .iter()
         .enumerate()
         .map(|(i, elem)| {
+            let (width, height) = element_dimensions(elem);
             let (x, y) = positions
                 .and_then(|p| p.get(i))
                 .map(|p| (p.x + BODY_MARGIN, p.y + BODY_MARGIN))
                 .unwrap_or((BODY_MARGIN, BODY_MARGIN + i as f64 * (ELEMENT_H + 50.0)));
-            let mut rect = empty_entity_rect(x, y, ELEMENT_W, ELEMENT_H);
+            let mut rect = empty_entity_rect(x, y, width, height);
             rect.entity_id = Some(format!("ent{:04}", i + 2));
             rect.source_line = (elem.source_line > 0).then(|| elem.source_line.to_string());
             rect.fill = Some(layer_fill(elem.layer).to_string());
@@ -885,6 +904,8 @@ fn scale(v: (f64, f64), s: f64) -> (f64, f64) {
 
 #[cfg(test)]
 mod tests {
+    use super::*;
+
     #[test]
     fn parsed_then_rendered() {
         let input = "@startuml\n!include <archimate/Archimate>\nBusiness_Actor(cust, \"Customer\")\nApplication_Component(app, \"App\")\nRel_Serving(app, cust, \"serves\")\n@enduml";
@@ -913,6 +934,33 @@ mod tests {
         assert!(
             svg.contains("<path"),
             "Archimate icon/body path missing: {svg}"
+        );
+    }
+
+    #[test]
+    fn renamed_long_label_uses_description_minimum_width_and_symbol_margins() {
+        let input = "@startuml\n\
+                     !include <archimate/Archimate>\n\
+                     Motivation_Requirement(novel_requirement_83, \"Coordinate Intercontinental Compliance Review\")\n\
+                     Implementation_WorkPackage(novel_package_89, \"Q4 Migration\")\n\
+                     Rel_Association(novel_requirement_83, novel_package_89, \"governs\")\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Archimate(diagram) = diagram else {
+            panic!("expected Archimate diagram");
+        };
+
+        let long = element_dimensions(&diagram.elements[0]);
+        let short = element_dimensions(&diagram.elements[1]);
+
+        // Fresh PlantUML 1.2026.3beta6 reference: the 286.9805px label grows
+        // by USymbolRectangle's two 10px margins; the short label is held at
+        // the stdlib's 120px MinimumWidth before those margins are added.
+        assert_eq!(fc(long.0), "306.9805");
+        assert_eq!(long.1, ELEMENT_H);
+        assert_eq!(
+            short,
+            (ELEMENT_MIN_CONTENT_W + ELEMENT_MARGIN_X * 2.0, ELEMENT_H)
         );
     }
 
