@@ -2433,6 +2433,9 @@ struct ClassFontOverrides {
     /// `skinparam class<<stereotype>> { FontStyle ... }` — name styling for
     /// entities carrying the matching stereotype.
     stereotype_font_styles: Vec<ClassStereotypeFontStyle>,
+    /// `skinparam class { BackgroundColor<<stereotype>> ... }` and its border
+    /// counterpart, merged by Java's stereotype-qualified class style.
+    stereotype_colors: Vec<ClassStereotypeColors>,
     /// `skinparam ClassAttributeFontSize` — member (field/method) font size.
     attr_font_size: Option<u32>,
     /// `skinparam ClassAttributeFontStyle` — member bold/italic styling.
@@ -2493,6 +2496,13 @@ struct ClassStereotypeFontStyle {
     italic: bool,
 }
 
+#[derive(Clone)]
+struct ClassStereotypeColors {
+    stereotype: String,
+    background: Option<String>,
+    border: Option<String>,
+}
+
 impl ClassFontOverrides {
     fn from_skinparams(params: &[rustuml_parser::diagram::SkinParam]) -> Self {
         let plain_theme = params.iter().any(|sp| {
@@ -2512,6 +2522,30 @@ impl ClassFontOverrides {
             .iter()
             .filter_map(stereotype_font_style_param)
             .collect();
+        let mut stereotype_colors = Vec::<ClassStereotypeColors>::new();
+        for param in params {
+            let Some((stereotype, background)) = stereotype_class_color_param(param) else {
+                continue;
+            };
+            let color_index = stereotype_colors
+                .iter()
+                .position(|colors| colors.stereotype.eq_ignore_ascii_case(&stereotype))
+                .unwrap_or_else(|| {
+                    let index = stereotype_colors.len();
+                    stereotype_colors.push(ClassStereotypeColors {
+                        stereotype,
+                        background: None,
+                        border: None,
+                    });
+                    index
+                });
+            let colors = &mut stereotype_colors[color_index];
+            if background {
+                colors.background = Some(param.value.clone());
+            } else {
+                colors.border = Some(param.value.clone());
+            }
+        }
         // `skinparam defaultFontSize` is the base size for all class text,
         // overridden by the more specific `ClassFontSize` (name) and
         // `ClassAttributeFontSize` (members). It only applies when the
@@ -2554,6 +2588,7 @@ impl ClassFontOverrides {
             font_bold: style.contains("bold"),
             font_italic: style.contains("italic"),
             stereotype_font_styles,
+            stereotype_colors,
             attr_font_size: find(&["ClassAttributeFontSize"])
                 .and_then(|v| v.trim().parse::<u32>().ok())
                 .or(default_font_size),
@@ -2643,6 +2678,19 @@ impl ClassFontOverrides {
         }
         (false, false)
     }
+
+    fn stereotype_colors(&self, stereotypes: &[String]) -> (Option<&str>, Option<&str>) {
+        for stereotype in stereotypes {
+            if let Some(colors) = self
+                .stereotype_colors
+                .iter()
+                .find(|colors| stereotype.eq_ignore_ascii_case(&colors.stereotype))
+            {
+                return (colors.background.as_deref(), colors.border.as_deref());
+            }
+        }
+        (None, None)
+    }
 }
 
 fn canonical_class_font_family(value: &str) -> String {
@@ -2706,6 +2754,25 @@ fn stereotype_font_style_param(
         bold: style.contains("bold"),
         italic: style.contains("italic"),
     })
+}
+
+fn stereotype_class_color_param(
+    param: &rustuml_parser::diagram::SkinParam,
+) -> Option<(String, bool)> {
+    let key = param.key.trim();
+    for (prefix, background) in [
+        ("classBackgroundColor<<", true),
+        ("classBorderColor<<", false),
+    ] {
+        if key.len() < prefix.len() || !key[..prefix.len()].eq_ignore_ascii_case(prefix) {
+            continue;
+        }
+        let stereotype = key[prefix.len()..].strip_suffix(">>")?.trim();
+        if !stereotype.is_empty() {
+            return Some((stereotype.to_string(), background));
+        }
+    }
+    None
 }
 
 #[derive(Clone, Copy)]
@@ -5792,10 +5859,12 @@ fn render_entity_content(
         .color
         .as_deref()
         .is_some_and(|c| split_gradient_colors(c).is_some());
+    let (stereotype_background, stereotype_border) = font.stereotype_colors(&entity.stereotypes);
     let fill_default = entity
         .color
         .as_deref()
         .map(resolve_flat_or_gradient_start)
+        .or_else(|| stereotype_background.map(resolve_flat_or_gradient_start))
         .or_else(|| body_gradient_fill.map(str::to_string))
         .or_else(|| {
             font.class_background
@@ -5811,6 +5880,7 @@ fn render_entity_content(
         .line_color
         .as_deref()
         .map(crate::sequence::resolve_color)
+        .or_else(|| stereotype_border.map(crate::sequence::resolve_color))
         .or_else(|| {
             font.border_color
                 .as_deref()
@@ -13905,6 +13975,44 @@ mod tests {
         assert!(body_gradient < header_gradient);
         assert_eq!(svg.matches("<linearGradient ").count(), 2);
         assert!(svg.matches(r#"fill="url(#"#).count() >= 2);
+    }
+
+    #[test]
+    fn stereotype_qualified_class_colors_apply_per_entity_and_leave_plain_defaults() {
+        let input = "@startuml\n\
+            skinparam class {\n\
+              BackgroundColor<<pipeline>> HoneyDew\n\
+              BorderColor<<pipeline>> SeaGreen\n\
+              BackgroundColor<<archive>> AliceBlue\n\
+              BorderColor<<archive>> Navy\n\
+            }\n\
+            class FreshPipeline1409 <<pipeline>>\n\
+            class FreshArchive1423 <<archive>>\n\
+            class FreshPlain1427\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        let entity_body = |name: &str| {
+            let marker = format!("<!--class {name}-->");
+            svg.split_once(&marker)
+                .unwrap_or_else(|| panic!("missing {name}"))
+                .1
+                .split_once("</g>")
+                .unwrap()
+                .0
+        };
+        assert!(entity_body("FreshPipeline1409").contains(r##"<rect fill="#F0FFF0""##));
+        assert!(
+            entity_body("FreshPipeline1409")
+                .contains(r##"style="stroke:#2E8B57;stroke-width:0.5;""##)
+        );
+        assert!(entity_body("FreshArchive1423").contains(r##"<rect fill="#F0F8FF""##));
+        assert!(
+            entity_body("FreshArchive1423")
+                .contains(r##"style="stroke:#000080;stroke-width:0.5;""##)
+        );
+        assert!(entity_body("FreshPlain1427").contains(r##"<rect fill="#F1F1F1""##));
     }
 
     #[test]
