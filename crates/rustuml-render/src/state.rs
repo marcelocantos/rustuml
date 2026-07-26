@@ -131,6 +131,13 @@ const LINK_FONT_SIZE: f64 = 13.0;
 const DIVIDER_OFFSET: f64 = 26.48828125;
 /// Vertical position of the state name text baseline relative to box top.
 const NAME_BASELINE_OFFSET: f64 = 18.53515625;
+/// Baseline offset for the centered `H`/`H*` pseudo-state label.
+///
+/// Java provenance: `EntityImagePseudoState.drawU` centers its `Display`
+/// inside the 22px ellipse. Headless PlantUML 1.2026.3beta6 SVG metrics for
+/// both `EntityImagePseudoState` and `EntityImageDeepHistory` place the
+/// 14px sans-serif baseline 5.291px below the ellipse center.
+const HISTORY_LABEL_BASELINE_OFFSET: f64 = 5.291;
 // Java `Cluster.drawUState` gives `RoundedContainer` a header height of
 // `titleHeight + IEntityImage.MARGIN`, while `EntityImageState.drawU` places
 // its divider at `MARGIN + titleHeight + MARGIN_LINE`. `MARGIN_LINE` is 5px.
@@ -313,6 +320,7 @@ fn node_height(id: &str, state_def: Option<&State>, hide_empty_desc: bool) -> f6
         match state_def.map(|s| s.kind) {
             Some(StateKind::Fork | StateKind::Join) => BAR_HEIGHT,
             Some(StateKind::Choice) => CHOICE_SIZE * 2.0,
+            Some(StateKind::History | StateKind::DeepHistory) => END_OUTER_RADIUS * 2.0,
             Some(StateKind::Initial) => START_RADIUS * 2.0,
             Some(StateKind::Final) => END_OUTER_RADIUS * 2.0,
             _ => {
@@ -337,6 +345,7 @@ fn node_width(id: &str, state_def: Option<&State>) -> f64 {
         match state_def.map(|s| s.kind) {
             Some(StateKind::Fork | StateKind::Join) => BAR_WIDTH,
             Some(StateKind::Choice) => CHOICE_SIZE * 2.0,
+            Some(StateKind::History | StateKind::DeepHistory) => END_OUTER_RADIUS * 2.0,
             Some(StateKind::Initial) => START_RADIUS * 2.0,
             Some(StateKind::Final) => END_OUTER_RADIUS * 2.0,
             _ => {
@@ -380,7 +389,9 @@ fn layout_node_size(
         );
     }
     let shape = match state_def.map(|state| state.kind) {
-        Some(StateKind::Initial | StateKind::Final) => StateLayoutShape::Circle,
+        Some(
+            StateKind::Initial | StateKind::Final | StateKind::History | StateKind::DeepHistory,
+        ) => StateLayoutShape::Circle,
         Some(StateKind::Choice) => StateLayoutShape::Diamond,
         _ => StateLayoutShape::Box,
     };
@@ -2155,7 +2166,7 @@ fn build_autonomous_composite_node<'a>(
         .collect();
     if direct_children.is_empty()
         || direct_children.iter().any(|state| {
-            !matches!(state.kind, StateKind::Normal)
+            matches!(state.kind, StateKind::EntryPoint | StateKind::ExitPoint)
                 || state.stereotype.is_some()
                 || state.stroke.is_some()
                 || state.url.is_some()
@@ -2264,7 +2275,7 @@ fn build_autonomous_composite<'a>(
         || diagram
             .states
             .iter()
-            .any(|state| !matches!(state.kind, StateKind::Normal))
+            .any(|state| matches!(state.kind, StateKind::EntryPoint | StateKind::ExitPoint))
         || diagram
             .transitions
             .iter()
@@ -2610,6 +2621,124 @@ fn emit_autonomous_scope_entities(
         };
         if skip_composites && state.composite {
             continue;
+        }
+        match state.kind {
+            StateKind::Initial => {
+                let fill = state
+                    .fill
+                    .as_deref()
+                    .map(crate::sequence::resolve_color)
+                    .unwrap_or_else(|| PSEUDO_COLOR.to_string());
+                write!(
+                    svg,
+                    r#"<g class="start_entity" data-qualified-name="{}" data-source-line="{}" id="{}"><ellipse cx="{}" cy="{}" fill="{fill}" rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/></g>"#,
+                    escape_attr(&state.id),
+                    state.source_line,
+                    autonomous_entity_id(context.entity_ids, id),
+                    fmt_f(cx),
+                    fmt_f(cy),
+                )
+                .unwrap();
+                continue;
+            }
+            StateKind::Final => {
+                let fill = state
+                    .fill
+                    .as_deref()
+                    .map(crate::sequence::resolve_color)
+                    .unwrap_or_else(|| PSEUDO_COLOR.to_string());
+                write!(
+                    svg,
+                    r#"<g class="end_entity" data-qualified-name="{}" data-source-line="{}" id="{}"><ellipse cx="{}" cy="{}" fill="none" rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/><ellipse cx="{}" cy="{}" fill="{fill}" rx="{END_INNER_RADIUS}" ry="{END_INNER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/></g>"#,
+                    escape_attr(&state.id),
+                    state.source_line,
+                    autonomous_entity_id(context.entity_ids, id),
+                    fmt_f(cx),
+                    fmt_f(cy),
+                    fmt_f(cx),
+                    fmt_f(cy),
+                )
+                .unwrap();
+                continue;
+            }
+            StateKind::Choice => {
+                let fill = state
+                    .fill
+                    .as_deref()
+                    .map(crate::sequence::resolve_color)
+                    .unwrap_or_else(|| context.skin.state_fill.clone());
+                write!(
+                    svg,
+                    r#"<g class="entity" data-qualified-name="{}" id="{}"><polygon fill="{fill}" points="{},{} {},{} {},{} {},{} {},{}" style="stroke:{};stroke-width:0.5;"/></g>"#,
+                    escape_attr(&state.id),
+                    autonomous_entity_id(context.entity_ids, id),
+                    fmt_f(cx),
+                    fmt_f(cy - CHOICE_SIZE),
+                    fmt_f(cx + CHOICE_SIZE),
+                    fmt_f(cy),
+                    fmt_f(cx),
+                    fmt_f(cy + CHOICE_SIZE),
+                    fmt_f(cx - CHOICE_SIZE),
+                    fmt_f(cy),
+                    fmt_f(cx),
+                    fmt_f(cy - CHOICE_SIZE),
+                    context.skin.stroke,
+                )
+                .unwrap();
+                continue;
+            }
+            StateKind::Fork | StateKind::Join => {
+                let fill = state
+                    .fill
+                    .as_deref()
+                    .map(crate::sequence::resolve_color)
+                    .unwrap_or_else(|| BAR_COLOR.to_string());
+                write!(
+                    svg,
+                    r#"<rect fill="{fill}" height="{}" style="stroke:none;stroke-width:1;" width="{}" x="{}" y="{}"/>"#,
+                    fmt_f(*height),
+                    fmt_f(*width),
+                    fmt_f(cx - width / 2.0),
+                    fmt_f(cy - height / 2.0),
+                )
+                .unwrap();
+                continue;
+            }
+            StateKind::History | StateKind::DeepHistory => {
+                let label = if state.kind == StateKind::DeepHistory {
+                    "H*"
+                } else {
+                    "H"
+                };
+                let fill = state
+                    .fill
+                    .as_deref()
+                    .map(crate::sequence::resolve_color)
+                    .unwrap_or_else(|| context.skin.state_fill.clone());
+                write!(
+                    svg,
+                    r#"<ellipse cx="{}" cy="{}" fill="{fill}" rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{};stroke-width:0.5;"/>"#,
+                    fmt_f(cx),
+                    fmt_f(cy),
+                    context.skin.stroke,
+                )
+                .unwrap();
+                let text_width = text_render::measure(label, STATE_FONT_SIZE, false);
+                write!(
+                    svg,
+                    r#"<text fill="{}" font-family="sans-serif" font-size="{STATE_FONT_SIZE}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{label}</text>"#,
+                    context.skin.text_color,
+                    fmt_f(text_width),
+                    fmt_f(cx - text_width / 2.0),
+                    fmt_f(cy + HISTORY_LABEL_BASELINE_OFFSET),
+                )
+                .unwrap();
+                continue;
+            }
+            StateKind::EntryPoint | StateKind::ExitPoint => {
+                unreachable!("state-border images are excluded from autonomous composites");
+            }
+            StateKind::Normal => {}
         }
         let box_x = cx - width / 2.0;
         let box_y = cy - height / 2.0;
@@ -3373,7 +3502,7 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
             continue;
         }
         let position = result.node_positions[index];
-        let (_, width, height, _) = node_sizes.iter().find(|entry| &entry.0 == id)?;
+        let (_, width, height, shape) = node_sizes.iter().find(|entry| &entry.0 == id)?;
         let center_x = quantize_svek_coord(position.x + position.width / 2.0);
         let center_y = quantize_svek_coord(position.y + position.height / 2.0);
         if id == "__start__" || id.starts_with("__start__:") {
@@ -3388,10 +3517,36 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
         } else {
             let image_x = center_x - width / 2.0;
             let image_y = center_y - height / 2.0;
-            // `LimitFinder.drawRectangle` expands one pixel above/left and
-            // stops one pixel inside the calculated lower/right dimension.
-            include_point(image_x - 1.0, image_y - 1.0);
-            include_point(image_x + width, image_y + height - 1.0);
+            match shape {
+                StateLayoutShape::Circle => {
+                    // `EntityImagePseudoState` and `EntityImageDeepHistory`
+                    // paint a 22px ellipse. `LimitFinder.drawEllipse` keeps
+                    // the top/left and stops one pixel inside bottom/right.
+                    include_point(image_x, image_y);
+                    include_point(image_x + width - 1.0, image_y + height - 1.0);
+                }
+                StateLayoutShape::Diamond => {
+                    // `EntityImageBranch.drawU` paints a UPolygon, and
+                    // `LimitFinder.drawUPolygon` contributes its fixed 10px
+                    // horizontal envelope on both sides.
+                    include_point(image_x - 10.0, image_y);
+                    include_point(image_x + width + 10.0, image_y + height);
+                }
+                StateLayoutShape::Box => {
+                    // `LimitFinder.drawRectangle` expands one pixel above/left.
+                    // Ordinary states then paint a full-width divider, unlike
+                    // the bare `EntityImageSynchroBar` rectangle.
+                    include_point(image_x - 1.0, image_y - 1.0);
+                    let max_x = if diagram.states.iter().any(|state| {
+                        state.id == *id && matches!(state.kind, StateKind::Fork | StateKind::Join)
+                    }) {
+                        image_x + width - 1.0
+                    } else {
+                        image_x + width
+                    };
+                    include_point(max_x, image_y + height - 1.0);
+                }
+            }
         }
     }
     for cluster in &result.cluster_positions {
@@ -4913,7 +5068,7 @@ pub fn render_with_oracle(
             .unwrap();
             let label = history_marker_label(id);
             let tw = text_render::measure(label, STATE_FONT_SIZE, false);
-            let text_y = py + 5.291;
+            let text_y = py + HISTORY_LABEL_BASELINE_OFFSET;
             write!(
                 svg,
                 r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{STATE_FONT_SIZE}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{label}</text>"#,
@@ -5094,9 +5249,10 @@ pub fn render_with_oracle(
                     .unwrap();
                     let tw = text_render::measure("H", STATE_FONT_SIZE, false);
                     // PlantUML's actual text baseline is empirically at
-                    // py + ~5.291 for the 14pt sans-serif "H" glyph; the
+                    // py + HISTORY_LABEL_BASELINE_OFFSET for the 14pt
+                    // sans-serif "H" glyph; the
                     // analytic "py + font_size/3" form misses by ~1px.
-                    let text_y = py + 5.291;
+                    let text_y = py + HISTORY_LABEL_BASELINE_OFFSET;
                     write!(
                         svg,
                         r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{STATE_FONT_SIZE}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">H</text>"#,
@@ -5132,7 +5288,7 @@ pub fn render_with_oracle(
                     )
                     .unwrap();
                     let tw = text_render::measure("H*", STATE_FONT_SIZE, false);
-                    let text_y = py + 5.291;
+                    let text_y = py + HISTORY_LABEL_BASELINE_OFFSET;
                     write!(
                         svg,
                         r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{STATE_FONT_SIZE}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">H*</text>"#,
@@ -6956,7 +7112,7 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
             )
             .unwrap();
             let tw = text_render::measure(label, STATE_FONT_SIZE, false);
-            let text_y = py + 5.291;
+            let text_y = py + HISTORY_LABEL_BASELINE_OFFSET;
             write!(
                 svg,
                 r#"<text fill="{h_text}" font-family="sans-serif" font-size="{STATE_FONT_SIZE}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{label}</text>"#,
@@ -8495,6 +8651,36 @@ mod tests {
         );
         assert!(
             svg.contains(r#"M42.14,137.24 C31.37,145.18 21.33,155.09 15.27,167 C6,185.25"#),
+            "{svg}"
+        );
+    }
+
+    #[test]
+    fn renamed_history_pair_uses_pseudo_state_image_metrics() {
+        let input = concat!(
+            "@startuml\n",
+            "state FirstMemory <<history>>\n",
+            "state DeepMemory <<history*>>\n",
+            "[*] --> AmberQueue\n",
+            "AmberQueue --> FirstMemory\n",
+            "FirstMemory --> CobaltQueue\n",
+            "CobaltQueue --> DeepMemory\n",
+            "DeepMemory --> [*]\n",
+            "@enduml\n",
+        );
+        let diagram = rustuml_parser::parse::parse_auto_with_base(input, None).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Fresh headless PlantUML 1.2026.3beta6 reference. GeneralImageBuilder
+        // selects the 22px `EntityImagePseudoState` and
+        // `EntityImageDeepHistory` images independently of their renamed ids.
+        assert!(svg.contains(r#"viewBox="0 0 130 506""#), "{svg}");
+        assert!(
+            svg.contains(r##"<ellipse cx="61.46" cy="207" fill="#F1F1F1" rx="11" ry="11""##),
+            "{svg}"
+        );
+        assert!(
+            svg.contains(r#"textLength="17.0352" x="52.9424" y="404.291">H*</text>"#),
             "{svg}"
         );
     }
