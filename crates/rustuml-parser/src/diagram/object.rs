@@ -84,6 +84,18 @@ pub struct ObjectPackage {
     pub id: String,
     pub label: String,
     pub object_ids: Vec<String>,
+    #[serde(default)]
+    pub kind: ObjectPackageKind,
+    /// 1-based line number within the `@startuml` block.
+    #[serde(default)]
+    pub source_line: usize,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
+pub enum ObjectPackageKind {
+    #[default]
+    Package,
+    Namespace,
 }
 
 /// A directed link between object instances (or object fields).

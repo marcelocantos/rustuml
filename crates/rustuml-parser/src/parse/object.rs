@@ -352,13 +352,13 @@ impl ObjectParser {
     fn try_package(&mut self, line: &str) -> bool {
         // package "Label" {  or  namespace com.example {  or  package Name
         static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r#"^(?:package|namespace)\s+(?:"([^"]+)"|([^\s{]+))\s*\{?\s*$"#).unwrap()
+            Regex::new(r#"^(package|namespace)\s+(?:"([^"]+)"|([^\s{]+))\s*\{?\s*$"#).unwrap()
         });
 
         if let Some(caps) = RE.captures(line) {
             let label = caps
-                .get(1)
-                .or(caps.get(2))
+                .get(2)
+                .or(caps.get(3))
                 .map(|m| m.as_str().to_string())
                 .unwrap_or_default();
             // Build a safe identifier (replace non-alphanumeric with '_').
@@ -376,6 +376,12 @@ impl ObjectParser {
                 id,
                 label,
                 object_ids: Vec::new(),
+                kind: if &caps[1] == "namespace" {
+                    ObjectPackageKind::Namespace
+                } else {
+                    ObjectPackageKind::Package
+                },
+                source_line: self.current_line,
             });
             self.current_package = Some(self.packages.len() - 1);
             true
@@ -698,6 +704,8 @@ mod tests {
         assert_eq!(d.packages.len(), 1);
         assert_eq!(d.packages[0].label, "Domain");
         assert_eq!(d.packages[0].object_ids, vec!["User", "Role"]);
+        assert_eq!(d.packages[0].kind, ObjectPackageKind::Package);
+        assert_eq!(d.packages[0].source_line, 1);
         assert_eq!(d.objects.len(), 3);
     }
 
@@ -707,5 +715,7 @@ mod tests {
         assert_eq!(d.packages.len(), 1);
         assert_eq!(d.packages[0].label, "com.example");
         assert_eq!(d.packages[0].object_ids, vec!["Entity"]);
+        assert_eq!(d.packages[0].kind, ObjectPackageKind::Namespace);
+        assert_eq!(d.packages[0].source_line, 1);
     }
 }

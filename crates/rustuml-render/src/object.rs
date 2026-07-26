@@ -11,7 +11,10 @@
 
 use std::fmt::Write;
 
-use rustuml_layout::graph::{Direction, EdgeLabelPosition, EdgeLabelSize, EdgePath, LayoutGraph};
+use rustuml_layout::graph::{
+    ClusterPosition, ClusterTitleSize, Direction, EdgeLabelPosition, EdgeLabelSize, EdgePath,
+    LayoutGraph,
+};
 use rustuml_parser::diagram::object::*;
 
 use crate::layout_oracle::{
@@ -67,6 +70,7 @@ const NOTE_FONT_SIZE: f64 = 13.0;
 const LINK_LABEL_FONT_SIZE: f64 = 13.0;
 /// `SvekEdge.addVisibilityModifier` wraps center labels in a one-pixel margin.
 const LINK_LABEL_MARGIN: f64 = 1.0;
+const PACKAGE_FONT_SIZE: f64 = 14.0;
 
 // ---------------------------------------------------------------------------
 // Public entry points
@@ -112,6 +116,7 @@ pub fn render_with_oracle(
             positions: oracle_positions(diagram, &mut dims, orc),
             edge_paths: Vec::new(),
             note_positions: vec![None; diagram.notes.len()],
+            cluster_positions: Vec::new(),
         }
     } else {
         layout_object(diagram, &dims)
@@ -371,6 +376,7 @@ struct ObjectLayout {
     positions: Vec<(f64, f64)>,
     edge_paths: Vec<EdgePath>,
     note_positions: Vec<Option<NotePlacement>>,
+    cluster_positions: Vec<ClusterPosition>,
 }
 
 #[derive(Clone, Copy)]
@@ -379,6 +385,59 @@ struct NotePlacement {
     y: f64,
     width: f64,
     height: f64,
+}
+
+#[derive(Debug)]
+struct ObjectClusterSpec {
+    qname: String,
+    label: String,
+    parent: Option<String>,
+    object_ids: Vec<String>,
+    source_line: usize,
+}
+
+/// Expands namespaces into the ancestry that `CommandNamespace.executeArg`
+/// obtains from `ClassDiagram.quarkInContext`.
+fn object_cluster_specs(diagram: &ObjectDiagram) -> Vec<ObjectClusterSpec> {
+    let mut specs = Vec::<ObjectClusterSpec>::new();
+    for package in &diagram.packages {
+        let labels = if package.kind == ObjectPackageKind::Namespace {
+            package.label.split('.').collect::<Vec<_>>()
+        } else {
+            vec![package.label.as_str()]
+        };
+        let mut qname = String::new();
+        let mut parent = None;
+        for (index, label) in labels.iter().enumerate() {
+            if !qname.is_empty() {
+                qname.push('.');
+            }
+            qname.push_str(label);
+            let is_leaf = index + 1 == labels.len();
+            if let Some(existing) = specs.iter_mut().find(|spec| spec.qname == qname) {
+                if is_leaf {
+                    existing
+                        .object_ids
+                        .extend(package.object_ids.iter().cloned());
+                    existing.source_line = package.source_line;
+                }
+            } else {
+                specs.push(ObjectClusterSpec {
+                    qname: qname.clone(),
+                    label: (*label).to_string(),
+                    parent: parent.clone(),
+                    object_ids: if is_leaf {
+                        package.object_ids.clone()
+                    } else {
+                        Vec::new()
+                    },
+                    source_line: if is_leaf { package.source_line } else { 0 },
+                });
+            }
+            parent = Some(qname.clone());
+        }
+    }
+    specs
 }
 
 fn layout_object(diagram: &ObjectDiagram, dims: &[ObjDim]) -> ObjectLayout {
@@ -394,6 +453,21 @@ fn layout_object(diagram: &ObjectDiagram, dims: &[ObjDim]) -> ObjectLayout {
             dim.height
         };
         layout.add_node(&obj.id, &obj.label, dim.width, layout_height);
+    }
+    for cluster in object_cluster_specs(diagram) {
+        // `ClusterHeader.getTitleAndAttribute{Width,Height}` supplies the
+        // measured title table to `ClusterDotString.printInternal`.
+        layout.add_svek_cluster(
+            &cluster.qname,
+            cluster.parent.as_deref(),
+            ClusterTitleSize {
+                width: text_render::measure_no_underline(&cluster.label, PACKAGE_FONT_SIZE, true),
+                height: text_render::label_height(&cluster.label, PACKAGE_FONT_SIZE),
+            },
+        );
+        for object_id in &cluster.object_ids {
+            layout.add_cluster_node(&cluster.qname, object_id);
+        }
     }
     let mut attached_note_nodes = Vec::new();
     for (note_idx, note) in diagram.notes.iter().enumerate() {
@@ -474,7 +548,22 @@ fn layout_object(diagram: &ObjectDiagram, dims: &[ObjDim]) -> ObjectLayout {
     }
     match layout.layout_full(std::time::Duration::from_secs(5)) {
         Some(mut result) => {
-            let (origin_x, origin_y) = if attached_note_nodes.is_empty() {
+            let (origin_x, origin_y) = if !result.cluster_positions.is_empty() {
+                // `DotStringFactory.solve` normalizes the complete SVEK
+                // cluster envelope to the six-pixel diagram margin. Native
+                // Graphviz cluster bounds retain their internal 16px inset.
+                let min_x = result
+                    .cluster_positions
+                    .iter()
+                    .map(|cluster| cluster.x)
+                    .fold(f64::INFINITY, f64::min);
+                let min_y = result
+                    .cluster_positions
+                    .iter()
+                    .map(|cluster| cluster.y)
+                    .fold(f64::INFINITY, f64::min);
+                (6.0 - min_x, 6.0 - min_y)
+            } else if attached_note_nodes.is_empty() {
                 (MARGIN, MARGIN)
             } else {
                 normalize_attached_note_svek_envelope(
@@ -504,6 +593,10 @@ fn layout_object(diagram: &ObjectDiagram, dims: &[ObjDim]) -> ObjectLayout {
                     label.y += origin_y;
                 }
             }
+            for cluster in &mut result.cluster_positions {
+                cluster.x += origin_x;
+                cluster.y += origin_y;
+            }
             let positions = result
                 .node_positions
                 .iter()
@@ -528,6 +621,7 @@ fn layout_object(diagram: &ObjectDiagram, dims: &[ObjDim]) -> ObjectLayout {
                     }
                     positions
                 },
+                cluster_positions: result.cluster_positions,
             }
         }
         None => ObjectLayout {
@@ -536,6 +630,7 @@ fn layout_object(diagram: &ObjectDiagram, dims: &[ObjDim]) -> ObjectLayout {
                 .collect(),
             edge_paths: Vec::new(),
             note_positions: vec![None; diagram.notes.len()],
+            cluster_positions: Vec::new(),
         },
     }
 }
@@ -759,6 +854,7 @@ fn translate_qualified_name(label: &str) -> String {
 }
 
 struct ObjectSvgIds {
+    clusters: Vec<String>,
     objects: Vec<String>,
     notes: Vec<Option<(String, String)>>,
     links: Vec<String>,
@@ -766,6 +862,7 @@ struct ObjectSvgIds {
 
 #[derive(Clone, Copy)]
 enum ObjectIdEvent {
+    Cluster(usize),
     Object(usize),
     Link(usize),
     Note(usize),
@@ -775,24 +872,35 @@ enum ObjectIdEvent {
 /// Attached notes consume one synthetic `GMN` name and one entity uid; named
 /// floating notes already have a name and consume only the entity uid.
 fn allocate_object_svg_ids(diagram: &ObjectDiagram) -> ObjectSvgIds {
+    let cluster_specs = object_cluster_specs(diagram);
     let mut events = Vec::new();
+    for (idx, cluster) in cluster_specs.iter().enumerate() {
+        if cluster.source_line > 0 {
+            events.push((cluster.source_line, 0_u8, idx, ObjectIdEvent::Cluster(idx)));
+        }
+    }
     for (idx, object) in diagram.objects.iter().enumerate() {
-        events.push((object.source_line, 0_u8, idx, ObjectIdEvent::Object(idx)));
+        events.push((object.source_line, 1_u8, idx, ObjectIdEvent::Object(idx)));
     }
     for (idx, link) in diagram.links.iter().enumerate() {
-        events.push((link.source_line, 1_u8, idx, ObjectIdEvent::Link(idx)));
+        events.push((link.source_line, 2_u8, idx, ObjectIdEvent::Link(idx)));
     }
     for (idx, note) in diagram.notes.iter().enumerate() {
-        events.push((note.source_line, 2_u8, idx, ObjectIdEvent::Note(idx)));
+        events.push((note.source_line, 3_u8, idx, ObjectIdEvent::Note(idx)));
     }
     events.sort_by_key(|&(line, kind, idx, _)| (line, kind, idx));
 
     let mut next = 2;
+    let mut clusters = vec![String::new(); cluster_specs.len()];
     let mut objects = vec![String::new(); diagram.objects.len()];
     let mut notes = vec![None; diagram.notes.len()];
     let mut links = vec![String::new(); diagram.links.len()];
     for (_, _, _, event) in events {
         match event {
+            ObjectIdEvent::Cluster(idx) => {
+                clusters[idx] = format!("ent{next:04}");
+                next += 1;
+            }
             ObjectIdEvent::Object(idx) => {
                 objects[idx] = format!("ent{next:04}");
                 next += 1;
@@ -821,11 +929,106 @@ fn allocate_object_svg_ids(diagram: &ObjectDiagram) -> ObjectSvgIds {
             }
         }
     }
+    // Dotted namespaces create their explicit leaf in source order, then
+    // `quarkInContext` materializes missing ancestors in outer-to-inner order.
+    for cluster_id in &mut clusters {
+        if cluster_id.is_empty() {
+            *cluster_id = format!("ent{next:04}");
+            next += 1;
+        }
+    }
     ObjectSvgIds {
+        clusters,
         objects,
         notes,
         links,
     }
+}
+
+fn emit_object_cluster(
+    svg: &mut String,
+    cluster: &ObjectClusterSpec,
+    position: &ClusterPosition,
+    entity_id: &str,
+) {
+    // Java `USymbolFolder.drawFolder`: title margins 3/3/7, 5px rounding.
+    // The 14px AWT title metrics make `getHTitle` 22.4883px and place the
+    // baseline 15.5352px below the cluster origin.
+    const TITLE_HEIGHT: f64 = 22.4883;
+    const TITLE_BASELINE: f64 = 15.5352;
+    let label_width = text_render::measure_no_underline(&cluster.label, PACKAGE_FONT_SIZE, true);
+    let title_width = label_width + 6.0;
+    let tab_right = position.x + title_width + 7.0;
+    let tab_join = position.x + title_width - 2.5;
+    let right = position.x + position.width;
+    let bottom = position.y + position.height;
+    write!(svg, "<!--cluster {}-->", escape_xml(&cluster.qname)).unwrap();
+    if cluster.source_line > 0 {
+        write!(
+            svg,
+            r#"<g class="cluster" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
+            escape_xml(&cluster.qname),
+            cluster.source_line,
+            entity_id,
+        )
+        .unwrap();
+    } else {
+        write!(
+            svg,
+            r#"<g class="cluster" data-qualified-name="{}" id="{}">"#,
+            escape_xml(&cluster.qname),
+            entity_id,
+        )
+        .unwrap();
+    }
+    write!(
+        svg,
+        r#"<path d="M{},{} L{},{} A3.75,3.75 0 0 1 {},{} L{},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{}" fill="none" style="stroke:#000000;stroke-width:1.5;"/>"#,
+        fmt_tl(position.x + 2.5),
+        fmt_tl(position.y),
+        fmt_tl(tab_join),
+        fmt_tl(position.y),
+        fmt_tl(tab_join + 2.5),
+        fmt_tl(position.y + 2.5),
+        fmt_tl(tab_right),
+        fmt_tl(position.y + TITLE_HEIGHT),
+        fmt_tl(right - 2.5),
+        fmt_tl(position.y + TITLE_HEIGHT),
+        fmt_tl(right),
+        fmt_tl(position.y + TITLE_HEIGHT + 2.5),
+        fmt_tl(right),
+        fmt_tl(bottom - 2.5),
+        fmt_tl(right - 2.5),
+        fmt_tl(bottom),
+        fmt_tl(position.x + 2.5),
+        fmt_tl(bottom),
+        fmt_tl(position.x),
+        fmt_tl(bottom - 2.5),
+        fmt_tl(position.x),
+        fmt_tl(position.y + 2.5),
+        fmt_tl(position.x + 2.5),
+        fmt_tl(position.y),
+    )
+    .unwrap();
+    write!(
+        svg,
+        r#"<line style="stroke:#000000;stroke-width:1.5;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+        fmt_tl(position.x),
+        fmt_tl(tab_right),
+        fmt_tl(position.y + TITLE_HEIGHT),
+        fmt_tl(position.y + TITLE_HEIGHT),
+    )
+    .unwrap();
+    write!(
+        svg,
+        r##"<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"##,
+        fmt_tl(label_width),
+        fmt_tl(position.x + 4.0),
+        fmt_tl(position.y + TITLE_BASELINE),
+        escape_xml(&cluster.label),
+    )
+    .unwrap();
+    svg.push_str("</g>");
 }
 
 fn render_plantuml_svg(
@@ -855,6 +1058,10 @@ fn render_plantuml_svg(
         for note in layout.note_positions.iter().flatten() {
             max_x = max_x.max(note.x + note.width);
             max_y = max_y.max(note.y + note.height);
+        }
+        for cluster in &layout.cluster_positions {
+            max_x = max_x.max(cluster.x + cluster.width);
+            max_y = max_y.max(cluster.y + cluster.height);
         }
         for edge in &layout.edge_paths {
             for (x, y) in &edge.points {
@@ -904,6 +1111,7 @@ fn render_plantuml_svg(
         }
         let canvas_pad = if has_rendered_layout_dependency(diagram, &layout.edge_paths)
             || layout.note_positions.iter().any(Option::is_some)
+            || !layout.cluster_positions.is_empty()
         {
             OBJECT_LINK_CANVAS_PAD
         } else {
@@ -959,6 +1167,18 @@ fn render_plantuml_svg(
         }
         emit_oracle_cluster_children(&mut svg, cluster);
         svg.push_str("</g>");
+    }
+    if oracle.is_none() {
+        for (index, cluster) in object_cluster_specs(diagram).iter().enumerate() {
+            let Some(position) = layout
+                .cluster_positions
+                .iter()
+                .find(|position| position.id == cluster.qname)
+            else {
+                continue;
+            };
+            emit_object_cluster(&mut svg, cluster, position, &svg_ids.clusters[index]);
+        }
     }
     let mut ent_id = 2;
     for (i, obj) in diagram.objects.iter().enumerate() {
@@ -2554,6 +2774,43 @@ mod tests {
         let svg = crate::render_svg(&diagram);
         assert!(svg.contains("Car"));
         assert!(svg.contains("Bike"));
+    }
+
+    #[test]
+    fn renamed_dotted_namespace_expands_to_svek_cluster_ancestry() {
+        let input = r#"@startuml
+namespace alpha.beta.gamma {
+  object RenamedNode {
+    code = 17
+    state = "ready"
+  }
+}
+@enduml"#;
+        let lines = input
+            .lines()
+            .skip(1)
+            .take_while(|line| *line != "@enduml")
+            .map(str::to_owned)
+            .collect::<Vec<_>>();
+        let diagram = rustuml_parser::parse::object::parse_object(&lines).unwrap();
+        let svg = render(&diagram, &Theme::default());
+
+        assert!(svg.contains(r#"width="261px""#));
+        assert!(svg.contains(r#"height="267px""#));
+        assert!(svg.contains(r#"data-qualified-name="alpha" id="ent0004""#));
+        assert!(svg.contains(r#"data-qualified-name="alpha.beta" id="ent0005""#));
+        assert!(svg.contains(
+            r#"data-qualified-name="alpha.beta.gamma" data-source-line="1" id="ent0002""#
+        ));
+        assert!(svg.contains(
+            r#"data-qualified-name="alpha.beta.gamma.RenamedNode" data-source-line="2" id="ent0003""#
+        ));
+        // Fresh Java PlantUML reference. `CommandNamespace.executeArg`
+        // creates the qname ancestry and `ClusterDotString.printInternal`
+        // solves these nested SVEK bounds around the renamed entity.
+        assert!(svg.contains(r#"M8.5,6 L48.9844,6"#));
+        assert!(svg.contains(r#"M56.5,92 L110.3486,92"#));
+        assert!(svg.contains("state = &quot;ready&quot;"));
     }
 
     #[test]
