@@ -1,0 +1,10 @@
+@startuml
+state SilentCurveEnvelope731 {
+  [*] --> QuartzAlpha731
+  QuartzAlpha731 --> QuartzBeta731
+  QuartzBeta731 --> QuartzAlpha731
+  QuartzBeta731 --> [*]
+}
+[*] --> SilentCurveEnvelope731
+SilentCurveEnvelope731 --> [*]
+@enduml

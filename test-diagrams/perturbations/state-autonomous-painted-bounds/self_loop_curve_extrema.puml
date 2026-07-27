@@ -1,0 +1,10 @@
+@startuml
+state LoopFrontierEnvelope731 {
+  [*] --> OrbitNode731
+  OrbitNode731 --> OrbitNode731
+  OrbitNode731 --> ExitNode731
+  ExitNode731 --> [*]
+}
+[*] --> LoopFrontierEnvelope731
+LoopFrontierEnvelope731 --> [*]
+@enduml

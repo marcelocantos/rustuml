@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-autonomous-painted-bounds",
+  "reviewer": {
+    "task_id": "codex-desktop-task-019ee369-54e2-7203-afce-ddde7bfe1723-painted-bounds-adversarial-checker",
+    "model": "GPT-5 Codex"
+  },
+  "account_commit": "3dfe272d74ee5f3f7e1ff03a4c4c0df087369fdc",
+  "implementation_commit": "f83ad70bac10886960a2fef85dda0d20002596af",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "git merge-base --is-ancestor 3dfe272d74ee5f3f7e1ff03a4c4c0df087369fdc f83ad70bac10886960a2fef85dda0d20002596af",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "git show 3dfe272d74ee5f3f7e1ff03a4c4c0df087369fdc:docs/parity-reviews/state-autonomous-painted-bounds/account.json",
+    "git diff f83ad70bac10886960a2fef85dda0d20002596af^ f83ad70bac10886960a2fef85dda0d20002596af -- crates/rustuml-render/src/state.rs test-diagrams/no_oracle_baseline.txt",
+    "sed -n '175,225p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/statediagram/StateDiagram.java",
+    "sed -n '105,180p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/GroupMakerState.java",
+    "sed -n '55,150p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/ConcurrentStates.java",
+    "sed -n '70,160p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekResult.java",
+    "sed -n '70,235p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java",
+    "sed -n '235,265p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/shape/DotPath.java",
+    "sed -n '140,180p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/InnerStateAutonom.java",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/state-autonomous-painted-bounds/*.puml",
+    "find test-diagrams/perturbations/state-autonomous-painted-bounds -name '*.svg' -exec xmllint --noout {} +",
+    "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"' test-diagrams/perturbations/state-autonomous-painted-bounds -g '*.svg'",
+    "ruby -rdigest -e 'golden = Dir[\"test-diagrams/golden/**/*.puml\"].to_h { |p| [Digest::SHA256.file(p).hexdigest, p] }; held = Dir[\"test-diagrams/perturbations/state-autonomous-painted-bounds/*.puml\"]; dupes = held.filter_map { |p| golden[Digest::SHA256.file(p).hexdigest]&.then { |g| [p, g] } }; abort dupes.inspect unless dupes.empty?; puts \"#{held.length} held-outs are unique against #{golden.length} golden sources\"'",
+    "cargo test -p rustuml-render --lib --release -- --nocapture",
+    "cargo test --test golden_no_oracle --release -- --nocapture",
+    "cargo test --test parity_perturbations --release -- --nocapture",
+    "cargo test --test harness_guards --release -- --nocapture"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-painted-bounds/renamed_antiparallel_labels.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-painted-bounds/renamed_antiparallel_labels.svg",
+      "axes": [
+        "renamed antiparallel states",
+        "independently varied edge-label lengths",
+        "autonomous nesting"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-painted-bounds/reversed_direction_identity.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-painted-bounds/reversed_direction_identity.svg",
+      "axes": [
+        "reversed command direction",
+        "reversed solved endpoints",
+        "multiple same-endpoint transition identities"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-painted-bounds/unlabelled_curved_arrow_control.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-painted-bounds/unlabelled_curved_arrow_control.svg",
+      "axes": [
+        "unlabelled antiparallel curves",
+        "arrowhead-only painted frontier",
+        "autonomous nesting"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-painted-bounds/self_loop_curve_extrema.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-painted-bounds/self_loop_curve_extrema.svg",
+      "axes": [
+        "self-loop cubic controls",
+        "path painted extrema",
+        "unlabelled transition"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-painted-bounds/nested_vertical_concurrent.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-painted-bounds/nested_vertical_concurrent.svg",
+      "axes": [
+        "nested autonomous groups",
+        "vertical concurrent composition",
+        "independent region labels and topology"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-painted-bounds/nested_horizontal_concurrent.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-painted-bounds/nested_horizontal_concurrent.svg",
+      "axes": [
+        "nested autonomous groups",
+        "horizontal concurrent composition",
+        "independent region labels and topology"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-painted-bounds/pseudostate_left_frontiers.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-painted-bounds/pseudostate_left_frontiers.svg",
+      "axes": [
+        "choice history and final endpoints",
+        "left-reaching arrowheads",
+        "mixed primitive bounds"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-painted-bounds/empty_concurrent_region.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-painted-bounds/empty_concurrent_region.svg",
+      "axes": [
+        "empty concurrent middle region",
+        "consecutive valid separators",
+        "empty-image identity and composition span"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-painted-bounds/root_level_equivalent_control.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-painted-bounds/root_level_equivalent_control.svg",
+      "axes": [
+        "root-level equivalent topology",
+        "scope boundary",
+        "unlabelled antiparallel curves"
+      ],
+      "result": "pass"
+    }
+  ],
+  "findings": [
+    "The account commit is an ancestor of the immutable implementation commit, and the pinned Java checkout is exactly 71806a23780b04a5ccde2f8ceb5121edad5eb711. Commit f83ad70bac10886960a2fef85dda0d20002596af changes only crates/rustuml-render/src/state.rs and test-diagrams/no_oracle_baseline.txt; the checker did not review later production changes as part of this mechanism.",
+    "The earlier read-only Java runtime trace supports the motivating translation exactly. SvekResult.calculateDimension observed painted minX=-7.524221468190966 after the arrowhead UPolygon's leftmost vertex 2.475778531809034 received LimitFinder's 10px horizontal overscan. Java therefore applies moveDelta x=13.524221468190966, explaining the complete 6.524221468190966px displacement relative to Rust's former fixed origin x=7.",
+    "The primitive audit supports most of the implementation model. LimitFinder.drawRectangle contributes x-1/y-1 and width-1/height-1 bounds; drawEllipse and image primitives stop one pixel inside the lower/right extent; drawUPolygon contributes the fixed +/-10px horizontal overscan; drawText uses measured width and baseline-height+1.5; and drawDotPath delegates to DotPath.getMinMax. DotPath.getMinMax intentionally includes cubic endpoints and both control points, so the implementation's inclusion of every routed cubic point is faithful rather than an overestimate. The self-loop held-out independently exercises that path and passes.",
+    "The edge and decoration audit did not find identity collapse. layout_autonomous_scope stores each source transition index against the exact LayoutGraph edge index returned at insertion; both painted-bounds lookup and emission recover EdgePath by edge_index. Reversed command/solved directions preserve the swapped layout endpoints and arrow-at-start decoration, while retraction precedes shaft bounds and the unretracted boundary tip drives the arrowhead polygon. The reversed-direction held-out with repeated endpoint pairs passes.",
+    "The translation and span audit is otherwise model-shaped. normalize_autonomous_scope derives origin=(6-minX,6-minY), shifts every solved node center by the origin delta, and stores the same origin consumed by every path, arrowhead, and label emitter. It reports max-min+15 on both axes. InnerStateAutonom-equivalent wrapping and ConcurrentStates-equivalent summation/max composition pass across both concurrent orientations and two nested autonomous groups. The equivalent root topology also passes, confirming the correction remains scoped to independently wrapped autonomous images.",
+    "The complete perturbation run rejects the mechanism on empty-result handling. The valid consecutive-separator source creates a real empty middle region in Java: StateDiagram.concurrentState always calls gotoGroup for a new CONCURRENT_STATE, and GroupMakerState.getImage returns EntityImageState when that group's child count is zero. Java therefore paints EmptyRegionEnvelope731.CONC2 as a 50x50 entity and composes it between two dashed separators. Rust's parser advances to a synthetic CONC2 string but stores no region entity; build_one_level_concurrent_node reconstructs region_scopes only from child parent references, so CONC2 disappears before layout_autonomous_scope can return an empty painted-bound identity. Rust is 49px shorter at the canvas and 50px shorter at the composite, emits 49 elements instead of 54, and omits the CONC2 entity entirely.",
+    "This counterexample also corrects the account's empty-image assumption. MinMax.getEmpty(true) and SvekResult's 15px zero-span identity are real, but they are not the Java path for a syntactically empty concurrent group. GroupMakerState selects EntityImageState first, so a complete state-autonomous composition model must preserve the synthetic empty group and its ordinary 50x50 state image before painted-bound normalization.",
+    "All nine Java SVGs are well-formed XML, contain no PlantUML error marker, and were generated from valid out-of-corpus inputs. SHA-256 comparison found all nine sources unique against 12090 golden sources. The complete perturbation suite fails on exactly empty_concurrent_region.puml; the other eight new held-outs and all previously preserved perturbations pass at the reviewed checkout. Existing choice counterexamples were reused by executing the complete suite and were not edited.",
+    "Static inspection found no golden-data reads, fixture-label branches, per-count constant ladders, coordinate-keyed SVG surgery, comparator changes, guard changes, or fixture names in the production diff. The mechanism is expressed through primitive type, transition identity, and scope composition.",
+    "Parity Honesty Rule 3 is not fully satisfied. The new SVEK_PAINTED_ORIGIN and reused polygon overscan have adjacent Java provenance, but autonomous_scope_painted_bounds also introduces parity-affecting inline text/label offsets and the has_full_width_divider branch without adjacent Java-source citations. The causal account names the relevant classes, but it does not replace the rule's required adjacent citations in production.",
+    "Renderer unit tests pass 684/684. The no-oracle census remains green at 11023/11251 eligible pairs, including rendering 78/98 and state 861/901. Five of six harness guard tests pass; parity_review_records_are_complete parses this record and all paths, then fails on the intentional rejected verdict/failing perturbation and the already-preserved rejected state-choice-polygon-serialization review. No comparator-freeze, decimal-ratchet, golden-embedding, error-census, path-traversal, or schema defect was reported. Those regression checks do not override the held-out rejection.",
+    "Verdict is rejected. A corrective model should preserve separator-created concurrent groups even when they contain no children, select Java's EntityImageState path for an empty group, and compose that image in source order. It should also add adjacent Java provenance for every new parity literal and branch before a subsequent independent review; the preserved failing pair must then pass without weakening any comparator or guard."
+  ],
+  "verdict": "rejected"
+}

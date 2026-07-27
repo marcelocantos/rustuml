@@ -1,0 +1,10 @@
+@startuml
+state ChromaticEnvelope731 {
+  [*] --> CinnabarStage731
+  CinnabarStage731 --> UltramarineProcessingBay731 : hop
+  UltramarineProcessingBay731 --> CinnabarStage731 : extraordinarily_long_return_signal_731
+  UltramarineProcessingBay731 --> [*]
+}
+[*] --> ChromaticEnvelope731
+ChromaticEnvelope731 --> [*]
+@enduml

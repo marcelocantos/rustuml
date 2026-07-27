@@ -1,0 +1,12 @@
+@startuml
+state EmptyRegionEnvelope731 {
+  [*] --> NorthAnchor731
+  NorthAnchor731 --> [*]
+  --
+  --
+  [*] --> SouthAnchor731
+  SouthAnchor731 --> [*]
+}
+[*] --> EmptyRegionEnvelope731
+EmptyRegionEnvelope731 --> [*]
+@enduml

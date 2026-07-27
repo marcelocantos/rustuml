@@ -1,0 +1,11 @@
+@startuml
+state CompassEnvelope731 {
+  [*] --> AmberEastLatch731
+  AmberEastLatch731 <-left- VioletWestLatch731 : reversed_command_long_731
+  VioletWestLatch731 -left-> AmberEastLatch731 : solved_left_short
+  AmberEastLatch731 <-right- VioletWestLatch731 : reverse_right_medium_731
+  VioletWestLatch731 --> [*]
+}
+[*] --> CompassEnvelope731
+CompassEnvelope731 --> [*]
+@enduml

@@ -1,0 +1,23 @@
+@startuml
+state HorizontalConcurrentEnvelope731 {
+  state WestAutonomousNest731 {
+    [*] --> WestJade731
+    WestJade731 --> WestCrimsonArchive731 : westward_731
+    WestCrimsonArchive731 --> WestJade731 : west_return_signal_731
+    WestCrimsonArchive731 --> [*]
+  }
+  [*] --> WestAutonomousNest731
+  WestAutonomousNest731 --> [*]
+  ||
+  state EastAutonomousNest731 {
+    [*] --> EastPearl731
+    EastPearl731 --> EastGraphiteRepository731
+    EastGraphiteRepository731 --> EastPearl731
+    EastGraphiteRepository731 --> [*]
+  }
+  [*] --> EastAutonomousNest731
+  EastAutonomousNest731 --> [*]
+}
+[*] --> HorizontalConcurrentEnvelope731
+HorizontalConcurrentEnvelope731 --> [*]
+@enduml

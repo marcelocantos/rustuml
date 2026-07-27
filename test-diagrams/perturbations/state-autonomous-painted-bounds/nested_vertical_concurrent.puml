@@ -1,0 +1,23 @@
+@startuml
+state VerticalConcurrentEnvelope731 {
+  state UpperAutonomousNest731 {
+    [*] --> UpperCopper731
+    UpperCopper731 --> UpperSilverReservoir731 : ascend_731
+    UpperSilverReservoir731 --> UpperCopper731 : return_upper_731
+    UpperSilverReservoir731 --> [*]
+  }
+  [*] --> UpperAutonomousNest731
+  UpperAutonomousNest731 --> [*]
+  --
+  state LowerAutonomousNest731 {
+    [*] --> LowerIndigo731
+    LowerIndigo731 --> LowerOchreRepository731
+    LowerOchreRepository731 --> LowerIndigo731
+    LowerOchreRepository731 --> [*]
+  }
+  [*] --> LowerAutonomousNest731
+  LowerAutonomousNest731 --> [*]
+}
+[*] --> VerticalConcurrentEnvelope731
+VerticalConcurrentEnvelope731 --> [*]
+@enduml

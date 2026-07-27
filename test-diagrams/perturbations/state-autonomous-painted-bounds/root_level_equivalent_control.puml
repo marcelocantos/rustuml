@@ -1,0 +1,6 @@
+@startuml
+[*] --> RootQuartzAlpha731
+RootQuartzAlpha731 --> RootQuartzBeta731
+RootQuartzBeta731 --> RootQuartzAlpha731
+RootQuartzBeta731 --> [*]
+@enduml

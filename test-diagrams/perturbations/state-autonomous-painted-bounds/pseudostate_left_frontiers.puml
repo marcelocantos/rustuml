@@ -1,0 +1,17 @@
+@startuml
+state PrimitiveFrontierEnvelope731 {
+  state RecallPocket731 <<history>>
+  state DecisionJunction731 <<choice>>
+  state RightWorker731
+  state RightTerminal731
+
+  [*] --> RightWorker731
+  RightWorker731 -left-> DecisionJunction731
+  DecisionJunction731 --> RightTerminal731
+  RightTerminal731 -left-> RecallPocket731
+  RecallPocket731 --> RightWorker731
+  RightTerminal731 -left-> [*]
+}
+[*] --> PrimitiveFrontierEnvelope731
+PrimitiveFrontierEnvelope731 --> [*]
+@enduml
