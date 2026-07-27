@@ -535,13 +535,13 @@ struct PreprocessContext {
     render_clock: RenderClock,
     /// Theme expansion output accumulated across `!theme` directives.
     ///
-    /// Themes emit many `skinparam` lines plus a `<style>` block (the latter
-    /// is dropped during flattening). Inlining the expansion in place would
-    /// push every subsequent diagram line down by ~150 positions, breaking
-    /// `data-source-line=` matching in goldens. Instead we collect the
-    /// expansion here and append it once at the end of the preprocessed
-    /// output. Internal body delimiters let the parser reconstruct the
-    /// directive's temporal position without shifting user source lines.
+    /// Themes emit many `skinparam` lines plus `<style>` blocks. Inlining the
+    /// expansion in place would push every subsequent diagram line down by
+    /// ~150 positions, breaking `data-source-line=` matching in goldens.
+    /// Instead we collect the expansion here and append it once at the end of
+    /// the preprocessed output. Internal body delimiters let the shared style
+    /// parser reconstruct the directive's temporal position without shifting
+    /// user source lines.
     theme_tail: Vec<String>,
     /// Unflattened theme expansions keyed by their top-level source line.
     ///
@@ -1813,6 +1813,7 @@ impl PreprocessContext {
     fn try_theme(&mut self, line: &str) -> Option<Vec<String>> {
         let rest = line.strip_prefix("!theme ")?;
         let source_line = self.current_source_line;
+        let diagram_source_line = self.current_diagram_source_line();
         let top_level = self.include_depth == 0;
         let mut name_part = rest.trim();
         // `!theme NAME from URL` — strip the `from URL` portion. We always
@@ -1839,10 +1840,9 @@ impl PreprocessContext {
                 self.include_depth += 1;
                 let expanded = self.process(body);
                 self.include_depth -= 1;
-                // Themes emit `<style>` blocks and grouped `skinparam X { ... }`
-                // declarations. Most parsers don't recognise `<style>` so we
-                // strip it, and we flatten any leftover grouped skinparams so
-                // every parser sees plain `skinparam Key Value` lines.
+                // Preserve `<style>` blocks for the shared parser-owned style
+                // pass, and flatten grouped `skinparam X { ... }` declarations
+                // so both that pass and every family parser see ordinary keys.
                 self.theme_tail
                     .extend(themes::flatten_theme_output(&expanded));
 
@@ -1882,7 +1882,12 @@ impl PreprocessContext {
         }
         // Replacing the directive with one metadata line preserves every
         // following source-line number while retaining its temporal position.
-        Some(vec![format!("skinparam __theme {name_part}")])
+        // Keep an explicit marker because an earlier include or macro may make
+        // the output index differ from the user's entity/link source lines.
+        Some(vec![source_line_marker(
+            diagram_source_line,
+            &format!("skinparam __theme {name_part}"),
+        )])
     }
 
     fn try_option(&self, line: &str) -> Option<Vec<String>> {

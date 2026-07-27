@@ -120,10 +120,9 @@ pub(super) fn strip_front_matter(source: &str) -> &str {
 /// Themes use two PlantUML constructs the per-diagram parsers do not all
 /// understand:
 ///
-/// 1. `<style>...</style>` blocks — used to drive the modern CSS-style
-///    skin system. None of our renderers consume them yet, so dropping
-///    them entirely is harmless and keeps stray `{`/`}` tokens from
-///    leaking into the diagram.
+/// 1. `<style>...</style>` blocks — preserved for the shared parser-owned
+///    style pass. That pass records their sparse selector/property structure
+///    and masks them before diagram-family parsing.
 /// 2. Grouped `skinparam Prefix { Key Value ... }` blocks — only some
 ///    parsers (state, activity) flatten these; flattening here means
 ///    class, sequence and the rest also pick up the entries.
@@ -131,19 +130,22 @@ pub(super) fn flatten_theme_output(lines: &[String]) -> Vec<String> {
     let mut out = Vec::with_capacity(lines.len());
     let mut in_style = false;
     let mut style_scopes: Vec<String> = Vec::new();
+    let mut style_compatibility = Vec::new();
     let mut skin_prefix: Option<String> = None;
 
     for raw in lines {
         let source = super::split_source_line_marker(raw).map_or(raw.as_str(), |(_, text)| text);
         let line = source.trim();
 
-        // `<style>` block: drop everything up to `</style>` (case-sensitive,
-        // matching PlantUML's own convention). Preserve the few root-level
-        // style values that older renderers can consume as skinparams.
+        // Preserve the CSS source for the shared style parser. The three
+        // root-level compatibility values remain ordinary skinparams after
+        // the block until existing renderers migrate to StyleProgram.
         if in_style {
             if line.contains("</style>") {
+                out.push(source.to_string());
                 in_style = false;
                 style_scopes.clear();
+                out.append(&mut style_compatibility);
                 continue;
             }
             if line == "}" {
@@ -155,20 +157,23 @@ pub(super) fn flatten_theme_output(lines: &[String]) -> Vec<String> {
                 && let Some((key, value)) = line.split_once(char::is_whitespace)
             {
                 if key.eq_ignore_ascii_case("LineThickness") {
-                    out.push(format!(
+                    style_compatibility.push(format!(
                         "skinparam __styleRootLineThickness {}",
                         value.trim()
                     ));
                 } else if key.eq_ignore_ascii_case("LineColor") {
-                    out.push(format!("skinparam __styleRootLineColor {}", value.trim()));
+                    style_compatibility
+                        .push(format!("skinparam __styleRootLineColor {}", value.trim()));
                 } else if key.eq_ignore_ascii_case("FontColor") {
-                    out.push(format!("skinparam __styleRootFontColor {}", value.trim()));
+                    style_compatibility
+                        .push(format!("skinparam __styleRootFontColor {}", value.trim()));
                 }
             }
+            out.push(source.to_string());
             continue;
         }
         if line.starts_with("<style") {
-            // A single-line `<style>foo</style>` is unusual but also dropped.
+            out.push(source.to_string());
             if !line.contains("</style>") {
                 in_style = true;
             }
@@ -275,7 +280,7 @@ mod tests {
     }
 
     #[test]
-    fn flatten_drops_style_block() {
+    fn flatten_preserves_style_block() {
         let input = vec![
             "<style>".to_string(),
             "  root { BackgroundColor white }".to_string(),
@@ -283,7 +288,7 @@ mod tests {
             "skinparam shadowing false".to_string(),
         ];
         let out = flatten_theme_output(&input);
-        assert_eq!(out, vec!["skinparam shadowing false".to_string()]);
+        assert_eq!(out, input);
     }
 
     #[test]
@@ -305,6 +310,17 @@ mod tests {
         assert_eq!(
             out,
             vec![
+                "<style>".to_string(),
+                "root {".to_string(),
+                "  FontColor #FFFFFF".to_string(),
+                "  LineColor #2683B9".to_string(),
+                "  LineThickness 1".to_string(),
+                "  Padding 6".to_string(),
+                "}".to_string(),
+                "activity {".to_string(),
+                "  LineThickness 2".to_string(),
+                "}".to_string(),
+                "</style>".to_string(),
                 "skinparam __styleRootFontColor #FFFFFF".to_string(),
                 "skinparam __styleRootLineColor #2683B9".to_string(),
                 "skinparam __styleRootLineThickness 1".to_string(),
@@ -313,7 +329,7 @@ mod tests {
     }
 
     #[test]
-    fn flatten_ignores_nested_root_style_scope() {
+    fn flatten_preserves_nested_style_without_root_compatibility() {
         let input = vec![
             "<style>".to_string(),
             "wbsDiagram, mindmapDiagram {".to_string(),
@@ -325,7 +341,11 @@ mod tests {
             "</style>".to_string(),
         ];
         let out = flatten_theme_output(&input);
-        assert!(out.is_empty());
+        assert_eq!(out, input);
+        assert!(
+            !out.iter()
+                .any(|line| line.starts_with("skinparam __styleRoot"))
+        );
     }
 
     #[test]

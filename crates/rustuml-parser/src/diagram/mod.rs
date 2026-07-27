@@ -26,6 +26,7 @@ pub mod regex_diagram;
 pub mod salt;
 pub mod sequence;
 pub mod state;
+pub mod style;
 pub mod timing;
 pub mod usecase;
 pub mod wbs;
@@ -214,6 +215,11 @@ pub struct DiagramMeta {
     pub legend_vertical_alignment: LegendVerticalAlignment,
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub skinparams: Vec<SkinParam>,
+    /// Ordered sparse style declarations from `<style>` and legacy
+    /// `skinparam` commands. Raw skinparams remain above for compatibility
+    /// with non-style behavior and renderers that have not migrated yet.
+    #[serde(default, skip_serializing_if = "style::StyleProgram::is_empty")]
+    pub style_program: style::StyleProgram,
     /// Sprite definitions collected from the source (`sprite $name { ... }`).
     #[serde(default, skip_serializing_if = "HashMap::is_empty")]
     pub sprites: HashMap<String, SpriteData>,

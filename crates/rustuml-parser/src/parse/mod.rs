@@ -27,6 +27,8 @@ pub mod timing;
 pub mod usecase;
 pub mod wbs;
 
+mod style;
+
 use crate::diagram::Diagram;
 use crate::preprocess;
 
@@ -1093,6 +1095,7 @@ pub fn parse_with_base(
         Some(dir) => preprocess::preprocess_full_for_parse(input, Some(dir.to_path_buf())),
         None => preprocess::preprocess_full_for_parse(input, None),
     };
+    let mut style_program = style::extract_style_program(&mut preprocess_out.lines);
     let uml_subtype = (typ == "uml").then(|| detect_uml_subtype(&preprocess_out.lines));
     if matches!(uml_subtype, Some(UmlSubtype::Sequence)) {
         preprocess_out = match base_dir {
@@ -1101,6 +1104,7 @@ pub fn parse_with_base(
             }
             None => preprocess::preprocess_full_for_sequence_parse(input, None),
         };
+        style_program = style::extract_style_program(&mut preprocess_out.lines);
     }
     let lines = preprocess_out.lines;
     let sprites = preprocess_out.sprites;
@@ -1226,6 +1230,7 @@ pub fn parse_with_base(
     }?;
 
     collapse_reassigned_skinparams(&mut diagram);
+    diagram.meta_mut().style_program = style_program;
 
     // Inject sprite definitions from the preprocessor into the diagram's meta.
     if !sprites.is_empty() {
@@ -1557,6 +1562,255 @@ mod tests {
         assert_eq!(theme_positions.len(), 2);
         assert!(theme_positions[0] < user_position);
         assert!(user_position < theme_positions[1]);
+    }
+
+    #[test]
+    fn style_program_preserves_sparse_css_and_raw_skinparam_compatibility() {
+        let diagram = parse(concat!(
+            "@startuml\n",
+            "<style>\n",
+            "  root { LineColor #123456; Padding 17 }\n",
+            "</style>\n",
+            "skinparam State.Arrow_Color #654321\n",
+            "[*] --> FreshStyledState\n",
+            "@enduml\n",
+        ))
+        .unwrap();
+
+        let declarations = &diagram.meta().style_program.declarations;
+        assert_eq!(declarations.len(), 3);
+        assert_eq!(declarations[0].selector, ["root"]);
+        assert_eq!(declarations[0].property, "linecolor");
+        assert_eq!(declarations[0].source_line, 1);
+        assert_eq!(declarations[1].property, "padding");
+        assert_eq!(declarations[1].source_line, 1);
+        assert_eq!(declarations[2].selector, ["arrow"]);
+        assert_eq!(declarations[2].value, "#654321");
+        assert_eq!(declarations[2].source_line, 4);
+        assert!(
+            declarations
+                .windows(2)
+                .all(|pair| pair[0].epoch < pair[1].epoch)
+        );
+
+        assert!(
+            diagram
+                .meta()
+                .skinparams
+                .iter()
+                .any(|param| param.key == "arrowcolor" && param.value == "#654321")
+        );
+    }
+
+    #[test]
+    fn real_theme_css_and_skinparams_execute_at_the_theme_epoch() {
+        use crate::diagram::style::StyleOrigin;
+
+        let diagram = parse(concat!(
+            "@startuml\n",
+            "skinparam ArrowColor #101010\n",
+            "!theme metal\n",
+            "skinparam ArrowColor #303030\n",
+            "class FreshThemeEpochA\n",
+            "class FreshThemeEpochB\n",
+            "FreshThemeEpochA --> FreshThemeEpochB\n",
+            "@enduml\n",
+        ))
+        .unwrap();
+        let declarations = &diagram.meta().style_program.declarations;
+
+        let before = declarations
+            .iter()
+            .find(|declaration| declaration.value == "#101010")
+            .unwrap()
+            .epoch;
+        let after = declarations
+            .iter()
+            .find(|declaration| declaration.value == "#303030")
+            .unwrap()
+            .epoch;
+        let theme_epochs = declarations
+            .iter()
+            .filter_map(|declaration| match &declaration.origin {
+                StyleOrigin::ThemeStyle { theme } | StyleOrigin::ThemeSkinParam { theme }
+                    if theme == "metal" =>
+                {
+                    Some(declaration.epoch)
+                }
+                _ => None,
+            })
+            .collect::<Vec<_>>();
+
+        assert!(!theme_epochs.is_empty());
+        assert!(declarations.iter().any(|declaration| {
+            matches!(
+                &declaration.origin,
+                StyleOrigin::ThemeStyle { theme } if theme == "metal"
+            )
+        }));
+        assert!(declarations.iter().any(|declaration| {
+            matches!(
+                &declaration.origin,
+                StyleOrigin::ThemeSkinParam { theme } if theme == "metal"
+            )
+        }));
+        assert!(theme_epochs.iter().all(|epoch| before < *epoch));
+        assert!(theme_epochs.iter().all(|epoch| *epoch < after));
+    }
+
+    #[test]
+    fn style_source_lines_recover_entity_and_link_snapshot_boundaries() {
+        use crate::diagram::style::StyleOrigin;
+
+        let diagram = parse(concat!(
+            "@startuml\n",
+            "class FreshBeforeStyle\n",
+            "<style>\n",
+            "  classDiagram { element { LineColor #1A2B3C } }\n",
+            "</style>\n",
+            "class FreshBeforeTheme\n",
+            "FreshBeforeStyle --> FreshBeforeTheme\n",
+            "!theme metal\n",
+            "class FreshAfterTheme\n",
+            "FreshBeforeTheme --> FreshAfterTheme\n",
+            "@enduml\n",
+        ))
+        .unwrap();
+        let Diagram::Class(class) = &diagram else {
+            panic!("expected class diagram");
+        };
+        let declaration_line = |origin: &StyleOrigin| {
+            class
+                .meta
+                .style_program
+                .declarations
+                .iter()
+                .find(|declaration| &declaration.origin == origin)
+                .unwrap()
+                .source_line
+        };
+        let entity_line = |id: &str| {
+            class
+                .entities
+                .iter()
+                .find(|entity| entity.id == id)
+                .unwrap()
+                .source_line
+        };
+
+        let user_style_line = declaration_line(&StyleOrigin::UserStyle);
+        let theme_style_line = class
+            .meta
+            .style_program
+            .declarations
+            .iter()
+            .find_map(|declaration| {
+                matches!(
+                    &declaration.origin,
+                    StyleOrigin::ThemeStyle { theme } if theme == "metal"
+                )
+                .then_some(declaration.source_line)
+            })
+            .unwrap();
+        assert_eq!(user_style_line, 2);
+        assert_eq!(theme_style_line, 7);
+        assert!(entity_line("FreshBeforeStyle") < user_style_line);
+        assert!(user_style_line < entity_line("FreshBeforeTheme"));
+        assert!(class.relationships[0].source_line < theme_style_line);
+        assert!(theme_style_line < entity_line("FreshAfterTheme"));
+        assert!(theme_style_line < class.relationships[1].source_line);
+        assert!(class.meta.style_program.declarations.iter().all(
+            |declaration| !matches!(&declaration.origin, StyleOrigin::ThemeStyle { theme } if theme == "metal")
+                || declaration.source_line == theme_style_line
+        ));
+    }
+
+    #[test]
+    fn repeated_themes_keep_intervening_user_style_epoch() {
+        use crate::diagram::style::StyleOrigin;
+
+        let diagram = parse(concat!(
+            "@startuml\n",
+            "!theme metal\n",
+            "skinparam StateBorderColor #C62828\n",
+            "!theme minty\n",
+            "[*] --> FreshThemeRelay\n",
+            "FreshThemeRelay --> [*]\n",
+            "@enduml\n",
+        ))
+        .unwrap();
+        let declarations = &diagram.meta().style_program.declarations;
+        let metal_max = declarations
+            .iter()
+            .filter_map(|declaration| match &declaration.origin {
+                StyleOrigin::ThemeStyle { theme } | StyleOrigin::ThemeSkinParam { theme }
+                    if theme == "metal" =>
+                {
+                    Some(declaration.epoch)
+                }
+                _ => None,
+            })
+            .max()
+            .unwrap();
+        let user_epoch = declarations
+            .iter()
+            .find(|declaration| {
+                matches!(&declaration.origin, StyleOrigin::UserSkinParam)
+                    && declaration.selector == ["state"]
+                    && declaration.property == "linecolor"
+                    && declaration.value == "#C62828"
+            })
+            .unwrap()
+            .epoch;
+        let minty_min = declarations
+            .iter()
+            .filter_map(|declaration| match &declaration.origin {
+                StyleOrigin::ThemeStyle { theme } | StyleOrigin::ThemeSkinParam { theme }
+                    if theme == "minty" =>
+                {
+                    Some(declaration.epoch)
+                }
+                _ => None,
+            })
+            .min()
+            .unwrap();
+
+        assert!(metal_max < user_epoch);
+        assert!(user_epoch < minty_min);
+    }
+
+    #[test]
+    fn style_program_retains_repeated_writes_that_raw_compatibility_collapses() {
+        let diagram = parse(concat!(
+            "@startuml\n",
+            "skinparam ArrowColor #111111\n",
+            "skinparam State.Arrow_Color #222222\n",
+            "skinparam UseCase_Arrow.Color #333333\n",
+            "[*] --> FreshOrderedRelay\n",
+            "@enduml\n",
+        ))
+        .unwrap();
+
+        let writes = diagram
+            .meta()
+            .style_program
+            .declarations
+            .iter()
+            .filter(|declaration| {
+                declaration.selector == ["arrow"] && declaration.property == "linecolor"
+            })
+            .map(|declaration| declaration.value.as_str())
+            .collect::<Vec<_>>();
+        assert_eq!(writes, ["#111111", "#222222", "#333333"]);
+        assert_eq!(
+            diagram
+                .meta()
+                .skinparams
+                .iter()
+                .filter(|param| canonical_skinparam_key(&param.key) == "arrowcolor")
+                .count(),
+            1
+        );
     }
 
     #[test]
