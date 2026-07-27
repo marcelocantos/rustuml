@@ -162,6 +162,13 @@ const BAR_HEIGHT: f64 = 8.0;
 
 /// Choice diamond half-size.
 const CHOICE_SIZE: f64 = 12.0;
+/// Horizontal painted-bound expansion applied to every polygon.
+///
+/// Java provenance: `LimitFinder.drawUPolygon` expands `UPolygon` bounds by
+/// `HACK_X_FOR_POLYGON` on both sides. `EntityImageBranch.drawU` paints state
+/// choices as a `UPolygon`, so their SVEK image can be wider than its 24px
+/// Graphviz diamond node.
+const POLYGON_LIMIT_FINDER_OVERSCAN_X: f64 = 10.0;
 
 /// Vertical gap between nodes in the layout.
 const V_GAP: f64 = 60.0;
@@ -4401,10 +4408,10 @@ pub fn render_with_oracle(
                 let (_, _, shape) = state_node_size(id, state_def);
                 Some(
                     quantize_svek_coord(layout_positions[index].x)
-                        - if shape == StateLayoutShape::Box {
-                            1.0
-                        } else {
-                            0.0
+                        - match shape {
+                            StateLayoutShape::Box => 1.0,
+                            StateLayoutShape::Diamond => POLYGON_LIMIT_FINDER_OVERSCAN_X,
+                            StateLayoutShape::Circle => 0.0,
                         },
                 )
             })
@@ -4539,7 +4546,14 @@ pub fn render_with_oracle(
             let x = layout_x + graph_body_x + w / 2.0;
             let y = layout_y + graph_body_y + h / 2.0;
             positions.push((id.clone(), x, y, w, h));
-            max_x = max_x.max(layout_x + w);
+            max_x = max_x.max(if shape == StateLayoutShape::Diamond {
+                // `SvekResult.calculateDimension` adds 15px after the
+                // inclusive polygon maximum. `SVEK_TRAILING_PAD` is 14px
+                // because rectangles and ellipses stop one pixel inside.
+                layout_x + w + POLYGON_LIMIT_FINDER_OVERSCAN_X + 1.0
+            } else {
+                layout_x + w
+            });
             let descriptions_are_hidden =
                 hide_empty_desc && state_def.is_none_or(|state| state.descriptions.is_empty());
             let has_full_width_divider = shape == StateLayoutShape::Box
@@ -4555,7 +4569,10 @@ pub fn render_with_oracle(
             // reaches `x + width`. This distinction is observable when
             // `hide empty description` removes that divider and
             // `DecorateEntityImage.addTop` centers the body under a title.
-            let painted_node_right = layout_x + w - if has_full_width_divider { 0.0 } else { 1.0 };
+            let painted_node_right = match shape {
+                StateLayoutShape::Diamond => layout_x + w + POLYGON_LIMIT_FINDER_OVERSCAN_X + 1.0,
+                _ => layout_x + w - if has_full_width_divider { 0.0 } else { 1.0 },
+            };
             painted_max_x = painted_max_x.max(painted_node_right);
             max_y = max_y.max(layout_y + h);
             painted_max_y = painted_max_y.max(layout_y + h - 1.0);
@@ -8180,6 +8197,32 @@ fn short_name_match(ep: &str, edge_id: &str, is_from: bool) -> bool {
 mod tests {
     use super::*;
     use rustuml_parser::diagram::DiagramMeta;
+
+    #[test]
+    fn renamed_deeper_choice_chain_uses_polygon_limit_finder_bounds() {
+        let input = r#"@startuml
+state AuroraGate <<choice>> #Coral
+state BorealisJunction <<choice>> #LightSeaGreen
+state CobaltDecision <<choice>> #RoyalBlue
+[*] --> AuroraGate
+AuroraGate --> BorealisJunction
+BorealisJunction --> CobaltDecision
+CobaltDecision --> [*]
+@enduml
+"#;
+        let parsed = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::State(diagram) = &parsed else {
+            panic!("expected state diagram");
+        };
+        let svg = render(diagram, &Theme::default());
+
+        // Fresh headless PlantUML 1.2026.3beta6 renders this renamed,
+        // three-decision perturbation with the same 65x374 envelope. Its
+        // leftmost diamond paints at x=16, while LimitFinder reserves the
+        // additional ten pixels on either side.
+        assert!(svg.contains(r#"viewBox="0 0 65 374""#));
+        assert!(svg.contains(r#"points="28,86,40,98,28,110,16,98,28,86""#));
+    }
 
     #[test]
     fn renamed_six_state_graph_groups_noncontiguous_reverse_transitions() {
