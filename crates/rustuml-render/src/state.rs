@@ -2446,13 +2446,30 @@ fn autonomous_group_is_autarkic(diagram: &StateDiagram, group: &str) -> bool {
     })
 }
 
-fn autonomous_edge_label_margin(transition: &Transition) -> f64 {
+fn state_edge_label_margin(transition: &Transition) -> f64 {
     let from = state_endpoint_layout_id(&transition.from, true);
     let to = state_endpoint_layout_id(&transition.to, false);
     if from == to {
         SVEK_SELF_EDGE_LABEL_MARGIN
     } else {
         SVEK_EDGE_LABEL_MARGIN
+    }
+}
+
+fn svek_edge_label_box_size(
+    transition: &Transition,
+    label: &str,
+    arrow_font: &StateArrowFont,
+) -> EdgeLabelSize {
+    let margin = state_edge_label_margin(transition);
+    EdgeLabelSize {
+        width: text_render::measure_with_family(
+            label,
+            arrow_font.size as f64,
+            arrow_font.bold,
+            &arrow_font.family,
+        ) + 2.0 * margin,
+        height: text_render::label_height(label, arrow_font.size as f64) + 2.0 * margin,
     }
 }
 
@@ -2644,7 +2661,7 @@ fn autonomous_scope_painted_bounds(
         if let Some(label) = transition.label.as_deref()
             && let Some(label_position) = edge.label
         {
-            let label_margin = autonomous_edge_label_margin(transition);
+            let label_margin = state_edge_label_margin(transition);
             let x = quantize_svek_coord(label_position.x) + label_margin;
             let baseline = quantize_svek_coord(label_position.y)
                 + label_margin
@@ -2749,17 +2766,9 @@ fn layout_autonomous_scope(
             layout.add_plantuml_svek_line0_edge(layout_from, layout_to);
         }
         let label_size = transition.label.as_deref().map(|label| {
-            let margin = autonomous_edge_label_margin(transition);
-            EdgeLabelSize {
-                width: text_render::measure_with_family(
-                    label,
-                    arrow_font.size as f64,
-                    arrow_font.bold,
-                    &arrow_font.family,
-                ) + 2.0 * margin,
-                height: (text_render::label_height(label, arrow_font.size as f64) + 2.0 * margin)
-                    .floor(),
-            }
+            let mut size = svek_edge_label_box_size(transition, label, &arrow_font);
+            size.height = size.height.floor();
+            size
         });
         let layout_edge_index = layout.add_edge_with_label_sizes_and_minlen(
             layout_from,
@@ -3933,7 +3942,7 @@ fn emit_autonomous_scope_links(
             render_arrowhead(svg, arrow_control, arrow_tip, color, thickness);
 
             if let Some(label) = &transition.label {
-                let label_margin = autonomous_edge_label_margin(transition);
+                let label_margin = state_edge_label_margin(transition);
                 let (label_x, label_y) = edge_path
                     .label
                     .map(|position| {
@@ -4995,7 +5004,7 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
         else {
             continue;
         };
-        let margin = autonomous_edge_label_margin(transition);
+        let margin = state_edge_label_margin(transition);
         let x = quantize_svek_coord(position.x) + margin;
         let baseline = quantize_svek_coord(position.y)
             + margin
@@ -5746,13 +5755,10 @@ pub fn render_with_oracle(
             if horizontal {
                 layout.add_plantuml_svek_line0_edge(layout_from, layout_to);
             }
-            let ordinary_label_size = t.label.as_deref().map(|label| {
-                let mut size = ordinary_edge_label_size(label, &arrow_font);
-                if layout_from == layout_to {
-                    size.width += SELF_EDGE_ARROW_MARGIN;
-                }
-                size
-            });
+            let ordinary_label_size = t
+                .label
+                .as_deref()
+                .map(|label| svek_edge_label_box_size(t, label, &arrow_font));
             let label_size = compose_link_label_size(
                 ordinary_label_size,
                 link_note_for_transition(diagram, transition_index),
@@ -5787,11 +5793,7 @@ pub fn render_with_oracle(
     let has_complete_flat_painter_model = diagram.meta.title.is_none()
         && diagram.meta.skinparams.is_empty()
         && diagram.notes.is_empty()
-        && diagram.states.iter().all(|state| !state.composite)
-        && diagram
-            .transitions
-            .iter()
-            .all(|transition| transition.from != transition.to);
+        && diagram.states.iter().all(|state| !state.composite);
     let flat_painted_bounds = layout_result.as_ref().and_then(|result| {
         if !has_complete_flat_painter_model {
             return None;
@@ -5906,15 +5908,12 @@ pub fn render_with_oracle(
                     transition
                         .label
                         .as_deref()
-                        .map(|label| ordinary_edge_label_size(label, &arrow_font)),
+                        .map(|label| svek_edge_label_box_size(transition, label, &arrow_font)),
                     link_note_for_transition(diagram, transition_index),
                 )
             {
-                let mut x = quantize_svek_coord(label_origin.x);
+                let x = quantize_svek_coord(label_origin.x);
                 let y = quantize_svek_coord(label_origin.y);
-                if transition.from == transition.to {
-                    x += SELF_EDGE_ARROW_MARGIN / 2.0;
-                }
                 bounds.include(x, y);
                 bounds.include(x + label_size.width, y + label_size.height);
             }
@@ -7736,7 +7735,9 @@ pub fn render_with_oracle(
                             ((first.0 + last.0) / 2.0, (first.1 + last.1) / 2.0)
                         });
                     if edge_from_layout == edge_to_layout {
-                        label_origin.0 += SELF_EDGE_ARROW_MARGIN / 2.0;
+                        let inset = state_edge_label_margin(t) - SVEK_EDGE_LABEL_MARGIN;
+                        label_origin.0 += inset;
+                        label_origin.1 += inset;
                     }
                     emit_link_label_composition(&mut svg, t, link_note, label_origin, &arrow_font);
                 }
@@ -11534,13 +11535,10 @@ CobaltDecision --> [*]
         };
 
         assert_eq!(
-            autonomous_edge_label_margin(&self_link),
+            state_edge_label_margin(&self_link),
             SVEK_SELF_EDGE_LABEL_MARGIN
         );
-        assert_eq!(
-            autonomous_edge_label_margin(&ordinary),
-            SVEK_EDGE_LABEL_MARGIN
-        );
+        assert_eq!(state_edge_label_margin(&ordinary), SVEK_EDGE_LABEL_MARGIN);
     }
 
     #[test]

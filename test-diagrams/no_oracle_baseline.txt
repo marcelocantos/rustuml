@@ -12,7 +12,7 @@ creole 639 639
 deployment 495 495
 dot 25 25
 ebnf 25 25
-edge-cases 711 777
+edge-cases 712 777
 er 153 157
 gantt 114 114
 git 25 25
@@ -30,7 +30,7 @@ salt 103 103
 sequence 1411 1411
 skinparam 401 410
 sprites 49 49
-state 884 901
+state 885 901
 timing 141 141
 type-detection 41 42
 usecase 315 315
