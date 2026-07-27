@@ -4583,7 +4583,10 @@ fn render_plantuml_svg(
         if let Some(source_line) = oracle_rect
             .and_then(|r| r.source_line.as_deref())
             .map(str::to_string)
-            .or_else(|| oracle_rect.is_none().then(|| dim.source_line.to_string()))
+            .or_else(|| {
+                (oracle_rect.is_none() && entity.kind != EntityKind::State)
+                    .then(|| dim.source_line.to_string())
+            })
         {
             write!(svg, r#" data-source-line="{source_line}""#).unwrap();
         }
@@ -13148,6 +13151,38 @@ mod tests {
         assert!(svg.contains("</svg>"));
         assert!(svg.contains("Animal"));
         assert!(svg.contains("Dog"));
+    }
+
+    #[test]
+    fn mixed_state_group_omits_class_source_line_metadata() {
+        let input = "@startuml\n\
+                     allowmixing\n\
+                     class Processor\n\
+                     state Running\n\
+                     Processor --> Running\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Class(diagram) = diagram else {
+            panic!("allowmixing input should parse as a class diagram");
+        };
+
+        let svg = render(&diagram, &Theme::default());
+        assert!(
+            svg.contains(
+                r#"<g class="entity" data-qualified-name="Processor" data-source-line="2""#
+            ),
+            "{svg}"
+        );
+        assert!(
+            svg.contains(r#"<g class="entity" data-qualified-name="Running" id=""#),
+            "{svg}"
+        );
+        assert!(
+            !svg.contains(
+                r#"<g class="entity" data-qualified-name="Running" data-source-line="3""#
+            ),
+            "{svg}"
+        );
     }
 
     #[test]
