@@ -1097,6 +1097,10 @@ fn parse_arrow(s: &str) -> Arrow {
 
     let direction = if s.starts_with('<') && s.ends_with('>') {
         ArrowDirection::Bidirectional
+    } else if s.starts_with('/') || s.starts_with('\\') {
+        // Java `CommandArrow` treats a left half-head dressing as
+        // reverseDefine before it swaps the semantic participants.
+        ArrowDirection::RightToLeft
     } else if s.contains("<-") || s.contains('<') && !s.contains("->") {
         ArrowDirection::RightToLeft
     } else {
@@ -1147,7 +1151,7 @@ fn parse_arrow(s: &str) -> Arrow {
     // Half-arrowhead modifiers: `/` draws only the bottom wing, `\` only the
     // top wing. Doubling the modifier (`//`, `\\`) renders a thin open stroke
     // instead of a filled triangle.
-    let (head_half, thin_head) = if s.contains("//") {
+    let (mut head_half, thin_head) = if s.contains("//") {
         (Some(ArrowHalf::Bottom), true)
     } else if s.contains("\\\\") {
         (Some(ArrowHalf::Top), true)
@@ -1158,6 +1162,12 @@ fn parse_arrow(s: &str) -> Arrow {
     } else {
         (None, false)
     };
+    if direction == ArrowDirection::RightToLeft && (s.starts_with('/') || s.starts_with('\\')) {
+        head_half = head_half.map(|half| match half {
+            ArrowHalf::Top => ArrowHalf::Bottom,
+            ArrowHalf::Bottom => ArrowHalf::Top,
+        });
+    }
 
     Arrow {
         line,
@@ -1499,6 +1509,24 @@ mod tests {
         assert_eq!(filled.to, "A");
         assert!(filled.arrow.source_circle);
         assert_eq!(filled.arrow.head, ArrowHead::Filled);
+    }
+
+    #[test]
+    fn left_half_head_dressing_reverses_semantic_participants() {
+        let d = parse(
+            "West /-o East : lower\n\
+             East \\-o West : upper\n\
+             Middle //-o East : thin",
+        );
+        let expected = [("East", "West"), ("West", "East"), ("East", "Middle")];
+        for (event, (from, to)) in d.events.iter().zip(expected) {
+            let Event::Message(message) = event else {
+                panic!("expected message");
+            };
+            assert_eq!((message.from.as_str(), message.to.as_str()), (from, to));
+            assert_eq!(message.arrow.direction, ArrowDirection::RightToLeft);
+            assert!(message.arrow.source_circle);
+        }
     }
 
     #[test]

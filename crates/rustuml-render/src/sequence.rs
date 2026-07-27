@@ -2463,9 +2463,16 @@ fn parse_autonumber_template_runs(format: &str) -> Vec<AutoNumberRun> {
             text.push_str(&tag);
             break;
         }
-        // PlantUML treats angle brackets around a numeric placeholder as
-        // literal format text, not as an unknown Creole tag.
-        if !tag.is_empty() && tag.chars().all(|c| matches!(c, '0' | '#')) {
+        let lower = tag.trim().to_ascii_lowercase();
+        let recognized_markup = matches!(
+            lower.as_str(),
+            "b" | "/b" | "i" | "/i" | "u" | "/u" | "/font" | "/color"
+        ) || lower.starts_with("font color")
+            || lower.starts_with("color:");
+        // DecimalFormat retains literal text around its placeholder. Angle
+        // brackets only denote markup when the enclosed token is a recognized
+        // Creole tag.
+        if !recognized_markup && tag.chars().any(|c| matches!(c, '0' | '#')) {
             text.push('<');
             text.push_str(&tag);
             text.push('>');
@@ -2480,8 +2487,6 @@ fn parse_autonumber_template_runs(format: &str) -> Vec<AutoNumberRun> {
             underline,
             fill.clone(),
         );
-
-        let lower = tag.trim().to_ascii_lowercase();
         match lower.as_str() {
             "b" => bold = true,
             "/b" => bold = false,
@@ -2737,19 +2742,10 @@ fn format_autonumber(n: u32, format: &Option<String>) -> String {
         return n.to_string();
     };
 
-    let plain: String = {
-        let mut out = String::with_capacity(fmt.len());
-        let mut depth = 0u32;
-        for c in fmt.chars() {
-            match c {
-                '<' => depth += 1,
-                '>' if depth > 0 => depth -= 1,
-                _ if depth == 0 => out.push(c),
-                _ => {}
-            }
-        }
-        out
-    };
+    let plain = parse_autonumber_template_runs(fmt)
+        .into_iter()
+        .map(|run| run.text)
+        .collect::<String>();
 
     if let Some(start) = plain.find('0') {
         let end = plain[start..]
@@ -2985,6 +2981,49 @@ impl ActivationTracker {
             *d = d.saturating_sub(1);
         }
     }
+}
+
+fn live_depth_at_message_ordinate(
+    events: &[Event],
+    event_y_positions: &[f64],
+    page1_end: usize,
+    event_index: usize,
+    participant: &str,
+    current_depth: usize,
+) -> usize {
+    let mut depth = current_depth;
+    if let Some(Event::Message(message)) = events.get(event_index) {
+        match message.activation {
+            Some(ActivationChange::Activate) if message.to == participant => depth += 1,
+            Some(ActivationChange::Deactivate) if message.from == participant => {
+                depth = depth.saturating_sub(1);
+            }
+            Some(ActivationChange::Destroy) if message.to == participant => {
+                depth = depth.saturating_sub(1);
+            }
+            _ => {}
+        }
+    }
+
+    for (next_index, next_event) in events
+        .iter()
+        .enumerate()
+        .take(page1_end)
+        .skip(event_index + 1)
+    {
+        if event_y_positions.get(next_index) != event_y_positions.get(event_index) {
+            break;
+        }
+        match next_event {
+            Event::Activate(id, _) if id == participant => depth += 1,
+            Event::Deactivate(id) | Event::Destroy(id) if id == participant => {
+                depth = depth.saturating_sub(1);
+            }
+            Event::Message(_) | Event::Return(_) => break,
+            _ => {}
+        }
+    }
+    depth
 }
 
 // ---------------------------------------------------------------------------
@@ -10382,21 +10421,25 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     .get(msg.from.as_str())
                     .copied()
                     .unwrap_or(0);
-                // LifeLine's stair is queried at the arrow ordinate. Inline
-                // deactivation and an immediately following standalone
-                // deactivation share that ordinate, so both already reduce the
-                // visible live segment by one level.
-                let deactivates_at_message = matches!(
-                    msg.activation,
-                    Some(ActivationChange::Deactivate)
-                ) || matches!(events.get(ev_idx + 1), Some(Event::Deactivate(id)) if id == &msg.from);
-                let lost_live_depth = if deactivates_at_message {
-                    from_depth.saturating_sub(1)
-                } else {
-                    from_depth
-                };
+                let from_live_depth = live_depth_at_message_ordinate(
+                    events,
+                    &event_y_positions,
+                    page1_end,
+                    ev_idx,
+                    &msg.from,
+                    from_depth,
+                );
+                let to_depth = render_activation.get(msg.to.as_str()).copied().unwrap_or(0);
+                let to_live_depth = live_depth_at_message_ordinate(
+                    events,
+                    &event_y_positions,
+                    page1_end,
+                    ev_idx,
+                    &msg.to,
+                    to_depth,
+                );
                 let lost_live_shift = if msg.to == "]" {
-                    lost_live_depth as f64 * ACTIVATION_HALF_W
+                    from_live_depth as f64 * ACTIVATION_HALF_W
                 } else {
                     0.0
                 };
@@ -10792,7 +10835,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         }
                     }
                     let from_x_shifted = if msg.to == "]" {
-                        from_x + lost_live_shift
+                        from_x + from_live_depth as f64 * ACTIVATION_HALF_W
+                    } else if msg.to == "[" {
+                        from_x
+                            - if from_live_depth > 0 {
+                                ACTIVATION_HALF_W
+                            } else {
+                                0.0
+                            }
                     } else if is_right && source_right_depth > 0 {
                         from_x + source_right_depth as f64 * ACTIVATION_HALF_W
                     } else if !is_right
@@ -10827,7 +10877,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     let activates_target =
                         matches!(msg.activation, Some(ActivationChange::Activate));
                     let target_deactivates_next = matches!(events.get(ev_idx + 1), Some(Event::Deactivate(id)) if id == &msg.to);
-                    let target_shift = if to_active && !is_create_msg && !target_deactivates_next {
+                    let target_shift = if msg.from == "[" {
+                        if to_live_depth > 0 {
+                            ACTIVATION_HALF_W
+                        } else {
+                            0.0
+                        }
+                    } else if msg.from == "]" {
+                        to_live_depth as f64 * ACTIVATION_HALF_W
+                    } else if to_active && !is_create_msg && !target_deactivates_next {
                         if is_right {
                             let lands_on_depth = if activates_target {
                                 to_existing_depth
@@ -13608,6 +13666,17 @@ mod tests {
 
         assert_eq!(text, "<000017>");
         assert!(runs.iter().all(|run| run.bold));
+    }
+
+    #[test]
+    fn autonumber_keeps_prefixed_literal_angle_decimal_format() {
+        let format = Some("<i><ID-00000>".to_string());
+        let runs = format_autonumber_runs(33, &format);
+        let text: String = runs.iter().map(|run| run.text.as_str()).collect();
+
+        assert_eq!(text, "<ID-00033>");
+        assert_eq!(format_autonumber(46, &format), "<ID-00046>");
+        assert!(runs.iter().all(|run| run.italic));
     }
 
     #[test]
