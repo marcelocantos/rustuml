@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-autonomous-painted-bounds",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "net.sourceforge.plantuml.dot.CucaDiagramSimplifierState#simplify",
+    "net.sourceforge.plantuml.svek.GroupMakerState#getImage",
+    "net.sourceforge.plantuml.svek.SvekResult#calculateDimension",
+    "net.sourceforge.plantuml.svek.DotStringFactory#moveDelta",
+    "net.sourceforge.plantuml.svek.SvekEdge#drawU",
+    "net.sourceforge.plantuml.svek.SvekEdge#moveDelta",
+    "net.sourceforge.plantuml.klimt.shape.TextBlockUtils#getMinMax",
+    "net.sourceforge.plantuml.klimt.drawing.LimitFinder#drawRectangle",
+    "net.sourceforge.plantuml.klimt.drawing.LimitFinder#drawEllipse",
+    "net.sourceforge.plantuml.klimt.drawing.LimitFinder#drawUPolygon",
+    "net.sourceforge.plantuml.klimt.drawing.LimitFinder#drawDotPath",
+    "net.sourceforge.plantuml.klimt.drawing.LimitFinder#drawText",
+    "net.sourceforge.plantuml.svek.InnerStateAutonom#calculateDimensionSlow",
+    "net.sourceforge.plantuml.svek.InnerStateAutonom#drawU",
+    "net.sourceforge.plantuml.svek.ConcurrentStates#calculateDimensionSlow",
+    "net.sourceforge.plantuml.svek.ConcurrentStates#drawU"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/state.rs::layout_autonomous_scope",
+    "crates/rustuml-render/src/state.rs::normalize_autonomous_scope",
+    "crates/rustuml-render/src/state.rs::emit_autonomous_scope_entities",
+    "crates/rustuml-render/src/state.rs::emit_autonomous_scope_links",
+    "crates/rustuml-render/src/state.rs::build_autonomous_composite_node",
+    "crates/rustuml-render/src/state.rs::build_one_level_concurrent_node"
+  ],
+  "invariant": "Each autarkic state group is first rendered as an independent SvekResult. SvekResult.calculateDimension draws that complete result into LimitFinder before applying any wrapper margin. LimitFinder derives one painted MinMax from primitive-specific bounds: rectangles extend one pixel above and left, ellipses stop one pixel inside their lower and right edges, paths contribute their actual extrema, text contributes measured glyph-box dimensions, and UPolygon contributes a fixed ten-pixel horizontal overscan beyond its vertices. SvekResult then translates the whole solved graph through DotStringFactory.moveDelta by (6 - minX, 6 - minY), so nodes, paths, arrowheads, and labels retain their relative geometry, and reports (maxX - minX + 15, maxY - minY + 15). InnerStateAutonom and ConcurrentStates compose those translated, painted dimensions rather than raw Graphviz canvas or node bounds.",
+  "causal_divergence": "Rust layout_autonomous_scope assigns a fixed horizontal origin and a top-shape-dependent fixed vertical origin before it knows the complete painted bounds. It derives its initial extent from node boxes and Graphviz's canvas, while normalize_autonomous_scope adjusts dimensions and selected label right edges but never translates the scope from a primitive-aware painted minimum. A curved edge whose arrowhead polygon overscan reaches left of the assumed origin therefore makes Java translate every inner primitive farther right and enlarge the autonomous image, while Rust preserves the raw placement. The history node in the observed concurrent residual is incidental; the divergence is caused by the arrowhead's painted frontier and applies to any autonomous topology whose path, decoration, label, or node primitive extends the pre-translation minimum.",
+  "planned_change": "Add a LimitFinder-equivalent painted-bounds pass for each autonomous scope after Graphviz routing and before the scope is wrapped. Measure the same emitted node primitives, retracted edge paths, arrowhead polygons including the Java horizontal overscan, and edge labels. Derive the scope translation from 6 minus each painted minimum, store that translation as the origin consumed uniformly by entity and link emission, and derive width and height from painted span plus Java's fifteen-pixel result margin. Preserve all solved relative coordinates, node sizes, transition identity, nesting composition, spacing, and serialization. Do not change fixed origins globally, adjust width without translating content, special-case history or fixture labels, or alter comparator behavior.",
+  "perturbation_axes": [
+    "renamed antiparallel labelled states with independently varied label lengths",
+    "the same autonomous topology with command and solved arrow direction reversed",
+    "unlabelled curved links proving arrowhead bounds independently of label bounds",
+    "nested autonomous states inside vertical and horizontal concurrent compositions",
+    "choice, final, and history endpoints with left-reaching arrowheads",
+    "a root-level equivalent demonstrating that the correction is scoped to independently wrapped autonomous images"
+  ]
+}
