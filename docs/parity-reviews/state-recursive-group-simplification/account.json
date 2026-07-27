@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-recursive-group-simplification",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "net.sourceforge.plantuml.dot.CucaDiagramSimplifierState#simplify",
+    "net.sourceforge.plantuml.dot.CucaDiagramSimplifierState#getOrdered",
+    "net.sourceforge.plantuml.abel.Entity#isAutarkic",
+    "net.sourceforge.plantuml.abel.Entity#overrideImage",
+    "net.sourceforge.plantuml.abel.EntityUtils#isPureInnerLink3",
+    "net.sourceforge.plantuml.statediagram.StateDiagram#concurrentState",
+    "net.sourceforge.plantuml.svek.GroupMakerState#getImage",
+    "net.sourceforge.plantuml.svek.GroupMakerState#createGeneralImageBuilder",
+    "net.sourceforge.plantuml.svek.ConcurrentStates#calculateDimensionSlow",
+    "net.sourceforge.plantuml.svek.ConcurrentStates#drawU",
+    "net.sourceforge.plantuml.svek.InnerStateAutonom#calculateDimensionSlow",
+    "net.sourceforge.plantuml.svek.InnerStateAutonom#drawU"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/state.rs::StateParser::parse_line",
+    "crates/rustuml-parser/src/parse/state.rs::StateParser::current_scope",
+    "crates/rustuml-render/src/state.rs::transition_parent_scope",
+    "crates/rustuml-render/src/state.rs::build_autonomous_composite_node",
+    "crates/rustuml-render/src/state.rs::build_autonomous_composite",
+    "crates/rustuml-render/src/state.rs::build_one_level_concurrent_node",
+    "crates/rustuml-render/src/state.rs::build_one_level_concurrent_composites",
+    "crates/rustuml-render/src/state.rs::render_non_autarkic_root_clusters",
+    "crates/rustuml-render/src/state.rs::emit_autonomous_composite"
+  ],
+  "invariant": "Java does not choose an ordinary-composite renderer or a concurrent-composite renderer for the whole diagram. CucaDiagramSimplifierState constructs the current group tree, reverses it into deepest-first order, replaces every currently autarkic group with an image leaf, and repeats until a complete pass makes no replacement. Entity.isAutarkic defines ordinary state-group eligibility semantically: package groups are excluded; every link must have both endpoint parent containers inside the group's ancestor closure or both outside it; and every surviving leaf must have NORMAL EntityPosition. Synthetic CONCURRENT_STATE groups are always eligible. StateDiagram.concurrentState leaves the first region's entities directly in the owning STATE group and creates each later region as a nested CONCURRENT_STATE group carrying the same separator. Deepest-first replacement therefore turns each later region into a STATE_CONCURRENT image before considering its owner. GroupMakerState lays out the owner's ordinary immediate leaves as one independent SVEK image, appends each already-solved concurrent image in source order, and ConcurrentStates composes those region images by summing heights for '--' or widths for '||' while taking the orthogonal maximum. InnerStateAutonom then wraps that complete body with the owner's title, attributes, margins, and border; its resulting dimensions are the node dimensions seen by the next enclosing group. Repeating the pass is essential: a concurrent owner may itself become an image leaf, which can make an ordinary parent eligible and eventually place the fully solved subtree as one node in the outer SVEK graph. Root siblings are independent, so ordinary, concurrent, and plain states may coexist; eligibility and image kind are properties of each group, not of the root forest as a whole.",
+  "causal_divergence": "Rust already recursively builds ordinary autonomous composites, but build_autonomous_composite_node rejects any composite carrying a concurrent separator. Its separate build_one_level_concurrent_node accepts only root composites, delegates nested composites back to the ordinary-only builder, and build_one_level_concurrent_composites requires every root composite to be concurrent. These mutually exclusive entry paths cannot represent Java's fixed point when concurrency occurs below an ordinary group, when a concurrent group contains another concurrent group, or when ordinary and concurrent root images share one outer graph. When either path declines, the fallback renderer treats scoped pseudo-states and nested region members as unrelated top-level entities, producing the characteristic wide, shallow graph instead of Java's tall nested autonomous images. The same split obscures Java's actual autarky test: equality of immediate endpoint parents is sufficient for selecting links local to one solved SVEK image, but it is not the group-eligibility predicate. Eligibility depends on descendant membership for both link endpoints, so a link from outside a group to any descendant keeps that group unsimplified even though an enclosing ancestor can still regard both endpoints as internal.",
+  "planned_change": "Replace the ordinary-only recursive node builder and root-only concurrent node builder with one recursive group-image builder. For each composite, first derive its ordered region scopes from the composite scope plus parser-recorded concurrent regions. Recursively solve child composites regardless of whether the child or parent is ordinary or concurrent, then lay out each region's immediate surviving leaves and solved child-image nodes independently. Compose multiple regions using ConcurrentStates' axis rule and separator order; wrap every owner with the existing InnerStateAutonom geometry model. Drive all root composites through that same builder and place every successfully simplified root image beside ordinary root entities in one outer SVEK layout, without requiring homogeneous root kinds. Introduce an explicit descendant-membership predicate matching EntityUtils.isParent and use it to distinguish group autarky from per-region transition selection. Preserve non-autarkic groups for the cluster path rather than coercing them into autonomous images. Do not add depth-specific branches, region-count ladders, fixture-name checks, canvas-size corrections, or constants inferred from one golden.",
+  "perturbation_axes": [
+    "two through four hierarchy levels alternating ordinary, '--', and '||' composites",
+    "renamed groups and leaves with declaration order permuted independently of label length",
+    "two, three, and four concurrent regions with empty first, middle, and final regions",
+    "mixed root forests containing plain states, ordinary composites, and concurrent composites",
+    "multiple concurrent child composites under one ordinary parent",
+    "an ordinary child inside a concurrent region and a concurrent child inside an ordinary group",
+    "links wholly inside a descendant subtree versus links from outside to the group, a child, and a grandchild",
+    "links from a group endpoint to its own child and links crossing sibling child groups",
+    "region-local labeled and unlabeled transitions with varied branch counts",
+    "shallow and deep history leaves remaining normal autonomous image content",
+    "repeated short names in sibling scopes and across concurrent regions",
+    "unchanged structures with labels lengthened to prove geometry remains generative"
+  ]
+}
