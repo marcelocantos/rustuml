@@ -1,0 +1,14 @@
+@startuml
+skinparam state {
+  BackgroundColor<<unmatched>> Crimson
+  BorderColor<<unmatched>> DarkRed
+  FontSize<<unmatched>> 28
+  FontStyle<<unmatched>> bold
+}
+state "Neutral Archive" as NeutralArchive <<other>> {
+  [*] --> RecordShelf
+  RecordShelf --> [*]
+}
+[*] --> NeutralArchive
+NeutralArchive --> [*]
+@enduml

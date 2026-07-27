@@ -1,0 +1,19 @@
+@startuml
+skinparam state {
+  BackgroundColor<<composite>> LightYellow
+  BorderColor<<composite>> Orange
+  FontSize<<composite>> 20
+  BackgroundColor<<other>> PaleTurquoise
+}
+state "Matched Composite Name" as MatchedComposite <<composite>> {
+  [*] --> MatchedChild
+  MatchedChild --> [*]
+}
+state "Unmatched Composite Name" as UnmatchedComposite <<notComposite>> {
+  [*] --> UnmatchedChild
+  UnmatchedChild --> [*]
+}
+[*] --> MatchedComposite
+MatchedComposite --> UnmatchedComposite
+UnmatchedComposite --> [*]
+@enduml

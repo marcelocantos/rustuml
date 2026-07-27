@@ -1,0 +1,15 @@
+@startuml
+skinparam state {
+  BackgroundColor<<signal>> LightYellow
+  BorderColor<<signal>> Orange
+  BorderThickness<<signal>> 3
+  FontColor<<signal>> DarkRed
+}
+state "Signal Vault" as SignalVault <<signal>> #PaleGreen ##[dashed]Navy {
+  [*] --> SignalNode
+  state "Signal Node" as SignalNode <<signal>> #LightBlue ##[bold]Purple
+  SignalNode --> [*]
+}
+[*] --> SignalVault
+SignalVault --> [*]
+@enduml

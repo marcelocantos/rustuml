@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-autonomous-stereotype-styles",
+  "reviewer": {
+    "task_id": "independent-adversarial-checker-2026-07-27",
+    "model": "GPT-5 Codex"
+  },
+  "account_commit": "bbd43bd0061a75167bf9c355491510569f551344",
+  "implementation_commit": "adeb85019ee2159516383de82f99911acb096a31",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "git show bbd43bd0061a75167bf9c355491510569f551344:docs/parity-reviews/state-autonomous-stereotype-styles/account.json",
+    "git show --format=fuller --no-ext-diff --no-renames adeb85019ee2159516383de82f99911acb096a31 -- crates/rustuml-parser/src/parse/state.rs crates/rustuml-render/src/state.rs",
+    "sed -n '160,225p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/statediagram/command/CommandCreateState.java",
+    "sed -n '300,352p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/abel/Entity.java",
+    "sed -n '686,712p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/abel/Entity.java",
+    "sed -n '1,190p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/abel/EntityPosition.java",
+    "sed -n '65,150p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/image/EntityImageStateCommon.java",
+    "sed -n '70,180p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/InnerStateAutonom.java",
+    "rg -n -C 8 'FontStyle|AttributeFontStyle|FontSize|AttributeFontSize' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/style/FromSkinparamToStyle.java /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/skin/SkinParam.java",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/state-autonomous-stereotype-styles/*.puml",
+    "xmllint --noout test-diagrams/perturbations/state-autonomous-stereotype-styles/*.svg",
+    "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"' test-diagrams/perturbations/state-autonomous-stereotype-styles/*.svg",
+    "ruby -rdigest -e 'Dir[\"test-diagrams/perturbations/state-autonomous-stereotype-styles/*.puml\"].each { |candidate| hash=Digest::SHA256.file(candidate).hexdigest; match=Dir[\"test-diagrams/golden/**/*.puml\"].find { |p| Digest::SHA256.file(p).hexdigest == hash }; abort \"duplicate: #{candidate}: #{match}\" if match }; puts \"all held-outs unique against golden sources\"'",
+    "git archive adeb85019ee2159516383de82f99911acb096a31 | tar -x -C /private/tmp/rustuml-stereotype-review.kE7LlI",
+    "cp -R test-diagrams/perturbations /private/tmp/rustuml-stereotype-review.kE7LlI/test-diagrams/",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-stereotype-review-target cargo test --test parity_perturbations --release -- --nocapture",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-stereotype-review-target cargo test -p rustuml-render --lib --release",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-stereotype-review-target cargo test -p rustuml-parser state_stereotypes --release",
+    "git diff --check bbd43bd0061a75167bf9c355491510569f551344^..adeb85019ee2159516383de82f99911acb096a31",
+    "git show --format= adeb85019ee2159516383de82f99911acb096a31 -- crates/rustuml-parser/src/parse/state.rs crates/rustuml-render/src/state.rs | rg -n 'test-diagrams|include_str!|include_bytes!|LedgerCapsule|DetailedLedger|PositionCabinet'"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-stereotype-styles/group_leaf_qualified_styles.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-stereotype-styles/group_leaf_qualified_styles.svg",
+      "axes": ["ordinary group versus leaf stereotypes", "qualified color selectors", "font size and single face style"],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-stereotype-styles/unmatched_selector_inert.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-stereotype-styles/unmatched_selector_inert.svg",
+      "axes": ["unmatched selector", "renamed composite label"],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-stereotype-styles/font_name_style_geometry.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-stereotype-styles/font_name_style_geometry.svg",
+      "axes": ["stereotype-qualified font name", "title and attribute font metrics", "ordinary leaf descriptions"],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-stereotype-styles/font_name_style_without_attributes.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-stereotype-styles/font_name_style_without_attributes.svg",
+      "axes": ["stereotype-qualified font name and size", "compound legacy FontStyle value", "geometry and paint coupling"],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-stereotype-styles/explicit_fill_stroke_precedence.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-stereotype-styles/explicit_fill_stroke_precedence.svg",
+      "axes": ["qualified colors", "explicit entity fill and stroke", "border thickness and dash precedence"],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-stereotype-styles/deep_history_case_matrix.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-stereotype-styles/deep_history_case_matrix.svg",
+      "axes": ["ordinary deepHistory", "case-varied reserved history*", "qualified selector matching"],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-stereotype-styles/non_normal_position_stereotypes.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-stereotype-styles/non_normal_position_stereotypes.svg",
+      "axes": ["case-varied entry point", "input pin", "expansion input"],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-stereotype-styles/nested_concurrent_stereotypes.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-stereotype-styles/nested_concurrent_stereotypes.svg",
+      "axes": ["nested topology", "concurrent topology", "independent group styles"],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-stereotype-styles/composite_selector_matched_unmatched.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-stereotype-styles/composite_selector_matched_unmatched.svg",
+      "axes": ["selector named composite", "matched and unmatched ordinary stereotypes", "two root composites"],
+      "result": "pass"
+    }
+  ],
+  "findings": [
+    "Rejected the account's implicit claim that ordinary styled leaf descriptions can enter the autonomous renderer. Java's EntityImageStateCommon and InnerStateAutonom resolve title and state-header text before image sizing; adeb8501 still rejects every non-composite direct child with descriptions in build_autonomous_composite_node and build_one_level_concurrent_node. The valid font_name_style_geometry held-out falls back to Rust's general renderer and diverges structurally.",
+    "Rejected Rust's blanket parsing of a stereotype-qualified FontStyle value as bold and italic. In valid font_name_style_without_attributes, Java at 71806a2 applies Courier New and 21px from the qualified selectors but emits neither font-weight nor font-style for the compound legacy value 'bold italic'. Rust's autonomous_state_style uses substring matching and emits both styles, changing title dimensions, divider positions, and the enclosing Graphviz geometry. This is a Java runtime counterexample, not a comparator-tuning issue.",
+    "Verified that Entity.getEntityPosition and EntityPosition.fromStereotype preserve non-normal state positions as a semantic autarky boundary. adeb8501 excludes those names from autonomous eligibility, but its parser and general renderer only implement entry/exit image kinds; valid inputPin and expansionInput are rendered as ordinary boxes. The preserved non_normal_position_stereotypes counterexample therefore remains divergent.",
+    "Six of nine fresh valid held-outs match exactly: group/leaf qualified styles, unmatched selector inertness, explicit fill/stroke precedence, deepHistory versus case-varied history*, nested concurrent styling, and matched/unmatched selector name composite.",
+    "All nine Java SVGs are well-formed, error-free, and source-unique against the golden corpus. The immutable adeb8501 archive passed 686 rustuml-render unit tests and the focused parser stereotype test. Its perturbation suite fails on the three mechanism-local counterexamples listed here; no later HEAD work was included in that verdict.",
+    "The implementation diff has no fixture labels, golden reads, or include_str/include_bytes additions, and git diff --check is clean. The rejection is model correctness and unsupported semantic coverage, not an overfit finding."
+  ],
+  "verdict": "rejected"
+}

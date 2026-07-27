@@ -1,0 +1,13 @@
+@startuml
+state "Position Cabinet" as PositionCabinet {
+  [*] --> EntryMark
+  state EntryMark <<EnTrYpOiNt>>
+  state InputMark <<InPuTpIn>>
+  state ExpandMark <<ExPaNsIoNiNpUt>>
+  EntryMark --> InputMark
+  InputMark --> ExpandMark
+  ExpandMark --> [*]
+}
+[*] --> PositionCabinet
+PositionCabinet --> [*]
+@enduml

@@ -1,0 +1,15 @@
+@startuml
+skinparam state {
+  BackgroundColor<<deepHistory>> LightYellow
+  BorderColor<<deepHistory>> Orange
+}
+state "History Cabinet" as HistoryCabinet {
+  [*] --> OrdinaryDeep
+  state "Ordinary Deep" as OrdinaryDeep <<deepHistory>>
+  state "Reserved Deep" as ReservedDeep <<hIsToRy*>>
+  OrdinaryDeep --> ReservedDeep
+  ReservedDeep --> [*]
+}
+[*] --> HistoryCabinet
+HistoryCabinet --> [*]
+@enduml

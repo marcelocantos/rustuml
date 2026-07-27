@@ -1,0 +1,21 @@
+@startuml
+skinparam state {
+  BackgroundColor<<warm>> LightYellow
+  BorderColor<<warm>> Orange
+  FontSize<<cool>> 18
+  FontStyle<<cool>> bold
+}
+state "Concurrent Atlas" as ConcurrentAtlas <<warm>> {
+  state "North Region" as NorthRegion <<cool>> {
+    [*] --> NorthNode
+    NorthNode --> [*]
+  }
+  --
+  state "South Region" as SouthRegion <<warm>> {
+    [*] --> SouthNode
+    SouthNode --> [*]
+  }
+}
+[*] --> ConcurrentAtlas
+ConcurrentAtlas --> [*]
+@enduml

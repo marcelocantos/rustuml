@@ -1,0 +1,19 @@
+@startuml
+skinparam state {
+  BackgroundColor<<groupTone>> LightYellow
+  BorderColor<<groupTone>> Orange
+  FontSize<<groupTone>> 19
+  FontStyle<<groupTone>> bold
+  BackgroundColor<<leafTone>> PaleTurquoise
+  BorderColor<<leafTone>> DarkCyan
+  FontSize<<leafTone>> 17
+  FontStyle<<leafTone>> italic
+}
+state "Outer Observatory" as OuterObservatory <<groupTone>> {
+  [*] --> CopperRelay
+  state "Copper Relay" as CopperRelay <<leafTone>>
+  CopperRelay --> [*]
+}
+[*] --> OuterObservatory
+OuterObservatory --> [*]
+@enduml

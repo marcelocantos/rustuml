@@ -1,0 +1,18 @@
+@startuml
+skinparam state {
+  FontName<<ledger>> Courier New
+  FontSize<<ledger>> 21
+  FontStyle<<ledger>> bold italic
+  AttributeFontName<<ledger>> Courier New
+  AttributeFontSize<<ledger>> 16
+  AttributeFontStyle<<ledger>> italic
+}
+state "Ledger Capsule" as LedgerCapsule <<ledger>> {
+  [*] --> DetailedLedger
+  state "Detailed Ledger" as DetailedLedger <<ledger>>
+  DetailedLedger : audited field
+  DetailedLedger --> [*]
+}
+[*] --> LedgerCapsule
+LedgerCapsule --> [*]
+@enduml
