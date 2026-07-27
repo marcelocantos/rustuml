@@ -1,0 +1,11 @@
+@startuml
+skinparam State.Arrow_Color #1565C0
+skinparam SEQUENCE_Arrow.Color #3949AB
+skinparam Activity.Arrow_Color #2E7D32
+component "Ingress Adapter 501" as Ingress501
+component "Relay Core 503" as Relay503
+component "Archive Store 509" as Archive509
+Ingress501 --> Relay503 : inherited
+Relay503 -[#C2185B,dashed]-> Archive509 : local
+Archive509 --> Ingress501 : inherited return
+@enduml

@@ -1,0 +1,214 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-arrow-style-isolation",
+  "reviewer": {
+    "task_id": "codex-desktop-t14-state-arrow-style-isolation-review-5",
+    "model": "OpenAI GPT-5 Codex"
+  },
+  "account_commit": "3f80363ecc8f683a452924f82d7ac8cb24ee7eb3",
+  "corrected_account_commits": [
+    "3f80363ecc8f683a452924f82d7ac8cb24ee7eb3"
+  ],
+  "implementation_commit": "3fb74a8bf518a528e89686d1390c223983fc98fb",
+  "prior_rejected_review_commit": "1980fd231e830d2cbc7277f4bcd9b7ca915b4934",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar": {
+    "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+  },
+  "clean_snapshot": {
+    "method": "git archive",
+    "worktree": "/private/tmp/rustuml-arrow-review5-3fb74a8b.sKnI1s",
+    "rust_revision": "3fb74a8bf518a528e89686d1390c223983fc98fb",
+    "copied_in": [
+      "test-diagrams/perturbations/state-arrow-style-isolation/review5_component_cross_family_alias_order.puml",
+      "test-diagrams/perturbations/state-arrow-style-isolation/review5_component_cross_family_alias_order.svg",
+      "test-diagrams/perturbations/state-arrow-style-isolation/review5_component_theme_scope_negative.puml",
+      "test-diagrams/perturbations/state-arrow-style-isolation/review5_component_theme_scope_negative.svg",
+      "test-diagrams/perturbations/state-arrow-style-isolation/review5_sequence_repeated_theme_cross_family_alias.puml",
+      "test-diagrams/perturbations/state-arrow-style-isolation/review5_sequence_repeated_theme_cross_family_alias.svg"
+    ],
+    "excluded_dirty_shared_tree_paths": [
+      "crates/rustuml-render/src/state.rs",
+      "test-diagrams/perturbations/state-parallel-transition-route-identity/*",
+      "docs/parity-reviews/state-parallel-transition-route-identity/review.json"
+    ]
+  },
+  "commands": [
+    {
+      "command": "pgrep -x cargo; pgrep -x rustc",
+      "cwd": "/Users/marcelo/work/github.com/marcelocantos/rustuml",
+      "result": "pass: both exact process checks returned no running process before taking the compile slot"
+    },
+    {
+      "command": "git show -s --format=%H 3fb74a8b",
+      "cwd": "/Users/marcelo/work/github.com/marcelocantos/rustuml",
+      "result": "3fb74a8bf518a528e89686d1390c223983fc98fb"
+    },
+    {
+      "command": "git show -s --format=%H 3f80363e",
+      "cwd": "/Users/marcelo/work/github.com/marcelocantos/rustuml",
+      "result": "3f80363ecc8f683a452924f82d7ac8cb24ee7eb3"
+    },
+    {
+      "command": "git log --all --format=%H | rg '^1980fd23'",
+      "cwd": "/Users/marcelo/work/github.com/marcelocantos/rustuml",
+      "result": "1980fd231e830d2cbc7277f4bcd9b7ca915b4934"
+    },
+    {
+      "command": "git archive --format=tar --output=/private/tmp/rustuml-arrow-review5-3fb74a8b.sKnI1s/source.tar 3fb74a8b",
+      "cwd": "/Users/marcelo/work/github.com/marcelocantos/rustuml",
+      "result": "pass"
+    },
+    {
+      "command": "tar -xf /private/tmp/rustuml-arrow-review5-3fb74a8b.sKnI1s/source.tar -C /private/tmp/rustuml-arrow-review5-3fb74a8b.sKnI1s",
+      "cwd": "/Users/marcelo/work/github.com/marcelocantos/rustuml",
+      "result": "pass"
+    },
+    {
+      "command": "cp review5_*.puml/svg from shared tree into /private/tmp/rustuml-arrow-review5-3fb74a8b.sKnI1s/test-diagrams/perturbations/state-arrow-style-isolation/",
+      "cwd": "/Users/marcelo/work/github.com/marcelocantos/rustuml",
+      "result": "pass: only the six fresh arrow review-5 fixture files were copied into the immutable snapshot"
+    },
+    {
+      "command": "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+      "cwd": "/private/tmp/rustuml-arrow-review5-3fb74a8b.sKnI1s",
+      "result": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+    },
+    {
+      "command": "shasum -a 256 /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "cwd": "/private/tmp/rustuml-arrow-review5-3fb74a8b.sKnI1s",
+      "result": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+    },
+    {
+      "command": "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/state-arrow-style-isolation/review5_component_cross_family_alias_order.puml test-diagrams/perturbations/state-arrow-style-isolation/review5_component_theme_scope_negative.puml test-diagrams/perturbations/state-arrow-style-isolation/review5_sequence_repeated_theme_cross_family_alias.puml",
+      "cwd": "/private/tmp/rustuml-arrow-review5-3fb74a8b.sKnI1s",
+      "result": "pass: pinned Java SVG goldens generated"
+    },
+    {
+      "command": "xmllint --noout test-diagrams/perturbations/state-arrow-style-isolation/review5_component_cross_family_alias_order.svg test-diagrams/perturbations/state-arrow-style-isolation/review5_component_theme_scope_negative.svg test-diagrams/perturbations/state-arrow-style-isolation/review5_sequence_repeated_theme_cross_family_alias.svg",
+      "cwd": "/private/tmp/rustuml-arrow-review5-3fb74a8b.sKnI1s",
+      "result": "pass"
+    },
+    {
+      "command": "rg -n -i 'syntax error|error line|plantuml error|fatal parsing error|cannot include|class=\"error\"|id=\"error\"|<title>error' test-diagrams/perturbations/state-arrow-style-isolation/review5_*.svg",
+      "cwd": "/private/tmp/rustuml-arrow-review5-3fb74a8b.sKnI1s",
+      "result": "pass: no matches"
+    },
+    {
+      "command": "ruby -rdigest -e 'verify review5_*.puml SHA-256 uniqueness against test-diagrams/golden/**/*.puml and test-diagrams/perturbations/**/*.puml'",
+      "cwd": "/Users/marcelo/work/github.com/marcelocantos/rustuml",
+      "result": "pass: unique 3 fresh sources checked against 12656 puml files"
+    },
+    {
+      "command": "shasum -a 256 test-diagrams/perturbations/state-arrow-style-isolation/review5_*.puml test-diagrams/perturbations/state-arrow-style-isolation/review5_*.svg",
+      "cwd": "/private/tmp/rustuml-arrow-review5-3fb74a8b.sKnI1s",
+      "result": "puml e656d0030159ee076da8ec380e3ee66661db913c212835cb141ed0c024a4e89d, 34b2a0d25412f3785b42b4336817a80aa49895a44fafac489375d8a0affa263b, e1e590485f05b45a6e77bf6b9050ca193c4d896af10183ae6fb44f4dc6a1d9cb; svg 7f8b69da4bd9b66b92ce703a3f425be967317c97148a3b5f66452a17049830af, 55b45d8bdd655419c00fd8a274ab4963335d06a741426391a9f141005b89ca64, ef24396af9b1fffd5e4cfcd3b96491e3e70adeffff63673b04c84bab63c2aa9c"
+    },
+    {
+      "command": "rg/sed source review of Java SkinParam.cleanForKeySlow, SkinParam.setParam, FromSkinparamToStyle, TContext.executeTheme, Rust parse::collapse_reassigned_skinparams, preprocess theme flattening, and arrow-colour consumers in state/class/component/activity/sequence/usecase renderers",
+      "cwd": "/private/tmp/rustuml-arrow-review5-3fb74a8b.sKnI1s",
+      "result": "pass: source review completed; findings recorded below"
+    },
+    {
+      "command": "env CARGO_TARGET_DIR=/private/tmp/rustuml-arrow-review5-3fb74a8b-target cargo build -p rustuml-oracle --example diff_one --release",
+      "cwd": "/private/tmp/rustuml-arrow-review5-3fb74a8b.sKnI1s",
+      "result": "pass: finished release profile in 50.30s"
+    },
+    {
+      "command": "/private/tmp/rustuml-arrow-review5-3fb74a8b-target/release/examples/diff_one --no-oracle test-diagrams/perturbations/state-arrow-style-isolation/review5_component_cross_family_alias_order.puml",
+      "cwd": "/private/tmp/rustuml-arrow-review5-3fb74a8b.sKnI1s",
+      "result": "fail_strict: command completed but printed SVG structural differences; inherited emitted Rust arrow paths use #2E7D32 like Java, but component layout/link ordering differs and the local edge is not matched strictly"
+    },
+    {
+      "command": "/private/tmp/rustuml-arrow-review5-3fb74a8b-target/release/examples/diff_one --no-oracle test-diagrams/perturbations/state-arrow-style-isolation/review5_component_theme_scope_negative.puml",
+      "cwd": "/private/tmp/rustuml-arrow-review5-3fb74a8b.sKnI1s",
+      "result": "fail_strict: command completed but printed SVG structural differences; Java inherited component arrows are #000000 from theme processing while Rust remains #181818, and layout/link ordering also differs"
+    },
+    {
+      "command": "/private/tmp/rustuml-arrow-review5-3fb74a8b-target/release/examples/diff_one --no-oracle test-diagrams/perturbations/state-arrow-style-isolation/review5_sequence_repeated_theme_cross_family_alias.puml",
+      "cwd": "/private/tmp/rustuml-arrow-review5-3fb74a8b.sKnI1s",
+      "result": "fail_strict: inherited arrows match #2E7D32, but the local sequence override differs: Java renders #C2185B dashed, Rust renders #FFFFFF solid"
+    },
+    {
+      "command": "env CARGO_TARGET_DIR=/private/tmp/rustuml-arrow-review5-3fb74a8b-target cargo test -p rustuml-oracle --test parity_perturbations --release -- --nocapture",
+      "cwd": "/private/tmp/rustuml-arrow-review5-3fb74a8b.sKnI1s",
+      "result": "fail: held_out_perturbations_match_java_without_oracle_layout failed. New review-5 failures include review5_component_cross_family_alias_order, review5_component_theme_scope_negative, and review5_sequence_repeated_theme_cross_family_alias; pre-existing rejected state-arrow and state-recursive perturbations also remain red."
+    },
+    {
+      "command": "pgrep -x cargo; pgrep -x rustc",
+      "cwd": "/Users/marcelo/work/github.com/marcelocantos/rustuml",
+      "result": "pass: both exact process checks returned no running process after pausing and before the final review write"
+    }
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/state-arrow-style-isolation/review5_component_cross_family_alias_order.puml",
+      "golden": "test-diagrams/perturbations/state-arrow-style-isolation/review5_component_cross_family_alias_order.svg",
+      "source_sha256": "e656d0030159ee076da8ec380e3ee66661db913c212835cb141ed0c024a4e89d",
+      "golden_sha256": "7f8b69da4bd9b66b92ce703a3f425be967317c97148a3b5f66452a17049830af",
+      "axes": [
+        "ordinary aliases using State.Arrow_Color, SEQUENCE_Arrow.Color, and Activity.Arrow_Color in a component diagram",
+        "different family prefixes from the target diagram family",
+        "mixed separators and case",
+        "final ordinary alias should win by Java cleanForKey identity",
+        "local dashed colour override"
+      ],
+      "result": "fail_strict",
+      "arrow_specific_result": "The ordinary shared storage model is supported for emitted inherited links: both Java and Rust use #2E7D32 from the final Activity.Arrow_Color alias. The strict no-oracle comparison still fails because component layout/link ordering diverges and the local-edge path is not matched structurally."
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arrow-style-isolation/review5_component_theme_scope_negative.puml",
+      "golden": "test-diagrams/perturbations/state-arrow-style-isolation/review5_component_theme_scope_negative.svg",
+      "source_sha256": "34b2a0d25412f3785b42b4336817a80aa49895a44fafac489375d8a0affa263b",
+      "golden_sha256": "55b45d8bdd655419c00fd8a274ab4963335d06a741426391a9f141005b89ca64",
+      "axes": [
+        "real !theme reddress-lightred",
+        "theme family arrow declarations without ordinary user arrow aliases",
+        "!theme _none_ repeated-theme control after the real theme",
+        "component diagram family",
+        "local dashed colour override"
+      ],
+      "result": "fail_strict",
+      "arrow_specific_result": "Rust keeps synthetic theme family records isolated in source, but the strict Java golden expects inherited component arrows in #000000 after PlantUML theme processing. Rust renders inherited arrows #181818, so the no-oracle comparison rejects the current compatibility model for this valid heldout."
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arrow-style-isolation/review5_sequence_repeated_theme_cross_family_alias.puml",
+      "golden": "test-diagrams/perturbations/state-arrow-style-isolation/review5_sequence_repeated_theme_cross_family_alias.svg",
+      "source_sha256": "e1e590485f05b45a6e77bf6b9050ca193c4d896af10183ae6fb44f4dc6a1d9cb",
+      "golden_sha256": "ef24396af9b1fffd5e4cfcd3b96491e3e70adeffff63673b04c84bab63c2aa9c",
+      "axes": [
+        "repeated real themes reddress-lightred then metal",
+        "ordinary aliases using Component.Arrow_Color and UsEcAsE_ArRoW.Color in a sequence diagram",
+        "source-order override after theme expansion",
+        "different family prefixes from the target diagram family",
+        "local sequence message colour and dashed style override"
+      ],
+      "result": "fail_strict",
+      "arrow_specific_result": "The inherited sequence arrows match Java at #2E7D32 after the final UseCase alias, so ordinary cross-family alias storage and repeated-theme source order survive this axis. The local message override rejects the implementation: Java renders the middle message #C2185B dashed, while Rust renders #FFFFFF solid."
+    }
+  ],
+  "results": {
+    "java_svg_generation": "pass",
+    "syntax_xml_validation": "pass",
+    "fresh_source_uniqueness": "pass",
+    "diff_one_no_oracle": "fail: 0/3 strict review-5 perturbations matched Java exactly",
+    "parity_perturbations": "fail: aggregate held-out no-oracle perturbation gate remains red and includes all three review-5 perturbations",
+    "production_files_modified": "no",
+    "route_files_modified": "no"
+  },
+  "findings": [
+    "The review was performed against an archive snapshot of immutable implementation 3fb74a8bf518a528e89686d1390c223983fc98fb with only the six fresh review-5 arrow fixture files copied in. The shared worktree's unrelated state.rs and route-identity files were not used for Rust validation.",
+    "Java provenance still supports the ordinary shared-arrow model. SkinParam.setParam runs cleanForKey for each declaration before both params storage and FromSkinparamToStyle conversion. cleanForKeySlow lowercases, removes underscores and dots, rewrites activity/class/component/object/sequence/state/usecase Arrow prefixes to arrow, and FromSkinparamToStyle maps arrowColor to SName.arrow LineColor.",
+    "Rust commit 3fb74a8b implements the claimed ordinary alias storage model in parse::collapse_reassigned_skinparams: ordinary records compare through canonical_skinparam_key, and when that identity is arrowcolor the surviving SkinParam.key is stored as arrowcolor. This fixes the prior review-4 boundary where final UseCase.Arrow_Color was retained as usecasearrowcolor and invisible to state rendering.",
+    "The renderer consumers inspected are consistent with that ordinary storage model for current primary paths. State and class reverse-scan state/classArrowColor or ArrowColor, and lowercase arrowcolor matches ArrowColor case-insensitively. Component and activity consume lowercase arrowcolor. Usecase consumes arrowColor through a case-insensitive helper. Sequence consumes lowercase arrowcolor, sequencearrowcolor, and classarrowcolor. The review-5 component and sequence heldouts both show inherited ordinary cross-family aliases reaching Rust as #2E7D32.",
+    "Synthetic theme body records remain isolated in Rust source. parse::collapse_reassigned_skinparams keys theme-body replacement as theme:<segment>:<raw lowercased key> and does not canonicalize the family-arrow prefix. The reddress-lightred source expands family blocks such as class/usecase/activity/sequence/state arrow_style(), while the component block omits arrow_style(). Rust therefore does not merge those non-component theme keys into ordinary arrowcolor.",
+    "That isolation is source-faithful to the corrected account but not enough to pass the strict Java oracle for the fresh component theme negative. Pinned Java renders inherited component arrows #000000 for review5_component_theme_scope_negative, while Rust remains #181818. This rejects the heldout under the no-oracle gate even if it supports the claim that Rust did not leak synthetic theme family keys into component arrow state.",
+    "The strongest mechanism-shaped rejection is the sequence local override. In review5_sequence_repeated_theme_cross_family_alias, Java applies the final ordinary UseCase alias to inherited arrows (#2E7D32) and the local message override to the middle arrow (#C2185B dashed). Rust matches the inherited #2E7D32 arrows but renders the middle message #FFFFFF solid, so local link override semantics do not survive the requested cross-family/repeated-theme perturbation.",
+    "The component cross-family heldout also fails strict no-oracle comparison. Its emitted inherited Rust arrows use the final ordinary Activity.Arrow_Color #2E7D32, but the component no-oracle renderer lays out and orders entities/links differently from Java, so the strict comparator rejects the fixture before the mechanism can be accepted.",
+    "No production code, existing fixtures, baselines, guards, comparator slack, park/error lists, or state-parallel-transition-route-identity files were modified by this review. The only intended shared-tree additions are this review record and the six fresh review5 state-arrow-style-isolation perturbation files.",
+    "Verdict is rejected. A later implementation can still be on the right track for ordinary arrowcolor storage, but the mechanism cannot be accepted while the required valid-syntax perturbations fail strict no-oracle comparison, especially the sequence local colour/style override and the component theme-scope control."
+  ],
+  "accepted": false,
+  "verdict": "rejected"
+}

@@ -1,0 +1,10 @@
+@startuml
+!theme reddress-lightred
+!theme _none_
+component "Theme Probe 521" as Probe521
+component "Neutral Relay 523" as Relay523
+component "Archive Sink 529" as Sink529
+Probe521 --> Relay523 : inherited default
+Relay523 -[#C2185B,dashed]-> Sink529 : local
+Sink529 --> Probe521 : inherited default
+@enduml

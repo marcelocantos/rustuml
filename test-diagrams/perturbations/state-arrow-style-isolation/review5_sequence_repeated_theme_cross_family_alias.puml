@@ -1,0 +1,12 @@
+@startuml
+!theme reddress-lightred
+skinparam Component.Arrow_Color #1565C0
+!theme metal
+skinparam UsEcAsE_ArRoW.Color #2E7D32
+participant "Ingress 601" as Ingress601
+participant "Worker 603" as Worker603
+participant "Archive 607" as Archive607
+Ingress601 -> Worker603 : inherited after themes
+Worker603 -[#C2185B,dashed]> Archive607 : local color
+Archive607 -> Ingress601 : inherited final
+@enduml
