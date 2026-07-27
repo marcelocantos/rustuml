@@ -4555,7 +4555,13 @@ fn compute_positions_from_layout(
         .map(|position| position.y)
         .fold(f64::INFINITY, f64::min);
     let (mut layout_dx, mut layout_dy) = if raw_cluster_positions.is_empty() {
-        component_svek_translation(diagram, node_positions, attached_note_count, title_h)
+        component_svek_translation(
+            diagram,
+            comp_dims,
+            node_positions,
+            attached_note_count,
+            title_h,
+        )
     } else {
         let min_x = raw_cluster_positions
             .iter()
@@ -4576,8 +4582,13 @@ fn compute_positions_from_layout(
         // entities before `DotStringFactory.moveDelta` translates the graph.
         // A cluster must therefore not hide a root leaf that paints farther
         // left or above its frame.
-        let node_translation =
-            component_svek_translation(diagram, node_positions, attached_note_count, title_h);
+        let node_translation = component_svek_translation(
+            diagram,
+            comp_dims,
+            node_positions,
+            attached_note_count,
+            title_h,
+        );
         layout_dx = layout_dx.max(node_translation.0);
         layout_dy = layout_dy.max(node_translation.1);
     }
@@ -4716,6 +4727,7 @@ fn compute_positions_from_layout(
 
 fn component_svek_translation(
     diagram: &ComponentDiagram,
+    comp_dims: &[CompDim],
     node_positions: &[rustuml_layout::graph::NodePosition],
     attached_note_count: usize,
     title_h: f64,
@@ -4738,6 +4750,14 @@ fn component_svek_translation(
                 // `USymbolQueue.drawQueue` paint UPath primitives whose
                 // minimum is their declared image origin.
                 ComponentElementKind::Database | ComponentElementKind::Queue => (0.0, 0.0),
+                // `USymbolCloud.getSpecificFrontierForCloudNew` generates a
+                // seeded UPath whose Bezier controls protrude beyond the
+                // nominal image. `LimitFinder.drawUPath` includes those
+                // controls in the SVEK painted envelope.
+                ComponentElementKind::Cloud => {
+                    crate::cloud_shape::generate(comp_dims[index].width, comp_dims[index].height)
+                        .min_xy()
+                }
                 // `USymbolComponent2.drawComponent2` and the remaining leaf
                 // symbols retain the established `URectangle` top-left
                 // envelope until their primitive models are split out.
@@ -7785,6 +7805,37 @@ mod tests {
             .unwrap_or_else(|| panic!("missing rectangle for {qualified_name}: {svg}"))
     }
 
+    fn path_data<'a>(svg: &'a str, qualified_name: &str) -> &'a str {
+        let marker = format!(r#"data-qualified-name="{qualified_name}""#);
+        let entity = svg
+            .split_once(&marker)
+            .map(|(_, entity)| entity)
+            .unwrap_or_else(|| panic!("missing entity {qualified_name}: {svg}"));
+        entity
+            .split_once(r#"<path d=""#)
+            .and_then(|(_, path)| path.split_once('"'))
+            .map(|(path, _)| path)
+            .unwrap_or_else(|| panic!("missing path for {qualified_name}: {svg}"))
+    }
+
+    fn path_min_x(path: &str) -> f64 {
+        let coordinates: Vec<f64> = path
+            .split(|character: char| {
+                character.is_ascii_alphabetic() || character == ',' || character.is_whitespace()
+            })
+            .filter(|value| !value.is_empty())
+            .map(|value| {
+                value
+                    .parse()
+                    .unwrap_or_else(|_| panic!("non-numeric path coordinate {value} in {path}"))
+            })
+            .collect();
+        coordinates
+            .chunks_exact(2)
+            .map(|point| point[0])
+            .fold(f64::INFINITY, f64::min)
+    }
+
     #[test]
     fn parsed_then_rendered() {
         let input = "@startuml\ncomponent \"Web\" as WS\ncomponent \"DB\" as DB\nWS --> DB : query\n@enduml";
@@ -7991,6 +8042,23 @@ mod tests {
         assert!(
             svg.contains(r#"d="M130.78,53.82 C130.78,78.64 130.78,117.18 130.78,133.62""#),
             "{svg}"
+        );
+    }
+
+    #[test]
+    fn no_oracle_leaf_cloud_normalizes_generated_path_envelope() {
+        let input = "@startuml\ninterface I7307\ncloud \"Fresh Telemetry Archive 7309\" as Cloud7309\nI7307 --> Cloud7309\n@enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        let cloud_path = path_data(&svg, "Cloud7309");
+
+        // Java `USymbolCloud.getSpecificFrontierForCloudNew` lets Bezier
+        // controls protrude outside the nominal box. `LimitFinder.drawUPath`
+        // includes that generated minimum before `SvekResult.calculateDimension`
+        // moves the complete painted envelope to (6, 6).
+        assert!(
+            (path_min_x(cloud_path) - super::SVEK_CLUSTER_ORIGIN).abs() < 0.0001,
+            "cloud path must define the left SVEK envelope: {svg}"
         );
     }
 
