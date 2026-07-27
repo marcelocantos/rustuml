@@ -1,0 +1,11 @@
+@startuml
+package EmptyOuter {
+  package EmptyLeft {
+  }
+  package EmptyRight {
+    package EmptyDeep {
+    }
+  }
+}
+class EmptyControlAnchor
+@enduml

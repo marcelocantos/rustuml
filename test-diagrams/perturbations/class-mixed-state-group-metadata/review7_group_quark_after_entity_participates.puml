@@ -1,0 +1,15 @@
+@startuml
+allowmixing
+package EntityFirst {
+  class ReverseCollision
+}
+package GroupSecond {
+  package ReverseCollision {
+    class NestedWitness
+  }
+}
+package MixedThird {
+  actor "Third collision actor" as ReverseCollision
+}
+MixedThird.ReverseCollision --> EntityFirst.ReverseCollision
+@enduml

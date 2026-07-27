@@ -1,0 +1,11 @@
+@startuml
+allowmixing
+class PhantomRoot.CollisionScope.SeedLeaf
+package EntityArchive {
+  class CollisionScope
+}
+package MixedArchive {
+  actor "Local collision actor" as CollisionScope
+}
+MixedArchive.CollisionScope --> EntityArchive.CollisionScope
+@enduml

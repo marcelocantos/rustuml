@@ -1,0 +1,7 @@
+@startuml
+set namespaceSeparator none
+class Literal.Dot
+set namespaceSeparator ::
+class ColonRealm::InnerRealm::TransitionLeaf
+ColonRealm::InnerRealm::TransitionLeaf --> TransitionSink
+@enduml

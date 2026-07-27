@@ -1,0 +1,13 @@
+@startuml
+allowmixing
+set namespaceSeparator ::
+namespace AlphaRealm::Inner {
+  class TransitionToken
+}
+namespace BetaRealm::Inner {
+  class TransitionToken
+}
+set namespaceSeparator none
+database "First transition token" as TransitionToken
+TransitionToken --> TransitionObserver
+@enduml

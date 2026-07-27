@@ -1,0 +1,14 @@
+@startuml
+allowmixing
+package FirstArchive {
+  package InnerArchive {
+    class OrderedEcho
+  }
+}
+package SecondArchive {
+  class OrderedEcho
+}
+set namespaceSeparator none
+actor "First-created echo" as OrderedEcho
+OrderedEcho --> OrderingSink
+@enduml

@@ -1,0 +1,15 @@
+@startuml
+allowmixing
+package RemoteOrigin {
+  class SharedTransit
+}
+package DestinationRoot {
+  package EmptySibling {
+  }
+  package WorkingScope {
+    actor "Remote transit actor" as SharedTransit
+    class LocalWitness
+  }
+}
+SharedTransit --> DestinationRoot.WorkingScope.LocalWitness
+@enduml

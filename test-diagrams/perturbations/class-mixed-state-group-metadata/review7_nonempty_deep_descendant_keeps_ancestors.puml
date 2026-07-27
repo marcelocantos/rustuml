@@ -1,0 +1,12 @@
+@startuml
+package LiveOuter {
+  package EmptyPeer {
+  }
+  package LiveMiddle {
+    package LiveDeep {
+      class DeepWitness
+    }
+  }
+}
+LiveOuter.LiveMiddle.LiveDeep.DeepWitness --> DescendantSink
+@enduml

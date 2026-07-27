@@ -1,0 +1,329 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-mixed-state-group-metadata",
+  "reviewed_at": "2026-07-28T00:19:37+1000",
+  "verdict": "reject",
+  "reviewer": {
+    "identity": "Codex independent skeptical checker",
+    "model": "GPT-5",
+    "role": "review only; did not implement 78b19bf5",
+    "independence": [
+      "The checker did not author or edit the immutable implementation.",
+      "No production file was edited during this review.",
+      "The unrelated dirty crates/rustuml-render/src/sequence.rs was left untouched."
+    ]
+  },
+  "subject": {
+    "implementation_commit": "78b19bf591e482991a1c1bf43da85fec60e3590d",
+    "implementation_parent": "ba634c7b5032f0914be91b48918e806ad363e45d",
+    "implementation_subject": "fix: preserve creation-ordered class quarks",
+    "production_diff": [
+      "crates/rustuml-parser/src/parse/class.rs",
+      "crates/rustuml-render/src/class.rs"
+    ],
+    "account": "docs/parity-reviews/class-mixed-state-group-metadata/account.json",
+    "account_sha256": "596e29247608bf2699a9f1a3628be2b6ac558409f47c3bb6d2f9cc58c2292409",
+    "causal_response_commit": "ba634c7b5032f0914be91b48918e806ad363e45d",
+    "causal_response": "docs/parity-reviews/class-mixed-state-group-metadata/review-6-response.md",
+    "causal_response_sha256": "13241bfea050ddc4b9df68f47e2c7d09dd01272141b75b900754c6a30969c11f",
+    "immutability_evidence": [
+      "ba634c7b5032f0914be91b48918e806ad363e45d is the direct parent of 78b19bf591e482991a1c1bf43da85fec60e3590d.",
+      "The account and review-6 response are byte-unchanged across the implementation commit.",
+      "The reviewed production files are byte-unchanged from 78b19bf5 through the review worktree HEAD."
+    ]
+  },
+  "java": {
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "jar_mtime": "2026-06-19T02:03:25+1000",
+    "jar_size_bytes": 56761142,
+    "inspected_locations": [
+      "net.atmp.CucaDiagram#quarkInContextSafe",
+      "net.sourceforge.plantuml.plasma.Plasma#firstWithName",
+      "net.sourceforge.plantuml.plasma.Plasma#countByName",
+      "net.sourceforge.plantuml.classdiagram.command.CommandNamespaceSeparator#executeArg",
+      "net.sourceforge.plantuml.abel.Entity#isEmpty",
+      "net.sourceforge.plantuml.svek.GraphvizImageBuilder#printGroups",
+      "net.sourceforge.plantuml.svek.GraphvizImageBuilder#printGroup",
+      "net.sourceforge.plantuml.svek.CucaDiagramFileMakerSvek#getTextBlock12026"
+    ],
+    "mechanism_evidence": [
+      "CucaDiagram.quarkInContextSafe uses creation-ordered Plasma.firstWithName whenever the namespace separator is null and countByName == 1 only for reusable unqualified lookup under a non-null separator.",
+      "CommandNamespaceSeparator.executeArg replaces the diagram namespace separator on every command: none stores null and any other token stores that token. Java has no second sticky lexical-mode flag.",
+      "Entity.isEmpty examines direct quark children, not a flattened transitive leaf set. A group containing an empty child group is therefore nonempty.",
+      "GraphvizImageBuilder.printGroups converts a directly empty package to an EMPTY_PACKAGE leaf, but opens a cluster for a group with any direct nonremoved child. This preserves parent clusters even when the only descendant chain terminates in empty packages."
+    ],
+    "source_cleanliness": "Every inspected Java source file is byte-clean at the pinned revision."
+  },
+  "rust_execution": {
+    "helper": "/Users/marcelo/work/github.com/marcelocantos/rustuml/target/release/examples/diff_one",
+    "helper_sha256": "f832151c2f9ead5399711c2921f62cea80f66dc303d4ef96edac4c03ff3f8da2",
+    "helper_mtime": "2026-07-28T00:14:29+1000",
+    "helper_size_bytes": 16552992,
+    "direct_cargo_commands": [],
+    "direct_rustc_commands": [],
+    "rustfmt_commands": [],
+    "build_commands": [],
+    "notes": [
+      "All Rust SVGs came from the prebuilt release helper supplied for this review.",
+      "The helper's --print-rust mode supplied Rust SVGs to the scoped REXML comparison without writing Rust output into the repository.",
+      "No Cargo, rustc, rustfmt, or build command was invoked."
+    ]
+  },
+  "comparison": {
+    "predicate": "Root data-diagram-type plus the ordered sequence of g[class=entity|cluster] records, each represented by class, data-qualified-name, and data-source-line.",
+    "validity_gate": "Every fresh Java SVG parsed as XML and contained no PlantUML syntax/error-page marker.",
+    "strict_note": "Strict structural differences are reported separately and do not override a scoped identity failure."
+  },
+  "prior_replay": {
+    "source_count": 51,
+    "valid_java_svgs": 51,
+    "java_error_pages": 0,
+    "strict_matches": 17,
+    "strict_differences": 34,
+    "strict_skips": 0,
+    "scoped_identity_matches": 51,
+    "scoped_identity_failures": [],
+    "classification": "All review2 through review6 controls pass the parser-owned identity predicate."
+  },
+  "fresh_review": {
+    "summary": {
+      "valid_sources": 8,
+      "valid_java_svgs": 8,
+      "java_error_pages": 0,
+      "strict_matches": 2,
+      "strict_differences": 6,
+      "strict_skips": 0,
+      "scoped_identity_matches": 6,
+      "scoped_identity_failures": 2,
+      "combined_scoped_identity_matches": 57,
+      "combined_source_count": 59,
+      "verdict_basis": "Either fresh valid scoped failure rejects the immutable implementation. Both failures expose Java model behavior named by the requested axes rather than renderer geometry."
+    },
+    "fixtures": [
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review7_creation_order_nested_duplicates.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review7_creation_order_nested_duplicates.svg",
+        "source_sha256": "5d0a2bb2572f46adff860bc9475848ad14b31c3ccb3f2f2a84665cdced10cb1f",
+        "golden_sha256": "fc50589b083ead908423414e337505220a55b2f913f84eefbaf8ba85d105e99c",
+        "axes": [
+          "nested first-created duplicate",
+          "second duplicate in a sibling package",
+          "separator-none mixed declaration and relationship"
+        ],
+        "strict": "pass",
+        "scoped_identity": "pass"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review7_group_quark_after_entity_participates.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review7_group_quark_after_entity_participates.svg",
+        "source_sha256": "3e8308a262cc4700ba5df12123ca6ee0233d4c1c4ad0499372ea00e54f1add52",
+        "golden_sha256": "a15634ff3c72bd97978dc518d9e384f183639b5ecb5b5eb536079d30c41e041b",
+        "axes": [
+          "entity quark created before a same-short-name group quark",
+          "non-null unique-reuse ambiguity",
+          "mixed declaration in a third package"
+        ],
+        "strict": "different",
+        "scoped_identity": "pass"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review7_nested_empty_groups_only.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review7_nested_empty_groups_only.svg",
+        "source_sha256": "9db6246602b5a57f522b1e62bf0e8c8b5e941fbe3209c56e6d2ad67f5c00d00f",
+        "golden_sha256": "43b391648d549b96d705d9802f0709ad19406d97f56479294ff0a29dea94fe82",
+        "axes": [
+          "two empty sibling groups",
+          "an empty group nested under another empty group",
+          "an unrelated live root entity"
+        ],
+        "strict": "different",
+        "scoped_identity": "fail",
+        "evidence": "Java emits cluster records for EmptyOuter at line 1 and EmptyOuter.EmptyRight at line 4 because each has a direct group child. Rust emits neither because both flattened package entity lists are empty.",
+        "java_records": [
+          ["cluster", "EmptyOuter", "1"],
+          ["cluster", "EmptyOuter.EmptyRight", "4"],
+          ["entity", "EmptyControlAnchor", "9"]
+        ],
+        "rust_records": [
+          ["entity", "EmptyControlAnchor", "9"]
+        ]
+      },
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review7_nested_empty_remote_reuse_then_local.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review7_nested_empty_remote_reuse_then_local.svg",
+        "source_sha256": "e5026c8aa0b9ee8cabefe1a0b0e370aa7c9b12e9a3522865a8cef6735785f5fa",
+        "golden_sha256": "7ba8982ba83db79fd16581f08952cdf0f2db1acb54977b9aa1c9b0723bbb7ec0",
+        "axes": [
+          "remote mixed reuse inside a nested package",
+          "empty sibling group",
+          "later locally owned leaf preserving parentage"
+        ],
+        "strict": "different",
+        "scoped_identity": "pass"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review7_nonempty_deep_descendant_keeps_ancestors.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review7_nonempty_deep_descendant_keeps_ancestors.svg",
+        "source_sha256": "25befb66e32a019c6b0127337b9f617ca2e03d0dab66bc84cba8719dcd363a59",
+        "golden_sha256": "dd92ca68529a83c3e6e72bd82a61459380865909fd47c81f88077cdb45daa688",
+        "axes": [
+          "three-level live descendant",
+          "empty sibling",
+          "qualified relationship to a root endpoint"
+        ],
+        "strict": "different",
+        "scoped_identity": "pass"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review7_phantom_group_quark_participates.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review7_phantom_group_quark_participates.svg",
+        "source_sha256": "f66c776f7e08096bb4dc4a3450e7dbb213e74a1b4a2fd2307d38ea1db355b710",
+        "golden_sha256": "5a3dba16ff8bd1e7f38230146a674a093d2467f3de460784a3a8bb5b5f56cf8c",
+        "axes": [
+          "phantom intermediate group quark",
+          "same-short-name entity quark",
+          "mixed declaration forced local by ambiguity"
+        ],
+        "strict": "different",
+        "scoped_identity": "pass"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review7_separator_colon_to_none_first_created.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review7_separator_colon_to_none_first_created.svg",
+        "source_sha256": "4d9d9d5baea27978fd271dfee3f030c3596e8bc6808dc7e34da33cef1c4284e7",
+        "golden_sha256": "78ae334f388390489db8136d041656d1c3b8338a8d4718f471fc8d646bbfdcef",
+        "axes": [
+          "custom separator with duplicate nested leaves",
+          "transition to separator none",
+          "first-created mixed reuse"
+        ],
+        "strict": "pass",
+        "scoped_identity": "pass"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review7_separator_none_to_colon_qualified_declaration.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review7_separator_none_to_colon_qualified_declaration.svg",
+        "source_sha256": "e52a16d7c9422c6ae6e61d76a53af50e0def125cd0613ebb8c54bd84c027c3ae",
+        "golden_sha256": "de8ae5b8a8709a1bd16b1ebae7e554099cb8a036ba3f355db8869a033afa0de4",
+        "axes": [
+          "literal dotted name under separator none",
+          "transition from none to a custom separator",
+          "qualified ordinary declaration before relationship lookup"
+        ],
+        "strict": "different",
+        "scoped_identity": "fail",
+        "evidence": "Java creates ColonRealm..InnerRealm..TransitionLeaf at declaration line 4. Rust leaves namespace_sep_none sticky, parses only ColonRealm as a root entity at line 4, then materializes the intended hierarchy and leaf from the relationship at line 5.",
+        "java_records": [
+          ["cluster", "ColonRealm", "4"],
+          ["cluster", "ColonRealm..InnerRealm", "4"],
+          ["entity", "ColonRealm..InnerRealm..TransitionLeaf", "4"],
+          ["entity", "Literal.Dot", "2"],
+          ["entity", "TransitionSink", "5"]
+        ],
+        "rust_records": [
+          ["cluster", "ColonRealm", "5"],
+          ["cluster", "ColonRealm..InnerRealm", "5"],
+          ["entity", "ColonRealm..InnerRealm..TransitionLeaf", "5"],
+          ["entity", "Literal.Dot", "2"],
+          ["entity", "ColonRealm", "4"],
+          ["entity", "TransitionSink", "5"]
+        ]
+      }
+    ]
+  },
+  "anti_overfit": {
+    "fixture_shaped_logic": "pass",
+    "golden_or_fixture_reads": "pass",
+    "numeric_constant_audit": "pass",
+    "model_completeness": "fail",
+    "findings": [
+      "The production diff contains none of the prior or fresh review labels and no held-out entity or package names.",
+      "The production diff introduces no fixture/golden reads, embedded source or SVG data, source-line equality predicate, coordinate/dimension predicate, count ladder, or parity-affecting numeric constant.",
+      "The creation-ordered shared quark index is mechanism-shaped and passes both creation-order reversals, phantom-group participation, separator-none first-created reuse, and all 51 prior controls.",
+      "The implementation adds quark order without unifying namespace-separator state: namespace_sep is replaced, but namespace_sep_none remains true after a non-none separator command and continues selecting RE_DOTTED.",
+      "The renderer's Package.entities vector is a flattened transitive leaf-membership projection. Using entities.is_empty as group liveness cannot reproduce Entity.isEmpty, which is defined over direct quark children and distinguishes a directly empty package from a parent whose child group is empty.",
+      "The narrow renderer unit test asserts only an isolated empty Package value and therefore encodes the incomplete response model rather than Java's nested group behavior."
+    ]
+  },
+  "findings": [
+    {
+      "severity": "reject",
+      "title": "namespaceSeparator none remains sticky after a non-none transition",
+      "evidence": [
+        "review7_separator_none_to_colon_qualified_declaration.puml is valid Java syntax and its SVG is not an error page.",
+        "CommandNamespaceSeparator.executeArg replaces the separator on every command.",
+        "Rust sets namespace_sep to :: but never clears namespace_sep_none, so try_entity_decl continues using RE_DOTTED.",
+        "The stale lexical mode creates an extra root ColonRealm entity and shifts the intended qualified leaf and phantom-group source lines from declaration line 4 to relationship line 5."
+      ]
+    },
+    {
+      "severity": "reject",
+      "title": "Flattened leaf membership erases nested empty-group clusters",
+      "evidence": [
+        "review7_nested_empty_groups_only.puml is valid Java syntax and its SVG is not an error page.",
+        "Java Entity.isEmpty returns false when a group has any direct nonremoved child, including an empty child group.",
+        "GraphvizImageBuilder therefore emits EmptyOuter and EmptyOuter.EmptyRight as clusters while rendering their directly empty children as EMPTY_PACKAGE leaves.",
+        "Rust is_rendered_package_cluster rejects every package whose flattened entities vector is empty, so it erases both parent clusters.",
+        "This contradicts review-6-response.md's rendered-descendant formulation: Java's relevant distinction is direct quark-child structure, not eventual ownership of a rendered leaf."
+      ]
+    },
+    {
+      "severity": "info",
+      "title": "Creation-ordered quark lookup is repaired without fixture shaping",
+      "evidence": [
+        "All 51 prior scoped controls pass.",
+        "Six of eight fresh controls pass, including both creation-order directions, explicit and phantom group-quark ambiguity, custom-to-none transition, remote mixed reuse, and nonempty descendant retention.",
+        "Static inspection found no fixture labels, golden reads, embedded output, unexplained constants, or fixture-count branches."
+      ]
+    }
+  ],
+  "required_followup": [
+    "Preserve all eight review7 source/Java-SVG pairs, including both valid failing counterexamples.",
+    "Before another production edit, commit a causal response that models namespace separator parsing as one coherent replaceable state. Setting a non-none separator must also leave separator-none lexical mode.",
+    "Replace the flattened entities.is_empty liveness proxy with a representation or diagram-aware query that can reproduce Java Entity.isEmpty over direct quark children and GraphvizImageBuilder's EMPTY_PACKAGE-versus-cluster decision.",
+    "Replay all 59 review2 through review7 sources. Acceptance requires 59/59 scoped identity matches before adding another fresh adversarial matrix.",
+    "Do not weaken the ordered identity predicate, discard empty nested groups from comparison, or reclassify either valid source as an error case."
+  ],
+  "commands": [
+    "cat /Users/marcelo/.claude/rust.md",
+    "cat /Users/marcelo/.codex/skills/oracle-first/SKILL.md",
+    "cat /Users/marcelo/.claude/conventions.md",
+    "cat /Users/marcelo/.claude/tools.md",
+    "bullseye_query(cwd=/Users/marcelo/work/github.com/marcelocantos/rustuml,view=frontier)",
+    "git show and git diff inspection of immutable commit 78b19bf5",
+    "static sed/rg inspection of all Java and Rust locations listed above",
+    "Ruby REXML replay of all 51 review2-review6 sources using target/release/examples/diff_one --no-oracle --print-rust",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-mixed-state-group-metadata/review7_*.puml",
+    "xmllint --noout test-diagrams/perturbations/class-mixed-state-group-metadata/review7_*.svg",
+    "error-page marker scan over all review7 Java SVGs",
+    "Ruby REXML scoped identity comparison of all eight review7 sources",
+    "direct diff_one strict replay of all 59 review2-review7 sources",
+    "anti-overfit rg scan of the 78b19bf5 production diff",
+    "git diff --check 78b19bf5^ 78b19bf5",
+    "git immutability checks for account, response, and reviewed production files",
+    "Java source cleanliness checks at revision 71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "SHA-256 uniqueness scan of all sixteen fresh source/SVG files against the existing corpus",
+    "shasum -a 256 over the Java JAR, prebuilt helper, account, response, and fresh evidence"
+  ],
+  "ready_to_commit_paths": [
+    "docs/parity-reviews/class-mixed-state-group-metadata/review-7.json",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review7_creation_order_nested_duplicates.puml",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review7_creation_order_nested_duplicates.svg",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review7_group_quark_after_entity_participates.puml",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review7_group_quark_after_entity_participates.svg",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review7_nested_empty_groups_only.puml",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review7_nested_empty_groups_only.svg",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review7_nested_empty_remote_reuse_then_local.puml",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review7_nested_empty_remote_reuse_then_local.svg",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review7_nonempty_deep_descendant_keeps_ancestors.puml",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review7_nonempty_deep_descendant_keeps_ancestors.svg",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review7_phantom_group_quark_participates.puml",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review7_phantom_group_quark_participates.svg",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review7_separator_colon_to_none_first_created.puml",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review7_separator_colon_to_none_first_created.svg",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review7_separator_none_to_colon_qualified_declaration.puml",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review7_separator_none_to_colon_qualified_declaration.svg"
+  ]
+}
