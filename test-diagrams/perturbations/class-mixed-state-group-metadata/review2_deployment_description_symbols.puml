@@ -1,0 +1,20 @@
+@startuml
+allowmixing
+database "Metrics Store" as MetricsStore
+queue "Retry Queue" as RetryQueue
+node "Edge Host" as EdgeHost
+rectangle "Trust Boundary" as TrustBoundary
+state DeliveryPaused
+diamond DeliveryChoice
+circle DeliveryJunction
+object DeliveryEnvelope
+class DeliveryCoordinator
+DeliveryCoordinator --> DeliveryEnvelope
+DeliveryEnvelope --> DeliveryJunction
+DeliveryJunction --> DeliveryChoice
+DeliveryChoice --> DeliveryPaused
+DeliveryCoordinator --> EdgeHost
+EdgeHost --> MetricsStore
+MetricsStore --> RetryQueue
+RetryQueue --> TrustBoundary
+@enduml

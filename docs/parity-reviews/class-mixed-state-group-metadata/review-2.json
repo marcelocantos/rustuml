@@ -1,0 +1,159 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-mixed-state-group-metadata",
+  "reviewer": {
+    "task_id": "codex-desktop-task-019ee369-54e2-7203-afce-ddde7bfe1723-class-mixed-state-group-metadata-checker-2",
+    "model": "OpenAI GPT-5 Codex",
+    "role": "review-only skeptical checker; no production edits"
+  },
+  "account_commit": "5df5e7ed799d1e2a414751cd6d6c635aeec055ef",
+  "implementation_commit": "1166e7e3424c0fb976acaddae6f566972f3bd5c9",
+  "implementation_parent": "ebbba65207efec6e78ce8f67fd5b8d73a29dd366",
+  "head_at_review": "747e138f16209ae693d693722ab6ec61d0655efd",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+  "rust_execution": {
+    "cargo_or_rustc_run": false,
+    "existing_helper": "target/release/examples/diff_one",
+    "helper_mtime": "2026-07-27T20:59:49+10:00",
+    "reason": "The assignment forbade Cargo, rustc, and rustfmt. The checker used the already-built no-oracle diff helper, targeted XML metadata extraction, and immutable Rust static data-flow inspection."
+  },
+  "commands": [
+    "cat /Users/marcelo/.claude/conventions.md",
+    "cat /Users/marcelo/.claude/tools.md",
+    "git show --stat --oneline 1166e7e3",
+    "git show --format=fuller --no-ext-diff 1166e7e3 -- crates/rustuml-render/src/class.rs",
+    "cat docs/parity-reviews/class-mixed-state-group-metadata/account.json",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "shasum -a 256 /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "sed and rg inspections of GeneralImageBuilder, EntityImageClass, EntityImageObject, EntityImageState, EntityImageBranch, EntityImageDescription, UGroup, and CommandCreateElementFull2 at Java revision 71806a2",
+    "sed and rg inspections of ClassParser::try_entity_decl, ClassParser::try_package, ClassParser::ensure_entity, and entity_group_has_source_line at Rust revision 1166e7e3",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-mixed-state-group-metadata/review2_*.puml",
+    "xmllint --noout test-diagrams/perturbations/class-mixed-state-group-metadata/review2_*.svg",
+    "rg -n -i \"syntax error|error line|plantuml.*error|class=\\\"message\\\"|an error has occured\" test-diagrams/perturbations/class-mixed-state-group-metadata/review2_*.svg",
+    "target/release/examples/diff_one --no-oracle --print-rust <each review2_ source>",
+    "target/release/examples/diff_one --no-oracle <each review2_ source>",
+    "ruby targeted comparison of data-qualified-name and data-source-line attributes in Java and Rust entity groups",
+    "ruby uniqueness check of six review2_ sources against 12,717 prior PlantUML sources",
+    "git show 1166e7e3 production diff piped to anti-overfit searches for all heldout labels, golden reads, embedded fixture data, coordinate/dimension branches, and source-line equality branches",
+    "git merge-base --is-ancestor 5df5e7ed 1166e7e3",
+    "git diff --exit-code 5df5e7ed 1166e7e3 -- docs/parity-reviews/class-mixed-state-group-metadata/account.json",
+    "shasum -a 256 test-diagrams/perturbations/class-mixed-state-group-metadata/review2_*.puml test-diagrams/perturbations/class-mixed-state-group-metadata/review2_*.svg"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review2_reordered_core_matrix.puml",
+      "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review2_reordered_core_matrix.svg",
+      "sha256": "b14ebe2f43c5f5796b3ab14be98f46896baf7628b396c0a98af07fd4acb30647",
+      "golden_sha256": "4a5246ba2f796de856cd3b533f087d68e9631ed961eaf4c0caffdb5e8864d5be",
+      "axes": [
+        "state and diamond declared before positive controls",
+        "renamed class, entity, object, circle, diamond, and state",
+        "five-link chain across all represented image contracts"
+      ],
+      "metadata_result": "pass",
+      "evidence": "Java and Rust entity-group data-qualified-name/data-source-line maps are exact: state and diamond omit source line; class, entity, object, and circle carry their declaration line.",
+      "strict_render_result": "different",
+      "strict_render_note": "The no-oracle helper reports unrelated geometry and element-order differences; those are outside this metadata verdict."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review2_classlike_variants.puml",
+      "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review2_classlike_variants.svg",
+      "sha256": "538f4fc2b6869c09ad74e32de138f34c077101884419489776646b38a735bb11",
+      "golden_sha256": "9b6a3044adf125f0f55c0f6ccb9da1a0351f8c8c1cee8d7d679d6e0795f88ddd",
+      "axes": [
+        "annotation, interface, enum, and abstract-class positive controls",
+        "object and circle positive controls",
+        "state and diamond negative controls",
+        "reordered declarations and longer topology"
+      ],
+      "metadata_result": "pass",
+      "evidence": "All eight Java and Rust entity-group metadata records match exactly.",
+      "strict_render_result": "different",
+      "strict_render_note": "Layout and body-painting deltas were explicitly excluded from the metadata comparison."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review2_alias_line_offsets.puml",
+      "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review2_alias_line_offsets.svg",
+      "sha256": "4e688e1070aa8072d9c0d86458e18472b97c2c739f1d054b98ba53fed9908038",
+      "golden_sha256": "e87b48c56f0f6efc632e97935fd1cd42cdc29857c2e41e24b34a8339f09057f5",
+      "axes": [
+        "quoted labels with aliases",
+        "comments and blank lines shifting declaration locations",
+        "circle, class, and object positives plus diamond and state negatives"
+      ],
+      "metadata_result": "pass",
+      "evidence": "All five Java and Rust entity-group metadata records match exactly, including non-consecutive source lines 4, 6, and 9.",
+      "strict_render_result": "different",
+      "strict_render_note": "The strict helper remains red on unrelated geometry."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review2_multiple_symbol_instances.puml",
+      "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review2_multiple_symbol_instances.svg",
+      "sha256": "0b9bef74721a5e8960d8ad790e7fdde0e9ee29c767eb8cba2f97d546597511e7",
+      "golden_sha256": "c7865deab56fbba27f4ba31b5015bda61bf08667e4e774f95341c33fd46eaed3",
+      "axes": [
+        "two independent instances of every core image contract",
+        "interleaved positive and negative metadata owners",
+        "two disconnected relationship chains"
+      ],
+      "metadata_result": "pass",
+      "evidence": "All ten Java and Rust entity-group metadata records match exactly; the predicate does not depend on entity count or declaration position.",
+      "strict_render_result": "different",
+      "strict_render_note": "Only the targeted metadata layer was used for this verdict."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review2_description_symbols.puml",
+      "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review2_description_symbols.svg",
+      "sha256": "5c7ff6bca41a45c976108a0a4102706d023b4bbd2b70e9d2882240c4811f8b5a",
+      "golden_sha256": "e72c005e706bc0c1ee0d382a4d07633962753b902383f441c89ad3f8d575e6d2",
+      "axes": [
+        "actor, usecase, and component concrete description images",
+        "ordinary class, object, and circle positive controls",
+        "state and diamond negative controls",
+        "relationships forcing every description entity into the graph"
+      ],
+      "metadata_result": "fail",
+      "evidence": "Java records ReleaseOperator=2, ApproveRollout=3, and PolicyEngine=4. Rust records 10, 10, and 11 because the class parser ignores their declarations and ClassParser::ensure_entity recreates class-shaped endpoints from relationship lines.",
+      "strict_render_result": "different",
+      "strict_render_note": "The verdict is based on wrong source-line ownership, not the additional expected symbol-shape or layout differences."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review2_deployment_description_symbols.puml",
+      "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review2_deployment_description_symbols.svg",
+      "sha256": "cabc7d8a07cbe336184205aa7e19499ca5397ef8a563b45e3841add12c848413",
+      "golden_sha256": "fcb1fe778e6e67a033d6f0ea9b59c2eb946dacc8f948ca8b105adb0eb7123506",
+      "axes": [
+        "database, queue, node, and rectangle concrete description images",
+        "ordinary class, object, and circle positive controls",
+        "state and diamond negative controls",
+        "cross-family declaration order and links"
+      ],
+      "metadata_result": "fail",
+      "evidence": "Java records declaration locations MetricsStore=2, RetryQueue=3, EdgeHost=4, and TrustBoundary=5. Rust records relationship locations 16, 17, 15, and 18, and misqualifies the core entities beneath package-shaped containers because bare database, node, and rectangle declarations are parsed as open packages.",
+      "strict_render_result": "different",
+      "strict_render_note": "The wrong identities and source lines are metadata/model failures. Remaining geometry differences are not part of the verdict."
+    }
+  ],
+  "anti_overfit": {
+    "result": "pass",
+    "findings": [
+      "The immutable production diff contains none of the six heldout fixture labels or names.",
+      "The diff contains no golden/fixture reads, include_str/include_bytes embedding, coordinate or dimension keys, source-line equality branches, entity-name branches, or entity-count ladders.",
+      "The only new branch is the Java-image-contract predicate on EntityKind::State and EntityKind::Diamond; this is mechanism-shaped and is supported by EntityImageState and EntityImageBranch."
+    ]
+  },
+  "findings": [
+    "The durable corrected account 5df5e7ed799d1e2a414751cd6d6c635aeec055ef is an ancestor of immutable implementation 1166e7e3424c0fb976acaddae6f566972f3bd5c9, and the account file is byte-unchanged between them.",
+    "The pinned Java checkout and JAR match the requested revision and prior oracle evidence. UGroup(LineLocation) alone inserts DATA_SOURCE_LINE. EntityImageClass, EntityImageObject, and EntityImageDescription use that constructor; EntityImageState and EntityImageBranch create location-free groups.",
+    "Within Rust's represented class EntityKind set, entity_group_has_source_line is correct. Four fresh matrices totaling 29 entity groups match Java metadata exactly across aliases, source-line offsets, declaration order, duplicate image contracts, disconnected topology, and all class-like variants.",
+    "The exact concrete-image ownership invariant is broader than Rust's current EntityKind set. Java ClassDiagram CommandCreateElementFull2 accepts allowmixing actor, usecase, component, database, queue, node, rectangle, and related symbols as LeafType.DESCRIPTION or LeafType.USECASE; GeneralImageBuilder routes those leaves to EntityImageDescription, which carries their declaration LineLocation.",
+    "Rust ClassParser::try_entity_decl accepts only class-like, object, state, circle, and diamond keywords. Actor, usecase, component, and queue declarations are ignored, after which relationship parsing creates implicit EntityKind::Class endpoints at the relationship source line. Bare database, node, and rectangle declarations are parsed as package containers even without braces, distorting both identity and location.",
+    "The two description-symbol counterexamples therefore fail at the claimed metadata layer independently of geometry: Java owns source metadata at declaration lines 2-5, while Rust owns it at later relationship lines or under misqualified identities.",
+    "This failure is not caused by fixture-shaped code and is not a defect in the new State/Diamond predicate itself. It is a neighboring generative-model gap in allowmixing concrete image/type dispatch. The held-out gate nevertheless rejects the implementation against the stated ownership claim; passing only the currently represented subset is insufficient.",
+    "All six fresh sources are valid PlantUML rendered headlessly by the pinned Java JAR, all twelve source/golden files are byte-unique against the existing corpus, xmllint accepts every Java and Rust SVG, and no PlantUML error marker is present.",
+    "No Cargo, rustc, rustfmt, or production edit was performed. Existing unrelated renderer edits and sequence perturbations in the shared worktree were neither inspected for acceptance nor staged."
+  ],
+  "verdict": "rejected",
+  "required_followup": "Preserve both failing review2_ description-symbol matrices. Before another production change, write and commit a new causal account for allowmixing concrete description-element representation: parse these declarations as typed leaves with declaration LineLocation, keep bare leaf symbols out of package-container state, and route source-line metadata from the concrete image contract rather than reconstructing entities from links. Re-run the four passing core matrices as regression controls."
+}

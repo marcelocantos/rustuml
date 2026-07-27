@@ -1,0 +1,18 @@
+@startuml
+allowmixing
+diamond VariantChoice
+annotation AuditTag
+state VariantWaiting
+interface DispatchPort
+object VariantSnapshot
+enum DispatchMode
+circle VariantJunction
+abstract class AbstractDispatcher
+AbstractDispatcher --> DispatchPort
+DispatchPort --> DispatchMode
+DispatchMode --> AuditTag
+AuditTag --> VariantSnapshot
+VariantSnapshot --> VariantJunction
+VariantJunction --> VariantChoice
+VariantChoice --> VariantWaiting
+@enduml

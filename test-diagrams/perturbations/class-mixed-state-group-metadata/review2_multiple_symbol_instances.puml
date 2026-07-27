@@ -1,0 +1,21 @@
+@startuml
+allowmixing
+circle FirstMerge
+diamond FirstDecision
+state FirstPause
+object FirstPayload
+class FirstWorker
+diamond SecondDecision
+circle SecondMerge
+state SecondPause
+object SecondPayload
+class SecondWorker
+FirstWorker --> FirstPayload
+FirstPayload --> FirstMerge
+FirstMerge --> FirstDecision
+FirstDecision --> FirstPause
+SecondWorker --> SecondPayload
+SecondPayload --> SecondMerge
+SecondMerge --> SecondDecision
+SecondDecision --> SecondPause
+@enduml

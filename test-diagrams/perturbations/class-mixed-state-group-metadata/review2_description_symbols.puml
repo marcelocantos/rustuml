@@ -1,0 +1,18 @@
+@startuml
+allowmixing
+actor "Release Operator" as ReleaseOperator
+usecase "Approve Rollout" as ApproveRollout
+component "Policy Engine" as PolicyEngine
+circle ReleaseJunction
+diamond ReleaseChoice
+state ReleasePending
+object ReleaseTrace
+class ReleaseRecord
+ReleaseOperator --> ApproveRollout
+ApproveRollout --> PolicyEngine
+PolicyEngine --> ReleaseRecord
+ReleaseRecord --> ReleaseTrace
+ReleaseTrace --> ReleaseJunction
+ReleaseJunction --> ReleaseChoice
+ReleaseChoice --> ReleasePending
+@enduml

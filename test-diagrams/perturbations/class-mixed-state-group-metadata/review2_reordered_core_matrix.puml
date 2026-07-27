@@ -1,0 +1,14 @@
+@startuml
+allowmixing
+state "Cooling Down" as CoolingDown
+diamond ForkGate
+circle EventTap
+object "Session Cache" as SessionCache
+entity LedgerEntry
+class Coordinator
+Coordinator --> SessionCache
+SessionCache --> EventTap
+EventTap --> ForkGate
+ForkGate --> CoolingDown
+LedgerEntry --> Coordinator
+@enduml

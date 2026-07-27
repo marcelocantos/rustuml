@@ -1,0 +1,17 @@
+@startuml
+allowmixing
+
+' Source-line offsets are intentional metadata controls.
+circle "Ingress Junction" as IngressJunction
+
+class "Inbound Router" as InboundRouter
+diamond "Route Choice" as RouteChoice
+
+object "Request Envelope" as RequestEnvelope
+state "Held Request" as HeldRequest
+
+InboundRouter --> RequestEnvelope
+RequestEnvelope --> IngressJunction
+IngressJunction --> RouteChoice
+RouteChoice --> HeldRequest
+@enduml
