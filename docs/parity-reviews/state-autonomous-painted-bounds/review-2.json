@@ -1,0 +1,152 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-autonomous-painted-bounds",
+  "reviewer": {
+    "task_id": "codex-desktop-task-019ee369-54e2-7203-afce-ddde7bfe1723-painted-bounds-round-2-checker",
+    "model": "GPT-5 Codex"
+  },
+  "account_commit": "1ae1801c9f4fc49842d54b7d728ed5d939cf8d1d",
+  "implementation_commit": "4b0b06634253f5f85ea6bb69ff97600fbc4cf891",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "git merge-base --is-ancestor 1ae1801c9f4fc49842d54b7d728ed5d939cf8d1d 4b0b06634253f5f85ea6bb69ff97600fbc4cf891",
+    "git diff --exit-code 0d2949786d89e41c72926ba153bb58b4211bacf2 4b0b06634253f5f85ea6bb69ff97600fbc4cf891 -- docs/parity-reviews/state-autonomous-painted-bounds/review.json test-diagrams/perturbations/state-autonomous-painted-bounds",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "git diff 4b0b06634253f5f85ea6bb69ff97600fbc4cf891^ 4b0b06634253f5f85ea6bb69ff97600fbc4cf891 -- crates/rustuml-parser/src/diagram/state.rs crates/rustuml-parser/src/parse/state.rs crates/rustuml-render/src/state.rs",
+    "sed -n '185,210p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/statediagram/StateDiagram.java",
+    "sed -n '325,385p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/atmp/CucaDiagram.java",
+    "sed -n '150,178p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/abel/Entity.java",
+    "sed -n '45,80p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/dot/CucaDiagramSimplifierState.java",
+    "sed -n '110,145p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/GroupMakerState.java",
+    "sed -n '80,145p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/image/EntityImageState.java",
+    "sed -n '355,370p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+    "sed -n '190,215p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/state-autonomous-painted-bounds/labelled_self_loop_margin.puml",
+    "xmllint --noout test-diagrams/perturbations/state-autonomous-painted-bounds/labelled_self_loop_margin.svg",
+    "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"' test-diagrams/perturbations/state-autonomous-painted-bounds/labelled_self_loop_margin.svg",
+    "ruby -rdigest -e 'candidate=\"test-diagrams/perturbations/state-autonomous-painted-bounds/labelled_self_loop_margin.puml\"; hash=Digest::SHA256.file(candidate).hexdigest; match=Dir[\"test-diagrams/golden/**/*.puml\"].find { |p| Digest::SHA256.file(p).hexdigest == hash }; abort \"duplicate: #{match}\" if match; puts \"unique against #{Dir[\"test-diagrams/golden/**/*.puml\"].length} golden sources\"'",
+    "git archive 4b0b06634253f5f85ea6bb69ff97600fbc4cf891 | tar -x -C /private/tmp/rustuml-review-4b-round2",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-review-4b-target cargo test --test parity_perturbations --release -- --nocapture",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-review-4b-target cargo test -p rustuml-parser --lib --release -- --nocapture",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-review-4b-target cargo test -p rustuml-render --lib --release -- --nocapture",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-review-4b-target cargo test --test golden_no_oracle --release -- --nocapture",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-review-4b-target cargo clippy --workspace --all-targets -- -D warnings",
+    "/private/tmp/rustuml-review-4b-target/release/rustuml -tsvg test-diagrams/perturbations/state-autonomous-painted-bounds/empty_concurrent_region.puml > /private/tmp/rustuml-review-empty.svg",
+    "rg -o '<g class=\"entity\" data-qualified-name=\"EmptyRegionEnvelope731\\.CONC2\"[^<]*|<rect fill=\"#F1F1F1\" height=\"50\"[^>]*/>|<text[^>]*>&#160;</text>' /private/tmp/rustuml-review-empty.svg test-diagrams/perturbations/state-autonomous-painted-bounds/empty_concurrent_region.svg",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-review-4b-target cargo test --test harness_guards --release -- --nocapture"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-painted-bounds/renamed_antiparallel_labels.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-painted-bounds/renamed_antiparallel_labels.svg",
+      "axes": [
+        "renamed antiparallel states",
+        "independently varied edge-label lengths",
+        "autonomous nesting"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-painted-bounds/reversed_direction_identity.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-painted-bounds/reversed_direction_identity.svg",
+      "axes": [
+        "reversed command direction",
+        "reversed solved endpoints",
+        "multiple same-endpoint transition identities"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-painted-bounds/unlabelled_curved_arrow_control.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-painted-bounds/unlabelled_curved_arrow_control.svg",
+      "axes": [
+        "unlabelled antiparallel curves",
+        "arrowhead-only painted frontier",
+        "autonomous nesting"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-painted-bounds/self_loop_curve_extrema.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-painted-bounds/self_loop_curve_extrema.svg",
+      "axes": [
+        "unlabelled self-loop cubic controls",
+        "path painted extrema",
+        "autonomous nesting"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-painted-bounds/nested_vertical_concurrent.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-painted-bounds/nested_vertical_concurrent.svg",
+      "axes": [
+        "nested autonomous groups",
+        "vertical concurrent composition",
+        "independent region labels and topology"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-painted-bounds/nested_horizontal_concurrent.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-painted-bounds/nested_horizontal_concurrent.svg",
+      "axes": [
+        "nested autonomous groups",
+        "horizontal concurrent composition",
+        "independent region labels and topology"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-painted-bounds/pseudostate_left_frontiers.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-painted-bounds/pseudostate_left_frontiers.svg",
+      "axes": [
+        "choice history and final endpoints",
+        "left-reaching arrowheads",
+        "mixed primitive bounds"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-painted-bounds/empty_concurrent_region.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-painted-bounds/empty_concurrent_region.svg",
+      "axes": [
+        "empty concurrent middle region",
+        "consecutive valid separators",
+        "empty-state identity and source-order UID"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-painted-bounds/root_level_equivalent_control.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-painted-bounds/root_level_equivalent_control.svg",
+      "axes": [
+        "root-level equivalent topology",
+        "scope boundary",
+        "unlabelled antiparallel curves"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-painted-bounds/labelled_self_loop_margin.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-painted-bounds/labelled_self_loop_margin.svg",
+      "axes": [
+        "labelled self-loop",
+        "self-link-specific SVEK label margin",
+        "autonomous painted width"
+      ],
+      "result": "fail"
+    }
+  ],
+  "findings": [
+    "The amended account commit 1ae1801c9f4fc49842d54b7d728ed5d939cf8d1d precedes the immutable correction commit 4b0b06634253f5f85ea6bb69ff97600fbc4cf891. The correction is layered over original implementation f83ad70bac10886960a2fef85dda0d20002596af and rejected review commit 0d2949786d89e41c72926ba153bb58b4211bacf2. The original review.json and all nine round-one evidence pairs are byte-unchanged between 0d294978 and 4b0b0663.",
+    "The correction commit changes only the state parser model, state parser, and state renderer. It does not change a baseline, comparator, guard, prior review, account after implementation, or existing evidence. Static inspection found no golden reads, fixture labels, count ladders, coordinate-keyed surgery, or names from the preserved counterexample.",
+    "The consecutive-separator model now matches Java source order. StateDiagram.concurrentState closes a current CONCURRENT_STATE when needed, obtains the next global CONC identity, and calls CucaDiagram.gotoGroup immediately for every separator. gotoGroup creates an Entity when the quark is new, and Entity's constructor consumes the diagram UID at that point. Rust now appends a ConcurrentRegion carrying the generated id and separator source line on every separator, keeps that vector in parser order, and merges those events into pass-one UID allocation by source line. The parser regression proves two consecutive separators produce ordered CONC2 and CONC3 records on lines 3 and 4.",
+    "The preserved empty_concurrent_region held-out now passes the complete structural perturbation suite. Java GroupMakerState.getImage checks child/group count before CONCURRENT_STATE type and returns EntityImageState for the childless CONC2 group; EntityImageState.calculateDimensionSlow applies atLeast(MIN_WIDTH, MIN_HEIGHT), yielding 50x50, and paints a full-width divider plus an empty-display nonbreaking space. CucaDiagramSimplifierState then exposes that image as STATE_CONCURRENT for parent composition. The immutable Rust render matches the Java evidence for data-qualified-name EmptyRegionEnvelope731.CONC2, duplicate local id ent0003, the 50x50 rectangle at x=12/y=295.4883, divider, nonbreaking-space text, separator order, and 50px restored composite span.",
+    "The correction adequately names and cites the previously anonymous 15px SvekResult pad, one-pixel rectangle/ellipse adjustment, ordinary one-pixel edge-label margin, and ordinary-state-versus-synchronization-bar full-width-divider branch. The LIMIT_FINDER_TEXT_ADJUST comment names the right Java method but inaccurately says drawText passes 1.5 to TextLimitFinder; pinned LimitFinder.drawText directly applies y -= height - 1.5. More importantly, the adjacent SVEK_EDGE_LABEL_MARGIN provenance explicitly describes only ordinary labels while the constant and autonomous EdgeLabelSize are applied to self-links too.",
+    "Pinned Java SvekEdge.addVisibilityModifier contains a load-bearing branch omitted from Rust: marginLabel = startUid.equalsId(endUid) ? 6 : 1, followed by TextBlockUtils.withMargin on both sides. Immutable Rust always sizes an autonomous label as measured width plus 2 and always applies SVEK_EDGE_LABEL_MARGIN=1 in painted bounds. The new valid out-of-corpus labelled_self_loop_margin held-out therefore falsifies the complete label-bound model: Java is 435px wide, Rust is 425px wide, the autonomous wrapper is exactly 10px narrower, and its centered title/root endpoints shift left by 5px. Java's label textLength is identical, isolating the missing 5px-per-side self-link margin rather than font measurement.",
+    "All nine preserved round-one held-outs pass at immutable 4b0b0663; only the new labelled self-loop fails. Its Java SVG is well-formed, contains no PlantUML error marker, and its source is unique against 12550 golden sources. The earlier unlabelled self-loop remains a useful control and passes, demonstrating that cubic path/control bounds are not the cause.",
+    "At immutable 4b0b0663, parser tests pass 487/487, renderer tests pass 684/684, clippy passes for the whole workspace with all targets and warnings denied, and the no-oracle census remains green at 11023/11251 eligible pairs, including rendering 78/98 and state 861/901. Five of six harness guards pass; parity_review_records_are_complete parses this round-two record and every evidence path, then fails only on this intentional rejected verdict/failing perturbation and the older rejected state-choice-polygon-serialization review present at 4b0b0663. These regression results do not supersede the fresh held-out failure.",
+    "Verdict is rejected. A correction must derive the edge-label margin from Java's self-link identity branch and apply the same selected margin to both Graphviz label dimensions and painted text bounds. It must also correct the 1.5 provenance wording. The preserved labelled_self_loop_margin pair must remain executable and pass before a later independent review can accept the mechanism."
+  ],
+  "verdict": "rejected"
+}

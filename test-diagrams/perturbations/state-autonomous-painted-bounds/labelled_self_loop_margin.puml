@@ -1,0 +1,10 @@
+@startuml
+state LabelledOrbitEnvelope842 {
+  [*] --> OrbitNode842
+  OrbitNode842 --> OrbitNode842 : independently_wide_self_return_842
+  OrbitNode842 --> ExitNode842
+  ExitNode842 --> [*]
+}
+[*] --> LabelledOrbitEnvelope842
+LabelledOrbitEnvelope842 --> [*]
+@enduml
