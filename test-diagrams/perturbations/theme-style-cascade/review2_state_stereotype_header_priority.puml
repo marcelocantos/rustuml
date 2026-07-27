@@ -1,0 +1,29 @@
+@startuml
+left to right direction
+<style>
+root {
+  FontColor #37474F
+}
+state {
+  BackgroundColor #ECEFF1
+  LineColor #455A64
+  header {
+    FontColor #263238
+  }
+  .Audit.Gate {
+    BackgroundColor #FFF9C4
+    LineColor #F57F17
+    FontColor #E65100
+    header {
+      FontColor #BF360C
+      FontStyle bold
+    }
+  }
+}
+</style>
+state "Audit Gate" as AuditGate <<audit_gate>>
+AuditGate : retained evidence
+state "Control Gate" as ControlGate
+ControlGate : ordinary evidence
+AuditGate --> ControlGate : header priority
+@enduml

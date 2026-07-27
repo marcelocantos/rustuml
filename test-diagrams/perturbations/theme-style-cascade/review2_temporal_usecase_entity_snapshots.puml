@@ -1,0 +1,20 @@
+@startuml
+left to right direction
+<style>
+usecase {
+  BackgroundColor #E0F7FA
+  LineColor #00838F
+  FontColor #006064
+}
+</style>
+usecase "Inspect Harbor" as InspectHarbor
+<style>
+usecase {
+  BackgroundColor #FCE4EC
+  LineColor #C2185B
+  FontColor #880E4F
+}
+</style>
+usecase "Archive Signal" as ArchiveSignal
+InspectHarbor --> ArchiveSignal : usecase epochs
+@enduml

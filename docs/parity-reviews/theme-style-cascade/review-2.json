@@ -1,0 +1,338 @@
+{
+  "schema_version": 1,
+  "mechanism": "theme-style-cascade",
+  "account_commit": "ca50f6d2e87b8cac1e0222f18b473406ffbbca06",
+  "implementation_commit": "99fe75cf33ed0f1e836c0bac392f64676b99f0ec",
+  "implementation_parent": "b85ba7e1b7ea4bb468bc6e40dc0c9660d67ec41c",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar": {
+    "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+  },
+  "reviewer": {
+    "task_id": "019fa369-eebe-7ba2-bdc5-39ac7148f879",
+    "parent_task_id": "019ee369-54e2-7203-afce-ddde7bfe1723",
+    "model": "gpt-5.6-sol",
+    "reasoning_effort": "xhigh",
+    "tool": "Codex desktop",
+    "role": "fresh independent skeptical checker; did not implement immutable commit 99fe75cf and made no production edits"
+  },
+  "constraints": [
+    "No Cargo, rustc, rustfmt, or other Rust compilation command was run.",
+    "No production Rust, parser source, baseline, comparator slack, park list, or error list was edited.",
+    "The pinned PlantUML picoweb server generated every fresh Java SVG.",
+    "The already-built target/release/examples/diff_one binary performed every Rust render and strict comparison.",
+    "Only new review2_ perturbation pairs and this review record are eligible for the checker commit."
+  ],
+  "execution": {
+    "diff_helper": "target/release/examples/diff_one",
+    "diff_helper_sha256": "b514e7c78cc376ae9ee1ec42331940ef50e6565ae708b9ea5e9cd39ae67375f9",
+    "diff_helper_mtime": "2026-07-27T21:48:50+1000",
+    "oracle_server": "http://127.0.0.1:8787/render",
+    "existing_review1": {
+      "strict_total": 10,
+      "strict_passed": 9,
+      "strict_failed": 1,
+      "scoped_style_passed": 10,
+      "scoped_style_failed": 0,
+      "separate_failure": "review1_cross_family_arrow_alias_usecase preserves the requested inherited arrow color on both routes; strict differences are the pre-existing description-entity-alias-identity mechanism and a 0.01 path ordinate."
+    },
+    "fresh_review2": {
+      "strict_total": 14,
+      "strict_passed": 1,
+      "strict_failed": 13,
+      "direct_style_semantic_failures": 11,
+      "style_derived_geometry_failures_after_correct_winner_selection": 1,
+      "unrelated_geometry_only_failures": 1
+    }
+  },
+  "commands": [
+    "git status --short --branch; git rev-parse HEAD; git show --stat --oneline --decorate 99fe75cf; git diff --name-only 99fe75cf^ 99fe75cf",
+    "cat /Users/marcelo/.claude/rust.md",
+    "cat docs/parity-reviews/theme-style-cascade/account.json docs/parity-reviews/theme-style-cascade/review-1.json docs/parity-reviews/theme-style-cascade/review-1-response.md",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "shasum -a 256 target/release/examples/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "for source in test-diagrams/perturbations/theme-style-cascade/review1_*.puml; do target/release/examples/diff_one --no-oracle \"$source\"; done",
+    "PLANTUML_JAR=/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar scripts/plantuml-server.sh 8787",
+    "for source in test-diagrams/perturbations/theme-style-cascade/review2_*.puml; do jq -Rs '{source: ., options: [\"-tsvg\"]}' \"$source\" and POST the payload with curl to http://127.0.0.1:8787/render as the same-stem SVG; done",
+    "xmllint --noout test-diagrams/perturbations/theme-style-cascade/review2_*.svg",
+    "rg -n -i 'Syntax Error|NoSuchElementException|Welcome to PlantUML|An error has occured|\\[From string|Assumed diagram type|class=\"message\"' test-diagrams/perturbations/theme-style-cascade/review2_*.svg",
+    "for source in test-diagrams/perturbations/theme-style-cascade/review2_*.puml; do target/release/examples/diff_one --no-oracle \"$source\"; done",
+    "target/release/examples/diff_one --no-oracle --print-rust on the component padding/shadow, sparse state, temporal class, and use-case arrow-channel heldouts; compare selected SVG elements with their Java goldens",
+    "static Java inspection of Entity#getCurrentStyleBuilder, Link#getStyleBuilder, EntityImageDescription, EntityImageState2, EntityImageClass, EntityImageClassHeader, GraphvizImageBuilder, SvekEdge, Style#getStroke, Style#getMargin, Style#getPadding, ClockwiseTopRightBottomLeft#read, and StyleSignatureBasic#matchAll at Java revision 71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "static Rust inspection of immutable 99fe75cf in style_cascade.rs and the class, component, state, and use-case adapters",
+    "git diff --no-ext-diff --unified=0 99fe75cf^ 99fe75cf over crates/rustuml-render/src; search added lines for golden/fixture/perturbation reads, review names, heldout labels, source-coordinate predicates, and numeric literals",
+    "git diff --check 99fe75cf^ 99fe75cf",
+    "git merge-base --is-ancestor ca50f6d2 99fe75cf; git diff --exit-code ca50f6d2 99fe75cf -- docs/parity-reviews/theme-style-cascade/account.json",
+    "SHA-256 uniqueness comparison of all fourteen review2_ sources against every earlier PlantUML source under test-diagrams"
+  ],
+  "existing_replay": [
+    {
+      "source": "test-diagrams/perturbations/theme-style-cascade/review1_cross_family_arrow_alias_usecase.puml",
+      "strict_result": "fail",
+      "scoped_style_result": "pass",
+      "separate_mechanisms": [
+        "description-entity-alias-identity",
+        "description-path-rounding"
+      ]
+    },
+    {
+      "glob": "test-diagrams/perturbations/theme-style-cascade/review1_*.puml excluding review1_cross_family_arrow_alias_usecase.puml",
+      "strict_result": "pass",
+      "count": 9
+    }
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/theme-style-cascade/review2_class_document_three_value_margin.puml",
+      "golden": "test-diagrams/perturbations/theme-style-cascade/review2_class_document_three_value_margin.svg",
+      "source_sha256": "616914639bfb1a61bf255dea8b79f78ad50adff18a01c5f82f38d970e72da1dd",
+      "golden_sha256": "6a3434e82b04684e5352319b3c44881aeb6a1763e660811e4f96a43898c63625",
+      "axes": [
+        "three-value document margin",
+        "document background",
+        "class and arrow sparse inheritance",
+        "left-to-right two-node topology"
+      ],
+      "result": "pass",
+      "scoped_result": "pass",
+      "comparison": "Java and Rust are structurally equivalent. The class adapter preserves the top/right/bottom/left expansion of Margin 2 8 14 and the document, class, and arrow colors."
+    },
+    {
+      "source": "test-diagrams/perturbations/theme-style-cascade/review2_component_document_four_value_margin_background.puml",
+      "golden": "test-diagrams/perturbations/theme-style-cascade/review2_component_document_four_value_margin_background.svg",
+      "source_sha256": "86cbce56e48f5aeca2a496678fc4eb0749c60c76ac72eb543cf1d9f3ef258eb6",
+      "golden_sha256": "b319c7d221a2c95cf1120e5ce7b8c12af0f36fcbd378508d5cfb2c1fc496e847",
+      "axes": [
+        "four-value document margin",
+        "document background",
+        "component vertical topology",
+        "asymmetric left and bottom extents"
+      ],
+      "result": "fail",
+      "scoped_result": "fail",
+      "comparison": "Background projection passes, but Java parses Margin 3 7 11 13 as four independent sides while Rust takes only the first scalar. Java places the first component at x=20.08 and produces 284x199; Rust places it at x=10.0786 and produces 277x196."
+    },
+    {
+      "source": "test-diagrams/perturbations/theme-style-cascade/review2_component_four_value_padding_shadow_dash.puml",
+      "golden": "test-diagrams/perturbations/theme-style-cascade/review2_component_four_value_padding_shadow_dash.svg",
+      "source_sha256": "3df2e85c30532fb7fd7ddb2ef2173a62198a153c96664c318c2908e6d4d34e32",
+      "golden_sha256": "49ab16bec2b7b85d801cd6b7d889f588e84b66e172301553392967e8443b464c",
+      "axes": [
+        "four-value component padding syntax",
+        "numeric shadowing",
+        "arbitrary dash pair",
+        "arrow font, color, and thickness"
+      ],
+      "result": "fail",
+      "scoped_result": "fail",
+      "comparison": "Colors, fonts, and thickness reach the consumers, and Java does not apply the component Padding value to this symbol. Java emits a shadow filter and stroke-dasharray:7,4; Rust emits neither. The Rust ComponentLineStyle enum collapses the open-ended Java dash grammar, and component_shadow_frontier changes only the canvas estimate without painting a shadow."
+    },
+    {
+      "source": "test-diagrams/perturbations/theme-style-cascade/review2_component_stereotype_normalization_priority.puml",
+      "golden": "test-diagrams/perturbations/theme-style-cascade/review2_component_stereotype_normalization_priority.svg",
+      "source_sha256": "3c50901355c7e7cd80bc62bb5810b9fdacea52a67a3f528231ca93fd354a6316",
+      "golden_sha256": "8320fd5c71d6fe268e52d1bbdff92a3701dcbdedfc8ec6d218a98ed8e12a7abb",
+      "axes": [
+        "component CSS stereotype selector",
+        "dot-versus-underscore normalization",
+        "stereotype priority over ordinary family style",
+        "qualified line thickness"
+      ],
+      "result": "fail",
+      "scoped_result": "fail",
+      "comparison": "Java applies .Critical.Port to <<critical_port>>: #FFCDD2 fill, #B71C1C line at width 2, and #880E4F text. Rust renders the base component style because its CSS component signature never includes each entity stereotype."
+    },
+    {
+      "source": "test-diagrams/perturbations/theme-style-cascade/review2_legacy_component_entity_refresh_link_capture.puml",
+      "golden": "test-diagrams/perturbations/theme-style-cascade/review2_legacy_component_entity_refresh_link_capture.svg",
+      "source_sha256": "164dc9f03ead9e9aa6bb7b9671cd9604ea36261d33d2cb963da05beb2c8c19d5",
+      "golden_sha256": "47fc83845c1ca79640161b6ac28a52d0d380b12520557ee86e28554118f47406",
+      "axes": [
+        "legacy skinparam compatibility trigger",
+        "component entity refresh",
+        "link creation before and after trigger",
+        "arrow line, head, font color, and thickness"
+      ],
+      "result": "fail",
+      "scoped_result": "fail",
+      "comparison": "Entity refresh semantics pass, but Java retains the early link's #C62828 width-2 builder while Rust recolors it #4527A0 at width 3. The component adapter resolves one final arrow style and has no per-link source-line resolution."
+    },
+    {
+      "source": "test-diagrams/perturbations/theme-style-cascade/review2_sparse_state_header_document_two_value_margin.puml",
+      "golden": "test-diagrams/perturbations/theme-style-cascade/review2_sparse_state_header_document_two_value_margin.svg",
+      "source_sha256": "471c863a1fa2710b482da308e502cc9b463aed45c11f287015b4f79ada111f5b",
+      "golden_sha256": "2190f42588ad39cd31eef450f21e8fb224e7b7b744045972d7ded40550eb8d4a",
+      "axes": [
+        "two-value document margin",
+        "document background",
+        "sparse root inheritance",
+        "state header and arrow font channels"
+      ],
+      "result": "fail",
+      "scoped_result": "fail",
+      "comparison": "Java emits the #FFFDE7 document background and 4/9/4/9 margin, uses #0D47A1 bold text for state descriptions, and #00695C for the link label. Rust keeps a white marginless document and root #263238/black text because the flat StateSkin adapter projects neither document, header, nor arrow FontColor."
+    },
+    {
+      "source": "test-diagrams/perturbations/theme-style-cascade/review2_state_stereotype_header_priority.puml",
+      "golden": "test-diagrams/perturbations/theme-style-cascade/review2_state_stereotype_header_priority.svg",
+      "source_sha256": "b0e4711b133f3262194709839cd02379e7a04b063b9d784004a7c3159a017c4b",
+      "golden_sha256": "de3c63d5f41fe5664207c0b5af8a83558f9162738cb72062e8c5c94a0def8e6d",
+      "axes": [
+        "state CSS stereotype selector",
+        "dot-versus-underscore normalization",
+        "nested header priority",
+        "left-to-right state topology"
+      ],
+      "result": "fail",
+      "scoped_result": "fail",
+      "separate_mechanism": "state-direction-layout also changes horizontal Java placement to vertical Rust placement",
+      "comparison": "The style failure is independent of layout: Java applies the Audit.Gate fill, line, body font, and bold header font; Rust applies only the ordinary state/root values. The stereotype-aware autonomous helper exists, but this flat rendering path consumes the stereotype-free StateSkin."
+    },
+    {
+      "source": "test-diagrams/perturbations/theme-style-cascade/review2_temporal_class_combined_snapshots.puml",
+      "golden": "test-diagrams/perturbations/theme-style-cascade/review2_temporal_class_combined_snapshots.svg",
+      "source_sha256": "624d38e738ccb626fbea1868bcbe59e860fb113e542d1bc772c6827e5d671aa8",
+      "golden_sha256": "07e6a82e4157e82e83a4d473c78bc55fb68a9ba6377fd59f9da2a944ba7d9bb7",
+      "axes": [
+        "combined class entity and link snapshots",
+        "three-node topology",
+        "two links on opposite sides of a CSS mutation",
+        "split body-versus-header style ownership"
+      ],
+      "result": "fail",
+      "scoped_result": "fail",
+      "comparison": "Body fill/line snapshots and both link snapshots pass. Java class names use the final #33691E header font through EntityImageClassHeader and SkinParam's current builder, while Rust snapshots header FontColor per entity and leaves the first two names #283593. The implementation over-generalizes Entity#getCurrentStyleBuilder across class sub-consumers."
+    },
+    {
+      "source": "test-diagrams/perturbations/theme-style-cascade/review2_temporal_component_entity_snapshots.puml",
+      "golden": "test-diagrams/perturbations/theme-style-cascade/review2_temporal_component_entity_snapshots.svg",
+      "source_sha256": "5e7895f5f719e26c3a9878104c18d249610837df686931d8e1a0affe0ff7c84f",
+      "golden_sha256": "d528447698b68a47ac07b51701b151b7492063cd0f3dbf22b8286e5bfbb01f62",
+      "axes": [
+        "pure CSS component creation snapshots",
+        "before and after component declarations",
+        "background, line, and font channels",
+        "left-to-right topology"
+      ],
+      "result": "fail",
+      "scoped_result": "fail",
+      "comparison": "Java preserves the early component's #E1F5FE/#0277BD/#01579B style. Rust applies the later #F3E5F5/#6A1B9A/#4A148C style to both because component rendering resolves one final signature."
+    },
+    {
+      "source": "test-diagrams/perturbations/theme-style-cascade/review2_temporal_state_entity_snapshots.puml",
+      "golden": "test-diagrams/perturbations/theme-style-cascade/review2_temporal_state_entity_snapshots.svg",
+      "source_sha256": "51d7172f30a871e8584420264790bcc41296198e03906211fe74c74043b7e7ca",
+      "golden_sha256": "86dc881239e766026d38dbc82ba5b6461245946333f198dd35f5709c8df83ada",
+      "axes": [
+        "state style before and after entity creation",
+        "final-builder ownership",
+        "left-to-right direction",
+        "two-node transition topology"
+      ],
+      "result": "fail",
+      "scoped_result": "pass",
+      "separate_mechanism": "state-direction-layout",
+      "comparison": "The probe corrects an over-broad account assumption: Java EntityImageState2 resolves SkinParam's current builder, so both states legitimately use the late orange style, exactly as Rust does. Strict comparison fails because Java honors left-to-right direction while Rust lays the states vertically; no state style difference is present."
+    },
+    {
+      "source": "test-diagrams/perturbations/theme-style-cascade/review2_temporal_usecase_entity_snapshots.puml",
+      "golden": "test-diagrams/perturbations/theme-style-cascade/review2_temporal_usecase_entity_snapshots.svg",
+      "source_sha256": "fd9d29866f99e1789c9f865ad7cd560283977ff64189755006cc28582c7bb1d7",
+      "golden_sha256": "8b2615c3861a4df6133e7aa24a3a76d33e1341d620fb34cd33e24397937cf0d0",
+      "axes": [
+        "pure CSS use-case creation snapshots",
+        "before and after use-case declarations",
+        "background, line, and font channels",
+        "left-to-right topology without actors"
+      ],
+      "result": "fail",
+      "scoped_result": "fail",
+      "comparison": "Java preserves the early use case's #E0F7FA/#00838F/#006064 style. Rust applies the later #FCE4EC/#C2185B/#880E4F style to both because SkinColors is one diagram-wide final projection."
+    },
+    {
+      "source": "test-diagrams/perturbations/theme-style-cascade/review2_theme_style_skinparam_ordering.puml",
+      "golden": "test-diagrams/perturbations/theme-style-cascade/review2_theme_style_skinparam_ordering.svg",
+      "source_sha256": "5f76b01f3b205140d2a0b4c460a382c1d44128e69323d0b7ca256c16c8b691ff",
+      "golden_sha256": "35060ef769e718c13981e5b4d0cb5703874c617276146e6a35d05bb5fbe5eb44",
+      "axes": [
+        "user CSS before theme",
+        "theme before legacy skinparam",
+        "later sparse user CSS",
+        "property-by-property winner selection"
+      ],
+      "result": "fail",
+      "scoped_result": "fail",
+      "subresult": {
+        "declaration_ordering": "pass",
+        "style_derived_geometry": "fail"
+      },
+      "comparison": "Every child SVG element is structurally equal, proving the final sparse component and arrow winners are correct. Only the root width differs, 251.0417 Java versus 254.1667 Rust, isolating a style-derived component-painted-envelope failure rather than an ordering failure."
+    },
+    {
+      "source": "test-diagrams/perturbations/theme-style-cascade/review2_usecase_stereotype_normalization_priority.puml",
+      "golden": "test-diagrams/perturbations/theme-style-cascade/review2_usecase_stereotype_normalization_priority.svg",
+      "source_sha256": "c6a6e8f910bb22eb8a5a88dd975954f44db2a32f35344a5292b566e2dbec9798",
+      "golden_sha256": "983e0c1bd164e0d07876303fc4d09ae2b171e6661fe6ed13c4b44e75dc9f71dc",
+      "axes": [
+        "use-case CSS stereotype selector",
+        "dot-versus-underscore normalization",
+        "stereotype priority over ordinary family style",
+        "qualified line thickness"
+      ],
+      "result": "fail",
+      "scoped_result": "fail",
+      "comparison": "Java applies .Review.Gate to <<review_gate>>: #DCEDC8 fill, #558B2F width-2 line, and #33691E text. Rust renders the ordinary use-case style because SkinColors resolves no per-use-case stereotype signature."
+    },
+    {
+      "source": "test-diagrams/perturbations/theme-style-cascade/review2_usecase_three_value_padding_shadow_arrow_channels.puml",
+      "golden": "test-diagrams/perturbations/theme-style-cascade/review2_usecase_three_value_padding_shadow_arrow_channels.svg",
+      "source_sha256": "3f0cbeaad60456b155032aa47e83c0e924fc1419c5dd2dc3f184c94032757b19",
+      "golden_sha256": "711227f5a4c65e1e36c2a67a6cf9cab6626ba8fd32695f91fe1244d969ba81ed",
+      "axes": [
+        "three-value padding syntax on a non-consuming symbol",
+        "numeric shadow syntax on a non-consuming symbol",
+        "arrow font family, size, and color",
+        "arrow thickness and arbitrary dash pair"
+      ],
+      "result": "fail",
+      "scoped_result": "fail",
+      "comparison": "The valid three-value padding and shadow declarations are inert in Java's use-case symbol and therefore are controls, while arrow FontColor, FontName, and FontSize pass. Java emits width 3 and stroke-dasharray:5,2 on the shaft plus width 3 on the head; Rust hardcodes width 1 and solid stroke because SkinColors does not project arrow LineThickness or LineStyle."
+    }
+  ],
+  "anti_overfit": {
+    "result": "failed",
+    "clean_findings": [
+      "The durable account commit is an ancestor of 99fe75cf and account.json is byte-unchanged through the implementation boundary.",
+      "The production diff adds no golden or perturbation file reads, embedded SVGs, review-name conditions, heldout labels, coordinate-keyed surgery, source-line fixture predicates, or per-count constant ladders.",
+      "All fourteen fresh sources are valid, well-formed, error-free PlantUML inputs and have zero SHA-256 matches among earlier test-diagrams sources.",
+      "git diff --check is clean for immutable commit 99fe75cf."
+    ],
+    "violations": [
+      "The new COMPONENT_DEFAULT_SHADOW_FRONTIER = 5.0 comment names a generic Rose baseline and LimitFinder.drawRectangle but gives neither the exact Java producer nor a checked derivation of five pixels, so it does not satisfy the adjacent constant-provenance rule.",
+      "The new component shadowing branch true/yes => 1.5 and its fallback COMPONENT_DEFAULT_SHADOW_FRONTIER / 2.0 have no adjacent Java-source citation. The fresh numeric-shadow case also proves that the implementation adjusts only the painted-envelope estimate and never emits Java's shadow filter.",
+      "Several independent Java channels are collapsed into final diagram-wide structs: component and use-case entity/link snapshots, flat-state stereotype/header/document styles, arbitrary UStroke dash pairs, and clockwise 1/2/3/4-value box metrics."
+    ]
+  },
+  "findings": [
+    "Existing evidence improved from review-1's 0/10 boundary to 9/10 strict and 10/10 scoped style semantics. The remaining review1 strict miss is correctly separable from theme/style cascade.",
+    "Fresh evidence rejects 99fe75cf: only 1 of 14 heldouts is structurally equivalent. Eleven fail direct style semantics, one fails style-derived component envelope geometry after correct winner selection, and one has exact state style semantics but fails an unrelated direction-layout mechanism.",
+    "Java temporal ownership is consumer-specific, not uniformly entity-specific. EntityImageDescription uses Entity#getCurrentStyleBuilder for component and use-case symbol styles; EntityImageState2 uses SkinParam#getCurrentStyleBuilder; EntityImageClass uses the entity builder for body paint while EntityImageClassHeader uses SkinParam's current builder for class-name fonts; GraphvizImageBuilder and SvekEdge use Link#getStyleBuilder for arrows and labels.",
+    "Rust's temporal resolver API is sound enough for the previously covered class body and link cases, but its adapters do not preserve Java's ownership graph. Component, state, and use-case call resolve on one final signature, while class applies the entity snapshot to header fonts that Java resolves against the current builder.",
+    "Component integration drops per-entity stereotypes, per-link snapshots, arbitrary LineStyle pairs, painted shadows, and clockwise document margins. Taking the first Margin scalar is a direct contradiction of ClockwiseTopRightBottomLeft#read.",
+    "Flat state rendering drops stereotype-qualified selectors, header FontColor/FontStyle, document background/margin, and arrow FontColor. Its use of the final state style is correct for EntityImageState2, which the temporal state heldout confirms.",
+    "Use-case integration drops per-entity snapshots, stereotype-qualified selectors, arrow LineThickness, and arrow LineStyle. Arrow font family, size, and color do project correctly.",
+    "Theme, style, and skinparam winner ordering survives the mixed-order control, but the resulting component canvas envelope remains wrong even when every child element is exact.",
+    "The mechanical anti-overfit search is clean, but the provenance gate and generative-model gate both fail. The boundary is not fixture-shaped; it is incomplete and over-generalized.",
+    "No Cargo, rustc, rustfmt, self-authored Rust test, production edit, baseline edit, comparator edit, or skip-list edit was used as checker evidence."
+  ],
+  "verdict": "rejected",
+  "required_followup": [
+    "Model style-builder ownership per Java consumer: component/use-case entities use creation snapshots unless legacy skinparam refresh applies, links always use creation snapshots, state EntityImageState2 uses the current builder, and class body/header channels remain split.",
+    "Resolve component, use-case, and flat-state signatures per concrete entity stereotype with Java-compatible normalization and priority.",
+    "Replace scalar/enum projections with generative value types matching ClockwiseTopRightBottomLeft#read and Style#getStroke, including arbitrary one- or two-number dash strings.",
+    "Project state document/header/arrow-font channels and use-case arrow thickness/style; paint component shadows rather than adjusting only the envelope.",
+    "Replace or substantiate every new component shadow constant and branch with an adjacent exact Java class/method citation or checked derivation.",
+    "Preserve all failing review2_ pairs, rerun both review generations after implementation, and obtain a new independent accepted checker record before accepting this mechanism."
+  ]
+}

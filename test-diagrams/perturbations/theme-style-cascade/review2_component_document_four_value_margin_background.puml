@@ -1,0 +1,16 @@
+@startuml
+<style>
+document {
+  BackgroundColor #E8EAF6
+  Margin 3 7 11 13
+}
+component {
+  BackgroundColor #FFFFFF
+  LineColor #3F51B5
+  FontColor #1A237E
+}
+</style>
+component "Margin North" as MarginNorth
+component "Margin South" as MarginSouth
+MarginNorth --> MarginSouth : asymmetric document frame
+@enduml

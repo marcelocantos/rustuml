@@ -1,0 +1,19 @@
+@startuml
+left to right direction
+<style>
+usecase {
+  BackgroundColor #E8EAF6
+  LineColor #3949AB
+  FontColor #283593
+  .Review.Gate {
+    BackgroundColor #DCEDC8
+    LineColor #558B2F
+    FontColor #33691E
+    LineThickness 2
+  }
+}
+</style>
+usecase "Review Gate" as ReviewGate <<review_gate>>
+usecase "Control Gate" as ControlGate
+ReviewGate --> ControlGate : normalized selector
+@enduml

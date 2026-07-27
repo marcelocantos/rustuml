@@ -1,0 +1,29 @@
+@startuml
+<style>
+component {
+  BackgroundColor #FFEBEE
+  LineColor #C62828
+  FontColor #B71C1C
+}
+arrow {
+  LineColor #C62828
+  FontColor #C62828
+}
+</style>
+!theme minty
+skinparam componentBackgroundColor #FFF9C4
+<style>
+component {
+  LineColor #00838F
+  FontColor #006064
+}
+arrow {
+  LineColor #5E35B1
+  FontColor #4527A0
+  LineThickness 4
+}
+</style>
+component "Ordered Source" as OrderedSource
+component "Ordered Sink" as OrderedSink
+OrderedSource --> OrderedSink : final sparse winners
+@enduml

@@ -1,0 +1,23 @@
+@startuml
+left to right direction
+<style>
+component {
+  BackgroundColor #E0F2F1
+  LineColor #00695C
+  FontColor #004D40
+  LineThickness 2
+  Padding 3 7 11 13
+  Shadowing 4
+}
+arrow {
+  LineColor #7B1FA2
+  FontColor #4A148C
+  FontSize 16
+  LineThickness 3
+  LineStyle 7-4
+}
+</style>
+component "Padded Intake" as PaddedIntake
+component "Shadow Ledger" as ShadowLedger
+PaddedIntake --> ShadowLedger : weighted dashed route
+@enduml

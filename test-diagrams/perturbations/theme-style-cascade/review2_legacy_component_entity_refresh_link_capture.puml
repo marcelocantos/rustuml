@@ -1,0 +1,30 @@
+@startuml
+<style>
+component {
+  BackgroundColor #E3F2FD
+  LineColor #1565C0
+}
+arrow {
+  LineColor #C62828
+  FontColor #C62828
+  LineThickness 2
+}
+</style>
+component "Early Intake" as EarlyIntake
+component "Middle Queue" as MiddleQueue
+EarlyIntake --> MiddleQueue : captured before legacy
+skinparam componentBorderColor #00695C
+<style>
+component {
+  BackgroundColor #E0F2F1
+  LineColor #00695C
+}
+arrow {
+  LineColor #4527A0
+  FontColor #4527A0
+  LineThickness 3
+}
+</style>
+component "Late Archive" as LateArchive
+MiddleQueue --> LateArchive : captured after legacy
+@enduml

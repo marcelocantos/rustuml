@@ -1,0 +1,19 @@
+@startuml
+left to right direction
+<style>
+component {
+  BackgroundColor #ECEFF1
+  LineColor #455A64
+  FontColor #263238
+  .Critical.Port {
+    BackgroundColor #FFCDD2
+    LineColor #B71C1C
+    FontColor #880E4F
+    LineThickness 2
+  }
+}
+</style>
+component "Critical Adapter" as CriticalAdapter <<critical_port>>
+component "Ordinary Adapter" as OrdinaryAdapter
+CriticalAdapter --> OrdinaryAdapter : selector priority
+@enduml

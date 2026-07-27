@@ -1,0 +1,28 @@
+@startuml
+<style>
+root {
+  FontColor #263238
+  LineColor #455A64
+}
+document {
+  BackgroundColor #FFFDE7
+  Margin 4 9
+}
+state {
+  BackgroundColor #ECEFF1
+  header {
+    FontColor #0D47A1
+    FontStyle bold
+  }
+}
+arrow {
+  LineColor #00695C
+  FontColor #00695C
+}
+</style>
+state "Sparse Cache" as SparseCache
+SparseCache : payload ready
+state "Inherited Relay" as InheritedRelay
+InheritedRelay : payload sent
+SparseCache --> InheritedRelay : sparse document route
+@enduml

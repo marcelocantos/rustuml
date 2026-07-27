@@ -1,0 +1,21 @@
+@startuml
+left to right direction
+<style>
+document {
+  BackgroundColor #E0F2F1
+  Margin 2 8 14
+}
+class {
+  BackgroundColor #FFFFFF
+  LineColor #00796B
+  FontColor #004D40
+}
+arrow {
+  LineColor #00897B
+  FontColor #00695C
+}
+</style>
+class "Three Top" as ThreeTop
+class "Three Bottom" as ThreeBottom
+ThreeTop --> ThreeBottom : three value document margin
+@enduml

@@ -1,0 +1,24 @@
+@startuml
+left to right direction
+<style>
+usecase {
+  BackgroundColor #E3F2FD
+  LineColor #1565C0
+  FontColor #0D47A1
+  LineThickness 2
+  Padding 5 9 13
+  Shadowing 3
+}
+arrow {
+  LineColor #AD1457
+  FontColor #880E4F
+  FontName "Liberation Mono"
+  FontSize 17
+  LineThickness 3
+  LineStyle 5-2
+}
+</style>
+usecase "Channel Source" as ChannelSource
+usecase "Channel Sink" as ChannelSink
+ChannelSource --> ChannelSink : projected arrow font
+@enduml

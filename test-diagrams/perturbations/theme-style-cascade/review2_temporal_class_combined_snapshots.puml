@@ -1,0 +1,32 @@
+@startuml
+left to right direction
+<style>
+class {
+  BackgroundColor #E8EAF6
+  LineColor #3949AB
+  FontColor #283593
+}
+arrow {
+  LineColor #C62828
+  FontColor #C62828
+  LineThickness 2
+}
+</style>
+class "Initial Compass" as InitialCompass
+class "Middle Beacon" as MiddleBeacon
+InitialCompass --> MiddleBeacon : early combined snapshot
+<style>
+class {
+  BackgroundColor #F1F8E9
+  LineColor #558B2F
+  FontColor #33691E
+}
+arrow {
+  LineColor #1565C0
+  FontColor #1565C0
+  LineThickness 3
+}
+</style>
+class "Final Harbor" as FinalHarbor
+MiddleBeacon --> FinalHarbor : late combined snapshot
+@enduml

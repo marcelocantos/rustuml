@@ -1,0 +1,20 @@
+@startuml
+left to right direction
+<style>
+component {
+  BackgroundColor #E1F5FE
+  LineColor #0277BD
+  FontColor #01579B
+}
+</style>
+component "Ingress Pearl" as IngressPearl
+<style>
+component {
+  BackgroundColor #F3E5F5
+  LineColor #6A1B9A
+  FontColor #4A148C
+}
+</style>
+component "Ledger Plum" as LedgerPlum
+IngressPearl --> LedgerPlum : component epochs
+@enduml
