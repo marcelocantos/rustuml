@@ -1,0 +1,15 @@
+@startuml
+skinparam state {
+  BackgroundColor white
+  ' state G5 {
+  ' H5 : skin-only
+}
+state V5
+note right of V5
+state G5 {
+G5 --> H5
+N5 : note-only
+end note
+[*] --> V5
+V5 --> [*]
+@enduml

@@ -1,0 +1,197 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-parser-pass-entity-order",
+  "reviewer": {
+    "task_id": "codex-desktop-task-019ee369-54e2-7203-afce-ddde7bfe1723-independent-checker-state-parser-pass-entity-order",
+    "model": "OpenAI GPT-5 Codex"
+  },
+  "account_commit": "b0070b4c2f355b7d450d8730f427bf932a82844c",
+  "prior_account_commits": [
+    "78eda66dcf96e0d724a28509363f7abaf73558a2",
+    "f787292b63f820717e3cf01f00832c01eb2487fd"
+  ],
+  "implementation_commit": "bbf79ea11d8e48f8a5947866d85f96e739682055",
+  "implementation_parent": "371deb0834230a90a9a90093745ca407861b160c",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar": {
+    "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+  },
+  "snapshot": "/private/tmp/rustuml-state-parser-bbf79ea1.qmDI5A",
+  "commands": [
+    "bullseye_startup_context cwd=/Users/marcelo/work/github.com/marcelocantos/rustuml recent_days=14",
+    "bullseye_frontier cwd=/Users/marcelo/work/github.com/marcelocantos/rustuml",
+    "cat /Users/marcelo/.claude/rust.md",
+    "git rev-parse bbf79ea1 bbf79ea1^ b0070b4c 78eda66d f787292b",
+    "git merge-base --is-ancestor b0070b4c bbf79ea1",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/command/PSystemCommandFactory.java",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/statediagram/StateDiagram.java",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/statediagram/command/CommandCreateState.java",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/statediagram/command/CommandLinkStateCommon.java",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/statediagram/command/CommandAddField.java",
+    "git grep -n -A 70 -B 20 quarkInContextSafe 71806a23780b04a5ccde2f8ceb5121edad5eb711 -- src/main/java/net/atmp/CucaDiagram.java",
+    "git show --no-ext-diff --unified=80 bbf79ea1 -- crates/rustuml-parser/src/parse/state.rs",
+    "git diff --check bbf79ea1^ bbf79ea1",
+    "git diff bbf79ea1^ bbf79ea1 -- crates/rustuml-parser/src/parse/state.rs | rg fixture/output-fitting patterns",
+    "JAVA_TOOL_OPTIONS=-Djava.awt.headless=true java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/state-parser-pass-entity-order/review_*.puml",
+    "xmllint --noout test-diagrams/perturbations/state-parser-pass-entity-order/review_*.svg",
+    "rg -n 'Syntax Error|Some diagram description contains errors|<title>Error|error' test-diagrams/perturbations/state-parser-pass-entity-order/review_*.svg",
+    "find test-diagrams -type f -name '*.puml' -exec shasum -a 256 {} +",
+    "git archive --format=tar --output=/private/tmp/rustuml-state-parser-bbf79ea1.tar bbf79ea1",
+    "tar -xf /private/tmp/rustuml-state-parser-bbf79ea1.tar -C /private/tmp/rustuml-state-parser-bbf79ea1.qmDI5A",
+    "cp -R test-diagrams/golden/. /private/tmp/rustuml-state-parser-bbf79ea1.qmDI5A/test-diagrams/golden/",
+    "copy the seven fresh review_ pairs into the immutable snapshot",
+    "CARGO_TARGET_DIR=/Users/marcelo/work/github.com/marcelocantos/rustuml/target cargo build -p rustuml-oracle --example diff_one --release",
+    "run diff_one --no-oracle for all seven fresh pairs, all five maker pairs, state_composite_transition_into, edge_state_choice, edge_state_choice_fork_join, and edge_state_fork_join",
+    "run diff_one --no-oracle --print-rust and compare data-qualified-name values for every failing state-parser-pass-entity-order pair",
+    "CARGO_TARGET_DIR=/Users/marcelo/work/github.com/marcelocantos/rustuml/target cargo test -p rustuml-parser --release",
+    "cargo fmt --check",
+    "CARGO_TARGET_DIR=/Users/marcelo/work/github.com/marcelocantos/rustuml/target cargo clippy -p rustuml-parser --all-targets --release -- -D warnings",
+    "CARGO_TARGET_DIR=/Users/marcelo/work/github.com/marcelocantos/rustuml/target cargo test --test golden_no_oracle --release -- --nocapture",
+    "CARGO_TARGET_DIR=/Users/marcelo/work/github.com/marcelocantos/rustuml/target cargo test -p rustuml-oracle --test parity_perturbations --release -- --nocapture",
+    "CARGO_TARGET_DIR=/Users/marcelo/work/github.com/marcelocantos/rustuml/target cargo test -p rustuml-oracle --test harness_guards --release -- --nocapture"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/state-parser-pass-entity-order/renamed_short_collision.puml",
+      "golden": "test-diagrams/perturbations/state-parser-pass-entity-order/renamed_short_collision.svg",
+      "axes": [
+        "preserved maker fixture",
+        "transition before nested explicit declaration",
+        "short renamed labels"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-parser-pass-entity-order/short_description_collision.puml",
+      "golden": "test-diagrams/perturbations/state-parser-pass-entity-order/short_description_collision.svg",
+      "axes": [
+        "preserved maker fixture",
+        "transition before nested description declaration",
+        "short renamed labels"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-parser-pass-entity-order/renamed_late_nested_declarations.puml",
+      "golden": "test-diagrams/perturbations/state-parser-pass-entity-order/renamed_late_nested_declarations.svg",
+      "axes": [
+        "preserved maker fixture",
+        "long renamed labels",
+        "late nested explicit declaration"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-parser-pass-entity-order/description_sibling_concurrent_controls.puml",
+      "golden": "test-diagrams/perturbations/state-parser-pass-entity-order/description_sibling_concurrent_controls.svg",
+      "axes": [
+        "preserved maker fixture",
+        "long renamed labels",
+        "description declaration",
+        "ordinary sibling reuse and concurrent distinct-name control"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-parser-pass-entity-order/root_quark_nested_reuse_control.puml",
+      "golden": "test-diagrams/perturbations/state-parser-pass-entity-order/root_quark_nested_reuse_control.svg",
+      "axes": [
+        "preserved maker fixture",
+        "root quark reused from nested declaration",
+        "no reparenting"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-parser-pass-entity-order/review_late_nested_count_topology.puml",
+      "golden": "test-diagrams/perturbations/state-parser-pass-entity-order/review_late_nested_count_topology.svg",
+      "axes": [
+        "fresh transition before later nested declaration",
+        "renamed labels",
+        "changed child count",
+        "fanout topology"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-parser-pass-entity-order/review_late_description_order.puml",
+      "golden": "test-diagrams/perturbations/state-parser-pass-entity-order/review_late_description_order.svg",
+      "axes": [
+        "fresh transition before later nested description",
+        "multiple description rows",
+        "renamed entry and exit states"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-parser-pass-entity-order/review_pseudostate_declaration_order.puml",
+      "golden": "test-diagrams/perturbations/state-parser-pass-entity-order/review_pseudostate_declaration_order.svg",
+      "axes": [
+        "fresh source use before declaration",
+        "choice fork and join kinds",
+        "declaration reordering",
+        "changed link count"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-parser-pass-entity-order/review_root_quark_no_reparent.puml",
+      "golden": "test-diagrams/perturbations/state-parser-pass-entity-order/review_root_quark_no_reparent.svg",
+      "axes": [
+        "fresh root quark reused by nested composite declaration",
+        "no reparenting",
+        "changed child count",
+        "fanout topology"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-parser-pass-entity-order/review_sibling_reuse_concurrent_control.puml",
+      "golden": "test-diagrams/perturbations/state-parser-pass-entity-order/review_sibling_reuse_concurrent_control.svg",
+      "axes": [
+        "fresh transition-created ordinary sibling reuse",
+        "valid concurrent regions with distinct names",
+        "changed nesting and path lengths"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-parser-pass-entity-order/review_note_skinparam_body_control.puml",
+      "golden": "test-diagrams/perturbations/state-parser-pass-entity-order/review_note_skinparam_body_control.svg",
+      "axes": [
+        "fresh state-like multiline note text",
+        "state-like commented skinparam block text",
+        "negative phantom-state control"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-parser-pass-entity-order/review_note_prefix_description_collision.puml",
+      "golden": "test-diagrams/perturbations/state-parser-pass-entity-order/review_note_prefix_description_collision.svg",
+      "axes": [
+        "fresh valid state identifier beginning with note",
+        "transition before later nested description declaration",
+        "command-recognition boundary"
+      ],
+      "result": "fail"
+    }
+  ],
+  "findings": [
+    "The immutable implementation under review is bbf79ea11d8e48f8a5947866d85f96e739682055. The active amended account b0070b4c2f355b7d450d8730f427bf932a82844c and its two prior account commits are ancestors of the implementation. Because unrelated sequence files changed in the shared worktree during review, all revision-sensitive checks were repeated in /private/tmp/rustuml-state-parser-bbf79ea1.qmDI5A, created by git archive from exactly bbf79ea1 and populated only with the tracked golden corpus and this checker's seven fresh review_ pairs.",
+    "The PlantUML checkout is exactly 71806a23780b04a5ccde2f8ceb5121edad5eb711 and the pinned jar SHA-256 is c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45. Java source supports the account's central model: PSystemCommandFactory.createSystem rewinds for StateDiagram's parser passes, CommandAddField is eligible only in ParserPass.ONE, CommandLinkStateCommon is eligible only in ParserPass.TWO, state creation establishes quarks before links, and CucaDiagram.quarkInContextSafe(true, name) reuses a sole existing short-name quark.",
+    "Static inspection found no production golden-data reads, include_str/include_bytes fixture embedding, fixture names, label-text conditionals, per-count ladders, coordinate-keyed SVG surgery, comparator changes, guard changes, or new layout constants in bbf79ea1. git diff --check passes. The new source_line == 0 branches are first-use sentinels tied to the prepass reset, not source-line fixture keys.",
+    "The seven fresh PlantUML sources are valid under the pinned Java jar, their SVGs are well-formed under xmllint and contain no PlantUML error marker. Their SHA-256 hashes occur exactly once across the complete golden and perturbation source corpus, so they are source-unique from prior inputs and one another.",
+    "Exact no-oracle controls pass for state_composite_transition_into, edge_state_choice, edge_state_choice_fork_join, edge_state_fork_join, renamed_short_collision, and short_description_collision. The fresh choice/fork/join declaration-order matrix and the isolated state-like note/skinparam body control also pass.",
+    "The two long-name maker failures remain failures and are not called passes. renamed_late_nested_declarations has exactly the same six data-qualified names in Java and Rust, including HarborShell731.DeferredBay731 and its child/pseudostates, but Rust adds composite envelope spacing: Java is 236x512 while Rust is 256x544 and nested contents shift by 8 or 16 pixels. description_sibling_concurrent_controls preserves the identity claims RootAnchor947.DeferredRelay947, sole OrdinaryCopper947.SharedNode947 reuse, and distinct ParallelShell947.CONC2.RegionNodeB947; its divergent cluster flattening, pseudo-state image selection, DOM order, and 706x563 versus 1338x310 canvas are renderer composition failures outside this parser identity mechanism.",
+    "The fresh late nested-count and late description cases likewise preserve Java's complete data-qualified-name sets, including B0.C0 and O1.D1, but fail exact comparison through the same composite envelope geometry. The fresh root-reuse case preserves R3.A3, R3.B3, and R3.C3 beneath root R3 without reparenting, while the fresh sibling/concurrent case preserves one P4.Q4 identity and distinct C4.CONC2 children; their remaining differences are group-image and pseudo-state rendering failures. The preserved root_quark_nested_reuse_control fails for the same renderer classification reason. These failures still prevent acceptance under the requested all-fresh-exact rule, but they do not disprove the corresponding parser identities.",
+    "review_note_prefix_description_collision is a direct in-scope counterexample. Java's CommandAddField grammar accepts `noteworthy : late detail` as a state field command in pass one and creates O6.noteworthy before the earlier textual transition executes in pass two. Rust predeclare_state_structure tests trimmed.starts_with(\"note\") before try_state_description, so it discards the legitimate state description as note syntax. The pinned Java SVG contains O6.noteworthy; Rust contains root noteworthy. This falsifies the claimed pass-one command-recognition model independently of all renderer limitations.",
+    "At exact bbf79ea1, cargo test -p rustuml-parser --release passes 504 unit tests plus 19 error-path integration tests, cargo fmt --check passes, and cargo clippy -p rustuml-parser --all-targets --release -- -D warnings passes.",
+    "At exact bbf79ea1, golden_no_oracle passes its ratchet at 11056/11251 eligible pairs with state 886/901, sequence 1411/1411, edge-cases 712/777, rendering 80/98, and skinparam 401/410. This broad corpus gain does not cover the fresh note-prefix counterexample.",
+    "The exact-snapshot parity_perturbations run fails on five fresh state-parser-pass-entity-order inputs, three preserved maker inputs for this mechanism, and eleven already-preserved inputs from rejected sequence-inline-arrow-style, state-arrow-style-isolation, state-parallel-transition-route-identity, and state-recursive-group-simplification reviews.",
+    "With this review file copied into the exact snapshot, harness_guards passes 5/6: parity_review_paths_reject_traversal, comparator_constants_frozen, decimal_literal_ratchet, no_golden_data_embedded_in_shipping_crates, and error_golden_census_is_frozen are green. parity_review_records_are_complete is the sole failure. It reports this review's rejected latest verdict and eight failing perturbation entries, plus exact pre-existing problems: state-arrow-style-isolation review-5 has too few command strings, a rejected latest verdict, and three noncanonical failing result values; sequence-inline-arrow-style has a rejected latest verdict and three failing entries; skinparam-stereotype-qualifier-identity has no independent checker review; state-parallel-transition-route-identity has a rejected latest verdict and three failing entries; state-autonomous-stereotype-styles has a rejected latest verdict and one failing entry; state-recursive-group-simplification has a rejected latest verdict and two failing entries. No comparator, decimal, golden-data, error-census, path-traversal, schema, or unnamed-pair violation is attributed to this state-parser review.",
+    "Verdict is rejected for state-parser-pass-entity-order at bbf79ea1. The implementation fixes the original corpus case and the short maker controls, and several exact failures are causally outside parser identity, but the valid `noteworthy` held-out proves that the structural prepass does not yet recognize the same pass-one command language as Java."
+  ],
+  "verdict": "rejected"
+}

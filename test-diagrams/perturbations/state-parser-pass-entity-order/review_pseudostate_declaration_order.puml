@@ -1,0 +1,10 @@
+@startuml
+[*] --> C2
+C2 --> F2
+F2 --> J2
+C2 --> J2 : bypass
+state J2 <<join>>
+state C2 <<choice>>
+state F2 <<fork>>
+J2 --> [*]
+@enduml

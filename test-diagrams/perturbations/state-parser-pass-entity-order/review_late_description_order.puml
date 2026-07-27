@@ -1,0 +1,10 @@
+@startuml
+S1 --> D1 : enter
+state S1
+state O1 {
+  D1 : late one
+  D1 : late two
+}
+D1 --> T1 : exit
+state T1
+@enduml

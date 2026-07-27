@@ -1,0 +1,15 @@
+@startuml
+A0 --> C0 : enter
+state A0
+state B0 {
+  state C0 {
+    [*] --> D0
+    D0 --> E0
+    D0 --> F0
+    E0 --> [*]
+    F0 --> [*]
+  }
+}
+C0 --> Z0 : leave
+state Z0
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+A6 --> noteworthy : enter
+state A6
+state O6 {
+  noteworthy : late detail
+}
+noteworthy --> Z6 : leave
+state Z6
+@enduml
