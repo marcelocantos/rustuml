@@ -1,0 +1,10 @@
+@startuml
+state RootSwitch <<choice>>
+
+[*] --> RootIntake
+RootIntake --> RootSwitch
+RootSwitch --> RootApproved : [pass]
+RootSwitch --> RootDeferred : [pause]
+RootApproved --> [*]
+RootDeferred --> [*]
+@enduml

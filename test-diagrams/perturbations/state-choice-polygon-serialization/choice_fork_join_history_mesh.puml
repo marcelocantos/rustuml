@@ -1,0 +1,20 @@
+@startuml
+state ResilienceBay {
+  state RecallMark <<history>>
+  state SplitRail <<fork>>
+  state DecideRail <<choice>>
+  state MergeRail <<join>>
+
+  [*] --> RecallMark
+  RecallMark --> SplitRail
+  SplitRail --> AssessNorth
+  SplitRail --> AssessSouth
+  AssessNorth --> DecideRail
+  AssessSouth --> MergeRail
+  DecideRail --> MergeRail : [approve]
+  DecideRail --> AssessNorth : [recheck]
+  MergeRail --> [*]
+}
+[*] --> ResilienceBay
+ResilienceBay --> [*]
+@enduml

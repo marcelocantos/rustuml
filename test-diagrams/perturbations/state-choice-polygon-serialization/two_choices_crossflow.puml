@@ -1,0 +1,18 @@
+@startuml
+state SortingDeck {
+  state FirstGate <<choice>>
+  state SecondGate <<choice>>
+
+  [*] --> Intake
+  Intake --> FirstGate
+  FirstGate --> BlueQueue : [blue]
+  FirstGate --> SecondGate : [silver]
+  BlueQueue --> SecondGate
+  SecondGate --> Dispatch : [send]
+  SecondGate --> RetryQueue : [retry]
+  RetryQueue --> FirstGate
+  Dispatch --> [*]
+}
+[*] --> SortingDeck
+SortingDeck --> [*]
+@enduml

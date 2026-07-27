@@ -1,0 +1,18 @@
+@startuml
+state TransitCabinet {
+  state AmberJunction <<choice>>
+
+  [*] --> InletNorth
+  [*] --> InletSouth
+  InletNorth --> AmberJunction : calibrate
+  InletSouth --> AmberJunction : recover
+  AmberJunction --> HarborReady : [green]
+  AmberJunction --> HarborWait : [yellow]
+  AmberJunction --> HarborReject : [red]
+  HarborReady --> [*]
+  HarborWait --> [*]
+  HarborReject --> [*]
+}
+[*] --> TransitCabinet
+TransitCabinet --> [*]
+@enduml

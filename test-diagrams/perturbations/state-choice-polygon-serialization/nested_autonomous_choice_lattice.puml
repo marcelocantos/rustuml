@@ -1,0 +1,19 @@
+@startuml
+state Observatory {
+  state InnerVault {
+    state SignalChoice <<choice>>
+
+    [*] --> SensorFeed
+    SensorFeed --> SignalChoice
+    SignalChoice --> ArchiveLane : [archive]
+    SignalChoice --> EscalateLane : [escalate]
+    ArchiveLane --> [*]
+    EscalateLane --> [*]
+  }
+
+  [*] --> InnerVault
+  InnerVault --> [*]
+}
+[*] --> Observatory
+Observatory --> [*]
+@enduml

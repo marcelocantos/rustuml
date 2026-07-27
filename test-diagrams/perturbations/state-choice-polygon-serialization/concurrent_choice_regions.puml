@@ -1,0 +1,22 @@
+@startuml
+state ParallelConsole {
+  --
+  state LeftDecision <<choice>>
+  [*] --> LeftOrigin
+  LeftOrigin --> LeftDecision
+  LeftDecision --> LeftCommit : [yes]
+  LeftDecision --> LeftRepair : [no]
+  LeftCommit --> [*]
+  LeftRepair --> [*]
+  --
+  state RightDecision <<choice>>
+  [*] --> RightOrigin
+  RightOrigin --> RightDecision
+  RightDecision --> RightCommit : [ship]
+  RightDecision --> RightRepair : [hold]
+  RightCommit --> [*]
+  RightRepair --> [*]
+}
+[*] --> ParallelConsole
+ParallelConsole --> [*]
+@enduml

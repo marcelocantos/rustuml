@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-choice-polygon-serialization",
+  "reviewer": {
+    "task_id": "codex-desktop-task-019ee369-54e2-7203-afce-ddde7bfe1723-adversarial-checker",
+    "model": "GPT-5 Codex"
+  },
+  "account_commit": "4531801a01a6db330d4d49f02d2e260eb714817d",
+  "implementation_commit": "33cd6c0e35cb2a8b83d8677e15d5c629f5182ba8",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "git rev-parse HEAD && git merge-base --is-ancestor 4531801a01a6db330d4d49f02d2e260eb714817d 33cd6c0e35cb2a8b83d8677e15d5c629f5182ba8",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "git diff --check 4531801ac7e90f5827230173d5bda9d333fd4081 33cd6c0e35cb2a8b83d8677e15d5c629f5182ba8",
+    "git diff --word-diff=plain 33cd6c0e35cb2a8b83d8677e15d5c629f5182ba8^ 33cd6c0e35cb2a8b83d8677e15d5c629f5182ba8 -- crates/rustuml-render/src/state.rs",
+    "sed -n '71,78p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/image/EntityImageBranch.java",
+    "sed -n '45,78p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/DriverPolygonSvg.java",
+    "sed -n '625,642p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/SvgGraphics.java",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/state-choice-polygon-serialization/*.puml",
+    "xmllint --noout test-diagrams/perturbations/state-choice-polygon-serialization/*.svg",
+    "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"' test-diagrams/perturbations/state-choice-polygon-serialization/*.svg",
+    "shasum -a 256 test-diagrams/perturbations/state-choice-polygon-serialization/*.puml and hash comparison against every test-diagrams/golden/**/*.puml source",
+    "cargo test -p rustuml-render autonomous_choice_uses_java_polygon_coordinate_delimiters --release -- --nocapture",
+    "cargo build -p rustuml --release and target/release/rustuml -tsvg for each generated held-out, followed by polygon points inspection",
+    "cargo test --test parity_perturbations --release -- --nocapture",
+    "cargo test --test golden_no_oracle --release -- --nocapture",
+    "cargo test --test harness_guards --release parity_review_records_are_complete -- --nocapture"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/state-choice-polygon-serialization/renamed_choice_branch_matrix.puml",
+      "golden": "test-diagrams/perturbations/state-choice-polygon-serialization/renamed_choice_branch_matrix.svg",
+      "axes": [
+        "renamed choice node",
+        "multiple incoming branches",
+        "three outgoing branches"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-choice-polygon-serialization/two_choices_crossflow.puml",
+      "golden": "test-diagrams/perturbations/state-choice-polygon-serialization/two_choices_crossflow.svg",
+      "axes": [
+        "two choice nodes",
+        "crossflow and retry topology",
+        "renamed labels"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-choice-polygon-serialization/choice_fork_join_history_mesh.puml",
+      "golden": "test-diagrams/perturbations/state-choice-polygon-serialization/choice_fork_join_history_mesh.svg",
+      "axes": [
+        "choice with fork and join",
+        "history pseudostate",
+        "branch and retry topology"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-choice-polygon-serialization/concurrent_choice_regions.puml",
+      "golden": "test-diagrams/perturbations/state-choice-polygon-serialization/concurrent_choice_regions.svg",
+      "axes": [
+        "two concurrent regions",
+        "choice in each region",
+        "renamed labels"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-choice-polygon-serialization/nested_autonomous_choice_lattice.puml",
+      "golden": "test-diagrams/perturbations/state-choice-polygon-serialization/nested_autonomous_choice_lattice.svg",
+      "axes": [
+        "two autonomous nesting levels",
+        "renamed choice node",
+        "two outgoing branches"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-choice-polygon-serialization/root_choice_serialization_control.puml",
+      "golden": "test-diagrams/perturbations/state-choice-polygon-serialization/root_choice_serialization_control.svg",
+      "axes": [
+        "root-level control",
+        "renamed choice node",
+        "two outgoing branches"
+      ],
+      "result": "pass"
+    }
+  ],
+  "findings": [
+    "The causal account commit is an ancestor of the immutable implementation commit, the implementation was checked at exactly 33cd6c0e35cb2a8b83d8677e15d5c629f5182ba8 before checker evidence was written, and the Java checkout was exactly 71806a23780b04a5ccde2f8ceb5121edad5eb711.",
+    "Java provenance supports the narrow serialization claim. EntityImageBranch.drawU creates the same five diamond vertices, DriverPolygonSvg.draw obtains one flat coordinate array, and SvgGraphics.svgPolygon appends a comma before every coordinate after the first. The Java SVG points attribute therefore contains no space between logical coordinate pairs.",
+    "The production implementation diff changes only the autonomous choice polygon format string from five whitespace-separated x/y pairs to a single comma-delimited ten-coordinate sequence. Its numeric expressions, vertex order, fill, stroke, dimensions, and surrounding layout flow are unchanged. The only other production-commit changes are a focused delimiter test and the state baseline ratchet from 858 to 859.",
+    "All six generated Java SVGs are well-formed XML and contain no Java error page. SHA-256 comparison against the golden source corpus found no duplicate input. Fresh release renders show every autonomous choice polygon uses the intended comma-only sequence, while the root-level control remains unchanged and passes.",
+    "The focused Rust test autonomous_choice_uses_java_polygon_coordinate_delimiters passes. The no-oracle suite is green at 11017/11251 eligible pairs, including state 859/901, so no unrelated golden regression was observed.",
+    "No fixture labels or checker source names occur in the implementation diff. The broader audit found no golden reads, coordinate-keyed SVG surgery, comparator or guard edits, or new layout constants. Existing non-autonomous choice emitters already use the same comma-delimited serialization.",
+    "The complete cargo test --test parity_perturbations --release -- --nocapture run fails on exactly two new held-outs: concurrent_choice_regions.puml and two_choices_crossflow.puml. Both failures preserve comma-only choice polygon points but diverge across group dimensions and translated layout coordinates. The concurrent case is a one-pixel vertical offset throughout both concurrent regions; the two-choice case is a broader horizontal layout divergence. These are not evidence that delimiter serialization changed geometry, but they are valid counterexamples to accepting the mechanism under the held-out perturbation gate.",
+    "Verdict is rejected. The serializer correction is causally supported and passes the simple, nested, pseudostate, and root controls, but the two preserved failures require distinct Java-backed layout accounts before this parity change can be accepted."
+  ],
+  "verdict": "rejected"
+}
