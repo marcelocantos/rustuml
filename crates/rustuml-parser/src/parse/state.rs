@@ -379,6 +379,14 @@ impl StateParser {
                 self.conc_counter += 1;
                 let n = self.conc_counter;
                 frame.current = format!("{}.CONC{}", frame.base, n);
+                if let Some(state) = self.states.iter_mut().find(|state| state.id == frame.base) {
+                    state
+                        .concurrent_regions
+                        .push(crate::diagram::state::ConcurrentRegion {
+                            id: frame.current.clone(),
+                            source_line: self.current_line,
+                        });
+                }
             }
             return Ok(());
         }
@@ -860,11 +868,45 @@ mod tests {
             .unwrap();
         assert_eq!(composite.concurrent_separator, Some('|'));
         assert_eq!(
+            composite
+                .concurrent_regions
+                .iter()
+                .map(|region| region.id.as_str())
+                .collect::<Vec<_>>(),
+            vec!["ParallelHarbor.CONC2"],
+        );
+        assert_eq!(
             d.states
                 .iter()
                 .find(|state| state.label == "Violet")
                 .and_then(|state| state.parent.as_deref()),
             Some("ParallelHarbor.CONC2"),
+        );
+    }
+
+    #[test]
+    fn consecutive_separators_preserve_empty_concurrent_groups() {
+        let d = parse(
+            "state ParallelHarbor {\n\
+             [*] --> Copper\n\
+             --\n\
+             --\n\
+             [*] --> Violet\n\
+             }",
+        );
+
+        let composite = d
+            .states
+            .iter()
+            .find(|state| state.id == "ParallelHarbor")
+            .unwrap();
+        assert_eq!(
+            composite
+                .concurrent_regions
+                .iter()
+                .map(|region| (region.id.as_str(), region.source_line))
+                .collect::<Vec<_>>(),
+            vec![("ParallelHarbor.CONC2", 3), ("ParallelHarbor.CONC3", 4),],
         );
     }
 

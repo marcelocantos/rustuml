@@ -189,6 +189,28 @@ const V_GAP: f64 = 60.0;
 /// vertical bound is already integral, yielding visible x=7 and y=6 origins.
 /// The remaining 14px of the dimension delta trails the painted graph.
 const SVEK_PAINTED_ORIGIN: f64 = 6.0;
+/// Dimension added after `LimitFinder` measures the painted SVEK result.
+///
+/// Java provenance: `SvekResult.calculateDimension` returns
+/// `minMax.getDimension().delta(15, 15)`.
+const SVEK_RESULT_DIMENSION_PAD: f64 = 15.0;
+/// One-pixel frontier adjustment used by Java's primitive bounds.
+///
+/// Java provenance: `LimitFinder.drawRectangle` expands the upper/left edge
+/// by one pixel, while `drawRectangle` and `drawEllipse` stop one pixel inside
+/// the lower/right extent.
+const LIMIT_FINDER_PIXEL_ADJUST: f64 = 1.0;
+/// Vertical text frontier adjustment used by Java's limit finder.
+///
+/// Java provenance: `LimitFinder.drawText` passes `1.5` as the descent-side
+/// safety margin to `TextLimitFinder`.
+const LIMIT_FINDER_TEXT_ADJUST: f64 = 1.5;
+/// Margin encoded in SVEK's Graphviz label box and placement.
+///
+/// Java provenance: `SvekEdge.addVisibilityModifier` wraps ordinary labels in
+/// `TextBlockUtils.withMargin(..., 1, 1)`; Graphviz places that boxed label and
+/// the emitted text begins one pixel inside it.
+const SVEK_EDGE_LABEL_MARGIN: f64 = 1.0;
 const SVEK_ORIGIN_X: f64 = 7.0;
 const SVEK_ORIGIN_Y: f64 = SVEK_PAINTED_ORIGIN;
 const SVEK_TRAILING_PAD: f64 = 14.0;
@@ -1555,7 +1577,7 @@ fn allocate_state_svg_ids(diagram: &StateDiagram, state_ids: &[String]) -> State
 
     enum PassOneEvent<'a> {
         State(&'a str),
-        ConcurrentRegion,
+        ConcurrentRegion(&'a str),
         FloatingNote { index: usize, alias: &'a str },
     }
 
@@ -1568,6 +1590,13 @@ fn allocate_state_svg_ids(diagram: &StateDiagram, state_ids: &[String]) -> State
     let state_sequence_end = diagram.states.len();
     let mut concurrent_regions = std::collections::BTreeMap::<&str, usize>::new();
     for state in &diagram.states {
+        for region in &state.concurrent_regions {
+            concurrent_regions.insert(region.id.as_str(), region.source_line);
+        }
+    }
+    // Preserve compatibility with parsed models predating explicit region
+    // metadata by reconstructing only regions that have a member.
+    for state in &diagram.states {
         let Some(parent) = state.parent.as_deref() else {
             continue;
         };
@@ -1578,19 +1607,19 @@ fn allocate_state_svg_ids(diagram: &StateDiagram, state_ids: &[String]) -> State
         {
             concurrent_regions
                 .entry(parent)
-                .and_modify(|line| *line = (*line).min(state.source_line))
-                .or_insert(state.source_line);
+                .and_modify(|line| *line = (*line).min(state.source_line.saturating_sub(1)))
+                .or_insert(state.source_line.saturating_sub(1));
         }
     }
     let concurrent_region_count = concurrent_regions.len();
-    for (sequence, (_, first_member_line)) in concurrent_regions.into_iter().enumerate() {
+    for (sequence, (region, source_line)) in concurrent_regions.into_iter().enumerate() {
         // Java provenance: `StateDiagram.concurrentState` calls `gotoGroup`
         // for a synthetic `CONC<n>` group during pass one. That hidden group
         // consumes an entity UID before any explicit member in the new region.
         pass_one_events.push((
-            first_member_line.saturating_sub(1),
+            source_line,
             state_sequence_end + sequence,
-            PassOneEvent::ConcurrentRegion,
+            PassOneEvent::ConcurrentRegion(region),
         ));
     }
     let concurrent_sequence_end = state_sequence_end + concurrent_region_count;
@@ -1622,7 +1651,10 @@ fn allocate_state_svg_ids(diagram: &StateDiagram, state_ids: &[String]) -> State
                 entity_ids.push((id.to_string(), format!("ent{pass_one_counter:04}")));
                 pass_one_counter += 1;
             }
-            PassOneEvent::ConcurrentRegion => {
+            PassOneEvent::ConcurrentRegion(id) => {
+                if state_ids.iter().any(|state_id| state_id == id) {
+                    entity_ids.push((id.to_string(), format!("ent{pass_one_counter:04}")));
+                }
                 pass_one_counter += 1;
             }
             PassOneEvent::FloatingNote { index, alias } => {
@@ -1903,6 +1935,7 @@ impl AutonomousPaintedBounds {
 
 struct AutonomousRegion {
     layout: AutonomousScopeLayout,
+    empty_concurrent_state: Option<String>,
 }
 
 struct AutonomousComposite<'a> {
@@ -2041,14 +2074,21 @@ fn autonomous_scope_painted_bounds(
         match shape {
             StateLayoutShape::Circle | StateLayoutShape::Port => {
                 bounds.include(x, y);
-                bounds.include(x + width - 1.0, y + height - 1.0);
+                bounds.include(
+                    x + width - LIMIT_FINDER_PIXEL_ADJUST,
+                    y + height - LIMIT_FINDER_PIXEL_ADJUST,
+                );
             }
             StateLayoutShape::Diamond => {
                 bounds.include(x - POLYGON_LIMIT_FINDER_OVERSCAN_X, y);
                 bounds.include(x + width + POLYGON_LIMIT_FINDER_OVERSCAN_X, y + height);
             }
             StateLayoutShape::Box => {
-                bounds.include(x - 1.0, y - 1.0);
+                bounds.include(x - LIMIT_FINDER_PIXEL_ADJUST, y - LIMIT_FINDER_PIXEL_ADJUST);
+                // `EntityImageState.drawU` paints a full-width title divider,
+                // while `EntityImageSynchroBar.drawU` paints only its filled
+                // rectangle. `LimitFinder.drawLine` therefore reaches the
+                // nominal right edge only for ordinary state boxes.
                 let has_full_width_divider = diagram
                     .states
                     .iter()
@@ -2057,9 +2097,9 @@ fn autonomous_scope_painted_bounds(
                 let max_x = if has_full_width_divider {
                     x + width
                 } else {
-                    x + width - 1.0
+                    x + width - LIMIT_FINDER_PIXEL_ADJUST
                 };
-                bounds.include(max_x, y + height - 1.0);
+                bounds.include(max_x, y + height - LIMIT_FINDER_PIXEL_ADJUST);
             }
         }
 
@@ -2077,9 +2117,12 @@ fn autonomous_scope_painted_bounds(
             let text_height = text_render::label_height(label, STATE_FONT_SIZE);
             bounds.include(
                 x + width / 2.0 - text_width / 2.0,
-                baseline - text_height + 1.5,
+                baseline - text_height + LIMIT_FINDER_TEXT_ADJUST,
             );
-            bounds.include(x + width / 2.0 + text_width / 2.0, baseline + 1.5);
+            bounds.include(
+                x + width / 2.0 + text_width / 2.0,
+                baseline + LIMIT_FINDER_TEXT_ADJUST,
+            );
         }
     }
 
@@ -2141,9 +2184,9 @@ fn autonomous_scope_painted_bounds(
         if let Some(label) = transition.label.as_deref()
             && let Some(label_position) = edge.label
         {
-            let x = quantize_svek_coord(label_position.x) + 1.0;
+            let x = quantize_svek_coord(label_position.x) + SVEK_EDGE_LABEL_MARGIN;
             let baseline = quantize_svek_coord(label_position.y)
-                + 1.0
+                + SVEK_EDGE_LABEL_MARGIN
                 + text_render::label_ascent(label, arrow_font.size as f64);
             let width = text_render::measure_with_family(
                 label,
@@ -2152,8 +2195,11 @@ fn autonomous_scope_painted_bounds(
                 &arrow_font.family,
             );
             let height = text_render::label_height(label, arrow_font.size as f64);
-            bounds.include(x, baseline - height + 1.5);
-            bounds.include(x + width + 1.0, baseline + 1.5);
+            bounds.include(x, baseline - height + LIMIT_FINDER_TEXT_ADJUST);
+            bounds.include(
+                x + width + SVEK_EDGE_LABEL_MARGIN,
+                baseline + LIMIT_FINDER_TEXT_ADJUST,
+            );
         }
     }
 
@@ -2346,8 +2392,8 @@ fn normalize_autonomous_scope(mut scope: AutonomousScopeLayout) -> AutonomousSco
     }
     scope.origin_x = origin_x;
     scope.origin_y = origin_y;
-    scope.width = bounds.max_x - bounds.min_x + 15.0;
-    scope.height = bounds.max_y - bounds.min_y + 15.0;
+    scope.width = bounds.max_x - bounds.min_x + SVEK_RESULT_DIMENSION_PAD;
+    scope.height = bounds.max_y - bounds.min_y + SVEK_RESULT_DIMENSION_PAD;
     scope
 }
 
@@ -2460,7 +2506,10 @@ fn build_autonomous_composite_node<'a>(
 
     Some(AutonomousComposite {
         state: composite,
-        regions: vec![AutonomousRegion { layout }],
+        regions: vec![AutonomousRegion {
+            layout,
+            empty_concurrent_state: None,
+        }],
         children,
         separator: None,
         inner_width,
@@ -2595,6 +2644,14 @@ fn build_one_level_concurrent_node<'a>(
     }
 
     let mut region_scopes = vec![composite.id.clone()];
+    region_scopes.extend(
+        composite
+            .concurrent_regions
+            .iter()
+            .map(|region| region.id.clone()),
+    );
+    // Models serialized before concurrent-region metadata was introduced can
+    // still reconstruct nonempty scopes from their direct members.
     for child in &children {
         let scope = child.parent.as_ref()?;
         if !region_scopes.contains(scope) {
@@ -2632,16 +2689,46 @@ fn build_one_level_concurrent_node<'a>(
                 }
             })
             .collect();
-        let layout = layout_autonomous_scope(
-            diagram,
-            inner_ids,
-            transition_indices,
-            &inner_sizes,
-            arrow_font,
-            None,
-        )?;
+        let empty_concurrent_state =
+            (scope != composite.id && inner_ids.is_empty() && transition_indices.is_empty())
+                .then_some(scope.clone());
+        let layout = if empty_concurrent_state.is_some() {
+            // Java provenance: `GroupMakerState.getImage` checks for an empty
+            // group before its CONCURRENT_STATE branch and returns
+            // `EntityImageState`, whose minimum ordinary-state size is 50x50.
+            AutonomousScopeLayout {
+                ids: vec![scope.clone()],
+                positions: vec![(
+                    scope.clone(),
+                    STATE_MIN_WIDTH / 2.0,
+                    STATE_BOX_HEIGHT / 2.0,
+                    STATE_MIN_WIDTH,
+                    STATE_BOX_HEIGHT,
+                )],
+                cluster_positions: Vec::new(),
+                edge_paths: Vec::new(),
+                transition_layout_edges: std::collections::HashMap::new(),
+                transition_indices: Vec::new(),
+                origin_x: 0.0,
+                origin_y: 0.0,
+                width: STATE_MIN_WIDTH,
+                height: STATE_BOX_HEIGHT,
+                compound_clusters: false,
+                painted_bounds: None,
+            }
+        } else {
+            normalize_autonomous_scope(layout_autonomous_scope(
+                diagram,
+                inner_ids,
+                transition_indices,
+                &inner_sizes,
+                arrow_font,
+                None,
+            )?)
+        };
         regions.push(AutonomousRegion {
-            layout: normalize_autonomous_scope(layout),
+            layout,
+            empty_concurrent_state,
         });
     }
     let separator = composite.concurrent_separator;
@@ -3327,6 +3414,57 @@ fn collect_autonomous_composite_ids(composite: &AutonomousComposite<'_>, ids: &m
     }
 }
 
+fn emit_autonomous_empty_concurrent_state(
+    svg: &mut String,
+    context: &AutonomousRenderContext<'_>,
+    id: &str,
+    offset: (f64, f64),
+) {
+    // Java provenance: `GroupMakerState.getImage` returns `EntityImageState`
+    // for a childless CONCURRENT_STATE group. `EntityImageState` renders its
+    // empty display as one nonbreaking space in the ordinary 50x50 state box.
+    let box_x = offset.0;
+    let box_y = offset.1;
+    write!(
+        svg,
+        r#"<g class="entity" data-qualified-name="{}" id="{}"><rect fill="{}" height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/><line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+        escape_attr(id),
+        autonomous_entity_id(context.entity_ids, id),
+        context.skin.state_fill,
+        fmt_f(STATE_BOX_HEIGHT),
+        context.skin.stroke,
+        context.skin.border_thickness,
+        fmt_f(STATE_MIN_WIDTH),
+        fmt_f(box_x),
+        fmt_f(box_y),
+        context.skin.stroke,
+        context.skin.border_thickness,
+        fmt_f(box_x),
+        fmt_f(box_x + STATE_MIN_WIDTH),
+        fmt_f(box_y + DIVIDER_OFFSET),
+        fmt_f(box_y + DIVIDER_OFFSET),
+    )
+    .unwrap();
+    let label = "\u{00a0}";
+    let text_width = text_render::measure(label, STATE_FONT_SIZE, false);
+    text_render::emit_text(
+        svg,
+        label,
+        &TextBase {
+            x: box_x + (STATE_MIN_WIDTH - text_width) / 2.0,
+            y: box_y + NAME_BASELINE_OFFSET,
+            font_size: STATE_FONT_SIZE as u32,
+            font_family: "sans-serif",
+            fill: &context.skin.text_color,
+            bold: false,
+            italic: false,
+            underline: false,
+            skip_underline: false,
+        },
+    );
+    svg.push_str("</g>");
+}
+
 fn emit_autonomous_composite(
     svg: &mut String,
     context: &AutonomousRenderContext<'_>,
@@ -3439,6 +3577,9 @@ fn emit_autonomous_composite(
     let mut region_offset_y = inner_offset_y;
     for (index, region) in composite.regions.iter().enumerate() {
         let offset = (region_offset_x, region_offset_y);
+        if let Some(id) = region.empty_concurrent_state.as_deref() {
+            emit_autonomous_empty_concurrent_state(svg, context, id, offset);
+        }
         for child in &composite.children {
             if let Some((_, cx, cy, _, _)) = region
                 .layout
@@ -8471,6 +8612,15 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
     // `<composite>.CONC{N+1}` introduced by `--`/`||` separators. Returns just
     // the composite id when there are no regions.
     let region_scopes = |composite_id: &str| -> Vec<String> {
+        let mut scopes = vec![composite_id.to_string()];
+        if let Some(composite) = diagram.states.iter().find(|state| state.id == composite_id) {
+            scopes.extend(
+                composite
+                    .concurrent_regions
+                    .iter()
+                    .map(|region| region.id.clone()),
+            );
+        }
         // Collect every `<composite_id>.CONC{n}` sub-scope referenced by a
         // child state or scoped pseudo-state. The CONC counter is diagram-wide,
         // so a single composite's regions need not use consecutive indices
@@ -8501,8 +8651,11 @@ fn render_composite_with_oracle(diagram: &StateDiagram, orc: &OracleLayout) -> S
             }
         }
         ns.sort_unstable();
-        let mut scopes = vec![composite_id.to_string()];
-        scopes.extend(ns.into_iter().map(|n| format!("{composite_id}.CONC{n}")));
+        for scope in ns.into_iter().map(|n| format!("{composite_id}.CONC{n}")) {
+            if !scopes.contains(&scope) {
+                scopes.push(scope);
+            }
+        }
         scopes
     };
 

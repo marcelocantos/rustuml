@@ -145,6 +145,14 @@ pub enum StateNotePosition {
     Bottom,
 }
 
+/// A synthetic concurrent-state group created by a `--` or `||` separator.
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
+pub struct ConcurrentRegion {
+    pub id: String,
+    /// 1-based source line of the separator that created this group.
+    pub source_line: usize,
+}
+
 /// A state in a state diagram.
 #[derive(Debug, Clone, Default, Serialize, Deserialize)]
 pub struct State {
@@ -183,6 +191,12 @@ pub struct State {
     /// independently-laid-out region images stack vertically or horizontally.
     #[serde(default)]
     pub concurrent_separator: Option<char>,
+    /// Ordered synthetic groups created by this composite's separators.
+    ///
+    /// This records empty regions too; their identity cannot be reconstructed
+    /// from child states or transitions.
+    #[serde(default)]
+    pub concurrent_regions: Vec<ConcurrentRegion>,
     /// Qualified id of the immediately-enclosing composite state, if this
     /// state is nested inside one. `None` for top-level states.
     #[serde(default)]
