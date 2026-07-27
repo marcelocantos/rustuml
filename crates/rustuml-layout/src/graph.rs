@@ -656,6 +656,9 @@ impl LayoutGraph {
     }
 
     /// Adds a measured-label edge bound to ports with an optional dot rank length.
+    // The three label positions, two ports, and minlen are independent Graphviz
+    // edge attributes; grouping them would obscure the call site's mapping.
+    #[allow(clippy::too_many_arguments)]
     pub fn add_edge_with_ports_and_label_sizes_and_minlen(
         &mut self,
         from: &str,
