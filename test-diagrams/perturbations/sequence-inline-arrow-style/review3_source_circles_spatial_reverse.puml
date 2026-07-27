@@ -1,0 +1,10 @@
+@startuml
+participant "West 16201" as West16201
+participant "Middle 16203" as Middle16203
+participant "East 16205" as East16205
+West16201 o-[#C62828,dashed]> Middle16203 : filled source circle left to right
+East16205 o-[#1565C0,dotted]> Middle16203 : filled source circle spatially right to left
+West16201 o-[#2E7D32,dashed]>> East16205 : open source circle left to right
+West16201 <<-[#6A1B9A,dotted]-o East16205 : open source circle with reverse syntax
+Middle16203 <-[#EF6C00]-o East16205 : filled source circle with reverse syntax
+@enduml

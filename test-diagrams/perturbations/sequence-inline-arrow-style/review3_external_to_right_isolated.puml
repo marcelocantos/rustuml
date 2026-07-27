@@ -1,0 +1,9 @@
+@startuml
+autonumber "<b><000000>"
+participant "Egress Right 16601" as Egress16601
+activate Egress16601 #F3E5F5
+activate Egress16601 #E1BEE7
+Egress16601 -[#7B1FA2,dashed]>] : isolated numbered to-right at depth two
+Egress16601 -[#00838F,dotted]>] : deactivation follows this message
+deactivate Egress16601
+@enduml

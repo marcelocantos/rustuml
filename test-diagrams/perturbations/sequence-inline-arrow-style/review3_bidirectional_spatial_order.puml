@@ -1,0 +1,11 @@
+@startuml
+participant "Far West 16901" as FarWest16901
+participant "Near West 16903" as NearWest16903
+participant "Near East 16905" as NearEast16905
+participant "Far East 16907" as FarEast16907
+FarEast16907 <-[#D81B60,dashed]-> FarWest16901 : filled both spatially reversed
+NearEast16905 <<-[#00897B,dotted]->> NearWest16903 : open both spatially reversed
+FarWest16901 <<-[#5E35B1,dashed]->> NearEast16905 : open forward control
+FarEast16907 <-[#6D4C41,bold]-> NearWest16903 : filled reversed shorter span
+NearWest16903 -> NearEast16905 : changed message count control
+@enduml

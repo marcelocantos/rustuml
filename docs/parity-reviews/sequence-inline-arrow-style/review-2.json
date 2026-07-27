@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-inline-arrow-style",
+  "account_commit": "d929684d2cc8c8d0d26d3f95d9875fc9c58eeb09",
+  "implementation_commit": "d9cccb1be5fcde2786dd472566546d64e1905891",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "reviewer": {
+    "task_id": "019fa31d-41d7-7680-8a45-30fb880a6949",
+    "model": "GPT-5 Codex"
+  },
+  "commands": [
+    "git rev-parse HEAD d929684d 71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "git show --format= --no-ext-diff d9cccb1b | rg -n 'include_str|include_bytes|read_to_string|golden|review3|fixture|perturb'",
+    "git diff --check d9cccb1b^ d9cccb1b",
+    "shasum -a 256 /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/sequence-inline-arrow-style/review3_*.puml",
+    "xmllint --noout test-diagrams/perturbations/sequence-inline-arrow-style/review3_*.svg",
+    "rg -n -i 'Syntax Error|NoSuchElementException|Welcome to PlantUML|An error has occured|\\[From string|Assumed diagram type' test-diagrams/perturbations/sequence-inline-arrow-style/review3_*.svg",
+    "shasum -a 256 test-diagrams/perturbations/sequence-inline-arrow-style/review3_*.puml",
+    "cargo build --release --example diff_one -p rustuml-oracle",
+    "target/release/examples/diff_one --no-oracle for every preserved sequence-inline-arrow-style perturbation",
+    "cargo test --test golden_no_oracle --release -- --nocapture",
+    "cargo test -p rustuml-parser --release",
+    "cargo test -p rustuml-render --release",
+    "cargo test -p rustuml-oracle --test parity_perturbations --release -- --nocapture",
+    "cargo fmt --check",
+    "cargo clippy -p rustuml-parser -p rustuml-render --all-targets --release -- -D warnings",
+    "cargo test -p rustuml-oracle --test harness_guards --release -- --nocapture"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review3_page_meta_participant_brackets.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review3_page_meta_participant_brackets.svg",
+      "sha256": "9a3b6f32d5b6234ab656e215d4e45d23e9e195a3a41ffb2199c5aa8e54a3ae94",
+      "axes": [
+        "fresh header footer title and caption bracket text without arrow shafts",
+        "fresh style-looking participant labels",
+        "renamed participants and changed message count"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review3_source_circles_spatial_reverse.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review3_source_circles_spatial_reverse.svg",
+      "sha256": "4cfe568b39da33504f2aea00a79049da37559fc24e567f3f5099ae9022a51448",
+      "axes": [
+        "fresh source circles with filled and open target heads",
+        "fresh left-to-right and spatially right-to-left sources",
+        "canonical reverse arrow syntax",
+        "renamed labels and changed message count"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review3_external_from_left_isolated.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review3_external_from_left_isolated.svg",
+      "sha256": "537449fa8f818ff66bf5b105bd1c772469d0d17962163a2e81bec4c25688529c",
+      "axes": [
+        "isolated FROM_LEFT external direction",
+        "fresh six-digit autonumber width",
+        "inline activation and changed message count"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review3_external_to_left_isolated.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review3_external_to_left_isolated.svg",
+      "sha256": "2fc32aec82d26047c62c48de9981009b09b6dff1176335becfdfa7fb7f7b34b3",
+      "axes": [
+        "isolated TO_LEFT external direction",
+        "fresh six-digit autonumber width",
+        "depth-two sender and inline deactivation"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review3_external_from_right_isolated.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review3_external_from_right_isolated.svg",
+      "sha256": "ee713b4dc2be042b349b75b90166baad110aa5679e0ad4543ae01fb5474bf0d0",
+      "axes": [
+        "isolated FROM_RIGHT external direction",
+        "fresh six-digit autonumber width",
+        "inline activation and changed message count"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review3_external_to_right_isolated.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review3_external_to_right_isolated.svg",
+      "sha256": "60e3df501cfb27d4415901a33ffab32cb1d236875878fecf8765419b98141590",
+      "axes": [
+        "isolated TO_RIGHT external direction",
+        "fresh angle-bracket six-digit autonumber width",
+        "depth-two sender and immediately-following standalone deactivation"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review3_external_four_way_combined.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review3_external_four_way_combined.svg",
+      "sha256": "28a41fc90398fcce6701066b4181ff8e90f5554fbe5500f196bcc72f3cae1ec9",
+      "axes": [
+        "FROM_LEFT TO_LEFT FROM_RIGHT and TO_RIGHT in one diagram",
+        "fresh literal-prefixed six-digit autonumber width",
+        "source-circle width control",
+        "renamed participants and changed message count"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review3_nested_activation_deactivation.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review3_nested_activation_deactivation.svg",
+      "sha256": "751739504655a21f6dc7deb25a3d0c53afacb7c04a9377eabc32ff6013996d43",
+      "axes": [
+        "nested inline and standalone activations",
+        "inline deactivation",
+        "immediately-following standalone deactivation",
+        "renamed participants and changed message count"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review3_bidirectional_spatial_order.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review3_bidirectional_spatial_order.svg",
+      "sha256": "dd51df259d028f2f78a784a5349f277ac8d5d46282efc2fff62e32272705f703",
+      "axes": [
+        "fresh filled and open bidirectional dressing order",
+        "spatially reversed long and short spans",
+        "renamed labels and changed participant and message counts"
+      ],
+      "result": "pass"
+    }
+  ],
+  "findings": [
+    "The immutable implementation is d9cccb1be5fcde2786dd472566546d64e1905891 and its durable account amendment d929684d2cc8c8d0d26d3f95d9875fc9c58eeb09 predates it. The Java checkout is exactly 71806a23780b04a5ccde2f8ceb5121edad5eb711, and the pinned oracle JAR SHA-256 is c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45.",
+    "Static inspection found no shipping golden reads or embedding, fixture or review-name conditions, participant-label conditions, message-count ladders, or coordinate-keyed SVG surgery. The source-circle constants have adjacent ComponentRoseArrow provenance, and git diff --check is clean.",
+    "All nine fresh Java sources produce well-formed SEQUENCE SVGs at the pinned revision. No source produces a syntax or PlantUML error page.",
+    "Every one of the eleven perturbations preserved before this review now passes exactly. This independently confirms that d9cccb1b repairs the four review.json counterexamples and retains the previously passing maker and checker controls.",
+    "Only two of nine fresh review3 perturbations pass: isolated FROM_LEFT and the changed-count bidirectional spatial-order matrix. Seven fresh valid perturbations fail strict structural comparison.",
+    "The page-meta and participant-bracket matrix dispatches as SEQUENCE and its participant/message structure matches. Its only divergence is the known page-chrome baseline: Java title and caption text are 0.7988 pixels lower. This is not evidence against the corrected dispatch recognizer, but the preserved input honestly remains a failing exact perturbation.",
+    "The source-circle matrix directly rejects the decoration model. The ordinary open left-to-right source-circle shaft begins four pixels too early, and canonical reverse forms A <<-o B and A <-o B lose or reorder circle and head elements; expected 60 structural elements versus 57. Modeling source_circle only when the raw arrow token starts with o does not cover Java's reverseDefine decoration ownership.",
+    "The isolated FROM_RIGHT matrix is 94 pixels too narrow, with both boundary endpoints stopping at x=324.4727 instead of Java's x=418.4473. The isolated TO_LEFT matrix is 263 pixels too narrow and shifts the entire participant/lifeline from Java x=335.7021 to x=73. The isolated TO_RIGHT matrix is 64 pixels too narrow on its first arrow and also renders the valid autonumber format <000001> as plain 1.",
+    "The four-way external matrix still shortens the shared right boundary by 17.3735 pixels and starts its source-circle shaft four pixels too early. FROM_LEFT passing in isolation does not generalize to all four MessageExoType directions or their combined constraint envelope.",
+    "The nested activation matrix differs on the second ordinary message: Java departs the active Worker segment at x=242.2651 while Rust departs at x=232.2651. The remainder, including inline and immediately-following standalone deactivation paths, aligns, but active-source live-segment selection remains incomplete.",
+    "The product no-oracle gate passes at 11057/11251 eligible pairs, with sequence 1411/1411. Parser tests pass at 512 unit plus 19 error-path tests; renderer tests pass at 699. cargo fmt --check and release clippy with warnings denied pass.",
+    "The global parity_perturbations gate fails, including these seven fresh sequence counterexamples and preserved failures from other rejected mechanisms. The harness guard is expected to remain red because this latest checker verdict is rejected; its other mechanical checks are reported separately.",
+    "Verdict is rejected for d9cccb1b. It is a non-fixture-shaped improvement and closes every earlier sequence counterexample, but fresh valid reverse source-circle, external-direction constraint, autonumber-format, and active-source activation combinations disprove the claimed complete generative model."
+  ],
+  "verdict": "rejected"
+}

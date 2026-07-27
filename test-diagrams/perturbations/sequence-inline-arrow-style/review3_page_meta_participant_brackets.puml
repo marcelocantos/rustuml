@@ -1,0 +1,12 @@
+@startuml
+header Pipeline [dotted,#455A64] ox without a shaft
+footer Audit [hidden] xo without a shaft
+title Sequence [bold,#6A1B9A] bracket ownership
+caption Page [dashed,#00695C] metadata
+participant "Gateway [hidden]: 16101" as Gateway16101
+participant "Ledger [dotted,#455A64]: 16103" as Ledger16103
+participant "Notifier [bold,#6A1B9A]: 16105" as Notifier16105
+Gateway16101 -> Ledger16103 : plain bracket-label message
+Ledger16103 -[#00897B,dashed]> Notifier16105 : styled bracket-label message
+Notifier16105 --> Gateway16101 : changed count control
+@enduml

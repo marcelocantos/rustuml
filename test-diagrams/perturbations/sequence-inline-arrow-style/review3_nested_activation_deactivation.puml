@@ -1,0 +1,16 @@
+@startuml
+hide footbox
+participant "Caller 16801" as Caller16801
+participant "Worker 16803" as Worker16803
+participant "Store 16805" as Store16805
+Caller16801 -> Worker16803 ++ #E3F2FD : inline worker activation
+Worker16803 -> Store16805 ++ #E8F5E9 : inline store activation
+activate Worker16803 #BBDEFB
+activate Worker16803 #90CAF9
+Worker16803 -[#7B1FA2,dashed]>] -- : inline worker deactivation
+Worker16803 -[#00838F,dotted]>] : standalone deactivation follows
+deactivate Worker16803
+Store16805 --> Worker16803 : return after nested changes
+deactivate Store16805
+Worker16803 --> Caller16801 : changed-count tail
+@enduml

@@ -1,0 +1,11 @@
+@startuml
+autonumber "<b>EX-000000"
+participant "West Relay 16701" as WestRelay16701
+participant "East Relay 16703" as EastRelay16703
+[-[#1565C0,dashed]> WestRelay16701 : combined from-left
+WestRelay16701 -[#2E7D32,dotted]>[ : combined to-left
+]--[#EF6C00,dotted]> EastRelay16703 : combined from-right
+EastRelay16703 -[#6A1B9A,dashed]>] : combined to-right
+WestRelay16701 o-[#C62828]>> EastRelay16703 : source-circle width control
+EastRelay16703 --> WestRelay16701 : changed message count control
+@enduml

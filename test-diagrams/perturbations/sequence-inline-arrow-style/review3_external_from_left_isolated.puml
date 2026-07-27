@@ -1,0 +1,7 @@
+@startuml
+autonumber "<b>[000000]"
+participant "Ingress Left 16301" as Ingress16301
+[-[#00897B,dashed]> Ingress16301 : isolated numbered from-left message
+[-[#C62828,dotted]> Ingress16301 ++ #E0F2F1 : activating from-left message
+Ingress16301 -> Ingress16301 : changed-count control
+@enduml
