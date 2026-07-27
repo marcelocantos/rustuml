@@ -3,8 +3,9 @@
   "mechanism": "state-composite-entry-exit-frontier",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "java_locations": [
+    "net.sourceforge.plantuml.abel.Entity#isAutarkic",
     "net.sourceforge.plantuml.dot.CucaDiagramSimplifierState#simplify",
-    "net.sourceforge.plantuml.svek.GroupMakerState#getImage",
+    "net.sourceforge.plantuml.svek.ClusterDotString#printInternal",
     "net.sourceforge.plantuml.svek.GeneralImageBuilder#createEntityImage",
     "net.sourceforge.plantuml.svek.SvekNode#appendLabelHtmlSpecialForPort",
     "net.sourceforge.plantuml.abel.Link#hasEntryPoint",
@@ -12,14 +13,14 @@
     "net.sourceforge.plantuml.svek.FrontierCalculator#FrontierCalculator"
   ],
   "rust_locations": [
-    "crates/rustuml-render/src/state.rs::build_autonomous_composite_node",
-    "crates/rustuml-render/src/state.rs::build_autonomous_composite",
-    "crates/rustuml-render/src/state.rs::layout_autonomous_scope",
+    "crates/rustuml-render/src/state.rs::render_non_autarkic_root_clusters",
+    "crates/rustuml-render/src/state.rs::emit_root_state_cluster",
+    "crates/rustuml-render/src/state.rs::emit_autonomous_scope_entities",
     "crates/rustuml-layout/src/graph.rs::LayoutGraph"
   ],
-  "invariant": "An autarkic composite remains an independently solved state image when it contains entry or exit border points. Those points participate in the inner Graphviz topology as 12-by-12 port nodes, entry-point links do not create ordinary rank-same constraints, and the visible composite frontier is derived from normal interior boxes plus the border-point centers.",
-  "causal_divergence": "Rust's autonomous-composite builders explicitly reject every EntryPoint and ExitPoint state. The diagram then falls through to the flat renderer, which emits the composite as an ordinary entity and solves its children in the root graph. Java instead keeps the group autarkic, selects EntityImageStateBorder for the non-normal leaves, solves the group's pure inner links through GroupMakerState, and applies Cluster.manageEntryExitPoint plus FrontierCalculator before wrapping that inner image. The missing group-local border-node and frontier model causes the repeated cluster-versus-entity structural divergence across the entry/exit fixture matrix.",
-  "planned_change": "Extend the autonomous state model so entry and exit leaves remain inside their owning composite, carry PlantUML's border-port Graphviz semantics, and influence the solved composite frontier through a Rust port of the FrontierCalculator rules. Preserve Java's entry-point link constraint behavior in graph construction, then render the resulting group-local entities and links through the existing autonomous-composite emission path.",
+  "invariant": "A composite containing an entry or exit border point is non-autarkic and remains a live cluster in the root Graphviz graph. Input border points occupy the cluster's source rank, outputs occupy its sink rank, both use 12-by-12 RECTANGLE_PORT nodes, entry-point links bypass ordinary rank-same handling, and the visible cluster frontier is derived from normal interior boxes plus the border-point centers.",
+  "causal_divergence": "Java Entity.isAutarkic explicitly rejects groups containing non-normal leaves, so CucaDiagramSimplifierState leaves an entry/exit composite in the root GraphvizImageBuilder. ClusterDotString then constructs source and sink ranks for EntityImageStateBorder nodes, and Cluster.manageEntryExitPoint applies FrontierCalculator to move the visible boundary through those points. Rust correctly excludes entry/exit groups from autonomous simplification, but render_non_autarkic_root_clusters only accepts two or more top-level composites containing normal states. A one-composite entry/exit diagram therefore falls through to the flat renderer, which emits the composite and its children as ordinary entities. The missing live-cluster border-rank and frontier model causes the repeated cluster-versus-entity structural divergence across the entry/exit fixture matrix.",
+  "planned_change": "Generalize the non-autarkic root-cluster renderer to retain one or more entry/exit composites in the root LayoutGraph. Register border leaves with PlantUML's 12-by-12 port-node geometry, reproduce ClusterDotString's source/sink rank and entry-point edge-constraint rules, then port FrontierCalculator's boundary derivation before emitting cluster chrome, border symbols, ordinary members, and root links.",
   "perturbation_axes": [
     "entry/exit cardinality and connection topology",
     "declaration order plus composite and interior label dimensions"
