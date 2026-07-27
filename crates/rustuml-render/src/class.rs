@@ -2030,6 +2030,7 @@ fn render_with_oracle_uid_origin(
     // through `UHidden.HIDDEN`. Their geometry therefore remains in layout and
     // in LimitFinder's measured canvas even though no SVG elements are emitted.
     let hidden = lifecycle_entities(diagram, false);
+    let package_render = package_render_model(diagram);
 
     if diagram.entities.is_empty() {
         // Java `GraphvizImageBuilder.buildImage` takes its degenerate image
@@ -2038,7 +2039,13 @@ fn render_with_oracle_uid_origin(
         if diagram.notes.len() == 1 {
             return render_notes_only(diagram, cs, oracle);
         }
-        if diagram.notes.is_empty() {
+        if diagram.notes.is_empty()
+            && !package_render
+                .roles
+                .iter()
+                .copied()
+                .any(PackageRenderRole::is_rendered)
+        {
             let has_meta = diagram.meta.header.is_some()
                 || diagram.meta.footer.is_some()
                 || diagram.meta.legend.is_some()
@@ -2166,6 +2173,7 @@ fn render_with_oracle_uid_origin(
     source_nodes.sort_by_key(|&(source_line, is_note, idx)| (source_line, is_note, idx));
     let mut entity_layout_slots = vec![0; diagram.entities.len()];
     let mut floating_layout_slots = vec![None; diagram.notes.len()];
+    let mut empty_package_layout_slots = vec![None; diagram.packages.len()];
     let mut next_layout_slot = 0;
     for (_, is_note, idx) in source_nodes {
         if is_note {
@@ -2179,6 +2187,15 @@ fn render_with_oracle_uid_origin(
             layout.add_node(&entity.id, &entity.label, dim.width, dim.height);
             entity_layout_slots[idx] = next_layout_slot;
         }
+        next_layout_slot += 1;
+    }
+    for (idx, role) in package_render.roles.iter().copied().enumerate() {
+        if role != PackageRenderRole::EmptyLeaf {
+            continue;
+        }
+        let (width, height) = empty_package_dims(&diagram.packages[idx]);
+        layout.add_node(&empty_package_layout_id(idx), "", width, height);
+        empty_package_layout_slots[idx] = Some(next_layout_slot);
         next_layout_slot += 1;
     }
     add_single_strategy_links(&mut layout, diagram);
@@ -2220,14 +2237,13 @@ fn render_with_oracle_uid_origin(
             NotePosition::Bottom => layout.add_edge(target, &note_id, None),
         }
     }
-    let parent_pkg = package_parent_indices(diagram);
-    let innermost_pkg = innermost_entity_packages(diagram, &parent_pkg);
     for (idx, pkg) in diagram.packages.iter().enumerate() {
-        if !is_rendered_package_cluster(pkg) {
+        if package_render.roles[idx] != PackageRenderRole::Cluster {
             continue;
         }
-        let parent = parent_pkg[idx].and_then(|p| {
-            is_rendered_package_cluster(&diagram.packages[p]).then(|| package_cluster_id(p))
+        let parent = package_render.parent_pkg[idx].and_then(|parent| {
+            (package_render.roles[parent] == PackageRenderRole::Cluster)
+                .then(|| package_cluster_id(parent))
         });
         let label = package_display_label(pkg);
         // Java `ClusterHeader` merges the visible stereotype block above the
@@ -2267,10 +2283,23 @@ fn render_with_oracle_uid_origin(
         );
     }
     for (entity_idx, entity) in diagram.entities.iter().enumerate() {
-        if let Some(pkg_idx) = innermost_pkg[entity_idx]
-            && is_rendered_package_cluster(&diagram.packages[pkg_idx])
+        if let Some(pkg_idx) = package_render.innermost_pkg[entity_idx]
+            && package_render.roles[pkg_idx] == PackageRenderRole::Cluster
         {
             layout.add_cluster_node(&package_cluster_id(pkg_idx), &entity.id);
+        }
+    }
+    for (pkg_idx, role) in package_render.roles.iter().copied().enumerate() {
+        if role != PackageRenderRole::EmptyLeaf {
+            continue;
+        }
+        if let Some(parent) = package_render.parent_pkg[pkg_idx]
+            && package_render.roles[parent] == PackageRenderRole::Cluster
+        {
+            layout.add_cluster_node(
+                &package_cluster_id(parent),
+                &empty_package_layout_id(pkg_idx),
+            );
         }
     }
     let uses_ortho_labels = has_ortho_linetype(diagram);
@@ -2331,6 +2360,12 @@ fn render_with_oracle_uid_origin(
                 .filter_map(|&idx| floating_layout_slots[idx])
                 .filter_map(|slot| solved_positions.get(slot).copied()),
         )
+        .chain(
+            empty_package_layout_slots
+                .iter()
+                .flatten()
+                .filter_map(|&slot| solved_positions.get(slot).copied()),
+        )
         .collect();
     normalize_svek_package_envelope(
         diagram,
@@ -2348,7 +2383,8 @@ fn render_with_oracle_uid_origin(
     // an attached note, rather than an ordinary entity, owns the minimum.
     let entity_positions = &result.node_positions[..diagram.entities.len()];
     let note_start = diagram.entities.len() + diagram.association_classes.len();
-    let note_positions = &result.node_positions[note_start..];
+    let note_count = attached_layout_slots.len() + floating_note_indices.len();
+    let note_positions = &result.node_positions[note_start..note_start + note_count];
     let entity_min_x = entity_positions
         .iter()
         .map(|pos| pos.x)
@@ -3353,6 +3389,76 @@ fn innermost_entity_packages(
         .collect()
 }
 
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum PackageRenderRole {
+    Hidden,
+    Cluster,
+    EmptyLeaf,
+}
+
+impl PackageRenderRole {
+    fn is_rendered(self) -> bool {
+        !matches!(self, Self::Hidden)
+    }
+}
+
+struct PackageRenderModel {
+    parent_pkg: Vec<Option<usize>>,
+    innermost_pkg: Vec<Option<usize>>,
+    roles: Vec<PackageRenderRole>,
+}
+
+fn package_render_model(diagram: &ClassDiagram) -> PackageRenderModel {
+    let parent_pkg = package_parent_indices(diagram);
+    let innermost_pkg = innermost_entity_packages(diagram, &parent_pkg);
+    let mut has_direct_entity = vec![false; diagram.packages.len()];
+    for package_idx in innermost_pkg.iter().flatten().copied() {
+        has_direct_entity[package_idx] = true;
+    }
+    let mut has_direct_package = vec![false; diagram.packages.len()];
+    for parent in parent_pkg.iter().flatten().copied() {
+        has_direct_package[parent] = true;
+    }
+
+    let roles = diagram
+        .packages
+        .iter()
+        .enumerate()
+        .map(|(idx, package)| {
+            let supports_package_rendering = matches!(
+                effective_package_kind(package),
+                PackageKind::Package
+                    | PackageKind::Namespace
+                    | PackageKind::Database
+                    | PackageKind::Folder
+                    | PackageKind::Frame
+                    | PackageKind::Rectangle
+                    | PackageKind::Node
+                    | PackageKind::Cloud
+            );
+            if !supports_package_rendering {
+                PackageRenderRole::Hidden
+            } else if has_direct_entity[idx] || has_direct_package[idx] {
+                // Java `Entity#isEmpty` examines direct quark children. A
+                // direct leaf or group child therefore makes this a cluster.
+                PackageRenderRole::Cluster
+            } else if !package.phantom {
+                // `GraphvizImageBuilder#printGroups` mutates an explicit,
+                // directly empty package to `LeafType.EMPTY_PACKAGE`.
+                PackageRenderRole::EmptyLeaf
+            } else {
+                PackageRenderRole::Hidden
+            }
+        })
+        .collect();
+
+    PackageRenderModel {
+        parent_pkg,
+        innermost_pkg,
+        roles,
+    }
+}
+
 fn effective_package_kind(pkg: &Package) -> PackageKind {
     if matches!(pkg.kind, PackageKind::Package | PackageKind::Namespace) {
         for stereotype in &pkg.stereotypes {
@@ -3392,27 +3498,35 @@ fn visible_package_stereotype_lines(pkg: &Package) -> Vec<String> {
         .collect()
 }
 
-fn is_rendered_package_cluster(pkg: &Package) -> bool {
-    // Java retains empty group quarks for subsequent name resolution, but
-    // CucaDiagramFileMakerSvek only materializes groups that own a live leaf.
-    if pkg.entities.is_empty() || (pkg.phantom && pkg.source_line == 0) {
-        return false;
-    }
-    matches!(
-        effective_package_kind(pkg),
-        PackageKind::Package
-            | PackageKind::Namespace
-            | PackageKind::Database
-            | PackageKind::Folder
-            | PackageKind::Frame
-            | PackageKind::Rectangle
-            | PackageKind::Node
-            | PackageKind::Cloud
-    )
-}
-
 fn package_cluster_id(idx: usize) -> String {
     format!("pkg{idx}")
+}
+
+fn empty_package_layout_id(idx: usize) -> String {
+    format!("empty_pkg{idx}")
+}
+
+fn empty_package_dims(pkg: &Package) -> (f64, f64) {
+    let label = package_display_label(pkg);
+    let label_width = text_render::measure_no_underline(label, FONT_SIZE, true);
+    let label_height = text_render::label_height(label, FONT_SIZE);
+    let stereotype_lines = visible_package_stereotype_lines(pkg);
+    let content_width = stereotype_lines
+        .iter()
+        .map(|line| text_render::measure_no_underline(line, FONT_SIZE, false))
+        .fold(label_width, f64::max);
+    let content_height = stereotype_lines
+        .iter()
+        .map(|line| text_render::label_height(line, FONT_SIZE))
+        .sum::<f64>()
+        + label_height;
+    // Java `EntityImageEmptyPackage#MARGIN` is 10 on each side, and
+    // `calculateDimensionSlow` keeps at least two title-line heights.
+    let margin = 10.0;
+    (
+        content_width + margin * 2.0,
+        content_height.max(label_height * 2.0) + margin * 2.0,
+    )
 }
 
 fn package_cluster_envelope_extra(diagram: &ClassDiagram, cluster: &ClusterPosition) -> (f64, f64) {
@@ -3560,8 +3674,11 @@ fn relationship_endpoint_name<'a>(
 }
 
 fn package_content_offsets(diagram: &ClassDiagram) -> Vec<(f64, f64)> {
-    let parent_pkg = package_parent_indices(diagram);
-    let innermost_pkg = innermost_entity_packages(diagram, &parent_pkg);
+    let PackageRenderModel {
+        parent_pkg,
+        innermost_pkg,
+        roles,
+    } = package_render_model(diagram);
     innermost_pkg
         .into_iter()
         .map(|package_idx| {
@@ -3569,7 +3686,7 @@ fn package_content_offsets(diagram: &ClassDiagram) -> Vec<(f64, f64)> {
                 return (0.0, 0.0);
             };
             while let Some(parent) = parent_pkg[package_idx] {
-                if !is_rendered_package_cluster(&diagram.packages[parent]) {
+                if roles[parent] != PackageRenderRole::Cluster {
                     break;
                 }
                 package_idx = parent;
@@ -3754,6 +3871,7 @@ struct SvekEmissionOrder<'a> {
     diagram: &'a ClassDiagram,
     parent_pkg: &'a [Option<usize>],
     innermost_pkg: &'a [Option<usize>],
+    package_roles: &'a [PackageRenderRole],
     entity_order: Vec<usize>,
 }
 
@@ -3766,7 +3884,7 @@ impl SvekEmissionOrder<'_> {
         }
         for child_idx in 0..self.diagram.packages.len() {
             if self.parent_pkg[child_idx] == Some(pkg_idx)
-                && is_rendered_package_cluster(&self.diagram.packages[child_idx])
+                && self.package_roles[child_idx] == PackageRenderRole::Cluster
             {
                 self.collect_package(child_idx);
             }
@@ -3812,21 +3930,21 @@ impl CucaUidEvent {
 /// `CommandFactoryNoteOnEntity.executeInternal` advances it for the generated
 /// GMN name, note entity, and connector link in that order.
 fn svek_id_allocation(diagram: &ClassDiagram) -> SvekIdAllocation {
-    let parent_pkg = package_parent_indices(diagram);
-    let innermost_pkg = innermost_entity_packages(diagram, &parent_pkg);
+    let package_render = package_render_model(diagram);
     let mut emission = SvekEmissionOrder {
         diagram,
-        parent_pkg: &parent_pkg,
-        innermost_pkg: &innermost_pkg,
+        parent_pkg: &package_render.parent_pkg,
+        innermost_pkg: &package_render.innermost_pkg,
+        package_roles: &package_render.roles,
         entity_order: Vec::with_capacity(diagram.entities.len()),
     };
 
-    for (pkg_idx, parent) in parent_pkg.iter().copied().enumerate() {
-        if !is_rendered_package_cluster(&diagram.packages[pkg_idx]) {
+    for (pkg_idx, parent) in package_render.parent_pkg.iter().copied().enumerate() {
+        if package_render.roles[pkg_idx] != PackageRenderRole::Cluster {
             continue;
         }
         let parent_is_rendered =
-            parent.is_some_and(|parent| is_rendered_package_cluster(&diagram.packages[parent]));
+            parent.is_some_and(|parent| package_render.roles[parent] == PackageRenderRole::Cluster);
         if !parent_is_rendered {
             emission.collect_package(pkg_idx);
         }
@@ -3835,7 +3953,7 @@ fn svek_id_allocation(diagram: &ClassDiagram) -> SvekIdAllocation {
         .entities
         .iter()
         .enumerate()
-        .filter(|(idx, _)| innermost_pkg[*idx].is_none())
+        .filter(|(idx, _)| package_render.innermost_pkg[*idx].is_none())
         .map(|(idx, entity)| (entity.source_line, idx))
         .collect::<Vec<_>>();
     root_entities.sort_by_key(|&(source_line, idx)| (source_line, idx));
@@ -3847,8 +3965,10 @@ fn svek_id_allocation(diagram: &ClassDiagram) -> SvekIdAllocation {
         .packages
         .iter()
         .enumerate()
-        .filter_map(|(idx, package)| {
-            is_rendered_package_cluster(package).then_some(CucaUidEvent::Package(idx))
+        .filter_map(|(idx, _)| {
+            package_render.roles[idx]
+                .is_rendered()
+                .then_some(CucaUidEvent::Package(idx))
         })
         .chain(
             diagram
@@ -5016,12 +5136,12 @@ fn layout_package_clusters(
     diagram: &ClassDiagram,
     cluster_positions: &[ClusterPosition],
 ) -> Vec<LayoutPackageCluster> {
-    let parent_pkg = package_parent_indices(diagram);
+    let package_render = package_render_model(diagram);
     diagram
         .packages
         .iter()
         .enumerate()
-        .filter(|(_, pkg)| is_rendered_package_cluster(pkg))
+        .filter(|(idx, _)| package_render.roles[*idx] == PackageRenderRole::Cluster)
         .filter_map(|(idx, pkg)| {
             let id = package_cluster_id(idx);
             let pos = cluster_positions.iter().find(|p| p.id == id)?;
@@ -5054,7 +5174,7 @@ fn layout_package_clusters(
             Some(LayoutPackageCluster {
                 package_idx: idx,
                 kind,
-                qualified_name: package_qualified_name(diagram, &parent_pkg, idx),
+                qualified_name: package_qualified_name(diagram, &package_render.parent_pkg, idx),
                 source_line: pkg.source_line,
                 label: package_display_label(pkg).to_string(),
                 stereotype_lines: visible_package_stereotype_lines(pkg),
@@ -13372,23 +13492,59 @@ mod tests {
     }
 
     #[test]
-    fn empty_package_quarks_do_not_materialize_as_clusters() {
-        let empty = Package {
-            name: "ScopeOnly".into(),
-            kind: PackageKind::Package,
-            color: None,
-            entities: Vec::new(),
-            parent: None,
-            source_line: 1,
-            stereotypes: Vec::new(),
-            display_name: None,
-            phantom: false,
+    fn nested_empty_packages_use_direct_child_render_roles() {
+        let input = "@startuml\n\
+                     package EmptyOuter {\n\
+                       package EmptyLeft {\n\
+                       }\n\
+                       package EmptyRight {\n\
+                         package EmptyDeep {\n\
+                         }\n\
+                       }\n\
+                     }\n\
+                     class EmptyControlAnchor\n\
+                     class PhantomRoot.PhantomInner.LiveLeaf\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Class(diagram) = diagram else {
+            panic!("expected class diagram");
         };
-        assert!(!is_rendered_package_cluster(&empty));
+        let model = package_render_model(&diagram);
+        let role = |name: &str| {
+            let idx = diagram
+                .packages
+                .iter()
+                .position(|package| package.name == name)
+                .unwrap();
+            model.roles[idx]
+        };
 
-        let mut live = empty;
-        live.entities.push("ScopeOnly.Leaf".into());
-        assert!(is_rendered_package_cluster(&live));
+        assert_eq!(role("EmptyOuter"), PackageRenderRole::Cluster);
+        assert_eq!(role("EmptyOuter.EmptyLeft"), PackageRenderRole::EmptyLeaf);
+        assert_eq!(role("EmptyOuter.EmptyRight"), PackageRenderRole::Cluster);
+        assert_eq!(
+            role("EmptyOuter.EmptyRight.EmptyDeep"),
+            PackageRenderRole::EmptyLeaf
+        );
+        assert_eq!(role("PhantomRoot"), PackageRenderRole::Cluster);
+        assert_eq!(role("PhantomRoot.PhantomInner"), PackageRenderRole::Cluster);
+
+        let allocation = svek_id_allocation(&diagram);
+        assert_eq!(
+            &allocation.package_ids[..4],
+            &[
+                Some("ent0002".to_string()),
+                Some("ent0003".to_string()),
+                Some("ent0004".to_string()),
+                Some("ent0005".to_string()),
+            ]
+        );
+        let anchor_idx = diagram
+            .entities
+            .iter()
+            .position(|entity| entity.id == "EmptyControlAnchor")
+            .unwrap();
+        assert_eq!(allocation.entity_ids[anchor_idx], "ent0006");
     }
 
     #[test]

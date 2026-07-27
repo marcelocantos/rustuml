@@ -78,8 +78,6 @@ struct ClassParser {
     current_note: Option<Note>,
     /// ID of the last declared entity (for shorthand `note right : text`).
     last_entity_id: Option<String>,
-    /// Whether `set namespaceSeparator none` was seen (dots allowed in class names).
-    namespace_sep_none: bool,
     /// Namespace separator string (default "."; `None` when `set namespaceSeparator none`).
     namespace_sep: Option<String>,
     /// Whether we are inside a multi-line header/footer/legend block.
@@ -116,7 +114,6 @@ impl ClassParser {
             quark_creation_order: Vec::new(),
             current_note: None,
             last_entity_id: None,
-            namespace_sep_none: false,
             namespace_sep: Some(".".to_string()),
             meta_block: None,
             current_skinparam_prefix: None,
@@ -606,14 +603,13 @@ impl ClassParser {
         static STEREOTYPE_RE: LazyLock<Regex> =
             LazyLock::new(|| Regex::new(r"<<\s*([^>]+?)>>").unwrap());
 
-        let re = if self.namespace_sep_none {
-            // `namespaceSeparator none` — dots are part of the name, no splitting.
-            &*RE_DOTTED
-        } else if self.namespace_sep.as_deref() == Some(".") {
-            // Default "." separator: use dotted regex so `com.example.MyClass` is captured fully.
+        let re = if matches!(self.namespace_sep.as_deref(), None | Some(".")) {
+            // With Java's null separator, dots are literal name characters.
+            // The default dot separator uses the same lexical grammar and
+            // splits the captured identity later.
             &*RE_DOTTED
         } else {
-            // Custom separator (e.g. "::" or "/") or no separator: use permissive regex.
+            // Custom separators (e.g. "::" or "/") use the permissive grammar.
             &*RE_PERMISSIVE
         };
         if let Some(caps) = re.captures(line) {
@@ -1438,18 +1434,15 @@ impl ClassParser {
             self.legend_line.get_or_insert(self.current_line);
             return true;
         }
-        if line == "set namespaceSeparator none" {
-            self.namespace_sep_none = true;
-            self.namespace_sep = None;
-            return true;
-        }
         if let Some(sep) = line.strip_prefix("set namespaceSeparator ") {
             let sep = sep.trim();
-            if sep.is_empty() || sep == "." {
-                self.namespace_sep = Some(".".to_string());
-            } else {
-                self.namespace_sep = Some(sep.to_string());
-            }
+            // `CommandNamespaceSeparator#executeArg` replaces the diagram's
+            // sole separator state on every command; `none` stores null.
+            self.namespace_sep = match sep {
+                "none" => None,
+                "" | "." => Some(".".to_string()),
+                _ => Some(sep.to_string()),
+            };
             return true;
         }
         // Parse skinparam key value (store for renderer use).
@@ -2330,6 +2323,47 @@ mod tests {
         );
         assert_eq!(d.entities[0].label, "Root Echo Declaration");
         assert_eq!(d.relationships[0].from, "SepNoneAlpha.EchoToken");
+    }
+
+    #[test]
+    fn namespace_separator_none_is_replaced_by_later_custom_separators() {
+        let d = parse(
+            "set namespaceSeparator none\n\
+             class Literal.Dot\n\
+             set namespaceSeparator ::\n\
+             class ColonRealm::InnerRealm::TransitionLeaf\n\
+             set namespaceSeparator none\n\
+             class \"Renamed Literal\" as Literal.Dot\n\
+             set namespaceSeparator /\n\
+             class SlashRealm/InnerRealm/FinalLeaf",
+        );
+
+        assert_eq!(
+            d.packages
+                .iter()
+                .map(|package| package.name.as_str())
+                .collect::<Vec<_>>(),
+            [
+                "ColonRealm",
+                "ColonRealm::InnerRealm",
+                "SlashRealm",
+                "SlashRealm/InnerRealm",
+            ]
+        );
+        assert_eq!(
+            d.entities
+                .iter()
+                .map(|entity| entity.id.as_str())
+                .collect::<Vec<_>>(),
+            [
+                "Literal.Dot",
+                "ColonRealm::InnerRealm::TransitionLeaf",
+                "SlashRealm/InnerRealm/FinalLeaf",
+            ]
+        );
+        assert_eq!(d.entities[0].label, "Renamed Literal");
+        assert_eq!(d.entities[1].source_line, 4);
+        assert_eq!(d.entities[2].source_line, 8);
     }
 
     #[test]
