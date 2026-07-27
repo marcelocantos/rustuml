@@ -2766,7 +2766,7 @@ fn layout_autonomous_scope(
             layout.add_plantuml_svek_line0_edge(layout_from, layout_to);
         }
         let label_size = transition.label.as_deref().map(|label| {
-            let mut size = svek_edge_label_box_size(transition, label, &arrow_font);
+            let mut size = svek_edge_label_box_size(transition, label, arrow_font);
             size.height = size.height.floor();
             size
         });
