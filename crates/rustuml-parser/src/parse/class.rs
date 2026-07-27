@@ -3,7 +3,7 @@
 
 //! Class diagram parser.
 
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 use std::sync::LazyLock;
 
 use regex::Regex;
@@ -72,6 +72,8 @@ struct ClassParser {
     package_by_path: HashMap<Vec<String>, usize>,
     /// Entity lookup by canonical quark path.
     entity_by_path: HashMap<Vec<String>, usize>,
+    /// Canonical quark paths in the order PlantUML's Plasma tree creates them.
+    quark_creation_order: Vec<Vec<String>>,
     /// Note currently being accumulated (multi-line `note ... end note`).
     current_note: Option<Note>,
     /// ID of the last declared entity (for shorthand `note right : text`).
@@ -111,6 +113,7 @@ impl ClassParser {
             package_paths: Vec::new(),
             package_by_path: HashMap::new(),
             entity_by_path: HashMap::new(),
+            quark_creation_order: Vec::new(),
             current_note: None,
             last_entity_id: None,
             namespace_sep_none: false,
@@ -201,14 +204,29 @@ impl ClassParser {
     }
 
     fn unique_quark_path_named(&self, name: &str) -> Option<Vec<String>> {
-        let matches: HashSet<Vec<String>> = self
-            .entity_by_path
-            .keys()
-            .chain(self.package_by_path.keys())
-            .filter(|path| path.last().is_some_and(|part| part == name))
+        let mut matches = self
+            .quark_creation_order
+            .iter()
+            .filter(|path| path.last().is_some_and(|part| part == name));
+        let first = matches.next()?.clone();
+        matches.next().is_none().then_some(first)
+    }
+
+    fn first_quark_path_named(&self, name: &str) -> Option<Vec<String>> {
+        self.quark_creation_order
+            .iter()
+            .find(|path| path.last().is_some_and(|part| part == name))
             .cloned()
-            .collect();
-        (matches.len() == 1).then(|| matches.into_iter().next().unwrap())
+    }
+
+    fn register_quark_path(&mut self, path: &[String]) {
+        if !self
+            .quark_creation_order
+            .iter()
+            .any(|existing| existing == path)
+        {
+            self.quark_creation_order.push(path.to_vec());
+        }
     }
 
     /// Mirrors `CucaDiagram#quarkInContextSafe`: qualified names resolve from
@@ -217,7 +235,10 @@ impl ClassParser {
     fn resolve_quark_path(&self, raw: &str, lookup: QuarkLookup) -> Vec<String> {
         let raw = raw.trim();
         if self.namespace_sep.is_none() {
-            if let Some(path) = self.unique_quark_path_named(raw) {
+            // `CucaDiagram#quarkInContextSafe` bypasses both lookup modes
+            // here and delegates directly to creation-ordered
+            // `Plasma#firstWithName`.
+            if let Some(path) = self.first_quark_path_named(raw) {
                 return path;
             }
             let mut path = self.current_group_path().to_vec();
@@ -312,7 +333,8 @@ impl ClassParser {
                 phantom: true,
             });
             self.package_paths.push(path.clone());
-            self.package_by_path.insert(path, idx);
+            self.package_by_path.insert(path.clone(), idx);
+            self.register_quark_path(&path);
         }
     }
 
@@ -345,6 +367,7 @@ impl ClassParser {
             source_line: self.current_line,
         });
         self.entity_by_path.insert(path.clone(), idx);
+        self.register_quark_path(&path);
         self.register_entity_path(&path, &id);
         id
     }
@@ -1145,7 +1168,8 @@ impl ClassParser {
                         phantom: !is_final,
                     });
                     self.package_paths.push(prefix.clone());
-                    self.package_by_path.insert(prefix, idx);
+                    self.package_by_path.insert(prefix.clone(), idx);
+                    self.register_quark_path(&prefix);
                     idx
                 };
                 parent = Some(idx);
@@ -2277,6 +2301,54 @@ mod tests {
             assert_eq!(entity.kind, kind);
             assert_eq!(entity.source_line, source_line);
         }
+    }
+
+    #[test]
+    fn separator_none_reuses_the_first_created_duplicate_quark() {
+        let d = parse(
+            "package SepNoneAlpha {\n\
+               class EchoToken\n\
+             }\n\
+             package SepNoneBeta {\n\
+               class EchoToken\n\
+             }\n\
+             set namespaceSeparator none\n\
+             class \"Root Echo Declaration\" as EchoToken\n\
+             EchoToken --> SepNoneSink",
+        );
+
+        assert_eq!(
+            d.entities
+                .iter()
+                .map(|entity| entity.id.as_str())
+                .collect::<Vec<_>>(),
+            [
+                "SepNoneAlpha.EchoToken",
+                "SepNoneBeta.EchoToken",
+                "SepNoneSink"
+            ]
+        );
+        assert_eq!(d.entities[0].label, "Root Echo Declaration");
+        assert_eq!(d.relationships[0].from, "SepNoneAlpha.EchoToken");
+    }
+
+    #[test]
+    fn mixed_remote_reuse_leaves_the_current_group_without_owned_entities() {
+        let d = parse(
+            "allowmixing\n\
+             package BridgeClasses {\n\
+               class TransitBridge\n\
+             }\n\
+             package BridgeActors {\n\
+               actor \"Transit Bridge Actor\" as TransitBridge\n\
+             }\n\
+             TransitBridge --> BridgeTerminal",
+        );
+
+        assert_eq!(d.entities[0].id, "BridgeClasses.TransitBridge");
+        assert_eq!(d.entities[0].label, "Transit Bridge Actor");
+        assert_eq!(d.packages[0].entities, ["BridgeClasses.TransitBridge"]);
+        assert!(d.packages[1].entities.is_empty());
     }
 
     #[test]

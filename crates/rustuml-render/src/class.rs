@@ -3393,7 +3393,9 @@ fn visible_package_stereotype_lines(pkg: &Package) -> Vec<String> {
 }
 
 fn is_rendered_package_cluster(pkg: &Package) -> bool {
-    if pkg.phantom && pkg.source_line == 0 {
+    // Java retains empty group quarks for subsequent name resolution, but
+    // CucaDiagramFileMakerSvek only materializes groups that own a live leaf.
+    if pkg.entities.is_empty() || (pkg.phantom && pkg.source_line == 0) {
         return false;
     }
     matches!(
@@ -13367,6 +13369,26 @@ mod tests {
         assert!(svg.contains("</svg>"));
         assert!(svg.contains("Animal"));
         assert!(svg.contains("Dog"));
+    }
+
+    #[test]
+    fn empty_package_quarks_do_not_materialize_as_clusters() {
+        let empty = Package {
+            name: "ScopeOnly".into(),
+            kind: PackageKind::Package,
+            color: None,
+            entities: Vec::new(),
+            parent: None,
+            source_line: 1,
+            stereotypes: Vec::new(),
+            display_name: None,
+            phantom: false,
+        };
+        assert!(!is_rendered_package_cluster(&empty));
+
+        let mut live = empty;
+        live.entities.push("ScopeOnly.Leaf".into());
+        assert!(is_rendered_package_cluster(&live));
     }
 
     #[test]
