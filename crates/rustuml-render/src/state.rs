@@ -10,7 +10,7 @@ use std::fmt::Write;
 
 use rustuml_layout::graph::{
     ClusterPosition, ClusterTitleSize, Direction, EdgeLabelSize, EdgePath, EdgePorts, GraphSpacing,
-    LayoutGraph, NodePosition,
+    LayoutGraph, LayoutResult, NodePosition,
 };
 use rustuml_parser::diagram::state::*;
 
@@ -188,15 +188,10 @@ const V_GAP: f64 = 60.0;
 /// the state rectangle's horizontal stroke overscan but the start circle's
 /// vertical bound is already integral, yielding visible x=7 and y=6 origins.
 /// The remaining 14px of the dimension delta trails the painted graph.
+const SVEK_PAINTED_ORIGIN: f64 = 6.0;
 const SVEK_ORIGIN_X: f64 = 7.0;
-const SVEK_ORIGIN_Y: f64 = 6.0;
+const SVEK_ORIGIN_Y: f64 = SVEK_PAINTED_ORIGIN;
 const SVEK_TRAILING_PAD: f64 = 14.0;
-/// Extra width after the right edge of a painted autonomous edge label.
-///
-/// Java provenance: `SvekResult.calculateDimension` takes the painted
-/// `LimitFinder` span and adds 15px; the translated graph's painted minimum is
-/// x=5, so a rightmost text edge contributes `right - 5 + 15`.
-const AUTONOMOUS_LABEL_TRAILING: f64 = 10.0;
 /// Title font size.
 const TITLE_FONT_SIZE: f64 = 14.0;
 /// Horizontal inset contributed by the title style's 5px padding and 5px
@@ -1870,6 +1865,40 @@ struct AutonomousScopeLayout {
     width: f64,
     height: f64,
     compound_clusters: bool,
+    painted_bounds: Option<AutonomousPaintedBounds>,
+}
+
+#[derive(Clone, Copy)]
+struct AutonomousPaintedBounds {
+    min_x: f64,
+    min_y: f64,
+    max_x: f64,
+    max_y: f64,
+}
+
+impl AutonomousPaintedBounds {
+    fn empty() -> Self {
+        Self {
+            min_x: f64::INFINITY,
+            min_y: f64::INFINITY,
+            max_x: f64::NEG_INFINITY,
+            max_y: f64::NEG_INFINITY,
+        }
+    }
+
+    fn include(&mut self, x: f64, y: f64) {
+        self.min_x = self.min_x.min(x);
+        self.min_y = self.min_y.min(y);
+        self.max_x = self.max_x.max(x);
+        self.max_y = self.max_y.max(y);
+    }
+
+    fn is_finite(self) -> bool {
+        self.min_x.is_finite()
+            && self.min_y.is_finite()
+            && self.max_x.is_finite()
+            && self.max_y.is_finite()
+    }
 }
 
 struct AutonomousRegion {
@@ -1994,6 +2023,143 @@ where
     ids
 }
 
+fn autonomous_scope_painted_bounds(
+    diagram: &StateDiagram,
+    ids: &[String],
+    node_sizes: &[(String, f64, f64, StateLayoutShape)],
+    result: &LayoutResult,
+    transition_layout_edges: &std::collections::HashMap<usize, usize>,
+    transition_indices: &[usize],
+    arrow_font: &StateArrowFont,
+) -> Option<AutonomousPaintedBounds> {
+    let mut bounds = AutonomousPaintedBounds::empty();
+
+    for (id, position) in ids.iter().zip(&result.node_positions) {
+        let (_, width, height, shape) = node_sizes.iter().find(|entry| &entry.0 == id)?;
+        let x = quantize_svek_coord(position.x);
+        let y = quantize_svek_coord(position.y);
+        match shape {
+            StateLayoutShape::Circle | StateLayoutShape::Port => {
+                bounds.include(x, y);
+                bounds.include(x + width - 1.0, y + height - 1.0);
+            }
+            StateLayoutShape::Diamond => {
+                bounds.include(x - POLYGON_LIMIT_FINDER_OVERSCAN_X, y);
+                bounds.include(x + width + POLYGON_LIMIT_FINDER_OVERSCAN_X, y + height);
+            }
+            StateLayoutShape::Box => {
+                bounds.include(x - 1.0, y - 1.0);
+                let has_full_width_divider = diagram
+                    .states
+                    .iter()
+                    .find(|state| state.id == *id)
+                    .is_none_or(|state| !matches!(state.kind, StateKind::Fork | StateKind::Join));
+                let max_x = if has_full_width_divider {
+                    x + width
+                } else {
+                    x + width - 1.0
+                };
+                bounds.include(max_x, y + height - 1.0);
+            }
+        }
+
+        let Some(state) = diagram.states.iter().find(|state| state.id == *id) else {
+            continue;
+        };
+        if matches!(state.kind, StateKind::History | StateKind::DeepHistory) {
+            let label = if state.kind == StateKind::DeepHistory {
+                "H*"
+            } else {
+                "H"
+            };
+            let text_width = text_render::measure(label, STATE_FONT_SIZE, false);
+            let baseline = y + height / 2.0 + HISTORY_LABEL_BASELINE_OFFSET;
+            let text_height = text_render::label_height(label, STATE_FONT_SIZE);
+            bounds.include(
+                x + width / 2.0 - text_width / 2.0,
+                baseline - text_height + 1.5,
+            );
+            bounds.include(x + width / 2.0 + text_width / 2.0, baseline + 1.5);
+        }
+    }
+
+    for transition_index in transition_indices {
+        let transition = &diagram.transitions[*transition_index];
+        let layout_edge_index = transition_layout_edges.get(transition_index)?;
+        let edge = result
+            .edge_paths
+            .iter()
+            .find(|edge| edge.edge_index == *layout_edge_index)?;
+        if edge.points.is_empty() {
+            continue;
+        }
+        let mut points = edge
+            .points
+            .iter()
+            .map(|(x, y)| (quantize_svek_coord(*x), quantize_svek_coord(*y)))
+            .collect::<Vec<_>>();
+        let arrow_at_start = transition.arrow.arrow_at_start();
+        let (arrow_control, arrow_tip) = if arrow_at_start {
+            (points.get(1).copied().unwrap_or(points[0]), points[0])
+        } else {
+            (
+                points
+                    .get(points.len().saturating_sub(2))
+                    .copied()
+                    .unwrap_or(points[0]),
+                points[points.len() - 1],
+            )
+        };
+        if arrow_at_start {
+            retract_dependency_arrow_path_start(&mut points);
+        } else {
+            retract_dependency_arrow_path(&mut points);
+        }
+        for (x, y) in points {
+            bounds.include(x, y);
+        }
+        let arrowhead = arrowhead_points(arrow_control, arrow_tip);
+        let arrow_min_x = arrowhead
+            .iter()
+            .map(|point| point.0)
+            .fold(f64::INFINITY, f64::min);
+        let arrow_max_x = arrowhead
+            .iter()
+            .map(|point| point.0)
+            .fold(f64::NEG_INFINITY, f64::max);
+        let arrow_min_y = arrowhead
+            .iter()
+            .map(|point| point.1)
+            .fold(f64::INFINITY, f64::min);
+        let arrow_max_y = arrowhead
+            .iter()
+            .map(|point| point.1)
+            .fold(f64::NEG_INFINITY, f64::max);
+        bounds.include(arrow_min_x - POLYGON_LIMIT_FINDER_OVERSCAN_X, arrow_min_y);
+        bounds.include(arrow_max_x + POLYGON_LIMIT_FINDER_OVERSCAN_X, arrow_max_y);
+
+        if let Some(label) = transition.label.as_deref()
+            && let Some(label_position) = edge.label
+        {
+            let x = quantize_svek_coord(label_position.x) + 1.0;
+            let baseline = quantize_svek_coord(label_position.y)
+                + 1.0
+                + text_render::label_ascent(label, arrow_font.size as f64);
+            let width = text_render::measure_with_family(
+                label,
+                arrow_font.size as f64,
+                arrow_font.bold,
+                &arrow_font.family,
+            );
+            let height = text_render::label_height(label, arrow_font.size as f64);
+            bounds.include(x, baseline - height + 1.5);
+            bounds.include(x + width + 1.0, baseline + 1.5);
+        }
+    }
+
+    bounds.is_finite().then_some(bounds)
+}
+
 fn layout_autonomous_scope(
     diagram: &StateDiagram,
     ids: Vec<String>,
@@ -2057,6 +2223,15 @@ fn layout_autonomous_scope(
     if result.node_positions.len() < ids.len() {
         return None;
     }
+    let painted_bounds = autonomous_scope_painted_bounds(
+        diagram,
+        &ids,
+        node_sizes,
+        &result,
+        &transition_layout_edges,
+        &transition_indices,
+        arrow_font,
+    );
     let top = result
         .node_positions
         .iter()
@@ -2112,6 +2287,7 @@ fn layout_autonomous_scope(
         width: origin_x + max_x + SVEK_TRAILING_PAD,
         height: origin_y + max_y + SVEK_TRAILING_PAD,
         compound_clusters: false,
+        painted_bounds,
     })
 }
 
@@ -2151,46 +2327,27 @@ fn has_only_autonomous_layout_skinparams(diagram: &StateDiagram) -> bool {
     })
 }
 
-fn normalize_autonomous_scope(
-    diagram: &StateDiagram,
-    arrow_font: &StateArrowFont,
-    mut scope: AutonomousScopeLayout,
-) -> AutonomousScopeLayout {
-    // `SvekResult.calculateDimension` measures an autonomous image from its
-    // painted `MinMax`, rather than from the translated outer-canvas origin.
-    // `LimitFinder.drawRectangle` contributes the two horizontal stroke-limit
-    // pixels; the vertical ellipse bound needs no corresponding allowance.
-    scope.width = scope.width - scope.origin_x + 2.0;
-    scope.height -= scope.origin_y;
-    for transition_index in &scope.transition_indices {
-        let transition = &diagram.transitions[*transition_index];
-        let Some(label) = transition.label.as_deref() else {
-            continue;
-        };
-        let mut from = state_endpoint_layout_id(&transition.from, true);
-        let mut to = state_endpoint_layout_id(&transition.to, false);
-        if transition.arrow.reverses_solved_endpoints() {
-            std::mem::swap(&mut from, &mut to);
-        }
-        let Some(label_position) = scope
-            .edge_paths
-            .iter()
-            .find(|edge| edge.from == from && edge.to == to)
-            .and_then(|edge| edge.label)
-        else {
-            continue;
-        };
-        let label_right = quantize_svek_coord(label_position.x)
-            + scope.origin_x
-            + 1.0
-            + text_render::measure_with_family(
-                label,
-                arrow_font.size as f64,
-                arrow_font.bold,
-                &arrow_font.family,
-            );
-        scope.width = scope.width.max(label_right + AUTONOMOUS_LABEL_TRAILING);
+fn normalize_autonomous_scope(mut scope: AutonomousScopeLayout) -> AutonomousScopeLayout {
+    // `MinMax.getEmpty(true)` gives an image with a zero painted span, so an
+    // empty concurrent region still contributes SvekResult's 15px dimension.
+    let bounds = scope.painted_bounds.unwrap_or(AutonomousPaintedBounds {
+        min_x: 0.0,
+        min_y: 0.0,
+        max_x: 0.0,
+        max_y: 0.0,
+    });
+    let origin_x = SVEK_PAINTED_ORIGIN - bounds.min_x;
+    let origin_y = SVEK_PAINTED_ORIGIN - bounds.min_y;
+    let delta_x = origin_x - scope.origin_x;
+    let delta_y = origin_y - scope.origin_y;
+    for (_, center_x, center_y, _, _) in &mut scope.positions {
+        *center_x += delta_x;
+        *center_y += delta_y;
     }
+    scope.origin_x = origin_x;
+    scope.origin_y = origin_y;
+    scope.width = bounds.max_x - bounds.min_x + 15.0;
+    scope.height = bounds.max_y - bounds.min_y + 15.0;
     scope
 }
 
@@ -2277,7 +2434,7 @@ fn build_autonomous_composite_node<'a>(
         arrow_font,
         None,
     )?;
-    let layout = normalize_autonomous_scope(diagram, arrow_font, layout);
+    let layout = normalize_autonomous_scope(layout);
     let inner_width = layout.width;
     let inner_height = layout.height;
     let title_height = crate::plantuml_metrics::text_height(STATE_FONT_SIZE);
@@ -2484,7 +2641,7 @@ fn build_one_level_concurrent_node<'a>(
             None,
         )?;
         regions.push(AutonomousRegion {
-            layout: normalize_autonomous_scope(diagram, arrow_font, layout),
+            layout: normalize_autonomous_scope(layout),
         });
     }
     let separator = composite.concurrent_separator;
@@ -4041,6 +4198,7 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
         width,
         height,
         compound_clusters: true,
+        painted_bounds: None,
     };
     let allocated_ids = allocate_state_svg_ids(diagram, &ids);
     let skin = StateSkin::from_diagram(diagram);
