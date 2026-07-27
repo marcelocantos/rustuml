@@ -80,6 +80,69 @@ impl<'a> ResolvedStyle<'a> {
             .iter()
             .map(|(property, declaration)| (property.as_str(), declaration.value.as_str()))
     }
+
+    pub fn box_sides(&self, property: &str) -> Option<StyleBoxSides> {
+        self.property(property).and_then(StyleBoxSides::parse)
+    }
+
+    pub fn stroke(&self, default_thickness: f64) -> StyleStroke {
+        let thickness = self
+            .property("lineThickness")
+            .and_then(|value| value.parse::<f64>().ok())
+            .unwrap_or(default_thickness);
+        let dash = self.property("lineStyle").and_then(parse_dash_pair);
+        StyleStroke { thickness, dash }
+    }
+}
+
+/// Java `ClockwiseTopRightBottomLeft#read` value.
+#[derive(Debug, Default, Clone, Copy, PartialEq)]
+pub struct StyleBoxSides {
+    pub top: f64,
+    pub right: f64,
+    pub bottom: f64,
+    pub left: f64,
+}
+
+impl StyleBoxSides {
+    fn parse(value: &str) -> Option<Self> {
+        let values = value
+            .split_whitespace()
+            .map(str::parse::<u32>)
+            .collect::<Result<Vec<_>, _>>()
+            .ok()?;
+        let [top, right, bottom, left] = match values.as_slice() {
+            [all] => [*all, *all, *all, *all],
+            [vertical, horizontal] => [*vertical, *horizontal, *vertical, *horizontal],
+            [top, horizontal, bottom] => [*top, *horizontal, *bottom, *horizontal],
+            [top, right, bottom, left] => [*top, *right, *bottom, *left],
+            _ => return None,
+        };
+        Some(Self {
+            top: f64::from(top),
+            right: f64::from(right),
+            bottom: f64::from(bottom),
+            left: f64::from(left),
+        })
+    }
+}
+
+/// Java `Style#getStroke` value.
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct StyleStroke {
+    pub thickness: f64,
+    pub dash: Option<(f64, f64)>,
+}
+
+fn parse_dash_pair(value: &str) -> Option<(f64, f64)> {
+    let mut values = value
+        .split(['-', ';', ','])
+        .map(str::trim)
+        .filter(|value| !value.is_empty())
+        .map(str::parse::<f64>);
+    let visible = values.next()?.ok()?;
+    let space = values.next().transpose().ok()?.unwrap_or(visible);
+    Some((visible, space))
 }
 
 /// Resolves one parser-owned style program without introducing renderer
@@ -364,7 +427,7 @@ mod tests {
         StyleDeclaration, StyleOrigin, StyleProgram, StyleScheme,
     };
 
-    use super::{StyleCascade, StyleSignature};
+    use super::{StyleBoxSides, StyleCascade, StyleSignature, parse_dash_pair};
 
     fn declaration(
         selector: &[&str],
@@ -828,5 +891,35 @@ mod tests {
                 Some("copper-827")
             );
         }
+    }
+
+    #[test]
+    fn box_sides_follow_java_clockwise_arity() {
+        assert_eq!(
+            StyleBoxSides::parse("3 7 11 13"),
+            Some(StyleBoxSides {
+                top: 3.0,
+                right: 7.0,
+                bottom: 11.0,
+                left: 13.0,
+            })
+        );
+        assert_eq!(
+            StyleBoxSides::parse("4 9"),
+            Some(StyleBoxSides {
+                top: 4.0,
+                right: 9.0,
+                bottom: 4.0,
+                left: 9.0,
+            })
+        );
+    }
+
+    #[test]
+    fn stroke_keeps_open_ended_dash_pairs() {
+        assert_eq!(parse_dash_pair("7-4"), Some((7.0, 4.0)));
+        assert_eq!(parse_dash_pair("5, 2"), Some((5.0, 2.0)));
+        assert_eq!(parse_dash_pair("3"), Some((3.0, 3.0)));
+        assert_eq!(parse_dash_pair("solid"), None);
     }
 }
