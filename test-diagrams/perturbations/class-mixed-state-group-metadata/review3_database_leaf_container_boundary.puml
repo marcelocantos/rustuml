@@ -1,0 +1,8 @@
+@startuml
+allowmixing
+database "Aurora Ledger Leaf" as AuroraLedger
+database AuroraVault {
+  class "Aurora Vault Entry" as AuroraEntry
+}
+AuroraLedger --> AuroraEntry
+@enduml

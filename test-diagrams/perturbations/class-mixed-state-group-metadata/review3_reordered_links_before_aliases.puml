@@ -1,0 +1,11 @@
+@startuml
+allowmixing
+class CloudLedgerAnchor
+CloudSteward --> CloudReview
+CloudReview --> CloudEngine
+CloudEngine --> CloudBuffer
+actor "Cloud Steward" as CloudSteward
+component "Cloud Policy Engine" as CloudEngine
+usecase "Review Cloud Rollout" as CloudReview
+queue "Cloud Retry Buffer" as CloudBuffer
+@enduml

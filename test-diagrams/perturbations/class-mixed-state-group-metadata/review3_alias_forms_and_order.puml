@@ -1,0 +1,10 @@
+@startuml
+allowmixing
+database "Violet Metrics Store" as VioletStore
+rectangle "Violet Trust Boundary" as VioletBoundary
+node "Violet Edge Host" as VioletHost
+component "Violet Policy Unit" as VioletPolicy
+VioletHost --> VioletPolicy
+VioletBoundary --> VioletStore
+VioletPolicy --> VioletStore
+@enduml

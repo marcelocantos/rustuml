@@ -1,0 +1,8 @@
+@startuml
+allowmixing
+rectangle "Saffron Boundary Leaf" as SaffronBoundary
+rectangle SaffronZone {
+  queue "Saffron Work Queue" as SaffronQueue
+}
+SaffronBoundary --> SaffronQueue
+@enduml

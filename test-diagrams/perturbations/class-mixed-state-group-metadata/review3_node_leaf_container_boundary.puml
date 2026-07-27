@@ -1,0 +1,9 @@
+@startuml
+allowmixing
+class CobaltAnchor
+node "Cobalt Host Leaf" as CobaltHost
+node CobaltRack {
+  component "Cobalt Runtime Service" as CobaltService
+}
+CobaltHost --> CobaltService
+@enduml

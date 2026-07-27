@@ -1,0 +1,10 @@
+@startuml
+allowmixing
+component "Quasar Policy Engine" as QuasarPolicy
+actor "Nimbus Release Operator" as NimbusOperator
+queue "Ember Retry Queue" as EmberRetry
+usecase "Approve Nimbus Rollout" as NimbusApproval
+NimbusOperator --> NimbusApproval
+NimbusApproval --> QuasarPolicy
+QuasarPolicy --> EmberRetry
+@enduml

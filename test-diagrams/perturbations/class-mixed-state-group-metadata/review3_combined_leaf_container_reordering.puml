@@ -1,0 +1,19 @@
+@startuml
+allowmixing
+database IndigoDatabaseGroup {
+  class IndigoRecord
+}
+node IndigoNodeGroup {
+  class IndigoWorker
+}
+rectangle IndigoRectangleGroup {
+  class IndigoGateway
+}
+IndigoGateway --> IndigoWorker
+IndigoWorker --> IndigoRecord
+database "Indigo Database Leaf" as IndigoDatabaseLeaf
+node "Indigo Node Leaf" as IndigoNodeLeaf
+rectangle "Indigo Rectangle Leaf" as IndigoRectangleLeaf
+IndigoRectangleLeaf --> IndigoNodeLeaf
+IndigoNodeLeaf --> IndigoDatabaseLeaf
+@enduml

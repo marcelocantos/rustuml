@@ -1,0 +1,233 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-mixed-state-group-metadata",
+  "reviewer": {
+    "task_id": "codex-desktop-task-019ee369-54e2-7203-afce-ddde7bfe1723-class-mixed-state-group-metadata-checker-3",
+    "model": "OpenAI Codex (GPT-5)",
+    "role": "independent skeptical checker; no production edits"
+  },
+  "account_commit": "e85a3669f0311aa85fe8799e036af64b3c8c996e",
+  "prior_rejection_commit": "ef6faef6392cae54eacf8e1ec9cc0c03cc68d31f",
+  "implementation_commit": "0b06536bb29ae350dff494e92721a2f0fb2333c9",
+  "implementation_parent": "e85a3669f0311aa85fe8799e036af64b3c8c996e",
+  "head_at_review": "0b06536bb29ae350dff494e92721a2f0fb2333c9",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+  "rust_execution": {
+    "cargo_or_rustc_run": false,
+    "rustfmt_run": false,
+    "existing_helper": "target/release/examples/diff_one",
+    "helper_sha256": "4ce9dbcef7a476f312d19247de32653793bc1d150dc769b0218901f1e7ae5c1c",
+    "helper_mtime": "2026-07-27T20:59:49+1000",
+    "reason": "The assignment forbade Cargo, rustc, and rustfmt. The checker used the existing release helper and confirmed that it embodies the implementation by replaying the two formerly failing review2 description matrices successfully."
+  },
+  "commands": [
+    "cat /Users/marcelo/.claude/rust.md",
+    "cat /Users/marcelo/.claude/conventions.md",
+    "cat /Users/marcelo/.claude/tools.md",
+    "git show --format=fuller --no-ext-diff 0b06536b -- crates/rustuml-parser/src/diagram/class.rs crates/rustuml-parser/src/parse/class.rs crates/rustuml-render/src/class.rs",
+    "cat docs/parity-reviews/class-mixed-state-group-metadata/allowmixing-description-account.md",
+    "cat docs/parity-reviews/class-mixed-state-group-metadata/review-2.json",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "shasum -a 256 /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "static inspection of CommandCreateElementFull2, CommandPackageWithUSymbol, GeneralImageBuilder, and EntityImageDescription at Java revision 71806a2",
+    "static inspection of detect_uml_subtype, ClassParser::ensure_entity, ClassParser::try_entity_decl, ClassParser::try_package, qualify_entity, and entity_group_has_source_line at Rust revision 0b06536b",
+    "target/release/examples/diff_one --no-oracle --print-rust <each of six review2_ sources>",
+    "target/release/examples/diff_one --no-oracle <each of six review2_ sources>",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-mixed-state-group-metadata/review3_*.puml",
+    "xmllint --noout test-diagrams/perturbations/class-mixed-state-group-metadata/review3_*.svg",
+    "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"|an error has occured' test-diagrams/perturbations/class-mixed-state-group-metadata/review3_*.svg",
+    "target/release/examples/diff_one --no-oracle --print-rust <each review3_ source>",
+    "target/release/examples/diff_one --no-oracle <each review3_ source>",
+    "Ruby REXML comparison of class, data-qualified-name, and data-source-line for every entity and cluster group in Java and Rust SVGs",
+    "Ruby SHA-256 uniqueness scan of all review3_ source/SVG pairs against the full test-diagrams corpus",
+    "git diff and rg anti-overfit audit of 0b06536b for golden reads, embedded fixtures, heldout labels, source-line equality branches, entity-count ladders, coordinates, and dimensions",
+    "git merge-base --is-ancestor e85a3669 0b06536b",
+    "git diff --exit-code e85a3669 0b06536b -- docs/parity-reviews/class-mixed-state-group-metadata/allowmixing-description-account.md",
+    "shasum -a 256 test-diagrams/perturbations/class-mixed-state-group-metadata/review3_*.puml test-diagrams/perturbations/class-mixed-state-group-metadata/review3_*.svg"
+  ],
+  "prior_rejection_replay": [
+    {
+      "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review2_alias_line_offsets.puml",
+      "metadata_result": "pass",
+      "java_group_count": 5,
+      "rust_group_count": 5
+    },
+    {
+      "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review2_classlike_variants.puml",
+      "metadata_result": "pass",
+      "java_group_count": 8,
+      "rust_group_count": 8
+    },
+    {
+      "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review2_deployment_description_symbols.puml",
+      "metadata_result": "pass",
+      "java_group_count": 9,
+      "rust_group_count": 9,
+      "evidence": "The four formerly synthesized or misqualified deployment-description leaves now match their declaration identities and lines."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review2_description_symbols.puml",
+      "metadata_result": "pass",
+      "java_group_count": 8,
+      "rust_group_count": 8,
+      "evidence": "ReleaseOperator, ApproveRollout, and PolicyEngine now carry declaration lines 2, 3, and 4 rather than relationship lines."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review2_multiple_symbol_instances.puml",
+      "metadata_result": "pass",
+      "java_group_count": 10,
+      "rust_group_count": 10
+    },
+    {
+      "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review2_reordered_core_matrix.puml",
+      "metadata_result": "pass",
+      "java_group_count": 6,
+      "rust_group_count": 6
+    }
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review3_renamed_description_leaves.puml",
+      "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review3_renamed_description_leaves.svg",
+      "sha256": "1b242e97cf9946ecdce0ef7aa6cc7439067985e47a92a930c9788a53f6fea61b",
+      "golden_sha256": "0e90b1ddda4fbabf472c165872c37d33a1193241d11b9cdcc3a719c8bf26c083",
+      "axes": [
+        "description-only allowmixing class diagram",
+        "renamed actor, usecase, component, and queue leaves",
+        "declaration order distinct from relationship order"
+      ],
+      "metadata_result": "fail",
+      "evidence": "Java produces a CLASS diagram with exactly QuasarPolicy=2, NimbusOperator=3, EmberRetry=4, and NimbusApproval=5. Rust auto-dispatches to DESCRIPTION, invents entities all and wmixing from the allowmixing directive, and assigns NimbusApproval line 6.",
+      "strict_render_result": "different",
+      "strict_render_note": "The metadata failure is independently dispositive; geometry was not considered."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review3_reordered_links_before_aliases.puml",
+      "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review3_reordered_links_before_aliases.svg",
+      "sha256": "0d6987fe2833690a4e4a76d9b13240dc0f992fe32c28cf528a8dcf1bc9254a70",
+      "golden_sha256": "53a9a4dacc102e39c0252406955ad99d439618c9f9b3a4353b5e2af0fc20e037",
+      "axes": [
+        "relationships before explicit declarations",
+        "quoted displays with aliases",
+        "actor, usecase, component, and queue kinds",
+        "ordinary class anchor forcing ClassParser dispatch"
+      ],
+      "metadata_result": "fail",
+      "evidence": "Source ownership matches Java's first relationship creation lines, but qualified identity does not. Java emits CloudSteward, CloudReview, CloudEngine, and CloudBuffer; Rust emits Cloud Steward, Review Cloud Rollout, Cloud Policy Engine, and Cloud Retry Buffer because try_entity_decl does not set explicit_alias when updating an existing implicit entity.",
+      "strict_render_result": "different",
+      "strict_render_note": "The verdict is based only on qualified-name metadata, not shape or layout."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review3_implicit_and_explicit_endpoints.puml",
+      "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review3_implicit_and_explicit_endpoints.svg",
+      "sha256": "99d7cd6b0ad6d0d1aa1c2342f40edf6f3636bbd7acced6200c08cc3b68a8cb68",
+      "golden_sha256": "4cfea42e923aace4ac5e7d761efc442a689c2cc0d950d5645cc0f76883b4a09f",
+      "axes": [
+        "explicit actor and queue endpoints",
+        "two never-declared implicit endpoints",
+        "repeated and reversed links"
+      ],
+      "metadata_result": "pass",
+      "evidence": "All five entity qualified names and source lines match, including implicit endpoints owned by first relationship lines 6 and 7.",
+      "strict_render_result": "different",
+      "strict_render_note": "Unrelated geometry differences were excluded."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review3_alias_forms_and_order.puml",
+      "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review3_alias_forms_and_order.svg",
+      "sha256": "9b364fb999bd563579301d006e2adb4e74c22511a2eb8d718af4e7cf433d804a",
+      "golden_sha256": "dc351c341d3b5ca33a39de2874d4bce578e52f32feded9d4ed0a7d3ae024a281",
+      "axes": [
+        "quoted aliases declared before use",
+        "database, rectangle, node, and component leaves",
+        "relationship order different from declaration order"
+      ],
+      "metadata_result": "pass",
+      "evidence": "VioletStore=2, VioletBoundary=3, VioletHost=4, and VioletPolicy=5 match exactly.",
+      "strict_render_result": "different",
+      "strict_render_note": "Unrelated geometry differences were excluded."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review3_database_leaf_container_boundary.puml",
+      "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review3_database_leaf_container_boundary.svg",
+      "sha256": "49a1d805550f63f54ee1f8e88bee7557fb61d2c952b605feb1dd457aeac957e3",
+      "golden_sha256": "b3f0ff65dfc9d9c431b516d510b256dd7b5f6110a26253572d8bd6f756f890d9",
+      "axes": [
+        "bare database leaf with alias",
+        "braced database container",
+        "nested aliased class and cross-boundary link"
+      ],
+      "metadata_result": "pass",
+      "evidence": "Both implementations emit AuroraLedger=2, cluster AuroraVault=3, and AuroraVault.AuroraEntry=4.",
+      "strict_render_result": "different",
+      "strict_render_note": "Unrelated geometry differences were excluded."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review3_node_leaf_container_boundary.puml",
+      "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review3_node_leaf_container_boundary.svg",
+      "sha256": "ccf1afd9c0335ad9cd02e1ead713ce73a067451ddcaaacbf3a5e45f2af0e0210",
+      "golden_sha256": "dccfebc418b04557923fdbae52e5ef7b1503dd833e0d1e0cf3a8e00e364bb836",
+      "axes": [
+        "bare node leaf with alias",
+        "braced node container",
+        "nested aliased component and class dispatch anchor"
+      ],
+      "metadata_result": "pass",
+      "evidence": "Both implementations emit CobaltAnchor=2, CobaltHost=3, cluster CobaltRack=4, and CobaltRack.CobaltService=5.",
+      "strict_render_result": "different",
+      "strict_render_note": "Unrelated geometry differences were excluded."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review3_rectangle_leaf_container_boundary.puml",
+      "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review3_rectangle_leaf_container_boundary.svg",
+      "sha256": "80ecbe95f48be74a33d9a4921560f49a942c4a102abd5113ccc1cd390d291b6a",
+      "golden_sha256": "14747856c6382ddf186f07d6651ccf7ef5ed98d685ecc5abcf698b682cd04993",
+      "axes": [
+        "bare rectangle leaf with alias",
+        "braced rectangle container",
+        "nested aliased queue"
+      ],
+      "metadata_result": "pass",
+      "evidence": "Both implementations emit SaffronBoundary=2, cluster SaffronZone=3, and SaffronZone.SaffronQueue=4.",
+      "strict_render_result": "different",
+      "strict_render_note": "Unrelated geometry differences were excluded."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review3_combined_leaf_container_reordering.puml",
+      "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review3_combined_leaf_container_reordering.svg",
+      "sha256": "86096fd5793a3c523553ab8c5dd36c7087bba80e084e8741dd4532a55b5cf283",
+      "golden_sha256": "482d8bf0f2998ea653122762b3f53e79d708fa64416c6a702b08843db375b0e3",
+      "axes": [
+        "database, node, and rectangle braced containers in one source",
+        "nested classes linked before leaf declarations",
+        "three corresponding aliased leaves declared after container links"
+      ],
+      "metadata_result": "pass",
+      "evidence": "All three cluster records and all six leaf records match exactly, including qualified nesting and declaration lines.",
+      "strict_render_result": "different",
+      "strict_render_note": "Unrelated geometry differences were excluded."
+    }
+  ],
+  "anti_overfit": {
+    "result": "pass",
+    "findings": [
+      "The immutable shipping diff contains no review2 or review3 heldout labels, no golden or fixture reads, and no include_str/include_bytes embedding.",
+      "The production branch is mechanism-shaped: only database, node, and rectangle declarations ending in an opening brace are yielded to package parsing; all listed leaf keywords become typed EntityKind values.",
+      "There are no source-line equality checks, entity-count or relationship-count ladders, coordinate/dimension branches, or new parity-affecting numeric constants.",
+      "Mechanism-specific labels occur only in the implementation's unit tests and do not influence shipping control flow."
+    ]
+  },
+  "findings": [
+    "The mechanism account e85a3669 is the direct parent of immutable implementation 0b06536b and remains byte-unchanged.",
+    "All six matrices preserved by rejection ef6faef6 now pass exact entity/cluster metadata comparison. The original actor/usecase/component and database/queue/node/rectangle source-ownership failures are repaired.",
+    "Java CommandPackageWithUSymbol requires a terminal opening brace, while CommandCreateElementFull2 creates unbraced symbols as leaves. Rust's new terminal-brace split reproduces that boundary across all three overloaded keywords in six fresh passing matrices.",
+    "Java CommandCreateElementFull2 obtains a quark from the syntax code/alias and only calls reallyCreateLeaf when it does not exist. EntityImageDescription emits that quark's qualified name and the entity's retained creation LineLocation.",
+    "Rust ClassParser::try_entity_decl updates kind and display label for an existing relationship-created entity but does not update explicit_alias. qualify_entity consequently substitutes the display label for the stable alias code. The review3_reordered_links_before_aliases counterexample fails qualified identity while source-line ownership correctly remains at first creation.",
+    "Rust detect_uml_subtype only promotes allowmixing to CLASS when an independent class score is already nonzero. A valid Java allowmixing source containing only actor/usecase/component/queue leaves is therefore dispatched to DESCRIPTION in Rust, where the directive is partially parsed as entities all and wmixing.",
+    "The two failures are independent of shape and layout. Every Java SVG is valid XML, carries no PlantUML error marker, and reports a CLASS diagram for the heldout sources.",
+    "All sixteen fresh review3 files are byte-unique in the repository corpus. No Cargo, rustc, rustfmt, production edit, push, PR, or delivery action was performed."
+  ],
+  "verdict": "rejected",
+  "required_followup": "Preserve both failing review3_ pairs. Before another production change, commit a causal account covering two remaining model boundaries: allowmixing must itself force class-diagram dispatch for valid description-only mixed sources, and a declaration that refines a relationship-created endpoint must retain the quark/code identity while changing only its display and concrete image contract. Re-run all six review2 controls and all eight review3 matrices."
+}

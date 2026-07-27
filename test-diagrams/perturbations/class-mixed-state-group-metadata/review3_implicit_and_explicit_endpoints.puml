@@ -1,0 +1,10 @@
+@startuml
+allowmixing
+class CopperAnchor
+actor "Copper Dispatcher" as CopperDispatcher
+queue "Copper Queue" as CopperQueue
+CopperDispatcher --> CopperQueue
+ImplicitNorthRelay --> CopperDispatcher
+CopperQueue --> ImplicitSouthRelay
+ImplicitSouthRelay --> ImplicitNorthRelay
+@enduml
