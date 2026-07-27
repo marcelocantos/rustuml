@@ -1890,7 +1890,7 @@ fn allocate_state_svg_ids(diagram: &StateDiagram, state_ids: &[String]) -> State
 /// Effective skinparam values for a state diagram, resolved from
 /// `skinparam state { ... }` blocks and standalone `skinparam X Y` lines.
 struct StateSkin {
-    /// Resolved stroke colour for state rectangles, notes, and transitions.
+    /// Resolved stroke colour for state rectangles and notes.
     stroke: String,
     /// Resolved stroke width for normal state rectangles and dividers.
     border_thickness: String,
@@ -1950,7 +1950,8 @@ impl StateSkin {
         // state-specific arrow value remains the more specific declaration.
         let arrow_color = color("stateArrowColor")
             .or_else(|| color("ArrowColor"))
-            .unwrap_or_else(|| stroke.clone());
+            .or_else(|| root_line_color.clone())
+            .unwrap_or_else(|| DEFAULT_STROKE_COLOR.to_string());
         // Java provenance: `FromSkinparamToStyle` maps `arrowThickness` to
         // `root.element.<diagram>.arrow.LineThickness`; `SvekEdge.drawU`
         // retrieves that merged style through `getDefaultStyleDefinition`.
@@ -10624,6 +10625,25 @@ CobaltDecision --> [*]
             6
         );
         assert!(!override_svg.contains("#2468AC"));
+    }
+
+    #[test]
+    fn state_border_color_does_not_leak_into_the_arrow_signature() {
+        let input = concat!(
+            "@startuml\n",
+            "skinparam stateBorderColor #2648A8\n",
+            "[*] --> CopperDormant\n",
+            "CopperDormant --> VioletReady\n",
+            "VioletReady -[#B83280]-> AmberDone\n",
+            "AmberDone --> [*]\n",
+            "@enduml\n",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert_eq!(svg.matches("stroke:#2648A8;stroke-width:0.5;").count(), 6);
+        assert_eq!(svg.matches("stroke:#181818;stroke-width:1;").count(), 6);
+        assert_eq!(svg.matches("stroke:#B83280;stroke-width:1;").count(), 2);
     }
 
     #[test]

@@ -1,0 +1,13 @@
+@startuml
+skinparam ArrowColor #2E7D32
+skinparam stateBorderColor #5E35B1
+state CopperDormant103
+state VioletReady107
+state AmberRunning109
+state QuartzDone113
+[*] --> CopperDormant103
+CopperDormant103 --> VioletReady107 : inherited arrow
+VioletReady107 -[#C62828]-> AmberRunning109 : local override
+AmberRunning109 --> QuartzDone113
+QuartzDone113 --> [*]
+@enduml
