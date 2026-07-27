@@ -70,6 +70,10 @@ fn component_stereotype_skinparam<'a>(key: &'a str, property: &str) -> Option<&'
         .filter(|stereotype| !stereotype.is_empty())
 }
 
+fn skinparam_stereotype_identity(stereotype: &str) -> String {
+    stereotype.to_ascii_lowercase().replace(['_', '.'], "")
+}
+
 fn fc(v: f64) -> String {
     pm::fmt_coord(v)
 }
@@ -1067,7 +1071,7 @@ pub fn render_with_oracle(
         });
         if let Some((property, stereotype)) = scoped_property {
             let style = component_stereotype_styles
-                .entry(stereotype.to_string())
+                .entry(skinparam_stereotype_identity(stereotype))
                 .or_default();
             match property {
                 "componentbackgroundcolor" => {
@@ -2227,7 +2231,7 @@ pub fn render_with_oracle(
         let stereotype_style = matches!(comp.kind, ComponentElementKind::Component)
             .then(|| {
                 comp.stereotypes.iter().find_map(|stereotype| {
-                    component_stereotype_styles.get(&stereotype.to_ascii_lowercase())
+                    component_stereotype_styles.get(&skinparam_stereotype_identity(stereotype))
                 })
             })
             .flatten();
@@ -8476,6 +8480,35 @@ mod tests {
             4,
             "{svg}"
         );
+    }
+
+    #[test]
+    fn component_stereotype_skinparam_separator_aliases_follow_source_order() {
+        for (first, second, expected, rejected) in [
+            ("Red", "Blue", "#0000FF", "#FF0000"),
+            ("Blue", "Red", "#FF0000", "#0000FF"),
+        ] {
+            let input = format!(
+                "@startuml\n\
+                 skinparam componentBackgroundColor<<relay_71>> {first}\n\
+                 skinparam componentBackgroundColor<<relay.71>> {second}\n\
+                 component \"Scoped Relay\" as Scoped <<relay_71>>\n\
+                 component \"Other Relay\" as Other <<relay_72>>\n\
+                 @enduml"
+            );
+            let diagram = rustuml_parser::parse::parse(&input).unwrap();
+            let svg = crate::render_svg(&diagram);
+
+            assert_eq!(
+                svg.matches(&format!(r##"fill="{expected}""##)).count(),
+                4,
+                "{svg}"
+            );
+            assert!(!svg.contains(&format!(r##"fill="{rejected}""##)), "{svg}");
+            assert_eq!(svg.matches(r##"fill="#F1F1F1""##).count(), 4, "{svg}");
+            assert!(svg.contains("relay_71"), "{svg}");
+            assert!(svg.contains("relay_72"), "{svg}");
+        }
     }
 
     #[test]
