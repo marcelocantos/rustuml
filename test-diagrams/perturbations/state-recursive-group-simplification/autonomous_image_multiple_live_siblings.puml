@@ -1,0 +1,19 @@
+@startuml
+state "Autonomous Gallery 3203" as AutonomousGallery3203 {
+  state "Left Retained Alcove 3209" as LeftAlcove3209 {
+    [*] --> LeftAmberLeaf3217
+    LeftAmberLeaf3217 --> [*]
+  }
+  state "Right Retained Observatory With A Longer Name 3221" as RightObservatory3221 {
+    [*] --> RightCobaltLeaf3229
+    RightCobaltLeaf3229 --> [*]
+  }
+  [*] --> LeftAlcove3209
+  LeftAlcove3209 --> LeftAlcove3209.LeftAmberLeaf3217 : descend_left
+  LeftAlcove3209 --> RightObservatory3221 : cross_siblings
+  RightObservatory3221 --> RightObservatory3221.RightCobaltLeaf3229 : descend_right
+  RightObservatory3221 --> [*]
+}
+[*] --> AutonomousGallery3203
+AutonomousGallery3203 --> [*]
+@enduml

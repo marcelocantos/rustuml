@@ -1,0 +1,16 @@
+@startuml
+state "Review Anchor 3101" as ReviewAnchor3101
+state "Retained Parent 3103" as RetainedParent3103 {
+  state "Solved Grandchild Capsule 3109" as SolvedGrandchild3109 {
+    [*] --> CapsuleReady3119
+    CapsuleReady3119 --> CapsuleClosed3121 : seal_capsule
+    CapsuleClosed3121 --> [*]
+  }
+  state "Boundary Relay 3137" as BoundaryRelay3137
+  [*] --> BoundaryRelay3137
+  BoundaryRelay3137 --> [*]
+}
+[*] --> ReviewAnchor3101
+ReviewAnchor3101 --> RetainedParent3103.BoundaryRelay3137 : cross_into_retained_parent
+RetainedParent3103 --> [*]
+@enduml

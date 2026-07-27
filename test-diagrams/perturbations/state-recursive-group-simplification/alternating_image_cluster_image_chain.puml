@@ -1,0 +1,24 @@
+@startuml
+state "Outer Image With Renamed Ledger 3301" as OuterImage3301 {
+  state "Middle Retained Cluster 3307" as MiddleCluster3307 {
+    state "Middle Direct Leaf Declared First 3313" as MiddleDirect3313
+    state "Solved Inner Image With Extended Caption 3319" as SolvedInner3319 {
+      state "Deep Retained Cluster 3323" as DeepCluster3323 {
+        [*] --> DeepVerdantLeaf3331
+        DeepVerdantLeaf3331 --> [*]
+      }
+      [*] --> DeepCluster3323
+      DeepCluster3323 --> DeepCluster3323.DeepVerdantLeaf3331 : descend_at_deep_boundary
+      DeepCluster3323 --> [*]
+    }
+    [*] --> MiddleDirect3313
+    MiddleCluster3307 --> MiddleDirect3313 : keep_middle_live
+    MiddleDirect3313 --> SolvedInner3319 : enter_solved_image
+    SolvedInner3319 --> [*]
+  }
+  [*] --> MiddleCluster3307
+  MiddleCluster3307 --> [*]
+}
+[*] --> OuterImage3301
+OuterImage3301 --> [*]
+@enduml
