@@ -1,0 +1,24 @@
+@startuml
+skinparam NodeSep +19
+skinparam nodesep 73
+skinparam RankSep 61x
+skinparam ranksep 61
+
+state ValidAster {
+  [*] --> ValidAsterNorth
+  ValidAsterNorth --> ValidAsterSouth
+  ValidAsterSouth --> [*]
+}
+
+state ValidBirch {
+  [*] --> ValidBirchNorth
+  ValidBirchNorth --> ValidBirchSouth
+  ValidBirchSouth --> [*]
+}
+
+[*] --> ValidAster
+[*] --> ValidBirch
+ValidAster --> ValidTerminus
+ValidBirch --> ValidTerminus
+ValidTerminus --> [*]
+@enduml

@@ -1,0 +1,22 @@
+@startuml
+skinparam nodesep 00091
+skinparam ranksep 0000
+
+state ZeroAster {
+  [*] --> ZeroAsterNorth
+  ZeroAsterNorth --> ZeroAsterSouth
+  ZeroAsterSouth --> [*]
+}
+
+state ZeroBirch {
+  [*] --> ZeroBirchNorth
+  ZeroBirchNorth --> ZeroBirchSouth
+  ZeroBirchSouth --> [*]
+}
+
+[*] --> ZeroAster
+[*] --> ZeroBirch
+ZeroAster --> ZeroTerminus
+ZeroBirch --> ZeroTerminus
+ZeroTerminus --> [*]
+@enduml

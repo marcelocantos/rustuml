@@ -1,0 +1,216 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-autonomous-dot-option-spacing",
+  "reviewer": {
+    "task_id": "codex-desktop-task-019ee369-54e2-7203-afce-ddde7bfe1723-independent-checker-round-2",
+    "model": "GPT-5 Codex"
+  },
+  "account_commit": "3fa25fa6da493717046b8b522c663004ae1e51f0",
+  "account_commits": [
+    "dfe69a15d5bd65059f855b155185a7c9291cd8eb",
+    "4531801a01a6db330d4d49f02d2e260eb714817d",
+    "3fa25fa6da493717046b8b522c663004ae1e51f0"
+  ],
+  "implementation_commit": "63723c169abd2d9ffa4fb8999eeeae39164affe2",
+  "implementation_commits": [
+    "94a718a5f70cf69c65fd8cd76795d4bb382e2cf9",
+    "63723c169abd2d9ffa4fb8999eeeae39164affe2"
+  ],
+  "orthogonal_commit": "33cd6c0e35cb2a8b83d8677e15d5c629f5182ba8",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "git rev-parse HEAD",
+    "git merge-base --is-ancestor dfe69a15d5bd65059f855b155185a7c9291cd8eb 94a718a5f70cf69c65fd8cd76795d4bb382e2cf9",
+    "git merge-base --is-ancestor 4531801a01a6db330d4d49f02d2e260eb714817d 63723c169abd2d9ffa4fb8999eeeae39164affe2",
+    "git merge-base --is-ancestor 3fa25fa6da493717046b8b522c663004ae1e51f0 63723c169abd2d9ffa4fb8999eeeae39164affe2",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "git show dfe69a15d5bd65059f855b155185a7c9291cd8eb:docs/parity-reviews/state-autonomous-dot-option-spacing/account.json",
+    "git show 4531801a01a6db330d4d49f02d2e260eb714817d:docs/parity-reviews/state-autonomous-dot-option-spacing/account.json",
+    "git show 3fa25fa6da493717046b8b522c663004ae1e51f0:docs/parity-reviews/state-autonomous-dot-option-spacing/account.json",
+    "git diff 94a718a5f70cf69c65fd8cd76795d4bb382e2cf9^ 94a718a5f70cf69c65fd8cd76795d4bb382e2cf9 -- crates/rustuml-render/src/state.rs test-diagrams/no_oracle_baseline.txt",
+    "git diff 63723c169abd2d9ffa4fb8999eeeae39164affe2^ 63723c169abd2d9ffa4fb8999eeeae39164affe2 -- crates/rustuml-render/src/state.rs",
+    "git diff 33cd6c0e35cb2a8b83d8677e15d5c629f5182ba8^ 33cd6c0e35cb2a8b83d8677e15d5c629f5182ba8 -- crates/rustuml-render/src/state.rs test-diagrams/no_oracle_baseline.txt",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/GroupMakerState.java",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/skin/SkinParam.java",
+    "git show 63723c169abd2d9ffa4fb8999eeeae39164affe2:crates/rustuml-parser/src/parse/mod.rs",
+    "git show 63723c169abd2d9ffa4fb8999eeeae39164affe2:crates/rustuml-parser/src/parse/state.rs",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/state-autonomous-dot-option-spacing/grammar_signed_values_fallback.puml test-diagrams/perturbations/state-autonomous-dot-option-spacing/grammar_decimal_alpha_fallback.puml test-diagrams/perturbations/state-autonomous-dot-option-spacing/grammar_zero_and_leading_zeros.puml test-diagrams/perturbations/state-autonomous-dot-option-spacing/grammar_whitespace_normalization.puml test-diagrams/perturbations/state-autonomous-dot-option-spacing/grammar_duplicate_latest_valid.puml test-diagrams/perturbations/state-autonomous-dot-option-spacing/grammar_duplicate_latest_invalid.puml",
+    "GRAPHVIZ_DOT=/Users/marcelo/work/github.com/marcelocantos/rustuml/test-diagrams/perturbations/state-autonomous-dot-option-spacing/capture-java-dot.sh RUSTUML_DOT_CAPTURE_DIR=/Users/marcelo/work/github.com/marcelocantos/rustuml/test-diagrams/perturbations/state-autonomous-dot-option-spacing/round-2-dot-evidence/<case> java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/state-autonomous-dot-option-spacing/<case>.puml",
+    "xmllint --noout test-diagrams/perturbations/state-autonomous-dot-option-spacing/grammar_signed_values_fallback.svg test-diagrams/perturbations/state-autonomous-dot-option-spacing/grammar_decimal_alpha_fallback.svg test-diagrams/perturbations/state-autonomous-dot-option-spacing/grammar_zero_and_leading_zeros.svg test-diagrams/perturbations/state-autonomous-dot-option-spacing/grammar_whitespace_normalization.svg test-diagrams/perturbations/state-autonomous-dot-option-spacing/grammar_duplicate_latest_valid.svg test-diagrams/perturbations/state-autonomous-dot-option-spacing/grammar_duplicate_latest_invalid.svg",
+    "rg -n \"Syntax Error|PlantUML.*Error|Error line|class=\\\"message\\\"\" test-diagrams/perturbations/state-autonomous-dot-option-spacing/grammar_*.svg",
+    "rg -n \"LexicalAster|InvalidAster|ValidAster|SignAster|SpaceAster|ZeroAster\" test-diagrams/golden --glob '*.puml'",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-spacing-review2-target cargo test --test parity_perturbations --release -- --nocapture",
+    "CARGO_TARGET_DIR=/Users/marcelo/work/github.com/marcelocantos/rustuml/target cargo test -p rustuml-render --lib autonomous_outer_spacing -- --nocapture",
+    "CARGO_TARGET_DIR=/Users/marcelo/work/github.com/marcelocantos/rustuml/target cargo test -p rustuml-parser --lib repeated_skinparams_keep_first_position_with_last_value -- --nocapture",
+    "CARGO_TARGET_DIR=/Users/marcelo/work/github.com/marcelocantos/rustuml/target cargo test -p rustuml-render --lib autonomous_choice_uses_java_polygon_coordinate_delimiters -- --nocapture",
+    "CARGO_TARGET_DIR=/Users/marcelo/work/github.com/marcelocantos/rustuml/target cargo test -p rustuml-render --lib state::tests:: -- --nocapture",
+    "cargo test --test parity_perturbations --release -- --nocapture",
+    "cargo test --test harness_guards --release parity_review_records_are_complete -- --nocapture"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/choice_only_autonomous.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/choice_only_autonomous.svg",
+      "axes": [
+        "choice pseudo-state",
+        "autonomous nesting",
+        "label variation"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/fork_join_history_control.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/fork_join_history_control.svg",
+      "axes": [
+        "fork/join/history pseudo-states",
+        "autonomous nesting",
+        "label variation"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/grammar_decimal_alpha_fallback.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/grammar_decimal_alpha_fallback.svg",
+      "axes": [
+        "decimal value rejection",
+        "alphabetic mix rejection",
+        "outer default fallback"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/grammar_duplicate_latest_invalid.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/grammar_duplicate_latest_invalid.svg",
+      "axes": [
+        "duplicate case-insensitive keys",
+        "latest invalid value precedence",
+        "prior valid value replacement"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/grammar_duplicate_latest_valid.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/grammar_duplicate_latest_valid.svg",
+      "axes": [
+        "duplicate case-insensitive keys",
+        "latest valid value precedence",
+        "prior invalid value replacement"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/grammar_signed_values_fallback.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/grammar_signed_values_fallback.svg",
+      "axes": [
+        "leading plus rejection",
+        "leading minus rejection",
+        "outer default fallback"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/grammar_whitespace_normalization.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/grammar_whitespace_normalization.svg",
+      "axes": [
+        "source whitespace normalization",
+        "leading-zero digit acceptance",
+        "outer spacing override"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/grammar_zero_and_leading_zeros.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/grammar_zero_and_leading_zeros.svg",
+      "axes": [
+        "zero means no override",
+        "leading-zero digit acceptance",
+        "independent node and rank spacing"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/nondigit_spacing_values_fallback.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/nondigit_spacing_values_fallback.svg",
+      "axes": [
+        "skinparam value grammar",
+        "outer spacing override",
+        "parallel root topology"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/outer_spacing_inner_defaults.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/outer_spacing_inner_defaults.svg",
+      "axes": [
+        "outer nodesep/ranksep overrides",
+        "inner default isolation",
+        "parallel root topology"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/pseudostate_spacing_matrix.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/pseudostate_spacing_matrix.svg",
+      "axes": [
+        "fork/join/choice/history pseudo-states",
+        "autonomous nesting",
+        "branch topology"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/renamed_antiparallel_adjacent_ranks.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/renamed_antiparallel_adjacent_ranks.svg",
+      "axes": [
+        "antiparallel adjacent ranks",
+        "label variation",
+        "node count"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/root_and_autonomous_equivalent_topology.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/root_and_autonomous_equivalent_topology.svg",
+      "axes": [
+        "root versus autonomous topology",
+        "antiparallel links",
+        "label variation"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/three_concurrent_regions.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/three_concurrent_regions.svg",
+      "axes": [
+        "multiple concurrent regions",
+        "independent inner layouts",
+        "antiparallel links"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/two_nested_autonomous_levels.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/two_nested_autonomous_levels.svg",
+      "axes": [
+        "two autonomous nesting levels",
+        "antiparallel links",
+        "label variation"
+      ],
+      "result": "pass"
+    }
+  ],
+  "findings": [
+    "The original account precedes implementation 94a718a5f70cf69c65fd8cd76795d4bb382e2cf9, both corrective account revisions precede 63723c169abd2d9ffa4fb8999eeeae39164affe2, and the Java checkout was exactly 71806a23780b04a5ccde2f8ceb5121edad5eb711. The final account revision 3fa25fa6da493717046b8b522c663004ae1e51f0 accurately narrows the claim by excluding Java's out-of-range Integer.parseInt exception path.",
+    "Static Java review still supports the spacing boundary. GroupMakerState passes new String[0] to every autonomous inner GraphvizImageBuilder, while the root builder receives the diagram DOT options. The original Rust implementation mirrors that boundary by leaving inner LayoutGraph spacing unset and resolving explicit spacing only for the outer graph.",
+    "SkinParam.getNodesep and getRanksep delegate to getAsInt, whose isDigits guard accepts only a nonempty digit sequence before Integer.parseInt. Corrective commit 63723c16 performs the same nonempty ASCII-digit check before Rust integer parsing and filters zero. No sign, decimal, suffix, or partial numeric form survives either implementation.",
+    "Rust parsing trims the spacing value and collapse_reassigned_skinparams applies case-insensitive LinkedHashMap-like replacement: the first key position remains and the latest value wins. The focused parser test passes. Fresh duplicate-key held-outs prove both directions: a latest valid value replaces an invalid predecessor, while a latest invalid value removes the effect of a valid predecessor.",
+    "Fresh Java DOT captures provide dynamic grammar evidence. Signed +83/-67 and mixed 83.5/67px values produce root defaults nodesep=0.486111 and ranksep=0.833333. Values 00091/0000 produce nodesep=1.263889 with default ranksep. Whitespace-normalized 00084/00072 produce 1.166667/1.000000. Latest valid 73/61 produce 1.013889/0.847222, while latest invalid +19/61x restores both defaults. Every case has two autonomous inner invocations with neither spacing attribute.",
+    "All six new Java SVGs are well-formed and contain no PlantUML error marker. Their distinctive labels are absent from the golden corpus. All nine preserved round-one perturbations and all six fresh grammar perturbations match Java in the clean immutable 33cd6c0e review snapshot; the complete parity perturbation suite passes there.",
+    "Commit 33cd6c0e35cb2a8b83d8677e15d5c629f5182ba8 changes only autonomous choice polygon delimiter serialization, its focused unit test, and the separately accounted state baseline. It does not read, write, pass, or branch on spacing data. Choice-bearing round-one fixtures pass at the reviewed state, but their delimiter correction is not evidence for this spacing mechanism.",
+    "A union run before the concurrent painted-bounds implementation landed also copied another checker's then-uncommitted state-choice-polygon-serialization perturbations and failed only on concurrent_choice_regions.puml and two_choices_crossflow.puml. Those files are absent from immutable commit 33cd6c0e, have a separate rejected checker record, and exposed autonomous painted-bound geometry rather than spacing option flow. They are disclosed here but are not claimed, modified, or used as evidence for this verdict.",
+    "At finalization the live branch included the separately accounted painted-bounds implementation f83ad70bac10886960a2fef85dda0d20002596af and the complete parity perturbation suite passed. The parity review guard reported no violation for this round-two spacing record; it remained red only because state-autonomous-painted-bounds had no checker review yet and the separate state-choice-polygon-serialization review remained rejected. Neither later mechanism contributes evidence to this spacing verdict.",
+    "No reviewed spacing diff contains fixture labels, golden reads, coordinate-keyed SVG surgery, comparator changes, guard changes, or an unexplained spacing constant. The six grammar attacks and the preserved topology matrix failed to falsify either the corrected value grammar or the autonomous inner/outer option boundary.",
+    "Verdict is accepted for state-autonomous-dot-option-spacing at implementation commits 94a718a5f70cf69c65fd8cd76795d4bb382e2cf9 and 63723c169abd2d9ffa4fb8999eeeae39164affe2. The separately accounted choice-serialization commit is orthogonal and is not part of this mechanism claim."
+  ],
+  "verdict": "accepted"
+}

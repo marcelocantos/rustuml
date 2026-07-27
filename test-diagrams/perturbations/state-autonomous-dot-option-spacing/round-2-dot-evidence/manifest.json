@@ -1,0 +1,145 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "wrapper": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/capture-java-dot.sh",
+  "captures": [
+    {
+      "source": "grammar_signed_values_fallback.puml",
+      "invocations": [
+        {
+          "path": "grammar_signed_values_fallback/invocation-01.dot",
+          "scope": "SignAster autonomous inner image",
+          "spacing_attributes": []
+        },
+        {
+          "path": "grammar_signed_values_fallback/invocation-02.dot",
+          "scope": "SignBirch autonomous inner image",
+          "spacing_attributes": []
+        },
+        {
+          "path": "grammar_signed_values_fallback/invocation-03.dot",
+          "scope": "root SVEK graph after Java rejects +83 and -67 as non-digits",
+          "spacing_attributes": [
+            "nodesep=0.486111",
+            "ranksep=0.833333"
+          ]
+        }
+      ]
+    },
+    {
+      "source": "grammar_decimal_alpha_fallback.puml",
+      "invocations": [
+        {
+          "path": "grammar_decimal_alpha_fallback/invocation-01.dot",
+          "scope": "DecimalAster autonomous inner image",
+          "spacing_attributes": []
+        },
+        {
+          "path": "grammar_decimal_alpha_fallback/invocation-02.dot",
+          "scope": "DecimalBirch autonomous inner image",
+          "spacing_attributes": []
+        },
+        {
+          "path": "grammar_decimal_alpha_fallback/invocation-03.dot",
+          "scope": "root SVEK graph after Java rejects 83.5 and 67px as non-digits",
+          "spacing_attributes": [
+            "nodesep=0.486111",
+            "ranksep=0.833333"
+          ]
+        }
+      ]
+    },
+    {
+      "source": "grammar_zero_and_leading_zeros.puml",
+      "invocations": [
+        {
+          "path": "grammar_zero_and_leading_zeros/invocation-01.dot",
+          "scope": "ZeroAster autonomous inner image",
+          "spacing_attributes": []
+        },
+        {
+          "path": "grammar_zero_and_leading_zeros/invocation-02.dot",
+          "scope": "ZeroBirch autonomous inner image",
+          "spacing_attributes": []
+        },
+        {
+          "path": "grammar_zero_and_leading_zeros/invocation-03.dot",
+          "scope": "root SVEK graph after Java parses 00091 and treats 0000 as no override",
+          "spacing_attributes": [
+            "nodesep=1.263889",
+            "ranksep=0.833333"
+          ]
+        }
+      ]
+    },
+    {
+      "source": "grammar_whitespace_normalization.puml",
+      "invocations": [
+        {
+          "path": "grammar_whitespace_normalization/invocation-01.dot",
+          "scope": "WhitespaceAster autonomous inner image",
+          "spacing_attributes": []
+        },
+        {
+          "path": "grammar_whitespace_normalization/invocation-02.dot",
+          "scope": "WhitespaceBirch autonomous inner image",
+          "spacing_attributes": []
+        },
+        {
+          "path": "grammar_whitespace_normalization/invocation-03.dot",
+          "scope": "root SVEK graph after parser whitespace normalization",
+          "spacing_attributes": [
+            "nodesep=1.166667",
+            "ranksep=1.000000"
+          ]
+        }
+      ]
+    },
+    {
+      "source": "grammar_duplicate_latest_valid.puml",
+      "invocations": [
+        {
+          "path": "grammar_duplicate_latest_valid/invocation-01.dot",
+          "scope": "LatestValidAster autonomous inner image",
+          "spacing_attributes": []
+        },
+        {
+          "path": "grammar_duplicate_latest_valid/invocation-02.dot",
+          "scope": "LatestValidBirch autonomous inner image",
+          "spacing_attributes": []
+        },
+        {
+          "path": "grammar_duplicate_latest_valid/invocation-03.dot",
+          "scope": "root SVEK graph using latest valid values 73 and 61",
+          "spacing_attributes": [
+            "nodesep=1.013889",
+            "ranksep=0.847222"
+          ]
+        }
+      ]
+    },
+    {
+      "source": "grammar_duplicate_latest_invalid.puml",
+      "invocations": [
+        {
+          "path": "grammar_duplicate_latest_invalid/invocation-01.dot",
+          "scope": "LatestInvalidAster autonomous inner image",
+          "spacing_attributes": []
+        },
+        {
+          "path": "grammar_duplicate_latest_invalid/invocation-02.dot",
+          "scope": "LatestInvalidBirch autonomous inner image",
+          "spacing_attributes": []
+        },
+        {
+          "path": "grammar_duplicate_latest_invalid/invocation-03.dot",
+          "scope": "root SVEK graph after latest invalid values replace prior valid values",
+          "spacing_attributes": [
+            "nodesep=0.486111",
+            "ranksep=0.833333"
+          ]
+        }
+      ]
+    }
+  ]
+}

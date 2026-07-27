@@ -1,0 +1,22 @@
+@startuml
+skinparam     nodesep        00084
+skinparam     ranksep        00072
+
+state SpaceAster {
+  [*] --> SpaceAsterNorth
+  SpaceAsterNorth --> SpaceAsterSouth
+  SpaceAsterSouth --> [*]
+}
+
+state SpaceBirch {
+  [*] --> SpaceBirchNorth
+  SpaceBirchNorth --> SpaceBirchSouth
+  SpaceBirchSouth --> [*]
+}
+
+[*] --> SpaceAster
+[*] --> SpaceBirch
+SpaceAster --> SpaceTerminus
+SpaceBirch --> SpaceTerminus
+SpaceTerminus --> [*]
+@enduml

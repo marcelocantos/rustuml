@@ -1,0 +1,22 @@
+@startuml
+skinparam nodesep +83
+skinparam ranksep -67
+
+state SignAster {
+  [*] --> SignAsterNorth
+  SignAsterNorth --> SignAsterSouth
+  SignAsterSouth --> [*]
+}
+
+state SignBirch {
+  [*] --> SignBirchNorth
+  SignBirchNorth --> SignBirchSouth
+  SignBirchSouth --> [*]
+}
+
+[*] --> SignAster
+[*] --> SignBirch
+SignAster --> SignedTerminus
+SignBirch --> SignedTerminus
+SignedTerminus --> [*]
+@enduml
