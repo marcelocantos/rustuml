@@ -2128,7 +2128,12 @@ fn autonomous_outer_spacing(diagram: &StateDiagram) -> GraphSpacing {
             .iter()
             .rev()
             .find(|skinparam| skinparam.key.eq_ignore_ascii_case(key))
-            .and_then(|skinparam| skinparam.value.trim().parse::<i32>().ok())
+            .and_then(|skinparam| {
+                let value = skinparam.value.trim();
+                (!value.is_empty() && value.bytes().all(|byte| byte.is_ascii_digit()))
+                    .then(|| value.parse::<i32>().ok())
+                    .flatten()
+            })
             .filter(|value| *value != 0)
             .map(f64::from)
     };
@@ -10041,6 +10046,35 @@ CobaltDecision --> [*]
                 value: "red".into(),
             });
         assert!(!has_only_autonomous_layout_skinparams(&visual));
+    }
+
+    #[test]
+    fn autonomous_outer_spacing_rejects_nondigit_values_like_java() {
+        let parsed = rustuml_parser::parse::parse(
+            "@startuml\n\
+             skinparam nodesep +91\n\
+             skinparam ranksep 77.0\n\
+             state Outer {\n\
+               [*] --> A\n\
+               A --> B\n\
+             }\n\
+             [*] --> Outer\n\
+             @enduml",
+        )
+        .unwrap();
+        let rustuml_parser::diagram::Diagram::State(diagram) = parsed else {
+            panic!("expected state diagram");
+        };
+
+        let spacing = autonomous_outer_spacing(&diagram);
+        assert_eq!(
+            spacing.node_sep_px,
+            GraphSpacing::PLANTUML_SVEK_DEFAULTS.node_sep_px
+        );
+        assert_eq!(
+            spacing.rank_sep_px,
+            GraphSpacing::PLANTUML_SVEK_DEFAULTS.rank_sep_px
+        );
     }
 
     #[test]
