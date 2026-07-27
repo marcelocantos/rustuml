@@ -32,8 +32,12 @@ use crate::preprocess;
 
 /// Return the ordinary-key identity used by PlantUML's
 /// `SkinParam.cleanForKeySlow`.
+fn normalized_skinparam_spelling(key: &str) -> String {
+    key.trim().to_ascii_lowercase().replace(['_', '.'], "")
+}
+
 fn canonical_skinparam_key(key: &str) -> String {
-    let mut canonical = key.trim().to_ascii_lowercase().replace(['_', '.'], "");
+    let mut canonical = normalized_skinparam_spelling(key);
     canonical = canonical
         .replace("sequenceparticipant", "participant")
         .replace("sequenceactor", "actor");
@@ -55,41 +59,82 @@ fn canonical_skinparam_key(key: &str) -> String {
     canonical
 }
 
-/// Apply PlantUML's `SkinParam.setParam` replacement semantics to parsed
-/// metadata. Java stores ordinary skinparams in a `LinkedHashMap`, so a later
-/// assignment replaces the value without moving the key's insertion position.
-///
-/// Double-underscore keys are RustUML parser metadata, not Java skinparams, and
-/// must remain as an ordered event stream.
+/// Reconstruct theme execution order and apply PlantUML's ordinary
+/// `SkinParam.setParam` key identity to parsed metadata.
 fn collapse_reassigned_skinparams(diagram: &mut Diagram) {
     let params = &mut diagram.meta_mut().skinparams;
-    let mut effective: Vec<(Option<String>, crate::diagram::SkinParam)> =
-        Vec::with_capacity(params.len());
-    let mut theme_segment = 0usize;
+    let drained = std::mem::take(params);
+    let mut source = Vec::with_capacity(drained.len());
+    let mut theme_bodies = std::collections::VecDeque::new();
+    let mut iter = drained.into_iter();
 
-    for param in params.drain(..) {
-        if param.key.eq_ignore_ascii_case("__theme") {
-            theme_segment += 1;
-            effective.push((None, param));
+    while let Some(param) = iter.next() {
+        if !param.key.eq_ignore_ascii_case("__theme_body_start") {
+            source.push(param);
             continue;
         }
+        let name = param.value;
+        let mut body = Vec::new();
+        for body_param in iter.by_ref() {
+            if body_param.key.eq_ignore_ascii_case("__theme_body_end")
+                && body_param.value.eq_ignore_ascii_case(&name)
+            {
+                break;
+            }
+            body.push(body_param);
+        }
+        theme_bodies.push_back((name, body));
+    }
+
+    // `TContext.executeTheme` runs each body at the directive before reading
+    // the next user line. The preprocessor relocates bodies only to preserve
+    // source-line numbers, so splice them back into that logical order here.
+    let mut logical = Vec::with_capacity(source.len());
+    let mut theme_segment = 0usize;
+    for param in source {
+        let theme_name = param
+            .key
+            .eq_ignore_ascii_case("__theme")
+            .then(|| param.value.clone());
+        logical.push((None, param));
+        let Some(theme_name) = theme_name else {
+            continue;
+        };
+        let Some(body_index) = theme_bodies
+            .iter()
+            .position(|(name, _)| name.eq_ignore_ascii_case(&theme_name))
+        else {
+            continue;
+        };
+        let (_, body) = theme_bodies.remove(body_index).unwrap();
+        theme_segment += 1;
+        logical.extend(
+            body.into_iter()
+                .map(|body_param| (Some(theme_segment), body_param)),
+        );
+    }
+
+    let mut effective: Vec<(Option<String>, crate::diagram::SkinParam)> =
+        Vec::with_capacity(logical.len());
+    for (theme_segment, mut param) in logical {
         if param.key.starts_with("__") {
             effective.push((None, param));
             continue;
         }
-        let canonical_key = if theme_segment == 0 {
-            canonical_skinparam_key(&param.key)
+        let replacement_key = if let Some(theme_segment) = theme_segment {
+            format!("theme:{theme_segment}:{}", param.key.to_ascii_lowercase())
         } else {
-            format!("{theme_segment}:{}", param.key.to_ascii_lowercase())
+            let canonical = canonical_skinparam_key(&param.key);
+            param.key = normalized_skinparam_spelling(&param.key);
+            format!("ordinary:{canonical}")
         };
-        if let Some((_, existing)) = effective
-            .iter_mut()
-            .find(|(key, _)| key.as_deref() == Some(canonical_key.as_str()))
+        if let Some(existing) = effective
+            .iter()
+            .position(|(key, _)| key.as_deref() == Some(replacement_key.as_str()))
         {
-            existing.value = param.value;
-        } else {
-            effective.push((Some(canonical_key), param));
+            effective.remove(existing);
         }
+        effective.push((Some(replacement_key), param));
     }
 
     *params = effective.into_iter().map(|(_, param)| param).collect();
@@ -1242,7 +1287,7 @@ mod tests {
     }
 
     #[test]
-    fn repeated_skinparams_keep_first_position_with_last_value() {
+    fn repeated_skinparams_expose_normalized_latest_spelling_and_value() {
         let input = concat!(
             "@startuml\n",
             "skinparam ClassBackgroundColor #13579B\n",
@@ -1263,7 +1308,7 @@ mod tests {
             .collect();
 
         assert_eq!(matching.len(), 1);
-        assert_eq!(matching[0].key, "ClassBackgroundColor");
+        assert_eq!(matching[0].key, "classbackgroundcolor");
         assert_eq!(matching[0].value, "#2468AC");
     }
 
@@ -1289,7 +1334,7 @@ mod tests {
             .collect();
 
         assert_eq!(matching.len(), 1);
-        assert_eq!(matching[0].key, "StAtEaRrOwCoLoR");
+        assert_eq!(matching[0].key, "statearrowcolor");
         assert_eq!(matching[0].value, "#2E7D32");
     }
 
@@ -1311,8 +1356,30 @@ mod tests {
             .collect();
 
         assert_eq!(matching.len(), 1);
-        assert_eq!(matching[0].key, "default_text_align");
+        assert_eq!(matching[0].key, "defaulttextalignment");
         assert_eq!(matching[0].value, "right");
+    }
+
+    #[test]
+    fn replacement_identity_retains_latest_family_spelling() {
+        let input = concat!(
+            "@startuml\n",
+            "skinparam participantPadding 7\n",
+            "skinparam Sequence.Participant_Padding 15\n",
+            "Alice -> Bob : Fresh message\n",
+            "@enduml\n",
+        );
+        let diagram = parse(input).unwrap();
+        let matching: Vec<_> = diagram
+            .meta()
+            .skinparams
+            .iter()
+            .filter(|param| canonical_skinparam_key(&param.key) == "participantpadding")
+            .collect();
+
+        assert_eq!(matching.len(), 1);
+        assert_eq!(matching[0].key, "sequenceparticipantpadding");
+        assert_eq!(matching[0].value, "15");
     }
 
     #[test]
@@ -1322,9 +1389,11 @@ mod tests {
             "skinparam stateArrowColor #1565C0\n",
             "skinparam ArrowColor #6A1B9A\n",
             "skinparam __theme fresh-synthetic-theme\n",
+            "skinparam __theme_body_start fresh-synthetic-theme\n",
             "skinparam classArrowColor #AD1457\n",
             "skinparam stateArrowColor #2E7D32\n",
             "skinparam usecaseArrowColor #EF6C00\n",
+            "skinparam __theme_body_end fresh-synthetic-theme\n",
             "[*] --> FreshRelay\n",
             "FreshRelay --> [*]\n",
             "@enduml\n",
@@ -1342,7 +1411,7 @@ mod tests {
         assert_eq!(
             params
                 .iter()
-                .find(|param| param.key == "stateArrowColor")
+                .find(|param| param.key == "arrowcolor")
                 .unwrap()
                 .value,
             "#6A1B9A"
@@ -1357,6 +1426,84 @@ mod tests {
                 .iter()
                 .any(|param| { param.key == "usecaseArrowColor" && param.value == "#EF6C00" })
         );
+    }
+
+    #[test]
+    fn real_theme_body_keeps_directive_order_against_user_skinparams() {
+        let after_theme = parse(concat!(
+            "@startuml\n",
+            "!theme metal\n",
+            "skinparam State.Arrow_Color #C62828\n",
+            "[*] --> FreshRelay\n",
+            "FreshRelay --> [*]\n",
+            "@enduml\n",
+        ))
+        .unwrap();
+        let after_params = &after_theme.meta().skinparams;
+        let theme_position = after_params
+            .iter()
+            .position(|param| param.key.eq_ignore_ascii_case("__theme"))
+            .unwrap();
+        let user_position = after_params
+            .iter()
+            .position(|param| {
+                canonical_skinparam_key(&param.key) == "arrowcolor" && param.value == "#C62828"
+            })
+            .unwrap();
+        assert!(theme_position < user_position);
+
+        let before_theme = parse(concat!(
+            "@startuml\n",
+            "skinparam State.Arrow_Color #C62828\n",
+            "!theme metal\n",
+            "[*] --> FreshRelay\n",
+            "FreshRelay --> [*]\n",
+            "@enduml\n",
+        ))
+        .unwrap();
+        let before_params = &before_theme.meta().skinparams;
+        let user_position = before_params
+            .iter()
+            .position(|param| {
+                canonical_skinparam_key(&param.key) == "arrowcolor" && param.value == "#C62828"
+            })
+            .unwrap();
+        let theme_position = before_params
+            .iter()
+            .position(|param| param.key.eq_ignore_ascii_case("__theme"))
+            .unwrap();
+        assert!(user_position < theme_position);
+    }
+
+    #[test]
+    fn repeated_theme_bodies_keep_intervening_user_order() {
+        let diagram = parse(concat!(
+            "@startuml\n",
+            "!theme metal\n",
+            "skinparam StateBorderColor #C62828\n",
+            "!theme minty\n",
+            "[*] --> FreshRelay\n",
+            "FreshRelay --> [*]\n",
+            "@enduml\n",
+        ))
+        .unwrap();
+        let params = &diagram.meta().skinparams;
+        let theme_positions = params
+            .iter()
+            .enumerate()
+            .filter(|(_, param)| param.key.eq_ignore_ascii_case("__theme"))
+            .map(|(index, _)| index)
+            .collect::<Vec<_>>();
+        let user_position = params
+            .iter()
+            .position(|param| {
+                param.key == "statebordercolor" && param.value.eq_ignore_ascii_case("#C62828")
+            })
+            .unwrap();
+
+        assert_eq!(theme_positions.len(), 2);
+        assert!(theme_positions[0] < user_position);
+        assert!(user_position < theme_positions[1]);
     }
 
     #[test]

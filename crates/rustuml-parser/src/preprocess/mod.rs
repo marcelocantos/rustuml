@@ -540,8 +540,8 @@ struct PreprocessContext {
     /// push every subsequent diagram line down by ~150 positions, breaking
     /// `data-source-line=` matching in goldens. Instead we collect the
     /// expansion here and append it once at the end of the preprocessed
-    /// output — skinparams are position-insensitive so this is semantically
-    /// equivalent to in-place expansion for everything we currently render.
+    /// output. Internal body delimiters let the parser reconstruct the
+    /// directive's temporal position without shifting user source lines.
     theme_tail: Vec<String>,
     /// Unflattened theme expansions keyed by their top-level source line.
     ///
@@ -1807,9 +1807,9 @@ impl PreprocessContext {
     /// PlantUML when no theme by that name exists). Returns `None` when
     /// the line is not a theme directive.
     ///
-    /// In-place output is empty: the theme expansion is appended to
-    /// `theme_tail` so the user diagram keeps its original line numbers
-    /// (see the `theme_tail` doc comment for the rationale).
+    /// In-place output is a single metadata marker. The theme expansion is
+    /// appended to `theme_tail` so the user diagram keeps its original line
+    /// numbers; parser-side body delimiters restore its source-order effects.
     fn try_theme(&mut self, line: &str) -> Option<Vec<String>> {
         let rest = line.strip_prefix("!theme ")?;
         let source_line = self.current_source_line;
@@ -1828,11 +1828,11 @@ impl PreprocessContext {
         if !self.is_active() {
             return Some(vec![String::new()]);
         }
-        self.theme_tail
-            .push(format!("skinparam __theme {name_part}"));
         if let Some(theme_src) = themes::get_theme_source(name_part) {
             let body = themes::strip_front_matter(theme_src);
             if self.include_depth < MAX_INCLUDE_DEPTH {
+                self.theme_tail
+                    .push(format!("skinparam __theme_body_start {name_part}"));
                 let saved_mark_function_body_source_lines = self.mark_function_body_source_lines;
                 self.mark_function_body_source_lines = false;
                 let sub_start = self.sub_blocks.len();
@@ -1876,11 +1876,13 @@ impl PreprocessContext {
                     });
                 }
                 self.mark_function_body_source_lines = saved_mark_function_body_source_lines;
+                self.theme_tail
+                    .push(format!("skinparam __theme_body_end {name_part}"));
             }
         }
-        // Emit a placeholder blank line so the diagram body's source-line
-        // numbers stay aligned with the original .puml.
-        Some(vec![String::new()])
+        // Replacing the directive with one metadata line preserves every
+        // following source-line number while retaining its temporal position.
+        Some(vec![format!("skinparam __theme {name_part}")])
     }
 
     fn try_option(&self, line: &str) -> Option<Vec<String>> {
