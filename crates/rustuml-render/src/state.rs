@@ -10,7 +10,7 @@ use std::fmt::Write;
 
 use rustuml_layout::graph::{
     ClusterPosition, ClusterTitleSize, Direction, EdgeLabelSize, EdgePath, EdgePorts, GraphSpacing,
-    LayoutGraph, LayoutResult, NodePosition,
+    LayoutGraph, LayoutResult, NodePosition, svek_state_border_geometry,
 };
 use rustuml_parser::diagram::state::*;
 
@@ -467,12 +467,9 @@ impl StateEntityPosition {
 }
 
 fn state_position_image_offset_x(state: &State) -> f64 {
-    if StateEntityPosition::of(state).uses_port_p()
-        && text_render::measure(&state.label, STATE_FONT_SIZE, false) > 40.0
-    {
-        // `SvekNode.appendLabelHtmlSpecialForPortHtml` paints the 12px image
-        // from the left edge of Graphviz's 52/3px middle cell.
-        -(8.0 / 3.0)
+    if StateEntityPosition::of(state).uses_port_p() {
+        svek_state_border_geometry(text_render::measure(&state.label, STATE_FONT_SIZE, false))
+            .image_offset_x
     } else {
         0.0
     }

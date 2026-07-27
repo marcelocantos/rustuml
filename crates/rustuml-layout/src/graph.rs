@@ -19,6 +19,13 @@ use crate::graphviz_ffi;
 static GRAPHVIZ_LOCK: Mutex<()> = Mutex::new(());
 
 const DOT_POINTS_PER_INCH: f64 = 72.0;
+const SVEK_STATE_BORDER_IMAGE_SIZE: f64 = 12.0;
+const SVEK_STATE_BORDER_LABEL_HTML_THRESHOLD: f64 = 40.0;
+const SVEK_STATE_BORDER_MIN_FULL_WIDTH: f64 = 10.0;
+const SVEK_STATE_BORDER_MIN_TABLE_WIDTH: f64 = 54.0;
+const SVEK_STATE_BORDER_TABLE_WIDTH_OVERHEAD: f64 = 16.0;
+const SVEK_STATE_BORDER_PORT_WIDTH_OVERHEAD: f64 = 24.0;
+const SVEK_STATE_BORDER_TABLE_HEIGHT: f64 = 36.0;
 /// `SmetanaForJson.createNode` requests a 15-point empty-row axis, while
 /// `shapes__c.record_init` resolves the omitted `\N` label to 16 points on the
 /// other axis before its final one-point `ND_height` correction.
@@ -52,6 +59,49 @@ pub struct EdgeLabelSize {
 pub struct ClusterTitleSize {
     pub width: f64,
     pub height: f64,
+}
+
+/// Graphviz geometry produced by Java's state-border DOT serializer.
+#[derive(Clone, Copy, Debug, PartialEq)]
+pub struct SvekStateBorderGeometry {
+    pub layout_width: f64,
+    pub node_height: f64,
+    pub port_width: f64,
+    pub image_offset_x: f64,
+    pub shielded: bool,
+}
+
+/// Reproduces `SvekNode.appendLabelHtmlSpecialForPort` and Graphviz's
+/// three-column allocation for an entry/exit label.
+pub fn svek_state_border_geometry(label_width: f64) -> SvekStateBorderGeometry {
+    let truncated_label_width = label_width.floor();
+    if truncated_label_width <= SVEK_STATE_BORDER_LABEL_HTML_THRESHOLD {
+        return SvekStateBorderGeometry {
+            layout_width: SVEK_STATE_BORDER_IMAGE_SIZE,
+            node_height: SVEK_STATE_BORDER_IMAGE_SIZE,
+            port_width: SVEK_STATE_BORDER_IMAGE_SIZE,
+            image_offset_x: 0.0,
+            shielded: false,
+        };
+    }
+
+    let full_width = (truncated_label_width - SVEK_STATE_BORDER_LABEL_HTML_THRESHOLD)
+        .max(SVEK_STATE_BORDER_MIN_FULL_WIDTH);
+    // Extracted from the pinned Java HTML table under Graphviz 15; see
+    // `docs/parity-reviews/state-autonomous-stereotype-styles/`
+    // `svek-port-shield-metrics.json`.
+    let table_width = (full_width + SVEK_STATE_BORDER_TABLE_WIDTH_OVERHEAD)
+        .max(SVEK_STATE_BORDER_MIN_TABLE_WIDTH);
+    let layout_width = (table_width / 2.0).ceil() * 2.0;
+    let port_width = ((full_width + SVEK_STATE_BORDER_PORT_WIDTH_OVERHEAD) / 3.0)
+        .max(SVEK_STATE_BORDER_IMAGE_SIZE);
+    SvekStateBorderGeometry {
+        layout_width,
+        node_height: SVEK_STATE_BORDER_TABLE_HEIGHT,
+        port_width,
+        image_offset_x: SVEK_STATE_BORDER_IMAGE_SIZE / 2.0 - port_width / 2.0,
+        shielded: true,
+    }
 }
 
 /// One named row in a renderer-owned fixed HTML-table node.
@@ -244,34 +294,26 @@ impl LayoutGraph {
 
     /// Adds a state entry/exit node, preserving Java's HTML label shield.
     ///
-    /// `SvekNode.appendLabelHtmlSpecialForPort` switches from a fixed rect to
-    /// a three-cell HTML table when the separately-painted label exceeds 40px.
-    /// Its middle image cell supplies the `P` edge port while the side cells
-    /// reserve the label's horizontal layout footprint.
+    /// `SvekNode.appendLabelHtmlSpecialForPort` truncates the separately
+    /// painted label width, then switches from a fixed rect to a three-cell
+    /// HTML table above 40px. Its middle cell supplies the `P` edge port while
+    /// the side cells reserve the label's horizontal layout footprint.
     pub fn add_svek_state_border_node_with_label(&mut self, id: &str, label_width: f64) -> bool {
         if self.nodes.iter().any(|node| node.id == id) {
             return false;
         }
-        let shape = if label_width > 40.0 {
-            // Graphviz 15 solves Java's fixed 12px middle HTML cell to a
-            // 52/3px port box; captured from
-            // `SvekNode.appendLabelHtmlSpecialForPort`'s emitted DOT.
+        let geometry = svek_state_border_geometry(label_width);
+        let shape = if geometry.shielded {
             NodeShape::SvekStateBorderShield {
-                image_width: 52.0 / 3.0,
+                port_width: geometry.port_width,
             }
         } else {
             NodeShape::SvekStateBorder
         };
         self.nodes.push(NodeSpec {
             id: id.to_string(),
-            // Java's `fullWidth = (int) labelWidth - 40` table solves to
-            // `fullWidth + 26` by 36 points in Graphviz 15.
-            width: if label_width > 40.0 {
-                label_width.floor() - 14.0
-            } else {
-                12.0
-            },
-            height: if label_width > 40.0 { 36.0 } else { 12.0 },
+            width: geometry.layout_width,
+            height: geometry.node_height,
             shape,
         });
         true
@@ -1181,11 +1223,11 @@ impl LayoutGraph {
                             label_val.as_ptr(),
                             empty.as_ptr(),
                         );
-                        if let NodeShape::SvekStateBorderShield { image_width } = spec.shape {
+                        if let NodeShape::SvekStateBorderShield { port_width } = spec.shape {
                             graphviz_ffi::agsafeset(
                                 node as *mut c_void,
                                 svek_center_port_key.as_ptr(),
-                                CString::new(image_width.to_string()).unwrap().as_ptr(),
+                                CString::new(port_width.to_string()).unwrap().as_ptr(),
                                 empty.as_ptr(),
                             );
                             graphviz_ffi::agsafeset(
@@ -2157,7 +2199,7 @@ enum NodeShape {
     Box,
     SvekStateBorder,
     SvekStateBorderShield {
-        image_width: f64,
+        port_width: f64,
     },
     Circle,
     Ellipse,
@@ -2957,6 +2999,31 @@ mod tests {
         assert_eq!(result.node_positions.len(), 1);
         assert!((result.node_positions[0].width - 54.0).abs() < 0.001);
         assert!((result.node_positions[0].height - 36.0).abs() < 0.001);
+
+        let mut odd_width_graph = LayoutGraph::new(Direction::TopToBottom);
+        assert!(
+            odd_width_graph.add_svek_state_border_node_with_label("long_renamed_entry", 175.875)
+        );
+        let odd_width_result = odd_width_graph.layout_full_no_timeout();
+        assert!((odd_width_result.node_positions[0].width - 152.0).abs() < 0.001);
+    }
+
+    #[test]
+    fn state_border_geometry_uses_java_integer_threshold_and_dynamic_port() {
+        let below = svek_state_border_geometry(40.2842);
+        assert_eq!(below.layout_width, 12.0);
+        assert_eq!(below.node_height, 12.0);
+        assert!(!below.shielded);
+
+        let just_above = svek_state_border_geometry(41.0771);
+        assert_eq!(just_above.layout_width, 54.0);
+        assert_eq!(just_above.port_width, 12.0);
+        assert_eq!(just_above.image_offset_x, 0.0);
+
+        let long = svek_state_border_geometry(175.875);
+        assert_eq!(long.layout_width, 152.0);
+        assert_eq!(long.port_width, 53.0);
+        assert_eq!(long.image_offset_x, -20.5);
     }
 
     #[test]
