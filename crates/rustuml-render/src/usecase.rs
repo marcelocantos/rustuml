@@ -19,7 +19,7 @@ use rustuml_parser::diagram::{DiagramMeta, style::StyleScheme};
 use crate::layout_oracle::{OracleLayout, wrap_oracle_envelope};
 use crate::plantuml_metrics as pm;
 use crate::style::Theme;
-use crate::style_cascade::{StyleCascade, StyleSignature};
+use crate::style_cascade::{StyleBoxSides, StyleCascade, StyleSignature};
 use crate::svg::SvgBuilder;
 use crate::text_render::{self, TextBase};
 
@@ -69,6 +69,14 @@ const CHROME_CAPTION_BOTTOM_PAD: f64 = 1.0;
 const CHROME_TITLE_MARGIN_X: f64 = 10.0;
 const CHROME_TITLE_TOP_PAD: f64 = 10.0;
 const CHROME_TITLE_BOTTOM_PAD: f64 = 11.0;
+/// Java `CucaDiagram#getDefaultMargins` supplies these asymmetric exporter
+/// margins for DESCRIPTION diagrams when root.document has no Margin value.
+const DEFAULT_DOCUMENT_MARGIN: StyleBoxSides = StyleBoxSides {
+    top: 0.0,
+    right: 5.0,
+    bottom: 5.0,
+    left: 0.0,
+};
 const LAYOUT_TIMEOUT: std::time::Duration = std::time::Duration::from_secs(5);
 const DEPENDENCY_ARROW_BACK: f64 = 9.0;
 const DEPENDENCY_ARROW_NOTCH: f64 = 5.0;
@@ -184,6 +192,7 @@ fn canonical_usecase_font_family(value: &str) -> String {
 /// Per-kind background/border/text defaults derived from `skinparam`
 /// directives. Keep this opt-in: absent skinparams preserve the renderer's
 /// existing PlantUML defaults instead of inheriting RustUML's UI theme.
+#[derive(Clone)]
 struct SkinColors {
     actor_fill: Option<String>,
     actor_border: Option<String>,
@@ -200,11 +209,15 @@ struct SkinColors {
     uc_font_size: u32,
     uc_stereo_font_color: String,
     arrow_color: String,
+    arrow_head_color: String,
+    arrow_stroke_width: f64,
+    arrow_dash: Option<(f64, f64)>,
     arrow_font_color: String,
     arrow_font_family: String,
     arrow_font_size: u32,
     canvas_background: Option<String>,
     canvas_rect: Option<String>,
+    document_margin: StyleBoxSides,
     gradient_defs: Option<String>,
 }
 
@@ -233,9 +246,6 @@ impl SkinColors {
             .map(canonical_usecase_font_family)
             .unwrap_or_else(|| default_font_family.clone());
         let uc_font_family = skin_value(skinparams, &["usecaseFontName"])
-            .map(canonical_usecase_font_family)
-            .unwrap_or_else(|| default_font_family.clone());
-        let arrow_font_family = skin_value(skinparams, &["arrowFontName", "usecaseArrowFontName"])
             .map(canonical_usecase_font_family)
             .unwrap_or_else(|| default_font_family.clone());
         let root_line = ["__styleRootLineThickness", "borderThickness"];
@@ -288,105 +298,227 @@ impl SkinColors {
             ),
             uc_stereo_font_color: skin_color(skinparams, "usecaseStereotypeFontColor")
                 .unwrap_or(uc_font_color),
-            arrow_color: skin_color(skinparams, "usecaseArrowColor")
-                .or_else(|| skin_color(skinparams, "arrowColor"))
-                .unwrap_or_else(|| STROKE.to_string()),
-            arrow_font_color: skin_color(skinparams, "usecaseArrowFontColor")
-                .or_else(|| skin_color(skinparams, "arrowFontColor"))
-                .unwrap_or_else(|| TEXT_COLOR.to_string()),
-            arrow_font_family,
-            arrow_font_size: skin_font_size(
-                skinparams,
-                &["usecaseArrowFontSize", "arrowFontSize"],
-                13,
-            ),
+            // Link styles are rebuilt from each Link's captured StyleBuilder
+            // below. Do not seed them from the final raw skinparam map: Java
+            // `Link#getStyleBuilder` never receives Entity's legacy refresh.
+            arrow_color: STROKE.to_string(),
+            arrow_head_color: STROKE.to_string(),
+            arrow_stroke_width: 1.0,
+            arrow_dash: None,
+            arrow_font_color: TEXT_COLOR.to_string(),
+            arrow_font_family: "sans-serif".to_string(),
+            arrow_font_size: 13,
             canvas_background,
             canvas_rect,
+            document_margin: DEFAULT_DOCUMENT_MARGIN,
             gradient_defs: gradient_defs.map(str::to_string),
         };
 
         let cascade = StyleCascade::new(&meta.style_program);
-        let actor_signature =
-            StyleSignature::from_selectors(["root", "element", "usecaseDiagram", "actor"]);
-        let usecase_signature =
-            StyleSignature::from_selectors(["root", "element", "usecaseDiagram", "usecase"]);
-        let arrow_signature =
-            StyleSignature::from_selectors(["root", "element", "usecaseDiagram", "arrow"]);
         let document_signature = StyleSignature::from_selectors(["root", "document"]);
-        let actor_style = cascade.resolve(&actor_signature, StyleScheme::Regular);
-        let usecase_style = cascade.resolve(&usecase_signature, StyleScheme::Regular);
-        let arrow_style = cascade.resolve(&arrow_signature, StyleScheme::Regular);
         let document_style = cascade.resolve(&document_signature, StyleScheme::Regular);
 
-        if let Some(value) = actor_style.property("backgroundColor") {
-            skin.actor_fill = Some(crate::sequence::gradient_fill_or(value, gradient_defs));
-        }
-        if let Some(value) = actor_style.property("lineColor") {
-            skin.actor_border = Some(crate::sequence::resolve_color(value));
-        }
-        if let Some(value) = actor_style.property("lineThickness")
-            && let Ok(value) = value.parse::<f64>()
-        {
-            skin.actor_border_thickness = fc(value);
-        }
-        if let Some(value) = actor_style.property("fontColor") {
-            skin.actor_font_color = crate::sequence::resolve_color(value);
-        }
-        if let Some(value) = actor_style.property("fontName") {
-            skin.actor_font_family = canonical_usecase_font_family(value);
-        }
-        if let Some(value) = actor_style.property("fontSize")
-            && let Ok(value) = value.parse::<f64>()
-        {
-            skin.actor_font_size = value.round() as u32;
-        }
-        if let Some(value) = usecase_style.property("backgroundColor") {
-            skin.uc_fill = Some(crate::sequence::gradient_fill_or(value, gradient_defs));
-        }
-        if let Some(value) = usecase_style.property("lineColor") {
-            skin.uc_border = Some(crate::sequence::resolve_color(value));
-        }
-        if let Some(value) = usecase_style.property("lineThickness")
-            && let Ok(value) = value.parse::<f64>()
-        {
-            skin.uc_border_thickness = fc(value);
-        }
-        if let Some(value) = usecase_style.property("fontColor") {
-            skin.uc_font_color = crate::sequence::resolve_color(value);
-        }
-        if let Some(value) = usecase_style.property("fontName") {
-            skin.uc_font_family = canonical_usecase_font_family(value);
-        }
-        if let Some(value) = usecase_style.property("fontSize")
-            && let Ok(value) = value.parse::<f64>()
-        {
-            skin.uc_font_size = value.round() as u32;
-        }
-        if let Some(value) = arrow_style.property("lineColor") {
-            skin.arrow_color = crate::sequence::resolve_color(value);
-        }
-        if let Some(value) = arrow_style.property("fontColor") {
-            skin.arrow_font_color = crate::sequence::resolve_color(value);
-        }
-        if let Some(value) = arrow_style.property("fontName") {
-            skin.arrow_font_family = canonical_usecase_font_family(value);
-        }
-        if let Some(value) = arrow_style.property("fontSize")
-            && let Ok(value) = value.parse::<f64>()
-        {
-            skin.arrow_font_size = value.round() as u32;
-        }
         if let Some(value) = document_style.property("backgroundColor") {
-            let color = crate::sequence::resolve_color(value);
-            if color.eq_ignore_ascii_case("transparent") {
+            // Java `TitledDiagram#calculateBackColor` resolves root.document,
+            // and `HColorSet#parseColor` maps transparent to no paint. Test
+            // that token before generic color resolution, which deliberately
+            // maps unknown names to white.
+            if value.trim().eq_ignore_ascii_case("transparent") {
                 skin.canvas_background = None;
                 skin.canvas_rect = None;
             } else {
+                let color = crate::sequence::resolve_color(value);
                 skin.canvas_rect = (color != "#FFFFFF").then(|| color.clone());
                 skin.canvas_background = Some(color);
             }
         }
+        // Java `TextBlockExporter12026.Builder#calculateMargin` resolves
+        // root.document from SkinParam's final builder, then
+        // `ClockwiseTopRightBottomLeft#read` retains all four sides.
+        skin.document_margin = document_style
+            .box_sides("margin")
+            .unwrap_or(DEFAULT_DOCUMENT_MARGIN);
         skin
+    }
+
+    fn for_actor(&self, meta: &DiagramMeta, actor: &Actor) -> Self {
+        let mut result = self.clone();
+        let cascade = StyleCascade::new(&meta.style_program);
+        let mut title_signature = StyleSignature::from_selectors([
+            "root",
+            "element",
+            "usecaseDiagram",
+            "actor",
+            "title",
+        ]);
+        let mut stereotype_signature = StyleSignature::from_selectors([
+            "root",
+            "element",
+            "usecaseDiagram",
+            "actor",
+            "stereotype",
+        ]);
+        if let Some(stereotype) = &actor.stereotype {
+            title_signature = title_signature.with_stereotype(stereotype);
+            stereotype_signature = stereotype_signature.with_stereotype(stereotype);
+        }
+
+        // Java `EntityImageDescription` resolves its title Fashion and font
+        // from `Entity#getCurrentStyleBuilder`; that method keeps the creation
+        // builder for pure CSS but refreshes to the final builder after any
+        // legacy skinparam command.
+        let style = cascade.resolve_entity_at_source_line(
+            &title_signature,
+            StyleScheme::Regular,
+            actor.source_line,
+        );
+        if let Some(value) = style.property("backgroundColor") {
+            result.actor_fill = Some(crate::sequence::gradient_fill_or(
+                value,
+                self.gradient_defs.as_deref(),
+            ));
+        }
+        if let Some(value) = style.property("lineColor") {
+            result.actor_border = Some(crate::sequence::resolve_color(value));
+        }
+        let default_stroke = result
+            .actor_border_thickness
+            .parse::<f64>()
+            .unwrap_or(0.5);
+        result.actor_border_thickness = fc(style.stroke(default_stroke).thickness);
+        if let Some(value) = style.property("fontColor") {
+            result.actor_font_color = crate::sequence::resolve_color(value);
+        }
+        if let Some(value) = style.property("fontName") {
+            result.actor_font_family = canonical_usecase_font_family(value);
+        }
+        if let Some(value) = style.property("fontSize")
+            && let Ok(value) = value.parse::<f64>()
+        {
+            result.actor_font_size = value.round() as u32;
+        }
+
+        // Java `EntityImageDescription` uses
+        // `forStereotypeItself(stereotype)` for the stereotype text style.
+        let stereotype_style = cascade.resolve_entity_at_source_line(
+            &stereotype_signature,
+            StyleScheme::Regular,
+            actor.source_line,
+        );
+        if let Some(value) = stereotype_style.property("fontColor") {
+            result.actor_stereo_font_color = crate::sequence::resolve_color(value);
+        }
+        result
+    }
+
+    fn for_use_case(&self, meta: &DiagramMeta, use_case: &UseCase) -> Self {
+        let mut result = self.clone();
+        let cascade = StyleCascade::new(&meta.style_program);
+        let mut title_signature = StyleSignature::from_selectors([
+            "root",
+            "element",
+            "usecaseDiagram",
+            "usecase",
+            "title",
+        ]);
+        let mut stereotype_signature = StyleSignature::from_selectors([
+            "root",
+            "element",
+            "usecaseDiagram",
+            "usecase",
+            "stereotype",
+        ]);
+        if let Some(stereotype) = &use_case.stereotype {
+            title_signature = title_signature.with_stereotype(stereotype);
+            stereotype_signature = stereotype_signature.with_stereotype(stereotype);
+        }
+
+        // Java `EntityImageDescription` snapshots the merged symbol/title
+        // style at entity creation through `Entity#getCurrentStyleBuilder`.
+        let style = cascade.resolve_entity_at_source_line(
+            &title_signature,
+            StyleScheme::Regular,
+            use_case.source_line,
+        );
+        if let Some(value) = style.property("backgroundColor") {
+            result.uc_fill = Some(crate::sequence::gradient_fill_or(
+                value,
+                self.gradient_defs.as_deref(),
+            ));
+        }
+        if let Some(value) = style.property("lineColor") {
+            result.uc_border = Some(crate::sequence::resolve_color(value));
+        }
+        let default_stroke = result
+            .uc_border_thickness
+            .parse::<f64>()
+            .unwrap_or(0.5);
+        result.uc_border_thickness = fc(style.stroke(default_stroke).thickness);
+        if let Some(value) = style.property("fontColor") {
+            result.uc_font_color = crate::sequence::resolve_color(value);
+        }
+        if let Some(value) = style.property("fontName") {
+            result.uc_font_family = canonical_usecase_font_family(value);
+        }
+        if let Some(value) = style.property("fontSize")
+            && let Ok(value) = value.parse::<f64>()
+        {
+            result.uc_font_size = value.round() as u32;
+        }
+
+        let stereotype_style = cascade.resolve_entity_at_source_line(
+            &stereotype_signature,
+            StyleScheme::Regular,
+            use_case.source_line,
+        );
+        if let Some(value) = stereotype_style.property("fontColor") {
+            result.uc_stereo_font_color = crate::sequence::resolve_color(value);
+        }
+        // `EntityImageDescription` reads Padding and Shadowing into style
+        // values, but `USymbolUsecase#asSmall` consumes neither. They remain
+        // intentionally inert here.
+        result
+    }
+
+    fn for_connection(&self, meta: &DiagramMeta, connection: &UseCaseConnection) -> Self {
+        let mut result = self.clone();
+        let cascade = StyleCascade::new(&meta.style_program);
+        let mut signature =
+            StyleSignature::from_selectors(["root", "element", "usecaseDiagram", "arrow"]);
+        if let Some(stereotype) = &connection.stereotype {
+            signature = signature.with_stereotype(stereotype);
+        }
+
+        // Java `GraphvizImageBuilder` and `SvekEdge#getCurrentStyleBuilder`
+        // both resolve against `Link#getStyleBuilder`, the builder captured
+        // when this concrete connection was created.
+        let style = cascade.resolve_link_at_source_line(
+            &signature,
+            StyleScheme::Regular,
+            connection.source_line,
+        );
+        if let Some(value) = style.property("lineColor") {
+            result.arrow_color = crate::sequence::resolve_color(value);
+        }
+        result.arrow_head_color = style
+            .property("headColor")
+            .map(crate::sequence::resolve_color)
+            .unwrap_or_else(|| result.arrow_color.clone());
+        let stroke = style.stroke(1.0);
+        result.arrow_stroke_width = stroke.thickness;
+        result.arrow_dash = stroke.dash;
+        if let Some(value) = style.property("fontColor") {
+            result.arrow_font_color = crate::sequence::resolve_color(value);
+        }
+        if let Some(value) = style.property("fontName") {
+            result.arrow_font_family = canonical_usecase_font_family(value);
+        }
+        if let Some(value) = style.property("fontSize")
+            && let Ok(value) = value.parse::<f64>()
+        {
+            result.arrow_font_size = value.round() as u32;
+        }
+        result
     }
 }
 
@@ -439,6 +571,16 @@ impl UseCaseChromeLayout {
             // SVG writer's bottom extent, not just the ribbon line box.
             footer_y: canvas_height - 9.0241,
         }
+    }
+
+    fn translate(&mut self, dx: f64, dy: f64) {
+        self.body_dx += dx;
+        self.body_dy += dy;
+        self.header_x += dx;
+        self.title_x += dx;
+        self.title_y += dy;
+        self.footer_x += dx;
+        self.footer_y += dy;
     }
 }
 
@@ -545,31 +687,73 @@ pub fn render_with_oracle(
         return wrap_oracle_envelope(orc, body, "DESCRIPTION");
     }
 
+    let gradient_defs = oracle
+        .map(|o| o.defs_inner_xml.as_str())
+        .filter(|d| !d.is_empty());
+    let skin = SkinColors::from_meta(&diagram.meta, gradient_defs);
     if diagram.actors.is_empty()
         && diagram.use_cases.is_empty()
         && diagram.packages.is_empty()
         && diagram.notes.is_empty()
         && diagram.meta.title.is_none()
     {
-        return r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="50px" preserveAspectRatio="none" style="width:100px;height:50px;background:#FFFFFF;" version="1.1" viewBox="0 0 100 50" width="100px" zoomAndPan="magnify"><defs/><g></g></svg>"#.to_string();
+        let width = 100.0 + skin.document_margin.left + skin.document_margin.right
+            - DEFAULT_DOCUMENT_MARGIN.left
+            - DEFAULT_DOCUMENT_MARGIN.right;
+        let height = 50.0 + skin.document_margin.top + skin.document_margin.bottom
+            - DEFAULT_DOCUMENT_MARGIN.top
+            - DEFAULT_DOCUMENT_MARGIN.bottom;
+        let background_style = skin
+            .canvas_background
+            .as_deref()
+            .map(|background| format!("background:{background};"))
+            .unwrap_or_default();
+        return format!(
+            r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="{height}px" preserveAspectRatio="none" style="width:{width}px;height:{height}px;{background_style}" version="1.1" viewBox="0 0 {width} {height}" width="{width}px" zoomAndPan="magnify"><defs/><g></g></svg>"#,
+            width = width as i64,
+            height = height as i64,
+        );
     }
 
-    let gradient_defs = oracle
-        .map(|o| o.defs_inner_xml.as_str())
-        .filter(|d| !d.is_empty());
-    let skin = SkinColors::from_meta(&diagram.meta, gradient_defs);
-    let actor_dims: Vec<ActorDim> = diagram.actors.iter().map(|a| actor_dim(a, &skin)).collect();
+    let actor_styles: Vec<SkinColors> = diagram
+        .actors
+        .iter()
+        .map(|actor| skin.for_actor(&diagram.meta, actor))
+        .collect();
+    let use_case_styles: Vec<SkinColors> = diagram
+        .use_cases
+        .iter()
+        .map(|use_case| skin.for_use_case(&diagram.meta, use_case))
+        .collect();
+    let connection_styles: Vec<SkinColors> = diagram
+        .connections
+        .iter()
+        .map(|connection| skin.for_connection(&diagram.meta, connection))
+        .collect();
+    let actor_dims: Vec<ActorDim> = diagram
+        .actors
+        .iter()
+        .zip(&actor_styles)
+        .map(|(actor, style)| actor_dim(actor, style))
+        .collect();
     let uc_dims: Vec<UseCaseDim> = diagram
         .use_cases
         .iter()
-        .map(|u| use_case_dim(u, &skin))
+        .zip(&use_case_styles)
+        .map(|(use_case, style)| use_case_dim(use_case, style))
         .collect();
     let note_dims: Vec<NoteDim> = diagram.notes.iter().map(note_dim).collect();
-    let mut positions =
-        resolve_positions(diagram, &actor_dims, &uc_dims, &note_dims, &skin, oracle);
+    let mut positions = resolve_positions(
+        diagram,
+        &actor_dims,
+        &uc_dims,
+        &note_dims,
+        &connection_styles,
+        oracle,
+    );
     let id_map = build_entity_id_map(diagram);
 
-    let (total_w, total_h, chrome) = if let Some(orc) = oracle
+    let (mut total_w, mut total_h, mut chrome) = if let Some(orc) = oracle
         && orc.canvas_width > 0.0
         && orc.canvas_height > 0.0
     {
@@ -585,6 +769,24 @@ pub fn render_with_oracle(
         positions.translate(chrome.body_dx, chrome.body_dy);
         (chrome.canvas_width, chrome.canvas_height, chrome)
     };
+    if oracle.is_none() {
+        // `TextBlockExporter12026#exportTo` translates the complete decorated
+        // diagram by the final document's left/top margin, replacing
+        // `CucaDiagram#getDefaultMargins`; `calculateFinalDimension` replaces
+        // the opposite sides independently.
+        let margin_dx = skin.document_margin.left - DEFAULT_DOCUMENT_MARGIN.left;
+        let margin_dy = skin.document_margin.top - DEFAULT_DOCUMENT_MARGIN.top;
+        positions.translate(margin_dx, margin_dy);
+        chrome.translate(margin_dx, margin_dy);
+        total_w += skin.document_margin.left + skin.document_margin.right
+            - DEFAULT_DOCUMENT_MARGIN.left
+            - DEFAULT_DOCUMENT_MARGIN.right;
+        total_h += skin.document_margin.top + skin.document_margin.bottom
+            - DEFAULT_DOCUMENT_MARGIN.top
+            - DEFAULT_DOCUMENT_MARGIN.bottom;
+        chrome.canvas_width = total_w;
+        chrome.canvas_height = total_h;
+    }
 
     let mut svg = SvgBuilder::new_plantuml_with_background_and_defs(
         total_w,
@@ -625,7 +827,7 @@ pub fn render_with_oracle(
             cy,
             oracle,
             &id_map,
-            &skin,
+            &actor_styles[i],
         );
     };
     let render_uc_i = |svg: &mut SvgBuilder, i: usize| {
@@ -639,7 +841,7 @@ pub fn render_with_oracle(
             cy,
             oracle,
             &id_map,
-            &skin,
+            &use_case_styles[i],
         );
     };
 
@@ -752,9 +954,15 @@ pub fn render_with_oracle(
     }
 
     if let Some(orc) = oracle {
-        render_oracle_connections(&mut svg, diagram, orc, &skin);
+        render_oracle_connections(&mut svg, diagram, orc, &connection_styles);
     } else {
-        render_no_oracle_connections(&mut svg, diagram, &id_map, &positions.edge_paths, &skin);
+        render_no_oracle_connections(
+            &mut svg,
+            diagram,
+            &id_map,
+            &positions.edge_paths,
+            &connection_styles,
+        );
     }
 
     render_footer(&mut svg, diagram, &chrome);
@@ -1483,7 +1691,7 @@ fn resolve_positions(
     actor_dims: &[ActorDim],
     uc_dims: &[UseCaseDim],
     note_dims: &[NoteDim],
-    skin: &SkinColors,
+    connection_styles: &[SkinColors],
     oracle: Option<&OracleLayout>,
 ) -> Positions {
     if let Some(orc) = oracle {
@@ -1513,7 +1721,13 @@ fn resolve_positions(
             edge_paths: Vec::new(),
         };
     }
-    layout_usecase_positions(diagram, actor_dims, uc_dims, note_dims, skin)
+    layout_usecase_positions(
+        diagram,
+        actor_dims,
+        uc_dims,
+        note_dims,
+        connection_styles,
+    )
         .unwrap_or_else(|| fallback_positions(actor_dims, uc_dims, diagram.notes.len()))
 }
 
@@ -1560,7 +1774,7 @@ fn layout_usecase_positions(
     actor_dims: &[ActorDim],
     uc_dims: &[UseCaseDim],
     note_dims: &[NoteDim],
-    skin: &SkinColors,
+    connection_styles: &[SkinColors],
 ) -> Option<Positions> {
     // Java path: `CucaDiagramFileMakerSvek` builds measured SVEK nodes,
     // `DotStringFactory` serialises fixed-size nodes/clusters to dot, and
@@ -1744,6 +1958,7 @@ fn layout_usecase_positions(
         match edge {
             LayoutEdge::Connection(index) => {
                 let conn = &diagram.connections[index];
+                let connection_style = &connection_styles[index];
                 let queue_len = conn.queue_len.max(1);
                 if queue_len == 1
                     && diagram.packages.iter().any(|package| {
@@ -1762,7 +1977,12 @@ fn layout_usecase_positions(
                 // one-character relation queue.
                 let minlen = Some(queue_len - 1);
                 if let Some((note_index, note)) = note_on_connection(diagram, index) {
-                    let size = link_note_label_size(conn, note, &note_dims[note_index], skin);
+                    let size = link_note_label_size(
+                        conn,
+                        note,
+                        &note_dims[note_index],
+                        connection_style,
+                    );
                     layout.add_edge_with_label_sizes_and_minlen(
                         &conn.from,
                         &conn.to,
@@ -1782,11 +2002,11 @@ fn layout_usecase_positions(
                         let label_size = EdgeLabelSize {
                             width: text_render::measure_with_family(
                                 label,
-                                skin.arrow_font_size as f64,
+                                connection_style.arrow_font_size as f64,
                                 false,
-                                &skin.arrow_font_family,
+                                &connection_style.arrow_font_family,
                             ) + 2.0,
-                            height: pm::text_height(skin.arrow_font_size as f64) + 2.0,
+                            height: pm::text_height(connection_style.arrow_font_size as f64) + 2.0,
                         };
                         layout.add_edge_with_label_sizes_and_minlen(
                             &conn.from,
@@ -1962,13 +2182,14 @@ fn layout_usecase_positions(
                 return None;
             }
             let (_, solved_y) = quantized_svek_label_origin(label.x, label.y);
+            let connection_style = &connection_styles[connection_index];
             // `SvekEdge.drawU` paints the real one-pixel-margined text at the
             // fixed-table origin recovered by `solveLine`.
             // `LimitFinder.drawText` then moves the UText baseline upward by
             // its line-box height minus 1.5 pixels.
             Some(
-                solved_y + 1.0 + pm::ascent(skin.arrow_font_size as f64)
-                    - pm::text_height(skin.arrow_font_size as f64)
+                solved_y + 1.0 + pm::ascent(connection_style.arrow_font_size as f64)
+                    - pm::text_height(connection_style.arrow_font_size as f64)
                     + 1.5,
             )
         }))
@@ -2762,21 +2983,14 @@ fn render_use_case(
     } else {
         (dim.rx, dim.ry)
     };
-    // Fill precedence: per-element `#color` > stereotype-scoped skinparam
-    // (`usecaseBackgroundColor<<stereo>>`) > generic `usecaseBackgroundColor` >
-    // default.
-    let stereo_fill = uc.stereotype.as_deref().and_then(|s| {
-        skin_fill(
-            &diagram.meta.skinparams,
-            &format!("usecaseBackgroundColor<<{s}>>"),
-            skin.gradient_defs.as_deref(),
-        )
-    });
+    // `Colors` is applied after `EntityImageDescription` resolves its
+    // stereotype-qualified style, so an inline entity color remains the final
+    // fill override. Legacy stereotype skinparams already participate in that
+    // resolved style through `FromSkinparamToStyle`.
     let fill = uc
         .color
         .as_deref()
         .map(resolve_fill)
-        .or(stereo_fill)
         .or_else(|| skin.uc_fill.clone())
         .unwrap_or_else(|| ENTITY_FILL.to_string());
     let stroke = skin.uc_border.as_deref().unwrap_or(STROKE);
@@ -3247,7 +3461,7 @@ fn render_oracle_connections(
     svg: &mut SvgBuilder,
     diagram: &UseCaseDiagram,
     oracle: &OracleLayout,
-    skin: &SkinColors,
+    connection_styles: &[SkinColors],
 ) {
     // PlantUML emits links sorted by source line. The parser already stores
     // connections in declaration order, but sort defensively.
@@ -3280,6 +3494,7 @@ fn render_oracle_connections(
         };
         used_conns.insert(conn_idx);
         let conn = &diagram.connections[conn_idx];
+        let skin = &connection_styles[conn_idx];
         let from_label = entity_label(diagram, &conn.from);
         let to_label = entity_label(diagram, &conn.to);
         let entity_1 = oracle_edge.entity_1.as_deref().unwrap_or("");
@@ -3535,12 +3750,13 @@ fn render_no_oracle_connections(
     diagram: &UseCaseDiagram,
     id_map: &HashMap<String, String>,
     edge_paths: &[EdgePath],
-    skin: &SkinColors,
+    connection_styles: &[SkinColors],
 ) {
     // Java `CucaDiagramFileMakerSvek.getOrderedLinks/addLinkNew` keeps links
     // sharing an unordered endpoint pair adjacent to their first occurrence.
     for connection_index in svek_ordered_connection_indices(diagram) {
         let conn = &diagram.connections[connection_index];
+        let skin = &connection_styles[connection_index];
         let Some(edge) = edge_paths
             .iter()
             .find(|edge| edge.from == conn.from && edge.to == conn.to)
@@ -3579,14 +3795,28 @@ fn render_no_oracle_connections(
             trim_svek_edge_endpoint(&mut path_points, false, decoration.path_gap());
         }
         if let Some(d) = edge_path_d(&path_points) {
-            let path_style = if conn.dashed {
-                format!(
-                    "stroke:{};stroke-width:1;stroke-dasharray:7,7;",
-                    skin.arrow_color
-                )
+            // Java `SvekEdge#drawU` resolves `Style#getStroke` from the
+            // connection's captured builder. Source-level dotted relations
+            // remain an inline LinkType override of the style dash pair.
+            let dash = if conn.dashed {
+                Some((7.0, 7.0))
             } else {
-                format!("stroke:{};stroke-width:1;", skin.arrow_color)
+                skin.arrow_dash
             };
+            let dash_style = dash
+                .map(|(visible, space)| {
+                    format!(
+                        "stroke-dasharray:{},{};",
+                        fc(visible),
+                        fc(space),
+                    )
+                })
+                .unwrap_or_default();
+            let path_style = format!(
+                "stroke:{};stroke-width:{};{dash_style}",
+                skin.arrow_color,
+                fc(skin.arrow_stroke_width),
+            );
             // Java `Link.idCommentForSvg()` uses `-backto-` whenever
             // `LinkType.looksLikeRevertedForSvg()` reports a decoration at
             // the source endpoint.
@@ -3609,7 +3839,8 @@ fn render_no_oracle_connections(
                 decoration,
                 raw_points[1],
                 raw_points[0],
-                &skin.arrow_color,
+                &skin.arrow_head_color,
+                skin.arrow_stroke_width,
             );
         }
         if let Some(decoration) = end_decoration
@@ -3621,7 +3852,8 @@ fn render_no_oracle_connections(
                 decoration,
                 raw_points[endpoint - 1],
                 raw_points[endpoint],
-                &skin.arrow_color,
+                &skin.arrow_head_color,
+                skin.arrow_stroke_width,
             );
         }
         let label_text = conn
@@ -3844,18 +4076,21 @@ fn render_usecase_extremity(
     control: (f64, f64),
     endpoint: (f64, f64),
     color: &str,
+    stroke_width: f64,
 ) {
     match decoration {
         UseCaseExtremity::Dependency => {
             let points = dependency_arrow_points(control, endpoint);
             svg.raw(&format!(
-                r#"<polygon fill="{color}" points="{points}" style="stroke:{color};stroke-width:1;"/>"#,
+                r#"<polygon fill="{color}" points="{points}" style="stroke:{color};stroke-width:{stroke_width};"/>"#,
+                stroke_width = fc(stroke_width),
             ));
         }
         UseCaseExtremity::Extension => {
             let points = extension_arrow_points(control, endpoint);
             svg.raw(&format!(
-                r#"<polygon fill="none" points="{points}" style="stroke:{color};stroke-width:1;"/>"#,
+                r#"<polygon fill="none" points="{points}" style="stroke:{color};stroke-width:{stroke_width};"/>"#,
+                stroke_width = fc(stroke_width),
             ));
         }
     }
@@ -4636,11 +4871,25 @@ mod tests {
         let usecase_dims: Vec<_> = usecase
             .use_cases
             .iter()
-            .map(|item| super::use_case_dim(item, &skin))
+            .map(|item| {
+                let style = skin.for_use_case(&usecase.meta, item);
+                super::use_case_dim(item, &style)
+            })
+            .collect();
+        let connection_styles: Vec<_> = usecase
+            .connections
+            .iter()
+            .map(|connection| skin.for_connection(&usecase.meta, connection))
             .collect();
         let note_dims: Vec<_> = usecase.notes.iter().map(super::note_dim).collect();
-        let positions =
-            super::resolve_positions(usecase, &actor_dims, &usecase_dims, &note_dims, &skin, None);
+        let positions = super::resolve_positions(
+            usecase,
+            &actor_dims,
+            &usecase_dims,
+            &note_dims,
+            &connection_styles,
+            None,
+        );
         let (cx, cy) = positions.use_cases[0];
         let oval = &usecase_dims[0];
         let mut diagonal_edges = 0;
@@ -4795,6 +5044,222 @@ FreshOperator --> FreshCheckpoint
         );
         assert!((atoms[0].width - expected_width).abs() < 0.01);
         assert!((atoms[0].line_width - expected_width).abs() < 0.01);
+    }
+
+    #[test]
+    fn entity_and_link_styles_follow_their_java_builder_ownership() {
+        let input = r##"@startuml
+<style>
+usecase {
+  BackgroundColor #E0F7FA
+  LineColor #00838F
+  FontColor #006064
+}
+arrow {
+  LineColor #AD1457
+  HeadColor #880E4F
+  LineThickness 3
+  LineStyle 5-2
+}
+</style>
+usecase "Early Harbor" as Early
+usecase "Middle Harbor" as Middle
+Early --> Middle : early route
+<style>
+usecase {
+  BackgroundColor #FCE4EC
+  LineColor #C2185B
+  FontColor #880E4F
+}
+arrow {
+  LineColor #1565C0
+  LineThickness 2
+  LineStyle 7-4
+}
+</style>
+usecase "Late Harbor" as Late
+Middle --> Late : late route
+@enduml"##;
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::UseCase(usecase) = &diagram else {
+            panic!("expected use-case diagram");
+        };
+        let base = super::SkinColors::from_meta(&usecase.meta, None);
+        let early = base.for_use_case(&usecase.meta, &usecase.use_cases[0]);
+        let late = base.for_use_case(&usecase.meta, &usecase.use_cases[2]);
+        let early_link = base.for_connection(&usecase.meta, &usecase.connections[0]);
+        let late_link = base.for_connection(&usecase.meta, &usecase.connections[1]);
+
+        // Java `Entity#getCurrentStyleBuilder` preserves pure-CSS creation
+        // snapshots; `Link#getStyleBuilder` does the same independently.
+        assert_eq!(early.uc_fill.as_deref(), Some("#E0F7FA"));
+        assert_eq!(early.uc_border.as_deref(), Some("#00838F"));
+        assert_eq!(early.uc_font_color, "#006064");
+        assert_eq!(late.uc_fill.as_deref(), Some("#FCE4EC"));
+        assert_eq!(late.uc_border.as_deref(), Some("#C2185B"));
+        assert_eq!(late.uc_font_color, "#880E4F");
+        assert_eq!(early_link.arrow_color, "#AD1457");
+        assert_eq!(early_link.arrow_head_color, "#880E4F");
+        assert_eq!(early_link.arrow_stroke_width, 3.0);
+        assert_eq!(early_link.arrow_dash, Some((5.0, 2.0)));
+        assert_eq!(late_link.arrow_color, "#1565C0");
+        assert_eq!(late_link.arrow_head_color, "#1565C0");
+        assert_eq!(late_link.arrow_stroke_width, 2.0);
+        assert_eq!(late_link.arrow_dash, Some((7.0, 4.0)));
+
+        let svg = crate::render_svg(&diagram);
+        assert!(
+            svg.contains("stroke:#AD1457;stroke-width:3;stroke-dasharray:5,2;"),
+            "{svg}"
+        );
+        assert!(
+            svg.contains(r##"<polygon fill="#880E4F""##)
+                && svg.contains("stroke:#880E4F;stroke-width:3;"),
+            "{svg}"
+        );
+        assert!(
+            svg.contains("stroke:#1565C0;stroke-width:2;stroke-dasharray:7,4;"),
+            "{svg}"
+        );
+    }
+
+    #[test]
+    fn legacy_skinparam_refreshes_entities_but_not_older_links() {
+        let input = r##"@startuml
+<style>
+usecase {
+  BackgroundColor #E0F7FA
+}
+</style>
+usecase "Early Harbor" as Early
+usecase "Late Harbor" as Late
+Early --> Late : before legacy
+skinparam UsecaseBackgroundColor #FCE4EC
+skinparam ArrowColor #1565C0
+Late --> Early : after legacy
+@enduml"##;
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::UseCase(usecase) = &diagram else {
+            panic!("expected use-case diagram");
+        };
+        let base = super::SkinColors::from_meta(&usecase.meta, None);
+        let early = base.for_use_case(&usecase.meta, &usecase.use_cases[0]);
+        let late = base.for_use_case(&usecase.meta, &usecase.use_cases[1]);
+        let before = base.for_connection(&usecase.meta, &usecase.connections[0]);
+        let after = base.for_connection(&usecase.meta, &usecase.connections[1]);
+
+        // Java `Entity#getCurrentStyleBuilder` has the compatibility refresh;
+        // `Link#getStyleBuilder` always keeps the captured builder.
+        assert_eq!(early.uc_fill.as_deref(), Some("#FCE4EC"));
+        assert_eq!(late.uc_fill.as_deref(), Some("#FCE4EC"));
+        assert_eq!(before.arrow_color, super::STROKE);
+        assert_eq!(after.arrow_color, "#1565C0");
+    }
+
+    #[test]
+    fn concrete_actor_and_usecase_signatures_normalize_stereotypes() {
+        let input = r##"@startuml
+<style>
+actor {
+  .External.User {
+    BackgroundColor #FFF3E0
+    LineColor #E65100
+    FontColor #BF360C
+  }
+}
+usecase {
+  .Review.Gate {
+    BackgroundColor #DCEDC8
+    LineColor #558B2F
+    FontColor #33691E
+    LineThickness 2
+  }
+}
+</style>
+actor "External User" as External <<external_user>>
+usecase "Review Gate" as Review <<review_gate>>
+External --> Review
+@enduml"##;
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::UseCase(usecase) = &diagram else {
+            panic!("expected use-case diagram");
+        };
+        let base = super::SkinColors::from_meta(&usecase.meta, None);
+        let actor = base.for_actor(&usecase.meta, &usecase.actors[0]);
+        let use_case = base.for_use_case(&usecase.meta, &usecase.use_cases[0]);
+
+        // Java `StyleSignatureBasic#clean` makes dots and underscores the same
+        // stereotype identity before `withTOBECHANGED` merges the style.
+        assert_eq!(actor.actor_fill.as_deref(), Some("#FFF3E0"));
+        assert_eq!(actor.actor_border.as_deref(), Some("#E65100"));
+        assert_eq!(actor.actor_font_color, "#BF360C");
+        assert_eq!(use_case.uc_fill.as_deref(), Some("#DCEDC8"));
+        assert_eq!(use_case.uc_border.as_deref(), Some("#558B2F"));
+        assert_eq!(use_case.uc_font_color, "#33691E");
+        assert_eq!(use_case.uc_stereo_font_color, "#33691E");
+        assert_eq!(use_case.uc_border_thickness, "2");
+    }
+
+    #[test]
+    fn usecase_padding_and_shadow_remain_symbol_inert() {
+        let plain = rustuml_parser::parse::parse(
+            "@startuml\nusecase \"Inert Controls\" as Probe\n@enduml",
+        )
+        .unwrap();
+        let styled = rustuml_parser::parse::parse(
+            "@startuml\n<style>\nusecase {\nPadding 5 9 13\nShadowing 3\n}\n</style>\nusecase \"Inert Controls\" as Probe\n@enduml",
+        )
+        .unwrap();
+        let rustuml_parser::diagram::Diagram::UseCase(plain) = &plain else {
+            panic!("expected use-case diagram");
+        };
+        let rustuml_parser::diagram::Diagram::UseCase(styled) = &styled else {
+            panic!("expected use-case diagram");
+        };
+        let plain_base = super::SkinColors::from_meta(&plain.meta, None);
+        let styled_base = super::SkinColors::from_meta(&styled.meta, None);
+        let plain_style = plain_base.for_use_case(&plain.meta, &plain.use_cases[0]);
+        let styled_style = styled_base.for_use_case(&styled.meta, &styled.use_cases[0]);
+        let plain_dim = super::use_case_dim(&plain.use_cases[0], &plain_style);
+        let styled_dim = super::use_case_dim(&styled.use_cases[0], &styled_style);
+
+        // Java `USymbolUsecase#asSmall` does not consume the parsed Padding or
+        // Shadowing values.
+        assert_eq!(plain_dim.rx, styled_dim.rx);
+        assert_eq!(plain_dim.ry, styled_dim.ry);
+    }
+
+    #[test]
+    fn document_style_keeps_transparency_and_four_independent_margins() {
+        let input = r##"@startuml
+<style>
+document {
+  BackgroundColor transparent
+  Margin 3 7 11 13
+}
+</style>
+usecase "Document Probe" as Probe
+@enduml"##;
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::UseCase(usecase) = &diagram else {
+            panic!("expected use-case diagram");
+        };
+        let skin = super::SkinColors::from_meta(&usecase.meta, None);
+
+        assert_eq!(skin.canvas_background, None);
+        assert_eq!(skin.canvas_rect, None);
+        assert_eq!(
+            skin.document_margin,
+            crate::style_cascade::StyleBoxSides {
+                top: 3.0,
+                right: 7.0,
+                bottom: 11.0,
+                left: 13.0,
+            }
+        );
+        let svg = crate::render_svg(&diagram);
+        assert!(!svg.contains("background:#FFFFFF;"), "{svg}");
+        assert!(!svg.contains(r##"<rect fill="#FFFFFF""##), "{svg}");
     }
 
     #[test]
