@@ -1,0 +1,12 @@
+@startuml
+allowmixing
+R4Alpha --> R4Beta
+R4Gamma --> R4Delta
+R4Beta --> R4Gamma
+R4Delta --> R4Epsilon
+R4Epsilon --> R4Alpha
+actor "Alpha Review Owner" as R4Alpha
+component "Gamma Review Engine" as R4Gamma
+queue "Delta Review Queue" as R4Delta
+usecase "Beta Review Decision" as R4Beta
+@enduml

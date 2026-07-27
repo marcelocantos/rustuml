@@ -1,0 +1,25 @@
+@startuml
+allowmixing
+state "Review Four Waiting" as R4Waiting
+diamond R4Choice
+circle R4Junction
+annotation R4Annotation
+entity R4Record
+actor "Review Four Custodian" as R4Custodian
+usecase "Review Four Audit" as R4Audit
+component "Review Four Collector" as R4Collector
+database "Review Four Warehouse" as R4Warehouse
+queue "Review Four Intake" as R4Intake
+node "Review Four Runtime" as R4Runtime
+rectangle "Review Four Perimeter" as R4Perimeter
+R4Waiting --> R4Choice
+R4Choice --> R4Junction
+R4Junction --> R4Annotation
+R4Annotation --> R4Record
+R4Custodian --> R4Audit
+R4Audit --> R4Collector
+R4Collector --> R4Warehouse
+R4Warehouse --> R4Intake
+R4Intake --> R4Runtime
+R4Runtime --> R4Perimeter
+@enduml

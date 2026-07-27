@@ -1,0 +1,11 @@
+@startuml
+allowmixing
+actor "Copper Night Operator" as R4CopperOperator
+usecase "Validate Copper Night" as R4CopperValidation
+component "Copper Night Router" as R4CopperRouter
+queue "Copper Night Queue" as R4CopperQueue
+R4CopperQueue --> R4CopperRouter
+R4CopperOperator --> R4CopperValidation
+R4CopperValidation --> R4CopperRouter
+R4CopperRouter --> R4CopperQueue
+@enduml

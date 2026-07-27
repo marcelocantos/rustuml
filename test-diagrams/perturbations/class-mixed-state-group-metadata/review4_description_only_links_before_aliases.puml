@@ -1,0 +1,12 @@
+@startuml
+allowmixing
+R4Scout --> R4Decision
+R4Decision --> R4Engine
+R4Engine --> R4Backlog
+R4Backlog --> R4Archive
+actor "Review Four Scout" as R4Scout
+database "Review Four Archive" as R4Archive
+component "Review Four Engine" as R4Engine
+usecase "Review Four Decision" as R4Decision
+queue "Review Four Backlog" as R4Backlog
+@enduml

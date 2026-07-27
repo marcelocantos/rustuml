@@ -1,0 +1,5 @@
+@startuml
+component "Control Review Frontend" as R4ControlFrontend
+component "Control Review Backend" as R4ControlBackend
+R4ControlFrontend --> R4ControlBackend
+@enduml

@@ -1,0 +1,500 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-mixed-state-group-metadata",
+  "verdict": "rejected",
+  "reviewer": {
+    "task_id": "codex-desktop-task-019ee369-54e2-7203-afce-ddde7bfe1723-class-mixed-state-group-metadata-checker-4",
+    "model": "OpenAI Codex (GPT-5)",
+    "role": "skeptical checker; no production edits"
+  },
+  "scope": {
+    "implementation_commit": "30902301fa70d9410bcfd7d38be52b654970e29b",
+    "implementation_parent": "d01dd24e05ef41fbcb2303d45dab96fab9efacba",
+    "causal_response": "docs/parity-reviews/class-mixed-state-group-metadata/review-3-response.md",
+    "causal_response_commit": "ca46f7c4457eee2c561c5d90113d2e8fd8797cb1",
+    "causal_response_sha256": "ed6878f17b6daca7a00dda4a5c7e8d8a96175fdabff79917aa0f50dd3f414a2a",
+    "head_at_review_start": "30902301fa70d9410bcfd7d38be52b654970e29b",
+    "head_at_record_write": "32b71af3bf8c68faae6fc0ea731f78e20beffe94",
+    "concurrent_head_note": "Other checker and style commits advanced the shared branch during this review. The reviewed implementation remained immutable, and all Rust executions used the pinned helper hash below."
+  },
+  "java": {
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "jar_mtime": "2026-06-19T02:03:25+1000",
+    "inspected_locations": [
+      "net.sourceforge.plantuml.PSystemBuilder#createPSystem",
+      "net.sourceforge.plantuml.classdiagram.ClassDiagramFactory#initCommandsList",
+      "net.sourceforge.plantuml.classdiagram.command.CommandAllowMixing#getRegexConcat",
+      "net.sourceforge.plantuml.classdiagram.command.CommandAllowMixing#executeArg",
+      "net.sourceforge.plantuml.classdiagram.command.CommandCreateElementFull2#executeArg",
+      "net.sourceforge.plantuml.classdiagram.command.CommandLinkClass#executeArg",
+      "net.sourceforge.plantuml.command.CommandPackage#executeArg",
+      "net.sourceforge.plantuml.command.CommandNamespace#executeArg",
+      "net.atmp.CucaDiagram#quarkInContextSafe",
+      "net.atmp.CucaDiagram#reallyCreateLeaf",
+      "net.sourceforge.plantuml.regex.Pattern2#compileInternal"
+    ]
+  },
+  "rust_execution": {
+    "helper": "target/release/examples/diff_one",
+    "helper_sha256": "fb23b10f2cfb7191e8c18507f44e673140b722d69ef79ce9083c9fc27cb11f05",
+    "helper_mtime": "2026-07-27T22:15:43+1000",
+    "helper_size_bytes": 16494336,
+    "helper_provenance": "Provided as freshly built from the two parser edits in 30902301 plus committed sequence implementation d01dd24e. Hash and mtime were unchanged at the end of review.",
+    "direct_cargo_commands": [],
+    "direct_rustc_commands": [],
+    "direct_rustfmt_commands": [],
+    "protocol_deviation": {
+      "occurred": true,
+      "command": "bullseye_convergence(cwd=/Users/marcelo/work/github.com/marcelocantos/rustuml)",
+      "effect": "The mandatory startup convergence tool automatically ran make bullseye. Its output showed fmt, clippy, and Rust tests, so the no-Cargo/no-rustfmt constraint was indirectly breached before fixture work began.",
+      "containment": "The release helper hash and mtime remained fb23b10f... and 2026-07-27T22:15:43+1000. No production file or baseline was changed by the checker."
+    },
+    "excluded_binary": {
+      "path": "target/release/rustuml",
+      "sha256": "c40a255124afd6e3a860092260787ffb83f3dc4df83f01f63fbb2d951d2dd64e",
+      "mtime": "2026-07-27T16:42:35+1000",
+      "reason": "The CLI predates 30902301 and was excluded from all verdict evidence after its timestamp exposed that it was stale."
+    }
+  },
+  "commands": [
+    "cat /Users/marcelo/.claude/rust.md",
+    "cat /Users/marcelo/.claude/conventions.md",
+    "cat /Users/marcelo/.claude/tools.md",
+    "git show --format=fuller --no-ext-diff 30902301",
+    "git diff --no-ext-diff d01dd24e 30902301 -- crates/rustuml-parser/src/parse/mod.rs crates/rustuml-parser/src/parse/class.rs",
+    "cat docs/parity-reviews/class-mixed-state-group-metadata/review-3-response.md",
+    "cat docs/parity-reviews/class-mixed-state-group-metadata/review-3.json",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "static inspection of the Java locations listed in java.inspected_locations at revision 71806a2",
+    "static inspection of detect_uml_subtype, ClassParser::ensure_entity, ClassParser::resolve_relationship_endpoint, ClassParser::try_entity_decl, ClassParser::try_package, package_qualified_name, and qualify_entity at Rust implementation 30902301",
+    "target/release/examples/diff_one --no-oracle --print-rust <each review2_, review3_, and review4_ source>",
+    "target/release/examples/diff_one --no-oracle <each review2_, review3_, and review4_ source>",
+    "Ruby REXML comparison of root data-diagram-type and ordered class/cluster data-qualified-name plus data-source-line records",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-mixed-state-group-metadata/review4_*.puml",
+    "xmllint --noout test-diagrams/perturbations/class-mixed-state-group-metadata/review4_*.svg",
+    "golden_has_syntax_error needle scan over every review4_ SVG",
+    "Ruby SHA-256 uniqueness scan of all 28 review4_ files against test-diagrams",
+    "temporary non-preserved invalid grammar probe: allowmixing unexpected-token; Java returned an error at line 2 while the pinned Rust helper rendered CLASS",
+    "git diff and rg anti-overfit audit for golden reads, embedded fixtures, heldout labels in shipping branches, source-line equality branches, entity/relationship-count ladders, coordinates, dimensions, and numeric constants",
+    "git merge-base --is-ancestor ca46f7c4 30902301",
+    "git diff --exit-code ca46f7c4 30902301 -- docs/parity-reviews/class-mixed-state-group-metadata/review-3-response.md",
+    "shasum -a 256 target/release/examples/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar review4_*.puml review4_*.svg"
+  ],
+  "prior_replay": {
+    "summary": {
+      "source_count": 14,
+      "strict_matches": 1,
+      "scoped_identity_matches": 14,
+      "classification": "All prior parser-owned factory type, class/cluster qualified-name, and source-line records pass. Thirteen strict differences are pre-existing renderer geometry or shape gaps."
+    },
+    "fixtures": [
+      {
+        "source": "review2_alias_line_offsets.puml",
+        "strict": "different",
+        "scoped_identity": "pass"
+      },
+      {
+        "source": "review2_classlike_variants.puml",
+        "strict": "different",
+        "scoped_identity": "pass"
+      },
+      {
+        "source": "review2_deployment_description_symbols.puml",
+        "strict": "different",
+        "scoped_identity": "pass"
+      },
+      {
+        "source": "review2_description_symbols.puml",
+        "strict": "different",
+        "scoped_identity": "pass"
+      },
+      {
+        "source": "review2_multiple_symbol_instances.puml",
+        "strict": "different",
+        "scoped_identity": "pass"
+      },
+      {
+        "source": "review2_reordered_core_matrix.puml",
+        "strict": "different",
+        "scoped_identity": "pass"
+      },
+      {
+        "source": "review3_alias_forms_and_order.puml",
+        "strict": "different",
+        "scoped_identity": "pass"
+      },
+      {
+        "source": "review3_combined_leaf_container_reordering.puml",
+        "strict": "different",
+        "scoped_identity": "pass"
+      },
+      {
+        "source": "review3_database_leaf_container_boundary.puml",
+        "strict": "different",
+        "scoped_identity": "pass"
+      },
+      {
+        "source": "review3_implicit_and_explicit_endpoints.puml",
+        "strict": "different",
+        "scoped_identity": "pass"
+      },
+      {
+        "source": "review3_node_leaf_container_boundary.puml",
+        "strict": "different",
+        "scoped_identity": "pass"
+      },
+      {
+        "source": "review3_rectangle_leaf_container_boundary.puml",
+        "strict": "different",
+        "scoped_identity": "pass"
+      },
+      {
+        "source": "review3_renamed_description_leaves.puml",
+        "strict": "different",
+        "scoped_identity": "pass"
+      },
+      {
+        "source": "review3_reordered_links_before_aliases.puml",
+        "strict": "pass",
+        "scoped_identity": "pass"
+      }
+    ]
+  },
+  "fresh_review": {
+    "summary": {
+      "valid_sources": 14,
+      "valid_java_svgs": 14,
+      "java_error_pages": 0,
+      "strict_matches": 5,
+      "scoped_identity_matches": 10,
+      "direct_parser_failures": 4,
+      "unique_files": 28,
+      "hash_collisions_in_test_diagrams": 0
+    },
+    "fixtures": [
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review4_aliases_after_reversed_chain.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review4_aliases_after_reversed_chain.svg",
+        "source_sha256": "fd9a0c37a36a92f420f6fc26df166b35d23b5567b0250ce6e077424ab1fde3d1",
+        "golden_sha256": "81045b4e563e9787122f4e1c1e9a9d12a559590dd05cf795b8d3ad10413241a2",
+        "axes": [
+          "relationships before declarations",
+          "reversed and repeated links",
+          "quoted aliases reordered by kind"
+        ],
+        "java_type": "CLASS",
+        "rust_type": "CLASS",
+        "strict": "different",
+        "scoped_identity": "pass",
+        "evidence": "All four aliases retain Java's first relationship source lines and qualified codes. Remaining differences are renderer-owned."
+      },
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review4_aliases_before_links_renamed.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review4_aliases_before_links_renamed.svg",
+        "source_sha256": "df8222d2ce012edb7e2254fd0421deff2673bc2654b3bf5b71734da267628625",
+        "golden_sha256": "b570e3f5cc3dfe69189ba3b60d4a6fdb33a94d42124b36a99b76d5b00980d2e0",
+        "axes": [
+          "declarations before relationships",
+          "renamed quoted displays",
+          "non-source-order topology"
+        ],
+        "java_type": "CLASS",
+        "rust_type": "CLASS",
+        "strict": "different",
+        "scoped_identity": "pass",
+        "evidence": "Declaration-owned alias identities and lines match. The SVG mismatch is outside the two parser fixes."
+      },
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review4_control_class_without_allowmixing.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review4_control_class_without_allowmixing.svg",
+        "source_sha256": "1793180677d330a760e6118dce2333ea3becc885f9856fde2e81a055d3c451c0",
+        "golden_sha256": "4e720c4ebbb2bfdc0ee9ada46fd02a84f989602472f7aca64907c5a9dddc9a6a",
+        "axes": [
+          "no allowmixing control",
+          "ordinary class factory",
+          "relationship before aliased class refinement"
+        ],
+        "java_type": "CLASS",
+        "rust_type": "CLASS",
+        "strict": "different",
+        "scoped_identity": "pass",
+        "evidence": "The changed dispatch branch does not perturb ordinary class selection or first-use identity."
+      },
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review4_control_component_without_allowmixing.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review4_control_component_without_allowmixing.svg",
+        "source_sha256": "d23a6061e4f502593c3cb1b3159d5718927021cd5e10c26793d7603d522a3e90",
+        "golden_sha256": "36e4d7dc8667d4cab02c816a4e6692114f674b14ee5f280c6ef2f98f538d705d",
+        "axes": [
+          "no allowmixing control",
+          "description component leaves",
+          "explicit aliases"
+        ],
+        "java_type": "DESCRIPTION",
+        "rust_type": "DESCRIPTION",
+        "strict": "pass",
+        "scoped_identity": "pass",
+        "evidence": "Unambiguous component description dispatch remains exact."
+      },
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review4_control_sequence_without_allowmixing.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review4_control_sequence_without_allowmixing.svg",
+        "source_sha256": "82a6b32c6fcaf124b05736501a3fb31b85858ee5aa3279eda538954cab43f61d",
+        "golden_sha256": "053f95dc2cd6076e5299ffc8752bd150b142da76b80418e3a02b8f2b3b203453",
+        "axes": [
+          "no allowmixing control",
+          "explicit sequence participants",
+          "solid and return messages"
+        ],
+        "java_type": "SEQUENCE",
+        "rust_type": "SEQUENCE",
+        "strict": "pass",
+        "scoped_identity": "pass",
+        "evidence": "Sequence dispatch remains exact without the directive."
+      },
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review4_control_usecase_without_allowmixing.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review4_control_usecase_without_allowmixing.svg",
+        "source_sha256": "e17d0e62abbba04fce16ad45d7585823756877dc27e712d33996c27c0660ca42",
+        "golden_sha256": "bf5c5e3d080e14c9944432ab202b9b6489ecdc7b82be65891c460823eb3ecb1d",
+        "axes": [
+          "no allowmixing control",
+          "actor and usecase leaves",
+          "explicit aliases"
+        ],
+        "java_type": "DESCRIPTION",
+        "rust_type": "DESCRIPTION",
+        "strict": "pass",
+        "scoped_identity": "pass",
+        "evidence": "Description/usecase dispatch remains exact without the directive."
+      },
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review4_description_only_declarations_first.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review4_description_only_declarations_first.svg",
+        "source_sha256": "ea5833007fd6a47dd2152e94bf941a636c45aa4bcdf7a4812121248f65162dac",
+        "golden_sha256": "eb794e89b2c79acb92c669f4d41613a8cb3ebd2fb5a331dc4514deb14ef52a92",
+        "axes": [
+          "description-only allowmixing",
+          "seven mixed leaf kinds",
+          "declarations before a deep chain"
+        ],
+        "java_type": "CLASS",
+        "rust_type": "CLASS",
+        "strict": "different",
+        "scoped_identity": "pass",
+        "evidence": "The exact lowercase directive now selects CLASS and all seven declaration aliases and lines match. Geometry remains different."
+      },
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review4_description_only_links_before_aliases.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review4_description_only_links_before_aliases.svg",
+        "source_sha256": "29294be6e28e9cb7033bfbc4ef77bc208c874130e00c459560515eac1e60ab97",
+        "golden_sha256": "76dd01a81c70ea3678224e70056f604023962ab172e9a4bb0ad94c1fdc064311",
+        "axes": [
+          "description-only allowmixing",
+          "four links before five declarations",
+          "kind and declaration order permutation"
+        ],
+        "java_type": "CLASS",
+        "rust_type": "CLASS",
+        "strict": "pass",
+        "scoped_identity": "pass",
+        "evidence": "First relationship ownership and later alias codes match exactly across the complete SVG."
+      },
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review4_mixed_case_allowmixing.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review4_mixed_case_allowmixing.svg",
+        "source_sha256": "8de762834ba596f6366569f64dc927de40867460e17e7631db68d9ecd481f802",
+        "golden_sha256": "b1045dca6fe2c1610939944bbd8584b9c4cb0b9f8f2c22b0d959e9ad40a6d93b",
+        "axes": [
+          "description-only allowmixing",
+          "mixed-case Java command spelling",
+          "renamed aliases and three-link chain"
+        ],
+        "java_type": "CLASS",
+        "rust_type": "DESCRIPTION",
+        "strict": "different",
+        "scoped_identity": "fail",
+        "evidence": "Java Pattern2 compiles command regexes case-insensitively and selects CLASS. Rust checks lowercase bytes, selects DESCRIPTION, invents AlL and WmIxInG from the directive, and moves R4CaseApproval ownership from declaration line 4 to relationship line 6."
+      },
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review4_multiple_implicit_chains.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review4_multiple_implicit_chains.svg",
+        "source_sha256": "d11121d9ac61ee2bf98a97918e5e3a61223afe0db33c66a6b571df144d88b5f9",
+        "golden_sha256": "661af912865816e7ae0d28b98fa94f3d061954a2a12ea125624f704ff0387162",
+        "axes": [
+          "two implicit endpoint chains",
+          "one never-declared endpoint",
+          "four reordered alias refinements"
+        ],
+        "java_type": "CLASS",
+        "rust_type": "CLASS",
+        "strict": "pass",
+        "scoped_identity": "pass",
+        "evidence": "All five quark-like identities, including undeclared R4Epsilon, match Java's first-use locations and complete SVG."
+      },
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review4_namespace_container_reordered.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review4_namespace_container_reordered.svg",
+        "source_sha256": "756f3c785d9335ac9c9b3c75662ce233a2a20242820eb88980c27eda18f12418",
+        "golden_sha256": "cfc24d3039621367fec5f494777088ac88f60b87cee5ed36b989f9d68bb1ef91",
+        "axes": [
+          "two nested namespace containers",
+          "relationship before aliases inside the namespace",
+          "fully qualified cross-boundary reference after closure"
+        ],
+        "java_type": "CLASS",
+        "rust_type": "CLASS",
+        "strict": "different",
+        "scoped_identity": "fail",
+        "evidence": "Java resolves the external R4Outer.R4Inner.R4Gateway reference to the existing nested quark. Rust emits the correct nested entity at source line 4 and a duplicate with the same qualified name at line 10."
+      },
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review4_nested_package_alias_after_links.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review4_nested_package_alias_after_links.svg",
+        "source_sha256": "b9531c36a22d2d6f50ddc6055541fed68c7147a38f339ff57ad9be2ba746520d",
+        "golden_sha256": "48b27360f5aee5119e057696e529dd3f195693677a1b50be6791558bf7407597",
+        "axes": [
+          "quoted package display with explicit package alias",
+          "links before three nested alias declarations",
+          "qualified reference from outside the package"
+        ],
+        "java_type": "CLASS",
+        "rust_type": "CLASS",
+        "strict": "different",
+        "scoped_identity": "fail",
+        "evidence": "Java CommandPackage uses AS as the group quark and NAME as display, producing R4Domain.*. Rust's package regex ignores the alias, qualifies the cluster and members as Review Four Domain.*, then creates a duplicate R4Domain.R4DomainComponent endpoint at line 10."
+      },
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review4_underscored_allow_mixing.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review4_underscored_allow_mixing.svg",
+        "source_sha256": "c82c28612b62cce0fa5a138778e4b185609890e2e4314c16269dfd3b0ee33f31",
+        "golden_sha256": "d90d944d6f6833f41ae77bafeb471a76beefbf2ca04dd4c4ff411fbf3cd145ac",
+        "axes": [
+          "description-only allowmixing",
+          "Java's optional underscore command spelling",
+          "links before reordered aliases"
+        ],
+        "java_type": "CLASS",
+        "rust_type": "DESCRIPTION",
+        "strict": "different",
+        "scoped_identity": "fail",
+        "evidence": "Java CommandAllowMixing#getRegexConcat explicitly accepts allow_?mixing. Rust selects DESCRIPTION, invents all and w_mixing, and duplicates declared endpoints."
+      },
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review4_valid_mixed_leaf_matrix.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review4_valid_mixed_leaf_matrix.svg",
+        "source_sha256": "6cc72af96457e67019c45c7036e9a3b2634b3de9fd951ef6afbc17a0c91c76bd",
+        "golden_sha256": "40bd60d18970bac9cc4592b192b1ee15772aedff57489e010e26806d8ee8052d",
+        "axes": [
+          "twelve valid mixed leaf kinds",
+          "state-like and description-like leaves together",
+          "two independent relationship chains"
+        ],
+        "java_type": "CLASS",
+        "rust_type": "CLASS",
+        "strict": "different",
+        "scoped_identity": "pass",
+        "evidence": "All twelve qualified names and source lines match. Shape and geometry differences are excluded from the parser verdict."
+      }
+    ]
+  },
+  "mechanism_assessment": {
+    "dispatch": {
+      "result": "fail",
+      "findings": [
+        "The response says a standalone, case-insensitive allowmixing command is direct class evidence, but detect_uml_subtype performs case-sensitive byte checks.",
+        "Java CommandAllowMixing accepts an optional underscore and Pattern2 compiles case-insensitively. Both valid spellings are fresh direct counterexamples.",
+        "Rust uses starts_with(\"allowmixing \") while Java's command regex is end-anchored. The temporary invalid probe allowmixing unexpected-token is a Java syntax error but renders as CLASS in Rust, so the new branch also over-accepts invalid syntax."
+      ]
+    },
+    "leaf_alias_refinement": {
+      "result": "partial_pass",
+      "findings": [
+        "Simple top-level relationships-before-declarations now preserve first-use source lines while later aliases become data-qualified-name. The old failing review3 matrix and three fresh top-level matrices pass.",
+        "The response's claim that EntityKind remains a refinable presentation field is not supported by Java. CommandLinkClass creates a LeafType.CLASS entity; CommandCreateElementFull2 reuses it and calls setDisplay but does not replace LeafType or USymbol. Rust still assigns entity.kind = kind. This is a model-account error even where the current renderer masks it."
+      ]
+    },
+    "container_ownership": {
+      "result": "fail",
+      "findings": [
+        "Rust ClassParser::try_package does not parse package DISPLAY as CODE and is not end-anchored, so it silently ignores the alias suffix.",
+        "Rust ClassParser::resolve_relationship_endpoint does not resolve a fully qualified nested package or namespace path back to its existing short-id entity. It creates a duplicate endpoint with a later source line.",
+        "These are direct qualified-identity and ownership failures, not layout failures."
+      ]
+    },
+    "causal_account_gate": {
+      "result": "fail",
+      "findings": [
+        "The pre-code document is review-3-response.md, not the required machine-readable docs/parity-reviews/<mechanism>/account.json for this new change.",
+        "The response does not pin the Java revision and its dispatch section does not name CommandAllowMixing#getRegexConcat or Pattern2#compileInternal, which are necessary to capture accepted command grammar.",
+        "Both changed production branch conditions lack an adjacent named Java class/method citation, violating the repository's constant-and-branch provenance rule."
+      ]
+    }
+  },
+  "anti_overfit": {
+    "fixture_shaped_logic": "pass",
+    "golden_or_fixture_reads": "pass",
+    "numeric_constant_audit": "pass",
+    "provenance_gate": "fail",
+    "findings": [
+      "The shipping diff contains no review2, review3, or review4 labels, no golden or fixture reads, and no include_str/include_bytes embedding.",
+      "The shipping branches contain no source-line equality checks, entity-count or relationship-count ladders, coordinates, dimensions, or new numeric constants.",
+      "Fixture labels appear only in unit tests and do not affect production control flow.",
+      "The implementation is mechanism-shaped for exact lowercase top-level cases, but its command grammar is narrower than Java for valid spellings and broader than Java for invalid trailing text.",
+      "The absence of fixture-shaped logic does not rescue a model that fails held-out valid syntax and container ownership."
+    ]
+  },
+  "findings": [
+    {
+      "severity": "reject",
+      "title": "Valid Java allowmixing spellings still dispatch to DESCRIPTION",
+      "evidence": [
+        "review4_mixed_case_allowmixing.puml",
+        "review4_underscored_allow_mixing.puml"
+      ]
+    },
+    {
+      "severity": "reject",
+      "title": "Package aliases and nested qualified endpoints do not preserve quark-like ownership",
+      "evidence": [
+        "review4_nested_package_alias_after_links.puml",
+        "review4_namespace_container_reordered.puml"
+      ]
+    },
+    {
+      "severity": "major",
+      "title": "The causal response misstates Java's existing-entity type refinement",
+      "evidence": [
+        "CommandLinkClass creates LeafType.CLASS",
+        "CommandCreateElementFull2 only calls setDisplay on an existing entity"
+      ]
+    },
+    {
+      "severity": "major",
+      "title": "The changed dispatch condition accepts Java-invalid trailing command text",
+      "evidence": [
+        "Temporary probe allowmixing unexpected-token: Java error line 2; Rust CLASS with two entities"
+      ]
+    },
+    {
+      "severity": "gate",
+      "title": "Durable account and adjacent branch provenance requirements are unmet",
+      "evidence": [
+        "review-3-response.md is not account.json",
+        "Neither changed branch names its Java class/method beside the condition"
+      ]
+    }
+  ],
+  "required_followup": [
+    "Preserve all 14 review4_ source/SVG pairs, including the four direct failures.",
+    "Before another production edit, commit a compliant account.json that pins Java 71806a2 and models CommandAllowMixing#getRegexConcat plus Pattern2#compileInternal: full-line, case-insensitive, optional underscore.",
+    "Normalize the directive grammar once and use the same exact recognizer for subtype detection and ClassParser command consumption. Reject trailing tokens rather than starts_with acceptance.",
+    "Model CommandPackage#executeArg so package DISPLAY as CODE stores CODE as group identity and DISPLAY only as presentation.",
+    "Resolve fully qualified nested package and namespace relationship endpoints to existing entities without duplicate source ownership.",
+    "Correct or justify the response's type-refinement claim against CommandLinkClass and CommandCreateElementFull2 before changing EntityKind behavior.",
+    "Add adjacent named Java citations to every changed parity-affecting branch.",
+    "Replay all 14 review2/review3 sources and all 14 review4 sources with the pinned no-oracle helper. Acceptance requires 28/28 scoped identity matches; strict mismatches may only be classified as unrelated after scoped identity passes."
+  ]
+}

@@ -1,0 +1,12 @@
+@startuml
+allowmixing
+namespace R4Outer {
+  namespace R4Inner {
+    R4Gateway --> R4Ledger
+    database "Nested Review Ledger" as R4Ledger
+    component "Nested Review Gateway" as R4Gateway
+  }
+}
+actor "Outer Review Auditor" as R4Auditor
+R4Outer.R4Inner.R4Gateway --> R4Auditor
+@enduml

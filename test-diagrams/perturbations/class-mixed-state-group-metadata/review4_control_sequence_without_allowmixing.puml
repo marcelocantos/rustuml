@@ -1,0 +1,6 @@
+@startuml
+participant "Control Review Caller" as R4ControlCaller
+participant "Control Review Callee" as R4ControlCallee
+R4ControlCaller -> R4ControlCallee : inspect
+R4ControlCallee --> R4ControlCaller : result
+@enduml

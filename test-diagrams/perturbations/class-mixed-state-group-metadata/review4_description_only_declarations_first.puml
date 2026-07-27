@@ -1,0 +1,16 @@
+@startuml
+allowmixing
+actor "Review Four Operator" as R4Operator
+usecase "Approve Review Four" as R4Approval
+component "Review Four Policy" as R4Policy
+queue "Review Four Retry" as R4Retry
+database "Review Four Store" as R4Store
+node "Review Four Host" as R4Host
+rectangle "Review Four Boundary" as R4Boundary
+R4Operator --> R4Approval
+R4Approval --> R4Policy
+R4Policy --> R4Retry
+R4Retry --> R4Store
+R4Store --> R4Host
+R4Host --> R4Boundary
+@enduml

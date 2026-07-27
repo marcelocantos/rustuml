@@ -1,0 +1,12 @@
+@startuml
+allowmixing
+package "Review Four Domain" as R4Domain {
+  R4DomainActor --> R4DomainUse
+  R4DomainUse --> R4DomainComponent
+  component "Domain Policy Unit" as R4DomainComponent
+  actor "Domain Release Lead" as R4DomainActor
+  usecase "Approve Domain Release" as R4DomainUse
+}
+queue "Domain Outbox" as R4DomainOutbox
+R4Domain.R4DomainComponent --> R4DomainOutbox
+@enduml

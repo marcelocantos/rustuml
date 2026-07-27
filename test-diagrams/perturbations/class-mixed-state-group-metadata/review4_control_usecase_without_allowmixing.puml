@@ -1,0 +1,5 @@
+@startuml
+actor "Control Review User" as R4ControlUser
+usecase "Control Review Login" as R4ControlLogin
+R4ControlUser --> R4ControlLogin
+@enduml

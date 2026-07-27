@@ -1,0 +1,10 @@
+@startuml
+AlLoWmIxInG
+component "Mixed Case Review Policy" as R4CasePolicy
+actor "Mixed Case Review Owner" as R4CaseOwner
+usecase "Approve Mixed Case Review" as R4CaseApproval
+queue "Mixed Case Review Queue" as R4CaseQueue
+R4CaseOwner --> R4CaseApproval
+R4CaseApproval --> R4CasePolicy
+R4CasePolicy --> R4CaseQueue
+@enduml

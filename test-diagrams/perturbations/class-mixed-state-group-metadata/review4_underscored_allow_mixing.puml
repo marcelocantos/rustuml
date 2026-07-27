@@ -1,0 +1,8 @@
+@startuml
+allow_mixing
+R4UnderOwner --> R4UnderApproval
+R4UnderApproval --> R4UnderPolicy
+actor "Underscore Review Owner" as R4UnderOwner
+component "Underscore Review Policy" as R4UnderPolicy
+usecase "Approve Underscore Review" as R4UnderApproval
+@enduml

@@ -1,0 +1,5 @@
+@startuml
+class "Control Review Ledger" as R4ControlLedger
+R4ControlLedger --> R4ControlImplicit
+class "Control Review Endpoint" as R4ControlImplicit
+@enduml

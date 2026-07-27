@@ -1,0 +1,12 @@
+@startuml
+allowmixing
+R4AmberActor --> R4AmberUse
+R4AmberUse --> R4AmberComponent
+R4AmberComponent --> R4AmberQueue
+R4AmberQueue --> R4AmberActor
+R4AmberComponent --> R4AmberUse
+queue "Amber Deferred Work" as R4AmberQueue
+actor "Amber Shift Lead" as R4AmberActor
+component "Amber Decision Engine" as R4AmberComponent
+usecase "Approve Amber Change" as R4AmberUse
+@enduml
