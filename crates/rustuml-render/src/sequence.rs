@@ -477,6 +477,9 @@ const MSG_BASE_STEP: f64 = 14.0;
 /// Base first-message offset from lifeline top (no label text).
 const MSG_BASE_FIRST_OFFSET: f64 = 16.0;
 const TAIL_GAP: f64 = 17.0; // gap from last msg y to tail box y
+/// Java closes unfinished `LifeLine` segments at `DrawableSet#getMaxY`, the
+/// common sequence body boundary eight pixels above the foot-box top.
+const OPEN_ACTIVATION_TAIL_CLEARANCE: f64 = 8.0;
 const SHADOW_LIVING_WIDTH_EXTRA: f64 = 3.0;
 const SHADOW_VERTICAL_PAD: f64 = 3.0;
 const SHADOW_NOTE_EXTRA: f64 = 1.5;
@@ -6669,10 +6672,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     //
     let mut min_first_center_x: f64 = 0.0;
     let mut min_scan_group_depth = 0usize;
+    let mut min_scan_auto = AutoState::default();
     for event in &diagram.events {
         match event {
             Event::GroupStart(_) => min_scan_group_depth += 1,
             Event::GroupEnd => min_scan_group_depth = min_scan_group_depth.saturating_sub(1),
+            Event::Autonumber(command) => min_scan_auto.apply(command),
             _ => {}
         }
         if let Event::Note(note) = event {
@@ -6758,12 +6763,19 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             && id_to_idx.get(msg.to.as_str()) == Some(&0)
         {
             let label_w = message_label_width(&process_label(&msg.label));
+            let autonumber_extra = min_scan_auto
+                .current()
+                .map_or(0.0, |(_, width, _)| width + AUTONUMBER_LABEL_GAP);
             let group_pad = if min_scan_group_depth > 0 {
                 MSG_TEXT_LEFT_PAD
             } else {
                 0.0
             };
-            min_first_center_x = min_first_center_x.max(label_w + 24.0 + group_pad);
+            min_first_center_x =
+                min_first_center_x.max(autonumber_extra + label_w + 24.0 + group_pad);
+        }
+        if matches!(event, Event::Message(_) | Event::Return(_)) {
+            min_scan_auto.advance();
         }
     }
 
@@ -8229,15 +8241,71 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // A lost message `X ->]` runs an arrow rightward from X by label_w+18 (plus
     // the arrowhead), extending the canvas to the right.
     let mut max_lost_right: f64 = 0.0;
+    let mut lost_label_width_by_from: HashMap<&str, f64> = HashMap::new();
+    let mut lost_scan_auto = AutoState::default();
+    let mut lost_scan_activation: HashMap<&str, usize> = HashMap::new();
     for event in &diagram.events {
-        if let Event::Message(msg) = event
-            && msg.to == "]"
-            && let Some(&fi) = id_to_idx.get(msg.from.as_str())
-        {
-            let label_w = message_label_width(&process_label(&msg.label));
-            // Canvas edge = arrow line end (label_w+18) + 1px stroke; the
-            // arrowhead tip extends into the RIGHT_MARGIN.
-            max_lost_right = max_lost_right.max(participants[fi].center_x + label_w + 19.0);
+        match event {
+            Event::Autonumber(command) => lost_scan_auto.apply(command),
+            Event::Message(msg) => {
+                let depth_before = lost_scan_activation
+                    .get(msg.from.as_str())
+                    .copied()
+                    .unwrap_or(0);
+                let live_depth = if matches!(msg.activation, Some(ActivationChange::Deactivate)) {
+                    depth_before.saturating_sub(1)
+                } else {
+                    depth_before
+                };
+                if msg.to == "]"
+                    && let Some(&fi) = id_to_idx.get(msg.from.as_str())
+                {
+                    let autonumber_extra = lost_scan_auto
+                        .current()
+                        .map_or(0.0, |(_, width, _)| width + AUTONUMBER_LABEL_GAP);
+                    let label_w =
+                        autonumber_extra + message_label_width(&process_label(&msg.label));
+                    lost_label_width_by_from
+                        .entry(msg.from.as_str())
+                        .and_modify(|width| *width = (*width).max(label_w))
+                        .or_insert(label_w);
+                    let live_origin_shift = live_depth as f64 * ACTIVATION_HALF_W;
+                    // Canvas edge = live-segment origin + arrow line end
+                    // (label_w+18) + 1px stroke; the arrowhead tip extends into
+                    // the shared RIGHT_MARGIN.
+                    max_lost_right = max_lost_right
+                        .max(participants[fi].center_x + live_origin_shift + label_w + 19.0);
+                }
+
+                if let Some(activation) = &msg.activation {
+                    match activation {
+                        ActivationChange::Activate => {
+                            *lost_scan_activation.entry(msg.to.as_str()).or_default() += 1;
+                        }
+                        ActivationChange::Deactivate => {
+                            if let Some(depth) = lost_scan_activation.get_mut(msg.from.as_str()) {
+                                *depth = depth.saturating_sub(1);
+                            }
+                        }
+                        ActivationChange::Destroy => {
+                            if let Some(depth) = lost_scan_activation.get_mut(msg.to.as_str()) {
+                                *depth = depth.saturating_sub(1);
+                            }
+                        }
+                    }
+                }
+                lost_scan_auto.advance();
+            }
+            Event::Return(_) => lost_scan_auto.advance(),
+            Event::Activate(id, _) => {
+                *lost_scan_activation.entry(id.as_str()).or_default() += 1;
+            }
+            Event::Deactivate(id) => {
+                if let Some(depth) = lost_scan_activation.get_mut(id.as_str()) {
+                    *depth = depth.saturating_sub(1);
+                }
+            }
+            _ => {}
         }
     }
     // The widened participant-box frame can be the rightmost visible element;
@@ -8510,6 +8578,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         // frame's bottom (so the bar visibly clears the closed frame). The
         // bar's end is then the group-end y plus this extension.
         post_group_end_extend: bool,
+        /// The source left this activation open through the end of page 1.
+        ends_at_page_boundary: bool,
     }
 
     let mut activation_bars: Vec<ActivationBar> = Vec::new();
@@ -8563,6 +8633,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                         depth,
                                         pre_first_message: pre,
                                         post_group_end_extend: false,
+                                        ends_at_page_boundary: false,
                                     });
                                 }
                             }
@@ -8617,6 +8688,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             depth,
                             pre_first_message: pre,
                             post_group_end_extend,
+                            ends_at_page_boundary: false,
                         });
                     }
                 }
@@ -8634,6 +8706,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             depth,
                             pre_first_message: pre,
                             post_group_end_extend: false,
+                            ends_at_page_boundary: false,
                         });
                     }
                 }
@@ -8641,26 +8714,19 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             }
         }
 
-        // Close any remaining open activations. Without a `newpage` they extend
-        // to the last (page-1) event. With a `newpage`, a bar left open when the
-        // page breaks is closed at the page boundary instead (sentinel
-        // end_event_idx = usize::MAX → bottom computed from the separator y in
-        // the draw pass), matching Java per-page layout where the bar ends with
-        // the page's content.
-        let final_idx = if has_newpage {
-            usize::MAX
-        } else {
-            page1_end.saturating_sub(1)
-        };
+        // Java closes every remaining LifeLine level at DrawableSet#getMaxY.
+        // Keep that state explicit instead of pretending the last event closed
+        // the activation.
         for (pid, start_idx, color, depth, pre) in open_activations {
             activation_bars.push(ActivationBar {
                 participant_id: pid,
                 start_event_idx: start_idx,
-                end_event_idx: final_idx,
+                end_event_idx: page1_end.saturating_sub(1),
                 color,
                 depth,
                 pre_first_message: pre,
                 post_group_end_extend: false,
+                ends_at_page_boundary: true,
             });
         }
 
@@ -9830,8 +9896,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             + self_activation_start_offset(bar.start_event_idx)
     };
     let bar_end_y = |bar: &ActivationBar| -> f64 {
-        if bar.end_event_idx == usize::MAX {
-            tail_box_y - NEWPAGE_SEPARATOR_FOOT_GAP + 2.0
+        if bar.ends_at_page_boundary {
+            if has_newpage {
+                tail_box_y - NEWPAGE_SEPARATOR_FOOT_GAP + 2.0
+            } else {
+                tail_box_y - OPEN_ACTIVATION_TAIL_CLEARANCE
+            }
         } else {
             let base = event_y(bar.end_event_idx) + self_deactivation_end_offset(bar.end_event_idx);
             // A bar closed by an explicit `deactivate` after a group frame ends
@@ -10165,18 +10235,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let mut last_return_pair: Option<(String, String, bool)> = None;
 
     let events = &diagram.events;
-    let mut lost_label_width_by_from: HashMap<&str, f64> = HashMap::new();
-    for event in events.iter().take(page1_end) {
-        if let Event::Message(msg) = event
-            && msg.to == "]"
-        {
-            let label_w = message_label_width(&process_label(&msg.label));
-            lost_label_width_by_from
-                .entry(msg.from.as_str())
-                .and_modify(|w| *w = (*w).max(label_w))
-                .or_insert(label_w);
-        }
-    }
     let lost_external_min_to_x = participants
         .last()
         .map(|p| p.box_x + p.box_width + 5.0)
@@ -10249,6 +10307,21 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 // (`X ->]`): from X rightward to an external point label_w+18
                 // away. center_of("[")/("]") return 0, so override the lost end.
                 let from_x = center_of(&msg.from);
+                let from_depth = render_activation
+                    .get(msg.from.as_str())
+                    .copied()
+                    .unwrap_or(0);
+                let lost_live_depth =
+                    if matches!(msg.activation, Some(ActivationChange::Deactivate)) {
+                        from_depth.saturating_sub(1)
+                    } else {
+                        from_depth
+                    };
+                let lost_live_shift = if msg.to == "]" {
+                    lost_live_depth as f64 * ACTIVATION_HALF_W
+                } else {
+                    0.0
+                };
                 let to_x = if msg.to == "]" {
                     // to_x is the conceptual arrowhead tip+2; the normal render
                     // draws the line to to_x-6 and the tip at to_x-2, matching
@@ -10260,7 +10333,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         .get(msg.from.as_str())
                         .copied()
                         .unwrap_or_else(|| message_label_width(&process_label(&msg.label)));
-                    (from_x + label_w + 24.0).max(lost_external_min_to_x)
+                    (from_x + lost_live_shift + label_w + 24.0).max(lost_external_min_to_x)
                 } else {
                     center_of(&msg.to)
                 };
@@ -10611,7 +10684,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         .get(msg.from.as_str())
                         .copied()
                         .unwrap_or(0);
-                    let from_x_shifted = if is_right && from_active {
+                    let from_x_shifted = if msg.to == "]" {
+                        from_x + lost_live_shift
+                    } else if is_right && from_active {
                         from_x + ACTIVATION_HALF_W
                     } else if !is_right
                         && from_active
@@ -10917,7 +10992,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 tip_x,
                                 msg_y,
                                 false,
-                                None,
+                                if is_bidirectional {
+                                    Some(from_x_shifted - 1.0)
+                                } else {
+                                    None
+                                },
                                 tip_x - 1.0,
                                 line_x2_end,
                                 msg_y,
@@ -10957,6 +11036,24 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 message_align,
                             );
                         } else {
+                            let leading_filled_tip_x = from_x_shifted - 2.0;
+                            let leading_arrow_pts = if is_bidirectional {
+                                Some(format!(
+                                    "{},{},{},{},{},{},{},{}",
+                                    fmt_coord(leading_filled_tip_x - ARROW_SIZE),
+                                    fmt_coord(msg_y - ARROW_HALF_H),
+                                    fmt_coord(leading_filled_tip_x),
+                                    fmt_coord(msg_y),
+                                    fmt_coord(leading_filled_tip_x - ARROW_SIZE),
+                                    fmt_coord(msg_y + ARROW_HALF_H),
+                                    fmt_coord(
+                                        leading_filled_tip_x - ARROW_SIZE + FILLED_ARROW_NOTCH
+                                    ),
+                                    fmt_coord(msg_y),
+                                ))
+                            } else {
+                                None
+                            };
                             let arrow_pts = format!(
                                 "{},{},{},{},{},{},{},{}",
                                 fmt_coord(tip_x + ARROW_SIZE),
@@ -10968,16 +11065,28 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 fmt_coord(tip_x + ARROW_SIZE - FILLED_ARROW_NOTCH),
                                 fmt_coord(msg_y),
                             );
+                            let (first_arrow_pts, second_arrow_pts) = if is_bidirectional {
+                                (
+                                    Some(arrow_pts.as_str()),
+                                    leading_arrow_pts.as_deref().unwrap(),
+                                )
+                            } else {
+                                (None, arrow_pts.as_str())
+                            };
                             svg.message_filled_arrow(
                                 &from_uid,
                                 &to_uid,
                                 src_line,
                                 msg_id,
                                 None,
-                                None,
-                                &arrow_pts,
+                                first_arrow_pts,
+                                second_arrow_pts,
                                 line_x1,
-                                line_x2_end,
+                                if is_bidirectional {
+                                    leading_filled_tip_x - FILLED_ARROW_NOTCH
+                                } else {
+                                    line_x2_end
+                                },
                                 msg_y,
                                 line_style,
                                 text_x,
@@ -13326,6 +13435,26 @@ mod tests {
         assert!(!svg.contains("concealed"));
         assert!(svg.contains(r#"id="msg3""#));
         assert!(svg.contains(">visible after hidden</text>"));
+    }
+
+    #[test]
+    fn right_to_left_bidirectional_message_paints_both_heads() {
+        let input = concat!(
+            "@startuml\n",
+            "participant A\n",
+            "participant B\n",
+            "participant C\n",
+            "C <-[#C2185B,dotted]-> B : both ways\n",
+            "@enduml\n",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        let message_start = svg.find(r#"<g class="message""#).unwrap();
+        let message_end = svg[message_start..].find("</g>").unwrap() + message_start;
+        let message = &svg[message_start..message_end];
+
+        assert_eq!(message.matches("<polygon").count(), 2);
+        assert!(message.contains("stroke-dasharray:2,2"));
     }
 
     #[test]

@@ -308,7 +308,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         } else {
             trimmed
         };
-        let has_sequence_inline_arrow_style = sequence::has_inline_arrow_style(trimmed);
+        let looks_like_sequence_message = sequence::looks_like_message(trimmed);
         let top_level = brace_depth == 0;
 
         if trimmed.starts_with("skinparam ") {
@@ -501,7 +501,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             && !trimmed.contains("[*]")
             && !trimmed.contains("[[")
             && !trimmed.contains("[#")
-            && !has_sequence_inline_arrow_style
+            && !looks_like_sequence_message
             && !trimmed.starts_with("return ")
             // `autonumber "<b>[000]"` uses brackets inside its format string;
             // that is a sequence-diagram directive, not a component reference.
@@ -619,7 +619,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             scores[6] += 2;
         }
         // Arrows are weak sequence indicators.
-        if trimmed.contains("->") || trimmed.contains("-->") || has_sequence_inline_arrow_style {
+        if trimmed.contains("->") || trimmed.contains("-->") || looks_like_sequence_message {
             scores[0] += 1;
         }
         // `return` statement is sequence-diagram-specific syntax.
@@ -2046,6 +2046,28 @@ Ready --> [*] : close"#;
             "@enduml\n",
         );
         assert!(matches!(parse(input).unwrap(), Diagram::Sequence(_)));
+    }
+
+    #[test]
+    fn quoted_participant_style_text_is_not_component_evidence() {
+        let input = concat!(
+            "@startuml\n",
+            "\"Source [hidden]: 9401\" -[#AD1457,dashed]> \"Target: 9403\" : visible\n",
+            "\"Target: 9403\" -> \"Source [hidden]: 9401\" : return\n",
+            "@enduml\n",
+        );
+        let Diagram::Sequence(sequence) = parse(input).unwrap() else {
+            panic!("expected sequence diagram");
+        };
+        assert_eq!(sequence.events.len(), 2);
+        assert_eq!(sequence.participants[0].label, "Source [hidden]: 9401");
+    }
+
+    #[test]
+    fn meta_keywords_without_a_hyphen_shaft_are_not_sequence_messages() {
+        assert!(!sequence::looks_like_message("footer"));
+        assert!(!sequence::looks_like_message("header"));
+        assert!(sequence::looks_like_message("A o-> B"));
     }
 
     #[test]

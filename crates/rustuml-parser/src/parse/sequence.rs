@@ -20,6 +20,27 @@ static INLINE_ARROW_STYLE: LazyLock<Regex> = LazyLock::new(|| {
     .unwrap()
 });
 
+static MESSAGE_RE: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(
+        r#"^("(?:[^"]+)"|\w+)\s*([-<>.\\/ox]*(?:\[(?:(?:#\w+|(?i:dashed|dotted|hidden|bold))(?:,(?:#\w+|(?i:dashed|dotted|hidden|bold)))*)\])?[-<>.\\/ox]+)\s*("(?:[^"]+)"|\w+)\s*(?:((?:\+\+|--|!!))\s*(#\S+)?\s*)?(?::\s*(.*))?$"#,
+    )
+    .unwrap()
+});
+
+static EXTERNAL_MESSAGE_IN_RE: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(
+        r"^\[([-<>.\\/ox]*(?:\[(?:(?:#\w+|(?i:dashed|dotted|hidden|bold))(?:,(?:#\w+|(?i:dashed|dotted|hidden|bold)))*)\])?[-<>.\\/ox]+)\s*(\w+)\s*(?:((?:\+\+|--|!!))\s*(#\S+)?\s*)?(?::\s*(.*))?$",
+    )
+    .unwrap()
+});
+
+static EXTERNAL_MESSAGE_OUT_RE: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(
+        r"^(\w+)\s*([-<>.\\/ox]*(?:\[(?:(?:#\w+|(?i:dashed|dotted|hidden|bold))(?:,(?:#\w+|(?i:dashed|dotted|hidden|bold)))*)\])?[-<>.\\/ox]+)([\[\]])\s*(?:((?:\+\+|--|!!))\s*(#\S+)?\s*)?(?::\s*(.*))?$",
+    )
+    .unwrap()
+});
+
 /// Parse preprocessed lines into a sequence diagram.
 pub fn parse_sequence(lines: &[String]) -> Result<SequenceDiagram, ParseError> {
     let mut parser = SeqParser::new();
@@ -363,22 +384,7 @@ impl SeqParser {
     }
 
     fn try_message(&mut self, line: &str) -> bool {
-        // Allow optional #color after activation modifier (++ #blue, -- #red, etc.)
-        // Supports both simple names (\w+) and quoted names ("...").
-        static RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(
-                r#"^("(?:[^"]+)"|\w+)\s*([-<>.\\/ox]+)\s*("(?:[^"]+)"|\w+)\s*(?:((?:\+\+|--|!!))\s*(#\S+)?\s*)?(?::\s*(.*))?$"#,
-            )
-            .unwrap()
-        });
-
-        // Extract arrow colour only from the arrow header. Message labels can
-        // contain local Creole links like `[[#anchor label]]`, whose inner
-        // `[#anchor label]` must not be mistaken for an arrow colour.
-        let (arrow_style, stripped) = strip_arrow_style_annotation(line);
-        let line = stripped.as_str();
-
-        if let Some(caps) = RE.captures(line) {
+        if let Some(caps) = MESSAGE_RE.captures(line) {
             // Strip surrounding quotes from quoted participant names.
             let unquote = |s: &str| -> String {
                 if s.starts_with('"') && s.ends_with('"') && s.len() >= 2 {
@@ -388,13 +394,13 @@ impl SeqParser {
                 }
             };
             let from_raw = unquote(&caps[1]);
-            let arrow_str = &caps[2];
+            let (arrow_style, arrow_str) = strip_arrow_style_annotation(&caps[2]);
             let to_raw = unquote(&caps[3]);
             let activation_str = caps.get(4).map(|m| m.as_str());
             let activation_color = caps.get(5).map(|m| m.as_str().to_string());
             let label = message_label(line, caps.get(6));
 
-            let mut arrow = parse_arrow(arrow_str);
+            let mut arrow = parse_arrow(&arrow_str);
             apply_inline_arrow_style(&mut arrow, arrow_style);
             let activation = activation_str
                 .map(parse_activation)
@@ -430,21 +436,9 @@ impl SeqParser {
     }
 
     fn try_external_message(&mut self, line: &str) -> bool {
-        static RE_IN: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(
-                r"^\[([-<>.\\/ox]+)\s*(\w+)\s*(?:((?:\+\+|--|!!))\s*(#\S+)?\s*)?(?::\s*(.*))?$",
-            )
-            .unwrap()
-        });
-        static RE_OUT: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^(\w+)\s*([-<>.\\/ox]+)([\[\]])\s*(?:((?:\+\+|--|!!))\s*(#\S+)?\s*)?(?::\s*(.*))?$")
-                .unwrap()
-        });
-        let (arrow_style, stripped) = strip_arrow_style_annotation(line);
-        let line = stripped.as_str();
-
-        if let Some(caps) = RE_IN.captures(line) {
-            let mut arrow = parse_arrow(&caps[1]);
+        if let Some(caps) = EXTERNAL_MESSAGE_IN_RE.captures(line) {
+            let (arrow_style, arrow_str) = strip_arrow_style_annotation(&caps[1]);
+            let mut arrow = parse_arrow(&arrow_str);
             arrow.direction = ArrowDirection::LeftToRight;
             apply_inline_arrow_style(&mut arrow, arrow_style);
             let to = self.ensure_participant(&caps[2]);
@@ -461,9 +455,10 @@ impl SeqParser {
                 source_line: self.current_line,
             }));
             true
-        } else if let Some(caps) = RE_OUT.captures(line) {
+        } else if let Some(caps) = EXTERNAL_MESSAGE_OUT_RE.captures(line) {
             let from = self.ensure_participant(&caps[1]);
-            let mut arrow = parse_arrow(&caps[2]);
+            let (arrow_style, arrow_str) = strip_arrow_style_annotation(&caps[2]);
+            let mut arrow = parse_arrow(&arrow_str);
             arrow.direction = ArrowDirection::LeftToRight;
             apply_inline_arrow_style(&mut arrow, arrow_style);
             let activation = caps.get(4).map(|m| parse_activation(m.as_str()));
@@ -828,7 +823,7 @@ impl SeqParser {
             (LineStyle::Dotted, ArrowHead::Filled | ArrowHead::Open) => {
                 Some(ActivationChange::Deactivate)
             }
-            (LineStyle::Solid, ArrowHead::Filled | ArrowHead::Open) => {
+            (LineStyle::Solid | LineStyle::Hidden, ArrowHead::Filled | ArrowHead::Open) => {
                 Some(ActivationChange::Activate)
             }
             _ => None,
@@ -1152,14 +1147,10 @@ struct InlineArrowStyle {
     line: Option<LineStyle>,
 }
 
-fn strip_arrow_style_annotation(line: &str) -> (InlineArrowStyle, String) {
-    let delimiter = sequence_message_delimiter(line);
-    let (head, tail) = delimiter.map_or((line, None), |index| {
-        (&line[..index], Some(&line[index + 1..]))
-    });
+fn strip_arrow_style_annotation(arrow: &str) -> (InlineArrowStyle, String) {
     let mut style = InlineArrowStyle::default();
     if let Some(tokens) = INLINE_ARROW_STYLE
-        .captures(head)
+        .captures(arrow)
         .and_then(|captures| captures.get(1))
         .map(|matched| matched.as_str())
     {
@@ -1174,36 +1165,24 @@ fn strip_arrow_style_annotation(line: &str) -> (InlineArrowStyle, String) {
         }
     }
 
-    let stripped_head = INLINE_ARROW_STYLE.replace(head, "");
-    let stripped = match tail {
-        Some(tail) => format!("{stripped_head}:{tail}"),
-        None => stripped_head.into_owned(),
-    };
-    (style, stripped)
+    (style, INLINE_ARROW_STYLE.replace(arrow, "").into_owned())
 }
 
-pub(super) fn has_inline_arrow_style(line: &str) -> bool {
-    let header_end = sequence_message_delimiter(line).unwrap_or(line.len());
-    INLINE_ARROW_STYLE.is_match(&line[..header_end])
-}
-
-fn sequence_message_delimiter(line: &str) -> Option<usize> {
-    let mut quoted = false;
-    let mut escaped = false;
-    for (index, ch) in line.char_indices() {
-        if escaped {
-            escaped = false;
-            continue;
-        }
-        if quoted && ch == '\\' {
-            escaped = true;
-        } else if ch == '"' {
-            quoted = !quoted;
-        } else if ch == ':' && !quoted {
-            return Some(index);
-        }
-    }
-    None
+pub(super) fn looks_like_message(line: &str) -> bool {
+    MESSAGE_RE
+        .captures(line)
+        .and_then(|captures| captures.get(2))
+        .or_else(|| {
+            EXTERNAL_MESSAGE_IN_RE
+                .captures(line)
+                .and_then(|captures| captures.get(1))
+        })
+        .or_else(|| {
+            EXTERNAL_MESSAGE_OUT_RE
+                .captures(line)
+                .and_then(|captures| captures.get(2))
+        })
+        .is_some_and(|arrow| arrow.as_str().contains('-'))
 }
 
 fn apply_inline_arrow_style(arrow: &mut Arrow, style: InlineArrowStyle) {
@@ -1320,6 +1299,20 @@ mod tests {
     }
 
     #[test]
+    fn style_looking_brackets_in_quoted_participants_are_not_arrow_styles() {
+        let d =
+            parse(r#""Source [hidden]: 9401" -[#AD1457,dashed]> "Target: 9403" : visible message"#);
+        let Event::Message(message) = &d.events[0] else {
+            panic!("expected message");
+        };
+        assert_eq!(message.from, "Source [hidden]: 9401");
+        assert_eq!(message.to, "Target: 9403");
+        assert_eq!(message.arrow.color.as_deref(), Some("#AD1457"));
+        assert_eq!(message.arrow.line, LineStyle::Dotted);
+        assert_eq!(d.participants[0].label, "Source [hidden]: 9401");
+    }
+
+    #[test]
     fn inline_arrow_style_keeps_color_and_body_orthogonal() {
         let d = parse(
             "A -[#C2185B,dashed]> B : color first\n\
@@ -1350,6 +1343,16 @@ mod tests {
         assert_eq!(second.arrow.line, LineStyle::Dotted);
         assert_eq!(bold.arrow.line, LineStyle::Solid);
         assert_eq!(hidden.arrow.line, LineStyle::Hidden);
+    }
+
+    #[test]
+    fn hidden_normal_head_still_autoactivates_its_target() {
+        let d = parse("autoactivate on\nA -[hidden]> B : hidden");
+        let Event::Message(message) = &d.events[0] else {
+            panic!("expected message");
+        };
+        assert_eq!(message.arrow.line, LineStyle::Hidden);
+        assert_eq!(message.activation, Some(ActivationChange::Activate));
     }
 
     #[test]
