@@ -274,22 +274,6 @@ fn ascent_with_family(font_size: f64, font_family: &str) -> f64 {
     text_render::ascent_for_family(font_size, font_family)
 }
 
-fn combined_footer_bottom_offset(font_family: &str) -> f64 {
-    if font_family.eq_ignore_ascii_case("sans-serif") {
-        8.4687
-    } else {
-        8.7778
-    }
-}
-
-fn combined_caption_footer_baseline_gap(font_family: &str) -> f64 {
-    if font_family.eq_ignore_ascii_case("sans-serif") {
-        14.6211
-    } else {
-        14.3467
-    }
-}
-
 /// Format an f64 as a PlantUML-compatible coordinate string.
 ///
 /// PlantUML emits SVG coordinates via `String.format(Locale.US, "%.4f", x)`
@@ -573,6 +557,7 @@ fn first_msg_offset(has_text: bool, text_height: f64) -> f64 {
 const LIFELINE_Y_OFFSET: f64 = 1.0; // lifeline starts 1px below head box
 const RIGHT_MARGIN: f64 = 10.0; // right margin beyond last box
 const BOTTOM_MARGIN: f64 = 7.0; // bottom margin below tail box
+const CAPTION_FONT_SIZE: u32 = 14;
 const ARROW_SIZE: f64 = 10.0; // horizontal size of arrow polygon
 const ARROW_HALF_H: f64 = 4.0; // vertical half-height of arrow polygon
 const FILLED_ARROW_NOTCH: f64 = 4.0; // notch indent in filled arrow
@@ -2478,6 +2463,14 @@ fn parse_autonumber_template_runs(format: &str) -> Vec<AutoNumberRun> {
             text.push_str(&tag);
             break;
         }
+        // PlantUML treats angle brackets around a numeric placeholder as
+        // literal format text, not as an unknown Creole tag.
+        if !tag.is_empty() && tag.chars().all(|c| matches!(c, '0' | '#')) {
+            text.push('<');
+            text.push_str(&tag);
+            text.push('>');
+            continue;
+        }
 
         push_autonumber_run(
             &mut runs,
@@ -3112,6 +3105,22 @@ impl PlantUmlSvg {
             note_border_thickness: "0.5".into(),
             message_label_component_left_shift: 0.0,
         }
+    }
+
+    fn write_source_circle(&mut self, center: Option<(f64, f64)>, color: &str) {
+        let Some((cx, cy)) = center else {
+            return;
+        };
+        write!(
+            self.buf,
+            r##"<ellipse cx="{}" cy="{}" fill="#000000" rx="{}" ry="{}" style="stroke:{color};stroke-width:{};"/>"##,
+            fmt_coord(cx),
+            fmt_coord(cy),
+            fmt_coord(SOURCE_CIRCLE_RADIUS),
+            fmt_coord(SOURCE_CIRCLE_RADIUS),
+            fmt_coord(SOURCE_CIRCLE_STROKE),
+        )
+        .unwrap();
     }
 
     /// Write the opening `<svg>` tag with PlantUML's exact attributes.
@@ -4464,6 +4473,7 @@ impl PlantUmlSvg {
         tip_x: f64,
         msg_y: f64,
         is_right: bool,
+        leading_circle_center: Option<(f64, f64)>,
         line_x1: f64,
         line_x2: f64,
         line_style: &str,
@@ -4485,6 +4495,9 @@ impl PlantUmlSvg {
             self.message_label_component_left_shift,
         );
         self.message_group_open(entity1, entity2, source_line, msg_id);
+        if is_right {
+            self.write_source_circle(leading_circle_center, color);
+        }
 
         // X mark: spans 10x10 with right edge at tip_x (right-going) or left
         // edge at tip_x (left-going). The arrow line meets the X at its centre.
@@ -4515,6 +4528,9 @@ impl PlantUmlSvg {
             fmt_coord(y_top),
         )
         .unwrap();
+        if !is_right {
+            self.write_source_circle(leading_circle_center, color);
+        }
 
         let thickness = self.arrow_thickness.clone();
         write!(
@@ -4576,17 +4592,8 @@ impl PlantUmlSvg {
         );
         self.message_group_open(entity1, entity2, source_line, msg_id);
 
-        if let Some((cx, cy)) = leading_circle_center {
-            write!(
-                self.buf,
-                r##"<ellipse cx="{}" cy="{}" fill="#000000" rx="{}" ry="{}" style="stroke:{color};stroke-width:{};"/>"##,
-                fmt_coord(cx),
-                fmt_coord(cy),
-                fmt_coord(SOURCE_CIRCLE_RADIUS),
-                fmt_coord(SOURCE_CIRCLE_RADIUS),
-                fmt_coord(SOURCE_CIRCLE_STROKE),
-            )
-            .unwrap();
+        if is_right {
+            self.write_source_circle(leading_circle_center, color);
         }
 
         if let Some(cx) = leading_cross_center {
@@ -4621,6 +4628,9 @@ impl PlantUmlSvg {
             arrow_points,
             &format!("stroke:{color};stroke-width:1;"),
         );
+        if !is_right {
+            self.write_source_circle(leading_circle_center, color);
+        }
 
         let thickness = self.arrow_thickness.clone();
         self.write_line(
@@ -4666,6 +4676,7 @@ impl PlantUmlSvg {
         line_y: f64,
         top: bool,
         thin: bool,
+        leading_circle_center: Option<(f64, f64)>,
         line_style: &str,
         text_x: f64,
         text_y: f64,
@@ -4686,6 +4697,9 @@ impl PlantUmlSvg {
             self.message_label_component_left_shift,
         );
         self.message_group_open(entity1, entity2, source_line, msg_id);
+        if is_right {
+            self.write_source_circle(leading_circle_center, color);
+        }
 
         let wing_y = if top {
             line_y - ARROW_HALF_H
@@ -4728,6 +4742,9 @@ impl PlantUmlSvg {
                 r##"<polygon fill="{color}" points="{arrow_points}" style="stroke:{color};stroke-width:1;"/>"##,
             )
             .unwrap();
+        }
+        if !is_right {
+            self.write_source_circle(leading_circle_center, color);
         }
 
         let thickness = self.arrow_thickness.clone();
@@ -4792,17 +4809,8 @@ impl PlantUmlSvg {
         self.message_group_open(entity1, entity2, source_line, msg_id);
 
         let thickness = self.arrow_thickness.clone();
-        if let Some((cx, cy)) = leading_circle_center {
-            write!(
-                self.buf,
-                r##"<ellipse cx="{}" cy="{}" fill="#000000" rx="{}" ry="{}" style="stroke:{color};stroke-width:{};"/>"##,
-                fmt_coord(cx),
-                fmt_coord(cy),
-                fmt_coord(SOURCE_CIRCLE_RADIUS),
-                fmt_coord(SOURCE_CIRCLE_RADIUS),
-                fmt_coord(SOURCE_CIRCLE_STROKE),
-            )
-            .unwrap();
+        if is_right {
+            self.write_source_circle(leading_circle_center, color);
         }
         let main_back_x = if is_right {
             tip_x - ARROW_SIZE
@@ -4844,6 +4852,9 @@ impl PlantUmlSvg {
                 fmt_coord(tip_y + ARROW_HALF_H),
             )
             .unwrap();
+        }
+        if !is_right {
+            self.write_source_circle(leading_circle_center, color);
         }
 
         write!(
@@ -6770,12 +6781,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 _ => {}
             }
         }
-        // A found message `[-> X` on the first participant reserves left space
-        // for its incoming arrow + label (arrow_len = center-6 = label_w+18,
-        // so center = label_w + 24).
+        // Either left-border form (`[-> X` or `X ->[`) constrains the first
+        // participant against the same border using the numbered arrow
+        // component's preferred width.
         if let Event::Message(msg) = event
-            && msg.from == "["
-            && id_to_idx.get(msg.to.as_str()) == Some(&0)
+            && ((msg.from == "[" && id_to_idx.get(msg.to.as_str()) == Some(&0))
+                || (msg.to == "[" && id_to_idx.get(msg.from.as_str()) == Some(&0)))
         {
             let label_w = message_label_width(&process_label(&msg.label));
             let autonumber_extra = min_scan_auto
@@ -8253,16 +8264,21 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             }
         }
     }
-    // A lost message `X ->]` runs an arrow rightward from X by label_w+18 (plus
-    // the arrowhead), extending the canvas to the right.
+    // Both right-border forms constrain the last border using the numbered
+    // arrow component's preferred width.
     let mut max_lost_right: f64 = 0.0;
-    let mut lost_label_width_by_from: HashMap<&str, f64> = HashMap::new();
+    let mut lost_preferred_extent_by_from: HashMap<&str, f64> = HashMap::new();
     let mut lost_scan_auto = AutoState::default();
     let mut lost_scan_activation: HashMap<&str, usize> = HashMap::new();
     for event in &diagram.events {
         match event {
             Event::Autonumber(command) => lost_scan_auto.apply(command),
             Event::Message(msg) => {
+                let autonumber_extra = lost_scan_auto
+                    .current()
+                    .map_or(0.0, |(_, width, _)| width + AUTONUMBER_LABEL_GAP);
+                let numbered_label_w =
+                    autonumber_extra + message_label_width(&process_label(&msg.label));
                 let depth_before = lost_scan_activation
                     .get(msg.from.as_str())
                     .copied()
@@ -8275,21 +8291,24 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 if msg.to == "]"
                     && let Some(&fi) = id_to_idx.get(msg.from.as_str())
                 {
-                    let autonumber_extra = lost_scan_auto
-                        .current()
-                        .map_or(0.0, |(_, width, _)| width + AUTONUMBER_LABEL_GAP);
-                    let label_w =
-                        autonumber_extra + message_label_width(&process_label(&msg.label));
-                    lost_label_width_by_from
-                        .entry(msg.from.as_str())
-                        .and_modify(|width| *width = (*width).max(label_w))
-                        .or_insert(label_w);
                     let live_origin_shift = live_depth as f64 * ACTIVATION_HALF_W;
+                    let preferred_extent = live_origin_shift + numbered_label_w;
+                    lost_preferred_extent_by_from
+                        .entry(msg.from.as_str())
+                        .and_modify(|extent| *extent = (*extent).max(preferred_extent))
+                        .or_insert(preferred_extent);
                     // Canvas edge = live-segment origin + arrow line end
                     // (label_w+18) + 1px stroke; the arrowhead tip extends into
                     // the shared RIGHT_MARGIN.
-                    max_lost_right = max_lost_right
-                        .max(participants[fi].center_x + live_origin_shift + label_w + 19.0);
+                    max_lost_right = max_lost_right.max(
+                        participants[fi].center_x + live_origin_shift + numbered_label_w + 19.0,
+                    );
+                }
+                if msg.from == "]"
+                    && let Some(&ti) = id_to_idx.get(msg.to.as_str())
+                {
+                    max_lost_right =
+                        max_lost_right.max(participants[ti].center_x + numbered_label_w + 19.0);
                 }
 
                 if let Some(activation) = &msg.activation {
@@ -8489,10 +8508,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     } else {
         0.0
     };
-    let mut svg_height = if diagram.hide_footbox {
-        (lifeline_bottom + footer_band_h).ceil() as u32
+    let mut pre_caption_height = if diagram.hide_footbox {
+        lifeline_bottom + footer_band_h
     } else {
-        (tail_box_y
+        tail_box_y
             + max_box_h
             + BOTTOM_MARGIN
             + footer_band_h
@@ -8501,28 +8520,47 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 SHADOW_CANVAS_BOTTOM_PAD
             } else {
                 0.0
-            })
-        .ceil() as u32
+            }
     };
     if diagram.teoz && !diagram.hide_footbox {
-        svg_height += 4;
+        pre_caption_height += 4.0;
     }
     if diagram.teoz && has_boxes && !diagram.hide_footbox {
-        svg_height += TEOZ_BOX_CANVAS_BOTTOM_EXTRA;
+        pre_caption_height += f64::from(TEOZ_BOX_CANVAS_BOTTOM_EXTRA);
     }
+    let mut svg_height = pre_caption_height.ceil() as u32;
     // Caption adds vertical space below the foot boxes. Caption-only diagrams
     // place the baseline from the tail box bottom, then size the canvas around
     // that baseline. When a footer is present, PlantUML stacks caption above
     // the footer inside a shared bottom decoration band. With hidden footboxes
     // that band is compact; otherwise the tail boxes reserve an extra few
     // pixels above the bottom decorations.
-    const CAPTION_BASELINE_AFTER_TAIL: f64 = 16.5352;
     const CAPTION_BOTTOM_AFTER_BASELINE: f64 = 10.1777;
     const FOOTER_BASELINE_AFTER_TAIL: f64 = 11.6679;
-    let caption_only_y = tail_box_y + max_box_h + CAPTION_BASELINE_AFTER_TAIL;
+    let caption_top = if diagram.hide_footbox {
+        // The raw hidden-footbox sequence block ends eight pixels before the
+        // visible lifeline tail.
+        lifeline_bottom - 8.0
+    } else {
+        // The raw sequence block leaves three pixels below the tail boxes
+        // before DiagramChromeFactory12026 stacks the caption.
+        tail_box_y + max_box_h + 3.0
+    };
+    let caption_only_y =
+        caption_top + ascent_with_family(CAPTION_FONT_SIZE as f64, &page_font_family);
     if diagram.meta.caption.is_some() {
         if diagram.meta.footer.is_some() {
-            svg_height += if diagram.hide_footbox { 15 } else { 19 };
+            if diagram.hide_footbox {
+                svg_height += 15;
+            } else {
+                // DiagramChromeFactory12026 wraps the raw diagram with the
+                // caption before adding the footer. The default caption style
+                // contributes a one-pixel margin on both vertical sides, and
+                // the exported block keeps one outer pixel. Preserve the raw
+                // fractional height until this final ceil.
+                let caption_block_height = text_height_with_family(14.0, &page_font_family) + 2.0;
+                svg_height = (pre_caption_height + caption_block_height + 1.0).ceil() as u32;
+            }
         } else {
             svg_height = (caption_only_y + CAPTION_BOTTOM_AFTER_BASELINE).ceil() as u32;
         }
@@ -10369,11 +10407,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     // Multiple lost messages from the same source share the
                     // widest lost-label extent; PlantUML keeps the external
                     // endpoint stable instead of shortening later/earlier rows.
-                    let label_w = lost_label_width_by_from
+                    let preferred_extent = lost_preferred_extent_by_from
                         .get(msg.from.as_str())
                         .copied()
-                        .unwrap_or_else(|| message_label_width(&process_label(&msg.label)));
-                    (from_x + lost_live_shift + label_w + 24.0).max(lost_external_min_to_x)
+                        .unwrap_or_else(|| {
+                            lost_live_shift + message_label_width(&process_label(&msg.label))
+                        });
+                    (from_x + preferred_extent + 24.0).max(lost_external_min_to_x)
                 } else {
                     center_of(&msg.to)
                 };
@@ -10725,10 +10765,36 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         .get(msg.from.as_str())
                         .copied()
                         .unwrap_or(0);
+                    // Standalone life events after a message do not advance the
+                    // ordinate. LifeLine#getRightShift therefore sees bars
+                    // opened at that same y when choosing the source segment.
+                    let mut source_right_depth = from_existing_depth;
+                    let mut same_y_depth = from_existing_depth;
+                    for (next_idx, next_event) in
+                        events.iter().enumerate().take(page1_end).skip(ev_idx + 1)
+                    {
+                        if event_y_positions.get(next_idx) != event_y_positions.get(ev_idx) {
+                            break;
+                        }
+                        match next_event {
+                            Event::Activate(id, _) if id == &msg.from => {
+                                same_y_depth += 1;
+                                source_right_depth = source_right_depth.max(same_y_depth);
+                            }
+                            Event::Deactivate(id) if id == &msg.from => {
+                                same_y_depth = same_y_depth.saturating_sub(1);
+                            }
+                            Event::Destroy(id) if id == &msg.from => {
+                                same_y_depth = same_y_depth.saturating_sub(1);
+                            }
+                            Event::Message(_) | Event::Return(_) => break,
+                            _ => {}
+                        }
+                    }
                     let from_x_shifted = if msg.to == "]" {
                         from_x + lost_live_shift
-                    } else if is_right && from_active {
-                        from_x + ACTIVATION_HALF_W
+                    } else if is_right && source_right_depth > 0 {
+                        from_x + source_right_depth as f64 * ACTIVATION_HALF_W
                     } else if !is_right
                         && from_active
                         && !is_dotted
@@ -10846,6 +10912,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 cross_right,
                                 msg_y,
                                 true,
+                                has_source_circle.then_some((
+                                    from_x_shifted + SOURCE_CIRCLE_X_OFFSET,
+                                    msg_y + SOURCE_CIRCLE_Y_OFFSET,
+                                )),
                                 if has_source_circle {
                                     from_x_shifted + SOURCE_CIRCLE_LINE_INSET
                                 } else {
@@ -10880,7 +10950,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                     from_x_shifted + SOURCE_CIRCLE_X_OFFSET,
                                     msg_y + SOURCE_CIRCLE_Y_OFFSET,
                                 )),
-                                from_x_shifted,
+                                line_x1,
                                 tip_x + 1.0,
                                 msg_y,
                                 line_style,
@@ -10902,11 +10972,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 msg_id,
                                 tip_x,
                                 tip_x - ARROW_SIZE,
-                                from_x_shifted,
+                                line_x1,
                                 tip_x + 1.0,
                                 msg_y,
                                 half == ArrowHalf::Top,
                                 thin_head,
+                                has_source_circle.then_some((
+                                    from_x_shifted + SOURCE_CIRCLE_X_OFFSET,
+                                    msg_y + SOURCE_CIRCLE_Y_OFFSET,
+                                )),
                                 line_style,
                                 text_x,
                                 text_y_pos,
@@ -11036,6 +11110,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 cross_left,
                                 msg_y,
                                 false,
+                                has_source_circle.then_some((
+                                    from_x_shifted + SOURCE_CIRCLE_X_OFFSET,
+                                    msg_y + SOURCE_CIRCLE_Y_OFFSET,
+                                )),
                                 cross_left + 5.0,
                                 line_x2_end,
                                 line_style,
@@ -11063,7 +11141,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                     None
                                 },
                                 has_source_circle.then_some((
-                                    from_x_shifted - SOURCE_CIRCLE_X_OFFSET,
+                                    from_x_shifted + SOURCE_CIRCLE_X_OFFSET,
                                     msg_y + SOURCE_CIRCLE_Y_OFFSET,
                                 )),
                                 tip_x - 1.0,
@@ -11094,6 +11172,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 msg_y,
                                 half == ArrowHalf::Top,
                                 thin_head,
+                                has_source_circle.then_some((
+                                    from_x_shifted + SOURCE_CIRCLE_X_OFFSET,
+                                    msg_y + SOURCE_CIRCLE_Y_OFFSET,
+                                )),
                                 line_style,
                                 text_x,
                                 text_y_pos,
@@ -11149,7 +11231,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 msg_id,
                                 None,
                                 has_source_circle.then_some((
-                                    from_x_shifted - SOURCE_CIRCLE_X_OFFSET,
+                                    from_x_shifted + SOURCE_CIRCLE_X_OFFSET,
                                     msg_y + SOURCE_CIRCLE_Y_OFFSET,
                                 )),
                                 first_arrow_pts,
@@ -12781,7 +12863,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // routes the text through the creole segmenter so bold/italic/under runs
     // split into separate `<text>` elements at calculated x offsets.
     if let Some(caption) = &diagram.meta.caption {
-        const CAPTION_FONT_SIZE: u32 = 14;
         let src_line = diagram.meta.caption_line.unwrap_or(1);
         let caption_x = if let (Some(first), Some(last)) =
             (participants.first(), participants.last())
@@ -12792,12 +12873,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         } else {
             1.0
         };
-        let caption_y = if diagram.meta.footer.is_some() {
-            let footer_y = svg_height as f64 - combined_footer_bottom_offset(&page_font_family);
-            footer_y - combined_caption_footer_baseline_gap(&page_font_family)
-        } else {
-            caption_only_y
-        };
+        // Adding the footer wraps the captioned block and does not move the
+        // caption inside it (`DiagramChromeFactory12026#addCaption` followed
+        // by `addHeaderAndFooter`).
+        let caption_y = caption_only_y;
         write!(
             svg.buf,
             r#"<g class="caption" data-source-line="{src_line}">"#
@@ -12858,7 +12937,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         )
         .unwrap();
         let footer_y = if diagram.meta.caption.is_some() {
-            svg_height as f64 - combined_footer_bottom_offset(&page_font_family)
+            // DecorateEntityImage stacks the footer below the complete caption
+            // block. The caption's default style has one-pixel top and bottom
+            // margins around its measured text.
+            caption_only_y - ascent_with_family(14.0, &page_font_family)
+                + text_height_with_family(14.0, &page_font_family)
+                + 2.0
+                + ascent_with_family(FOOTER_FONT_SIZE as f64, &page_font_family)
         } else if diagram.hide_footbox {
             if diagram.teoz && has_boxes {
                 // Teoz sizes the named-box frame 6px below the lifeline tail
@@ -13513,6 +13598,16 @@ mod tests {
         assert!(!svg.contains("concealed"));
         assert!(svg.contains(r#"id="msg3""#));
         assert!(svg.contains(">visible after hidden</text>"));
+    }
+
+    #[test]
+    fn autonumber_keeps_literal_angle_brackets_around_zero_placeholder() {
+        let format = Some("<b><000000>".to_string());
+        let runs = format_autonumber_runs(17, &format);
+        let text: String = runs.iter().map(|run| run.text.as_str()).collect();
+
+        assert_eq!(text, "<000017>");
+        assert!(runs.iter().all(|run| run.bold));
     }
 
     #[test]

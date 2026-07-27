@@ -1088,26 +1088,57 @@ fn parse_participant_kind(s: &str) -> ParticipantKind {
 }
 
 fn parse_arrow(s: &str) -> Arrow {
+    let s = s.trim();
     let line = if s.contains("--") {
         LineStyle::Dotted
     } else {
         LineStyle::Solid
     };
 
-    let source_cross = s.starts_with('x');
-    let source_circle = s.starts_with('o');
-    let target_syntax = if source_cross || source_circle {
-        &s[1..]
+    let direction = if s.starts_with('<') && s.ends_with('>') {
+        ArrowDirection::Bidirectional
+    } else if s.contains("<-") || s.contains('<') && !s.contains("->") {
+        ArrowDirection::RightToLeft
     } else {
-        s
+        ArrowDirection::LeftToRight
     };
-    let head = if source_cross {
-        ArrowHead::Filled
-    } else if target_syntax.contains('x') {
+    // CommandArrow derives decoration ownership before swapping semantic
+    // participants for reverseDefine arrows. The raw token's right dressing is
+    // therefore the source side for `<-o`, while its left dressing is the
+    // source side for `o->`.
+    let reverse = direction == ArrowDirection::RightToLeft;
+    let source_cross = if reverse {
+        s.ends_with('x')
+    } else {
+        s.starts_with('x')
+    };
+    let source_circle = if reverse {
+        s.ends_with('o')
+    } else {
+        s.starts_with('o')
+    };
+    let target_cross = if reverse {
+        s.starts_with('x')
+    } else {
+        s.ends_with('x')
+    };
+    let target_circle = if reverse {
+        s.starts_with('o')
+    } else {
+        s.ends_with('o')
+    };
+    let target_open = match direction {
+        ArrowDirection::RightToLeft => s.contains("<<"),
+        ArrowDirection::LeftToRight => s.contains(">>"),
+        ArrowDirection::Bidirectional | ArrowDirection::Self_ => {
+            s.contains("<<") || s.contains(">>")
+        }
+    };
+    let head = if target_cross {
         ArrowHead::Cross
-    } else if target_syntax.contains('o') {
+    } else if target_circle {
         ArrowHead::Circle
-    } else if target_syntax.contains(">>") || target_syntax.contains("<<") {
+    } else if target_open {
         ArrowHead::Open
     } else {
         ArrowHead::Filled
@@ -1126,14 +1157,6 @@ fn parse_arrow(s: &str) -> Arrow {
         (Some(ArrowHalf::Top), false)
     } else {
         (None, false)
-    };
-
-    let direction = if s.starts_with('<') && s.ends_with('>') {
-        ArrowDirection::Bidirectional
-    } else if s.contains("<-") || s.contains("<") && !s.contains("->") {
-        ArrowDirection::RightToLeft
-    } else {
-        ArrowDirection::LeftToRight
     };
 
     Arrow {
@@ -1456,6 +1479,26 @@ mod tests {
         } else {
             panic!("expected message");
         }
+    }
+
+    #[test]
+    fn reverse_source_circle_keeps_semantic_source_and_target_head() {
+        let d = parse("A <<-o B : open reverse\nA <-o B : filled reverse");
+        let Event::Message(open) = &d.events[0] else {
+            panic!("expected open reverse message");
+        };
+        assert_eq!(open.from, "B");
+        assert_eq!(open.to, "A");
+        assert!(open.arrow.source_circle);
+        assert_eq!(open.arrow.head, ArrowHead::Open);
+
+        let Event::Message(filled) = &d.events[1] else {
+            panic!("expected filled reverse message");
+        };
+        assert_eq!(filled.from, "B");
+        assert_eq!(filled.to, "A");
+        assert!(filled.arrow.source_circle);
+        assert_eq!(filled.arrow.head, ArrowHead::Filled);
     }
 
     #[test]
