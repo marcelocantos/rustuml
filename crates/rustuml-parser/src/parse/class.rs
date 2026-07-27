@@ -491,14 +491,14 @@ impl ClassParser {
         // Allows dots in the identifier (for `set namespaceSeparator none`).
         static RE_DOTTED: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
-                r#"^(class|abstract\s+class|abstract|interface|enum|annotation|entity|object|state|circle|diamond)\s+(?:(?:"([^"]+)"\s+as\s+)?(\w[\w.]*(?:<[^<>]*(?:<[^<>]*>[^<>]*)*>)?)|"([^"]+)")"#,
+                r#"^(class|abstract\s+class|abstract|interface|enum|annotation|entity|object|state|circle|diamond|actor|usecase|component|database|queue|node|rectangle)\s+(?:(?:"([^"]+)"\s+as\s+)?(\w[\w.]*(?:<[^<>]*(?:<[^<>]*>[^<>]*)*>)?)|"([^"]+)")"#,
             )
             .unwrap()
         });
         // Permissive regex: accepts any non-whitespace name (for custom namespace separators).
         static RE_PERMISSIVE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
-                r#"^(class|abstract\s+class|abstract|interface|enum|annotation|entity|object|state|circle|diamond)\s+(?:(?:"([^"]+)"\s+as\s+)?([^\s{<>]+(?:<[^<>]*(?:<[^<>]*>[^<>]*)*>)?)|"([^"]+)")"#,
+                r#"^(class|abstract\s+class|abstract|interface|enum|annotation|entity|object|state|circle|diamond|actor|usecase|component|database|queue|node|rectangle)\s+(?:(?:"([^"]+)"\s+as\s+)?([^\s{<>]+(?:<[^<>]*(?:<[^<>]*>[^<>]*)*>)?)|"([^"]+)")"#,
             )
             .unwrap()
         });
@@ -516,7 +516,13 @@ impl ClassParser {
             &*RE_PERMISSIVE
         };
         if let Some(caps) = re.captures(line) {
-            let kind = parse_entity_kind(caps[1].trim());
+            let declaration_kind = caps[1].trim();
+            if line.trim_end().ends_with('{')
+                && matches!(declaration_kind, "database" | "node" | "rectangle")
+            {
+                return false;
+            }
+            let kind = parse_entity_kind(declaration_kind);
             // Group 4: quoted-only form — class "**Name**" with no `as` keyword.
             let (mut label, mut id) = if let Some(m) = caps.get(4) {
                 let label_raw = m.as_str().to_string();
@@ -1633,6 +1639,13 @@ fn parse_entity_kind(s: &str) -> EntityKind {
         "state" => EntityKind::State,
         "circle" => EntityKind::Circle,
         "diamond" => EntityKind::Diamond,
+        "actor" => EntityKind::Actor,
+        "usecase" => EntityKind::UseCase,
+        "component" => EntityKind::Component,
+        "database" => EntityKind::Database,
+        "queue" => EntityKind::Queue,
+        "node" => EntityKind::Node,
+        "rectangle" => EntityKind::Rectangle,
         _ => EntityKind::Class,
     }
 }
@@ -2226,6 +2239,64 @@ mod tests {
         assert_eq!(d.entities[2].id, "Baz");
         assert_eq!(d.entities[2].kind, EntityKind::Diamond);
         assert_eq!(d.entities[2].source_line, 3);
+    }
+
+    #[test]
+    fn allowmixing_description_leaves_keep_declaration_kind_and_location() {
+        let d = parse(
+            "allowmixing\n\
+             actor \"Release Operator\" as Operator\n\
+             usecase \"Approve Rollout\" as Approval\n\
+             component PolicyEngine\n\
+             database MetricsStore\n\
+             queue RetryQueue\n\
+             node EdgeHost\n\
+             rectangle TrustBoundary\n\
+             Operator --> Approval\n\
+             Approval --> PolicyEngine",
+        );
+        let expected = [
+            ("Operator", EntityKind::Actor, 2),
+            ("Approval", EntityKind::UseCase, 3),
+            ("PolicyEngine", EntityKind::Component, 4),
+            ("MetricsStore", EntityKind::Database, 5),
+            ("RetryQueue", EntityKind::Queue, 6),
+            ("EdgeHost", EntityKind::Node, 7),
+            ("TrustBoundary", EntityKind::Rectangle, 8),
+        ];
+        for (id, kind, source_line) in expected {
+            let entity = d.entities.iter().find(|entity| entity.id == id).unwrap();
+            assert_eq!(entity.kind, kind);
+            assert_eq!(entity.source_line, source_line);
+        }
+    }
+
+    #[test]
+    fn braced_description_keywords_remain_containers() {
+        let d = parse(
+            "allowmixing\n\
+             database DataZone {\n\
+               class Record\n\
+             }\n\
+             node Runtime {\n\
+               class Worker\n\
+             }\n\
+             rectangle Boundary {\n\
+               class Gateway\n\
+             }",
+        );
+        assert_eq!(d.packages.len(), 3);
+        assert_eq!(
+            d.packages
+                .iter()
+                .map(|package| package.name.as_str())
+                .collect::<Vec<_>>(),
+            ["DataZone", "Runtime", "Boundary"]
+        );
+        assert!(d.entities.iter().all(|entity| !matches!(
+            entity.kind,
+            EntityKind::Database | EntityKind::Node | EntityKind::Rectangle
+        )));
     }
 
     #[test]

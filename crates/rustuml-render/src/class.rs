@@ -483,6 +483,13 @@ fn resolve_hide(entity: &ClassEntity, directives: &[HideShow]) -> HideFlags {
         EntityKind::State => "state",
         EntityKind::Circle => "circle",
         EntityKind::Diamond => "diamond",
+        EntityKind::Actor => "actor",
+        EntityKind::UseCase => "usecase",
+        EntityKind::Component => "component",
+        EntityKind::Database => "database",
+        EntityKind::Queue => "queue",
+        EntityKind::Node => "node",
+        EntityKind::Rectangle => "rectangle",
     };
     for d in directives {
         if d.remove {
@@ -6561,12 +6568,27 @@ fn render_entity_content(
                 EntityKind::Circle | EntityKind::Diamond => {
                     stereotype_c_fill.as_deref().unwrap_or(CLASS_ICON_FILL)
                 }
+                EntityKind::Actor
+                | EntityKind::UseCase
+                | EntityKind::Component
+                | EntityKind::Database
+                | EntityKind::Queue
+                | EntityKind::Node
+                | EntityKind::Rectangle => stereotype_c_fill.as_deref().unwrap_or(CLASS_ICON_FILL),
             },
         };
         let icon_stroke = match entity.kind {
-            EntityKind::Class | EntityKind::Object | EntityKind::Entity | EntityKind::State => {
-                stereotype_c_stroke.as_deref().unwrap_or(BORDER_COLOR)
-            }
+            EntityKind::Class
+            | EntityKind::Object
+            | EntityKind::Entity
+            | EntityKind::State
+            | EntityKind::Actor
+            | EntityKind::UseCase
+            | EntityKind::Component
+            | EntityKind::Database
+            | EntityKind::Queue
+            | EntityKind::Node
+            | EntityKind::Rectangle => stereotype_c_stroke.as_deref().unwrap_or(BORDER_COLOR),
             EntityKind::Interface => stereotype_i_stroke.as_deref().unwrap_or(BORDER_COLOR),
             EntityKind::Enum => stereotype_e_stroke.as_deref().unwrap_or(BORDER_COLOR),
             EntityKind::AbstractClass => stereotype_a_stroke.as_deref().unwrap_or(BORDER_COLOR),
@@ -6611,6 +6633,13 @@ fn render_entity_content(
                 EntityKind::AbstractClass => 'A',
                 EntityKind::Annotation => '@',
                 EntityKind::Circle | EntityKind::Diamond => 'C',
+                EntityKind::Actor
+                | EntityKind::UseCase
+                | EntityKind::Component
+                | EntityKind::Database
+                | EntityKind::Queue
+                | EntityKind::Node
+                | EntityKind::Rectangle => 'C',
             });
             crate::metrics::centered_character_path(
                 character,

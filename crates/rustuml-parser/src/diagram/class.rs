@@ -163,6 +163,13 @@ pub enum EntityKind {
     State,
     Circle,
     Diamond,
+    Actor,
+    UseCase,
+    Component,
+    Database,
+    Queue,
+    Node,
+    Rectangle,
 }
 
 /// A field or method in a class.
