@@ -3692,11 +3692,12 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
         return None;
     }
 
-    let composites = diagram
+    let mut composites = diagram
         .states
         .iter()
         .filter(|state| state.composite)
         .collect::<Vec<_>>();
+    composites.sort_by_key(|state| state.decl_line.unwrap_or(state.source_line));
     if composites.is_empty()
         || (!has_border_points && composites.len() < 2)
         || composites.iter().any(|state| state.parent.is_some())
@@ -3853,26 +3854,72 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
     {
         return None;
     }
+    let mut painted_cluster_positions = result.cluster_positions.clone();
     apply_state_border_frontiers(
         diagram,
         &ids,
-        &mut result.cluster_positions,
+        &mut painted_cluster_positions,
         &result.node_positions,
     );
     order_parallel_svek_paths(&mut result.edge_paths);
-    for edge in &mut result.edge_paths {
-        let tail = result
-            .cluster_positions
+
+    // `ClusterDotString.printInternal` assigns each link's projection cluster
+    // while walking groups in declaration order, so the later group endpoint
+    // wins. `DotStringFactory.solve` then visits links in insertion order and
+    // `SvekEdge.solveLine` updates only that projection before compound
+    // clipping. All remaining frontiers are updated later by `Cluster.drawU`.
+    let mut live_cluster_positions = result.cluster_positions.clone();
+    let mut consumed_edge_paths = vec![false; result.edge_paths.len()];
+    for transition_index in &transition_indices {
+        let transition = &diagram.transitions[*transition_index];
+        let from = state_endpoint_layout_id(&transition.from, true);
+        let to = state_endpoint_layout_id(&transition.to, false);
+        let inverted = matches!(
+            explicit_transition_direction(diagram, transition),
+            Some(ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Up)
+        );
+        let (edge_from, edge_to) = if inverted { (&to, &from) } else { (&from, &to) };
+        let Some(edge_index) = routed_compound_edge_index(
+            &result.edge_paths,
+            &mut consumed_edge_paths,
+            edge_from,
+            edge_to,
+        ) else {
+            continue;
+        };
+
+        let projection = composites.iter().rev().find(|composite| {
+            (transition.from == composite.id || transition.to == composite.id)
+                && diagram.states.iter().any(|state| {
+                    state.parent.as_deref() == Some(composite.id.as_str())
+                        && matches!(state.kind, StateKind::EntryPoint | StateKind::ExitPoint)
+                })
+        });
+        if let Some(projection) = projection
+            && let Some(adjusted) = painted_cluster_positions
+                .iter()
+                .find(|cluster| cluster.id == projection.id)
+            && let Some(live) = live_cluster_positions
+                .iter_mut()
+                .find(|cluster| cluster.id == projection.id)
+        {
+            *live = adjusted.clone();
+        }
+
+        let edge_from = result.edge_paths[edge_index].from.clone();
+        let edge_to = result.edge_paths[edge_index].to.clone();
+        let tail = live_cluster_positions
             .iter()
-            .find(|cluster| cluster.id == edge.from);
-        let head = result
-            .cluster_positions
+            .find(|cluster| cluster.id == edge_from);
+        let head = live_cluster_positions
             .iter()
-            .find(|cluster| cluster.id == edge.to);
+            .find(|cluster| cluster.id == edge_to);
         if tail.is_some() || head.is_some() {
-            edge.points = simulate_state_compound(&edge.points, tail, head);
+            result.edge_paths[edge_index].points =
+                simulate_state_compound(&result.edge_paths[edge_index].points, tail, head);
         }
     }
+    result.cluster_positions = painted_cluster_positions;
 
     // `SvekResult.calculateDimension` measures the painted result through
     // `LimitFinder`, then asks `DotStringFactory.moveDelta` to place its
@@ -4162,7 +4209,7 @@ fn emit_root_state_cluster(
         svg,
         r#"<g class="cluster" data-qualified-name="{}" data-source-line="{}" id="{}"><path d="M{},{} L{},{} A{STATE_RX},{STATE_RX} 0 0 1 {},{} L{},{} L{},{} L{},{} A{STATE_RX},{STATE_RX} 0 0 1 {},{}" fill="{}"/><rect fill="none" height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/><line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
         escape_attr(&composite.id),
-        composite.source_line,
+        composite.decl_line.unwrap_or(composite.source_line),
         autonomous_entity_id(context.entity_ids, &composite.id),
         fmt_f(x + STATE_RX),
         fmt_f(y),
@@ -6873,6 +6920,16 @@ fn routed_compound_edge_path<'a>(
     from: &str,
     to: &str,
 ) -> Option<&'a EdgePath> {
+    let index = routed_compound_edge_index(edge_paths, consumed, from, to)?;
+    edge_paths.get(index)
+}
+
+fn routed_compound_edge_index(
+    edge_paths: &[EdgePath],
+    consumed: &mut [bool],
+    from: &str,
+    to: &str,
+) -> Option<usize> {
     let index = edge_paths.iter().enumerate().position(|(index, edge)| {
         !consumed.get(index).copied().unwrap_or(true)
             && edge.from == from
@@ -6880,7 +6937,7 @@ fn routed_compound_edge_path<'a>(
             && !edge.points.is_empty()
     })?;
     consumed[index] = true;
-    edge_paths.get(index)
+    Some(index)
 }
 
 /// Bind one parallel self-loop back to its declaration-order transition.
