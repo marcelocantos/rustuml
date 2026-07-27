@@ -1278,8 +1278,7 @@ renamed:
 
         let child_center_mean =
             ((boxes[2].1 + boxes[2].3 / 2.0) + (boxes[4].1 + boxes[4].3 / 2.0)) / 2.0;
-        let port_center_mean =
-            (parent_port_centers[0] + parent_port_centers[1]) / 2.0;
+        let port_center_mean = (parent_port_centers[0] + parent_port_centers[1]) / 2.0;
         // PlantUML serializes these independently to four decimal places.
         assert!((child_center_mean - port_center_mean).abs() < 1.0 / 1000.0);
     }

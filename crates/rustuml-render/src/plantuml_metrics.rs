@@ -360,11 +360,7 @@ fn arabic_context_widths(c: char, bold: bool) -> Option<&'static [f64; 4]> {
         .ok()
         .map(|index| {
             let (_, plain, bold_widths) = &crate::non_ascii_widths::ARABIC_CONTEXT_WIDTHS[index];
-            if bold {
-                bold_widths
-            } else {
-                plain
-            }
+            if bold { bold_widths } else { plain }
         })
 }
 
