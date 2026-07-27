@@ -1,0 +1,17 @@
+digraph unix {
+remincross=true;
+searchsize=500;
+sh0006 [shape=diamond,label="",width=0.333333,height=0.333333,color="#000006"];
+sh0007 [shape=circle,label="",width=0.277778,height=0.277778,color="#000007"];
+sh0008 [shape=rect,style=rounded,label="",width=1.521918,height=0.694444,color="#000008"];
+sh0009 [shape=rect,style=rounded,label="",width=1.392131,height=0.694444,color="#000009"];
+sh0010 [shape=rect,style=rounded,label="",width=1.259874,height=0.694444,color="#00000A"];
+sh0011 [shape=circle,label="",width=0.305556,height=0.305556,color="#00000B"];
+sh0007->sh0008[arrowtail=none,arrowhead=none,minlen=1,color="#00000C"];
+sh0008->sh0006[arrowtail=none,arrowhead=none,minlen=1,color="#000010"];
+sh0006->sh0009[arrowtail=none,arrowhead=none,minlen=1,color="#000014",label=<<TABLE BGCOLOR="#000015" FIXEDSIZE="TRUE" WIDTH="40" HEIGHT="17"><TR><TD></TD></TR></TABLE>>];
+sh0006->sh0010[arrowtail=none,arrowhead=none,minlen=1,color="#000018",label=<<TABLE BGCOLOR="#000019" FIXEDSIZE="TRUE" WIDTH="60" HEIGHT="17"><TR><TD></TD></TR></TABLE>>];
+sh0009->sh0011[arrowtail=none,arrowhead=none,minlen=1,color="#00001C"];
+sh0010->sh0011[arrowtail=none,arrowhead=none,minlen=1,color="#000020"];
+
+}

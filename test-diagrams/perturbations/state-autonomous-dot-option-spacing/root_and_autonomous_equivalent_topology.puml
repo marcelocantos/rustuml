@@ -1,0 +1,14 @@
+@startuml
+state HarborShell {
+  [*] --> InnerQuartz
+  InnerQuartz --> InnerTopaz : inward
+  InnerTopaz --> InnerQuartz : return
+  InnerTopaz --> [*]
+}
+
+[*] --> RootQuartz
+RootQuartz --> RootTopaz : outward
+RootTopaz --> RootQuartz : return
+RootTopaz --> HarborShell
+HarborShell --> [*]
+@enduml

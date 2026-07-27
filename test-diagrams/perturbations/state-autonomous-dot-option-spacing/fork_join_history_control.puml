@@ -1,0 +1,17 @@
+@startuml
+state RelayAtrium {
+  state RecallPool <<history>>
+  state DispatchFork <<fork>>
+  state CollectJoin <<join>>
+
+  [*] --> RecallPool
+  RecallPool --> DispatchFork
+  DispatchFork --> EasternTrack
+  DispatchFork --> WesternTrack
+  EasternTrack --> CollectJoin
+  WesternTrack --> CollectJoin
+  CollectJoin --> [*]
+}
+[*] --> RelayAtrium
+RelayAtrium --> [*]
+@enduml

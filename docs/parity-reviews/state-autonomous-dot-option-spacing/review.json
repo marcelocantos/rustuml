@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-autonomous-dot-option-spacing",
+  "reviewer": {
+    "task_id": "codex-desktop-task-019ee369-54e2-7203-afce-ddde7bfe1723-independent-checker",
+    "model": "GPT-5 Codex"
+  },
+  "account_commit": "dfe69a15d5bd65059f855b155185a7c9291cd8eb",
+  "implementation_commit": "94a718a5f70cf69c65fd8cd76795d4bb382e2cf9",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "git rev-parse HEAD && git merge-base --is-ancestor dfe69a15d5bd65059f855b155185a7c9291cd8eb 94a718a5f70cf69c65fd8cd76795d4bb382e2cf9",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "git diff dfe69a15d5bd65059f855b155185a7c9291cd8eb 94a718a5f70cf69c65fd8cd76795d4bb382e2cf9 -- crates/rustuml-render/src/state.rs test-diagrams/no_oracle_baseline.txt",
+    "sed -n '101,153p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/GroupMakerState.java",
+    "sed -n '112,145p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/DotStringFactory.java",
+    "sed -n '122,128p;211,218p;830,840p;1121,1127p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/skin/SkinParam.java",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/state-autonomous-dot-option-spacing/*.puml",
+    "GRAPHVIZ_DOT=/Users/marcelo/work/github.com/marcelocantos/rustuml/test-diagrams/perturbations/state-autonomous-dot-option-spacing/capture-java-dot.sh RUSTUML_DOT_CAPTURE_DIR=/Users/marcelo/work/github.com/marcelocantos/rustuml/test-diagrams/perturbations/state-autonomous-dot-option-spacing/dot-evidence/<case> java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/state-autonomous-dot-option-spacing/<case>.puml",
+    "rg -n \"Syntax Error|PlantUML.*Error|Error line|class=\\\"message\\\"\" test-diagrams/perturbations/state-autonomous-dot-option-spacing -g '*.svg'",
+    "cargo test --test parity_perturbations --release -- --nocapture",
+    "cargo test --test harness_guards --release parity_review_records_are_complete -- --nocapture"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/choice_only_autonomous.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/choice_only_autonomous.svg",
+      "axes": [
+        "choice pseudo-state",
+        "autonomous nesting",
+        "label variation"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/fork_join_history_control.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/fork_join_history_control.svg",
+      "axes": [
+        "fork/join/history pseudo-states",
+        "autonomous nesting",
+        "label variation"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/nondigit_spacing_values_fallback.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/nondigit_spacing_values_fallback.svg",
+      "axes": [
+        "skinparam value grammar",
+        "outer spacing override",
+        "parallel root topology"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/outer_spacing_inner_defaults.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/outer_spacing_inner_defaults.svg",
+      "axes": [
+        "outer nodesep/ranksep overrides",
+        "inner default isolation",
+        "parallel root topology"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/pseudostate_spacing_matrix.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/pseudostate_spacing_matrix.svg",
+      "axes": [
+        "fork/join/choice/history pseudo-states",
+        "autonomous nesting",
+        "branch topology"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/renamed_antiparallel_adjacent_ranks.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/renamed_antiparallel_adjacent_ranks.svg",
+      "axes": [
+        "antiparallel adjacent ranks",
+        "label variation",
+        "node count"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/root_and_autonomous_equivalent_topology.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/root_and_autonomous_equivalent_topology.svg",
+      "axes": [
+        "root versus autonomous topology",
+        "antiparallel links",
+        "label variation"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/three_concurrent_regions.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/three_concurrent_regions.svg",
+      "axes": [
+        "multiple concurrent regions",
+        "independent inner layouts",
+        "antiparallel links"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/two_nested_autonomous_levels.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/two_nested_autonomous_levels.svg",
+      "axes": [
+        "two autonomous nesting levels",
+        "antiparallel links",
+        "label variation"
+      ],
+      "result": "pass"
+    }
+  ],
+  "findings": [
+    "The account commit precedes the implementation commit, Rust HEAD was exactly 94a718a5f70cf69c65fd8cd76795d4bb382e2cf9 before checker writes, and the relevant Java sources were unmodified at exactly 71806a23780b04a5ccde2f8ceb5121edad5eb711.",
+    "Static Java provenance supports the core inner/outer boundary: every GroupMakerState inner build passes new String[0], while CucaDiagramFileMakerSvek passes diagram.getDotStringSkek() to the root builder. The implementation's None for autonomous inner LayoutGraph spacing and explicit Some(GraphSpacing) for the root is structurally aligned with that boundary.",
+    "The captured Java DOT streams prove the boundary dynamically. Integer overrides 91/77 produce two inner invocations without spacing attributes and an outer invocation with nodesep=1.263889 and ranksep=1.069444. Two nested autonomous levels likewise omit both attributes twice before an explicit-default root call, and three concurrent regions omit them independently before the root call. All captures and their scope mapping are preserved under dot-evidence/.",
+    "The implementation contains no changed golden reads, fixture-label branches, coordinate-keyed SVG surgery, comparator changes, guard changes, or new parity constants. AUTONOMOUS_RANK_SEP is removed rather than replaced, and the new branches are keyed only to the Java model's inner/outer scope and spacing skinparam names.",
+    "Primary counterexample: Java SkinParam.getAsInt accepts only values matching \\\\d+, but Rust autonomous_outer_spacing uses parse::<i32>(), which accepts a leading plus sign. In nondigit_spacing_values_fallback.puml, Java rejects nodesep +91 and ranksep 77.0 and its captured outer DOT uses defaults nodesep=0.486111/ranksep=0.833333. Rust applies +91, widening the output from Java's 318x592 to 374x593 and changing root placement. This directly falsifies the claimed Java-equivalent outer option resolution.",
+    "The fork/join/history control passes. Both choice-bearing perturbations fail only because the autonomous choice emitter serializes polygon point pairs with spaces while Java uses commas; the coordinates are otherwise identical. That serializer existed before 94a718a5, so it is not evidence against the spacing boundary, but the valid generated counterexamples remain executable and prevent this review from accepting the complete mechanism.",
+    "The complete cargo test --test parity_perturbations --release -- --nocapture run failed on exactly nondigit_spacing_values_fallback.puml, choice_only_autonomous.puml, and pseudostate_spacing_matrix.puml; the other six new held-outs and all prior perturbations passed.",
+    "The parity_review_records_are_complete guard parsed the record and all evidence paths successfully, then failed only on the intentional rejection conditions: the latest verdict is rejected and the same three perturbations are marked fail.",
+    "A corrective implementation should first make outer spacing value acceptance match Java's ASCII-digit-only SkinParam.getAsInt behavior, with the account clarified before production changes. The autonomous choice polygon serializer also needs a separate model-backed correction before the preserved choice perturbations can pass."
+  ],
+  "verdict": "rejected"
+}

@@ -1,0 +1,20 @@
+@startuml
+state TriuneConsole {
+  [*] --> AlpineIdle
+  AlpineIdle --> AlpineBusy : wake
+  AlpineBusy --> AlpineIdle : rest
+  AlpineBusy --> [*]
+  --
+  [*] --> BalticIdle
+  BalticIdle --> BalticBusy : wake
+  BalticBusy --> BalticIdle : rest
+  BalticBusy --> [*]
+  --
+  [*] --> CaspianIdle
+  CaspianIdle --> CaspianBusy : wake
+  CaspianBusy --> CaspianIdle : rest
+  CaspianBusy --> [*]
+}
+[*] --> TriuneConsole
+TriuneConsole --> [*]
+@enduml

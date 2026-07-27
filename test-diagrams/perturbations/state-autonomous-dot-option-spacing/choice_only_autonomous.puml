@@ -1,0 +1,14 @@
+@startuml
+state DecisionGallery {
+  state PrismChoice <<choice>>
+
+  [*] --> WaitingRoom
+  WaitingRoom --> PrismChoice
+  PrismChoice --> EmeraldExit : [clear]
+  PrismChoice --> ScarletExit : [blocked]
+  EmeraldExit --> [*]
+  ScarletExit --> [*]
+}
+[*] --> DecisionGallery
+DecisionGallery --> [*]
+@enduml

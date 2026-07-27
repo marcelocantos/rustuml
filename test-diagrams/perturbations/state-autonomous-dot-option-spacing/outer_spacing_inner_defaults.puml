@@ -1,0 +1,24 @@
+@startuml
+skinparam nodesep 91
+skinparam ranksep 77
+
+state CopperBay {
+  [*] --> CopperNorth
+  CopperNorth --> CopperSouth : down
+  CopperSouth --> CopperNorth : up
+  CopperSouth --> [*]
+}
+
+state QuartzBay {
+  [*] --> QuartzNorth
+  QuartzNorth --> QuartzSouth : down
+  QuartzSouth --> QuartzNorth : up
+  QuartzSouth --> [*]
+}
+
+[*] --> CopperBay
+[*] --> QuartzBay
+CopperBay --> TerminalMooring
+QuartzBay --> TerminalMooring
+TerminalMooring --> [*]
+@enduml

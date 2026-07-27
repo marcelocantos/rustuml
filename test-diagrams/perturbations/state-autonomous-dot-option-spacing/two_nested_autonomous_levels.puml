@@ -1,0 +1,16 @@
+@startuml
+state ObservatoryHull {
+  [*] --> LensAssembly
+  state LensAssembly {
+    [*] --> IndigoLens
+    IndigoLens --> VermilionLens : focus
+    VermilionLens --> IndigoLens : defocus
+    VermilionLens --> [*]
+  }
+  LensAssembly --> CalibrationDeck : inspect
+  CalibrationDeck --> LensAssembly : repeat
+  CalibrationDeck --> [*]
+}
+[*] --> ObservatoryHull
+ObservatoryHull --> [*]
+@enduml

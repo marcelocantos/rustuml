@@ -1,0 +1,122 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "wrapper": "test-diagrams/perturbations/state-autonomous-dot-option-spacing/capture-java-dot.sh",
+  "captures": [
+    {
+      "source": "choice_only_autonomous.puml",
+      "invocations": [
+        {
+          "path": "choice_only_autonomous/invocation-01.dot",
+          "scope": "DecisionGallery autonomous inner image",
+          "spacing_attributes": []
+        },
+        {
+          "path": "choice_only_autonomous/invocation-02.dot",
+          "scope": "root SVEK graph",
+          "spacing_attributes": [
+            "nodesep=0.486111",
+            "ranksep=0.833333"
+          ]
+        }
+      ]
+    },
+    {
+      "source": "nondigit_spacing_values_fallback.puml",
+      "invocations": [
+        {
+          "path": "nondigit_spacing_values_fallback/invocation-01.dot",
+          "scope": "SilverDock autonomous inner image",
+          "spacing_attributes": []
+        },
+        {
+          "path": "nondigit_spacing_values_fallback/invocation-02.dot",
+          "scope": "OnyxDock autonomous inner image",
+          "spacing_attributes": []
+        },
+        {
+          "path": "nondigit_spacing_values_fallback/invocation-03.dot",
+          "scope": "root SVEK graph after Java rejects +91 and 77.0 as non-digits",
+          "spacing_attributes": [
+            "nodesep=0.486111",
+            "ranksep=0.833333"
+          ]
+        }
+      ]
+    },
+    {
+      "source": "outer_spacing_inner_defaults.puml",
+      "invocations": [
+        {
+          "path": "outer_spacing_inner_defaults/invocation-01.dot",
+          "scope": "CopperBay autonomous inner image",
+          "spacing_attributes": []
+        },
+        {
+          "path": "outer_spacing_inner_defaults/invocation-02.dot",
+          "scope": "QuartzBay autonomous inner image",
+          "spacing_attributes": []
+        },
+        {
+          "path": "outer_spacing_inner_defaults/invocation-03.dot",
+          "scope": "root SVEK graph with integer overrides",
+          "spacing_attributes": [
+            "nodesep=1.263889",
+            "ranksep=1.069444"
+          ]
+        }
+      ]
+    },
+    {
+      "source": "three_concurrent_regions.puml",
+      "invocations": [
+        {
+          "path": "three_concurrent_regions/invocation-01.dot",
+          "scope": "first concurrent region inner image",
+          "spacing_attributes": []
+        },
+        {
+          "path": "three_concurrent_regions/invocation-02.dot",
+          "scope": "second concurrent region inner image",
+          "spacing_attributes": []
+        },
+        {
+          "path": "three_concurrent_regions/invocation-03.dot",
+          "scope": "third concurrent region inner image",
+          "spacing_attributes": []
+        },
+        {
+          "path": "three_concurrent_regions/invocation-04.dot",
+          "scope": "root SVEK graph",
+          "spacing_attributes": [
+            "nodesep=0.486111",
+            "ranksep=0.833333"
+          ]
+        }
+      ]
+    },
+    {
+      "source": "two_nested_autonomous_levels.puml",
+      "invocations": [
+        {
+          "path": "two_nested_autonomous_levels/invocation-01.dot",
+          "scope": "LensAssembly autonomous inner image",
+          "spacing_attributes": []
+        },
+        {
+          "path": "two_nested_autonomous_levels/invocation-02.dot",
+          "scope": "ObservatoryHull autonomous inner image",
+          "spacing_attributes": []
+        },
+        {
+          "path": "two_nested_autonomous_levels/invocation-03.dot",
+          "scope": "root SVEK graph",
+          "spacing_attributes": [
+            "nodesep=0.486111",
+            "ranksep=0.833333"
+          ]
+        }
+      ]
+    }
+  ]
+}

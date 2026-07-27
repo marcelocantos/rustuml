@@ -1,0 +1,20 @@
+@startuml
+state ControlChamber {
+  state MemoryHarbor <<history>>
+  state RouteFork <<fork>>
+  state RouteChoice <<choice>>
+  state RouteJoin <<join>>
+
+  [*] --> MemoryHarbor
+  MemoryHarbor --> RouteFork
+  RouteFork --> NorthLane
+  RouteFork --> SouthLane
+  NorthLane --> RouteChoice
+  RouteChoice --> RouteJoin : [ready]
+  RouteChoice --> NorthLane : [again]
+  SouthLane --> RouteJoin
+  RouteJoin --> [*]
+}
+[*] --> ControlChamber
+ControlChamber --> [*]
+@enduml

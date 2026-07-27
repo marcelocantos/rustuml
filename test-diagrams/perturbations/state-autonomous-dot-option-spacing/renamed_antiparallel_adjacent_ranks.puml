@@ -1,0 +1,12 @@
+@startuml
+state CobaltVault {
+  [*] --> AmberRelay
+  AmberRelay --> BirchLatch : descend
+  BirchLatch --> AmberRelay : retry
+  BirchLatch --> CedarGate : advance
+  CedarGate --> BirchLatch : rewind
+  CedarGate --> [*]
+}
+[*] --> CobaltVault
+CobaltVault --> [*]
+@enduml

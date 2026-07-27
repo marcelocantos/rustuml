@@ -1,0 +1,22 @@
+@startuml
+skinparam nodesep +91
+skinparam ranksep 77.0
+
+state SilverDock {
+  [*] --> SilverNorth
+  SilverNorth --> SilverSouth
+  SilverSouth --> [*]
+}
+
+state OnyxDock {
+  [*] --> OnyxNorth
+  OnyxNorth --> OnyxSouth
+  OnyxSouth --> [*]
+}
+
+[*] --> SilverDock
+[*] --> OnyxDock
+SilverDock --> FinalPier
+OnyxDock --> FinalPier
+FinalPier --> [*]
+@enduml
