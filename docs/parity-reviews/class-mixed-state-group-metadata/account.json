@@ -3,30 +3,79 @@
   "mechanism": "class-mixed-state-group-metadata",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "java_locations": [
-    "net.sourceforge.plantuml.svek.GeneralImageBuilder#buildImage",
-    "net.sourceforge.plantuml.svek.image.EntityImageClass#drawU",
-    "net.sourceforge.plantuml.svek.image.EntityImageState#drawU",
-    "net.sourceforge.plantuml.svek.image.EntityImageBranch#drawU",
-    "net.sourceforge.plantuml.svek.image.EntityImageDescription#drawU",
-    "net.sourceforge.plantuml.svek.image.EntityImageObject#drawU",
-    "net.sourceforge.plantuml.klimt.UGroup#UGroup"
+    "net.sourceforge.plantuml.PSystemBuilder#createPSystem",
+    "net.sourceforge.plantuml.classdiagram.ClassDiagramFactory#initCommandsList",
+    "net.sourceforge.plantuml.classdiagram.command.CommandAllowMixing#getRegexConcat",
+    "net.sourceforge.plantuml.classdiagram.command.CommandAllowMixing#executeArg",
+    "net.sourceforge.plantuml.regex.Pattern2#compileInternal",
+    "net.sourceforge.plantuml.command.CommandPackage#getRegexConcat",
+    "net.sourceforge.plantuml.command.CommandPackage#executeArg",
+    "net.sourceforge.plantuml.command.CommandNamespace#getRegexConcat",
+    "net.sourceforge.plantuml.command.CommandNamespace#executeArg",
+    "net.atmp.CucaDiagram#quarkInContext",
+    "net.atmp.CucaDiagram#quarkInContextSafe",
+    "net.atmp.CucaDiagram#reallyCreateLeaf",
+    "net.sourceforge.plantuml.classdiagram.command.CommandLinkClass#executeArg",
+    "net.sourceforge.plantuml.classdiagram.command.CommandCreateElementFull2#executeArg"
   ],
+  "prior_account": {
+    "account_commits": [
+      "c475a4a56aae5c0166aab47d41600da1bcbbde85",
+      "5df5e7ed799d1e2a414751cd6d6c635aeec055ef"
+    ],
+    "scope": "Renderer ownership of data-source-line metadata for mixed class, object, description, state, and branch images.",
+    "status": "Retained as valid historical provenance. It was completed before the rejected parser identity work and does not explain review-4 command grammar or quark-path failures.",
+    "java_locations": [
+      "net.sourceforge.plantuml.svek.GeneralImageBuilder#buildImage",
+      "net.sourceforge.plantuml.svek.image.EntityImageClass#drawU",
+      "net.sourceforge.plantuml.svek.image.EntityImageState#drawU",
+      "net.sourceforge.plantuml.svek.image.EntityImageBranch#drawU",
+      "net.sourceforge.plantuml.svek.image.EntityImageDescription#drawU",
+      "net.sourceforge.plantuml.svek.image.EntityImageObject#drawU",
+      "net.sourceforge.plantuml.klimt.UGroup#UGroup"
+    ],
+    "rust_locations": [
+      "crates/rustuml-render/src/class.rs::measure_entity",
+      "crates/rustuml-render/src/class.rs::render_class_svg",
+      "crates/rustuml-render/src/class.rs::render_entity"
+    ],
+    "invariant": "Concrete Java SVEK entity-image implementations own SVG group source-line metadata: class, object, and description images construct groups with the entity location, while state and branch images construct location-free groups. Rust retains parser source locations but emits data-source-line only when the corresponding image contract owns it."
+  },
+  "rejected_attempt": {
+    "implementation_commit": "30902301fa70d9410bcfd7d38be52b654970e29b",
+    "review_commit": "7fb30ee889af2745c697f0874dba703fe7d3f367",
+    "review_record": "docs/parity-reviews/class-mixed-state-group-metadata/review-4.json",
+    "causal_response": "docs/parity-reviews/class-mixed-state-group-metadata/review-4-response.md",
+    "parser_unchanged_through": "025bd4ec620fae66823996148449ce63fba18332",
+    "result": "Rejected: 10/14 fresh scoped identity matches. Valid mixed-case and underscored allowmixing commands selected the wrong factory; package aliases used display text as identity; nested qualified endpoints duplicated existing leaves; and later declarations incorrectly retyped relationship-created entities."
+  },
   "rust_locations": [
-    "crates/rustuml-render/src/class.rs::measure_entity",
-    "crates/rustuml-render/src/class.rs::render_class_svg",
-    "crates/rustuml-render/src/class.rs::render_entity"
+    "crates/rustuml-parser/src/parse/mod.rs::detect_uml_subtype",
+    "crates/rustuml-parser/src/parse/class.rs::ClassParser::try_meta",
+    "crates/rustuml-parser/src/parse/class.rs::ClassParser::try_package",
+    "crates/rustuml-parser/src/parse/class.rs::ClassParser::resolve_relationship_endpoint",
+    "crates/rustuml-parser/src/parse/class.rs::ClassParser::ensure_entity",
+    "crates/rustuml-parser/src/parse/class.rs::ClassParser::ensure_namespace_packages",
+    "crates/rustuml-parser/src/parse/class.rs::ClassParser::try_entity_decl",
+    "crates/rustuml-parser/src/diagram/class.rs::ClassEntity",
+    "crates/rustuml-parser/src/diagram/class.rs::Package"
   ],
-  "invariant": "In an allowmixing class diagram, an entity's SVG group metadata is owned by the concrete SVEK entity-image implementation, not inferred uniformly from the parser's source location. UGroup emits DATA_SOURCE_LINE only when its constructor receives a non-null LineLocation. EntityImageClass, EntityImageObject, and EntityImageDescription construct their groups with entity.getLocation(), so class-like entities, objects, and description symbols such as circles carry source-line metadata. EntityImageState and EntityImageBranch construct location-free groups, so mixed states and branch/state-choice diamonds omit data-source-line even though their entities retain source locations for parsing, ordering, and relationships.",
-  "causal_divergence": "Rust's no-oracle class renderer creates one common entity group wrapper before dispatching the body painter by EntityKind. The first correction changed its fallback from every entity to every non-state entity. That fixed mixed state groups but still serialized EntityDims.source_line for EntityKind::Diamond, even though GeneralImageBuilder selects EntityImageBranch and that painter creates a location-free group. The divergence is therefore concrete renderer-image metadata ownership, not a state/non-state dichotomy, type dispatch, parser location tracking, graph layout, or source-line numbering.",
-  "planned_change": "Keep source_line on ClassEntity and EntityDims so ordering and relationship logic remain unchanged. Add a single EntityKind image-contract predicate for no-oracle source-line metadata: class-like kinds, EntityKind::Object, and EntityKind::Circle carry a LineLocation; EntityKind::State and EntityKind::Diamond do not. Preserve oracle-provided source-line metadata if present, because the oracle-assisted path must reproduce supplied SVG metadata. Extend renderer tests with the rejected branch/diamond heldout while retaining state negative controls and class, object, and circle positive controls. Do not branch on fixture names, labels, source-line values, entity counts, coordinates, or diagram dimensions.",
+  "invariant": "PlantUML recognizes allowmixing through one complete class-command grammar: CommandAllowMixing.getRegexConcat anchors allow + optional underscore + mixing at both line boundaries, and Pattern2.compileInternal applies case-insensitive matching. Factory selection and command execution therefore accept exactly case variants of allowmixing and allow_mixing and reject trailing tokens. Class group and leaf identity is a hierarchical quark path, not display text or a flat entity ID. CommandPackage uses AS as the group quark identity and NAME only as display; CommandNamespace likewise enters a quark-backed group. CommandLinkClass resolves endpoints through CucaDiagram.quarkInContextSafe(true, name), so qualified paths whose first group exists resolve from the root and unqualified uniquely existing children can be reused. The first command that materializes an entity owns its quark, source location, and leaf type: a relationship-created endpoint is LeafType.CLASS at the relationship location, and a later CommandCreateElementFull2 declaration reuses that entity and updates display or other explicitly mutable fields without replacing its identity, source, or kind.",
+  "causal_divergence": "Rust duplicates allowmixing recognition in detect_uml_subtype and ClassParser.try_meta. The former accepts only lowercase allowmixing or a lowercase allowmixing prefix, while the latter skips any lowercase line starting with allowmixing; together they reject valid mixed-case and optional-underscore commands but over-accept Java-invalid trailing text. ClassParser.try_package has no AS capture and is not end-anchored, so it partially matches a quoted package declaration, discards the alias suffix, and stores display text in Package.name as identity. ClassParser.resolve_relationship_endpoint then searches a flat ClassEntity.id list and performs only a one-package-prefix strip over Package.entities. It cannot reconstruct a nested parent path such as Outer.Inner.Leaf and falls through to ensure_entity, duplicating an existing leaf at the later relationship line. Finally, ClassParser.try_entity_decl unconditionally changes EntityKind when it finds an endpoint that ensure_entity created from a relationship, whereas Java preserves the original LeafType.CLASS and source location. These are command-grammar and hierarchical identity-model gaps, not fixture, label, relationship-count, layout, or renderer-geometry effects.",
+  "planned_change": "Introduce one shared, full-line, ASCII-case-insensitive parser for the exact allow_?mixing command and use its result for both subtype selection and class-command consumption; command-shaped input with trailing tokens must remain invalid. Parse package declarations to completion and separate canonical code from display, storing AS as the group identity and NAME as presentation. Represent every package, namespace, and leaf with one canonical identity path derived from parent identity plus local code, and maintain an index from that path to the existing object; package membership remains layout data rather than the authority for identity. Route declarations and relationship endpoints through one resolver implementing the relevant CucaDiagram.quarkInContextSafe reuse rules for root-qualified, context-relative, and uniquely reusable unqualified names. Preserve first materialization ownership of entity source and kind, allowing later declarations to mutate only fields that CommandCreateElementFull2 mutates on an existing entity. Preserve the already passing top-level declaration-order and first-use behavior. Add adjacent named Java class and method citations to every parity-affecting recognizer and branch. Do not add fixture-label conditions, source-line equality branches, entity or relationship count ladders, coordinate logic, golden reads, or post-hoc SVG rewriting.",
   "perturbation_axes": [
-    "renamed mixed state and class entities",
-    "state declarations before and after class declarations",
-    "multiple mixed states at different source lines",
-    "mixed state-to-state and class-to-state relationships",
-    "ordinary class source-line metadata as a positive control",
-    "object and circle source-line metadata as positive controls",
-    "branch and state-choice diamond metadata as negative controls",
-    "oracle-provided source-line metadata as an assisted-path control"
+    "allowmixing command case crossed with optional underscore",
+    "valid exact allowmixing commands crossed with invalid trailing tokens",
+    "quoted package display crossed with explicit package code",
+    "package and namespace nesting at one, two, and at least three levels",
+    "declarations before relationships crossed with relationships before declarations",
+    "qualified references from inside and outside the owning group",
+    "renamed displays with stable identity codes",
+    "repeated and reversed relationship order",
+    "same short leaf name in multiple package paths",
+    "default and custom namespace separators",
+    "relationship-created leaves later declared as actor, usecase, component, or other description kinds",
+    "aliased and unaliased package controls",
+    "ordinary class, component, sequence, and usecase inputs without allowmixing"
   ]
 }

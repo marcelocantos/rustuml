@@ -2,6 +2,31 @@
   "schema_version": 1,
   "mechanism": "sequence-inline-arrow-style",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "causal_history": [
+    {
+      "stage": "pre-review-5 causal gate",
+      "commit": "99666502b99a59f49771f6229ab84db58f9f7323",
+      "document": "docs/parity-reviews/sequence-inline-arrow-style/review-4-response.md",
+      "claim": "Standalone lifecycle events were claimed to flow through one message-owned timeline."
+    },
+    {
+      "stage": "rejected implementation",
+      "commit": "d01dd24e05ef41fbcb2303d45dab96fab9efacba",
+      "parent": "4621ef5a509d63a06f32f51d267bf88b95cdf717",
+      "status": "rejected"
+    },
+    {
+      "stage": "adversarial review",
+      "commit": "32b71af3bf8c68faae6fc0ea731f78e20beffe94",
+      "record": "docs/parity-reviews/sequence-inline-arrow-style/review-5.json",
+      "result": "6 of 16 fresh valid perturbations passed; the claimed unified lifecycle model was disproved."
+    },
+    {
+      "stage": "causal response",
+      "document": "docs/parity-reviews/sequence-inline-arrow-style/review-5-response.md",
+      "status": "model replacement specified; production implementation not yet accepted"
+    }
+  ],
   "java_locations": [
     "net.sourceforge.plantuml.sequencediagram.command.CommandArrow#getColorOrStylePattern",
     "net.sourceforge.plantuml.sequencediagram.command.CommandArrow#getRegexConcat",
@@ -10,15 +35,40 @@
     "net.sourceforge.plantuml.sequencediagram.command.CommandExoArrowAny#executeArg",
     "net.sourceforge.plantuml.sequencediagram.command.CommandExoArrowLeft#getMessageExoType",
     "net.sourceforge.plantuml.sequencediagram.command.CommandExoArrowRight#getMessageExoType",
+    "net.sourceforge.plantuml.sequencediagram.SequenceDiagram#addMessage",
+    "net.sourceforge.plantuml.sequencediagram.SequenceDiagram#activate",
+    "net.sourceforge.plantuml.sequencediagram.SequenceDiagram#grouping",
+    "net.sourceforge.plantuml.sequencediagram.AbstractMessage#addLifeEvent",
+    "net.sourceforge.plantuml.sequencediagram.AbstractMessage#isActivateAndDeactive",
     "net.sourceforge.plantuml.sequencediagram.AbstractMessage#getLabelNumbered",
+    "net.sourceforge.plantuml.sequencediagram.GroupingLeaf#addLifeEvent",
     "net.sourceforge.plantuml.skin.ArrowConfiguration#reverseDefine",
+    "net.sourceforge.plantuml.skin.ArrowConfiguration#withBody",
+    "net.sourceforge.plantuml.skin.ArrowConfiguration#withColor",
     "net.sourceforge.plantuml.sequencediagram.graphic.Step1Message#prepareMessage",
     "net.sourceforge.plantuml.sequencediagram.graphic.Step1MessageExo#Step1MessageExo",
     "net.sourceforge.plantuml.sequencediagram.graphic.Step1MessageExo#prepareMessage",
+    "net.sourceforge.plantuml.sequencediagram.graphic.DrawableSetInitializer#prepareLiveEvent",
+    "net.sourceforge.plantuml.sequencediagram.graphic.DrawableSetInitializer#prepareGroupingStart",
+    "net.sourceforge.plantuml.sequencediagram.graphic.DrawableSetInitializer#prepareGroupingLeaf",
+    "net.sourceforge.plantuml.sequencediagram.graphic.DrawableSetInitializer#prepareNote",
+    "net.sourceforge.plantuml.sequencediagram.graphic.DrawableSetInitializer#prepareMissingSpace",
+    "net.sourceforge.plantuml.sequencediagram.graphic.LivingParticipantBox#getLiveThicknessAt",
+    "net.sourceforge.plantuml.sequencediagram.graphic.MessageArrow#getLeftStartInternal",
+    "net.sourceforge.plantuml.sequencediagram.graphic.MessageArrow#getRightEndInternal",
     "net.sourceforge.plantuml.sequencediagram.graphic.MessageExoArrow#getLeftStartInternal",
     "net.sourceforge.plantuml.sequencediagram.graphic.MessageExoArrow#getRightEndInternal",
     "net.sourceforge.plantuml.sequencediagram.graphic.MessageExoArrow#getPreferredWidth",
-    "net.sourceforge.plantuml.sequencediagram.graphic.LivingParticipantBox#getLiveThicknessAt",
+    "net.sourceforge.plantuml.skin.rose.ComponentRoseArrow#drawInternalU",
+    "net.sourceforge.plantuml.skin.rose.ComponentRoseArrow#drawDressing1",
+    "net.sourceforge.plantuml.skin.rose.ComponentRoseArrow#drawDressing2",
+    "net.sourceforge.plantuml.sequencediagram.graphic.NoteBox#getSegment",
+    "net.sourceforge.plantuml.sequencediagram.graphic.NoteBox#getStartingX",
+    "net.sourceforge.plantuml.sequencediagram.graphic.InGroupablesStack#addElement",
+    "net.sourceforge.plantuml.sequencediagram.InGroupableList#getMinX",
+    "net.sourceforge.plantuml.sequencediagram.InGroupableList#getMaxX",
+    "net.sourceforge.plantuml.sequencediagram.graphic.GraphicalDivider#drawInternalU",
+    "net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet#drawPlaygroundU",
     "net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet#getMaxY",
     "net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet#drawLifeLineU",
     "net.sourceforge.plantuml.sequencediagram.graphic.LifeLine#finish",
@@ -27,10 +77,7 @@
     "net.sourceforge.plantuml.svek.DecorateEntityImage#drawU",
     "net.sourceforge.plantuml.svek.DecorateEntityImage#calculateDimension",
     "net.sourceforge.plantuml.style.Style#createTextBlockBordered",
-    "net.sourceforge.plantuml.descdiagram.command.CommandLinkElement#LINE_STYLE",
-    "net.sourceforge.plantuml.skin.ArrowConfiguration#withBody",
-    "net.sourceforge.plantuml.skin.ArrowConfiguration#withColor",
-    "net.sourceforge.plantuml.skin.rose.ComponentRoseArrow#drawInternalU"
+    "net.sourceforge.plantuml.descdiagram.command.CommandLinkElement#LINE_STYLE"
   ],
   "rust_locations": [
     "crates/rustuml-parser/src/parse/sequence.rs::SequenceParser::try_message",
@@ -40,36 +87,189 @@
     "crates/rustuml-parser/src/parse/sequence.rs::SeqParser::autoactivation_for",
     "crates/rustuml-parser/src/parse/mod.rs::detect_uml_subtype",
     "crates/rustuml-parser/src/diagram/sequence.rs::Arrow",
+    "crates/rustuml-render/src/sequence.rs::live_depth_at_message_ordinate (d01dd24e:2977-3014)",
+    "crates/rustuml-render/src/sequence.rs::deactivates_at_message_start (d01dd24e:3016-3047)",
+    "crates/rustuml-render/src/sequence.rs::render note active-depth prepass (d01dd24e:7702-7770)",
+    "crates/rustuml-render/src/sequence.rs::render lifecycle owner prepass (d01dd24e:7796-7827)",
+    "crates/rustuml-render/src/sequence.rs::render lost-message extent scan (d01dd24e:8396-8483)",
+    "crates/rustuml-render/src/sequence.rs::render activation-bar scan (d01dd24e:8780-8923)",
+    "crates/rustuml-render/src/sequence.rs::render group extent and group_act_depth scan (d01dd24e:9234-9576)",
+    "crates/rustuml-render/src/sequence.rs::render render_activation scan (d01dd24e:10423-10541,12853-12865)",
+    "crates/rustuml-render/src/sequence.rs::render source endpoint and cross placement (d01dd24e:10885-11252)",
+    "crates/rustuml-render/src/sequence.rs::render divider span (d01dd24e:11683-11733)",
     "crates/rustuml-render/src/sequence.rs::render"
   ],
-  "invariant": "A sequence arrow is an ordered ArrowConfiguration, not a collection of unrelated booleans. CommandArrow first derives dressing1, dressing2, reverseDefine, circle decorations, body, and semantic participants from the complete arrow grammar, then applies the bracket tokens in source order. Dashed and dotted select DOTTED, hidden selects HIDDEN, bold is a no-op at the pinned revision, colors replace only color, and later tokens win. Decoration ownership follows the semantic configuration slots: reverse syntax swaps semantic participants and records reverseDefine while preserving the source circle on the sender dressing. ComponentRoseArrow always paints dressing1 then dressing2 and shortens its shaft for each attached decoration. External messages retain one of FROM_LEFT, TO_LEFT, FROM_RIGHT, or TO_RIGHT; Step1MessageExo constrains the real participant against a shared first or last border using MessageExoArrow's numbered preferred width and the live segment at the message ordinate. Autonumber formatting is resolved before label measurement, with style tags interpreted but literal angle-bracket placeholder text preserved.",
-  "causal_divergence": "The first corrections fixed arrow-slot ownership, hidden autoactivation, earlier bidirectional ordering cases, one external direction, and page-end activation closure, but the AST still compresses Java's configuration too aggressively. Arrow.source_circle is recognized only when the raw token starts with `o`; reverse forms such as `A <<-o B` therefore misclassify the source circle as a target Circle head, lose elements, and reorder dressings. Open source-circle arrows pass the unshortened source coordinate to the painter even though ComponentRoseArrow advances the shaft by the circle radius, producing the observed four-pixel overrun. External rendering uses `[` and `]` sentinels, but layout reserves only FROM_LEFT and TO_RIGHT extents; FROM_RIGHT never widens the shared last border and TO_LEFT never widens the shared first border. The resulting border is then reused by the painter, so isolated and combined valid directions can be hundreds of pixels too narrow. The active-source approximation also treats depth as a scalar offset and reduces it before a following deactivation; Step1Message and MessageExoArrow instead query LifeLine's actual segment at the arrow ordinate, so an ordinary message can still depart from the deepest active Worker bar. Finally, parse_autonumber_template_runs consumes any `<...>` token as markup: `<000000>` disappears as an unknown tag and the renderer emits `1`, whereas Java preserves the angle brackets and replaces the zero run. The page-metadata perturbation exposed an independent chrome-stack error. DiagramChromeFactory12026 first wraps the raw diagram with addCaption and then wraps that result with addHeaderAndFooter. DecorateEntityImage places each bottom block at the exact fractional height of the block it wraps; the default caption style contributes one-pixel top and bottom margins around its measured text. Rust instead ceils the raw sequence/footer height and then adds an integer caption allowance, losing the fractional carry. Depending on the raw height fraction this makes the canvas and both bottom baselines one pixel too high or low. These are model gaps, not fixture-specific geometry.",
-  "planned_change": "Retain semantic decoration ownership when parsing both forward and reverse syntax: identify the target dressing independently of source-side `o`, set source_circle for `o->` and `<-o`, and keep the open or filled target head. Feed the circle-shortened endpoint to every painter branch, including open and half arrows, while preserving configuration dressing order. Keep the four external forms distinguishable through the existing side sentinels or an explicit enum, but compute one symmetric external constraint envelope: FROM_LEFT and TO_LEFT reserve the first border; FROM_RIGHT and TO_RIGHT reserve the last border; all use the formatted numbered-label width and the participant's live segment at that event. Replay activation events at message ordinates and select the deepest segment before applying a later standalone deactivation; apply inline activation or deactivation at the same ordinate according to Java event order. Teach autonumber template parsing to treat recognized style tags as markup and unrecognized numeric-placeholder angle brackets as literal text around the zero/hash run. For combined caption and footer chrome, derive caption and footer baselines by stacking the raw-diagram height, caption text ascent/height, the caption style's one-pixel top and bottom margins, and the footer ascent. Preserve the unrounded block sum through final canvas sizing rather than adding an integer allowance after an earlier ceil. Preserve the earlier command-admissibility dispatch, body/color ordering, hidden semantics, bidirectional dressing order, and common page-end closure. Do not special-case review labels, participant names, message counts, source coordinates, or rendered coordinates.",
+  "invariant": "Sequence lifecycle layout is a normalized event model, not a collection of independent depth scans. The owner domain contains AbstractMessage, GroupingLeaf at GroupEnd, and no owner. Attachment ownership is distinct from whether a lifecycle type is accepted into an AbstractMessage's ordered type history: an unrelated lifecycle event after a self-message remains attached for ordinate placement but is excluded from combined-row classification. A message reserves the Java combined row only when its first accepted lifecycle type is ACTIVATE and a later accepted type is DEACTIVATE or DESTROY. Those message start/end ordinates install variations on one participant live-segment timeline. Message arrows, external arrows, notes, activation bars, group ranges, and final horizontal extents query that timeline. ComponentRoseArrow cross geometry is transformed from the complete spatial arrow area built from left and right live segments, not from a separately shifted semantic-source coordinate. Actual element extents produce one final envelope consumed by all external directions and GraphicalDivider. Earlier valid ordered ArrowConfiguration, autonumber, and chrome-stacking invariants remain in force.",
+  "causal_divergence": "Implementation d01dd24e does not implement the claimed normalized model. Its last_message_owner ignores GroupEnd and therefore retains a prior message where Java replaces lastEventWithDeactivate with GroupingLeaf. Its owner_has_activation boolean loses accepted lifecycle-type order, so a later activation can retroactively make a deactivation-first owner look activation-first. It also conflates lifecycle attachment with row-classification eligibility, allowing unrelated participant events to classify a self-message even though AbstractMessage#addLifeEvent filters their types. Source-cross placement is derived from direction-specific from_x_shifted formulas, while Java first constructs a spatial MessageArrow area from both live segments and paints each dressing in component-local coordinates. Finally, note placement, lost-message extents, activation bars, group extents, painted endpoints, and divider width each replay activation or extent state independently. Java applies lifecycle variations once to LifeLine, registers actual graphical elements with group structures, resolves actual widths in prepareMissingSpace, and passes one final width to every drawable. The observed false combined rows, active-source cross displacement, note shifts, oversized group range, stale divider span, and wrong right-border depth are consequences of those ownership and data-flow differences, not coordinates to tune.",
+  "planned_change": "Replace the competing event replays with one typed sequence layout model. First normalize each lifecycle command to an owner in {AbstractMessage, GroupingLeaf, None}, preserving GroupStart ownership and replacing it at GroupEnd. Record attachment separately from AbstractMessage type acceptance, including the self-message participant filter, and retain accepted lifecycle types in order. Derive each message's combined-row predicate and start/end ordinates from that record. Apply all lifecycle variations once to a queryable participant live-segment timeline. Build ordinary and external arrow areas from the left and right live segments at the message ordinate, then transform ArrowConfiguration dressings, including source crosses, through the component-local area. Derive note segments over their top and bottom ordinates, activation bars, and group membership from the same timeline and actual element geometry. Resolve one final horizontal constraint envelope from actual elements and use it for group frames, notes, all four external directions, and dividers. Remove or reduce note active_depth, lost_scan_activation, ActivationTracker/open_activations, group_act_depth, render_activation, and ad hoc live-depth helpers to views over the normalized model. Preserve the earlier ordered arrow grammar, DecimalFormat/autonumber behavior, and fractional chrome stack. Do not add branches keyed to fixture names, labels, participant counts, source coordinates, rendered coordinates, or observed 5-pixel, 6-pixel, and 30-pixel differences.",
   "perturbation_axes": [
+    "GroupStart owner preservation versus GroupEnd owner replacement",
+    "nested group boundaries with deactivation and destruction",
+    "activate-then-deactivate versus deactivate-then-activate accepted type order",
+    "repeated lifecycle types with intervening notes, dividers, and autonumber commands",
+    "self-message matching participant versus unrelated participant lifecycle events",
+    "self-message versus non-self ownership under renamed aliases and declaration order",
+    "inactive, singly active, and nested active source live segments",
+    "semantic source on spatial left versus spatial right",
+    "solid, dotted, and thin source-cross half arrows",
+    "FROM_LEFT, TO_LEFT, FROM_RIGHT, and TO_RIGHT sharing boundaries",
+    "notes spanning activation transitions over their vertical height",
+    "nested group membership containing internal and external arrows",
+    "participant, group, note, and external-message candidates taking turns as final widest extent",
     "color before and after dashed or dotted",
     "multiple colors with final-token precedence",
     "solid, self, reversed, and bidirectional message topology",
     "forward and reverse source-circle decoration ownership with filled and open target heads",
-    "found and lost external messages",
-    "found and lost messages at both left and right external boundaries",
     "hidden body with a visible message label",
     "hidden body under autoactivate with nested activation and deactivation",
-    "nested activating target and deactivating source live-segment selection",
-    "right-to-left bidirectional message with both painted heads",
-    "found-message autonumber prefix in first-participant left extent",
-    "lost-message autonumber prefix in last-participant right extent",
-    "lost message from inactive and active sender live segments",
-    "all four external directions in isolation and in one shared-border diagram",
     "literal angle-bracket, brace, bracket, and parenthesis autonumber formats",
     "combined caption and footer after raw sequence heights on both sides of a ceil boundary",
     "combined caption and footer with default and physical font metrics",
     "unfinished nested activations sharing the page-end boundary",
-    "style-looking bracket text inside a quoted participant name",
-    "style-looking bracket text inside a quoted participant on a plain-arrow line",
-    "meta keywords containing arrow-decoration letters but no hyphen shaft",
-    "header and footer text containing style-looking brackets",
-    "inherited arrow color surrounding a local override",
-    "Creole anchor brackets confined to message text",
+    "style-looking bracket text inside quoted participants, headers, footers, and messages",
     "renamed participants and changed message counts"
+  ],
+  "invariants": [
+    {
+      "id": "lifecycle-owner-domain",
+      "java_locations": [
+        "net.sourceforge.plantuml.sequencediagram.SequenceDiagram#addMessage",
+        "net.sourceforge.plantuml.sequencediagram.SequenceDiagram#activate",
+        "net.sourceforge.plantuml.sequencediagram.SequenceDiagram#grouping",
+        "net.sourceforge.plantuml.sequencediagram.GroupingLeaf#addLifeEvent"
+      ],
+      "rust_locations": [
+        "crates/rustuml-render/src/sequence.rs::render lifecycle owner prepass (d01dd24e:7796-7827)"
+      ],
+      "invariant": "The current lifecycle owner is an AbstractMessage, the GroupingLeaf created by GroupEnd, or no owner. Messages replace the owner, ordinary intervening events and GroupStart preserve it, and GroupEnd replaces it with GroupingLeaf. Only AbstractMessage owners can reserve a combined lifecycle row.",
+      "causal_divergence": "Rust tracks only last_message_owner and does not handle Event::GroupEnd, so lifecycle commands after a group end remain attached to the message that preceded the boundary.",
+      "planned_change": "Normalize lifecycle attachment with an explicit owner enum and Java's replacement rules before deriving any row or depth state.",
+      "perturbation_axes": [
+        "GroupStart versus GroupEnd between message and lifecycle command",
+        "nested versus flat grouping",
+        "left-boundary versus right-boundary external owner",
+        "deactivation versus destruction after the boundary"
+      ]
+    },
+    {
+      "id": "ordered-accepted-lifecycle-types",
+      "java_locations": [
+        "net.sourceforge.plantuml.sequencediagram.AbstractMessage#addLifeEvent",
+        "net.sourceforge.plantuml.sequencediagram.AbstractMessage#isActivateAndDeactive",
+        "net.sourceforge.plantuml.sequencediagram.graphic.Step1Message#prepareMessage",
+        "net.sourceforge.plantuml.sequencediagram.graphic.Step1MessageExo#prepareMessage"
+      ],
+      "rust_locations": [
+        "crates/rustuml-render/src/sequence.rs::render lifecycle owner prepass (d01dd24e:7796-7827)"
+      ],
+      "invariant": "A combined row exists only when the first accepted lifecycle type is ACTIVATE and a later accepted type is DEACTIVATE or DESTROY.",
+      "causal_divergence": "owner_has_activation is an unordered boolean. A later activation can make a deactivation-first sequence reserve a row that Java does not reserve.",
+      "planned_change": "Retain accepted lifecycle types in order, or an equivalent state machine that records first_accepted_is_activate and later closing-type presence.",
+      "perturbation_axes": [
+        "activate then deactivate versus deactivate then activate",
+        "deactivate versus destroy as the closing type",
+        "repeated same types versus mixed types",
+        "intervening note, divider, and autonumber events"
+      ]
+    },
+    {
+      "id": "self-message-attachment-classification-split",
+      "java_locations": [
+        "net.sourceforge.plantuml.sequencediagram.SequenceDiagram#activate",
+        "net.sourceforge.plantuml.sequencediagram.AbstractMessage#addLifeEvent",
+        "net.sourceforge.plantuml.sequencediagram.graphic.DrawableSetInitializer#prepareLiveEvent"
+      ],
+      "rust_locations": [
+        "crates/rustuml-render/src/sequence.rs::render lifecycle owner prepass (d01dd24e:7796-7827)",
+        "crates/rustuml-render/src/sequence.rs::live_depth_at_message_ordinate (d01dd24e:2977-3014)"
+      ],
+      "invariant": "An unrelated participant's lifecycle event after a self-message remains attached to that message for ordinate placement, but AbstractMessage excludes its type from combined-row classification.",
+      "causal_divergence": "Rust uses one owner relation for both ordinate attachment and type classification, so unrelated events can create a false self-message combined row.",
+      "planned_change": "Store attachment owner and accepted-for-owner-classification as separate fields on every normalized lifecycle entry.",
+      "perturbation_axes": [
+        "matching versus unrelated lifecycle participant",
+        "self-message versus non-self message owner",
+        "participant declaration order",
+        "trailing ordinary versus bidirectional messages"
+      ]
+    },
+    {
+      "id": "arrow-area-active-source-cross",
+      "java_locations": [
+        "net.sourceforge.plantuml.sequencediagram.graphic.LivingParticipantBox#getLiveThicknessAt",
+        "net.sourceforge.plantuml.sequencediagram.graphic.MessageArrow#getLeftStartInternal",
+        "net.sourceforge.plantuml.sequencediagram.graphic.MessageArrow#getRightEndInternal",
+        "net.sourceforge.plantuml.skin.rose.ComponentRoseArrow#drawInternalU",
+        "net.sourceforge.plantuml.skin.rose.ComponentRoseArrow#drawDressing1",
+        "net.sourceforge.plantuml.skin.rose.ComponentRoseArrow#drawDressing2"
+      ],
+      "rust_locations": [
+        "crates/rustuml-render/src/sequence.rs::render source endpoint and cross placement (d01dd24e:10885-11252)"
+      ],
+      "invariant": "The complete spatial arrow area is bounded by the left and right live segments at the message ordinate. ArrowConfiguration selects component-local dressings, and source-cross geometry is transformed through that area.",
+      "causal_divergence": "Rust derives the cross center from direction-specific from_x_shifted semantic-source formulas. That agrees only when the live segment collapses to an inactive point.",
+      "planned_change": "Compute one spatial arrow area from both live segments and paint each dressing in component-local coordinates without an active-source correction constant.",
+      "perturbation_axes": [
+        "inactive versus singly active versus nested active source",
+        "semantic source on spatial left versus spatial right",
+        "solid versus dotted line",
+        "top, bottom, and thin half-head orientations"
+      ]
+    },
+    {
+      "id": "single-live-segment-timeline",
+      "java_locations": [
+        "net.sourceforge.plantuml.sequencediagram.graphic.DrawableSetInitializer#prepareLiveEvent",
+        "net.sourceforge.plantuml.sequencediagram.graphic.LivingParticipantBox#getLiveThicknessAt",
+        "net.sourceforge.plantuml.sequencediagram.graphic.NoteBox#getSegment",
+        "net.sourceforge.plantuml.sequencediagram.graphic.MessageExoArrow#getLeftStartInternal",
+        "net.sourceforge.plantuml.sequencediagram.graphic.MessageExoArrow#getRightEndInternal"
+      ],
+      "rust_locations": [
+        "crates/rustuml-render/src/sequence.rs::render note active-depth prepass (d01dd24e:7702-7770)",
+        "crates/rustuml-render/src/sequence.rs::render lost-message extent scan (d01dd24e:8396-8483)",
+        "crates/rustuml-render/src/sequence.rs::render activation-bar scan (d01dd24e:8780-8923)",
+        "crates/rustuml-render/src/sequence.rs::render group extent and group_act_depth scan (d01dd24e:9234-9576)",
+        "crates/rustuml-render/src/sequence.rs::render render_activation scan (d01dd24e:10423-10541,12853-12865)"
+      ],
+      "invariant": "Lifecycle variations are applied once to a participant timeline. Every message, note, activation bar, group member, and external arrow queries the same live segment at its relevant ordinate.",
+      "causal_divergence": "Rust independently replays active_depth, lost_scan_activation, ActivationTracker/open_activations, group_act_depth, and render_activation, so consumers disagree after owner-preserving and owner-resetting events.",
+      "planned_change": "Build one queryable live-segment timeline from normalized lifecycle entries and migrate every depth consumer to it before deleting the competing replays.",
+      "perturbation_axes": [
+        "owner-preserving note versus divider versus group start",
+        "owner-resetting group end",
+        "one versus multiple nested activation depths",
+        "note height spanning a lifecycle transition",
+        "internal versus each external message direction"
+      ]
+    },
+    {
+      "id": "single-final-extent-envelope",
+      "java_locations": [
+        "net.sourceforge.plantuml.sequencediagram.graphic.Step1Message#prepareMessage",
+        "net.sourceforge.plantuml.sequencediagram.graphic.Step1MessageExo#prepareMessage",
+        "net.sourceforge.plantuml.sequencediagram.graphic.InGroupablesStack#addElement",
+        "net.sourceforge.plantuml.sequencediagram.InGroupableList#getMinX",
+        "net.sourceforge.plantuml.sequencediagram.InGroupableList#getMaxX",
+        "net.sourceforge.plantuml.sequencediagram.graphic.DrawableSetInitializer#prepareMissingSpace",
+        "net.sourceforge.plantuml.sequencediagram.graphic.GraphicalDivider#drawInternalU",
+        "net.sourceforge.plantuml.sequencediagram.graphic.DrawableSet#drawPlaygroundU"
+      ],
+      "rust_locations": [
+        "crates/rustuml-render/src/sequence.rs::render group extent and group_act_depth scan (d01dd24e:9234-9576)",
+        "crates/rustuml-render/src/sequence.rs::render divider span (d01dd24e:11683-11733)",
+        "crates/rustuml-render/src/sequence.rs::render lost-message extent scan (d01dd24e:8396-8483)"
+      ],
+      "invariant": "Group ranges contain actual registered element extents, prepareMissingSpace resolves actual arrow widths into one final horizontal envelope, and every drawable, including dividers, consumes that final width.",
+      "causal_divergence": "Rust reconstructs group membership and divider span from participant/group estimates while external arrows can widen a separate final canvas, leaving frames oversized or dividers stale.",
+      "planned_change": "Represent actual element extents, fold them into one horizontal constraint envelope, and make group frames, notes, external borders, and dividers consume that envelope.",
+      "perturbation_axes": [
+        "participant versus note versus group versus external arrow as widest element",
+        "FROM_LEFT and TO_LEFT sharing the first border",
+        "FROM_RIGHT and TO_RIGHT sharing the last border",
+        "nested groups containing internal and external arrows",
+        "divider before versus after the envelope-widening event"
+      ]
+    }
   ]
 }
