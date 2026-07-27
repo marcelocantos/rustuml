@@ -4108,10 +4108,35 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
     // SVG, whose root transform already contains the same moveDelta applied to
     // clusters and splines. The C API node boxes are pre-transform, so apply
     // that delta once more when positioning renderer-owned state images.
+    // `GraphvizImageBuilder.printGroups/printGroup` creates every leaf of one
+    // root group before moving to the next, and `SvekResult.drawU` later
+    // paints `Bibliotekon.allNodes()` in that insertion order. Keep the
+    // solved order within each owner, but paint grouped leaves before the
+    // unpackaged root leaves created by `getUnpackagedEntities`.
+    let mut paint_scope = scope.clone();
+    paint_scope.positions.sort_by_key(|(id, ..)| {
+        let owner = id
+            .strip_prefix("__start__:")
+            .or_else(|| id.strip_prefix("__end__:"))
+            .or_else(|| {
+                diagram
+                    .states
+                    .iter()
+                    .find(|state| state.id == *id)
+                    .and_then(|state| state.parent.as_deref())
+            });
+        owner
+            .and_then(|owner| {
+                composites
+                    .iter()
+                    .position(|composite| composite.id == owner)
+            })
+            .unwrap_or(composites.len())
+    });
     emit_autonomous_scope_entities(
         &mut svg,
         &context,
-        &scope,
+        &paint_scope,
         (scope.origin_x, scope.origin_y),
         true,
     );
