@@ -1,0 +1,10 @@
+@startuml
+skinparam SequenceArrowColor #37474F
+participant "Alpha: 15501" as Alpha15501
+participant "Beta: 15503" as Beta15503
+Alpha15501 -[DASHED,#C62828,#1565C0]> Beta15503 : uppercase style then two colors [[#review2-anchor anchor]]
+Beta15503 -[#2E7D32,DoTtEd,#6A1B9A]> Alpha15501 : colors around mixed-case style
+Alpha15501 -[bold,#00838F]> Alpha15501 : colored bold self message
+Beta15503 -[hidden,#F9A825]> Alpha15501 : hidden body with visible label
+Alpha15501 -> Beta15503 : inherited color after local styles
+@enduml

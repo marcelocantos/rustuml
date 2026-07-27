@@ -1,0 +1,9 @@
+@startuml
+header Header ox footer [hidden] without a shaft
+footer Footer xo header [dotted,#455A64] without a shaft
+participant "Ingress [hidden]: 15101" as Ingress15101
+participant "Worker [dotted,#455A64]: 15103" as Worker15103
+Ingress15101 -> Worker15103 : plain arrow preserves both quoted labels
+"Worker [dotted,#455A64]: 15103" -[#7B1FA2,dashed]> "Ingress [hidden]: 15101" : styled arrow preserves both quoted labels
+Ingress15101 o-> Worker15103 : decoration letters with a mandatory shaft
+@enduml

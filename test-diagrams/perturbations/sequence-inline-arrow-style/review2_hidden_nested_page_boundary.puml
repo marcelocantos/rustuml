@@ -1,0 +1,12 @@
+@startuml
+hide footbox
+autoactivate on
+participant "Caller 15301" as Caller15301
+participant "Middle 15303" as Middle15303
+participant "Leaf 15305" as Leaf15305
+Caller15301 -[hidden]> Middle15303 : first hidden activation
+Middle15303 -[HIDDEN,#546E7A]> Leaf15305 : second hidden activation
+Caller15301 -[#8E24AA,dashed]> Middle15303 : visible nested activation
+Leaf15305 -[bold]> Middle15303 : bold leaves another activation open
+Middle15303 -[dotted,#00897B]> Caller15301 : dotted deactivates its sender
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+participant "Left 15401" as Left15401
+participant "Center 15403" as Center15403
+participant "Right 15405" as Right15405
+Left15401 <-[#D81B60,dashed]-> Right15405 : filled heads left to right
+Right15405 <-[dotted,#00897B]-> Left15401 : filled heads right to left
+Left15401 <<-[#5E35B1,dashed]->> Center15403 : open heads left to right
+Center15403 <<-[DOTTED,#F4511E]->> Left15401 : open heads right to left
+Right15405 <-[#6D4C41,bold]-> Center15403 : bold bidirectional control
+@enduml

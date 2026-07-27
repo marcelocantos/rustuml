@@ -1,0 +1,13 @@
+@startuml
+autonumber "<b>{0000}"
+participant "Edge Node 15201" as Edge15201
+participant "Core Node 15203" as Core15203
+[-[#00897B,dashed]> Edge15201 : numbered found message with a wider prefix
+activate Edge15201 #E0F2F1
+activate Edge15201 #B2DFDB
+Edge15201 -[DoTtEd,#5E35B1,#3949AB]>] : numbered lost message from depth two
+deactivate Edge15201
+Edge15201 -[#F4511E,dashed]>[ : numbered lost message toward the left
+]--[dotted,#6D4C41]> Core15203 : numbered found message from the right
+Core15203 -[hidden]>] : hidden lost message still consumes numbering
+@enduml
