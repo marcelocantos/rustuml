@@ -458,6 +458,9 @@ const MSG_FONT_SIZE: f64 = 13.0;
 const MSG_TEXT_HEIGHT: f64 = 15.310546875; // plantuml_metrics::text_height(13.0)
 /// Base vertical step between messages (no label text).
 const MSG_BASE_STEP: f64 = 14.0;
+// Java `Step1MessageExo` reserves this row when one message owns both an
+// activation and a later deactivation event.
+const SAME_MESSAGE_LIFECYCLE_ROW: f64 = 30.0;
 /// Base first-message offset from lifeline top (no label text).
 const MSG_BASE_FIRST_OFFSET: f64 = 16.0;
 const TAIL_GAP: f64 = 17.0; // gap from last msg y to tail box y
@@ -561,6 +564,11 @@ const CAPTION_FONT_SIZE: u32 = 14;
 const ARROW_SIZE: f64 = 10.0; // horizontal size of arrow polygon
 const ARROW_HALF_H: f64 = 4.0; // vertical half-height of arrow polygon
 const FILLED_ARROW_NOTCH: f64 = 4.0; // notch indent in filled arrow
+// `ComponentRoseArrow` places dressing 1 at pos1=1 and dressing 2 at
+// pos2=width-2. Its CROSSX centre is another spaceCrossX(6)+half-width(5)
+// inward, yielding asymmetric offsets from the two spatial endpoints.
+const SOURCE_CROSS_FORWARD_CENTER_OFFSET: f64 = 12.0;
+const SOURCE_CROSS_REVERSE_CENTER_OFFSET: f64 = 13.0;
 // ComponentRoseArrow: diamCircle=8 and thinCircle=1.5; its translated
 // UEllipse center sits half the outline width above the shaft.
 const SOURCE_CIRCLE_RADIUS: f64 = 4.0;
@@ -2602,22 +2610,16 @@ fn format_autonumber_runs(n: u32, format: &Option<String>) -> Vec<AutoNumberRun>
 }
 
 fn autonumber_placeholder_replacement(n: u32, plain: &str) -> Option<(usize, usize, String)> {
-    if let Some(start) = plain.find('0') {
-        let end = plain[start..]
-            .find(|c| c != '0')
-            .map(|i| start + i)
-            .unwrap_or(plain.len());
-        let width = end - start;
-        Some((start, end, format!("{n:0>width$}")))
-    } else if let Some(start) = plain.find('#') {
-        let end = plain[start..]
-            .find(|c: char| c != '#')
-            .map(|i| start + i)
-            .unwrap_or(plain.len());
-        Some((start, end, n.to_string()))
-    } else {
-        None
-    }
+    let start = plain.find(['#', '0'])?;
+    let end = plain[start..]
+        .find(|character| !matches!(character, '#' | '0'))
+        .map(|offset| start + offset)
+        .unwrap_or(plain.len());
+    let minimum_width = plain[start..end]
+        .bytes()
+        .filter(|character| *character == b'0')
+        .count();
+    Some((start, end, format!("{n:0>width$}", width = minimum_width)))
 }
 
 fn autonumber_run_width(run: &AutoNumberRun) -> f64 {
@@ -2747,19 +2749,8 @@ fn format_autonumber(n: u32, format: &Option<String>) -> String {
         .map(|run| run.text)
         .collect::<String>();
 
-    if let Some(start) = plain.find('0') {
-        let end = plain[start..]
-            .find(|c| c != '0')
-            .map(|i| start + i)
-            .unwrap_or(plain.len());
-        let width = end - start;
-        format!("{}{:0>width$}{}", &plain[..start], n, &plain[end..])
-    } else if let Some(start) = plain.find('#') {
-        let end = plain[start..]
-            .find(|c: char| c != '#')
-            .map(|i| start + i)
-            .unwrap_or(plain.len());
-        format!("{}{}{}", &plain[..start], n, &plain[end..])
+    if let Some((start, end, replacement)) = autonumber_placeholder_replacement(n, &plain) {
+        format!("{}{}{}", &plain[..start], replacement, &plain[end..])
     } else {
         format!("{plain}{n}")
     }
@@ -2985,8 +2976,8 @@ impl ActivationTracker {
 
 fn live_depth_at_message_ordinate(
     events: &[Event],
-    event_y_positions: &[f64],
-    page1_end: usize,
+    lifecycle_owner: &[Option<usize>],
+    lifecycle_y_offset: &[f64],
     event_index: usize,
     participant: &str,
     current_depth: usize,
@@ -3005,25 +2996,54 @@ fn live_depth_at_message_ordinate(
         }
     }
 
-    for (next_index, next_event) in events
-        .iter()
-        .enumerate()
-        .take(page1_end)
-        .skip(event_index + 1)
-    {
-        if event_y_positions.get(next_index) != event_y_positions.get(event_index) {
-            break;
+    for (next_index, next_event) in events.iter().enumerate().skip(event_index + 1) {
+        if lifecycle_owner.get(next_index).copied().flatten() != Some(event_index)
+            || lifecycle_y_offset.get(next_index).copied().unwrap_or(0.0) != 0.0
+        {
+            continue;
         }
         match next_event {
             Event::Activate(id, _) if id == participant => depth += 1,
             Event::Deactivate(id) | Event::Destroy(id) if id == participant => {
                 depth = depth.saturating_sub(1);
             }
-            Event::Message(_) | Event::Return(_) => break,
             _ => {}
         }
     }
     depth
+}
+
+fn deactivates_at_message_start(
+    events: &[Event],
+    lifecycle_owner: &[Option<usize>],
+    lifecycle_y_offset: &[f64],
+    event_index: usize,
+    participant: &str,
+) -> bool {
+    let inline = matches!(
+        events.get(event_index),
+        Some(Event::Message(message))
+            if matches!(message.activation, Some(ActivationChange::Deactivate))
+                && message.from == participant
+    ) || matches!(
+        events.get(event_index),
+        Some(Event::Message(message))
+            if matches!(message.activation, Some(ActivationChange::Destroy))
+                && message.to == participant
+    );
+    inline
+        || events
+            .iter()
+            .enumerate()
+            .skip(event_index + 1)
+            .any(|(next_index, event)| {
+                lifecycle_owner.get(next_index).copied().flatten() == Some(event_index)
+                    && lifecycle_y_offset.get(next_index).copied().unwrap_or(0.0) == 0.0
+                    && matches!(
+                        event,
+                        Event::Deactivate(id) | Event::Destroy(id) if id == participant
+                    )
+            })
 }
 
 // ---------------------------------------------------------------------------
@@ -4715,6 +4735,7 @@ impl PlantUmlSvg {
         line_y: f64,
         top: bool,
         thin: bool,
+        leading_cross_center: Option<f64>,
         leading_circle_center: Option<(f64, f64)>,
         line_style: &str,
         text_x: f64,
@@ -4738,6 +4759,26 @@ impl PlantUmlSvg {
         self.message_group_open(entity1, entity2, source_line, msg_id);
         if is_right {
             self.write_source_circle(leading_circle_center, color);
+        }
+        let write_source_cross = |buf: &mut String, center: Option<f64>| {
+            if let Some(cx) = center {
+                write!(
+                    buf,
+                    r##"<line style="stroke:{color};stroke-width:2;" x1="{}" x2="{}" y1="{}" y2="{}"/><line style="stroke:{color};stroke-width:2;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+                    fmt_coord(cx - 5.0),
+                    fmt_coord(cx + 5.0),
+                    fmt_coord(line_y - 5.0),
+                    fmt_coord(line_y + 5.0),
+                    fmt_coord(cx - 5.0),
+                    fmt_coord(cx + 5.0),
+                    fmt_coord(line_y + 5.0),
+                    fmt_coord(line_y - 5.0),
+                )
+                .unwrap();
+            }
+        };
+        if is_right {
+            write_source_cross(&mut self.buf, leading_cross_center);
         }
 
         let wing_y = if top {
@@ -4783,6 +4824,7 @@ impl PlantUmlSvg {
             .unwrap();
         }
         if !is_right {
+            write_source_cross(&mut self.buf, leading_cross_center);
             self.write_source_circle(leading_circle_center, color);
         }
 
@@ -7747,6 +7789,44 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         .unwrap_or(diagram.events.len());
     let has_newpage = page1_end < diagram.events.len();
 
+    // Java attaches standalone life events to the preceding message rather
+    // than giving them independent rows. When an activation is followed by a
+    // deactivation on the same owner, `Step1MessageExo` reserves one row and
+    // `prepareLiveEvent` places the closing event at its bottom.
+    let mut lifecycle_owner = vec![None; page1_end];
+    let mut lifecycle_y_offset = vec![0.0; page1_end];
+    let mut lifecycle_row_after_message = vec![0.0; page1_end];
+    let mut owner_has_activation = vec![false; page1_end];
+    let mut last_message_owner = None;
+    for (idx, event) in diagram.events.iter().take(page1_end).enumerate() {
+        match event {
+            Event::Message(message) => {
+                last_message_owner = Some(idx);
+                owner_has_activation[idx] =
+                    matches!(message.activation, Some(ActivationChange::Activate));
+            }
+            Event::Return(_) => {
+                last_message_owner = Some(idx);
+            }
+            Event::Activate(_, _) => {
+                if let Some(owner) = last_message_owner {
+                    lifecycle_owner[idx] = Some(owner);
+                    owner_has_activation[owner] = true;
+                }
+            }
+            Event::Deactivate(_) | Event::Destroy(_) => {
+                if let Some(owner) = last_message_owner {
+                    lifecycle_owner[idx] = Some(owner);
+                    if owner_has_activation[owner] {
+                        lifecycle_y_offset[idx] = SAME_MESSAGE_LIFECYCLE_ROW;
+                        lifecycle_row_after_message[owner] = SAME_MESSAGE_LIFECYCLE_ROW;
+                    }
+                }
+            }
+            _ => {}
+        }
+    }
+
     // Groups add header/else/end vertical space.
     let mut event_y_positions: Vec<f64> = Vec::new();
     let mut msg_count: u32 = 0;
@@ -7792,6 +7872,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     if let Some(&extra) = create_msg_extra.get(&idx) {
                         y += extra;
                     }
+                    y += lifecycle_row_after_message[idx];
                     msg_count += 1;
                 }
                 Event::Return(_) => {
@@ -8034,8 +8115,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         + if first_ref { REF_FIRST_FLOW_EXTRA } else { 0.0 };
                     msg_count += 1;
                 }
-                Event::Activate(_, _) | Event::Deactivate(_) => {
-                    event_y_positions.push(y);
+                Event::Activate(_, _) | Event::Deactivate(_) | Event::Destroy(_) => {
+                    let event_y = lifecycle_owner[idx]
+                        .and_then(|owner| event_y_positions.get(owner).copied())
+                        .map(|owner_y| owner_y + lifecycle_y_offset[idx])
+                        .unwrap_or(y);
+                    event_y_positions.push(event_y);
                 }
                 _ => {
                     event_y_positions.push(y);
@@ -8309,7 +8394,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let mut lost_preferred_extent_by_from: HashMap<&str, f64> = HashMap::new();
     let mut lost_scan_auto = AutoState::default();
     let mut lost_scan_activation: HashMap<&str, usize> = HashMap::new();
-    for event in &diagram.events {
+    for (event_idx, event) in diagram.events.iter().enumerate() {
         match event {
             Event::Autonumber(command) => lost_scan_auto.apply(command),
             Event::Message(msg) => {
@@ -8346,8 +8431,24 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 if msg.from == "]"
                     && let Some(&ti) = id_to_idx.get(msg.to.as_str())
                 {
-                    max_lost_right =
-                        max_lost_right.max(participants[ti].center_x + numbered_label_w + 19.0);
+                    let target_depth_before = lost_scan_activation
+                        .get(msg.to.as_str())
+                        .copied()
+                        .unwrap_or(0);
+                    let target_live_depth = live_depth_at_message_ordinate(
+                        &diagram.events,
+                        &lifecycle_owner,
+                        &lifecycle_y_offset,
+                        event_idx,
+                        &msg.to,
+                        target_depth_before,
+                    );
+                    max_lost_right = max_lost_right.max(
+                        participants[ti].center_x
+                            + target_live_depth as f64 * ACTIVATION_HALF_W
+                            + numbered_label_w
+                            + 19.0,
+                    );
                 }
 
                 if let Some(activation) = &msg.activation {
@@ -8740,7 +8841,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     tracker.activate(id);
                     open_activations.push((
                         id.clone(),
-                        last_event_idx,
+                        ev_idx,
                         color.clone(),
                         depth,
                         !seen_message,
@@ -8770,7 +8871,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             .map(|(i, _)| i);
                         let (end_idx, post_group_end_extend) = match group_end_idx {
                             Some(gi) => (gi, true),
-                            None => (last_event_idx, false),
+                            None => (ev_idx, false),
                         };
                         activation_bars.push(ActivationBar {
                             participant_id: pid,
@@ -10423,8 +10524,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     .unwrap_or(0);
                 let from_live_depth = live_depth_at_message_ordinate(
                     events,
-                    &event_y_positions,
-                    page1_end,
+                    &lifecycle_owner,
+                    &lifecycle_y_offset,
                     ev_idx,
                     &msg.from,
                     from_depth,
@@ -10432,8 +10533,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 let to_depth = render_activation.get(msg.to.as_str()).copied().unwrap_or(0);
                 let to_live_depth = live_depth_at_message_ordinate(
                     events,
-                    &event_y_positions,
-                    page1_end,
+                    &lifecycle_owner,
+                    &lifecycle_y_offset,
                     ev_idx,
                     &msg.to,
                     to_depth,
@@ -10473,27 +10574,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 let head_half = msg.arrow.head_half;
                 let thin_head = msg.arrow.thin_head;
 
-                // Check if source/target are activated.
-                // Also look ahead: if the next event activates the target, treat it as
-                // activated (PlantUML's activation conceptually starts at the message).
-                let from_active = render_activation
-                    .get(msg.from.as_str())
-                    .copied()
-                    .unwrap_or(0)
-                    > 0;
-                let mut to_active =
-                    render_activation.get(msg.to.as_str()).copied().unwrap_or(0) > 0;
-                // Check message's own activation flag
-                if let Some(ActivationChange::Activate) = &msg.activation {
-                    to_active = true;
-                }
-                // Look ahead for standalone Activate events targeting the message's 'to'
-                if !to_active
-                    && let Some(Event::Activate(id, _)) = events.get(ev_idx + 1)
-                    && id == &msg.to
-                {
-                    to_active = true;
-                }
+                let from_active = from_live_depth > 0;
+                let to_active = to_live_depth > 0;
 
                 let line_style = if is_dotted {
                     "stroke-dasharray:2,2;"
@@ -10813,11 +10895,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     // opened at that same y when choosing the source segment.
                     let mut source_right_depth = from_existing_depth;
                     let mut same_y_depth = from_existing_depth;
-                    for (next_idx, next_event) in
-                        events.iter().enumerate().take(page1_end).skip(ev_idx + 1)
-                    {
-                        if event_y_positions.get(next_idx) != event_y_positions.get(ev_idx) {
-                            break;
+                    for (next_idx, next_event) in events.iter().enumerate().skip(ev_idx + 1) {
+                        if lifecycle_owner.get(next_idx).copied().flatten() != Some(ev_idx)
+                            || lifecycle_y_offset.get(next_idx).copied().unwrap_or(0.0) != 0.0
+                        {
+                            continue;
                         }
                         match next_event {
                             Event::Activate(id, _) if id == &msg.from => {
@@ -10830,7 +10912,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             Event::Destroy(id) if id == &msg.from => {
                                 same_y_depth = same_y_depth.saturating_sub(1);
                             }
-                            Event::Message(_) | Event::Return(_) => break,
                             _ => {}
                         }
                     }
@@ -10874,9 +10955,14 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     // contributes its left edge.
                     let to_existing_depth =
                         render_activation.get(msg.to.as_str()).copied().unwrap_or(0);
-                    let activates_target =
-                        matches!(msg.activation, Some(ActivationChange::Activate));
-                    let target_deactivates_next = matches!(events.get(ev_idx + 1), Some(Event::Deactivate(id)) if id == &msg.to);
+                    let activates_target = to_live_depth > to_existing_depth;
+                    let target_deactivates_at_start = deactivates_at_message_start(
+                        events,
+                        &lifecycle_owner,
+                        &lifecycle_y_offset,
+                        ev_idx,
+                        &msg.to,
+                    );
                     let target_shift = if msg.from == "[" {
                         if to_live_depth > 0 {
                             ACTIVATION_HALF_W
@@ -10885,7 +10971,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         }
                     } else if msg.from == "]" {
                         to_live_depth as f64 * ACTIVATION_HALF_W
-                    } else if to_active && !is_create_msg && !target_deactivates_next {
+                    } else if to_active && !is_create_msg && !target_deactivates_at_start {
                         if is_right {
                             let lands_on_depth = if activates_target {
                                 to_existing_depth
@@ -10943,7 +11029,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         };
                         let leading_filled_tip_x = from_x_shifted + 1.0;
                         let leading_cross_center = if has_source_cross {
-                            Some(from_x_shifted + 12.0)
+                            Some(from_x_shifted + SOURCE_CROSS_FORWARD_CENTER_OFFSET)
                         } else {
                             None
                         };
@@ -11035,6 +11121,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 msg_y,
                                 half == ArrowHalf::Top,
                                 thin_head,
+                                leading_cross_center,
                                 has_source_circle.then_some((
                                     from_x_shifted + SOURCE_CIRCLE_X_OFFSET,
                                     msg_y + SOURCE_CIRCLE_Y_OFFSET,
@@ -11129,15 +11216,18 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         //      comes off the centre instead. `from_x_shifted`
                         //      already keeps dotted leftward messages on the centre,
                         //      so only the stay-active case is handled here.
-                        let from_deactivates_next = matches!(
-                            msg.activation,
-                            Some(ActivationChange::Deactivate)
-                        ) || matches!(events.get(ev_idx + 1), Some(Event::Deactivate(id)) if id == &msg.from);
+                        let from_deactivates_at_start = deactivates_at_message_start(
+                            events,
+                            &lifecycle_owner,
+                            &lifecycle_y_offset,
+                            ev_idx,
+                            &msg.from,
+                        );
                         let teoz_deactivate_return = diagram.teoz
                             && matches!(msg.activation, Some(ActivationChange::Deactivate))
                             && from_existing_depth > 0;
                         let dotted_from_active_bar =
-                            is_dotted && from_active && !from_deactivates_next;
+                            is_dotted && from_active && !from_deactivates_at_start;
                         let line_x2_end = if teoz_deactivate_return {
                             // The return leaves from the *closing* (deepest) bar's
                             // near edge. A bar at nesting depth d has its left edge
@@ -11151,7 +11241,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         } else {
                             from_x_shifted - 1.0
                         };
-                        let line_x2_end = if has_source_circle {
+                        let leading_cross_center = has_source_cross
+                            .then_some(from_x_shifted - SOURCE_CROSS_REVERSE_CENTER_OFFSET);
+                        let line_x2_end = if let Some(center) = leading_cross_center {
+                            center
+                        } else if has_source_circle {
                             line_x2_end - SOURCE_CIRCLE_LINE_INSET
                         } else {
                             line_x2_end
@@ -11230,6 +11324,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 msg_y,
                                 half == ArrowHalf::Top,
                                 thin_head,
+                                leading_cross_center,
                                 has_source_circle.then_some((
                                     from_x_shifted + SOURCE_CIRCLE_X_OFFSET,
                                     msg_y + SOURCE_CIRCLE_Y_OFFSET,
@@ -13677,6 +13772,34 @@ mod tests {
         assert_eq!(text, "<ID-00033>");
         assert_eq!(format_autonumber(46, &format), "<ID-00046>");
         assert!(runs.iter().all(|run| run.italic));
+    }
+
+    #[test]
+    fn autonumber_consumes_optional_and_required_decimal_field_as_one_run() {
+        let format = Some("<i><B-##0-Q></i>".to_string());
+        let runs = format_autonumber_runs(33, &format);
+        let text: String = runs.iter().map(|run| run.text.as_str()).collect();
+
+        assert_eq!(text, "<B-33-Q>");
+        assert_eq!(format_autonumber(7, &format), "<B-7-Q>");
+        assert!(runs.iter().all(|run| run.italic));
+    }
+
+    #[test]
+    fn half_head_composes_source_cross_with_target_wing() {
+        let input = concat!(
+            "@startuml\n",
+            "participant \"Renamed West\" as West\n",
+            "participant \"Renamed East\" as East\n",
+            "West /-x East : repeated half decoration\n",
+            "East \\\\-x West : repeated half decoration\n",
+            "@enduml\n",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert_eq!(svg.matches("stroke-width:2;").count(), 4);
+        assert_eq!(svg.matches("<polygon").count(), 1);
     }
 
     #[test]
