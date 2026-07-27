@@ -4245,6 +4245,19 @@ fn render_plantuml_svg(
             )
         })
         .collect();
+    let package_render = package_render_model(diagram);
+    let empty_package_start = diagram.entities.len()
+        + diagram.association_classes.len()
+        + attached_notes.len()
+        + floating_notes.len();
+    let empty_packages = package_render
+        .roles
+        .iter()
+        .enumerate()
+        .filter(|(_, role)| **role == PackageRenderRole::EmptyLeaf)
+        .enumerate()
+        .map(|(ordinal, (package_idx, _))| (package_idx, empty_package_start + ordinal))
+        .collect::<Vec<_>>();
 
     // Java `DiagramChromeFactory12026.create` wraps the SVEK body with title,
     // caption, then header/footer. Each `DecorateEntityImage.drawU` centres the
@@ -4281,6 +4294,16 @@ fn render_plantuml_svg(
         }
     }
     for &(_, node_idx) in &floating_notes {
+        if let Some(pos) = positions.get(node_idx) {
+            let x = pos.x + MARGIN + layout_x_bias;
+            let y = pos.y + MARGIN;
+            body_min_x = body_min_x.min(x);
+            body_max_x = body_max_x.max(x + pos.width);
+            body_top = body_top.min(y);
+            body_bottom = body_bottom.max(y + pos.height);
+        }
+    }
+    for &(_, node_idx) in &empty_packages {
         if let Some(pos) = positions.get(node_idx) {
             let x = pos.x + MARGIN + layout_x_bias;
             let y = pos.y + MARGIN;
@@ -4399,6 +4422,12 @@ fn render_plantuml_svg(
             }
         }
         for &(_, node_idx) in &floating_notes {
+            if let Some(pos) = positions.get(node_idx) {
+                max_x = max_x.max(pos.x + MARGIN + layout_x_bias + body_dx + pos.width);
+                max_y = max_y.max(pos.y + MARGIN + body_dy + pos.height);
+            }
+        }
+        for &(_, node_idx) in &empty_packages {
             if let Some(pos) = positions.get(node_idx) {
                 max_x = max_x.max(pos.x + MARGIN + layout_x_bias + body_dx + pos.width);
                 max_y = max_y.max(pos.y + MARGIN + body_dy + pos.height);
@@ -4650,6 +4679,18 @@ fn render_plantuml_svg(
     } else {
         Vec::new()
     };
+    let layout_empty_packages = if oracle.is_none() {
+        layout_empty_packages(
+            diagram,
+            positions,
+            &empty_packages,
+            layout_x_bias,
+            body_dx,
+            body_dy,
+        )
+    } else {
+        Vec::new()
+    };
     let svek_ids = svek_id_allocation_from_origin(diagram, uid_origin);
     // Note entities (alias-named like `N1` AND auto-generated `GMNn`) are
     // captured separately in `note_entities`. The legacy `clusters`
@@ -4680,11 +4721,21 @@ fn render_plantuml_svg(
         emit_oracle_cluster_children(&mut svg, cluster);
         svg.push_str("</g>");
     }
-    for cluster in &layout_pkg_clusters {
-        let entity_id = svek_ids.package_ids[cluster.package_idx]
-            .as_deref()
-            .unwrap_or("ent0002");
-        emit_layout_package_cluster(&mut svg, cluster, entity_id);
+    for package_idx in 0..diagram.packages.len() {
+        if let Some(cluster) = layout_pkg_clusters
+            .iter()
+            .find(|cluster| cluster.package_idx == package_idx)
+        {
+            let entity_id = svek_ids.package_ids[cluster.package_idx]
+                .as_deref()
+                .unwrap_or("ent0002");
+            emit_layout_package_cluster(&mut svg, cluster, entity_id);
+        } else if let Some(empty) = layout_empty_packages
+            .iter()
+            .find(|empty| empty.package_idx == package_idx)
+        {
+            emit_layout_empty_package(&mut svg, empty);
+        }
     }
     if let Some(oracle) = oracle {
         for cluster in &oracle.loose_clusters {
@@ -4693,7 +4744,8 @@ fn render_plantuml_svg(
     }
 
     // Entity ID counter (PlantUML starts at ent0002, shifted past clusters).
-    let mut ent_id = 2 + oracle_pkg_clusters.len() + layout_pkg_clusters.len();
+    let mut ent_id =
+        2 + oracle_pkg_clusters.len() + layout_pkg_clusters.len() + layout_empty_packages.len();
 
     let emission_order = entity_emission_order(diagram);
     let mut layout_floating_notes = floating_notes
@@ -5188,6 +5240,155 @@ fn layout_package_clusters(
             })
         })
         .collect()
+}
+
+struct EmptyPackageLayout {
+    package_idx: usize,
+    label: String,
+    stereotype_lines: Vec<String>,
+    fill: String,
+    stroke: String,
+    font_fill: String,
+    x: f64,
+    y: f64,
+    width: f64,
+    height: f64,
+}
+
+fn layout_empty_packages(
+    diagram: &ClassDiagram,
+    positions: &[NodePosition],
+    empty_packages: &[(usize, usize)],
+    layout_x_bias: f64,
+    body_dx: f64,
+    body_dy: f64,
+) -> Vec<EmptyPackageLayout> {
+    empty_packages
+        .iter()
+        .filter_map(|&(package_idx, node_idx)| {
+            let package = &diagram.packages[package_idx];
+            let pos = positions.get(node_idx)?;
+            let kind = effective_package_kind(package);
+            // Java `EntityImageEmptyPackage` merges the package-title style
+            // with entity colors: an explicit BACK wins, then package style
+            // supplies background, line, and title-font colors. The defaults
+            // below are the current PlantUML package-title style values.
+            let fill = package
+                .color
+                .as_deref()
+                .or_else(|| package_skinparam(diagram, kind, "BackgroundColor"))
+                .map(crate::sequence::resolve_color)
+                .unwrap_or_else(|| "#F1F1F1".to_string());
+            let stroke = package_skinparam(diagram, kind, "BorderColor")
+                .map(crate::sequence::resolve_color)
+                .unwrap_or_else(|| "#181818".to_string());
+            let font_fill = package_skinparam(diagram, kind, "FontColor")
+                .map(crate::sequence::resolve_color)
+                .unwrap_or_else(|| "#000000".to_string());
+            Some(EmptyPackageLayout {
+                package_idx,
+                label: package_display_label(package).to_string(),
+                stereotype_lines: visible_package_stereotype_lines(package),
+                fill,
+                stroke,
+                font_fill,
+                x: pos.x + MARGIN + layout_x_bias + body_dx,
+                y: pos.y + MARGIN + body_dy,
+                width: pos.width,
+                height: pos.height,
+            })
+        })
+        .collect()
+}
+
+fn emit_layout_empty_package(svg: &mut String, package: &EmptyPackageLayout) {
+    let label_w = text_render::measure_no_underline(&package.label, FONT_SIZE, true);
+    let title_w = label_w + 2.0 * PACKAGE_TITLE_MARGIN_X;
+    let tab_w = (title_w + PACKAGE_TAB_SLOPE_WIDTH).min(package.width.max(0.0));
+    let x = package.x;
+    let y = package.y;
+    let right = package.x + package.width;
+    let bottom = package.y + package.height;
+    let tab_join = x + title_w - PACKAGE_ROUND_CORNER / 2.0;
+    let tab_right = x + tab_w;
+    let line_y = y + PACKAGE_TAB_H;
+    write!(
+        svg,
+        r#"<path d="M{},{} L{},{} A3.75,3.75 0 0 1 {},{} L{},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{}" fill="{}" style="stroke:{};stroke-width:{};"/>"#,
+        fmt4(x + 2.5),
+        fmt4(y),
+        fmt4(tab_join),
+        fmt4(y),
+        fmt4(tab_join + 2.5),
+        fmt4(y + 2.5),
+        fmt4(tab_right),
+        fmt4(line_y),
+        fmt4(right - 2.5),
+        fmt4(line_y),
+        fmt4(right),
+        fmt4(line_y + 2.5),
+        fmt4(right),
+        fmt4(bottom - 2.5),
+        fmt4(right - 2.5),
+        fmt4(bottom),
+        fmt4(x + 2.5),
+        fmt4(bottom),
+        fmt4(x),
+        fmt4(bottom - 2.5),
+        fmt4(x),
+        fmt4(y + 2.5),
+        fmt4(x + 2.5),
+        fmt4(y),
+        package.fill,
+        package.stroke,
+        BORDER_WIDTH,
+    )
+    .unwrap();
+    write!(
+        svg,
+        r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+        package.stroke,
+        BORDER_WIDTH,
+        fmt4(x),
+        fmt4(tab_right),
+        fmt4(line_y),
+        fmt4(line_y),
+    )
+    .unwrap();
+    text_render::emit_text(
+        svg,
+        &package.label,
+        &TextBase {
+            x: x + PACKAGE_TAB_TEXT_X,
+            y: y + PACKAGE_TITLE_BASELINE,
+            font_size: FONT_SIZE as u32,
+            font_family: "sans-serif",
+            fill: &package.font_fill,
+            bold: true,
+            italic: false,
+            underline: false,
+            skip_underline: true,
+        },
+    );
+    for (line_index, stereotype) in package.stereotype_lines.iter().enumerate() {
+        let width = text_render::measure_no_underline(stereotype, FONT_SIZE, false);
+        text_render::emit_text(
+            svg,
+            stereotype,
+            &TextBase {
+                x: x + (package.width - width) / 2.0,
+                y: y + PACKAGE_STEREOTYPE_BASELINE
+                    + line_index as f64 * text_render::label_height(stereotype, FONT_SIZE),
+                font_size: FONT_SIZE as u32,
+                font_family: "sans-serif",
+                fill: &package.font_fill,
+                bold: false,
+                italic: true,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+    }
 }
 
 fn emit_layout_package_cluster(svg: &mut String, cluster: &LayoutPackageCluster, entity_id: &str) {
@@ -13545,6 +13746,41 @@ mod tests {
             .position(|entity| entity.id == "EmptyControlAnchor")
             .unwrap();
         assert_eq!(allocation.entity_ids[anchor_idx], "ent0006");
+    }
+
+    #[test]
+    fn empty_package_nodes_emit_visible_metadata_driven_chrome() {
+        let input = "@startuml\n\
+                     skinparam PackageBorderColor #123456\n\
+                     skinparam PackageFontColor #654321\n\
+                     package \"Root Empty Leaf\" as RootLeaf {\n\
+                     }\n\
+                     package Outer {\n\
+                       package \"Painted Empty Leaf\" as PaintedLeaf #ABCDEF <<Archive>> {\n\
+                       }\n\
+                     }\n\
+                     class LayoutAnchor\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Class(diagram) = diagram else {
+            panic!("expected class diagram");
+        };
+
+        let svg = render(&diagram, &Theme::default());
+        assert!(svg.contains(r#"fill="#ABCDEF""#), "{svg}");
+        assert!(
+            svg.contains(r#"style="stroke:#123456;stroke-width:0.5;""#),
+            "{svg}"
+        );
+        assert!(
+            svg.contains(
+                r##"<text fill="#654321" font-family="sans-serif" font-size="14" font-weight="700""##
+            ),
+            "{svg}"
+        );
+        assert!(svg.contains(">Root Empty Leaf</text>"), "{svg}");
+        assert!(svg.contains(">Painted Empty Leaf</text>"), "{svg}");
+        assert!(svg.contains("«Archive»"), "{svg}");
     }
 
     #[test]

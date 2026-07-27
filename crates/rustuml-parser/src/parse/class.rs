@@ -268,12 +268,12 @@ impl ClassParser {
     fn resolve_group_path(&self, raw: &str) -> Vec<String> {
         let raw = raw.trim();
         if self.namespace_sep.is_none() {
-            if let Some((path, _)) = self
-                .package_by_path
-                .iter()
-                .find(|(path, _)| path.last().is_some_and(|part| part == raw))
-            {
-                return path.clone();
+            // Package commands call the same `CucaDiagram#quarkInContextSafe`
+            // path as entity commands. With a null separator Java delegates
+            // to creation-ordered `Plasma#firstWithName` across the shared
+            // entity/package quark namespace.
+            if let Some(path) = self.first_quark_path_named(raw) {
+                return path;
             }
             let mut path = self.current_group_path().to_vec();
             path.push(raw.to_string());
@@ -1434,14 +1434,19 @@ impl ClassParser {
             self.legend_line.get_or_insert(self.current_line);
             return true;
         }
-        if let Some(sep) = line.strip_prefix("set namespaceSeparator ") {
-            let sep = sep.trim();
+        static NAMESPACE_SEPARATOR_RE: LazyLock<Regex> = LazyLock::new(|| {
+            // Java `CommandNamespaceSeparator#getRegexConcat` accepts both
+            // command spellings; its command regex is case-insensitive.
+            Regex::new(r"(?i)^set\s+(?:separator|namespaceseparator)\s+(\S+)\s*$").unwrap()
+        });
+        if let Some(caps) = NAMESPACE_SEPARATOR_RE.captures(line) {
+            let sep = &caps[1];
             // `CommandNamespaceSeparator#executeArg` replaces the diagram's
-            // sole separator state on every command; `none` stores null.
-            self.namespace_sep = match sep {
-                "none" => None,
-                "" | "." => Some(".".to_string()),
-                _ => Some(sep.to_string()),
+            // sole separator state and compares `none` case-insensitively.
+            self.namespace_sep = if sep.eq_ignore_ascii_case("none") {
+                None
+            } else {
+                Some(sep.to_string())
             };
             return true;
         }
@@ -2328,11 +2333,11 @@ mod tests {
     #[test]
     fn namespace_separator_none_is_replaced_by_later_custom_separators() {
         let d = parse(
-            "set namespaceSeparator none\n\
+            "set separator NONE\n\
              class Literal.Dot\n\
-             set namespaceSeparator ::\n\
+             SET namespaceSeparator ::\n\
              class ColonRealm::InnerRealm::TransitionLeaf\n\
-             set namespaceSeparator none\n\
+             set namespaceseparator nOnE\n\
              class \"Renamed Literal\" as Literal.Dot\n\
              set namespaceSeparator /\n\
              class SlashRealm/InnerRealm/FinalLeaf",
@@ -2364,6 +2369,99 @@ mod tests {
         assert_eq!(d.entities[0].label, "Renamed Literal");
         assert_eq!(d.entities[1].source_line, 4);
         assert_eq!(d.entities[2].source_line, 8);
+    }
+
+    #[test]
+    fn separator_none_package_lookup_uses_shared_quark_creation_order() {
+        let first_then_second = parse(
+            "package FirstRealm {\n\
+               package SharedGate {\n\
+               }\n\
+             }\n\
+             package SecondRealm {\n\
+               package SharedGate {\n\
+               }\n\
+             }\n\
+             set separator none\n\
+             package \"Reopened First Gate\" as SharedGate {\n\
+               class NestedLeaf\n\
+             }",
+        );
+
+        let reopened = first_then_second
+            .packages
+            .iter()
+            .find(|package| package.name == "FirstRealm.SharedGate")
+            .unwrap();
+        assert_eq!(
+            reopened.display_name.as_deref(),
+            Some("Reopened First Gate")
+        );
+        assert_eq!(
+            first_then_second
+                .entities
+                .iter()
+                .map(|entity| entity.id.as_str())
+                .collect::<Vec<_>>(),
+            ["FirstRealm.SharedGate.NestedLeaf"]
+        );
+
+        let second_then_first = parse(
+            "package SecondRealm {\n\
+               package SharedGate {\n\
+               }\n\
+             }\n\
+             package FirstRealm {\n\
+               package SharedGate {\n\
+               }\n\
+             }\n\
+             set separator NONE\n\
+             package \"Reopened Second Gate\" as SharedGate {\n\
+               class NestedLeaf\n\
+             }",
+        );
+        let reopened = second_then_first
+            .packages
+            .iter()
+            .find(|package| package.name == "SecondRealm.SharedGate")
+            .unwrap();
+        assert_eq!(
+            reopened.display_name.as_deref(),
+            Some("Reopened Second Gate")
+        );
+        assert_eq!(
+            second_then_first
+                .entities
+                .iter()
+                .map(|entity| entity.id.as_str())
+                .collect::<Vec<_>>(),
+            ["SecondRealm.SharedGate.NestedLeaf"]
+        );
+    }
+
+    #[test]
+    fn separator_none_package_lookup_can_reuse_an_entity_quark() {
+        let d = parse(
+            "class SharedIdentity\n\
+             set namespaceseparator NoNe\n\
+             package \"Shared Package\" as SharedIdentity {\n\
+               class PackageChild\n\
+             }",
+        );
+
+        assert_eq!(d.packages.len(), 1);
+        assert_eq!(d.packages[0].name, "SharedIdentity");
+        assert_eq!(
+            d.packages[0].display_name.as_deref(),
+            Some("Shared Package")
+        );
+        assert_eq!(
+            d.entities
+                .iter()
+                .map(|entity| entity.id.as_str())
+                .collect::<Vec<_>>(),
+            ["SharedIdentity", "SharedIdentity.PackageChild"]
+        );
     }
 
     #[test]
