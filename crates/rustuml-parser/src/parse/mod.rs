@@ -30,29 +30,69 @@ pub mod wbs;
 use crate::diagram::Diagram;
 use crate::preprocess;
 
+/// Return the ordinary-key identity used by PlantUML's
+/// `SkinParam.cleanForKeySlow`.
+fn canonical_skinparam_key(key: &str) -> String {
+    let mut canonical = key.trim().to_ascii_lowercase().replace(['_', '.'], "");
+    canonical = canonical
+        .replace("sequenceparticipant", "participant")
+        .replace("sequenceactor", "actor");
+    for prefix in [
+        "activity",
+        "class",
+        "component",
+        "object",
+        "sequence",
+        "state",
+        "usecase",
+    ] {
+        canonical = canonical.replace(&format!("{prefix}arrow"), "arrow");
+    }
+    if canonical.ends_with("align") {
+        canonical.truncate(canonical.len() - "align".len());
+        canonical.push_str("alignment");
+    }
+    canonical
+}
+
 /// Apply PlantUML's `SkinParam.setParam` replacement semantics to parsed
 /// metadata. Java stores ordinary skinparams in a `LinkedHashMap`, so a later
 /// assignment replaces the value without moving the key's insertion position.
 ///
-/// `__theme` is a RustUML preprocessing marker whose position represents a
-/// theme reset; it is not a Java skinparam key and must remain ordered.
+/// Double-underscore keys are RustUML parser metadata, not Java skinparams, and
+/// must remain as an ordered event stream.
 fn collapse_reassigned_skinparams(diagram: &mut Diagram) {
     let params = &mut diagram.meta_mut().skinparams;
-    let mut effective: Vec<crate::diagram::SkinParam> = Vec::with_capacity(params.len());
+    let mut effective: Vec<(Option<String>, crate::diagram::SkinParam)> =
+        Vec::with_capacity(params.len());
+    let mut theme_segment = 0usize;
 
     for param in params.drain(..) {
-        if !param.key.eq_ignore_ascii_case("__theme")
-            && let Some(existing) = effective
-                .iter_mut()
-                .find(|existing| existing.key.eq_ignore_ascii_case(&param.key))
+        if param.key.eq_ignore_ascii_case("__theme") {
+            theme_segment += 1;
+            effective.push((None, param));
+            continue;
+        }
+        if param.key.starts_with("__") {
+            effective.push((None, param));
+            continue;
+        }
+        let canonical_key = if theme_segment == 0 {
+            canonical_skinparam_key(&param.key)
+        } else {
+            format!("{theme_segment}:{}", param.key.to_ascii_lowercase())
+        };
+        if let Some((_, existing)) = effective
+            .iter_mut()
+            .find(|(key, _)| key.as_deref() == Some(canonical_key.as_str()))
         {
             existing.value = param.value;
         } else {
-            effective.push(param);
+            effective.push((Some(canonical_key), param));
         }
     }
 
-    *params = effective;
+    *params = effective.into_iter().map(|(_, param)| param).collect();
 }
 
 /// Parse error with location context.
@@ -1225,6 +1265,98 @@ mod tests {
         assert_eq!(matching.len(), 1);
         assert_eq!(matching[0].key, "ClassBackgroundColor");
         assert_eq!(matching[0].value, "#2468AC");
+    }
+
+    #[test]
+    fn alternating_arrow_aliases_collapse_by_java_key_identity() {
+        let input = concat!(
+            "@startuml\n",
+            "skinparam StAtEaRrOwCoLoR #1565C0\n",
+            "skinparam ArrowColor #6A1B9A\n",
+            "skinparam stateArrowColor #00838F\n",
+            "skinparam aRrOwCoLoR #3949AB\n",
+            "skinparam StAtEaRrOwCoLoR #2E7D32\n",
+            "[*] --> FreshRelay\n",
+            "FreshRelay --> [*]\n",
+            "@enduml\n",
+        );
+        let diagram = parse(input).unwrap();
+        let matching: Vec<_> = diagram
+            .meta()
+            .skinparams
+            .iter()
+            .filter(|param| canonical_skinparam_key(&param.key) == "arrowcolor")
+            .collect();
+
+        assert_eq!(matching.len(), 1);
+        assert_eq!(matching[0].key, "StAtEaRrOwCoLoR");
+        assert_eq!(matching[0].value, "#2E7D32");
+    }
+
+    #[test]
+    fn separator_and_alignment_aliases_share_java_key_identity() {
+        let input = concat!(
+            "@startuml\n",
+            "skinparam default_text_align left\n",
+            "skinparam default.text.alignment right\n",
+            "class FreshLedger\n",
+            "@enduml\n",
+        );
+        let diagram = parse(input).unwrap();
+        let matching: Vec<_> = diagram
+            .meta()
+            .skinparams
+            .iter()
+            .filter(|param| canonical_skinparam_key(&param.key) == "defaulttextalignment")
+            .collect();
+
+        assert_eq!(matching.len(), 1);
+        assert_eq!(matching[0].key, "default_text_align");
+        assert_eq!(matching[0].value, "right");
+    }
+
+    #[test]
+    fn synthetic_theme_family_keys_keep_separate_scoped_identities() {
+        let input = concat!(
+            "@startuml\n",
+            "skinparam stateArrowColor #1565C0\n",
+            "skinparam ArrowColor #6A1B9A\n",
+            "skinparam __theme fresh-synthetic-theme\n",
+            "skinparam classArrowColor #AD1457\n",
+            "skinparam stateArrowColor #2E7D32\n",
+            "skinparam usecaseArrowColor #EF6C00\n",
+            "[*] --> FreshRelay\n",
+            "FreshRelay --> [*]\n",
+            "@enduml\n",
+        );
+        let diagram = parse(input).unwrap();
+        let params = &diagram.meta().skinparams;
+
+        assert_eq!(
+            params
+                .iter()
+                .filter(|param| canonical_skinparam_key(&param.key) == "arrowcolor")
+                .count(),
+            4
+        );
+        assert_eq!(
+            params
+                .iter()
+                .find(|param| param.key == "stateArrowColor")
+                .unwrap()
+                .value,
+            "#6A1B9A"
+        );
+        assert!(
+            params
+                .iter()
+                .any(|param| { param.key == "classArrowColor" && param.value == "#AD1457" })
+        );
+        assert!(
+            params
+                .iter()
+                .any(|param| { param.key == "usecaseArrowColor" && param.value == "#EF6C00" })
+        );
     }
 
     #[test]
