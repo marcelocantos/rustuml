@@ -5,7 +5,9 @@
 
 use std::collections::BTreeMap;
 
-use rustuml_parser::diagram::style::{StyleDeclaration, StyleProgram, StyleScheme};
+use rustuml_parser::diagram::style::{
+    StyleDeclaration, StyleOrigin, StyleProgram, StyleScheme,
+};
 
 /// The style signature requested by a renderer.
 ///
@@ -88,16 +90,26 @@ impl<'a> ResolvedStyle<'a> {
 #[derive(Debug, Clone, Copy)]
 pub struct StyleCascade<'a> {
     program: &'a StyleProgram,
+    legacy_skinparam_used: bool,
 }
 
 impl<'a> StyleCascade<'a> {
     pub fn new(program: &'a StyleProgram) -> Self {
-        Self { program }
+        let legacy_skinparam_used = program.declarations.iter().any(|declaration| {
+            matches!(
+                &declaration.origin,
+                StyleOrigin::UserSkinParam | StyleOrigin::ThemeSkinParam { .. }
+            )
+        });
+        Self {
+            program,
+            legacy_skinparam_used,
+        }
     }
 
     /// Resolve against the complete style program.
     pub fn resolve(&self, signature: &StyleSignature, scheme: StyleScheme) -> ResolvedStyle<'a> {
-        self.resolve_at(signature, scheme, u64::MAX)
+        self.resolve_bounded(signature, scheme, ResolutionBound::Final)
     }
 
     /// Resolve declarations whose source epoch is at or before `epoch_ceiling`.
@@ -110,11 +122,73 @@ impl<'a> StyleCascade<'a> {
         scheme: StyleScheme,
         epoch_ceiling: u64,
     ) -> ResolvedStyle<'a> {
+        self.resolve_bounded(
+            signature,
+            scheme,
+            ResolutionBound::Epoch(epoch_ceiling),
+        )
+    }
+
+    /// Resolve declarations visible at an element or link creation source line.
+    ///
+    /// Theme declarations carry the source line of their `!theme` directive,
+    /// so the source-line bound preserves theme replay placement.
+    pub fn resolve_at_source_line(
+        &self,
+        signature: &StyleSignature,
+        scheme: StyleScheme,
+        creation_source_line: usize,
+    ) -> ResolvedStyle<'a> {
+        self.resolve_bounded(
+            signature,
+            scheme,
+            ResolutionBound::SourceLine(creation_source_line),
+        )
+    }
+
+    /// Resolve an entity's creation snapshot, including Java's legacy
+    /// skinparam compatibility refresh.
+    ///
+    /// Java provenance: `Entity#getCurrentStyleBuilder` returns the diagram's
+    /// final builder after any legacy skinparam command; pure CSS entities
+    /// retain the builder captured when they were created.
+    pub fn resolve_entity_at_source_line(
+        &self,
+        signature: &StyleSignature,
+        scheme: StyleScheme,
+        creation_source_line: usize,
+    ) -> ResolvedStyle<'a> {
+        if self.legacy_skinparam_used {
+            self.resolve(signature, scheme)
+        } else {
+            self.resolve_at_source_line(signature, scheme, creation_source_line)
+        }
+    }
+
+    /// Resolve a link against the builder captured when the link was created.
+    ///
+    /// Java provenance: `Link#getStyleBuilder` always returns the captured
+    /// builder, including when legacy skinparams refresh entity builders.
+    pub fn resolve_link_at_source_line(
+        &self,
+        signature: &StyleSignature,
+        scheme: StyleScheme,
+        creation_source_line: usize,
+    ) -> ResolvedStyle<'a> {
+        self.resolve_at_source_line(signature, scheme, creation_source_line)
+    }
+
+    fn resolve_bounded(
+        &self,
+        signature: &StyleSignature,
+        scheme: StyleScheme,
+        bound: ResolutionBound,
+    ) -> ResolvedStyle<'a> {
         let mut regular = BTreeMap::<String, Winner<'a>>::new();
         let mut dark = BTreeMap::<String, Winner<'a>>::new();
 
         for (order, declaration) in self.program.declarations.iter().enumerate() {
-            if declaration.epoch > epoch_ceiling || !declaration_matches(declaration, signature) {
+            if !bound.includes(declaration) || !declaration_matches(declaration, signature) {
                 continue;
             }
 
@@ -154,6 +228,25 @@ impl<'a> StyleCascade<'a> {
         }
 
         ResolvedStyle { declarations }
+    }
+}
+
+#[derive(Debug, Clone, Copy)]
+enum ResolutionBound {
+    Final,
+    Epoch(u64),
+    SourceLine(usize),
+}
+
+impl ResolutionBound {
+    fn includes(self, declaration: &StyleDeclaration) -> bool {
+        match self {
+            Self::Final => true,
+            Self::Epoch(epoch_ceiling) => declaration.epoch <= epoch_ceiling,
+            Self::SourceLine(source_line_ceiling) => {
+                declaration.source_line <= source_line_ceiling
+            }
+        }
     }
 }
 
@@ -290,6 +383,22 @@ mod tests {
 
     fn program(declarations: Vec<StyleDeclaration>) -> StyleProgram {
         StyleProgram { declarations }
+    }
+
+    fn with_source_line(
+        mut declaration: StyleDeclaration,
+        source_line: usize,
+    ) -> StyleDeclaration {
+        declaration.source_line = source_line;
+        declaration
+    }
+
+    fn with_origin(
+        mut declaration: StyleDeclaration,
+        origin: StyleOrigin,
+    ) -> StyleDeclaration {
+        declaration.origin = origin;
+        declaration
     }
 
     #[test]
@@ -508,5 +617,178 @@ mod tests {
                 .property("linecolor"),
             Some("blue")
         );
+    }
+
+    #[test]
+    fn pure_css_entities_resolve_at_their_creation_source_lines() {
+        let program = program(vec![
+            with_source_line(
+                declaration(
+                    &["root", "element", "widgetDiagram", "widget"],
+                    &[],
+                    "signalColor",
+                    "cedar-271",
+                    StyleScheme::Regular,
+                    40,
+                    7,
+                ),
+                3,
+            ),
+            with_source_line(
+                declaration(
+                    &["root", "element", "widgetDiagram", "widget"],
+                    &[],
+                    "signalColor",
+                    "amber-914",
+                    StyleScheme::Regular,
+                    41,
+                    7,
+                ),
+                12,
+            ),
+        ]);
+        let signature =
+            StyleSignature::from_selectors(["root", "element", "widgetDiagram", "widget"]);
+        let cascade = StyleCascade::new(&program);
+
+        assert_eq!(
+            cascade
+                .resolve_entity_at_source_line(&signature, StyleScheme::Regular, 7)
+                .property("signalColor"),
+            Some("cedar-271")
+        );
+        assert_eq!(
+            cascade
+                .resolve_entity_at_source_line(&signature, StyleScheme::Regular, 16)
+                .property("signalColor"),
+            Some("amber-914")
+        );
+    }
+
+    #[test]
+    fn links_always_resolve_at_their_creation_source_lines() {
+        let program = program(vec![
+            with_origin(
+                with_source_line(
+                    declaration(
+                        &["root", "element", "widgetDiagram", "arrow"],
+                        &[],
+                        "routeInk",
+                        "plum-308",
+                        StyleScheme::Regular,
+                        70,
+                        9,
+                    ),
+                    5,
+                ),
+                StyleOrigin::ThemeStyle {
+                    theme: "renamed-cascade".to_string(),
+                },
+            ),
+            with_source_line(
+                declaration(
+                    &["root", "element", "widgetDiagram", "arrow"],
+                    &[],
+                    "routeInk",
+                    "teal-662",
+                    StyleScheme::Regular,
+                    71,
+                    9,
+                ),
+                14,
+            ),
+        ]);
+        let signature =
+            StyleSignature::from_selectors(["root", "element", "widgetDiagram", "arrow"]);
+        let cascade = StyleCascade::new(&program);
+
+        assert_eq!(
+            cascade
+                .resolve_link_at_source_line(&signature, StyleScheme::Regular, 9)
+                .property("routeInk"),
+            Some("plum-308")
+        );
+        assert_eq!(
+            cascade
+                .resolve_link_at_source_line(&signature, StyleScheme::Regular, 18)
+                .property("routeInk"),
+            Some("teal-662")
+        );
+    }
+
+    #[test]
+    fn legacy_skinparams_refresh_entities_but_not_link_snapshots() {
+        let legacy_origins = [
+            StyleOrigin::UserSkinParam,
+            StyleOrigin::ThemeSkinParam {
+                theme: "renamed-legacy".to_string(),
+            },
+        ];
+
+        for legacy_origin in legacy_origins {
+            let program = program(vec![
+                with_source_line(
+                    declaration(
+                        &["root", "element", "widgetDiagram", "widget"],
+                        &[],
+                        "signalColor",
+                        "indigo-144",
+                        StyleScheme::Regular,
+                        90,
+                        11,
+                    ),
+                    2,
+                ),
+                with_origin(
+                    with_source_line(
+                        declaration(
+                            &["root"],
+                            &[],
+                            "compatibilityMarker",
+                            "enabled-503",
+                            StyleScheme::Regular,
+                            91,
+                            11,
+                        ),
+                        10,
+                    ),
+                    legacy_origin,
+                ),
+                with_source_line(
+                    declaration(
+                        &["root", "element", "widgetDiagram", "widget"],
+                        &[],
+                        "signalColor",
+                        "copper-827",
+                        StyleScheme::Regular,
+                        92,
+                        11,
+                    ),
+                    15,
+                ),
+            ]);
+            let signature =
+                StyleSignature::from_selectors(["root", "element", "widgetDiagram", "widget"]);
+            let cascade = StyleCascade::new(&program);
+
+            assert_eq!(
+                cascade
+                    .resolve_entity_at_source_line(&signature, StyleScheme::Regular, 6)
+                    .property("signalColor"),
+                Some("copper-827")
+            );
+            assert_eq!(
+                cascade
+                    .resolve_link_at_source_line(&signature, StyleScheme::Regular, 6)
+                    .property("signalColor"),
+                Some("indigo-144")
+            );
+            assert_eq!(
+                cascade
+                    .resolve_link_at_source_line(&signature, StyleScheme::Regular, 19)
+                    .property("signalColor"),
+                Some("copper-827")
+            );
+        }
     }
 }
