@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-arrow-style-isolation",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "net.sourceforge.plantuml.style.FromSkinparamToStyle#FromSkinparamToStyle",
+    "net.sourceforge.plantuml.svek.GraphvizImageBuilder#getDefaultStyleDefinitionArrow",
+    "net.sourceforge.plantuml.svek.SvekEdge#getDefaultStyleDefinition",
+    "net.sourceforge.plantuml.svek.SvekEdge#drawU",
+    "net.sourceforge.plantuml.svek.SvekResult#getDefaultStyleDefinition"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/state.rs::StateSkin::from_diagram",
+    "crates/rustuml-render/src/state.rs::emit_autonomous_scope_links",
+    "crates/rustuml-render/src/state.rs::render_with_oracle"
+  ],
+  "invariant": "Java resolves state-image borders and state-diagram arrows from sibling style signatures. FromSkinparamToStyle maps stateBorderColor to root.element.stateDiagram.state LineColor and maps global arrowColor to root.element.stateDiagram.arrow LineColor; a state-specific arrow declaration is a more specific arrow-style input, not a state-border fallback. GraphvizImageBuilder and SvekEdge independently construct root.element.<diagram>.arrow, merge that signature with the current StyleBuilder, and derive the shaft and arrowhead Rainbow from the resulting arrow style. Both signatures may inherit the root or theme line color, but neither inherits the other sibling's explicit LineColor. A per-link color remains the final arrow-only override.",
+  "causal_divergence": "Rust resolves stateArrowColor and global ArrowColor first, but when neither is present it falls back to the already-resolved state rectangle stroke. That aliases two independent style channels. Consequently stateBorderColor changes every transition shaft and arrowhead even though Java changes only state chrome. The default corpus hid the alias whenever both sibling signatures inherited the same root color.",
+  "planned_change": "Resolve the arrow fallback from the root/theme line color, or the built-in default when the root supplies none, independently of the state border stroke. Preserve stateArrowColor over global ArrowColor and preserve per-transition color over both. Add renamed perturbations that vary stateBorderColor alone, arrowColor alone, both in opposite declaration orders, and a local transition color, proving that only the named style channel moves. Do not special-case DarkBlue or any fixture name.",
+  "perturbation_axes": [
+    "stateBorderColor alone with renamed states and changed chain length",
+    "global ArrowColor alone",
+    "stateArrowColor overriding global ArrowColor",
+    "stateBorderColor and ArrowColor in both declaration orders",
+    "per-transition color overriding every diagram-level arrow declaration",
+    "root or theme line color inherited by both sibling signatures only when neither has an explicit color"
+  ]
+}
