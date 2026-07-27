@@ -1,0 +1,36 @@
+@startuml
+[*] --> LeadLeaf
+LeadLeaf --> CedarBay
+CedarBay --> MapleBay
+MapleBay --> PineBay
+PineBay --> TailLeaf
+TailLeaf --> [*]
+
+state LeadLeaf
+
+state PineBay {
+  state pi <<entryPoint>>
+  state po <<exitPoint>>
+  state PineCore
+  pi --> PineCore
+  PineCore --> po
+}
+
+state CedarBay {
+  state ci <<entryPoint>>
+  state co <<exitPoint>>
+  state CedarCore
+  ci --> CedarCore
+  CedarCore --> co
+}
+
+state TailLeaf
+
+state MapleBay {
+  state mi <<entryPoint>>
+  state mo <<exitPoint>>
+  state MapleCore
+  mi --> MapleCore
+  MapleCore --> mo
+}
+@enduml

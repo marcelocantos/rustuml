@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-composite-entry-exit-frontier",
+  "reviewer": {
+    "task_id": "codex-desktop-independent-checker-round-2-2026-07-27",
+    "model": "GPT-5 Codex"
+  },
+  "account_commit": "0c03e3f8ce6be46260bad0e57c9ec0f241c464a7",
+  "implementation_commit": "42f24ecd4636ecc7611e86c2926e4b8ce59e17e1",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "git status --short --branch",
+    "git rev-parse HEAD",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "git show --format=fuller --no-ext-diff --no-renames 42f24ecd4636ecc7611e86c2926e4b8ce59e17e1 --",
+    "git show 0c03e3f8ce6be46260bad0e57c9ec0f241c464a7:docs/parity-reviews/state-composite-entry-exit-frontier/account.json",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/state-composite-entry-exit-frontier/triple_composites_root_leaf_interleave.puml test-diagrams/perturbations/state-composite-entry-exit-frontier/triple_composites_scoped_pseudos.puml test-diagrams/perturbations/state-composite-entry-exit-frontier/forward_referenced_composite_order.puml",
+    "rg -n \"Syntax Error|PlantUML.*Error|Error line|class=\\\"message\\\"\" test-diagrams/perturbations/state-composite-entry-exit-frontier/forward_referenced_composite_order.svg test-diagrams/perturbations/state-composite-entry-exit-frontier/triple_composites_root_leaf_interleave.svg test-diagrams/perturbations/state-composite-entry-exit-frontier/triple_composites_scoped_pseudos.svg",
+    "xmllint --noout test-diagrams/perturbations/state-composite-entry-exit-frontier/forward_referenced_composite_order.svg test-diagrams/perturbations/state-composite-entry-exit-frontier/triple_composites_root_leaf_interleave.svg test-diagrams/perturbations/state-composite-entry-exit-frontier/triple_composites_scoped_pseudos.svg",
+    "cargo test --test parity_perturbations --release",
+    "target/release/rustuml -tsvg test-diagrams/perturbations/state-composite-entry-exit-frontier/forward_referenced_composite_order.puml > /private/tmp/rustuml-forward-referenced-composite-order.svg",
+    "target/release/rustuml -tsvg test-diagrams/perturbations/state-composite-entry-exit-frontier/triple_composites_scoped_pseudos.puml > /private/tmp/rustuml-triple-composites-scoped-pseudos.svg",
+    "rg -n \"dual_composite_basic_ports|reordered_basic_ports|same_container_port_link|PodAlpha|PodBeta|CoreOne|CoreTwo|ShellKappa|RelayBox\" crates tests --glob '*.rs'",
+    "cargo test --test harness_guards --release parity_review_records_are_complete -- --nocapture"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/state-composite-entry-exit-frontier/dual_composite_basic_ports.puml",
+      "golden": "test-diagrams/perturbations/state-composite-entry-exit-frontier/dual_composite_basic_ports.svg",
+      "axes": [
+        "topology/cardinality",
+        "label variation"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-composite-entry-exit-frontier/reordered_basic_ports.puml",
+      "golden": "test-diagrams/perturbations/state-composite-entry-exit-frontier/reordered_basic_ports.svg",
+      "axes": [
+        "declaration order",
+        "label variation"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-composite-entry-exit-frontier/same_container_port_link.puml",
+      "golden": "test-diagrams/perturbations/state-composite-entry-exit-frontier/same_container_port_link.svg",
+      "axes": [
+        "topology/cardinality",
+        "same-container border-point constraint",
+        "label variation"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-composite-entry-exit-frontier/triple_composites_root_leaf_interleave.puml",
+      "golden": "test-diagrams/perturbations/state-composite-entry-exit-frontier/triple_composites_root_leaf_interleave.svg",
+      "axes": [
+        "three root composites",
+        "root unpackaged leaves before/between/after group declarations",
+        "composite declaration order versus root transition order",
+        "label variation"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-composite-entry-exit-frontier/triple_composites_scoped_pseudos.puml",
+      "golden": "test-diagrams/perturbations/state-composite-entry-exit-frontier/triple_composites_scoped_pseudos.svg",
+      "axes": [
+        "three root composites",
+        "scoped start/end pseudostates mixed with basic entry/exit ports",
+        "intra-group declaration order",
+        "label variation"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-composite-entry-exit-frontier/forward_referenced_composite_order.puml",
+      "golden": "test-diagrams/perturbations/state-composite-entry-exit-frontier/forward_referenced_composite_order.svg",
+      "axes": [
+        "three root composites",
+        "composite forward references",
+        "composite declaration order",
+        "root unpackaged leaves",
+        "label variation"
+      ],
+      "result": "fail"
+    }
+  ],
+  "findings": [
+    "The Rust workspace HEAD was exactly 42f24ecd4636ecc7611e86c2926e4b8ce59e17e1, the corrected account was read from exactly 0c03e3f8ce6be46260bad0e57c9ec0f241c464a7, and the Java oracle checkout was exactly 71806a23780b04a5ccde2f8ceb5121edad5eb711.",
+    "The prior rejected review and its three perturbation pairs retained their pre-review SHA-256 hashes. The full perturbation suite no longer reports failures for those three cases, including the original dual-composite counterexample.",
+    "All three new Java SVGs were generated headlessly, parsed as valid XML, and contained no PlantUML syntax-error markers. Every new entry/exit label is two ASCII letters, safely inside the corrected account's integer rendered-width <=40 basic-port scope.",
+    "Static review found no fixture-name conditionals in the inspected Rust path and no new numeric constants in implementation commit 42f24ecd4636ecc7611e86c2926e4b8ce59e17e1. The correction stable-sorts solved positions by owner, but derives root-composite order from diagram.states iteration, which records first entity creation rather than group declaration traversal.",
+    "Counterexample forward_referenced_composite_order.puml declares PineBay, CedarBay, and MapleBay as groups in that order after root transitions have already referenced CedarBay, MapleBay, and PineBay. Java GraphvizImageBuilder traverses and paints the groups in declaration/group-hierarchy order PineBay, CedarBay, MapleBay. Rust emits cluster chrome and grouped leaves in first-reference order CedarBay, MapleBay, PineBay. The correction therefore models ownership partitioning but not Java's group-order source when a leaf is promoted to a composite after first reference.",
+    "Counterexample triple_composites_scoped_pseudos.puml matches Java for every cluster and entity but diverges on the DeltaCell-to-BirchCell compound spline. Java ClusterDotString assigns one projectionCluster field while traversing groups; because the edge touches both DeltaCell and BirchCell, the later BirchCell assignment wins. SvekEdge solves the line by recomputing only that projection cluster before DotPath.simulateCompound, so the DeltaCell tail is clipped against its original Graphviz cluster rectangle even though later drawing recomputes DeltaCell's visible frontier. Rust apply_state_border_frontiers eagerly replaces every cluster rectangle before simulate_state_compound, so it clips the same tail against DeltaCell's adjusted visible frontier. The scoped pseudostates enlarge the original-versus-visible frontier difference enough to expose the incorrect update timing.",
+    "triple_composites_root_leaf_interleave.puml passes, showing that the stable partition correctly keeps directly declared grouped leaves ahead of unpackaged root leaves for three groups. That success does not cover forward-reference ordering or Java's per-edge frontier-update timing.",
+    "cargo test --test parity_perturbations --release failed only for the two new counterexamples above. The review guard was run after this record was written and is expected to reject the latest review because its verdict is rejected and it preserves failing perturbations."
+  ],
+  "verdict": "rejected"
+}

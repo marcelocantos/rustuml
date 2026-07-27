@@ -1,0 +1,36 @@
+@startuml
+state DeltaCell {
+  [*] --> DeltaCore
+  state di <<entryPoint>>
+  state do <<exitPoint>>
+  state DeltaCore
+  di --> DeltaCore
+  DeltaCore --> do
+  DeltaCore --> [*]
+}
+
+state BirchCell {
+  state BirchCore
+  state bi <<entryPoint>>
+  state bo <<exitPoint>>
+  [*] --> BirchCore
+  bi --> BirchCore
+  BirchCore --> bo
+  BirchCore --> [*]
+}
+
+state CedarCell {
+  state co <<exitPoint>>
+  state ci <<entryPoint>>
+  ci --> CedarCore
+  [*] --> CedarCore
+  state CedarCore
+  CedarCore --> co
+  CedarCore --> [*]
+}
+
+[*] --> CedarCell
+CedarCell --> DeltaCell
+DeltaCell --> BirchCell
+BirchCell --> [*]
+@enduml

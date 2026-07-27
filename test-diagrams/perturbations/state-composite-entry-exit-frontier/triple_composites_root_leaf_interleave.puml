@@ -1,0 +1,39 @@
+@startuml
+state LoneBefore
+
+state QuartzZone {
+  state qa <<entryPoint>>
+  state qx <<exitPoint>>
+  state QuartzCore
+  qa --> QuartzCore
+  QuartzCore --> qx
+}
+
+state LoneMiddle
+
+state AmberZone {
+  state aa <<entryPoint>>
+  state ax <<exitPoint>>
+  state AmberCore
+  aa --> AmberCore
+  AmberCore --> ax
+}
+
+state LoneAfter
+
+state MossZone {
+  state ma <<entryPoint>>
+  state mx <<exitPoint>>
+  state MossCore
+  ma --> MossCore
+  MossCore --> mx
+}
+
+[*] --> LoneBefore
+LoneBefore --> MossZone
+MossZone --> LoneMiddle
+LoneMiddle --> QuartzZone
+QuartzZone --> LoneAfter
+LoneAfter --> AmberZone
+AmberZone --> [*]
+@enduml
