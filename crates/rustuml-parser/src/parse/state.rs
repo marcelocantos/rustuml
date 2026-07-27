@@ -510,7 +510,10 @@ impl StateParser {
             // against it.
             let is_composite = line.trim_end().ends_with('{');
 
-            let kind = match stereotype {
+            // Java provenance: `CommandCreateState.getTypeFromStereotype`
+            // recognizes reserved state-image stereotypes case-insensitively.
+            let normalized_stereotype = stereotype.map(str::to_ascii_lowercase);
+            let kind = match normalized_stereotype.as_deref() {
                 Some("start") => StateKind::Initial,
                 Some("end") => StateKind::Final,
                 Some("choice") => StateKind::Choice,
@@ -518,8 +521,8 @@ impl StateParser {
                 Some("join") => StateKind::Join,
                 Some("history") => StateKind::History,
                 Some("history*") => StateKind::DeepHistory,
-                Some("entryPoint") => StateKind::EntryPoint,
-                Some("exitPoint") => StateKind::ExitPoint,
+                Some("entrypoint") => StateKind::EntryPoint,
+                Some("exitpoint") => StateKind::ExitPoint,
                 _ => StateKind::Normal,
             };
             let ordinary_stereotype = matches!(kind, StateKind::Normal)
@@ -1045,8 +1048,8 @@ mod tests {
     #[test]
     fn state_stereotypes() {
         let d = parse(
-            "state s1 <<start>>\nstate s2 <<end>>\nstate s3 <<choice>>\n\
-             state s4 <<fork>>\nstate s5 <<join>>",
+            "state s1 <<START>>\nstate s2 <<End>>\nstate s3 <<Choice>>\n\
+             state s4 <<FORK>>\nstate s5 <<join>>\nstate s6 <<HISTORY*>>",
         );
         assert_eq!(d.states[0].kind, StateKind::Initial);
         assert_eq!(d.states[0].stereotype, None);
@@ -1055,6 +1058,7 @@ mod tests {
         assert_eq!(d.states[2].kind, StateKind::Choice);
         assert_eq!(d.states[3].kind, StateKind::Fork);
         assert_eq!(d.states[4].kind, StateKind::Join);
+        assert_eq!(d.states[5].kind, StateKind::DeepHistory);
     }
 
     #[test]

@@ -436,6 +436,44 @@ fn layout_node_size(
     )
 }
 
+fn autonomous_layout_node_size(
+    diagram: &StateDiagram,
+    skin: &StateSkin,
+    id: &str,
+    state_def: Option<&State>,
+) -> (f64, f64, StateLayoutShape) {
+    let (_, _, shape) = layout_node_size(id, state_def, false);
+    if shape != StateLayoutShape::Box
+        || state_def.is_some_and(|state| {
+            matches!(
+                state.kind,
+                StateKind::Fork | StateKind::Join | StateKind::Choice
+            )
+        })
+    {
+        return layout_node_size(id, state_def, false);
+    }
+
+    let style = autonomous_state_style(diagram, skin, state_def);
+    let label = state_def.map_or(id, |state| state.label.as_str());
+    let descriptions = state_def.map_or(&[][..], |state| state.descriptions.as_slice());
+    let title_width = style.title.width(label);
+    let attribute_width = descriptions
+        .iter()
+        .map(|description| style.attribute.width(description))
+        .fold(0.0_f64, f64::max);
+    let title_height = style.title.height(label);
+    let attribute_height = descriptions
+        .iter()
+        .map(|description| style.attribute.height(description))
+        .sum::<f64>();
+    (
+        (title_width.max(attribute_width) + STATE_DIMENSION_PADDING).max(STATE_MIN_WIDTH),
+        (title_height + attribute_height + STATE_DIMENSION_PADDING).max(STATE_BOX_HEIGHT),
+        shape,
+    )
+}
+
 struct StateNodeFont<'a> {
     name_size: f64,
     desc_size: f64,
@@ -1297,7 +1335,7 @@ fn escape_text_content(s: &str) -> String {
     escape_attr(s).replace('\u{00a0}', "&#160;")
 }
 
-fn stereotype_state_color(diagram: &StateDiagram, stereotype: &str, attr: &str) -> Option<String> {
+fn stereotype_state_value(diagram: &StateDiagram, stereotype: &str, attr: &str) -> Option<String> {
     let block_key = format!("state<<{stereotype}>>{attr}");
     let suffix_key = format!("state{attr}<<{stereotype}>>");
     diagram
@@ -1308,7 +1346,12 @@ fn stereotype_state_color(diagram: &StateDiagram, stereotype: &str, attr: &str) 
         .find(|sp| {
             sp.key.eq_ignore_ascii_case(&block_key) || sp.key.eq_ignore_ascii_case(&suffix_key)
         })
-        .map(|sp| crate::sequence::resolve_color(sp.value.trim()))
+        .map(|sp| sp.value.trim().to_string())
+}
+
+fn stereotype_state_color(diagram: &StateDiagram, stereotype: &str, attr: &str) -> Option<String> {
+    stereotype_state_value(diagram, stereotype, attr)
+        .map(|value| crate::sequence::resolve_color(&value))
 }
 
 fn state_text_width_with_family(
@@ -1836,6 +1879,174 @@ impl StateSkin {
             start_color,
             end_color,
         }
+    }
+}
+
+#[derive(Clone)]
+struct AutonomousTextStyle {
+    color: String,
+    family: String,
+    size: f64,
+    bold: bool,
+    italic: bool,
+}
+
+impl AutonomousTextStyle {
+    fn width(&self, text: &str) -> f64 {
+        state_text_width_with_family(
+            text,
+            self.size,
+            self.bold,
+            Some(&self.family),
+            is_state_monospace_family(&self.family),
+        )
+    }
+
+    fn height(&self, text: &str) -> f64 {
+        text_render::label_height_with_family(text, self.size, &self.family)
+    }
+
+    fn ascent(&self, text: &str) -> f64 {
+        text_render::label_ascent_with_family(text, self.size, &self.family)
+    }
+
+    fn emit(&self, svg: &mut String, text: &str, x: f64, baseline: f64) {
+        text_render::emit_text(
+            svg,
+            text,
+            &TextBase {
+                x,
+                y: baseline,
+                font_size: self.size as u32,
+                font_family: &self.family,
+                fill: &self.color,
+                bold: self.bold,
+                italic: self.italic,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+    }
+}
+
+#[derive(Clone)]
+struct AutonomousStateStyle {
+    fill: String,
+    stroke: String,
+    border_thickness: String,
+    title: AutonomousTextStyle,
+    attribute: AutonomousTextStyle,
+}
+
+fn is_state_monospace_family(family: &str) -> bool {
+    matches!(
+        family.to_ascii_lowercase().as_str(),
+        "courier" | "courier new" | "monospaced" | "monospace" | "consolas" | "lucida console"
+    )
+}
+
+fn state_skinparam_value(diagram: &StateDiagram, keys: &[&str]) -> Option<String> {
+    diagram
+        .meta
+        .skinparams
+        .iter()
+        .rev()
+        .find(|skinparam| {
+            keys.iter()
+                .any(|key| skinparam.key.eq_ignore_ascii_case(key))
+        })
+        .map(|skinparam| skinparam.value.trim().to_string())
+}
+
+fn autonomous_state_style(
+    diagram: &StateDiagram,
+    skin: &StateSkin,
+    state: Option<&State>,
+) -> AutonomousStateStyle {
+    let stereotype = state.and_then(|state| state.stereotype.as_deref());
+    let stereo_value = |attrs: &[&str]| {
+        stereotype.and_then(|stereotype| {
+            attrs
+                .iter()
+                .find_map(|attr| stereotype_state_value(diagram, stereotype, attr))
+        })
+    };
+    let stereo_color =
+        |attrs: &[&str]| stereo_value(attrs).map(|value| crate::sequence::resolve_color(&value));
+    let global_value = |keys: &[&str]| state_skinparam_value(diagram, keys);
+    let font_family = |stereo_attrs: &[&str], global_keys: &[&str]| {
+        stereo_value(stereo_attrs)
+            .or_else(|| global_value(global_keys))
+            .map(|value| canonical_state_font_family(&value))
+            .filter(|value| !value.is_empty())
+            .unwrap_or_else(|| "sans-serif".to_string())
+    };
+    let font_size = |stereo_attrs: &[&str], global_keys: &[&str], default: f64| {
+        stereo_value(stereo_attrs)
+            .or_else(|| global_value(global_keys))
+            .and_then(|value| value.parse::<f64>().ok())
+            .unwrap_or(default)
+    };
+    let font_flags = |stereo_attrs: &[&str], global_keys: &[&str]| {
+        let style = stereo_value(stereo_attrs)
+            .or_else(|| global_value(global_keys))
+            .unwrap_or_default()
+            .to_ascii_lowercase();
+        (style.contains("bold"), style.contains("italic"))
+    };
+
+    let title_family = font_family(
+        &["FontName"],
+        &["stateFontName", "defaultFontName", "fontName"],
+    );
+    let attribute_family = font_family(
+        &["AttributeFontName", "FontName"],
+        &[
+            "stateAttributeFontName",
+            "stateFontName",
+            "defaultFontName",
+            "fontName",
+        ],
+    );
+    let title_size = font_size(
+        &["FontSize"],
+        &["stateFontSize", "defaultFontSize"],
+        STATE_FONT_SIZE,
+    );
+    let attribute_size = font_size(
+        &["AttributeFontSize", "FontSize"],
+        &["stateAttributeFontSize", "stateFontSize", "defaultFontSize"],
+        DESC_FONT_SIZE,
+    );
+    let title_flags = font_flags(&["FontStyle"], &["stateFontStyle"]);
+    let attribute_flags = font_flags(
+        &["AttributeFontStyle", "FontStyle"],
+        &["stateAttributeFontStyle", "stateFontStyle"],
+    );
+
+    AutonomousStateStyle {
+        fill: stereo_color(&["BackgroundColor"]).unwrap_or_else(|| skin.state_fill.clone()),
+        stroke: stereo_color(&["BorderColor"]).unwrap_or_else(|| skin.stroke.clone()),
+        border_thickness: stereo_value(&["BorderThickness"])
+            .and_then(|value| value.parse::<f64>().ok())
+            .map(fmt_f)
+            .unwrap_or_else(|| skin.border_thickness.clone()),
+        title: AutonomousTextStyle {
+            color: stereo_color(&["AttributeFontColor", "FontColor"])
+                .unwrap_or_else(|| skin.text_color.clone()),
+            family: title_family,
+            size: title_size,
+            bold: title_flags.0,
+            italic: title_flags.1,
+        },
+        attribute: AutonomousTextStyle {
+            color: stereo_color(&["AttributeFontColor", "FontColor"])
+                .unwrap_or_else(|| skin.text_color.clone()),
+            family: attribute_family,
+            size: attribute_size,
+            bold: attribute_flags.0,
+            italic: attribute_flags.1,
+        },
     }
 }
 
@@ -2368,9 +2579,75 @@ fn autonomous_outer_spacing(diagram: &StateDiagram) -> GraphSpacing {
 
 fn has_only_autonomous_layout_skinparams(diagram: &StateDiagram) -> bool {
     diagram.meta.skinparams.iter().all(|skinparam| {
-        skinparam.key.eq_ignore_ascii_case("nodesep")
-            || skinparam.key.eq_ignore_ascii_case("ranksep")
+        let mut canonical = String::with_capacity(skinparam.key.len());
+        let mut rest = skinparam.key.as_str();
+        while let Some(start) = rest.find("<<") {
+            canonical.push_str(&rest[..start]);
+            let Some(end) = rest[start + 2..].find(">>") else {
+                return false;
+            };
+            rest = &rest[start + 2 + end + 2..];
+        }
+        canonical.push_str(rest);
+        matches!(
+            canonical.to_ascii_lowercase().as_str(),
+            "nodesep"
+                | "ranksep"
+                | "statebackgroundcolor"
+                | "statebordercolor"
+                | "stateborderthickness"
+                | "statefontcolor"
+                | "stateattributefontcolor"
+                | "statefontsize"
+                | "stateattributefontsize"
+                | "statefontname"
+                | "stateattributefontname"
+                | "statefontstyle"
+                | "stateattributefontstyle"
+                | "statearrowcolor"
+                | "statearrowfontcolor"
+                | "statearrowfontsize"
+                | "statearrowfontname"
+                | "statearrowfontstyle"
+                | "statestartcolor"
+                | "stateendcolor"
+                | "defaultfontcolor"
+                | "defaultfontsize"
+                | "defaultfontname"
+                | "fontname"
+                | "arrowcolor"
+                | "arrowfontsize"
+                | "arrowfontname"
+                | "arrowfontstyle"
+                | "arrowthickness"
+        )
     })
+}
+
+fn supports_autonomous_state_image(state: &State) -> bool {
+    if matches!(state.kind, StateKind::EntryPoint | StateKind::ExitPoint) {
+        return false;
+    }
+    let Some(stereotype) = state.stereotype.as_deref() else {
+        return true;
+    };
+    // Java provenance: `Entity.getEntityPosition` delegates ordinary state
+    // stereotypes to `EntityPosition.fromStereotype`; every non-NORMAL
+    // position prevents `Entity.isAutarkic`. O-O and SDL receive remain
+    // autarkic in Java but require image decorations this renderer does not
+    // yet generate, so they deliberately fall through to the general path.
+    !matches!(
+        stereotype.to_ascii_lowercase().as_str(),
+        "port"
+            | "entrypoint"
+            | "exitpoint"
+            | "inputpin"
+            | "outputpin"
+            | "expansioninput"
+            | "expansionoutput"
+            | "o-o"
+            | "sdlreceive"
+    )
 }
 
 fn normalize_autonomous_scope(mut scope: AutonomousScopeLayout) -> AutonomousScopeLayout {
@@ -2409,12 +2686,7 @@ fn build_autonomous_composite_node<'a>(
     composite: &'a State,
     arrow_font: &StateArrowFont,
 ) -> Option<AutonomousComposite<'a>> {
-    if !composite.composite
-        || composite.concurrent_separator.is_some()
-        || composite.stereotype.is_some()
-        || composite.stroke.is_some()
-        || composite.url.is_some()
-    {
+    if !composite.composite || composite.concurrent_separator.is_some() || composite.url.is_some() {
         return None;
     }
 
@@ -2425,9 +2697,7 @@ fn build_autonomous_composite_node<'a>(
         .collect();
     if direct_children.is_empty()
         || direct_children.iter().any(|state| {
-            matches!(state.kind, StateKind::EntryPoint | StateKind::ExitPoint)
-                || state.stereotype.is_some()
-                || state.stroke.is_some()
+            !supports_autonomous_state_image(state)
                 || state.url.is_some()
                 || (!state.composite && !state.descriptions.is_empty())
         })
@@ -2460,6 +2730,7 @@ fn build_autonomous_composite_node<'a>(
     let inner_ids = collect_autonomous_scope_ids(diagram, &transition_indices, |state| {
         state.parent.as_deref() == Some(composite.id.as_str())
     });
+    let skin = StateSkin::from_diagram(diagram);
     let inner_sizes: Vec<(String, f64, f64, StateLayoutShape)> = inner_ids
         .iter()
         .map(|id| {
@@ -2467,7 +2738,7 @@ fn build_autonomous_composite_node<'a>(
                 (id.clone(), child.width, child.height, StateLayoutShape::Box)
             } else {
                 let state = diagram.states.iter().find(|state| state.id == *id);
-                let (width, height, shape) = layout_node_size(id, state, false);
+                let (width, height, shape) = autonomous_layout_node_size(diagram, &skin, id, state);
                 (id.clone(), width, height, shape)
             }
         })
@@ -2483,21 +2754,21 @@ fn build_autonomous_composite_node<'a>(
     let layout = normalize_autonomous_scope(layout);
     let inner_width = layout.width;
     let inner_height = layout.height;
-    let title_height = crate::plantuml_metrics::text_height(STATE_FONT_SIZE);
-    let attribute_height =
-        composite.descriptions.len() as f64 * crate::plantuml_metrics::text_height(DESC_FONT_SIZE);
+    let composite_style = autonomous_state_style(diagram, &skin, Some(composite));
+    let title_height = composite_style.title.height(&composite.label);
+    let attribute_height = composite
+        .descriptions
+        .iter()
+        .map(|description| composite_style.attribute.height(description))
+        .sum::<f64>();
     let attribute_width = composite
         .descriptions
         .iter()
-        .map(|description| text_render::measure(description, DESC_FONT_SIZE, false))
+        .map(|description| composite_style.attribute.width(description))
         .fold(0.0_f64, f64::max);
     let field_margin = if attribute_height > 0.0 { 5.0 } else { 0.0 };
     let width = inner_width
-        .max(text_render::measure(
-            &composite.label,
-            STATE_FONT_SIZE,
-            false,
-        ))
+        .max(composite_style.title.width(&composite.label))
         .max(attribute_width)
         + STATE_DIMENSION_PADDING
         + field_margin;
@@ -2568,6 +2839,7 @@ fn build_autonomous_composite<'a>(
     let outer_ids = collect_autonomous_scope_ids(diagram, &outer_transition_indices, |state| {
         state.parent.is_none()
     });
+    let skin = StateSkin::from_diagram(diagram);
     let outer_sizes: Vec<(String, f64, f64, StateLayoutShape)> = outer_ids
         .iter()
         .map(|id| {
@@ -2583,7 +2855,8 @@ fn build_autonomous_composite<'a>(
                 )
             } else {
                 let state = diagram.states.iter().find(|state| state.id == *id);
-                let (node_width, node_height, shape) = layout_node_size(id, state, false);
+                let (node_width, node_height, shape) =
+                    autonomous_layout_node_size(diagram, &skin, id, state);
                 (id.clone(), node_width, node_height, shape)
             }
         })
@@ -2609,8 +2882,6 @@ fn build_one_level_concurrent_node<'a>(
 ) -> Option<AutonomousComposite<'a>> {
     if composite.parent.is_some()
         || composite.concurrent_separator.is_none()
-        || composite.stereotype.is_some()
-        || composite.stroke.is_some()
         || composite.url.is_some()
     {
         return None;
@@ -2627,10 +2898,7 @@ fn build_one_level_concurrent_node<'a>(
         .collect();
     if children.is_empty()
         || children.iter().any(|state| {
-            matches!(state.kind, StateKind::EntryPoint | StateKind::ExitPoint)
-                || state.stereotype.is_some()
-                || state.fill.is_some()
-                || state.stroke.is_some()
+            !supports_autonomous_state_image(state)
                 || state.url.is_some()
                 || (!state.composite && !state.descriptions.is_empty())
         })
@@ -2672,6 +2940,7 @@ fn build_one_level_concurrent_node<'a>(
         }
     }
 
+    let skin = StateSkin::from_diagram(diagram);
     let mut regions = Vec::with_capacity(region_scopes.len());
     for (scope, transition_indices) in region_scopes.into_iter().zip(region_transition_indices) {
         let inner_ids = collect_autonomous_scope_ids(diagram, &transition_indices, |state| {
@@ -2684,7 +2953,8 @@ fn build_one_level_concurrent_node<'a>(
                     (id.clone(), child.width, child.height, StateLayoutShape::Box)
                 } else {
                     let state = diagram.states.iter().find(|state| state.id == *id);
-                    let (width, height, shape) = layout_node_size(id, state, false);
+                    let (width, height, shape) =
+                        autonomous_layout_node_size(diagram, &skin, id, state);
                     (id.clone(), width, height, shape)
                 }
             })
@@ -2696,14 +2966,20 @@ fn build_one_level_concurrent_node<'a>(
             // Java provenance: `GroupMakerState.getImage` checks for an empty
             // group before its CONCURRENT_STATE branch and returns
             // `EntityImageState`, whose minimum ordinary-state size is 50x50.
+            let empty_style = autonomous_state_style(diagram, &skin, None);
+            let empty_label = "\u{00a0}";
+            let empty_width = (empty_style.title.width(empty_label) + STATE_DIMENSION_PADDING)
+                .max(STATE_MIN_WIDTH);
+            let empty_height = (empty_style.title.height(empty_label) + STATE_DIMENSION_PADDING)
+                .max(STATE_BOX_HEIGHT);
             AutonomousScopeLayout {
                 ids: vec![scope.clone()],
                 positions: vec![(
                     scope.clone(),
-                    STATE_MIN_WIDTH / 2.0,
-                    STATE_BOX_HEIGHT / 2.0,
-                    STATE_MIN_WIDTH,
-                    STATE_BOX_HEIGHT,
+                    empty_width / 2.0,
+                    empty_height / 2.0,
+                    empty_width,
+                    empty_height,
                 )],
                 cluster_positions: Vec::new(),
                 edge_paths: Vec::new(),
@@ -2711,8 +2987,8 @@ fn build_one_level_concurrent_node<'a>(
                 transition_indices: Vec::new(),
                 origin_x: 0.0,
                 origin_y: 0.0,
-                width: STATE_MIN_WIDTH,
-                height: STATE_BOX_HEIGHT,
+                width: empty_width,
+                height: empty_height,
                 compound_clusters: false,
                 painted_bounds: None,
             }
@@ -2749,21 +3025,21 @@ fn build_one_level_concurrent_node<'a>(
         ),
         Some(_) | None => return None,
     };
-    let title_height = crate::plantuml_metrics::text_height(STATE_FONT_SIZE);
-    let attribute_height =
-        composite.descriptions.len() as f64 * crate::plantuml_metrics::text_height(DESC_FONT_SIZE);
+    let composite_style = autonomous_state_style(diagram, &skin, Some(composite));
+    let title_height = composite_style.title.height(&composite.label);
+    let attribute_height = composite
+        .descriptions
+        .iter()
+        .map(|description| composite_style.attribute.height(description))
+        .sum::<f64>();
     let attribute_width = composite
         .descriptions
         .iter()
-        .map(|description| text_render::measure(description, DESC_FONT_SIZE, false))
+        .map(|description| composite_style.attribute.width(description))
         .fold(0.0_f64, f64::max);
     let field_margin = if attribute_height > 0.0 { 5.0 } else { 0.0 };
     let width = inner_width
-        .max(text_render::measure(
-            &composite.label,
-            STATE_FONT_SIZE,
-            false,
-        ))
+        .max(composite_style.title.width(&composite.label))
         .max(attribute_width)
         + STATE_DIMENSION_PADDING
         + field_margin;
@@ -3145,48 +3421,46 @@ fn emit_autonomous_scope_entities(
         }
         let box_x = cx - width / 2.0;
         let box_y = cy - height / 2.0;
+        let style = autonomous_state_style(context.diagram, context.skin, Some(state));
         let fill = state
             .fill
             .as_deref()
             .map(crate::sequence::resolve_color)
-            .unwrap_or_else(|| context.skin.state_fill.clone());
+            .unwrap_or_else(|| style.fill.clone());
+        let stroke = state
+            .stroke
+            .as_deref()
+            .map(crate::sequence::resolve_color)
+            .unwrap_or_else(|| style.stroke.clone());
+        let stroke_style = match state.stroke_style.as_deref() {
+            Some("bold") => format!("stroke:{stroke};stroke-width:2;"),
+            Some("dashed") => format!("stroke:{stroke};stroke-width:1;stroke-dasharray:7,7;"),
+            Some("dotted") => format!("stroke:{stroke};stroke-width:1;stroke-dasharray:1,3;"),
+            _ => format!("stroke:{stroke};stroke-width:{};", style.border_thickness),
+        };
+        let divider_y = box_y + 5.0 + style.title.height(&state.label) + 5.0;
         write!(
             svg,
-            r#"<g class="entity" data-qualified-name="{}" id="{}"><rect fill="{fill}" height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/><line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+            r#"<g class="entity" data-qualified-name="{}" id="{}"><rect fill="{fill}" height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="{stroke_style}" width="{}" x="{}" y="{}"/><line style="{stroke_style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
             escape_attr(&state.id),
             autonomous_entity_id(context.entity_ids, id),
             fmt_f(*height),
-            context.skin.stroke,
-            context.skin.border_thickness,
             fmt_f(*width),
             fmt_f(box_x),
             fmt_f(box_y),
-            context.skin.stroke,
-            context.skin.border_thickness,
             fmt_f(box_x),
             fmt_f(box_x + width),
-            fmt_f(box_y + DIVIDER_OFFSET),
-            fmt_f(box_y + DIVIDER_OFFSET),
+            fmt_f(divider_y),
+            fmt_f(divider_y),
         )
         .unwrap();
-        let text_width = text_render::measure(&state.label, STATE_FONT_SIZE, false);
-        let mut text = String::new();
-        text_render::emit_text(
-            &mut text,
+        let text_width = style.title.width(&state.label);
+        style.title.emit(
+            svg,
             &state.label,
-            &TextBase {
-                x: cx - text_width / 2.0,
-                y: box_y + NAME_BASELINE_OFFSET,
-                font_size: STATE_FONT_SIZE as u32,
-                font_family: "sans-serif",
-                fill: &context.skin.text_color,
-                bold: false,
-                italic: false,
-                underline: false,
-                skip_underline: false,
-            },
+            cx - text_width / 2.0,
+            box_y + 5.0 + style.title.ascent(&state.label),
         );
-        svg.push_str(&text);
         svg.push_str("</g>");
     }
 }
@@ -3419,48 +3693,42 @@ fn emit_autonomous_empty_concurrent_state(
     context: &AutonomousRenderContext<'_>,
     id: &str,
     offset: (f64, f64),
+    size: (f64, f64),
 ) {
     // Java provenance: `GroupMakerState.getImage` returns `EntityImageState`
     // for a childless CONCURRENT_STATE group. `EntityImageState` renders its
     // empty display as one nonbreaking space in the ordinary 50x50 state box.
     let box_x = offset.0;
     let box_y = offset.1;
+    let (width, height) = size;
+    let style = autonomous_state_style(context.diagram, context.skin, None);
     write!(
         svg,
         r#"<g class="entity" data-qualified-name="{}" id="{}"><rect fill="{}" height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/><line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
         escape_attr(id),
         autonomous_entity_id(context.entity_ids, id),
-        context.skin.state_fill,
-        fmt_f(STATE_BOX_HEIGHT),
-        context.skin.stroke,
-        context.skin.border_thickness,
-        fmt_f(STATE_MIN_WIDTH),
+        style.fill,
+        fmt_f(height),
+        style.stroke,
+        style.border_thickness,
+        fmt_f(width),
         fmt_f(box_x),
         fmt_f(box_y),
-        context.skin.stroke,
-        context.skin.border_thickness,
+        style.stroke,
+        style.border_thickness,
         fmt_f(box_x),
-        fmt_f(box_x + STATE_MIN_WIDTH),
+        fmt_f(box_x + width),
         fmt_f(box_y + DIVIDER_OFFSET),
         fmt_f(box_y + DIVIDER_OFFSET),
     )
     .unwrap();
     let label = "\u{00a0}";
-    let text_width = text_render::measure(label, STATE_FONT_SIZE, false);
-    text_render::emit_text(
+    let text_width = style.title.width(label);
+    style.title.emit(
         svg,
         label,
-        &TextBase {
-            x: box_x + (STATE_MIN_WIDTH - text_width) / 2.0,
-            y: box_y + NAME_BASELINE_OFFSET,
-            font_size: STATE_FONT_SIZE as u32,
-            font_family: "sans-serif",
-            fill: &context.skin.text_color,
-            bold: false,
-            italic: false,
-            underline: false,
-            skip_underline: false,
-        },
+        box_x + (width - text_width) / 2.0,
+        box_y + 5.0 + style.title.ascent(label),
     );
     svg.push_str("</g>");
 }
@@ -3474,7 +3742,8 @@ fn emit_autonomous_composite(
     let (composite_cx, composite_cy) = center;
     let box_x = composite_cx - composite.width / 2.0;
     let box_y = composite_cy - composite.height / 2.0;
-    let title_divider_y = box_y + DIVIDER_OFFSET;
+    let style = autonomous_state_style(context.diagram, context.skin, Some(composite.state));
+    let title_divider_y = box_y + 5.0 + style.title.height(&composite.state.label) + 5.0;
     let header_divider_y = title_divider_y + composite.attribute_height + composite.field_margin;
     let right = box_x + composite.width;
     let header_fill = composite
@@ -3482,10 +3751,22 @@ fn emit_autonomous_composite(
         .fill
         .as_deref()
         .map(crate::sequence::resolve_color)
-        .unwrap_or_else(|| context.skin.state_fill.clone());
+        .unwrap_or_else(|| style.fill.clone());
+    let stroke = composite
+        .state
+        .stroke
+        .as_deref()
+        .map(crate::sequence::resolve_color)
+        .unwrap_or_else(|| style.stroke.clone());
+    let stroke_style = match composite.state.stroke_style.as_deref() {
+        Some("bold") => format!("stroke:{stroke};stroke-width:2;"),
+        Some("dashed") => format!("stroke:{stroke};stroke-width:1;stroke-dasharray:7,7;"),
+        Some("dotted") => format!("stroke:{stroke};stroke-width:1;stroke-dasharray:1,3;"),
+        _ => format!("stroke:{stroke};stroke-width:{};", style.border_thickness),
+    };
     write!(
         svg,
-        r#"<path d="M{},{} L{},{} A{STATE_RX},{STATE_RX} 0 0 1 {},{} L{},{} L{},{} L{},{} A{STATE_RX},{STATE_RX} 0 0 1 {},{}" fill="{}"/><rect fill="none" height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/><line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+        r#"<path d="M{},{} L{},{} A{STATE_RX},{STATE_RX} 0 0 1 {},{} L{},{} L{},{} L{},{} A{STATE_RX},{STATE_RX} 0 0 1 {},{}" fill="{}"/><rect fill="none" height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="{stroke_style}" width="{}" x="{}" y="{}"/><line style="{stroke_style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
         fmt_f(box_x + STATE_RX),
         fmt_f(box_y),
         fmt_f(right - STATE_RX),
@@ -3502,13 +3783,9 @@ fn emit_autonomous_composite(
         fmt_f(box_y),
         header_fill,
         fmt_f(composite.height),
-        context.skin.stroke,
-        context.skin.border_thickness,
         fmt_f(composite.width),
         fmt_f(box_x),
         fmt_f(box_y),
-        context.skin.stroke,
-        context.skin.border_thickness,
         fmt_f(box_x),
         fmt_f(right),
         fmt_f(header_divider_y),
@@ -3518,9 +3795,7 @@ fn emit_autonomous_composite(
     if composite.attribute_height > 0.0 {
         write!(
             svg,
-            r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-            context.skin.stroke,
-            context.skin.border_thickness,
+            r#"<line style="{stroke_style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
             fmt_f(box_x),
             fmt_f(right),
             fmt_f(title_divider_y),
@@ -3528,44 +3803,25 @@ fn emit_autonomous_composite(
         )
         .unwrap();
     }
-    let title_width = text_render::measure(&composite.state.label, STATE_FONT_SIZE, false);
-    let mut title = String::new();
-    text_render::emit_text(
-        &mut title,
+    let title_width = style.title.width(&composite.state.label);
+    style.title.emit(
+        svg,
         &composite.state.label,
-        &TextBase {
-            x: composite_cx - title_width / 2.0,
-            y: box_y + NAME_BASELINE_OFFSET,
-            font_size: STATE_FONT_SIZE as u32,
-            font_family: "sans-serif",
-            fill: &context.skin.text_color,
-            bold: false,
-            italic: false,
-            underline: false,
-            skip_underline: false,
-        },
+        composite_cx - title_width / 2.0,
+        box_y + 5.0 + style.title.ascent(&composite.state.label),
     );
-    svg.push_str(&title);
     for (index, attribute) in composite.state.descriptions.iter().enumerate() {
-        let mut text = String::new();
-        text_render::emit_text(
-            &mut text,
+        style.attribute.emit(
+            svg,
             attribute,
-            &TextBase {
-                x: box_x + 5.0,
-                y: title_divider_y
-                    + crate::plantuml_metrics::ascent(DESC_FONT_SIZE)
-                    + index as f64 * crate::plantuml_metrics::text_height(DESC_FONT_SIZE),
-                font_size: DESC_FONT_SIZE as u32,
-                font_family: "sans-serif",
-                fill: &context.skin.text_color,
-                bold: false,
-                italic: false,
-                underline: false,
-                skip_underline: false,
-            },
+            box_x + 5.0,
+            title_divider_y
+                + style.attribute.ascent(attribute)
+                + composite.state.descriptions[..index]
+                    .iter()
+                    .map(|previous| style.attribute.height(previous))
+                    .sum::<f64>(),
         );
-        svg.push_str(&text);
     }
 
     // `GroupMakerState.getImage` renders child group images before the current
@@ -3578,7 +3834,13 @@ fn emit_autonomous_composite(
     for (index, region) in composite.regions.iter().enumerate() {
         let offset = (region_offset_x, region_offset_y);
         if let Some(id) = region.empty_concurrent_state.as_deref() {
-            emit_autonomous_empty_concurrent_state(svg, context, id, offset);
+            emit_autonomous_empty_concurrent_state(
+                svg,
+                context,
+                id,
+                offset,
+                (region.layout.width, region.layout.height),
+            );
         }
         for child in &composite.children {
             if let Some((_, cx, cy, _, _)) = region
@@ -9098,6 +9360,60 @@ CobaltDecision --> [*]
     }
 
     #[test]
+    fn autonomous_stereotype_style_drives_geometry_and_paint() {
+        let input = concat!(
+            "@startuml\n",
+            "skinparam state {\n",
+            "  BackgroundColor<<signal>> LightYellow\n",
+            "  BorderColor<<signal>> Orange\n",
+            "  FontSize<<signal>> 24\n",
+            "}\n",
+            "state SignalObservatory809 <<signal>> {\n",
+            "  [*] --> CopperRelay811\n",
+            "  CopperRelay811 --> [*]\n",
+            "}\n",
+            "[*] --> SignalObservatory809\n",
+            "SignalObservatory809 --> [*]\n",
+            "@enduml\n",
+        );
+        let parsed = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::State(diagram) = &parsed else {
+            panic!("expected state diagram");
+        };
+        let svg = render(diagram, &Theme::default());
+
+        assert!(svg.contains(r##"fill="#FFFFE0""##));
+        assert!(svg.contains(r#"stroke:#FFA500;stroke-width:0.5;"#));
+        assert!(svg.contains(r#"font-size="24""#));
+        assert!(svg.contains("SignalObservatory809"));
+    }
+
+    #[test]
+    fn nonnormal_position_stereotypes_do_not_enter_autonomous_layout() {
+        for stereotype in [
+            "entryPoint",
+            "exitPoint",
+            "inputPin",
+            "outputPin",
+            "expansionInput",
+            "expansionOutput",
+            "port",
+        ] {
+            let state = State {
+                kind: StateKind::Normal,
+                stereotype: Some(stereotype.to_string()),
+                ..State::default()
+            };
+            assert!(!supports_autonomous_state_image(&state), "{stereotype}");
+        }
+        let ordinary = State {
+            stereotype: Some("deepHistory".to_string()),
+            ..State::default()
+        };
+        assert!(supports_autonomous_state_image(&ordinary));
+    }
+
+    #[test]
     fn renamed_depth_four_composites_build_recursive_autonomous_images() {
         let input = concat!(
             "@startuml\n",
@@ -10322,7 +10638,7 @@ CobaltDecision --> [*]
     }
 
     #[test]
-    fn autonomous_outer_spacing_uses_only_latest_nonzero_layout_skinparams() {
+    fn autonomous_skinparams_accept_supported_styles_and_spacing() {
         let parsed = rustuml_parser::parse::parse(
             "@startuml\n\
              skinparam nodesep 41\n\
@@ -10355,6 +10671,14 @@ CobaltDecision --> [*]
             .push(rustuml_parser::diagram::SkinParam {
                 key: "stateBorderColor".into(),
                 value: "red".into(),
+            });
+        assert!(has_only_autonomous_layout_skinparams(&visual));
+        visual
+            .meta
+            .skinparams
+            .push(rustuml_parser::diagram::SkinParam {
+                key: "stateShadowing".into(),
+                value: "true".into(),
             });
         assert!(!has_only_autonomous_layout_skinparams(&visual));
     }
