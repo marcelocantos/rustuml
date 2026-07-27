@@ -72,6 +72,35 @@ fn parse_transition_style(arrow: &str) -> TransitionStyle {
     style
 }
 
+/// Parse command orientation separately from the effective queue direction.
+///
+/// Java's `CommandLinkStateReverse` exchanges ENT1/ENT2 and defaults to LEFT;
+/// `CommandLinkStateCommon.executeArg` later applies `Link.getInv()` for
+/// LEFT/UP. The two operations are intentionally not collapsed here.
+fn parse_transition_arrow(arrow: &str) -> TransitionArrow {
+    static STYLE_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"\[[^\]]*\]").unwrap());
+
+    let command_reversed = arrow.starts_with('<');
+    let without_styles = STYLE_RE.replace_all(arrow, "");
+    let token = without_styles
+        .chars()
+        .filter(|character| character.is_ascii_alphabetic())
+        .collect::<String>()
+        .to_ascii_lowercase();
+    let direction = match token.as_str() {
+        "left" | "le" | "l" => Some(TransitionDirection::Left),
+        "right" | "ri" | "r" => Some(TransitionDirection::Right),
+        "up" | "u" => Some(TransitionDirection::Up),
+        "down" | "do" | "d" => Some(TransitionDirection::Down),
+        _ if command_reversed => Some(TransitionDirection::Left),
+        _ => None,
+    };
+    TransitionArrow {
+        direction,
+        command_reversed,
+    }
+}
+
 /// Accumulator for a multi-line note body.
 struct NoteBuffer {
     kind: StateNoteKind,
@@ -390,8 +419,8 @@ impl StateParser {
             //   `..>`, `.up.>`, `-[#blue]..->`, etc. (dotted variants)
             //   `<--`, `<.>`, `<-->` (reverse / bidirectional)
             // The regex consumes any non-space sequence between source and `>` /
-            // `<` to keep this loose — exact arrow semantics are recovered
-            // downstream from the source text when needed.
+            // `<` to keep this loose; typed direction and command orientation
+            // are derived from the captured arrow token.
             Regex::new(
                 r"^(\[[\w*]*\]|[\w.]+)\s*([-.<>][-.<>\[\]#,=\w]*[->])\s*(\[[\w*]*\]|[\w.]+)(?:\s*:\s*(.+))?$",
             )
@@ -408,6 +437,7 @@ impl StateParser {
                 from,
                 to,
                 label,
+                arrow: parse_transition_arrow(&caps[2]),
                 source_line: self.current_line,
             });
             true
@@ -908,6 +938,41 @@ mod tests {
         assert_eq!(d.transitions[0].from, "[*]");
         assert_eq!(d.transitions[0].to, "Active");
         assert_eq!(d.transitions[1].label.as_deref(), Some("disable"));
+    }
+
+    #[test]
+    fn transition_arrows_preserve_command_orientation_and_link_inversion() {
+        let d = parse(
+            "Alpha --> Beta\n\
+             Beta -left-> Gamma\n\
+             Gamma -up-> Delta\n\
+             Delta <-- Epsilon",
+        );
+
+        assert_eq!(d.transitions[0].arrow, TransitionArrow::default());
+        assert_eq!(
+            d.transitions[1].arrow,
+            TransitionArrow {
+                direction: Some(TransitionDirection::Left),
+                command_reversed: false,
+            }
+        );
+        assert!(d.transitions[1].arrow.reverses_solved_endpoints());
+        assert!(d.transitions[1].arrow.arrow_at_start());
+        assert_eq!(
+            d.transitions[2].arrow.direction,
+            Some(TransitionDirection::Up)
+        );
+        assert_eq!(
+            d.transitions[3].arrow,
+            TransitionArrow {
+                direction: Some(TransitionDirection::Left),
+                command_reversed: true,
+            }
+        );
+        assert!(!d.transitions[3].arrow.reverses_solved_endpoints());
+        assert!(d.transitions[3].arrow.arrow_at_start());
+        assert!(d.transitions[3].arrow.is_horizontal());
     }
 
     #[test]

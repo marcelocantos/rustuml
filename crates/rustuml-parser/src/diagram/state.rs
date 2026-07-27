@@ -229,7 +229,56 @@ pub struct Transition {
     pub from: String,
     pub to: String,
     pub label: Option<String>,
+    /// Command orientation and direction before SVEK lays out the link.
+    #[serde(default, skip_serializing_if = "TransitionArrow::is_default")]
+    pub arrow: TransitionArrow,
     /// 1-based line number within the `@startuml` block.
     #[serde(default)]
     pub source_line: usize,
+}
+
+/// Parsed state-transition arrow semantics.
+///
+/// Java's reverse command exchanges the textual endpoint roles before
+/// `CommandLinkStateCommon` optionally calls `Link.getInv()` for LEFT/UP.
+/// Keeping those inputs separate lets renderers derive solved endpoint order
+/// and arrow decoration without reparsing source text.
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
+pub struct TransitionArrow {
+    pub direction: Option<TransitionDirection>,
+    pub command_reversed: bool,
+}
+
+impl TransitionArrow {
+    pub fn is_default(&self) -> bool {
+        *self == Self::default()
+    }
+
+    /// Whether the stored/SVEK endpoints are reversed from textual order.
+    pub fn reverses_solved_endpoints(self) -> bool {
+        self.command_reversed ^ self.arrow_at_start()
+    }
+
+    /// Whether `Link.getInv()` puts the arrow decoration at the path start.
+    pub fn arrow_at_start(self) -> bool {
+        matches!(
+            self.direction,
+            Some(TransitionDirection::Left | TransitionDirection::Up)
+        )
+    }
+
+    pub fn is_horizontal(self) -> bool {
+        matches!(
+            self.direction,
+            Some(TransitionDirection::Left | TransitionDirection::Right)
+        )
+    }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
+pub enum TransitionDirection {
+    Left,
+    Right,
+    Up,
+    Down,
 }

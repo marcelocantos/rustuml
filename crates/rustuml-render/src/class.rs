@@ -14963,6 +14963,7 @@ mod tests {
         };
         diagram.relationships = vec![rel.clone()];
         let edge_path = EdgePath {
+            edge_index: 0,
             from: "Animal".into(),
             to: "Dog".into(),
             points: vec![(40.0, 50.0), (40.0, 80.0), (40.0, 120.0), (40.0, 150.0)],

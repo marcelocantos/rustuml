@@ -715,7 +715,7 @@ impl LayoutGraph {
         tail_label_size: Option<EdgeLabelSize>,
         head_label_size: Option<EdgeLabelSize>,
         minlen: Option<usize>,
-    ) {
+    ) -> usize {
         self.edges.push(EdgeSpec {
             from: from.to_string(),
             to: to.to_string(),
@@ -729,6 +729,7 @@ impl LayoutGraph {
             tail_label_size,
             head_label_size,
         });
+        self.edges.len() - 1
     }
 
     /// Adds a measured-label edge with an optional explicit dot rank length.
@@ -740,7 +741,7 @@ impl LayoutGraph {
         tail_label_size: Option<EdgeLabelSize>,
         head_label_size: Option<EdgeLabelSize>,
         minlen: Option<usize>,
-    ) {
+    ) -> usize {
         self.edges.push(EdgeSpec {
             from: from.to_string(),
             to: to.to_string(),
@@ -754,6 +755,7 @@ impl LayoutGraph {
             tail_label_size,
             head_label_size,
         });
+        self.edges.len() - 1
     }
 
     /// Marks the most recently registered matching edge as non-constraining.
@@ -1170,7 +1172,7 @@ impl LayoutGraph {
             create_node!(node_idx);
         }
 
-        let mut edge_specs: HashMap<usize, (String, String, bool)> = HashMap::new();
+        let mut edge_specs: HashMap<usize, (usize, String, String, bool)> = HashMap::new();
         macro_rules! create_edge {
             ($edge_idx:expr) => {{
                 let edge_spec = &self.edges[$edge_idx];
@@ -1279,6 +1281,7 @@ impl LayoutGraph {
                     edge_specs.insert(
                         edge as usize,
                         (
+                            $edge_idx,
                             edge_spec.from.clone(),
                             edge_spec.to.clone(),
                             edge_spec.invisible,
@@ -1446,13 +1449,14 @@ impl LayoutGraph {
                     );
                 }
 
-                let (from, to, invisible) = edge_specs
+                let (edge_index, from, to, invisible) = edge_specs
                     .get(&(e as usize))
                     .cloned()
-                    .unwrap_or_else(|| (String::new(), String::new(), false));
+                    .unwrap_or_else(|| (usize::MAX, String::new(), String::new(), false));
 
                 if !invisible {
                     edge_paths.push(EdgePath {
+                        edge_index,
                         from,
                         to,
                         points,
@@ -2190,6 +2194,8 @@ pub struct NodePosition {
 /// Routed path of an edge as cubic bezier control points.
 #[derive(Debug, Clone)]
 pub struct EdgePath {
+    /// Stable insertion index of the caller-owned layout edge.
+    pub edge_index: usize,
     /// Source node id.
     pub from: String,
     /// Target node id.
@@ -2293,6 +2299,8 @@ mod tests {
             .iter()
             .find(|edge| edge.from == "source_b_23" && edge.to == "target_b_31")
             .expect("renamed B edge");
+        assert_eq!(edge_b.edge_index, 0);
+        assert_eq!(edge_a.edge_index, 1);
         assert!(
             distance(edge_a.points[0], source_a) < distance(edge_a.points[0], source_b),
             "A spline should start at source A"

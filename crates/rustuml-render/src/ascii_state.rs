@@ -180,6 +180,7 @@ mod tests {
             from: from.to_string(),
             to: to.to_string(),
             label: label.map(|s| s.to_string()),
+            arrow: TransitionArrow::default(),
             source_line: 0,
         }
     }

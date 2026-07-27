@@ -556,14 +556,6 @@ fn svek_origin_y_for_layout(
     SVEK_ORIGIN_Y + f64::from(rectangle_on_top_rank)
 }
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
-enum ExplicitTransitionDirection {
-    Up,
-    Down,
-    Left,
-    Right,
-}
-
 fn transition_source_text<'a>(
     diagram: &'a StateDiagram,
     transition: &Transition,
@@ -581,23 +573,8 @@ fn transition_source_text<'a>(
     source.lines().nth(source_index)
 }
 
-/// Recover the named direction carried by an explicit state transition arrow.
-///
-/// Java provenance: `CommandLinkStateCommon.getDirection` passes
-/// `ARROW_DIRECTION` through `StringUtils.getQueueDirection`.
-fn explicit_transition_direction(
-    diagram: &StateDiagram,
-    transition: &Transition,
-) -> Option<ExplicitTransitionDirection> {
-    let lowercase = transition_source_text(diagram, transition)?.to_ascii_lowercase();
-    [
-        ("-left", ExplicitTransitionDirection::Left),
-        ("-right", ExplicitTransitionDirection::Right),
-        ("-up", ExplicitTransitionDirection::Up),
-        ("-down", ExplicitTransitionDirection::Down),
-    ]
-    .into_iter()
-    .find_map(|(token, direction)| lowercase.contains(token).then_some(direction))
+fn transition_direction(transition: &Transition) -> Option<TransitionDirection> {
+    transition.arrow.direction
 }
 
 /// Recover the Graphviz rank length carried by a vertical transition arrow.
@@ -610,8 +587,8 @@ fn explicit_transition_direction(
 /// those two dash runs, so counting the dashes recovers the same queue length.
 fn transition_svek_minlen(diagram: &StateDiagram, transition: &Transition) -> Option<usize> {
     if matches!(
-        explicit_transition_direction(diagram, transition),
-        Some(ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Right)
+        transition_direction(transition),
+        Some(TransitionDirection::Left | TransitionDirection::Right)
     ) {
         return Some(0);
     }
@@ -1692,10 +1669,7 @@ fn allocate_state_svg_ids(diagram: &StateDiagram, state_ids: &[String]) -> State
         // `CommandLinkStateCommon.executeArg` first constructs the forward
         // `Link`, then `Link.getInv()` constructs the stored reverse link for
         // left/up arrows.
-        if matches!(
-            explicit_transition_direction(diagram, transition),
-            Some(ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Up)
-        ) {
+        if transition.arrow.arrow_at_start() {
             pass_two_counter += 1;
             link_ids[idx] = format!("lnk{}", pass_two_counter - 1);
         }
@@ -1895,6 +1869,7 @@ struct AutonomousScopeLayout {
     positions: Vec<(String, f64, f64, f64, f64)>,
     cluster_positions: Vec<ClusterPosition>,
     edge_paths: Vec<EdgePath>,
+    transition_layout_edges: std::collections::HashMap<usize, usize>,
     transition_indices: Vec<usize>,
     origin_x: f64,
     origin_y: f64,
@@ -2046,27 +2021,18 @@ fn layout_autonomous_scope(
         let (_, width, height, shape) = node_sizes.iter().find(|entry| &entry.0 == id)?;
         add_state_layout_node(&mut layout, id, *width, *height, *shape);
     }
+    let mut transition_layout_edges = std::collections::HashMap::new();
     for index in &transition_indices {
         let transition = &diagram.transitions[*index];
         let from = state_endpoint_layout_id(&transition.from, true);
         let to = state_endpoint_layout_id(&transition.to, false);
-        let direction = explicit_transition_direction(diagram, transition);
-        let (layout_from, layout_to) = if matches!(
-            direction,
-            Some(ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Up)
-        ) {
+        let (layout_from, layout_to) = if transition.arrow.reverses_solved_endpoints() {
             (&to, &from)
         } else {
             (&from, &to)
         };
-        let horizontal = matches!(
-            direction,
-            Some(ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Right)
-        );
-        if matches!(
-            direction,
-            Some(ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Up)
-        ) {
+        let horizontal = transition.arrow.is_horizontal();
+        if transition.arrow.arrow_at_start() {
             // `CommandLinkStateCommon.executeArg` calls `Link.getInv` for
             // LEFT/UP transitions. `Cluster.getNodesOrderedTop` emits that
             // inverted link's start before ordinary SVEK nodes.
@@ -2087,7 +2053,7 @@ fn layout_autonomous_scope(
             ) + 2.0,
             height: (text_render::label_height(label, arrow_font.size as f64) + 2.0).floor(),
         });
-        layout.add_edge_with_label_sizes_and_minlen(
+        let layout_edge_index = layout.add_edge_with_label_sizes_and_minlen(
             layout_from,
             layout_to,
             label_size,
@@ -2095,6 +2061,7 @@ fn layout_autonomous_scope(
             None,
             transition_svek_minlen(diagram, transition),
         );
+        transition_layout_edges.insert(*index, layout_edge_index);
     }
 
     let result = layout.layout_full(std::time::Duration::from_secs(5))?;
@@ -2149,6 +2116,7 @@ fn layout_autonomous_scope(
         positions,
         cluster_positions: Vec::new(),
         edge_paths: result.edge_paths,
+        transition_layout_edges,
         transition_indices,
         origin_x,
         origin_y,
@@ -2176,10 +2144,7 @@ fn normalize_autonomous_scope(
         };
         let mut from = state_endpoint_layout_id(&transition.from, true);
         let mut to = state_endpoint_layout_id(&transition.to, false);
-        if matches!(
-            explicit_transition_direction(diagram, transition),
-            Some(ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Up)
-        ) {
+        if transition.arrow.reverses_solved_endpoints() {
             std::mem::swap(&mut from, &mut to);
         }
         let Some(label_position) = scope
@@ -2985,21 +2950,23 @@ fn emit_autonomous_scope_links(
         let stroke = transition_stroke_style(color, &style, context.skin.arrow_thickness);
         let from = state_endpoint_layout_id(&transition.from, true);
         let to = state_endpoint_layout_id(&transition.to, false);
-        let inverted = matches!(
-            explicit_transition_direction(context.diagram, transition),
-            Some(ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Up)
-        );
-        let (edge_from, edge_to) = if inverted { (&to, &from) } else { (&from, &to) };
+        let solved_reversed = transition.arrow.reverses_solved_endpoints();
+        let arrow_at_start = transition.arrow.arrow_at_start();
+        let (edge_from, edge_to) = if solved_reversed {
+            (&to, &from)
+        } else {
+            (&from, &to)
+        };
         // Java provenance: `Link.commentForSvg` and `Link.idCommentForSvg`
         // build both values from `Entity.getName()`, not the display label.
         let from_name = autonomous_endpoint_svg_name(&transition.from, true);
         let to_name = autonomous_endpoint_svg_name(&transition.to, false);
-        let (edge_from_name, edge_to_name) = if inverted {
+        let (edge_from_name, edge_to_name) = if solved_reversed {
             (&to_name, &from_name)
         } else {
             (&from_name, &to_name)
         };
-        if inverted {
+        if arrow_at_start {
             write!(
                 svg,
                 "<!--reverse link {edge_from_name} to {edge_to_name}-->"
@@ -3023,26 +2990,37 @@ fn emit_autonomous_scope_links(
         )
         .unwrap();
 
-        let edge_path = if edge_from == edge_to {
-            routed_self_edge_path(&scope.edge_paths, &mut consumed_edge_paths, edge_from)
-        } else if scope.compound_clusters {
-            routed_compound_edge_path(
-                &scope.edge_paths,
-                &mut consumed_edge_paths,
-                edge_from,
-                edge_to,
-            )
-        } else {
-            routed_edge_path_for_transition(
-                &scope.edge_paths,
-                &mut consumed_edge_paths,
-                edge_from,
-                edge_to,
-                scope.origin_x + offset_x,
-                scope.origin_y + offset_y,
-                &pos_of,
-            )
-        };
+        let edge_path = scope
+            .transition_layout_edges
+            .get(transition_index)
+            .and_then(|layout_edge_index| {
+                scope
+                    .edge_paths
+                    .iter()
+                    .find(|edge| edge.edge_index == *layout_edge_index)
+            })
+            .or_else(|| {
+                if edge_from == edge_to {
+                    routed_self_edge_path(&scope.edge_paths, &mut consumed_edge_paths, edge_from)
+                } else if scope.compound_clusters {
+                    routed_compound_edge_path(
+                        &scope.edge_paths,
+                        &mut consumed_edge_paths,
+                        edge_from,
+                        edge_to,
+                    )
+                } else {
+                    routed_edge_path_for_transition(
+                        &scope.edge_paths,
+                        &mut consumed_edge_paths,
+                        edge_from,
+                        edge_to,
+                        scope.origin_x + offset_x,
+                        scope.origin_y + offset_y,
+                        &pos_of,
+                    )
+                }
+            });
         if let Some(edge_path) = edge_path
             && !edge_path.points.is_empty()
         {
@@ -3067,7 +3045,7 @@ fn emit_autonomous_scope_links(
                     )
                 })
                 .collect();
-            let (arrow_control, arrow_tip) = if inverted {
+            let (arrow_control, arrow_tip) = if arrow_at_start {
                 (points.get(1).copied().unwrap_or(points[0]), points[0])
             } else {
                 (
@@ -3078,7 +3056,7 @@ fn emit_autonomous_scope_links(
                     points[points.len() - 1],
                 )
             };
-            if inverted {
+            if arrow_at_start {
                 retract_dependency_arrow_path_start(&mut points);
             } else {
                 retract_dependency_arrow_path(&mut points);
@@ -3103,7 +3081,7 @@ fn emit_autonomous_scope_links(
                 &mut used_path_ids,
                 &format!(
                     "{edge_from_name}-{}-{edge_to_name}",
-                    if inverted { "backto" } else { "to" },
+                    if arrow_at_start { "backto" } else { "to" },
                 ),
             );
             write!(
@@ -3417,66 +3395,6 @@ fn plantuml_svek_transition_order(
     ordered
 }
 
-/// Restore declaration identity for parallel SVEK lanes.
-///
-/// Java's `SvekEdge.appendLine` gives every DOT statement a unique marker
-/// color, and `SvekEdge.solveLine` finds that same color in Graphviz's SVG.
-/// The C API exposes the same lane geometry without the marker identity.
-/// Graphviz lays parallel lanes monotonically across the flow axis, so sorting
-/// each directed bundle by that axis recovers the marker-stable association
-/// without changing any solved coordinate.
-fn order_parallel_svek_paths(edge_paths: &mut [EdgePath]) {
-    let mut visited = std::collections::HashSet::new();
-    for edge_index in 0..edge_paths.len() {
-        let key = (
-            edge_paths[edge_index].from.clone(),
-            edge_paths[edge_index].to.clone(),
-        );
-        if !visited.insert(key.clone()) {
-            continue;
-        }
-        let indices = edge_paths
-            .iter()
-            .enumerate()
-            .filter_map(|(index, edge)| (edge.from == key.0 && edge.to == key.1).then_some(index))
-            .collect::<Vec<_>>();
-        if indices.len() < 2 {
-            continue;
-        }
-        let mut lanes = indices
-            .iter()
-            .map(|index| edge_paths[*index].clone())
-            .collect::<Vec<_>>();
-        lanes.sort_by(|first, second| {
-            let first_start = first.points.first().copied().unwrap_or_default();
-            let first_end = first.points.last().copied().unwrap_or(first_start);
-            let second_start = second.points.first().copied().unwrap_or_default();
-            let second_end = second.points.last().copied().unwrap_or(second_start);
-            let vertical =
-                (first_end.1 - first_start.1).abs() >= (first_end.0 - first_start.0).abs();
-            let first_key = if vertical {
-                (first_start.0, first_start.1, first_end.0, first_end.1)
-            } else {
-                (first_start.1, first_start.0, first_end.1, first_end.0)
-            };
-            let second_key = if vertical {
-                (second_start.0, second_start.1, second_end.0, second_end.1)
-            } else {
-                (second_start.1, second_start.0, second_end.1, second_end.0)
-            };
-            first_key
-                .0
-                .total_cmp(&second_key.0)
-                .then(first_key.1.total_cmp(&second_key.1))
-                .then(first_key.2.total_cmp(&second_key.2))
-                .then(first_key.3.total_cmp(&second_key.3))
-        });
-        for (index, lane) in indices.into_iter().zip(lanes) {
-            edge_paths[index] = lane;
-        }
-    }
-}
-
 /// Recompute the painted frontier of clusters carrying entry/exit points.
 ///
 /// Java provenance: `Cluster.manageEntryExitPoint` separates ordinary member
@@ -3670,13 +3588,10 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
     if !diagram.notes.is_empty()
         || diagram.meta.title.is_some()
         || !diagram.meta.skinparams.is_empty()
-        || diagram.transitions.iter().any(|transition| {
-            transition.label.is_some()
-                || matches!(
-                    explicit_transition_direction(diagram, transition),
-                    Some(ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Up)
-                )
-        })
+        || diagram
+            .transitions
+            .iter()
+            .any(|transition| transition.label.is_some())
         || diagram.states.iter().any(|state| {
             !matches!(
                 state.kind,
@@ -3777,29 +3692,17 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
         }
     }
 
+    let mut transition_layout_edges = std::collections::HashMap::new();
     for transition_index in &transition_indices {
         let transition = &diagram.transitions[*transition_index];
         let from = state_endpoint_layout_id(&transition.from, true);
         let to = state_endpoint_layout_id(&transition.to, false);
-        let direction = explicit_transition_direction(diagram, transition);
-        let (layout_from, layout_to) = if matches!(
-            direction,
-            Some(ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Up)
-        ) {
+        let (layout_from, layout_to) = if transition.arrow.reverses_solved_endpoints() {
             (&to, &from)
         } else {
             (&from, &to)
         };
-        if matches!(
-            direction,
-            Some(ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Up)
-        ) {
-            layout.add_plantuml_svek_inverted_start(layout_from);
-        }
-        if matches!(
-            direction,
-            Some(ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Right)
-        ) {
+        if transition.arrow.is_horizontal() {
             layout.add_plantuml_svek_line0_edge(layout_from, layout_to);
         }
         let label_size = transition.label.as_deref().map(|label| EdgeLabelSize {
@@ -3821,7 +3724,7 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
                 })
                 .then_some("P")
         };
-        layout.add_edge_with_ports_and_label_sizes_and_minlen(
+        let layout_edge_index = layout.add_edge_with_ports_and_label_sizes_and_minlen(
             layout_from,
             layout_to,
             EdgePorts {
@@ -3833,6 +3736,7 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
             None,
             transition_svek_minlen(diagram, transition),
         );
+        transition_layout_edges.insert(*transition_index, layout_edge_index);
         let same_border_container = diagram
             .states
             .iter()
@@ -3861,30 +3765,22 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
         &mut painted_cluster_positions,
         &result.node_positions,
     );
-    order_parallel_svek_paths(&mut result.edge_paths);
-
     // `ClusterDotString.printInternal` assigns each link's projection cluster
     // while walking groups in declaration order, so the later group endpoint
     // wins. `DotStringFactory.solve` then visits links in insertion order and
     // `SvekEdge.solveLine` updates only that projection before compound
     // clipping. All remaining frontiers are updated later by `Cluster.drawU`.
     let mut live_cluster_positions = result.cluster_positions.clone();
-    let mut consumed_edge_paths = vec![false; result.edge_paths.len()];
     for transition_index in &transition_indices {
         let transition = &diagram.transitions[*transition_index];
-        let from = state_endpoint_layout_id(&transition.from, true);
-        let to = state_endpoint_layout_id(&transition.to, false);
-        let inverted = matches!(
-            explicit_transition_direction(diagram, transition),
-            Some(ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Up)
-        );
-        let (edge_from, edge_to) = if inverted { (&to, &from) } else { (&from, &to) };
-        let Some(edge_index) = routed_compound_edge_index(
-            &result.edge_paths,
-            &mut consumed_edge_paths,
-            edge_from,
-            edge_to,
-        ) else {
+        let Some(layout_edge_index) = transition_layout_edges.get(transition_index) else {
+            continue;
+        };
+        let Some(edge_index) = result
+            .edge_paths
+            .iter()
+            .position(|edge| edge.edge_index == *layout_edge_index)
+        else {
             continue;
         };
 
@@ -4113,6 +4009,7 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
         positions,
         cluster_positions: result.cluster_positions.clone(),
         edge_paths: result.edge_paths,
+        transition_layout_edges,
         transition_indices,
         origin_x,
         origin_y,
@@ -4289,9 +4186,9 @@ fn simulate_state_compound(
 
     let contains = |rectangle: &ClusterPosition, point: (f64, f64)| {
         point.0 >= rectangle.x
-            && point.0 <= rectangle.x + rectangle.width
+            && point.0 < rectangle.x + rectangle.width
             && point.1 >= rectangle.y
-            && point.1 <= rectangle.y + rectangle.height
+            && point.1 < rectangle.y + rectangle.height
     };
     let subdivide = |curve: Cubic| {
         let midpoint = |a: (f64, f64), b: (f64, f64)| ((a.0 + b.0) / 2.0, (a.1 + b.1) / 2.0);
@@ -4766,23 +4663,13 @@ pub fn render_with_oracle(
         for (transition_index, t) in diagram.transitions.iter().enumerate() {
             let from = map_id(&t.from, true);
             let to = map_id(&t.to, false);
-            let direction = explicit_transition_direction(diagram, t);
-            let (layout_from, layout_to) = if matches!(
-                direction,
-                Some(ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Up)
-            ) {
+            let (layout_from, layout_to) = if t.arrow.reverses_solved_endpoints() {
                 (&to, &from)
             } else {
                 (&from, &to)
             };
-            let horizontal = matches!(
-                direction,
-                Some(ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Right)
-            );
-            if matches!(
-                direction,
-                Some(ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Up)
-            ) {
+            let horizontal = t.arrow.is_horizontal();
+            if t.arrow.arrow_at_start() {
                 // Java's inverted State links participate in the same
                 // `Cluster.getNodesOrderedTop` pass as other SVEK diagrams.
                 layout.add_plantuml_svek_inverted_start(layout_from);
@@ -5061,11 +4948,7 @@ pub fn render_with_oracle(
                     }
                     let from = map_id(&transition.from, true);
                     let to = map_id(&transition.to, false);
-                    let inverted = matches!(
-                        explicit_transition_direction(diagram, transition),
-                        Some(ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Up)
-                    );
-                    let (edge_from, edge_to) = if inverted {
+                    let (edge_from, edge_to) = if transition.arrow.reverses_solved_endpoints() {
                         (to.as_str(), from.as_str())
                     } else {
                         (from.as_str(), to.as_str())
@@ -5145,13 +5028,7 @@ pub fn render_with_oracle(
                     for transition in labeled {
                         let from = map_id(&transition.from, true);
                         let to = map_id(&transition.to, false);
-                        let inverted = matches!(
-                            explicit_transition_direction(diagram, transition),
-                            Some(
-                                ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Up
-                            )
-                        );
-                        let (edge_from, edge_to) = if inverted {
+                        let (edge_from, edge_to) = if transition.arrow.reverses_solved_endpoints() {
                             (to.as_str(), from.as_str())
                         } else {
                             (from.as_str(), to.as_str())
@@ -6529,18 +6406,17 @@ pub fn render_with_oracle(
             let to_layout = map_id(&t.to, false);
             let from_name = if t.from == "[*]" { "*start*" } else { &t.from };
             let to_name = if t.to == "[*]" { "*end*" } else { &t.to };
-            let inverted = matches!(
-                explicit_transition_direction(diagram, t),
-                Some(ExplicitTransitionDirection::Left | ExplicitTransitionDirection::Up)
-            );
-            let (edge_from_layout, edge_to_layout, edge_from_name, edge_to_name) = if inverted {
-                (&to_layout, &from_layout, to_name, from_name)
-            } else {
-                (&from_layout, &to_layout, from_name, to_name)
-            };
+            let solved_reversed = t.arrow.reverses_solved_endpoints();
+            let arrow_at_start = t.arrow.arrow_at_start();
+            let (edge_from_layout, edge_to_layout, edge_from_name, edge_to_name) =
+                if solved_reversed {
+                    (&to_layout, &from_layout, to_name, from_name)
+                } else {
+                    (&from_layout, &to_layout, from_name, to_name)
+                };
             let path_id = unique_svek_path_id(
                 &mut used_path_ids,
-                &if inverted {
+                &if arrow_at_start {
                     format!("{edge_from_name}-backto-{edge_to_name}")
                 } else {
                     format!("{edge_from_name}-to-{edge_to_name}")
@@ -6548,7 +6424,7 @@ pub fn render_with_oracle(
             );
 
             // HTML comment.
-            if inverted {
+            if arrow_at_start {
                 write!(
                     svg,
                     "<!--reverse link {} to {}-->",
@@ -6616,7 +6492,7 @@ pub fn render_with_oracle(
                         )
                     })
                     .collect();
-                let (arrow_control, arrow_tip) = if inverted {
+                let (arrow_control, arrow_tip) = if arrow_at_start {
                     (points.get(1).copied().unwrap_or((to_cx, to_cy)), points[0])
                 } else {
                     (
@@ -6627,7 +6503,7 @@ pub fn render_with_oracle(
                         points[points.len() - 1],
                     )
                 };
-                if inverted {
+                if arrow_at_start {
                     retract_dependency_arrow_path_start(&mut points);
                 } else {
                     retract_dependency_arrow_path(&mut points);
@@ -6801,7 +6677,9 @@ fn retract_dependency_arrow_path(points: &mut [(f64, f64)]) {
 /// Java provenance: `Link.getInv()` leaves the SVEK spline in reversed layout
 /// order, while `SvekEdge.getExtremitySimplier` and `DotPath.moveStartPoint`
 /// reserve the same six-pixel decoration length at the first endpoint.
-fn retract_dependency_arrow_path_start(points: &mut [(f64, f64)]) {
+/// `moveStartPoint` removes a shorter first cubic before applying the residual
+/// translation to the next cubic.
+fn retract_dependency_arrow_path_start(points: &mut Vec<(f64, f64)>) {
     if points.len() < 2 {
         return;
     }
@@ -6815,6 +6693,23 @@ fn retract_dependency_arrow_path_start(points: &mut [(f64, f64)]) {
         dx / length * ARROW_DECORATION_LENGTH,
         dy / length * ARROW_DECORATION_LENGTH,
     );
+    if points.len() >= 7 {
+        let first_start = points[0];
+        let next_start = points[3];
+        let first_chord = (next_start.0 - first_start.0).hypot(next_start.1 - first_start.1);
+        if ARROW_DECORATION_LENGTH >= first_chord {
+            let residual = (
+                shift.0 - (next_start.0 - first_start.0),
+                shift.1 - (next_start.1 - first_start.1),
+            );
+            points.drain(..3);
+            points[0].0 += residual.0;
+            points[0].1 += residual.1;
+            points[1].0 += residual.0;
+            points[1].1 += residual.1;
+            return;
+        }
+    }
     points[0].0 += shift.0;
     points[0].1 += shift.1;
     if points.len() >= 4 {
@@ -8802,12 +8697,14 @@ CobaltDecision --> [*]
                     from: "[*]".into(),
                     to: "Active".into(),
                     label: None,
+                    arrow: TransitionArrow::default(),
                     source_line: 0,
                 },
                 Transition {
                     from: "Active".into(),
                     to: "Inactive".into(),
                     label: Some("disable".into()),
+                    arrow: TransitionArrow::default(),
                     source_line: 0,
                 },
             ],
@@ -10022,12 +9919,12 @@ CobaltDecision --> [*]
         };
 
         assert_eq!(
-            explicit_transition_direction(diagram, &diagram.transitions[1]),
-            Some(ExplicitTransitionDirection::Left)
+            transition_direction(&diagram.transitions[1]),
+            Some(TransitionDirection::Left)
         );
         assert_eq!(
-            explicit_transition_direction(diagram, &diagram.transitions[2]),
-            Some(ExplicitTransitionDirection::Up)
+            transition_direction(&diagram.transitions[2]),
+            Some(TransitionDirection::Up)
         );
         assert_eq!(
             transition_svek_minlen(diagram, &diagram.transitions[2]),
@@ -10066,6 +9963,26 @@ CobaltDecision --> [*]
         assert!(svg.contains(r#"<ellipse cx="72.87" cy="32""#));
         assert!(svg.contains(r#"x="119.17" y="7""#));
         assert!(svg.contains(r#"id="AzureDepot709-backto-CopperRelay701""#));
+    }
+
+    #[test]
+    fn start_arrow_retraction_discards_a_short_first_cubic() {
+        let mut points = vec![
+            (0.0, 0.0),
+            (0.25, 0.0),
+            (0.75, 0.0),
+            (1.0, 0.0),
+            (10.0, 0.0),
+            (15.0, 0.0),
+            (20.0, 0.0),
+        ];
+
+        retract_dependency_arrow_path_start(&mut points);
+
+        assert_eq!(
+            points,
+            vec![(6.0, 0.0), (15.0, 0.0), (15.0, 0.0), (20.0, 0.0)]
+        );
     }
 
     #[test]
