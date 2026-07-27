@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-inline-arrow-style",
+  "reviewer": {
+    "task_id": "codex-desktop-task-019ee369-54e2-7203-afce-ddde7bfe1723-independent-checker-sequence-inline-arrow-style",
+    "model": "OpenAI GPT-5 Codex"
+  },
+  "account_commit": "28074c063913b1c6bdac243664f573bbfc08d547",
+  "prior_account_commit": "47f1df569df3b5eeb25e8b95990256b8283ed73a",
+  "implementation_commit": "59169b2a18ee6d46b7fd990328acd42c90c638db",
+  "implementation_parent": "016b19b9a9bac58344bad721ff00c99114301379",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "snapshot": "/private/tmp/rustuml-sequence-inline-arrow-style-59169b2a.bz1pf4",
+  "commands": [
+    "bullseye_startup_context cwd=/Users/marcelo/work/github.com/marcelocantos/rustuml recent_days=14",
+    "bullseye_frontier cwd=/Users/marcelo/work/github.com/marcelocantos/rustuml",
+    "sed -n '1,260p' /Users/marcelo/.claude/rust.md",
+    "git rev-parse 59169b2a^{commit}",
+    "git merge-base --is-ancestor 47f1df56 59169b2a",
+    "git merge-base --is-ancestor 28074c06 59169b2a",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "sed -n '75,430p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandArrow.java",
+    "sed -n '45,120p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/sequencediagram/command/CommandExoArrowRight.java",
+    "git show --find-renames --find-copies --patch --stat 59169b2a -- crates/rustuml-parser/src/diagram/sequence.rs crates/rustuml-parser/src/parse/mod.rs crates/rustuml-parser/src/parse/sequence.rs crates/rustuml-render/src/sequence.rs",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/sequence-inline-arrow-style/review_token_order_topology_colons.puml test-diagrams/perturbations/sequence-inline-arrow-style/review_external_hidden_autonumber_activation.puml test-diagrams/perturbations/sequence-inline-arrow-style/review_inherited_local_override_counts.puml test-diagrams/perturbations/sequence-inline-arrow-style/review_quoted_participant_style_text_probe.puml",
+    "xmllint --noout test-diagrams/perturbations/sequence-inline-arrow-style/review_token_order_topology_colons.svg test-diagrams/perturbations/sequence-inline-arrow-style/review_external_hidden_autonumber_activation.svg test-diagrams/perturbations/sequence-inline-arrow-style/review_inherited_local_override_counts.svg test-diagrams/perturbations/sequence-inline-arrow-style/review_quoted_participant_style_text_probe.svg",
+    "rg -n -i 'syntax error|error line|plantuml.*error|Welcome to PlantUML|NoSuchElementException|An error has occured' test-diagrams/perturbations/sequence-inline-arrow-style/review_*.svg",
+    "ruby -rdigest -e 'verify fresh source hashes are unique against test-diagrams/{golden,perturbations}/**/*.puml and one another'",
+    "git archive --format=tar --output=/private/tmp/rustuml-sequence-inline-arrow-style-59169b2a.tar 59169b2a",
+    "tar -xf /private/tmp/rustuml-sequence-inline-arrow-style-59169b2a.tar -C /private/tmp/rustuml-sequence-inline-arrow-style-59169b2a.bz1pf4",
+    "cp -R /Users/marcelo/work/github.com/marcelocantos/rustuml/test-diagrams/golden/. /private/tmp/rustuml-sequence-inline-arrow-style-59169b2a.bz1pf4/test-diagrams/golden/",
+    "cp test-diagrams/perturbations/sequence-inline-arrow-style/review_* /private/tmp/rustuml-sequence-inline-arrow-style-59169b2a.bz1pf4/test-diagrams/perturbations/sequence-inline-arrow-style/",
+    "git diff --check 59169b2a^ 59169b2a",
+    "rg -n 'include_str!|include_bytes!|test-diagrams|golden|fixture|review5|review_|renamed_visible|renamed_external|label\\s*==|label\\.contains|branch.*count|coordinate|C2185B|AD1457|1565C0|2E7D32|00838F|6A1B9A|8101|8201|9101|9201|9301|9401' crates/rustuml-parser/src/diagram/sequence.rs crates/rustuml-parser/src/parse/mod.rs crates/rustuml-parser/src/parse/sequence.rs crates/rustuml-render/src/sequence.rs",
+    "cargo fmt --check",
+    "cargo build -p rustuml-oracle --example diff_one --release",
+    "ruby -e 'run target/release/examples/diff_one --no-oracle for maker sequence fixtures, fresh review fixtures, and state-arrow-style-isolation/review5_sequence_repeated_theme_cross_family_alias.puml'",
+    "cargo test -p rustuml-parser --lib --release -- --nocapture",
+    "cargo test -p rustuml-render --lib --release -- --nocapture",
+    "cargo test -p rustuml-oracle --test golden_no_oracle --release -- --nocapture",
+    "cargo test -p rustuml-oracle --test parity_perturbations --release -- --nocapture",
+    "cargo clippy --workspace --all-targets --release -- -D warnings",
+    "cargo test -p rustuml-oracle --test harness_guards --release -- --nocapture"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/renamed_visible_style_order_matrix.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/renamed_visible_style_order_matrix.svg",
+      "axes": [
+        "preserved maker fixture",
+        "color and body token order",
+        "ordinary self and bidirectional messages",
+        "renamed participants and changed counts"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/renamed_external_hidden_style_matrix.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/renamed_external_hidden_style_matrix.svg",
+      "axes": [
+        "preserved maker fixture",
+        "found and lost external arrows",
+        "hidden body and bold no-op controls",
+        "Creole anchor brackets in labels"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review_token_order_topology_colons.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review_token_order_topology_colons.svg",
+      "axes": [
+        "fresh color before style and style before repeated colors",
+        "ordinary reversed bidirectional and self messages",
+        "bold no-op",
+        "quoted participant names containing colons",
+        "Creole anchor brackets in labels"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review_external_hidden_autonumber_activation.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review_external_hidden_autonumber_activation.svg",
+      "axes": [
+        "fresh found and lost external arrows",
+        "hidden messages amid autonumber and activation semantics",
+        "style and repeated color token order",
+        "bold no-op after hidden"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review_inherited_local_override_counts.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review_inherited_local_override_counts.svg",
+      "axes": [
+        "fresh inherited arrow color around local overrides",
+        "repeated local colors with final-token precedence",
+        "renamed participants and changed message count"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review_quoted_participant_style_text_probe.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review_quoted_participant_style_text_probe.svg",
+      "axes": [
+        "fresh quoted participant names containing colons",
+        "style-looking bracket text in a participant name",
+        "arrow-header extraction boundary"
+      ],
+      "result": "fail"
+    }
+  ],
+  "findings": [
+    "The immutable implementation under review is 59169b2a18ee6d46b7fd990328acd42c90c638db. The active amended account is 28074c063913b1c6bdac243664f573bbfc08d547, with prior account 47f1df569df3b5eeb25e8b95990256b8283ed73a; both are ancestors of the implementation. The validation tree was built from a git archive of exactly 59169b2a, with only the populated golden corpus and the fresh review_ perturbation pairs copied into /private/tmp/rustuml-sequence-inline-arrow-style-59169b2a.bz1pf4.",
+    "The pinned PlantUML checkout is 71806a23780b04a5ccde2f8ceb5121edad5eb711, matching the account. Java source supports the account's core model: CommandArrow captures ARROW_STYLE between the arrow body halves, CommandExoArrowRight/Left reuse CommandArrow.getColorOrStylePattern for external found/lost messages, and CommandArrow.applyStyle tokenizes in source order with dashed/dotted selecting DOTTED, hidden selecting HIDDEN, bold as a no-op, and other accepted tokens resolved as colors.",
+    "Static review found no production reads of golden data, fixture names, review labels, branch-count ladders, coordinate-keyed SVG surgery, or unexplained new high-precision constants in the 59169b2a implementation diff; git diff --check is clean. However, the Rust recognizer is broader than the Java model: strip_arrow_style_annotation and has_inline_arrow_style scan the whole pre-colon header, then INLINE_ARROW_STYLE.replace(head, \"\") removes the first style-looking bracket anywhere in that header rather than constraining the match to the parsed arrow body slot.",
+    "The four fresh review_ PlantUML sources are valid under pinned Java, generated to well-formed SVG under xmllint, contain no PlantUML error markers, and are source-unique across 12669 golden and perturbation .puml sources. They exercise token order and repeated colors, ordinary/self/reversed/bidirectional topology, found/lost external messages, hidden messages amid autonumber and activation, bold no-op, quoted colon participant names, Creole anchor labels, inherited arrow color around local overrides, renamed participants, and changed counts.",
+    "Exact no-oracle comparisons pass for the two maker fixtures and for the preserved state-arrow-style-isolation/review5_sequence_repeated_theme_cross_family_alias.puml counterexample. review_inherited_local_override_counts.puml also passes, confirming inherited SequenceArrowColor and local repeated-color override composition in that narrow case.",
+    "Exact no-oracle comparison fails for review_token_order_topology_colons.puml: element count differs, expected 58 versus actual 57. The failure is in the bold self-message portion of a valid source that also exercises quoted colon participants, token order, repeated colors, reversed ordinary, bidirectional, and Creole-label brackets.",
+    "Exact no-oracle comparison fails for review_external_hidden_autonumber_activation.puml: element count differs, expected 59 versus actual 55, and activation rectangles/message numbering geometry diverge. Java preserves hidden-message event, numbering, and activation semantics around found/lost external styled arrows; Rust's rendered output does not match that model in this valid perturbation.",
+    "Exact no-oracle comparison fails for review_quoted_participant_style_text_probe.puml: element count differs, expected 31 versus actual 23. Java renders the participant text Source [hidden]: 9401 and the first styled message; Rust strips [hidden] from the quoted participant name, renders Source : 9401 on the second participant, and omits the first message. This directly disproves the implementation's arrow-header extraction boundary.",
+    "cargo fmt --check passes. rustuml-parser release unit tests pass 498/498. rustuml-render release unit tests pass 697/697. cargo clippy --workspace --all-targets --release -- -D warnings passes.",
+    "golden_no_oracle passes at 11055/11251 eligible pairs, with sequence 1411/1411. This broad corpus result does not cover the fresh held-out failures above.",
+    "cargo test -p rustuml-oracle --test parity_perturbations --release fails. The relevant new sequence-inline-arrow-style failures are review_token_order_topology_colons.puml, review_external_hidden_autonumber_activation.puml, and review_quoted_participant_style_text_probe.puml; the full output also includes unrelated preserved failures from other rejected mechanisms.",
+    "cargo test -p rustuml-oracle --test harness_guards --release has five green mechanical guards and fails parity_review_records_are_complete. The sequence-inline-arrow-style entries are expected for this rejected verdict: latest checker review must be accepted, and three failing perturbations cannot appear in an accepted latest review. The same guard output also reports unrelated pre-existing rejected or incomplete review records.",
+    "Verdict is rejected for sequence-inline-arrow-style at 59169b2a. The implementation fixes the maker examples and the preserved review5 sequence counterexample, but the held-out perturbations show that the parser still recognizes style brackets outside the arrow body and that hidden/bold styled sequence semantics are not sufficiently modeled across the requested axes."
+  ],
+  "verdict": "rejected"
+}

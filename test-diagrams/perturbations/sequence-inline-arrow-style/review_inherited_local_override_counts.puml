@@ -1,0 +1,12 @@
+@startuml
+skinparam SequenceArrowColor #2E7D32
+participant "Renamed Client: 9301" as Client9301
+participant "Renamed Broker: 9303" as Broker9303
+participant "Renamed Queue: 9305" as Queue9305
+participant "Renamed Audit: 9307" as Audit9307
+Client9301 -> Broker9303 : inherited before local override
+Broker9303 -[#C2185B,dashed]> Queue9305 : local dashed override
+Queue9305 -> Audit9307 : inherited after local override
+Audit9307 -[dotted,#1565C0,#00838F]> Broker9303 : repeated colors with final local owner
+Broker9303 -> Client9301 : inherited final changed count
+@enduml

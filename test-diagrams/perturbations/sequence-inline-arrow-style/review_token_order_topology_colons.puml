@@ -1,0 +1,8 @@
+@startuml
+skinparam SequenceArrowColor #2E7D32
+"North: API 9101" -[#AD1457,dashed]> "South: Worker 9103" : color before dashed [[#order-a label]]
+"South: Worker 9103" -[dotted,#1565C0,#6A1B9A]> "East: Store 9105" : dotted before repeated colors
+"East: Store 9105" <-[#00838F,dashed]- "North: API 9101" : reversed ordinary message
+"East: Store 9105" <-[#C2185B,dotted]-> "South: Worker 9103" : bidirectional styled message
+"South: Worker 9103" -[bold]> "South: Worker 9103" : bold self no-op
+@enduml

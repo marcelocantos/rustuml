@@ -1,0 +1,4 @@
+@startuml
+"Source [hidden]: 9401" -[#AD1457,dashed]> "Target: 9403" : style text belongs to participant name
+"Target: 9403" -> "Source [hidden]: 9401" : inherited control back to quoted name
+@enduml

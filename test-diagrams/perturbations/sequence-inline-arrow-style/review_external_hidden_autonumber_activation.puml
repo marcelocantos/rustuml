@@ -1,0 +1,11 @@
+@startuml
+autonumber "<b>[000]"
+autoactivate on
+participant "Sender: Front 9201" as Sender9201
+participant "Receiver: Core 9203" as Receiver9203
+[-[#AD1457,dashed]> Sender9201 ++ #DDEEFF : found styled activation
+Sender9201 -[hidden]> Receiver9203 : hidden message amid numbering
+Sender9201 -[dotted,#1565C0]> Receiver9203 ++ #F2F2F2 : visible activation after hidden
+Receiver9203 -[#6A1B9A,#2E7D32,dotted]>] -- : lost styled deactivation
+Sender9201 -[bold]> Receiver9203 : bold visible no-op
+@enduml
