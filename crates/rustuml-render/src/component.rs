@@ -101,6 +101,20 @@ fn component_dash_suffix(dash: Option<(f64, f64)>) -> String {
     .unwrap_or_default()
 }
 
+fn component_element_style_name(kind: ComponentElementKind) -> &'static str {
+    match kind {
+        ComponentElementKind::Component => "component",
+        ComponentElementKind::Actor => "actor",
+        ComponentElementKind::Artifact => "artifact",
+        ComponentElementKind::Collections => "collections",
+        ComponentElementKind::Database => "database",
+        ComponentElementKind::Node => "node",
+        ComponentElementKind::Queue => "queue",
+        ComponentElementKind::Storage => "storage",
+        ComponentElementKind::Cloud => "cloud",
+    }
+}
+
 fn component_shadow_value(value: &str) -> f64 {
     // Java `Style#getShadowing` delegates non-numeric values to
     // `Value#asDoubleDefaultTo(1.5)`; zero and negative deltas do not paint a
@@ -1479,10 +1493,19 @@ pub fn render_with_oracle(
                 font_bold: use_final_fallback && component_font_bold,
                 font_italic: use_final_fallback && component_font_italic,
             };
+            // `EntityImageDescription` resolves the concrete `USymbol`
+            // signature. A database declared in a component diagram therefore
+            // consumes `database`, not the sibling `component` style.
+            let base_signature = StyleSignature::from_selectors([
+                "root",
+                "element",
+                "componentDiagram",
+                component_element_style_name(component.kind),
+            ]);
             let signature = component
                 .stereotypes
                 .iter()
-                .fold(component_signature.clone(), |signature, stereotype| {
+                .fold(base_signature, |signature, stereotype| {
                     signature.with_stereotype(stereotype)
                 });
             // `EntityImageDescription` asks the entity for its builder at
