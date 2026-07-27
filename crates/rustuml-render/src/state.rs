@@ -1949,12 +1949,19 @@ impl StateSkin {
             .unwrap_or_else(|| DEFAULT_TEXT_COLOR.to_string());
         let state_fill =
             color("stateBackgroundColor").unwrap_or_else(|| DEFAULT_STATE_FILL.to_string());
-        // Java provenance: `SvekEdge.getDefaultStyleDefinition` merges
-        // `root.element.stateDiagram.arrow`; `FromSkinparamToStyle` maps the
-        // global `arrowColor` to that arrow style's `LineColor`. A
-        // state-specific arrow value remains the more specific declaration.
-        let arrow_color = color("stateArrowColor")
-            .or_else(|| color("ArrowColor"))
+        // Java provenance: `SkinParam.cleanForKeySlow` normalizes both
+        // `stateArrowColor` and `ArrowColor` to the same arrow style property,
+        // so `SkinParam.setParam` makes the later source declaration win.
+        let arrow_color = diagram
+            .meta
+            .skinparams
+            .iter()
+            .rev()
+            .find(|skinparam| {
+                skinparam.key.eq_ignore_ascii_case("stateArrowColor")
+                    || skinparam.key.eq_ignore_ascii_case("ArrowColor")
+            })
+            .map(|skinparam| crate::sequence::resolve_color(skinparam.value.trim()))
             .or_else(|| root_line_color.clone())
             .unwrap_or_else(|| DEFAULT_STROKE_COLOR.to_string());
         // Java provenance: `FromSkinparamToStyle` maps `arrowThickness` to
@@ -10866,6 +10873,24 @@ CobaltDecision --> [*]
             6
         );
         assert!(!override_svg.contains("#2468AC"));
+    }
+
+    #[test]
+    fn arrow_color_aliases_follow_source_order() {
+        let input = concat!(
+            "@startuml\n",
+            "skinparam stateArrowColor #00838F\n",
+            "skinparam ArrowColor #D84315\n",
+            "[*] --> IndigoQueued\n",
+            "IndigoQueued --> AmberActive\n",
+            "AmberActive --> [*]\n",
+            "@enduml\n",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert_eq!(svg.matches("stroke:#D84315;stroke-width:1;").count(), 6);
+        assert!(!svg.contains("#00838F"));
     }
 
     #[test]
