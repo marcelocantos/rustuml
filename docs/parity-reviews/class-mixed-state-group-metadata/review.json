@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-mixed-state-group-metadata",
+  "reviewer": {
+    "task_id": "codex-desktop-task-019ee369-54e2-7203-afce-ddde7bfe1723-class-mixed-state-group-metadata-checker",
+    "model": "OpenAI GPT-5 Codex"
+  },
+  "account_commit": "c475a4a56aae5c0166aab47d41600da1bcbbde85",
+  "implementation_commit": "7852be9128f6d763deb69386e2f18514a46f0401",
+  "implementation_parent": "25c8f30562beef576cf51039d7582e4b484c1886",
+  "head_at_review": "ca50f6d2e87b8cac1e0222f18b473406ffbbca06",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+  "rust_execution": {
+    "cargo_or_rustc_run": false,
+    "reason": "User explicitly reserved the sole compile slot. This review rejects on Java source, Java SVG, and immutable Rust static data-flow evidence only."
+  },
+  "commands": [
+    "bullseye_startup_context cwd=/Users/marcelo/work/github.com/marcelocantos/rustuml recent_days=14",
+    "cat /Users/marcelo/.claude/rust.md",
+    "cat /Users/marcelo/.codex/skills/oracle-first/SKILL.md",
+    "git show c475a4a5:docs/parity-reviews/class-mixed-state-group-metadata/account.json",
+    "git show --find-renames --find-copies --stat --patch 7852be91 -- crates/rustuml-render/src/class.rs",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "sed -n '96,150p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/GeneralImageBuilder.java",
+    "sed -n '1,180p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/image/EntityImageClass.java",
+    "sed -n '1,180p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/image/EntityImageState.java",
+    "sed -n '1,220p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/UGroup.java",
+    "sed -n '160,260p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/image/EntityImageObject.java",
+    "sed -n '1,180p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/image/EntityImageBranch.java",
+    "sed -n '220,320p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/image/EntityImageDescription.java",
+    "sed -n '820,895p' crates/rustuml-render/src/class.rs",
+    "sed -n '4560,4615p' crates/rustuml-render/src/class.rs",
+    "sed -n '5920,6010p' crates/rustuml-render/src/class.rs",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-mixed-state-group-metadata/review_mixed_reordered_states_classes.puml test-diagrams/perturbations/class-mixed-state-group-metadata/review_mixed_alias_links_object_controls.puml test-diagrams/perturbations/class-mixed-state-group-metadata/review_mixed_late_state_controls.puml test-diagrams/perturbations/class-mixed-state-group-metadata/review_mixed_symbol_overfit_probe.puml",
+    "xmllint --noout test-diagrams/perturbations/class-mixed-state-group-metadata/review_mixed_reordered_states_classes.svg test-diagrams/perturbations/class-mixed-state-group-metadata/review_mixed_alias_links_object_controls.svg test-diagrams/perturbations/class-mixed-state-group-metadata/review_mixed_late_state_controls.svg test-diagrams/perturbations/class-mixed-state-group-metadata/review_mixed_symbol_overfit_probe.svg",
+    "rg -n -i \"syntax error|error line|plantuml.*error|class=\\\"message\\\"\" test-diagrams/perturbations/class-mixed-state-group-metadata",
+    "rg -o '<g class=\"entity\"[^>]*>' test-diagrams/perturbations/class-mixed-state-group-metadata/*.svg",
+    "ruby -rdigest -e 'verify fresh class-mixed-state-group-metadata sources are unique against test-diagrams/golden/**/*.puml and all prior perturbation sources'",
+    "shasum -a 256 test-diagrams/perturbations/class-mixed-state-group-metadata/*.puml test-diagrams/perturbations/class-mixed-state-group-metadata/*.svg",
+    "git merge-base --is-ancestor c475a4a5 7852be91",
+    "git diff --quiet c475a4a5 7852be91 -- docs/parity-reviews/class-mixed-state-group-metadata/account.json",
+    "git diff --check"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review_mixed_reordered_states_classes.puml",
+      "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review_mixed_reordered_states_classes.svg",
+      "sha256": "33eddfcd218d362a22b396dbe42fed042fdda5f1910321efcfa47e06a57cac14",
+      "golden_sha256": "0362f8a36622c6f649644154216af18f9de1783dbe69bfea0ad53a2207ad5bbe",
+      "axes": [
+        "renamed states and classes",
+        "state declarations before class and object declarations",
+        "state-to-state and class-to-state links",
+        "ordinary class and object source-line positive controls"
+      ],
+      "result": "pass",
+      "result_basis": "Static metadata data-flow plus Java SVG entity groups; no Cargo/rustc was run."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review_mixed_alias_links_object_controls.puml",
+      "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review_mixed_alias_links_object_controls.svg",
+      "sha256": "5490628db8c51f5b5ffc209dfe3556bed2b86867a3edf8f6395861ee4b1d4235",
+      "golden_sha256": "af05ba5347c1c712f021e78e28f4d59c8d15e8ecad389478c8f24a7f8f316f34",
+      "axes": [
+        "quoted alias class",
+        "interface and enum positive controls",
+        "two renamed mixed states",
+        "class-to-interface, interface-to-state, state-to-state, and enum-to-state links"
+      ],
+      "result": "pass",
+      "result_basis": "Static metadata data-flow plus Java SVG entity groups; no Cargo/rustc was run."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review_mixed_late_state_controls.puml",
+      "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review_mixed_late_state_controls.svg",
+      "sha256": "2b79bea38b211f15921a2396680fbc0abe43ddc0efcb9dc241ded2a0d6f59b6b",
+      "golden_sha256": "66182059af1efcd2a03ac5980b63db3add7b06a3e42bd8ce83ff38922868cdbf",
+      "axes": [
+        "class, object, and enum declarations before mixed states",
+        "renamed late states",
+        "state-to-state and non-state-to-state links",
+        "positive source-line controls at different source lines"
+      ],
+      "result": "pass",
+      "result_basis": "Static metadata data-flow plus Java SVG entity groups; no Cargo/rustc was run."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review_mixed_symbol_overfit_probe.puml",
+      "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review_mixed_symbol_overfit_probe.svg",
+      "sha256": "b1787d2904e6b5dfc73a626e6e684d4f6ba445d7d27dec72d669f80a05e71506",
+      "golden_sha256": "d868f2049f353ff408c2653435ed2e005001a5e5d0947aa1aeadd35673edded1",
+      "axes": [
+        "circle and diamond mixed symbol entities",
+        "class, state, circle, and diamond entity kinds in one allowmixing diagram",
+        "symbol-to-symbol and symbol-to-state links",
+        "overfit probe for the broad non-state source-line predicate"
+      ],
+      "result": "fail",
+      "result_basis": "Java EntityImageBranch omits LineLocation while immutable Rust statically emits synthetic data-source-line for EntityKind::Diamond when no oracle rect is present."
+    }
+  ],
+  "findings": [
+    "The durable account c475a4a56aae5c0166aab47d41600da1bcbbde85 is an ancestor of immutable implementation 7852be9128f6d763deb69386e2f18514a46f0401, and the account file is byte-unchanged between them. The implementation changes only crates/rustuml-render/src/class.rs and test-diagrams/no_oracle_baseline.txt.",
+    "The pinned PlantUML checkout is exactly 71806a23780b04a5ccde2f8ceb5121edad5eb711, and the oracle JAR SHA-256 is c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45.",
+    "Java source confirms the account's class/state core: GeneralImageBuilder selects EntityImageClass for isLikeClass leaves and EntityImageState for LeafType.STATE; EntityImageClass.drawU constructs new UGroup(getEntity().getLocation()), while EntityImageState.drawU starts with UGroup.singletonMap and never supplies a LineLocation. UGroup only inserts DATA_SOURCE_LINE in the LineLocation constructor.",
+    "Java source also confirms ordinary object and circle controls. EntityImageObject.drawU constructs new UGroup(getEntity().getLocation()), and circle is rendered through EntityImageDescription, whose drawU also constructs new UGroup(getEntity().getLocation()). The fresh Java SVGs show data-source-line on SchedulerCore, workerSession, OrderProcessor, RetryPort, RetryOutcome, BillingLedger, captureJob, ResultCode, RoutingTable, and MergePoint.",
+    "The account and implementation miss the diamond branch image contract. GeneralImageBuilder maps LeafType.BRANCH and LeafType.STATE_CHOICE to EntityImageBranch. EntityImageBranch.drawU constructs new UGroup() with no LineLocation, then writes class, id, data entity, uid, and data-qualified-name only. The fresh Java SVG for review_mixed_symbol_overfit_probe therefore has <g class=\"entity\" data-qualified-name=\"BranchPoint\" id=\"ent0004\"> with no data-source-line.",
+    "Immutable Rust parses the declaration keyword diamond as EntityKind::Diamond, measure_entity assigns EntityDims.source_line to both EntityKind::Circle and EntityKind::Diamond, and render_plantuml_svg writes synthetic data-source-line whenever oracle_rect is absent and entity.kind != EntityKind::State. Therefore the no-oracle Rust data flow would emit data-source-line for BranchPoint, contradicting the Java SVG and the Java EntityImageBranch contract without needing to run Cargo.",
+    "The implementation is not fixture-shaped in the narrow sense: the static diff contains no checked fixture names, labels, source-line numbers, diagram dimensions, coordinates, golden reads, include_str/include_bytes, or count ladders. The failure is instead a model boundary error: metadata ownership is per concrete Java entity-image class, not simply state versus non-state.",
+    "The oracle-assisted control is statically preserved: render_plantuml_svg first uses oracle_rect.source_line if present and only then applies the no-oracle synthetic fallback. No artificial oracle SVG was created, because checker perturbation goldens must remain Java-generated and Java does not emit state or branch source-line metadata to preserve.",
+    "All four fresh sources are valid PlantUML class diagrams rendered by the pinned Java jar; xmllint accepted all four SVGs; no PlantUML syntax/error markers were found; and the source hashes are unique against the golden corpus and all prior perturbation sources.",
+    "No Cargo or rustc command was run, per the user's explicit compile-slot instruction. The rejection does not rely on an executable Rust comparison; it follows from Java source, Java SVG metadata, and immutable Rust source data flow.",
+    "Verdict is rejected. A corrected implementation should synthesize no-oracle data-source-line according to the concrete Java image contract for each class-diagram entity kind: class-like, object, description/circle positive controls carry location; state and branch/diamond do not. The preserved BranchPoint heldout should remain as the counterexample for the next checker."
+  ],
+  "verdict": "rejected"
+}

@@ -1,0 +1,12 @@
+@startuml
+allowmixing
+class BillingLedger
+object captureJob
+enum ResultCode
+state Capturing
+state Settled
+BillingLedger --> Capturing
+Capturing --> Settled
+captureJob --> Capturing
+ResultCode --> Settled
+@enduml

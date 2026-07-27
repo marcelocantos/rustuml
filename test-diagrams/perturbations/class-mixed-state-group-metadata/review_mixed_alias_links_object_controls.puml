@@ -1,0 +1,14 @@
+@startuml
+allowmixing
+class "Order Processor" as OrderProcessor {
+  +submit()
+}
+interface RetryPort
+enum RetryOutcome
+state "Queued Retry" as QueuedRetry
+state "Escalated Hold" as EscalatedHold
+OrderProcessor ..> RetryPort
+RetryPort --> QueuedRetry
+QueuedRetry --> EscalatedHold
+RetryOutcome --> EscalatedHold
+@enduml

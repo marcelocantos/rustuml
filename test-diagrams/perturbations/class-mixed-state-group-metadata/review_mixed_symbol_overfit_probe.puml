@@ -1,0 +1,12 @@
+@startuml
+allowmixing
+class RoutingTable
+circle MergePoint
+diamond BranchPoint
+state "Route Open" as RouteOpen
+state "Route Closed" as RouteClosed
+RoutingTable --> RouteOpen
+RouteOpen --> BranchPoint
+BranchPoint --> MergePoint
+MergePoint --> RouteClosed
+@enduml

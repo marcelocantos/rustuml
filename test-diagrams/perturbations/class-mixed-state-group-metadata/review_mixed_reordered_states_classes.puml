@@ -1,0 +1,10 @@
+@startuml
+allowmixing
+state ParkedBlue
+state "Warm Wait" as WarmWait
+class SchedulerCore
+object workerSession
+SchedulerCore --> ParkedBlue
+ParkedBlue --> WarmWait
+workerSession --> WarmWait
+@enduml
