@@ -1,0 +1,12 @@
+@startuml
+[*] --> LoopAnchor7421 : start_short
+LoopAnchor7421 --> LoopAnchor7421 : first_self_loop_label_is_deliberately_wide
+LoopAnchor7421 --> LoopAnchor7421 : m
+LoopAnchor7421 <-- LoopAnchor7421 : reverse_self_loop_medium
+LoopAnchor7421 -right-> LoopAnchor7421 : right_self_loop_tiny
+LoopAnchor7421 --> ExitRelay7423 : after_loops
+ExitRelay7423 --> [*] : done
+
+state "Loop Anchor 7421" as LoopAnchor7421
+state "Exit Relay 7423" as ExitRelay7423
+@enduml

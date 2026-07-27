@@ -1,0 +1,14 @@
+@startuml
+[*] --> SourceSpur7701 : start
+SourceSpur7701 --> TargetSpur7703 : narrow_a
+TargetSpur7703 <-- SourceSpur7701 : reversed_command_carries_the_very_wide_label_owner
+SourceSpur7701 -right-> TargetSpur7703 : medium_right_lane
+SourceSpur7701 --> TargetSpur7703 : z
+SideCheck7705 --> SourceSpur7701 : inbound_control
+TargetSpur7703 --> SideCheck7705 : outbound_control
+TargetSpur7703 --> [*] : finish
+
+state "Source Spur 7701" as SourceSpur7701
+state "Target Spur 7703" as TargetSpur7703
+state "Side Check 7705" as SideCheck7705
+@enduml

@@ -1,0 +1,15 @@
+@startuml
+[*] --> OuterSource7603 : begin
+OuterSource7603 --> CompoundGate7601 : first_compound_lane_has_the_widest_label
+OuterSource7603 --> CompoundGate7601 : q
+OuterSource7603 -right-> CompoundGate7601 : right_lane_declared_third
+CompoundGate7601 --> OuterSink7605 : exit_compound
+OuterSink7605 --> [*] : done
+
+state "Compound Gate 7601" as CompoundGate7601 {
+  [*] --> InsideReady7607 : enter_inner
+  InsideReady7607 --> [*] : leave_inner
+}
+state "Outer Source 7603" as OuterSource7603
+state "Outer Sink 7605" as OuterSink7605
+@enduml

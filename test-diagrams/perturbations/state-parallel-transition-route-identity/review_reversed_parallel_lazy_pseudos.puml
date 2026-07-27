@@ -1,0 +1,13 @@
+@startuml
+[*] --> SourceGate7517 : boot
+SourceGate7517 --> SinkGate7519 : first_forward_label_is_deliberately_long
+SinkGate7519 <-- SourceGate7517 : reverse_syntax_short
+SourceGate7517 -right-> SinkGate7519 : rightward_third_lane
+SourceGate7517 --> AuditNode7523 : separate_control_out
+AuditNode7523 --> SinkGate7519 : separate_control_in
+SinkGate7519 --> [*] : halt
+
+state "Sink Gate 7519" as SinkGate7519
+state "Source Gate 7517" as SourceGate7517
+state "Audit Node 7523" as AuditNode7523
+@enduml

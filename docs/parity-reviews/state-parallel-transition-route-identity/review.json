@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-parallel-transition-route-identity",
+  "reviewer": {
+    "task_id": "codex-desktop-independent-checker-state-parallel-transition-route-identity-2026-07-27",
+    "model": "OpenAI GPT-5 Codex"
+  },
+  "account_commit": "4f67bb5478b9b6499a6ab236edb4f3f2f8decf8e",
+  "account_commits": [
+    "1a5239ed3375b00d4d6513e0b3483a63eeaca85c",
+    "12022987d7f48d78b50c514f66825c7c1c906fad",
+    "4f67bb5478b9b6499a6ab236edb4f3f2f8decf8e"
+  ],
+  "implementation_commit": "3538e6c46cb73a426a5e8af66b8b89907f2a9707",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "accepted": false,
+  "commands": [
+    "sed -n '1,260p' AGENTS.md",
+    "sed -n '1,260p' /Users/marcelo/.codex/skills/oracle-first/SKILL.md",
+    "sed -n '1,260p' /Users/marcelo/.claude/rust.md",
+    "mcp__bullseye.bullseye_query cwd=/Users/marcelo/work/github.com/marcelocantos/rustuml view=context recent_days=14",
+    "ps -axo pid,ppid,etime,pcpu,comm,args | rg '(cargo|rustc)'",
+    "sed -n '1,260p' docs/parity-reviews/state-parallel-transition-route-identity/account.json",
+    "git show --format=fuller --patch 1a5239ed",
+    "git show --format=fuller --patch 12022987",
+    "git show --format=fuller --patch 4f67bb54",
+    "git show --format=fuller --patch 3538e6c4 -- crates/rustuml-render/src/state.rs",
+    "git diff 3538e6c4^ 3538e6c4 -- test-diagrams/no_oracle_baseline.txt test-diagrams/perturbations/state-parallel-transition-route-identity",
+    "git show 3538e6c4:crates/rustuml-render/src/state.rs | rg -n 'flat_transition_edge_path|routed_edge_path_for_transition|routed_self_edge_path|routed_compound_edge_path|transition_layout_edges'",
+    "git show 3538e6c4:crates/rustuml-layout/src/graph.rs | rg -n 'struct EdgePath|edge_index|edge_specs|add_edge|layout_full_no_timeout|agedge|Agedge'",
+    "git merge-base --is-ancestor 1a5239ed 3538e6c4",
+    "git merge-base --is-ancestor 12022987 3538e6c4",
+    "git merge-base --is-ancestor 4f67bb54 3538e6c4",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/CucaDiagramFileMakerSvek.java | rg -n 'getOrderedLinks|addLinkNew|for \\(|new SvekEdge|addLine'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java | rg -n 'appendLine|solveLine|getXY|getIndexFromColor|noteLabelColor|labelXY'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/Bibliotekon.java | rg -n 'addLine|allLines|lines0|lines1|getLine|SvekEdge'",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/state-parallel-transition-route-identity/review_compound_endpoint_parallel_order.puml test-diagrams/perturbations/state-parallel-transition-route-identity/review_label_bound_owner_four_lane.puml test-diagrams/perturbations/state-parallel-transition-route-identity/review_reversed_parallel_lazy_pseudos.puml test-diagrams/perturbations/state-parallel-transition-route-identity/review_self_loop_reversed_lazy_matrix.puml",
+    "xmllint --noout test-diagrams/perturbations/state-parallel-transition-route-identity/review_compound_endpoint_parallel_order.svg test-diagrams/perturbations/state-parallel-transition-route-identity/review_label_bound_owner_four_lane.svg test-diagrams/perturbations/state-parallel-transition-route-identity/review_reversed_parallel_lazy_pseudos.svg test-diagrams/perturbations/state-parallel-transition-route-identity/review_self_loop_reversed_lazy_matrix.svg",
+    "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"|welcome to plantuml|an error has occured' test-diagrams/perturbations/state-parallel-transition-route-identity/review_*.svg",
+    "shasum test-diagrams/perturbations/state-parallel-transition-route-identity/review_*.puml",
+    "git archive --format=tar --output=/private/tmp/rustuml-review-3538-route.tar 3538e6c4",
+    "tar -xf /private/tmp/rustuml-review-3538-route.tar -C /private/tmp/rustuml-review-3538-route.VUnRYg",
+    "cp only the four fresh route checker .puml/.svg pairs into /private/tmp/rustuml-review-3538-route.VUnRYg",
+    "cargo fmt --check",
+    "cargo build --release -p rustuml-oracle --example diff_one",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/state-parallel-transition-route-identity/review_reversed_parallel_lazy_pseudos.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/state-parallel-transition-route-identity/review_label_bound_owner_four_lane.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/state-parallel-transition-route-identity/review_self_loop_reversed_lazy_matrix.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/state-parallel-transition-route-identity/review_compound_endpoint_parallel_order.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/state-parallel-transition-route-identity/renamed_two_links_labels_exchanged.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/state-parallel-transition-route-identity/renamed_three_links_reordered.puml",
+    "cargo test -p rustuml-render --lib --release -- --nocapture",
+    "cp -R /Users/marcelo/work/github.com/marcelocantos/rustuml/test-diagrams/golden/. /private/tmp/rustuml-review-3538-route.VUnRYg/test-diagrams/golden/",
+    "cargo test -p rustuml-oracle --test golden_no_oracle --release -- --nocapture",
+    "cargo test -p rustuml-oracle --test parity_perturbations --release -- --nocapture",
+    "git show --format= 3538e6c4 -- crates/rustuml-render/src/state.rs | rg -n 'test-diagrams|include_str!|include_bytes!|\\.puml|\\.svg|golden|fixture|label.*==|match.*label|branch.*count|coordinate|renamed_|review_|source_line ==|source_line\\)'"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/state-parallel-transition-route-identity/renamed_two_links_labels_exchanged.puml",
+      "golden": "test-diagrams/perturbations/state-parallel-transition-route-identity/renamed_two_links_labels_exchanged.svg",
+      "axes": [
+        "maker fixture preserved from implementation commit",
+        "two same-endpoint fork-to-join links",
+        "wide label declared before short label",
+        "renamed states and pseudostates"
+      ],
+      "result": "pass",
+      "detail": "Exact snapshot diff_one --no-oracle reports SVGs are structurally equivalent."
+    },
+    {
+      "source": "test-diagrams/perturbations/state-parallel-transition-route-identity/renamed_three_links_reordered.puml",
+      "golden": "test-diagrams/perturbations/state-parallel-transition-route-identity/renamed_three_links_reordered.svg",
+      "axes": [
+        "maker fixture preserved from implementation commit",
+        "three same-endpoint fork-to-join links",
+        "middle widest and tiny labels in source order",
+        "incoming and outgoing control routes"
+      ],
+      "result": "pass",
+      "detail": "Exact snapshot diff_one --no-oracle reports SVGs are structurally equivalent."
+    },
+    {
+      "source": "test-diagrams/perturbations/state-parallel-transition-route-identity/review_reversed_parallel_lazy_pseudos.puml",
+      "golden": "test-diagrams/perturbations/state-parallel-transition-route-identity/review_reversed_parallel_lazy_pseudos.svg",
+      "axes": [
+        "fresh lazy state declarations after transitions",
+        "mixed forward, reverse-command, and explicit right arrows sharing solved endpoints",
+        "start and end pseudostates",
+        "distinct incoming and outgoing control routes"
+      ],
+      "result": "pass",
+      "detail": "Exact snapshot diff_one --no-oracle reports SVGs are structurally equivalent."
+    },
+    {
+      "source": "test-diagrams/perturbations/state-parallel-transition-route-identity/review_label_bound_owner_four_lane.puml",
+      "golden": "test-diagrams/perturbations/state-parallel-transition-route-identity/review_label_bound_owner_four_lane.svg",
+      "axes": [
+        "fresh four same-endpoint routes",
+        "forward, reverse-command, explicit right, and ordinary tiny lanes",
+        "wide label ownership competing with label-bound canvas width",
+        "separate inbound and outbound control edges"
+      ],
+      "result": "fail",
+      "detail": "Java renders a 1061px-wide canvas; Rust at 3538e6c4 renders 1051px. The route, arrowhead, and label coordinates for the parallel cluster and adjacent control routes shift under strict comparison."
+    },
+    {
+      "source": "test-diagrams/perturbations/state-parallel-transition-route-identity/review_self_loop_reversed_lazy_matrix.puml",
+      "golden": "test-diagrams/perturbations/state-parallel-transition-route-identity/review_self_loop_reversed_lazy_matrix.svg",
+      "axes": [
+        "fresh parallel self loops",
+        "reverse self-loop command",
+        "explicit right self-loop command",
+        "wide, medium, short, and tiny labels"
+      ],
+      "result": "fail",
+      "detail": "Java renders an 810px-wide canvas; Rust at 3538e6c4 renders 847px. The only strict mismatch reported by diff_one is the root SVG width/viewBox, isolating this to self-loop label/envelope ownership rather than node or path spelling."
+    },
+    {
+      "source": "test-diagrams/perturbations/state-parallel-transition-route-identity/review_compound_endpoint_parallel_order.puml",
+      "golden": "test-diagrams/perturbations/state-parallel-transition-route-identity/review_compound_endpoint_parallel_order.svg",
+      "axes": [
+        "fresh parallel routes into a compound endpoint",
+        "three source-owned lanes with wide, short, and explicit-right labels",
+        "nested start/end pseudostates inside the compound state",
+        "outer start/end and exit control routes"
+      ],
+      "result": "fail",
+      "detail": "Java renders 602x718; Rust at 3538e6c4 renders 530x719 and shifts the compound state, its inner pseudostates, and every related route left by roughly the missing envelope."
+    }
+  ],
+  "results": {
+    "process_slot": "pass: before Cargo use, ps showed no cargo/rustc process other than the process-list command itself",
+    "java_svg_generation": "pass: all four fresh checker sources generated Java SVGs with the pinned local PlantUML jar",
+    "xml_and_error_validation": "pass: xmllint accepted all fresh Java SVGs and rg found no PlantUML error markers",
+    "immutable_snapshot": "all Rust validation ran in /private/tmp/rustuml-review-3538-route.VUnRYg, a git archive of 3538e6c4 plus only the fresh route fixtures and copied golden corpus",
+    "fmt": "pass: cargo fmt --check",
+    "maker_perturbations": "pass: both implementation-added route fixtures are structurally equivalent under diff_one --no-oracle",
+    "fresh_perturbations": "fail: one fresh reverse/lazy pseudostate case passes; the four-lane label-bound, self-loop, and compound-endpoint cases fail strict comparison",
+    "renderer_lib": "pass: 695/695 rustuml-render release library tests",
+    "golden_no_oracle": "pass: 11050/11251 eligible pairs; state 883/901",
+    "parity_perturbations": "fail: includes the fresh route failures along with already-preserved rejected mechanisms"
+  },
+  "findings": [
+    "The durable account gate is satisfied chronologically. Account revisions 1a5239ed3375b00d4d6513e0b3483a63eeaca85c, 12022987d7f48d78b50c514f66825c7c1c906fad, and 4f67bb5478b9b6499a6ab236edb4f3f2f8decf8e all precede immutable implementation commit 3538e6c46cb73a426a5e8af66b8b89907f2a9707, and the final account explicitly falsifies the earlier cgraph-name and schema-binding hypotheses before locating the claimed loss in final SVG emission.",
+    "Pinned Java source supports the model that PlantUML binds solved splines and label positions by per-link marker color rather than by endpoint geometry. CucaDiagramFileMakerSvek.getOrderedLinks preserves same-connection source order while grouping, Bibliotekon.addLine retains every SvekEdge in insertion-owned collections, SvekEdge.appendLine emits each edge with a unique lineColor and noteLabelColor, and SvekEdge.solveLine/getXY recover the path and label positions by searching the rendered SVG for those colors.",
+    "Static Rust inspection supports the narrow implementation claim for flat states. LayoutGraph appends EdgeSpec values and returns their insertion index, records the returned Agedge_t pointer in edge_specs, and later fills EdgePath.edge_index from that pointer while walking cgraph in traversal order. Commit 3538e6c4 changes flat final transition emission and the flat label-bound calculations to resolve each transition through flat_transition_layout_edges and EdgePath.edge_index instead of consuming paths by endpoint distance.",
+    "Static review found no golden reads, include_str/include_bytes fixture embedding, fixture path checks, label-text conditionals, per-branch-count constant ladders, coordinate-keyed SVG surgery, comparator changes, guard changes, park/error-list changes, or new parity constants in 3538e6c4's production diff. The no-oracle baseline increases state from 882/901 to 883/901 and rides in the implementation commit.",
+    "The two implementation-added held-outs pass exactly in an immutable 3538e6c4 archive: renamed_two_links_labels_exchanged and renamed_three_links_reordered both report structural equivalence. This confirms the change fixed the narrow fork/join same-endpoint cases that motivated the implementation.",
+    "The fresh review_reversed_parallel_lazy_pseudos held-out also passes exactly. It varies lazy declaration order, start/end pseudostates, a forward lane, a reverse-command lane, an explicit right lane, and distinct control routes, so the flat transition-to-EdgePath map is not merely keyed to fixture names or the original two- and three-link shapes.",
+    "The fresh review_label_bound_owner_four_lane held-out rejects the mechanism's accepted surface. Java and Rust both produce the same labels and link IDs, but Rust renders a 1051px canvas where Java renders 1061px and shifts the same-endpoint parallel cluster plus adjacent control routes. This is a valid-syntax same-endpoint route and label-bound ownership case not derivable by renaming the maker fixtures.",
+    "The fresh review_self_loop_reversed_lazy_matrix held-out rejects the account's statement that self links are covered by the exact transition-to-layout-edge lookup. Java renders width 810px while Rust renders width 847px; diff_one reports only the root SVG width/viewBox mismatch. The input combines four self loops, a reverse self-loop command, an explicit right self-loop command, and varied label widths.",
+    "The fresh review_compound_endpoint_parallel_order held-out rejects acceptance for the requested compound-endpoint surface. Java renders 602x718 while Rust renders 530x719 and shifts the compound, its inner pseudostates, and every related route. This may include broader compound-frontier drift, but as an adversarial route-identity review it is still a valid preserved counterexample for the claimed route ownership mechanism at compound endpoints.",
+    "The exact immutable snapshot passes cargo fmt --check, 695/695 rustuml-render release library tests, and the no-oracle ratchet at 11050/11251 eligible pairs with state at 883/901. Those green checks do not cover the fresh held-out failures and therefore do not satisfy the T14 adversarial maker/checker gate.",
+    "Verdict is rejected. The implementation is real and mechanism-shaped for the narrow flat fork/join cases, but fresh valid held-outs show the route-identity account is incomplete for four-lane label-bound ownership, parallel self-loop envelope ownership, and compound endpoints. The failing pairs are preserved as executable counterexamples."
+  ],
+  "verdict": "rejected"
+}
