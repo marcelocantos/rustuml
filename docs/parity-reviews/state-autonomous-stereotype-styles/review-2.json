@@ -1,0 +1,147 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-autonomous-stereotype-styles",
+  "reviewer": {
+    "task_id": "independent-adversarial-checker-round-2-2026-07-27",
+    "model": "GPT-5 Codex"
+  },
+  "account_commit": "504164a6c6d4c364506525d0da28ec8529ca66df",
+  "implementation_commit": "49388ae279407335f6047636d312181b0c8c22cd",
+  "implementation_parent_production_commit": "bdd66c285237ae7c921400a1807268abba73c54b",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "git show 504164a6c6d4c364506525d0da28ec8529ca66df:docs/parity-reviews/state-autonomous-stereotype-styles/account.json",
+    "git show f07599fb206313af770b9eb3e35cd4a6254716aa:docs/parity-reviews/state-autonomous-stereotype-styles/account.json",
+    "git diff --format=fuller --no-ext-diff --no-renames bdd66c285237ae7c921400a1807268abba73c54b^ bdd66c285237ae7c921400a1807268abba73c54b -- crates/rustuml-layout/src/graph.rs crates/rustuml-render/src/state.rs crates/rustuml-render/src/plantuml_metrics.rs vendor/graphviz/lib/common/shapes.c",
+    "git diff --format=fuller --no-ext-diff --no-renames bdd66c285237ae7c921400a1807268abba73c54b 49388ae279407335f6047636d312181b0c8c22cd",
+    "sed -n '150,245p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekNode.java",
+    "sed -n '1,220p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/style/ValueImpl.java",
+    "sed -n '1,220p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/abel/EntityPosition.java",
+    "sed -n '1,260p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/image/EntityImageStateBorder.java",
+    "rg -n -C 8 'SvekStateBorderShield|state_position_image_offset_x|add_svek_state_border_node_with_label' crates/rustuml-layout/src/graph.rs crates/rustuml-render/src/state.rs",
+    "sed -n '2880,2950p' vendor/graphviz/lib/common/shapes.c",
+    "sed -n '1,240p' tools/PhysicalFontMetricsExtract.java",
+    "javac -d /private/tmp/stereotype-r2-metrics tools/PhysicalFontMetricsExtract.java && java -cp /private/tmp/stereotype-r2-metrics PhysicalFontMetricsExtract 'Courier New'",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/state-autonomous-stereotype-styles/*.puml",
+    "xmllint --noout test-diagrams/perturbations/state-autonomous-stereotype-styles/*.svg",
+    "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"' test-diagrams/perturbations/state-autonomous-stereotype-styles/*.svg",
+    "ruby -rdigest -e 'Dir[\"test-diagrams/perturbations/state-autonomous-stereotype-styles/*.puml\"].each { |candidate| hash=Digest::SHA256.file(candidate).hexdigest; match=Dir[\"test-diagrams/golden/**/*.puml\"].find { |p| Digest::SHA256.file(p).hexdigest == hash }; abort \"duplicate: #{candidate}: #{match}\" if match }; puts \"all held-outs unique against golden sources\"'",
+    "git archive 49388ae279407335f6047636d312181b0c8c22cd | tar -x -C /private/tmp/rustuml-stereotype-r2.WQMq5i",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-stereotype-r2-target cargo test --test parity_perturbations --release -- --nocapture",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-stereotype-r2-target cargo test -p rustuml-parser --lib --release",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-stereotype-r2-target cargo test -p rustuml-render --lib --release",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-stereotype-r2-target cargo test -p rustuml-layout --lib --release",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-stereotype-r2-target cargo test --test golden_no_oracle --release",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-stereotype-r2-target cargo clippy --workspace --all-targets -- -D warnings",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-stereotype-r2-target cargo test --test harness_guards --release decimal_literal_ratchet -- --nocapture",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-stereotype-r2-target cargo test --test harness_guards --release no_golden_data_embedded_in_shipping_crates -- --nocapture",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-stereotype-r2-target cargo test --test harness_guards --release comparator_constants_frozen -- --nocapture",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-stereotype-r2-target cargo test --test harness_guards --release error_golden_census_is_frozen -- --nocapture",
+    "git diff --check bdd66c285237ae7c921400a1807268abba73c54b^..bdd66c285237ae7c921400a1807268abba73c54b",
+    "git diff --check bdd66c285237ae7c921400a1807268abba73c54b..49388ae279407335f6047636d312181b0c8c22cd",
+    "git show --format= bdd66c285237ae7c921400a1807268abba73c54b -- crates/rustuml-layout/src/graph.rs crates/rustuml-render/src/state.rs crates/rustuml-render/src/plantuml_metrics.rs vendor/graphviz/lib/common/shapes.c | rg -n 'test-diagrams|include_str!|include_bytes!|entry_exit|LedgerCapsule|PositionCabinet'",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -debugsvek -tsvg case.puml"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-stereotype-styles/group_leaf_qualified_styles.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-stereotype-styles/group_leaf_qualified_styles.svg",
+      "axes": ["ordinary group versus leaf stereotypes", "qualified color selectors", "font size and single face style"],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-stereotype-styles/unmatched_selector_inert.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-stereotype-styles/unmatched_selector_inert.svg",
+      "axes": ["unmatched selector", "renamed composite label"],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-stereotype-styles/font_name_style_geometry.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-stereotype-styles/font_name_style_geometry.svg",
+      "axes": ["stereotype-qualified font name", "title and attribute font metrics", "ordinary leaf descriptions"],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-stereotype-styles/font_name_style_without_attributes.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-stereotype-styles/font_name_style_without_attributes.svg",
+      "axes": ["stereotype-qualified font name and size", "compound legacy FontStyle value", "geometry and paint coupling"],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-stereotype-styles/explicit_fill_stroke_precedence.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-stereotype-styles/explicit_fill_stroke_precedence.svg",
+      "axes": ["qualified colors", "explicit entity fill and stroke", "border thickness and dash precedence"],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-stereotype-styles/deep_history_case_matrix.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-stereotype-styles/deep_history_case_matrix.svg",
+      "axes": ["ordinary deepHistory", "case-varied reserved history*", "qualified selector matching"],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-stereotype-styles/non_normal_position_stereotypes.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-stereotype-styles/non_normal_position_stereotypes.svg",
+      "axes": ["case-varied entry point", "input pin", "expansion input"],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-stereotype-styles/nested_concurrent_stereotypes.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-stereotype-styles/nested_concurrent_stereotypes.svg",
+      "axes": ["nested topology", "concurrent topology", "independent group styles"],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-stereotype-styles/composite_selector_matched_unmatched.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-stereotype-styles/composite_selector_matched_unmatched.svg",
+      "axes": ["selector named composite", "matched and unmatched ordinary stereotypes", "two root composites"],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-stereotype-styles/output_and_expansion_output.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-stereotype-styles/output_and_expansion_output.svg",
+      "axes": ["outputPin", "expansionOutput", "intra-composite links"],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-stereotype-styles/entry_exit_short_labels.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-stereotype-styles/entry_exit_short_labels.svg",
+      "axes": ["short entry label", "short exit label", "basic port path"],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-stereotype-styles/entry_exit_long_renamed_labels.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-stereotype-styles/entry_exit_long_renamed_labels.svg",
+      "axes": ["independently renamed long entry and exit labels", "HTML port table", "solved port geometry"],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-stereotype-styles/entry_exit_integer_thresholds.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-stereotype-styles/entry_exit_integer_thresholds.svg",
+      "axes": ["label width immediately above 40px", "integer-truncated SvekNode threshold", "basic versus HTML port decision"],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-stereotype-styles/described_autonomous_attribute_typography.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-stereotype-styles/described_autonomous_attribute_typography.svg",
+      "axes": ["described autonomous leaves", "independent AttributeFontName", "independent AttributeFontSize and AttributeFontStyle"],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-stereotype-styles/font_face_exact_numeric_invalid_controls.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-stereotype-styles/font_face_exact_numeric_invalid_controls.svg",
+      "axes": ["exact valid bold and italic faces", "numeric weight 700", "invalid compound FontStyle control"],
+      "result": "pass"
+    }
+  ],
+  "findings": [
+    "Reviewed immutable tip 49388ae279407335f6047636d312181b0c8c22cd. Its only change from parent production commit bdd66c285237ae7c921400a1807268abba73c54b is the mandatory decimal-literal ratchet from 1050 to 1053 in plantuml_metrics.rs's baseline; it contains no production source. The 49388ae2 decimal guard passes. The reviewer separately inspected the full bdd66c28 production diff against the causal account at 504164a6c6d4c364506525d0da28ec8529ca66df and its prior correction f07599fb206313af770b9eb3e35cd4a6254716aa.",
+    "Rejected: Java SvekNode chooses the special entry/exit HTML port path only when (int) label width is greater than 40. Rust instead checks the untruncated floating measurement against 40.0 in both state_position_image_offset_x and add_svek_state_border_node_with_label. In the preserved threshold case, WWWJ measures about 40.2842px: Java truncates it to 40 and emits a basic rectangle; Rust emits the shield. Java -debugsvek shows that rectangle beside WWWf, which truncates to 41 and emits the HTML table. The resulting Rust diagram is 9px taller and shifts downstream solved geometry. This is a concrete causal counterexample to the account's model.",
+    "Rejected: even above the threshold, Java SvekNode supplies Graphviz a three-row plaintext HTML table whose middle cell is the fixed 12px P port and whose full-width rows use int(labelWidth)-40. Rust replaces that layout contract with NodeShape::SvekStateBorderShield and a custom rustuml_center_port in vendored shapes.c. The long independently renamed entry and exit labels preserve valid Java syntax but differ in node x positions and edge routing. Java -debugsvek reports 135px and 130px table widths; the Rust synthetic port does not represent those solver constraints. The mismatch is geometry-model coupling, not paint-only drift.",
+    "The original nine held-outs all pass at the immutable 49388ae2 archive, including ordinary/group styles, matching and nonmatching selectors, explicit fill/stroke precedence, deepHistory case behavior, non-normal positions, nested/concurrent topology, and selector-named composites. Fresh outputPin/expansionOutput, short entry/exit labels, described autonomous leaves with independently varied attribute typography, and exact/numeric/invalid font-face controls also pass. These gains do not falsify the two port-model failures.",
+    "All fifteen sources are valid Java diagrams, have paired Java SVGs that are well-formed and contain no PlantUML error page, and are source-unique against the golden corpus. The two failing fresh pairs remain checked in as executable counterexamples; no baseline, comparator, park list, error-golden marker, account, or production source was changed by this review.",
+    "The immutable archive passes parser (487), render (689), and layout (38) unit suites, golden_no_oracle, and clippy with warnings denied. The parity perturbation suite fails only on entry_exit_integer_thresholds and entry_exit_long_renamed_labels. The no-golden-data, frozen-comparator, decimal-ratchet, and error-census harness checks pass (the error census reports the golden submodule absent and skips its census body).",
+    "Audit of bdd66c28 found no fixture labels, corpus reads, golden embedding, include_str/include_bytes use, per-label/count ladders, or post-hoc SVG surgery. PhysicalFontMetricsExtract provenance agrees with the extracted Courier New metrics that motivated 49388ae2. The rejection is therefore not an overfit finding; it is that the generic replacement for Java's Svek/Graphviz table model is semantically incomplete."
+  ],
+  "verdict": "rejected"
+}

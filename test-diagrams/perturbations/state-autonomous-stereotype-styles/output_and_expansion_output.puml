@@ -1,0 +1,13 @@
+@startuml
+state "Output Cabinet" as OutputCabinet {
+  [*] --> InputRelay
+  state "Input Relay" as InputRelay <<inputPin>>
+  state "Output Relay" as OutputRelay <<outputPin>>
+  state "Expansion Output" as ExpansionOutput <<expansionOutput>>
+  InputRelay --> OutputRelay
+  OutputRelay --> ExpansionOutput
+  ExpansionOutput --> [*]
+}
+[*] --> OutputCabinet
+OutputCabinet --> [*]
+@enduml

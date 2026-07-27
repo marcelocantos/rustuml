@@ -1,0 +1,13 @@
+@startuml
+state "Long Port Cabinet" as LongPortCabinet {
+  state "Ingress Observatory Node" as IngressAlias <<entryPoint>>
+  state "Egress Observatory Node" as EgressAlias <<exitPoint>>
+  state "Transit Relay" as TransitAlias
+  [*] --> IngressAlias
+  IngressAlias --> TransitAlias
+  TransitAlias --> EgressAlias
+  EgressAlias --> [*]
+}
+[*] --> LongPortCabinet
+LongPortCabinet --> [*]
+@enduml

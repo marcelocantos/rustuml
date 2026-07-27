@@ -1,0 +1,13 @@
+@startuml
+state "Threshold Cabinet" as ThresholdCabinet {
+  state WWWJ <<entryPoint>>
+  state WWWf <<exitPoint>>
+  state BridgeNode
+  [*] --> WWWJ
+  WWWJ --> BridgeNode
+  BridgeNode --> WWWf
+  WWWf --> [*]
+}
+[*] --> ThresholdCabinet
+ThresholdCabinet --> [*]
+@enduml

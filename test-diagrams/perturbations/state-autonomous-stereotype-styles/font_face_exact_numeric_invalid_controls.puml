@@ -1,0 +1,21 @@
+@startuml
+skinparam state {
+  FontStyle<<boldFace>> bold
+  FontStyle<<italicFace>> italic
+  FontStyle<<numericFace>> 700
+  FontStyle<<compoundFace>> bold italic
+}
+state "Face Cabinet" as FaceCabinet {
+  [*] --> BoldLeaf
+  state "Bold Leaf" as BoldLeaf <<boldFace>>
+  state "Italic Leaf" as ItalicLeaf <<italicFace>>
+  state "Numeric Leaf" as NumericLeaf <<numericFace>>
+  state "Compound Leaf" as CompoundLeaf <<compoundFace>>
+  BoldLeaf --> ItalicLeaf
+  ItalicLeaf --> NumericLeaf
+  NumericLeaf --> CompoundLeaf
+  CompoundLeaf --> [*]
+}
+[*] --> FaceCabinet
+FaceCabinet --> [*]
+@enduml

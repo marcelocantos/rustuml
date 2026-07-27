@@ -1,0 +1,13 @@
+@startuml
+state "Short Port Cabinet" as ShortPortCabinet {
+  state I <<entryPoint>>
+  state O <<exitPoint>>
+  state MiddleRelay
+  [*] --> I
+  I --> MiddleRelay
+  MiddleRelay --> O
+  O --> [*]
+}
+[*] --> ShortPortCabinet
+ShortPortCabinet --> [*]
+@enduml
