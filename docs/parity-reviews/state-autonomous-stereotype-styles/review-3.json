@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-autonomous-stereotype-styles",
+  "reviewer": {
+    "task_id": "independent-adversarial-checker-round-3-2026-07-27",
+    "model": "GPT-5 Codex"
+  },
+  "account_commit": "3df41ad0aa21de37904957bbfa94b367cd89ecf4",
+  "implementation_commit": "043f93eca517da1df4c0a2799bc34e27b94765f8",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "git show 3df41ad0aa21de37904957bbfa94b367cd89ecf4:docs/parity-reviews/state-autonomous-stereotype-styles/account.json",
+    "git show --format=fuller --no-ext-diff --no-renames 043f93eca517da1df4c0a2799bc34e27b94765f8 -- crates/rustuml-layout/src/graph.rs crates/rustuml-render/src/state.rs",
+    "sed -n '180,220p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekNode.java",
+    "sed -n '78,180p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/image/EntityImageStateBorder.java",
+    "sed -n '731,750p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/skin/SkinParam.java",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/state-autonomous-stereotype-styles/entry_exit_mixed_port_envelopes.puml",
+    "cmp -s test-diagrams/perturbations/state-autonomous-stereotype-styles/entry_exit_mixed_port_envelopes.svg /private/tmp/rustuml-stereotype-review-3.hjn64l/java-inherited/entry_exit_mixed_port_envelopes.svg",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/state-autonomous-stereotype-styles/entry_exit_styled_shadow_matrix.puml",
+    "xmllint --noout test-diagrams/perturbations/state-autonomous-stereotype-styles/entry_exit_mixed_port_envelopes.svg test-diagrams/perturbations/state-autonomous-stereotype-styles/entry_exit_styled_shadow_matrix.svg",
+    "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"' test-diagrams/perturbations/state-autonomous-stereotype-styles/entry_exit_mixed_port_envelopes.svg test-diagrams/perturbations/state-autonomous-stereotype-styles/entry_exit_styled_shadow_matrix.svg",
+    "ruby -rdigest -e 'candidates=%w[test-diagrams/perturbations/state-autonomous-stereotype-styles/entry_exit_mixed_port_envelopes.puml test-diagrams/perturbations/state-autonomous-stereotype-styles/entry_exit_styled_shadow_matrix.puml]; candidates.each { |candidate| hash=Digest::SHA256.file(candidate).hexdigest; match=Dir[\"test-diagrams/golden/**/*.puml\"].find { |p| Digest::SHA256.file(p).hexdigest == hash }; abort \"duplicate: #{candidate}: #{match}\" if match }; puts \"both_sources_unique\"'",
+    "git archive 043f93eca517da1df4c0a2799bc34e27b94765f8 | tar -x -C /private/tmp/rustuml-stereotype-review-3.hjn64l",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-stereotype-review-3-target cargo test --test parity_perturbations --release -- --nocapture",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-stereotype-review-3-target cargo test -p rustuml-parser --lib --release",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-stereotype-review-3-target cargo test -p rustuml-render --lib --release",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-stereotype-review-3-target cargo test -p rustuml-layout --lib --release",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-stereotype-review-3-target cargo test --test golden_no_oracle --release -- --nocapture",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-stereotype-review-3-target cargo clippy --workspace --all-targets -- -D warnings",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-stereotype-review-3-target cargo test --test harness_guards --release decimal_literal_ratchet -- --nocapture",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-stereotype-review-3-target cargo test --test harness_guards --release no_golden_data_embedded_in_shipping_crates -- --nocapture",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-stereotype-review-3-target cargo test --test harness_guards --release comparator_constants_frozen -- --nocapture",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-stereotype-review-3-target cargo test --test harness_guards --release error_golden_census_is_frozen -- --nocapture",
+    "git diff --check 3df41ad0aa21de37904957bbfa94b367cd89ecf4^..043f93eca517da1df4c0a2799bc34e27b94765f8",
+    "git show --format= 043f93eca517da1df4c0a2799bc34e27b94765f8 -- crates/rustuml-layout/src/graph.rs crates/rustuml-render/src/state.rs | rg -n 'test-diagrams|include_str!|include_bytes!|golden|fixture'"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-stereotype-styles/entry_exit_mixed_port_envelopes.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-stereotype-styles/entry_exit_mixed_port_envelopes.svg",
+      "axes": ["integer threshold around 40px", "odd and even long HTML-table envelopes", "renamed entry and exit points", "multiple independent port routes"],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-stereotype-styles/entry_exit_styled_shadow_matrix.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-stereotype-styles/entry_exit_styled_shadow_matrix.svg",
+      "axes": ["independently qualified entry and exit fill, border, and text colors", "global state shadowing", "long renamed port-table labels", "composite topology"],
+      "result": "fail"
+    }
+  ],
+  "findings": [
+    "Rejected. The inherited entry_exit_mixed_port_envelopes pair is valid evidence: a fresh Java 71806a2 render is byte-identical to the inherited SVG, XML validation passes, it contains no Java error page, and its source is unique against the golden corpus. The immutable 043f93ec archive passes all sixteen mechanism perturbations when this pair is overlaid, so the even-point envelope correction resolves the previous odd-width counterexample for unstyled port labels.",
+    "The fresh entry_exit_styled_shadow_matrix pair is a valid, source-unique Java diagram. Java emits the independently qualified entry and exit fills (#FFE4E1 and #F0F8FF), borders (#B22222 and #483D8B), text (#191970 and #006400), and six uses of its shadow filter. It is not an error diagram and its Java SVG is preserved beside the source.",
+    "043f93ec fails that fresh heldout. The no-oracle perturbation comparator reports 52 Java elements versus 46 Rust elements and a 397x283 Java canvas versus a 475x372 Rust canvas. Rust emits neither the filter nor the qualified border-point paint, and the remaining generic-state layout routes a different graph. This is a structural mismatch, not comparator slack or serialization noise.",
+    "The causal gap is in renderer dispatch, not the odd-width formula. Java EntityImageStateBorder.drawU resolves its style and SkinParam.shadowing applies global or stereotype-qualified shadowing. Rust's has_only_autonomous_layout_skinparams excludes the global shadowing key; non-normal positions also exclude the autonomous image path; and render_non_autarkic_root_clusters rejects every non-empty skinparam set. The later generic fallback therefore lacks the EntityImageStateBorder geometry and style channels for entry/exit port images. The causal account explicitly claims those channels, so this counterexample is in scope.",
+    "The immutable archive passes parser 487, renderer 689, and layout 39 unit tests; clippy is green with warnings denied; decimal-ratchet, no-golden-data, frozen-comparator, and error-census guards pass. With the golden corpus mounted read-only, golden_no_oracle passes its 043f93ec baseline at 11028/11251 eligible pairs, including state 866/901. The perturbation suite fails only after the fresh styled-shadow counterexample is introduced.",
+    "The implementation diff is clean and contains no fixture labels, corpus reads, include_str/include_bytes use, or post-hoc SVG surgery. The rejection is a missing Java renderer path rather than evidence of fixture-shaped overfit. No production source, baseline, account, comparator, skip rule, or guard was changed by this checker."
+  ],
+  "verdict": "rejected"
+}

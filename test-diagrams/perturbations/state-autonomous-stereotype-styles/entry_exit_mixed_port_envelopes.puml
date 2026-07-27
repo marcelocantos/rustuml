@@ -1,0 +1,28 @@
+@startuml
+state "Port Envelope Matrix" as PortEnvelopeMatrix {
+  state "WWMi" as ThresholdBasic <<entryPoint>>
+  state "WWMf" as ThresholdHtml <<exitPoint>>
+  state "Odd Envelope Relay" as OddEntry <<entryPoint>>
+  state "Ivory Transit Gate" as EvenExit <<exitPoint>>
+  state "Silver Transit Gate" as SecondOddEntry <<entryPoint>>
+  state "Control Relay" as ControlRelay
+  state "Envelope Relay" as EnvelopeRelay
+  state "Silver Relay" as SilverRelay
+
+  [*] --> ThresholdBasic
+  ThresholdBasic --> ControlRelay
+  ControlRelay --> ThresholdHtml
+  ThresholdHtml --> [*]
+
+  [*] --> OddEntry
+  OddEntry --> EnvelopeRelay
+  EnvelopeRelay --> EvenExit
+  EvenExit --> [*]
+
+  [*] --> SecondOddEntry
+  SecondOddEntry --> SilverRelay
+  SilverRelay --> [*]
+}
+[*] --> PortEnvelopeMatrix
+PortEnvelopeMatrix --> [*]
+@enduml

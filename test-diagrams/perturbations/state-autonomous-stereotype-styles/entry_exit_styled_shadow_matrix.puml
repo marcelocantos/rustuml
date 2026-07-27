@@ -1,0 +1,24 @@
+@startuml
+skinparam shadowing true
+skinparam state {
+  BackgroundColor<<entryPoint>> MistyRose
+  BorderColor<<entryPoint>> FireBrick
+  FontColor<<entryPoint>> MidnightBlue
+  BackgroundColor<<exitPoint>> AliceBlue
+  BorderColor<<exitPoint>> DarkSlateBlue
+  FontColor<<exitPoint>> DarkGreen
+}
+
+state "Styled Port Envelope Matrix" as StyledPortEnvelopeMatrix {
+  state "Northbound Ingress Observatory" as NorthIngress <<entryPoint>>
+  state "Southbound Egress Observatory" as SouthEgress <<exitPoint>>
+  state "Interior Relay" as InteriorRelay
+
+  [*] --> NorthIngress
+  NorthIngress --> InteriorRelay
+  InteriorRelay --> SouthEgress
+  SouthEgress --> [*]
+}
+[*] --> StyledPortEnvelopeMatrix
+StyledPortEnvelopeMatrix --> [*]
+@enduml
