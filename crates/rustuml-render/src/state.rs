@@ -219,6 +219,11 @@ const SVEK_SELF_EDGE_LABEL_MARGIN: f64 = 6.0;
 const SVEK_ORIGIN_X: f64 = 7.0;
 const SVEK_ORIGIN_Y: f64 = SVEK_PAINTED_ORIGIN;
 const SVEK_TRAILING_PAD: f64 = 14.0;
+/// Pixel dimension of SVEK's routable group endpoint.
+///
+/// Java provenance: `ClusterDotString.printInternal` emits
+/// `shape=point,width=.01`; Graphviz converts the 0.01-inch node at 72 dpi.
+const SVEK_CLUSTER_ENDPOINT_SIZE: f64 = 0.72;
 /// Title font size.
 const TITLE_FONT_SIZE: f64 = 14.0;
 /// Horizontal inset contributed by the title style's 5px padding and 5px
@@ -2259,14 +2264,15 @@ impl AutonomousPaintedBounds {
     }
 }
 
-struct AutonomousRegion {
+struct AutonomousRegion<'a> {
     layout: AutonomousScopeLayout,
     empty_concurrent_state: Option<String>,
+    live_clusters: Vec<&'a State>,
 }
 
 struct AutonomousComposite<'a> {
     state: &'a State,
-    regions: Vec<AutonomousRegion>,
+    regions: Vec<AutonomousRegion<'a>>,
     children: Vec<AutonomousComposite<'a>>,
     separator: Option<char>,
     inner_width: f64,
@@ -2275,6 +2281,14 @@ struct AutonomousComposite<'a> {
     field_margin: f64,
     width: f64,
     height: f64,
+}
+
+enum StateGroupOutcome<'a> {
+    Image(AutonomousComposite<'a>),
+    Cluster {
+        state: &'a State,
+        children: Vec<StateGroupOutcome<'a>>,
+    },
 }
 
 struct AutonomousRenderContext<'a> {
@@ -2436,6 +2450,13 @@ fn autonomous_scope_painted_bounds(
     let mut bounds = AutonomousPaintedBounds::empty();
 
     for (id, position) in ids.iter().zip(&result.node_positions) {
+        if result
+            .cluster_positions
+            .iter()
+            .any(|cluster| cluster.id == *id)
+        {
+            continue;
+        }
         let (_, width, height, shape) = node_sizes.iter().find(|entry| &entry.0 == id)?;
         let x = quantize_svek_coord(position.x);
         let y = quantize_svek_coord(position.y);
@@ -2492,6 +2513,15 @@ fn autonomous_scope_painted_bounds(
                 baseline + LIMIT_FINDER_TEXT_ADJUST,
             );
         }
+    }
+
+    for cluster in &result.cluster_positions {
+        let x = quantize_svek_coord(cluster.x);
+        let y = quantize_svek_coord(cluster.y);
+        let width = quantize_svek_coord(cluster.width);
+        let height = quantize_svek_coord(cluster.height);
+        bounds.include(x - LIMIT_FINDER_PIXEL_ADJUST, y - LIMIT_FINDER_PIXEL_ADJUST);
+        bounds.include(x + width, y + height - LIMIT_FINDER_PIXEL_ADJUST);
     }
 
     for transition_index in transition_indices {
@@ -2580,6 +2610,7 @@ fn layout_autonomous_scope(
     ids: Vec<String>,
     transition_indices: Vec<usize>,
     node_sizes: &[(String, f64, f64, StateLayoutShape)],
+    live_clusters: &[&State],
     arrow_font: &StateArrowFont,
     spacing: Option<GraphSpacing>,
 ) -> Option<AutonomousScopeLayout> {
@@ -2589,8 +2620,48 @@ fn layout_autonomous_scope(
     }
     for id in &ids {
         let (_, width, height, shape) = node_sizes.iter().find(|entry| &entry.0 == id)?;
-        let state = diagram.states.iter().find(|state| state.id == *id);
-        add_state_layout_node(&mut layout, id, *width, *height, *shape, state);
+        if live_clusters.iter().any(|cluster| cluster.id == *id) {
+            layout.add_svek_cluster_endpoint(id);
+        } else {
+            let state = diagram.states.iter().find(|state| state.id == *id);
+            add_state_layout_node(&mut layout, id, *width, *height, *shape, state);
+        }
+    }
+    for cluster in live_clusters {
+        let parent = cluster.parent.as_deref().filter(|parent| {
+            live_clusters
+                .iter()
+                .any(|candidate| candidate.id == *parent)
+        });
+        layout.add_svek_cluster(
+            &cluster.id,
+            parent,
+            ClusterTitleSize {
+                width: text_render::measure(&cluster.label, STATE_FONT_SIZE, false),
+                height: text_render::label_height(&cluster.label, STATE_FONT_SIZE),
+            },
+        );
+    }
+    for id in &ids {
+        let owner = if live_clusters.iter().any(|cluster| cluster.id == *id) {
+            Some(id.as_str())
+        } else if let Some(scope) = id
+            .strip_prefix("__start__:")
+            .or_else(|| id.strip_prefix("__end__:"))
+        {
+            Some(scope)
+        } else {
+            diagram
+                .states
+                .iter()
+                .find(|state| state.id == *id)
+                .and_then(|state| state.parent.as_deref())
+        };
+        if let Some(owner) = owner
+            && live_clusters.iter().any(|cluster| cluster.id == owner)
+        {
+            layout.add_cluster_node(owner, id);
+        }
     }
     let mut transition_layout_edges = std::collections::HashMap::new();
     for index in &transition_indices {
@@ -2639,9 +2710,27 @@ fn layout_autonomous_scope(
         transition_layout_edges.insert(*index, layout_edge_index);
     }
 
-    let result = layout.layout_full(std::time::Duration::from_secs(5))?;
+    let mut result = layout.layout_full(std::time::Duration::from_secs(5))?;
     if result.node_positions.len() < ids.len() {
         return None;
+    }
+    if result.cluster_positions.len() != live_clusters.len() {
+        return None;
+    }
+    if !live_clusters.is_empty() {
+        for edge in &mut result.edge_paths {
+            let tail = result
+                .cluster_positions
+                .iter()
+                .find(|cluster| cluster.id == edge.from);
+            let head = result
+                .cluster_positions
+                .iter()
+                .find(|cluster| cluster.id == edge.to);
+            if tail.is_some() || head.is_some() {
+                edge.points = simulate_state_compound(&edge.points, tail, head);
+            }
+        }
     }
     let painted_bounds = autonomous_scope_painted_bounds(
         diagram,
@@ -2698,7 +2787,7 @@ fn layout_autonomous_scope(
     Some(AutonomousScopeLayout {
         ids,
         positions,
-        cluster_positions: Vec::new(),
+        cluster_positions: result.cluster_positions,
         edge_paths: result.edge_paths,
         transition_layout_edges,
         transition_indices,
@@ -2706,7 +2795,7 @@ fn layout_autonomous_scope(
         origin_y,
         width: origin_x + max_x + SVEK_TRAILING_PAD,
         height: origin_y + max_y + SVEK_TRAILING_PAD,
-        compound_clusters: false,
+        compound_clusters: !live_clusters.is_empty(),
         painted_bounds,
     })
 }
@@ -2844,15 +2933,28 @@ fn normalize_autonomous_scope(mut scope: AutonomousScopeLayout) -> AutonomousSco
 /// immediate leaves of the current group. `InnerStateAutonom` wraps that
 /// independently-laid-out image and its resulting dimensions become the node
 /// dimensions seen by the parent group's `GraphvizImageBuilder`.
-fn build_autonomous_composite_node<'a>(
+fn collect_state_group_outcome<'a>(
+    outcome: StateGroupOutcome<'a>,
+    images: &mut Vec<AutonomousComposite<'a>>,
+    live_clusters: &mut Vec<&'a State>,
+) {
+    match outcome {
+        StateGroupOutcome::Image(image) => images.push(image),
+        StateGroupOutcome::Cluster { state, children } => {
+            live_clusters.push(state);
+            for child in children {
+                collect_state_group_outcome(child, images, live_clusters);
+            }
+        }
+    }
+}
+
+fn build_state_group_outcome<'a>(
     diagram: &'a StateDiagram,
     composite: &'a State,
     arrow_font: &StateArrowFont,
-) -> Option<AutonomousComposite<'a>> {
-    if !composite.composite
-        || composite.url.is_some()
-        || !autonomous_group_is_autarkic(diagram, &composite.id)
-    {
+) -> Option<StateGroupOutcome<'a>> {
+    if !composite.composite || composite.url.is_some() {
         return None;
     }
 
@@ -2875,35 +2977,102 @@ fn build_autonomous_composite_node<'a>(
         return None;
     }
 
-    let mut children = Vec::new();
+    let mut region_outcomes = region_scopes
+        .iter()
+        .map(|scope| (scope.clone(), Vec::new()))
+        .collect::<Vec<_>>();
     for state in direct_children
         .iter()
         .copied()
         .filter(|state| state.composite)
     {
-        children.push(build_autonomous_composite_node(diagram, state, arrow_font)?);
+        let outcome = build_state_group_outcome(diagram, state, arrow_font)?;
+        let parent = state.parent.as_deref()?;
+        region_outcomes
+            .iter_mut()
+            .find(|(scope, _)| scope == parent)?
+            .1
+            .push(outcome);
+    }
+
+    if !autonomous_group_is_autarkic(diagram, &composite.id) {
+        if composite.concurrent_separator.is_some() {
+            return None;
+        }
+        return Some(StateGroupOutcome::Cluster {
+            state: composite,
+            children: region_outcomes
+                .into_iter()
+                .flat_map(|(_, outcomes)| outcomes)
+                .collect(),
+        });
     }
 
     let skin = StateSkin::from_diagram(diagram);
+    let mut children = Vec::new();
     let mut regions = Vec::with_capacity(region_scopes.len());
-    for scope in region_scopes {
-        let transition_indices: Vec<usize> = diagram
-            .transitions
-            .iter()
-            .enumerate()
-            .filter_map(|(index, transition)| {
-                (transition_parent_scope(diagram, transition) == Some(Some(scope.as_str())))
-                    .then_some(index)
-            })
-            .collect();
+    for (scope, outcomes) in region_outcomes {
+        let mut region_images = Vec::new();
+        let mut live_clusters = Vec::new();
+        for outcome in outcomes {
+            collect_state_group_outcome(outcome, &mut region_images, &mut live_clusters);
+        }
+        let transition_indices: Vec<usize> = if live_clusters.is_empty() {
+            diagram
+                .transitions
+                .iter()
+                .enumerate()
+                .filter_map(|(index, transition)| {
+                    (transition_parent_scope(diagram, transition) == Some(Some(scope.as_str())))
+                        .then_some(index)
+                })
+                .collect()
+        } else {
+            diagram
+                .transitions
+                .iter()
+                .enumerate()
+                .filter_map(|(index, transition)| {
+                    let inside_scope =
+                        autonomous_endpoint_is_inside(diagram, &transition.from, &scope)
+                            && autonomous_endpoint_is_inside(diagram, &transition.to, &scope);
+                    let inside_image = region_images.iter().any(|image| {
+                        autonomous_endpoint_is_inside(diagram, &transition.from, &image.state.id)
+                            && autonomous_endpoint_is_inside(
+                                diagram,
+                                &transition.to,
+                                &image.state.id,
+                            )
+                    });
+                    (inside_scope && !inside_image).then_some(index)
+                })
+                .collect()
+        };
         let inner_ids = collect_autonomous_scope_ids(diagram, &transition_indices, |state| {
-            state.parent.as_deref() == Some(scope.as_str())
+            if live_clusters.is_empty() {
+                return state.parent.as_deref() == Some(scope.as_str());
+            }
+            let Some(parent) = state.parent.as_deref() else {
+                return false;
+            };
+            autonomous_scope_is_inside(diagram, parent, &scope)
+                && !region_images.iter().any(|image| {
+                    state.id != image.state.id
+                        && autonomous_scope_is_inside(diagram, parent, &image.state.id)
+                })
         });
         let inner_sizes: Vec<(String, f64, f64, StateLayoutShape)> = inner_ids
             .iter()
             .map(|id| {
-                if let Some(child) = children.iter().find(|child| child.state.id == *id) {
+                if let Some(child) = region_images.iter().find(|child| child.state.id == *id) {
                     (id.clone(), child.width, child.height, StateLayoutShape::Box)
+                } else if live_clusters.iter().any(|cluster| cluster.id == *id) {
+                    (
+                        id.clone(),
+                        SVEK_CLUSTER_ENDPOINT_SIZE,
+                        SVEK_CLUSTER_ENDPOINT_SIZE,
+                        StateLayoutShape::Circle,
+                    )
                 } else {
                     let state = diagram.states.iter().find(|state| state.id == *id);
                     let (width, height, shape) =
@@ -2965,13 +3134,16 @@ fn build_autonomous_composite_node<'a>(
                 inner_ids,
                 transition_indices,
                 &inner_sizes,
+                &live_clusters,
                 arrow_font,
                 None,
             )?)
         };
+        children.extend(region_images);
         regions.push(AutonomousRegion {
             layout,
             empty_concurrent_state,
+            live_clusters,
         });
     }
     let separator = composite.concurrent_separator;
@@ -3015,7 +3187,7 @@ fn build_autonomous_composite_node<'a>(
     let height =
         inner_height + title_height + attribute_height + STATE_DIMENSION_PADDING + field_margin;
 
-    Some(AutonomousComposite {
+    Some(StateGroupOutcome::Image(AutonomousComposite {
         state: composite,
         regions,
         children,
@@ -3026,7 +3198,18 @@ fn build_autonomous_composite_node<'a>(
         field_margin,
         width,
         height,
-    })
+    }))
+}
+
+fn build_autonomous_composite_node<'a>(
+    diagram: &'a StateDiagram,
+    composite: &'a State,
+    arrow_font: &StateArrowFont,
+) -> Option<AutonomousComposite<'a>> {
+    match build_state_group_outcome(diagram, composite, arrow_font)? {
+        StateGroupOutcome::Image(image) => Some(image),
+        StateGroupOutcome::Cluster { .. } => None,
+    }
 }
 
 /// Build every root autonomous image and their shared outer SVEK layout.
@@ -3047,10 +3230,6 @@ fn build_autonomous_composite<'a>(
             .states
             .iter()
             .any(|state| !StateEntityPosition::of(state).is_normal())
-        || diagram
-            .transitions
-            .iter()
-            .any(|transition| transition_parent_scope(diagram, transition).is_none())
     {
         return None;
     }
@@ -3104,6 +3283,7 @@ fn build_autonomous_composite<'a>(
         outer_ids,
         outer_transition_indices,
         &outer_sizes,
+        &[],
         arrow_font,
         Some(autonomous_outer_spacing(diagram)),
     )?;
@@ -3881,6 +4061,26 @@ fn emit_autonomous_composite(
                 (region.layout.width, region.layout.height),
             );
         }
+        for live_cluster in &region.live_clusters {
+            let Some(cluster) = region
+                .layout
+                .cluster_positions
+                .iter()
+                .find(|cluster| cluster.id == live_cluster.id)
+            else {
+                continue;
+            };
+            emit_root_state_cluster(
+                svg,
+                context,
+                live_cluster,
+                cluster,
+                (
+                    offset.0 + region.layout.origin_x,
+                    offset.1 + region.layout.origin_y,
+                ),
+            );
+        }
         for child in &composite.children {
             if let Some((_, cx, cy, _, _)) = region
                 .layout
@@ -3959,19 +4159,29 @@ fn render_autonomous_composite(diagram: &StateDiagram) -> Option<String> {
     )
     .unwrap();
 
-    for composite in &composites {
-        let (_, composite_cx, composite_cy, _, _) = outer
-            .positions
+    for id in &outer.ids {
+        if let Some(composite) = composites
             .iter()
-            .find(|(id, _, _, _, _)| id == &composite.state.id)?;
-        emit_autonomous_composite(
-            &mut svg,
-            &context,
-            composite,
-            (*composite_cx, *composite_cy),
-        );
+            .find(|composite| composite.state.id == *id)
+        {
+            let (_, composite_cx, composite_cy, _, _) = outer
+                .positions
+                .iter()
+                .find(|(position_id, _, _, _, _)| position_id == id)?;
+            emit_autonomous_composite(
+                &mut svg,
+                &context,
+                composite,
+                (*composite_cx, *composite_cy),
+            );
+        } else {
+            let mut entity_scope = outer.clone();
+            entity_scope
+                .positions
+                .retain(|(position_id, _, _, _, _)| position_id == id);
+            emit_autonomous_scope_entities(&mut svg, &context, &entity_scope, (0.0, 0.0), true);
+        }
     }
-    emit_autonomous_scope_entities(&mut svg, &context, &outer, (0.0, 0.0), true);
     emit_autonomous_scope_links(&mut svg, &context, &outer, (0.0, 0.0));
     svg.push_str("</g></svg>");
     Some(svg)
@@ -4214,10 +4424,6 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
     if !diagram.notes.is_empty()
         || diagram.meta.title.is_some()
         || !diagram.meta.skinparams.is_empty()
-        || diagram
-            .transitions
-            .iter()
-            .any(|transition| transition.label.is_some())
         || diagram.states.iter().any(|state| {
             !matches!(
                 state.kind,
@@ -4241,7 +4447,6 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
     composites.sort_by_key(|state| state.decl_line.unwrap_or(state.source_line));
     if composites.is_empty()
         || (!has_border_points && composites.len() < 2)
-        || composites.iter().any(|state| state.parent.is_some())
         || diagram.states.iter().any(|state| {
             state
                 .parent
@@ -4267,7 +4472,12 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
         .map(|id| {
             if composites.iter().any(|composite| composite.id == *id) {
                 layout.add_svek_cluster_endpoint(id);
-                (id.clone(), 0.72, 0.72, StateLayoutShape::Circle)
+                (
+                    id.clone(),
+                    SVEK_CLUSTER_ENDPOINT_SIZE,
+                    SVEK_CLUSTER_ENDPOINT_SIZE,
+                    StateLayoutShape::Circle,
+                )
             } else {
                 let state = diagram.states.iter().find(|state| state.id == *id);
                 let (width, height, shape) = layout_node_size(id, state, false);
@@ -4280,7 +4490,7 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
     for composite in &composites {
         layout.add_svek_cluster(
             &composite.id,
-            None,
+            composite.parent.as_deref(),
             ClusterTitleSize {
                 width: text_render::measure(&composite.label, STATE_FONT_SIZE, false),
                 height: text_render::label_height(&composite.label, STATE_FONT_SIZE),
@@ -4605,6 +4815,37 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
             .fold(f64::NEG_INFINITY, f64::max);
         include_point(arrow_min_x - 10.0, arrow_min_y);
         include_point(arrow_max_x + 10.0, arrow_max_y);
+    }
+    for transition_index in &transition_indices {
+        let transition = &diagram.transitions[*transition_index];
+        let Some(label) = transition.label.as_deref() else {
+            continue;
+        };
+        let Some(layout_edge_index) = transition_layout_edges.get(transition_index) else {
+            continue;
+        };
+        let Some(position) = result
+            .edge_paths
+            .iter()
+            .find(|edge| edge.edge_index == *layout_edge_index)
+            .and_then(|edge| edge.label)
+        else {
+            continue;
+        };
+        let margin = autonomous_edge_label_margin(transition);
+        let x = quantize_svek_coord(position.x) + margin;
+        let baseline = quantize_svek_coord(position.y)
+            + margin
+            + text_render::label_ascent(label, arrow_font.size as f64);
+        let width = text_render::measure_with_family(
+            label,
+            arrow_font.size as f64,
+            arrow_font.bold,
+            &arrow_font.family,
+        );
+        let height = text_render::label_height(label, arrow_font.size as f64);
+        include_point(x, baseline - height + LIMIT_FINDER_TEXT_ADJUST);
+        include_point(x + width + margin, baseline + LIMIT_FINDER_TEXT_ADJUST);
     }
     if !painted_min_x.is_finite()
         || !painted_min_y.is_finite()
