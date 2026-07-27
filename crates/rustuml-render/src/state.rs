@@ -20,7 +20,9 @@ use crate::layout_oracle::{
     wrap_oracle_envelope,
 };
 use crate::style::Theme;
+use crate::style_cascade::{StyleCascade, StyleSignature};
 use crate::text_render::{self, TextBase};
+use rustuml_parser::diagram::style::StyleScheme;
 
 #[derive(Debug)]
 struct StateGradient {
@@ -1986,7 +1988,7 @@ impl StateSkin {
             .unwrap_or(1.0);
         let start_color = color("stateStartColor");
         let end_color = color("stateEndColor");
-        Self {
+        let mut skin = Self {
             stroke,
             border_thickness,
             text_color,
@@ -1996,7 +1998,40 @@ impl StateSkin {
             root_line_color,
             start_color,
             end_color,
+        };
+
+        let cascade = StyleCascade::new(&diagram.meta.style_program);
+        let state_signature =
+            StyleSignature::from_selectors(["root", "element", "stateDiagram", "state"]);
+        let arrow_signature =
+            StyleSignature::from_selectors(["root", "element", "stateDiagram", "arrow"]);
+        let state_style = cascade.resolve(&state_signature, StyleScheme::Regular);
+        let arrow_style = cascade.resolve(&arrow_signature, StyleScheme::Regular);
+        if let Some(value) = state_style.property("backgroundColor") {
+            skin.state_fill = crate::sequence::resolve_color(value);
         }
+        if let Some(value) = state_style.property("lineColor") {
+            let color = crate::sequence::resolve_color(value);
+            skin.stroke = color.clone();
+            skin.root_line_color = Some(color);
+        }
+        if let Some(value) = state_style.property("lineThickness")
+            && let Ok(value) = value.parse::<f64>()
+        {
+            skin.border_thickness = fmt_f(value);
+        }
+        if let Some(value) = state_style.property("fontColor") {
+            skin.text_color = crate::sequence::resolve_color(value);
+        }
+        if let Some(value) = arrow_style.property("lineColor") {
+            skin.arrow_color = crate::sequence::resolve_color(value);
+        }
+        if let Some(value) = arrow_style.property("lineThickness")
+            && let Ok(value) = value.parse::<f64>()
+        {
+            skin.arrow_thickness = value;
+        }
+        skin
     }
 }
 
@@ -2195,7 +2230,7 @@ fn autonomous_state_style(
         &["stateAttributeFontStyle", "stateFontStyle"],
     );
 
-    AutonomousStateStyle {
+    let mut style = AutonomousStateStyle {
         fill: stereo_color(&["BackgroundColor"]).unwrap_or_else(|| skin.state_fill.clone()),
         stroke: stereo_color(&["BorderColor"]).unwrap_or_else(|| skin.stroke.clone()),
         border_thickness: stereo_value(&["BorderThickness"])
@@ -2219,6 +2254,81 @@ fn autonomous_state_style(
             bold: attribute_flags.0,
             italic: attribute_flags.1,
         },
+    };
+
+    let cascade = StyleCascade::new(&diagram.meta.style_program);
+    let mut state_signature =
+        StyleSignature::from_selectors(["root", "element", "stateDiagram", "state"]);
+    let mut header_signature =
+        StyleSignature::from_selectors(["root", "element", "stateDiagram", "state", "header"]);
+    if let Some(stereotype) = stereotype {
+        state_signature = state_signature.with_stereotype(stereotype);
+        header_signature = header_signature.with_stereotype(stereotype);
+    }
+    let state_style = cascade.resolve(&state_signature, StyleScheme::Regular);
+    let header_style = cascade.resolve(&header_signature, StyleScheme::Regular);
+
+    if let Some(value) = state_style.property("backgroundColor") {
+        style.fill = crate::sequence::resolve_color(value);
+    }
+    if let Some(value) = state_style.property("lineColor") {
+        style.stroke = crate::sequence::resolve_color(value);
+    }
+    if let Some(value) = state_style.property("lineThickness")
+        && let Ok(value) = value.parse::<f64>()
+    {
+        style.border_thickness = fmt_f(value);
+    }
+    if let Some(value) = state_style.property("shadowing") {
+        style.shadow = match value.trim().to_ascii_lowercase().as_str() {
+            "true" | "yes" => 3.0,
+            "false" | "no" => 0.0,
+            _ => value.trim().parse::<f64>().unwrap_or(style.shadow).max(0.0),
+        };
+    }
+    apply_resolved_state_text_style(&mut style.attribute, &state_style);
+    apply_resolved_state_text_style(&mut style.title, &header_style);
+    style
+}
+
+fn apply_resolved_state_text_style(
+    text: &mut AutonomousTextStyle,
+    resolved: &crate::style_cascade::ResolvedStyle<'_>,
+) {
+    if let Some(value) = resolved.property("fontColor") {
+        text.color = crate::sequence::resolve_color(value);
+    }
+    if let Some(value) = resolved.property("fontName") {
+        text.family = canonical_state_font_family(value);
+    }
+    if let Some(value) = resolved.property("fontSize")
+        && let Ok(value) = value.parse::<f64>()
+    {
+        text.size = value;
+    }
+    if let Some(value) = resolved.property("fontStyle") {
+        let value = value.trim().to_ascii_lowercase();
+        match value.as_str() {
+            "bold" | "bolder" => {
+                text.bold = true;
+                text.italic = false;
+            }
+            "italic" => {
+                text.bold = false;
+                text.italic = true;
+            }
+            "plain" | "normal" | "lighter" => {
+                text.bold = false;
+                text.italic = false;
+            }
+            _ => {
+                text.bold = value
+                    .parse::<u16>()
+                    .ok()
+                    .is_some_and(|weight| weight >= 700);
+                text.italic = false;
+            }
+        }
     }
 }
 

@@ -78,9 +78,7 @@ impl<'a> ResolvedStyle<'a> {
     pub fn iter(&self) -> impl Iterator<Item = (&str, &'a str)> + '_ {
         self.declarations
             .iter()
-            .map(|(property, declaration)| {
-                (property.as_str(), declaration.value.as_str())
-            })
+            .map(|(property, declaration)| (property.as_str(), declaration.value.as_str()))
     }
 }
 
@@ -98,11 +96,7 @@ impl<'a> StyleCascade<'a> {
     }
 
     /// Resolve against the complete style program.
-    pub fn resolve(
-        &self,
-        signature: &StyleSignature,
-        scheme: StyleScheme,
-    ) -> ResolvedStyle<'a> {
+    pub fn resolve(&self, signature: &StyleSignature, scheme: StyleScheme) -> ResolvedStyle<'a> {
         self.resolve_at(signature, scheme, u64::MAX)
     }
 
@@ -120,9 +114,7 @@ impl<'a> StyleCascade<'a> {
         let mut dark = BTreeMap::<String, Winner<'a>>::new();
 
         for (order, declaration) in self.program.declarations.iter().enumerate() {
-            if declaration.epoch > epoch_ceiling
-                || !declaration_matches(declaration, signature)
-            {
+            if declaration.epoch > epoch_ceiling || !declaration_matches(declaration, signature) {
                 continue;
             }
 
@@ -289,6 +281,7 @@ mod tests {
             property: property.to_string(),
             value: value.to_string(),
             scheme,
+            source_line: epoch as usize,
             epoch,
             priority,
             origin: StyleOrigin::UserStyle,
@@ -341,15 +334,9 @@ mod tests {
                 1,
             ),
         ]);
-        let family =
-            StyleSignature::from_selectors(["root", "element", "classDiagram", "class"]);
-        let header = StyleSignature::from_selectors([
-            "root",
-            "element",
-            "classDiagram",
-            "class",
-            "header",
-        ]);
+        let family = StyleSignature::from_selectors(["root", "element", "classDiagram", "class"]);
+        let header =
+            StyleSignature::from_selectors(["root", "element", "classDiagram", "class", "header"]);
         let cascade = StyleCascade::new(&program);
 
         assert_eq!(
@@ -417,8 +404,7 @@ mod tests {
                 1,
             ),
         ]);
-        let plain =
-            StyleSignature::from_selectors(["root", "element", "classdiagram", "class"]);
+        let plain = StyleSignature::from_selectors(["root", "element", "classdiagram", "class"]);
         let stereotyped = plain.clone().with_stereotype("<<Critical.Alert>>");
         let cascade = StyleCascade::new(&program);
 

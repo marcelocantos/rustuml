@@ -13,6 +13,7 @@ use rustuml_layout::graph::{
     LayoutGraph,
 };
 use rustuml_parser::diagram::component::*;
+use rustuml_parser::diagram::style::StyleScheme;
 use rustuml_parser::diagram::{LegendHorizontalAlignment, LegendVerticalAlignment};
 
 use crate::layout_oracle::{
@@ -21,6 +22,7 @@ use crate::layout_oracle::{
 };
 use crate::plantuml_metrics as pm;
 use crate::style::Theme;
+use crate::style_cascade::{StyleCascade, StyleSignature};
 use crate::svg::SvgBuilder;
 use crate::text_render::{self, TextBase};
 
@@ -1175,6 +1177,64 @@ pub fn render_with_oracle(
             }
             _ => {}
         }
+    }
+    let cascade = StyleCascade::new(&diagram.meta.style_program);
+    let component_signature =
+        StyleSignature::from_selectors(["root", "element", "componentDiagram", "component"]);
+    let arrow_signature =
+        StyleSignature::from_selectors(["root", "element", "componentDiagram", "arrow"]);
+    let document_signature = StyleSignature::from_selectors(["root", "document"]);
+    let component_style = cascade.resolve(&component_signature, StyleScheme::Regular);
+    let arrow_style = cascade.resolve(&arrow_signature, StyleScheme::Regular);
+    let document_style = cascade.resolve(&document_signature, StyleScheme::Regular);
+    if let Some(value) = component_style.property("backgroundColor") {
+        component_fill = crate::sequence::gradient_fill_or(value, gradient_defs);
+    }
+    if let Some(value) = component_style.property("lineColor") {
+        component_stroke = crate::sequence::resolve_color(value);
+    }
+    if let Some(value) = component_style.property("lineThickness")
+        && let Ok(value) = value.parse::<f64>()
+    {
+        component_stroke_width = value;
+    }
+    if let Some(value) = component_style.property("roundCorner")
+        && let Ok(value) = value.parse::<f64>()
+    {
+        component_round_corner = Some(value / 2.0);
+    }
+    if let Some(value) = component_style.property("lineStyle") {
+        component_line_style =
+            ComponentLineStyle::from_skinparam(value).unwrap_or(component_line_style);
+    }
+    if let Some(value) = component_style.property("fontColor") {
+        component_font_color_sp = Some(crate::sequence::resolve_color(value));
+    }
+    if let Some(value) = component_style.property("fontName") {
+        component_font_family_sp = Some(canonical_font_family(value));
+    }
+    if let Some(value) = component_style.property("fontSize") {
+        component_font_size_sp = value.parse::<f64>().ok();
+    }
+    if let Some(value) = component_style.property("fontStyle") {
+        let value = value.to_ascii_lowercase();
+        component_font_bold = value.contains("bold");
+        component_font_italic = value.contains("italic");
+    }
+    if let Some(value) = arrow_style.property("lineColor") {
+        component_arrow_stroke = crate::sequence::resolve_color(value);
+    }
+    if let Some(value) = arrow_style.property("fontColor") {
+        component_arrow_font_color_sp = Some(crate::sequence::resolve_color(value));
+    }
+    if let Some(value) = arrow_style.property("fontName") {
+        component_arrow_font_family_sp = Some(canonical_font_family(value));
+    }
+    if let Some(value) = arrow_style.property("fontSize") {
+        component_arrow_font_size_sp = value.parse::<f64>().ok();
+    }
+    if let Some(value) = document_style.property("backgroundColor") {
+        bg_value = Some(value.to_string());
     }
     let default_font_family = default_font_family.unwrap_or_else(|| "sans-serif".to_string());
     let component_font_family = component_font_family_sp

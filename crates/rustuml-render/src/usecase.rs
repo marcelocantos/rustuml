@@ -14,10 +14,12 @@ use rustuml_layout::graph::{
     ClusterPosition, ClusterTitleSize, Direction, EdgeLabelSize, EdgePath, LayoutGraph,
 };
 use rustuml_parser::diagram::usecase::*;
+use rustuml_parser::diagram::{DiagramMeta, style::StyleScheme};
 
 use crate::layout_oracle::{OracleLayout, wrap_oracle_envelope};
 use crate::plantuml_metrics as pm;
 use crate::style::Theme;
+use crate::style_cascade::{StyleCascade, StyleSignature};
 use crate::svg::SvgBuilder;
 use crate::text_render::{self, TextBase};
 
@@ -207,10 +209,8 @@ struct SkinColors {
 }
 
 impl SkinColors {
-    fn from_meta(
-        skinparams: &[rustuml_parser::diagram::SkinParam],
-        gradient_defs: Option<&str>,
-    ) -> Self {
+    fn from_meta(meta: &DiagramMeta, gradient_defs: Option<&str>) -> Self {
+        let skinparams = &meta.skinparams;
         let default_font_family = skin_value(skinparams, &["defaultFontName", "fontName"])
             .map(canonical_usecase_font_family)
             .unwrap_or_else(|| "sans-serif".to_string());
@@ -249,7 +249,7 @@ impl SkinColors {
             .as_ref()
             .filter(|c| *c != "#FFFFFF")
             .cloned();
-        SkinColors {
+        let mut skin = SkinColors {
             actor_fill: skin_fill(skinparams, "actorBackgroundColor", gradient_defs),
             actor_border: skin_color(skinparams, "actorBorderColor")
                 .or_else(|| skin_color(skinparams, "__styleRootLineColor")),
@@ -303,7 +303,90 @@ impl SkinColors {
             canvas_background,
             canvas_rect,
             gradient_defs: gradient_defs.map(str::to_string),
+        };
+
+        let cascade = StyleCascade::new(&meta.style_program);
+        let actor_signature =
+            StyleSignature::from_selectors(["root", "element", "usecaseDiagram", "actor"]);
+        let usecase_signature =
+            StyleSignature::from_selectors(["root", "element", "usecaseDiagram", "usecase"]);
+        let arrow_signature =
+            StyleSignature::from_selectors(["root", "element", "usecaseDiagram", "arrow"]);
+        let document_signature = StyleSignature::from_selectors(["root", "document"]);
+        let actor_style = cascade.resolve(&actor_signature, StyleScheme::Regular);
+        let usecase_style = cascade.resolve(&usecase_signature, StyleScheme::Regular);
+        let arrow_style = cascade.resolve(&arrow_signature, StyleScheme::Regular);
+        let document_style = cascade.resolve(&document_signature, StyleScheme::Regular);
+
+        if let Some(value) = actor_style.property("backgroundColor") {
+            skin.actor_fill = Some(crate::sequence::gradient_fill_or(value, gradient_defs));
         }
+        if let Some(value) = actor_style.property("lineColor") {
+            skin.actor_border = Some(crate::sequence::resolve_color(value));
+        }
+        if let Some(value) = actor_style.property("lineThickness")
+            && let Ok(value) = value.parse::<f64>()
+        {
+            skin.actor_border_thickness = fc(value);
+        }
+        if let Some(value) = actor_style.property("fontColor") {
+            skin.actor_font_color = crate::sequence::resolve_color(value);
+        }
+        if let Some(value) = actor_style.property("fontName") {
+            skin.actor_font_family = canonical_usecase_font_family(value);
+        }
+        if let Some(value) = actor_style.property("fontSize")
+            && let Ok(value) = value.parse::<f64>()
+        {
+            skin.actor_font_size = value.round() as u32;
+        }
+        if let Some(value) = usecase_style.property("backgroundColor") {
+            skin.uc_fill = Some(crate::sequence::gradient_fill_or(value, gradient_defs));
+        }
+        if let Some(value) = usecase_style.property("lineColor") {
+            skin.uc_border = Some(crate::sequence::resolve_color(value));
+        }
+        if let Some(value) = usecase_style.property("lineThickness")
+            && let Ok(value) = value.parse::<f64>()
+        {
+            skin.uc_border_thickness = fc(value);
+        }
+        if let Some(value) = usecase_style.property("fontColor") {
+            skin.uc_font_color = crate::sequence::resolve_color(value);
+        }
+        if let Some(value) = usecase_style.property("fontName") {
+            skin.uc_font_family = canonical_usecase_font_family(value);
+        }
+        if let Some(value) = usecase_style.property("fontSize")
+            && let Ok(value) = value.parse::<f64>()
+        {
+            skin.uc_font_size = value.round() as u32;
+        }
+        if let Some(value) = arrow_style.property("lineColor") {
+            skin.arrow_color = crate::sequence::resolve_color(value);
+        }
+        if let Some(value) = arrow_style.property("fontColor") {
+            skin.arrow_font_color = crate::sequence::resolve_color(value);
+        }
+        if let Some(value) = arrow_style.property("fontName") {
+            skin.arrow_font_family = canonical_usecase_font_family(value);
+        }
+        if let Some(value) = arrow_style.property("fontSize")
+            && let Ok(value) = value.parse::<f64>()
+        {
+            skin.arrow_font_size = value.round() as u32;
+        }
+        if let Some(value) = document_style.property("backgroundColor") {
+            let color = crate::sequence::resolve_color(value);
+            if color.eq_ignore_ascii_case("transparent") {
+                skin.canvas_background = None;
+                skin.canvas_rect = None;
+            } else {
+                skin.canvas_rect = (color != "#FFFFFF").then(|| color.clone());
+                skin.canvas_background = Some(color);
+            }
+        }
+        skin
     }
 }
 
@@ -474,7 +557,7 @@ pub fn render_with_oracle(
     let gradient_defs = oracle
         .map(|o| o.defs_inner_xml.as_str())
         .filter(|d| !d.is_empty());
-    let skin = SkinColors::from_meta(&diagram.meta.skinparams, gradient_defs);
+    let skin = SkinColors::from_meta(&diagram.meta, gradient_defs);
     let actor_dims: Vec<ActorDim> = diagram.actors.iter().map(|a| actor_dim(a, &skin)).collect();
     let uc_dims: Vec<UseCaseDim> = diagram
         .use_cases
@@ -4345,7 +4428,7 @@ mod tests {
         let rustuml_parser::diagram::Diagram::UseCase(usecase) = &diagram else {
             panic!("expected use-case diagram");
         };
-        let skin = super::SkinColors::from_meta(&usecase.meta.skinparams, None);
+        let skin = super::SkinColors::from_meta(&usecase.meta, None);
         let dim = super::actor_dim(&usecase.actors[0], &skin);
         let bare_stereo_w = crate::text_render::measure_with_family(
             "\u{00AB}externalized\u{00BB}",
@@ -4544,7 +4627,7 @@ mod tests {
         let rustuml_parser::diagram::Diagram::UseCase(usecase) = &diagram else {
             panic!("expected use-case diagram");
         };
-        let skin = super::SkinColors::from_meta(&usecase.meta.skinparams, None);
+        let skin = super::SkinColors::from_meta(&usecase.meta, None);
         let actor_dims: Vec<_> = usecase
             .actors
             .iter()
@@ -4595,7 +4678,7 @@ mod tests {
         let rustuml_parser::diagram::Diagram::UseCase(usecase) = &diagram else {
             panic!("expected use-case diagram");
         };
-        let skin = super::SkinColors::from_meta(&usecase.meta.skinparams, None);
+        let skin = super::SkinColors::from_meta(&usecase.meta, None);
         let dim = super::use_case_dim(&usecase.use_cases[0], &skin);
         let expected_cx = super::fc(super::DEGENERATED_MARGIN + dim.rx);
         let expected_cy = super::fc(super::DEGENERATED_MARGIN + dim.ry);
@@ -4669,7 +4752,7 @@ FreshActor --> FreshReview
         let rustuml_parser::diagram::Diagram::UseCase(usecase) = &diagram else {
             panic!("expected use-case diagram");
         };
-        let skin = super::SkinColors::from_meta(&usecase.meta.skinparams, None);
+        let skin = super::SkinColors::from_meta(&usecase.meta, None);
         let actor = super::actor_dim(&usecase.actors[0], &skin);
         let usecase = super::use_case_dim(&usecase.use_cases[0], &skin);
         assert!((actor.label_gap - 14.69).abs() < 0.01);
@@ -4692,7 +4775,7 @@ FreshOperator --> FreshCheckpoint
         let rustuml_parser::diagram::Diagram::UseCase(usecase) = &diagram else {
             panic!("expected use-case diagram");
         };
-        let skin = super::SkinColors::from_meta(&usecase.meta.skinparams, None);
+        let skin = super::SkinColors::from_meta(&usecase.meta, None);
         let label = &usecase.use_cases[0].label;
         let atoms = super::use_case_footprint_atoms(
             label,

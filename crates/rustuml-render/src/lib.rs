@@ -64,6 +64,7 @@ pub mod skinparam;
 pub mod sprite;
 pub mod state;
 pub mod style;
+pub mod style_cascade;
 pub mod svg;
 pub mod text_render;
 pub mod timing;

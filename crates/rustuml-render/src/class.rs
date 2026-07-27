@@ -21,6 +21,7 @@ use rustuml_layout::graph::{
 };
 use rustuml_parser::diagram::SpriteData;
 use rustuml_parser::diagram::class::*;
+use rustuml_parser::diagram::style::StyleScheme;
 
 use crate::layout_oracle::{
     CrowMark, EntityPath, EntityPolygon, EntityRect, EntityText, OracleCluster, OracleEdgePath,
@@ -28,6 +29,7 @@ use crate::layout_oracle::{
     emit_oracle_cluster_children, emit_oracle_note_entity, wrap_oracle_envelope,
 };
 use crate::style::Theme;
+use crate::style_cascade::{StyleCascade, StyleSignature};
 use crate::svg::SvgBuilder;
 use crate::text_render::{self, TextBase};
 
@@ -2034,7 +2036,7 @@ fn render_with_oracle_uid_origin(
         }
     }
 
-    let font = ClassFontOverrides::from_skinparams(&diagram.meta.skinparams);
+    let font = ClassFontOverrides::from_diagram(diagram);
 
     // Phase 1: Calculate entity dimensions.
     let dims: Vec<EntityDims> = diagram
@@ -2613,53 +2615,89 @@ impl ClassDocumentMargin {
     }
 }
 
-/// Resolve the root document margin from PlantUML's preprocessed `<style>`
-/// source. This mirrors `Style.getMargin` plus
-/// `TextBlockExporter12026.Builder.calculateMargin`; later root declarations
-/// replace earlier theme values.
 fn class_document_margin(diagram: &ClassDiagram) -> Option<ClassDocumentMargin> {
-    let source = diagram.meta.source.as_deref()?;
-    let mut in_style = false;
-    let mut selector_stack = Vec::<String>::new();
-    let mut margin = None;
-
-    for raw_line in source.lines() {
-        let line = raw_line.trim();
-        if line.eq_ignore_ascii_case("<style>") {
-            in_style = true;
-            selector_stack.clear();
-            continue;
-        }
-        if line.eq_ignore_ascii_case("</style>") {
-            in_style = false;
-            selector_stack.clear();
-            continue;
-        }
-        if !in_style || line.is_empty() {
-            continue;
-        }
-        if let Some(selector) = line.strip_suffix('{') {
-            selector_stack.push(selector.trim().to_ascii_lowercase());
-            continue;
-        }
-        if line.starts_with('}') {
-            selector_stack.pop();
-            continue;
-        }
-        if selector_stack.len() == 1 && selector_stack[0] == "root" {
-            let mut parts = line.split_whitespace();
-            if parts
-                .next()
-                .is_some_and(|name| name.eq_ignore_ascii_case("margin"))
-            {
-                margin = ClassDocumentMargin::parse(&parts.collect::<Vec<_>>().join(" "));
-            }
-        }
-    }
-    margin
+    StyleCascade::new(&diagram.meta.style_program)
+        .resolve(
+            &StyleSignature::from_selectors(["root", "document"]),
+            StyleScheme::Regular,
+        )
+        .property("margin")
+        .and_then(ClassDocumentMargin::parse)
 }
 
 impl ClassFontOverrides {
+    fn from_diagram(diagram: &ClassDiagram) -> Self {
+        let mut font = Self::from_skinparams(&diagram.meta.skinparams);
+        let cascade = StyleCascade::new(&diagram.meta.style_program);
+        let class_style = cascade.resolve(
+            &StyleSignature::from_selectors(["root", "element", "classDiagram", "class"]),
+            StyleScheme::Regular,
+        );
+        let header_style = cascade.resolve(
+            &StyleSignature::from_selectors(["root", "element", "classDiagram", "class", "header"]),
+            StyleScheme::Regular,
+        );
+        let root_style = cascade.resolve(
+            &StyleSignature::from_selectors(["root"]),
+            StyleScheme::Regular,
+        );
+
+        font.class_background = class_style.property("backgroundColor").map(str::to_string);
+        font.border_color = class_style.property("lineColor").map(str::to_string);
+        if let Some(value) = class_style.property("lineThickness") {
+            font.border_width = value.parse::<f64>().ok();
+        }
+        if let Some(value) = class_style.property("roundCorner")
+            && let Ok(value) = value.parse::<f64>()
+        {
+            font.round_corner = value;
+        }
+        let has_legacy_padding = diagram
+            .meta
+            .skinparams
+            .iter()
+            .any(|skinparam| skinparam.key.eq_ignore_ascii_case("padding"));
+        if !has_legacy_padding
+            && let Some(value) = class_style.property("padding")
+            && let Ok(value) = value.parse::<f64>()
+        {
+            font.text_padding = value;
+        }
+        font.attr_font_color = class_style.property("fontColor").map(str::to_string);
+        if let Some(value) = class_style.property("fontName") {
+            font.family = canonical_class_font_family(value);
+        }
+        if let Some(value) = class_style.property("fontSize")
+            && let Ok(value) = value.parse::<u32>()
+        {
+            font.attr_font_size = Some(value);
+        }
+        if let Some(value) = class_style.property("fontStyle") {
+            let value = value.to_ascii_lowercase();
+            font.attr_font_bold = value.contains("bold");
+            font.attr_font_italic = value.contains("italic");
+        }
+
+        font.header_background = header_style.property("backgroundColor").map(str::to_string);
+        font.font_color = header_style.property("fontColor").map(str::to_string);
+        if let Some(value) = header_style.property("fontName") {
+            font.name_family = canonical_class_font_family(value);
+        }
+        if let Some(value) = header_style.property("fontSize")
+            && let Ok(value) = value.parse::<u32>()
+        {
+            font.font_size = Some(value);
+        }
+        if let Some(value) = header_style.property("fontStyle") {
+            let value = value.to_ascii_lowercase();
+            font.font_bold = value.contains("bold");
+            font.font_italic = value.contains("italic");
+        }
+        font.root_line_color = root_style.property("lineColor").map(str::to_string);
+        font.root_font_color = root_style.property("fontColor").map(str::to_string);
+        font
+    }
+
     fn from_skinparams(params: &[rustuml_parser::diagram::SkinParam]) -> Self {
         let plain_theme = params.iter().any(|sp| {
             sp.key.eq_ignore_ascii_case("__theme") && sp.value.trim().eq_ignore_ascii_case("plain")
@@ -3902,7 +3940,7 @@ fn render_plantuml_svg(
         return render_grid_fallback(diagram, cs);
     }
 
-    let font = ClassFontOverrides::from_skinparams(&diagram.meta.skinparams);
+    let font = ClassFontOverrides::from_diagram(diagram);
     let document_margin = class_document_margin(diagram);
     let shadow_filter_id = has_shadowing_skinparam(diagram).then(|| {
         crate::filter_registry::shadow_id_for(diagram.meta.source.as_deref().unwrap_or(""))
@@ -9479,7 +9517,7 @@ fn render_relationship_svg(
     // PlantUML `SvekEdge.drawU` merges the class-diagram arrow style, then
     // lets `Link.getColors` and a link-specific stroke override it. Apply the
     // resolved paint once to the path and every endpoint extremity.
-    let default_arrow_color = diagram
+    let compatibility_arrow_color = diagram
         .meta
         .skinparams
         .iter()
@@ -9489,7 +9527,7 @@ fn render_relationship_svg(
                 || skinparam.key.eq_ignore_ascii_case("ArrowColor")
         })
         .map(|skinparam| crate::sequence::resolve_color(skinparam.value.trim()));
-    let default_arrow_thickness = diagram
+    let compatibility_arrow_thickness = diagram
         .meta
         .skinparams
         .iter()
@@ -9499,6 +9537,18 @@ fn render_relationship_svg(
                 || skinparam.key.eq_ignore_ascii_case("ArrowThickness")
         })
         .and_then(|skinparam| skinparam.value.trim().parse::<f64>().ok());
+    let arrow_style = StyleCascade::new(&diagram.meta.style_program).resolve(
+        &StyleSignature::from_selectors(["root", "element", "classDiagram", "arrow"]),
+        StyleScheme::Regular,
+    );
+    let default_arrow_color = arrow_style
+        .property("lineColor")
+        .map(crate::sequence::resolve_color)
+        .or(compatibility_arrow_color);
+    let default_arrow_thickness = arrow_style
+        .property("lineThickness")
+        .and_then(|value| value.parse::<f64>().ok())
+        .or(compatibility_arrow_thickness);
     let edge_color = rel
         .style
         .color
@@ -11210,7 +11260,7 @@ fn render_grid_fallback(diagram: &ClassDiagram, _cs: &crate::style::ClassStyle) 
             .to_string();
     }
 
-    let font = ClassFontOverrides::from_skinparams(&diagram.meta.skinparams);
+    let font = ClassFontOverrides::from_diagram(diagram);
 
     let dims: Vec<_> = diagram
         .entities
