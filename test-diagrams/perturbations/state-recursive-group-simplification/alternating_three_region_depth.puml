@@ -1,0 +1,29 @@
+@startuml
+state ObservatoryRoot947 {
+  state RelayGrid953 {
+    state CopperCell967 {
+      [*] --> CopperIdle971
+      CopperIdle971 --> CopperBusy977 : engage_copper
+      CopperBusy977 --> [*]
+    }
+    [*] --> CopperCell967
+    CopperCell967 --> [*]
+    --
+    [*] --> VioletIdle983
+    VioletIdle983 --> VioletBusy991 : engage_violet
+    VioletBusy991 --> [*]
+    --
+    state QuartzCell997 {
+      [*] --> QuartzIdle1009
+      QuartzIdle1009 --> QuartzBusy1013 : engage_quartz
+      QuartzBusy1013 --> [*]
+    }
+    [*] --> QuartzCell997
+    QuartzCell997 --> [*]
+  }
+  [*] --> RelayGrid953
+  RelayGrid953 --> [*]
+}
+[*] --> ObservatoryRoot947
+ObservatoryRoot947 --> [*]
+@enduml

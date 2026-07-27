@@ -2284,33 +2284,6 @@ struct AutonomousRenderContext<'a> {
     arrow_font: &'a StateArrowFont,
 }
 
-fn is_direct_concurrent_scope(composite: &str, scope: &str) -> bool {
-    if scope == composite {
-        return true;
-    }
-    scope
-        .strip_prefix(composite)
-        .and_then(|suffix| suffix.strip_prefix(".CONC"))
-        .is_some_and(|index| !index.is_empty() && index.chars().all(|ch| ch.is_ascii_digit()))
-}
-
-fn endpoint_concurrent_scope<'a>(
-    diagram: &'a StateDiagram,
-    endpoint: &'a str,
-    composite: &str,
-) -> Option<&'a str> {
-    let scope = if let Some(scope) = endpoint.strip_prefix("[*]") {
-        scope
-    } else {
-        diagram
-            .states
-            .iter()
-            .find(|state| state.id == endpoint)
-            .and_then(|state| state.parent.as_deref())?
-    };
-    is_direct_concurrent_scope(composite, scope).then_some(scope)
-}
-
 fn endpoint_parent_scope<'a>(
     diagram: &'a StateDiagram,
     endpoint: &'a str,
@@ -2335,6 +2308,65 @@ fn transition_parent_scope<'a>(
     let from = endpoint_parent_scope(diagram, &transition.from)?;
     let to = endpoint_parent_scope(diagram, &transition.to)?;
     (from == to).then_some(from)
+}
+
+fn autonomous_region_scopes(composite: &State) -> Vec<String> {
+    let mut scopes = Vec::with_capacity(composite.concurrent_regions.len() + 1);
+    scopes.push(composite.id.clone());
+    scopes.extend(
+        composite
+            .concurrent_regions
+            .iter()
+            .map(|region| region.id.clone()),
+    );
+    scopes
+}
+
+fn autonomous_scope_parent<'a>(diagram: &'a StateDiagram, scope: &str) -> Option<&'a str> {
+    if let Some(parent) = diagram
+        .states
+        .iter()
+        .find(|state| state.id == scope)
+        .and_then(|state| state.parent.as_deref())
+    {
+        return Some(parent);
+    }
+    diagram.states.iter().find_map(|state| {
+        state
+            .concurrent_regions
+            .iter()
+            .any(|region| region.id == scope)
+            .then_some(state.id.as_str())
+    })
+}
+
+fn autonomous_scope_is_inside(diagram: &StateDiagram, scope: &str, group: &str) -> bool {
+    let mut current = Some(scope);
+    let mut remaining = diagram.states.len() + 1;
+    while let Some(scope) = current {
+        if scope == group {
+            return true;
+        }
+        if remaining == 0 {
+            return false;
+        }
+        remaining -= 1;
+        current = autonomous_scope_parent(diagram, scope);
+    }
+    false
+}
+
+fn autonomous_endpoint_is_inside(diagram: &StateDiagram, endpoint: &str, group: &str) -> bool {
+    endpoint_parent_scope(diagram, endpoint)
+        .flatten()
+        .is_some_and(|scope| autonomous_scope_is_inside(diagram, scope, group))
+}
+
+fn autonomous_group_is_autarkic(diagram: &StateDiagram, group: &str) -> bool {
+    diagram.transitions.iter().all(|transition| {
+        autonomous_endpoint_is_inside(diagram, &transition.from, group)
+            == autonomous_endpoint_is_inside(diagram, &transition.to, group)
+    })
 }
 
 fn autonomous_edge_label_margin(transition: &Transition) -> f64 {
@@ -2816,14 +2848,23 @@ fn build_autonomous_composite_node<'a>(
     composite: &'a State,
     arrow_font: &StateArrowFont,
 ) -> Option<AutonomousComposite<'a>> {
-    if !composite.composite || composite.concurrent_separator.is_some() || composite.url.is_some() {
+    if !composite.composite
+        || composite.url.is_some()
+        || !autonomous_group_is_autarkic(diagram, &composite.id)
+    {
         return None;
     }
 
+    let region_scopes = autonomous_region_scopes(composite);
     let direct_children: Vec<&State> = diagram
         .states
         .iter()
-        .filter(|state| state.parent.as_deref() == Some(composite.id.as_str()))
+        .filter(|state| {
+            state
+                .parent
+                .as_ref()
+                .is_some_and(|parent| region_scopes.contains(parent))
+        })
         .collect();
     if direct_children.is_empty()
         || direct_children
@@ -2842,46 +2883,116 @@ fn build_autonomous_composite_node<'a>(
         children.push(build_autonomous_composite_node(diagram, state, arrow_font)?);
     }
 
-    let transition_indices: Vec<usize> = diagram
-        .transitions
-        .iter()
-        .enumerate()
-        .filter_map(|(index, transition)| {
-            (transition_parent_scope(diagram, transition) == Some(Some(composite.id.as_str())))
-                .then_some(index)
-        })
-        .collect();
-    if transition_indices.is_empty() {
-        return None;
-    }
-
-    let inner_ids = collect_autonomous_scope_ids(diagram, &transition_indices, |state| {
-        state.parent.as_deref() == Some(composite.id.as_str())
-    });
     let skin = StateSkin::from_diagram(diagram);
-    let inner_sizes: Vec<(String, f64, f64, StateLayoutShape)> = inner_ids
-        .iter()
-        .map(|id| {
-            if let Some(child) = children.iter().find(|child| child.state.id == *id) {
-                (id.clone(), child.width, child.height, StateLayoutShape::Box)
-            } else {
-                let state = diagram.states.iter().find(|state| state.id == *id);
-                let (width, height, shape) = autonomous_layout_node_size(diagram, &skin, id, state);
-                (id.clone(), width, height, shape)
+    let mut regions = Vec::with_capacity(region_scopes.len());
+    for scope in region_scopes {
+        let transition_indices: Vec<usize> = diagram
+            .transitions
+            .iter()
+            .enumerate()
+            .filter_map(|(index, transition)| {
+                (transition_parent_scope(diagram, transition) == Some(Some(scope.as_str())))
+                    .then_some(index)
+            })
+            .collect();
+        let inner_ids = collect_autonomous_scope_ids(diagram, &transition_indices, |state| {
+            state.parent.as_deref() == Some(scope.as_str())
+        });
+        let inner_sizes: Vec<(String, f64, f64, StateLayoutShape)> = inner_ids
+            .iter()
+            .map(|id| {
+                if let Some(child) = children.iter().find(|child| child.state.id == *id) {
+                    (id.clone(), child.width, child.height, StateLayoutShape::Box)
+                } else {
+                    let state = diagram.states.iter().find(|state| state.id == *id);
+                    let (width, height, shape) =
+                        autonomous_layout_node_size(diagram, &skin, id, state);
+                    (id.clone(), width, height, shape)
+                }
+            })
+            .collect();
+        let empty_concurrent_state =
+            (scope != composite.id && inner_ids.is_empty() && transition_indices.is_empty())
+                .then_some(scope.clone());
+        let layout = if empty_concurrent_state.is_some() {
+            // `GroupMakerState.getImage` checks for an empty synthetic
+            // CONCURRENT_STATE before its concurrent-image branch.
+            let empty_style = autonomous_state_style(diagram, &skin, None);
+            let empty_label = "\u{00a0}";
+            let empty_width = (empty_style.title.width(empty_label) + STATE_DIMENSION_PADDING)
+                .max(STATE_MIN_WIDTH);
+            let empty_height = (empty_style.title.height(empty_label) + STATE_DIMENSION_PADDING)
+                .max(STATE_BOX_HEIGHT);
+            AutonomousScopeLayout {
+                ids: vec![scope.clone()],
+                positions: vec![(
+                    scope.clone(),
+                    empty_width / 2.0,
+                    empty_height / 2.0,
+                    empty_width,
+                    empty_height,
+                )],
+                cluster_positions: Vec::new(),
+                edge_paths: Vec::new(),
+                transition_layout_edges: std::collections::HashMap::new(),
+                transition_indices: Vec::new(),
+                origin_x: 0.0,
+                origin_y: 0.0,
+                width: empty_width,
+                height: empty_height,
+                compound_clusters: false,
+                painted_bounds: None,
             }
-        })
-        .collect();
-    let layout = layout_autonomous_scope(
-        diagram,
-        inner_ids,
-        transition_indices,
-        &inner_sizes,
-        arrow_font,
-        None,
-    )?;
-    let layout = normalize_autonomous_scope(layout);
-    let inner_width = layout.width;
-    let inner_height = layout.height;
+        } else if inner_ids.is_empty() && transition_indices.is_empty() {
+            AutonomousScopeLayout {
+                ids: Vec::new(),
+                positions: Vec::new(),
+                cluster_positions: Vec::new(),
+                edge_paths: Vec::new(),
+                transition_layout_edges: std::collections::HashMap::new(),
+                transition_indices: Vec::new(),
+                origin_x: SVEK_PAINTED_ORIGIN,
+                origin_y: SVEK_PAINTED_ORIGIN,
+                width: SVEK_RESULT_DIMENSION_PAD,
+                height: SVEK_RESULT_DIMENSION_PAD,
+                compound_clusters: false,
+                painted_bounds: None,
+            }
+        } else {
+            normalize_autonomous_scope(layout_autonomous_scope(
+                diagram,
+                inner_ids,
+                transition_indices,
+                &inner_sizes,
+                arrow_font,
+                None,
+            )?)
+        };
+        regions.push(AutonomousRegion {
+            layout,
+            empty_concurrent_state,
+        });
+    }
+    let separator = composite.concurrent_separator;
+    let (inner_width, inner_height) = match separator {
+        Some('|') => (
+            regions.iter().map(|region| region.layout.width).sum(),
+            regions
+                .iter()
+                .map(|region| region.layout.height)
+                .fold(0.0_f64, f64::max),
+        ),
+        Some('-') => (
+            regions
+                .iter()
+                .map(|region| region.layout.width)
+                .fold(0.0_f64, f64::max),
+            regions.iter().map(|region| region.layout.height).sum(),
+        ),
+        Some(_) => return None,
+        None if regions.len() == 1 => (regions[0].layout.width, regions[0].layout.height),
+        None => return None,
+    };
     let composite_style = autonomous_state_style(diagram, &skin, Some(composite));
     let title_height = composite_style.title.height(&composite.label);
     let attribute_height = composite
@@ -2905,12 +3016,9 @@ fn build_autonomous_composite_node<'a>(
 
     Some(AutonomousComposite {
         state: composite,
-        regions: vec![AutonomousRegion {
-            layout,
-            empty_concurrent_state: None,
-        }],
+        regions,
         children,
-        separator: None,
+        separator,
         inner_width,
         inner_height,
         attribute_height,
@@ -2925,7 +3033,8 @@ fn build_autonomous_composite_node<'a>(
 /// Java provenance: `CucaDiagramSimplifierState.simplify` replaces every
 /// autarkic group with its `GroupMakerState` image, from the deepest groups
 /// outward. The root `GraphvizImageBuilder` therefore receives one solved
-/// image node for each top-level composite, not only when exactly one exists.
+/// image node for each top-level composite, independent of whether its solved
+/// body is ordinary or concurrent.
 fn build_autonomous_composite<'a>(
     diagram: &'a StateDiagram,
     arrow_font: &StateArrowFont,
@@ -2985,266 +3094,6 @@ fn build_autonomous_composite<'a>(
                 let state = diagram.states.iter().find(|state| state.id == *id);
                 let (node_width, node_height, shape) =
                     autonomous_layout_node_size(diagram, &skin, id, state);
-                (id.clone(), node_width, node_height, shape)
-            }
-        })
-        .collect();
-    let outer = layout_autonomous_scope(
-        diagram,
-        outer_ids,
-        outer_transition_indices,
-        &outer_sizes,
-        arrow_font,
-        Some(autonomous_outer_spacing(diagram)),
-    )?;
-
-    Some((composites, outer))
-}
-
-/// Build one root concurrent image using the same independent region images
-/// that Java passes to `ConcurrentStates`.
-fn build_one_level_concurrent_node<'a>(
-    diagram: &'a StateDiagram,
-    composite: &'a State,
-    arrow_font: &StateArrowFont,
-) -> Option<AutonomousComposite<'a>> {
-    if composite.parent.is_some()
-        || composite.concurrent_separator.is_none()
-        || composite.url.is_some()
-    {
-        return None;
-    }
-    let children: Vec<&State> = diagram
-        .states
-        .iter()
-        .filter(|state| {
-            state
-                .parent
-                .as_deref()
-                .is_some_and(|scope| is_direct_concurrent_scope(&composite.id, scope))
-        })
-        .collect();
-    if children.is_empty()
-        || children
-            .iter()
-            .any(|state| !supports_autonomous_state_image(state) || state.url.is_some())
-    {
-        return None;
-    }
-
-    let mut child_composites = Vec::new();
-    for state in children.iter().copied().filter(|state| state.composite) {
-        child_composites.push(build_autonomous_composite_node(diagram, state, arrow_font)?);
-    }
-
-    let mut region_scopes = vec![composite.id.clone()];
-    region_scopes.extend(
-        composite
-            .concurrent_regions
-            .iter()
-            .map(|region| region.id.clone()),
-    );
-    // Models serialized before concurrent-region metadata was introduced can
-    // still reconstruct nonempty scopes from their direct members.
-    for child in &children {
-        let scope = child.parent.as_ref()?;
-        if !region_scopes.contains(scope) {
-            region_scopes.push(scope.clone());
-        }
-    }
-    let mut region_transition_indices = vec![Vec::new(); region_scopes.len()];
-    for (index, transition) in diagram.transitions.iter().enumerate() {
-        let from_scope = endpoint_concurrent_scope(diagram, &transition.from, &composite.id);
-        let to_scope = endpoint_concurrent_scope(diagram, &transition.to, &composite.id);
-        match (from_scope, to_scope) {
-            (Some(from), Some(to)) if from == to => {
-                let region_index = region_scopes.iter().position(|scope| scope == from)?;
-                region_transition_indices[region_index].push(index);
-            }
-            (None, None) => {}
-            _ => return None,
-        }
-    }
-
-    let skin = StateSkin::from_diagram(diagram);
-    let mut regions = Vec::with_capacity(region_scopes.len());
-    for (scope, transition_indices) in region_scopes.into_iter().zip(region_transition_indices) {
-        let inner_ids = collect_autonomous_scope_ids(diagram, &transition_indices, |state| {
-            state.parent.as_deref() == Some(scope.as_str())
-        });
-        let inner_sizes: Vec<(String, f64, f64, StateLayoutShape)> = inner_ids
-            .iter()
-            .map(|id| {
-                if let Some(child) = child_composites.iter().find(|child| child.state.id == *id) {
-                    (id.clone(), child.width, child.height, StateLayoutShape::Box)
-                } else {
-                    let state = diagram.states.iter().find(|state| state.id == *id);
-                    let (width, height, shape) =
-                        autonomous_layout_node_size(diagram, &skin, id, state);
-                    (id.clone(), width, height, shape)
-                }
-            })
-            .collect();
-        let empty_concurrent_state =
-            (scope != composite.id && inner_ids.is_empty() && transition_indices.is_empty())
-                .then_some(scope.clone());
-        let layout = if empty_concurrent_state.is_some() {
-            // Java provenance: `GroupMakerState.getImage` checks for an empty
-            // group before its CONCURRENT_STATE branch and returns
-            // `EntityImageState`, whose minimum ordinary-state size is 50x50.
-            let empty_style = autonomous_state_style(diagram, &skin, None);
-            let empty_label = "\u{00a0}";
-            let empty_width = (empty_style.title.width(empty_label) + STATE_DIMENSION_PADDING)
-                .max(STATE_MIN_WIDTH);
-            let empty_height = (empty_style.title.height(empty_label) + STATE_DIMENSION_PADDING)
-                .max(STATE_BOX_HEIGHT);
-            AutonomousScopeLayout {
-                ids: vec![scope.clone()],
-                positions: vec![(
-                    scope.clone(),
-                    empty_width / 2.0,
-                    empty_height / 2.0,
-                    empty_width,
-                    empty_height,
-                )],
-                cluster_positions: Vec::new(),
-                edge_paths: Vec::new(),
-                transition_layout_edges: std::collections::HashMap::new(),
-                transition_indices: Vec::new(),
-                origin_x: 0.0,
-                origin_y: 0.0,
-                width: empty_width,
-                height: empty_height,
-                compound_clusters: false,
-                painted_bounds: None,
-            }
-        } else {
-            normalize_autonomous_scope(layout_autonomous_scope(
-                diagram,
-                inner_ids,
-                transition_indices,
-                &inner_sizes,
-                arrow_font,
-                None,
-            )?)
-        };
-        regions.push(AutonomousRegion {
-            layout,
-            empty_concurrent_state,
-        });
-    }
-    let separator = composite.concurrent_separator;
-    let (inner_width, inner_height) = match separator {
-        Some('|') => (
-            regions.iter().map(|region| region.layout.width).sum(),
-            regions
-                .iter()
-                .map(|region| region.layout.height)
-                .fold(0.0_f64, f64::max),
-        ),
-        Some('-') => (
-            regions
-                .iter()
-                .map(|region| region.layout.width)
-                .fold(0.0_f64, f64::max),
-            regions.iter().map(|region| region.layout.height).sum(),
-        ),
-        Some(_) | None => return None,
-    };
-    let composite_style = autonomous_state_style(diagram, &skin, Some(composite));
-    let title_height = composite_style.title.height(&composite.label);
-    let attribute_height = composite
-        .descriptions
-        .iter()
-        .map(|description| composite_style.attribute.height(description))
-        .sum::<f64>();
-    let attribute_width = composite
-        .descriptions
-        .iter()
-        .map(|description| composite_style.attribute.width(description))
-        .fold(0.0_f64, f64::max);
-    let field_margin = if attribute_height > 0.0 { 5.0 } else { 0.0 };
-    let width = inner_width
-        .max(composite_style.title.width(&composite.label))
-        .max(attribute_width)
-        + STATE_DIMENSION_PADDING
-        + field_margin;
-    let height =
-        inner_height + title_height + attribute_height + STATE_DIMENSION_PADDING + field_margin;
-
-    Some(AutonomousComposite {
-        state: composite,
-        regions,
-        children: child_composites,
-        separator,
-        inner_width,
-        inner_height,
-        attribute_height,
-        field_margin,
-        width,
-        height,
-    })
-}
-
-/// Build every root concurrent image and their shared outer SVEK layout.
-///
-/// Java provenance: `CucaDiagramSimplifierState.simplify` walks all autarkic
-/// groups deepest-first, and `GroupMakerState.getImage` wraps each region set
-/// in `ConcurrentStates`. The root graph therefore receives every simplified
-/// concurrent group as an independent image node, not only a sole group.
-fn build_one_level_concurrent_composites<'a>(
-    diagram: &'a StateDiagram,
-    arrow_font: &StateArrowFont,
-) -> Option<(Vec<AutonomousComposite<'a>>, AutonomousScopeLayout)> {
-    if !diagram.notes.is_empty()
-        || diagram.meta.title.is_some()
-        || !has_only_autonomous_layout_skinparams(diagram)
-    {
-        return None;
-    }
-    let root_composites = diagram
-        .states
-        .iter()
-        .filter(|state| state.composite && state.parent.is_none())
-        .collect::<Vec<_>>();
-    if root_composites.is_empty()
-        || root_composites
-            .iter()
-            .any(|state| state.concurrent_separator.is_none())
-    {
-        return None;
-    }
-    let composites = root_composites
-        .into_iter()
-        .map(|composite| build_one_level_concurrent_node(diagram, composite, arrow_font))
-        .collect::<Option<Vec<_>>>()?;
-    let outer_transition_indices = diagram
-        .transitions
-        .iter()
-        .enumerate()
-        .filter_map(|(index, transition)| {
-            (transition_parent_scope(diagram, transition) == Some(None)).then_some(index)
-        })
-        .collect::<Vec<_>>();
-    let outer_ids = collect_autonomous_scope_ids(diagram, &outer_transition_indices, |state| {
-        state.parent.is_none()
-    });
-    let outer_sizes: Vec<(String, f64, f64, StateLayoutShape)> = outer_ids
-        .iter()
-        .map(|id| {
-            if let Some(composite) = composites
-                .iter()
-                .find(|composite| id == &composite.state.id)
-            {
-                (
-                    id.clone(),
-                    composite.width,
-                    composite.height,
-                    StateLayoutShape::Box,
-                )
-            } else {
-                let state = diagram.states.iter().find(|state| state.id == *id);
-                let (node_width, node_height, shape) = layout_node_size(id, state, false);
                 (id.clone(), node_width, node_height, shape)
             }
         })
@@ -4087,8 +3936,7 @@ fn emit_autonomous_composite(
 fn render_autonomous_composite(diagram: &StateDiagram) -> Option<String> {
     let skin = StateSkin::from_diagram(diagram);
     let arrow_font = StateArrowFont::from_diagram(diagram);
-    let (composites, outer) = build_autonomous_composite(diagram, &arrow_font)
-        .or_else(|| build_one_level_concurrent_composites(diagram, &arrow_font))?;
+    let (composites, outer) = build_autonomous_composite(diagram, &arrow_font)?;
     let mut all_ids = outer.ids.clone();
     for composite in &composites {
         collect_autonomous_composite_ids(composite, &mut all_ids);
@@ -9680,6 +9528,65 @@ CobaltDecision --> [*]
     }
 
     #[test]
+    fn autarky_uses_descendant_membership_instead_of_immediate_parent_equality() {
+        let input = concat!(
+            "@startuml\n",
+            "state OuterHarbor {\n",
+            "  state InnerVault {\n",
+            "    [*] --> CopperRelay\n",
+            "    CopperRelay --> [*]\n",
+            "  }\n",
+            "  InnerVault --> InnerVault.CopperRelay\n",
+            "}\n",
+            "@enduml\n",
+        );
+        let parsed = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::State(diagram) = &parsed else {
+            panic!("expected state diagram");
+        };
+
+        assert!(autonomous_group_is_autarkic(diagram, "OuterHarbor"));
+        assert!(!autonomous_group_is_autarkic(
+            diagram,
+            "OuterHarbor.InnerVault"
+        ));
+    }
+
+    #[test]
+    fn concurrent_region_scopes_are_descendants_of_their_owner() {
+        let input = concat!(
+            "@startuml\n",
+            "state ParallelHarbor {\n",
+            "  [*] --> CopperRelay\n",
+            "  CopperRelay --> [*]\n",
+            "  --\n",
+            "  [*] --> VioletRelay\n",
+            "  VioletRelay --> [*]\n",
+            "}\n",
+            "[*] --> ParallelHarbor\n",
+            "ParallelHarbor --> [*]\n",
+            "@enduml\n",
+        );
+        let parsed = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::State(diagram) = &parsed else {
+            panic!("expected state diagram");
+        };
+        let parallel = diagram
+            .states
+            .iter()
+            .find(|state| state.id == "ParallelHarbor")
+            .unwrap();
+        let second_region = &parallel.concurrent_regions[0].id;
+
+        assert!(autonomous_scope_is_inside(
+            diagram,
+            second_region,
+            "ParallelHarbor"
+        ));
+        assert!(autonomous_group_is_autarkic(diagram, "ParallelHarbor"));
+    }
+
+    #[test]
     fn renamed_depth_four_composites_build_recursive_autonomous_images() {
         let input = concat!(
             "@startuml\n",
@@ -9971,7 +9878,7 @@ CobaltDecision --> [*]
             panic!("expected state diagram");
         };
         let arrow_font = StateArrowFont::from_diagram(diagram);
-        let (roots, _) = build_one_level_concurrent_composites(diagram, &arrow_font).unwrap();
+        let (roots, _) = build_autonomous_composite(diagram, &arrow_font).unwrap();
         assert_eq!(
             roots
                 .iter()
