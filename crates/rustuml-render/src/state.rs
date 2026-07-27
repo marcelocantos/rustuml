@@ -2755,7 +2755,7 @@ fn emit_autonomous_scope_entities(
                     .unwrap_or_else(|| context.skin.state_fill.clone());
                 write!(
                     svg,
-                    r#"<g class="entity" data-qualified-name="{}" id="{}"><polygon fill="{fill}" points="{},{} {},{} {},{} {},{} {},{}" style="stroke:{};stroke-width:0.5;"/></g>"#,
+                    r#"<g class="entity" data-qualified-name="{}" id="{}"><polygon fill="{fill}" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{};stroke-width:0.5;"/></g>"#,
                     escape_attr(&state.id),
                     autonomous_entity_id(context.entity_ids, id),
                     fmt_f(cx),
@@ -10075,6 +10075,35 @@ CobaltDecision --> [*]
             spacing.rank_sep_px,
             GraphSpacing::PLANTUML_SVEK_DEFAULTS.rank_sep_px
         );
+    }
+
+    #[test]
+    fn autonomous_choice_uses_java_polygon_coordinate_delimiters() {
+        let parsed = rustuml_parser::parse::parse(
+            "@startuml\n\
+             state Outer {\n\
+               state Decision <<choice>>\n\
+               [*] --> Decision\n\
+               Decision --> Accepted\n\
+               Decision --> Rejected\n\
+             }\n\
+             [*] --> Outer\n\
+             @enduml",
+        )
+        .unwrap();
+        let rustuml_parser::diagram::Diagram::State(diagram) = parsed else {
+            panic!("expected state diagram");
+        };
+        let svg = render(&diagram, &Theme::default());
+
+        let points = svg
+            .split_once("<polygon ")
+            .and_then(|(_, suffix)| suffix.split_once("points=\""))
+            .and_then(|(_, suffix)| suffix.split_once('"'))
+            .map(|(points, _)| points)
+            .expect("choice polygon points");
+        assert!(!points.contains(' '), "{points}");
+        assert_eq!(points.split(',').count(), 10);
     }
 
     #[test]
