@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-arrow-style-isolation",
+  "reviewer": {
+    "task_id": "codex-desktop-t14-state-arrow-style-isolation-review-4",
+    "model": "OpenAI GPT-5 Codex"
+  },
+  "account_commit": "dc67cf3ac8132b3acdb5ac632ca6dc5bd6cb0ffe",
+  "corrected_account_commits": [
+    "dc67cf3ac8132b3acdb5ac632ca6dc5bd6cb0ffe",
+    "414c966f4c458090d72747d7d7e88bebc60c77cb"
+  ],
+  "implementation_commit": "f55215d998f50f81e065ac544d093b7929c7aee8",
+  "prior_rejected_review_commit": "8e8a171dda0329a71d448f36568e73922109665e",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "accepted": false,
+  "commands": [
+    "git status --short",
+    "git show --stat --oneline f55215d9",
+    "sed -n '1,260p' docs/parity-reviews/state-arrow-style-isolation/account.json",
+    "sed -n '1,260p' docs/parity-reviews/state-arrow-style-isolation/review-3.json",
+    "git show --unified=80 --find-renames f55215d9 -- crates/rustuml-parser/src/parse/mod.rs",
+    "git show --unified=80 --find-renames f55215d9 -- crates/rustuml-parser/src/preprocess/mod.rs",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/skin/SkinParam.java | sed -n '205,310p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/style/FromSkinparamToStyle.java | sed -n '140,215p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/tim/TContext.java | sed -n '388,410p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/tim/TContext.java | sed -n '725,765p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java | sed -n '806,874p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java | sed -n '110,122p'",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/state-arrow-style-isolation/review4_separator_case_final_cross_family.puml test-diagrams/perturbations/state-arrow-style-isolation/review4_repeated_themes_bidirectional_order.puml",
+    "xmllint --noout test-diagrams/perturbations/state-arrow-style-isolation/review4_separator_case_final_cross_family.svg test-diagrams/perturbations/state-arrow-style-isolation/review4_repeated_themes_bidirectional_order.svg",
+    "stat -f \"%Sm %N\" -t \"%Y-%m-%d %H:%M:%S %z\" target/release/examples/diff_one target/release/rustuml",
+    "cargo build --release -p rustuml-oracle --example diff_one",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/state-arrow-style-isolation/checker_separator_alias_and_local_override.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/state-arrow-style-isolation/checker_theme_user_order_and_local_override.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/state-arrow-style-isolation/review4_separator_case_final_cross_family.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/state-arrow-style-isolation/review4_repeated_themes_bidirectional_order.puml",
+    "cargo test -p rustuml-parser --lib --release -- --nocapture",
+    "cargo test -p rustuml-oracle --test parity_perturbations --release -- --nocapture",
+    "cargo test -p rustuml-oracle --test golden_no_oracle --release -- --nocapture",
+    "cargo clippy --workspace --all-targets --release -- -D warnings",
+    "cargo test -p rustuml-oracle --test harness_guards --release -- --nocapture",
+    "git diff --check"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/state-arrow-style-isolation/review4_separator_case_final_cross_family.puml",
+      "golden": "test-diagrams/perturbations/state-arrow-style-isolation/review4_separator_case_final_cross_family.svg",
+      "axes": [
+        "ordinary aliases with mixed case, underscores, and dots",
+        "final declaration uses a different family spelling: UseCase.Arrow_Color",
+        "local dashed link colour remains the final per-transition override"
+      ],
+      "result": "fail",
+      "arrow_specific_result": "Java renders inherited shafts and heads in #2E7D32; Rust renders the same geometry with inherited #181818 while preserving the local #C2185B override."
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arrow-style-isolation/review4_repeated_themes_bidirectional_order.puml",
+      "golden": "test-diagrams/perturbations/state-arrow-style-isolation/review4_repeated_themes_bidirectional_order.svg",
+      "axes": [
+        "ordinary user declaration before any theme",
+        "real !theme metal followed by user declarations",
+        "real !theme minty followed by final ordinary alias",
+        "local dotted link colour remains the final per-transition override"
+      ],
+      "result": "fail",
+      "arrow_specific_result": "The inherited and local arrow colours match Java (#2E7D32 and #6A1B9A respectively); strict comparison fails on broader themed state geometry and coordinates."
+    }
+  ],
+  "results": {
+    "focused_parser": "pass: 493/493 parser library tests",
+    "prior_separator_heldout": "pass: checker_separator_alias_and_local_override is structurally equivalent after rebuilding diff_one for f55215d9",
+    "prior_theme_heldout": "strict fail: checker_theme_user_order_and_local_override still diverges on broad themed rendering; the diff is not isolated to arrow colour",
+    "parity_perturbations": "fail: includes review4_separator_case_final_cross_family, review4_repeated_themes_bidirectional_order, the prior themed heldout, and previously preserved rejected mechanisms",
+    "golden_no_oracle": "pass: 11049/11251 eligible pairs; state 882/901; skinparam 400/410",
+    "clippy": "pass: cargo clippy --workspace --all-targets --release -- -D warnings",
+    "harness_guards": "fail: 5/6 pass; parity_review_records_are_complete is red because the latest review records for several mechanisms, including this one, are rejected or missing",
+    "diff_check": "pass"
+  },
+  "findings": [
+    "Java SkinParam.setParam calls cleanForKey for each declaration before both the params map update and FromSkinparamToStyle conversion. The pinned cleanForKeySlow lowercases, removes underscores and dots, rewrites sequenceParticipant and sequenceActor prefixes, rewrites activity/class/component/object/sequence/state/usecase Arrow prefixes to the shared arrow prefix, and rewrites terminal align to alignment.",
+    "FromSkinparamToStyle maps arrowColor to the root.element.<diagram>.arrow LineColor style, while stateBorderColor maps to the sibling state LineColor. GraphvizImageBuilder and SvekEdge merge the arrow signature and build the Rainbow from that style, so the final ordinary *ArrowColor spelling must drive inherited state-diagram arrow shafts and heads regardless of which supported family prefix supplied it.",
+    "Commit f55215d9 fixes the review-3 separator/case boundary for final state/global spellings: checker_separator_alias_and_local_override is now structurally equivalent after rebuilding the stale diff_one example. It also avoids fixture labels, SVG surgery, new layout constants, and golden-data embedding.",
+    "The new cross-family heldout rejects the corrected causal claim. Java renders all inherited state arrows in #2E7D32 after final UseCase.Arrow_Color, but Rust renders the same paths and arrowhead points in #181818. The local dashed #C2185B transition remains correct, so this is an inherited arrow-scope failure rather than layout drift.",
+    "The proximate Rust cause is still a parser-renderer boundary mismatch. collapse_reassigned_skinparams correctly compares ordinary declarations through canonical_skinparam_key and retains the latest separator-normalized spelling, but StateSkin::from_diagram only recognizes stateArrowColor and ArrowColor. A latest usecasearrowcolor or classarrowcolor record is therefore invisible to state rendering even though Java has already converted it to arrowColor.",
+    "TContext.executeOneLineNotSafe dispatches THEME immediately to executeTheme, and executeTheme calls executeLines on the theme body before returning to later user lines. The f55215d9 body delimiters and parser splice model preserve enough order for the repeated-theme arrow-specific heldout: final post-minty aRrOw.CoLoR wins and both inherited #2E7D32 and local #6A1B9A colours match Java.",
+    "The repeated-theme heldout and the prior checker_theme_user_order_and_local_override still fail strict comparison on broad themed state rendering: state box dimensions, coordinates, pseudo-state placement, gradients, and element counts differ. This is honest residual theme geometry drift, not evidence that the arrow precedence fix itself failed for repeated themes.",
+    "Internal theme body markers are treated as parser events before the generic double-underscore preservation path. For preprocessor-generated paired markers this reconstructs source order, but user-authored or malformed __theme_body_start/__theme_body_end skinparams are not isolated from the splice machinery. I did not count this as the primary rejection because the cross-family valid-syntax heldout already rejects the ordinary Java alias model.",
+    "Parser coverage for sequenceParticipant/Actor and alignment compatibility is present and green, including replacement_identity_retains_latest_family_spelling and separator_and_alignment_aliases_share_java_key_identity. No no-oracle regression appears in sequenceParticipantPadding or sequenceActor-adjacent families in the 11049/11251 census."
+  ],
+  "verdict": "rejected"
+}

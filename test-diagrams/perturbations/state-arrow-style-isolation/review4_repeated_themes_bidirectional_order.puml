@@ -1,0 +1,15 @@
+@startuml
+skinparam ArrowColor #1565C0
+!theme metal
+skinparam State.Arrow_Color #C62828
+skinparam stateBorderColor #455A64
+!theme minty
+skinparam aRrOw.CoLoR #2E7D32
+state "Boreal Source 2521" as BorealSource2521
+state "Boreal Switch 2527" as BorealSwitch2527
+state "Boreal Sink 2531" as BorealSink2531
+[*] --> BorealSource2521
+BorealSource2521 -[#6A1B9A,dotted]-> BorealSwitch2527 : local override
+BorealSwitch2527 --> BorealSink2531 : inherited after second theme
+BorealSink2531 --> [*]
+@enduml

@@ -1,0 +1,14 @@
+@startuml
+skinparam State.Arrow_Color #1565C0
+skinparam aRrOw_CoLoR #8E24AA
+skinparam CLASS.Arrow.Color #00897B
+skinparam State_Arrow.Color #3949AB
+skinparam UseCase.Arrow_Color #2E7D32
+state "Aurora Intake 2471" as AuroraIntake2471
+state "Aurora Relay 2473" as AuroraRelay2473
+state "Aurora Archive 2477" as AuroraArchive2477
+[*] --> AuroraIntake2471
+AuroraIntake2471 -[#C2185B,dashed]-> AuroraRelay2473 : local cross-check
+AuroraRelay2473 --> AuroraArchive2477 : inherited final family spelling
+AuroraArchive2477 --> [*]
+@enduml
