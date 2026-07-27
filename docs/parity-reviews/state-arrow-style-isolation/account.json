@@ -4,24 +4,32 @@
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "java_locations": [
     "net.sourceforge.plantuml.style.FromSkinparamToStyle#FromSkinparamToStyle",
+    "net.sourceforge.plantuml.skin.SkinParam#cleanForKeySlow",
+    "net.sourceforge.plantuml.skin.SkinParam#setParam",
     "net.sourceforge.plantuml.svek.GraphvizImageBuilder#getDefaultStyleDefinitionArrow",
     "net.sourceforge.plantuml.svek.SvekEdge#getDefaultStyleDefinition",
     "net.sourceforge.plantuml.svek.SvekEdge#drawU",
     "net.sourceforge.plantuml.svek.SvekResult#getDefaultStyleDefinition"
   ],
+  "prior_attempt": {
+    "account_commit": "c4ec5216eead4c32624badea2b6a62cdb3089461",
+    "implementation_commit": "ad832e2c68444330a67c578885a44d64cb28cbfa",
+    "rejected_review_commit": "f5db731b389e06ad35e2f5cc73eb8e4b014540ab",
+    "rejection": "The first correction separated state borders from arrows, but treated stateArrowColor as unconditionally more specific than ArrowColor. Java normalizes both spellings to the same arrowColor style property, so their declarations override in source order."
+  },
   "rust_locations": [
     "crates/rustuml-render/src/state.rs::StateSkin::from_diagram",
     "crates/rustuml-render/src/state.rs::emit_autonomous_scope_links",
     "crates/rustuml-render/src/state.rs::render_with_oracle"
   ],
-  "invariant": "Java resolves state-image borders and state-diagram arrows from sibling style signatures. FromSkinparamToStyle maps stateBorderColor to root.element.stateDiagram.state LineColor and maps global arrowColor to root.element.stateDiagram.arrow LineColor; a state-specific arrow declaration is a more specific arrow-style input, not a state-border fallback. GraphvizImageBuilder and SvekEdge independently construct root.element.<diagram>.arrow, merge that signature with the current StyleBuilder, and derive the shaft and arrowhead Rainbow from the resulting arrow style. Both signatures may inherit the root or theme line color, but neither inherits the other sibling's explicit LineColor. A per-link color remains the final arrow-only override.",
-  "causal_divergence": "Rust resolves stateArrowColor and global ArrowColor first, but when neither is present it falls back to the already-resolved state rectangle stroke. That aliases two independent style channels. Consequently stateBorderColor changes every transition shaft and arrowhead even though Java changes only state chrome. The default corpus hid the alias whenever both sibling signatures inherited the same root color.",
-  "planned_change": "Resolve the arrow fallback from the root/theme line color, or the built-in default when the root supplies none, independently of the state border stroke. Preserve stateArrowColor over global ArrowColor and preserve per-transition color over both. Add renamed perturbations that vary stateBorderColor alone, arrowColor alone, both in opposite declaration orders, and a local transition color, proving that only the named style channel moves. Do not special-case DarkBlue or any fixture name.",
+  "invariant": "Java resolves state-image borders and state-diagram arrows from sibling style signatures. FromSkinparamToStyle maps stateBorderColor to root.element.stateDiagram.state LineColor, while SkinParam.cleanForKeySlow applies patternCleanArrow to both stateArrowColor and ArrowColor and normalizes them to the same arrowColor key before style conversion. SkinParam.setParam processes declarations in source order, so the later alias overwrites the earlier value on root.element.stateDiagram.arrow. GraphvizImageBuilder and SvekEdge independently merge that arrow signature and derive the shaft and arrowhead Rainbow from it. The arrow signature may inherit the root or theme line color, but never the state sibling's explicit LineColor. A per-link color remains the final arrow-only override.",
+  "causal_divergence": "Commit ad832e2c correctly stopped falling back from the arrow signature to the resolved state border stroke, but StateSkin::from_diagram still performs two independent reverse lookups and always checks stateArrowColor before ArrowColor. That invents a specificity relation Java does not have. When stateArrowColor appears first and ArrowColor appears later, Java's normalized arrowColor property contains the later global value while Rust keeps the earlier state-prefixed value. The rejected opposite-order heldout isolates this as eight color-only shaft and arrowhead differences.",
+  "planned_change": "Resolve the diagram arrow color with one reverse source-order lookup whose key predicate accepts either stateArrowColor or ArrowColor, then fall back independently to the root/theme line color and built-in default. Preserve the existing stateBorderColor channel and per-transition final override. Keep both opposite declaration-order controls, border-only control, changed chain lengths, and local link override executable. Do not assign artificial specificity to either alias, special-case a color or fixture, or alter any geometry.",
   "perturbation_axes": [
     "stateBorderColor alone with renamed states and changed chain length",
     "global ArrowColor alone",
-    "stateArrowColor overriding global ArrowColor",
-    "stateBorderColor and ArrowColor in both declaration orders",
+    "stateArrowColor and ArrowColor overriding one another in both source orders",
+    "stateBorderColor remaining isolated from both arrow aliases",
     "per-transition color overriding every diagram-level arrow declaration",
     "root or theme line color inherited by both sibling signatures only when neither has an explicit color"
   ]
