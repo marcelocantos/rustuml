@@ -1,0 +1,14 @@
+@startuml
+state ExitQuartz1999 <<end>>
+state ExitCopper1901 <<end>>
+state ExitIndigo1951 <<end>>
+state ExitAmber1927 <<end>>
+[*] --> DispatchHub1913
+DispatchHub1913 --> WorkingRelay1931 : begin_dispatch
+WorkingRelay1931 --> ExitAmber1927 : amber_shutdown
+WorkingRelay1931 --> ExitQuartz1999 : quartz_shutdown_with_long_text
+WorkingRelay1931 --> ExitCopper1901 : copper_shutdown
+WorkingRelay1931 --> ExitIndigo1951 : indigo_shutdown
+WorkingRelay1931 --> CompletedRelay1973 : continue_normally
+CompletedRelay1973 --> [*]
+@enduml

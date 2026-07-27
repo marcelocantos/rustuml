@@ -1,0 +1,14 @@
+@startuml
+state SplitBeacon1801 <<fork>>
+state MergeBeacon1877 <<join>>
+[*] --> SplitBeacon1801
+SplitBeacon1801 --> NorthCircuit1811 : route_north
+SplitBeacon1801 --> EastCircuit1823 : route_east_with_longer_text
+SplitBeacon1801 --> SouthCircuit1831 : route_south
+SplitBeacon1801 --> WestCircuit1847 : route_west
+NorthCircuit1811 --> MergeBeacon1877 : settle_north
+EastCircuit1823 --> MergeBeacon1877 : settle_east
+SouthCircuit1831 --> MergeBeacon1877 : settle_south
+WestCircuit1847 --> MergeBeacon1877 : settle_west
+MergeBeacon1877 --> [*]
+@enduml

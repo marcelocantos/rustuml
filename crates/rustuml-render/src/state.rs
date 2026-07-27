@@ -194,6 +194,20 @@ const SVEK_PAINTED_ORIGIN: f64 = 6.0;
 /// Java provenance: `SvekResult.calculateDimension` returns
 /// `minMax.getDimension().delta(15, 15)`.
 const SVEK_RESULT_DIMENSION_PAD: f64 = 15.0;
+/// Backward-compatible file margin on the positive axes of Cuca diagrams.
+///
+/// Java provenance: `CucaDiagram.getDefaultMargins` returns zero on the top
+/// and left and five pixels on the right and bottom.
+const CUCA_POSITIVE_AXIS_MARGIN: f64 = 5.0;
+/// Increment applied before Java's SVG backend truncates a visible dimension.
+///
+/// Java provenance: `SvgGraphics.ensureVisible` assigns
+/// `(int) (dimension + 1)` for a new positive maximum.
+const SVG_POSITIVE_DIMENSION_INCREMENT: f64 = 1.0;
+
+fn svg_ensure_visible_dimension(dimension: f64) -> f64 {
+    (dimension + SVG_POSITIVE_DIMENSION_INCREMENT).trunc()
+}
 /// One-pixel frontier adjustment used by Java's primitive bounds.
 ///
 /// Java provenance: `LimitFinder.drawRectangle` expands the upper/left edge
@@ -5523,6 +5537,7 @@ pub fn render_with_oracle(
     // Use oracle layout when available; otherwise attempt Sugiyama layout.
     let use_oracle = oracle.is_some();
     let empty_edge_paths: Vec<EdgePath> = Vec::new();
+    let mut flat_transition_layout_edges = std::collections::HashMap::new();
 
     let layout_result = if use_oracle {
         None
@@ -5567,7 +5582,7 @@ pub fn render_with_oracle(
                 ordinary_label_size,
                 link_note_for_transition(diagram, transition_index),
             );
-            layout.add_edge_with_label_sizes_and_minlen(
+            let layout_edge_index = layout.add_edge_with_label_sizes_and_minlen(
                 layout_from,
                 layout_to,
                 label_size,
@@ -5575,6 +5590,7 @@ pub fn render_with_oracle(
                 None,
                 transition_svek_minlen(diagram, t),
             );
+            flat_transition_layout_edges.insert(transition_index, layout_edge_index);
         }
         for note in &attached_notes {
             let (from, to) = if note.right {
@@ -5593,6 +5609,144 @@ pub fn render_with_oracle(
         layout.layout_full(std::time::Duration::from_secs(5))
     };
 
+    let has_complete_flat_painter_model = diagram.meta.title.is_none()
+        && diagram.meta.skinparams.is_empty()
+        && diagram.notes.is_empty()
+        && diagram.states.iter().all(|state| !state.composite)
+        && diagram
+            .transitions
+            .iter()
+            .all(|transition| transition.from != transition.to);
+    let flat_painted_bounds = layout_result.as_ref().and_then(|result| {
+        if !has_complete_flat_painter_model {
+            return None;
+        }
+        if result.node_positions.len() < layout_node_ids.len() {
+            return None;
+        }
+        let mut bounds = AutonomousPaintedBounds::empty();
+        for (id, position) in layout_node_ids.iter().zip(&result.node_positions) {
+            let x = quantize_svek_coord(position.x);
+            let y = quantize_svek_coord(position.y);
+            if let Some(note) = attached_notes.iter().find(|note| note.id == *id) {
+                bounds.include(x, y);
+                bounds.include(x + note.width, y + note.height);
+                continue;
+            }
+            if let Some(note) = floating_notes.iter().find(|note| note.alias == *id) {
+                bounds.include(x, y);
+                bounds.include(x + note.width, y + note.height);
+                continue;
+            }
+
+            let state = find_state(id);
+            let (width, height, shape) = state_node_size(id, state);
+            match shape {
+                StateLayoutShape::Circle | StateLayoutShape::Port => {
+                    bounds.include(x, y);
+                    bounds.include(
+                        x + width - LIMIT_FINDER_PIXEL_ADJUST,
+                        y + height - LIMIT_FINDER_PIXEL_ADJUST,
+                    );
+                }
+                StateLayoutShape::Diamond => {
+                    bounds.include(x - POLYGON_LIMIT_FINDER_OVERSCAN_X, y);
+                    bounds.include(x + width + POLYGON_LIMIT_FINDER_OVERSCAN_X, y + height);
+                }
+                StateLayoutShape::Box => {
+                    bounds.include(x - LIMIT_FINDER_PIXEL_ADJUST, y - LIMIT_FINDER_PIXEL_ADJUST);
+                    let descriptions_are_hidden =
+                        hide_empty_desc && state.is_none_or(|state| state.descriptions.is_empty());
+                    let has_full_width_divider = state.is_none_or(|state| {
+                        !matches!(state.kind, StateKind::Fork | StateKind::Join)
+                            && !descriptions_are_hidden
+                    });
+                    let max_x = x + width
+                        - if has_full_width_divider {
+                            0.0
+                        } else {
+                            LIMIT_FINDER_PIXEL_ADJUST
+                        };
+                    bounds.include(max_x, y + height - LIMIT_FINDER_PIXEL_ADJUST);
+                }
+            }
+        }
+
+        for (transition_index, transition) in diagram.transitions.iter().enumerate() {
+            let layout_edge_index = flat_transition_layout_edges.get(&transition_index)?;
+            let edge = result
+                .edge_paths
+                .iter()
+                .find(|edge| edge.edge_index == *layout_edge_index)?;
+            if edge.points.is_empty() {
+                continue;
+            }
+            let mut points = edge
+                .points
+                .iter()
+                .map(|(x, y)| (quantize_svek_coord(*x), quantize_svek_coord(*y)))
+                .collect::<Vec<_>>();
+            let arrow_at_start = transition.arrow.arrow_at_start();
+            let (arrow_control, arrow_tip) = if arrow_at_start {
+                (points.get(1).copied().unwrap_or(points[0]), points[0])
+            } else {
+                (
+                    points
+                        .get(points.len().saturating_sub(2))
+                        .copied()
+                        .unwrap_or(points[0]),
+                    points[points.len() - 1],
+                )
+            };
+            if arrow_at_start {
+                retract_dependency_arrow_path_start(&mut points);
+            } else {
+                retract_dependency_arrow_path(&mut points);
+            }
+            for (x, y) in points {
+                bounds.include(x, y);
+            }
+            let arrowhead = arrowhead_points(arrow_control, arrow_tip);
+            let arrow_min_x = arrowhead
+                .iter()
+                .map(|point| point.0)
+                .fold(f64::INFINITY, f64::min);
+            let arrow_max_x = arrowhead
+                .iter()
+                .map(|point| point.0)
+                .fold(f64::NEG_INFINITY, f64::max);
+            let arrow_min_y = arrowhead
+                .iter()
+                .map(|point| point.1)
+                .fold(f64::INFINITY, f64::min);
+            let arrow_max_y = arrowhead
+                .iter()
+                .map(|point| point.1)
+                .fold(f64::NEG_INFINITY, f64::max);
+            bounds.include(arrow_min_x - POLYGON_LIMIT_FINDER_OVERSCAN_X, arrow_min_y);
+            bounds.include(arrow_max_x + POLYGON_LIMIT_FINDER_OVERSCAN_X, arrow_max_y);
+
+            if let Some(label_origin) = edge.label
+                && let Some(label_size) = compose_link_label_size(
+                    transition
+                        .label
+                        .as_deref()
+                        .map(|label| ordinary_edge_label_size(label, &arrow_font)),
+                    link_note_for_transition(diagram, transition_index),
+                )
+            {
+                let mut x = quantize_svek_coord(label_origin.x);
+                let y = quantize_svek_coord(label_origin.y);
+                if transition.from == transition.to {
+                    x += SELF_EDGE_ARROW_MARGIN / 2.0;
+                }
+                bounds.include(x, y);
+                bounds.include(x + label_size.width, y + label_size.height);
+            }
+        }
+        bounds.is_finite().then_some(bounds)
+    });
+
     let layout_positions = layout_result.as_ref().map(|r| &r.node_positions[..]);
     let state_layout_positions = layout_positions.map(|positions| {
         state_ids
@@ -5600,7 +5754,10 @@ pub fn render_with_oracle(
             .filter_map(|id| layout_index_of(id).map(|index| positions[index]))
             .collect::<Vec<_>>()
     });
-    if let Some(layout_positions) = layout_positions {
+    if let Some(bounds) = flat_painted_bounds {
+        graph_body_x = SVEK_PAINTED_ORIGIN - bounds.min_x;
+        graph_body_y = title_h + SVEK_PAINTED_ORIGIN - bounds.min_y;
+    } else if let Some(layout_positions) = layout_positions {
         // `SvekResult.calculateDimension` measures the complete painted body
         // and moves it by `6 - minX`. `LimitFinder.drawRectangle` contributes
         // the one-pixel state overscan, while `drawDotPath` includes every
@@ -5939,11 +6096,20 @@ pub fn render_with_oracle(
                 }
             }
         }
-        let tw = graph_body_x + max_x + right_note_space + SVEK_TRAILING_PAD;
-        let title_tw = graph_body_x + painted_max_x + right_note_space + SVEK_TRAILING_PAD;
-        let th = graph_body_y + max_y + SVEK_TRAILING_PAD;
-        let title_th = graph_body_y + painted_max_y + SVEK_TRAILING_PAD;
-        (positions, tw, th, title_tw, title_th)
+        if let Some(bounds) = flat_painted_bounds {
+            let export_pad = SVEK_RESULT_DIMENSION_PAD + CUCA_POSITIVE_AXIS_MARGIN;
+            let body_width =
+                svg_ensure_visible_dimension(bounds.max_x - bounds.min_x + export_pad);
+            let body_height =
+                svg_ensure_visible_dimension(title_h + bounds.max_y - bounds.min_y + export_pad);
+            (positions, body_width, body_height, body_width, body_height)
+        } else {
+            let tw = graph_body_x + max_x + right_note_space + SVEK_TRAILING_PAD;
+            let title_tw = graph_body_x + painted_max_x + right_note_space + SVEK_TRAILING_PAD;
+            let th = graph_body_y + max_y + SVEK_TRAILING_PAD;
+            let title_th = graph_body_y + painted_max_y + SVEK_TRAILING_PAD;
+            (positions, tw, th, title_tw, title_th)
+        }
     } else {
         // Vertical stacking fallback.
         let max_w: f64 = state_ids
@@ -10367,6 +10533,12 @@ CobaltDecision --> [*]
             svg.contains(r#"textLength="96.5415" x="92.4373" y="218.0566""#),
             "{svg}"
         );
+    }
+
+    #[test]
+    fn svg_visible_dimension_integerizes_once() {
+        assert_eq!(svg_ensure_visible_dimension(223.09), 224.0);
+        assert_eq!(svg_ensure_visible_dimension(223.0), 224.0);
     }
 
     #[test]

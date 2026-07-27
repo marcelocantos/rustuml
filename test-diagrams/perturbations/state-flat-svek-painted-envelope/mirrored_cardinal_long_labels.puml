@@ -1,0 +1,7 @@
+@startuml
+[*] -right-> CopperHarbor1709
+CopperHarbor1709 -up-> IndigoObservatory1721 : climb_to_indigo
+IndigoObservatory1721 -left-> AmberRelay1733 : return_across_amber
+AmberRelay1733 -down-> QuartzTerminal1741 : descend_to_quartz
+QuartzTerminal1741 --> [*]
+@enduml
