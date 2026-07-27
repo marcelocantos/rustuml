@@ -786,13 +786,11 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         scores[1] = scores[0] + 1;
     }
 
-    // `allowmixing` + an explicit class declaration => CLASS, overriding any
-    // state/object/etc. signals from the mixed-in elements. scores[1] (CLASS)
-    // is non-zero only when a real class-style declaration (class/interface/
-    // enum/abstract/annotation/inheritance) was seen, so this never fires on
-    // an `allowmixing` diagram that has no class content (e.g. participant +
-    // component, which Java PlantUML rejects as an error rather than CLASS).
-    if has_allowmixing && scores[1] > 0 {
+    // `allowmixing` is itself a class-diagram command. Java selects the class
+    // factory even when every following leaf uses description syntax; the
+    // selected parser remains responsible for rejecting commands it cannot
+    // consume.
+    if has_allowmixing {
         let other_max = scores
             .iter()
             .enumerate()
@@ -2010,6 +2008,27 @@ Ready --> Suspended : hold
 Suspended --> Ready : resume
 Ready --> [*] : close"#;
         assert!(matches!(parse(states).unwrap(), Diagram::State(_)));
+    }
+
+    #[test]
+    fn description_only_allowmixing_selects_class_factory() {
+        let input = r#"@startuml
+allowmixing
+actor "Renamed Operator" as Operator
+usecase "Renamed Approval" as Approval
+component "Renamed Policy" as Policy
+queue "Renamed Retry" as Retry
+Operator --> Approval
+Approval --> Policy
+Policy --> Retry
+@enduml"#;
+
+        let Diagram::Class(diagram) = parse(input).unwrap() else {
+            panic!("allowmixing must select the class parser");
+        };
+        assert_eq!(diagram.entities.len(), 4);
+        assert!(diagram.entities.iter().all(|entity| entity.id != "all"));
+        assert!(diagram.entities.iter().all(|entity| entity.id != "wmixing"));
     }
 
     #[test]

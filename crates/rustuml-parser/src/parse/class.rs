@@ -591,6 +591,13 @@ impl ClassParser {
             if let Some(entity) = self.find_entity_mut(&final_id) {
                 entity.kind = kind;
                 entity.label = display_label;
+                if caps.get(2).is_some() {
+                    // Java resolves the declaration alias to the quark that a
+                    // relationship may already have created. Presentation is
+                    // refined here, but the quark code becomes the stable
+                    // qualified identity and its creation line is retained.
+                    entity.explicit_alias = true;
+                }
                 if !stereotypes.is_empty() {
                     entity.stereotypes = stereotypes;
                 }
@@ -2267,6 +2274,33 @@ mod tests {
         for (id, kind, source_line) in expected {
             let entity = d.entities.iter().find(|entity| entity.id == id).unwrap();
             assert_eq!(entity.kind, kind);
+            assert_eq!(entity.source_line, source_line);
+        }
+    }
+
+    #[test]
+    fn later_alias_refines_implicit_endpoint_identity_without_moving_ownership() {
+        let d = parse(
+            "allowmixing\n\
+             class DispatchAnchor\n\
+             SlateOperator --> SlateApproval\n\
+             SlateApproval --> SlatePolicy\n\
+             SlatePolicy --> SlateRetry\n\
+             actor \"Slate Operator\" as SlateOperator\n\
+             usecase \"Approve Slate\" as SlateApproval\n\
+             component \"Slate Policy\" as SlatePolicy\n\
+             queue \"Slate Retry\" as SlateRetry",
+        );
+
+        for (id, label, source_line) in [
+            ("SlateOperator", "Slate Operator", 3),
+            ("SlateApproval", "Approve Slate", 3),
+            ("SlatePolicy", "Slate Policy", 4),
+            ("SlateRetry", "Slate Retry", 5),
+        ] {
+            let entity = d.entities.iter().find(|entity| entity.id == id).unwrap();
+            assert_eq!(entity.label, label);
+            assert!(entity.explicit_alias);
             assert_eq!(entity.source_line, source_line);
         }
     }
