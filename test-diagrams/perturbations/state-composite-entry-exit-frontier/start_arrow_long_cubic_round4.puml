@@ -1,0 +1,15 @@
+@startuml
+state ZenithBay47 {
+  state zi <<entryPoint>>
+  state zx <<exitPoint>>
+  state ZenithCore47
+  zi --> ZenithCore47
+  ZenithCore47 --> zx
+}
+
+state RootAnchor47
+
+[*] --> RootAnchor47
+ZenithBay47 -up-> RootAnchor47
+ZenithBay47 --> [*]
+@enduml

@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-composite-entry-exit-frontier",
+  "reviewer": {
+    "task_id": "codex-desktop-independent-checker-round-4-2026-07-27",
+    "model": "GPT-5 Codex"
+  },
+  "account_commit": "4ff3396d35e1c2b854a5b7d4cf2b3e5b1f4b10a3",
+  "account_commits": [
+    "43a18a4a1c64be550ddbaf5362b509dc6736130a",
+    "4ff3396d35e1c2b854a5b7d4cf2b3e5b1f4b10a3",
+    "a50aef46f1199e9d63d943d4edad15c74c9a4b49",
+    "99afc68d922e4211622911a0f906bef5873168a4"
+  ],
+  "implementation_commit": "2c542483068904d4cb8e90f9358bcbe9eedd094d",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "git status --short --branch",
+    "git rev-parse HEAD",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "git show 43a18a4a1c64be550ddbaf5362b509dc6736130a:docs/parity-reviews/state-composite-entry-exit-frontier/account.json",
+    "git show 4ff3396d35e1c2b854a5b7d4cf2b3e5b1f4b10a3:docs/parity-reviews/state-composite-entry-exit-frontier/account.json",
+    "git show a50aef46f1199e9d63d943d4edad15c74c9a4b49:docs/parity-reviews/state-composite-entry-exit-frontier/account.json",
+    "git show 99afc68d922e4211622911a0f906bef5873168a4:docs/parity-reviews/state-composite-entry-exit-frontier/account.json",
+    "git show --format=fuller --no-ext-diff --no-renames 2c542483068904d4cb8e90f9358bcbe9eedd094d -- crates/rustuml-parser crates/rustuml-layout crates/rustuml-render",
+    "cargo test --test parity_perturbations --release",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/state-composite-entry-exit-frontier/cardinal_abbreviation_grid.puml test-diagrams/perturbations/state-composite-entry-exit-frontier/reverse_explicit_direction_matrix.puml test-diagrams/perturbations/state-composite-entry-exit-frontier/mixed_parallel_direction_identity.puml test-diagrams/perturbations/state-composite-entry-exit-frontier/start_arrow_short_cubic_round4.puml test-diagrams/perturbations/state-composite-entry-exit-frontier/start_arrow_long_cubic_round4.puml test-diagrams/perturbations/state-composite-entry-exit-frontier/five_group_depth_reordered.puml",
+    "xmllint --noout test-diagrams/perturbations/state-composite-entry-exit-frontier/cardinal_abbreviation_grid.svg test-diagrams/perturbations/state-composite-entry-exit-frontier/reverse_explicit_direction_matrix.svg test-diagrams/perturbations/state-composite-entry-exit-frontier/mixed_parallel_direction_identity.svg test-diagrams/perturbations/state-composite-entry-exit-frontier/start_arrow_short_cubic_round4.svg test-diagrams/perturbations/state-composite-entry-exit-frontier/start_arrow_long_cubic_round4.svg test-diagrams/perturbations/state-composite-entry-exit-frontier/five_group_depth_reordered.svg",
+    "rg -i \"syntax error|error line|plantuml.*error\" test-diagrams/perturbations/state-composite-entry-exit-frontier/cardinal_abbreviation_grid.svg test-diagrams/perturbations/state-composite-entry-exit-frontier/reverse_explicit_direction_matrix.svg test-diagrams/perturbations/state-composite-entry-exit-frontier/mixed_parallel_direction_identity.svg test-diagrams/perturbations/state-composite-entry-exit-frontier/start_arrow_short_cubic_round4.svg test-diagrams/perturbations/state-composite-entry-exit-frontier/start_arrow_long_cubic_round4.svg test-diagrams/perturbations/state-composite-entry-exit-frontier/five_group_depth_reordered.svg",
+    "tmpdir=$(mktemp -d /private/tmp/rustuml-svek-r4.XXXXXX) && cp test-diagrams/perturbations/state-composite-entry-exit-frontier/mixed_parallel_direction_identity.puml \"$tmpdir/case.puml\" && cd \"$tmpdir\" && java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -debugsvek -tsvg case.puml",
+    "rg -- \"->.*color=\" /private/tmp/rustuml-svek-r4.jGLynY/svek.dot",
+    "rg \"<path fill=\\\"none\\\" stroke=\" /private/tmp/rustuml-svek-r4.jGLynY/svek.svg",
+    "jdb -J-Djava.awt.headless=true -classpath /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "jdb: stop in net.sourceforge.plantuml.klimt.shape.DotPath.moveStartPoint(double,double); run net.sourceforge.plantuml.Run -tsvg case.puml; print dx; print dy; dump this.beziers.elementData[0]; dump this.beziers",
+    "cargo test -p rustuml-parser transition_arrows_preserve_command_orientation_and_link_inversion --release",
+    "cargo test -p rustuml-render start_arrow_retraction_discards_a_short_first_cubic --release",
+    "cargo test --test harness_guards --release parity_review_records_are_complete -- --nocapture",
+    "cargo test --test parity_perturbations --release"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/state-composite-entry-exit-frontier/cardinal_abbreviation_grid.puml",
+      "golden": "test-diagrams/perturbations/state-composite-entry-exit-frontier/cardinal_abbreviation_grid.svg",
+      "axes": [
+        "full and one-letter up/down/left/right directions",
+        "four forward-referenced root composites",
+        "declaration order differing from transition order",
+        "parallel directional links",
+        "root leaves before/between/after groups"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-composite-entry-exit-frontier/reverse_explicit_direction_matrix.puml",
+      "golden": "test-diagrams/perturbations/state-composite-entry-exit-frontier/reverse_explicit_direction_matrix.svg",
+      "axes": [
+        "reverse command combined with all cardinal directions",
+        "full and abbreviated direction tokens",
+        "parallel links with opposite solved endpoint order",
+        "start versus end arrow decoration"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-composite-entry-exit-frontier/mixed_parallel_direction_identity.puml",
+      "golden": "test-diagrams/perturbations/state-composite-entry-exit-frontier/mixed_parallel_direction_identity.svg",
+      "axes": [
+        "ordinary, explicit left/up, reverse, and reverse-explicit links",
+        "three declaration-ordered root composites",
+        "parallel links sharing solved endpoints",
+        "horizontal-only early DOT emission",
+        "Graphviz edge order differing from source insertion order"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-composite-entry-exit-frontier/start_arrow_short_cubic_round4.puml",
+      "golden": "test-diagrams/perturbations/state-composite-entry-exit-frontier/start_arrow_short_cubic_round4.svg",
+      "axes": [
+        "start-arrow tail compound clipping",
+        "first clipped cubic chord below six pixels",
+        "DotPath first-cubic removal"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-composite-entry-exit-frontier/start_arrow_long_cubic_round4.puml",
+      "golden": "test-diagrams/perturbations/state-composite-entry-exit-frontier/start_arrow_long_cubic_round4.svg",
+      "axes": [
+        "start arrow on an unpackaged root leaf",
+        "head-only compound clipping",
+        "first clipped cubic chord above six pixels",
+        "DotPath no-removal branch"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-composite-entry-exit-frontier/five_group_depth_reordered.puml",
+      "golden": "test-diagrams/perturbations/state-composite-entry-exit-frontier/five_group_depth_reordered.svg",
+      "axes": [
+        "five forward-referenced root composites",
+        "changed declaration and transition insertion order",
+        "internal path depths from one through five",
+        "ordinary, explicit left/up, and reverse group links",
+        "root leaves before/between/after groups"
+      ],
+      "result": "pass"
+    }
+  ],
+  "findings": [
+    "The Rust workspace HEAD was exactly 2c542483068904d4cb8e90f9358bcbe9eedd094d, all four account revisions were read directly from Git, and the Java checkout was exactly 71806a23780b04a5ccde2f8ceb5121edad5eb711.",
+    "Before any round-four source was added, cargo test --test parity_perturbations --release passed every existing perturbation pair, including all counterexamples retained by the three prior reviews. Scoped git status and diff checks after fixture generation showed only the thirteen new round-four paths, confirming that prior reviews and fixtures were unchanged.",
+    "Static review found no fixture labels, golden paths, output coordinates, per-cardinality ladders, comparator changes, guard changes, unexplained new layout constants, or baseline changes in implementation commit 2c542483068904d4cb8e90f9358bcbe9eedd094d.",
+    "Parser semantics match Java's two-stage model. StateParser records command_reversed independently from the full or abbreviated direction token; TransitionArrow.reverses_solved_endpoints applies command reversal XOR LEFT/UP inversion, arrow_at_start depends only on LEFT/UP, and is_horizontal depends only on LEFT/RIGHT. The full and abbreviated forward/reverse matrices match Java exactly.",
+    "The mixed parallel trace assigns marker colors in source transition order 000039, 00003D, 000041, 000045 for the ordinary, explicit-left, default-reverse, and reverse-explicit-right links sharing solved endpoints. Java emits the three horizontal lines early and Graphviz returns 00003D, 000041, 000045, 000039. Rust still matches because LayoutGraph carries the caller insertion index into each EdgePath and render_non_autarkic_root_clusters resolves each transition through transition_layout_edges rather than endpoint or traversal-order consumption.",
+    "Horizontal-only early emission is preserved. The explicit-left and reverse horizontal links appear in Java lines0 before cluster emission, while the explicit-up and reverse-down links remain in ordinary link order; Rust uses TransitionArrow.is_horizontal for add_plantuml_svek_line0_edge and uses arrow_at_start separately for inverted-start node ordering.",
+    "A pinned-Java jdb breakpoint at DotPath.moveStartPoint measured start_arrow_short_cubic_round4 before retraction with first cubic endpoints (192.12073629558085,115.07945368289947) and (192.42513996124268,114.76777679443359), a 0.4356650943926185-pixel chord. Because another cubic remains, Java removes it; Rust's DotPath-compatible branch produces the exact Java SVG.",
+    "The corresponding pinned-Java breakpoint for start_arrow_long_cubic_round4 measured first cubic endpoints (258.58,138.24) and (214.58,190.455), a 68.28181474594825-pixel chord. This head-only compound route therefore retains its first cubic; Rust again produces the exact Java SVG.",
+    "The five-group held-out changes composite count, declaration order, transition insertion order, and internal path depth from one through five while mixing ordinary, left, up, and reverse group links. Its exact match supports the declaration-ordered cluster frontier and projection timing model beyond the earlier three- and four-group cases.",
+    "All six new Java SVGs were generated headlessly, parsed as valid XML, and contained no PlantUML error markers. Every new entry/exit label is two ASCII characters, keeping the evidence inside the accounts' integer rendered border-label width <=40 basic-port branch.",
+    "The complete perturbation suite passes every prior and round-four fixture. Static review found no model bypass or policy violation, so the evidence warrants acceptance."
+  ],
+  "verdict": "accepted"
+}

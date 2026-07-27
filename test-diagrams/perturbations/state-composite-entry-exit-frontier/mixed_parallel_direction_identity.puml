@@ -1,0 +1,35 @@
+@startuml
+state UmberDock47 {
+  state ui <<entryPoint>>
+  state ux <<exitPoint>>
+  state UmberCore47
+  ui --> UmberCore47
+  UmberCore47 --> ux
+}
+
+state SableDock47 {
+  state si <<entryPoint>>
+  state sx <<exitPoint>>
+  state SableCore47
+  si --> SableCore47
+  SableCore47 --> sx
+}
+
+state CobaltDock47 {
+  state ci <<entryPoint>>
+  state cx <<exitPoint>>
+  state CobaltCore47
+  ci --> CobaltCore47
+  CobaltCore47 --> cx
+}
+
+[*] --> SableDock47
+SableDock47 --> UmberDock47
+UmberDock47 -left-> SableDock47
+SableDock47 <-- UmberDock47
+UmberDock47 <-right- SableDock47
+SableDock47 -up-> CobaltDock47
+CobaltDock47 <-down- SableDock47
+CobaltDock47 --> UmberDock47
+UmberDock47 --> [*]
+@enduml

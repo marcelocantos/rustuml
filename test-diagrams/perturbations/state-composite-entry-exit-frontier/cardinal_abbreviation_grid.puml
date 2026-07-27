@@ -1,0 +1,52 @@
+@startuml
+[*] --> RootLead47
+RootLead47 --> SouthQuay47
+SouthQuay47 -up-> NorthQuay47
+SouthQuay47 -u-> NorthQuay47
+NorthQuay47 -down-> SouthQuay47
+NorthQuay47 -d-> SouthQuay47
+WestQuay47 -right-> EastQuay47
+WestQuay47 -r-> EastQuay47
+EastQuay47 -left-> WestQuay47
+EastQuay47 -l-> WestQuay47
+WestQuay47 --> RootTail47
+RootTail47 --> [*]
+
+state RootLead47
+
+state EastQuay47 {
+  state ei <<entryPoint>>
+  state ex <<exitPoint>>
+  state EastCore47
+  ei --> EastCore47
+  EastCore47 --> ex
+}
+
+state NorthQuay47 {
+  state ni <<entryPoint>>
+  state nx <<exitPoint>>
+  state NorthCore47
+  ni --> NorthCore47
+  NorthCore47 --> nx
+}
+
+state RootMiddle47
+
+state WestQuay47 {
+  state wi <<entryPoint>>
+  state wx <<exitPoint>>
+  state WestCore47
+  wi --> WestCore47
+  WestCore47 --> wx
+}
+
+state SouthQuay47 {
+  state si <<entryPoint>>
+  state sx <<exitPoint>>
+  state SouthCore47
+  si --> SouthCore47
+  SouthCore47 --> sx
+}
+
+state RootTail47
+@enduml

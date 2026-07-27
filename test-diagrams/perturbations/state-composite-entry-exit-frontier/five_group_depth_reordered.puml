@@ -1,0 +1,77 @@
+@startuml
+[*] --> RootBefore47
+RootBefore47 --> GammaField47
+GammaField47 --> AlphaField47
+AlphaField47 -left-> DeltaField47
+EpsilonField47 <-- BetaField47
+DeltaField47 -up-> EpsilonField47
+BetaField47 --> GammaField47
+GammaField47 --> RootAfter47
+RootAfter47 --> [*]
+
+state RootBefore47
+
+state DeltaField47 {
+  state di <<entryPoint>>
+  state dx <<exitPoint>>
+  state DeltaOne47
+  state DeltaTwo47
+  state DeltaThree47
+  di --> DeltaOne47
+  DeltaOne47 --> DeltaTwo47
+  DeltaTwo47 --> DeltaThree47
+  DeltaThree47 --> dx
+}
+
+state AlphaField47 {
+  state ai <<entryPoint>>
+  state ax <<exitPoint>>
+  state AlphaOne47
+  ai --> AlphaOne47
+  AlphaOne47 --> ax
+}
+
+state RootBetween47
+
+state EpsilonField47 {
+  state ei <<entryPoint>>
+  state ex <<exitPoint>>
+  state EpsilonOne47
+  state EpsilonTwo47
+  state EpsilonThree47
+  state EpsilonFour47
+  ei --> EpsilonOne47
+  EpsilonOne47 --> EpsilonTwo47
+  EpsilonTwo47 --> EpsilonThree47
+  EpsilonThree47 --> EpsilonFour47
+  EpsilonFour47 --> ex
+}
+
+state BetaField47 {
+  state bi <<entryPoint>>
+  state bx <<exitPoint>>
+  state BetaOne47
+  state BetaTwo47
+  bi --> BetaOne47
+  BetaOne47 --> BetaTwo47
+  BetaTwo47 --> bx
+}
+
+state GammaField47 {
+  state gi <<entryPoint>>
+  state gx <<exitPoint>>
+  state GammaOne47
+  state GammaTwo47
+  state GammaThree47
+  state GammaFour47
+  state GammaFive47
+  gi --> GammaOne47
+  GammaOne47 --> GammaTwo47
+  GammaTwo47 --> GammaThree47
+  GammaThree47 --> GammaFour47
+  GammaFour47 --> GammaFive47
+  GammaFive47 --> gx
+}
+
+state RootAfter47
+@enduml

@@ -1,0 +1,31 @@
+@startuml
+state IbisVault47 {
+  state ii <<entryPoint>>
+  state ix <<exitPoint>>
+  state IbisCore47
+  ii --> IbisCore47
+  IbisCore47 --> ix
+}
+
+state LumenVault47 {
+  state li <<entryPoint>>
+  state lx <<exitPoint>>
+  state LumenCore47
+  li --> LumenCore47
+  LumenCore47 --> lx
+}
+
+[*] --> IbisVault47
+IbisVault47 <-left- LumenVault47
+IbisVault47 <-le- LumenVault47
+IbisVault47 <-l- LumenVault47
+IbisVault47 <-right- LumenVault47
+IbisVault47 <-ri- LumenVault47
+IbisVault47 <-r- LumenVault47
+IbisVault47 <-up- LumenVault47
+IbisVault47 <-u- LumenVault47
+IbisVault47 <-down- LumenVault47
+IbisVault47 <-do- LumenVault47
+IbisVault47 <-d- LumenVault47
+LumenVault47 --> [*]
+@enduml

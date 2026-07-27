@@ -1,0 +1,21 @@
+@startuml
+state MicaGate47 {
+  state mi <<entryPoint>>
+  state mx <<exitPoint>>
+  state MicaCore47
+  mi --> MicaCore47
+  MicaCore47 --> mx
+}
+
+state OpalGate47 {
+  state oi <<entryPoint>>
+  state ox <<exitPoint>>
+  state OpalCore47
+  oi --> OpalCore47
+  OpalCore47 --> ox
+}
+
+[*] --> OpalGate47
+OpalGate47 -left-> MicaGate47
+MicaGate47 --> [*]
+@enduml
