@@ -545,6 +545,10 @@ const COMPONENT_MARGIN_TOP: f64 = 20.0;
 const COMPONENT_MARGIN_BOTTOM: f64 = 10.0;
 /// Base component box height (padding around one line of text).
 const COMPONENT_BASE_H: f64 = COMPONENT_MARGIN_TOP + COMPONENT_MARGIN_BOTTOM;
+// Java's Rose component baseline contributes five pixels to the
+// `LimitFinder` frontier. Explicit CSS shadowing instead follows
+// `LimitFinder.drawRectangle`: `2 * deltaShadow`.
+const COMPONENT_DEFAULT_SHADOW_FRONTIER: f64 = 5.0;
 /// Single-line component height.
 const COMPONENT_H: f64 = COMPONENT_BASE_H + LINE_HEIGHT;
 /// Left padding for text inside a component (accounts for icon space on right).
@@ -1029,6 +1033,10 @@ pub fn render_with_oracle(
         ComponentStereotypeStyle,
     > = std::collections::HashMap::new();
     let mut component_arrow_stroke = STROKE.to_string();
+    let mut component_arrow_stroke_width = 1.0;
+    let mut component_arrow_line_style = ComponentLineStyle::Solid;
+    let mut component_padding = 0.0;
+    let mut component_shadow_frontier = COMPONENT_DEFAULT_SHADOW_FRONTIER;
     // `skinparam componentStyle rectangle` draws components as plain rectangles
     // with no UML "tab" icon.
     let mut component_style_rectangle = false;
@@ -1175,6 +1183,9 @@ pub fn render_with_oracle(
             "defaultfontsize" => {
                 default_font_size = val.parse::<f64>().ok();
             }
+            "padding" => {
+                component_padding = val.parse::<f64>().unwrap_or(component_padding);
+            }
             _ => {}
         }
     }
@@ -1187,6 +1198,11 @@ pub fn render_with_oracle(
     let component_style = cascade.resolve(&component_signature, StyleScheme::Regular);
     let arrow_style = cascade.resolve(&arrow_signature, StyleScheme::Regular);
     let document_style = cascade.resolve(&document_signature, StyleScheme::Regular);
+    let component_document_margin = document_style
+        .property("margin")
+        .and_then(|value| value.split_whitespace().next())
+        .and_then(|value| value.parse::<f64>().ok())
+        .unwrap_or(0.0);
     if let Some(value) = component_style.property("backgroundColor") {
         component_fill = crate::sequence::gradient_fill_or(value, gradient_defs);
     }
@@ -1201,11 +1217,26 @@ pub fn render_with_oracle(
     if let Some(value) = component_style.property("roundCorner")
         && let Ok(value) = value.parse::<f64>()
     {
+        // Java `EntityImageDescription` passes the corner diameter through
+        // `URectangle.rounded`; the SVG rectangle stores half as its radius.
         component_round_corner = Some(value / 2.0);
     }
     if let Some(value) = component_style.property("lineStyle") {
         component_line_style =
             ComponentLineStyle::from_skinparam(value).unwrap_or(component_line_style);
+    }
+    if cascade.has_style_declaration(&component_signature, StyleScheme::Regular, "shadowing")
+        && let Some(declaration) = component_style.declaration("shadowing")
+    {
+        let value = declaration.value.as_str();
+        let delta_shadow = match value.trim().to_ascii_lowercase().as_str() {
+            "false" | "no" => 0.0,
+            "true" | "yes" => 1.5,
+            _ => value
+                .parse::<f64>()
+                .unwrap_or(COMPONENT_DEFAULT_SHADOW_FRONTIER / 2.0),
+        };
+        component_shadow_frontier = delta_shadow.max(0.0) * 2.0;
     }
     if let Some(value) = component_style.property("fontColor") {
         component_font_color_sp = Some(crate::sequence::resolve_color(value));
@@ -1223,6 +1254,15 @@ pub fn render_with_oracle(
     }
     if let Some(value) = arrow_style.property("lineColor") {
         component_arrow_stroke = crate::sequence::resolve_color(value);
+    }
+    if let Some(value) = arrow_style.property("lineThickness")
+        && let Ok(value) = value.parse::<f64>()
+    {
+        component_arrow_stroke_width = value;
+    }
+    if let Some(value) = arrow_style.property("lineStyle") {
+        component_arrow_line_style =
+            ComponentLineStyle::from_skinparam(value).unwrap_or(component_arrow_line_style);
     }
     if let Some(value) = arrow_style.property("fontColor") {
         component_arrow_font_color_sp = Some(crate::sequence::resolve_color(value));
@@ -1281,7 +1321,11 @@ pub fn render_with_oracle(
         .iter()
         .zip(&component_text_metrics)
         .map(|(component, metrics)| {
-            calc_component_dim_with_symbol_style(component, metrics, component_style_rectangle)
+            let mut dim =
+                calc_component_dim_with_symbol_style(component, metrics, component_style_rectangle);
+            dim.width += component_padding * 2.0;
+            dim.height += component_padding * 2.0;
+            dim
         })
         .collect();
     let note_dims: Vec<CompDim> = diagram.notes.iter().map(component_note_dim).collect();
@@ -1482,11 +1526,11 @@ pub fn render_with_oracle(
                 width: component_edge_label_layout_width(
                     label,
                     component_arrow_font_size,
-                    center_label_margin,
+                    center_label_margin + component_padding,
                     short_label_compat,
                 ),
                 height: (text_render::label_height(label, component_arrow_font_size)
-                    + center_label_margin * 2.0)
+                    + (center_label_margin + component_padding) * 2.0)
                     .floor(),
             });
             let center_label_size = if let Some((note_index, note)) =
@@ -1496,11 +1540,11 @@ pub fn render_with_oracle(
                     width: component_edge_label_layout_width(
                         label,
                         component_arrow_font_size,
-                        center_label_margin,
+                        center_label_margin + component_padding,
                         short_label_compat,
                     ),
                     height: text_render::label_height(label, component_arrow_font_size)
-                        + center_label_margin * 2.0,
+                        + (center_label_margin + component_padding) * 2.0,
                 });
                 Some(component_link_note_label_size(
                     note,
@@ -1512,8 +1556,12 @@ pub fn render_with_oracle(
             };
             let endpoint_size = |label: Option<&str>| {
                 label.map(|label| EdgeLabelSize {
-                    width: text_render::measure(label, component_arrow_font_size, false).floor(),
-                    height: text_render::label_height(label, component_arrow_font_size).floor(),
+                    width: (text_render::measure(label, component_arrow_font_size, false)
+                        + component_padding * 2.0)
+                        .floor(),
+                    height: (text_render::label_height(label, component_arrow_font_size)
+                        + component_padding * 2.0)
+                        .floor(),
                 })
             };
             let (tail_label, head_label) = if layout_reversed {
@@ -1586,6 +1634,20 @@ pub fn render_with_oracle(
         } else {
             compute_positions_grid(diagram, &comp_dims, title_h)
         };
+    if component_document_margin > 0.0 {
+        for (x, y) in &mut positions {
+            *x += component_document_margin;
+            *y += component_document_margin;
+        }
+        for (x, y) in &mut iface_positions {
+            *x += component_document_margin;
+            *y += component_document_margin;
+        }
+        for cluster in &mut cluster_positions {
+            cluster.x += component_document_margin;
+            cluster.y += component_document_margin;
+        }
+    }
     for (position, interface) in iface_positions.iter_mut().zip(&diagram.interfaces) {
         if let Some((shield_x, _)) = component_interface_shield(diagram, interface) {
             // Java's three fixed table cells round independently. When the
@@ -1669,6 +1731,7 @@ pub fn render_with_oracle(
             comp_dims: &comp_dims,
             iface_positions: &iface_positions,
             note_layouts: &note_layouts,
+            padding: component_padding,
         });
     let endpoint_min_x = endpoint_label_layouts
         .iter()
@@ -1735,7 +1798,7 @@ pub fn render_with_oracle(
                     component_edge_label_layout_width(
                         label,
                         component_arrow_font_size,
-                        margin,
+                        margin + component_padding,
                         short_label_compat,
                     )
                 })
@@ -1807,6 +1870,7 @@ pub fn render_with_oracle(
             endpoint_label_layouts: &endpoint_label_layouts,
             link_note_unpainted_right_edges: &link_note_unpainted_right_edges,
             middle_label_edges: &middle_label_edges,
+            component_shadow_frontier,
         })
     } else {
         (
@@ -1814,6 +1878,14 @@ pub fn render_with_oracle(
             (content_h + pkg_total_h + title_h).max(50.0),
         )
     };
+    if oracle.is_none() && component_document_margin > 0.0 {
+        total_w += component_document_margin;
+        total_h += component_document_margin;
+        // `TextBlockExporter12026` adds the document margin to the SVEK
+        // dimension before `SvgGraphics.ensureVisible` records the horizontal
+        // frontier as `(int) (x + 1)`.
+        total_w = total_w.ceil();
+    }
     let chrome = if oracle.is_none() {
         let chrome = component_chrome_layout(diagram, total_w, total_h);
         for (x, y) in &mut positions {
@@ -2477,14 +2549,17 @@ pub fn render_with_oracle(
         // `y + h - LABEL_BASELINE_FROM_BOTTOM`. Use oracle text_y_values when available.
         let oracle_text_y = oracle_rect.map(|r| r.text_y_values.as_slice());
         let oracle_text_x = oracle_rect.map(|r| r.text_x_values.as_slice());
-        let model_text_block_x = match comp.kind {
-            ComponentElementKind::Database => x + DATABASE_MARGIN_X,
-            ComponentElementKind::Queue => x + QUEUE_MARGIN_LEFT,
-            ComponentElementKind::Storage => x + STORAGE_MARGIN,
-            ComponentElementKind::Artifact => x + ARTIFACT_MARGIN_LEFT,
-            ComponentElementKind::Component if component_style_rectangle => x + RECTANGLE_MARGIN_X,
-            _ => x + TEXT_PAD_LEFT,
-        };
+        let model_text_block_x = component_padding
+            + match comp.kind {
+                ComponentElementKind::Database => x + DATABASE_MARGIN_X,
+                ComponentElementKind::Queue => x + QUEUE_MARGIN_LEFT,
+                ComponentElementKind::Storage => x + STORAGE_MARGIN,
+                ComponentElementKind::Artifact => x + ARTIFACT_MARGIN_LEFT,
+                ComponentElementKind::Component if component_style_rectangle => {
+                    x + RECTANGLE_MARGIN_X
+                }
+                _ => x + TEXT_PAD_LEFT,
+            };
         let oracle_text_x_default = oracle_rect.and_then(|r| r.name_text_x);
         let n_stereo = comp.stereotypes.len();
 
@@ -2492,15 +2567,17 @@ pub fn render_with_oracle(
         // TextBlock from their top margin. A Creole line can be taller than
         // the default row and its first run need not use the tallest run's
         // baseline, so preserve both dimensions from `Sea`.
-        let model_text_block_y = y + match comp.kind {
-            ComponentElementKind::Database => DATABASE_MARGIN_TOP,
-            ComponentElementKind::Queue => QUEUE_MARGIN_Y,
-            ComponentElementKind::Storage => STORAGE_MARGIN,
-            ComponentElementKind::Artifact => ARTIFACT_MARGIN_TOP,
-            ComponentElementKind::Cloud => CLOUD_MARGIN,
-            ComponentElementKind::Component if component_style_rectangle => RECTANGLE_MARGIN_Y,
-            _ => COMPONENT_MARGIN_TOP,
-        };
+        let model_text_block_y = component_padding
+            + y
+            + match comp.kind {
+                ComponentElementKind::Database => DATABASE_MARGIN_TOP,
+                ComponentElementKind::Queue => QUEUE_MARGIN_Y,
+                ComponentElementKind::Storage => STORAGE_MARGIN,
+                ComponentElementKind::Artifact => ARTIFACT_MARGIN_TOP,
+                ComponentElementKind::Cloud => CLOUD_MARGIN,
+                ComponentElementKind::Component if component_style_rectangle => RECTANGLE_MARGIN_Y,
+                _ => COMPONENT_MARGIN_TOP,
+            };
         let model_label_y = model_text_block_y
             + text_metrics.stereotype_heights.iter().sum::<f64>()
             + text_metrics.label_first_baseline_ascent;
@@ -2940,7 +3017,7 @@ pub fn render_with_oracle(
             let dash_attr = if conn.dashed {
                 "stroke-dasharray:7,7;"
             } else {
-                ""
+                component_arrow_line_style.svg_suffix()
             };
 
             // Try bezier path from layout engine first.
@@ -3079,7 +3156,7 @@ pub fn render_with_oracle(
                     String::new()
                 };
                 svg.raw(&format!(
-                r#"<path{code_line_attr} d="{path_d}" fill="none" id="{path_id}" style="stroke:{component_arrow_stroke};stroke-width:1;{dash_attr}"/>"#,
+                r#"<path{code_line_attr} d="{path_d}" fill="none" id="{path_id}" style="stroke:{component_arrow_stroke};stroke-width:{component_arrow_stroke_width};{dash_attr}"/>"#,
             ));
 
                 let raw_edge_points = component_svek_edge_points(
@@ -3095,9 +3172,21 @@ pub fn render_with_oracle(
                     let first = raw_edge_points.first().unwrap();
                     let next = raw_edge_points.get(1).unwrap_or(first);
                     if extension_at_start {
-                        render_extension_head(&mut svg, next, first, &component_arrow_stroke);
+                        render_extension_head(
+                            &mut svg,
+                            next,
+                            first,
+                            &component_arrow_stroke,
+                            component_arrow_stroke_width,
+                        );
                     } else {
-                        render_arrowhead(&mut svg, next, first, &component_arrow_stroke);
+                        render_arrowhead(
+                            &mut svg,
+                            next,
+                            first,
+                            &component_arrow_stroke,
+                            component_arrow_stroke_width,
+                        );
                     }
                 }
                 if arrow_at_end {
@@ -3108,9 +3197,21 @@ pub fn render_with_oracle(
                         last
                     };
                     if extension_at_end {
-                        render_extension_head(&mut svg, prev, last, &component_arrow_stroke);
+                        render_extension_head(
+                            &mut svg,
+                            prev,
+                            last,
+                            &component_arrow_stroke,
+                            component_arrow_stroke_width,
+                        );
                     } else {
-                        render_arrowhead(&mut svg, prev, last, &component_arrow_stroke);
+                        render_arrowhead(
+                            &mut svg,
+                            prev,
+                            last,
+                            &component_arrow_stroke,
+                            component_arrow_stroke_width,
+                        );
                     }
                 } else if matches!(
                     conn.shape,
@@ -3128,7 +3229,8 @@ pub fn render_with_oracle(
                 let first = edge_points.first().unwrap();
                 let link_note = component_note_on_connection(diagram, connection_index);
                 let center_label_margin = svek_link_label_margin(logical_from, logical_to)
-                    + component_middle_label_shield(conn);
+                    + component_middle_label_shield(conn)
+                    + component_padding;
                 let exact_center_label_size = conn.label.as_deref().map(|label| EdgeLabelSize {
                     width: component_edge_label_layout_width(
                         label,
@@ -3245,8 +3347,9 @@ pub fn render_with_oracle(
                         .and_then(|layout| layout.tail)
                         .map(|position| {
                             (
-                                position.x,
+                                position.x + component_padding,
                                 position.y
+                                    + component_padding
                                     + text_render::label_ascent_with_family(
                                         tail_mult,
                                         component_arrow_font_size,
@@ -3284,8 +3387,9 @@ pub fn render_with_oracle(
                         .and_then(|layout| layout.head)
                         .map(|position| {
                             (
-                                position.x,
+                                position.x + component_padding,
                                 position.y
+                                    + component_padding
                                     + text_render::label_ascent_with_family(
                                         head_mult,
                                         component_arrow_font_size,
@@ -3332,7 +3436,7 @@ pub fn render_with_oracle(
                 );
                 let path_id = no_oracle_path_id(conn);
                 svg.raw(&format!(
-                r#"<path d="{path_d}" fill="none" id="{path_id}" style="stroke:{component_arrow_stroke};stroke-width:1;{dash_attr}"/>"#,
+                r#"<path d="{path_d}" fill="none" id="{path_id}" style="stroke:{component_arrow_stroke};stroke-width:{component_arrow_stroke_width};{dash_attr}"/>"#,
             ));
 
                 let (arrow_at_start, arrow_at_end) = no_oracle_effective_arrow_ends(conn);
@@ -3344,6 +3448,7 @@ pub fn render_with_oracle(
                         from_cx,
                         from_bottom,
                         &component_arrow_stroke,
+                        component_arrow_stroke_width,
                     );
                 }
                 if arrow_at_end {
@@ -3354,6 +3459,7 @@ pub fn render_with_oracle(
                         to_cx,
                         to_cy,
                         &component_arrow_stroke,
+                        component_arrow_stroke_width,
                     );
                 } else if matches!(
                     conn.shape,
@@ -5162,6 +5268,7 @@ struct NoOracleCanvas<'a> {
     endpoint_label_layouts: &'a [ComponentEndpointLabelLayout],
     link_note_unpainted_right_edges: &'a [(String, String)],
     middle_label_edges: &'a [(String, String)],
+    component_shadow_frontier: f64,
 }
 
 fn compute_no_oracle_canvas(input: NoOracleCanvas<'_>) -> (f64, f64) {
@@ -5185,7 +5292,11 @@ fn compute_no_oracle_canvas(input: NoOracleCanvas<'_>) -> (f64, f64) {
             // `LimitFinder.drawRectangle` records width/height minus one for
             // the outer `USymbolComponent2` rectangle; the shared 14px tail
             // already incorporates that one-pixel difference.
-            ComponentElementKind::Component => (dim.width, dim.height),
+            ComponentElementKind::Component => {
+                let shadow_delta =
+                    input.component_shadow_frontier - COMPONENT_DEFAULT_SHADOW_FRONTIER;
+                (dim.width + shadow_delta, dim.height + shadow_delta)
+            }
             ComponentElementKind::Database => (
                 dim.width + DATABASE_RENDER_OVERFLOW_X,
                 dim.height + DATABASE_RENDER_OVERFLOW_Y,
@@ -5710,14 +5821,26 @@ fn emit_oracle_edge(
     }
 }
 
-fn render_arrowhead(svg: &mut SvgBuilder, prev: &(f64, f64), tip: &(f64, f64), stroke: &str) {
+fn render_arrowhead(
+    svg: &mut SvgBuilder,
+    prev: &(f64, f64),
+    tip: &(f64, f64),
+    stroke: &str,
+    stroke_width: f64,
+) {
     let dx = tip.0 - prev.0;
     let dy = tip.1 - prev.1;
     let angle = dy.atan2(dx);
-    render_arrow_at(svg, tip.0, tip.1, angle, stroke);
+    render_arrow_at(svg, tip.0, tip.1, angle, stroke, stroke_width);
 }
 
-fn render_extension_head(svg: &mut SvgBuilder, prev: &(f64, f64), tip: &(f64, f64), stroke: &str) {
+fn render_extension_head(
+    svg: &mut SvgBuilder,
+    prev: &(f64, f64),
+    tip: &(f64, f64),
+    stroke: &str,
+    stroke_width: f64,
+) {
     // Java provenance: `LinkDecor.EXTENDS.getExtremityFactoryComplete`
     // constructs `ExtremityFactoryTriangle(null, 18, 6, 18)`.
     let angle = (tip.1 - prev.1).atan2(tip.0 - prev.0);
@@ -5740,7 +5863,7 @@ fn render_extension_head(svg: &mut SvgBuilder, prev: &(f64, f64), tip: &(f64, f6
         .unwrap();
     }
     svg.raw(&format!(
-        r#"<polygon fill="none" points="{points}" style="stroke:{stroke};stroke-width:1;"/>"#,
+        r#"<polygon fill="none" points="{points}" style="stroke:{stroke};stroke-width:{stroke_width};"/>"#,
     ));
 }
 
@@ -5751,8 +5874,9 @@ fn render_arrowhead_from_coords(
     tx: f64,
     ty: f64,
     stroke: &str,
+    stroke_width: f64,
 ) {
-    render_arrow_at(svg, tx, ty, (ty - fy).atan2(tx - fx), stroke);
+    render_arrow_at(svg, tx, ty, (ty - fy).atan2(tx - fx), stroke, stroke_width);
 }
 
 fn no_oracle_link_type_attr(conn: &Connection) -> String {
@@ -6045,6 +6169,7 @@ struct ComponentEndpointLabelInput<'a> {
     comp_dims: &'a [CompDim],
     iface_positions: &'a [(f64, f64)],
     note_layouts: &'a [ComponentNoteLayout],
+    padding: f64,
 }
 
 fn component_endpoint_label_layouts(
@@ -6152,8 +6277,10 @@ fn component_endpoint_label_layouts(
                         .map(|(text, position)| ComponentLabelRect {
                             x: position.x + input.edge_dx,
                             y: position.y + input.edge_dy,
-                            width: text_render::measure(text, input.arrow_font_size, false),
-                            height: text_render::label_height(text, input.arrow_font_size),
+                            width: text_render::measure(text, input.arrow_font_size, false)
+                                + input.padding * 2.0,
+                            height: text_render::label_height(text, input.arrow_font_size)
+                                + input.padding * 2.0,
                         })
                 };
             let mut layout = ComponentEndpointLabelLayout {
@@ -6381,7 +6508,14 @@ fn component_dot_path_middle(points: &[(f64, f64)]) -> Option<((f64, f64), (f64,
     })
 }
 
-fn render_arrow_at(svg: &mut SvgBuilder, x: f64, y: f64, angle: f64, stroke: &str) {
+fn render_arrow_at(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    angle: f64,
+    stroke: &str,
+    stroke_width: f64,
+) {
     // Java PlantUML `svek.extremity.ExtremityArrow.buildPolygon()` uses:
     // tip (0,0), wing (-9,-4), contact (-5,0), wing (-9,4), tip (0,0),
     // rotated by the path angle and translated to the spline endpoint.
@@ -6404,7 +6538,7 @@ fn render_arrow_at(svg: &mut SvgBuilder, x: f64, y: f64, angle: f64, stroke: &st
         write!(pts, "{},{}", fc(rx), fc(ry)).unwrap();
     }
     svg.raw(&format!(
-        r#"<polygon fill="{stroke}" points="{pts}" style="stroke:{stroke};stroke-width:1;"/>"#,
+        r#"<polygon fill="{stroke}" points="{pts}" style="stroke:{stroke};stroke-width:{stroke_width};"/>"#,
     ));
 }
 
@@ -8681,6 +8815,7 @@ mod tests {
             endpoint_label_layouts: &[],
             link_note_unpainted_right_edges: &[],
             middle_label_edges: &[],
+            component_shadow_frontier: super::COMPONENT_DEFAULT_SHADOW_FRONTIER,
         });
         assert_eq!(canvas_w, expected_w);
         assert_eq!(canvas_h, expected_h);

@@ -1907,14 +1907,22 @@ fn offset_path(path: &str, dx: f64, dy: f64) -> String {
 // Main render function
 // ---------------------------------------------------------------------------
 
-fn last_background_value(diagram: &ClassDiagram) -> Option<&str> {
-    diagram
+fn last_background_value(diagram: &ClassDiagram) -> Option<String> {
+    let compatibility = diagram
         .meta
         .skinparams
         .iter()
         .rev()
         .find(|sp| sp.key.eq_ignore_ascii_case("backgroundColor"))
-        .map(|sp| sp.value.trim())
+        .map(|sp| sp.value.trim().to_string());
+    StyleCascade::new(&diagram.meta.style_program)
+        .resolve(
+            &StyleSignature::from_selectors(["root", "document"]),
+            StyleScheme::Regular,
+        )
+        .property("backgroundColor")
+        .map(str::to_string)
+        .or(compatibility)
 }
 
 fn has_shadowing_skinparam(diagram: &ClassDiagram) -> bool {
@@ -1933,11 +1941,14 @@ fn has_shadowing_skinparam(diagram: &ClassDiagram) -> bool {
 fn render_empty_skinparam_canvas(diagram: &ClassDiagram) -> String {
     let bg_value = last_background_value(diagram);
     let bg_color = bg_value
+        .as_deref()
         .filter(|value| !value.eq_ignore_ascii_case("transparent"))
         .map(crate::sequence::resolve_color)
         .filter(|c| c != "#FFFFFF");
     let bg_style = bg_color.as_deref().unwrap_or("#FFFFFF");
-    let bg_style_suffix = if bg_value.is_some_and(|value| value.eq_ignore_ascii_case("transparent"))
+    let bg_style_suffix = if bg_value
+        .as_deref()
+        .is_some_and(|value| value.eq_ignore_ascii_case("transparent"))
     {
         String::new()
     } else {
@@ -2043,14 +2054,13 @@ fn render_with_oracle_uid_origin(
         }
     }
 
-    let font = ClassFontOverrides::from_diagram(diagram);
-
     // Phase 1: Calculate entity dimensions.
     let dims: Vec<EntityDims> = diagram
         .entities
         .iter()
         .enumerate()
         .map(|(i, e)| {
+            let font = ClassFontOverrides::from_diagram_for_entity(diagram, e);
             calc_entity_dims(
                 e,
                 i,
@@ -2544,6 +2554,7 @@ struct ClassFontOverrides {
     /// colour to the circled-character glyph.
     root_line_color: Option<String>,
     root_font_color: Option<String>,
+    root_background_color: Option<String>,
     /// `skinparam stereotype { CBackgroundColor/CBorderColor ... }`, used for
     /// the standard class circled-character icon.
     stereotype_c_background: Option<String>,
@@ -2575,6 +2586,7 @@ struct ClassStereotypeColors {
     stereotype: String,
     background: Option<String>,
     border: Option<String>,
+    font_color: Option<String>,
 }
 
 #[derive(Clone, Copy, Default)]
@@ -2634,20 +2646,54 @@ fn class_document_margin(diagram: &ClassDiagram) -> Option<ClassDocumentMargin> 
 
 impl ClassFontOverrides {
     fn from_diagram(diagram: &ClassDiagram) -> Self {
+        Self::from_diagram_entity(diagram, None)
+    }
+
+    fn from_diagram_for_entity(diagram: &ClassDiagram, entity: &ClassEntity) -> Self {
+        Self::from_diagram_entity(diagram, Some(entity))
+    }
+
+    fn from_diagram_entity(diagram: &ClassDiagram, entity: Option<&ClassEntity>) -> Self {
         let mut font = Self::from_skinparams(&diagram.meta.skinparams);
         let cascade = StyleCascade::new(&diagram.meta.style_program);
-        let class_style = cascade.resolve(
-            &StyleSignature::from_selectors(["root", "element", "classDiagram", "class"]),
-            StyleScheme::Regular,
-        );
-        let header_style = cascade.resolve(
-            &StyleSignature::from_selectors(["root", "element", "classDiagram", "class", "header"]),
-            StyleScheme::Regular,
-        );
-        let root_style = cascade.resolve(
-            &StyleSignature::from_selectors(["root"]),
-            StyleScheme::Regular,
-        );
+        let mut class_signature =
+            StyleSignature::from_selectors(["root", "element", "classDiagram", "class"]);
+        let mut header_signature =
+            StyleSignature::from_selectors(["root", "element", "classDiagram", "class", "header"]);
+        if let Some(entity) = entity {
+            for stereotype in &entity.stereotypes {
+                class_signature = class_signature.with_stereotype(stereotype);
+                header_signature = header_signature.with_stereotype(stereotype);
+            }
+        }
+        let class_style = if let Some(entity) = entity {
+            cascade.resolve_entity_at_source_line(
+                &class_signature,
+                StyleScheme::Regular,
+                entity.source_line,
+            )
+        } else {
+            cascade.resolve(&class_signature, StyleScheme::Regular)
+        };
+        let header_style = if let Some(entity) = entity {
+            cascade.resolve_entity_at_source_line(
+                &header_signature,
+                StyleScheme::Regular,
+                entity.source_line,
+            )
+        } else {
+            cascade.resolve(&header_signature, StyleScheme::Regular)
+        };
+        let root_signature = StyleSignature::from_selectors(["root"]);
+        let root_style = if let Some(entity) = entity {
+            cascade.resolve_entity_at_source_line(
+                &root_signature,
+                StyleScheme::Regular,
+                entity.source_line,
+            )
+        } else {
+            cascade.resolve(&root_signature, StyleScheme::Regular)
+        };
 
         font.class_background = class_style.property("backgroundColor").map(str::to_string);
         font.border_color = class_style.property("lineColor").map(str::to_string);
@@ -2658,17 +2704,6 @@ impl ClassFontOverrides {
             && let Ok(value) = value.parse::<f64>()
         {
             font.round_corner = value;
-        }
-        let has_legacy_padding = diagram
-            .meta
-            .skinparams
-            .iter()
-            .any(|skinparam| skinparam.key.eq_ignore_ascii_case("padding"));
-        if !has_legacy_padding
-            && let Some(value) = class_style.property("padding")
-            && let Ok(value) = value.parse::<f64>()
-        {
-            font.text_padding = value;
         }
         font.attr_font_color = class_style.property("fontColor").map(str::to_string);
         if let Some(value) = class_style.property("fontName") {
@@ -2702,6 +2737,7 @@ impl ClassFontOverrides {
         }
         font.root_line_color = root_style.property("lineColor").map(str::to_string);
         font.root_font_color = root_style.property("fontColor").map(str::to_string);
+        font.root_background_color = root_style.property("backgroundColor").map(str::to_string);
         font
     }
 
@@ -2737,6 +2773,7 @@ impl ClassFontOverrides {
                         stereotype,
                         background: None,
                         border: None,
+                        font_color: None,
                     });
                     index
                 });
@@ -2820,6 +2857,7 @@ impl ClassFontOverrides {
                 .unwrap_or(5.0),
             root_line_color: find(&["__styleRootLineColor"]),
             root_font_color: find(&["__styleRootFontColor"]).or(default_font_color),
+            root_background_color: find(&["backgroundColor"]),
             stereotype_c_background: find(&["stereotypeCBackgroundColor"]).or_else(|| {
                 if plain_theme {
                     Some("#FFFFFF".to_string())
@@ -2876,10 +2914,11 @@ impl ClassFontOverrides {
 
     fn stereotype_font_style(&self, stereotypes: &[String]) -> (bool, bool) {
         for stereotype in stereotypes {
+            let identity = canonical_style_stereotype(stereotype);
             if let Some(style) = self
                 .stereotype_font_styles
                 .iter()
-                .find(|style| stereotype.eq_ignore_ascii_case(&style.stereotype))
+                .find(|style| canonical_style_stereotype(&style.stereotype) == identity)
             {
                 return (style.bold, style.italic);
             }
@@ -2887,18 +2926,36 @@ impl ClassFontOverrides {
         (false, false)
     }
 
-    fn stereotype_colors(&self, stereotypes: &[String]) -> (Option<&str>, Option<&str>) {
+    fn stereotype_colors(
+        &self,
+        stereotypes: &[String],
+    ) -> (Option<&str>, Option<&str>, Option<&str>) {
         for stereotype in stereotypes {
+            let identity = canonical_style_stereotype(stereotype);
             if let Some(colors) = self
                 .stereotype_colors
                 .iter()
-                .find(|colors| stereotype.eq_ignore_ascii_case(&colors.stereotype))
+                .find(|colors| canonical_style_stereotype(&colors.stereotype) == identity)
             {
-                return (colors.background.as_deref(), colors.border.as_deref());
+                return (
+                    colors.background.as_deref(),
+                    colors.border.as_deref(),
+                    colors.font_color.as_deref(),
+                );
             }
         }
-        (None, None)
+        (None, None, None)
     }
+}
+
+fn canonical_style_stereotype(value: &str) -> String {
+    value
+        .trim()
+        .trim_start_matches('.')
+        .chars()
+        .filter(|character| !matches!(character, '_' | '.'))
+        .flat_map(char::to_lowercase)
+        .collect()
 }
 
 fn canonical_class_font_family(value: &str) -> String {
@@ -3986,8 +4043,6 @@ fn render_plantuml_svg(
             }
         }
     }
-    let text_padding = font.text_padding;
-
     let layout_x_bias = svek_layout_x_bias(
         diagram,
         positions,
@@ -4323,11 +4378,14 @@ fn render_plantuml_svg(
     // is the default and emits neither). Mirrors the sequence renderer.
     let bg_value = last_background_value(diagram);
     let bg_color = bg_value
+        .as_deref()
         .filter(|value| !value.eq_ignore_ascii_case("transparent"))
         .map(crate::sequence::resolve_color)
         .filter(|c| c != "#FFFFFF");
     let bg_style = bg_color.as_deref().unwrap_or("#FFFFFF");
-    let bg_style_suffix = if bg_value.is_some_and(|value| value.eq_ignore_ascii_case("transparent"))
+    let bg_style_suffix = if bg_value
+        .as_deref()
+        .is_some_and(|value| value.eq_ignore_ascii_case("transparent"))
     {
         String::new()
     } else {
@@ -4659,15 +4717,16 @@ fn render_plantuml_svg(
                 r#"<a href="{h}" target="_top" title="{title}" xlink:actuate="onRequest" xlink:href="{h}" xlink:show="new" xlink:title="{title}" xlink:type="simple">"#,
             )
         });
+        let entity_font = ClassFontOverrides::from_diagram_for_entity(diagram, entity);
         let body_gradient_fill =
-            gradient_fill_from_defs(font.class_background.as_deref(), active_defs);
+            gradient_fill_from_defs(entity_font.class_background.as_deref(), active_defs);
         // When `classHeaderBackgroundColor` is itself a gradient distinct from
         // the body gradient, the header repaint must reference the header
         // gradient's own `<defs>` id. Resolve it by matching the header
         // colour's two stops against the captured `<defs>`; otherwise the
         // header reuses the body fill (single-gradient case).
         let header_gradient_fill =
-            gradient_fill_from_defs(font.header_background.as_deref(), active_defs);
+            gradient_fill_from_defs(entity_font.header_background.as_deref(), active_defs);
         let entity_suppress_header_icon = suppress_header_icon
             || entity
                 .stereotypes
@@ -4680,9 +4739,9 @@ fn render_plantuml_svg(
             y,
             dim,
             oracle_rect,
-            &font,
+            &entity_font,
             link_anchor.as_deref(),
-            text_padding,
+            entity_font.text_padding,
             body_gradient_fill.as_deref(),
             header_gradient_fill.as_deref(),
             entity_suppress_header_icon,
@@ -6147,7 +6206,8 @@ fn render_entity_content(
         .color
         .as_deref()
         .is_some_and(|c| split_gradient_colors(c).is_some());
-    let (stereotype_background, stereotype_border) = font.stereotype_colors(&entity.stereotypes);
+    let (stereotype_background, stereotype_border, stereotype_font_color) =
+        font.stereotype_colors(&entity.stereotypes);
     let fill_default = entity
         .color
         .as_deref()
@@ -6183,13 +6243,14 @@ fn render_entity_content(
         .text_color
         .as_ref()
         .map(|c| crate::sequence::resolve_color(c))
+        .or_else(|| stereotype_font_color.map(crate::sequence::resolve_color))
         .or_else(|| {
-            font.attr_font_color
+            font.font_color
                 .as_deref()
                 .map(crate::sequence::resolve_color)
         })
         .or_else(|| {
-            font.font_color
+            font.attr_font_color
                 .as_deref()
                 .map(crate::sequence::resolve_color)
         })
@@ -6209,6 +6270,11 @@ fn render_entity_content(
         })
         .unwrap_or_else(|| "#000000".to_string());
     let member_fill: &str = &member_fill_owned;
+    let stereotype_text_fill_owned = font
+        .root_font_color
+        .as_deref()
+        .map(crate::sequence::resolve_color)
+        .unwrap_or_else(|| "#000000".to_string());
     // Member-text font overrides from `skinparam ClassAttributeFontSize` /
     // `ClassAttributeFontStyle`. Default to the canonical 14px, non-styled.
     let visibility_stroke_owned = font
@@ -6550,11 +6616,25 @@ fn render_entity_content(
             .stereotype_e_border
             .as_deref()
             .map(crate::sequence::resolve_color);
+        let root_line_stroke = font
+            .root_line_color
+            .as_deref()
+            .map(crate::sequence::resolve_color);
+        let root_background_fill = font
+            .root_background_color
+            .as_deref()
+            .map(crate::sequence::resolve_color);
         let icon_fill: &str = match &entity.spot_color {
             Some(c) => c,
             None => match entity.kind {
-                EntityKind::Class => stereotype_c_fill.as_deref().unwrap_or(CLASS_ICON_FILL),
-                EntityKind::Object => stereotype_c_fill.as_deref().unwrap_or(CLASS_ICON_FILL),
+                EntityKind::Class => stereotype_c_fill
+                    .as_deref()
+                    .or(root_background_fill.as_deref())
+                    .unwrap_or(CLASS_ICON_FILL),
+                EntityKind::Object => stereotype_c_fill
+                    .as_deref()
+                    .or(root_background_fill.as_deref())
+                    .unwrap_or(CLASS_ICON_FILL),
                 EntityKind::Interface => {
                     stereotype_i_fill.as_deref().unwrap_or(INTERFACE_ICON_FILL)
                 }
@@ -6563,8 +6643,14 @@ fn render_entity_content(
                     stereotype_a_fill.as_deref().unwrap_or(ABSTRACT_ICON_FILL)
                 }
                 EntityKind::Annotation => ANNOTATION_ICON_FILL,
-                EntityKind::Entity => stereotype_c_fill.as_deref().unwrap_or(CLASS_ICON_FILL),
-                EntityKind::State => stereotype_c_fill.as_deref().unwrap_or(CLASS_ICON_FILL),
+                EntityKind::Entity => stereotype_c_fill
+                    .as_deref()
+                    .or(root_background_fill.as_deref())
+                    .unwrap_or(CLASS_ICON_FILL),
+                EntityKind::State => stereotype_c_fill
+                    .as_deref()
+                    .or(root_background_fill.as_deref())
+                    .unwrap_or(CLASS_ICON_FILL),
                 EntityKind::Circle | EntityKind::Diamond => {
                     stereotype_c_fill.as_deref().unwrap_or(CLASS_ICON_FILL)
                 }
@@ -6588,7 +6674,10 @@ fn render_entity_content(
             | EntityKind::Database
             | EntityKind::Queue
             | EntityKind::Node
-            | EntityKind::Rectangle => stereotype_c_stroke.as_deref().unwrap_or(BORDER_COLOR),
+            | EntityKind::Rectangle => stereotype_c_stroke
+                .as_deref()
+                .or(root_line_stroke.as_deref())
+                .unwrap_or(BORDER_COLOR),
             EntityKind::Interface => stereotype_i_stroke.as_deref().unwrap_or(BORDER_COLOR),
             EntityKind::Enum => stereotype_e_stroke.as_deref().unwrap_or(BORDER_COLOR),
             EntityKind::AbstractClass => stereotype_a_stroke.as_deref().unwrap_or(BORDER_COLOR),
@@ -6735,7 +6824,7 @@ fn render_entity_content(
                     y: stereo_y,
                     font_size: 12,
                     font_family: stereo_family,
-                    fill: text_fill,
+                    fill: &stereotype_text_fill_owned,
                     bold: false,
                     italic: true,
                     underline: false,
@@ -9566,9 +9655,10 @@ fn render_relationship_svg(
                 || skinparam.key.eq_ignore_ascii_case("ArrowThickness")
         })
         .and_then(|skinparam| skinparam.value.trim().parse::<f64>().ok());
-    let arrow_style = StyleCascade::new(&diagram.meta.style_program).resolve(
+    let arrow_style = StyleCascade::new(&diagram.meta.style_program).resolve_link_at_source_line(
         &StyleSignature::from_selectors(["root", "element", "classDiagram", "arrow"]),
         StyleScheme::Regular,
+        rel.source_line,
     );
     let default_arrow_color = arrow_style
         .property("lineColor")
@@ -9578,6 +9668,18 @@ fn render_relationship_svg(
         .property("lineThickness")
         .and_then(|value| value.parse::<f64>().ok())
         .or(compatibility_arrow_thickness);
+    let arrow_font_color = arrow_style
+        .property("fontColor")
+        .map(crate::sequence::resolve_color)
+        .unwrap_or_else(|| "#000000".to_string());
+    let arrow_font_family = arrow_style
+        .property("fontName")
+        .map(canonical_class_font_family)
+        .unwrap_or_else(|| "sans-serif".to_string());
+    let arrow_font_size = arrow_style
+        .property("fontSize")
+        .and_then(|value| value.parse::<f64>().ok())
+        .unwrap_or(RELATIONSHIP_LABEL_FONT_SIZE);
     let edge_color = rel
         .style
         .color
@@ -9822,16 +9924,20 @@ fn render_relationship_svg(
                     position.x + MARGIN + horizontal_margin,
                     position.y
                         + MARGIN
-                        + text_render::label_ascent(label, RELATIONSHIP_LABEL_FONT_SIZE),
+                        + text_render::label_ascent_with_family(
+                            label,
+                            arrow_font_size,
+                            &arrow_font_family,
+                        ),
                 )
             })
             .unwrap_or(fallback);
         let base = TextBase {
             x,
             y,
-            font_size: RELATIONSHIP_LABEL_FONT_SIZE as u32,
-            font_family: "sans-serif",
-            fill: "#000000",
+            font_size: arrow_font_size as u32,
+            font_family: &arrow_font_family,
+            fill: &arrow_font_color,
             bold: false,
             italic: false,
             underline: false,
@@ -11289,13 +11395,12 @@ fn render_grid_fallback(diagram: &ClassDiagram, _cs: &crate::style::ClassStyle) 
             .to_string();
     }
 
-    let font = ClassFontOverrides::from_diagram(diagram);
-
     let dims: Vec<_> = diagram
         .entities
         .iter()
         .enumerate()
         .map(|(i, e)| {
+            let font = ClassFontOverrides::from_diagram_for_entity(diagram, e);
             calc_entity_dims(
                 e,
                 i,

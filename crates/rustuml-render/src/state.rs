@@ -2280,6 +2280,8 @@ fn autonomous_state_style(
         style.border_thickness = fmt_f(value);
     }
     if let Some(value) = state_style.property("shadowing") {
+        // Java `FromSkinparamToStyle#convertNow` normalizes boolean shadowing
+        // to the legacy three-pixel delta before `Style#getShadowing`.
         style.shadow = match value.trim().to_ascii_lowercase().as_str() {
             "true" | "yes" => 3.0,
             "false" | "no" => 0.0,

@@ -5,9 +5,7 @@
 
 use std::collections::BTreeMap;
 
-use rustuml_parser::diagram::style::{
-    StyleDeclaration, StyleOrigin, StyleProgram, StyleScheme,
-};
+use rustuml_parser::diagram::style::{StyleDeclaration, StyleOrigin, StyleProgram, StyleScheme};
 
 /// The style signature requested by a renderer.
 ///
@@ -122,11 +120,7 @@ impl<'a> StyleCascade<'a> {
         scheme: StyleScheme,
         epoch_ceiling: u64,
     ) -> ResolvedStyle<'a> {
-        self.resolve_bounded(
-            signature,
-            scheme,
-            ResolutionBound::Epoch(epoch_ceiling),
-        )
+        self.resolve_bounded(signature, scheme, ResolutionBound::Epoch(epoch_ceiling))
     }
 
     /// Resolve declarations visible at an element or link creation source line.
@@ -176,6 +170,26 @@ impl<'a> StyleCascade<'a> {
         creation_source_line: usize,
     ) -> ResolvedStyle<'a> {
         self.resolve_at_source_line(signature, scheme, creation_source_line)
+    }
+
+    /// Whether a matching property has a declaration from `<style>` syntax,
+    /// even if a later compatibility skinparam wins the resolved value.
+    pub fn has_style_declaration(
+        &self,
+        signature: &StyleSignature,
+        scheme: StyleScheme,
+        property: &str,
+    ) -> bool {
+        let property = normalize_property(property);
+        self.program.declarations.iter().any(|declaration| {
+            declaration.scheme == scheme
+                && normalize_property(&declaration.property) == property
+                && matches!(
+                    declaration.origin,
+                    StyleOrigin::UserStyle | StyleOrigin::ThemeStyle { .. }
+                )
+                && declaration_matches(declaration, signature)
+        })
     }
 
     fn resolve_bounded(
@@ -243,9 +257,7 @@ impl ResolutionBound {
         match self {
             Self::Final => true,
             Self::Epoch(epoch_ceiling) => declaration.epoch <= epoch_ceiling,
-            Self::SourceLine(source_line_ceiling) => {
-                declaration.source_line <= source_line_ceiling
-            }
+            Self::SourceLine(source_line_ceiling) => declaration.source_line <= source_line_ceiling,
         }
     }
 }
@@ -385,18 +397,12 @@ mod tests {
         StyleProgram { declarations }
     }
 
-    fn with_source_line(
-        mut declaration: StyleDeclaration,
-        source_line: usize,
-    ) -> StyleDeclaration {
+    fn with_source_line(mut declaration: StyleDeclaration, source_line: usize) -> StyleDeclaration {
         declaration.source_line = source_line;
         declaration
     }
 
-    fn with_origin(
-        mut declaration: StyleDeclaration,
-        origin: StyleOrigin,
-    ) -> StyleDeclaration {
+    fn with_origin(mut declaration: StyleDeclaration, origin: StyleOrigin) -> StyleDeclaration {
         declaration.origin = origin;
         declaration
     }
@@ -419,6 +425,38 @@ mod tests {
 
         assert_eq!(resolved.property("fontColor"), Some("black"));
         assert_eq!(resolved.property("backgroundcolor"), None);
+    }
+
+    #[test]
+    fn style_origin_remains_observable_after_skinparam_override() {
+        let program = program(vec![
+            declaration(&["root"], &[], "shadowing", "0", StyleScheme::Regular, 0, 0),
+            with_origin(
+                declaration(
+                    &["root"],
+                    &[],
+                    "shadowing",
+                    "false",
+                    StyleScheme::Regular,
+                    1,
+                    1,
+                ),
+                StyleOrigin::ThemeSkinParam {
+                    theme: "origin-probe".to_string(),
+                },
+            ),
+        ]);
+        let signature =
+            StyleSignature::from_selectors(["root", "element", "componentDiagram", "component"]);
+        let cascade = StyleCascade::new(&program);
+
+        assert_eq!(
+            cascade
+                .resolve(&signature, StyleScheme::Regular)
+                .property("shadowing"),
+            Some("false")
+        );
+        assert!(cascade.has_style_declaration(&signature, StyleScheme::Regular, "shadowing"));
     }
 
     #[test]
