@@ -25,12 +25,12 @@ nwdiag 89 89
 object 155 155
 preprocessing 264 307
 regex 45 45
-rendering 79 98
+rendering 80 98
 salt 103 103
 sequence 1411 1411
 skinparam 401 410
 sprites 49 49
-state 883 901
+state 884 901
 timing 141 141
 type-detection 41 42
 usecase 315 315

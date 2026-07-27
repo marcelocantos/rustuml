@@ -3265,17 +3265,6 @@ fn build_state_group_outcome<'a>(
     }))
 }
 
-fn build_autonomous_composite_node<'a>(
-    diagram: &'a StateDiagram,
-    composite: &'a State,
-    arrow_font: &StateArrowFont,
-) -> Option<AutonomousComposite<'a>> {
-    match build_state_group_outcome(diagram, composite, arrow_font)? {
-        StateGroupOutcome::Image(image) => Some(image),
-        StateGroupOutcome::Cluster { .. } => None,
-    }
-}
-
 /// Build every root autonomous image and their shared outer SVEK layout.
 ///
 /// Java provenance: `CucaDiagramSimplifierState.simplify` replaces every
@@ -3286,7 +3275,11 @@ fn build_autonomous_composite_node<'a>(
 fn build_autonomous_composite<'a>(
     diagram: &'a StateDiagram,
     arrow_font: &StateArrowFont,
-) -> Option<(Vec<AutonomousComposite<'a>>, AutonomousScopeLayout)> {
+) -> Option<(
+    Vec<AutonomousComposite<'a>>,
+    Vec<&'a State>,
+    AutonomousScopeLayout,
+)> {
     if !diagram.notes.is_empty()
         || diagram.meta.title.is_some()
         || !has_only_autonomous_layout_skinparams(diagram)
@@ -3305,20 +3298,46 @@ fn build_autonomous_composite<'a>(
     if root_composites.is_empty() {
         return None;
     }
-    let composites = root_composites
-        .into_iter()
-        .map(|composite| build_autonomous_composite_node(diagram, composite, arrow_font))
-        .collect::<Option<Vec<_>>>()?;
-    let outer_transition_indices: Vec<usize> = diagram
-        .transitions
-        .iter()
-        .enumerate()
-        .filter_map(|(index, transition)| {
-            (transition_parent_scope(diagram, transition) == Some(None)).then_some(index)
-        })
-        .collect();
+    let mut composites = Vec::new();
+    let mut live_clusters = Vec::new();
+    for composite in root_composites {
+        let outcome = build_state_group_outcome(diagram, composite, arrow_font)?;
+        collect_state_group_outcome(outcome, &mut composites, &mut live_clusters);
+    }
+    let outer_transition_indices: Vec<usize> = if live_clusters.is_empty() {
+        diagram
+            .transitions
+            .iter()
+            .enumerate()
+            .filter_map(|(index, transition)| {
+                (transition_parent_scope(diagram, transition) == Some(None)).then_some(index)
+            })
+            .collect()
+    } else {
+        diagram
+            .transitions
+            .iter()
+            .enumerate()
+            .filter_map(|(index, transition)| {
+                let inside_image = composites.iter().any(|image| {
+                    autonomous_endpoint_is_inside(diagram, &transition.from, &image.state.id)
+                        && autonomous_endpoint_is_inside(diagram, &transition.to, &image.state.id)
+                });
+                (!inside_image).then_some(index)
+            })
+            .collect()
+    };
     let outer_ids = collect_autonomous_scope_ids(diagram, &outer_transition_indices, |state| {
-        state.parent.is_none()
+        if live_clusters.is_empty() {
+            return state.parent.is_none();
+        }
+        let Some(parent) = state.parent.as_deref() else {
+            return true;
+        };
+        !composites.iter().any(|image| {
+            state.id != image.state.id
+                && autonomous_scope_is_inside(diagram, parent, &image.state.id)
+        })
     });
     let skin = StateSkin::from_diagram(diagram);
     let outer_sizes: Vec<(String, f64, f64, StateLayoutShape)> = outer_ids
@@ -3334,6 +3353,13 @@ fn build_autonomous_composite<'a>(
                     composite.height,
                     StateLayoutShape::Box,
                 )
+            } else if live_clusters.iter().any(|cluster| cluster.id == *id) {
+                (
+                    id.clone(),
+                    SVEK_CLUSTER_ENDPOINT_SIZE,
+                    SVEK_CLUSTER_ENDPOINT_SIZE,
+                    StateLayoutShape::Circle,
+                )
             } else {
                 let state = diagram.states.iter().find(|state| state.id == *id);
                 let (node_width, node_height, shape) =
@@ -3347,12 +3373,20 @@ fn build_autonomous_composite<'a>(
         outer_ids,
         outer_transition_indices,
         &outer_sizes,
-        &[],
+        &live_clusters,
         arrow_font,
         Some(autonomous_outer_spacing(diagram)),
     )?;
+    let outer = if live_clusters.is_empty() {
+        outer
+    } else {
+        let mut outer = normalize_autonomous_scope(outer);
+        outer.width += CUCA_POSITIVE_AXIS_MARGIN;
+        outer.height += CUCA_POSITIVE_AXIS_MARGIN;
+        outer
+    };
 
-    Some((composites, outer))
+    Some((composites, live_clusters, outer))
 }
 
 fn autonomous_entity_id<'a>(entity_ids: &'a [(String, String)], id: &str) -> &'a str {
@@ -4146,17 +4180,27 @@ fn emit_autonomous_composite(
                 ),
             );
         }
-        for child in &composite.children {
-            if let Some((_, cx, cy, _, _)) = region
-                .layout
-                .positions
+        for id in &region.layout.ids {
+            if let Some(child) = composite
+                .children
                 .iter()
-                .find(|(id, _, _, _, _)| id == &child.state.id)
+                .find(|child| child.state.id == *id)
             {
+                let (_, cx, cy, _, _) = region
+                    .layout
+                    .positions
+                    .iter()
+                    .find(|(position_id, _, _, _, _)| position_id == id)
+                    .expect("every autonomous image has a solved position");
                 emit_autonomous_composite(svg, context, child, (cx + offset.0, cy + offset.1));
+            } else {
+                let mut entity_scope = region.layout.clone();
+                entity_scope
+                    .positions
+                    .retain(|(position_id, _, _, _, _)| position_id == id);
+                emit_autonomous_scope_entities(svg, context, &entity_scope, offset, true);
             }
         }
-        emit_autonomous_scope_entities(svg, context, &region.layout, offset, true);
         emit_autonomous_scope_links(svg, context, &region.layout, offset);
         match composite.separator {
             Some('|') => region_offset_x += region.layout.width,
@@ -4202,7 +4246,7 @@ fn emit_autonomous_composite(
 fn render_autonomous_composite(diagram: &StateDiagram) -> Option<String> {
     let skin = StateSkin::from_diagram(diagram);
     let arrow_font = StateArrowFont::from_diagram(diagram);
-    let (composites, outer) = build_autonomous_composite(diagram, &arrow_font)?;
+    let (composites, live_clusters, outer) = build_autonomous_composite(diagram, &arrow_font)?;
     let mut all_ids = outer.ids.clone();
     for composite in &composites {
         collect_autonomous_composite_ids(composite, &mut all_ids);
@@ -4238,7 +4282,36 @@ fn render_autonomous_composite(diagram: &StateDiagram) -> Option<String> {
     )
     .unwrap();
 
-    for id in &outer.ids {
+    for live_cluster in &live_clusters {
+        let cluster = outer
+            .cluster_positions
+            .iter()
+            .find(|cluster| cluster.id == live_cluster.id)?;
+        emit_root_state_cluster(
+            &mut svg,
+            &context,
+            live_cluster,
+            cluster,
+            (outer.origin_x, outer.origin_y),
+        );
+    }
+    let mut paint_ids = outer.ids.clone();
+    paint_ids.sort_by_key(|id| {
+        let owner = id
+            .strip_prefix("__start__:")
+            .or_else(|| id.strip_prefix("__end__:"))
+            .or_else(|| {
+                diagram
+                    .states
+                    .iter()
+                    .find(|state| state.id == *id)
+                    .and_then(|state| state.parent.as_deref())
+            });
+        owner
+            .and_then(|owner| live_clusters.iter().position(|cluster| cluster.id == owner))
+            .unwrap_or(live_clusters.len())
+    });
+    for id in &paint_ids {
         if let Some(composite) = composites
             .iter()
             .find(|composite| composite.state.id == *id)
@@ -10103,7 +10176,7 @@ CobaltDecision --> [*]
             panic!("expected state diagram");
         };
         let arrow_font = StateArrowFont::from_diagram(diagram);
-        let (roots, _) = build_autonomous_composite(diagram, &arrow_font).unwrap();
+        let (roots, _, _) = build_autonomous_composite(diagram, &arrow_font).unwrap();
         let [root] = roots.as_slice() else {
             panic!("expected one root composite");
         };
@@ -10164,7 +10237,7 @@ CobaltDecision --> [*]
             panic!("expected state diagram");
         };
         let arrow_font = StateArrowFont::from_diagram(diagram);
-        let (roots, outer_layout) = build_autonomous_composite(diagram, &arrow_font).unwrap();
+        let (roots, _, outer_layout) = build_autonomous_composite(diagram, &arrow_font).unwrap();
         let [root] = roots.as_slice() else {
             panic!("expected one isolated root composite");
         };
@@ -10218,7 +10291,7 @@ CobaltDecision --> [*]
             panic!("expected state diagram");
         };
         let arrow_font = StateArrowFont::from_diagram(diagram);
-        let (roots, _) = build_autonomous_composite(diagram, &arrow_font).unwrap();
+        let (roots, _, _) = build_autonomous_composite(diagram, &arrow_font).unwrap();
         let [root] = roots.as_slice() else {
             panic!("expected one root composite");
         };
@@ -10285,7 +10358,7 @@ CobaltDecision --> [*]
             panic!("expected state diagram");
         };
         let arrow_font = StateArrowFont::from_diagram(diagram);
-        let (roots, _) = build_autonomous_composite(diagram, &arrow_font).unwrap();
+        let (roots, _, _) = build_autonomous_composite(diagram, &arrow_font).unwrap();
 
         assert_eq!(roots.len(), 4);
         assert_eq!(
@@ -10366,7 +10439,7 @@ CobaltDecision --> [*]
             panic!("expected state diagram");
         };
         let arrow_font = StateArrowFont::from_diagram(diagram);
-        let (roots, _) = build_autonomous_composite(diagram, &arrow_font).unwrap();
+        let (roots, _, _) = build_autonomous_composite(diagram, &arrow_font).unwrap();
         assert_eq!(
             roots
                 .iter()
