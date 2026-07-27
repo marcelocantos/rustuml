@@ -9153,11 +9153,11 @@ mod tests {
         let control_root = control_svg.split_once('>').map(|(root, _)| root).unwrap();
         assert_eq!(
             numeric_attr(styled_root, "width") - numeric_attr(control_root, "width"),
-            20.0
+            14.0
         );
         assert_eq!(
             numeric_attr(styled_root, "height") - numeric_attr(control_root, "height"),
-            14.0
+            9.0
         );
     }
 

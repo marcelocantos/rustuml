@@ -2675,7 +2675,7 @@ impl ClassFontOverrides {
         } else {
             cascade.resolve(&class_signature, StyleScheme::Regular)
         };
-        let header_style = if let Some(entity) = entity {
+        let header_paint_style = if let Some(entity) = entity {
             cascade.resolve_entity_at_source_line(
                 &header_signature,
                 StyleScheme::Regular,
@@ -2684,6 +2684,10 @@ impl ClassFontOverrides {
         } else {
             cascade.resolve(&header_signature, StyleScheme::Regular)
         };
+        // Java `EntityImageClassHeader` receives `SkinParam#getCurrentStyleBuilder`
+        // for its text when the image is built, while `EntityImageClass` keeps
+        // the entity's creation builder for body and header paint.
+        let header_style = cascade.resolve(&header_signature, StyleScheme::Regular);
         let root_signature = StyleSignature::from_selectors(["root"]);
         let root_style = if let Some(entity) = entity {
             cascade.resolve_entity_at_source_line(
@@ -2720,7 +2724,9 @@ impl ClassFontOverrides {
             font.attr_font_italic = value.contains("italic");
         }
 
-        font.header_background = header_style.property("backgroundColor").map(str::to_string);
+        font.header_background = header_paint_style
+            .property("backgroundColor")
+            .map(str::to_string);
         font.font_color = header_style.property("fontColor").map(str::to_string);
         if let Some(value) = header_style.property("fontName") {
             font.name_family = canonical_class_font_family(value);

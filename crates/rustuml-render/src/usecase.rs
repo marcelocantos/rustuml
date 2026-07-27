@@ -344,13 +344,8 @@ impl SkinColors {
     fn for_actor(&self, meta: &DiagramMeta, actor: &Actor) -> Self {
         let mut result = self.clone();
         let cascade = StyleCascade::new(&meta.style_program);
-        let mut title_signature = StyleSignature::from_selectors([
-            "root",
-            "element",
-            "usecaseDiagram",
-            "actor",
-            "title",
-        ]);
+        let mut title_signature =
+            StyleSignature::from_selectors(["root", "element", "usecaseDiagram", "actor", "title"]);
         let mut stereotype_signature = StyleSignature::from_selectors([
             "root",
             "element",
@@ -381,10 +376,7 @@ impl SkinColors {
         if let Some(value) = style.property("lineColor") {
             result.actor_border = Some(crate::sequence::resolve_color(value));
         }
-        let default_stroke = result
-            .actor_border_thickness
-            .parse::<f64>()
-            .unwrap_or(0.5);
+        let default_stroke = result.actor_border_thickness.parse::<f64>().unwrap_or(0.5);
         result.actor_border_thickness = fc(style.stroke(default_stroke).thickness);
         if let Some(value) = style.property("fontColor") {
             result.actor_font_color = crate::sequence::resolve_color(value);
@@ -449,10 +441,7 @@ impl SkinColors {
         if let Some(value) = style.property("lineColor") {
             result.uc_border = Some(crate::sequence::resolve_color(value));
         }
-        let default_stroke = result
-            .uc_border_thickness
-            .parse::<f64>()
-            .unwrap_or(0.5);
+        let default_stroke = result.uc_border_thickness.parse::<f64>().unwrap_or(0.5);
         result.uc_border_thickness = fc(style.stroke(default_stroke).thickness);
         if let Some(value) = style.property("fontColor") {
             result.uc_font_color = crate::sequence::resolve_color(value);
@@ -1721,13 +1710,7 @@ fn resolve_positions(
             edge_paths: Vec::new(),
         };
     }
-    layout_usecase_positions(
-        diagram,
-        actor_dims,
-        uc_dims,
-        note_dims,
-        connection_styles,
-    )
+    layout_usecase_positions(diagram, actor_dims, uc_dims, note_dims, connection_styles)
         .unwrap_or_else(|| fallback_positions(actor_dims, uc_dims, diagram.notes.len()))
 }
 
@@ -1977,12 +1960,8 @@ fn layout_usecase_positions(
                 // one-character relation queue.
                 let minlen = Some(queue_len - 1);
                 if let Some((note_index, note)) = note_on_connection(diagram, index) {
-                    let size = link_note_label_size(
-                        conn,
-                        note,
-                        &note_dims[note_index],
-                        connection_style,
-                    );
+                    let size =
+                        link_note_label_size(conn, note, &note_dims[note_index], connection_style);
                     layout.add_edge_with_label_sizes_and_minlen(
                         &conn.from,
                         &conn.to,
@@ -3804,13 +3783,7 @@ fn render_no_oracle_connections(
                 skin.arrow_dash
             };
             let dash_style = dash
-                .map(|(visible, space)| {
-                    format!(
-                        "stroke-dasharray:{},{};",
-                        fc(visible),
-                        fc(space),
-                    )
-                })
+                .map(|(visible, space)| format!("stroke-dasharray:{},{};", fc(visible), fc(space),))
                 .unwrap_or_default();
             let path_style = format!(
                 "stroke:{};stroke-width:{};{dash_style}",
@@ -5103,7 +5076,8 @@ Middle --> Late : late route
         assert_eq!(early_link.arrow_stroke_width, 3.0);
         assert_eq!(early_link.arrow_dash, Some((5.0, 2.0)));
         assert_eq!(late_link.arrow_color, "#1565C0");
-        assert_eq!(late_link.arrow_head_color, "#1565C0");
+        // The later sparse arrow rule does not erase the earlier HeadColor.
+        assert_eq!(late_link.arrow_head_color, "#880E4F");
         assert_eq!(late_link.arrow_stroke_width, 2.0);
         assert_eq!(late_link.arrow_dash, Some((7.0, 4.0)));
 
@@ -5202,10 +5176,9 @@ External --> Review
 
     #[test]
     fn usecase_padding_and_shadow_remain_symbol_inert() {
-        let plain = rustuml_parser::parse::parse(
-            "@startuml\nusecase \"Inert Controls\" as Probe\n@enduml",
-        )
-        .unwrap();
+        let plain =
+            rustuml_parser::parse::parse("@startuml\nusecase \"Inert Controls\" as Probe\n@enduml")
+                .unwrap();
         let styled = rustuml_parser::parse::parse(
             "@startuml\n<style>\nusecase {\nPadding 5 9 13\nShadowing 3\n}\n</style>\nusecase \"Inert Controls\" as Probe\n@enduml",
         )
