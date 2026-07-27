@@ -67,6 +67,24 @@ Java does not sort equal-ordinate variations, and it does not impose
 is retained. `LifeLine#finish` appends only the missing closing variations at
 the final ordinate through the same acceptance function.
 
+The review7 names `same_ordinate_close_then_open_rejected` and
+`same_ordinate_filtered_pair` do not prove that their source-level commands
+share an ordinate. `DrawableSetInitializer#prepareLiveEvent` projects attached
+self-message lifecycle commands onto distinct graphical ordinates:
+
+- activation is installed at message start plus 8;
+- close/destroy is installed at message end minus 7;
+- a self-message's arrow-only end is start plus 13;
+- a combined lifecycle row extends that end before the close projection.
+
+Consequently close-then-open can produce ordinates `start + 6` and
+`start + 8`, both accepted. Open-then-close can produce `start + 8` followed
+by `start + 6`, so the close is rejected for moving backward. True
+equal-ordinate opposite-type rejection remains part of `LifeLine`, but it
+must not be inferred from source-event Y values. The accepted timeline stores
+these projected ordinates directly; activation-bar geometry must not add the
+projection later during paint.
+
 At `6ff6d9a8`, `SequenceLifeLines` collects raw variations and then sorts them
 by ordinate, close-before-open, and event index. The adjacent comment claims
 that Java applies closing variations first, but Java source directly
@@ -159,9 +177,10 @@ mutate depth independently.
 1. All 37 designated historical perturbations remain strict matches.
 2. All 16 `review6_` and all 17 `review7_` valid perturbations become strict
    matches without editing their sources or Java SVGs.
-3. Fresh checker inputs independently reverse same-ordinate lifecycle arrival
-   order, vary nested activation depth, mirror semantic/spatial source sides,
-   and rotate note/group/external/divider ownership of the widest extent.
+3. Fresh checker inputs independently reverse projected lifecycle arrival
+   order, include a genuinely equal-ordinate opposite-type pair, vary nested
+   activation depth, mirror semantic/spatial source sides, and rotate
+   note/group/external/divider ownership of the widest extent.
 4. A structural audit finds one accepted lifecycle timeline and one
    horizontal-element envelope solve. No note, group, bar, external, or paint
    consumer independently replays activation state.
