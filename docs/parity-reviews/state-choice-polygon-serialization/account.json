@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-choice-polygon-serialization",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "net.sourceforge.plantuml.svek.image.EntityImageBranch#drawU",
+    "net.sourceforge.plantuml.klimt.drawing.svg.DriverPolygonSvg#draw",
+    "net.sourceforge.plantuml.klimt.drawing.svg.SvgGraphics#svgPolygon"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/state.rs::emit_autonomous_scope_entities"
+  ],
+  "invariant": "A state choice is painted as a UPolygon. DriverPolygonSvg flattens the polygon into an alternating numeric coordinate array, and SvgGraphics.svgPolygon serializes that array by placing a comma before every coordinate after the first. The SVG points attribute therefore uses one comma-delimited numeric sequence; it does not introduce whitespace between logical point pairs.",
+  "causal_divergence": "The autonomous state emitter computes the same five choice vertices as Java but formats each x/y pair with a comma and separates adjacent pairs with spaces. Other Rust state choice emitters already use Java's flat comma-delimited form. Strict comparison therefore rejects autonomous choice diagrams even when their topology, geometry, styling, and element order agree.",
+  "planned_change": "Serialize the autonomous choice polygon's existing coordinate sequence with commas between every adjacent numeric value, matching SvgGraphics.svgPolygon and the other state choice emitters. Do not change vertex count, coordinate calculation, choice dimensions, styling, layout, comparator behavior, or any fixture-dependent branch.",
+  "perturbation_axes": [
+    "renamed choice nodes inside autonomous composites",
+    "choice nodes mixed with fork, join, and history pseudostates",
+    "multiple incoming and outgoing choice branches",
+    "nested autonomous levels containing choices"
+  ]
+}
