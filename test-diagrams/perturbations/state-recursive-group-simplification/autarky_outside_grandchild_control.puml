@@ -1,0 +1,18 @@
+@startuml
+state "Outside Anchor 1451" as OutsideAnchor1451
+state "External Root 1453" as ExternalRoot1453 {
+  state "External Child 1459" as ExternalChild1459 {
+    state "External Grand 1471" as ExternalGrand1471 {
+      [*] --> ExternalLeaf1481
+      ExternalLeaf1481 --> [*]
+    }
+    [*] --> ExternalGrand1471
+    ExternalGrand1471 --> [*]
+  }
+  [*] --> ExternalChild1459
+  ExternalChild1459 --> [*]
+}
+[*] --> OutsideAnchor1451
+OutsideAnchor1451 --> ExternalRoot1453.ExternalChild1459.ExternalGrand1471.ExternalLeaf1481 : pierce_grandchild
+ExternalRoot1453 --> [*]
+@enduml

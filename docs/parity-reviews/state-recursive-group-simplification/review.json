@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-recursive-group-simplification",
+  "reviewer": {
+    "task_id": "independent-adversarial-checker-state-recursive-group-simplification-2026-07-27",
+    "model": "OpenAI GPT-5 Codex"
+  },
+  "account_commit": "0416573b42c6e0cafa8c84c3b166862c84ba80d9",
+  "implementation_commit": "3c670edba51f611d0f4d98ffaa49c390111d9886",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "git show 0416573b42c6e0cafa8c84c3b166862c84ba80d9:docs/parity-reviews/state-recursive-group-simplification/account.json",
+    "git diff 0416573b42c6e0cafa8c84c3b166862c84ba80d9..3c670edba51f611d0f4d98ffaa49c390111d9886 -- crates/rustuml-render/src/state.rs test-diagrams/no_oracle_baseline.txt test-diagrams/perturbations/state-recursive-group-simplification",
+    "git merge-base --is-ancestor 0416573b42c6e0cafa8c84c3b166862c84ba80d9 3c670edba51f611d0f4d98ffaa49c390111d9886",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/dot/CucaDiagramSimplifierState.java",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/abel/Entity.java",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/abel/EntityUtils.java",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/statediagram/StateDiagram.java",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/statediagram/command/CommandConcurrentState.java",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/GroupMakerState.java",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/ConcurrentStates.java",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/InnerStateAutonom.java",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/state-recursive-group-simplification/alternating_depth_four_mixed_axes.puml test-diagrams/perturbations/state-recursive-group-simplification/mixed_root_plain_ordinary_concurrent.puml test-diagrams/perturbations/state-recursive-group-simplification/autarky_internal_descendant_control.puml test-diagrams/perturbations/state-recursive-group-simplification/autarky_outside_grandchild_control.puml",
+    "xmllint --noout test-diagrams/perturbations/state-recursive-group-simplification/*.svg",
+    "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"' test-diagrams/perturbations/state-recursive-group-simplification/*.svg",
+    "ruby -rdigest -e 'compare all state-recursive-group-simplification source hashes with every test-diagrams/golden/**/*.puml source and one another'",
+    "cargo test -p rustuml-oracle --test parity_perturbations --release -- --nocapture",
+    "cargo test -p rustuml-oracle --test golden_no_oracle --release -- --nocapture",
+    "cargo test -p rustuml-parser --lib --release",
+    "cargo test -p rustuml-render --lib --release",
+    "cargo test -p rustuml-layout --lib --release",
+    "cargo clippy --workspace --all-targets --release -- -D warnings",
+    "cargo test -p rustuml-oracle --test harness_guards --release no_golden_data_embedded_in_shipping_crates -- --exact --nocapture",
+    "cargo test -p rustuml-oracle --test harness_guards --release error_golden_census_is_frozen -- --exact --nocapture",
+    "cargo test -p rustuml-oracle --test harness_guards --release decimal_literal_ratchet -- --exact --nocapture",
+    "cargo test -p rustuml-oracle --test harness_guards --release comparator_constants_frozen -- --exact --nocapture",
+    "cargo test -p rustuml-oracle --test harness_guards --release parity_review_paths_reject_traversal -- --exact --nocapture",
+    "cargo test -p rustuml-oracle --test harness_guards --release -- --nocapture",
+    "git diff --check 0416573b42c6e0cafa8c84c3b166862c84ba80d9..3c670edba51f611d0f4d98ffaa49c390111d9886",
+    "git show --format= 3c670edba51f611d0f4d98ffaa49c390111d9886 -- crates/rustuml-render/src/state.rs | rg -n 'test-diagrams|include_str!|include_bytes!|\\.puml|\\.svg|alternating_three_region_depth|ObservatoryRoot947|RelayGrid953|CopperCell967|VioletIdle983|QuartzCell997'"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/state-recursive-group-simplification/alternating_three_region_depth.puml",
+      "golden": "test-diagrams/perturbations/state-recursive-group-simplification/alternating_three_region_depth.svg",
+      "axes": [
+        "ordinary parent around a concurrent child",
+        "three horizontal regions",
+        "nested ordinary children"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-recursive-group-simplification/alternating_depth_four_mixed_axes.puml",
+      "golden": "test-diagrams/perturbations/state-recursive-group-simplification/alternating_depth_four_mixed_axes.svg",
+      "axes": [
+        "four-level alternating ordinary and concurrent hierarchy",
+        "both horizontal and vertical concurrent separators",
+        "renamed labeled transitions"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-recursive-group-simplification/mixed_root_plain_ordinary_concurrent.puml",
+      "golden": "test-diagrams/perturbations/state-recursive-group-simplification/mixed_root_plain_ordinary_concurrent.svg",
+      "axes": [
+        "plain, ordinary composite, and concurrent composite root siblings",
+        "root declaration and transition order",
+        "vertical concurrent composition"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-recursive-group-simplification/autarky_internal_descendant_control.puml",
+      "golden": "test-diagrams/perturbations/state-recursive-group-simplification/autarky_internal_descendant_control.svg",
+      "axes": [
+        "group-to-own-descendant link wholly inside its parent",
+        "non-autarkic nested child retained inside an autarkic parent",
+        "three composite levels"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-recursive-group-simplification/autarky_outside_grandchild_control.puml",
+      "golden": "test-diagrams/perturbations/state-recursive-group-simplification/autarky_outside_grandchild_control.svg",
+      "axes": [
+        "outside root state linked to a deeply nested grandchild leaf",
+        "non-autarkic nested cluster tree",
+        "qualified descendant endpoint"
+      ],
+      "result": "fail"
+    }
+  ],
+  "findings": [
+    "The causal account commit is an ancestor of immutable implementation commit 3c670edba51f611d0f4d98ffaa49c390111d9886. The pinned PlantUML checkout is exactly 71806a23780b04a5ccde2f8ceb5121edad5eb711. The implementation commit changes state.rs, the state no-oracle baseline from 866 to 869, and one paired perturbation; this checker did not modify any production source, baseline, comparator, guard, account, prior review, or pre-existing perturbation.",
+    "The Java fixed-point claim is only partially implemented. CucaDiagramSimplifierState.simplify examines groups deepest-first and repeats. If a nested group is not autarkic, an autarkic parent can still be simplified: GroupMakerState.createGeneralImageBuilder supplies InnerGroupHierarchy, which retains non-concurrent child groups as Graphviz clusters inside the parent's image. Rust instead recursively applies build_autonomous_composite_node to every direct child composite and propagates any None with ?, so one non-autarkic child prevents an otherwise autarkic parent from becoming an image.",
+    "The fresh internal-boundary control proves that gap. InternalGrand1427 is non-autarkic because its own group endpoint links to its descendant leaf, while both endpoints are descendants of InternalChild1423, so the parent remains autarkic under EntityUtils.isPureInnerLink3. Java emits a 346 by 708 nested image with InternalGrand1427 preserved as a cluster. Rust declines the recursive autonomous path and emits a flat 740 by 420 diagram. This rejects the account's requirement to preserve non-autarkic groups for the cluster path while still simplifying eligible ancestors.",
+    "The fresh external-boundary control separately rejects nested non-autarkic fallback. The OutsideAnchor1451-to-grandchild link makes ExternalRoot1453 and its descendants non-autarkic, so Java keeps the complete nested cluster tree in the outer Graphviz solve. Rust's autonomous path declines the root, while render_non_autarkic_root_clusters explicitly rejects composites with nested parents; the resulting 953 by 420 flat diagram diverges from Java's 641 by 650 nested cluster layout.",
+    "The mixed-root control rejects the account's root-sibling claim even when every composite is independently simplifiable. Java's outer SVEK stream emits the earlier-declared PlainBeacon1301 before the two solved composite images. Rust render_autonomous_composite loops over all composites before calling emit_autonomous_scope_entities for ordinary root entities, bypassing outer.ids order. The strict comparison therefore sees a composite path where Java has the plain root entity, followed by broad DOM-order and geometry divergence.",
+    "The original alternating-three-region heldout and the fresh four-level alternating hierarchy with both -- and || pass strict no-oracle comparison. Recursive ordinary/concurrent composition therefore generalizes beyond the corpus example, but those passes do not cure the independent cluster-retention and mixed-root-order counterexamples.",
+    "All five preserved sources are valid Java diagrams. Their Java SVGs are well-formed XML, contain no PlantUML error marker, are source-unique against 12,090 golden inputs, and are unique from one another. The complete parity_perturbations run fails on exactly the three fresh controls recorded as fail and preserves all three as executable counterexamples.",
+    "The immutable commit keeps the corpus ratchet green: golden_no_oracle reports 11031 of 11251 eligible pairs, with state at 869 of 901. Parser 487, renderer 691, and layout 39 unit tests pass; workspace all-target release clippy passes with warnings denied. The no-golden-data, frozen error census, decimal-literal ratchet, frozen comparator, and review-path guards pass. The complete harness_guards suite is expected to reject this review because the latest checker verdict is rejected and includes failing heldouts.",
+    "Static audit found no production reference to test-diagrams, golden data, fixture names or labels, include_str/include_bytes, per-depth or per-region-count ladders, coordinate-keyed SVG surgery, or new unexplained parity constants. The generic regions.len() == 1 condition is the no-separator structural invariant rather than a count ladder. This review finds no fixture-shaped overfit in the implementation; it rejects the change because the ported Java model is materially incomplete."
+  ],
+  "verdict": "rejected"
+}

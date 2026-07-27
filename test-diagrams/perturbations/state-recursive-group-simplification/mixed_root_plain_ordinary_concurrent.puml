@@ -1,0 +1,21 @@
+@startuml
+state "Plain Beacon 1301" as PlainBeacon1301
+state "Ordinary Archive 1303" as OrdinaryArchive1303 {
+  [*] --> ArchiveOpen1307
+  ArchiveOpen1307 --> ArchiveSealed1319 : seal_archive
+  ArchiveSealed1319 --> [*]
+}
+state "Concurrent Relay 1321" as ConcurrentRelay1321 {
+  [*] --> RelayNorth1327
+  RelayNorth1327 --> RelayNorthDone1361 : finish_north
+  RelayNorthDone1361 --> [*]
+  ||
+  [*] --> RelaySouth1367
+  RelaySouth1367 --> RelaySouthDone1373 : finish_south
+  RelaySouthDone1373 --> [*]
+}
+[*] --> PlainBeacon1301
+PlainBeacon1301 --> OrdinaryArchive1303
+OrdinaryArchive1303 --> ConcurrentRelay1321
+ConcurrentRelay1321 --> [*]
+@enduml

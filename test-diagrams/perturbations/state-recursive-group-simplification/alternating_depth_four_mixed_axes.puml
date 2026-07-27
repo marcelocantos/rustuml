@@ -1,0 +1,33 @@
+@startuml
+state "Aster Root 1201" as AsterRoot1201 {
+  state "Brass Horizontal 1213" as BrassHorizontal1213 {
+    state "Cobalt Vertical 1217" as CobaltVertical1217 {
+      state "Dawn Ordinary 1223" as DawnOrdinary1223 {
+        [*] --> DawnIdle1229
+        DawnIdle1229 --> DawnRun1231 : warm_dawn
+        DawnRun1231 --> [*]
+      }
+      [*] --> DawnOrdinary1223
+      DawnOrdinary1223 --> [*]
+      ||
+      [*] --> EmberWait1237
+      EmberWait1237 --> EmberDone1249 : light_ember
+      EmberDone1249 --> [*]
+    }
+    [*] --> CobaltVertical1217
+    CobaltVertical1217 --> [*]
+    --
+    state "Frost Ordinary 1259" as FrostOrdinary1259 {
+      [*] --> FrostIdle1277
+      FrostIdle1277 --> FrostDone1279 : cool_frost
+      FrostDone1279 --> [*]
+    }
+    [*] --> FrostOrdinary1259
+    FrostOrdinary1259 --> [*]
+  }
+  [*] --> BrassHorizontal1213
+  BrassHorizontal1213 --> [*]
+}
+[*] --> AsterRoot1201
+AsterRoot1201 --> [*]
+@enduml

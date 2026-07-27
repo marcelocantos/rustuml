@@ -1,0 +1,16 @@
+@startuml
+state "Internal Root 1409" as InternalRoot1409 {
+  state "Internal Child 1423" as InternalChild1423 {
+    state "Internal Grand 1427" as InternalGrand1427 {
+      [*] --> InternalLeaf1429
+      InternalLeaf1429 --> [*]
+    }
+    [*] --> InternalGrand1427
+    InternalGrand1427 --> InternalGrand1427.InternalLeaf1429 : descend_inside
+  }
+  [*] --> InternalChild1423
+  InternalChild1423 --> [*]
+}
+[*] --> InternalRoot1409
+InternalRoot1409 --> [*]
+@enduml
