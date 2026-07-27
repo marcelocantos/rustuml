@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-mixed-state-group-metadata",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "net.sourceforge.plantuml.svek.GeneralImageBuilder#buildImage",
+    "net.sourceforge.plantuml.svek.image.EntityImageClass#drawU",
+    "net.sourceforge.plantuml.svek.image.EntityImageState#drawU",
+    "net.sourceforge.plantuml.klimt.UGroup#UGroup"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs::measure_entity",
+    "crates/rustuml-render/src/class.rs::render_class_svg",
+    "crates/rustuml-render/src/class.rs::render_entity"
+  ],
+  "invariant": "In an allowmixing class diagram, an entity's SVG group metadata is owned by the concrete SVEK entity-image implementation, not inferred uniformly from the parser's source location. GeneralImageBuilder selects EntityImageState for LeafType.STATE. EntityImageClass.drawU starts its group with new UGroup(entity.getLocation()), which serializes DATA_SOURCE_LINE when a location exists. EntityImageState.drawU instead starts from UGroup.singletonMap and adds entity identity fields without a LineLocation, so mixed state groups deliberately omit data-source-line even though the state entity retains its source location for parsing, ordering, and relationships. UGroup only emits DATA_SOURCE_LINE when constructed with a non-null LineLocation.",
+  "causal_divergence": "Rust's no-oracle class renderer creates one common entity group wrapper before dispatching the body painter by EntityKind. When no oracle rectangle is present, that wrapper always serializes EntityDims.source_line. In ambiguous_allowmixing_class_state, all geometry and content are exact, but the Running and Idle state groups gain data-source-line attributes that Java's EntityImageState never supplies. Processor correctly retains its source line through the EntityImageClass contract. The divergence is therefore renderer-image metadata ownership, not type dispatch, parser location tracking, graph layout, or source-line numbering.",
+  "planned_change": "Keep source_line on ClassEntity and EntityDims so ordering and relationship logic remain unchanged. In the common no-oracle entity wrapper, synthesize data-source-line only for entity kinds whose Java image contract carries a LineLocation; omit it for EntityKind::State, matching EntityImageState. Preserve oracle-provided source-line metadata if present, because the oracle-assisted path must reproduce the supplied SVG. Add renderer tests covering mixed states and ordinary classes, then validate renamed and reordered allowmixing inputs containing multiple entity kinds and relationships. Do not branch on fixture names, labels, source-line values, entity counts, coordinates, or diagram dimensions.",
+  "perturbation_axes": [
+    "renamed mixed state and class entities",
+    "state declarations before and after class declarations",
+    "multiple mixed states at different source lines",
+    "mixed state-to-state and class-to-state relationships",
+    "ordinary class source-line metadata as a positive control",
+    "oracle-provided source-line metadata as an assisted-path control"
+  ]
+}
