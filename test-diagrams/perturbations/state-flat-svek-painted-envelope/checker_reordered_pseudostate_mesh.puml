@@ -1,0 +1,19 @@
+@startuml
+state TerminalQuartz3299 <<end>>
+state RecallCopper3203 <<history>>
+state MergeIndigo3271 <<join>>
+state DeepAmber3229 <<history*>>
+state DecisionPearl3253 <<choice>>
+state SplitCobalt3239 <<fork>>
+state "Dispatch Relay 3217" as DispatchRelay3217
+
+[*] --> DispatchRelay3217
+DispatchRelay3217 -left-> DecisionPearl3253 : choose_western_route
+DecisionPearl3253 -up-> RecallCopper3203 : recall_short
+DecisionPearl3253 -right-> DeepAmber3229 : recover_deep_history
+RecallCopper3203 --> SplitCobalt3239 : resume_from_memory
+DeepAmber3229 --> SplitCobalt3239 : resume_from_archive
+SplitCobalt3239 --> MergeIndigo3271 : upper_branch
+SplitCobalt3239 --> MergeIndigo3271 : lower_branch_with_width
+MergeIndigo3271 --> TerminalQuartz3299 : settle_named_terminal
+@enduml

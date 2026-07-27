@@ -1,0 +1,23 @@
+@startuml
+state TerminalQuartz3599 <<end>>
+state RecallCopper3503 <<history>>
+state MergeIndigo3571 <<join>>
+state DeepAmber3529 <<history*>>
+state DecisionPearl3553 <<choice>>
+state SplitCobalt3539 <<fork>>
+state "Upper Relay 3547" as UpperRelay3547
+state "Lower Relay 3569" as LowerRelay3569
+state "Dispatch Relay 3517" as DispatchRelay3517
+
+[*] --> DispatchRelay3517
+DispatchRelay3517 -left-> DecisionPearl3553 : choose_western_route
+DecisionPearl3553 -up-> RecallCopper3503 : recall_short
+DecisionPearl3553 -right-> DeepAmber3529 : recover_deep_history
+RecallCopper3503 --> SplitCobalt3539 : resume_from_memory
+DeepAmber3529 --> SplitCobalt3539 : resume_from_archive
+SplitCobalt3539 --> UpperRelay3547 : upper_branch
+SplitCobalt3539 --> LowerRelay3569 : lower_branch_with_width
+UpperRelay3547 --> MergeIndigo3571 : upper_converges
+LowerRelay3569 --> MergeIndigo3571 : lower_converges
+MergeIndigo3571 --> TerminalQuartz3599 : settle_named_terminal
+@enduml

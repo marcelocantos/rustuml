@@ -1,0 +1,11 @@
+@startuml
+state "Quartz iii Relay 3109" as QuartzRelay3109
+state "Copper WWW Hub 3121" as CopperHub3121
+state "Indigo narrow mix 3137" as IndigoMix3137
+state "Amber broad matrix 3163" as AmberMatrix3163
+
+QuartzRelay3109 <-- CopperHub3121 : reverse_WiWi_boundary
+CopperHub3121 -up-> IndigoMix3137 : climb_iiii_fractional
+IndigoMix3137 -right-> AmberMatrix3163 : east_WMWMW_extent
+AmberMatrix3163 -down-> QuartzRelay3109 : descend_mixed_glyphs
+@enduml

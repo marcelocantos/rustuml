@@ -1,0 +1,15 @@
+@startuml
+state "North Ledger 3407" as NorthLedger3407
+NorthLedger3407 : first narrow iii field
+NorthLedger3407 : second WWW field
+state "East Ledger 3433" as EastLedger3433
+EastLedger3433 : compact value
+state "South Ledger 3461" as SouthLedger3461
+SouthLedger3461 : a substantially longer descriptive row
+
+[*] -[#2F6F9F,dashed]-> NorthLedger3407 : enter_with_fractional_width
+NorthLedger3407 -right[#8A2BE2,dotted]-> EastLedger3433 : dotted_east_label
+EastLedger3433 -down[#228B22,thickness=2]-> SouthLedger3461 : boldish_south_label
+SouthLedger3461 -left[#B22222,dashed]-> NorthLedger3407 : return_west_with_WiWi
+SouthLedger3461 --> [*] : finish_label
+@enduml

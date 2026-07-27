@@ -1,0 +1,13 @@
+@startuml
+state "Peripheral Indigo 3371" as PeripheralIndigo3371 <<secondary>> #AliceBlue
+state "Central Quartz 3301" as CentralQuartz3301 <<primary>> #LightYellow
+state "Peripheral Amber 3343" as PeripheralAmber3343 <<secondary>> #MistyRose
+state "Terminal Copper 3391" as TerminalCopper3391 <<terminal>> #HoneyDew
+
+[*] --> CentralQuartz3301
+CentralQuartz3301 -left-> PeripheralAmber3343 : amber_fractional_label
+CentralQuartz3301 -right-> PeripheralIndigo3371 : indigo_WWW_label
+PeripheralAmber3343 --> TerminalCopper3391 : converge_from_amber
+PeripheralIndigo3371 --> TerminalCopper3391 : converge_from_indigo
+TerminalCopper3391 --> [*]
+@enduml
