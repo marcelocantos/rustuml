@@ -199,7 +199,12 @@ impl StateParser {
             if trimmed.is_empty() {
                 continue;
             }
-            if trimmed.starts_with("note") {
+            let is_note_command = trimmed == "note"
+                || trimmed
+                    .strip_prefix("note")
+                    .and_then(|rest| rest.chars().next())
+                    .is_some_and(char::is_whitespace);
+            if is_note_command {
                 in_note = !trimmed.contains(':') && !trimmed.starts_with("note \"");
                 continue;
             }
@@ -1124,6 +1129,23 @@ mod tests {
         assert!(d.states.iter().any(|state| state.id == "VisibleNode"));
         assert!(!d.states.iter().any(|state| state.id == "PhantomShell"));
         assert!(!d.states.iter().any(|state| state.id == "PhantomNode"));
+    }
+
+    #[test]
+    fn predeclaration_keeps_note_prefixed_state_descriptions() {
+        let d = parse(
+            "Anchor --> noteworthy\n\
+             state Outer {\n\
+             noteworthy : declared after the transition\n\
+             }",
+        );
+
+        assert_eq!(d.transitions[0].to, "Outer.noteworthy");
+        assert!(d.states.iter().any(|state| {
+            state.id == "Outer.noteworthy"
+                && state.descriptions == ["declared after the transition"]
+        }));
+        assert!(!d.states.iter().any(|state| state.id == "noteworthy"));
     }
 
     #[test]
