@@ -1,0 +1,12 @@
+@startuml
+participant "Copper Caller" as Caller
+participant "Quartz Owner" as Owner
+participant "Indigo Subject" as Subject
+Caller -> Owner : ordinary owner row
+activate Subject
+deactivate Subject
+note left of Subject : equal-row open wins while this left note widens the scene
+Subject -->] : right boundary competes after the rejected close
+== equal owner open then close ==
+Owner --> Caller : trailing depth and divider control
+@enduml

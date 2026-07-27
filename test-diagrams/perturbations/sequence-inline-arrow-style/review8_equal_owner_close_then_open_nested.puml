@@ -1,0 +1,14 @@
+@startuml
+participant "Amber Seed" as Seed
+participant "Violet Owner" as Owner
+participant "Cobalt Subject" as Subject
+activate Subject
+Owner -> Owner : self owner for reversed projected pair
+deactivate Subject
+activate Subject
+group nested width observer
+  note right of Subject : first close wins and the rejected reopen stays invisible
+  [-> Owner : independent left boundary member
+end
+Subject -> Seed : trailing segment probe
+@enduml

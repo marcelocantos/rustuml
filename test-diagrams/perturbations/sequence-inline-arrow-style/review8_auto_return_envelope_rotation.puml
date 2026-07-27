@@ -1,0 +1,18 @@
+@startuml
+autoactivate on
+participant "Crimson Root" as Root
+participant "Silver Branch" as Branch
+participant "Emerald Leaf" as Leaf
+Root -> Branch : outer automatic call
+group automatic nested frame
+  note left of Branch : left extent between automatic levels
+  Branch -> Leaf : inner automatic call
+  Leaf -->] : right boundary while leaf is live
+end
+return inner automatic result
+== between automatic closes ==
+return outer automatic result
+[-> Root : left boundary after return stack empties
+Root -> Leaf : trailing automatic call
+return trailing automatic result
+@enduml

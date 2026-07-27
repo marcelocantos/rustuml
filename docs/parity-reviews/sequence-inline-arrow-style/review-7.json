@@ -1,0 +1,229 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-inline-arrow-style",
+  "reviewer": {
+    "task_id": "019fa3e2-f0e5-7a43-a63a-47378ae24ea4",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop",
+    "role": "fresh independent skeptical checker; did not implement e490ea6f and did not edit production code"
+  },
+  "implementation_commit": "e490ea6fd27c9454cb7fca0372316b837806d1b1",
+  "implementation_parent": "b7b00d50070b6bde72a76cdc448fdad794bb4bed",
+  "account_commit": "5d2f46e191d4a9f9e0cca53cd20d901d8660af1d",
+  "prior_rejection_commit": "ad330988919619e56c7bd27471c8bab9d2d9046e",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_provenance": {
+    "repository": "/Users/marcelo/work/github.com/plantuml/plantuml",
+    "head": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "worktree_note": "The pinned Java worktree had unrelated CLAUDE.md, svek.dot, and svek.svg changes. No Java source or jar was modified by this review."
+  },
+  "rust_evidence": {
+    "diff_binary": "target/release/examples/diff_one",
+    "diff_binary_sha256": "aa0cca6c12ef4fc632e4695ee49054398d71ecd4b9f14aef9cd12b02615db1eb",
+    "production_diff_sha256": "899e7134a4245ff325ac1b2f0c4afda6b21dc8abeb1efd02f76a1dbbc7419ba1",
+    "production_file_sha256": "a3251725930ac48af6e1249749d284acfe354d2d6fdc2b6f8562b2714024ac65",
+    "account_sha256": "54af9eac9d85d612739fca8b68ea17965ad90e19862ae7b0b4af174bb1903504",
+    "response_sha256": "cf01ca2c316b71e38eb266ad300b92c08e8385f284697bdb582bf8211e2d9c7f"
+  },
+  "constraints": [
+    "Production boundary e490ea6f was immutable throughout the review.",
+    "No Cargo, rustc, rustfmt, or build command was invoked.",
+    "No production file was edited by the reviewer.",
+    "All Rust comparisons used the pre-existing target/release/examples/diff_one binary with --no-oracle.",
+    "All eight preserved review8 Java SVGs were generated from the pinned PlantUML jar, validated as XML, checked for PlantUML error markers, and checked for data-diagram-type=\"SEQUENCE\".",
+    "One invalid first draft was rejected by Java and corrected before final generation. The invalid output was overwritten and is not part of the preserved evidence.",
+    "The Rust worktree was clean at review start. Unrelated concurrent production and class-review changes appeared near the end; they were not staged, committed, or used as the reviewed production boundary.",
+    "All recorded fresh and replay comparisons completed against diff_binary_sha256 aa0cca6c before a concurrent rebuild replaced target/release/examples/diff_one at 2026-07-28 00:08:31 +1000. Later probe output from the replacement binary was discarded."
+  ],
+  "commands": [
+    "git status --short --branch && git show --stat --oneline --decorate --no-renames e490ea6f && git diff e490ea6f^ e490ea6f -- crates/rustuml-render/src/sequence.rs",
+    "cat docs/parity-reviews/sequence-inline-arrow-style/account.json && cat docs/parity-reviews/sequence-inline-arrow-style/review-6-response.md",
+    "git rev-parse e490ea6f e490ea6f^ && git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "shasum -a 256 target/release/examples/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar docs/parity-reviews/sequence-inline-arrow-style/account.json docs/parity-reviews/sequence-inline-arrow-style/review-6-response.md",
+    "JAVA_TOOL_OPTIONS=-Djava.awt.headless=true java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/sequence-inline-arrow-style/review8_*.puml",
+    "JAVA_TOOL_OPTIONS=-Djava.awt.headless=true java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/sequence-inline-arrow-style/review8_equal_owner_close_then_open_nested.puml",
+    "xmllint --noout test-diagrams/perturbations/sequence-inline-arrow-style/review8_*.svg",
+    "rg -n -i 'Syntax Error|NoSuchElementException|Welcome to PlantUML|An error has occured|\\[From |Assumed diagram type' test-diagrams/perturbations/sequence-inline-arrow-style/review8_*.svg",
+    "rg -l 'data-diagram-type=\"SEQUENCE\"' test-diagrams/perturbations/sequence-inline-arrow-style/review8_*.svg",
+    "for f in test-diagrams/perturbations/sequence-inline-arrow-style/review8_*.puml; do target/release/examples/diff_one --no-oracle \"$f\"; done",
+    "for f in test-diagrams/perturbations/sequence-inline-arrow-style/review6_*.puml; do target/release/examples/diff_one --no-oracle \"$f\"; done",
+    "for f in test-diagrams/perturbations/sequence-inline-arrow-style/review7_*.puml; do target/release/examples/diff_one --no-oracle \"$f\"; done",
+    "for f in $(jq -r '.preserved_perturbations.strict_passes[]' docs/parity-reviews/sequence-inline-arrow-style/review-5.json); do target/release/examples/diff_one --no-oracle \"test-diagrams/perturbations/sequence-inline-arrow-style/$f\"; done",
+    "git show --format= --no-ext-diff e490ea6f -- crates/rustuml-render/src/sequence.rs | rg -n -i 'include_str|include_bytes|read_to_string|golden|perturb|review[0-9]|fixture'",
+    "git diff --check e490ea6f^ e490ea6f",
+    "shasum -a 256 test-diagrams/perturbations/sequence-inline-arrow-style/review8_*.puml test-diagrams/perturbations/sequence-inline-arrow-style/review8_*.svg"
+  ],
+  "preserved_perturbations": {
+    "strict_total": 37,
+    "strict_passed": 37,
+    "strict_failed": 0,
+    "result": "All 37 cases designated strict by review-5 replayed as structurally equivalent."
+  },
+  "review6_replay": {
+    "total": 16,
+    "passed": 16,
+    "failed": 0,
+    "result": "All 16 review6 perturbations replayed as structurally equivalent."
+  },
+  "review7_replay": {
+    "total": 17,
+    "passed": 10,
+    "failed": 7,
+    "failed_sources": [
+      "review7_active_source_cross_spatial_left.puml",
+      "review7_active_source_cross_spatial_right.puml",
+      "review7_exo_to_left_grouped.puml",
+      "review7_exo_to_right_grouped.puml",
+      "review7_nested_groups_competing_extents.puml",
+      "review7_note_left_live_transition.puml",
+      "review7_note_right_nested_transition.puml"
+    ],
+    "result": "The implementation does not satisfy review-6-response.md acceptance criterion 2; seven already-preserved review7 counterexamples remain failing."
+  },
+  "fresh_summary": {
+    "total": 8,
+    "valid_sequence_goldens": 8,
+    "strict_passed": 1,
+    "strict_failed": 7,
+    "result": "The fresh held-out review8 matrix rejects the implementation."
+  },
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review8_active_source_boundary_mix.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review8_active_source_boundary_mix.svg",
+      "source_sha256": "ee90c573f4e9e0a0ffdd7fc797950f4e9f029162f0fcc822f5189c97cf231d65",
+      "golden_sha256": "72c293d90cd82cbcd8b201f5a877e0342fa1ad99a195b510c8f2a163f5d15de2",
+      "axes": [
+        "spatial-right active source at two activation depths",
+        "half-arrow cross dressing",
+        "left note on the active source",
+        "right external boundary at nested depth"
+      ],
+      "result": "pass",
+      "comparison": "SVGs are structurally equivalent"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review8_auto_return_envelope_rotation.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review8_auto_return_envelope_rotation.svg",
+      "source_sha256": "ad266226dcba95021db3f0fa69c01fd6ec4b96cc1d52d9cec3f7502f777d386e",
+      "golden_sha256": "e133c8d8b484718200e83d01069e9ec0fd903c25f21b02ae910831fe1794db79",
+      "axes": [
+        "nested autoactivation return stack",
+        "grouped left note",
+        "right external boundary while the leaf is live",
+        "left external boundary after both returns"
+      ],
+      "result": "fail",
+      "comparison": "Java has 93 SVG elements and width 833; Rust has 89 elements and width 858. Java's first listed activation bar is x=271.2241, y=324.2832, height=67.6211 while Rust instead emits x=440.4946, y=67.7988, height=227.1738. Activation ownership and return-stack closure diverge before horizontal extents are compared."
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review8_divider_before_after_widest.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review8_divider_before_after_widest.svg",
+      "source_sha256": "2af336fa9776a7c003768ad01fc6c7437fcac5df3b4676acd8511ca5951424a8",
+      "golden_sha256": "cf9ff960b6acaacd38fbe29aafe0b1e3b9cd5479b7db919129d96755bc85bbf4",
+      "axes": [
+        "divider before and after the width-changing group",
+        "left note as left envelope owner",
+        "TO_RIGHT external arrow as right envelope owner",
+        "late FROM_LEFT boundary"
+      ],
+      "result": "fail",
+      "comparison": "Java width is 833 and the group frame starts at x=9 with width 808.938; Rust width is 819 and the frame starts at x=-5 with width 808.938. Participants and lifelines are shifted 14px left, so dividers, frame, and elements do not consume one translated envelope."
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review8_equal_owner_close_then_open_nested.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review8_equal_owner_close_then_open_nested.svg",
+      "source_sha256": "762552e4ff244ad9227cada995a45af2c5c0a467e54bedd26754fb21f0372c89",
+      "golden_sha256": "94052c97adde82b1f880df84c075efc7350e675451dedc06d6b78477e9e7c0e2",
+      "axes": [
+        "self-owner close then reopen projected ordering",
+        "pre-existing active subject",
+        "grouped right note",
+        "grouped FROM_LEFT external member"
+      ],
+      "result": "fail",
+      "comparison": "Activation bar heights agree, but Java width is 904 and the nested frame width is 885.3071; Rust width is 817 and the frame width is 798.3071. The grouped left-boundary member fails to participate in the same missing-space solve as the note and participants."
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review8_equal_owner_open_then_close_dual_extent.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review8_equal_owner_open_then_close_dual_extent.svg",
+      "source_sha256": "ab9c784ba0e98582a7fdc507d5d0c5b2a8171ae2c09ad741d95feaa7cf0b1a3c",
+      "golden_sha256": "dc2062556fd394e310d60a3f2e47805d3befd03ebbfc05168d0e6fc26c726239",
+      "axes": [
+        "genuine equal-ordinate open then close on an ordinary owner",
+        "unrelated participant lifecycle",
+        "left note after the rejected close",
+        "right external boundary and trailing divider"
+      ],
+      "result": "fail",
+      "comparison": "Lifecycle and all other geometry agree, but Rust places the left note at x=17 instead of Java x=18; its folded-note paths and text are uniformly 1px left. This isolates a remaining NoteBox segment/rounding mismatch after equal-ordinate filtering."
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review8_group_end_close_reopen_competing.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review8_group_end_close_reopen_competing.svg",
+      "source_sha256": "d74296aab4850fad912fd241c43aa77c2b3628b3a331b4e0d5c49bc0662be9a0",
+      "golden_sha256": "695e864b4fc5bea341fabed9322296fc56c6c9306aa8cad2649af7dfb9d6d388",
+      "axes": [
+        "nested GroupEnd ownership replacement",
+        "close then reopen after the outer end",
+        "inner left note",
+        "inner TO_RIGHT boundary and final divider"
+      ],
+      "result": "fail",
+      "comparison": "Java width is 689; Rust width is 669. Java's outer frame is x=9 width=658.5254, while Rust uses x=-15 width=668.5254 and shifts every participant 24px left. Accepted activation height agrees, but group/list membership and missing-space translation do not."
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review8_nested_dual_boundary_notes.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review8_nested_dual_boundary_notes.svg",
+      "source_sha256": "3ea279a33639b3ffc51f3fedabcbafdee59a459c5415c96c62e8dcc74048f47c",
+      "golden_sha256": "23a009b593fce89860ac6f9c961f082a9f18e438fce8e90170d2dd59df78c77e",
+      "axes": [
+        "nested group lists",
+        "outer FROM_LEFT boundary",
+        "inner left and right notes",
+        "inner TO_RIGHT boundary and final divider"
+      ],
+      "result": "fail",
+      "comparison": "Rust makes the canvas and outer frame 10px wider than Java, shifts the inner frame by 1px, and still draws the grouped TO_RIGHT arrow 7px short. The final divider follows Rust's oversized canvas, proving that sharing the final numeric width does not make the upstream element envelope faithful."
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review8_note_transition_mirrored.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review8_note_transition_mirrored.svg",
+      "source_sha256": "3e8d591ecf07779b8652db6363dd8471ff611bbf483ab95fdfc3b93bdc6a5ef4",
+      "golden_sha256": "e785968ed75224bae9a5cd9e1ee910d7bb81adb366d3d867da75710e34d4e5f0",
+      "axes": [
+        "reverse-direction activation",
+        "nested live depth across left and right notes",
+        "TO_RIGHT external arrow before final close",
+        "FROM_LEFT boundary after the divider"
+      ],
+      "result": "fail",
+      "comparison": "Rust's opening message target is 5px left of Java, its left note is 1px right, and its TO_RIGHT arrow tip is x=679.9404 instead of Java x=768.4858. The divider then uses 771 instead of Java's unrounded 770.4858 span. Live endpoints, note segments, external actual width, and final width are not one geometry."
+    }
+  ],
+  "mechanism_audit": {
+    "java_lifecycle": "LifeLine.addSegmentVariation appends one ordinate-based variation stream in preparation order, rejects lower ordinates and opposite types at the same ordinate, and immediately updates one Stairs instance. LivingParticipantBox consumers query that same LifeLine.",
+    "rust_lifecycle_gap": "e490ea6f introduces SequenceDepthSnapshots for pre-layout spacing and separately builds SequenceLifeLines after event ordinates exist. Both replay raw events, maintain their own return_stack and accepted_events, and independently encode projection keys. That violates review-6-response.md acceptance criterion 4's requirement for one accepted lifecycle timeline. The auto-return held-out failure demonstrates observable disagreement in activation ownership and closure.",
+    "java_horizontal": "DrawableSetInitializer.prepareMissingSpace iterates every concrete GraphicalElement once, uses each element's starting X and preferred/actual width, pushes the shared constraint set for left missing space, and derives final freeX from the same pass. InGroupablesStack registers each concrete element with every active InGroupableList, so nested frames derive from actual members.",
+    "rust_horizontal_gap": "e490ea6f still computes left missing space from a dedicated left-note scan, then separately computes max_divider_right, max_note_right, max_ref_right, max_lost_right, GroupAccum frame extrema, open-group width, and a post-frame svg_width maximum. There is no typed collection equivalent to drawableSet.getAllGraphicalElements and no single prepareMissingSpace pass. The grouped external-arrow, nested-frame, note, and divider failures are direct consequences.",
+    "acceptance_gap": "The implementation fails 7 of the 17 review7 cases that review-6-response.md explicitly requires to pass, and fails 7 of 8 fresh valid held-outs."
+  },
+  "anti_overfit_audit": {
+    "mechanical_scan": "No shipping golden read, fixture filename, review filename, held-out label, coordinate key, or direct perturbation reference was found in the exact e490ea6f production diff.",
+    "diff_hygiene": "git diff --check e490ea6f^ e490ea6f is clean.",
+    "constant_provenance": "The newly introduced SELF_MSG_LIFELINE_CLOSE_INSET=7.0 has an adjacent DrawableSetInitializer.prepareLiveEvent citation. No unexplained fresh high-precision constant was found.",
+    "skeptical_assessment": "There is no evidence of direct fixture-keyed cheating. The risk is structural overfitting by accumulation of consumer-specific formulas: several scans and topology branches reproduce known cases without porting Java's shared graphical-element and constraint model. Passing all historical/review6 cases while seven known review7 and seven fresh cases fail is the expected signature of that incomplete model."
+  },
+  "verdict": {
+    "status": "reject",
+    "reason": "e490ea6f does not implement one accepted lifecycle history or one shared horizontal graphical-element envelope, does not satisfy its stated review7 acceptance matrix, and fails seven of eight fresh valid perturbations.",
+    "required_model_change": [
+      "Derive spacing snapshots from the same accepted variation object used for ordinate-based lifeline segments; do not replay events into a second return stack.",
+      "Represent notes, messages, external arrows, grouping elements, references, and dividers as concrete horizontal elements with starting/preferred/actual extents.",
+      "Register each concrete element with every active nested group and run one two-sided missing-space solve before frame, divider, external-arrow, and canvas geometry are consumed.",
+      "Retain all failing review7 and review8 inputs as executable counterexamples."
+    ]
+  }
+}

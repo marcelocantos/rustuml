@@ -1,0 +1,16 @@
+@startuml
+participant "Rose Entry" as Entry
+participant "Teal Core" as Core
+participant "Gold Exit" as Exit
+== divider before width competition ==
+group width rotation frame
+  Entry -> Core ++ : establish active centre
+  note left of Core : a long folded note owns the left side of the envelope
+  Core -->] : a longer outbound boundary owns the right side of the envelope
+  Core -> Exit : participant-span member
+  deactivate Core
+end
+== divider after width competition ==
+[-> Entry : late left boundary control
+Exit --> Entry : final internal control
+@enduml

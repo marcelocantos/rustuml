@@ -1,0 +1,18 @@
+@startuml
+participant "North Relay" as Relay
+participant "Central Engine" as Engine
+participant "South Audit" as Audit
+group outer ownership shell
+  Relay -> Engine ++ : establish live engine
+  group inner ownership shell
+    note left of Engine : inner left extent before ownership replacement
+    Engine -> Audit : inner work
+    Audit -->] : inner right boundary extent
+  end
+end
+deactivate Engine
+activate Engine
+note right of Engine : group-end close then reopen projection probe
+== after group-end ownership ==
+Engine -> Relay : final accepted-depth probe
+@enduml

@@ -1,0 +1,15 @@
+@startuml
+participant "Azure Sink" as Sink
+participant "Saffron Pivot" as Pivot
+participant "Ruby Active Source" as Source
+activate Source
+activate Source
+note left of Source : nested source note joins the horizontal solve
+Source /--x Sink : dotted upper half from nested spatial-right source
+Source -->] : right boundary emitted at nested source depth
+deactivate Source
+Source \\-x Pivot : solid lower half from singly active spatial-right source
+deactivate Source
+== active source boundary mix ==
+Sink -> Pivot : trailing control
+@enduml

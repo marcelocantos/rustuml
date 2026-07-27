@@ -1,0 +1,18 @@
+@startuml
+participant "Lime Gate" as Gate
+participant "Magenta Worker" as Worker
+participant "Slate Store" as Store
+group broad outer frame
+  [-> Gate : outer left boundary with a deliberately broad request label
+  group compact inner frame
+    Gate -> Worker ++ : open nested worker
+    note left of Worker : inner left note competes with the outer boundary
+    note right of Worker : inner right note competes with the store side
+    Worker -> Store : ordinary inner member
+    Store -->] : inner right boundary with a deliberately broad response label
+  end
+  deactivate Worker
+end
+== divider consumes both boundary solutions ==
+Store --> Gate : final internal control
+@enduml

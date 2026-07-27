@@ -1,0 +1,16 @@
+@startuml
+participant "Ivory Left" as Left
+participant "Obsidian Live" as Live
+participant "Mint Right" as Right
+Right -> Live ++ : reverse-direction activation
+activate Live
+note left of Live : left note spans the nested live segment
+Live -> Left : reverse internal depth probe
+deactivate Live
+note right of Live : right note observes the remaining live segment
+Live -->] : right boundary before final close
+deactivate Live
+== mirrored transition complete ==
+[-> Left : final left boundary width control
+Right --> Left : trailing internal control
+@enduml
