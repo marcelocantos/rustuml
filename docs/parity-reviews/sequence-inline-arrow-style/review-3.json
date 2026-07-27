@@ -1,0 +1,189 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-inline-arrow-style",
+  "account_commit": "ebbba65207efec6e78ce8f67fd5b8d73a29dd366",
+  "implementation_commit": "747e138f16209ae693d693722ab6ec61d0655efd",
+  "implementation_parent": "1166e7e3424c0fb976acaddae6f566972f3bd5c9",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar": {
+    "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+  },
+  "reviewer": {
+    "task_id": "019ee369-54e2-7203-afce-ddde7bfe1723",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop"
+  },
+  "constraints": [
+    "No Cargo, rustc, or rustfmt command was run.",
+    "No production source was edited.",
+    "The existing target/release/examples/diff_one binary performed every Rust render and strict comparison.",
+    "Only review4_ perturbations and this review record are included in the checker commit."
+  ],
+  "commands": [
+    "git rev-parse HEAD (in the PlantUML checkout)",
+    "git rev-parse ebbba652 747e138f 747e138f^",
+    "git show ebbba652:docs/parity-reviews/sequence-inline-arrow-style/account.json",
+    "git diff --no-ext-diff 747e138f^ 747e138f -- crates/rustuml-parser/src/parse/sequence.rs crates/rustuml-render/src/sequence.rs",
+    "find test-diagrams/perturbations/sequence-inline-arrow-style -maxdepth 1 -name '*.puml' -exec target/release/examples/diff_one --no-oracle '{}' \\;",
+    "JAVA_TOOL_OPTIONS=-Djava.awt.headless=true java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/sequence-inline-arrow-style/review4_*.puml",
+    "xmllint --noout test-diagrams/perturbations/sequence-inline-arrow-style/review4_*.svg",
+    "rg -n -i 'Syntax Error|NoSuchElementException|Welcome to PlantUML|An error has occured|\\[From string|Assumed diagram type' test-diagrams/perturbations/sequence-inline-arrow-style/review4_*.svg",
+    "rg -l 'data-diagram-type=\"SEQUENCE\"' test-diagrams/perturbations/sequence-inline-arrow-style/review4_*.svg",
+    "find test-diagrams/perturbations/sequence-inline-arrow-style -maxdepth 1 -name 'review4_*.puml' -print -exec target/release/examples/diff_one --no-oracle '{}' \\;",
+    "git show --format= --no-ext-diff 747e138f -- crates/rustuml-parser/src/parse/sequence.rs crates/rustuml-render/src/sequence.rs | rg -n -i 'include_str|include_bytes|read_to_string|golden|perturb|review[0-9]|fixture|Western Target|Boundary Worker|Format Sender|Hidden Alpha|Physical Left|Visible West'",
+    "git diff --no-ext-diff 747e138f^ 747e138f -- crates/rustuml-parser/src/parse/sequence.rs crates/rustuml-render/src/sequence.rs | rg -n '^\\+.*[0-9]+\\.[0-9]+|^\\+.*fmt_coord\\([^)]*[0-9]'",
+    "git diff --no-ext-diff 747e138f^ 747e138f -- crates/rustuml-parser/src/parse/sequence.rs crates/rustuml-render/src/sequence.rs | rg -n '^\\+.*(events|messages|participants|branches|children)\\.len\\(\\)|^\\+.*\\.len\\(\\)\\s*(==|<=|>=|<|>)\\s*[0-9]|^\\+.*match\\s+.*\\.len\\(\\)|^\\+.*source_line\\s*(==|<=|>=|<|>)'",
+    "git diff --no-ext-diff 747e138f^ 747e138f -- crates/rustuml-parser/src/parse/sequence.rs crates/rustuml-render/src/sequence.rs | rg -n '^\\+\\s*(if|else if|match).*([xy][12]?\\s*(==|<=|>=)|label|from\\s*==\\s*\"[^\\[\\]]|to\\s*==\\s*\"[^\\[\\]])'",
+    "git diff --check 747e138f^ 747e138f",
+    "shasum -a 256 /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar test-diagrams/perturbations/sequence-inline-arrow-style/review4_*.puml test-diagrams/perturbations/sequence-inline-arrow-style/review4_*.svg"
+  ],
+  "preserved_perturbations": {
+    "total": 20,
+    "passed": 20,
+    "failed": 0,
+    "result": "All 20 pre-existing sequence-inline-arrow-style perturbations were independently rerun and reported 'SVGs are structurally equivalent'.",
+    "sources": [
+      "renamed_external_hidden_style_matrix.puml",
+      "renamed_visible_style_order_matrix.puml",
+      "review2_bidirectional_dressing_order.puml",
+      "review2_external_live_depth_autonumber.puml",
+      "review2_hidden_nested_page_boundary.puml",
+      "review2_quoted_plain_styled_dispatch.puml",
+      "review2_style_order_anchor_self.puml",
+      "review3_bidirectional_spatial_order.puml",
+      "review3_external_four_way_combined.puml",
+      "review3_external_from_left_isolated.puml",
+      "review3_external_from_right_isolated.puml",
+      "review3_external_to_left_isolated.puml",
+      "review3_external_to_right_isolated.puml",
+      "review3_nested_activation_deactivation.puml",
+      "review3_page_meta_participant_brackets.puml",
+      "review3_source_circles_spatial_reverse.puml",
+      "review_external_hidden_autonumber_activation.puml",
+      "review_inherited_local_override_counts.puml",
+      "review_quoted_participant_style_text_probe.puml",
+      "review_token_order_topology_colons.puml"
+    ]
+  },
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review4_reverse_circle_cross_spatial.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review4_reverse_circle_cross_spatial.svg",
+      "source_sha256": "874d9cf255af75a0518d80a18907363b872b66f4897050fec06ebbb2d0e2bece",
+      "golden_sha256": "35ce26d8fb9ef3ee579d0c37e535e427e3ef7de25c60a85bf43de3e5758e6df1",
+      "axes": [
+        "reverse source circle plus cross target",
+        "both spatial directions",
+        "long and short spans with renamed participants"
+      ],
+      "result": "pass",
+      "comparison": "SVGs are structurally equivalent"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review4_reverse_circle_open_half_spatial.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review4_reverse_circle_open_half_spatial.svg",
+      "source_sha256": "d5d5580d85e0005fa433d113934c9674653c7f70f5fd05971dbd8feb444df8d1",
+      "golden_sha256": "342869266f4ebfede77ba941d71a86a2736742131eb410adb43f493f015cad2f",
+      "axes": [
+        "reverse source circle plus open target",
+        "reverse source circle plus filled and thin half targets",
+        "both spatial directions and changed topology"
+      ],
+      "result": "fail",
+      "comparison": "Expected 60 structural elements, got 57. The first half-arrow message expected semantic entities part3 to part1 but Rust emitted part1 to part3; subsequent ellipse, line, polygon, and text ordering diverged."
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review4_external_shared_left_depth_repeat.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review4_external_shared_left_depth_repeat.svg",
+      "source_sha256": "09dd78961ac23211c440ad43c530eb8051dc5f43281c7ff4e86d71e8e270e7a5",
+      "golden_sha256": "3acd9ab2eae1db809e8b4433cc53a775fbbe1cb9b815d2fbaded1500479b5139",
+      "axes": [
+        "shared FROM_LEFT and TO_LEFT border",
+        "depth changes with inline and standalone activation/deactivation",
+        "repeated labels and four-digit angle autonumber"
+      ],
+      "result": "fail",
+      "comparison": "The third external line at y=126.4199 ended at x=232.8818 instead of Java's x=237.8818, a five-pixel live-segment error."
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review4_external_shared_right_depth_repeat.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review4_external_shared_right_depth_repeat.svg",
+      "source_sha256": "88c768acb6030d36ee1c64bf120dabd014fae186578737a1f0f53323997a068c",
+      "golden_sha256": "62a74479a97668c4ef7422bdfde3a705baec69390e3961d2fb6f8b117cc68fe2",
+      "axes": [
+        "shared FROM_RIGHT and TO_RIGHT border",
+        "depth changes with inline and standalone activation/deactivation",
+        "repeated labels and five-digit angle autonumber"
+      ],
+      "result": "fail",
+      "comparison": "The first incoming arrow target, shaft, and numbered label were five pixels left of Java. A later shared-border message was five pixels right of Java, showing inconsistent live-segment selection across event order."
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review4_autonumber_literal_angle_formats.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review4_autonumber_literal_angle_formats.svg",
+      "source_sha256": "150dae613fa5ed93829946fac45b06d42a3ab7b26f9b80c2568467ff33bc95fa",
+      "golden_sha256": "5aafbf66b330db587dd3b7bf5ca04a3fadedd0908c8f8c0334c6162b10820fa6",
+      "axes": [
+        "pure literal numeric angle format",
+        "prefixed literal numeric angle format after stop/resume",
+        "changed start, increment, labels, and direction"
+      ],
+      "result": "fail",
+      "comparison": "Pure <00000> formatting survives, but Java's <ID-00033> and <ID-00046> become 33 and 46 in Rust. The canvas is 437px wide in Java and 408px in Rust."
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review4_chrome_hidden_default_font.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review4_chrome_hidden_default_font.svg",
+      "source_sha256": "6082f5575e15ff0ecf3fbd5a999bd34b94bad982e1f95ce548dd12ab69f7a41b",
+      "golden_sha256": "7a59ea94413c304d27f5ee645e1f4b357648cc4687e595b22532bfd3b5d33114",
+      "axes": [
+        "combined caption and footer",
+        "hidden footbox",
+        "default sans metrics and changed message height"
+      ],
+      "result": "pass",
+      "comparison": "SVGs are structurally equivalent"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review4_chrome_hidden_physical_font.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review4_chrome_hidden_physical_font.svg",
+      "source_sha256": "1599f357362379d5b1d723b3738cb15978e3227ffaea012b0a32acbc1f732350",
+      "golden_sha256": "a4e331157867649ae42667aa797b79c8b3c19d494c0ab6e2eab6ab7f617cea64",
+      "axes": [
+        "combined caption and footer",
+        "hidden footbox",
+        "Monospaced physical font metrics"
+      ],
+      "result": "pass",
+      "comparison": "SVGs are structurally equivalent"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review4_chrome_visible_physical_font.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review4_chrome_visible_physical_font.svg",
+      "source_sha256": "ec3f13ebd997428d15083b6a7d5b830096efc8c80c87eb0db045ca3e5fa85262",
+      "golden_sha256": "54c29835b9774cef3eaf5a046431d2efb628981db2cc41a05c0ad11a93bcb6a8",
+      "axes": [
+        "combined caption and footer",
+        "visible footbox",
+        "Serif physical font metrics and changed raw height"
+      ],
+      "result": "fail",
+      "comparison": "Java is 230x211 and Rust is 260x214. Java caption/footer baselines are 188.1138 and 202.478; Rust emits 190.4434 and 205.0645. Participant and message physical-font metrics also diverge, so this failure is broader than chrome alone."
+    }
+  ],
+  "findings": [
+    "The durable causal account amendment ebbba65207efec6e78ce8f67fd5b8d73a29dd366 predates immutable production commit 747e138f16209ae693d693722ab6ec61d0655efd. The Java checkout is exactly 71806a23780b04a5ccde2f8ceb5121edad5eb711 and the pinned JAR hash matches the prior checker.",
+    "All 20 pre-existing perturbations were rerun rather than trusted; all 20 are strictly structurally equivalent with the existing no-oracle diff binary.",
+    "All eight fresh sources are valid PlantUML SEQUENCE diagrams. Their Java SVGs are well-formed and contain no PlantUML error markers.",
+    "Three of eight fresh perturbations pass exactly: reverse source-circle plus cross targets in both spatial directions, hidden-footbox caption/footer with default metrics, and hidden-footbox caption/footer with Monospaced metrics.",
+    "Five of eight fresh perturbations fail. Three failures directly disprove the claimed generative model independently of the broader Serif metrics issue.",
+    "CommandArrow lines 214-222 treats left slash and backslash dressings as reverseDefine even without a less-than sign, then swaps semantic participants at lines 234-242. Rust parse_arrow lines 1098-1109 derives reverse solely from less-than syntax. Valid /-o, \\-o, and //-o messages therefore retain the wrong semantic participant order and misplace their source circle and half target dressing.",
+    "MessageExoArrow lines 84-116 selects the participant's live segment through LivingParticipantBox.getLiveThicknessAt at the exact arrow ordinate. The fresh shared-border matrices expose five-pixel errors in both directions after depth changes, including opposite-sign errors on the same right border. The scalar event replay still does not model Java's segment selection consistently.",
+    "CommandAutonumber passes the complete format to DecimalFormat, and DottedNumber.format returns its full literal result. Rust parse_autonumber_template_runs lines 2466-2473 preserves an angle token only when every character is 0 or #. A valid prefixed numeric token such as <ID-00000> is still discarded as unknown markup.",
+    "The hidden-footbox chrome formula generalizes for both default sans and Monospaced metrics. The visible Serif perturbation does not: every physical-font metric and both bottom baselines diverge. This is not the sole basis for rejection, but it disproves the account's broad physical-font acceptance axis.",
+    "Mechanical anti-overfit searches found no golden or fixture reads, heldout labels, review-name conditions, coordinate-keyed conditionals, source-line gates, or collection-length ladders. Added numeric geometry appears in general formulas with nearby Java-mechanism comments. git diff --check is clean.",
+    "No Cargo, rustc, rustfmt, product gate, or self-authored unit test was used as checker evidence."
+  ],
+  "verdict": "rejected"
+}

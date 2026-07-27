@@ -1,0 +1,12 @@
+@startuml
+autonumber 7 13 "<00000>"
+participant "Format Sender" as Sender
+participant "Format Receiver" as Receiver
+Sender -> Receiver : first numeric angle format
+Receiver --> Sender : second numeric angle format
+autonumber stop
+Sender -> Receiver : unnumbered separator
+autonumber resume "<ID-00000>"
+Receiver -> Sender : prefixed numeric angle format
+Sender --> Receiver : repeated prefixed format
+@enduml

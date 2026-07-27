@@ -1,0 +1,8 @@
+@startuml
+participant "Western Target" as Western
+participant "Middle Observer" as Middle
+participant "Eastern Source" as Eastern
+Western x<-o Eastern : east source circle to west cross
+Eastern x<-o Western : west source circle to east cross
+Middle x<-o Eastern : east source circle to middle cross
+@enduml

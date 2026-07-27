@@ -1,0 +1,11 @@
+@startuml
+skinparam defaultFontName "Monospaced"
+hide footbox
+caption Hidden physical caption
+footer Hidden physical footer
+participant "Physical Left" as PhysicalLeft
+participant "Physical Right" as PhysicalRight
+PhysicalLeft -> PhysicalRight ++ : physical metric request
+PhysicalRight --> PhysicalLeft : physical metric response
+deactivate PhysicalRight
+@enduml

@@ -1,0 +1,11 @@
+@startuml
+hide footbox
+caption Hidden default caption
+footer Hidden default footer
+participant "Hidden Alpha" as Alpha
+participant "Hidden Beta" as Beta
+Alpha -> Beta ++ : open hidden-footbox work
+Beta --> Alpha : hidden-footbox response
+deactivate Beta
+Alpha -> Beta : close hidden-footbox work
+@enduml

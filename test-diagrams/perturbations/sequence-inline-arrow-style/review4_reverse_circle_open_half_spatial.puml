@@ -1,0 +1,10 @@
+@startuml
+participant "Left Station" as LeftStation
+participant "Center Station" as CenterStation
+participant "Right Station" as RightStation
+LeftStation <<-o RightStation : open target from right source
+RightStation <<-o LeftStation : open target from left source
+LeftStation /-o RightStation : lower half target from right source
+RightStation \-o LeftStation : upper half target from left source
+CenterStation //-o RightStation : thin lower half from right source
+@enduml

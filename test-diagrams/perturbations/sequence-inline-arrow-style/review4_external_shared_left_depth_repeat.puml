@@ -1,0 +1,12 @@
+@startuml
+autonumber 97 "<0000>"
+participant "Boundary Worker" as Worker
+participant "Internal Peer" as Peer
+[--> Worker ++ : repeated boundary pulse
+activate Worker
+Worker -->[ : repeated boundary pulse
+Worker -->[ -- : repeated boundary pulse
+deactivate Worker
+[--> Worker : repeated boundary pulse
+Worker -> Peer : internal control
+@enduml

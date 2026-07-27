@@ -1,0 +1,10 @@
+@startuml
+skinparam defaultFontName "Serif"
+caption Visible physical caption
+footer Visible physical footer
+participant "Visible West" as VisibleWest
+participant "Visible East" as VisibleEast
+VisibleWest -> VisibleEast : first physical row
+VisibleEast --> VisibleWest : second physical row
+VisibleWest -> VisibleEast : third physical row
+@enduml
