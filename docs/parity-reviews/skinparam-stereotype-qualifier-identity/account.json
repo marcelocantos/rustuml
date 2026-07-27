@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "mechanism": "skinparam-stereotype-qualifier-identity",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "net.sourceforge.plantuml.skin.SkinParam#setParam",
+    "net.sourceforge.plantuml.skin.SkinParam#getValue",
+    "net.sourceforge.plantuml.skin.SkinParam#cleanForKey",
+    "net.sourceforge.plantuml.skin.SkinParam#cleanForKeySlow",
+    "net.sourceforge.plantuml.skin.SkinParam#getHtmlColor"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/mod.rs::normalized_skinparam_spelling",
+    "crates/rustuml-parser/src/parse/mod.rs::canonical_skinparam_key",
+    "crates/rustuml-parser/src/parse/mod.rs::collapse_reassigned_skinparams",
+    "crates/rustuml-render/src/component.rs::component_stereotype_skinparam",
+    "crates/rustuml-render/src/component.rs::render_with_oracle"
+  ],
+  "invariant": "PlantUML applies SkinParam.cleanForKeySlow symmetrically when a parameter is stored by setParam and when it is retrieved by getValue. The cleaning operation lowercases the complete key and removes every underscore and dot before extracting or retaining stereotype qualifiers. A declaration such as componentBackgroundColor<<relay_71>> is therefore stored under componentbackgroundcolor<<relay71>>, and a later lookup assembled from the entity stereotype <<relay_71>> is cleaned to the same identity. Separator-normalized stereotype spellings collide in one parameter-map slot and the latest declaration wins. The displayed stereotype remains unchanged; cleaning affects only skinparam identity.",
+  "causal_divergence": "Rust collapse_reassigned_skinparams now correctly retains the latest ordinary declaration under its separator-normalized spelling, so componentBackgroundColor<<relay_71>> reaches the renderer as componentbackgroundcolor<<relay71>>. The component renderer extracts relay71 into its scoped-style map but looks that map up with the raw parsed entity stereotype relay_71. The mismatch drops every qualified style and falls back to the unqualified component colors. This is a renderer lookup-identity defect, not evidence that parser normalization should preserve qualifier separators.",
+  "planned_change": "Use the same lowercase underscore/dot-free identity for both sides of component stereotype style lookup. Keep the entity's original stereotype text for display. Add tests proving that underscore and dot variants select one qualified style, that unrelated qualifiers remain distinct, and that later separator-alias declarations replace earlier ones. Do not alter ordinary skinparam replacement order, theme reconstruction, displayed stereotype spelling, geometry, colors, or SVG after emission.",
+  "perturbation_axes": [
+    "renamed component stereotypes containing underscores and dots",
+    "separator aliases that normalize to one qualifier identity",
+    "source-order reversal of colliding qualified declarations",
+    "qualified and unqualified component styles in the same block",
+    "an unrelated qualifier that must not inherit the scoped style"
+  ]
+}
