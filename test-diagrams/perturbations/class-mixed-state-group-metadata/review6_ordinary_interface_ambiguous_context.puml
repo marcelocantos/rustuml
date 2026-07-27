@@ -1,0 +1,10 @@
+@startuml
+package PortNorth {
+  interface SharedPort
+}
+package PortSouth {
+  interface SharedPort
+}
+SharedPort --> PortConsumer
+PortNorth.SharedPort --> PortSouth.SharedPort
+@enduml

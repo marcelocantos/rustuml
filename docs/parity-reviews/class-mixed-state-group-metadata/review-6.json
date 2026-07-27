@@ -1,0 +1,300 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-mixed-state-group-metadata",
+  "verdict": "rejected",
+  "reviewer": {
+    "task_id": "codex-desktop-task-019ee369-54e2-7203-afce-ddde7bfe1723-class-mixed-state-group-metadata-checker-6",
+    "model": "OpenAI Codex (GPT-5)",
+    "role": "independent skeptical checker; no production edits"
+  },
+  "scope": {
+    "branch": "t14-ratchet",
+    "head_at_review_start": "e490ea6fd27c9454cb7fca0372316b837806d1b1",
+    "implementation_commit": "b7b00d50070b6bde72a76cdc448fdad794bb4bed",
+    "implementation_parent": "5181ef43b20511bddc0c587b819481711a76d042",
+    "implementation_subject": "fix: distinguish class quark lookup modes",
+    "production_diff": [
+      "crates/rustuml-parser/src/parse/class.rs"
+    ],
+    "account": "docs/parity-reviews/class-mixed-state-group-metadata/account.json",
+    "account_sha256": "596e29247608bf2699a9f1a3628be2b6ac558409f47c3bb6d2f9cc58c2292409",
+    "prior_response": "docs/parity-reviews/class-mixed-state-group-metadata/review-5-response.md",
+    "prior_response_sha256": "7dff6db482ec165301548f3cad5ff1f53a222dcd107b1a56bb9fa84808706bb5",
+    "immutability_evidence": [
+      "5181ef43b20511bddc0c587b819481711a76d042 is the direct parent of b7b00d50070b6bde72a76cdc448fdad794bb4bed.",
+      "The account and review-5 response are byte-unchanged from 5181ef43 through b7b00d50.",
+      "No production file was edited during this review."
+    ]
+  },
+  "java": {
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "jar_mtime": "2026-06-19T02:03:25+1000",
+    "jar_size_bytes": 56761142,
+    "worktree_note": "The Java checkout had unrelated CLAUDE.md, svek.dot, and svek.svg changes. Diff checks confirmed that every inspected Java source file was byte-clean at the pinned revision.",
+    "inspected_locations": [
+      "net.atmp.CucaDiagram#quarkInContext",
+      "net.atmp.CucaDiagram#quarkInContextSafe",
+      "net.atmp.CucaDiagram#reallyCreateLeaf",
+      "net.sourceforge.plantuml.plasma.Plasma#firstWithName",
+      "net.sourceforge.plantuml.plasma.Plasma#countByName",
+      "net.sourceforge.plantuml.classdiagram.ClassDiagramFactory#initCommandsList",
+      "net.sourceforge.plantuml.classdiagram.command.CommandCreateClass#executeArg",
+      "net.sourceforge.plantuml.classdiagram.command.CommandCreateClassMultilines#executeNow",
+      "net.sourceforge.plantuml.classdiagram.command.CommandCreateElementFull2#executeArg",
+      "net.sourceforge.plantuml.classdiagram.command.CommandLinkClass#executeArg"
+    ],
+    "mechanism_evidence": [
+      "With a non-null separator, CucaDiagram.quarkInContextSafe reuses an unqualified name only when reuseExistingChild is true and Plasma.countByName returns exactly one; otherwise it returns the current group's child.",
+      "CommandCreateClass and CommandCreateClassMultilines pass false. CommandCreateElementFull2 and CommandLinkClass pass true.",
+      "Plasma.countByName counts every quark registered under a short name, so group quarks participate in ambiguity.",
+      "With namespaceSeparator none, CucaDiagram.quarkInContextSafe takes a separate branch: it calls firstWithName and reuses that first quark regardless of lookup mode or duplicate count.",
+      "Plasma.firstWithName is creation-order-sensitive. A HashSet of canonical paths can answer uniqueness but cannot implement first-created reuse."
+    ]
+  },
+  "rust_execution": {
+    "helper": "/Users/marcelo/work/github.com/marcelocantos/rustuml/target/release/examples/diff_one",
+    "helper_sha256": "aa0cca6c12ef4fc632e4695ee49054398d71ecd4b9f14aef9cd12b02615db1eb",
+    "helper_mtime": "2026-07-27T23:59:30+1000",
+    "helper_size_bytes": 16552912,
+    "direct_cargo_commands": [],
+    "direct_rustc_commands": [],
+    "build_commands": [],
+    "notes": [
+      "All Rust renders came from the parent repo's prebuilt release helper requested by the user.",
+      "The helper's --print-rust mode supplied Rust SVGs to the scoped REXML comparison without writing temporary repo files.",
+      "No cargo, rustc, rustfmt, or build command was invoked."
+    ]
+  },
+  "commands": [
+    "cat /Users/marcelo/.claude/rust.md",
+    "cat /Users/marcelo/.codex/skills/oracle-first/SKILL.md",
+    "cat /Users/marcelo/.claude/conventions.md",
+    "cat /Users/marcelo/.claude/tools.md",
+    "bullseye_startup_context(cwd=/Users/marcelo/work/github.com/marcelocantos/rustuml,recent_days=14)",
+    "bullseye_frontier(cwd=/Users/marcelo/work/github.com/marcelocantos/rustuml)",
+    "git show --stat --oneline --decorate --no-renames b7b00d50",
+    "git diff b7b00d50^ b7b00d50 -- crates/rustuml-parser/src/parse/class.rs",
+    "cat docs/parity-reviews/class-mixed-state-group-metadata/account.json",
+    "cat docs/parity-reviews/class-mixed-state-group-metadata/review-5-response.md",
+    "jq '.' docs/parity-reviews/class-mixed-state-group-metadata/review-5.json",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "static sed/rg inspection of every Java location listed in java.inspected_locations",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-mixed-state-group-metadata/review6_*.puml",
+    "xmllint --noout test-diagrams/perturbations/class-mixed-state-group-metadata/review6_*.svg",
+    "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"|an error has occured|\\[From string|No class ' test-diagrams/perturbations/class-mixed-state-group-metadata/review6_*.svg",
+    "for f in test-diagrams/perturbations/class-mixed-state-group-metadata/review6_*.puml; do target/release/examples/diff_one --no-oracle \"$f\"; done",
+    "for f in test-diagrams/perturbations/class-mixed-state-group-metadata/review6_*.puml; do target/release/examples/diff_one --no-oracle --print-rust \"$f\"; done",
+    "Ruby REXML comparison of root data-diagram-type and ordered entity/cluster data-qualified-name plus data-source-line records for all review6_ sources",
+    "Ruby REXML replay of all 45 review2_/review3_/review4_/review5_ sources using target/release/examples/diff_one --no-oracle and --print-rust",
+    "git diff --check b7b00d50^ b7b00d50 -- crates/rustuml-parser/src/parse/class.rs",
+    "git merge-base --is-ancestor 5181ef43 b7b00d50",
+    "git diff --exit-code 5181ef43 b7b00d50 -- docs/parity-reviews/class-mixed-state-group-metadata/account.json docs/parity-reviews/class-mixed-state-group-metadata/review-5-response.md",
+    "git show --format= --no-ext-diff b7b00d50 -- crates/rustuml-parser/src/parse/class.rs | rg anti-overfit scan for review labels, held-out labels, fixture/golden reads, embedded data, source-line equality, count ladders, coordinates, and dimensions",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml diff --exit-code -- <all inspected Java source files>",
+    "Ruby SHA-256 uniqueness scan of all twelve review6_ source/SVG files against the rest of test-diagrams",
+    "shasum -a 256 test-diagrams/perturbations/class-mixed-state-group-metadata/review6_*.puml test-diagrams/perturbations/class-mixed-state-group-metadata/review6_*.svg"
+  ],
+  "prior_replay": {
+    "source_count": 45,
+    "strict_matches": 17,
+    "scoped_identity_matches": 45,
+    "scoped_failures": [],
+    "classification": "The immutable commit repairs the review-5 duplicate ordinary-class counterexample without regressing the 45 prior scoped identity controls."
+  },
+  "fresh_review": {
+    "summary": {
+      "valid_sources": 6,
+      "valid_java_svgs": 6,
+      "java_error_pages": 0,
+      "strict_matches": 0,
+      "scoped_identity_matches": 4,
+      "direct_scoped_failures": 2,
+      "verdict_basis": "Either fresh valid scoped failure rejects the immutable implementation. Renderer geometry accounts for many strict differences but cannot explain an extra parser-owned entity or cluster identity."
+    },
+    "fixtures": [
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review6_mixed_actor_ambiguous_context.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review6_mixed_actor_ambiguous_context.svg",
+        "source_sha256": "930ef7e03def0aa95161e6425ba9204f76880530e906563f2b9fea3e6b5078f7",
+        "golden_sha256": "5d9017cc574b219ba281b1b92a03a3d5d18433cc4cf9be7a5caf2821f9d68b20",
+        "axes": [
+          "renamed duplicate class leaves in two packages",
+          "mixed actor declaration in a third package",
+          "ambiguity plus two qualified links"
+        ],
+        "strict": "different",
+        "scoped_identity": "pass",
+        "evidence": "Java and Rust both create three package clusters and three distinct SharedRole leaves at declaration lines 3, 6, and 9."
+      },
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review6_namespace_none_duplicate_first_match.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review6_namespace_none_duplicate_first_match.svg",
+        "source_sha256": "2feb774e8d748aa327e8a6cb6f6b603068d4285df35882d177235f4f2d6e1cd9",
+        "golden_sha256": "1836b613a08924c7724d6de965c6da090dd2311f6828d56e16459d608410560b",
+        "axes": [
+          "two same-short-name leaves created under the default separator",
+          "separator changed to none after ambiguity exists",
+          "ordinary aliased declaration followed by relationship lookup"
+        ],
+        "strict": "different",
+        "scoped_identity": "fail",
+        "evidence": "Java firstWithName reuses SepNoneAlpha.EchoToken and creates no root EchoToken. Rust's uniqueness check sees two matches and creates root EchoToken at source line 8.",
+        "java_records": [
+          ["cluster", "SepNoneAlpha", "1"],
+          ["cluster", "SepNoneBeta", "4"],
+          ["entity", "SepNoneAlpha.EchoToken", "2"],
+          ["entity", "SepNoneBeta.EchoToken", "5"],
+          ["entity", "SepNoneSink", "9"]
+        ],
+        "rust_records": [
+          ["cluster", "SepNoneAlpha", "1"],
+          ["cluster", "SepNoneBeta", "4"],
+          ["entity", "SepNoneAlpha.EchoToken", "2"],
+          ["entity", "SepNoneBeta.EchoToken", "5"],
+          ["entity", "EchoToken", "8"],
+          ["entity", "SepNoneSink", "9"]
+        ]
+      },
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review6_ordinary_enum_ambiguous_context.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review6_ordinary_enum_ambiguous_context.svg",
+        "source_sha256": "c8d588e7669283aee5e974eecd888d6f6cb7efadaffb5095cc5c44a4beef53bd",
+        "golden_sha256": "66050f3a43c5788b0b5bee6f5df56b27e2ebd06eaa68d7321bbfb92f1f320238",
+        "axes": [
+          "ordinary enum command family",
+          "renamed duplicate short names",
+          "ambiguous root relationship and reversed qualified link"
+        ],
+        "strict": "different",
+        "scoped_identity": "pass",
+        "evidence": "Both implementations create EnumEast.SharedPhase, EnumWest.SharedPhase, and a separate root SharedPhase at the ambiguous relationship."
+      },
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review6_ordinary_interface_ambiguous_context.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review6_ordinary_interface_ambiguous_context.svg",
+        "source_sha256": "552ae274ca67f7a6ba36ff1c7f6492daac34e0ad0ce10fe0be980587d8c968c2",
+        "golden_sha256": "41ec8d4b1ea648211e7790eded6157f8b1ee07cacc4e34da33cef1c4284e7ca4",
+        "axes": [
+          "ordinary interface command family",
+          "renamed duplicate short names",
+          "ambiguous root relationship and forward qualified link"
+        ],
+        "strict": "different",
+        "scoped_identity": "pass",
+        "evidence": "Both implementations create PortNorth.SharedPort, PortSouth.SharedPort, and a separate root SharedPort at the ambiguous relationship."
+      },
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review6_package_quark_counts_for_mixed_lookup.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review6_package_quark_counts_for_mixed_lookup.svg",
+        "source_sha256": "4be25efc76c6d0372b8cb594ac8ccb0948de226ae0f11932506b0ab34d5c36b4",
+        "golden_sha256": "e860a18a83ba8ab5f10f16cedec70d505ebff1bafb12e9681c5b8808bf0781ab",
+        "axes": [
+          "package quark and entity quark share a short name",
+          "mixed actor declaration in a third package",
+          "nested group plus qualified relationship"
+        ],
+        "strict": "different",
+        "scoped_identity": "pass",
+        "evidence": "Counting both group and entity quarks makes CollisionMark ambiguous, so both implementations create QuarkMixed.CollisionMark rather than reusing QuarkEntities.CollisionMark."
+      },
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review6_unique_mixed_reuses_remote_class.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review6_unique_mixed_reuses_remote_class.svg",
+        "source_sha256": "a8d76ba50fa2b6e753e1e93efb3a4db050804eaccea700602f482aa30d6ecd2c",
+        "golden_sha256": "30472a6be922bae49cd8b4549bcb16db33e652274a56da6e5f992c5f9cb03cb1",
+        "axes": [
+          "sole class leaf in one package",
+          "mixed actor declaration with the same code in a second package",
+          "unqualified relationship after both declarations"
+        ],
+        "strict": "different",
+        "scoped_identity": "fail",
+        "evidence": "Both implementations reuse BridgeClasses.TransitBridge as the sole leaf, but Java emits no empty BridgeActors cluster. Rust emits an extra, misqualified BridgeClasses.BridgeActors cluster at source line 5.",
+        "java_records": [
+          ["cluster", "BridgeClasses", "2"],
+          ["entity", "BridgeClasses.TransitBridge", "3"],
+          ["entity", "BridgeTerminal", "8"]
+        ],
+        "rust_records": [
+          ["cluster", "BridgeClasses", "2"],
+          ["cluster", "BridgeClasses.BridgeActors", "5"],
+          ["entity", "BridgeClasses.TransitBridge", "3"],
+          ["entity", "BridgeTerminal", "8"]
+        ]
+      }
+    ]
+  },
+  "anti_overfit": {
+    "fixture_shaped_logic": "pass",
+    "golden_or_fixture_reads": "pass",
+    "numeric_constant_audit": "pass_with_provenance",
+    "branch_provenance": "partial_pass",
+    "findings": [
+      "The production diff contains none of the fresh or prior review labels and no held-out entity/package names.",
+      "The production diff introduces no fixture or golden reads, embedded source/SVG data, source-line equality branch, coordinate/dimension branch, per-count ladder, or layout constant.",
+      "The exactly-one threshold is mechanism-shaped and directly supported by Plasma.countByName(name) == 1. The union of entity and package canonical paths correctly addresses group participation for the non-null-separator branch.",
+      "The explicit CurrentContext versus ReuseUnique enum correctly repairs the prior ordinary-declaration overgeneralization across class, enum, and interface controls.",
+      "The implementation is nevertheless incomplete against its own durable response: review-5-response.md says namespaceSeparator none retains Java's separate first-name behavior, but resolve_quark_path calls unique_quark_path_named in that branch.",
+      "Because entity_by_path and package_by_path are HashMaps and unique_quark_path_named collects into a HashSet, the new representation does not retain the creation order required by Plasma.firstWithName."
+    ]
+  },
+  "findings": [
+    {
+      "severity": "reject",
+      "title": "namespaceSeparator none implements uniqueness instead of first-created reuse",
+      "evidence": [
+        "review6_namespace_none_duplicate_first_match.puml is valid Java syntax and its SVG is not an error page.",
+        "Java reuses SepNoneAlpha.EchoToken after two EchoToken quarks exist and creates no root EchoToken.",
+        "Rust creates root EchoToken at declaration source line 8.",
+        "CucaDiagram.quarkInContextSafe's sep == null branch calls firstWithName without consulting reuseExistingChild or countByName.",
+        "Rust resolve_quark_path's namespace_sep.is_none branch calls unique_quark_path_named and therefore implements the wrong predicate.",
+        "The discrepancy was named in the pre-implementation review-5 response, so this is an omitted part of the documented model rather than a newly inferred requirement."
+      ]
+    },
+    {
+      "severity": "reject",
+      "title": "Unique remote mixed reuse leaves an extra misqualified package cluster",
+      "evidence": [
+        "review6_unique_mixed_reuses_remote_class.puml is valid Java syntax and its SVG is not an error page.",
+        "Java and Rust both reuse BridgeClasses.TransitBridge, proving the unique leaf lookup itself fires.",
+        "Java emits only BridgeClasses as a cluster because BridgeActors owns no rendered leaf after reuse.",
+        "Rust emits an extra cluster qualified as BridgeClasses.BridgeActors at declaration source line 5.",
+        "This is parser-owned group identity/metadata, not renderer geometry."
+      ]
+    },
+    {
+      "severity": "info",
+      "title": "The prior rejection is genuinely repaired without fixture shaping",
+      "evidence": [
+        "All 45 prior review2/review3/review4/review5 sources pass scoped identity.",
+        "Fresh enum and interface duplicate-name matrices pass.",
+        "Fresh mixed ambiguity and package-quark-count matrices pass.",
+        "Static anti-overfit scans found no fixture labels, fixture reads, golden embedding, or unexplained numeric/layout branches."
+      ]
+    }
+  ],
+  "required_followup": [
+    "Preserve both failing review6_ pairs and all four passing controls.",
+    "Before another production edit, commit a causal response that models the separator-null branch as creation-ordered Plasma.firstWithName behavior, not uniqueness. A HashMap/HashSet-only index is insufficient for this branch.",
+    "Model whether a parsed package with no locally owned rendered leaf survives into ClassDiagram output after a mixed declaration reuses a remote quark, and preserve root qualification across that transition.",
+    "Replay all 45 prior sources and all six review6 sources. Acceptance requires 51/51 scoped identity matches; strict renderer differences may be classified separately only after scoped identity passes.",
+    "Do not weaken scoped identity comparison, exclude empty groups, or change valid-syntax/error classification to make these cases pass."
+  ],
+  "ready_to_commit_paths": [
+    "docs/parity-reviews/class-mixed-state-group-metadata/review-6.json",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review6_mixed_actor_ambiguous_context.puml",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review6_mixed_actor_ambiguous_context.svg",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review6_namespace_none_duplicate_first_match.puml",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review6_namespace_none_duplicate_first_match.svg",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review6_ordinary_enum_ambiguous_context.puml",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review6_ordinary_enum_ambiguous_context.svg",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review6_ordinary_interface_ambiguous_context.puml",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review6_ordinary_interface_ambiguous_context.svg",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review6_package_quark_counts_for_mixed_lookup.puml",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review6_package_quark_counts_for_mixed_lookup.svg",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review6_unique_mixed_reuses_remote_class.puml",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review6_unique_mixed_reuses_remote_class.svg"
+  ]
+}

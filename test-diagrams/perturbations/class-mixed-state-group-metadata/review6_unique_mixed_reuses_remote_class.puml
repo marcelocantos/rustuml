@@ -1,0 +1,10 @@
+@startuml
+allowmixing
+package BridgeClasses {
+  class TransitBridge
+}
+package BridgeActors {
+  actor "Transit Bridge Actor" as TransitBridge
+}
+TransitBridge --> BridgeTerminal
+@enduml

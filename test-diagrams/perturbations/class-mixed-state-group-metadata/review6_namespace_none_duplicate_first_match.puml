@@ -1,0 +1,11 @@
+@startuml
+package SepNoneAlpha {
+  class EchoToken
+}
+package SepNoneBeta {
+  class EchoToken
+}
+set namespaceSeparator none
+class "Root Echo Declaration" as EchoToken
+EchoToken --> SepNoneSink
+@enduml

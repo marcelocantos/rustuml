@@ -1,0 +1,15 @@
+@startuml
+allowmixing
+package QuarkArchive {
+  package CollisionMark {
+    class ArchiveLeaf
+  }
+}
+package QuarkEntities {
+  class CollisionMark
+}
+package QuarkMixed {
+  actor "Collision Mark Actor" as CollisionMark
+}
+QuarkMixed.CollisionMark --> QuarkEntities.CollisionMark
+@enduml

@@ -1,0 +1,14 @@
+@startuml
+allowmixing
+package ActorSeedOne {
+  class SharedRole
+}
+package ActorSeedTwo {
+  class SharedRole
+}
+package ActorDestination {
+  actor "Destination Role" as SharedRole
+}
+ActorDestination.SharedRole --> ActorSeedOne.SharedRole
+ActorSeedTwo.SharedRole --> ActorDestination.SharedRole
+@enduml

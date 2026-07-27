@@ -1,0 +1,10 @@
+@startuml
+package EnumEast {
+  enum SharedPhase
+}
+package EnumWest {
+  enum SharedPhase
+}
+SharedPhase --> PhaseObserver
+EnumWest.SharedPhase --> EnumEast.SharedPhase
+@enduml
