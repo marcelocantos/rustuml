@@ -3192,7 +3192,6 @@ fn collect_state_group_outcome<'a>(
 fn build_state_group_outcome<'a>(
     diagram: &'a StateDiagram,
     composite: &'a State,
-    arrow_font: &StateArrowFont,
 ) -> Option<StateGroupOutcome<'a>> {
     if !composite.composite || composite.url.is_some() {
         return None;
@@ -3226,7 +3225,7 @@ fn build_state_group_outcome<'a>(
         .copied()
         .filter(|state| state.composite)
     {
-        let outcome = build_state_group_outcome(diagram, state, arrow_font)?;
+        let outcome = build_state_group_outcome(diagram, state)?;
         let parent = state.parent.as_deref()?;
         region_outcomes
             .iter_mut()
@@ -3449,7 +3448,6 @@ fn build_state_group_outcome<'a>(
 /// body is ordinary or concurrent.
 fn build_autonomous_composite<'a>(
     diagram: &'a StateDiagram,
-    arrow_font: &StateArrowFont,
 ) -> Option<(
     Vec<AutonomousComposite<'a>>,
     Vec<&'a State>,
@@ -3476,7 +3474,7 @@ fn build_autonomous_composite<'a>(
     let mut composites = Vec::new();
     let mut live_clusters = Vec::new();
     for composite in root_composites {
-        let outcome = build_state_group_outcome(diagram, composite, arrow_font)?;
+        let outcome = build_state_group_outcome(diagram, composite)?;
         collect_state_group_outcome(outcome, &mut composites, &mut live_clusters);
     }
     let outer_transition_indices: Vec<usize> = if live_clusters.is_empty() {
@@ -4417,8 +4415,7 @@ fn emit_autonomous_composite(
 
 fn render_autonomous_composite(diagram: &StateDiagram) -> Option<String> {
     let skin = StateSkin::from_diagram(diagram);
-    let arrow_font = StateArrowFont::from_diagram(diagram);
-    let (composites, live_clusters, outer) = build_autonomous_composite(diagram, &arrow_font)?;
+    let (composites, live_clusters, outer) = build_autonomous_composite(diagram)?;
     let mut all_ids = outer.ids.clone();
     for composite in &composites {
         collect_autonomous_composite_ids(composite, &mut all_ids);
@@ -10403,8 +10400,7 @@ CobaltDecision --> [*]
         let rustuml_parser::diagram::Diagram::State(diagram) = &parsed else {
             panic!("expected state diagram");
         };
-        let arrow_font = StateArrowFont::from_diagram(diagram);
-        let (roots, _, _) = build_autonomous_composite(diagram, &arrow_font).unwrap();
+        let (roots, _, _) = build_autonomous_composite(diagram).unwrap();
         let [root] = roots.as_slice() else {
             panic!("expected one root composite");
         };
@@ -10464,8 +10460,7 @@ CobaltDecision --> [*]
         let rustuml_parser::diagram::Diagram::State(diagram) = &parsed else {
             panic!("expected state diagram");
         };
-        let arrow_font = StateArrowFont::from_diagram(diagram);
-        let (roots, _, outer_layout) = build_autonomous_composite(diagram, &arrow_font).unwrap();
+        let (roots, _, outer_layout) = build_autonomous_composite(diagram).unwrap();
         let [root] = roots.as_slice() else {
             panic!("expected one isolated root composite");
         };
@@ -10518,8 +10513,7 @@ CobaltDecision --> [*]
         let rustuml_parser::diagram::Diagram::State(diagram) = &parsed else {
             panic!("expected state diagram");
         };
-        let arrow_font = StateArrowFont::from_diagram(diagram);
-        let (roots, _, _) = build_autonomous_composite(diagram, &arrow_font).unwrap();
+        let (roots, _, _) = build_autonomous_composite(diagram).unwrap();
         let [root] = roots.as_slice() else {
             panic!("expected one root composite");
         };
@@ -10585,8 +10579,7 @@ CobaltDecision --> [*]
         let rustuml_parser::diagram::Diagram::State(diagram) = &parsed else {
             panic!("expected state diagram");
         };
-        let arrow_font = StateArrowFont::from_diagram(diagram);
-        let (roots, _, _) = build_autonomous_composite(diagram, &arrow_font).unwrap();
+        let (roots, _, _) = build_autonomous_composite(diagram).unwrap();
 
         assert_eq!(roots.len(), 4);
         assert_eq!(
@@ -10666,8 +10659,7 @@ CobaltDecision --> [*]
         let rustuml_parser::diagram::Diagram::State(diagram) = &parsed else {
             panic!("expected state diagram");
         };
-        let arrow_font = StateArrowFont::from_diagram(diagram);
-        let (roots, _, _) = build_autonomous_composite(diagram, &arrow_font).unwrap();
+        let (roots, _, _) = build_autonomous_composite(diagram).unwrap();
         assert_eq!(
             roots
                 .iter()
