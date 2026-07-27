@@ -1216,6 +1216,75 @@ revision: 23
     }
 
     #[test]
+    fn renamed_tail_branches_balance_around_their_record_ports() {
+        let source = r#"@startyaml
+renamed:
+  first: alpha
+  second: beta
+  violet:
+    - ultraviolet: 17
+  indigo:
+    - north: 23
+      south: 29
+@endyaml"#;
+        let svg = render_input(source);
+        let attribute = |tag: &str, name: &str| {
+            let marker = format!(r#" {name}=""#);
+            let start = tag.find(&marker)? + marker.len();
+            tag[start..].split_once('"')?.0.parse::<f64>().ok()
+        };
+        let boxes = svg
+            .split("<rect ")
+            .skip(1)
+            .filter_map(|rest| rest.split_once("/>").map(|(tag, _)| tag))
+            .filter(|tag| tag.contains(r##"fill="#F1F1F1""##))
+            .map(|tag| {
+                (
+                    attribute(tag, "x").unwrap(),
+                    attribute(tag, "y").unwrap(),
+                    attribute(tag, "width").unwrap(),
+                    attribute(tag, "height").unwrap(),
+                )
+            })
+            .collect::<Vec<_>>();
+        assert_eq!(boxes.len(), 6);
+
+        let parent_left = boxes[1].0;
+        let first_child_left = boxes[2].0;
+        let connector_leads = svg
+            .split("<path ")
+            .skip(1)
+            .filter_map(|rest| rest.split_once("/>").map(|(tag, _)| tag))
+            .filter(|tag| tag.contains("stroke-dasharray:3,3"))
+            .filter_map(|tag| {
+                let marker = r#"d="M"#;
+                let start = tag.find(marker)? + marker.len();
+                let point = tag[start..].split_once(' ')?.0;
+                let (x, y) = point.split_once(',')?;
+                Some((x.parse::<f64>().ok()?, y.parse::<f64>().ok()?))
+            })
+            .collect::<Vec<_>>();
+        let parent_port_centers = connector_leads
+            .iter()
+            .copied()
+            .filter(|(x, _)| *x > parent_left && *x < first_child_left)
+            .map(|(_, y)| y)
+            .collect::<Vec<_>>();
+        assert_eq!(
+            parent_port_centers.len(),
+            2,
+            "boxes={boxes:?}, connector_leads={connector_leads:?}"
+        );
+
+        let child_center_mean =
+            ((boxes[2].1 + boxes[2].3 / 2.0) + (boxes[4].1 + boxes[4].3 / 2.0)) / 2.0;
+        let port_center_mean =
+            (parent_port_centers[0] + parent_port_centers[1]) / 2.0;
+        // PlantUML serializes these independently to four decimal places.
+        assert!((child_center_mean - port_center_mean).abs() < 1.0 / 1000.0);
+    }
+
+    #[test]
     fn renamed_keyed_map_routes_four_branches_with_deeper_mixed_nesting() {
         let source = r#"@startjson
 {

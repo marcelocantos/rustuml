@@ -19,7 +19,12 @@ fn main() {
         "cargo:rerun-if-changed={}",
         lib.join("rustuml_helpers.h").display()
     );
-    for source in ["common/labels.c", "common/shapes.c", "common/splines.c"] {
+    for source in [
+        "common/labels.c",
+        "common/ns.c",
+        "common/shapes.c",
+        "common/splines.c",
+    ] {
         println!("cargo:rerun-if-changed={}", lib.join(source).display());
     }
 

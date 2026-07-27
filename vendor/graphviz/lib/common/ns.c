@@ -19,6 +19,7 @@
 #include <assert.h>
 #include <common/render.h>
 #include <limits.h>
+#include <rustuml_helpers.h>
 #include <stdbool.h>
 #include <stddef.h>
 #include <stdint.h>
@@ -300,6 +301,181 @@ static void init_cutvalues(network_simplex_ctx_t *ctx)
 {
     dfs_range_init(GD_nlist(ctx->G));
     dfs_cutval(GD_nlist(ctx->G), NULL);
+}
+
+/*
+ * Graphviz 2.38 built the initial tight tree by repeatedly scanning nodes in
+ * graph order for the first minimum-slack edge incident on the current tree.
+ * PlantUML's Smetana translation preserves that tie-breaking. Modern Graphviz
+ * uses a heap of tight subtrees instead, which can choose another valid
+ * optimum and move port-balanced JSON branches by several points.
+ */
+static node_t *smetana_incident(edge_t *e)
+{
+    if (ND_mark(agtail(e)))
+	return ND_mark(aghead(e)) ? NULL : agtail(e);
+    return ND_mark(aghead(e)) ? aghead(e) : NULL;
+}
+
+typedef LIST(node_t *) smetana_node_list_t;
+
+static int smetana_add_tree_edge(network_simplex_ctx_t *ctx, edge_t *e,
+				  smetana_node_list_t *tree_nodes)
+{
+    if (!ND_mark(agtail(e)))
+	LIST_APPEND(tree_nodes, agtail(e));
+    if (!ND_mark(aghead(e)))
+	LIST_APPEND(tree_nodes, aghead(e));
+    return add_tree_edge(ctx, e);
+}
+
+static int smetana_tree_search(network_simplex_ctx_t *ctx, node_t *v,
+			       smetana_node_list_t *tree_nodes)
+{
+    typedef struct {
+	node_t *node;
+	int out_index;
+	int in_index;
+	bool scanning_in;
+    } search_frame_t;
+
+    LIST(search_frame_t) stack = {0};
+    LIST_PUSH_BACK(&stack, ((search_frame_t){.node = v}));
+    while (!LIST_IS_EMPTY(&stack)) {
+	search_frame_t *frame = LIST_BACK(&stack);
+	edge_t *e;
+	bool descended = false;
+
+	if (!frame->scanning_in) {
+	    while ((e = ND_out(frame->node).list[frame->out_index])) {
+		frame->out_index++;
+		if (ND_mark(aghead(e)) || SLACK(e) != 0)
+		    continue;
+		if (smetana_add_tree_edge(ctx, e, tree_nodes) != 0) {
+		    LIST_FREE(&stack);
+		    return -1;
+		}
+		if (LIST_SIZE(&ctx->Tree_edge) == ctx->N_nodes - 1) {
+		    LIST_FREE(&stack);
+		    return 1;
+		}
+		LIST_PUSH_BACK(&stack, ((search_frame_t){.node = aghead(e)}));
+		descended = true;
+		break;
+	    }
+	    if (descended)
+		continue;
+	    frame = LIST_BACK(&stack);
+	    frame->scanning_in = true;
+	}
+
+	while ((e = ND_in(frame->node).list[frame->in_index])) {
+	    frame->in_index++;
+	    if (ND_mark(agtail(e)) || SLACK(e) != 0)
+		continue;
+	    if (smetana_add_tree_edge(ctx, e, tree_nodes) != 0) {
+		LIST_FREE(&stack);
+		return -1;
+	    }
+	    if (LIST_SIZE(&ctx->Tree_edge) == ctx->N_nodes - 1) {
+		LIST_FREE(&stack);
+		return 1;
+	    }
+	    LIST_PUSH_BACK(&stack, ((search_frame_t){.node = agtail(e)}));
+	    descended = true;
+	    break;
+	}
+	if (!descended)
+	    LIST_DROP_BACK(&stack);
+    }
+    LIST_FREE(&stack);
+    return 0;
+}
+
+static int smetana_tight_tree(network_simplex_ctx_t *ctx,
+			      smetana_node_list_t *tree_nodes)
+{
+    for (node_t *n = GD_nlist(ctx->G); n; n = ND_next(n)) {
+	ND_mark(n) = false;
+	ND_tree_in(n).list[0] = NULL;
+	ND_tree_out(n).list[0] = NULL;
+	ND_tree_in(n).size = 0;
+	ND_tree_out(n).size = 0;
+    }
+    for (size_t i = 0; i < LIST_SIZE(&ctx->Tree_edge); i++)
+	ED_tree_index(LIST_GET(&ctx->Tree_edge, i)) = -1;
+
+    LIST_CLEAR(&ctx->Tree_edge);
+    LIST_CLEAR(tree_nodes);
+    for (node_t *n = GD_nlist(ctx->G);
+	 n && LIST_IS_EMPTY(&ctx->Tree_edge);
+	 n = ND_next(n)) {
+	int result = smetana_tree_search(ctx, n, tree_nodes);
+	if (result < 0)
+	    return -1;
+    }
+    return (int)LIST_SIZE(tree_nodes);
+}
+
+static int smetana_feasible_tree(network_simplex_ctx_t *ctx)
+{
+    if (ctx->N_nodes <= 1) {
+	init_cutvalues(ctx);
+	return 0;
+    }
+
+    smetana_node_list_t tree_nodes = {0};
+    LIST_RESERVE(&tree_nodes, ctx->N_nodes);
+    while (true) {
+	int tree_size = smetana_tight_tree(ctx, &tree_nodes);
+	if (tree_size < 0) {
+	    LIST_FREE(&tree_nodes);
+	    return 2;
+	}
+	if ((size_t)tree_size >= ctx->N_nodes)
+	    break;
+
+	edge_t *best = NULL;
+	node_t *incident = NULL;
+	for (node_t *n = GD_nlist(ctx->G); n; n = ND_next(n)) {
+	    for (int i = 0; ND_out(n).list[i]; i++) {
+		edge_t *candidate = ND_out(n).list[i];
+		node_t *candidate_incident;
+		if (TREE_EDGE(candidate)
+		    || !(candidate_incident = smetana_incident(candidate)))
+		    continue;
+		if (!best || SLACK(candidate) < SLACK(best)) {
+		    best = candidate;
+		    incident = candidate_incident;
+		}
+	    }
+	}
+	if (!best) {
+	    LIST_FREE(&tree_nodes);
+	    return 1;
+	}
+
+	int delta = SLACK(best);
+	if (delta != 0) {
+	    if (incident == aghead(best))
+		delta = -delta;
+	    for (size_t i = 0; i < LIST_SIZE(&tree_nodes); i++)
+		ND_rank(LIST_GET(&tree_nodes, i)) += delta;
+	}
+    }
+    LIST_FREE(&tree_nodes);
+    init_cutvalues(ctx);
+    return 0;
+}
+
+static bool uses_smetana_record_tree(graph_t *g)
+{
+    for (node_t *n = GD_nlist(g); n; n = ND_next(n)) {
+	if (ND_node_type(n) == NORMAL
+	    && rustuml_node_uses_text_span_dimensions(n))
+	    return true;
+    }
+    return false;
 }
 
 /* functions for initial tight tree construction */
@@ -975,7 +1151,9 @@ int rank2(graph_t * g, int balance, int maxiter, int search_size)
 	ctx.Search_size = SEARCHSIZE;
 
     {
-	const int err = feasible_tree(&ctx);
+	const int err = uses_smetana_record_tree(g)
+			    ? smetana_feasible_tree(&ctx)
+			    : feasible_tree(&ctx);
 	if (err != 0) {
 	    freeTreeList(&ctx, g);
 	    return err;
