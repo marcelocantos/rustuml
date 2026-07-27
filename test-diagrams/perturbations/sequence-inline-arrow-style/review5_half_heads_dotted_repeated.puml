@@ -1,0 +1,11 @@
+@startuml
+participant "Amber Terminal" as Amber
+participant "Beryl Terminal" as Beryl
+participant "Cobalt Terminal" as Cobalt
+Amber /--o Cobalt : recurring dotted payload
+Cobalt \--x Amber : recurring dotted payload
+Beryl //--o Cobalt : recurring dotted payload
+Cobalt \\--x Beryl : recurring dotted payload
+Amber /--x Beryl : recurring dotted payload
+Beryl \--o Amber : recurring dotted payload
+@enduml

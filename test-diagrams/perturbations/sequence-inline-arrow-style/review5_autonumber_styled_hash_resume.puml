@@ -1,0 +1,12 @@
+@startuml
+autonumber 23 5 "<b><A-000-Z></b>"
+participant "Counter Alpha" as Alpha
+participant "Counter Beta" as Beta
+Alpha -> Beta : same text
+Beta --> Alpha : same text
+autonumber stop
+Beta -> Alpha : same text
+autonumber resume 3 "<i><B-##0-Q></i>"
+Alpha -> Beta : same text
+Beta --> Alpha : same text
+@enduml

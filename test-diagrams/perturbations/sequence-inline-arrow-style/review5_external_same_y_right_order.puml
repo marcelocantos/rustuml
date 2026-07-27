@@ -1,0 +1,14 @@
+@startuml
+participant "Renamed Right Peer" as Peer
+participant "Renamed Right Worker" as Worker
+Peer -> Worker : repeated ordering label
+activate Worker
+]--> Worker ++ : repeated ordering label
+deactivate Worker
+Peer -> Worker : repeated ordering label
+activate Worker
+Worker -->] -- : repeated ordering label
+deactivate Worker
+]--> Worker : repeated ordering label
+Worker -->] : repeated ordering label
+@enduml

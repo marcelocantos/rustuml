@@ -1,0 +1,12 @@
+@startuml
+autonumber 8 7 "<ID-000-SFX>"
+participant "Numbering Origin" as Origin
+participant "Numbering Target" as Target
+Origin -> Target : repeated numbered payload
+Target --> Origin : repeated numbered payload
+autonumber stop
+Origin -> Target : repeated numbered payload
+autonumber resume 11 "<RUN-000-ENDX>"
+Target -> Origin : repeated numbered payload
+Origin --> Target : repeated numbered payload
+@enduml

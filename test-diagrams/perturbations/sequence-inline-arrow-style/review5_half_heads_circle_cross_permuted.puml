@@ -1,0 +1,11 @@
+@startuml
+participant "Quartz West" as Quartz
+participant "Jade Middle" as Jade
+participant "Onyx East" as Onyx
+Quartz /-o Onyx : repeated half decoration
+Onyx \-o Quartz : repeated half decoration
+Jade /-x Onyx : repeated half decoration
+Onyx \-x Jade : repeated half decoration
+Quartz //-o Jade : repeated half decoration
+Jade \\-x Quartz : repeated half decoration
+@enduml

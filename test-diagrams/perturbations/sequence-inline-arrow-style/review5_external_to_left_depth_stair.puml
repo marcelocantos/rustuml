@@ -1,0 +1,13 @@
+@startuml
+participant "Left Descent Worker" as Worker
+activate Worker
+activate Worker
+activate Worker
+Worker -->[ : recurring border message
+Worker -->[ -- : recurring border message
+Worker -->[ : recurring border message
+Worker -->[ -- : recurring border message
+Worker -->[ : recurring border message
+Worker -->[ -- : recurring border message
+Worker -->[ : recurring border message
+@enduml

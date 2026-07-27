@@ -1,0 +1,12 @@
+@startuml
+participant "Right Stair Worker" as Worker
+]--> Worker : repeated boundary signal
+activate Worker
+]--> Worker : repeated boundary signal
+activate Worker
+]--> Worker : repeated boundary signal
+activate Worker
+]--> Worker : repeated boundary signal
+Worker -->] -- : repeated boundary signal
+deactivate Worker
+@enduml
