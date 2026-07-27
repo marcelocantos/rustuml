@@ -3,6 +3,7 @@
 
 //! Class diagram parser.
 
+use std::collections::HashMap;
 use std::sync::LazyLock;
 
 use regex::Regex;
@@ -59,6 +60,12 @@ struct ClassParser {
     current_entity_needs_body_location: bool,
     /// Stack of active package indices (innermost last), supporting nested packages.
     package_stack: Vec<usize>,
+    /// Canonical quark path for each package, parallel to `packages`.
+    package_paths: Vec<Vec<String>>,
+    /// Package lookup by canonical quark path.
+    package_by_path: HashMap<Vec<String>, usize>,
+    /// Entity lookup by canonical quark path.
+    entity_by_path: HashMap<Vec<String>, usize>,
     /// Note currently being accumulated (multi-line `note ... end note`).
     current_note: Option<Note>,
     /// ID of the last declared entity (for shorthand `note right : text`).
@@ -95,6 +102,9 @@ impl ClassParser {
             current_entity: None,
             current_entity_needs_body_location: false,
             package_stack: Vec::new(),
+            package_paths: Vec::new(),
+            package_by_path: HashMap::new(),
+            entity_by_path: HashMap::new(),
             current_note: None,
             last_entity_id: None,
             namespace_sep_none: false,
@@ -149,155 +159,213 @@ impl ClassParser {
         }
     }
 
-    fn ensure_entity(&mut self, id: &str) -> String {
-        let id = id.trim().to_string();
-        if !self.entities.iter().any(|e| e.id == id) {
-            self.entities.push(ClassEntity {
-                id: id.clone(),
-                label: id.clone(),
-                explicit_alias: false,
-                kind: EntityKind::Class,
-                members: Vec::new(),
-                stereotypes: Vec::new(),
-                generic: None,
-                spot_color: None,
-                spot_character: None,
-                url: None,
-                url_tooltip: None,
-                color: None,
-                text_color: None,
-                line_color: None,
-                line_style: None,
-                source_line: self.current_line,
-            });
-        }
-        id
+    fn current_group_path(&self) -> &[String] {
+        self.package_stack
+            .last()
+            .map(|&idx| self.package_paths[idx].as_slice())
+            .unwrap_or(&[])
     }
 
-    fn resolve_relationship_endpoint(&mut self, raw: &str) -> String {
+    fn identity_separator(&self) -> &str {
+        self.namespace_sep.as_deref().unwrap_or(".")
+    }
+
+    fn path_id(&self, path: &[String]) -> String {
+        path.join(self.identity_separator())
+    }
+
+    fn split_identity(&self, raw: &str) -> (bool, Vec<String>) {
         let raw = raw.trim();
-        if self.entities.iter().any(|e| e.id == raw) {
-            return raw.to_string();
+        let Some(separator) = self.namespace_sep.as_deref() else {
+            return (false, vec![raw.to_string()]);
+        };
+        let rooted = raw.starts_with(separator);
+        let raw = if rooted {
+            raw.trim_start_matches(separator)
+        } else {
+            raw
+        };
+        (
+            rooted,
+            raw.split(separator)
+                .filter(|part| !part.is_empty())
+                .map(str::to_string)
+                .collect(),
+        )
+    }
+
+    fn unique_entity_path_named(&self, name: &str) -> Option<Vec<String>> {
+        let mut matches = self
+            .entity_by_path
+            .keys()
+            .filter(|path| path.last().is_some_and(|part| part == name));
+        let first = matches.next()?.clone();
+        matches.next().is_none().then_some(first)
+    }
+
+    /// Mirrors `CucaDiagram#quarkInContextSafe`: qualified names resolve from
+    /// the root when their first group exists, otherwise from the current
+    /// group; a reusable unqualified name binds to its sole existing quark.
+    fn resolve_quark_path(&self, raw: &str, reuse_existing_child: bool) -> Vec<String> {
+        let raw = raw.trim();
+        if self.namespace_sep.is_none() {
+            if let Some(path) = self.unique_entity_path_named(raw) {
+                return path;
+            }
+            let mut path = self.current_group_path().to_vec();
+            path.push(raw.to_string());
+            return path;
         }
 
-        for pkg in self.packages.iter().rev() {
-            let separators = [self.namespace_sep.as_deref().unwrap_or("."), ".", "::", "/"];
-            for sep in separators {
-                let Some(member) = raw
-                    .strip_prefix(&pkg.name)
-                    .and_then(|rest| rest.strip_prefix(sep))
-                else {
-                    continue;
-                };
-                if pkg.entities.iter().any(|id| id == member)
-                    && self.entities.iter().any(|e| e.id == member)
-                {
-                    return member.to_string();
+        let (rooted, parts) = self.split_identity(raw);
+        if rooted || self.entity_by_path.contains_key(&parts) {
+            return parts;
+        }
+        if parts.len() == 1 {
+            if reuse_existing_child && let Some(path) = self.unique_entity_path_named(&parts[0]) {
+                return path;
+            }
+            let mut path = self.current_group_path().to_vec();
+            path.extend(parts);
+            return path;
+        }
+        if self.package_by_path.contains_key(&vec![parts[0].clone()]) {
+            return parts;
+        }
+        let mut path = self.current_group_path().to_vec();
+        path.extend(parts);
+        path
+    }
+
+    fn resolve_group_path(&self, raw: &str) -> Vec<String> {
+        let raw = raw.trim();
+        if self.namespace_sep.is_none() {
+            if let Some((path, _)) = self
+                .package_by_path
+                .iter()
+                .find(|(path, _)| path.last().is_some_and(|part| part == raw))
+            {
+                return path.clone();
+            }
+            let mut path = self.current_group_path().to_vec();
+            path.push(raw.to_string());
+            return path;
+        }
+
+        let (rooted, parts) = self.split_identity(raw);
+        if rooted {
+            return parts;
+        }
+        if parts.len() > 1 && self.package_by_path.contains_key(&vec![parts[0].clone()]) {
+            return parts;
+        }
+        let mut path = self.current_group_path().to_vec();
+        path.extend(parts);
+        path
+    }
+
+    fn register_entity_path(&mut self, path: &[String], entity_id: &str) {
+        for (package_idx, package_path) in self.package_paths.iter().enumerate() {
+            if package_path.len() < path.len() && path.starts_with(package_path) {
+                let package = &mut self.packages[package_idx];
+                if !package.entities.iter().any(|id| id == entity_id) {
+                    package.entities.push(entity_id.to_string());
                 }
             }
         }
+    }
 
+    /// `CucaDiagram#eventuallyBuildPhantomGroups` materializes every empty
+    /// parent quark when a class-like leaf is first created below it.
+    fn ensure_phantom_packages(&mut self, entity_path: &[String]) {
+        for depth in 1..entity_path.len() {
+            let path = entity_path[..depth].to_vec();
+            if let Some(&idx) = self.package_by_path.get(&path) {
+                if self.packages[idx].phantom && self.packages[idx].source_line == 0 {
+                    self.packages[idx].source_line = self.current_line;
+                }
+                continue;
+            }
+            let parent =
+                (depth > 1).then(|| self.package_by_path[&entity_path[..depth - 1].to_vec()]);
+            let idx = self.packages.len();
+            let name = self.path_id(&path);
+            self.packages.push(Package {
+                name,
+                kind: PackageKind::Package,
+                color: None,
+                entities: Vec::new(),
+                parent,
+                source_line: self.current_line,
+                stereotypes: Vec::new(),
+                display_name: path.last().cloned(),
+                phantom: true,
+            });
+            self.package_paths.push(path.clone());
+            self.package_by_path.insert(path, idx);
+        }
+    }
+
+    fn create_entity_at_path(
+        &mut self,
+        path: Vec<String>,
+        label: String,
+        kind: EntityKind,
+        explicit_alias: bool,
+    ) -> String {
+        self.ensure_phantom_packages(&path);
+        let id = self.path_id(&path);
+        let idx = self.entities.len();
+        self.entities.push(ClassEntity {
+            id: id.clone(),
+            label,
+            explicit_alias,
+            kind,
+            members: Vec::new(),
+            stereotypes: Vec::new(),
+            generic: None,
+            spot_color: None,
+            spot_character: None,
+            url: None,
+            url_tooltip: None,
+            color: None,
+            text_color: None,
+            line_color: None,
+            line_style: None,
+            source_line: self.current_line,
+        });
+        self.entity_by_path.insert(path.clone(), idx);
+        self.register_entity_path(&path, &id);
+        id
+    }
+
+    fn ensure_entity(&mut self, raw: &str) -> String {
+        let path = self.resolve_quark_path(raw, true);
+        if let Some(&idx) = self.entity_by_path.get(&path) {
+            return self.entities[idx].id.clone();
+        }
+        let label = path.last().cloned().unwrap_or_default();
+        self.create_entity_at_path(path, label, EntityKind::Class, false)
+    }
+
+    fn ensure_entity_kind(&mut self, raw: &str, kind: EntityKind) -> String {
+        let path = self.resolve_quark_path(raw, true);
+        if let Some(&idx) = self.entity_by_path.get(&path) {
+            return self.entities[idx].id.clone();
+        }
+        let label = path.last().cloned().unwrap_or_default();
+        self.create_entity_at_path(path, label, kind, false)
+    }
+
+    fn resolve_relationship_endpoint(&mut self, raw: &str) -> String {
+        // `CommandLinkClass#executeArg` calls
+        // `CucaDiagram#quarkInContextSafe(true, endpoint)` and first creates a
+        // missing endpoint as `LeafType.CLASS` at the relationship location.
         self.ensure_entity(raw)
     }
 
     fn find_entity_mut(&mut self, id: &str) -> Option<&mut ClassEntity> {
         self.entities.iter_mut().find(|e| e.id == id)
-    }
-
-    /// Given a fully-qualified class name like `com.example.MyClass`, ensure
-    /// intermediate namespace packages exist and register the entity in them.
-    /// Returns `(entity_id, entity_label)` where `entity_id` is the full qualified
-    /// name and `entity_label` is just the last segment (short name).
-    ///
-    /// If no separator is active or the name contains no separator, returns
-    /// `(qualified, qualified)` unchanged.
-    fn ensure_namespace_packages(&mut self, qualified: &str) -> (String, String) {
-        let sep = match self.namespace_sep.clone() {
-            Some(s) if !s.is_empty() => s,
-            _ => return (qualified.to_string(), qualified.to_string()),
-        };
-        let parts: Vec<&str> = qualified.split(sep.as_str()).collect();
-        if parts.len() < 2 {
-            return (qualified.to_string(), qualified.to_string());
-        }
-
-        // Build the namespace package hierarchy for all segments except the last.
-        let mut prefix = String::new();
-        let mut parent_pkg_idx: Option<usize> = self.package_stack.last().copied();
-        for part in &parts[..parts.len() - 1] {
-            if !prefix.is_empty() {
-                prefix.push_str(&sep);
-            }
-            prefix.push_str(part);
-            let pkg_id = prefix.clone();
-            let pkg_label = part.to_string();
-
-            let pkg_idx = if let Some(idx) = self.packages.iter().position(|p| p.name == pkg_id) {
-                idx
-            } else {
-                let new_idx = self.packages.len();
-                self.packages.push(Package {
-                    name: pkg_id.clone(),
-                    kind: PackageKind::Package,
-                    color: None,
-                    entities: Vec::new(),
-                    parent: parent_pkg_idx,
-                    source_line: self.current_line,
-                    stereotypes: Vec::new(),
-                    display_name: Some(pkg_label),
-                    phantom: true,
-                });
-                // Register this pkg in its parent package's entity list.
-                if let Some(p_idx) = parent_pkg_idx {
-                    let parent = &mut self.packages[p_idx];
-                    if !parent.entities.contains(&pkg_id) {
-                        parent.entities.push(pkg_id.clone());
-                    }
-                }
-                new_idx
-            };
-            parent_pkg_idx = Some(pkg_idx);
-        }
-
-        // Register the entity in all namespace packages (innermost = last namespace segment).
-        let entity_id = qualified.to_string();
-        if let Some(innermost_idx) = parent_pkg_idx {
-            // Register entity in innermost namespace package.
-            let pkg = &mut self.packages[innermost_idx];
-            if !pkg.entities.contains(&entity_id) {
-                pkg.entities.push(entity_id.clone());
-            }
-            // Also register in outer namespace packages and any active user packages.
-            // Build list of all ancestor namespace pkg indices.
-            let mut prefix2 = String::new();
-            let mut ancestor_indices = Vec::new();
-            for part in &parts[..parts.len() - 1] {
-                if !prefix2.is_empty() {
-                    prefix2.push_str(&sep);
-                }
-                prefix2.push_str(part);
-                if let Some(idx) = self.packages.iter().position(|p| p.name == prefix2) {
-                    ancestor_indices.push(idx);
-                }
-            }
-            // Register in all ancestors (except innermost already done).
-            for &idx in ancestor_indices.iter().rev().skip(1) {
-                let pkg = &mut self.packages[idx];
-                if !pkg.entities.contains(&entity_id) {
-                    pkg.entities.push(entity_id.clone());
-                }
-            }
-        }
-        // Also register in any active user-defined package scopes.
-        for &pkg_idx in &self.package_stack {
-            let pkg = &mut self.packages[pkg_idx];
-            if !pkg.entities.contains(&entity_id) {
-                pkg.entities.push(entity_id.clone());
-            }
-        }
-
-        let entity_label = parts[parts.len() - 1].to_string();
-        (entity_id, entity_label)
     }
 
     fn materialize_active_phantom_packages(&mut self) {
@@ -565,37 +633,36 @@ impl ClassParser {
 
             let entity_colors = parse_entity_colors(line);
 
-            // Handle namespace separation: split `com.example.MyClass` or `com::example::MyClass`
-            // into package hierarchy + short entity name.  For default separator ".", we must
-            // use RE_DOTTED (which already matches dotted names) — but for the default RE above
-            // (`\w+`), dots aren't matched so id won't contain them.  In the permissive case
-            // (custom separator), `id` may contain the separator.
-            //
-            // Additionally, even when using the default "." separator but the user declared
-            // `class com.example.MyClass`, the permissive re wasn't used — we use a second
-            // pass to split names that contain the default separator even when using RE.
-            let (final_id, final_label) = if caps.get(2).is_none() {
-                // Only apply namespace splitting to unquoted, non-aliased names.
-                self.ensure_namespace_packages(&id)
-            } else {
-                (id.clone(), label.clone())
-            };
-
-            // Use the namespace-derived label if available (not aliased).
-            let display_label = if caps.get(2).is_none() && final_label != final_id {
-                final_label.clone()
-            } else {
+            let explicit_alias = caps.get(2).is_some();
+            // `CommandCreateElementFull2#executeArg` resolves the declaration
+            // code through `CucaDiagram#quarkInContext(true, idShort)`.
+            let entity_path = self.resolve_quark_path(&id, true);
+            let display_label = if explicit_alias || caps.get(4).is_some() {
                 label
+            } else {
+                entity_path.last().cloned().unwrap_or(label)
+            };
+            let final_id = self.path_id(&entity_path);
+            let entity_idx = if let Some(&idx) = self.entity_by_path.get(&entity_path) {
+                idx
+            } else {
+                self.create_entity_at_path(
+                    entity_path.clone(),
+                    display_label.clone(),
+                    kind,
+                    explicit_alias,
+                );
+                self.entity_by_path[&entity_path]
             };
 
-            if let Some(entity) = self.find_entity_mut(&final_id) {
-                entity.kind = kind;
+            {
+                let entity = &mut self.entities[entity_idx];
+                // `CommandCreateElementFull2#executeArg` only calls
+                // `reallyCreateLeaf` when the quark has no data. Reusing an
+                // endpoint updates display/decorations but retains the first
+                // location and `LeafType.CLASS`.
                 entity.label = display_label;
-                if caps.get(2).is_some() {
-                    // Java resolves the declaration alias to the quark that a
-                    // relationship may already have created. Presentation is
-                    // refined here, but the quark code becomes the stable
-                    // qualified identity and its creation line is retained.
+                if explicit_alias {
                     entity.explicit_alias = true;
                 }
                 if !stereotypes.is_empty() {
@@ -624,49 +691,10 @@ impl ClassParser {
                 if generic.is_some() {
                     entity.generic = generic.clone();
                 }
-            } else {
-                self.entities.push(ClassEntity {
-                    id: final_id.clone(),
-                    label: display_label,
-                    explicit_alias: caps.get(2).is_some(),
-                    kind,
-                    members: Vec::new(),
-                    stereotypes,
-                    generic: generic.clone(),
-                    spot_color,
-                    spot_character,
-                    url: url.clone(),
-                    url_tooltip: url_tooltip.clone(),
-                    color: entity_colors.back,
-                    text_color: entity_colors.text,
-                    line_color: entity_colors.line,
-                    line_style: entity_colors.line_style,
-                    source_line: self.current_line,
-                });
             }
 
+            self.register_entity_path(&entity_path, &final_id);
             self.materialize_active_phantom_packages();
-
-            // Register entity in ALL active packages (innermost to outermost),
-            // so that outer container bounding boxes include entities from inner
-            // nested packages.
-            // (Note: namespace package registration was already done in ensure_namespace_packages)
-            let mut active_packages = self.package_stack.clone();
-            let mut cursor = 0;
-            while cursor < active_packages.len() {
-                if let Some(parent) = self.packages[active_packages[cursor]].parent
-                    && !active_packages.contains(&parent)
-                {
-                    active_packages.push(parent);
-                }
-                cursor += 1;
-            }
-            for pkg_idx in active_packages {
-                let pkg = &mut self.packages[pkg_idx];
-                if !pkg.entities.contains(&final_id) {
-                    pkg.entities.push(final_id.clone());
-                }
-            }
 
             // `CommandCreateClassMultilines.manageExtends` constructs each
             // declaration relationship as parent -> child with
@@ -774,27 +802,7 @@ impl ClassParser {
         static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^enum\s+(\w+)\s*\{?$").unwrap());
 
         if let Some(caps) = RE.captures(line) {
-            let id = caps[1].to_string();
-            if !self.entities.iter().any(|e| e.id == id) {
-                self.entities.push(ClassEntity {
-                    id: id.clone(),
-                    label: id.clone(),
-                    explicit_alias: false,
-                    kind: EntityKind::Enum,
-                    members: Vec::new(),
-                    stereotypes: Vec::new(),
-                    generic: None,
-                    spot_color: None,
-                    spot_character: None,
-                    url: None,
-                    url_tooltip: None,
-                    color: None,
-                    text_color: None,
-                    line_color: None,
-                    line_style: None,
-                    source_line: self.current_line,
-                });
-            }
+            let id = self.ensure_entity_kind(&caps[1], EntityKind::Enum);
             if line.ends_with('{') {
                 self.current_entity = Some(id.clone());
                 self.current_entity_needs_body_location = true;
@@ -983,31 +991,11 @@ impl ClassParser {
             } else {
                 (caps[3].to_string(), caps[4].to_string())
             };
-            // Ensure the interface entity exists.
-            if !self.entities.iter().any(|e| e.id == to_raw) {
-                self.entities.push(ClassEntity {
-                    id: to_raw.clone(),
-                    label: to_raw.clone(),
-                    explicit_alias: false,
-                    kind: EntityKind::Interface,
-                    members: Vec::new(),
-                    stereotypes: Vec::new(),
-                    generic: None,
-                    spot_color: None,
-                    spot_character: None,
-                    url: None,
-                    url_tooltip: None,
-                    color: None,
-                    text_color: None,
-                    line_color: None,
-                    line_style: None,
-                    source_line: self.current_line,
-                });
-            }
+            let to = self.ensure_entity_kind(&to_raw, EntityKind::Interface);
             let from = self.ensure_entity(&from_raw);
             self.relationships.push(Relationship {
                 from,
-                to: to_raw,
+                to,
                 kind: RelationshipKind::Association,
                 label: None,
                 label_arrow: LinkArrow::None,
@@ -1031,10 +1019,9 @@ impl ClassParser {
         static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^(\w+)\s*:\s*(.+)$").unwrap());
 
         if let Some(caps) = RE.captures(line) {
-            let entity_id = caps[1].to_string();
+            let entity_id = self.ensure_entity(&caps[1]);
             let member_text = caps[2].trim();
 
-            self.ensure_entity(&entity_id);
             let member = parse_member(member_text);
 
             if let Some(entity) = self.find_entity_mut(&entity_id) {
@@ -1049,25 +1036,28 @@ impl ClassParser {
     fn try_package(&mut self, line: &str) -> bool {
         static RE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
-                r#"^(package|namespace|cloud|database|folder|frame|rectangle|node)\s+(?:"([^"]+)"|([^#\s{<]+))\s*(?:#([^\s{<]+))?\s*(?:<<\s*([^>]+?)\s*>>)?\s*\{?"#,
+                r#"^((?i:package|namespace|cloud|database|folder|frame|rectangle|node))\s+(?:"([^"]+)"|([^#\s{<]+))(?:\s+(?i:as)\s+([\p{L}\p{N}_.]+))?\s*(?:#([^\s{<]+))?\s*(?:<<\s*([^>]+?)\s*>>)?\s*\{\s*$"#,
             )
             .unwrap()
         });
-        static STEREOTYPE_RE: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"<<\s*([^>]+?)>>").unwrap());
 
         if let Some(caps) = RE.captures(line) {
-            let kind_str = &caps[1];
-            let name = caps
+            let kind_key = caps[1].to_ascii_lowercase();
+            let kind_str = kind_key.as_str();
+            let display = caps
                 .get(2)
                 .or(caps.get(3))
                 .map(|m| m.as_str().to_string())
                 .unwrap_or_default();
-            let color = caps.get(4).map(|m| m.as_str().to_string());
-            let stereotypes: Vec<String> = STEREOTYPE_RE
-                .captures_iter(line)
-                .map(|c| c[1].trim().to_string())
-                .collect();
+            let alias = caps.get(4).map(|m| m.as_str().to_string());
+            if alias.is_some() && kind_str != "package" {
+                return false;
+            }
+            let color = caps.get(5).map(|m| m.as_str().to_string());
+            let stereotypes = caps
+                .get(6)
+                .map(|m| vec![m.as_str().trim().to_string()])
+                .unwrap_or_default();
             let kind = match kind_str {
                 "namespace" => PackageKind::Namespace,
                 "cloud" => PackageKind::Cloud,
@@ -1078,60 +1068,73 @@ impl ClassParser {
                 "node" => PackageKind::Node,
                 _ => PackageKind::Package,
             };
-            let mut package_parent = self.package_stack.last().copied();
-            let mut display_name = None;
-            if kind == PackageKind::Namespace
-                && caps.get(2).is_none()
-                && let Some(separator) = self.namespace_sep.as_deref()
-            {
-                let parts = name.split(separator).collect::<Vec<_>>();
-                if parts.len() > 1 && parts.iter().all(|part| !part.is_empty()) {
-                    let mut prefix = String::new();
-                    for part in &parts[..parts.len() - 1] {
-                        if !prefix.is_empty() {
-                            prefix.push_str(separator);
-                        }
-                        prefix.push_str(part);
-                        let pkg_idx = if let Some(idx) = self.packages.iter().position(|package| {
-                            package.name == prefix && package.parent == package_parent
-                        }) {
-                            idx
-                        } else {
-                            let idx = self.packages.len();
-                            self.packages.push(Package {
-                                name: prefix.clone(),
-                                kind: PackageKind::Package,
-                                color: None,
-                                entities: Vec::new(),
-                                parent: package_parent,
-                                // `CucaDiagram.eventuallyBuildPhantomGroups`
-                                // creates this parent when the first leaf is
-                                // built, not when the namespace is declared.
-                                source_line: 0,
-                                stereotypes: Vec::new(),
-                                display_name: Some((*part).to_string()),
-                                phantom: true,
-                            });
-                            idx
-                        };
-                        package_parent = Some(pkg_idx);
-                    }
-                    display_name = parts.last().map(|part| (*part).to_string());
-                }
+            // `CommandPackage#getRegexConcat` consumes the complete line.
+            // `CommandPackage#executeArg` sends `AS` to `quarkInContext` and
+            // keeps `NAME` solely as display; `CommandNamespace#executeArg`
+            // follows the same quark-backed group discipline.
+            let code = alias.as_deref().unwrap_or(&display);
+            let path = self.resolve_group_path(code);
+            if path.is_empty() {
+                return false;
             }
-            let pkg_idx = self.packages.len();
-            self.package_stack.push(pkg_idx);
-            self.packages.push(Package {
-                name,
-                kind,
-                color,
-                entities: Vec::new(),
-                parent: package_parent,
-                source_line: self.current_line,
-                stereotypes,
-                display_name,
-                phantom: false,
+            let requested_display_name = (alias.is_some() || path.len() > 1).then(|| {
+                if alias.is_some() {
+                    display.clone()
+                } else {
+                    path.last().cloned().unwrap_or_default()
+                }
             });
+
+            let final_depth = path.len();
+            let mut parent = None;
+            for depth in 1..=final_depth {
+                let prefix = path[..depth].to_vec();
+                let is_final = depth == final_depth;
+                let idx = if let Some(&idx) = self.package_by_path.get(&prefix) {
+                    if is_final {
+                        let package = &mut self.packages[idx];
+                        package.kind = kind;
+                        package.color = color.clone();
+                        package.stereotypes = stereotypes.clone();
+                        if package.source_line == 0 {
+                            package.source_line = self.current_line;
+                        }
+                        package.display_name = requested_display_name.clone();
+                        package.phantom = false;
+                    }
+                    idx
+                } else {
+                    let idx = self.packages.len();
+                    let name = self.path_id(&prefix);
+                    let display_name = if is_final {
+                        requested_display_name.clone()
+                    } else {
+                        prefix.last().cloned()
+                    };
+                    self.packages.push(Package {
+                        name,
+                        kind: if is_final { kind } else { PackageKind::Package },
+                        color: if is_final { color.clone() } else { None },
+                        entities: Vec::new(),
+                        parent,
+                        // `CucaDiagram#eventuallyBuildPhantomGroups` gives
+                        // intermediate quarks their first leaf's location.
+                        source_line: if is_final { self.current_line } else { 0 },
+                        stereotypes: if is_final {
+                            stereotypes.clone()
+                        } else {
+                            Vec::new()
+                        },
+                        display_name,
+                        phantom: !is_final,
+                    });
+                    self.package_paths.push(prefix.clone());
+                    self.package_by_path.insert(prefix, idx);
+                    idx
+                };
+                parent = Some(idx);
+            }
+            self.package_stack.push(parent.unwrap());
             true
         } else {
             false
@@ -1319,27 +1322,9 @@ impl ClassParser {
                     kind: MemberKind::Field,
                     display_text: text.to_string(),
                 };
-                if let Some(ent) = self.entities.iter_mut().find(|e| e.id == "note") {
+                let id = self.ensure_entity("note");
+                if let Some(ent) = self.find_entity_mut(&id) {
                     ent.members.push(member);
-                } else {
-                    self.entities.push(ClassEntity {
-                        id: "note".to_string(),
-                        label: "note".to_string(),
-                        explicit_alias: false,
-                        kind: EntityKind::Class,
-                        members: vec![member],
-                        stereotypes: Vec::new(),
-                        generic: None,
-                        spot_color: None,
-                        spot_character: None,
-                        url: None,
-                        url_tooltip: None,
-                        color: None,
-                        text_color: None,
-                        line_color: None,
-                        line_style: None,
-                        source_line: self.current_line,
-                    });
                 }
             }
             return true;
@@ -1473,11 +1458,11 @@ impl ClassParser {
             });
             return true;
         }
+        if super::is_allow_mixing_command(line) {
+            return true;
+        }
         // Skip other layout/format directives.
-        line.starts_with("together")
-            || line.starts_with("allowmixing")
-            || line.starts_with("map ")
-            || line.starts_with("set ")
+        line.starts_with("together") || line.starts_with("map ") || line.starts_with("set ")
     }
 
     fn parse_member_line(&mut self, line: &str) {
@@ -2302,7 +2287,17 @@ mod tests {
             assert_eq!(entity.label, label);
             assert!(entity.explicit_alias);
             assert_eq!(entity.source_line, source_line);
+            assert_eq!(entity.kind, EntityKind::Class);
         }
+    }
+
+    #[test]
+    fn allow_mixing_command_consumption_uses_the_shared_complete_grammar() {
+        let mut parser = ClassParser::new();
+        assert!(parser.try_meta("ALLOW_MIXING"));
+        assert!(parser.try_meta("allowmixing"));
+        assert!(!parser.try_meta("allow_mixing trailing"));
+        assert!(!parser.try_meta("allowmixing trailing"));
     }
 
     #[test]
@@ -2412,16 +2407,19 @@ mod tests {
 
         assert_eq!(d.entities.len(), 2);
         assert_eq!(d.relationships.len(), 1);
-        assert_eq!(d.relationships[0].from, "UserService");
-        assert_eq!(d.relationships[0].to, "User");
+        assert_eq!(d.relationships[0].from, "service.UserService");
+        assert_eq!(d.relationships[0].to, "model.User");
     }
 
     #[test]
     fn package() {
         let d = parse("package com.example {\n  class Foo\n  class Bar\n}");
-        assert_eq!(d.packages.len(), 1);
-        assert_eq!(d.packages[0].name, "com.example");
+        assert_eq!(d.packages.len(), 2);
+        assert_eq!(d.packages[0].name, "com");
+        assert_eq!(d.packages[1].name, "com.example");
         assert_eq!(d.entities.len(), 2);
+        assert_eq!(d.entities[0].id, "com.example.Foo");
+        assert_eq!(d.entities[1].id, "com.example.Bar");
     }
 
     #[test]
@@ -2447,8 +2445,97 @@ mod tests {
         assert_eq!(d.packages[2].parent, Some(1));
         assert_eq!(
             d.packages[2].entities,
-            ["FreshPacket1301", "FreshLedger1303"]
+            [
+                "telemetry.pipeline.archive.FreshPacket1301",
+                "telemetry.pipeline.archive.FreshLedger1303"
+            ]
         );
+    }
+
+    #[test]
+    fn package_alias_separates_display_from_canonical_identity() {
+        let d = parse(
+            "package \"Service Display\" as ServiceCode {\n\
+               class Gateway\n\
+             }\n\
+             ServiceCode.Gateway --> Audit",
+        );
+
+        assert_eq!(d.packages.len(), 1);
+        assert_eq!(d.packages[0].name, "ServiceCode");
+        assert_eq!(
+            d.packages[0].display_name.as_deref(),
+            Some("Service Display")
+        );
+        assert_eq!(
+            d.entities
+                .iter()
+                .map(|entity| entity.id.as_str())
+                .collect::<Vec<_>>(),
+            ["ServiceCode.Gateway", "Audit"]
+        );
+        assert_eq!(d.relationships[0].from, "ServiceCode.Gateway");
+    }
+
+    #[test]
+    fn nested_qualified_endpoint_reuses_the_existing_leaf() {
+        let d = parse(
+            "package Outer {\n\
+               package \"Inner Display\" as Inner {\n\
+                 class Gateway\n\
+               }\n\
+             }\n\
+             Outer.Inner.Gateway --> Audit",
+        );
+
+        assert_eq!(
+            d.packages
+                .iter()
+                .map(|package| package.name.as_str())
+                .collect::<Vec<_>>(),
+            ["Outer", "Outer.Inner"]
+        );
+        assert_eq!(
+            d.entities
+                .iter()
+                .map(|entity| entity.id.as_str())
+                .collect::<Vec<_>>(),
+            ["Outer.Inner.Gateway", "Audit"]
+        );
+        assert_eq!(d.relationships[0].from, "Outer.Inner.Gateway");
+    }
+
+    #[test]
+    fn custom_separator_resolves_nested_paths_without_duplication() {
+        let d = parse(
+            "set namespaceSeparator ::\n\
+             namespace Platform::Ingress {\n\
+               class Gateway\n\
+             }\n\
+             Platform::Ingress::Gateway --> Audit",
+        );
+
+        assert_eq!(
+            d.entities
+                .iter()
+                .map(|entity| entity.id.as_str())
+                .collect::<Vec<_>>(),
+            ["Platform::Ingress::Gateway", "Audit"]
+        );
+        assert_eq!(d.relationships[0].from, "Platform::Ingress::Gateway");
+    }
+
+    #[test]
+    fn unique_unqualified_endpoint_reuses_a_nested_leaf() {
+        let d = parse(
+            "package Services {\n\
+               class Gateway\n\
+             }\n\
+             Gateway --> Audit",
+        );
+
+        assert_eq!(d.entities.len(), 2);
+        assert_eq!(d.relationships[0].from, "Services.Gateway");
     }
 
     #[test]
@@ -2862,9 +2949,9 @@ mod tests {
         );
         assert_eq!(d.packages.len(), 2);
         assert_eq!(d.packages[0].name, "Outer");
-        assert_eq!(d.packages[1].name, "Inner");
+        assert_eq!(d.packages[1].name, "Outer.Inner");
         assert_eq!(d.entities.len(), 1);
-        assert_eq!(d.entities[0].id, "MyClass");
+        assert_eq!(d.entities[0].id, "Outer.Inner.MyClass");
     }
 
     #[test]

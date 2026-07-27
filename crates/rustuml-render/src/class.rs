@@ -3524,18 +3524,37 @@ fn package_qualified_name(
     chain.join(".")
 }
 
-fn relationship_endpoint_name<'a>(diagram: &'a ClassDiagram, id: &'a str) -> &'a str {
+fn relationship_endpoint_name<'a>(
+    diagram: &'a ClassDiagram,
+    id: &'a str,
+) -> std::borrow::Cow<'a, str> {
     // Java `Link.idCommentForSvg` builds path ids from `Entity.getName()`,
-    // which is the Quark name. `NameAndCodeParser.CODE4` makes a bare quoted
-    // name the Quark name, while `DISPLAY as CODE` makes the explicit code the
-    // Quark name. Rust normalizes bare quoted ids for lookup, so recover their
-    // display label here but preserve true aliases.
-    diagram
-        .entities
+    // which delegates to the short `Quark#getName`, not its qualified name.
+    // Bare quoted names use their display as that short name; explicit aliases
+    // use the canonical id's leaf below the innermost owning package.
+    let Some(entity) = diagram.entities.iter().find(|entity| entity.id == id) else {
+        return std::borrow::Cow::Borrowed(id);
+    };
+    if !entity.explicit_alias {
+        return std::borrow::Cow::Borrowed(entity.label.as_str());
+    }
+
+    let local_name = diagram
+        .packages
         .iter()
-        .find(|entity| entity.id == id)
-        .filter(|entity| !entity.explicit_alias)
-        .map_or(id, |entity| entity.label.as_str())
+        .filter(|package| package.entities.iter().any(|member| member == id))
+        .filter_map(|package| {
+            let suffix = id.strip_prefix(&package.name)?;
+            if !suffix.starts_with(|ch: char| !ch.is_alphanumeric() && ch != '_') {
+                return None;
+            }
+            let suffix = suffix.trim_start_matches(|ch: char| !ch.is_alphanumeric() && ch != '_');
+            (!suffix.is_empty()).then_some((package.name.len(), suffix))
+        })
+        .max_by_key(|(prefix_len, _)| *prefix_len)
+        .map(|(_, suffix)| suffix);
+
+    std::borrow::Cow::Borrowed(local_name.unwrap_or(id))
 }
 
 fn package_content_offsets(diagram: &ClassDiagram) -> Vec<(f64, f64)> {

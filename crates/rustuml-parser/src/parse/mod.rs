@@ -237,6 +237,43 @@ pub(crate) fn source_text(line: &str) -> &str {
     preprocess::split_source_line_marker(line).map_or(line, |(_, text)| text)
 }
 
+/// PlantUML's `CommandAllowMixing#getRegexConcat` anchors `allow_?mixing` at
+/// both ends, while `Pattern2#compileInternal` makes the match case-insensitive.
+/// Keep factory selection and command consumption on this one grammar.
+pub(crate) fn is_allow_mixing_command(line: &str) -> bool {
+    let line = line.trim();
+    line.eq_ignore_ascii_case("allowmixing") || line.eq_ignore_ascii_case("allow_mixing")
+}
+
+fn resembles_allow_mixing_command(line: &str) -> bool {
+    if is_allow_mixing_command(line) {
+        return false;
+    }
+    let lower = line.trim().to_ascii_lowercase();
+    let mut words = lower.split_whitespace();
+    let Some(first) = words.next() else {
+        return false;
+    };
+    if first == "allow" {
+        return words.next().is_some_and(|word| word == "mixing");
+    }
+    let Some(suffix) = first.strip_prefix("allow") else {
+        return false;
+    };
+    if suffix.trim_start_matches('_') != "mixing" {
+        return false;
+    }
+    if !matches!(first, "allowmixing" | "allow_mixing") {
+        return true;
+    }
+    words.next().is_some_and(|word| {
+        !word
+            .chars()
+            .next()
+            .is_some_and(|ch| matches!(ch, '-' | '.' | '<' | '>' | '*' | 'o'))
+    })
+}
+
 /// Detect the diagram type from the @start tag.
 ///
 /// If the input has an outer `@startuml` wrapper with an inner `@startXxx`
@@ -695,7 +732,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             scores[9] += 20;
         }
         // `allowmixing` directive (class-diagram only).
-        if trimmed == "allowmixing" || trimmed.starts_with("allowmixing ") {
+        if is_allow_mixing_command(trimmed) {
             has_allowmixing = true;
         }
 
@@ -1094,6 +1131,17 @@ pub fn parse_with_base(
         None => preprocess::preprocess_full_for_parse(input, None),
     };
     let mut style_program = style::extract_style_program(&mut preprocess_out.lines);
+    if typ == "uml" {
+        for (index, line) in preprocess_out.lines.iter().enumerate() {
+            let (source_line, trimmed) = source_line_and_trimmed(index + 1, line);
+            if resembles_allow_mixing_command(trimmed) {
+                return Err(ParseError {
+                    line: source_line,
+                    message: "invalid allowmixing command".to_string(),
+                });
+            }
+        }
+    }
     let uml_subtype = (typ == "uml").then(|| detect_uml_subtype(&preprocess_out.lines));
     if matches!(uml_subtype, Some(UmlSubtype::Sequence)) {
         preprocess_out = match base_dir {
@@ -2029,6 +2077,29 @@ Policy --> Retry
         assert_eq!(diagram.entities.len(), 4);
         assert!(diagram.entities.iter().all(|entity| entity.id != "all"));
         assert!(diagram.entities.iter().all(|entity| entity.id != "wmixing"));
+    }
+
+    #[test]
+    fn allow_mixing_uses_one_exact_case_insensitive_command_grammar() {
+        for command in ["allowmixing", "ALLOWMIXING", "allow_mixing", "AlLoW_MiXiNg"] {
+            assert!(is_allow_mixing_command(command));
+            let input = format!("@startuml\n{command}\nactor \"Operator\" as Operator\n@enduml");
+            assert!(matches!(parse(&input).unwrap(), Diagram::Class(_)));
+        }
+
+        for invalid in [
+            "allowmixing trailing",
+            "allow_mixing trailing",
+            "allow__mixing",
+            "allow mixing",
+        ] {
+            assert!(!is_allow_mixing_command(invalid));
+            let input = format!("@startuml\n{invalid}\n@enduml");
+            assert!(parse(&input).is_err());
+        }
+
+        let relationship = parse("@startuml\nallowmixing --> X\n@enduml").unwrap();
+        assert!(matches!(relationship, Diagram::Sequence(_)));
     }
 
     #[test]
