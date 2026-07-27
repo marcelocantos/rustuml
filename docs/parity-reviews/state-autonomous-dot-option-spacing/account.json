@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-autonomous-dot-option-spacing",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "net.sourceforge.plantuml.dot.CucaDiagramSimplifierState#simplify",
+    "net.sourceforge.plantuml.svek.GroupMakerState#getPureInnerLinks",
+    "net.sourceforge.plantuml.svek.GroupMakerState#getImage",
+    "net.sourceforge.plantuml.svek.GroupMakerState#createGeneralImageBuilder",
+    "net.sourceforge.plantuml.svek.GraphvizImageBuilder#buildImage",
+    "net.sourceforge.plantuml.svek.DotStringFactory#createDotString",
+    "net.sourceforge.plantuml.svek.CucaDiagramFileMakerSvek#getTextBlock12026",
+    "net.sourceforge.plantuml.svek.InnerStateAutonom#drawU",
+    "vendor/graphviz/lib/common/const.h#DEFAULT_NODESEP",
+    "vendor/graphviz/lib/common/const.h#DEFAULT_RANKSEP",
+    "vendor/graphviz/lib/common/input.c#nodesep/ranksep defaults"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/state.rs::layout_autonomous_scope",
+    "crates/rustuml-render/src/state.rs::build_autonomous_composite_node",
+    "crates/rustuml-render/src/state.rs::build_autonomous_composite",
+    "crates/rustuml-render/src/state.rs::build_one_level_concurrent_node",
+    "crates/rustuml-layout/src/graph.rs::LayoutGraph"
+  ],
+  "invariant": "CucaDiagramSimplifierState replaces each autarkic composite with an independently rendered GroupMakerState image. Every GroupMakerState inner build calls GraphvizImageBuilder.buildImage with an empty dot-option array, so DotStringFactory emits neither nodesep nor ranksep even though it computes candidate values. Graphviz therefore uses its native 0.25-inch node separation and 0.5-inch rank separation, equal to 18px and 36px at 72 points per inch. Nested autonomous levels and each concurrent region repeat that omission independently. The outer CucaDiagramFileMakerSvek build passes diagram.getDotStringSkek(), so its DOT does emit the normal state SVEK spacing options; nonzero skinparam nodesep/ranksep values replace the corresponding outer minimum. Because inner options remain empty, those layout-only skinparams change outer placement without changing any autonomous image's local geometry.",
+  "causal_divergence": "Rust layout_autonomous_scope distinguishes outer and inner layouts with a boolean, but the inner branch explicitly sets nodesep to the outer PlantUML SVEK minimum of 35px and ranksep to 36px. The rank gap happens to equal Graphviz's default, while the explicit 35px node gap widens antiparallel inner lanes compared with Java's native 18px default. The nearby AUTONOMOUS_RANK_SEP provenance is inaccurate: Java's GroupMakerState does not request DotStringFactory.getMinRankSep at all; the observed 36px comes from omitting ranksep. Rust also rejects every skinparam before entering the autonomous path, so it cannot express Java's option boundary where layout-only spacing overrides affect the outer graph but remain absent from inner DOT.",
+  "planned_change": "Leave LayoutGraph spacing unset for every autonomous inner scope, allowing the vendored Graphviz defaults to govern both axes. Remove AUTONOMOUS_RANK_SEP rather than replacing it with another fitted constant. Keep explicit PlantUML SVEK spacing on the outer scope, resolving the latest nonzero nodesep/ranksep skinparams independently and applying them only there. Admit diagrams whose only skinparams are those two layout options to the autonomous builders; retain the existing fallback for all visual or otherwise unsupported skinparams. Do not alter spline coordinates, node sizes, normalization, comparator slack, or fixture-specific branches.",
+  "perturbation_axes": [
+    "renamed antiparallel inner links with changed node counts and adjacent ranks",
+    "the same topology at root versus inside an autarkic composite",
+    "nonzero nodesep/ranksep overrides that affect only the outer graph",
+    "two or more nested autonomous levels",
+    "multiple concurrent regions with independent inner layouts"
+  ]
+}
