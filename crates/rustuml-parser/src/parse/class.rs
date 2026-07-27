@@ -3,7 +3,7 @@
 
 //! Class diagram parser.
 
-use std::collections::HashMap;
+use std::collections::{HashMap, HashSet};
 use std::sync::LazyLock;
 
 use regex::Regex;
@@ -20,6 +20,12 @@ enum MetaBlock {
     Legend,
     Caption,
     Title,
+}
+
+#[derive(Clone, Copy)]
+enum QuarkLookup {
+    CurrentContext,
+    ReuseUnique,
 }
 
 /// Parse preprocessed lines into a class diagram.
@@ -194,22 +200,24 @@ impl ClassParser {
         )
     }
 
-    fn unique_entity_path_named(&self, name: &str) -> Option<Vec<String>> {
-        let mut matches = self
+    fn unique_quark_path_named(&self, name: &str) -> Option<Vec<String>> {
+        let matches: HashSet<Vec<String>> = self
             .entity_by_path
             .keys()
-            .filter(|path| path.last().is_some_and(|part| part == name));
-        let first = matches.next()?.clone();
-        matches.next().is_none().then_some(first)
+            .chain(self.package_by_path.keys())
+            .filter(|path| path.last().is_some_and(|part| part == name))
+            .cloned()
+            .collect();
+        (matches.len() == 1).then(|| matches.into_iter().next().unwrap())
     }
 
     /// Mirrors `CucaDiagram#quarkInContextSafe`: qualified names resolve from
     /// the root when their first group exists, otherwise from the current
     /// group; a reusable unqualified name binds to its sole existing quark.
-    fn resolve_quark_path(&self, raw: &str, reuse_existing_child: bool) -> Vec<String> {
+    fn resolve_quark_path(&self, raw: &str, lookup: QuarkLookup) -> Vec<String> {
         let raw = raw.trim();
         if self.namespace_sep.is_none() {
-            if let Some(path) = self.unique_entity_path_named(raw) {
+            if let Some(path) = self.unique_quark_path_named(raw) {
                 return path;
             }
             let mut path = self.current_group_path().to_vec();
@@ -222,7 +230,9 @@ impl ClassParser {
             return parts;
         }
         if parts.len() == 1 {
-            if reuse_existing_child && let Some(path) = self.unique_entity_path_named(&parts[0]) {
+            if matches!(lookup, QuarkLookup::ReuseUnique)
+                && let Some(path) = self.unique_quark_path_named(&parts[0])
+            {
                 return path;
             }
             let mut path = self.current_group_path().to_vec();
@@ -340,7 +350,7 @@ impl ClassParser {
     }
 
     fn ensure_entity(&mut self, raw: &str) -> String {
-        let path = self.resolve_quark_path(raw, true);
+        let path = self.resolve_quark_path(raw, QuarkLookup::ReuseUnique);
         if let Some(&idx) = self.entity_by_path.get(&path) {
             return self.entities[idx].id.clone();
         }
@@ -349,7 +359,7 @@ impl ClassParser {
     }
 
     fn ensure_entity_kind(&mut self, raw: &str, kind: EntityKind) -> String {
-        let path = self.resolve_quark_path(raw, true);
+        let path = self.resolve_quark_path(raw, QuarkLookup::ReuseUnique);
         if let Some(&idx) = self.entity_by_path.get(&path) {
             return self.entities[idx].id.clone();
         }
@@ -634,9 +644,15 @@ impl ClassParser {
             let entity_colors = parse_entity_colors(line);
 
             let explicit_alias = caps.get(2).is_some();
-            // `CommandCreateElementFull2#executeArg` resolves the declaration
-            // code through `CucaDiagram#quarkInContext(true, idShort)`.
-            let entity_path = self.resolve_quark_path(&id, true);
+            // The ordinary class commands use
+            // `CucaDiagram#quarkInContextSafe(false, idShort)`, while
+            // `CommandCreateElementFull2` uses the unique-reuse form.
+            let lookup = match declaration_kind {
+                "class" | "abstract class" | "abstract" | "interface" | "enum" | "annotation"
+                | "entity" => QuarkLookup::CurrentContext,
+                _ => QuarkLookup::ReuseUnique,
+            };
+            let entity_path = self.resolve_quark_path(&id, lookup);
             let display_label = if explicit_alias || caps.get(4).is_some() {
                 label
             } else {
