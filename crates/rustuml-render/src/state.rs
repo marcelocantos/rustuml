@@ -398,7 +398,84 @@ enum StateLayoutShape {
     Box,
     Circle,
     Diamond,
+    /// A non-normal `EntityPosition` whose label is painted outside its image.
     Port,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+enum StateEntityPosition {
+    Normal,
+    EntryPoint,
+    ExitPoint,
+    InputPin,
+    OutputPin,
+    ExpansionInput,
+    ExpansionOutput,
+}
+
+impl StateEntityPosition {
+    fn of(state: &State) -> Self {
+        match state.kind {
+            StateKind::EntryPoint => Self::EntryPoint,
+            StateKind::ExitPoint => Self::ExitPoint,
+            _ => match state
+                .stereotype
+                .as_deref()
+                .map(str::to_ascii_lowercase)
+                .as_deref()
+            {
+                Some("entrypoint") => Self::EntryPoint,
+                Some("exitpoint") => Self::ExitPoint,
+                Some("inputpin") => Self::InputPin,
+                Some("outputpin") => Self::OutputPin,
+                Some("expansioninput") => Self::ExpansionInput,
+                Some("expansionoutput") => Self::ExpansionOutput,
+                _ => Self::Normal,
+            },
+        }
+    }
+
+    fn is_normal(self) -> bool {
+        self == Self::Normal
+    }
+
+    fn is_input(self) -> bool {
+        matches!(
+            self,
+            Self::EntryPoint | Self::InputPin | Self::ExpansionInput
+        )
+    }
+
+    fn is_output(self) -> bool {
+        matches!(
+            self,
+            Self::ExitPoint | Self::OutputPin | Self::ExpansionOutput
+        )
+    }
+
+    fn uses_port_p(self) -> bool {
+        matches!(self, Self::EntryPoint | Self::ExitPoint)
+    }
+
+    fn dimensions(self) -> (f64, f64) {
+        if matches!(self, Self::ExpansionInput | Self::ExpansionOutput) {
+            (48.0, 12.0)
+        } else {
+            (12.0, 12.0)
+        }
+    }
+}
+
+fn state_position_image_offset_x(state: &State) -> f64 {
+    if StateEntityPosition::of(state).uses_port_p()
+        && text_render::measure(&state.label, STATE_FONT_SIZE, false) > 40.0
+    {
+        // `SvekNode.appendLabelHtmlSpecialForPortHtml` paints the 12px image
+        // from the left edge of Graphviz's 52/3px middle cell.
+        -(8.0 / 3.0)
+    } else {
+        0.0
+    }
 }
 
 fn layout_node_size(
@@ -420,12 +497,13 @@ fn layout_node_size(
             StateLayoutShape::Circle,
         );
     }
-    if state_def
-        .is_some_and(|state| matches!(state.kind, StateKind::EntryPoint | StateKind::ExitPoint))
+    if let Some(position) = state_def.map(StateEntityPosition::of)
+        && !position.is_normal()
     {
-        // Java `EntityPosition.getDimension` uses `RADIUS * 2` on both axes
-        // and `EntityImageStateBorder` maps the image to RECTANGLE_PORT.
-        return (12.0, 12.0, StateLayoutShape::Port);
+        // Java `EntityPosition.getDimension` uses 12px symbols, widening
+        // top-to-bottom expansion positions to four compartments.
+        let (width, height) = position.dimensions();
+        return (width, height, StateLayoutShape::Port);
     }
     let shape = match state_def.map(|state| state.kind) {
         Some(
@@ -557,6 +635,7 @@ fn add_state_layout_node(
     width: f64,
     height: f64,
     shape: StateLayoutShape,
+    state: Option<&State>,
 ) {
     match shape {
         StateLayoutShape::Box => {
@@ -569,7 +648,17 @@ fn add_state_layout_node(
             layout.add_diamond_node(id, id, width, height);
         }
         StateLayoutShape::Port => {
-            layout.add_svek_state_border_node(id);
+            if width == STATE_BORDER_RADIUS * 2.0 && height == STATE_BORDER_RADIUS * 2.0 {
+                let label_width = state
+                    .filter(|state| StateEntityPosition::of(state).uses_port_p())
+                    .map(|state| text_render::measure(&state.label, STATE_FONT_SIZE, false))
+                    .unwrap_or(0.0);
+                layout.add_svek_state_border_node_with_label(id, label_width);
+            } else {
+                // Java maps pin and expansion positions to ShapeType::RECTANGLE;
+                // expansion positions retain their 48x12 image dimensions.
+                layout.add_node(id, id, width, height);
+            }
         }
     }
 }
@@ -1946,7 +2035,7 @@ struct AutonomousStateStyle {
 fn is_state_monospace_family(family: &str) -> bool {
     matches!(
         family.to_ascii_lowercase().as_str(),
-        "courier" | "courier new" | "monospaced" | "monospace" | "consolas" | "lucida console"
+        "courier" | "monospaced" | "monospace" | "consolas" | "lucida console"
     )
 }
 
@@ -1996,13 +2085,33 @@ fn autonomous_state_style(
         let style = stereo_value(stereo_attrs)
             .or_else(|| global_value(global_keys))
             .unwrap_or_default()
+            .trim()
             .to_ascii_lowercase();
-        (style.contains("bold"), style.contains("italic"))
+        // Java `ValueImpl.asFontFace` accepts one exact face value. Invalid
+        // compounds such as "bold italic" resolve to the normal face.
+        match style.as_str() {
+            "bold" => (true, false),
+            "italic" => (false, true),
+            "bolder" => (true, false),
+            "plain" | "normal" | "lighter" => (false, false),
+            _ => (
+                style
+                    .parse::<u16>()
+                    .ok()
+                    .is_some_and(|weight| weight >= 700),
+                false,
+            ),
+        }
     };
 
     let title_family = font_family(
-        &["FontName"],
-        &["stateFontName", "defaultFontName", "fontName"],
+        &["AttributeFontName", "FontName"],
+        &[
+            "stateAttributeFontName",
+            "stateFontName",
+            "defaultFontName",
+            "fontName",
+        ],
     );
     let attribute_family = font_family(
         &["AttributeFontName", "FontName"],
@@ -2014,8 +2123,8 @@ fn autonomous_state_style(
         ],
     );
     let title_size = font_size(
-        &["FontSize"],
-        &["stateFontSize", "defaultFontSize"],
+        &["AttributeFontSize", "FontSize"],
+        &["stateAttributeFontSize", "stateFontSize", "defaultFontSize"],
         STATE_FONT_SIZE,
     );
     let attribute_size = font_size(
@@ -2023,7 +2132,10 @@ fn autonomous_state_style(
         &["stateAttributeFontSize", "stateFontSize", "defaultFontSize"],
         DESC_FONT_SIZE,
     );
-    let title_flags = font_flags(&["FontStyle"], &["stateFontStyle"]);
+    let title_flags = font_flags(
+        &["AttributeFontStyle", "FontStyle"],
+        &["stateAttributeFontStyle", "stateFontStyle"],
+    );
     let attribute_flags = font_flags(
         &["AttributeFontStyle", "FontStyle"],
         &["stateAttributeFontStyle", "stateFontStyle"],
@@ -2447,7 +2559,8 @@ fn layout_autonomous_scope(
     }
     for id in &ids {
         let (_, width, height, shape) = node_sizes.iter().find(|entry| &entry.0 == id)?;
-        add_state_layout_node(&mut layout, id, *width, *height, *shape);
+        let state = diagram.states.iter().find(|state| state.id == *id);
+        add_state_layout_node(&mut layout, id, *width, *height, *shape, state);
     }
     let mut transition_layout_edges = std::collections::HashMap::new();
     for index in &transition_indices {
@@ -2645,7 +2758,7 @@ fn has_only_autonomous_layout_skinparams(diagram: &StateDiagram) -> bool {
 }
 
 fn supports_autonomous_state_image(state: &State) -> bool {
-    if matches!(state.kind, StateKind::EntryPoint | StateKind::ExitPoint) {
+    if !StateEntityPosition::of(state).is_normal() {
         return false;
     }
     let Some(stereotype) = state.stereotype.as_deref() else {
@@ -2716,11 +2829,9 @@ fn build_autonomous_composite_node<'a>(
         .filter(|state| state.parent.as_deref() == Some(composite.id.as_str()))
         .collect();
     if direct_children.is_empty()
-        || direct_children.iter().any(|state| {
-            !supports_autonomous_state_image(state)
-                || state.url.is_some()
-                || (!state.composite && !state.descriptions.is_empty())
-        })
+        || direct_children
+            .iter()
+            .any(|state| !supports_autonomous_state_image(state) || state.url.is_some())
     {
         return None;
     }
@@ -2828,7 +2939,7 @@ fn build_autonomous_composite<'a>(
         || diagram
             .states
             .iter()
-            .any(|state| matches!(state.kind, StateKind::EntryPoint | StateKind::ExitPoint))
+            .any(|state| !StateEntityPosition::of(state).is_normal())
         || diagram
             .transitions
             .iter()
@@ -2917,11 +3028,9 @@ fn build_one_level_concurrent_node<'a>(
         })
         .collect();
     if children.is_empty()
-        || children.iter().any(|state| {
-            !supports_autonomous_state_image(state)
-                || state.url.is_some()
-                || (!state.composite && !state.descriptions.is_empty())
-        })
+        || children
+            .iter()
+            .any(|state| !supports_autonomous_state_image(state) || state.url.is_some())
     {
         return None;
     }
@@ -3245,9 +3354,11 @@ fn emit_autonomous_scope_entities(
         let Some(state) = context.diagram.states.iter().find(|state| state.id == *id) else {
             continue;
         };
+        let cx = cx + state_position_image_offset_x(state);
         if skip_composites && state.composite {
             continue;
         }
+        let entity_position = StateEntityPosition::of(state);
         match state.kind {
             StateKind::Initial => {
                 let fill = state
@@ -3361,15 +3472,18 @@ fn emit_autonomous_scope_entities(
                 .unwrap();
                 continue;
             }
-            StateKind::EntryPoint | StateKind::ExitPoint => {
+            StateKind::EntryPoint | StateKind::ExitPoint | StateKind::Normal
+                if !entity_position.is_normal() =>
+            {
                 let fill = state
                     .fill
                     .as_deref()
                     .map(crate::sequence::resolve_color)
                     .unwrap_or_else(|| context.skin.state_fill.clone());
+                let (image_width, image_height) = entity_position.dimensions();
                 let label_width = text_render::measure(&state.label, STATE_FONT_SIZE, false);
                 let label_height = text_render::label_height(&state.label, STATE_FONT_SIZE);
-                let label_x = cx - label_width / 2.0;
+                let label_x = cx - image_width / 2.0 + STATE_BORDER_RADIUS - label_width / 2.0;
                 let image_y = cy - STATE_BORDER_RADIUS;
                 let parent_center_y = state
                     .parent
@@ -3405,15 +3519,33 @@ fn emit_autonomous_scope_entities(
                         skip_underline: false,
                     },
                 );
-                write!(
-                    svg,
-                    r#"<ellipse cx="{}" cy="{}" fill="{fill}" rx="{STATE_BORDER_RADIUS}" ry="{STATE_BORDER_RADIUS}" style="stroke:{};stroke-width:1.5;"/>"#,
-                    fmt_f(cx),
-                    fmt_f(cy),
-                    context.skin.stroke,
-                )
-                .unwrap();
-                if state.kind == StateKind::ExitPoint {
+                let image_x = cx - image_width / 2.0;
+                let image_y = cy - image_height / 2.0;
+                if matches!(
+                    entity_position,
+                    StateEntityPosition::EntryPoint | StateEntityPosition::ExitPoint
+                ) {
+                    write!(
+                        svg,
+                        r#"<ellipse cx="{}" cy="{}" fill="{fill}" rx="{STATE_BORDER_RADIUS}" ry="{STATE_BORDER_RADIUS}" style="stroke:{};stroke-width:1.5;"/>"#,
+                        fmt_f(cx),
+                        fmt_f(cy),
+                        context.skin.stroke,
+                    )
+                    .unwrap();
+                } else {
+                    write!(
+                        svg,
+                        r#"<rect fill="{fill}" height="{}" style="stroke:{};stroke-width:1.5;" width="{}" x="{}" y="{}"/>"#,
+                        fmt_f(image_height),
+                        context.skin.stroke,
+                        fmt_f(image_width),
+                        fmt_f(image_x),
+                        fmt_f(image_y),
+                    )
+                    .unwrap();
+                }
+                if entity_position == StateEntityPosition::ExitPoint {
                     // Java `EntityPosition.drawSymbol` offsets the cross center
                     // by 6.5px and draws a 5.5px radius at +/-45 degrees.
                     let cross_center_x = cx + 0.5;
@@ -3435,8 +3567,27 @@ fn emit_autonomous_scope_entities(
                     )
                     .unwrap();
                 }
+                if matches!(
+                    entity_position,
+                    StateEntityPosition::ExpansionInput | StateEntityPosition::ExpansionOutput
+                ) {
+                    for compartment in 1..4 {
+                        let x = image_x + STATE_BORDER_RADIUS * 2.0 * compartment as f64;
+                        write!(
+                            svg,
+                            r#"<line style="stroke:{};stroke-width:1.5;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                            context.skin.stroke,
+                            fmt_f(x),
+                            fmt_f(x),
+                            fmt_f(image_y),
+                            fmt_f(image_y + image_height),
+                        )
+                        .unwrap();
+                    }
+                }
                 continue;
             }
+            StateKind::EntryPoint | StateKind::ExitPoint => unreachable!(),
             StateKind::Normal => {}
         }
         let box_x = cx - width / 2.0;
@@ -3481,6 +3632,20 @@ fn emit_autonomous_scope_entities(
             cx - text_width / 2.0,
             box_y + 5.0 + style.title.ascent(&state.label),
         );
+        for (index, description) in state.descriptions.iter().enumerate() {
+            style.attribute.emit(
+                svg,
+                description,
+                box_x + 5.0,
+                divider_y
+                    + 5.0
+                    + style.attribute.ascent(description)
+                    + state.descriptions[..index]
+                        .iter()
+                        .map(|previous| style.attribute.height(previous))
+                        .sum::<f64>(),
+            );
+        }
         svg.push_str("</g>");
     }
 }
@@ -4023,7 +4188,7 @@ fn apply_state_border_frontiers(
             .states
             .iter()
             .filter(|state| state.parent.as_deref() == Some(cluster.id.as_str()))
-            .filter(|state| matches!(state.kind, StateKind::EntryPoint | StateKind::ExitPoint))
+            .filter(|state| !StateEntityPosition::of(state).is_normal())
             .map(|state| state.id.as_str())
             .collect::<std::collections::HashSet<_>>();
         if border_ids.is_empty() {
@@ -4056,8 +4221,11 @@ fn apply_state_border_frontiers(
             if owner != Some(cluster.id.as_str()) {
                 continue;
             }
+            let state = diagram.states.iter().find(|state| state.id == *id);
             let center = (
-                position.x + position.width / 2.0,
+                position.x
+                    + position.width / 2.0
+                    + state.map(state_position_image_offset_x).unwrap_or(0.0),
                 position.y + position.height / 2.0,
             );
             if border_ids.contains(id.as_str()) {
@@ -4196,7 +4364,7 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
     let has_border_points = diagram
         .states
         .iter()
-        .any(|state| matches!(state.kind, StateKind::EntryPoint | StateKind::ExitPoint));
+        .any(|state| !StateEntityPosition::of(state).is_normal());
     if !diagram.notes.is_empty()
         || diagram.meta.title.is_some()
         || !diagram.meta.skinparams.is_empty()
@@ -4209,7 +4377,7 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
                 state.kind,
                 StateKind::Normal | StateKind::EntryPoint | StateKind::ExitPoint
             ) || state.concurrent_separator.is_some()
-                || state.stereotype.is_some()
+                || (state.stereotype.is_some() && StateEntityPosition::of(state).is_normal())
                 || state.fill.is_some()
                 || state.stroke.is_some()
                 || state.url.is_some()
@@ -4257,7 +4425,7 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
             } else {
                 let state = diagram.states.iter().find(|state| state.id == *id);
                 let (width, height, shape) = layout_node_size(id, state, false);
-                add_state_layout_node(&mut layout, id, width, height, shape);
+                add_state_layout_node(&mut layout, id, width, height, shape, state);
                 (id.clone(), width, height, shape)
             }
         })
@@ -4295,10 +4463,10 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
                 .states
                 .iter()
                 .find(|state| state.id == *id)
-                .map(|state| state.kind)
+                .map(StateEntityPosition::of)
             {
-                Some(StateKind::EntryPoint) => layout.add_cluster_source_node(owner, id),
-                Some(StateKind::ExitPoint) => layout.add_cluster_sink_node(owner, id),
+                Some(position) if position.is_input() => layout.add_cluster_source_node(owner, id),
+                Some(position) if position.is_output() => layout.add_cluster_sink_node(owner, id),
                 _ => layout.add_cluster_node(owner, id),
             }
         }
@@ -4331,9 +4499,7 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
                 .states
                 .iter()
                 .find(|state| state.id == endpoint)
-                .is_some_and(|state| {
-                    matches!(state.kind, StateKind::EntryPoint | StateKind::ExitPoint)
-                })
+                .is_some_and(|state| StateEntityPosition::of(state).uses_port_p())
                 .then_some("P")
         };
         let layout_edge_index = layout.add_edge_with_ports_and_label_sizes_and_minlen(
@@ -4355,8 +4521,8 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
             .find(|state| state.id == *layout_from)
             .zip(diagram.states.iter().find(|state| state.id == *layout_to))
             .is_some_and(|(from, to)| {
-                matches!(from.kind, StateKind::EntryPoint | StateKind::ExitPoint)
-                    && matches!(to.kind, StateKind::EntryPoint | StateKind::ExitPoint)
+                !StateEntityPosition::of(from).is_normal()
+                    && !StateEntityPosition::of(to).is_normal()
                     && from.parent == to.parent
             });
         if same_border_container {
@@ -4400,7 +4566,7 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
             (transition.from == composite.id || transition.to == composite.id)
                 && diagram.states.iter().any(|state| {
                     state.parent.as_deref() == Some(composite.id.as_str())
-                        && matches!(state.kind, StateKind::EntryPoint | StateKind::ExitPoint)
+                        && !StateEntityPosition::of(state).is_normal()
                 })
         });
         if let Some(projection) = projection
@@ -4450,7 +4616,12 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
         }
         let position = result.node_positions[index];
         let (_, width, height, shape) = node_sizes.iter().find(|entry| &entry.0 == id)?;
-        let center_x = quantize_svek_coord(position.x + position.width / 2.0);
+        let state = diagram.states.iter().find(|state| state.id == *id);
+        let center_x = quantize_svek_coord(
+            position.x
+                + position.width / 2.0
+                + state.map(state_position_image_offset_x).unwrap_or(0.0),
+        );
         let center_y = quantize_svek_coord(position.y + position.height / 2.0);
         if id == "__start__" || id.starts_with("__start__:") {
             include_point(center_x - START_RADIUS, center_y - START_RADIUS);
@@ -4484,7 +4655,7 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
                     // label outside the owning cluster's visible frontier.
                     include_point(image_x, image_y);
                     include_point(image_x + width - 1.0, image_y + height - 1.0);
-                    let state = diagram.states.iter().find(|state| state.id == *id)?;
+                    let state = state?;
                     let label_width = text_render::measure(&state.label, STATE_FONT_SIZE, false);
                     let label_height = text_render::label_height(&state.label, STATE_FONT_SIZE);
                     let parent_center_y = state
@@ -4509,9 +4680,10 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
                         text_render::ascent_for_family(STATE_FONT_SIZE, "sans-serif")
                             - label_height
                             + 1.5;
-                    include_point(center_x - label_width / 2.0, label_top + limit_offset);
+                    let label_center_x = image_x + STATE_BORDER_RADIUS;
+                    include_point(label_center_x - label_width / 2.0, label_top + limit_offset);
                     include_point(
-                        center_x + label_width / 2.0,
+                        label_center_x + label_width / 2.0,
                         label_top + label_height + limit_offset,
                     );
                 }
@@ -4753,7 +4925,7 @@ fn emit_root_state_cluster(
     let title_width = text_render::measure(&composite.label, STATE_FONT_SIZE, false);
     let has_border_points = context.diagram.states.iter().any(|state| {
         state.parent.as_deref() == Some(composite.id.as_str())
-            && matches!(state.kind, StateKind::EntryPoint | StateKind::ExitPoint)
+            && !StateEntityPosition::of(state).is_normal()
     });
     let title_baseline_offset = if has_border_points {
         // `Cluster.manageEntryExitPoint` replaces the solved rectangle and
@@ -5270,7 +5442,7 @@ pub fn render_with_oracle(
             } else {
                 let state_def = find_state(id);
                 let (w, h, shape) = state_node_size(id, state_def);
-                add_state_layout_node(&mut layout, id, w, h, shape);
+                add_state_layout_node(&mut layout, id, w, h, shape, state_def);
             }
         }
         for (transition_index, t) in diagram.transitions.iter().enumerate() {
@@ -9416,6 +9588,39 @@ CobaltDecision --> [*]
     }
 
     #[test]
+    fn autonomous_descriptions_use_typed_attribute_font_style() {
+        let input = concat!(
+            "@startuml\n",
+            "skinparam state {\n",
+            "  FontName<<ledger>> Courier New\n",
+            "  FontSize<<ledger>> 21\n",
+            "  FontStyle<<ledger>> bold italic\n",
+            "  AttributeFontSize<<ledger>> 16\n",
+            "  AttributeFontStyle<<ledger>> italic\n",
+            "}\n",
+            "state LedgerVault701 <<ledger>> {\n",
+            "  [*] --> AuditLeaf709\n",
+            "  state AuditLeaf709 <<ledger>>\n",
+            "  AuditLeaf709 : renamed field\n",
+            "  AuditLeaf709 --> [*]\n",
+            "}\n",
+            "[*] --> LedgerVault701\n",
+            "LedgerVault701 --> [*]\n",
+            "@enduml\n",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        let typed_style = r#"font-family="Courier New" font-size="16" font-style="italic" lengthAdjust="spacing""#;
+        assert_eq!(svg.matches(typed_style).count(), 3);
+        for text in ["LedgerVault701", "AuditLeaf709", "renamed field"] {
+            assert!(svg.contains(&format!(">{text}</text>")));
+        }
+        assert!(!svg.contains(r#"font-weight="bold""#));
+        assert!(svg.contains(r#"data-qualified-name="LedgerVault701.AuditLeaf709""#));
+    }
+
+    #[test]
     fn nonnormal_position_stereotypes_do_not_enter_autonomous_layout() {
         for stereotype in [
             "entryPoint",
@@ -9438,6 +9643,43 @@ CobaltDecision --> [*]
             ..State::default()
         };
         assert!(supports_autonomous_state_image(&ordinary));
+    }
+
+    #[test]
+    fn nonnormal_position_model_covers_pins_and_expansion_bars() {
+        let cases = [
+            ("entryPoint", StateEntityPosition::EntryPoint, true, false),
+            ("exitPoint", StateEntityPosition::ExitPoint, false, true),
+            ("inputPin", StateEntityPosition::InputPin, true, false),
+            ("outputPin", StateEntityPosition::OutputPin, false, true),
+            (
+                "expansionInput",
+                StateEntityPosition::ExpansionInput,
+                true,
+                false,
+            ),
+            (
+                "expansionOutput",
+                StateEntityPosition::ExpansionOutput,
+                false,
+                true,
+            ),
+        ];
+        for (stereotype, expected, input, output) in cases {
+            let state = State {
+                stereotype: Some(stereotype.to_string()),
+                ..State::default()
+            };
+            let position = StateEntityPosition::of(&state);
+            assert_eq!(position, expected);
+            assert_eq!(position.is_input(), input);
+            assert_eq!(position.is_output(), output);
+        }
+        assert_eq!(StateEntityPosition::InputPin.dimensions(), (12.0, 12.0));
+        assert_eq!(
+            StateEntityPosition::ExpansionInput.dimensions(),
+            (48.0, 12.0)
+        );
     }
 
     #[test]

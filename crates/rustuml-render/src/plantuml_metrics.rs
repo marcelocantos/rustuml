@@ -102,6 +102,25 @@ pub fn mono_text_height(font_size: f64) -> f64 {
     font_size * MONO_HEIGHT_PER_SIZE
 }
 
+// Java AWT physical "Courier New" metrics extracted by
+// `tools/PhysicalFontMetricsExtract.java` with PlantUML's fractional-metrics
+// rendering hints. Plain, bold, and italic share the same values.
+const COURIER_NEW_WIDTH_PER_SIZE: f64 = 0.60009765625;
+const COURIER_NEW_ASCENT_PER_SIZE: f64 = 0.83251953125;
+const COURIER_NEW_HEIGHT_PER_SIZE: f64 = 1.1328125;
+
+pub fn courier_new_text_width(text: &str, font_size: f64) -> f64 {
+    text.chars().count() as f64 * font_size * COURIER_NEW_WIDTH_PER_SIZE
+}
+
+pub fn courier_new_ascent(font_size: f64) -> f64 {
+    font_size * COURIER_NEW_ASCENT_PER_SIZE
+}
+
+pub fn courier_new_text_height(font_size: f64) -> f64 {
+    font_size * COURIER_NEW_HEIGHT_PER_SIZE
+}
+
 // ─── Serif metrics ──────────────────────────────────────────────────
 // Java AWT's `Serif` logical font on macOS maps to "Times", a TrueType
 // face with unitsPerEm = 2048. Advance widths are exact integer font

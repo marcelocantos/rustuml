@@ -239,14 +239,40 @@ impl LayoutGraph {
     /// on both axes, and `SvekNode.appendLabelHtmlSpecialForPortBasic`
     /// registers that image as a fixed rectangular Graphviz node.
     pub fn add_svek_state_border_node(&mut self, id: &str) -> bool {
+        self.add_svek_state_border_node_with_label(id, 0.0)
+    }
+
+    /// Adds a state entry/exit node, preserving Java's HTML label shield.
+    ///
+    /// `SvekNode.appendLabelHtmlSpecialForPort` switches from a fixed rect to
+    /// a three-cell HTML table when the separately-painted label exceeds 40px.
+    /// Its middle image cell supplies the `P` edge port while the side cells
+    /// reserve the label's horizontal layout footprint.
+    pub fn add_svek_state_border_node_with_label(&mut self, id: &str, label_width: f64) -> bool {
         if self.nodes.iter().any(|node| node.id == id) {
             return false;
         }
+        let shape = if label_width > 40.0 {
+            // Graphviz 15 solves Java's fixed 12px middle HTML cell to a
+            // 52/3px port box; captured from
+            // `SvekNode.appendLabelHtmlSpecialForPort`'s emitted DOT.
+            NodeShape::SvekStateBorderShield {
+                image_width: 52.0 / 3.0,
+            }
+        } else {
+            NodeShape::SvekStateBorder
+        };
         self.nodes.push(NodeSpec {
             id: id.to_string(),
-            width: 12.0,
-            height: 12.0,
-            shape: NodeShape::SvekStateBorder,
+            // Java's `fullWidth = (int) labelWidth - 40` table solves to
+            // `fullWidth + 26` by 36 points in Graphviz 15.
+            width: if label_width > 40.0 {
+                label_width.floor() - 14.0
+            } else {
+                12.0
+            },
+            height: if label_width > 40.0 { 36.0 } else { 12.0 },
+            shape,
         });
         true
     }
@@ -886,6 +912,7 @@ impl LayoutGraph {
         let margin_key = CString::new("margin").unwrap();
         let text_span_dimensions_key = CString::new("rustuml_text_span_dimensions").unwrap();
         let svek_center_port_key = CString::new("rustuml_svek_center_port").unwrap();
+        let svek_center_port_height_key = CString::new("rustuml_svek_center_port_height").unwrap();
         let svek_center_port_offset_key = CString::new("rustuml_svek_center_port_offset").unwrap();
         let no_label_val = CString::new("").unwrap();
         let fixedsize_val = CString::new("true").unwrap();
@@ -1040,6 +1067,7 @@ impl LayoutGraph {
                     let shape = match &spec.shape {
                         NodeShape::Box => &box_val,
                         NodeShape::SvekStateBorder => &box_val,
+                        NodeShape::SvekStateBorderShield { .. } => &box_val,
                         NodeShape::Circle => &circle_val,
                         NodeShape::Ellipse => &ellipse_val,
                         NodeShape::Diamond => &diamond_val,
@@ -1138,6 +1166,7 @@ impl LayoutGraph {
                             }
                             NodeShape::Box
                             | NodeShape::SvekStateBorder
+                            | NodeShape::SvekStateBorderShield { .. }
                             | NodeShape::Circle
                             | NodeShape::Ellipse
                             | NodeShape::Diamond
@@ -1152,6 +1181,26 @@ impl LayoutGraph {
                             label_val.as_ptr(),
                             empty.as_ptr(),
                         );
+                        if let NodeShape::SvekStateBorderShield { image_width } = spec.shape {
+                            graphviz_ffi::agsafeset(
+                                node as *mut c_void,
+                                svek_center_port_key.as_ptr(),
+                                CString::new(image_width.to_string()).unwrap().as_ptr(),
+                                empty.as_ptr(),
+                            );
+                            graphviz_ffi::agsafeset(
+                                node as *mut c_void,
+                                svek_center_port_height_key.as_ptr(),
+                                CString::new("12").unwrap().as_ptr(),
+                                empty.as_ptr(),
+                            );
+                            graphviz_ffi::agsafeset(
+                                node as *mut c_void,
+                                svek_center_port_offset_key.as_ptr(),
+                                zero_val.as_ptr(),
+                                empty.as_ptr(),
+                            );
+                        }
                     }
                 }
 
@@ -2107,6 +2156,9 @@ struct NodeSpec {
 enum NodeShape {
     Box,
     SvekStateBorder,
+    SvekStateBorderShield {
+        image_width: f64,
+    },
     Circle,
     Ellipse,
     Diamond,
@@ -2894,6 +2946,17 @@ mod tests {
 
         assert!((solved_sizes[0].0 - solved_sizes[1].0).abs() < 0.001);
         assert!((solved_sizes[0].1 - solved_sizes[1].1).abs() < 0.001);
+    }
+
+    #[test]
+    fn long_state_border_label_preserves_java_html_shield_geometry() {
+        let mut graph = LayoutGraph::new(Direction::TopToBottom);
+        assert!(graph.add_svek_state_border_node_with_label("renamed_entry", 68.0));
+
+        let result = graph.layout_full_no_timeout();
+        assert_eq!(result.node_positions.len(), 1);
+        assert!((result.node_positions[0].width - 54.0).abs() < 0.001);
+        assert!((result.node_positions[0].height - 36.0).abs() < 0.001);
     }
 
     #[test]

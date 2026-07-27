@@ -2904,7 +2904,8 @@ static port poly_port(node_t * n, char *portname, char *compass)
 	compass = "_";
     sides = BOTTOM | RIGHT | TOP | LEFT;
     const char *rustuml_center_port = agget(n, "rustuml_svek_center_port");
-    if (strcmp(portname, "h") == 0 && rustuml_center_port != NULL &&
+    if ((strcmp(portname, "h") == 0 || strcmp(portname, "P") == 0) &&
+	rustuml_center_port != NULL &&
 	rustuml_center_port[0] != '\0') {
 	rustuml_center_port_record_t *record =
 	    agbindrec(n, "rustuml_svek_center_port_box", sizeof(*record), false);
@@ -2915,7 +2916,13 @@ static port poly_port(node_t * n, char *portname, char *compass)
 	 * explicitly marked shielded nodes.
 	 */
 	const double half_width = strtod(rustuml_center_port, NULL) / 2.0;
-	const double half_height = half_width;
+	const char *rustuml_center_port_height =
+	    agget(n, "rustuml_svek_center_port_height");
+	const double half_height =
+	    rustuml_center_port_height != NULL &&
+	    rustuml_center_port_height[0] != '\0'
+		? strtod(rustuml_center_port_height, NULL) / 2.0
+		: half_width;
 	const double center_offset =
 	    strtod(agget(n, "rustuml_svek_center_port_offset"), NULL);
 	record->box.LL.x = -half_width + center_offset;

@@ -665,6 +665,7 @@ fn next_tab_advance(advance: f64, tab_width: f64) -> f64 {
 enum MetricFamily {
     Sans,
     Mono,
+    CourierNew,
     Arial,
     Helvetica,
     Verdana,
@@ -736,7 +737,8 @@ fn metric_family(font_family: &str) -> MetricFamily {
         .trim_matches(|c| c == '"' || c == '\'')
         .to_ascii_lowercase();
     match normalized.as_str() {
-        "courier" | "courier new" | "monospace" | "monospaced" => MetricFamily::Mono,
+        "courier new" => MetricFamily::CourierNew,
+        "courier" | "monospace" | "monospaced" => MetricFamily::Mono,
         "arial" => MetricFamily::Arial,
         "helvetica" => MetricFamily::Helvetica,
         "verdana" => MetricFamily::Verdana,
@@ -1308,6 +1310,7 @@ fn helvetica_text_width(text: &str, font_size: f64, bold: bool) -> f64 {
 fn family_text_width(text: &str, font_size: f64, bold: bool, family: MetricFamily) -> f64 {
     match family {
         MetricFamily::Mono => pm::mono_text_width(text, font_size),
+        MetricFamily::CourierNew => pm::courier_new_text_width(text, font_size),
         MetricFamily::Arial => {
             family_table_text_width(text, font_size, bold, &ARIAL_WIDTH, &ARIAL_BOLD_WIDTH)
         }
@@ -1322,6 +1325,7 @@ fn family_text_width(text: &str, font_size: f64, bold: bool, family: MetricFamil
 fn family_text_height(font_size: f64, family: MetricFamily) -> f64 {
     match family {
         MetricFamily::Mono => pm::mono_text_height(font_size),
+        MetricFamily::CourierNew => pm::courier_new_text_height(font_size),
         MetricFamily::Arial => font_size * 1.14990234375,
         MetricFamily::Helvetica => font_size,
         MetricFamily::Verdana => font_size * 1.21533203125,
@@ -1332,6 +1336,7 @@ fn family_text_height(font_size: f64, family: MetricFamily) -> f64 {
 fn family_ascent(font_size: f64, family: MetricFamily) -> f64 {
     match family {
         MetricFamily::Mono => pm::mono_ascent(font_size),
+        MetricFamily::CourierNew => pm::courier_new_ascent(font_size),
         // Java AWT's Arial line metrics carry non-zero leading. PlantUML's
         // text baseline behaves as ascent + leading, while the text height
         // above already includes the same leading.
