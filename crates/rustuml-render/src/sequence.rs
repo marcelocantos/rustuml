@@ -1811,7 +1811,7 @@ const GROUP_GAP_AFTER_MSG: f64 = 15.0;
 const GROUP_FRAME_MIN_LEFT: f64 = 10.0;
 /// A group enclosing a found message (`[->`) extends to PlantUML's external
 /// message frame floor instead of the participant-margin floor.
-const GROUP_EXTERNAL_LEFT_FLOOR: f64 = 3.0;
+const GROUP_EXTERNAL_ARROW_MARGIN: f64 = 3.0;
 /// Gap from the lifeline top to the group frame top when a group is the very
 /// first event (no preceding message). PlantUML reserves 2px more headroom in
 /// this case than the standalone-note first gap.
@@ -2974,10 +2974,336 @@ impl ActivationTracker {
     }
 }
 
+#[derive(Clone, Copy)]
+enum LifecycleAttachmentOwner {
+    Message(usize),
+    GroupEnd(usize),
+}
+
+impl LifecycleAttachmentOwner {
+    fn event_index(self) -> usize {
+        match self {
+            Self::Message(index) | Self::GroupEnd(index) => index,
+        }
+    }
+}
+
+#[derive(Default)]
+struct MessageLifecycleState {
+    first_accepted_is_activate: Option<bool>,
+    has_closing_type: bool,
+}
+
+impl MessageLifecycleState {
+    fn accept(&mut self, change: &ActivationChange) {
+        let is_activate = matches!(change, ActivationChange::Activate);
+        self.first_accepted_is_activate.get_or_insert(is_activate);
+        if matches!(
+            change,
+            ActivationChange::Deactivate | ActivationChange::Destroy
+        ) {
+            self.has_closing_type = true;
+        }
+    }
+
+    fn reserves_combined_row(&self) -> bool {
+        self.first_accepted_is_activate == Some(true) && self.has_closing_type
+    }
+}
+
+struct SequenceLifecycleLayout {
+    attachment_owner: Vec<Option<usize>>,
+    y_offset: Vec<f64>,
+    row_after_message: Vec<f64>,
+    closing_keeps_depth: Vec<bool>,
+}
+
+#[derive(Clone, Copy, PartialEq, Eq, PartialOrd, Ord)]
+enum LifeVariationKind {
+    Close,
+    Open,
+}
+
+struct LifeVariation {
+    ordinate: f64,
+    event_index: usize,
+    kind: LifeVariationKind,
+}
+
+#[derive(Default)]
+struct SequenceLifeLines {
+    variations: HashMap<String, Vec<LifeVariation>>,
+}
+
+impl SequenceLifeLines {
+    fn depth_at(&self, participant: &str, ordinate: f64) -> usize {
+        let mut depth = 0usize;
+        let Some(variations) = self.variations.get(participant) else {
+            return depth;
+        };
+        for variation in variations {
+            if variation.ordinate > ordinate {
+                break;
+            }
+            match variation.kind {
+                LifeVariationKind::Close => depth = depth.saturating_sub(1),
+                LifeVariationKind::Open => depth += 1,
+            }
+        }
+        depth
+    }
+
+    fn segment_shifts(&self, participant: &str, top: f64, bottom: f64) -> (f64, f64) {
+        let depth = self
+            .depth_at(participant, top)
+            .max(self.depth_at(participant, bottom));
+        if depth == 0 {
+            (0.0, 0.0)
+        } else {
+            (-ACTIVATION_HALF_W, depth as f64 * ACTIVATION_HALF_W)
+        }
+    }
+}
+
+fn sequence_lifelines(
+    events: &[Event],
+    event_y_positions: &[f64],
+    page1_end: usize,
+) -> SequenceLifeLines {
+    let mut model = SequenceLifeLines::default();
+    let mut return_stack: Vec<String> = Vec::new();
+
+    let mut add = |participant: &str, event_index: usize, kind: LifeVariationKind| {
+        let ordinate = event_y_positions
+            .get(event_index)
+            .copied()
+            .unwrap_or_default();
+        model
+            .variations
+            .entry(participant.to_owned())
+            .or_default()
+            .push(LifeVariation {
+                ordinate,
+                event_index,
+                kind,
+            });
+    };
+
+    for (event_index, event) in events.iter().take(page1_end).enumerate() {
+        match event {
+            Event::Message(message) => {
+                if let Some(change) = &message.activation {
+                    match change {
+                        ActivationChange::Activate => {
+                            add(&message.to, event_index, LifeVariationKind::Open);
+                            return_stack.push(message.to.clone());
+                        }
+                        ActivationChange::Deactivate => {
+                            add(&message.from, event_index, LifeVariationKind::Close);
+                            if let Some(position) =
+                                return_stack.iter().rposition(|id| id == &message.from)
+                            {
+                                return_stack.remove(position);
+                            }
+                        }
+                        ActivationChange::Destroy => {
+                            add(&message.to, event_index, LifeVariationKind::Close);
+                            if let Some(position) =
+                                return_stack.iter().rposition(|id| id == &message.to)
+                            {
+                                return_stack.remove(position);
+                            }
+                        }
+                    }
+                }
+            }
+            Event::Activate(participant, _) => {
+                add(participant, event_index, LifeVariationKind::Open);
+                return_stack.push(participant.clone());
+            }
+            Event::Deactivate(participant) | Event::Destroy(participant) => {
+                add(participant, event_index, LifeVariationKind::Close);
+                if let Some(position) = return_stack.iter().rposition(|id| id == participant) {
+                    return_stack.remove(position);
+                }
+            }
+            Event::Return(_) => {
+                if let Some(participant) = return_stack.pop() {
+                    add(&participant, event_index, LifeVariationKind::Close);
+                }
+            }
+            _ => {}
+        }
+    }
+
+    for variations in model.variations.values_mut() {
+        variations.sort_by(|left, right| {
+            left.ordinate
+                .total_cmp(&right.ordinate)
+                // Java `LifeLine` applies SMALLER closing variations before
+                // LARGER opening variations at one ordinate.
+                .then(left.kind.cmp(&right.kind))
+                .then(left.event_index.cmp(&right.event_index))
+        });
+    }
+    model
+}
+
+fn sequence_lifecycle_layout(events: &[Event], page1_end: usize) -> SequenceLifecycleLayout {
+    let mut attachment_owner = vec![None; page1_end];
+    let mut y_offset = vec![0.0; page1_end];
+    let mut row_after_message = vec![0.0; page1_end];
+    let mut message_states: Vec<MessageLifecycleState> = (0..page1_end)
+        .map(|_| MessageLifecycleState::default())
+        .collect();
+    let mut last_owner = None;
+
+    for (index, event) in events.iter().take(page1_end).enumerate() {
+        match event {
+            Event::Message(message) => {
+                last_owner = Some(LifecycleAttachmentOwner::Message(index));
+                if let Some(change) = &message.activation {
+                    message_states[index].accept(change);
+                }
+            }
+            Event::Return(_) => {
+                last_owner = Some(LifecycleAttachmentOwner::Message(index));
+            }
+            Event::GroupEnd => {
+                // Java `SequenceDiagram#grouping` replaces
+                // `lastEventWithDeactivate` only for the END leaf. Group
+                // starts and ordinary intervening events preserve its owner.
+                last_owner = Some(LifecycleAttachmentOwner::GroupEnd(index));
+            }
+            Event::Activate(participant, _) => {
+                attach_sequence_lifecycle_event(
+                    events,
+                    index,
+                    participant,
+                    &ActivationChange::Activate,
+                    last_owner,
+                    &mut attachment_owner,
+                    &mut y_offset,
+                    &mut row_after_message,
+                    &mut message_states,
+                );
+            }
+            Event::Deactivate(participant) => {
+                attach_sequence_lifecycle_event(
+                    events,
+                    index,
+                    participant,
+                    &ActivationChange::Deactivate,
+                    last_owner,
+                    &mut attachment_owner,
+                    &mut y_offset,
+                    &mut row_after_message,
+                    &mut message_states,
+                );
+            }
+            Event::Destroy(participant) => {
+                attach_sequence_lifecycle_event(
+                    events,
+                    index,
+                    participant,
+                    &ActivationChange::Destroy,
+                    last_owner,
+                    &mut attachment_owner,
+                    &mut y_offset,
+                    &mut row_after_message,
+                    &mut message_states,
+                );
+            }
+            _ => {}
+        }
+    }
+
+    let mut closing_keeps_depth = vec![false; page1_end];
+    let mut attached_activations: HashMap<(usize, &str), usize> = HashMap::new();
+    for (index, event) in events.iter().take(page1_end).enumerate() {
+        match event {
+            Event::Activate(participant, _) => {
+                if let Some(owner) = attachment_owner[index] {
+                    attached_activations.insert((owner, participant.as_str()), index);
+                }
+            }
+            Event::Deactivate(participant) => {
+                let Some(owner) = attachment_owner[index] else {
+                    continue;
+                };
+                if attached_activations
+                    .remove(&(owner, participant.as_str()))
+                    .is_some()
+                    && row_after_message.get(owner).copied().unwrap_or(0.0) == 0.0
+                {
+                    // `LifeLine` orders equal-ordinate SMALLER variations
+                    // before LARGER variations. The activation therefore
+                    // remains live after this source-level closing command.
+                    closing_keeps_depth[index] = true;
+                }
+            }
+            _ => {}
+        }
+    }
+
+    SequenceLifecycleLayout {
+        attachment_owner,
+        y_offset,
+        row_after_message,
+        closing_keeps_depth,
+    }
+}
+
+#[allow(clippy::too_many_arguments)]
+fn attach_sequence_lifecycle_event(
+    events: &[Event],
+    event_index: usize,
+    participant: &str,
+    change: &ActivationChange,
+    owner: Option<LifecycleAttachmentOwner>,
+    attachment_owner: &mut [Option<usize>],
+    y_offset: &mut [f64],
+    row_after_message: &mut [f64],
+    message_states: &mut [MessageLifecycleState],
+) {
+    let Some(owner) = owner else {
+        return;
+    };
+    attachment_owner[event_index] = Some(owner.event_index());
+
+    let LifecycleAttachmentOwner::Message(message_index) = owner else {
+        return;
+    };
+    // `AbstractMessage#addLifeEvent` always attaches the event first. For a
+    // self-message it then declines to record an unrelated participant's
+    // lifecycle type, so ordinate ownership and combined-row eligibility are
+    // deliberately separate facts.
+    let accepted = !matches!(
+        events.get(message_index),
+        Some(Event::Message(message))
+            if message.from == message.to && message.from != participant
+    );
+    if !accepted {
+        return;
+    }
+
+    let state = &mut message_states[message_index];
+    state.accept(change);
+    if matches!(
+        change,
+        ActivationChange::Deactivate | ActivationChange::Destroy
+    ) && state.reserves_combined_row()
+    {
+        y_offset[event_index] = SAME_MESSAGE_LIFECYCLE_ROW;
+        row_after_message[message_index] = SAME_MESSAGE_LIFECYCLE_ROW;
+    }
+}
+
 fn live_depth_at_message_ordinate(
     events: &[Event],
     lifecycle_owner: &[Option<usize>],
     lifecycle_y_offset: &[f64],
+    lifecycle_closing_keeps_depth: &[bool],
     event_index: usize,
     participant: &str,
     current_depth: usize,
@@ -3004,7 +3330,16 @@ fn live_depth_at_message_ordinate(
         }
         match next_event {
             Event::Activate(id, _) if id == participant => depth += 1,
-            Event::Deactivate(id) | Event::Destroy(id) if id == participant => {
+            Event::Deactivate(id)
+                if id == participant
+                    && !lifecycle_closing_keeps_depth
+                        .get(next_index)
+                        .copied()
+                        .unwrap_or(false) =>
+            {
+                depth = depth.saturating_sub(1);
+            }
+            Event::Destroy(id) if id == participant => {
                 depth = depth.saturating_sub(1);
             }
             _ => {}
@@ -3017,6 +3352,7 @@ fn deactivates_at_message_start(
     events: &[Event],
     lifecycle_owner: &[Option<usize>],
     lifecycle_y_offset: &[f64],
+    lifecycle_closing_keeps_depth: &[bool],
     event_index: usize,
     participant: &str,
 ) -> bool {
@@ -3039,11 +3375,28 @@ fn deactivates_at_message_start(
             .any(|(next_index, event)| {
                 lifecycle_owner.get(next_index).copied().flatten() == Some(event_index)
                     && lifecycle_y_offset.get(next_index).copied().unwrap_or(0.0) == 0.0
-                    && matches!(
-                        event,
-                        Event::Deactivate(id) | Event::Destroy(id) if id == participant
-                    )
+                    && match event {
+                        Event::Deactivate(id) => {
+                            id == participant
+                                && !lifecycle_closing_keeps_depth
+                                    .get(next_index)
+                                    .copied()
+                                    .unwrap_or(false)
+                        }
+                        Event::Destroy(id) => id == participant,
+                        _ => false,
+                    }
             })
+}
+
+fn message_area_right_end(center_x: f64, live_depth: usize) -> f64 {
+    if live_depth == 0 {
+        center_x
+    } else {
+        // `MessageArrow#getRightEndInternal` uses the spatial-right
+        // participant's live-segment pos2 minus the activation-box width.
+        center_x + live_depth as f64 * ACTIVATION_HALF_W - ACTIVATION_WIDTH
+    }
 }
 
 // ---------------------------------------------------------------------------
@@ -6297,6 +6650,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
 
     let mut group_left_shift_depth = 0usize;
     let mut group_left_external_shift_depth = 0usize;
+    let mut group_has_external_left = false;
     {
         // Scan for groups and collect the participant index range for each group
         let mut group_stack: Vec<(usize, usize, bool)> = Vec::new(); // (min_idx, max_idx, has_external_left)
@@ -6336,8 +6690,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             top.0 = top.0.min(ti);
                             top.1 = top.1.max(ti);
                         }
-                        if msg.from == "[" {
+                        if msg.from == "[" || msg.to == "[" {
                             top.2 = true;
+                            group_has_external_left = true;
                         }
                     }
                 }
@@ -6369,6 +6724,21 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             }
         }
     }
+
+    // `newpage` splits the diagram into pages; single-image SVG output renders
+    // only page one. Normalize lifecycle attachment before any spacing, extent,
+    // note, activation, or paint scan asks for live depth.
+    let page1_end = diagram
+        .events
+        .iter()
+        .position(|event| matches!(event, Event::NewPage(_)))
+        .unwrap_or(diagram.events.len());
+    let has_newpage = page1_end < diagram.events.len();
+    let lifecycle = sequence_lifecycle_layout(&diagram.events, page1_end);
+    let lifecycle_owner = lifecycle.attachment_owner;
+    let lifecycle_y_offset = lifecycle.y_offset;
+    let lifecycle_row_after_message = lifecycle.row_after_message;
+    let lifecycle_closing_keeps_depth = lifecycle.closing_keeps_depth;
 
     // -----------------------------------------------------------------------
     // Phase 2: Compute required gap between adjacent participant pairs
@@ -6411,7 +6781,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // extra horizontal space for the inline head box centered on X's lifeline.
     let mut spacing_pending_create: Vec<String> = Vec::new();
 
-    for event in &diagram.events {
+    for (event_idx, event) in diagram.events.iter().enumerate() {
         match event {
             Event::Create(id) => spacing_pending_create.push(id.clone()),
             Event::Message(msg) => {
@@ -6727,14 +7097,20 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 }
             }
             Event::Deactivate(id) => {
-                if let Some(d) = activation_depth.get_mut(id) {
-                    *d = d.saturating_sub(1);
-                }
-                if let Some(pos) = spacing_return_stack
-                    .iter()
-                    .rposition(|(ret_from, _)| ret_from == id)
+                if !lifecycle_closing_keeps_depth
+                    .get(event_idx)
+                    .copied()
+                    .unwrap_or(false)
                 {
-                    spacing_return_stack.remove(pos);
+                    if let Some(d) = activation_depth.get_mut(id) {
+                        *d = d.saturating_sub(1);
+                    }
+                    if let Some(pos) = spacing_return_stack
+                        .iter()
+                        .rposition(|(ret_from, _)| ret_from == id)
+                    {
+                        spacing_return_stack.remove(pos);
+                    }
                 }
             }
             Event::Autonumber(cmd) => spacing_auto.apply(cmd),
@@ -6983,6 +7359,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         } else {
             0.0
         };
+        // A long exo-left arrow has minX=0. `InGroupableList#getMinX`
+        // applies its exo +3 margin, then `GroupingGraphicalElement` starts
+        // one MARGIN10 earlier. `prepareMissingSpace` shifts the full
+        // constraint set by that negative-start deficit.
+        let group_shift = group_shift.max(if group_has_external_left {
+            group_frame_margin - GROUP_EXTERNAL_ARROW_MARGIN
+        } else {
+            0.0
+        });
         let teoz_box_shift = if diagram.teoz && has_boxes {
             TEOZ_BOX_BOUNDARY_GAP
         } else {
@@ -7557,7 +7942,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     *act_depth.entry(id.clone()).or_default() += 1;
                 }
                 Event::Deactivate(id) => {
-                    if let Some(d) = act_depth.get_mut(id) {
+                    if !lifecycle_closing_keeps_depth
+                        .get(idx)
+                        .copied()
+                        .unwrap_or(false)
+                        && let Some(d) = act_depth.get_mut(id)
+                    {
                         *d = d.saturating_sub(1);
                     }
                 }
@@ -7699,78 +8089,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             }
         }
     }
-    let mut note_right_active_shift_by_event: HashMap<usize, f64> = HashMap::new();
-    {
-        let mut active_depth: HashMap<String, usize> = HashMap::new();
-        let mut return_stack: Vec<String> = Vec::new();
-        let mut last_return_from: Option<String> = None;
-        for (idx, event) in diagram.events.iter().enumerate() {
-            match event {
-                Event::Message(msg) => {
-                    last_return_from = Some(msg.to.clone());
-                    if let Some(act) = &msg.activation {
-                        match act {
-                            ActivationChange::Activate => {
-                                *active_depth.entry(msg.to.clone()).or_default() += 1;
-                                return_stack.push(msg.to.clone());
-                            }
-                            ActivationChange::Deactivate => {
-                                if let Some(d) = active_depth.get_mut(&msg.from) {
-                                    *d = d.saturating_sub(1);
-                                }
-                                if let Some(pos) =
-                                    return_stack.iter().rposition(|id| id == &msg.from)
-                                {
-                                    return_stack.remove(pos);
-                                }
-                            }
-                            ActivationChange::Destroy => {
-                                if let Some(d) = active_depth.get_mut(&msg.to) {
-                                    *d = d.saturating_sub(1);
-                                }
-                            }
-                        }
-                    }
-                }
-                Event::Return(_) => {
-                    if let Some(id) = return_stack.pop()
-                        && let Some(d) = active_depth.get_mut(&id)
-                    {
-                        *d = d.saturating_sub(1);
-                    }
-                }
-                Event::Activate(id, _) => {
-                    *active_depth.entry(id.clone()).or_default() += 1;
-                    if last_return_from.as_deref() == Some(id.as_str()) {
-                        return_stack.push(id.clone());
-                    }
-                }
-                Event::Deactivate(id) => {
-                    if let Some(d) = active_depth.get_mut(id) {
-                        *d = d.saturating_sub(1);
-                    }
-                    if let Some(pos) = return_stack.iter().rposition(|p| p == id) {
-                        return_stack.remove(pos);
-                    }
-                }
-                Event::Note(note)
-                    if !note.on_message
-                        && note.position == NotePosition::Right
-                        && note
-                            .participants
-                            .first()
-                            .and_then(|id| active_depth.get(id.as_str()))
-                            .copied()
-                            .unwrap_or(0)
-                            > 0 =>
-                {
-                    note_right_active_shift_by_event.insert(idx, ACTIVATION_HALF_W);
-                }
-                _ => {}
-            }
-        }
-    }
-
     // Pre-compute message y positions. PlantUML sizes each message step
     // dynamically: messages with label text get extra height for the text line.
     // Notes consume vertical space (note height + gap) and count as events
@@ -7782,51 +8100,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // height/message flow, and a horizontal separator rule is drawn at the
     // bottom of page 1. See Java `SequenceDiagramFileMaker` page handling and
     // `GraphicalNewpage`/`ComponentRoseNewpage`.
-    let page1_end = diagram
-        .events
-        .iter()
-        .position(|e| matches!(e, Event::NewPage(_)))
-        .unwrap_or(diagram.events.len());
-    let has_newpage = page1_end < diagram.events.len();
-
-    // Java attaches standalone life events to the preceding message rather
-    // than giving them independent rows. When an activation is followed by a
-    // deactivation on the same owner, `Step1MessageExo` reserves one row and
-    // `prepareLiveEvent` places the closing event at its bottom.
-    let mut lifecycle_owner = vec![None; page1_end];
-    let mut lifecycle_y_offset = vec![0.0; page1_end];
-    let mut lifecycle_row_after_message = vec![0.0; page1_end];
-    let mut owner_has_activation = vec![false; page1_end];
-    let mut last_message_owner = None;
-    for (idx, event) in diagram.events.iter().take(page1_end).enumerate() {
-        match event {
-            Event::Message(message) => {
-                last_message_owner = Some(idx);
-                owner_has_activation[idx] =
-                    matches!(message.activation, Some(ActivationChange::Activate));
-            }
-            Event::Return(_) => {
-                last_message_owner = Some(idx);
-            }
-            Event::Activate(_, _) => {
-                if let Some(owner) = last_message_owner {
-                    lifecycle_owner[idx] = Some(owner);
-                    owner_has_activation[owner] = true;
-                }
-            }
-            Event::Deactivate(_) | Event::Destroy(_) => {
-                if let Some(owner) = last_message_owner {
-                    lifecycle_owner[idx] = Some(owner);
-                    if owner_has_activation[owner] {
-                        lifecycle_y_offset[idx] = SAME_MESSAGE_LIFECYCLE_ROW;
-                        lifecycle_row_after_message[owner] = SAME_MESSAGE_LIFECYCLE_ROW;
-                    }
-                }
-            }
-            _ => {}
-        }
-    }
-
     // Groups add header/else/end vertical space.
     let mut event_y_positions: Vec<f64> = Vec::new();
     let mut msg_count: u32 = 0;
@@ -8137,6 +8410,37 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         last_effective_y = y;
     }
 
+    let life_lines = sequence_lifelines(&diagram.events, &event_y_positions, page1_end);
+    let mut note_left_live_shift_by_event: HashMap<usize, f64> = HashMap::new();
+    let mut note_right_live_shift_by_event: HashMap<usize, f64> = HashMap::new();
+    for (event_index, event) in diagram.events.iter().take(page1_end).enumerate() {
+        let Event::Note(note) = event else {
+            continue;
+        };
+        if note.on_message {
+            continue;
+        }
+        let Some(participant) = note.participants.first() else {
+            continue;
+        };
+        let metrics =
+            note_text_metrics_with_family(&note.text, note_font_size_f, &note_font_family);
+        let note_y_extra = match note.shape {
+            NoteShape::Note => 7.0,
+            NoteShape::Hexagonal | NoteShape::Rectangular => 5.0,
+        };
+        let note_top = event_y_positions[event_index] - note_y_extra - metrics.total_height;
+        let note_bottom = note_top + note_rendered_height_padded(note.shape, &metrics);
+        let (left_shift, right_shift) =
+            life_lines.segment_shifts(participant, note_top, note_bottom);
+        if left_shift != 0.0 {
+            note_left_live_shift_by_event.insert(event_index, left_shift);
+        }
+        if right_shift != 0.0 {
+            note_right_live_shift_by_event.insert(event_index, right_shift);
+        }
+    }
+
     // Compute tail box y based on message count.
     // With 0 messages, PlantUML uses a minimum lifeline height of 20px.
     // With messages, the tail starts TAIL_GAP below the last effective y
@@ -8228,7 +8532,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             .and_then(|id| id_to_idx.get(id.as_str()))
                             .map(|&i| {
                                 participants[i].center_x
-                                    + note_right_active_shift_by_event
+                                    + note_right_live_shift_by_event
                                         .get(&event_idx)
                                         .copied()
                                         .unwrap_or(0.0)
@@ -8393,7 +8697,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let mut max_lost_right: f64 = 0.0;
     let mut lost_preferred_extent_by_from: HashMap<&str, f64> = HashMap::new();
     let mut lost_scan_auto = AutoState::default();
-    let mut lost_scan_activation: HashMap<&str, usize> = HashMap::new();
     for (event_idx, event) in diagram.events.iter().enumerate() {
         match event {
             Event::Autonumber(command) => lost_scan_auto.apply(command),
@@ -8403,19 +8706,15 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     .map_or(0.0, |(_, width, _)| width + AUTONUMBER_LABEL_GAP);
                 let numbered_label_w =
                     autonumber_extra + message_label_width(&process_label(&msg.label));
-                let depth_before = lost_scan_activation
-                    .get(msg.from.as_str())
+                let ordinate = event_y_positions
+                    .get(event_idx)
                     .copied()
-                    .unwrap_or(0);
-                let live_depth = if matches!(msg.activation, Some(ActivationChange::Deactivate)) {
-                    depth_before.saturating_sub(1)
-                } else {
-                    depth_before
-                };
+                    .unwrap_or(last_effective_y);
+                let source_live_depth = life_lines.depth_at(&msg.from, ordinate);
                 if msg.to == "]"
                     && let Some(&fi) = id_to_idx.get(msg.from.as_str())
                 {
-                    let live_origin_shift = live_depth as f64 * ACTIVATION_HALF_W;
+                    let live_origin_shift = source_live_depth as f64 * ACTIVATION_HALF_W;
                     let preferred_extent = live_origin_shift + numbered_label_w;
                     lost_preferred_extent_by_from
                         .entry(msg.from.as_str())
@@ -8431,18 +8730,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 if msg.from == "]"
                     && let Some(&ti) = id_to_idx.get(msg.to.as_str())
                 {
-                    let target_depth_before = lost_scan_activation
-                        .get(msg.to.as_str())
-                        .copied()
-                        .unwrap_or(0);
-                    let target_live_depth = live_depth_at_message_ordinate(
-                        &diagram.events,
-                        &lifecycle_owner,
-                        &lifecycle_y_offset,
-                        event_idx,
-                        &msg.to,
-                        target_depth_before,
-                    );
+                    let target_live_depth = life_lines.depth_at(&msg.to, ordinate);
                     max_lost_right = max_lost_right.max(
                         participants[ti].center_x
                             + target_live_depth as f64 * ACTIVATION_HALF_W
@@ -8451,34 +8739,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     );
                 }
 
-                if let Some(activation) = &msg.activation {
-                    match activation {
-                        ActivationChange::Activate => {
-                            *lost_scan_activation.entry(msg.to.as_str()).or_default() += 1;
-                        }
-                        ActivationChange::Deactivate => {
-                            if let Some(depth) = lost_scan_activation.get_mut(msg.from.as_str()) {
-                                *depth = depth.saturating_sub(1);
-                            }
-                        }
-                        ActivationChange::Destroy => {
-                            if let Some(depth) = lost_scan_activation.get_mut(msg.to.as_str()) {
-                                *depth = depth.saturating_sub(1);
-                            }
-                        }
-                    }
-                }
                 lost_scan_auto.advance();
             }
             Event::Return(_) => lost_scan_auto.advance(),
-            Event::Activate(id, _) => {
-                *lost_scan_activation.entry(id.as_str()).or_default() += 1;
-            }
-            Event::Deactivate(id) => {
-                if let Some(depth) = lost_scan_activation.get_mut(id.as_str()) {
-                    *depth = depth.saturating_sub(1);
-                }
-            }
             _ => {}
         }
     }
@@ -8545,70 +8808,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         .max(max_ref_right)
         .max(max_lost_right)
         .max(max_participant_box_right);
-    // If groups are present, the group frame may extend beyond participant boxes.
-    // Compute the maximum right extent of any group frame (header text + guard).
-    let mut max_group_right: f64 = 0.0;
-    if !participants.is_empty() {
-        let default_fl = participants[0].box_x - group_frame_margin;
-        let alt_fl = participants[0].box_x + group_frame_margin;
-        for event in &diagram.events {
-            if let Event::GroupStart(g) = event {
-                let kind_str = match g.kind {
-                    GroupKind::Alt => "alt",
-                    GroupKind::Opt => "opt",
-                    GroupKind::Loop => "loop",
-                    GroupKind::Par => "par",
-                    GroupKind::Break => "break",
-                    GroupKind::Critical => "critical",
-                    GroupKind::Group => "group",
-                };
-                // Use the larger frame_left (alt_fl) for guard text calculation
-                // since empty groups use alt_fl while non-empty use default_fl.
-                let fl = if group_left_shift_depth > 0 {
-                    default_fl
-                } else {
-                    alt_fl
-                };
-                let (tab_text, guard_label, _) =
-                    group_header_parts(g.kind, kind_str, g.label.as_ref());
-                let mut kw = bold_text_width_with_family(
-                    tab_text,
-                    group_header_font_size_f,
-                    &group_header_font_family,
-                );
-                if g.kind == GroupKind::Group && guard_label.is_some() {
-                    kw += bold_text_width_with_family(
-                        " ",
-                        group_header_font_size_f,
-                        &group_header_font_family,
-                    );
-                }
-                let tab_right = fl + kw + 45.0;
-                let guard_right = if let Some(label) = guard_label {
-                    let gw = group_guard_width_with_family(label, &group_header_font_family);
-                    tab_right + 15.0 + gw + 5.0
-                } else {
-                    tab_right + 5.0
-                };
-                let last = &participants[n - 1];
-                let participant_right = last.box_x + last.box_width + group_frame_margin;
-                max_group_right = max_group_right.max(guard_right.max(participant_right));
-            }
-        }
-    }
-    let has_groups = max_group_right > 0.0;
-    // The SVG width must accommodate both participant boxes and group frames.
-    // Group frames already include their margin; just add RIGHT_MARGIN + 5.
+    // Actual group extents are resolved after event geometry is available.
+    // Seed the shared area from ordinary elements here; the InGroupable pass
+    // below expands it from real frame members and headers.
     // Unrounded canvas width (pre-ceil). PlantUML right-aligns the header to
     // this exact value with a 6px margin, so the ceiled `svg_width` (used
     // elsewhere) would mis-place the header by the rounding remainder.
-    let svg_width_exact = if has_groups {
-        let from_participants = effective_right + RIGHT_MARGIN;
-        let from_groups = max_group_right + RIGHT_MARGIN + 5.0;
-        from_participants.max(from_groups)
-    } else {
-        effective_right + RIGHT_MARGIN
-    };
+    let svg_width_exact = effective_right + RIGHT_MARGIN;
     // A title/caption/footer band wider than the participant span shifted the
     // participants right by `meta_shift` (so `effective_right` already grew by
     // that much); add it once more to keep the band centred and symmetric.
@@ -8848,6 +9054,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     ));
                 }
                 Event::Deactivate(id) => {
+                    if lifecycle_closing_keeps_depth
+                        .get(ev_idx)
+                        .copied()
+                        .unwrap_or(false)
+                    {
+                        continue;
+                    }
                     tracker.deactivate(id);
                     if let Some(pos) = open_activations
                         .iter()
@@ -9039,13 +9252,25 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         + if note.on_message {
                             0.0
                         } else {
-                            note_right_active_shift_by_event
+                            note_right_live_shift_by_event
                                 .get(&event_idx)
                                 .copied()
                                 .unwrap_or(0.0)
                         }
                 } else {
-                    participants[i].lifeline_line_x
+                    let live_shift = if note.on_message {
+                        0.0
+                    } else {
+                        note_left_live_shift_by_event
+                            .get(&event_idx)
+                            .copied()
+                            .unwrap_or(0.0)
+                    };
+                    if live_shift == 0.0 {
+                        participants[i].lifeline_line_x
+                    } else {
+                        participants[i].box_x + participants[i].box_width / 2.0 + live_shift
+                    }
                 }
             })
             .collect();
@@ -9102,7 +9327,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     let right = ll_x.floor() - gap;
                     Some((right - note_content_w, right))
                 } else {
-                    let mut left = (ll_x - gap - raw_note_content_w).floor();
+                    let position_width =
+                        single_note_visible_raw_width(max_text_w, note.shape, note_global_padding);
+                    let mut left = (ll_x - gap - position_width).floor();
                     if let Some(&floor) = group_note_left_floor_by_event.get(&event_idx) {
                         left = floor;
                     }
@@ -9132,7 +9359,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     let raw_w =
                         single_note_visible_raw_width(max_text_w, note.shape, note_global_padding);
                     let left = (cx - raw_w / 2.0).max(HEAD_BOX_Y).floor();
-                    Some((left, left + note_content_w))
+                    Some((left, left + raw_w))
                 } else {
                     let first_idx = *id_to_idx.get(note.participants.first()?.as_str())?;
                     let last_idx = *id_to_idx.get(note.participants.last()?.as_str())?;
@@ -9210,6 +9437,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             ref_right: f64,
             message_right: f64,
             external_left: f64,
+            external_right: f64,
             // Teoz: rightmost livebox right edge over the group's message
             // endpoints (`participant.center + level * LIVE_DELTA_SIZE`). The frame
             // covers the active livebox, not just the lifeline centre.
@@ -9231,7 +9459,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         // Track which participant indices are referenced inside each group,
         // plus the drawn extent of any enclosed note (which the frame must cover).
         let mut group_start_stack: Vec<GroupAccum> = Vec::new();
-        let mut group_act_depth: HashMap<String, usize> = HashMap::new();
         for (ev_idx, event) in diagram.events.iter().enumerate() {
             match event {
                 Event::GroupStart(_) => {
@@ -9245,6 +9472,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         ref_right: f64::NEG_INFINITY,
                         message_right: f64::NEG_INFINITY,
                         external_left: f64::INFINITY,
+                        external_right: f64::NEG_INFINITY,
                         max_live_right: f64::NEG_INFINITY,
                         on_msg_note_frame_right: f64::NEG_INFINITY,
                     });
@@ -9277,6 +9505,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         let has_ref = group.ref_left.is_finite();
                         let has_message_right = group.message_right.is_finite();
                         let has_external_left = group.external_left.is_finite();
+                        let has_external_right = group.external_right.is_finite();
 
                         // Compute the participant-based frame left first, then derive
                         // the header right edge from the *final* left (so the guard
@@ -9321,10 +9550,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             }
                         } else if has_child {
                             child_left - group_frame_margin
-                        } else if !participants.is_empty() {
+                        } else if !has_note && !has_ref && !participants.is_empty() {
                             participants[0].box_x + group_frame_margin
                         } else {
-                            HEAD_BOX_Y
+                            f64::INFINITY
                         };
                         // An enclosed note that overhangs the messages widens the
                         // frame to cover it: the frame's InGroupable left edge sits
@@ -9430,11 +9659,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 + group_frame_margin
                         } else if has_child {
                             f64::NEG_INFINITY
-                        } else if !participants.is_empty() {
+                        } else if !has_note && !has_ref && !participants.is_empty() {
                             let last = &participants[n - 1];
                             last.box_x + last.box_width + group_frame_margin
                         } else {
-                            100.0
+                            f64::NEG_INFINITY
                         };
                         let mut frame_right = part_right.max(header_right);
                         if has_child {
@@ -9464,6 +9693,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         if has_message_right {
                             frame_right = frame_right.max(group.message_right + group_frame_margin);
                         }
+                        if has_external_right {
+                            // `InGroupableList#getMaxXInternal` uses an exo
+                            // arrow's own max and applies its dedicated -3
+                            // margin instead of the ordinary member margin.
+                            frame_right = frame_right.max(group.external_right);
+                        }
 
                         group_frames.push(GroupFrame {
                             top: frame_top,
@@ -9479,9 +9714,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     let ti = id_to_idx.get(msg.to.as_str()).copied();
                     let self_message_right = if msg.from == msg.to {
                         let cx_base = center_of(&msg.from);
-                        let active = group_act_depth.get(msg.from.as_str()).copied().unwrap_or(0)
-                            > 0
-                            || matches!(msg.activation, Some(ActivationChange::Activate));
+                        let active = life_lines.depth_at(
+                            &msg.from,
+                            event_y_positions.get(ev_idx).copied().unwrap_or_default(),
+                        ) > 0;
                         let from_x = if active {
                             cx_base + ACTIVATION_HALF_W
                         } else {
@@ -9526,13 +9762,36 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     // already-open livebox uses the bare lifeline centre (getMaxX = posC).
                     let msg_live_right =
                         if matches!(msg.activation, Some(ActivationChange::Activate)) {
-                            let level =
-                                group_act_depth.get(msg.to.as_str()).copied().unwrap_or(0) + 1;
+                            let level = life_lines.depth_at(
+                                &msg.to,
+                                event_y_positions.get(ev_idx).copied().unwrap_or_default(),
+                            );
                             center_of(&msg.to) + level as f64 * ACTIVATION_HALF_W
                         } else {
                             f64::NEG_INFINITY
                         };
-                    if let Some(top) = group_start_stack.last_mut() {
+                    let external_right = if msg.from == "]" || msg.to == "]" {
+                        let participant = if msg.from == "]" {
+                            msg.to.as_str()
+                        } else {
+                            msg.from.as_str()
+                        };
+                        let live_depth = life_lines.depth_at(
+                            participant,
+                            event_y_positions.get(ev_idx).copied().unwrap_or_default(),
+                        );
+                        Some(
+                            center_of(participant)
+                                + live_depth as f64 * ACTIVATION_HALF_W
+                                + message_label_width(&process_label(&msg.label))
+                                + 2.0 * MSG_TEXT_LEFT_PAD
+                                + ARROW_SIZE
+                                - GROUP_EXTERNAL_ARROW_MARGIN,
+                        )
+                    } else {
+                        None
+                    };
+                    for top in &mut group_start_stack {
                         if let Some(fi) = fi {
                             top.min_idx = top.min_idx.min(fi);
                             top.max_idx = top.max_idx.max(fi);
@@ -9541,38 +9800,16 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             top.min_idx = top.min_idx.min(ti);
                             top.max_idx = top.max_idx.max(ti);
                         }
-                        if msg.from == "[" {
-                            top.external_left = top.external_left.min(GROUP_EXTERNAL_LEFT_FLOOR);
+                        if msg.from == "[" || msg.to == "[" {
+                            top.external_left = top.external_left.min(GROUP_EXTERNAL_ARROW_MARGIN);
                         }
                         if let Some(right) = self_message_right {
                             top.message_right = top.message_right.max(right);
                         }
-                        top.max_live_right = top.max_live_right.max(msg_live_right);
-                    }
-                    if let Some(act) = &msg.activation {
-                        match act {
-                            ActivationChange::Activate => {
-                                *group_act_depth.entry(msg.to.clone()).or_default() += 1;
-                            }
-                            ActivationChange::Deactivate => {
-                                if let Some(d) = group_act_depth.get_mut(&msg.from) {
-                                    *d = d.saturating_sub(1);
-                                }
-                            }
-                            ActivationChange::Destroy => {
-                                if let Some(d) = group_act_depth.get_mut(&msg.to) {
-                                    *d = d.saturating_sub(1);
-                                }
-                            }
+                        if let Some(right) = external_right {
+                            top.external_right = top.external_right.max(right);
                         }
-                    }
-                }
-                Event::Activate(id, _) => {
-                    *group_act_depth.entry(id.clone()).or_default() += 1;
-                }
-                Event::Deactivate(id) => {
-                    if let Some(d) = group_act_depth.get_mut(id) {
-                        *d = d.saturating_sub(1);
+                        top.max_live_right = top.max_live_right.max(msg_live_right);
                     }
                 }
                 Event::Note(note) if !group_start_stack.is_empty() => {
@@ -9751,17 +9988,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             max_frame_right + RIGHT_MARGIN + 5.0
         };
         let from_participants = effective_right + RIGHT_MARGIN;
-        // PlantUML's `SequenceDiagramArea.getWidth()` is `max(sequenceWidth, …)`
-        // and the header/title/footer bands all centre/right-align on it. In
-        // Teoz the sequence-area width spans the *group frames* (which can reach
-        // past the participant boxes), not the participant-based estimate that
-        // `svg_width_exact` was first seeded with. Refresh the band reference to
-        // the unrounded frame-based width so the bands track the real area edge
-        // (seq_all_features_01).
-        if diagram.teoz {
-            svg_width_exact = svg_width_exact.max(from_participants.max(from_frames));
-        }
-        from_participants.max(from_frames).ceil() as u32
+        // `SequenceDiagramArea#getWidth` is resolved from the actual group
+        // lists for both layout engines. Every later element, including exo
+        // arrows and dividers, consumes this one unrounded area width.
+        svg_width_exact = svg_width_exact.max(from_participants.max(from_frames));
+        svg_width_exact.ceil() as u32
     } else {
         svg_width
     };
@@ -10067,6 +10298,22 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 if msg.from == msg.to
                     && matches!(msg.activation, Some(ActivationChange::Activate)) =>
             {
+                SELF_MSG_DROP - ACTIVATION_HALF_W
+            }
+            Some(Event::Activate(_, _))
+                if lifecycle_owner
+                    .get(idx)
+                    .copied()
+                    .flatten()
+                    .and_then(|owner| diagram.events.get(owner))
+                    .is_some_and(
+                        |owner| matches!(owner, Event::Message(msg) if msg.from == msg.to),
+                    ) =>
+            {
+                // `DrawableSetInitializer#prepareLiveEvent` uses
+                // `STRICT_SELFMESSAGE_POSITION` for every attached activation,
+                // including one whose participant is filtered from the
+                // message's lifecycle-type set.
                 SELF_MSG_DROP - ACTIVATION_HALF_W
             }
             _ => 0.0,
@@ -10526,6 +10773,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     events,
                     &lifecycle_owner,
                     &lifecycle_y_offset,
+                    &lifecycle_closing_keeps_depth,
                     ev_idx,
                     &msg.from,
                     from_depth,
@@ -10535,6 +10783,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     events,
                     &lifecycle_owner,
                     &lifecycle_y_offset,
+                    &lifecycle_closing_keeps_depth,
                     ev_idx,
                     &msg.to,
                     to_depth,
@@ -10906,7 +11155,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 same_y_depth += 1;
                                 source_right_depth = source_right_depth.max(same_y_depth);
                             }
-                            Event::Deactivate(id) if id == &msg.from => {
+                            Event::Deactivate(id)
+                                if id == &msg.from
+                                    && !lifecycle_closing_keeps_depth
+                                        .get(next_idx)
+                                        .copied()
+                                        .unwrap_or(false) =>
+                            {
                                 same_y_depth = same_y_depth.saturating_sub(1);
                             }
                             Event::Destroy(id) if id == &msg.from => {
@@ -10960,6 +11215,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         events,
                         &lifecycle_owner,
                         &lifecycle_y_offset,
+                        &lifecycle_closing_keeps_depth,
                         ev_idx,
                         &msg.to,
                     );
@@ -11220,6 +11476,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             events,
                             &lifecycle_owner,
                             &lifecycle_y_offset,
+                            &lifecycle_closing_keeps_depth,
                             ev_idx,
                             &msg.from,
                         );
@@ -11241,8 +11498,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         } else {
                             from_x_shifted - 1.0
                         };
+                        let source_area_right_end = message_area_right_end(from_x, from_live_depth);
                         let leading_cross_center = has_source_cross
-                            .then_some(from_x_shifted - SOURCE_CROSS_REVERSE_CENTER_OFFSET);
+                            .then_some(source_area_right_end - SOURCE_CROSS_REVERSE_CENTER_OFFSET);
                         let line_x2_end = if let Some(center) = leading_cross_center {
                             center
                         } else if has_source_circle {
@@ -11729,7 +11987,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     let span_right = last.box_x + last.box_width;
                     (left, span_right.max(left + label_box_w + 24.0))
                 } else {
-                    (0.0, participant_span.max(label_box_w + 24.0))
+                    (
+                        0.0,
+                        participant_span
+                            .max(label_box_w + 24.0)
+                            .max(svg_width_exact - HEAD_BOX_Y),
+                    )
                 };
                 let mid_x = (line_left + line_right) / 2.0;
 
@@ -11896,8 +12159,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 );
                 let note_content_w =
                     note_content_width_padded(max_text_w, note.shape, note_text_align);
-                let raw_note_content_w =
-                    note_content_width_raw_padded(max_text_w, note.shape, note_text_align);
 
                 // Lifeline x values of the note's anchor participant(s).
                 let anchor_idxs: Vec<usize> = note
@@ -11914,13 +12175,25 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 + if note.on_message {
                                     0.0
                                 } else {
-                                    note_right_active_shift_by_event
+                                    note_right_live_shift_by_event
                                         .get(&ev_idx)
                                         .copied()
                                         .unwrap_or(0.0)
                                 }
                         } else {
-                            participants[i].lifeline_line_x
+                            let live_shift = if note.on_message {
+                                0.0
+                            } else {
+                                note_left_live_shift_by_event
+                                    .get(&ev_idx)
+                                    .copied()
+                                    .unwrap_or(0.0)
+                            };
+                            if live_shift == 0.0 {
+                                participants[i].lifeline_line_x
+                            } else {
+                                participants[i].box_x + participants[i].box_width / 2.0 + live_shift
+                            }
                         }
                     })
                     .collect();
@@ -11979,7 +12252,12 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             let right = ll_x.floor() - gap;
                             (right - note_content_w, right)
                         } else {
-                            let mut left = (ll_x - gap - raw_note_content_w).floor();
+                            let position_width = single_note_visible_raw_width(
+                                max_text_w,
+                                note.shape,
+                                note_global_padding,
+                            );
+                            let mut left = (ll_x - gap - position_width).floor();
                             if let Some(&floor) = group_note_left_floor_by_event.get(&ev_idx) {
                                 left = floor;
                             }
@@ -12860,14 +13138,20 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 }
             }
             Event::Deactivate(id) => {
-                if let Some(d) = render_activation.get_mut(id) {
-                    *d = d.saturating_sub(1);
-                }
-                if let Some(pos) = return_stack
-                    .iter()
-                    .rposition(|(ret_from, _, _)| ret_from == id)
+                if !lifecycle_closing_keeps_depth
+                    .get(ev_idx)
+                    .copied()
+                    .unwrap_or(false)
                 {
-                    return_stack.remove(pos);
+                    if let Some(d) = render_activation.get_mut(id) {
+                        *d = d.saturating_sub(1);
+                    }
+                    if let Some(pos) = return_stack
+                        .iter()
+                        .rposition(|(ret_from, _, _)| ret_from == id)
+                    {
+                        return_stack.remove(pos);
+                    }
                 }
             }
             Event::Destroy(id) => {
