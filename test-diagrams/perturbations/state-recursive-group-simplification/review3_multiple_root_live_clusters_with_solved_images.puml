@@ -1,0 +1,41 @@
+@startuml
+state "Outer Witness 4101" as OuterWitness4101
+state "First Retained Root 4103" as FirstRetained4103 {
+  state "First Plain Before 4109" as FirstPlain4109
+  state "First Solved Capsule 4113" as FirstSolved4113 {
+    [*] --> FirstSolvedLeaf4119
+    FirstSolvedLeaf4119 --> [*]
+  }
+  state "First Live Inner 4123" as FirstLiveInner4123 {
+    [*] --> FirstLiveLeaf4129
+    FirstLiveLeaf4129 --> [*]
+  }
+  state "First Plain After 4131" as FirstPlainAfter4131
+  FirstRetained4103 --> FirstPlain4109 : keep_first_root_live
+  FirstPlain4109 --> FirstSolved4113 : first_before_to_solved
+  FirstSolved4113 --> FirstPlainAfter4131 : first_solved_to_after
+  FirstLiveInner4123 --> FirstLiveInner4123.FirstLiveLeaf4129 : descend_first_live
+}
+state "Second Retained Root 4203" as SecondRetained4203 {
+  state "Second Plain Before 4209" as SecondPlain4209
+  state "Second Solved Capsule 4213" as SecondSolved4213 {
+    [*] --> SecondSolvedLeaf4219
+    SecondSolvedLeaf4219 --> [*]
+  }
+  state "Second Live Inner 4223" as SecondLiveInner4223 {
+    [*] --> SecondLiveLeaf4229
+    SecondLiveLeaf4229 --> [*]
+  }
+  state "Second Plain After 4231" as SecondPlainAfter4231
+  SecondRetained4203 --> SecondPlainAfter4231 : keep_second_root_live
+  SecondPlain4209 --> SecondSolved4213 : second_before_to_solved
+  SecondSolved4213 --> SecondPlainAfter4231 : second_solved_to_after
+  SecondLiveInner4223 --> SecondLiveInner4223.SecondLiveLeaf4229 : descend_second_live
+}
+[*] --> OuterWitness4101
+OuterWitness4101 --> FirstRetained4103.FirstPlain4109 : cross_first_root
+OuterWitness4101 --> SecondRetained4203.SecondPlainAfter4231 : cross_second_root
+FirstRetained4103 --> SecondRetained4203 : root_bridge
+FirstRetained4103 --> [*]
+SecondRetained4203 --> [*]
+@enduml

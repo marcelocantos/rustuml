@@ -1,0 +1,31 @@
+@startuml
+state "Envelope 4301" as Envelope4301 {
+  state "Middle Live Cluster 4307" as MiddleLive4307 {
+    state "Leaf Before 4311" as LeafBefore4311
+    state "Solved One 4313" as SolvedOne4313 {
+      [*] --> SolvedOneLeaf4319
+      SolvedOneLeaf4319 --> [*]
+    }
+    state "Live Inner 4323" as LiveInner4323 {
+      [*] --> LiveInnerLeaf4329
+      LiveInnerLeaf4329 --> [*]
+    }
+    state "Solved Two 4331" as SolvedTwo4331 {
+      [*] --> SolvedTwoLeaf4337
+      SolvedTwoLeaf4337 --> [*]
+    }
+    state "Leaf After 4341" as LeafAfter4341
+    [*] --> LeafBefore4311
+    MiddleLive4307 --> LeafBefore4311 : keep_middle_live
+    LeafBefore4311 --> SolvedOne4313 : enter_one
+    SolvedOne4313 --> SolvedTwo4331 : between_images
+    SolvedTwo4331 --> LeafAfter4341 : exit_two
+    LiveInner4323 --> LiveInner4323.LiveInnerLeaf4329 : descend_inner_live
+    LeafAfter4341 --> [*]
+  }
+  [*] --> MiddleLive4307
+  MiddleLive4307 --> [*]
+}
+[*] --> Envelope4301
+Envelope4301 --> [*]
+@enduml

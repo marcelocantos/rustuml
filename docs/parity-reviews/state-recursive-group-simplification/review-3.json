@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-recursive-group-simplification",
+  "reviewer": {
+    "task_id": "codex-desktop-task-019ee369-54e2-7203-afce-ddde7bfe1723-independent-checker-state-recursive-group-simplification-round-3",
+    "model": "OpenAI GPT-5 Codex"
+  },
+  "account_commit": "c4708acb6cac16ea3280c5688dafa3215e35ebb1",
+  "implementation_commit": "2553e1b8a0d6ee9d8dc5aff56c09aab89b5a36f2",
+  "prior_review_commit": "4e466bfa460f8e92d9605164cad57ac54a4d257a",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "git show c4708acb6cac16ea3280c5688dafa3215e35ebb1:docs/parity-reviews/state-recursive-group-simplification/account.json",
+    "sed -n '1,260p' docs/parity-reviews/state-recursive-group-simplification/review-2.json",
+    "git show --format=fuller --find-renames 2553e1b8a0d6ee9d8dc5aff56c09aab89b5a36f2 -- crates/rustuml-render/src/state.rs test-diagrams/no_oracle_baseline.txt",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/dot/CucaDiagramSimplifierState.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/GroupMakerState.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
+    "git archive 2553e1b8a0d6ee9d8dc5aff56c09aab89b5a36f2 | tar -x -C /private/tmp/rustuml-review-2553e1b8",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg /private/tmp/rustuml-review-2553e1b8/test-diagrams/perturbations/state-recursive-group-simplification/review3_multiple_root_live_clusters_with_solved_images.puml /private/tmp/rustuml-review-2553e1b8/test-diagrams/perturbations/state-recursive-group-simplification/review3_nested_live_cluster_leaves_around_multiple_solved_images.puml /private/tmp/rustuml-review-2553e1b8/test-diagrams/perturbations/state-recursive-group-simplification/review3_concurrent_region_mixed_live_and_image_outcomes.puml",
+    "xmllint --noout /private/tmp/rustuml-review-2553e1b8/test-diagrams/perturbations/state-recursive-group-simplification/review3_multiple_root_live_clusters_with_solved_images.svg /private/tmp/rustuml-review-2553e1b8/test-diagrams/perturbations/state-recursive-group-simplification/review3_nested_live_cluster_leaves_around_multiple_solved_images.svg /private/tmp/rustuml-review-2553e1b8/test-diagrams/perturbations/state-recursive-group-simplification/review3_concurrent_region_mixed_live_and_image_outcomes.svg",
+    "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"' /private/tmp/rustuml-review-2553e1b8/test-diagrams/perturbations/state-recursive-group-simplification/review3_multiple_root_live_clusters_with_solved_images.svg /private/tmp/rustuml-review-2553e1b8/test-diagrams/perturbations/state-recursive-group-simplification/review3_nested_live_cluster_leaves_around_multiple_solved_images.svg /private/tmp/rustuml-review-2553e1b8/test-diagrams/perturbations/state-recursive-group-simplification/review3_concurrent_region_mixed_live_and_image_outcomes.svg",
+    "ruby -rdigest -e 'check fresh perturbation hashes against golden and perturbation corpora'",
+    "cargo run --release -p rustuml-oracle --example diff_one -- --no-oracle test-diagrams/perturbations/state-recursive-group-simplification/review3_multiple_root_live_clusters_with_solved_images.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/state-recursive-group-simplification/review3_nested_live_cluster_leaves_around_multiple_solved_images.puml",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/state-recursive-group-simplification/review3_concurrent_region_mixed_live_and_image_outcomes.puml"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/state-recursive-group-simplification/review3_multiple_root_live_clusters_with_solved_images.puml",
+      "golden": "test-diagrams/perturbations/state-recursive-group-simplification/review3_multiple_root_live_clusters_with_solved_images.svg",
+      "axes": [
+        "two retained root clusters each containing a solved image and a retained descendant",
+        "cross-boundary links from an unpackaged root state into both retained roots plus a root-to-root bridge",
+        "ordinary leaves before and after solved image siblings under each retained root"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-recursive-group-simplification/review3_nested_live_cluster_leaves_around_multiple_solved_images.puml",
+      "golden": "test-diagrams/perturbations/state-recursive-group-simplification/review3_nested_live_cluster_leaves_around_multiple_solved_images.svg",
+      "axes": [
+        "autonomous outer image containing a retained ordinary child group",
+        "ordinary leaf before, two solved image siblings, and ordinary leaf after inside that retained child",
+        "retained grandchild cluster nested alongside solved image siblings"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-recursive-group-simplification/review3_concurrent_region_mixed_live_and_image_outcomes.puml",
+      "golden": "test-diagrams/perturbations/state-recursive-group-simplification/review3_concurrent_region_mixed_live_and_image_outcomes.svg",
+      "axes": [
+        "three vertical concurrent regions under one solved owner",
+        "middle concurrent region mixing a retained child cluster with ordinary leaves before and after two solved images",
+        "depth and count variant beyond the prior corpus with both solved and retained siblings inside a synthetic concurrent region"
+      ],
+      "result": "fail"
+    }
+  ],
+  "findings": [
+    "All validation ran from the immutable archive at /private/tmp/rustuml-review-2553e1b8 rooted at implementation commit 2553e1b8a0d6ee9d8dc5aff56c09aab89b5a36f2. The fresh perturbation sources are unique against the existing golden and perturbation corpora, their pinned-Java SVGs are well-formed XML, and none contains a PlantUML syntax-error marker.",
+    "The fresh multi-root held-out passes: target/release/examples/diff_one reports review3_multiple_root_live_clusters_with_solved_images.puml as structurally equivalent in no-oracle mode. That confirms 2553e1b8 really did improve mixed root handling beyond the previously rejected review-2 implementation.",
+    "The fresh nested mixed-child held-out fails in no-oracle mode. The first structural mismatch arrives where Java expects the retained parent's own pseudo stream (Envelope4301.MiddleLive4307..start.MiddleLive4307), but Rust emits the retained grandchild's pseudo/entity stream first (Envelope4301.MiddleLive4307.LiveInner4323..start.LiveInner4323 and LiveInnerLeaf4329). This is consistent with the implementation's recursive flattening: collect_state_group_outcome stores descendant retained clusters in region.live_clusters, and emit_autonomous_composite emits every retained cluster before iterating region.layout.ids, whereas GraphvizImageBuilder.printGroup emits the current group's leaf stream before descending into child groups.",
+    "The fresh concurrent-region held-out fails more broadly. In Java, the synthetic concurrent region's retained ordinary child group appears after that region's leaf/image stream; in Rust, the retained RegionLive4441 subtree is emitted ahead of RegionLeafBefore4427, RegionSolvedOne4431, RegionSolvedTwo4451, and RegionLeafAfter4461. The resulting mismatch is not just paint order: the root canvas shrinks from 634x1864 to 591x1848 and the diff trace shows large-scale stream displacement once the retained concurrent-region child is emitted too early.",
+    "These two failures are mechanism-shaped, not coordinate-shaped. They both arise from the same representation error: descendant retained clusters are flattened into the enclosing solved scope and emitted as an upfront batch, instead of remaining behind the local leaf stream and being visited in Java's printEntities(...), then printGroups(...) order.",
+    "I found no evidence of fixture-keyed branches, golden reads, or fresh unexplained parity constants in 2553e1b8 itself. The review still rejects the mechanism because the generative traversal is not yet faithful in mixed retained/image scopes, especially once retained descendants coexist with multiple solved siblings or sit inside synthetic concurrent regions."
+  ],
+  "accepted": false,
+  "verdict": "rejected"
+}

@@ -1,0 +1,43 @@
+@startuml
+state "Concurrent Envelope 4401" as ConcurrentEnvelope4401 {
+  state "Solved Head 4407" as SolvedHead4407 {
+    [*] --> HeadReady4413
+    HeadReady4413 --> [*]
+  }
+  [*] --> SolvedHead4407
+  SolvedHead4407 --> [*]
+  --
+  state "Mixed Region 4421" as MixedRegion4421 {
+    state "Region Leaf Before 4427" as RegionLeafBefore4427
+    state "Region Solved One 4431" as RegionSolvedOne4431 {
+      [*] --> RegionSolvedLeaf4437
+      RegionSolvedLeaf4437 --> [*]
+    }
+    state "Region Live Cluster 4441" as RegionLive4441 {
+      [*] --> RegionLiveLeaf4447
+      RegionLiveLeaf4447 --> [*]
+    }
+    state "Region Solved Two 4451" as RegionSolvedTwo4451 {
+      [*] --> RegionSolvedLeaf4457
+      RegionSolvedLeaf4457 --> [*]
+    }
+    state "Region Leaf After 4461" as RegionLeafAfter4461
+    [*] --> RegionLeafBefore4427
+    MixedRegion4421 --> RegionLeafBefore4427 : keep_region_live
+    RegionLeafBefore4427 --> RegionSolvedOne4431 : into_region_one
+    RegionSolvedOne4431 --> RegionSolvedTwo4451 : between_region_images
+    RegionSolvedTwo4451 --> RegionLeafAfter4461 : out_region_two
+    RegionLive4441 --> RegionLive4441.RegionLiveLeaf4447 : descend_region_live
+    RegionLeafAfter4461 --> [*]
+  }
+  --
+  state "Solved Tail 4471" as SolvedTail4471 {
+    [*] --> TailReady4477
+    TailReady4477 --> [*]
+  }
+  [*] --> SolvedTail4471
+  SolvedTail4471 --> [*]
+}
+[*] --> ConcurrentEnvelope4401
+ConcurrentEnvelope4401 --> [*]
+@enduml
