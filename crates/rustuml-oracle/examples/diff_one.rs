@@ -21,12 +21,8 @@ fn main() {
     let golden = std::fs::read_to_string(puml_path.with_extension("svg")).unwrap();
 
     if golden_has_syntax_error(&golden) {
-        if args.iter().any(|a| a == "--print-rust") {
-            eprintln!("skipped: golden SVG contains a PlantUML error");
-            std::process::exit(2);
-        }
-        println!("skipped: golden SVG contains a PlantUML error");
-        return;
+        eprintln!("skipped: golden SVG contains a PlantUML error");
+        std::process::exit(2);
     }
 
     let oracle = if !no_oracle && golden.contains("<?plantuml ") {
@@ -93,6 +89,9 @@ fn main() {
 
     let cmp = compare::compare_svg_strict(&golden, &rust_svg).unwrap();
     println!("{}", cmp);
+    if !cmp.is_match() {
+        std::process::exit(1);
+    }
 }
 
 fn golden_has_syntax_error(svg: &str) -> bool {
