@@ -202,15 +202,20 @@ const SVEK_RESULT_DIMENSION_PAD: f64 = 15.0;
 const LIMIT_FINDER_PIXEL_ADJUST: f64 = 1.0;
 /// Vertical text frontier adjustment used by Java's limit finder.
 ///
-/// Java provenance: `LimitFinder.drawText` passes `1.5` as the descent-side
-/// safety margin to `TextLimitFinder`.
+/// Java provenance: `LimitFinder.drawText` raises the top frontier by
+/// `height - 1.5` while retaining the baseline-side frontier.
 const LIMIT_FINDER_TEXT_ADJUST: f64 = 1.5;
-/// Margin encoded in SVEK's Graphviz label box and placement.
+/// Margin encoded in an ordinary SVEK Graphviz label box and placement.
 ///
 /// Java provenance: `SvekEdge.addVisibilityModifier` wraps ordinary labels in
 /// `TextBlockUtils.withMargin(..., 1, 1)`; Graphviz places that boxed label and
 /// the emitted text begins one pixel inside it.
 const SVEK_EDGE_LABEL_MARGIN: f64 = 1.0;
+/// Margin encoded in a self-link's SVEK label box and placement.
+///
+/// Java provenance: `SvekEdge.addVisibilityModifier` selects six pixels when
+/// `startUid.equalsId(endUid)`, then applies that margin on every side.
+const SVEK_SELF_EDGE_LABEL_MARGIN: f64 = 6.0;
 const SVEK_ORIGIN_X: f64 = 7.0;
 const SVEK_ORIGIN_Y: f64 = SVEK_PAINTED_ORIGIN;
 const SVEK_TRAILING_PAD: f64 = 14.0;
@@ -2223,6 +2228,16 @@ fn transition_parent_scope<'a>(
     (from == to).then_some(from)
 }
 
+fn autonomous_edge_label_margin(transition: &Transition) -> f64 {
+    let from = state_endpoint_layout_id(&transition.from, true);
+    let to = state_endpoint_layout_id(&transition.to, false);
+    if from == to {
+        SVEK_SELF_EDGE_LABEL_MARGIN
+    } else {
+        SVEK_EDGE_LABEL_MARGIN
+    }
+}
+
 fn collect_autonomous_scope_ids<F>(
     diagram: &StateDiagram,
     transition_indices: &[usize],
@@ -2395,9 +2410,10 @@ fn autonomous_scope_painted_bounds(
         if let Some(label) = transition.label.as_deref()
             && let Some(label_position) = edge.label
         {
-            let x = quantize_svek_coord(label_position.x) + SVEK_EDGE_LABEL_MARGIN;
+            let label_margin = autonomous_edge_label_margin(transition);
+            let x = quantize_svek_coord(label_position.x) + label_margin;
             let baseline = quantize_svek_coord(label_position.y)
-                + SVEK_EDGE_LABEL_MARGIN
+                + label_margin
                 + text_render::label_ascent(label, arrow_font.size as f64);
             let width = text_render::measure_with_family(
                 label,
@@ -2408,7 +2424,7 @@ fn autonomous_scope_painted_bounds(
             let height = text_render::label_height(label, arrow_font.size as f64);
             bounds.include(x, baseline - height + LIMIT_FINDER_TEXT_ADJUST);
             bounds.include(
-                x + width + SVEK_EDGE_LABEL_MARGIN,
+                x + width + label_margin,
                 baseline + LIMIT_FINDER_TEXT_ADJUST,
             );
         }
@@ -2456,14 +2472,18 @@ fn layout_autonomous_scope(
             // rank-same block under the default `SkinParam.useRankSame`.
             layout.add_plantuml_svek_line0_edge(layout_from, layout_to);
         }
-        let label_size = transition.label.as_deref().map(|label| EdgeLabelSize {
-            width: text_render::measure_with_family(
-                label,
-                arrow_font.size as f64,
-                arrow_font.bold,
-                &arrow_font.family,
-            ) + 2.0,
-            height: (text_render::label_height(label, arrow_font.size as f64) + 2.0).floor(),
+        let label_size = transition.label.as_deref().map(|label| {
+            let margin = autonomous_edge_label_margin(transition);
+            EdgeLabelSize {
+                width: text_render::measure_with_family(
+                    label,
+                    arrow_font.size as f64,
+                    arrow_font.bold,
+                    &arrow_font.family,
+                ) + 2.0 * margin,
+                height: (text_render::label_height(label, arrow_font.size as f64) + 2.0 * margin)
+                    .floor(),
+            }
         });
         let layout_edge_index = layout.add_edge_with_label_sizes_and_minlen(
             layout_from,
@@ -3635,22 +3655,29 @@ fn emit_autonomous_scope_links(
             render_arrowhead(svg, arrow_control, arrow_tip, color, thickness);
 
             if let Some(label) = &transition.label {
+                let label_margin = autonomous_edge_label_margin(transition);
                 let (label_x, label_y) = edge_path
                     .label
                     .map(|position| {
                         (
-                            quantize_svek_coord(position.x) + scope.origin_x + offset_x + 1.0,
+                            quantize_svek_coord(position.x)
+                                + scope.origin_x
+                                + offset_x
+                                + label_margin,
                             quantize_svek_coord(position.y)
                                 + scope.origin_y
                                 + offset_y
-                                + 1.0
+                                + label_margin
                                 + text_render::label_ascent(label, context.arrow_font.size as f64),
                         )
                     })
                     .unwrap_or_else(|| {
                         let first = points[0];
                         let last = points[points.len() - 1];
-                        ((first.0 + last.0) / 2.0 + 1.0, (first.1 + last.1) / 2.0)
+                        (
+                            (first.0 + last.0) / 2.0 + label_margin,
+                            (first.1 + last.1) / 2.0,
+                        )
                     });
                 let mut text = String::new();
                 text_render::emit_text(
@@ -10709,6 +10736,30 @@ CobaltDecision --> [*]
         assert_eq!(
             spacing.rank_sep_px,
             GraphSpacing::PLANTUML_SVEK_DEFAULTS.rank_sep_px
+        );
+    }
+
+    #[test]
+    fn autonomous_self_link_uses_java_label_margin() {
+        let self_link = Transition {
+            from: "Orbit".into(),
+            to: "Orbit".into(),
+            label: Some("long self-link label".into()),
+            arrow: TransitionArrow::default(),
+            source_line: 1,
+        };
+        let ordinary = Transition {
+            to: "Harbor".into(),
+            ..self_link.clone()
+        };
+
+        assert_eq!(
+            autonomous_edge_label_margin(&self_link),
+            SVEK_SELF_EDGE_LABEL_MARGIN
+        );
+        assert_eq!(
+            autonomous_edge_label_margin(&ordinary),
+            SVEK_EDGE_LABEL_MARGIN
         );
     }
 
