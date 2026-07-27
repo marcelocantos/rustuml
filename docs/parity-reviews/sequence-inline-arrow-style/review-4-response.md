@@ -34,41 +34,60 @@ circle/cross with the selected half polygon or open stroke. Primitive ordering
 follows semantic source side, exactly as for the filled-arrow writer; it is not
 derived from participant labels or spatial index.
 
-## Canonical life variations
+## Message-owned lifecycle timeline
 
-Java `LifeLine.addSegmentVariation` owns one ordered variation program per
-participant. A variation earlier than the last accepted ordinate is ignored.
-At the same ordinate, an opposite variation is ignored, while a repeated
-variation of the same type is accepted. `finish` appends enough closing
-variations at the diagram maximum for levels left open by those rules.
+Java inserts a message before applying the activation suffix parsed from that
+command. `SequenceDiagram.addMessage` also makes it the owner for following
+standalone lifecycle commands until another message replaces that owner.
+`AbstractMessage.addLifeEvent` therefore retains ordered activation and
+deactivation events on one message, including:
 
-RustUML currently replays activation state separately for bar pairing,
-message endpoints, external-width scans, and rendering. Its stack pairing
-closes an inline activation with an opposite standalone deactivation at the
-same message ordinate, creating a zero-height nested bar that Java never
-creates. Later scans then observe a shallower timeline and can disagree with
-the bars.
+```plantuml
+[--> Worker ++
+deactivate Worker
+```
 
-The correction is one renderer-neutral accepted-variation replay, indexed by
-participant and event/ordinate. Activation bars, live depth at a message,
-endpoint shifts, return state, and extent scans must consume that same replay.
-The replay preserves source event order and first-creation ownership; it does
-not insert a fixture-specific row or branch on event count.
+`AbstractMessage.isActivateAndDeactive` exposes that combined ownership.
+`Step1MessageExo` reserves a 30-pixel margin for it and moves the message end
+ordinate down by the same amount. `DrawableSetInitializer.prepareLiveEvent`
+then places activation at the arrow start and deactivation at that extended
+end. Only after those distinct ordinates are established does `LifeLine`
+receive its variations; its same-ordinate rejection rule is not the source of
+this case.
+
+RustUML's `Message` stores only one optional activation, while the standalone
+deactivation remains an unowned event. Standalone lifecycle events consume no
+vertical flow, so both changes are paired at the message's single ordinate,
+creating a zero-height nested bar and placing every later message 30 pixels
+early.
+
+The correction is a normalized lifecycle timeline that retains ordered life
+events and their owning message. It derives each message's start/end ordinates
+and the Java-provenanced combined-event margin once. Row allocation,
+activation bars, message endpoint depth, rendering state, and external extent
+scans must consume that same timeline. A local "next event is deactivate"
+condition is insufficient because Java ownership survives intervening
+non-message events.
 
 ## External area ownership
 
-For every exo direction, `MessageExoArrow` asks
-`LivingParticipantBox.getLiveThicknessAt(messageY)` for the participant segment
-at the exact arrow ordinate. On the right, its area end is
-`max(sharedMaxX, livePos2 + preferredWidth)`; every FROM_RIGHT and TO_RIGHT
-message then draws against that shared area edge.
+Java builds the right border in two stages. `Step1MessageExo` first constrains
+one shared virtual border for every FROM_RIGHT and TO_RIGHT message using the
+arrow component's preferred width. `DrawableSetInitializer.prepareMissingSpace`
+then expands the envelope for each arrow's actual starting position.
+`MessageExoArrow` obtains that position from
+`LivingParticipantBox.getLiveThicknessAt(messageY)`.
 
-RustUML's right-envelope scan uses participant centre plus label extent for
-FROM_RIGHT and evolves activation depth independently. It therefore omits the
-accepted live-segment right shift in the fresh staircase and fixes the shared
-border five pixels too far left. Right-border candidates must be derived from
-the canonical life replay's `pos2` and the arrow component's preferred width,
-then shared by both right exo directions.
+RustUML's width prepass includes live-depth displacement for TO_RIGHT but not
+FROM_RIGHT, and it evolves that depth independently from later endpoint logic.
+In the fresh staircase the deepest FROM_RIGHT candidate is at depth three,
+while the final deactivating TO_RIGHT candidate is at depth two. The omitted
+activation half-width is exactly the observed five-pixel deficit.
+
+The correction must preserve Java's two stages: establish the preferred-width
+constraint, then compute maximum actual overflow using the shared lifecycle
+timeline for both right-border directions. Every right exo message renders
+against the resulting common edge; no canvas constant is added.
 
 ## Acceptance
 
@@ -78,6 +97,6 @@ then shared by both right exo directions.
    source-cross half-heads, right staircases, and same-ordinate variation order.
 3. Unit tests vary mixed `#`/`0` fields, left/right and dotted half-heads, and
    same-ordinate opposite/same variation sequences using renamed participants.
-4. Every activation consumer uses the same accepted variation replay; no
-   consumer reconstructs a competing depth timeline.
+4. Every activation consumer uses the same message-owned lifecycle timeline;
+   no consumer reconstructs a competing ownership or depth history.
 5. The complete no-oracle ratchet has no pass-for-fail swaps.
