@@ -1,0 +1,31 @@
+@startuml
+left to right direction
+<style>
+document {
+  BackgroundColor #FFFDE7
+  Margin 4 12
+}
+state {
+  BackgroundColor #E3F2FD
+  LineColor #1565C0
+  FontColor #0D47A1
+}
+state.header {
+  FontColor #B71C1C
+  FontStyle bold
+  FontSize 13
+}
+arrow {
+  LineColor #00695C
+  FontColor #004D40
+  FontSize 15
+  LineThickness 2
+  LineStyle 6-2
+}
+</style>
+state "Queued" as Queued
+Queued : waits for token
+state "Running" as Running
+Running : owns worker
+Queued --> Running : styled transition
+@enduml

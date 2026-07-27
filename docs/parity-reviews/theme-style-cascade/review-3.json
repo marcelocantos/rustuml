@@ -1,0 +1,407 @@
+{
+  "schema_version": 1,
+  "mechanism": "theme-style-cascade",
+  "account_commit": "ca50f6d2e87b8cac1e0222f18b473406ffbbca06",
+  "audit_range": {
+    "base": "c794c6751498d801f8e8222a575b54a067211217",
+    "head": "af5e6018f5c21a53ea12d02f9470b2bc7fdcd4a0",
+    "expression": "c794c675..af5e6018"
+  },
+  "implementation_commits_reviewed": [
+    "0cfab79b",
+    "1b677826",
+    "025bd4ec620fae66823996148449ce63fba18332",
+    "9d317115c52580cbf87edce65e24c81fd779417e",
+    "af5e6018f5c21a53ea12d02f9470b2bc7fdcd4a0"
+  ],
+  "implementation_commit": "af5e6018f5c21a53ea12d02f9470b2bc7fdcd4a0",
+  "implementation_parent": "9d317115c52580cbf87edce65e24c81fd779417e",
+  "current_checkout": {
+    "head": "5ab2b95dd74dc2ba393b35521c0e7fa7f328a37f",
+    "note": "Current checkout contains a later docs-only commit and an unrelated unstaged sequence.rs change; neither is part of this audited implementation range."
+  },
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar": {
+    "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "mtime": "2026-06-19T02:03:25+1000"
+  },
+  "reviewer": {
+    "task_id": "019ee369-54e2-7203-afce-ddde7bfe1723",
+    "model": "OpenAI GPT-5 Codex",
+    "tool": "Codex desktop",
+    "role": "fresh independent skeptical checker; did not implement commits 0cfab79b, 1b677826, 025bd4ec, 9d317115, or af5e6018; no production edits"
+  },
+  "constraints": [
+    "No Cargo, rustc, rustfmt, or Rust build command was run by this checker.",
+    "No production source, baseline, comparator slack, park list, or error-golden list was edited.",
+    "The pinned PlantUML picoweb server generated every fresh Java SVG.",
+    "The already-built target/release/examples/diff_one binary performed every Rust render and strict comparison.",
+    "Review1 and review2 artifacts were preserved; review3 artifacts are additive.",
+    "Per shared-index instruction, this review record and review3 perturbation pairs are left uncommitted and unstaged until the user says the index is clear."
+  ],
+  "execution": {
+    "diff_helper": "target/release/examples/diff_one",
+    "diff_helper_sha256": "ab815e7e427306770a1bbab7fbbb42dd76f64bc48de6383300fbe787a533894a",
+    "diff_helper_mtime": "2026-07-27T22:53:47+1000",
+    "oracle_server": "http://127.0.0.1:8787/render",
+    "existing_review1": {
+      "strict_total": 10,
+      "strict_passed": 7,
+      "strict_failed": 3,
+      "scoped_style_passed": 10,
+      "scoped_style_failed": 0,
+      "strict_failures": [
+        {
+          "source": "test-diagrams/perturbations/theme-style-cascade/review1_cross_family_arrow_alias_usecase.puml",
+          "scoped_style_result": "pass",
+          "separate_mechanisms": [
+            "description-entity-alias-identity",
+            "description-path-rounding"
+          ]
+        },
+        {
+          "source": "test-diagrams/perturbations/theme-style-cascade/review1_theme_then_user_component.puml",
+          "scoped_style_result": "pass",
+          "separate_mechanism": "component-root-envelope"
+        },
+        {
+          "source": "test-diagrams/perturbations/theme-style-cascade/review1_user_then_theme_component.puml",
+          "scoped_style_result": "pass",
+          "separate_mechanism": "component-root-envelope"
+        }
+      ]
+    },
+    "existing_review2": {
+      "strict_total": 14,
+      "strict_passed": 11,
+      "strict_failed": 3,
+      "scoped_style_passed": 14,
+      "scoped_style_failed": 0,
+      "strict_failures": [
+        {
+          "source": "test-diagrams/perturbations/theme-style-cascade/review2_state_stereotype_header_priority.puml",
+          "scoped_style_result": "pass",
+          "separate_mechanism": "state-direction-layout"
+        },
+        {
+          "source": "test-diagrams/perturbations/theme-style-cascade/review2_temporal_state_entity_snapshots.puml",
+          "scoped_style_result": "pass",
+          "separate_mechanism": "state-direction-layout"
+        },
+        {
+          "source": "test-diagrams/perturbations/theme-style-cascade/review2_theme_style_skinparam_ordering.puml",
+          "scoped_style_result": "pass",
+          "separate_mechanism": "component-root-envelope"
+        }
+      ]
+    },
+    "fresh_review3": {
+      "strict_total": 14,
+      "strict_passed": 4,
+      "strict_failed": 10,
+      "scoped_style_passed": 8,
+      "scoped_style_failed": 6,
+      "direct_style_semantic_failures": 6,
+      "separate_geometry_or_identity_failures": 4
+    }
+  },
+  "commands": [
+    "git rev-parse af5e6018 9d317115 025bd4ec c794c675 5ab2b95d",
+    "git show --stat --oneline af5e6018",
+    "git show --stat --oneline 9d317115",
+    "git diff --name-only c794c675..af5e6018",
+    "cat /Users/marcelo/.claude/rust.md",
+    "cat /Users/marcelo/.codex/skills/oracle-first/SKILL.md",
+    "cat docs/parity-reviews/theme-style-cascade/account.json docs/parity-reviews/theme-style-cascade/review-1.json docs/parity-reviews/theme-style-cascade/review-2.json docs/parity-reviews/theme-style-cascade/review-2-response.md",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "scripts/plantuml-server.sh 8787",
+    "jq -Rs '{source: ., options: [\"-tsvg\"]}' \"$source\" | curl -sf -H 'Content-Type: application/json' --data-binary @- http://127.0.0.1:8787/render -o \"${source%.puml}.svg\" for each review3_ source",
+    "xmllint --noout test-diagrams/perturbations/theme-style-cascade/review3_*.svg",
+    "rg -n -i 'Syntax Error|NoSuchElementException|Welcome to PlantUML|An error has occured|\\[From string|Assumed diagram type|class=\"message\"' test-diagrams/perturbations/theme-style-cascade/review3_*.svg",
+    "python3 -c batch replay of target/release/examples/diff_one --no-oracle for review1_, review2_, and review3_ sources",
+    "target/release/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/theme-style-cascade/review3_state_stereotype_autonomous_shadow.puml",
+    "target/release/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/theme-style-cascade/review3_component_document_shadow_dash_margin.puml",
+    "target/release/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/theme-style-cascade/review3_state_temporal_link_snapshot_legacy.puml",
+    "rg -n 'review[0-9]|golden|perturb|include_str|test-diagrams|theme-style-cascade' crates/rustuml-render/src/class.rs crates/rustuml-render/src/component.rs crates/rustuml-render/src/state.rs crates/rustuml-render/src/usecase.rs",
+    "rg -n 'fn render_no_oracle_relationship|arrow_style|get_property\\(\"lineStyle\"\\)|get_property\\(\"headColor\"\\)|rel\\.dashed|rel\\.style\\.line_style' crates/rustuml-render/src/class.rs",
+    "rg -n 'component_element_style_name|StyleSignature::from_selectors|apply_component_link_style|headColor|lineStyle|stroke_dash|Shadowing|shadow|database|node' crates/rustuml-render/src/component.rs",
+    "rg -n 'stateDiagram|arrow|skinparam|legacy|lineStyle|get_property\\(\"lineColor\"\\)|get_property\\(\"lineThickness\"\\)|LineStyle' crates/rustuml-render/src/state.rs",
+    "git diff --check c794c675 af5e6018",
+    "git merge-base --is-ancestor ca50f6d2 af5e6018",
+    "git diff --exit-code ca50f6d2 af5e6018 -- docs/parity-reviews/theme-style-cascade/account.json",
+    "shasum -a 256 target/release/examples/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "shasum -a 256 test-diagrams/perturbations/theme-style-cascade/review3_*.puml test-diagrams/perturbations/theme-style-cascade/review3_*.svg",
+    "python3 -c SHA-256 uniqueness check of review3_ sources against prior test-diagrams PlantUML sources"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/theme-style-cascade/review3_class_document_transparent_margin.puml",
+      "golden": "test-diagrams/perturbations/theme-style-cascade/review3_class_document_transparent_margin.svg",
+      "source_sha256": "2129f8efe4353e0b36887312f617bcf203fdc3ef28699954eea53d6fad818491",
+      "golden_sha256": "bf91ab95a298270ed2787d02646c32813e6ae64ed6f589799db4d4e8184a682d",
+      "axes": [
+        "class",
+        "document background",
+        "transparent value",
+        "document margin",
+        "arrow inheritance"
+      ],
+      "strict_result": "pass",
+      "scoped_style_result": "pass",
+      "comparison": "Java and Rust are structurally equivalent. Transparent document background, margin expansion, class paint, and arrow channels all survive."
+    },
+    {
+      "source": "test-diagrams/perturbations/theme-style-cascade/review3_class_header_final_body_snapshot.puml",
+      "golden": "test-diagrams/perturbations/theme-style-cascade/review3_class_header_final_body_snapshot.svg",
+      "source_sha256": "c6df29245899163b3df39e90c00dd8cd1b8b555cb165d3c921dbc02f691e19a5",
+      "golden_sha256": "f1bbe96e95c9640dcf304f3c85d85c4e3a65bcd453874ba2aa4b65ea98b60ec7",
+      "axes": [
+        "class",
+        "temporal entity mutation",
+        "body-versus-header ownership",
+        "arrow dash pairs"
+      ],
+      "strict_result": "fail",
+      "scoped_style_result": "fail",
+      "comparison": "Class body/header ownership is largely correct, but class relationships do not consume arrow LineStyle. Java emits the requested dash pairs on both links; Rust renders both links solid."
+    },
+    {
+      "source": "test-diagrams/perturbations/theme-style-cascade/review3_class_stereotype_dash_priority.puml",
+      "golden": "test-diagrams/perturbations/theme-style-cascade/review3_class_stereotype_dash_priority.svg",
+      "source_sha256": "0533a123ec0752597af1f4ff63df7f6e922d3da7c8416e293e7681aa5dcecbde",
+      "golden_sha256": "2b2209745a664d67650883e74b4a90b99a23ae686dd0e0d342aca41023509216",
+      "axes": [
+        "class",
+        "stereotype normalization",
+        "stereotype priority",
+        "dash pair",
+        "headColor"
+      ],
+      "strict_result": "fail",
+      "scoped_style_result": "fail",
+      "comparison": "Stereotype entity styling succeeds, but class arrows still ignore LineStyle and HeadColor. Java uses stroke-dasharray 6,2 and a #1B5E20 arrowhead; Rust renders a solid shaft and fills the head with the shaft color."
+    },
+    {
+      "source": "test-diagrams/perturbations/theme-style-cascade/review3_component_concrete_symbol_signatures.puml",
+      "golden": "test-diagrams/perturbations/theme-style-cascade/review3_component_concrete_symbol_signatures.svg",
+      "source_sha256": "6d409c1110c0236b520271567f929f978546162e764c3643478d061560c50474",
+      "golden_sha256": "ae58688079c0e710df98de8fb6e5e8d5fc106427f37bce90b1842b6831b0e7f6",
+      "axes": [
+        "component",
+        "concrete database signature",
+        "concrete node signature",
+        "shadowing",
+        "line thickness"
+      ],
+      "strict_result": "fail",
+      "scoped_style_result": "fail",
+      "comparison": "The 9d317115 concrete database/node color and font mapping works, but not every concrete symbol style channel reaches the painter. Java paints the database shadow and node stroke-width 2; Rust omits the filter and keeps the node stroke at 0.5."
+    },
+    {
+      "source": "test-diagrams/perturbations/theme-style-cascade/review3_component_document_shadow_dash_margin.puml",
+      "golden": "test-diagrams/perturbations/theme-style-cascade/review3_component_document_shadow_dash_margin.svg",
+      "source_sha256": "bb4e2154cbcb3c23ca548d3b8a3563f7c99de57257864faf28360b1d544dafae",
+      "golden_sha256": "ae4f8561157bdaaf7e0aad5ead653859119da6dfd8e985689d2bf3f124d0ab35",
+      "axes": [
+        "component",
+        "document margin",
+        "document background",
+        "componentDiagram-scoped concrete selectors",
+        "numeric shadowing",
+        "arrow dash pair"
+      ],
+      "strict_result": "fail",
+      "scoped_style_result": "fail",
+      "comparison": "Nested componentDiagram concrete selectors are a counterexample. Java applies the document background/margin, database/node paint, database shadow, and arrow color/thickness/dash/font. Rust renders default database/node colors, default canvas, no shadow, and default solid black arrow."
+    },
+    {
+      "source": "test-diagrams/perturbations/theme-style-cascade/review3_component_stereotype_inline_override.puml",
+      "golden": "test-diagrams/perturbations/theme-style-cascade/review3_component_stereotype_inline_override.svg",
+      "source_sha256": "eb3ff629b90b0c518ca4c1ac01df954caff5d7635d619a28c58ab16b842b9183",
+      "golden_sha256": "06185f130f7887c80dba30efec70af4f4cbf77da271d4f6e8c4d4b19cdf689ea",
+      "axes": [
+        "component",
+        "stereotype normalization",
+        "inline entity override",
+        "ordinary-versus-qualified priority"
+      ],
+      "strict_result": "pass",
+      "scoped_style_result": "pass",
+      "comparison": "Java and Rust are structurally equivalent. Qualified component stereotype styling and inline color override order are preserved."
+    },
+    {
+      "source": "test-diagrams/perturbations/theme-style-cascade/review3_component_temporal_legacy_link_capture.puml",
+      "golden": "test-diagrams/perturbations/theme-style-cascade/review3_component_temporal_legacy_link_capture.svg",
+      "source_sha256": "fe364943a406d06ec86b2085b7f391a5c60df79831465c527799181252d18d3e",
+      "golden_sha256": "0325418f4bbfaee4d19b39a59345e1205bba41efaca386bfb9b66cfc738003b6",
+      "axes": [
+        "component",
+        "temporal link creation",
+        "legacy refresh",
+        "entity refresh",
+        "headColor"
+      ],
+      "strict_result": "fail",
+      "scoped_style_result": "fail",
+      "comparison": "Component entity refresh and shaft line styling are mostly correct, but component links do not consume HeadColor. Java preserves the declared #B71C1C head color on both links; Rust fills each head from the shaft color."
+    },
+    {
+      "source": "test-diagrams/perturbations/theme-style-cascade/review3_state_document_header_arrow_channels.puml",
+      "golden": "test-diagrams/perturbations/theme-style-cascade/review3_state_document_header_arrow_channels.svg",
+      "source_sha256": "1cb201d02eb2e6a0d82f790bb05523e838e470420dfc58ff3d94416b37396e09",
+      "golden_sha256": "32959ddf3ebeb9637ab95f1560c921a8cbeb502a5a3c296a33b6091af5389611",
+      "axes": [
+        "state",
+        "document background",
+        "state header",
+        "arrow font",
+        "arrow dash pair"
+      ],
+      "strict_result": "fail",
+      "scoped_style_result": "pass",
+      "separate_mechanism": "state-direction-layout",
+      "comparison": "Document, state, header, arrow color, arrow font, and dash channels match. Strict comparison fails because Java lays the state graph left-to-right while Rust remains vertical."
+    },
+    {
+      "source": "test-diagrams/perturbations/theme-style-cascade/review3_state_stereotype_autonomous_shadow.puml",
+      "golden": "test-diagrams/perturbations/theme-style-cascade/review3_state_stereotype_autonomous_shadow.svg",
+      "source_sha256": "39641cbd31826d12899329f01cb37439c089037910440321c3dddd0fdab3406d",
+      "golden_sha256": "027ccfb0afa8e4b52e4597c88162d44592c64a5435ead9413ce4147322f98c20",
+      "axes": [
+        "state",
+        "stereotype normalization",
+        "autonomous/composite state",
+        "shadowing",
+        "arrow channels"
+      ],
+      "strict_result": "fail",
+      "scoped_style_result": "pass",
+      "separate_mechanism": "state-composite-envelope",
+      "comparison": "The Rust render contains the expected stereotype fill, line color, header/body text colors, shadow filter, and arrow channels. Strict comparison stops at root width/height and viewBox differences."
+    },
+    {
+      "source": "test-diagrams/perturbations/theme-style-cascade/review3_state_temporal_link_snapshot_legacy.puml",
+      "golden": "test-diagrams/perturbations/theme-style-cascade/review3_state_temporal_link_snapshot_legacy.svg",
+      "source_sha256": "4f499941e9658e6bbe23a1360dcfbbbb2b7273852c4d39912ebbcf288e9cd78a",
+      "golden_sha256": "4700d484427bdb7c40da8b484633e2da9b9fe10220dc735b06ac7e6a06ebfb2a",
+      "axes": [
+        "state",
+        "temporal link creation",
+        "legacy refresh",
+        "flat state transition ownership",
+        "lineColor and thickness"
+      ],
+      "strict_result": "fail",
+      "scoped_style_result": "fail",
+      "comparison": "This disproves the broad state-link snapshot assumption. In Java, the link created before the legacy skinparam still renders with final #1565C0 width 3; Rust preserves the earlier #AD1457 width 2 snapshot. The strict diff also includes the known state direction-layout gap."
+    },
+    {
+      "source": "test-diagrams/perturbations/theme-style-cascade/review3_usecase_actor_and_usecase_stereotypes.puml",
+      "golden": "test-diagrams/perturbations/theme-style-cascade/review3_usecase_actor_and_usecase_stereotypes.svg",
+      "source_sha256": "c617d19d30bf755b84cc87cc64261c5551f5a57a1fc468bc95dd82c323447cd3",
+      "golden_sha256": "dc59f408ec5fb8b196abd37fd8fbe487ca0f1cac0d300b795ad23732b8d76e7f",
+      "axes": [
+        "usecase",
+        "actor stereotype",
+        "usecase stereotype",
+        "arrow inheritance",
+        "alias identity"
+      ],
+      "strict_result": "fail",
+      "scoped_style_result": "pass",
+      "separate_mechanisms": [
+        "description-entity-alias-identity",
+        "description-path-rounding"
+      ],
+      "comparison": "Actor and use-case stereotype style values match. Strict comparison fails because Rust uses the actor display label instead of the alias in ids/data-qualified-name, plus a small path-coordinate difference."
+    },
+    {
+      "source": "test-diagrams/perturbations/theme-style-cascade/review3_usecase_document_transparent_dash.puml",
+      "golden": "test-diagrams/perturbations/theme-style-cascade/review3_usecase_document_transparent_dash.svg",
+      "source_sha256": "cd160528fd113c3bc94fe55d24a87468d8d7b7926ea9252567276e26f0ada306",
+      "golden_sha256": "009259b64eecc45c033976cca001d2f3aa398b0e25c3fdfe4e3686b99dbaad02",
+      "axes": [
+        "usecase",
+        "transparent document background",
+        "document margin",
+        "arrow dash pair",
+        "font channels"
+      ],
+      "strict_result": "pass",
+      "scoped_style_result": "pass",
+      "comparison": "Java and Rust are structurally equivalent. Transparent document handling, use-case paint, arrow line style, and arrow label font channels all pass."
+    },
+    {
+      "source": "test-diagrams/perturbations/theme-style-cascade/review3_usecase_legacy_refresh_link_capture.puml",
+      "golden": "test-diagrams/perturbations/theme-style-cascade/review3_usecase_legacy_refresh_link_capture.svg",
+      "source_sha256": "3a0d442373eddc6b841039f33dbc3cc56a94c9c701d80bb519a44302e8b3c47a",
+      "golden_sha256": "f14afae4ded49c03b77036011e0fe0d7a079ee0a1693f852eddcdc7869aee30b",
+      "axes": [
+        "usecase",
+        "legacy refresh",
+        "link capture",
+        "entity refresh",
+        "arrow channels"
+      ],
+      "strict_result": "pass",
+      "scoped_style_result": "pass",
+      "comparison": "Java and Rust are structurally equivalent. Use-case entity refresh and link style capture survive this legacy mutation probe."
+    },
+    {
+      "source": "test-diagrams/perturbations/theme-style-cascade/review3_usecase_temporal_entities_links.puml",
+      "golden": "test-diagrams/perturbations/theme-style-cascade/review3_usecase_temporal_entities_links.svg",
+      "source_sha256": "1fc7f6db078abd93819c0a91c7aa4b557fa8016aff004b4b8c292a125f1e10e8",
+      "golden_sha256": "f5362322a00471f9eb7329f2336ddfd53581cd41aa5e148f3f4d22f6935e9bd3",
+      "axes": [
+        "usecase",
+        "temporal entity mutation",
+        "temporal link mutation",
+        "actor participation",
+        "arrow dash pair"
+      ],
+      "strict_result": "fail",
+      "scoped_style_result": "pass",
+      "separate_mechanisms": [
+        "description-entity-alias-identity",
+        "description-path-rounding"
+      ],
+      "comparison": "Temporal use-case and link style channels match. Strict comparison fails on actor alias identity and a small path-coordinate mismatch, not on theme/style cascade."
+    }
+  ],
+  "anti_overfit": {
+    "result": "passed_mechanical_search_but_rejected_semantics",
+    "clean_findings": [
+      "The durable account commit is an ancestor of af5e6018 and account.json is byte-unchanged through the implementation boundary.",
+      "The af5e6018 follow-up is clippy-only cleanup in state.rs and removes unused recursive-state font plumbing; it adds no behavior and no new constants.",
+      "The audited production range adds no review3 file reads, embedded SVGs, include_str golden data, review-name conditions, heldout labels, source-coordinate predicates, or per-fixture branch-count ladders found by targeted search.",
+      "git diff --check is clean for c794c675..af5e6018.",
+      "All fourteen review3 sources are valid, well-formed, error-free PlantUML inputs and have zero SHA-256 matches against prior PlantUML sources under test-diagrams."
+    ],
+    "remaining_risks": [
+      "Existing renderers still contain older comments and tests that mention golden-derived constants; this review did not reopen unrelated historical constant provenance outside the audited mechanism range.",
+      "The already-built diff_one binary changed before final replay, but no Rust build command was run by this checker; the record captures the exact hash and mtime used for final strict evidence.",
+      "The worktree had unrelated uncommitted sequence.rs changes while this review record was written; they were not inspected as part of theme-style-cascade and were not staged."
+    ]
+  },
+  "findings": [
+    "The final implementation boundary is af5e6018f5c21a53ea12d02f9470b2bc7fdcd4a0. It is behavior-neutral cleanup after 9d317115, so the substantive final renderer behavior is the 0cfab79b, 1b677826, 025bd4ec, and 9d317115 sequence.",
+    "Review1/review2 evidence is preserved at scoped-style level. Review1 is now 7/10 strict and 10/10 scoped-style; review2 is 11/14 strict and 14/14 scoped-style. The remaining strict misses are separable actor identity, state direction layout, or component envelope mechanisms.",
+    "Fresh review3 evidence rejects the implementation boundary. Only 4 of 14 fresh heldouts are strict matches, and 6 of the 10 strict misses are direct theme/style cascade semantic failures after excluding known geometry/identity mechanisms.",
+    "Class entity and stereotype style ownership has materially improved, but class relationships still do not consume arrow LineStyle or HeadColor. The code resolves arrow_style for lineColor, lineThickness, fontColor, fontName, and fontSize, while dash/head output still comes from relation-local flags or shaft color.",
+    "The concrete component symbol fix in 9d317115 reaches simple top-level database/node signatures, but it does not complete concrete symbol style ownership. Database shadowing and node line thickness are not fully consumed, and nested componentDiagram-scoped concrete selectors are a direct counterexample.",
+    "Component link style remains incomplete because apply_component_link_style has no HeadColor channel. Java can style shaft and head independently; Rust fills component arrowheads from the shaft color.",
+    "The state temporal ownership claim is too broad. The flat state transition probe shows Java applying the final legacy ArrowColor/Thickness to a transition declared before the legacy command, while Rust keeps the earlier source-line snapshot. This needs a Java consumer-specific account rather than a universal Link#getStyleBuilder assumption for all state transition paths.",
+    "State document/header/arrow style and autonomous stereotype shadowing now pass scoped style checks in fresh probes; their strict failures are state layout/envelope issues, not style cascade rejections.",
+    "Use-case style ownership looks substantially correct under review3. The actor/use-case stereotype, document transparent/dash, legacy refresh/link capture, and temporal entity/link probes either pass strict or fail only on already separate actor alias/path mechanisms.",
+    "The audit found no new fixture-shaped production logic in the reviewed range. The rejection is not an overfit finding; it is a model-completeness finding against Java style consumers and selector/value channels."
+  ],
+  "verdict": "rejected",
+  "required_followup": [
+    "For class relationships, consume the resolved Java arrow LineStyle grammar and HeadColor separately from shaft LineColor, with Java provenance at the consumer.",
+    "For component concrete symbols, make componentDiagram-scoped database/node/etc. selectors resolve through the same signature path as top-level concrete selectors, and project shadowing and line thickness into the concrete painters.",
+    "For component links, add a HeadColor channel and preserve arbitrary dash pairs and thickness from the per-link style consumer.",
+    "For flat state transitions, revisit the Java data flow around stateDiagram arrows and legacy skinparam refresh; update account.json before changing code if the ownership rule differs from the current durable account.",
+    "Keep review1_, review2_, and review3_ perturbations as the acceptance matrix. A future boundary should pass all scoped style checks, with only explicitly separate state layout, component envelope, or actor identity strict misses allowed."
+  ]
+}

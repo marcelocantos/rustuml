@@ -1,0 +1,27 @@
+@startuml
+left to right direction
+<style>
+document {
+  BackgroundColor transparent
+  Margin 5 12 7
+}
+usecase {
+  BackgroundColor #FFFDE7
+  LineColor #F9A825
+  FontColor #F57F17
+  Padding 5 9 13
+  Shadowing 3
+}
+arrow {
+  LineColor #7B1FA2
+  HeadColor #4A148C
+  FontColor #4A148C
+  FontSize 16
+  LineThickness 3
+  LineStyle 9
+}
+</style>
+usecase "Transparent Draft" as TransparentDraft
+usecase "Transparent Publish" as TransparentPublish
+TransparentDraft --> TransparentPublish : one-token dash
+@enduml

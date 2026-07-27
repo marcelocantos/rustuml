@@ -1,0 +1,27 @@
+@startuml
+left to right direction
+<style>
+component {
+  BackgroundColor #E0F2F1
+  LineColor #00695C
+  FontColor #004D40
+}
+arrow {
+  LineColor #C62828
+  HeadColor #B71C1C
+  FontColor #AD1457
+  LineThickness 2
+  LineStyle 5-2
+}
+</style>
+component "Old Intake" as OldIntake
+component "Middle Queue" as MiddleQueue
+OldIntake --> MiddleQueue : before legacy
+skinparam ComponentBackgroundColor #F3E5F5
+skinparam ComponentBorderColor #6A1B9A
+skinparam ComponentFontColor #4A148C
+skinparam ArrowColor #1565C0
+skinparam ArrowThickness 3
+component "New Exporter" as NewExporter
+MiddleQueue --> NewExporter : after legacy
+@enduml

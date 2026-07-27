@@ -1,0 +1,26 @@
+@startuml
+left to right direction
+<style>
+state {
+  BackgroundColor #E8F5E9
+  LineColor #2E7D32
+  FontColor #1B5E20
+}
+arrow {
+  LineColor #AD1457
+  FontColor #880E4F
+  LineThickness 2
+  LineStyle 5-2
+}
+</style>
+state "Drafted" as Drafted
+state "Checked" as Checked
+Drafted --> Checked : before legacy
+skinparam StateBackgroundColor #FCE4EC
+skinparam StateBorderColor #C2185B
+skinparam StateFontColor #880E4F
+skinparam ArrowColor #1565C0
+skinparam ArrowThickness 3
+state "Released" as Released
+Checked --> Released : after legacy
+@enduml

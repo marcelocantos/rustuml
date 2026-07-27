@@ -1,0 +1,51 @@
+@startuml
+left to right direction
+<style>
+class {
+  BackgroundColor #E8EAF6
+  LineColor #283593
+  FontColor #1A237E
+  LineThickness 2
+}
+class.header {
+  BackgroundColor #C5CAE9
+  FontColor #283593
+}
+arrow {
+  LineColor #00897B
+  FontColor #00695C
+  FontSize 15
+  LineThickness 2
+  LineStyle 4-2
+}
+</style>
+class "Dawn Ledger" as DawnLedger {
+  +openedAt
+}
+class "Noon Ledger" as NoonLedger {
+  +balancedAt
+}
+DawnLedger --> NoonLedger : morning route
+<style>
+class {
+  BackgroundColor #FFF3E0
+  LineColor #E65100
+  FontColor #BF360C
+}
+class.header {
+  BackgroundColor #FFE0B2
+  FontColor #E65100
+}
+arrow {
+  LineColor #6A1B9A
+  FontColor #4A148C
+  FontSize 13
+  LineThickness 3
+  LineStyle 7-3
+}
+</style>
+class "Dusk Ledger" as DuskLedger {
+  +closedAt
+}
+NoonLedger --> DuskLedger : evening route
+@enduml

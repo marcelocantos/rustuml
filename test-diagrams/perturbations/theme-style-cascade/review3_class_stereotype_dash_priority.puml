@@ -1,0 +1,31 @@
+@startuml
+left to right direction
+<style>
+class {
+  BackgroundColor #E3F2FD
+  LineColor #1565C0
+  FontColor #0D47A1
+  .Risk.Matrix {
+    BackgroundColor #FFCDD2
+    LineColor #B71C1C
+    FontColor #880E4F
+    FontStyle bold
+    LineThickness 2
+  }
+}
+arrow {
+  LineColor #33691E
+  HeadColor #1B5E20
+  FontColor #33691E
+  LineThickness 3
+  LineStyle 6,2
+}
+</style>
+class "Risk Register" as RiskRegister <<risk_matrix>> {
+  +score
+}
+class "Plain Register" as PlainRegister {
+  +score
+}
+RiskRegister --> PlainRegister : normalized route
+@enduml

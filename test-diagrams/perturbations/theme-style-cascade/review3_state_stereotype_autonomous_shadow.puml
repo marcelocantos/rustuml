@@ -1,0 +1,35 @@
+@startuml
+<style>
+state {
+  BackgroundColor #ECEFF1
+  LineColor #455A64
+  FontColor #263238
+  header {
+    FontColor #BF360C
+    FontStyle bold
+  }
+  .Audit.Path {
+    BackgroundColor #FFF9C4
+    LineColor #F57F17
+    FontColor #E65100
+    Shadowing 4
+    LineThickness 2
+    header {
+      FontColor #BF360C
+      FontStyle bold
+    }
+  }
+}
+arrow {
+  LineColor #6A1B9A
+  FontColor #4A148C
+  LineThickness 2
+}
+</style>
+state AuditShell <<audit_path>> {
+  [*] --> ReviewDraft
+  ReviewDraft --> PublishNote : approve
+}
+state OutsideLane
+AuditShell --> OutsideLane : exit path
+@enduml

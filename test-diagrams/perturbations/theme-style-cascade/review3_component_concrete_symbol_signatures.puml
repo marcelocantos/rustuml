@@ -1,0 +1,32 @@
+@startuml
+left to right direction
+<style>
+component {
+  BackgroundColor #E0F7FA
+  LineColor #00838F
+  FontColor #006064
+}
+database {
+  BackgroundColor #FFF8E1
+  LineColor #FF8F00
+  FontColor #E65100
+  Shadowing 4
+}
+node {
+  BackgroundColor #EDE7F6
+  LineColor #4527A0
+  FontColor #311B92
+  LineThickness 2
+}
+arrow {
+  LineColor #AD1457
+  FontColor #880E4F
+  LineThickness 2
+}
+</style>
+component "Ingress Adapter" as IngressAdapter
+database "Event Store" as EventStore
+node "Worker Node" as WorkerNode
+IngressAdapter --> EventStore : persists audit
+EventStore --> WorkerNode : replays batch
+@enduml

@@ -1,0 +1,43 @@
+@startuml
+left to right direction
+<style>
+usecase {
+  BackgroundColor #E0F7FA
+  LineColor #00838F
+  FontColor #006064
+}
+actor {
+  LineColor #00838F
+  FontColor #006064
+}
+arrow {
+  LineColor #C62828
+  HeadColor #B71C1C
+  FontColor #AD1457
+  LineThickness 2
+  LineStyle 4-2
+}
+</style>
+actor "Early Actor" as EarlyActor
+usecase "Early Case" as EarlyCase
+EarlyActor --> EarlyCase : first route
+<style>
+usecase {
+  BackgroundColor #FCE4EC
+  LineColor #C2185B
+  FontColor #880E4F
+}
+actor {
+  LineColor #C2185B
+  FontColor #880E4F
+}
+arrow {
+  LineColor #1565C0
+  FontColor #0D47A1
+  LineThickness 3
+  LineStyle 7-3
+}
+</style>
+usecase "Late Case" as LateCase
+EarlyActor --> LateCase : second route
+@enduml

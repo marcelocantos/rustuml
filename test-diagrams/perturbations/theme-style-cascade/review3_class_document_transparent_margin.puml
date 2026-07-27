@@ -1,0 +1,22 @@
+@startuml
+left to right direction
+<style>
+document {
+  BackgroundColor transparent
+  Margin 6 2 10 14
+}
+class {
+  BackgroundColor #F1F8E9
+  LineColor #558B2F
+  FontColor #33691E
+}
+arrow {
+  LineColor #00695C
+  FontColor #004D40
+  LineThickness 2
+}
+</style>
+class "Transparent Source" as TransparentSource
+class "Transparent Sink" as TransparentSink
+TransparentSource --> TransparentSink : margin probe
+@enduml

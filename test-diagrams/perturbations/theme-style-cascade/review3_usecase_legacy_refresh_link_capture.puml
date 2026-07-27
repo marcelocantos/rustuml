@@ -1,0 +1,26 @@
+@startuml
+left to right direction
+<style>
+usecase {
+  BackgroundColor #E8F5E9
+  LineColor #2E7D32
+  FontColor #1B5E20
+}
+arrow {
+  LineColor #AD1457
+  FontColor #880E4F
+  LineThickness 2
+  LineStyle 5-2
+}
+</style>
+usecase "Legacy Before" as LegacyBefore
+usecase "Legacy Middle" as LegacyMiddle
+LegacyBefore --> LegacyMiddle : before legacy
+skinparam UsecaseBackgroundColor #F3E5F5
+skinparam UsecaseBorderColor #6A1B9A
+skinparam UsecaseFontColor #4A148C
+skinparam ArrowColor #1565C0
+skinparam ArrowThickness 3
+usecase "Legacy After" as LegacyAfter
+LegacyMiddle --> LegacyAfter : after legacy
+@enduml

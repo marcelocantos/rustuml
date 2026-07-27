@@ -1,0 +1,36 @@
+@startuml
+left to right direction
+<style>
+actor {
+  BackgroundColor #E3F2FD
+  LineColor #1565C0
+  FontColor #0D47A1
+  .External.User {
+    BackgroundColor #FFF3E0
+    LineColor #E65100
+    FontColor #BF360C
+  }
+}
+usecase {
+  BackgroundColor #F1F8E9
+  LineColor #558B2F
+  FontColor #33691E
+  .Review.Step {
+    BackgroundColor #DCEDC8
+    LineColor #33691E
+    FontColor #1B5E20
+    LineThickness 2
+  }
+}
+arrow {
+  LineColor #6A1B9A
+  FontColor #4A148C
+  LineThickness 2
+}
+</style>
+actor "External Reviewer" as ExternalReviewer <<external_user>>
+usecase "Review Step" as ReviewStep <<review_step>>
+usecase "Ordinary Step" as OrdinaryStep
+ExternalReviewer --> ReviewStep : submits
+ExternalReviewer --> OrdinaryStep : observes
+@enduml

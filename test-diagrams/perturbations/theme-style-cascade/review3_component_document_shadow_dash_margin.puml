@@ -1,0 +1,33 @@
+@startuml
+left to right direction
+<style>
+document {
+  BackgroundColor #F9FBE7
+  Margin 5 11 7 13
+}
+componentDiagram {
+  database {
+    BackgroundColor #FFFDE7
+    LineColor #F9A825
+    FontColor #F57F17
+    Shadowing 5
+  }
+  node {
+    BackgroundColor #E8EAF6
+    LineColor #3949AB
+    FontColor #283593
+    Shadowing 3
+  }
+}
+arrow {
+  LineColor #7B1FA2
+  FontColor #4A148C
+  FontSize 16
+  LineThickness 3
+  LineStyle 8-3
+}
+</style>
+database "Priority Store" as PriorityStore
+node "Cold Node" as ColdNode
+PriorityStore --> ColdNode : dashed handoff
+@enduml

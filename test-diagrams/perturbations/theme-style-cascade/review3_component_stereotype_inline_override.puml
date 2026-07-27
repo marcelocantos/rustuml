@@ -1,0 +1,23 @@
+@startuml
+left to right direction
+<style>
+component {
+  BackgroundColor #ECEFF1
+  LineColor #455A64
+  FontColor #263238
+  .Critical.Socket {
+    BackgroundColor #FFCDD2
+    LineColor #B71C1C
+    FontColor #880E4F
+    LineThickness 2
+  }
+}
+arrow {
+  LineColor #00695C
+  FontColor #004D40
+}
+</style>
+component "Critical Socket" as CriticalSocket <<critical_socket>>
+component "Inline Override" as InlineOverride <<critical_socket>> #FFF9C4
+CriticalSocket --> InlineOverride : override survives
+@enduml
