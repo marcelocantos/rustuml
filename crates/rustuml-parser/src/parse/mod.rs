@@ -308,6 +308,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         } else {
             trimmed
         };
+        let has_sequence_inline_arrow_style = sequence::has_inline_arrow_style(trimmed);
         let top_level = brace_depth == 0;
 
         if trimmed.starts_with("skinparam ") {
@@ -500,6 +501,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             && !trimmed.contains("[*]")
             && !trimmed.contains("[[")
             && !trimmed.contains("[#")
+            && !has_sequence_inline_arrow_style
             && !trimmed.starts_with("return ")
             // `autonumber "<b>[000]"` uses brackets inside its format string;
             // that is a sequence-diagram directive, not a component reference.
@@ -617,7 +619,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             scores[6] += 2;
         }
         // Arrows are weak sequence indicators.
-        if trimmed.contains("->") || trimmed.contains("-->") {
+        if trimmed.contains("->") || trimmed.contains("-->") || has_sequence_inline_arrow_style {
             scores[0] += 1;
         }
         // `return` statement is sequence-diagram-specific syntax.
@@ -2029,6 +2031,21 @@ Ready --> [*] : close"#;
         assert!(results[1].is_ok());
         assert!(matches!(results[0].as_ref().unwrap(), Diagram::Sequence(_)));
         assert!(matches!(results[1].as_ref().unwrap(), Diagram::Sequence(_)));
+    }
+
+    #[test]
+    fn styled_external_arrows_remain_sequence_dispatch_evidence() {
+        let input = concat!(
+            "@startuml\n",
+            "participant Amber\n",
+            "participant Indigo\n",
+            "[-[#C2185B,dashed]> Amber : found\n",
+            "Amber -[dotted,#2E7D32]>] : lost\n",
+            "Amber -[hidden]> Indigo : concealed\n",
+            "Indigo -[bold]> Amber : visible\n",
+            "@enduml\n",
+        );
+        assert!(matches!(parse(input).unwrap(), Diagram::Sequence(_)));
     }
 
     #[test]

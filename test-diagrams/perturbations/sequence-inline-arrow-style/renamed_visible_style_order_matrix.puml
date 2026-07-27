@@ -1,0 +1,10 @@
+@startuml
+participant "Quartz Ingress 8101" as Quartz8101
+participant "Cobalt Worker 8103" as Cobalt8103
+participant "Jade Archive 8107" as Jade8107
+Quartz8101 -[#AD1457,dashed]> Cobalt8103 : color before body
+Cobalt8103 -[dotted,#2E7D32]> Jade8107 : body before color
+Jade8107 -[#1565C0,#6A1B9A]> Jade8107 : final color owns self message
+Quartz8101 <-[#00838F,dashed]-> Jade8107 : bidirectional styled message
+Jade8107 -> Quartz8101 : inherited control
+@enduml

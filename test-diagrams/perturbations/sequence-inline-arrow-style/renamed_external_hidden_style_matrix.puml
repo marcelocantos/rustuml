@@ -1,0 +1,9 @@
+@startuml
+participant "Amber Gateway 8201" as Amber8201
+participant "Indigo Relay 8203" as Indigo8203
+[-[#C2185B,dashed]> Amber8201 : found styled message
+Amber8201 -[dotted,#2E7D32]>] : lost styled message
+Amber8201 -[hidden]> Indigo8203 : hidden message label
+Indigo8203 -[bold]> Amber8201 : accepted bold control
+Amber8201 -> Indigo8203 : [[#local-anchor visible Creole control]]
+@enduml

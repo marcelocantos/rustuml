@@ -165,6 +165,7 @@ pub enum LineStyle {
     #[default]
     Solid,
     Dotted,
+    Hidden,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]

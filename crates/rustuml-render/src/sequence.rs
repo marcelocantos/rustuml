@@ -10267,6 +10267,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 let is_self = msg.from == msg.to;
                 let is_right = to_x > from_x;
                 let is_dotted = msg.arrow.line == LineStyle::Dotted;
+                let is_hidden = msg.arrow.line == LineStyle::Hidden;
                 let is_open = msg.arrow.head == ArrowHead::Open;
                 let is_cross = msg.arrow.head == ArrowHead::Cross;
                 let is_bidirectional = msg.arrow.direction == ArrowDirection::Bidirectional;
@@ -10348,7 +10349,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                 // branches (where `tip_x` is known) and drawn after the message.
                 let mut destroy_cross_center: Option<f64> = None;
 
-                if is_self {
+                if is_hidden {
+                    // Java retains the event's row, id, numbering, and
+                    // activation semantics but emits no message painter.
+                } else if is_self {
                     // Self-message: U-shaped loopback. When the participant is
                     // activated, the loop starts from the activation bar's right
                     // edge (lifeline center + ACTIVATION_HALF_W).
@@ -13301,6 +13305,27 @@ mod tests {
         assert!(svg.contains(r#">sad path</text>"#));
         assert!(svg.contains(r#">]</text>"#));
         assert!(!svg.contains("[//sad path//]"));
+    }
+
+    #[test]
+    fn inline_arrow_style_paints_color_body_and_hidden_event_semantics() {
+        let input = concat!(
+            "@startuml\n",
+            "participant A\n",
+            "participant B\n",
+            "A -[#C2185B,dashed]> B : local visible\n",
+            "A -[hidden]> B : concealed\n",
+            "A -> B : visible after hidden\n",
+            "@enduml\n",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(r##"style="stroke:#C2185B;stroke-width:1;stroke-dasharray:2,2;""##));
+        assert!(svg.contains(">local visible</text>"));
+        assert!(!svg.contains("concealed"));
+        assert!(svg.contains(r#"id="msg3""#));
+        assert!(svg.contains(">visible after hidden</text>"));
     }
 
     #[test]

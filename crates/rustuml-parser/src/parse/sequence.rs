@@ -13,6 +13,13 @@ use super::ParseError;
 use crate::diagram::DiagramMeta;
 use crate::diagram::sequence::*;
 
+static INLINE_ARROW_STYLE: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(
+        r"\[((?:#\w+|(?i:dashed|dotted|hidden|bold))(?:,(?:#\w+|(?i:dashed|dotted|hidden|bold)))*)\]",
+    )
+    .unwrap()
+});
+
 /// Parse preprocessed lines into a sequence diagram.
 pub fn parse_sequence(lines: &[String]) -> Result<SequenceDiagram, ParseError> {
     let mut parser = SeqParser::new();
@@ -356,8 +363,6 @@ impl SeqParser {
     }
 
     fn try_message(&mut self, line: &str) -> bool {
-        // Capture and strip inline color annotations from arrows, e.g. -[#red]> → ->
-        static RE_COLOR: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"\[(#[^\]]*)\]").unwrap());
         // Allow optional #color after activation modifier (++ #blue, -- #red, etc.)
         // Supports both simple names (\w+) and quoted names ("...").
         static RE: LazyLock<Regex> = LazyLock::new(|| {
@@ -370,7 +375,7 @@ impl SeqParser {
         // Extract arrow colour only from the arrow header. Message labels can
         // contain local Creole links like `[[#anchor label]]`, whose inner
         // `[#anchor label]` must not be mistaken for an arrow colour.
-        let (arrow_color, stripped) = strip_arrow_color_annotation(line, &RE_COLOR);
+        let (arrow_style, stripped) = strip_arrow_style_annotation(line);
         let line = stripped.as_str();
 
         if let Some(caps) = RE.captures(line) {
@@ -390,7 +395,7 @@ impl SeqParser {
             let label = message_label(line, caps.get(6));
 
             let mut arrow = parse_arrow(arrow_str);
-            arrow.color = arrow_color;
+            apply_inline_arrow_style(&mut arrow, arrow_style);
             let activation = activation_str
                 .map(parse_activation)
                 .or_else(|| self.autoactivation_for(&arrow));
@@ -425,8 +430,6 @@ impl SeqParser {
     }
 
     fn try_external_message(&mut self, line: &str) -> bool {
-        // Strip [#color] annotations first.
-        static RE_COLOR: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"\[#[^\]]*\]").unwrap());
         static RE_IN: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
                 r"^\[([-<>.\\/ox]+)\s*(\w+)\s*(?:((?:\+\+|--|!!))\s*(#\S+)?\s*)?(?::\s*(.*))?$",
@@ -437,12 +440,13 @@ impl SeqParser {
             Regex::new(r"^(\w+)\s*([-<>.\\/ox]+)([\[\]])\s*(?:((?:\+\+|--|!!))\s*(#\S+)?\s*)?(?::\s*(.*))?$")
                 .unwrap()
         });
-        let (_, stripped) = strip_arrow_color_annotation(line, &RE_COLOR);
+        let (arrow_style, stripped) = strip_arrow_style_annotation(line);
         let line = stripped.as_str();
 
         if let Some(caps) = RE_IN.captures(line) {
             let mut arrow = parse_arrow(&caps[1]);
             arrow.direction = ArrowDirection::LeftToRight;
+            apply_inline_arrow_style(&mut arrow, arrow_style);
             let to = self.ensure_participant(&caps[2]);
             let activation = caps.get(3).map(|m| parse_activation(m.as_str()));
             let activation_color = caps.get(4).map(|m| m.as_str().to_string());
@@ -461,6 +465,7 @@ impl SeqParser {
             let from = self.ensure_participant(&caps[1]);
             let mut arrow = parse_arrow(&caps[2]);
             arrow.direction = ArrowDirection::LeftToRight;
+            apply_inline_arrow_style(&mut arrow, arrow_style);
             let activation = caps.get(4).map(|m| parse_activation(m.as_str()));
             let activation_color = caps.get(5).map(|m| m.as_str().to_string());
             let label = message_label(line, caps.get(6));
@@ -1141,19 +1146,73 @@ fn parse_arrow(s: &str) -> Arrow {
     }
 }
 
-fn strip_arrow_color_annotation(line: &str, color_re: &Regex) -> (Option<String>, String) {
-    let Some((head, tail)) = line.split_once(':') else {
-        let color = color_re
-            .captures(line)
-            .and_then(|captures| captures.get(1).map(|m| m.as_str().to_string()));
-        return (color, color_re.replace_all(line, "").into_owned());
-    };
+#[derive(Default)]
+struct InlineArrowStyle {
+    color: Option<String>,
+    line: Option<LineStyle>,
+}
 
-    let color = color_re
+fn strip_arrow_style_annotation(line: &str) -> (InlineArrowStyle, String) {
+    let delimiter = sequence_message_delimiter(line);
+    let (head, tail) = delimiter.map_or((line, None), |index| {
+        (&line[..index], Some(&line[index + 1..]))
+    });
+    let mut style = InlineArrowStyle::default();
+    if let Some(tokens) = INLINE_ARROW_STYLE
         .captures(head)
-        .and_then(|captures| captures.get(1).map(|m| m.as_str().to_string()));
-    let stripped_head = color_re.replace_all(head, "");
-    (color, format!("{stripped_head}:{tail}"))
+        .and_then(|captures| captures.get(1))
+        .map(|matched| matched.as_str())
+    {
+        for token in tokens.split(',') {
+            if token.eq_ignore_ascii_case("dashed") || token.eq_ignore_ascii_case("dotted") {
+                style.line = Some(LineStyle::Dotted);
+            } else if token.eq_ignore_ascii_case("hidden") {
+                style.line = Some(LineStyle::Hidden);
+            } else if !token.eq_ignore_ascii_case("bold") {
+                style.color = Some(token.to_string());
+            }
+        }
+    }
+
+    let stripped_head = INLINE_ARROW_STYLE.replace(head, "");
+    let stripped = match tail {
+        Some(tail) => format!("{stripped_head}:{tail}"),
+        None => stripped_head.into_owned(),
+    };
+    (style, stripped)
+}
+
+pub(super) fn has_inline_arrow_style(line: &str) -> bool {
+    let header_end = sequence_message_delimiter(line).unwrap_or(line.len());
+    INLINE_ARROW_STYLE.is_match(&line[..header_end])
+}
+
+fn sequence_message_delimiter(line: &str) -> Option<usize> {
+    let mut quoted = false;
+    let mut escaped = false;
+    for (index, ch) in line.char_indices() {
+        if escaped {
+            escaped = false;
+            continue;
+        }
+        if quoted && ch == '\\' {
+            escaped = true;
+        } else if ch == '"' {
+            quoted = !quoted;
+        } else if ch == ':' && !quoted {
+            return Some(index);
+        }
+    }
+    None
+}
+
+fn apply_inline_arrow_style(arrow: &mut Arrow, style: InlineArrowStyle) {
+    if let Some(line) = style.line {
+        arrow.line = line;
+    }
+    if let Some(color) = style.color {
+        arrow.color = Some(color);
+    }
 }
 
 fn message_label(line: &str, matched: Option<Match<'_>>) -> String {
@@ -1245,6 +1304,66 @@ mod tests {
             assert_eq!(m.arrow.color, None);
         } else {
             panic!("expected message");
+        }
+    }
+
+    #[test]
+    fn quoted_participant_colon_does_not_expose_label_brackets() {
+        let d = parse(r#""Cache: primary" -[#AD1457,dashed]> B : [[#anchor label]]"#);
+        let Event::Message(message) = &d.events[0] else {
+            panic!("expected message");
+        };
+        assert_eq!(message.from, "Cache: primary");
+        assert_eq!(message.label, "[[#anchor label]]");
+        assert_eq!(message.arrow.color.as_deref(), Some("#AD1457"));
+        assert_eq!(message.arrow.line, LineStyle::Dotted);
+    }
+
+    #[test]
+    fn inline_arrow_style_keeps_color_and_body_orthogonal() {
+        let d = parse(
+            "A -[#C2185B,dashed]> B : color first\n\
+             B -[dotted,#1565C0]> A : style first\n\
+             A -[#red,#blue]> B : final color\n\
+             A -[bold]> B : accepted no-op\n\
+             A -[hidden]> B : hidden",
+        );
+        for (index, color) in [(0, "#C2185B"), (1, "#1565C0"), (2, "#blue")] {
+            let Event::Message(message) = &d.events[index] else {
+                panic!("expected message");
+            };
+            assert_eq!(message.arrow.color.as_deref(), Some(color));
+        }
+        let Event::Message(first) = &d.events[0] else {
+            panic!("expected message");
+        };
+        let Event::Message(second) = &d.events[1] else {
+            panic!("expected message");
+        };
+        let Event::Message(bold) = &d.events[3] else {
+            panic!("expected message");
+        };
+        let Event::Message(hidden) = &d.events[4] else {
+            panic!("expected message");
+        };
+        assert_eq!(first.arrow.line, LineStyle::Dotted);
+        assert_eq!(second.arrow.line, LineStyle::Dotted);
+        assert_eq!(bold.arrow.line, LineStyle::Solid);
+        assert_eq!(hidden.arrow.line, LineStyle::Hidden);
+    }
+
+    #[test]
+    fn external_messages_share_inline_arrow_style_parser() {
+        let d = parse(
+            "[-[#AD1457,dashed]> Alice : found\n\
+             Alice -[dotted,#2E7D32]>] : lost",
+        );
+        for (index, color) in [(0, "#AD1457"), (1, "#2E7D32")] {
+            let Event::Message(message) = &d.events[index] else {
+                panic!("expected message");
+            };
+            assert_eq!(message.arrow.color.as_deref(), Some(color));
+            assert_eq!(message.arrow.line, LineStyle::Dotted);
         }
     }
 
