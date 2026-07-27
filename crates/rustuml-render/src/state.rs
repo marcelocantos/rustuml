@@ -20,7 +20,7 @@ use crate::layout_oracle::{
     wrap_oracle_envelope,
 };
 use crate::style::Theme;
-use crate::style_cascade::{StyleCascade, StyleSignature};
+use crate::style_cascade::{StyleBoxSides, StyleCascade, StyleSignature};
 use crate::text_render::{self, TextBase};
 use rustuml_parser::diagram::style::StyleScheme;
 
@@ -1461,11 +1461,6 @@ fn stereotype_state_value(diagram: &StateDiagram, stereotype: &str, attr: &str) 
         .map(|sp| sp.value.trim().to_string())
 }
 
-fn stereotype_state_color(diagram: &StateDiagram, stereotype: &str, attr: &str) -> Option<String> {
-    stereotype_state_value(diagram, stereotype, attr)
-        .map(|value| crate::sequence::resolve_color(&value))
-}
-
 fn state_text_width_with_family(
     text: &str,
     font_size: f64,
@@ -1929,6 +1924,10 @@ struct StateSkin {
     start_color: Option<String>,
     /// Theme/skinparam colour for the end pseudo-state, when specified.
     end_color: Option<String>,
+    /// Final `root.document` background, when explicitly styled.
+    document_background: Option<String>,
+    /// Final `root.document` margin.
+    document_margin: Option<StyleBoxSides>,
 }
 
 impl StateSkin {
@@ -1998,6 +1997,8 @@ impl StateSkin {
             root_line_color,
             start_color,
             end_color,
+            document_background: None,
+            document_margin: None,
         };
 
         let cascade = StyleCascade::new(&diagram.meta.style_program);
@@ -2005,8 +2006,10 @@ impl StateSkin {
             StyleSignature::from_selectors(["root", "element", "stateDiagram", "state"]);
         let arrow_signature =
             StyleSignature::from_selectors(["root", "element", "stateDiagram", "arrow"]);
+        let document_signature = StyleSignature::from_selectors(["root", "document"]);
         let state_style = cascade.resolve(&state_signature, StyleScheme::Regular);
         let arrow_style = cascade.resolve(&arrow_signature, StyleScheme::Regular);
+        let document_style = cascade.resolve(&document_signature, StyleScheme::Regular);
         if let Some(value) = state_style.property("backgroundColor") {
             skin.state_fill = crate::sequence::resolve_color(value);
         }
@@ -2031,6 +2034,10 @@ impl StateSkin {
         {
             skin.arrow_thickness = value;
         }
+        skin.document_background = document_style
+            .property("backgroundColor")
+            .map(crate::sequence::resolve_color);
+        skin.document_margin = document_style.box_sides("margin");
         skin
     }
 }
@@ -2288,8 +2295,10 @@ fn autonomous_state_style(
             _ => value.trim().parse::<f64>().unwrap_or(style.shadow).max(0.0),
         };
     }
-    apply_resolved_state_text_style(&mut style.attribute, &state_style);
-    apply_resolved_state_text_style(&mut style.title, &header_style);
+    // Java `EntityImageState2` uses the state style for the name block and
+    // the nested header style for the description/attribute sheet.
+    apply_resolved_state_text_style(&mut style.title, &state_style);
+    apply_resolved_state_text_style(&mut style.attribute, &header_style);
     style
 }
 
@@ -2334,6 +2343,7 @@ fn apply_resolved_state_text_style(
     }
 }
 
+#[derive(Clone)]
 struct StateArrowFont {
     color: String,
     family: String,
@@ -2343,7 +2353,7 @@ struct StateArrowFont {
 }
 
 impl StateArrowFont {
-    fn from_diagram(diagram: &StateDiagram) -> Self {
+    fn from_skinparams(diagram: &StateDiagram) -> Self {
         let find = |keys: &[&str]| {
             diagram
                 .meta
@@ -2375,6 +2385,53 @@ impl StateArrowFont {
             size,
             bold: style.contains("bold"),
             italic: style.contains("italic"),
+        }
+    }
+
+    fn from_diagram(diagram: &StateDiagram) -> Self {
+        let mut font = Self::from_skinparams(diagram);
+        let cascade = StyleCascade::new(&diagram.meta.style_program);
+        let signature =
+            StyleSignature::from_selectors(["root", "element", "stateDiagram", "arrow"]);
+        let style = cascade.resolve(&signature, StyleScheme::Regular);
+        font.apply_resolved(&style);
+        font
+    }
+
+    fn for_transition(diagram: &StateDiagram, transition: &Transition) -> Self {
+        let mut font = Self::from_skinparams(diagram);
+        let cascade = StyleCascade::new(&diagram.meta.style_program);
+        let signature =
+            StyleSignature::from_selectors(["root", "element", "stateDiagram", "arrow"]);
+        let style = cascade.resolve_link_at_source_line(
+            &signature,
+            StyleScheme::Regular,
+            transition.source_line,
+        );
+        font.apply_resolved(&style);
+        font
+    }
+
+    fn apply_resolved(&mut self, style: &crate::style_cascade::ResolvedStyle<'_>) {
+        if let Some(value) = style.property("fontColor") {
+            self.color = crate::sequence::resolve_color(value);
+        }
+        if let Some(value) = style.property("fontName") {
+            self.family = canonical_state_font_family(value);
+        }
+        if let Some(value) = style.property("fontSize")
+            && let Ok(value) = value.parse::<f64>()
+        {
+            self.size = value.round() as u32;
+        }
+        if let Some(value) = style.property("fontStyle") {
+            let value = value.trim().to_ascii_lowercase();
+            self.bold = matches!(value.as_str(), "bold" | "bolder")
+                || value
+                    .parse::<u16>()
+                    .ok()
+                    .is_some_and(|weight| weight >= 700);
+            self.italic = value == "italic";
         }
     }
 }
@@ -2460,7 +2517,6 @@ struct AutonomousRenderContext<'a> {
     entity_ids: &'a [(String, String)],
     allocated_ids: &'a StateSvgIds,
     skin: &'a StateSkin,
-    arrow_font: &'a StateArrowFont,
     shadow_filter_id: Option<String>,
 }
 
@@ -2636,7 +2692,6 @@ fn autonomous_scope_painted_bounds(
     result: &LayoutResult,
     transition_layout_edges: &std::collections::HashMap<usize, usize>,
     transition_indices: &[usize],
-    arrow_font: &StateArrowFont,
 ) -> Option<AutonomousPaintedBounds> {
     let mut bounds = AutonomousPaintedBounds::empty();
 
@@ -2773,18 +2828,19 @@ fn autonomous_scope_painted_bounds(
         if let Some(label) = transition.label.as_deref()
             && let Some(label_position) = edge.label
         {
+            let transition_font = StateArrowFont::for_transition(diagram, transition);
             let label_margin = state_edge_label_margin(transition);
             let x = quantize_svek_coord(label_position.x) + label_margin;
             let baseline = quantize_svek_coord(label_position.y)
                 + label_margin
-                + text_render::label_ascent(label, arrow_font.size as f64);
+                + text_render::label_ascent(label, transition_font.size as f64);
             let width = text_render::measure_with_family(
                 label,
-                arrow_font.size as f64,
-                arrow_font.bold,
-                &arrow_font.family,
+                transition_font.size as f64,
+                transition_font.bold,
+                &transition_font.family,
             );
-            let height = text_render::label_height(label, arrow_font.size as f64);
+            let height = text_render::label_height(label, transition_font.size as f64);
             bounds.include(x, baseline - height + LIMIT_FINDER_TEXT_ADJUST);
             bounds.include(
                 x + width + label_margin,
@@ -2802,7 +2858,6 @@ fn layout_autonomous_scope(
     transition_indices: Vec<usize>,
     node_sizes: &[(String, f64, f64, StateLayoutShape)],
     live_clusters: &[&State],
-    arrow_font: &StateArrowFont,
     spacing: Option<GraphSpacing>,
 ) -> Option<AutonomousScopeLayout> {
     let mut layout = LayoutGraph::new(Direction::TopToBottom);
@@ -2877,8 +2932,9 @@ fn layout_autonomous_scope(
             // rank-same block under the default `SkinParam.useRankSame`.
             layout.add_plantuml_svek_line0_edge(layout_from, layout_to);
         }
+        let transition_font = StateArrowFont::for_transition(diagram, transition);
         let label_size = transition.label.as_deref().map(|label| {
-            let mut size = svek_edge_label_box_size(transition, label, arrow_font);
+            let mut size = svek_edge_label_box_size(transition, label, &transition_font);
             size.height = size.height.floor();
             size
         });
@@ -2922,7 +2978,6 @@ fn layout_autonomous_scope(
         &result,
         &transition_layout_edges,
         &transition_indices,
-        arrow_font,
     );
     let top = result
         .node_positions
@@ -3320,7 +3375,6 @@ fn build_state_group_outcome<'a>(
                 transition_indices,
                 &inner_sizes,
                 &live_clusters,
-                arrow_font,
                 None,
             )?)
         };
@@ -3495,7 +3549,6 @@ fn build_autonomous_composite<'a>(
         outer_transition_indices,
         &outer_sizes,
         &live_clusters,
-        arrow_font,
         Some(autonomous_outer_spacing(diagram)),
     )?;
     let outer = if live_clusters.is_empty() {
@@ -3903,13 +3956,11 @@ fn emit_autonomous_scope_links(
     let mut used_path_ids = std::collections::HashSet::new();
     for transition_index in &scope.transition_indices {
         let transition = &context.diagram.transitions[*transition_index];
-        let style = context.diagram.transition_style(*transition_index);
-        let explicit_color = style.color.as_deref().map(crate::sequence::resolve_color);
-        let color = explicit_color
-            .as_deref()
-            .unwrap_or(&context.skin.arrow_color);
-        let thickness = transition_stroke_thickness(&style, context.skin.arrow_thickness);
-        let stroke = transition_stroke_style(color, &style, context.skin.arrow_thickness);
+        let paint = state_transition_paint(context.diagram, *transition_index, context.skin);
+        let color = paint.color.as_str();
+        let thickness = paint.thickness;
+        let stroke = paint.stroke.as_str();
+        let arrow_font = StateArrowFont::for_transition(context.diagram, transition);
         let from = state_endpoint_layout_id(&transition.from, true);
         let to = state_endpoint_layout_id(&transition.to, false);
         let solved_reversed = transition.arrow.reverses_solved_endpoints();
@@ -4067,7 +4118,7 @@ fn emit_autonomous_scope_links(
                                 + scope.origin_y
                                 + offset_y
                                 + label_margin
-                                + text_render::label_ascent(label, context.arrow_font.size as f64),
+                                + text_render::label_ascent(label, arrow_font.size as f64),
                         )
                     })
                     .unwrap_or_else(|| {
@@ -4085,11 +4136,11 @@ fn emit_autonomous_scope_links(
                     &TextBase {
                         x: label_x,
                         y: label_y,
-                        font_size: context.arrow_font.size,
-                        font_family: &context.arrow_font.family,
-                        fill: &context.arrow_font.color,
-                        bold: context.arrow_font.bold,
-                        italic: context.arrow_font.italic,
+                        font_size: arrow_font.size,
+                        font_family: &arrow_font.family,
+                        fill: &arrow_font.color,
+                        bold: arrow_font.bold,
+                        italic: arrow_font.italic,
                         underline: false,
                         skip_underline: false,
                     },
@@ -4378,7 +4429,6 @@ fn render_autonomous_composite(diagram: &StateDiagram) -> Option<String> {
         entity_ids: &allocated_ids.entity_ids,
         allocated_ids: &allocated_ids,
         skin: &skin,
-        arrow_font: &arrow_font,
         shadow_filter_id: (autonomous_state_style(diagram, &skin, None).shadow > 0.0
             || diagram
                 .states
@@ -5179,7 +5229,6 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
         entity_ids: &allocated_ids.entity_ids,
         allocated_ids: &allocated_ids,
         skin: &skin,
-        arrow_font: &arrow_font,
         shadow_filter_id: (autonomous_state_style(diagram, &skin, None).shadow > 0.0
             || diagram
                 .states
@@ -5509,13 +5558,14 @@ pub fn render_with_oracle(
     // `skinparam backgroundColor <c>` paints the whole canvas: it sets the
     // SVG root `background:` and emits a full-size `<rect>` just inside the
     // root `<g>`. PlantUML keeps the default `#FFFFFF` when unset.
-    let bg_raw = diagram
+    let skinparam_bg = diagram
         .meta
         .skinparams
         .iter()
         .rev()
         .find(|sp| sp.key.eq_ignore_ascii_case("backgroundColor"))
         .map(|sp| sp.value.trim().to_string());
+    let bg_raw = skin.document_background.as_ref().cloned().or(skinparam_bg);
     let bg_is_transparent = bg_raw
         .as_deref()
         .is_some_and(|v| v.eq_ignore_ascii_case("transparent"));
@@ -5540,13 +5590,9 @@ pub fn render_with_oracle(
     #[allow(non_snake_case)]
     let STROKE_COLOR: &str = skin.stroke.as_str();
     #[allow(non_snake_case)]
-    let STROKE_WIDTH: &str = skin.border_thickness.as_str();
-    #[allow(non_snake_case)]
     let TEXT_COLOR: &str = skin.text_color.as_str();
     #[allow(non_snake_case)]
     let STATE_FILL: &str = skin.state_fill.as_str();
-    #[allow(non_snake_case)]
-    let ARROW_COLOR: &str = skin.arrow_color.as_str();
     let apply_themed_pseudo_colors = bg_is_transparent;
     let start_fill = if apply_themed_pseudo_colors {
         skin.start_color.as_deref().unwrap_or(PSEUDO_COLOR)
@@ -5635,8 +5681,6 @@ pub fn render_with_oracle(
         .map(|sp| sp.value.to_ascii_lowercase())
         .unwrap_or_default();
     let state_font_bold = state_font_style.contains("bold");
-    let state_font_italic = state_font_style.contains("italic");
-    let state_metric_family = state_font_name.as_deref().unwrap_or("sans-serif");
 
     let (has_start, _has_end) = classify_star_nodes(&diagram.transitions);
 
@@ -5814,7 +5858,11 @@ pub fn render_with_oracle(
         diagram.states.iter().find(|s| s.id == lookup_id)
     };
     let state_node_size = |id: &str, state_def: Option<&State>| {
-        layout_node_size_with_font(id, state_def, hide_empty_desc, &state_node_font)
+        if oracle.is_none() && !diagram.meta.style_program.is_empty() {
+            autonomous_layout_node_size(diagram, &skin, id, state_def)
+        } else {
+            layout_node_size_with_font(id, state_def, hide_empty_desc, &state_node_font)
+        }
     };
 
     // Map transition state IDs to layout IDs.
@@ -5867,10 +5915,11 @@ pub fn render_with_oracle(
             if horizontal {
                 layout.add_plantuml_svek_line0_edge(layout_from, layout_to);
             }
+            let transition_font = StateArrowFont::for_transition(diagram, t);
             let ordinary_label_size = t
                 .label
                 .as_deref()
-                .map(|label| svek_edge_label_box_size(t, label, &arrow_font));
+                .map(|label| svek_edge_label_box_size(t, label, &transition_font));
             let label_size = compose_link_label_size(
                 ordinary_label_size,
                 link_note_for_transition(diagram, transition_index),
@@ -6017,10 +6066,10 @@ pub fn render_with_oracle(
 
             if let Some(label_origin) = edge.label
                 && let Some(label_size) = compose_link_label_size(
-                    transition
-                        .label
-                        .as_deref()
-                        .map(|label| svek_edge_label_box_size(transition, label, &arrow_font)),
+                    transition.label.as_deref().map(|label| {
+                        let transition_font = StateArrowFont::for_transition(diagram, transition);
+                        svek_edge_label_box_size(transition, label, &transition_font)
+                    }),
                     link_note_for_transition(diagram, transition_index),
                 )
             {
@@ -6315,7 +6364,8 @@ pub fn render_with_oracle(
                             continue;
                         };
                         let label = transition.label.as_deref().unwrap();
-                        let label_size = ordinary_edge_label_size(label, &arrow_font);
+                        let transition_font = StateArrowFont::for_transition(diagram, transition);
+                        let label_size = ordinary_edge_label_size(label, &transition_font);
                         let label_right = quantize_svek_coord(label_position.x)
                             + label_size.width
                             + SELF_EDGE_ARROW_MARGIN;
@@ -6342,8 +6392,9 @@ pub fn render_with_oracle(
                             continue;
                         };
                         let label = transition.label.as_deref().unwrap();
+                        let transition_font = StateArrowFont::for_transition(diagram, transition);
                         let label_right = quantize_svek_coord(label_position.x)
-                            + ordinary_edge_label_size(label, &arrow_font).width;
+                            + ordinary_edge_label_size(label, &transition_font).width;
                         max_x = max_x.max(label_right);
                         painted_max_x = painted_max_x.max(label_right);
                     }
@@ -6450,6 +6501,30 @@ pub fn render_with_oracle(
     }
     if oracle.is_none() && diagram.meta.title.is_some() {
         total_height = title_body_height;
+    }
+    if oracle.is_none()
+        && let Some(margin) = skin.document_margin
+    {
+        for (_, x, y, _, _) in &mut positions {
+            *x += margin.left;
+            *y += margin.top;
+        }
+        for note in &mut attached_note_positions {
+            note.x += margin.left;
+            note.y += margin.top;
+        }
+        for note in &mut floating_note_positions {
+            note.x += margin.left;
+            note.y += margin.top;
+        }
+        graph_body_x += margin.left;
+        graph_body_y += margin.top;
+        // `GraphvizImageBuilder` already contributes the five-pixel positive
+        // axis margin that `AnnotatedWorker` replaces with the document
+        // margin. Preserve the existing solved body, then exchange that
+        // default tail for the four explicitly resolved sides.
+        total_width += margin.left + margin.right - CUCA_POSITIVE_AXIS_MARGIN;
+        total_height += margin.top + margin.bottom - CUCA_POSITIVE_AXIS_MARGIN;
     }
 
     let pos_of = |id: &str| -> (f64, f64, f64, f64) {
@@ -7003,16 +7078,9 @@ pub fn render_with_oracle(
                     // Normal state box.
                     let label = state_def.map_or(id.as_str(), |s| s.label.as_str());
                     let descriptions = state_def.map_or(&[][..], |s| s.descriptions.as_slice());
-                    let state_stereotype = state_def.and_then(|s| s.stereotype.as_deref());
-                    let stereo_fill = state_stereotype
-                        .and_then(|s| stereotype_state_color(diagram, s, "BackgroundColor"));
-                    let stereo_stroke = state_stereotype
-                        .and_then(|s| stereotype_state_color(diagram, s, "BorderColor"));
-                    let stereo_text_color = state_stereotype.and_then(|s| {
-                        stereotype_state_color(diagram, s, "FontColor")
-                            .or_else(|| stereotype_state_color(diagram, s, "AttributeFontColor"))
-                    });
-                    let state_text_color = stereo_text_color.as_deref().unwrap_or(TEXT_COLOR);
+                    let rendered_style = autonomous_state_style(diagram, &skin, state_def);
+                    let title_style = &rendered_style.title;
+                    let attribute_style = &rendered_style.attribute;
 
                     let box_x = cx - bw / 2.0;
                     let box_y = cy - bh / 2.0;
@@ -7028,8 +7096,7 @@ pub fn render_with_oracle(
                         .and_then(|orc| orc.entities.get(id.as_str()))
                         .and_then(|r| r.fill.clone())
                         .or(parser_fill)
-                        .or(stereo_fill)
-                        .unwrap_or_else(|| STATE_FILL.to_string());
+                        .unwrap_or_else(|| rendered_style.fill.clone());
 
                     // Border style: `state X ##color` sets stroke colour;
                     // `##[dashed]color` adds a dash pattern; `##[bold]`
@@ -7049,12 +7116,16 @@ pub fn render_with_oracle(
                                 "dotted" => format!(
                                     "stroke:{stroke_color};stroke-width:1;stroke-dasharray:1,3;"
                                 ),
-                                _ => format!("stroke:{stroke_color};stroke-width:{STROKE_WIDTH};"),
+                                _ => format!(
+                                    "stroke:{stroke_color};stroke-width:{};",
+                                    rendered_style.border_thickness
+                                ),
                             }
-                        } else if let Some(stroke_color) = stereo_stroke {
-                            format!("stroke:{stroke_color};stroke-width:{STROKE_WIDTH};")
                         } else {
-                            format!("stroke:{STROKE_COLOR};stroke-width:{STROKE_WIDTH};")
+                            format!(
+                                "stroke:{};stroke-width:{};",
+                                rendered_style.stroke, rendered_style.border_thickness
+                            )
                         };
                     let orc_rect = oracle.and_then(|orc| orc.entities.get(id.as_str()));
 
@@ -7078,10 +7149,10 @@ pub fn render_with_oracle(
 
                         let text_w = state_text_width_with_family(
                             label,
-                            state_name_font_size,
-                            state_font_bold,
-                            state_font_name.as_deref(),
-                            state_name_is_mono,
+                            title_style.size,
+                            title_style.bold,
+                            Some(&title_style.family),
+                            is_state_monospace_family(&title_style.family),
                         );
                         let text_x = cx - text_w / 2.0;
                         // Java `EntityImageStateEmptyDescription.drawU`
@@ -7089,15 +7160,15 @@ pub fn render_with_oracle(
                         // that top edge.
                         let title_height = text_render::label_height_with_family(
                             label,
-                            state_name_font_size,
-                            state_metric_family,
+                            title_style.size,
+                            &title_style.family,
                         );
                         let text_y = box_y
                             + (*bh - title_height) / 2.0
                             + text_render::label_ascent_with_family(
                                 label,
-                                state_name_font_size,
-                                state_metric_family,
+                                title_style.size,
+                                &title_style.family,
                             );
                         let mut text_buf = String::new();
                         text_render::emit_text(
@@ -7106,11 +7177,11 @@ pub fn render_with_oracle(
                             &TextBase {
                                 x: text_x,
                                 y: text_y,
-                                font_size: state_name_font_size as u32,
-                                font_family: state_metric_family,
-                                fill: state_text_color,
-                                bold: state_font_bold,
-                                italic: state_font_italic,
+                                font_size: title_style.size as u32,
+                                font_family: &title_style.family,
+                                fill: &title_style.color,
+                                bold: title_style.bold,
+                                italic: title_style.italic,
                                 underline: false,
                                 skip_underline: false,
                             },
@@ -7167,8 +7238,8 @@ pub fn render_with_oracle(
                                     + 10.0
                                     + text_render::label_height_with_family(
                                         label,
-                                        state_name_font_size,
-                                        state_metric_family,
+                                        title_style.size,
+                                        &title_style.family,
                                     )
                             });
                         if let Some(rect) = orc_rect
@@ -7195,10 +7266,10 @@ pub fn render_with_oracle(
                         // PlantUML's own text measurement.
                         let text_w = state_text_width_with_family(
                             label,
-                            state_name_font_size,
-                            state_font_bold,
-                            state_font_name.as_deref(),
-                            state_name_is_mono,
+                            title_style.size,
+                            title_style.bold,
+                            Some(&title_style.family),
+                            is_state_monospace_family(&title_style.family),
                         );
                         let text_x = orc_rect
                             .and_then(|r| r.name_text_x)
@@ -7214,29 +7285,30 @@ pub fn render_with_oracle(
                                     + 5.0
                                     + text_render::label_ascent_with_family(
                                         label,
-                                        state_name_font_size,
-                                        state_metric_family,
+                                        title_style.size,
+                                        &title_style.family,
                                     )
                             });
-                        if let Some(font_name) = state_font_name.as_deref() {
+                        if title_style.family != "sans-serif" {
                             // Custom font name (`skinparam stateFontName ...` /
                             // global `defaultFontName ...`): emit the
                             // user-supplied family and the matching width.
-                            let fam = escape_attr(font_name);
-                            let style_attr = if state_font_italic {
+                            let fam = escape_attr(&title_style.family);
+                            let style_attr = if title_style.italic {
                                 r#" font-style="italic""#
                             } else {
                                 ""
                             };
-                            let weight_attr = if state_font_bold {
+                            let weight_attr = if title_style.bold {
                                 r#" font-weight="700""#
                             } else {
                                 ""
                             };
                             write!(
                                 svg,
-                                r#"<text fill="{state_text_color}" font-family="{fam}" font-size="{}"{style_attr}{weight_attr} lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
-                                state_name_font_size as u32,
+                                r#"<text fill="{}" font-family="{fam}" font-size="{}"{style_attr}{weight_attr} lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
+                                title_style.color,
+                                title_style.size as u32,
                                 fmt_f(text_w),
                                 fmt_f(text_x),
                                 fmt_f(text_y),
@@ -7251,11 +7323,11 @@ pub fn render_with_oracle(
                                 &TextBase {
                                     x: text_x,
                                     y: text_y,
-                                    font_size: state_name_font_size as u32,
+                                    font_size: title_style.size as u32,
                                     font_family: "sans-serif",
-                                    fill: state_text_color,
-                                    bold: state_font_bold,
-                                    italic: state_font_italic,
+                                    fill: &title_style.color,
+                                    bold: title_style.bold,
+                                    italic: title_style.italic,
                                     underline: false,
                                     skip_underline: false,
                                 },
@@ -7268,7 +7340,7 @@ pub fn render_with_oracle(
                         // label. Rich Creole names can emit more than one
                         // baseline (for example mixed font sizes), so `j + 1`
                         // would accidentally reuse the second name baseline.
-                        let mut oracle_text_y_index = if state_font_name.is_some() {
+                        let mut oracle_text_y_index = if title_style.family != "sans-serif" {
                             1
                         } else {
                             text_render::emitted_baseline_count(
@@ -7276,11 +7348,11 @@ pub fn render_with_oracle(
                                 &TextBase {
                                     x: text_x,
                                     y: text_y,
-                                    font_size: state_name_font_size as u32,
+                                    font_size: title_style.size as u32,
                                     font_family: "sans-serif",
-                                    fill: state_text_color,
-                                    bold: state_font_bold,
-                                    italic: state_font_italic,
+                                    fill: &title_style.color,
+                                    bold: title_style.bold,
+                                    italic: title_style.italic,
                                     underline: false,
                                     skip_underline: false,
                                 },
@@ -7303,39 +7375,41 @@ pub fn render_with_oracle(
                                         + STATE_FIELD_TOP_PADDING
                                         + text_render::label_first_baseline_ascent_with_family(
                                             desc,
-                                            state_desc_font_size,
-                                            state_metric_family,
+                                            attribute_style.size,
+                                            &attribute_style.family,
                                         )
                                         + j as f64 * DESC_LINE_SPACING
                                 });
-                            if let Some(font_name) = state_font_name.as_deref() {
-                                let fam = escape_attr(font_name);
-                                let style_attr = if state_font_italic {
+                            if attribute_style.family != "sans-serif" {
+                                let fam = escape_attr(&attribute_style.family);
+                                let style_attr = if attribute_style.italic {
                                     r#" font-style="italic""#
                                 } else {
                                     ""
                                 };
-                                let weight_attr = if state_font_bold {
+                                let weight_attr = if attribute_style.bold {
                                     r#" font-weight="700""#
                                 } else {
                                     ""
                                 };
-                                let content = if state_name_is_mono {
+                                let content = if is_state_monospace_family(&attribute_style.family)
+                                {
                                     desc.replace(' ', "\u{00a0}")
                                 } else {
                                     desc.clone()
                                 };
                                 let width = state_text_width_with_family(
                                     &content,
-                                    state_desc_font_size,
-                                    state_font_bold,
-                                    Some(font_name),
-                                    state_name_is_mono,
+                                    attribute_style.size,
+                                    attribute_style.bold,
+                                    Some(&attribute_style.family),
+                                    is_state_monospace_family(&attribute_style.family),
                                 );
                                 write!(
                                     svg,
-                                    r#"<text fill="{state_text_color}" font-family="{fam}" font-size="{}"{style_attr}{weight_attr} lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
-                                    state_desc_font_size as u32,
+                                    r#"<text fill="{}" font-family="{fam}" font-size="{}"{style_attr}{weight_attr} lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
+                                    attribute_style.color,
+                                    attribute_style.size as u32,
                                     fmt_f(width),
                                     fmt_f(desc_x),
                                     fmt_f(desc_y),
@@ -7351,11 +7425,11 @@ pub fn render_with_oracle(
                                     &TextBase {
                                         x: desc_x,
                                         y: desc_y,
-                                        font_size: state_desc_font_size as u32,
+                                        font_size: attribute_style.size as u32,
                                         font_family: "sans-serif",
-                                        fill: state_text_color,
-                                        bold: state_font_bold,
-                                        italic: state_font_italic,
+                                        fill: &attribute_style.color,
+                                        bold: attribute_style.bold,
+                                        italic: attribute_style.italic,
                                         underline: false,
                                         skip_underline: false,
                                     },
@@ -7366,11 +7440,11 @@ pub fn render_with_oracle(
                                     &TextBase {
                                         x: desc_x,
                                         y: desc_y,
-                                        font_size: state_desc_font_size as u32,
+                                        font_size: attribute_style.size as u32,
                                         font_family: "sans-serif",
-                                        fill: state_text_color,
-                                        bold: state_font_bold,
-                                        italic: state_font_italic,
+                                        fill: &attribute_style.color,
+                                        bold: attribute_style.bold,
+                                        italic: attribute_style.italic,
                                         underline: false,
                                         skip_underline: false,
                                     },
@@ -7693,16 +7767,11 @@ pub fn render_with_oracle(
         for transition_idx in transition_order {
             let t = &diagram.transitions[transition_idx];
             let link_note = link_note_for_transition(diagram, transition_idx);
-            let transition_style = diagram.transition_style(transition_idx);
-            let explicit_color = transition_style
-                .color
-                .as_deref()
-                .map(crate::sequence::resolve_color);
-            let link_color = explicit_color.as_deref().unwrap_or(ARROW_COLOR);
-            let link_thickness =
-                transition_stroke_thickness(&transition_style, skin.arrow_thickness);
-            let link_stroke =
-                transition_stroke_style(link_color, &transition_style, skin.arrow_thickness);
+            let paint = state_transition_paint(diagram, transition_idx, &skin);
+            let link_color = paint.color.as_str();
+            let link_thickness = paint.thickness;
+            let link_stroke = paint.stroke.as_str();
+            let transition_arrow_font = StateArrowFont::for_transition(diagram, t);
             let from_layout = map_id(&t.from, true);
             let to_layout = map_id(&t.to, false);
             let from_name = if t.from == "[*]" { "*start*" } else { &t.from };
@@ -7851,7 +7920,13 @@ pub fn render_with_oracle(
                         label_origin.0 += inset;
                         label_origin.1 += inset;
                     }
-                    emit_link_label_composition(&mut svg, t, link_note, label_origin, &arrow_font);
+                    emit_link_label_composition(
+                        &mut svg,
+                        t,
+                        link_note,
+                        label_origin,
+                        &transition_arrow_font,
+                    );
                 }
             } else {
                 // Straight line fallback.
@@ -7881,7 +7956,7 @@ pub fn render_with_oracle(
                         t,
                         link_note,
                         (from_cx.max(to_cx), (start_y + end_y) / 2.0),
-                        &arrow_font,
+                        &transition_arrow_font,
                     );
                 }
             }
@@ -7900,6 +7975,56 @@ pub fn render_with_oracle(
 /// `WithLinkType.applyOneStyle`, while `LinkStyle.getStroke3` maps dashed to
 /// 7/7, dotted to 1/3, bold to width 2, and otherwise preserves the requested
 /// thickness.
+struct StateTransitionPaint {
+    color: String,
+    thickness: f64,
+    stroke: String,
+}
+
+fn state_transition_paint(
+    diagram: &StateDiagram,
+    transition_index: usize,
+    skin: &StateSkin,
+) -> StateTransitionPaint {
+    let transition = &diagram.transitions[transition_index];
+    let inline = diagram.transition_style(transition_index);
+    let cascade = StyleCascade::new(&diagram.meta.style_program);
+    let signature = StyleSignature::from_selectors(["root", "element", "stateDiagram", "arrow"]);
+    // Java `Link#getStyleBuilder` is the creation snapshot even when legacy
+    // skinparams later refresh entity builders.
+    let resolved = cascade.resolve_link_at_source_line(
+        &signature,
+        StyleScheme::Regular,
+        transition.source_line,
+    );
+    let css_stroke = resolved.stroke(skin.arrow_thickness);
+    let color = inline
+        .color
+        .as_deref()
+        .map(crate::sequence::resolve_color)
+        .or_else(|| {
+            resolved
+                .property("lineColor")
+                .map(crate::sequence::resolve_color)
+        })
+        .unwrap_or_else(|| skin.arrow_color.clone());
+    let thickness = transition_stroke_thickness(&inline, css_stroke.thickness);
+    let dash = match inline.line_style {
+        Some(TransitionLineStyle::Dashed) => Some((7.0, 7.0)),
+        Some(TransitionLineStyle::Dotted) => Some((1.0, 3.0)),
+        _ => css_stroke.dash,
+    };
+    let dash = dash
+        .map(|(visible, space)| format!("stroke-dasharray:{},{};", fmt_f(visible), fmt_f(space)))
+        .unwrap_or_default();
+    let stroke = format!("stroke:{color};stroke-width:{};{dash}", fmt_f(thickness));
+    StateTransitionPaint {
+        color,
+        thickness,
+        stroke,
+    }
+}
+
 fn transition_stroke_thickness(style: &TransitionStyle, default_thickness: f64) -> f64 {
     match style.line_style {
         Some(TransitionLineStyle::Bold) => 2.0,
@@ -7923,16 +8048,6 @@ fn unique_svek_path_id(ids: &mut std::collections::HashSet<String>, base: &str) 
         }
     }
     unreachable!("the monotonically increasing suffix must become unique")
-}
-
-fn transition_stroke_style(color: &str, style: &TransitionStyle, default_thickness: f64) -> String {
-    let thickness = transition_stroke_thickness(style, default_thickness);
-    let dash = match style.line_style {
-        Some(TransitionLineStyle::Dashed) => "stroke-dasharray:7,7;",
-        Some(TransitionLineStyle::Dotted) => "stroke-dasharray:1,3;",
-        _ => "",
-    };
-    format!("stroke:{color};stroke-width:{};{dash}", fmt_f(thickness))
 }
 
 /// Retract the final Bezier segment to make room for a dependency arrow.

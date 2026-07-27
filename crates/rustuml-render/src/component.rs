@@ -22,7 +22,7 @@ use crate::layout_oracle::{
 };
 use crate::plantuml_metrics as pm;
 use crate::style::Theme;
-use crate::style_cascade::{StyleCascade, StyleSignature};
+use crate::style_cascade::{ResolvedStyle, StyleBoxSides, StyleCascade, StyleSignature};
 use crate::svg::SvgBuilder;
 use crate::text_render::{self, TextBase};
 
@@ -44,14 +44,14 @@ impl ComponentLineStyle {
         }
     }
 
-    fn svg_suffix(self) -> &'static str {
+    fn dash(self) -> Option<(f64, f64)> {
         match self {
-            Self::Solid => "",
-            Self::Dashed => "stroke-dasharray:7,7;",
+            Self::Solid => None,
+            Self::Dashed => Some((7.0, 7.0)),
             // `FromSkinparamToStyle.convertNow` rewrites dotted to `1;3`,
             // then its complex-value branch retains only `1`;
-            // `Style.getStroke` duplicates that lone token.
-            Self::Dotted => "stroke-dasharray:1,1;",
+            // `Style#getStroke` duplicates that lone token.
+            Self::Dotted => Some((1.0, 1.0)),
         }
     }
 }
@@ -63,6 +63,125 @@ struct ComponentStereotypeStyle {
     stroke_width: Option<f64>,
     round_corner: Option<f64>,
     line_style: Option<ComponentLineStyle>,
+}
+
+#[derive(Clone)]
+struct ComponentEntityRenderStyle {
+    fill: String,
+    stroke: String,
+    stroke_width: f64,
+    dash: Option<(f64, f64)>,
+    round_corner: f64,
+    shadow: f64,
+    font_color: String,
+    font_family: String,
+    font_size: f64,
+    font_bold: bool,
+    font_italic: bool,
+}
+
+#[derive(Clone)]
+struct ComponentLinkRenderStyle {
+    stroke: String,
+    stroke_width: f64,
+    dash: Option<(f64, f64)>,
+    font_color: String,
+    font_family: String,
+    font_size: f64,
+}
+
+fn component_dash_suffix(dash: Option<(f64, f64)>) -> String {
+    dash.map(|(visible, space)| {
+        format!(
+            "stroke-dasharray:{},{};",
+            pm::fmt_coord(visible),
+            pm::fmt_coord(space)
+        )
+    })
+    .unwrap_or_default()
+}
+
+fn component_shadow_value(value: &str) -> f64 {
+    // Java `Style#getShadowing` delegates non-numeric values to
+    // `Value#asDoubleDefaultTo(1.5)`; zero and negative deltas do not paint a
+    // shadow in `SvgGraphics#addFilterShadowId`.
+    match value.trim().to_ascii_lowercase().as_str() {
+        "false" | "no" => 0.0,
+        "true" | "yes" => 1.5,
+        _ => value.trim().parse::<f64>().unwrap_or(1.5).max(0.0),
+    }
+}
+
+fn apply_component_entity_style(
+    target: &mut ComponentEntityRenderStyle,
+    resolved: &ResolvedStyle<'_>,
+    gradient_defs: Option<&str>,
+) {
+    // Java `EntityImageDescription` resolves title paint, stroke, shadow, and
+    // font from the concrete symbol signature against
+    // `Entity#getCurrentStyleBuilder`.
+    if let Some(value) = resolved.property("backgroundColor") {
+        target.fill = crate::sequence::gradient_fill_or(value, gradient_defs);
+    }
+    if let Some(value) = resolved.property("lineColor") {
+        target.stroke = crate::sequence::resolve_color(value);
+    }
+    let stroke = resolved.stroke(target.stroke_width);
+    target.stroke_width = stroke.thickness;
+    if resolved.property("lineStyle").is_some() {
+        target.dash = stroke.dash;
+    }
+    if let Some(value) = resolved.property("roundCorner")
+        && let Ok(value) = value.parse::<f64>()
+    {
+        // `EntityImageDescription` passes the diameter to
+        // `URectangle#rounded`; SVG serializes its half-radius.
+        target.round_corner = value / 2.0;
+    }
+    if let Some(value) = resolved.property("shadowing") {
+        target.shadow = component_shadow_value(value);
+    }
+    if let Some(value) = resolved.property("fontColor") {
+        target.font_color = crate::sequence::resolve_color(value);
+    }
+    if let Some(value) = resolved.property("fontName") {
+        target.font_family = canonical_font_family(value);
+    }
+    if let Some(value) = resolved.property("fontSize")
+        && let Ok(value) = value.parse::<f64>()
+    {
+        target.font_size = value;
+    }
+    if let Some(value) = resolved.property("fontStyle") {
+        let value = value.to_ascii_lowercase();
+        target.font_bold = value.contains("bold");
+        target.font_italic = value.contains("italic");
+    }
+}
+
+fn apply_component_link_style(target: &mut ComponentLinkRenderStyle, resolved: &ResolvedStyle<'_>) {
+    // Java `SvekEdge#getCurrentStyleBuilder` returns `Link#getStyleBuilder`;
+    // line, head, and label channels therefore share the link's creation
+    // snapshot even after a legacy skinparam refreshes entities.
+    if let Some(value) = resolved.property("lineColor") {
+        target.stroke = crate::sequence::resolve_color(value);
+    }
+    let stroke = resolved.stroke(target.stroke_width);
+    target.stroke_width = stroke.thickness;
+    if resolved.property("lineStyle").is_some() {
+        target.dash = stroke.dash;
+    }
+    if let Some(value) = resolved.property("fontColor") {
+        target.font_color = crate::sequence::resolve_color(value);
+    }
+    if let Some(value) = resolved.property("fontName") {
+        target.font_family = canonical_font_family(value);
+    }
+    if let Some(value) = resolved.property("fontSize")
+        && let Ok(value) = value.parse::<f64>()
+    {
+        target.font_size = value;
+    }
 }
 
 fn component_stereotype_skinparam<'a>(key: &'a str, property: &str) -> Option<&'a str> {
@@ -545,10 +664,6 @@ const COMPONENT_MARGIN_TOP: f64 = 20.0;
 const COMPONENT_MARGIN_BOTTOM: f64 = 10.0;
 /// Base component box height (padding around one line of text).
 const COMPONENT_BASE_H: f64 = COMPONENT_MARGIN_TOP + COMPONENT_MARGIN_BOTTOM;
-// Java's Rose component baseline contributes five pixels to the
-// `LimitFinder` frontier. Explicit CSS shadowing instead follows
-// `LimitFinder.drawRectangle`: `2 * deltaShadow`.
-const COMPONENT_DEFAULT_SHADOW_FRONTIER: f64 = 5.0;
 /// Single-line component height.
 const COMPONENT_H: f64 = COMPONENT_BASE_H + LINE_HEIGHT;
 /// Left padding for text inside a component (accounts for icon space on right).
@@ -1036,7 +1151,6 @@ pub fn render_with_oracle(
     let mut component_arrow_stroke_width = 1.0;
     let mut component_arrow_line_style = ComponentLineStyle::Solid;
     let mut component_padding = 0.0;
-    let mut component_shadow_frontier = COMPONENT_DEFAULT_SHADOW_FRONTIER;
     // `skinparam componentStyle rectangle` draws components as plain rectangles
     // with no UML "tab" icon.
     let mut component_style_rectangle = false;
@@ -1198,11 +1312,10 @@ pub fn render_with_oracle(
     let component_style = cascade.resolve(&component_signature, StyleScheme::Regular);
     let arrow_style = cascade.resolve(&arrow_signature, StyleScheme::Regular);
     let document_style = cascade.resolve(&document_signature, StyleScheme::Regular);
-    let component_document_margin = document_style
-        .property("margin")
-        .and_then(|value| value.split_whitespace().next())
-        .and_then(|value| value.parse::<f64>().ok())
-        .unwrap_or(0.0);
+    // Java `TextBlockExporter12026.Builder#calculateMargin` resolves
+    // `root.document` through the final skin builder, then
+    // `ClockwiseTopRightBottomLeft#read` preserves all four sides.
+    let component_document_margin = document_style.box_sides("margin").unwrap_or_default();
     if let Some(value) = component_style.property("backgroundColor") {
         component_fill = crate::sequence::gradient_fill_or(value, gradient_defs);
     }
@@ -1224,19 +1337,6 @@ pub fn render_with_oracle(
     if let Some(value) = component_style.property("lineStyle") {
         component_line_style =
             ComponentLineStyle::from_skinparam(value).unwrap_or(component_line_style);
-    }
-    if cascade.has_style_declaration(&component_signature, StyleScheme::Regular, "shadowing")
-        && let Some(declaration) = component_style.declaration("shadowing")
-    {
-        let value = declaration.value.as_str();
-        let delta_shadow = match value.trim().to_ascii_lowercase().as_str() {
-            "false" | "no" => 0.0,
-            "true" | "yes" => 1.5,
-            _ => value
-                .parse::<f64>()
-                .unwrap_or(COMPONENT_DEFAULT_SHADOW_FRONTIER / 2.0),
-        };
-        component_shadow_frontier = delta_shadow.max(0.0) * 2.0;
     }
     if let Some(value) = component_style.property("fontColor") {
         component_font_color_sp = Some(crate::sequence::resolve_color(value));
@@ -1302,17 +1402,183 @@ pub fn render_with_oracle(
         .or(default_font_size)
         .unwrap_or(LINK_FONT);
 
+    let component_entity_styles: Vec<ComponentEntityRenderStyle> = diagram
+        .components
+        .iter()
+        .map(|component| {
+            let stereotype_style = matches!(component.kind, ComponentElementKind::Component)
+                .then(|| {
+                    component.stereotypes.iter().find_map(|stereotype| {
+                        component_stereotype_styles.get(&skinparam_stereotype_identity(stereotype))
+                    })
+                })
+                .flatten();
+            // `Component#source_line` uses serde's zero default only for
+            // legacy serialized models; parser-created entities are 1-based.
+            // Preserve the former final-style behavior for that compatibility
+            // sentinel without changing valid-source snapshot ownership.
+            let use_final_fallback = component.source_line == 0;
+            let mut style = ComponentEntityRenderStyle {
+                fill: stereotype_style
+                    .and_then(|style| style.fill.clone())
+                    .unwrap_or_else(|| {
+                        if use_final_fallback {
+                            component_fill.clone()
+                        } else {
+                            COMP_FILL.to_string()
+                        }
+                    }),
+                stroke: stereotype_style
+                    .and_then(|style| style.stroke.clone())
+                    .unwrap_or_else(|| {
+                        if use_final_fallback {
+                            component_stroke.clone()
+                        } else {
+                            STROKE.to_string()
+                        }
+                    }),
+                stroke_width: stereotype_style
+                    .and_then(|style| style.stroke_width)
+                    .unwrap_or(if use_final_fallback {
+                        component_stroke_width
+                    } else {
+                        0.5
+                    }),
+                dash: stereotype_style
+                    .and_then(|style| style.line_style)
+                    .unwrap_or(if use_final_fallback {
+                        component_line_style
+                    } else {
+                        ComponentLineStyle::Solid
+                    })
+                    .dash(),
+                round_corner: stereotype_style
+                    .and_then(|style| style.round_corner)
+                    .or(if use_final_fallback {
+                        component_round_corner
+                    } else {
+                        None
+                    })
+                    .unwrap_or(ROUND_R),
+                shadow: 0.0,
+                font_color: if use_final_fallback {
+                    component_font_color.clone()
+                } else {
+                    TEXT_COLOR.to_string()
+                },
+                font_family: if use_final_fallback {
+                    component_font_family.clone()
+                } else {
+                    "sans-serif".to_string()
+                },
+                font_size: if use_final_fallback {
+                    component_font_size
+                } else {
+                    FONT_SIZE
+                },
+                font_bold: use_final_fallback && component_font_bold,
+                font_italic: use_final_fallback && component_font_italic,
+            };
+            let signature = component
+                .stereotypes
+                .iter()
+                .fold(component_signature.clone(), |signature, stereotype| {
+                    signature.with_stereotype(stereotype)
+                });
+            // `EntityImageDescription` asks the entity for its builder at
+            // consumption time. `Entity#getCurrentStyleBuilder` preserves a
+            // pure-CSS creation snapshot, but refreshes every entity to the
+            // final builder after any legacy skinparam command.
+            let resolved = if component.source_line == 0 {
+                cascade.resolve(&signature, StyleScheme::Regular)
+            } else {
+                cascade.resolve_entity_at_source_line(
+                    &signature,
+                    StyleScheme::Regular,
+                    component.source_line,
+                )
+            };
+            apply_component_entity_style(&mut style, &resolved, gradient_defs);
+            style
+        })
+        .collect();
+    let component_link_styles: Vec<ComponentLinkRenderStyle> = diagram
+        .connections
+        .iter()
+        .map(|connection| {
+            // `Connection#source_line` has the same zero-only serde
+            // compatibility sentinel as component entities.
+            let use_final_fallback = connection.source_line == 0;
+            let mut style = ComponentLinkRenderStyle {
+                stroke: if use_final_fallback {
+                    component_arrow_stroke.clone()
+                } else {
+                    STROKE.to_string()
+                },
+                stroke_width: if use_final_fallback {
+                    component_arrow_stroke_width
+                } else {
+                    1.0
+                },
+                dash: if use_final_fallback {
+                    component_arrow_line_style.dash()
+                } else {
+                    None
+                },
+                font_color: if use_final_fallback {
+                    component_arrow_font_color.clone()
+                } else {
+                    TEXT_COLOR.to_string()
+                },
+                font_family: if use_final_fallback {
+                    component_arrow_font_family.clone()
+                } else {
+                    "sans-serif".to_string()
+                },
+                font_size: if use_final_fallback {
+                    component_arrow_font_size
+                } else {
+                    LINK_FONT
+                },
+            };
+            // `Link#getStyleBuilder` always returns the builder captured by
+            // the link constructor; unlike entities, legacy skinparams do not
+            // refresh an already-created link.
+            let resolved = if connection.source_line == 0 {
+                cascade.resolve(&arrow_signature, StyleScheme::Regular)
+            } else {
+                cascade.resolve_link_at_source_line(
+                    &arrow_signature,
+                    StyleScheme::Regular,
+                    connection.source_line,
+                )
+            };
+            apply_component_link_style(&mut style, &resolved);
+            style
+        })
+        .collect();
+    let component_layout_arrow_font_size = component_link_styles
+        .iter()
+        .map(|style| style.font_size)
+        .max_by(f64::total_cmp)
+        .unwrap_or(component_arrow_font_size);
+    let component_shadows: Vec<f64> = component_entity_styles
+        .iter()
+        .map(|style| style.shadow)
+        .collect();
+
     // Compute the same merged stereotype/label block that
     // `EntityImageDescription` passes to `USymbolComponent2.asSmall`.
     let component_text_metrics: Vec<ComponentTextMetrics> = diagram
         .components
         .iter()
-        .map(|component| {
+        .zip(&component_entity_styles)
+        .map(|(component, style)| {
             component_text_metrics(
                 component,
-                component_font_size,
-                &component_font_family,
-                component_font_bold,
+                style.font_size,
+                &style.font_family,
+                style.font_bold,
             )
         })
         .collect();
@@ -1349,7 +1615,7 @@ pub fn render_with_oracle(
 
     let use_oracle = oracle.is_some();
     let (component_node_sep, short_label_compat) =
-        component_no_oracle_spacing(diagram, component_arrow_font_size);
+        component_no_oracle_spacing(diagram, component_layout_arrow_font_size);
 
     // Try Sugiyama layout (skip when oracle is available).
     let layout_result = if use_oracle {
@@ -1457,6 +1723,7 @@ pub fn render_with_oracle(
             }
         }
         for (connection_index, conn) in diagram.connections.iter().enumerate() {
+            let link_style = &component_link_styles[connection_index];
             let (logical_from, logical_to, layout_reversed) = no_oracle_layout_edge_ends(conn);
             let class_socket_reversed = component_class_socket_link(diagram, conn);
             let (layout_logical_from, layout_logical_to) = if class_socket_reversed {
@@ -1525,11 +1792,11 @@ pub fn render_with_oracle(
                 // `appendLine` emits its fixed HTML table.
                 width: component_edge_label_layout_width(
                     label,
-                    component_arrow_font_size,
+                    link_style.font_size,
                     center_label_margin + component_padding,
                     short_label_compat,
                 ),
-                height: (text_render::label_height(label, component_arrow_font_size)
+                height: (text_render::label_height(label, link_style.font_size)
                     + (center_label_margin + component_padding) * 2.0)
                     .floor(),
             });
@@ -1539,11 +1806,11 @@ pub fn render_with_oracle(
                 let exact_label_size = conn.label.as_deref().map(|label| EdgeLabelSize {
                     width: component_edge_label_layout_width(
                         label,
-                        component_arrow_font_size,
+                        link_style.font_size,
                         center_label_margin + component_padding,
                         short_label_compat,
                     ),
-                    height: text_render::label_height(label, component_arrow_font_size)
+                    height: text_render::label_height(label, link_style.font_size)
                         + (center_label_margin + component_padding) * 2.0,
                 });
                 Some(component_link_note_label_size(
@@ -1556,10 +1823,10 @@ pub fn render_with_oracle(
             };
             let endpoint_size = |label: Option<&str>| {
                 label.map(|label| EdgeLabelSize {
-                    width: (text_render::measure(label, component_arrow_font_size, false)
+                    width: (text_render::measure(label, link_style.font_size, false)
                         + component_padding * 2.0)
                         .floor(),
-                    height: (text_render::label_height(label, component_arrow_font_size)
+                    height: (text_render::label_height(label, link_style.font_size)
                         + component_padding * 2.0)
                         .floor(),
                 })
@@ -1634,18 +1901,18 @@ pub fn render_with_oracle(
         } else {
             compute_positions_grid(diagram, &comp_dims, title_h)
         };
-    if component_document_margin > 0.0 {
+    if component_document_margin != StyleBoxSides::default() {
         for (x, y) in &mut positions {
-            *x += component_document_margin;
-            *y += component_document_margin;
+            *x += component_document_margin.left;
+            *y += component_document_margin.top;
         }
         for (x, y) in &mut iface_positions {
-            *x += component_document_margin;
-            *y += component_document_margin;
+            *x += component_document_margin.left;
+            *y += component_document_margin.top;
         }
         for cluster in &mut cluster_positions {
-            cluster.x += component_document_margin;
-            cluster.y += component_document_margin;
+            cluster.x += component_document_margin.left;
+            cluster.y += component_document_margin.top;
         }
     }
     for (position, interface) in iface_positions.iter_mut().zip(&diagram.interfaces) {
@@ -1726,7 +1993,7 @@ pub fn render_with_oracle(
             edge_paths,
             edge_dx: svek_edge_dx,
             edge_dy: svek_edge_dy,
-            arrow_font_size: component_arrow_font_size,
+            link_styles: &component_link_styles,
             positions: &positions,
             comp_dims: &comp_dims,
             iface_positions: &iface_positions,
@@ -1797,7 +2064,7 @@ pub fn render_with_oracle(
                 .map(|label| {
                     component_edge_label_layout_width(
                         label,
-                        component_arrow_font_size,
+                        component_link_styles[connection_index].font_size,
                         margin + component_padding,
                         short_label_compat,
                     )
@@ -1870,7 +2137,7 @@ pub fn render_with_oracle(
             endpoint_label_layouts: &endpoint_label_layouts,
             link_note_unpainted_right_edges: &link_note_unpainted_right_edges,
             middle_label_edges: &middle_label_edges,
-            component_shadow_frontier,
+            component_shadows: &component_shadows,
         })
     } else {
         (
@@ -1878,9 +2145,12 @@ pub fn render_with_oracle(
             (content_h + pkg_total_h + title_h).max(50.0),
         )
     };
-    if oracle.is_none() && component_document_margin > 0.0 {
-        total_w += component_document_margin;
-        total_h += component_document_margin;
+    if oracle.is_none() && component_document_margin != StyleBoxSides::default() {
+        // The solved body already owns the normal seven-pixel chrome tail
+        // and five-pixel positive-axis tail. `TextBlockMarged` replaces
+        // those tails with the document's right and bottom sides.
+        total_w += component_document_margin.right - CHROME_RIGHT_PAD;
+        total_h += component_document_margin.bottom - (SVEK_ENVELOPE_ORIGIN - 1.0);
         // `TextBlockExporter12026` adds the document margin to the SVEK
         // dimension before `SvgGraphics.ensureVisible` records the horizontal
         // frontier as `(int) (x + 1)`.
@@ -1938,12 +2208,27 @@ pub fn render_with_oracle(
         .as_ref()
         .filter(|c| *c != "#FFFFFF")
         .cloned();
+    let component_shadow_filter_id =
+        component_shadows
+            .iter()
+            .any(|shadow| *shadow > 0.0)
+            .then(|| {
+                crate::filter_registry::shadow_id_for(diagram.meta.source.as_deref().unwrap_or(""))
+            });
+    let mut component_defs = gradient_defs.unwrap_or("").to_string();
+    if let Some(filter_id) = component_shadow_filter_id.as_deref()
+        && !component_defs.contains(&format!(r#"id="{filter_id}""#))
+    {
+        // Java `SvgGraphics#manageShadow` lazily creates one source-seeded
+        // filter shared by every shape whose delta shadow is positive.
+        component_defs.push_str(&crate::filter_registry::shadow_filter_def(filter_id));
+    }
     let mut svg = SvgBuilder::new_plantuml_with_background_and_defs(
         total_w,
         total_h,
         diagram_type,
         canvas_background.as_deref(),
-        gradient_defs.unwrap_or(""),
+        &component_defs,
     );
     if let Some(bg) = canvas_rect.as_deref() {
         svg.raw(&format!(
@@ -2301,6 +2586,7 @@ pub fn render_with_oracle(
         let (x, y) = positions[i];
         let dim = &comp_dims[i];
         let text_metrics = &component_text_metrics[i];
+        let render_style = &component_entity_styles[i];
         let oracle_rect_for_id = oracle_comp_rect(comp);
         let ent_id = if let Some(id) = oracle_rect_for_id
             .and_then(|r| r.entity_id.clone())
@@ -2360,18 +2646,12 @@ pub fn render_with_oracle(
 
         // Determine fill: use oracle fill if available, otherwise default.
         let oracle_rect = oracle_comp_rect(comp);
-        let stereotype_style = matches!(comp.kind, ComponentElementKind::Component)
-            .then(|| {
-                comp.stereotypes.iter().find_map(|stereotype| {
-                    component_stereotype_styles.get(&skinparam_stereotype_identity(stereotype))
-                })
-            })
-            .flatten();
         let fill_owned = oracle_rect
             .and_then(|r| r.fill.clone())
-            .or_else(|| comp.color.as_deref().map(crate::sequence::resolve_color))
-            .or_else(|| stereotype_style.and_then(|style| style.fill.clone()));
-        let fill = fill_owned.as_deref().unwrap_or(&component_fill);
+            // Java `Style#eventuallyOverride(colors)` applies declaration
+            // colors after the entity-builder snapshot.
+            .or_else(|| comp.color.as_deref().map(crate::sequence::resolve_color));
+        let fill = fill_owned.as_deref().unwrap_or(&render_style.fill);
 
         // Use oracle width/height when available — they're authoritative.
         let (w, h) = oracle_rect
@@ -2383,19 +2663,11 @@ pub fn render_with_oracle(
         let body_style = oracle_rect
             .and_then(|r| r.body_style.clone())
             .unwrap_or_else(|| {
-                let stroke = stereotype_style
-                    .and_then(|style| style.stroke.as_deref())
-                    .unwrap_or(&component_stroke);
-                let stroke_width = stereotype_style
-                    .and_then(|style| style.stroke_width)
-                    .unwrap_or(component_stroke_width);
-                let line_style = stereotype_style
-                    .and_then(|style| style.line_style)
-                    .unwrap_or(component_line_style);
                 format!(
-                    "stroke:{stroke};stroke-width:{};{}",
-                    fc(stroke_width),
-                    line_style.svg_suffix()
+                    "stroke:{};stroke-width:{};{}",
+                    render_style.stroke,
+                    fc(render_style.stroke_width),
+                    component_dash_suffix(render_style.dash),
                 )
             });
         // Corner radius: honour the oracle's captured rx/ry when present. A
@@ -2404,12 +2676,14 @@ pub fn render_with_oracle(
         // body `<rect>`. Fall back to skinparam corner radius, then default.
         let oracle_rx = oracle_rect.and_then(|r| r.rect_rx.as_deref());
         let oracle_ry = oracle_rect.and_then(|r| r.rect_ry.as_deref());
-        let round_r = stereotype_style
-            .and_then(|style| style.round_corner)
-            .or(component_round_corner)
-            .unwrap_or(ROUND_R);
+        let round_r = render_style.round_corner;
         let rx_s = oracle_rx.map(String::from).unwrap_or_else(|| fc(round_r));
         let ry_s = oracle_ry.map(String::from).unwrap_or_else(|| fc(round_r));
+        let shadow_attr = component_shadow_filter_id
+            .as_deref()
+            .filter(|_| render_style.shadow > 0.0)
+            .map(|id| format!(r#" filter="url(#{id})""#))
+            .unwrap_or_default();
 
         // Non-component leaf elements draw their own DESCRIPTION shapes in
         // place of the rounded body rect and UML tab icon. Reuse the
@@ -2478,7 +2752,7 @@ pub fn render_with_oracle(
             ));
         } else {
             svg.raw(&format!(
-            r#"<rect fill="{fill}" height="{h_s}" rx="{rx_s}" ry="{ry_s}" style="{body_style}" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
+            r#"<rect fill="{fill}"{shadow_attr} height="{h_s}" rx="{rx_s}" ry="{ry_s}" style="{body_style}" width="{w_s}" x="{x_s}" y="{y_s}"/>"#,
             h_s = fc(h),
             w_s = fc(w),
             x_s = fc(x),
@@ -2618,9 +2892,9 @@ pub fn render_with_oracle(
                 &TextBase {
                     x: tx,
                     y: ty,
-                    font_size: component_font_size as u32,
-                    font_family: &component_font_family,
-                    fill: &component_font_color,
+                    font_size: render_style.font_size as u32,
+                    font_family: &render_style.font_family,
+                    fill: &render_style.font_color,
                     bold: false,
                     italic: true,
                     underline: false,
@@ -2646,11 +2920,11 @@ pub fn render_with_oracle(
             &TextBase {
                 x: label_tx,
                 y: label_y,
-                font_size: component_font_size as u32,
-                font_family: &component_font_family,
-                fill: &component_font_color,
-                bold: component_font_bold,
-                italic: component_font_italic,
+                font_size: render_style.font_size as u32,
+                font_family: &render_style.font_family,
+                fill: &render_style.font_color,
+                bold: render_style.font_bold,
+                italic: render_style.font_italic,
                 underline: false,
                 skip_underline: false,
             },
@@ -2885,6 +3159,7 @@ pub fn render_with_oracle(
             &mut svg,
             diagram,
             orc,
+            &component_link_styles,
             component_arrow_font_size,
             &component_arrow_font_family,
             &component_arrow_font_color,
@@ -2906,6 +3181,12 @@ pub fn render_with_oracle(
             .collect();
         let mut next_link_counter = entity_counter;
         for (connection_index, conn) in diagram.connections.iter().enumerate() {
+            let link_style = &component_link_styles[connection_index];
+            let component_arrow_stroke = link_style.stroke.clone();
+            let component_arrow_stroke_width = link_style.stroke_width;
+            let component_arrow_font_color = link_style.font_color.clone();
+            let component_arrow_font_family = link_style.font_family.clone();
+            let component_arrow_font_size = link_style.font_size;
             let (logical_from, logical_to, layout_reversed) = no_oracle_layout_edge_ends(conn);
             let class_socket_reversed = component_class_socket_link(diagram, conn);
             let (layout_logical_from, layout_logical_to) = if class_socket_reversed {
@@ -3015,9 +3296,9 @@ pub fn render_with_oracle(
 
             let link_type_attr = no_oracle_link_type_attr(conn);
             let dash_attr = if conn.dashed {
-                "stroke-dasharray:7,7;"
+                "stroke-dasharray:7,7;".to_string()
             } else {
-                component_arrow_line_style.svg_suffix()
+                component_dash_suffix(link_style.dash)
             };
 
             // Try bezier path from layout engine first.
@@ -3485,9 +3766,9 @@ pub fn render_with_oracle(
                         &TextBase {
                             x: mx + 1.0,
                             y: my - 4.0,
-                            font_size: LINK_FONT as u32,
-                            font_family: "sans-serif",
-                            fill: TEXT_COLOR,
+                            font_size: component_arrow_font_size as u32,
+                            font_family: &component_arrow_font_family,
+                            fill: &component_arrow_font_color,
                             bold: false,
                             italic: false,
                             underline: false,
@@ -3497,17 +3778,17 @@ pub fn render_with_oracle(
                     svg.raw(&text_buf);
                 }
                 if let Some(from_mult) = &conn.from_mult {
-                    let mw = text_render::measure(from_mult, LINK_FONT, false);
+                    let mw = text_render::measure(from_mult, component_arrow_font_size, false);
                     let mut text_buf = String::new();
                     text_render::emit_text(
                         &mut text_buf,
                         from_mult,
                         &TextBase {
                             x: from_cx - mw - 1.0,
-                            y: from_cy + LINK_FONT + 2.0,
-                            font_size: LINK_FONT as u32,
-                            font_family: "sans-serif",
-                            fill: TEXT_COLOR,
+                            y: from_cy + component_arrow_font_size + 2.0,
+                            font_size: component_arrow_font_size as u32,
+                            font_family: &component_arrow_font_family,
+                            fill: &component_arrow_font_color,
                             bold: false,
                             italic: false,
                             underline: false,
@@ -3517,7 +3798,7 @@ pub fn render_with_oracle(
                     svg.raw(&text_buf);
                 }
                 if let Some(to_mult) = &conn.to_mult {
-                    let mw = text_render::measure(to_mult, LINK_FONT, false);
+                    let mw = text_render::measure(to_mult, component_arrow_font_size, false);
                     let mut text_buf = String::new();
                     text_render::emit_text(
                         &mut text_buf,
@@ -3525,9 +3806,9 @@ pub fn render_with_oracle(
                         &TextBase {
                             x: to_cx - mw - 1.0,
                             y: to_cy - 4.0,
-                            font_size: LINK_FONT as u32,
-                            font_family: "sans-serif",
-                            fill: TEXT_COLOR,
+                            font_size: component_arrow_font_size as u32,
+                            font_family: &component_arrow_font_family,
+                            fill: &component_arrow_font_color,
                             bold: false,
                             italic: false,
                             underline: false,
@@ -5268,18 +5549,19 @@ struct NoOracleCanvas<'a> {
     endpoint_label_layouts: &'a [ComponentEndpointLabelLayout],
     link_note_unpainted_right_edges: &'a [(String, String)],
     middle_label_edges: &'a [(String, String)],
-    component_shadow_frontier: f64,
+    component_shadows: &'a [f64],
 }
 
 fn compute_no_oracle_canvas(input: NoOracleCanvas<'_>) -> (f64, f64) {
     let mut max_x = 0.0_f64;
     let mut max_y = input.title_h;
 
-    for (((x, y), dim), comp) in input
+    for ((((x, y), dim), comp), shadow) in input
         .positions
         .iter()
         .zip(input.comp_dims)
         .zip(input.components)
+        .zip(input.component_shadows)
     {
         let (painted_max_x, painted_max_y) = match comp.kind {
             // Java `LimitFinder.drawUPolygon` measures ten pixels beyond both
@@ -5289,13 +5571,12 @@ fn compute_no_oracle_canvas(input: NoOracleCanvas<'_>) -> (f64, f64) {
             // at `dimension - 1`, making that equivalent to SVEK's 15px
             // dimension delta, while polygon/UEmpty maxima do not.
             ComponentElementKind::Node => (dim.width + 11.0, dim.height + 11.0),
-            // `LimitFinder.drawRectangle` records width/height minus one for
-            // the outer `USymbolComponent2` rectangle; the shared 14px tail
-            // already incorporates that one-pixel difference.
+            // `EntityImageDescription` passes the style shadow through
+            // `Fashion#withShadow` to `USymbolComponent2#drawComponent2`.
+            // `SvgGraphics#svgRectangle` records the same painted rectangle at
+            // width/height plus twice its delta shadow.
             ComponentElementKind::Component => {
-                let shadow_delta =
-                    input.component_shadow_frontier - COMPONENT_DEFAULT_SHADOW_FRONTIER;
-                (dim.width + shadow_delta, dim.height + shadow_delta)
+                (dim.width + *shadow * 2.0, dim.height + *shadow * 2.0)
             }
             ComponentElementKind::Database => (
                 dim.width + DATABASE_RENDER_OVERFLOW_X,
@@ -5442,6 +5723,7 @@ fn render_oracle_connections(
     svg: &mut SvgBuilder,
     diagram: &ComponentDiagram,
     oracle: &OracleLayout,
+    link_styles: &[ComponentLinkRenderStyle],
     arrow_font_size: f64,
     arrow_font_family: &str,
     arrow_font_color: &str,
@@ -5457,7 +5739,7 @@ fn render_oracle_connections(
     };
 
     let mut emitted_edge_ids: std::collections::HashSet<String> = std::collections::HashSet::new();
-    for conn in &diagram.connections {
+    for (connection_index, conn) in diagram.connections.iter().enumerate() {
         // Path id formats vary by arrow kind:
         //   "{from}-to-{to}"     — dependency  (`A -> B`, `A --> B`)
         //   "{from}-{to}"        — association (`A -- B`)
@@ -5488,14 +5770,21 @@ fn render_oracle_connections(
             None => continue,
         };
         emitted_edge_ids.insert(oracle_edge.id.clone());
+        let link_style = link_styles.get(connection_index);
         emit_oracle_edge(
             svg,
             oracle_edge,
             &conn.from,
             &conn.to,
-            arrow_font_size,
-            arrow_font_family,
-            arrow_font_color,
+            link_style
+                .map(|style| style.font_size)
+                .unwrap_or(arrow_font_size),
+            link_style
+                .map(|style| style.font_family.as_str())
+                .unwrap_or(arrow_font_family),
+            link_style
+                .map(|style| style.font_color.as_str())
+                .unwrap_or(arrow_font_color),
         );
     }
 
@@ -6164,7 +6453,7 @@ struct ComponentEndpointLabelInput<'a> {
     edge_paths: &'a [EdgePath],
     edge_dx: f64,
     edge_dy: f64,
-    arrow_font_size: f64,
+    link_styles: &'a [ComponentLinkRenderStyle],
     positions: &'a [(f64, f64)],
     comp_dims: &'a [CompDim],
     iface_positions: &'a [(f64, f64)],
@@ -6234,7 +6523,13 @@ fn component_endpoint_label_layouts(
         .diagram
         .connections
         .iter()
-        .map(|connection| {
+        .enumerate()
+        .map(|(connection_index, connection)| {
+            let arrow_font_size = input
+                .link_styles
+                .get(connection_index)
+                .map(|style| style.font_size)
+                .unwrap_or(LINK_FONT);
             let (logical_from, logical_to, layout_reversed) =
                 no_oracle_layout_edge_ends(connection);
             let (layout_logical_from, layout_logical_to) =
@@ -6277,9 +6572,9 @@ fn component_endpoint_label_layouts(
                         .map(|(text, position)| ComponentLabelRect {
                             x: position.x + input.edge_dx,
                             y: position.y + input.edge_dy,
-                            width: text_render::measure(text, input.arrow_font_size, false)
+                            width: text_render::measure(text, arrow_font_size, false)
                                 + input.padding * 2.0,
-                            height: text_render::label_height(text, input.arrow_font_size)
+                            height: text_render::label_height(text, arrow_font_size)
                                 + input.padding * 2.0,
                         })
                 };
@@ -8677,6 +8972,196 @@ mod tests {
     }
 
     #[test]
+    fn pure_css_component_entities_keep_creation_snapshots() {
+        let input = "@startuml\n\
+                     <style>\n\
+                     component {\n\
+                       BackgroundColor #E1F5FE\n\
+                       LineColor #0277BD\n\
+                       FontColor #01579B\n\
+                     }\n\
+                     </style>\n\
+                     component \"Early Relay 3109\" as EarlyRelay3109\n\
+                     <style>\n\
+                     component {\n\
+                       BackgroundColor #F3E5F5\n\
+                       LineColor #6A1B9A\n\
+                       FontColor #4A148C\n\
+                     }\n\
+                     </style>\n\
+                     component \"Late Relay 3119\" as LateRelay3119\n\
+                     EarlyRelay3109 --> LateRelay3119\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        let early = entity_rect(&svg, "EarlyRelay3109");
+        let late = entity_rect(&svg, "LateRelay3119");
+
+        assert!(early.contains(r##"fill="#E1F5FE""##), "{svg}");
+        assert!(early.contains("stroke:#0277BD;"), "{svg}");
+        assert!(late.contains(r##"fill="#F3E5F5""##), "{svg}");
+        assert!(late.contains("stroke:#6A1B9A;"), "{svg}");
+    }
+
+    #[test]
+    fn component_css_stereotypes_use_normalized_entity_signatures() {
+        let input = "@startuml\n\
+                     <style>\n\
+                     component {\n\
+                       BackgroundColor #ECEFF1\n\
+                       LineColor #455A64\n\
+                       .Critical.Port {\n\
+                         BackgroundColor #FFCDD2\n\
+                         LineColor #B71C1C\n\
+                         LineThickness 2\n\
+                       }\n\
+                     }\n\
+                     </style>\n\
+                     component \"Qualified Relay 3163\" as QualifiedRelay3163 <<critical_port>>\n\
+                     component \"Plain Relay 3167\" as PlainRelay3167\n\
+                     QualifiedRelay3163 --> PlainRelay3167\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        let qualified = entity_rect(&svg, "QualifiedRelay3163");
+        let plain = entity_rect(&svg, "PlainRelay3167");
+
+        assert!(qualified.contains(r##"fill="#FFCDD2""##), "{svg}");
+        assert!(
+            qualified.contains("stroke:#B71C1C;stroke-width:2;"),
+            "{svg}"
+        );
+        assert!(plain.contains(r##"fill="#ECEFF1""##), "{svg}");
+        assert!(plain.contains("stroke:#455A64;"), "{svg}");
+    }
+
+    #[test]
+    fn legacy_refreshes_entities_but_links_keep_their_own_builders() {
+        let input = "@startuml\n\
+                     <style>\n\
+                     component {\n\
+                       BackgroundColor #E3F2FD\n\
+                       LineColor #1565C0\n\
+                     }\n\
+                     arrow {\n\
+                       LineColor #C62828\n\
+                       FontColor #C62828\n\
+                       LineThickness 2\n\
+                     }\n\
+                     </style>\n\
+                     component \"Early Intake 3203\" as EarlyIntake3203\n\
+                     component \"Middle Queue 3209\" as MiddleQueue3209\n\
+                     EarlyIntake3203 --> MiddleQueue3209 : before refresh\n\
+                     skinparam componentBorderColor #00695C\n\
+                     <style>\n\
+                     component {\n\
+                       BackgroundColor #E0F2F1\n\
+                       LineColor #00695C\n\
+                     }\n\
+                     arrow {\n\
+                       LineColor #4527A0\n\
+                       FontColor #4527A0\n\
+                       LineThickness 3\n\
+                     }\n\
+                     </style>\n\
+                     component \"Late Archive 3217\" as LateArchive3217\n\
+                     MiddleQueue3209 --> LateArchive3217 : after refresh\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        for id in ["EarlyIntake3203", "MiddleQueue3209", "LateArchive3217"] {
+            let rect = entity_rect(&svg, id);
+            assert!(rect.contains(r##"fill="#E0F2F1""##), "{svg}");
+            assert!(rect.contains("stroke:#00695C;"), "{svg}");
+        }
+        assert!(
+            svg.contains(
+                r#"id="EarlyIntake3203-to-MiddleQueue3209" style="stroke:#C62828;stroke-width:2;"#
+            ),
+            "{svg}"
+        );
+        assert!(
+            svg.contains(
+                r#"id="MiddleQueue3209-to-LateArchive3217" style="stroke:#4527A0;stroke-width:3;"#
+            ),
+            "{svg}"
+        );
+    }
+
+    #[test]
+    fn component_shadow_and_open_dash_pair_share_painted_style_values() {
+        let input = "@startuml\n\
+                     left to right direction\n\
+                     <style>\n\
+                     document {\n\
+                       BackgroundColor #E8EAF6\n\
+                       Margin 3 7 11 13\n\
+                     }\n\
+                     component {\n\
+                       BackgroundColor #E0F2F1\n\
+                       LineColor #00695C\n\
+                       Shadowing 4\n\
+                     }\n\
+                     arrow {\n\
+                       LineColor #7B1FA2\n\
+                       LineThickness 3\n\
+                       LineStyle 7-4\n\
+                     }\n\
+                     </style>\n\
+                     component \"Shadow Source 3301\" as ShadowSource3301\n\
+                     component \"Shadow Sink 3307\" as ShadowSink3307\n\
+                     ShadowSource3301 --> ShadowSink3307 : weighted route\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Component(component_diagram) = &diagram else {
+            panic!("expected component diagram");
+        };
+        let seed_source = component_diagram.meta.source.as_deref().unwrap_or("");
+        let filter_id = crate::filter_registry::shadow_id_for(seed_source);
+        let svg = crate::render_svg(&diagram);
+        let control = input.replace("Margin 3 7 11 13\n", "");
+        let control_diagram = rustuml_parser::parse::parse(&control).unwrap();
+        let control_svg = crate::render_svg(&control_diagram);
+
+        assert!(
+            svg.contains(&crate::filter_registry::shadow_filter_def(&filter_id)),
+            "{svg}"
+        );
+        assert_eq!(
+            svg.matches(&format!(r#"filter="url(#{filter_id})""#))
+                .count(),
+            2,
+            "{svg}"
+        );
+        assert!(
+            svg.contains("stroke:#7B1FA2;stroke-width:3;stroke-dasharray:7,4;"),
+            "{svg}"
+        );
+        assert!(svg.contains("background:#E8EAF6;"), "{svg}");
+        let styled_rect = entity_rect(&svg, "ShadowSource3301");
+        let control_rect = entity_rect(&control_svg, "ShadowSource3301");
+        assert_eq!(
+            numeric_attr(styled_rect, "x") - numeric_attr(control_rect, "x"),
+            13.0
+        );
+        assert_eq!(
+            numeric_attr(styled_rect, "y") - numeric_attr(control_rect, "y"),
+            3.0
+        );
+        let styled_root = svg.split_once('>').map(|(root, _)| root).unwrap();
+        let control_root = control_svg.split_once('>').map(|(root, _)| root).unwrap();
+        assert_eq!(
+            numeric_attr(styled_root, "width") - numeric_attr(control_root, "width"),
+            20.0
+        );
+        assert_eq!(
+            numeric_attr(styled_root, "height") - numeric_attr(control_root, "height"),
+            14.0
+        );
+    }
+
+    #[test]
     fn component_stereotype_skinparam_separator_aliases_follow_source_order() {
         for (first, second, expected, rejected) in [
             ("Red", "Blue", "#0000FF", "#FF0000"),
@@ -8815,7 +9300,7 @@ mod tests {
             endpoint_label_layouts: &[],
             link_note_unpainted_right_edges: &[],
             middle_label_edges: &[],
-            component_shadow_frontier: super::COMPONENT_DEFAULT_SHADOW_FRONTIER,
+            component_shadows: &[0.0],
         });
         assert_eq!(canvas_w, expected_w);
         assert_eq!(canvas_h, expected_h);
