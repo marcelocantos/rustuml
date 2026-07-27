@@ -1,0 +1,287 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-mixed-state-group-metadata",
+  "reviewed_at": "2026-07-28T00:44:09+1000",
+  "verdict": "reject",
+  "reviewer": {
+    "identity": "Codex independent skeptical checker",
+    "model": "GPT-5 Codex",
+    "role": "review only; did not implement 0caa6d9f",
+    "independence": [
+      "The checker did not author or edit the immutable implementation.",
+      "No production code or causal-response file was edited during this review.",
+      "The unrelated dirty crates/rustuml-render/src/sequence.rs was left untouched.",
+      "The checker independently inspected the Java provenance, Rust data flow, held-out outputs, and anti-overfit surface rather than accepting prior test claims."
+    ]
+  },
+  "subject": {
+    "implementation_commit": "0caa6d9f42409ef8c0454bc511169ada9787d49b",
+    "implementation_parent": "84d9c403317af007f4c649e683fb6d472505ee45",
+    "implementation_subject": "fix: model class package render roles",
+    "production_diff": [
+      "crates/rustuml-parser/src/parse/class.rs",
+      "crates/rustuml-render/src/class.rs"
+    ],
+    "account": "docs/parity-reviews/class-mixed-state-group-metadata/account.json",
+    "account_sha256": "596e29247608bf2699a9f1a3628be2b6ac558409f47c3bb6d2f9cc58c2292409",
+    "causal_response_commit": "84d9c403317af007f4c649e683fb6d472505ee45",
+    "causal_response": "docs/parity-reviews/class-mixed-state-group-metadata/review-7-response.md",
+    "causal_response_sha256": "88ef3dc875b9eabeae49478969b7c3b945bf115b8f58cf8f02dc468f8a851d76",
+    "immutability_evidence": [
+      "84d9c403317af007f4c649e683fb6d472505ee45 is the direct parent of 0caa6d9f42409ef8c0454bc511169ada9787d49b.",
+      "The account and review-7 response are byte-unchanged across the implementation commit.",
+      "HEAD was exactly 0caa6d9f42409ef8c0454bc511169ada9787d49b during review.",
+      "git diff --exit-code 0caa6d9f -- the two reviewed production files exited 0."
+    ]
+  },
+  "java": {
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "jar_mtime": "2026-06-19T02:03:25+1000",
+    "jar_size_bytes": 56761142,
+    "inspected_locations": [
+      "net.atmp.CucaDiagram#setNamespaceSeparator",
+      "net.atmp.CucaDiagram#quarkInContextSafe",
+      "net.sourceforge.plantuml.plasma.Plasma#firstWithName",
+      "net.sourceforge.plantuml.classdiagram.command.CommandNamespaceSeparator#getRegexConcat",
+      "net.sourceforge.plantuml.classdiagram.command.CommandNamespaceSeparator#executeArg",
+      "net.sourceforge.plantuml.command.CommandPackage#executeArg",
+      "net.sourceforge.plantuml.command.CommandPackageEmpty#executeArg",
+      "net.sourceforge.plantuml.abel.Entity#isEmpty",
+      "net.sourceforge.plantuml.svek.GraphvizImageBuilder#printGroups",
+      "net.sourceforge.plantuml.svek.GraphvizImageBuilder#printGroup",
+      "net.sourceforge.plantuml.svek.image.EntityImageEmptyPackage#calculateDimensionSlow",
+      "net.sourceforge.plantuml.svek.image.EntityImageEmptyPackage#drawU"
+    ],
+    "mechanism_evidence": [
+      "CucaDiagram.quarkInContextSafe calls creation-ordered Plasma.firstWithName for every command when the namespace separator is null; the branch is not limited to entity declarations.",
+      "CommandPackage and CommandPackageEmpty both call quarkInContext(false), so package declarations under a null separator must use the same shared first-created quark order as entity declarations.",
+      "CommandNamespaceSeparator accepts both separator and namespaceseparator spellings and treats none case-insensitively.",
+      "Entity.isEmpty examines direct nonremoved quark children.",
+      "GraphvizImageBuilder.printGroups mutates a directly empty package to LeafType.EMPTY_PACKAGE and calls printEntity; it does not merely reserve an invisible layout node.",
+      "EntityImageEmptyPackage.calculateDimensionSlow and drawU define both the layout envelope and visible package chrome."
+    ],
+    "source_cleanliness": "git diff --exit-code HEAD over every inspected Java source file exited 0 at the pinned revision."
+  },
+  "rust_execution": {
+    "helper": "/Users/marcelo/work/github.com/marcelocantos/rustuml/target/release/examples/diff_one",
+    "helper_sha256": "63d10bf8fed449d1af4697d03e86a5368430eb098c3fad1220742ce4923357dd",
+    "helper_mtime": "2026-07-28T00:40:10+1000",
+    "helper_size_bytes": 16553856,
+    "direct_cargo_commands": [],
+    "direct_rustc_commands": [],
+    "rustfmt_commands": [],
+    "build_commands": [],
+    "notes": [
+      "All reviewed Rust SVGs came from the prebuilt release helper.",
+      "The helper's --print-rust mode supplied Rust SVGs without writing rendered output into the repository.",
+      "No Cargo, rustc, rustfmt, or build command was invoked.",
+      "A stale target/release/rustuml binary was not used as verdict evidence; commit-specific output evidence came from the rebuilt diff_one helper."
+    ]
+  },
+  "commands": [
+    "bullseye_frontier(cwd=/Users/marcelo/work/github.com/marcelocantos/rustuml)",
+    "bullseye_convergence(cwd=/Users/marcelo/work/github.com/marcelocantos/rustuml, skip_invariants=true)",
+    "cat /Users/marcelo/.claude/rust.md",
+    "cat /Users/marcelo/.codex/skills/oracle-first/SKILL.md",
+    "git show --stat --oneline --decorate 0caa6d9f",
+    "git show --format=fuller --no-ext-diff 0caa6d9f -- crates/rustuml-parser/src/parse/class.rs crates/rustuml-render/src/class.rs",
+    "cat docs/parity-reviews/class-mixed-state-group-metadata/review-7-response.md",
+    "cat docs/parity-reviews/class-mixed-state-group-metadata/review-7.json",
+    "static sed/rg inspection of every Java and Rust location named in java.inspected_locations",
+    "for every review2_ through review7_ source: target/release/examples/diff_one --no-oracle <source>",
+    "for every review2_ through review7_ source: target/release/examples/diff_one --no-oracle --print-rust <source>",
+    "Ruby REXML comparison of root data-diagram-type and ordered g[class=entity|cluster] data-qualified-name/data-source-line records for all 59 review2_ through review7_ sources",
+    "target/release/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/class-mixed-state-group-metadata/review6_unique_mixed_reuses_remote_class.puml",
+    "target/release/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/class-mixed-state-group-metadata/review7_nested_empty_groups_only.puml",
+    "eight-worker Ruby replay of target/release/examples/diff_one --no-oracle over all 2,140 test-diagrams/golden/class/**/*.puml sources",
+    "git show --format= --no-ext-diff 0caa6d9f -- reviewed production files | rg anti-overfit patterns for review labels, fixture/golden reads, embedded data, source-line predicates, count ladders, and coordinates",
+    "git diff --check 0caa6d9f^ 0caa6d9f -- crates/rustuml-parser/src/parse/class.rs crates/rustuml-render/src/class.rs",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml diff --exit-code HEAD -- all inspected Java source files",
+    "git diff --exit-code 0caa6d9f -- crates/rustuml-parser/src/parse/class.rs crates/rustuml-render/src/class.rs"
+  ],
+  "comparison": {
+    "scoped_identity_predicate": "Root data-diagram-type plus the ordered sequence of g[class=entity|cluster] records, each represented by class, data-qualified-name, and data-source-line.",
+    "strict_predicate": "The repository's strict SVG comparator as invoked by diff_one --no-oracle.",
+    "validity_gate": "All 59 existing review2 through review7 Java SVGs parse as XML and none is classified as a PlantUML syntax/error page.",
+    "identified_blind_spot": "PlantUML EMPTY_PACKAGE leaves are painted without a g[class=entity|cluster] wrapper, so scoped identity can report a pass while Rust omits visible empty-package chrome.",
+    "verdict_rule": "A source-proven mechanism contradiction or valid visible held-out divergence rejects the immutable implementation even when the narrower scoped predicate and family ratchet remain green."
+  },
+  "existing_held_out_replay": {
+    "source_glob": "test-diagrams/perturbations/class-mixed-state-group-metadata/review[2-7]_*.puml",
+    "source_count": 59,
+    "valid_java_svgs": 59,
+    "java_error_pages": 0,
+    "strict_matches": 19,
+    "strict_differences": 40,
+    "strict_skips": 0,
+    "scoped_identity_matches": 59,
+    "scoped_identity_failures": [],
+    "classification": "The implementation repairs the two review-7 scoped identity failures, but the scoped predicate does not observe EMPTY_PACKAGE paint."
+  },
+  "class_family_replay": {
+    "source_glob": "test-diagrams/golden/class/**/*.puml",
+    "source_count": 2140,
+    "passes": 1940,
+    "mismatches": 31,
+    "skips": 169,
+    "eligible": 1971,
+    "baseline_passes": 1940,
+    "baseline_eligible": 1971,
+    "classification": "No class-family ratchet regression, but this aggregate metric does not override the mechanism rejection."
+  },
+  "focused_output_evidence": [
+    {
+      "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review6_unique_mixed_reuses_remote_class.puml",
+      "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review6_unique_mixed_reuses_remote_class.svg",
+      "source_sha256": "a8d76ba50fa2b6e753e1e93efb3a4db050804eaccea700602f482aa30d6ecd2c",
+      "golden_sha256": "30472a6be922bae49cd8b4549bcb16db33e652274a56da6e5f992c5f9cb03cb1",
+      "scoped_identity": "pass",
+      "strict": "different",
+      "evidence": "Java visibly paints BridgeActors as an empty-package leaf after the mixed declaration reuses BridgeClasses.TransitBridge. Rust reserves the EmptyLeaf layout role but emits no BridgeActors chrome. The scoped predicate ignores the Java leaf because it has no entity/cluster group wrapper."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review7_nested_empty_groups_only.puml",
+      "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review7_nested_empty_groups_only.svg",
+      "source_sha256": "9db6246602b5a57f522b1e62bf0e8c8b5e941fbe3209c56e6d2ad67f5c00d00f",
+      "golden_sha256": "43b391648d549b96d705d9802f0709ad19406d97f56479294ff0a29dea94fe82",
+      "scoped_identity": "pass",
+      "strict": "different",
+      "evidence": "Both implementations now emit EmptyOuter and EmptyOuter.EmptyRight clusters, satisfying scoped identity. Java also paints EmptyLeft and EmptyDeep EMPTY_PACKAGE leaves; Rust emits neither label or package outline."
+    }
+  ],
+  "fresh_review": {
+    "generated_sources": 0,
+    "generated_java_svgs": 0,
+    "reason": "The user requested a review-record-only commit and prohibited edits outside this record. No unpreserved temporary probe is claimed as T14.6 held-out evidence.",
+    "acceptance_effect": "This rejection is valid from source contradictions and already-preserved held-outs, but a successor implementation cannot be accepted until the missing adversarial cases below are preserved as source/Java-SVG pairs and independently replayed."
+  },
+  "anti_overfit": {
+    "fixture_shaped_logic": "pass",
+    "golden_or_fixture_reads": "pass",
+    "numeric_constant_audit": "pass_with_provenance",
+    "model_completeness": "fail",
+    "findings": [
+      "The production diff contains no prior or held-out fixture path, source, SVG body, fixture label branch, source-line equality predicate, coordinate predicate, or per-count constant ladder.",
+      "The PackageRenderRole enum and direct-child derivation are mechanism-shaped rather than fixture-shaped.",
+      "The new 10.0 empty-package margin is adjacent to an EntityImageEmptyPackage#MARGIN provenance comment.",
+      "The mechanism is incomplete because EmptyLeaf participates in layout and UID allocation but not SVG paint.",
+      "The shared creation-order index is used by resolve_quark_path but bypassed by resolve_group_path under a null separator.",
+      "The separator command parser does not implement Java's accepted separator alias or case-insensitive none value."
+    ]
+  },
+  "findings": [
+    {
+      "severity": "reject",
+      "title": "EMPTY_PACKAGE leaves are laid out and allocated but never painted",
+      "rust_evidence": [
+        "crates/rustuml-render/src/class.rs:2192-2200 creates empty-package layout nodes.",
+        "crates/rustuml-render/src/class.rs:2292-2304 adds those nodes to parent clusters.",
+        "crates/rustuml-render/src/class.rs:3509-3530 computes EntityImageEmptyPackage-derived dimensions.",
+        "crates/rustuml-render/src/class.rs:5135-5191 filters SVG package emission to PackageRenderRole::Cluster and has no EmptyLeaf emitter."
+      ],
+      "java_evidence": [
+        "GraphvizImageBuilder#printGroups lines 416-418 mutates a directly empty package to EMPTY_PACKAGE and calls printEntity.",
+        "EntityImageEmptyPackage#drawU paints the package decoration, title, stereotype, colors, and outline."
+      ],
+      "held_out_evidence": [
+        "review6_unique_mixed_reuses_remote_class: Java paints BridgeActors; Rust omits it.",
+        "review7_nested_empty_groups_only: Java paints EmptyLeft and EmptyDeep; Rust omits both."
+      ],
+      "impact": "The 59/59 scoped result is a false accept for visible empty-package semantics and cannot attest this mechanism."
+    },
+    {
+      "severity": "reject",
+      "title": "Null-separator package lookup bypasses the shared creation-order model",
+      "rust_evidence": [
+        "crates/rustuml-parser/src/parse/class.rs:212-217 defines the shared creation-ordered first_quark_path_named lookup.",
+        "crates/rustuml-parser/src/parse/class.rs:234-243 uses it for resolve_quark_path.",
+        "crates/rustuml-parser/src/parse/class.rs:268-280 instead searches package_by_path HashMap iteration order for resolve_group_path and cannot select an earlier entity quark."
+      ],
+      "java_evidence": [
+        "CucaDiagram#quarkInContextSafe lines 249-255 calls firstWithName for every null-separator lookup.",
+        "CommandPackage and CommandPackageEmpty call quarkInContext(false), so the same rule applies to package declarations."
+      ],
+      "impact": "Package declarations under namespaceSeparator none can be nondeterministic, can select the wrong duplicate package, and can diverge when the first matching quark is an entity."
+    },
+    {
+      "severity": "reject",
+      "title": "Namespace-separator command grammar does not match Java",
+      "rust_evidence": [
+        "crates/rustuml-parser/src/parse/class.rs:1437 recognizes only the exact set namespaceSeparator prefix.",
+        "crates/rustuml-parser/src/parse/class.rs:1441-1444 recognizes only lowercase none as null."
+      ],
+      "java_evidence": [
+        "CommandNamespaceSeparator#getRegexConcat accepts separator and namespaceseparator.",
+        "CommandNamespaceSeparator#executeArg uses equalsIgnoreCase for none."
+      ],
+      "impact": "Valid Java commands such as set separator none and mixed-case NONE do not establish the intended null-separator state in Rust."
+    },
+    {
+      "severity": "info",
+      "title": "The implementation is mechanism-shaped and preserves aggregate metrics",
+      "evidence": [
+        "Static anti-overfit scans found no fixture/golden reads, embedded output, fixture labels, coordinate exceptions, or source-line branches.",
+        "All 59 review2 through review7 sources pass the existing scoped identity predicate.",
+        "The class family remains at its 1940/1971 no-oracle baseline with 169 intentional skips.",
+        "These positives do not override the three model-completeness failures."
+      ]
+    }
+  ],
+  "missing_adversarial_cases": [
+    {
+      "name": "null separator duplicate packages with reversed creation order",
+      "axes": [
+        "two packages with the same short name under different parents",
+        "set namespaceSeparator none",
+        "a later package declaration using that short name",
+        "reversed creation order"
+      ],
+      "purpose": "Prove package lookup uses Plasma.firstWithName order rather than HashMap iteration."
+    },
+    {
+      "name": "null separator entity-to-package quark collision",
+      "axes": [
+        "entity quark created first",
+        "later package declaration with the same short name",
+        "nested local leaf"
+      ],
+      "purpose": "Prove group commands and entity commands share one quark namespace and first-created lookup."
+    },
+    {
+      "name": "separator command aliases and case variants",
+      "axes": [
+        "set separator none",
+        "set namespaceseparator NONE",
+        "transition back to :: and /",
+        "literal dotted and qualified declarations"
+      ],
+      "purpose": "Prove all Java-valid spellings replace one coherent separator state."
+    },
+    {
+      "name": "visible empty-package chrome matrix",
+      "axes": [
+        "root and nested empty packages",
+        "aliases and renamed labels",
+        "stereotypes",
+        "background/border colors",
+        "empty sibling plus deep descendant"
+      ],
+      "purpose": "Assert visible EMPTY_PACKAGE paint, not merely cluster identity and layout occupancy."
+    }
+  ],
+  "required_followup": [
+    "Preserve every existing review2 through review7 source/Java-SVG pair.",
+    "Before another production edit, commit a causal response that covers EMPTY_PACKAGE paint, null-separator group lookup through the shared ordered quark index, and the complete separator command grammar.",
+    "Implement an EmptyLeaf SVG emitter derived from EntityImageEmptyPackage rather than treating the leaf as an invisible layout proxy.",
+    "Make all null-separator quark consumers, including package commands, use one creation-ordered index spanning group and entity quarks.",
+    "Accept separator and namespaceseparator spellings and treat none case-insensitively, while preserving coherent replacement transitions.",
+    "Have a fresh independent checker create and preserve the missing adversarial source/Java-SVG pairs before accepting the successor implementation.",
+    "Replay the scoped matrix, strict perturbation matrix, parser/render tests, class-family ratchet, harness guards, and parity perturbation tests.",
+    "Do not widen the scoped predicate to claim visual coverage without explicitly adding EMPTY_PACKAGE observations."
+  ],
+  "ready_to_commit_paths": [
+    "docs/parity-reviews/class-mixed-state-group-metadata/review-8.json"
+  ]
+}
