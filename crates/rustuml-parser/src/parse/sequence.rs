@@ -29,7 +29,7 @@ static MESSAGE_RE: LazyLock<Regex> = LazyLock::new(|| {
 
 static EXTERNAL_MESSAGE_IN_RE: LazyLock<Regex> = LazyLock::new(|| {
     Regex::new(
-        r"^\[([-<>.\\/ox]*(?:\[(?:(?:#\w+|(?i:dashed|dotted|hidden|bold))(?:,(?:#\w+|(?i:dashed|dotted|hidden|bold)))*)\])?[-<>.\\/ox]+)\s*(\w+)\s*(?:((?:\+\+|--|!!))\s*(#\S+)?\s*)?(?::\s*(.*))?$",
+        r"^([\[\]])([-<>.\\/ox]*(?:\[(?:(?:#\w+|(?i:dashed|dotted|hidden|bold))(?:,(?:#\w+|(?i:dashed|dotted|hidden|bold)))*)\])?[-<>.\\/ox]+)\s*(\w+)\s*(?:((?:\+\+|--|!!))\s*(#\S+)?\s*)?(?::\s*(.*))?$",
     )
     .unwrap()
 });
@@ -437,16 +437,16 @@ impl SeqParser {
 
     fn try_external_message(&mut self, line: &str) -> bool {
         if let Some(caps) = EXTERNAL_MESSAGE_IN_RE.captures(line) {
-            let (arrow_style, arrow_str) = strip_arrow_style_annotation(&caps[1]);
+            let (arrow_style, arrow_str) = strip_arrow_style_annotation(&caps[2]);
             let mut arrow = parse_arrow(&arrow_str);
             arrow.direction = ArrowDirection::LeftToRight;
             apply_inline_arrow_style(&mut arrow, arrow_style);
-            let to = self.ensure_participant(&caps[2]);
-            let activation = caps.get(3).map(|m| parse_activation(m.as_str()));
-            let activation_color = caps.get(4).map(|m| m.as_str().to_string());
-            let label = message_label(line, caps.get(5));
+            let to = self.ensure_participant(&caps[3]);
+            let activation = caps.get(4).map(|m| parse_activation(m.as_str()));
+            let activation_color = caps.get(5).map(|m| m.as_str().to_string());
+            let label = message_label(line, caps.get(6));
             self.events.push(Event::Message(Message {
-                from: "[".to_string(),
+                from: caps[1].to_string(),
                 to,
                 label,
                 arrow,
@@ -1095,13 +1095,19 @@ fn parse_arrow(s: &str) -> Arrow {
     };
 
     let source_cross = s.starts_with('x');
+    let source_circle = s.starts_with('o');
+    let target_syntax = if source_cross || source_circle {
+        &s[1..]
+    } else {
+        s
+    };
     let head = if source_cross {
         ArrowHead::Filled
-    } else if s.contains('x') {
+    } else if target_syntax.contains('x') {
         ArrowHead::Cross
-    } else if s.contains('o') {
+    } else if target_syntax.contains('o') {
         ArrowHead::Circle
-    } else if s.contains(">>") || s.contains("<<") {
+    } else if target_syntax.contains(">>") || target_syntax.contains("<<") {
         ArrowHead::Open
     } else {
         ArrowHead::Filled
@@ -1138,6 +1144,7 @@ fn parse_arrow(s: &str) -> Arrow {
         head_half,
         thin_head,
         source_cross,
+        source_circle,
     }
 }
 
@@ -1175,7 +1182,7 @@ pub(super) fn looks_like_message(line: &str) -> bool {
         .or_else(|| {
             EXTERNAL_MESSAGE_IN_RE
                 .captures(line)
-                .and_then(|captures| captures.get(1))
+                .and_then(|captures| captures.get(2))
         })
         .or_else(|| {
             EXTERNAL_MESSAGE_OUT_RE
@@ -1441,12 +1448,37 @@ mod tests {
     }
 
     #[test]
+    fn source_circle_arrow_keeps_target_head() {
+        let d = parse("A o-> B : decorated");
+        if let Event::Message(m) = &d.events[0] {
+            assert!(m.arrow.source_circle);
+            assert_eq!(m.arrow.head, ArrowHead::Filled);
+        } else {
+            panic!("expected message");
+        }
+    }
+
+    #[test]
     fn dotted_external_incoming_arrow() {
         let d = parse("[--> Alice : found dotted");
         if let Event::Message(m) = &d.events[0] {
             assert_eq!(m.from, "[");
             assert_eq!(m.to, "Alice");
             assert_eq!(m.arrow.line, LineStyle::Dotted);
+        } else {
+            panic!("expected message");
+        }
+    }
+
+    #[test]
+    fn dotted_external_incoming_arrow_preserves_right_boundary() {
+        let d = parse("]--[dotted,#6D4C41]> Alice : found from right");
+        if let Event::Message(m) = &d.events[0] {
+            assert_eq!(m.from, "]");
+            assert_eq!(m.to, "Alice");
+            assert_eq!(m.label, "found from right");
+            assert_eq!(m.arrow.line, LineStyle::Dotted);
+            assert_eq!(m.arrow.color.as_deref(), Some("#6D4C41"));
         } else {
             panic!("expected message");
         }

@@ -149,6 +149,10 @@ pub struct Arrow {
     /// while keeping the normal target arrowhead.
     #[serde(default, skip_serializing_if = "std::ops::Not::not")]
     pub source_cross: bool,
+    /// True for source-circle arrows (`o->`): draw a circle decoration at the
+    /// source side while keeping the normal target arrowhead.
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub source_circle: bool,
 }
 
 /// Which half of the arrowhead is drawn when a `/` or `\` modifier is present.

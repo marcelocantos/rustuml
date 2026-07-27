@@ -309,6 +309,31 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             trimmed
         };
         let looks_like_sequence_message = sequence::looks_like_message(trimmed);
+        let looks_like_sequence_participant = !trimmed.ends_with('{')
+            && (trimmed.starts_with("participant ")
+                || trimmed.starts_with("actor ")
+                || trimmed.starts_with("boundary ")
+                || trimmed.starts_with("control ")
+                || trimmed.starts_with("database ")
+                || trimmed.starts_with("collections ")
+                || trimmed.starts_with("queue ")
+                || trimmed.starts_with("entity "));
+        let looks_like_page_meta = trimmed == "header"
+            || trimmed.starts_with("header ")
+            || trimmed.starts_with("left header")
+            || trimmed.starts_with("right header")
+            || trimmed.starts_with("center header")
+            || trimmed == "endheader"
+            || trimmed == "footer"
+            || trimmed.starts_with("footer ")
+            || trimmed.starts_with("left footer")
+            || trimmed.starts_with("right footer")
+            || trimmed.starts_with("center footer")
+            || trimmed == "endfooter"
+            || trimmed == "title"
+            || trimmed.starts_with("title ")
+            || trimmed == "caption"
+            || trimmed.starts_with("caption ");
         let top_level = brace_depth == 0;
 
         if trimmed.starts_with("skinparam ") {
@@ -502,6 +527,8 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             && !trimmed.contains("[[")
             && !trimmed.contains("[#")
             && !looks_like_sequence_message
+            && !looks_like_sequence_participant
+            && !looks_like_page_meta
             && !trimmed.starts_with("return ")
             // `autonumber "<b>[000]"` uses brackets inside its format string;
             // that is a sequence-diagram directive, not a component reference.
@@ -597,16 +624,8 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         }
         // Sequence. Skip lines that end with `{` — those are container blocks
         // (class diagram packages) not sequence participants.
-        if !trimmed.ends_with('{')
-            && (trimmed.starts_with("participant ")
-                || trimmed.starts_with("boundary ")
-                || trimmed.starts_with("control ")
-                || trimmed.starts_with("database ")
-                || trimmed.starts_with("collections ")
-                || trimmed.starts_with("queue ")
-                || trimmed.starts_with("entity "))
-        // entity is also a sequence participant type
-        {
+        // `entity` is also a sequence participant type.
+        if looks_like_sequence_participant && !trimmed.starts_with("actor ") {
             scores[0] += 5;
         }
         // box / end box are unambiguously sequence-diagram keywords.
@@ -2061,6 +2080,30 @@ Ready --> [*] : close"#;
         };
         assert_eq!(sequence.events.len(), 2);
         assert_eq!(sequence.participants[0].label, "Source [hidden]: 9401");
+    }
+
+    #[test]
+    fn sequence_commands_own_brackets_in_participants_and_page_meta() {
+        let input = concat!(
+            "@startuml\n",
+            "header Header ox footer [hidden] without a shaft\n",
+            "footer Footer xo header [dotted,#455A64] without a shaft\n",
+            "participant \"Ingress [hidden]: 15101\" as Ingress15101\n",
+            "participant \"Worker [dotted,#455A64]: 15103\" as Worker15103\n",
+            "Ingress15101 -> Worker15103 : plain arrow\n",
+            "Worker15103 -[#7B1FA2,dashed]> Ingress15101 : styled arrow\n",
+            "@enduml\n",
+        );
+
+        let Diagram::Sequence(sequence) = parse(input).unwrap() else {
+            panic!("expected sequence diagram");
+        };
+        assert_eq!(sequence.events.len(), 2);
+        assert_eq!(sequence.participants[0].label, "Ingress [hidden]: 15101");
+        assert_eq!(
+            sequence.meta.header.as_deref(),
+            Some("Header ox footer [hidden] without a shaft")
+        );
     }
 
     #[test]
