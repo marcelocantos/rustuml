@@ -1,0 +1,13 @@
+@startuml
+state MergeViolet6893 <<join>>
+state TerminalMint6911 <<end>>
+state SplitAmber6869 <<fork>>
+state "Approach Relay 6803" as ApproachRelay6803
+
+[*] --> ApproachRelay6803
+ApproachRelay6803 --> SplitAmber6869 : enter_split
+SplitAmber6869 --> MergeViolet6893 : middle_width_branch
+SplitAmber6869 --> MergeViolet6893 : widest_parallel_branch_in_the_set
+SplitAmber6869 --> MergeViolet6893 : z
+MergeViolet6893 --> TerminalMint6911 : settle
+@enduml

@@ -6078,34 +6078,19 @@ pub fn render_with_oracle(
                 .enumerate()
                 .any(|(index, _)| link_note_for_transition(diagram, index).is_some());
             if has_link_notes {
-                let mut consumed = vec![false; result.edge_paths.len()];
                 for (index, transition) in diagram.transitions.iter().enumerate() {
                     let note = link_note_for_transition(diagram, index);
                     if transition.label.is_none() && note.is_none() {
                         continue;
                     }
-                    let from = map_id(&transition.from, true);
-                    let to = map_id(&transition.to, false);
-                    let (edge_from, edge_to) = if transition.arrow.reverses_solved_endpoints() {
-                        (to.as_str(), from.as_str())
-                    } else {
-                        (from.as_str(), to.as_str())
-                    };
-                    let Some((edge_index, label)) =
-                        result
-                            .edge_paths
-                            .iter()
-                            .enumerate()
-                            .find_map(|(edge_index, edge)| {
-                                (!consumed[edge_index]
-                                    && edge.from == edge_from
-                                    && edge.to == edge_to)
-                                    .then_some((edge_index, edge.label?))
-                            })
-                    else {
+                    let Some(label) = flat_transition_edge_path(
+                        &result.edge_paths,
+                        &flat_transition_layout_edges,
+                        index,
+                    )
+                    .and_then(|edge| edge.label) else {
                         continue;
                     };
-                    consumed[edge_index] = true;
                     let painted = link_label_painted_max(
                         transition,
                         note,
@@ -6121,10 +6106,11 @@ pub fn render_with_oracle(
                 let labeled = diagram
                     .transitions
                     .iter()
-                    .filter(|transition| transition.label.is_some())
+                    .enumerate()
+                    .filter(|(_, transition)| transition.label.is_some())
                     .collect::<Vec<_>>();
                 let self_only_labels = !labeled.is_empty()
-                    && labeled.iter().all(|transition| {
+                    && labeled.iter().all(|(_, transition)| {
                         map_id(&transition.from, true) == map_id(&transition.to, false)
                     });
                 if self_only_labels {
@@ -6133,12 +6119,12 @@ pub fn render_with_oracle(
                     // marker itself is not part of that MinMax. Bind each
                     // loop as `SvekEdge.solveLine` does, then include its
                     // rendered label block and arrow-decoration clearance.
-                    let mut consumed = vec![false; result.edge_paths.len()];
-                    for transition in labeled {
-                        let id = map_id(&transition.from, true);
-                        let Some(edge) =
-                            routed_self_edge_path(&result.edge_paths, &mut consumed, &id)
-                        else {
+                    for (transition_index, transition) in labeled {
+                        let Some(edge) = flat_transition_edge_path(
+                            &result.edge_paths,
+                            &flat_transition_layout_edges,
+                            transition_index,
+                        ) else {
                             continue;
                         };
                         let Some(label_position) = edge.label else {
@@ -6162,29 +6148,15 @@ pub fn render_with_oracle(
                     // fractional `labelText` block after `solveLine` places
                     // it. Keep both extents: either may be the rightmost
                     // painter depending on the glyph advances.
-                    let mut consumed = vec![false; result.edge_paths.len()];
-                    for transition in labeled {
-                        let from = map_id(&transition.from, true);
-                        let to = map_id(&transition.to, false);
-                        let (edge_from, edge_to) = if transition.arrow.reverses_solved_endpoints() {
-                            (to.as_str(), from.as_str())
-                        } else {
-                            (from.as_str(), to.as_str())
-                        };
-                        let Some((edge_index, label_position)) = result
-                            .edge_paths
-                            .iter()
-                            .enumerate()
-                            .find_map(|(edge_index, edge)| {
-                                (!consumed[edge_index]
-                                    && edge.from == edge_from
-                                    && edge.to == edge_to)
-                                    .then_some((edge_index, edge.label?))
-                            })
-                        else {
+                    for (transition_index, transition) in labeled {
+                        let Some(label_position) = flat_transition_edge_path(
+                            &result.edge_paths,
+                            &flat_transition_layout_edges,
+                            transition_index,
+                        )
+                        .and_then(|edge| edge.label) else {
                             continue;
                         };
-                        consumed[edge_index] = true;
                         let label = transition.label.as_deref().unwrap();
                         let label_right = quantize_svek_coord(label_position.x)
                             + ordinary_edge_label_size(label, &arrow_font).width;
@@ -7531,7 +7503,6 @@ pub fn render_with_oracle(
     if let Some(orc) = oracle {
         render_oracle_transitions(&mut svg, diagram, orc);
     } else {
-        let mut consumed_edge_paths = vec![false; edge_paths.len()];
         let mut used_path_ids = std::collections::HashSet::new();
         let transition_order =
             plantuml_svek_transition_order(diagram, 0..diagram.transitions.len());
@@ -7601,25 +7572,15 @@ pub fn render_with_oracle(
 
             let (from_cx, from_cy, _from_w, from_h) = pos_of(&from_layout);
             let (to_cx, to_cy, _to_w, to_h) = pos_of(&to_layout);
-            // Try bezier path from layout engine. Graphviz exposes splines by
-            // graph traversal order, while PlantUML's SVEK binds each solved
-            // line back to the link whose endpoint shapes it touches
-            // (`net.sourceforge.plantuml.svek.SvekEdge.solveLine`). Match by
-            // routed endpoint geometry so a state registered before its lazy
-            // `.start.` node does not swap the start/end transition paths.
-            let edge_path = if edge_from_layout == edge_to_layout {
-                routed_self_edge_path(edge_paths, &mut consumed_edge_paths, edge_from_layout)
-            } else {
-                routed_edge_path_for_transition(
-                    edge_paths,
-                    &mut consumed_edge_paths,
-                    edge_from_layout,
-                    edge_to_layout,
-                    graph_body_x,
-                    graph_body_y,
-                    &pos_of,
-                )
-            };
+            // `SvekEdge.solveLine` binds a routed line back to its source link
+            // by a unique marker color. LayoutGraph's stable edge index is the
+            // equivalent identity; endpoint geometry is ambiguous for parallel
+            // links and must not replace it.
+            let edge_path = flat_transition_edge_path(
+                edge_paths,
+                &flat_transition_layout_edges,
+                transition_idx,
+            );
 
             if let Some(ep) = edge_path
                 && !ep.points.is_empty()
@@ -7951,6 +7912,17 @@ where
     let (idx, _) = best?;
     consumed[idx] = true;
     edge_paths.get(idx)
+}
+
+fn flat_transition_edge_path<'a>(
+    edge_paths: &'a [EdgePath],
+    transition_layout_edges: &std::collections::HashMap<usize, usize>,
+    transition_index: usize,
+) -> Option<&'a EdgePath> {
+    let layout_edge_index = transition_layout_edges.get(&transition_index)?;
+    edge_paths
+        .iter()
+        .find(|edge| edge.edge_index == *layout_edge_index)
 }
 
 /// Bind a root-cluster transition to the next marker-ordered route for its

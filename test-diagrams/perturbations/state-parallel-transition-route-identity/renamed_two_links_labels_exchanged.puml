@@ -1,0 +1,12 @@
+@startuml
+state TerminalJade6811 <<end>>
+state MergeSilver6791 <<join>>
+state "Inbound Relay 6701" as InboundRelay6701
+state SplitCoral6763 <<fork>>
+
+[*] --> InboundRelay6701
+InboundRelay6701 --> SplitCoral6763 : approach
+SplitCoral6763 --> MergeSilver6791 : first_declaration_has_the_wider_label
+SplitCoral6763 --> MergeSilver6791 : x
+MergeSilver6791 --> TerminalJade6811 : finish
+@enduml
