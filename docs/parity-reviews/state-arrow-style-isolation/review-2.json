@@ -1,0 +1,163 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-arrow-style-isolation",
+  "reviewer": {
+    "task_id": "codex-desktop-t14-state-arrow-style-isolation-review-2",
+    "model": "OpenAI GPT-5 Codex"
+  },
+  "account_commit": "cb94f663763b89cdfbe15d055c71beab2077fb7c",
+  "implementation_commit": "8289f2e0cf3d7e2c0780c9c0959771003e971035",
+  "prior_rejection_commit": "f5db731b389e06ad35e2f5cc73eb8e4b014540ab",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "accepted": false,
+  "commands": [
+    "sed -n '1,220p' /Users/marcelo/.codex/skills/oracle-first/SKILL.md",
+    "sed -n '1,260p' /Users/marcelo/.claude/rust.md",
+    "bullseye_query view=context cwd=/Users/marcelo/work/github.com/marcelocantos/rustuml recent_days=14",
+    "git status --short",
+    "git log --oneline -12",
+    "git diff --stat cb94f663..8289f2e0",
+    "git diff --find-renames --unified=80 cb94f663..8289f2e0 -- crates/rustuml-render/src/state.rs",
+    "sed -n '1,240p' docs/parity-reviews/state-arrow-style-isolation/account.json",
+    "sed -n '1,260p' docs/parity-reviews/state-arrow-style-isolation/review.json",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/skin/SkinParam.java | sed -n '200,290p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/style/FromSkinparamToStyle.java | sed -n '130,220p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java | sed -n '800,900p'",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/state-arrow-style-isolation/alias_mixed_case_state_last.puml test-diagrams/perturbations/state-arrow-style-isolation/alias_alternating_case_last_state.puml test-diagrams/perturbations/state-arrow-style-isolation/alias_interleaved_border_last_global.puml test-diagrams/perturbations/state-arrow-style-isolation/alias_local_link_override_final.puml",
+    "xmllint --noout test-diagrams/perturbations/state-arrow-style-isolation/alias_mixed_case_state_last.svg test-diagrams/perturbations/state-arrow-style-isolation/alias_alternating_case_last_state.svg test-diagrams/perturbations/state-arrow-style-isolation/alias_interleaved_border_last_global.svg test-diagrams/perturbations/state-arrow-style-isolation/alias_local_link_override_final.svg",
+    "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"' test-diagrams/perturbations/state-arrow-style-isolation/alias_mixed_case_state_last.svg test-diagrams/perturbations/state-arrow-style-isolation/alias_alternating_case_last_state.svg test-diagrams/perturbations/state-arrow-style-isolation/alias_interleaved_border_last_global.svg test-diagrams/perturbations/state-arrow-style-isolation/alias_local_link_override_final.svg",
+    "ruby -rdigest -e 'verify the four fresh sources are unique against all test-diagrams/golden/**/*.puml sources and one another'",
+    "git merge-base --is-ancestor cb94f663 8289f2e0",
+    "git diff --exit-code cb94f663 8289f2e0 -- docs/parity-reviews/state-arrow-style-isolation/account.json",
+    "git diff --check cb94f663..8289f2e0",
+    "git show --format= 8289f2e0 -- crates/rustuml-render/src/state.rs | rg -n 'test-diagrams|golden|include_str!|include_bytes!|\\.puml|\\.svg|CopperDormant|VioletReady|AmberWaiting|IndigoQueued|alias_|OpalQueue911|QuartzDraft921|JadeWarmup931|CobaltSeed901'",
+    "git diff --unified=0 cb94f663..8289f2e0 -- crates/rustuml-render/src/state.rs | rg -n '^[+-].*[0-9]+\\.[0-9]{3,}|^[+-].*(count\\(|matches\\(|if |match |for |while )'",
+    "git archive --format=tar --output=/private/tmp/rustuml-review-8289-arrow-20260727.tar 8289f2e0",
+    "tar -xf /private/tmp/rustuml-review-8289-arrow-20260727.tar -C /private/tmp/rustuml-review-8289-arrow-20260727",
+    "cp -R test-diagrams/golden/. /private/tmp/rustuml-review-8289-arrow-20260727/test-diagrams/golden/",
+    "cp test-diagrams/perturbations/state-arrow-style-isolation/alias_*.puml test-diagrams/perturbations/state-arrow-style-isolation/alias_*.svg /private/tmp/rustuml-review-8289-arrow-20260727/test-diagrams/perturbations/state-arrow-style-isolation/",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-review-8289-arrow-target cargo test -p rustuml-render --lib --release arrow -- --nocapture",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-review-8289-arrow-target cargo test -p rustuml-oracle --test parity_perturbations --release -- --nocapture",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-review-8289-arrow-target cargo test -p rustuml-oracle --test golden_no_oracle --release -- --nocapture",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-review-8289-arrow-target cargo clippy --workspace --all-targets --release -- -D warnings",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-review-8289-arrow-target cargo test -p rustuml-oracle --test harness_guards --release no_golden_data_embedded_in_shipping_crates -- --exact --nocapture",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-review-8289-arrow-target cargo test -p rustuml-oracle --test harness_guards --release error_golden_census_is_frozen -- --exact --nocapture",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-review-8289-arrow-target cargo test -p rustuml-oracle --test harness_guards --release decimal_literal_ratchet -- --exact --nocapture",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-review-8289-arrow-target cargo test -p rustuml-oracle --test harness_guards --release comparator_constants_frozen -- --exact --nocapture",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-review-8289-arrow-target cargo test -p rustuml-oracle --test harness_guards --release parity_review_paths_reject_traversal -- --exact --nocapture",
+    "cp docs/parity-reviews/state-arrow-style-isolation/review-2.json /private/tmp/rustuml-review-8289-arrow-20260727/docs/parity-reviews/state-arrow-style-isolation/review-2.json",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-review-8289-arrow-target cargo test -p rustuml-oracle --test harness_guards --release -- --nocapture"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/state-arrow-style-isolation/renamed_border_arrow_override_matrix.puml",
+      "golden": "test-diagrams/perturbations/state-arrow-style-isolation/renamed_border_arrow_override_matrix.svg",
+      "axes": [
+        "preserved prior heldout",
+        "renamed four-state chain",
+        "independent state border and global arrow colors",
+        "per-link color override"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arrow-style-isolation/border_only_long_chain.puml",
+      "golden": "test-diagrams/perturbations/state-arrow-style-isolation/border_only_long_chain.svg",
+      "axes": [
+        "preserved prior heldout",
+        "stateBorderColor alone",
+        "renamed five-state chain",
+        "default root arrow color fallback"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arrow-style-isolation/global_then_state_precedence.puml",
+      "golden": "test-diagrams/perturbations/state-arrow-style-isolation/global_then_state_precedence.svg",
+      "axes": [
+        "preserved prior heldout",
+        "global ArrowColor declared first",
+        "stateArrowColor declared last",
+        "renamed three-state chain"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arrow-style-isolation/state_then_global_precedence.puml",
+      "golden": "test-diagrams/perturbations/state-arrow-style-isolation/state_then_global_precedence.svg",
+      "axes": [
+        "preserved prior rejection heldout",
+        "stateArrowColor declared first",
+        "global ArrowColor declared last",
+        "renamed three-state chain"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arrow-style-isolation/per_link_override_after_state.puml",
+      "golden": "test-diagrams/perturbations/state-arrow-style-isolation/per_link_override_after_state.svg",
+      "axes": [
+        "preserved prior heldout",
+        "state border plus global and state arrow declarations",
+        "per-link color and dashed style override",
+        "renamed four-state chain"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arrow-style-isolation/alias_mixed_case_state_last.puml",
+      "golden": "test-diagrams/perturbations/state-arrow-style-isolation/alias_mixed_case_state_last.svg",
+      "axes": [
+        "fresh mixed-case ArrowColor spelling",
+        "fresh mixed-case stateArrowColor spelling",
+        "state alias declared last"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arrow-style-isolation/alias_alternating_case_last_state.puml",
+      "golden": "test-diagrams/perturbations/state-arrow-style-isolation/alias_alternating_case_last_state.svg",
+      "axes": [
+        "fresh five-declaration alternating alias chain",
+        "fresh repeated aliases with mixed-case spelling",
+        "final normalized alias is stateArrowColor after a repeated ArrowColor"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arrow-style-isolation/alias_interleaved_border_last_global.puml",
+      "golden": "test-diagrams/perturbations/state-arrow-style-isolation/alias_interleaved_border_last_global.svg",
+      "axes": [
+        "fresh border declarations interleaved with arrow aliases",
+        "global ArrowColor declared after stateArrowColor",
+        "final border declaration must not alter arrow precedence"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arrow-style-isolation/alias_local_link_override_final.puml",
+      "golden": "test-diagrams/perturbations/state-arrow-style-isolation/alias_local_link_override_final.svg",
+      "axes": [
+        "fresh local per-link color override",
+        "fresh dashed per-link style override",
+        "diagram-level arrow aliases still apply to surrounding transitions"
+      ],
+      "result": "pass"
+    }
+  ],
+  "findings": [
+    "The corrected account cb94f663763b89cdfbe15d055c71beab2077fb7c is an ancestor of implementation 8289f2e0cf3d7e2c0780c9c0959771003e971035, and the account file is unchanged across that implementation range. The implementation diff is confined to crates/rustuml-render/src/state.rs.",
+    "Java provenance supports the corrected source-order alias model. SkinParam.setParam processes each declaration in source order through cleanForKey; cleanForKeySlow lowercases, removes separators, and patternCleanArrow rewrites both stateArrowColor and ArrowColor to arrowColor. FromSkinparamToStyle maps arrowColor to the arrow LineColor style, and SvekEdge builds its Rainbow from the merged stateDiagram.arrow style before applying link-specific colors.",
+    "Commit 8289f2e0 fixes the prior two-declaration rejection f5db731b: the preserved state_then_global_precedence heldout now passes, as do the prior border-only, global-then-state, and per-link controls. The fresh mixed-case two-alias heldout also passes.",
+    "The fresh alias_alternating_case_last_state heldout rejects the implementation. Java renders all four shafts and four arrowheads with #2E7D32 from the final StAtEaRrOwCoLoR declaration. Rust at exact 8289f2e0 renders the same geometry with #3949AB from the earlier repeated arrowColor declaration, producing eight color-only strict comparator mismatches.",
+    "The causal miss is upstream of StateSkin::from_diagram. crates/rustuml-parser/src/parse/mod.rs::collapse_reassigned_skinparams collapses same-key reassignments case-insensitively and keeps the first key position while replacing its value. After the five-declaration alternating heldout is parsed, the final stateArrowColor value is stored at the first stateArrowColor position, before the ArrowColor slot. The renderer's reverse alias scan then chooses ArrowColor #3949AB. Java's style builder receives every normalized alias conversion in source order, so the final stateArrowColor conversion wins despite the ordinary params map retaining insertion position.",
+    "The fresh interleaved-border heldout passes: StateBorderColor #1B5E20 styles only state rectangles, while ArrowColor #D84315 styles transition shafts and arrowheads. This confirms the remaining failure is not a border/arrow channel leak.",
+    "The fresh local override heldout passes: the diagram-level arrow color #0277BD applies to surrounding transitions, while the dashed local transition uses #8E24AA for both shaft and arrowhead.",
+    "All four fresh Java SVGs are valid XML, contain no PlantUML error marker, and their sources are corpus-unique against the checked golden sources and one another. The clean exact-commit perturbation run preserves all existing state-arrow-style-isolation heldouts and fails only alias_alternating_case_last_state for this mechanism.",
+    "Exact clean-tree golden_no_oracle passes at 11039/11251 eligible pairs, with state 874/901 and skinparam 400/410. The focused arrow unit filter passes 36/36, and exact clean-tree workspace release clippy passes with warnings denied.",
+    "The individual frozen/mechanical guards pass at exact 8289f2e0 with the heldouts copied in: no_golden_data_embedded_in_shipping_crates, error_golden_census_is_frozen, decimal_literal_ratchet, comparator_constants_frozen, and parity_review_paths_reject_traversal. The aggregate harness guard fails because this latest review is rejected and because other preserved mechanisms are already rejected; it no longer reports the four fresh arrow heldouts as unnamed after review-2.json is copied into the clean tree. Static audit found no shipping golden reads, production fixture-label conditionals, output-fitting SVG surgery, count ladders, or unexplained high-precision layout constants in the implementation diff.",
+    "Verdict is rejected. A correction needs to preserve raw source order for alias-equivalent skinparams or normalize aliases before any parser-side reassignment collapse that feeds style resolution, while retaining border isolation, root fallback, and link-local final override behavior."
+  ],
+  "verdict": "rejected"
+}

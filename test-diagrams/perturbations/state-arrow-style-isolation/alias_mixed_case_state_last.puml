@@ -1,0 +1,9 @@
+@startuml
+skinparam aRrOwCoLoR #5D4037
+skinparam StAtEaRrOwCoLoR #1565C0
+state "Cobalt Seed 901" as CobaltSeed901
+state "Cobalt Flow 902" as CobaltFlow902
+[*] --> CobaltSeed901
+CobaltSeed901 --> CobaltFlow902 : go
+CobaltFlow902 --> [*]
+@enduml

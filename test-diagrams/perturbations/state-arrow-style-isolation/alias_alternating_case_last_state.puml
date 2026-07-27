@@ -1,0 +1,14 @@
+@startuml
+skinparam stateArrowColor #00838F
+skinparam ArrowColor #D84315
+skinparam STATEARROWCOLOR #6A1B9A
+skinparam arrowColor #3949AB
+skinparam StAtEaRrOwCoLoR #2E7D32
+state "Opal Queue 911" as OpalQueue911
+state "Opal Route 912" as OpalRoute912
+state "Opal Done 913" as OpalDone913
+[*] --> OpalQueue911
+OpalQueue911 --> OpalRoute912 : dispatch
+OpalRoute912 --> OpalDone913
+OpalDone913 --> [*]
+@enduml

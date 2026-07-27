@@ -1,0 +1,11 @@
+@startuml
+skinparam stateArrowColor #00838F
+skinparam stateBorderColor #6A1B9A
+skinparam ArrowColor #D84315
+skinparam StateBorderColor #1B5E20
+state "Quartz Draft 921" as QuartzDraft921
+state "Quartz Review 922" as QuartzReview922
+[*] --> QuartzDraft921
+QuartzDraft921 --> QuartzReview922 : promote
+QuartzReview922 --> [*]
+@enduml

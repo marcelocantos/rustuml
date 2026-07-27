@@ -1,0 +1,12 @@
+@startuml
+skinparam ArrowColor #4E342E
+skinparam stateArrowColor #0277BD
+skinparam stateBorderColor #455A64
+state "Jade Warmup 931" as JadeWarmup931
+state "Jade Override 932" as JadeOverride932
+state "Jade Cooldown 933" as JadeCooldown933
+[*] --> JadeWarmup931
+JadeWarmup931 -[#8E24AA,dashed]-> JadeOverride932 : local
+JadeOverride932 --> JadeCooldown933
+JadeCooldown933 --> [*]
+@enduml
