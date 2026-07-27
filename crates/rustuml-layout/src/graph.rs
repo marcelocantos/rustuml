@@ -233,6 +233,24 @@ impl LayoutGraph {
         true
     }
 
+    /// Adds a fixed 12px state entry/exit node.
+    ///
+    /// PlantUML `EntityImageStateBorder` reports `EntityPosition.RADIUS * 2`
+    /// on both axes, and `SvekNode.appendLabelHtmlSpecialForPortBasic`
+    /// registers that image as a fixed rectangular Graphviz node.
+    pub fn add_svek_state_border_node(&mut self, id: &str) -> bool {
+        if self.nodes.iter().any(|node| node.id == id) {
+            return false;
+        }
+        self.nodes.push(NodeSpec {
+            id: id.to_string(),
+            width: 12.0,
+            height: 12.0,
+            shape: NodeShape::SvekStateBorder,
+        });
+        true
+    }
+
     /// Adds a circle-shaped node. Returns true if new, false if duplicate.
     pub fn add_circle_node(&mut self, id: &str, _label: &str, diameter: f64) -> bool {
         if self.nodes.iter().any(|node| node.id == id) {
@@ -427,6 +445,8 @@ impl LayoutGraph {
             kind: ClusterKind::NativeLabel(label.to_string()),
             parent: parent.map(String::from),
             nodes: Vec::new(),
+            source_rank_nodes: Vec::new(),
+            sink_rank_nodes: Vec::new(),
             has_svek_endpoint: false,
         });
         true
@@ -452,6 +472,8 @@ impl LayoutGraph {
             kind: ClusterKind::Svek { title_size },
             parent: parent.map(String::from),
             nodes: Vec::new(),
+            source_rank_nodes: Vec::new(),
+            sink_rank_nodes: Vec::new(),
             has_svek_endpoint: false,
         });
         true
@@ -460,7 +482,9 @@ impl LayoutGraph {
     /// Adds a node to an existing cluster/subgraph.
     pub fn add_cluster_node(&mut self, cluster_id: &str, node_id: &str) {
         if let Some(cluster) = self.clusters.iter_mut().find(|c| c.id == cluster_id) {
-            cluster.nodes.push(node_id.to_string());
+            if !cluster.nodes.iter().any(|id| id == node_id) {
+                cluster.nodes.push(node_id.to_string());
+            }
             if self
                 .nodes
                 .iter()
@@ -468,6 +492,26 @@ impl LayoutGraph {
             {
                 cluster.has_svek_endpoint = true;
             }
+        }
+    }
+
+    /// Places a state entry-point node on its owning SVEK cluster's source rank.
+    pub fn add_cluster_source_node(&mut self, cluster_id: &str, node_id: &str) {
+        self.add_cluster_node(cluster_id, node_id);
+        if let Some(cluster) = self.clusters.iter_mut().find(|c| c.id == cluster_id)
+            && !cluster.source_rank_nodes.iter().any(|id| id == node_id)
+        {
+            cluster.source_rank_nodes.push(node_id.to_string());
+        }
+    }
+
+    /// Places a state exit-point node on its owning SVEK cluster's sink rank.
+    pub fn add_cluster_sink_node(&mut self, cluster_id: &str, node_id: &str) {
+        self.add_cluster_node(cluster_id, node_id);
+        if let Some(cluster) = self.clusters.iter_mut().find(|c| c.id == cluster_id)
+            && !cluster.sink_rank_nodes.iter().any(|id| id == node_id)
+        {
+            cluster.sink_rank_nodes.push(node_id.to_string());
         }
     }
 
@@ -535,6 +579,7 @@ impl LayoutGraph {
             tail_port: None,
             head_port: None,
             minlen: Some(minlen),
+            constraint: true,
             invisible: false,
             label_size: None,
             tail_label_size: None,
@@ -554,6 +599,7 @@ impl LayoutGraph {
             tail_port: None,
             head_port: None,
             minlen: Some(minlen),
+            constraint: true,
             invisible: true,
             label_size: None,
             tail_label_size: None,
@@ -606,6 +652,7 @@ impl LayoutGraph {
             tail_port: tail_port.map(String::from),
             head_port: head_port.map(String::from),
             minlen: None,
+            constraint: true,
             invisible: false,
             label_size: None,
             tail_label_size: None,
@@ -676,6 +723,7 @@ impl LayoutGraph {
             tail_port: ports.tail.map(String::from),
             head_port: ports.head.map(String::from),
             minlen,
+            constraint: true,
             invisible: false,
             label_size,
             tail_label_size,
@@ -700,11 +748,27 @@ impl LayoutGraph {
             tail_port: None,
             head_port: None,
             minlen,
+            constraint: true,
             invisible: false,
             label_size,
             tail_label_size,
             head_label_size,
         });
+    }
+
+    /// Marks the most recently registered matching edge as non-constraining.
+    ///
+    /// PlantUML `SvekEdge.appendLine` emits `constraint=false` when both
+    /// endpoints are entry/exit points in the same container.
+    pub fn set_edge_unconstrained(&mut self, from: &str, to: &str) {
+        if let Some(edge) = self
+            .edges
+            .iter_mut()
+            .rev()
+            .find(|edge| edge.from == from && edge.to == to)
+        {
+            edge.constraint = false;
+        }
     }
 
     /// Runs Graphviz dot layout and returns full results (positions + edge paths).
@@ -837,11 +901,13 @@ impl LayoutGraph {
         let headport_key = CString::new("headport").unwrap();
         let tailport_key = CString::new("tailport").unwrap();
         let minlen_key = CString::new("minlen").unwrap();
+        let constraint_key = CString::new("constraint").unwrap();
         let headlabel_key = CString::new("headlabel").unwrap();
         let taillabel_key = CString::new("taillabel").unwrap();
         let external_endpoint_labels_key =
             CString::new("rustuml_external_endpoint_labels").unwrap();
         let true_val = CString::new("true").unwrap();
+        let false_val = CString::new("false").unwrap();
         let no_arrow_val = CString::new("none").unwrap();
         let style_key = CString::new("style").unwrap();
         let invisible_val = CString::new("invis").unwrap();
@@ -971,6 +1037,7 @@ impl LayoutGraph {
                 } else {
                     let shape = match &spec.shape {
                         NodeShape::Box => &box_val,
+                        NodeShape::SvekStateBorder => &box_val,
                         NodeShape::Circle => &circle_val,
                         NodeShape::Ellipse => &ellipse_val,
                         NodeShape::Diamond => &diamond_val,
@@ -1068,6 +1135,7 @@ impl LayoutGraph {
                                     .unwrap()
                             }
                             NodeShape::Box
+                            | NodeShape::SvekStateBorder
                             | NodeShape::Circle
                             | NodeShape::Ellipse
                             | NodeShape::Diamond
@@ -1174,6 +1242,14 @@ impl LayoutGraph {
                             edge as *mut c_void,
                             minlen_key.as_ptr(),
                             minlen_value.as_ptr(),
+                            empty.as_ptr(),
+                        );
+                    }
+                    if !edge_spec.constraint {
+                        graphviz_ffi::agsafeset(
+                            edge as *mut c_void,
+                            constraint_key.as_ptr(),
+                            false_val.as_ptr(),
                             empty.as_ptr(),
                         );
                     }
@@ -1499,7 +1575,15 @@ impl LayoutGraph {
             order: &mut Vec<usize>,
         ) {
             let cluster = &clusters[cluster_idx];
-            for node_id in &cluster.nodes {
+            for node_id in cluster
+                .source_rank_nodes
+                .iter()
+                .chain(&cluster.sink_rank_nodes)
+                .chain(cluster.nodes.iter().filter(|node| {
+                    !cluster.source_rank_nodes.contains(node)
+                        && !cluster.sink_rank_nodes.contains(node)
+                }))
+            {
                 if let Some(node_idx) = nodes.iter().position(|node| &node.id == node_id)
                     && !seen[node_idx]
                 {
@@ -1583,7 +1667,7 @@ impl LayoutGraph {
         built[cluster_idx] = true;
         let cluster = &self.clusters[cluster_idx];
 
-        let (real_cluster, member_parent) = match &cluster.kind {
+        let (real_cluster, member_parent, endpoint_parent) = match &cluster.kind {
             ClusterKind::NativeLabel(label) => {
                 let name = CString::new(format!("cluster_{}", cluster.id)).unwrap();
                 let real = graphviz_ffi::agsubg(parent, name.as_ptr() as *mut _, 1);
@@ -1594,9 +1678,11 @@ impl LayoutGraph {
                     label.as_ptr(),
                     empty.as_ptr(),
                 );
-                (real, real)
+                (real, real, real)
             }
             ClusterKind::Svek { title_size } => {
+                let has_border_ranks =
+                    !cluster.source_rank_nodes.is_empty() || !cluster.sink_rank_nodes.is_empty();
                 let cluster_parent = if cluster.has_svek_endpoint {
                     let protection_name = CString::new(format!("cluster_{}a", cluster.id)).unwrap();
                     let protection =
@@ -1612,18 +1698,23 @@ impl LayoutGraph {
                 } else {
                     parent
                 };
-                let p0_name = CString::new(format!("cluster_{}p0", cluster.id)).unwrap();
-                let p0 = graphviz_ffi::agsubg(cluster_parent, p0_name.as_ptr() as *mut _, 1);
                 let no_label = CString::new("").unwrap();
-                graphviz_ffi::agsafeset(
-                    p0 as *mut c_void,
-                    label_key.as_ptr(),
-                    no_label.as_ptr(),
-                    empty.as_ptr(),
-                );
+                let real_parent = if has_border_ranks {
+                    cluster_parent
+                } else {
+                    let p0_name = CString::new(format!("cluster_{}p0", cluster.id)).unwrap();
+                    let p0 = graphviz_ffi::agsubg(cluster_parent, p0_name.as_ptr() as *mut _, 1);
+                    graphviz_ffi::agsafeset(
+                        p0 as *mut c_void,
+                        label_key.as_ptr(),
+                        no_label.as_ptr(),
+                        empty.as_ptr(),
+                    );
+                    p0
+                };
 
                 let name = CString::new(format!("cluster_{}", cluster.id)).unwrap();
-                let real = graphviz_ffi::agsubg(p0, name.as_ptr() as *mut _, 1);
+                let real = graphviz_ffi::agsubg(real_parent, name.as_ptr() as *mut _, 1);
                 for (key, value) in [("style", "solid"), ("color", "#000004"), ("labeljust", "l")] {
                     let key = CString::new(key).unwrap();
                     let value = CString::new(value).unwrap();
@@ -1634,18 +1725,66 @@ impl LayoutGraph {
                         empty.as_ptr(),
                     );
                 }
-                let table = CString::new(cluster_title_table(*title_size)).unwrap();
-                graphviz_ffi::agsafeset_html(
-                    real as *mut c_void,
-                    label_key.as_ptr(),
-                    table.as_ptr(),
-                    empty.as_ptr(),
-                );
+                if has_border_ranks {
+                    // `ClusterDotString.printRanks` emits these subgraphs
+                    // before opening the inner `ee` and `i` clusters.
+                    let rank_key = CString::new("rank").unwrap();
+                    for (rank_name, rank_value, nodes) in [
+                        ("source", "source", &cluster.source_rank_nodes),
+                        ("sink", "sink", &cluster.sink_rank_nodes),
+                    ] {
+                        if nodes.is_empty() {
+                            continue;
+                        }
+                        let name =
+                            CString::new(format!("{}_rank_{rank_name}", cluster.id)).unwrap();
+                        let rank = graphviz_ffi::agsubg(real, name.as_ptr() as *mut _, 1);
+                        let value = CString::new(rank_value).unwrap();
+                        graphviz_ffi::agsafeset(
+                            rank as *mut c_void,
+                            rank_key.as_ptr(),
+                            value.as_ptr(),
+                            empty.as_ptr(),
+                        );
+                        for node_id in nodes {
+                            if let Some(&node) = node_handles.get(node_id) {
+                                graphviz_ffi::agsubnode(rank, node, 1);
+                            }
+                        }
+                    }
+                }
+                let content_parent = if has_border_ranks {
+                    graphviz_ffi::agsafeset(
+                        real as *mut c_void,
+                        label_key.as_ptr(),
+                        no_label.as_ptr(),
+                        empty.as_ptr(),
+                    );
+                    let content_name = CString::new(format!("cluster_{}EE", cluster.id)).unwrap();
+                    let content = graphviz_ffi::agsubg(real, content_name.as_ptr() as *mut _, 1);
+                    let table = CString::new(cluster_title_table(*title_size)).unwrap();
+                    graphviz_ffi::agsafeset_html(
+                        content as *mut c_void,
+                        label_key.as_ptr(),
+                        table.as_ptr(),
+                        empty.as_ptr(),
+                    );
+                    content
+                } else {
+                    let table = CString::new(cluster_title_table(*title_size)).unwrap();
+                    graphviz_ffi::agsafeset_html(
+                        real as *mut c_void,
+                        label_key.as_ptr(),
+                        table.as_ptr(),
+                        empty.as_ptr(),
+                    );
+                    real
+                };
 
                 let member_parent = if cluster.has_svek_endpoint {
                     let protection_name = CString::new(format!("cluster_{}i", cluster.id)).unwrap();
                     let protection =
-                        graphviz_ffi::agsubg(real, protection_name.as_ptr() as *mut _, 1);
+                        graphviz_ffi::agsubg(content_parent, protection_name.as_ptr() as *mut _, 1);
                     graphviz_ffi::agsafeset(
                         protection as *mut c_void,
                         label_key.as_ptr(),
@@ -1654,17 +1793,21 @@ impl LayoutGraph {
                     );
                     protection
                 } else {
-                    real
+                    content_parent
                 };
-                let p1_name = CString::new(format!("cluster_{}p1", cluster.id)).unwrap();
-                let p1 = graphviz_ffi::agsubg(member_parent, p1_name.as_ptr() as *mut _, 1);
-                graphviz_ffi::agsafeset(
-                    p1 as *mut c_void,
-                    label_key.as_ptr(),
-                    no_label.as_ptr(),
-                    empty.as_ptr(),
-                );
-                (real, p1)
+                if has_border_ranks {
+                    (real, member_parent, content_parent)
+                } else {
+                    let p1_name = CString::new(format!("cluster_{}p1", cluster.id)).unwrap();
+                    let p1 = graphviz_ffi::agsubg(member_parent, p1_name.as_ptr() as *mut _, 1);
+                    graphviz_ffi::agsafeset(
+                        p1 as *mut c_void,
+                        label_key.as_ptr(),
+                        no_label.as_ptr(),
+                        empty.as_ptr(),
+                    );
+                    (real, p1, real)
+                }
             }
         };
 
@@ -1676,7 +1819,9 @@ impl LayoutGraph {
             node_handles,
             together_handles,
         );
-        for node_id in &cluster.nodes {
+        for node_id in cluster.nodes.iter().filter(|node| {
+            !cluster.source_rank_nodes.contains(node) && !cluster.sink_rank_nodes.contains(node)
+        }) {
             if let Some(&node) = node_handles.get(node_id) {
                 let node_parent = if cluster.has_svek_endpoint
                     && self
@@ -1684,10 +1829,10 @@ impl LayoutGraph {
                         .iter()
                         .any(|spec| spec.id == *node_id && matches!(spec.shape, NodeShape::Point))
                 {
-                    // Java emits the package special point directly in the
-                    // real cluster, before opening the inner `i`/`p1`
-                    // protection wrappers around ordinary members.
-                    real_cluster
+                    // Java emits the group special point before opening the
+                    // inner `i`/`p1` protection wrappers. Border-point
+                    // clusters have already opened their `ee` wrapper.
+                    endpoint_parent
                 } else {
                     member_parent
                 };
@@ -1957,6 +2102,7 @@ struct NodeSpec {
 #[derive(Debug, Clone)]
 enum NodeShape {
     Box,
+    SvekStateBorder,
     Circle,
     Ellipse,
     Diamond,
@@ -1983,6 +2129,7 @@ struct EdgeSpec {
     tail_port: Option<String>,
     head_port: Option<String>,
     minlen: Option<usize>,
+    constraint: bool,
     invisible: bool,
     label_size: Option<EdgeLabelSize>,
     tail_label_size: Option<EdgeLabelSize>,
@@ -1995,6 +2142,8 @@ struct ClusterSpec {
     kind: ClusterKind,
     parent: Option<String>,
     nodes: Vec<String>,
+    source_rank_nodes: Vec<String>,
+    sink_rank_nodes: Vec<String>,
     has_svek_endpoint: bool,
 }
 

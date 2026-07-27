@@ -30,7 +30,7 @@ salt 103 103
 sequence 1411 1411
 skinparam 397 410
 sprites 49 49
-state 833 901
+state 848 901
 timing 141 141
 type-detection 40 42
 usecase 315 315

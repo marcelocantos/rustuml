@@ -9,7 +9,7 @@
 use std::fmt::Write;
 
 use rustuml_layout::graph::{
-    ClusterPosition, ClusterTitleSize, Direction, EdgeLabelSize, EdgePath, GraphSpacing,
+    ClusterPosition, ClusterTitleSize, Direction, EdgeLabelSize, EdgePath, EdgePorts, GraphSpacing,
     LayoutGraph, NodePosition,
 };
 use rustuml_parser::diagram::state::*;
@@ -155,6 +155,14 @@ const START_RADIUS: f64 = 10.0;
 const END_OUTER_RADIUS: f64 = 11.0;
 /// Inner radius of the end pseudo-state circle.
 const END_INNER_RADIUS: f64 = 6.0;
+/// Radius of an entry/exit state-border symbol.
+///
+/// Java provenance: `net.sourceforge.plantuml.abel.EntityPosition.RADIUS`.
+const STATE_BORDER_RADIUS: f64 = 6.0;
+/// Clearance added when a border point lies near an orthogonal frontier.
+///
+/// Java provenance: `FrontierCalculator.DELTA = 3 * EntityPosition.RADIUS`.
+const STATE_BORDER_FRONTIER_DELTA: f64 = 3.0 * STATE_BORDER_RADIUS;
 
 /// Fork/Join bar dimensions.
 const BAR_WIDTH: f64 = 80.0;
@@ -374,6 +382,7 @@ enum StateLayoutShape {
     Box,
     Circle,
     Diamond,
+    Port,
 }
 
 fn layout_node_size(
@@ -394,6 +403,13 @@ fn layout_node_size(
             END_OUTER_RADIUS * 2.0,
             StateLayoutShape::Circle,
         );
+    }
+    if state_def
+        .is_some_and(|state| matches!(state.kind, StateKind::EntryPoint | StateKind::ExitPoint))
+    {
+        // Java `EntityPosition.getDimension` uses `RADIUS * 2` on both axes
+        // and `EntityImageStateBorder` maps the image to RECTANGLE_PORT.
+        return (12.0, 12.0, StateLayoutShape::Port);
     }
     let shape = match state_def.map(|state| state.kind) {
         Some(
@@ -497,6 +513,9 @@ fn add_state_layout_node(
         }
         StateLayoutShape::Diamond => {
             layout.add_diamond_node(id, id, width, height);
+        }
+        StateLayoutShape::Port => {
+            layout.add_svek_state_border_node(id);
         }
     }
 }
@@ -1874,6 +1893,7 @@ impl StateArrowFont {
 struct AutonomousScopeLayout {
     ids: Vec<String>,
     positions: Vec<(String, f64, f64, f64, f64)>,
+    cluster_positions: Vec<ClusterPosition>,
     edge_paths: Vec<EdgePath>,
     transition_indices: Vec<usize>,
     origin_x: f64,
@@ -2127,6 +2147,7 @@ fn layout_autonomous_scope(
     Some(AutonomousScopeLayout {
         ids,
         positions,
+        cluster_positions: Vec::new(),
         edge_paths: result.edge_paths,
         transition_indices,
         origin_x,
@@ -2662,6 +2683,7 @@ fn emit_autonomous_scope_entities(
 ) {
     let (offset_x, offset_y) = offset;
     for (id, cx, cy, width, height) in &scope.positions {
+        let layout_cy = *cy;
         let cx = cx + offset_x;
         let cy = cy + offset_y;
         if let Some(qualified_name) = autonomous_pseudo_name(id) {
@@ -2810,7 +2832,80 @@ fn emit_autonomous_scope_entities(
                 continue;
             }
             StateKind::EntryPoint | StateKind::ExitPoint => {
-                unreachable!("state-border images are excluded from autonomous composites");
+                let fill = state
+                    .fill
+                    .as_deref()
+                    .map(crate::sequence::resolve_color)
+                    .unwrap_or_else(|| context.skin.state_fill.clone());
+                let label_width = text_render::measure(&state.label, STATE_FONT_SIZE, false);
+                let label_height = text_render::label_height(&state.label, STATE_FONT_SIZE);
+                let label_x = cx - label_width / 2.0;
+                let image_y = cy - STATE_BORDER_RADIUS;
+                let parent_center_y = state
+                    .parent
+                    .as_deref()
+                    .and_then(|parent| {
+                        scope
+                            .cluster_positions
+                            .iter()
+                            .find(|cluster| cluster.id == parent)
+                    })
+                    .map(|cluster| cluster.y + cluster.height / 2.0)
+                    .unwrap_or(layout_cy);
+                let label_y = if layout_cy <= parent_center_y {
+                    image_y - STATE_BORDER_RADIUS * 2.0 - label_height
+                        + text_render::ascent_for_family(STATE_FONT_SIZE, "sans-serif")
+                } else {
+                    image_y
+                        + STATE_BORDER_RADIUS * 2.0
+                        + text_render::ascent_for_family(STATE_FONT_SIZE, "sans-serif")
+                };
+                text_render::emit_text(
+                    svg,
+                    &state.label,
+                    &TextBase {
+                        x: label_x,
+                        y: label_y,
+                        font_size: STATE_FONT_SIZE as u32,
+                        font_family: "sans-serif",
+                        fill: &context.skin.text_color,
+                        bold: false,
+                        italic: false,
+                        underline: false,
+                        skip_underline: false,
+                    },
+                );
+                write!(
+                    svg,
+                    r#"<ellipse cx="{}" cy="{}" fill="{fill}" rx="{STATE_BORDER_RADIUS}" ry="{STATE_BORDER_RADIUS}" style="stroke:{};stroke-width:1.5;"/>"#,
+                    fmt_f(cx),
+                    fmt_f(cy),
+                    context.skin.stroke,
+                )
+                .unwrap();
+                if state.kind == StateKind::ExitPoint {
+                    // Java `EntityPosition.drawSymbol` offsets the cross center
+                    // by 6.5px and draws a 5.5px radius at +/-45 degrees.
+                    let cross_center_x = cx + 0.5;
+                    let cross_center_y = cy + 0.5;
+                    let cross_delta = 5.5 * std::f64::consts::FRAC_1_SQRT_2;
+                    write!(
+                        svg,
+                        r#"<line style="stroke:{};stroke-width:1.5;" x1="{}" x2="{}" y1="{}" y2="{}"/><line style="stroke:{};stroke-width:1.5;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+                        context.skin.stroke,
+                        fmt_f(cross_center_x + cross_delta),
+                        fmt_f(cross_center_x - cross_delta),
+                        fmt_f(cross_center_y + cross_delta),
+                        fmt_f(cross_center_y - cross_delta),
+                        context.skin.stroke,
+                        fmt_f(cross_center_x + cross_delta),
+                        fmt_f(cross_center_x - cross_delta),
+                        fmt_f(cross_center_y - cross_delta),
+                        fmt_f(cross_center_y + cross_delta),
+                    )
+                    .unwrap();
+                }
+                continue;
             }
             StateKind::Normal => {}
         }
@@ -3382,6 +3477,182 @@ fn order_parallel_svek_paths(edge_paths: &mut [EdgePath]) {
     }
 }
 
+/// Recompute the painted frontier of clusters carrying entry/exit points.
+///
+/// Java provenance: `Cluster.manageEntryExitPoint` separates ordinary member
+/// rectangles from non-normal point centers, then `FrontierCalculator`
+/// derives a visible cluster rectangle that may pass through those centers.
+fn apply_state_border_frontiers(
+    diagram: &StateDiagram,
+    ids: &[String],
+    clusters: &mut [ClusterPosition],
+    positions: &[NodePosition],
+) {
+    for cluster in clusters {
+        let border_ids = diagram
+            .states
+            .iter()
+            .filter(|state| state.parent.as_deref() == Some(cluster.id.as_str()))
+            .filter(|state| matches!(state.kind, StateKind::EntryPoint | StateKind::ExitPoint))
+            .map(|state| state.id.as_str())
+            .collect::<std::collections::HashSet<_>>();
+        if border_ids.is_empty() {
+            continue;
+        }
+
+        let initial_min_x = cluster.x;
+        let initial_min_y = cluster.y;
+        let initial_max_x = cluster.x + cluster.width;
+        let initial_max_y = cluster.y + cluster.height;
+        let mut core: Option<(f64, f64, f64, f64)> = None;
+        let mut points = Vec::new();
+
+        for (id, position) in ids.iter().zip(positions) {
+            if id == &cluster.id {
+                continue;
+            }
+            let owner = if let Some(scope) = id
+                .strip_prefix("__start__:")
+                .or_else(|| id.strip_prefix("__end__:"))
+            {
+                Some(scope)
+            } else {
+                diagram
+                    .states
+                    .iter()
+                    .find(|state| state.id == *id)
+                    .and_then(|state| state.parent.as_deref())
+            };
+            if owner != Some(cluster.id.as_str()) {
+                continue;
+            }
+            let center = (
+                position.x + position.width / 2.0,
+                position.y + position.height / 2.0,
+            );
+            if border_ids.contains(id.as_str()) {
+                points.push(center);
+                continue;
+            }
+            let rectangle = (
+                position.x,
+                position.y,
+                position.x + position.width,
+                position.y + position.height,
+            );
+            core = Some(match core {
+                Some((min_x, min_y, max_x, max_y)) => (
+                    min_x.min(rectangle.0),
+                    min_y.min(rectangle.1),
+                    max_x.max(rectangle.2),
+                    max_y.max(rectangle.3),
+                ),
+                None => rectangle,
+            });
+        }
+
+        let mut core = core.unwrap_or_else(|| {
+            let center_x = (initial_min_x + initial_max_x) / 2.0;
+            let center_y = (initial_min_y + initial_max_y) / 2.0;
+            (
+                center_x - 1.0,
+                center_y - 1.0,
+                center_x + 1.0,
+                center_y + 1.0,
+            )
+        });
+        for (x, y) in &points {
+            core.0 = core.0.min(*x);
+            core.1 = core.1.min(*y);
+            core.2 = core.2.max(*x);
+            core.3 = core.3.max(*y);
+        }
+
+        let touch_min_x = points.iter().any(|point| point.0 == core.0);
+        let touch_min_y = points.iter().any(|point| point.1 == core.1);
+        let touch_max_x = points.iter().any(|point| point.0 == core.2);
+        let touch_max_y = points.iter().any(|point| point.1 == core.3);
+        if !touch_min_x {
+            core.0 = initial_min_x;
+        }
+        if !touch_min_y {
+            core.1 = initial_min_y;
+        }
+        if !touch_max_x {
+            core.2 = initial_max_x;
+        }
+        if !touch_max_y {
+            core.3 = initial_max_y;
+        }
+
+        let mut push_min_x = false;
+        let mut push_min_y = false;
+        let mut push_max_x = false;
+        let mut push_max_y = false;
+        for (x, y) in &points {
+            if *y == core.1 || *y == core.3 {
+                push_min_x |= (*x - core.0).abs() < STATE_BORDER_FRONTIER_DELTA;
+                push_max_x |= (*x - core.2).abs() < STATE_BORDER_FRONTIER_DELTA;
+            }
+            if *x == core.0 || *x == core.2 {
+                push_min_y |= (*y - core.1).abs() < STATE_BORDER_FRONTIER_DELTA;
+                push_max_y |= (*y - core.3).abs() < STATE_BORDER_FRONTIER_DELTA;
+            }
+        }
+        // State diagrams here are top-to-bottom. Java suppresses vertical
+        // expansion when a point already occupies a top/bottom corner.
+        for (x, y) in &points {
+            if (*y == core.1 || *y == core.3) && (*x == core.0 || *x == core.2) {
+                if *y == core.1 {
+                    push_min_y = false;
+                }
+                if *y == core.3 {
+                    push_max_y = false;
+                }
+            }
+        }
+        if push_min_x {
+            core.0 -= STATE_BORDER_FRONTIER_DELTA;
+        }
+        if push_min_y {
+            core.1 -= STATE_BORDER_FRONTIER_DELTA;
+        }
+        if push_max_x {
+            core.2 += STATE_BORDER_FRONTIER_DELTA;
+        }
+        if push_max_y {
+            core.3 += STATE_BORDER_FRONTIER_DELTA;
+        }
+
+        // `Cluster.manageEntryExitPoint` reapplies the title-width floor after
+        // replacing Graphviz's initial rectangle.
+        let title = diagram
+            .states
+            .iter()
+            .find(|state| state.id == cluster.id)
+            .map(|state| state.label.as_str())
+            .unwrap_or(cluster.id.as_str());
+        let minimum_width = text_render::measure(title, STATE_FONT_SIZE, false) + 10.0;
+        let width_delta = core.2 - core.0 - minimum_width;
+        if width_delta < 0.0 {
+            let mut new_min_x = core.0 + width_delta / 2.0;
+            let mut new_max_x = core.2 - width_delta / 2.0;
+            let initial_error = new_min_x - initial_min_x;
+            if initial_error < 0.0 {
+                new_min_x -= initial_error;
+                new_max_x -= initial_error;
+            }
+            core.0 = new_min_x;
+            core.2 = new_max_x;
+        }
+
+        cluster.x = core.0;
+        cluster.y = core.1;
+        cluster.width = core.2 - core.0;
+        cluster.height = core.3 - core.1;
+    }
+}
+
 /// Render root state groups that remain connected to entities in sibling
 /// groups and therefore cannot be simplified into autonomous image nodes.
 ///
@@ -3392,6 +3663,10 @@ fn order_parallel_svek_paths(edge_paths: &mut [EdgePath]) {
 /// endpoint and the `p0`/`p1` protection clusters represented by
 /// `LayoutGraph::add_svek_cluster`.
 fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
+    let has_border_points = diagram
+        .states
+        .iter()
+        .any(|state| matches!(state.kind, StateKind::EntryPoint | StateKind::ExitPoint));
     if !diagram.notes.is_empty()
         || diagram.meta.title.is_some()
         || !diagram.meta.skinparams.is_empty()
@@ -3403,8 +3678,10 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
                 )
         })
         || diagram.states.iter().any(|state| {
-            !matches!(state.kind, StateKind::Normal)
-                || state.concurrent_separator.is_some()
+            !matches!(
+                state.kind,
+                StateKind::Normal | StateKind::EntryPoint | StateKind::ExitPoint
+            ) || state.concurrent_separator.is_some()
                 || state.stereotype.is_some()
                 || state.fill.is_some()
                 || state.stroke.is_some()
@@ -3420,7 +3697,8 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
         .iter()
         .filter(|state| state.composite)
         .collect::<Vec<_>>();
-    if composites.len() < 2
+    if composites.is_empty()
+        || (!has_border_points && composites.len() < 2)
         || composites.iter().any(|state| state.parent.is_some())
         || diagram.states.iter().any(|state| {
             state
@@ -3431,7 +3709,7 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
         || !diagram
             .transitions
             .iter()
-            .any(|transition| transition_parent_scope(diagram, transition).is_none())
+            .any(|transition| matches!(transition_parent_scope(diagram, transition), Some(None)))
     {
         return None;
     }
@@ -3485,7 +3763,16 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
         if let Some(owner) = owner
             && composites.iter().any(|composite| composite.id == owner)
         {
-            layout.add_cluster_node(owner, id);
+            match diagram
+                .states
+                .iter()
+                .find(|state| state.id == *id)
+                .map(|state| state.kind)
+            {
+                Some(StateKind::EntryPoint) => layout.add_cluster_source_node(owner, id),
+                Some(StateKind::ExitPoint) => layout.add_cluster_sink_node(owner, id),
+                _ => layout.add_cluster_node(owner, id),
+            }
         }
     }
 
@@ -3523,14 +3810,41 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
             ) + 2.0,
             height: (text_render::label_height(label, arrow_font.size as f64) + 2.0).floor(),
         });
-        layout.add_edge_with_label_sizes_and_minlen(
+        let border_port = |endpoint: &str| {
+            diagram
+                .states
+                .iter()
+                .find(|state| state.id == endpoint)
+                .is_some_and(|state| {
+                    matches!(state.kind, StateKind::EntryPoint | StateKind::ExitPoint)
+                })
+                .then_some("P")
+        };
+        layout.add_edge_with_ports_and_label_sizes_and_minlen(
             layout_from,
             layout_to,
+            EdgePorts {
+                tail: border_port(layout_from),
+                head: border_port(layout_to),
+            },
             label_size,
             None,
             None,
             transition_svek_minlen(diagram, transition),
         );
+        let same_border_container = diagram
+            .states
+            .iter()
+            .find(|state| state.id == *layout_from)
+            .zip(diagram.states.iter().find(|state| state.id == *layout_to))
+            .is_some_and(|(from, to)| {
+                matches!(from.kind, StateKind::EntryPoint | StateKind::ExitPoint)
+                    && matches!(to.kind, StateKind::EntryPoint | StateKind::ExitPoint)
+                    && from.parent == to.parent
+            });
+        if same_border_container {
+            layout.set_edge_unconstrained(layout_from, layout_to);
+        }
     }
 
     let mut result = layout.layout_full(std::time::Duration::from_secs(5))?;
@@ -3539,6 +3853,12 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
     {
         return None;
     }
+    apply_state_border_frontiers(
+        diagram,
+        &ids,
+        &mut result.cluster_positions,
+        &result.node_positions,
+    );
     order_parallel_svek_paths(&mut result.edge_paths);
     for edge in &mut result.edge_paths {
         let tail = result
@@ -3603,6 +3923,42 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
                     // horizontal envelope on both sides.
                     include_point(image_x - 10.0, image_y);
                     include_point(image_x + width + 10.0, image_y + height);
+                }
+                StateLayoutShape::Port => {
+                    // `EntityImageStateBorder` paints the point ellipse and a
+                    // label outside the owning cluster's visible frontier.
+                    include_point(image_x, image_y);
+                    include_point(image_x + width - 1.0, image_y + height - 1.0);
+                    let state = diagram.states.iter().find(|state| state.id == *id)?;
+                    let label_width = text_render::measure(&state.label, STATE_FONT_SIZE, false);
+                    let label_height = text_render::label_height(&state.label, STATE_FONT_SIZE);
+                    let parent_center_y = state
+                        .parent
+                        .as_deref()
+                        .and_then(|parent| {
+                            result
+                                .cluster_positions
+                                .iter()
+                                .find(|cluster| cluster.id == parent)
+                        })
+                        .map(|cluster| cluster.y + cluster.height / 2.0)
+                        .unwrap_or(center_y);
+                    let label_top = if center_y <= parent_center_y {
+                        image_y - STATE_BORDER_RADIUS * 2.0 - label_height
+                    } else {
+                        image_y + STATE_BORDER_RADIUS * 2.0
+                    };
+                    // Java `LimitFinder.drawText` records each UText from
+                    // `baseline - height + 1.5` through `baseline + 1.5`.
+                    let limit_offset =
+                        text_render::ascent_for_family(STATE_FONT_SIZE, "sans-serif")
+                            - label_height
+                            + 1.5;
+                    include_point(center_x - label_width / 2.0, label_top + limit_offset);
+                    include_point(
+                        center_x + label_width / 2.0,
+                        label_top + label_height + limit_offset,
+                    );
                 }
                 StateLayoutShape::Box => {
                     // `LimitFinder.drawRectangle` expands one pixel above/left.
@@ -3708,6 +4064,7 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
     let scope = AutonomousScopeLayout {
         ids: ids.clone(),
         positions,
+        cluster_positions: result.cluster_positions.clone(),
         edge_paths: result.edge_paths,
         transition_indices,
         origin_x,
@@ -3812,12 +4169,23 @@ fn emit_root_state_cluster(
     )
     .unwrap();
     let title_width = text_render::measure(&composite.label, STATE_FONT_SIZE, false);
+    let has_border_points = context.diagram.states.iter().any(|state| {
+        state.parent.as_deref() == Some(composite.id.as_str())
+            && matches!(state.kind, StateKind::EntryPoint | StateKind::ExitPoint)
+    });
+    let title_baseline_offset = if has_border_points {
+        // `Cluster.manageEntryExitPoint` replaces the solved rectangle and
+        // resets `xyTitle.y` to `minY + IEntityImage.MARGIN` (5px).
+        NAME_BASELINE_OFFSET
+    } else {
+        CLUSTER_TITLE_BASELINE_OFFSET
+    };
     text_render::emit_text(
         svg,
         &composite.label,
         &TextBase {
             x: x + (width - title_width) / 2.0,
-            y: y + CLUSTER_TITLE_BASELINE_OFFSET,
+            y: y + title_baseline_offset,
             font_size: STATE_FONT_SIZE as u32,
             font_family: "sans-serif",
             fill: &context.skin.text_color,
@@ -4411,7 +4779,7 @@ pub fn render_with_oracle(
                         - match shape {
                             StateLayoutShape::Box => 1.0,
                             StateLayoutShape::Diamond => POLYGON_LIMIT_FINDER_OVERSCAN_X,
-                            StateLayoutShape::Circle => 0.0,
+                            StateLayoutShape::Circle | StateLayoutShape::Port => 0.0,
                         },
                 )
             })
