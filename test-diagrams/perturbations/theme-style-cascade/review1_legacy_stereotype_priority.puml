@@ -1,0 +1,17 @@
+@startuml
+skinparam class<<service_tier>> {
+  BackgroundColor #D1C4E9
+  BorderColor #4527A0
+  FontStyle bold
+}
+<style>
+class {
+  BackgroundColor #DCEDC8
+  LineColor #33691E
+  FontStyle plain
+}
+</style>
+class "Priority Service 9701" as PriorityService9701 <<Service.Tier>>
+class "Priority Control 9709" as PriorityControl9709
+PriorityService9701 --> PriorityControl9709 : stereotype priority survives
+@enduml

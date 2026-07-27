@@ -1,0 +1,10 @@
+@startuml
+skinparam State.Arrow_Color #AD1457
+skinparam usecaseBackgroundColor #FFFDE7
+skinparam usecaseBorderColor #F57F17
+actor "Renamed Auditor 9901" as RenamedAuditor9901
+usecase "Inspect Cascade 9907" as InspectCascade9907
+usecase "Archive Finding 9911" as ArchiveFinding9911
+RenamedAuditor9901 --> InspectCascade9907 : inherited state arrow alias
+InspectCascade9907 --> ArchiveFinding9911 : second inherited route
+@enduml

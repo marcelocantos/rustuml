@@ -1,0 +1,28 @@
+@startuml
+<style>
+root {
+  FontColor #263238
+  LineColor #455A64
+}
+class {
+  BackgroundColor #ECEFF1
+  Padding 8
+  header {
+    BackgroundColor #CFD8DC
+    FontColor #0D47A1
+    FontStyle bold
+  }
+}
+arrow {
+  LineColor #00695C
+  FontColor #00695C
+}
+</style>
+class "Sparse Harbor 9501" as SparseHarbor9501 {
+  +cargoCode: String
+}
+class "Inherited Beacon 9509" as InheritedBeacon9509 {
+  +signalLevel: int
+}
+SparseHarbor9501 --> InheritedBeacon9509 : sparse inherited route
+@enduml

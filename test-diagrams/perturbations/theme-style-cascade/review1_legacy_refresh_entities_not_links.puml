@@ -1,0 +1,26 @@
+@startuml
+<style>
+class {
+  BackgroundColor #FCE4EC
+}
+arrow {
+  LineColor #AD1457
+  FontColor #AD1457
+}
+</style>
+class "Early Rowan 9301" as EarlyRowan9301
+class "Early Flint 9307" as EarlyFlint9307
+EarlyRowan9301 --> EarlyFlint9307 : captured before compatibility trigger
+skinparam classBorderColor #00695C
+<style>
+class {
+  BackgroundColor #E0F2F1
+}
+arrow {
+  LineColor #4527A0
+  FontColor #4527A0
+}
+</style>
+class "Late Opal 9311" as LateOpal9311
+EarlyFlint9307 --> LateOpal9311 : captured after compatibility trigger
+@enduml

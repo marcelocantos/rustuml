@@ -1,0 +1,21 @@
+@startuml
+class "North Quartz 9201" as NorthQuartz9201
+class "Middle Larch 9203" as MiddleLarch9203
+class "South Indigo 9209" as SouthIndigo9209
+<style>
+arrow {
+  LineColor #C62828
+  FontColor #C62828
+  LineThickness 2
+}
+</style>
+NorthQuartz9201 --> MiddleLarch9203 : early ruby route
+<style>
+arrow {
+  LineColor #1565C0
+  FontColor #1565C0
+  LineThickness 3
+}
+</style>
+MiddleLarch9203 --> SouthIndigo9209 : late cobalt route
+@enduml

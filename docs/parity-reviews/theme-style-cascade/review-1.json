@@ -1,0 +1,219 @@
+{
+  "schema_version": 1,
+  "mechanism": "theme-style-cascade",
+  "account_commit": "ca50f6d2e87b8cac1e0222f18b473406ffbbca06",
+  "implementation_commit": "60d16110082c189ba1f02ea3eb46a928a7f77cf2",
+  "implementation_parent": "67a51897d94b2280eb48f72c1869e0f4b70b992b",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar": {
+    "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+  },
+  "reviewer": {
+    "task_id": "019ee369-54e2-7203-afce-ddde7bfe1723",
+    "model": "OpenAI GPT-5 Codex",
+    "tool": "Codex desktop",
+    "role": "independent skeptical checker; no production edits"
+  },
+  "constraints": [
+    "No Cargo, rustc, or rustfmt command was run.",
+    "No production source was edited.",
+    "The PlantUML picoweb server was started through scripts/plantuml-server.sh and used the pinned Java JAR.",
+    "The already-built target/release/examples/diff_one binary performed every Rust render and strict comparison.",
+    "Only review1_ perturbation pairs and this review record are included in the checker commit."
+  ],
+  "execution": {
+    "diff_helper": "target/release/examples/diff_one",
+    "diff_helper_sha256": "4ce9dbcef7a476f312d19247de32653793bc1d150dc769b0218901f1e7ae5c1c",
+    "diff_helper_mtime": "2026-07-27T21:14:59+1000",
+    "oracle_server": "http://127.0.0.1:8787/render",
+    "strict_total": 10,
+    "strict_passed": 0,
+    "strict_failed": 10
+  },
+  "commands": [
+    "git show --stat --oneline --decorate 60d16110",
+    "git show --no-ext-diff 60d16110 -- crates/rustuml-render/src/class.rs crates/rustuml-render/src/component.rs crates/rustuml-render/src/lib.rs crates/rustuml-render/src/state.rs crates/rustuml-render/src/style_cascade.rs crates/rustuml-render/src/usecase.rs",
+    "cat docs/parity-reviews/theme-style-cascade/account.json",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "static inspection with rg and nl of StyleStorage#computeMergedStyle, StyleBuilder#muteStyle, StyleSignatureBasic#matchAll, DarkString#mergeWith, Entity#getCurrentStyleBuilder, Link#getStyleBuilder, SkinParam#setParam, Context#toStyles, and TContext#executeTheme at Java revision 71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "static inspection with rg and nl of crates/rustuml-parser/src/diagram/style.rs, crates/rustuml-parser/src/parse/style.rs, crates/rustuml-render/src/style_cascade.rs, and the class/state/component/usecase adapters at Rust revision 60d16110082c189ba1f02ea3eb46a928a7f77cf2",
+    "scripts/plantuml-server.sh 8787",
+    "for source in test-diagrams/perturbations/theme-style-cascade/review1_*.puml; do jq -Rs '{source: ., options: [\"-tsvg\"]}' \"$source\" | curl -sf -H 'Content-Type: application/json' --data-binary @- http://127.0.0.1:8787/render -o \"${source%.puml}.svg\"; done",
+    "find test-diagrams/perturbations/theme-style-cascade -maxdepth 1 -name 'review1_*.svg' -print0 | xargs -0 xmllint --noout",
+    "rg -n -i 'Syntax Error|NoSuchElementException|Welcome to PlantUML|An error has occured|\\[From string|Assumed diagram type|class=\"message\"' test-diagrams/perturbations/theme-style-cascade/review1_*.svg",
+    "for source in test-diagrams/perturbations/theme-style-cascade/review1_*.puml; do target/release/examples/diff_one --no-oracle \"$source\"; done",
+    "git merge-base --is-ancestor ca50f6d2 60d16110",
+    "git diff --exit-code ca50f6d2 60d16110 -- docs/parity-reviews/theme-style-cascade/account.json",
+    "git diff --no-ext-diff ca50f6d2 60d16110 over parser/style-cascade/adapter production files, searched for golden or fixture reads, heldout labels, review-name conditions, source-line gates, collection-length ladders, and unexplained numeric literals",
+    "git diff --check 60d16110^ 60d16110",
+    "shasum -a 256 /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar target/release/examples/diff_one test-diagrams/perturbations/theme-style-cascade/review1_*.puml test-diagrams/perturbations/theme-style-cascade/review1_*.svg",
+    "SHA-256 uniqueness comparison of all ten review1_ sources against every prior test-diagrams/golden and test-diagrams/perturbations PlantUML source"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/theme-style-cascade/review1_temporal_class_entity_snapshots.puml",
+      "golden": "test-diagrams/perturbations/theme-style-cascade/review1_temporal_class_entity_snapshots.svg",
+      "source_sha256": "23827687f61c3eac2ce8c9d1e9a576832c11859cf5a4c595ce3b273648bab6eb",
+      "golden_sha256": "dc7c44edbe5cd97090bcfce1ff775c6c6fea05b682f3945edeafaa79d3021b76",
+      "axes": [
+        "pure CSS before and after entity creation",
+        "renamed entities",
+        "background and border properties"
+      ],
+      "result": "fail",
+      "comparison": "Java preserves the creation-time style of BeforeCedar9101 (#E8F5E9 fill and #1B5E20 border). Rust applies the later #FFF3E0/#E65100 class style to both entities."
+    },
+    {
+      "source": "test-diagrams/perturbations/theme-style-cascade/review1_temporal_link_snapshots.puml",
+      "golden": "test-diagrams/perturbations/theme-style-cascade/review1_temporal_link_snapshots.svg",
+      "source_sha256": "031f794f52f21653b317b65f94891f757f05b917793a8ad8249d614dc7171e99",
+      "golden_sha256": "7cf3946dc8665c55cffdccd8c08fe25a17cd758c7058988e32c67117ee0e9af9",
+      "axes": [
+        "link creation before and after a CSS mutation",
+        "renamed three-node topology",
+        "line color, thickness, and label color"
+      ],
+      "result": "fail",
+      "comparison": "Java keeps the early route #C62828 at width 2 and the late route #1565C0 at width 3. Rust renders both with the late blue width-3 style and renders both labels black instead of their arrow FontColor."
+    },
+    {
+      "source": "test-diagrams/perturbations/theme-style-cascade/review1_legacy_refresh_entities_not_links.puml",
+      "golden": "test-diagrams/perturbations/theme-style-cascade/review1_legacy_refresh_entities_not_links.svg",
+      "source_sha256": "65c645e4e2b8174124d465692037828e9385adfa486e59c670f9a2017f25ecf9",
+      "golden_sha256": "d75c961f2169342d0599cf098c0628f805b393989e8be55338ba12a2cded97db",
+      "axes": [
+        "legacy skinparam compatibility trigger between entities",
+        "links before and after the trigger",
+        "renamed labels and changed declaration order"
+      ],
+      "result": "fail",
+      "comparison": "Entity paint agrees, confirming the latest-builder compatibility path for entities. The early Java link retains #AD1457 while Rust recolors it #4527A0 from the final cascade; Rust also drops both arrow label colors."
+    },
+    {
+      "source": "test-diagrams/perturbations/theme-style-cascade/review1_theme_then_user_component.puml",
+      "golden": "test-diagrams/perturbations/theme-style-cascade/review1_theme_then_user_component.svg",
+      "source_sha256": "dbbfd47cb59364144599f03c58dee36606019ea070015b540fe7b8c034306dba",
+      "golden_sha256": "7c6d2e4d6b8e42870eccdde6c2adc6891628eb83940064be2f6b2e09b8659dff",
+      "axes": [
+        "theme followed by user CSS",
+        "renamed component topology",
+        "sparse theme properties retained under a later partial override"
+      ],
+      "result": "fail",
+      "comparison": "Final user colors are ordered correctly, but Rust loses inherited theme geometry and arrow thickness: Java is 277x240 with a 3.125 SVG stroke, Rust is 239x193 with a 1.0417 stroke."
+    },
+    {
+      "source": "test-diagrams/perturbations/theme-style-cascade/review1_user_then_theme_component.puml",
+      "golden": "test-diagrams/perturbations/theme-style-cascade/review1_user_then_theme_component.svg",
+      "source_sha256": "4e5acecf430aeb158b06f92ed331c02d5ebd467d125ecbe33bce6529dc96e637",
+      "golden_sha256": "76fcf579afb63f54e4a0640b2d8acbcc8471e9bb725500bb94a9f2da0cd42120",
+      "axes": [
+        "user CSS followed by theme",
+        "source-order reversal of the paired control",
+        "renamed component topology"
+      ],
+      "result": "fail",
+      "comparison": "Minty correctly wins the final colors, so directive replay order survives this reversal. Rust still omits the theme's padding and arrow thickness: Java is 276x240 with a 3.125 stroke, Rust is 238x193 with a 1.0417 stroke."
+    },
+    {
+      "source": "test-diagrams/perturbations/theme-style-cascade/review1_sparse_root_family_header.puml",
+      "golden": "test-diagrams/perturbations/theme-style-cascade/review1_sparse_root_family_header.svg",
+      "source_sha256": "d935cd0a54c813775f4369def1aae2e2018bfb58ee808395903877ac400695ad",
+      "golden_sha256": "47d56ea3ea0231b9bb2e5bec1c9f63899261bee0a1ccd5a37b3af803b9022cbf",
+      "axes": [
+        "sparse root inheritance",
+        "family and nested header specificity",
+        "padding and arrow text feedback",
+        "renamed classes with members"
+      ],
+      "result": "fail",
+      "comparison": "Body colors inherit correctly, but Rust uses root #263238 for class names instead of header #0D47A1, doubles the padding effect (90.9766px entity height versus Java 64.4883px), keeps the class icon border #181818 instead of root #455A64, and renders the arrow label black instead of #00695C."
+    },
+    {
+      "source": "test-diagrams/perturbations/theme-style-cascade/review1_css_stereotype_normalization.puml",
+      "golden": "test-diagrams/perturbations/theme-style-cascade/review1_css_stereotype_normalization.svg",
+      "source_sha256": "83a60a5c7de1492f1a3e7df14f1552a00de43826b92a68b0412238006729c8ed",
+      "golden_sha256": "14e86d7e69861369b6c6b1725482e9c419183e866676aa2b112efee2cc59f54b",
+      "axes": [
+        "CSS stereotype qualifier",
+        "dot versus underscore normalization",
+        "qualified and ordinary entities in one graph"
+      ],
+      "result": "fail",
+      "comparison": "Java matches .Audit.Flag to <<audit_flag>> and emits #FFCDD2/#B71C1C/#880E4F. Rust ignores the qualifier and emits the unqualified #E3F2FD/#1565C0 class style with black text."
+    },
+    {
+      "source": "test-diagrams/perturbations/theme-style-cascade/review1_legacy_stereotype_priority.puml",
+      "golden": "test-diagrams/perturbations/theme-style-cascade/review1_legacy_stereotype_priority.svg",
+      "source_sha256": "3529ab29ff762390045d9849649eac3fb069e182b3788bd96e422c9967e3904d",
+      "golden_sha256": "e59e2400c7318f08f26837d2e8b8daa7cee2bb33d31ecd84ee085a3e39b233ce",
+      "axes": [
+        "legacy stereotype declaration before later ordinary CSS",
+        "stereotype priority delta",
+        "underscore versus dot normalization",
+        "qualified and unqualified controls"
+      ],
+      "result": "fail",
+      "comparison": "Java's earlier stereotype declaration retains #D1C4E9/#4527A0 and bold text over the later ordinary style. Rust emits the later unqualified #DCEDC8/#33691E style and plain text."
+    },
+    {
+      "source": "test-diagrams/perturbations/theme-style-cascade/review1_dark_regular_channel.puml",
+      "golden": "test-diagrams/perturbations/theme-style-cascade/review1_dark_regular_channel.svg",
+      "source_sha256": "0c23d55d8ced7313e335433e1cefe1e6839ef02d37bae830412651e848b83b3e",
+      "golden_sha256": "54960c8de6567b7f4f6caf78ff5b4fc441ee7b28ce443f2757823b2d81c215db",
+      "axes": [
+        "regular and dark declarations for the same properties",
+        "normal render must not leak dark values",
+        "sparse root document background"
+      ],
+      "result": "fail",
+      "comparison": "The regular class fill and border survive without dark leakage, but Java emits the regular root canvas #FAFAFA and a canvas rect while Rust emits #FFFFFF with one fewer structural element. Dark fallback itself cannot be exercised by the product helper because every adapter hardcodes StyleScheme::Regular."
+    },
+    {
+      "source": "test-diagrams/perturbations/theme-style-cascade/review1_cross_family_arrow_alias_usecase.puml",
+      "golden": "test-diagrams/perturbations/theme-style-cascade/review1_cross_family_arrow_alias_usecase.svg",
+      "source_sha256": "08cc800d30b87f65c18925267f2f5ae9dad354a31169e8fa867e4047c6bb20ef",
+      "golden_sha256": "34f53b5dda00d4f4c49dea1236ecd88b2729d4d0628038e0e2e3b4e029c08441",
+      "axes": [
+        "state-family dotted and underscored arrow alias",
+        "use-case consumer family",
+        "renamed actor and two-usecase topology"
+      ],
+      "result": "fail",
+      "comparison": "The targeted alias succeeds: both Java and Rust use #AD1457 for both use-case routes. Strict comparison still fails because Rust uses the actor display label instead of alias in data-qualified-name/id and one path ordinate differs by 0.01."
+    }
+  ],
+  "anti_overfit": {
+    "result": "partial",
+    "clean_findings": [
+      "The account commit predates the implementation and the account file is byte-unchanged through 60d16110.",
+      "Searches across the parser, resolver, and adapter implementation range found no golden or perturbation reads, embedded SVGs, heldout labels, review-name conditions, source-coordinate gates, or collection-count ladders.",
+      "git diff --check is clean for immutable adapter commit 60d16110."
+    ],
+    "violations": [
+      "The new component roundCorner division by 2.0 has no adjacent Java-source citation.",
+      "The new state shadowing branches that map true/yes to 3.0 and false/no to 0.0 have no adjacent Java-source citation. The account discusses conversion, but T14 rule 3 requires provenance beside each parity-affecting constant or branch."
+    ]
+  },
+  "findings": [
+    "The durable account ca50f6d2e87b8cac1e0222f18b473406ffbbca06 is an ancestor of immutable implementation 60d16110082c189ba1f02ea3eb46a928a7f77cf2 and remains byte-unchanged. The PlantUML checkout exactly matches the account's Java revision, and the oracle JAR hash matches prior checker evidence.",
+    "All ten fresh sources are valid PlantUML diagrams. Their server-generated SVGs are well-formed, have expected CLASS or DESCRIPTION diagram types, contain no PlantUML error markers, and are byte-unique against every prior golden and perturbation source.",
+    "The parser does preserve final declaration order across theme execution: the theme-then-user component case ends with user colors, and the reversed user-then-theme case ends with Minty colors. The cross-family State.Arrow_Color compatibility alias also reaches the use-case renderer correctly.",
+    "The account's temporal invariant is not implemented. StyleDeclaration.source_line and epoch are retained, and StyleCascade.resolve_at exists, but no production caller uses resolve_at. Every adapter calls resolve(...), which is resolve_at(..., u64::MAX). Java Entity#getCurrentStyleBuilder returns the creation-time builder for pure CSS, switches all entities to the latest builder after any skinparam command, and Link#getStyleBuilder always returns the captured builder. The three temporal heldouts directly expose all three paths.",
+    "Class, component, and use-case adapters never add an entity stereotype to their StyleSignature. State is the only adapted family that calls with_stereotype. CSS-qualified class styles are therefore unreachable, and the legacy raw fallback compares stereotype strings only with eq_ignore_ascii_case rather than Java's dot/underscore cleaning. Both CSS and legacy stereotype counterexamples fail.",
+    "Sparse selector matching in StyleCascade is not sufficient when the adapter projects winners into a dense family struct with the wrong consumption order. In class rendering, class_style inherits root FontColor into attr_font_color; that field is consulted before the separately resolved header FontColor, so the less-specific root value defeats the header winner. Padding is also projected with incompatible geometry, and arrow FontColor is not projected into class relationship labels.",
+    "The component adapter consumes arrow LineColor and font properties but not arrow LineThickness or LineStyle, and does not project root/family padding. Both source-order controls therefore preserve final colors while losing Minty's line width and layout envelope.",
+    "The resolver's regular/dark map overlay mirrors the simple DarkString fallback rule statically: regular winners are retained and dark winners replace only matching properties. Product integration is incomplete because all four adapters hardcode StyleScheme::Regular and no reviewed path selects dark rendering. The dark heldout confirms normal rendering does not leak dark class colors but exposes missing root document background projection.",
+    "Mechanical anti-overfit searches are clean, but the constant-provenance gate is not: newly introduced /2.0 component corner conversion and 3.0/0.0 state shadow branches lack adjacent Java citations.",
+    "No Cargo, rustc, rustfmt, self-authored unit test, or production edit was used as checker evidence. The verdict rests on pinned-Java differential outputs plus static Java/Rust data-flow inspection."
+  ],
+  "verdict": "rejected",
+  "required_followup": [
+    "Record a style epoch or builder snapshot on each style-bearing entity and link, then resolve pure CSS at creation time. Preserve Java's asymmetric compatibility rule: after any legacy skinparam, entities use the latest builder while links keep their creation snapshot.",
+    "Resolve per-entity signatures for class, component, and use-case families with Java-compatible stereotype normalization and priority. Remove exact-string legacy fallback behavior that bypasses the canonical resolver.",
+    "Project the complete sparse property set required by each consumer, including header-over-family precedence, arrow font/thickness/style, root document background, padding, and shadowing, without turning absent declarations into dense defaults.",
+    "Either expose and verify a product dark-scheme selection path or explicitly narrow the implementation claim; a resolver-only dark channel that no adapter can request is not product parity.",
+    "Add adjacent Java provenance for every new parity-affecting conversion constant and branch, then rerun all ten preserved review1_ pairs with the existing helper."
+  ]
+}

@@ -1,0 +1,17 @@
+@startuml
+<style>
+component {
+  BackgroundColor #FFF8E1
+  LineColor #FF6F00
+  FontColor #4E342E
+}
+arrow {
+  LineColor #8E24AA
+  FontColor #8E24AA
+}
+</style>
+!theme minty
+component "Copper Relay 9411" as CopperRelay9411
+component "Juniper Vault 9413" as JuniperVault9413
+CopperRelay9411 --> JuniperVault9413 : theme after user style
+@enduml

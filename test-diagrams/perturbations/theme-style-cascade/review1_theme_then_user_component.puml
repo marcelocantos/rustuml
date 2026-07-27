@@ -1,0 +1,17 @@
+@startuml
+!theme minty
+<style>
+component {
+  BackgroundColor #FFF8E1
+  LineColor #FF6F00
+  FontColor #4E342E
+}
+arrow {
+  LineColor #8E24AA
+  FontColor #8E24AA
+}
+</style>
+component "Amber Intake 9401" as AmberIntake9401
+component "Violet Ledger 9403" as VioletLedger9403
+AmberIntake9401 --> VioletLedger9403 : user style after theme
+@enduml

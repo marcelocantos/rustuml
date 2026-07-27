@@ -1,0 +1,27 @@
+@startuml
+<style>
+root {
+  BackgroundColor #FAFAFA
+  FontColor #212121
+  LineColor #424242
+}
+class {
+  BackgroundColor #E8EAF6
+  LineColor #3949AB
+}
+@media (prefers-color-scheme:dark) {
+  root {
+    BackgroundColor #101018
+    FontColor #F5F5F5
+    LineColor #E0E0E0
+  }
+  class {
+    BackgroundColor #24243A
+    LineColor #B39DDB
+  }
+}
+</style>
+class "Regular Lilac 9801" as RegularLilac9801
+class "Regular Slate 9803" as RegularSlate9803
+RegularLilac9801 --> RegularSlate9803 : regular channel only
+@enduml

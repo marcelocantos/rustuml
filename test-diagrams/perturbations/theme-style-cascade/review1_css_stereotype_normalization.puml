@@ -1,0 +1,16 @@
+@startuml
+<style>
+class {
+  BackgroundColor #E3F2FD
+  LineColor #1565C0
+  .Audit.Flag {
+    BackgroundColor #FFCDD2
+    LineColor #B71C1C
+    FontColor #880E4F
+  }
+}
+</style>
+class "Normalized Audit 9601" as NormalizedAudit9601 <<audit_flag>>
+class "Ordinary Channel 9607" as OrdinaryChannel9607
+NormalizedAudit9601 --> OrdinaryChannel9607 : normalized stereotype route
+@enduml

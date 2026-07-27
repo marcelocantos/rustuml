@@ -1,0 +1,17 @@
+@startuml
+<style>
+class {
+  BackgroundColor #E8F5E9
+  LineColor #1B5E20
+}
+</style>
+class "Before Cedar 9101" as BeforeCedar9101
+<style>
+class {
+  BackgroundColor #FFF3E0
+  LineColor #E65100
+}
+</style>
+class "After Saffron 9103" as AfterSaffron9103
+BeforeCedar9101 --> AfterSaffron9103 : renamed temporal edge
+@enduml
