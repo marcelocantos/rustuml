@@ -28,7 +28,7 @@ regex 45 45
 rendering 79 98
 salt 103 103
 sequence 1411 1411
-skinparam 400 410
+skinparam 401 410
 sprites 49 49
 state 883 901
 timing 141 141

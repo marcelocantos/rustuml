@@ -11139,6 +11139,28 @@ CobaltDecision --> [*]
     }
 
     #[test]
+    fn final_cross_family_arrow_alias_drives_state_links_below_local_override() {
+        let input = concat!(
+            "@startuml\n",
+            "skinparam State.Arrow_Color #1565C0\n",
+            "skinparam CLASS.Arrow.Color #00897B\n",
+            "skinparam UseCase.Arrow_Color #2E7D32\n",
+            "[*] --> AuroraIntake\n",
+            "AuroraIntake -[#C2185B,dashed]-> AuroraRelay : local\n",
+            "AuroraRelay --> AuroraArchive : inherited\n",
+            "AuroraArchive --> [*]\n",
+            "@enduml\n",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert_eq!(svg.matches("stroke:#2E7D32;stroke-width:1;").count(), 6);
+        assert_eq!(svg.matches("stroke:#C2185B;stroke-width:1;").count(), 2);
+        assert!(!svg.contains("#1565C0"));
+        assert!(!svg.contains("#00897B"));
+    }
+
+    #[test]
     fn state_border_color_does_not_leak_into_the_arrow_signature() {
         let input = concat!(
             "@startuml\n",

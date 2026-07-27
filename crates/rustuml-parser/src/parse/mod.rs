@@ -125,7 +125,11 @@ fn collapse_reassigned_skinparams(diagram: &mut Diagram) {
             format!("theme:{theme_segment}:{}", param.key.to_ascii_lowercase())
         } else {
             let canonical = canonical_skinparam_key(&param.key);
-            param.key = normalized_skinparam_spelling(&param.key);
+            param.key = if canonical == "arrowcolor" {
+                canonical.clone()
+            } else {
+                normalized_skinparam_spelling(&param.key)
+            };
             format!("ordinary:{canonical}")
         };
         if let Some(existing) = effective
@@ -1334,7 +1338,35 @@ mod tests {
             .collect();
 
         assert_eq!(matching.len(), 1);
-        assert_eq!(matching[0].key, "statearrowcolor");
+        assert_eq!(matching[0].key, "arrowcolor");
+        assert_eq!(matching[0].value, "#2E7D32");
+    }
+
+    #[test]
+    fn every_ordinary_family_arrow_alias_uses_shared_storage_identity() {
+        let input = concat!(
+            "@startuml\n",
+            "skinparam Activity.Arrow_Color #1565C0\n",
+            "skinparam Class_Arrow.Color #6A1B9A\n",
+            "skinparam Component.Arrow_Color #00838F\n",
+            "skinparam Object_Arrow.Color #3949AB\n",
+            "skinparam Sequence.Arrow_Color #AD1457\n",
+            "skinparam State_Arrow.Color #EF6C00\n",
+            "skinparam UseCase.Arrow_Color #2E7D32\n",
+            "[*] --> FreshRelay\n",
+            "FreshRelay --> [*]\n",
+            "@enduml\n",
+        );
+        let diagram = parse(input).unwrap();
+        let matching: Vec<_> = diagram
+            .meta()
+            .skinparams
+            .iter()
+            .filter(|param| canonical_skinparam_key(&param.key) == "arrowcolor")
+            .collect();
+
+        assert_eq!(matching.len(), 1);
+        assert_eq!(matching[0].key, "arrowcolor");
         assert_eq!(matching[0].value, "#2E7D32");
     }
 
