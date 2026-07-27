@@ -1,0 +1,12 @@
+@startuml
+state ShellKappa {
+  NodeA --> vx
+  state vx <<exitPoint>>
+  state uh <<entryPoint>>
+  state NodeA
+  uh --> NodeA
+}
+
+ShellKappa --> [*]
+[*] --> ShellKappa
+@enduml

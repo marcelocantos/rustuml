@@ -1,0 +1,19 @@
+@startuml
+state PodAlpha {
+  state qa <<entryPoint>>
+  state qz <<exitPoint>>
+  qa --> CoreOne
+  CoreOne --> qz
+}
+
+state PodBeta {
+  state rb <<entryPoint>>
+  state ry <<exitPoint>>
+  rb --> CoreTwo
+  CoreTwo --> ry
+}
+
+[*] --> PodAlpha
+PodAlpha --> PodBeta
+PodBeta --> [*]
+@enduml

@@ -1,0 +1,13 @@
+@startuml
+state RelayBox {
+  state ln <<entryPoint>>
+  state mq <<entryPoint>>
+  state rt <<exitPoint>>
+  ln --> mq
+  mq --> Work
+  Work --> rt
+}
+
+[*] --> RelayBox
+RelayBox --> [*]
+@enduml

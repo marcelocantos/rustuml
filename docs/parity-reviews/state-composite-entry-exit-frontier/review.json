@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-composite-entry-exit-frontier",
+  "reviewer": {
+    "task_id": "codex-desktop-independent-checker-2026-07-27",
+    "model": "GPT-5 Codex"
+  },
+  "account_commit": "e9c17afb90176509ff59920b5bdaa98a3ec6c0eb",
+  "implementation_commit": "64dddcf2be9131d1142746150efbb570c11b05b4",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "sed -n '1,260p' AGENTS.md",
+    "sed -n '1,240p' docs/parity-reviews/README.md",
+    "sed -n '1,260p' docs/parity-reviews/state-composite-entry-exit-frontier/account.json",
+    "git rev-parse HEAD",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/state-composite-entry-exit-frontier/*.puml",
+    "rg -n \"Syntax Error|PlantUML.*Error|Error line|class=\\\"message\\\"\" test-diagrams/perturbations/state-composite-entry-exit-frontier -g '*.svg'",
+    "cargo test --test parity_perturbations --release",
+    "target/release/rustuml -tsvg test-diagrams/perturbations/state-composite-entry-exit-frontier/dual_composite_basic_ports.puml > /private/tmp/rustuml-dual-composite-basic-ports.svg",
+    "cargo test --test harness_guards --release parity_review_records_are_complete -- --nocapture"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/state-composite-entry-exit-frontier/dual_composite_basic_ports.puml",
+      "golden": "test-diagrams/perturbations/state-composite-entry-exit-frontier/dual_composite_basic_ports.svg",
+      "axes": [
+        "topology/cardinality",
+        "label variation"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-composite-entry-exit-frontier/reordered_basic_ports.puml",
+      "golden": "test-diagrams/perturbations/state-composite-entry-exit-frontier/reordered_basic_ports.svg",
+      "axes": [
+        "declaration order",
+        "label variation"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-composite-entry-exit-frontier/same_container_port_link.puml",
+      "golden": "test-diagrams/perturbations/state-composite-entry-exit-frontier/same_container_port_link.svg",
+      "axes": [
+        "topology/cardinality",
+        "same-container border-point constraint",
+        "label variation"
+      ],
+      "result": "pass"
+    }
+  ],
+  "findings": [
+    "The Rust workspace HEAD was exactly 64dddcf2be9131d1142746150efbb570c11b05b4, and the Java oracle checkout was exactly 71806a23780b04a5ccde2f8ceb5121edad5eb711.",
+    "The Java SVGs for all three perturbations were generated with headless Java and contained no syntax-error markers. The checked labels are short non-corpus labels such as qa, qz, rb, ry, uh, vx, ln, mq, and rt, staying inside the account's basic-port branch.",
+    "Static review found Java provenance for the 12px port geometry, source/sink rank placement, constraint=false same-container point links, and FrontierCalculator DELTA/title-width behavior; I did not find fixture-name conditionals in the inspected implementation path.",
+    "Counterexample dual_composite_basic_ports.puml is in scope and fails cargo test --test parity_perturbations --release. Rust emits all border-point labels/ellipses for PodAlpha and PodBeta before emitting either composite's ordinary inner state box. Java emits PodAlpha's border points and CoreOne before PodBeta's border points and CoreTwo. The geometry is nearly aligned, but the DOM structure/order diverges.",
+    "The failure indicates the implementation ported the basic-port rank/frontier geometry but not the Java per-cluster entity paint traversal for multiple root composites. A corrective implementation should model that traversal before a review-2 can accept this mechanism.",
+    "The parity review guard was run after writing this record and failed only because the latest review is intentionally rejected and contains a failing perturbation; it did not report path or schema violations."
+  ],
+  "verdict": "rejected"
+}
