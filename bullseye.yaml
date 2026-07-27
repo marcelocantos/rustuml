@@ -175,6 +175,7 @@ targets:
     - T14.3
     - T14.4
     - T14.5
+    - T14.6
     tags:
     - parity
     - no-oracle
@@ -279,6 +280,24 @@ targets:
     origin: manual
     discovered: 2026-07-03
     achieved: 2026-07-25
+  T14.6:
+    name: Parity fixes survive mechanism-first, held-out adversarial validation
+    status: identified
+    value: 0.0
+    cost: 0.0
+    acceptance:
+    - Before each remaining parity mechanism changes production code, a committed docs/parity-reviews/<mechanism>/account.json names the exact Java revision and class/method, Rust location, invariant, causal divergence, planned model change, and at least two relevant perturbation axes; SVG coordinates and pass-count deltas are not causal explanations.
+    - After implementation, a separate reviewer task that did not implement the change and preferably uses a different model family audits the exact implementation commit, Java provenance, Rust data flow, all changed layout constants/thresholds/tables/branches, and actively searches for fixture-shaped logic and counterexamples.
+    - The checker preserves every generated input and Java SVG under test-diagrams/perturbations/<mechanism>/, exercises at least two independent axes relevant to the claimed invariant, and authors a structured review record naming reviewer/model, exact Rust and Java revisions, commands, findings, and verdict; the implementer may not author or edit that record.
+    - cargo test -p rustuml-oracle --test harness_guards --test parity_perturbations passes, and T14 completion evidence indexes an accepted per-change checker record for every parity-improving change made after this gate was introduced.
+    context: 'Late-stage exact-parity pressure creates a Goodhart risk: known golden gains can reward curve fitting even when mechanical fixture-reference guards remain green. The gate is deliberately per-change and durable: causal accounts precede code in Git history; independent checker records and all held-out perturbations follow it. Added after an adversarial different-model review found that informal independence, optional preservation, and retrospective attestation were exploitable.'
+    tags:
+    - parity
+    - honesty
+    - oracle
+    - adversarial-review
+    origin: User-approved T14 strategy review, 2026-07-27
+    discovered: 2026-07-27
   T2:
     name: Ditaa rendering engine ported to Rust
     status: set_aside
