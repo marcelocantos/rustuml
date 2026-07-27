@@ -1,0 +1,13 @@
+@startuml
+state "Intake Wide Label 9101" as IntakeWide9101
+state "Review Compact 9103" as ReviewCompact9103
+state "Archive Relay 9107" as ArchiveRelay9107
+
+[*] --> IntakeWide9101 : begin
+IntakeWide9101 --> IntakeWide9101 : WWW_wide_self_loop_marker_for_box
+IntakeWide9101 -right-> ReviewCompact9103 : east ordinary iii
+ReviewCompact9103 --> ReviewCompact9103 : ii
+ReviewCompact9103 -down-> ArchiveRelay9107 : south ordinary WMWM
+ArchiveRelay9107 <-- ArchiveRelay9107 : reverse_self_loop_mid_label
+ArchiveRelay9107 --> [*] : finish
+@enduml

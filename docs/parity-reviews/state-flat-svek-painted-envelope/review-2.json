@@ -1,0 +1,188 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-flat-svek-painted-envelope",
+  "reviewer": {
+    "task_id": "codex-desktop-task-019ee369-54e2-7203-afce-ddde7bfe1723-independent-checker-state-flat-svek-painted-envelope-review2",
+    "model": "OpenAI GPT-5 Codex"
+  },
+  "account_commit": "d17fb29847a3657964009e9c201781e1e35399bc",
+  "prior_account_commit": "2ac5b710332653a9462d09a6975833cbf692ae88",
+  "implementation_commit": "899aa67a84ed66c2b717e62921597c802321424e",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "snapshot": "/private/tmp/rustuml-review2-envelope-899aa67a.MEVrZy",
+  "commands": [
+    "sed -n '1,240p' /Users/marcelo/.codex/skills/oracle-first/SKILL.md",
+    "sed -n '241,520p' /Users/marcelo/.codex/skills/oracle-first/SKILL.md",
+    "sed -n '1,260p' /Users/marcelo/.claude/rust.md",
+    "bullseye_query cwd=/Users/marcelo/work/github.com/marcelocantos/rustuml view=context recent_days=14",
+    "git rev-parse 899aa67a^{commit}",
+    "git merge-base --is-ancestor 2ac5b710 899aa67a",
+    "git merge-base --is-ancestor d17fb298 899aa67a",
+    "git diff 899aa67a^ 899aa67a -- crates/rustuml-render/src/state.rs",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/state-flat-svek-painted-envelope/review2_mixed_self_nonself_label_widths.puml test-diagrams/perturbations/state-flat-svek-painted-envelope/review2_reordered_self_loop_counts.puml test-diagrams/perturbations/state-flat-svek-painted-envelope/review2_reverse_explicit_direction_matrix.puml test-diagrams/perturbations/state-flat-svek-painted-envelope/review2_negative_ordinary_control.puml",
+    "xmllint --noout test-diagrams/perturbations/state-flat-svek-painted-envelope/review2_mixed_self_nonself_label_widths.svg test-diagrams/perturbations/state-flat-svek-painted-envelope/review2_reordered_self_loop_counts.svg test-diagrams/perturbations/state-flat-svek-painted-envelope/review2_reverse_explicit_direction_matrix.svg test-diagrams/perturbations/state-flat-svek-painted-envelope/review2_negative_ordinary_control.svg",
+    "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"|Welcome to PlantUML|NoSuchElementException|An error has occured' test-diagrams/perturbations/state-flat-svek-painted-envelope/review2_*.svg",
+    "ruby -rdigest -e 'verify fresh source hashes are unique against test-diagrams/{golden,perturbations}/**/*.puml and one another' review2_*.puml",
+    "git archive --format=tar --output=/private/tmp/rustuml-review2-envelope-899aa67a.tar 899aa67a",
+    "tar -xf /private/tmp/rustuml-review2-envelope-899aa67a.tar -C /private/tmp/rustuml-review2-envelope-899aa67a.MEVrZy",
+    "cp -R /Users/marcelo/work/github.com/marcelocantos/rustuml/test-diagrams/golden/. /private/tmp/rustuml-review2-envelope-899aa67a.MEVrZy/test-diagrams/golden/",
+    "cp test-diagrams/perturbations/state-flat-svek-painted-envelope/review2_* /private/tmp/rustuml-review2-envelope-899aa67a.MEVrZy/test-diagrams/perturbations/state-flat-svek-painted-envelope/",
+    "rg -n 'calculateDimension|drawU\\(|moveDelta|ensureVisible|getDefaultMargins|getWidth\\(|getHeight\\(' PlantUML SvekResult.java CucaDiagram.java SvgGraphics.java",
+    "rg -n 'drawEmpty|drawRectangle|drawDotPath|drawUPolygon|drawEllipse|drawText|ensureVisible' PlantUML LimitFinder.java",
+    "rg -n 'appendTable|addVisibilityModifier|TextBlockMarged|marginLabel|marged|label' PlantUML SvekEdge.java TextBlockMarged.java",
+    "rg -n 'state_edge_label_margin|svek_edge_label_box_size|SVEK_SELF_EDGE_LABEL_MARGIN|SELF_EDGE_ARROW_MARGIN|has_complete_flat_painter_model|flat_painted_bounds|LayoutResult.width|include_str!|include_bytes!|test-diagrams|golden|fixture|label.*==|branch.*count|coordinate' crates/rustuml-render/src/state.rs",
+    "git diff --check 899aa67a^ 899aa67a",
+    "ruby -e 'scan added lines in git diff 899aa67a^..899aa67a for golden reads, fixture paths, label switches, branch-count ladders, and coordinate-keyed surgery'",
+    "cargo fmt --check",
+    "cargo build -p rustuml-oracle --example diff_one --release",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/state-flat-svek-painted-envelope/review2_negative_ordinary_control.puml",
+    "ruby -e 'run target/release/examples/diff_one --no-oracle for the four review2 pairs, the eight preserved state-flat-svek-painted-envelope pairs, state-parallel-transition-route-identity/review_self_loop_reversed_lazy_matrix.puml, and state-autonomous-painted-bounds/self_loop_curve_extrema.puml'",
+    "cargo test -p rustuml-render --lib --release -- --nocapture",
+    "cargo test -p rustuml-oracle --test golden_no_oracle --release -- --nocapture",
+    "cargo test -p rustuml-oracle --test parity_perturbations --release -- --nocapture",
+    "ruby -e 'run target/release/examples/diff_one --no-oracle for every test-diagrams/perturbations/**/*.puml and print failing paths'",
+    "cargo test -p rustuml-oracle --test harness_guards --release no_golden_data_embedded_in_shipping_crates -- --exact --nocapture",
+    "cargo test -p rustuml-oracle --test harness_guards --release error_golden_census_is_frozen -- --exact --nocapture",
+    "cargo test -p rustuml-oracle --test harness_guards --release decimal_literal_ratchet -- --exact --nocapture",
+    "cargo test -p rustuml-oracle --test harness_guards --release comparator_constants_frozen -- --exact --nocapture",
+    "cargo test -p rustuml-oracle --test harness_guards --release parity_review_paths_reject_traversal -- --exact --nocapture",
+    "cp docs/parity-reviews/state-flat-svek-painted-envelope/review-2.json /private/tmp/rustuml-review2-envelope-899aa67a.MEVrZy/docs/parity-reviews/state-flat-svek-painted-envelope/review-2.json",
+    "cargo test -p rustuml-oracle --test harness_guards --release parity_review_records_are_complete -- --exact --nocapture"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/state-flat-svek-painted-envelope/four_branch_fork_join_labels.puml",
+      "golden": "test-diagrams/perturbations/state-flat-svek-painted-envelope/four_branch_fork_join_labels.svg",
+      "axes": [
+        "preserved maker fixture",
+        "four labelled fork and join branches",
+        "changed branch count without self-links"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-flat-svek-painted-envelope/mirrored_cardinal_long_labels.puml",
+      "golden": "test-diagrams/perturbations/state-flat-svek-painted-envelope/mirrored_cardinal_long_labels.svg",
+      "axes": [
+        "preserved maker fixture",
+        "left right up and down ordinary transitions",
+        "long labels beyond node frontiers"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-flat-svek-painted-envelope/reordered_named_ends.puml",
+      "golden": "test-diagrams/perturbations/state-flat-svek-painted-envelope/reordered_named_ends.svg",
+      "axes": [
+        "preserved maker fixture",
+        "multiple named final pseudostates",
+        "declaration order differing from transition order"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-flat-svek-painted-envelope/checker_reverse_fractional_cycle.puml",
+      "golden": "test-diagrams/perturbations/state-flat-svek-painted-envelope/checker_reverse_fractional_cycle.svg",
+      "axes": [
+        "preserved checker fixture",
+        "backward command and start decoration",
+        "narrow and wide glyph labels"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-flat-svek-painted-envelope/checker_reordered_pseudostate_mesh.puml",
+      "golden": "test-diagrams/perturbations/state-flat-svek-painted-envelope/checker_reordered_pseudostate_mesh.svg",
+      "axes": [
+        "preserved checker fixture",
+        "same-endpoint route ownership stress",
+        "reordered choice history fork join and named-final declarations"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-flat-svek-painted-envelope/checker_stereotype_colour_fanout.puml",
+      "golden": "test-diagrams/perturbations/state-flat-svek-painted-envelope/checker_stereotype_colour_fanout.svg",
+      "axes": [
+        "preserved checker fixture",
+        "ordinary stereotypes admitted by the flat activation gate",
+        "per-state colours without skinparams"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-flat-svek-painted-envelope/checker_descriptions_styled_links.puml",
+      "golden": "test-diagrams/perturbations/state-flat-svek-painted-envelope/checker_descriptions_styled_links.svg",
+      "axes": [
+        "preserved checker fixture",
+        "multi-row state descriptions",
+        "per-link dashed dotted thickness and colour styles"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-flat-svek-painted-envelope/checker_reordered_pseudostate_distinct_routes.puml",
+      "golden": "test-diagrams/perturbations/state-flat-svek-painted-envelope/checker_reordered_pseudostate_distinct_routes.svg",
+      "axes": [
+        "preserved checker fixture",
+        "same primitive set as the prior same-endpoint mesh",
+        "distinct intermediate endpoints separating route identity"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-flat-svek-painted-envelope/review2_mixed_self_nonself_label_widths.puml",
+      "golden": "test-diagrams/perturbations/state-flat-svek-painted-envelope/review2_mixed_self_nonself_label_widths.svg",
+      "axes": [
+        "fresh mixed self and nonself links",
+        "wide and narrow self-loop labels",
+        "surrounding ordinary start final and inter-state controls"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-flat-svek-painted-envelope/review2_reordered_self_loop_counts.puml",
+      "golden": "test-diagrams/perturbations/state-flat-svek-painted-envelope/review2_reordered_self_loop_counts.svg",
+      "axes": [
+        "fresh changed self-loop count",
+        "source declaration order differs from transition order",
+        "reverse and explicit directional self-loop commands"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-flat-svek-painted-envelope/review2_reverse_explicit_direction_matrix.puml",
+      "golden": "test-diagrams/perturbations/state-flat-svek-painted-envelope/review2_reverse_explicit_direction_matrix.svg",
+      "axes": [
+        "fresh four-state cardinal matrix",
+        "reverse and explicit up down left self-loop directions",
+        "ordinary cardinal ring controls around self loops"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-flat-svek-painted-envelope/review2_negative_ordinary_control.puml",
+      "golden": "test-diagrams/perturbations/state-flat-svek-painted-envelope/review2_negative_ordinary_control.svg",
+      "axes": [
+        "fresh negative control without self-links",
+        "ordinary cardinal ring",
+        "varied ordinary label widths"
+      ],
+      "result": "pass"
+    }
+  ],
+  "findings": [
+    "The immutable implementation under review is 899aa67a84ed66c2b717e62921597c802321424e. Both account amendments, 2ac5b710332653a9462d09a6975833cbf692ae88 and d17fb29847a3657964009e9c201781e1e35399bc, are ancestors of that commit. The validation tree was built from a git archive of exactly 899aa67a, with only the populated golden corpus and this review's fresh perturbation pairs copied into /private/tmp/rustuml-review2-envelope-899aa67a.MEVrZy.",
+    "The pinned PlantUML checkout is 71806a23780b04a5ccde2f8ceb5121edad5eb711, matching the account. Java source supports the self-loop wrapper model: SvekEdge.addVisibilityModifier selects a one-pixel margin for ordinary links and a six-pixel margin when startUid equals endUid, while SvekResult and LimitFinder derive the exported body envelope from the painted primitives rather than raw Graphviz canvas width.",
+    "Static review found the Rust change mechanism-shaped. 899aa67a routes label sizing through state_edge_label_margin and svek_edge_label_box_size, uses that same selected box for layout, bounds collection, and final label emission, and admits self links to the flat painted-bounds collector without broadening the existing title, skinparam, note, or composite exclusions. The implementation diff added no golden reads, fixture paths, label-name switches, branch-count ladders, coordinate-keyed SVG surgery, or unexplained high-precision constants; git diff --check is clean.",
+    "The four fresh review2 PlantUML sources are valid-syntax, source-unique across 12663 golden and perturbation sources, generated with the pinned Java jar, well-formed under xmllint, and contain no PlantUML error markers. They exercise mixed self and nonself links, varied self-loop counts, declaration-order changes, wide and narrow labels, reverse and explicit directions, ordinary surrounding controls, and a no-self-link negative control. All four pass exact no-oracle comparison at 899aa67a.",
+    "All eight preserved state-flat-svek-painted-envelope perturbations now pass exact no-oracle comparison at 899aa67a. The previously failing checker_reordered_pseudostate_mesh same-endpoint route stress also passes in this immutable snapshot, confirming the later route-identity work composes with the flat painted-envelope collector.",
+    "The preserved self-loop evidence outside this mechanism also passes exact comparison: state-parallel-transition-route-identity/review_self_loop_reversed_lazy_matrix.puml no longer has the 847px versus 810px canvas mismatch, and state-autonomous-painted-bounds/self_loop_curve_extrema.puml remains exact. These are cross-mechanism controls and are therefore recorded in findings rather than as this mechanism's perturbations.",
+    "cargo fmt --check passes. The full rustuml-render release unit suite passes 696/696. The no-oracle product ratchet passes at 11055/11251 eligible pairs, including state 885/901, rendering 80/98, skinparam 401/410, and type-detection 41/42.",
+    "The full parity_perturbations test is still red in the immutable tree, but a compact per-source census shows no state-flat-svek-painted-envelope failures. The remaining failing paths are the already-preserved rejected mechanisms: state-arrow-style-isolation/checker_theme_user_order_and_local_override.puml, state-arrow-style-isolation/review4_repeated_themes_bidirectional_order.puml, the three state-arrow-style-isolation review5 files, state-parallel-transition-route-identity/review_compound_endpoint_parallel_order.puml, state-parallel-transition-route-identity/review_label_bound_owner_four_lane.puml, and two state-recursive-group-simplification review3 files.",
+    "The frozen mechanical guards pass individually: no_golden_data_embedded_in_shipping_crates, error_golden_census_is_frozen, decimal_literal_ratchet, comparator_constants_frozen, and parity_review_paths_reject_traversal. With this review copied into the immutable snapshot, parity_review_records_are_complete reports no state-flat-svek-painted-envelope schema, path, or latest-verdict violation; it remains red only on unrelated outstanding records, including state-arrow-style-isolation review-5 schema and rejected verdict, skinparam-stereotype-qualifier-identity lacking a checker review, and rejected route, autonomous-stereotype, and recursive reviews. No comparator slack, error marker, park list, baseline guard, or review path rule was changed.",
+    "Verdict is accepted for state-flat-svek-painted-envelope at 899aa67a. This acceptance is narrow: it covers the flat SVEK painted envelope and self-loop label wrapper mechanism, and it does not accept the unrelated arrow-style, compound route, four-lane route, or recursive group failures that remain preserved elsewhere."
+  ],
+  "verdict": "accepted"
+}

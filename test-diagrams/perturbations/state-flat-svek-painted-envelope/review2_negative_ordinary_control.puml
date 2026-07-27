@@ -1,0 +1,13 @@
+@startuml
+state "Plain North 9191" as PlainNorth9191
+state "Plain East 9193" as PlainEast9193
+state "Plain South 9197" as PlainSouth9197
+state "Plain West 9199" as PlainWest9199
+
+[*] --> PlainNorth9191 : enter_control
+PlainNorth9191 -right-> PlainEast9193 : wide ordinary WWWM
+PlainEast9193 -down-> PlainSouth9197 : narrow ordinary iii
+PlainSouth9197 -left-> PlainWest9199 : return ordinary label
+PlainWest9199 -up-> PlainNorth9191 : close ordinary control
+PlainSouth9197 --> [*] : exit_control
+@enduml

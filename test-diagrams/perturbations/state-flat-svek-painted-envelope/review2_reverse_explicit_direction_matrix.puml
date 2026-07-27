@@ -1,0 +1,15 @@
+@startuml
+state "North Pivot 9161" as NorthPivot9161
+state "East Pivot 9163" as EastPivot9163
+state "South Pivot 9167" as SouthPivot9167
+state "West Pivot 9171" as WestPivot9171
+
+NorthPivot9161 --> NorthPivot9161 : north_loop_WiWiWi
+EastPivot9163 <-- EastPivot9163 : east_reverse_loop
+SouthPivot9167 -down-> SouthPivot9167 : south_explicit_loop_long_label
+WestPivot9171 -left-> WestPivot9171 : west_loop_i
+NorthPivot9161 -right-> EastPivot9163 : east_ordinary_control
+EastPivot9163 -down-> SouthPivot9167 : south_ordinary_control_WW
+SouthPivot9167 -left-> WestPivot9171 : west_ordinary_control
+WestPivot9171 -up-> NorthPivot9161 : north_ordinary_control
+@enduml

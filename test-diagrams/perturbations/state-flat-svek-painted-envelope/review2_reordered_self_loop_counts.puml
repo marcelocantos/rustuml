@@ -1,0 +1,15 @@
+@startuml
+state "Gamma Ordered 9131" as GammaOrdered9131
+state "Alpha Ordered 9133" as AlphaOrdered9133
+state "Beta Ordered 9137" as BetaOrdered9137
+
+BetaOrdered9137 --> BetaOrdered9137 : beta_first_extra_wide_WWWWWW
+AlphaOrdered9133 --> AlphaOrdered9133 : alpha_short
+GammaOrdered9131 -left-> GammaOrdered9131 : gamma_left_loop_medium
+AlphaOrdered9133 --> BetaOrdered9137 : alpha_to_beta_bridge
+GammaOrdered9131 <-- GammaOrdered9131 : gamma_reverse_second
+BetaOrdered9137 -up-> AlphaOrdered9133 : beta_up_return_iiii
+[*] --> GammaOrdered9131 : start_after_declarations
+GammaOrdered9131 --> AlphaOrdered9133 : gamma_to_alpha
+BetaOrdered9137 --> [*] : beta_done
+@enduml
