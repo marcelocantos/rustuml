@@ -1953,6 +1953,13 @@ fn render_empty_skinparam_canvas(diagram: &ClassDiagram) -> String {
     svg
 }
 
+fn entity_group_has_source_line(kind: EntityKind) -> bool {
+    // Java provenance: EntityImageState and EntityImageBranch create a
+    // location-free UGroup; class, object, and description images pass the
+    // entity LineLocation to UGroup and therefore emit DATA_SOURCE_LINE.
+    !matches!(kind, EntityKind::State | EntityKind::Diamond)
+}
+
 /// Render a class diagram to SVG.
 pub fn render(diagram: &ClassDiagram, theme: &Theme) -> String {
     render_with_oracle(diagram, theme, None)
@@ -4584,7 +4591,7 @@ fn render_plantuml_svg(
             .and_then(|r| r.source_line.as_deref())
             .map(str::to_string)
             .or_else(|| {
-                (oracle_rect.is_none() && entity.kind != EntityKind::State)
+                (oracle_rect.is_none() && entity_group_has_source_line(entity.kind))
                     .then(|| dim.source_line.to_string())
             })
         {
@@ -13180,6 +13187,58 @@ mod tests {
         assert!(
             !svg.contains(
                 r#"<g class="entity" data-qualified-name="Running" data-source-line="3""#
+            ),
+            "{svg}"
+        );
+    }
+
+    #[test]
+    fn mixed_branch_group_omits_source_line_but_description_symbols_keep_it() {
+        let input = "@startuml\n\
+                     allowmixing\n\
+                     object workerSession\n\
+                     circle MergePoint\n\
+                     diamond BranchPoint\n\
+                     state Waiting\n\
+                     workerSession --> MergePoint\n\
+                     MergePoint --> BranchPoint\n\
+                     BranchPoint --> Waiting\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Class(diagram) = diagram else {
+            panic!("allowmixing input should parse as a class diagram");
+        };
+
+        let svg = render(&diagram, &Theme::default());
+        assert!(
+            svg.contains(
+                r#"<g class="entity" data-qualified-name="workerSession" data-source-line="2""#
+            ),
+            "{svg}"
+        );
+        assert!(
+            svg.contains(
+                r#"<g class="entity" data-qualified-name="MergePoint" data-source-line="3""#
+            ),
+            "{svg}"
+        );
+        assert!(
+            svg.contains(r#"<g class="entity" data-qualified-name="BranchPoint" id=""#),
+            "{svg}"
+        );
+        assert!(
+            !svg.contains(
+                r#"<g class="entity" data-qualified-name="BranchPoint" data-source-line="4""#
+            ),
+            "{svg}"
+        );
+        assert!(
+            svg.contains(r#"<g class="entity" data-qualified-name="Waiting" id=""#),
+            "{svg}"
+        );
+        assert!(
+            !svg.contains(
+                r#"<g class="entity" data-qualified-name="Waiting" data-source-line="5""#
             ),
             "{svg}"
         );
