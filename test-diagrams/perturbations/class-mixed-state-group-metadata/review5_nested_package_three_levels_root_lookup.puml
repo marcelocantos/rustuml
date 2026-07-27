@@ -1,0 +1,10 @@
+@startuml
+package R5Outer {
+  package R5Middle {
+    package R5Inner {
+      class Core
+    }
+  }
+}
+R5Outer.R5Middle.R5Inner.Core --> Audit
+@enduml

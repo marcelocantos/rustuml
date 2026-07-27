@@ -1,0 +1,8 @@
+@startuml
+ALLOWMIXING
+actor "Ops Reviewer" as R5OpsReviewer
+usecase "Approve Window" as R5ApproveWindow
+component "Policy Console" as R5PolicyConsole
+R5OpsReviewer --> R5ApproveWindow
+R5ApproveWindow --> R5PolicyConsole
+@enduml

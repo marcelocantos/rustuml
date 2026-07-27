@@ -1,0 +1,7 @@
+@startuml
+set namespaceSeparator ::
+namespace R5Space::Domain::Shard {
+  class Node
+}
+R5Space::Domain::Shard::Node --> R5Space::Domain::Shard::Sink
+@enduml

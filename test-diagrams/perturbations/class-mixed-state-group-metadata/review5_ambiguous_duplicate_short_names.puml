@@ -1,0 +1,10 @@
+@startuml
+package R5Left {
+  class Shared
+}
+package R5Right {
+  class Shared
+}
+Shared --> Consumer
+R5Left.Shared --> R5Right.Shared
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+set namespaceSeparator ::
+namespace R5Colon::Area {
+  class Producer
+  Producer --> Consumer
+  class "Colon Consumer" as Consumer
+}
+R5Colon::Area::Consumer --> R5Colon::Area::Producer
+@enduml

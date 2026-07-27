@@ -1,0 +1,7 @@
+@startuml
+allowmixing
+FutureActor --> FutureUse
+actor "Named Actor" as FutureActor
+usecase "Named Use" as FutureUse
+FutureUse --> FutureActor
+@enduml

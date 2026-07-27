@@ -1,0 +1,7 @@
+@startuml
+package R5Only {
+  class UniqueLeaf
+}
+UniqueLeaf --> External
+class "External Display" as External
+@enduml

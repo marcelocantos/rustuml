@@ -1,0 +1,7 @@
+@startuml
+allowmixing
+package "Customer Facing" as R5Public {
+  class "Gateway Display" as Gateway
+}
+R5Public.Gateway --> Outside
+@enduml

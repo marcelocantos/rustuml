@@ -1,0 +1,462 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-mixed-state-group-metadata",
+  "verdict": "rejected",
+  "reviewer": {
+    "task_id": "codex-desktop-task-019ee369-54e2-7203-afce-ddde7bfe1723-class-mixed-state-group-metadata-checker-5",
+    "model": "OpenAI Codex (GPT-5)",
+    "role": "fresh skeptical checker; no production edits"
+  },
+  "scope": {
+    "branch": "t14-ratchet",
+    "head_at_review_start": "ad330988",
+    "implementation_commit": "36916037523224eaa08f9ef929c1fdce54dacb92",
+    "implementation_parent": "e4bb16c5a3213ef16c0b05207063301798a0207e",
+    "implementation_subject": "fix: model class quark identity paths",
+    "account": "docs/parity-reviews/class-mixed-state-group-metadata/account.json",
+    "account_sha256": "a1b87a9454f0d4387c53ad4374b95263fb4ae4fee3ed4af0afe45f1e2ebb6047",
+    "prior_review": "docs/parity-reviews/class-mixed-state-group-metadata/review-4.json",
+    "prior_review_sha256": "dfae73a0483eba6caccffde1ac329360b436d62574fe8e72ed0ab9bec93d9ad4",
+    "prior_response": "docs/parity-reviews/class-mixed-state-group-metadata/review-4-response.md",
+    "prior_response_sha256": "7d1dc89c02ecbb05563b4afce560377c0a7dd1f03e242195ba83f48666b4ad00"
+  },
+  "java": {
+    "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "jar_mtime": "2026-06-19T02:03:25+1000",
+    "jar_size_bytes": 56761142,
+    "inspected_locations": [
+      "net.sourceforge.plantuml.classdiagram.ClassDiagramFactory#initCommandsList",
+      "net.sourceforge.plantuml.classdiagram.command.CommandAllowMixing#getRegexConcat",
+      "net.sourceforge.plantuml.regex.Pattern2#compileInternal",
+      "net.sourceforge.plantuml.command.CommandPackage#getRegexConcat",
+      "net.sourceforge.plantuml.command.CommandPackage#executeArg",
+      "net.sourceforge.plantuml.command.CommandNamespace#executeArg",
+      "net.sourceforge.plantuml.classdiagram.command.CommandNamespaceSeparator#executeArg",
+      "net.atmp.CucaDiagram#quarkInContextSafe",
+      "net.sourceforge.plantuml.classdiagram.command.CommandLinkClass#getClassIdentifier",
+      "net.sourceforge.plantuml.classdiagram.command.CommandLinkClass#executeArg",
+      "net.sourceforge.plantuml.classdiagram.command.CommandCreateClass#executeArg",
+      "net.sourceforge.plantuml.classdiagram.command.CommandCreateClassMultilines#executeNow",
+      "net.sourceforge.plantuml.classdiagram.command.CommandCreateElementFull2#executeArg"
+    ],
+    "evidence": [
+      "CommandAllowMixing builds a full-line allow + optional underscore + mixing regex; Pattern2.compileInternal applies Pattern.CASE_INSENSITIVE.",
+      "CommandPackage parses optional AS; executeArg passes AS to quarkInContext as the group identity and keeps NAME as display.",
+      "CommandLinkClass resolves endpoints with CucaDiagram.quarkInContextSafe(true, endpoint) and creates missing leaves as LeafType.CLASS at the relationship location.",
+      "CommandCreateElementFull2 resolves mixed declaration codes with quarkInContext(true, idShort) and updates display on an existing entity without recreating it.",
+      "Ordinary class declarations are different: CommandCreateClass and CommandCreateClassMultilines call quarkInContextSafe(false, idShort), so they do not unique-reuse a same-short-name leaf from a different package."
+    ]
+  },
+  "rust_execution": {
+    "helper": "target/release/examples/diff_one",
+    "helper_sha256": "bef93ad02b6e865a28250917731572e623fe3104c140213dde8e2c711a10ee59",
+    "helper_mtime": "2026-07-27T23:30:11+1000",
+    "helper_size_bytes": 16586864,
+    "direct_cargo_commands": [],
+    "direct_rustc_commands": [],
+    "direct_rustfmt_commands": [],
+    "notes": [
+      "The helper usage probe panicked as expected for missing <puml_path>; no Rust build command was run.",
+      "All Rust comparisons used the pinned prebuilt helper requested by the user."
+    ]
+  },
+  "commands": [
+    "sed -n '1,260p' /Users/marcelo/.codex/skills/oracle-first/SKILL.md",
+    "sed -n '1,260p' /Users/marcelo/.claude/rust.md",
+    "bullseye_startup_context(cwd=/Users/marcelo/work/github.com/marcelocantos/rustuml,recent_days=14)",
+    "git status --short",
+    "git rev-parse --abbrev-ref HEAD",
+    "git log --oneline --decorate -12",
+    "sed -n '1,260p' docs/parity-reviews/class-mixed-state-group-metadata/account.json",
+    "sed -n '1,700p' docs/parity-reviews/class-mixed-state-group-metadata/review-4.json",
+    "sed -n '1,520p' docs/parity-reviews/class-mixed-state-group-metadata/review-4-response.md",
+    "git diff --stat e4bb16c5..36916037",
+    "git diff --name-only e4bb16c5..36916037",
+    "git diff --no-ext-diff e4bb16c5..36916037 -- crates/rustuml-parser/src/parse/mod.rs crates/rustuml-parser/src/parse/class.rs crates/rustuml-render/src/class.rs",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "static inspection of Java locations listed in java.inspected_locations at revision 71806a2",
+    "target/release/examples/diff_one --no-oracle <each review2_, review3_, review4_, and review5_ source>",
+    "target/release/examples/diff_one --no-oracle --print-rust <each review2_, review3_, review4_, and review5_ source>",
+    "Ruby REXML comparison of root data-diagram-type and ordered entity/cluster data-qualified-name plus data-source-line records",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-mixed-state-group-metadata/review5_*.puml",
+    "Ruby REXML validation and error-marker scan over review5_*.svg",
+    "temporary non-preserved invalid grammar probes for allowmixing trailing text, malformed allow spellings, trailing namespace separators, and slash-qualified relationship separators",
+    "git grep anti-overfit audit over implementation commit 36916037 for review labels, fixture reads, golden embedding, source-line equality branches, count ladders, coordinates, dimensions, and unexplained constants",
+    "git diff --check e4bb16c5..36916037 -- crates/rustuml-parser/src/parse/class.rs crates/rustuml-parser/src/parse/mod.rs crates/rustuml-render/src/class.rs",
+    "shasum -a 256 docs/parity-reviews/class-mixed-state-group-metadata/account.json docs/parity-reviews/class-mixed-state-group-metadata/review-4.json docs/parity-reviews/class-mixed-state-group-metadata/review-4-response.md target/release/examples/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar"
+  ],
+  "prior_replay": {
+    "summary": {
+      "source_count": 28,
+      "strict_matches": 7,
+      "scoped_identity_matches": 28,
+      "classification": "All prior review2/review3/review4 sources match Java for parser-owned diagram type, ordered entity/cluster qualified name, and source line. The 21 strict differences are renderer geometry or shape differences outside this parser identity verdict."
+    },
+    "fixtures": [
+      {"source": "review2_alias_line_offsets.puml", "strict": "different", "scoped_identity": "pass"},
+      {"source": "review2_classlike_variants.puml", "strict": "different", "scoped_identity": "pass"},
+      {"source": "review2_deployment_description_symbols.puml", "strict": "different", "scoped_identity": "pass"},
+      {"source": "review2_description_symbols.puml", "strict": "different", "scoped_identity": "pass"},
+      {"source": "review2_multiple_symbol_instances.puml", "strict": "different", "scoped_identity": "pass"},
+      {"source": "review2_reordered_core_matrix.puml", "strict": "different", "scoped_identity": "pass"},
+      {"source": "review3_alias_forms_and_order.puml", "strict": "different", "scoped_identity": "pass"},
+      {"source": "review3_combined_leaf_container_reordering.puml", "strict": "different", "scoped_identity": "pass"},
+      {"source": "review3_database_leaf_container_boundary.puml", "strict": "different", "scoped_identity": "pass"},
+      {"source": "review3_implicit_and_explicit_endpoints.puml", "strict": "different", "scoped_identity": "pass"},
+      {"source": "review3_node_leaf_container_boundary.puml", "strict": "different", "scoped_identity": "pass"},
+      {"source": "review3_rectangle_leaf_container_boundary.puml", "strict": "different", "scoped_identity": "pass"},
+      {"source": "review3_renamed_description_leaves.puml", "strict": "different", "scoped_identity": "pass"},
+      {"source": "review3_reordered_links_before_aliases.puml", "strict": "pass", "scoped_identity": "pass"},
+      {"source": "review4_aliases_after_reversed_chain.puml", "strict": "different", "scoped_identity": "pass"},
+      {"source": "review4_aliases_before_links_renamed.puml", "strict": "different", "scoped_identity": "pass"},
+      {"source": "review4_control_class_without_allowmixing.puml", "strict": "different", "scoped_identity": "pass"},
+      {"source": "review4_control_component_without_allowmixing.puml", "strict": "pass", "scoped_identity": "pass"},
+      {"source": "review4_control_sequence_without_allowmixing.puml", "strict": "pass", "scoped_identity": "pass"},
+      {"source": "review4_control_usecase_without_allowmixing.puml", "strict": "pass", "scoped_identity": "pass"},
+      {"source": "review4_description_only_declarations_first.puml", "strict": "different", "scoped_identity": "pass"},
+      {"source": "review4_description_only_links_before_aliases.puml", "strict": "pass", "scoped_identity": "pass"},
+      {"source": "review4_mixed_case_allowmixing.puml", "strict": "different", "scoped_identity": "pass"},
+      {"source": "review4_multiple_implicit_chains.puml", "strict": "pass", "scoped_identity": "pass"},
+      {"source": "review4_namespace_container_reordered.puml", "strict": "different", "scoped_identity": "pass"},
+      {"source": "review4_nested_package_alias_after_links.puml", "strict": "different", "scoped_identity": "pass"},
+      {"source": "review4_underscored_allow_mixing.puml", "strict": "pass", "scoped_identity": "pass"},
+      {"source": "review4_valid_mixed_leaf_matrix.puml", "strict": "different", "scoped_identity": "pass"}
+    ]
+  },
+  "fresh_review": {
+    "summary": {
+      "valid_sources": 17,
+      "valid_java_svgs": 17,
+      "java_error_pages": 0,
+      "strict_matches": 10,
+      "scoped_identity_matches": 16,
+      "direct_parser_failures": 1,
+      "verdict_basis": "A single scoped identity failure rejects the immutable implementation because it is a fresh valid counterexample to the claimed quark identity model."
+    },
+    "fixtures": [
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_allow_mixing_mixedcase_links_first.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_allow_mixing_mixedcase_links_first.svg",
+        "source_sha256": "7c2e14b1592f45113c1b9dd7b3ff43fe8090658f931b0008a09d5e3bc4d74bf7",
+        "golden_sha256": "296746579e519f22f6596d3cb2a83c35c598f6b276972ce43c9446edbc9ef2b3",
+        "axes": ["mixed-case allow_mixing", "relationships before declarations", "first materialization across actor/usecase/database declarations"],
+        "java_type": "CLASS",
+        "rust_type": "CLASS",
+        "strict": "pass",
+        "scoped_identity": "pass"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_allowmixing_uppercase_declarations_first.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_allowmixing_uppercase_declarations_first.svg",
+        "source_sha256": "9d6150f340950dd58144a147bbd3dab54f375699856ac483e43683f934ceede6",
+        "golden_sha256": "ef7903579b8e7a13ecddb60ba3d42a151a53b7faa929ef890db235702cb348e3",
+        "axes": ["uppercase allowmixing", "declarations before links", "mixed leaf declarations"],
+        "java_type": "CLASS",
+        "rust_type": "CLASS",
+        "strict": "different",
+        "scoped_identity": "pass"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_ambiguous_duplicate_short_names.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_ambiguous_duplicate_short_names.svg",
+        "source_sha256": "05594c62fd5abd1ce0f49f3cde476b45455f31811fd7d1ae5e0ccb4e660e0b0b",
+        "golden_sha256": "69ecf67e0848ee8391c7560d52a899f4ccb830e3f78c43ea5f9c8d9e458779c6",
+        "axes": ["duplicate short names in distinct packages", "ambiguous unqualified lookup", "qualified reversed package link"],
+        "java_type": "CLASS",
+        "rust_type": "CLASS",
+        "strict": "different",
+        "scoped_identity": "fail",
+        "evidence": "Java records R5Right.Shared at declaration source line 5 and also creates root Shared at ambiguous relationship line 7. Rust omits root Shared and records R5Right.Shared at line 8 because the second package declaration reused R5Left.Shared, then the later qualified relationship materialized R5Right.Shared.",
+        "java_records": [
+          {"kind": "cluster", "qualified_name": "R5Left", "source_line": "1"},
+          {"kind": "cluster", "qualified_name": "R5Right", "source_line": "4"},
+          {"kind": "entity", "qualified_name": "R5Left.Shared", "source_line": "2"},
+          {"kind": "entity", "qualified_name": "R5Right.Shared", "source_line": "5"},
+          {"kind": "entity", "qualified_name": "Shared", "source_line": "7"},
+          {"kind": "entity", "qualified_name": "Consumer", "source_line": "7"}
+        ],
+        "rust_records": [
+          {"kind": "cluster", "qualified_name": "R5Left", "source_line": "1"},
+          {"kind": "cluster", "qualified_name": "R5Right", "source_line": "4"},
+          {"kind": "entity", "qualified_name": "R5Left.Shared", "source_line": "2"},
+          {"kind": "entity", "qualified_name": "R5Right.Shared", "source_line": "8"},
+          {"kind": "entity", "qualified_name": "Consumer", "source_line": "7"}
+        ]
+      },
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_case_underscore_package_link_chain.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_case_underscore_package_link_chain.svg",
+        "source_sha256": "7507ed79aeee846a4e9df0423a7bc0306e8588a35d38ea6785548fcb11f503f8",
+        "golden_sha256": "a1e4e7e1c12c25e2214448a95e8eab19363f743ccdc7e86cb2465a9188bc3998",
+        "axes": ["mixed-case underscored directive", "package alias code/display", "relationship inside package before declarations"],
+        "java_type": "CLASS",
+        "rust_type": "CLASS",
+        "strict": "pass",
+        "scoped_identity": "pass"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_first_materialization_actor_reuses_class_leaf.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_first_materialization_actor_reuses_class_leaf.svg",
+        "source_sha256": "15ed38080740e660452ddebce8a6dfc35fc38dac6d795688a92df985f8e1382c",
+        "golden_sha256": "fb4360e28c0cc68c1758d7cfbd81d18e1f251774e7c6a12b44d9dfb45082e8c5",
+        "axes": ["relationship-created leaves", "later actor/usecase declarations", "reversed relationship"],
+        "java_type": "CLASS",
+        "rust_type": "CLASS",
+        "strict": "pass",
+        "scoped_identity": "pass"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_namespace_custom_relative_inside.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_namespace_custom_relative_inside.svg",
+        "source_sha256": "a8451509f28400fe8610ae03c1d3878a3491a7794308d69d3bf9fe1e30399a5c",
+        "golden_sha256": "8d7141381f0428c48a3555ba07f2c579950b9f4d0845bbb752d3739054801ea3",
+        "axes": ["custom :: separator", "relative lookup inside namespace", "qualified lookup after close"],
+        "java_type": "CLASS",
+        "rust_type": "CLASS",
+        "strict": "different",
+        "scoped_identity": "pass"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_namespace_custom_separator_deep.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_namespace_custom_separator_deep.svg",
+        "source_sha256": "c6e093c16f0ac7dbb1cdc049eff8649eefab41ae3a58974910189ee78ac5d4ca",
+        "golden_sha256": "eea3fc1dcaff5c1aa0211e2532ccfa46d710159a9a1dce0fdb04a83603319ce1",
+        "axes": ["custom :: separator", "three-level namespace", "qualified missing endpoint"],
+        "java_type": "CLASS",
+        "rust_type": "CLASS",
+        "strict": "pass",
+        "scoped_identity": "pass"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_namespace_default_rooted_lookup.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_namespace_default_rooted_lookup.svg",
+        "source_sha256": "8a8898d5848a54b8d5a4f85c954025ce85a2d4bcbb0af9bd464f674d6556fde8",
+        "golden_sha256": "df92087a10585655cc52b1ff7d6c25ce3caad946f7c708bfb61aaa1a00862eac",
+        "axes": ["default dot separator", "leading-root qualified lookup", "two-level namespace"],
+        "java_type": "CLASS",
+        "rust_type": "CLASS",
+        "strict": "pass",
+        "scoped_identity": "pass"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_namespace_separator_none_literal_names.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_namespace_separator_none_literal_names.svg",
+        "source_sha256": "438d6ed3425c04d51f9478e1f155f6725699487a4a9bbfecf6377166e7633a4c",
+        "golden_sha256": "4cd63f3836c2af00006709bbf447252d77934026b312a9ea7eb10323b05a678d",
+        "axes": ["namespaceSeparator none", "literal dotted class names", "unique unqualified lookup after package close"],
+        "java_type": "CLASS",
+        "rust_type": "CLASS",
+        "strict": "pass",
+        "scoped_identity": "pass"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_nested_package_three_levels_root_lookup.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_nested_package_three_levels_root_lookup.svg",
+        "source_sha256": "4ed5b8f7f7a747839842accced7816d4bd3da614fc49d1cd8bd5b5230442d687",
+        "golden_sha256": "805e1b4419852876e6c6a11eaef63ee71de7d80587b2194b47df493a7c65727d",
+        "axes": ["three nested packages", "root-qualified relationship", "missing endpoint outside package"],
+        "java_type": "CLASS",
+        "rust_type": "CLASS",
+        "strict": "pass",
+        "scoped_identity": "pass"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_package_alias_declarations_after_link.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_package_alias_declarations_after_link.svg",
+        "source_sha256": "d27fbc984b00a42fb9ddc655c5f36a4475b099180819f64f2b6c5f72c48e513f",
+        "golden_sha256": "4b61ad2229523a6f1c4af78ad611c33c68607d237f37831109bb37dce8af25bc",
+        "axes": ["package alias code/display", "relationship before declarations inside package", "later queue declaration keeps first location"],
+        "java_type": "CLASS",
+        "rust_type": "CLASS",
+        "strict": "different",
+        "scoped_identity": "pass"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_package_alias_display_code_one_level.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_package_alias_display_code_one_level.svg",
+        "source_sha256": "88b2b40f0146761f51e702a4c8d2788ced9b0da4810b0899bfd8a63f8370f44e",
+        "golden_sha256": "c0874f2960ed7223dbaa5342ac25246de9c6643aa5160138e999706a715b878b",
+        "axes": ["one-level package alias", "quoted display separate from code", "external qualified lookup"],
+        "java_type": "CLASS",
+        "rust_type": "CLASS",
+        "strict": "pass",
+        "scoped_identity": "pass"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_package_unaliased_display_identity.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_package_unaliased_display_identity.svg",
+        "source_sha256": "216f8e6683e7c9635e04a2630be7f206e572d7fd431da6f6577fcf665171f7a3",
+        "golden_sha256": "ba8ac99627087cb554c601e907d8a2195c248402aa228eeb069f162450f65496",
+        "axes": ["unaliased package", "default identity/display", "qualified lookup"],
+        "java_type": "CLASS",
+        "rust_type": "CLASS",
+        "strict": "pass",
+        "scoped_identity": "pass"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_relative_lookup_inside_package.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_relative_lookup_inside_package.svg",
+        "source_sha256": "dce8eca4d6ceefb6a72705ff19b19010ee958a917dd63ed406b412993fa75d8f",
+        "golden_sha256": "3d50a04cc8b501f1d654800dacda2e594056ccf0cee9c802dfb0b8653de67b19",
+        "axes": ["relative lookup inside package", "declaration before and after link", "qualified link after close"],
+        "java_type": "CLASS",
+        "rust_type": "CLASS",
+        "strict": "different",
+        "scoped_identity": "pass"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_repeated_reversed_links_aliases_after.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_repeated_reversed_links_aliases_after.svg",
+        "source_sha256": "bba7796ae8a0ad17d26689f76767bfceff2a111dd6dfba273d70c78fe9c64bf7",
+        "golden_sha256": "22b517accd48cfaa83cb09821941e9d2b14a8435e325e8ebfac4c90f886756b3",
+        "axes": ["repeated links", "reversed links", "aliases after relationship creation"],
+        "java_type": "CLASS",
+        "rust_type": "CLASS",
+        "strict": "different",
+        "scoped_identity": "pass"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_sequence_endpoint_named_allowmixing.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_sequence_endpoint_named_allowmixing.svg",
+        "source_sha256": "c56ea6a064453f7a8e80d6b78febb817dc1d58194cd8fe825552fa7a442e9e6b",
+        "golden_sha256": "6f212880d4174c30e75cf2ab277a190083ef82e64be831c60bbdda6532ee7f8b",
+        "axes": ["legitimate sequence relationship endpoint named allowmixing", "factory dispatch control", "no class directive"],
+        "java_type": "SEQUENCE",
+        "rust_type": "SEQUENCE",
+        "strict": "pass",
+        "scoped_identity": "pass"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_unique_unqualified_lookup_after_close.puml",
+        "golden": "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_unique_unqualified_lookup_after_close.svg",
+        "source_sha256": "a64ae38a3b896c87bf4a8e70a2092fe3bec327efd822b53f7132cb73c988ea3d",
+        "golden_sha256": "f9f1a7b17597911475f9715fffd55ec40537090b777d6cf02137e468f60d93b8",
+        "axes": ["unique unqualified lookup from root", "package declaration before link", "later root declaration"],
+        "java_type": "CLASS",
+        "rust_type": "CLASS",
+        "strict": "different",
+        "scoped_identity": "pass"
+      }
+    ]
+  },
+  "invalid_non_pair_probes": [
+    {
+      "probe": "invalid_allowmixing_trailing",
+      "source": "allowmixing trailing",
+      "java_exit": 200,
+      "java_error_line": 2,
+      "java_error_marker": true,
+      "preserved_pair": false
+    },
+    {
+      "probe": "invalid_allow_mixing_trailing",
+      "source": "allow_mixing trailing",
+      "java_exit": 200,
+      "java_error_line": 2,
+      "java_error_marker": true,
+      "preserved_pair": false
+    },
+    {
+      "probe": "invalid_allow_double_underscore",
+      "source": "allow__mixing",
+      "java_exit": 200,
+      "java_error_line": 2,
+      "java_error_marker": true,
+      "preserved_pair": false
+    },
+    {
+      "probe": "invalid_allow_space_mixing",
+      "source": "allow mixing",
+      "java_exit": 200,
+      "java_error_line": 2,
+      "java_error_marker": true,
+      "preserved_pair": false
+    },
+    {
+      "probe": "malformed_trailing_namespace_separator",
+      "source": "set namespaceSeparator :: / class Bad::",
+      "java_exit": 200,
+      "java_error_line": 3,
+      "java_error_marker": true,
+      "preserved_pair": false
+    },
+    {
+      "probe": "malformed_custom_slash_two_qualified_relationship_endpoints",
+      "source": "R5Slash/Area/Consumer --> R5Slash/Area/Producer",
+      "java_exit": 200,
+      "java_error_line": 8,
+      "java_error_marker": true,
+      "preserved_pair": false,
+      "note": "Class relationship identifiers use CommandLinkClass.getSeparator, whose alternatives are dot, double-colon, backslash, and double-backslash. A slash namespace declaration can still be valid; this fully slash-qualified relationship shape is not a preserved pair."
+    }
+  ],
+  "anti_overfit": {
+    "fixture_shaped_logic": "pass",
+    "golden_or_fixture_reads": "pass",
+    "numeric_constant_audit": "pass",
+    "branch_provenance": "partial_pass",
+    "findings": [
+      "The implementation diff introduces no review2/review3/review4/review5 labels, no held-out names, no golden/fixture file reads, and no include_str/include_bytes embedding in production control flow.",
+      "The parser changes introduce no parity-affecting numeric constants, coordinate branches, entity-count ladders, relationship-count ladders, or source-line equality branches.",
+      "Adjacent Java citations are present for the shared allowmixing recognizer, package alias parsing, relationship endpoint resolution, phantom groups, declaration ownership, and renderer relationship short-name IDs.",
+      "The rejected behavior is not fixture-shaped. It is an over-broad model generalization: Rust applied the reuseExistingChild=true resolver to ordinary declarations, but Java uses reuseExistingChild=false for CommandCreateClass and CommandCreateClassMultilines."
+    ]
+  },
+  "findings": [
+    {
+      "severity": "reject",
+      "title": "Ordinary declarations unique-reuse same-short-name leaves across packages",
+      "evidence": [
+        "review5_ambiguous_duplicate_short_names.puml is valid Java syntax and its Java SVG is not an error page.",
+        "Java records R5Right.Shared at declaration line 5 and creates a separate root Shared at ambiguous relationship line 7.",
+        "Rust records no root Shared and materializes R5Right.Shared at line 8, showing the second package declaration reused R5Left.Shared.",
+        "Java CommandCreateClass#executeArg and CommandCreateClassMultilines#executeNow call quarkInContextSafe(false, idShort); Rust ClassParser::try_entity_decl calls resolve_quark_path(&id, true) for all declarations."
+      ]
+    }
+  ],
+  "required_followup": [
+    "Before accepting the implementation, split declaration resolver modes by Java command: ordinary class/multiline declarations must use the non-reusing current-context path, while CommandCreateElementFull2 mixed declarations may use the reuseExistingChild=true behavior.",
+    "Preserve review5_ambiguous_duplicate_short_names as a failing counterexample and replay it after the fix.",
+    "Replay all 28 prior review2/review3/review4 sources and all 17 review5 sources. Acceptance requires 45/45 scoped identity matches; strict mismatches may remain classified as renderer-owned only after scoped identity passes.",
+    "Keep invalid allowmixing and malformed separator probes as non-pair probes unless a future target explicitly changes the valid-syntax requirement."
+  ],
+  "ready_to_commit_paths": [
+    "docs/parity-reviews/class-mixed-state-group-metadata/review-5.json",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_allow_mixing_mixedcase_links_first.puml",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_allow_mixing_mixedcase_links_first.svg",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_allowmixing_uppercase_declarations_first.puml",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_allowmixing_uppercase_declarations_first.svg",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_ambiguous_duplicate_short_names.puml",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_ambiguous_duplicate_short_names.svg",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_case_underscore_package_link_chain.puml",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_case_underscore_package_link_chain.svg",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_first_materialization_actor_reuses_class_leaf.puml",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_first_materialization_actor_reuses_class_leaf.svg",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_namespace_custom_relative_inside.puml",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_namespace_custom_relative_inside.svg",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_namespace_custom_separator_deep.puml",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_namespace_custom_separator_deep.svg",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_namespace_default_rooted_lookup.puml",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_namespace_default_rooted_lookup.svg",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_namespace_separator_none_literal_names.puml",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_namespace_separator_none_literal_names.svg",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_nested_package_three_levels_root_lookup.puml",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_nested_package_three_levels_root_lookup.svg",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_package_alias_declarations_after_link.puml",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_package_alias_declarations_after_link.svg",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_package_alias_display_code_one_level.puml",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_package_alias_display_code_one_level.svg",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_package_unaliased_display_identity.puml",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_package_unaliased_display_identity.svg",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_relative_lookup_inside_package.puml",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_relative_lookup_inside_package.svg",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_repeated_reversed_links_aliases_after.puml",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_repeated_reversed_links_aliases_after.svg",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_sequence_endpoint_named_allowmixing.puml",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_sequence_endpoint_named_allowmixing.svg",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_unique_unqualified_lookup_after_close.puml",
+    "test-diagrams/perturbations/class-mixed-state-group-metadata/review5_unique_unqualified_lookup_after_close.svg"
+  ]
+}

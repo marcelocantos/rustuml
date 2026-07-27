@@ -1,0 +1,8 @@
+@startuml
+namespace R5Rooted {
+  namespace Inner {
+    class Leaf
+  }
+}
+.R5Rooted.Inner.Leaf --> RootConsumer
+@enduml

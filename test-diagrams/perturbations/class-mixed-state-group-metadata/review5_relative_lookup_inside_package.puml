@@ -1,0 +1,8 @@
+@startuml
+package R5Rel {
+  class LocalA
+  LocalA --> LocalB
+  class "Local Bee" as LocalB
+}
+R5Rel.LocalB --> R5Rel.LocalA
+@enduml

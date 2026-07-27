@@ -1,0 +1,8 @@
+@startuml
+AlLoW_MiXiNg
+R5Requester --> R5Decision
+actor "Requester Display" as R5Requester
+usecase "Decision Display" as R5Decision
+R5Decision --> R5Archive
+database "Archive Display" as R5Archive
+@enduml

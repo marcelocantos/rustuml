@@ -1,0 +1,9 @@
+@startuml
+allowmixing
+package "Order Domain" as R5Order {
+  R5OrderEntry --> R5OrderExit
+  class "Entry Display" as R5OrderEntry
+  queue "Exit Queue" as R5OrderExit
+}
+R5Order.R5OrderExit --> Outside
+@enduml

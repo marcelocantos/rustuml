@@ -1,0 +1,4 @@
+@startuml
+allowmixing -> Worker : ping
+Worker --> allowmixing : pong
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+set namespaceSeparator none
+package R5None {
+  class Thing.One
+}
+Thing.One --> Other.One
+@enduml

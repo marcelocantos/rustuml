@@ -1,0 +1,9 @@
+@startuml
+aLLoW_mIxInG
+package "Mixed Case Package" as R5CasePkg {
+  ActorInPkg --> UseInPkg
+  actor "Actor In Package" as ActorInPkg
+  usecase "Use In Package" as UseInPkg
+}
+R5CasePkg.UseInPkg --> OutsideCase
+@enduml

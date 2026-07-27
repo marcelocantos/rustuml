@@ -1,0 +1,8 @@
+@startuml
+allowmixing
+Alpha --> Beta
+Beta --> Alpha
+Alpha --> Beta
+class "Alpha Display" as Alpha
+class "Beta Display" as Beta
+@enduml
