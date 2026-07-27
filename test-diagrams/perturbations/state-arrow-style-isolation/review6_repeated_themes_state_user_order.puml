@@ -1,0 +1,19 @@
+@startuml
+skinparam State.Arrow_Color #1565C0
+!theme metal
+skinparam stateBorderColor #546E7A
+skinparam Class_Arrow.Color #6A1B9A
+!theme minty
+skinparam UseCase.Arrow_Color #2E7D32
+state "Maple Start 6401" as MapleStart6401
+state "Maple Gate 6403" as MapleGate6403
+state "Maple Retry 6407" as MapleRetry6407
+state "Maple Audit 6411" as MapleAudit6411
+state "Maple Finish 6413" as MapleFinish6413
+[*] --> MapleStart6401
+MapleStart6401 --> MapleGate6403 : inherited after themes
+MapleGate6403 -[#C2185B,bold]-> MapleRetry6407 : local bold
+MapleRetry6407 --> MapleAudit6411 : inherited tail
+MapleAudit6411 --> MapleFinish6413 : inherited final
+MapleFinish6413 --> [*]
+@enduml

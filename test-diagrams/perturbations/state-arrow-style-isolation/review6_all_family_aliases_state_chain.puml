@@ -1,0 +1,19 @@
+@startuml
+skinparam Activity.Arrow_Color #1565C0
+skinparam Class_Arrow.Color #6A1B9A
+skinparam COMPONENT.Arrow_Color #00838F
+skinparam objectArrowColor #3949AB
+skinparam SeQuEnCe_ArRoW.Color #AD1457
+skinparam State.Arrow_Color #EF6C00
+skinparam UseCase_Arrow.Color #2E7D32
+skinparam stateBorderColor #455A64
+state "Cedar Intake 6201" as CedarIntake6201
+state "Cedar Review 6203" as CedarReview6203
+state "Cedar Relay 6207" as CedarRelay6207
+state "Cedar Archive 6211" as CedarArchive6211
+[*] --> CedarIntake6201
+CedarIntake6201 --> CedarReview6203 : inherited one
+CedarReview6203 -[#C2185B,dashed]-> CedarRelay6207 : local override
+CedarRelay6207 --> CedarArchive6211 : inherited two
+CedarArchive6211 --> [*]
+@enduml

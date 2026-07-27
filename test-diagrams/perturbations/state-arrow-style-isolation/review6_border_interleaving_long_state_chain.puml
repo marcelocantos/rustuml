@@ -1,0 +1,20 @@
+@startuml
+skinparam stateBorderColor #1E88E5
+skinparam ArrowColor #1565C0
+skinparam stateBorderColor #8E24AA
+skinparam Object_Arrow.Color #2E7D32
+skinparam stateBorderColor #455A64
+state "Willow Draft 6501" as WillowDraft6501
+state "Willow Queue 6503" as WillowQueue6503
+state "Willow Dispatch 6507" as WillowDispatch6507
+state "Willow Verify 6511" as WillowVerify6511
+state "Willow Close 6513" as WillowClose6513
+state "Willow Ledger 6517" as WillowLedger6517
+[*] --> WillowDraft6501
+WillowDraft6501 --> WillowQueue6503
+WillowQueue6503 -[#C2185B,dashed]-> WillowDispatch6507 : local dashed
+WillowDispatch6507 --> WillowVerify6511
+WillowVerify6511 --> WillowClose6513
+WillowClose6513 --> WillowLedger6517
+WillowLedger6517 --> [*]
+@enduml

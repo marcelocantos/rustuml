@@ -1,0 +1,19 @@
+@startuml
+skinparam stateBorderColor #37474F
+skinparam State.Arrow_Color #1565C0
+skinparam arrow_color #6A1B9A
+skinparam Component.Arrow_Color #00838F
+skinparam STATE_Arrow.Color #3949AB
+skinparam Class.Arrow_Color #AD1457
+skinparam stateBorderColor #6D4C41
+skinparam Activity_Arrow.Color #2E7D32
+state "Juniper Open 6301" as JuniperOpen6301
+state "Juniper Work 6303" as JuniperWork6303
+state "Juniper Check 6307" as JuniperCheck6307
+state "Juniper Done 6311" as JuniperDone6311
+[*] --> JuniperOpen6301
+JuniperOpen6301 --> JuniperWork6303 : inherited first
+JuniperWork6303 --> JuniperCheck6307 : inherited second
+JuniperCheck6307 -[#C2185B,dotted]-> JuniperDone6311 : local dotted
+JuniperDone6311 --> [*]
+@enduml

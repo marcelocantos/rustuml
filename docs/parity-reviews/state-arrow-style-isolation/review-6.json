@@ -1,0 +1,163 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-arrow-style-isolation",
+  "reviewer": {
+    "task_id": "codex-desktop-t14-state-arrow-style-isolation-review-6",
+    "model": "OpenAI GPT-5 Codex"
+  },
+  "account_commit": "3f80363ecc8f683a452924f82d7ac8cb24ee7eb3",
+  "corrected_account_commits": [
+    "3f80363ecc8f683a452924f82d7ac8cb24ee7eb3"
+  ],
+  "implementation_commit": "3fb74a8bf518a528e89686d1390c223983fc98fb",
+  "prior_rejected_review_commit": "e461bc19b2cbea4e407e365b5c911fe0938b96b4",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar": {
+    "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+  },
+  "clean_snapshot": {
+    "method": "git archive",
+    "worktree": "/private/tmp/rustuml-arrow-review6-3fb74a8b.URuaKq",
+    "rust_revision": "3fb74a8bf518a528e89686d1390c223983fc98fb",
+    "target_dir": "/private/tmp/rustuml-arrow-review6-3fb74a8b-target",
+    "copied_in": [
+      "test-diagrams/perturbations/state-arrow-style-isolation/review6_all_family_aliases_state_chain.puml",
+      "test-diagrams/perturbations/state-arrow-style-isolation/review6_all_family_aliases_state_chain.svg",
+      "test-diagrams/perturbations/state-arrow-style-isolation/review6_alternating_repeated_keys_state_order.puml",
+      "test-diagrams/perturbations/state-arrow-style-isolation/review6_alternating_repeated_keys_state_order.svg",
+      "test-diagrams/perturbations/state-arrow-style-isolation/review6_border_interleaving_long_state_chain.puml",
+      "test-diagrams/perturbations/state-arrow-style-isolation/review6_border_interleaving_long_state_chain.svg",
+      "test-diagrams/perturbations/state-arrow-style-isolation/review6_repeated_themes_state_user_order.puml",
+      "test-diagrams/perturbations/state-arrow-style-isolation/review6_repeated_themes_state_user_order.svg",
+      "test-diagrams/perturbations/state-arrow-style-isolation/review6_separator_case_state_alias_matrix.puml",
+      "test-diagrams/perturbations/state-arrow-style-isolation/review6_separator_case_state_alias_matrix.svg"
+    ],
+    "excluded_dirty_shared_tree_paths": [
+      "crates/rustuml-render/src/class.rs"
+    ]
+  },
+  "commands": [
+    "git show -s --format=%H 3fb74a8b",
+    "git show -s --format=%H 3f80363e",
+    "git show -s --format=%H e461bc19",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/state-arrow-style-isolation/review6_all_family_aliases_state_chain.puml test-diagrams/perturbations/state-arrow-style-isolation/review6_alternating_repeated_keys_state_order.puml test-diagrams/perturbations/state-arrow-style-isolation/review6_repeated_themes_state_user_order.puml test-diagrams/perturbations/state-arrow-style-isolation/review6_border_interleaving_long_state_chain.puml test-diagrams/perturbations/state-arrow-style-isolation/review6_separator_case_state_alias_matrix.puml",
+    "xmllint --noout test-diagrams/perturbations/state-arrow-style-isolation/review6_all_family_aliases_state_chain.svg test-diagrams/perturbations/state-arrow-style-isolation/review6_alternating_repeated_keys_state_order.svg test-diagrams/perturbations/state-arrow-style-isolation/review6_repeated_themes_state_user_order.svg test-diagrams/perturbations/state-arrow-style-isolation/review6_border_interleaving_long_state_chain.svg test-diagrams/perturbations/state-arrow-style-isolation/review6_separator_case_state_alias_matrix.svg",
+    "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"|<title>error|fatal parsing' test-diagrams/perturbations/state-arrow-style-isolation/review6_*.svg",
+    "shasum -a 256 test-diagrams/perturbations/state-arrow-style-isolation/review6_*.puml test-diagrams/perturbations/state-arrow-style-isolation/review6_*.svg",
+    "git archive --format=tar --output=/private/tmp/rustuml-arrow-review6-3fb74a8b.URuaKq/source.tar 3fb74a8b",
+    "tar -xf /private/tmp/rustuml-arrow-review6-3fb74a8b.URuaKq/source.tar -C /private/tmp/rustuml-arrow-review6-3fb74a8b.URuaKq",
+    "cp the ten review6 .puml/.svg files from the shared tree into /private/tmp/rustuml-arrow-review6-3fb74a8b.URuaKq/test-diagrams/perturbations/state-arrow-style-isolation/",
+    "env CARGO_TARGET_DIR=/private/tmp/rustuml-arrow-review6-3fb74a8b-target cargo build -p rustuml-oracle --example diff_one --release",
+    "/private/tmp/rustuml-arrow-review6-3fb74a8b-target/release/examples/diff_one --no-oracle test-diagrams/perturbations/state-arrow-style-isolation/review6_all_family_aliases_state_chain.puml",
+    "/private/tmp/rustuml-arrow-review6-3fb74a8b-target/release/examples/diff_one --no-oracle test-diagrams/perturbations/state-arrow-style-isolation/review6_alternating_repeated_keys_state_order.puml",
+    "/private/tmp/rustuml-arrow-review6-3fb74a8b-target/release/examples/diff_one --no-oracle test-diagrams/perturbations/state-arrow-style-isolation/review6_border_interleaving_long_state_chain.puml",
+    "/private/tmp/rustuml-arrow-review6-3fb74a8b-target/release/examples/diff_one --no-oracle test-diagrams/perturbations/state-arrow-style-isolation/review6_repeated_themes_state_user_order.puml",
+    "/private/tmp/rustuml-arrow-review6-3fb74a8b-target/release/examples/diff_one --no-oracle test-diagrams/perturbations/state-arrow-style-isolation/review6_separator_case_state_alias_matrix.puml",
+    "env CARGO_TARGET_DIR=/private/tmp/rustuml-arrow-review6-3fb74a8b-target cargo test -p rustuml-oracle --test parity_perturbations --release held_out_perturbations_match_java_without_oracle_layout -- --exact --nocapture",
+    "env CARGO_TARGET_DIR=/private/tmp/rustuml-arrow-review6-3fb74a8b-target cargo test -p rustuml-oracle --test harness_guards --release no_golden_data_embedded_in_shipping_crates -- --exact --nocapture",
+    "env CARGO_TARGET_DIR=/private/tmp/rustuml-arrow-review6-3fb74a8b-target cargo test -p rustuml-oracle --test harness_guards --release error_golden_census_is_frozen -- --exact --nocapture",
+    "env CARGO_TARGET_DIR=/private/tmp/rustuml-arrow-review6-3fb74a8b-target cargo test -p rustuml-oracle --test harness_guards --release decimal_literal_ratchet -- --exact --nocapture",
+    "env CARGO_TARGET_DIR=/private/tmp/rustuml-arrow-review6-3fb74a8b-target cargo test -p rustuml-oracle --test harness_guards --release comparator_constants_frozen -- --exact --nocapture",
+    "env CARGO_TARGET_DIR=/private/tmp/rustuml-arrow-review6-3fb74a8b-target cargo test -p rustuml-oracle --test harness_guards --release parity_review_paths_reject_traversal -- --exact --nocapture"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/state-arrow-style-isolation/review6_all_family_aliases_state_chain.puml",
+      "golden": "test-diagrams/perturbations/state-arrow-style-isolation/review6_all_family_aliases_state_chain.svg",
+      "source_sha256": "b19091b24708307a22b9aab338fa0e2cd61cd93ffbb47011330fc3e1fc5bc7bf",
+      "golden_sha256": "50b40305f84cc190924a2729c97c3ce26cb344c53087a309d3ff611b524750f1",
+      "axes": [
+        "all seven ordinary family arrow aliases in a state diagram",
+        "mixed separators and case",
+        "renamed four-state chain",
+        "stateBorderColor isolation",
+        "local dashed transition override"
+      ],
+      "result": "pass",
+      "arrow_specific_result": "Strict no-oracle comparison is structurally equivalent; inherited arrows use the final UseCase alias #2E7D32, borders use #455A64, and the local dashed transition uses #C2185B."
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arrow-style-isolation/review6_alternating_repeated_keys_state_order.puml",
+      "golden": "test-diagrams/perturbations/state-arrow-style-isolation/review6_alternating_repeated_keys_state_order.svg",
+      "source_sha256": "95afe740ca9e05c6180c36d42bfe174bbac277b31d5de2e4f4066ef42c733a9d",
+      "golden_sha256": "97d9355a2d5b02025306528a826571b523b8b94abba3542cd6116f8c22c7eee9",
+      "axes": [
+        "alternating repeated state/global/cross-family arrow keys",
+        "final activity family alias by source order",
+        "stateBorderColor reassignment interleaved with arrow declarations",
+        "renamed four-state chain",
+        "local dotted transition override"
+      ],
+      "result": "pass",
+      "arrow_specific_result": "Strict no-oracle comparison is structurally equivalent; the final Activity alias drives inherited arrows #2E7D32, the last stateBorderColor drives state borders #6D4C41, and the local dotted transition remains #C2185B."
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arrow-style-isolation/review6_border_interleaving_long_state_chain.puml",
+      "golden": "test-diagrams/perturbations/state-arrow-style-isolation/review6_border_interleaving_long_state_chain.svg",
+      "source_sha256": "8a1f43b0e98193613fa55e330c131326d65ed36350f314415f77da3da3b9cf6c",
+      "golden_sha256": "7b3bac78773845ecf38e3a25f1ef3bd6134f77d26a93bfa44bf0adfac8cab3be",
+      "axes": [
+        "stateBorderColor interleaving before and after arrow aliases",
+        "object family arrow alias in a state diagram",
+        "renamed six-state chain",
+        "varied chain length",
+        "local dashed transition override"
+      ],
+      "result": "pass",
+      "arrow_specific_result": "Strict no-oracle comparison is structurally equivalent; inherited arrows use #2E7D32, state borders use the final #455A64, and the local dashed transition uses #C2185B."
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arrow-style-isolation/review6_repeated_themes_state_user_order.puml",
+      "golden": "test-diagrams/perturbations/state-arrow-style-isolation/review6_repeated_themes_state_user_order.svg",
+      "source_sha256": "9340c7076befb14b490b23d46d94d6c73e9fc29fbaf15225195a008e5324b936",
+      "golden_sha256": "7a23e182ed3e64d7a840872200ba8d801f51e81c1e69dea156520aeea7faa8b6",
+      "axes": [
+        "ordinary declarations before and after real !theme metal and !theme minty",
+        "repeated theme-event order",
+        "cross-family class and usecase aliases in a state diagram",
+        "renamed five-state chain",
+        "local bold transition override"
+      ],
+      "result": "fail",
+      "arrow_specific_result": "The arrow-specific mechanism survives: inherited arrows are #2E7D32 after the final UseCase alias, and the local bold transition is #C2185B in both Java and Rust. Strict no-oracle comparison still fails on broader themed state geometry, canvas size, state box dimensions, and coordinates."
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arrow-style-isolation/review6_separator_case_state_alias_matrix.puml",
+      "golden": "test-diagrams/perturbations/state-arrow-style-isolation/review6_separator_case_state_alias_matrix.svg",
+      "source_sha256": "241e2f7db9793fb721531a52bc1dbf476c32eb2929bad4dc0a6f2d6adf670bb4",
+      "golden_sha256": "9413666f00e3b7fed1846f1aa2e49e187578669bb3a0667c90c62bdd55511e43",
+      "axes": [
+        "all seven family aliases with dot and underscore separators",
+        "mixed case in every key family",
+        "final usecase alias by Java cleanForKey identity",
+        "renamed three-state chain",
+        "local dotted transition override"
+      ],
+      "result": "pass",
+      "arrow_specific_result": "Strict no-oracle comparison is structurally equivalent; the separator/case matrix resolves to inherited #2E7D32 arrows with the local dotted #C2185B override."
+    }
+  ],
+  "results": {
+    "java_svg_generation": "pass: pinned PlantUML Java SVGs generated for five review-6 inputs",
+    "syntax_xml_validation": "pass: xmllint accepted all five Java SVGs and the error-marker search found no matches",
+    "diff_one_no_oracle": "fail: 4/5 review-6 perturbations were structurally equivalent; review6_repeated_themes_state_user_order failed strict comparison on broad themed geometry while preserving arrow-specific colours and local style",
+    "parity_perturbations": "fail: aggregate held-out no-oracle gate remains red; new review-6 repeated-theme state failure is present alongside older checker_theme_user_order_and_local_override, review4_repeated_themes_bidirectional_order, and state-recursive-group-simplification failures in the 3fb74a8b snapshot",
+    "mechanical_guards": "pass: no_golden_data_embedded_in_shipping_crates, error_golden_census_is_frozen, decimal_literal_ratchet, comparator_constants_frozen, and parity_review_paths_reject_traversal passed individually",
+    "production_files_modified": "no"
+  },
+  "findings": [
+    "The review was performed against a git-archive snapshot of immutable implementation 3fb74a8bf518a528e89686d1390c223983fc98fb, with only the five fresh review-6 state-arrow perturbation pairs copied into that snapshot. The shared worktree's unrelated crates/rustuml-render/src/class.rs modification was excluded from validation.",
+    "Java provenance still supports the ordinary shared-arrow model. SkinParam.setParam cleans every key before map storage and style conversion; cleanForKeySlow lowercases, strips underscores and dots, rewrites activity/class/component/object/sequence/state/usecase Arrow prefixes to the shared arrow prefix, and FromSkinparamToStyle maps arrowColor to the arrow LineColor style.",
+    "Rust commit 3fb74a8b implements the corresponding ordinary storage boundary in parse::collapse_reassigned_skinparams: ordinary declarations compare through canonical_skinparam_key, and the arrowcolor identity is stored as the shared arrowcolor key. Synthetic theme body records remain keyed by theme segment plus raw lowercase key, preserving family scope for theme-expanded compatibility records.",
+    "StateSkin::from_diagram consumes the shared ordinary ArrowColor/stateArrowColor record after parser canonicalization, resolves stateBorderColor through the sibling state-border channel, and applies per-transition colour/style after the diagram-level arrow value. Static source inspection found no fixture labels, golden reads, SVG surgery, coordinate-keyed branches, or new unexplained constants in the reviewed implementation.",
+    "Four fresh state-only no-oracle perturbations passed strict comparison. They cover all seven family aliases, separator and case variants, alternating repeated keys, stateBorderColor interleaving, renamed states, varied chain lengths, and dashed/dotted local overrides.",
+    "The real repeated-theme state perturbation rejects acceptance under the strict no-oracle gate. The arrow-specific attributes match Java: inherited links use #2E7D32 after the final UseCase alias, and the local bold link uses #C2185B. The strict diff is instead dominated by broader themed state rendering: canvas dimensions, state-box height/width, pseudo-state coordinates, link geometry, and label coordinates.",
+    "The aggregate parity_perturbations run at the exact snapshot remains red. Besides the new review-6 repeated-theme state failure, it also reports pre-existing state-arrow themed heldouts checker_theme_user_order_and_local_override and review4_repeated_themes_bidirectional_order, plus preserved state-recursive-group-simplification failures. These failures mean the mechanism cannot be accepted by T14's no-oracle perturbation rule yet.",
+    "The frozen/mechanical guards passed individually: no golden data is embedded in shipping crates, the error-golden census guard skipped only because the archived snapshot has no populated golden submodule, decimal literals and comparator constants remain frozen, and parity review paths reject traversal.",
+    "Verdict is rejected. The ordinary alias/border/local-override model appears correct for non-themed state perturbations and for arrow attributes inside the themed perturbation, but latest acceptance would be false while the strict no-oracle perturbation gate remains red."
+  ],
+  "accepted": false,
+  "verdict": "rejected"
+}

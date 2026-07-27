@@ -1,0 +1,16 @@
+@startuml
+skinparam AcTiViTy_ArRoW.Color #1565C0
+skinparam class.arrow_color #6A1B9A
+skinparam Component_Arrow.Color #00838F
+skinparam OBJECT.Arrow_Color #3949AB
+skinparam sequenceArrowColor #AD1457
+skinparam State_Arrow.Color #EF6C00
+skinparam uSeCaSe.ArRoW_CoLoR #2E7D32
+state "Spruce Alpha 6601" as SpruceAlpha6601
+state "Spruce Beta 6603" as SpruceBeta6603
+state "Spruce Gamma 6607" as SpruceGamma6607
+[*] --> SpruceAlpha6601
+SpruceAlpha6601 -[#C2185B,dotted]-> SpruceBeta6603 : local dotted
+SpruceBeta6603 --> SpruceGamma6607 : inherited matrix
+SpruceGamma6607 --> [*]
+@enduml
