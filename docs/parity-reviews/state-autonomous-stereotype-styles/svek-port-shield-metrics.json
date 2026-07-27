@@ -11,6 +11,7 @@
   },
   "solved_model": {
     "node_width": "max(54, full_width + 16)",
+    "layout_envelope_width": "2 * ceil(node_width / 2)",
     "node_height": "36",
     "port_width": "max(12, (full_width + 24) / 3)",
     "port_height": "12",
@@ -20,53 +21,63 @@
     {
       "full_width": 10,
       "node_width": "54",
+      "layout_envelope_width": "54",
       "port_width": "12"
     },
     {
       "full_width": 11,
       "node_width": "54",
+      "layout_envelope_width": "54",
       "port_width": "12"
     },
     {
       "full_width": 20,
       "node_width": "54",
+      "layout_envelope_width": "54",
       "port_width": "44/3"
     },
     {
       "full_width": 28,
       "node_width": "54",
+      "layout_envelope_width": "54",
       "port_width": "52/3"
     },
     {
       "full_width": 40,
       "node_width": "56",
+      "layout_envelope_width": "56",
       "port_width": "64/3"
     },
     {
       "full_width": 50,
       "node_width": "66",
+      "layout_envelope_width": "66",
       "port_width": "74/3"
     },
     {
       "full_width": 80,
       "node_width": "96",
+      "layout_envelope_width": "96",
       "port_width": "104/3"
     },
     {
       "full_width": 130,
       "node_width": "146",
+      "layout_envelope_width": "146",
       "port_width": "154/3"
     },
     {
       "full_width": 135,
       "node_width": "151",
+      "layout_envelope_width": "152",
       "port_width": "53"
     },
     {
       "full_width": 200,
       "node_width": "216",
+      "layout_envelope_width": "216",
       "port_width": "224/3"
     }
   ],
-  "derivation": "The DOT model above was transcribed from the pinned Java method and solved with `dot -Tplain` and `dot -Tsvg`. Node dimensions came from plain output; P-cell bounds came from each node polygon in SVG. The formulas reproduce all ten samples exactly before SVG decimal formatting."
+  "derivation": "The DOT model above was transcribed from the pinned Java method and solved with `dot -Tplain` and `dot -Tsvg`. Node dimensions came from plain output; P-cell bounds came from each node polygon in SVG. Replacing an odd-width HTML node with fixed boxes from 149 through 152px in the same Java-emitted graph showed that only the 152px box reproduces the HTML node's rank coordinate: dot ranks the reported 151px table with symmetric 76px half-extents. The formulas reproduce all ten samples and this odd-width envelope before SVG decimal formatting."
 }
