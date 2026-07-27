@@ -24,7 +24,7 @@ crates/rustuml-render/src/mindmap.rs 4
 crates/rustuml-render/src/non_ascii_widths.rs 1159
 crates/rustuml-render/src/object.rs 21
 crates/rustuml-render/src/openiconic.rs 3
-crates/rustuml-render/src/plantuml_metrics.rs 1050
+crates/rustuml-render/src/plantuml_metrics.rs 1053
 crates/rustuml-render/src/salt.rs 1
 crates/rustuml-render/src/scale.rs 39
 crates/rustuml-render/src/sequence.rs 112
