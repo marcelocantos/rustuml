@@ -2052,6 +2052,7 @@ struct AutonomousStateStyle {
     fill: String,
     stroke: String,
     border_thickness: String,
+    shadow: f64,
     title: AutonomousTextStyle,
     attribute: AutonomousTextStyle,
 }
@@ -2081,7 +2082,20 @@ fn autonomous_state_style(
     skin: &StateSkin,
     state: Option<&State>,
 ) -> AutonomousStateStyle {
-    let stereotype = state.and_then(|state| state.stereotype.as_deref());
+    let stereotype = state.and_then(|state| {
+        state
+            .stereotype
+            .as_deref()
+            .or_else(|| match StateEntityPosition::of(state) {
+                StateEntityPosition::EntryPoint => Some("entryPoint"),
+                StateEntityPosition::ExitPoint => Some("exitPoint"),
+                StateEntityPosition::InputPin => Some("inputPin"),
+                StateEntityPosition::OutputPin => Some("outputPin"),
+                StateEntityPosition::ExpansionInput => Some("expansionInput"),
+                StateEntityPosition::ExpansionOutput => Some("expansionOutput"),
+                StateEntityPosition::Normal => None,
+            })
+    });
     let stereo_value = |attrs: &[&str]| {
         stereotype.and_then(|stereotype| {
             attrs
@@ -2126,6 +2140,22 @@ fn autonomous_state_style(
                 false,
             ),
         }
+    };
+    let shadow_value = stereo_value(&["Shadowing"])
+        .or_else(|| global_value(&["stateShadowing", "shadowing"]))
+        .unwrap_or_default();
+    let shadow = if matches!(
+        shadow_value.trim().to_ascii_lowercase().as_str(),
+        "true" | "yes"
+    ) {
+        3.0
+    } else if matches!(
+        shadow_value.trim().to_ascii_lowercase().as_str(),
+        "false" | "no"
+    ) {
+        0.0
+    } else {
+        shadow_value.trim().parse::<f64>().unwrap_or(0.0).max(0.0)
     };
 
     let title_family = font_family(
@@ -2172,6 +2202,7 @@ fn autonomous_state_style(
             .and_then(|value| value.parse::<f64>().ok())
             .map(fmt_f)
             .unwrap_or_else(|| skin.border_thickness.clone()),
+        shadow,
         title: AutonomousTextStyle {
             color: stereo_color(&["AttributeFontColor", "FontColor"])
                 .unwrap_or_else(|| skin.text_color.clone()),
@@ -2318,6 +2349,16 @@ struct AutonomousRenderContext<'a> {
     allocated_ids: &'a StateSvgIds,
     skin: &'a StateSkin,
     arrow_font: &'a StateArrowFont,
+    shadow_filter_id: Option<String>,
+}
+
+fn autonomous_shadow_attr(context: &AutonomousRenderContext<'_>, shadow: f64) -> String {
+    context
+        .shadow_filter_id
+        .as_deref()
+        .filter(|_| shadow > 0.0)
+        .map(|id| format!(r#" filter="url(#{id})""#))
+        .unwrap_or_default()
 }
 
 fn endpoint_parent_scope<'a>(
@@ -2884,6 +2925,7 @@ fn has_only_autonomous_layout_skinparams(diagram: &StateDiagram) -> bool {
                 | "statearrowfontstyle"
                 | "statestartcolor"
                 | "stateendcolor"
+                | "stateshadowing"
                 | "defaultfontcolor"
                 | "defaultfontsize"
                 | "defaultfontname"
@@ -2893,6 +2935,7 @@ fn has_only_autonomous_layout_skinparams(diagram: &StateDiagram) -> bool {
                 | "arrowfontname"
                 | "arrowfontstyle"
                 | "arrowthickness"
+                | "shadowing"
         )
     })
 }
@@ -3369,6 +3412,8 @@ fn emit_autonomous_scope_entities(
     skip_composites: bool,
 ) {
     let (offset_x, offset_y) = offset;
+    let default_style = autonomous_state_style(context.diagram, context.skin, None);
+    let default_shadow_attr = autonomous_shadow_attr(context, default_style.shadow);
     for (id, cx, cy, width, height) in &scope.positions {
         let layout_cy = *cy;
         let cx = cx + offset_x;
@@ -3378,7 +3423,7 @@ fn emit_autonomous_scope_entities(
             if id.starts_with("__start__") {
                 write!(
                     svg,
-                    r#"<g class="start_entity" data-qualified-name="{qualified_name}" data-source-line="{source_line}" id="{}"><ellipse cx="{}" cy="{}" fill="{PSEUDO_COLOR}" rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/></g>"#,
+                    r#"<g class="start_entity" data-qualified-name="{qualified_name}" data-source-line="{source_line}" id="{}"><ellipse cx="{}" cy="{}" fill="{PSEUDO_COLOR}"{default_shadow_attr} rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/></g>"#,
                     autonomous_entity_id(context.entity_ids, id),
                     fmt_f(cx),
                     fmt_f(cy),
@@ -3387,7 +3432,7 @@ fn emit_autonomous_scope_entities(
             } else {
                 write!(
                     svg,
-                    r#"<g class="end_entity" data-qualified-name="{qualified_name}" data-source-line="{source_line}" id="{}"><ellipse cx="{}" cy="{}" fill="none" rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/><ellipse cx="{}" cy="{}" fill="{PSEUDO_COLOR}" rx="{END_INNER_RADIUS}" ry="{END_INNER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/></g>"#,
+                    r#"<g class="end_entity" data-qualified-name="{qualified_name}" data-source-line="{source_line}" id="{}"><ellipse cx="{}" cy="{}" fill="none"{default_shadow_attr} rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/><ellipse cx="{}" cy="{}" fill="{PSEUDO_COLOR}" rx="{END_INNER_RADIUS}" ry="{END_INNER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/></g>"#,
                     autonomous_entity_id(context.entity_ids, id),
                     fmt_f(cx),
                     fmt_f(cy),
@@ -3402,7 +3447,7 @@ fn emit_autonomous_scope_entities(
         let Some(state) = context.diagram.states.iter().find(|state| state.id == *id) else {
             continue;
         };
-        let cx = cx + state_position_image_offset_x(state);
+        let cx = quantize_svek_coord(cx + state_position_image_offset_x(state));
         if skip_composites && state.composite {
             continue;
         }
@@ -3416,7 +3461,7 @@ fn emit_autonomous_scope_entities(
                     .unwrap_or_else(|| PSEUDO_COLOR.to_string());
                 write!(
                     svg,
-                    r#"<g class="start_entity" data-qualified-name="{}" data-source-line="{}" id="{}"><ellipse cx="{}" cy="{}" fill="{fill}" rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/></g>"#,
+                    r#"<g class="start_entity" data-qualified-name="{}" data-source-line="{}" id="{}"><ellipse cx="{}" cy="{}" fill="{fill}"{default_shadow_attr} rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/></g>"#,
                     escape_attr(&state.id),
                     state.source_line,
                     autonomous_entity_id(context.entity_ids, id),
@@ -3434,7 +3479,7 @@ fn emit_autonomous_scope_entities(
                     .unwrap_or_else(|| PSEUDO_COLOR.to_string());
                 write!(
                     svg,
-                    r#"<g class="end_entity" data-qualified-name="{}" data-source-line="{}" id="{}"><ellipse cx="{}" cy="{}" fill="none" rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/><ellipse cx="{}" cy="{}" fill="{fill}" rx="{END_INNER_RADIUS}" ry="{END_INNER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/></g>"#,
+                    r#"<g class="end_entity" data-qualified-name="{}" data-source-line="{}" id="{}"><ellipse cx="{}" cy="{}" fill="none"{default_shadow_attr} rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/><ellipse cx="{}" cy="{}" fill="{fill}" rx="{END_INNER_RADIUS}" ry="{END_INNER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/></g>"#,
                     escape_attr(&state.id),
                     state.source_line,
                     autonomous_entity_id(context.entity_ids, id),
@@ -3523,14 +3568,15 @@ fn emit_autonomous_scope_entities(
             StateKind::EntryPoint | StateKind::ExitPoint | StateKind::Normal
                 if !entity_position.is_normal() =>
             {
+                let style = autonomous_state_style(context.diagram, context.skin, Some(state));
                 let fill = state
                     .fill
                     .as_deref()
                     .map(crate::sequence::resolve_color)
-                    .unwrap_or_else(|| context.skin.state_fill.clone());
+                    .unwrap_or_else(|| style.fill.clone());
                 let (image_width, image_height) = entity_position.dimensions();
-                let label_width = text_render::measure(&state.label, STATE_FONT_SIZE, false);
-                let label_height = text_render::label_height(&state.label, STATE_FONT_SIZE);
+                let label_width = style.title.width(&state.label);
+                let label_height = style.title.height(&state.label);
                 let label_x = cx - image_width / 2.0 + STATE_BORDER_RADIUS - label_width / 2.0;
                 let image_y = cy - STATE_BORDER_RADIUS;
                 let parent_center_y = state
@@ -3546,27 +3592,11 @@ fn emit_autonomous_scope_entities(
                     .unwrap_or(layout_cy);
                 let label_y = if layout_cy <= parent_center_y {
                     image_y - STATE_BORDER_RADIUS * 2.0 - label_height
-                        + text_render::ascent_for_family(STATE_FONT_SIZE, "sans-serif")
+                        + style.title.ascent(&state.label)
                 } else {
-                    image_y
-                        + STATE_BORDER_RADIUS * 2.0
-                        + text_render::ascent_for_family(STATE_FONT_SIZE, "sans-serif")
+                    image_y + STATE_BORDER_RADIUS * 2.0 + style.title.ascent(&state.label)
                 };
-                text_render::emit_text(
-                    svg,
-                    &state.label,
-                    &TextBase {
-                        x: label_x,
-                        y: label_y,
-                        font_size: STATE_FONT_SIZE as u32,
-                        font_family: "sans-serif",
-                        fill: &context.skin.text_color,
-                        bold: false,
-                        italic: false,
-                        underline: false,
-                        skip_underline: false,
-                    },
-                );
+                style.title.emit(svg, &state.label, label_x, label_y);
                 let image_x = cx - image_width / 2.0;
                 let image_y = cy - image_height / 2.0;
                 if matches!(
@@ -3578,7 +3608,7 @@ fn emit_autonomous_scope_entities(
                         r#"<ellipse cx="{}" cy="{}" fill="{fill}" rx="{STATE_BORDER_RADIUS}" ry="{STATE_BORDER_RADIUS}" style="stroke:{};stroke-width:1.5;"/>"#,
                         fmt_f(cx),
                         fmt_f(cy),
-                        context.skin.stroke,
+                        style.stroke,
                     )
                     .unwrap();
                 } else {
@@ -3586,7 +3616,7 @@ fn emit_autonomous_scope_entities(
                         svg,
                         r#"<rect fill="{fill}" height="{}" style="stroke:{};stroke-width:1.5;" width="{}" x="{}" y="{}"/>"#,
                         fmt_f(image_height),
-                        context.skin.stroke,
+                        style.stroke,
                         fmt_f(image_width),
                         fmt_f(image_x),
                         fmt_f(image_y),
@@ -3602,12 +3632,12 @@ fn emit_autonomous_scope_entities(
                     write!(
                         svg,
                         r#"<line style="stroke:{};stroke-width:1.5;" x1="{}" x2="{}" y1="{}" y2="{}"/><line style="stroke:{};stroke-width:1.5;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                        context.skin.stroke,
+                        style.stroke,
                         fmt_f(cross_center_x + cross_delta),
                         fmt_f(cross_center_x - cross_delta),
                         fmt_f(cross_center_y + cross_delta),
                         fmt_f(cross_center_y - cross_delta),
-                        context.skin.stroke,
+                        style.stroke,
                         fmt_f(cross_center_x + cross_delta),
                         fmt_f(cross_center_x - cross_delta),
                         fmt_f(cross_center_y - cross_delta),
@@ -3624,7 +3654,7 @@ fn emit_autonomous_scope_entities(
                         write!(
                             svg,
                             r#"<line style="stroke:{};stroke-width:1.5;" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
-                            context.skin.stroke,
+                            style.stroke,
                             fmt_f(x),
                             fmt_f(x),
                             fmt_f(image_y),
@@ -3641,6 +3671,7 @@ fn emit_autonomous_scope_entities(
         let box_x = cx - width / 2.0;
         let box_y = cy - height / 2.0;
         let style = autonomous_state_style(context.diagram, context.skin, Some(state));
+        let shadow_attr = autonomous_shadow_attr(context, style.shadow);
         let fill = state
             .fill
             .as_deref()
@@ -3660,7 +3691,7 @@ fn emit_autonomous_scope_entities(
         let divider_y = box_y + 5.0 + style.title.height(&state.label) + 5.0;
         write!(
             svg,
-            r#"<g class="entity" data-qualified-name="{}" id="{}"><rect fill="{fill}" height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="{stroke_style}" width="{}" x="{}" y="{}"/><line style="{stroke_style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+            r#"<g class="entity" data-qualified-name="{}" id="{}"><rect fill="{fill}"{shadow_attr} height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="{stroke_style}" width="{}" x="{}" y="{}"/><line style="{stroke_style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
             escape_attr(&state.id),
             autonomous_entity_id(context.entity_ids, id),
             fmt_f(*height),
@@ -3942,9 +3973,10 @@ fn emit_autonomous_empty_concurrent_state(
     let box_y = offset.1;
     let (width, height) = size;
     let style = autonomous_state_style(context.diagram, context.skin, None);
+    let shadow_attr = autonomous_shadow_attr(context, style.shadow);
     write!(
         svg,
-        r#"<g class="entity" data-qualified-name="{}" id="{}"><rect fill="{}" height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/><line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+        r#"<g class="entity" data-qualified-name="{}" id="{}"><rect fill="{}"{shadow_attr} height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/><line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
         escape_attr(id),
         autonomous_entity_id(context.entity_ids, id),
         style.fill,
@@ -3983,6 +4015,7 @@ fn emit_autonomous_composite(
     let box_x = composite_cx - composite.width / 2.0;
     let box_y = composite_cy - composite.height / 2.0;
     let style = autonomous_state_style(context.diagram, context.skin, Some(composite.state));
+    let shadow_attr = autonomous_shadow_attr(context, style.shadow);
     let title_divider_y = box_y + 5.0 + style.title.height(&composite.state.label) + 5.0;
     let header_divider_y = title_divider_y + composite.attribute_height + composite.field_margin;
     let right = box_x + composite.width;
@@ -4004,6 +4037,17 @@ fn emit_autonomous_composite(
         Some("dotted") => format!("stroke:{stroke};stroke-width:1;stroke-dasharray:1,3;"),
         _ => format!("stroke:{stroke};stroke-width:{};", style.border_thickness),
     };
+    if !shadow_attr.is_empty() {
+        write!(
+            svg,
+            r#"<rect fill="none"{shadow_attr} height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="{stroke_style}" width="{}" x="{}" y="{}"/>"#,
+            fmt_f(composite.height),
+            fmt_f(composite.width),
+            fmt_f(box_x),
+            fmt_f(box_y),
+        )
+        .unwrap();
+    }
     write!(
         svg,
         r#"<path d="M{},{} L{},{} A{STATE_RX},{STATE_RX} 0 0 1 {},{} L{},{} L{},{} L{},{} A{STATE_RX},{STATE_RX} 0 0 1 {},{}" fill="{}"/><rect fill="none" height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="{stroke_style}" width="{}" x="{}" y="{}"/><line style="{stroke_style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
@@ -4170,13 +4214,27 @@ fn render_autonomous_composite(diagram: &StateDiagram) -> Option<String> {
         allocated_ids: &allocated_ids,
         skin: &skin,
         arrow_font: &arrow_font,
+        shadow_filter_id: (autonomous_state_style(diagram, &skin, None).shadow > 0.0
+            || diagram
+                .states
+                .iter()
+                .any(|state| autonomous_state_style(diagram, &skin, Some(state)).shadow > 0.0))
+        .then(|| {
+            crate::filter_registry::shadow_id_for(diagram.meta.source.as_deref().unwrap_or(""))
+        }),
     };
     let width = outer.width.ceil() as i64;
     let height = outer.height.ceil() as i64;
     let mut svg = String::with_capacity(4096);
+    let defs = context
+        .shadow_filter_id
+        .as_deref()
+        .map(crate::filter_registry::shadow_filter_def)
+        .map(|content| format!("<defs>{content}</defs>"))
+        .unwrap_or_else(|| "<defs/>".to_string());
     write!(
         svg,
-        r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="STATE" height="{height}px" preserveAspectRatio="none" style="width:{width}px;height:{height}px;background:#FFFFFF;" version="1.1" viewBox="0 0 {width} {height}" width="{width}px" zoomAndPan="magnify"><?plantuml ?><defs/><g>"#,
+        r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="STATE" height="{height}px" preserveAspectRatio="none" style="width:{width}px;height:{height}px;background:#FFFFFF;" version="1.1" viewBox="0 0 {width} {height}" width="{width}px" zoomAndPan="magnify"><?plantuml ?>{defs}<g>"#,
     )
     .unwrap();
 
@@ -4444,7 +4502,7 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
         .any(|state| !StateEntityPosition::of(state).is_normal());
     if !diagram.notes.is_empty()
         || diagram.meta.title.is_some()
-        || !diagram.meta.skinparams.is_empty()
+        || !has_only_autonomous_layout_skinparams(diagram)
         || diagram.states.iter().any(|state| {
             !matches!(
                 state.kind,
@@ -4483,6 +4541,7 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
     }
 
     let arrow_font = StateArrowFont::from_diagram(diagram);
+    let skin = StateSkin::from_diagram(diagram);
     let transition_indices = plantuml_svek_transition_order(diagram, 0..diagram.transitions.len());
     let ids = collect_autonomous_scope_ids(diagram, &transition_indices, |_| true);
     let mut layout = LayoutGraph::new(Direction::TopToBottom)
@@ -4687,6 +4746,7 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
         painted_max_x = painted_max_x.max(x);
         painted_max_y = painted_max_y.max(y);
     };
+    let default_shadow = autonomous_state_style(diagram, &skin, None).shadow;
     for (index, id) in ids.iter().enumerate() {
         if composites.iter().any(|composite| composite.id == *id) {
             continue;
@@ -4702,12 +4762,15 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
         let center_y = quantize_svek_coord(position.y + position.height / 2.0);
         if id == "__start__" || id.starts_with("__start__:") {
             include_point(center_x - START_RADIUS, center_y - START_RADIUS);
-            include_point(center_x + START_RADIUS - 1.0, center_y + START_RADIUS - 1.0);
+            include_point(
+                center_x + START_RADIUS - 1.0 + default_shadow * 2.0,
+                center_y + START_RADIUS - 1.0 + default_shadow * 2.0,
+            );
         } else if id == "__end__" || id.starts_with("__end__:") {
             include_point(center_x - END_OUTER_RADIUS, center_y - END_OUTER_RADIUS);
             include_point(
-                center_x + END_OUTER_RADIUS - 1.0,
-                center_y + END_OUTER_RADIUS - 1.0,
+                center_x + END_OUTER_RADIUS - 1.0 + default_shadow * 2.0,
+                center_y + END_OUTER_RADIUS - 1.0 + default_shadow * 2.0,
             );
         } else {
             let image_x = center_x - width / 2.0;
@@ -4733,8 +4796,9 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
                     include_point(image_x, image_y);
                     include_point(image_x + width - 1.0, image_y + height - 1.0);
                     let state = state?;
-                    let label_width = text_render::measure(&state.label, STATE_FONT_SIZE, false);
-                    let label_height = text_render::label_height(&state.label, STATE_FONT_SIZE);
+                    let style = autonomous_state_style(diagram, &skin, Some(state));
+                    let label_width = style.title.width(&state.label);
+                    let label_height = style.title.height(&state.label);
                     let parent_center_y = state
                         .parent
                         .as_deref()
@@ -4753,10 +4817,7 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
                     };
                     // Java `LimitFinder.drawText` records each UText from
                     // `baseline - height + 1.5` through `baseline + 1.5`.
-                    let limit_offset =
-                        text_render::ascent_for_family(STATE_FONT_SIZE, "sans-serif")
-                            - label_height
-                            + 1.5;
+                    let limit_offset = style.title.ascent(&state.label) - label_height + 1.5;
                     let label_center_x = image_x + STATE_BORDER_RADIUS;
                     include_point(label_center_x - label_width / 2.0, label_top + limit_offset);
                     include_point(
@@ -4776,7 +4837,10 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
                     } else {
                         image_x + width
                     };
-                    include_point(max_x, image_y + height - 1.0);
+                    let shadow = state
+                        .map(|state| autonomous_state_style(diagram, &skin, Some(state)).shadow)
+                        .unwrap_or(default_shadow);
+                    include_point(max_x + shadow * 2.0, image_y + height - 1.0 + shadow * 2.0);
                 }
             }
         }
@@ -4787,7 +4851,12 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
         let width = quantize_svek_coord(cluster.width);
         let height = quantize_svek_coord(cluster.height);
         include_point(x - 1.0, y - 1.0);
-        include_point(x + width, y + height - 1.0);
+        let shadow = composites
+            .iter()
+            .find(|composite| composite.id == cluster.id)
+            .map(|composite| autonomous_state_style(diagram, &skin, Some(composite)).shadow)
+            .unwrap_or(default_shadow);
+        include_point(x + width + shadow * 2.0, y + height - 1.0 + shadow * 2.0);
     }
     for edge in &result.edge_paths {
         let compound_endpoint = composites
@@ -4911,20 +4980,33 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
         painted_bounds: None,
     };
     let allocated_ids = allocate_state_svg_ids(diagram, &ids);
-    let skin = StateSkin::from_diagram(diagram);
     let context = AutonomousRenderContext {
         diagram,
         entity_ids: &allocated_ids.entity_ids,
         allocated_ids: &allocated_ids,
         skin: &skin,
         arrow_font: &arrow_font,
+        shadow_filter_id: (autonomous_state_style(diagram, &skin, None).shadow > 0.0
+            || diagram
+                .states
+                .iter()
+                .any(|state| autonomous_state_style(diagram, &skin, Some(state)).shadow > 0.0))
+        .then(|| {
+            crate::filter_registry::shadow_id_for(diagram.meta.source.as_deref().unwrap_or(""))
+        }),
     };
     let width = scope.width.ceil() as i64;
     let height = scope.height.ceil() as i64;
     let mut svg = String::with_capacity(4096);
+    let defs = context
+        .shadow_filter_id
+        .as_deref()
+        .map(crate::filter_registry::shadow_filter_def)
+        .map(|content| format!("<defs>{content}</defs>"))
+        .unwrap_or_else(|| "<defs/>".to_string());
     write!(
         svg,
-        r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="STATE" height="{height}px" preserveAspectRatio="none" style="width:{width}px;height:{height}px;background:#FFFFFF;" version="1.1" viewBox="0 0 {width} {height}" width="{width}px" zoomAndPan="magnify"><?plantuml ?><defs/><g>"#,
+        r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="STATE" height="{height}px" preserveAspectRatio="none" style="width:{width}px;height:{height}px;background:#FFFFFF;" version="1.1" viewBox="0 0 {width} {height}" width="{width}px" zoomAndPan="magnify"><?plantuml ?>{defs}<g>"#,
     )
     .unwrap();
 
@@ -4995,12 +5077,32 @@ fn emit_root_state_cluster(
     let height = quantize_svek_coord(cluster.height);
     let right = x + width;
     let divider_y = y + CLUSTER_HEADER_DIVIDER_OFFSET;
+    let style = autonomous_state_style(context.diagram, context.skin, Some(composite));
+    let shadow_attr = autonomous_shadow_attr(context, style.shadow);
     write!(
         svg,
-        r#"<g class="cluster" data-qualified-name="{}" data-source-line="{}" id="{}"><path d="M{},{} L{},{} A{STATE_RX},{STATE_RX} 0 0 1 {},{} L{},{} L{},{} L{},{} A{STATE_RX},{STATE_RX} 0 0 1 {},{}" fill="{}"/><rect fill="none" height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/><line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+        r#"<g class="cluster" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
         escape_attr(&composite.id),
         composite.decl_line.unwrap_or(composite.source_line),
         autonomous_entity_id(context.entity_ids, &composite.id),
+    )
+    .unwrap();
+    if !shadow_attr.is_empty() {
+        write!(
+            svg,
+            r#"<rect fill="none"{shadow_attr} height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
+            fmt_f(height),
+            style.stroke,
+            style.border_thickness,
+            fmt_f(width),
+            fmt_f(x),
+            fmt_f(y),
+        )
+        .unwrap();
+    }
+    write!(
+        svg,
+        r#"<path d="M{},{} L{},{} A{STATE_RX},{STATE_RX} 0 0 1 {},{} L{},{} L{},{} L{},{} A{STATE_RX},{STATE_RX} 0 0 1 {},{}" fill="{}"/><rect fill="none" height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/><line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
         fmt_f(x + STATE_RX),
         fmt_f(y),
         fmt_f(right - STATE_RX),
@@ -5015,15 +5117,15 @@ fn emit_root_state_cluster(
         fmt_f(y + STATE_RX),
         fmt_f(x + STATE_RX),
         fmt_f(y),
-        context.skin.state_fill,
+        style.fill,
         fmt_f(height),
-        context.skin.stroke,
-        context.skin.border_thickness,
+        style.stroke,
+        style.border_thickness,
         fmt_f(width),
         fmt_f(x),
         fmt_f(y),
-        context.skin.stroke,
-        context.skin.border_thickness,
+        style.stroke,
+        style.border_thickness,
         fmt_f(x),
         fmt_f(right),
         fmt_f(divider_y),
@@ -5050,9 +5152,9 @@ fn emit_root_state_cluster(
             y: y + title_baseline_offset,
             font_size: STATE_FONT_SIZE as u32,
             font_family: "sans-serif",
-            fill: &context.skin.text_color,
-            bold: false,
-            italic: false,
+            fill: &style.title.color,
+            bold: style.title.bold,
+            italic: style.title.italic,
             underline: false,
             skip_underline: false,
         },
@@ -6098,8 +6200,7 @@ pub fn render_with_oracle(
         }
         if let Some(bounds) = flat_painted_bounds {
             let export_pad = SVEK_RESULT_DIMENSION_PAD + CUCA_POSITIVE_AXIS_MARGIN;
-            let body_width =
-                svg_ensure_visible_dimension(bounds.max_x - bounds.min_x + export_pad);
+            let body_width = svg_ensure_visible_dimension(bounds.max_x - bounds.min_x + export_pad);
             let body_height =
                 svg_ensure_visible_dimension(title_h + bounds.max_y - bounds.min_y + export_pad);
             (positions, body_width, body_height, body_width, body_height)
@@ -11310,6 +11411,14 @@ CobaltDecision --> [*]
             .push(rustuml_parser::diagram::SkinParam {
                 key: "stateShadowing".into(),
                 value: "true".into(),
+            });
+        assert!(has_only_autonomous_layout_skinparams(&visual));
+        visual
+            .meta
+            .skinparams
+            .push(rustuml_parser::diagram::SkinParam {
+                key: "stateDiagonalCorner".into(),
+                value: "7".into(),
             });
         assert!(!has_only_autonomous_layout_skinparams(&visual));
     }
