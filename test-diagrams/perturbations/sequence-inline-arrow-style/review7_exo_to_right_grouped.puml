@@ -1,0 +1,11 @@
+@startuml
+participant "To Right Peer" as Peer
+participant "To Right Worker" as Worker
+group grouped to-right envelope
+  Peer -> Worker ++ : internal activation
+  Worker -->] : to-right boundary with a deliberately broad label
+  note right of Worker : right-side grouped note
+  deactivate Worker
+end
+Peer -> Worker : after to-right group
+@enduml

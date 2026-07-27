@@ -1,0 +1,16 @@
+@startuml
+participant "Frame Left" as Left
+participant "Frame Middle" as Middle
+participant "Frame Right" as Right
+group outer frame with a deliberately long title
+  Left -> Middle ++ : outer member
+  group inner frame
+    note right of Middle : inner side note challenges frame extent
+    Middle -> Right : inner ordinary member
+    Right -->] : inner right boundary member with a longer label
+  end
+  deactivate Middle
+end
+== shared envelope after nested frames ==
+Right --> Left : final internal control
+@enduml

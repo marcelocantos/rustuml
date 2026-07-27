@@ -1,0 +1,8 @@
+@startuml
+participant "Divider Left Worker" as Worker
+participant "Divider Left Peer" as Peer
+[--> Worker : left boundary element establishes the widest envelope by label length
+Worker -> Peer : compact internal message
+== divider must use final left-driven envelope ==
+Peer --> Worker : trailing divider control
+@enduml

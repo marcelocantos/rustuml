@@ -1,0 +1,12 @@
+@startuml
+participant "Initially Live Target" as Target
+participant "Reverse Pair Owner" as Owner
+participant "Reverse Pair Reader" as Reader
+activate Target
+Owner -> Owner : self owner for reversed filtered pair
+deactivate Target
+activate Target
+note right of Target : Java keeps the first same-ordinate variation
+Target -> Reader : reversed ordering depth probe
+Reader --> Owner : trailing control
+@enduml

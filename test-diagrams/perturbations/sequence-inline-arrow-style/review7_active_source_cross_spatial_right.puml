@@ -1,0 +1,12 @@
+@startuml
+participant "Western Active Source" as West
+participant "Central Sink" as Center
+participant "Eastern Sink" as East
+activate West
+activate West
+West \\--x East : dotted bottom half from nested left source
+West /-x Center : solid top half from nested left source
+deactivate West
+West \\-x East : thin bottom half from active left source
+deactivate West
+@enduml

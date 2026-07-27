@@ -1,0 +1,12 @@
+@startuml
+participant "Nested Observer" as Observer
+participant "Nested Worker" as Worker
+group outer ownership shell
+  group inner ownership shell
+    Observer -> Worker ++ : inner activation owner
+  end
+  deactivate Worker
+  Observer -> Worker : after inner end replacement
+end
+Worker --> Observer : nested boundary control
+@enduml

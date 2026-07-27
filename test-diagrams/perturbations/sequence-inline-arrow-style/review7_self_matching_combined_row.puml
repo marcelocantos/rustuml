@@ -1,0 +1,10 @@
+@startuml
+participant "Matching Self" as Self
+participant "Matching Peer" as Peer
+Self -> Self : self owner accepts matching lifecycle
+activate Self
+note over Self, Peer : first accepted type is activate
+deactivate Self
+Self -> Peer : after matching combined row
+Peer --> Self : return control
+@enduml

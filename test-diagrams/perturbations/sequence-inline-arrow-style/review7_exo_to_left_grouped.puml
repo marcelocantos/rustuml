@@ -1,0 +1,11 @@
+@startuml
+participant "To Left Worker" as Worker
+participant "To Left Peer" as Peer
+group grouped to-left envelope
+  Peer -> Worker ++ : internal activation
+  Worker -->[ : to-left boundary with a deliberately broad label
+  note left of Worker : left-side grouped note
+  deactivate Worker
+end
+Peer -> Worker : after to-left group
+@enduml

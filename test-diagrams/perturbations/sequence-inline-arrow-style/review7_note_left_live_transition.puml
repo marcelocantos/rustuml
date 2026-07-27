@@ -1,0 +1,10 @@
+@startuml
+participant "Left Note Peer" as Peer
+participant "Left Note Worker" as Worker
+Peer -> Worker ++ : open worker segment
+note left of Worker
+  left note spans an attached closing transition
+end note
+deactivate Worker
+Worker --> Peer : after left transition
+@enduml

@@ -1,0 +1,12 @@
+@startuml
+participant "Right Note Caller" as Caller
+participant "Right Note Worker" as Worker
+Caller -> Worker ++ : outer worker segment
+activate Worker
+note right of Worker
+  right note observes nested live segments
+end note
+deactivate Worker
+deactivate Worker
+Worker --> Caller : after nested transition
+@enduml

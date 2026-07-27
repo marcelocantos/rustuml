@@ -1,0 +1,10 @@
+@startuml
+participant "Left Boundary Worker" as Worker
+participant "Left Boundary Peer" as Peer
+activate Worker
+[--> Worker ++ : from-left nested activation with wide label
+note right of Worker : reads nested depth
+deactivate Worker
+deactivate Worker
+Worker -> Peer : after from-left depth
+@enduml

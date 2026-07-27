@@ -1,0 +1,11 @@
+@startuml
+participant "Filtered Target" as Target
+participant "Self Owner" as Owner
+participant "Downstream Reader" as Reader
+Owner -> Owner : self owner for filtered pair
+activate Target
+deactivate Target
+note right of Target : equal ordinate close precedes open
+Target -> Reader : live-segment ordering probe
+Reader --> Owner : trailing height control
+@enduml

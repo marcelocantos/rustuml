@@ -1,0 +1,11 @@
+@startuml
+participant "Copper Caller" as Caller
+participant "Indigo Callee" as Callee
+Caller -> Callee : owner before group start
+group owner-preserving shell
+activate Callee
+note right of Callee : lifecycle remains message-owned
+deactivate Callee
+end
+Callee --> Caller : after preserved owner
+@enduml

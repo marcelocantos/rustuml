@@ -1,0 +1,17 @@
+@startuml
+participant "Envelope Alpha" as Alpha
+participant "Envelope Beta" as Beta
+participant "Envelope Gamma" as Gamma
+group envelope parent
+  Alpha -> Beta ++ : establish live segment
+  group envelope child
+    note right of Beta : the longest nested side note determines a competing extent
+    ]--> Beta : right boundary competitor
+    Beta -> Gamma : child member
+  end
+  deactivate Beta
+end
+== divider consumes the resolved shared envelope ==
+Gamma -->[ : left boundary competitor after groups
+Alpha -> Gamma : final internal control
+@enduml
