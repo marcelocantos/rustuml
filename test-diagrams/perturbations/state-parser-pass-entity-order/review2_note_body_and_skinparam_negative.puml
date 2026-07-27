@@ -1,0 +1,17 @@
+@startuml
+skinparam state {
+  BackgroundColor white
+  ' notephantom : skinparam text must not create a state
+}
+state Visible903
+note right of Visible903
+notephantom : note body text must not create a state
+state Phantom903 {
+  PhantomLeaf903 : also note body text
+}
+end note
+Visible903 --> Real903
+state Wrapper903 {
+  Real903 : late real nested state
+}
+@enduml

@@ -1,0 +1,12 @@
+@startuml
+state Visible904
+note "floating note control" as NoteAlias904
+note as Floating904
+notestate : text inside a floating note must stay note text
+end note
+Visible904 --> notestate : transition before nested declaration
+state Container904 {
+  notestate : valid state code starts with note but is not note command
+  [*] --> notestate
+}
+@enduml

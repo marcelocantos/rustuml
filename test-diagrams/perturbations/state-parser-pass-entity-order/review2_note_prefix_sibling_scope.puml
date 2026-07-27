@@ -1,0 +1,16 @@
+@startuml
+Start902 --> noteworthy : enters the sole nested noteworthy state
+state Outer902 {
+  state Left902 {
+    notary : left description creates a sibling-local state
+    [*] --> notary
+  }
+  state Right902 {
+    noteworthy : right description creates the reused endpoint
+    [*] --> noteworthy
+    noteworthy --> Done902
+  }
+}
+notary --> Tail902 : ordinary sibling short-name reuse stays pass-two ordered
+state Tail902
+@enduml

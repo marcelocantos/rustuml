@@ -1,0 +1,14 @@
+@startuml
+Entry901 --> note : predeclared bare keyword code
+Entry901 --> note2 : predeclared numbered code
+state Shell901 {
+  note: bare note word is a state field here
+  note2 : numbered note prefix is also a state field
+  [*] --> note
+  note --> note2
+  note2 --> [*]
+}
+note2 --> Exit901 : leaves nested state
+state Entry901
+state Exit901
+@enduml

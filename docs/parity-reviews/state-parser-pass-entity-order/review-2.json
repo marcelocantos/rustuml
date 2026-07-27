@@ -1,0 +1,237 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-parser-pass-entity-order",
+  "reviewer": {
+    "task_id": "codex-desktop-task-independent-checker-state-parser-pass-entity-order-review-2",
+    "model": "OpenAI GPT-5 Codex"
+  },
+  "account_commit": "cfeb6f0ae3ffda8099c0e5d131686589cec3d139",
+  "prior_account_commits": [
+    "b0070b4c2f355b7d450d8730f427bf932a82844c",
+    "78eda66dcf96e0d724a28509363f7abaf73558a2",
+    "f787292b63f820717e3cf01f00832c01eb2487fd"
+  ],
+  "implementation_commit": "906820be019dd4df92109a687c4603a5dba06abc",
+  "implementation_parent": "12760c95268f0ea868719509772ab4baa446711f",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar": {
+    "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+  },
+  "snapshot": "/private/tmp/rustuml-state-parser-906820be.zBPX5r",
+  "commands": [
+    "bullseye_startup_context cwd=/Users/marcelo/work/github.com/marcelocantos/rustuml recent_days=14",
+    "bullseye_frontier cwd=/Users/marcelo/work/github.com/marcelocantos/rustuml",
+    "cat /Users/marcelo/.claude/rust.md",
+    "git rev-parse 906820be 906820be^ cfeb6f0a b0070b4c 78eda66d f787292b",
+    "git merge-base --is-ancestor cfeb6f0a 906820be",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/command/PSystemCommandFactory.java",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/statediagram/StateDiagram.java",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/statediagram/command/CommandAddField.java",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/statediagram/command/CommandFactoryNoteOnEntity.java",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/statediagram/command/CommandFactoryNoteOnLink.java",
+    "git show --no-ext-diff --unified=80 906820be -- crates/rustuml-parser/src/parse/state.rs",
+    "git diff --check 906820be^ 906820be",
+    "git diff 906820be^ 906820be -- crates/rustuml-parser/src/parse/state.rs | rg 'include_str|include_bytes|golden|fixture|noteworthy|source_line|data-qualified-name|starts_with\\(\"note\"\\)|GEOM_EPS'",
+    "JAVA_TOOL_OPTIONS=-Djava.awt.headless=true java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/state-parser-pass-entity-order/review2_*.puml",
+    "xmllint --noout test-diagrams/perturbations/state-parser-pass-entity-order/review2_*.svg",
+    "rg -n -i 'syntax error|error line|plantuml.*error|Welcome to PlantUML|NoSuchElementException|An error has occured|Some diagram description contains errors|<title>Error' test-diagrams/perturbations/state-parser-pass-entity-order/review2_*.svg",
+    "ruby uniqueness check over all test-diagrams/**/*.puml plus the four review2 sources",
+    "git archive --format=tar --output=/private/tmp/rustuml-state-parser-906820be.tar 906820be",
+    "tar -xf /private/tmp/rustuml-state-parser-906820be.tar -C /private/tmp/rustuml-state-parser-906820be.zBPX5r",
+    "cp -R /Users/marcelo/work/github.com/marcelocantos/rustuml/test-diagrams/golden/. /private/tmp/rustuml-state-parser-906820be.zBPX5r/test-diagrams/golden/",
+    "copy the four fresh review2 pairs into the immutable snapshot",
+    "CARGO_TARGET_DIR=/Users/marcelo/work/github.com/marcelocantos/rustuml/target cargo build -p rustuml-oracle --example diff_one --release",
+    "CARGO_TARGET_DIR=/Users/marcelo/work/github.com/marcelocantos/rustuml/target cargo test -p rustuml-parser --release",
+    "cargo fmt --check",
+    "CARGO_TARGET_DIR=/Users/marcelo/work/github.com/marcelocantos/rustuml/target cargo clippy -p rustuml-parser --all-targets --release -- -D warnings",
+    "CARGO_TARGET_DIR=/Users/marcelo/work/github.com/marcelocantos/rustuml/target cargo test -p rustuml-oracle --test golden_no_oracle --release -- --nocapture",
+    "CARGO_TARGET_DIR=/Users/marcelo/work/github.com/marcelocantos/rustuml/target cargo test -p rustuml-oracle --test parity_perturbations --release -- --nocapture",
+    "run diff_one --no-oracle for all state-parser-pass-entity-order perturbations and classify by output text, not exit status",
+    "run diff_one --no-oracle --print-rust for note-boundary review2 controls and the prior noteworthy counterexample",
+    "copy docs/parity-reviews/state-parser-pass-entity-order/review-2.json into the exact snapshot",
+    "CARGO_TARGET_DIR=/Users/marcelo/work/github.com/marcelocantos/rustuml/target cargo test -p rustuml-oracle --test harness_guards --release -- --nocapture"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/state-parser-pass-entity-order/renamed_short_collision.puml",
+      "golden": "test-diagrams/perturbations/state-parser-pass-entity-order/renamed_short_collision.svg",
+      "axes": [
+        "preserved maker fixture",
+        "transition before nested explicit declaration",
+        "short renamed labels"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-parser-pass-entity-order/short_description_collision.puml",
+      "golden": "test-diagrams/perturbations/state-parser-pass-entity-order/short_description_collision.svg",
+      "axes": [
+        "preserved maker fixture",
+        "transition before nested description declaration",
+        "short renamed labels"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-parser-pass-entity-order/renamed_late_nested_declarations.puml",
+      "golden": "test-diagrams/perturbations/state-parser-pass-entity-order/renamed_late_nested_declarations.svg",
+      "axes": [
+        "preserved maker fixture",
+        "long renamed labels",
+        "late nested explicit declaration"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-parser-pass-entity-order/description_sibling_concurrent_controls.puml",
+      "golden": "test-diagrams/perturbations/state-parser-pass-entity-order/description_sibling_concurrent_controls.svg",
+      "axes": [
+        "preserved maker fixture",
+        "long renamed labels",
+        "description declaration",
+        "ordinary sibling reuse and concurrent distinct-name control"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-parser-pass-entity-order/root_quark_nested_reuse_control.puml",
+      "golden": "test-diagrams/perturbations/state-parser-pass-entity-order/root_quark_nested_reuse_control.svg",
+      "axes": [
+        "preserved maker fixture",
+        "root quark reused from nested declaration",
+        "no reparenting"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-parser-pass-entity-order/review_late_nested_count_topology.puml",
+      "golden": "test-diagrams/perturbations/state-parser-pass-entity-order/review_late_nested_count_topology.svg",
+      "axes": [
+        "fresh transition before later nested declaration",
+        "renamed labels",
+        "changed child count",
+        "fanout topology"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-parser-pass-entity-order/review_late_description_order.puml",
+      "golden": "test-diagrams/perturbations/state-parser-pass-entity-order/review_late_description_order.svg",
+      "axes": [
+        "fresh transition before later nested description",
+        "multiple description rows",
+        "renamed entry and exit states"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-parser-pass-entity-order/review_pseudostate_declaration_order.puml",
+      "golden": "test-diagrams/perturbations/state-parser-pass-entity-order/review_pseudostate_declaration_order.svg",
+      "axes": [
+        "fresh source use before declaration",
+        "choice fork and join kinds",
+        "declaration reordering",
+        "changed link count"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-parser-pass-entity-order/review_root_quark_no_reparent.puml",
+      "golden": "test-diagrams/perturbations/state-parser-pass-entity-order/review_root_quark_no_reparent.svg",
+      "axes": [
+        "fresh root quark reused by nested composite declaration",
+        "no reparenting",
+        "changed child count",
+        "fanout topology"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-parser-pass-entity-order/review_sibling_reuse_concurrent_control.puml",
+      "golden": "test-diagrams/perturbations/state-parser-pass-entity-order/review_sibling_reuse_concurrent_control.svg",
+      "axes": [
+        "fresh transition-created ordinary sibling reuse",
+        "valid concurrent regions with distinct names",
+        "changed nesting and path lengths"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-parser-pass-entity-order/review_note_skinparam_body_control.puml",
+      "golden": "test-diagrams/perturbations/state-parser-pass-entity-order/review_note_skinparam_body_control.svg",
+      "axes": [
+        "fresh state-like multiline note text",
+        "state-like commented skinparam block text",
+        "negative phantom-state control"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-parser-pass-entity-order/review_note_prefix_description_collision.puml",
+      "golden": "test-diagrams/perturbations/state-parser-pass-entity-order/review_note_prefix_description_collision.svg",
+      "axes": [
+        "fresh valid state identifier beginning with note",
+        "transition before later nested description declaration",
+        "command-recognition boundary"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-parser-pass-entity-order/review2_note_keyword_code_boundary.puml",
+      "golden": "test-diagrams/perturbations/state-parser-pass-entity-order/review2_note_keyword_code_boundary.svg",
+      "axes": [
+        "fresh bare note and numbered note-prefix state codes",
+        "transition before later nested description declarations",
+        "link reuse after composite scope exit"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-parser-pass-entity-order/review2_note_prefix_sibling_scope.puml",
+      "golden": "test-diagrams/perturbations/state-parser-pass-entity-order/review2_note_prefix_sibling_scope.svg",
+      "axes": [
+        "fresh non-note prefixes in sibling composites",
+        "description-created states",
+        "ordinary sibling short-name reuse"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-parser-pass-entity-order/review2_note_body_and_skinparam_negative.puml",
+      "golden": "test-diagrams/perturbations/state-parser-pass-entity-order/review2_note_body_and_skinparam_negative.svg",
+      "axes": [
+        "fresh multiline note body negative control",
+        "skinparam body negative control",
+        "late real nested declaration"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-parser-pass-entity-order/review2_note_command_boundary_controls.puml",
+      "golden": "test-diagrams/perturbations/state-parser-pass-entity-order/review2_note_command_boundary_controls.svg",
+      "axes": [
+        "fresh floating note command control",
+        "note-body negative control",
+        "valid state code beginning with note"
+      ],
+      "result": "fail"
+    }
+  ],
+  "findings": [
+    "The immutable implementation under review is 906820be019dd4df92109a687c4603a5dba06abc. The amended account cfeb6f0ae3ffda8099c0e5d131686589cec3d139 and the earlier account commits listed above are ancestors of the implementation. Revision-sensitive checks used /private/tmp/rustuml-state-parser-906820be.zBPX5r, created by git archive from exactly 906820be and populated only with the tracked golden corpus, the four review2 held-out pairs, and this review file.",
+    "The PlantUML checkout is exactly 71806a23780b04a5ccde2f8ceb5121edad5eb711 and the pinned jar SHA-256 is c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45. Java source supports the corrected note-boundary account: CommandFactoryNote, CommandFactoryNoteOnEntity, and CommandFactoryNoteOnLink require the literal note keyword followed by whitespace and a note form, while CommandAddField is ParserPass.ONE and accepts legal state codes followed by a colon, including codes such as note, note2, noteworthy, notary, and notestate.",
+    "Static inspection of 906820be found no production golden-data reads, include_str/include_bytes fixture embedding, fixture names, label-text conditionals, per-count ladders, coordinate-keyed SVG surgery, comparator changes, guard changes, or new layout constants. The only notable fixture word in the patch is the unit-test label noteworthy. The production change replaces the broad trimmed.starts_with(\"note\") skip with a keyword-boundary check.",
+    "The four review2 PlantUML sources are valid under the pinned Java jar, their SVGs are well-formed under xmllint, and the generated SVGs contain no PlantUML error marker. Their source hashes are unique against the existing golden and perturbation corpus and one another.",
+    "The corrective note-boundary subclaim holds at the Rust data-model level. --print-rust shows review_note_prefix_description_collision now contains data-qualified-name=\"O6.noteworthy\" with transition ids A6-to-noteworthy and noteworthy-to-Z6; review2_note_keyword_code_boundary contains Shell901.note and Shell901.note2; review2_note_command_boundary_controls contains Container904.notestate. These are the expected nested state identities rather than note-command skips.",
+    "The exact no-oracle perturbation gate for this mechanism is still red at 906820be. Classifying diff_one output text, not process exit status, gives 4 structurally equivalent pairs and 12 divergent pairs across the 16 state-parser-pass-entity-order perturbations. The passing pairs are renamed_short_collision, short_description_collision, review_pseudostate_declaration_order, and review_note_skinparam_body_control. All four new review2 held-outs remain divergent.",
+    "The direct note-prefix identity regression from the first review is fixed, but its SVG still is not structurally equivalent to Java because the remaining renderer/layout output differs. The same is true for the new note-boundary controls: the state identities are now correctly nested, while exact comparison still reports SVG structural differences. Under the T14 held-out perturbation rule, a red no-oracle perturbation set rejects the change even when the parser identity subclaim is improved.",
+    "At exact 906820be, git diff --check passes. cargo build -p rustuml-oracle --example diff_one --release passes. cargo test -p rustuml-parser --release passes 509 parser unit tests, 19 error-path integration tests, and parser doctests. cargo fmt --check passes. cargo clippy -p rustuml-parser --all-targets --release -- -D warnings passes.",
+    "At exact 906820be, golden_no_oracle passes its ratchet at 11056/11251 eligible pairs with state 886/901, sequence 1411/1411, edge-cases 712/777, rendering 80/98, and skinparam 401/410. parity_perturbations fails globally, with visible failures in unrelated mechanisms and this mechanism's own exact divergences.",
+    "With this review file copied into the exact snapshot, harness_guards reaches the review completeness gate and reports the expected latest-review failure for state-parser-pass-entity-order: the latest checker review is rejected and contains failing perturbation entries. The mechanical frozen gates remain green in the prior run context: comparator constants, decimal literal ratchet, golden-data embedding, error-golden census, and path traversal checks did not flag this review.",
+    "Verdict is rejected for T14 acceptance of state-parser-pass-entity-order at 906820be. The corrective commit fixes the in-scope note keyword boundary in the parser model, but the mechanism still lacks a green no-oracle held-out perturbation set, so it cannot be accepted under the current gates."
+  ],
+  "verdict": "rejected"
+}
