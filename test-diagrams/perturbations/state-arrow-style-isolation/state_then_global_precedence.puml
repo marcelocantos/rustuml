@@ -1,0 +1,11 @@
+@startuml
+skinparam stateArrowColor #00838F
+skinparam ArrowColor #D84315
+state "Indigo Queued 257" as IndigoQueued257
+state "Amber Active 263" as AmberActive263
+state "Quartz Done 269" as QuartzDone269
+[*] --> IndigoQueued257
+IndigoQueued257 --> AmberActive263 : dispatch
+AmberActive263 --> QuartzDone269 : complete
+QuartzDone269 --> [*]
+@enduml

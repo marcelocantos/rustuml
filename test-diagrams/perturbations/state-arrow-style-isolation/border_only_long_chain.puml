@@ -1,0 +1,14 @@
+@startuml
+skinparam stateBorderColor #6A1B9A
+state "Quartz Waiting 211" as QuartzWaiting211
+state "Copper Primed 223" as CopperPrimed223
+state "Indigo Running 227" as IndigoRunning227
+state "Amber Cooling 229" as AmberCooling229
+state "Violet Complete 233" as VioletComplete233
+[*] --> QuartzWaiting211
+QuartzWaiting211 --> CopperPrimed223 : arm
+CopperPrimed223 --> IndigoRunning227 : launch
+IndigoRunning227 --> AmberCooling229 : settle
+AmberCooling229 --> VioletComplete233 : finish
+VioletComplete233 --> [*]
+@enduml

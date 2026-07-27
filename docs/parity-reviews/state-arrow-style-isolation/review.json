@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-arrow-style-isolation",
+  "reviewer": {
+    "task_id": "codex-desktop-task-019ee369-54e2-7203-afce-ddde7bfe1723-state-arrow-style-isolation-checker",
+    "model": "OpenAI GPT-5 Codex"
+  },
+  "account_commit": "c4ec5216eead4c32624badea2b6a62cdb3089461",
+  "implementation_commit": "ad832e2c68444330a67c578885a44d64cb28cbfa",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "git merge-base --is-ancestor c4ec5216eead4c32624badea2b6a62cdb3089461 ad832e2c68444330a67c578885a44d64cb28cbfa",
+    "git diff --exit-code c4ec5216eead4c32624badea2b6a62cdb3089461 ad832e2c68444330a67c578885a44d64cb28cbfa -- docs/parity-reviews/state-arrow-style-isolation/account.json",
+    "git diff c4ec5216eead4c32624badea2b6a62cdb3089461..ad832e2c68444330a67c578885a44d64cb28cbfa -- crates/rustuml-render/src/state.rs test-diagrams/no_oracle_baseline.txt",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "git blame -L 149,153 71806a23780b04a5ccde2f8ceb5121edad5eb711 -- src/main/java/net/sourceforge/plantuml/style/FromSkinparamToStyle.java",
+    "git blame -L 204,208 71806a23780b04a5ccde2f8ceb5121edad5eb711 -- src/main/java/net/sourceforge/plantuml/style/FromSkinparamToStyle.java",
+    "git blame -L 211,218 71806a23780b04a5ccde2f8ceb5121edad5eb711 -- src/main/java/net/sourceforge/plantuml/skin/SkinParam.java",
+    "git blame -L 259,281 71806a23780b04a5ccde2f8ceb5121edad5eb711 -- src/main/java/net/sourceforge/plantuml/skin/SkinParam.java",
+    "git blame -L 116,122 71806a23780b04a5ccde2f8ceb5121edad5eb711 -- src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
+    "git blame -L 810,815 71806a23780b04a5ccde2f8ceb5121edad5eb711 -- src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+    "git blame -L 867,886 71806a23780b04a5ccde2f8ceb5121edad5eb711 -- src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+    "git blame -L 1,19 71806a23780b04a5ccde2f8ceb5121edad5eb711 -- src/main/resources/skin/plantuml.skin",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/state-arrow-style-isolation/border_only_long_chain.puml test-diagrams/perturbations/state-arrow-style-isolation/global_then_state_precedence.puml test-diagrams/perturbations/state-arrow-style-isolation/state_then_global_precedence.puml test-diagrams/perturbations/state-arrow-style-isolation/per_link_override_after_state.puml",
+    "xmllint --noout test-diagrams/perturbations/state-arrow-style-isolation/border_only_long_chain.svg test-diagrams/perturbations/state-arrow-style-isolation/global_then_state_precedence.svg test-diagrams/perturbations/state-arrow-style-isolation/state_then_global_precedence.svg test-diagrams/perturbations/state-arrow-style-isolation/per_link_override_after_state.svg",
+    "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"' test-diagrams/perturbations/state-arrow-style-isolation/border_only_long_chain.svg test-diagrams/perturbations/state-arrow-style-isolation/global_then_state_precedence.svg test-diagrams/perturbations/state-arrow-style-isolation/state_then_global_precedence.svg test-diagrams/perturbations/state-arrow-style-isolation/per_link_override_after_state.svg",
+    "ruby -rdigest -e 'verify the four fresh sources are unique against all 12550 test-diagrams/golden/**/*.puml sources and one another'",
+    "git archive ad832e2c68444330a67c578885a44d64cb28cbfa | tar -x -C /private/tmp/rustuml-review-ad832-arrow-20260727",
+    "cp -R test-diagrams/golden/. /private/tmp/rustuml-review-ad832-arrow-20260727/test-diagrams/golden/",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-review-ad832-arrow-target cargo test -p rustuml-oracle --test parity_perturbations --release -- --nocapture",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-review-ad832-arrow-target cargo test -p rustuml-oracle --test golden_no_oracle --release -- --nocapture",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-review-ad832-arrow-target cargo test -p rustuml-render --lib --release arrow -- --nocapture",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-review-ad832-arrow-target cargo clippy --workspace --all-targets --release -- -D warnings",
+    "git diff --check ad832e2c68444330a67c578885a44d64cb28cbfa^ ad832e2c68444330a67c578885a44d64cb28cbfa",
+    "git show --format= ad832e2c68444330a67c578885a44d64cb28cbfa -- crates/rustuml-render/src/state.rs | rg -n 'test-diagrams|golden|include_str!|include_bytes!|\\.puml|\\.svg|CopperDormant103|VioletReady107|AmberRunning109|QuartzDone113|renamed_border_arrow_override_matrix'",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-review-ad832-arrow-target cargo test -p rustuml-oracle --test harness_guards --release no_golden_data_embedded_in_shipping_crates -- --exact --nocapture",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-review-ad832-arrow-target cargo test -p rustuml-oracle --test harness_guards --release error_golden_census_is_frozen -- --exact --nocapture",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-review-ad832-arrow-target cargo test -p rustuml-oracle --test harness_guards --release decimal_literal_ratchet -- --exact --nocapture",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-review-ad832-arrow-target cargo test -p rustuml-oracle --test harness_guards --release comparator_constants_frozen -- --exact --nocapture",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-review-ad832-arrow-target cargo test -p rustuml-oracle --test harness_guards --release parity_review_paths_reject_traversal -- --exact --nocapture",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-review-ad832-arrow-target cargo test -p rustuml-oracle --test harness_guards --release -- --nocapture"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/state-arrow-style-isolation/renamed_border_arrow_override_matrix.puml",
+      "golden": "test-diagrams/perturbations/state-arrow-style-isolation/renamed_border_arrow_override_matrix.svg",
+      "axes": [
+        "renamed four-state chain",
+        "independent state border and global arrow colors",
+        "per-link color override"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arrow-style-isolation/border_only_long_chain.puml",
+      "golden": "test-diagrams/perturbations/state-arrow-style-isolation/border_only_long_chain.svg",
+      "axes": [
+        "stateBorderColor alone",
+        "renamed five-state chain",
+        "default root arrow color fallback"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arrow-style-isolation/global_then_state_precedence.puml",
+      "golden": "test-diagrams/perturbations/state-arrow-style-isolation/global_then_state_precedence.svg",
+      "axes": [
+        "global ArrowColor declared first",
+        "stateArrowColor declared last",
+        "renamed three-state chain"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arrow-style-isolation/state_then_global_precedence.puml",
+      "golden": "test-diagrams/perturbations/state-arrow-style-isolation/state_then_global_precedence.svg",
+      "axes": [
+        "stateArrowColor declared first",
+        "global ArrowColor declared last",
+        "renamed three-state chain"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arrow-style-isolation/per_link_override_after_state.puml",
+      "golden": "test-diagrams/perturbations/state-arrow-style-isolation/per_link_override_after_state.svg",
+      "axes": [
+        "state border plus global and state arrow declarations",
+        "per-link color and dashed style override",
+        "renamed four-state chain"
+      ],
+      "result": "pass"
+    }
+  ],
+  "findings": [
+    "The durable account c4ec5216eead4c32624badea2b6a62cdb3089461 is an ancestor of immutable implementation ad832e2c68444330a67c578885a44d64cb28cbfa, and the account is byte-unchanged between those commits. The implementation changes the state renderer, the no-oracle baseline, and one implementation-authored perturbation pair.",
+    "The account is correct that state borders and transition arrows are separate Java style channels. FromSkinparamToStyle maps stateBorderColor to LineColor on SName.state and maps arrowColor to LineColor on SName.arrow. GraphvizImageBuilder.getDefaultStyleDefinitionArrow and SvekEdge.getDefaultStyleDefinition independently request root.element.stateDiagram.arrow, so an explicit state border color cannot enter either arrow signature. The fresh border-only five-state chain passes with #6A1B9A state borders and the default root #181818 transition color.",
+    "The account is incorrect that stateArrowColor is unconditionally more specific than global ArrowColor. SkinParam.cleanForKeySlow applies patternCleanArrow, whose pattern includes state, and rewrites both stateArrowColor and ArrowColor to the same arrowColor key before FromSkinparamToStyle conversion. SkinParam.setParam applies each declaration in source order, and StyleBuilder overwrites an existing value on that same arrow signature. Therefore the later declaration wins in Java regardless of which spelling it uses.",
+    "Rust StateSkin.from_diagram searches each original key independently from the end, then always chooses stateArrowColor before ArrowColor. The new opposite-order counterexample declares stateArrowColor #00838F followed by ArrowColor #D84315. Java paints all four shafts and arrowheads #D84315; immutable Rust paints the same geometry #00838F. The strict comparator reports eight color-only attribute mismatches, directly isolating the precedence error.",
+    "The reverse order control passes: ArrowColor #D84315 followed by stateArrowColor #00838F produces #00838F in both implementations. This also explains why the focused unit global_arrow_color_cascades_below_state_override passes while failing to test Java's aliasing semantics; it covers only that favorable declaration order.",
+    "Per-link precedence is correctly preserved. SvekEdge first builds shaft and head colors from the merged arrow Rainbow, then replaces both from Link colors or specific color. Rust transition_style.color is likewise selected after the diagram-level arrow color. The fresh dashed #8E24AA local override passes while surrounding transitions inherit #EF6C00.",
+    "All four fresh Java SVGs are well-formed XML, contain no PlantUML error marker, and their sources are unique against 12550 golden sources and one another. A theme-specific heldout was not added because current Rust theme preprocessing drops non-root style scopes, which would mix this arrow-fallback claim with unrelated theme-style parity; the default root fallback is exercised independently by border_only_long_chain.",
+    "At exact immutable ad832e2c in an archive with the golden submodule populated, golden_no_oracle is green at 11036/11251 eligible pairs, including skinparam 400/410 and state 871/901. The focused arrow test filter passes 35/35, and workspace all-target release clippy passes with warnings denied.",
+    "Full parity_perturbations at exact immutable ad832e2c fails on this mechanism's state_then_global_precedence plus three already-preserved state-recursive-group-simplification counterexamples: autarky_internal_descendant_control, autarky_outside_grandchild_control, and mixed_root_plain_ordinary_concurrent. Those three failures are pre-existing rejected recursive-group evidence and are not attributed to arrow style isolation.",
+    "Static inspection found no shipping golden reads, fixture labels in production logic, per-chain-count ladders, coordinate-keyed SVG surgery, or new unexplained layout constants. diff --check passes. The five mechanical/frozen harness guards pass independently; the aggregate review-record guard is expected to reject this latest failing checker record and separately reports other preserved rejected mechanisms.",
+    "Verdict is rejected. A correction must model stateArrowColor and ArrowColor as source-ordered aliases of the same arrow style property while retaining border isolation, default root fallback, and per-link final override. This counterexample must remain executable and pass before a later independent review can accept the mechanism."
+  ],
+  "verdict": "rejected"
+}

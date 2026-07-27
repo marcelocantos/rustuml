@@ -1,0 +1,14 @@
+@startuml
+skinparam stateBorderColor #3949AB
+skinparam ArrowColor #00897B
+skinparam stateArrowColor #EF6C00
+state "Copper Staged 271" as CopperStaged271
+state "Violet Running 277" as VioletRunning277
+state "Quartz Held 281" as QuartzHeld281
+state "Amber Finished 283" as AmberFinished283
+[*] --> CopperStaged271
+CopperStaged271 --> VioletRunning277 : inherited
+VioletRunning277 -[#8E24AA,dashed]-> QuartzHeld281 : local
+QuartzHeld281 --> AmberFinished283 : inherited again
+AmberFinished283 --> [*]
+@enduml
