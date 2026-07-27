@@ -1,0 +1,21 @@
+@startuml
+state UpperNode {
+  state ui <<entryPoint>>
+  state ux <<exitPoint>>
+  state UpperCore
+  ui --> UpperCore
+  UpperCore --> ux
+}
+
+state LowerNode {
+  state li <<entryPoint>>
+  state lx <<exitPoint>>
+  state LowerCore
+  li --> LowerCore
+  LowerCore --> lx
+}
+
+[*] --> LowerNode
+LowerNode -up-> UpperNode
+UpperNode --> [*]
+@enduml

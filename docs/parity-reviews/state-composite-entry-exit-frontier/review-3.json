@@ -1,0 +1,171 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-composite-entry-exit-frontier",
+  "reviewer": {
+    "task_id": "codex-desktop-independent-checker-round-3-2026-07-27",
+    "model": "GPT-5 Codex"
+  },
+  "account_commit": "1b6ef8330b8b10b494de8d832fe11ecca5b44534",
+  "implementation_commit": "2200a1083dba30576b91553d9f3187a57b81965b",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "git status --short --branch",
+    "git rev-parse HEAD",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "git show 1b6ef8330b8b10b494de8d832fe11ecca5b44534:docs/parity-reviews/state-composite-entry-exit-frontier/account.json",
+    "git show --format=fuller --no-ext-diff --no-renames 2200a1083dba30576b91553d9f3187a57b81965b --",
+    "cargo test --test parity_perturbations --release",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/state-composite-entry-exit-frontier/four_groups_parallel_projection_order.puml test-diagrams/perturbations/state-composite-entry-exit-frontier/scoped_projection_reuse.puml test-diagrams/perturbations/state-composite-entry-exit-frontier/directional_left_up_groups.puml test-diagrams/perturbations/state-composite-entry-exit-frontier/reversed_parallel_group_links.puml",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/state-composite-entry-exit-frontier/explicit_left_group_link_minimal.puml test-diagrams/perturbations/state-composite-entry-exit-frontier/explicit_up_group_link_minimal.puml test-diagrams/perturbations/state-composite-entry-exit-frontier/reversed_group_link_minimal.puml",
+    "rg -n \"Syntax Error|PlantUML.*Error|Error line|class=\\\"message\\\"\" test-diagrams/perturbations/state-composite-entry-exit-frontier/directional_left_up_groups.svg test-diagrams/perturbations/state-composite-entry-exit-frontier/explicit_left_group_link_minimal.svg test-diagrams/perturbations/state-composite-entry-exit-frontier/explicit_up_group_link_minimal.svg test-diagrams/perturbations/state-composite-entry-exit-frontier/four_groups_parallel_projection_order.svg test-diagrams/perturbations/state-composite-entry-exit-frontier/reversed_group_link_minimal.svg test-diagrams/perturbations/state-composite-entry-exit-frontier/reversed_parallel_group_links.svg test-diagrams/perturbations/state-composite-entry-exit-frontier/scoped_projection_reuse.svg",
+    "xmllint --noout test-diagrams/perturbations/state-composite-entry-exit-frontier/directional_left_up_groups.svg test-diagrams/perturbations/state-composite-entry-exit-frontier/explicit_left_group_link_minimal.svg test-diagrams/perturbations/state-composite-entry-exit-frontier/explicit_up_group_link_minimal.svg test-diagrams/perturbations/state-composite-entry-exit-frontier/four_groups_parallel_projection_order.svg test-diagrams/perturbations/state-composite-entry-exit-frontier/reversed_group_link_minimal.svg test-diagrams/perturbations/state-composite-entry-exit-frontier/reversed_parallel_group_links.svg test-diagrams/perturbations/state-composite-entry-exit-frontier/scoped_projection_reuse.svg",
+    "cargo test --test parity_perturbations --release > /private/tmp/state-frontier-review-3-parity.log 2>&1",
+    "rg -n \"^  test-diagrams/perturbations/state-composite-entry-exit-frontier/.*\\.puml:|test result:\" /private/tmp/state-frontier-review-3-parity.log",
+    "rg -n \"DeltaPack|GammaPack|CedarArc|AspenArc|NorthCell|RubyCell|LeftNode|UpperNode|FirstNode\" crates --glob '*.rs'",
+    "cargo test --test harness_guards --release parity_review_records_are_complete -- --nocapture"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/state-composite-entry-exit-frontier/dual_composite_basic_ports.puml",
+      "golden": "test-diagrams/perturbations/state-composite-entry-exit-frontier/dual_composite_basic_ports.svg",
+      "axes": [
+        "topology/cardinality",
+        "label variation"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-composite-entry-exit-frontier/forward_referenced_composite_order.puml",
+      "golden": "test-diagrams/perturbations/state-composite-entry-exit-frontier/forward_referenced_composite_order.svg",
+      "axes": [
+        "three root composites",
+        "composite forward references",
+        "declaration order",
+        "root unpackaged leaves"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-composite-entry-exit-frontier/reordered_basic_ports.puml",
+      "golden": "test-diagrams/perturbations/state-composite-entry-exit-frontier/reordered_basic_ports.svg",
+      "axes": [
+        "declaration order",
+        "label variation"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-composite-entry-exit-frontier/same_container_port_link.puml",
+      "golden": "test-diagrams/perturbations/state-composite-entry-exit-frontier/same_container_port_link.svg",
+      "axes": [
+        "topology/cardinality",
+        "same-container border-point constraint",
+        "label variation"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-composite-entry-exit-frontier/triple_composites_root_leaf_interleave.puml",
+      "golden": "test-diagrams/perturbations/state-composite-entry-exit-frontier/triple_composites_root_leaf_interleave.svg",
+      "axes": [
+        "three root composites",
+        "root unpackaged leaves before/between/after declarations",
+        "declaration order versus transition order"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-composite-entry-exit-frontier/triple_composites_scoped_pseudos.puml",
+      "golden": "test-diagrams/perturbations/state-composite-entry-exit-frontier/triple_composites_scoped_pseudos.svg",
+      "axes": [
+        "three root composites",
+        "scoped start/end pseudostates",
+        "projection-cluster solve timing"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-composite-entry-exit-frontier/four_groups_parallel_projection_order.puml",
+      "golden": "test-diagrams/perturbations/state-composite-entry-exit-frontier/four_groups_parallel_projection_order.svg",
+      "axes": [
+        "four declaration-ordered root composites",
+        "forward references",
+        "parallel group links",
+        "link insertion order versus declaration order",
+        "root leaves before/between/after groups"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-composite-entry-exit-frontier/scoped_projection_reuse.puml",
+      "golden": "test-diagrams/perturbations/state-composite-entry-exit-frontier/scoped_projection_reuse.svg",
+      "axes": [
+        "three root composites",
+        "scoped start/end pseudostates",
+        "one cluster selected by multiple links",
+        "stateful projection promotion",
+        "root leaves"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-composite-entry-exit-frontier/directional_left_up_groups.puml",
+      "golden": "test-diagrams/perturbations/state-composite-entry-exit-frontier/directional_left_up_groups.svg",
+      "axes": [
+        "three root composites",
+        "explicit left and up group links",
+        "basic entry/exit ports"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-composite-entry-exit-frontier/explicit_left_group_link_minimal.puml",
+      "golden": "test-diagrams/perturbations/state-composite-entry-exit-frontier/explicit_left_group_link_minimal.svg",
+      "axes": [
+        "minimal explicit left group link",
+        "two basic-port root composites"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-composite-entry-exit-frontier/explicit_up_group_link_minimal.puml",
+      "golden": "test-diagrams/perturbations/state-composite-entry-exit-frontier/explicit_up_group_link_minimal.svg",
+      "axes": [
+        "minimal explicit up group link",
+        "two basic-port root composites"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-composite-entry-exit-frontier/reversed_group_link_minimal.puml",
+      "golden": "test-diagrams/perturbations/state-composite-entry-exit-frontier/reversed_group_link_minimal.svg",
+      "axes": [
+        "minimal reversed group link",
+        "two basic-port root composites"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-composite-entry-exit-frontier/reversed_parallel_group_links.puml",
+      "golden": "test-diagrams/perturbations/state-composite-entry-exit-frontier/reversed_parallel_group_links.svg",
+      "axes": [
+        "parallel undirected endpoint bundle",
+        "mixed forward and reversed links",
+        "repeated group links"
+      ],
+      "result": "fail"
+    }
+  ],
+  "findings": [
+    "The Rust workspace HEAD was exactly 2200a1083dba30576b91553d9f3187a57b81965b, the mechanism account was read from exactly 1b6ef8330b8b10b494de8d832fe11ecca5b44534, and the Java checkout was exactly 71806a23780b04a5ccde2f8ceb5121edad5eb711.",
+    "Before any round-three fixture was created, cargo test --test parity_perturbations --release passed all six existing perturbation pairs. Their files and review.json/review-2.json retained their recorded SHA-256 hashes after the review.",
+    "Static review found no held-out labels, fixture paths, unexplained numeric constants, or coordinate-keyed surgery in implementation commit 2200a1083dba30576b91553d9f3187a57b81965b. The implementation now sorts composites by explicit declaration line and keeps original, live, and painted cluster rectangles so declaration-ordered projection promotion persists across insertion-ordered links.",
+    "The new four_groups_parallel_projection_order.puml and scoped_projection_reuse.puml cases pass. Together they exercise four declaration-ordered groups, forward references, repeated/parallel links, insertion order differing from declaration order, persistent reuse of promoted clusters, scoped start/end pseudostates, and unpackaged root leaves. This supports the corrected declaration-order and frontier-timing submodel.",
+    "Minimal counterexamples explicit_left_group_link_minimal.puml and explicit_up_group_link_minimal.puml are valid PlantUML but fail. Java CommandLinkStateCommon.getDirection recovers LEFT/UP, executeArg calls Link.getInv, and Entity.isAutarkic remains false because each group contains non-normal entry/exit leaves, so the groups stay live in the root SVEK graph. Rust render_non_autarkic_root_clusters explicitly returns None for Left or Up transitions, bypassing the reviewed cluster/frontier mechanism and falling back to a renderer that emits the composites as autonomous entity images instead of live clusters.",
+    "Minimal counterexample reversed_group_link_minimal.puml is valid and fails, as does the mixed parallel stress case. Java CommandLinkStateReverse parses the textual left state as ENT2 and the textual right state as ENT1, supplies default Direction.LEFT, and CommandLinkStateCommon applies Link.getInv before adding the link. Rust StateParser.try_transition uses one generic regex for both arrow orientations, always records the textual left endpoint as from and right endpoint as to, while parse_transition_style records only bracket styles and explicit_transition_direction recognizes only named direction tokens. A '<--' link therefore becomes an ordinary forward '-->' edge, losing Java's reverse-link inversion and decoration semantics before projection selection and layout.",
+    "Nested composites were not used as acceptance evidence because the account explicitly claims root composites and the reviewed function rejects composites with a parent. The fresh three- and four-root-group cases cover the requested declaration-order cardinality axis within scope.",
+    "All seven new Java SVGs were generated headlessly, parsed as valid XML, and contained no PlantUML error markers. Every new entry/exit label is two ASCII letters and remains within the account's integer rendered-width <=40 basic-port branch.",
+    "The final full perturbation run passes every prior fixture plus the two nondirectional round-three stress cases, and fails only the five new explicit-direction/reverse-arrow counterexamples. The review guard was run after this record was written and is expected to reject the latest review because it is intentionally rejected and contains failing perturbations."
+  ],
+  "verdict": "rejected"
+}

@@ -1,0 +1,49 @@
+@startuml
+[*] --> RootIn
+RootIn --> GammaPack
+GammaPack --> AlphaPack
+AlphaPack --> DeltaPack
+GammaPack --> AlphaPack
+DeltaPack --> BetaPack
+BetaPack --> GammaPack
+GammaPack --> RootOut
+RootOut --> [*]
+
+state RootIn
+
+state DeltaPack {
+  state di <<entryPoint>>
+  state dx <<exitPoint>>
+  state DeltaCore
+  di --> DeltaCore
+  DeltaCore --> dx
+}
+
+state AlphaPack {
+  state ai <<entryPoint>>
+  state ax <<exitPoint>>
+  state AlphaCore
+  ai --> AlphaCore
+  AlphaCore --> ax
+}
+
+state RootMid
+
+state GammaPack {
+  state gi <<entryPoint>>
+  state gx <<exitPoint>>
+  state GammaCore
+  gi --> GammaCore
+  GammaCore --> gx
+}
+
+state BetaPack {
+  state bi <<entryPoint>>
+  state bx <<exitPoint>>
+  state BetaCore
+  bi --> BetaCore
+  BetaCore --> bx
+}
+
+state RootOut
+@enduml

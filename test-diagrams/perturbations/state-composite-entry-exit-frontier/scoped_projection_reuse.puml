@@ -1,0 +1,43 @@
+@startuml
+state CedarArc {
+  state ci <<entryPoint>>
+  [*] --> CedarCore
+  state cx <<exitPoint>>
+  state CedarCore
+  ci --> CedarCore
+  CedarCore --> cx
+  CedarCore --> [*]
+}
+
+state BirchArc {
+  state bx <<exitPoint>>
+  state bi <<entryPoint>>
+  state BirchCore
+  [*] --> BirchCore
+  bi --> BirchCore
+  BirchCore --> bx
+  BirchCore --> [*]
+}
+
+state AspenArc {
+  [*] --> AspenCore
+  state ai <<entryPoint>>
+  state ax <<exitPoint>>
+  state AspenCore
+  ai --> AspenCore
+  AspenCore --> ax
+  AspenCore --> [*]
+}
+
+state RootLead
+state RootTail
+
+[*] --> RootLead
+RootLead --> CedarArc
+CedarArc --> AspenArc
+BirchArc --> CedarArc
+AspenArc --> CedarArc
+CedarArc --> BirchArc
+BirchArc --> RootTail
+RootTail --> [*]
+@enduml

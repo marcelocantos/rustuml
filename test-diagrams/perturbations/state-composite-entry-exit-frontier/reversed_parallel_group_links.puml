@@ -1,0 +1,23 @@
+@startuml
+state RubyCell {
+  state ri <<entryPoint>>
+  state rx <<exitPoint>>
+  state RubyCore
+  ri --> RubyCore
+  RubyCore --> rx
+}
+
+state CyanCell {
+  state ci <<entryPoint>>
+  state cx <<exitPoint>>
+  state CyanCore
+  ci --> CyanCore
+  CyanCore --> cx
+}
+
+[*] --> RubyCell
+RubyCell --> CyanCell
+RubyCell <-- CyanCell
+RubyCell --> CyanCell
+CyanCell --> [*]
+@enduml

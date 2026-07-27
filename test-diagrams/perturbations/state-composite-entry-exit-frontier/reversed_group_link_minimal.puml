@@ -1,0 +1,21 @@
+@startuml
+state FirstNode {
+  state fi <<entryPoint>>
+  state fx <<exitPoint>>
+  state FirstCore
+  fi --> FirstCore
+  FirstCore --> fx
+}
+
+state SecondNode {
+  state si <<entryPoint>>
+  state sx <<exitPoint>>
+  state SecondCore
+  si --> SecondCore
+  SecondCore --> sx
+}
+
+[*] --> FirstNode
+FirstNode <-- SecondNode
+SecondNode --> [*]
+@enduml

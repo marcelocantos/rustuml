@@ -1,0 +1,21 @@
+@startuml
+state LeftNode {
+  state li <<entryPoint>>
+  state lx <<exitPoint>>
+  state LeftCore
+  li --> LeftCore
+  LeftCore --> lx
+}
+
+state RightNode {
+  state ri <<entryPoint>>
+  state rx <<exitPoint>>
+  state RightCore
+  ri --> RightCore
+  RightCore --> rx
+}
+
+[*] --> RightNode
+RightNode -left-> LeftNode
+LeftNode --> [*]
+@enduml

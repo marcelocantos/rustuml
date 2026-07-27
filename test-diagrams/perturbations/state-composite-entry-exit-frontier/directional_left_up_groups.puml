@@ -1,0 +1,30 @@
+@startuml
+state NorthCell {
+  state ni <<entryPoint>>
+  state nx <<exitPoint>>
+  state NorthCore
+  ni --> NorthCore
+  NorthCore --> nx
+}
+
+state WestCell {
+  state wi <<entryPoint>>
+  state wx <<exitPoint>>
+  state WestCore
+  wi --> WestCore
+  WestCore --> wx
+}
+
+state EastCell {
+  state ei <<entryPoint>>
+  state ex <<exitPoint>>
+  state EastCore
+  ei --> EastCore
+  EastCore --> ex
+}
+
+[*] --> EastCell
+EastCell -left-> WestCell
+WestCell -up-> NorthCell
+NorthCell --> [*]
+@enduml
