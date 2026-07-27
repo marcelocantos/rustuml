@@ -1,0 +1,12 @@
+@startuml
+state MixedMarginEnvelope963 {
+  [*] --> AzureNode963
+  AzureNode963 --> AzureNode963 : short_self_963
+  AzureNode963 --> BronzeRepository963 : independently_long_ordinary_transfer_963
+  BronzeRepository963 --> BronzeRepository963 : independently_long_self_return_signal_963
+  BronzeRepository963 --> CobaltExit963 : hop
+  CobaltExit963 --> [*]
+}
+[*] --> MixedMarginEnvelope963
+MixedMarginEnvelope963 --> [*]
+@enduml

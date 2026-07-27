@@ -1,0 +1,163 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-autonomous-painted-bounds",
+  "reviewer": {
+    "task_id": "codex-desktop-task-019ee369-54e2-7203-afce-ddde7bfe1723-painted-bounds-round-3-checker",
+    "model": "GPT-5 Codex"
+  },
+  "account_commit": "41fe3c35d6e7a2136e8cfb224d96eecfd2afddf7",
+  "implementation_commit": "9635b0fbbf32462568067d0466c7238bd498fc14",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "git merge-base --is-ancestor 41fe3c35d6e7a2136e8cfb224d96eecfd2afddf7 9635b0fbbf32462568067d0466c7238bd498fc14",
+    "git merge-base --is-ancestor f83ad70bac10886960a2fef85dda0d20002596af 9635b0fbbf32462568067d0466c7238bd498fc14",
+    "git merge-base --is-ancestor 4b0b06634253f5f85ea6bb69ff97600fbc4cf891 9635b0fbbf32462568067d0466c7238bd498fc14",
+    "git diff --exit-code 0211bdd82c0120d034a3e436b7cbc3bb6659ed66 9635b0fbbf32462568067d0466c7238bd498fc14 -- docs/parity-reviews/state-autonomous-painted-bounds/review.json docs/parity-reviews/state-autonomous-painted-bounds/review-2.json test-diagrams/perturbations/state-autonomous-painted-bounds",
+    "git diff 9635b0fbbf32462568067d0466c7238bd498fc14^ 9635b0fbbf32462568067d0466c7238bd498fc14 -- crates/rustuml-render/src/state.rs",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "sed -n '345,375p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+    "sed -n '50,100p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/shape/TextBlockMarged.java",
+    "sed -n '125,140p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekResult.java",
+    "sed -n '195,212p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/state-autonomous-painted-bounds/mixed_label_margin_matrix.puml",
+    "xmllint --noout test-diagrams/perturbations/state-autonomous-painted-bounds/mixed_label_margin_matrix.svg",
+    "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"' test-diagrams/perturbations/state-autonomous-painted-bounds/mixed_label_margin_matrix.svg",
+    "ruby -rdigest -e 'candidate=\"test-diagrams/perturbations/state-autonomous-painted-bounds/mixed_label_margin_matrix.puml\"; hash=Digest::SHA256.file(candidate).hexdigest; match=Dir[\"test-diagrams/golden/**/*.puml\"].find { |p| Digest::SHA256.file(p).hexdigest == hash }; abort \"duplicate: #{match}\" if match; puts \"unique against #{Dir[\"test-diagrams/golden/**/*.puml\"].length} golden sources\"'",
+    "git archive 9635b0fbbf32462568067d0466c7238bd498fc14 | tar -x -C /private/tmp/rustuml-review-9635-round3",
+    "cargo test --test parity_perturbations --release -- --nocapture",
+    "cargo test -p rustuml-parser --lib --release -- --nocapture",
+    "cargo test -p rustuml-render --lib --release -- --nocapture",
+    "cargo test --test golden_no_oracle --release -- --nocapture",
+    "cargo clippy --workspace --all-targets --release -- -D warnings",
+    "cargo test --test harness_guards --release -- --nocapture",
+    "target/release/rustuml -pipe -tsvg < test-diagrams/perturbations/state-autonomous-painted-bounds/labelled_self_loop_margin.puml > /private/tmp/round3-self-rust.svg",
+    "target/release/rustuml -pipe -tsvg < test-diagrams/perturbations/state-autonomous-painted-bounds/mixed_label_margin_matrix.puml > /private/tmp/round3-mixed-rust.svg",
+    "cargo test --test parity_perturbations --release -- --nocapture"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-painted-bounds/renamed_antiparallel_labels.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-painted-bounds/renamed_antiparallel_labels.svg",
+      "axes": [
+        "renamed antiparallel states",
+        "independently varied ordinary-label lengths",
+        "autonomous nesting"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-painted-bounds/reversed_direction_identity.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-painted-bounds/reversed_direction_identity.svg",
+      "axes": [
+        "reversed command direction",
+        "reversed solved endpoints",
+        "multiple same-endpoint transition identities"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-painted-bounds/unlabelled_curved_arrow_control.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-painted-bounds/unlabelled_curved_arrow_control.svg",
+      "axes": [
+        "unlabelled antiparallel curves",
+        "arrowhead-only painted frontier",
+        "autonomous nesting"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-painted-bounds/self_loop_curve_extrema.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-painted-bounds/self_loop_curve_extrema.svg",
+      "axes": [
+        "unlabelled self-loop cubic controls",
+        "path painted extrema",
+        "autonomous nesting"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-painted-bounds/nested_vertical_concurrent.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-painted-bounds/nested_vertical_concurrent.svg",
+      "axes": [
+        "nested autonomous groups",
+        "vertical concurrent composition",
+        "independent region topology"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-painted-bounds/nested_horizontal_concurrent.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-painted-bounds/nested_horizontal_concurrent.svg",
+      "axes": [
+        "nested autonomous groups",
+        "horizontal concurrent composition",
+        "independent region topology"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-painted-bounds/pseudostate_left_frontiers.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-painted-bounds/pseudostate_left_frontiers.svg",
+      "axes": [
+        "choice history and final endpoints",
+        "left-reaching arrowheads",
+        "mixed primitive bounds"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-painted-bounds/empty_concurrent_region.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-painted-bounds/empty_concurrent_region.svg",
+      "axes": [
+        "empty concurrent middle region",
+        "consecutive valid separators",
+        "empty-state identity and source-order UID"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-painted-bounds/root_level_equivalent_control.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-painted-bounds/root_level_equivalent_control.svg",
+      "axes": [
+        "root-level equivalent topology",
+        "scope boundary",
+        "unlabelled antiparallel curves"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-painted-bounds/labelled_self_loop_margin.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-painted-bounds/labelled_self_loop_margin.svg",
+      "axes": [
+        "labelled self-loop",
+        "self-link-specific six-pixel SVEK label margin",
+        "Graphviz label box, painted frontier, and emitted text inset"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-painted-bounds/mixed_label_margin_matrix.puml",
+      "golden": "test-diagrams/perturbations/state-autonomous-painted-bounds/mixed_label_margin_matrix.svg",
+      "axes": [
+        "two independently sized labelled self-loops",
+        "long and short ordinary labelled transitions",
+        "mixed six-pixel and one-pixel margins in one autonomous scope"
+      ],
+      "result": "pass"
+    }
+  ],
+  "findings": [
+    "The amended causal account 41fe3c35d6e7a2136e8cfb224d96eecfd2afddf7 is an ancestor of immutable correction 9635b0fbbf32462568067d0466c7238bd498fc14. That correction is layered over original painted-bounds implementation f83ad70bac10886960a2fef85dda0d20002596af and empty-region correction 4b0b06634253f5f85ea6bb69ff97600fbc4cf891. Prior review.json, review-2.json, and all ten pre-existing evidence pairs are unchanged through the reviewed commit.",
+    "Commit 9635b0fb changes only crates/rustuml-render/src/state.rs. It does not alter an account, baseline, comparator, guard, prior review, or evidence file. Static inspection found no golden reads, include_str fixture embedding, fixture labels, source-path branches, per-count ladders, or coordinate-keyed SVG surgery.",
+    "Pinned Java SvekEdge.addVisibilityModifier selects marginLabel = startUid.equalsId(endUid) ? 6 : 1 and passes the selected value as both horizontal and vertical margins to TextBlockUtils.withMargin. TextBlockMarged.calculateDimension adds left plus right and top plus bottom to the inner dimensions; drawU first contributes a UEmpty of that expanded size and then translates the inner text by the selected left/top margins. The six-versus-one distinction therefore affects Graphviz label dimensions, the complete painted box seen by LimitFinder, and the final text inset, rather than being a post-layout cosmetic offset.",
+    "Rust autonomous_edge_label_margin derives identity from state_endpoint_layout_id at both endpoints. Ordinary links, reversed ordinary links, and distinct start/end pseudostates remain on the one-pixel branch; only the same canonical state identity takes six pixels. The selected value is used in EdgeLabelSize as measured width/height plus twice the margin, in autonomous_scope_painted_bounds for both text origin and right/bottom frontier, and in emit_autonomous_scope_links for the final text x/y inset. No stage retains the former unconditional one-pixel self-link value.",
+    "The preserved labelled_self_loop_margin counterexample now passes the strict perturbation comparator. Relative to the rejected round-two render, the self-label box gains exactly ten horizontal pixels, restoring Java's 435px canvas width from Rust's former 425px. The Java and Rust label both emit textLength=230.7944 at x=159.81 and y=210.5566. Their interior SVG structure and coordinates match; Rust's advertised root height is 486px versus Java's 485px, accepted only by the pre-existing frozen root-dimension tolerance and not attributed to this mechanism.",
+    "The fresh mixed_label_margin_matrix held-out exercises two self labels of independent lengths alongside one long and one short ordinary label. Java and immutable Rust both produce width 527px, and all four emitted labels have identical x, y, and textLength values: self labels at x=186.8 and x=208.58, ordinary labels at x=102.79, with their respective Java measurements. The strict perturbation comparator passes. This jointly demonstrates that the chosen six-pixel margin reaches Graphviz dimensions and painted translation while the one-pixel ordinary branch and final text placement remain exact.",
+    "The ordinary-label and nonself controls remain green independently: renamed_antiparallel_labels varies ordinary label lengths, reversed_direction_identity varies command and solved direction, and unlabelled_curved_arrow_control removes label bounds entirely. The empty-region, nested concurrent, pseudostate-frontier, unlabelled self-loop, and root-scope controls also remain green, so the correction did not regress the earlier primitive-aware painted-bounds model.",
+    "The corrected LIMIT_FINDER_TEXT_ADJUST provenance is accurate. Pinned LimitFinder.drawText measures the text, performs y -= dim.getHeight() - 1.5, then records the four corners from that raised top through y + height. The new comment describes this direct top-frontier adjustment and no longer claims that 1.5 is passed to another finder.",
+    "An isolated archive of immutable 9635b0fb, augmented only with the new mixed pair, passes the complete perturbation suite including every state-autonomous-painted-bounds pair. The shared worktree's complete suite separately failed only three state-autonomous-stereotype-styles inputs: font_name_style_geometry, font_name_style_without_attributes, and non_normal_position_stereotypes. Those files belong to another review, were absent from immutable 9635b0fb, and are neither evidence against nor accepted by this painted-bounds review.",
+    "At immutable 9635b0fb, parser tests pass 487/487, renderer tests pass 687/687 including the focused six-versus-one identity unit test, workspace clippy passes for all targets in release mode with warnings denied, and the no-oracle census passes its ratchet at 11026/11251 eligible pairs, including rendering 78/98 and state 864/901. Five of six harness guards pass; parity_review_records_are_complete parses this accepted round-three record and all painted-bounds evidence, then fails only because the separate state-autonomous-stereotype-styles account has no checker review at immutable 9635b0fb.",
+    "Verdict is accepted. The round-two labelled-self-loop falsifier is resolved by the exact Java identity branch, the same selected margin is demonstrably propagated through layout, painted bounds, and emission, ordinary/nonself behavior remains exact on independent controls, and no fixture-shaped logic or unexplained parity constant was introduced."
+  ],
+  "verdict": "accepted"
+}
