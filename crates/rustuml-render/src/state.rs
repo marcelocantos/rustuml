@@ -197,12 +197,6 @@ const SVEK_TRAILING_PAD: f64 = 14.0;
 /// `LimitFinder` span and adds 15px; the translated graph's painted minimum is
 /// x=5, so a rightmost text edge contributes `right - 5 + 15`.
 const AUTONOMOUS_LABEL_TRAILING: f64 = 10.0;
-/// Rank separation used by the autonomous image builder inside a composite.
-///
-/// Java provenance: `DotStringFactory.getMinRankSep()` falls back to dot's
-/// 36-pixel default when `InnerStateAutonom` creates its independent builder.
-const AUTONOMOUS_RANK_SEP: f64 = 36.0;
-
 /// Title font size.
 const TITLE_FONT_SIZE: f64 = 14.0;
 /// Horizontal inset contributed by the title style's 5px padding and 5px
@@ -2006,16 +2000,11 @@ fn layout_autonomous_scope(
     transition_indices: Vec<usize>,
     node_sizes: &[(String, f64, f64, StateLayoutShape)],
     arrow_font: &StateArrowFont,
-    plantuml_spacing: bool,
+    spacing: Option<GraphSpacing>,
 ) -> Option<AutonomousScopeLayout> {
     let mut layout = LayoutGraph::new(Direction::TopToBottom);
-    if plantuml_spacing {
-        layout = layout.with_plantuml_svek_spacing();
-    } else {
-        layout = layout.with_spacing_pixels(
-            rustuml_layout::graph::GraphSpacing::PLANTUML_SVEK_DEFAULTS.node_sep_px,
-            AUTONOMOUS_RANK_SEP,
-        );
+    if let Some(spacing) = spacing {
+        layout = layout.with_spacing(spacing);
     }
     for id in &ids {
         let (_, width, height, shape) = node_sizes.iter().find(|entry| &entry.0 == id)?;
@@ -2123,6 +2112,37 @@ fn layout_autonomous_scope(
         width: origin_x + max_x + SVEK_TRAILING_PAD,
         height: origin_y + max_y + SVEK_TRAILING_PAD,
         compound_clusters: false,
+    })
+}
+
+/// Resolve the spacing options emitted by the outer state SVEK invocation.
+///
+/// Java `DotStringFactory.createDotString` starts from the non-activity SVEK
+/// minima, then independently replaces each axis with the latest nonzero
+/// `skinparam nodesep` or `skinparam ranksep` value.
+fn autonomous_outer_spacing(diagram: &StateDiagram) -> GraphSpacing {
+    let explicit_nonzero = |key: &str| {
+        diagram
+            .meta
+            .skinparams
+            .iter()
+            .rev()
+            .find(|skinparam| skinparam.key.eq_ignore_ascii_case(key))
+            .and_then(|skinparam| skinparam.value.trim().parse::<i32>().ok())
+            .filter(|value| *value != 0)
+            .map(f64::from)
+    };
+
+    GraphSpacing::pixels(
+        explicit_nonzero("nodesep").unwrap_or(GraphSpacing::PLANTUML_SVEK_DEFAULTS.node_sep_px),
+        explicit_nonzero("ranksep").unwrap_or(GraphSpacing::PLANTUML_SVEK_DEFAULTS.rank_sep_px),
+    )
+}
+
+fn has_only_autonomous_layout_skinparams(diagram: &StateDiagram) -> bool {
+    diagram.meta.skinparams.iter().all(|skinparam| {
+        skinparam.key.eq_ignore_ascii_case("nodesep")
+            || skinparam.key.eq_ignore_ascii_case("ranksep")
     })
 }
 
@@ -2250,7 +2270,7 @@ fn build_autonomous_composite_node<'a>(
         transition_indices,
         &inner_sizes,
         arrow_font,
-        false,
+        None,
     )?;
     let layout = normalize_autonomous_scope(diagram, arrow_font, layout);
     let inner_width = layout.width;
@@ -2302,7 +2322,7 @@ fn build_autonomous_composite<'a>(
 ) -> Option<(Vec<AutonomousComposite<'a>>, AutonomousScopeLayout)> {
     if !diagram.notes.is_empty()
         || diagram.meta.title.is_some()
-        || !diagram.meta.skinparams.is_empty()
+        || !has_only_autonomous_layout_skinparams(diagram)
         || diagram
             .states
             .iter()
@@ -2363,7 +2383,7 @@ fn build_autonomous_composite<'a>(
         outer_transition_indices,
         &outer_sizes,
         arrow_font,
-        true,
+        Some(autonomous_outer_spacing(diagram)),
     )?;
 
     Some((composites, outer))
@@ -2456,7 +2476,7 @@ fn build_one_level_concurrent_node<'a>(
             transition_indices,
             &inner_sizes,
             arrow_font,
-            false,
+            None,
         )?;
         regions.push(AutonomousRegion {
             layout: normalize_autonomous_scope(diagram, arrow_font, layout),
@@ -2527,7 +2547,7 @@ fn build_one_level_concurrent_composites<'a>(
 ) -> Option<(Vec<AutonomousComposite<'a>>, AutonomousScopeLayout)> {
     if !diagram.notes.is_empty()
         || diagram.meta.title.is_some()
-        || !diagram.meta.skinparams.is_empty()
+        || !has_only_autonomous_layout_skinparams(diagram)
     {
         return None;
     }
@@ -2584,7 +2604,7 @@ fn build_one_level_concurrent_composites<'a>(
         outer_transition_indices,
         &outer_sizes,
         arrow_font,
-        true,
+        Some(autonomous_outer_spacing(diagram)),
     )?;
 
     Some((composites, outer))
@@ -9983,6 +10003,44 @@ CobaltDecision --> [*]
             points,
             vec![(6.0, 0.0), (15.0, 0.0), (15.0, 0.0), (20.0, 0.0)]
         );
+    }
+
+    #[test]
+    fn autonomous_outer_spacing_uses_only_latest_nonzero_layout_skinparams() {
+        let parsed = rustuml_parser::parse::parse(
+            "@startuml\n\
+             skinparam nodesep 41\n\
+             skinparam nodesep 47\n\
+             skinparam ranksep 0\n\
+             state Outer {\n\
+               [*] --> A\n\
+               A --> B\n\
+             }\n\
+             [*] --> Outer\n\
+             @enduml",
+        )
+        .unwrap();
+        let rustuml_parser::diagram::Diagram::State(diagram) = parsed else {
+            panic!("expected state diagram");
+        };
+
+        let spacing = autonomous_outer_spacing(&diagram);
+        assert_eq!(spacing.node_sep_px, 47.0);
+        assert_eq!(
+            spacing.rank_sep_px,
+            GraphSpacing::PLANTUML_SVEK_DEFAULTS.rank_sep_px
+        );
+        assert!(has_only_autonomous_layout_skinparams(&diagram));
+
+        let mut visual = diagram;
+        visual
+            .meta
+            .skinparams
+            .push(rustuml_parser::diagram::SkinParam {
+                key: "stateBorderColor".into(),
+                value: "red".into(),
+            });
+        assert!(!has_only_autonomous_layout_skinparams(&visual));
     }
 
     #[test]
