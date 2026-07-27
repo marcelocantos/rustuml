@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "mechanism": "theme-style-cascade",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "net.sourceforge.plantuml.tim.TContext#executeOneLineNotSafe",
+    "net.sourceforge.plantuml.tim.TContext#executeTheme",
+    "net.sourceforge.plantuml.style.StyleLoader#loadSkin",
+    "net.sourceforge.plantuml.style.StyleParser#parse",
+    "net.sourceforge.plantuml.style.StyleBuilder#muteStyle",
+    "net.sourceforge.plantuml.style.StyleStorage#computeMergedStyle",
+    "net.sourceforge.plantuml.style.StyleSignatureBasic#matchAll",
+    "net.sourceforge.plantuml.skin.SkinParam#setParam",
+    "net.sourceforge.plantuml.skin.SkinParam#cleanForKeySlow",
+    "net.sourceforge.plantuml.skin.FromSkinparamToStyle#convertNow",
+    "net.sourceforge.plantuml.abel.Entity#getCurrentStyleBuilder",
+    "net.sourceforge.plantuml.abel.Link#getStyleBuilder",
+    "net.sourceforge.plantuml.svek.GraphvizImageBuilder#getDefaultStyleDefinitionArrow",
+    "net.sourceforge.plantuml.svek.SvekEdge#getDefaultStyleDefinition"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/mod.rs::PreprocessContext::try_theme",
+    "crates/rustuml-parser/src/preprocess/themes.rs::flatten_theme_output",
+    "crates/rustuml-parser/src/parse/mod.rs::collapse_reassigned_skinparams",
+    "crates/rustuml-parser/src/diagram/mod.rs::DiagramMeta",
+    "crates/rustuml-render/src/style.rs",
+    "crates/rustuml-render/src/skinparam.rs::apply_skinparams",
+    "crates/rustuml-render/src/class.rs::ClassFontOverrides",
+    "crates/rustuml-render/src/state.rs::StateSkin::from_diagram",
+    "crates/rustuml-render/src/component.rs::render",
+    "crates/rustuml-render/src/usecase.rs::SkinColors::from_diagram"
+  ],
+  "invariant": "Theme CSS, theme skinparams, user CSS, and user skinparams form one ordered stream of sparse style declarations. Theme bodies execute at the directive position. Every declaration retains selector identity, property identity, value, source epoch, origin, and Java-compatible priority; later matching declarations win property by property. Resolution merges every declaration whose selector is contained by the requested element signature, then applies stereotype priority and inline entity or link overrides. Missing family properties inherit from matching root or element selectors instead of being replaced by a dense family palette. Pure style declarations use creation-time entity and link snapshots; after any legacy skinparam command, entities consult the latest builder for Java compatibility, while links retain their creation snapshot.",
+  "causal_divergence": "Rust currently appends theme bodies to a tail, drops nearly all CSS selectors, flattens grouped skinparams to compatibility keys, preserves synthetic theme aliases as independent family scopes, and materializes one final dense Theme. Class, state, component, and use-case renderers then bypass that palette with inconsistent first- or last-match scans of raw metadata. This conflates declaration identity, selector inheritance, temporal ordering, and renderer defaults. It explains cross-family fallback failures, repeated-theme failures, source-position failures, and theme-driven geometry differences even when isolated colors appear correct.",
+  "planned_change": "Introduce a renderer-neutral StyleProgram in parser metadata, containing ordered sparse StyleDeclaration records with canonical selector tokens, property, value, epoch, origin, optional stereotype identity, and priority. Preserve and parse expanded theme CSS instead of reducing it to three synthetic root keys. Convert legacy skinparams through one table-driven cleanForKeySlow and FromSkinparamToStyle compatibility layer while retaining raw skinparams only for non-style behavior. Add a StyleCascade resolver in rustuml-render that merges declarations against exact Java-style signatures and preserves absence before built-in defaults. Adapt class, state, component, and use-case renderers to the resolver, then record creation epochs on style-bearing entities and links. Apply inline colors and link styles last. Keep the unlicensed plain theme as an explicit availability case; do not emulate it with another bundled theme. Do not branch on theme names, fixture labels, family counts, source coordinates, or rendered coordinates.",
+  "perturbation_axes": [
+    "entities and links before, between, and after two themes",
+    "CSS and legacy skinparam writes in both source orders",
+    "sparse repeated themes that preserve unrelated earlier properties",
+    "root, element, family, entity, header, note, and arrow selector inheritance",
+    "cross-family arrow aliases with case, dot, and underscore variants",
+    "stereotype-qualified and unqualified declarations in reversed orders",
+    "pure-style creation snapshots with and without a legacy skinparam compatibility trigger",
+    "inline entity, gradient, color, and link-style final overrides",
+    "font, padding, margin, thickness, and shadow geometry feedback",
+    "unknown and intentionally unbundled theme availability controls",
+    "renamed labels, changed branch counts, and deeper package or state nesting"
+  ]
+}
