@@ -1,0 +1,9 @@
+@startuml
+participant "Unrelated Lifecycle Target" as Target
+participant "Self Message Owner" as Owner
+Owner -> Owner : self message owns next commands
+activate Target
+deactivate Target
+Owner -> Target : after unrelated lifecycle
+Target --> Owner : height control
+@enduml

@@ -1,0 +1,11 @@
+@startuml
+participant "Eastern Cross Port" as East
+participant "Central Cross Port" as Center
+participant "Western Cross Port" as West
+East /-x West : solid source cross reverse spatial
+West \-x East : solid source cross forward spatial
+Center /--x West : dotted source cross reverse spatial
+West \--x Center : dotted source cross forward spatial
+East //-x Center : thin solid source cross
+Center \\--x East : thin dotted source cross
+@enduml

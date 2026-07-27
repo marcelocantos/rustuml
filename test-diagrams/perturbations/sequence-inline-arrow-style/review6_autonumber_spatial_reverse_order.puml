@@ -1,0 +1,11 @@
+@startuml
+autonumber 98 3 "<b>[##00]</b>"
+participant "Eastern Number Sink" as East
+participant "Western Number Source" as West
+East -> West : reverse spatial numbering
+West --> East : forward spatial numbering
+autonumber stop
+autonumber resume 5 "<i>[###000]</i>"
+West -> East : resumed forward numbering
+East --> West : resumed reverse numbering
+@enduml

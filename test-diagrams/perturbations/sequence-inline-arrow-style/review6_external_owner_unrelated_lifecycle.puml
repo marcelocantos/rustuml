@@ -1,0 +1,9 @@
+@startuml
+participant "External Owner Primary" as Primary
+participant "External Owner Unrelated" as Unrelated
+]--> Primary : external owner message
+activate Unrelated
+deactivate Unrelated
+Primary -> Unrelated : after unrelated lifecycle
+Unrelated -->] : shared right edge control
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+participant "Right Reset Worker" as Worker
+participant "Right Reset Peer" as Peer
+group ownership boundary
+]--> Worker ++ : activation inside group
+end
+deactivate Worker
+Peer -> Worker : after group reset
+Worker -->] : right reset control
+@enduml

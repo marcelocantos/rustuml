@@ -1,0 +1,14 @@
+@startuml
+participant "Right Depth Observer" as Observer
+participant "Right Depth Worker" as Worker
+]--> Worker ++ : depth one
+note left of Worker : between depth one and two
+]--> Worker ++ : depth two
+== depth checkpoint ==
+activate Worker
+]--> Worker : depth three boundary read
+Observer -> Worker : internal depth read
+Worker -->] -- : close nested depth
+deactivate Worker
+Worker -->] -- : close outer depth
+@enduml

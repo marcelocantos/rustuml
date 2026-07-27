@@ -1,0 +1,11 @@
+@startuml
+participant "Right Group Depth Worker" as Worker
+participant "Right Group Depth Peer" as Peer
+group right depth ownership
+]--> Worker ++ : grouped right activation
+end
+deactivate Worker
+]--> Worker : after group-owned deactivation
+Worker -->] : shared border check
+Peer -> Worker : trailing internal check
+@enduml

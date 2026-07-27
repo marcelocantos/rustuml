@@ -1,0 +1,11 @@
+@startuml
+participant "Left Note Worker" as Worker
+participant "Left Note Peer" as Peer
+[--> Worker ++ : start left work
+note right of Worker
+  intervening note body
+end note
+deactivate Worker
+Peer -> Worker : after owned lifecycle
+Worker -->[ : left boundary control
+@enduml

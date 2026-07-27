@@ -1,0 +1,14 @@
+@startuml
+autoactivate on
+participant "Auto Root" as Root
+participant "Auto Middle" as Middle
+participant "Auto Leaf" as Leaf
+Root -> Middle : automatic outer call
+note right of Middle : between automatic calls
+Middle -> Leaf : automatic inner call
+return inner result
+== between automatic returns ==
+return outer result
+Root -> Leaf : automatic trailing call
+return trailing result
+@enduml

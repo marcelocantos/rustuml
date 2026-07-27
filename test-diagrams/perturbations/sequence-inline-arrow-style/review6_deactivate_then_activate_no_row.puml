@@ -1,0 +1,13 @@
+@startuml
+participant "Preactivated Gamma" as Gamma
+participant "Later Activated Delta" as Delta
+participant "Ordering Alpha" as Alpha
+participant "Ordering Beta" as Beta
+activate Gamma
+Alpha -> Beta : owner after initial activation
+deactivate Gamma
+note over Alpha, Beta : activation follows deactivation
+activate Delta
+deactivate Delta
+Beta --> Alpha : no combined lifecycle row
+@enduml

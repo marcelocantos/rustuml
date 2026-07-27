@@ -1,0 +1,403 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-inline-arrow-style",
+  "account_commit": "99666502b99a59f49771f6229ab84db58f9f7323",
+  "implementation_commit": "d01dd24e05ef41fbcb2303d45dab96fab9efacba",
+  "implementation_parent": "4621ef5a509d63a06f32f51d267bf88b95cdf717",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "reviewed_working_head": "30902301fa70d9410bcfd7d38be52b654970e29b",
+  "reviewed_working_head_difference": "Only crates/rustuml-parser/src/parse/class.rs and crates/rustuml-parser/src/parse/mod.rs differ from d01dd24e; crates/rustuml-render/src/sequence.rs is unchanged.",
+  "java_jar": {
+    "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+  },
+  "rust_diff_binary": {
+    "path": "target/release/examples/diff_one",
+    "sha256": "fb23b10f2cfb7191e8c18507f44e673140b722d69ef79ce9083c9fc27cb11f05",
+    "build_context": "Provided as freshly built from d01dd24e plus the parser-only working change later committed as 30902301; the parser-only delta does not touch sequence rendering."
+  },
+  "reviewer": {
+    "task_id": "019ee369-54e2-7203-afce-ddde7bfe1723",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop",
+    "role": "independent skeptical checker; did not edit production code"
+  },
+  "constraints": [
+    "No Cargo, rustc, or rustfmt command was run.",
+    "No production source, parser source, baseline, comparator, skip, or pre-existing fixture was edited.",
+    "The existing target/release/examples/diff_one binary performed every Rust render and strict structural comparison.",
+    "review4_chrome_visible_physical_font remains the declared physical Chrome Serif exclusion and is neither counted as a pass nor used as rejection evidence.",
+    "Only review6_ perturbation pairs and this review record belong to the checker change."
+  ],
+  "java_provenance": [
+    {
+      "mechanism": "message lifecycle ownership",
+      "locations": [
+        "src/main/java/net/sourceforge/plantuml/sequencediagram/SequenceDiagram.java:190-205",
+        "src/main/java/net/sourceforge/plantuml/sequencediagram/SequenceDiagram.java:335-373",
+        "src/main/java/net/sourceforge/plantuml/sequencediagram/SequenceDiagram.java:378-409"
+      ],
+      "invariant": "A message becomes lastEventWithDeactivate; ordinary intervening events preserve it, but GroupingType.END replaces it with the GroupingLeaf before later lifecycle commands are attached."
+    },
+    {
+      "mechanism": "activation-first combined row",
+      "locations": [
+        "src/main/java/net/sourceforge/plantuml/sequencediagram/AbstractMessage.java:144-166",
+        "src/main/java/net/sourceforge/plantuml/sequencediagram/AbstractMessage.java:192-194",
+        "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/Step1Message.java:121-139",
+        "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/Step1MessageExo.java:87-106"
+      ],
+      "invariant": "The 30-pixel row is reserved only when the first recorded lifecycle type is ACTIVATE and a later DEACTIVATE or DESTROY is present; merely seeing activation at any later point is insufficient."
+    },
+    {
+      "mechanism": "self-message participant filtering",
+      "locations": [
+        "src/main/java/net/sourceforge/plantuml/sequencediagram/AbstractMessage.java:147-166"
+      ],
+      "invariant": "A self-message returns before recording lifecycle types for a different participant, so unrelated activation/deactivation cannot make that self-message activation-and-deactivation combined."
+    },
+    {
+      "mechanism": "lifecycle event ordinates and live depth",
+      "locations": [
+        "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/DrawableSetInitializer.java:483-532",
+        "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/LivingParticipantBox.java:71-83",
+        "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/MessageExoArrow.java:82-116"
+      ],
+      "invariant": "Activation and deactivation positions derive from their owning message start/end, and every arrow decoration, note, divider, and external-area consumer must observe the same live depth and final shared border."
+    }
+  ],
+  "commands": [
+    "git rev-parse HEAD d01dd24e d01dd24e^ 99666502 5d3ad9ad",
+    "git diff --no-ext-diff --unified=60 4621ef5a..d01dd24e -- crates/rustuml-render/src/sequence.rs",
+    "git diff --stat d01dd24e..30902301 && git diff --name-only d01dd24e..30902301",
+    "for f in test-diagrams/perturbations/sequence-inline-arrow-style/*.puml; do target/release/examples/diff_one --no-oracle \"$f\"; done (before review6_ files existed: 38 inputs)",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "JAVA_TOOL_OPTIONS=-Djava.awt.headless=true java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/sequence-inline-arrow-style/review6_*.puml",
+    "xmllint --noout test-diagrams/perturbations/sequence-inline-arrow-style/review6_*.svg",
+    "rg -n -i 'Syntax Error|NoSuchElementException|Welcome to PlantUML|An error has occured|\\[From string|Assumed diagram type' test-diagrams/perturbations/sequence-inline-arrow-style/review6_*.svg",
+    "rg -l 'data-diagram-type=\"SEQUENCE\"' test-diagrams/perturbations/sequence-inline-arrow-style/review6_*.svg",
+    "for f in test-diagrams/perturbations/sequence-inline-arrow-style/review6_*.puml; do out=$(target/release/examples/diff_one --no-oracle \"$f\" 2>&1); test \"$out\" = 'SVGs are structurally equivalent'; done",
+    "rg -n 'lifecycle_owner|lifecycle_y_offset|ActivationChange|Event::Activate|Event::Deactivate|render_activation|lost_scan_activation|activation_depth|active_depth' crates/rustuml-render/src/sequence.rs",
+    "git show --format= --no-ext-diff d01dd24e -- crates/rustuml-render/src/sequence.rs | rg -n -i 'include_str|include_bytes|read_to_string|golden|perturb|review[0-9]|fixture|Lambda|Sigma|Cross Port|Reset Worker|Unrelated|Depth Worker'",
+    "git diff --check 4621ef5a d01dd24e",
+    "shasum -a 256 target/release/examples/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar test-diagrams/perturbations/sequence-inline-arrow-style/review6_*.puml test-diagrams/perturbations/sequence-inline-arrow-style/review6_*.svg"
+  ],
+  "preserved_perturbations": {
+    "total": 38,
+    "strict_passed": 37,
+    "scoped_failed": 0,
+    "predeclared_external_gap": 1,
+    "result": "All 38 pre-existing inputs were replayed. Thirty-seven are strictly structurally equivalent. review4_chrome_visible_physical_font reproduced only its declared physical-font mismatch and remains excluded.",
+    "strict_passes": [
+      "renamed_external_hidden_style_matrix.puml",
+      "renamed_visible_style_order_matrix.puml",
+      "review2_bidirectional_dressing_order.puml",
+      "review2_external_live_depth_autonumber.puml",
+      "review2_hidden_nested_page_boundary.puml",
+      "review2_quoted_plain_styled_dispatch.puml",
+      "review2_style_order_anchor_self.puml",
+      "review3_bidirectional_spatial_order.puml",
+      "review3_external_four_way_combined.puml",
+      "review3_external_from_left_isolated.puml",
+      "review3_external_from_right_isolated.puml",
+      "review3_external_to_left_isolated.puml",
+      "review3_external_to_right_isolated.puml",
+      "review3_nested_activation_deactivation.puml",
+      "review3_page_meta_participant_brackets.puml",
+      "review3_source_circles_spatial_reverse.puml",
+      "review4_autonumber_literal_angle_formats.puml",
+      "review4_chrome_hidden_default_font.puml",
+      "review4_chrome_hidden_physical_font.puml",
+      "review4_external_shared_left_depth_repeat.puml",
+      "review4_external_shared_right_depth_repeat.puml",
+      "review4_reverse_circle_cross_spatial.puml",
+      "review4_reverse_circle_open_half_spatial.puml",
+      "review5_autonumber_prefix_suffix_resume.puml",
+      "review5_autonumber_styled_hash_resume.puml",
+      "review5_external_from_left_depth_stair.puml",
+      "review5_external_from_right_depth_stair.puml",
+      "review5_external_same_y_left_order.puml",
+      "review5_external_same_y_right_order.puml",
+      "review5_external_to_left_depth_stair.puml",
+      "review5_external_to_right_depth_stair.puml",
+      "review5_half_heads_circle_cross_permuted.puml",
+      "review5_half_heads_dotted_repeated.puml",
+      "review_external_hidden_autonumber_activation.puml",
+      "review_inherited_local_override_counts.puml",
+      "review_quoted_participant_style_text_probe.puml",
+      "review_token_order_topology_colons.puml"
+    ],
+    "excluded_gap": {
+      "source": "review4_chrome_visible_physical_font.puml",
+      "reason": "The known Serif physical-font metrics differ across participant, message, caption, footer, and canvas geometry; account 5d3ad9ad explicitly excludes this renderer-wide concern."
+    }
+  },
+  "fresh_summary": {
+    "total": 16,
+    "passed": 6,
+    "failed": 10,
+    "valid_java_sequence_diagrams": 16
+  },
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review6_autoactivate_return_intervening.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review6_autoactivate_return_intervening.svg",
+      "source_sha256": "392c480e9c19f6e471c8114f44162ed27d316464a0a85681dedf59a180027cdf",
+      "golden_sha256": "c235649e3aa73e8d2601768b6f6e43a561aeb7a5cb482a21f8daeca4b4e794f7",
+      "axes": [
+        "autoactivation",
+        "nested returns",
+        "intervening note and divider",
+        "renamed three-participant topology"
+      ],
+      "result": "pass",
+      "comparison": "SVGs are structurally equivalent"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review6_autonumber_mixed_required_field.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review6_autonumber_mixed_required_field.svg",
+      "source_sha256": "b2e30ae6b903936eb2e1fa3eaf7877897426dbd619f204a7a9139d8ab506c522",
+      "golden_sha256": "3fe3506f26e4a42eaf873e844b50070904b84fd675c622525f33c084139329a6",
+      "axes": [
+        "mixed # and 0 DecimalFormat fields",
+        "changed increment and resume pattern",
+        "literal prefix and suffix",
+        "bidirectional labels"
+      ],
+      "result": "pass",
+      "comparison": "SVGs are structurally equivalent"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review6_autonumber_spatial_reverse_order.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review6_autonumber_spatial_reverse_order.svg",
+      "source_sha256": "a1725945ad58ccd0a9e72d57fae03997bc2d20c35422c7b7c7afa2e8b522a4f8",
+      "golden_sha256": "2187d51b428e85afc4b47333ba991b97570e33ab2d916c66ea9a72785da5f4d8",
+      "axes": [
+        "mixed # and 0 DecimalFormat fields",
+        "participant declaration order",
+        "spatially reversed messages",
+        "bold and italic whole-field styling"
+      ],
+      "result": "pass",
+      "comparison": "SVGs are structurally equivalent"
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review6_deactivate_then_activate_no_row.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review6_deactivate_then_activate_no_row.svg",
+      "source_sha256": "771a3314f7e09c47694cf656f02b6af1ecb8cecc4bf772915c53b5f179d7340f",
+      "golden_sha256": "b8db04ce308be68473fba3895bd3c56abad0ccd4da4cfc636bb011efd05a00cb",
+      "axes": [
+        "deactivation before activation on one message owner",
+        "unrelated lifecycle participants",
+        "intervening note",
+        "participant ordering"
+      ],
+      "result": "fail",
+      "comparison": "Java is 187px high and allocates no combined row because the first lifecycle type is DEACTIVATE. Rust is 217px high and incorrectly adds 30px after seeing a later activation."
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review6_external_owner_unrelated_lifecycle.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review6_external_owner_unrelated_lifecycle.svg",
+      "source_sha256": "08ed10a7211273cf76c312823e444c7be20d43db6ee7eedcd6d66e10056dce5c",
+      "golden_sha256": "82c094a427073f185f605b014c2d4f86415d747ad80b29356fba4cf89588da18",
+      "axes": [
+        "FROM_RIGHT owner",
+        "unrelated participant activation and deactivation",
+        "shared right border",
+        "renamed labels"
+      ],
+      "result": "pass",
+      "comparison": "SVGs are structurally equivalent; this is the non-self control for message-wide lifecycle type ownership."
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review6_group_end_resets_left_owner.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review6_group_end_resets_left_owner.svg",
+      "source_sha256": "0dbfdb872cd646a7d565c6905ebb9337a5283ce53358df953098dcd1263d2b80",
+      "golden_sha256": "2a20d6a7ffebb17fa06536c015484128d2a4192be46a36ac32fdc99697ea09cb",
+      "axes": [
+        "FROM_LEFT activation",
+        "group-end ownership reset",
+        "standalone deactivation",
+        "trailing internal and boundary messages"
+      ],
+      "result": "fail",
+      "comparison": "Java is 213px high with a 15px bar after GroupEnd replaces the owner. Rust retains the prior message, adds a false 30px combined row, and is 243px high."
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review6_group_end_resets_right_owner.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review6_group_end_resets_right_owner.svg",
+      "source_sha256": "69f20bfcb0442b442c8316a7fd97dd910de4ce3003bc839e4b180e5f413f47d6",
+      "golden_sha256": "5af9f662cd35ed5cac3e96205c567d7e2343fb19fdf1fae804dbcadcf358845a",
+      "axes": [
+        "FROM_RIGHT activation",
+        "group-end ownership reset",
+        "standalone deactivation",
+        "mirrored participant order"
+      ],
+      "result": "fail",
+      "comparison": "The mirrored right-border case repeats the false 30px row: Java is 213px high and Rust is 243px high."
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review6_half_cross_active_sources.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review6_half_cross_active_sources.svg",
+      "source_sha256": "a174bd0dbd764591ba3ccf59b9b916e109846efca5c379687c6b3aa614d3f827",
+      "golden_sha256": "37bcb184f6802cdf0b5efc68bf8038471f0b6e4ffb7e6b77d794dbe8db4e65de",
+      "axes": [
+        "source-cross half arrows",
+        "solid dotted and thin heads",
+        "active and nested source lifelines",
+        "left and right spatial orientation"
+      ],
+      "result": "fail",
+      "comparison": "On an active source, Java centers the source cross 5px left of Rust; both cross strokes and the dotted shaft endpoint differ by exactly one activation half-width."
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review6_half_cross_four_way.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review6_half_cross_four_way.svg",
+      "source_sha256": "279f84a78dbf13a718299f04714e04ffe803a9248ac9e0459333004150d6cf2a",
+      "golden_sha256": "6835cb5b97073b686a68d42e493e6293084515ef157b71764d69e1a8f7eaacb9",
+      "axes": [
+        "source-cross half arrows",
+        "solid dotted and thin heads",
+        "three-participant declaration order",
+        "left and right spatial orientation"
+      ],
+      "result": "pass",
+      "comparison": "SVGs are structurally equivalent when the semantic source lifeline is inactive."
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review6_owned_group_start_intervening.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review6_owned_group_start_intervening.svg",
+      "source_sha256": "be9285b2d4d5fa435da766c6894b8c2c191f049314d6ac89e000110047318f1a",
+      "golden_sha256": "2f32cb6d1fc9553b3b1953f9efae691661fbc4cd9be2fb49d0f4c56fe549c719",
+      "axes": [
+        "owner-preserving group start",
+        "intervening note",
+        "standalone deactivation",
+        "external left activation"
+      ],
+      "result": "fail",
+      "comparison": "Lifecycle y positions match, but Java constrains the group frame to x=143 width=225.4375 while Rust expands it to x=15 width=353, proving the lifecycle/group range consumer is not integrated with the same model."
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review6_owned_left_note_intervening.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review6_owned_left_note_intervening.svg",
+      "source_sha256": "55e2dd71e21d42c887bcd04494570b269f3bb3e1ae1e6a62d45e1758d39ae03a",
+      "golden_sha256": "e897a33d7eb7a2b6427bf4704f4cfa3d490b12d5b7460df265240b5f4ecb24c2",
+      "axes": [
+        "FROM_LEFT activation",
+        "intervening standalone note",
+        "message-owned deactivation",
+        "renamed participants"
+      ],
+      "result": "fail",
+      "comparison": "The note body is shifted 5px right in Rust relative to Java, one activation half-width, while the lifecycle row itself is retained."
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review6_owned_right_divider_intervening.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review6_owned_right_divider_intervening.svg",
+      "source_sha256": "2c30a8e949fc27a9247d54468a7757386fa1f8d407367d6f2aa54fbd4c2e7508",
+      "golden_sha256": "2503b47550e72217802d1f983abe7c38f5bd92e64175743f580d3bf05220ea28",
+      "axes": [
+        "FROM_RIGHT activation",
+        "intervening divider and autonumber directive",
+        "message-owned deactivation",
+        "shared right external border"
+      ],
+      "result": "fail",
+      "comparison": "The final canvas width agrees, but Java's divider spans 510.7866px while Rust uses the stale 367.6021px pre-external width and miscenters its label."
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review6_right_border_group_reset_depth.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review6_right_border_group_reset_depth.svg",
+      "source_sha256": "bf73373f355bebab5115607581291d892f2ccc9fd81f976f7b96d9403c677ea0",
+      "golden_sha256": "33e54db13c6e483e743113c4ce26972d1a521c0f344cf92f3bc28edb1b37cbe5",
+      "axes": [
+        "right-border live depth",
+        "group-end ownership reset",
+        "FROM_RIGHT and TO_RIGHT sharing",
+        "trailing participant message"
+      ],
+      "result": "fail",
+      "comparison": "Rust retains the grouped message as owner, adds 30px, and evaluates later right-border arrows against the wrong depth; Java is 242px high and Rust is 272px high."
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review6_right_border_intervening_depth.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review6_right_border_intervening_depth.svg",
+      "source_sha256": "b3b9cee5c4c7f53ce49d5760bb5919431215daf6e16e118edeb363cc922ed040",
+      "golden_sha256": "16554150b1ad1e2264f6e6bc698432efc8c2f76f2dd1415b14d67483f592049a",
+      "axes": [
+        "right-border depth staircase",
+        "inline and explicit activation",
+        "intervening note and divider",
+        "FROM_RIGHT and TO_RIGHT sharing"
+      ],
+      "result": "fail",
+      "comparison": "Rust shifts the active-lifeline note 6px right and renders the divider at stale width 328.0137 instead of Java's 457.5991, despite agreeing on final canvas width."
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review6_self_owner_unrelated_lifecycle.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review6_self_owner_unrelated_lifecycle.svg",
+      "source_sha256": "ea8fd5c536a9d3cdfca7815d949c7472850cda5b512cb3ec101d85097b349f5f",
+      "golden_sha256": "a95acd85321457fff5c0f278e6bd658988fd04b3ae7e0b185240eb4f0134e127",
+      "axes": [
+        "self-message owner",
+        "unrelated participant activation and deactivation",
+        "participant declaration order",
+        "trailing bidirectional messages"
+      ],
+      "result": "fail",
+      "comparison": "Java ignores unrelated lifecycle types when computing a self-message's combined row and is 194px high. Rust records them, adds 30px, and is 224px high."
+    },
+    {
+      "source": "test-diagrams/perturbations/sequence-inline-arrow-style/review6_unrelated_participant_order_control.puml",
+      "golden": "test-diagrams/perturbations/sequence-inline-arrow-style/review6_unrelated_participant_order_control.svg",
+      "source_sha256": "b8b2c6af9f7af6a9dfc87e8d722bfb6cc07fad05725f0ef49a5bd887e25b8f14",
+      "golden_sha256": "841f5a3264b21067860f42409e45420cdb07ed7b513e816986d48f5e3cb6dc59",
+      "axes": [
+        "ordinary message owner",
+        "unrelated participant activation and deactivation",
+        "intervening over-note",
+        "nontrivial participant declaration order"
+      ],
+      "result": "pass",
+      "comparison": "SVGs are structurally equivalent; this confirms Java's activation-and-deactivation test is message-wide for non-self messages."
+    }
+  ],
+  "mechanism_assessment": {
+    "decimal_format_field": "accepted within this review: both fresh mixed #/0 patterns pass, including resume, styling, and reversed spatial order",
+    "source_cross_half_arrow": "rejected: inactive-source controls pass, but an active semantic source moves Rust's cross and shaft endpoint by one activation half-width",
+    "message_owned_lifecycle": "rejected: Rust models the owner as the last message only, omits Java's GroupEnd replacement, collapses ordered lifecycle-type state to a boolean, and omits self-message participant filtering",
+    "right_external_area": "rejected: final canvas width can be correct while divider, note, group, and decoration consumers retain stale or independently reconstructed depth/extent state",
+    "single_underlying_model": "not present: spacing activation_depth, note active_depth, lost_scan_activation, activation-bar open_activations, and render_activation are separate mutable histories; lifecycle_owner/lifecycle_y_offset are consulted by only a subset"
+  },
+  "anti_overfit_findings": {
+    "forbidden_fixture_io": "none found",
+    "fixture_label_conditions": "none found",
+    "coordinate_or_branch_count_keys": "none found",
+    "mechanical_diff_check": "clean",
+    "constant_provenance": "SAME_MESSAGE_LIFECYCLE_ROW and the two SOURCE_CROSS center offsets name Java classes in comments, but the added branch conditions and 5px cross geometry do not carry the adjacent exact Java method/derivation required by the strengthened rule; the active-source counterexample shows the derivation is incomplete.",
+    "architectural_risk": "high: five independently evolved activation/depth histories make local exact fixes likely to disagree under event interleavings"
+  },
+  "findings": [
+    "All 37 scoped pre-existing perturbations pass; the one declared physical Serif case remains explicitly excluded.",
+    "Only 6 of 16 fresh valid-syntax perturbations pass.",
+    "Rust's last_message_owner survives GroupEnd, contradicting SequenceDiagram.grouping where END replaces lastEventWithDeactivate with GroupingLeaf; three fresh group-reset cases fail and add a false 30px row.",
+    "Rust's owner_has_activation boolean does not reproduce AbstractMessage.firstIsActivate ordering; a valid deactivation-then-unrelated-activation sequence adds a false 30px row.",
+    "Rust applies unrelated lifecycle types to self-message ownership, while AbstractMessage.addLifeEvent returns before recording them; the fresh self-message case adds a false 30px row.",
+    "An active semantic source moves source-cross half-arrow geometry by one activation half-width even though the inactive control passes.",
+    "Owner-preserving notes, group starts, dividers, and deep right-border cases expose stale independent depth or extent consumers.",
+    "The mechanical anti-overfit scan found no golden reads, fixture-label keys, coordinate keys, or branch-count ladders.",
+    "The claimed single underlying lifecycle ownership/depth model is absent; at least five separate state trackers remain."
+  ],
+  "required_follow_up": [
+    "Represent lastEventWithDeactivate semantics explicitly, including GroupEnd replacement and events with no message owner.",
+    "Retain ordered lifecycle events per owner; derive firstIsActivate and activate-and-deactivate from that order rather than a boolean seen-activation flag.",
+    "Apply AbstractMessage's self-message participant filter before lifecycle types affect owner row allocation.",
+    "Replace spacing, note, external-width, activation-bar, and rendering depth reconstructions with projections from one normalized timeline.",
+    "Derive half-arrow source decorations from the exact live segment at the message ordinate, including active and nested sources.",
+    "Make divider and group extents consume the final shared external area rather than a pre-external canvas width.",
+    "Rebuild the immutable implementation, replay all preserved review6_ failures, and commission a new independent checker with additional fresh inputs."
+  ],
+  "verdict": "rejected"
+}

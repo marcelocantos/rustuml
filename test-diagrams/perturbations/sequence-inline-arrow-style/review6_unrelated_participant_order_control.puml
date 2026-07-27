@@ -1,0 +1,11 @@
+@startuml
+participant "Lifecycle Gamma" as Gamma
+participant "Message Alpha" as Alpha
+participant "Message Beta" as Beta
+Alpha -> Beta : ordinary owner
+activate Gamma
+note over Alpha, Beta : intervening owner-preserving note
+deactivate Gamma
+Beta --> Alpha : after unrelated participant lifecycle
+Gamma -> Alpha : participant-order control
+@enduml

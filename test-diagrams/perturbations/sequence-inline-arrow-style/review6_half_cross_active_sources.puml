@@ -1,0 +1,13 @@
+@startuml
+participant "West Active Port" as West
+participant "Middle Active Port" as Middle
+participant "East Active Port" as East
+activate East
+West /--x East : dotted half from active source
+activate West
+East \-x West : solid half from active source
+Middle //-x East : thin half from nested source
+deactivate West
+East \\--x Middle : thin dotted orientation control
+deactivate East
+@enduml

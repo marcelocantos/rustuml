@@ -1,0 +1,10 @@
+@startuml
+participant "Right Divider Peer" as Peer
+participant "Right Divider Worker" as Worker
+]--> Worker ++ : start right work
+== intervening checkpoint ==
+autonumber 31 4 "<Q-##0>"
+deactivate Worker
+Peer -> Worker : after owned lifecycle
+Worker -->] : right boundary control
+@enduml

@@ -1,0 +1,12 @@
+@startuml
+autonumber 4 9 "<N-###00-Z>"
+participant "Lambda Counter" as Lambda
+participant "Sigma Counter" as Sigma
+Lambda -> Sigma : mixed numeric field
+Sigma --> Lambda : mixed numeric field
+autonumber stop
+Lambda -> Sigma : unnumbered control
+autonumber resume 7 "<R-##000-E>"
+Sigma -> Lambda : resumed numeric field
+Lambda --> Sigma : resumed numeric field
+@enduml

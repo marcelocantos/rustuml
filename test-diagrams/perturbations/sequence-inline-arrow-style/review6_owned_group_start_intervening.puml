@@ -1,0 +1,12 @@
+@startuml
+participant "Grouped Owner Peer" as Peer
+participant "Grouped Owner Worker" as Worker
+[--> Worker ++ : before group start
+group non-resetting group start
+note over Worker
+  group-start ownership probe
+end note
+deactivate Worker
+end
+Peer -> Worker : after grouped lifecycle
+@enduml
