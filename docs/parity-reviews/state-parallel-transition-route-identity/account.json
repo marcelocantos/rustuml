@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-parallel-transition-route-identity",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "net.sourceforge.plantuml.svek.CucaDiagramFileMakerSvek#getOrderedLinks",
+    "net.sourceforge.plantuml.svek.CucaDiagramFileMakerSvek#addLinkNew",
+    "net.sourceforge.plantuml.svek.GraphvizImageBuilder#buildImage",
+    "net.sourceforge.plantuml.svek.Bibliotekon#addLine",
+    "net.sourceforge.plantuml.svek.DotStringFactory#createDotString",
+    "net.sourceforge.plantuml.svek.SvekEdge#appendLine",
+    "net.sourceforge.plantuml.svek.SvekEdge#solveLine"
+  ],
+  "rust_locations": [
+    "crates/rustuml-layout/src/graph.rs::LayoutGraph::layout_full_no_timeout",
+    "crates/rustuml-layout/src/graph.rs::EdgePath",
+    "crates/rustuml-render/src/state.rs::render_with_oracle"
+  ],
+  "invariant": "Java preserves source identity for parallel same-endpoint transitions in two independent stages. CucaDiagramFileMakerSvek groups links with the same connections without changing their relative source order, GraphvizImageBuilder constructs SvekEdge values in that order, and Bibliotekon retains those values in insertion order. SvekEdge.appendLine then emits each relationship as a separate unnamed DOT edge statement carrying a unique marker color. The cgraph DOT grammar passes a null edge key for such a statement, so each statement receives a fresh anonymous cgraph identity. Graphviz may traverse or geometrically order the resulting lanes differently, but SvekEdge.solveLine recovers the spline belonging to each original link by its unique marker color. Rust must reproduce both halves: its cgraph edge creation must use the same anonymous-edge semantics as Java's unnamed DOT statements, and the returned cgraph edge pointer must remain associated with the caller's insertion index through layout and extraction. Parallel route identity is therefore neither endpoint-pair order nor left-to-right lane order; it is the source link attached to the anonymous edge instance that Graphviz routed.",
+  "causal_divergence": "Rust currently calls agedge with an explicit name formed from the endpoint identifiers and insertion index. Graphviz's cgraph implementation resolves a non-null name through its named-ID map, whereas its DOT grammar supplies null when an edge statement has no key pseudo-attribute and agedge allocates a fresh anonymous ID. The explicit Rust names therefore change the graph supplied to dot from the graph Java serialized, even though both contain the same endpoint pairs and labels. This difference is observable when two labelled transitions share solved endpoints: the same two splines are produced, but Java associates the first source link with the left lane while Rust's named edge instance receives the right lane. Rust already retains each returned Agedge_t pointer in edge_specs and recovers edge_index from that pointer after layout, so explicit names are not needed for stable caller identity. Sorting paths, reversing declaration order, or assigning by label width would discard Java's marker-based identity and overfit the observed two-lane case.",
+  "planned_change": "Create every LayoutGraph edge with a null name, matching cgraph's path for Java's unnamed DOT edge statements, and continue recording the returned edge pointer to preserve the caller's edge_index. Add a layout regression proving that parallel anonymous edges retain distinct splines and label boxes while their edge_index-to-lane association follows insertion identity. Verify the existing two-link pseudostate mesh, a renamed two-link graph with the label widths exchanged, and a fresh three-link same-endpoint graph with reordered declarations. Run the focused layout and state tests, the full no-oracle ratchet, and independent adversarial review. Do not sort routes geometrically, reverse all parallel links, branch on parallel-edge count, inspect fixture labels, or derive identity from label dimensions.",
+  "perturbation_axes": [
+    "renamed source and target identifiers",
+    "two and three same-endpoint transitions",
+    "short and long labels assigned in opposite declaration orders",
+    "parallel links embedded among unrelated incoming and outgoing routes",
+    "declaration order changed without changing endpoint topology",
+    "distinct-route controls using intermediate relay nodes"
+  ]
+}
