@@ -205,6 +205,10 @@ const TITLE_HEIGHT: f64 = TITLE_FONT_SIZE + 10.0;
 /// Left + right body margins added to the entity rect extent to form the body
 /// block width (`dimOriginal`): 7px left + 8px right.
 const BODY_DECORATION_MARGIN: f64 = 15.0;
+/// The no-style SVEK envelope already carries PlantUML's 5px document margin
+/// on its right and bottom sides. An explicit `root { Margin ... }` replaces
+/// that amount in `TextBlockExporter12026.Builder.calculateMargin`.
+const DEFAULT_DOCUMENT_EXTENT_MARGIN: i64 = 5;
 /// Java SVEK `ExtremityExtends` draws the inheritance triangle with an 18px
 /// length from contact tip to base centre and 12px base width, oriented by the
 /// edge tangent.
@@ -2513,6 +2517,9 @@ struct ClassFontOverrides {
     /// `skinparam classBorderColor` raw value — the entity border/separator
     /// stroke colour, applied when no per-entity style overrides it.
     border_color: Option<String>,
+    /// `skinparam ClassBorderThickness` belongs to the merged class style and
+    /// therefore controls both the entity outline and compartment rules.
+    border_width: Option<f64>,
     /// PlantUML `EntityImageClass` passes the style `RoundCorner` diameter to
     /// `URectangle.rounded`; `DriverRectangleSvg` emits half of it as rx/ry.
     round_corner: f64,
@@ -2552,6 +2559,97 @@ struct ClassStereotypeColors {
     stereotype: String,
     background: Option<String>,
     border: Option<String>,
+}
+
+#[derive(Clone, Copy, Default)]
+struct ClassDocumentMargin {
+    top: i64,
+    right: i64,
+    bottom: i64,
+    left: i64,
+}
+
+impl ClassDocumentMargin {
+    fn parse(value: &str) -> Option<Self> {
+        let values = value
+            .split_whitespace()
+            .map(str::parse::<u32>)
+            .collect::<Result<Vec<_>, _>>()
+            .ok()?;
+        match values.as_slice() {
+            [all] => Some(Self {
+                top: i64::from(*all),
+                right: i64::from(*all),
+                bottom: i64::from(*all),
+                left: i64::from(*all),
+            }),
+            [vertical, horizontal] => Some(Self {
+                top: i64::from(*vertical),
+                right: i64::from(*horizontal),
+                bottom: i64::from(*vertical),
+                left: i64::from(*horizontal),
+            }),
+            [top, horizontal, bottom] => Some(Self {
+                top: i64::from(*top),
+                right: i64::from(*horizontal),
+                bottom: i64::from(*bottom),
+                left: i64::from(*horizontal),
+            }),
+            [top, right, bottom, left] => Some(Self {
+                top: i64::from(*top),
+                right: i64::from(*right),
+                bottom: i64::from(*bottom),
+                left: i64::from(*left),
+            }),
+            _ => None,
+        }
+    }
+}
+
+/// Resolve the root document margin from PlantUML's preprocessed `<style>`
+/// source. This mirrors `Style.getMargin` plus
+/// `TextBlockExporter12026.Builder.calculateMargin`; later root declarations
+/// replace earlier theme values.
+fn class_document_margin(diagram: &ClassDiagram) -> Option<ClassDocumentMargin> {
+    let source = diagram.meta.source.as_deref()?;
+    let mut in_style = false;
+    let mut selector_stack = Vec::<String>::new();
+    let mut margin = None;
+
+    for raw_line in source.lines() {
+        let line = raw_line.trim();
+        if line.eq_ignore_ascii_case("<style>") {
+            in_style = true;
+            selector_stack.clear();
+            continue;
+        }
+        if line.eq_ignore_ascii_case("</style>") {
+            in_style = false;
+            selector_stack.clear();
+            continue;
+        }
+        if !in_style || line.is_empty() {
+            continue;
+        }
+        if let Some(selector) = line.strip_suffix('{') {
+            selector_stack.push(selector.trim().to_ascii_lowercase());
+            continue;
+        }
+        if line.starts_with('}') {
+            selector_stack.pop();
+            continue;
+        }
+        if selector_stack.len() == 1 && selector_stack[0] == "root" {
+            let mut parts = line.split_whitespace();
+            if parts
+                .next()
+                .is_some_and(|name| name.eq_ignore_ascii_case("margin"))
+            {
+                margin = ClassDocumentMargin::parse(&parts.collect::<Vec<_>>().join(" "));
+            }
+        }
+    }
+    margin
 }
 
 impl ClassFontOverrides {
@@ -2603,6 +2701,9 @@ impl ClassFontOverrides {
         // specific skinparam is absent.
         let default_font_size =
             find(&["defaultFontSize"]).and_then(|v| v.trim().parse::<u32>().ok());
+        let class_font_size = find(&["ClassFontSize"]).and_then(|v| v.trim().parse::<u32>().ok());
+        let class_attribute_font_size =
+            find(&["ClassAttributeFontSize"]).and_then(|v| v.trim().parse::<u32>().ok());
         let family = find(&["ClassAttributeFontName", "defaultFontName", "fontName"])
             .map(|v| canonical_class_font_family(&v))
             .unwrap_or_else(|| {
@@ -2631,8 +2732,12 @@ impl ClassFontOverrides {
             font_color: find(&["ClassFontColor"]).or_else(|| default_font_color.clone()),
             attr_font_color: find(&["ClassAttributeFontColor"])
                 .or_else(|| default_font_color.clone()),
-            font_size: find(&["ClassFontSize"])
-                .and_then(|v| v.trim().parse::<u32>().ok())
+            // Java `EntityImageClassHeader` resolves
+            // root.element.classDiagram.class.header. The header therefore
+            // inherits FontSize from its parent class style before falling
+            // back to the root default.
+            font_size: class_font_size
+                .or(class_attribute_font_size)
                 .or(default_font_size),
             family,
             name_family,
@@ -2640,9 +2745,7 @@ impl ClassFontOverrides {
             font_italic: style.contains("italic"),
             stereotype_font_styles,
             stereotype_colors,
-            attr_font_size: find(&["ClassAttributeFontSize"])
-                .and_then(|v| v.trim().parse::<u32>().ok())
-                .or(default_font_size),
+            attr_font_size: class_attribute_font_size.or(default_font_size),
             attr_font_bold: attr_style.contains("bold"),
             attr_font_italic: attr_style.contains("italic"),
             attr_icon_size: find(&["ClassAttributeIconSize"])
@@ -2657,6 +2760,8 @@ impl ClassFontOverrides {
             header_background: find(&["classHeaderBackgroundColor"]),
             class_background: find(&["classBackgroundColor"]),
             border_color: find(&["classBorderColor"]),
+            border_width: find(&["classBorderThickness"])
+                .and_then(|v| v.trim().parse::<f64>().ok()),
             round_corner: find(&["classRoundCorner"])
                 .or_else(|| find(&["roundCorner"]))
                 .and_then(|v| v.trim().parse::<f64>().ok())
@@ -3791,6 +3896,7 @@ fn render_plantuml_svg(
     }
 
     let font = ClassFontOverrides::from_skinparams(&diagram.meta.skinparams);
+    let document_margin = class_document_margin(diagram);
     let shadow_filter_id = has_shadowing_skinparam(diagram).then(|| {
         crate::filter_registry::shadow_id_for(diagram.meta.source.as_deref().unwrap_or(""))
     });
@@ -3946,6 +4052,9 @@ fn render_plantuml_svg(
     } else {
         (0.0, 0.0)
     };
+    let (body_dx, body_dy) = document_margin.map_or((body_dx, body_dy), |margin| {
+        (body_dx + margin.left as f64, body_dy + margin.top as f64)
+    });
 
     for position in &mut entity_positions {
         position.0 += body_dx;
@@ -4130,8 +4239,16 @@ fn render_plantuml_svg(
         } else {
             PACKAGE_CANVAS_EXTENT_PAD + i64::from(shadow_filter_id.is_some()) * 5
         };
+        let (extent_pad_x, extent_pad_y, document_width) =
+            document_margin.map_or((extent_pad, extent_pad, 0), |margin| {
+                (
+                    extent_pad + margin.right - DEFAULT_DOCUMENT_EXTENT_MARGIN,
+                    extent_pad + margin.bottom - DEFAULT_DOCUMENT_EXTENT_MARGIN,
+                    margin.left + margin.right,
+                )
+            });
         let decorated_w = if layout.has_decorations {
-            layout.dim_total_w as i64 + MARGIN as i64
+            layout.dim_total_w as i64 + MARGIN as i64 + document_width
         } else {
             0
         };
@@ -4140,10 +4257,10 @@ fn render_plantuml_svg(
         // entity layout. One pixel is retained beyond the image's right edge.
         let latex_image_w = latex_image_max_x.ceil() as i64 + i64::from(latex_image_max_x > 0.0);
         (
-            (max_x as i64 + extent_pad)
+            (max_x as i64 + extent_pad_x)
                 .max(decorated_w)
                 .max(latex_image_w),
-            (max_y + layout.bottom_h) as i64 + extent_pad,
+            (max_y + layout.bottom_h) as i64 + extent_pad_y,
         )
     };
 
@@ -6063,7 +6180,13 @@ fn render_entity_content(
         Some(EntityLineStyle::Dotted) => {
             format!("stroke:{border_col};stroke-width:1;stroke-dasharray:1,3;")
         }
-        None => format!("stroke:{};stroke-width:{};", border_col, BORDER_WIDTH),
+        None => format!(
+            "stroke:{};stroke-width:{};",
+            border_col,
+            font.border_width
+                .map(|width| width.to_string())
+                .unwrap_or_else(|| BORDER_WIDTH.to_string())
+        ),
     };
     let style = oracle_style.unwrap_or(style_default.as_str());
     let no_oracle_corner_radius = fmt4(font.round_corner / 2.0);
@@ -15315,6 +15438,45 @@ mod tests {
         let detached_x = entity_x("FreshDetachedLedger");
         assert!(entity_x("FreshIngress") < detached_x, "{svg}");
         assert!(entity_x("FreshEgress") < detached_x, "{svg}");
+    }
+
+    #[test]
+    fn merged_class_styles_inherit_into_deeper_headers_and_document_margin() {
+        let input = "@startuml\n\
+            <style>\n\
+            root {\n\
+              Margin 13\n\
+            }\n\
+            </style>\n\
+            skinparam defaultFontSize 18\n\
+            skinparam ClassAttributeFontSize 9\n\
+            skinparam ClassBorderThickness 3\n\
+            class FreshRoot {\n\
+              +alpha: String\n\
+            }\n\
+            class FreshChild extends FreshRoot {\n\
+              +beta: int\n\
+            }\n\
+            class FreshGrandchild extends FreshChild\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // Fresh Java 21 / PlantUML 1.2026.3beta6 reference. Java resolves
+        // `root.element.classDiagram.class.header` through
+        // `EntityImageClassHeader`, so the 9px parent class font beats the
+        // 18px root default at every depth. `TextBlockExporter12026` applies
+        // the 13px document margin around the solved SVEK image.
+        assert!(svg.contains(r#"viewBox="0 0 148 334""#), "{svg}");
+        assert!(svg.contains(
+            r##"<rect fill="#F1F1F1" height="60.5996" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:3;" width="82.1821""##
+        ), "{svg}");
+        let grandchild = svg
+            .split_once(r#"data-qualified-name="FreshGrandchild""#)
+            .unwrap()
+            .1;
+        assert!(grandchild.contains(r#"font-size="9""#), "{svg}");
+        assert!(grandchild.contains(">FreshGrandchild</text>"), "{svg}");
     }
 
     #[test]
