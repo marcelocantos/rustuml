@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "graphviz_version": "15.0.0 (20260523.1842)",
+  "java_method": "net.sourceforge.plantuml.svek.SvekNode#appendLabelHtmlSpecialForPortHtml",
+  "dot_model": "A borderless three-row table. The first and third rows contain one cell with WIDTH=fullWidth and COLSPAN=3. The middle row contains an empty cell, one FIXEDSIZE=TRUE WIDTH=12 HEIGHT=12 PORT=P cell, and another empty cell.",
+  "input_model": {
+    "label_width": "Java AWT measured external state-border label width",
+    "threshold": "appendLabelHtmlSpecialForPort casts label_width to int, then selects HTML only when that integer is greater than 40",
+    "full_width": "max(10, floor(label_width) - 40)"
+  },
+  "solved_model": {
+    "node_width": "max(54, full_width + 16)",
+    "node_height": "36",
+    "port_width": "max(12, (full_width + 24) / 3)",
+    "port_height": "12",
+    "painted_symbol_center_offset_x": "6 - port_width / 2"
+  },
+  "samples": [
+    {
+      "full_width": 10,
+      "node_width": "54",
+      "port_width": "12"
+    },
+    {
+      "full_width": 11,
+      "node_width": "54",
+      "port_width": "12"
+    },
+    {
+      "full_width": 20,
+      "node_width": "54",
+      "port_width": "44/3"
+    },
+    {
+      "full_width": 28,
+      "node_width": "54",
+      "port_width": "52/3"
+    },
+    {
+      "full_width": 40,
+      "node_width": "56",
+      "port_width": "64/3"
+    },
+    {
+      "full_width": 50,
+      "node_width": "66",
+      "port_width": "74/3"
+    },
+    {
+      "full_width": 80,
+      "node_width": "96",
+      "port_width": "104/3"
+    },
+    {
+      "full_width": 130,
+      "node_width": "146",
+      "port_width": "154/3"
+    },
+    {
+      "full_width": 135,
+      "node_width": "151",
+      "port_width": "53"
+    },
+    {
+      "full_width": 200,
+      "node_width": "216",
+      "port_width": "224/3"
+    }
+  ],
+  "derivation": "The DOT model above was transcribed from the pinned Java method and solved with `dot -Tplain` and `dot -Tsvg`. Node dimensions came from plain output; P-cell bounds came from each node polygon in SVG. The formulas reproduce all ten samples exactly before SVG decimal formatting."
+}
