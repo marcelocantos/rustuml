@@ -1,0 +1,16 @@
+@startuml
+skinparam StAtE_ArRoW.CoLoR #00695C
+skinparam aRrOw.CoLoR #5E35B1
+skinparam StAtE.ArRoW_CoLoR #00838F
+skinparam ArrowColor #3949AB
+skinparam st_ate.arrow_color #2E7D32
+skinparam default_text_align left
+skinparam default.text.alignment right
+state "Helix Intake 1401" as HelixIntake1401
+state "Helix Relay 1403" as HelixRelay1403
+state "Helix Archive 1409" as HelixArchive1409
+[*] --> HelixIntake1401
+HelixIntake1401 -[#AD1457,dashed]-> HelixRelay1403 : local priority
+HelixRelay1403 --> HelixArchive1409 : inherited
+HelixArchive1409 --> [*]
+@enduml

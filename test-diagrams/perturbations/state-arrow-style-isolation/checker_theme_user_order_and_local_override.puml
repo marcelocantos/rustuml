@@ -1,0 +1,13 @@
+@startuml
+!theme metal
+skinparam State.Arrow_Color #00796B
+skinparam aRrOw.CoLoR #283593
+skinparam StAtE_ArRoW.CoLoR #C62828
+state "Nimbus Source 1421" as NimbusSource1421
+state "Nimbus Switch 1427" as NimbusSwitch1427
+state "Nimbus Sink 1429" as NimbusSink1429
+[*] --> NimbusSource1421
+NimbusSource1421 -[#6A1B9A,dotted]-> NimbusSwitch1427 : local override
+NimbusSwitch1427 --> NimbusSink1429 : user tail
+NimbusSink1429 --> [*]
+@enduml

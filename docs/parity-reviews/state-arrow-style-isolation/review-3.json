@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-arrow-style-isolation",
+  "reviewer": {
+    "task_id": "codex-desktop-t14-state-arrow-style-isolation-review-3",
+    "model": "OpenAI GPT-5"
+  },
+  "account_commit": "8f26f519801e853d6be844adcf1c6cb197d6d139",
+  "corrected_account_commits": [
+    "0fff24021f7b319a893dd98717102aa4719763d6",
+    "8f26f519801e853d6be844adcf1c6cb197d6d139"
+  ],
+  "implementation_commit": "2ddfe4b186e50a46460e51408306b18cab3e5fa5",
+  "prior_rejection_commits": [
+    "f5db731b389e06ad35e2f5cc73eb8e4b014540ab",
+    "d1d83be8bcb422f0307a87535e32dfdaa3ec4eff"
+  ],
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "clean_snapshot": {
+    "rust_revision": "2ddfe4b186e50a46460e51408306b18cab3e5fa5",
+    "worktree": "/private/tmp/rustuml-arrow-style-review-3",
+    "golden_corpus": "copied from the main worktree into the isolated checkout only for no-oracle verification"
+  },
+  "accepted": false,
+  "commands": [
+    "git worktree add --detach /private/tmp/rustuml-arrow-style-review-3 2ddfe4b1",
+    "git diff --find-renames --unified=100 8f26f519..2ddfe4b1 -- crates/rustuml-parser/src/parse/mod.rs",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/skin/SkinParam.java | sed -n '200,330p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/style/FromSkinparamToStyle.java | sed -n '1,210p'",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/state-arrow-style-isolation/checker_separator_alias_and_local_override.puml test-diagrams/perturbations/state-arrow-style-isolation/checker_theme_user_order_and_local_override.puml",
+    "xmllint --noout test-diagrams/perturbations/state-arrow-style-isolation/checker_separator_alias_and_local_override.svg test-diagrams/perturbations/state-arrow-style-isolation/checker_theme_user_order_and_local_override.svg",
+    "ruby -rdigest -e 'compare SHA-256s of the two fresh sources with all test-diagrams/golden/**/*.puml sources and each other'",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-arrow-style-review-3-target cargo test -p rustuml-parser --lib --release -- --nocapture",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-arrow-style-review-3-target cargo test -p rustuml-render --lib --release arrow_color -- --nocapture",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-arrow-style-review-3-target cargo run -q -p rustuml --release -- test-diagrams/perturbations/state-arrow-style-isolation/checker_separator_alias_and_local_override.puml",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-arrow-style-review-3-target cargo run -q -p rustuml --release -- --ast test-diagrams/perturbations/state-arrow-style-isolation/checker_theme_user_order_and_local_override.puml",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-arrow-style-review-3-target cargo run -q -p rustuml --release -- test-diagrams/perturbations/state-arrow-style-isolation/checker_theme_user_order_and_local_override.puml",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-arrow-style-review-3-target cargo test -p rustuml-oracle --test parity_perturbations --release -- --nocapture",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-arrow-style-review-3-target cargo test -p rustuml-oracle --test golden_no_oracle --release -- --nocapture",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-arrow-style-review-3-target cargo clippy --workspace --all-targets --release -- -D warnings",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-arrow-style-review-3-target cargo test -p rustuml-oracle --test harness_guards --release no_golden_data_embedded_in_shipping_crates -- --exact --nocapture",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-arrow-style-review-3-target cargo test -p rustuml-oracle --test harness_guards --release error_golden_census_is_frozen -- --exact --nocapture",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-arrow-style-review-3-target cargo test -p rustuml-oracle --test harness_guards --release decimal_literal_ratchet -- --exact --nocapture",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-arrow-style-review-3-target cargo test -p rustuml-oracle --test harness_guards --release comparator_constants_frozen -- --exact --nocapture",
+    "CARGO_TARGET_DIR=/private/tmp/rustuml-arrow-style-review-3-target cargo test -p rustuml-oracle --test harness_guards --release parity_review_paths_reject_traversal -- --exact --nocapture"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/state-arrow-style-isolation/checker_separator_alias_and_local_override.puml",
+      "golden": "test-diagrams/perturbations/state-arrow-style-isolation/checker_separator_alias_and_local_override.svg",
+      "axes": [
+        "five repeated mixed-case state/global aliases",
+        "underscore and dot normalization before alias reassignment",
+        "terminal align to alignment canonicalization control",
+        "dashed per-link colour as the final override"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-arrow-style-isolation/checker_theme_user_order_and_local_override.puml",
+      "golden": "test-diagrams/perturbations/state-arrow-style-isolation/checker_theme_user_order_and_local_override.svg",
+      "axes": [
+        "real !theme metal expansion followed by user declarations",
+        "mixed-case state/global aliases with underscore and dot separators",
+        "synthetic __theme provenance boundary",
+        "dotted per-link colour as the final override"
+      ],
+      "result": "fail"
+    }
+  ],
+  "findings": [
+    "Java SkinParam.setParam invokes cleanForKey for each declaration. cleanForKeySlow lowercases, strips underscores and dots, normalizes every family-arrow prefix to arrow, and returns arrowcolor for both stateArrowColor and ArrowColor. FromSkinparamToStyle then maps arrowColor to SName.arrow LineColor. Thus the final declaration, regardless of raw spelling, must determine state-diagram arrow shafts and heads; per-link colour remains final.",
+    "Commit 2ddfe4b1 correctly derives a Java-like identity for ordinary parser-side replacement, and the full parser suite passes 490/490. Its effective record deliberately retains the first raw key spelling, however. In checker_separator_alias_and_local_override the final value #2E7D32 is stored under first spelling StAtE_ArRoW.CoLoR. StateSkin::from_diagram only recognizes literal stateArrowColor or ArrowColor case-insensitively, so it cannot observe the canonical identity and falls back to #181818.",
+    "The separator heldout has otherwise identical geometry. Java emits inherited shafts and arrowheads in #2E7D32 and the dashed local transition in #AD1457. Rust emits the local transition correctly, but all three inherited shafts and heads are #181818: six strict colour-only mismatches. This rejects the renderer/parser boundary model, not a layout constant.",
+    "The theme heldout demonstrates a second causal issue. Rust preprocessing defers !theme metal into a synthetic __theme tail after the user's source declarations. Its parsed metadata retains the user value #C62828 under State.Arrow_Color before __theme, then appends metal's ArrowColor #E5E4E2. StateSkin's reverse raw-key scan selects the tail colour. Java loads the theme at the directive and then applies the later three user aliases, so it renders inherited shafts and heads in #C62828 while retaining dotted local #6A1B9A.",
+    "The full strict diff for the metal heldout also contains known broader theme-rendering differences, so the theme failure is not counted as a standalone geometry diagnosis. The shipped Rust SVG nevertheless directly proves the relevant arrow scope loss: it contains inherited stroke #E5E4E2 at width 3.125 and local #6A1B9A, while the Java SVG contains inherited #C62828 and local #6A1B9A.",
+    "The synthetic boundary itself is preserved as an event and the parser's theme-segment keys avoid merging classArrowColor, stateArrowColor, and usecaseArrowColor in the tail. The remaining defect is temporal: user declarations located after !theme in source are represented before that tail, so Java's application order is unavailable to renderer resolution.",
+    "The implementation diff contains no golden-data embedding, fixture labels, SVG output surgery, count-shaped branches, or new high-precision layout constants. git diff --check passes. The frozen guards no_golden_data_embedded_in_shipping_crates, error_golden_census_is_frozen, decimal_literal_ratchet, comparator_constants_frozen, and parity_review_paths_reject_traversal pass.",
+    "Focused renderer arrow tests pass 4/4. Exact clean-tree no-oracle product evidence is 11049/11251 eligible pairs, including state 882/901 and skinparam 400/410. Release clippy passes with warnings denied. These regressions are heldout-specific and therefore reject the causal claim despite unchanged headline coverage.",
+    "The aggregate perturbation test fails for these two new inputs and three previously preserved rejected mechanisms. Existing state-arrow-style-isolation inputs are not listed among its failures. The aggregate review guard is intentionally red because this review rejects the latest implementation."
+  ],
+  "verdict": "rejected"
+}
