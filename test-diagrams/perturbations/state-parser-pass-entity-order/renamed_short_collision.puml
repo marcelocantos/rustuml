@@ -1,0 +1,12 @@
+@startuml
+[*] --> Hull
+Hull --> Cell
+state Hull {
+  [*] --> N1
+  N1 --> [*]
+  state Cell {
+    [*] --> N2
+    N2 --> [*]
+  }
+}
+@enduml

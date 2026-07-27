@@ -13,6 +13,8 @@ use crate::diagram::state::*;
 
 pub fn parse_state(lines: &[String]) -> Result<StateDiagram, ParseError> {
     let mut parser = StateParser::new();
+    parser.predeclare_state_structure(lines);
+    parser.reset_after_predeclaration();
     for (i, line) in lines.iter().enumerate() {
         let (source_line, trimmed) = super::source_line_and_trimmed(i + 1, line);
         if trimmed.is_empty() {
@@ -168,6 +170,74 @@ impl StateParser {
         self.scope_stack.last().map(|f| f.current.as_str())
     }
 
+    /// Populate the quark-equivalent state tree before transition parsing.
+    ///
+    /// Java provenance: `PSystemCommandFactory.createSystem` rewinds the full
+    /// source for each `ParserPass`. State declarations, composite scopes,
+    /// descriptions, and concurrent separators run in pass one, while
+    /// `CommandLinkStateCommon` runs only in pass two.
+    fn predeclare_state_structure(&mut self, lines: &[String]) {
+        let mut in_note = false;
+        let mut in_skinparam_block = false;
+
+        for (i, line) in lines.iter().enumerate() {
+            let (source_line, trimmed) = super::source_line_and_trimmed(i + 1, line);
+            self.current_line = source_line;
+
+            if in_note {
+                if matches!(trimmed, "end note" | "endnote") {
+                    in_note = false;
+                }
+                continue;
+            }
+            if in_skinparam_block {
+                if trimmed == "}" {
+                    in_skinparam_block = false;
+                }
+                continue;
+            }
+            if trimmed.is_empty() {
+                continue;
+            }
+            if trimmed.starts_with("note") {
+                in_note = !trimmed.contains(':') && !trimmed.starts_with("note \"");
+                continue;
+            }
+            if let Some(rest) = trimmed.strip_prefix("skinparam ") {
+                in_skinparam_block = rest.trim_end().ends_with('{')
+                    || rest.split_once(' ').is_some_and(|(_, v)| v.trim() == "{");
+                continue;
+            }
+            if is_region_separator(trimmed) {
+                self.advance_concurrent_region(trimmed);
+                continue;
+            }
+            if trimmed == "}" {
+                self.scope_stack.pop();
+                continue;
+            }
+            if !self.try_state_decl(trimmed) {
+                let _ = self.try_state_description(trimmed);
+            }
+        }
+    }
+
+    fn reset_after_predeclaration(&mut self) {
+        for state in &mut self.states {
+            state.descriptions.clear();
+            state.concurrent_separator = None;
+            state.concurrent_regions.clear();
+            // The prepass fixes quark identity and declaration metadata, but
+            // `source_line` models first textual use for renderer ordering.
+            // Let the full pass repopulate it from the first reference or
+            // declaration it encounters.
+            state.source_line = 0;
+        }
+        self.scope_stack.clear();
+        self.conc_counter = 1;
+        self.current_line = 0;
+    }
+
     /// Resolve a raw state reference within the current scope.
     ///
     /// - `[*]` becomes a scoped pseudo-state marker `[*]<scope>` (the empty
@@ -277,7 +347,11 @@ impl StateParser {
         }
         let id = self.resolve_state_id(raw);
         let parent = self.current_scope().map(String::from);
-        if !self.states.iter().any(|s| s.id == id) {
+        if let Some(state) = self.states.iter_mut().find(|state| state.id == id) {
+            if state.source_line == 0 {
+                state.source_line = self.current_line;
+            }
+        } else {
             self.states.push(State {
                 id: id.clone(),
                 label: raw.to_string(),
@@ -287,6 +361,29 @@ impl StateParser {
             });
         }
         id
+    }
+
+    fn advance_concurrent_region(&mut self, line: &str) {
+        if let Some(frame) = self.scope_stack.last_mut() {
+            // Java provenance: `StateDiagram.concurrentState` stores
+            // `direction` on both the owning state and each synthetic
+            // concurrent group. The renderer only needs the owner's value
+            // because all of its region images share one composition axis.
+            if let Some(state) = self.states.iter_mut().find(|state| state.id == frame.base) {
+                state.concurrent_separator = line.chars().next();
+            }
+            self.conc_counter += 1;
+            let n = self.conc_counter;
+            frame.current = format!("{}.CONC{}", frame.base, n);
+            if let Some(state) = self.states.iter_mut().find(|state| state.id == frame.base) {
+                state
+                    .concurrent_regions
+                    .push(crate::diagram::state::ConcurrentRegion {
+                        id: frame.current.clone(),
+                        source_line: self.current_line,
+                    });
+            }
+        }
     }
 
     fn parse_line(&mut self, line_num: usize, line: &str) -> Result<(), ParseError> {
@@ -368,26 +465,7 @@ impl StateParser {
         // `[*]` pseudo-states. Only meaningful inside a composite — at top level
         // the line is ignored.
         if is_region_separator(line) {
-            if let Some(frame) = self.scope_stack.last_mut() {
-                // Java provenance: `StateDiagram.concurrentState` stores
-                // `direction` on both the owning state and each synthetic
-                // concurrent group. The renderer only needs the owner's value
-                // because all of its region images share one composition axis.
-                if let Some(state) = self.states.iter_mut().find(|state| state.id == frame.base) {
-                    state.concurrent_separator = line.chars().next();
-                }
-                self.conc_counter += 1;
-                let n = self.conc_counter;
-                frame.current = format!("{}.CONC{}", frame.base, n);
-                if let Some(state) = self.states.iter_mut().find(|state| state.id == frame.base) {
-                    state
-                        .concurrent_regions
-                        .push(crate::diagram::state::ConcurrentRegion {
-                            id: frame.current.clone(),
-                            source_line: self.current_line,
-                        });
-                }
-            }
+            self.advance_concurrent_region(line);
             return Ok(());
         }
 
@@ -560,9 +638,6 @@ impl StateParser {
                 state.composite |= is_composite;
                 if state.decl_line.is_none() {
                     state.decl_line = Some(self.current_line);
-                }
-                if state.parent.is_none() {
-                    state.parent = parent;
                 }
                 if state.source_line == 0 {
                     state.source_line = self.current_line;
@@ -955,6 +1030,103 @@ mod tests {
     }
 
     #[test]
+    fn pass_one_nested_declaration_precedes_an_earlier_transition() {
+        let d = parse(
+            "OuterHarbor --> InnerRelay\n\
+             state OuterHarbor {\n\
+             state InnerRelay {\n\
+             [*] --> CopperNode\n\
+             CopperNode --> [*]\n\
+             }\n\
+             }",
+        );
+
+        assert_eq!(d.transitions[0].to, "OuterHarbor.InnerRelay");
+        assert!(d.states.iter().any(|state| {
+            state.id == "OuterHarbor.InnerRelay" && state.parent.as_deref() == Some("OuterHarbor")
+        }));
+        assert!(d.states.iter().any(|state| {
+            state.id == "OuterHarbor.InnerRelay.CopperNode"
+                && state.parent.as_deref() == Some("OuterHarbor.InnerRelay")
+        }));
+        assert!(!d.states.iter().any(|state| state.id == "InnerRelay"));
+    }
+
+    #[test]
+    fn pass_one_description_precedes_an_earlier_transition() {
+        let d = parse(
+            "OuterHarbor --> DeferredRelay\n\
+             state OuterHarbor {\n\
+             DeferredRelay : declared after the transition\n\
+             }",
+        );
+
+        assert_eq!(d.transitions[0].to, "OuterHarbor.DeferredRelay");
+        let deferred = d
+            .states
+            .iter()
+            .find(|state| state.id == "OuterHarbor.DeferredRelay")
+            .unwrap();
+        assert_eq!(deferred.descriptions, vec!["declared after the transition"]);
+    }
+
+    #[test]
+    fn pass_two_transition_without_a_later_declaration_stays_at_root() {
+        let d = parse(
+            "AnchorNode --> ImplicitRelay\n\
+             state UnrelatedShell {\n\
+             [*] --> NestedNode\n\
+             }",
+        );
+
+        assert_eq!(d.transitions[0].from, "AnchorNode");
+        assert_eq!(d.transitions[0].to, "ImplicitRelay");
+        assert!(
+            d.states
+                .iter()
+                .any(|state| { state.id == "ImplicitRelay" && state.parent.is_none() })
+        );
+    }
+
+    #[test]
+    fn reused_root_quark_is_not_reparented_by_a_nested_declaration() {
+        let d = parse(
+            "state SharedRelay\n\
+             state OuterHarbor {\n\
+             state SharedRelay {\n\
+             [*] --> NestedNode\n\
+             }\n\
+             }",
+        );
+
+        let shared = d
+            .states
+            .iter()
+            .find(|state| state.id == "SharedRelay")
+            .unwrap();
+        assert!(shared.parent.is_none());
+        assert!(shared.composite);
+        assert!(d.states.iter().any(|state| {
+            state.id == "SharedRelay.NestedNode" && state.parent.as_deref() == Some("SharedRelay")
+        }));
+    }
+
+    #[test]
+    fn predeclaration_skips_state_like_multiline_note_content() {
+        let d = parse(
+            "note right of VisibleNode\n\
+             state PhantomShell {\n\
+             PhantomNode --> PhantomExit\n\
+             end note\n\
+             state VisibleNode",
+        );
+
+        assert!(d.states.iter().any(|state| state.id == "VisibleNode"));
+        assert!(!d.states.iter().any(|state| state.id == "PhantomShell"));
+        assert!(!d.states.iter().any(|state| state.id == "PhantomNode"));
+    }
+
+    #[test]
     fn concurrent_regions_keep_same_named_children_scope_local() {
         let d = parse(
             "state ParallelVault {\n\
@@ -1059,6 +1231,20 @@ mod tests {
         assert_eq!(d.states[3].kind, StateKind::Fork);
         assert_eq!(d.states[4].kind, StateKind::Join);
         assert_eq!(d.states[5].kind, StateKind::DeepHistory);
+    }
+
+    #[test]
+    fn predeclared_pseudo_keeps_first_reference_and_declaration_lines_distinct() {
+        let d = parse("[*] --> decision\nstate decision <<choice>>");
+        let decision = d
+            .states
+            .iter()
+            .find(|state| state.id == "decision")
+            .unwrap();
+
+        assert_eq!(decision.source_line, 1);
+        assert_eq!(decision.decl_line, Some(2));
+        assert_eq!(decision.kind, StateKind::Choice);
     }
 
     #[test]

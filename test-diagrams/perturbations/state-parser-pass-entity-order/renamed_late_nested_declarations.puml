@@ -1,0 +1,14 @@
+@startuml
+IngressBeacon731 --> DeferredBay731 : enter_nested_731
+
+state IngressBeacon731
+state HarborShell731 {
+  state DeferredBay731 {
+    [*] --> CopperNode731
+    CopperNode731 --> [*]
+  }
+}
+
+DeferredBay731 --> EgressBeacon731 : leave_nested_731
+state EgressBeacon731
+@enduml

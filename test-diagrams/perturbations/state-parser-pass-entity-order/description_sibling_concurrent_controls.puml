@@ -1,0 +1,22 @@
+@startuml
+RootAnchor947 --> DeferredRelay947 : declared_by_description_947
+
+state OrdinaryCopper947 {
+  [*] --> SharedNode947
+  SharedNode947 --> [*]
+}
+state OrdinaryViolet947 {
+  [*] --> SharedNode947
+  SharedNode947 --> [*]
+}
+
+state ParallelShell947 {
+  [*] --> RegionNode947
+  --
+  [*] --> RegionNodeB947
+}
+
+state RootAnchor947 {
+  DeferredRelay947 : description arrives after transition
+}
+@enduml

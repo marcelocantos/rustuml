@@ -1,0 +1,12 @@
+@startuml
+state SharedGate593
+
+state OuterShell593 {
+  state SharedGate593 {
+    [*] --> NestedPulse593
+    NestedPulse593 --> [*]
+  }
+}
+
+SharedGate593 --> TerminalNode593 : fixed_root_parent_593
+@enduml

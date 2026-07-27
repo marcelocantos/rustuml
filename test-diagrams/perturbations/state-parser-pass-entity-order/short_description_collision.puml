@@ -1,0 +1,7 @@
+@startuml
+[*] --> Box
+Box --> Leaf
+state Box {
+  Leaf : late detail
+}
+@enduml
