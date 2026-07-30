@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-symbol-cluster-painted-frontier",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "net.sourceforge.plantuml.svek.ClusterDecoration#drawU",
+    "net.sourceforge.plantuml.svek.SvekResult#calculateDimension",
+    "net.sourceforge.plantuml.klimt.drawing.LimitFinder#drawRectangle",
+    "net.sourceforge.plantuml.klimt.drawing.LimitFinder#drawUPolygon",
+    "net.sourceforge.plantuml.decoration.symbol.USymbolFrame#asBig",
+    "net.sourceforge.plantuml.decoration.symbol.USymbolRectangle#asBig",
+    "net.sourceforge.plantuml.decoration.symbol.USymbolNode#drawNode",
+    "net.sourceforge.plantuml.decoration.symbol.USymbolNode#asBig"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs::package_content_offsets",
+    "crates/rustuml-render/src/class.rs::normalize_svek_package_envelope",
+    "crates/rustuml-render/src/class.rs::emit_layout_frame_cluster",
+    "crates/rustuml-render/src/class.rs::emit_layout_rectangle_cluster",
+    "crates/rustuml-render/src/class.rs::emit_layout_node_cluster"
+  ],
+  "invariant": "ClusterDecoration passes each symbol's asBig block the absolute RectangleArea origin. Frame and rectangle draw their URectangle at that origin, and node draws its bevel inside that same box from polygon points (0,10), (10,0), and (width,0); the bevel is not an origin translation. SvekResult measures the fully painted diagram through LimitFinder and then applies one moveDelta to every node, cluster, and edge. LimitFinder expands a URectangle minimum to (x-1,y-1), expands a UPolygon by ten pixels on each horizontal side, and does not add a vertical polygon inset. These are global painted-frontier effects determined by whichever shape owns each envelope axis, not offsets local to entities enclosed by that package.",
+  "causal_divergence": "Rust normalizes package diagrams from solved cluster boxes without the symbol primitive's LimitFinder frontier. It then compensates only ordinary entities according to their outer owning package: +1/+1 for frame and rectangle and +10/+0 for node. Root entities, relationships, directly empty symbol leaves, and nested clusters do not receive the corresponding move, while enclosed ordinary entities happen to look correct because the local offset cancels the missing global translation. The node emitter separately adds the ten-pixel bevel to its x origin even though Java's drawNode keeps the bevel inside RectangleArea, shifting the nested node outline nine pixels right in a frame-rooted control.",
+  "planned_change": "Measure each painted cluster with the same primitive-specific frontier as Java LimitFinder: frame and rectangle begin one pixel before RectangleArea on both axes, node begins ten pixels before it on x only, cloud retains its generated curve frontier, and path-based symbols retain their path frontier. Feed that frontier into the existing diagram-wide SVEK normalization so nodes, clusters, empty leaves, and edges all receive the same moveDelta. Delete the package-local entity and edge compensation. Paint frame, rectangle, and node asBig symbols directly at the normalized RectangleArea origin, keeping the node bevel only in its polygon points.",
+  "perturbation_axes": [
+    "frame crossed with rectangle and node as the outer envelope owner",
+    "root entities and links crossed with entities enclosed by the symbol cluster",
+    "directly empty symbol leaves crossed with ordinary class leaves",
+    "nested symbol clusters crossed with top-level symbol clusters",
+    "top-to-bottom crossed with left-to-right direction",
+    "short crossed with long renamed labels",
+    "single outer cluster crossed with multiple competing root clusters"
+  ]
+}
