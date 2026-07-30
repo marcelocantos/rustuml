@@ -2,7 +2,7 @@
   "schema_version": 1,
   "mechanism": "class-graphviz-svg-spline-quantization",
   "created": "2026-07-31",
-  "status": "proposed",
+  "status": "rejected",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "rust_revision_before_change": "2007364348e62b80f1478efb7cc84b441cad7757",
   "java_locations": [
@@ -71,6 +71,17 @@
   "claimed_invariant": "Every ordinary class SVEK spline enters PlantUML geometry through Graphviz's serialized SVG representation. Each start point, cubic control point, and cubic endpoint is therefore quantized to Graphviz SVG precision before orientation correction, compound clipping, endpoint shortening, extremity construction, painted-bound calculation, or final UGraphic scaling. Route shape, curvature, decoration kind, rank direction, and scale factor do not bypass that boundary.",
   "causal_divergence": "Rust reads native cgraph spline doubles directly from EdgePath and conditionally quantizes only axis-aligned routes. Java never receives that native stream: DotStringFactory asks Graphviz for SVG, SvgResult parses all M/C coordinates from the two-decimal path string, and SvekEdge mutates the reconstructed DotPath. Curved class links therefore diverge by the exact sub-centipixel residue that Java discarded before later shortening and extremity arithmetic. The mismatch is a missing representation boundary, not a fixture-specific coordinate table, route-kind exception, or comparator tolerance issue.",
   "planned_model_change": "Replace the straight-route predicate in class relationship rendering with an unconditional Graphviz-SVG projection for every spline point before simulate_class_compound and shortened_endpoint_points. Keep subsequent arithmetic at full f64 precision, including during scaled rendering: the initial two-decimal projection models Graphviz serialization, while full-precision formatting allows the later UGraphic scale transform to round once. Do not alter layout, routing, endpoint lengths, comparator tolerances, or non-SVEK geometry.",
+  "experimental_result": {
+    "tested_against_rust_revision": "2007364348e62b80f1478efb7cc84b441cad7757",
+    "change": "Removed the straight-route and full-precision predicates so every ordinary class EdgePath coordinate was rounded to two decimals before compound simulation and endpoint shortening; strengthened the unit input to a curved four-node diamond.",
+    "commands": [
+      "cargo test -p rustuml-render graphviz_curved_edge_points_enter_svek_at_svg_precision",
+      "cargo run --release -p rustuml-oracle --example diff_one -- --no-oracle test-diagrams/golden/class/class_impl_07_interfaces.puml",
+      "cargo test --test golden_no_oracle --release -- --nocapture"
+    ],
+    "result": "Rejected and reverted. The full shipped-path census changed from 11,104/11,251 to 11,100/11,251: class regressed from 1,956 to 1,951 while skinparam improved from 403 to 404. Newly failing exact class controls were class_comprehensive_relationships, class_dpi_300, class_impl_06_interfaces, class_impl_08_interfaces, and class_scale_2_0. The motivating class_impl_07_interfaces remained inexact.",
+    "corrected_conclusion": "Java's serialized-SVG boundary is real, but decimal-rounding Rust's already transformed native EdgePath stream is not an equivalent projection. The missing model includes the coordinate representation and transformation stage on each side of that boundary; quantization alone must not be landed."
+  },
   "perturbation_axes": [
     "axis-aligned versus curved cubic routes",
     "one, three, and seven parallel or fanout links",
