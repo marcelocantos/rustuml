@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-autonomous-label-alignment-capability",
+  "status": "proposed",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "ad60d401e1108b08f1bbc55be9ad148465760d11",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/svek/GroupMakerState.java:110-153 GroupMakerState chooses autonomous inner images from group structure and passes the complete shared skin parameter object to every inner GraphvizImageBuilder",
+    "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java:279-299 SvekEdge creates the label TextBlock inside both root and inner SVEK graphs",
+    "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java:369-373 SvekEdge#getMessageTextAlignment resolves stateMessageAlignment for state links",
+    "src/main/java/net/sourceforge/plantuml/skin/SkinParam.java:691-692 SkinParam#getHorizontalAlignment falls back through defaultTextAlignment with CENTER for state messages"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/state.rs:2754-2810 StateArrowFont#from_skinparams already resolves stateMessageAlignment, defaultTextAlignment, and CENTER fallback",
+    "crates/rustuml-render/src/state.rs:1045-1176 StateTransitionLabelBlock applies the resolved alignment consistently to metrics and paint",
+    "crates/rustuml-render/src/state.rs:3492-3531 has_only_autonomous_layout_skinparams rejects both alignment keys",
+    "crates/rustuml-render/src/state.rs:3867-3990 build_autonomous_composite refuses the autonomous model when that capability predicate is false",
+    "crates/rustuml-render/src/state.rs:5918-5980 render_with_oracle then falls through to a flat path that cannot paint composite state structure"
+  ],
+  "evidence_inputs": [
+    "test-diagrams/perturbations/state-transition-display-lines/checker_left_empty_rows_nested_lr.puml",
+    "test-diagrams/perturbations/state-transition-display-empty-row-atom/empty_first_nested_lr_arial_self.puml"
+  ],
+  "invariant": "State message alignment is a label TextBlock property and never changes whether a state group is autarkic. GroupMakerState builds the same autonomous inner graph regardless of stateMessageAlignment or defaultTextAlignment, and each SvekEdge inside that graph resolves alignment from the shared SkinParam. A renderer that already sizes and paints aligned labels can accept those parameters without changing group ownership, topology, or autonomous eligibility.",
+  "causal_divergence": "Rust's autonomous implementation already consumes both alignment parameters in StateArrowFont and StateTransitionLabelBlock, but its conservative skinparam capability predicate omits their canonical keys. Any composite using stateMessageAlignment or defaultTextAlignment is therefore denied the autonomous path and rendered by the flat fallback. The fallback paints the composite itself and scoped [*] markers as ordinary entities, loses the composite frame, and solves a different graph. This is why the rank-direction implementation changes flat orientation but cannot close the nested checker.",
+  "planned_change": "Add the canonical stateMessageAlignment and defaultTextAlignment keys to the autonomous capability set. Keep the existing shared StateArrowFont/StateTransitionLabelBlock as the sole alignment implementation; do not add a second label path. Add a test proving a renamed composite with each alignment parameter remains autonomous, paints its frame and scoped pseudostates, and changes only row placement. Re-run the two preserved nested LR counterexamples after rebuilding the helper. Do not broaden support for unrelated skinparams in the same change.",
+  "perturbation_axes": [
+    "stateMessageAlignment left, center, and right",
+    "defaultTextAlignment left, center, and right with no state-specific override",
+    "natural Display alignment absent, left, and right",
+    "top-to-bottom and left-to-right rank direction",
+    "single and nested autonomous composites",
+    "ordinary, self, and scoped-pseudostate links with unequal multiline labels"
+  ],
+  "scope_boundary": "This mechanism owns only autonomous-path eligibility for alignment parameters that the autonomous label implementation already supports. It does not own rank direction, Display parsing, font metrics, unsupported style properties, math/link raw rendering, or the general decision to use conservative capability checks."
+}
