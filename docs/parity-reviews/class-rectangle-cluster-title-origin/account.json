@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-rectangle-cluster-title-origin",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "net.sourceforge.plantuml.svek.ClusterDecoration#drawU",
+    "net.sourceforge.plantuml.decoration.symbol.USymbolRectangle#asBig"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs::emit_layout_rectangle_cluster"
+  ],
+  "invariant": "ClusterDecoration translates the complete USymbolRectangle.asBig block to RectangleArea.getPosition(). The rectangle border is drawn at local (0,0), and the title is drawn from that same local origin at y = 2 + stereotype height. For a title without a stereotype, the SVG text baseline is therefore the normalized cluster origin plus the shared package title baseline; there is no additional border-inset translation.",
+  "causal_divergence": "The painted-frontier fix moved the Rust rectangle border from cluster.y + 1 to the normalized cluster origin, matching Java's RectangleArea. The title expression retained its old trailing +1 compensation, however, so the border is exact while every rectangle title remains one pixel too low. An independent checker rejected the change on top-to-bottom, left-to-right, and competing-envelope-owner inputs, all with the same primitive-local error.",
+  "planned_change": "Anchor the rectangle title baseline directly to the same normalized y origin used by its border by deleting the obsolete one-pixel addition. Preserve the existing centered x calculation and shared text metrics. Re-run all preserved rejected rectangle counterexamples plus fresh direction, stereotype, nesting, and competing-owner perturbations under an independent checker.",
+  "perturbation_axes": [
+    "top-to-bottom crossed with left-to-right direction",
+    "plain title crossed with visible stereotype",
+    "top-level rectangle crossed with nested rectangle",
+    "single rectangle envelope owner crossed with competing frame and node owners",
+    "short crossed with long renamed labels",
+    "root entity and crossing link topology"
+  ],
+  "predecessor_rejection": {
+    "review": "docs/parity-reviews/class-symbol-cluster-painted-frontier/review.json",
+    "review_commit": "bd57472e",
+    "failing_inputs": [
+      "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker2_rectangle_tb_competing_owners.puml",
+      "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker2_rectangle_lr_root_link.puml",
+      "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker2_three_root_envelope_owners.puml"
+    ]
+  }
+}
