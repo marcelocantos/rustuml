@@ -1,0 +1,17 @@
+@startuml
+class Start7401
+package Orbit7403 {
+  class Direct7405
+  package Core7407 {
+    class Nested7409
+  }
+}
+class Finish7411
+Start7401 --> Orbit7403.Direct7405
+Orbit7403.Direct7405 --> Orbit7403.Core7407.Nested7409
+Orbit7403.Core7407.Nested7409 --> Finish7411
+note right of Orbit7403.Direct7405 : direct right marker
+note top of Orbit7403.Core7407.Nested7409 : nested top marker
+note left of Orbit7403.Direct7405 : direct left marker
+note bottom of Orbit7403.Core7407.Nested7409 : nested bottom marker
+@enduml

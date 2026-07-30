@@ -1,0 +1,13 @@
+@startuml
+class Beacon7201
+class Intake7203
+class Pivot7205
+class Exit7207
+Beacon7201 --> Intake7203
+Intake7203 --> Pivot7205
+Pivot7205 --> Exit7207
+note top of Intake7203 : top root signal
+note left of Pivot7205 : left root signal
+note bottom of Intake7203 : bottom root signal
+note right of Pivot7205 : right root signal
+@enduml
