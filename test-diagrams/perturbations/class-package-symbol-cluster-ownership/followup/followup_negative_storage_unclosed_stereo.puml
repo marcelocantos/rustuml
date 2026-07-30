@@ -1,0 +1,5 @@
+@startuml
+storage "Broken Storage" <<Encrypted> as BrokenStorage #Pink {
+  class BrokenStorageLeaf
+}
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+artifact ArtifactCode <<BinarySlot>> as "Deploy Bundle" $release <<BundlePost>> #Lavender {
+  class Manifest
+  class Archive
+  Manifest --> Archive
+}
+@enduml

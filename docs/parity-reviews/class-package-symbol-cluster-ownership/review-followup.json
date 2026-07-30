@@ -1,0 +1,283 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-package-symbol-cluster-ownership",
+  "verdict": "REJECT",
+  "identity": {
+    "role": "independent adversarial checker",
+    "implemented_change": false,
+    "agent": "Codex",
+    "model": "GPT-5",
+    "tool": "Codex desktop shell, rg, pinned Java PlantUML JAR, and prebuilt diff_one helper"
+  },
+  "revisions": {
+    "rust_worktree_head": "cf48f960d86542cb05652358bdff4d884cccdcd0",
+    "rust_account_commit": "1be87b305d6b4a209e291ca5b52429ccb9d4b2ec",
+    "rust_implementation_commit": "9bcbcd11bbdc8ec7bd64775cf4842900473b46ea",
+    "java_plantuml_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "artifacts": {
+    "diff_one": {
+      "path": "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one",
+      "sha256": "2fc275bde84f455840273e04159df2ef77980d669cf5f7b127a040e1cf18a27e"
+    },
+    "java_jar": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+    }
+  },
+  "instructions_observed": {
+    "cargo_or_rustc_run": false,
+    "shipping_source_edited": false,
+    "account_edited": false,
+    "baselines_or_comparator_edited": false,
+    "existing_reviews_edited": false
+  },
+  "java_provenance_checked": [
+    "src/main/java/net/sourceforge/plantuml/classdiagram/ClassDiagramFactory.java:127-130 registers CommandPackage before CommandPackageWithUSymbol",
+    "src/main/java/net/sourceforge/plantuml/command/CommandPackage.java:71-93 defines the ordinary package grammar",
+    "src/main/java/net/sourceforge/plantuml/command/CommandPackage.java:106-168 resolves AS/name, group ownership, stereotype, tags, URL, and color",
+    "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandPackageWithUSymbol.java:74-128 defines the symbol-container grammar and its symbol keyword set",
+    "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandPackageWithUSymbol.java:136-177 resolves CODE/DISPLAY with getLazzy and applies the lazy STEREOTYPE capture",
+    "src/main/java/net/sourceforge/plantuml/regex/RegexResult.java:87-112 returns the first populated key whose name starts with the requested prefix",
+    "src/main/java/net/sourceforge/plantuml/stereo/StereotypePattern.java:45-55 captures one permissive chevron span"
+  ],
+  "rust_provenance_checked": [
+    "crates/rustuml-parser/src/parse/class.rs:684-707 parse_line dispatches try_entity_decl before try_package and then fail-closed looks_like_package_opener",
+    "crates/rustuml-parser/src/parse/class.rs:731-760 try_entity_decl includes component and queue but only defers braced database/node/rectangle",
+    "crates/rustuml-parser/src/parse/class.rs:1273-1506 try_package implements ordinary package and symbol-container parsing",
+    "crates/rustuml-parser/src/parse/class.rs:1286-1289 SYMBOL_RE covers only package/namespace/cloud/database/folder/frame/rectangle/node",
+    "crates/rustuml-parser/src/parse/class.rs:1380-1388 chooses trailing symbol stereotype over identity-slot stereotype for supported symbols",
+    "crates/rustuml-parser/src/parse/class.rs:2587-2593 looks_like_package_opener covers only package/namespace/cloud/database/folder/frame/rectangle/node",
+    "crates/rustuml-parser/src/parse/mod.rs:543-609 diagram subtype scoring gives deployment/description weight to storage and artifact containers"
+  ],
+  "commands": [
+    "git status --short --branch",
+    "git rev-parse HEAD",
+    "git show --stat --oneline --decorate --no-renames 9bcbcd11",
+    "git show --stat --oneline --decorate --no-renames 1be87b30",
+    "shasum -a 256 /tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one",
+    "git rev-parse HEAD (in /Users/marcelo/work/github.com/plantuml/plantuml)",
+    "rg -n \"class CommandPackage|CommandPackageWithUSymbol|StereotypePattern|RegexResult|getLazzy|CommandPackage\" src/main/java (in Java repo)",
+    "nl -ba src/main/java/net/sourceforge/plantuml/command/CommandPackage.java | sed -n '1,230p'",
+    "nl -ba src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandPackageWithUSymbol.java | sed -n '1,240p'",
+    "nl -ba src/main/java/net/sourceforge/plantuml/regex/RegexResult.java | sed -n '70,125p'",
+    "nl -ba src/main/java/net/sourceforge/plantuml/stereo/StereotypePattern.java | sed -n '1,100p'",
+    "nl -ba src/main/java/net/sourceforge/plantuml/classdiagram/ClassDiagramFactory.java | sed -n '112,136p'",
+    "nl -ba crates/rustuml-parser/src/parse/class.rs | sed -n '1240,1495p'",
+    "nl -ba crates/rustuml-parser/src/parse/class.rs | sed -n '2470,2625p'",
+    "nl -ba crates/rustuml-parser/src/parse/mod.rs | sed -n '317,625p'",
+    "rg -n \"fixture|checker_|Split Fallback|Split Explicit|PostTwo|MistyRose|Thistle|class-package-symbol|golden|perturbation|if .*label|source_line|line ==\" crates/rustuml-parser/src/parse/class.rs crates/rustuml-parser/src/diagram/class.rs crates/rustuml-render/src/class.rs",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_package_reverse_alias_symbol_fallback_tb.puml test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_folder_reverse_alias_trailing_owns_lr.puml test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_storage_display_alias_slots_lr.puml test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_component_nested_display_alias_tb.puml test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_artifact_reverse_alias_slots_lr.puml test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_queue_reverse_alias_nested_tb.puml test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_node_unclosed_stereo.puml test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_storage_unclosed_stereo.puml",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_package_reverse_alias_symbol_fallback_tb.puml",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_folder_reverse_alias_trailing_owns_lr.puml",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_storage_display_alias_slots_lr.puml",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_component_nested_display_alias_tb.puml",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_artifact_reverse_alias_slots_lr.puml",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_queue_reverse_alias_nested_tb.puml",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_node_unclosed_stereo.puml",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_storage_unclosed_stereo.puml",
+    "cp test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_node_unclosed_stereo.puml /private/tmp/rustuml-package-followup-negative/node.puml",
+    "cp test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_storage_unclosed_stereo.puml /private/tmp/rustuml-package-followup-negative/storage.puml",
+    "printf '%s\\n' '<svg xmlns=\"http://www.w3.org/2000/svg\"></svg>' > /private/tmp/rustuml-package-followup-negative/node.svg",
+    "printf '%s\\n' '<svg xmlns=\"http://www.w3.org/2000/svg\"></svg>' > /private/tmp/rustuml-package-followup-negative/storage.svg",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle --print-rust /private/tmp/rustuml-package-followup-negative/node.puml",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle --print-rust /private/tmp/rustuml-package-followup-negative/storage.puml",
+    "shasum -a 256 test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/*.puml test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/*.svg"
+  ],
+  "fresh_inputs": [
+    {
+      "path": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_package_reverse_alias_symbol_fallback_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_package_reverse_alias_symbol_fallback_tb.svg",
+      "java_status": "valid class-diagram SVG",
+      "axes": [
+        "package keyword falling through to CommandPackageWithUSymbol reverse-alias form",
+        "identity-slot stereotype crossed with trailing stereotype",
+        "nested owner plus top-to-bottom direction"
+      ],
+      "diff_one_no_oracle": {
+        "exit_code": 0,
+        "stdout": "SVGs are structurally equivalent"
+      },
+      "outcome": "PASS",
+      "assessment": "Supported-symbol fallback preserves identity and trailing-stereotype ownership for this held-out package form."
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_folder_reverse_alias_trailing_owns_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_folder_reverse_alias_trailing_owns_lr.svg",
+      "java_status": "valid class-diagram SVG",
+      "axes": [
+        "folder symbol family",
+        "reverse alias display form",
+        "identity-slot stereotype crossed with trailing stereotype",
+        "nested owner plus left-to-right direction"
+      ],
+      "diff_one_no_oracle": {
+        "exit_code": 0,
+        "stdout": "SVGs are structurally equivalent"
+      },
+      "outcome": "PASS",
+      "assessment": "Supported folder symbol preserves nested ownership and trailing-stereotype precedence."
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_storage_display_alias_slots_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_storage_display_alias_slots_lr.svg",
+      "java_status": "valid class-diagram SVG",
+      "axes": [
+        "storage symbol family from Java CommandPackageWithUSymbol",
+        "quoted display plus AS alias",
+        "identity-slot stereotype crossed with trailing stereotype",
+        "URL, tooltip, color, and left-to-right direction"
+      ],
+      "diff_one_no_oracle": {
+        "exit_code": 1,
+        "stdout_excerpt": "expected data-diagram-type CLASS cluster data-qualified-name LedgerVault; actual data-diagram-type DESCRIPTION entity data-qualified-name Ledger Vault"
+      },
+      "outcome": "FAIL",
+      "assessment": "Valid counterexample. Java creates a class-diagram storage cluster owned by LedgerVault with visible trailing stereotype VaultPost and nested class leaves. Rust routes/renders it as a DESCRIPTION entity named Ledger Vault, so command-family selection, identity ownership, and stereotype ownership all fail."
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_component_nested_display_alias_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_component_nested_display_alias_tb.svg",
+      "java_status": "valid class-diagram SVG",
+      "axes": [
+        "component symbol family from Java CommandPackageWithUSymbol",
+        "nested package owner",
+        "quoted display plus AS alias",
+        "identity-slot stereotype crossed with trailing stereotype"
+      ],
+      "diff_one_no_oracle": {
+        "exit_code": 1,
+        "stdout_excerpt": "expected cluster Deployment.GatewayComponent; actual entity Deployment.Gateway_Component"
+      },
+      "outcome": "FAIL",
+      "assessment": "Valid counterexample. Java parses braced component as a class package cluster, but Rust try_entity_decl consumes it as an entity before try_package and treats the body as entity text."
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_artifact_reverse_alias_slots_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_artifact_reverse_alias_slots_lr.svg",
+      "java_status": "valid class-diagram SVG",
+      "axes": [
+        "artifact symbol family from Java CommandPackageWithUSymbol",
+        "reverse alias display form",
+        "identity-slot stereotype crossed with trailing stereotype",
+        "left-to-right direction"
+      ],
+      "diff_one_no_oracle": {
+        "exit_code": 1,
+        "stdout_excerpt": "expected class-diagram cluster ArtifactCode with visible BundlePost; actual DESCRIPTION entity ArtifactCode with visible BinarySlot"
+      },
+      "outcome": "FAIL",
+      "assessment": "Valid counterexample. Java stores the trailing stereotype and opens a package cluster. Rust dispatches to DESCRIPTION and keeps the identity-slot stereotype."
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_queue_reverse_alias_nested_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_queue_reverse_alias_nested_tb.svg",
+      "java_status": "valid class-diagram SVG",
+      "axes": [
+        "queue symbol family from Java CommandPackageWithUSymbol",
+        "reverse alias display form",
+        "identity-slot stereotype crossed with trailing stereotype",
+        "nested owner plus top-to-bottom direction"
+      ],
+      "diff_one_no_oracle": {
+        "exit_code": 1,
+        "stdout_excerpt": "expected cluster Messaging.QueueCode with display Review Queue; actual entity Messaging.QueueCode rendering IdentityQueue and body text"
+      },
+      "outcome": "FAIL",
+      "assessment": "Valid counterexample. Java treats braced queue as a package cluster, but Rust try_entity_decl consumes it as a class entity before try_package."
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_node_unclosed_stereo.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_node_unclosed_stereo.svg",
+      "java_status": "syntax-error SVG",
+      "axes": [
+        "malformed unsupported chevron on supported node symbol family",
+        "fail-closed parser behavior"
+      ],
+      "diff_one_no_oracle": {
+        "exit_code": 2,
+        "stderr": "skipped: golden SVG contains a PlantUML error"
+      },
+      "rust_negative_probe": {
+        "method": "Temporary copy with dummy non-error SVG companion to bypass diff_one's Java-error skip; preserved Java SVG remains the syntax-error page.",
+        "exit_code": 101,
+        "stderr_excerpt": "ParseError { line: 1, message: \"invalid package or symbol-container declaration\" }"
+      },
+      "outcome": "PASS_NEGATIVE",
+      "assessment": "Supported node malformed opener fails closed in Rust."
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_storage_unclosed_stereo.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_storage_unclosed_stereo.svg",
+      "java_status": "syntax-error SVG",
+      "axes": [
+        "malformed unsupported chevron on storage symbol family",
+        "fail-closed parser behavior outside Rust's shortened symbol list"
+      ],
+      "diff_one_no_oracle": {
+        "exit_code": 2,
+        "stderr": "skipped: golden SVG contains a PlantUML error"
+      },
+      "rust_negative_probe": {
+        "method": "Temporary copy with dummy non-error SVG companion to bypass diff_one's Java-error skip; preserved Java SVG remains the syntax-error page.",
+        "exit_code": 0,
+        "stdout_excerpt": "<svg ... data-diagram-type=\"DESCRIPTION\" ...><!--entity Broken Storage--><g class=\"entity\" data-qualified-name=\"Broken Storage\" data-source-line=\"1\""
+      },
+      "outcome": "FAIL_NEGATIVE",
+      "assessment": "Malformed storage opener fails open: Java rejects it, but Rust renders a DESCRIPTION entity. This disproves the fail-closed claim for the full Java symbol-container keyword set."
+    }
+  ],
+  "fresh_input_summary": {
+    "valid_inputs": 6,
+    "valid_passed": 2,
+    "valid_failed": 4,
+    "malformed_negative_controls": 2,
+    "malformed_fail_closed": 1,
+    "malformed_fail_open": 1
+  },
+  "findings": [
+    {
+      "severity": "reject",
+      "summary": "Rust implements only a subset of Java CommandPackageWithUSymbol's symbol-container keyword set.",
+      "details": "Java accepts package, rectangle, hexagon, node, artifact, folder, file, frame, cloud, action, process, database, storage, component, card, queue, and stack in CommandPackageWithUSymbol. Rust SYMBOL_RE and looks_like_package_opener cover only package, namespace, cloud, database, folder, frame, rectangle, and node. Fresh Java-valid storage and artifact probes therefore do not use the class package command path in Rust."
+    },
+    {
+      "severity": "reject",
+      "summary": "try_entity_decl precedes try_package and consumes braced component/queue containers as entities.",
+      "details": "The class parser defers braced database/node/rectangle declarations to try_package, but not component or queue. Fresh Java-valid component and queue container probes render as class entities with body text instead of package clusters."
+    },
+    {
+      "severity": "reject",
+      "summary": "Malformed opener behavior is fail-closed only for the shortened Rust symbol list.",
+      "details": "The malformed node control returns the expected Rust ParseError, but the malformed storage control renders a DESCRIPTION entity. Java emits syntax-error SVGs for both."
+    },
+    {
+      "severity": "pass",
+      "summary": "No fixture-shaped logic or unexplained parity constants were found in the audited implementation diff.",
+      "details": "Searches for checker fixture labels, perturbation paths, and golden-specific conditionals found only test names/comments, not shipping parser branches. The rejection is a Java model coverage gap rather than evidence of per-fixture overfit."
+    },
+    {
+      "severity": "pass",
+      "summary": "The corrected account and implementation are consistent for the supported package/folder controls.",
+      "details": "Fresh package reverse-alias and folder reverse-alias controls both passed structurally and exercised command fallback, identity ownership, and trailing-stereotype ownership."
+    }
+  ],
+  "file_hashes_sha256": {
+    "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_artifact_reverse_alias_slots_lr.puml": "7d33eac0435bc677c852259be36dcb81a515f5cba4752188ac778fb2783816f7",
+    "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_component_nested_display_alias_tb.puml": "78d7902a1ecfee8cea9c980de19810d89e0620d744fcc872d6f02186a8d114dc",
+    "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_folder_reverse_alias_trailing_owns_lr.puml": "6946c7fe03050a170866c45411ba3992c36a7668215757abed8078a94f53271c",
+    "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_node_unclosed_stereo.puml": "ac95b61ab59c0bb4ce966eed0196cc3b521d01b28d972b98c273e8be3a574bf6",
+    "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_storage_unclosed_stereo.puml": "bdabbc27dcb8454179d80c7af6c5581ffeff2cf1bf591a66cc6313df9699ee7d",
+    "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_package_reverse_alias_symbol_fallback_tb.puml": "d89f96194fef798359af589fdd00d1c7e4de883e6c358176d68a2e15b57e172f",
+    "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_queue_reverse_alias_nested_tb.puml": "fd2a45202572a4cc6d61bd8dd823d09fab1a9dc974d75157d5ef643a5e061da9",
+    "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_storage_display_alias_slots_lr.puml": "8055c5f2bb3c6961d35303f7dcdb8887302eac9edc32cd5c3ec5821fcb1a86e7",
+    "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_artifact_reverse_alias_slots_lr.svg": "050578d0ebe9cdd81eae7c3889e6e8db8a335fa300621c5b8679c899327b51a4",
+    "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_component_nested_display_alias_tb.svg": "50f26a2807b2dea7e1e71c9fcc8ae4aae9f1c67b197958dcb78f1aadf666c491",
+    "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_folder_reverse_alias_trailing_owns_lr.svg": "21fdcbea8875bd85ac35f862d10e488d93fa62da8af424c96985b12f153f83d1",
+    "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_node_unclosed_stereo.svg": "ff77cc49e87715c66c8e39233f368f225e2f84572f7d763d2cbd042024bcc909",
+    "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_negative_storage_unclosed_stereo.svg": "cdce326e26f0a4aaf1c75fdd15b89ecfeb23978c5e8f141d448a3601e1857de7",
+    "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_package_reverse_alias_symbol_fallback_tb.svg": "48e95a948c5feabd568df3f4e840680b7a9b60e4427cf807ed7ce327ec76b1d7",
+    "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_queue_reverse_alias_nested_tb.svg": "40aee30ed17ec455c022db1c4b754f4fccabebd5a3e024048a2d85a85ebd34ba",
+    "test-diagrams/perturbations/class-package-symbol-cluster-ownership/followup/followup_storage_display_alias_slots_lr.svg": "0de67dd1d2e8312aea97681e5dc10e5190e81ed73b47bce2b341be8e1c1ba221"
+  }
+}

@@ -1,0 +1,5 @@
+@startuml
+node "Broken Node" <<NorthSide> as BrokenNode #Pink {
+  class BrokenLeaf
+}
+@enduml

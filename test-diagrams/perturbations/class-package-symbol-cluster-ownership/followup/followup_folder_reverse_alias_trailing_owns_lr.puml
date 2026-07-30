@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+package HostRoot {
+  folder FolderCode <<IdentitySlot>> as "Folder Display" $ops <<TrailingSlot>> #HoneyDew {
+    class FolderEntry
+    class FolderExit
+    FolderEntry --> FolderExit
+  }
+}
+@enduml

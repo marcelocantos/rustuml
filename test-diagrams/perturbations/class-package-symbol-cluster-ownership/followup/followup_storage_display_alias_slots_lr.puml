@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+storage "Ledger Vault" <<Encrypted>> as LedgerVault $ops <<VaultPost>> [[https://example.com/ledger{Ledger docs}]] #LightYellow {
+  class LedgerRow
+  class LedgerAudit
+  LedgerRow --> LedgerAudit
+}
+@enduml

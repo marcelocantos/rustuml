@@ -1,0 +1,10 @@
+@startuml
+top to bottom direction
+package RootShell {
+  package CoreCode <<IdentityPkg>> as "Core Display" $pkg <<TrailingPkg>> #Azure {
+    class CoreEntry
+    class CoreExit
+    CoreEntry --> CoreExit
+  }
+}
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+top to bottom direction
+package Deployment {
+  component "Gateway Component" <<NorthSide>> as GatewayComponent <<SouthSide>> #LightCyan {
+    class RequestHandler
+    class ResponseMapper
+    RequestHandler --> ResponseMapper
+  }
+}
+@enduml
