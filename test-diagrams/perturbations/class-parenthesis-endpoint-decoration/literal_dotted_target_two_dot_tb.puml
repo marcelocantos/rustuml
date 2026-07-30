@@ -1,0 +1,5 @@
+@startuml
+class "Pewter Dotted Source 2381" as PewterDottedSource
+class "Lilac Dotted Sink 6947" as LilacDottedSink
+PewterDottedSource ..( LilacDottedSink
+@enduml

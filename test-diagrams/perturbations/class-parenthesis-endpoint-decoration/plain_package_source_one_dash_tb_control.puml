@@ -1,0 +1,7 @@
+@startuml
+package "Topaz Plain Group 4211" as TopazPlainGroup {
+  class "Topaz Plain Member 7331" as TopazPlainMember
+}
+class "Plain External Peer 9689" as PlainExternalPeer
+TopazPlainGroup - PlainExternalPeer
+@enduml

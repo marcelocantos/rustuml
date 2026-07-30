@@ -1,0 +1,7 @@
+SVG structural differences:
+  [18] <path> attr mismatch:
+    expected: [("codeLine", "3"), ("d", "M113.86,65.26 C113.86,82.94 113.86,87.13 113.86,104.79"), ("fill", "none"), ("id", "CobaltOrigin-MarigoldDestination"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("codeLine", "3"), ("d", "M113.86,65.26 C113.86,82.94 113.86,87.13 113.86,104.79"), ("fill", "none"), ("id", "CobaltOrigin-to-MarigoldDestination"), ("style", "stroke:#181818;stroke-width:1;")]
+
+
+helper_exit=1

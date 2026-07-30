@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+package "Garnet Archive 2143" as GarnetArchive {
+  class "Stored Node 5309" as StoredNode
+}
+class "Remote Peer 8873" as RemotePeer
+RemotePeer -( GarnetArchive
+@enduml

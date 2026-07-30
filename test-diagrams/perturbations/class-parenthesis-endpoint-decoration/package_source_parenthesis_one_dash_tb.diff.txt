@@ -1,0 +1,7 @@
+SVG structural differences:
+  [22] <path> attr mismatch:
+    expected: [("codeLine", "5"), ("d", "M230.0109,73 C230.3651,73 220.9849,73 221.3391,73 C224.1725,73 227.0062,73 229.84,73 C235.5075,73 241.175,73 246.84,73"), ("fill", "none"), ("id", "CopperVault-backto-OuterPeer"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("codeLine", "5"), ("d", "M230.0109,73 C230.0995,73 220.188,73 220.2765,73 C220.6307,73 220.9849,73 221.3391,73 C224.1725,73 227.0062,73 229.84,73 C235.5075,73 241.175,73 246.84,73"), ("fill", "none"), ("id", "CopperVault-to-OuterPeer"), ("style", "stroke:#181818;stroke-width:1;")]
+
+
+helper_exit=1

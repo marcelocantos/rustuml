@@ -1,0 +1,10 @@
+SVG structural differences:
+  [26] <path> attr mismatch:
+    expected: [("codeLine", "7"), ("d", "M248,131.6415 C248,140.3647 248,141.2603 248,150.5263 C248,152.8427 248,155.1592 248,157.4671 C248,158.6211 248,172.2612 248,173.4098"), ("fill", "none"), ("id", "FjordPackage-LanternPackage"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("codeLine", "7"), ("d", "M248,131.6415 C248,132.1823 248,122.7254 248,123.2706 C248,131.9938 248,141.2603 248,150.5263 C248,152.8427 248,155.1592 248,157.4671 C248,158.6211 248,149.7729 248,150.9215"), ("fill", "none"), ("id", "FjordPackage-to-LanternPackage"), ("style", "stroke:#181818;stroke-width:1;")]
+  [28] <path> attr mismatch:
+    expected: [("d", "M256.4572,180.3316 A9,9 0 0 0 239.5428 180.3316"), ("fill", "none"), ("style", "stroke:#181818;stroke-width:1.5;")]
+    actual:   [("d", "M256.4572,157.8433 A9,9 0 0 0 239.5428 157.8433"), ("fill", "none"), ("style", "stroke:#181818;stroke-width:1.5;")]
+
+
+helper_exit=1

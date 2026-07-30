@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+package "Mauve Plain Group 1597" as MauvePlainGroup {
+  class "Mauve Plain Member 5021" as MauvePlainMember
+}
+class "Plain Remote Peer 8443" as PlainRemotePeer
+PlainRemotePeer - MauvePlainGroup
+@enduml

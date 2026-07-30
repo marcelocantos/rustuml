@@ -1,0 +1,7 @@
+SVG structural differences:
+  [18] <path> attr mismatch:
+    expected: [("codeLine", "3"), ("d", "M91.61,65.26 C91.61,82.94 91.61,97.13 91.61,114.79"), ("fill", "none"), ("id", "HarborLower-backto-NimbusUpper"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("codeLine", "3"), ("d", "M91.61,65.26 C91.61,82.94 91.61,97.13 91.61,114.79"), ("fill", "none"), ("id", "HarborLower-to-NimbusUpper"), ("style", "stroke:#181818;stroke-width:1;")]
+
+
+helper_exit=1

@@ -1,0 +1,4 @@
+@startuml
+class "Lollipop Owner 4903" as LollipopOwner
+LollipopOwner -() "Interface Label 7319"
+@enduml

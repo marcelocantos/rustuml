@@ -1,0 +1,7 @@
+SVG structural differences:
+  [18] <path> attr mismatch:
+    expected: [("codeLine", "4"), ("d", "M182.05,31 C201.58,31 212.31,31 231.44,31"), ("fill", "none"), ("id", "IndigoSource-backto-WillowSink"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("codeLine", "4"), ("d", "M182.05,31 C201.58,31 212.31,31 231.44,31"), ("fill", "none"), ("id", "IndigoSource-to-WillowSink"), ("style", "stroke:#181818;stroke-width:1;")]
+
+
+helper_exit=1

@@ -1,0 +1,258 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-parenthesis-endpoint-decoration",
+  "review_date": "2026-07-31",
+  "account_commit": "2330a96041864c7bea743cfb6fd74c6c2b6c3641",
+  "implementation_commit": "b8e5f29dbe301b4ebb129e311e5ed6d57fcb5914",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "reviewer": {
+    "task_id": "019ee369-54e2-7203-afce-ddde7bfe1723",
+    "identity": "independent adversarial checker",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop",
+    "independence": "Did not implement b8e5f29dbe301b4ebb129e311e5ed6d57fcb5914, did not edit shipping code, and did not edit account.json. This review adds only held-out evidence and review.json."
+  },
+  "revisions": {
+    "checker_worktree": "/tmp/rustuml-checker-class-parenthesis-b8e5f29",
+    "checker_worktree_state": "detached HEAD",
+    "rust_revision_checked": "b8e5f29dbe301b4ebb129e311e5ed6d57fcb5914",
+    "rust_parent_revision": "a8c098b685f414e4604aeed55cdd0de8f7c411f2",
+    "rust_tree_checked": "665409bc6ef70c01854b697e675f4bc40ded346e",
+    "java_revision_checked": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_parent_revision": "602990977f4e66e91e14ae5dd01c586382b3c61f"
+  },
+  "binary": {
+    "path": "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one",
+    "expected_sha256": "487360ab0c5763453c6c8be4ef9e1fb731e9956c9f03f20f1e2237c869b64f16",
+    "pre_run_observed_sha256": "487360ab0c5763453c6c8be4ef9e1fb731e9956c9f03f20f1e2237c869b64f16",
+    "pre_run_size_bytes": 55159064,
+    "pre_run_mtime": "2026-07-31T06:05:10+10:00",
+    "artifact_capture_window": "2026-07-31T06:09:39+10:00 through 2026-07-31T06:11:25+10:00",
+    "mode": "--no-oracle",
+    "rebuilt_by_checker": false,
+    "post_run_path_replacement": {
+      "detected_at_verification": true,
+      "replacement_mtime": "2026-07-31T06:12:39+10:00",
+      "replacement_size_bytes": 55294120,
+      "replacement_sha256": "99f5c2b4ae4f5ef350b1f66f3c7eaf219cd70983d1ff135b5c7edda731a92fd0",
+      "provenance_effect": "None. Every preserved Rust SVG and diff predates the replacement, and no helper output was regenerated after it."
+    }
+  },
+  "java_jar": {
+    "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "mode": "-Djava.awt.headless=true -charset UTF-8 -tsvg"
+  },
+  "commands": {
+    "worktree": "git worktree add --detach /tmp/rustuml-checker-class-parenthesis-b8e5f29 b8e5f29dbe301b4ebb129e311e5ed6d57fcb5914",
+    "binary_identity": "shasum -a 256 /tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one",
+    "jar_identity": "shasum -a 256 /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "java_initial_matrix": "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/class-parenthesis-endpoint-decoration/flat_tb_target_one_dash.puml test-diagrams/perturbations/class-parenthesis-endpoint-decoration/flat_lr_source_two_dash.puml test-diagrams/perturbations/class-parenthesis-endpoint-decoration/flat_tb_both_two_dash.puml test-diagrams/perturbations/class-parenthesis-endpoint-decoration/direction_up_target_inversion_tb.puml test-diagrams/perturbations/class-parenthesis-endpoint-decoration/direction_left_source_inversion_lr.puml test-diagrams/perturbations/class-parenthesis-endpoint-decoration/package_source_parenthesis_one_dash_tb.puml test-diagrams/perturbations/class-parenthesis-endpoint-decoration/package_target_parenthesis_one_dash_lr.puml test-diagrams/perturbations/class-parenthesis-endpoint-decoration/package_both_endpoints_two_dash_tb.puml test-diagrams/perturbations/class-parenthesis-endpoint-decoration/nested_class_both_two_dash_lr.puml test-diagrams/perturbations/class-parenthesis-endpoint-decoration/styled_both_two_dash_tb.puml test-diagrams/perturbations/class-parenthesis-endpoint-decoration/lollipop_negative_control.puml",
+    "java_dotted_matrix": "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/class-parenthesis-endpoint-decoration/literal_dotted_target_two_dot_tb.puml test-diagrams/perturbations/class-parenthesis-endpoint-decoration/literal_dotted_source_one_dot_lr.puml",
+    "java_plain_group_controls": "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/class-parenthesis-endpoint-decoration/plain_package_source_one_dash_tb_control.puml test-diagrams/perturbations/class-parenthesis-endpoint-decoration/plain_package_target_one_dash_lr_control.puml",
+    "helper_capture_template": "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle --print-rust <puml> > <stem>.rust.svg; /tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle <puml> > <stem>.diff.txt 2>&1; printf '\\nhelper_exit=%s\\n' \"$?\" >> <stem>.diff.txt",
+    "artifact_timestamp_audit": "for f in test-diagrams/perturbations/class-parenthesis-endpoint-decoration/*.rust.svg; do stat -f '%Sm %N' -t '%Y-%m-%dT%H:%M:%S' \"$f\"; done | sort",
+    "fixture_shape_search": "rg -n -S 'class-parenthesis-endpoint-decoration|Quartz Source 4107|Indigo Source 2719|Cobalt Origin 4513|Nimbus Upper 3209|Saffron West 5813|Copper Vault 7729|Garnet Archive 2143|Fjord Package 3467|Orchid Scope 6763|Azure Styled 3251|Pewter Dotted Source 2381|Umber Dotted Source 3571|Topaz Plain Group 4211|Mauve Plain Group 1597' crates/rustuml crates/rustuml-parser crates/rustuml-render crates/rustuml-layout crates/rustuml-math",
+    "cargo_or_rustc_run": false
+  },
+  "source_inspection": {
+    "java": [
+      "ClassDiagramFactory.initCommandsList registers CommandLinkClass before CommandLinkLollipop.",
+      "CommandLinkClass.getRegexConcat parses endpoint heads independently through LinkDecor.getRegexDecors1/getRegexDecors2 and permits [-=.]+ arrow bodies with optional direction and style sections.",
+      "CommandLinkClass.getLinkType builds LinkType(decors2, decors1); Link.getInv and LinkType.getInversed swap endpoints and decorations for left/up directions.",
+      "Link.getLinkStrategy returns SIMPLIER. SvekEdge suppresses Graphviz arrowheads, calls ExtremityParenthesis through LinkDecor, and shortens DotPath by the extremity decoration length before paint.",
+      "ExtremityParenthesis defines radius 9, half-angle 70 degrees, fixed stroke width 1.5, and decoration length 10.",
+      "Link.idCommentForSvg emits '-backto-' when decor1 is NONE and decor2 is present, a plain '-' when both decorations are present, and '-to-' when only decor1 is present.",
+      "Cluster.getRankSame only emits a same-rank subgraph when both SvekEdge endpoint UID prefixes are ordinary SvekNode members. ClusterDotString creates a separate hidden special point for links to groups.",
+      "DotPath.moveStartPoint removes a first cubic when the requested decoration movement is at least that cubic's length, then shifts the surviving start point and first control point."
+    ],
+    "rust": [
+      "EndpointDecor::Parenthesis is propagated through Relationship.from_decor/to_decor, direction inversion swaps those fields, and solid dash target-end cases reach layout and paint correctly.",
+      "The parenthesis relationship regex enumerates only )-+, -+(, and )-+( forms. It does not accept Java-valid dotted or equals shaft bodies.",
+      "render_relationship_svg forces every relationship containing Parenthesis to use a '-to-' path ID, bypassing Java's source-only and double-decoration identity branches. relationship_decorates_from/to also ignores EndpointDecor, so source-only parenthesis links emit an ordinary link comment instead of a reverse-link comment.",
+      "shortened_endpoint_points translates the first point/control and last point/control but never removes a short first cubic. On clipped package-source routes this leaves a backwards cubic that Java DotPath.moveStartPoint removes.",
+      "The group endpoint rank suppression is broad, but its SvekNode-membership rationale is supported by Java Cluster.getRankSame and no fixture-specific endpoint names are used."
+    ],
+    "constant_review": {
+      "status": "supported",
+      "details": "All four newly introduced parity constants are directly supported by ExtremityParenthesis: radius 9, 70-degree half-angle (140-degree arc), decoration length 10, and stroke width 1.5. No unexplained parity-affecting numeric literal was found in the implementation diff."
+    },
+    "fixture_shaping_review": {
+      "status": "not_found",
+      "details": "No mechanism name, held-out label, held-out alias, per-fixture branch, coordinate-keyed surgery, or unexplained constant ladder was found in shipping crates. The synthetic __svek_group_endpoint_ prefix branch is model-shaped and backed by Java's hidden group point behavior."
+    }
+  },
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/flat_tb_target_one_dash.puml",
+      "java_svg": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/flat_tb_target_one_dash.svg",
+      "rust_svg": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/flat_tb_target_one_dash.rust.svg",
+      "diff": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/flat_tb_target_one_dash.diff.txt",
+      "axes": ["renamed labels", "target parenthesis", "one dash", "top-to-bottom", "ordinary classes"],
+      "result": "PASS"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/flat_lr_source_two_dash.puml",
+      "java_svg": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/flat_lr_source_two_dash.svg",
+      "rust_svg": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/flat_lr_source_two_dash.rust.svg",
+      "diff": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/flat_lr_source_two_dash.diff.txt",
+      "axes": ["renamed labels", "source parenthesis", "two dashes", "left-to-right", "ordinary classes"],
+      "result": "FAIL",
+      "finding": "Java path ID is IndigoSource-backto-WillowSink; Rust emits IndigoSource-to-WillowSink."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/flat_tb_both_two_dash.puml",
+      "java_svg": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/flat_tb_both_two_dash.svg",
+      "rust_svg": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/flat_tb_both_two_dash.rust.svg",
+      "diff": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/flat_tb_both_two_dash.diff.txt",
+      "axes": ["renamed labels", "both endpoint parentheses", "two dashes", "top-to-bottom", "ordinary classes"],
+      "result": "FAIL",
+      "finding": "Java path ID is CobaltOrigin-MarigoldDestination; Rust emits CobaltOrigin-to-MarigoldDestination."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/direction_up_target_inversion_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/direction_up_target_inversion_tb.svg",
+      "rust_svg": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/direction_up_target_inversion_tb.rust.svg",
+      "diff": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/direction_up_target_inversion_tb.diff.txt",
+      "axes": ["renamed labels", "target parenthesis before inversion", "up direction inversion", "two shaft characters", "ordinary classes"],
+      "result": "FAIL",
+      "finding": "Geometry and decoration side match, but Java path ID is HarborLower-backto-NimbusUpper while Rust emits HarborLower-to-NimbusUpper."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/direction_left_source_inversion_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/direction_left_source_inversion_lr.svg",
+      "rust_svg": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/direction_left_source_inversion_lr.rust.svg",
+      "diff": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/direction_left_source_inversion_lr.diff.txt",
+      "axes": ["renamed labels", "source parenthesis before inversion", "left direction inversion", "left-to-right", "ordinary classes"],
+      "result": "PASS"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/package_source_parenthesis_one_dash_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/package_source_parenthesis_one_dash_tb.svg",
+      "rust_svg": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/package_source_parenthesis_one_dash_tb.rust.svg",
+      "diff": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/package_source_parenthesis_one_dash_tb.diff.txt",
+      "axes": ["renamed labels", "source parenthesis", "one dash", "top-to-bottom", "filled package source"],
+      "result": "FAIL",
+      "finding": "Rust uses the wrong '-to-' path ID and retains an extra backwards first cubic after package clipping; Java removes the short first cubic before the 10px decoration shift."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/package_target_parenthesis_one_dash_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/package_target_parenthesis_one_dash_lr.svg",
+      "rust_svg": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/package_target_parenthesis_one_dash_lr.rust.svg",
+      "diff": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/package_target_parenthesis_one_dash_lr.diff.txt",
+      "axes": ["renamed labels", "target parenthesis", "one dash", "left-to-right", "filled package target"],
+      "result": "PASS"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/package_both_endpoints_two_dash_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/package_both_endpoints_two_dash_tb.svg",
+      "rust_svg": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/package_both_endpoints_two_dash_tb.rust.svg",
+      "diff": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/package_both_endpoints_two_dash_tb.diff.txt",
+      "axes": ["renamed labels", "both endpoint parentheses", "two dashes", "top-to-bottom", "filled package-to-package"],
+      "result": "FAIL",
+      "finding": "Rust emits the wrong '-to-' path ID and a materially different compound spline; the target arc is painted at y=157.8433 instead of Java's y=180.3316."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/nested_class_both_two_dash_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/nested_class_both_two_dash_lr.svg",
+      "rust_svg": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/nested_class_both_two_dash_lr.rust.svg",
+      "diff": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/nested_class_both_two_dash_lr.diff.txt",
+      "axes": ["renamed labels", "both endpoint parentheses", "two dashes", "left-to-right", "nested class target"],
+      "result": "FAIL",
+      "finding": "Java uses ExternalSource-NestedTarget; Rust incorrectly inserts '-to-'."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/styled_both_two_dash_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/styled_both_two_dash_tb.svg",
+      "rust_svg": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/styled_both_two_dash_tb.rust.svg",
+      "diff": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/styled_both_two_dash_tb.diff.txt",
+      "axes": ["renamed labels", "both endpoint parentheses", "two dashes", "dotted style override", "color", "thickness"],
+      "result": "FAIL",
+      "finding": "Stroke, dash, color, fixed 1.5px arcs, and geometry match, but the Java plain-hyphen path ID is replaced with '-to-' by Rust."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/literal_dotted_target_two_dot_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/literal_dotted_target_two_dot_tb.svg",
+      "rust_svg": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/literal_dotted_target_two_dot_tb.rust.svg",
+      "diff": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/literal_dotted_target_two_dot_tb.diff.txt",
+      "axes": ["renamed labels", "target parenthesis", "two literal dots", "top-to-bottom", "ordinary classes"],
+      "result": "FAIL",
+      "finding": "Java emits one dashed class link and one parenthesis arc; Rust emits no link because the parenthesis regex accepts only dash bodies."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/literal_dotted_source_one_dot_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/literal_dotted_source_one_dot_lr.svg",
+      "rust_svg": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/literal_dotted_source_one_dot_lr.rust.svg",
+      "diff": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/literal_dotted_source_one_dot_lr.diff.txt",
+      "axes": ["renamed labels", "source parenthesis", "one literal dot", "left-to-right", "ordinary classes"],
+      "result": "FAIL",
+      "finding": "Java emits one dashed reverse class link and one parenthesis arc; Rust emits no link."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/lollipop_negative_control.puml",
+      "java_svg": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/lollipop_negative_control.svg",
+      "rust_svg": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/lollipop_negative_control.rust.svg",
+      "diff": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/lollipop_negative_control.diff.txt",
+      "axes": ["renamed labels", "quoted lollipop label", "separate -() grammar", "negative control"],
+      "result": "FAIL_CONTROL",
+      "finding": "Rust's pre-existing lollipop regex accepts only word endpoints, so this valid quoted Java lollipop is absent. The ordinary parenthesis relationship parser does not intercept it; this control is preserved but is not needed for the verdict."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/plain_package_source_one_dash_tb_control.puml",
+      "java_svg": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/plain_package_source_one_dash_tb_control.svg",
+      "rust_svg": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/plain_package_source_one_dash_tb_control.rust.svg",
+      "diff": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/plain_package_source_one_dash_tb_control.diff.txt",
+      "axes": ["renamed labels", "plain package source", "one dash", "top-to-bottom", "rank handling control"],
+      "result": "PASS"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/plain_package_target_one_dash_lr_control.puml",
+      "java_svg": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/plain_package_target_one_dash_lr_control.svg",
+      "rust_svg": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/plain_package_target_one_dash_lr_control.rust.svg",
+      "diff": "test-diagrams/perturbations/class-parenthesis-endpoint-decoration/plain_package_target_one_dash_lr_control.diff.txt",
+      "axes": ["renamed labels", "plain package target", "one dash", "left-to-right", "rank handling control"],
+      "result": "FAIL_CONTROL",
+      "finding": "The plain LR package-target control retains a 3.5615px vertical envelope offset. This residual is preserved as evidence but is not used to attribute a parenthesis-specific failure."
+    }
+  ],
+  "findings": [
+    {
+      "severity": "rejecting",
+      "summary": "Java-valid dotted parenthesis relationships are silently dropped.",
+      "evidence": "CommandLinkClass accepts [-=.]+ bodies, but Rust's new regex only enumerates dash parenthesis forms. Both held-out dotted inputs produce a Java link and arc while Rust produces no link."
+    },
+    {
+      "severity": "rejecting",
+      "summary": "Parenthesis SVG path identity is wrong for source-only and both-end decorations.",
+      "evidence": "Rust forces '-to-' whenever either EndpointDecor is Parenthesis. Java derives identity from LinkType: source-only uses '-backto-', both-end uses a plain '-', and target-only uses '-to-'. Seven fresh solid inputs fail this rule across ordinary, styled, nested, package, and inverted links."
+    },
+    {
+      "severity": "rejecting",
+      "summary": "Package-source parenthesis trimming does not follow Java DotPath semantics.",
+      "evidence": "After compound clipping, Rust always shifts the first point/control and leaves the first cubic. Java DotPath.moveStartPoint removes a short first cubic when the 10px decoration shift consumes it. The package-source held-out contains the extra backwards cubic, and the package-to-package held-out also misplaces the target arc."
+    },
+    {
+      "severity": "non_rejecting",
+      "summary": "The arc geometry constants, target-only solid path, style ownership, and basic inversion data flow are supported.",
+      "evidence": "Fresh target-only ordinary and package cases pass, a left-inverted source case passes, and the styled both-end case matches stroke/color/dash/arc geometry aside from path identity."
+    },
+    {
+      "severity": "non_rejecting",
+      "summary": "No fixture-shaped logic or unexplained parity constant was found.",
+      "evidence": "Fresh labels do not occur in shipping crates, and every new numeric constant traces directly to ExtremityParenthesis."
+    }
+  ],
+  "summary": {
+    "fresh_inputs_total": 15,
+    "valid_java_inputs": 15,
+    "java_syntax_errors": 0,
+    "passes": 4,
+    "failures": 11,
+    "mechanism_relevant_failures": 9,
+    "control_failures_not_needed_for_verdict": 2,
+    "cargo_or_rustc_run": false,
+    "shipping_files_modified": false,
+    "account_json_modified": false
+  },
+  "verdict": "REJECT"
+}

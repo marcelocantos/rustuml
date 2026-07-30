@@ -1,0 +1,9 @@
+@startuml
+package "Fjord Package 3467" as FjordPackage {
+  class "Fjord Member 6101" as FjordMember
+}
+package "Lantern Package 9521" as LanternPackage {
+  class "Lantern Member 4079" as LanternMember
+}
+FjordPackage )--( LanternPackage
+@enduml

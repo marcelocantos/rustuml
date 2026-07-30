@@ -1,0 +1,6 @@
+@startuml
+left to right direction
+class "Saffron West 5813" as SaffronWest
+class "Juniper East 9479" as JuniperEast
+SaffronWest )-left- JuniperEast
+@enduml
