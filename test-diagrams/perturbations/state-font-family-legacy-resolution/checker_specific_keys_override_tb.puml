@@ -1,0 +1,18 @@
+@startuml
+top to bottom direction
+skinparam defaultFontName Courier New
+skinparam stateFontName Verdana
+skinparam arrowFontName Times New Roman
+skinparam stateArrowFontName Arial
+skinparam stateFontSize 15
+skinparam stateArrowFontSize 13
+state "Verdant Header" as Verdant
+state "Review Loop" as Review {
+  state "Memory Ledger" as Ledger <<history>>
+  state "Check Node" as Check
+  [*] --> Ledger : stateArrow beats arrow
+  Ledger --> Check : state text beats default
+}
+Verdant --> Review : root arrow label
+Review --> [*]
+@enduml

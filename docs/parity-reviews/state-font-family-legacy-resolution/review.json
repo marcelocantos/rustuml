@@ -1,0 +1,232 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-font-family-legacy-resolution",
+  "review_date": "2026-07-30",
+  "reviewer": {
+    "identity": "independent adversarial checker",
+    "model": "GPT-5 Codex / Codex desktop",
+    "tool": "Codex desktop, Java PlantUML JAR, and prebuilt diff_one helper",
+    "workspace": "/private/tmp/rustuml-check-state-font-family-legacy-resolution",
+    "shipping_rust_edited": false,
+    "cargo_or_rustc_invoked": false
+  },
+  "requested_revisions": {
+    "rust_revision": "976f8bf7780f6846dc0b9a76b0728f6a67f4ee29",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "account": {
+    "path": "docs/parity-reviews/state-font-family-legacy-resolution/account.json",
+    "status": "inspected",
+    "sha256": "7fa0f34bf76e3ec187d49b1999719276becf09023b6af4de69d09c83b36c1072",
+    "created_field": "2026-07-31"
+  },
+  "implementation": {
+    "commit": "976f8bf7780f6846dc0b9a76b0728f6a67f4ee29",
+    "summary": "Removes raw legacy `fontName` from state-node, history, transition-label, oracle-assisted, and capability-gate state font resolution, while preserving resolved style-cascade `fontName` handling."
+  },
+  "reference": {
+    "plantuml_repo": "/Users/marcelo/work/github.com/plantuml/plantuml",
+    "plantuml_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "plantuml_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "plantuml_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+  },
+  "rust_helper": {
+    "path": "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one",
+    "requested_sha256": "29072fff684144f256c262cd4797d07d0d1736221e2587df75d7f52a10b5fade",
+    "observed_sha256_initial": "29072fff684144f256c262cd4797d07d0d1736221e2587df75d7f52a10b5fade",
+    "observed_sha256_later": "a6b9987075ad50edbda5e889dff354ba18f3328f57020e1857af796d5900ac56",
+    "mtime_later": "2026-07-31 05:14:55 AEST",
+    "mode": "--no-oracle",
+    "provenance_note": "The helper matched the requested SHA-256 at the start of the review, then later hashed differently at the same path. The diff evidence below reflects execution from that path, but exact-binary provenance drifted during the review."
+  },
+  "timeline_notes": [
+    "Today was Thursday, 2026-07-30. The reviewed Rust commit is dated Friday, 2026-07-31, and the account `created` field is also 2026-07-31.",
+    "The helper binary later reported an mtime of Friday, 2026-07-31 05:14:55 AEST, so both commit/account metadata and helper timestamps were in the future relative to the review date."
+  ],
+  "source_trace": {
+    "java": [
+      {
+        "location": "src/main/java/net/sourceforge/plantuml/skin/SkinParam.java:429-449,476-484",
+        "finding": "`SkinParam.getFontFamily` checks FontParam-specific `<param>fontname` keys, then `defaultfontname`, and never reads a generic legacy `fontname` key."
+      },
+      {
+        "location": "src/main/java/net/sourceforge/plantuml/style/FromSkinparamToStyle.java:156",
+        "finding": "`defaultFontName` is separately mapped into the root style `fontName` property, which is distinct from raw legacy `fontName` lookup."
+      },
+      {
+        "location": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImagePseudoState.java:77-83 and src/main/java/net/sourceforge/plantuml/svek/image/EntityImageTransitionLabel.java:61-67",
+        "finding": "History labels use `FontParam.STATE`; transition labels use `FontParam.ARROW`, so the Java side exercises the same precedence split the account claims."
+      }
+    ],
+    "rust": [
+      {
+        "location": "crates/rustuml-render/src/state.rs:2416-2430,2582-2600,2738-2760,3492-3537,6014-6033,8781-8790",
+        "finding": "The implementation diff removes raw `fontName` from legacy state/history/title/arrow lookups and from the autonomous/flat allowlists, leaving `state*`, `arrow*`, and `defaultFontName` precedence only."
+      },
+      {
+        "location": "crates/rustuml-render/src/state.rs:2700-2702,2816-2818",
+        "finding": "Resolved style-cascade `fontName` still applies through `ResolvedStyle::property(\"fontName\")`, matching the account's intended scope."
+      },
+      {
+        "location": "crates/rustuml-render/src/state.rs search for `eq_ignore_ascii_case(\"fontName\")`",
+        "finding": "No remaining raw legacy `fontName` state lookup was found after the fix; remaining `fontName` reads are style-cascade properties only."
+      },
+      {
+        "location": "git show 976f8bf7 -- crates/rustuml-render/src/state.rs",
+        "finding": "No fixture label branches, golden/SVG reads, coordinate-keyed surgery, comparator changes, or new unexplained parity constants were introduced in the mechanism diff."
+      }
+    ]
+  },
+  "commands": [
+    {
+      "cmd": "shasum -a 256 /tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "result": "initial helper hash matched requested value 29072fff...; jar hash c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+    },
+    {
+      "cmd": "git show 976f8bf7780f6846dc0b9a76b0728f6a67f4ee29:docs/parity-reviews/state-font-family-legacy-resolution/account.json",
+      "result": "account inspected from the requested Rust revision"
+    },
+    {
+      "cmd": "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/skin/SkinParam.java",
+      "result": "Java font-family precedence inspected"
+    },
+    {
+      "cmd": "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/style/FromSkinparamToStyle.java",
+      "result": "Java style-cascade mapping for defaultFontName inspected"
+    },
+    {
+      "cmd": "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/state-font-family-legacy-resolution/*.puml",
+      "result": "Java SVGs generated for all preserved perturbation inputs"
+    },
+    {
+      "cmd": "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle --print-rust <input.puml>",
+      "result": "Rust SVG captured for each preserved perturbation"
+    },
+    {
+      "cmd": "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle <input.puml>",
+      "result": "Strict comparator output captured per perturbation in sibling `.diff.txt` files"
+    },
+    {
+      "cmd": "xmllint --noout test-diagrams/perturbations/state-font-family-legacy-resolution/*.svg test-diagrams/perturbations/state-font-family-legacy-resolution/*.rust.svg",
+      "result": "all preserved Java and Rust SVGs are well-formed XML"
+    },
+    {
+      "cmd": "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"|an error has occured|\\[From string|No class ' test-diagrams/perturbations/state-font-family-legacy-resolution -g '*.svg' -g '*.rust.svg'",
+      "result": "no PlantUML error markers found"
+    },
+    {
+      "cmd": "shasum -a 256 docs/parity-reviews/state-font-family-legacy-resolution/account.json /tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar test-diagrams/perturbations/state-font-family-legacy-resolution/*",
+      "result": "final artifact hashes recorded below; helper path now hashes to a6b99870..."
+    },
+    {
+      "cmd": "find /tmp /private/tmp -path '*/examples/diff_one' -type f -print0 | xargs -0 shasum -a 256",
+      "result": "no accessible `diff_one` copy with SHA-256 29072fff... was found after the helper drift"
+    }
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/state-font-family-legacy-resolution/checker_generic_fontname_inert_tb_root_history.puml",
+      "java_svg": "test-diagrams/perturbations/state-font-family-legacy-resolution/checker_generic_fontname_inert_tb_root_history.svg",
+      "rust_svg": "test-diagrams/perturbations/state-font-family-legacy-resolution/checker_generic_fontname_inert_tb_root_history.rust.svg",
+      "diff": "test-diagrams/perturbations/state-font-family-legacy-resolution/checker_generic_fontname_inert_tb_root_history.diff.txt",
+      "axes": [
+        "raw generic fontName only",
+        "top-to-bottom direction",
+        "flat state nodes plus root history label",
+        "state text and transition labels",
+        "monospace request expected to be inert"
+      ],
+      "result": "pass",
+      "finding": "Structurally equivalent. Java and Rust both keep `font-family=\"sans-serif\"` for state text, transition labels, and the history `H`, showing raw generic `fontName` is inert on the no-oracle state path."
+    },
+    {
+      "source": "test-diagrams/perturbations/state-font-family-legacy-resolution/checker_defaultfontname_courier_lr_nested.puml",
+      "java_svg": "test-diagrams/perturbations/state-font-family-legacy-resolution/checker_defaultfontname_courier_lr_nested.svg",
+      "rust_svg": "test-diagrams/perturbations/state-font-family-legacy-resolution/checker_defaultfontname_courier_lr_nested.rust.svg",
+      "diff": "test-diagrams/perturbations/state-font-family-legacy-resolution/checker_defaultfontname_courier_lr_nested.diff.txt",
+      "axes": [
+        "defaultFontName Courier New",
+        "left-to-right direction",
+        "nested topology with history label",
+        "monospace fallback propagation"
+      ],
+      "result": "pass",
+      "finding": "Structurally equivalent. `defaultFontName` reaches the outer state title, nested worker state, history `H`, and transition labels in both Java and Rust."
+    },
+    {
+      "source": "test-diagrams/perturbations/state-font-family-legacy-resolution/checker_specific_keys_override_tb.puml",
+      "java_svg": "test-diagrams/perturbations/state-font-family-legacy-resolution/checker_specific_keys_override_tb.svg",
+      "rust_svg": "test-diagrams/perturbations/state-font-family-legacy-resolution/checker_specific_keys_override_tb.rust.svg",
+      "diff": "test-diagrams/perturbations/state-font-family-legacy-resolution/checker_specific_keys_override_tb.diff.txt",
+      "axes": [
+        "defaultFontName Courier New",
+        "stateFontName Verdana",
+        "arrowFontName Times New Roman",
+        "stateArrowFontName Arial",
+        "top-to-bottom nested history topology",
+        "proportional specific overrides"
+      ],
+      "result": "pass",
+      "finding": "Structurally equivalent. State and history text resolve to Verdana, while transition labels resolve to Arial, confirming `state*` keys outrank default and `stateArrowFontName` outranks `arrowFontName`."
+    },
+    {
+      "source": "test-diagrams/perturbations/state-font-family-legacy-resolution/checker_style_fontname_beats_raw_generic_lr.puml",
+      "java_svg": "test-diagrams/perturbations/state-font-family-legacy-resolution/checker_style_fontname_beats_raw_generic_lr.svg",
+      "rust_svg": "test-diagrams/perturbations/state-font-family-legacy-resolution/checker_style_fontname_beats_raw_generic_lr.rust.svg",
+      "diff": "test-diagrams/perturbations/state-font-family-legacy-resolution/checker_style_fontname_beats_raw_generic_lr.diff.txt",
+      "axes": [
+        "resolved <style> state FontName Courier New",
+        "resolved <style> arrow FontName Arial",
+        "simultaneous raw generic skinparam fontName Times New Roman",
+        "left-to-right direction"
+      ],
+      "result": "pass",
+      "finding": "Structurally equivalent. Resolved style `fontName` remains effective for states and arrows, while the raw generic legacy `fontName` does not override those channels."
+    },
+    {
+      "source": "test-diagrams/perturbations/state-font-family-legacy-resolution/checker_generic_fontname_inert_tb.puml",
+      "java_svg": "test-diagrams/perturbations/state-font-family-legacy-resolution/checker_generic_fontname_inert_tb.svg",
+      "rust_svg": "test-diagrams/perturbations/state-font-family-legacy-resolution/checker_generic_fontname_inert_tb.rust.svg",
+      "diff": "test-diagrams/perturbations/state-font-family-legacy-resolution/checker_generic_fontname_inert_tb.diff.txt",
+      "axes": [
+        "raw generic fontName only",
+        "top-to-bottom direction",
+        "nested topology with history label and nested start marker"
+      ],
+      "result": "fail_unrelated_residue",
+      "finding": "Both sides still render state/history/label text in sans-serif, so the font-family invariant holds on the exercised channels. The failure is elsewhere: Java emits a `class=\"start_entity\"` nested start ellipse `Flow..start.Flow`, while Rust emits a normal boxed entity named `[*]Flow`, causing a large topology diff unrelated to font resolution."
+    }
+  ],
+  "artifact_hashes": {
+    "files": {
+      "checker_defaultfontname_courier_lr_nested.diff.txt": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+      "checker_defaultfontname_courier_lr_nested.puml": "90348b2a8b45e22316b10035dd6439476045de97afcee45e5633f3aa22ea7fa3",
+      "checker_defaultfontname_courier_lr_nested.rust.svg": "62ca5ecf64d215d13128eeebde33e3bfe41542d30ebf2325e0f679589e736ec1",
+      "checker_defaultfontname_courier_lr_nested.svg": "f786e24accac93f3b06d5cc74e366ea12e307d0f45941e10ee66179aa622c5eb",
+      "checker_generic_fontname_inert_tb.diff.txt": "ef4b4f32e14c88a68501f4af5adb46afa36e3c9e7729c384cd3b3ead383dc770",
+      "checker_generic_fontname_inert_tb.puml": "f4c8e59e2354725fe2478f1185ace87b97b23b6566e7e9aeb2c392735057d82c",
+      "checker_generic_fontname_inert_tb.rust.svg": "0d45c87aec2e4f4374872bfdcf4ce424cb651351fe2a60b32bc8e1ad8c5bc33d",
+      "checker_generic_fontname_inert_tb.svg": "76074f8bed20a0a0cde68e693673c2600d213246c0f6fce468a3c34bf3375430",
+      "checker_generic_fontname_inert_tb_root_history.diff.txt": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+      "checker_generic_fontname_inert_tb_root_history.puml": "66e484403ca37e0b5909d8cbf57a6855e9162a6b33c06d7d42e458c31ded671c",
+      "checker_generic_fontname_inert_tb_root_history.rust.svg": "22d321c0e46ca6f272c31222cdba01f89edfdcfc04655a8d4af91d0cec4cf0b5",
+      "checker_generic_fontname_inert_tb_root_history.svg": "c5913851411c7048f6731f000e47d08601cb25ff7b7ee9771394d789c22d7cea",
+      "checker_specific_keys_override_tb.diff.txt": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+      "checker_specific_keys_override_tb.puml": "2458b314aae4584e63382933495aaa4825e88e791dc2ca80e1b0da6fdd6ef5bd",
+      "checker_specific_keys_override_tb.rust.svg": "d2435e3852e9fa5a2835f0ca32613b95efe3feaac7f5a73a7a6deb4948d478c4",
+      "checker_specific_keys_override_tb.svg": "0265c84a329a3eb3e2e9fe738a3e02fe3f89011cd7bfb56c936751bc2ff6bf3d",
+      "checker_style_fontname_beats_raw_generic_lr.diff.txt": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+      "checker_style_fontname_beats_raw_generic_lr.puml": "56360201e96e3207a6d2bc07c5a52d69f742203d86c78f4accfc3f021324227a",
+      "checker_style_fontname_beats_raw_generic_lr.rust.svg": "994c62fda6aa510d860a30429415f7056bf8e95fec27d6c81dc63943b124a54f",
+      "checker_style_fontname_beats_raw_generic_lr.svg": "24802bffc58abb99da9b3d1b8738dba5ca227c39e5ad8d8ffe9db58f47a92bc5"
+    }
+  },
+  "findings": [
+    "I did not find an in-scope counterexample to the claimed legacy precedence. Fresh held-out inputs confirmed: raw generic legacy `fontName` is inert on no-oracle state text and arrow labels; `defaultFontName` still propagates; specific state and arrow keys override the shared default in the Java order; and resolved style-cascade `fontName` still works.",
+    "The only fresh failure preserved in-scope was not a font-family failure. `checker_generic_fontname_inert_tb.puml` exposed a separate nested start-marker residue where Rust serializes `[*]Flow` as a boxed entity instead of Java's nested `start_entity` ellipse. Because both Java and Rust still rendered the relevant text in sans-serif there, I do not count it as a disproof of the font-resolution invariant.",
+    "The implementation diff is mechanism-shaped rather than fixture-shaped: it removes raw `fontName` from the state legacy lookups and allowlists, adds a regression test for inert generic `fontName`, and leaves style-cascade `fontName` application intact.",
+    "Exact helper provenance drifted. The helper matched the requested SHA-256 at the start of the review, but later the same path hashed to `a6b9987075ad50edbda5e889dff354ba18f3328f57020e1857af796d5900ac56` with a future-dated mtime. This does not by itself create a mechanism counterexample, but it weakens the exact-binary attestation for the diff runs."
+  ],
+  "verdict": "accepted",
+  "verdict_scope": "Accepted on the mechanism claim only: no in-scope counterexample was found for legacy state font-family resolution at the requested Rust revision. Exact helper-binary provenance drifted during the review and is explicitly not attested as stable."
+}

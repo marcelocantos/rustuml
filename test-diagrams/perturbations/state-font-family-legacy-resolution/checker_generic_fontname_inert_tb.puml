@@ -1,0 +1,14 @@
+@startuml
+top to bottom direction
+skinparam fontName Courier New
+skinparam defaultFontSize 13
+state "Wide Default Node" as Wide
+state "Flow Container" as Flow {
+  state "Memory Shelf" as Memory <<history>>
+  state "Step Node" as Step
+  [*] --> Memory : generic stays inert
+  Memory --> Step : still sans
+}
+Wide --> Flow : root label
+Flow --> [*]
+@enduml

@@ -1,0 +1,11 @@
+@startuml
+top to bottom direction
+skinparam fontName Courier New
+skinparam defaultFontSize 13
+state "Wide Default Node" as Wide
+state "Plain Flow" as Plain
+state "Root Memory" as RootMemory <<history>>
+Wide --> Plain : generic stays inert
+Plain --> RootMemory : still sans
+RootMemory --> [*]
+@enduml

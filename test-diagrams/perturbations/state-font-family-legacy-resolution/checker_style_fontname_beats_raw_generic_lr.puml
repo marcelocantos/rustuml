@@ -1,0 +1,17 @@
+@startuml
+left to right direction
+<style>
+state {
+  FontName Courier New
+  FontSize 14
+}
+arrow {
+  FontName Arial
+  FontSize 12
+}
+</style>
+skinparam fontName Times New Roman
+state "Styled Source" as Styled
+state "Styled Target" as Target
+Styled --> Target : style beats raw generic
+@enduml

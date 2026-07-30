@@ -1,0 +1,14 @@
+@startuml
+left to right direction
+skinparam defaultFontName Courier New
+skinparam defaultFontSize 12
+state "Entry Portal" as Entry
+state "Archive Lane" as Lane {
+  state "Recall Buffer" as Recall <<history>>
+  state "Worker Stage" as Worker
+  [*] --> Recall : default courier
+  Recall --> Worker : nested courier
+}
+Entry --> Lane : root courier label
+Lane --> [*]
+@enduml
