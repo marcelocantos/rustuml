@@ -1,0 +1,9 @@
+@startuml
+package "Application Shell" as App {
+  database "Customer Store" as Storage {
+    class Row
+  }
+}
+class Gateway
+Gateway --> App.Storage.Row
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+package "Inbox Parcel" as Inbox {
+}
+Inbox --> Receiver
+class Receiver
+@enduml

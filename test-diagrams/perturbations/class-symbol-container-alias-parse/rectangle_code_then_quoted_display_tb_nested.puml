@@ -1,0 +1,9 @@
+@startuml
+package "UI Domain" as Ui {
+  rectangle Facade as "Public Facade" {
+    class Screen
+  }
+}
+class Session
+Ui.Facade.Screen --> Session
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+folder OpsHub as "Operations Hub" {
+  class Relay
+}
+class Monitor
+Monitor --> OpsHub.Relay
+@enduml

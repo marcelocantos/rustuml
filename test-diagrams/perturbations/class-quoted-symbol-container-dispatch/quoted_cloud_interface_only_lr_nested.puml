@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+package "Outer Shell" as Outer {
+  cloud "Service Boundary" as ServiceEdge {
+    interface Contract
+  }
+}
+interface Caller
+Caller ..> Outer.ServiceEdge.Contract
+@enduml

@@ -1,0 +1,120 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-empty-package-link-endpoint",
+  "account_commit": "ea56f2ce46b1be73eb68bb44393e2870c2c8f6bd",
+  "implementation_commit": "09014421f785f5d251a0b28541603b6dcda7aae9",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "reviewer": {
+    "task_id": "019ee369-54e2-7203-afce-ddde7bfe1723",
+    "identity": "independent adversarial checker",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop",
+    "independence": "Did not implement commit 09014421, did not edit production source, and only added held-out evidence plus this review record."
+  },
+  "revisions": {
+    "checker_worktree_branch": "codex/checker-09014421",
+    "rust_revision_checked": "09014421f785f5d251a0b28541603b6dcda7aae9",
+    "rust_tree_checked": "c02b1280c9be8cabb9730fd8e019014d95b2bd59",
+    "java_revision_checked": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "binary": {
+    "path": "/tmp/rustuml-checker-1482/target/release/examples/diff_one",
+    "sha256": "ecb6d18951d59810a4c64e468990a457969bb67d41d289812ef8d21653de9b90",
+    "mode": "--no-oracle",
+    "rebuilt": false
+  },
+  "java_jar": {
+    "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+  },
+  "commands": [
+    "git worktree add /tmp/rustuml-review-09014421 -b codex/checker-09014421 09014421",
+    "sed -n '1,220p' docs/parity-reviews/class-empty-package-link-endpoint/account.json",
+    "sed -n '430,560p' crates/rustuml-parser/src/parse/class.rs",
+    "sed -n '11311,11360p' crates/rustuml-render/src/class.rs",
+    "sed -n '12230,12270p' crates/rustuml-render/src/class.rs",
+    "sed -n '170,235p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandLinkClass.java",
+    "sed -n '408,433p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/class-empty-package-link-endpoint/empty_alias_link_before_target_tb.puml test-diagrams/perturbations/class-empty-package-link-endpoint/empty_nested_unaliased_lr.puml test-diagrams/perturbations/class-empty-package-link-endpoint/filled_package_endpoint_control_tb.puml test-diagrams/perturbations/class-empty-package-link-endpoint/empty_alias_target_from_class_lr.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-empty-package-link-endpoint/empty_alias_link_before_target_tb.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-empty-package-link-endpoint/empty_nested_unaliased_lr.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-empty-package-link-endpoint/filled_package_endpoint_control_tb.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-empty-package-link-endpoint/empty_alias_target_from_class_lr.puml",
+    "rg -n -i 'class-empty-package-link-endpoint|empty_alias_link_before_target_tb|empty_nested_unaliased_lr|filled_package_endpoint_control_tb|empty_alias_target_from_class_lr' crates/rustuml crates/rustuml-parser crates/rustuml-render crates/rustuml-layout crates/rustuml-math"
+  ],
+  "source_inspection": {
+    "java": [
+      "CommandLinkClass resolves endpoints through quarkInContextSafe(true, endpoint) and only creates a class leaf when quark.getData() is null.",
+      "GraphvizImageBuilder#printGroups mutes only empty package groups to EMPTY_PACKAGE before printEntity, so group identity survives into rendering."
+    ],
+    "rust": [
+      "resolve_relationship_endpoint now returns package.name for any matching package path, not just directly empty packages.",
+      "Renderer helpers relationship_layout_id and no_oracle_entity_id_from only special-case empty leaf packages, so parser broadening to filled packages is not matched by the rendering identity path."
+    ],
+    "fixture_shaping_search": "No mechanism-name string or held-out filename was found in shipping crate logic."
+  },
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-empty-package-link-endpoint/empty_alias_link_before_target_tb.puml",
+      "golden": "test-diagrams/perturbations/class-empty-package-link-endpoint/empty_alias_link_before_target_tb.svg",
+      "axes": [
+        "aliased empty package",
+        "link before target declaration",
+        "top-to-bottom",
+        "ordinary package"
+      ],
+      "result": "pass",
+      "evidence": "Top-level aliased empty package endpoints now compare cleanly when the external class is declared later."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-package-link-endpoint/empty_nested_unaliased_lr.puml",
+      "golden": "test-diagrams/perturbations/class-empty-package-link-endpoint/empty_nested_unaliased_lr.svg",
+      "axes": [
+        "nested empty package",
+        "unaliased path",
+        "left-to-right",
+        "ordinary package"
+      ],
+      "result": "fail",
+      "evidence": "Geometry matches, but Java emits link id=\"Inner-to-Sink\" while Rust emits id=\"Outer.Inner-to-Sink\". Stable endpoint identity is not preserved for nested empty leaves."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-package-link-endpoint/filled_package_endpoint_control_tb.puml",
+      "golden": "test-diagrams/perturbations/class-empty-package-link-endpoint/filled_package_endpoint_control_tb.svg",
+      "axes": [
+        "filled package endpoint",
+        "aliased package",
+        "top-to-bottom",
+        "ordinary package"
+      ],
+      "result": "fail",
+      "evidence": "Java renders a 190x220 CLASS diagram with the link anchored from the Filled package cluster. Rust diverges to a 213x120 layout because resolve_relationship_endpoint broadens to a filled package name that the renderer does not treat as an empty-package endpoint."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-package-link-endpoint/empty_alias_target_from_class_lr.puml",
+      "golden": "test-diagrams/perturbations/class-empty-package-link-endpoint/empty_alias_target_from_class_lr.svg",
+      "axes": [
+        "aliased empty package target",
+        "class-to-package direction",
+        "left-to-right",
+        "ordinary package"
+      ],
+      "result": "pass",
+      "evidence": "The top-level aliased empty package also compares cleanly when it is the relationship target rather than the source."
+    }
+  ],
+  "findings": [
+    "Reject: resolve_relationship_endpoint broadens from directly empty packages to any package path, but the renderer identity path still only special-cases empty leaf packages.",
+    "Fresh valid filled-package control diverges strongly, showing that the parser change overreaches the account's stated scope.",
+    "Fresh valid nested-empty control still diverges on link identity metadata (Inner-to-Sink versus Outer.Inner-to-Sink), so stable endpoint identity is not preserved for nested empty packages even where geometry matches.",
+    "Top-level aliased empty package endpoints do pass in both source and target directions, so the counterexamples are specific and mechanism-relevant."
+  ],
+  "summary": {
+    "valid_inputs": 4,
+    "passes": 2,
+    "failures": 2,
+    "java_syntax_errors": 0,
+    "cargo_or_rustc_run": false
+  },
+  "verdict": "rejected"
+}

@@ -1,0 +1,9 @@
+@startuml
+left to right direction
+package Outer {
+  package Inner {
+  }
+}
+class Sink
+Outer.Inner --> Sink
+@enduml

@@ -1,0 +1,7 @@
+@startuml
+package "Filled Hub" as Filled {
+  class Worker
+}
+class Sink
+Filled --> Sink
+@enduml

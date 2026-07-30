@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+class Api
+database "Warehouse Node" as Warehouse {
+  class Row
+}
+Api --> Warehouse.Row
+@enduml
