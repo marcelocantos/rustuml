@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "mechanism": "description-container-usymbol-identity",
+  "status": "proposed",
+  "supersedes": "docs/parity-reviews/description-container-usymbol-identity/account.json",
+  "correction": "The first account identified the Java USymbol invariant correctly but assigned the Rust divergence to the component-backed DESCRIPTION path. Valid brace-delimited storage and artifact sources select Rust's Deployment subtype, whose parser already retains DeploymentNodeKind::Storage and DeploymentNodeKind::Artifact. The shipped divergence is in deployment cluster rendering and painted-envelope accounting, not parser identity erasure.",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "b283b49c09afb90ffbc9172dc4e5baaa3bd3d572",
+  "scope": {
+    "included": [
+      "Brace-delimited DESCRIPTION storage containers on the Deployment model",
+      "Brace-delimited DESCRIPTION artifact containers on the Deployment model",
+      "Cluster shape dispatch, title placement, LimitFinder envelope translation, and canvas extent"
+    ],
+    "excluded": [
+      "Component-backed package parsing",
+      "Leaf storage and artifact elements",
+      "Command keyword case folding",
+      "Class-diagram package commands"
+    ]
+  },
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolStorage.java:49-112 USymbolStorage#drawStorage/asBig",
+    "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolArtifact.java:50-137 USymbolArtifact#drawArtifact/asBig",
+    "src/main/java/net/sourceforge/plantuml/svek/ClusterHeader.java:73-94 ClusterHeader constructor",
+    "src/main/java/net/sourceforge/plantuml/svek/ClusterDecoration.java:62-96 ClusterDecoration#getTextBlock/drawU",
+    "src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java:147-179 LimitFinder#drawUPolygon/drawRectangle",
+    "src/main/java/net/sourceforge/plantuml/svek/SvekResult.java:126-137 SvekResult#calculateDimension"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/mod.rs:553-614 deployment keyword subtype selection",
+    "crates/rustuml-parser/src/parse/deployment.rs:70-97 kind_from_keyword",
+    "crates/rustuml-parser/src/diagram/deployment.rs:79-106 DeploymentNodeKind",
+    "crates/rustuml-render/src/deployment.rs:1254-1285 emit_cluster_shape",
+    "crates/rustuml-render/src/deployment.rs:1409-1469 emit_artifact_with_stroke_width",
+    "crates/rustuml-render/src/deployment.rs:1945-1957 emit_storage",
+    "crates/rustuml-render/src/deployment.rs:2251-2349 emit_cluster_label",
+    "crates/rustuml-render/src/deployment.rs:2486-2522 cluster_top_pad/cluster_text_center",
+    "crates/rustuml-render/src/deployment.rs:4764-4905 deployment_cluster_frame"
+  ],
+  "invariant": "The Deployment parser's retained node kind selects one coherent Java USymbol model for cluster layout and painting. Storage asBig paints a round-70 URectangle with cluster stroke width 1, places stereotype content at top offset 5 and title content at top offset 7 plus stereotype height, and contributes URectangle LimitFinder bounds (-1,-1,width-1,height-1). Artifact asBig paints its rounded URectangle and folded-page glyph with cluster stroke width 1, places both text blocks at top offset 2, and contributes combined LimitFinder bounds (-1,-1,width+5,height-1): the URectangle supplies the negative minima and the UPolygon ten-pixel X expansion supplies width+5. SvekResult translates the measured minima to 6 and derives its canvas from the measured maxima plus 15.",
+  "causal_divergence": "Rust parsing already retains both exact kinds. Artifact cluster painting also already uses the artifact primitive. Storage is omitted from emit_cluster_shape and falls through to the default node tag polygon. Storage is also omitted from its Java-specific title offsets. Both Storage and Artifact are omitted from deployment_cluster_frame's root-cluster painted bounds, so their URectangle minimum is treated as zero instead of -1; artifact's polygon-expanded maximum width+5 is also lost. The fallback frame consequently places the solved cluster at 6 instead of 7 and derives oversized fallback canvases. These omissions explain the complete preserved residual cluster, including storage's wrong primitive and title position and artifact's uniform one-pixel translation, without reference to fixture labels or tuned output coordinates.",
+  "preserved_evidence": {
+    "helper_sha256": "08996aa34ff4538c4158193b79b14881a20ca36efaf9e24dfee10b74b090259f",
+    "storage_input": "test-diagrams/perturbations/description-element-command-case/followup/followup2_control_lower_storage_container_nested_queue_tb.puml",
+    "storage_observation": "The Java SVG paints rx=ry=35 at x=y=7 on a 159x98 canvas. The frozen Rust helper paints a node polygon at the fallback frame on a 169x108 canvas.",
+    "artifact_input": "test-diagrams/perturbations/description-element-command-case/followup/followup2_control_lower_artifact_container_nested_database_lr.puml",
+    "artifact_observation": "The artifact primitive dimensions are already correct, but every painted coordinate is one pixel low and left at x=y=6 and the fallback canvas is 215x128 instead of 211x118."
+  },
+  "planned_change": "Keep the existing parser and DeploymentNodeKind model. Route Storage cluster painting to a cluster-stroke variant of the existing storage primitive. Split cluster stereotype and title baseline offsets so Storage implements y=5/y=7 while Artifact retains y=2/y=2. Extend deployment_cluster_frame's root cluster bounds with the Java-derived Storage and Artifact LimitFinder bounds, using the same bounds for minimum translation and maximum canvas extent. Add model tests with renamed labels, stereotypes, colors, directions, nesting, and sibling controls. Do not alter layout coordinates after rendering, key behavior to fixture text, or introduce constants derived only from SVG differences.",
+  "perturbation_axes": [
+    "symbol family: storage versus artifact versus database and node controls",
+    "decoration: absent stereotype versus stereotype plus explicit color",
+    "scope: root container versus nested container",
+    "layout direction: top-to-bottom versus left-to-right",
+    "topology: one child versus multiple children and cross-container links",
+    "text: renamed bare identifiers versus quoted labels with AS aliases"
+  ],
+  "acceptance_evidence": [
+    "Deployment parser tests continue to prove exact Storage and Artifact kinds and ownership.",
+    "Renderer tests prove storage cluster primitive/stroke and symbol-specific title offsets.",
+    "Renderer tests prove Java-derived root-cluster LimitFinder bounds and canvas framing for both symbol families.",
+    "Fresh valid held-out perturbations cover at least two independent axes per family and preserve Java SVGs.",
+    "An independent checker rebuilds the exact implementation revision in an isolated target directory and attempts to disprove shape dispatch, text placement, frame, and canvas claims."
+  ]
+}
