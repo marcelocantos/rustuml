@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-cluster-post-normalization-dimensions",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "net.sourceforge.plantuml.svek.SvekResult#calculateDimension",
+    "net.sourceforge.plantuml.svek.DotStringFactory#moveDelta",
+    "net.sourceforge.plantuml.svek.Cluster#moveDelta",
+    "net.sourceforge.plantuml.klimt.geom.RectangleArea#move",
+    "net.sourceforge.plantuml.klimt.geom.RectangleArea#getWidth",
+    "net.sourceforge.plantuml.klimt.geom.RectangleArea#getHeight",
+    "net.sourceforge.plantuml.decoration.symbol.USymbolCloud#getSpecificFrontierForCloudNew"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs::normalize_svek_package_envelope",
+    "crates/rustuml-render/src/class.rs::cloud_frontier"
+  ],
+  "invariant": "After SvekResult's LimitFinder pass, PlantUML translates a cluster RectangleArea by adding the same normalization delta independently to min and max. Final symbol dimensions are then recomputed as translated max minus translated min. IEEE-754 cancellation can move an exact integer dimension one ULP below that integer even though its formatted geometry is unchanged. USymbolCloud casts those final dimensions to long when deriving its deterministic random seed.",
+  "causal_divergence": "Rust translated ClusterPosition.x and y during SVEK envelope normalization but retained the pre-translation width and height fields. In the valid filled packageStyle cloud counterexample, both measurement paths see 171.0 by 99.00000000000001. PlantUML's final translated RectangleArea becomes 170.99999999999997 by 99.00000000000001, selecting width seed 170; Rust keeps width 171.0 and selects seed 171. A JDK debugger at USymbolCloud.drawCloud observed both Java calls directly, and reflective invocation of the JAR's private frontier method reproduced the expected and actual first curves for those two adjacent widths.",
+  "planned_change": "When normalize_svek_package_envelope translates cluster positions, translate each min and max endpoint independently and recompute width and height from those translated endpoints, exactly as RectangleArea.move followed by getWidth/getHeight does. Do not round or bias the dimensions and do not special-case clouds; the endpoint arithmetic belongs to the shared cluster model. Remove the disproved cloud-distance experiment.",
+  "perturbation_axes": [
+    "normalization deltas that preserve an integer width crossed with deltas that move it one ULP below",
+    "integer cloud dimensions crossed with non-integer dimensions",
+    "simple cloud branch crossed with complex cloud branch",
+    "packageStyle cloud fallback crossed with explicit cloud symbol",
+    "top-to-bottom crossed with left-to-right direction",
+    "single-member cluster crossed with nested and linked cluster topology"
+  ],
+  "predecessor_rejection": {
+    "review": "docs/parity-reviews/class-package-style-symbol-fallback/review.json",
+    "review_commit": "63d978e7",
+    "relevant_counterexample": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_empty_control_valid_tb.puml"
+  },
+  "diagnostic_evidence": {
+    "java_measurement_width": "171.0 (0x4065600000000000)",
+    "java_final_width": "170.99999999999997 (0x40655fffffffffff)",
+    "java_height": "99.00000000000001 (0x4058c00000000001)",
+    "rust_final_width_before_fix": "171.0 (0x4065600000000000)"
+  }
+}

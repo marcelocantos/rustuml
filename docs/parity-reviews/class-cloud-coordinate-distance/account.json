@@ -1,6 +1,7 @@
 {
   "schema_version": 1,
   "mechanism": "class-cloud-coordinate-distance",
+  "status": "disproved",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "java_locations": [
     "net.sourceforge.plantuml.decoration.symbol.USymbolCloud#getSpecificFrontierForCloudNew",
@@ -16,9 +17,9 @@
     "crates/rustuml-render/src/class.rs::cloud_special_line",
     "crates/rustuml-render/src/class.rs::cloud_frontier"
   ],
-  "invariant": "Every USymbolCloud segment constructs CoordinateChange, whose length is XPoint2D.distance: Math.sqrt(dx * dx + dy * dy). That exact rounded length controls both unit vectors and the integer bubble count. Bubble count controls how many java.util.Random values are consumed before later segments and Bezier controls, so a last-bit distance difference at an integer boundary changes the complete deterministic path.",
-  "causal_divergence": "Rust ports the same seeded random process but computes segment lengths with f64::hypot. Hypot is numerically stronger but not operation-equivalent to Java's multiply-add-then-sqrt expression. For the valid 171 by 99 filled cloud cluster, one segment lands on a bubble-count boundary: Rust consumes a different random sequence and emits a different path while the cluster rectangle, title, members, links, and canvas are exact.",
-  "planned_change": "Use (dx * dx + dy * dy).sqrt() everywhere the cloud port mirrors CoordinateChange.getLength, preserving Java's operation order for unit vectors, bubble counts, and curve controls. Keep hypot elsewhere unless the Java provenance independently requires this arithmetic. Add threshold-adjacent cloud dimensions and both simple/complex cloud branches to held-out validation.",
+  "invariant": "Every USymbolCloud segment constructs CoordinateChange, whose length is XPoint2D.distance: Math.sqrt(dx * dx + dy * dy). That operation order can affect unit vectors and integer bubble counts, but it is not the source of the observed 171 by 99 cluster divergence.",
+  "causal_divergence": "Disproved by implementation and exact rerun: replacing every cloud f64::hypot call with Java's multiply-add-then-sqrt expression left the residual path byte-for-byte unchanged. A JDK debugger trace subsequently showed the actual discontinuity: PlantUML's LimitFinder measurement pass calls USymbolCloud with width 171.0, while the translated final SVG pass calls it with 170.99999999999997 and therefore selects a different integer seed. Rust retained 171.0 across normalization.",
+  "planned_change": "No production change is justified by this account. Revert the exploratory distance substitution and address the independently established post-normalization dimension mechanism in class-cluster-post-normalization-dimensions.",
   "perturbation_axes": [
     "segment lengths immediately below crossed with immediately above a bubble-count multiple",
     "simple width/height branch crossed with complex branch",
