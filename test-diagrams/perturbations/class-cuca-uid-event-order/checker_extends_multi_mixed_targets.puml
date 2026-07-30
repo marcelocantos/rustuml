@@ -1,0 +1,6 @@
+@startuml
+class "Existing Base" as ExistingBase
+interface "Existing Port" as ExistingPort
+class Child extends ExistingBase, MissingBase implements ExistingPort, MissingPort
+class Tail
+@enduml

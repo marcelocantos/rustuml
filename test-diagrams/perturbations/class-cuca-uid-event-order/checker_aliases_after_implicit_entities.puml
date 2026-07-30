@@ -1,0 +1,8 @@
+@startuml
+class "Right Node" as R
+L --> R
+class "Left Node" as L
+R --> Z
+class "Last Node" as Z
+class Tail
+@enduml

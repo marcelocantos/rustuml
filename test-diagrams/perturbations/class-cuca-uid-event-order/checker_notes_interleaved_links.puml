@@ -1,0 +1,9 @@
+@startuml
+class Anchor
+note right of Anchor : attached first
+MissingOne --> Anchor
+note "floating checkpoint" as Floating
+Anchor --> MissingTwo
+note left of MissingTwo : attached second
+class Tail
+@enduml

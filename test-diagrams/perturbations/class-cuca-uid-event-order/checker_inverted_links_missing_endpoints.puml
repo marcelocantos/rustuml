@@ -1,0 +1,6 @@
+@startuml
+class "Anchor Node" as Anchor
+Ghost -left-> Anchor
+Anchor -up-> Sky
+class Tail
+@enduml

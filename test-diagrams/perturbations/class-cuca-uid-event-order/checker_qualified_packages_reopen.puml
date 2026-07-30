@@ -1,0 +1,11 @@
+@startuml
+package alpha.beta {
+  class Existing
+}
+class gamma.delta.Leaf
+package gamma {
+  class Added
+}
+class alpha.beta.Second
+class Tail
+@enduml

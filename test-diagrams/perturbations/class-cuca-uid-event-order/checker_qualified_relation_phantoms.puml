@@ -1,0 +1,8 @@
+@startuml
+class root.branch.Source
+root.branch.Source --> root.other.Target
+package root.other {
+  class DeclaredAfter
+}
+class Tail
+@enduml

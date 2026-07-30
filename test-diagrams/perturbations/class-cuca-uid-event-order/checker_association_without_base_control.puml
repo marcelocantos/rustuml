@@ -1,0 +1,7 @@
+@startuml
+class EndA
+class EndB
+class Assoc
+(EndA, EndB) .. Assoc
+class Tail
+@enduml

@@ -1,0 +1,225 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-cuca-uid-event-order",
+  "reviewer": {
+    "task_id": "codex-desktop-task-019ee369-54e2-7203-afce-ddde7bfe1723",
+    "identity": "independent adversarial checker",
+    "model": "GPT-5 Codex / Codex desktop",
+    "tool": "Codex desktop, Java PlantUML JAR, and exact prebuilt diff_one --no-oracle"
+  },
+  "rust_revision": "9002e86a1546f3b0d7c46bde22b762c7e32e8646",
+  "rust_short_revision": "9002e86a",
+  "account_commit": "9078604dd5638cf05074003777a2f597b59ee4c8",
+  "implementation_commit": "72a0af052cea9299d49811e18e5865a6f0f96be3",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "binary": {
+    "path_at_execution": "/tmp/rustuml-checker-1482/target/release/examples/diff_one",
+    "sha256_at_execution": "5a80c1f2c85f2be1d2b386536f1f8d7f74bf8d5cd27d2516cb31f1bcbad4302c",
+    "pre_run_hash_observed_at": "2026-07-30T22:52:17.517+10:00",
+    "replaced_after_execution": true
+  },
+  "java_jar": {
+    "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+  },
+  "commands": [
+    "git rev-parse 9002e86a",
+    "git rev-parse HEAD",
+    "git merge-base --is-ancestor 9078604d 72a0af05",
+    "git merge-base --is-ancestor 72a0af05 9002e86a",
+    "git diff --check 9078604d 9002e86a",
+    "git diff 9078604d 72a0af05 -- crates/rustuml-parser/src/diagram/class.rs crates/rustuml-parser/src/parse/class.rs crates/rustuml-render/src/ascii_class.rs crates/rustuml-render/src/class.rs",
+    "git grep -n -E 'uid_events|relationships\\.push|notes\\.push|association_classes\\.push|packages\\.push|entities\\.push|push_relationship|push_note' 9002e86a -- crates/rustuml-parser/src/parse/class.rs crates/rustuml-render/src/class.rs crates/rustuml-parser/src/diagram/class.rs",
+    "git grep -n -E 'include_str!|include_bytes!|test-diagrams|golden|read_to_string|std::fs|fixture' 9002e86a -- crates/rustuml-parser/src/diagram/class.rs crates/rustuml-parser/src/parse/class.rs crates/rustuml-render/src/class.rs",
+    "git diff --unified=12 9078604d 9002e86a -G'include_str!|include_bytes!|test-diagrams|read_to_string|std::fs|fixture' -- crates/rustuml-parser/src/diagram/class.rs crates/rustuml-parser/src/parse/class.rs crates/rustuml-render/src/class.rs crates/rustuml-render/src/ascii_class.rs",
+    "git grep -n -E 'ASSOCIATION_SEQUENCE_SLOTS|ClassUidEvent::Association|association_classes\\.push' 9002e86a -- crates/rustuml-parser/src/parse/class.rs crates/rustuml-render/src/class.rs",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml grep -n -E 'cpt1|getUniqueSequenceValue|getUniqueSequence' 71806a23780b04a5ccde2f8ceb5121edad5eb711 -- src/main/java/net/atmp/CucaDiagram.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml blame -L 162,180 71806a23780b04a5ccde2f8ceb5121edad5eb711 -- src/main/java/net/sourceforge/plantuml/abel/Entity.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml blame -L 123,150 71806a23780b04a5ccde2f8ceb5121edad5eb711 -- src/main/java/net/sourceforge/plantuml/abel/Link.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml blame -L 262,294 71806a23780b04a5ccde2f8ceb5121edad5eb711 -- src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandCreateClassMultilines.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml blame -L 178,198 71806a23780b04a5ccde2f8ceb5121edad5eb711 -- src/main/java/net/sourceforge/plantuml/objectdiagram/AbstractClassOrObjectDiagram.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml blame -L 222,301 71806a23780b04a5ccde2f8ceb5121edad5eb711 -- src/main/java/net/sourceforge/plantuml/objectdiagram/AbstractClassOrObjectDiagram.java",
+    "java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/class-cuca-uid-event-order/checker_aliases_after_implicit_entities.puml test-diagrams/perturbations/class-cuca-uid-event-order/checker_association_then_relation.puml test-diagrams/perturbations/class-cuca-uid-event-order/checker_extends_multi_mixed_targets.puml test-diagrams/perturbations/class-cuca-uid-event-order/checker_extends_multi_preexisting_reordered.puml test-diagrams/perturbations/class-cuca-uid-event-order/checker_inverted_links_missing_endpoints.puml test-diagrams/perturbations/class-cuca-uid-event-order/checker_notes_interleaved_links.puml test-diagrams/perturbations/class-cuca-uid-event-order/checker_qualified_packages_reopen.puml test-diagrams/perturbations/class-cuca-uid-event-order/checker_qualified_relation_phantoms.puml",
+    "java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/class-cuca-uid-event-order/checker_association_then_relation.puml",
+    "java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/class-cuca-uid-event-order/checker_association_without_base_control.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-cuca-uid-event-order/checker_aliases_after_implicit_entities.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-cuca-uid-event-order/checker_association_then_relation.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-cuca-uid-event-order/checker_association_without_base_control.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-cuca-uid-event-order/checker_extends_multi_mixed_targets.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-cuca-uid-event-order/checker_extends_multi_preexisting_reordered.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-cuca-uid-event-order/checker_inverted_links_missing_endpoints.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-cuca-uid-event-order/checker_notes_interleaved_links.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-cuca-uid-event-order/checker_qualified_packages_reopen.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-cuca-uid-event-order/checker_qualified_relation_phantoms.puml",
+    "rg -o '<g class=\"entity\"[^>]+>' test-diagrams/perturbations/class-cuca-uid-event-order/checker_notes_interleaved_links.svg",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/class-cuca-uid-event-order/checker_notes_interleaved_links.puml | rg -o '<g class=\"entity\"[^>]+>'",
+    "rg -o '<g class=\"(entity|link)\"[^>]+>' test-diagrams/perturbations/class-cuca-uid-event-order/checker_association_then_relation.svg",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/class-cuca-uid-event-order/checker_association_then_relation.puml | rg -o '<g class=\"(entity|link)\"[^>]+>'",
+    "xmllint --noout test-diagrams/perturbations/class-cuca-uid-event-order/*.svg",
+    "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"|an error has occured|\\[From string|No class ' test-diagrams/perturbations/class-cuca-uid-event-order --glob '*.svg'",
+    "shasum -a 256 /tmp/rustuml-checker-1482/target/release/examples/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar docs/parity-reviews/class-cuca-uid-event-order/account.json",
+    "shasum -a 256 test-diagrams/perturbations/class-cuca-uid-event-order/*"
+  ],
+  "execution_provenance": {
+    "timezone": "Australia/Melbourne (+10:00)",
+    "pre_run_binary_hash_time": "2026-07-30T22:52:17.517+10:00",
+    "first_attested_comparison_time": "2026-07-30T22:52:40.158+10:00",
+    "last_attested_comparison_time": "2026-07-30T22:54:31.087+10:00",
+    "next_commit": "c7abd7b054afc2400f683679e46614244b910a34",
+    "next_commit_time": "2026-07-30T22:55:04+10:00",
+    "replacement_binary_mtime": "2026-07-30T22:55:43+10:00",
+    "conclusion": "All nine attested comparisons completed before the next commit and before the shared /tmp binary was replaced."
+  },
+  "setup_notes": [
+    "The first Java generation of checker_association_then_relation reported an invalid undeclared MissingA endpoint. The final preserved source deliberately creates MissingA through a base relation before the association command, its Java SVG was regenerated, and only that valid final pair was compared and attested.",
+    "All comparator results in this record were rerun against binary SHA-256 5a80c1f2c85f2be1d2b386536f1f8d7f74bf8d5cd27d2516cb31f1bcbad4302c at Rust revision 9002e86a1546f3b0d7c46bde22b762c7e32e8646.",
+    "The shared /tmp binary and branch advanced after the full matrix completed. This record is timestamp-bounded to the 9002e86a execution window and does not attest any later binary or revision."
+  ],
+  "no_cargo_or_rustc": true,
+  "artifact_hashes": {
+    "account_json_sha256": "ffd933848dfca99b6eae50d22bd2f65b6bc3312e8bd14f43db6c278535ac8e91",
+    "sources": {
+      "checker_aliases_after_implicit_entities.puml": "eddecddcace04d8989afe4ef52f9116db77a55cb35fd575ba50fdbfe0d953ad6",
+      "checker_association_then_relation.puml": "cdd61d5768d40a110d52536f49c711aaf7227f7aa805a094445d62d24f92be73",
+      "checker_association_without_base_control.puml": "c2e004693aaedaeb8c3a0f9296f8b1a16357f48da74efe3868ee9601d27f5c17",
+      "checker_extends_multi_mixed_targets.puml": "fda7bafb2fb7ffdd8a8186d76c7c976e989b75eb63fdaa47e8355a81a38e15c7",
+      "checker_extends_multi_preexisting_reordered.puml": "2235964fa8766f56a3cdaa37ca18fd1a516cf924982389a1e888ac4a7395741a",
+      "checker_inverted_links_missing_endpoints.puml": "9e63bc442516fa2e9634e6c96756bd615fcea26356895f214abddc95ea63f252",
+      "checker_notes_interleaved_links.puml": "ddf00e597ad7746e85020fe0f0440d4742c19106de33e454d3dea7aa9d2e49e3",
+      "checker_qualified_packages_reopen.puml": "dee963fcf719022e9b1d66bfad151f2abdd8fec37c8eb4fc69e5a3d7103e6039",
+      "checker_qualified_relation_phantoms.puml": "84b9b34539c593cdf462ba1054faf13e78bba3ea68130d770f4032fed3328a03"
+    },
+    "java_svgs": {
+      "checker_aliases_after_implicit_entities.svg": "02e89eebea043c552c919bf5b00f3d7677ab10b94b96b5dee0bc4f11b20602e9",
+      "checker_association_then_relation.svg": "79c2d5faa7a7417dbdd06916bd562b75885400ee6fc11d3c227bfc090a233e5f",
+      "checker_association_without_base_control.svg": "744d5cb58d4f3f52a1aff15e47fce61d0cffa9be0f46a30536e18f341ca13cdb",
+      "checker_extends_multi_mixed_targets.svg": "8649dd85b5a1fb04c9cdf553d5ff7d84dd7bfae5e736758e101bd59ad5143bb4",
+      "checker_extends_multi_preexisting_reordered.svg": "54346d4bf72c31584d58e4e58395909de9865f5561e182e823da8f763bb20c78",
+      "checker_inverted_links_missing_endpoints.svg": "d05defc0e2834f3cb61379fdf9a23d9d53d97bfd99fe373cca28d8e74f86be05",
+      "checker_notes_interleaved_links.svg": "0b73966ef8447c4aacbcef6c99665916308c7f19977952be3b61410ce714585c",
+      "checker_qualified_packages_reopen.svg": "315e08eef398ad81afcf62db7eaae972e9dcca2f86f5afc25d7aac051ad6739f",
+      "checker_qualified_relation_phantoms.svg": "c48cebd070e177c0a0091d5fa8471cb9a3f95af47899a746d02795bd04222bec"
+    }
+  },
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-cuca-uid-event-order/checker_extends_multi_mixed_targets.puml",
+      "golden": "test-diagrams/perturbations/class-cuca-uid-event-order/checker_extends_multi_mixed_targets.svg",
+      "axes": [
+        "multiple comma-separated extends and implements targets",
+        "preexisting targets crossed with missing targets",
+        "explicit aliases on preexisting targets",
+        "post-declaration tail entity exposing the final shared counter"
+      ],
+      "result": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-cuca-uid-event-order/checker_extends_multi_preexisting_reordered.puml",
+      "golden": "test-diagrams/perturbations/class-cuca-uid-event-order/checker_extends_multi_preexisting_reordered.svg",
+      "axes": [
+        "all comma-separated targets preexisting",
+        "interface and class declarations intentionally reordered",
+        "extends crossed with implements",
+        "post-declaration tail entity"
+      ],
+      "result": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-cuca-uid-event-order/checker_inverted_links_missing_endpoints.puml",
+      "golden": "test-diagrams/perturbations/class-cuca-uid-event-order/checker_inverted_links_missing_endpoints.svg",
+      "axes": [
+        "relation-created endpoint before a preexisting aliased endpoint",
+        "left and up link directions",
+        "Link.getInv transient replacement UID",
+        "post-link tail entity"
+      ],
+      "result": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-cuca-uid-event-order/checker_aliases_after_implicit_entities.puml",
+      "golden": "test-diagrams/perturbations/class-cuca-uid-event-order/checker_aliases_after_implicit_entities.svg",
+      "axes": [
+        "relation-created endpoints later redeclared with display aliases",
+        "declaration reordering",
+        "two links separated by alias upgrades",
+        "tail entity after all upgrades"
+      ],
+      "result": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-cuca-uid-event-order/checker_association_without_base_control.puml",
+      "golden": "test-diagrams/perturbations/class-cuca-uid-event-order/checker_association_without_base_control.svg",
+      "axes": [
+        "association class with all three entities predeclared",
+        "no preexisting base relationship",
+        "temporary A-B link creation branch",
+        "tail entity exposing the six-slot branch"
+      ],
+      "result": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-cuca-uid-event-order/checker_association_then_relation.puml",
+      "golden": "test-diagrams/perturbations/class-cuca-uid-event-order/checker_association_then_relation.svg",
+      "axes": [
+        "association class with a preexisting base relationship",
+        "base endpoint created by the relation",
+        "later relation-created endpoint",
+        "tail entity exposing downstream UID drift"
+      ],
+      "result": "fail: Java removes existing lnk4 and consumes five association slots, emitting lnk8 through lnk10, MissingB ent0011, and Tail ent0013; Rust retains lnk4, consumes six association slots, emits lnk9 through lnk11, MissingB ent0012, and Tail ent0014"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-cuca-uid-event-order/checker_notes_interleaved_links.puml",
+      "golden": "test-diagrams/perturbations/class-cuca-uid-event-order/checker_notes_interleaved_links.svg",
+      "axes": [
+        "attached note before a relation-created endpoint",
+        "floating note between links",
+        "second attached note after another relation-created endpoint",
+        "tail entity after note-generated UID triples"
+      ],
+      "result": "fail: UID values match Java, but Rust paints ordinary entities before generated attached-note entities; Java entity order is Anchor, GMN3, MissingOne, Floating, MissingTwo, GMN11, Tail while Rust order is Anchor, MissingOne, Floating, MissingTwo, Tail, GMN3, GMN11"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-cuca-uid-event-order/checker_qualified_packages_reopen.puml",
+      "golden": "test-diagrams/perturbations/class-cuca-uid-event-order/checker_qualified_packages_reopen.svg",
+      "axes": [
+        "explicit qualified package",
+        "phantom qualified package from a class",
+        "reopening a phantom ancestor explicitly",
+        "later qualified class and root tail entity"
+      ],
+      "result": "fail: package shells, tab lines, and package titles are shifted left by 1.0011 px in Rust; no UID mismatch was reported"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-cuca-uid-event-order/checker_qualified_relation_phantoms.puml",
+      "golden": "test-diagrams/perturbations/class-cuca-uid-event-order/checker_qualified_relation_phantoms.svg",
+      "axes": [
+        "qualified relation-created target",
+        "phantom sibling package materialization",
+        "later explicit reopen of the phantom package",
+        "root tail entity"
+      ],
+      "result": "fail: package shells, tab lines, and package titles are shifted left by 1.0011 px in Rust; no UID mismatch was reported"
+    }
+  ],
+  "result_counts": {
+    "total": 9,
+    "passed": 5,
+    "failed": 4
+  },
+  "findings": [
+    "The account's core extends/implements constructor-order claim is supported by Java CommandCreateClassMultilines.manageExtends and by both held-out comma-separated matrices. Java iterates each target, creates a missing parent if needed, then constructs its Link before advancing; Rust's event stream matches those cases.",
+    "The account is incomplete for association-class events. AbstractClassOrObjectDiagram.Association.createNew consumes six slots only when no A-B link exists: apoint short name, point Entity, temporary A-B Link, and three emitted Links. When an A-B link already exists, Java removes it and skips the temporary Link, consuming five slots. Rust records only Association(index), hardcodes ASSOCIATION_SEQUENCE_SLOTS = 6, and does not encode or apply base-link replacement.",
+    "The paired association cases isolate that branch. The no-base control is structurally equivalent. The preexisting-base case shifts every association link and subsequent entity/link by one and leaves the base link in Rust output, directly disproving the claimed general replay model.",
+    "The relevant constant has an adjacent provenance comment, but that comment incorrectly generalizes the no-base branch to all associations. This is an unexplained parity constant in effect because its asserted Java derivation omits the foundLink(existingLink) branch at AbstractClassOrObjectDiagram.java:250-257.",
+    "Left/up links survive the held-out transient-constructor check. Java Link.getInv constructs a replacement Link and consumes a second UID; Rust's inverted relationship allocation reproduces that sequence.",
+    "Attached-note UID allocation itself matches Java in the note/link matrix, including GMN3/ent0004 and GMN11/ent0012, but Rust emits generated note entities after all ordinary entities. That downstream document-order failure independently fails the required no-oracle perturbation gate.",
+    "The two qualified-package matrices fail only on a repeated 1.0011 px horizontal package-shell/title offset. They do not disprove UID allocation, but they are preserved because the required shipped-path no-oracle comparator rejected them.",
+    "Static inspection found no changed include_str/include_bytes use, filesystem golden reads, test-diagram reads, fixture-label production conditionals, coordinate-keyed SVG surgery, or per-fixture branch-count ladder in the mechanism diff. Test labels occur only in tests. The rejection rests on a genuine missing Java branch and a counterexample, not fixture-shaped logic.",
+    "All nine Java SVGs are well-formed XML and contain no recognized PlantUML error marker. Each final source hash occurs exactly once in the repository's PlantUML corpus."
+  ],
+  "no_oracle_gate": "failed",
+  "rejection_basis": "checker_association_then_relation is a valid fresh counterexample to the shared UID replay model, and three additional fresh inputs also fail the mandatory no-oracle comparator",
+  "verdict": "rejected"
+}

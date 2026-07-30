@@ -1,0 +1,7 @@
+@startuml
+class Existing
+MissingA -- Existing
+(MissingA, Existing) .. MissingAssoc
+MissingB --> Existing
+class Tail
+@enduml
