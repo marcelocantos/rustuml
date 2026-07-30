@@ -1,0 +1,4 @@
+@startuml
+top to bottom direction
+QUEUE "Priority Inbox 8101" AS Inbox8101
+@enduml

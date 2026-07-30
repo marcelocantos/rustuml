@@ -1,0 +1,6 @@
+@startuml
+left to right direction
+ClOuD "Edge Region 8111" As Edge8111 {
+  DATABASE "Session Store 8113" AS Store8113
+}
+@enduml

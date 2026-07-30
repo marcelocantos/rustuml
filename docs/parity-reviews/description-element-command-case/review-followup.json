@@ -1,0 +1,274 @@
+{
+  "schema_version": 1,
+  "mechanism": "description-element-command-case",
+  "review_kind": "followup",
+  "reviewed_on": "2026-07-31",
+  "verdict": "REJECT",
+  "rejection_rule": "Any valid Java input that fails the frozen no-oracle comparison rejects the mechanism.",
+  "implementation_commit": "40394d6771f600ce520b3adc6267049e7c5f1155",
+  "account_commit": "40ad4fb4eba56f98437efe1588ffc601f62015a1",
+  "prior_review_commit": "5d4af8a3c7fd46b66c18b8b81ddc6a934c7fd4f3",
+  "prior_implementation_commit": "ee0f6d52c547f980c5db65b3447c07c9ac792b14",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "reviewer": {
+    "identity": "independent adversarial follow-up checker",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop",
+    "independence": "Did not implement 40394d67. Worked only in isolated worktree /private/tmp/rustuml-review-description-case-40394 on branch codex/review-description-element-command-case-followup. No shipping source was edited."
+  },
+  "constraints_observed": {
+    "cargo_or_rustc_invoked": false,
+    "shipping_source_edited": false,
+    "evidence_only_commit": true
+  },
+  "artifacts": {
+    "helper": {
+      "path": "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one",
+      "sha256": "639fe4493baac53ba2433f8100aecfbdae951b392439e83e69eb9a26129e7ef2",
+      "mode": "--no-oracle",
+      "integrity_note": "The SHA-256 was verified immediately before the recorded comparisons. All comparisons completed before 2026-07-31 03:39 +1000. A concurrent unrelated state build later replaced this path at 2026-07-31 03:40:44 +1000; no result from the replacement binary is counted in this review."
+    },
+    "java_checkout": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml",
+      "head": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+    },
+    "java_jar": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+    }
+  },
+  "source_inspection": {
+    "java": [
+      "DescriptionDiagramFactory registers CommandPackageWithUSymbol before CommandCreateElementFull.",
+      "CommandCreateElementFull.ALL_TYPES includes component, queue, storage, artifact, cloud, database, and the other tested families.",
+      "CommandPackageWithUSymbol accepts package, rectangle, node, artifact, frame, cloud, database, storage, component, queue, stack, and related container forms.",
+      "Pattern2.compileInternal compiles command regexes with Pattern.CASE_INSENSITIVE, so the command keyword and AS token are case-insensitive at Java revision 71806a23780b04a5ccde2f8ceb5121edad5eb711."
+    ],
+    "rust": [
+      "40394d67 lowercases the leading semantic token in detect_uml_subtype and changes component scoring to use the already-normalized leading_keyword.",
+      "The implementation changes no score magnitude, threshold, layout constant, renderer, comparator, or SVG output.",
+      "The component parser's RE_COMP remains case-sensitive at crates/rustuml-parser/src/parse/component.rs:207-211. It matches only lowercase `component` and lowercase `as`.",
+      "The new unit test at crates/rustuml-parser/src/parse/mod.rs:1550 checks only that `CoMpOnEnT Api7031` selects Diagram::Component; it does not assert that Api7031 was parsed. The frozen product render proves that declaration is discarded and the resulting component collection is empty."
+    ],
+    "fixture_shaping_and_output_surgery": {
+      "result": "none found in the implementation diff",
+      "details": [
+        "No followup/checker stem, mechanism name, golden path, include_str!, SVG coordinate, textLength, or viewBox key was added.",
+        "No new or changed score value, decimal literal, branch-count ladder, or rendering post-processing was added.",
+        "The defect is instead an overbroad selector/consumer contract: the selector now credits mixed-case component commands that the selected parser cannot consume."
+      ]
+    }
+  },
+  "commands": {
+    "revision_and_hash_checks": [
+      "git rev-parse HEAD 40ad4fb4 5d4af8a3 ee0f6d52",
+      "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+      "shasum -a 256 /tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one",
+      "shasum -a 256 /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar"
+    ],
+    "source_audit": [
+      "git diff --no-ext-diff --unified=30 40ad4fb4 40394d67 -- crates/rustuml-parser/src/parse/mod.rs",
+      "nl -ba crates/rustuml-parser/src/parse/mod.rs | sed -n '300,455p'",
+      "nl -ba crates/rustuml-parser/src/parse/mod.rs | sed -n '830,990p'",
+      "nl -ba crates/rustuml-parser/src/parse/component.rs | sed -n '198,216p;650,686p'",
+      "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/descdiagram/DescriptionDiagramFactory.java",
+      "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandCreateElementFull.java",
+      "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandPackageWithUSymbol.java",
+      "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/regex/Pattern2.java | nl -ba | sed -n '90,130p'",
+      "git diff --no-ext-diff --unified=0 40ad4fb4 40394d67 -- crates/rustuml-parser/src/parse/mod.rs | rg -n 'followup|checker|golden|include_str|svg|coordinate|textLength|viewBox'",
+      "git diff --no-ext-diff --unified=0 40ad4fb4 40394d67 -- crates/rustuml-parser/src/parse/mod.rs | rg -n 'scores\\[[0-9]+\\].*[+*=]|const [A-Z_]+|[0-9]+\\.[0-9]+'"
+    ],
+    "prior_no_oracle_reruns": [
+      "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/description-element-command-case/followup/followup_root_upper_database_bare_lr.puml",
+      "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/description-element-command-case/followup/followup_root_mixedcase_node_quoted_as_tb.puml",
+      "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/description-element-command-case/followup/followup_root_mixedcase_frame_quoted_as_component_lr.puml",
+      "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_root_node_upper_database_lr.puml",
+      "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_nested_cloud_upper_queue_tb.puml",
+      "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_upper_boundary_before_entity_tb.puml"
+    ],
+    "fresh_java_validity": [
+      "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -checkonly test-diagrams/perturbations/description-element-command-case/followup/followup2_root_upper_queue_quoted_as_tb.puml",
+      "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -checkonly test-diagrams/perturbations/description-element-command-case/followup/followup2_root_mixedcase_storage_bare_lr.puml",
+      "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -checkonly test-diagrams/perturbations/description-element-command-case/followup/followup2_shared_cloud_nested_upper_database_lr.puml",
+      "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -checkonly test-diagrams/perturbations/description-element-command-case/followup/followup2_exclusive_storage_container_nested_queue_tb.puml",
+      "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -checkonly test-diagrams/perturbations/description-element-command-case/followup/followup2_exclusive_artifact_container_nested_database_lr.puml",
+      "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -checkonly test-diagrams/perturbations/description-element-command-case/followup/followup2_component_signal_rectangle_nested_bracket_lr.puml",
+      "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -checkonly test-diagrams/perturbations/description-element-command-case/followup/followup2_root_mixedcase_component_quoted_as_tb.puml",
+      "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -checkonly test-diagrams/perturbations/description-element-command-case/followup/followup2_root_upper_component_bare_lr.puml",
+      "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -checkonly test-diagrams/perturbations/description-element-command-case/followup/followup2_control_lower_storage_container_nested_queue_tb.puml",
+      "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -checkonly test-diagrams/perturbations/description-element-command-case/followup/followup2_control_lower_artifact_container_nested_database_lr.puml",
+      "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -checkonly test-diagrams/perturbations/description-element-command-case/followup/followup2_control_lower_component_quoted_as_tb.puml"
+    ],
+    "fresh_java_generation": [
+      "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/description-element-command-case/followup/followup2_root_upper_queue_quoted_as_tb.puml test-diagrams/perturbations/description-element-command-case/followup/followup2_root_mixedcase_storage_bare_lr.puml test-diagrams/perturbations/description-element-command-case/followup/followup2_shared_cloud_nested_upper_database_lr.puml test-diagrams/perturbations/description-element-command-case/followup/followup2_exclusive_storage_container_nested_queue_tb.puml test-diagrams/perturbations/description-element-command-case/followup/followup2_exclusive_artifact_container_nested_database_lr.puml test-diagrams/perturbations/description-element-command-case/followup/followup2_component_signal_rectangle_nested_bracket_lr.puml test-diagrams/perturbations/description-element-command-case/followup/followup2_root_mixedcase_component_quoted_as_tb.puml",
+      "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/description-element-command-case/followup/followup2_root_upper_component_bare_lr.puml",
+      "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/description-element-command-case/followup/followup2_control_lower_storage_container_nested_queue_tb.puml test-diagrams/perturbations/description-element-command-case/followup/followup2_control_lower_artifact_container_nested_database_lr.puml test-diagrams/perturbations/description-element-command-case/followup/followup2_control_lower_component_quoted_as_tb.puml"
+    ],
+    "fresh_no_oracle_comparisons": [
+      "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/description-element-command-case/followup/followup2_root_upper_queue_quoted_as_tb.puml",
+      "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/description-element-command-case/followup/followup2_root_mixedcase_storage_bare_lr.puml",
+      "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/description-element-command-case/followup/followup2_shared_cloud_nested_upper_database_lr.puml",
+      "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/description-element-command-case/followup/followup2_exclusive_storage_container_nested_queue_tb.puml",
+      "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/description-element-command-case/followup/followup2_exclusive_artifact_container_nested_database_lr.puml",
+      "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/description-element-command-case/followup/followup2_component_signal_rectangle_nested_bracket_lr.puml",
+      "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/description-element-command-case/followup/followup2_root_mixedcase_component_quoted_as_tb.puml",
+      "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/description-element-command-case/followup/followup2_root_upper_component_bare_lr.puml",
+      "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/description-element-command-case/followup/followup2_control_lower_storage_container_nested_queue_tb.puml",
+      "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/description-element-command-case/followup/followup2_control_lower_artifact_container_nested_database_lr.puml",
+      "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/description-element-command-case/followup/followup2_control_lower_component_quoted_as_tb.puml"
+    ],
+    "diagnostics": [
+      "DIFF_ONE_DEBUG=1 /tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/description-element-command-case/followup/followup2_exclusive_storage_container_nested_queue_tb.puml",
+      "DIFF_ONE_DEBUG=1 /tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/description-element-command-case/followup/followup2_exclusive_artifact_container_nested_database_lr.puml",
+      "DIFF_ONE_DEBUG=1 /tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/description-element-command-case/followup/followup2_root_mixedcase_component_quoted_as_tb.puml"
+    ]
+  },
+  "prior_input_results": [
+    {
+      "input": "test-diagrams/perturbations/description-element-command-case/followup/followup_root_upper_database_bare_lr.puml",
+      "sha256": "d08d89bee079d61530b8c655923c47d43461e651a77151d45179daea837206cc",
+      "result": "PASS"
+    },
+    {
+      "input": "test-diagrams/perturbations/description-element-command-case/followup/followup_root_mixedcase_node_quoted_as_tb.puml",
+      "sha256": "849853b2a109c4c6faadf0097cdb67f6dd2080f6c40627776c3ba58e65623970",
+      "result": "PASS"
+    },
+    {
+      "input": "test-diagrams/perturbations/description-element-command-case/followup/followup_root_mixedcase_frame_quoted_as_component_lr.puml",
+      "sha256": "42b55345916bc95625e9b2adececc1ffc5e17bf8753d4ca33fe2110050f53204",
+      "result": "PASS"
+    },
+    {
+      "input": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_root_node_upper_database_lr.puml",
+      "sha256": "2a8b7b940433c891423e58de9a640df038dd10bc57a7e622ad564fbd6fe1daa0",
+      "result": "PASS"
+    },
+    {
+      "input": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_nested_cloud_upper_queue_tb.puml",
+      "sha256": "ca92500788cac08258e9c3c20ea0f080f8af491f2caaa3f0ff5e3359c5f84e2f",
+      "result": "PASS"
+    },
+    {
+      "input": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_upper_boundary_before_entity_tb.puml",
+      "sha256": "ade1710d0dc8521ca33da7ac5a4420fe4aeac9d0e03b33cf009d7e52a65d8a94",
+      "result": "PASS"
+    }
+  ],
+  "fresh_results": [
+    {
+      "input": "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_upper_queue_quoted_as_tb.puml",
+      "java_syntax": "VALID",
+      "axes": ["root", "uppercase shared leaf", "quoted AS form", "top-to-bottom"],
+      "result": "PASS"
+    },
+    {
+      "input": "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_mixedcase_storage_bare_lr.puml",
+      "java_syntax": "VALID",
+      "axes": ["root", "mixed-case deployment-exclusive leaf", "bare form", "left-to-right"],
+      "result": "PASS"
+    },
+    {
+      "input": "test-diagrams/perturbations/description-element-command-case/followup/followup2_shared_cloud_nested_upper_database_lr.puml",
+      "java_syntax": "VALID",
+      "axes": ["root shared quoted container", "mixed-case keyword and AS", "nested uppercase shared leaf", "left-to-right"],
+      "result": "PASS"
+    },
+    {
+      "input": "test-diagrams/perturbations/description-element-command-case/followup/followup2_component_signal_rectangle_nested_bracket_lr.puml",
+      "java_syntax": "VALID",
+      "axes": ["mixed-case shared quoted container", "nested independent bracket-component signal", "left-to-right"],
+      "result": "PASS"
+    },
+    {
+      "input": "test-diagrams/perturbations/description-element-command-case/followup/followup2_control_lower_component_quoted_as_tb.puml",
+      "java_syntax": "VALID",
+      "axes": ["lowercase component control", "quoted AS form", "top-to-bottom"],
+      "result": "PASS"
+    },
+    {
+      "input": "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_mixedcase_component_quoted_as_tb.puml",
+      "java_syntax": "VALID",
+      "axes": ["root", "mixed-case component leaf", "quoted mixed-case AS form", "top-to-bottom"],
+      "result": "FAIL",
+      "classification": "mechanism-specific counterexample",
+      "details": "Java emits the Telemetry8151 component entity. Rust selects Diagram::Component but RE_COMP consumes neither the mixed-case command nor AS token, leaving components empty and rendering a 100x50 empty DESCRIPTION SVG."
+    },
+    {
+      "input": "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_upper_component_bare_lr.puml",
+      "java_syntax": "VALID",
+      "axes": ["root", "uppercase component leaf", "bare form", "left-to-right"],
+      "result": "FAIL",
+      "classification": "mechanism-specific counterexample",
+      "details": "Java emits ApiGateway8161. Rust selects Diagram::Component but discards the uppercase declaration, again rendering an empty 100x50 DESCRIPTION SVG."
+    },
+    {
+      "input": "test-diagrams/perturbations/description-element-command-case/followup/followup2_exclusive_storage_container_nested_queue_tb.puml",
+      "java_syntax": "VALID",
+      "axes": ["mixed-case deployment-exclusive quoted container", "nested mixed-case queue", "top-to-bottom"],
+      "result": "FAIL",
+      "classification": "adjacent pre-existing storage-container symbol mismatch",
+      "details": "The lowercase control fails with the same structural difference: Java uses a rounded storage group rectangle while Rust uses a folded-corner polygon. This is not caused by command case, but remains a valid no-oracle failure."
+    },
+    {
+      "input": "test-diagrams/perturbations/description-element-command-case/followup/followup2_control_lower_storage_container_nested_queue_tb.puml",
+      "java_syntax": "VALID",
+      "axes": ["lowercase storage control", "nested queue", "top-to-bottom"],
+      "result": "FAIL",
+      "classification": "adjacent pre-existing storage-container symbol mismatch"
+    },
+    {
+      "input": "test-diagrams/perturbations/description-element-command-case/followup/followup2_exclusive_artifact_container_nested_database_lr.puml",
+      "java_syntax": "VALID",
+      "axes": ["mixed-case deployment-exclusive quoted container", "nested mixed-case database", "left-to-right"],
+      "result": "FAIL",
+      "classification": "adjacent pre-existing artifact-cluster placement mismatch",
+      "details": "The lowercase control fails with the same one-pixel cluster and child offset. This is not caused by command case, but remains a valid no-oracle failure."
+    },
+    {
+      "input": "test-diagrams/perturbations/description-element-command-case/followup/followup2_control_lower_artifact_container_nested_database_lr.puml",
+      "java_syntax": "VALID",
+      "axes": ["lowercase artifact control", "nested database", "left-to-right"],
+      "result": "FAIL",
+      "classification": "adjacent pre-existing artifact-cluster placement mismatch"
+    }
+  ],
+  "fresh_artifact_hashes": {
+    "followup2_component_signal_rectangle_nested_bracket_lr.puml": "b297259fc5df8da46201771363788be4d913ad206802df9ecfda6cdd74cf10df",
+    "followup2_component_signal_rectangle_nested_bracket_lr.svg": "608ad2ad3a991353cebc065a9f03f046112d0d9008a8a375df599afd51c68fb3",
+    "followup2_control_lower_artifact_container_nested_database_lr.puml": "7c41e58c5529257d4526b511eb0c21a15ed129cf8879f5858d8dad81cf8e2f9c",
+    "followup2_control_lower_artifact_container_nested_database_lr.svg": "914045eb91c0510f76452a09f4de5c88ae8af042d20c4ae417cd8308d8cf4021",
+    "followup2_control_lower_component_quoted_as_tb.puml": "619479bd1724615654ff64b5d8d42de6034470a9c5b3a2eb5d8d7b2dffe20099",
+    "followup2_control_lower_component_quoted_as_tb.svg": "9cf177756f143d2f6500d7cb9b60dc5655f900d207de6b2bcd69cd1d1826fb11",
+    "followup2_control_lower_storage_container_nested_queue_tb.puml": "f77bcc67864a6926803e33988c776733d82db918f30617cfe83aa97ebb6fd6c0",
+    "followup2_control_lower_storage_container_nested_queue_tb.svg": "e4e05082ce8c0ced78cf06d1d9752025a5739289ec4ef3c169d7ccb43734f8c5",
+    "followup2_exclusive_artifact_container_nested_database_lr.puml": "d4e171580077b8d814abdbddea3a525915faeb20dc56a0735534eed7ce281f61",
+    "followup2_exclusive_artifact_container_nested_database_lr.svg": "105d0621d10838fa69cc36677015aa5fe4d64dfc8936e841ad9ec26c9e971f99",
+    "followup2_exclusive_storage_container_nested_queue_tb.puml": "8449f98653643212786ff1fee583efc415ee9338b1ad7aae9d841da44ea49c78",
+    "followup2_exclusive_storage_container_nested_queue_tb.svg": "1f6beb1d344e5498ea8325eaed0dfcea45b023df472444b1cce1c5e666ae69fa",
+    "followup2_root_mixedcase_component_quoted_as_tb.puml": "cc05d08eb6cdec982ae573fdfe81eb2f6bae3ae9b26536be787136d61e0dacae",
+    "followup2_root_mixedcase_component_quoted_as_tb.svg": "3ee641afcb6557ee8bdfa526b77532aa8d24311ba50947c3fd19c0c2dc833ca6",
+    "followup2_root_mixedcase_storage_bare_lr.puml": "d6d42c559dbe4e35637746c00994455c36ad7c2f68e545bc12d361c5c7436733",
+    "followup2_root_mixedcase_storage_bare_lr.svg": "f0bd560a69cca7d26d92975508b2efea89406aa56b3a6b87d76f6cb22269bfe2",
+    "followup2_root_upper_component_bare_lr.puml": "eec9ba45fa3f8964486488631f1228ef7dcc3ff6eeef0c319fde4c57ed6c8615",
+    "followup2_root_upper_component_bare_lr.svg": "4f45869736c4b6a55dd2f0e7e0c43fcba6a1d570c8d168eaf95f1bd52c860876",
+    "followup2_root_upper_queue_quoted_as_tb.puml": "ddfb1ecacd856a2ef06afe346f02f36793633e6db91b18bc21e4363d30846268",
+    "followup2_root_upper_queue_quoted_as_tb.svg": "37cf6dedf54637fd4ab8b9fca7eb07d5f2b9103b93715f6f15f84ec3a1e109f2",
+    "followup2_shared_cloud_nested_upper_database_lr.puml": "4fabd1f9953a2ce3b46796759b4e362f5595f07d91c9f8b83b29448c1fe086d3",
+    "followup2_shared_cloud_nested_upper_database_lr.svg": "378368537001ec5bc403a48694ac67b729069a5353012623cc0fd07453979ea7"
+  },
+  "summary": {
+    "prior_reruns": {
+      "pass": 6,
+      "fail": 0
+    },
+    "fresh_inputs": {
+      "java_valid": 11,
+      "pass": 5,
+      "fail": 6,
+      "mechanism_specific_failures": 2,
+      "adjacent_failures_with_lowercase_controls": 4
+    },
+    "decisive_finding": "40394d67 repairs case-insensitive factory scoring for many DESCRIPTION commands, but does not preserve Java's case-insensitive command-consumption invariant for component leaf commands. The selector accepts inputs that the selected component parser silently drops. The claimed mechanism is therefore incomplete."
+  }
+}

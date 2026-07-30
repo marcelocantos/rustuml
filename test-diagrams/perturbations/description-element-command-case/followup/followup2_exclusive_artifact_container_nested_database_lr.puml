@@ -1,0 +1,6 @@
+@startuml
+left to right direction
+ArTiFaCt "Release Bundle 8131" AS Bundle8131 {
+  DaTaBaSe SnapshotStore8133
+}
+@enduml

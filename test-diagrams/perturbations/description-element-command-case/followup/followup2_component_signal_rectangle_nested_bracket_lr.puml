@@ -1,0 +1,6 @@
+@startuml
+left to right direction
+ReCtAnGlE "Operator Zone 8141" aS Zone8141 {
+  [Dashboard8143]
+}
+@enduml

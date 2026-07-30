@@ -1,0 +1,6 @@
+@startuml
+left to right direction
+artifact "Release Bundle 8131" as Bundle8131 {
+  database SnapshotStore8133
+}
+@enduml
