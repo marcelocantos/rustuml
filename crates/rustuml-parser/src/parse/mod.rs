@@ -330,6 +330,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     let mut has_direction_directive = false;
     let mut has_floating_note = false;
     let mut has_interface_decl = false;
+    let mut has_component_bracket_interface_decl = false;
     let mut has_component_leaf_keyword = false;
     let mut has_quoted_deployment_container = false;
     let mut has_component_package_container = false;
@@ -731,6 +732,12 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             scores[1] += 10;
             has_interface_decl = true;
             has_class_factory_decl = true;
+            if trimmed.starts_with("interface [") {
+                // Java's component interface command accepts the bracket-name
+                // form, while ClassDiagramFactory's interface declaration does
+                // not consume it.
+                has_component_bracket_interface_decl = true;
+            }
         }
         if trimmed.contains("..>") || trimmed.contains("<..") {
             has_class_dependency_arrow = true;
@@ -845,7 +852,10 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     // Java keeps trying a factory only while every source command is
     // consumable. Once a mixed-only leaf rejects ClassDiagramFactory, a later
     // command cannot revive that candidate.
-    let class_factory_viable = has_class_factory_decl && !class_factory_rejected_by_mixed_leaf;
+    let class_factory_viable = has_class_factory_decl
+        && !class_factory_rejected_by_mixed_leaf
+        && !has_component_bracket_interface_decl
+        && scores[9] == 0;
 
     // Every complete braced USymbol command is consumable by the earlier
     // ClassDiagramFactory. When no mixed leaf has rejected that candidate,
@@ -1506,6 +1516,28 @@ mod tests {
                 "{keyword}"
             );
         }
+    }
+
+    #[test]
+    fn symbol_container_does_not_steal_expanded_archimate_source() {
+        let input = "@startuml\n\
+                     rectangle \"Business Layer\" {\n\
+                       archimate_element Business Actor customer \"Customer\"\n\
+                       archimate_element Business Process checkout \"Checkout\"\n\
+                       archimate_rel Serving checkout customer \"serves\"\n\
+                     }\n\
+                     @enduml";
+        assert!(matches!(parse(input).unwrap(), Diagram::Archimate(_)));
+    }
+
+    #[test]
+    fn symbol_container_does_not_steal_component_bracket_interface() {
+        let input = "@startuml\n\
+                     component RenamedShell9803 {\n\
+                       interface [Renamed Audit Store 9817] as Store9817\n\
+                     }\n\
+                     @enduml";
+        assert!(matches!(parse(input).unwrap(), Diagram::Component(_)));
     }
 
     #[test]

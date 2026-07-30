@@ -3883,7 +3883,10 @@ fn package_paint_kind(diagram: &ClassDiagram, pkg: &Package) -> PackageKind {
 }
 
 fn uses_symbol_cluster_style(kind: PackageKind) -> bool {
-    !matches!(kind, PackageKind::Package | PackageKind::Namespace)
+    !matches!(
+        kind,
+        PackageKind::Package | PackageKind::Namespace | PackageKind::Folder
+    )
 }
 
 fn package_cluster_id(idx: usize) -> String {
