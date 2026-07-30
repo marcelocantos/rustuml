@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-circle-external-label-shield",
+  "created": "2026-07-31",
+  "status": "proposed",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "b0daa7510263afd633abce4fcfa05c650e3d8288",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/abel/Entity.java",
+      "symbol": "Entity.getUSymbol",
+      "lines": "404-416",
+      "role": "Maps LeafType.CIRCLE declarations to USymbols.INTERFACE."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/GeneralImageBuilder.java",
+      "symbol": "GeneralImageBuilder.createEntityImageBlock",
+      "lines": "155-166",
+      "role": "Routes LeafType.CIRCLE through EntityImageDescription rather than a bare ellipse image."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageDescription.java",
+      "symbols": [
+        "EntityImageDescription constructor",
+        "EntityImageDescription.getShield",
+        "EntityImageDescription.drawU"
+      ],
+      "lines": "110-145, 220-285",
+      "role": "Hides the interface text inside the intrinsic symbol, paints the description below it, and exposes symmetric Graphviz shield margins unless link topology requires overlap-compatible placement."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolSimpleAbstract.java",
+      "symbol": "USymbolSimpleAbstract.asSmall",
+      "lines": "55-88",
+      "role": "Centers the intrinsic interface drawing and stacks its label block below the symbol."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/CircleInterface2.java",
+      "symbols": [
+        "CircleInterface2.drawU",
+        "CircleInterface2.calculateDimension"
+      ],
+      "lines": "50-79",
+      "role": "Defines an 8px-radius painted ellipse inside a one-pixel margin, giving the intrinsic image an 18x18 dimension."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbol": "calc_entity_dims",
+      "lines": "1011-1032",
+      "role": "Collapses circle and diamond declarations into bare shape boxes and assigns circles a 16x16 intrinsic dimension."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbol": "render_with_oracle_uid_origin SvekNodeEmission::Entity",
+      "lines": "2338-2346",
+      "role": "Adds every class entity as an unshielded Graphviz box even though the layout crate already supports SVEK fixed-shape HTML shields."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbol": "emit_entity EntityKind::Circle",
+      "lines": "8749-8790",
+      "role": "Paints the ellipse across the whole Rust node and emits its label only when oracle text coordinates are supplied."
+    },
+    {
+      "path": "crates/rustuml-layout/src/graph.rs",
+      "symbol": "LayoutGraph.add_svek_shielded_node",
+      "lines": "260-286",
+      "role": "Provides the fixed-shape HTML-table mechanism needed to reserve external label room while keeping edges attached to the intrinsic circle."
+    }
+  ],
+  "evidence_inputs": [
+    "test-diagrams/golden/class/class_feature_circle_notation.puml",
+    "test-diagrams/golden/class/class_feature_diamond_notation.puml"
+  ],
+  "claimed_invariant": "A class `circle` declaration is an EntityImageDescription containing an 18x18 USymbolInterface image, not the raw 16px ellipse that it paints. The description is painted eight pixels below that intrinsic image. For ordinary non-horizontal topology, SvekNode reserves the description footprint with symmetric HTML shield cells while `fixedsize=shape` keeps edge attachment on the 18px image. The shield is suppressed for duplicate links and overlap-sensitive horizontal links. A `diamond` declaration follows a separate raw-polygon model and must remain unchanged.",
+  "causal_divergence": "Rust treats both circle and diamond declarations as bare shapes. Its circle node is two pixels too small, carries no SVEK shield, and omits the description unless oracle coordinates are present. Consequently Graphviz solves a shorter rank, the edge reaches a different circle position, the label element is absent, and the canvas is 45 pixels too short. The diamond residual is only spline geometry and does not share this missing image/label mechanism.",
+  "planned_model_change": "Model circle declarations as their own EntityImageDescription lifecycle: use an 18x18 intrinsic node, compute Java's description shield from the resolved title text metrics and link topology, add the node through LayoutGraph.add_svek_shielded_node when the shield is active, paint the 16px ellipse at the intrinsic one-pixel inset, and paint the centered description eight pixels below the intrinsic image. Leave diamond dimensions, painting, and routing untouched.",
+  "perturbation_axes": [
+    "short versus long renamed circle labels",
+    "one-dash horizontal versus two-dash vertical links",
+    "single versus duplicate links to the same peer",
+    "circle declared before versus after its peer",
+    "default versus changed title font family and size",
+    "circle versus diamond negative control"
+  ],
+  "scope_boundary": "This mechanism owns class LeafType.CIRCLE intrinsic dimensions, external description painting, and SVEK shield reservation. It does not change lollipop relationship syntax, component interfaces, diamond symbols, generic class header icons, comparator behavior, or unrelated Graphviz routing.",
+  "acceptance": [
+    "The circle-notation golden becomes exact while the diamond-notation golden has no new differences.",
+    "Fresh renamed circles preserve centered labels and switch shield ownership correctly across horizontal, vertical, and duplicate-link topology.",
+    "Layout and renderer tests, full no-oracle ratchet, clippy, and mechanical harness guards pass except for explicitly pre-existing gate debt.",
+    "An independent checker records a verdict at the exact implementation revision."
+  ]
+}
