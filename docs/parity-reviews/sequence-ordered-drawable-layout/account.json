@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-ordered-drawable-layout",
+  "created": "2026-07-31",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "e33b38a0",
+  "supersedes": {
+    "mechanism": "sequence-inline-arrow-style",
+    "rejected_implementations": [
+      "6ff6d9a8f069e9c6130580214905b9c7e8813106",
+      "e490ea6fd27c9454cb7fca0372316b837806d1b1"
+    ],
+    "review": "docs/parity-reviews/sequence-inline-arrow-style/review-7.json",
+    "reason": "The rejected implementations added broader lifecycle and extent projections but retained separate histories and separate horizontal reservations, causing 44 sequence golden regressions and seven of eight fresh review-8 failures."
+  },
+  "java_locations": [
+    "sequencediagram/graphic/DrawableSetInitializer.java:96-201: iterates one copied event list in source order, creates each concrete graphical element, updates the authoritative lifelines while doing so, solves constraints, then calls prepareMissingSpace once.",
+    "sequencediagram/graphic/DrawableSetInitializer.java:246-288: computes one left and right deficit over every concrete graphical element and translates the shared ConstraintSet once.",
+    "sequencediagram/graphic/DrawableSetInitializer.java:360-442: registers grouping headers, tails, notes, and nested group membership in the same ordered drawable set.",
+    "sequencediagram/graphic/LifeLine.java:62-151: accepts or rejects ordered segment variations once and answers every later depth/shift query from the resulting Stairs history.",
+    "sequencediagram/graphic/NoteBox.java:75-155: derives side-note start and width from the authoritative lifeline segment at the note's vertical span.",
+    "sequencediagram/InGroupableList.java:50-235: each active group owns the same concrete members; nested lists and extreme element kinds determine one recursive min/max envelope.",
+    "sequencediagram/graphic/GroupingGraphicalElement.java:45-66: group starting and actual width are derived from the recursive InGroupableList, not recomputed from a separate participant scan."
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/sequence.rs:2985-3230: SequenceDepthSnapshots replays lifecycle events into its own levels and return stack.",
+    "crates/rustuml-render/src/sequence.rs:3230-3470: SequenceLifeLines independently replays the same events into a second accepted variation history.",
+    "crates/rustuml-render/src/sequence.rs:6800-7355: spacing consumes SequenceDepthSnapshots before graphical elements or final ordinates exist.",
+    "crates/rustuml-render/src/sequence.rs:7260-7350: first-participant note reservation pre-shifts constraints before the later missing-space pass.",
+    "crates/rustuml-render/src/sequence.rs:8390-8495: a second note-only left-deficit pass translates participants without seeing group headers, external arrows, references, or dividers.",
+    "crates/rustuml-render/src/sequence.rs:9340-9995: group frames are reconstructed later from another event scan, after the translation decision they should have influenced.",
+    "crates/rustuml-render/src/sequence.rs:12700-13150: divider, external-arrow, and canvas widths consume downstream aggregate numbers rather than one upstream element envelope."
+  ],
+  "claimed_invariant": "For the legacy sequence engine, one ordered source event stream creates one accepted LifeLine variation history and one ordered collection of concrete graphical elements. Every spacing, note anchor, activation segment, group membership, frame, external arrow, divider, and canvas query reads those same objects. Horizontal constraints are solved once, then the maximum left and right deficits of all concrete elements translate and extend that shared solution exactly once.",
+  "causal_divergence": "Rust materializes lifecycle acceptance twice and horizontal geometry in several scans. The two lifecycle projections disagree on equal-ordinate rejection, return ownership, self messages, group-end attachment, and page boundaries. The early note reservation and later note-only missing-space pass double-count some notes while omitting group headers and external arrows. Frames and dividers are then rebuilt after translation from different aggregates. This explains the one-pixel left-note shifts, negative grouped-frame origins, five-to-fourteen-pixel lifecycle/page shifts, shortened external arrows, and canvas/frame width disagreements.",
+  "planned_model_change": [
+    "Replace SequenceDepthSnapshots' event replay with snapshots projected from the accepted SequenceLifeLines variations; one acceptance result and one return-stack history own lifecycle truth.",
+    "Create typed horizontal element records for notes, messages, external arrows, references, grouping headers/tails, and dividers, each exposing starting, preferred, and actual extents from the same participant and lifeline positions used to paint.",
+    "Register every concrete element with all active nested group records during the same ordered event walk; recursive group min/max follows InGroupableList member-kind margins.",
+    "Remove the pre-layout left-note reservation and the note-only post-layout translation. Run one two-sided missing-space solve over the complete element collection, translate participant constraints once, and carry that translation into frames, external arrows, dividers, page chrome, and canvas width.",
+    "Keep every review-8 failure and add renamed, reordered, deeper, and changed-count held-outs that combine lifecycle variation order with independent left and right envelope owners."
+  ],
+  "perturbation_axes": [
+    "open/close order at one ordinate, nested depth, return ownership, self messages, group-end attachment, and newpage truncation",
+    "left, right, over, and message-attached notes across folded, hexagonal, rectangular, multiline, and renamed forms",
+    "FROM_LEFT, TO_LEFT, FROM_RIGHT, and TO_RIGHT external arrows with visible, hidden, crossed, and half heads",
+    "one through four nested alt/opt/loop groups with notes, references, dividers, and external members in varied source order",
+    "renamed participants plus changed participant count, group depth, declaration order, and topology",
+    "legacy versus teoz as an explicit negative boundary: this mechanism changes only the legacy DrawableSet path unless Java proves shared ownership"
+  ],
+  "expected_regression_recovery": {
+    "sequence": "1367/1411 to 1411/1411",
+    "combo": "317/327 to at least 318/327 through combo_sequence_everything",
+    "review_8": "all eight preserved inputs must pass before acceptance"
+  }
+}
