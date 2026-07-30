@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-leaf-textblock-padding",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "2d68b7bb5101ed066f80d1b2ce7ab20e1ef75f28",
+  "java_locations": [
+    "src/main/resources/themes/puml-theme-metal.puml:204-211 (defaultFontName, defaultFontSize, dpi, roundcorner, and global Padding 8)",
+    "src/main/resources/themes/puml-theme-minty.puml:203-210 (defaultFontName, defaultFontSize, dpi, roundcorner, and global Padding 5)",
+    "src/main/java/net/sourceforge/plantuml/skin/SkinParam.java:1101-1117 (SkinParam#getPadding reads the effective legacy padding key)",
+    "src/main/java/net/sourceforge/plantuml/klimt/creole/Display.java:688-695 (Display#getCreole passes ISkinSimple#getPadding into SheetBlock1)",
+    "src/main/java/net/sourceforge/plantuml/klimt/creole/SheetBlock1.java:74-94,195-210 (symmetric padding enters intrinsic dimensions and translates painted text)",
+    "src/main/java/net/sourceforge/plantuml/klimt/geom/XDimension2D.java:75-91 (delta(p) adds p to both width and height)",
+    "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageStateCommon.java:65-75 (the state title Display is created with the live SkinParam)",
+    "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageState.java:70-96,110-135 (the body Display uses the same SkinParam; title/body padded dimensions feed the image size, divider, and text origins)",
+    "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageStateEmptyDescription.java:52-82 (the hide-empty-description image retains the padded title block under its distinct outer margin and minimum)",
+    "src/main/java/net/sourceforge/plantuml/svek/SvekNode.java (the resulting entity-image dimensions are supplied to Graphviz before routing)",
+    "src/main/java/net/sourceforge/plantuml/svek/SvekResult.java (the solved nodes and edges determine the painted envelope and exported canvas)"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/state.rs:578-642 (StateNodeFont has no padding channel and layout_node_size_with_font uses one fixed outer dimension delta)",
+    "crates/rustuml-render/src/state.rs:5617-5696 (flat-state setup resolves theme font size/name/style but not the effective global padding)",
+    "crates/rustuml-render/src/state.rs:7136-7185 (hide-empty-description text placement models the title as unpadded)",
+    "crates/rustuml-render/src/state.rs:7215-7288 (ordinary state divider and title baselines use fixed offsets with no SheetBlock1 padding)",
+    "crates/rustuml-render/src/state.rs:7358-7379 (ordinary state body text starts at a fixed field inset with no SheetBlock1 padding)"
+  ],
+  "evidence_inputs": [
+    "test-diagrams/perturbations/state-arrow-style-isolation/checker_theme_user_order_and_local_override.puml",
+    "test-diagrams/perturbations/state-arrow-style-isolation/review4_repeated_themes_bidirectional_order.puml",
+    "test-diagrams/perturbations/state-arrow-style-isolation/review6_repeated_themes_state_user_order.puml"
+  ],
+  "observed_java_model": [
+    "The metal probe has dpi 100 and Padding 8. Its first state has SVG height 68.0923; de-scaling by 96/100 gives 65.368608, equal to the 11px Verdana title block's 13.368608 text height plus four padding contributions (title top/bottom and empty body top/bottom) plus EntityImageState's fixed 20px outer delta.",
+    "The minty probes have dpi 100 and Padding 5. Their state height 55.5923 de-scales to 53.368608, equal to 13.368608 + 4*5 + 20. The 12px unscaled height difference between metal and minty is exactly 4*(8-5).",
+    "For the first minty state, width 144.72 and textLength 113.47 de-scale to 138.9312 and 108.9312, a 30px difference equal to two horizontal padding contributions plus the fixed 20px outer delta. The first metal state analog differs by 36px, equal to 2*8 + 20.",
+    "The first metal divider is 39.36864 unscaled pixels below the box top and the first minty divider is 33.36864 pixels below it. These are exactly MARGIN 5 + (13.36864 text height + 2*Padding) + MARGIN_LINE 5.",
+    "Across all three probes, inherited and local arrow colors/styles already follow Java. Padding changes the intrinsic state images consumed by Graphviz, so node sizes, coordinates, routes, pseudo-state placement, and the final canvas move while arrow-style ownership remains independently correct."
+  ],
+  "invariant": "For every ordinary state leaf, Java treats the effective global legacy skinparam Padding as part of both state text blocks, not as a cosmetic SVG inset and not as the state style signature's generic Padding property. EntityImageStateCommon creates the title through Display.create8 with the live SkinParam; EntityImageState independently creates the body Display the same way, including an empty body. Display#getCreole reads SkinParam#getPadding and constructs a SheetBlock1 whose symmetric padding increases both intrinsic width and height and translates its painted glyphs. EntityImageState merges those two already-padded dimensions, then adds its fixed state-image margin and divider allowances and applies minimum dimensions. Its divider uses the padded title height, and its title and body painters retain each block's internal padding translation. EntityImageStateEmptyDescription uses the same padded title but a different fixed outer margin and minimum. These intrinsic dimensions enter SvekNode before Graphviz layout, so all downstream coordinates and the SvekResult canvas must be consequences of the padded image. Theme execution order matters only to select the effective Padding value: metal supplies 8, minty supplies 5, and a later theme or ordinary skinparam replaces the earlier value. DPI scaling remains a separate final-document transform.",
+  "causal_divergence": "Rust resolves the themed state font family, size, colors, stroke, rounding, document background, DPI, and arrow channels, but StateNodeFont carries no effective global padding. layout_node_size_with_font measures bare title/body glyphs and adds only a fixed 20px state delta (or 10px in hide-empty-description mode); an empty body contributes zero instead of its Java SheetBlock1 padding. Final emission likewise places the divider at 10px plus bare title height, the title at 5px plus bare ascent, and body text at a fixed five-pixel field inset. Consequently both metal Padding 8 and minty Padding 5 collapse onto the same unpadded intrinsic model before Graphviz. The resulting state boxes are too small and their glyph/divider origins are too shallow; Graphviz then legitimately produces different node coordinates, spline geometry, pseudo-state placement, and canvas dimensions even though the independently resolved arrow attributes match Java.",
+  "planned_change": "Resolve the last effective ordinary-or-theme global padding record in source order as a finite nonnegative scalar at the flat-state consumer. Add it to the state text-block model rather than to a theme-name table or a post-layout scaler. Model title and body as separate padded blocks: add 2*padding to each block's width and height, retain the empty body's padded extent in ordinary EntityImageState mode, merge the padded blocks before applying Java's existing fixed 20px delta and 50px minimum, and use the padded title height for the divider. Shift title and body glyph origins by their block padding while preserving centering and alignment. In hide-empty-description mode, apply the same padded-title model before its existing 10px outer delta and 50x40 minimum. Feed those dimensions to Graphviz before routing and let the existing painted-envelope and DPI stages derive coordinates and canvas size. Do not key behavior to metal, minty, fixture labels, state count, expected coordinates, or golden dimensions; do not alter arrow precedence or compensate after SVG emission.",
+  "perturbation_axes": [
+    "global Padding values 0, 1, 5, 8, and a fresh larger value with renamed short and long state labels",
+    "ordinary leaves with an empty body, one description line, and multiple description lines",
+    "default state rendering versus hide empty description",
+    "metal then minty versus minty then metal, with a user Padding declaration before, between, and after themes",
+    "Verdana and a different valid font family at two font sizes so padding remains independent of glyph metrics",
+    "top-to-bottom and left-to-right chains with changed state counts so intrinsic dimensions propagate through different Graphviz routes",
+    "dpi 96 and dpi 100 to prove text-block padding is applied before the independent document-scale transform",
+    "inherited, dotted, and bold local arrows to confirm padding geometry does not disturb the already-correct arrow-style channels"
+  ]
+}
