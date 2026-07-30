@@ -2152,7 +2152,9 @@ fn render_with_oracle_uid_origin(
     // minima, then independently replaces each axis when SkinParam's raw
     // integer nodesep/ranksep value is nonzero.
     let (node_sep, rank_sep) = class_svek_spacing(diagram);
-    let mut layout = LayoutGraph::new(direction).with_spacing_pixels(node_sep, rank_sep);
+    let mut layout = LayoutGraph::new(direction)
+        .with_spacing_pixels(node_sep, rank_sep)
+        .with_plantuml_svek_node_order();
     let floating_note_indices: Vec<usize> = diagram
         .notes
         .iter()
@@ -2525,24 +2527,28 @@ fn add_single_strategy_links(layout: &mut LayoutGraph, diagram: &ClassDiagram) {
         linked.insert(target);
     }
 
-    let packaged = diagram
-        .packages
-        .iter()
-        .flat_map(|package| package.entities.iter().map(String::as_str))
-        .collect::<HashSet<_>>();
+    // Java `Entity.leafs()` returns only immediate quark children. The parser's
+    // `Package.entities` is recursively inclusive, so project it back to one
+    // innermost owner before applying `CucaDiagram.applySingleStrategy`.
+    let parent_pkg = package_parent_indices(diagram);
+    let innermost_pkg = innermost_entity_packages(diagram, &parent_pkg);
     let root = diagram
         .entities
         .iter()
-        .map(|entity| entity.id.as_str())
-        .filter(|id| !packaged.contains(id) && !linked.contains(id))
+        .enumerate()
+        .filter(|(entity_idx, _)| innermost_pkg[*entity_idx].is_none())
+        .map(|(_, entity)| entity.id.as_str())
+        .filter(|id| !linked.contains(id))
         .collect::<Vec<_>>();
     add_square_invisible_links(layout, &root);
 
-    for package in &diagram.packages {
-        let standalones = package
+    for package_idx in 0..diagram.packages.len() {
+        let standalones = diagram
             .entities
             .iter()
-            .map(String::as_str)
+            .enumerate()
+            .filter(|(entity_idx, _)| innermost_pkg[*entity_idx] == Some(package_idx))
+            .map(|(_, entity)| entity.id.as_str())
             .filter(|id| !linked.contains(id))
             .collect::<Vec<_>>();
         add_square_invisible_links(layout, &standalones);
@@ -3386,23 +3392,12 @@ fn oracle_entities_for_diagram(
 }
 
 fn package_parent_indices(diagram: &ClassDiagram) -> Vec<Option<usize>> {
-    let n_pkg = diagram.packages.len();
-    (0..n_pkg)
-        .map(|i| {
-            if let Some(parent) = diagram.packages[i].parent {
-                return Some(parent);
-            }
-            let mine = &diagram.packages[i].entities;
-            (0..n_pkg)
-                .filter(|&j| {
-                    j != i
-                        && diagram.packages[j].entities.len() > mine.len()
-                        && mine
-                            .iter()
-                            .all(|m| diagram.packages[j].entities.contains(m))
-                })
-                .min_by_key(|&j| diagram.packages[j].entities.len())
-        })
+    // Java `Entity.getParentContainer()` is an explicit quark-tree identity.
+    // The parser records the same identity, including `None` for root groups.
+    diagram
+        .packages
+        .iter()
+        .map(|package| package.parent)
         .collect()
 }
 
@@ -3921,24 +3916,77 @@ struct SvekEmissionOrder<'a> {
     parent_pkg: &'a [Option<usize>],
     innermost_pkg: &'a [Option<usize>],
     package_roles: &'a [PackageRenderRole],
-    entity_order: Vec<usize>,
+    node_order: Vec<SvekNodeEmission>,
+}
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+enum SvekNodeEmission {
+    Entity(usize),
+    EmptyPackage(usize),
 }
 
 impl SvekEmissionOrder<'_> {
     fn collect_package(&mut self, pkg_idx: usize) {
         for (entity_idx, _) in self.diagram.entities.iter().enumerate() {
             if self.innermost_pkg[entity_idx] == Some(pkg_idx) {
-                self.entity_order.push(entity_idx);
+                self.node_order.push(SvekNodeEmission::Entity(entity_idx));
             }
         }
         for child_idx in 0..self.diagram.packages.len() {
-            if self.parent_pkg[child_idx] == Some(pkg_idx)
-                && self.package_roles[child_idx] == PackageRenderRole::Cluster
-            {
-                self.collect_package(child_idx);
+            if self.parent_pkg[child_idx] != Some(pkg_idx) {
+                continue;
+            }
+            match self.package_roles[child_idx] {
+                PackageRenderRole::Cluster => self.collect_package(child_idx),
+                PackageRenderRole::EmptyLeaf => self
+                    .node_order
+                    .push(SvekNodeEmission::EmptyPackage(child_idx)),
+                PackageRenderRole::Hidden => {}
             }
         }
     }
+}
+
+fn svek_node_emission_order(diagram: &ClassDiagram) -> Vec<SvekNodeEmission> {
+    let package_render = package_render_model(diagram);
+    let mut emission = SvekEmissionOrder {
+        diagram,
+        parent_pkg: &package_render.parent_pkg,
+        innermost_pkg: &package_render.innermost_pkg,
+        package_roles: &package_render.roles,
+        node_order: Vec::with_capacity(diagram.entities.len() + diagram.packages.len()),
+    };
+
+    for (pkg_idx, parent) in package_render.parent_pkg.iter().copied().enumerate() {
+        let parent_is_rendered =
+            parent.is_some_and(|parent| package_render.roles[parent] == PackageRenderRole::Cluster);
+        if parent_is_rendered {
+            continue;
+        }
+        match package_render.roles[pkg_idx] {
+            PackageRenderRole::Cluster => emission.collect_package(pkg_idx),
+            PackageRenderRole::EmptyLeaf => emission
+                .node_order
+                .push(SvekNodeEmission::EmptyPackage(pkg_idx)),
+            PackageRenderRole::Hidden => {}
+        }
+    }
+
+    let mut root_entities = diagram
+        .entities
+        .iter()
+        .enumerate()
+        .filter(|(idx, _)| package_render.innermost_pkg[*idx].is_none())
+        .map(|(idx, entity)| (entity.source_line, idx))
+        .collect::<Vec<_>>();
+    root_entities.sort_by_key(|&(source_line, idx)| (source_line, idx));
+    emission.node_order.extend(
+        root_entities
+            .into_iter()
+            .map(|(_, idx)| SvekNodeEmission::Entity(idx)),
+    );
+
+    emission.node_order
 }
 
 #[derive(Clone, Copy)]
@@ -3980,35 +4028,13 @@ impl CucaUidEvent {
 /// GMN name, note entity, and connector link in that order.
 fn svek_id_allocation(diagram: &ClassDiagram) -> SvekIdAllocation {
     let package_render = package_render_model(diagram);
-    let mut emission = SvekEmissionOrder {
-        diagram,
-        parent_pkg: &package_render.parent_pkg,
-        innermost_pkg: &package_render.innermost_pkg,
-        package_roles: &package_render.roles,
-        entity_order: Vec::with_capacity(diagram.entities.len()),
-    };
-
-    for (pkg_idx, parent) in package_render.parent_pkg.iter().copied().enumerate() {
-        if package_render.roles[pkg_idx] != PackageRenderRole::Cluster {
-            continue;
-        }
-        let parent_is_rendered =
-            parent.is_some_and(|parent| package_render.roles[parent] == PackageRenderRole::Cluster);
-        if !parent_is_rendered {
-            emission.collect_package(pkg_idx);
-        }
-    }
-    let mut root_entities = diagram
-        .entities
-        .iter()
-        .enumerate()
-        .filter(|(idx, _)| package_render.innermost_pkg[*idx].is_none())
-        .map(|(idx, entity)| (entity.source_line, idx))
-        .collect::<Vec<_>>();
-    root_entities.sort_by_key(|&(source_line, idx)| (source_line, idx));
-    emission
-        .entity_order
-        .extend(root_entities.into_iter().map(|(_, idx)| idx));
+    let entity_order = svek_node_emission_order(diagram)
+        .into_iter()
+        .filter_map(|node| match node {
+            SvekNodeEmission::Entity(idx) => Some(idx),
+            SvekNodeEmission::EmptyPackage(_) => None,
+        })
+        .collect();
 
     let mut events = diagram
         .packages
@@ -4059,7 +4085,7 @@ fn svek_id_allocation(diagram: &ClassDiagram) -> SvekIdAllocation {
         attached_note_starts: vec![None; diagram.notes.len()],
         relationship_ids: vec![0; diagram.relationships.len()],
         association_starts: vec![None; diagram.association_classes.len()],
-        entity_order: emission.entity_order,
+        entity_order,
     };
     let mut next_id = 2;
     for event in events {
@@ -4779,11 +4805,6 @@ fn render_plantuml_svg(
                 .as_deref()
                 .unwrap_or("ent0002");
             emit_layout_package_cluster(&mut svg, cluster, entity_id);
-        } else if let Some(empty) = layout_empty_packages
-            .iter()
-            .find(|empty| empty.package_idx == package_idx)
-        {
-            emit_layout_empty_package(&mut svg, empty);
         }
     }
     if let Some(oracle) = oracle {
@@ -4796,7 +4817,15 @@ fn render_plantuml_svg(
     let mut ent_id =
         2 + oracle_pkg_clusters.len() + layout_pkg_clusters.len() + layout_empty_packages.len();
 
-    let emission_order = entity_emission_order(diagram);
+    let node_emission_order = svek_node_emission_order(diagram);
+    let emission_order = node_emission_order
+        .iter()
+        .filter_map(|node| match node {
+            SvekNodeEmission::Entity(idx) => Some(*idx),
+            SvekNodeEmission::EmptyPackage(_) => None,
+        })
+        .collect::<Vec<_>>();
+    let mut node_emission_cursor = 0;
     let mut layout_floating_notes = floating_notes
         .iter()
         .filter_map(|&(note_idx, node_idx)| {
@@ -4820,6 +4849,23 @@ fn render_plantuml_svg(
 
     // Render each entity.
     for &i in &emission_order {
+        while let Some(SvekNodeEmission::EmptyPackage(package_idx)) =
+            node_emission_order.get(node_emission_cursor).copied()
+        {
+            if let Some(empty) = layout_empty_packages
+                .iter()
+                .find(|empty| empty.package_idx == package_idx)
+            {
+                emit_layout_empty_package(&mut svg, empty);
+            }
+            node_emission_cursor += 1;
+        }
+        debug_assert_eq!(
+            node_emission_order.get(node_emission_cursor),
+            Some(&SvekNodeEmission::Entity(i))
+        );
+        node_emission_cursor += 1;
+
         let entity = &diagram.entities[i];
         let (x, y) = entity_positions[i];
         let dim = &dims[i];
@@ -5121,6 +5167,19 @@ fn render_plantuml_svg(
             );
         }
     }
+
+    while let Some(SvekNodeEmission::EmptyPackage(package_idx)) =
+        node_emission_order.get(node_emission_cursor).copied()
+    {
+        if let Some(empty) = layout_empty_packages
+            .iter()
+            .find(|empty| empty.package_idx == package_idx)
+        {
+            emit_layout_empty_package(&mut svg, empty);
+        }
+        node_emission_cursor += 1;
+    }
+    debug_assert_eq!(node_emission_cursor, node_emission_order.len());
 
     // Emit any remaining note entities whose emission counter follows every
     // regular entity (notes declared after the last `entity`). The interleave
@@ -14783,6 +14842,75 @@ mod tests {
                 "wrong recursive SVEK id for {qualified_name}: {opening_tag}"
             );
         }
+    }
+
+    #[test]
+    fn svek_node_stream_interleaves_empty_packages_after_cluster_paint() {
+        let input = "@startuml\n\
+            package OrderOuter701 {\n\
+              class DirectFirst709\n\
+              package Filled719 {\n\
+                class FilledLeaf727\n\
+              }\n\
+              package EmptyMiddle733 {\n\
+              }\n\
+              package Nested739 {\n\
+                class NestedLeaf743\n\
+                package InnerEmpty751 {\n\
+                }\n\
+              }\n\
+              class DirectSecond757\n\
+            }\n\
+            package RootEmpty761 {\n\
+            }\n\
+            class RootLeaf769\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Class(diagram) = diagram else {
+            panic!("expected class diagram");
+        };
+        let labels = svek_node_emission_order(&diagram)
+            .into_iter()
+            .map(|node| match node {
+                SvekNodeEmission::Entity(idx) => diagram.entities[idx].label.as_str(),
+                SvekNodeEmission::EmptyPackage(idx) => {
+                    package_display_label(&diagram.packages[idx])
+                }
+            })
+            .collect::<Vec<_>>();
+
+        assert_eq!(
+            labels,
+            [
+                "DirectFirst709",
+                "DirectSecond757",
+                "FilledLeaf727",
+                "EmptyMiddle733",
+                "NestedLeaf743",
+                "InnerEmpty751",
+                "RootEmpty761",
+                "RootLeaf769",
+            ]
+        );
+
+        let svg = render(&diagram, &Theme::default());
+        let markers = [
+            "<!--cluster OrderOuter701-->",
+            "<!--cluster OrderOuter701.Filled719-->",
+            "<!--cluster OrderOuter701.Nested739-->",
+            "<!--class DirectFirst709-->",
+            "<!--class DirectSecond757-->",
+            "<!--class FilledLeaf727-->",
+            ">EmptyMiddle733</text>",
+            "<!--class NestedLeaf743-->",
+            ">InnerEmpty751</text>",
+            ">RootEmpty761</text>",
+            "<!--class RootLeaf769-->",
+        ];
+        assert!(markers.windows(2).all(|pair| {
+            svg.find(pair[0]).expect("missing earlier SVEK marker")
+                < svg.find(pair[1]).expect("missing later SVEK marker")
+        }));
     }
 
     #[test]
