@@ -1,0 +1,11 @@
+@startuml
+set namespaceSeparator ::
+left to right direction
+package Archive9761 {
+  class Direct9763
+}
+package Archive9761 {
+  note "separator memo" as Memo9765
+  Memo9765 .. Archive9761::Direct9763
+}
+@enduml
