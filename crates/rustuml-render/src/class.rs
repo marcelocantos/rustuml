@@ -2385,9 +2385,8 @@ fn render_with_oracle_uid_origin(
                         height: center.height,
                     });
             let endpoint_size = |label: Option<&str>| {
-                label.map(|label| EdgeLabelSize {
-                    width: text_render::measure(label, RELATIONSHIP_LABEL_FONT_SIZE, false).floor(),
-                    height: text_render::label_height(label, RELATIONSHIP_LABEL_FONT_SIZE).floor(),
+                label.map(|label| {
+                    relationship_endpoint_label_block(diagram, &relationship, label).graphviz_size()
                 })
             };
             layout.add_edge_with_label_sizes_and_minlen(
@@ -2583,10 +2582,8 @@ fn render_with_oracle_uid_origin(
                 height: center.height,
             });
         let endpoint_size = |label: Option<&str>| {
-            label.map(|label| EdgeLabelSize {
-                width: text_render::measure(label, RELATIONSHIP_LABEL_FONT_SIZE, false).floor(),
-                height: text_render::label_height(label, RELATIONSHIP_LABEL_FONT_SIZE).floor(),
-            })
+            label
+                .map(|label| relationship_endpoint_label_block(diagram, rel, label).graphviz_size())
         };
         layout.add_edge_with_label_sizes_and_minlen(
             &from,
@@ -12408,18 +12405,7 @@ fn render_relationship_svg(
         .property("lineThickness")
         .and_then(|value| value.parse::<f64>().ok())
         .or(compatibility_arrow_thickness);
-    let arrow_font_color = arrow_style
-        .property("fontColor")
-        .map(crate::sequence::resolve_color)
-        .unwrap_or_else(|| "#000000".to_string());
-    let arrow_font_family = arrow_style
-        .property("fontName")
-        .map(canonical_class_font_family)
-        .unwrap_or_else(|| "sans-serif".to_string());
-    let arrow_font_size = arrow_style
-        .property("fontSize")
-        .and_then(|value| value.parse::<f64>().ok())
-        .unwrap_or(RELATIONSHIP_LABEL_FONT_SIZE);
+    let arrow_font = relationship_arrow_font(diagram, rel);
     let edge_color = rel
         .style
         .color
@@ -12687,8 +12673,7 @@ fn render_relationship_svg(
                       label: &str,
                       position: Option<rustuml_layout::graph::EdgeLabelPosition>,
                       horizontal_margin: f64,
-                      fallback: (f64, f64),
-                      center_label: bool| {
+                      fallback: (f64, f64)| {
         let (x, y) = position
             .map(|position| {
                 (
@@ -12697,8 +12682,8 @@ fn render_relationship_svg(
                         + MARGIN
                         + text_render::label_ascent_with_family(
                             label,
-                            arrow_font_size,
-                            &arrow_font_family,
+                            arrow_font.size,
+                            &arrow_font.family,
                         ),
                 )
             })
@@ -12706,21 +12691,17 @@ fn render_relationship_svg(
         let base = TextBase {
             x,
             y,
-            font_size: arrow_font_size as u32,
-            font_family: &arrow_font_family,
-            fill: &arrow_font_color,
+            font_size: arrow_font.size as u32,
+            font_family: &arrow_font.family,
+            fill: &arrow_font.color,
             bold: false,
             italic: false,
             underline: false,
-            skip_underline: center_label,
+            skip_underline: true,
         };
-        if center_label {
-            // `SvekEdge` center labels use Creole styling, but preserve `__`
-            // and neutralize the `""` monospace delimiter.
-            text_render::emit_text_no_mono(svg, label.trim_matches('"'), &base);
-        } else {
-            text_render::emit_text(svg, label.trim_matches('"'), &base);
-        }
+        // `SvekEdge` center labels use Creole styling, but preserve `__`
+        // and neutralize the `""` monospace delimiter.
+        text_render::emit_text_no_mono(svg, label.trim_matches('"'), &base);
     };
 
     let center_layout = relationship_center_layout(diagram, rel, note, &diagram.meta.sprites);
@@ -12762,7 +12743,6 @@ fn render_relationship_svg(
                 }),
                 label_margin + layout_x_bias,
                 (0.0, 0.0),
-                true,
             );
         }
     }
@@ -12781,23 +12761,23 @@ fn render_relationship_svg(
         );
     }
     if let Some(label) = rel.from_multiplicity.as_deref() {
-        emit_label(
+        emit_relationship_endpoint_label(
             svg,
             label,
             edge_path.tail_label,
             layout_x_bias,
             edge_points.first().copied().unwrap_or((0.0, 0.0)),
-            false,
+            &arrow_font,
         );
     }
     if let Some(label) = rel.to_multiplicity.as_deref() {
-        emit_label(
+        emit_relationship_endpoint_label(
             svg,
             label,
             edge_path.head_label,
             layout_x_bias,
             edge_points.last().copied().unwrap_or((0.0, 0.0)),
-            false,
+            &arrow_font,
         );
     }
 
@@ -13148,6 +13128,150 @@ fn relationship_edge_indices(
         .collect()
 }
 
+struct RelationshipArrowFont {
+    family: String,
+    size: f64,
+    color: String,
+}
+
+fn relationship_arrow_font(
+    diagram: &ClassDiagram,
+    relationship: &Relationship,
+) -> RelationshipArrowFont {
+    let arrow_style = StyleCascade::new(&diagram.meta.style_program).resolve_link_at_source_line(
+        &StyleSignature::from_selectors(["root", "element", "classDiagram", "arrow"]),
+        StyleScheme::Regular,
+        relationship.source_line,
+    );
+    RelationshipArrowFont {
+        family: arrow_style
+            .property("fontName")
+            .map(canonical_class_font_family)
+            .unwrap_or_else(|| "sans-serif".to_string()),
+        size: arrow_style
+            .property("fontSize")
+            .and_then(|value| value.parse::<f64>().ok())
+            .unwrap_or(RELATIONSHIP_LABEL_FONT_SIZE),
+        color: arrow_style
+            .property("fontColor")
+            .map(crate::sequence::resolve_color)
+            .unwrap_or_else(|| "#000000".to_string()),
+    }
+}
+
+struct RelationshipEndpointLabelBlock<'a> {
+    rows: Vec<&'a str>,
+    row_widths: Vec<f64>,
+    row_heights: Vec<f64>,
+    width: f64,
+    height: f64,
+}
+
+impl<'a> RelationshipEndpointLabelBlock<'a> {
+    fn paint_row(row: &'a str) -> &'a str {
+        // Java `StripeSimple.getAtoms` retains an ordinary-space AtomText for
+        // an empty Display row, so it still contributes one text-line height.
+        if row.is_empty() { " " } else { row }
+    }
+
+    fn measure(label: &'a str, font_size: f64, font_family: &str) -> Self {
+        let rows = rustuml_parser::display::split_escaped_newlines(label.trim_matches('"'));
+        let row_widths = rows
+            .iter()
+            .map(|row| {
+                text_render::measure_with_family(
+                    Self::paint_row(row),
+                    font_size,
+                    false,
+                    font_family,
+                )
+            })
+            .collect::<Vec<_>>();
+        let row_heights = rows
+            .iter()
+            .map(|row| {
+                text_render::label_height_with_family(Self::paint_row(row), font_size, font_family)
+            })
+            .collect::<Vec<_>>();
+        let width = row_widths.iter().copied().fold(0.0, f64::max);
+        let height = row_heights.iter().sum();
+        Self {
+            rows,
+            row_widths,
+            row_heights,
+            width,
+            height,
+        }
+    }
+
+    fn graphviz_size(&self) -> EdgeLabelSize {
+        // `SvekEdge.appendTable` serializes endpoint TextBlock dimensions as
+        // integer HTML-cell sizes before Graphviz solves the label positions.
+        EdgeLabelSize {
+            width: self.width.floor(),
+            height: self.height.floor(),
+        }
+    }
+}
+
+fn relationship_endpoint_label_block<'a>(
+    diagram: &ClassDiagram,
+    relationship: &Relationship,
+    label: &'a str,
+) -> RelationshipEndpointLabelBlock<'a> {
+    let arrow_font = relationship_arrow_font(diagram, relationship);
+    RelationshipEndpointLabelBlock::measure(label, arrow_font.size, &arrow_font.family)
+}
+
+fn emit_relationship_endpoint_label(
+    svg: &mut String,
+    label: &str,
+    position: Option<rustuml_layout::graph::EdgeLabelPosition>,
+    horizontal_margin: f64,
+    fallback: (f64, f64),
+    font: &RelationshipArrowFont,
+) {
+    let block = RelationshipEndpointLabelBlock::measure(label, font.size, &font.family);
+    let (block_x, mut row_top, block_width) = position
+        .map(|position| {
+            (
+                position.x + MARGIN + horizontal_margin,
+                position.y + MARGIN,
+                position.width,
+            )
+        })
+        .unwrap_or_else(|| {
+            let first_ascent = text_render::label_first_baseline_ascent_with_family(
+                RelationshipEndpointLabelBlock::paint_row(block.rows[0]),
+                font.size,
+                &font.family,
+            );
+            (fallback.0, fallback.1 - first_ascent, block.width)
+        });
+
+    for (row_index, row) in block.rows.iter().enumerate() {
+        let row = RelationshipEndpointLabelBlock::paint_row(row);
+        let baseline = row_top
+            + text_render::label_first_baseline_ascent_with_family(row, font.size, &font.family);
+        text_render::emit_text(
+            svg,
+            row,
+            &TextBase {
+                x: block_x + (block_width - block.row_widths[row_index]) / 2.0,
+                y: baseline,
+                font_size: font.size as u32,
+                font_family: &font.family,
+                fill: &font.color,
+                bold: false,
+                italic: false,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        row_top += block.row_heights[row_index];
+    }
+}
+
 fn resolve_endpoint_label_collisions(
     diagram: &ClassDiagram,
     nodes: &[NodePosition],
@@ -13162,6 +13286,7 @@ fn resolve_endpoint_label_collisions(
             continue;
         };
         let edge = &mut edge_paths[edge_idx];
+        let arrow_font = relationship_arrow_font(diagram, relationship);
 
         for (position, label) in [
             (
@@ -13176,8 +13301,10 @@ fn resolve_endpoint_label_collisions(
             let (Some(position), Some(label)) = (position.as_mut(), label) else {
                 continue;
             };
-            position.width = text_render::measure(label, RELATIONSHIP_LABEL_FONT_SIZE, false);
-            position.height = text_render::label_height(label, RELATIONSHIP_LABEL_FONT_SIZE);
+            let block =
+                RelationshipEndpointLabelBlock::measure(label, arrow_font.size, &arrow_font.family);
+            position.width = block.width;
+            position.height = block.height;
             for node in nodes {
                 move_label_away_from_node(position, node);
             }
@@ -16532,6 +16659,37 @@ fn render_note_box(
 mod tests {
     use super::*;
     use rustuml_parser::diagram::{Diagram, DiagramMeta};
+
+    #[test]
+    fn endpoint_label_block_measures_centered_display_rows() {
+        let block = RelationshipEndpointLabelBlock::measure("owner\\ni\\n", 13.0, "sans-serif");
+
+        assert_eq!(block.rows, ["owner", "i", ""]);
+        assert_eq!(block.row_widths.len(), 3);
+        assert_eq!(block.row_heights.len(), 3);
+        assert_eq!(block.width, block.row_widths[0]);
+        assert_eq!(block.height, block.row_heights.iter().sum::<f64>());
+        assert!(block.row_widths[1] < block.width);
+        assert!(block.row_widths[2] > 0.0);
+    }
+
+    #[test]
+    fn endpoint_label_block_preserves_newlines_inside_raw_spans() {
+        let block = RelationshipEndpointLabelBlock::measure(
+            "pre\\n[[https://example.test/a\\nb label]]\\n<math>x\\ny</math>",
+            13.0,
+            "sans-serif",
+        );
+
+        assert_eq!(
+            block.rows,
+            [
+                "pre",
+                "[[https://example.test/a\\nb label]]",
+                "<math>x\\ny</math>"
+            ]
+        );
+    }
 
     fn simple_class_diagram() -> ClassDiagram {
         ClassDiagram {
