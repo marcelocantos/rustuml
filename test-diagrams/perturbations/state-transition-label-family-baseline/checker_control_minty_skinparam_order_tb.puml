@@ -1,0 +1,9 @@
+@startuml
+skinparam stateArrowFontName Arial
+!theme minty
+skinparam stateArrowFontName Verdana
+skinparam stateArrowFontSize 12
+[*] --> Queued
+Queued --> Running : theme then override
+Running --> [*] : stop
+@enduml

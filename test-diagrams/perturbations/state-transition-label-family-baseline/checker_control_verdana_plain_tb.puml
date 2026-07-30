@@ -1,0 +1,7 @@
+@startuml
+skinparam stateArrowFontName Verdana
+skinparam stateArrowFontSize 12
+[*] --> Alpha
+Alpha --> Beta : renamed verdana step
+Beta --> [*] : complete
+@enduml

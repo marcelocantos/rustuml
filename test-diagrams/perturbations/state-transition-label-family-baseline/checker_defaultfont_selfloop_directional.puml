@@ -1,0 +1,9 @@
+@startuml
+skinparam defaultFontName Verdana
+skinparam arrowFontSize 14
+left to right direction
+[*] --> Stable
+Stable --> Stable : recalibrate self loop
+Stable -left-> Recovering : recover against flow
+Recovering --> [*] : done
+@enduml

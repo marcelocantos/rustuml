@@ -1,0 +1,12 @@
+@startuml
+skinparam stateArrowFontName Courier New
+skinparam stateArrowFontStyle italic
+skinparam stateArrowFontSize 12
+state Envelope {
+  [*] --> Idle : boot pass\nsecond line
+  Idle --> Busy : //rich italic label//
+  Busy --> [*] : finish path
+}
+[*] --> Envelope : enter wrapper
+Envelope --> [*] : leave wrapper
+@enduml
