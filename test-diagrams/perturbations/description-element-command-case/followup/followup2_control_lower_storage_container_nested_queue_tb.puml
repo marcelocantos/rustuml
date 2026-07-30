@@ -1,0 +1,6 @@
+@startuml
+top to bottom direction
+storage "Cold Vault 8121" as Vault8121 {
+  queue JobPipe8123
+}
+@enduml
