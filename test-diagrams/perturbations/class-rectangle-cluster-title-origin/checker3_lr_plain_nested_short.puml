@@ -1,0 +1,11 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+package OuterCloudQuartz <<Cloud>> {
+  package InnerShortQuartz {
+    class Leaf
+  }
+}
+class RootShortQuartz
+Leaf --> RootShortQuartz : short-nested-route
+@enduml

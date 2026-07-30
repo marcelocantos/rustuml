@@ -1,0 +1,15 @@
+@startuml
+package NorthFrameQuartz <<Frame>> {
+  class NorthFrameLeafQuartz
+}
+package CenterRectangleQuartz <<Rectangle>> {
+  class CenterRectangleLeafQuartz
+}
+package WestNodeQuartz <<Node>> {
+  class WestNodeLeafQuartz
+}
+class RootConfluenceQuartz
+NorthFrameLeafQuartz --> RootConfluenceQuartz : north-quartz-route
+CenterRectangleLeafQuartz --> RootConfluenceQuartz : center-quartz-route
+WestNodeLeafQuartz --> RootConfluenceQuartz : west-quartz-route
+@enduml

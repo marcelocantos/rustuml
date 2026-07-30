@@ -1,0 +1,14 @@
+@startuml
+left to right direction
+package "Frame Envelope Quartz" as FrameEnvelopeQuartz <<Frame>> {
+  package "Long Nested Rectangle Envelope Quartz" as LongNestedRectangleEnvelope <<Rectangle>> {
+    class LongNestedRectangleEnvelopeLeaf
+  }
+}
+package "Node Envelope Quartz" as NodeEnvelopeQuartz <<Node>> {
+  class NodeEnvelopeQuartzLeaf
+}
+class RootEnvelopeQuartz
+LongNestedRectangleEnvelopeLeaf --> RootEnvelopeQuartz : long-nested-rectangle-route
+NodeEnvelopeQuartzLeaf --> RootEnvelopeQuartz : long-node-envelope-route
+@enduml

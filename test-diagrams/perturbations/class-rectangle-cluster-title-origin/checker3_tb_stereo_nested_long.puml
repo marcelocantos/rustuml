@@ -1,0 +1,11 @@
+@startuml
+package OuterNodeQuartz <<Node>> {
+  package "Very Long Nested Rectangle Title Quartz" as LongNestedRectangle <<Rectangle>> {
+    class LongNestedRectangleQuartzLeaf
+    class LongNestedRectangleQuartzRelay
+    LongNestedRectangleQuartzLeaf --> LongNestedRectangleQuartzRelay : nested-long-route
+  }
+}
+class RootLongNestedQuartz
+LongNestedRectangleQuartzRelay --> RootLongNestedQuartz : root-long-route
+@enduml

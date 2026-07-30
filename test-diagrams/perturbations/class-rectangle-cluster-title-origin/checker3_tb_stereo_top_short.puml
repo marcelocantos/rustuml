@@ -1,0 +1,7 @@
+@startuml
+package "Sapphire Rectangle" as SapphireRectangle <<Rectangle>> {
+  class ShortSapphireLeaf
+}
+class RootSapphire
+ShortSapphireLeaf --> RootSapphire : stereo-tb
+@enduml

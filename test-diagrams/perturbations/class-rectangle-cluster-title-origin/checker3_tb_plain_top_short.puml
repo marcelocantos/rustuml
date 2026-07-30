@@ -1,0 +1,8 @@
+@startuml
+skinparam packageStyle rectangle
+package PlainTopQuartz {
+  class ShortLeafQuartz
+}
+class RootQuartz
+ShortLeafQuartz --> RootQuartz : plain-tb
+@enduml

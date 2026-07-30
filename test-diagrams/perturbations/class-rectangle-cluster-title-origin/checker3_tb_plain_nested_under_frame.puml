@@ -1,0 +1,11 @@
+@startuml
+package OuterFrameQuartz <<Frame>> {
+  package InnerPlainQuartz {
+    class NestedPlainQuartzLeaf
+  }
+  class FrameQuartzLeaf
+}
+class RootNestedQuartz
+NestedPlainQuartzLeaf --> RootNestedQuartz : nested-plain
+FrameQuartzLeaf --> RootNestedQuartz : frame-route
+@enduml

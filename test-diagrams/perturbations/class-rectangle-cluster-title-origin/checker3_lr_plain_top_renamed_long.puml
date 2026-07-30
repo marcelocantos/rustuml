@@ -1,0 +1,11 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+package LongTopQuartzTransit {
+  class RenamedQuartzSource
+  class RenamedQuartzRelay
+  RenamedQuartzSource --> RenamedQuartzRelay : internal-route
+}
+class RootQuartzBeacon
+RenamedQuartzRelay --> RootQuartzBeacon : outward-route
+@enduml

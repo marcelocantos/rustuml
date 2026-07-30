@@ -1,0 +1,13 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+package OuterPlainQuartz {
+  package "Nested Sapphire Rectangle" as NestedSapphire <<Rectangle>> {
+    class NestedSapphireQuartzLeaf
+  }
+  class PlainQuartzLeaf
+}
+class RootNestedSapphire
+NestedSapphireQuartzLeaf --> RootNestedSapphire : nested-stereo
+PlainQuartzLeaf --> RootNestedSapphire : plain-owner-route
+@enduml

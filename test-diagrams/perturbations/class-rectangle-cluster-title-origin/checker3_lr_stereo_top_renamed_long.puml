@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+package "Long Sapphire Rectangle Transit" as SapphireTransit <<Rectangle>> {
+  class RenamedSapphireSource
+  class RenamedSapphireRelay
+  RenamedSapphireSource --> RenamedSapphireRelay : internal-sapphire-route
+}
+class RootSapphireBeacon
+RenamedSapphireRelay --> RootSapphireBeacon : outward-sapphire-route
+@enduml

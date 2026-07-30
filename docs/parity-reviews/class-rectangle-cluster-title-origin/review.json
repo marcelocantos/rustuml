@@ -1,0 +1,212 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-rectangle-cluster-title-origin",
+  "reviewer": {
+    "identity": "fresh independent adversarial checker",
+    "model": "gpt-5.6-luna",
+    "reasoning": "xhigh",
+    "tool": "Codex desktop with the exact prebuilt diff_one --no-oracle helper and local PlantUML picoweb oracle",
+    "independence": "Did not implement the correction, author the causal account, edit production code, edit baselines, or edit the predecessor review"
+  },
+  "revisions": {
+    "account_commit": "5d12ac81",
+    "implementation_commit": "dc0aee28",
+    "predecessor_review_commit": "bd57472e",
+    "rust_detached_revision": "18dcd865703088a6ef78c980085db2dd7ac81ebe",
+    "rust_tree": "3c685815718dd2b21ff94cf99baf617a3b684c31",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "binary": {
+    "path": "/tmp/rustuml-checker-1482/target/release/examples/diff_one",
+    "sha256": "0eef16f728ffef2c8852105ff5036d8fa4ca946bf920a4960aad5bfdbbfc4c8a",
+    "mode": "--no-oracle",
+    "cargo_or_rustc_run": false
+  },
+  "oracle": {
+    "url": "http://127.0.0.1:8787/render",
+    "request": "POST JSON {source,options:[-tsvg]}",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "all_fresh_oracle_responses_are_svg": true,
+    "oracle_error_response_count": 0
+  },
+  "commands": [
+    "git -C /tmp/rustuml-checker-1482 rev-parse HEAD",
+    "git -C /tmp/rustuml-checker-1482 rev-parse HEAD^{tree}",
+    "sha256sum /tmp/rustuml-checker-1482/target/release/examples/diff_one",
+    "git diff 18dcd865^ 18dcd865 -- crates/rustuml-render/src/class.rs",
+    "git diff --check 18dcd865^ 18dcd865",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "Inspect ClusterDecoration#drawU, USymbolRectangle#asBig, and PackageStyle#toUSymbol at Java revision 71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "rg -n 'class-rectangle-cluster-title-origin|checker3_|checker2_rectangle|RectangleOwnerEast' crates/rustuml-render crates/rustuml-parser crates/rustuml-layout crates/rustuml-oracle",
+    "curl -sf -H 'Content-Type: application/json' -d '{source,options:[-tsvg]}' http://127.0.0.1:8787/render -o test-diagrams/perturbations/class-rectangle-cluster-title-origin/<same-stem>.svg",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker2_rectangle_tb_competing_owners.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker2_rectangle_lr_root_link.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker2_three_root_envelope_owners.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_*.puml"
+  ],
+  "source_inspection": {
+    "supported": [
+      "ClusterDecoration#drawU obtains the USymbol.asBig TextBlock and draws it after applying rectangleArea.getPosition(), so border and title share one translated local origin.",
+      "USymbolRectangle#asBig draws URectangle at local origin and draws the title at local y = 2 + dimStereo.getHeight(); with an empty stereotype this is the rectangle's shared title baseline.",
+      "PackageStyle#toUSymbol maps RECTANGLE to USymbols.RECTANGLE, so a plain packageStyle rectangle is a valid sibling of an explicit Rectangle symbol.",
+      "The correction commit changes only emit_layout_rectangle_cluster's title y expression from cluster.y + PACKAGE_TITLE_BASELINE + 1.0 to y + PACKAGE_TITLE_BASELINE; it introduces no new constant or fixture branch."
+    ],
+    "implementation_audit": [
+      "No production reference to class-rectangle-cluster-title-origin, checker3 names, checker2 names, RectangleOwnerEast, golden paths, fixture embedding, or coordinate-keyed SVG surgery was found.",
+      "No new unexplained numeric constant was introduced by dc0aee28. PACKAGE_TITLE_BASELINE is pre-existing and the correction removes a trailing one-pixel literal.",
+      "Rust skinparam.rs stores packageStyle in Theme.package.style, but the class renderer search found no consumer that maps that value to a package render kind. Rust package shape selection in class.rs uses package kind and explicit stereotypes; it does not reproduce Java's plain packageStyle rectangle fallback.",
+      "The three predecessor rejected rectangle counterexamples are now structurally equivalent with the corrected detached binary."
+    ],
+    "rejected_assumption": "The one-line explicit-symbol correction generalizes to plain packageStyle rectangle titles. Java's plain package path selects USymbolRectangle through PackageStyle.toUSymbol, while Rust leaves the plain package as the folder-style package shape and therefore does not exercise the corrected rectangle renderer."
+  },
+  "controls": [
+    {
+      "path": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker2_rectangle_tb_competing_owners.puml",
+      "result": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker2_rectangle_lr_root_link.puml",
+      "result": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker2_three_root_envelope_owners.puml",
+      "result": "pass: SVGs are structurally equivalent"
+    }
+  ],
+  "inputs": [
+    {
+      "path": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_competing_frame_node_rootlinks_long.puml",
+      "java_svg": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_competing_frame_node_rootlinks_long.svg",
+      "axes": ["left-to-right", "explicit rectangle", "competing frame and node owners", "root links", "long renamed labels"],
+      "result": "pass: SVGs are structurally equivalent",
+      "mechanism_relevant": true
+    },
+    {
+      "path": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_competing_nested_rectangle_long.puml",
+      "java_svg": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_competing_nested_rectangle_long.svg",
+      "axes": ["left-to-right", "nested explicit rectangle", "competing frame and node owners", "root links", "long renamed labels"],
+      "result": "pass: SVGs are structurally equivalent",
+      "mechanism_relevant": true
+    },
+    {
+      "path": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_plain_nested_short.puml",
+      "java_svg": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_plain_nested_short.svg",
+      "axes": ["left-to-right", "plain packageStyle rectangle", "nested rectangle", "short renamed labels", "competing cloud owner", "root link"],
+      "result": "fail: Java emits a rectangle cluster for the plain packageStyle rectangle, but Rust emits the folder-style path; the title and descendant layout are consequently shifted",
+      "mechanism_relevant": true
+    },
+    {
+      "path": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_plain_top_renamed_long.puml",
+      "java_svg": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_plain_top_renamed_long.svg",
+      "axes": ["left-to-right", "plain packageStyle rectangle", "top-level rectangle", "long renamed labels", "root link"],
+      "result": "fail: Java emits a rectangle cluster while Rust emits the folder-style path; expected rectangle title baseline is y=22.5352, while the Rust folder title is y=21.5352",
+      "mechanism_relevant": true
+    },
+    {
+      "path": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_stereo_nested_under_plain.puml",
+      "java_svg": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_stereo_nested_under_plain.svg",
+      "axes": ["left-to-right", "explicit nested rectangle", "plain packageStyle rectangle owner", "renamed labels", "root links"],
+      "result": "fail: the plain outer packageStyle rectangle is rendered by Java as a rectangle but by Rust as a folder-style path; the explicit nested title itself is not sufficient to make the complete valid sibling pass",
+      "mechanism_relevant": true
+    },
+    {
+      "path": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_stereo_top_renamed_long.puml",
+      "java_svg": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_stereo_top_renamed_long.svg",
+      "axes": ["left-to-right", "top-level explicit Rectangle", "stereotyped title", "long renamed labels", "root link"],
+      "result": "pass: SVGs are structurally equivalent",
+      "mechanism_relevant": true
+    },
+    {
+      "path": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_competing_frame_node_rootlinks.puml",
+      "java_svg": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_competing_frame_node_rootlinks.svg",
+      "axes": ["top-to-bottom", "explicit rectangle", "competing frame and node owners", "multiple root links"],
+      "result": "fail: SVG width differs by 10px; rectangle primitive and title origin match, so this is preserved as non-attributed envelope/layout residue",
+      "mechanism_relevant": false
+    },
+    {
+      "path": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_competing_nested_rectangle.puml",
+      "java_svg": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_competing_nested_rectangle.svg",
+      "axes": ["top-to-bottom", "nested explicit rectangle", "competing frame and node owners", "root links"],
+      "result": "fail: SVG width differs by 10px; nested rectangle primitive and title origin match, so this is preserved as non-attributed envelope/layout residue",
+      "mechanism_relevant": false
+    },
+    {
+      "path": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_plain_nested_under_frame.puml",
+      "java_svg": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_plain_nested_under_frame.svg",
+      "axes": ["top-to-bottom", "nested title without explicit symbol stereotype", "frame owner", "root links"],
+      "result": "pass: SVGs are structurally equivalent",
+      "mechanism_relevant": true
+    },
+    {
+      "path": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_plain_top_short.puml",
+      "java_svg": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_plain_top_short.svg",
+      "axes": ["top-to-bottom", "plain packageStyle rectangle", "top-level rectangle", "short renamed label", "root link"],
+      "result": "fail: Java emits a rectangle cluster while Rust emits the folder-style path; expected rectangle title baseline is y=22.5352, while the Rust folder title is y=21.5352",
+      "mechanism_relevant": true
+    },
+    {
+      "path": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_stereo_nested_long.puml",
+      "java_svg": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_stereo_nested_long.svg",
+      "axes": ["top-to-bottom", "nested explicit Rectangle", "node owner", "long renamed title", "root link"],
+      "result": "fail: SVG width differs by 10px; nested rectangle primitive and title origin match, so this is preserved as non-attributed envelope/layout residue",
+      "mechanism_relevant": false
+    },
+    {
+      "path": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_stereo_top_short.puml",
+      "java_svg": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_stereo_top_short.svg",
+      "axes": ["top-to-bottom", "top-level explicit Rectangle", "stereotyped title", "short renamed label", "root link"],
+      "result": "pass: SVGs are structurally equivalent",
+      "mechanism_relevant": true
+    }
+  ],
+  "result_counts": {
+    "preserved_rejected_counterexamples": 3,
+    "preserved_rejected_counterexamples_passed": 3,
+    "all_fresh_pairs": 12,
+    "all_fresh_passed": 5,
+    "all_fresh_failed": 7,
+    "fresh_mechanism_relevant_pairs": 9,
+    "fresh_mechanism_relevant_passed": 5,
+    "fresh_mechanism_relevant_failed": 4,
+    "fresh_non_attributed_residue_pairs": 3,
+    "oracle_errors": 0
+  },
+  "findings": [
+    {
+      "severity": "rejecting",
+      "summary": "Plain packageStyle rectangle is not modeled by the Rust class renderer.",
+      "evidence": "Java PackageStyle.toUSymbol maps RECTANGLE to USymbols.RECTANGLE and therefore uses the same USymbolRectangle.asBig origin rule for plain packages. Four fresh valid inputs across TB/LR, top-level/nested, short/long labels, and competing owners instead produce Rust folder-style paths. The direct TB and LR controls show Java rectangle titles at y=22.5352 while Rust's folder titles are at y=21.5352, with different primitive sequences and layout envelopes.",
+      "relevant_inputs": [
+        "checker3_tb_plain_top_short.puml",
+        "checker3_lr_plain_top_renamed_long.puml",
+        "checker3_lr_plain_nested_short.puml",
+        "checker3_lr_stereo_nested_under_plain.puml"
+      ]
+    },
+    {
+      "severity": "residual",
+      "summary": "Three explicit nested or competing-owner cases still have a 10px envelope-width mismatch.",
+      "evidence": "checker3_tb_competing_frame_node_rootlinks, checker3_tb_competing_nested_rectangle, and checker3_tb_stereo_nested_long fail only on the outer SVG width. Their rectangle primitive and title coordinates match the Java output; this review does not attribute those failures to the title-origin correction, but preserves them as executable residue.",
+      "relevant_inputs": [
+        "checker3_tb_competing_frame_node_rootlinks.puml",
+        "checker3_tb_competing_nested_rectangle.puml",
+        "checker3_tb_stereo_nested_long.puml"
+      ]
+    },
+    {
+      "severity": "informational",
+      "summary": "The one-line explicit rectangle correction itself is supported where its renderer is reached.",
+      "evidence": "Four fresh direct explicit-rectangle cases and all three preserved predecessor counterexamples are structurally equivalent. No fixture-shaped production logic or unexplained constant was found in the exact correction diff."
+    }
+  ],
+  "no_oracle_gate": "failed",
+  "rejection_basis": "Fresh valid plain-title siblings fail across both directions and top-level/nested contexts because packageStyle rectangle fallback is absent from Rust. This is mechanism-relevant to the requested plain/stereotyped title generalization even though the explicit-symbol one-pixel correction passes its direct controls.",
+  "artifacts": {
+    "held_out_directory": "test-diagrams/perturbations/class-rectangle-cluster-title-origin/",
+    "review": "docs/parity-reviews/class-rectangle-cluster-title-origin/review.json",
+    "production_files_modified": false,
+    "existing_review_records_modified": false,
+    "existing_fixtures_modified": false
+  },
+  "verdict": "REJECTED"
+}

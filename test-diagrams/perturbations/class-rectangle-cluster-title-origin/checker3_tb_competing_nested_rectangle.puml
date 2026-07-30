@@ -1,0 +1,13 @@
+@startuml
+package FrameOwnerQuartz <<Frame>> {
+  package "Nested Rectangle Quartz" as NestedRectangleQuartz <<Rectangle>> {
+    class NestedRectangleLeafQuartz
+  }
+}
+package NodeOwnerQuartz <<Node>> {
+  class NodeOwnerLeafQuartz
+}
+class RootNestedConfluenceQuartz
+NestedRectangleLeafQuartz --> RootNestedConfluenceQuartz : nested-rectangle-route
+NodeOwnerLeafQuartz --> RootNestedConfluenceQuartz : node-owner-route
+@enduml

@@ -1,0 +1,16 @@
+@startuml
+left to right direction
+package "North Long Frame Quartz" as NorthLongFrame <<Frame>> {
+  class NorthLongFrameLeafQuartz
+}
+package "Center Long Rectangle Quartz" as CenterLongRectangle <<Rectangle>> {
+  class CenterLongRectangleLeafQuartz
+}
+package "West Long Node Quartz" as WestLongNode <<Node>> {
+  class WestLongNodeLeafQuartz
+}
+class RootLongConfluenceQuartz
+NorthLongFrameLeafQuartz --> RootLongConfluenceQuartz : north-long-quartz-route
+CenterLongRectangleLeafQuartz --> RootLongConfluenceQuartz : center-long-quartz-route
+WestLongNodeLeafQuartz --> RootLongConfluenceQuartz : west-long-quartz-route
+@enduml
