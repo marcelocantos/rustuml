@@ -1051,13 +1051,20 @@ struct StateTransitionLabelBlock {
 }
 
 impl StateTransitionLabelBlock {
+    fn paint_row(row: &str) -> &str {
+        // Java provenance: `StripeSimple.getAtoms()` inserts one ordinary-space
+        // `AtomText` when a Display row produced no Creole atoms. `SheetBlock1`
+        // then uses that retained atom for measurement, alignment, and drawing.
+        if row.is_empty() { " " } else { row }
+    }
+
     fn measure(label: &TransitionLabel, arrow_font: &StateArrowFont) -> Self {
         let row_widths = label
             .rows()
             .iter()
             .map(|row| {
                 text_render::measure_with_family(
-                    row,
+                    Self::paint_row(row),
                     arrow_font.size as f64,
                     arrow_font.bold,
                     &arrow_font.family,
@@ -1069,7 +1076,7 @@ impl StateTransitionLabelBlock {
             .iter()
             .map(|row| {
                 text_render::label_height_with_family(
-                    row,
+                    Self::paint_row(row),
                     arrow_font.size as f64,
                     &arrow_font.family,
                 )
@@ -1103,7 +1110,7 @@ impl StateTransitionLabelBlock {
 
     fn first_baseline_ascent(&self, label: &TransitionLabel, arrow_font: &StateArrowFont) -> f64 {
         text_render::label_first_baseline_ascent_with_family(
-            &label.rows()[0],
+            Self::paint_row(&label.rows()[0]),
             arrow_font.size as f64,
             &arrow_font.family,
         )
@@ -1119,6 +1126,7 @@ impl StateTransitionLabelBlock {
     ) {
         let mut row_top = block_y;
         for (row_index, row) in label.rows().iter().enumerate() {
+            let row = Self::paint_row(row);
             let baseline = row_top
                 + text_render::label_first_baseline_ascent_with_family(
                     row,
@@ -1154,6 +1162,7 @@ impl StateTransitionLabelBlock {
         let mut min_y = f64::INFINITY;
         let mut max_y = f64::NEG_INFINITY;
         for (row_index, row) in label.rows().iter().enumerate() {
+            let row = Self::paint_row(row);
             let baseline = row_top
                 + text_render::label_first_baseline_ascent_with_family(
                     row,
@@ -11611,6 +11620,30 @@ CobaltDecision --> [*]
         assert!(svg.contains(">boot pass</text>"), "{svg}");
         assert!(svg.contains(">second line</text>"), "{svg}");
         assert!(!svg.contains(r">boot pass\nsecond line</text>"), "{svg}");
+    }
+
+    #[test]
+    fn transition_display_empty_row_retains_space_atom() {
+        let font = StateArrowFont {
+            color: DEFAULT_TEXT_COLOR.to_string(),
+            family: "Verdana".to_string(),
+            size: 14,
+            bold: false,
+            italic: false,
+            padding: 0.0,
+            alignment: StateLabelAlignment::Right,
+        };
+        let label = TransitionLabel::from("first expansive row\\n\\nfin\\r");
+        let block = StateTransitionLabelBlock::measure(&label, &font);
+        let empty_row_width = text_render::measure_with_family(" ", 14.0, false, "Verdana");
+
+        assert!(empty_row_width > 0.0);
+        assert_eq!(block.row_widths[1], empty_row_width);
+        assert_eq!(block.row_x(40.0, 1), 40.0 + block.width - empty_row_width);
+
+        let mut svg = String::new();
+        block.emit(&mut svg, &label, 40.0, 20.0, &font);
+        assert!(svg.contains(">&#160;</text>"), "{svg}");
     }
 
     #[test]
