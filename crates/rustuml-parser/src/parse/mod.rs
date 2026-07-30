@@ -345,6 +345,8 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     let mut has_entity_class_factory_decl = false;
     let mut class_factory_rejected_by_mixed_leaf = false;
     let mut has_class_symbol_container = false;
+    let mut has_native_object_or_map = false;
+    let mut object_containers_all_ordinary = true;
     let mut quoted_shared_deployment_containers = 0i32;
     let mut brace_depth = 0usize;
 
@@ -416,6 +418,9 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             // DESCRIPTION leaf consumer in ClassDiagramFactory.
             has_class_symbol_container = true;
             has_class_factory_decl = true;
+            if !matches!(leading_keyword.as_str(), "package" | "namespace") {
+                object_containers_all_ordinary = false;
+            }
         }
         if !has_allowmixing
             && !trimmed.contains('{')
@@ -710,6 +715,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         // Object / map — strong unique keywords.
         if trimmed.starts_with("object ") || trimmed.starts_with("map ") {
             scores[2] += 10;
+            has_native_object_or_map = true;
         }
         // Class — use weight 10 so that class-specific keywords dominate
         // container keywords (cloud, folder, node, etc.) that are shared with
@@ -861,12 +867,18 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         && !class_factory_rejected_by_mixed_leaf
         && !has_component_bracket_interface_decl
         && scores[9] == 0;
+    let object_only_container_model = has_native_object_or_map
+        && object_containers_all_ordinary
+        && !has_allowmixing
+        && !has_non_interface_class_decl
+        && !has_interface_decl
+        && !has_entity_class_factory_decl;
 
     // Every complete braced USymbol command is consumable by the earlier
     // ClassDiagramFactory. When no mixed leaf has rejected that candidate,
     // preserve factory order instead of letting deployment keyword weights
     // steal the same command.
-    if has_class_symbol_container && class_factory_viable {
+    if has_class_symbol_container && class_factory_viable && !object_only_container_model {
         let other_max = scores
             .iter()
             .enumerate()
@@ -2455,6 +2467,60 @@ Application --> RR
         let input = "@startuml\nobject Server {\n  ip = \"192.168.1.1\"\n}\nnote \"text\" as N1\nServer .. N1\n@enduml";
         let diagram = parse(input).unwrap();
         assert!(matches!(diagram, Diagram::Object(_)));
+    }
+
+    #[test]
+    fn ordinary_containers_with_only_objects_or_maps_stay_object_diagrams() {
+        let package = r#"@startuml
+package "Renamed Domain" {
+  object Account {
+    id = 7
+  }
+  map "Flags" as flags {
+    active => true
+  }
+}
+Account --> flags
+@enduml"#;
+        assert!(matches!(parse(package).unwrap(), Diagram::Object(_)));
+
+        let namespace = r#"@startuml
+namespace net.example.fresh {
+  map "Settings" as settings {
+    mode => strict
+  }
+}
+@enduml"#;
+        assert!(matches!(parse(namespace).unwrap(), Diagram::Object(_)));
+    }
+
+    #[test]
+    fn object_leaves_do_not_steal_class_only_or_symbol_container_models() {
+        let mixed_class = r#"@startuml
+package "Renamed Domain" {
+  object Account
+  class Policy
+}
+@enduml"#;
+        assert!(matches!(parse(mixed_class).unwrap(), Diagram::Class(_)));
+
+        let symbol_container = r#"@startuml
+rectangle "Renamed Domain" {
+  object Account
+}
+@enduml"#;
+        assert!(matches!(
+            parse(symbol_container).unwrap(),
+            Diagram::Class(_)
+        ));
+
+        let allow_mixing = r#"@startuml
+allowmixing
+package "Renamed Domain" {
+  object Account
+}
+@enduml"#;
+        assert!(matches!(parse(allow_mixing).unwrap(), Diagram::Class(_)));
     }
 
     #[test]
