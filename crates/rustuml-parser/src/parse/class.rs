@@ -57,6 +57,7 @@ struct ClassParser {
     entities: Vec<ClassEntity>,
     relationships: Vec<Relationship>,
     association_classes: Vec<crate::diagram::class::AssociationClass>,
+    uid_events: Vec<ClassUidEvent>,
     together: Vec<crate::diagram::class::TogetherGroup>,
     packages: Vec<Package>,
     notes: Vec<Note>,
@@ -111,6 +112,7 @@ impl ClassParser {
             entities: Vec::new(),
             relationships: Vec::new(),
             association_classes: Vec::new(),
+            uid_events: Vec::new(),
             together: Vec::new(),
             packages: Vec::new(),
             notes: Vec::new(),
@@ -161,6 +163,7 @@ impl ClassParser {
         ClassDiagram {
             meta: self.meta,
             direction: self.direction,
+            uid_events: self.uid_events,
             entities,
             relationships: self.relationships,
             association_classes: self.association_classes,
@@ -174,6 +177,17 @@ impl ClassParser {
             caption_line: self.caption_line,
             legend_line: self.legend_line,
         }
+    }
+
+    fn push_relationship(&mut self, relationship: Relationship) {
+        self.uid_events
+            .push(ClassUidEvent::Relationship(self.relationships.len()));
+        self.relationships.push(relationship);
+    }
+
+    fn push_note(&mut self, note: Note) {
+        self.uid_events.push(ClassUidEvent::Note(self.notes.len()));
+        self.notes.push(note);
     }
 
     fn current_group_path(&self) -> &[String] {
@@ -338,6 +352,9 @@ impl ClassParser {
             if let Some(&idx) = self.package_by_path.get(&path) {
                 if self.packages[idx].phantom && self.packages[idx].source_line == 0 {
                     self.packages[idx].source_line = self.current_line;
+                    self.uid_events.push(ClassUidEvent::Package(
+                        self.packages[idx].name.clone(),
+                    ));
                 }
                 continue;
             }
@@ -345,6 +362,7 @@ impl ClassParser {
                 (depth > 1).then(|| self.package_by_path[&entity_path[..depth - 1].to_vec()]);
             let idx = self.packages.len();
             let name = self.path_id(&path);
+            self.uid_events.push(ClassUidEvent::Package(name.clone()));
             self.packages.push(Package {
                 name,
                 kind: PackageKind::Package,
@@ -369,8 +387,11 @@ impl ClassParser {
         kind: EntityKind,
         explicit_alias: bool,
     ) -> String {
-        self.ensure_phantom_packages(&path);
         let id = self.path_id(&path);
+        // `reallyCreateLeaf` consumes the entity UID before
+        // `eventuallyBuildPhantomGroups` materializes missing parent quarks.
+        self.uid_events.push(ClassUidEvent::Entity(id.clone()));
+        self.ensure_phantom_packages(&path);
         let idx = self.entities.len();
         self.entities.push(ClassEntity {
             id: id.clone(),
@@ -428,13 +449,20 @@ impl ClassParser {
 
     fn materialize_active_phantom_packages(&mut self) {
         for package_idx in self.package_stack.clone() {
+            let mut newly_materialized = Vec::new();
             let mut parent = self.packages[package_idx].parent;
             while let Some(parent_idx) = parent {
                 let package = &mut self.packages[parent_idx];
                 if package.phantom && package.source_line == 0 {
                     package.source_line = self.current_line;
+                    newly_materialized.push(parent_idx);
                 }
                 parent = package.parent;
+            }
+            for parent_idx in newly_materialized.into_iter().rev() {
+                self.uid_events.push(ClassUidEvent::Package(
+                    self.packages[parent_idx].name.clone(),
+                ));
             }
         }
     }
@@ -530,7 +558,7 @@ impl ClassParser {
                     note.source_line = note.source_line.saturating_add(1);
                 }
                 dedent_note_lines(&mut note.lines);
-                self.notes.push(note);
+                self.push_note(note);
             } else if let Some(note) = self.current_note.as_mut() {
                 if note.lines.is_empty() {
                     // `CommandFactoryNote` attributes a multiline note entity
@@ -851,7 +879,7 @@ impl ClassParser {
             };
             let parent = self.ensure_entity_kind(&name, parent_kind);
             let dashed = parent_kind == EntityKind::Interface && !child_is_interface;
-            self.relationships.push(Relationship {
+            self.push_relationship(Relationship {
                 from: parent,
                 to: child_id.to_string(),
                 kind,
@@ -942,6 +970,8 @@ impl ClassParser {
         let b = self.ensure_entity(&b_raw);
         let c = self.ensure_entity(&c_raw);
 
+        self.uid_events
+            .push(ClassUidEvent::Association(self.association_classes.len()));
         self.association_classes
             .push(crate::diagram::class::AssociationClass {
                 a,
@@ -1028,7 +1058,7 @@ impl ClassParser {
                 style.inverted = true;
             }
 
-            self.relationships.push(Relationship {
+            self.push_relationship(Relationship {
                 from,
                 to,
                 kind,
@@ -1059,7 +1089,7 @@ impl ClassParser {
             let from = self.ensure_entity(from_raw);
             let to = self.ensure_entity(to_raw);
 
-            self.relationships.push(Relationship {
+            self.push_relationship(Relationship {
                 from,
                 to,
                 kind: RelationshipKind::Association,
@@ -1091,7 +1121,7 @@ impl ClassParser {
             };
             let to = self.ensure_entity_kind(&to_raw, EntityKind::Interface);
             let from = self.ensure_entity(&from_raw);
-            self.relationships.push(Relationship {
+            self.push_relationship(Relationship {
                 from,
                 to,
                 kind: RelationshipKind::Association,
@@ -1226,6 +1256,10 @@ impl ClassParser {
                     }
                     let idx = self.packages.len();
                     let name = self.path_id(&prefix);
+                    if is_final {
+                        self.uid_events
+                            .push(ClassUidEvent::Package(name.clone()));
+                    }
                     let display_name = if is_final {
                         requested_display_name.clone()
                     } else {
@@ -1304,7 +1338,7 @@ impl ClassParser {
                 .split("\\n")
                 .map(|s| s.trim_end().to_string())
                 .collect();
-            self.notes.push(Note {
+            self.push_note(Note {
                 lines,
                 target: Some(target),
                 position: Some(position),
@@ -1338,7 +1372,7 @@ impl ClassParser {
                 .map(|s| s.trim_end().to_string())
                 .collect();
             let target = self.last_entity_id.clone();
-            self.notes.push(Note {
+            self.push_note(Note {
                 lines,
                 target,
                 position: Some(position),
@@ -1371,7 +1405,7 @@ impl ClassParser {
                 .split("\\n")
                 .map(|s| s.trim_end().to_string())
                 .collect();
-            self.notes.push(Note {
+            self.push_note(Note {
                 lines,
                 target: None,
                 position: None,
@@ -1408,7 +1442,7 @@ impl ClassParser {
                     .map(|s| s.trim_end().to_string())
                     .collect()
             };
-            self.notes.push(Note {
+            self.push_note(Note {
                 lines,
                 target: None,
                 position: None,
@@ -3236,6 +3270,22 @@ mod tests {
                 .unwrap()
                 .dashed
         );
+    }
+
+    #[test]
+    fn declaration_supertypes_record_interleaved_cuca_uid_events() {
+        let d = parse("class Child extends Base implements Port");
+
+        assert!(matches!(
+            d.uid_events.as_slice(),
+            [
+                ClassUidEvent::Entity(child),
+                ClassUidEvent::Entity(base),
+                ClassUidEvent::Relationship(0),
+                ClassUidEvent::Entity(port),
+                ClassUidEvent::Relationship(1)
+            ] if child == "Child" && base == "Base" && port == "Port"
+        ));
     }
 
     #[test]

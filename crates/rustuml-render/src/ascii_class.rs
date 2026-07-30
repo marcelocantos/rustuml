@@ -298,6 +298,7 @@ mod tests {
         ClassDiagram {
             meta: DiagramMeta::default(),
             direction: ClassLayoutDirection::TopToBottom,
+            uid_events: vec![],
             entities,
             relationships,
             association_classes: vec![],

@@ -805,6 +805,10 @@ fn filter_removed(
     let is_dropped = |name: &str| dropped_ids.contains(name) || dropped_labels.contains(name);
 
     let mut out = diagram.clone();
+    // Vector indices in the filtered copy no longer match the parser's
+    // constructor event stream. `svek_id_allocation_from_origin` restores the
+    // surviving IDs from the unfiltered source model.
+    out.uid_events.clear();
     out.entities = diagram
         .entities
         .iter()
@@ -4036,47 +4040,91 @@ fn svek_id_allocation(diagram: &ClassDiagram) -> SvekIdAllocation {
         })
         .collect();
 
-    let mut events = diagram
-        .packages
-        .iter()
-        .enumerate()
-        .filter_map(|(idx, _)| {
-            package_render.roles[idx]
-                .is_rendered()
-                .then_some(CucaUidEvent::Package(idx))
-        })
-        .chain(
-            diagram
-                .entities
-                .iter()
-                .enumerate()
-                .map(|(idx, _)| CucaUidEvent::Entity(idx)),
-        )
-        .chain(diagram.notes.iter().enumerate().filter_map(|(idx, note)| {
-            if note.target.is_some() && note.position.is_some() {
-                Some(CucaUidEvent::AttachedNote(idx))
-            } else if note.target.is_none() && note.alias.is_some() {
-                Some(CucaUidEvent::FloatingNote(idx))
-            } else {
-                None
-            }
-        }))
-        .chain(
-            diagram
-                .association_classes
-                .iter()
-                .enumerate()
-                .map(|(idx, _)| CucaUidEvent::Association(idx)),
-        )
-        .chain(
-            diagram
-                .relationships
-                .iter()
-                .enumerate()
-                .map(|(idx, _)| CucaUidEvent::Relationship(idx)),
-        )
-        .collect::<Vec<_>>();
-    events.sort_by_key(|event| event.sort_key(diagram));
+    let events = if diagram.uid_events.is_empty() {
+        let mut reconstructed = diagram
+            .packages
+            .iter()
+            .enumerate()
+            .filter_map(|(idx, _)| {
+                package_render.roles[idx]
+                    .is_rendered()
+                    .then_some(CucaUidEvent::Package(idx))
+            })
+            .chain(
+                diagram
+                    .entities
+                    .iter()
+                    .enumerate()
+                    .map(|(idx, _)| CucaUidEvent::Entity(idx)),
+            )
+            .chain(
+                diagram
+                    .notes
+                    .iter()
+                    .enumerate()
+                    .filter_map(|(idx, note)| {
+                        if note.target.is_some() && note.position.is_some() {
+                            Some(CucaUidEvent::AttachedNote(idx))
+                        } else if note.target.is_none() && note.alias.is_some() {
+                            Some(CucaUidEvent::FloatingNote(idx))
+                        } else {
+                            None
+                        }
+                    }),
+            )
+            .chain(
+                diagram
+                    .association_classes
+                    .iter()
+                    .enumerate()
+                    .map(|(idx, _)| CucaUidEvent::Association(idx)),
+            )
+            .chain(
+                diagram
+                    .relationships
+                    .iter()
+                    .enumerate()
+                    .map(|(idx, _)| CucaUidEvent::Relationship(idx)),
+            )
+            .collect::<Vec<_>>();
+        reconstructed.sort_by_key(|event| event.sort_key(diagram));
+        reconstructed
+    } else {
+        diagram
+            .uid_events
+            .iter()
+            .filter_map(|event| match event {
+                ClassUidEvent::Package(name) => diagram
+                    .packages
+                    .iter()
+                    .position(|package| package.name == *name)
+                    .filter(|&idx| package_render.roles[idx].is_rendered())
+                    .map(CucaUidEvent::Package),
+                ClassUidEvent::Entity(id) => diagram
+                    .entities
+                    .iter()
+                    .position(|entity| entity.id == *id)
+                    .map(CucaUidEvent::Entity),
+                ClassUidEvent::Note(idx) => diagram.notes.get(*idx).and_then(|note| {
+                    if note.target.is_some() && note.position.is_some() {
+                        Some(CucaUidEvent::AttachedNote(*idx))
+                    } else if note.target.is_none() && note.alias.is_some() {
+                        Some(CucaUidEvent::FloatingNote(*idx))
+                    } else {
+                        None
+                    }
+                }),
+                ClassUidEvent::Relationship(idx) => diagram
+                    .relationships
+                    .get(*idx)
+                    .map(|_| CucaUidEvent::Relationship(*idx)),
+                ClassUidEvent::Association(idx) => diagram
+                    .association_classes
+                    .get(*idx)
+                    .map(|_| CucaUidEvent::Association(*idx)),
+            })
+            .collect()
+    };
 
     let mut allocation = SvekIdAllocation {
         package_ids: vec![None; diagram.packages.len()],
@@ -13747,6 +13795,7 @@ mod tests {
         ClassDiagram {
             meta: DiagramMeta::default(),
             direction: ClassLayoutDirection::TopToBottom,
+            uid_events: vec![],
             entities: vec![
                 ClassEntity {
                     id: "Animal".into(),
@@ -14305,6 +14354,7 @@ mod tests {
         let diagram = ClassDiagram {
             meta: DiagramMeta::default(),
             direction: ClassLayoutDirection::TopToBottom,
+            uid_events: vec![],
             entities: vec![ClassEntity {
                 id: "MyClass".into(),
                 label: "MyClass".into(),
@@ -15089,6 +15139,21 @@ mod tests {
     }
 
     #[test]
+    fn declaration_supertypes_replay_interleaved_constructor_uids() {
+        let input = "@startuml\n\
+            class Child extends Base implements Port\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Class(diagram) = diagram else {
+            panic!("expected class diagram");
+        };
+        let allocation = svek_id_allocation(&diagram);
+
+        assert_eq!(allocation.entity_ids, ["ent0002", "ent0003", "ent0005"]);
+        assert_eq!(allocation.relationship_ids, [4, 6]);
+    }
+
+    #[test]
     fn attached_note_before_relationship_claims_three_shared_uid_slots() {
         let input = "@startuml\n\
             class FreshOrigin1009\n\
@@ -15803,6 +15868,7 @@ mod tests {
         let diagram = ClassDiagram {
             meta: DiagramMeta::default(),
             direction: ClassLayoutDirection::TopToBottom,
+            uid_events: vec![],
             entities: vec![ClassEntity {
                 id: "Drawable".into(),
                 label: "Drawable".into(),
@@ -16670,6 +16736,7 @@ mod tests {
         let diagram = ClassDiagram {
             meta: DiagramMeta::default(),
             direction: ClassLayoutDirection::TopToBottom,
+            uid_events: vec![],
             entities: vec![],
             relationships: vec![],
             association_classes: vec![],
