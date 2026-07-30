@@ -3787,8 +3787,10 @@ fn normalize_svek_package_envelope(
     if cluster_positions.is_empty() {
         return;
     }
+    let painted_cluster_ids = painted_package_cluster_ids(diagram);
     let min_x = cluster_positions
         .iter()
+        .filter(|position| painted_cluster_ids.contains(position.id.as_str()))
         .map(|position| {
             package_cloud_frontier(diagram, position)
                 .map(|frontier| position.x + frontier.min_x)
@@ -3798,6 +3800,7 @@ fn normalize_svek_package_envelope(
         .fold(f64::INFINITY, f64::min);
     let min_y = cluster_positions
         .iter()
+        .filter(|position| painted_cluster_ids.contains(position.id.as_str()))
         .map(|position| {
             package_cloud_frontier(diagram, position)
                 .map(|frontier| position.y + frontier.min_y)
@@ -3837,6 +3840,18 @@ fn normalize_svek_package_envelope(
             label.y += dy;
         }
     }
+}
+
+fn painted_package_cluster_ids(diagram: &ClassDiagram) -> std::collections::HashSet<String> {
+    let package_render = package_render_model(diagram);
+    package_render
+        .roles
+        .iter()
+        .enumerate()
+        .filter_map(|(idx, role)| {
+            (*role == PackageRenderRole::Cluster).then(|| package_cluster_id(idx))
+        })
+        .collect()
 }
 
 struct HeaderPositions {
@@ -11045,6 +11060,7 @@ fn svek_layout_x_bias(
     font: &ClassFontOverrides,
 ) -> f64 {
     let package_offsets = package_content_offsets(diagram);
+    let painted_cluster_ids = painted_package_cluster_ids(diagram);
     let visibility_polygon_min_x = (!uses_degenerated_entity(diagram, cluster_positions))
         .then(|| {
             let icon = font.visibility_icon_geom();
@@ -11083,7 +11099,12 @@ fn svek_layout_x_bias(
                     0.0
                 }
         })
-        .chain(cluster_positions.iter().map(|position| position.x))
+        .chain(
+            cluster_positions
+                .iter()
+                .filter(|position| painted_cluster_ids.contains(position.id.as_str()))
+                .map(|position| position.x),
+        )
         .chain(
             edge_paths
                 .iter()
@@ -11136,6 +11157,7 @@ fn svek_layout_y_bias(
     cluster_positions: &[ClusterPosition],
     edge_paths: &[EdgePath],
 ) -> f64 {
+    let painted_cluster_ids = painted_package_cluster_ids(diagram);
     let min_y = positions
         .iter()
         .enumerate()
@@ -11147,7 +11169,12 @@ fn svek_layout_y_bias(
                     0.0
                 }
         })
-        .chain(cluster_positions.iter().map(|position| position.y))
+        .chain(
+            cluster_positions
+                .iter()
+                .filter(|position| painted_cluster_ids.contains(position.id.as_str()))
+                .map(|position| position.y),
+        )
         .chain(
             edge_paths
                 .iter()
