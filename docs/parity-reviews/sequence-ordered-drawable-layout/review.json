@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-ordered-drawable-layout",
+  "review_created": "2026-07-31",
+  "reviewer": {
+    "identity": "Codex GPT-5 adversarial checker",
+    "role": "independent checker for implementation f0272d0e",
+    "constraints": [
+      "Did not edit Rust implementation.",
+      "Did not run Cargo or rustc.",
+      "Used the already-built target/debug/examples/diff_one binary."
+    ]
+  },
+  "revisions": {
+    "java": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "rust_account_commit": "9c3de84e",
+    "rust_implementation_commit": "f0272d0eb71143117da95eb4f68aca906f5d650d",
+    "rust_checkout_head_during_review": "8c9db6cdc90ce6dc6bca712693c81b4151b7cb58",
+    "rust_diff_inspected": "9c3de84e..f0272d0e",
+    "diff_one_sha256": "3b115431a08707df68d10615999ffe42f9c73d68a504ba22eacf70b48327197c",
+    "worktree_note": "The checkout had an unstaged sequence.rs debug-print hunk and later documentation commits above f0272d0e. The implementation verdict is based on the committed f0272d0e diff and the requested existing diff_one binary; only evidence files were staged."
+  },
+  "account_inspected": {
+    "path": "docs/parity-reviews/sequence-ordered-drawable-layout/account.json",
+    "claimed_invariant_summary": "One ordered event stream creates one accepted lifecycle history and one concrete drawable envelope; one missing-space solve over all concrete elements translates participant constraints exactly once."
+  },
+  "java_sources_inspected": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/DrawableSetInitializer.java",
+      "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+      "lines": "96-201,246-289",
+      "observation": "createDrawableSet iterates one copied event list into concrete graphical elements, then prepareMissingSpace loops over drawableSet.getAllGraphicalElements(), computes left and right deficits, and pushes the shared ConstraintSet once."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/InGroupableList.java",
+      "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+      "lines": "50-235",
+      "observation": "Group envelopes are recursive over the actual in-groupable members. Min and max add different margins for exo arrows, nested lists, and ordinary members."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/GroupingGraphicalElement.java",
+      "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+      "lines": "45-66",
+      "observation": "Group starting X is InGroupableList.getMinX() - 10 and actual width is max(preferred width, list max - list min + 20)."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/LifeLine.java",
+      "revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+      "lines": "62-151",
+      "observation": "addSegmentVariation rejects out-of-order or same-y opposite variations before mutating the Stairs history."
+    }
+  ],
+  "rust_sources_inspected": [
+    {
+      "path": "crates/rustuml-render/src/sequence.rs",
+      "diff": "9c3de84e..f0272d0e",
+      "observation": "Lifecycle acceptance was reduced to a single accepted_changes source consumed by SequenceLifeLines."
+    },
+    {
+      "path": "crates/rustuml-render/src/sequence.rs",
+      "diff": "9c3de84e..f0272d0e",
+      "observation": "The horizontal implementation still reconstructs group_frames in a later event scan and applies group_left_missing_space = GROUP_FRAME_MARGIN - frame.left after participants were already solved, rather than materializing one ordered typed drawable list and running one complete prepareMissingSpace equivalent over every concrete element."
+    }
+  ],
+  "fixture_shape_search": {
+    "commands": [
+      "git diff 9c3de84e..f0272d0e -- crates/rustuml-render/src/sequence.rs | rg -n \"review8|checker|seq_|renamed|fixture|golden|puml|RUSTUML_DEBUG|env::var|GROUP_FRAME_MARGIN - frame.left|accepted_changes|note_content_width_raw_padded\"",
+      "git diff 9c3de84e..f0272d0e -- crates/rustuml-render/src/sequence.rs | rg -n \"[0-9]+\\.[0-9]{3,}\""
+    ],
+    "result": "No fixture-label branches and no new high-precision decimal literals were found in the f0272d0e diff. The suspicious arithmetic is structural: the late group-only missing-space expression is narrower than the claimed all-element solve."
+  },
+  "existing_review8_results": {
+    "source_directory": "test-diagrams/perturbations/sequence-inline-arrow-style",
+    "command": "for f in test-diagrams/perturbations/sequence-inline-arrow-style/review8_*.puml; do ./target/debug/examples/diff_one --no-oracle \"$f\"; done",
+    "summary": "Seven of eight preserved review8 perturbations failed; only review8_equal_owner_open_then_close_dual_extent.puml passed.",
+    "failures": [
+      "review8_active_source_boundary_mix.puml: one-pixel note path/text x mismatch.",
+      "review8_auto_return_envelope_rotation.puml: element count mismatch and lifecycle/frame geometry divergence.",
+      "review8_divider_before_after_widest.puml: group frame x/width mismatch.",
+      "review8_equal_owner_close_then_open_nested.puml: canvas width and participant x mismatch.",
+      "review8_group_end_close_reopen_competing.puml: canvas width and group frame mismatch.",
+      "review8_nested_dual_boundary_notes.puml: canvas width and participant x mismatch.",
+      "review8_note_transition_mirrored.puml: message geometry mismatch."
+    ]
+  },
+  "fresh_perturbations": [
+    {
+      "stem": "checker_renamed_nested_lifecycle_left",
+      "axes": [
+        "renamed labels",
+        "two-level group depth",
+        "left note envelope",
+        "activation and return lifecycle order"
+      ],
+      "puml": "test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_renamed_nested_lifecycle_left.puml",
+      "java_svg": "test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_renamed_nested_lifecycle_left.svg",
+      "rust_svg": "test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_renamed_nested_lifecycle_left.rust.svg",
+      "diff": "test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_renamed_nested_lifecycle_left.diff.txt",
+      "java_validity": "xmllint passed, no PlantUML error markers, data-diagram-type=\"SEQUENCE\" present.",
+      "diff_one_result": "failed",
+      "failure_summary": "Java outer and inner group frames start at x=9 and x=19 with widths 633.7432 and 613.7432. Rust starts them at x=10 and x=20 with widths 631.7432 and 611.7432. Participants, lifelines, notes, arrows, and texts are shifted one pixel left while frames shift one pixel right, contradicting a shared one-envelope translation."
+    },
+    {
+      "stem": "checker_renamed_deep_group_return_order",
+      "axes": [
+        "renamed labels",
+        "three-level group depth",
+        "external left ingress",
+        "activation and return lifecycle order"
+      ],
+      "puml": "test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_renamed_deep_group_return_order.puml",
+      "java_svg": "test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_renamed_deep_group_return_order.svg",
+      "rust_svg": "test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_renamed_deep_group_return_order.rust.svg",
+      "diff": "test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_renamed_deep_group_return_order.diff.txt",
+      "java_validity": "xmllint passed, no PlantUML error markers, data-diagram-type=\"SEQUENCE\" present.",
+      "diff_one_result": "failed",
+      "failure_summary": "Java group frames start at x=9, x=19, and x=29 with widths 752.2974, 732.2974, and 712.2974. Rust starts them at x=10, x=20, and x=30 with widths 750.2842, 730.2842, and 710.2842. Participants and message geometry are also shifted by about 1.0132px, so the recursive group envelope is not equivalent."
+    }
+  ],
+  "commands": [
+    "cat docs/parity-reviews/sequence-ordered-drawable-layout/account.json",
+    "git show --stat --oneline f0272d0e",
+    "git diff 9c3de84e..f0272d0e -- crates/rustuml-render/src/sequence.rs",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse --verify 71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/DrawableSetInitializer.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/sequencediagram/InGroupableList.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/GroupingGraphicalElement.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/sequencediagram/graphic/LifeLine.java",
+    "JAVA_TOOL_OPTIONS=-Djava.awt.headless=true java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_renamed_nested_lifecycle_left.puml test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_renamed_deep_group_return_order.puml",
+    "xmllint --noout test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_renamed_nested_lifecycle_left.svg test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_renamed_deep_group_return_order.svg",
+    "rg -n -i \"Syntax Error|NoSuchElementException|Welcome to PlantUML|An error has occured|\\[From |Assumed diagram type\" test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_renamed_nested_lifecycle_left.svg test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_renamed_deep_group_return_order.svg",
+    "rg -n \"data-diagram-type=\\\"SEQUENCE\\\"\" test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_renamed_nested_lifecycle_left.svg test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_renamed_deep_group_return_order.svg",
+    "./target/debug/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_renamed_nested_lifecycle_left.puml > test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_renamed_nested_lifecycle_left.rust.svg",
+    "./target/debug/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_renamed_deep_group_return_order.puml > test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_renamed_deep_group_return_order.rust.svg",
+    "./target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_renamed_nested_lifecycle_left.puml > test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_renamed_nested_lifecycle_left.diff.txt",
+    "./target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_renamed_deep_group_return_order.puml > test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_renamed_deep_group_return_order.diff.txt",
+    "shasum -a 256 target/debug/examples/diff_one test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_*.puml test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_*.svg test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_*.rust.svg test-diagrams/perturbations/sequence-ordered-drawable-layout/checker_*.diff.txt"
+  ],
+  "artifact_sha256": {
+    "checker_renamed_nested_lifecycle_left.puml": "c895a1dd48aeda4540095c366506f2fe1c86512ecbe37d7e8d48178e035e09af",
+    "checker_renamed_nested_lifecycle_left.svg": "d90e8ec46b51a69e7c3cc08581bd1f298738e25786fd438317362f2a1562180f",
+    "checker_renamed_nested_lifecycle_left.rust.svg": "6bc8251dc1a5fa7a732917992b71f9bbf2862f77ac0eb3da0116e1a1b0815bee",
+    "checker_renamed_nested_lifecycle_left.diff.txt": "740566a1b7ca0f83a2e8e40a12b37f1c53e44bd5319acb3bff8a9497947dacac",
+    "checker_renamed_deep_group_return_order.puml": "fd43aca8f23e9265be0bbdc2ce2ac63082840d74f0c539495be226c97e398413",
+    "checker_renamed_deep_group_return_order.svg": "5bac167591b1f7df909a8f571a61c4b1a5f59958f3c634ab261d7eb183f688b5",
+    "checker_renamed_deep_group_return_order.rust.svg": "1263413c03f33a79dfe7c9b069650253143b5b4804b05b19a864a75d9d4a2841",
+    "checker_renamed_deep_group_return_order.diff.txt": "e00d1a97d8c79bc6cf1e6a3cc63760d25d1c48ce8cfc7df46e66697c4ce5f921"
+  },
+  "verdict": "reject",
+  "verdict_reason": "A failing held-out counterexample rejects the implementation under the T14 adversarial gate. Here both fresh valid held-outs fail, and seven of eight preserved review8 perturbations still fail. The implementation also does not match the account's model shape: it keeps a late group-frame reconstruction plus group-only missing-space translation instead of a single ordered concrete drawable envelope."
+}

@@ -1,0 +1,28 @@
+@startuml
+participant "Ingress Renamed" as IR
+participant "Coordinator Renamed" as CR
+participant "Executor Renamed" as ER
+participant "Audit Renamed" as AR
+
+[-> IR : renamed ingress
+activate IR
+alt renamed branch
+  IR -> CR ++ : coordinate renamed
+  opt renamed nested option
+    CR -> ER ++ : execute renamed
+    loop renamed audit loop
+      note left of IR
+        outer left note
+        shifted by group depth
+      end note
+      ER -> AR ++ : audit renamed
+      return audit ok
+    end
+    return execution ok
+  end
+  return coordination ok
+else renamed fallback
+  IR -> AR : fallback renamed
+end
+deactivate IR
+@enduml

@@ -1,0 +1,20 @@
+@startuml
+participant "Renamed Client Alpha" as RCA
+participant "Renamed Worker Beta" as RWB
+participant "Renamed Store Gamma" as RSG
+
+activate RCA
+group Outer renamed [lifecycle]
+  RCA -> RWB ++ : open renamed worker
+  group Inner renamed [left envelope]
+    note left of RCA
+      renamed left note
+      inside nested group
+    end note
+    RWB -> RSG ++ : store renamed payload
+    return stored renamed
+  end
+  return worker complete
+end
+deactivate RCA
+@enduml
