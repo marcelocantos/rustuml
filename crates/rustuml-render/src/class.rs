@@ -2325,7 +2325,7 @@ fn render_with_oracle_uid_origin(
             .iter()
             .map(|line| text_render::label_height(line, FONT_SIZE))
             .sum::<f64>();
-        let (title_width_extra, title_height_extra) = match effective_package_kind(pkg) {
+        let (title_width_extra, title_height_extra) = match effective_package_kind(diagram, pkg) {
             PackageKind::Database => (0.0, DATABASE_CLUSTER_TITLE_EXTRA),
             PackageKind::Node => (
                 NODE_CLUSTER_TITLE_WIDTH_EXTRA,
@@ -3537,7 +3537,7 @@ fn package_render_model(diagram: &ClassDiagram) -> PackageRenderModel {
         .enumerate()
         .map(|(idx, package)| {
             let supports_package_rendering = matches!(
-                effective_package_kind(package),
+                effective_package_kind(diagram, package),
                 PackageKind::Package
                     | PackageKind::Namespace
                     | PackageKind::Database
@@ -3553,7 +3553,7 @@ fn package_render_model(diagram: &ClassDiagram) -> PackageRenderModel {
                 // Java `Entity#isEmpty` examines direct quark children. A
                 // direct leaf or group child therefore makes this a cluster.
                 PackageRenderRole::Cluster
-            } else if !package.phantom && explicit_package_symbol_kind(package).is_some() {
+            } else if !package.phantom && automatic_package_kind(package).is_some() {
                 // `GeneralImageBuilder#createEntityImageBlock` sends an
                 // EMPTY_PACKAGE retaining a non-null USymbol through
                 // `EntityImageDescription` rather than EntityImageEmptyPackage.
@@ -3575,30 +3575,32 @@ fn package_render_model(diagram: &ClassDiagram) -> PackageRenderModel {
     }
 }
 
-fn effective_package_kind(pkg: &Package) -> PackageKind {
+fn automatic_package_kind(pkg: &Package) -> Option<PackageKind> {
     if matches!(pkg.kind, PackageKind::Package | PackageKind::Namespace) {
         for stereotype in &pkg.stereotypes {
             if stereotype.eq_ignore_ascii_case("database") {
-                return PackageKind::Database;
+                return Some(PackageKind::Database);
             }
             if stereotype.eq_ignore_ascii_case("folder") {
-                return PackageKind::Folder;
+                return Some(PackageKind::Folder);
             }
             if stereotype.eq_ignore_ascii_case("frame") {
-                return PackageKind::Frame;
+                return Some(PackageKind::Frame);
             }
             if stereotype.eq_ignore_ascii_case("rectangle") {
-                return PackageKind::Rectangle;
+                return Some(PackageKind::Rectangle);
             }
             if stereotype.eq_ignore_ascii_case("node") {
-                return PackageKind::Node;
+                return Some(PackageKind::Node);
             }
             if stereotype.eq_ignore_ascii_case("cloud") {
-                return PackageKind::Cloud;
+                return Some(PackageKind::Cloud);
             }
         }
+    } else {
+        return Some(pkg.kind);
     }
-    pkg.kind
+    None
 }
 
 fn visible_package_stereotype_lines(pkg: &Package) -> Vec<String> {
@@ -3614,28 +3616,42 @@ fn visible_package_stereotype_lines(pkg: &Package) -> Vec<String> {
         .collect()
 }
 
-fn explicit_package_symbol_kind(pkg: &Package) -> Option<PackageKind> {
-    match pkg.kind {
-        PackageKind::Cloud
-        | PackageKind::Database
-        | PackageKind::Folder
-        | PackageKind::Frame
-        | PackageKind::Rectangle
-        | PackageKind::Node => Some(pkg.kind),
-        PackageKind::Package | PackageKind::Namespace => {
-            pkg.stereotypes.iter().find_map(|stereotype| {
-                match stereotype.to_ascii_lowercase().as_str() {
-                    "cloud" => Some(PackageKind::Cloud),
-                    "database" => Some(PackageKind::Database),
-                    "folder" => Some(PackageKind::Folder),
-                    "frame" => Some(PackageKind::Frame),
-                    "rectangle" => Some(PackageKind::Rectangle),
-                    "node" => Some(PackageKind::Node),
-                    _ => None,
-                }
-            })
-        }
+fn configured_package_kind(diagram: &ClassDiagram) -> Option<PackageKind> {
+    let style = diagram
+        .meta
+        .skinparams
+        .iter()
+        .rev()
+        .find(|skinparam| skinparam.key.eq_ignore_ascii_case("packageStyle"))?
+        .value
+        .trim();
+    if style.eq_ignore_ascii_case("database") {
+        Some(PackageKind::Database)
+    } else if style.eq_ignore_ascii_case("frame") {
+        Some(PackageKind::Frame)
+    } else if style.eq_ignore_ascii_case("rectangle") || style.eq_ignore_ascii_case("rect") {
+        Some(PackageKind::Rectangle)
+    } else if style.eq_ignore_ascii_case("node") {
+        Some(PackageKind::Node)
+    } else if style.eq_ignore_ascii_case("cloud") {
+        Some(PackageKind::Cloud)
+    } else {
+        None
     }
+}
+
+fn effective_package_kind(diagram: &ClassDiagram, pkg: &Package) -> PackageKind {
+    // Java `Cluster.drawU` gives an explicit/automatic symbol precedence,
+    // then lets `ClusterDecoration.guess` fall back to packageStyle.
+    automatic_package_kind(pkg)
+        .or_else(|| configured_package_kind(diagram))
+        .unwrap_or(pkg.kind)
+}
+
+fn package_paint_kind(pkg: &Package) -> PackageKind {
+    // A global packageStyle changes ClusterDecoration's guessed symbol, not
+    // the group's style signature or its explicit semantic kind.
+    automatic_package_kind(pkg).unwrap_or(pkg.kind)
 }
 
 fn package_cluster_id(idx: usize) -> String {
@@ -3652,7 +3668,7 @@ fn together_layout_id(idx: usize) -> String {
 
 fn empty_package_dims(pkg: &Package) -> (f64, f64) {
     let label = package_display_label(pkg);
-    let symbol_kind = explicit_package_symbol_kind(pkg);
+    let symbol_kind = automatic_package_kind(pkg);
     let bold = symbol_kind.is_none();
     let label_width = text_render::measure_no_underline(label, FONT_SIZE, bold);
     let label_height = text_render::label_height(label, FONT_SIZE);
@@ -3708,20 +3724,22 @@ fn package_cluster_envelope_extra(diagram: &ClassDiagram, cluster: &ClusterPosit
         .strip_prefix("pkg")
         .and_then(|idx| idx.parse::<usize>().ok())
         .and_then(|idx| diagram.packages.get(idx))
-        .map_or((0.0, 0.0), |pkg| match effective_package_kind(pkg) {
-            PackageKind::Database => (
-                DATABASE_CLUSTER_ENVELOPE_EXTRA,
-                DATABASE_CLUSTER_ENVELOPE_EXTRA,
-            ),
-            PackageKind::Node => (NODE_CLUSTER_ENVELOPE_X_EXTRA, NODE_CLUSTER_ENVELOPE_Y_EXTRA),
-            PackageKind::Cloud => {
-                let frontier = cloud_frontier(cluster.width, cluster.height);
-                (
-                    (frontier.max_x - cluster.width).max(0.0),
-                    (frontier.max_y - cluster.height).max(0.0),
-                )
+        .map_or((0.0, 0.0), |pkg| {
+            match effective_package_kind(diagram, pkg) {
+                PackageKind::Database => (
+                    DATABASE_CLUSTER_ENVELOPE_EXTRA,
+                    DATABASE_CLUSTER_ENVELOPE_EXTRA,
+                ),
+                PackageKind::Node => (NODE_CLUSTER_ENVELOPE_X_EXTRA, NODE_CLUSTER_ENVELOPE_Y_EXTRA),
+                PackageKind::Cloud => {
+                    let frontier = cloud_frontier(cluster.width, cluster.height);
+                    (
+                        (frontier.max_x - cluster.width).max(0.0),
+                        (frontier.max_y - cluster.height).max(0.0),
+                    )
+                }
+                _ => (0.0, 0.0),
             }
-            _ => (0.0, 0.0),
         })
 }
 
@@ -3734,7 +3752,7 @@ fn package_cloud_frontier(
         .strip_prefix("pkg")
         .and_then(|idx| idx.parse::<usize>().ok())
         .and_then(|idx| diagram.packages.get(idx))
-        .filter(|pkg| effective_package_kind(pkg) == PackageKind::Cloud)
+        .filter(|pkg| effective_package_kind(diagram, pkg) == PackageKind::Cloud)
         .map(|_| cloud_frontier(cluster.width, cluster.height))
 }
 
@@ -3855,7 +3873,7 @@ fn package_cluster_painted_min(diagram: &ClassDiagram, position: &ClusterPositio
         .iter()
         .enumerate()
         .find(|(idx, _)| package_cluster_id(*idx) == position.id)
-        .map(|(_, package)| effective_package_kind(package));
+        .map(|(_, package)| effective_package_kind(diagram, package));
 
     match kind {
         // Java `LimitFinder.drawRectangle()` measures a `URectangle` from
@@ -5523,14 +5541,15 @@ fn layout_package_clusters(
             let pkg = &diagram.packages[idx];
             let id = package_cluster_id(idx);
             let pos = cluster_positions.iter().find(|p| p.id == id)?;
-            let kind = effective_package_kind(pkg);
+            let kind = effective_package_kind(diagram, pkg);
+            let paint_kind = package_paint_kind(pkg);
             let fill = pkg
                 .color
                 .as_deref()
-                .or_else(|| package_skinparam(diagram, kind, "BackgroundColor"))
+                .or_else(|| package_skinparam(diagram, paint_kind, "BackgroundColor"))
                 .map(crate::sequence::resolve_color)
                 .unwrap_or_else(|| "none".to_string());
-            let stroke = package_skinparam(diagram, kind, "BorderColor")
+            let stroke = package_skinparam(diagram, paint_kind, "BorderColor")
                 .map(crate::sequence::resolve_color)
                 .unwrap_or_else(|| {
                     if matches!(
@@ -5546,7 +5565,7 @@ fn layout_package_clusters(
                         "#000000".to_string()
                     }
                 });
-            let font_fill = package_skinparam(diagram, kind, "FontColor")
+            let font_fill = package_skinparam(diagram, paint_kind, "FontColor")
                 .map(crate::sequence::resolve_color)
                 .unwrap_or_else(|| "#000000".to_string());
             Some(LayoutPackageCluster {
@@ -5616,7 +5635,7 @@ fn layout_empty_packages(
         .filter_map(|&(package_idx, node_idx)| {
             let package = &diagram.packages[package_idx];
             let pos = positions.get(node_idx)?;
-            let kind = effective_package_kind(package);
+            let kind = package_paint_kind(package);
             // Java `EntityImageEmptyPackage` merges the package-title style
             // with entity colors: an explicit BACK wins, then package style
             // supplies background, line, and title-font colors. The defaults
@@ -5641,7 +5660,7 @@ fn layout_empty_packages(
                     package_idx,
                 ),
                 source_line: package.source_line,
-                symbol_kind: explicit_package_symbol_kind(package),
+                symbol_kind: automatic_package_kind(package),
                 label: package_display_label(package).to_string(),
                 stereotype_lines: visible_package_stereotype_lines(package),
                 fill,
@@ -14579,6 +14598,54 @@ mod tests {
             svg.contains("<!--entity FreshFrame7101.FreshEmptyFolder7103-->"),
             "{svg}"
         );
+    }
+
+    #[test]
+    fn global_package_style_selects_cluster_geometry_but_not_explicit_symbols() {
+        let input = "@startuml\n\
+                     skinparam packageStyle rect\n\
+                     package FreshOuterPackage3203 {\n\
+                       package FreshInnerPackage3209 {\n\
+                         class FreshPayload3217\n\
+                       }\n\
+                       database FreshExplicitStore3221 {\n\
+                         class FreshRecord3229\n\
+                       }\n\
+                     }\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Class(class_diagram) = &diagram else {
+            panic!("expected class diagram");
+        };
+        let kind = |name: &str| {
+            let package = class_diagram
+                .packages
+                .iter()
+                .find(|package| package.name == name)
+                .unwrap();
+            effective_package_kind(class_diagram, package)
+        };
+
+        assert_eq!(kind("FreshOuterPackage3203"), PackageKind::Rectangle);
+        assert_eq!(
+            kind("FreshOuterPackage3203.FreshInnerPackage3209"),
+            PackageKind::Rectangle
+        );
+        assert_eq!(
+            kind("FreshOuterPackage3203.FreshExplicitStore3221"),
+            PackageKind::Database
+        );
+
+        let svg = crate::render_svg(&diagram);
+        let outer = svg
+            .split_once("<!--cluster FreshOuterPackage3203-->")
+            .unwrap()
+            .1
+            .split_once("</g>")
+            .unwrap()
+            .0;
+        assert!(outer.contains("<rect "), "{outer}");
+        assert!(!outer.contains("<path "), "{outer}");
     }
 
     #[test]
