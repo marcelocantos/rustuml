@@ -469,6 +469,17 @@ impl ClassParser {
         self.create_entity_at_path(path, label, EntityKind::Class, false)
     }
 
+    fn resolve_quoted_relationship_endpoint(&mut self, raw: &str) -> String {
+        let exact_path = self.resolve_quark_path(raw, QuarkLookup::ReuseUnique);
+        if let Some(&idx) = self.entity_by_path.get(&exact_path) {
+            return self.entities[idx].id.clone();
+        }
+        if let Some(&idx) = self.package_by_path.get(&exact_path) {
+            return self.packages[idx].name.clone();
+        }
+        self.resolve_relationship_endpoint(&strip_creole_for_id(raw))
+    }
+
     fn find_entity_mut(&mut self, id: &str) -> Option<&mut ClassEntity> {
         self.entities.iter_mut().find(|e| e.id == id)
     }
@@ -1055,24 +1066,13 @@ impl ClassParser {
         });
 
         if let Some(caps) = RE.captures(line) {
-            // Quoted endpoints (groups 1/6) must be normalized the same way the
-            // entity declaration normalizes a quoted name (whitespace → `_`,
-            // creole markers stripped), so a relationship like
-            // `"Fish & Chips" --> "Bread & Butter"` resolves to the existing
-            // declared entity instead of creating a duplicate.
-            let from_raw = if let Some(m) = caps.get(1) {
-                strip_creole_for_id(m.as_str())
-            } else {
-                caps.get(2).map(|m| m.as_str()).unwrap_or("").to_string()
-            };
+            let from_quoted = caps.get(1).map(|m| m.as_str());
+            let from_raw = from_quoted.unwrap_or_else(|| caps.get(2).unwrap().as_str());
             let from_mult = caps.get(3).map(|m| m.as_str().to_string());
             let rel_str = &caps[4];
             let to_mult = caps.get(5).map(|m| m.as_str().to_string());
-            let to_raw = if let Some(m) = caps.get(6) {
-                strip_creole_for_id(m.as_str())
-            } else {
-                caps.get(7).map(|m| m.as_str()).unwrap_or("").to_string()
-            };
+            let to_quoted = caps.get(6).map(|m| m.as_str());
+            let to_raw = to_quoted.unwrap_or_else(|| caps.get(7).unwrap().as_str());
             let (label, label_arrow) = parse_label_arrow(caps.get(8).map(|m| m.as_str()));
 
             let (kind, dashed, mut decorated_end) = parse_relationship_kind(rel_str);
@@ -1081,8 +1081,16 @@ impl ClassParser {
             } else {
                 relationship_length(rel_str)
             };
-            let mut from = self.resolve_relationship_endpoint(&from_raw);
-            let mut to = self.resolve_relationship_endpoint(&to_raw);
+            let mut from = if from_quoted.is_some() {
+                self.resolve_quoted_relationship_endpoint(from_raw)
+            } else {
+                self.resolve_relationship_endpoint(from_raw)
+            };
+            let mut to = if to_quoted.is_some() {
+                self.resolve_quoted_relationship_endpoint(to_raw)
+            } else {
+                self.resolve_relationship_endpoint(to_raw)
+            };
             let mut from_mult = from_mult;
             let mut to_mult = to_mult;
             if direction.is_some_and(QueueDirection::inverts_link) {
@@ -2835,6 +2843,32 @@ mod tests {
                 .count(),
             1
         );
+    }
+
+    #[test]
+    fn quoted_relationship_prefers_exact_existing_package_identity() {
+        let d = parse(
+            "package \"Quoted Parcel\" {\n\
+             }\n\
+             class Receiver\n\
+             \"Quoted Parcel\" --> Receiver",
+        );
+
+        assert_eq!(d.entities.len(), 1);
+        assert_eq!(d.packages[0].name, "Quoted Parcel");
+        assert_eq!(d.relationships[0].from, "Quoted Parcel");
+    }
+
+    #[test]
+    fn quoted_relationship_falls_back_to_normalized_class_identity() {
+        let d = parse(
+            "class \"Fish & Chips\"\n\
+             class Receiver\n\
+             \"Fish & Chips\" --> Receiver",
+        );
+
+        assert_eq!(d.entities.len(), 2);
+        assert_eq!(d.relationships[0].from, d.entities[0].id);
     }
 
     #[test]
