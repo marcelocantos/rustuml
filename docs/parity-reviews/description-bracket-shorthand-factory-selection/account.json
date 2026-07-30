@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "mechanism": "description-bracket-shorthand-factory-selection",
+  "created": "2026-07-31",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "64bc51e4aba504fae256372c6b242d02ffbd8ed6",
+  "golden_revision": "9efdc12fb057bbfecb6a8e2d25d31ec1e5ead19a",
+  "regression_origin": {
+    "commit": "4275bab624c02c820e28ab866b58f5db5b470b7c",
+    "subject": "fix: port complete package symbol model",
+    "evidence": "The commit introduced has_class_symbol_container and promoted CLASS above every competing score while its viability model omitted DESCRIPTION-only bracket shorthand."
+  },
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/core/DiagramType.java:195-199",
+    "src/main/java/net/sourceforge/plantuml/PSystemBuilder.java:128-136,226-241",
+    "src/main/java/net/sourceforge/plantuml/command/PSystemCommandFactory.java:74-109,135-197",
+    "src/main/java/net/sourceforge/plantuml/classdiagram/ClassDiagramFactory.java:100-171",
+    "src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandCreateElementFull2.java:82-145",
+    "src/main/java/net/sourceforge/plantuml/descdiagram/DescriptionDiagramFactory.java:85-138",
+    "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandPackageWithUSymbol.java:74-178",
+    "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandCreateElementFull.java:81-138,213-233",
+    "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandLinkElement.java:87-119,180-242"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/mod.rs:323-430,643-688,863-892,1292-1363",
+    "crates/rustuml-parser/src/parse/class.rs:650-764,1076-1103,1283-1440",
+    "crates/rustuml-parser/src/parse/component.rs:483-509,659-717,824-947",
+    "crates/rustuml-render/src/class.rs:3686-3740"
+  ],
+  "claimed_invariant": "A shared package-symbol opener does not establish CLASS ownership. For generic @startuml, ClassDiagramFactory wins only if every later line is accepted by its command grammar. Bare bracket component declarations and bracket-endpoint links are DESCRIPTION commands and reject the earlier Class candidate.",
+  "causal_divergence": "Rust scores bracket syntax as Component evidence but does not feed it into Class-factory viability. The symbol-container override consequently revives a Java candidate that failed at the first bracket shorthand line, dispatching to a Class model that discards the leaves and links.",
+  "planned_model_change": "Recognize exact DESCRIPTION-only bracket declaration and bracket-endpoint link grammar, excluding class qualifiers, guards, URLs, and arrow styles, and invalidate Class-factory viability before score promotion. Preserve existing scores and dispatch the source through Diagram::Component.",
+  "perturbation_axes": [
+    "package/component/node/frame containers, aliases, and nested scopes",
+    "bare bracket, bracket-with-alias, and links-only endpoint forms",
+    "leaf count, chain/fanout/cross-container topology, and declaration order",
+    "top-to-bottom versus left-to-right with renamed labels",
+    "explicit class and explicit description-keyword negative controls"
+  ],
+  "likely_combo_impact": {
+    "explained": "combo/combo_component_201 through combo_component_250",
+    "not_explained": "combo/combo_sequence_everything and the nine baseline combo failures"
+  }
+}

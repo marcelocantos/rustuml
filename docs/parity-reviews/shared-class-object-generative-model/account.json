@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "mechanism": "shared-class-object-generative-model",
+  "created": "2026-07-31",
+  "rust_revision_before_change": "64bc51e4aba504fae256372c6b242d02ffbd8ed6",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "supersedes": {
+    "mechanism": "object-only-container-backend-dispatch",
+    "account_commit": "41f52949485715bf18c6c85c87805e8ecbef51073",
+    "rejected_implementation": "da7a338517a368483e00290e5738ac96cbfb5e6a2",
+    "review": "docs/parity-reviews/object-only-container-backend-dispatch/review.json"
+  },
+  "architecture_decision": "Ordinary @startuml object, map, class, package, namespace, symbol-container, and link commands populate one shared ClassDiagram-style semantic graph. Object and map specialization occurs when rendering each leaf, not by selecting a separate diagram parser or backend. ObjectParser is retired from ordinary text dispatch or retained only as a compatibility adapter over the shared model.",
+  "claimed_invariant": "Java ClassDiagramFactory owns object and map commands. Every declaration resolves through the same contextual Quark graph, group stack, source-identity lifecycle, and relationship model. GeneralImageBuilder later selects EntityImageObject or EntityImageMap from LeafType. Reopening a group reuses its first Entity, source location, and UID; aliases change identity while preserving display text; links resolve to those same entities.",
+  "java_locations": [
+    "PSystemBuilder.java:128-136,226-241",
+    "ClassDiagramFactory.java:101-165",
+    "PSystemCommandFactory.java:173-235",
+    "CommandCreateEntityObject.java:81-111",
+    "CommandCreateEntityObjectMultilines.java:92-137",
+    "CommandCreateMap.java:104-176",
+    "CommandPackage.java:108-141",
+    "CommandNamespace.java:81-110",
+    "CommandEndPackage.java:45-64",
+    "CucaDiagram.java:219-243,249-310,343-373,891-916",
+    "Quark.java:48-65,116-141",
+    "Entity.java:162-175,243-245,747-749",
+    "CommandLinkClass.java:160-245",
+    "GeneralImageBuilder.java:180-184"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/mod.rs:314-323,348-350,412-423,503-524,715-718,870-881,1016-1020",
+    "crates/rustuml-parser/src/parse/object.rs:29-44,113-169,171-391",
+    "crates/rustuml-parser/src/diagram/object.rs:9-17,81-144",
+    "crates/rustuml-parser/src/parse/class.rs:54-101,210-448,649-684,725-815,1283-1538,2390-2476",
+    "crates/rustuml-parser/src/diagram/class.rs:40-93,128-210,277-318,448-484",
+    "crates/rustuml-render/src/object.rs:447-489,491-515,604-629,693-700,1005-1079",
+    "crates/rustuml-render/src/class.rs:1106,1279-1280,1525-1565,2313-2515,4492-4547,9661-9715"
+  ],
+  "causal_divergence": "Rust partitions one Java generative model into a capable ClassParser with incomplete object/map rendering and a faithful object/map renderer backed by an incapable flat ObjectParser. The rejected predicate moved inputs between these incomplete halves. It recovered four fixtures accidentally but could not preserve command ownership, scope identity, source chronology, direction, map normalization, or mixed-leaf rendering.",
+  "planned_model_change": [
+    "Add Map and an appropriate map-body representation to ClassDiagram; preserve Object bodies as shared-model members.",
+    "Parse object/map multiline blocks through ClassParser command context so body text cannot influence top-level factory selection.",
+    "Use canonical scoped identities, first-materialization source locations, UID events, reopen reuse, and contextual link resolution for all object/map leaves.",
+    "Run one shared direction-aware graph and cluster layout, then dispatch Object and Map leaves to the proven dimensions and paint currently in object.rs.",
+    "Remove ordinary object/map routing to the flat ObjectParser; do not expand it into a second ClassParser."
+  ],
+  "perturbation_axes": [
+    "bare, aliased, dotted, explicitly nested, sibling, and reopened scopes",
+    "declaration and reopening order versus source-line and UID order",
+    "Object, Map, Class, description, and package-symbol leaf mixtures",
+    "top-level versus contained maps, including map ports and map-created links",
+    "body tokens colliding with diagram commands, including state = ready",
+    "short, aliased, qualified, unique-unqualified, intra-scope, and cross-scope link endpoints",
+    "top-to-bottom versus left-to-right",
+    "renamed labels plus independently varied topology, depth, and branch count"
+  ]
+}
