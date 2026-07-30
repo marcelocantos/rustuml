@@ -31,6 +31,54 @@ const CONTAINER_KEYWORDS: &[&str] = &[
     "collections",
 ];
 
+static RE_DESCRIPTION_BRACKET_DECL: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(
+        r"^(?:\[([^\[\]]+)\](?:\s+(?i:as)\s+([\w.]+))?|([\w.]+)\s+(?i:as)\s+\[([^\[\]]+)\])\s*$",
+    )
+    .unwrap()
+});
+
+// Matches: FROM ["from_mult"] ARROW ["to_mult"] TO [: label].
+// FROM and TO can be [bracket], "quoted label", or \w+ identifiers.
+// Group map: 1=from-bracket 2=from-quoted 3=from-word 4=from-mult
+// 5=arrow 6=to-mult 7=to-bracket 8=to-quoted 9=to-word 10=label.
+static RE_DESCRIPTION_CONN: LazyLock<Regex> = LazyLock::new(|| {
+    Regex::new(
+        r#"^(?:\[([^\]]+)\]|"([^"]+)"|(\w+))\s*(?:"([^"]*)")?\s*([-.<>()|~0#*o]+)\s*(?:"([^"]*)")?\s*(?:\[([^\]]+)\]|"([^"]+)"|(\w+))(?:\s*:\s*(.+))?$"#,
+    )
+    .unwrap()
+});
+
+static RE_DESCRIPTION_LINK_DIRECTION: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"-(down|up|left|right)([-.>])").unwrap());
+
+fn parse_description_bracket_declaration(trimmed: &str) -> Option<(String, String)> {
+    let captures = RE_DESCRIPTION_BRACKET_DECL.captures(trimmed)?;
+    if let Some(display) = captures.get(1) {
+        let label = display.as_str().to_string();
+        let id = captures
+            .get(2)
+            .map(|alias| alias.as_str().to_string())
+            .unwrap_or_else(|| label.replace(' ', "_"));
+        return Some((id, label));
+    }
+
+    Some((
+        captures.get(3)?.as_str().to_string(),
+        captures.get(4)?.as_str().to_string(),
+    ))
+}
+
+pub(super) fn looks_like_description_bracket_command(trimmed: &str) -> bool {
+    if RE_DESCRIPTION_BRACKET_DECL.is_match(trimmed) {
+        return true;
+    }
+    let normalized = RE_DESCRIPTION_LINK_DIRECTION.replace_all(trimmed, "-$2");
+    RE_DESCRIPTION_CONN
+        .captures(&normalized)
+        .is_some_and(|captures| captures.get(1).is_some() || captures.get(7).is_some())
+}
+
 /// Check if a trimmed line opens a container block (keyword followed by optional label and `{`).
 fn container_keyword(trimmed: &str) -> Option<&'static str> {
     for &kw in CONTAINER_KEYWORDS {
@@ -212,7 +260,6 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
         )
         .unwrap()
     });
-    static RE_BRACKET: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^\[([^\]]+)\]$").unwrap());
     // Interface: `interface "Name" as ID`, `interface Name`, or `interface [Name] as ID`.
     static RE_IFACE_QUOTED_AS: LazyLock<Regex> = LazyLock::new(|| {
         Regex::new(r#"^(?i:interface)\s+"((?:[^"]|"")+)"\s+(?i:as)\s+(\w+)"#).unwrap()
@@ -235,18 +282,6 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
     // Floating note: `note "text" as ID` or `note : text`
     static RE_NOTE_INLINE: LazyLock<Regex> =
         LazyLock::new(|| Regex::new(r#"^note\s+"([^"]+)"\s+as\s+(\w+)"#).unwrap());
-    // Matches: FROM ["from_mult"] ARROW ["to_mult"] TO [: label]
-    // FROM and TO can be [bracket], "quoted label", or \w+ identifiers.
-    // Group map: 1=from-bracket 2=from-quoted 3=from-word 4=from-mult
-    // 5=arrow 6=to-mult 7=to-bracket 8=to-quoted 9=to-word 10=label.
-    // Arrow chars broadened to include lollipop notation: `-(`, `-(0-`, `--(`  etc.
-    static RE_CONN: LazyLock<Regex> = LazyLock::new(|| {
-        Regex::new(
-            r#"^(?:\[([^\]]+)\]|"([^"]+)"|(\w+))\s*(?:"([^"]*)")?\s*([-.<>()|~0#*o]+)\s*(?:"([^"]*)")?\s*(?:\[([^\]]+)\]|"([^"]+)"|(\w+))(?:\s*:\s*(.+))?$"#,
-        )
-        .unwrap()
-    });
-
     for (line_idx, line) in lines.iter().enumerate() {
         let (current_line, trimmed) = super::source_line_and_trimmed(line_idx + 1, line);
         if trimmed.is_empty() {
@@ -693,14 +728,11 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
             continue;
         }
 
-        if let Some(caps) = RE_BRACKET.captures(trimmed) {
-            let name = caps[1].to_string();
-            // Use the bracket label as both id and display label.
-            let id = name.replace(' ', "_");
+        if let Some((id, label)) = parse_description_bracket_declaration(trimmed) {
             if !components.iter().any(|c: &Component| c.id == id) {
                 components.push(Component {
                     id: id.clone(),
-                    label: name,
+                    label,
                     stereotypes: parse_stereotypes(trimmed),
                     color: None,
                     url: None,
@@ -809,20 +841,22 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
         // `<-left-`, …) so the arrow falls within the character class used
         // by RE_CONN. Direction is purely a layout hint in PlantUML; the
         // connection structure is unchanged.
-        static RE_DIR: LazyLock<Regex> =
-            LazyLock::new(|| Regex::new(r"-(down|up|left|right)([-.>])").unwrap());
-        let explicit_direction = RE_DIR.captures(trimmed).and_then(|caps| match &caps[1] {
-            "down" => Some(ConnectionDirection::Down),
-            "up" => Some(ConnectionDirection::Up),
-            "left" => Some(ConnectionDirection::Left),
-            "right" => Some(ConnectionDirection::Right),
-            _ => None,
-        });
-        let trimmed_owned = RE_DIR.replace_all(trimmed, "-$2").to_string();
+        let explicit_direction = RE_DESCRIPTION_LINK_DIRECTION
+            .captures(trimmed)
+            .and_then(|caps| match &caps[1] {
+                "down" => Some(ConnectionDirection::Down),
+                "up" => Some(ConnectionDirection::Up),
+                "left" => Some(ConnectionDirection::Left),
+                "right" => Some(ConnectionDirection::Right),
+                _ => None,
+            });
+        let trimmed_owned = RE_DESCRIPTION_LINK_DIRECTION
+            .replace_all(trimmed, "-$2")
+            .to_string();
         let trimmed = trimmed_owned.as_str();
 
-        if let Some(caps) = RE_CONN.captures(trimmed) {
-            // Group map (see RE_CONN): 1/7 bracketed (`[Name]`), 2/8 quoted
+        if let Some(caps) = RE_DESCRIPTION_CONN.captures(trimmed) {
+            // Group map (see RE_DESCRIPTION_CONN): 1/7 bracketed (`[Name]`), 2/8 quoted
             // (`"Name"`), 3/9 bare word. PlantUML treats a *bare*, undeclared
             // endpoint as an interface (drawn as a circle); bracketed or
             // quoted endpoints are components. Quoted endpoints keep their

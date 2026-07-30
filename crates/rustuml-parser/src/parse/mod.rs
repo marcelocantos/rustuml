@@ -349,6 +349,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     let mut object_containers_all_ordinary = true;
     let mut quoted_shared_deployment_containers = 0i32;
     let mut brace_depth = 0usize;
+    let mut class_leaf_body_depth = None;
 
     for line in lines {
         let trimmed = source_text(line).trim();
@@ -361,6 +362,8 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         } else {
             trimmed
         };
+        let inside_class_leaf_body =
+            class_leaf_body_depth.is_some_and(|depth| brace_depth >= depth);
         if is_allow_mixing_command(trimmed) {
             has_allowmixing = true;
         }
@@ -426,6 +429,9 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             && !trimmed.contains('{')
             && MIXED_ONLY_CLASS_KEYWORDS.contains(&leading_keyword.as_str())
         {
+            class_factory_rejected_by_mixed_leaf = true;
+        }
+        if !inside_class_leaf_body && component::looks_like_description_bracket_command(trimmed) {
             class_factory_rejected_by_mixed_leaf = true;
         }
         let looks_like_sequence_message = sequence::looks_like_message(trimmed);
@@ -857,7 +863,13 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         }
         let opens = trimmed.chars().filter(|&c| c == '{').count();
         let closes = trimmed.chars().filter(|&c| c == '}').count();
+        if !inside_class_leaf_body && opens > 0 && looks_like_class_leaf_body_opener(trimmed) {
+            class_leaf_body_depth = Some(brace_depth + opens);
+        }
         brace_depth = brace_depth.saturating_add(opens).saturating_sub(closes);
+        if class_leaf_body_depth.is_some_and(|depth| brace_depth < depth) {
+            class_leaf_body_depth = None;
+        }
     }
 
     // Java keeps trying a factory only while every source command is
@@ -1042,6 +1054,30 @@ fn looks_like_bare_class_association(line: &str) -> bool {
         .unwrap()
     });
     RE.is_match(line)
+}
+
+fn looks_like_class_leaf_body_opener(line: &str) -> bool {
+    if !line.trim_end().ends_with('{') {
+        return false;
+    }
+    let normalized = line.trim_start().to_ascii_lowercase();
+    let mut words = normalized.split_whitespace();
+    let first = words.next().unwrap_or_default();
+    matches!(
+        first,
+        "class"
+            | "interface"
+            | "enum"
+            | "annotation"
+            | "entity"
+            | "object"
+            | "map"
+            | "protocol"
+            | "struct"
+            | "exception"
+            | "metaclass"
+            | "stereotype"
+    ) || (first == "abstract" && words.next() == Some("class"))
 }
 
 #[derive(Clone, Copy)]
@@ -1555,6 +1591,63 @@ mod tests {
                      }\n\
                      @enduml";
         assert!(matches!(parse(input).unwrap(), Diagram::Component(_)));
+    }
+
+    #[test]
+    fn description_bracket_commands_reject_shared_class_container_candidate() {
+        let input = "@startuml\n\
+                     component FreshFrontend7311 {\n\
+                       [Fresh Login 7313] as Login7313\n\
+                       [Fresh Dashboard 7317]\n\
+                     }\n\
+                     component FreshBackend7321 {\n\
+                       [Fresh Auth 7323] as Auth7323\n\
+                     }\n\
+                     Login7313 -right-> Auth7323 : calls\n\
+                     [Fresh Dashboard 7317] --> Auth7323 : fetches\n\
+                     @enduml";
+        let Diagram::Component(diagram) = parse(input).unwrap() else {
+            panic!("description bracket commands must select Component");
+        };
+        assert_eq!(diagram.packages.len(), 2);
+        assert_eq!(diagram.connections.len(), 2);
+        assert!(diagram.components.iter().any(|component| {
+            component.id == "Login7313" && component.label == "Fresh Login 7313"
+        }));
+        assert!(diagram.components.iter().any(|component| {
+            component.id == "Fresh_Dashboard_7317" && component.label == "Fresh Dashboard 7317"
+        }));
+    }
+
+    #[test]
+    fn description_bracket_alias_directions_preserve_code_and_display() {
+        let input = "@startuml\n\
+                     [Fresh Primary 7331] as Primary7331\n\
+                     Secondary7333 as [Fresh Secondary 7333]\n\
+                     Primary7331 --> Secondary7333\n\
+                     @enduml";
+        let Diagram::Component(diagram) = parse(input).unwrap() else {
+            panic!("bracket aliases must select Component");
+        };
+        assert!(diagram.components.iter().any(|component| {
+            component.id == "Primary7331" && component.label == "Fresh Primary 7331"
+        }));
+        assert!(diagram.components.iter().any(|component| {
+            component.id == "Secondary7333" && component.label == "Fresh Secondary 7333"
+        }));
+    }
+
+    #[test]
+    fn bracket_text_consumed_by_class_body_does_not_reject_class_factory() {
+        let input = "@startuml\n\
+                     package FreshTypes7341 {\n\
+                       class FreshRecord7343 {\n\
+                         +values : String[]\n\
+                         [literal member row]\n\
+                       }\n\
+                     }\n\
+                     @enduml";
+        assert!(matches!(parse(input).unwrap(), Diagram::Class(_)));
     }
 
     #[test]
