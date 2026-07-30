@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "mechanism": "description-container-usymbol-identity",
+  "status": "proposed",
+  "supersedes": "docs/parity-reviews/description-container-usymbol-identity/account-followup.json",
+  "correction": "The first account correctly identified ComponentPackageKind identity erasure, while the first follow-up correctly found and repaired the same rendering omissions on Rust's Deployment backend but incorrectly declared the Component backend out of scope. Java has one DESCRIPTION command model. Rust's internal factory heuristic can select either backend for valid brace-delimited storage/artifact sources based on unrelated sibling signals, so the exact USymbol invariant must hold on both paths.",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "723af6cdc732456f7150e6501f1f0ad0c6f6ef0e",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/descdiagram/DescriptionDiagramFactory.java:85-138 DescriptionDiagramFactory#initCommandsList",
+    "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandPackageWithUSymbol.java:73-178 CommandPackageWithUSymbol#getRegexConcat/executeArg",
+    "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbols.java:78-119 USymbol constants and fromString",
+    "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolStorage.java:49-112 USymbolStorage#drawStorage/asBig",
+    "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolArtifact.java:50-137 USymbolArtifact#drawArtifact/asBig",
+    "src/main/java/net/sourceforge/plantuml/svek/ClusterHeader.java:73-94 ClusterHeader constructor",
+    "src/main/java/net/sourceforge/plantuml/svek/ClusterDecoration.java:62-96 ClusterDecoration#getTextBlock/drawU",
+    "src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java:147-179 primitive painted bounds",
+    "src/main/java/net/sourceforge/plantuml/svek/SvekResult.java:126-137 painted-envelope translation"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/mod.rs:553-614,839-912 DESCRIPTION subtype scoring and Component/Deployment selection",
+    "crates/rustuml-parser/src/parse/component.rs:14-25 CONTAINER_KEYWORDS",
+    "crates/rustuml-parser/src/parse/component.rs:90-105 component_package_kind",
+    "crates/rustuml-parser/src/diagram/component.rs:183-194 ComponentPackageKind",
+    "crates/rustuml-render/src/component.rs:4702-4744 add_package_clusters_to_layout",
+    "crates/rustuml-render/src/component.rs:4911-5006 component_cluster_frame",
+    "crates/rustuml-render/src/component.rs:7530-7605 emit_layout_package_cluster",
+    "crates/rustuml-render/src/component.rs:7768-7824 rectangle cluster painting",
+    "crates/rustuml-render/src/component.rs:8070-8138 database cluster painting",
+    "crates/rustuml-parser/src/parse/deployment.rs:70-97 kind_from_keyword",
+    "crates/rustuml-render/src/deployment.rs deployment Storage/Artifact cluster model implemented at 54b10a24"
+  ],
+  "preserved_counterexample": {
+    "input": "test-diagrams/perturbations/description-container-usymbol-identity/checker_storage_root_stereo_lr_siblings.puml",
+    "review": "docs/parity-reviews/description-container-usymbol-identity/review.json",
+    "java_behavior": "CommandPackageWithUSymbol retains USymbolStorage and paints one rounded-70 rectangle with stereotype y=5 and title y=7 plus stereotype height.",
+    "rust_behavior": "The top-level component sibling makes Rust select its Component backend. component_package_kind collapses storage to Database, producing two cylinder paths, a database title supplement, shifted descendants, and a 474x253 canvas instead of Java's 464x239.",
+    "control_interpretation": "Held-out cases without the Component-selection signal use Rust's corrected Deployment backend and pass. Their success does not validate the Component backend or disprove the Java single-factory invariant."
+  },
+  "invariant": "CommandPackageWithUSymbol selects and stores the exact USymbol named by every valid brace-delimited DESCRIPTION command. Unrelated siblings, links, direction, nesting, labels, stereotypes, and colors do not change that symbol. Storage always uses USymbolStorage's zero ClusterHeader supplement, rounded-70 rectangle, stereotype top 5, title top 7 plus stereotype height, and URectangle painted bounds. Artifact always uses USymbolArtifact's zero supplement, ordinary rounded body plus folded-page glyph, stereotype/title top 2 stack, and combined rectangle/polygon painted bounds. Because Rust's Component and Deployment backends are implementation details hidden behind one DESCRIPTION surface, both must preserve the same symbol identity, solved title dimensions, paint, and envelope.",
+  "causal_divergence": "Rust's Deployment model now retains and renders Storage/Artifact correctly, but its Component model still has no corresponding package variants. component_package_kind maps storage to Database and artifact to Rectangle before layout. Any valid source that Rust's scoring routes to Component therefore acquires the wrong title supplement, cluster frame, primitive, text offsets, and painted envelope. The failing held-out storage source reaches this path because its unrelated root component leaf triggers has_top_level_component_leaf; removing that sibling changes only Rust's backend choice and makes the corrected Deployment path pass. The divergence is backend-dependent semantic identity loss, not a root/nested distinction or a geometry constant.",
+  "planned_change": "Add explicit Storage and Artifact variants to ComponentPackageKind and map brace-delimited component-parser commands to them without changing leaf kinds, labels, aliases, stereotypes, colors, source lines, ownership, or factory scoring. Give both variants Java's zero ClusterHeader shape supplement and ordinary SVEK cluster frame. Paint Storage through a component-cluster emitter using the rounded-70 body and y=5/y=7 text stack at cluster stroke width 1. Paint Artifact through a component-cluster emitter using the ordinary rounded body, top-right folded-page glyph, and y=2/y=2 text stack at cluster stroke width 1. Include their primitive-specific LimitFinder extrema in component root-cluster framing and canvas calculations instead of borrowing Database or Rectangle padding. Reuse shared artifact/storage primitive helpers where their contracts match. Do not change subtype scoring to force fixtures onto the already-passing backend, and do not add sibling-, label-, or coordinate-keyed branches.",
+  "perturbation_axes": [
+    "Rust backend selector: no component sibling versus top-level component sibling versus package/component ownership",
+    "symbol family: storage versus database and artifact versus rectangle",
+    "scope: root and nested containers",
+    "decoration: plain, stereotype, explicit color, and both",
+    "layout: top-to-bottom and left-to-right",
+    "topology: one child, multiple children, internal link, and root-to-sibling link",
+    "text: renamed bare and quoted AS-alias forms"
+  ],
+  "acceptance_evidence": [
+    "Parser tests prove brace-delimited storage/artifact keep exact ComponentPackageKind values while leaves keep ComponentElementKind values.",
+    "Renderer tests prove zero title supplements, Java text stacks, exact primitives, and primitive-specific painted bounds on the Component backend.",
+    "The preserved rejecting storage input passes without changing factory scoring.",
+    "Fresh valid held-outs force both Rust backends with unrelated sibling changes and preserve Java SVGs.",
+    "An independent checker rebuilds the exact revision and attempts to disprove cross-backend equivalence."
+  ]
+}
