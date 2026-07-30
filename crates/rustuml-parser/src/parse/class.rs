@@ -266,12 +266,15 @@ impl ClassParser {
     }
 
     fn register_quark_path(&mut self, path: &[String]) {
-        if !self
-            .quark_creation_order
-            .iter()
-            .any(|existing| existing == path)
-        {
-            self.quark_creation_order.push(path.to_vec());
+        for depth in 1..=path.len() {
+            let prefix = &path[..depth];
+            if !self
+                .quark_creation_order
+                .iter()
+                .any(|existing| existing == prefix)
+            {
+                self.quark_creation_order.push(prefix.to_vec());
+            }
         }
     }
 
@@ -368,11 +371,19 @@ impl ClassParser {
             .push(entity_id.to_string());
     }
 
-    /// `CucaDiagram#eventuallyBuildPhantomGroups` materializes every empty
-    /// parent quark when a class-like leaf is first created below it.
-    fn ensure_phantom_packages(&mut self, entity_path: &[String]) {
-        for depth in 1..entity_path.len() {
-            let path = entity_path[..depth].to_vec();
+    /// `CucaDiagram#eventuallyBuildPhantomGroups` scans every registered
+    /// data-less quark after a class-like leaf constructor. Quarks with
+    /// children become package entities in global Plasma creation order.
+    fn materialize_phantom_packages(&mut self) {
+        let paths = self.quark_creation_order.clone();
+        for path in paths {
+            let has_children = self
+                .quark_creation_order
+                .iter()
+                .any(|candidate| candidate.len() > path.len() && candidate.starts_with(&path));
+            if !has_children || self.entity_by_path.contains_key(&path) {
+                continue;
+            }
             if let Some(&idx) = self.package_by_path.get(&path) {
                 if self.packages[idx].phantom && self.packages[idx].source_line == 0 {
                     self.packages[idx].source_line = self.current_line;
@@ -381,8 +392,9 @@ impl ClassParser {
                 }
                 continue;
             }
-            let parent =
-                (depth > 1).then(|| self.package_by_path[&entity_path[..depth - 1].to_vec()]);
+            let parent = path
+                .split_last()
+                .and_then(|(_, parent)| self.package_by_path.get(parent).copied());
             let idx = self.packages.len();
             let name = self.path_id(&path);
             self.uid_events.push(ClassUidEvent::Package(name.clone()));
@@ -399,7 +411,6 @@ impl ClassParser {
             });
             self.package_paths.push(path.clone());
             self.package_by_path.insert(path.clone(), idx);
-            self.register_quark_path(&path);
         }
     }
 
@@ -411,10 +422,10 @@ impl ClassParser {
         explicit_alias: bool,
     ) -> String {
         let id = self.path_id(&path);
+        self.register_quark_path(&path);
         // `reallyCreateLeaf` consumes the entity UID before
-        // `eventuallyBuildPhantomGroups` materializes missing parent quarks.
+        // `eventuallyBuildPhantomGroups` performs its global quark sweep.
         self.uid_events.push(ClassUidEvent::Entity(id.clone()));
-        self.ensure_phantom_packages(&path);
         let idx = self.entities.len();
         self.entities.push(ClassEntity {
             id: id.clone(),
@@ -435,7 +446,7 @@ impl ClassParser {
             source_line: self.current_line,
         });
         self.entity_by_path.insert(path.clone(), idx);
-        self.register_quark_path(&path);
+        self.materialize_phantom_packages();
         self.register_entity_path(&path, &id);
         self.enroll_new_entity_in_current_together(&id);
         id
@@ -459,12 +470,25 @@ impl ClassParser {
         self.create_entity_at_path(path, label, kind, false)
     }
 
-    fn resolve_relationship_endpoint(&mut self, raw: &str) -> String {
+    fn relationship_endpoint_path(&self, raw: &str, quoted: bool) -> Vec<String> {
         // `CommandLinkClass#executeArg` calls
         // `CucaDiagram#quarkInContextSafe(true, endpoint)`. An existing group
         // quark is retained and may later be muted to `EMPTY_PACKAGE`; only a
         // genuinely missing quark is created as `LeafType.CLASS`.
+        if quoted {
+            let exact_path = self.resolve_quark_path(raw, QuarkLookup::ReuseUnique);
+            if self.entity_by_path.contains_key(&exact_path)
+                || self.package_by_path.contains_key(&exact_path)
+            {
+                return exact_path;
+            }
+            return self.resolve_quark_path(&strip_creole_for_id(raw), QuarkLookup::ReuseUnique);
+        }
         let path = self.resolve_quark_path(raw, QuarkLookup::ReuseUnique);
+        path
+    }
+
+    fn materialize_relationship_endpoint(&mut self, path: Vec<String>) -> String {
         if let Some(&idx) = self.entity_by_path.get(&path) {
             return self.entities[idx].id.clone();
         }
@@ -473,17 +497,6 @@ impl ClassParser {
         }
         let label = path.last().cloned().unwrap_or_default();
         self.create_entity_at_path(path, label, EntityKind::Class, false)
-    }
-
-    fn resolve_quoted_relationship_endpoint(&mut self, raw: &str) -> String {
-        let exact_path = self.resolve_quark_path(raw, QuarkLookup::ReuseUnique);
-        if let Some(&idx) = self.entity_by_path.get(&exact_path) {
-            return self.entities[idx].id.clone();
-        }
-        if let Some(&idx) = self.package_by_path.get(&exact_path) {
-            return self.packages[idx].name.clone();
-        }
-        self.resolve_relationship_endpoint(&strip_creole_for_id(raw))
     }
 
     fn resolve_note_target(&self, raw: &str) -> String {
@@ -1098,16 +1111,16 @@ impl ClassParser {
             } else {
                 relationship_length(rel_str)
             };
-            let mut from = if from_quoted.is_some() {
-                self.resolve_quoted_relationship_endpoint(from_raw)
-            } else {
-                self.resolve_relationship_endpoint(from_raw)
-            };
-            let mut to = if to_quoted.is_some() {
-                self.resolve_quoted_relationship_endpoint(to_raw)
-            } else {
-                self.resolve_relationship_endpoint(to_raw)
-            };
+            // Java's `CommandLinkClass` selects both endpoint quarks before
+            // either missing leaf constructor runs. The first constructor's
+            // phantom-group sweep can therefore materialize ancestors of the
+            // second endpoint before that endpoint consumes its own UID.
+            let from_path = self.relationship_endpoint_path(from_raw, from_quoted.is_some());
+            self.register_quark_path(&from_path);
+            let to_path = self.relationship_endpoint_path(to_raw, to_quoted.is_some());
+            self.register_quark_path(&to_path);
+            let mut from = self.materialize_relationship_endpoint(from_path);
+            let mut to = self.materialize_relationship_endpoint(to_path);
             let mut from_mult = from_mult;
             let mut to_mult = to_mult;
             if direction.is_some_and(QueueDirection::inverts_link) {
@@ -1149,8 +1162,12 @@ impl ClassParser {
                 .get(5)
                 .map(|m| m.as_str().trim().trim_matches('"').to_string());
 
-            let from = self.ensure_entity(from_raw);
-            let to = self.ensure_entity(to_raw);
+            let from_path = self.relationship_endpoint_path(from_raw, false);
+            self.register_quark_path(&from_path);
+            let to_path = self.relationship_endpoint_path(to_raw, false);
+            self.register_quark_path(&to_path);
+            let from = self.materialize_relationship_endpoint(from_path);
+            let to = self.materialize_relationship_endpoint(to_path);
 
             self.push_relationship(Relationship {
                 from,
@@ -3019,6 +3036,73 @@ mod tests {
             [
                 "telemetry.pipeline.archive.FreshPacket1301",
                 "telemetry.pipeline.archive.FreshLedger1303"
+            ]
+        );
+    }
+
+    #[test]
+    fn relationship_preselects_both_quarks_before_phantom_constructors() {
+        let d = parse(
+            "Client --> Outer.Ui.Facade.Controller\n\
+             frame Outer.Ui.Facade as \"UI Facade\" {\n\
+               class Controller\n\
+             }\n\
+             class Client",
+        );
+        let events = d
+            .uid_events
+            .iter()
+            .map(|event| match event {
+                ClassUidEvent::Package(name) => format!("package:{name}"),
+                ClassUidEvent::Entity(id) => format!("entity:{id}"),
+                ClassUidEvent::Relationship(index) => format!("relationship:{index}"),
+                ClassUidEvent::Note { .. }
+                | ClassUidEvent::DiscardedRelationship { .. }
+                | ClassUidEvent::Association(_) => "other".to_string(),
+            })
+            .collect::<Vec<_>>();
+
+        assert_eq!(
+            events,
+            [
+                "entity:Client",
+                "package:Outer",
+                "package:Outer.Ui",
+                "package:Outer.Ui.Facade",
+                "entity:Outer.Ui.Facade.Controller",
+                "relationship:0",
+            ]
+        );
+        assert_eq!(d.packages[2].display_name.as_deref(), Some("Facade"));
+    }
+
+    #[test]
+    fn preselected_custom_separator_paths_share_one_phantom_sweep() {
+        let d = parse(
+            "set namespaceSeparator ::\n\
+             Left::Branch::Leaf --> Right::Wing::Target",
+        );
+        let events = d
+            .uid_events
+            .iter()
+            .filter_map(|event| match event {
+                ClassUidEvent::Package(name) => Some(format!("package:{name}")),
+                ClassUidEvent::Entity(id) => Some(format!("entity:{id}")),
+                ClassUidEvent::Relationship(index) => Some(format!("relationship:{index}")),
+                _ => None,
+            })
+            .collect::<Vec<_>>();
+
+        assert_eq!(
+            events,
+            [
+                "entity:Left::Branch::Leaf",
+                "package:Left",
+                "package:Left::Branch",
+                "package:Right",
+                "package:Right::Wing",
+                "entity:Right::Wing::Target",
+                "relationship:0",
             ]
         );
     }
