@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-together-structural-layout",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "net.sourceforge.plantuml.descdiagram.command.CommandTogether#executeArg",
+    "net.atmp.CucaDiagram#gotoTogether",
+    "net.atmp.CucaDiagram#gotoGroup",
+    "net.atmp.CucaDiagram#endGroup",
+    "net.sourceforge.plantuml.abel.Together",
+    "net.sourceforge.plantuml.svek.Cluster#printCluster2",
+    "net.sourceforge.plantuml.svek.Cluster#printTogether",
+    "net.atmp.CucaDiagram#applySingleStrategy",
+    "net.sourceforge.plantuml.cucadiagram.Magma#putInSquare",
+    "net.sourceforge.plantuml.cucadiagram.SquareMaker#putInSquare",
+    "net.sourceforge.plantuml.svek.SvekResult#calculateDimension"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/diagram/class.rs::TogetherGroup",
+    "crates/rustuml-parser/src/diagram/class.rs::ClassDiagram::together",
+    "crates/rustuml-parser/src/parse/class.rs::ClassScope",
+    "crates/rustuml-parser/src/parse/class.rs::ClassParser::try_together",
+    "crates/rustuml-parser/src/parse/class.rs::ClassParser::try_package",
+    "crates/rustuml-render/src/class.rs::build_layout_graph",
+    "crates/rustuml-render/src/class.rs::apply_single_strategy",
+    "crates/rustuml-layout/src/graph.rs::LayoutGraph::add_together",
+    "crates/rustuml-layout/src/graph.rs::LayoutGraph::add_together_node",
+    "crates/rustuml-layout/src/graph.rs::LayoutGraph::add_together_cluster",
+    "crates/rustuml-layout/src/graph.rs::LayoutGraph::solve"
+  ],
+  "invariant": "A class-diagram together block is structural layout state with lexical nesting. Each leaf and child package created while the block is active belongs to that exact Together object, nested together blocks retain their parent, and sibling blocks remain siblings after a close. Cluster.printCluster2 emits ordinary nodes first and then root Together subgraphs in first-seen order; printTogether recursively emits direct leaves, direct child clusters, and child Together objects. The invisible subgraphs constrain Graphviz placement but contribute no painted geometry to SvekResult.calculateDimension. CucaDiagram.applySingleStrategy appends Magma/SquareMaker invisible links only after user links have been collected, so generated link insertion order is part of the layout model.",
+  "causal_divergence": "Rust previously discarded class together blocks during parsing, so class leaves and packages had no Together identity, parent relation, or direct-membership boundary. The renderer therefore flattened every block into its package, and the layout graph could neither reproduce Java's nested invisible subgraphs nor their dot statement order. Independently, Rust registered generated SquareMaker links before user relationships and allowed the invisible Together envelope to affect final canvas normalization, while Java appends those links in applySingleStrategy and SvekResult measures only painted shapes. These data-flow and phase-order differences explain the two failing exact outputs; no label, fixture path, coordinate, or expected SVG is involved.",
+  "planned_change": "Carry Together identity through the class parser as an indexed lexical scope graph recording parent, owning package, direct entities, and direct child packages. Translate that graph into LayoutGraph Together specifications, emit ordinary nodes and then nested Together subgraphs in Java's first-seen structural order, append Magma/SquareMaker invisible links after user links, and exclude invisible Together-only envelopes from painted canvas bounds. Keep scope closure derived from one authoritative stack so release builds cannot compile away a required pop. Validate renamed sibling and nested groups, package ownership, declaration order, topology, and direction without reading golden output in shipping code.",
+  "perturbation_axes": [
+    "renamed labels and aliases",
+    "sibling together blocks crossed with nested together blocks",
+    "top-level ownership crossed with package-owned groups",
+    "direct leaves crossed with child packages and empty packages",
+    "declaration order and user relationship order",
+    "three, four, and five standalone entities exercising SquareMaker branch shape",
+    "top-to-bottom crossed with left-to-right direction"
+  ],
+  "protocol_timing": {
+    "status": "grandfathered-work-in-progress",
+    "note": "The implementation was already present as uncommitted work when the three-commit maker/checker protocol became active in this task. This account is intentionally not represented as pre-implementation evidence. The mechanism must still survive an independent adversarial review and held-out perturbations, but it does not satisfy the protocol's historical account-before-code ancestry requirement."
+  }
+}
