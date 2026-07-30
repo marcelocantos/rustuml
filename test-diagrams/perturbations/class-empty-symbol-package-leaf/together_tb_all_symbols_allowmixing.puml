@@ -1,0 +1,25 @@
+@startuml
+allowmixing
+class TogetherAnchor9501
+together {
+  folder TogetherFolder9503 {
+  }
+  frame TogetherFrame9505 {
+  }
+  node TogetherNode9507 {
+  }
+  database TogetherDatabase9509 {
+  }
+  rectangle TogetherRectangle9511 {
+  }
+  cloud TogetherCloud9513 {
+  }
+  package TogetherOrdinary9515 {
+  }
+}
+package FilledNeighbor9517 {
+  class FilledLeaf9519
+}
+class TogetherTail9521
+TogetherAnchor9501 --> TogetherTail9521
+@enduml

@@ -1,0 +1,24 @@
+@startuml
+class TogetherAnchor8301
+together {
+  folder TogetherFolder8303 {
+  }
+  frame TogetherFrame8305 {
+  }
+  node TogetherNode8307 {
+  }
+  database TogetherDatabase8309 {
+  }
+  rectangle TogetherRectangle8311 {
+  }
+  cloud TogetherCloud8313 {
+  }
+  package TogetherOrdinary8315 {
+  }
+}
+package FilledNeighbor8317 {
+  class FilledLeaf8319
+}
+class TogetherTail8321
+TogetherAnchor8301 --> TogetherTail8321
+@enduml

@@ -1,0 +1,186 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-empty-symbol-package-leaf",
+  "reviewer": {
+    "task_id": "codex-desktop-task-019ee369-54e2-7203-afce-ddde7bfe1723-independent-adversarial-checker",
+    "identity": "independent adversarial checker",
+    "model": "gpt-5.6-terra",
+    "tool": "Codex desktop; Java PlantUML picoweb oracle; exact supplied diff_one --no-oracle binary"
+  },
+  "verdict": "REJECTED",
+  "revisions": {
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "rust_revision_requested_and_audited": "18dcd865703088a6ef78c980085db2dd7ac81ebe",
+    "rust_tree_requested_and_audited": "3c685815718dd2b21ff94cf99baf617a3b684c31",
+    "account_commit": "3a614bb347588c3eb025e6d080f93416a4c6e1f1",
+    "named_implementation_commits": [
+      "e60822ee0e53482acb688cd70323d01a40076b6c",
+      "1546e80093f2047b5aea41a3e74c5fe2e041c7dd",
+      "9aa8c1073ebff44c19c0da2386a4db4b62ff3d07"
+    ],
+    "pinned_history_equivalent_commits": [
+      "b594f227 (same stable patch ID as e60822ee)",
+      "545b0abf (same stable patch ID as 1546e800)",
+      "3d062200 (same stable patch ID as 9aa8c107)"
+    ],
+    "checkout_observed_at_final_audit": "6375646049d2188af3db85571a490ee07e4e7f23",
+    "checkout_drift_note": "The detached checkout advanced after the requested revision was audited. No Cargo or rustc command was run, and every product comparison used the exact prebuilt helper supplied for this review. This record attests the user-specified 18dcd865 source audit and the hash-identified helper, not the later checkout."
+  },
+  "artifact_hashes": {
+    "account_json_sha256": "ce9842c3b191b1e776f451ab766ac9bea09d0d82e6f13e767299d08d4d0a9f20",
+    "java_jar": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+    },
+    "diff_one": {
+      "path": "/tmp/rustuml-checker-1482/target/release/examples/diff_one",
+      "sha256": "0eef16f728ffef2c8852105ff5036d8fa4ca946bf920a4960aad5bfdbbfc4c8a"
+    }
+  },
+  "no_cargo_or_rustc": true,
+  "commands": [
+    "git show 18dcd865:docs/parity-reviews/class-empty-symbol-package-leaf/account.json",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/GeneralImageBuilder.java",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbol{Folder,Frame,Node,Database,Rectangle,Cloud}.java",
+    "git show 18dcd865:crates/rustuml-render/src/class.rs | rg -n 'PackageRenderRole|SymbolLeaf|EmptyLeaf|explicit_package_symbol_kind|empty_package_dims|add_together_node|svek_node_emission_order'",
+    "git patch-id --stable for b594f227/e60822ee, 545b0abf/1546e800, and 3d062200/9aa8c107",
+    "curl --fail-with-body -sS -X POST http://127.0.0.1:8787/render -H 'content-type: application/json' --data $(jq -n --rawfile source INPUT '{source: $source, options: [\"-tsvg\"]}') > OUTPUT.svg",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle each test-diagrams/perturbations/class-empty-symbol-package-leaf/*.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle each prescribed existing control",
+    "xmllint --noout test-diagrams/perturbations/class-empty-symbol-package-leaf/*.svg",
+    "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"|an error has occured|\\[From string' test-diagrams/perturbations/class-empty-symbol-package-leaf -g '*.svg'",
+    "shasum -a 256 docs/parity-reviews/class-empty-symbol-package-leaf/account.json /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar target/release/examples/diff_one",
+    "git diff --check 3a614bb3..18dcd865"
+  ],
+  "model_audit": {
+    "java": [
+      "GraphvizImageBuilder#printGroups mutates directly empty PACKAGE groups to EMPTY_PACKAGE before GeneralImageBuilder creates the image.",
+      "GeneralImageBuilder#createEntityImageBlock dispatches EMPTY_PACKAGE with a non-null USymbol to EntityImageDescription, and only a null symbol to EntityImageEmptyPackage.",
+      "USymbolFolder, USymbolFrame, USymbolNode, USymbolDatabase, USymbolRectangle, and USymbolCloud each supply a distinct asSmall margin/title model; Cloud additionally uses its prescribed seeded shape generation.",
+      "Cluster#getNodesOrderedWithoutTop and Cluster#printTogether preserve the direct Together node order before nested clusters; Together is therefore a necessary ownership/order surface, not merely a layout option."
+    ],
+    "rust": [
+      "The pinned source splits PackageRenderRole::SymbolLeaf from ::EmptyLeaf, routes explicit package kinds through explicit_package_symbol_kind, and carries both through Svek node emission, parent-cluster insertion, and Together membership.",
+      "The pinned source has no inspected production references to this checker directory, golden SVG input, the fresh labels, include_str/include_bytes, coordinate-keyed SVG surgery, or new unexplained decimal constants.",
+      "The account omits the exact Java locations for USymbolDatabase, USymbolRectangle, and USymbolCloud even though it claims all six; this documentation gap is not the rejection basis."
+    ]
+  },
+  "inputs": [
+    {
+      "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/root_tb_short_all_symbols.puml",
+      "golden": "test-diagrams/perturbations/class-empty-symbol-package-leaf/root_tb_short_all_symbols.svg",
+      "axes": ["all six explicit symbols", "ordinary empty package control", "root ownership", "TB", "short renamed labels", "declaration order", "neighboring filled group", "no Together"],
+      "result": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/nested_tb_long_labels_allowmixing.puml",
+      "golden": "test-diagrams/perturbations/class-empty-symbol-package-leaf/nested_tb_long_labels_allowmixing.svg",
+      "axes": ["all six explicit symbols", "ordinary empty package control", "nested ownership", "TB", "long renamed labels", "declaration reordering", "neighboring filled group", "allowmixing forces class dispatch"],
+      "result": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/lr_folder_frame_node_allowmixing.puml",
+      "golden": "test-diagrams/perturbations/class-empty-symbol-package-leaf/lr_folder_frame_node_allowmixing.svg",
+      "axes": ["folder/frame/node subset", "ordinary empty package control", "nested ownership", "LR", "long renamed labels", "declaration reordering", "neighboring filled group", "allowmixing forces class dispatch"],
+      "result": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/ordinary_empty_package_valid_control.puml",
+      "golden": "test-diagrams/perturbations/class-empty-symbol-package-leaf/ordinary_empty_package_valid_control.svg",
+      "axes": ["ordinary empty package only", "filled neighboring group", "valid class dispatch"],
+      "result": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/together_folder_ordinary_allowmixing.puml",
+      "golden": "test-diagrams/perturbations/class-empty-symbol-package-leaf/together_folder_ordinary_allowmixing.svg",
+      "axes": ["direct Together ownership", "folder plus ordinary empty package", "TB", "allowmixing forces class dispatch"],
+      "result": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/together_tb_all_symbols_allowmixing.puml",
+      "golden": "test-diagrams/perturbations/class-empty-symbol-package-leaf/together_tb_all_symbols_allowmixing.svg",
+      "axes": ["all six explicit symbols", "ordinary empty package control", "root direct Together ownership", "TB", "short renamed labels", "declaration order", "neighboring filled group", "allowmixing forces class dispatch"],
+      "result": "fail: both sides are CLASS, but Java is 1867 by 215 while Rust is 1852 by 215. Java places the ordinary empty package at x=1691.19 after the symbol leaves; Rust paints it at x=206.1899 before them. This is a mechanism-relevant Together ordering/ownership counterexample.",
+      "counterexample": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/stereotyped_package_symbols_valid.puml",
+      "golden": "test-diagrams/perturbations/class-empty-symbol-package-leaf/stereotyped_package_symbols_valid.svg",
+      "axes": ["all six explicit symbols via package stereotypes", "ordinary empty package carrying a non-symbol stereotype", "filled neighboring group", "root ownership"],
+      "result": "fail: the ordinary <<Application>> package stereotype text is x=1441.5498 in Java and x=1437.5542 in Rust. The claimed ordinary EntityImageEmptyPackage-style branch does not preserve this visible stereotype placement.",
+      "counterexample": true
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/lr_folder_frame_node_ordinary.puml",
+      "golden": "test-diagrams/perturbations/class-empty-symbol-package-leaf/lr_folder_frame_node_ordinary.svg",
+      "result": "diagnostic only: Java is CLASS and Rust selects DESCRIPTION; not used as a mechanism verdict because class forcing is absent."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/nested_lr_long_labels_reordered.puml",
+      "golden": "test-diagrams/perturbations/class-empty-symbol-package-leaf/nested_lr_long_labels_reordered.svg",
+      "result": "diagnostic only: Java is CLASS and Rust selects DESCRIPTION; not used as a mechanism verdict because class forcing is absent."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/nested_tb_long_labels_reordered.puml",
+      "golden": "test-diagrams/perturbations/class-empty-symbol-package-leaf/nested_tb_long_labels_reordered.svg",
+      "result": "diagnostic only: Java is CLASS and Rust selects DESCRIPTION; not used as a mechanism verdict because class forcing is absent."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/together_folder_ordinary_minimal.puml",
+      "golden": "test-diagrams/perturbations/class-empty-symbol-package-leaf/together_folder_ordinary_minimal.svg",
+      "result": "diagnostic only: Java is CLASS and Rust selects DESCRIPTION; not used as a mechanism verdict because class forcing is absent."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/together_lr_nested_reordered.puml",
+      "golden": "test-diagrams/perturbations/class-empty-symbol-package-leaf/together_lr_nested_reordered.svg",
+      "result": "diagnostic only: Java is CLASS and Rust selects DESCRIPTION; not used as a mechanism verdict because class forcing is absent."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/together_tb_all_symbols_root.puml",
+      "golden": "test-diagrams/perturbations/class-empty-symbol-package-leaf/together_tb_all_symbols_root.svg",
+      "result": "diagnostic duplicate of the valid allowmixing all-six Together counterexample; it fails with the same canvas and direct-node ordering divergence."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/ordinary_empty_root_control.puml",
+      "golden": "test-diagrams/perturbations/class-empty-symbol-package-leaf/ordinary_empty_root_control.svg",
+      "result": "excluded: Java oracle reports a syntax error; preserved to document the rejected probe."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-symbol-package-leaf/stereotyped_package_symbols.puml",
+      "golden": "test-diagrams/perturbations/class-empty-symbol-package-leaf/stereotyped_package_symbols.svg",
+      "result": "excluded: Java oracle reports a syntax error; preserved to document the rejected probe."
+    }
+  ],
+  "existing_controls": [
+    {
+      "source": "test-diagrams/perturbations/class-together-structural-layout/review2_control_frame_folder_node_no_together.puml",
+      "result": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-together-structural-layout/review2_frame_folder_node_together_order.puml",
+      "result": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-svek-bibliotekon-order/review_10a16ee3_lr_together_nested_empty_order.puml",
+      "result": "pass: SVGs are structurally equivalent; this is the previously passing ordinary nested empty-package Together control."
+    }
+  ],
+  "counts": {
+    "fresh_pairs_preserved": 15,
+    "fresh_valid_class_forced_or_unambiguous_pairs": 7,
+    "fresh_valid_passes": 5,
+    "fresh_mechanism_relevant_failures": 2,
+    "diagnostic_pairs_excluded_from_verdict": 8,
+    "existing_controls_passed": 3,
+    "all_generated_svg_well_formed_xml": true,
+    "generated_java_error_svgs": 2
+  },
+  "findings": [
+    "The all-six direct Together perturbation rejects the core claim that SymbolLeaf and EmptyLeaf share Java's direct-node ordering. Java preserves the declaration order through Cluster#printTogether; Rust moves the ordinary empty package ahead of the six explicit symbol leaves, changing the canvas and all downstream positions.",
+    "The valid non-symbol-stereotype control rejects the claimed ordinary branch fidelity: symbol-free empty package emission does not preserve the Java placement of an ordinary package's visible stereotype.",
+    "The five passing valid held-outs show that symbol geometry itself generalizes across root/nested ownership, TB/LR, renamed labels, a filled neighbor, all six symbols, and a simple folder-plus-ordinary Together case. They do not outweigh the two fresh counterexamples.",
+    "Static inspection found no fixture-shaped code, golden-data reads, coordinate-keyed SVG surgery, unexplained high-precision parity constant, baseline edit, or guard/comparator modification in the audited mechanism. The rejection is a model-completeness failure, not an overfit finding.",
+    "All generated SVGs are well-formed XML. Two exploratory inputs have Java syntax-error SVGs and are explicitly excluded; every valid Java pair is retained, including both failing counterexamples."
+  ]
+}

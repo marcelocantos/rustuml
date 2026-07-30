@@ -1,0 +1,11 @@
+@startuml
+class TogetherAnchor9101
+together {
+  folder "Together folder 9103" {
+  }
+  package "Together ordinary package 9105" {
+  }
+}
+class TogetherTail9107
+TogetherAnchor9101 --> TogetherTail9107
+@enduml

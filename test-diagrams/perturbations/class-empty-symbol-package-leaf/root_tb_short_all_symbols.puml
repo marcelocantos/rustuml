@@ -1,0 +1,22 @@
+@startuml
+class RootAnchor8101
+folder F8103 {
+}
+frame Fr8105 {
+}
+node N8107 {
+}
+database D8109 {
+}
+rectangle R8111 {
+}
+cloud C8113 {
+}
+package P8115 {
+}
+package Filled8117 {
+  class FilledLeaf8119
+}
+class RootTail8121
+RootAnchor8101 --> RootTail8121
+@enduml

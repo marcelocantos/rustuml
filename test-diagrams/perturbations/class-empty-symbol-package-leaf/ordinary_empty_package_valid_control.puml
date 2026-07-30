@@ -1,0 +1,10 @@
+@startuml
+class OrdinaryAnchor8901
+package "Ordinary empty package control 8903" {
+}
+package FilledNeighbor8905 {
+  class FilledLeaf8907
+}
+class OrdinaryTail8909
+OrdinaryAnchor8901 --> OrdinaryTail8909
+@enduml

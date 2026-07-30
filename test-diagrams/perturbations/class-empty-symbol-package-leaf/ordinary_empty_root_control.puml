@@ -1,0 +1,13 @@
+@startuml
+left to right direction
+package "Ordinary empty package control 8601" {
+}
+namespace "Ordinary empty namespace control 8603" {
+}
+package FilledNeighbor8605 {
+  class FilledLeaf8607
+}
+class OrdinaryAnchor8609
+class OrdinaryTail8611
+OrdinaryAnchor8609 --> OrdinaryTail8611
+@enduml

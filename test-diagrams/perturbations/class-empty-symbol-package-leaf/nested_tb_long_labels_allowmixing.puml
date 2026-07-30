@@ -1,0 +1,25 @@
+@startuml
+allowmixing
+package "Outer Ownership 9201" {
+  class OuterAnchor9203
+  cloud "Cloud label deliberately much wider 9205" {
+  }
+  rectangle "Rectangle label deliberately much wider 9207" {
+  }
+  database "Database label deliberately much wider 9209" {
+  }
+  node "Node label deliberately much wider 9211" {
+  }
+  frame "Frame label deliberately much wider 9213" {
+  }
+  folder "Folder label deliberately much wider 9215" {
+  }
+  package "Ordinary empty package remains a tab 9217" {
+  }
+  package FilledNeighbor9219 {
+    class FilledLeaf9221
+  }
+}
+class OutsideTail9223
+OuterAnchor9203 --> OutsideTail9223
+@enduml

@@ -1,0 +1,22 @@
+@startuml
+class StereotypeAnchor8501
+package "Stereotype Folder 8503" <<folder>> {
+}
+package "Stereotype Frame 8505" <<frame>> {
+}
+package "Stereotype Node 8507" <<node>> {
+}
+package "Stereotype Database 8509" <<database>> {
+}
+package "Stereotype Rectangle 8511" <<rectangle>> {
+}
+namespace "Stereotype Cloud 8513" <<cloud>> {
+}
+package "Stereotype Ordinary 8515" <<Application>> {
+}
+package FilledNeighbor8517 {
+  class FilledLeaf8519
+}
+class StereotypeTail8521
+StereotypeAnchor8501 --> StereotypeTail8521
+@enduml

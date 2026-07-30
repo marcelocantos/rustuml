@@ -1,0 +1,27 @@
+@startuml
+left to right direction
+package TogetherOwner8401 {
+  class TogetherOwnerAnchor8403
+  together {
+    cloud "Reordered cloud label 8405" {
+    }
+    database "Reordered database label 8407" {
+    }
+    node "Reordered node label 8409" {
+    }
+    folder "Reordered folder label 8411" {
+    }
+    rectangle "Reordered rectangle label 8413" {
+    }
+    frame "Reordered frame label 8415" {
+    }
+    package "Reordered ordinary package 8417" {
+    }
+  }
+  package FilledNeighbor8419 {
+    class FilledLeaf8421
+  }
+}
+class TogetherOutside8423
+TogetherOwnerAnchor8403 --> TogetherOutside8423
+@enduml

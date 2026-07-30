@@ -1,0 +1,18 @@
+@startuml
+allowmixing
+class LeftRightAnchor9301
+left to right direction
+folder "Long folder label 9303" {
+}
+frame "Long frame label 9305" {
+}
+node "Long node label 9307" {
+}
+package "Ordinary empty package 9309" {
+}
+package FilledNeighbor9311 {
+  class FilledLeaf9313
+}
+class LeftRightTail9315
+LeftRightAnchor9301 --> LeftRightTail9315
+@enduml
