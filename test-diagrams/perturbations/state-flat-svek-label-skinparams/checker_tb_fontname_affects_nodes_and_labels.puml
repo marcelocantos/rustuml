@@ -1,0 +1,9 @@
+@startuml
+top to bottom direction
+skinparam fontName Courier New
+skinparam defaultFontSize 14
+skinparam ArrowFontColor #884422
+state "Wide Courier State" as Wide
+state "Narrow State" as Narrow
+Wide --> Narrow : node and arrow fonts share defaults\nsecond line
+@enduml

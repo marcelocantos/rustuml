@@ -1,0 +1,10 @@
+@startuml
+top to bottom direction
+skinparam ArrowFontName sans-serif
+skinparam ArrowFontSize 9
+skinparam defaultTextAlignment center
+state "Origin" as Origin
+state "Lower Target" as Target
+Origin --> Target : tiny ordinary label
+Target --> Target : tiny self label\nunder target
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+skinparam State.Arrow_Font.Name Courier New
+skinparam State.Arrow_Font.Size 11
+skinparam State.Message_Alignment left
+skinparam default.text.align right
+state "First Relay" as First
+state "Second Relay" as Second
+First --> Second : prefix row\rnatural right row
+@enduml

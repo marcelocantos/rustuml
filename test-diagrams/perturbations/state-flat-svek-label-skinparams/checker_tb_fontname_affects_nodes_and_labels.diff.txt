@@ -1,0 +1,35 @@
+SVG structural differences:
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "STATE"), ("height", "215px"), ("preserveAspectRatio", "none"), ("style", "width:343px;height:215px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 343 215"), ("width", "343px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "STATE"), ("height", "214px"), ("preserveAspectRatio", "none"), ("style", "width:403px;height:214px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 403 214"), ("width", "403px"), ("zoomAndPan", "magnify")]
+  [4] <rect> attr mismatch:
+    expected: [("fill", "#F1F1F1"), ("height", "50"), ("rx", "12.5"), ("ry", "12.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "145.3164"), ("x", "7"), ("y", "7")]
+    actual:   [("fill", "#F1F1F1"), ("height", "50"), ("rx", "12.5"), ("ry", "12.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "171.2246"), ("x", "7"), ("y", "7")]
+  [5] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "7"), ("x2", "152.3164"), ("y1", "33.4883"), ("y2", "33.4883")]
+    actual:   [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "7"), ("x2", "178.2246"), ("y1", "32.8594"), ("y2", "32.8594")]
+  [6] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "125.3164"), ("x", "17"), ("y", "25.5352")]
+    actual:   [("fill", "#000000"), ("font-family", "Courier New"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "151.2246"), ("x", "17"), ("y", "23.6553")]
+  [8] <rect> attr mismatch:
+    expected: [("fill", "#F1F1F1"), ("height", "50"), ("rx", "12.5"), ("ry", "12.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "106.8916"), ("x", "26.21"), ("y", "151")]
+    actual:   [("fill", "#F1F1F1"), ("height", "50"), ("rx", "12.5"), ("ry", "12.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "120.8164"), ("x", "32.2"), ("y", "150")]
+  [9] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "26.21"), ("x2", "133.1016"), ("y1", "177.4883"), ("y2", "177.4883")]
+    actual:   [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "32.2"), ("x2", "153.0164"), ("y1", "175.8594"), ("y2", "175.8594")]
+  [10] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "86.8916"), ("x", "36.21"), ("y", "169.5352")]
+    actual:   [("fill", "#000000"), ("font-family", "Courier New"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "100.8164"), ("x", "42.2"), ("y", "166.6553")]
+  [12] <path> attr mismatch:
+    expected: [("d", "M79.66,57.41 C79.66,83.58 79.66,118.86 79.66,144.91"), ("fill", "none"), ("id", "Wide-to-Narrow"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("d", "M92.61,57.24 C92.61,83.06 92.61,117.72 92.61,143.61"), ("fill", "none"), ("id", "Wide-to-Narrow"), ("style", "stroke:#181818;stroke-width:1;")]
+  [13] <polygon> attr mismatch:
+    expected: [("fill", "#181818"), ("points", "79.66,150.91,83.66,141.91,79.66,145.91,75.66,141.91,79.66,150.91"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("fill", "#181818"), ("points", "92.61,149.61,96.61,140.61,92.61,144.61,88.61,140.61,92.61,149.61"), ("style", "stroke:#181818;stroke-width:1;")]
+  [14] <text> attr mismatch:
+    expected: [("fill", "#884422"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "246.3467"), ("x", "80.66"), ("y", "101.5352")]
+    actual:   [("fill", "#884422"), ("font-family", "Courier New"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "294.0479"), ("x", "93.61"), ("y", "99.6553")]
+  [15] <text> attr mismatch:
+    expected: [("fill", "#884422"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "77.2188"), ("x", "165.224"), ("y", "118.0234")]
+    actual:   [("fill", "#884422"), ("font-family", "Courier New"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "92.415"), ("x", "194.4264"), ("y", "115.5146")]
+

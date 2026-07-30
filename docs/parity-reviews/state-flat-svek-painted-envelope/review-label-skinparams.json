@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-flat-svek-painted-envelope-label-skinparams",
+  "checker": {
+    "identity": "Codex GPT-5 independent adversarial checker",
+    "implemented_mechanism": false,
+    "date": "2026-07-31",
+    "mode": "adversarial maker-checker review"
+  },
+  "revisions": {
+    "rust_review_revision": "e00d68f839d2a173ec214480f41b6f92fb3f8460",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "plantuml_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "comparator": "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one",
+    "comparator_sha256": "e830cc00b0d2c2d0758ef11dd013dbcf18fc2aa4d34bef107a958cc92a849bd8"
+  },
+  "documents_read": [
+    "AGENTS.md parity rules",
+    "docs/parity-reviews/state-flat-svek-painted-envelope/account.json",
+    "docs/parity-reviews/state-flat-svek-painted-envelope/account-label-skinparams.json",
+    "git diff e00d68f839d2a173ec214480f41b6f92fb3f8460^ e00d68f839d2a173ec214480f41b6f92fb3f8460 -- crates/rustuml-render/src/state.rs"
+  ],
+  "source_inspection": {
+    "java": [
+      "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java:285-297 resolves label Display with message alignment and font",
+      "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java:356-366 wraps labels with one-pixel or six-pixel margin",
+      "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java:369-373 resolves stateMessageAlignment for state links",
+      "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java:944-947 paints the resolved label block at the solved label origin",
+      "src/main/java/net/sourceforge/plantuml/klimt/shape/TextBlockMarged.java:73-86 draws UEmpty for the complete margin box before child text",
+      "src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java:150-152 includes the UEmpty rectangle",
+      "src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java:203-210 includes UText from baseline-height+1.5 to baseline+1.5"
+    ],
+    "rust": [
+      "crates/rustuml-render/src/state.rs::has_only_flat_label_skinparams admits a fixed legacy skinparam allowlist",
+      "crates/rustuml-render/src/state.rs::StateArrowFont::from_skinparams resolves font family, size, style, color, padding, and alignment",
+      "crates/rustuml-render/src/state.rs::StateTransitionLabelBlock::measure computes row widths/heights without an italic metric input",
+      "crates/rustuml-render/src/state.rs flat_painted_bounds includes label wrapper and added visible-text y range"
+    ]
+  },
+  "commands": [
+    "git worktree add --detach /tmp/rustuml-check-state-flat-svek-label-skinparams e00d68f839d2a173ec214480f41b6f92fb3f8460",
+    "shasum -a 256 /tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one",
+    "java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -version",
+    "java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/state-flat-svek-label-skinparams/*.puml",
+    "for f in test-diagrams/perturbations/state-flat-svek-label-skinparams/*.puml; do stem=${f%.puml}; /tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle \"$f\" > \"$stem.diff.txt\" 2>&1; rc=$?; printf '%s exit=%s\\n' \"$f\" \"$rc\"; /tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle --print-rust \"$f\" > \"$stem.rust.svg\" 2> \"$stem.rust.err\"; done"
+  ],
+  "constraints_observed": {
+    "ran_cargo": false,
+    "ran_rustc": false,
+    "edited_shipping_code": false,
+    "edited_accounts": false
+  },
+  "perturbation_directory": "test-diagrams/perturbations/state-flat-svek-label-skinparams",
+  "results": [
+    {
+      "stem": "checker_lr_courier_right_multirow",
+      "axes": ["left-to-right", "Courier New", "font size 15", "bold", "right alignment", "multi-row ordinary label"],
+      "comparator": "PASS"
+    },
+    {
+      "stem": "checker_tb_verdana_default_left_natural",
+      "axes": ["top-to-bottom", "defaultFontName Verdana", "font size 16", "defaultTextAlignment", "natural left row override"],
+      "comparator": "PASS"
+    },
+    {
+      "stem": "checker_lr_italic_self_and_ordinary",
+      "axes": ["left-to-right", "Times New Roman", "font size 18", "italic", "ordinary link", "self link"],
+      "comparator": "FAIL",
+      "failure_summary": "Java emits smaller italic Times New Roman textLength values and routes narrower label boxes; Rust emits wider italic text and a 453x159 canvas versus Java 420x158."
+    },
+    {
+      "stem": "checker_tb_bold_italic_reset_up_down",
+      "axes": ["direction reset to top-to-bottom", "Courier New", "bold italic", "up arrow", "down arrow", "labels above and below nodes"],
+      "comparator": "PASS"
+    },
+    {
+      "stem": "checker_lr_dotted_keys_natural_right",
+      "axes": ["left-to-right", "dotted and underscored skinparam spellings", "Courier New", "font size 11", "natural right row override"],
+      "comparator": "FAIL",
+      "failure_summary": "Java shifts the complete diagram down by 0.8032 pixels; Rust leaves nodes, path, arrowhead, and label text at the unshifted y origin, so the visible text ascent is still not fully reflected in the flat painted bounds for this small-font case."
+    },
+    {
+      "stem": "checker_tb_fontname_affects_nodes_and_labels",
+      "axes": ["top-to-bottom", "fontName Courier New", "defaultFontSize 14", "arrow font color", "node and transition labels"],
+      "comparator": "FAIL",
+      "failure_summary": "Rust admits and applies legacy fontName to state and transition fonts, but Java leaves this state diagram on sans-serif; Rust reports 403x214 with Courier labels versus Java 343x215 with sans-serif labels."
+    },
+    {
+      "stem": "checker_lr_self_natural_right_empty_row",
+      "axes": ["left-to-right", "Courier New", "self link", "natural right row override", "empty display row"],
+      "comparator": "PASS"
+    },
+    {
+      "stem": "checker_tb_sans_small_self_below",
+      "axes": ["top-to-bottom", "sans-serif", "font size 9", "ordinary link", "self link", "label below node"],
+      "comparator": "PASS"
+    },
+    {
+      "stem": "checker_negative_unknown_key_stays_fallback",
+      "axes": ["unsupported unknown skinparam", "negative control", "ordinary link"],
+      "comparator": "PASS",
+      "inspection": "has_only_flat_label_skinparams does not admit unknownstatepainter, so the negative control remains outside the broadened flat capability."
+    }
+  ],
+  "findings": [
+    {
+      "severity": "rejecting",
+      "counterexample": "checker_lr_italic_self_and_ordinary",
+      "finding": "The account admits StateArrowFontStyle/ArrowFontStyle, including italic, but StateTransitionLabelBlock measures row widths and heights without passing italic to the text metrics. Java's italic Times New Roman widths are materially narrower than Rust's emitted widths, changing Graphviz label boxes, route geometry, canvas dimensions, and final textLength values."
+    },
+    {
+      "severity": "rejecting",
+      "counterexample": "checker_tb_fontname_affects_nodes_and_labels",
+      "finding": "The flat allowlist admits fontName. In the pinned Java oracle, skinparam fontName Courier New does not change these state node or transition label fonts, while Rust applies Courier New through StateArrowFont and state node font resolution. This is an unsupported key admitted by the capability predicate."
+    },
+    {
+      "severity": "rejecting",
+      "counterexample": "checker_lr_dotted_keys_natural_right",
+      "finding": "A fresh valid small Courier label using normalized dotted/underscored keys still exposes a 0.8032 pixel vertical painted-envelope miss. Java's LimitFinder text contribution moves the complete diagram down; Rust's flat bounds leaves the body at y=7. The failure is in the claimed label-skinparam envelope scope."
+    }
+  ],
+  "fixture_shape_search": {
+    "result": "No fixture labels or per-stem keys were found in the implementation diff. The rejected behavior is due to over-broad capability admission and incomplete metric/envelope modeling, not obvious fixture-shaped logic."
+  },
+  "verdict": "REJECT",
+  "verdict_reason": "Three fresh valid in-scope perturbations fail the prescribed no-oracle comparator. Per T14 held-out perturbation rules, any failing counterexample rejects the mechanism and remains preserved."
+}

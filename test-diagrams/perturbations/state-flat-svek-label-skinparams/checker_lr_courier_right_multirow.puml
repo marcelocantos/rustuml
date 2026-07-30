@@ -1,0 +1,11 @@
+@startuml
+left to right direction
+skinparam StateArrowFontName Courier New
+skinparam StateArrowFontSize 15
+skinparam StateArrowFontStyle bold
+skinparam StateArrowFontColor #336699
+skinparam StateMessageAlignment right
+state "West Node" as West
+state "East Node" as East
+West --> East : short\nmuch longer courier row\rend
+@enduml

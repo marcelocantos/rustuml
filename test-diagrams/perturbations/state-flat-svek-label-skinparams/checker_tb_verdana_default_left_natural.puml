@@ -1,0 +1,9 @@
+@startuml
+top to bottom direction
+skinparam defaultFontName Verdana
+skinparam defaultFontSize 16
+skinparam defaultTextAlignment right
+state "Alpha Basin" as Alpha
+state "Beta Ridge" as Beta
+Alpha --> Beta : natural left\lwide Verdana row
+@enduml

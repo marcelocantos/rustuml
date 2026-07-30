@@ -1,0 +1,7 @@
+@startuml
+left to right direction
+skinparam UnknownStatePainter value
+state "Plain Start" as Start
+state "Plain End" as End
+Start --> End : ordinary label
+@enduml

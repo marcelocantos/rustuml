@@ -1,0 +1,13 @@
+@startuml
+left to right direction
+top to bottom direction
+skinparam StateArrowFontName Courier New
+skinparam StateArrowFontSize 13
+skinparam StateArrowFontStyle bold italic
+skinparam StateMessageAlignment left
+state "North Gate" as North
+state "Middle Gate" as Middle
+state "South Gate" as South
+Middle -up-> North : label above node pair
+Middle -down-> South : lower label\nwith second row
+@enduml

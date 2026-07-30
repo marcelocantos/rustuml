@@ -1,0 +1,11 @@
+@startuml
+left to right direction
+skinparam ArrowFontName Times New Roman
+skinparam ArrowFontSize 18
+skinparam ArrowFontStyle italic
+skinparam StateMessageAlignment center
+state "Solo Loop" as Solo
+state "Neighbour" as Peer
+Solo --> Solo : italic self label\nsecond row
+Solo --> Peer : ordinary italic label
+@enduml
