@@ -1,0 +1,9 @@
+@startuml
+skinparam stateMessageAlignment left
+skinparam StateArrowFontName Verdana
+skinparam StateArrowFontSize 14
+state "Harbor Gate" as HarborGate
+state "Signal Vault" as SignalVault
+HarborGate --> SignalVault : \nfirst cargo\n\nfinal cargo\n
+SignalVault --> [*]
+@enduml

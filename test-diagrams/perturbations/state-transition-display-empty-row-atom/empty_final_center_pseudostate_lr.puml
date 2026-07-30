@@ -1,0 +1,11 @@
+@startuml
+left to right direction
+skinparam stateMessageAlignment center
+skinparam StateArrowFontName Times New Roman
+skinparam StateArrowFontSize 15
+state "Start Chamber" as StartChamber
+state "Finish Chamber" as FinishChamber
+[*] --> StartChamber
+StartChamber --> FinishChamber : begin\nmiddle\n
+FinishChamber --> [*] : exit\n\n
+@enduml

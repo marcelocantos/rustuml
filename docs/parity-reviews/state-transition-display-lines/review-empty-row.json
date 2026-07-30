@@ -1,0 +1,168 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-transition-display-empty-row-atom",
+  "checker_identity": {
+    "agent": "Codex",
+    "model": "GPT-5",
+    "role": "independent adversarial checker",
+    "timestamp": "2026-07-31T04:41:07+10:00"
+  },
+  "verdict": "REJECT",
+  "reviewed_revisions": {
+    "rust_revision": "899d1edc3231d571b1e703ee3b84737378c1052b",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "parent_account": "docs/parity-reviews/state-transition-display-lines/account.json",
+    "mechanism_account": "docs/parity-reviews/state-transition-display-lines/account-empty-row.json",
+    "rejecting_review": "docs/parity-reviews/state-transition-display-lines/review.json",
+    "reviewed_rust_parent": "480527995a2f24240a996f08787ee4a4a06556c2"
+  },
+  "artifacts": {
+    "checker_worktree": "/private/tmp/rustuml-integrate-20260731a",
+    "checker_branch": null,
+    "plantuml_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "diff_helper": "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one",
+    "diff_helper_sha256": "097f8ccf18745d617dac9ce0466066a4e57e6e0aa0c0be13bfb3a865bdd6b213",
+    "perturbation_directory": "test-diagrams/perturbations/state-transition-display-empty-row-atom"
+  },
+  "constraints_observed": {
+    "checker_shipping_rust_edited": false,
+    "cargo_or_rustc_invoked": false,
+    "java_svg_generation": "All six Java SVGs were generated with -Djava.awt.headless=true and validated with xmllint --noout. None contains a PlantUML syntax-error page.",
+    "helper_used_after_hash_recorded": true,
+    "preexisting_unstaged_changes": [
+      "crates/rustuml-parser/src/diagram/state.rs",
+      "crates/rustuml-parser/src/parse/state.rs",
+      "crates/rustuml-render/src/ascii_state.rs",
+      "crates/rustuml-render/src/state.rs"
+    ],
+    "working_tree_note": "The review started with HEAD 899d1edc. During the review another task advanced this shared isolated checkout to 5635cb2e and left direction-related Rust edits unstaged. Those files were not staged or edited by the checker. The requested prebuilt helper was used without rebuilding; its recorded hash is the executable identity used for every comparison."
+  },
+  "commands": [
+    "git rev-parse HEAD",
+    "git show --format=fuller --no-ext-diff 899d1edc -- crates/rustuml-render/src/state.rs",
+    "cat docs/parity-reviews/state-transition-display-lines/account-empty-row.json",
+    "cat docs/parity-reviews/state-transition-display-lines/account.json",
+    "cat docs/parity-reviews/state-transition-display-lines/review.json",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/klimt/creole/legacy/StripeSimple.java | nl -ba | sed -n '95,145p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/klimt/creole/legacy/CreoleParser.java | nl -ba | sed -n '130,190p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/klimt/creole/SheetBlock1.java | nl -ba | sed -n '55,220p'",
+    "nl -ba crates/rustuml-render/src/state.rs | sed -n '1035,1190p'",
+    "nl -ba crates/rustuml-parser/src/diagram/state.rs | sed -n '250,360p'",
+    "shasum -a 256 target/debug/examples/diff_one",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/state-transition-display-empty-row-atom/*.puml",
+    "xmllint --noout test-diagrams/perturbations/state-transition-display-empty-row-atom/*.svg",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/state-transition-display-empty-row-atom/empty_positions_left_verdana_tb.puml",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/state-transition-display-empty-row-atom/empty_positions_center_arial_self_tb.puml",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/state-transition-display-empty-row-atom/empty_final_right_courier_pseudostate_tb.puml",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/state-transition-display-empty-row-atom/empty_intermediate_lr_helvetica_ordinary.puml",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/state-transition-display-empty-row-atom/empty_first_nested_lr_arial_self.puml",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/state-transition-display-empty-row-atom/empty_final_center_pseudostate_lr.puml",
+    "rg -n \"empty_positions|empty_final|empty_intermediate|empty_first|state-transition-display-empty-row-atom|include_str!|include_bytes!|golden|fixture|paint_row|if .*row\" crates/rustuml-render/src/state.rs crates/rustuml-parser/src/diagram/state.rs crates/rustuml-parser/src/parse/state.rs crates/rustuml-oracle",
+    "shasum -a 256 target/debug/examples/diff_one test-diagrams/perturbations/state-transition-display-empty-row-atom/* | sort"
+  ],
+  "source_review": {
+    "java_findings": [
+      "StripeSimple#getAtoms inserts AtomTextUtils.createLegacy(\" \", fontConfiguration) when a logical row has no atoms.",
+      "CreoleParser#createSheetSlow sends each Display row, including empty rows, through createStripes and adds the resulting stripe to the Sheet.",
+      "SheetBlock1#initMap measures each retained stripe, advances the row stack by its height, aligns it within the maximum width, and drawU emits the same atom positions. The Java behavior is therefore a row-level atom invariant, not a fixture-specific width constant."
+    ],
+    "rust_findings": [
+      "Commit 899d1edc adds StateTransitionLabelBlock#paint_row, mapping only empty logical rows to one ordinary space before width, height, baseline, emission, and painted-y calculations.",
+      "The three top-to-bottom cases confirm that the empty atom is retained through measurement and SVG emission: Java and Rust both emit positive-width &#160; text nodes for empty first, intermediate, and final rows.",
+      "The two non-Times LR cases also report matching positive empty-row widths, but the overall diagrams are laid out vertically by Rust instead of horizontally. This is the pre-existing LR/state layout residue identified by the parent rejecting review, not evidence that the empty atom disappeared.",
+      "The Times New Roman LR case has a separate font-metric mismatch: Java reports 3.75 for the empty row while Rust reports 4.7461, and the non-empty rows also differ (for example begin is 33.3252 versus 40.7959). The failure cannot be assigned specifically to empty-row materialization."
+    ],
+    "overfit_scan": {
+      "fixture_logic": "No fresh fixture names, perturbation stems, golden reads, include_str!, include_bytes!, or fixture-keyed conditionals were found in the reviewed TransitionLabel/StateTransitionLabelBlock implementation path.",
+      "constants": "The only mechanism-specific new literal is the Java-cited ordinary-space atom in paint_row. No coordinate ladder, per-branch-count constant, or unexplained parity-affecting numeric constant was found in commit 899d1edc.",
+      "pre_existing_scope": "The broader renderer contains pre-existing oracle/captured-golden paths and tests; those were not attributed to this commit and were not used as evidence for acceptance."
+    }
+  },
+  "inputs": [
+    {
+      "name": "empty_positions_left_verdana_tb",
+      "puml": "test-diagrams/perturbations/state-transition-display-empty-row-atom/empty_positions_left_verdana_tb.puml",
+      "java_svg": "test-diagrams/perturbations/state-transition-display-empty-row-atom/empty_positions_left_verdana_tb.svg",
+      "sha256": {
+        "puml": "041f92dccae9e698131de5b93abccb58eceeff902a1aac26fd15b5d7a407ce8a",
+        "java_svg": "6dacd6207abd2dd0aa949e50aa55270278e640b782f188035edc984662226def"
+      },
+      "axes": ["empty first row", "empty intermediate row", "empty final row", "effective left alignment", "Verdana size 14", "ordinary link", "top-to-bottom"],
+      "result": "PASS",
+      "finding": "Structurally equivalent. Java emits 4.9219-width NBSP atoms for all three empty positions; the Rust path preserves the same positive-width rows and the surrounding ordinary-link geometry matches."
+    },
+    {
+      "name": "empty_positions_center_arial_self_tb",
+      "puml": "test-diagrams/perturbations/state-transition-display-empty-row-atom/empty_positions_center_arial_self_tb.puml",
+      "java_svg": "test-diagrams/perturbations/state-transition-display-empty-row-atom/empty_positions_center_arial_self_tb.svg",
+      "sha256": {
+        "puml": "8eff63dd776d3ddadcab83c732a7efb1a04534a13177f1ed2412dfd7a3228680",
+        "java_svg": "f6d3fca6205cb41c09715fff74c8e069cb56ce7ec54d6df5d76fd15519c680a2"
+      },
+      "axes": ["empty intermediate row", "empty first row on a second link", "effective center alignment", "Arial size 10", "self link", "pseudostate link", "top-to-bottom"],
+      "result": "PASS",
+      "finding": "Structurally equivalent. The self-link label and the pseudostate label both retain positive-width empty-row atoms (2.7783), including centered placement."
+    },
+    {
+      "name": "empty_final_right_courier_pseudostate_tb",
+      "puml": "test-diagrams/perturbations/state-transition-display-empty-row-atom/empty_final_right_courier_pseudostate_tb.puml",
+      "java_svg": "test-diagrams/perturbations/state-transition-display-empty-row-atom/empty_final_right_courier_pseudostate_tb.svg",
+      "sha256": {
+        "puml": "18c42eb5f06e2ed3410438ba401cc6c9e0fee8fe01627f2f6cd5dea08814f858",
+        "java_svg": "89f476cfda2145d8d2899a4a4359afe24be949a2872dafcf21f9f92f12ecce4f"
+      },
+      "axes": ["empty final row", "natural right alignment via \\r", "Courier New size 16", "pseudostate links", "top-to-bottom"],
+      "result": "PASS",
+      "finding": "Structurally equivalent. The final empty rows on ordinary and pseudostate links are emitted as positive-width Courier atoms (9.6016), and right alignment matches."
+    },
+    {
+      "name": "empty_intermediate_lr_helvetica_ordinary",
+      "puml": "test-diagrams/perturbations/state-transition-display-empty-row-atom/empty_intermediate_lr_helvetica_ordinary.puml",
+      "java_svg": "test-diagrams/perturbations/state-transition-display-empty-row-atom/empty_intermediate_lr_helvetica_ordinary.svg",
+      "sha256": {
+        "puml": "95da77d331b64e1317d33c97ea8d58dc70a7bef8be67d42015c37503a794946c",
+        "java_svg": "bd11328672a83dc1ab0815c57c50032129285be15d31577262b40db30264660e8"
+      },
+      "axes": ["empty intermediate row", "effective center alignment", "Helvetica size 12", "ordinary link", "left-to-right"],
+      "result": "FAIL",
+      "finding": "Rejecting counterexample for the required matrix, but not for the empty-row atom. Java and Rust both report a 3.334-width empty-row atom and the row text content matches. The structural failure is the known direction/layout residue: Java is 313x83 with horizontal states, while Rust is 119x219 with vertical states."
+    },
+    {
+      "name": "empty_first_nested_lr_arial_self",
+      "puml": "test-diagrams/perturbations/state-transition-display-empty-row-atom/empty_first_nested_lr_arial_self.puml",
+      "java_svg": "test-diagrams/perturbations/state-transition-display-empty-row-atom/empty_first_nested_lr_arial_self.svg",
+      "sha256": {
+        "puml": "66856413ccc2982a2f3e3900692ec0a455b4e2be6b4d5726005f7681ad85d47d",
+        "java_svg": "2a955094594ec3b98e811c7bb50f91dd73bbd81b2ea558aa719a8cab019f8923"
+      },
+      "axes": ["empty first row", "empty intermediate self-link row", "effective left alignment", "Arial size 13", "nested state scope", "self link", "left-to-right"],
+      "result": "FAIL",
+      "finding": "Rejecting counterexample for the required matrix, but not for empty-row materialization. Both outputs contain a positive-width 3.6118 Arial atom for the empty rows. The dominant failure is unrelated nested/LR layout and qualified edge identity: Java uses a horizontal nested scope while Rust renders a vertical arrangement."
+    },
+    {
+      "name": "empty_final_center_pseudostate_lr",
+      "puml": "test-diagrams/perturbations/state-transition-display-empty-row-atom/empty_final_center_pseudostate_lr.puml",
+      "java_svg": "test-diagrams/perturbations/state-transition-display-empty-row-atom/empty_final_center_pseudostate_lr.svg",
+      "sha256": {
+        "puml": "e1f8fefaeda84a1e14557f4e7c7a16710ff45b110e6472b6e724e389fd199f25",
+        "java_svg": "c5b78aaa93c2ccfb3b96a153e34a0ebd1580918f86ee664a5f3473b38bbec3b9"
+      },
+      "axes": ["empty final and intermediate rows", "effective center alignment", "Times New Roman size 15", "pseudostate links", "left-to-right"],
+      "result": "FAIL",
+      "finding": "Rejecting counterexample with mixed residue. Java is 553x98 and horizontal; Rust is 148x451 and vertical, confirming the known LR layout failure. In addition, Java's Times New Roman empty atom is 3.75 while Rust reports 4.7461, but non-empty rows also differ (begin 33.3252 versus 40.7959 and exit 22.4927 versus 27.5024), so this is a separate font-metrics gap rather than evidence against the generic empty-row normalization."
+    }
+  ],
+  "summary": {
+    "fresh_inputs": 6,
+    "passed": 3,
+    "failed": 3,
+    "acceptance_gate": "failed",
+    "empty_row_atom_isolated_result": "The fix survives the three top-to-bottom cases covering empty first, intermediate, and final rows, plus self and pseudostate endpoints, and the empty-row widths match in two of three LR cases. No isolated counterexample to the ordinary-space atom normalization was found.",
+    "primary_reject_reason": "The held-out matrix includes the account's declared left-to-right and font axes, and three valid cases fail the no-oracle comparator. Two fail through known LR/state layout residue; one additionally exposes an existing Times New Roman metrics mismatch. The parity gate requires the full mechanism-shaped perturbation matrix to pass, so the implementation cannot be accepted.",
+    "residue": [
+      "left-to-right state/autonomous layout remains vertical in Rust for the fresh ordinary, nested, and pseudostate cases",
+      "Times New Roman metrics differ for both empty and non-empty rows"
+    ],
+    "recommendation": "Keep all six failing or passing pairs preserved. Do not alter comparator slack or park these failures. Address LR layout and font-family metrics as separate causal mechanisms before a later empty-row review claims the full declared perturbation axes are green."
+  }
+}

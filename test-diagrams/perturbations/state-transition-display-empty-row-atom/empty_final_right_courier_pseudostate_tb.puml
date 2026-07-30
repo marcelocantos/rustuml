@@ -1,0 +1,10 @@
+@startuml
+skinparam stateMessageAlignment right
+skinparam StateArrowFontName Courier New
+skinparam StateArrowFontSize 16
+state "Source Beacon" as SourceBeacon
+state "Target Beacon" as TargetBeacon
+[*] --> SourceBeacon : initial\nroute\n
+SourceBeacon --> TargetBeacon : wide right row\rshort\r
+TargetBeacon --> [*] : done\n
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+left to right direction
+skinparam stateMessageAlignment center
+skinparam StateArrowFontName Helvetica
+skinparam StateArrowFontSize 12
+state "West Relay" as WestRelay
+state "East Relay" as EastRelay
+WestRelay --> EastRelay : left lane\n\nright lane
+@enduml

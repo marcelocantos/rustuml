@@ -1,0 +1,12 @@
+@startuml
+left to right direction
+skinparam stateMessageAlignment left
+skinparam StateArrowFontName Arial
+skinparam StateArrowFontSize 13
+state "Outer Basin" as OuterBasin {
+  state "Inner Start" as InnerStart
+  state "Inner End" as InnerEnd
+  InnerStart --> InnerEnd : \ninner first\ninner last
+  InnerEnd --> InnerEnd : loop\n\nloop finish
+}
+@enduml

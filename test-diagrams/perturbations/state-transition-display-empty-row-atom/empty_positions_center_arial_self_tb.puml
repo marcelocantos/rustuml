@@ -1,0 +1,8 @@
+@startuml
+skinparam stateMessageAlignment center
+skinparam StateArrowFontName Arial
+skinparam StateArrowFontSize 10
+state "Quiet Node" as QuietNode
+QuietNode --> QuietNode : opening\n\nclosing
+QuietNode --> [*] : \nonly second row
+@enduml
