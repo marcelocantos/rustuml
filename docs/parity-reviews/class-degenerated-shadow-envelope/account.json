@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-degenerated-shadow-envelope",
+  "created": "2026-07-31",
+  "status": "proposed",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "cd023969f422c29d64b588fbeebecbd4c1670a91",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
+      "symbol": "GraphvizImageBuilder.buildImage",
+      "lines": "209-224",
+      "role": "Selects EntityImageDegenerated for exactly one root leaf with no links or groups instead of constructing a SvekResult."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/EntityImageDegenerated.java",
+      "symbols": [
+        "EntityImageDegenerated.calculateDimension",
+        "EntityImageDegenerated.drawU"
+      ],
+      "lines": "47-93",
+      "role": "Sizes the one-leaf image from the intrinsic entity dimension plus a fixed 7px inset on each side and draws the entity at that inset; it does not run a painted-shape LimitFinder pass."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java",
+      "symbol": "LimitFinder.drawRectangle",
+      "lines": "175-179",
+      "role": "Shows the contrasting SVEK path: a rectangle measured through LimitFinder contributes size minus one plus twice its delta shadow to the painted maximum."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbol": "uses_degenerated_entity",
+      "lines": "13761-13770",
+      "role": "Already mirrors the Java selection predicate for one ungrouped, unlinked root leaf."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbol": "render_plantuml_svg::entity_shadow_limit_extra",
+      "lines": "5074-5080",
+      "role": "Adds the LimitFinder rectangle-shadow extent to every shadowed non-diamond entity without excluding the degenerated image lifecycle."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbol": "render_plantuml_svg canvas extent loop",
+      "lines": "5234-5248",
+      "role": "Uses that unconditional shadow extent in the final one-leaf canvas even though the same function later selects the degenerated fixed-inset extent pad."
+    }
+  ],
+  "evidence_inputs": [
+    "test-diagrams/golden/class/class_skinparam_shadowing.puml",
+    "test-diagrams/golden/class/class_skinparam_shadow_true.puml"
+  ],
+  "claimed_invariant": "Class entity shadow geometry enters the document envelope only when Java measures painted shapes through SvekResult and LimitFinder. A single unlinked root leaf follows EntityImageDegenerated instead: its document dimension is the intrinsic entity image plus a fixed 7px inset on each side, independent of the entity rectangle's delta shadow. Adding a link, a second leaf, a group, or a layout note switches back to SVEK and restores LimitFinder shadow accounting.",
+  "causal_divergence": "Rust correctly recognizes the degenerated one-leaf lifecycle and uses its distinct canvas padding, but its entity_shadow_limit_extra closure still adds the five-pixel rectangle-shadow frontier in both lifecycle branches. The isolated shadow golden is therefore five pixels too wide and tall, while the linked shadow negative control already passes because that diagram legitimately uses SvekResult and LimitFinder.",
+  "planned_model_change": "Make entity shadow-envelope accounting lifecycle-aware: retain the Java-derived rectangle shadow frontier for SVEK entities, but return zero for every entity when uses_degenerated_entity is true. Keep filter generation and the shadow attribute on the painted entity rectangle unchanged; only dimension ownership changes.",
+  "perturbation_axes": [
+    "one root leaf versus two leaves",
+    "unlinked leaf versus the same leaf with a relationship",
+    "root leaf versus leaf inside a package",
+    "plain leaf versus attached or named layout note",
+    "renamed labels and changed member counts",
+    "shadowing false, true, and explicit numeric values"
+  ],
+  "scope_boundary": "This mechanism owns only whether class entity delta-shadow geometry participates in the outer dimension calculation on the degenerated versus SVEK lifecycle. It does not change entity intrinsic dimensions, Graphviz layout, filter IDs or definitions, painted shadow attributes, package shadow geometry, diamond symbols, document margins, or comparator behavior.",
+  "acceptance": [
+    "The isolated shadowed class becomes exact while the linked shadowed class remains exact.",
+    "Fresh renamed one-leaf and multi-leaf perturbations preserve their respective degenerated and SVEK dimension ownership.",
+    "Class renderer tests, full no-oracle ratchet, clippy, and mechanical harness guards pass except for explicitly pre-existing gate debt.",
+    "An independent checker records a verdict at the exact implementation revision."
+  ]
+}
