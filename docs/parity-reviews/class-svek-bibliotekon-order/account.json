@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-svek-bibliotekon-order",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "net.sourceforge.plantuml.svek.GraphvizImageBuilder#buildImage",
+    "net.sourceforge.plantuml.svek.GraphvizImageBuilder#printGroups",
+    "net.sourceforge.plantuml.svek.GraphvizImageBuilder#printGroup",
+    "net.sourceforge.plantuml.svek.GraphvizImageBuilder#printEntities",
+    "net.sourceforge.plantuml.svek.Bibliotekon#createNode",
+    "net.sourceforge.plantuml.svek.Bibliotekon#allNodes",
+    "net.sourceforge.plantuml.svek.SvekResult#drawU",
+    "net.sourceforge.plantuml.svek.DotStringFactory#createDotString",
+    "net.sourceforge.plantuml.svek.Cluster#printCluster2"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs::build_layout_graph",
+    "crates/rustuml-render/src/class.rs::SvekEmissionOrder",
+    "crates/rustuml-render/src/class.rs::svek_id_allocation",
+    "crates/rustuml-render/src/class.rs::render_svek",
+    "crates/rustuml-layout/src/graph.rs::LayoutGraph::with_plantuml_svek_node_order",
+    "crates/rustuml-layout/src/graph.rs::LayoutGraph::graphviz_node_creation_order"
+  ],
+  "invariant": "GraphvizImageBuilder materializes a package tree depth first. For each non-empty group it opens the cluster, creates nodes for that group's immediate leafs, then visits child groups in hierarchy order. An explicitly empty package is mutated to LeafType.EMPTY_PACKAGE and inserted into the same Bibliotekon node map at the point where that child group is visited. Bibliotekon preserves node insertion order. DotStringFactory serializes root leaves before recursively serialized clusters, while SvekResult paints every visible cluster first and then paints every node in Bibliotekon insertion order. Empty packages are therefore nodes, not cluster decorations, and interleave with ordinary entity nodes after all painted clusters.",
+  "causal_divergence": "The class renderer does not opt into LayoutGraph's existing PlantUML SVEK node-creation projection, so Graphviz can receive source-order nodes rather than root-leaves followed by each cluster's direct leaves. Separately, render_svek walks packages once and emits both cluster decorations and empty-package node images before it begins the entity loop. That conflates Java's allCluster paint phase with its allNodes phase and moves empty packages ahead of ordinary entities and later clusters. The held-out package-only control reaches Java-equivalent canvas and geometry after the direct-leaf standalone fix and SVEK node-order opt-in, but its XML stream diverges exactly where Rust emits the first empty package during the cluster phase.",
+  "planned_change": "Opt the class renderer into LayoutGraph's provenance-backed PlantUML SVEK node order. Derive one shared Bibliotekon node emission stream from the package ownership tree: each non-empty package contributes its direct ordinary entity nodes, then visits child packages in hierarchy order; an EmptyLeaf child contributes an empty-package node at that visit point, while a Cluster child recurses. Append root ordinary nodes after root groups, matching GraphvizImageBuilder. Paint all cluster decorations first, then consume that unified node stream to interleave ordinary entities and empty packages. Reuse the same stream for IDs and layout slots where applicable, without label-, fixture-, coordinate-, or package-count branches.",
+  "perturbation_axes": [
+    "root entities crossed with packaged entities",
+    "direct entities crossed with filled child packages",
+    "empty child packages before, between, and after filled child packages",
+    "one-level crossed with three-level nesting",
+    "renamed labels and reordered declarations",
+    "top-to-bottom crossed with left-to-right direction",
+    "packages crossed with Together-owned nodes",
+    "linked crossed with unlinked leaves"
+  ]
+}
