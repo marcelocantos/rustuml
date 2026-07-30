@@ -1,0 +1,14 @@
+@startuml
+left to right direction
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam PackageBackgroundColor AliceBlue
+skinparam PackageBorderColor MediumBlue
+rectangle "Explicit Rect Plain 8621" as ExplicitRect8621 {
+  class RectLeaf8623
+}
+package "Fallback Rect Plain 8625" as FallbackRect8625 {
+  class PlainLeaf8627
+}
+RectLeaf8623 --> PlainLeaf8627
+@enduml

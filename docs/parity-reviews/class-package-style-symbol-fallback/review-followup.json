@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-package-style-symbol-fallback",
+  "followup_to": "docs/parity-reviews/class-package-style-symbol-fallback/review.json",
+  "reviewer": {
+    "identity": "independent adversarial checker",
+    "model": "GPT-5",
+    "tool": "Codex desktop",
+    "independence": "Did not implement commit 09014421, did not edit production source, and preserved the predecessor review unchanged."
+  },
+  "revisions": {
+    "checker_worktree_branch": "codex/t14-adversarial-09014421",
+    "rust_revision": "09014421f785f5d251a0b28541603b6dcda7aae9",
+    "rust_tree": "c02b1280c9be8cabb9730fd8e019014d95b2bd59",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "predecessor_review_commit": "63d978e7"
+  },
+  "binary": {
+    "path": "/tmp/rustuml-checker-1482/target/release/examples/diff_one",
+    "sha256": "e564a723cf16ec3a4fcc7ce2fce934befbd3712374fa6654988ade263a794488",
+    "mode": "--no-oracle",
+    "cargo_or_rustc_run": false
+  },
+  "commands": [
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-package-style-symbol-fallback/checker_database_tb_top.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-package-style-symbol-fallback/checker_database_lr_nested.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-package-style-symbol-fallback/checker_node_tb_fallback.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-package-style-symbol-fallback/checker_node_lr_fallback.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-package-style-symbol-fallback/checker_explicit_precedence_lr.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-package-style-symbol-fallback/checker_empty_control_valid_tb.puml",
+    "java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar --svg -pipe < test-diagrams/perturbations/class-package-style-symbol-fallback/checker_followup_explicit_precedence_tb.puml > test-diagrams/perturbations/class-package-style-symbol-fallback/checker_followup_explicit_precedence_tb.svg",
+    "java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar --svg -pipe < test-diagrams/perturbations/class-package-style-symbol-fallback/checker_followup_empty_cloud_nested_lr.puml > test-diagrams/perturbations/class-package-style-symbol-fallback/checker_followup_empty_cloud_nested_lr.svg",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-package-style-symbol-fallback/checker_followup_explicit_precedence_tb.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-package-style-symbol-fallback/checker_followup_empty_cloud_nested_lr.puml"
+  ],
+  "historical_counterexamples": [
+    {
+      "path": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_database_tb_top.puml",
+      "outcome": "pass"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_database_lr_nested.puml",
+      "outcome": "pass"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_node_tb_fallback.puml",
+      "outcome": "pass"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_node_lr_fallback.puml",
+      "outcome": "pass"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_explicit_precedence_lr.puml",
+      "outcome": "pass"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_empty_control_valid_tb.puml",
+      "outcome": "pass"
+    }
+  ],
+  "fresh_followup_inputs": [
+    {
+      "path": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_followup_explicit_precedence_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_followup_explicit_precedence_tb.svg",
+      "axes": [
+        "global database fallback",
+        "explicit node, frame, and cloud precedence",
+        "top-to-bottom"
+      ],
+      "outcome": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_followup_empty_cloud_nested_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_followup_empty_cloud_nested_lr.svg",
+      "axes": [
+        "cloud fallback",
+        "nested ordinary empty package",
+        "left-to-right"
+      ],
+      "outcome": "fail: Java and Rust diverge heavily on canvas, cluster geometry, and descendant placement."
+    }
+  ],
+  "findings": [
+    {
+      "severity": "informational",
+      "summary": "The specific historical counterexamples from the predecessor REJECT are now fixed.",
+      "evidence": "All six previously rejecting inputs from review.json are structurally equivalent at 09014421."
+    },
+    {
+      "severity": "rejecting",
+      "summary": "The predecessor REJECT is not fully answered because a fresh same-family nested empty-cloud fallback case still fails.",
+      "evidence": "checker_followup_empty_cloud_nested_lr reproduces a large divergence on an ordinary nested empty package under packageStyle cloud. This remains within the same mechanism family and prevents closing the older REJECT."
+    }
+  ],
+  "artifacts": {
+    "held_out_directory": "test-diagrams/perturbations/class-package-style-symbol-fallback/",
+    "followup_review": "docs/parity-reviews/class-package-style-symbol-fallback/review-followup.json",
+    "prior_review_preserved": true,
+    "production_files_modified": false,
+    "account_modified": false
+  },
+  "verdict": "REJECT"
+}

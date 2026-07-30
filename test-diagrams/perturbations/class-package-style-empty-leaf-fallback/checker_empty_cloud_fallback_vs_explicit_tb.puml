@@ -1,0 +1,12 @@
+@startuml
+skinparam packageStyle cloud
+package "Fallback Empty Parcel 8501" as FallbackEmpty8501 <<Queued>> {
+}
+cloud "Explicit Empty Parcel 8503" as ExplicitEmpty8503 <<Queued>> {
+}
+package FilledAnchor8505 {
+  class FilledLeaf8507
+}
+class LiveAnchor8509
+FilledLeaf8507 --> LiveAnchor8509
+@enduml

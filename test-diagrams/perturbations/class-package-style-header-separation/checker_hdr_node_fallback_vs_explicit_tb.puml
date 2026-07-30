@@ -1,0 +1,10 @@
+@startuml
+skinparam packageStyle node
+package "Fallback Header Vault 8401" as FallbackHdr8401 <<AuditTrailService>> {
+  class FallbackLeaf8403
+}
+node "Explicit Header Vault 8405" as ExplicitHdr8405 <<AuditTrailService>> {
+  class ExplicitLeaf8407
+}
+FallbackLeaf8403 --> ExplicitLeaf8407
+@enduml

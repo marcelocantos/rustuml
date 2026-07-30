@@ -1,0 +1,18 @@
+@startuml
+left to right direction
+skinparam shadowing true
+skinparam packageStyle frame
+skinparam PackageBackgroundColor MistyRose
+skinparam PackageBorderColor DarkMagenta
+skinparam FrameBorderColor DarkOrange
+skinparam FrameFontColor Navy
+skinparam CloudBackgroundColor LemonChiffon
+skinparam CloudBorderColor SaddleBrown
+cloud "Explicit Cloud Shadow 8611" as ExplicitCloud8611 {
+  class CloudLeaf8613
+}
+package "Fallback Frame Shadow 8615" as FallbackFrame8615 {
+  class FrameLeaf8617
+}
+CloudLeaf8613 --> FrameLeaf8617
+@enduml

@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-cluster-svg-polygon-reconstruction",
+  "reviewer": {
+    "identity": "independent adversarial checker",
+    "model": "GPT-5",
+    "tool": "Codex desktop",
+    "independence": "Did not implement commit 09014421, did not edit production source, and did not edit account.json."
+  },
+  "revisions": {
+    "checker_worktree_branch": "codex/t14-adversarial-09014421",
+    "rust_revision": "09014421f785f5d251a0b28541603b6dcda7aae9",
+    "rust_tree": "c02b1280c9be8cabb9730fd8e019014d95b2bd59",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "binary": {
+    "path": "/tmp/rustuml-checker-1482/target/release/examples/diff_one",
+    "sha256": "e564a723cf16ec3a4fcc7ce2fce934befbd3712374fa6654988ade263a794488",
+    "mode": "--no-oracle",
+    "cargo_or_rustc_run": false
+  },
+  "commands": [
+    "git show 09014421 -- crates/rustuml-layout/src/graph.rs crates/rustuml-render/src/class.rs",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/DotStringFactory.java",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/SvgResult.java",
+    "git show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/SvekUtils.java",
+    "java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar --svg -pipe < test-diagrams/perturbations/class-cluster-svg-polygon-reconstruction/checker_polygon_cloud_boundary_tb_a.puml > test-diagrams/perturbations/class-cluster-svg-polygon-reconstruction/checker_polygon_cloud_boundary_tb_a.svg",
+    "java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar --svg -pipe < test-diagrams/perturbations/class-cluster-svg-polygon-reconstruction/checker_polygon_cloud_boundary_tb_b.puml > test-diagrams/perturbations/class-cluster-svg-polygon-reconstruction/checker_polygon_cloud_boundary_tb_b.svg",
+    "java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar --svg -pipe < test-diagrams/perturbations/class-cluster-svg-polygon-reconstruction/checker_polygon_explicit_cloud_nested_lr.puml > test-diagrams/perturbations/class-cluster-svg-polygon-reconstruction/checker_polygon_explicit_cloud_nested_lr.svg",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-cluster-svg-polygon-reconstruction/checker_polygon_cloud_boundary_tb_a.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-cluster-svg-polygon-reconstruction/checker_polygon_cloud_boundary_tb_b.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-cluster-svg-polygon-reconstruction/checker_polygon_explicit_cloud_nested_lr.puml"
+  ],
+  "source_inspection": {
+    "supported": [
+      "Java reconstructs cluster rectangles from serialized SVG polygon points via DotStringFactory.solve, SvgResult.extractList, and SvekUtils.getMinXY/getMaxXY.",
+      "No fixture-shaped branches or post-hoc coordinate surgery were found in shipping crates."
+    ],
+    "disproven": [
+      "The Rust layout crate stores only serialized width and height at crates/rustuml-layout/src/graph.rs:1598-1609; it keeps the internal ll_x/ll_y origin.",
+      "The renderer then rounds that internal origin at crates/rustuml-render/src/class.rs:2468-2475 instead of reconstructing min and max from serialized SVG coordinates."
+    ]
+  },
+  "inputs": [
+    {
+      "path": "test-diagrams/perturbations/class-cluster-svg-polygon-reconstruction/checker_polygon_cloud_boundary_tb_a.puml",
+      "java_svg": "test-diagrams/perturbations/class-cluster-svg-polygon-reconstruction/checker_polygon_cloud_boundary_tb_a.svg",
+      "axes": [
+        "fallback cloud",
+        "single-member cluster",
+        "link leaving cluster",
+        "top-to-bottom"
+      ],
+      "outcome": "fail: the cloud path, member rectangles, and outgoing edge are all shifted by roughly 0.27px on x because Rust keeps the internal origin."
+    },
+    {
+      "path": "test-diagrams/perturbations/class-cluster-svg-polygon-reconstruction/checker_polygon_cloud_boundary_tb_b.puml",
+      "java_svg": "test-diagrams/perturbations/class-cluster-svg-polygon-reconstruction/checker_polygon_cloud_boundary_tb_b.svg",
+      "axes": [
+        "fallback cloud",
+        "multi-member cluster",
+        "internal plus external links",
+        "top-to-bottom"
+      ],
+      "outcome": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-cluster-svg-polygon-reconstruction/checker_polygon_explicit_cloud_nested_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-cluster-svg-polygon-reconstruction/checker_polygon_explicit_cloud_nested_lr.svg",
+      "axes": [
+        "explicit cloud",
+        "nested fallback child",
+        "left-to-right"
+      ],
+      "outcome": "pass: SVGs are structurally equivalent"
+    }
+  ],
+  "result_counts": {
+    "fresh_inputs_total": 3,
+    "valid_inputs": 3,
+    "valid_passed": 2,
+    "valid_failed": 1
+  },
+  "findings": [
+    {
+      "severity": "rejecting",
+      "summary": "The implementation does not actually reconstruct serialized cluster origins.",
+      "evidence": "A fresh single-member cloud case still carries a consistent horizontal offset through the cluster path, child entity, and outgoing edge. The source keeps ll_x/ll_y from Graphviz and swaps only width and height from serialized coordinates."
+    },
+    {
+      "severity": "informational",
+      "summary": "Not every cloud case is broken; the miss is residual and input-shaped.",
+      "evidence": "The multi-member fallback cloud and the nested explicit-cloud LR case both pass, which means the remaining divergence is narrower than the account claims."
+    }
+  ],
+  "artifacts": {
+    "held_out_directory": "test-diagrams/perturbations/class-cluster-svg-polygon-reconstruction/",
+    "review": "docs/parity-reviews/class-cluster-svg-polygon-reconstruction/review.json",
+    "production_files_modified": false,
+    "account_modified": false
+  },
+  "verdict": "REJECT"
+}

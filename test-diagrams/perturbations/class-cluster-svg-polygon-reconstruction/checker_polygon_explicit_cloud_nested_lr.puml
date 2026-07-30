@@ -1,0 +1,12 @@
+@startuml
+left to right direction
+cloud "Explicit Polygon Parent 8715" as ExplicitPolygon8715 {
+  package "Nested Fallback Polygon 8717" as NestedPolygon8717 {
+    class Deep8719
+  }
+  class Peer8721
+  Deep8719 --> Peer8721
+}
+class Outer8723
+Peer8721 --> Outer8723
+@enduml
