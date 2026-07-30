@@ -1,0 +1,8 @@
+@startuml
+participant "Renamed Client" as Client
+participant "Renamed Server" as Server
+Client -> Server : pre [[https://example.com/sequence/implicit\npath shown]] mid [[https://example.com/sequence/explicit{Docs <U+0026> Support} second label]] post
+note right of Server
+  [[https://example.com/sequence/note{Note tip\ncontinued} renamed note]] and unlinked tail
+end note
+@enduml

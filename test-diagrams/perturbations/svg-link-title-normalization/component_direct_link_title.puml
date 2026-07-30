@@ -1,0 +1,5 @@
+@startuml
+component "Renamed API" as Api [[https://example.com/component/api{API tip\ncontinued} visible api]]
+component "Renamed DB" as Db
+Api --> Db : connected
+@enduml

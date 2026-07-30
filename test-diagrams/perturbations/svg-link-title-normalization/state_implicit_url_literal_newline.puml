@@ -1,0 +1,5 @@
+@startuml
+state "Renamed Intake" as Intake
+state "Renamed Archive" as Archive
+Intake --> Archive : [[https://example.com/state/implicit\nraw-path visible-label]] tail text
+@enduml

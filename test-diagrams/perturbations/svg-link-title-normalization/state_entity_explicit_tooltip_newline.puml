@@ -1,0 +1,5 @@
+@startuml
+state "Renamed Service" as Service [[https://example.com/state/entity{Entity tip\ncontinued} visible state]]
+state "Renamed Store" as Store
+Service --> Store : ordinary transition
+@enduml

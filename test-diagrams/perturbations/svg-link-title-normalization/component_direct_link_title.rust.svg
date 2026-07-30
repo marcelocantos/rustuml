@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="196px" preserveAspectRatio="none" style="width:195px;height:196px;background:#FFFFFF;" version="1.1" viewBox="0 0 195 196" width="195px" zoomAndPan="magnify"><?plantuml ?><defs/><g><!--cluster Api-->
+<g class="cluster" data-qualified-name="Api" data-source-line="1" id="ent0002">
+<rect fill="none" height="175.2083" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:1;" width="174" x="7" y="7"/>
+<rect fill="none" height="10" style="stroke:#181818;stroke-width:1;" width="15" x="161" y="12"/>
+<rect fill="none" height="2" style="stroke:#181818;stroke-width:1;" width="4" x="159" y="14"/>
+<rect fill="none" height="2" style="stroke:#181818;stroke-width:1;" width="4" x="159" y="18"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="94.4932" x="46.7534" y="33.5352">Renamed API</text>
+</g>
+<!--entity Db-->
+<g class="entity" data-qualified-name="Api.Db" data-source-line="2" id="ent0003">
+<rect fill="#F1F1F1" height="46.4883" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="125.7227" x="31.1387" y="111.72"/>
+<rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="136.8613" y="116.72"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="134.8613" y="118.72"/>
+<rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="134.8613" y="122.72"/>
+<text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="85.7227" x="46.1387" y="145.2552">Renamed DB</text>
+</g>
+<!--link Api to Db-->
+<g class="link" data-entity-1="ent0002" data-entity-2="ent0003" data-link-type="dependency" data-source-line="3" id="lnk4">
+<path d="M94,35.01 C94,38.96 94,77.26 94,105.23" fill="none" id="Api-to-Db" style="stroke:#181818;stroke-width:1;"/>
+<polygon fill="#181818" points="94,111.23,98,102.23,94,106.23,90,102.23,94,111.23" style="stroke:#181818;stroke-width:1;"/>
+<text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="64.9683" x="95" y="78.2884">connected</text>
+</g>
+</g></svg>

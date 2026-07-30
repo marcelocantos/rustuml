@@ -1,0 +1,5 @@
+@startuml
+state "Renamed Left" as Left
+state "Renamed Right" as Right
+Left --> Right : [[https://example.com/state/hex{A <U+1F600> B <U+0041> C} unicode label]]
+@enduml

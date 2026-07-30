@@ -1,0 +1,5 @@
+@startuml
+state "Renamed Intake" as Intake
+state "Renamed Archive" as Archive
+Intake --> Archive : first [[https://example.com/state/one{Keep <U+ZZZZ> literal} first label]] middle [[https://example.com/state/two\nsecond-path second label]] last
+@enduml

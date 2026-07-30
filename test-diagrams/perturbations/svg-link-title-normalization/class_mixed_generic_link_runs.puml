@@ -1,0 +1,7 @@
+@startuml
+class "Renamed Record" as Record [[https://example.com/class/entity{Entity <U+0026> docs} visible entity]] {
+  [[https://example.com/class/implicit\npath implicit-label]]: first field
+  [[https://example.com/class/explicit{Field <U+0026> docs} explicit-label]]: second field
+  [[https://example.com/class/invalid{Bad <U+ZZZZ> marker} invalid-label]]: third field
+}
+@enduml
