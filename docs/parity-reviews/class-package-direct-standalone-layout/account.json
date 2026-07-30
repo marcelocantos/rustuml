@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-package-direct-standalone-layout",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "net.sourceforge.plantuml.abel.Entity#leafs",
+    "net.atmp.CucaDiagram#groupsAndRoot",
+    "net.atmp.CucaDiagram#isStandalone",
+    "net.atmp.CucaDiagram#applySingleStrategy",
+    "net.sourceforge.plantuml.cucadiagram.Magma#putInSquare",
+    "net.sourceforge.plantuml.cucadiagram.SquareMaker#putInSquare"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/class.rs::ClassParser::register_entity_path",
+    "crates/rustuml-render/src/class.rs::package_parent_indices",
+    "crates/rustuml-render/src/class.rs::innermost_entity_packages",
+    "crates/rustuml-render/src/class.rs::add_single_strategy_links",
+    "crates/rustuml-render/src/class.rs::add_square_invisible_links"
+  ],
+  "invariant": "CucaDiagram.applySingleStrategy evaluates each group independently over Entity.leafs(), which returns only immediate non-group quark children. A descendant leaf belongs to its innermost parent group for this phase and is never also a standalone of ancestor packages. isStandalone excludes any direct leaf incident to a link. Magma and SquareMaker add invisible row and column links only when one container has at least three remaining direct standalone leaves.",
+  "causal_divergence": "Rust Package.entities intentionally contains every descendant entity because register_entity_path adds a leaf to all matching package-path prefixes. add_single_strategy_links consumes that recursively inclusive list as if it were Java Entity.leafs(). An ancestor package can therefore combine its own direct leafs with leafs from multiple child packages and emit SquareMaker links that Java never creates. In the held-out nested package control, three unrelated descendant standalones cross the threshold and impose a false square layout, explaining the divergence without any Together scope or painted-coordinate adjustment.",
+  "planned_change": "Derive one innermost package owner per entity from the existing parent graph and feed add_single_strategy_links only entities whose owner is exactly the container being evaluated. Root standalones are entities with no owner. Keep Package.entities recursively inclusive for package containment, identity, and rendering code that needs descendants; change only the single-strategy projection. Preserve Java link incidence semantics and existing SquareMaker branch construction. Do not add package-name, label, fixture, coordinate, or branch-count special cases.",
+  "perturbation_axes": [
+    "one-level versus three-level nested packages",
+    "direct standalone leaves crossed with descendant standalone leaves",
+    "linked direct leaves crossed with unlinked direct leaves",
+    "filled child packages crossed with empty child packages",
+    "two, three, four, and five direct standalones",
+    "top-to-bottom crossed with left-to-right direction",
+    "renamed labels and reordered declarations"
+  ]
+}
