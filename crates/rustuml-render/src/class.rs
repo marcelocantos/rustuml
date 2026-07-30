@@ -6123,8 +6123,8 @@ fn emit_layout_frame_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
     let y = cluster.y;
     let label_w = text_render::measure_no_underline(&cluster.label, FONT_SIZE, true);
     let path_right = x + label_w + FRAME_TITLE_CORNER;
-    let upper_y = cluster.y + PACKAGE_TAB_H - 12.0;
-    let lower_y = cluster.y + PACKAGE_TAB_H - 2.0;
+    let upper_y = y + PACKAGE_TAB_H - 13.0;
+    let lower_y = y + PACKAGE_TAB_H - 3.0;
 
     // Java `USymbolFrame.asBig()` delegates to `drawFrame()`: a rounded
     // rectangle plus the title-corner path, then draws the title at (3, 1).
@@ -6158,8 +6158,8 @@ fn emit_layout_frame_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
     emit_layout_symbol_cluster_title(
         svg,
         cluster,
-        cluster.x + 4.0,
-        cluster.y + PACKAGE_TITLE_BASELINE,
+        x + 3.0,
+        y + PACKAGE_TITLE_BASELINE - 1.0,
     );
 }
 
