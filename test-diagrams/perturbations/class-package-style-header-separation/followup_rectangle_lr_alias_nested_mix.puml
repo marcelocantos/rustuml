@@ -1,0 +1,19 @@
+@startuml
+left to right direction
+skinparam packageStyle rect
+
+rectangle "RX" as ExplicitRectangle <<VeryWideApprovalWindow>> <<Escalated>> {
+  class RectExplicitA
+  class RectExplicitB
+}
+
+node "Wrapper" as Wrapper <<Ops>> {
+  package "This Label Is Much Wider Than Go" as FallbackRectangle <<Go>> {
+    class RectFallbackA
+    class RectFallbackB
+  }
+}
+
+RectExplicitA --> RectFallbackA
+RectExplicitB --> RectFallbackB
+@enduml

@@ -1,0 +1,239 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-package-style-header-separation",
+  "reviewer": {
+    "identity": "independent adversarial checker",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop",
+    "independence": "Did not implement commit 178883656d401630b88fadfc603a45af3f27da50, did not author account commits 09da80ee36775462539e347ec1628888ac52f237 or 56398bfe5a964c354691d1bc10ccb88f69f2ef1c, and did not edit production source, baselines, or predecessor review records."
+  },
+  "revisions": {
+    "checker_worktree_branch": "codex/checker-class-package-style-header-separation-followup",
+    "rust_revision": "178883656d401630b88fadfc603a45af3f27da50",
+    "rust_tree": "1cbccdaddc42493bae6bf7efe22a5686cda7360c",
+    "implementation_commit": "178883656d401630b88fadfc603a45af3f27da50",
+    "account_commits": [
+      "09da80ee36775462539e347ec1628888ac52f237",
+      "56398bfe5a964c354691d1bc10ccb88f69f2ef1c"
+    ],
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "binary": {
+    "path": "/tmp/rustuml-diff-one-17888365",
+    "sha256": "faf4aaa919b8ab9c614ddfa9c0de00871efe682066f3f7da3cffa553c187b649",
+    "mode": "--no-oracle",
+    "cargo_or_rustc_run": false,
+    "rebuilt": false
+  },
+  "oracle": {
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "generation_mode": "java -Djava.awt.headless=true -jar ... -tsvg <file>",
+    "java_svg_count": 5,
+    "java_syntax_error_count": 0,
+    "source_uniqueness": "All five fresh .puml inputs are SHA-256-unique against test-diagrams/golden/**/*.puml and the existing perturbation corpus."
+  },
+  "commands": [
+    "git worktree add -b codex/checker-class-package-style-header-separation-followup /private/tmp/rustuml-checker-class-package-style-header-separation 178883656d401630b88fadfc603a45af3f27da50",
+    "git -C /private/tmp/rustuml-checker-class-package-style-header-separation rev-parse --abbrev-ref HEAD",
+    "git -C /private/tmp/rustuml-checker-class-package-style-header-separation rev-parse HEAD",
+    "git -C /private/tmp/rustuml-checker-class-package-style-header-separation rev-parse HEAD^{tree}",
+    "git -C /private/tmp/rustuml-checker-class-package-style-header-separation show 09da80ee:docs/parity-reviews/class-package-style-header-separation/account.json",
+    "git -C /private/tmp/rustuml-checker-class-package-style-header-separation show 56398bfe:docs/parity-reviews/class-package-style-header-separation/account.json",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse 71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/ClusterHeader.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/Cluster.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolNode.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolDatabase.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolFrame.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolRectangle.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolCloud.java",
+    "git -C /private/tmp/rustuml-checker-class-package-style-header-separation show --stat --patch 178883656d401630b88fadfc603a45af3f27da50 -- crates/rustuml-render/src/class.rs crates/rustuml-layout/src/graph.rs docs/parity-reviews/class-package-style-header-separation/account.json",
+    "git -C /private/tmp/rustuml-checker-class-package-style-header-separation diff --check 178883656d401630b88fadfc603a45af3f27da50^..178883656d401630b88fadfc603a45af3f27da50",
+    "rg -n -i 'class-package-style-header-separation|checker_hdr_|followup_|test-diagrams/perturbations/class-package-style-header-separation|include_str!|include_bytes!|golden' crates/rustuml-render/src/class.rs crates/rustuml-layout/src/graph.rs crates/rustuml-parser/src/parse/class.rs crates/rustuml-parser/src/parse/mod.rs crates/rustuml/src/main.rs",
+    "ruby -rdigest -e 'cands=Dir[\"test-diagrams/perturbations/class-package-style-header-separation/followup_*.puml\"].sort; pool=(Dir[\"test-diagrams/golden/**/*.puml\"] + Dir[\"test-diagrams/perturbations/**/*.puml\"] - cands).uniq; cands.each{|cand| h=Digest::SHA256.file(cand).hexdigest; dup=pool.find{|p| Digest::SHA256.file(p).hexdigest==h}; abort(\"duplicate #{cand} #{dup}\") if dup}; puts \"unique_against_golden_and_existing_perturbations\"'",
+    "for f in test-diagrams/perturbations/class-package-style-header-separation/followup_*.puml; do java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg \"$f\"; done",
+    "for f in test-diagrams/perturbations/class-package-style-header-separation/followup_*.puml; do /tmp/rustuml-diff-one-17888365 --no-oracle --print-rust \"$f\" > \"${f%.puml}.rust.svg\"; /tmp/rustuml-diff-one-17888365 --no-oracle \"$f\"; done"
+  ],
+  "source_inspection": {
+    "supported": [
+      "Java GraphvizImageBuilder#printGroup constructs ClusterHeader before Cluster.drawU performs packageStyle fallback through ClusterDecoration. ClusterHeader reserves width and height only from group.getUSymbol(), matching the account's explicit-symbol-only title-reserve model.",
+      "The audited Rust diff removes the old label-only helper and emits stereotype/title stacks with named constants derived from Java's symbol asBig methods. Surviving symbol clusters in the fresh matrix show the expected italic stereotype lines above or below the bold title according to the symbol family.",
+      "Static inspection of the changed Rust paths found no mechanism-name strings, held-out filenames, test-diagram reads, include_str/include_bytes additions, coordinate-keyed SVG surgery, or fixture-specific branches. git diff --check is clean."
+    ],
+    "disproven": [
+      "The generalization claim does not survive a fresh five-symbol held-out matrix. On the audited commit, several symbol packages never survive as clusters at all, so the header-separation paint path is never reached for them.",
+      "The failure pattern is broader than text-stack arithmetic: Rust SVG qualified names show missing intermediate package owners or missing cluster wrappers. For example, followup_node_tb_root_explicit_mix flattens FallbackNode's children to top-level NodeFallbackA/NodeFallbackB, followup_database_lr_nested_root_mix assigns FallbackDatabase's children directly to Envelope, followup_frame_tb_root_nested_mix drops the ExplicitFrame cluster under CloudParent, followup_rectangle_lr_alias_nested_mix drops the root ExplicitRectangle cluster, and followup_cloud_tb_root_nested_mix drops the root FallbackCloud cluster."
+    ]
+  },
+  "inputs": [
+    {
+      "path": "test-diagrams/perturbations/class-package-style-header-separation/followup_node_tb_root_explicit_mix.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-style-header-separation/followup_node_tb_root_explicit_mix.svg",
+      "rust_svg": "test-diagrams/perturbations/class-package-style-header-separation/followup_node_tb_root_explicit_mix.rust.svg",
+      "valid": true,
+      "axes": [
+        "node",
+        "packageStyle fallback versus explicit keyword",
+        "top-to-bottom",
+        "root clusters",
+        "multiple visible stereotypes",
+        "stereotype width greater than title on fallback",
+        "title width greater than stereotype on explicit"
+      ],
+      "outcome": "fail: Rust flattens the fallback node package instead of preserving a FallbackNode cluster; the explicit node cluster survives with a correct header stack, but the fallback header path is never reached."
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-header-separation/followup_database_lr_nested_root_mix.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-style-header-separation/followup_database_lr_nested_root_mix.svg",
+      "rust_svg": "test-diagrams/perturbations/class-package-style-header-separation/followup_database_lr_nested_root_mix.rust.svg",
+      "valid": true,
+      "axes": [
+        "database",
+        "packageStyle fallback versus explicit keyword",
+        "left-to-right",
+        "nested fallback plus root explicit",
+        "multiple visible stereotypes",
+        "stereotype width greater than title on fallback",
+        "title width greater than stereotype on explicit"
+      ],
+      "outcome": "fail: Rust drops the nested FallbackDatabase cluster and reassigns its children directly to Envelope; the explicit database cluster survives, but the nested fallback header model is not exercised."
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-header-separation/followup_frame_tb_root_nested_mix.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-style-header-separation/followup_frame_tb_root_nested_mix.svg",
+      "rust_svg": "test-diagrams/perturbations/class-package-style-header-separation/followup_frame_tb_root_nested_mix.rust.svg",
+      "valid": true,
+      "axes": [
+        "frame",
+        "packageStyle fallback versus explicit keyword",
+        "top-to-bottom",
+        "root fallback plus nested explicit",
+        "multiple visible stereotypes",
+        "title width greater than stereotype on fallback",
+        "stereotype width greater than title on explicit"
+      ],
+      "outcome": "fail: Rust preserves the root fallback frame cluster and its title-first tab ordering, but drops the nested ExplicitFrame cluster under CloudParent and emits its children as direct CloudParent members."
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-header-separation/followup_rectangle_lr_alias_nested_mix.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-style-header-separation/followup_rectangle_lr_alias_nested_mix.svg",
+      "rust_svg": "test-diagrams/perturbations/class-package-style-header-separation/followup_rectangle_lr_alias_nested_mix.rust.svg",
+      "valid": true,
+      "axes": [
+        "rectangle via rect alias fallback plus explicit rectangle keyword",
+        "left-to-right",
+        "root explicit plus nested fallback",
+        "multiple visible stereotypes",
+        "stereotype width greater than title on explicit",
+        "title width greater than stereotype on fallback"
+      ],
+      "outcome": "fail: Rust preserves the nested fallback rectangle cluster and its stereotype-above-title stack, but drops the root ExplicitRectangle cluster and emits only its leaf classes at top level."
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-header-separation/followup_cloud_tb_root_nested_mix.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-style-header-separation/followup_cloud_tb_root_nested_mix.svg",
+      "rust_svg": "test-diagrams/perturbations/class-package-style-header-separation/followup_cloud_tb_root_nested_mix.rust.svg",
+      "valid": true,
+      "axes": [
+        "cloud",
+        "packageStyle fallback versus explicit keyword",
+        "top-to-bottom",
+        "root fallback plus nested explicit",
+        "multiple visible stereotypes",
+        "stereotype width greater than title on fallback",
+        "title width greater than stereotype on explicit"
+      ],
+      "outcome": "fail: Rust preserves the nested explicit cloud cluster and its stereotype/title stack, but drops the root FallbackCloud cluster and flattens CloudFallbackA/CloudFallbackB to top-level entities."
+    }
+  ],
+  "result_counts": {
+    "fresh_inputs_total": 5,
+    "java_syntax_error_inputs": 0,
+    "valid_inputs": 5,
+    "valid_passed": 0,
+    "valid_failed": 5,
+    "valid_mechanism_relevant_passed": 0,
+    "valid_mechanism_relevant_failed": 5,
+    "oracle_errors": 0
+  },
+  "findings": [
+    {
+      "severity": "rejecting",
+      "summary": "The audited commit does not preserve symbol clusters across the requested five-family held-out matrix.",
+      "evidence": "All five fresh valid cases fail under /tmp/rustuml-diff-one-17888365 --no-oracle. The failure mode is consistent: one side of the explicit/fallback pair is flattened or loses its intermediate cluster owner, so the container-level header model never runs for that cluster. The broken cases cover node fallback at root, database fallback nested in a frame, explicit frame nested in a cloud, explicit rectangle at root, and cloud fallback at root."
+    },
+    {
+      "severity": "rejecting",
+      "summary": "The narrow header-stack patch is real but insufficient for acceptance.",
+      "evidence": "Surviving symbol clusters do show the intended stereotype/title ordering: explicit node, explicit database, root fallback frame, nested fallback rectangle, and nested explicit cloud each render visible stereotype lines in the expected position. The strict failures therefore reject the broader mechanism claim on model completeness, not because the checker found a fixture-shaped overfit in the changed lines."
+    },
+    {
+      "severity": "informational",
+      "summary": "No fixture-shaped logic, unexplained output surgery, or comparator manipulation was found in the audited implementation diff.",
+      "evidence": "The changed Rust paths contain only named Java-cited constants, text-stack helpers, and call-site rewiring. Searches over the audited files found no held-out filenames, mechanism-name strings, test-diagram reads, include_str/include_bytes additions, or coordinate-keyed SVG rewriting. The rejection is about failing held-outs, not about dishonest implementation tactics."
+    }
+  ],
+  "artifact_hashes": {
+    "helper": {
+      "path": "/tmp/rustuml-diff-one-17888365",
+      "sha256": "faf4aaa919b8ab9c614ddfa9c0de00871efe682066f3f7da3cffa553c187b649"
+    },
+    "java_jar": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+    },
+    "pairs": [
+      {
+        "source": "test-diagrams/perturbations/class-package-style-header-separation/followup_node_tb_root_explicit_mix.puml",
+        "source_sha256": "4d7e3f8d734c6bd732485e40fdd1c07d2a32927ed6313c60cea7ba6a1ca9487a",
+        "java_svg": "test-diagrams/perturbations/class-package-style-header-separation/followup_node_tb_root_explicit_mix.svg",
+        "java_svg_sha256": "6ee2269053958e8eb63545df5f6177db9a3f5f03ba0a57dc40ae77b20d649937",
+        "rust_svg": "test-diagrams/perturbations/class-package-style-header-separation/followup_node_tb_root_explicit_mix.rust.svg",
+        "rust_svg_sha256": "4627d1c611dfcf5845aad0518d9975dbf46a7a14a2b9dc59f673a0fc11d419d8"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-package-style-header-separation/followup_database_lr_nested_root_mix.puml",
+        "source_sha256": "c90406da24dea3fbec6af7d9e0ac147595bb70b1e0765ed0aa02c568b7bcd2d9",
+        "java_svg": "test-diagrams/perturbations/class-package-style-header-separation/followup_database_lr_nested_root_mix.svg",
+        "java_svg_sha256": "2f883f1c556845c3669d0877aafdb36b3ae1afebd7ec7f334db079ae3477d865",
+        "rust_svg": "test-diagrams/perturbations/class-package-style-header-separation/followup_database_lr_nested_root_mix.rust.svg",
+        "rust_svg_sha256": "1ae41572e0208f0a102cc1563180e91d8eec37acf4f05e04e520069f5e8685ce"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-package-style-header-separation/followup_frame_tb_root_nested_mix.puml",
+        "source_sha256": "ac1e919109f2cd80ab051335f52bae36094abaa023016e02805db101a7a85e19",
+        "java_svg": "test-diagrams/perturbations/class-package-style-header-separation/followup_frame_tb_root_nested_mix.svg",
+        "java_svg_sha256": "8f4db726a4618fd3a394727108a91d86394bdf45f927f0b07e17d74f4941db58",
+        "rust_svg": "test-diagrams/perturbations/class-package-style-header-separation/followup_frame_tb_root_nested_mix.rust.svg",
+        "rust_svg_sha256": "0f18f8992bb57780fd9f557614287096291ba8a6354a1182ddc30d148c81e252"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-package-style-header-separation/followup_rectangle_lr_alias_nested_mix.puml",
+        "source_sha256": "9a41e4338dededef00b0b43de7e270dca9ed56304133d7842efcd12ae16fe92b",
+        "java_svg": "test-diagrams/perturbations/class-package-style-header-separation/followup_rectangle_lr_alias_nested_mix.svg",
+        "java_svg_sha256": "863fca89cd16c8e1533c4170d3301cda2ec924d1f722a7dbe044c9082cc6a8bb",
+        "rust_svg": "test-diagrams/perturbations/class-package-style-header-separation/followup_rectangle_lr_alias_nested_mix.rust.svg",
+        "rust_svg_sha256": "e2daaea007f14cbe257e0176da30ac51b175e24b8e804c47cc9bcd235bc02f97"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-package-style-header-separation/followup_cloud_tb_root_nested_mix.puml",
+        "source_sha256": "ee17480a47f9d824c70e86884568befea0e7c8546b09c0bb05fcb350522840c2",
+        "java_svg": "test-diagrams/perturbations/class-package-style-header-separation/followup_cloud_tb_root_nested_mix.svg",
+        "java_svg_sha256": "e0c6f7cffd02be70ff747736f65b1b5dae7b1b259fa395efbc9f53d73f4494f8",
+        "rust_svg": "test-diagrams/perturbations/class-package-style-header-separation/followup_cloud_tb_root_nested_mix.rust.svg",
+        "rust_svg_sha256": "3cfcabc27301200c93811d56024dd75826f0d71514320f60475461bbde2eb846"
+      }
+    ]
+  },
+  "artifacts": {
+    "held_out_directory": "test-diagrams/perturbations/class-package-style-header-separation/",
+    "review": "docs/parity-reviews/class-package-style-header-separation/review-followup.json",
+    "production_files_modified": false,
+    "baselines_modified": false,
+    "existing_review_records_modified": false,
+    "rust_svgs_preserved": true
+  },
+  "verdict": "REJECT"
+}

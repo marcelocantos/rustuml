@@ -1,0 +1,18 @@
+@startuml
+skinparam packageStyle frame
+
+package "Very Long Release Coordination Frame" as FallbackFrame <<Ops>> {
+  class FrameFallbackA
+  class FrameFallbackB
+}
+
+cloud "Outer Weather Shell" as CloudParent <<WX>> {
+  frame "FR" as ExplicitFrame <<VeryWideApprovalWindow>> <<Beta>> {
+    class FrameExplicitA
+    class FrameExplicitB
+  }
+}
+
+FrameFallbackA --> FrameExplicitA
+FrameFallbackB --> FrameExplicitB
+@enduml

@@ -1,0 +1,16 @@
+@startuml
+skinparam packageStyle node
+
+package "API" as FallbackNode <<ObservabilityPortal>> <<AuditTrail>> {
+  class NodeFallbackA
+  class NodeFallbackB
+}
+
+node "Runtime Control Plane" as ExplicitNode <<Ops>> {
+  class NodeExplicitA
+  class NodeExplicitB
+}
+
+NodeFallbackA --> NodeExplicitA
+NodeFallbackB --> NodeExplicitB
+@enduml

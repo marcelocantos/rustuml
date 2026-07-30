@@ -1,0 +1,19 @@
+@startuml
+left to right direction
+skinparam packageStyle database
+
+frame "Envelope" as Envelope <<Review>> {
+  package "DB" as FallbackDatabase <<ReplicaSetMembers>> <<Readonly>> {
+    class DbFallbackA
+    class DbFallbackB
+  }
+}
+
+database "Ledger Archive" as ExplicitDatabase <<Ops>> {
+  class DbExplicitA
+  class DbExplicitB
+}
+
+DbFallbackA --> DbExplicitA
+DbFallbackB --> DbExplicitB
+@enduml
