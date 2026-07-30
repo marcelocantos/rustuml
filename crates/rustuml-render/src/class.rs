@@ -204,6 +204,10 @@ const NOTE_TREE_BRANCH_WIDTH: f64 = 8.0;
 const NOTE_TREE_TEXT_X: f64 = 18.0;
 const NOTE_TREE_GRID_TOP_PAD: f64 = 2.0;
 const NOTE_TREE_BODY_EXTRA: f64 = 4.0;
+/// `EntityImageNote.drawNormal` draws its `TextBlock` on the unmodified
+/// `UGraphic`, whose default stroke is one pixel. Attached notes instead use
+/// `Opale.drawU`, which applies the resolved note stroke before the TextBlock.
+const DEFAULT_NOTE_CONTENT_STROKE_WIDTH: f64 = 1.0;
 /// `EntityImageAssociationPoint.SIZE`: PlantUML lays out and paints the
 /// synthetic point inserted into an association-class base edge as a 4px
 /// circle.
@@ -16224,6 +16228,7 @@ fn emit_note_tree(
     x: f64,
     y: f64,
     fill: &str,
+    stroke_width: f64,
     style: &ResolvedNoteStyle,
 ) {
     let f = crate::plantuml_metrics::fmt_coord;
@@ -16270,15 +16275,17 @@ fn emit_note_tree(
     for (vertical_top, branch_y) in branches {
         write!(
             svg,
-            r#"<rect fill="{}" height="2" style="stroke:#000000;stroke-width:1;" width="2" x="{}" y="{}"/>"#,
+            r#"<rect fill="{}" height="2" style="stroke:#000000;stroke-width:{};" width="2" x="{}" y="{}"/>"#,
             fill,
+            f(stroke_width),
             f(branch_right - 1.0),
             f(branch_y - 1.0),
         )
         .unwrap();
         write!(
             svg,
-            r##"<line style="stroke:#000000;stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            r##"<line style="stroke:#000000;stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            f(stroke_width),
             f(trunk_x),
             f(branch_right),
             f(branch_y),
@@ -16287,7 +16294,8 @@ fn emit_note_tree(
         .unwrap();
         write!(
             svg,
-            r##"<line style="stroke:#000000;stroke-width:1;" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            r##"<line style="stroke:#000000;stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"##,
+            f(stroke_width),
             f(trunk_x),
             f(trunk_x),
             f(vertical_top),
@@ -16355,7 +16363,22 @@ fn emit_note_body(
             continue;
         }
         if let Some(tree) = note_tree_rows(&block.lines) {
-            emit_note_tree(svg, &tree, x, block_top, &style.background, style);
+            // `Opale.drawU` applies the note stroke before drawing attached
+            // note content. `EntityImageNote.drawNormal` does not.
+            let tree_stroke_width = if note.target.is_some() && note.position.is_some() {
+                style.border_width
+            } else {
+                DEFAULT_NOTE_CONTENT_STROKE_WIDTH
+            };
+            emit_note_tree(
+                svg,
+                &tree,
+                x,
+                block_top,
+                &style.background,
+                tree_stroke_width,
+                style,
+            );
             block_top += tree
                 .iter()
                 .map(|node| {
@@ -19380,14 +19403,44 @@ mod tests {
     }
 
     #[test]
-    fn standalone_note_tree_uses_one_structural_trunk_for_deeper_rows() {
-        let input = "@startuml\nnote as FreshTree743\n  |_ renamed root\n  |__ second level\n  |___ third level\nend note\n@enduml";
+    fn attached_note_tree_inherits_opale_stroke() {
+        let input = "@startuml\n\
+            skinparam NoteBorderThickness 3\n\
+            class FreshTreeOwner739\n\
+            note right of FreshTreeOwner739\n\
+              |_ renamed root\n\
+              |__ second level\n\
+              |___ third level\n\
+            end note\n\
+            @enduml";
         let diagram = rustuml_parser::parse::parse(input).unwrap();
         let svg = crate::render_svg(&diagram);
 
         assert!(svg.contains(">renamed root</text>"));
         assert!(svg.contains(">_ second level</text>"));
         assert!(svg.contains(">__ third level</text>"));
+        assert!(svg.contains(r#"stroke:#181818;stroke-width:3;""#));
+        assert_eq!(
+            svg.matches(r#"<line style="stroke:#000000;stroke-width:3;""#)
+                .count(),
+            6
+        );
+    }
+
+    #[test]
+    fn standalone_note_tree_uses_default_graphics_stroke() {
+        let input = "@startuml\n\
+            skinparam NoteBorderThickness 3\n\
+            note as FreshTree743\n\
+              |_ renamed root\n\
+              |__ second level\n\
+              |___ third level\n\
+            end note\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(r#"stroke:#181818;stroke-width:3;""#));
         assert_eq!(
             svg.matches(r#"<line style="stroke:#000000;stroke-width:1;""#)
                 .count(),
