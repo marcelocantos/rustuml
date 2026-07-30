@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-note-tree-inherited-stroke",
+  "created": "2026-07-31",
+  "status": "proposed",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "91d5a20cbcac58cebf8748ad537da1c1a8a1d6c8",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNote.java",
+      "symbols": [
+        "EntityImageNote.drawNormal",
+        "EntityImageNote.applyStroke"
+      ],
+      "lines": "275-301",
+      "role": "Applies the merged note style stroke to a derived graphics context only for the note polygon, then draws the note TextBlock on the original class-note graphics context."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/Opale.java",
+      "symbol": "Opale.drawU",
+      "lines": "105-130",
+      "role": "For an attached opale note, applies the merged note stroke to the active graphics context before drawing both the polygon and the TextBlock."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/atom/AtomTree.java",
+      "symbol": "AtomTree.drawU",
+      "lines": "75-88",
+      "role": "Builds the tree skeleton and draws it using the received graphics context with only the font color applied; it does not install a stroke."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/salt/element/Skeleton2.java",
+      "symbols": [
+        "Skeleton2.Entry.drawHline",
+        "Skeleton2.Entry.drawVline",
+        "Skeleton2.draw"
+      ],
+      "lines": "55-87",
+      "role": "Emits each 2x2 joint rectangle and horizontal/vertical branch directly on the inherited graphics context without applying UStroke."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbol": "emit_note_tree",
+      "lines": "16221-16297",
+      "role": "Correctly ports Skeleton2 geometry but hardcodes stroke-width 1 on every joint and branch, bypassing the class note graphics context."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbol": "ResolvedNoteStyle::for_note",
+      "lines": "14372-14422",
+      "role": "Models the class note image context, whose default border stroke is 0.5; the tree content must not be overwritten with the generic one-pixel tree stroke used by other diagram renderers."
+    }
+  ],
+  "evidence_inputs": [
+    "test-diagrams/golden/class/class_note_creole_tree.puml",
+    "test-diagrams/golden/creole/creole_tree_simple_in_note.puml",
+    "test-diagrams/golden/creole/creole_tree_deep_in_note.puml"
+  ],
+  "claimed_invariant": "Creole AtomTree owns tree geometry and line color but not stroke selection. Every Skeleton2 joint and branch inherits the active UGraphic stroke of its containing note renderer. An attached class note uses Opale, which applies the merged note style stroke before drawing the TextBlock, so the tree inherits NoteBorderThickness (0.5 by default). A standalone named class note draws its TextBlock on the default graphics context and the same tree inherits width 1.",
+  "causal_divergence": "Rust's class note tree emitter reconstructs the correct Skeleton2 points but hardcodes stroke-width 1 for every primitive, ignoring whether the note is attached through Opale. The attached class golden therefore needs 0.5 while the two standalone Creole-note goldens correctly retain 1. This is note-image lifecycle and graphics-context ownership, not a universal tree constant.",
+  "planned_model_change": "Pass the note lifecycle into emit_note_tree. Use the resolved note border width for attached/opale notes and the default one-pixel graphics stroke for standalone named notes, then apply that inherited value to every joint rectangle and branch segment. Keep the change inside the class renderer; do not alter Creole parsing, shared tree geometry, note polygon styling, colors, dimensions, or comparator behavior.",
+  "perturbation_axes": [
+    "one versus multiple sibling rows",
+    "depth one through depth four",
+    "attached note left, right, above, and below a class",
+    "default versus explicit NoteBorderThickness on attached and standalone notes",
+    "default versus custom note font and font color",
+    "renamed labels and mixed sibling/deeper nesting",
+    "class SVEK note versus standalone Creole note negative control"
+  ],
+  "scope_boundary": "This mechanism owns only the inherited stroke width of Skeleton2 primitives emitted inside class-diagram attached and standalone notes. It does not change tree parsing, indentation, geometry, text metrics, note borders, table grids, list bullets, non-class note renderers, or shared styles.",
+  "acceptance": [
+    "The class note tree becomes exact while both standalone Creole tree goldens remain exact.",
+    "Fresh class-note trees with changed depth, count, side, labels, and NoteBorderThickness preserve the inherited content stroke.",
+    "Renderer tests, class and Creole family censuses, full no-oracle ratchet, clippy, and mechanical harness guards pass except for explicitly pre-existing gate debt.",
+    "An independent checker records a verdict at the exact implementation revision."
+  ]
+}
