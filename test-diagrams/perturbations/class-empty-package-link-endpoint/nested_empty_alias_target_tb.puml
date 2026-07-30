@@ -1,0 +1,8 @@
+@startuml
+package Outer8211 {
+  package "Nested Empty 8213" as Empty8213 {
+  }
+}
+class Source8215
+Source8215 --> Outer8211.Empty8213
+@enduml

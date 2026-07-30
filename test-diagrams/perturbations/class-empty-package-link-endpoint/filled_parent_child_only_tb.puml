@@ -1,0 +1,8 @@
+@startuml
+package Parent8251 {
+  package Child8253 {
+  }
+}
+class Sink8255
+Parent8251 --> Sink8255
+@enduml

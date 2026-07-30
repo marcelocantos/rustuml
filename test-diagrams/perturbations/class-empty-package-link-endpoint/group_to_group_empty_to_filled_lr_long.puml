@@ -1,0 +1,11 @@
+@startuml
+left to right direction
+package "Empty Left 8241" as Empty8241 {
+}
+package Outer8243 {
+  package "Filled Right 8245" as Filled8245 {
+    class Member8247
+  }
+}
+Empty8241 ----> Outer8243.Filled8245
+@enduml

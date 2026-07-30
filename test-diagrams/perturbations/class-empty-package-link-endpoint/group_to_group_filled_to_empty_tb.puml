@@ -1,0 +1,10 @@
+@startuml
+package FilledLeft8231 {
+  class Member8233
+}
+package Outer8235 {
+  package "Empty Right 8237" as Empty8237 {
+  }
+}
+FilledLeft8231 --> Outer8235.Empty8237
+@enduml

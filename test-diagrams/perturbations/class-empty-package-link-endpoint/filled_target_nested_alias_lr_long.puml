@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+package Outer8221 {
+  package "Nested Filled 8223" as Filled8223 {
+    class Member8225
+  }
+}
+class Source8227
+Source8227 ----> Outer8221.Filled8223
+@enduml

@@ -1,0 +1,199 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-empty-package-link-endpoint",
+  "account": "docs/parity-reviews/class-empty-package-link-endpoint/account.json",
+  "prior_review": {
+    "path": "docs/parity-reviews/class-empty-package-link-endpoint/review.json",
+    "result": "rejected",
+    "review_commit": "28a85f6f"
+  },
+  "implementation_commit": "5e8db2b8af85c923026cffed8534e419d97d01fc",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "reviewer": {
+    "identity": "independent adversarial checker",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop",
+    "independence": "Did not implement commit 5e8db2b8, did not edit shipping source, and only added held-out evidence plus this follow-up review record."
+  },
+  "revisions": {
+    "rust_revision_checked": "5e8db2b8af85c923026cffed8534e419d97d01fc",
+    "rust_tree_checked": "0d2e300331856949c0d6b2219aaf0edce4dfb2a2",
+    "checker_worktree": "/tmp/rustuml-review-endpoint-5e8",
+    "checker_worktree_ref": "detached HEAD",
+    "java_revision_checked": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "comparator": {
+    "binary": "/tmp/rustuml-checker-1482/target/debug/examples/diff_one",
+    "mode": "--no-oracle",
+    "source": "crates/rustuml-oracle/examples/diff_one.rs",
+    "compare_function": "rustuml_oracle::compare::compare_svg_strict",
+    "notes": "Strict SVG comparison with the project's built-in coordinate/root-svg tolerances; no Cargo or rustc was run in this checker pass."
+  },
+  "java_jar": {
+    "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar"
+  },
+  "commands": [
+    "cat docs/parity-reviews/class-empty-package-link-endpoint/account.json",
+    "git show 5e8db2b8^:docs/parity-reviews/class-empty-package-link-endpoint/review.json",
+    "git diff 5e8db2b8^ 5e8db2b8 -- crates/rustuml-render/src/class.rs",
+    "sed -n '249,330p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/atmp/CucaDiagram.java",
+    "sed -n '150,260p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandLinkClass.java",
+    "sed -n '300,345p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/ClusterDotString.java",
+    "sed -n '620,670p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/Cluster.java",
+    "sed -n '430,580p' crates/rustuml-parser/src/parse/class.rs",
+    "sed -n '1000,1115p' crates/rustuml-parser/src/parse/class.rs",
+    "sed -n '1270,1365p' crates/rustuml-parser/src/parse/class.rs",
+    "sed -n '2210,2455p' crates/rustuml-render/src/class.rs",
+    "sed -n '3681,3908p' crates/rustuml-render/src/class.rs",
+    "sed -n '10602,10834p' crates/rustuml-render/src/class.rs",
+    "sed -n '11290,12392p' crates/rustuml-render/src/class.rs",
+    "sed -n '1,160p' crates/rustuml-oracle/examples/diff_one.rs",
+    "sed -n '481,560p' crates/rustuml-oracle/src/compare.rs",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/class-empty-package-link-endpoint/nested_empty_alias_target_tb.puml test-diagrams/perturbations/class-empty-package-link-endpoint/filled_target_nested_alias_lr_long.puml test-diagrams/perturbations/class-empty-package-link-endpoint/group_to_group_filled_to_empty_tb.puml test-diagrams/perturbations/class-empty-package-link-endpoint/group_to_group_empty_to_filled_lr_long.puml test-diagrams/perturbations/class-empty-package-link-endpoint/filled_parent_child_only_tb.puml test-diagrams/perturbations/class-empty-package-link-endpoint/cloud_filled_source_lr.puml test-diagrams/perturbations/class-empty-package-link-endpoint/filled_link_before_late_class_tb.puml test-diagrams/perturbations/class-empty-package-link-endpoint/quoted_empty_source_tb.puml test-diagrams/perturbations/class-empty-package-link-endpoint/quoted_filled_target_lr.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-empty-package-link-endpoint/nested_empty_alias_target_tb.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-empty-package-link-endpoint/filled_target_nested_alias_lr_long.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-empty-package-link-endpoint/group_to_group_filled_to_empty_tb.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-empty-package-link-endpoint/group_to_group_empty_to_filled_lr_long.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-empty-package-link-endpoint/filled_parent_child_only_tb.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-empty-package-link-endpoint/cloud_filled_source_lr.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-empty-package-link-endpoint/filled_link_before_late_class_tb.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-empty-package-link-endpoint/quoted_empty_source_tb.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-empty-package-link-endpoint/quoted_filled_target_lr.puml",
+    "rg -n -i 'class-empty-package-link-endpoint|nested_empty_alias_target_tb|filled_target_nested_alias_lr_long|group_to_group_filled_to_empty_tb|group_to_group_empty_to_filled_lr_long|filled_parent_child_only_tb|cloud_filled_source_lr|filled_link_before_late_class_tb|quoted_empty_source_tb|quoted_filled_target_lr' crates/rustuml crates/rustuml-parser crates/rustuml-render crates/rustuml-layout crates/rustuml-math"
+  ],
+  "source_inspection": {
+    "java": [
+      "CommandLinkClass resolves each relationship endpoint through CucaDiagram#quarkInContextSafe(true, endpoint) and only creates a class leaf when quark.getData() is null.",
+      "With separators enabled, CucaDiagram#quarkInContextSafe uses the exact supplied endpoint string when choosing root.child(full) or currentQuark.child(full); it does not identifier-normalize quoted display names.",
+      "Bibliotekon#getNodeUid returns Cluster.getSpecialPointId(ent) for any group endpoint, and ClusterDotString emits that point inside the cluster whenever a link touches the group."
+    ],
+    "rust": [
+      "The renderer change in 5e8db2b8 correctly maps rendered package endpoints to either empty leaf nodes or cluster special-point nodes, and the fresh non-quoted held-outs exercise those paths successfully.",
+      "ClassParser::try_relationship still normalizes every quoted endpoint with strip_creole_for_id, turning spaces into underscores before resolve_relationship_endpoint runs.",
+      "Package creation does not apply that quoted-name normalization: try_package resolves the group path from the original code string and stores package names/display names with spaces intact. Existing quoted package groups therefore live at a different quark path than quoted relationship endpoints."
+    ],
+    "fixture_shaping_search": "No mechanism-name string, held-out filename, or similar fixture-shaped branch was found in shipping crates.",
+    "constants": "No new unexplained mechanism-shaped constants were found. The new subdivision count in simulate_class_compound is adjacent to a Java-source comment naming DotPath.simulateCompound's eight bisections."
+  },
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-empty-package-link-endpoint/nested_empty_alias_target_tb.puml",
+      "golden": "test-diagrams/perturbations/class-empty-package-link-endpoint/nested_empty_alias_target_tb.svg",
+      "axes": [
+        "nested empty package",
+        "explicit alias",
+        "class-to-package target direction",
+        "top-to-bottom",
+        "length-one link"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-package-link-endpoint/filled_target_nested_alias_lr_long.puml",
+      "golden": "test-diagrams/perturbations/class-empty-package-link-endpoint/filled_target_nested_alias_lr_long.svg",
+      "axes": [
+        "nested filled package",
+        "explicit alias",
+        "class-to-package target direction",
+        "left-to-right",
+        "longer link"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-package-link-endpoint/group_to_group_filled_to_empty_tb.puml",
+      "golden": "test-diagrams/perturbations/class-empty-package-link-endpoint/group_to_group_filled_to_empty_tb.svg",
+      "axes": [
+        "group-to-group",
+        "filled package source",
+        "nested empty package target",
+        "top-to-bottom",
+        "length-one link"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-package-link-endpoint/group_to_group_empty_to_filled_lr_long.puml",
+      "golden": "test-diagrams/perturbations/class-empty-package-link-endpoint/group_to_group_empty_to_filled_lr_long.svg",
+      "axes": [
+        "group-to-group",
+        "empty package source",
+        "nested filled package target",
+        "left-to-right",
+        "longer link"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-package-link-endpoint/filled_parent_child_only_tb.puml",
+      "golden": "test-diagrams/perturbations/class-empty-package-link-endpoint/filled_parent_child_only_tb.svg",
+      "axes": [
+        "filled package with only child groups",
+        "root package source",
+        "top-to-bottom",
+        "length-one link"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-package-link-endpoint/cloud_filled_source_lr.puml",
+      "golden": "test-diagrams/perturbations/class-empty-package-link-endpoint/cloud_filled_source_lr.svg",
+      "axes": [
+        "explicit cloud group",
+        "filled package source",
+        "left-to-right",
+        "length-one link"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-package-link-endpoint/filled_link_before_late_class_tb.puml",
+      "golden": "test-diagrams/perturbations/class-empty-package-link-endpoint/filled_link_before_late_class_tb.svg",
+      "axes": [
+        "filled package source",
+        "link before later class declaration",
+        "top-to-bottom",
+        "length-one link"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-package-link-endpoint/quoted_empty_source_tb.puml",
+      "golden": "test-diagrams/perturbations/class-empty-package-link-endpoint/quoted_empty_source_tb.svg",
+      "axes": [
+        "bare quoted package display",
+        "root empty package source",
+        "top-to-bottom",
+        "length-one link"
+      ],
+      "result": "fail",
+      "evidence": "Java treats \"Quoted Empty 8281\" as the existing empty package endpoint and emits link id=\"Quoted Empty 8281-to-Sink8283\" from package ent0002. Rust normalizes the quoted endpoint to Quoted_Empty_8281, fails to resolve the existing package quark, creates a new class entity, and routes the link from that synthetic class instead."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-package-link-endpoint/quoted_filled_target_lr.puml",
+      "golden": "test-diagrams/perturbations/class-empty-package-link-endpoint/quoted_filled_target_lr.svg",
+      "axes": [
+        "bare quoted package display",
+        "root filled package target",
+        "left-to-right",
+        "length-one link"
+      ],
+      "result": "fail",
+      "evidence": "Java resolves \"Quoted Filled 8291\" to the existing cluster endpoint and routes Source8295 directly into the package cluster. Rust again identifier-normalizes the quoted endpoint, synthesizes a separate class entity Quoted_Filled_8291, and produces a materially different 387x186 layout."
+    }
+  ],
+  "findings": [
+    "REJECT: 5e8db2b8 improves ordinary existing-group endpoints, but the claim is not complete because bare quoted package displays in relationship endpoints still miss the existing group and create class leaves instead.",
+    "The causal miss is in the parser, not the new renderer path: try_relationship applies strip_creole_for_id to quoted endpoints before resolve_relationship_endpoint, while try_package stores the package quark path with the original quoted display text.",
+    "Seven fresh non-quoted held-outs passed across nested/root, empty/filled, source/target, TB/LR, longer-link, group-to-group, explicit-cloud, and late-target axes, so the remaining failure is narrow but directly mechanism-relevant.",
+    "No fixture-shaped logic was found in shipping crates, and no unexplained new mechanism constants were found."
+  ],
+  "summary": {
+    "fresh_valid_inputs": 9,
+    "passes": 7,
+    "failures": 2,
+    "java_syntax_errors": 0,
+    "cargo_or_rustc_run": false
+  },
+  "verdict": "REJECT"
+}

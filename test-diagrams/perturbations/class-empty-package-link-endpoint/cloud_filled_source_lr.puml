@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+cloud Cloud8261 {
+  class Member8263
+}
+class Sink8265
+Cloud8261 --> Sink8265
+@enduml

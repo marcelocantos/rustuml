@@ -1,0 +1,6 @@
+@startuml
+package "Quoted Empty 8281" {
+}
+class Sink8283
+"Quoted Empty 8281" --> Sink8283
+@enduml
