@@ -1,0 +1,8 @@
+@startuml
+top to bottom direction
+skinparam State_Arrow_Font_Name Courier New
+skinparam State_Arrow_Font_Size 9
+skinparam default_text_align right
+state "Alias Loop" as Loop
+Loop --> Loop : compact self loop\nright aligned row
+@enduml

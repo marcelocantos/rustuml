@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+skinparam StateArrowFontName Times New Roman
+skinparam StateArrowFontSize 19
+skinparam StateArrowFontStyle italic
+skinparam StateMessageAlignment center
+state "Source Accent" as Source
+state "Target Accent" as Target
+Source --> Target : Crème brûlée — déjà vu
+@enduml

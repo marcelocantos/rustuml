@@ -1,0 +1,7 @@
+@startuml
+left to right direction
+skinparam fontName Courier New
+state "Generic Key Source" as Source
+state "Generic Key Sink" as Sink
+Source --> Sink : generic fontName must be inert
+@enduml

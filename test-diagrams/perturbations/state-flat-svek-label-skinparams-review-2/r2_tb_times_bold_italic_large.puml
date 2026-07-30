@@ -1,0 +1,11 @@
+@startuml
+top to bottom direction
+skinparam ArrowFontName Times New Roman
+skinparam ArrowFontSize 22
+skinparam ArrowFontStyle bold italic
+skinparam StateMessageAlignment center
+state "Upper Station" as Upper
+state "Lower Station" as Lower
+Upper --> Lower : Broad Times face\nmixed WWW and iii
+Lower --> Lower : Large self-loop label
+@enduml

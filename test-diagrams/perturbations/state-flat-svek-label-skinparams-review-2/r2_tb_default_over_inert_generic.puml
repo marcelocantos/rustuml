@@ -1,0 +1,9 @@
+@startuml
+top to bottom direction
+skinparam fontName Courier New
+skinparam defaultFontName Times New Roman
+skinparam defaultFontSize 17
+state "Default Family Source" as Source
+state "Default Family Sink" as Sink
+Source --> Sink : default family owns this label\nnot the generic key
+@enduml

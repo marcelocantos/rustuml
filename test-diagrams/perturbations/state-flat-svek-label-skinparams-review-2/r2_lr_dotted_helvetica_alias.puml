@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+skinparam State.Arrow_Font.Name Helvetica
+skinparam State.Arrow_Font.Size 10
+skinparam State.Message_Align left
+skinparam default.text.align right
+state "Alias West" as West
+state "Alias East" as East
+West --> East : configured left\nnatural right wins\r
+@enduml

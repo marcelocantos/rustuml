@@ -1,0 +1,205 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-flat-svek-painted-envelope-label-skinparams",
+  "review_sequence": 2,
+  "checker": {
+    "identity": "Codex GPT-5 independent adversarial checker",
+    "implemented_mechanism": false,
+    "date": "2026-07-31",
+    "mode": "adversarial maker-checker re-review",
+    "objective": "Attempt to disprove acceptance after the three findings in review-label-skinparams.json were addressed by broader model changes."
+  },
+  "revisions": {
+    "rust_implementation_revision": "212f84422e235c308e15a853273a7d81a56eac10",
+    "evidence_base_revision": "cb42827055e1bc2fa5499eec282443d818603820",
+    "evidence_base_difference": "cb428270 differs from 212f8442 only by previously committed checker evidence.",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "plantuml_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "comparator": "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one",
+    "comparator_sha256": "33103684b0f98e40078b0a2327d3b18df86375f86889b91cbe36e9b1320a482c"
+  },
+  "documents_read": [
+    "AGENTS.md parity honesty rules",
+    "docs/parity-reviews/state-flat-svek-painted-envelope/account-label-skinparams.json",
+    "docs/parity-reviews/state-flat-svek-painted-envelope/review-label-skinparams.json",
+    "git diff e00d68f839d2a173ec214480f41b6f92fb3f8460..212f84422e235c308e15a853273a7d81a56eac10"
+  ],
+  "source_inspection": {
+    "java": [
+      "SkinParam.cleanForKeySlow removes underscores and dots, folds diagram-specific arrow prefixes, and rewrites a trailing align to alignment.",
+      "SkinParam.getFontFamily resolves the FontParam-specific FontName first, then defaultFontName; an unrelated raw fontName is not a state-arrow fallback.",
+      "SkinParam.getFont and UFontFactory.build preserve family, bold, and italic face for AWT measurement.",
+      "SvekEdge resolves the state message font and alignment before constructing labelOnly, wraps ordinary labels by one pixel and self labels by six pixels, and paints the same block at Graphviz's solved label origin.",
+      "TextBlockMarged and LimitFinder include the complete margin box and visible text contribution in the painted envelope."
+    ],
+    "rust": [
+      "canonical_skinparam_key implements Java's separator, arrow-prefix, and trailing-align identity rules and is used by StateArrowFont and flat capability admission.",
+      "StateArrowFont::from_skinparams resolves StateArrowFontName/ArrowFontName/defaultFontName and deliberately excludes raw fontName.",
+      "StateTransitionLabelBlock::measure passes both bold and italic into measure_with_family_and_face.",
+      "text_render dispatches Times New Roman to four complete-face printable-ASCII tables; plantuml_metrics falls back to a fixed half-em advance for every non-ASCII character.",
+      "flat_painted_bounds includes the solved wrapper box plus StateTransitionLabelBlock::painted_y_range.",
+      "has_only_flat_label_skinparams admits only the modeled arrow/default font, message alignment, and default text alignment keys."
+    ]
+  },
+  "provenance_checks": {
+    "physical_font_extractor": "Compiled tools/PhysicalFontMetricsExtract.java with javac and ran it headlessly for Times New Roman. The JVM resolved the requested family and reproduced all four 95-entry ASCII tables plus ascent=1825, descent=443, and height=2355 at 2048 units per em.",
+    "fixture_shape_search": "No old or new held-out labels, fixture stems, or rejected coordinate offsets occur in production code. The old phrase 'italic self label' occurs only in a unit assertion. Production selection is by font family/face and character code, not fixture identity.",
+    "constant_assessment": "The new metric constants are derivable from the checked-in Java extractor. No per-topology or per-fixture correction constant was added."
+  },
+  "commands": [
+    "git diff --stat 212f8442..cb428270",
+    "shasum -a 256 target/debug/examples/diff_one",
+    "rg -n \"TimesNewRoman|times_new_roman|canonical_skinparam_key|fontName|defaultFontName|has_only_flat_label_skinparams|StateTransitionLabelBlock|flat_painted_bounds|measure_with_family_and_face\" crates/rustuml-parser/src crates/rustuml-render/src tools/PhysicalFontMetricsExtract.java",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -version",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/state-flat-svek-label-skinparams-review-2/*.puml",
+    "for each new .puml: diff_one --no-oracle INPUT > SAME_STEM.diff.txt",
+    "for each new .puml: diff_one --no-oracle --print-rust INPUT > SAME_STEM.rust.svg",
+    "for each old state-flat-svek-label-skinparams .puml: diff_one --no-oracle INPUT, writing only a temporary transcript outside the existing perturbation directory",
+    "javac -d /tmp/rustuml-metrics-review tools/PhysicalFontMetricsExtract.java",
+    "java -Djava.awt.headless=true -cp /tmp/rustuml-metrics-review PhysicalFontMetricsExtract 'Times New Roman'",
+    "strip only the PlantUML source-metadata processing instruction and SHA-256 compare each dotted/underscored Java alias output with its canonical sibling",
+    "byte-compare each dotted/underscored Rust alias output with its canonical sibling"
+  ],
+  "execution_note": "The first non-headless PlantUML version invocation exited with status 134 before processing inputs. The same pinned jar ran successfully with -Djava.awt.headless=true; every preserved Java SVG was generated by that successful headless invocation.",
+  "constraints_observed": {
+    "ran_cargo": false,
+    "ran_rustc": false,
+    "ran_javac_for_checked_in_extractor": true,
+    "edited_shipping_code": false,
+    "edited_accounts": false,
+    "edited_baselines": false,
+    "edited_comparator": false,
+    "edited_allowlists": false,
+    "edited_existing_perturbations": false,
+    "edited_park_or_error_lists": false
+  },
+  "old_rejection_regression": {
+    "directory": "test-diagrams/perturbations/state-flat-svek-label-skinparams",
+    "result": "9 of 9 structurally equivalent with the supplied no-oracle helper",
+    "previously_rejecting_cases": {
+      "checker_lr_italic_self_and_ordinary": "PASS",
+      "checker_tb_fontname_affects_nodes_and_labels": "PASS",
+      "checker_lr_dotted_keys_natural_right": "PASS"
+    }
+  },
+  "perturbation_directory": "test-diagrams/perturbations/state-flat-svek-label-skinparams-review-2",
+  "results": [
+    {
+      "stem": "r2_lr_times_plain_small_natural_self",
+      "axes": [
+        "left-to-right",
+        "Times New Roman plain",
+        "font size 8",
+        "configured right alignment",
+        "natural left override",
+        "ordinary and self links"
+      ],
+      "comparator": "PASS"
+    },
+    {
+      "stem": "r2_tb_times_bold_italic_large",
+      "axes": [
+        "top-to-bottom",
+        "Times New Roman bold italic",
+        "font size 22",
+        "configured center alignment",
+        "ordinary and self links"
+      ],
+      "comparator": "PASS"
+    },
+    {
+      "stem": "r2_lr_generic_fontname_inert",
+      "axes": [
+        "left-to-right",
+        "raw fontName negative ownership control",
+        "ordinary link"
+      ],
+      "comparator": "PASS",
+      "inspection": "Java and Rust both emit sans-serif for both state labels and the transition label."
+    },
+    {
+      "stem": "r2_tb_default_over_inert_generic",
+      "axes": [
+        "top-to-bottom",
+        "raw fontName negative control",
+        "defaultFontName positive control",
+        "Times New Roman size 17",
+        "multi-row ordinary link"
+      ],
+      "comparator": "PASS",
+      "inspection": "Java and Rust both emit Times New Roman with exactly matching textLength values for state and transition labels."
+    },
+    {
+      "stem": "r2_lr_dotted_helvetica_alias",
+      "axes": [
+        "left-to-right",
+        "dotted and underscored keys",
+        "Helvetica size 10",
+        "configured left alignment",
+        "natural right override"
+      ],
+      "comparator": "PASS",
+      "alias_equivalence": "Rust output is byte-identical to r2_lr_canonical_helvetica_alias. Java rendered content is byte-identical after removing only the source-encoding processing instruction."
+    },
+    {
+      "stem": "r2_lr_canonical_helvetica_alias",
+      "axes": [
+        "canonical sibling for dotted Helvetica controls",
+        "non-Times physical face"
+      ],
+      "comparator": "PASS"
+    },
+    {
+      "stem": "r2_tb_underscored_courier_alias",
+      "axes": [
+        "top-to-bottom",
+        "underscored keys",
+        "Courier New size 9",
+        "configured right alignment",
+        "self link"
+      ],
+      "comparator": "PASS",
+      "alias_equivalence": "Rust output is byte-identical to r2_tb_canonical_courier_alias. Java rendered content is byte-identical after removing only the source-encoding processing instruction."
+    },
+    {
+      "stem": "r2_tb_canonical_courier_alias",
+      "axes": [
+        "canonical sibling for underscored Courier controls",
+        "non-Times face",
+        "self link"
+      ],
+      "comparator": "PASS"
+    },
+    {
+      "stem": "r2_lr_times_italic_unicode",
+      "axes": [
+        "left-to-right",
+        "Times New Roman italic",
+        "font size 19",
+        "valid non-ASCII Latin characters",
+        "em dash",
+        "ordinary link"
+      ],
+      "comparator": "FAIL",
+      "failure_summary": "Java measures the label at textLength 185.7324; Rust measures 181.5391. The narrower Rust label box changes the routed path and target x position and produces a 494px canvas instead of Java's 498px canvas."
+    }
+  ],
+  "findings": [
+    {
+      "severity": "rejecting",
+      "counterexample": "r2_lr_times_italic_unicode",
+      "finding": "The complete-face change is generative for printable ASCII but not for valid Unicode labels. times_new_roman_text_width uses the selected face table only for codepoints 32 through 126 and assigns every other glyph a fixed 1024-unit half-em advance. Java AWT measures the real Times New Roman glyph advances. Accented Latin letters and an em dash therefore produce a 4.1933px label-width error at size 19, which propagates through Graphviz into route, node position, and canvas differences.",
+      "scope_assessment": "The account places no ASCII-only restriction on transition labels, and Java accepts and renders this valid PlantUML input. The failure affects the claimed transition-label measurement and painted-envelope mechanism directly, so it is in scope."
+    },
+    {
+      "severity": "non_rejecting",
+      "finding": "The original three counterexamples and eight new printable-ASCII controls pass. Font ownership, canonical dotted/underscored key identity, all four Times ASCII faces, configured/natural alignment, and ordinary/self painted envelopes are supported by the evidence."
+    },
+    {
+      "severity": "observation",
+      "finding": "One original failing phrase remains in a unit assertion, but production code contains no fixture-label branch. Because the independently generated Unicode case fails through the general fallback, the checker did not mistake the complete ASCII table for a complete glyph model."
+    }
+  ],
+  "verdict": "REJECT",
+  "verdict_reason": "A fresh valid in-scope Times New Roman transition label fails the supplied no-oracle comparator. T14's held-out perturbation rule requires any such counterexample to reject the change and remain executable, regardless of the eight new passing controls and the repaired original nine cases."
+}
