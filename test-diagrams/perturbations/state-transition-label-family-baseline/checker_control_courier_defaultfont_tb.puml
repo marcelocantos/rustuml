@@ -1,0 +1,7 @@
+@startuml
+skinparam defaultFontName Courier New
+skinparam stateArrowFontSize 11
+[*] --> Warm
+Warm --> Hot : courier default handoff
+Hot --> [*] : cool
+@enduml

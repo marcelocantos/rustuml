@@ -1,0 +1,9 @@
+@startuml
+!theme minty
+left to right direction
+skinparam stateArrowFontName Verdana
+skinparam stateArrowFontSize 12
+[*] --> WaitingForLedger : renamed start handshake
+WaitingForLedger --> ReviewingBatch : confirm adjusted route
+ReviewingBatch --> [*] : close packet
+@enduml

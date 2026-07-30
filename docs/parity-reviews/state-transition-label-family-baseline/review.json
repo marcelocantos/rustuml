@@ -1,0 +1,168 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-transition-label-family-baseline",
+  "checker_identity": {
+    "agent": "Codex GPT-5",
+    "role": "independent adversarial checker",
+    "workspace": "/tmp/rustuml-check-state-transition-label-family-baseline",
+    "shipping_rust_edited": false,
+    "cargo_or_rustc_invoked": false
+  },
+  "account": {
+    "path": "docs/parity-reviews/state-transition-label-family-baseline/account.json",
+    "commit": "ad177b59",
+    "status": "inspected"
+  },
+  "implementation": {
+    "commit": "cf48f960d86542cb05652358bdff4d884cccdcd0",
+    "summary": "Adds state_edge_label_first_baseline_ascent and replaces four state transition label emission/painted-bound family-blind ascent consumers with label_first_baseline_ascent_with_family."
+  },
+  "reference": {
+    "plantuml_repo": "/Users/marcelo/work/github.com/plantuml/plantuml",
+    "plantuml_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "plantuml_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar"
+  },
+  "rust_helper": {
+    "path": "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one",
+    "sha256": "08996aa34ff4538c4158193b79b14881a20ca36efaf9e24dfee10b74b090259f",
+    "mode": "--no-oracle",
+    "not_relinked": true
+  },
+  "source_trace": {
+    "java": [
+      {
+        "location": "src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java:116-122,231-242",
+        "finding": "GraphvizImageBuilder resolves the arrow StyleSignature and passes the resulting FontConfiguration into SvekEdge."
+      },
+      {
+        "location": "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java:279-325,942-948",
+        "finding": "SvekEdge builds the link label TextBlock from link.getLabel().create0(font, ...) and later draws that same TextBlock at the solved label origin."
+      },
+      {
+        "location": "src/main/java/net/sourceforge/plantuml/klimt/creole/SheetBlock1.java:195-210",
+        "finding": "SheetBlock1 draws each atom at its stored position after applying text block padding."
+      },
+      {
+        "location": "src/main/java/net/sourceforge/plantuml/klimt/creole/legacy/AtomText.java:110-153",
+        "finding": "AtomText computes glyph baseline as calculated text height minus descent for the resolved FontConfiguration font."
+      }
+    ],
+    "rust": [
+      {
+        "location": "crates/rustuml-render/src/state.rs:1005-1011",
+        "finding": "The new helper delegates to text_render::label_first_baseline_ascent_with_family using StateArrowFont.family and size."
+      },
+      {
+        "location": "crates/rustuml-render/src/state.rs:1082-1096,2887-2905,4174-4186,5221-5232",
+        "finding": "The implementation wires the helper into ordinary link label emission, autonomous painted bounds, autonomous label emission, and flat painted bounds."
+      },
+      {
+        "location": "crates/rustuml-render/src/state.rs search for label_ascent",
+        "finding": "No remaining family-blind label_ascent call was found on the no-oracle state transition label emission paths. Remaining uses are state names/descriptions or text_render tests."
+      }
+    ],
+    "fixture_shape_review": {
+      "finding": "No fixture label, coordinate keyed branch, high precision compensating constant, or golden-data read was found in cf48f960. The change is expressed through existing StateArrowFont data flow."
+    }
+  },
+  "commands": [
+    {
+      "cmd": "shasum -a 256 /tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one",
+      "result": "08996aa34ff4538c4158193b79b14881a20ca36efaf9e24dfee10b74b090259f"
+    },
+    {
+      "cmd": "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+      "result": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+    },
+    {
+      "cmd": "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/state-transition-label-family-baseline/*.puml",
+      "result": "Java SVGs generated for all preserved perturbation inputs"
+    },
+    {
+      "cmd": "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle <input.puml>",
+      "result": "Run for each input; per-input outcomes recorded below"
+    },
+    {
+      "cmd": "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle --print-rust <input.puml>",
+      "result": "Used only to inspect Rust text attributes; generated debug SVGs were kept outside the repository under /tmp/rustuml-state-baseline-rust-svg"
+    }
+  ],
+  "inputs": [
+    {
+      "puml": "test-diagrams/perturbations/state-transition-label-family-baseline/checker_control_verdana_plain_tb.puml",
+      "java_svg": "test-diagrams/perturbations/state-transition-label-family-baseline/checker_control_verdana_plain_tb.svg",
+      "axes": ["Verdana stateArrowFontName", "12px", "top-to-bottom ordinary transition labels", "renamed labels"],
+      "diff_one_status": "pass",
+      "finding": "Structurally equivalent. Java and Rust transition labels match family, font-size, textLength, x, and y for both labels."
+    },
+    {
+      "puml": "test-diagrams/perturbations/state-transition-label-family-baseline/checker_control_courier_defaultfont_tb.puml",
+      "java_svg": "test-diagrams/perturbations/state-transition-label-family-baseline/checker_control_courier_defaultfont_tb.svg",
+      "axes": ["Courier New defaultFontName", "11px stateArrowFontSize", "top-to-bottom ordinary transition labels", "renamed labels"],
+      "diff_one_status": "pass",
+      "finding": "Structurally equivalent. The fallback from defaultFontName to arrow text uses Courier New and both baselines match Java."
+    },
+    {
+      "puml": "test-diagrams/perturbations/state-transition-label-family-baseline/checker_control_minty_skinparam_order_tb.puml",
+      "java_svg": "test-diagrams/perturbations/state-transition-label-family-baseline/checker_control_minty_skinparam_order_tb.svg",
+      "axes": ["theme minty", "skinparam before and after theme", "Verdana override", "top-to-bottom labels"],
+      "diff_one_status": "fail_unrelated_residue",
+      "finding": "Only known minty pseudostate/background residue appeared in strict diff. Extracted transition-label rows for 'theme then override' and 'stop' matched Java exactly, including y baselines."
+    },
+    {
+      "puml": "test-diagrams/perturbations/state-transition-label-family-baseline/checker_control_arial_italic_tb.puml",
+      "java_svg": "test-diagrams/perturbations/state-transition-label-family-baseline/checker_control_arial_italic_tb.svg",
+      "axes": ["arrowFontName alias", "Arial", "italic", "13px", "three-state topology"],
+      "diff_one_status": "fail_unrelated_layout_residue",
+      "finding": "The first Arial italic transition label matches Java exactly. The second label y differs by +1px together with downstream node, path, polygon, and canvas y drift, so this is not isolated evidence against the family-baseline mechanism."
+    },
+    {
+      "puml": "test-diagrams/perturbations/state-transition-label-family-baseline/checker_arial_bold_note_composition_tb.puml",
+      "java_svg": "test-diagrams/perturbations/state-transition-label-family-baseline/checker_arial_bold_note_composition_tb.svg",
+      "axes": ["Arial", "bold", "13px", "note on link composition", "top-to-bottom labels"],
+      "diff_one_status": "fail_unrelated_note_or_layout_residue",
+      "finding": "Both Arial bold transition labels match Java exactly. The note text baseline differs by 0.3618px and later node/route y values drift, outside this transition-label family-baseline mechanism."
+    },
+    {
+      "puml": "test-diagrams/perturbations/state-transition-label-family-baseline/checker_courier_nested_multiline_tb.puml",
+      "java_svg": "test-diagrams/perturbations/state-transition-label-family-baseline/checker_courier_nested_multiline_tb.svg",
+      "axes": ["Courier New", "italic", "12px", "nested state scope", "multiline transition label", "rich italic label"],
+      "diff_one_status": "fail_relevant_counterexample",
+      "finding": "Rejecting counterexample. Java renders the label 'boot pass\\nsecond line' as two Display text atoms, 'boot pass' at y=187.4785 and 'second line' at y=201.0723. Rust renders one text element containing the literal backslash-n text 'boot pass\\nsecond line' at y=188.4785 with textLength=158.4258. This violates the account's broader Display-model claim and misses a transition-label path requested by the held-out multiline axis."
+    },
+    {
+      "puml": "test-diagrams/perturbations/state-transition-label-family-baseline/checker_minty_verdana_lr_theme_override.puml",
+      "java_svg": "test-diagrams/perturbations/state-transition-label-family-baseline/checker_minty_verdana_lr_theme_override.svg",
+      "axes": ["theme minty", "Verdana", "dpi 100 theme scaling", "left-to-right direction", "three labels"],
+      "diff_one_status": "fail_unrelated_direction_layout_residue",
+      "finding": "The label family, size, and textLength match Java, but Rust ignores or diverges on the left-to-right layout in this no-oracle path. This is a direction/layout residue rather than a font-baseline-specific failure."
+    },
+    {
+      "puml": "test-diagrams/perturbations/state-transition-label-family-baseline/checker_defaultfont_selfloop_directional.puml",
+      "java_svg": "test-diagrams/perturbations/state-transition-label-family-baseline/checker_defaultfont_selfloop_directional.svg",
+      "axes": ["defaultFontName Verdana", "arrowFontSize 14", "self-link", "explicit left arrow", "left-to-right direction"],
+      "diff_one_status": "fail_unrelated_direction_layout_residue",
+      "finding": "The label family, size, and textLength match Java for self-link and directional labels, but the solved routing/topology differs substantially. This does not disprove the baseline ascent wiring by itself."
+    }
+  ],
+  "artifact_hashes": {
+    "checker_arial_bold_note_composition_tb.puml": "6596f183180f662ebd1fa70f9e74dfccb15adba94939b5ef2b8bee652445ce77",
+    "checker_arial_bold_note_composition_tb.svg": "c8be54097b5df89da2c24eb32e747e4ec7ca82e67fba6e3a575d0a4ecb5f11bb",
+    "checker_control_arial_italic_tb.puml": "c82c3c695e846c0e9cdb5edceaab9630ac8b4bd0b6b92759701ac1f1ffbd796b",
+    "checker_control_arial_italic_tb.svg": "e4570127a754b94f5a7c8776b310a69c0d6e7571f8acec37f6287285b96aa914",
+    "checker_control_courier_defaultfont_tb.puml": "e5db58112713a372da903136e4694df00e7432a4913f09ff38d657645589b9c5",
+    "checker_control_courier_defaultfont_tb.svg": "24498944c8b741fd6ac897a8f3edeec0048ba434496b32d6d16c944b93c2cb03",
+    "checker_control_minty_skinparam_order_tb.puml": "b46392622feaede75189d5ac54bda84622f082af914b297130a11c21b26358c3",
+    "checker_control_minty_skinparam_order_tb.svg": "98c768765fe56761c50b122875354108698d94c464e5fcc5ab447ad6ad82e3b6",
+    "checker_control_verdana_plain_tb.puml": "c809f7447a3794c89c5203a97e7e4dec278fe93cd04f9c4b71a2b73a02764c51",
+    "checker_control_verdana_plain_tb.svg": "67322d68aa96c20fe693669a64f9f3144e822628c035df6f9daa33eadcd68d17",
+    "checker_courier_nested_multiline_tb.puml": "5a22c904b2c26da1e145fa3f2953790801b454f6ad6ffdfea9bff64ece16e9fa",
+    "checker_courier_nested_multiline_tb.svg": "3a0bf586998e131167ce5bc3723912ffa453f41ee023d85de94f4ce3d9ac4ef4",
+    "checker_defaultfont_selfloop_directional.puml": "1c329ae0805520ca294a4d3019adb68cc3de69e9108a75c1298a6f55f54e9d7f",
+    "checker_defaultfont_selfloop_directional.svg": "3f797ebc7aa8d8db065e57b0a6ba843c7a7dc28e61f412132dd0dc9a0032dc53",
+    "checker_minty_verdana_lr_theme_override.puml": "33cf464f0980a59ee13e2193e7898bf9a756f08ca06da8e6b5cae25fe198369e",
+    "checker_minty_verdana_lr_theme_override.svg": "8170a639e07e2e648c99b45241e46e4a98524588cd5f163d8a2d081418866f3a"
+  },
+  "verdict": "reject",
+  "verdict_reason": "The narrow single-line transition-label family baseline wiring is supported by controlled Verdana, Courier New, Arial, and minty override cases, and no fixture-shaped implementation logic was found. However, the committed causal account claims the Java Display text-block model and includes multiline labels as a perturbation axis. The fresh valid nested Courier New multiline case disproves that broader claim: Java splits the transition label into two text atoms while Rust emits a literal backslash-n as one label. Under the held-out perturbation rule, this relevant counterexample rejects acceptance until the multiline Display behavior is either fixed or explicitly scoped out by a new causal account and target."
+}

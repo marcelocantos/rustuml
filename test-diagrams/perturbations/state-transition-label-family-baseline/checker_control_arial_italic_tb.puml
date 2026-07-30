@@ -1,0 +1,9 @@
+@startuml
+skinparam arrowFontName Arial
+skinparam arrowFontStyle italic
+skinparam arrowFontSize 13
+[*] --> Draft
+Draft --> Review : italic renamed check
+Review --> Done : accepted route
+Done --> [*]
+@enduml

@@ -1,0 +1,12 @@
+@startuml
+skinparam stateArrowFontName Arial
+skinparam stateArrowFontStyle bold
+skinparam stateArrowFontSize 13
+[*] --> Intake
+Intake --> Validate : renamed bold gate
+note on link
+  audit note beside label
+end note
+Validate --> Ship : final handoff
+Ship --> [*]
+@enduml
