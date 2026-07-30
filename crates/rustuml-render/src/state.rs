@@ -4000,14 +4000,9 @@ fn build_autonomous_composite<'a>(
         &live_clusters,
         Some(autonomous_outer_spacing(diagram)),
     )?;
-    let outer = if live_clusters.is_empty() {
-        outer
-    } else {
-        let mut outer = normalize_autonomous_scope(outer);
-        outer.width += CUCA_POSITIVE_AXIS_MARGIN;
-        outer.height += CUCA_POSITIVE_AXIS_MARGIN;
-        outer
-    };
+    let mut outer = normalize_autonomous_scope(outer);
+    outer.width += CUCA_POSITIVE_AXIS_MARGIN;
+    outer.height += CUCA_POSITIVE_AXIS_MARGIN;
 
     Some((composites, live_clusters, outer))
 }
@@ -11747,6 +11742,40 @@ CobaltDecision --> [*]
         let (nested_lr_width, nested_lr_height) = dimensions(&crate::render_svg(&nested_lr));
         assert!(nested_tb_height > nested_tb_width);
         assert!(nested_lr_width > nested_lr_height);
+    }
+
+    #[test]
+    fn autonomous_lr_root_normalizes_ellipse_painted_minimum() {
+        let parsed = rustuml_parser::parse::parse(
+            "@startuml\n\
+             left to right direction\n\
+             state \"Outer Model\" as OuterModel {\n\
+               state \"Inner Start\" as InnerStart\n\
+               state \"Inner Finish\" as InnerFinish\n\
+               [*] --> InnerStart\n\
+               InnerStart --> InnerFinish\n\
+               InnerFinish --> [*]\n\
+             }\n\
+             [*] --> OuterModel\n\
+             OuterModel --> [*]\n\
+             @enduml",
+        )
+        .unwrap();
+        let rustuml_parser::diagram::Diagram::State(diagram) = parsed else {
+            panic!("expected state diagram");
+        };
+        let (_, _, outer) = build_autonomous_composite(&diagram).unwrap();
+        let (_, center_x, _, _, _) = outer
+            .positions
+            .iter()
+            .find(|(id, ..)| id == "__start__")
+            .unwrap();
+        assert_eq!(center_x - START_RADIUS, SVEK_PAINTED_ORIGIN);
+        let bounds = outer.painted_bounds.unwrap();
+        assert_eq!(
+            outer.width,
+            bounds.max_x - bounds.min_x + SVEK_RESULT_DIMENSION_PAD + CUCA_POSITIVE_AXIS_MARGIN
+        );
     }
 
     #[test]
