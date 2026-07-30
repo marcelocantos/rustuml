@@ -1,0 +1,83 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-svek-retracted-edge-envelope",
+  "created": "2026-07-31",
+  "status": "proposed",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "a418f6d02fd49550eda2773e1ea603f5c8a0bc7e",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+      "symbols": [
+        "SvekEdge#solveLine",
+        "SvekEdge#getExtremitySimplier",
+        "SvekEdge#drawU"
+      ],
+      "role": "Builds endpoint extremities at the original Graphviz contacts, retracts the stored DotPath by each extremity's decoration length, and later paints that mutated path."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/shape/DotPath.java",
+      "symbols": [
+        "DotPath#moveStartPoint",
+        "DotPath#moveEndPoint",
+        "DotPath#getMinMax"
+      ],
+      "role": "Moves the endpoint plus its adjacent control point before reporting the painted cubic endpoint/control-point envelope."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekResult.java",
+      "symbols": [
+        "SvekResult#calculateDimension",
+        "SvekResult#drawU"
+      ],
+      "role": "Measures the already solved and retracted SVEK edges through LimitFinder, then translates the complete graph by 6-minX and 6-minY."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java",
+      "symbols": [
+        "LimitFinder#drawDotPath",
+        "LimitFinder#drawUPolygon"
+      ],
+      "role": "Uses the mutated DotPath controls for shaft bounds while independently retaining endpoint-decoration polygon bounds."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": [
+        "svek_layout_x_bias",
+        "svek_layout_y_bias",
+        "shortened_endpoint_points",
+        "render_no_oracle_relationship"
+      ],
+      "role": "Computes the painted origin from raw EdgePath controls, but applies Java-compatible endpoint retraction only later during relationship emission."
+    }
+  ],
+  "claimed_invariant": "A decorated SVEK relationship has two coordinate streams with different ownership. The endpoint extremity remains at the original Graphviz contact, while the visible DotPath shaft is retracted by the extremity's Java decoration length before SvekResult measures the painted graph. SvekResult's minimum therefore unions retracted shaft controls, unretracted extremity geometry, nodes, labels, and clusters. The same retracted path that is emitted must participate in both horizontal and vertical origin normalization; raw Graphviz controls are layout input, not painted shaft bounds.",
+  "causal_divergence": "Rust's final relationship emitter correctly derives a shortened path from the raw EdgePath and leaves endpoint decorations at the original contacts. Its earlier svek_layout_x_bias and svek_layout_y_bias helpers nevertheless include every raw EdgePath control. When a moved endpoint or adjacent control is the painted minimum, Rust normalizes from geometry Java no longer paints. In class_rel_label_navigability this translates both nodes, both splines, all endpoint labels, and both navigability marks about 0.75px left while preserving their relative geometry, which is the signature of a wrong global painted origin rather than a node-size, label-width, spline-routing, or comparator problem.",
+  "planned_model_change": "Project every ordinary class relationship edge through the same decoration-length and shortened_endpoint_points model before collecting SVEK painted minima. Preserve raw paths for Graphviz contact geometry, endpoint extremities, and final shortening; use retracted copies only for the DotPath portion of the envelope. Keep non-relationship edges on their existing path model. Apply the correction symmetrically to x and y and add tests whose minimum is owned by a retracted first or last control under renamed labels, reversed arrows, different relationship kinds, and both rank directions. Do not add fixture-coordinate offsets, tune decoration lengths, alter Graphviz routing, or relax the comparator.",
+  "perturbation_axes": [
+    "arrow decoration at the source versus the target endpoint",
+    "association arrow versus dependency and inheritance extremities",
+    "top-to-bottom versus left-to-right rank direction",
+    "center navigability marker present versus absent",
+    "endpoint multiplicities present versus absent",
+    "renamed entities and relationship labels",
+    "declaration order and reversed relationship notation"
+  ],
+  "scope_boundary": "This mechanism owns only the painted-envelope projection of ordinary class relationship shafts after existing endpoint retraction. It does not change Graphviz layout, spline quantization, endpoint-decoration geometry or lengths, compound clipping, label measurement, ORTHO routing, comparator tolerances, or non-class families.",
+  "acceptance": [
+    "class_rel_label_navigability passes the frozen strict comparator through render_svg without oracle input because all geometry receives the Java painted-origin translation.",
+    "Fresh valid held-outs spanning at least two independent perturbation axes match Java or remain preserved as explicit checker evidence when Java generation is unavailable.",
+    "Focused envelope tests prove that raw contacts still own extremities while retracted controls own shaft minima on both axes.",
+    "The class-family and full no-oracle ratchets do not regress any existing match.",
+    "Parser, renderer, layout, clippy, and the four frozen mechanical guards pass except for explicitly pre-existing gate debt."
+  ],
+  "forbidden_approaches": [
+    "a numeric offset keyed to class_rel_label_navigability or its labels",
+    "changing endpoint decoration lengths without new Java provenance",
+    "rounding curved Graphviz controls to make this fixture fit",
+    "post-hoc SVG coordinate translation keyed to the observed 0.75px drift",
+    "comparator or baseline weakening"
+  ]
+}
