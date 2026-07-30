@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-symbol-cluster-style-shadow",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "net.sourceforge.plantuml.style.FromSkinparamToStyle#static-initializer",
+    "net.sourceforge.plantuml.style.FromSkinparamToStyle#addMagic",
+    "net.sourceforge.plantuml.svek.Cluster#getDefaultStyleDefinition",
+    "net.sourceforge.plantuml.svek.Cluster#getStyle",
+    "net.sourceforge.plantuml.svek.Cluster#drawU",
+    "net.sourceforge.plantuml.svek.ClusterDecoration#getTextBlock",
+    "net.sourceforge.plantuml.svek.PackageStyle#drawU"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs::package_skinparam",
+    "crates/rustuml-render/src/class.rs::layout_package_clusters",
+    "crates/rustuml-render/src/class.rs::render_plantuml_svg",
+    "crates/rustuml-render/src/class.rs::emit_layout_package_cluster"
+  ],
+  "invariant": "Java maps packageBackgroundColor and packageBorderColor to the generic group style, so explicit symbol groups inherit those colors unless a symbol-specific style overrides them. Package font and border thickness are package-specific properties: an explicit node keeps node/default typography and stroke, while an ordinary package rendered with packageStyle node keeps package typography and packageBorderThickness. Root shadowing is resolved by Cluster.getStyle, passed through Fashion to the outer symbol shape, and emitted as an SVG filter without changing the SVEK/LimitFinder canvas envelope.",
+  "causal_divergence": "Rust uses only the semantic symbol prefix for explicit node colors, so generic Package background and border values are lost. It hard-codes cluster stroke widths, so an ordinary package with packageBorderThickness is wrong. It creates a shadow filter definition and adds five pixels to each canvas extent, but never attaches the filter to package cluster shapes. The three styled held-out node cases consequently have correct points but wrong paint, stroke, filter, and canvas dimensions.",
+  "planned_change": "Model the Java style signatures rather than promoting one prefix wholesale: let symbol BackgroundColor and BorderColor fall back to generic Package/group values, keep FontColor symbol-specific, and resolve BorderThickness from the semantic package channel only where that signature includes package. Carry root shadow state into layout package emission and attach the generated filter to each outer symbol shape. Remove shadow-only canvas padding because the filter is paint metadata, not a LimitFinder bound.",
+  "perturbation_axes": [
+    "explicit node crossed with ordinary packageStyle node",
+    "package colors crossed with node-specific color overrides",
+    "packageBorderThickness crossed with nodeBorderThickness",
+    "shadowing true crossed with false",
+    "node crossed with frame, rectangle, database, and cloud outer shapes",
+    "top-to-bottom crossed with left-to-right direction"
+  ],
+  "predecessor_rejection": {
+    "review": "docs/parity-reviews/class-node-cluster-limitfinder-max/review.json",
+    "review_commit": "9f1ef8b0",
+    "relevant_counterexamples": [
+      "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_styled_shadow_explicit.puml",
+      "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_styled_shadow_fallback.puml",
+      "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_unquoted_explicit_style_shadow.puml"
+    ]
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-empty-package-link-endpoint",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "net.sourceforge.plantuml.classdiagram.command.CommandLinkClass#executeArg",
+    "net.sourceforge.plantuml.cucadiagram.CucaDiagram#quarkInContextSafe",
+    "net.sourceforge.plantuml.svek.GraphvizImageBuilder#printGroups",
+    "net.sourceforge.plantuml.svek.GraphvizImageBuilder#printEntity"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/class.rs::ClassParser::resolve_relationship_endpoint",
+    "crates/rustuml-render/src/class.rs::relationship_layout_id",
+    "crates/rustuml-render/src/class.rs::empty_package_layout_id",
+    "crates/rustuml-render/src/class.rs::no_oracle_entity_id_from"
+  ],
+  "invariant": "A relationship endpoint resolves through the existing quark tree before creating a missing class leaf. A directly empty package is still the same quark and UID when GraphvizImageBuilder later mutates its group entity to EMPTY_PACKAGE for SVEK. Links to that name therefore terminate at the converted package leaf and retain its original UID; no second class entity is created.",
+  "causal_divergence": "Rust resolves relationship endpoints only against class entities. Naming an existing directly empty package falls through ensure_entity, creating a duplicate class with the package's name and a new UID. The renderer then emits both the genuine empty-package leaf and the phantom class, routes the link to the phantom, and reports the wrong endpoint metadata. The held-out cloud fallback control exposes the duplicate directly.",
+  "planned_change": "Resolve an endpoint that names an existing directly empty package to a stable package endpoint identity without creating a class. Map that identity to the package leaf's layout node and package UID during rendering. Preserve current class creation for genuinely missing endpoints, and do not reinterpret filled cluster endpoints until Java behavior for those links is separately established.",
+  "perturbation_axes": [
+    "empty package source crossed with empty package target",
+    "aliased crossed with unaliased package names",
+    "top-level crossed with nested empty packages",
+    "ordinary package crossed with packageStyle symbol fallback and explicit symbols",
+    "link declared before crossed with after an external class",
+    "top-to-bottom crossed with left-to-right direction"
+  ],
+  "predecessor_rejection": {
+    "review": "docs/parity-reviews/class-package-style-symbol-fallback/review.json",
+    "review_commit": "63d978e7",
+    "relevant_counterexample": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_empty_control_valid_tb.puml"
+  }
+}

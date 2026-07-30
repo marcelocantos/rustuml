@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-symbol-container-alias-parse",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "net.sourceforge.plantuml.descdiagram.command.CommandPackageWithUSymbol#getRegexConcat",
+    "net.sourceforge.plantuml.descdiagram.command.CommandPackageWithUSymbol#executeArg",
+    "net.sourceforge.plantuml.cucadiagram.CucaDiagram#gotoGroup"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/class.rs::ClassParser::try_package"
+  ],
+  "invariant": "CommandPackageWithUSymbol accepts DISPLAY as CODE for every supported symbol-container keyword, including node, frame, cloud, database, and rectangle. CODE is cleaned and used as the quark identity; DISPLAY remains the visible group label. Alias support is part of the shared command grammar and is not restricted to the package keyword.",
+  "causal_divergence": "Rust's class parser recognizes the same symbol-container keywords and captures aliases, but explicitly rejects every alias unless the keyword is package. After subtype dispatch correctly selects CLASS, a quoted node/frame/cloud alias is therefore skipped as a group declaration, its contents escape to the root, and a closing brace is ignored. This accounts for the remaining explicit-precedence and renamed-node counterexamples.",
+  "planned_change": "Remove the package-only alias restriction from ClassParser::try_package. Continue using the alias as the resolved group path and the quoted token as display text, preserving the existing package quark discipline for all supported symbol keywords. Add parser tests for quoted aliases across multiple symbols, nesting, and relationship endpoints.",
+  "perturbation_axes": [
+    "node alias crossed with frame, cloud, database, and rectangle aliases",
+    "quoted display crossed with unquoted code",
+    "top-level crossed with nested symbol containers",
+    "short crossed with long renamed labels",
+    "internal links crossed with links leaving the container",
+    "top-to-bottom crossed with left-to-right direction"
+  ],
+  "predecessor_rejections": [
+    {
+      "review": "docs/parity-reviews/class-package-style-symbol-fallback/review.json",
+      "review_commit": "63d978e7",
+      "relevant_counterexample": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_explicit_precedence_lr.puml"
+    },
+    {
+      "review": "docs/parity-reviews/class-node-cluster-limitfinder-max/review.json",
+      "review_commit": "9f1ef8b0",
+      "relevant_counterexample": "test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_explicit_top_renamed_long.puml"
+    }
+  ]
+}
