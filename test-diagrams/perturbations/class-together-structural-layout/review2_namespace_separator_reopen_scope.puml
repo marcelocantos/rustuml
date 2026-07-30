@@ -1,0 +1,15 @@
+@startuml
+set namespaceSeparator ::
+
+namespace Review2::Api6301 {
+  class Review2Entry6303
+}
+
+together {
+  namespace Review2::Api6301 {
+    class Review2Later6305
+  }
+}
+
+Review2Entry6303 --> Review2Later6305
+@enduml

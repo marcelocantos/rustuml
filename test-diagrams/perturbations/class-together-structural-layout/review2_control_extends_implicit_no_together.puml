@@ -1,0 +1,8 @@
+@startuml
+class Review2ChildCtl6611 extends Review2BaseCtl6613 implements Review2PortCtl6615
+class Review2SiblingCtl6617
+class Review2BaseCtl6613
+interface Review2PortCtl6615
+
+Review2ChildCtl6611 --> Review2SiblingCtl6617 : dispatch
+@enduml

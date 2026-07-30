@@ -1,0 +1,13 @@
+@startuml
+package Review2PlainCtl7111 {
+  class Review2SeedCtl7113
+}
+
+package Review2PlainCtl7111 {
+  class Review2ReopenedCtl7115
+  class Review2ReopenedCtl7117
+}
+
+Review2SeedCtl7113 --> Review2ReopenedCtl7115
+Review2ReopenedCtl7115 --> Review2ReopenedCtl7117
+@enduml

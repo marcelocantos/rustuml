@@ -1,0 +1,15 @@
+@startuml
+package "Review2 Control Domain 6701" as Review2DomainCtl6701 {
+  class Review2SeedCtl6703
+}
+
+package Review2DomainCtl6701 {
+  class Review2ReopenedCtl6705
+  package Review2NestedCtl6707 {
+    class Review2NestedLeafCtl6709
+  }
+}
+
+Review2SeedCtl6703 --> Review2ReopenedCtl6705
+Review2ReopenedCtl6705 --> Review2NestedLeafCtl6709
+@enduml

@@ -1,0 +1,13 @@
+@startuml
+package Review2OwnedCtl7311 {
+  class Review2FirstCtl7313
+}
+
+package Review2OwnedCtl7311 {
+  class Review2SecondCtl7315
+}
+
+class Review2OutsideCtl7317
+Review2FirstCtl7313 --> Review2SecondCtl7315
+Review2SecondCtl7315 --> Review2OutsideCtl7317
+@enduml

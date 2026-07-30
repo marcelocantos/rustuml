@@ -1,0 +1,13 @@
+@startuml
+together {
+  class Review2Child6101 extends Review2Base6103 implements Review2Port6105
+}
+
+together {
+  class Review2Sibling6107
+  class Review2Base6103
+  interface Review2Port6105
+}
+
+Review2Child6101 --> Review2Sibling6107 : dispatch
+@enduml

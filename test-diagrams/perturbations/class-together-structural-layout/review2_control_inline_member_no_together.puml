@@ -1,0 +1,7 @@
+@startuml
+Review2InlineCtl7211 : +field : String
+class Review2InlineCtl7211
+class Review2SiblingCtl7213
+
+Review2InlineCtl7211 --> Review2SiblingCtl7213
+@enduml

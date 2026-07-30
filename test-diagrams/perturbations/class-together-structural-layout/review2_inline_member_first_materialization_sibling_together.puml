@@ -1,0 +1,12 @@
+@startuml
+together {
+  Review2Inline7201 : +field : String
+}
+
+together {
+  class Review2Inline7201
+  class Review2Sibling7203
+}
+
+Review2Inline7201 --> Review2Sibling7203
+@enduml

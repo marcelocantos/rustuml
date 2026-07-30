@@ -1,0 +1,8 @@
+@startuml
+class Review2SoloCtl6901
+class Review2MemoCtl6903
+class Review2PlainCtl6905
+class Review2TailCtl6907
+
+note right of Review2MemoCtl6903 : anchored memo
+@enduml

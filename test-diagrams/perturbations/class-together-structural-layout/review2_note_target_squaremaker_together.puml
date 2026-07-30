@@ -1,0 +1,10 @@
+@startuml
+together {
+  class Review2Solo6501
+  class Review2Memo6503
+  class Review2Plain6505
+  class Review2Tail6507
+}
+
+note right of Review2Memo6503 : anchored memo
+@enduml

@@ -1,0 +1,266 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-together-structural-layout",
+  "reviewer": {
+    "task_id": "codex-desktop-task-019ee369-54e2-7203-afce-ddde7bfe1723-independent-adversarial-checker",
+    "model": "GPT-5 Codex / Codex desktop"
+  },
+  "account_commit": "4a359984cfe8b624ce0a626f4a6f7be70d166a91",
+  "implementation_commit": "10a16ee323cf2a2a21054967681eec6e43cd5b22",
+  "rust_revision_requested": "10a16ee37cc98b38f5ba465b217a3362ab73a8ed",
+  "revision_resolution_note": "The user-supplied 40-character object id does not resolve in this checkout. `git rev-parse --verify 10a16ee3` resolves to `10a16ee323cf2a2a21054967681eec6e43cd5b22`, and the rerun used the shared `target/release/examples/diff_one` binary the user identified as rebuilt from exact 10a16ee3.",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "git rev-parse --verify 10a16ee3",
+    "sed -n '1,260p' docs/parity-reviews/class-svek-painted-envelope-origin/account.json",
+    "git diff --stat 1482ade4..10a16ee3 -- crates/rustuml-render/src/class.rs docs/parity-reviews/class-svek-painted-envelope-origin/account.json docs/parity-reviews/class-together-structural-layout/account.json",
+    "git diff --unified=40 1482ade4..10a16ee3 -- crates/rustuml-render/src/class.rs",
+    "git diff --check f840f7070d3c203265e6bcb871e7116a5ec843a9 10a16ee3",
+    "git diff --unified=25 f840f7070d3c203265e6bcb871e7116a5ec843a9 10a16ee3 -- crates/rustuml-parser/src/parse/class.rs crates/rustuml-render/src/class.rs docs/parity-reviews/class-together-structural-layout/account.json docs/parity-reviews/class-svek-painted-envelope-origin/account.json > /tmp/class-together-10a16.diff",
+    "rg -n \"include_str|test-diagrams|golden|fixture|review2_|Fresh|Renamed|coordinates?|\\\\.svg|\\\\.puml|debug_assert|INFINITY|0\\\\.\\\\d{3,}|[0-9]+\\\\.[0-9]{3,}\" /tmp/class-together-10a16.diff",
+    "git merge-base --is-ancestor 4a359984cfe8b624ce0a626f4a6f7be70d166a91 10a16ee3",
+    "git log --format=%H -n 1 10a16ee3 -- docs/parity-reviews/class-together-structural-layout/account.json",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-together-structural-layout/review2_*.puml",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-together-structural-layout/review2_control_*.puml",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-together-structural-layout/review2_*{plain,inline,package}*.puml",
+    "xmllint --noout test-diagrams/perturbations/class-together-structural-layout/review2_*.svg",
+    "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"|an error has occured|\\\\[From string|No class ' test-diagrams/perturbations/class-together-structural-layout/review2_*.svg",
+    "xmllint --noout test-diagrams/perturbations/class-together-structural-layout/review2_control_*.svg",
+    "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"|an error has occured|\\\\[From string|No class ' test-diagrams/perturbations/class-together-structural-layout/review2_control_*.svg",
+    "xmllint --noout test-diagrams/perturbations/class-together-structural-layout/review2_*{plain,inline,package}*.svg",
+    "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"|an error has occured|\\\\[From string|No class ' test-diagrams/perturbations/class-together-structural-layout/review2_*{plain,inline,package}*.svg",
+    "/Users/marcelo/work/github.com/marcelocantos/rustuml/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-together-structural-layout/review2_extends_implicit_membership_sibling_scope.puml",
+    "/Users/marcelo/work/github.com/marcelocantos/rustuml/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-together-structural-layout/review2_reopen_package_inside_together_boundary.puml",
+    "/Users/marcelo/work/github.com/marcelocantos/rustuml/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-together-structural-layout/review2_namespace_separator_reopen_scope.puml",
+    "/Users/marcelo/work/github.com/marcelocantos/rustuml/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-together-structural-layout/review2_frame_folder_node_together_order.puml",
+    "/Users/marcelo/work/github.com/marcelocantos/rustuml/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-together-structural-layout/review2_note_target_squaremaker_together.puml",
+    "/Users/marcelo/work/github.com/marcelocantos/rustuml/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-together-structural-layout/review2_control_extends_implicit_no_together.puml",
+    "/Users/marcelo/work/github.com/marcelocantos/rustuml/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-together-structural-layout/review2_control_reopen_package_no_together.puml",
+    "/Users/marcelo/work/github.com/marcelocantos/rustuml/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-together-structural-layout/review2_control_frame_folder_node_no_together.puml",
+    "/Users/marcelo/work/github.com/marcelocantos/rustuml/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-together-structural-layout/review2_control_note_target_no_together.puml",
+    "/Users/marcelo/work/github.com/marcelocantos/rustuml/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-together-structural-layout/review2_plain_package_reopen_inside_together.puml",
+    "/Users/marcelo/work/github.com/marcelocantos/rustuml/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-together-structural-layout/review2_control_plain_package_reopen_no_together.puml",
+    "/Users/marcelo/work/github.com/marcelocantos/rustuml/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-together-structural-layout/review2_inline_member_first_materialization_sibling_together.puml",
+    "/Users/marcelo/work/github.com/marcelocantos/rustuml/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-together-structural-layout/review2_control_inline_member_no_together.puml",
+    "/Users/marcelo/work/github.com/marcelocantos/rustuml/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-together-structural-layout/review2_package_owned_then_reopened_in_sibling_together.puml",
+    "/Users/marcelo/work/github.com/marcelocantos/rustuml/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-together-structural-layout/review2_control_package_reopen_twice_no_together.puml",
+    "shasum -a 256 /Users/marcelo/work/github.com/marcelocantos/rustuml/target/release/examples/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar docs/parity-reviews/class-together-structural-layout/account.json docs/parity-reviews/class-svek-painted-envelope-origin/account.json",
+    "find test-diagrams/perturbations/class-together-structural-layout -maxdepth 1 \\( -name 'review2_*.puml' -o -name 'review2_*.svg' \\) | sort | xargs shasum -a 256",
+    "ruby -rdigest -e 'fresh = Dir[\"test-diagrams/perturbations/class-together-structural-layout/review2_*.puml\"].sort; corpus = (Dir[\"test-diagrams/golden/**/*.puml\"] + Dir[\"test-diagrams/perturbations/**/*.puml\"]).uniq; fresh.each { |path| digest = Digest::SHA256.file(path).hexdigest; matches = corpus.select { |other| other != path && Digest::SHA256.file(other).hexdigest == digest }; abort(\"duplicate #{path} -> #{matches.join(\",\")}\") unless matches.empty? }; puts \"all fresh review2 sources are hash-unique\"'"
+  ],
+  "artifact_hashes": {
+    "diff_one_sha256": "f14280518d64a5de983ec7df7fa9e2b773608cb0b4a5bf2400605814adafa71a",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "together_account_json_sha256": "89e11e897657a85eabfbed05881096e6602302257bc0da88a3f77e72b578be74",
+    "painted_envelope_account_json_sha256": "1ac3a17610f81c7de260fe654ee888fd9cec099ba0a27927e7ad4b889764d36c",
+    "sources": {
+      "review2_control_extends_implicit_no_together.puml": "5d255d7404379100a0e46b70af9d79134227e5dcc80b3b9b6c6aefcc186ac797",
+      "review2_control_frame_folder_node_no_together.puml": "feca994a15fa20f2e5a309bad56e728ecf14618a7674473481f7e93f9ad58007",
+      "review2_control_inline_member_no_together.puml": "fbeb1de903e7d12ac2dc5913f7612527c17249ad261ed2fbed8b6924ff7649d4",
+      "review2_control_note_target_no_together.puml": "aa84c37de76a18c0c54d68f15c0cee54b5a2af9f55c0ae67aa381ddaaa785391",
+      "review2_control_package_reopen_twice_no_together.puml": "e00f683078e6f739d0101e8c8b9061e4ae854b1a38c284984b67f52ad69be0f3",
+      "review2_control_plain_package_reopen_no_together.puml": "d39f241009122c4236dc4f8b81da5ab1c595b10d6fd8013d2b981305ede5196c",
+      "review2_control_reopen_package_no_together.puml": "57ca9d97c51c6183ac58f3dd5a31cae9ffd6aaec00f0a55fe05d04ffd8647cb5",
+      "review2_extends_implicit_membership_sibling_scope.puml": "b81392bf50999e887cbcd37aaf50f12a390b485a93e81873239c93b8634d28b7",
+      "review2_frame_folder_node_together_order.puml": "9f61d60d9c7295558e6ea0c1098bbd04d5ebcc809a8e8139698356981b1b219b",
+      "review2_inline_member_first_materialization_sibling_together.puml": "1a2bc3961aed867fff363d03b32771d99cd5d4925fba1e766275b311854b0bb0",
+      "review2_namespace_separator_reopen_scope.puml": "e1ee8ac323922ab332bd478e4381f49a7ee5dcb53123c9d7e6e0f8f9289776ba",
+      "review2_note_target_squaremaker_together.puml": "fa1e02065d0dfb258f428b0c5b3aaea876273d92440d54c3c959d5cd0b2d223e",
+      "review2_package_owned_then_reopened_in_sibling_together.puml": "97544a7440e599d869269aec2422dc775ba9dff073d6feca3dcdc9a493838375",
+      "review2_plain_package_reopen_inside_together.puml": "1fd1cde4810aa96c82b2eadaec0748832f7cdf9310e25bccafceee6b59832ad5",
+      "review2_reopen_package_inside_together_boundary.puml": "1ddf12728794237bc9f68dcacf6452e79ea729a27fd4d4133ae0ee2ae01ac62d"
+    },
+    "java_svgs": {
+      "review2_control_extends_implicit_no_together.svg": "9c31c65ca73f20d6ea90c8b41dd640df7ced465c9518a2203ed77b81e83304d8",
+      "review2_control_frame_folder_node_no_together.svg": "e5f98b79f9e5e5e7417aad0a0d671635a1f92beacb85fadb84e9a15436930cad",
+      "review2_control_inline_member_no_together.svg": "e64be4153ac46975722df430f108bd39c404706f7554b8703d8e9c3264de366d",
+      "review2_control_note_target_no_together.svg": "3623914692f48b7ed35340aaa65b6719a4751115df95d768b9289f446f23b2b3",
+      "review2_control_package_reopen_twice_no_together.svg": "5ac436913bd8d19345f5fc6df426d1f8f44b3f6c87789bbd93b4112af6f393f3",
+      "review2_control_plain_package_reopen_no_together.svg": "bcd583d85f1c98bc2f2a058869e7c26adfb04faa533a090920e67e175d2ab3bb",
+      "review2_control_reopen_package_no_together.svg": "977efd254073419c4a7b1c487d2e8e37303ad03d736d2c46bdc36297f21d1aaa",
+      "review2_extends_implicit_membership_sibling_scope.svg": "b5138f3cd68b0f7852fe768a1bc854f604f41d43ccdabebe787c85d35b6a4c5c",
+      "review2_frame_folder_node_together_order.svg": "68c13210f2e0d545438766ae053e0ad0af8247723e2bf789c35ccace423a2803",
+      "review2_inline_member_first_materialization_sibling_together.svg": "e69ba198d69d7b63e7ea5fd8d7bff99c19a747a46fb970c941b46bb240b150de",
+      "review2_namespace_separator_reopen_scope.svg": "ee6d3519e36ea112e85efb080f27e619f82254a8c4b4370445986fed81d3ac61",
+      "review2_note_target_squaremaker_together.svg": "a92a210a5d6ee5ef2c14b7265cea45b87522233a870a80346a180f4397daae51",
+      "review2_package_owned_then_reopened_in_sibling_together.svg": "bb69d9276766aa58b0b0fe55e414073ca8bfc195b5d104bd0ab494afd1d69f71",
+      "review2_plain_package_reopen_inside_together.svg": "02aa809668eeef1f078045f3b5b0350cf3bbccd3bdd139af3f8451bb0251035a",
+      "review2_reopen_package_inside_together_boundary.svg": "79a560703cb3b56e1cfcd05a5f5466027b16cea7fa87bc7b3bc6e08e28e42878"
+    }
+  },
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-together-structural-layout/review2_extends_implicit_membership_sibling_scope.puml",
+      "golden": "test-diagrams/perturbations/class-together-structural-layout/review2_extends_implicit_membership_sibling_scope.svg",
+      "axes": [
+        "implicit supertype and interface endpoints materialized by extends/implements",
+        "sibling Together scopes",
+        "later ordinary declaration of previously implicit endpoints"
+      ],
+      "result": "fail",
+      "pairing": "Fails in the same way as review2_control_extends_implicit_no_together."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-together-structural-layout/review2_reopen_package_inside_together_boundary.puml",
+      "golden": "test-diagrams/perturbations/class-together-structural-layout/review2_reopen_package_inside_together_boundary.svg",
+      "axes": [
+        "aliased package reopened inside Together",
+        "new nested child package under the reopened package",
+        "cross-package links through reused group state"
+      ],
+      "result": "fail",
+      "pairing": "Fails in the same way as review2_control_reopen_package_no_together."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-together-structural-layout/review2_namespace_separator_reopen_scope.puml",
+      "golden": "test-diagrams/perturbations/class-together-structural-layout/review2_namespace_separator_reopen_scope.svg",
+      "axes": [
+        "custom namespaceSeparator ::",
+        "reopened namespace scope inside Together",
+        "plain class link across reused namespace context"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-together-structural-layout/review2_frame_folder_node_together_order.puml",
+      "golden": "test-diagrams/perturbations/class-together-structural-layout/review2_frame_folder_node_together_order.svg",
+      "axes": [
+        "Together-owned frame cluster",
+        "empty folder child plus node child cluster",
+        "direct leaf ordering around heterogeneous child groups"
+      ],
+      "result": "fail",
+      "pairing": "Fails in the same way as review2_control_frame_folder_node_no_together."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-together-structural-layout/review2_note_target_squaremaker_together.puml",
+      "golden": "test-diagrams/perturbations/class-together-structural-layout/review2_note_target_squaremaker_together.svg",
+      "axes": [
+        "attached note marks one root entity as linked",
+        "four top-level classes with no user links",
+        "Together-aware standalone selection for SquareMaker/Magma"
+      ],
+      "result": "fail",
+      "pairing": "Fails in the same way as review2_control_note_target_no_together."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-together-structural-layout/review2_control_extends_implicit_no_together.puml",
+      "golden": "test-diagrams/perturbations/class-together-structural-layout/review2_control_extends_implicit_no_together.svg",
+      "axes": [
+        "implicit supertype and interface endpoints materialized by extends/implements",
+        "later ordinary declaration of previously implicit endpoints",
+        "no Together control"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-together-structural-layout/review2_control_reopen_package_no_together.puml",
+      "golden": "test-diagrams/perturbations/class-together-structural-layout/review2_control_reopen_package_no_together.svg",
+      "axes": [
+        "aliased package reopened without Together",
+        "new nested child package under the reopened package",
+        "cross-package links through reused group state"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-together-structural-layout/review2_control_frame_folder_node_no_together.puml",
+      "golden": "test-diagrams/perturbations/class-together-structural-layout/review2_control_frame_folder_node_no_together.svg",
+      "axes": [
+        "frame cluster with folder and node children",
+        "direct leaf ordering around heterogeneous child groups",
+        "no Together control"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-together-structural-layout/review2_control_note_target_no_together.puml",
+      "golden": "test-diagrams/perturbations/class-together-structural-layout/review2_control_note_target_no_together.svg",
+      "axes": [
+        "attached note marks one root entity as linked",
+        "four top-level classes with no user links",
+        "no Together control"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-together-structural-layout/review2_plain_package_reopen_inside_together.puml",
+      "golden": "test-diagrams/perturbations/class-together-structural-layout/review2_plain_package_reopen_inside_together.svg",
+      "axes": [
+        "plain package reopened inside Together",
+        "no alias or quoted display on the package",
+        "two direct reopened leaves with chained links"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-together-structural-layout/review2_control_plain_package_reopen_no_together.puml",
+      "golden": "test-diagrams/perturbations/class-together-structural-layout/review2_control_plain_package_reopen_no_together.svg",
+      "axes": [
+        "plain package reopened without Together",
+        "two direct reopened leaves with chained links",
+        "no alias or quoted display on the package"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-together-structural-layout/review2_inline_member_first_materialization_sibling_together.puml",
+      "golden": "test-diagrams/perturbations/class-together-structural-layout/review2_inline_member_first_materialization_sibling_together.svg",
+      "axes": [
+        "entity first materialized by inline-member syntax",
+        "later explicit declaration in a sibling Together scope",
+        "first-materialization owner immutability"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-together-structural-layout/review2_control_inline_member_no_together.puml",
+      "golden": "test-diagrams/perturbations/class-together-structural-layout/review2_control_inline_member_no_together.svg",
+      "axes": [
+        "entity first materialized by inline-member syntax",
+        "later explicit declaration without Together",
+        "control for first-materialization reuse"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-together-structural-layout/review2_package_owned_then_reopened_in_sibling_together.puml",
+      "golden": "test-diagrams/perturbations/class-together-structural-layout/review2_package_owned_then_reopened_in_sibling_together.svg",
+      "axes": [
+        "package first materialized inside Together",
+        "same package reopened inside a sibling Together scope",
+        "new leaf created under the reopened package after owner assignment"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-together-structural-layout/review2_control_package_reopen_twice_no_together.puml",
+      "golden": "test-diagrams/perturbations/class-together-structural-layout/review2_control_package_reopen_twice_no_together.svg",
+      "axes": [
+        "same package reopened twice without Together",
+        "new leaf created under the reopened package",
+        "control for package reuse independent of Together ownership"
+      ],
+      "result": "pass"
+    }
+  ],
+  "findings": [
+    "The 10a16ee3 rerun supersedes the earlier 1482ade4 attempt. I audited `docs/parity-reviews/class-svek-painted-envelope-origin/account.json` and the corresponding render diff: the added `svek_layout_y_bias` is a generic vertical SVEK-origin correction applied to nodes, clusters, paths, endpoints, and labels, and the account explicitly forbids keying it to Together or fixture labels.",
+    "The local checkout does not contain the user-supplied 40-character hash `10a16ee37cc98b38f5ba465b217a3362ab73a8ed`. The locally resolvable `10a16ee3` commit is `10a16ee323cf2a2a21054967681eec6e43cd5b22`, and the review records that concrete object id while preserving the provenance mismatch note.",
+    "Static diff inspection from `f840f7070d3c203265e6bcb871e7116a5ec843a9` to `10a16ee3` found no new production golden reads, fixture-name branches, coordinate-keyed SVG surgery, or held-out-specific constant ladders. The new behavior is structural: top-of-stack Together ownership, first-materialization enrollment, recursive SVEK node emission, and generic vertical painted-envelope normalization.",
+    "All 15 fresh `review2_*.puml` inputs produced well-formed Java CLASS SVGs with no recognized PlantUML error-page markers, and every fresh source hash is unique against the golden corpus and the perturbation corpus.",
+    "Four initially failing Together variants do not isolate this mechanism because matched no-Together controls fail too. `review2_extends_implicit_membership_sibling_scope` and its control both keep an implicitly created `implements` endpoint as a class instead of mutating it to an interface. `review2_reopen_package_inside_together_boundary` and its control both lose the aliased package display title on reopen. `review2_frame_folder_node_together_order` and its control both diverge on heterogeneous frame/folder/node cluster layout. `review2_note_target_squaremaker_together` and its control both diverge on note-bearing multi-root layout.",
+    "The plain-package reopen probe does isolate the alias/display confounder away from Together. `review2_plain_package_reopen_inside_together` passes, and so does its no-Together control, which means the earlier aliased reopen failure is not evidence against the Together ownership boundary itself.",
+    "The inline-member probe passes. `review2_inline_member_first_materialization_sibling_together` shows that an entity first materialized by `Foo : member` is enrolled in the opening Together exactly once and later explicit declaration in a sibling Together scope does not migrate it.",
+    "The package-owner immutability probe passes. `review2_package_owned_then_reopened_in_sibling_together` shows that a package first materialized inside one Together can be reopened inside a sibling Together without reparenting the package or leaking the later leaf into the sibling Together.",
+    "The namespace-separator reopen probe passes. `review2_namespace_separator_reopen_scope` exercises `namespaceSeparator ::` with a reopened namespace scope inside Together and found no counterexample.",
+    "Net result: after the generic painted-envelope fix, I found no held-out whose failure disappears in the no-Together control while remaining on the Together variant. The surviving failures are broader parser/renderer residue and are preserved here, but they are not mechanism-shaped rejection evidence for `class-together-structural-layout`."
+  ],
+  "residue": [
+    "General implicit-type mutation issue: an endpoint first created via `implements` is later left as a class instead of mutating to an interface.",
+    "General package reopen display issue: reopening an aliased package can lose the display title and fall back to the canonical code name.",
+    "General heterogeneous group rendering issue: frame/folder/node cluster geometry and child emission still diverge from Java.",
+    "General note/root layout issue: note-bearing multi-root class diagrams still diverge even without Together."
+  ],
+  "verdict": "accepted"
+}

@@ -1,0 +1,15 @@
+@startuml
+package Review2Plain7101 {
+  class Review2Seed7103
+}
+
+together {
+  package Review2Plain7101 {
+    class Review2Reopened7105
+    class Review2Reopened7107
+  }
+}
+
+Review2Seed7103 --> Review2Reopened7105
+Review2Reopened7105 --> Review2Reopened7107
+@enduml

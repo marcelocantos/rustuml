@@ -1,0 +1,17 @@
+@startuml
+together {
+  package Review2Owned7301 {
+    class Review2First7303
+  }
+}
+
+together {
+  package Review2Owned7301 {
+    class Review2Second7305
+  }
+}
+
+class Review2Outside7307
+Review2First7303 --> Review2Second7305
+Review2Second7305 --> Review2Outside7307
+@enduml

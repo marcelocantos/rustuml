@@ -1,0 +1,16 @@
+@startuml
+together {
+  frame Review2Frame6401 {
+    class Review2FrameLeaf6403
+    folder Review2Empty6405 {
+    }
+    node Review2Node6407 {
+      class Review2NodeLeaf6409
+    }
+    class Review2FrameTail6411
+  }
+}
+
+class Review2Root6413
+Review2FrameLeaf6403 --> Review2Root6413
+@enduml

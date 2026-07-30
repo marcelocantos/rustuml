@@ -1,0 +1,17 @@
+@startuml
+package "Review2 Domain 6201" as Review2Domain6201 {
+  class Review2Seed6203
+}
+
+together {
+  package Review2Domain6201 {
+    class Review2Reopened6205
+    package Review2Nested6207 {
+      class Review2NestedLeaf6209
+    }
+  }
+}
+
+Review2Seed6203 --> Review2Reopened6205
+Review2Reopened6205 --> Review2NestedLeaf6209
+@enduml
