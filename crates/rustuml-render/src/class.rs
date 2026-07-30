@@ -298,6 +298,14 @@ const PACKAGE_TITLE_MARGIN_X: f64 = 3.0;
 const PACKAGE_TAB_SLOPE_WIDTH: f64 = 7.0;
 const PACKAGE_ROUND_CORNER: f64 = 5.0;
 const PACKAGE_STROKE_WIDTH: &str = "1.5";
+/// `USymbolFolder(false)#asSmall` uses a synthetic 40x15 title block for the
+/// tab, then surrounds the stereotype/body label stack with Margin(10,20,13,10).
+const SYMBOL_FOLDER_TAB_TITLE_WIDTH: f64 = 40.0;
+const SYMBOL_FOLDER_TAB_TITLE_HEIGHT: f64 = 15.0;
+const SYMBOL_FOLDER_BODY_MARGIN_LEFT: f64 = 10.0;
+const SYMBOL_FOLDER_BODY_MARGIN_RIGHT: f64 = 20.0;
+const SYMBOL_FOLDER_BODY_MARGIN_TOP: f64 = 13.0;
+const SYMBOL_FOLDER_BODY_MARGIN_BOTTOM: f64 = 10.0;
 /// Java `USymbolFrame.drawFrame`, `USymbolRectangle.drawRect`, and
 /// `USymbolNode.drawNode` use the ordinary cluster line thickness.
 const SYMBOL_CLUSTER_STROKE_WIDTH: &str = "1";
@@ -2321,7 +2329,7 @@ fn render_with_oracle_uid_origin(
         }
     }
     for (pkg_idx, role) in package_render.roles.iter().copied().enumerate() {
-        if role != PackageRenderRole::EmptyLeaf {
+        if !role.is_leaf_node() {
             continue;
         }
         if let Some(parent) = package_render.parent_pkg[pkg_idx]
@@ -2362,7 +2370,7 @@ fn render_with_oracle_uid_origin(
                 PackageRenderRole::Cluster => {
                     layout.add_together_cluster(&group_id, &package_cluster_id(package_idx));
                 }
-                PackageRenderRole::EmptyLeaf => {
+                PackageRenderRole::EmptyLeaf | PackageRenderRole::SymbolLeaf => {
                     layout.add_together_node(&group_id, &empty_package_layout_id(package_idx));
                 }
                 PackageRenderRole::Hidden => {}
@@ -3464,11 +3472,16 @@ enum PackageRenderRole {
     Hidden,
     Cluster,
     EmptyLeaf,
+    SymbolLeaf,
 }
 
 impl PackageRenderRole {
     fn is_rendered(self) -> bool {
         !matches!(self, Self::Hidden)
+    }
+
+    fn is_leaf_node(self) -> bool {
+        matches!(self, Self::EmptyLeaf | Self::SymbolLeaf)
     }
 }
 
@@ -3512,6 +3525,11 @@ fn package_render_model(diagram: &ClassDiagram) -> PackageRenderModel {
                 // Java `Entity#isEmpty` examines direct quark children. A
                 // direct leaf or group child therefore makes this a cluster.
                 PackageRenderRole::Cluster
+            } else if !package.phantom && explicit_package_symbol_kind(package).is_some() {
+                // `GeneralImageBuilder#createEntityImageBlock` sends an
+                // EMPTY_PACKAGE retaining a non-null USymbol through
+                // `EntityImageDescription` rather than EntityImageEmptyPackage.
+                PackageRenderRole::SymbolLeaf
             } else if !package.phantom {
                 // `GraphvizImageBuilder#printGroups` mutates an explicit,
                 // directly empty package to `LeafType.EMPTY_PACKAGE`.
@@ -3568,6 +3586,30 @@ fn visible_package_stereotype_lines(pkg: &Package) -> Vec<String> {
         .collect()
 }
 
+fn explicit_package_symbol_kind(pkg: &Package) -> Option<PackageKind> {
+    match pkg.kind {
+        PackageKind::Cloud
+        | PackageKind::Database
+        | PackageKind::Folder
+        | PackageKind::Frame
+        | PackageKind::Rectangle
+        | PackageKind::Node => Some(pkg.kind),
+        PackageKind::Package | PackageKind::Namespace => {
+            pkg.stereotypes.iter().find_map(|stereotype| {
+                match stereotype.to_ascii_lowercase().as_str() {
+                    "cloud" => Some(PackageKind::Cloud),
+                    "database" => Some(PackageKind::Database),
+                    "folder" => Some(PackageKind::Folder),
+                    "frame" => Some(PackageKind::Frame),
+                    "rectangle" => Some(PackageKind::Rectangle),
+                    "node" => Some(PackageKind::Node),
+                    _ => None,
+                }
+            })
+        }
+    }
+}
+
 fn package_cluster_id(idx: usize) -> String {
     format!("pkg{idx}")
 }
@@ -3582,7 +3624,9 @@ fn together_layout_id(idx: usize) -> String {
 
 fn empty_package_dims(pkg: &Package) -> (f64, f64) {
     let label = package_display_label(pkg);
-    let label_width = text_render::measure_no_underline(label, FONT_SIZE, true);
+    let symbol_kind = explicit_package_symbol_kind(pkg);
+    let bold = symbol_kind.is_none();
+    let label_width = text_render::measure_no_underline(label, FONT_SIZE, bold);
     let label_height = text_render::label_height(label, FONT_SIZE);
     let stereotype_lines = visible_package_stereotype_lines(pkg);
     let content_width = stereotype_lines
@@ -3594,6 +3638,33 @@ fn empty_package_dims(pkg: &Package) -> (f64, f64) {
         .map(|line| text_render::label_height(line, FONT_SIZE))
         .sum::<f64>()
         + label_height;
+    if let Some(symbol_kind) = symbol_kind {
+        // Java symbol-leaf dimensions come from each `USymbol#asSmall`
+        // implementation's `Margin`: Folder(10,20,13,10) plus its hidden
+        // 40x15 title; Frame/Node(15,25,20,10); Database(10,10,24,5);
+        // Rectangle(10,10,10,10); Cloud(15,15,15,15).
+        let (left, right, top, bottom, title_width, title_height) = match symbol_kind {
+            PackageKind::Folder => (
+                SYMBOL_FOLDER_BODY_MARGIN_LEFT,
+                SYMBOL_FOLDER_BODY_MARGIN_RIGHT,
+                SYMBOL_FOLDER_BODY_MARGIN_TOP,
+                SYMBOL_FOLDER_BODY_MARGIN_BOTTOM,
+                SYMBOL_FOLDER_TAB_TITLE_WIDTH,
+                SYMBOL_FOLDER_TAB_TITLE_HEIGHT,
+            ),
+            PackageKind::Frame | PackageKind::Node => (15.0, 25.0, 20.0, 10.0, 0.0, 0.0),
+            PackageKind::Database => (10.0, 10.0, 24.0, 5.0, 0.0, 0.0),
+            PackageKind::Rectangle => (10.0, 10.0, 10.0, 10.0, 0.0, 0.0),
+            PackageKind::Cloud => (15.0, 15.0, 15.0, 15.0, 0.0, 0.0),
+            PackageKind::Package | PackageKind::Namespace => {
+                unreachable!("ordinary package kinds do not retain an explicit USymbol")
+            }
+        };
+        return (
+            content_width.max(title_width) + left + right,
+            title_height + content_height + top + bottom,
+        );
+    }
     // Java `EntityImageEmptyPackage#MARGIN` is 10 on each side, and
     // `calculateDimensionSlow` keeps at least two title-line heights.
     let margin = 10.0;
@@ -4003,7 +4074,7 @@ impl SvekEmissionOrder<'_> {
             }
             match self.package_roles[child_idx] {
                 PackageRenderRole::Cluster => self.collect_package(child_idx),
-                PackageRenderRole::EmptyLeaf => self
+                PackageRenderRole::EmptyLeaf | PackageRenderRole::SymbolLeaf => self
                     .node_order
                     .push(SvekNodeEmission::EmptyPackage(child_idx)),
                 PackageRenderRole::Hidden => {}
@@ -4030,7 +4101,7 @@ fn svek_node_emission_order(diagram: &ClassDiagram) -> Vec<SvekNodeEmission> {
         }
         match package_render.roles[pkg_idx] {
             PackageRenderRole::Cluster => emission.collect_package(pkg_idx),
-            PackageRenderRole::EmptyLeaf => emission
+            PackageRenderRole::EmptyLeaf | PackageRenderRole::SymbolLeaf => emission
                 .node_order
                 .push(SvekNodeEmission::EmptyPackage(pkg_idx)),
             PackageRenderRole::Hidden => {}
@@ -4468,7 +4539,7 @@ fn render_plantuml_svg(
         .roles
         .iter()
         .enumerate()
-        .filter(|(_, role)| **role == PackageRenderRole::EmptyLeaf)
+        .filter(|(_, role)| role.is_leaf_node())
         .enumerate()
         .map(|(ordinal, (package_idx, _))| (package_idx, empty_package_start + ordinal))
         .collect::<Vec<_>>();
@@ -4996,7 +5067,10 @@ fn render_plantuml_svg(
                 .iter()
                 .find(|empty| empty.package_idx == package_idx)
             {
-                emit_layout_empty_package(&mut svg, empty);
+                let entity_id = svek_ids.package_ids[package_idx]
+                    .as_deref()
+                    .unwrap_or("ent0002");
+                emit_layout_empty_package(&mut svg, empty, entity_id);
             }
             node_emission_cursor += 1;
         }
@@ -5315,7 +5389,10 @@ fn render_plantuml_svg(
             .iter()
             .find(|empty| empty.package_idx == package_idx)
         {
-            emit_layout_empty_package(&mut svg, empty);
+            let entity_id = svek_ids.package_ids[package_idx]
+                .as_deref()
+                .unwrap_or("ent0002");
+            emit_layout_empty_package(&mut svg, empty, entity_id);
         }
         node_emission_cursor += 1;
     }
@@ -5508,6 +5585,9 @@ fn package_cluster_depth_first_order(package_render: &PackageRenderModel) -> Vec
 
 struct EmptyPackageLayout {
     package_idx: usize,
+    qualified_name: String,
+    source_line: usize,
+    symbol_kind: Option<PackageKind>,
     label: String,
     stereotype_lines: Vec<String>,
     fill: String,
@@ -5527,6 +5607,7 @@ fn layout_empty_packages(
     body_dx: f64,
     body_dy: f64,
 ) -> Vec<EmptyPackageLayout> {
+    let package_render = package_render_model(diagram);
     empty_packages
         .iter()
         .filter_map(|&(package_idx, node_idx)| {
@@ -5551,6 +5632,13 @@ fn layout_empty_packages(
                 .unwrap_or_else(|| "#000000".to_string());
             Some(EmptyPackageLayout {
                 package_idx,
+                qualified_name: package_qualified_name(
+                    diagram,
+                    &package_render.parent_pkg,
+                    package_idx,
+                ),
+                source_line: package.source_line,
+                symbol_kind: explicit_package_symbol_kind(package),
                 label: package_display_label(package).to_string(),
                 stereotype_lines: visible_package_stereotype_lines(package),
                 fill,
@@ -5565,7 +5653,31 @@ fn layout_empty_packages(
         .collect()
 }
 
-fn emit_layout_empty_package(svg: &mut String, package: &EmptyPackageLayout) {
+fn emit_layout_empty_package(svg: &mut String, package: &EmptyPackageLayout, entity_id: &str) {
+    write!(svg, "<!--entity {}-->", escape_xml(&package.qualified_name)).unwrap();
+    write!(
+        svg,
+        r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
+        escape_xml(&package.qualified_name),
+        package.source_line,
+        entity_id,
+    )
+    .unwrap();
+    if let Some(kind) = package.symbol_kind {
+        match kind {
+            PackageKind::Folder => emit_layout_empty_symbol_folder(svg, package),
+            PackageKind::Frame => emit_layout_empty_symbol_frame(svg, package),
+            PackageKind::Node => emit_layout_empty_symbol_node(svg, package),
+            PackageKind::Database => emit_layout_empty_symbol_database(svg, package),
+            PackageKind::Rectangle => emit_layout_empty_symbol_rectangle(svg, package),
+            PackageKind::Cloud => emit_layout_empty_symbol_cloud(svg, package),
+            PackageKind::Package | PackageKind::Namespace => {
+                unreachable!("ordinary package kinds do not retain an explicit USymbol")
+            }
+        }
+        svg.push_str("</g>");
+        return;
+    }
     let label_w = text_render::measure_no_underline(&package.label, FONT_SIZE, true);
     let title_w = label_w + 2.0 * PACKAGE_TITLE_MARGIN_X;
     let tab_w = (title_w + PACKAGE_TAB_SLOPE_WIDTH).min(package.width.max(0.0));
@@ -5653,6 +5765,278 @@ fn emit_layout_empty_package(svg: &mut String, package: &EmptyPackageLayout) {
             },
         );
     }
+    svg.push_str("</g>");
+}
+
+fn emit_layout_empty_symbol_folder(svg: &mut String, package: &EmptyPackageLayout) {
+    let x = package.x;
+    let y = package.y;
+    let right = x + package.width;
+    let bottom = y + package.height;
+    let title_width = SYMBOL_FOLDER_TAB_TITLE_WIDTH + 2.0 * PACKAGE_TITLE_MARGIN_X;
+    let tab_join = x + title_width - PACKAGE_ROUND_CORNER / 2.0;
+    let tab_right = x + title_width + PACKAGE_TAB_SLOPE_WIDTH;
+    let line_y = y + SYMBOL_FOLDER_TAB_TITLE_HEIGHT + 2.0 * PACKAGE_TITLE_MARGIN_X;
+    write!(
+        svg,
+        r#"<path d="M{},{} L{},{} A3.75,3.75 0 0 1 {},{} L{},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{}" fill="{}" style="stroke:{};stroke-width:{};"/>"#,
+        fmt4(x + 2.5),
+        fmt4(y),
+        fmt4(tab_join),
+        fmt4(y),
+        fmt4(tab_join + 2.5),
+        fmt4(y + 2.5),
+        fmt4(tab_right),
+        fmt4(line_y),
+        fmt4(right - 2.5),
+        fmt4(line_y),
+        fmt4(right),
+        fmt4(line_y + 2.5),
+        fmt4(right),
+        fmt4(bottom - 2.5),
+        fmt4(right - 2.5),
+        fmt4(bottom),
+        fmt4(x + 2.5),
+        fmt4(bottom),
+        fmt4(x),
+        fmt4(bottom - 2.5),
+        fmt4(x),
+        fmt4(y + 2.5),
+        fmt4(x + 2.5),
+        fmt4(y),
+        package.fill,
+        package.stroke,
+        BORDER_WIDTH,
+    )
+    .unwrap();
+    write!(
+        svg,
+        r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+        package.stroke,
+        BORDER_WIDTH,
+        fmt4(x),
+        fmt4(tab_right),
+        fmt4(line_y),
+        fmt4(line_y),
+    )
+    .unwrap();
+    emit_layout_empty_symbol_text(
+        svg,
+        package,
+        x + SYMBOL_FOLDER_BODY_MARGIN_LEFT,
+        y + SYMBOL_FOLDER_BODY_MARGIN_TOP + SYMBOL_FOLDER_TAB_TITLE_HEIGHT,
+    );
+}
+
+fn emit_layout_empty_symbol_text(
+    svg: &mut String,
+    package: &EmptyPackageLayout,
+    body_x: f64,
+    body_y: f64,
+) {
+    let label_width = text_render::measure_no_underline(&package.label, FONT_SIZE, false);
+    let content_width = package
+        .stereotype_lines
+        .iter()
+        .map(|line| text_render::measure_no_underline(line, FONT_SIZE, false))
+        .fold(label_width, f64::max);
+    let mut preceding_height = 0.0;
+    for stereotype in &package.stereotype_lines {
+        let width = text_render::measure_no_underline(stereotype, FONT_SIZE, false);
+        text_render::emit_text(
+            svg,
+            stereotype,
+            &TextBase {
+                x: body_x + (content_width - width) / 2.0,
+                y: body_y + preceding_height + text_render::label_ascent(stereotype, FONT_SIZE),
+                font_size: FONT_SIZE as u32,
+                font_family: "sans-serif",
+                fill: &package.font_fill,
+                bold: false,
+                italic: true,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        preceding_height += text_render::label_height(stereotype, FONT_SIZE);
+    }
+    text_render::emit_text(
+        svg,
+        &package.label,
+        &TextBase {
+            x: body_x + (content_width - label_width) / 2.0,
+            y: body_y + preceding_height + text_render::label_ascent(&package.label, FONT_SIZE),
+            font_size: FONT_SIZE as u32,
+            font_family: "sans-serif",
+            fill: &package.font_fill,
+            bold: false,
+            italic: false,
+            underline: false,
+            skip_underline: true,
+        },
+    );
+}
+
+fn emit_layout_empty_symbol_frame(svg: &mut String, package: &EmptyPackageLayout) {
+    let x = package.x;
+    let y = package.y;
+    let notch_right = x + package.width / 3.0;
+    // `USymbolFrame#asSmall` passes an empty title to `drawFrame`, selecting
+    // the width/3, 5px-high, 7px-diagonal, 12px-bottom notch.
+    write!(
+        svg,
+        r#"<rect fill="{}" height="{}" rx="2.5" ry="2.5" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
+        package.fill,
+        fmt4(package.height),
+        package.stroke,
+        BORDER_WIDTH,
+        fmt4(package.width),
+        fmt4(x),
+        fmt4(y),
+    )
+    .unwrap();
+    write!(
+        svg,
+        r#"<path d="M{},{} L{},{} L{},{} L{},{}" fill="none" style="stroke:{};stroke-width:{};"/>"#,
+        fmt4(notch_right),
+        fmt4(y),
+        fmt4(notch_right),
+        fmt4(y + 5.0),
+        fmt4(notch_right - 7.0),
+        fmt4(y + 12.0),
+        fmt4(x),
+        fmt4(y + 12.0),
+        package.stroke,
+        BORDER_WIDTH,
+    )
+    .unwrap();
+    emit_layout_empty_symbol_text(svg, package, x + 15.0, y + 20.0);
+}
+
+fn emit_layout_empty_symbol_node(svg: &mut String, package: &EmptyPackageLayout) {
+    let x = package.x;
+    let y = package.y;
+    let right = x + package.width;
+    let bottom = y + package.height;
+    let front_right = right - NODE_BEVEL;
+    write!(
+        svg,
+        r#"<polygon fill="{}" points="{},{},{},{},{},{},{},{},{},{},{},{},{},{}" style="stroke:{};stroke-width:{};"/>"#,
+        package.fill,
+        fmt4(x),
+        fmt4(y + NODE_BEVEL),
+        fmt4(x + NODE_BEVEL),
+        fmt4(y),
+        fmt4(right),
+        fmt4(y),
+        fmt4(right),
+        fmt4(bottom - NODE_BEVEL),
+        fmt4(front_right),
+        fmt4(bottom),
+        fmt4(x),
+        fmt4(bottom),
+        fmt4(x),
+        fmt4(y + NODE_BEVEL),
+        package.stroke,
+        BORDER_WIDTH,
+    )
+    .unwrap();
+    for (x1, y1, x2, y2) in [
+        (front_right, y + NODE_BEVEL, right, y),
+        (x, y + NODE_BEVEL, front_right, y + NODE_BEVEL),
+        (front_right, y + NODE_BEVEL, front_right, bottom),
+    ] {
+        write!(
+            svg,
+            r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+            package.stroke,
+            BORDER_WIDTH,
+            fmt4(x1),
+            fmt4(x2),
+            fmt4(y1),
+            fmt4(y2),
+        )
+        .unwrap();
+    }
+    emit_layout_empty_symbol_text(svg, package, x + 15.0, y + 20.0);
+}
+
+fn emit_layout_empty_symbol_database(svg: &mut String, package: &EmptyPackageLayout) {
+    let x = package.x;
+    let y = package.y;
+    let middle = x + package.width / 2.0;
+    let right = x + package.width;
+    let bottom = y + package.height;
+    write!(
+        svg,
+        r#"<path d="M{},{} C{},{} {},{} {},{} C{},{} {},{} {},{} L{},{} C{},{} {},{} {},{} C{},{} {},{} {},{} L{},{}" fill="{}" style="stroke:{};stroke-width:{};"/>"#,
+        fmt4(x), fmt4(y + 10.0),
+        fmt4(x), fmt4(y), fmt4(middle), fmt4(y), fmt4(middle), fmt4(y),
+        fmt4(middle), fmt4(y), fmt4(right), fmt4(y), fmt4(right), fmt4(y + 10.0),
+        fmt4(right), fmt4(bottom - 10.0),
+        fmt4(right), fmt4(bottom), fmt4(middle), fmt4(bottom), fmt4(middle), fmt4(bottom),
+        fmt4(middle), fmt4(bottom), fmt4(x), fmt4(bottom), fmt4(x), fmt4(bottom - 10.0),
+        fmt4(x), fmt4(y + 10.0),
+        package.fill, package.stroke, BORDER_WIDTH,
+    )
+    .unwrap();
+    write!(
+        svg,
+        r#"<path d="M{},{} C{},{} {},{} {},{} C{},{} {},{} {},{}" fill="none" style="stroke:{};stroke-width:{};"/>"#,
+        fmt4(x), fmt4(y + 10.0),
+        fmt4(x), fmt4(y + 20.0), fmt4(middle), fmt4(y + 20.0), fmt4(middle), fmt4(y + 20.0),
+        fmt4(middle), fmt4(y + 20.0), fmt4(right), fmt4(y + 20.0), fmt4(right), fmt4(y + 10.0),
+        package.stroke, BORDER_WIDTH,
+    )
+    .unwrap();
+    emit_layout_empty_symbol_text(svg, package, x + 10.0, y + 24.0);
+}
+
+fn emit_layout_empty_symbol_rectangle(svg: &mut String, package: &EmptyPackageLayout) {
+    write!(
+        svg,
+        r#"<rect fill="{}" height="{}" rx="2.5" ry="2.5" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
+        package.fill,
+        fmt4(package.height),
+        package.stroke,
+        BORDER_WIDTH,
+        fmt4(package.width),
+        fmt4(package.x),
+        fmt4(package.y),
+    )
+    .unwrap();
+    emit_layout_empty_symbol_text(svg, package, package.x + 10.0, package.y + 10.0);
+}
+
+fn emit_layout_empty_symbol_cloud(svg: &mut String, package: &EmptyPackageLayout) {
+    let frontier = cloud_frontier(package.width, package.height);
+    write!(
+        svg,
+        r#"<path d="M{},{}"#,
+        fmt4(package.x + frontier.start.x),
+        fmt4(package.y + frontier.start.y),
+    )
+    .unwrap();
+    for curve in frontier.curves {
+        write!(
+            svg,
+            " C{},{} {},{} {},{}",
+            fmt4(package.x + curve.control1.x),
+            fmt4(package.y + curve.control1.y),
+            fmt4(package.x + curve.control2.x),
+            fmt4(package.y + curve.control2.y),
+            fmt4(package.x + curve.end.x),
+            fmt4(package.y + curve.end.y),
+        )
+        .unwrap();
+    }
+    write!(
+        svg,
+        r#"" fill="{}" style="stroke:{};stroke-width:{};"/>"#,
+        package.fill, package.stroke, BORDER_WIDTH,
+    )
+    .unwrap();
+    emit_layout_empty_symbol_text(svg, package, package.x + 15.0, package.y + 15.0);
 }
 
 fn emit_layout_package_cluster(svg: &mut String, cluster: &LayoutPackageCluster, entity_id: &str) {
@@ -14076,6 +14460,67 @@ mod tests {
             .position(|entity| entity.id == "EmptyControlAnchor")
             .unwrap();
         assert_eq!(allocation.entity_ids[anchor_idx], "ent0006");
+    }
+
+    #[test]
+    fn explicit_empty_symbols_use_symbol_leaf_geometry() {
+        let input = "@startuml\n\
+                     frame FreshFrame7101 {\n\
+                       folder FreshEmptyFolder7103 {\n\
+                       }\n\
+                       frame FreshEmptyFrame7105 {\n\
+                       }\n\
+                       node FreshEmptyNode7107 {\n\
+                       }\n\
+                       database FreshEmptyDatabase7111 {\n\
+                       }\n\
+                       rectangle FreshEmptyRectangle7117 {\n\
+                       }\n\
+                       cloud FreshEmptyCloud7121 {\n\
+                       }\n\
+                     }\n\
+                     class FreshAnchor7127\n\
+                     class FreshPeer7133\n\
+                     FreshAnchor7127 --> FreshPeer7133\n\
+                     @enduml";
+        let lines = input
+            .lines()
+            .filter(|line| !line.starts_with("@start") && !line.starts_with("@end"))
+            .map(str::to_string)
+            .collect::<Vec<_>>();
+        let diagram = rustuml_parser::parse::class::parse_class(&lines).unwrap();
+        let model = package_render_model(&diagram);
+        for (name, extra_width, extra_height) in [
+            ("FreshEmptyFolder7103", 30.0, 38.0),
+            ("FreshEmptyFrame7105", 40.0, 30.0),
+            ("FreshEmptyNode7107", 40.0, 30.0),
+            ("FreshEmptyDatabase7111", 20.0, 29.0),
+            ("FreshEmptyRectangle7117", 20.0, 20.0),
+            ("FreshEmptyCloud7121", 30.0, 30.0),
+        ] {
+            let package_idx = diagram
+                .packages
+                .iter()
+                .position(|package| package.name == format!("FreshFrame7101.{name}"))
+                .unwrap();
+            assert_eq!(
+                model.roles[package_idx],
+                PackageRenderRole::SymbolLeaf,
+                "{name}"
+            );
+            let label = package_display_label(&diagram.packages[package_idx]);
+            let (width, height) = empty_package_dims(&diagram.packages[package_idx]);
+            assert_eq!(
+                width,
+                text_render::measure_no_underline(label, FONT_SIZE, false) + extra_width,
+                "{name}"
+            );
+            assert_eq!(
+                height,
+                text_render::label_height(label, FONT_SIZE) + extra_height,
+                "{name}"
+            );
+        }
     }
 
     #[test]
