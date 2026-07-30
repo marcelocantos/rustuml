@@ -1,0 +1,10 @@
+@startuml
+skinparam packageStyle cloud
+package "Direct Empty Parcel" as EmptyParcel
+class "External Receiving Class" as ReceivingClass
+package "Filled Ordinary Parcel" as FilledParcel {
+  class FilledPayload
+}
+EmptyParcel --> ReceivingClass
+FilledPayload --> ReceivingClass
+@enduml

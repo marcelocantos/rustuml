@@ -1,0 +1,11 @@
+@startuml
+left to right direction
+skinparam packageStyle database
+package "Archive Reservoir" as ArchiveReservoir {
+  package "Delta Partition" as DeltaPartition {
+    class ArchiveReader
+    class ArchiveWriter
+    ArchiveReader --> ArchiveWriter
+  }
+}
+@enduml

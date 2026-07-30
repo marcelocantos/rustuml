@@ -1,0 +1,12 @@
+@startuml
+skinparam packageStyle frame
+skinparam PackageBackgroundColor #FFF4CE
+skinparam PackageBorderColor #8A6D3B
+skinparam FrameBackgroundColor #E8F4FD
+skinparam FrameBorderColor #005A9E
+package "Frame Fallback Dispatch Dossier" as FrameDossier {
+  class DossierProducer
+  class DossierConsumer
+  DossierProducer --> DossierConsumer
+}
+@enduml

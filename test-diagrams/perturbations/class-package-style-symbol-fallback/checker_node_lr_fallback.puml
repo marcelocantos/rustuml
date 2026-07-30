@@ -1,0 +1,9 @@
+@startuml
+left to right direction
+skinparam packageStyle node
+package "Eastbound Relay Cabinet" as EastboundRelay {
+  class RelaySource
+  class RelayTarget
+  RelaySource --> RelayTarget
+}
+@enduml

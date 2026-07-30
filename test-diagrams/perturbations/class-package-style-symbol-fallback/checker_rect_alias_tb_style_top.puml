@@ -1,0 +1,14 @@
+@startuml
+skinparam packageStyle rect
+skinparam PackageBackgroundColor #E6F4EA
+skinparam PackageBorderColor #185ABD
+skinparam PackageFontColor #004578
+skinparam RectangleBackgroundColor #FDE7E9
+skinparam RectangleBorderColor #A4262C
+skinparam RectangleFontColor #881798
+package "Harbor Manifest Continuity Ledger" as HarborManifest {
+  class "Cargo Intake Token" as CargoIntake
+  class "Audit Departure Token" as AuditDeparture
+  CargoIntake --> AuditDeparture
+}
+@enduml

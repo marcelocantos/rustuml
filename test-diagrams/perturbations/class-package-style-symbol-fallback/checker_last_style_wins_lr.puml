@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+skinparam packageStyle folder
+skinparam packageStyle cloud
+package "Latest Style Prevails" as LatestStyle {
+  class LatestSource
+  class LatestTarget
+  LatestSource --> LatestTarget
+}
+@enduml

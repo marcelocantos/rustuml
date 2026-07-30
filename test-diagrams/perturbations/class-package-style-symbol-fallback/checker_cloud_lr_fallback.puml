@@ -1,0 +1,9 @@
+@startuml
+left to right direction
+skinparam packageStyle cloud
+package "Cumulus Dispatch Archive" as CumulusArchive {
+  class DispatchSource
+  class DispatchTarget
+  DispatchSource --> DispatchTarget
+}
+@enduml
