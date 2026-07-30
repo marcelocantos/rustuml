@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "mechanism": "sequence-external-autoactivation",
+  "created": "2026-07-31",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "4df34f4db5890d3cfc55cbdc52f76785d72ca8f8",
+  "java_locations": [
+    "sequencediagram/command/CommandExoArrowAny.java:98-183 constructs every external message, then applies explicit activation or the same autoactivate head/body rule used by ordinary messages.",
+    "sequencediagram/command/CommandArrow.java:330-353 applies autoactivate to ordinary messages: dotted normal/async heads deactivate the sender; solid normal/async heads activate the receiver.",
+    "sequencediagram/command/CommandReturn.java:85-124 reverses the last accepted message and deactivates its receiver, so an external message's activation changes the owner consumed by the next return."
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/sequence.rs:386-430 applies autoactivation_for to ordinary messages.",
+    "crates/rustuml-parser/src/parse/sequence.rs:438-477 parses incoming and outgoing external messages but only preserves explicit activation suffixes.",
+    "crates/rustuml-render/src/sequence.rs:3028-3175 and 6815-7190 consume parsed activation changes to maintain lifecycle and return-owner stacks."
+  ],
+  "claimed_invariant": "External and ordinary sequence messages share one autoactivation rule. With autoactivate enabled, a solid normal/open-headed incoming external message activates its participant, while a dotted normal/open-headed outgoing external message deactivates its participant; the accepted change immediately updates subsequent return ownership.",
+  "causal_divergence": "Rust calls autoactivation_for only from try_message. Both try_external_message branches leave activation unset unless the source has an explicit ++, --, or !! suffix. Consequently an outgoing dotted boundary message leaves a completed callee on the return stack, and an incoming solid boundary message fails to create the activation segment that a later return should close. The first wrong external event then rotates every subsequent return pair and lifeline envelope.",
+  "planned_model_change": [
+    "Apply the existing autoactivation_for rule after inline arrow style parsing in both external-message branches whenever no explicit activation suffix is present.",
+    "Keep explicit activation authoritative through Option::or_else, matching CommandExoArrowAny's explicit-first control flow.",
+    "Add parser tests covering incoming solid activation, outgoing dotted deactivation, explicit override, and crossed or half-head exclusions.",
+    "Verify a nested return-stack perturbation with renamed participants and a direction/style perturbation not present in the golden corpus."
+  ],
+  "perturbation_axes": [
+    "incoming versus outgoing external boundary and solid versus dotted body",
+    "nested automatic calls and returns, renamed participants, and explicit activation override",
+    "normal/open heads versus crossed or half heads"
+  ]
+}
