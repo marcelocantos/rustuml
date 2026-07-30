@@ -1221,23 +1221,56 @@ impl ClassParser {
     fn try_package(&mut self, line: &str) -> bool {
         static RE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
-                r#"^((?i:package|namespace|cloud|database|folder|frame|rectangle|node))\s+(?:"([^"]+)"|([^#\s{<]+))(?:\s+(?i:as)\s+([\p{L}\p{N}_.]+))?\s*(?:#([^\s{<]+))?\s*(?:<<\s*([^>]+?)\s*>>)?\s*\{\s*$"#,
+                r#"^((?i:package|namespace|cloud|database|folder|frame|rectangle|node))\s+(?:"([^"]+)"(?:\s+<<\s*([^>]+?)\s*>>)?\s+(?i:as)\s+([^\s#{}"]+)|([^\s#{}"]+)(?:\s+<<\s*([^>]+?)\s*>>)?\s+(?i:as)\s+"([^"]+)"|([^\s#{}"]+)(?:\s+<<\s*([^>]+?)\s*>>)?\s+(?i:as)\s+([^\s#{}"]+)|"([^"]+)"|([^\s#{}"]+))(.*?)\{\s*$"#,
+            )
+            .unwrap()
+        });
+        static MODIFIERS_RE: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(
+                r#"^\s*(?:\$[^\s{}"<>$]+(?:\s+\$[^\s{}"<>$]+)*)?\s*(?:<<\s*([^>]+?)\s*>>)?\s*(?:\$[^\s{}"<>$]+(?:\s+\$[^\s{}"<>$]+)*)?\s*(?:\[\[.*?\]\])?\s*(?:#([^\s{]+))?\s*$"#,
             )
             .unwrap()
         });
 
         if let Some(caps) = RE.captures(line) {
+            let Some(modifiers) = MODIFIERS_RE.captures(caps.get(13).unwrap().as_str()) else {
+                return false;
+            };
             let kind_key = caps[1].to_ascii_lowercase();
             let kind_str = kind_key.as_str();
-            let display = caps
-                .get(2)
-                .or(caps.get(3))
-                .map(|m| m.as_str().to_string())
-                .unwrap_or_default();
-            let alias = caps.get(4).map(|m| m.as_str().to_string());
-            let color = caps.get(5).map(|m| m.as_str().to_string());
-            let stereotypes = caps
-                .get(6)
+            let (display, code, explicit_alias, identity_stereotype) =
+                if let (Some(display), Some(code)) = (caps.get(2), caps.get(4)) {
+                    (
+                        display.as_str().to_string(),
+                        code.as_str().to_string(),
+                        true,
+                        caps.get(3),
+                    )
+                } else if let (Some(code), Some(display)) = (caps.get(5), caps.get(7)) {
+                    (
+                        display.as_str().to_string(),
+                        code.as_str().to_string(),
+                        true,
+                        caps.get(6),
+                    )
+                } else if let (Some(display), Some(code)) = (caps.get(8), caps.get(10)) {
+                    (
+                        display.as_str().to_string(),
+                        code.as_str().to_string(),
+                        true,
+                        caps.get(9),
+                    )
+                } else {
+                    let code = caps
+                        .get(11)
+                        .or(caps.get(12))
+                        .map(|m| m.as_str().to_string())
+                        .unwrap_or_default();
+                    (code.clone(), code, false, None)
+                };
+            let color = modifiers.get(2).map(|m| m.as_str().to_string());
+            let stereotypes = identity_stereotype
+                .or_else(|| modifiers.get(1))
                 .map(|m| vec![m.as_str().trim().to_string()])
                 .unwrap_or_default();
             let kind = match kind_str {
@@ -1254,13 +1287,12 @@ impl ClassParser {
             // `CommandPackage#executeArg` sends `AS` to `quarkInContext` and
             // keeps `NAME` solely as display; `CommandNamespace#executeArg`
             // follows the same quark-backed group discipline.
-            let code = alias.as_deref().unwrap_or(&display);
-            let path = self.resolve_group_path(code);
+            let path = self.resolve_group_path(&code);
             if path.is_empty() {
                 return false;
             }
-            let requested_display_name = (alias.is_some() || path.len() > 1).then(|| {
-                if alias.is_some() {
+            let requested_display_name = (explicit_alias || path.len() > 1).then(|| {
+                if explicit_alias {
                     display.clone()
                 } else {
                     path.last().cloned().unwrap_or_default()
@@ -3000,6 +3032,73 @@ mod tests {
         );
         assert_eq!(d.relationships[0].from, "ComputeCode.Gateway");
         assert_eq!(d.relationships[0].to, "OuterCode.CloudCode.Worker");
+    }
+
+    #[test]
+    fn symbol_container_reverse_alias_uses_code_as_identity() {
+        let d = parse(
+            "folder ServiceCode as \"Service Display\" {\n\
+               class Gateway\n\
+             }\n\
+             rectangle OuterCode as \"Outer Display\" {\n\
+               class Audit\n\
+             }\n\
+             ServiceCode.Gateway --> OuterCode.Audit",
+        );
+
+        assert_eq!(
+            d.packages
+                .iter()
+                .map(|package| (
+                    package.name.as_str(),
+                    package.display_name.as_deref(),
+                    package.kind
+                ))
+                .collect::<Vec<_>>(),
+            [
+                ("ServiceCode", Some("Service Display"), PackageKind::Folder),
+                ("OuterCode", Some("Outer Display"), PackageKind::Rectangle)
+            ]
+        );
+        assert_eq!(d.relationships[0].from, "ServiceCode.Gateway");
+        assert_eq!(d.relationships[0].to, "OuterCode.Audit");
+    }
+
+    #[test]
+    fn package_modifiers_follow_java_command_order() {
+        let d = parse(
+            "package Service $before <<Application>> $after \
+             [[https://example.com{Service docs}]] #LightBlue {\n\
+               class Gateway\n\
+             }\n\
+             cloud CloudCode <<Platform>> #aliceblue {\n\
+               class Worker\n\
+             }",
+        );
+
+        assert_eq!(d.packages[0].name, "Service");
+        assert_eq!(d.packages[0].stereotypes, ["Application"]);
+        assert_eq!(d.packages[0].color.as_deref(), Some("LightBlue"));
+        assert_eq!(d.packages[1].name, "CloudCode");
+        assert_eq!(d.packages[1].stereotypes, ["Platform"]);
+        assert_eq!(d.packages[1].color.as_deref(), Some("aliceblue"));
+    }
+
+    #[test]
+    fn alias_local_stereotype_precedes_as_clause() {
+        let d = parse(
+            "node \"Service Display\" <<Platform>> as ServiceCode #wheat {\n\
+               class Gateway\n\
+             }",
+        );
+
+        assert_eq!(d.packages[0].name, "ServiceCode");
+        assert_eq!(
+            d.packages[0].display_name.as_deref(),
+            Some("Service Display")
+        );
+        assert_eq!(d.packages[0].stereotypes, ["Platform"]);
+        assert_eq!(d.packages[0].color.as_deref(), Some("wheat"));
     }
 
     #[test]

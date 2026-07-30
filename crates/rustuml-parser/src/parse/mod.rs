@@ -334,6 +334,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     let mut has_component_package_container = false;
     let mut has_top_level_component_leaf = false;
     let mut has_non_interface_class_decl = false;
+    let mut has_class_factory_decl = false;
     let mut quoted_shared_deployment_containers = 0i32;
     let mut brace_depth = 0usize;
 
@@ -628,10 +629,12 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         {
             scores[1] += 10;
             has_non_interface_class_decl = true;
+            has_class_factory_decl = true;
         }
         if trimmed.starts_with("interface ") {
             scores[1] += 10;
             has_interface_decl = true;
+            has_class_factory_decl = true;
         }
         if trimmed.contains("..>") || trimmed.contains("<..") {
             has_class_dependency_arrow = true;
@@ -749,7 +752,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     // factories. Quoted node/frame/cloud containers only need their deployment
     // bonus when explicit class declarations have not made the class grammar
     // authoritative for the complete source.
-    if !has_non_interface_class_decl {
+    if !has_class_factory_decl {
         scores[7] += 20 * quoted_shared_deployment_containers;
     }
 
@@ -786,7 +789,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     }
 
     if has_quoted_deployment_container
-        && !has_non_interface_class_decl
+        && !has_class_factory_decl
         && !has_component_package_container
         && !has_top_level_component_leaf
     {
@@ -803,7 +806,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     }
 
     if has_quoted_deployment_container
-        && !has_non_interface_class_decl
+        && !has_class_factory_decl
         && (has_component_package_container || has_top_level_component_leaf)
     {
         let other_max = scores
@@ -1924,6 +1927,29 @@ package "Backend" {
   component "Data Ingestion" as DI
 }
 Sensor --> DI
+@enduml"#;
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Component(_)));
+    }
+
+    #[test]
+    fn quoted_shared_container_with_interface_routes_to_class() {
+        let input = r#"@startuml
+node "Service Boundary" {
+  interface Gateway
+}
+Gateway --> Audit
+@enduml"#;
+        let diagram = parse(input).unwrap();
+        assert!(matches!(diagram, Diagram::Class(_)));
+    }
+
+    #[test]
+    fn interface_with_component_leaf_without_class_container_stays_component() {
+        let input = r#"@startuml
+interface Gateway
+component Application
+Application --> Gateway
 @enduml"#;
         let diagram = parse(input).unwrap();
         assert!(matches!(diagram, Diagram::Component(_)));
