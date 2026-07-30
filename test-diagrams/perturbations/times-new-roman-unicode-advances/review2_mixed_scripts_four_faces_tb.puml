@@ -1,0 +1,13 @@
+@startuml
+top to bottom direction
+skinparam stateFontName Times New Roman
+skinparam stateFontStyle italic
+skinparam stateFontSize 37
+skinparam stateArrowFontName Times New Roman
+skinparam stateArrowFontStyle bold
+skinparam stateArrowFontSize 11
+
+state "éΘԘ—𝐀 éΘԘ—𝐀" as Source
+state "𝐀—ԘΘé 𝐀—ԘΘé" as Target
+Source --> Target : éΘԘ—𝐀 **éΘԘ—𝐀** //éΘԘ—𝐀// **//éΘԘ—𝐀//**
+@enduml

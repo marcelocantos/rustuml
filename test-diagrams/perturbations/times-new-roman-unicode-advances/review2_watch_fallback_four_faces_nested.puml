@@ -1,0 +1,15 @@
+@startuml
+top to bottom direction
+skinparam stateFontName Times New Roman
+skinparam stateFontStyle bold
+skinparam stateFontSize 19
+skinparam stateArrowFontName Times New Roman
+skinparam stateArrowFontStyle plain
+skinparam stateArrowFontSize 7
+
+state "Outer ⌚⌚⌚⌚" as Outer {
+  state "Inner ⌚⌚⌚⌚" as Inner
+  state "Target ⌚⌚⌚⌚" as Target
+  Inner --> Target : ⌚⌚ **⌚⌚** //⌚⌚// **//⌚⌚//**
+}
+@enduml

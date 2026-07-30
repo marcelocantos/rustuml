@@ -4,214 +4,257 @@
   "reviewer": {
     "identity": "Codex independent adversarial checker",
     "model": "OpenAI GPT-5 Codex",
-    "tool": "Codex shell inspection, javac/java probes, pinned PlantUML jar, and the supplied diff_one path",
+    "tool": "Codex shell inspection, Java AWT probes, pinned PlantUML jar, and the supplied prebuilt diff_one helper",
     "implemented_mechanism": false
   },
   "review_date": "2026-07-31",
   "revisions": {
-    "account_commit": "44bd7c289fdf1cd83833c2a56c2a89720590237e",
-    "implementation_commit": "3046a6d9e9e1743c66aba6cbc71454d211bde738",
+    "account_commit": "d98cc0a7509161627ad55fef091c35b06670a17c",
+    "implementation_commit": "2eae99edf5a7722342a444efff7bf2a07348f156",
     "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "supersedes_review": {
+    "reviewed_implementation": "3046a6d9e9e1743c66aba6cbc71454d211bde738",
+    "evidence_commit": "a8c098b685f414e4604aeed55cdd0de8f7c411f2",
+    "verdict": "rejected",
+    "reason": "The prior u16 table rounded fractional 2048-point advances. This review addresses the corrective u32 16.16 implementation."
   },
   "plantuml_jar": {
     "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
     "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
   },
-  "helper": {
-    "path": "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one",
-    "requested_sha256": "031b6bc4610514e072c3b3592913216ef21ac360d0618386e355dc46416322c7",
-    "observed_sha256": "7cbd07cb8f6663b607378980e4a9b9a9e451c7f24d9cd96cc11aaf3dd6aa4bd5",
-    "mtime": "2026-07-31T05:50:40+10:00",
-    "integrity_assessment": "The supplied path changed or the requested hash was stale before this review began. No binary with the requested hash was found under /private/tmp. Dynamic SVG artifacts and transcripts are truthfully attributed to the observed binary, not to the requested hash. The rejecting additive-width finding also follows directly from the exact implementation source and independent Java measurements, so it does not depend on treating the observed helper as the pinned binary."
+  "helper_provenance": {
+    "original": {
+      "path": "/private/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one",
+      "requested_sha256": "99f5c2b4ae4f5ef350b1f66f3c7eaf219cd70983d1ff135b5c7edda731a92fd0",
+      "observed_sha256_at_review_start": "99f5c2b4ae4f5ef350b1f66f3c7eaf219cd70983d1ff135b5c7edda731a92fd0",
+      "verification_time": "Immediately after the detached checker worktree was created at 2026-07-31T06:18:34+10:00 and before any SVG capture.",
+      "later_observed_sha256": "853ada3b486e049185a972a1c952ec027b5d248afd22bc0da941442180893148",
+      "integrity_assessment": "The original path matched the requested binary at review start, then was rebuilt before capture for the next parser mechanism."
+    },
+    "stable_capture_copy": {
+      "path": "/private/tmp/rustuml-integrate-20260731a/target/checker-tools/diff_one-e33b38a0",
+      "sha256": "853ada3b486e049185a972a1c952ec027b5d248afd22bc0da941442180893148",
+      "verified_at": "2026-07-31T06:29:13+10:00",
+      "binary_revision": "e33b38a0",
+      "revision_delta": "e33b38a0 changes only crates/rustuml-parser/src/parse/component.rs and crates/rustuml-parser/src/parse/mod.rs. It contains the exact 2eae99e render and metrics implementation.",
+      "usage": "All committed Rust SVG and strict-diff captures in this review used this stable copy."
+    }
   },
   "documents_and_code_inspected": [
     "docs/parity-reviews/times-new-roman-unicode-advances/account.json",
-    "docs/parity-reviews/times-new-roman-face-metrics/review.json",
-    "docs/parity-reviews/state-flat-svek-painted-envelope/review-label-skinparams-2.json",
+    "docs/parity-reviews/times-new-roman-unicode-advances/review.json at its prior rejecting revision",
     "tools/PhysicalFontMetricsExtract.java",
     "crates/rustuml-render/src/times_new_roman_unicode.rs",
     "crates/rustuml-render/src/plantuml_metrics.rs",
-    "crates/rustuml-render/src/text_render.rs",
     "PlantUML FontStack.java, UFontImpl.java, FileFormat.java, and StringBounderRaw.java at the pinned Java revision"
   ],
   "java_model_assessment": {
-    "font_selection": "For a single requested family, FontStack derives the primary Times New Roman AWT Font with the requested face and integer size. UFontImpl returns that same face-aware Font for text measurement.",
-    "measurement": "FileFormat.getJavaDimension invokes FontMetrics.getStringBounds on the complete string, and StringBounderRaw obtains descent from the same resolved Font.",
-    "boundary": "For simple Latin, Greek, Cyrillic, punctuation, and the tested combining sequences, complete-string width is additive over scalar advances. Arabic is not additive because AWT performs contextual shaping; that failure is classified within the account's explicit shaping residue."
+    "font_selection": "For a single requested family, FontStack retains the primary Times New Roman AWT Font and UFontImpl applies the requested face and integer size. Java2D may still substitute physical glyphs internally for scalars absent from that face.",
+    "measurement": "FileFormat.getJavaDimension asks FontMetrics.getStringBounds for the complete string at the requested size. It does not measure at 2048 points and scale the result.",
+    "corrected_case": "For U+0518 CYRILLIC CAPITAL LETTER YAE, the exact 2048-point 16.16 advance scales and accumulates like AWT across the tested sizes and all four binary faces.",
+    "disproved_assumption": "An exact source advance at 2048 points is not necessarily a size-independent per-em advance for AWT fallback glyphs. U+231A WATCH is exactly scalar-additive, yet its requested-size advance is 15px at size 11, 22px at size 17, and 23px at size 19, while the table model yields 11px, 17px, and 19px."
   },
   "generator_reproducibility": {
-    "compile_command": "javac -d /tmp/rustuml-font-extract-checker tools/PhysicalFontMetricsExtract.java",
-    "generation_command": "java -Djava.awt.headless=true -cp /tmp/rustuml-font-extract-checker PhysicalFontMetricsExtract 'Times New Roman' --rust-unicode-ranges > /tmp/times-new-roman-unicode.check.rs",
-    "generated_sha256": "eacdc71813740c7736d31b4c77a6546e3efcf30911c3d94fac4744c98f64c37b",
-    "checked_in_sha256": "eacdc71813740c7736d31b4c77a6546e3efcf30911c3d94fac4744c98f64c37b",
+    "compile_command": "javac -d /private/tmp/rustuml-font-extract-review2 tools/PhysicalFontMetricsExtract.java",
+    "generation_command": "JAVA_TOOL_OPTIONS=-Djava.awt.headless=true java -cp /private/tmp/rustuml-font-extract-review2 PhysicalFontMetricsExtract \"Times New Roman\" --rust-unicode-ranges > /private/tmp/times-new-roman-unicode-review2.rs",
+    "format_command": "rustfmt /private/tmp/times-new-roman-unicode-review2.rs",
+    "generated_sha256_after_rustfmt": "dd2aa79dc5d8f93e84b927501b6794a7c3c6650b4ae0fdcbd86c78e4e4ba668d",
+    "checked_in_sha256": "dd2aa79dc5d8f93e84b927501b6794a7c3c6650b4ae0fdcbd86c78e4e4ba668d",
     "byte_reproducible": true,
-    "resolved_family": "Times New Roman",
-    "range_validation": {
-      "ranges": 15958,
-      "covered_assigned_scalars": 286591,
-      "expected_assigned_scalars": 286591,
-      "ordered_and_non_overlapping": true,
-      "maximally_coalesced": true,
-      "surrogates_and_undefined_scalars_excluded": true,
-      "first": "U+0080",
-      "last": "U+10FFFD"
-    },
-    "defect": "scalarUnits rounds each 2048-point AWT advance with Math.round and stores it as u16. Some valid simple-script advances are fractional at 2048 points, so the encoding loses information before Rust scales it to the requested size."
+    "defect": "The generator proves exact 16.16 representation only at its 2048-point extraction size. It does not prove that AWT's requested-size fallback advance is linear in that value."
   },
-  "adversarial_additivity_probe": {
-    "codepoint": "U+0518 CYRILLIC CAPITAL LETTER YAE",
-    "awt_2048_unit_advance": 2111.488037109,
-    "generated_u16_advance": 2111,
-    "generated_table_location": "crates/rustuml-render/src/times_new_roman_unicode.rs:899",
-    "repeat_count": 32,
-    "size_17": {
-      "java_whole_string": 560.864135742,
-      "java_scalar_sum": 560.864013672,
-      "rust_table_model": 560.734375,
-      "whole_minus_scalar_sum": 0.00012207,
-      "whole_minus_table": 0.129760742
+  "adversarial_java_probes": {
+    "commands": [
+      "javac -d /private/tmp /private/tmp/TimesUnicodeProbe.java",
+      "JAVA_TOOL_OPTIONS=-Djava.awt.headless=true java -cp /private/tmp TimesUnicodeProbe",
+      "javac -d /private/tmp /private/tmp/TimesUnicodeExhaustive.java",
+      "JAVA_TOOL_OPTIONS=-Djava.awt.headless=true java -cp /private/tmp TimesUnicodeExhaustive",
+      "javac -d /private/tmp /private/tmp/TimesUnicodeFocused.java",
+      "JAVA_TOOL_OPTIONS=-Djava.awt.headless=true java -cp /private/tmp TimesUnicodeFocused"
+    ],
+    "exhaustive_probe": {
+      "scope": "Every assigned non-surrogate scalar from U+0080 upward, initially across plain Times New Roman at sizes 1, 2, 3, and 7 before stopping after a decisive counterexample.",
+      "size_1": "1,910 scalar advances differed; maximum observed error 0.000026702880859px at U+0C01.",
+      "size_2": "3,201 scalar advances differed; maximum observed error 1px at U+231A.",
+      "size_3": "4,830 scalar advances differed; maximum observed error 1px at U+231A.",
+      "size_7": "4,663 scalar advances differed; maximum observed error 2px at U+231A.",
+      "termination": "The broad scan was interrupted after size 7 because a valid, exactly additive, high-magnitude counterexample had already rejected the invariant."
     },
-    "size_19": {
-      "java_whole_string": 626.847839355,
-      "java_scalar_sum": 626.848022461,
-      "rust_table_model": 626.703125,
-      "whole_minus_scalar_sum": -0.000183105,
-      "whole_minus_table": 0.144714355
+    "fractional_control": {
+      "codepoint": "U+0518 CYRILLIC CAPITAL LETTER YAE",
+      "source_2048_advance": 2111.488037109375,
+      "repeat_count": 32,
+      "size_17_java_and_rust": 560.864135742188,
+      "size_19_java_and_rust": 626.847839355469,
+      "assessment": "The corrective fixed-point and ordered-f32 model repairs the prior rejection."
     },
-    "scope_assessment": "Rejecting and in scope. Repeated U+0518 has no combining marks, ligatures, contextual shaping, grapheme sequence, or font-stack fallback. Java's whole-string width is scalar-additive to less than 0.0002px, while the checked-in rounded table creates the visible error."
+    "rejecting_counterexample": {
+      "codepoint": "U+231A WATCH",
+      "character_is_defined": true,
+      "source_2048_advance_all_faces": 2048.0,
+      "repeat_count": 32,
+      "additivity": "Exact at every tested size and face: Java whole-string width equals 32 times the Java scalar width.",
+      "plain_results": [
+        {
+          "size": 7,
+          "java_scalar": 9.0,
+          "rust_table_scalar": 7.0,
+          "java_32": 288.0,
+          "rust_table_32": 224.0
+        },
+        {
+          "size": 11,
+          "java_scalar": 15.0,
+          "rust_table_scalar": 11.0,
+          "java_32": 480.0,
+          "rust_table_32": 352.0
+        },
+        {
+          "size": 17,
+          "java_scalar": 22.0,
+          "rust_table_scalar": 17.0,
+          "java_32": 704.0,
+          "rust_table_32": 544.0
+        },
+        {
+          "size": 19,
+          "java_scalar": 23.0,
+          "rust_table_scalar": 19.0,
+          "java_32": 736.0,
+          "rust_table_32": 608.0
+        },
+        {
+          "size": 37,
+          "java_scalar": 37.0,
+          "rust_table_scalar": 37.0,
+          "java_32": 1184.0,
+          "rust_table_32": 1184.0
+        }
+      ],
+      "face_results": "Plain, bold, italic, and bold-italic produce the same fallback-width discrepancy at sizes 7, 11, 17, and 19.",
+      "scope_assessment": "Rejecting and in scope. A single WATCH scalar has no contextual shaping, ligature, grapheme cluster, emoji sequence, or multi-family font stack, and repetition remains exactly additive."
+    },
+    "declared_residue_probe": {
+      "text": "éΘԘ—𝐀",
+      "size_37_italic_whole": 132.534286499023,
+      "size_37_italic_scalar_sum": 141.901504516602,
+      "delta": -9.367218017578,
+      "assessment": "The mixed fallback run is not scalar-additive and is classified outside this mechanism's stated boundary. It is preserved but is not needed for rejection."
+    }
   },
-  "commands": [
-    "git diff 44bd7c28..3046a6d9e9e1743c66aba6cbc71454d211bde738 --stat",
-    "git diff --check 44bd7c28..3046a6d9e9e1743c66aba6cbc71454d211bde738",
-    "shasum -a 256 target/debug/examples/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
-    "javac/java regeneration and byte comparison of times_new_roman_unicode.rs",
-    "javac/java range ordering, completeness, maximality, and assigned-scalar validation",
-    "javac/java fractional-advance and whole-string-versus-scalar-sum probes",
-    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/times-new-roman-unicode-advances/*.puml",
-    "xmllint --noout over every Java and Rust SVG",
-    "diff_one --no-oracle --print-rust for every fresh input, preserving same-stem .rust.svg",
-    "diff_one --no-oracle for every fresh input, preserving same-stem .diff.txt",
-    "diff_one --no-oracle for both triggering Unicode counterexamples",
-    "rg searches for fresh fixture stems and labels in shipping crates and tools"
-  ],
   "perturbation_directory": "test-diagrams/perturbations/times-new-roman-unicode-advances",
   "perturbations": [
     {
-      "stem": "checker_latin1_plain_lr_flat",
-      "source_sha256": "2c0d176c5988a76898b04d666771a5e4eb1cb042510a3cba2a957537867fe192",
+      "stem": "review2_fractional_cyrillic_face_sizes_tb",
+      "source_sha256": "ac9f4bbf0b80a9b39878be75e9e3545c92a06fad1ad99cd68b8d4d574a7000e8",
       "axes": [
-        "Latin-1",
-        "plain face",
-        "11px state and 12px arrow text",
-        "left-to-right flat states",
-        "titles, attributes, ordinary link, self link"
-      ],
-      "result": "strict fail outside mechanism; all Times textLength values exact",
-      "classification": "The known left-to-right self-loop root-envelope translation moves the entire graph by 59px. It does not change any measured text width."
-    },
-    {
-      "stem": "checker_greek_bold_tb_flat",
-      "source_sha256": "1c98e594d882f92f0d76d68564294666cef296bb008d5111485bef2600197dd0",
-      "axes": [
-        "Greek",
-        "bold face",
-        "17px state and 14px arrow text",
-        "top-to-bottom flat states",
-        "titles, attributes, ordinary link, self link"
-      ],
-      "result": "structurally equivalent"
-    },
-    {
-      "stem": "checker_cyrillic_italic_lr_nested",
-      "source_sha256": "470f2ed21d388d9ab3e86fc17f36b61e281beb3fad1fc8bae85f909775a72ab6",
-      "axes": [
-        "Cyrillic",
-        "italic face",
-        "13px state and 19px arrow text",
-        "left-to-right nested topology",
-        "titles, attributes, nested and outer ordinary links, self link"
-      ],
-      "result": "strict fail outside mechanism; all Times textLength values exact",
-      "classification": "Nested state/container vertical dimensions differ while every text width is exact. This is a state nested-envelope residue, not an additive advance failure."
-    },
-    {
-      "stem": "checker_punctuation_four_faces_tb_nested",
-      "source_sha256": "40c8560eaeffde5561da072978eca2f4a1f051e0d4f38f3dbcaf51e3ca82bc91",
-      "axes": [
-        "Unicode punctuation and currency",
-        "plain, bold, italic, and bold-italic runs",
-        "20px state and 16px arrow text",
-        "top-to-bottom nested topology"
-      ],
-      "result": "strict fail outside mechanism; bold, italic, bold-italic, em-dash, ellipsis, and symbol advances exact",
-      "classification": "Java normalizes U+2013 EN DASH to ASCII hyphen before SVG output while Rust preserves U+2013. The resulting plain-run width difference is a text-normalization ownership gap, not an error in the U+2013 table entry."
-    },
-    {
-      "stem": "checker_combining_marks_lr_flat",
-      "source_sha256": "21476efb50c65c0d3c954d1f93e1a626958b6d5a6812670b1dd2e7115a071099",
-      "axes": [
-        "precomposed versus decomposed Latin",
-        "combining acute, ring, diaeresis, and grave",
-        "plain state and italic arrow faces",
-        "15px state and 18px arrow text",
-        "left-to-right flat topology"
-      ],
-      "result": "strict fail outside mechanism; all Times textLength values exact",
-      "classification": "The sampled combining strings are additive in this AWT face: Java complete-string and scalar-sum widths are identical. The only SVG difference is the known root-envelope translation."
-    },
-    {
-      "stem": "checker_arabic_complex_tb_flat",
-      "source_sha256": "ee1f7df07934e60dcf95052265afc01eecbbb7b115fcfaba002cedb419fb1c96",
-      "axes": [
-        "Arabic complex-script probe",
-        "bold state and italic arrow faces",
-        "18px state and 15px arrow text",
-        "top-to-bottom flat topology"
-      ],
-      "result": "strict fail within declared shaping residue",
-      "classification": "For the arrow phrase, Java complete-string width is 81.401367188px while the scalar sum is 102.402725220px, a -21.001358032px contextual-shaping delta. This is explicitly outside the additive-scalar claim and remains preserved."
-    },
-    {
-      "stem": "checker_cyrillic_fractional_units_lr_flat",
-      "source_sha256": "28da5fb65962dd07084d1497512c18a62cd79301a63fcfb9bca7928ac9ea0103",
-      "axes": [
-        "simple Cyrillic additive scalar",
-        "plain face",
+        "fractional U+0518 repetition",
+        "source-order reversal with ASCII endpoints",
         "17px state and 19px arrow text",
-        "left-to-right flat topology",
-        "state titles, ordinary link, self link",
-        "rounding accumulation"
+        "plain, bold, italic, and bold-italic runs",
+        "top-to-bottom topology"
+      ],
+      "result": "structurally equivalent",
+      "classification": "Passing in-scope control for the corrected fractional accumulation."
+    },
+    {
+      "stem": "review2_watch_fallback_plain_sizes_tb",
+      "source_sha256": "e3cf50c1f4a1137688c72a232c5ab98d5067f0d2488996e57016c57f6bf95b06",
+      "axes": [
+        "assigned fallback scalar U+231A",
+        "plain face",
+        "11px state and 17px arrow text",
+        "repetition and reversed surrounding labels",
+        "top-to-bottom topology"
       ],
       "result": "rejecting in-scope failure",
-      "classification": "Java textLength is 582.1141 versus Rust 581.9844 for each state title, and 650.5978 versus 650.4531 for each arrow label. The difference is exactly the generated table's lossy rounding of U+0518."
+      "classification": "Each 8-WATCH state run is 32px too narrow and the 8-WATCH arrow run is 40px too narrow. Java textLength values are 134.0562 and 176; Rust values are 102.0562 and 136."
+    },
+    {
+      "stem": "review2_watch_fallback_four_faces_nested",
+      "source_sha256": "5b29ad03ee5db598c8ad9d0438058a1662f90548b17676e7a9bca2feadd7cca5",
+      "axes": [
+        "assigned fallback scalar U+231A",
+        "bold state face",
+        "plain, bold, italic, and bold-italic arrow runs",
+        "19px state and 7px arrow text",
+        "nested topology"
+      ],
+      "result": "rejecting in-scope failure",
+      "classification": "Every four-WATCH state title is 16px too narrow. Each two-WATCH arrow run is 4px too narrow in all four faces."
+    },
+    {
+      "stem": "review2_supplementary_math_face_sizes_tb",
+      "source_sha256": "447c1aa242b6fd722f441ba9da447939171afe4426fa1d421889e5cfbcf5b3ae",
+      "axes": [
+        "supplementary-plane U+1D400",
+        "repetition and ASCII interleaving",
+        "italic state and bold arrow defaults",
+        "four inline faces",
+        "17px and 19px text"
+      ],
+      "result": "structurally equivalent",
+      "classification": "Passing in-scope supplementary-plane control at emitted SVG precision."
+    },
+    {
+      "stem": "review2_mixed_scripts_four_faces_tb",
+      "source_sha256": "8262b919edd4d0443beeb0526a6571812efd0ffe771641d37756a63ec9701293",
+      "axes": [
+        "Latin-1, Greek, Cyrillic, em dash, and supplementary math",
+        "source-order reversal",
+        "four faces",
+        "37px state and 11px arrow text",
+        "top-to-bottom topology"
+      ],
+      "result": "strict failure within declared non-additive residue",
+      "classification": "Direct AWT probing shows the mixed fallback run is not scalar-additive. Preserved as residue and not counted as the rejecting evidence."
     }
   ],
-  "triggering_counterexamples": {
-    "times_new_roman_face_metrics_unicode": "structurally equivalent with the observed helper",
-    "state_label_skinparams_unicode": "structurally equivalent with the observed helper"
+  "preserved_artifacts": {
+    "per_stem": [
+      ".puml fresh valid input",
+      ".svg Java PlantUML oracle output",
+      ".rust.svg no-oracle Rust output",
+      ".diff.txt strict structural comparison"
+    ],
+    "java_svg_validation": "xmllint --noout passed for all five fresh Java SVGs."
   },
   "fixture_shape_and_constant_audit": {
-    "production_fixture_matches": "No fresh fixture stem or fresh label occurs in shipping crates or tools.",
-    "old_counterexample_strings": "Three old rejecting strings occur in unit assertions. They do not drive production branching, but they are insufficient protection against the independently generated fractional-advance case.",
+    "production_fixture_matches": "No fresh stem or fresh label fragment occurs in crates/ or tools/.",
     "fixture_conditionals": "none found",
     "golden_reads": "none introduced",
     "coordinate_surgery": "none introduced",
-    "unexplained_constants": "The 2048 units-per-em scale has Java extractor provenance. The rejecting defect is not an unexplained constant but the unjustified assumption that rounding every fractional 2048-point advance to integer u16 units remains exact after arbitrary repetition."
+    "constant_provenance": "2048 and 65536 are documented and reproducibly derived, but the implementation draws an invalid inference from exact source-size representation to target-size linearity.",
+    "mechanism_assessment": "The implementation is generative rather than fixture-shaped, but its generative model is incomplete for AWT physical-glyph fallback."
   },
+  "commands": [
+    "git diff --check d98cc0a7..2eae99ed",
+    "git diff --stat d98cc0a7..2eae99ed",
+    "git diff d98cc0a7..2eae99ed -- crates/rustuml-render/src/plantuml_metrics.rs tools/PhysicalFontMetricsExtract.java",
+    "shasum -a 256 over both helper identities, the PlantUML jar, generated table, checked-in table, and every fresh artifact",
+    "Java AWT compilation and direct scalar, repetition, face, size, additivity, and partial exhaustive probes listed above",
+    "JAVA_TOOL_OPTIONS=-Djava.awt.headless=true java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg over all five fresh inputs",
+    "xmllint --noout over all five Java SVGs",
+    "stable diff_one --no-oracle --print-rust over all five fresh inputs",
+    "stable diff_one --no-oracle over all five fresh inputs",
+    "rg searches for fresh stems and label fragments in shipping crates and tools"
+  ],
   "constraints_observed": {
     "ran_cargo": false,
     "ran_rustc": false,
     "ran_javac_java_only": true,
+    "ran_rustfmt_on_generated_temp_file_only": true,
     "edited_implementation": false,
     "edited_account": false,
     "edited_baselines": false,
     "edited_comparator": false,
     "edited_allowlists": false,
-    "edited_old_perturbations": false,
+    "edited_existing_perturbations": false,
     "edited_park_or_error_lists": false,
     "preserved_every_fresh_source_java_svg_rust_svg_and_diff": true
   },
   "accepted": false,
   "verdict": "rejected",
-  "verdict_reason": "A fresh valid simple-script counterexample disproves the claimed additive-advance invariant. The checked-in range ordering and coverage are complete, but integer u16 compression loses fractional AWT advances and accumulates a measurable error. T14 requires any additive-advance counterexample to reject the mechanism."
+  "verdict_reason": "The corrective 16.16 model fixes fractional source advances but still assumes every assigned scalar's requested-size AWT advance is a linear scale of its 2048-point advance. Fresh valid U+231A WATCH perturbations disprove that assumption across sizes and all four faces while remaining exactly scalar-additive. T14 requires an in-scope held-out counterexample to reject the mechanism."
 }

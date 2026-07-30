@@ -1,0 +1,13 @@
+@startuml
+top to bottom direction
+skinparam stateFontName Times New Roman
+skinparam stateFontStyle plain
+skinparam stateFontSize 17
+skinparam stateArrowFontName Times New Roman
+skinparam stateArrowFontStyle plain
+skinparam stateArrowFontSize 19
+
+state "AԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘZ" as First
+state "ZԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘA" as Second
+First --> Second : **ԘԘԘԘԘԘԘԘ** //ԘԘԘԘԘԘԘԘ// **//ԘԘԘԘԘԘԘԘ//** ԘԘԘԘԘԘԘԘ
+@enduml

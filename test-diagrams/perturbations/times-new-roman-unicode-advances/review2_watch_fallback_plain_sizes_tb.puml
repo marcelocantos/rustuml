@@ -1,0 +1,13 @@
+@startuml
+top to bottom direction
+skinparam stateFontName Times New Roman
+skinparam stateFontStyle plain
+skinparam stateFontSize 11
+skinparam stateArrowFontName Times New Roman
+skinparam stateArrowFontStyle plain
+skinparam stateArrowFontSize 17
+
+state "L⌚⌚⌚⌚⌚⌚⌚⌚R" as Left
+state "R⌚⌚⌚⌚⌚⌚⌚⌚L" as Right
+Left --> Right : ⌚⌚⌚⌚⌚⌚⌚⌚
+@enduml

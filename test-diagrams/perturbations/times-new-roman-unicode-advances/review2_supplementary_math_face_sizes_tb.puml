@@ -1,0 +1,13 @@
+@startuml
+top to bottom direction
+skinparam stateFontName Times New Roman
+skinparam stateFontStyle italic
+skinparam stateFontSize 17
+skinparam stateArrowFontName Times New Roman
+skinparam stateArrowFontStyle bold
+skinparam stateArrowFontSize 19
+
+state "𝐀𝐀𝐀𝐀𝐀𝐀𝐀𝐀𝐀𝐀𝐀𝐀𝐀𝐀𝐀𝐀𝐀𝐀𝐀𝐀𝐀𝐀𝐀𝐀𝐀𝐀𝐀𝐀𝐀𝐀𝐀𝐀" as Alpha
+state "𝐀A𝐀A𝐀A𝐀A𝐀A𝐀A𝐀A𝐀A𝐀A𝐀A𝐀A𝐀A𝐀A𝐀A𝐀A𝐀A𝐀A" as Beta
+Alpha --> Beta : **𝐀𝐀𝐀𝐀𝐀𝐀𝐀𝐀** //𝐀𝐀𝐀𝐀𝐀𝐀𝐀𝐀// **//𝐀𝐀𝐀𝐀𝐀𝐀𝐀𝐀//**
+@enduml
