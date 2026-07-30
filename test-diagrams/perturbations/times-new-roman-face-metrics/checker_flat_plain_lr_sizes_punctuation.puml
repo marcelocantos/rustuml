@@ -1,0 +1,15 @@
+@startuml
+left to right direction
+skinparam stateFontName Times New Roman
+skinparam stateFontStyle plain
+skinparam stateFontSize 11
+skinparam stateArrowFontName Times New Roman
+skinparam stateArrowFontStyle plain
+skinparam stateArrowFontSize 9
+
+state "Plain Mix A7!?" as A7
+A7 : body #42 (Qq)
+state "Plain End Z9" as Z9
+A7 --> Z9 : Plain route 17!?
+A7 --> A7 : self Plain_2
+@enduml

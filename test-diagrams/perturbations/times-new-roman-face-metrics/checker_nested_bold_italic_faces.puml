@@ -1,0 +1,19 @@
+@startuml
+top to bottom direction
+skinparam stateFontName Times New Roman
+skinparam stateFontStyle bold italic
+skinparam stateFontSize 19
+skinparam stateArrowFontName Times New Roman
+skinparam stateArrowFontStyle bold italic
+skinparam stateArrowFontSize 15
+
+state "Outer BI 31" as Outer31 {
+  state "Inner Alpha A1" as A1
+  A1 : nested row (B2)!
+  state "Inner Beta B2" as B2
+  A1 --> B2 : nested ordinary #73
+  B2 --> B2 : nested self Q9?
+}
+state "Terminal BI T4" as T4
+Outer31 --> T4 : outer ordinary 56!
+@enduml

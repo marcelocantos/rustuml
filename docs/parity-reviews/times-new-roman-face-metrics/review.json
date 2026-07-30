@@ -1,0 +1,220 @@
+{
+  "schema_version": 1,
+  "mechanism": "times-new-roman-face-metrics",
+  "reviewer": {
+    "task_id": "codex-desktop-019ee369-54e2-7203-afce-ddde7bfe1723-independent-checker-times-new-roman-face-metrics",
+    "model": "OpenAI GPT-5 Codex",
+    "tool": "Codex shell inspection plus the supplied prebuilt diff_one helper"
+  },
+  "review_date": "2026-07-31",
+  "account_commit": "2687cbeb41cfea05977f45854433c331a1ff1a5b",
+  "implementation_commit": "212f84422e235c308e15a853273a7d81a56eac10",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar": {
+    "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+  },
+  "helper": {
+    "path": "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one",
+    "sha256": "33103684b0f98e40078b0a2327d3b18df86375f86889b91cbe36e9b1320a482c",
+    "mode": "no-oracle",
+    "notes": "Used as supplied. No cargo or rustc command was run."
+  },
+  "commands": [
+    "git show 212f8442:docs/parity-reviews/times-new-roman-face-metrics/account.json",
+    "git show --stat --oneline 212f8442",
+    "git diff 2687cbeb 212f8442 --check",
+    "git diff 2687cbeb 212f8442 -- crates/rustuml-render/src/plantuml_metrics.rs crates/rustuml-render/src/text_render.rs crates/rustuml-render/src/state.rs tools/PhysicalFontMetricsExtract.java",
+    "git show 212f8442:crates/rustuml-render/src/plantuml_metrics.rs",
+    "git show 212f8442:crates/rustuml-render/src/text_render.rs",
+    "git show 212f8442:crates/rustuml-render/src/state.rs",
+    "git show 212f8442:tools/PhysicalFontMetricsExtract.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/klimt/font/UFontFactory.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/klimt/font/UFontImpl.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/FileFormat.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/klimt/font/StringBounderRaw.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/skin/SkinParam.java",
+    "shasum -a 256 /tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "JAVA_TOOL_OPTIONS=-Djava.awt.headless=true java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/times-new-roman-face-metrics/*.puml",
+    "xmllint --noout test-diagrams/perturbations/times-new-roman-face-metrics/*.svg test-diagrams/perturbations/times-new-roman-face-metrics/*.rust.svg",
+    "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"|an error has occured|\\[From string|No class ' test-diagrams/perturbations/times-new-roman-face-metrics -g '*.svg' -g '*.rust.svg'",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle --print-rust <input.puml> > <input.rust.svg> for each of the eight named perturbations",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle <input.puml> > <input.diff.txt> 2>&1 for each of the eight named perturbations",
+    "shasum -a 256 test-diagrams/perturbations/times-new-roman-face-metrics/*",
+    "hash every checker .puml and count identical hashes across test-diagrams to confirm each source occurs exactly once"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/times-new-roman-face-metrics/checker_flat_plain_lr_sizes_punctuation.puml",
+      "golden": "test-diagrams/perturbations/times-new-roman-face-metrics/checker_flat_plain_lr_sizes_punctuation.svg",
+      "rust_svg": "test-diagrams/perturbations/times-new-roman-face-metrics/checker_flat_plain_lr_sizes_punctuation.rust.svg",
+      "diff": "test-diagrams/perturbations/times-new-roman-face-metrics/checker_flat_plain_lr_sizes_punctuation.diff.txt",
+      "source_sha256": "208afa2410ebd9d2084bba20b57eb1297186224e7788f790ab32c07b4a88dafd",
+      "golden_sha256": "3a8962095e354185c55a24a042753db2a364b7f35ba1c6c6d21ebcd286c2cfda",
+      "rust_svg_sha256": "8191f494d58d603370906d26ae1fd9f9cfed832d0f888876c41a901e25a7c057",
+      "diff_sha256": "1d99f5310c638724a034fe705ac09d8d693f5bee7504d0db422e8db826a68901",
+      "axes": [
+        "plain Times New Roman face",
+        "11px state text and 9px transition text",
+        "left-to-right flat topology",
+        "state title and attribute plus ordinary and self labels",
+        "punctuation digits uppercase and lowercase"
+      ],
+      "result": "fail",
+      "finding": "Every textLength and horizontal coordinate matches Java, but the entire graph is translated 56px upward and the self loop extends above the canvas. This is preserved as a strict failure and classified as pre-existing root painted-bound normalization residue, not a Times metric counterexample."
+    },
+    {
+      "source": "test-diagrams/perturbations/times-new-roman-face-metrics/checker_flat_bold_tb_ordinary_self.puml",
+      "golden": "test-diagrams/perturbations/times-new-roman-face-metrics/checker_flat_bold_tb_ordinary_self.svg",
+      "rust_svg": "test-diagrams/perturbations/times-new-roman-face-metrics/checker_flat_bold_tb_ordinary_self.rust.svg",
+      "diff": "test-diagrams/perturbations/times-new-roman-face-metrics/checker_flat_bold_tb_ordinary_self.diff.txt",
+      "source_sha256": "df95eb51d6df076a109c58d6fa65280afc7303ca27a4333f163392141498759a",
+      "golden_sha256": "941d82a624e18014fa99d916bc5375bd74151cf5c6b50a62d9b9501e1c411e1d",
+      "rust_svg_sha256": "0cc031952cf70f8217dc013216420f3f995ec62b65d6e67a91edd37d9635129b",
+      "diff_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+      "axes": [
+        "bold Times New Roman face",
+        "17px state text and 12px transition text",
+        "top-to-bottom flat topology",
+        "state title and attribute plus ordinary and self labels",
+        "punctuation digits uppercase and lowercase"
+      ],
+      "result": "pass",
+      "finding": "Structurally equivalent."
+    },
+    {
+      "source": "test-diagrams/perturbations/times-new-roman-face-metrics/checker_flat_italic_lr_mixed_case.puml",
+      "golden": "test-diagrams/perturbations/times-new-roman-face-metrics/checker_flat_italic_lr_mixed_case.svg",
+      "rust_svg": "test-diagrams/perturbations/times-new-roman-face-metrics/checker_flat_italic_lr_mixed_case.rust.svg",
+      "diff": "test-diagrams/perturbations/times-new-roman-face-metrics/checker_flat_italic_lr_mixed_case.diff.txt",
+      "source_sha256": "29460ee6db64b5f9fe54ac6dac90039704694099d4af7a2ae187006f978f3c05",
+      "golden_sha256": "2037a99834b7333384cf0ed9657ab5dfa6d49f74190756a6042eecc8099dc05b",
+      "rust_svg_sha256": "110ffb35a07746db60c973e41ea759d36fd19864847e48596004eff9a6974724",
+      "diff_sha256": "5c398b6d9f45302a2f7ebc9f8f80e286f65dff61495c15dbef2b43776a71c734",
+      "axes": [
+        "italic Times New Roman face",
+        "13px state text and 18px transition text",
+        "left-to-right flat topology",
+        "state title and attribute plus ordinary and self labels",
+        "punctuation digits uppercase and lowercase"
+      ],
+      "result": "fail",
+      "finding": "Every italic textLength, font attribute, node dimension, and horizontal route coordinate matches Java, but the entire graph is translated 66px upward. This is preserved as a strict failure and classified as the same root painted-bound residue rather than a face-metric failure."
+    },
+    {
+      "source": "test-diagrams/perturbations/times-new-roman-face-metrics/checker_nested_bold_italic_faces.puml",
+      "golden": "test-diagrams/perturbations/times-new-roman-face-metrics/checker_nested_bold_italic_faces.svg",
+      "rust_svg": "test-diagrams/perturbations/times-new-roman-face-metrics/checker_nested_bold_italic_faces.rust.svg",
+      "diff": "test-diagrams/perturbations/times-new-roman-face-metrics/checker_nested_bold_italic_faces.diff.txt",
+      "source_sha256": "2af70edc4b607d9697dd1b4754a0f9b02701ab783798902c1e602d545e9074ac",
+      "golden_sha256": "2d60ebf1b9f7f90cb3bbd8754cfec7a4fdb42c9116b7541a8797414f2b8a9b1c",
+      "rust_svg_sha256": "d8839f2f49c33034996a8da3c845298abaa3b233550020ff68f4f6cf34e14b4f",
+      "diff_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+      "axes": [
+        "legacy compound bold italic spelling",
+        "19px state text and 15px transition text",
+        "nested topology",
+        "nested and outer ordinary links plus nested self link",
+        "punctuation digits uppercase and lowercase"
+      ],
+      "result": "pass",
+      "finding": "Structurally equivalent. Static SVG inspection shows this is a normalization control, not proof of a bold-italic face: on this state style path Java normalizes the compound legacy spelling to plain and emits neither face attribute."
+    },
+    {
+      "source": "test-diagrams/perturbations/times-new-roman-face-metrics/checker_creole_face_matrix_lr.puml",
+      "golden": "test-diagrams/perturbations/times-new-roman-face-metrics/checker_creole_face_matrix_lr.svg",
+      "rust_svg": "test-diagrams/perturbations/times-new-roman-face-metrics/checker_creole_face_matrix_lr.rust.svg",
+      "diff": "test-diagrams/perturbations/times-new-roman-face-metrics/checker_creole_face_matrix_lr.diff.txt",
+      "source_sha256": "ee9daf8b806079007841560d8212b47bf6d152883fa30c9207cf84e7d4ae7052",
+      "golden_sha256": "5ab9a663701e3e3e07d4dcadec425a56314bc17c339931ad5d2a2c7638550ae8",
+      "rust_svg_sha256": "b2c48b8bcc62f6ddf9e9e2a8112e5917f6059d5659b77e2b24760f0cf9bb3ad1",
+      "diff_sha256": "0a74759478b20595555e43c74441cabeef34faa590974765e90c8aab1687c762",
+      "axes": [
+        "plain bold italic and bold-italic Times runs",
+        "16px state text and 14px transition text",
+        "left-to-right flat topology",
+        "state attribute plus ordinary and self transition labels",
+        "punctuation digits uppercase and lowercase"
+      ],
+      "result": "fail",
+      "finding": "The ordinary and self transition runs have exact Java face attributes, textLength values, and x advances for all four faces. The strict failure comes from Rust emitting state-description Creole markup literally and from the root translation residue; both are preserved and outside this metric-table change."
+    },
+    {
+      "source": "test-diagrams/perturbations/times-new-roman-face-metrics/checker_attribute_face_channel_tb.puml",
+      "golden": "test-diagrams/perturbations/times-new-roman-face-metrics/checker_attribute_face_channel_tb.svg",
+      "rust_svg": "test-diagrams/perturbations/times-new-roman-face-metrics/checker_attribute_face_channel_tb.rust.svg",
+      "diff": "test-diagrams/perturbations/times-new-roman-face-metrics/checker_attribute_face_channel_tb.diff.txt",
+      "source_sha256": "89aba695a95767091424e9e57d6f6f2b33237fbba50bef2c68801d68ea98e2ed",
+      "golden_sha256": "647ff42028a1acb130f945454ad99f3e454c9d0e0d54ba619f75e5b10c9d7327",
+      "rust_svg_sha256": "f97d699ce8a9b7ec284ed15f51fffd2244efee2d1f133779a8b214e7167008d8",
+      "diff_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+      "axes": [
+        "separate state attribute family style and size channel",
+        "plain state style plus bold-italic attribute request and italic arrows",
+        "18px state text and 11px transition text",
+        "top-to-bottom flat topology",
+        "ordinary and self labels with punctuation digits and mixed case"
+      ],
+      "result": "pass",
+      "finding": "Structurally equivalent."
+    },
+    {
+      "source": "test-diagrams/perturbations/times-new-roman-face-metrics/checker_transition_creole_four_faces_tb.puml",
+      "golden": "test-diagrams/perturbations/times-new-roman-face-metrics/checker_transition_creole_four_faces_tb.svg",
+      "rust_svg": "test-diagrams/perturbations/times-new-roman-face-metrics/checker_transition_creole_four_faces_tb.rust.svg",
+      "diff": "test-diagrams/perturbations/times-new-roman-face-metrics/checker_transition_creole_four_faces_tb.diff.txt",
+      "source_sha256": "96e5c5c81038d9afbe9086aa4a7a58da7476c68df66629d3b52c2e305b62445a",
+      "golden_sha256": "5f3e593ffe81ed93b852531120cac4f90caa52952a5b83c1353e58a1107f1432",
+      "rust_svg_sha256": "5df005bebb32ef50a28ed23fb656dc0b63fd2f32a2024c495fff0e03fd66615d",
+      "diff_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+      "axes": [
+        "true plain bold italic and bold-italic Times runs in one label",
+        "16px transition text and 12px state text",
+        "top-to-bottom flat topology",
+        "ordinary and self transition labels",
+        "punctuation digits uppercase and lowercase"
+      ],
+      "result": "pass",
+      "finding": "Structurally equivalent. This removes state-description and root-translation confounders and directly confirms all four printable-ASCII face tables and measurement-to-emission agreement."
+    },
+    {
+      "source": "test-diagrams/perturbations/times-new-roman-face-metrics/checker_unicode_fallback_italic_tb.puml",
+      "golden": "test-diagrams/perturbations/times-new-roman-face-metrics/checker_unicode_fallback_italic_tb.svg",
+      "rust_svg": "test-diagrams/perturbations/times-new-roman-face-metrics/checker_unicode_fallback_italic_tb.rust.svg",
+      "diff": "test-diagrams/perturbations/times-new-roman-face-metrics/checker_unicode_fallback_italic_tb.diff.txt",
+      "source_sha256": "188ac9ff43e64f3e626a92d20369eb7cdf3a7277a714817e4a9bd21d923bce3e",
+      "golden_sha256": "bed6991fd16c189e88c847037bda3d2cfca057364a0eac401ada0e3eeba42262",
+      "rust_svg_sha256": "5c4d7c2438c4f9aa497a8dcc471fb70da6426666787f420850519f0af4d1309c",
+      "diff_sha256": "54daab2566397981066dd9d1ecf1cdf3724581645c0fb9b931e8c40dc6094838",
+      "axes": [
+        "italic Times New Roman face",
+        "15px state text and 13px transition text",
+        "top-to-bottom flat topology",
+        "Latin-1 Greek and Cyrillic glyphs",
+        "ordinary and self transition labels with digits and mixed case"
+      ],
+      "result": "fail",
+      "finding": "In-scope counterexample. Rust's explicit half-em fallback gives 91.6626 instead of 94.1675 for `Café Ωmega 27`, 64.5923 instead of 68.9722 for `Журнал Z8`, 92.4219 instead of 91.7046 for `naïve façade Ω42`, and 54.8818 instead of 59.5601 for `déjà vu Ж9`. The incorrect face metrics change node widths, link geometry, and canvas width."
+    }
+  ],
+  "results": {
+    "source_uniqueness": "pass: all eight checker sources are unique within the current golden and perturbation corpus",
+    "java_svg_generation": "pass: the pinned Java jar generated well-formed SVG for every input with no PlantUML error marker",
+    "strict_no_oracle": "4 pass, 4 fail",
+    "ascii_face_matrix": "pass: the isolated transition matrix matches Java for all four printable-ASCII Times faces",
+    "unicode_face_metrics": "fail: the half-em fallback is not Java's glyph/fallback measurement model",
+    "production_files_modified": "no",
+    "compiler_invocations": "none"
+  },
+  "findings": [
+    "The review is anchored to exact Rust implementation commit 212f84422e235c308e15a853273a7d81a56eac10, account commit 2687cbeb41cfea05977f45854433c331a1ff1a5b, Java revision 71806a23780b04a5ccde2f8ceb5121edad5eb711, jar SHA-256 c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45, and supplied helper SHA-256 33103684b0f98e40078b0a2327d3b18df86375f86889b91cbe36e9b1320a482c. No cargo or rustc command was run.",
+    "Java provenance supports the causal account for resolved physical faces: UFontFactory.build retains family, weight, italic, and size; UFontImpl resolves that face to an AWT Font; FileFormat.getJavaDimension measures it with FontMetrics.getStringBounds; and StringBounderRaw obtains dimensions and descent from that same face.",
+    "Static inspection found no fixture labels, golden reads, coordinate-keyed surgery, comparator edits, park/error-list changes, or per-branch-count ladders in the implementation diff. The 95-entry face tables have checked-in Java-extractor provenance and italic is threaded through shared segment measurement and state title, attribute, autonomous, and transition-label callers.",
+    "The printable-ASCII portion is strong. Across sizes 9, 11, 12, 13, 14, 15, 16, 17, 18, and 19, Java and Rust agree on the observed Times widths for state titles, attributes, ordinary links, self links, flat topology, and nested topology. The isolated Creole transition matrix is structurally equivalent and proves actual plain, bold, italic, and bold-italic runs select matching tables and emit matching face attributes.",
+    "Three ASCII controls fail strict comparison for mechanisms outside this change. The left-to-right plain and italic diagrams have exact text metrics and geometry up to a uniform negative root translation caused by a self loop above the initial canvas. The mixed state-description Creole case also exposes literal state-body markup emission while its transition runs retain exact four-face metrics. These failures remain preserved and are not relabeled as passes.",
+    "The implementation's non-ASCII branch is a direct model gap: every codepoint outside printable ASCII is assigned 1024 units, whereas Java's FontStack resolves and measures the actual Times New Roman glyph or fallback font run. The valid Unicode held-out exercises Latin-1, Greek, and Cyrillic in state titles and ordinary/self labels and produces four wrong textLength values, changed node widths, shifted routes, and a 221px Rust canvas versus Java's 230px canvas.",
+    "Because the fresh Unicode case is an in-scope face-metric counterexample, the claimed invariant does not hold for arbitrary valid PlantUML text. The mechanism is rejected despite exact printable-ASCII behavior. A corrected model must derive non-ASCII advances and Java FontStack fallback behavior rather than extending the half-em approximation or keying special cases to these strings."
+  ],
+  "accepted": false,
+  "verdict": "rejected"
+}

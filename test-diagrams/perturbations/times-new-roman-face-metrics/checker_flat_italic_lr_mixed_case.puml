@@ -1,0 +1,15 @@
+@startuml
+left to right direction
+skinparam stateFontName Times New Roman
+skinparam stateFontStyle italic
+skinparam stateFontSize 13
+skinparam stateArrowFontName Times New Roman
+skinparam stateArrowFontStyle italic
+skinparam stateArrowFontSize 18
+
+state "Italic Delta d4" as D4
+D4 : slant row [19]
+state "Italic Echo E6" as E6
+D4 --> E6 : Zig-zag italic 204?
+E6 --> E6 : Loop italic: Wm!
+@enduml

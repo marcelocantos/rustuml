@@ -1,0 +1,14 @@
+@startuml
+top to bottom direction
+skinparam stateFontName Times New Roman
+skinparam stateFontStyle plain
+skinparam stateFontSize 12
+skinparam stateArrowFontName Times New Roman
+skinparam stateArrowFontStyle plain
+skinparam stateArrowFontSize 16
+
+state "Source S8" as S8
+state "Target T9" as T9
+S8 --> T9 : plain P1 **Bold B2** //Italic I3// **//Both BI4!?//**
+T9 --> T9 : self **Bold 55** and //Italic Qq//
+@enduml

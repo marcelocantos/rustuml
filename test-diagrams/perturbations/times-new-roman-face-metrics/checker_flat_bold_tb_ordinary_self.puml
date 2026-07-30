@@ -1,0 +1,15 @@
+@startuml
+top to bottom direction
+skinparam stateFontName Times New Roman
+skinparam stateFontStyle bold
+skinparam stateFontSize 17
+skinparam stateArrowFontName Times New Roman
+skinparam stateArrowFontStyle bold
+skinparam stateArrowFontSize 12
+
+state "Bold CAPS B8" as B8
+B8 : Weight 700; $53
+state "Bold lower m2" as M2
+B8 --> M2 : Bold ordinary: Q5
+M2 --> M2 : Bold self (88)
+@enduml

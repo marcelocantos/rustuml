@@ -1,0 +1,14 @@
+@startuml
+top to bottom direction
+skinparam stateFontName Times New Roman
+skinparam stateFontStyle italic
+skinparam stateFontSize 15
+skinparam stateArrowFontName Times New Roman
+skinparam stateArrowFontStyle italic
+skinparam stateArrowFontSize 13
+
+state "Café Ωmega 27" as Cafe27
+state "Журнал Z8" as Journal8
+Cafe27 --> Journal8 : naïve façade Ω42
+Journal8 --> Journal8 : déjà vu Ж9
+@enduml

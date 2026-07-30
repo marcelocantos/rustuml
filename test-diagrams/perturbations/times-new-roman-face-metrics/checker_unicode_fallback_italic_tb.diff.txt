@@ -1,0 +1,41 @@
+SVG structural differences:
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "STATE"), ("height", "197px"), ("preserveAspectRatio", "none"), ("style", "width:230px;height:197px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 230 197"), ("width", "230px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "STATE"), ("height", "197px"), ("preserveAspectRatio", "none"), ("style", "width:221px;height:197px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 221 197"), ("width", "221px"), ("zoomAndPan", "magnify")]
+  [4] <rect> attr mismatch:
+    expected: [("fill", "#F1F1F1"), ("height", "50"), ("rx", "12.5"), ("ry", "12.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "114.1675"), ("x", "7"), ("y", "7")]
+    actual:   [("fill", "#F1F1F1"), ("height", "50"), ("rx", "12.5"), ("ry", "12.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "111.6626"), ("x", "7"), ("y", "7")]
+  [5] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "7"), ("x2", "121.1675"), ("y1", "34.2485"), ("y2", "34.2485")]
+    actual:   [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "7"), ("x2", "118.6626"), ("y1", "34.2485"), ("y2", "34.2485")]
+  [6] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "15"), ("font-style", "italic"), ("lengthAdjust", "spacing"), ("textLength", "94.1675"), ("x", "17"), ("y", "26.0039")]
+    actual:   [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "15"), ("font-style", "italic"), ("lengthAdjust", "spacing"), ("textLength", "91.6626"), ("x", "17"), ("y", "26.0039")]
+  [8] <rect> attr mismatch:
+    expected: [("fill", "#F1F1F1"), ("height", "50"), ("rx", "12.5"), ("ry", "12.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "88.9722"), ("x", "19.6"), ("y", "133")]
+    actual:   [("fill", "#F1F1F1"), ("height", "50"), ("rx", "12.5"), ("ry", "12.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "84.5923"), ("x", "20.54"), ("y", "133")]
+  [9] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "19.6"), ("x2", "108.5722"), ("y1", "160.2485"), ("y2", "160.2485")]
+    actual:   [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "20.54"), ("x2", "105.1323"), ("y1", "160.2485"), ("y2", "160.2485")]
+  [10] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "15"), ("font-style", "italic"), ("lengthAdjust", "spacing"), ("textLength", "68.9722"), ("x", "29.6"), ("y", "152.0039")]
+    actual:   [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "15"), ("font-style", "italic"), ("lengthAdjust", "spacing"), ("textLength", "64.5923"), ("x", "30.54"), ("y", "152.0039")]
+  [12] <path> attr mismatch:
+    expected: [("d", "M64.08,57.5 C64.08,79.24 64.08,104.83 64.08,126.55"), ("fill", "none"), ("id", "Cafe27-to-Journal8"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("d", "M62.83,57.5 C62.83,79.24 62.83,104.83 62.83,126.55"), ("fill", "none"), ("id", "Cafe27-to-Journal8"), ("style", "stroke:#181818;stroke-width:1;")]
+  [13] <polygon> attr mismatch:
+    expected: [("fill", "#181818"), ("points", "64.08,132.55,68.08,123.55,64.08,127.55,60.08,123.55,64.08,132.55"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("fill", "#181818"), ("points", "62.83,132.55,66.83,123.55,62.83,127.55,58.83,123.55,62.83,132.55"), ("style", "stroke:#181818;stroke-width:1;")]
+  [14] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "13"), ("font-style", "italic"), ("lengthAdjust", "spacing"), ("textLength", "91.7046"), ("x", "65.08"), ("y", "100.1367")]
+    actual:   [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "13"), ("font-style", "italic"), ("lengthAdjust", "spacing"), ("textLength", "92.4219"), ("x", "63.83"), ("y", "100.1367")]
+  [16] <path> attr mismatch:
+    expected: [("d", "M109.03,146.29 C127.72,145.48 143.57,149.39 143.57,158 C143.57,166.61 133.7144,170.7798 115.0244,169.9698"), ("fill", "none"), ("id", "Journal8-to-Journal8"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("d", "M105.36,146.35 C124.05,145.32 140.13,149.2 140.13,158 C140.13,166.8 130.0409,171.0102 111.3509,169.9802"), ("fill", "none"), ("id", "Journal8-to-Journal8"), ("style", "stroke:#181818;stroke-width:1;")]
+  [17] <polygon> attr mismatch:
+    expected: [("fill", "#181818"), ("points", "109.03,169.71,117.8484,174.0959,114.0253,169.9265,118.1948,166.1034,109.03,169.71"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("fill", "#181818"), ("points", "105.36,169.65,114.1263,174.1392,110.3524,169.9251,114.5665,166.1513,105.36,169.65"), ("style", "stroke:#181818;stroke-width:1;")]
+  [18] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "13"), ("font-style", "italic"), ("lengthAdjust", "spacing"), ("textLength", "59.5601"), ("x", "149.57"), ("y", "163.1367")]
+    actual:   [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "13"), ("font-style", "italic"), ("lengthAdjust", "spacing"), ("textLength", "54.8818"), ("x", "146.13"), ("y", "163.1367")]
+

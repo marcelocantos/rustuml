@@ -1,0 +1,66 @@
+SVG structural differences:
+  element count: expected 33, got 28
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "STATE"), ("height", "136px"), ("preserveAspectRatio", "none"), ("style", "width:530px;height:136px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 530 136"), ("width", "530px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "STATE"), ("height", "138px"), ("preserveAspectRatio", "none"), ("style", "width:530px;height:138px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 530 138"), ("width", "530px"), ("zoomAndPan", "magnify")]
+  [4] <rect> attr mismatch:
+    expected: [("fill", "#F1F1F1"), ("height", "56.7969"), ("rx", "12.5"), ("ry", "12.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "200.0156"), ("x", "7"), ("y", "65.6")]
+    actual:   [("fill", "#F1F1F1"), ("height", "56.7969"), ("rx", "12.5"), ("ry", "12.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "200.0156"), ("x", "7"), ("y", "7")]
+  [5] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "7"), ("x2", "207.0156"), ("y1", "93.9984"), ("y2", "93.9984")]
+    actual:   [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "7"), ("x2", "207.0156"), ("y1", "35.3984"), ("y2", "35.3984")]
+  [6] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "16"), ("lengthAdjust", "spacing"), ("textLength", "52"), ("x", "81.0078"), ("y", "85.5375")]
+    actual:   [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "16"), ("lengthAdjust", "spacing"), ("textLength", "52"), ("x", "81.0078"), ("y", "26.9375")]
+  [7] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "16"), ("lengthAdjust", "spacing"), ("textLength", "31.9922"), ("x", "12"), ("y", "113.9359")]
+    actual:   [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "16"), ("lengthAdjust", "spacing"), ("textLength", "180.0156"), ("x", "12"), ("y", "55.3359")]
+  [7] <text> text mismatch:
+    expected: Some("plain")
+    actual:   Some("plain **Bold7** //Italic8// **//Both9!?//**")
+  [8] tag mismatch: expected <text>, got <g>
+  [9] tag mismatch: expected <text>, got <rect>
+  [10] tag mismatch: expected <text>, got <line>
+  [11] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "16"), ("lengthAdjust", "spacing"), ("textLength", "4"), ("x", "133.7734"), ("y", "113.9359")]
+    actual:   [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "16"), ("lengthAdjust", "spacing"), ("textLength", "64.4219"), ("x", "436.02"), ("y", "30.3375")]
+  [11] <text> text mismatch:
+    expected: None
+    actual:   Some("Target R6")
+  [12] tag mismatch: expected <text>, got <g>
+  [13] tag mismatch: expected <g>, got <path>
+  [14] tag mismatch: expected <rect>, got <polygon>
+  [15] tag mismatch: expected <line>, got <text>
+  [16] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "16"), ("lengthAdjust", "spacing"), ("textLength", "64.4219"), ("x", "436.02"), ("y", "88.9375")]
+    actual:   [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "14"), ("font-weight", "700"), ("lengthAdjust", "spacing"), ("textLength", "35.0137"), ("x", "269.5132"), ("y", "31.4703")]
+  [16] <text> text mismatch:
+    expected: Some("Target R6")
+    actual:   Some("Bold2")
+  [17] tag mismatch: expected <g>, got <text>
+  [18] tag mismatch: expected <path>, got <text>
+  [19] tag mismatch: expected <polygon>, got <text>
+  [20] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "27.9932"), ("x", "238.02"), ("y", "90.0703")]
+    actual:   [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "14"), ("font-style", "italic"), ("font-weight", "700"), ("lengthAdjust", "spacing"), ("textLength", "47.4619"), ("x", "348.0718"), ("y", "31.4703")]
+  [20] <text> text mismatch:
+    expected: Some("plain")
+    actual:   Some("Both4!?")
+  [21] tag mismatch: expected <text>, got <g>
+  [22] tag mismatch: expected <text>, got <path>
+  [23] tag mismatch: expected <text>, got <polygon>
+  [24] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "3.5"), ("x", "344.5718"), ("y", "90.0703")]
+    actual:   [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "20.2139"), ("x", "427.23"), ("y", "-33.5297")]
+  [24] <text> text mismatch:
+    expected: None
+    actual:   Some("self")
+  [25] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "14"), ("font-style", "italic"), ("font-weight", "700"), ("lengthAdjust", "spacing"), ("textLength", "47.4619"), ("x", "348.0718"), ("y", "90.0703")]
+    actual:   [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "14"), ("font-weight", "700"), ("lengthAdjust", "spacing"), ("textLength", "16.3379"), ("x", "450.9439"), ("y", "-33.5297")]
+  [25] <text> text mismatch:
+    expected: Some("Both4!?")
+    actual:   Some("B5")
+  [26] tag mismatch: expected <g>, got <text>
+  [27] tag mismatch: expected <path>, got <text>
+

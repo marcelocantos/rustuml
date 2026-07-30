@@ -1,0 +1,19 @@
+@startuml
+top to bottom direction
+skinparam stateFontName Times New Roman
+skinparam stateFontStyle plain
+skinparam stateFontSize 14
+skinparam stateAttributeFontName Times New Roman
+skinparam stateAttributeFontStyle bold italic
+skinparam stateAttributeFontSize 18
+skinparam stateArrowFontName Times New Roman
+skinparam stateArrowFontStyle italic
+skinparam stateArrowFontSize 11
+
+state "Plain Header H3" as H3
+H3 : Attribute BI 902!?
+state "Plain Header J5" as J5
+J5 : Second attr (Q7)
+H3 --> J5 : italic ordinary
+J5 --> J5 : italic self 64
+@enduml
