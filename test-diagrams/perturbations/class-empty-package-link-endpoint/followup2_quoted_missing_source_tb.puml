@@ -1,0 +1,4 @@
+@startuml
+class Sink9002
+"Quoted Missing 9001" --> Sink9002
+@enduml

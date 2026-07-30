@@ -1,0 +1,162 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-empty-package-link-endpoint",
+  "account": "docs/parity-reviews/class-empty-package-link-endpoint/account.json",
+  "prior_review": {
+    "path": "docs/parity-reviews/class-empty-package-link-endpoint/review-followup.json",
+    "result": "rejected",
+    "review_commit": "5726cab3"
+  },
+  "implementation_commit": "4273c3d98691c15ac891985d216918fc29ec89a8",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "reviewer": {
+    "identity": "independent adversarial checker",
+    "model": "gpt-5.4",
+    "reasoning_effort": "xhigh",
+    "tool": "Codex desktop",
+    "independence": "Did not implement commit 4273c3d9, did not edit shipping source, and only added held-out evidence plus this follow-up review record in the detached checker worktree."
+  },
+  "revisions": {
+    "rust_revision_checked": "4273c3d98691c15ac891985d216918fc29ec89a8",
+    "rust_tree_checked": "face75cf04c5a456bda182ca540226eeff934d42",
+    "checker_worktree": "/tmp/rustuml-review-quoted-4273",
+    "checker_worktree_ref": "detached HEAD",
+    "java_revision_checked": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "comparator": {
+    "binary": "/tmp/rustuml-checker-1482/target/debug/examples/diff_one",
+    "mode": "--no-oracle",
+    "source": "crates/rustuml-oracle/examples/diff_one.rs",
+    "compare_function": "rustuml_oracle::compare::compare_svg_strict",
+    "notes": "Strict SVG comparison against Java goldens using the provided prebuilt helper. No Cargo or rustc commands were run in this checker pass."
+  },
+  "java_jar": {
+    "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar"
+  },
+  "commands": [
+    "git -C /tmp/rustuml-review-quoted-4273 status --short --branch",
+    "sed -n '1,220p' /tmp/rustuml-review-quoted-4273/docs/parity-reviews/class-empty-package-link-endpoint/account.json",
+    "git -C /tmp/rustuml-review-quoted-4273 show --stat --patch 4273c3d9 -- docs/parity-reviews/class-empty-package-link-endpoint/account.json crates scripts test-diagrams docs/parity-reviews/class-empty-package-link-endpoint",
+    "rg -n \"resolve_quoted_relationship_endpoint|resolve_relationship_endpoint|strip_creole_for_id|try_package|quarkInContextSafe|relationship_layout_id|empty_package_layout_id|no_oracle_entity_id_from|add_svek_cluster_endpoint\" /tmp/rustuml-review-quoted-4273/crates/rustuml-parser/src/parse/class.rs /tmp/rustuml-review-quoted-4273/crates/rustuml-render/src/class.rs /tmp/rustuml-review-quoted-4273/crates/rustuml-layout/src/graph.rs /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandLinkClass.java /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/atmp/CucaDiagram.java /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/Bibliotekon.java /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/Cluster.java /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/ClusterDotString.java",
+    "sed -n '240,340p' /tmp/rustuml-review-quoted-4273/crates/rustuml-parser/src/parse/class.rs",
+    "sed -n '420,560p' /tmp/rustuml-review-quoted-4273/crates/rustuml-parser/src/parse/class.rs",
+    "sed -n '700,790p' /tmp/rustuml-review-quoted-4273/crates/rustuml-parser/src/parse/class.rs",
+    "sed -n '1030,1115p' /tmp/rustuml-review-quoted-4273/crates/rustuml-parser/src/parse/class.rs",
+    "sed -n '1229,1375p' /tmp/rustuml-review-quoted-4273/crates/rustuml-parser/src/parse/class.rs",
+    "sed -n '2382,2405p' /tmp/rustuml-review-quoted-4273/crates/rustuml-parser/src/parse/class.rs",
+    "sed -n '11341,11425p' /tmp/rustuml-review-quoted-4273/crates/rustuml-render/src/class.rs",
+    "sed -n '12359,12425p' /tmp/rustuml-review-quoted-4273/crates/rustuml-render/src/class.rs",
+    "sed -n '340,420p' /tmp/rustuml-review-quoted-4273/crates/rustuml-layout/src/graph.rs",
+    "sed -n '170,240p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandLinkClass.java",
+    "sed -n '249,340p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/atmp/CucaDiagram.java",
+    "sed -n '130,190p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/Bibliotekon.java",
+    "sed -n '615,675p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/Cluster.java",
+    "sed -n '250,330p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/ClusterDotString.java",
+    "sed -n '1,220p' /tmp/rustuml-review-quoted-4273/crates/rustuml-oracle/examples/diff_one.rs",
+    "sed -n '470,560p' /tmp/rustuml-review-quoted-4273/crates/rustuml-oracle/src/compare.rs",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/class-empty-package-link-endpoint/followup2_quoted_missing_source_tb.puml test-diagrams/perturbations/class-empty-package-link-endpoint/followup2_quoted_missing_target_lr.puml test-diagrams/perturbations/class-empty-package-link-endpoint/followup2_quoted_missing_collision_tb.puml test-diagrams/perturbations/class-empty-package-link-endpoint/followup2_quoted_alias_display_reopen_tb.puml test-diagrams/perturbations/class-empty-package-link-endpoint/followup2_quoted_reopened_filled_target_lr.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-empty-package-link-endpoint/followup2_quoted_missing_source_tb.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-empty-package-link-endpoint/followup2_quoted_missing_target_lr.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-empty-package-link-endpoint/followup2_quoted_missing_collision_tb.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-empty-package-link-endpoint/followup2_quoted_alias_display_reopen_tb.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-empty-package-link-endpoint/followup2_quoted_reopened_filled_target_lr.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/class-empty-package-link-endpoint/followup2_quoted_reopened_filled_target_lr.puml",
+    "rg -n \"data-qualified-name|data-entity-1|data-entity-2|id=\\\"lnk|id=\\\"ent|Quoted Reopen|Quoted_Reopen|Sink9042|Source9043\" /tmp/rustuml-review-quoted-4273/test-diagrams/perturbations/class-empty-package-link-endpoint/followup2_quoted_reopened_filled_target_lr.svg",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/class-empty-package-link-endpoint/followup2_quoted_missing_collision_tb.puml",
+    "rg -n \"data-qualified-name|data-entity-1|data-entity-2|id=\\\"lnk|id=\\\"ent|Quoted Missing 9021|Quoted_Missing_9021|Sink9022\" /tmp/rustuml-review-quoted-4273/test-diagrams/perturbations/class-empty-package-link-endpoint/followup2_quoted_missing_collision_tb.svg",
+    "git -C /tmp/rustuml-review-quoted-4273 rev-parse HEAD",
+    "git -C /tmp/rustuml-review-quoted-4273 rev-parse HEAD^{tree}",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD"
+  ],
+  "source_inspection": {
+    "java": [
+      "CommandLinkClass resolves both relationship endpoints through CucaDiagram#quarkInContextSafe(true, entString) and only creates a leaf when quark.getData() is null.",
+      "CucaDiagram#quarkInContextSafe preserves the exact supplied endpoint string. With separators enabled it returns root.child(full) or currentQuark.child(full); with a null separator it firstWithName(full) matches the raw name, never an identifier-normalized surrogate.",
+      "For group endpoints, Bibliotekon#getNodeUid returns Cluster.getSpecialPointId(ent), and ClusterDotString emits that point when a link touches the group."
+    ],
+    "rust": [
+      "4273c3d9 adds resolve_quoted_relationship_endpoint, which probes the raw quoted endpoint against existing entity/package quark paths, then falls back to resolve_relationship_endpoint(strip_creole_for_id(raw)).",
+      "That fallback is already non-Java for genuinely missing quoted class endpoints: Java would create a new leaf named from the raw quoted text, while Rust normalizes whitespace and markup into an identifier-shaped name before creation.",
+      "The same fallback can also misbind to an unrelated existing normalized class (for example Quoted_Missing_9021) instead of creating a fresh raw-name leaf when the quoted display collides with an existing normalized identifier."
+    ],
+    "runtime_note": "Using the provided prebuilt no-oracle helper for revision 4273c3d9, the shipped path still emits normalized synthetic classes on fresh quoted cases, including a reopened bare quoted-package target that Java routes directly to the existing cluster.",
+    "fixture_shaping_search": "No mechanism-name string, prior held-out filename, or similar fixture-shaped branch was found in shipping crates.",
+    "constants": "No new mechanism-shaped constants were introduced by 4273c3d9; the implementation diff is parser-only."
+  },
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-empty-package-link-endpoint/followup2_quoted_missing_source_tb.puml",
+      "golden": "test-diagrams/perturbations/class-empty-package-link-endpoint/followup2_quoted_missing_source_tb.svg",
+      "axes": [
+        "missing quoted class endpoint",
+        "source endpoint",
+        "top-to-bottom",
+        "raw display name with spaces"
+      ],
+      "result": "fail",
+      "evidence": "Java creates a new class with data-qualified-name and link id text \"Quoted Missing 9001\". Rust creates Quoted_Missing_9001 instead, widening the root SVG to 205px and changing both entity text and relationship metadata."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-package-link-endpoint/followup2_quoted_missing_target_lr.puml",
+      "golden": "test-diagrams/perturbations/class-empty-package-link-endpoint/followup2_quoted_missing_target_lr.svg",
+      "axes": [
+        "missing quoted class endpoint",
+        "target endpoint",
+        "left-to-right",
+        "raw display name with spaces"
+      ],
+      "result": "fail",
+      "evidence": "Java renders a target class named \"Quoted Missing 9012\" and link id=\"Source9011-to-Quoted Missing 9012\". Rust again normalizes the target to Quoted_Missing_9012, changing both the label text and SVG metadata."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-package-link-endpoint/followup2_quoted_missing_collision_tb.puml",
+      "golden": "test-diagrams/perturbations/class-empty-package-link-endpoint/followup2_quoted_missing_collision_tb.svg",
+      "axes": [
+        "missing quoted class endpoint",
+        "existing normalized-name collision",
+        "top-to-bottom",
+        "source endpoint"
+      ],
+      "result": "fail",
+      "evidence": "Java keeps the declared class Quoted_Missing_9021 and also creates a second class \"Quoted Missing 9021\" for the quoted endpoint. Rust reuses the existing normalized class and never creates the raw quoted leaf, collapsing the diagram from 27 elements to 20."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-package-link-endpoint/followup2_quoted_alias_display_reopen_tb.puml",
+      "golden": "test-diagrams/perturbations/class-empty-package-link-endpoint/followup2_quoted_alias_display_reopen_tb.svg",
+      "axes": [
+        "quoted display name versus explicit alias",
+        "package reopening",
+        "missing quoted class endpoint",
+        "top-to-bottom"
+      ],
+      "result": "fail",
+      "evidence": "Java treats the display-only reference \"Quoted Alias 9031\" as a new class and links it to Sink9032. Rust instead synthesizes Quoted_Alias_9031, proving the normalized fallback also mis-models quoted display versus aliased identity."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-empty-package-link-endpoint/followup2_quoted_reopened_filled_target_lr.puml",
+      "golden": "test-diagrams/perturbations/class-empty-package-link-endpoint/followup2_quoted_reopened_filled_target_lr.svg",
+      "axes": [
+        "bare quoted package identity",
+        "package reopening",
+        "filled group target",
+        "left-to-right"
+      ],
+      "result": "fail",
+      "evidence": "Java links Source9043 directly to the existing cluster Quoted Reopen 9041 (data-entity-2=\"ent0002\", link id=\"Source9043-to-Quoted Reopen 9041\"). The provided 4273c3d9 no-oracle helper instead synthesizes a class Quoted_Reopen_9041 (ent0005) and routes the edge to that class."
+    }
+  ],
+  "findings": [
+    "REJECT: the account's planned normalized fallback for genuinely missing quoted class endpoints is not PlantUML's model. Java preserves the raw quoted endpoint text when it has to create a missing leaf.",
+    "REJECT: the normalized fallback can also bind to an unrelated existing normalized class instead of creating the fresh raw quoted leaf that Java creates, as shown by followup2_quoted_missing_collision_tb.",
+    "REJECT: end-to-end no-oracle behavior at the provided 4273c3d9 helper still fails a reopened bare quoted-package target, synthesizing Quoted_Reopen_9041 instead of routing to the existing filled group cluster.",
+    "No fixture-shaped shipping logic or new unexplained mechanism constants were found; the failures come from identity/path behavior, not from obvious overfitting."
+  ],
+  "summary": {
+    "fresh_valid_inputs": 5,
+    "passes": 0,
+    "failures": 5,
+    "java_syntax_errors": 0,
+    "cargo_or_rustc_run": false
+  },
+  "verdict": "REJECT"
+}

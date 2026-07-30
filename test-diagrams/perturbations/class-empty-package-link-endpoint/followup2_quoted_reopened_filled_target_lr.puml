@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+package "Quoted Reopen 9041" {
+}
+package "Quoted Reopen 9041" {
+  class Sink9042
+}
+class Source9043
+Source9043 --> "Quoted Reopen 9041"
+@enduml

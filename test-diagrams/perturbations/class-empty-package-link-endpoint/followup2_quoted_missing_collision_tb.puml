@@ -1,0 +1,5 @@
+@startuml
+class Quoted_Missing_9021
+class Sink9022
+"Quoted Missing 9021" --> Sink9022
+@enduml

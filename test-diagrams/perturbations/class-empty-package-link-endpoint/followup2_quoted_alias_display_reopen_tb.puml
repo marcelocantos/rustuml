@@ -1,0 +1,8 @@
+@startuml
+package pkg9031 as "Quoted Alias 9031" {
+}
+package pkg9031 {
+  class Sink9032
+}
+"Quoted Alias 9031" --> Sink9032
+@enduml
