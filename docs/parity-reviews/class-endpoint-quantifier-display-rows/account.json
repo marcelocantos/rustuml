@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-endpoint-quantifier-display-rows",
+  "created": "2026-07-31",
+  "status": "proposed",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "d78a06d877942281561c0a7e8774ec045aecad75",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandLinkClass.java",
+      "symbol": "CommandLinkClass.executeArg",
+      "lines": "210-220",
+      "role": "Passes the two parsed endpoint labels to LinkArg as quantifier strings."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/abel/LinkArg.java",
+      "symbols": [
+        "LinkArg.withQuantifier",
+        "LinkArg.getQuantifier1",
+        "LinkArg.getQuantifier2"
+      ],
+      "lines": "78-80, 115-133",
+      "role": "Stores endpoint quantifiers independently and swaps them with the link when its direction is inverted."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+      "symbol": "SvekEdge.SvekEdge",
+      "lines": "322-332",
+      "role": "Converts each quantifier through Display.getWithNewlines and creates a centered cardinality TextBlock before Graphviz layout."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/Display.java",
+      "symbol": "Display.getWithNewlines",
+      "lines": "258-341",
+      "role": "Splits legacy escaped newline controls outside raw URL, math, and LaTeX spans into ordered Display rows."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/diagram/class.rs",
+      "symbol": "Relationship",
+      "lines": "288-289",
+      "role": "Stores each endpoint multiplicity as one source string."
+    },
+    {
+      "path": "crates/rustuml-parser/src/display.rs",
+      "symbol": "split_escaped_newlines",
+      "lines": "6-41",
+      "role": "Already models Display's escaped-newline/raw-span boundary and can provide the ordered rows."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": [
+        "render_no_oracle",
+        "render_relationship_svg",
+        "resolve_endpoint_label_collisions"
+      ],
+      "lines": "2387-2391, 2585-2589, 12686-12802, 13151-13184",
+      "role": "Measures, collision-bounds, and emits each multiplicity as one literal row, so the three projections disagree with Java's Display block."
+    }
+  ],
+  "evidence_inputs": [
+    "test-diagrams/golden/class/class_rel_labelstyle_full.puml",
+    "test-diagrams/golden/class/class_rel_labelstyle_both_roles.puml"
+  ],
+  "claimed_invariant": "A class relationship endpoint quantifier is one centered Display TextBlock. Outside raw URL, math, and LaTeX spans, each escaped newline produces another ordered row. The block width is the maximum measured row width, the block height is the sum of row heights, and every row is horizontally centered within that maximum width. Graphviz sizing, post-layout collision bounds, and final SVG painting consume the same row measurements and block dimensions; endpoint identity, source order, direction, and fixture names do not affect this projection.",
+  "causal_divergence": "For `A \"1\\nowner\" --> \"n\\nowned\" B`, Java emits four centered SVG text rows and reserves two row heights at each endpoint. Rust measures and emits two literal strings containing backslash-n, making each endpoint box too wide and too short. Graphviz consequently solves a wider canvas, the collision pass uses the wrong rectangles, and SVG contains two wrong text elements. The first divergence is the missing Display-row model, not font tuning, route coordinates, or post-hoc serialization.",
+  "planned_model_change": "Introduce one class endpoint-label block value built from split_escaped_newlines: ordered rows, per-row widths and heights, maximum width, and summed height. Use its floored block dimensions for the Graphviz endpoint-label request, exact block dimensions for collision resolution, and centered row origins plus cumulative row heights for SVG emission. Preserve the existing resolved relationship font and fallback placement behavior, and keep center relationship labels on their separate LinkArg Display path. Do not special-case multiplicity text, endpoint names, branch counts, or solved coordinates.",
+  "perturbation_axes": [
+    "tail versus head quantifiers and inverted arrow directions",
+    "two and three rows with the widest row in different positions",
+    "renamed endpoints and unequal row text widths",
+    "top-to-bottom versus left-to-right layout",
+    "empty leading, intermediate, and trailing rows",
+    "escaped newline sequences inside versus outside raw URL, math, and LaTeX spans",
+    "single-line quantifiers as a regression control"
+  ],
+  "scope_boundary": "This mechanism owns Display-row dimensions and painting for class relationship endpoint quantifiers. It does not change quantifier parsing, center relationship labels, roles, endpoint decorations, Graphviz routing, font-style resolution, or other diagram families.",
+  "acceptance": [
+    "Both existing multiline class endpoint-label pairs match in the no-oracle path without regressing single-line quantifiers.",
+    "Fresh valid quantifiers covering at least two perturbation axes match freshly generated Java SVG.",
+    "Raw-span newline tokens remain unsplit.",
+    "Focused renderer tests, the class-family census, the no-oracle ratchet, and harness guards pass except for explicitly pre-existing gate debt.",
+    "An independent checker records a verdict at the exact implementation revision."
+  ]
+}
