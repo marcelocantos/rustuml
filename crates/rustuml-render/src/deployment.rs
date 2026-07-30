@@ -1269,6 +1269,7 @@ fn emit_cluster_shape(
         // Clusters use stroke-width=1 (per goldens).
         Node => emit_tag_polygon(svg, x, y, w, h, fill, 1.0, stroke),
         Artifact => emit_artifact_with_stroke_width(svg, x, y, w, h, fill, stroke, 1.0),
+        Storage => emit_storage_with_stroke_width(svg, x, y, w, h, fill, stroke, 1.0),
         // Card cluster has rect + horizontal line under title.
         Card => emit_card_cluster(svg, x, y, w, h, fill, stroke),
         // Rectangle / Agent cluster: bare rect, no line.
@@ -1945,12 +1946,27 @@ fn emit_stack_cluster(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill
 // ---- Storage (rounded rect with rx=35, ry=35) -----------------------------
 
 fn emit_storage(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str, stroke: &str) {
+    emit_storage_with_stroke_width(svg, x, y, w, h, fill, stroke, 0.5);
+}
+
+#[allow(clippy::too_many_arguments)]
+fn emit_storage_with_stroke_width(
+    svg: &mut SvgBuilder,
+    x: f64,
+    y: f64,
+    w: f64,
+    h: f64,
+    fill: &str,
+    stroke: &str,
+    stroke_width: f64,
+) {
     svg.raw(&format!(
-        r#"<rect fill="{fill}" height="{h}" rx="35" ry="35" style="stroke:{stroke};stroke-width:0.5;" width="{w}" x="{x}" y="{y}"/>"#,
+        r#"<rect fill="{fill}" height="{h}" rx="35" ry="35" style="stroke:{stroke};stroke-width:{stroke_width};" width="{w}" x="{x}" y="{y}"/>"#,
         h = fc(h),
         w = fc(w),
         x = fc(x),
         y = fc(y),
+        stroke_width = fc(stroke_width),
     ));
 }
 
@@ -2311,7 +2327,7 @@ fn emit_cluster_label(
         let stereo_label = format!("\u{00AB}{stereo}\u{00BB}");
         let stereo_w = text_render::measure(&stereo_label, FONT_SIZE, false);
         let stereo_x = center_x - stereo_w / 2.0;
-        let stereo_y = y + cluster_top_pad(kind);
+        let stereo_y = y + cluster_stereotype_baseline_offset(kind);
         emit_text(
             svg,
             &stereo_label,
@@ -2326,7 +2342,7 @@ fn emit_cluster_label(
             svg,
             &node.label,
             label_x,
-            stereo_y + TEXT_LINE_H,
+            stereo_y + cluster_stereotype_to_title_offset(kind),
             DeploymentLabelStyle {
                 font_size: FONT_SIZE,
                 bold: true,
@@ -2336,7 +2352,7 @@ fn emit_cluster_label(
         );
     } else {
         let label_x = center_x - label_w / 2.0;
-        let label_y = y + cluster_top_pad(kind);
+        let label_y = y + cluster_title_baseline_offset(kind);
         emit_deployment_label(
             svg,
             &node.label,
@@ -2483,15 +2499,36 @@ fn deployment_sprite_logical_dimensions(
     (width as f64 * scale, height as f64 * scale)
 }
 
-fn cluster_top_pad(kind: DeploymentNodeKind) -> f64 {
+fn cluster_title_baseline_offset(kind: DeploymentNodeKind) -> f64 {
     use DeploymentNodeKind::*;
     match kind {
         // Node cluster title sits in a small header band: ascent+13 from bbox top.
         Node => ASCENT_14 + 13.0,
-        // Card-like clusters: ascent+2.
+        // `USymbolStorage.asBig` places the title at y=7.
+        Storage => ASCENT_14 + 7.0,
+        // Card-like clusters place the title at y=2.
         Artifact | Card | Rectangle | Agent | Frame => ASCENT_14 + 2.0,
         _ => ASCENT_14 + 13.0,
     }
+}
+
+fn cluster_stereotype_baseline_offset(kind: DeploymentNodeKind) -> f64 {
+    if kind == DeploymentNodeKind::Storage {
+        // `USymbolStorage.asBig` places the stereotype at y=5, two pixels
+        // above the title's y=7 origin.
+        ASCENT_14 + 5.0
+    } else {
+        cluster_title_baseline_offset(kind)
+    }
+}
+
+fn cluster_stereotype_to_title_offset(kind: DeploymentNodeKind) -> f64 {
+    TEXT_LINE_H
+        + if kind == DeploymentNodeKind::Storage {
+            2.0
+        } else {
+            0.0
+        }
 }
 
 /// Horizontal center used for cluster labels (different per shape).
@@ -4815,24 +4852,10 @@ fn deployment_cluster_frame(
                 .get(&node.id)
                 .copied()
                 .unwrap_or((position.width, position.height));
-            let (local_min_x, local_min_y) = match node.kind {
-                // `USymbolNode.drawNode` paints a polygon whose LimitFinder X
-                // bounds extend ten pixels beyond the visible cluster.
-                DeploymentNodeKind::Node => (-10.0, 0.0),
-                DeploymentNodeKind::Cloud => {
-                    crate::cloud_shape::generate(cluster_width, cluster_height).min_xy()
-                }
-                // These `asBig` implementations draw a full-size `URectangle`;
-                // `LimitFinder.drawRectangle` expands its top-left by one pixel.
-                DeploymentNodeKind::Rectangle
-                | DeploymentNodeKind::Agent
-                | DeploymentNodeKind::Frame
-                | DeploymentNodeKind::Card => (-1.0, -1.0),
-                // `USymbolStack.drawQueue` paints a full-width UPath, while its
-                // inset `URectangle` extends the top LimitFinder bound by one.
-                DeploymentNodeKind::Stack => (0.0, -1.0),
-                _ => (0.0, 0.0),
-            };
+            let (local_min_x, local_min_y) =
+                deployment_cluster_local_painted_bounds(node.kind, cluster_width, cluster_height)
+                    .map(|(min_x, min_y, _, _)| (min_x, min_y))
+                    .unwrap_or((0.0, 0.0));
             (position.x, position.y, local_min_x, local_min_y)
         };
         // `LimitFinder` measures the already translated primitive, then
@@ -4873,26 +4896,8 @@ fn deployment_cluster_frame(
                 .get(&node.id)
                 .copied()
                 .unwrap_or((position.width, position.height));
-            let bounds = match node.kind {
-                DeploymentNodeKind::Cloud => {
-                    crate::cloud_shape::generate(cluster_width, cluster_height).bounds()
-                }
-                // `USymbolNode.drawNode` paints its outer `UPolygon` plus a
-                // lower-edge `UEmpty(10,10)`. `LimitFinder.drawUPolygon`
-                // expands the polygon horizontally by ten pixels.
-                DeploymentNodeKind::Node => {
-                    (-10.0, 0.0, cluster_width + 10.0, cluster_height + 10.0)
-                }
-                DeploymentNodeKind::Folder => (0.0, 0.0, cluster_width, cluster_height),
-                DeploymentNodeKind::Rectangle
-                | DeploymentNodeKind::Agent
-                | DeploymentNodeKind::Frame
-                | DeploymentNodeKind::Card => {
-                    (-1.0, -1.0, cluster_width - 1.0, cluster_height - 1.0)
-                }
-                DeploymentNodeKind::Stack => (0.0, -1.0, cluster_width, cluster_height),
-                _ => return None,
-            };
+            let bounds =
+                deployment_cluster_local_painted_bounds(node.kind, cluster_width, cluster_height)?;
             Some((position.x, position.y, bounds))
         })
         .collect();
@@ -4914,6 +4919,34 @@ fn deployment_cluster_frame(
         margin_y: required_dy,
         outer_symbol_painted_max_x,
         outer_symbol_painted_max_y,
+    })
+}
+
+fn deployment_cluster_local_painted_bounds(
+    kind: DeploymentNodeKind,
+    width: f64,
+    height: f64,
+) -> Option<(f64, f64, f64, f64)> {
+    use DeploymentNodeKind::*;
+    Some(match kind {
+        Cloud => crate::cloud_shape::generate(width, height).bounds(),
+        // `USymbolNode.drawNode` paints its outer `UPolygon` plus a
+        // lower-edge `UEmpty(10,10)`. `LimitFinder.drawUPolygon` expands the
+        // polygon horizontally by ten pixels.
+        Node => (-10.0, 0.0, width + 10.0, height + 10.0),
+        Folder => (0.0, 0.0, width, height),
+        // `LimitFinder.drawRectangle` expands the top-left of every
+        // `URectangle` by one pixel and records width-1/height-1 at the
+        // opposite corner.
+        Rectangle | Agent | Frame | Card | Storage => (-1.0, -1.0, width - 1.0, height - 1.0),
+        // `USymbolArtifact.drawArtifact` adds a folded UPolygon whose
+        // rightmost x is width-5; LimitFinder's ten-pixel polygon expansion
+        // therefore extends the measured maximum to width+5.
+        Artifact => (-1.0, -1.0, width + 5.0, height - 1.0),
+        // `USymbolStack.drawQueue` paints a full-width UPath, while its inset
+        // `URectangle` extends the top LimitFinder bound by one.
+        Stack => (0.0, -1.0, width, height),
+        _ => return None,
     })
 }
 
@@ -6061,13 +6094,34 @@ mod tests {
 
     fn root_numeric_attr(svg: &str, name: &str) -> f64 {
         let root = svg.split_once('>').map_or(svg, |(root, _)| root);
+        numeric_attr(root, name)
+    }
+
+    fn numeric_attr(tag: &str, name: &str) -> f64 {
         let marker = format!(r#" {name}=""#);
-        root.split_once(&marker)
+        tag.split_once(&marker)
             .and_then(|(_, rest)| rest.split_once('"'))
             .map(|(value, _)| value.trim_end_matches("px"))
-            .unwrap_or_else(|| panic!("missing {name} in {root}"))
+            .unwrap_or_else(|| panic!("missing {name} in {tag}"))
             .parse()
-            .unwrap_or_else(|_| panic!("non-numeric {name} in {root}"))
+            .unwrap_or_else(|_| panic!("non-numeric {name} in {tag}"))
+    }
+
+    fn cluster_section<'a>(svg: &'a str, qualified_name: &str) -> &'a str {
+        let marker = format!(r#"data-qualified-name="{qualified_name}""#);
+        svg.split_once(&marker)
+            .and_then(|(_, tail)| tail.split_once("</g>"))
+            .map(|(cluster, _)| cluster)
+            .unwrap_or_else(|| panic!("missing cluster {qualified_name}: {svg}"))
+    }
+
+    fn first_element_tag<'a>(content: &'a str, element: &str) -> &'a str {
+        let marker = format!("<{element} ");
+        content
+            .split_once(&marker)
+            .and_then(|(_, tail)| tail.split_once('>'))
+            .map(|(tag, _)| tag)
+            .unwrap_or_else(|| panic!("missing {element} in {content}"))
     }
 
     #[test]
@@ -6417,6 +6471,100 @@ artifact "payload-v2.7.war" --> "gateway-prod" : rollout
         assert!(svg.contains(r#"fill="none" style="stroke:#181818;stroke-width:1;"/>"#));
         assert!(!svg.contains(r#"<polygon fill="none""#));
         assert!(svg.contains(r#"data-qualified-name="Renamed Edge 109.Worker113""#));
+    }
+
+    #[test]
+    fn no_oracle_storage_cluster_uses_storage_paint_text_and_rectangle_envelope() {
+        let source = "@startuml\n\
+            storage \"Renamed Archive 8209\" as Archive8209 <<durable_8219>> #LightBlue {\n\
+              queue \"Pending Batch 8221\" as Batch8221\n\
+            }\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+
+        let svg = render(&diagram, &Theme::default());
+        let cluster = cluster_section(&svg, "Archive8209");
+        let rect = first_element_tag(cluster, "rect");
+        let mut text_tags = cluster
+            .split("<text ")
+            .skip(1)
+            .filter_map(|tail| tail.split_once('>').map(|(tag, _)| tag));
+        let stereotype = text_tags.next().expect("storage stereotype");
+        let title = text_tags.next().expect("storage title");
+        let rect_x = numeric_attr(rect, "x");
+        let rect_y = numeric_attr(rect, "y");
+        let rect_width = numeric_attr(rect, "width");
+        let rect_height = numeric_attr(rect, "height");
+
+        assert!(rect.contains(r#"rx="35" ry="35""#), "{cluster}");
+        assert!(rect.contains("stroke:#181818;stroke-width:1;"), "{cluster}");
+        assert!(!cluster.contains("<polygon "), "{cluster}");
+        assert_eq!(rect_x, 7.0);
+        assert_eq!(rect_y, 7.0);
+        assert!(
+            ((numeric_attr(title, "y") - numeric_attr(stereotype, "y")) - (TEXT_LINE_H + 2.0))
+                .abs()
+                < 0.0001
+        );
+        assert_eq!(
+            root_numeric_attr(&svg, "width"),
+            (rect_x + rect_width - 1.0 + SVEK_DIMENSION_DELTA) as i64 as f64
+        );
+        assert_eq!(
+            root_numeric_attr(&svg, "height"),
+            (rect_y + rect_height - 1.0 + SVEK_DIMENSION_DELTA) as i64 as f64
+        );
+    }
+
+    #[test]
+    fn no_oracle_artifact_cluster_uses_polygon_expanded_rectangle_envelope() {
+        let source = "@startuml\n\
+            left to right direction\n\
+            artifact \"Renamed Manifest 8231\" as Manifest8231 #PaleGreen {\n\
+              database \"Ledger 8233\" as Ledger8233\n\
+            }\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse_auto_with_base(source, None).unwrap();
+        let rustuml_parser::diagram::Diagram::Deployment(diagram) = diagram else {
+            panic!("expected deployment diagram");
+        };
+
+        let svg = render(&diagram, &Theme::default());
+        let cluster = cluster_section(&svg, "Manifest8231");
+        let rect = first_element_tag(cluster, "rect");
+        let rect_x = numeric_attr(rect, "x");
+        let rect_y = numeric_attr(rect, "y");
+        let rect_width = numeric_attr(rect, "width");
+        let rect_height = numeric_attr(rect, "height");
+
+        assert!(rect.contains(r#"rx="2.5" ry="2.5""#), "{cluster}");
+        assert_eq!(cluster.matches("<polygon ").count(), 1, "{cluster}");
+        assert_eq!(cluster.matches("<line ").count(), 2, "{cluster}");
+        assert_eq!(rect_x, 7.0);
+        assert_eq!(rect_y, 7.0);
+        assert_eq!(
+            root_numeric_attr(&svg, "width"),
+            (rect_x + rect_width + 5.0 + SVEK_DIMENSION_DELTA) as i64 as f64
+        );
+        assert_eq!(
+            root_numeric_attr(&svg, "height"),
+            (rect_y + rect_height - 1.0 + SVEK_DIMENSION_DELTA) as i64 as f64
+        );
+    }
+
+    #[test]
+    fn cluster_symbol_bounds_follow_java_limit_finder_primitives() {
+        assert_eq!(
+            deployment_cluster_local_painted_bounds(DeploymentNodeKind::Storage, 120.0, 80.0),
+            Some((-1.0, -1.0, 119.0, 79.0))
+        );
+        assert_eq!(
+            deployment_cluster_local_painted_bounds(DeploymentNodeKind::Artifact, 120.0, 80.0),
+            Some((-1.0, -1.0, 125.0, 79.0))
+        );
     }
 
     #[test]
