@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-declaration-supertype-materialization",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "net.sourceforge.plantuml.classdiagram.command.CommandCreateClass#executeArg",
+    "net.sourceforge.plantuml.classdiagram.command.CommandCreateClassMultilines#manageExtends",
+    "net.atmp.CucaDiagram#reallyCreateLeaf"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/class.rs::ClassParser::try_entity",
+    "crates/rustuml-parser/src/parse/class.rs::ClassParser::parse_supertypes",
+    "crates/rustuml-parser/src/parse/class.rs::ClassParser::ensure_entity_kind"
+  ],
+  "invariant": "CommandCreateClass materializes the declared child before processing inheritance clauses. manageExtends then visits extends before implements and creates only missing supertype quarks. A missing implements target is an interface; a missing extends target is an interface when the child is an interface and otherwise a class. An already materialized target keeps its existing type. This creation sequence also fixes the shared SVEK UID order.",
+  "causal_divergence": "Rust creates the child first and visits clauses in source order, but parse_supertypes sends every missing target through ensure_entity, whose default is EntityKind::Class. A target first encountered through implements is therefore permanently materialized as a class and consumes a class node identity before a later explicit interface declaration. The resulting glyph, color, element count, and SVEK endpoint IDs differ even though the relationship topology is otherwise correct.",
+  "planned_change": "Derive the Java supertype kind from the clause mode and the already materialized child's kind, then use ensure_entity_kind so only missing targets receive that kind. Preserve existing target kinds and the child-first, extends-before-implements creation order. Add parser and held-out cases for class implements, interface extends, preexisting conflicting target kinds, multiple comma-separated targets, renamed labels, and reordered later declarations.",
+  "perturbation_axes": [
+    "class implements crossed with interface extends",
+    "missing supertype crossed with preexisting supertype",
+    "single target crossed with comma-separated targets",
+    "extends plus implements on one declaration",
+    "later explicit declaration crossed with declaration order",
+    "renamed labels and nested package context"
+  ]
+}

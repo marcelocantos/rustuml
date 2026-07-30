@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-package-first-display",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "net.sourceforge.plantuml.command.CommandPackage#executeArg",
+    "net.atmp.CucaDiagram#gotoGroup"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/class.rs::ClassParser::try_package",
+    "crates/rustuml-parser/src/diagram/class.rs::Package::display_name"
+  ],
+  "invariant": "A package quark owns the display assigned when the group is first materialized. CommandPackage resolves the requested quark and passes a display to CucaDiagram.gotoGroup, but gotoGroup calls setDisplay only inside quark.getData() == null. Reopening an existing package may mute its group type and update later command-owned metadata, but it does not replace the original display.",
+  "causal_divergence": "Rust try_package assigns requested_display_name whenever the final package path already exists. Reopening a package by alias or unqualified quark lookup therefore replaces its first display with the spelling on the reopening command. The checker case that opens \"Review2 Domain 6201\" as Review2Domain6201 and later reopens package Review2Domain6201 exposes this directly: Java retains the quoted display while Rust renders the alias.",
+  "planned_change": "Assign Package.display_name only when the package path is first materialized. Preserve the existing display on every reopen while continuing to apply the Java-command metadata that is explicitly mutable. Add parser tests and held-out render cases covering aliases, quoted names, nested paths, declaration order, and reopening inside and outside Together.",
+  "perturbation_axes": [
+    "quoted display with alias crossed with bare-alias reopen",
+    "root package crossed with nested package",
+    "reopen outside Together crossed with reopen inside Together",
+    "same spelling crossed with changed display spelling",
+    "reordered package and member declarations"
+  ]
+}
