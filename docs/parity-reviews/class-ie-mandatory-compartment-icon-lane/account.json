@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-ie-mandatory-compartment-icon-lane",
+  "created": "2026-07-31",
+  "status": "rejected",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "e98918cbcdf6e3e579fcd95ac8e9eb2da3351f20",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/skin/VisibilityModifier.java",
+      "symbol": "VisibilityModifier.getVisibilityModifierForField",
+      "lines": "267-283",
+      "role": "Maps the entity-field `*` prefix to the ordinary non-null IE_MANDATORY VisibilityModifier."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/cucadiagram/MethodsOrFieldsArea.java",
+      "symbols": [
+        "MethodsOrFieldsArea.hasSmallIcon",
+        "MethodsOrFieldsArea.calculateDimensionOnlyMembers"
+      ],
+      "lines": "125-170",
+      "role": "Activates one icon lane for the complete compartment whenever any member has any non-null visibility modifier, then adds the radius-derived lane width to the compartment's maximum text width."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/cucadiagram/MethodsOrFieldsArea.java",
+      "symbol": "MethodsOrFieldsArea.getLayout",
+      "lines": "390-415",
+      "role": "Uses PlacementStrategyVisibility for every row in an icon-bearing compartment, aligning default rows to the same text lane even when only one sibling paints a marker."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbol": "calc_entity_dims",
+      "lines": "1150-1212",
+      "role": "Correctly computes compartment-wide visibility lanes for class modifiers but explicitly excludes IeMandatory, adding the wide offset only to the starred row itself."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbol": "render_generated_body_blocks",
+      "lines": "11010-11030",
+      "role": "Already treats any rendered visibility modifier, including IE_MANDATORY, as activating the compartment-wide text lane during painting."
+    }
+  ],
+  "evidence_inputs": [
+    "test-diagrams/golden/class/class_entity_relationships.puml"
+  ],
+  "claimed_invariant": "MethodsOrFieldsArea chooses its horizontal member layout once per compartment. If icon size is nonzero and any row has a non-null VisibilityModifier, including IE_MANDATORY from `*`, every row reserves `circledCharacterRadius + 3` before the maximum text width and every row's text is painted in that common lane. The marker still appears only on the row that owns it. Disabling class attribute icons removes the lane.",
+  "causal_divergence": "Rust painting already aligns ordinary rows to the icon lane when an IE marker exists, but dimension calculation declares IeMandatory not to be a Java VisibilityModifier. It therefore measures only the starred row with the wide offset. Entities whose longest text is on an ordinary sibling become 14 pixels too narrow at default metrics; wider mandatory rows hide the bug. The narrower nodes shift the centered graph and all attached crowfoot geometry without changing vertical dimensions.",
+  "planned_model_change": "Include Visibility::IeMandatory in calc_entity_dims' compartment-level has_visibility_modifier predicate and remove the contradictory per-row ownership comment. Preserve the existing icon-size-zero gate, per-row marker painting, member text metrics, and relationship geometry.",
+  "rejection_reason": "The proposed compartment-wide predicate made class_entity_relationships byte-exact, but the full shipped-path census fell from 11107/11251 to 10944/11251: class dropped from 1959 to 1949, ER from 153 to 1, and type-detection from 42 to 41. Rust's IeMandatory representation crosses diagram/body-model boundaries that this account treated as one Java MethodsOrFieldsArea mechanism. A non-null VisibilityModifier alone is therefore insufficient provenance for broadening every Rust entity compartment.",
+  "rejection_evidence": {
+    "focused_result": "class_entity_relationships became byte-exact",
+    "full_no_oracle_before": "11107/11251",
+    "full_no_oracle_after": "10944/11251",
+    "family_regressions": {
+      "class": "1959/1971 -> 1949/1971",
+      "er": "153/157 -> 1/157",
+      "type-detection": "42/42 -> 41/42"
+    },
+    "disposition": "The implementation and generated baseline were fully reverted. Any successor account must first distinguish the Java body/rendering paths represented by Rust IeMandatory across class, ER, and type-detection inputs."
+  },
+  "perturbation_axes": [
+    "mandatory row shorter versus longer than ordinary siblings",
+    "mandatory row first, middle, and last",
+    "one versus multiple mandatory rows",
+    "field labels and entity names renamed independently",
+    "default versus zero and non-default ClassAttributeIconSize",
+    "ordinary class visibility modifiers as a negative control"
+  ],
+  "scope_boundary": "This mechanism owns only compartment width activation by IE_MANDATORY visibility markers. It does not change parser classification, marker shape or color, row text metrics, header icon geometry, crowfoot extremities, Graphviz spacing, or comparator behavior.",
+  "acceptance": [
+    "The entity-relationships golden becomes exact without changing non-ER class-family results.",
+    "Fresh entities reserve the shared lane regardless of which row is widest or where the mandatory row appears, while icon-size zero suppresses it.",
+    "Renderer tests, full no-oracle ratchet, clippy, and mechanical harness guards pass except for explicitly pre-existing gate debt.",
+    "An independent checker records a verdict at the exact implementation revision."
+  ]
+}
