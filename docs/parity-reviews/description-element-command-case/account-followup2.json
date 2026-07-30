@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "mechanism": "description-element-command-case",
+  "status": "proposed",
+  "extends": "docs/parity-reviews/description-element-command-case/account.json",
+  "trigger_review": "docs/parity-reviews/description-element-command-case/review-followup2.json",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "54b10a247831a0b8a4742398210f3e55103b6e69",
+  "scope": {
+    "included": [
+      "DESCRIPTION interface declarations parsed by the component-backed path",
+      "DESCRIPTION parenthesis interface shorthand parsed by the component-backed path",
+      "DESCRIPTION bracket component shorthand parsed by the deployment-backed path",
+      "Case-insensitive command keywords and AS separators"
+    ],
+    "excluded": [
+      "Diagram subtype scoring",
+      "Container geometry",
+      "Element rendering after a declaration has been parsed",
+      "Note and relationship command case"
+    ]
+  },
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/descdiagram/DescriptionDiagramFactory.java:85-138 DescriptionDiagramFactory#initCommandsList",
+    "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandCreateElementFull.java:73-177 CommandCreateElementFull#getRegexConcat/executeArg",
+    "src/main/java/net/sourceforge/plantuml/regex/Pattern2.java Pattern2#compileInternal"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/component.rs:207-228 component/interface declaration regexes",
+    "crates/rustuml-parser/src/parse/component.rs:693-806 bracket/interface declaration consumers",
+    "crates/rustuml-parser/src/parse/deployment.rs:414-440 deployment element declaration regexes",
+    "crates/rustuml-parser/src/parse/deployment.rs:728-806 deployment declaration consumers"
+  ],
+  "invariant": "Java DESCRIPTION element declarations are one case-insensitive CommandCreateElementFull grammar. Pattern2 compiles the command regex case-insensitively, so both the optional symbol keyword and every literal AS separator accept arbitrary ASCII case. Bracket code/display selects the component USymbol, and parenthesis code/display selects the interface USymbol, without changing that case policy. Rust may split this grammar across component and deployment parsers, but every consumer of these same declaration forms must preserve the shared case-insensitive command boundary and the parsed label, alias, source line, owner, and symbol.",
+  "causal_divergence": "The earlier implementation made only component leaf RE_COMP case-insensitive. The component parser's three interface regexes still require lowercase `interface`, their quoted and bracket aliases require lowercase `as`, and the parenthesis shorthand also requires lowercase `as`. The deployment parser lowercases keyword captures and already accepts mixed-case AS for bare and quoted keyword forms, but RE_NODE_BRACKET alone requires lowercase `as`. These sibling regex islands are partial copies of Java's single case-insensitive command grammar. When one rejects a valid declaration, Rust either drops the entity or later auto-creates an endpoint from a relationship, changing label, source line, ownership, UID order, and layout.",
+  "planned_change": "Make the command keyword and AS separator case-insensitive in every listed sibling declaration regex while leaving labels and aliases case-preserving. Add parser tests that cover quoted, bare, bracket, and parenthesis forms, root and nested ownership, and both component/deployment-backed DESCRIPTION selection. Strengthen dispatch tests to assert materialized entities and source lines. Do not change subtype scores, rendering geometry, or any fixture-keyed branch.",
+  "perturbation_axes": [
+    "declaration form: quoted, bare, bracket, and parenthesis",
+    "parser path: component-backed versus deployment-backed DESCRIPTION",
+    "case: mixed command keyword, uppercase AS, and mixed AS",
+    "scope: root versus nested owner",
+    "topology: standalone declaration versus declaration referenced by a relationship",
+    "text: renamed display label versus bare identifier"
+  ],
+  "acceptance_evidence": [
+    "Focused parser tests prove every declaration form preserves id, display label, source line, symbol, and nested ownership.",
+    "All eight followup3 Java-valid checker inputs pass the rebuilt no-oracle helper.",
+    "Fresh held-out valid inputs cover at least two independent axes and are preserved with Java SVGs.",
+    "An independent checker attempts to find another case-sensitive sibling consumer before acceptance."
+  ]
+}
