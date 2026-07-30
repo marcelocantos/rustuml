@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-attached-note-line0-serialization",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "net.sourceforge.plantuml.command.note.CommandFactoryNoteOnEntity#executeInternal",
+    "net.sourceforge.plantuml.svek.Bibliotekon#addLine",
+    "net.sourceforge.plantuml.svek.DotStringFactory#createDotString",
+    "net.sourceforge.plantuml.svek.Cluster#printCluster1",
+    "net.sourceforge.plantuml.svek.Cluster#printCluster2",
+    "net.sourceforge.plantuml.svek.Cluster#appendRankSame",
+    "net.sourceforge.plantuml.svek.SvekEdge#appendLine"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs::build_layout_graph",
+    "crates/rustuml-layout/src/graph.rs::LayoutGraph::add_plantuml_svek_line0_edge",
+    "crates/rustuml-layout/src/graph.rs::LayoutGraph::solve"
+  ],
+  "invariant": "CommandFactoryNoteOnEntity constructs attached-note links with length one. Bibliotekon.addLine classifies every length-one link into lines0. In the normal DotStringFactory path, root.printCluster1 emits only inverted-start nodes, then all lines0 edges are serialized, and only afterward root.printCluster2 emits ordinary nodes, Together subgraphs, and rank=same statements. Graphviz therefore lazily creates an attached-note target and note endpoint in line0 edge order before the remaining node stream. CucaDiagram.applySingleStrategy appends its invisible SquareMaker links later, so their effect is evaluated against that established endpoint and edge insertion order.",
+  "causal_divergence": "Rust creates every ordinary and note node before edges. It records ordinary length-one relationships with LayoutGraph.add_plantuml_svek_line0_edge so the solver recreates Java's early endpoint and edge order, but attached-note links bypass that hook and add only a same-rank pair plus an ordinary edge. The node set and constraints are equivalent, yet Graphviz's deterministic ordering differs for disconnected classes shaped by SquareMaker, moving the note target and its standalone siblings.",
+  "planned_change": "Register each left/right attached-note edge with add_plantuml_svek_line0_edge immediately before adding its same-rank constraint and visible edge. Keep top/bottom note links on the later non-horizontal path. Do not alter node dimensions, SquareMaker membership, rank ownership, coordinates, or rendering.",
+  "perturbation_axes": [
+    "three, four, and five disconnected ordinary classes",
+    "left and right attached notes",
+    "note target first, middle, and last in declaration order",
+    "top-level nodes crossed with Together-owned nodes",
+    "renamed labels with unequal widths",
+    "top-to-bottom and left-to-right layout"
+  ],
+  "status": "proposed"
+}
