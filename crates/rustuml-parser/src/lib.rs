@@ -7,5 +7,6 @@
 //! rendered to SVG or other formats.
 
 pub mod diagram;
+pub mod display;
 pub mod parse;
 pub mod preprocess;

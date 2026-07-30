@@ -1561,8 +1561,8 @@ impl ClassParser {
             // (e.g. `  * point 2`) are distinguishable from top-level bullet
             // items (`* point 1`) in the renderer.  Only strip trailing
             // whitespace from each segment.
-            let lines = text
-                .split("\\n")
+            let lines = crate::display::split_escaped_newlines(&text)
+                .into_iter()
                 .map(|s| s.trim_end().to_string())
                 .collect();
             self.push_note(Note {
@@ -1596,8 +1596,8 @@ impl ClassParser {
         if let Some(caps) = SHORT_RE.captures(line) {
             let position = parse_note_position(&caps[1]);
             let text = caps[2].trim().to_string();
-            let lines = text
-                .split("\\n")
+            let lines = crate::display::split_escaped_newlines(&text)
+                .into_iter()
                 .map(|s| s.trim_end().to_string())
                 .collect();
             let target = self.last_entity_id.clone();
@@ -1632,8 +1632,8 @@ impl ClassParser {
         if let Some(caps) = FLOATING_RE.captures(line) {
             let text = caps[1].trim().to_string();
             let alias = caps[2].to_string();
-            let lines = text
-                .split("\\n")
+            let lines = crate::display::split_escaped_newlines(&text)
+                .into_iter()
                 .map(|s| s.trim_end().to_string())
                 .collect();
             self.push_note(Note {
@@ -1671,7 +1671,8 @@ impl ClassParser {
             let lines = if text.is_empty() {
                 Vec::new()
             } else {
-                text.split("\\n")
+                crate::display::split_escaped_newlines(&text)
+                    .into_iter()
                     .map(|s| s.trim_end().to_string())
                     .collect()
             };

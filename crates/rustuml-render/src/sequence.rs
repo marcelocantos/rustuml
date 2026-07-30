@@ -987,7 +987,8 @@ fn mixed_super_line_metrics_with_family(
 }
 
 fn pure_underline_message_flow_extra(text: &str) -> f64 {
-    text.split("\\n")
+    rustuml_parser::display::split_escaped_newlines(text)
+        .into_iter()
         .filter(|line| note_separator_label(line).is_some())
         .count() as f64
         * PURE_UNDERLINE_MESSAGE_FLOW_EXTRA
@@ -1120,7 +1121,8 @@ fn rendered_label_y_drop_with_family(content: &str, font_size: f64, font_family:
     if let Some(latex) = latex_label_content(content) {
         return crate::math::raw_latex_image(latex).height as f64 + 1.0;
     }
-    let mut lines = content.split("\\n");
+    let rows = rustuml_parser::display::split_escaped_newlines(content);
+    let mut lines = rows.into_iter();
     let first = lines.next().unwrap_or("");
     if let Some((_, first_drop)) =
         all_shifted_line_metrics_with_family(first, font_size, font_family)
@@ -1148,7 +1150,8 @@ fn message_label_width_with_family(
     bold: bool,
     font_family: &str,
 ) -> f64 {
-    text.split("\\n")
+    rustuml_parser::display::split_escaped_newlines(text)
+        .into_iter()
         .map(|line| {
             if let Some(latex) = latex_label_content(line) {
                 crate::math::raw_latex_image(latex).width as f64 + MSG_TEXT_LEFT_PAD
@@ -1166,7 +1169,8 @@ fn message_label_width_with_family(
 }
 
 fn message_label_block_height_with_family(text: &str, font_size: f64, font_family: &str) -> f64 {
-    text.split("\\n")
+    rustuml_parser::display::split_escaped_newlines(text)
+        .into_iter()
         .map(|line| {
             if let Some(latex) = latex_label_content(line) {
                 crate::math::raw_latex_image(latex).height as f64 - 1.0
@@ -4084,7 +4088,7 @@ impl PlantUmlSvg {
         stroke_color: &str,
     ) {
         let mut y = text_y;
-        for line in text_content.split("\\n") {
+        for line in rustuml_parser::display::split_escaped_newlines(text_content) {
             if let Some(latex) = latex_label_content(line) {
                 let image = crate::math::raw_latex_image(latex);
                 write!(
@@ -6411,13 +6415,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         .meta
         .title
         .as_deref()
-        .map(|t| t.split("\\n").collect())
+        .map(rustuml_parser::display::split_escaped_newlines)
         .unwrap_or_default();
     let header_lines: Vec<&str> = diagram
         .meta
         .header
         .as_deref()
-        .map(|h| h.split("\\n").collect())
+        .map(rustuml_parser::display::split_escaped_newlines)
         .unwrap_or_default();
     let legend_lines: Vec<&str> = diagram
         .meta
@@ -13741,6 +13745,25 @@ mod tests {
         assert!(!svg.contains(r##"<text fill="#000000" font-family="sans-serif" font-size="13""##));
         assert!(svg.contains(r#"width="112px""#));
         assert!(svg.contains(r#"height="107px""#));
+    }
+
+    #[test]
+    fn message_link_keeps_raw_newline_in_url_token() {
+        let input = concat!(
+            "@startuml\n",
+            "participant \"Renamed Client\" as Client\n",
+            "participant \"Renamed Server\" as Server\n",
+            "Client -> Server : pre [[https://example.com/sequence/implicit\\npath shown]] post\n",
+            "@enduml\n",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(
+            r#"href="https://example.com/sequence/implicit\npath" target="_top" title="https://example.com/sequence/implicit&#10;path""#
+        ));
+        assert!(svg.contains(">shown</text>"));
+        assert!(!svg.contains(">path shown]]"));
     }
 
     #[test]

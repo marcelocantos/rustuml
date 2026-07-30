@@ -1885,7 +1885,10 @@ fn member_oracle_text_element_count(member: &Member, attr_font: &AttrFont<'_>) -
 }
 
 fn escaped_newline_lines(text: &str) -> Vec<String> {
-    text.split("\\n").map(str::to_string).collect()
+    rustuml_parser::display::split_escaped_newlines(text)
+        .into_iter()
+        .map(str::to_string)
+        .collect()
 }
 
 fn oracle_text_line_anchors(rect: &EntityRect) -> Vec<(f64, f64)> {
@@ -17038,6 +17041,25 @@ mod tests {
             normalize_svg_link_title("Keep <U+ZZZZ> literal"),
             "Keep <U+ZZZZ> literal"
         );
+    }
+
+    #[test]
+    fn class_member_link_keeps_raw_newline_in_url_token() {
+        let input = concat!(
+            "@startuml\n",
+            "class \"Renamed Record\" as Record {\n",
+            "  [[https://example.com/class/implicit\\npath implicit-label]]: first field\n",
+            "}\n",
+            "@enduml\n",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(
+            r#"href="https://example.com/class/implicit\npath" target="_top" title="https://example.com/class/implicit&#10;path""#
+        ));
+        assert!(svg.contains(">implicit-label</text>"));
+        assert!(!svg.contains(">path implicit-label]]"));
     }
 
     #[test]
