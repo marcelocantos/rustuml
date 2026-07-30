@@ -4268,6 +4268,34 @@ fn package_cluster_painted_min(diagram: &ClassDiagram, position: &ClusterPositio
     }
 }
 
+#[derive(Clone, Copy, Debug)]
+struct GenericBadgeFrontier {
+    min_y: f64,
+    max_x: f64,
+}
+
+fn generic_badge_frontier(entity: &ClassEntity, entity_width: f64) -> Option<GenericBadgeFrontier> {
+    entity.generic.as_ref().map(|_| GenericBadgeFrontier {
+        // `HeaderLayout.drawU` places the outer generic block at y=-4. The
+        // outer one-pixel margin moves `TextBlockGeneric` and its rectangle to
+        // y=-3, which is also the first visible pixel.
+        min_y: -GENERIC_BOX_OVERHANG,
+        // The same wrappers place the visible rectangle's right edge three
+        // pixels beyond the entity rectangle.
+        max_x: entity_width + GENERIC_BOX_OVERHANG,
+    })
+}
+
+fn entity_limit_finder_min_y(entity: &ClassEntity, position_y: f64) -> f64 {
+    let visible_min_y = entity
+        .generic
+        .as_ref()
+        .map_or(0.0, |_| -GENERIC_BOX_OVERHANG);
+    // Java `LimitFinder.drawRectangle` expands the generic rectangle's visible
+    // top by one more pixel before `SvekResult` computes its global move.
+    position_y + visible_min_y - LIMIT_FINDER_RECTANGLE_INSET
+}
+
 /// Java `SvekResult.calculateDimension` measures only renderer-visible shapes
 /// and moves that envelope to `(6, 6)`. SVEK's outer `p0` protection clusters
 /// influence dot but are not drawn, so normalize from the solved real cluster
@@ -4300,12 +4328,9 @@ fn normalize_svek_package_envelope(
         .filter(|position| painted_cluster_ids.contains(position.id.as_str()))
         .map(|position| package_cluster_painted_min(diagram, position).1)
         .chain(node_positions.iter().enumerate().map(|(idx, position)| {
-            position.y
-                - if idx < diagram.entities.len() {
-                    LIMIT_FINDER_RECTANGLE_INSET
-                } else {
-                    0.0
-                }
+            diagram.entities.get(idx).map_or(position.y, |entity| {
+                entity_limit_finder_min_y(entity, position.y)
+            })
         }))
         .fold(f64::INFINITY, f64::min);
     let target = SVEK_LABEL_ENVELOPE_MARGIN - MARGIN;
@@ -4949,6 +4974,7 @@ fn render_plantuml_svg(
     let shadow_filter_id = has_shadowing_skinparam(diagram).then(|| {
         crate::filter_registry::shadow_id_for(diagram.meta.source.as_deref().unwrap_or(""))
     });
+    let uses_degenerated_entity = uses_degenerated_entity(diagram, cluster_positions);
     let mut adjusted_edge_paths = edge_paths.to_vec();
     let layout_x_bias = svek_layout_x_bias(
         diagram,
@@ -5071,9 +5097,16 @@ fn render_plantuml_svg(
     let mut body_bottom = f64::NEG_INFINITY;
     for (i, (x, y)) in entity_positions.iter().enumerate() {
         let shadow_extra = entity_shadow_limit_extra(&diagram.entities[i]);
+        let generic_frontier = (!uses_degenerated_entity)
+            .then(|| generic_badge_frontier(&diagram.entities[i], dims[i].width))
+            .flatten();
         body_min_x = body_min_x.min(*x);
-        body_max_x = body_max_x.max(x + dims[i].width + shadow_extra);
-        body_top = body_top.min(*y);
+        body_max_x = body_max_x.max(
+            generic_frontier
+                .map_or(x + dims[i].width, |frontier| x + frontier.max_x)
+                .max(x + dims[i].width + shadow_extra),
+        );
+        body_top = body_top.min(generic_frontier.map_or(*y, |frontier| y + frontier.min_y));
         body_bottom = body_bottom.max(y + dims[i].height + shadow_extra);
     }
     for cluster in cluster_positions
@@ -5197,12 +5230,19 @@ fn render_plantuml_svg(
     } else {
         let mut max_x = 0.0_f64;
         let mut max_y = 0.0_f64;
+        let mut generic_badge_max_x = f64::NEG_INFINITY;
         let mut latex_image_max_x = 0.0_f64;
         for (i, (x, y)) in entity_positions.iter().enumerate() {
             let shadow_extra = entity_shadow_limit_extra(&diagram.entities[i]);
             max_x = max_x.max(x + dims[i].width + shadow_extra);
             max_y = max_y.max(y + dims[i].height + shadow_extra);
             let entity = &diagram.entities[i];
+            if !uses_degenerated_entity
+                && let Some(frontier) = generic_badge_frontier(entity, dims[i].width)
+            {
+                generic_badge_max_x = generic_badge_max_x.max(x + frontier.max_x);
+                max_x = max_x.max(generic_badge_max_x);
+            }
             let hide = resolve_hide(entity, &diagram.hide_show);
             for member in entity
                 .members
@@ -5332,7 +5372,6 @@ fn render_plantuml_svg(
         // `DotData.isDegeneratedWithFewEntities(1)` reports zero groups, zero
         // links, and exactly one leaf. Every other graph is a `SvekResult`,
         // whose `calculateDimension` adds 15px to the measured body envelope.
-        let uses_degenerated_entity = uses_degenerated_entity(diagram, cluster_positions);
         let extent_pad = if uses_degenerated_entity {
             13
         } else {
@@ -5358,8 +5397,15 @@ fn render_plantuml_svg(
         // payload even though `AtomMath` contributed the smaller raster box to
         // entity layout. One pixel is retained beyond the image's right edge.
         let latex_image_w = latex_image_max_x.ceil() as i64 + i64::from(latex_image_max_x > 0.0);
+        // Generic badges retain their fractional right frontier until
+        // `SvekResult` turns the complete painted span into an integer canvas.
+        let painted_max_x = (max_x as i64).max(if generic_badge_max_x.is_finite() {
+            generic_badge_max_x.ceil() as i64
+        } else {
+            0
+        });
         (
-            (max_x as i64 + extent_pad_x)
+            (painted_max_x + extent_pad_x)
                 .max(decorated_w)
                 .max(latex_image_w),
             (max_y + layout.bottom_h) as i64 + extent_pad_y,
@@ -13563,16 +13609,18 @@ fn svek_layout_y_bias(
 ) -> f64 {
     let painted_cluster_ids = painted_package_cluster_ids(diagram);
     let empty_symbol_minima = empty_package_frontier_minima(diagram, positions);
+    let uses_degenerated_entity = uses_degenerated_entity(diagram, cluster_positions);
     let min_y = positions
         .iter()
         .enumerate()
         .map(|(idx, position)| {
-            position.y
-                - if idx < diagram.entities.len() {
-                    LIMIT_FINDER_RECTANGLE_INSET
+            diagram.entities.get(idx).map_or(position.y, |entity| {
+                if uses_degenerated_entity {
+                    position.y - LIMIT_FINDER_RECTANGLE_INSET
                 } else {
-                    0.0
+                    entity_limit_finder_min_y(entity, position.y)
                 }
+            })
         })
         .chain(
             cluster_positions
@@ -16659,6 +16707,27 @@ fn render_note_box(
 mod tests {
     use super::*;
     use rustuml_parser::diagram::{Diagram, DiagramMeta};
+
+    #[test]
+    fn generic_badge_frontier_projects_header_layout_and_limit_finder() {
+        let Diagram::Class(diagram) =
+            rustuml_parser::parse::parse("@startuml\nclass Box<T>\n@enduml")
+                .expect("generic class parses")
+        else {
+            panic!("expected class diagram");
+        };
+        let entity = &diagram.entities[0];
+        let frontier = generic_badge_frontier(entity, 120.0).expect("generic badge");
+
+        assert_eq!(frontier.min_y, -3.0);
+        assert_eq!(frontier.max_x, 123.0);
+        assert_eq!(entity_limit_finder_min_y(entity, 10.0), 6.0);
+
+        let mut entity = entity.clone();
+        entity.generic = None;
+        assert!(generic_badge_frontier(&entity, 120.0).is_none());
+        assert_eq!(entity_limit_finder_min_y(&entity, 10.0), 9.0);
+    }
 
     #[test]
     fn endpoint_label_block_measures_centered_display_rows() {
