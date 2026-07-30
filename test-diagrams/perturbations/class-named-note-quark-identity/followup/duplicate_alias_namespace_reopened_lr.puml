@@ -1,0 +1,22 @@
+@startuml
+set namespaceSeparator ::
+left to right direction
+package North9821 {
+  package Wing9823 {
+    class Node9825
+  }
+}
+package South9827 {
+  package Wing9829 {
+    class Node9831
+  }
+}
+package North9821::Wing9823 {
+  note "north memo" as SharedMemo9833
+  Node9825 .. SharedMemo9833
+}
+package South9827::Wing9829 {
+  note "south memo" as SharedMemo9833
+  SharedMemo9833 .. Node9831
+}
+@enduml

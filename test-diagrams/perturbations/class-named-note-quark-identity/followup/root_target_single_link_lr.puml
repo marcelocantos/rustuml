@@ -1,0 +1,6 @@
+@startuml
+left to right direction
+class RootFocus9711
+note "root memo" as RootMemo9713
+RootFocus9711 .. RootMemo9713
+@enduml

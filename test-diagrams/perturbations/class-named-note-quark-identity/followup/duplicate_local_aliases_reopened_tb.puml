@@ -1,0 +1,16 @@
+@startuml
+package West9741 {
+  class WestLeaf9743
+}
+package East9747 {
+  class EastLeaf9749
+}
+package West9741 {
+  note "west memo" as SharedMemo9751
+  SharedMemo9751 .. WestLeaf9743
+}
+package East9747 {
+  note "east memo" as SharedMemo9751
+  SharedMemo9751 .. EastLeaf9749
+}
+@enduml

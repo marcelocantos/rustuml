@@ -1,0 +1,15 @@
+@startuml
+package Outer9841 {
+  package Inner9843 {
+    class Direct9845
+    class Peer9847
+    class Third9849
+  }
+}
+package Outer9841.Inner9843 {
+  note "triple memo" as Memo9851
+}
+Outer9841.Inner9843.Direct9845 .. Outer9841.Inner9843.Memo9851
+Outer9841.Inner9843.Peer9847 .. Outer9841.Inner9843.Memo9851
+Outer9841.Inner9843.Third9849 .. Outer9841.Inner9843.Memo9851
+@enduml

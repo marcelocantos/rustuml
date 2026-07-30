@@ -1,0 +1,12 @@
+@startuml
+set namespaceSeparator ::
+package Vault9811 {
+  package Archive9813 {
+    class Entry9815
+  }
+}
+package Vault9811::Archive9813 {
+  note "nested separator memo" as SharedMemo9817
+}
+Vault9811::Archive9813::Entry9815 .. Vault9811::Archive9813::SharedMemo9817
+@enduml

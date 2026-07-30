@@ -1,0 +1,5 @@
+@startuml
+class RootFocus9703
+note "root memo" as RootMemo9705
+RootMemo9705 .. RootFocus9703
+@enduml
