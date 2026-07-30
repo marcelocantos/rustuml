@@ -5,6 +5,12 @@
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "rust_revision_before_change": "f2254d0bb7b271845bed8ea6555a01d66e5b2f46",
   "corrective_revision_before_change": "7049eff8",
+  "amended_after_rejection": {
+    "account_revision_reviewed": "d98cc0a7509161627ad55fef091c35b06670a17c",
+    "rejected_implementation": "2eae99edf5a7722342a444efff7bf2a07348f156",
+    "independent_evidence_revision": "722ffd04a6234a37d9e7093c1e649a4c8c6aa78d",
+    "reason": "The exact 16.16 representation repaired fractional accumulation for U+0518 but retained an invalid source-size scaling assumption for CoreText-substituted glyphs."
+  },
   "triggering_reviews": [
     "docs/parity-reviews/times-new-roman-face-metrics/review.json",
     "docs/parity-reviews/state-flat-svek-painted-envelope/review-label-skinparams-2.json",
@@ -39,6 +45,37 @@
       "role": "Uses the same resolved font for layout dimensions and descent."
     }
   ],
+  "java_runtime_model": {
+    "runtime": "Homebrew OpenJDK 21.0.11 on macOS",
+    "source_archive": "/opt/homebrew/Cellar/openjdk@21/21.0.11/libexec/openjdk.jdk/Contents/Home/lib/src.zip",
+    "locations": [
+      {
+        "path": "java.desktop/sun/font/FontDesignMetrics.java",
+        "symbols": [
+          "initMatrixAndMetrics",
+          "handleCharWidth",
+          "getStringBounds"
+        ],
+        "lines": "351-355, 413-415, 528-538",
+        "role": "Builds a FontStrike from the requested Font and FontRenderContext, obtains each simple codepoint advance from that strike, and accumulates at the requested size."
+      },
+      {
+        "path": "java.desktop/sun/font/CCharToGlyphMapper.java",
+        "symbol": "nativeCharsToGlyphs",
+        "lines": "128-136",
+        "role": "Represents an on-the-fly CoreText substitution as the negative Unicode value; OpenJDK requires that opaque value to strike and measure like a real glyph code."
+      },
+      {
+        "path": "java.desktop/sun/font/CStrike.java",
+        "symbols": [
+          "getNativeStrikePtr",
+          "getCachedNativeGlyphAdvance"
+        ],
+        "lines": "97-125, 337-347",
+        "role": "Creates the native strike from the actual glyph transform and rendering hints, then obtains the advance from that requested-size native strike."
+      }
+    ]
+  },
   "rust_locations": [
     {
       "path": "crates/rustuml-render/src/plantuml_metrics.rs",
@@ -50,8 +87,8 @@
       "role": "The checked-in derivation currently emits only printable ASCII even though the same AWT API can derive assigned Unicode scalar advances."
     }
   ],
-  "claimed_invariant": "For text whose AWT width is scalar-additive, every assigned Unicode scalar is measured with the same Times New Roman face and JDK fallback behavior as printable ASCII, scaled to the requested size as f32, and accumulated in source order as f32. Plain, bold, italic, and bold-italic layout widths therefore reproduce the same additive AWT path that SVG emission names.",
-  "causal_divergence": "The original implementation deliberately replaced every non-ASCII scalar with a half-em advance. The first Unicode-table correction then rounded every AWT advance independently to an integer at a 2048-point extraction size. Java retains 16 fractional bits in these measurements and sums those fractional scalar advances before scaling. For additive scripts, repeated fractional-width scalars such as U+0518 therefore accumulate a visible width error even though the selected face and codepoint coverage are correct.",
+  "claimed_invariant": "For scalar-additive text in a single requested PlantUML family, parity is defined by the same fallback decision and requested-size FontStrike that Java2D uses, with the same face, transform, antialiasing and fractional-metrics hints, followed by source-order f32 accumulation. A source-size advance may be scaled only for a glyph path whose target-size linearity has been established from the underlying scalable font model; exact representation of one sampled size is not evidence of that property. CoreText-substituted, bitmap-strike, optical-size, hinted, or otherwise strike-sensitive glyphs must be measured by their requested-size generative path.",
+  "causal_divergence": "The original implementation replaced every non-ASCII scalar with a half-em advance. The first Unicode-table correction rounded 2048-point AWT advances; the 16.16 correction preserved those samples exactly and correctly repaired fractional accumulation for U+0518. Both corrections nevertheless treated a requested-size Java2D strike as a linear rescaling of one 2048-point observation. On macOS, CCharToGlyphMapper can encode a CoreText substitution as a negative Unicode glyph code, and CStrike measures that opaque glyph through a native strike created with the actual requested transform and hints. U+231A follows that path, so its size-dependent advance is generated downstream of the sampled Times table.",
   "derivation": {
     "tool": "tools/PhysicalFontMetricsExtract.java",
     "font_size": 2048,
@@ -60,7 +97,8 @@
       "FRACTIONALMETRICS_ON"
     ],
     "domain": "Every Character.isDefined Unicode scalar in the pinned JDK, excluding surrogate code points, for all four binary faces.",
-    "encoding": "Unsigned 16.16 fixed-point advances at a 2048-point extraction size, stored as u32 tuples and compressed into maximal consecutive codepoint ranges sharing the same four-face tuple; undefined scalars use a separately extracted missing-glyph tuple.",
+    "encoding": "The rejected implementation used unsigned 16.16 fixed-point advances at a 2048-point extraction size, stored as u32 tuples and compressed into maximal consecutive codepoint ranges sharing the same four-face tuple; undefined scalars used a separately extracted missing-glyph tuple.",
+    "status": "Valid as a reproducible record of the 2048-point observation, but invalid as a universal requested-size measurement model.",
     "preimplementation_probe": {
       "times_new_roman_displayable_bmp_scalars_per_face": 54739,
       "distinct_bmp_face_tuples": 4256,
@@ -71,10 +109,35 @@
       "maximum_error_at_16_fractional_bits": 0.0,
       "fixed_point_fit": "The maximum observed 16.16 value is below u32::MAX.",
       "awt_accumulation_probe": "For 32 repetitions of U+0518, scaling the exact 2048-point advance to sizes 17 and 19 as f32 and accumulating as f32 exactly equals Font.getStringBounds on the complete string: 560.864135742188 and 626.847839355469."
+    },
+    "rejecting_requested_size_probe": {
+      "codepoint": "U+231A WATCH",
+      "primary_cfont_glyph_code": -8986,
+      "interpretation": "The negative Unicode code is the OpenJDK macOS representation of an on-the-fly CoreText substitution, not a reusable Times New Roman design-unit glyph.",
+      "source_2048_advance_all_faces": 2048.0,
+      "plain_requested_size_advances": {
+        "7": 9.0,
+        "11": 15.0,
+        "17": 22.0,
+        "19": 23.0,
+        "37": 37.0
+      },
+      "linear_table_predictions": {
+        "7": 7.0,
+        "11": 11.0,
+        "17": 17.0,
+        "19": 19.0,
+        "37": 37.0
+      },
+      "additivity": "At every tested size and all four binary faces, the complete width of 32 WATCH scalars equals 32 times the requested-size scalar width exactly.",
+      "fresh_artifacts": [
+        "test-diagrams/perturbations/times-new-roman-unicode-advances/review2_watch_fallback_plain_sizes_tb.puml",
+        "test-diagrams/perturbations/times-new-roman-unicode-advances/review2_watch_fallback_four_faces_nested.puml"
+      ]
     }
   },
-  "planned_model_change": "Change the checked-in Java extractor and generated Rust range table from rounded u16 design units to exact u32 16.16 fixed-point advances, with a generation-time assertion that every AWT width is represented exactly and fits u32. For strings containing non-ASCII scalars, binary-search the same ranges, convert both Unicode and printable-ASCII advances to the requested size as f32, and accumulate in source order as f32 before returning f64, matching AWT's additive glyph-position path. Preserve the established all-ASCII f64 path and cross-check the overlapping arrays. Do not add string-specific values, script guesses, state offsets, or route changes.",
-  "scope_residue": "This mechanism corrects additive scalar advances. Contextual shaping, ligatures, grapheme clusters, emoji sequences, and font-stack definitions containing multiple comma-separated families are not claimed to be solved by a scalar table and remain separate mechanisms. The checker must distinguish an additive-advance failure from that declared shaping residue.",
+  "planned_model_change": "Replace the Unicode range table as the source of truth with a fallback-aware requested-size text backend. Pin a legally shippable primary and fallback font profile, its coverage/cascade order, face selection, and hashes; make the Java oracle and Rust renderer consume that same profile rather than inheriting an unrecorded host cascade. In Rust, resolve each text run through that cascade, shape the complete run, and create glyph advances from the selected font's actual requested integer size, transform, and rendering-hint model. Scalable outline glyphs may use their font-program metrics only where the scaler establishes linearity; strike-sensitive glyphs must select and apply the font's bitmap, optical-size, hinting, or variation data at the requested size. Accumulate the resulting glyph positions with Java's f32 ordering. The existing 2048-point table becomes a diagnostic cross-check, not an execution model. If matching the current macOS CoreText cascade requires non-redistributable Apple or Microsoft font assets or a host CoreText dependency, resolve that product-contract conflict before implementation: either adopt a shared bundled-font oracle profile or explicitly authorize a platform profile. Do not approximate the conflict with per-codepoint, per-size corrections.",
+  "scope_residue": "The immediate acceptance boundary remains scalar-additive text in a single requested family, but fallback selection and requested-size strike behavior are inside that boundary. Contextual shaping, ligatures, grapheme clusters, emoji sequences, and comma-separated PlantUML font stacks remain separate acceptance mechanisms even though the replacement backend should be architected to shape complete runs rather than preserve a scalar-table dead end.",
   "perturbation_axes": [
     "Latin-1 accents versus ASCII base letters",
     "Greek versus Cyrillic",
@@ -83,17 +146,23 @@
     "state titles and attributes versus ordinary and self transition labels",
     "flat versus nested topology",
     "multiple font sizes",
+    "primary glyphs versus CoreText-substituted glyphs",
+    "scalable outline behavior versus strike-sensitive fallback behavior",
     "repetition counts that accumulate fractional scalar advances",
     "precomposed characters versus combining marks as a residue probe"
   ],
   "known_counterexamples": [
     "test-diagrams/perturbations/times-new-roman-face-metrics/checker_unicode_fallback_italic_tb.puml",
-    "test-diagrams/perturbations/state-flat-svek-label-skinparams-review-2/r2_lr_times_italic_unicode.puml"
+    "test-diagrams/perturbations/state-flat-svek-label-skinparams-review-2/r2_lr_times_italic_unicode.puml",
+    "test-diagrams/perturbations/times-new-roman-unicode-advances/review2_watch_fallback_plain_sizes_tb.puml",
+    "test-diagrams/perturbations/times-new-roman-unicode-advances/review2_watch_fallback_four_faces_nested.puml"
   ],
   "acceptance": [
-    "Both preserved Unicode counterexamples have exact additive text metrics and are structurally equivalent unless an independently identified out-of-scope residue remains.",
-    "Fresh valid additive-script perturbations across all four faces match Java without per-input constants.",
-    "The checked-in extractor deterministically regenerates the range table and verifies the original printable-ASCII arrays.",
+    "Both preserved WATCH counterexamples have exact requested-size additive metrics across their exercised sizes and faces, without a U+231A branch or sampled-size correction table.",
+    "Both earlier Unicode counterexamples retain exact additive text metrics and are structurally equivalent unless an independently identified out-of-scope residue remains.",
+    "Fresh valid additive perturbations cross primary and substituted glyph paths, all four faces, at least three unseen sizes, and source-order reversal without per-input constants.",
+    "The font profile, fallback coverage and cascade, selected glyph source, requested-size scaler or strike data, and f32 accumulation are reproducibly derived and independently inspectable.",
+    "A direct test demonstrates that changing the requested size invokes the requested-size model rather than scaling a canonical-size observation.",
     "The full renderer library suite passes.",
     "The no-oracle product gate does not regress any family.",
     "A separate checker reviews the exact implementation revision and preserves all passing and failing held-outs."
