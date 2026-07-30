@@ -4,10 +4,13 @@
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "java_locations": [
     "net.sourceforge.plantuml.descdiagram.command.CommandTogether#executeArg",
+    "net.atmp.CucaDiagram#currentTogether",
     "net.atmp.CucaDiagram#gotoTogether",
     "net.atmp.CucaDiagram#gotoGroup",
     "net.atmp.CucaDiagram#endGroup",
+    "net.atmp.CucaDiagram#reallyCreateLeaf",
     "net.sourceforge.plantuml.abel.Together",
+    "net.sourceforge.plantuml.abel.Entity#setTogether",
     "net.sourceforge.plantuml.svek.Cluster#printCluster2",
     "net.sourceforge.plantuml.svek.Cluster#printTogether",
     "net.atmp.CucaDiagram#applySingleStrategy",
@@ -21,6 +24,8 @@
     "crates/rustuml-parser/src/parse/class.rs::ClassScope",
     "crates/rustuml-parser/src/parse/class.rs::ClassParser::try_together",
     "crates/rustuml-parser/src/parse/class.rs::ClassParser::try_package",
+    "crates/rustuml-parser/src/parse/class.rs::ClassParser::create_entity_at_path",
+    "crates/rustuml-parser/src/parse/class.rs::ClassParser::ensure_entity",
     "crates/rustuml-render/src/class.rs::build_layout_graph",
     "crates/rustuml-render/src/class.rs::apply_single_strategy",
     "crates/rustuml-layout/src/graph.rs::LayoutGraph::add_together",
@@ -28,13 +33,15 @@
     "crates/rustuml-layout/src/graph.rs::LayoutGraph::add_together_cluster",
     "crates/rustuml-layout/src/graph.rs::LayoutGraph::solve"
   ],
-  "invariant": "A class-diagram together block is structural layout state with lexical nesting. Each leaf and child package created while the block is active belongs to that exact Together object, nested together blocks retain their parent, and sibling blocks remain siblings after a close. Cluster.printCluster2 emits ordinary nodes first and then root Together subgraphs in first-seen order; printTogether recursively emits direct leaves, direct child clusters, and child Together objects. The invisible subgraphs constrain Graphviz placement but contribute no painted geometry to SvekResult.calculateDimension. CucaDiagram.applySingleStrategy appends Magma/SquareMaker invisible links only after user links have been collected, so generated link insertion order is part of the layout model.",
-  "causal_divergence": "Rust previously discarded class together blocks during parsing, so class leaves and packages had no Together identity, parent relation, or direct-membership boundary. The renderer therefore flattened every block into its package, and the layout graph could neither reproduce Java's nested invisible subgraphs nor their dot statement order. Independently, Rust registered generated SquareMaker links before user relationships and allowed the invisible Together envelope to affect final canvas normalization, while Java appends those links in applySingleStrategy and SvekResult measures only painted shapes. These data-flow and phase-order differences explain the two failing exact outputs; no label, fixture path, coordinate, or expected SVG is involved.",
-  "planned_change": "Carry Together identity through the class parser as an indexed lexical scope graph recording parent, owning package, direct entities, and direct child packages. Translate that graph into LayoutGraph Together specifications, emit ordinary nodes and then nested Together subgraphs in Java's first-seen structural order, append Magma/SquareMaker invisible links after user links, and exclude invisible Together-only envelopes from painted canvas bounds. Keep scope closure derived from one authoritative stack so release builds cannot compile away a required pop. Validate renamed sibling and nested groups, package ownership, declaration order, topology, and direction without reading golden output in shipping code.",
+  "invariant": "Together ownership follows CucaDiagram's actual heterogeneous stack, not a lexical search. currentTogether returns a Together only when the top stack item is a Together. gotoTogether therefore records the current top Together as parent, but a package pushed by gotoGroup is a hard ownership boundary: a Together opened inside that package has no outer Together parent and is owned by the package. reallyCreateLeaf and gotoGroup assign the current top Together exactly once when a new leaf or group is materialized. Relationship commands can be the first materializer, and later declarations or sibling scopes reuse the existing entity without moving or duplicating its Together identity. Cluster.printCluster2 emits ordinary nodes first and then root Together subgraphs in first-seen order; printTogether emits each scope's direct leaves, direct child clusters, and direct child Together scopes. The invisible subgraphs constrain Graphviz placement but contribute no painted geometry to SvekResult.calculateDimension. CucaDiagram.applySingleStrategy appends Magma/SquareMaker invisible links only after user links have been collected.",
+  "causal_divergence": "The first implementation scans backward through ClassScope entries, so it incorrectly carries an outer Together across a package boundary. It enrolls entities only after explicit declarations instead of at create_entity_at_path, missing relationship-created leaves, and it allows a reused entity to be appended to a second sibling Together. That duplicate membership makes graphviz_node_creation_order contain more entries than nodes, panics in debug, and silently emits a different wrong graph in release. LayoutGraph also creates the complete Together subgraph tree before grouped nodes and visible child clusters, unlike Cluster.printTogether's recursive statement order. The retained package-only control proves that some package-heavy SVG divergence predates Together and must not be explained by this mechanism. The SquareMaker link phase and top-level invisible-versus-painted envelope portions survived independent 3/4/5-node held-outs.",
+  "planned_change": "Mirror Java's stack-top semantics with one authoritative structural stack. Move entity Together assignment into the first-materialization path shared by declarations and relationship endpoints, and move package assignment into first group materialization; store one immutable owner per entity or package and derive each TogetherGroup's direct member lists from those owners so redeclaration cannot duplicate or migrate membership. A Together opened with a package on top gets no Together parent. Make layout emission recursive in Java order: ordinary nodes first, then each root Together subgraph containing direct nodes, direct visible child clusters, and child Together subgraphs. Preserve the already validated trailing Magma/SquareMaker links and painted-envelope exclusion. Keep the unrelated package-only control executable and treat any remaining failure there as a separate package-layout dependency rather than adding fixture-shaped branches.",
   "perturbation_axes": [
     "renamed labels and aliases",
     "sibling together blocks crossed with nested together blocks",
     "top-level ownership crossed with package-owned groups",
+    "relationship-created leaves crossed with explicit declarations and redeclarations",
+    "pre-existing entities crossed with sibling Together scopes",
     "direct leaves crossed with child packages and empty packages",
     "declaration order and user relationship order",
     "three, four, and five standalone entities exercising SquareMaker branch shape",
@@ -43,5 +50,11 @@
   "protocol_timing": {
     "status": "grandfathered-work-in-progress",
     "note": "The implementation was already present as uncommitted work when the three-commit maker/checker protocol became active in this task. This account is intentionally not represented as pre-implementation evidence. The mechanism must still survive an independent adversarial review and held-out perturbations, but it does not satisfy the protocol's historical account-before-code ancestry requirement."
+  },
+  "rejected_attempt": {
+    "implementation_commit": "f840f7070d3c203265e6bcb871e7116a5ec843a9",
+    "review_commit": "cc48a1b38fec48361183d36a1974f41f84652ac2",
+    "review_record": "docs/parity-reviews/class-together-structural-layout/review.json",
+    "result": "Rejected: 5/12 fresh exact matches. Top-only package scope, first-materialization membership, relationship-created leaves, sibling redeclaration, and recursive node/cluster emission were not modeled correctly. The 3/4/5-node SquareMaker phase and top-level painted-envelope behavior survived."
   }
 }
