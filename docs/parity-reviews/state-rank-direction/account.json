@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-rank-direction",
+  "status": "proposed",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "899d1edc3231d571b1e703ee3b84737378c1052b",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/command/CommandRankDir.java:57-66 CommandRankDir#executeArg parses the direction command and writes SkinParam.rankdir",
+    "src/main/java/net/sourceforge/plantuml/skin/SkinParam.java:192,977-982 SkinParam owns TOP_TO_BOTTOM by default and exposes the mutable diagram-wide rankdir",
+    "src/main/java/net/sourceforge/plantuml/svek/CucaDiagramFileMakerSvek.java:70-79 the root SVEK builder receives the diagram and its shared skin parameters",
+    "src/main/java/net/sourceforge/plantuml/svek/GroupMakerState.java:110-153 GroupMakerState#getImage recursively creates every autonomous inner GraphvizImageBuilder from the same diagram and passes diagram.getSkinParam() to DotStringFactory",
+    "src/main/java/net/sourceforge/plantuml/svek/DotStringFactory.java:157-170 DotStringFactory emits rankdir=LR whenever the shared SkinParam rankdir is LEFT_TO_RIGHT"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/diagram/state.rs:10-17 StateDiagram has no rank-direction field",
+    "crates/rustuml-parser/src/parse/state.rs:150-165 StateParser has no rank-direction state and parse_line ignores both direction commands",
+    "crates/rustuml-render/src/state.rs:3276 layout_autonomous_scope always constructs Direction::TopToBottom for both root and recursively built inner scopes",
+    "crates/rustuml-render/src/state.rs:5210 render_non_autarkic_root_clusters always constructs Direction::TopToBottom",
+    "crates/rustuml-render/src/state.rs:6274 the flat SVEK path always constructs Direction::TopToBottom"
+  ],
+  "evidence_inputs": [
+    "test-diagrams/perturbations/state-transition-display-lines/checker_left_empty_rows_nested_lr.puml",
+    "test-diagrams/perturbations/state-transition-display-lines/checker_link_raw_escape_outside_newline_lr.puml",
+    "test-diagrams/perturbations/state-transition-display-lines/checker_tab_backslash_unknown_escape_lr.puml"
+  ],
+  "invariant": "State rank direction is one diagram-wide typed property with TOP_TO_BOTTOM as its default and last-command-wins mutation semantics. The root SVEK graph and every autonomous inner state graph consume the same effective SkinParam rankdir. LEFT_TO_RIGHT therefore emits Graphviz rankdir=LR at every layout depth; it changes node ranks, edge routes, label positions, cluster dimensions, and the final painted envelope together. Explicit arrow directions remain per-link queue/orientation hints and do not replace the global rank direction.",
+  "causal_divergence": "Rust discards state direction commands during parsing and independently hard-codes Direction::TopToBottom in all three state layout paths. A valid nested state diagram containing `left to right direction` is therefore solved vertically at both inner and outer levels. In the isolated checker, Java produces a 538x139 horizontal composite while Rust produces a 303x335 vertical image. The resulting element-order and scoped-pseudostate comparator mismatches are downstream desynchronization from the wrong solved graph, not evidence for renaming endpoints or tuning coordinates. The same missing property explains fresh flat LR failures in the transition-display checker.",
+  "planned_change": "Add a serializable StateLayoutDirection enum with TopToBottom default and a direction field on StateDiagram. Parse `left to right direction` and `top to bottom direction` in StateParser with source-order last-command-wins behavior. Convert that value once to rustuml_layout::Direction and use it in layout_autonomous_scope, render_non_autarkic_root_clusters, and the flat state SVEK path so root and recursively built inner graphs share one effective direction. Preserve per-transition explicit direction handling, spacing, node sizes, label blocks, routing, paint normalization, and source identities. Add parser tests for default, LR, and reset behavior plus renderer tests covering renamed flat and nested chains in both directions. Do not add fixture-name branches, transpose solved coordinates after layout, or tune canvas dimensions.",
+  "perturbation_axes": [
+    "flat, single-composite autonomous, nested-composite, and non-autarkic root-cluster layouts",
+    "default top-to-bottom, explicit left-to-right, and a later top-to-bottom reset",
+    "ordinary endpoints, scoped start/end pseudostates, choices, forks, and histories",
+    "unlabelled, single-row, multiline, and empty-row transition labels",
+    "renamed chains, fanout, cycles, self links, and changed node counts",
+    "global direction combined with explicit up/down/left/right transition hints"
+  ],
+  "scope_boundary": "This mechanism owns parsing and propagation of the global state rank direction into every state layout graph. It does not own per-link command orientation, label escape/title semantics, math rendering, text metrics, state symbol paint, comparator tolerance, or coordinate normalization after a correctly directed solve."
+}
