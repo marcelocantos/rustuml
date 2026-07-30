@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+package Outer {
+  cloud "Shared Cloud" as SharedCloud {
+    interface Port
+  }
+}
+@enduml

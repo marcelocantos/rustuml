@@ -1,0 +1,111 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-package-modifier-order",
+  "implementation_commit": "8895b9de317ebdac7b32ddeb99733c8b73e786a3",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "reviewer": {
+    "identity": "independent adversarial checker",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop",
+    "independence": "Did not implement commit 8895b9de, did not edit shipping source, and added only held-out evidence plus this review record in a clean /tmp worktree."
+  },
+  "revisions": {
+    "rust_revision_checked": "8895b9de317ebdac7b32ddeb99733c8b73e786a3",
+    "java_revision_checked": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "prior_review": {
+    "path": null,
+    "commit": null,
+    "verdict": null,
+    "note": "No prior review.json for this mechanism was found in git history."
+  },
+  "binary": {
+    "path": "/tmp/rustuml-checker-1482/target/debug/examples/diff_one",
+    "sha256": "bff6ba279277237f5457faa6294afa1f49f4d35f0512d6dea9f7208dfd098d50",
+    "mode": "--no-oracle",
+    "rebuilt": false
+  },
+  "java_jar": {
+    "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+  },
+  "commands": [
+    "sed -n '1,220p' docs/parity-reviews/class-package-modifier-order/account.json",
+    "sed -n '1210,1365p' crates/rustuml-parser/src/parse/class.rs",
+    "sed -n '392,426p' crates/rustuml-parser/src/diagram/class.rs",
+    "sed -n '120,190p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/CommandPackage.java",
+    "sed -n '70,190p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandPackageWithUSymbol.java",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/class-package-modifier-order/package_modifier_order_package_no_url_tb.puml test-diagrams/perturbations/class-package-modifier-order/package_modifier_order_package_url_lr.puml test-diagrams/perturbations/class-package-modifier-order/package_modifier_order_node_url_empty_tb.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-package-modifier-order/package_modifier_order_package_no_url_tb.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-package-modifier-order/package_modifier_order_package_url_lr.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-package-modifier-order/package_modifier_order_node_url_empty_tb.puml",
+    "rg -n -i 'class-package-modifier-order|package_modifier_order_package_no_url_tb|package_modifier_order_package_url_lr|package_modifier_order_node_url_empty_tb' crates/rustuml crates/rustuml-parser crates/rustuml-render crates/rustuml-layout crates/rustuml-math"
+  ],
+  "source_inspection": {
+    "java": [
+      "CommandPackage and CommandPackageWithUSymbol both accept tags, stereotype, URL, and trailing color after the code/display portion, then call p.addUrl(url) on the current group.",
+      "The URL therefore becomes part of the rendered package/group model, not a tolerated no-op token."
+    ],
+    "rust": [
+      "try_package now tolerates the Java modifier order, but it never extracts a package URL and the Package model has no url or tooltip field to carry one to rendering.",
+      "The ordinary no-URL control passes, which isolates the remaining failures to omitted model carry-through rather than the stereotype-before-color grammar alone."
+    ],
+    "fixture_shaping_search": "No mechanism name or held-out filename was found in shipping crate logic."
+  },
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-package-modifier-order/package_modifier_order_package_no_url_tb.puml",
+      "golden": "test-diagrams/perturbations/class-package-modifier-order/package_modifier_order_package_no_url_tb.svg",
+      "axes": [
+        "ordinary package",
+        "DISPLAY as CODE",
+        "tags before and after stereotype",
+        "stereotype before color",
+        "filled group"
+      ],
+      "result": "pass",
+      "evidence": "Without a URL, the modifier-order case compares exactly."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-package-modifier-order/package_modifier_order_package_url_lr.puml",
+      "golden": "test-diagrams/perturbations/class-package-modifier-order/package_modifier_order_package_url_lr.svg",
+      "axes": [
+        "ordinary package",
+        "DISPLAY as CODE",
+        "tags before and after stereotype",
+        "URL before color",
+        "filled group",
+        "left-to-right direction"
+      ],
+      "result": "fail",
+      "evidence": "Java emits an <a> wrapper for the package header. Rust emits no anchor and the exact SVG structure shifts immediately after the missing link element."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-package-modifier-order/package_modifier_order_node_url_empty_tb.puml",
+      "golden": "test-diagrams/perturbations/class-package-modifier-order/package_modifier_order_node_url_empty_tb.svg",
+      "axes": [
+        "explicit node symbol",
+        "CODE as quoted DISPLAY",
+        "tags before and after stereotype",
+        "URL before color",
+        "filled explicit symbol package",
+        "top-to-bottom direction"
+      ],
+      "result": "fail",
+      "evidence": "The explicit node variant also lacks Java's package anchor and diverges structurally while remaining a CLASS diagram in both implementations."
+    }
+  ],
+  "findings": [
+    "Reject: commit 8895b9de fixes the parsing order but not the full mechanism claim, because URL-bearing package modifiers are still dropped from the Rust model.",
+    "A no-URL control passes, while both ordinary-package and explicit-node URL cases fail with the missing Java <a> wrapper as the first structural divergence.",
+    "This is not fixture-shaped logic and not an endpoint confounder; it is a direct model gap between Java's p.addUrl(url) path and Rust's Package struct, which has no URL field."
+  ],
+  "summary": {
+    "valid_inputs": 3,
+    "passes": 1,
+    "failures": 2,
+    "java_syntax_errors": 0,
+    "cargo_or_rustc_run": false
+  },
+  "verdict": "rejected"
+}

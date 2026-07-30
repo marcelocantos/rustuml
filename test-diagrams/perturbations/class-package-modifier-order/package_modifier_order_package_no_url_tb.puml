@@ -1,0 +1,5 @@
+@startuml
+package "Payroll" as Payroll $alpha <<Domain>> $beta #BurlyWood {
+  class Employee
+}
+@enduml

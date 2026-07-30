@@ -1,0 +1,5 @@
+@startuml
+node Infra.Core as "Core Infra" $ops <<Execution>> $runtime [[https://example.com/core]] #AliceBlue {
+  class Gateway
+}
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+frame "Ledger Space" as LedgerSpace {
+  entity Ledger {
+    amount : int
+  }
+}
+@enduml

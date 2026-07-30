@@ -1,0 +1,5 @@
+@startuml
+node "Component Rack" as Rack {
+  component Worker
+}
+@enduml

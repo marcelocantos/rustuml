@@ -1,0 +1,5 @@
+@startuml
+node "Shared Node" as SharedNode {
+  interface Api
+}
+@enduml

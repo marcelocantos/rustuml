@@ -1,0 +1,7 @@
+@startuml
+package Storage {
+  database "Orders DB" as Storage.Orders {
+    class Record
+  }
+}
+@enduml

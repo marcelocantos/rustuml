@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+OpsHub.Service --> Client
+folder OpsHub as "Operations Hub" {
+  class Service
+}
+class Client
+@enduml

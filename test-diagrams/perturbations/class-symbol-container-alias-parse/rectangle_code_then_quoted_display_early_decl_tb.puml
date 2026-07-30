@@ -1,0 +1,7 @@
+@startuml
+rectangle Ui.Facade as "UI Facade" {
+  class Controller
+}
+class Client
+Client --> Ui.Facade.Controller
+@enduml

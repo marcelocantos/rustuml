@@ -1,0 +1,6 @@
+@startuml
+left to right direction
+package "Operations" as Ops $core <<Domain>> $v1 [[https://example.com/ops]] #Wheat {
+  class Service
+}
+@enduml

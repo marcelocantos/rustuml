@@ -1,25 +1,27 @@
 {
   "schema_version": 1,
   "mechanism": "class-symbol-container-alias-parse",
-  "account_commit": "ea56f2ce46b1be73eb68bb44393e2870c2c8f6bd",
-  "implementation_commit": "09014421f785f5d251a0b28541603b6dcda7aae9",
+  "implementation_commit": "8895b9de317ebdac7b32ddeb99733c8b73e786a3",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "reviewer": {
-    "task_id": "019ee369-54e2-7203-afce-ddde7bfe1723",
     "identity": "independent adversarial checker",
     "model": "GPT-5 Codex",
     "tool": "Codex desktop",
-    "independence": "Did not implement commit 09014421, did not edit production source, and only added held-out evidence plus this review record."
+    "independence": "Did not implement commit 8895b9de, did not edit shipping source, and added only held-out evidence plus this review record in a clean /tmp worktree."
   },
   "revisions": {
-    "checker_worktree_branch": "codex/checker-09014421",
-    "rust_revision_checked": "09014421f785f5d251a0b28541603b6dcda7aae9",
-    "rust_tree_checked": "c02b1280c9be8cabb9730fd8e019014d95b2bd59",
+    "rust_revision_checked": "8895b9de317ebdac7b32ddeb99733c8b73e786a3",
     "java_revision_checked": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
   },
+  "prior_review": {
+    "path": "docs/parity-reviews/class-symbol-container-alias-parse/review.json",
+    "commit": "28a85f6f",
+    "verdict": "rejected",
+    "note": "The prior rejection covered the missing CODE as quoted DISPLAY grammar. This review tested both directions again, then pushed on nesting and declaration order."
+  },
   "binary": {
-    "path": "/tmp/rustuml-checker-1482/target/release/examples/diff_one",
-    "sha256": "ecb6d18951d59810a4c64e468990a457969bb67d41d289812ef8d21653de9b90",
+    "path": "/tmp/rustuml-checker-1482/target/debug/examples/diff_one",
+    "sha256": "bff6ba279277237f5457faa6294afa1f49f4d35f0512d6dea9f7208dfd098d50",
     "mode": "--no-oracle",
     "rebuilt": false
   },
@@ -28,77 +30,91 @@
     "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
   },
   "commands": [
-    "git worktree add /tmp/rustuml-review-09014421 -b codex/checker-09014421 09014421",
     "sed -n '1,220p' docs/parity-reviews/class-symbol-container-alias-parse/account.json",
-    "sed -n '70,220p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandPackageWithUSymbol.java",
-    "sed -n '1270,1385p' crates/rustuml-parser/src/parse/class.rs",
-    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/class-symbol-container-alias-parse/folder_code_then_quoted_display_lr.puml test-diagrams/perturbations/class-symbol-container-alias-parse/database_display_then_code_nested_tb.puml test-diagrams/perturbations/class-symbol-container-alias-parse/rectangle_code_then_quoted_display_tb_nested.puml",
-    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-symbol-container-alias-parse/folder_code_then_quoted_display_lr.puml",
-    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-symbol-container-alias-parse/database_display_then_code_nested_tb.puml",
-    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-symbol-container-alias-parse/rectangle_code_then_quoted_display_tb_nested.puml",
-    "rg -n -i 'class-symbol-container-alias-parse|folder_code_then_quoted_display_lr|database_display_then_code_nested_tb|rectangle_code_then_quoted_display_tb_nested' crates/rustuml crates/rustuml-parser crates/rustuml-render crates/rustuml-layout crates/rustuml-math"
+    "git show 28a85f6f:docs/parity-reviews/class-symbol-container-alias-parse/review.json",
+    "sed -n '1210,1365p' crates/rustuml-parser/src/parse/class.rs",
+    "sed -n '260,470p' crates/rustuml-parser/src/parse/class.rs",
+    "sed -n '70,190p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandPackageWithUSymbol.java",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/class-symbol-container-alias-parse/folder_code_then_quoted_display_late_decl_lr.puml test-diagrams/perturbations/class-symbol-container-alias-parse/frame_code_then_quoted_display_nested_late_decl_tb.puml test-diagrams/perturbations/class-symbol-container-alias-parse/database_quoted_display_then_code_nested_tb.puml test-diagrams/perturbations/class-symbol-container-alias-parse/rectangle_code_then_quoted_display_early_decl_tb.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-symbol-container-alias-parse/folder_code_then_quoted_display_late_decl_lr.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-symbol-container-alias-parse/frame_code_then_quoted_display_nested_late_decl_tb.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-symbol-container-alias-parse/database_quoted_display_then_code_nested_tb.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-symbol-container-alias-parse/rectangle_code_then_quoted_display_early_decl_tb.puml",
+    "rg -n -i 'class-symbol-container-alias-parse|folder_code_then_quoted_display_late_decl_lr|frame_code_then_quoted_display_nested_late_decl_tb|database_quoted_display_then_code_nested_tb|rectangle_code_then_quoted_display_early_decl_tb' crates/rustuml crates/rustuml-parser crates/rustuml-render crates/rustuml-layout crates/rustuml-math"
   ],
   "source_inspection": {
     "java": [
-      "CommandPackageWithUSymbol#getRegexConcat accepts both quoted-display-then-code and code-then-quoted-display spellings, in addition to unquoted display/code forms.",
-      "CommandPackageWithUSymbol#executeArg always feeds the resolved CODE token into quarkInContext(false, cleanId(codeArg)) and keeps DISPLAY as presentation only."
+      "CommandPackageWithUSymbol accepts both DISPLAY as CODE and CODE as quoted DISPLAY and resolves the CODE token through quarkInContext(false, cleanId(codeArg)).",
+      "The explicit package command runs gotoGroup on the package quark before subsequent group contents are materialized."
     ],
     "rust": [
-      "ClassParser::try_package removes the package-only alias rejection but still matches only keyword + quoted-display-or-bare-token + optional bare alias. It cannot parse CODE as \"DISPLAY\".",
-      "The failing held-outs are still routed to CLASS at the subtype level, so the divergence is inside package parsing/identity, not subtype dispatch."
+      "try_package now parses both alias directions, but when a dotted reference materializes a nested entity first, create_entity_at_path pushes the entity UID event before ensure_phantom_packages creates the parent packages.",
+      "Later try_package reopens existing package paths via package_by_path.get(&prefix) and updates kind/color/stereotypes, but it does not rebuild the Java package-before-entity creation order."
     ],
-    "fixture_shaping_search": "No mechanism-name string or held-out filename was found in shipping crate logic."
+    "fixture_shaping_search": "No mechanism name or held-out filename was found in shipping crate logic."
   },
   "perturbations": [
     {
-      "source": "test-diagrams/perturbations/class-symbol-container-alias-parse/folder_code_then_quoted_display_lr.puml",
-      "golden": "test-diagrams/perturbations/class-symbol-container-alias-parse/folder_code_then_quoted_display_lr.svg",
+      "source": "test-diagrams/perturbations/class-symbol-container-alias-parse/folder_code_then_quoted_display_late_decl_lr.puml",
+      "golden": "test-diagrams/perturbations/class-symbol-container-alias-parse/folder_code_then_quoted_display_late_decl_lr.svg",
       "axes": [
         "folder keyword",
-        "code as quoted display",
-        "left-to-right",
+        "CODE as quoted DISPLAY",
         "top-level alias",
-        "external link"
-      ],
-      "result": "fail",
-      "evidence": "Java renders an OpsHub cluster titled \"Operations Hub\". Rust keeps the class diagram type but loses the cluster declaration, reopens OpsHub implicitly from later references, and renders a different 31-element SVG."
-    },
-    {
-      "source": "test-diagrams/perturbations/class-symbol-container-alias-parse/database_display_then_code_nested_tb.puml",
-      "golden": "test-diagrams/perturbations/class-symbol-container-alias-parse/database_display_then_code_nested_tb.svg",
-      "axes": [
-        "database keyword",
-        "quoted display then code",
-        "nested ownership",
-        "top-to-bottom",
-        "external link"
+        "late declaration after use",
+        "left-to-right direction"
       ],
       "result": "pass",
-      "evidence": "The supported DISPLAY as CODE form still compares cleanly under nesting, so the rejection is not a blanket alias regression."
+      "evidence": "A simple top-level late declaration now compares exactly."
     },
     {
-      "source": "test-diagrams/perturbations/class-symbol-container-alias-parse/rectangle_code_then_quoted_display_tb_nested.puml",
-      "golden": "test-diagrams/perturbations/class-symbol-container-alias-parse/rectangle_code_then_quoted_display_tb_nested.svg",
+      "source": "test-diagrams/perturbations/class-symbol-container-alias-parse/frame_code_then_quoted_display_nested_late_decl_tb.puml",
+      "golden": "test-diagrams/perturbations/class-symbol-container-alias-parse/frame_code_then_quoted_display_nested_late_decl_tb.svg",
       "axes": [
-        "rectangle keyword",
-        "code as quoted display",
-        "nested ownership",
-        "top-to-bottom",
-        "relationship after declarations"
+        "frame keyword",
+        "CODE as quoted DISPLAY",
+        "nested dotted package path",
+        "late declaration after use",
+        "top-to-bottom direction"
       ],
       "result": "fail",
-      "evidence": "Java renders a nested Ui.Facade cluster with the quoted display. Rust widens the root cluster and serializes the rectangle alias via later implicit reuse instead of the command line."
+      "evidence": "Java serializes Outer, Outer.Ui, and Outer.Ui.Facade before the Controller entity. Rust serializes Controller first, shifting cluster/entity ids and the link's data-entity-2 target."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-symbol-container-alias-parse/database_quoted_display_then_code_nested_tb.puml",
+      "golden": "test-diagrams/perturbations/class-symbol-container-alias-parse/database_quoted_display_then_code_nested_tb.svg",
+      "axes": [
+        "database keyword",
+        "quoted DISPLAY as CODE",
+        "nested ownership",
+        "top-to-bottom direction"
+      ],
+      "result": "pass",
+      "evidence": "The opposite alias direction compares exactly under nesting."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-symbol-container-alias-parse/rectangle_code_then_quoted_display_early_decl_tb.puml",
+      "golden": "test-diagrams/perturbations/class-symbol-container-alias-parse/rectangle_code_then_quoted_display_early_decl_tb.svg",
+      "axes": [
+        "rectangle keyword",
+        "CODE as quoted DISPLAY",
+        "nested ownership",
+        "early declaration before use",
+        "top-to-bottom direction"
+      ],
+      "result": "pass",
+      "evidence": "An early declaration control compares exactly, isolating the remaining issue to nested late materialization rather than alias grammar itself."
     }
   ],
   "findings": [
-    "Reject: the mechanism claim overstates Java grammar coverage. Java accepts CODE as quoted DISPLAY for symbol containers, while Rust try_package still only parses quoted DISPLAY with bare CODE/alias.",
-    "Fresh valid folder and rectangle held-outs using CODE as quoted DISPLAY both diverge while a nested database DISPLAY as CODE control passes.",
-    "No fixture-shaped branch was found in shipping crate logic; the counterexamples are explained by the narrower Rust regex and alias data flow."
+    "Reject: commit 8895b9de closes the original grammar hole, but the broader mechanism claim still fails for nested late declarations.",
+    "A fresh valid nested frame case with CODE as quoted DISPLAY and a pre-declaration dotted reference preserves Java parsing but Rust emits a different package/entity uid order and therefore different exact SVG metadata.",
+    "Top-level late declaration, early declaration, and the opposite alias direction all pass, so the residual divergence is specifically the nested late-materialization path."
   ],
   "summary": {
-    "valid_inputs": 3,
-    "passes": 1,
-    "failures": 2,
+    "valid_inputs": 4,
+    "passes": 3,
+    "failures": 1,
     "java_syntax_errors": 0,
     "cargo_or_rustc_run": false
   },

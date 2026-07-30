@@ -1,25 +1,27 @@
 {
   "schema_version": 1,
   "mechanism": "class-quoted-symbol-container-dispatch",
-  "account_commit": "ea56f2ce46b1be73eb68bb44393e2870c2c8f6bd",
-  "implementation_commit": "09014421f785f5d251a0b28541603b6dcda7aae9",
+  "implementation_commit": "8895b9de317ebdac7b32ddeb99733c8b73e786a3",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "reviewer": {
-    "task_id": "019ee369-54e2-7203-afce-ddde7bfe1723",
     "identity": "independent adversarial checker",
     "model": "GPT-5 Codex",
     "tool": "Codex desktop",
-    "independence": "Did not implement commit 09014421, did not edit production source, and only added held-out evidence plus this review record."
+    "independence": "Did not implement commit 8895b9de, did not edit shipping source, and added only held-out evidence plus this review record in a clean /tmp worktree."
   },
   "revisions": {
-    "checker_worktree_branch": "codex/checker-09014421",
-    "rust_revision_checked": "09014421f785f5d251a0b28541603b6dcda7aae9",
-    "rust_tree_checked": "c02b1280c9be8cabb9730fd8e019014d95b2bd59",
+    "rust_revision_checked": "8895b9de317ebdac7b32ddeb99733c8b73e786a3",
     "java_revision_checked": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
   },
+  "prior_review": {
+    "path": "docs/parity-reviews/class-quoted-symbol-container-dispatch/review.json",
+    "commit": "28a85f6f",
+    "verdict": "rejected",
+    "note": "The prior rejection isolated interface-only quoted shared containers. Those now pass; this review looked for a different class-family declaration still omitted from the subtype model."
+  },
   "binary": {
-    "path": "/tmp/rustuml-checker-1482/target/release/examples/diff_one",
-    "sha256": "ecb6d18951d59810a4c64e468990a457969bb67d41d289812ef8d21653de9b90",
+    "path": "/tmp/rustuml-checker-1482/target/debug/examples/diff_one",
+    "sha256": "bff6ba279277237f5457faa6294afa1f49f4d35f0512d6dea9f7208dfd098d50",
     "mode": "--no-oracle",
     "rebuilt": false
   },
@@ -28,78 +30,88 @@
     "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
   },
   "commands": [
-    "git worktree add /tmp/rustuml-review-09014421 -b codex/checker-09014421 09014421",
     "sed -n '1,220p' docs/parity-reviews/class-quoted-symbol-container-dispatch/account.json",
-    "sed -n '300,860p' crates/rustuml-parser/src/parse/mod.rs",
-    "sed -n '95,155p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/classdiagram/ClassDiagramFactory.java",
-    "sed -n '70,170p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandCreateClass.java",
-    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/class-quoted-symbol-container-dispatch/quoted_node_interface_only_tb.puml test-diagrams/perturbations/class-quoted-symbol-container-dispatch/quoted_cloud_interface_only_lr_nested.puml test-diagrams/perturbations/class-quoted-symbol-container-dispatch/quoted_database_class_control_lr.puml",
-    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-quoted-symbol-container-dispatch/quoted_node_interface_only_tb.puml",
-    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-quoted-symbol-container-dispatch/quoted_cloud_interface_only_lr_nested.puml",
-    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-quoted-symbol-container-dispatch/quoted_database_class_control_lr.puml",
-    "rg -n -i 'class-quoted-symbol-container-dispatch|quoted_node_interface_only_tb|quoted_cloud_interface_only_lr_nested|quoted_database_class_control_lr' crates/rustuml crates/rustuml-parser crates/rustuml-render crates/rustuml-layout crates/rustuml-math"
+    "git show 28a85f6f:docs/parity-reviews/class-quoted-symbol-container-dispatch/review.json",
+    "sed -n '317,820p' crates/rustuml-parser/src/parse/mod.rs",
+    "sed -n '110,150p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/classdiagram/ClassDiagramFactory.java",
+    "sed -n '80,120p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandCreateClass.java",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/class-quoted-symbol-container-dispatch/quoted_node_interface_shared_tb.puml test-diagrams/perturbations/class-quoted-symbol-container-dispatch/quoted_cloud_interface_nested_lr.puml test-diagrams/perturbations/class-quoted-symbol-container-dispatch/quoted_frame_entity_body_lr.puml test-diagrams/perturbations/class-quoted-symbol-container-dispatch/quoted_node_component_control_tb.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-quoted-symbol-container-dispatch/quoted_node_interface_shared_tb.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-quoted-symbol-container-dispatch/quoted_cloud_interface_nested_lr.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-quoted-symbol-container-dispatch/quoted_frame_entity_body_lr.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-quoted-symbol-container-dispatch/quoted_node_component_control_tb.puml",
+    "rg -n -i 'class-quoted-symbol-container-dispatch|quoted_node_interface_shared_tb|quoted_cloud_interface_nested_lr|quoted_frame_entity_body_lr|quoted_node_component_control_tb' crates/rustuml crates/rustuml-parser crates/rustuml-render crates/rustuml-layout crates/rustuml-math"
   ],
   "source_inspection": {
     "java": [
-      "ClassDiagramFactory registers CommandCreateClass before CommandPackageWithUSymbol and before the later deployment factory path, so a full source accepted by class commands remains a class diagram.",
-      "CommandCreateClass accepts TYPE=(interface|enum|annotation|abstract class|class|entity|circle|diamond|protocol|struct|exception|metaclass|stereotype|dataclass|record|map); interface-only class syntax is not excluded from the class factory."
+      "ClassDiagramFactory registers CommandCreateClass before CommandPackageWithUSymbol, so a full source accepted by class commands remains a class diagram.",
+      "CommandCreateClass accepts entity alongside class, interface, enum, annotation, and the rest of the class family."
     ],
     "rust": [
-      "detect_uml_subtype only suppresses quoted-container deployment promotion when has_non_interface_class_decl is true.",
-      "Quoted node/cloud/database containers are still treated as deployment signals when only interface declarations are present, even though interface declarations are valid class-factory inputs in Java."
+      "detect_uml_subtype now tracks interface via has_class_factory_decl, but its class-family predicate still excludes entity declarations with bodies.",
+      "An entity leaf with a body scores CLASS, yet without has_class_factory_decl the quoted shared container still receives the deployment bonus and wins subtype selection."
     ],
-    "fixture_shaping_search": "No mechanism-name string or held-out filename was found in shipping crate logic; only unit-test strings reference the implementer's example labels."
+    "fixture_shaping_search": "No mechanism name or held-out filename was found in shipping crate logic."
   },
   "perturbations": [
     {
-      "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/quoted_node_interface_only_tb.puml",
-      "golden": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/quoted_node_interface_only_tb.svg",
+      "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/quoted_node_interface_shared_tb.puml",
+      "golden": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/quoted_node_interface_shared_tb.svg",
       "axes": [
-        "node keyword",
-        "quoted display plus alias",
-        "interface-only class syntax",
-        "top-to-bottom",
-        "top-level container"
-      ],
-      "result": "fail",
-      "evidence": "Java emits data-diagram-type=CLASS. Rust emits data-diagram-type=DESCRIPTION and serializes Host as an entity rather than a cluster."
-    },
-    {
-      "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/quoted_cloud_interface_only_lr_nested.puml",
-      "golden": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/quoted_cloud_interface_only_lr_nested.svg",
-      "axes": [
-        "cloud keyword",
-        "quoted display plus alias",
-        "interface-only class syntax",
-        "left-to-right",
-        "nested ownership"
-      ],
-      "result": "fail",
-      "evidence": "Java emits a CLASS diagram with an Outer package cluster and nested cloud cluster. Rust emits DESCRIPTION with a different element count (16 vs 27) and different cluster/entity shapes."
-    },
-    {
-      "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/quoted_database_class_control_lr.puml",
-      "golden": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/quoted_database_class_control_lr.svg",
-      "axes": [
-        "database keyword",
-        "quoted display plus alias",
-        "explicit non-interface class declaration",
-        "left-to-right",
-        "top-level container"
+        "quoted node container",
+        "interface-only class-family declaration",
+        "top-level container",
+        "top-to-bottom direction"
       ],
       "result": "pass",
-      "evidence": "The supported non-interface-class case compares cleanly, so the counterexamples isolate the interface-only guard rather than a general parser collapse."
+      "evidence": "Java and Rust compare exactly, confirming the interface-specific hole from 28a85f6f is fixed here."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/quoted_cloud_interface_nested_lr.puml",
+      "golden": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/quoted_cloud_interface_nested_lr.svg",
+      "axes": [
+        "quoted cloud container",
+        "interface-only class-family declaration",
+        "nested ownership",
+        "left-to-right direction"
+      ],
+      "result": "pass",
+      "evidence": "A second interface-only quoted shared container also compares exactly."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/quoted_frame_entity_body_lr.puml",
+      "golden": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/quoted_frame_entity_body_lr.svg",
+      "axes": [
+        "quoted frame container",
+        "entity-with-body class-family declaration",
+        "top-level container",
+        "left-to-right direction"
+      ],
+      "result": "fail",
+      "evidence": "Java emits data-diagram-type=CLASS. Rust emits data-diagram-type=DESCRIPTION and renders the inner entity as a deployment-style leaf, proving the class-family predicate is still incomplete."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/quoted_node_component_control_tb.puml",
+      "golden": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/quoted_node_component_control_tb.svg",
+      "axes": [
+        "quoted node container",
+        "genuine component leaf",
+        "top-level container",
+        "top-to-bottom direction"
+      ],
+      "result": "pass",
+      "evidence": "The genuine component control compares exactly, so the failure is not a blanket quoted-container regression."
     }
   ],
   "findings": [
-    "Reject: the mechanism claim is incomplete because Java's class factory accepts interface declarations through CommandCreateClass, but Rust only suppresses quoted-container deployment promotion for has_non_interface_class_decl.",
-    "Fresh valid held-outs with quoted node and quoted cloud containers plus interface-only class syntax both render as Java CLASS SVGs but Rust DESCRIPTION SVGs.",
-    "No fixture-shaped branch was found in shipping crate logic; this is a model mismatch in subtype detection, not a checker-input special case."
+    "Reject: commit 8895b9de fixes the prior interface-only hole but not the broader account claim. Entity-with-body declarations accepted by Java's class factory are still omitted from Rust's has_class_factory_decl model.",
+    "A fresh valid held-out quoted frame plus entity-body source routes to CLASS in Java and DESCRIPTION in Rust.",
+    "The interface cases and a genuine component control all pass, isolating the remaining divergence to the incomplete class-family predicate rather than a general quoted-container failure."
   ],
   "summary": {
-    "valid_inputs": 3,
-    "passes": 1,
-    "failures": 2,
+    "valid_inputs": 4,
+    "passes": 3,
+    "failures": 1,
     "java_syntax_errors": 0,
     "cargo_or_rustc_run": false
   },
