@@ -1035,28 +1035,149 @@ fn link_note_component_size(note: &StateNote) -> EdgeLabelSize {
     }
 }
 
-fn ordinary_edge_label_size(label: &str, arrow_font: &StateArrowFont) -> EdgeLabelSize {
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+enum StateLabelAlignment {
+    Left,
+    Center,
+    Right,
+}
+
+struct StateTransitionLabelBlock {
+    row_widths: Vec<f64>,
+    row_heights: Vec<f64>,
+    width: f64,
+    height: f64,
+    alignment: StateLabelAlignment,
+}
+
+impl StateTransitionLabelBlock {
+    fn measure(label: &TransitionLabel, arrow_font: &StateArrowFont) -> Self {
+        let row_widths = label
+            .rows()
+            .iter()
+            .map(|row| {
+                text_render::measure_with_family(
+                    row,
+                    arrow_font.size as f64,
+                    arrow_font.bold,
+                    &arrow_font.family,
+                )
+            })
+            .collect::<Vec<_>>();
+        let row_heights = label
+            .rows()
+            .iter()
+            .map(|row| {
+                text_render::label_height_with_family(
+                    row,
+                    arrow_font.size as f64,
+                    &arrow_font.family,
+                )
+            })
+            .collect::<Vec<_>>();
+        let width = row_widths.iter().copied().fold(0.0, f64::max);
+        let height = row_heights.iter().sum();
+        let alignment = match label.natural_alignment() {
+            Some(TransitionLabelAlignment::Left) => StateLabelAlignment::Left,
+            Some(TransitionLabelAlignment::Right) => StateLabelAlignment::Right,
+            None => arrow_font.alignment,
+        };
+        Self {
+            row_widths,
+            row_heights,
+            width,
+            height,
+            alignment,
+        }
+    }
+
+    fn row_x(&self, block_x: f64, row_index: usize) -> f64 {
+        let remaining = self.width - self.row_widths[row_index];
+        block_x
+            + match self.alignment {
+                StateLabelAlignment::Left => 0.0,
+                StateLabelAlignment::Center => remaining / 2.0,
+                StateLabelAlignment::Right => remaining,
+            }
+    }
+
+    fn first_baseline_ascent(&self, label: &TransitionLabel, arrow_font: &StateArrowFont) -> f64 {
+        text_render::label_first_baseline_ascent_with_family(
+            &label.rows()[0],
+            arrow_font.size as f64,
+            &arrow_font.family,
+        )
+    }
+
+    fn emit(
+        &self,
+        svg: &mut String,
+        label: &TransitionLabel,
+        block_x: f64,
+        block_y: f64,
+        arrow_font: &StateArrowFont,
+    ) {
+        let mut row_top = block_y;
+        for (row_index, row) in label.rows().iter().enumerate() {
+            let baseline = row_top
+                + text_render::label_first_baseline_ascent_with_family(
+                    row,
+                    arrow_font.size as f64,
+                    &arrow_font.family,
+                );
+            text_render::emit_text(
+                svg,
+                row,
+                &TextBase {
+                    x: self.row_x(block_x, row_index),
+                    y: baseline,
+                    font_size: arrow_font.size,
+                    font_family: &arrow_font.family,
+                    fill: &arrow_font.color,
+                    bold: arrow_font.bold,
+                    italic: arrow_font.italic,
+                    underline: false,
+                    skip_underline: false,
+                },
+            );
+            row_top += self.row_heights[row_index];
+        }
+    }
+
+    fn painted_y_range(
+        &self,
+        label: &TransitionLabel,
+        block_y: f64,
+        arrow_font: &StateArrowFont,
+    ) -> (f64, f64) {
+        let mut row_top = block_y;
+        let mut min_y = f64::INFINITY;
+        let mut max_y = f64::NEG_INFINITY;
+        for (row_index, row) in label.rows().iter().enumerate() {
+            let baseline = row_top
+                + text_render::label_first_baseline_ascent_with_family(
+                    row,
+                    arrow_font.size as f64,
+                    &arrow_font.family,
+                );
+            min_y = min_y.min(baseline - self.row_heights[row_index] + LIMIT_FINDER_TEXT_ADJUST);
+            max_y = max_y.max(baseline + LIMIT_FINDER_TEXT_ADJUST);
+            row_top += self.row_heights[row_index];
+        }
+        (min_y, max_y)
+    }
+}
+
+fn ordinary_edge_label_size(label: &TransitionLabel, arrow_font: &StateArrowFont) -> EdgeLabelSize {
     let inset = SVEK_EDGE_LABEL_MARGIN + arrow_font.padding;
+    let block = StateTransitionLabelBlock::measure(label, arrow_font);
     EdgeLabelSize {
         // Java provenance: `Display#create0` contributes the live SkinParam
         // padding, then `SvekEdge#addVisibilityModifier` wraps that block in
         // one independent pixel of margin on every side.
-        width: text_render::measure_with_family(
-            label,
-            arrow_font.size as f64,
-            arrow_font.bold,
-            &arrow_font.family,
-        ) + 2.0 * inset,
-        height: text_render::label_height(label, arrow_font.size as f64) + 2.0 * inset,
+        width: block.width + 2.0 * inset,
+        height: block.height + 2.0 * inset,
     }
-}
-
-fn state_edge_label_first_baseline_ascent(label: &str, arrow_font: &StateArrowFont) -> f64 {
-    text_render::label_first_baseline_ascent_with_family(
-        label,
-        arrow_font.size as f64,
-        &arrow_font.family,
-    )
 }
 
 /// Arrow-decoration clearance used by Java SVEK when Graphviz routes a
@@ -1098,7 +1219,7 @@ fn emit_link_label_composition(
 ) {
     let ordinary_size = transition
         .label
-        .as_deref()
+        .as_ref()
         .map(|label| ordinary_edge_label_size(label, arrow_font));
     let note_size = note.map(|(note, _)| link_note_component_size(note));
 
@@ -1126,28 +1247,17 @@ fn emit_link_label_composition(
 
     let emit_label = |svg: &mut String| {
         let (Some(label), Some((offset_x, offset_y))) =
-            (transition.label.as_deref(), ordinary_offset)
+            (transition.label.as_ref(), ordinary_offset)
         else {
             return;
         };
-        text_render::emit_text(
+        let block = StateTransitionLabelBlock::measure(label, arrow_font);
+        block.emit(
             svg,
             label,
-            &TextBase {
-                x: label_origin.0 + offset_x + SVEK_EDGE_LABEL_MARGIN + arrow_font.padding,
-                y: label_origin.1
-                    + offset_y
-                    + SVEK_EDGE_LABEL_MARGIN
-                    + arrow_font.padding
-                    + state_edge_label_first_baseline_ascent(label, arrow_font),
-                font_size: arrow_font.size,
-                font_family: &arrow_font.family,
-                fill: &arrow_font.color,
-                bold: arrow_font.bold,
-                italic: arrow_font.italic,
-                underline: false,
-                skip_underline: false,
-            },
+            label_origin.0 + offset_x + SVEK_EDGE_LABEL_MARGIN + arrow_font.padding,
+            label_origin.1 + offset_y + SVEK_EDGE_LABEL_MARGIN + arrow_font.padding,
+            arrow_font,
         );
     };
     let emit_note = |svg: &mut String| {
@@ -1186,7 +1296,7 @@ fn link_label_painted_max(
 ) -> (f64, f64) {
     let ordinary_size = transition
         .label
-        .as_deref()
+        .as_ref()
         .map(|label| ordinary_edge_label_size(label, arrow_font));
     let note_size = note.map(|(note, _)| link_note_component_size(note));
     let (ordinary_offset, note_offset) = match (ordinary_size, note_size, note.map(|(_, p)| p)) {
@@ -1214,19 +1324,11 @@ fn link_label_painted_max(
     let mut max_x = label_origin.0;
     let mut max_y = label_origin.1;
     if let (Some(label), Some((offset_x, offset_y)), Some(size)) =
-        (transition.label.as_deref(), ordinary_offset, ordinary_size)
+        (transition.label.as_ref(), ordinary_offset, ordinary_size)
     {
+        let block = StateTransitionLabelBlock::measure(label, arrow_font);
         max_x = max_x.max(
-            label_origin.0
-                + offset_x
-                + SVEK_EDGE_LABEL_MARGIN
-                + arrow_font.padding
-                + text_render::measure_with_family(
-                    label,
-                    arrow_font.size as f64,
-                    arrow_font.bold,
-                    &arrow_font.family,
-                ),
+            label_origin.0 + offset_x + SVEK_EDGE_LABEL_MARGIN + arrow_font.padding + block.width,
         );
         max_y = max_y.max(label_origin.1 + offset_y + size.height - 1.0);
     }
@@ -2643,6 +2745,7 @@ struct StateArrowFont {
     bold: bool,
     italic: bool,
     padding: f64,
+    alignment: StateLabelAlignment,
 }
 
 impl StateArrowFont {
@@ -2672,6 +2775,16 @@ impl StateArrowFont {
         let style = find(&["stateArrowFontStyle", "arrowFontStyle"])
             .map(|sp| sp.value.to_ascii_lowercase())
             .unwrap_or_default();
+        let parse_alignment = |value: &str| match value.trim().to_ascii_lowercase().as_str() {
+            "left" => Some(StateLabelAlignment::Left),
+            "center" | "centre" => Some(StateLabelAlignment::Center),
+            "right" => Some(StateLabelAlignment::Right),
+            _ => None,
+        };
+        let alignment = find(&["stateMessageAlignment"])
+            .and_then(|sp| parse_alignment(&sp.value))
+            .or_else(|| find(&["defaultTextAlignment"]).and_then(|sp| parse_alignment(&sp.value)))
+            .unwrap_or(StateLabelAlignment::Center);
         Self {
             color,
             family,
@@ -2679,6 +2792,7 @@ impl StateArrowFont {
             bold: style.contains("bold"),
             italic: style.contains("italic"),
             padding: state_text_block_padding(diagram),
+            alignment,
         }
     }
 
@@ -2929,18 +3043,14 @@ fn state_edge_label_margin(transition: &Transition) -> f64 {
 
 fn svek_edge_label_box_size(
     transition: &Transition,
-    label: &str,
+    label: &TransitionLabel,
     arrow_font: &StateArrowFont,
 ) -> EdgeLabelSize {
     let margin = state_edge_label_margin(transition) + arrow_font.padding;
+    let block = StateTransitionLabelBlock::measure(label, arrow_font);
     EdgeLabelSize {
-        width: text_render::measure_with_family(
-            label,
-            arrow_font.size as f64,
-            arrow_font.bold,
-            &arrow_font.family,
-        ) + 2.0 * margin,
-        height: text_render::label_height(label, arrow_font.size as f64) + 2.0 * margin,
+        width: block.width + 2.0 * margin,
+        height: block.height + 2.0 * margin,
     }
 }
 
@@ -3129,27 +3239,17 @@ fn autonomous_scope_painted_bounds(
         bounds.include(arrow_min_x - POLYGON_LIMIT_FINDER_OVERSCAN_X, arrow_min_y);
         bounds.include(arrow_max_x + POLYGON_LIMIT_FINDER_OVERSCAN_X, arrow_max_y);
 
-        if let Some(label) = transition.label.as_deref()
+        if let Some(label) = transition.label.as_ref()
             && let Some(label_position) = edge.label
         {
             let transition_font = StateArrowFont::for_transition(diagram, transition);
             let label_margin = state_edge_label_margin(transition) + transition_font.padding;
             let x = quantize_svek_coord(label_position.x) + label_margin;
-            let baseline = quantize_svek_coord(label_position.y)
-                + label_margin
-                + state_edge_label_first_baseline_ascent(label, &transition_font);
-            let width = text_render::measure_with_family(
-                label,
-                transition_font.size as f64,
-                transition_font.bold,
-                &transition_font.family,
-            );
-            let height = text_render::label_height(label, transition_font.size as f64);
-            bounds.include(x, baseline - height + LIMIT_FINDER_TEXT_ADJUST);
-            bounds.include(
-                x + width + label_margin,
-                baseline + LIMIT_FINDER_TEXT_ADJUST,
-            );
+            let y = quantize_svek_coord(label_position.y) + label_margin;
+            let block = StateTransitionLabelBlock::measure(label, &transition_font);
+            let (min_y, max_y) = block.painted_y_range(label, y, &transition_font);
+            bounds.include(x, min_y);
+            bounds.include(x + block.width + label_margin, max_y);
         }
     }
 
@@ -3237,7 +3337,7 @@ fn layout_autonomous_scope(
             layout.add_plantuml_svek_line0_edge(layout_from, layout_to);
         }
         let transition_font = StateArrowFont::for_transition(diagram, transition);
-        let label_size = transition.label.as_deref().map(|label| {
+        let label_size = transition.label.as_ref().map(|label| {
             let mut size = svek_edge_label_box_size(transition, label, &transition_font);
             size.height = size.height.floor();
             size
@@ -4429,7 +4529,8 @@ fn emit_autonomous_scope_links(
 
             if let Some(label) = &transition.label {
                 let label_margin = state_edge_label_margin(transition) + arrow_font.padding;
-                let (label_x, label_y) = edge_path
+                let block = StateTransitionLabelBlock::measure(label, &arrow_font);
+                let (label_x, label_top) = edge_path
                     .label
                     .map(|position| {
                         (
@@ -4440,8 +4541,7 @@ fn emit_autonomous_scope_links(
                             quantize_svek_coord(position.y)
                                 + scope.origin_y
                                 + offset_y
-                                + label_margin
-                                + state_edge_label_first_baseline_ascent(label, &arrow_font),
+                                + label_margin,
                         )
                     })
                     .unwrap_or_else(|| {
@@ -4449,25 +4549,12 @@ fn emit_autonomous_scope_links(
                         let last = points[points.len() - 1];
                         (
                             (first.0 + last.0) / 2.0 + label_margin,
-                            (first.1 + last.1) / 2.0,
+                            (first.1 + last.1) / 2.0
+                                - block.first_baseline_ascent(label, &arrow_font),
                         )
                     });
                 let mut text = String::new();
-                text_render::emit_text(
-                    &mut text,
-                    label,
-                    &TextBase {
-                        x: label_x,
-                        y: label_y,
-                        font_size: arrow_font.size,
-                        font_family: &arrow_font.family,
-                        fill: &arrow_font.color,
-                        bold: arrow_font.bold,
-                        italic: arrow_font.italic,
-                        underline: false,
-                        skip_underline: false,
-                    },
-                );
+                block.emit(&mut text, label, label_x, label_top, &arrow_font);
                 svg.push_str(&text);
             }
         }
@@ -5188,7 +5275,7 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
         if transition.arrow.is_horizontal() {
             layout.add_plantuml_svek_line0_edge(layout_from, layout_to);
         }
-        let label_size = transition.label.as_deref().map(|label| {
+        let label_size = transition.label.as_ref().map(|label| {
             let mut size = svek_edge_label_box_size(transition, label, &arrow_font);
             size.height = size.height.floor();
             size
@@ -5471,7 +5558,7 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
     }
     for transition_index in &transition_indices {
         let transition = &diagram.transitions[*transition_index];
-        let Some(label) = transition.label.as_deref() else {
+        let Some(label) = transition.label.as_ref() else {
             continue;
         };
         let Some(layout_edge_index) = transition_layout_edges.get(transition_index) else {
@@ -5487,18 +5574,11 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
         };
         let margin = state_edge_label_margin(transition) + arrow_font.padding;
         let x = quantize_svek_coord(position.x) + margin;
-        let baseline = quantize_svek_coord(position.y)
-            + margin
-            + state_edge_label_first_baseline_ascent(label, &arrow_font);
-        let width = text_render::measure_with_family(
-            label,
-            arrow_font.size as f64,
-            arrow_font.bold,
-            &arrow_font.family,
-        );
-        let height = text_render::label_height(label, arrow_font.size as f64);
-        include_point(x, baseline - height + LIMIT_FINDER_TEXT_ADJUST);
-        include_point(x + width + margin, baseline + LIMIT_FINDER_TEXT_ADJUST);
+        let y = quantize_svek_coord(position.y) + margin;
+        let block = StateTransitionLabelBlock::measure(label, &arrow_font);
+        let (min_y, max_y) = block.painted_y_range(label, y, &arrow_font);
+        include_point(x, min_y);
+        include_point(x + block.width + margin, max_y);
     }
     if !painted_min_x.is_finite()
         || !painted_min_y.is_finite()
@@ -6214,7 +6294,7 @@ pub fn render_with_oracle(
             let transition_font = StateArrowFont::for_transition(diagram, t);
             let ordinary_label_size = t
                 .label
-                .as_deref()
+                .as_ref()
                 .map(|label| svek_edge_label_box_size(t, label, &transition_font));
             let label_size = compose_link_label_size(
                 ordinary_label_size,
@@ -6362,7 +6442,7 @@ pub fn render_with_oracle(
 
             if let Some(label_origin) = edge.label
                 && let Some(label_size) = compose_link_label_size(
-                    transition.label.as_deref().map(|label| {
+                    transition.label.as_ref().map(|label| {
                         let transition_font = StateArrowFont::for_transition(diagram, transition);
                         svek_edge_label_box_size(transition, label, &transition_font)
                     }),
@@ -6659,7 +6739,7 @@ pub fn render_with_oracle(
                         let Some(label_position) = edge.label else {
                             continue;
                         };
-                        let label = transition.label.as_deref().unwrap();
+                        let label = transition.label.as_ref().unwrap();
                         let transition_font = StateArrowFont::for_transition(diagram, transition);
                         let label_size = ordinary_edge_label_size(label, &transition_font);
                         let label_right = quantize_svek_coord(label_position.x)
@@ -6687,7 +6767,7 @@ pub fn render_with_oracle(
                         .and_then(|edge| edge.label) else {
                             continue;
                         };
-                        let label = transition.label.as_deref().unwrap();
+                        let label = transition.label.as_ref().unwrap();
                         let transition_font = StateArrowFont::for_transition(diagram, transition);
                         let label_right = quantize_svek_coord(label_position.x)
                             + ordinary_edge_label_size(label, &transition_font).width;
@@ -7182,12 +7262,10 @@ pub fn render_with_oracle(
                         .and_then(|orc| orc.entities.get(id.as_str()))
                         .and_then(|r| r.fill.clone())
                         .unwrap_or_else(|| {
-                            state_def
-                                .and_then(|state| state.fill.as_deref())
-                                .map_or_else(
-                                    || paint_registry.use_paint(&style.fill),
-                                    |fill| paint_registry.use_raw(fill),
-                                )
+                            match state_def.and_then(|state| state.fill.as_deref()) {
+                                Some(fill) => paint_registry.use_raw(fill),
+                                None => paint_registry.use_paint(&style.fill),
+                            }
                         });
                     let stroke = paint_registry.use_paint(&style.stroke);
                     let shadow_attr = shadow_attr_for(style.shadow);
@@ -7225,12 +7303,10 @@ pub fn render_with_oracle(
                         .and_then(|orc| orc.entities.get(id.as_str()))
                         .and_then(|r| r.fill.clone())
                         .unwrap_or_else(|| {
-                            state_def
-                                .and_then(|state| state.fill.as_deref())
-                                .map_or_else(
-                                    || paint_registry.use_paint(&style.fill),
-                                    |fill| paint_registry.use_raw(fill),
-                                )
+                            match state_def.and_then(|state| state.fill.as_deref()) {
+                                Some(fill) => paint_registry.use_raw(fill),
+                                None => paint_registry.use_paint(&style.fill),
+                            }
                         });
                     let stroke = paint_registry.use_paint(&style.stroke);
                     let shadow_attr = shadow_attr_for(style.shadow);
@@ -11446,15 +11522,95 @@ CobaltDecision --> [*]
             bold: false,
             italic: false,
             padding: 0.0,
+            alignment: StateLabelAlignment::Center,
         };
 
-        let verdana = state_edge_label_first_baseline_ascent("transition", &font("Verdana"));
-        let generic = state_edge_label_first_baseline_ascent("transition", &font("sans-serif"));
+        let label = TransitionLabel::from("transition");
+        let verdana_font = font("Verdana");
+        let generic_font = font("sans-serif");
+        let verdana = StateTransitionLabelBlock::measure(&label, &verdana_font)
+            .first_baseline_ascent(&label, &verdana_font);
+        let generic = StateTransitionLabelBlock::measure(&label, &generic_font)
+            .first_baseline_ascent(&label, &generic_font);
         assert_eq!(
             verdana,
             text_render::label_first_baseline_ascent_with_family("transition", 12.0, "Verdana")
         );
         assert_ne!(verdana, generic);
+    }
+
+    #[test]
+    fn transition_display_block_measures_and_aligns_each_row() {
+        let font = StateArrowFont {
+            color: DEFAULT_TEXT_COLOR.to_string(),
+            family: "Courier New".to_string(),
+            size: 12,
+            bold: false,
+            italic: true,
+            padding: 0.0,
+            alignment: StateLabelAlignment::Center,
+        };
+        let label = TransitionLabel::from("short\\nsubstantially longer");
+        let block = StateTransitionLabelBlock::measure(&label, &font);
+        let short_width = text_render::measure_with_family("short", 12.0, false, "Courier New");
+        let long_width =
+            text_render::measure_with_family("substantially longer", 12.0, false, "Courier New");
+
+        assert_eq!(block.width, long_width);
+        assert_eq!(
+            block.height,
+            text_render::label_height_with_family("short", 12.0, "Courier New")
+                + text_render::label_height_with_family(
+                    "substantially longer",
+                    12.0,
+                    "Courier New"
+                )
+        );
+        assert_eq!(
+            block.row_x(20.0, 0),
+            20.0 + (long_width - short_width) / 2.0
+        );
+        assert_eq!(block.row_x(20.0, 1), 20.0);
+    }
+
+    #[test]
+    fn transition_display_natural_alignment_overrides_state_message_alignment() {
+        let parsed = rustuml_parser::parse::parse(
+            "@startuml\n\
+             skinparam stateMessageAlignment right\n\
+             state Alpha\n\
+             state Beta\n\
+             Alpha --> Beta : narrow\\lwidest row\n\
+             @enduml",
+        )
+        .unwrap();
+        let rustuml_parser::diagram::Diagram::State(diagram) = parsed else {
+            panic!("expected state diagram");
+        };
+        let transition = &diagram.transitions[0];
+        let font = StateArrowFont::for_transition(&diagram, transition);
+        let block = StateTransitionLabelBlock::measure(transition.label.as_ref().unwrap(), &font);
+
+        assert_eq!(font.alignment, StateLabelAlignment::Right);
+        assert_eq!(block.alignment, StateLabelAlignment::Left);
+        assert_eq!(block.row_x(31.0, 0), 31.0);
+    }
+
+    #[test]
+    fn transition_display_emits_separate_text_rows() {
+        let diagram = rustuml_parser::parse::parse(
+            "@startuml\n\
+             state Envelope {\n\
+               [*] --> Idle : boot pass\\nsecond line\n\
+             }\n\
+             @enduml",
+        )
+        .unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(">boot pass</text>"), "{svg}");
+        assert!(svg.contains(">second line</text>"), "{svg}");
+        assert!(!svg.contains(r">boot pass\nsecond line</text>"), "{svg}");
     }
 
     #[test]
@@ -12350,6 +12506,9 @@ CobaltDecision --> [*]
             "state Decision <<choice>>\n",
             "state Split <<fork>>\n",
             "state Recall <<history>>\n",
+            "[*] --> Decision\n",
+            "Decision --> Split\n",
+            "Split --> Recall\n",
             "@enduml\n",
         );
         let parsed = rustuml_parser::parse::parse(input).unwrap();
@@ -12427,6 +12586,8 @@ CobaltDecision --> [*]
             "skinparam activityDiamondBackgroundColor #010203-#A0B0C0\n",
             "state Decision <<choice>>\n",
             "state Recall <<history>>\n",
+            "[*] --> Decision\n",
+            "Decision --> Recall\n",
             "@enduml\n",
         );
         let parsed = rustuml_parser::parse::parse(input).unwrap();
@@ -12461,6 +12622,7 @@ CobaltDecision --> [*]
             "skinparam stateFontSize 17\n",
             "skinparam stateAttributeFontSize 9\n",
             "state Recall <<history>>\n",
+            "[*] --> Recall\n",
             "@enduml\n",
         );
         let parsed = rustuml_parser::parse::parse(input).unwrap();

@@ -4,7 +4,8 @@
 //! State diagram model.
 
 use super::{DiagramMeta, SkinParam};
-use serde::{Deserialize, Serialize};
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
+use std::ops::Deref;
 
 /// A complete state diagram.
 #[derive(Debug, Serialize, Deserialize)]
@@ -242,13 +243,138 @@ pub enum StateKind {
 pub struct Transition {
     pub from: String,
     pub to: String,
-    pub label: Option<String>,
+    pub label: Option<TransitionLabel>,
     /// Command orientation and direction before SVEK lays out the link.
     #[serde(default, skip_serializing_if = "TransitionArrow::is_default")]
     pub arrow: TransitionArrow,
     /// 1-based line number within the `@startuml` block.
     #[serde(default)]
     pub source_line: usize,
+}
+
+/// PlantUML `Display` content attached to a state transition.
+///
+/// The source remains available for string-compatible serialization, while
+/// renderers consume the parsed rows and natural alignment that Java creates
+/// in `Display.getWithNewlines`.
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct TransitionLabel {
+    source: String,
+    rows: Vec<String>,
+    natural_alignment: Option<TransitionLabelAlignment>,
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum TransitionLabelAlignment {
+    Left,
+    Right,
+}
+
+impl TransitionLabel {
+    pub fn rows(&self) -> &[String] {
+        &self.rows
+    }
+
+    pub fn natural_alignment(&self) -> Option<TransitionLabelAlignment> {
+        self.natural_alignment
+    }
+
+    pub fn as_str(&self) -> &str {
+        &self.source
+    }
+
+    fn parse(source: String) -> Self {
+        let mut rows = Vec::new();
+        let mut current = String::new();
+        let mut natural_alignment = None;
+        let mut raw_mode = false;
+        let mut offset = 0;
+
+        while offset < source.len() {
+            let rest = &source[offset..];
+            if rest.starts_with("<math>") || rest.starts_with("<latex>") || rest.starts_with("[[") {
+                raw_mode = true;
+            } else if rest.starts_with("</math>")
+                || rest.starts_with("</latex>")
+                || rest.starts_with("]]")
+            {
+                raw_mode = false;
+            }
+
+            let ch = rest.chars().next().expect("offset is before source end");
+            if !raw_mode && ch == '\\' {
+                let next_offset = offset + ch.len_utf8();
+                if let Some(next) = source[next_offset..].chars().next() {
+                    match next {
+                        'n' | 'l' | 'r' => {
+                            if next == 'l' {
+                                natural_alignment = Some(TransitionLabelAlignment::Left);
+                            } else if next == 'r' {
+                                natural_alignment = Some(TransitionLabelAlignment::Right);
+                            }
+                            rows.push(std::mem::take(&mut current));
+                        }
+                        't' => current.push('\t'),
+                        '\\' => current.push('\\'),
+                        _ => {
+                            current.push(ch);
+                            current.push(next);
+                        }
+                    }
+                    offset = next_offset + next.len_utf8();
+                    continue;
+                }
+            }
+
+            current.push(ch);
+            offset += ch.len_utf8();
+        }
+        rows.push(current);
+
+        Self {
+            source,
+            rows,
+            natural_alignment,
+        }
+    }
+}
+
+impl From<String> for TransitionLabel {
+    fn from(source: String) -> Self {
+        Self::parse(source)
+    }
+}
+
+impl From<&str> for TransitionLabel {
+    fn from(source: &str) -> Self {
+        Self::parse(source.to_string())
+    }
+}
+
+impl Deref for TransitionLabel {
+    type Target = str;
+
+    fn deref(&self) -> &Self::Target {
+        self.as_str()
+    }
+}
+
+impl Serialize for TransitionLabel {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer,
+    {
+        serializer.serialize_str(&self.source)
+    }
+}
+
+impl<'de> Deserialize<'de> for TransitionLabel {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        String::deserialize(deserializer).map(Self::from)
+    }
 }
 
 /// Parsed state-transition arrow semantics.

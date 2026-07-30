@@ -521,7 +521,9 @@ impl StateParser {
         if let Some(caps) = RE.captures(line) {
             let from = self.ensure_state(&caps[1]);
             let to = self.ensure_state(&caps[3]);
-            let label = caps.get(4).map(|m| m.as_str().trim().to_string());
+            let label = caps
+                .get(4)
+                .map(|m| TransitionLabel::from(m.as_str().trim()));
             let transition_style = parse_transition_style(&caps[2]);
             transition_style.record_in(&mut self.meta, self.transitions.len());
             self.transitions.push(Transition {
@@ -1177,6 +1179,41 @@ mod tests {
         assert_eq!(d.transitions[0].from, "[*]");
         assert_eq!(d.transitions[0].to, "Active");
         assert_eq!(d.transitions[1].label.as_deref(), Some("disable"));
+    }
+
+    #[test]
+    fn transition_labels_parse_java_display_rows_and_alignment() {
+        let d = parse(
+            "Alpha --> Beta : first row\\nwidest second row\\rthird\n\
+             Beta --> Gamma : left row\\lright row\n\
+             Gamma --> Delta : <math>a\\nb</math> [[x\\ny]] tail\\nlast",
+        );
+
+        let first = d.transitions[0].label.as_ref().unwrap();
+        assert_eq!(first.rows(), &["first row", "widest second row", "third"]);
+        assert_eq!(
+            first.natural_alignment(),
+            Some(TransitionLabelAlignment::Right)
+        );
+
+        let second = d.transitions[1].label.as_ref().unwrap();
+        assert_eq!(second.rows(), &["left row", "right row"]);
+        assert_eq!(
+            second.natural_alignment(),
+            Some(TransitionLabelAlignment::Left)
+        );
+
+        let raw = d.transitions[2].label.as_ref().unwrap();
+        assert_eq!(raw.rows(), &["<math>a\\nb</math> [[x\\ny]] tail", "last"]);
+        assert_eq!(raw.as_str(), "<math>a\\nb</math> [[x\\ny]] tail\\nlast");
+    }
+
+    #[test]
+    fn transition_labels_decode_tabs_and_escaped_backslashes() {
+        let d = parse(r"Alpha --> Beta : one\two\\three\q");
+        let label = d.transitions[0].label.as_ref().unwrap();
+        assert_eq!(label.rows(), &["one\two\\three\\q"]);
+        assert_eq!(label.as_str(), r"one\two\\three\q");
     }
 
     #[test]
