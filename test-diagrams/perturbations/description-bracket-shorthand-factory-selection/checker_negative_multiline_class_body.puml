@@ -1,0 +1,9 @@
+@startuml
+package "Review Types" as Types {
+  class "Review Record" as Record {
+    +values : String[]
+    [literal member row] as body text
+    +lookup(key : String) : String
+  }
+}
+@enduml

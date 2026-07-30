@@ -1,0 +1,7 @@
+@startuml
+package "Review Styled Types" as StyledTypes {
+  class StyleSource
+  class StyleTarget
+}
+StyleSource -[#336699,dashed]-> StyleTarget : [review style]
+@enduml

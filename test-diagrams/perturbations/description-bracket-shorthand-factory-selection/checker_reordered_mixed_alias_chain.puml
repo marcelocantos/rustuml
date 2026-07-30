@@ -1,0 +1,9 @@
+@startuml
+component "Review Chain" as Chain {
+  Tail as [Review Tail]
+  [Review Head] as Head
+  Middle as [Review Middle]
+}
+Head --> Middle
+Middle --> Tail
+@enduml

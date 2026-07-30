@@ -1,0 +1,5 @@
+@startuml
+package "Review Abbreviated Links" as AbbreviatedLinks {
+  [Review Left] -r-> [Review Right] : abbreviated
+}
+@enduml

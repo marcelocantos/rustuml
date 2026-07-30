@@ -1,0 +1,7 @@
+@startuml
+frame "Review Styled Link" as Styled {
+  [Review Producer] as Producer
+  [Review Consumer] as Consumer
+}
+Producer -[#336699,dashed]-> [Review Consumer] : styled route
+@enduml

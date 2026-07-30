@@ -1,0 +1,7 @@
+@startuml
+package "Review Abbreviation" as Abbrev {
+  [Review Alpha] as Alpha
+  [Review Beta] as Beta
+}
+Alpha -r-> [Review Beta] : abbreviated direction
+@enduml

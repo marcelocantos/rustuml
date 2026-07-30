@@ -1,0 +1,5 @@
+@startuml
+frame "Review URL Types" as UrlTypes {
+  class "Review Link [stable]" as Link [[https://example.test/review?tag=stable]]
+}
+@enduml

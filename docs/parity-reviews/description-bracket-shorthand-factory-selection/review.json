@@ -1,0 +1,260 @@
+{
+  "schema_version": 1,
+  "mechanism": "description-bracket-shorthand-factory-selection",
+  "reviewed": "2026-07-31",
+  "checker": {
+    "identity": "independent Codex adversarial checker",
+    "model": "OpenAI GPT-5 (Codex)",
+    "tool": "Codex desktop task",
+    "implemented_change": false,
+    "edited_shipping_code": false,
+    "edited_account": false,
+    "ran_cargo_or_rustc": false
+  },
+  "revisions": {
+    "rust_implementation": "e33b38a0bfe33d40b3d954eff16ff30c90399c1f",
+    "java": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "executables": {
+    "rust_helper": {
+      "path": "/private/tmp/rustuml-integrate-20260731a/target/checker-tools/diff_one-e33b38a0",
+      "sha256": "853ada3b486e049185a972a1c952ec027b5d248afd22bc0da941442180893148"
+    },
+    "java_jar": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+    }
+  },
+  "commands": [
+    "git rev-parse HEAD",
+    "shasum -a 256 target/checker-tools/diff_one-e33b38a0 /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "JAVA_TOOL_OPTIONS=-Djava.awt.headless=true java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/description-bracket-shorthand-factory-selection/*.puml",
+    "target/checker-tools/diff_one-e33b38a0 --no-oracle <each-puml>",
+    "target/checker-tools/diff_one-e33b38a0 --no-oracle --print-rust <each-puml>",
+    "DIFF_ONE_DEBUG=1 target/checker-tools/diff_one-e33b38a0 --no-oracle <each-puml>",
+    "rg -n \"Syntax Error|NoSuchElementException|An error has occured|Assumed diagram type\" test-diagrams/perturbations/description-bracket-shorthand-factory-selection",
+    "git show --format= --no-ext-diff e33b38a0 -- crates/rustuml-parser/src/parse/mod.rs crates/rustuml-parser/src/parse/component.rs"
+  ],
+  "validity": {
+    "final_inputs": 19,
+    "java_svgs": 19,
+    "java_generation_exit": 0,
+    "error_marker_matches": 0,
+    "note": "An initially drafted URL label was rejected by Java and corrected before the final matrix. The preserved URL input and SVG are valid; no invalid input is counted."
+  },
+  "source_audit": {
+    "java": [
+      {
+        "location": "src/main/java/net/sourceforge/plantuml/PSystemBuilder.java:128-136,226-241",
+        "finding": "Java tries Sequence, Class, Activity, then Description factories and accepts the first factory that consumes the complete source."
+      },
+      {
+        "location": "src/main/java/net/sourceforge/plantuml/command/PSystemCommandFactory.java:135-197",
+        "finding": "Factory viability is command-driven. Multiline commands are recognized and consumed as complete blocks before their body lines can be considered as top-level commands."
+      },
+      {
+        "location": "src/main/java/net/sourceforge/plantuml/classdiagram/ClassDiagramFactory.java:101-171",
+        "finding": "Class registers its class, package, shared-symbol, link, title, and common command grammars, but not Description's bracket element grammar."
+      },
+      {
+        "location": "src/main/java/net/sourceforge/plantuml/descdiagram/DescriptionDiagramFactory.java:85-138",
+        "finding": "Description registers CommandLinkElement, shared symbol containers, CommandCreateElementFull, and multiline element commands in one command model."
+      },
+      {
+        "location": "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandCreateElementFull.java:81-138",
+        "finding": "The Description declaration grammar supports both `[Display] as Code` and `Code as [Display]`, preserving code and display separately."
+      },
+      {
+        "location": "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandLinkElement.java:87-119",
+        "finding": "The Description link grammar supports abbreviated direction tokens and bracketed line-style clauses in addition to full direction words."
+      }
+    ],
+    "rust": [
+      {
+        "location": "crates/rustuml-parser/src/parse/mod.rs:354-436,864-881",
+        "finding": "Rust scans every raw line and suppresses bracket recognition only inside one hand-maintained class-leaf brace context. It does not model title, header, footer, legend, note, or other multiline command ownership."
+      },
+      {
+        "location": "crates/rustuml-parser/src/parse/component.rs:34-80",
+        "finding": "Rust duplicates a reduced Description grammar. Its direction regex accepts only down/up/left/right, and its arrow regex excludes Java's bracketed style grammar."
+      },
+      {
+        "location": "crates/rustuml-parser/src/parse/component.rs:728-755,841-920",
+        "finding": "The component parser can construct both alias directions when reached, but subtype scoring and command recognition do not consistently route reverse aliases or the broader Java link grammar to that parser."
+      },
+      {
+        "location": "git diff e33b38a0^ e33b38a0 -- crates/rustuml-parser/src/parse/mod.rs crates/rustuml-parser/src/parse/component.rs",
+        "finding": "No golden reads, fixture labels, SVG surgery, coordinate keys, or parity-affecting numeric constants were added. The defect is conceptual over-specialization, not mechanical fixture lookup."
+      }
+    ]
+  },
+  "matrix_summary": {
+    "strict_exact": 5,
+    "strict_mismatch": 14,
+    "mechanism_relevant_failures": 8,
+    "factory_or_command_semantic_passes": 11
+  },
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/description-bracket-shorthand-factory-selection/checker_package_forward_alias_lr.puml",
+      "golden": "test-diagrams/perturbations/description-bracket-shorthand-factory-selection/checker_package_forward_alias_lr.svg",
+      "axes": ["aliased package", "forward bracket alias", "left-to-right", "renamed labels", "link direction"],
+      "strict": "fail",
+      "mechanism": "pass",
+      "finding": "Both sides select DESCRIPTION and preserve Gateway.Login, Gateway.Audit, displays, and the link. The strict failure is an existing layout-spacing residue."
+    },
+    {
+      "source": "test-diagrams/perturbations/description-bracket-shorthand-factory-selection/checker_component_reverse_alias_tb.puml",
+      "golden": "test-diagrams/perturbations/description-bracket-shorthand-factory-selection/checker_component_reverse_alias_tb.svg",
+      "axes": ["component container", "reverse aliases", "top-to-bottom", "contained link"],
+      "strict": "fail",
+      "mechanism": "fail",
+      "finding": "Java emits cluster Shell with Shell.Portal and Shell.Store using Review Portal/Review Store displays. Rust flattens Shell to an entity and recreates top-level Portal/Store from the link, losing both displays and scope."
+    },
+    {
+      "source": "test-diagrams/perturbations/description-bracket-shorthand-factory-selection/checker_node_nested_alias_cross_lr.puml",
+      "golden": "test-diagrams/perturbations/description-bracket-shorthand-factory-selection/checker_node_nested_alias_cross_lr.svg",
+      "axes": ["node container", "nested aliased packages", "both alias directions", "cross-scope link", "left-to-right"],
+      "strict": "pass",
+      "mechanism": "pass",
+      "finding": "Byte-structural match with the complete Edge.Public.Api and Edge.Private.Ledger identity graph."
+    },
+    {
+      "source": "test-diagrams/perturbations/description-bracket-shorthand-factory-selection/checker_frame_nested_fanout_order_tb.puml",
+      "golden": "test-diagrams/perturbations/description-bracket-shorthand-factory-selection/checker_frame_nested_fanout_order_tb.svg",
+      "axes": ["frame plus nested component", "reverse alias", "fanout topology", "declaration order", "top-to-bottom"],
+      "strict": "fail",
+      "mechanism": "fail",
+      "finding": "Java preserves Plane.Core.Worker first and all three links. Rust omits that declaration from the nested scope, later creates top-level Worker, changes UID order, and drops the fanout links."
+    },
+    {
+      "source": "test-diagrams/perturbations/description-bracket-shorthand-factory-selection/checker_undeclared_bracket_endpoints_left.puml",
+      "golden": "test-diagrams/perturbations/description-bracket-shorthand-factory-selection/checker_undeclared_bracket_endpoints_left.svg",
+      "axes": ["package", "links-only endpoints", "full left direction token", "implicit declarations"],
+      "strict": "pass",
+      "mechanism": "pass",
+      "finding": "Byte-structural match. A full direction token with two bracket endpoints rejects Class and reaches the Description model."
+    },
+    {
+      "source": "test-diagrams/perturbations/description-bracket-shorthand-factory-selection/checker_abbreviated_direction_token.puml",
+      "golden": "test-diagrams/perturbations/description-bracket-shorthand-factory-selection/checker_abbreviated_direction_token.svg",
+      "axes": ["package", "forward aliases", "abbreviated right token", "bracket endpoint reference"],
+      "strict": "fail",
+      "mechanism": "fail",
+      "finding": "Java parses `-r->`, creates the bracket endpoint Review Beta, and emits the labeled link. Rust emits only the two declarations and drops the command."
+    },
+    {
+      "source": "test-diagrams/perturbations/description-bracket-shorthand-factory-selection/checker_styled_bracket_endpoint_link.puml",
+      "golden": "test-diagrams/perturbations/description-bracket-shorthand-factory-selection/checker_styled_bracket_endpoint_link.svg",
+      "axes": ["frame", "forward aliases", "bracket endpoint reference", "color and dashed link style"],
+      "strict": "fail",
+      "mechanism": "fail",
+      "finding": "Java accepts the styled Description link and its bracket endpoint. Rust's reduced arrow regex does not parse it, so the endpoint and link are absent."
+    },
+    {
+      "source": "test-diagrams/perturbations/description-bracket-shorthand-factory-selection/checker_reordered_mixed_alias_chain.puml",
+      "golden": "test-diagrams/perturbations/description-bracket-shorthand-factory-selection/checker_reordered_mixed_alias_chain.svg",
+      "axes": ["component container", "mixed alias directions", "changed declaration order", "chain topology"],
+      "strict": "fail",
+      "mechanism": "fail",
+      "finding": "Java emits Chain.Tail, Chain.Head, and Chain.Middle with all displays. Rust preserves only the forward alias in scope; reverse aliases become top-level code labels and the chain links disappear."
+    },
+    {
+      "source": "test-diagrams/perturbations/description-bracket-shorthand-factory-selection/checker_links_only_abbreviated_direction.puml",
+      "golden": "test-diagrams/perturbations/description-bracket-shorthand-factory-selection/checker_links_only_abbreviated_direction.svg",
+      "axes": ["package", "links-only endpoints", "abbreviated direction", "renamed labels"],
+      "strict": "fail",
+      "mechanism": "fail",
+      "finding": "Java selects DESCRIPTION and emits both scoped endpoints plus the link. Rust selects CLASS and emits no leaves. This directly disproves the claimed factory predicate."
+    },
+    {
+      "source": "test-diagrams/perturbations/description-bracket-shorthand-factory-selection/checker_links_only_styled_arrow.puml",
+      "golden": "test-diagrams/perturbations/description-bracket-shorthand-factory-selection/checker_links_only_styled_arrow.svg",
+      "axes": ["node", "links-only endpoints", "styled arrow", "renamed labels"],
+      "strict": "fail",
+      "mechanism": "fail",
+      "finding": "Java selects DESCRIPTION and emits both scoped endpoints plus the styled link. Rust selects CLASS and emits only the container."
+    },
+    {
+      "source": "test-diagrams/perturbations/description-bracket-shorthand-factory-selection/checker_negative_multiline_class_body.puml",
+      "golden": "test-diagrams/perturbations/description-bracket-shorthand-factory-selection/checker_negative_multiline_class_body.svg",
+      "axes": ["explicit class", "multiline class body", "bracket-shaped member", "package"],
+      "strict": "pass",
+      "mechanism": "pass",
+      "finding": "Byte-structural CLASS match; body text is not treated as a Description command."
+    },
+    {
+      "source": "test-diagrams/perturbations/description-bracket-shorthand-factory-selection/checker_negative_abstract_class_body.puml",
+      "golden": "test-diagrams/perturbations/description-bracket-shorthand-factory-selection/checker_negative_abstract_class_body.svg",
+      "axes": ["abstract class", "reverse-alias-shaped body text", "inheritance", "frame"],
+      "strict": "pass",
+      "mechanism": "pass",
+      "finding": "Byte-structural CLASS match; the abstract-class body exclusion works."
+    },
+    {
+      "source": "test-diagrams/perturbations/description-bracket-shorthand-factory-selection/checker_negative_multiline_title.puml",
+      "golden": "test-diagrams/perturbations/description-bracket-shorthand-factory-selection/checker_negative_multiline_title.svg",
+      "axes": ["explicit class", "multiline title", "single bracket declaration-shaped line"],
+      "strict": "fail",
+      "mechanism": "pass",
+      "finding": "Both sides remain CLASS with the same entities. The strict mismatch is title geometry, but this pass is score-dependent rather than command-context-aware."
+    },
+    {
+      "source": "test-diagrams/perturbations/description-bracket-shorthand-factory-selection/checker_negative_multiline_header.puml",
+      "golden": "test-diagrams/perturbations/description-bracket-shorthand-factory-selection/checker_negative_multiline_header.svg",
+      "axes": ["explicit class", "multiline header", "single bracket declaration-shaped line", "node"],
+      "strict": "fail",
+      "mechanism": "pass",
+      "finding": "Both sides remain CLASS with matching semantic identities; only header text metrics differ."
+    },
+    {
+      "source": "test-diagrams/perturbations/description-bracket-shorthand-factory-selection/checker_negative_multiline_legend.puml",
+      "golden": "test-diagrams/perturbations/description-bracket-shorthand-factory-selection/checker_negative_multiline_legend.svg",
+      "axes": ["explicit class", "multiline legend", "single bracket declaration-shaped line", "component container"],
+      "strict": "fail",
+      "mechanism": "pass",
+      "finding": "Both sides remain CLASS with matching entity identities. Rust omits the legend body, an existing renderer/parser residue outside factory ownership."
+    },
+    {
+      "source": "test-diagrams/perturbations/description-bracket-shorthand-factory-selection/checker_negative_class_guard_label.puml",
+      "golden": "test-diagrams/perturbations/description-bracket-shorthand-factory-selection/checker_negative_class_guard_label.svg",
+      "axes": ["explicit classes", "bracket guard in link label", "package"],
+      "strict": "fail",
+      "mechanism": "pass",
+      "finding": "Both sides remain CLASS with matching entities and link identity. Rust truncates the label before the guard, an existing class-link label residue."
+    },
+    {
+      "source": "test-diagrams/perturbations/description-bracket-shorthand-factory-selection/checker_negative_class_url.puml",
+      "golden": "test-diagrams/perturbations/description-bracket-shorthand-factory-selection/checker_negative_class_url.svg",
+      "axes": ["explicit class", "bracket text in label", "double-bracket URL", "frame"],
+      "strict": "pass",
+      "mechanism": "pass",
+      "finding": "Byte-structural CLASS match; URL brackets do not trigger Description routing."
+    },
+    {
+      "source": "test-diagrams/perturbations/description-bracket-shorthand-factory-selection/checker_negative_class_link_style.puml",
+      "golden": "test-diagrams/perturbations/description-bracket-shorthand-factory-selection/checker_negative_class_link_style.svg",
+      "axes": ["explicit classes", "bracketed line style", "bracket-shaped label", "package"],
+      "strict": "fail",
+      "mechanism": "pass",
+      "finding": "Both sides remain CLASS and preserve the styled link. Rust omits the bracket-shaped label, an existing class-link label residue."
+    },
+    {
+      "source": "test-diagrams/perturbations/description-bracket-shorthand-factory-selection/checker_negative_metadata_bracket_pressure.puml",
+      "golden": "test-diagrams/perturbations/description-bracket-shorthand-factory-selection/checker_negative_metadata_bracket_pressure.svg",
+      "axes": ["explicit class", "multiline title", "three bracket-shaped prose lines", "fixed topology"],
+      "strict": "fail",
+      "mechanism": "fail",
+      "finding": "Java remains CLASS and renders MetadataTypes.MetadataLeaf. Rust flips to DESCRIPTION and emits no entities. Increasing only title prose volume changes subtype selection because raw lines are scored as commands."
+    }
+  ],
+  "findings": [
+    "Rejected: the implementation models one special multiline context, class leaf bodies, instead of Java's general command-consumption model. Bracket-shaped title prose can still reject the Class candidate and eventually change the selected subtype.",
+    "Rejected: the duplicated Description link recognizer is narrower than Java CommandLinkElement. Links-only abbreviated directions and styled arrows leave the Class candidate viable and select CLASS with missing endpoints.",
+    "Rejected: the planned reverse-alias invariant is not established in shared containers. Reverse aliases are dropped or recreated as top-level code labels, losing display text, scope, source order, and links.",
+    "No fixture-keyed logic, golden dependency, SVG surgery, unexplained layout constant, or high-precision tuning was found. The implementation is nevertheless over-specialized to enumerated syntax rather than the underlying factory/command model.",
+    "The held-out matrix contains 19 Java-valid inputs across container, scope, alias direction, topology, order, direction, style, multiline-body, metadata, guard, URL, and class-control axes. Five are strict matches; eight failures directly contradict the claimed mechanism."
+  ],
+  "verdict": "rejected",
+  "verdict_scope": "The change recovers the targeted bare bracket cases and several held-outs, but it does not reproduce Java factory viability or the full Description bracket command model. General multiline command ownership, reverse aliases in shared containers, abbreviated directions, and styled links remain counterexamples."
+}

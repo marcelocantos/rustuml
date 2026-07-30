@@ -1,0 +1,8 @@
+@startuml
+legend
+[Review Legend] as legend text
+endlegend
+component "Review Legend Types" as LegendTypes {
+  class LegendLeaf
+}
+@enduml

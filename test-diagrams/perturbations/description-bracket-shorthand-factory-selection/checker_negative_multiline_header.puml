@@ -1,0 +1,8 @@
+@startuml
+header
+[Review Header] as header text
+endheader
+node "Review Header Types" as HeaderTypes {
+  class HeaderLeaf
+}
+@enduml

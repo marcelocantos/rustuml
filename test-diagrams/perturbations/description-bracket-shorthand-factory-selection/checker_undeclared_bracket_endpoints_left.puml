@@ -1,0 +1,5 @@
+@startuml
+package "Review Links" as Links {
+  [Review Source] -left-> [Review Sink] : reverse flow
+}
+@enduml

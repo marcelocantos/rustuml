@@ -1,0 +1,10 @@
+@startuml
+frame "Review Abstract Types" as AbstractTypes {
+  abstract class "Review Base" as Base {
+    Code as [literal reverse alias text]
+    #items : List<String>
+  }
+  class Derived
+}
+Base <|-- Derived
+@enduml

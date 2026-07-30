@@ -1,0 +1,7 @@
+@startuml
+package "Review Guard Types" as GuardTypes {
+  class GuardSource
+  class GuardTarget
+}
+GuardSource --> GuardTarget : update [version > 7]
+@enduml

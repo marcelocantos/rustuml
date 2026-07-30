@@ -1,0 +1,13 @@
+@startuml
+top to bottom direction
+frame "Review Plane" as Plane {
+  component "Review Core" as Core {
+    Worker as [Review Worker]
+    [Review Queue] as Queue
+    [Review Archive] as Archive
+  }
+}
+Queue -down-> Worker
+Worker -down-> Archive
+Queue -down-> Archive
+@enduml

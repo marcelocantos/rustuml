@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+package "Review Gateway" as Gateway {
+  [Review Login] as Login
+  [Review Audit] as Audit
+}
+Login -right-> Audit : records
+@enduml

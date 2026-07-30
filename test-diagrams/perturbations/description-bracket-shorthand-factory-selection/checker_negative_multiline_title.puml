@@ -1,0 +1,8 @@
+@startuml
+title
+[Review Release] as title text
+end title
+package "Review Title Types" as TitleTypes {
+  class TitleLeaf
+}
+@enduml

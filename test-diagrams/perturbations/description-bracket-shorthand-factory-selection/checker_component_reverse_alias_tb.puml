@@ -1,0 +1,8 @@
+@startuml
+top to bottom direction
+component "Review Shell" as Shell {
+  Portal as [Review Portal]
+  Store as [Review Store]
+  Portal -down-> Store : persists
+}
+@enduml

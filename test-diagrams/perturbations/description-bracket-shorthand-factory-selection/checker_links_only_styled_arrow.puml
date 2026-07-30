@@ -1,0 +1,5 @@
+@startuml
+node "Review Styled Endpoints" as StyledEndpoints {
+  [Review Producer] -[#336699,dashed]-> [Review Consumer] : styled
+}
+@enduml
