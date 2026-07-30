@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-svek-link-connection-order",
+  "created": "2026-07-31",
+  "status": "proposed",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "cb5be12b7928ec20c791909cbaf4c01eb6c011ab",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/CucaDiagramFileMakerSvek.java",
+      "symbols": [
+        "CucaDiagramFileMakerSvek.getTextBlock12026",
+        "CucaDiagramFileMakerSvek.getOrderedLinks",
+        "CucaDiagramFileMakerSvek.addLinkNew"
+      ],
+      "lines": "60-110",
+      "role": "Transforms constructor/source-order links into a stable connection-grouped list before creating DotData: a later link with the same unordered endpoints is inserted after the existing contiguous group."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/abel/Link.java",
+      "symbols": [
+        "Link.idCommentForSvg",
+        "Link.sameConnections"
+      ],
+      "lines": "106-114, 462-470",
+      "role": "Defines the decoration-sensitive base SVG path id separately from connection identity, which is the same two endpoint entities in either direction independent of link kind, label, or decoration."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
+      "symbol": "GraphvizImageBuilder.buildImage",
+      "lines": "224-244",
+      "role": "Creates every SvekEdge and Bibliotekon entry by iterating the already connection-grouped DotData link list."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/Bibliotekon.java",
+      "symbols": [
+        "Bibliotekon.addLine",
+        "Bibliotekon.allLines"
+      ],
+      "lines": "87-111, 166-168",
+      "role": "Preserves that grouped insertion stream for both Graphviz solving and final painting."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekResult.java",
+      "symbol": "SvekResult.drawU",
+      "lines": "90-101",
+      "role": "Paints relationship groups in Bibliotekon allLines order after nodes and shares one used-id set across the stream."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+      "symbols": [
+        "SvekEdge.drawU",
+        "SvekEdge.uniq"
+      ],
+      "lines": "929-944, 1086-1098",
+      "role": "Allocates an SVG path id only for a drawable edge, inserts the full decoration-sensitive Link.idCommentForSvg value into the shared set, and appends -1, -2, and so on only when that complete id is already present."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbol": "render_no_oracle",
+      "lines": "2552-2621",
+      "role": "Adds regular class relationships to LayoutGraph in raw parser/source order."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbol": "render_with_oracle_uid_origin",
+      "lines": "5955-5994",
+      "role": "Paints regular relationships in the same raw parser/source order even when Java groups noncontiguous links by connection, and counts duplicate ids by the undecorated ordered endpoint tuple before deriving the actual SVG path id."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbol": "relationship_edge_indices",
+      "lines": "13151-13174",
+      "role": "Recovers routes by first-unused endpoint matching, discarding the stable caller-owned edge_index already retained by rustuml-layout."
+    },
+    {
+      "path": "crates/rustuml-layout/src/graph.rs",
+      "symbol": "EdgePath.edge_index",
+      "lines": "2343-2347",
+      "role": "Carries the exact caller insertion identity through Graphviz traversal and is available to bind grouped relationships back to their own routes."
+    }
+  ],
+  "evidence_inputs": [
+    "test-diagrams/golden/class/class_edge_dense_relationships.puml",
+    "test-diagrams/golden/class/class_pattern_interpreter.puml"
+  ],
+  "claimed_invariant": "Before SVEK construction, class links are stably partitioned by first-seen unordered endpoint pair. The order of pair groups is the order in which each pair first appears; the order within a pair group is original link-construction order, including reversed links and mixed relationship kinds. This one stream controls Graphviz edge insertion, stable route identity, Bibliotekon allLines painting, link-group metadata order, and duplicate SVG-id allocation. Constructor UIDs remain attached to their original Link objects and are not renumbered by the grouping projection.",
+  "causal_divergence": "Rust retains source order for `A-B, A-C, B-A, B-C, C-A, C-B, A..B, A..C`, while Java projects it to the pair-grouped stream `A-B, B-A, A..B, A-C, C-A, A..C, B-C, C-B`. Rust then emits line 11 where Java emits line 12 and consumes endpoint-matched routes rather than the relationship's stable layout identity. The interpreter case has the same shape: each later aggregation is moved beside the first inheritance link sharing Expression and that concrete expression. Rust also increments duplicate ids by `(from, to)` before deriving the decoration-sensitive path id, so an inheritance and aggregation sharing endpoints spuriously collide even though Java's complete base ids differ (`A-to-B` versus `A-backto-B`). The mismatch is the missing ordered-link and rendered-id allocation model, not a fixture-specific UID map, Graphviz coordinate sort, relationship-kind priority, or source-line exception.",
+  "planned_model_change": "Introduce one stable ordinary-class relationship index stream implementing CucaDiagramFileMakerSvek.addLinkNew over unordered canonical endpoint pairs. Use it when adding ordinary relationships to LayoutGraph and when painting them. Reconstruct each ordinary relationship's expected LayoutGraph insertion index after the preceding association-replacement and attached-note edges, then bind it to EdgePath.edge_index instead of consuming the first route with matching endpoints. During that paint stream, derive the complete decoration-sensitive Link.idCommentForSvg-equivalent base id and uniquify it against one set only after the edge is known to be drawable; do not let a different link decoration consume its suffix. Keep source-order parser storage and shared Cuca UID allocation unchanged. Preserve the existing specialized association and note-link phases; extending their already separately modeled construction streams is outside this residual mechanism and must not be approximated here.",
+  "perturbation_axes": [
+    "two versus three versus four unordered endpoint pairs",
+    "contiguous versus interleaved repeated pairs",
+    "forward versus reverse orientation within one pair",
+    "association, dependency, inheritance, implementation, and aggregation kinds sharing a pair",
+    "labels and endpoint quantifiers on different members of one pair group",
+    "renamed endpoints and reordered first pair occurrence",
+    "top-to-bottom versus left-to-right layout",
+    "unique-pair-only graph as a negative control"
+  ],
+  "scope_boundary": "This mechanism owns the ordered-link projection for ordinary ClassDiagram relationships, their LayoutGraph insertion identities, and their final SVEK paint order. It does not change parser construction order, Cuca UIDs, relationship semantics, endpoint resolution, association-class replacement, attached-note links, SquareMaker links, routing algorithms, or SVG comparator behavior.",
+  "acceptance": [
+    "Both dense and interpreter residuals improve without changing unique-pair class diagrams.",
+    "Fresh valid inputs with interleaved reversed and mixed-kind links preserve Java pair-group and within-group order.",
+    "Every relationship remains bound to its own stable EdgePath identity when Graphviz traversal differs.",
+    "Focused layout/renderer tests, the class-family census, the full no-oracle ratchet, clippy, and mechanical harness guards pass except for explicitly pre-existing gate debt.",
+    "An independent checker records a verdict at the exact implementation revision."
+  ]
+}
