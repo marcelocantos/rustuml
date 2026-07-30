@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+NoDe "Runtime Host F3G" AS HostF3G {
+  DATABASE AuditStoreF3G
+  QuEuE "Retry Work F3G" As RetryQueueF3G
+}
+AuditStoreF3G --> RetryQueueF3G
+@enduml

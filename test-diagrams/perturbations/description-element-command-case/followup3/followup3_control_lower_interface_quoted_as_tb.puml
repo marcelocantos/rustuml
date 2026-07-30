@@ -1,0 +1,5 @@
+@startuml
+component GatewayF3A
+interface "Service Port F3A" as ServicePortF3A
+GatewayF3A ..> ServicePortF3A
+@enduml
