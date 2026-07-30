@@ -1,0 +1,12 @@
+@startuml
+left to right direction
+package C1482UnquotedOuter {
+  node C1482UnquotedInner {
+    class C1482UnquotedInnerLeaf
+  }
+  class C1482UnquotedSibling
+  C1482UnquotedInnerLeaf --> C1482UnquotedSibling : unquoted-inside
+}
+class C1482UnquotedOutside
+C1482UnquotedSibling --> C1482UnquotedOutside : unquoted-outside
+@enduml

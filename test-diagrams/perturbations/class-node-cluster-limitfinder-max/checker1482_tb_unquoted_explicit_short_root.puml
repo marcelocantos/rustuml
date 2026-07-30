@@ -1,0 +1,7 @@
+@startuml
+node C1482UnquotedShort {
+  class C1482UnquotedLeaf
+}
+class C1482UnquotedReceiver
+C1482UnquotedLeaf --> C1482UnquotedReceiver : unquoted-outside
+@enduml

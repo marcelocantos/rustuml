@@ -1,0 +1,13 @@
+@startuml
+left to right direction
+skinparam shadowing true
+skinparam packageBorderThickness 2
+skinparam packageBackgroundColor #E8F4FF
+skinparam packageBorderColor #204060
+skinparam packageFontColor #102030
+node "C1482 Styled Shadow Node" {
+  class C1482StyledLeaf
+}
+class C1482StyledOutside
+C1482StyledLeaf --> C1482StyledOutside : styled-outside
+@enduml

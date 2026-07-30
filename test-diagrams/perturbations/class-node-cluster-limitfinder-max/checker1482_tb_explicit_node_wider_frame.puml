@@ -1,0 +1,9 @@
+@startuml
+node "C1482 Node Envelope Owner" {
+  class C1482NodeLeaf
+}
+frame "C1482 Competing Frame Has A Much Wider Label For Envelope" {
+  class C1482FrameLeaf
+}
+C1482NodeLeaf --> C1482FrameLeaf : wider-peer-route
+@enduml

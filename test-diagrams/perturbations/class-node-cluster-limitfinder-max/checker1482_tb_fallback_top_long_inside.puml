@@ -1,0 +1,8 @@
+@startuml
+skinparam packageStyle node
+package "C1482 Fallback Node With A Deliberately Long Title" {
+  class C1482FallbackLeft
+  class C1482FallbackRight
+  C1482FallbackLeft --> C1482FallbackRight : inside-route
+}
+@enduml

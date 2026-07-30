@@ -1,0 +1,11 @@
+@startuml
+left to right direction
+skinparam packageStyle node
+package "C1482 Narrow Fallback Node" {
+  class C1482NarrowLeaf
+}
+frame "C1482 Wider Competing Frame With A Deliberately Extended Label" {
+  class C1482WideLeaf
+}
+C1482NarrowLeaf --> C1482WideLeaf : competing-route
+@enduml

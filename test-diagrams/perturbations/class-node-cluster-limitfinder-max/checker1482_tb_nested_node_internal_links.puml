@@ -1,0 +1,10 @@
+@startuml
+package "C1482 Outer Nest" {
+  node "C1482 Inner Node" {
+    class C1482InnerFirst
+    class C1482InnerSecond
+    C1482InnerFirst --> C1482InnerSecond : wholly-inside
+  }
+  class C1482OuterSibling
+}
+@enduml

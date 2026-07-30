@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+node "C1482 Renamed Node With A Long Title" as C1482RenamedNode {
+  class C1482RenamedLeaf
+}
+class C1482RenamedSource
+class C1482RenamedSink
+C1482RenamedSource --> C1482RenamedLeaf : enters-node
+C1482RenamedLeaf --> C1482RenamedSink : leaves-node
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+left to right direction
+skinparam packageStyle node
+package C1482FallbackUnquoted {
+  class C1482FallbackUnquotedLeaf
+}
+class C1482FallbackUnquotedOutside
+C1482FallbackUnquotedLeaf --> C1482FallbackUnquotedOutside : fallback-outside
+@enduml

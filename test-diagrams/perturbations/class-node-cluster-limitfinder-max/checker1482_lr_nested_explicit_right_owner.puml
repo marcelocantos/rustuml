@@ -1,0 +1,12 @@
+@startuml
+left to right direction
+package "C1482 Nested Shelter" {
+  class C1482NestedLeft
+  node "C1482 Nested Right Node" {
+    class C1482NestedLeaf
+  }
+  C1482NestedLeft --> C1482NestedLeaf : inside-route
+}
+class C1482NestedOutside
+C1482NestedLeaf --> C1482NestedOutside : outside-route
+@enduml

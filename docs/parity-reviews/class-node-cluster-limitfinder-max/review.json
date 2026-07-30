@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-node-cluster-limitfinder-max",
+  "reviewer": {
+    "task_id": "019ee369-54e2-7203-afce-ddde7bfe1723",
+    "identity": "independent adversarial checker",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop, pinned Java PlantUML JAR, exact prebuilt diff_one --no-oracle"
+  },
+  "revisions": {
+    "account_commit": "aab6b757a0b4539ab7b11b562e5f3676883c71b7",
+    "implementation_commit": "eca14ad8c80817e267ebce35834c263d2bdb35f2",
+    "rust_revision_checked": "eca14ad8c80817e267ebce35834c263d2bdb35f2",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "comparator_build_revision": "826fbfd0a1a882ca9863f965a38963af24ca00e2"
+  },
+  "binary": {
+    "path": "/tmp/rustuml-checker-1482/target/release/examples/diff_one",
+    "sha256": "d36d5f2332316226802a938eaeefef6a23ecdc09af1006afa95c1bd9b2d03926"
+  },
+  "java_jar": {
+    "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+  },
+  "source_inspection": {
+    "java": [
+      "USymbolNode.drawNode at USymbolNode.java:71-90 emits polygon x=0..width and UEmpty(10,10) at (0,height).",
+      "LimitFinder.drawEmpty at LimitFinder.java:150-153 measures (x,y) and (x+width,y+height).",
+      "LimitFinder.drawUPolygon at LimitFinder.java:162-168 measures polygon minX-10 and maxX+10, without Y overscan.",
+      "SvekResult.calculateDimension at SvekResult.java:125-136 gets the painted MinMax, moves its minimum to 6,6, and adds 15px."
+    ],
+    "rust": [
+      "class.rs:326-334 sets NODE_CLUSTER_ENVELOPE_X_EXTRA=10.0 and NODE_CLUSTER_ENVELOPE_Y_EXTRA=10.0.",
+      "class.rs:3854-3860 applies both node extras to the cluster maximum envelope.",
+      "class.rs:3870-3892 applies node painted minimum x-10 and leaves Y unchanged.",
+      "class.rs:4582-4594 includes the cluster frontier in body bounds."
+    ],
+    "assessment": "The account is correct that UEmpty starts at x=0 and cannot add a second independent +10 to the right; direct right-owner controls support the corrected maximum. The broader product path is not green under the requested matrix."
+  },
+  "commands": [
+    "git rev-parse HEAD",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "git rev-parse aab6b757a0b4539ab7b11b562e5f3676883c71b7 eca14ad8c80817e267ebce35834c263d2bdb35f2 826fbfd0a1a882ca9863f965a38963af24ca00e2",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolNode.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/SvekResult.java",
+    "git show eca14ad8c80817e267ebce35834c263d2bdb35f2:crates/rustuml-render/src/class.rs",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_explicit_top_short_rootlink.puml test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_fallback_top_long_inside.puml test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_nested_explicit_right_owner.puml test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_fallback_node_wider_frame.puml test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_nested_node_internal_links.puml test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_explicit_top_renamed_long.puml test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_explicit_node_wider_frame.puml test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_fallback_nested_external.puml test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_styled_shadow_explicit.puml test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_styled_shadow_fallback.puml test-diagrams/perturbations/class-node-cluster-limitfinder-max/excluded_syntax_error_probe.puml",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_unquoted_explicit_short_root.puml test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_unquoted_explicit_nested.puml test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_unquoted_explicit_wider_frame.puml test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_fallback_unquoted_short.puml test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_unquoted_explicit_style_shadow.puml",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_unquoted_node_right_owner.puml",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/class-node-cluster-limitfinder-max/excluded_syntax_error_probe.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle <each of the 16 valid .puml files listed in perturbations>",
+    "xmllint --noout test-diagrams/perturbations/class-node-cluster-limitfinder-max/*.svg",
+    "rg -l 'C1482' test-diagrams/golden test-diagrams/perturbations --glob '*.puml'",
+    "git diff --check -- test-diagrams/perturbations/class-node-cluster-limitfinder-max",
+    "No cargo, rustc, cargo build, or Rust build command was run."
+  ],
+  "comparison_commands": [
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_explicit_top_short_rootlink.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_fallback_top_long_inside.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_nested_explicit_right_owner.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_fallback_node_wider_frame.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_nested_node_internal_links.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_explicit_top_renamed_long.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_explicit_node_wider_frame.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_fallback_nested_external.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_styled_shadow_explicit.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_styled_shadow_fallback.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_unquoted_explicit_short_root.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_unquoted_explicit_nested.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_unquoted_explicit_wider_frame.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_fallback_unquoted_short.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_unquoted_explicit_style_shadow.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_unquoted_node_right_owner.puml"
+  ],
+  "perturbations": [
+    {"source":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_explicit_top_short_rootlink.puml","golden":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_explicit_top_short_rootlink.svg","axes":["explicit node","TB","top-level","short label","outside link"],"result":"fail: Rust DESCRIPTION versus Java CLASS"},
+    {"source":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_fallback_top_long_inside.puml","golden":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_fallback_top_long_inside.svg","axes":["packageStyle node fallback","TB","top-level","long label","inside link"],"result":"fail: Java 430x255; Rust 490x260"},
+    {"source":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_nested_explicit_right_owner.puml","golden":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_nested_explicit_right_owner.svg","axes":["explicit node","LR","nested","right-envelope candidate","inside/outside links"],"result":"fail: Rust DESCRIPTION versus Java CLASS"},
+    {"source":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_fallback_node_wider_frame.puml","golden":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_fallback_node_wider_frame.svg","axes":["packageStyle node fallback","LR","wider frame"],"result":"fail: Rust DESCRIPTION versus Java CLASS"},
+    {"source":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_nested_node_internal_links.puml","golden":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_nested_node_internal_links.svg","axes":["explicit node","TB","nested","inside links"],"result":"fail: Rust DESCRIPTION versus Java CLASS"},
+    {"source":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_explicit_top_renamed_long.puml","golden":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_explicit_top_renamed_long.svg","axes":["explicit node alias","LR","renamed long label","inside/outside links"],"result":"fail: Rust DESCRIPTION versus Java CLASS"},
+    {"source":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_explicit_node_wider_frame.puml","golden":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_explicit_node_wider_frame.svg","axes":["explicit node","TB","wider frame"],"result":"fail: Rust DESCRIPTION versus Java CLASS"},
+    {"source":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_fallback_nested_external.puml","golden":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_fallback_nested_external.svg","axes":["packageStyle node fallback","TB","nested","inside/outside links"],"result":"fail: Java 289x401; Rust 317x411"},
+    {"source":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_styled_shadow_explicit.puml","golden":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_styled_shadow_explicit.svg","axes":["explicit node","LR","shadow","style"],"result":"fail: Rust DESCRIPTION and missing Java shadow/style"},
+    {"source":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_styled_shadow_fallback.puml","golden":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_styled_shadow_fallback.svg","axes":["packageStyle node fallback","TB","shadow","style"],"result":"fail: Java 275x130; Rust 322x140"},
+    {"source":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_unquoted_explicit_short_root.puml","golden":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_unquoted_explicit_short_root.svg","axes":["explicit node","TB","top-level","short identifier","outside link"],"result":"pass: SVGs structurally equivalent"},
+    {"source":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_unquoted_explicit_nested.puml","golden":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_unquoted_explicit_nested.svg","axes":["explicit node","LR","nested","inside/outside links"],"result":"pass: SVGs structurally equivalent"},
+    {"source":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_unquoted_explicit_wider_frame.puml","golden":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_unquoted_explicit_wider_frame.svg","axes":["explicit node","TB","wider competing frame"],"result":"pass: wider frame owns the competing envelope without node surplus"},
+    {"source":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_fallback_unquoted_short.puml","golden":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_fallback_unquoted_short.svg","axes":["packageStyle node fallback","LR","short identifier","outside link"],"result":"fail: width matches at 692px; Rust is 5px taller"},
+    {"source":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_unquoted_explicit_style_shadow.puml","golden":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_tb_unquoted_explicit_style_shadow.svg","axes":["explicit node","TB","shadow","style"],"result":"fail: Java 285x135; Rust 290x140 with missing cluster style/filter"},
+    {"source":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_unquoted_node_right_owner.puml","golden":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/checker1482_lr_unquoted_node_right_owner.svg","axes":["explicit node","LR","node owns right envelope","outside link"],"result":"pass: SVGs structurally equivalent; no second +10 right extension"}
+  ],
+  "syntax_error_probes": [
+    {"source":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/excluded_syntax_error_probe.puml","golden":"test-diagrams/perturbations/class-node-cluster-limitfinder-max/excluded_syntax_error_probe.svg","result":"excluded: intentional class syntax error; Java SVG contains Syntax Error?; diff_one not run"}
+  ],
+  "summary": {"valid_inputs":16,"passes":4,"failures":12,"syntax_error_probes_excluded":1,"valid_sources_have_same_stem_java_svg":true,"java_error_markers_in_valid_svgs":false,"svg_xml_validation":"passed","fresh_identifier_collision_scan":"C1482 identifiers occur only in this new perturbation directory"},
+  "findings": [
+    {"severity":"supporting","summary":"The corrected +10 maximum is supported in isolated explicit-node controls.","evidence":"Fresh TB, nested LR, wider-frame, and direct LR right-owner controls pass. The right-owner case shows no second ten-pixel surplus."},
+    {"severity":"rejecting","summary":"PackageStyle node fallback remains divergent.","evidence":"The unquoted LR fallback is 692px wide in both outputs but 135px tall in Rust versus 130px in Java. Long top-level fallback is 490x260 versus 430x255, and nested fallback is 317x411 versus 289x401."},
+    {"severity":"rejecting","summary":"Shadow/style controls remain divergent.","evidence":"The unquoted explicit styled-shadow control is 285x135 in Java versus 290x140 in Rust and lacks Java cluster fill/filter/style. The styled fallback is 275x130 versus 322x140."},
+    {"severity":"rejecting","summary":"Valid quoted explicit node labels dispatch to a different Rust diagram type.","evidence":"Short, long-renamed, top-level, nested, TB, LR, inside-link, outside-link, and styled quoted-node inputs produce Java CLASS SVGs but Rust DESCRIPTION SVGs."},
+    {"severity":"informational","summary":"The Java primitive ownership account is not disproved.","evidence":"UEmpty is at x=0, drawEmpty measures x=0..10, and drawUPolygon measures maxX+10; direct right-owner and wider-peer controls agree with one independent +10 maximum."}
+  ],
+  "no_oracle_gate": "failed",
+  "rejection_basis": "Fresh valid fallback and style/shadow perturbations fail the required no-oracle comparison, and the valid quoted-label matrix dispatches to a different Rust diagram type. The corrected 10px maximum is supported in isolated explicit controls, but the requested held-out matrix is not green.",
+  "artifacts_status": {"production_files_modified":false,"existing_review_records_modified":false,"existing_fixture_files_modified":false,"new_fixture_and_review_files_only":true},
+  "verdict": "REJECTED",
+  "verdict_label": "REJECT"
+}

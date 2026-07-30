@@ -1,0 +1,10 @@
+@startuml
+skinparam shadowing true
+skinparam packageBorderThickness 2
+skinparam packageBackgroundColor #E8F4FF
+skinparam packageBorderColor #204060
+skinparam packageFontColor #102030
+node C1482UnquotedStyled {
+  class C1482UnquotedStyledLeaf
+}
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+class C1482RightSource
+node C1482RightEnvelope {
+  class C1482RightLeaf
+}
+C1482RightSource --> C1482RightLeaf : right-envelope-route
+@enduml

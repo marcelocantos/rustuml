@@ -1,0 +1,12 @@
+@startuml
+skinparam packageStyle node
+package "C1482 Fallback Outer" {
+  package "C1482 Fallback Inner" {
+    class C1482FallbackInner
+  }
+  class C1482FallbackSibling
+  C1482FallbackInner --> C1482FallbackSibling : inside-route
+}
+class C1482FallbackRoot
+C1482FallbackSibling --> C1482FallbackRoot : outside-route
+@enduml

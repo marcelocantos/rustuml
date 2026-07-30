@@ -1,0 +1,9 @@
+@startuml
+node C1482UnquotedNode {
+  class C1482UnquotedNodeLeaf
+}
+frame C1482UnquotedFrameWithAConsiderablyWiderIdentifier {
+  class C1482UnquotedFrameLeaf
+}
+C1482UnquotedNodeLeaf --> C1482UnquotedFrameLeaf : unquoted-peer
+@enduml

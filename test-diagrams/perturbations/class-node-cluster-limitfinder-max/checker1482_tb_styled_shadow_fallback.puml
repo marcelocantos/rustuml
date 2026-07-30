@@ -1,0 +1,11 @@
+@startuml
+skinparam shadowing true
+skinparam packageStyle node
+skinparam packageBorderThickness 3
+skinparam packageBackgroundColor #FFF4E6
+skinparam packageBorderColor #704214
+skinparam packageFontColor #402010
+package "C1482 Styled Fallback Node" {
+  class C1482StyledFallbackLeaf
+}
+@enduml

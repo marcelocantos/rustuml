@@ -1,0 +1,8 @@
+@startuml
+class C1482TopAnchor
+node "C1482 Top Node" {
+  class C1482TopLeaf
+}
+class C1482TopReceiver
+C1482TopLeaf --> C1482TopReceiver : outside-route
+@enduml
