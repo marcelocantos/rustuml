@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-dot-spline-routing-mode",
+  "created": "2026-07-31",
+  "status": "proposed",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "1f6b6286",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/skin/SkinParam.java",
+      "symbol": "SkinParam.getDotSplines",
+      "lines": "628-638",
+      "role": "Resolves linetype polyline and ortho to distinct DotSplines modes, defaulting to SPLINES."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/DotStringFactory.java",
+      "symbol": "DotStringFactory.createDotString",
+      "lines": "157-165",
+      "role": "Serializes graph-level splines=polyline or splines=ortho and enables forcelabels for orthogonal routing."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+      "symbol": "SvekEdge.appendLine",
+      "lines": "384-435",
+      "role": "Uses the resolved DotSplines mode when choosing label channels and edge serialization."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": [
+        "class SVEK layout construction",
+        "has_ortho_linetype"
+      ],
+      "lines": "2410-2420,12037-12045",
+      "role": "Resolves ortho only for center-label placeholders and post-layout labels; the graph itself receives no routing mode."
+    },
+    {
+      "path": "crates/rustuml-layout/src/graph.rs",
+      "symbols": [
+        "LayoutGraph",
+        "LayoutGraph.run_graphviz_layout_inner"
+      ],
+      "lines": "151-196,900-970",
+      "role": "Sets rank direction, remincross, searchsize, and spacing but never sets Graphviz's splines or forcelabels graph attributes."
+    }
+  ],
+  "evidence_inputs": [
+    "test-diagrams/golden/class/class_skinparam_linetype_ortho.puml",
+    "test-diagrams/golden/class/class_skinparam_linetype_polyline.puml"
+  ],
+  "claimed_invariant": "The effective class SVEK edge router is a graph-level three-state model: ordinary cubic splines by default, Graphviz polyline routing for linetype polyline, and Graphviz orthogonal routing with forced external labels for linetype ortho. The mode changes routed edge geometry while leaving node construction, rank constraints, edge ownership, decorations, and painted path serialization intact.",
+  "causal_divergence": "Rust parses and retains the linetype skinparam and already branches around orthogonal label handling, but LayoutGraph always runs with Graphviz's default spline router. Consequently both explicit modes produce ordinary cubic routes: the polyline golden differs in its long three-node edge, while the ortho golden differs on all three edges. This is the exact surface owned by DotStringFactory's missing graph attributes.",
+  "planned_model_change": "Add a typed graph routing mode to rustuml-layout, defaulting to cubic splines. Serialize splines=polyline for Polyline and splines=ortho plus forcelabels=true for Ortho. Resolve the latest class linetype skinparam case-insensitively and configure LayoutGraph before node and edge construction. Keep the existing ortho label-channel and post-layout behavior, and do not post-process route coordinates.",
+  "perturbation_axes": [
+    "default, polyline, and ortho modes",
+    "top-to-bottom versus left-to-right rank direction",
+    "chain, fanout, and transitive long edge topologies",
+    "renamed nodes and changed node counts",
+    "linetype casing and repeated declarations where the last value wins",
+    "unlabeled versus center-labeled edges"
+  ],
+  "scope_boundary": "This mechanism owns only Graphviz graph routing attributes selected by class linetype. It does not change node dimensions or order, rank and spacing policy, edge minlen, labels or decorations, SVG path formatting, canvas normalization, comparator behavior, or routing defaults for other renderers.",
+  "acceptance": [
+    "Both class linetype goldens become byte-exact without class or cross-family regressions.",
+    "Fresh valid inputs demonstrate distinct default, polyline, and ortho routes under both rank directions, changed topology, case-insensitive values, and last-declaration precedence.",
+    "Layout and renderer tests, full no-oracle ratchet, clippy, and mechanical harness guards pass except for explicitly pre-existing gate debt.",
+    "An independent checker records a verdict at the exact implementation revision."
+  ]
+}
