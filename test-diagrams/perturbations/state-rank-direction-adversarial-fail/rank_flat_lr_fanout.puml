@@ -1,0 +1,13 @@
+@startuml
+left to right direction
+state "Intake Harbor 01" as IntakeHarbor01
+state "Review Basin 02" as ReviewBasin02
+state "Audit Ridge 03" as AuditRidge03
+state "Release Gate 04" as ReleaseGate04
+[*] --> IntakeHarbor01
+IntakeHarbor01 --> ReviewBasin02 : submit\nreview
+IntakeHarbor01 -down-> AuditRidge03 : side_check
+ReviewBasin02 --> ReleaseGate04 : approve
+AuditRidge03 -right-> ReleaseGate04 : merge
+ReleaseGate04 --> [*]
+@enduml

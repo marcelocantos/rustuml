@@ -1,0 +1,15 @@
+@startuml
+left to right direction
+skinparam stateMessageAlignment left
+state "Outer Alignment Vault 41" as OuterAlignmentVault41 {
+  state "Inner Alignment Bay 42" as InnerAlignmentBay42 {
+    [*] --> ShortLabel42
+    ShortLabel42 --> LongLabel42 : narrow\nsubstantially_longer_row
+    LongLabel42 --> [*]
+  }
+  [*] --> InnerAlignmentBay42
+  InnerAlignmentBay42 --> [*]
+}
+[*] --> OuterAlignmentVault41
+OuterAlignmentVault41 --> [*]
+@enduml

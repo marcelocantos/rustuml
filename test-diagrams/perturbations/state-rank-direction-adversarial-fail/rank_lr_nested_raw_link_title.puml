@@ -1,0 +1,12 @@
+@startuml
+left to right direction
+state "Outer Link Vault 81" as OuterLinkVault81 {
+  state "Link Source 82" as LinkSource82
+  state "Link Sink 83" as LinkSink83
+  [*] --> LinkSource82
+  LinkSource82 --> LinkSink83 : [[https://example.com/heldout\nraw title]] outside\nsecond row
+  LinkSink83 --> [*]
+}
+[*] --> OuterLinkVault81
+OuterLinkVault81 --> [*]
+@enduml

@@ -1,0 +1,12 @@
+@startuml
+skinparam stateMessageAlignment right
+state "Renamed Message Cradle 61" as RenamedMessageCradle61 {
+  state "Copper Intake 62" as CopperIntake62
+  state "Violet Archive 63" as VioletArchive63
+  [*] --> CopperIntake62
+  CopperIntake62 --> VioletArchive63 : short\lwide natural row
+  VioletArchive63 --> [*]
+}
+[*] --> RenamedMessageCradle61
+RenamedMessageCradle61 --> [*]
+@enduml

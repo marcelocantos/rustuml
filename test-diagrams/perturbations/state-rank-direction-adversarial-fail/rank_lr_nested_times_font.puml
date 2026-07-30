@@ -1,0 +1,14 @@
+@startuml
+left to right direction
+skinparam StateArrowFontName Times New Roman
+skinparam StateArrowFontSize 15
+state "Outer Metrics Vault 91" as OuterMetricsVault91 {
+  state "First Metrics Bay 92" as FirstMetricsBay92
+  state "Second Metrics Bay 93" as SecondMetricsBay93
+  [*] --> FirstMetricsBay92
+  FirstMetricsBay92 --> SecondMetricsBay93 : opening row\nclosing row
+  SecondMetricsBay93 --> [*] : final row
+}
+[*] --> OuterMetricsVault91
+OuterMetricsVault91 --> [*]
+@enduml

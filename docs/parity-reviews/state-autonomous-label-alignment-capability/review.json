@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-autonomous-label-alignment-capability",
+  "reviewer": {
+    "task_id": "codex-desktop-state-mechanisms-adversarial-checker-2026-07-31",
+    "model": "GPT-5 Codex",
+    "role": "independent adversarial checker"
+  },
+  "verdict": "REJECT",
+  "account_commit": "a3a24506ad46ba4f0248a499c8f00b1e93b4c8e8",
+  "implementation_revision": "446dc5383741fd91f4613ee19e0d9e53a77764db",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "reviewed_at": "2026-07-31T04:56:57+10:00",
+  "artifacts": {
+    "checker_worktree": "/tmp/rustuml-integrate-20260731a",
+    "worktree_state": "HEAD is the requested revision but unrelated unstaged renderer changes are present in crates/rustuml-render/src/class.rs, crates/rustuml-render/src/svg.rs, and crates/rustuml-render/src/text_render.rs; the checker did not edit or stage them",
+    "plantuml_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "diff_helper": "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one",
+    "diff_helper_sha256": "8d8e0bda16d967987cefd36deac3694ed61e59ad5ecd06d7f1cf276309d9b630"
+  },
+  "constraints_observed": {
+    "shipping_code_edited": false,
+    "causal_account_edited": false,
+    "cargo_or_rustc_invoked": false,
+    "java_svg_generation": "All six Java SVGs were generated headlessly, validated with xmllint, and had no PlantUML syntax-error markers.",
+    "source_corpus_uniqueness": "All six source SHA-256 values were absent from test-diagrams/golden/**/*.puml."
+  },
+  "java_review": {
+    "provenance": [
+      "GroupMakerState.java:110-153 selects autonomous inner images from group structure and passes the complete shared SkinParam to each inner GraphvizImageBuilder.",
+      "SvekEdge.java:279-299 creates the label TextBlock for state links in both root and inner SVEK graphs.",
+      "SvekEdge.java:369-373 resolves stateMessageAlignment for STATE links through SkinParam.getHorizontalAlignment.",
+      "SkinParam.java:691-692 falls back from an unset state alignment to defaultTextAlignment and then CENTER."
+    ],
+    "invariant_check": "Alignment is a property of the edge label TextBlock; Java does not use it to change group autarky or inner-image construction. The Rust StateArrowFont and StateTransitionLabelBlock already consume the two keys, so adding them to the autonomous capability allowlist is causally coherent."
+  },
+  "rust_review": {
+    "locations": [
+      "crates/rustuml-render/src/state.rs:2754-2810 resolves stateMessageAlignment/defaultTextAlignment in StateArrowFont",
+      "crates/rustuml-render/src/state.rs:1045-1176 shares alignment through measurement, painting, and painted bounds",
+      "crates/rustuml-render/src/state.rs:3492-3538 now admits statemessagealignment and defaulttextalignment",
+      "crates/rustuml-render/src/state.rs:3867-3990 uses the capability predicate before recursive autonomous construction"
+    ],
+    "overfit_scan": [
+      "No held-out fixture names, perturbation paths, golden reads, include_str!, or include_bytes! references were found in the inspected autonomous/capability path.",
+      "The implementation diff at 446dc538 adds only the two canonical allowlist keys and a test; it adds no coordinate constants, branch-count ladders, or SVG surgery.",
+      "The alignment implementation is shared between autonomous and ordinary state label paths rather than duplicated for the held-out cases."
+    ]
+  },
+  "commands": [
+    "git rev-parse HEAD",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "cat docs/parity-reviews/state-autonomous-label-alignment-capability/account.json",
+    "sha256sum /tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one",
+    "sed -n '100,153p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/GroupMakerState.java",
+    "rg -n -C 4 'getMessageTextAlignment|stateMessageAlignment|defaultTextAlignment' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/skin/SkinParam.java",
+    "rg -n -i 'rank-direction-adversarial|label-alignment-capability-adversarial|golden|fixture|include_str!|include_bytes!' crates/rustuml-render/src/state.rs crates/rustuml-parser/src/diagram/state.rs crates/rustuml-parser/src/parse/state.rs",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/state-autonomous-label-alignment-capability-adversarial-pass/*.puml test-diagrams/perturbations/state-autonomous-label-alignment-capability-adversarial-fail/*.puml",
+    "xmllint --noout test-diagrams/perturbations/state-autonomous-label-alignment-capability-adversarial-pass/*.svg test-diagrams/perturbations/state-autonomous-label-alignment-capability-adversarial-fail/*.svg",
+    "shasum -a 256 test-diagrams/perturbations/state-autonomous-label-alignment-capability-adversarial-{pass,fail}/*.puml test-diagrams/perturbations/state-autonomous-label-alignment-capability-adversarial-{pass,fail}/*.svg",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one <each capability pair>",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle <each capability pair>",
+    "git status --short --untracked-files=all"
+  ],
+  "inputs": [
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-label-alignment-capability-adversarial-pass/cap_default_alignment_concurrent.puml",
+      "java_svg": "test-diagrams/perturbations/state-autonomous-label-alignment-capability-adversarial-pass/cap_default_alignment_concurrent.svg",
+      "axes": ["defaultTextAlignment right", "nested concurrent regions", "renamed labels", "multiline label"],
+      "result": "PASS",
+      "default_comparator": "PASS",
+      "no_oracle_comparator": "PASS",
+      "sha256": {"puml": "9a495a142632fd483574a5cdf191c32bc5580fab56c67a891163ca0b284494a2", "java_svg": "618c3d812fdd1ca24275a884ca5fe9aed898612b3284c665304a36e6b6d48059"}
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-label-alignment-capability-adversarial-pass/cap_default_left_multilevel.puml",
+      "java_svg": "test-diagrams/perturbations/state-autonomous-label-alignment-capability-adversarial-pass/cap_default_left_multilevel.svg",
+      "axes": ["defaultTextAlignment left", "three nesting levels", "renamed labels", "multiline label"],
+      "result": "PASS",
+      "default_comparator": "PASS",
+      "no_oracle_comparator": "PASS",
+      "sha256": {"puml": "3d6f4045b808cc133ba15a196a2148d43adaf3f29e30e27741e7eb210edada7d", "java_svg": "4fbb4de268d7c40a6eb82a17f8359c760d25bf5ccf58bddb26343f143807da1f"}
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-label-alignment-capability-adversarial-pass/cap_natural_row_override_renamed.puml",
+      "java_svg": "test-diagrams/perturbations/state-autonomous-label-alignment-capability-adversarial-pass/cap_natural_row_override_renamed.svg",
+      "axes": ["stateMessageAlignment right", "natural left row override", "renamed labels", "nested composite"],
+      "result": "PASS",
+      "default_comparator": "PASS",
+      "no_oracle_comparator": "PASS",
+      "sha256": {"puml": "849886b54769e364e7c6e7369bc93e25f29530f1c141460eeeecbfaaff77ee45", "java_svg": "0cdf2d456ed169c7a2d7b08fdafa98682fe0993b2e9f09ccfefc39618c21c1aa"}
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-label-alignment-capability-adversarial-fail/cap_state_alignment_nested_lr.puml",
+      "java_svg": "test-diagrams/perturbations/state-autonomous-label-alignment-capability-adversarial-fail/cap_state_alignment_nested_lr.svg",
+      "axes": ["stateMessageAlignment left", "left-to-right", "nested autonomous scopes", "renamed labels", "multiline label"],
+      "result": "FAIL",
+      "default_comparator": "PASS",
+      "no_oracle_comparator": "FAIL",
+      "finding": "The capability gate admits the composite and the output retains the frame/topology, but the no-oracle result has a systematic one-pixel origin drift and a 890x180 versus 892x181 envelope. Eligibility is correct for this input; the shipped full result is still not equivalent.",
+      "sha256": {"puml": "fda51ce6f943338aaea5b925ee5894d89e2f9023b0cd642acf1913e33557787d", "java_svg": "57cc2282dd87d4f0db8e004a01eb2bcdb4364dd2a4e1555deb8f020206f47b7d"}
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-label-alignment-capability-adversarial-fail/cap_alignment_nested_times_font.puml",
+      "java_svg": "test-diagrams/perturbations/state-autonomous-label-alignment-capability-adversarial-fail/cap_alignment_nested_times_font.svg",
+      "axes": ["stateMessageAlignment right", "left-to-right", "nested composite", "Times New Roman 15px", "multiline label"],
+      "result": "FAIL",
+      "default_comparator": "FAIL",
+      "no_oracle_comparator": "FAIL",
+      "finding": "Alignment-enabled autonomous rendering reaches the intended path, but Java and Rust disagree on label widths and the resulting outer geometry for the non-default font. This is font/metrics residue, but it is a valid failure under the declared alignment-plus-topology matrix.",
+      "sha256": {"puml": "2f0eda54a6d77d2816a65f22913f26affd53221239bca26f58ac9555a7143218", "java_svg": "74b6368c60dc25807352f2b9ccbd9f6f1ce7289b8bc0ec193c98c379d6bac713"}
+    },
+    {
+      "source": "test-diagrams/perturbations/state-autonomous-label-alignment-capability-adversarial-fail/cap_default_alignment_nested_raw_link.puml",
+      "java_svg": "test-diagrams/perturbations/state-autonomous-label-alignment-capability-adversarial-fail/cap_default_alignment_nested_raw_link.svg",
+      "axes": ["defaultTextAlignment left", "left-to-right", "nested composite", "raw link title newline", "outside multiline row"],
+      "result": "FAIL",
+      "default_comparator": "FAIL",
+      "no_oracle_comparator": "FAIL",
+      "finding": "The autonomous path is retained, but Java link-title newline semantics differ from Rust and the no-oracle output also has a one-pixel origin/envelope drift. The capability predicate is not the direct cause, but the requested held-out result is failing.",
+      "sha256": {"puml": "38cc7536adaf7f10d62fd704e91a64b5737878f567b5f1ff019f7d4e4d001924", "java_svg": "a7de807b33590855f629c7507abe3f8a8cc36e88f8edead48a074e4ee47b2325"}
+    }
+  ],
+  "summary": {
+    "fresh_inputs": 6,
+    "passed_no_oracle": 3,
+    "failed_no_oracle": 3,
+    "acceptance_gate": "failed",
+    "primary_reject_reason": "The allowlist correction survives simple nested, concurrent, default-alignment, and natural-row cases, but nested LR alignment still fails the shipped comparator and the font/raw-link held-outs expose additional output residue.",
+    "residue": ["nested LR painted-envelope origin", "font family and metrics propagation", "raw link title/newline serialization"],
+    "recommendation": "Keep all six pairs preserved. The narrow capability claim is causally supported, but do not accept it while the declared no-oracle perturbation matrix contains failures. Resolve the named residues separately rather than widening the allowlist or changing comparator tolerance."
+  }
+}

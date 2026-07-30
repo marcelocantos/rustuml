@@ -1,0 +1,15 @@
+@startuml
+left to right direction
+state "Nested Shell 21" as NestedShell21 {
+  state "Alpha Chamber 22" as AlphaChamber22
+  state "Beta Chamber 23" as BetaChamber23
+  [*] --> AlphaChamber22
+  AlphaChamber22 --> BetaChamber23 : inner_pass
+  BetaChamber23 --> [*]
+}
+state "Root Relay 24" as RootRelay24
+NestedShell21 --> RootRelay24 : leave_shell
+top to bottom direction
+RootRelay24 --> [*]
+[*] --> NestedShell21
+@enduml

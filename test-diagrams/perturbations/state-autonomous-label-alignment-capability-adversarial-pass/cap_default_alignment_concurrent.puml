@@ -1,0 +1,22 @@
+@startuml
+skinparam defaultTextAlignment right
+state "Concurrent Alignment House 51" as ConcurrentAlignmentHouse51 {
+  state "Left Alignment Room 52" as LeftAlignmentRoom52 {
+    [*] --> LeftStart52
+    LeftStart52 --> LeftEnd52 : left_room\nsecond_line
+    LeftEnd52 --> [*]
+  }
+  [*] --> LeftAlignmentRoom52
+  LeftAlignmentRoom52 --> [*]
+  --
+  state "Right Alignment Room 53" as RightAlignmentRoom53 {
+    [*] --> RightStart53
+    RightStart53 --> RightEnd53 : right_room
+    RightEnd53 --> [*]
+  }
+  [*] --> RightAlignmentRoom53
+  RightAlignmentRoom53 --> [*]
+}
+[*] --> ConcurrentAlignmentHouse51
+ConcurrentAlignmentHouse51 --> [*]
+@enduml

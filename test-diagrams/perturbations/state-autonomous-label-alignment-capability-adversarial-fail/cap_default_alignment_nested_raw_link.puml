@@ -1,0 +1,13 @@
+@startuml
+left to right direction
+skinparam defaultTextAlignment left
+state "Aligned Link Vault 111" as AlignedLinkVault111 {
+  state "Link Intake 112" as LinkIntake112
+  state "Link Archive 113" as LinkArchive113
+  [*] --> LinkIntake112
+  LinkIntake112 --> LinkArchive113 : [[https://example.com/alignment\nheldout title]] tail\nlast row
+  LinkArchive113 --> [*]
+}
+[*] --> AlignedLinkVault111
+AlignedLinkVault111 --> [*]
+@enduml

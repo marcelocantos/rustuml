@@ -1,0 +1,16 @@
+@startuml
+top to bottom direction
+state "North Container 31" as NorthContainer31 {
+  state "Middle Container 32" as MiddleContainer32 {
+    state "Leaf Start 33" as LeafStart33
+    state "Leaf Finish 34" as LeafFinish34
+    [*] --> LeafStart33
+    LeafStart33 --> LeafFinish34 : descend
+    LeafFinish34 --> [*]
+  }
+  [*] --> MiddleContainer32
+  MiddleContainer32 --> [*]
+}
+[*] --> NorthContainer31
+NorthContainer31 --> [*]
+@enduml

@@ -1,0 +1,21 @@
+@startuml
+left to right direction
+state "Outer Ledger 11" as OuterLedger11 {
+  state "Inner Intake 12" as InnerIntake12 {
+    [*] --> DraftLane12
+    DraftLane12 --> AuditLane12 : inspect\nrecord
+    AuditLane12 --> [*]
+  }
+  [*] --> InnerIntake12
+  InnerIntake12 --> [*]
+  --
+  state "Parallel Relay 13" as ParallelRelay13 {
+    [*] --> RelayNorth13
+    RelayNorth13 --> [*]
+  }
+  [*] --> ParallelRelay13
+  ParallelRelay13 --> [*]
+}
+[*] --> OuterLedger11
+OuterLedger11 --> [*]
+@enduml

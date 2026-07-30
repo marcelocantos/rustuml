@@ -1,0 +1,16 @@
+@startuml
+skinparam defaultTextAlignment left
+state "Top Alignment Frame 71" as TopAlignmentFrame71 {
+  state "Middle Alignment Frame 72" as MiddleAlignmentFrame72 {
+    state "Bottom Start 73" as BottomStart73
+    state "Bottom Finish 74" as BottomFinish74
+    [*] --> BottomStart73
+    BottomStart73 --> BottomFinish74 : deep_line\nsecond_deep_line
+    BottomFinish74 --> [*]
+  }
+  [*] --> MiddleAlignmentFrame72
+  MiddleAlignmentFrame72 --> [*]
+}
+[*] --> TopAlignmentFrame71
+TopAlignmentFrame71 --> [*]
+@enduml

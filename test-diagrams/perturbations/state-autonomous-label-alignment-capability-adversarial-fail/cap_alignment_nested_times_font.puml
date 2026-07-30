@@ -1,0 +1,15 @@
+@startuml
+left to right direction
+skinparam stateMessageAlignment right
+skinparam StateArrowFontName Times New Roman
+skinparam StateArrowFontSize 15
+state "Aligned Metrics Vault 101" as AlignedMetricsVault101 {
+  state "First Aligned Bay 102" as FirstAlignedBay102
+  state "Second Aligned Bay 103" as SecondAlignedBay103
+  [*] --> FirstAlignedBay102
+  FirstAlignedBay102 --> SecondAlignedBay103 : short\nlonger aligned row
+  SecondAlignedBay103 --> [*]
+}
+[*] --> AlignedMetricsVault101
+AlignedMetricsVault101 --> [*]
+@enduml

@@ -1,0 +1,137 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-rank-direction",
+  "reviewer": {
+    "task_id": "codex-desktop-state-mechanisms-adversarial-checker-2026-07-31",
+    "model": "GPT-5 Codex",
+    "role": "independent adversarial checker"
+  },
+  "verdict": "REJECT",
+  "account_commit": "5635cb2e3238ab372c43625dded522e945247047",
+  "implementation_revision": "446dc5383741fd91f4613ee19e0d9e53a77764db",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "reviewed_at": "2026-07-31T04:56:57+10:00",
+  "artifacts": {
+    "checker_worktree": "/tmp/rustuml-integrate-20260731a",
+    "worktree_state": "HEAD is the requested revision but unrelated unstaged renderer changes are present in crates/rustuml-render/src/class.rs, crates/rustuml-render/src/svg.rs, and crates/rustuml-render/src/text_render.rs; the checker did not edit or stage them",
+    "plantuml_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "diff_helper": "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one",
+    "diff_helper_sha256": "8d8e0bda16d967987cefd36deac3694ed61e59ad5ecd06d7f1cf276309d9b630"
+  },
+  "constraints_observed": {
+    "shipping_code_edited": false,
+    "causal_account_edited": false,
+    "cargo_or_rustc_invoked": false,
+    "java_svg_generation": "All six Java SVGs were generated headlessly, validated with xmllint, and had no PlantUML syntax-error markers.",
+    "source_corpus_uniqueness": "All six source SHA-256 values were absent from test-diagrams/golden/**/*.puml."
+  },
+  "java_review": {
+    "provenance": [
+      "CommandRankDir.java:53-64 accepts only left-to-right or top-to-bottom direction and writes the diagram SkinParam rankdir.",
+      "SkinParam.java:192 initializes rankdir to TOP_TO_BOTTOM; getRankdir/setRankdir expose the diagram-wide mutable value.",
+      "GroupMakerState.java:110-153 recursively builds inner state images and passes diagram.getSkinParam() to each DotStringFactory.",
+      "DotStringFactory.java:167-170 emits rankdir=LR when the shared SkinParam is LEFT_TO_RIGHT."
+    ],
+    "invariant_check": "The Rust StateLayoutDirection field and parser implement default top-to-bottom plus source-order last-command-wins. state_layout_direction is consumed by autonomous, non-autarkic cluster, and flat layout construction, so the reviewed direction propagation is model-shaped and not a fixture-specific transpose."
+  },
+  "rust_review": {
+    "locations": [
+      "crates/rustuml-parser/src/diagram/state.rs:10-26 typed StateLayoutDirection and StateDiagram.direction",
+      "crates/rustuml-parser/src/parse/state.rs:428-434 direction command handling",
+      "crates/rustuml-render/src/state.rs:3268-3274 shared direction conversion",
+      "crates/rustuml-render/src/state.rs:3285 and recursive callers use the shared direction",
+      "crates/rustuml-render/src/state.rs:5210 and 6303 use the same direction for non-autarkic and flat paths"
+    ],
+    "overfit_scan": [
+      "No held-out fixture names, perturbation paths, golden reads, include_str!, or include_bytes! references were found in the inspected parser or state renderer paths.",
+      "No coordinate-keyed SVG rewriting or branch-count constant ladder was found in the direction implementation.",
+      "The reviewed direction commits add a typed field, parser branches, and shared propagation; no new unexplained numeric layout constant is introduced by that mechanism."
+    ]
+  },
+  "commands": [
+    "git rev-parse HEAD",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "cat docs/parity-reviews/state-rank-direction/account.json",
+    "sha256sum /tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one",
+    "sed -n '45,75p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/CommandRankDir.java",
+    "sed -n '185,200p;971,983p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/skin/SkinParam.java",
+    "sed -n '100,154p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/GroupMakerState.java",
+    "sed -n '157,172p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/DotStringFactory.java",
+    "rg -n -i 'rank-direction-adversarial|label-alignment-capability-adversarial|golden|fixture|include_str!|include_bytes!' crates/rustuml-parser/src/parse/state.rs crates/rustuml-parser/src/diagram/state.rs crates/rustuml-render/src/state.rs",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/state-rank-direction-adversarial-pass/*.puml test-diagrams/perturbations/state-rank-direction-adversarial-fail/*.puml",
+    "xmllint --noout test-diagrams/perturbations/state-rank-direction-adversarial-pass/*.svg test-diagrams/perturbations/state-rank-direction-adversarial-fail/*.svg",
+    "shasum -a 256 test-diagrams/perturbations/state-rank-direction-adversarial-{pass,fail}/*.puml test-diagrams/perturbations/state-rank-direction-adversarial-{pass,fail}/*.svg",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one <each rank pair>",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle <each rank pair>",
+    "git status --short --untracked-files=all"
+  ],
+  "inputs": [
+    {
+      "source": "test-diagrams/perturbations/state-rank-direction-adversarial-pass/rank_deep_nested_tb.puml",
+      "java_svg": "test-diagrams/perturbations/state-rank-direction-adversarial-pass/rank_deep_nested_tb.svg",
+      "axes": ["top-to-bottom command", "three nested levels", "scoped pseudostates", "renamed labels"],
+      "result": "PASS",
+      "default_comparator": "PASS",
+      "no_oracle_comparator": "PASS",
+      "sha256": {"puml": "d8d2419aadea14fff1765cb0c70c1d465de25c5697bb2999f4b5723578c777ee", "java_svg": "1fa4491bb8f13f76c4c4fd0743e553b18e28f9de8a6c875520b0f64833caee0c"}
+    },
+    {
+      "source": "test-diagrams/perturbations/state-rank-direction-adversarial-pass/rank_nested_lr_reset_order.puml",
+      "java_svg": "test-diagrams/perturbations/state-rank-direction-adversarial-pass/rank_nested_lr_reset_order.svg",
+      "axes": ["left-to-right then top-to-bottom reset", "nested composite", "declaration/order variation", "renamed labels"],
+      "result": "PASS",
+      "default_comparator": "PASS",
+      "no_oracle_comparator": "PASS",
+      "sha256": {"puml": "86afb020eba20fd45dda42eee9282c56b723dfd1a9bf1e340716940b1d4866d6", "java_svg": "a0d6ec5a01460302df2daec7211dfc67c355e309c88cb38cf37610833934be31"}
+    },
+    {
+      "source": "test-diagrams/perturbations/state-rank-direction-adversarial-fail/rank_flat_lr_fanout.puml",
+      "java_svg": "test-diagrams/perturbations/state-rank-direction-adversarial-fail/rank_flat_lr_fanout.svg",
+      "axes": ["left-to-right", "flat fanout", "explicit down/right link directions", "multiline label"],
+      "result": "FAIL",
+      "default_comparator": "PASS",
+      "no_oracle_comparator": "FAIL",
+      "finding": "No-oracle output has one extra element and a trailing text/group/path ordering mismatch. The simple rank direction is recognized, but the shipped path does not preserve the complete flat LR output sequence for this fanout.",
+      "sha256": {"puml": "aeabb6c660655694668a81fffb4c92a4b543e114e9fecb8dbb336a87be313d7b", "java_svg": "f633a883a774b60231ab2bff04a3d3ad02a9d6285ccc44dfd56a8c6243351d93"}
+    },
+    {
+      "source": "test-diagrams/perturbations/state-rank-direction-adversarial-fail/rank_nested_lr_concurrent.puml",
+      "java_svg": "test-diagrams/perturbations/state-rank-direction-adversarial-fail/rank_nested_lr_concurrent.svg",
+      "axes": ["left-to-right", "nested composite", "concurrent region", "scoped pseudostates", "multiline label"],
+      "result": "FAIL",
+      "default_comparator": "PASS",
+      "no_oracle_comparator": "FAIL",
+      "finding": "No-oracle output has a systematic one-pixel horizontal origin drift and a 772x296 versus 774x297 painted envelope. Topology and horizontal orientation survive, but the complete shipped output is not equivalent.",
+      "sha256": {"puml": "cdbe07612511a7ca557d736b39daba5f39718f0cf920530ec92494c73512e74e", "java_svg": "46b455b806a3e1ffa4a760f4404e7111ca871baf1bb105ca1dc50ff44ae57e80"}
+    },
+    {
+      "source": "test-diagrams/perturbations/state-rank-direction-adversarial-fail/rank_lr_nested_raw_link_title.puml",
+      "java_svg": "test-diagrams/perturbations/state-rank-direction-adversarial-fail/rank_lr_nested_raw_link_title.svg",
+      "axes": ["left-to-right", "nested composite", "raw link title containing newline", "outside multiline row"],
+      "result": "FAIL",
+      "default_comparator": "FAIL",
+      "no_oracle_comparator": "FAIL",
+      "finding": "Java emits a link wrapper and newline title semantics that the Rust output does not preserve; the no-oracle result also has a one-pixel envelope/origin drift. This is a valid counterexample at the declared label/topology matrix boundary.",
+      "sha256": {"puml": "631ee3036b05d915229fa85b3e1f9b67506db2e655235152a5c2f0d4b1de6d5f", "java_svg": "2e7a5f1caf7ab079b5fffd68c163225f9965b129fae6dccf6384a6329c827cd4"}
+    },
+    {
+      "source": "test-diagrams/perturbations/state-rank-direction-adversarial-fail/rank_lr_nested_times_font.puml",
+      "java_svg": "test-diagrams/perturbations/state-rank-direction-adversarial-fail/rank_lr_nested_times_font.svg",
+      "axes": ["left-to-right", "nested composite", "Times New Roman 15px", "two-row and final labels"],
+      "result": "FAIL",
+      "default_comparator": "FAIL",
+      "no_oracle_comparator": "FAIL",
+      "finding": "The held-out font axis changes Java label family, size, widths, and the resulting painted envelope; Rust does not produce an equivalent result. This exposes font/layout residue rather than a direction parser error, but it remains a failing declared perturbation.",
+      "sha256": {"puml": "10c0441cd0f6507391c00213a77171d90db36bdc51acb2bea0ccc508af3ee946", "java_svg": "f79947e499c5e97316b035ec030dfe7e8d858e590137767b01cd18249e42d844"}
+    }
+  ],
+  "summary": {
+    "fresh_inputs": 6,
+    "passed_no_oracle": 2,
+    "failed_no_oracle": 4,
+    "acceptance_gate": "failed",
+    "primary_reject_reason": "The typed direction propagation survives simple deep nesting and a direction reset, but the held-out no-oracle matrix still fails flat fanout, nested concurrent layout, raw link titles, and non-default font metrics.",
+    "residue": ["flat LR element ordering", "nested/concurrent painted-envelope origin", "raw link title/newline serialization", "font family and metrics propagation"],
+    "recommendation": "Keep all six pairs preserved. Do not relax comparator slack or attribute the failures to direction alone; investigate each named residue as its own causal mechanism before a later acceptance review."
+  }
+}
