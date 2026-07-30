@@ -1,0 +1,10 @@
+@startuml
+set namespaceSeparator ::
+North::Api::Gateway::Worker --> South::Ui::Portal::Screen
+frame North::Api::Gateway as "North Gateway" {
+  class Worker
+}
+folder "Portal Deck" as South::Ui::Portal {
+  class Screen
+}
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+frame Alpha.Beta as "Alpha Beta" {
+  class LeftLeaf
+}
+Alpha.Beta.LeftLeaf --> Gamma.Delta.RightLeaf
+folder "Gamma Delta" as Gamma.Delta {
+  class RightLeaf
+}
+@enduml

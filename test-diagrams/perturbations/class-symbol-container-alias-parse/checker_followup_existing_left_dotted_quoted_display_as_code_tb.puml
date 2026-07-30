@@ -1,0 +1,7 @@
+@startuml
+class Sink
+Warehouse.Ui.Panel.Entry ..> Sink
+folder "Panel Shelf" as Warehouse.Ui.Panel {
+  class Entry
+}
+@enduml

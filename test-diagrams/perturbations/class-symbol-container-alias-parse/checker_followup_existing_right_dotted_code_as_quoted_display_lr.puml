@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+class Client
+Client ..> Realm.Ui.Facade.Controller
+frame Realm.Ui.Facade as "Realm Facade" {
+  class Controller
+}
+@enduml

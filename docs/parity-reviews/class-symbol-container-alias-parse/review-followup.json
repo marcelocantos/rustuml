@@ -1,0 +1,193 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-symbol-container-alias-parse",
+  "account": "docs/parity-reviews/class-symbol-container-alias-parse/account.json",
+  "prior_review": {
+    "path": "docs/parity-reviews/class-symbol-container-alias-parse/review.json",
+    "result": "rejected",
+    "review_commit": "22cbd4904308b7b60102377be464a2782f05c4ca"
+  },
+  "implementation_commit": "1c80b8b0e691700fe5fcaac9ae0fa5f7b9ccefd9",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "reviewer": {
+    "identity": "independent adversarial checker",
+    "model": "gpt-5.4",
+    "reasoning_effort": "xhigh",
+    "tool": "Codex desktop",
+    "independence": "Did not implement commit 1c80b8b0, did not edit shipping source, and only added held-out evidence plus this follow-up review record in the detached checker worktree."
+  },
+  "revisions": {
+    "rust_revision_checked": "1c80b8b0e691700fe5fcaac9ae0fa5f7b9ccefd9",
+    "rust_tree_checked": "7b6b6280e358542273a21bd16d092c326cdc464e",
+    "checker_worktree": "/tmp/rustuml-review-alias-1c80",
+    "checker_worktree_ref": "detached HEAD",
+    "java_revision_checked": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "comparator": {
+    "binary": "/tmp/rustuml-checker-1482/target/debug/examples/diff_one",
+    "sha256": "3a41000a200202fed33d98621cb280a5688fd690dd39b543e1103d53e991a70a",
+    "mode": "--no-oracle",
+    "source": "crates/rustuml-oracle/examples/diff_one.rs",
+    "compare_function": "rustuml_oracle::compare::compare_svg_strict",
+    "notes": "Strict SVG comparison against Java goldens using the provided prebuilt helper. No Cargo or rustc commands were run in this checker pass."
+  },
+  "java_jar": {
+    "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+  },
+  "commands": [
+    "git -C /tmp/rustuml-review-alias-1c80 status --short --branch",
+    "sed -n '1,260p' /tmp/rustuml-review-alias-1c80/docs/parity-reviews/class-symbol-container-alias-parse/account.json",
+    "sed -n '1,260p' /tmp/rustuml-review-alias-1c80/docs/parity-reviews/class-symbol-container-alias-parse/review.json",
+    "git -C /tmp/rustuml-review-alias-1c80 show --stat --summary 1c80b8b0",
+    "git -C /tmp/rustuml-review-alias-1c80 show 1c80b8b0 -- crates/rustuml-parser/src/parse/class.rs",
+    "sed -n '1080,1165p' /tmp/rustuml-review-alias-1c80/crates/rustuml-parser/src/parse/class.rs",
+    "sed -n '1240,1405p' /tmp/rustuml-review-alias-1c80/crates/rustuml-parser/src/parse/class.rs",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandLinkClass.java | sed -n '150,220p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandPackageWithUSymbol.java | sed -n '70,190p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/atmp/CucaDiagram.java | sed -n '210,370p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/plasma/Quark.java | sed -n '110,150p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/plasma/Plasma.java | sed -n '55,110p'",
+    "rg -n \"checker_followup_|class-symbol-container-alias-parse|frame_code_then_quoted_display_nested_late_decl_tb|8895b9de|1c80b8b0\" /tmp/rustuml-review-alias-1c80/crates/rustuml /tmp/rustuml-review-alias-1c80/crates/rustuml-parser /tmp/rustuml-review-alias-1c80/crates/rustuml-render /tmp/rustuml-review-alias-1c80/crates/rustuml-layout /tmp/rustuml-review-alias-1c80/crates/rustuml-math",
+    "git -C /tmp/rustuml-review-alias-1c80 diff 1c80b8b0^ 1c80b8b0 -- crates/rustuml-parser/src/parse/class.rs | rg -n \"^[+-].*[0-9]\"",
+    "shasum -a 256 /tmp/rustuml-checker-1482/target/debug/examples/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/class-symbol-container-alias-parse/checker_followup_existing_right_dotted_code_as_quoted_display_lr.puml test-diagrams/perturbations/class-symbol-container-alias-parse/checker_followup_existing_left_dotted_quoted_display_as_code_tb.puml test-diagrams/perturbations/class-symbol-container-alias-parse/checker_followup_both_dotted_custom_colon_alias_mix_tb.puml test-diagrams/perturbations/class-symbol-container-alias-parse/checker_followup_parent_late_deeper_default_tb.puml test-diagrams/perturbations/class-symbol-container-alias-parse/checker_followup_shared_root_both_dotted_late_parent_lr.puml",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/class-symbol-container-alias-parse/checker_followup_existing_left_dotted_vs_missing_right_dotted_tb.puml test-diagrams/perturbations/class-symbol-container-alias-parse/checker_followup_missing_left_dotted_vs_existing_right_dotted_lr.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-symbol-container-alias-parse/checker_followup_existing_right_dotted_code_as_quoted_display_lr.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-symbol-container-alias-parse/checker_followup_existing_left_dotted_quoted_display_as_code_tb.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-symbol-container-alias-parse/checker_followup_both_dotted_custom_colon_alias_mix_tb.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-symbol-container-alias-parse/checker_followup_parent_late_deeper_default_tb.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-symbol-container-alias-parse/checker_followup_shared_root_both_dotted_late_parent_lr.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-symbol-container-alias-parse/checker_followup_existing_left_dotted_vs_missing_right_dotted_tb.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-symbol-container-alias-parse/checker_followup_missing_left_dotted_vs_existing_right_dotted_lr.puml",
+    "git -C /tmp/rustuml-review-alias-1c80 rev-parse HEAD",
+    "git -C /tmp/rustuml-review-alias-1c80 rev-parse HEAD^{tree}"
+  ],
+  "discarded_drafts": [
+    {
+      "command": "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/class-symbol-container-alias-parse/checker_followup_existing_right_dotted_code_as_quoted_display_lr.puml test-diagrams/perturbations/class-symbol-container-alias-parse/checker_followup_existing_left_dotted_quoted_display_as_code_tb.puml test-diagrams/perturbations/class-symbol-container-alias-parse/checker_followup_both_dotted_custom_colon_alias_mix_tb.puml test-diagrams/perturbations/class-symbol-container-alias-parse/checker_followup_parent_late_slash_separator_tb.puml test-diagrams/perturbations/class-symbol-container-alias-parse/checker_followup_shared_root_both_dotted_late_parent_lr.puml",
+      "outcome": "Rejected as invalid evidence after Java reported a syntax error on line 4 of checker_followup_parent_late_slash_separator_tb.puml.",
+      "reason": "At Java revision 71806a23780b04a5ccde2f8ceb5121edad5eb711, CommandLinkClass#getSeparator admits dot, ::, and backslash variants for class relationship identifiers; slash is not a valid held-out separator for this mechanism."
+    }
+  ],
+  "source_inspection": {
+    "java": [
+      "CommandLinkClass resolves quark1 and quark2 before either missing leaf constructor runs.",
+      "Quark.child and Quark.getDirectChild register every path segment eagerly through Plasma.register, preserving one global creation order across both endpoints.",
+      "reallyCreateLeaf consumes the entity UID first, then eventuallyBuildPhantomGroups scans all registered data-less quarks with children and materializes phantom groups in Plasma order.",
+      "CommandPackageWithUSymbol accepts both DISPLAY as CODE and CODE as quoted DISPLAY and reuses the CODE quark through gotoGroup without replacing an already materialized phantom group's display."
+    ],
+    "rust": [
+      "1c80b8b0 changes register_quark_path to record every prefix path segment instead of only full paths.",
+      "try_relationship now computes and registers both endpoint paths before materializing either endpoint, matching CommandLinkClass's quark1-then-quark2 selection order.",
+      "create_entity_at_path registers the path before pushing the entity UID event, inserts the entity, then runs one global materialize_phantom_packages sweep over quark_creation_order, which is the Rust analogue of eventuallyBuildPhantomGroups.",
+      "try_package still reuses existing package quark paths for late declarations and does not replace display_name on already materialized phantom groups, matching gotoGroup's no-setDisplay behavior on reuse."
+    ],
+    "fixture_shaping_search": "No mechanism-name string, prior held-out filename, or similar fixture-shaped branch was found in shipping crates.",
+    "constants": "No new production magic constants were introduced by 1c80b8b0. The only numeric additions in the implementation diff are loop bounds and unit-test expectations."
+  },
+  "inputs": [
+    {
+      "path": "test-diagrams/perturbations/class-symbol-container-alias-parse/checker_followup_existing_right_dotted_code_as_quoted_display_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-symbol-container-alias-parse/checker_followup_existing_right_dotted_code_as_quoted_display_lr.svg",
+      "axes": [
+        "right dotted missing endpoint",
+        "existing simple source endpoint",
+        "CODE as quoted DISPLAY",
+        "late exact-ancestor declaration",
+        "default dot separator",
+        "left-to-right direction"
+      ],
+      "outcome": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-symbol-container-alias-parse/checker_followup_existing_left_dotted_quoted_display_as_code_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-symbol-container-alias-parse/checker_followup_existing_left_dotted_quoted_display_as_code_tb.svg",
+      "axes": [
+        "left dotted missing endpoint",
+        "existing simple target endpoint",
+        "quoted DISPLAY as CODE",
+        "late exact-ancestor declaration",
+        "default dot separator",
+        "top-to-bottom direction"
+      ],
+      "outcome": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-symbol-container-alias-parse/checker_followup_both_dotted_custom_colon_alias_mix_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-symbol-container-alias-parse/checker_followup_both_dotted_custom_colon_alias_mix_tb.svg",
+      "axes": [
+        "both dotted missing endpoints",
+        "custom namespaceSeparator ::",
+        "mixed alias directions",
+        "late exact-ancestor declaration on both sides",
+        "top-to-bottom direction"
+      ],
+      "outcome": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-symbol-container-alias-parse/checker_followup_parent_late_deeper_default_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-symbol-container-alias-parse/checker_followup_parent_late_deeper_default_tb.svg",
+      "axes": [
+        "right dotted missing endpoint",
+        "deeper four-segment nesting",
+        "late parent declaration plus nested child group",
+        "default dot separator",
+        "top-to-bottom direction"
+      ],
+      "outcome": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-symbol-container-alias-parse/checker_followup_shared_root_both_dotted_late_parent_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-symbol-container-alias-parse/checker_followup_shared_root_both_dotted_late_parent_lr.svg",
+      "axes": [
+        "both dotted missing endpoints",
+        "shared root",
+        "late common-parent declaration",
+        "default dot separator",
+        "left-to-right direction"
+      ],
+      "outcome": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-symbol-container-alias-parse/checker_followup_existing_left_dotted_vs_missing_right_dotted_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-symbol-container-alias-parse/checker_followup_existing_left_dotted_vs_missing_right_dotted_tb.svg",
+      "axes": [
+        "existing dotted source endpoint",
+        "missing dotted target endpoint",
+        "mixed alias directions",
+        "late exact-ancestor declaration on target",
+        "default dot separator",
+        "top-to-bottom direction"
+      ],
+      "outcome": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-symbol-container-alias-parse/checker_followup_missing_left_dotted_vs_existing_right_dotted_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-symbol-container-alias-parse/checker_followup_missing_left_dotted_vs_existing_right_dotted_lr.svg",
+      "axes": [
+        "missing dotted source endpoint",
+        "existing dotted target endpoint",
+        "mixed alias directions",
+        "late exact-ancestor declaration on source",
+        "default dot separator",
+        "left-to-right direction"
+      ],
+      "outcome": "pass: SVGs are structurally equivalent"
+    }
+  ],
+  "findings": [
+    "ACCEPT: I did not find a mechanism-shaped counterexample against 1c80b8b0. Seven fresh valid held-out cases spanning right, left, and both dotted endpoints; existing-vs-missing endpoints; default dot and custom :: separators; deeper nesting; alias-direction reversals; and late symbol-container declarations all passed strict no-oracle comparison.",
+    "The source audit supports the claimed model change: Rust now preselects and registers both endpoint quark paths before either endpoint is materialized, and its post-entity global phantom sweep matches the Java CommandLinkClass -> reallyCreateLeaf -> eventuallyBuildPhantomGroups ordering at the mechanism level.",
+    "No fixture-shaped shipping logic or unexplained production constants were found in the implementation. The observed behavior comes from the general parser/data-flow change, not from obvious overfitting.",
+    "Axis correction: the account's slash-separator example is not valid for class relationship identifiers at Java revision 71806a23780b04a5ccde2f8ceb5121edad5eb711, so I excluded the slash draft from the evidence corpus and used valid dot/:: separator coverage instead."
+  ],
+  "summary": {
+    "fresh_valid_inputs": 7,
+    "passes": 7,
+    "failures": 0,
+    "java_syntax_errors": 0,
+    "cargo_or_rustc_run": false
+  },
+  "verdict": "ACCEPT"
+}

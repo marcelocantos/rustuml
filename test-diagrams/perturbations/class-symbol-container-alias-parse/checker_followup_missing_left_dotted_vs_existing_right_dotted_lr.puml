@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+frame Sigma.Omega as "Sigma Omega" {
+  class RightLeaf
+}
+Lambda.Core.LeftLeaf --> Sigma.Omega.RightLeaf
+folder "Lambda Core" as Lambda.Core {
+  class LeftLeaf
+}
+@enduml

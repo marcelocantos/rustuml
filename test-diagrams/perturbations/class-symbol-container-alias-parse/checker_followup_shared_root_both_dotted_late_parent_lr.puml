@@ -1,0 +1,12 @@
+@startuml
+left to right direction
+One.Root.Left.Leaf --> One.Root.Right.Leaf
+frame One.Root as "Shared Root" {
+  package Left {
+    class Leaf
+  }
+  package Right {
+    class Leaf
+  }
+}
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+class Requester
+Requester --> Root.Feature.Sub.Leaf
+rectangle Root.Feature as "Feature Root" {
+  folder Sub {
+    class Leaf
+  }
+}
+@enduml
