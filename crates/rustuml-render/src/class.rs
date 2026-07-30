@@ -2443,7 +2443,10 @@ fn render_with_oracle_uid_origin(
                 let entity = &diagram.entities[idx];
                 let dim = &dims[idx];
                 let font = ClassFontOverrides::from_diagram_for_entity(diagram, entity);
-                if let Some((shield_x, shield_y)) = class_circle_shield(diagram, entity, dim, &font)
+                if entity.kind == EntityKind::Diamond {
+                    layout.add_diamond_node(&entity.id, &entity.label, dim.width, dim.height);
+                } else if let Some((shield_x, shield_y)) =
+                    class_circle_shield(diagram, entity, dim, &font)
                 {
                     layout.add_svek_shielded_node(
                         &entity.id, dim.width, dim.height, shield_x, shield_y,
@@ -18276,6 +18279,115 @@ mod tests {
 
         let (icons_hidden, _) = entity_width(&format!("*id : INT\n{long_field}"), Some(0));
         assert_eq!(icons_hidden, same_block_without_marker);
+    }
+
+    #[test]
+    fn class_diamond_links_contact_the_native_diagonal_shape() {
+        let numbers = |value: &str| {
+            value
+                .split(|ch: char| {
+                    !(ch.is_ascii_digit()
+                        || ch == '.'
+                        || ch == '-'
+                        || ch == '+'
+                        || ch == 'e'
+                        || ch == 'E')
+                })
+                .filter(|part| !part.is_empty())
+                .map(|part| part.parse::<f64>().unwrap())
+                .collect::<Vec<_>>()
+        };
+        let path_endpoints = |svg: &str, id: &str| {
+            let marker = format!(r#" id="{id}""#);
+            let marker_index = svg
+                .find(&marker)
+                .unwrap_or_else(|| panic!("missing link path {id}: {svg}"));
+            let path_start = svg[..marker_index].rfind("<path ").unwrap();
+            let path_tag = &svg[path_start..marker_index + marker.len()];
+            let coords = numbers(attr_value(path_tag, "d").unwrap());
+            (
+                (coords[0], coords[1]),
+                (coords[coords.len() - 2], coords[coords.len() - 1]),
+            )
+        };
+
+        for direction in ["", "left to right direction\n"] {
+            for gate_first in [false, true] {
+                let declarations = if gate_first {
+                    "diamond FreshGate3251\n\
+                     class FreshNorth3253\n\
+                     class FreshSouth3257\n\
+                     class FreshExit3259\n"
+                } else {
+                    "class FreshNorth3253\n\
+                     class FreshSouth3257\n\
+                     class FreshExit3259\n\
+                     diamond FreshGate3251\n"
+                };
+                let input = format!(
+                    "@startuml\n\
+                     {direction}\
+                     {declarations}\
+                     FreshNorth3253 -- FreshGate3251\n\
+                     FreshSouth3257 -- FreshGate3251\n\
+                     FreshGate3251 -- FreshExit3259\n\
+                     @enduml"
+                );
+                let diagram = rustuml_parser::parse::parse(&input).unwrap();
+                let svg = crate::render_svg(&diagram);
+                let entity = svg
+                    .split_once(r#"data-qualified-name="FreshGate3251""#)
+                    .unwrap()
+                    .1
+                    .split_once("</g>")
+                    .unwrap()
+                    .0;
+                let polygon = entity
+                    .split_once("<polygon ")
+                    .unwrap()
+                    .1
+                    .split_once("/>")
+                    .unwrap()
+                    .0;
+                let points = numbers(attr_value(polygon, "points").unwrap());
+                let xs = points.iter().step_by(2).copied().collect::<Vec<_>>();
+                let ys = points
+                    .iter()
+                    .skip(1)
+                    .step_by(2)
+                    .copied()
+                    .collect::<Vec<_>>();
+                let min_x = xs.iter().copied().fold(f64::INFINITY, f64::min);
+                let max_x = xs.iter().copied().fold(f64::NEG_INFINITY, f64::max);
+                let min_y = ys.iter().copied().fold(f64::INFINITY, f64::min);
+                let max_y = ys.iter().copied().fold(f64::NEG_INFINITY, f64::max);
+                assert_eq!(max_x - min_x, 24.0);
+                assert_eq!(max_y - min_y, 24.0);
+                let center_x = (min_x + max_x) / 2.0;
+                let center_y = (min_y + max_y) / 2.0;
+                let radius_x = (max_x - min_x) / 2.0;
+                let radius_y = (max_y - min_y) / 2.0;
+
+                let contacts = [
+                    path_endpoints(&svg, "FreshNorth3253-FreshGate3251").1,
+                    path_endpoints(&svg, "FreshSouth3257-FreshGate3251").1,
+                    path_endpoints(&svg, "FreshGate3251-FreshExit3259").0,
+                ];
+                let mut saw_diagonal_contact = false;
+                for (x, y) in contacts {
+                    let dx = (x - center_x).abs();
+                    let dy = (y - center_y).abs();
+                    saw_diagonal_contact |= dx > 1.0 && dy > 1.0;
+                    let diamond_boundary = dx / radius_x + dy / radius_y;
+                    assert!(
+                        (0.85..=1.15).contains(&diamond_boundary),
+                        "contact ({x}, {y}) is not on diamond centered at \
+                         ({center_x}, {center_y}): {diamond_boundary}\n{svg}"
+                    );
+                }
+                assert!(saw_diagonal_contact, "{svg}");
+            }
+        }
     }
 
     #[test]
