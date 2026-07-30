@@ -87,6 +87,17 @@ const MIXED_BOUNDARY_CIRCLE_LEFT: f64 = 21.0;
 const MIXED_BOUNDARY_STUB_LENGTH: f64 = 17.0;
 /// Default 14px AWT ascent used by `USymbolSimpleAbstract.asSmall`.
 const MIXED_BOUNDARY_LABEL_BASELINE: f64 = MIXED_BOUNDARY_SYMBOL_BAND_HEIGHT + 13.53515625;
+/// Java `CircleInterface2` paints a radius-8 ellipse after a one-pixel inset
+/// and reports the complete 18px square as its intrinsic SVEK image.
+const CLASS_CIRCLE_RADIUS: f64 = 8.0;
+const CLASS_CIRCLE_MARGIN: f64 = 1.0;
+const CLASS_CIRCLE_SIZE: f64 = 2.0 * (CLASS_CIRCLE_RADIUS + CLASS_CIRCLE_MARGIN);
+/// `EntityImageDescription.drawU` places a hidden interface description eight
+/// pixels below the intrinsic image.
+const CLASS_CIRCLE_LABEL_GAP: f64 = 8.0;
+/// `LimitFinder.drawText` extends a text primitive to 1.5px below its emitted
+/// baseline when calculating the painted document maximum.
+const LIMIT_FINDER_TEXT_BASELINE_TAIL: f64 = 1.5;
 /// Height of entity header (icon + name area) — used in height computations.
 #[allow(dead_code)]
 const HEADER_HEIGHT: f64 = 32.0;
@@ -1015,7 +1026,7 @@ fn calc_entity_dims(
             entity_index + 1
         };
         let shape_size = if entity.kind == EntityKind::Circle {
-            16.0
+            CLASS_CIRCLE_SIZE
         } else {
             24.0
         };
@@ -1353,6 +1364,80 @@ fn calc_entity_dims(
         source_line,
         hide,
     }
+}
+
+/// Java `EntityImageDescription#getShield` reserves an external circle label
+/// around the fixed-size image. Duplicate links and visible one-length links
+/// deliberately suppress that reservation to permit overlap-compatible SVEK
+/// placement.
+fn class_circle_shield(
+    diagram: &ClassDiagram,
+    entity: &ClassEntity,
+    dim: &EntityDims,
+    font: &ClassFontOverrides,
+) -> Option<(f64, f64)> {
+    if entity.kind != EntityKind::Circle {
+        return None;
+    }
+
+    let mut peers = HashSet::new();
+    for relationship in &diagram.relationships {
+        let peer = if relationship.from == entity.id || relationship.from == entity.label {
+            Some(&relationship.to)
+        } else if relationship.to == entity.id || relationship.to == entity.label {
+            Some(&relationship.from)
+        } else {
+            None
+        };
+        let Some(peer) = peer else {
+            continue;
+        };
+        if !peers.insert(peer.as_str()) || (relationship.length == 1 && !relationship.style.hidden)
+        {
+            return None;
+        }
+    }
+
+    let label_height = if entity.label.is_empty() {
+        0.0
+    } else {
+        text_render::label_height_with_family(
+            &entity.label,
+            font.name_font_size() as f64,
+            &font.name_family,
+        )
+    };
+    Some((
+        (dim.name_width - dim.width).max(1.0) / 2.0,
+        label_height.max(1.0),
+    ))
+}
+
+fn class_circle_label_bounds(
+    entity: &ClassEntity,
+    dim: &EntityDims,
+    font: &ClassFontOverrides,
+    x: f64,
+    y: f64,
+) -> Option<(f64, f64, f64, f64)> {
+    if entity.kind != EntityKind::Circle || entity.label.is_empty() {
+        return None;
+    }
+    let left = x + (dim.width - dim.name_width) / 2.0;
+    let baseline = y
+        + dim.height
+        + CLASS_CIRCLE_LABEL_GAP
+        + text_render::label_ascent_with_family(
+            &entity.label,
+            font.name_font_size() as f64,
+            &font.name_family,
+        );
+    Some((
+        left,
+        baseline,
+        left + dim.name_width,
+        baseline + LIMIT_FINDER_TEXT_BASELINE_TAIL,
+    ))
 }
 
 fn uses_document_order_body(entity: &ClassEntity, hide: HideFlags) -> bool {
@@ -2341,7 +2426,15 @@ fn render_with_oracle_uid_origin(
             SvekNodeEmission::Entity(idx) => {
                 let entity = &diagram.entities[idx];
                 let dim = &dims[idx];
-                layout.add_node(&entity.id, &entity.label, dim.width, dim.height);
+                let font = ClassFontOverrides::from_diagram_for_entity(diagram, entity);
+                if let Some((shield_x, shield_y)) = class_circle_shield(diagram, entity, dim, &font)
+                {
+                    layout.add_svek_shielded_node(
+                        &entity.id, dim.width, dim.height, shield_x, shield_y,
+                    );
+                } else {
+                    layout.add_node(&entity.id, &entity.label, dim.width, dim.height);
+                }
                 entity_layout_slots[idx] = next_layout_slot;
             }
             SvekNodeEmission::Note(idx) => {
@@ -5021,9 +5114,20 @@ fn render_plantuml_svg(
     // Compute entity positions (offset from layout).
     let mut entity_positions: Vec<(f64, f64)> = (0..diagram.entities.len())
         .map(|i| {
+            let entity = &diagram.entities[i];
+            let font = ClassFontOverrides::from_diagram_for_entity(diagram, entity);
+            let (image_dx, image_dy) =
+                if class_circle_shield(diagram, entity, &dims[i], &font).is_some() {
+                    (
+                        (positions[i].width - dims[i].width) / 2.0,
+                        (positions[i].height - dims[i].height) / 2.0,
+                    )
+                } else {
+                    (0.0, 0.0)
+                };
             (
-                positions[i].x + MARGIN + layout_x_bias,
-                positions[i].y + MARGIN,
+                positions[i].x + image_dx + MARGIN + layout_x_bias,
+                positions[i].y + image_dy + MARGIN,
             )
         })
         .collect();
@@ -5107,9 +5211,10 @@ fn render_plantuml_svg(
     let mut body_top = f64::INFINITY;
     let mut body_bottom = f64::NEG_INFINITY;
     for (i, (x, y)) in entity_positions.iter().enumerate() {
-        let shadow_extra = entity_shadow_limit_extra(&diagram.entities[i]);
+        let entity = &diagram.entities[i];
+        let shadow_extra = entity_shadow_limit_extra(entity);
         let generic_frontier = (!uses_degenerated_entity)
-            .then(|| generic_badge_frontier(&diagram.entities[i], dims[i].width))
+            .then(|| generic_badge_frontier(entity, dims[i].width))
             .flatten();
         body_min_x = body_min_x.min(*x);
         body_max_x = body_max_x.max(
@@ -5119,6 +5224,14 @@ fn render_plantuml_svg(
         );
         body_top = body_top.min(generic_frontier.map_or(*y, |frontier| y + frontier.min_y));
         body_bottom = body_bottom.max(y + dims[i].height + shadow_extra);
+        let font = ClassFontOverrides::from_diagram_for_entity(diagram, entity);
+        if let Some((label_left, _, label_right, label_bottom)) =
+            class_circle_label_bounds(entity, &dims[i], &font, *x, *y)
+        {
+            body_min_x = body_min_x.min(label_left);
+            body_max_x = body_max_x.max(label_right);
+            body_bottom = body_bottom.max(label_bottom);
+        }
     }
     for cluster in cluster_positions
         .iter()
@@ -5244,10 +5357,17 @@ fn render_plantuml_svg(
         let mut generic_badge_max_x = f64::NEG_INFINITY;
         let mut latex_image_max_x = 0.0_f64;
         for (i, (x, y)) in entity_positions.iter().enumerate() {
-            let shadow_extra = entity_shadow_limit_extra(&diagram.entities[i]);
+            let entity = &diagram.entities[i];
+            let shadow_extra = entity_shadow_limit_extra(entity);
             max_x = max_x.max(x + dims[i].width + shadow_extra);
             max_y = max_y.max(y + dims[i].height + shadow_extra);
-            let entity = &diagram.entities[i];
+            let font = ClassFontOverrides::from_diagram_for_entity(diagram, entity);
+            if let Some((_, _, label_right, label_bottom)) =
+                class_circle_label_bounds(entity, &dims[i], &font, *x, *y)
+            {
+                max_x = max_x.max(label_right);
+                max_y = max_y.max(label_bottom);
+            }
             if !uses_degenerated_entity
                 && let Some(frontier) = generic_badge_frontier(entity, dims[i].width)
             {
@@ -8757,6 +8877,16 @@ fn render_entity_content(
             .and_then(|r| r.rect_style.as_deref())
             .or_else(|| oracle_rect.and_then(|r| r.body_style.as_deref()))
             .unwrap_or("stroke:#181818;stroke-width:0.5;");
+        let text_fill = entity
+            .text_color
+            .as_deref()
+            .map(crate::sequence::resolve_color)
+            .or_else(|| {
+                font.font_color
+                    .as_deref()
+                    .map(crate::sequence::resolve_color)
+            })
+            .unwrap_or_else(|| "#000000".to_string());
         match entity.kind {
             EntityKind::Circle => {
                 let cx = x + dim.width / 2.0;
@@ -8767,8 +8897,8 @@ fn render_entity_content(
                     crate::plantuml_metrics::fmt_coord(cx),
                     crate::plantuml_metrics::fmt_coord(cy),
                     fill,
-                    crate::plantuml_metrics::fmt_coord(dim.width / 2.0),
-                    crate::plantuml_metrics::fmt_coord(dim.height / 2.0),
+                    crate::plantuml_metrics::fmt_coord(CLASS_CIRCLE_RADIUS),
+                    crate::plantuml_metrics::fmt_coord(CLASS_CIRCLE_RADIUS),
                     style,
                 )
                 .unwrap();
@@ -8784,6 +8914,24 @@ fn render_entity_content(
                             fill: "#000000",
                             bold: false,
                             italic: false,
+                            underline: false,
+                            skip_underline: true,
+                        },
+                    );
+                } else if !entity.label.is_empty() {
+                    let (label_x, label_y, _, _) =
+                        class_circle_label_bounds(entity, dim, font, x, y).unwrap();
+                    text_render::emit_text(
+                        svg,
+                        &entity.label,
+                        &TextBase {
+                            x: label_x,
+                            y: label_y,
+                            font_size: font.name_font_size(),
+                            font_family: &font.name_family,
+                            fill: &text_fill,
+                            bold: font.font_bold,
+                            italic: font.font_italic,
                             underline: false,
                             skip_underline: true,
                         },
@@ -17937,6 +18085,100 @@ mod tests {
         assert!(!plain.contains("<filter "));
         assert!(shadowed.contains("<filter "));
         assert!(shadowed.contains(r#"filter="url(#"#));
+    }
+
+    #[test]
+    fn circle_external_label_shield_follows_link_topology() {
+        let has_shield = |links: &str| {
+            let input = format!(
+                "@startuml\n\
+                 class FreshCirclePeer3079\n\
+                 circle FreshCircleEndpoint3083\n\
+                 {links}\n\
+                 @enduml"
+            );
+            let parsed = rustuml_parser::parse::parse(&input).unwrap();
+            let rustuml_parser::diagram::Diagram::Class(diagram) = parsed else {
+                panic!("expected class diagram");
+            };
+            let index = diagram
+                .entities
+                .iter()
+                .position(|entity| entity.kind == EntityKind::Circle)
+                .unwrap();
+            let entity = &diagram.entities[index];
+            let font = ClassFontOverrides::from_diagram_for_entity(&diagram, entity);
+            let dim = calc_entity_dims(
+                entity,
+                index,
+                HideFlags::default(),
+                &font,
+                &diagram.meta.sprites,
+            );
+            (
+                dim.width,
+                class_circle_shield(&diagram, entity, &dim, &font).is_some(),
+            )
+        };
+
+        assert_eq!(
+            has_shield("FreshCirclePeer3079 -- FreshCircleEndpoint3083"),
+            (CLASS_CIRCLE_SIZE, true)
+        );
+        assert_eq!(
+            has_shield("FreshCirclePeer3079 - FreshCircleEndpoint3083"),
+            (CLASS_CIRCLE_SIZE, false)
+        );
+        assert_eq!(
+            has_shield(
+                "FreshCirclePeer3079 -- FreshCircleEndpoint3083\n\
+                 FreshCirclePeer3079 .. FreshCircleEndpoint3083"
+            ),
+            (CLASS_CIRCLE_SIZE, false)
+        );
+    }
+
+    #[test]
+    fn circle_description_is_centered_below_intrinsic_image() {
+        let input = "@startuml\n\
+                     class FreshCircleOwner3109\n\
+                     circle RenamedExternalCircleLabel3119\n\
+                     FreshCircleOwner3109 -- RenamedExternalCircleLabel3119\n\
+                     @enduml";
+        let parsed = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Class(diagram) = &parsed else {
+            panic!("expected class diagram");
+        };
+        let entity = diagram
+            .entities
+            .iter()
+            .find(|entity| entity.kind == EntityKind::Circle)
+            .unwrap();
+        let svg = crate::render_svg(&parsed);
+
+        assert!(svg.contains(r#"rx="8" ry="8""#), "{svg}");
+        assert!(
+            svg.contains(">RenamedExternalCircleLabel3119</text>"),
+            "{svg}"
+        );
+        let text_end = svg.find(">RenamedExternalCircleLabel3119</text>").unwrap();
+        let text_start = svg[..text_end].rfind("<text ").unwrap();
+        let label_x = attr_value(&svg[text_start..text_end], " x")
+            .unwrap()
+            .parse::<f64>()
+            .unwrap();
+        let label_width = text_render::measure_no_underline_with_family(
+            &entity.label,
+            FONT_SIZE,
+            false,
+            "sans-serif",
+        );
+        let ellipse = svg
+            .split("<ellipse ")
+            .find(|element| element.contains(r#"rx="8" ry="8""#))
+            .unwrap();
+        let circle_x = attr_value(ellipse, "cx").unwrap().parse::<f64>().unwrap();
+        assert!((label_x + label_width / 2.0 - circle_x).abs() < 0.001);
     }
 
     #[test]
