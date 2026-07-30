@@ -206,7 +206,7 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
 
     static RE_COMP: LazyLock<Regex> = LazyLock::new(|| {
         Regex::new(
-            r#"^component\s+(?:"((?:[^"]|"")+)"\s+as\s+(\w+)|"((?:[^"]|"")+)"|(\w+))(?:\s+[^{]*)?"#,
+            r#"^(?i:component)\s+(?:"((?:[^"]|"")+)"\s+(?i:as)\s+(\w+)|"((?:[^"]|"")+)"|(\w+))(?:\s+[^{]*)?"#,
         )
         .unwrap()
     });
@@ -1482,6 +1482,20 @@ mod tests {
             .unwrap();
         assert_eq!(queue.label, "Delivery Work");
         assert_eq!(queue.kind, ComponentElementKind::Queue);
+    }
+
+    #[test]
+    fn component_leaf_command_and_as_token_are_case_insensitive() {
+        let d = parse(
+            "CoMpOnEnT \"Telemetry Display\" As Telemetry8151\n\
+             COMPONENT Api8161",
+        );
+
+        assert_eq!(d.components.len(), 2);
+        assert_eq!(d.components[0].id, "Telemetry8151");
+        assert_eq!(d.components[0].label, "Telemetry Display");
+        assert_eq!(d.components[1].id, "Api8161");
+        assert_eq!(d.components[1].label, "Api8161");
     }
 
     #[test]

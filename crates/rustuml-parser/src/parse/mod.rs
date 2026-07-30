@@ -1563,10 +1563,17 @@ mod tests {
             assert!(matches!(parse(input).unwrap(), Diagram::Deployment(_)));
         }
 
-        assert!(matches!(
-            parse("@startuml\nCoMpOnEnT Api7031\n@enduml").unwrap(),
-            Diagram::Component(_)
-        ));
+        let Diagram::Component(diagram) =
+            parse("@startuml\nCoMpOnEnT \"API Display 7031\" As Api7031\n@enduml").unwrap()
+        else {
+            panic!("expected component-backed description diagram");
+        };
+        assert!(
+            diagram
+                .components
+                .iter()
+                .any(|component| component.id == "Api7031" && component.label == "API Display 7031")
+        );
     }
 
     #[test]
