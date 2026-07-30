@@ -4272,6 +4272,35 @@ fn render_plantuml_svg(
         &adjusted_edge_paths,
         &font,
     );
+    let layout_y_bias =
+        svek_layout_y_bias(diagram, positions, cluster_positions, &adjusted_edge_paths);
+    let mut normalized_positions = positions.to_vec();
+    for position in &mut normalized_positions {
+        position.y += layout_y_bias;
+    }
+    let positions = normalized_positions.as_slice();
+    let mut normalized_cluster_positions = cluster_positions.to_vec();
+    for position in &mut normalized_cluster_positions {
+        position.y += layout_y_bias;
+    }
+    let cluster_positions = normalized_cluster_positions.as_slice();
+    for edge in &mut adjusted_edge_paths {
+        for point in &mut edge.points {
+            point.1 += layout_y_bias;
+        }
+        if let Some(point) = &mut edge.start_point {
+            point.1 += layout_y_bias;
+        }
+        if let Some(point) = &mut edge.end_point {
+            point.1 += layout_y_bias;
+        }
+        for label in [&mut edge.label, &mut edge.tail_label, &mut edge.head_label]
+            .into_iter()
+            .flatten()
+        {
+            label.y += layout_y_bias;
+        }
+    }
 
     // Compute entity positions (offset from layout).
     let mut entity_positions: Vec<(f64, f64)> = (0..diagram.entities.len())
@@ -11002,6 +11031,51 @@ fn svek_layout_x_bias(
         // `normalize_svek_package_envelope` has already translated rendered
         // cluster frontiers to Java's SVEK origin. Do not apply that move a
         // second time merely because an enclosed class rectangle starts later.
+        envelope_bias.max(0.0)
+    }
+}
+
+/// Vertical twin of `svek_layout_x_bias`. Java
+/// `SvekResult.calculateDimension` measures splines as well as nodes, then
+/// calls `moveDelta(6 - minY)`. Curved one-rank edges can rise far above every
+/// node, so Graphviz's node origin alone is not a valid painted origin.
+fn svek_layout_y_bias(
+    diagram: &ClassDiagram,
+    positions: &[NodePosition],
+    cluster_positions: &[ClusterPosition],
+    edge_paths: &[EdgePath],
+) -> f64 {
+    let min_y = positions
+        .iter()
+        .enumerate()
+        .map(|(idx, position)| {
+            position.y
+                - if idx < diagram.entities.len() {
+                    LIMIT_FINDER_RECTANGLE_INSET
+                } else {
+                    0.0
+                }
+        })
+        .chain(cluster_positions.iter().map(|position| position.y))
+        .chain(
+            edge_paths
+                .iter()
+                .flat_map(|edge| edge.points.iter().map(|point| point.1)),
+        )
+        .chain(edge_paths.iter().flat_map(|edge| {
+            [edge.label, edge.tail_label, edge.head_label]
+                .into_iter()
+                .flatten()
+                .map(|label| label.y)
+        }))
+        .fold(f64::INFINITY, f64::min);
+    if !min_y.is_finite() {
+        return 0.0;
+    }
+    let envelope_bias = SVEK_LABEL_ENVELOPE_MARGIN - min_y - MARGIN;
+    if cluster_positions.is_empty() {
+        envelope_bias
+    } else {
         envelope_bias.max(0.0)
     }
 }
