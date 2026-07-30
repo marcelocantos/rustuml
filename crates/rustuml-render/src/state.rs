@@ -3521,12 +3521,14 @@ fn has_only_autonomous_layout_skinparams(diagram: &StateDiagram) -> bool {
                 | "statearrowfontsize"
                 | "statearrowfontname"
                 | "statearrowfontstyle"
+                | "statemessagealignment"
                 | "statestartcolor"
                 | "stateendcolor"
                 | "stateshadowing"
                 | "defaultfontcolor"
                 | "defaultfontsize"
                 | "defaultfontname"
+                | "defaulttextalignment"
                 | "fontname"
                 | "arrowcolor"
                 | "arrowfontsize"
@@ -12383,6 +12385,45 @@ CobaltDecision --> [*]
                 value: "7".into(),
             });
         assert!(!has_only_autonomous_layout_skinparams(&visual));
+    }
+
+    #[test]
+    fn autonomous_composites_accept_state_label_alignment_params() {
+        for alignment_param in [
+            "skinparam stateMessageAlignment right",
+            "skinparam defaultTextAlignment left",
+        ] {
+            let parsed = rustuml_parser::parse::parse(&format!(
+                "@startuml\n\
+                 left to right direction\n\
+                 {alignment_param}\n\
+                 state \"Outer Ledger\" as OuterLedger {{\n\
+                   state \"Draft Lane\" as DraftLane\n\
+                   state \"Audit Lane\" as AuditLane\n\
+                   [*] --> DraftLane\n\
+                   DraftLane --> AuditLane : head\\nlonger aligned row\n\
+                   AuditLane --> [*]\n\
+                 }}\n\
+                 @enduml"
+            ))
+            .unwrap();
+            let rustuml_parser::diagram::Diagram::State(diagram) = parsed else {
+                panic!("expected state diagram");
+            };
+
+            assert!(has_only_autonomous_layout_skinparams(&diagram));
+            assert!(build_autonomous_composite(&diagram).is_some());
+            let svg = render(&diagram, &Theme::default());
+            assert!(svg.contains("<path"), "{alignment_param}: {svg}");
+            assert!(
+                svg.contains(r#"data-qualified-name="OuterLedger..start.OuterLedger""#),
+                "{alignment_param}: {svg}"
+            );
+            assert!(
+                !svg.contains(r#"data-qualified-name="[*]OuterLedger""#),
+                "{alignment_param}: {svg}"
+            );
+        }
     }
 
     #[test]
