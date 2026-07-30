@@ -2548,7 +2548,8 @@ fn render_with_oracle_uid_origin(
     }
     let uses_ortho_labels = has_ortho_linetype(diagram);
     let relationship_note_indices = relationship_note_indices(diagram);
-    for (rel_idx, rel) in diagram.relationships.iter().enumerate() {
+    for rel_idx in svek_relationship_order(diagram) {
+        let rel = &diagram.relationships[rel_idx];
         let from = relationship_layout_id(diagram, &rel.from);
         let to = relationship_layout_id(diagram, &rel.to);
         let touches_group_endpoint =
@@ -5954,25 +5955,24 @@ fn render_plantuml_svg(
     } else {
         let edge_indices = relationship_edge_indices(diagram, edge_paths);
         let relationship_note_indices = relationship_note_indices(diagram);
-        let mut duplicate_counts = HashMap::<(&str, &str), usize>::new();
-        for (rel_idx, ((rel, edge_idx), &link_id)) in diagram
-            .relationships
-            .iter()
-            .zip(edge_indices)
-            .zip(&svek_ids.relationship_ids)
-            .enumerate()
-        {
+        let mut used_relationship_path_ids = HashSet::new();
+        for rel_idx in svek_relationship_order(diagram) {
+            let rel = &diagram.relationships[rel_idx];
+            let edge_idx = edge_indices[rel_idx];
+            let link_id = svek_ids.relationship_ids[rel_idx];
             if opale_relationships.contains(&rel_idx) {
                 continue;
             }
-            let duplicate_index = duplicate_counts
-                .entry((rel.from.as_str(), rel.to.as_str()))
-                .and_modify(|count| *count += 1)
-                .or_insert(0);
             if relationship_touches_hidden_entity(rel, diagram, hidden_entities) {
                 continue;
             }
             if let Some(ep) = edge_idx.and_then(|idx| edge_paths.get(idx)) {
+                let base_path_id = relationship_svg_path_id(diagram, rel);
+                let path_id = if rel.style.hidden || ep.points.is_empty() {
+                    base_path_id
+                } else {
+                    unique_relationship_svg_path_id(&mut used_relationship_path_ids, base_path_id)
+                };
                 render_relationship_svg(
                     &mut svg,
                     rel,
@@ -5987,7 +5987,7 @@ fn render_plantuml_svg(
                     ep,
                     link_id,
                     layout_x_bias,
-                    *duplicate_index,
+                    &path_id,
                 );
             }
         }
@@ -11665,6 +11665,7 @@ fn render_no_oracle_association_class_links(
             else {
                 continue;
             };
+            let path_id = relationship_svg_path_id(diagram, &relationship);
             render_relationship_svg(
                 svg,
                 &relationship,
@@ -11679,7 +11680,7 @@ fn render_no_oracle_association_class_links(
                 edge,
                 first_link_id + link_idx,
                 layout_x_bias,
-                0,
+                &path_id,
             );
         }
     }
@@ -12338,7 +12339,7 @@ fn render_relationship_svg(
     edge_path: &EdgePath,
     ent_id: usize,
     layout_x_bias: f64,
-    duplicate_index: usize,
+    path_id: &str,
 ) {
     let RelationshipRenderContext {
         diagram,
@@ -12569,30 +12570,6 @@ fn render_relationship_svg(
         i += 3;
     }
 
-    // `Link.idCommentForSvg` uses `Entity.getName()`, which is the short
-    // Quark name for a namespace-separated entity, while explicit aliases
-    // remain the Quark name themselves.
-    let from_name = relationship_endpoint_name(context.diagram, &rel.from);
-    let to_name = relationship_endpoint_name(context.diagram, &rel.to);
-    let has_parenthesis = rel.from_decor == Some(EndpointDecor::Parenthesis)
-        || rel.to_decor == Some(EndpointDecor::Parenthesis);
-    let mut path_id = if has_parenthesis {
-        format!("{from_name}-to-{to_name}")
-    } else if rel.from_decor.is_some()
-        || rel.to_decor.is_some()
-        || matches!(rel.kind, RelationshipKind::Association)
-        || (decorates_from && decorates_to)
-    {
-        format!("{from_name}-{to_name}")
-    } else if is_reverse {
-        format!("{from_name}-backto-{to_name}")
-    } else {
-        format!("{from_name}-to-{to_name}")
-    };
-    if duplicate_index > 0 {
-        write!(path_id, "-{duplicate_index}").unwrap();
-    }
-
     let code_line_attr = if rel.source_line > 0 && !rel.style.declaration {
         format!(r#" codeLine="{}""#, rel.source_line)
     } else {
@@ -12602,7 +12579,7 @@ fn render_relationship_svg(
         svg,
         r#"<path{code_line_attr} d="{}" fill="none" id="{}" style="stroke:{};stroke-width:{};{}"/>"#,
         d,
-        escape_xml(&path_id),
+        escape_xml(path_id),
         edge_color,
         crate::plantuml_metrics::fmt_coord(stroke_width),
         dash_style,
@@ -12827,6 +12804,49 @@ fn render_relationship_svg(
     }
 
     svg.push_str("</g>");
+}
+
+fn relationship_svg_path_id(diagram: &ClassDiagram, rel: &Relationship) -> String {
+    // `Link.idCommentForSvg` uses `Entity.getName()`, which is the short
+    // Quark name for a namespace-separated entity, while explicit aliases
+    // remain the Quark name themselves.
+    let from_name = relationship_endpoint_name(diagram, &rel.from);
+    let to_name = relationship_endpoint_name(diagram, &rel.to);
+    let decorates_from = relationship_decorates_from(rel);
+    let decorates_to = relationship_decorates_to(rel);
+    let has_parenthesis = rel.from_decor == Some(EndpointDecor::Parenthesis)
+        || rel.to_decor == Some(EndpointDecor::Parenthesis);
+
+    if has_parenthesis {
+        format!("{from_name}-to-{to_name}")
+    } else if rel.from_decor.is_some()
+        || rel.to_decor.is_some()
+        || matches!(rel.kind, RelationshipKind::Association)
+        || (decorates_from && decorates_to)
+    {
+        format!("{from_name}-{to_name}")
+    } else if decorates_from {
+        format!("{from_name}-backto-{to_name}")
+    } else {
+        format!("{from_name}-to-{to_name}")
+    }
+}
+
+fn unique_relationship_svg_path_id(
+    used_path_ids: &mut HashSet<String>,
+    base_path_id: String,
+) -> String {
+    if used_path_ids.insert(base_path_id.clone()) {
+        return base_path_id;
+    }
+
+    for suffix in 1.. {
+        let candidate = format!("{base_path_id}-{suffix}");
+        if used_path_ids.insert(candidate.clone()) {
+            return candidate;
+        }
+    }
+    unreachable!("the finite relationship stream must have a free SVG path id")
 }
 
 fn relationship_decorates_from(rel: &Relationship) -> bool {
@@ -13148,29 +13168,68 @@ fn simulate_class_compound(
 }
 
 /// Match each source relationship to one solved edge without reusing parallel
-/// edges. `GraphvizImageBuilder.addLine` inserts links in source order, and
-/// `SvekResult` preserves that order when several links share endpoints.
+/// edge. `LayoutGraph` retains the caller's insertion index even when cgraph
+/// traverses same-connection edges in a different order.
 fn relationship_edge_indices(
     diagram: &ClassDiagram,
     edge_paths: &[EdgePath],
 ) -> Vec<Option<usize>> {
-    let mut used = vec![false; edge_paths.len()];
-    diagram
-        .relationships
-        .iter()
-        .map(|relationship| {
-            let from = relationship_layout_id(diagram, &relationship.from);
-            let to = relationship_layout_id(diagram, &relationship.to);
-            let edge_idx = edge_paths
+    relationship_layout_edge_indices(diagram)
+        .into_iter()
+        .map(|expected| {
+            edge_paths
                 .iter()
-                .enumerate()
-                .position(|(idx, edge)| !used[idx] && edge.from == from && edge.to == to);
-            if let Some(idx) = edge_idx {
-                used[idx] = true;
-            }
-            edge_idx
+                .position(|edge| edge.edge_index == expected)
         })
         .collect()
+}
+
+/// Port of `CucaDiagramFileMakerSvek.addLinkNew`: keep the first-seen order of
+/// unordered endpoint-pair groups and preserve construction order within each
+/// group. The parser and Cuca UID stream intentionally remain source ordered.
+fn svek_relationship_order(diagram: &ClassDiagram) -> Vec<usize> {
+    let same_connections = |left: usize, right: usize| {
+        let left = &diagram.relationships[left];
+        let right = &diagram.relationships[right];
+        (left.from == right.from && left.to == right.to)
+            || (left.from == right.to && left.to == right.from)
+    };
+    let mut ordered = Vec::<usize>::with_capacity(diagram.relationships.len());
+    for relationship_idx in 0..diagram.relationships.len() {
+        let Some(mut insert_at) = ordered
+            .iter()
+            .position(|&other_idx| same_connections(other_idx, relationship_idx))
+        else {
+            ordered.push(relationship_idx);
+            continue;
+        };
+        while insert_at < ordered.len() && same_connections(ordered[insert_at], relationship_idx) {
+            insert_at += 1;
+        }
+        ordered.insert(insert_at, relationship_idx);
+    }
+    ordered
+}
+
+fn relationship_layout_edge_indices(diagram: &ClassDiagram) -> Vec<usize> {
+    // Association replacement links and attached-note links enter LayoutGraph
+    // before ordinary relationships in `render_no_oracle`.
+    let first_relationship_edge_index = diagram
+        .association_classes
+        .iter()
+        .enumerate()
+        .map(|(idx, association)| association_replacement_relationships(association, idx).len())
+        .sum::<usize>()
+        + diagram
+            .notes
+            .iter()
+            .filter(|note| note.target.is_some() && note.position.is_some())
+            .count();
+    let mut edge_indices = vec![usize::MAX; diagram.relationships.len()];
+    for (offset, relationship_idx) in svek_relationship_order(diagram).into_iter().enumerate() {
+        edge_indices[relationship_idx] = first_relationship_edge_index + offset;
+    }
+    edge_indices
 }
 
 struct RelationshipArrowFont {
@@ -16729,6 +16788,62 @@ mod tests {
     }
 
     #[test]
+    fn svek_links_stably_group_unordered_endpoint_pairs() {
+        let Diagram::Class(diagram) = rustuml_parser::parse::parse(
+            "@startuml\n\
+             class Alpha\n\
+             class Beta\n\
+             class Gamma\n\
+             Alpha --> Beta : first-ab\n\
+             Alpha --> Gamma : first-ag\n\
+             Beta --> Alpha : reverse-ab\n\
+             Beta --> Gamma : first-bg\n\
+             Gamma ..> Alpha : dependency-ag\n\
+             Gamma --> Beta : reverse-bg\n\
+             @enduml",
+        )
+        .expect("class graph parses") else {
+            panic!("expected class diagram");
+        };
+
+        assert_eq!(svek_relationship_order(&diagram), [0, 2, 1, 4, 3, 5]);
+        assert_eq!(
+            relationship_layout_edge_indices(&diagram),
+            [0, 2, 1, 4, 3, 5]
+        );
+    }
+
+    #[test]
+    fn relationship_svg_ids_collide_only_after_decoration_is_applied() {
+        let Diagram::Class(diagram) = rustuml_parser::parse::parse(
+            "@startuml\n\
+             class Alpha\n\
+             class Beta\n\
+             Alpha --|> Beta\n\
+             Alpha o-- Beta\n\
+             Alpha --|> Beta\n\
+             @enduml",
+        )
+        .expect("class graph parses") else {
+            panic!("expected class diagram");
+        };
+        let mut used_path_ids = HashSet::new();
+        let path_ids = diagram
+            .relationships
+            .iter()
+            .map(|relationship| {
+                unique_relationship_svg_path_id(
+                    &mut used_path_ids,
+                    relationship_svg_path_id(&diagram, relationship),
+                )
+            })
+            .collect::<Vec<_>>();
+
+        assert_ne!(path_ids[0], path_ids[1]);
+        assert_eq!(path_ids[2], format!("{}-1", path_ids[0]));
+    }
+
+    #[test]
     fn endpoint_label_block_measures_centered_display_rows() {
         let block = RelationshipEndpointLabelBlock::measure("owner\\ni\\n", 13.0, "sans-serif");
 
@@ -19765,6 +19880,7 @@ mod tests {
             head_label: None,
         };
         let mut svg = String::new();
+        let path_id = relationship_svg_path_id(&diagram, &rel);
         render_relationship_svg(
             &mut svg,
             &rel,
@@ -19779,7 +19895,7 @@ mod tests {
             &edge_path,
             4,
             0.0,
-            0,
+            &path_id,
         );
 
         assert!(svg.contains(r#"data-link-type="crowfoot""#));
