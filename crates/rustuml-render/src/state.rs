@@ -3540,6 +3540,27 @@ fn has_only_autonomous_layout_skinparams(diagram: &StateDiagram) -> bool {
     })
 }
 
+fn has_only_flat_label_skinparams(diagram: &StateDiagram) -> bool {
+    diagram.meta.skinparams.iter().all(|skinparam| {
+        matches!(
+            skinparam.key.to_ascii_lowercase().as_str(),
+            "statearrowfontcolor"
+                | "arrowfontcolor"
+                | "statearrowfontsize"
+                | "arrowfontsize"
+                | "defaultfontsize"
+                | "statearrowfontname"
+                | "arrowfontname"
+                | "defaultfontname"
+                | "fontname"
+                | "statearrowfontstyle"
+                | "arrowfontstyle"
+                | "statemessagealignment"
+                | "defaulttextalignment"
+        )
+    })
+}
+
 fn supports_autonomous_state_image(state: &State) -> bool {
     if !StateEntityPosition::of(state).is_normal() {
         return false;
@@ -6349,7 +6370,7 @@ pub fn render_with_oracle(
     };
 
     let has_complete_flat_painter_model = diagram.meta.title.is_none()
-        && diagram.meta.skinparams.is_empty()
+        && has_only_flat_label_skinparams(diagram)
         && diagram.notes.is_empty()
         && diagram.states.iter().all(|state| !state.composite);
     let flat_painted_bounds = layout_result.as_ref().and_then(|result| {
@@ -6474,6 +6495,16 @@ pub fn render_with_oracle(
                 let y = quantize_svek_coord(label_origin.y);
                 bounds.include(x, y);
                 bounds.include(x + label_size.width, y + label_size.height);
+                if let Some(label) = transition.label.as_ref() {
+                    let transition_font = StateArrowFont::for_transition(diagram, transition);
+                    let label_margin =
+                        state_edge_label_margin(transition) + transition_font.padding;
+                    let block = StateTransitionLabelBlock::measure(label, &transition_font);
+                    let (min_y, max_y) =
+                        block.painted_y_range(label, y + label_margin, &transition_font);
+                    bounds.include(x + label_margin, min_y);
+                    bounds.include(x + label_margin + block.width, max_y);
+                }
             }
         }
         bounds.is_finite().then_some(bounds)
@@ -12422,6 +12453,52 @@ CobaltDecision --> [*]
             assert!(
                 !svg.contains(r#"data-qualified-name="[*]OuterLedger""#),
                 "{alignment_param}: {svg}"
+            );
+        }
+    }
+
+    #[test]
+    fn flat_painted_envelope_accepts_only_modeled_label_skinparams() {
+        let accepted = rustuml_parser::parse::parse(
+            "@startuml\n\
+             left to right direction\n\
+             skinparam StateArrowFontName Courier New\n\
+             skinparam StateArrowFontSize 12\n\
+             skinparam StateArrowFontStyle bold\n\
+             skinparam StateArrowFontColor #123456\n\
+             skinparam StateMessageAlignment right\n\
+             state \"Renamed Alpha\" as Alpha\n\
+             state \"Renamed Beta\" as Beta\n\
+             Alpha --> Beta : first row\\nsecond row\n\
+             @enduml",
+        )
+        .unwrap();
+        let rustuml_parser::diagram::Diagram::State(accepted) = accepted else {
+            panic!("expected state diagram");
+        };
+        assert!(has_only_flat_label_skinparams(&accepted));
+
+        for unsupported in [
+            "skinparam StateShadowing 4",
+            "skinparam Padding 3",
+            "skinparam NodeSep 70",
+            "skinparam UnknownStatePainter value",
+        ] {
+            let parsed = rustuml_parser::parse::parse(&format!(
+                "@startuml\n\
+                 {unsupported}\n\
+                 state \"Renamed Alpha\" as Alpha\n\
+                 state \"Renamed Beta\" as Beta\n\
+                 Alpha --> Beta : held out label\n\
+                 @enduml"
+            ))
+            .unwrap();
+            let rustuml_parser::diagram::Diagram::State(diagram) = parsed else {
+                panic!("expected state diagram");
+            };
+            assert!(
+                !has_only_flat_label_skinparams(&diagram),
+                "{unsupported} must remain on the conservative fallback"
             );
         }
     }
