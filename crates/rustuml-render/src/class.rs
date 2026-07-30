@@ -365,6 +365,69 @@ const FRAME_CLUSTER_STEREOTYPE_TOP_EXTRA: f64 = 5.0;
 const RECTANGLE_CLUSTER_CONTENT_TOP: f64 = 2.0;
 /// Java `USymbolCloud.asBig()` starts its stereotype/title stack at y=13.
 const CLOUD_CLUSTER_CONTENT_TOP: f64 = 13.0;
+/// Java `USymbolArtifact#getMargin`: left 10, right 20, top 13, bottom 10.
+const ARTIFACT_SMALL_MARGINS: (f64, f64, f64, f64) = (10.0, 20.0, 13.0, 10.0);
+/// Java `USymbolAction#getMargin`: left 10, right 20, top/bottom 10.
+const ACTION_SMALL_MARGINS: (f64, f64, f64, f64) = (10.0, 20.0, 10.0, 10.0);
+/// Java `USymbolProcess#getMargin`: horizontal 20, vertical 10.
+const PROCESS_SMALL_MARGINS: (f64, f64, f64, f64) = (20.0, 20.0, 10.0, 10.0);
+/// Java `USymbolComponent2#getMargin`: 15, 25, 20, 10.
+const COMPONENT_SMALL_MARGINS: (f64, f64, f64, f64) = (15.0, 25.0, 20.0, 10.0);
+/// Java `USymbolComponent1#getMargin`: ten pixels on every side.
+const COMPONENT_UML1_SMALL_MARGINS: (f64, f64, f64, f64) = (10.0, 10.0, 10.0, 10.0);
+/// Java `USymbolCard#getMargin`: horizontal 10, vertical 3.
+const CARD_SMALL_MARGINS: (f64, f64, f64, f64) = (10.0, 10.0, 3.0, 3.0);
+/// Java `USymbolQueue#getMargin`: 5, 15, 5, 5.
+const QUEUE_SMALL_MARGINS: (f64, f64, f64, f64) = (5.0, 15.0, 5.0, 5.0);
+/// Java `USymbolStack#getMargin`: horizontal 25, vertical 10.
+const STACK_SMALL_MARGINS: (f64, f64, f64, f64) = (25.0, 25.0, 10.0, 10.0);
+/// Java file, storage, and rectangle symbols all use ten-pixel margins.
+const TEN_PIXEL_SMALL_MARGINS: (f64, f64, f64, f64) = (10.0, 10.0, 10.0, 10.0);
+/// Java `USymbolHexagon#asSmall` doubles content width and adds `marginY=5`
+/// above and below without painting the big-symbol polygon.
+const HEXAGON_SMALL_WIDTH_FACTOR: f64 = 2.0;
+const HEXAGON_SMALL_MARGIN_Y: f64 = 5.0;
+/// Java `USymbolAction#drawAction` and `USymbolProcess#drawProcess`.
+const CHEVRON_DEPTH: f64 = 10.0;
+/// Java `USymbolHexagon#drawRect` uses one eighth of the width per end cap.
+const HEXAGON_CAP_DIVISOR: f64 = 8.0;
+/// Java `USymbolFile#drawFile`.
+const FILE_FOLD_SIZE: f64 = 10.0;
+/// Java `USymbolArtifact#drawArtifact`.
+const ARTIFACT_MARK_WIDTH: f64 = 12.0;
+const ARTIFACT_MARK_HEIGHT: f64 = 14.0;
+const ARTIFACT_FOLD_SIZE: f64 = 6.0;
+const ARTIFACT_MARK_INSET: f64 = 5.0;
+/// Java `USymbolStorage#drawStorage` calls `URectangle.rounded(70)`.
+const STORAGE_ROUND_DIAMETER: f64 = 70.0;
+/// Java `USymbolComponent2#drawComponent2`.
+const COMPONENT_MARK_WIDTH: f64 = 15.0;
+const COMPONENT_MARK_HEIGHT: f64 = 10.0;
+const COMPONENT_MARK_RIGHT_INSET: f64 = 20.0;
+const COMPONENT_MARK_TOP: f64 = 5.0;
+const COMPONENT_PORT_WIDTH: f64 = 4.0;
+const COMPONENT_PORT_HEIGHT: f64 = 2.0;
+const COMPONENT_PORT_RIGHT_INSET: f64 = 22.0;
+const COMPONENT_PORT_TOP_ONE: f64 = 7.0;
+const COMPONENT_PORT_TOP_TWO: f64 = 11.0;
+/// Java `USymbolComponent1#drawComponent1`.
+const COMPONENT_UML1_TAB_WIDTH: f64 = 10.0;
+const COMPONENT_UML1_TAB_HEIGHT: f64 = 5.0;
+const COMPONENT_UML1_TAB_LEFT: f64 = -5.0;
+const COMPONENT_UML1_TAB_TOP: f64 = 5.0;
+const COMPONENT_UML1_TAB_BOTTOM_INSET: f64 = 10.0;
+/// Java `USymbolQueue#drawQueue`.
+const QUEUE_CURVE_DEPTH: f64 = 5.0;
+/// Java `USymbolStack#drawQueue`.
+const STACK_SIDE_INSET: f64 = 15.0;
+/// Java `USymbolCard#asBig` separates the title stack from the body by 4px.
+const CARD_HEADER_GAP: f64 = 4.0;
+/// Java big-symbol title origins.
+const STANDARD_SYMBOL_CONTENT_TOP: f64 = 2.0;
+const STORAGE_STEREOTYPE_TOP: f64 = 5.0;
+const STORAGE_TITLE_TOP: f64 = 7.0;
+const COMPONENT_CLUSTER_CONTENT_TOP: f64 = 13.0;
+const STACK_CLUSTER_CONTENT_TOP: f64 = 13.0;
 /// Package cluster canvases use the full SVEK body side extent (left 6 plus
 /// right-side stroke/body slack) rather than the single-entity 13px formula.
 /// Provenance: Java `SvekResult.drawU` normalises the body at x/y=6 before
@@ -2315,7 +2378,7 @@ fn render_with_oracle_uid_origin(
             }
             SvekNodeEmission::EmptyPackage(idx) => {
                 let package = &diagram.packages[idx];
-                let (width, height) = empty_package_intrinsic_dims(package);
+                let (width, height) = empty_package_intrinsic_dims(diagram, package);
                 layout.add_node(&empty_package_layout_id(idx), "", width, height);
                 empty_package_layout_slots[idx] = Some(next_layout_slot);
             }
@@ -3655,12 +3718,23 @@ fn package_render_model(diagram: &ClassDiagram) -> PackageRenderModel {
                 effective_package_kind(diagram, package),
                 PackageKind::Package
                     | PackageKind::Namespace
+                    | PackageKind::Action
+                    | PackageKind::Artifact
+                    | PackageKind::Card
                     | PackageKind::Database
+                    | PackageKind::Component
+                    | PackageKind::ComponentUml1
+                    | PackageKind::File
                     | PackageKind::Folder
                     | PackageKind::Frame
+                    | PackageKind::Hexagon
                     | PackageKind::Rectangle
                     | PackageKind::Node
                     | PackageKind::Cloud
+                    | PackageKind::Process
+                    | PackageKind::Queue
+                    | PackageKind::Stack
+                    | PackageKind::Storage
             );
             if !supports_package_rendering {
                 PackageRenderRole::Hidden
@@ -3691,42 +3765,29 @@ fn package_render_model(diagram: &ClassDiagram) -> PackageRenderModel {
 }
 
 fn automatic_package_kind(pkg: &Package) -> Option<PackageKind> {
-    if matches!(pkg.kind, PackageKind::Package | PackageKind::Namespace) {
-        for stereotype in &pkg.stereotypes {
-            if stereotype.eq_ignore_ascii_case("database") {
-                return Some(PackageKind::Database);
-            }
-            if stereotype.eq_ignore_ascii_case("folder") {
-                return Some(PackageKind::Folder);
-            }
-            if stereotype.eq_ignore_ascii_case("frame") {
-                return Some(PackageKind::Frame);
-            }
-            if stereotype.eq_ignore_ascii_case("rectangle") {
-                return Some(PackageKind::Rectangle);
-            }
-            if stereotype.eq_ignore_ascii_case("node") {
-                return Some(PackageKind::Node);
-            }
-            if stereotype.eq_ignore_ascii_case("cloud") {
-                return Some(PackageKind::Cloud);
-            }
-        }
-    } else {
+    if pkg.symbol_from_keyword {
         return Some(pkg.kind);
     }
-    None
+    if !matches!(pkg.kind, PackageKind::Package | PackageKind::Namespace)
+        || pkg.stereotypes.len() != 1
+    {
+        return None;
+    }
+    // `CommandPackage#executeArg` passes the one raw stereotype capture to
+    // `USymbols#fromString`. Multiple labels concatenate to an unknown key;
+    // they are ordinary visible stereotypes rather than independent selectors.
+    PackageKind::from_command_symbol(&pkg.stereotypes[0])
 }
 
 fn visible_package_stereotype_lines(pkg: &Package) -> Vec<String> {
+    let selector = if pkg.symbol_from_keyword {
+        None
+    } else {
+        automatic_package_kind(pkg)
+    };
     pkg.stereotypes
         .iter()
-        .filter(|stereotype| {
-            !matches!(
-                stereotype.to_ascii_lowercase().as_str(),
-                "database" | "folder" | "frame" | "rectangle" | "node" | "cloud"
-            )
-        })
+        .filter(|_| selector.is_none())
         .map(|stereotype| format!("\u{00AB}{stereotype}\u{00BB}"))
         .collect()
 }
@@ -3750,23 +3811,79 @@ fn configured_package_kind(diagram: &ClassDiagram) -> Option<PackageKind> {
         Some(PackageKind::Node)
     } else if style.eq_ignore_ascii_case("cloud") {
         Some(PackageKind::Cloud)
+    } else if style.eq_ignore_ascii_case("card") {
+        Some(PackageKind::Card)
     } else {
         None
+    }
+}
+
+fn configured_component_style(diagram: &ClassDiagram) -> Option<&str> {
+    diagram
+        .meta
+        .skinparams
+        .iter()
+        .rev()
+        .find(|skinparam| skinparam.key.eq_ignore_ascii_case("componentStyle"))
+        .map(|skinparam| skinparam.value.trim())
+}
+
+fn configured_component_kind(diagram: &ClassDiagram) -> PackageKind {
+    if configured_component_style(diagram)
+        .is_some_and(|style| style.eq_ignore_ascii_case("rectangle"))
+    {
+        PackageKind::Rectangle
+    } else {
+        // `SkinParam#componentStyle` defaults to UML2. UML1 delegates its big
+        // cluster rendering to `USymbolComponent2#asBig` as well.
+        PackageKind::Component
+    }
+}
+
+fn configured_component_leaf_kind(diagram: &ClassDiagram) -> PackageKind {
+    match configured_component_style(diagram) {
+        Some(style) if style.eq_ignore_ascii_case("rectangle") => PackageKind::Rectangle,
+        Some(style) if style.eq_ignore_ascii_case("uml1") => PackageKind::ComponentUml1,
+        _ => PackageKind::Component,
+    }
+}
+
+fn concrete_package_kind(diagram: &ClassDiagram, kind: PackageKind) -> PackageKind {
+    if matches!(kind, PackageKind::Component | PackageKind::ComponentUml1) {
+        configured_component_kind(diagram)
+    } else {
+        kind
     }
 }
 
 fn effective_package_kind(diagram: &ClassDiagram, pkg: &Package) -> PackageKind {
     // Java `Cluster.drawU` gives an explicit/automatic symbol precedence,
     // then lets `ClusterDecoration.guess` fall back to packageStyle.
-    automatic_package_kind(pkg)
-        .or_else(|| configured_package_kind(diagram))
-        .unwrap_or(pkg.kind)
+    let kind = match automatic_package_kind(pkg) {
+        Some(PackageKind::Package) => {
+            configured_package_kind(diagram).unwrap_or(PackageKind::Package)
+        }
+        Some(kind) => kind,
+        None => configured_package_kind(diagram).unwrap_or(pkg.kind),
+    };
+    concrete_package_kind(diagram, kind)
 }
 
-fn package_paint_kind(pkg: &Package) -> PackageKind {
+fn package_paint_kind(diagram: &ClassDiagram, pkg: &Package) -> PackageKind {
     // A global packageStyle changes ClusterDecoration's guessed symbol, not
     // the group's style signature or its explicit semantic kind.
-    automatic_package_kind(pkg).unwrap_or(pkg.kind)
+    match automatic_package_kind(pkg) {
+        Some(PackageKind::Package) => {
+            configured_package_kind(diagram).unwrap_or(PackageKind::Package)
+        }
+        Some(PackageKind::Component | PackageKind::ComponentUml1) => PackageKind::Component,
+        Some(kind) => kind,
+        None => pkg.kind,
+    }
+}
+
+fn uses_symbol_cluster_style(kind: PackageKind) -> bool {
+    !matches!(kind, PackageKind::Package | PackageKind::Namespace)
 }
 
 fn package_cluster_id(idx: usize) -> String {
@@ -3789,7 +3906,16 @@ fn empty_package_symbol_kind(diagram: &ClassDiagram, pkg: &Package) -> Option<Pa
     // `EntityImageEmptyPackage.drawU()` passes a null explicit symbol and the
     // configured packageStyle to `ClusterDecoration`, whose `guess()` applies
     // the same fallback as a painted cluster.
-    automatic_package_kind(pkg).or_else(|| configured_package_kind(diagram))
+    match automatic_package_kind(pkg) {
+        Some(PackageKind::Package) => {
+            Some(configured_package_kind(diagram).unwrap_or(PackageKind::Package))
+        }
+        Some(PackageKind::Component | PackageKind::ComponentUml1) => {
+            Some(configured_component_leaf_kind(diagram))
+        }
+        Some(kind) => Some(kind),
+        None => configured_package_kind(diagram),
+    }
 }
 
 fn empty_package_dims(pkg: &Package, symbol_kind: Option<PackageKind>) -> (f64, f64) {
@@ -3808,10 +3934,15 @@ fn empty_package_dims(pkg: &Package, symbol_kind: Option<PackageKind>) -> (f64, 
         .sum::<f64>()
         + label_height;
     if let Some(symbol_kind) = symbol_kind {
+        if symbol_kind == PackageKind::Hexagon {
+            return (
+                content_width * HEXAGON_SMALL_WIDTH_FACTOR,
+                content_height + 2.0 * HEXAGON_SMALL_MARGIN_Y,
+            );
+        }
         // Java symbol-leaf dimensions come from each `USymbol#asSmall`
-        // implementation's `Margin`: Folder(10,20,13,10) plus its hidden
-        // 40x15 title; Frame/Node(15,25,20,10); Database(10,10,24,5);
-        // Rectangle(10,10,10,10); Cloud(15,15,15,15).
+        // implementation's `Margin`; every tuple below is cited at its
+        // declaration beside the corresponding Java class.
         let (left, right, top, bottom, title_width, title_height) = match symbol_kind {
             PackageKind::Folder => (
                 SYMBOL_FOLDER_BODY_MARGIN_LEFT,
@@ -3821,11 +3952,31 @@ fn empty_package_dims(pkg: &Package, symbol_kind: Option<PackageKind>) -> (f64, 
                 SYMBOL_FOLDER_TAB_TITLE_WIDTH,
                 SYMBOL_FOLDER_TAB_TITLE_HEIGHT,
             ),
+            PackageKind::Package => (
+                SYMBOL_FOLDER_BODY_MARGIN_LEFT,
+                SYMBOL_FOLDER_BODY_MARGIN_RIGHT,
+                SYMBOL_FOLDER_BODY_MARGIN_TOP,
+                SYMBOL_FOLDER_BODY_MARGIN_BOTTOM,
+                label_width,
+                label_height,
+            ),
             PackageKind::Frame | PackageKind::Node => (15.0, 25.0, 20.0, 10.0, 0.0, 0.0),
             PackageKind::Database => (10.0, 10.0, 24.0, 5.0, 0.0, 0.0),
             PackageKind::Rectangle => (10.0, 10.0, 10.0, 10.0, 0.0, 0.0),
             PackageKind::Cloud => (15.0, 15.0, 15.0, 15.0, 0.0, 0.0),
-            PackageKind::Package | PackageKind::Namespace => {
+            PackageKind::Action => margins_with_no_title(ACTION_SMALL_MARGINS),
+            PackageKind::Artifact => margins_with_no_title(ARTIFACT_SMALL_MARGINS),
+            PackageKind::Card => margins_with_no_title(CARD_SMALL_MARGINS),
+            PackageKind::Component => margins_with_no_title(COMPONENT_SMALL_MARGINS),
+            PackageKind::ComponentUml1 => margins_with_no_title(COMPONENT_UML1_SMALL_MARGINS),
+            PackageKind::File | PackageKind::Storage => {
+                margins_with_no_title(TEN_PIXEL_SMALL_MARGINS)
+            }
+            PackageKind::Process => margins_with_no_title(PROCESS_SMALL_MARGINS),
+            PackageKind::Queue => margins_with_no_title(QUEUE_SMALL_MARGINS),
+            PackageKind::Stack => margins_with_no_title(STACK_SMALL_MARGINS),
+            PackageKind::Hexagon => unreachable!("hexagon dimensions are width-proportional"),
+            PackageKind::Namespace => {
                 unreachable!("ordinary package kinds do not retain an explicit USymbol")
             }
         };
@@ -3843,11 +3994,65 @@ fn empty_package_dims(pkg: &Package, symbol_kind: Option<PackageKind>) -> (f64, 
     )
 }
 
-fn empty_package_intrinsic_dims(pkg: &Package) -> (f64, f64) {
+fn margins_with_no_title(
+    (left, right, top, bottom): (f64, f64, f64, f64),
+) -> (f64, f64, f64, f64, f64, f64) {
+    (left, right, top, bottom, 0.0, 0.0)
+}
+
+fn empty_package_intrinsic_dims(diagram: &ClassDiagram, pkg: &Package) -> (f64, f64) {
     // `SvekNode` retains its `IEntityImage` after Graphviz solves a rounded
     // layout box. `SvekResult.drawU` places that image at the solved minimum
     // but asks the image to calculate its own dimensions again.
-    empty_package_dims(pkg, automatic_package_kind(pkg))
+    let explicit_kind = automatic_package_kind(pkg).map(|kind| match kind {
+        PackageKind::Package => configured_package_kind(diagram).unwrap_or(PackageKind::Package),
+        PackageKind::Component | PackageKind::ComponentUml1 => {
+            configured_component_leaf_kind(diagram)
+        }
+        kind => kind,
+    });
+    empty_package_dims(pkg, explicit_kind)
+}
+
+#[derive(Clone, Copy)]
+struct PaintedFrontier {
+    min_x: f64,
+    min_y: f64,
+    max_x: f64,
+    max_y: f64,
+}
+
+fn empty_package_painted_frontier(
+    diagram: &ClassDiagram,
+    pkg: &Package,
+    width: f64,
+    height: f64,
+) -> PaintedFrontier {
+    match empty_package_symbol_kind(diagram, pkg) {
+        Some(PackageKind::Cloud) => {
+            let frontier = cloud_frontier(width, height);
+            PaintedFrontier {
+                min_x: frontier.min_x,
+                min_y: frontier.min_y,
+                max_x: frontier.max_x,
+                max_y: frontier.max_y,
+            }
+        }
+        // Java `USymbolComponent1#asSmall` places both tabs at x=-5 while
+        // retaining the ordinary component image dimensions.
+        Some(PackageKind::ComponentUml1) => PaintedFrontier {
+            min_x: COMPONENT_UML1_TAB_LEFT,
+            min_y: 0.0,
+            max_x: width,
+            max_y: height,
+        },
+        _ => PaintedFrontier {
+            min_x: 0.0,
+            min_y: 0.0,
+            max_x: width,
+            max_y: height,
+        },
+    }
 }
 
 fn package_cluster_envelope_extra(diagram: &ClassDiagram, cluster: &ClusterPosition) -> (f64, f64) {
@@ -3858,6 +4063,12 @@ fn package_cluster_envelope_extra(diagram: &ClassDiagram, cluster: &ClusterPosit
         .and_then(|idx| diagram.packages.get(idx))
         .map_or((0.0, 0.0), |pkg| {
             match effective_package_kind(diagram, pkg) {
+                PackageKind::Action | PackageKind::Process => {
+                    (LIMIT_FINDER_POLYGON_OVERSCAN_X, 0.0)
+                }
+                PackageKind::Artifact => {
+                    (LIMIT_FINDER_POLYGON_OVERSCAN_X - ARTIFACT_MARK_INSET, 0.0)
+                }
                 PackageKind::Database => (
                     DATABASE_CLUSTER_ENVELOPE_EXTRA,
                     DATABASE_CLUSTER_ENVELOPE_EXTRA,
@@ -3898,24 +4109,33 @@ fn package_skinparam<'a>(
     suffix: &str,
 ) -> Option<&'a str> {
     let group_paint = matches!(suffix, "BackgroundColor" | "BorderColor");
-    let prefixes: &[&str] = match kind {
-        PackageKind::Database if group_paint => &["Database", "Package"],
-        PackageKind::Database => &["Database"],
-        // `packageBackgroundColor` and `packageBorderColor` map to the generic
-        // `group` style, which explicit symbol signatures inherit.
-        PackageKind::Folder if group_paint => &["Folder", "Package"],
-        PackageKind::Folder => &["Folder"],
-        PackageKind::Frame if group_paint => &["Frame", "Package"],
-        PackageKind::Frame => &["Frame"],
-        PackageKind::Rectangle if group_paint => &["Rectangle", "Package"],
-        PackageKind::Rectangle => &["Rectangle"],
-        PackageKind::Node if group_paint => &["Node", "Package"],
-        PackageKind::Node => &["Node"],
-        PackageKind::Cloud if group_paint => &["Cloud", "Package"],
-        PackageKind::Cloud => &["Cloud"],
-        PackageKind::Package | PackageKind::Namespace => &["Package"],
+    let primary = match kind {
+        PackageKind::Package | PackageKind::Namespace => "Package",
+        PackageKind::Action => "Action",
+        PackageKind::Artifact => "Artifact",
+        PackageKind::Card => "Card",
+        PackageKind::Cloud => "Cloud",
+        PackageKind::Component => "Component",
+        PackageKind::ComponentUml1 => "Component",
+        PackageKind::Database => "Database",
+        PackageKind::File => "File",
+        PackageKind::Folder => "Folder",
+        PackageKind::Frame => "Frame",
+        PackageKind::Hexagon => "Hexagon",
+        PackageKind::Node => "Node",
+        PackageKind::Process => "Process",
+        PackageKind::Queue => "Queue",
+        PackageKind::Rectangle => "Rectangle",
+        PackageKind::Stack => "Stack",
+        PackageKind::Storage => "Storage",
     };
-    for prefix in prefixes {
+    // `packageBackgroundColor` and `packageBorderColor` map to the generic
+    // group style inherited by every explicit USymbol signature.
+    let prefixes = [primary, "Package"];
+    let prefix_count =
+        usize::from(group_paint && !matches!(kind, PackageKind::Package | PackageKind::Namespace))
+            + 1;
+    for prefix in prefixes.into_iter().take(prefix_count) {
         let key = format!("{prefix}{suffix}");
         if let Some(value) = diagram
             .meta
@@ -4038,13 +4258,23 @@ fn package_cluster_painted_min(diagram: &ClassDiagram, position: &ClusterPositio
     match kind {
         // Java `LimitFinder.drawRectangle()` measures a `URectangle` from
         // `(x - 1, y - 1)`.
-        Some(PackageKind::Frame | PackageKind::Rectangle) => (
+        Some(
+            PackageKind::Artifact
+            | PackageKind::Card
+            | PackageKind::Component
+            | PackageKind::ComponentUml1
+            | PackageKind::Frame
+            | PackageKind::Rectangle
+            | PackageKind::Storage,
+        ) => (
             position.x - LIMIT_FINDER_RECTANGLE_INSET,
             position.y - LIMIT_FINDER_RECTANGLE_INSET,
         ),
         // Java `LimitFinder.drawUPolygon()` expands every polygon by ten
         // pixels horizontally while preserving its vertical minimum.
-        Some(PackageKind::Node) => (position.x - LIMIT_FINDER_POLYGON_OVERSCAN_X, position.y),
+        Some(PackageKind::Action | PackageKind::Node | PackageKind::Process) => {
+            (position.x - LIMIT_FINDER_POLYGON_OVERSCAN_X, position.y)
+        }
         Some(PackageKind::Cloud) => package_cloud_frontier(diagram, position)
             .map(|frontier| (position.x + frontier.min_x, position.y + frontier.min_y))
             .unwrap_or((position.x, position.y)),
@@ -4900,14 +5130,12 @@ fn render_plantuml_svg(
             let x = pos.x + MARGIN + layout_x_bias;
             let y = pos.y + MARGIN;
             let package = &diagram.packages[package_idx];
-            let (width, height) = empty_package_intrinsic_dims(package);
-            let cloud_frontier = (empty_package_symbol_kind(diagram, package)
-                == Some(PackageKind::Cloud))
-            .then(|| cloud_frontier(width, height));
-            body_min_x = body_min_x.min(x + cloud_frontier.as_ref().map_or(0.0, |f| f.min_x));
-            body_max_x = body_max_x.max(x + cloud_frontier.as_ref().map_or(width, |f| f.max_x));
-            body_top = body_top.min(y + cloud_frontier.as_ref().map_or(0.0, |f| f.min_y));
-            body_bottom = body_bottom.max(y + cloud_frontier.as_ref().map_or(height, |f| f.max_y));
+            let (width, height) = empty_package_intrinsic_dims(diagram, package);
+            let frontier = empty_package_painted_frontier(diagram, package, width, height);
+            body_min_x = body_min_x.min(x + frontier.min_x);
+            body_max_x = body_max_x.max(x + frontier.max_x);
+            body_top = body_top.min(y + frontier.min_y);
+            body_bottom = body_bottom.max(y + frontier.max_y);
         }
     }
     if !body_min_x.is_finite() {
@@ -5028,20 +5256,10 @@ fn render_plantuml_svg(
         for &(package_idx, node_idx) in &empty_packages {
             if let Some(pos) = positions.get(node_idx) {
                 let package = &diagram.packages[package_idx];
-                let (width, height) = empty_package_intrinsic_dims(package);
-                let cloud_frontier = (empty_package_symbol_kind(diagram, package)
-                    == Some(PackageKind::Cloud))
-                .then(|| cloud_frontier(width, height));
-                max_x = max_x.max(
-                    pos.x
-                        + MARGIN
-                        + layout_x_bias
-                        + body_dx
-                        + cloud_frontier.as_ref().map_or(width, |f| f.max_x),
-                );
-                max_y = max_y.max(
-                    pos.y + MARGIN + body_dy + cloud_frontier.as_ref().map_or(height, |f| f.max_y),
-                );
+                let (width, height) = empty_package_intrinsic_dims(diagram, package);
+                let frontier = empty_package_painted_frontier(diagram, package, width, height);
+                max_x = max_x.max(pos.x + MARGIN + layout_x_bias + body_dx + frontier.max_x);
+                max_y = max_y.max(pos.y + MARGIN + body_dy + frontier.max_y);
             }
         }
         for cluster in cluster_positions
@@ -5828,7 +6046,7 @@ fn layout_package_clusters(
             let id = package_cluster_id(idx);
             let pos = cluster_positions.iter().find(|p| p.id == id)?;
             let kind = effective_package_kind(diagram, pkg);
-            let paint_kind = package_paint_kind(pkg);
+            let paint_kind = package_paint_kind(diagram, pkg);
             let fill = pkg
                 .color
                 .as_deref()
@@ -5838,14 +6056,7 @@ fn layout_package_clusters(
             let stroke = package_skinparam(diagram, paint_kind, "BorderColor")
                 .map(crate::sequence::resolve_color)
                 .unwrap_or_else(|| {
-                    if matches!(
-                        paint_kind,
-                        PackageKind::Database
-                            | PackageKind::Frame
-                            | PackageKind::Rectangle
-                            | PackageKind::Node
-                            | PackageKind::Cloud
-                    ) {
+                    if uses_symbol_cluster_style(paint_kind) {
                         "#181818".to_string()
                     } else {
                         "#000000".to_string()
@@ -5858,14 +6069,7 @@ fn layout_package_clusters(
             let stroke_width = package_skinparam(diagram, paint_kind, "BorderThickness")
                 .map(str::to_string)
                 .unwrap_or_else(|| {
-                    if matches!(
-                        paint_kind,
-                        PackageKind::Database
-                            | PackageKind::Frame
-                            | PackageKind::Rectangle
-                            | PackageKind::Node
-                            | PackageKind::Cloud
-                    ) {
+                    if uses_symbol_cluster_style(paint_kind) {
                         SYMBOL_CLUSTER_STROKE_WIDTH.to_string()
                     } else {
                         PACKAGE_STROKE_WIDTH.to_string()
@@ -5954,7 +6158,7 @@ fn layout_empty_packages(
         .filter_map(|&(package_idx, node_idx)| {
             let package = &diagram.packages[package_idx];
             let pos = positions.get(node_idx)?;
-            let kind = package_paint_kind(package);
+            let kind = package_paint_kind(diagram, package);
             // Java `EntityImageEmptyPackage` merges the package-title style
             // with entity colors: an explicit BACK wins, then package style
             // supplies background, line, and title-font colors. The defaults
@@ -5971,7 +6175,7 @@ fn layout_empty_packages(
             let font_fill = package_skinparam(diagram, kind, "FontColor")
                 .map(crate::sequence::resolve_color)
                 .unwrap_or_else(|| "#000000".to_string());
-            let (width, height) = empty_package_intrinsic_dims(package);
+            let (width, height) = empty_package_intrinsic_dims(diagram, package);
             Some(EmptyPackageLayout {
                 package_idx,
                 qualified_name: package_qualified_name(
@@ -6023,13 +6227,25 @@ fn emit_layout_empty_package(
             svg_link_target,
         );
         match kind {
+            PackageKind::Action => emit_layout_empty_symbol_action(svg, package),
+            PackageKind::Artifact => emit_layout_empty_symbol_artifact(svg, package),
+            PackageKind::Card => emit_layout_empty_symbol_card(svg, package),
+            PackageKind::Component => emit_layout_empty_symbol_component(svg, package),
+            PackageKind::ComponentUml1 => emit_layout_empty_symbol_component_uml1(svg, package),
+            PackageKind::File => emit_layout_empty_symbol_file(svg, package),
             PackageKind::Folder => emit_layout_empty_symbol_folder(svg, package),
             PackageKind::Frame => emit_layout_empty_symbol_frame(svg, package),
+            PackageKind::Hexagon => emit_layout_empty_symbol_hexagon(svg, package),
             PackageKind::Node => emit_layout_empty_symbol_node(svg, package),
             PackageKind::Database => emit_layout_empty_symbol_database(svg, package),
             PackageKind::Rectangle => emit_layout_empty_symbol_rectangle(svg, package),
             PackageKind::Cloud => emit_layout_empty_symbol_cloud(svg, package),
-            PackageKind::Package | PackageKind::Namespace => {
+            PackageKind::Package => emit_layout_empty_symbol_package(svg, package),
+            PackageKind::Process => emit_layout_empty_symbol_process(svg, package),
+            PackageKind::Queue => emit_layout_empty_symbol_queue(svg, package),
+            PackageKind::Stack => emit_layout_empty_symbol_stack(svg, package),
+            PackageKind::Storage => emit_layout_empty_symbol_storage(svg, package),
+            PackageKind::Namespace => {
                 unreachable!("ordinary package kinds do not retain an explicit USymbol")
             }
         }
@@ -6140,14 +6356,37 @@ fn emit_layout_empty_package(
 }
 
 fn emit_layout_empty_symbol_folder(svg: &mut String, package: &EmptyPackageLayout) {
+    emit_layout_empty_symbol_folder_shape(svg, package, false);
+}
+
+fn emit_layout_empty_symbol_package(svg: &mut String, package: &EmptyPackageLayout) {
+    emit_layout_empty_symbol_folder_shape(svg, package, true);
+}
+
+fn emit_layout_empty_symbol_folder_shape(
+    svg: &mut String,
+    package: &EmptyPackageLayout,
+    show_title: bool,
+) {
     let x = package.x;
     let y = package.y;
     let right = x + package.width;
     let bottom = y + package.height;
-    let title_width = SYMBOL_FOLDER_TAB_TITLE_WIDTH + 2.0 * PACKAGE_TITLE_MARGIN_X;
+    let (title_content_width, title_content_height) = if show_title {
+        (
+            text_render::measure_no_underline(&package.label, FONT_SIZE, true),
+            text_render::label_height(&package.label, FONT_SIZE),
+        )
+    } else {
+        (
+            SYMBOL_FOLDER_TAB_TITLE_WIDTH,
+            SYMBOL_FOLDER_TAB_TITLE_HEIGHT,
+        )
+    };
+    let title_width = title_content_width + 2.0 * PACKAGE_TITLE_MARGIN_X;
     let tab_join = x + title_width - PACKAGE_ROUND_CORNER / 2.0;
     let tab_right = x + title_width + PACKAGE_TAB_SLOPE_WIDTH;
-    let line_y = y + SYMBOL_FOLDER_TAB_TITLE_HEIGHT + 2.0 * PACKAGE_TITLE_MARGIN_X;
+    let line_y = y + title_content_height + 2.0 * PACKAGE_TITLE_MARGIN_X;
     write!(
         svg,
         r#"<path d="M{},{} L{},{} A3.75,3.75 0 0 1 {},{} L{},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{}" fill="{}" style="stroke:{};stroke-width:{};"/>"#,
@@ -6191,11 +6430,29 @@ fn emit_layout_empty_symbol_folder(svg: &mut String, package: &EmptyPackageLayou
         fmt4(line_y),
     )
     .unwrap();
+    if show_title {
+        text_render::emit_text(
+            svg,
+            &package.label,
+            &TextBase {
+                x: x + PACKAGE_TAB_TEXT_X,
+                y: y + PACKAGE_TITLE_MARGIN_X
+                    + text_render::label_ascent(&package.label, FONT_SIZE),
+                font_size: FONT_SIZE as u32,
+                font_family: "sans-serif",
+                fill: &package.font_fill,
+                bold: true,
+                italic: false,
+                underline: false,
+                skip_underline: true,
+            },
+        );
+    }
     emit_layout_empty_symbol_text(
         svg,
         package,
         x + SYMBOL_FOLDER_BODY_MARGIN_LEFT,
-        y + SYMBOL_FOLDER_BODY_MARGIN_TOP + SYMBOL_FOLDER_TAB_TITLE_HEIGHT,
+        y + SYMBOL_FOLDER_BODY_MARGIN_TOP + title_content_height,
     );
 }
 
@@ -6391,6 +6648,277 @@ fn emit_layout_empty_symbol_rectangle(svg: &mut String, package: &EmptyPackageLa
     emit_layout_empty_symbol_text(svg, package, package.x + 10.0, package.y + 10.0);
 }
 
+fn emit_layout_empty_symbol_action(svg: &mut String, package: &EmptyPackageLayout) {
+    let right = package.x + package.width;
+    let bottom = package.y + package.height;
+    write!(
+        svg,
+        r#"<polygon fill="{}" points="{},{} {},{} {},{} {},{} {},{}" style="stroke:{};stroke-width:{};"/>"#,
+        package.fill,
+        fmt4(package.x),
+        fmt4(package.y),
+        fmt4(right - CHEVRON_DEPTH),
+        fmt4(package.y),
+        fmt4(right),
+        fmt4(package.y + package.height / 2.0),
+        fmt4(right - CHEVRON_DEPTH),
+        fmt4(bottom),
+        fmt4(package.x),
+        fmt4(bottom),
+        package.stroke,
+        BORDER_WIDTH,
+    )
+    .unwrap();
+    emit_layout_empty_symbol_text(
+        svg,
+        package,
+        package.x + ACTION_SMALL_MARGINS.0,
+        package.y + ACTION_SMALL_MARGINS.2,
+    );
+}
+
+fn emit_layout_empty_symbol_process(svg: &mut String, package: &EmptyPackageLayout) {
+    let right = package.x + package.width;
+    let bottom = package.y + package.height;
+    write!(
+        svg,
+        r#"<polygon fill="{}" points="{},{} {},{} {},{} {},{} {},{} {},{}" style="stroke:{};stroke-width:{};"/>"#,
+        package.fill,
+        fmt4(package.x),
+        fmt4(package.y),
+        fmt4(right - CHEVRON_DEPTH),
+        fmt4(package.y),
+        fmt4(right),
+        fmt4(package.y + package.height / 2.0),
+        fmt4(right - CHEVRON_DEPTH),
+        fmt4(bottom),
+        fmt4(package.x),
+        fmt4(bottom),
+        fmt4(package.x + CHEVRON_DEPTH),
+        fmt4(package.y + package.height / 2.0),
+        package.stroke,
+        BORDER_WIDTH,
+    )
+    .unwrap();
+    emit_layout_empty_symbol_text(
+        svg,
+        package,
+        package.x + PROCESS_SMALL_MARGINS.0,
+        package.y + PROCESS_SMALL_MARGINS.2,
+    );
+}
+
+fn emit_layout_empty_symbol_artifact(svg: &mut String, package: &EmptyPackageLayout) {
+    write!(
+        svg,
+        r#"<rect fill="{}" height="{}" rx="2.5" ry="2.5" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
+        package.fill,
+        fmt4(package.height),
+        package.stroke,
+        BORDER_WIDTH,
+        fmt4(package.width),
+        fmt4(package.x),
+        fmt4(package.y),
+    )
+    .unwrap();
+    emit_artifact_mark(
+        svg,
+        package.x + package.width - ARTIFACT_MARK_WIDTH - ARTIFACT_MARK_INSET,
+        package.y + ARTIFACT_MARK_INSET,
+        &package.fill,
+        &package.stroke,
+        BORDER_WIDTH,
+    );
+    emit_layout_empty_symbol_text(
+        svg,
+        package,
+        package.x + ARTIFACT_SMALL_MARGINS.0,
+        package.y + ARTIFACT_SMALL_MARGINS.2,
+    );
+}
+
+fn emit_layout_empty_symbol_card(svg: &mut String, package: &EmptyPackageLayout) {
+    write!(
+        svg,
+        r#"<rect fill="{}" height="{}" rx="2.5" ry="2.5" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
+        package.fill,
+        fmt4(package.height),
+        package.stroke,
+        BORDER_WIDTH,
+        fmt4(package.width),
+        fmt4(package.x),
+        fmt4(package.y),
+    )
+    .unwrap();
+    emit_layout_empty_symbol_text(
+        svg,
+        package,
+        package.x + CARD_SMALL_MARGINS.0,
+        package.y + CARD_SMALL_MARGINS.2,
+    );
+}
+
+fn emit_layout_empty_symbol_component(svg: &mut String, package: &EmptyPackageLayout) {
+    write!(
+        svg,
+        r#"<rect fill="{}" height="{}" rx="2.5" ry="2.5" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
+        package.fill,
+        fmt4(package.height),
+        package.stroke,
+        BORDER_WIDTH,
+        fmt4(package.width),
+        fmt4(package.x),
+        fmt4(package.y),
+    )
+    .unwrap();
+    emit_component_mark(
+        svg,
+        package.x,
+        package.y,
+        package.width,
+        &package.fill,
+        &package.stroke,
+        BORDER_WIDTH,
+    );
+    emit_layout_empty_symbol_text(
+        svg,
+        package,
+        package.x + COMPONENT_SMALL_MARGINS.0,
+        package.y + COMPONENT_SMALL_MARGINS.2,
+    );
+}
+
+fn emit_layout_empty_symbol_component_uml1(svg: &mut String, package: &EmptyPackageLayout) {
+    write!(
+        svg,
+        r#"<rect fill="{}" height="{}" rx="2.5" ry="2.5" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
+        package.fill,
+        fmt4(package.height),
+        package.stroke,
+        BORDER_WIDTH,
+        fmt4(package.width),
+        fmt4(package.x),
+        fmt4(package.y),
+    )
+    .unwrap();
+    for tab_y in [
+        package.y + COMPONENT_UML1_TAB_TOP,
+        package.y + package.height - COMPONENT_UML1_TAB_BOTTOM_INSET,
+    ] {
+        write!(
+            svg,
+            r#"<rect fill="{}" height="{}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
+            package.fill,
+            fmt4(COMPONENT_UML1_TAB_HEIGHT),
+            package.stroke,
+            BORDER_WIDTH,
+            fmt4(COMPONENT_UML1_TAB_WIDTH),
+            fmt4(package.x + COMPONENT_UML1_TAB_LEFT),
+            fmt4(tab_y),
+        )
+        .unwrap();
+    }
+    emit_layout_empty_symbol_text(
+        svg,
+        package,
+        package.x + COMPONENT_UML1_SMALL_MARGINS.0,
+        package.y + COMPONENT_UML1_SMALL_MARGINS.2,
+    );
+}
+
+fn emit_layout_empty_symbol_file(svg: &mut String, package: &EmptyPackageLayout) {
+    emit_file_envelope(
+        svg,
+        package.x,
+        package.y,
+        package.width,
+        package.height,
+        &package.fill,
+        "",
+        &package.stroke,
+        BORDER_WIDTH,
+    );
+    emit_layout_empty_symbol_text(
+        svg,
+        package,
+        package.x + TEN_PIXEL_SMALL_MARGINS.0,
+        package.y + TEN_PIXEL_SMALL_MARGINS.2,
+    );
+}
+
+fn emit_layout_empty_symbol_hexagon(svg: &mut String, package: &EmptyPackageLayout) {
+    // `USymbolHexagon#asSmall` deliberately paints only the merged text block.
+    emit_layout_empty_symbol_text(
+        svg,
+        package,
+        package.x + package.width / 4.0,
+        package.y + HEXAGON_SMALL_MARGIN_Y,
+    );
+}
+
+fn emit_layout_empty_symbol_queue(svg: &mut String, package: &EmptyPackageLayout) {
+    emit_queue_envelope(
+        svg,
+        package.x,
+        package.y,
+        package.width,
+        package.height,
+        &package.fill,
+        "",
+        &package.stroke,
+        BORDER_WIDTH,
+    );
+    emit_layout_empty_symbol_text(
+        svg,
+        package,
+        package.x + QUEUE_SMALL_MARGINS.0,
+        package.y + QUEUE_SMALL_MARGINS.2,
+    );
+}
+
+fn emit_layout_empty_symbol_stack(svg: &mut String, package: &EmptyPackageLayout) {
+    emit_stack_envelope(
+        svg,
+        package.x,
+        package.y,
+        package.width,
+        package.height,
+        &package.fill,
+        "",
+        &package.stroke,
+        BORDER_WIDTH,
+    );
+    emit_layout_empty_symbol_text(
+        svg,
+        package,
+        package.x + STACK_SMALL_MARGINS.0,
+        package.y + STACK_SMALL_MARGINS.2,
+    );
+}
+
+fn emit_layout_empty_symbol_storage(svg: &mut String, package: &EmptyPackageLayout) {
+    write!(
+        svg,
+        r#"<rect fill="{}" height="{}" rx="{}" ry="{}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
+        package.fill,
+        fmt4(package.height),
+        fmt4(STORAGE_ROUND_DIAMETER / 2.0),
+        fmt4(STORAGE_ROUND_DIAMETER / 2.0),
+        package.stroke,
+        BORDER_WIDTH,
+        fmt4(package.width),
+        fmt4(package.x),
+        fmt4(package.y),
+    )
+    .unwrap();
+    emit_layout_empty_symbol_text(
+        svg,
+        package,
+        package.x + TEN_PIXEL_SMALL_MARGINS.0,
+        package.y + TEN_PIXEL_SMALL_MARGINS.2,
+    );
+}
+
 fn emit_layout_empty_symbol_cloud(svg: &mut String, package: &EmptyPackageLayout) {
     let frontier = cloud_frontier(package.width, package.height);
     write!(
@@ -6420,6 +6948,302 @@ fn emit_layout_empty_symbol_cloud(svg: &mut String, package: &EmptyPackageLayout
     )
     .unwrap();
     emit_layout_empty_symbol_text(svg, package, package.x + 15.0, package.y + 15.0);
+}
+
+fn emit_artifact_mark(
+    svg: &mut String,
+    x: f64,
+    y: f64,
+    fill: &str,
+    stroke: &str,
+    stroke_width: &str,
+) {
+    write!(
+        svg,
+        r#"<polygon fill="{}" points="{},{} {},{} {},{} {},{} {},{} {},{}" style="stroke:{};stroke-width:{};"/>"#,
+        fill,
+        fmt4(x),
+        fmt4(y),
+        fmt4(x),
+        fmt4(y + ARTIFACT_MARK_HEIGHT),
+        fmt4(x + ARTIFACT_MARK_WIDTH),
+        fmt4(y + ARTIFACT_MARK_HEIGHT),
+        fmt4(x + ARTIFACT_MARK_WIDTH),
+        fmt4(y + ARTIFACT_FOLD_SIZE),
+        fmt4(x + ARTIFACT_MARK_WIDTH - ARTIFACT_FOLD_SIZE),
+        fmt4(y),
+        fmt4(x),
+        fmt4(y),
+        stroke,
+        stroke_width,
+    )
+    .unwrap();
+    write!(
+        svg,
+        r#"<path d="M{},{} L{},{} L{},{}" fill="none" style="stroke:{};stroke-width:{};"/>"#,
+        fmt4(x + ARTIFACT_MARK_WIDTH - ARTIFACT_FOLD_SIZE),
+        fmt4(y),
+        fmt4(x + ARTIFACT_MARK_WIDTH - ARTIFACT_FOLD_SIZE),
+        fmt4(y + ARTIFACT_FOLD_SIZE),
+        fmt4(x + ARTIFACT_MARK_WIDTH),
+        fmt4(y + ARTIFACT_FOLD_SIZE),
+        stroke,
+        stroke_width,
+    )
+    .unwrap();
+}
+
+fn emit_component_mark(
+    svg: &mut String,
+    x: f64,
+    y: f64,
+    width: f64,
+    fill: &str,
+    stroke: &str,
+    stroke_width: &str,
+) {
+    for (mark_x, mark_y, mark_width, mark_height) in [
+        (
+            x + width - COMPONENT_MARK_RIGHT_INSET,
+            y + COMPONENT_MARK_TOP,
+            COMPONENT_MARK_WIDTH,
+            COMPONENT_MARK_HEIGHT,
+        ),
+        (
+            x + width - COMPONENT_PORT_RIGHT_INSET,
+            y + COMPONENT_PORT_TOP_ONE,
+            COMPONENT_PORT_WIDTH,
+            COMPONENT_PORT_HEIGHT,
+        ),
+        (
+            x + width - COMPONENT_PORT_RIGHT_INSET,
+            y + COMPONENT_PORT_TOP_TWO,
+            COMPONENT_PORT_WIDTH,
+            COMPONENT_PORT_HEIGHT,
+        ),
+    ] {
+        write!(
+            svg,
+            r#"<rect fill="{}" height="{}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
+            fill,
+            fmt4(mark_height),
+            stroke,
+            stroke_width,
+            fmt4(mark_width),
+            fmt4(mark_x),
+            fmt4(mark_y),
+        )
+        .unwrap();
+    }
+}
+
+#[allow(clippy::too_many_arguments)]
+fn emit_file_envelope(
+    svg: &mut String,
+    x: f64,
+    y: f64,
+    width: f64,
+    height: f64,
+    fill: &str,
+    filter_attr: &str,
+    stroke: &str,
+    stroke_width: &str,
+) {
+    let right = x + width;
+    let bottom = y + height;
+    let radius = PACKAGE_ROUND_CORNER / 2.0;
+    write!(
+        svg,
+        r#"<path d="M{},{} L{},{} A{},{} 0 0 0 {},{} L{},{} A{},{} 0 0 0 {},{} L{},{} L{},{} L{},{} A{},{} 0 0 0 {},{} Z" fill="{}"{} style="stroke:{};stroke-width:{};"/>"#,
+        fmt4(x),
+        fmt4(y + radius),
+        fmt4(x),
+        fmt4(bottom - radius),
+        fmt4(radius),
+        fmt4(radius),
+        fmt4(x + radius),
+        fmt4(bottom),
+        fmt4(right - radius),
+        fmt4(bottom),
+        fmt4(radius),
+        fmt4(radius),
+        fmt4(right),
+        fmt4(bottom - radius),
+        fmt4(right),
+        fmt4(y + FILE_FOLD_SIZE),
+        fmt4(right - FILE_FOLD_SIZE),
+        fmt4(y),
+        fmt4(x + radius),
+        fmt4(y),
+        fmt4(radius),
+        fmt4(radius),
+        fmt4(x),
+        fmt4(y + radius),
+        fill,
+        filter_attr,
+        stroke,
+        stroke_width,
+    )
+    .unwrap();
+    write!(
+        svg,
+        r#"<path d="M{},{} L{},{} A{},{} 0 0 0 {},{} L{},{}" fill="none" style="stroke:{};stroke-width:{};"/>"#,
+        fmt4(right - FILE_FOLD_SIZE),
+        fmt4(y),
+        fmt4(right - FILE_FOLD_SIZE),
+        fmt4(y + FILE_FOLD_SIZE - radius),
+        fmt4(radius),
+        fmt4(radius),
+        fmt4(right - FILE_FOLD_SIZE + radius),
+        fmt4(y + FILE_FOLD_SIZE),
+        fmt4(right),
+        fmt4(y + FILE_FOLD_SIZE),
+        stroke,
+        stroke_width,
+    )
+    .unwrap();
+}
+
+#[allow(clippy::too_many_arguments)]
+fn emit_queue_envelope(
+    svg: &mut String,
+    x: f64,
+    y: f64,
+    width: f64,
+    height: f64,
+    fill: &str,
+    filter_attr: &str,
+    stroke: &str,
+    stroke_width: &str,
+) {
+    let right = x + width;
+    let bottom = y + height;
+    let middle = y + height / 2.0;
+    write!(
+        svg,
+        r#"<path d="M{},{} L{},{} C{},{} {},{} {},{} C{},{} {},{} {},{} L{},{} C{},{} {},{} {},{} C{},{} {},{} {},{}" fill="{}"{} style="stroke:{};stroke-width:{};"/>"#,
+        fmt4(x + QUEUE_CURVE_DEPTH),
+        fmt4(y),
+        fmt4(right - QUEUE_CURVE_DEPTH),
+        fmt4(y),
+        fmt4(right),
+        fmt4(y),
+        fmt4(right),
+        fmt4(middle),
+        fmt4(right),
+        fmt4(middle),
+        fmt4(right),
+        fmt4(middle),
+        fmt4(right),
+        fmt4(bottom),
+        fmt4(right - QUEUE_CURVE_DEPTH),
+        fmt4(bottom),
+        fmt4(x + QUEUE_CURVE_DEPTH),
+        fmt4(bottom),
+        fmt4(x),
+        fmt4(bottom),
+        fmt4(x),
+        fmt4(middle),
+        fmt4(x),
+        fmt4(middle),
+        fmt4(x),
+        fmt4(middle),
+        fmt4(x),
+        fmt4(y),
+        fmt4(x + QUEUE_CURVE_DEPTH),
+        fmt4(y),
+        fill,
+        filter_attr,
+        stroke,
+        stroke_width,
+    )
+    .unwrap();
+    write!(
+        svg,
+        r#"<path d="M{},{} C{},{} {},{} {},{} C{},{} {},{} {},{}" fill="none" style="stroke:{};stroke-width:{};"/>"#,
+        fmt4(right - QUEUE_CURVE_DEPTH),
+        fmt4(y),
+        fmt4(right - 2.0 * QUEUE_CURVE_DEPTH),
+        fmt4(y),
+        fmt4(right - 2.0 * QUEUE_CURVE_DEPTH),
+        fmt4(middle),
+        fmt4(right - 2.0 * QUEUE_CURVE_DEPTH),
+        fmt4(middle),
+        fmt4(right - 2.0 * QUEUE_CURVE_DEPTH),
+        fmt4(bottom),
+        fmt4(right - QUEUE_CURVE_DEPTH),
+        fmt4(bottom),
+        fmt4(right - QUEUE_CURVE_DEPTH),
+        fmt4(bottom),
+        stroke,
+        stroke_width,
+    )
+    .unwrap();
+}
+
+#[allow(clippy::too_many_arguments)]
+fn emit_stack_envelope(
+    svg: &mut String,
+    x: f64,
+    y: f64,
+    width: f64,
+    height: f64,
+    fill: &str,
+    filter_attr: &str,
+    stroke: &str,
+    stroke_width: &str,
+) {
+    let right = x + width;
+    let bottom = y + height;
+    let radius = PACKAGE_ROUND_CORNER / 2.0;
+    write!(
+        svg,
+        r#"<rect fill="{}" height="{}" rx="{}" ry="{}" style="stroke:none;" width="{}" x="{}" y="{}"/>"#,
+        fill,
+        fmt4(height),
+        fmt4(radius),
+        fmt4(radius),
+        fmt4(width - 2.0 * STACK_SIDE_INSET),
+        fmt4(x + STACK_SIDE_INSET),
+        fmt4(y),
+    )
+    .unwrap();
+    write!(
+        svg,
+        r#"<path d="M{},{} L{},{} A{},{} 0 0 1 {},{} L{},{} A{},{} 0 0 0 {},{} L{},{} A{},{} 0 0 0 {},{} L{},{} A{},{} 0 0 1 {},{} L{},{}" fill="none"{} style="stroke:{};stroke-width:{};"/>"#,
+        fmt4(x),
+        fmt4(y),
+        fmt4(x + STACK_SIDE_INSET - radius),
+        fmt4(y),
+        fmt4(radius),
+        fmt4(radius),
+        fmt4(x + STACK_SIDE_INSET),
+        fmt4(y + radius),
+        fmt4(x + STACK_SIDE_INSET),
+        fmt4(bottom - radius),
+        fmt4(radius),
+        fmt4(radius),
+        fmt4(x + STACK_SIDE_INSET + radius),
+        fmt4(bottom),
+        fmt4(right - STACK_SIDE_INSET - radius),
+        fmt4(bottom),
+        fmt4(radius),
+        fmt4(radius),
+        fmt4(right - STACK_SIDE_INSET),
+        fmt4(bottom - radius),
+        fmt4(right - STACK_SIDE_INSET),
+        fmt4(y + radius),
+        fmt4(radius),
+        fmt4(radius),
+        fmt4(right - STACK_SIDE_INSET + radius),
+        fmt4(y),
+        fmt4(right),
+        fmt4(y),
+        filter_attr,
+        stroke,
+        stroke_width,
+    )
+    .unwrap();
 }
 
 fn emit_layout_package_cluster(
@@ -6461,11 +7285,22 @@ fn emit_layout_package_cluster(
         svg_link_target,
     );
     match cluster.kind {
+        PackageKind::Action => emit_layout_action_cluster(svg, cluster),
+        PackageKind::Artifact => emit_layout_artifact_cluster(svg, cluster),
+        PackageKind::Card => emit_layout_card_cluster(svg, cluster),
+        PackageKind::Component => emit_layout_component_cluster(svg, cluster),
+        PackageKind::ComponentUml1 => emit_layout_component_cluster(svg, cluster),
         PackageKind::Database => emit_layout_database_cluster(svg, cluster),
+        PackageKind::File => emit_layout_file_cluster(svg, cluster),
         PackageKind::Frame => emit_layout_frame_cluster(svg, cluster),
+        PackageKind::Hexagon => emit_layout_hexagon_cluster(svg, cluster),
+        PackageKind::Process => emit_layout_process_cluster(svg, cluster),
+        PackageKind::Queue => emit_layout_queue_cluster(svg, cluster),
         PackageKind::Rectangle => emit_layout_rectangle_cluster(svg, cluster),
         PackageKind::Node => emit_layout_node_cluster(svg, cluster),
         PackageKind::Cloud => emit_layout_cloud_cluster(svg, cluster),
+        PackageKind::Stack => emit_layout_stack_cluster(svg, cluster),
+        PackageKind::Storage => emit_layout_storage_cluster(svg, cluster),
         _ => {
             write!(
                 svg,
@@ -6559,6 +7394,330 @@ fn emit_layout_package_cluster(
     svg.push_str("</g>");
 }
 
+fn emit_layout_action_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
+    let right = cluster.x + cluster.width;
+    let bottom = cluster.y + cluster.height;
+    write!(
+        svg,
+        r#"<polygon fill="{}"{} points="{},{} {},{} {},{} {},{} {},{}" style="stroke:{};stroke-width:{};"/>"#,
+        cluster.fill,
+        cluster.filter_attr,
+        fmt4(cluster.x),
+        fmt4(cluster.y),
+        fmt4(right - CHEVRON_DEPTH),
+        fmt4(cluster.y),
+        fmt4(right),
+        fmt4(cluster.y + cluster.height / 2.0),
+        fmt4(right - CHEVRON_DEPTH),
+        fmt4(bottom),
+        fmt4(cluster.x),
+        fmt4(bottom),
+        cluster.stroke,
+        cluster.stroke_width,
+    )
+    .unwrap();
+    emit_layout_action_title_stack(svg, cluster);
+}
+
+fn emit_layout_process_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
+    let right = cluster.x + cluster.width;
+    let bottom = cluster.y + cluster.height;
+    write!(
+        svg,
+        r#"<polygon fill="{}"{} points="{},{} {},{} {},{} {},{} {},{} {},{}" style="stroke:{};stroke-width:{};"/>"#,
+        cluster.fill,
+        cluster.filter_attr,
+        fmt4(cluster.x),
+        fmt4(cluster.y),
+        fmt4(right - CHEVRON_DEPTH),
+        fmt4(cluster.y),
+        fmt4(right),
+        fmt4(cluster.y + cluster.height / 2.0),
+        fmt4(right - CHEVRON_DEPTH),
+        fmt4(bottom),
+        fmt4(cluster.x),
+        fmt4(bottom),
+        fmt4(cluster.x + CHEVRON_DEPTH),
+        fmt4(cluster.y + cluster.height / 2.0),
+        cluster.stroke,
+        cluster.stroke_width,
+    )
+    .unwrap();
+    emit_layout_action_title_stack(svg, cluster);
+}
+
+fn emit_layout_artifact_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
+    write!(
+        svg,
+        r#"<rect fill="{}"{} height="{}" rx="2.5" ry="2.5" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
+        cluster.fill,
+        cluster.filter_attr,
+        fmt4(cluster.height),
+        cluster.stroke,
+        cluster.stroke_width,
+        fmt4(cluster.width),
+        fmt4(cluster.x),
+        fmt4(cluster.y),
+    )
+    .unwrap();
+    emit_artifact_mark(
+        svg,
+        cluster.x + cluster.width - ARTIFACT_MARK_WIDTH - ARTIFACT_MARK_INSET,
+        cluster.y + ARTIFACT_MARK_INSET,
+        &cluster.fill,
+        &cluster.stroke,
+        &cluster.stroke_width,
+    );
+    emit_layout_symbol_cluster_title_stack(
+        svg,
+        cluster,
+        0.0,
+        cluster.y + STANDARD_SYMBOL_CONTENT_TOP,
+        cluster.y + STANDARD_SYMBOL_CONTENT_TOP,
+    );
+}
+
+fn emit_layout_card_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
+    write!(
+        svg,
+        r#"<rect fill="{}"{} height="{}" rx="2.5" ry="2.5" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
+        cluster.fill,
+        cluster.filter_attr,
+        fmt4(cluster.height),
+        cluster.stroke,
+        cluster.stroke_width,
+        fmt4(cluster.width),
+        fmt4(cluster.x),
+        fmt4(cluster.y),
+    )
+    .unwrap();
+    let header_height = cluster
+        .stereotype_lines
+        .iter()
+        .map(|line| text_render::label_height(line, FONT_SIZE))
+        .sum::<f64>()
+        + text_render::label_height(&cluster.label, FONT_SIZE)
+        + CARD_HEADER_GAP;
+    write!(
+        svg,
+        r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+        cluster.stroke,
+        cluster.stroke_width,
+        fmt4(cluster.x),
+        fmt4(cluster.x + cluster.width),
+        fmt4(cluster.y + header_height),
+        fmt4(cluster.y + header_height),
+    )
+    .unwrap();
+    emit_layout_symbol_cluster_title_stack(
+        svg,
+        cluster,
+        0.0,
+        cluster.y + STANDARD_SYMBOL_CONTENT_TOP,
+        cluster.y + STANDARD_SYMBOL_CONTENT_TOP,
+    );
+}
+
+fn emit_layout_component_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
+    write!(
+        svg,
+        r#"<rect fill="{}"{} height="{}" rx="2.5" ry="2.5" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
+        cluster.fill,
+        cluster.filter_attr,
+        fmt4(cluster.height),
+        cluster.stroke,
+        cluster.stroke_width,
+        fmt4(cluster.width),
+        fmt4(cluster.x),
+        fmt4(cluster.y),
+    )
+    .unwrap();
+    emit_component_mark(
+        svg,
+        cluster.x,
+        cluster.y,
+        cluster.width,
+        &cluster.fill,
+        &cluster.stroke,
+        &cluster.stroke_width,
+    );
+    emit_layout_symbol_cluster_title_stack(
+        svg,
+        cluster,
+        0.0,
+        cluster.y + COMPONENT_CLUSTER_CONTENT_TOP,
+        cluster.y + COMPONENT_CLUSTER_CONTENT_TOP,
+    );
+}
+
+fn emit_layout_file_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
+    emit_file_envelope(
+        svg,
+        cluster.x,
+        cluster.y,
+        cluster.width,
+        cluster.height,
+        &cluster.fill,
+        &cluster.filter_attr,
+        &cluster.stroke,
+        &cluster.stroke_width,
+    );
+    emit_layout_symbol_cluster_title_stack(
+        svg,
+        cluster,
+        0.0,
+        cluster.y + STANDARD_SYMBOL_CONTENT_TOP,
+        cluster.y + STANDARD_SYMBOL_CONTENT_TOP,
+    );
+}
+
+fn emit_layout_hexagon_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
+    let cap = cluster.width / HEXAGON_CAP_DIVISOR;
+    let right = cluster.x + cluster.width;
+    let bottom = cluster.y + cluster.height;
+    write!(
+        svg,
+        r#"<path d="M{},{} L{},{} L{},{} L{},{} L{},{} L{},{} Z" fill="{}"{} style="stroke:{};stroke-width:{};"/>"#,
+        fmt4(cluster.x),
+        fmt4(cluster.y + cluster.height / 2.0),
+        fmt4(cluster.x + cap),
+        fmt4(cluster.y),
+        fmt4(right - cap),
+        fmt4(cluster.y),
+        fmt4(right),
+        fmt4(cluster.y + cluster.height / 2.0),
+        fmt4(right - cap),
+        fmt4(bottom),
+        fmt4(cluster.x + cap),
+        fmt4(bottom),
+        cluster.fill,
+        cluster.filter_attr,
+        cluster.stroke,
+        cluster.stroke_width,
+    )
+    .unwrap();
+    emit_layout_symbol_cluster_title_stack(
+        svg,
+        cluster,
+        0.0,
+        cluster.y + STANDARD_SYMBOL_CONTENT_TOP,
+        cluster.y + STANDARD_SYMBOL_CONTENT_TOP,
+    );
+}
+
+fn emit_layout_queue_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
+    emit_queue_envelope(
+        svg,
+        cluster.x,
+        cluster.y,
+        cluster.width,
+        cluster.height,
+        &cluster.fill,
+        &cluster.filter_attr,
+        &cluster.stroke,
+        &cluster.stroke_width,
+    );
+    emit_layout_symbol_cluster_title_stack(
+        svg,
+        cluster,
+        0.0,
+        cluster.y + STANDARD_SYMBOL_CONTENT_TOP,
+        cluster.y + STANDARD_SYMBOL_CONTENT_TOP,
+    );
+}
+
+fn emit_layout_stack_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
+    emit_stack_envelope(
+        svg,
+        cluster.x,
+        cluster.y,
+        cluster.width,
+        cluster.height,
+        &cluster.fill,
+        &cluster.filter_attr,
+        &cluster.stroke,
+        &cluster.stroke_width,
+    );
+    emit_layout_symbol_cluster_title_stack(
+        svg,
+        cluster,
+        0.0,
+        cluster.y + STACK_CLUSTER_CONTENT_TOP,
+        cluster.y + STACK_CLUSTER_CONTENT_TOP,
+    );
+}
+
+fn emit_layout_storage_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
+    write!(
+        svg,
+        r#"<rect fill="{}"{} height="{}" rx="{}" ry="{}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
+        cluster.fill,
+        cluster.filter_attr,
+        fmt4(cluster.height),
+        fmt4(STORAGE_ROUND_DIAMETER / 2.0),
+        fmt4(STORAGE_ROUND_DIAMETER / 2.0),
+        cluster.stroke,
+        cluster.stroke_width,
+        fmt4(cluster.width),
+        fmt4(cluster.x),
+        fmt4(cluster.y),
+    )
+    .unwrap();
+    emit_layout_symbol_cluster_title_stack(
+        svg,
+        cluster,
+        0.0,
+        cluster.y + STORAGE_STEREOTYPE_TOP,
+        cluster.y + STORAGE_TITLE_TOP,
+    );
+}
+
+fn emit_layout_action_title_stack(svg: &mut String, cluster: &LayoutPackageCluster) {
+    let label_width = text_render::measure_no_underline(&cluster.label, FONT_SIZE, true);
+    text_render::emit_text(
+        svg,
+        &cluster.label,
+        &TextBase {
+            x: cluster.x + (cluster.width - label_width) / 2.0,
+            y: cluster.y
+                + STANDARD_SYMBOL_CONTENT_TOP
+                + text_render::label_ascent(&cluster.label, FONT_SIZE),
+            font_size: FONT_SIZE as u32,
+            font_family: "sans-serif",
+            fill: &cluster.font_fill,
+            bold: true,
+            italic: false,
+            underline: false,
+            skip_underline: true,
+        },
+    );
+    let stereotype_top = cluster.y
+        + STANDARD_SYMBOL_CONTENT_TOP
+        + text_render::label_height(&cluster.label, FONT_SIZE);
+    let mut preceding_height = 0.0;
+    for stereotype in &cluster.stereotype_lines {
+        let width = text_render::measure_no_underline(stereotype, FONT_SIZE, false);
+        text_render::emit_text(
+            svg,
+            stereotype,
+            &TextBase {
+                x: cluster.x + PACKAGE_TAB_TEXT_X + (cluster.width - width) / 2.0,
+                y: stereotype_top
+                    + preceding_height
+                    + text_render::label_ascent(stereotype, FONT_SIZE),
+                font_size: FONT_SIZE as u32,
+                font_family: "sans-serif",
+                fill: &cluster.font_fill,
+                bold: false,
+                italic: true,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        preceding_height += text_render::label_height(stereotype, FONT_SIZE);
+    }
+}
+
 fn emit_layout_frame_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
     let x = cluster.x;
     let y = cluster.y;
@@ -6618,7 +7777,13 @@ fn emit_layout_rectangle_cluster(svg: &mut String, cluster: &LayoutPackageCluste
         fmt4(y),
     )
     .unwrap();
-    emit_layout_symbol_cluster_title_stack(svg, cluster, 0.0, y + RECTANGLE_CLUSTER_CONTENT_TOP);
+    emit_layout_symbol_cluster_title_stack(
+        svg,
+        cluster,
+        0.0,
+        y + RECTANGLE_CLUSTER_CONTENT_TOP,
+        y + RECTANGLE_CLUSTER_CONTENT_TOP,
+    );
 }
 
 fn emit_layout_node_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
@@ -6685,7 +7850,13 @@ fn emit_layout_node_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
         fmt4(bottom),
     )
     .unwrap();
-    emit_layout_symbol_cluster_title_stack(svg, cluster, -4.0, y + NODE_CLUSTER_CONTENT_TOP);
+    emit_layout_symbol_cluster_title_stack(
+        svg,
+        cluster,
+        -4.0,
+        y + NODE_CLUSTER_CONTENT_TOP,
+        y + NODE_CLUSTER_CONTENT_TOP,
+    );
 }
 
 #[derive(Clone, Copy)]
@@ -6977,6 +8148,7 @@ fn emit_layout_cloud_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
         cluster,
         0.0,
         cluster.y + CLOUD_CLUSTER_CONTENT_TOP,
+        cluster.y + CLOUD_CLUSTER_CONTENT_TOP,
     );
 }
 
@@ -6984,7 +8156,8 @@ fn emit_layout_symbol_cluster_title_stack(
     svg: &mut String,
     cluster: &LayoutPackageCluster,
     center_offset: f64,
-    content_top: f64,
+    stereotype_top: f64,
+    title_top: f64,
 ) {
     let mut preceding_height = 0.0;
     for stereotype in &cluster.stereotype_lines {
@@ -6994,7 +8167,7 @@ fn emit_layout_symbol_cluster_title_stack(
             stereotype,
             &TextBase {
                 x: cluster.x + center_offset + (cluster.width - width) / 2.0,
-                y: content_top
+                y: stereotype_top
                     + preceding_height
                     + text_render::label_ascent(stereotype, FONT_SIZE),
                 font_size: FONT_SIZE as u32,
@@ -7017,7 +8190,7 @@ fn emit_layout_symbol_cluster_title_stack(
         fmt4(label_w),
         fmt4(cluster.x + center_offset + (cluster.width - label_w) / 2.0),
         fmt4(
-            content_top
+            title_top
                 + preceding_height
                 + text_render::label_ascent(&cluster.label, FONT_SIZE),
         ),
@@ -7136,7 +8309,13 @@ fn emit_layout_database_cluster(svg: &mut String, cluster: &LayoutPackageCluster
         cluster.stroke_width,
     )
     .unwrap();
-    emit_layout_symbol_cluster_title_stack(svg, cluster, 0.0, y + DATABASE_CLUSTER_CONTENT_TOP);
+    emit_layout_symbol_cluster_title_stack(
+        svg,
+        cluster,
+        0.0,
+        y + DATABASE_CLUSTER_CONTENT_TOP,
+        y + DATABASE_CLUSTER_CONTENT_TOP,
+    );
 }
 
 fn emit_oracle_legend(svg: &mut String, legend: &OracleLegend, fallback_line: Option<usize>) {
@@ -12146,7 +13325,7 @@ fn svek_layout_x_bias(
     font: &ClassFontOverrides,
 ) -> f64 {
     let painted_cluster_ids = painted_package_cluster_ids(diagram);
-    let empty_cloud_minima = empty_package_cloud_minima(diagram, positions);
+    let empty_symbol_minima = empty_package_frontier_minima(diagram, positions);
     let visibility_polygon_min_x = (!uses_degenerated_entity(diagram, cluster_positions))
         .then(|| {
             let icon = font.visibility_icon_geom();
@@ -12191,7 +13370,7 @@ fn svek_layout_x_bias(
                 .filter(|position| painted_cluster_ids.contains(position.id.as_str()))
                 .map(|position| position.x),
         )
-        .chain(empty_cloud_minima.iter().map(|&(x, _)| x))
+        .chain(empty_symbol_minima.iter().map(|&(x, _)| x))
         .chain(
             edge_paths
                 .iter()
@@ -12245,7 +13424,7 @@ fn svek_layout_y_bias(
     edge_paths: &[EdgePath],
 ) -> f64 {
     let painted_cluster_ids = painted_package_cluster_ids(diagram);
-    let empty_cloud_minima = empty_package_cloud_minima(diagram, positions);
+    let empty_symbol_minima = empty_package_frontier_minima(diagram, positions);
     let min_y = positions
         .iter()
         .enumerate()
@@ -12263,7 +13442,7 @@ fn svek_layout_y_bias(
                 .filter(|position| painted_cluster_ids.contains(position.id.as_str()))
                 .map(|position| position.y),
         )
-        .chain(empty_cloud_minima.iter().map(|&(_, y)| y))
+        .chain(empty_symbol_minima.iter().map(|&(_, y)| y))
         .chain(
             edge_paths
                 .iter()
@@ -12287,7 +13466,7 @@ fn svek_layout_y_bias(
     }
 }
 
-fn empty_package_cloud_minima(
+fn empty_package_frontier_minima(
     diagram: &ClassDiagram,
     positions: &[NodePosition],
 ) -> Vec<(f64, f64)> {
@@ -12313,19 +13492,19 @@ fn empty_package_cloud_minima(
         .filter(|(_, role)| role.is_leaf_node())
         .enumerate()
         .filter_map(|(ordinal, (package_idx, _))| {
-            if empty_package_symbol_kind(diagram, &diagram.packages[package_idx])
-                != Some(PackageKind::Cloud)
-            {
+            let package = &diagram.packages[package_idx];
+            if !matches!(
+                empty_package_symbol_kind(diagram, package),
+                Some(PackageKind::Cloud | PackageKind::ComponentUml1)
+            ) {
                 return None;
             }
             let position = positions.get(empty_package_start + ordinal)?;
-            let package = &diagram.packages[package_idx];
-            let (width, height) = empty_package_intrinsic_dims(package);
-            // `LimitFinder#drawUPath` contributes the cloud frontier rather
-            // than the Graphviz node rectangle to SVEK's painted origin.
-            // `SvekResult` redraws the intrinsic image dimensions at the
-            // solved node minimum; Graphviz's rounded box is placement only.
-            let frontier = cloud_frontier(width, height);
+            let (width, height) = empty_package_intrinsic_dims(diagram, package);
+            // `LimitFinder` contributes geometry outside the Graphviz node
+            // rectangle to SVEK's painted origin. `SvekResult` redraws the
+            // intrinsic image dimensions at the solved node minimum.
+            let frontier = empty_package_painted_frontier(diagram, package, width, height);
             Some((position.x + frontier.min_x, position.y + frontier.min_y))
         })
         .collect()
@@ -15424,6 +16603,31 @@ mod tests {
         }
     }
 
+    fn render_symbol_cluster_primitive(kind: PackageKind) -> String {
+        let cluster = LayoutPackageCluster {
+            package_idx: 0,
+            kind,
+            qualified_name: "Primitive".to_string(),
+            source_line: 1,
+            label: "Primitive".to_string(),
+            stereotype_lines: vec!["\u{00AB}Profile\u{00BB}".to_string()],
+            fill: "#F1F1F1".to_string(),
+            stroke: "#181818".to_string(),
+            stroke_width: "1".to_string(),
+            filter_attr: String::new(),
+            font_fill: "#000000".to_string(),
+            url: None,
+            url_tooltip: None,
+            x: 10.0,
+            y: 20.0,
+            width: 120.0,
+            height: 80.0,
+        };
+        let mut svg = String::new();
+        emit_layout_package_cluster(&mut svg, &cluster, "cluster0", "_top");
+        svg
+    }
+
     #[test]
     fn enum_body_detects_appended_constants_after_methods() {
         let mut entity = simple_class_diagram().entities.remove(0);
@@ -15590,6 +16794,131 @@ mod tests {
     }
 
     #[test]
+    fn polygon_usymbol_clusters_keep_their_distinct_envelopes() {
+        let action = render_symbol_cluster_primitive(PackageKind::Action);
+        let process = render_symbol_cluster_primitive(PackageKind::Process);
+        let hexagon = render_symbol_cluster_primitive(PackageKind::Hexagon);
+
+        assert!(action.contains("<polygon "), "{action}");
+        assert!(!action.contains("20,60"), "{action}");
+        assert!(process.contains("<polygon "), "{process}");
+        assert!(process.contains("20,60"), "{process}");
+        assert!(hexagon.contains("<path "), "{hexagon}");
+        assert!(hexagon.contains(" Z\""), "{hexagon}");
+    }
+
+    #[test]
+    fn decorated_rectangle_usymbol_clusters_emit_java_marks() {
+        let artifact = render_symbol_cluster_primitive(PackageKind::Artifact);
+        let component = render_symbol_cluster_primitive(PackageKind::Component);
+        let card = render_symbol_cluster_primitive(PackageKind::Card);
+        let storage = render_symbol_cluster_primitive(PackageKind::Storage);
+
+        assert!(artifact.contains("<rect "), "{artifact}");
+        assert!(artifact.contains("<polygon "), "{artifact}");
+        assert_eq!(component.matches("<rect ").count(), 4, "{component}");
+        assert!(card.contains("<line "), "{card}");
+        assert!(storage.contains(r#"rx="35""#), "{storage}");
+    }
+
+    #[test]
+    fn component_style_preserves_java_big_and_small_symbol_split() {
+        for (style, cluster_kind, leaf_kind) in [
+            ("uml1", PackageKind::Component, PackageKind::ComponentUml1),
+            ("rectangle", PackageKind::Rectangle, PackageKind::Rectangle),
+            ("uml2", PackageKind::Component, PackageKind::Component),
+        ] {
+            let lines = [
+                format!("skinparam componentStyle {style}"),
+                "component StyledComponent {".to_string(),
+                "class NestedClass".to_string(),
+                "}".to_string(),
+                "component EmptyComponent {".to_string(),
+                "}".to_string(),
+            ];
+            let diagram = rustuml_parser::parse::class::parse_class(&lines).unwrap();
+            let styled = diagram
+                .packages
+                .iter()
+                .find(|package| package.name == "StyledComponent")
+                .unwrap();
+            let empty = diagram
+                .packages
+                .iter()
+                .find(|package| package.name == "EmptyComponent")
+                .unwrap();
+
+            assert_eq!(
+                effective_package_kind(&diagram, styled),
+                cluster_kind,
+                "{style}"
+            );
+            assert_eq!(
+                empty_package_symbol_kind(&diagram, empty),
+                Some(leaf_kind),
+                "{style}"
+            );
+            if style == "uml1" {
+                let (width, height) = empty_package_intrinsic_dims(&diagram, empty);
+                let frontier = empty_package_painted_frontier(&diagram, empty, width, height);
+                assert_eq!(frontier.min_x, COMPONENT_UML1_TAB_LEFT);
+            }
+        }
+    }
+
+    #[test]
+    fn ordinary_symbol_selector_and_explicit_stereotype_remain_distinct() {
+        let lines = [
+            "package Selected <<database>> {",
+            "class SelectedLeaf",
+            "}",
+            "database Explicit <<database>> {",
+            "class ExplicitLeaf",
+            "}",
+        ]
+        .map(str::to_string);
+        let diagram = rustuml_parser::parse::class::parse_class(&lines).unwrap();
+        let selected = diagram
+            .packages
+            .iter()
+            .find(|package| package.name == "Selected")
+            .unwrap();
+        let explicit = diagram
+            .packages
+            .iter()
+            .find(|package| package.name == "Explicit")
+            .unwrap();
+
+        assert_eq!(
+            automatic_package_kind(selected),
+            Some(PackageKind::Database)
+        );
+        assert!(visible_package_stereotype_lines(selected).is_empty());
+        assert!(explicit.symbol_from_keyword);
+        assert_eq!(
+            automatic_package_kind(explicit),
+            Some(PackageKind::Database)
+        );
+        assert_eq!(
+            visible_package_stereotype_lines(explicit),
+            ["\u{00AB}database\u{00BB}"]
+        );
+    }
+
+    #[test]
+    fn path_usymbol_clusters_do_not_collapse_to_rectangles() {
+        for kind in [PackageKind::File, PackageKind::Queue] {
+            let svg = render_symbol_cluster_primitive(kind);
+            assert!(svg.matches("<path ").count() >= 2, "{kind:?}: {svg}");
+            assert!(!svg.contains("<rect "), "{kind:?}: {svg}");
+        }
+
+        let stack = render_symbol_cluster_primitive(PackageKind::Stack);
+        assert!(stack.contains("<path "), "{stack}");
+        assert!(stack.contains(r#"style="stroke:none;""#), "{stack}");
+    }
+
+    #[test]
     fn empty_leaf_paint_uses_intrinsic_image_dimensions_after_layout() {
         let input = "@startuml\n\
                      skinparam packageStyle cloud\n\
@@ -15607,7 +16936,7 @@ mod tests {
             .iter()
             .position(|package| package.name == "IntrinsicParcel7151")
             .unwrap();
-        let intrinsic = empty_package_intrinsic_dims(&diagram.packages[package_idx]);
+        let intrinsic = empty_package_intrinsic_dims(&diagram, &diagram.packages[package_idx]);
         let solved = [NodePosition {
             x: 12.0,
             y: 34.0,

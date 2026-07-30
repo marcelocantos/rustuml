@@ -395,12 +395,53 @@ pub enum PackageKind {
     #[default]
     Package,
     Namespace,
+    Action,
+    Artifact,
+    Card,
     Cloud,
+    Component,
+    ComponentUml1,
     Database,
+    File,
     Folder,
     Frame,
+    Hexagon,
     Rectangle,
     Node,
+    Process,
+    Queue,
+    Stack,
+    Storage,
+}
+
+impl PackageKind {
+    /// Complete symbol-command projection registered by Java
+    /// `CommandPackageWithUSymbol#getRegexConcat`.
+    pub const COMMAND_SYMBOLS: [(&'static str, Self); 17] = [
+        ("package", Self::Package),
+        ("rectangle", Self::Rectangle),
+        ("hexagon", Self::Hexagon),
+        ("node", Self::Node),
+        ("artifact", Self::Artifact),
+        ("folder", Self::Folder),
+        ("file", Self::File),
+        ("frame", Self::Frame),
+        ("cloud", Self::Cloud),
+        ("action", Self::Action),
+        ("process", Self::Process),
+        ("database", Self::Database),
+        ("storage", Self::Storage),
+        ("component", Self::Component),
+        ("card", Self::Card),
+        ("queue", Self::Queue),
+        ("stack", Self::Stack),
+    ];
+
+    pub fn from_command_symbol(keyword: &str) -> Option<Self> {
+        Self::COMMAND_SYMBOLS
+            .iter()
+            .find_map(|(candidate, kind)| keyword.eq_ignore_ascii_case(candidate).then_some(*kind))
+    }
 }
 
 /// A package/namespace/container grouping entities.
@@ -427,6 +468,11 @@ pub struct Package {
     /// Stereotypes applied to this package (e.g. `<<Application>>`).
     #[serde(default)]
     pub stereotypes: Vec<String>,
+    /// True when `CommandPackageWithUSymbol` supplied the shape keyword.
+    /// Ordinary package/namespace commands instead derive an optional symbol
+    /// from their single stereotype capture.
+    #[serde(default, skip_serializing_if = "std::ops::Not::not")]
+    pub symbol_from_keyword: bool,
     /// Display label override (used for auto-created namespace packages where `name`
     /// is the full qualified path but we only want to show the short last segment).
     #[serde(default, skip_serializing_if = "Option::is_none")]
