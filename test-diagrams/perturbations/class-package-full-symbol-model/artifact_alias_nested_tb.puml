@@ -1,0 +1,8 @@
+@startuml
+top to bottom direction
+artifact "Review Artifact" as ReviewArtifact <<ArtifactStereo>> #LightYellow {
+  class ArtifactChild
+  class ArtifactPeer
+  ArtifactChild --> ArtifactPeer
+}
+@enduml

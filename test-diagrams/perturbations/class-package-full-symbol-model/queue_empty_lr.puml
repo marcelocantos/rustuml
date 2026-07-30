@@ -1,0 +1,5 @@
+@startuml
+left to right direction
+queue "Review Queue" as ReviewQueue <<QueueStereo>> #WhiteSmoke {
+}
+@enduml

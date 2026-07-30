@@ -1,0 +1,234 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-package-full-symbol-model",
+  "verdict": "REJECT",
+  "implementation_commits": [
+    "4275bab624c02c820e28ab866b58f5db5b470b7c",
+    "112b31b8f9be1f653805d2b73ad9ca04f8227538"
+  ],
+  "reviewer": {
+    "identity": "independent adversarial checker",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop",
+    "independence": "Did not implement the reviewed work. Used an isolated detached worktree at the prescribed revision and changed only this review plus held-out perturbation pairs."
+  },
+  "revisions": {
+    "rust_revision_checked": "446dc5383741fd91f4613ee19e0d9e53a77764db",
+    "java_revision_checked": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "diff_helper": "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one",
+    "diff_helper_sha256": "8d8e0bda16d967987cefd36deac3694ed61e59ad5ecd06d7f1cf276309d9b630",
+    "diff_mode": "--no-oracle",
+    "cargo_or_rustc_run": false
+  },
+  "accounts_read": [
+    "docs/parity-reviews/class-package-symbol-cluster-ownership/account.json",
+    "docs/parity-reviews/class-package-symbol-cluster-ownership/account-full-model-integration.json"
+  ],
+  "commands": [
+    "git worktree add --detach /tmp/rustuml-class-package-checker 446dc5383741fd91f4613ee19e0d9e53a77764db",
+    "sed -n '/## Parity Honesty Rules/,/## Agent Guidance/p' AGENTS.md",
+    "sed -n '1,280p' docs/parity-reviews/class-package-symbol-cluster-ownership/account.json",
+    "sed -n '1,300p' docs/parity-reviews/class-package-symbol-cluster-ownership/account-full-model-integration.json",
+    "git show --format=fuller --find-renames --find-copies 4275bab6^..4275bab6 -- crates/rustuml-parser/src/diagram/class.rs crates/rustuml-parser/src/parse/class.rs crates/rustuml-parser/src/parse/mod.rs crates/rustuml-render/src/class.rs",
+    "sed -n '318,940p' crates/rustuml-parser/src/parse/mod.rs",
+    "sed -n '1240,1510p' crates/rustuml-parser/src/parse/class.rs",
+    "sed -n '385,455p' crates/rustuml-parser/src/diagram/class.rs",
+    "sed -n '3870,3905p' crates/rustuml-render/src/class.rs",
+    "sed -n '6028,6090p' crates/rustuml-render/src/class.rs",
+    "rg -n -C 3 'emit_layout_(empty_symbol_hexagon|hexagon_cluster|artifact_cluster|empty_symbol_artifact)|fn package_header|stereotype_lines' crates/rustuml-render/src/class.rs",
+    "sed -n '68,190p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandPackageWithUSymbol.java",
+    "sed -n '110,150p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/classdiagram/ClassDiagramFactory.java",
+    "sed -n '86,110p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/descdiagram/DescriptionDiagramFactory.java",
+    "rg -n -i 'class-package-full-symbol-model|Review (Package|Rectangle|Hexagon|Node|Artifact|Folder|File|Frame|Cloud|Action|Process|Database|Storage|Component|Card|Queue|Stack)' crates test-diagrams/golden test-diagrams/perturbations -g '*.rs' -g '*.puml'",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/class-package-full-symbol-model/*.puml",
+    "for f in test-diagrams/perturbations/class-package-full-symbol-model/*.puml; do /tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle \"$f\"; done",
+    "shasum -a 256 /tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar test-diagrams/perturbations/class-package-full-symbol-model/* | sort"
+  ],
+  "source_inspection": {
+    "java": [
+      "CommandPackageWithUSymbol#getRegexConcat declares exactly package, rectangle, hexagon, node, artifact, folder, file, frame, cloud, action, process, database, storage, component, card, queue, and stack. executeArg resolves the selected USymbol then calls gotoGroup, so the command owns both concrete geometry and current group scope.",
+      "ClassDiagramFactory registers CommandPackageWithUSymbol after the ordinary package commands and before CommandCreateElementFull2. DescriptionDiagramFactory also registers it, but ClassDiagramFactory is the earlier viable generic factory.",
+      "Java USymbol classes own their concrete envelopes and the Cluster style path provides the merged paint/stroke independently of factory selection."
+    ],
+    "rust": [
+      "PackageKind::COMMAND_SYMBOLS faithfully contains the complete 17-keyword Java table, and ClassParser rejects those braced keywords from leaf parsing so they reach try_package.",
+      "detect_uml_subtype records a braced complete-set symbol container as class-factory evidence but now rejects that path when expanded ArchiMate or component bracket-interface input makes the whole source non-class-consumable. The two cross-factory sources therefore select DESCRIPTION, matching Java's factory choice.",
+      "The renderer still has per-symbol envelope paths. emit_layout_empty_symbol_hexagon states that Java paints only text, but the preserved Java SVG for a valid empty hexagon contains a polygon. Artifact, file, queue, and stack output also diverge at their concrete envelope/decorations."
+    ],
+    "fixture_shaping": "No mechanism name, new fixture stem, or new fixture label appears in shipping crates. The reviewed code is table/heuristic based rather than fixture-keyed."
+  },
+  "inputs": [
+    {
+      "source": "test-diagrams/perturbations/class-package-full-symbol-model/package_alias_nested_tb.puml",
+      "golden": "test-diagrams/perturbations/class-package-full-symbol-model/package_alias_nested_tb.svg",
+      "symbol": "package",
+      "axes": ["alias", "stereotype", "nested class children", "top-to-bottom"],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-package-full-symbol-model/rectangle_alias_nested_lr.puml",
+      "golden": "test-diagrams/perturbations/class-package-full-symbol-model/rectangle_alias_nested_lr.svg",
+      "symbol": "rectangle",
+      "axes": ["alias", "stereotype", "nested class children", "left-to-right"],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-package-full-symbol-model/hexagon_empty_tb.puml",
+      "golden": "test-diagrams/perturbations/class-package-full-symbol-model/hexagon_empty_tb.svg",
+      "symbol": "hexagon",
+      "axes": ["alias", "stereotype", "empty symbol", "top-to-bottom"],
+      "result": "fail",
+      "mechanism_shaped": true,
+      "evidence": "Java emits the empty Hexagon USymbol polygon and a 280px canvas. Rust emits only the two text nodes and a 256px canvas. This directly disproves the Rust empty-hexagon rendering premise."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-package-full-symbol-model/node_alias_nested_lr.puml",
+      "golden": "test-diagrams/perturbations/class-package-full-symbol-model/node_alias_nested_lr.svg",
+      "symbol": "node",
+      "axes": ["alias", "stereotype", "nested class children", "left-to-right"],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-package-full-symbol-model/artifact_alias_nested_tb.puml",
+      "golden": "test-diagrams/perturbations/class-package-full-symbol-model/artifact_alias_nested_tb.svg",
+      "symbol": "artifact",
+      "axes": ["alias", "stereotype", "nested class children", "top-to-bottom"],
+      "result": "fail",
+      "mechanism_shaped": true,
+      "evidence": "Java emits a separate fold line after the artifact corner polygon; Rust emits a path instead. The missing primitive shifts the subsequent structural order and the child cluster layout differs by eight pixels vertically."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-package-full-symbol-model/folder_alias_nested_lr.puml",
+      "golden": "test-diagrams/perturbations/class-package-full-symbol-model/folder_alias_nested_lr.svg",
+      "symbol": "folder",
+      "axes": ["alias", "stereotype", "nested class children", "left-to-right"],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-package-full-symbol-model/file_alias_nested_tb.puml",
+      "golden": "test-diagrams/perturbations/class-package-full-symbol-model/file_alias_nested_tb.svg",
+      "symbol": "file",
+      "axes": ["alias", "stereotype", "nested class children", "top-to-bottom"],
+      "result": "fail",
+      "mechanism_shaped": true,
+      "evidence": "Rust closes the outer file path with Z where Java leaves it open, and paints the folded-corner path with fill=none where Java fills it with the symbol background."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-package-full-symbol-model/frame_alias_nested_lr.puml",
+      "golden": "test-diagrams/perturbations/class-package-full-symbol-model/frame_alias_nested_lr.svg",
+      "symbol": "frame",
+      "axes": ["alias", "stereotype", "nested class children", "left-to-right"],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-package-full-symbol-model/cloud_alias_nested_tb.puml",
+      "golden": "test-diagrams/perturbations/class-package-full-symbol-model/cloud_alias_nested_tb.svg",
+      "symbol": "cloud",
+      "axes": ["alias", "stereotype", "nested class children", "top-to-bottom"],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-package-full-symbol-model/action_alias_nested_lr.puml",
+      "golden": "test-diagrams/perturbations/class-package-full-symbol-model/action_alias_nested_lr.svg",
+      "symbol": "action",
+      "axes": ["alias", "stereotype", "nested class children", "left-to-right"],
+      "result": "fail",
+      "mechanism_shaped": true,
+      "evidence": "Coordinates match, but Java serializes the polygon points with comma separators and Rust uses spaces. The prescribed structural comparator rejects the emitted SVG."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-package-full-symbol-model/process_alias_nested_tb.puml",
+      "golden": "test-diagrams/perturbations/class-package-full-symbol-model/process_alias_nested_tb.svg",
+      "symbol": "process",
+      "axes": ["alias", "stereotype", "nested class children", "top-to-bottom"],
+      "result": "fail",
+      "mechanism_shaped": true,
+      "evidence": "Coordinates match, but Java serializes the polygon points with comma separators and Rust uses spaces. The prescribed structural comparator rejects the emitted SVG."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-package-full-symbol-model/database_alias_nested_lr.puml",
+      "golden": "test-diagrams/perturbations/class-package-full-symbol-model/database_alias_nested_lr.svg",
+      "symbol": "database",
+      "axes": ["alias", "stereotype", "nested class children", "left-to-right"],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-package-full-symbol-model/storage_alias_nested_tb.puml",
+      "golden": "test-diagrams/perturbations/class-package-full-symbol-model/storage_alias_nested_tb.svg",
+      "symbol": "storage",
+      "axes": ["alias", "stereotype", "nested class children", "top-to-bottom"],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-package-full-symbol-model/component_alias_nested_lr.puml",
+      "golden": "test-diagrams/perturbations/class-package-full-symbol-model/component_alias_nested_lr.svg",
+      "symbol": "component",
+      "axes": ["alias", "stereotype", "nested class children", "left-to-right"],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-package-full-symbol-model/card_alias_nested_tb.puml",
+      "golden": "test-diagrams/perturbations/class-package-full-symbol-model/card_alias_nested_tb.svg",
+      "symbol": "card",
+      "axes": ["alias", "stereotype", "nested class children", "top-to-bottom"],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-package-full-symbol-model/queue_empty_lr.puml",
+      "golden": "test-diagrams/perturbations/class-package-full-symbol-model/queue_empty_lr.svg",
+      "symbol": "queue",
+      "axes": ["alias", "stereotype", "empty symbol", "left-to-right"],
+      "result": "fail",
+      "mechanism_shaped": true,
+      "evidence": "Rust's empty queue is two pixels narrower than Java, shifting both envelope paths and text one pixel left."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-package-full-symbol-model/stack_empty_tb.puml",
+      "golden": "test-diagrams/perturbations/class-package-full-symbol-model/stack_empty_tb.svg",
+      "symbol": "stack",
+      "axes": ["alias", "stereotype", "empty symbol", "top-to-bottom"],
+      "result": "fail",
+      "mechanism_shaped": true,
+      "evidence": "Rust's empty stack is two pixels narrower and one pixel higher than Java; it also omits stroke-width:0.5 from the fill rectangle."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-package-full-symbol-model/archimate_rectangle_expanded_lr.puml",
+      "golden": "test-diagrams/perturbations/class-package-full-symbol-model/archimate_rectangle_expanded_lr.svg",
+      "symbol": "rectangle cross-factory ArchiMate",
+      "axes": ["public ArchiMate include expansion", "rectangle container", "two elements plus relationship", "left-to-right"],
+      "result": "fail",
+      "mechanism_shaped": false,
+      "evidence": "Both Java and Rust select DESCRIPTION, so the repaired class-factory guard does not steal the source. Rust still drops the Java rectangle cluster and renders an unclustered vertical ArchiMate body. This is a cross-factory rendering residual, not a renewed class-dispatch failure."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-package-full-symbol-model/component_bracket_interface_tb.puml",
+      "golden": "test-diagrams/perturbations/class-package-full-symbol-model/component_bracket_interface_tb.svg",
+      "symbol": "component cross-factory bracket interface",
+      "axes": ["component container", "bracket interface child", "alias", "stereotype", "top-to-bottom"],
+      "result": "fail",
+      "mechanism_shaped": false,
+      "evidence": "Both Java and Rust select DESCRIPTION, so the repaired class-factory guard does not steal the source. Rust renders the shell as a leaf entity instead of Java's component cluster containing the bracket interface."
+    }
+  ],
+  "summary": {
+    "valid_inputs": 19,
+    "java_syntax_errors": 0,
+    "structural_passes": 10,
+    "structural_failures": 9,
+    "complete_symbol_table_covered": [
+      "package", "rectangle", "hexagon", "node", "artifact", "folder", "file", "frame", "cloud", "action", "process", "database", "storage", "component", "card", "queue", "stack"
+    ],
+    "axes_covered": [
+      "aliases", "stereotypes", "nested class children", "empty symbols", "left-to-right and top-to-bottom direction", "ArchiMate factory conflict", "component bracket-interface factory conflict"
+    ]
+  },
+  "findings": [
+    "REJECT: the full-symbol model is incomplete. Seven of the seventeen concrete Java command symbols fail fresh valid no-oracle comparisons: hexagon, artifact, file, action, process, queue, and stack.",
+    "The decisive semantic counterexample is empty hexagon: Java paints the USymbol polygon, while Rust emits only text. This is an incorrect model claim, not a tolerance or label-specific difference.",
+    "Artifact, file, queue, and stack have concrete Java geometry/style divergence. Action and process have an otherwise matching polygon expressed with a different points serialization that the prescribed comparator rejects.",
+    "The integration repair does correctly prevent the class factory from stealing the held-out public ArchiMate and component bracket-interface sources. Both choose DESCRIPTION as Java does. Their rendering mismatches remain executable cross-factory residue.",
+    "No fixture-shaped dispatch or rendering logic was found, and the complete parser keyword table itself is present. The rejection is about missing/incorrect generative symbol and cross-factory rendering behavior."
+  ]
+}

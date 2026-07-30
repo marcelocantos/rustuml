@@ -1,0 +1,8 @@
+@startuml
+top to bottom direction
+cloud "Review Cloud" as ReviewCloud <<CloudStereo>> #Thistle {
+  class CloudChild
+  class CloudPeer
+  CloudChild --> CloudPeer
+}
+@enduml

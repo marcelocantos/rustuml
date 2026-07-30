@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+node "Review Node" as ReviewNode <<NodeStereo>> #MistyRose {
+  class NodeChild
+  class NodePeer
+  NodeChild --> NodePeer
+}
+@enduml

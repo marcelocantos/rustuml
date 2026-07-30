@@ -1,0 +1,9 @@
+@startuml
+left to right direction
+!include <archimate/Archimate>
+rectangle "Review Business Layer" as ReviewLayer <<ArchimateBoundary>> {
+  Business_Actor(review_customer, "Review Customer")
+  Business_Process(review_checkout, "Review Checkout")
+  Rel_Serving(review_checkout, review_customer, "serves")
+}
+@enduml

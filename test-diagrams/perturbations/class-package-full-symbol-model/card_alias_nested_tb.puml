@@ -1,0 +1,8 @@
+@startuml
+top to bottom direction
+card "Review Card" as ReviewCard <<CardStereo>> #LightPink {
+  class CardChild
+  class CardPeer
+  CardChild --> CardPeer
+}
+@enduml

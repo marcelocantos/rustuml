@@ -1,0 +1,8 @@
+@startuml
+top to bottom direction
+file "Review File" as ReviewFile <<FileStereo>> #Beige {
+  class FileChild
+  class FilePeer
+  FileChild --> FilePeer
+}
+@enduml

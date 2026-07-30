@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+rectangle "Review Rectangle" as ReviewRectangle <<RectangleStereo>> #HoneyDew {
+  class RectangleChild
+  class RectanglePeer
+  RectangleChild --> RectanglePeer
+}
+@enduml

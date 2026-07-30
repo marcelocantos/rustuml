@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+database "Review Database" as ReviewDatabase <<DatabaseStereo>> #LightSteelBlue {
+  class DatabaseChild
+  class DatabasePeer
+  DatabaseChild --> DatabasePeer
+}
+@enduml

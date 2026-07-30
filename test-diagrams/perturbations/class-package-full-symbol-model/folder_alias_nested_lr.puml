@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+folder "Review Folder" as ReviewFolder <<FolderStereo>> #Azure {
+  class FolderChild
+  class FolderPeer
+  FolderChild --> FolderPeer
+}
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+action "Review Action" as ReviewAction <<ActionStereo>> #Wheat {
+  class ActionChild
+  class ActionPeer
+  ActionChild --> ActionPeer
+}
+@enduml

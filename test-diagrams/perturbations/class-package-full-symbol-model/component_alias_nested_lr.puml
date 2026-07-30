@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+component "Review Component" as ReviewComponent <<ComponentStereo>> #LightGreen {
+  class ComponentChild
+  class ComponentPeer
+  ComponentChild --> ComponentPeer
+}
+@enduml

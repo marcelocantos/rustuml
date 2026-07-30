@@ -1,0 +1,8 @@
+@startuml
+top to bottom direction
+storage "Review Storage" as ReviewStorage <<StorageStereo>> #LightSalmon {
+  class StorageChild
+  class StoragePeer
+  StorageChild --> StoragePeer
+}
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+frame "Review Frame" as ReviewFrame <<FrameStereo>> #LightCyan {
+  class FrameChild
+  class FramePeer
+  FrameChild --> FramePeer
+}
+@enduml
