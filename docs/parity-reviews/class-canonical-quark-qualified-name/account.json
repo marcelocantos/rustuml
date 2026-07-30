@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-canonical-quark-qualified-name",
+  "created": "2026-07-31",
+  "status": "proposed",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "621f86a80fbfa51bba5723bbb0836bc079bc0c7c",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/NameAndCodeParser.java",
+      "symbol": "NameAndCodeParser.nameAndCodeForClassWithGeneric",
+      "lines": "48-69",
+      "role": "Parses a quoted declaration without `as` through CODE4, making the quoted text the class identity while leaving DISPLAY absent."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandCreateClass.java",
+      "symbol": "CommandCreateClass.executeArg",
+      "lines": "127-145",
+      "role": "Resolves CODE4 through the canonical Quark path and, because DISPLAY is absent, derives the visible class Display from the short leaf Quark name."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/objectdiagram/AbstractClassOrObjectDiagram.java",
+      "symbol": "AbstractClassOrObjectDiagram.AbstractClassOrObjectDiagram",
+      "lines": "60-66",
+      "role": "Sets the class/object namespace separator to dot by default."
+    },
+    {
+      "path": "src/main/java/net/atmp/CucaDiagram.java",
+      "symbol": "CucaDiagram.quarkInContextSafe",
+      "lines": "249-286",
+      "role": "Resolves separator-bearing class identities into one canonical Quark path, rooted or relative according to the existing first package."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/plasma/Quark.java",
+      "symbols": [
+        "Quark.getName",
+        "Quark.getQualifiedName"
+      ],
+      "lines": "84-93",
+      "role": "Separates the short leaf name used by display and link identity from the canonical ancestry serialized into SVG qualified-name metadata."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/abel/Link.java",
+      "symbol": "Link.idCommentForSvg",
+      "lines": "105-114",
+      "role": "Builds SVG relationship path ids from each endpoint's short Entity/Quark name rather than its qualified name."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/parse/class.rs",
+      "symbols": [
+        "ClassParser.try_entity_decl",
+        "ClassParser.resolve_quark_path",
+        "ClassParser.create_entity_at_path"
+      ],
+      "lines": "277-306, 735-875, 408-447",
+      "role": "Resolves the same canonical separator path and stores its joined identity in ClassEntity.id, but treats every quoted CODE4 source as an explicit display instead of deriving the leaf display when the path has ancestors."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbol": "qualify_entity",
+      "lines": "1635-1706",
+      "role": "Reconstructs SVG qualified-name metadata but rejects the canonical id when the source label equals it, then appends the already-qualified text to its package prefix a second time."
+    }
+  ],
+  "evidence_inputs": [
+    "test-diagrams/golden/class/class_special_name_dot_in_name.puml",
+    "test-diagrams/golden/class/class_namespace_separator_default.puml",
+    "test-diagrams/golden/class/class_namespace_separator_none.puml",
+    "test-diagrams/golden/class/class_ns_sep_dot.puml",
+    "test-diagrams/golden/class/class_special_name_spaces.puml"
+  ],
+  "claimed_invariant": "A class entity has two Quark projections: the translated canonical ancestry used by SVG data-qualified-name, and the short leaf name used as the fallback visible Display and by Link.idCommentForSvg. When a namespace separator creates ancestors, the canonical path is serialized exactly once while CODE4 declarations with absent DISPLAY show only the leaf. A quoted identity with no separator-created ancestors naturally has the whole quoted name as its leaf, so spaces remain visible and link-addressable.",
+  "causal_divergence": "For `class \"com.example.Class\"`, both implementations parse the default dot separator into the canonical path `com/example/Class`. Rust stores the correctly joined path as ClassEntity.id, but then treats the full quoted CODE4 source as the visible label and initially refuses to trust the canonical id because id and source label are equal. Java leaves DISPLAY absent, falls back to Quark.getName() (`Class`) for painting and links, and emits Quark.getQualifiedName() (`com.example.Class`) once for metadata. Rust therefore paints an over-wide `com.example.Class` leaf inside duplicated package metadata and emits `com.example.Class-to-Other` instead of `Class-to-Other`. Supplying the correct leaf display also supplies the correct existing non-alias relationship-name projection; quoted displays inside ordinary explicit packages remain full display names.",
+  "planned_model_change": "When a quoted CODE4 source identity itself contains the active namespace separator, derive its display from the final resolved path segment just as CommandCreateClass does when DISPLAY is absent; preserve the full quoted text when only an enclosing explicit package makes the canonical path multi-segment. Treat a separator-derived package prefix in ClassEntity.id as sufficient evidence that the id is the canonical Quark path and return that translated id exactly once. Continue deriving non-alias relationship endpoint names from the entity display: separator-derived CODE4 entities now carry the correct short Quark leaf there, while quoted identities inside ordinary explicit packages retain their full spaced display. Preserve explicit aliases, custom separators, explicit packages, and namespaceSeparator-none behavior. Do not special-case fixture text or repair strings after SVG serialization.",
+  "perturbation_axes": [
+    "quoted dotted identity versus quoted spaced identity",
+    "bare dotted code versus quoted dotted code",
+    "default dot separator versus explicit dot separator versus namespaceSeparator none",
+    "root declaration versus declaration inside an existing unrelated package",
+    "quoted CODE4 identity versus explicit DISPLAY as CODE alias",
+    "renamed path segments and two versus four namespace levels"
+  ],
+  "scope_boundary": "This mechanism owns only how an already-resolved class Quark path becomes SVG qualified-name metadata and the geometry derived from that name. It does not change parser tokenization, Quark creation order, package rendering, display labels, namespace-separator commands, relationship endpoint lookup, or Graphviz routing.",
+  "acceptance": [
+    "The dotted quoted-name residual matches without regressing bare dotted names, spaced quoted names, aliases, or namespaceSeparator none.",
+    "Fresh valid inputs spanning at least two perturbation axes match freshly generated Java SVG.",
+    "Parser and renderer unit tests, the class-family census, the full no-oracle ratchet, clippy, and mechanical harness guards pass except for explicitly pre-existing gate debt.",
+    "An independent checker records a verdict at the exact implementation revision."
+  ]
+}
