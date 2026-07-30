@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+skinparam State.Arrow_Font.Name Courier New
+skinparam State.Arrow_Font.Size 11
+skinparam State.Message_Alignment left
+skinparam default.text.align right
+state "Signal Loom 7601" as SignalLoom7601
+state "Relay Harbor 7603" as RelayHarbor7603
+SignalLoom7601 --> RelayHarbor7603 : first row\rmuch longer terminal row
+@enduml

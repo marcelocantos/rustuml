@@ -1,0 +1,8 @@
+@startuml
+skinparam stateArrowFontSize 13
+skinparam arrow_font_size 11
+skinparam default_text_align right
+state "Transit Key 7611" as TransitKey7611
+state "Archive Spur 7613" as ArchiveSpur7613
+TransitKey7611 --> ArchiveSpur7613 : short\ra distinctly wider second line
+@enduml

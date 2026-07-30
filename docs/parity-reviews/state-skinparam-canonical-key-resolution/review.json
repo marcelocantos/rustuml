@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-skinparam-canonical-key-resolution",
+  "reviewer": {
+    "task_id": "codex-desktop-019ee369-54e2-7203-afce-ddde7bfe1723-independent-checker-state-skinparam-canonical-key-resolution",
+    "model": "OpenAI GPT-5 Codex"
+  },
+  "review_date": "2026-07-30",
+  "account_commit": "363633441adb0dd70e54918802946a8be47e63ba",
+  "implementation_commit": "bec36e625e58711bbb1e32d878a31cb63b47c36d",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_jar": {
+    "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+  },
+  "helper": {
+    "path": "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one",
+    "sha256": "3183361f7ad8fa84df87d781ba1268857ffe55ea7be83b1a13c38a5df684d51b",
+    "mode": "no-oracle",
+    "notes": "Used as supplied. No cargo or rustc commands were run."
+  },
+  "commands": [
+    "git show bec36e625e58711bbb1e32d878a31cb63b47c36d:docs/parity-reviews/state-skinparam-canonical-key-resolution/account.json",
+    "git show bec36e625e58711bbb1e32d878a31cb63b47c36d --stat -- docs/parity-reviews/state-skinparam-canonical-key-resolution crates/rustuml-render/src/state.rs crates/rustuml-parser/src/parse/mod.rs",
+    "git show bec36e625e58711bbb1e32d878a31cb63b47c36d:crates/rustuml-render/src/state.rs | sed -n '2390,3565p'",
+    "git show bec36e625e58711bbb1e32d878a31cb63b47c36d:crates/rustuml-parser/src/parse/mod.rs | sed -n '1,240p'",
+    "git diff bec36e625e58711bbb1e32d878a31cb63b47c36d^ bec36e625e58711bbb1e32d878a31cb63b47c36d -- crates/rustuml-render/src/state.rs",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/skin/SkinParam.java | sed -n '240,760p'",
+    "sed -n '1,260p' crates/rustuml-oracle/examples/diff_one.rs",
+    "ruby -rdigest -e 'require \"set\"; candidates=Dir[\"test-diagrams/perturbations/state-skinparam-canonical-key-resolution/*.puml\"]; existing=(Dir[\"test-diagrams/golden/**/*.puml\"] + (Dir[\"test-diagrams/perturbations/**/*.puml\"] - candidates)).map { |p| [Digest::SHA256.file(p).hexdigest, p] }.to_h; seen=Set.new; candidates.each do |c| h=Digest::SHA256.file(c).hexdigest; abort(\"duplicate against corpus: #{c} == #{existing[h]}\") if existing[h]; abort(\"duplicate within candidates: #{c}\") unless seen.add?(h); end; puts \"all checker perturbations unique against current golden and perturbation corpora\"'",
+    "shasum -a 256 /tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one",
+    "shasum -a 256 /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_lr_alias_flat_label_courier.puml test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_lr_canonical_flat_label_courier.puml test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_tb_alias_reassigned_default_align.puml test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_tb_canonical_reassigned_default_alignment.puml",
+    "xmllint --noout test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_lr_alias_flat_label_courier.svg test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_lr_canonical_flat_label_courier.svg test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_tb_alias_reassigned_default_align.svg test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_tb_canonical_reassigned_default_alignment.svg",
+    "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"|<title>error|fatal parsing' test-diagrams/perturbations/state-skinparam-canonical-key-resolution",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_lr_alias_flat_label_courier.puml",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_lr_canonical_flat_label_courier.puml",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_tb_alias_reassigned_default_align.puml",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_tb_canonical_reassigned_default_alignment.puml",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_lr_alias_flat_label_courier.puml > test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_lr_alias_flat_label_courier.rust.svg",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_lr_canonical_flat_label_courier.puml > test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_lr_canonical_flat_label_courier.rust.svg",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_tb_alias_reassigned_default_align.puml > test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_tb_alias_reassigned_default_align.rust.svg",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_tb_canonical_reassigned_default_alignment.puml > test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_tb_canonical_reassigned_default_alignment.rust.svg",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_lr_alias_flat_label_courier.puml > test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_lr_alias_flat_label_courier.diff.txt",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_lr_canonical_flat_label_courier.puml > test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_lr_canonical_flat_label_courier.diff.txt",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_tb_alias_reassigned_default_align.puml > test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_tb_alias_reassigned_default_align.diff.txt",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_tb_canonical_reassigned_default_alignment.puml > test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_tb_canonical_reassigned_default_alignment.diff.txt",
+    "cmp -s test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_lr_alias_flat_label_courier.rust.svg test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_lr_canonical_flat_label_courier.rust.svg && echo identical",
+    "cmp -s test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_tb_alias_reassigned_default_align.rust.svg test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_tb_canonical_reassigned_default_alignment.rust.svg && echo identical",
+    "shasum -a 256 test-diagrams/perturbations/state-skinparam-canonical-key-resolution/*"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_lr_alias_flat_label_courier.puml",
+      "golden": "test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_lr_alias_flat_label_courier.svg",
+      "rust_svg": "test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_lr_alias_flat_label_courier.rust.svg",
+      "diff": "test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_lr_alias_flat_label_courier.diff.txt",
+      "source_sha256": "34fe83a565838fd6dedbb9ce511f593b8c91685b61f9b1e3a74b4bea84cb51d2",
+      "golden_sha256": "f66924d62443e03ad29800cd90d3b45f1f861daf6f23b964b17c244d26907fbe",
+      "rust_svg_sha256": "247a8bc82a3da2320b10eec9d4a48dc376680601fc94785b96adc5d6df876627",
+      "diff_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+      "axes": [
+        "left-to-right state layout",
+        "small named Courier New arrow labels",
+        "dotted and underscored stateArrow font and alignment spellings",
+        "explicit stateMessageAlignment plus default.text.align capability-admission probe",
+        "painted-envelope routing with unequal multiline rows"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_lr_canonical_flat_label_courier.puml",
+      "golden": "test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_lr_canonical_flat_label_courier.svg",
+      "rust_svg": "test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_lr_canonical_flat_label_courier.rust.svg",
+      "diff": "test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_lr_canonical_flat_label_courier.diff.txt",
+      "source_sha256": "9b0311fc9b8aa1f7275f781c50a73cabfa8109476aad097217d645ce57a27fe8",
+      "golden_sha256": "5e56ddfb64d42a42901f94f184c36585d6500ca522a01fc7620099a1e9052740",
+      "rust_svg_sha256": "247a8bc82a3da2320b10eec9d4a48dc376680601fc94785b96adc5d6df876627",
+      "diff_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+      "axes": [
+        "left-to-right state layout",
+        "small named Courier New arrow labels",
+        "canonical default.text.alignment spelling paired against the alias form",
+        "explicit stateMessageAlignment plus ordinary-key capability admission",
+        "painted-envelope routing with unequal multiline rows"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_tb_alias_reassigned_default_align.puml",
+      "golden": "test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_tb_alias_reassigned_default_align.svg",
+      "rust_svg": "test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_tb_alias_reassigned_default_align.rust.svg",
+      "diff": "test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_tb_alias_reassigned_default_align.diff.txt",
+      "source_sha256": "9871b6350d282249849641f91d6f4c3a2bd756548cd87de5b80934c669098163",
+      "golden_sha256": "5d58626f7b86a63858c5e1aace1c8a4b3da0c2cafff90e69ccbba7ea6188e673",
+      "rust_svg_sha256": "4a3671b466c1634c33722602732657d3c95024fdc931b82fd72d584796646ace",
+      "diff_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+      "axes": [
+        "top-to-bottom state layout",
+        "ordinary sans-serif arrow labels",
+        "stateArrowFontSize then arrow_font_size reassignment order",
+        "default_text_align value-resolution probe without explicit stateMessageAlignment",
+        "multiline label with unequal widths"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_tb_canonical_reassigned_default_alignment.puml",
+      "golden": "test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_tb_canonical_reassigned_default_alignment.svg",
+      "rust_svg": "test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_tb_canonical_reassigned_default_alignment.rust.svg",
+      "diff": "test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_tb_canonical_reassigned_default_alignment.diff.txt",
+      "source_sha256": "16a146f53d7f9ebfad60b7503b631956ebf03f7c69b8b902278ca312a8705b58",
+      "golden_sha256": "f5805b232c9716cc8447df5f5e1f9768c3bf61d03c9ea6bead365c73653a2e69",
+      "rust_svg_sha256": "4a3671b466c1634c33722602732657d3c95024fdc931b82fd72d584796646ace",
+      "diff_sha256": "a913e3c910a9d00e7b6bd9f0c4a69144f2c6db156f95d185297c6e0599d0b6bb",
+      "axes": [
+        "top-to-bottom state layout",
+        "ordinary sans-serif arrow labels",
+        "canonical arrowFontSize reassignment order paired against stateArrow alias form",
+        "canonical defaultTextAlignment value-resolution control",
+        "multiline label with unequal widths"
+      ],
+      "result": "pass"
+    }
+  ],
+  "pairwise_identity": [
+    {
+      "alias_source": "test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_lr_alias_flat_label_courier.puml",
+      "canonical_source": "test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_lr_canonical_flat_label_courier.puml",
+      "rust_svg_equal": true,
+      "rust_svg_sha256": "247a8bc82a3da2320b10eec9d4a48dc376680601fc94785b96adc5d6df876627"
+    },
+    {
+      "alias_source": "test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_tb_alias_reassigned_default_align.puml",
+      "canonical_source": "test-diagrams/perturbations/state-skinparam-canonical-key-resolution/checker_tb_canonical_reassigned_default_alignment.puml",
+      "rust_svg_equal": true,
+      "rust_svg_sha256": "4a3671b466c1634c33722602732657d3c95024fdc931b82fd72d584796646ace"
+    }
+  ],
+  "results": {
+    "source_uniqueness": "pass: all four checker perturbations are unique against the current golden and perturbation corpora",
+    "java_svg_generation": "pass: pinned PlantUML Java SVGs generated for all four checker perturbations",
+    "syntax_xml_validation": "pass: xmllint accepted all four Java SVGs and the error-marker search found no matches",
+    "diff_one_no_oracle": "pass: 4/4 checker perturbations are structurally equivalent to Java in no-oracle mode",
+    "pairwise_rust_identity": "pass: both alias/canonical pairs collapse to identical Rust SVG output",
+    "production_files_modified": "no"
+  },
+  "findings": [
+    "The review was anchored to exact git objects rather than the dirty shared worktree. I inspected the mechanism account and Rust implementation with git show at implementation commit bec36e625e58711bbb1e32d878a31cb63b47c36d, inspected Java SkinParam at revision 71806a23780b04a5ccde2f8ceb5121edad5eb711, and rendered held-outs only through the supplied diff_one helper with SHA256 3183361f7ad8fa84df87d781ba1268857ffe55ea7be83b1a13c38a5df684d51b. No cargo or rustc commands were run.",
+    "Java provenance still supports the claimed ordinary-key identity. SkinParam.cleanForKeySlow lowercases, strips underscores and dots, rewrites family-specific arrow prefixes to arrow, and rewrites a terminal align to alignment before lookup. Rust's parser canonical_skinparam_key matches that model, and commit bec36e6 threads it through state_skinparam_preferred_value, state_skinparam_value, StateArrowFont::from_skinparams, autonomous_outer_spacing, has_only_autonomous_layout_skinparams, and has_only_flat_label_skinparams.",
+    "Static inspection of the one-file implementation diff found no fixture-shaped branches, no golden-data reads, no SVG string surgery, and no new unexplained parity constants. The change is a direct substitution from raw case-insensitive string comparison to parser-level canonical identity.",
+    "All four fresh held-outs are valid and mechanism-shaped. They cover left-to-right versus top-to-bottom layout, small named Courier labels versus ordinary sans-serif labels, dotted and underscored spellings, stateArrow versus shared arrow prefixes, explicit reassignment order, and both value-resolution and painted-envelope capability-admission surfaces.",
+    "Every fresh held-out passed strict no-oracle comparison against pinned Java. The two alias forms that were supposed to denote the same ordinary key also collapsed to identical Rust SVGs in each pair: the flat-label Courier pair hashes to 247a8bc82a3da2320b10eec9d4a48dc376680601fc94785b96adc5d6df876627, and the top-to-bottom default-alignment pair hashes to 4a3671b466c1634c33722602732657d3c95024fdc931b82fd72d584796646ace.",
+    "I did not find an in-scope counterexample. Given the clean Java provenance, the absence of suspicious implementation patterns, four green no-oracle held-outs, and the pairwise Rust-output identity checks, this checker round supports the account's claim that ordinary state skinparam lookup and capability admission now compare canonical Java key identities rather than retained source spellings."
+  ],
+  "accepted": true,
+  "verdict": "accepted"
+}
