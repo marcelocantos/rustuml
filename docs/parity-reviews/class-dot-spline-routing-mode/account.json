@@ -2,7 +2,7 @@
   "schema_version": 1,
   "mechanism": "class-dot-spline-routing-mode",
   "created": "2026-07-31",
-  "status": "proposed",
+  "status": "rejected",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "rust_revision_before_change": "1f6b6286",
   "java_locations": [
@@ -43,6 +43,18 @@
       ],
       "lines": "151-196,900-970",
       "role": "Sets rank direction, remincross, searchsize, and spacing but never sets Graphviz's splines or forcelabels graph attributes."
+    },
+    {
+      "path": "vendor/graphviz/lib/dotgen/dotsplines.c",
+      "symbol": "dot_splines_",
+      "lines": "250-260",
+      "role": "Dispatches EDGETYPE_ORTHO to orthoEdges only when the Graphviz translation unit is compiled with ORTHO defined; otherwise the mode falls through to ordinary spline routing."
+    },
+    {
+      "path": "crates/rustuml-layout/build.rs",
+      "symbol": "main",
+      "lines": "197-226",
+      "role": "Compiles the complete vendored ortho library and dotgen/dotsplines.c into one static archive but does not define ORTHO, leaving the compiled router unreachable."
     }
   ],
   "evidence_inputs": [
@@ -50,8 +62,15 @@
     "test-diagrams/golden/class/class_skinparam_linetype_polyline.puml"
   ],
   "claimed_invariant": "The effective class SVEK edge router is a graph-level three-state model: ordinary cubic splines by default, Graphviz polyline routing for linetype polyline, and Graphviz orthogonal routing with forced external labels for linetype ortho. The mode changes routed edge geometry while leaving node construction, rank constraints, edge ownership, decorations, and painted path serialization intact.",
-  "causal_divergence": "Rust parses and retains the linetype skinparam and already branches around orthogonal label handling, but LayoutGraph always runs with Graphviz's default spline router. Consequently both explicit modes produce ordinary cubic routes: the polyline golden differs in its long three-node edge, while the ortho golden differs on all three edges. This is the exact surface owned by DotStringFactory's missing graph attributes.",
-  "planned_model_change": "Add a typed graph routing mode to rustuml-layout, defaulting to cubic splines. Serialize splines=polyline for Polyline and splines=ortho plus forcelabels=true for Ortho. Resolve the latest class linetype skinparam case-insensitively and configure LayoutGraph before node and edge construction. Keep the existing ortho label-channel and post-layout behavior, and do not post-process route coordinates.",
+  "causal_divergence": "Rust parses and retains the linetype skinparam and already branches around orthogonal label handling, but LayoutGraph always runs with Graphviz's default spline router. Adding the graph attributes activates polyline correctly, proving the option path, but ortho remains cubic because the vendored Graphviz build omits the ORTHO feature define: dotsplines.c compiles out its orthoEdges dispatch even though build.rs compiles the complete ortho library. The polyline golden differs in its long three-node edge, while the ortho golden differs on all three edges. These are the exact surfaces owned by DotStringFactory's graph attributes and Graphviz's disabled orthogonal router.",
+  "planned_model_change": "Add a typed graph routing mode to rustuml-layout, defaulting to cubic splines. Serialize splines=polyline for Polyline and splines=ortho plus forcelabels=true for Ortho. Compile the already-vendored Graphviz dot generator with ORTHO enabled so EDGETYPE_ORTHO reaches orthoEdges. Resolve the latest class linetype skinparam case-insensitively and configure LayoutGraph before node and edge construction. Keep the existing ortho label-channel and post-layout behavior, and do not post-process route coordinates.",
+  "rejection_reason": "The combined three-state rollout was too broad. Graph attributes without the ORTHO build define safely raised the shipped path from 11109/11251 to 11113/11251 by fixing one polyline case in each of class, edge-cases, rendering, and skinparam. Enabling the real orthogonal router then fixed the corresponding ortho cases but dropped ER from 153/157 to 103/157, producing a product regression to 11071/11251. Existing ER parity depends on a separate cubic-route normalization model, so globally activating Graphviz ortho cannot ride this mechanism.",
+  "rejection_evidence": {
+    "baseline": "11109/11251; class 1961/1971; edge-cases 725/777; rendering 85/98; skinparam 403/410; ER 153/157",
+    "graph_attributes_only": "11113/11251; class 1962/1971; edge-cases 726/777; rendering 86/98; skinparam 404/410; ER 153/157",
+    "orthogonal_router_enabled": "11071/11251; class 1963/1971; edge-cases 727/777; rendering 91/98; skinparam 405/410; ER 103/157",
+    "disposition": "The complete combined implementation and generated baselines were reverted. A successor may port only polyline routing. Orthogonal routing requires a separate migration account that reconciles or replaces the ER normalization path before activation."
+  },
   "perturbation_axes": [
     "default, polyline, and ortho modes",
     "top-to-bottom versus left-to-right rank direction",
