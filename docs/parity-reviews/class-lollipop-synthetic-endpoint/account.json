@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-lollipop-synthetic-endpoint",
+  "created": "2026-07-31",
+  "status": "proposed",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "d7be29d729eddfbb52e55ec3b98be6eee38f5320",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/classdiagram/ClassDiagramFactory.java",
+      "symbols": [
+        "ClassDiagramFactory.createCommands"
+      ],
+      "lines": "120-145",
+      "role": "Registers CommandCreateClass and CommandLinkLollipop in the earlier ClassDiagramFactory, so a valid explicit class followed by lollipop notation remains a CLASS diagram."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandLinkLollipop.java",
+      "symbols": [
+        "CommandLinkLollipop.getRegexConcat",
+        "CommandLinkLollipop.getType",
+        "CommandLinkLollipop.executeArg"
+      ],
+      "lines": "67-172",
+      "role": "Recognizes entity-to-lollipop and lollipop-to-entity forms, requires the ordinary endpoint to exist, consumes a shared `lolN` sequence name, creates a synthetic LOLLIPOP_FULL or LOLLIPOP_HALF leaf whose display is the interface label, and then constructs the association Link."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/GeneralImageBuilder.java",
+      "symbols": [
+        "GeneralImageBuilder.buildEntityImage"
+      ],
+      "lines": "150-156",
+      "role": "Maps both lollipop leaf types to EntityImageLollipopInterface rather than to an ordinary class/interface image."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageLollipopInterface.java",
+      "symbols": [
+        "EntityImageLollipopInterface.calculateDimensionSlow",
+        "EntityImageLollipopInterface.drawU",
+        "EntityImageLollipopInterface.getShapeType"
+      ],
+      "lines": "63-139",
+      "role": "Declares a fixed 10 by 10 CIRCLE layout node, paints a 1.5px full or half ellipse, and draws the display label below and horizontally centered outside the node's intrinsic dimensions."
+    },
+    {
+      "path": "src/main/java/net/atmp/CucaDiagram.java",
+      "symbols": [
+        "CucaDiagram.startingPass",
+        "CucaDiagram.getUniqueSequenceValue",
+        "CucaDiagram.getUniqueSequence"
+      ],
+      "lines": "157-164, 808-818",
+      "role": "Resets the shared cpt1 counter to one; synthetic `lolN` names, Entity UIDs, and Link UIDs each consume the same add-and-get sequence."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/abel/Entity.java",
+      "symbols": [
+        "Entity.Entity"
+      ],
+      "lines": "162-179",
+      "role": "Consumes cpt1 for every non-root leaf and formats its SVG identity as entNNNN."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/abel/Link.java",
+      "symbols": [
+        "Link.Link"
+      ],
+      "lines": "125-139",
+      "role": "Consumes cpt1 after the synthetic lollipop leaf and uses that value for the lnkN relationship identity."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/parse/mod.rs",
+      "symbols": [
+        "detect_uml_subtype"
+      ],
+      "lines": "323-1045",
+      "role": "Scores every line whose first case-folded token is `component` as a component declaration, so an ordinary class named `Component` on a lollipop relationship outvotes the explicit class declaration and incorrectly selects DESCRIPTION."
+    },
+    {
+      "path": "crates/rustuml-parser/src/parse/class.rs",
+      "symbols": [
+        "ClassParser::try_relationship"
+      ],
+      "lines": "1084-1254",
+      "role": "Recognizes only a narrow word-only lollipop fallback and turns the interface label into an ordinary EntityKind::Interface, losing the synthetic identity, leaf type, half/full distinction, external label model, and Java command grammar."
+    },
+    {
+      "path": "crates/rustuml-parser/src/diagram/class.rs",
+      "symbols": [
+        "EntityKind",
+        "ClassUidEvent"
+      ],
+      "lines": "190-210, 78-94",
+      "role": "Has no LOLLIPOP_FULL/HALF entity kinds or event for a shared sequence value consumed without constructing an Entity or Link."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": [
+        "svek_id_allocation",
+        "oracle_lollipop_for_entity",
+        "emit_lollipop_entity"
+      ],
+      "lines": "4838-4987, 11682-11749",
+      "role": "Already models the shared UID stream for ordinary entities and links, but only discovers and paints class lollipops when an oracle SVG supplies their synthetic identity and rectangle."
+    }
+  ],
+  "evidence_inputs": [
+    "test-diagrams/golden/class/class_lollipop_required.puml"
+  ],
+  "claimed_invariant": "A class lollipop command is owned by the earlier ClassDiagramFactory whenever its ordinary endpoint declaration and the lollipop command are both consumable there; an identifier whose spelling is `Component` does not become a component declaration merely because it begins a relationship line. CommandLinkLollipop requires the ordinary endpoint to exist, consumes one shared cpt1 value for a synthetic `<ordinary-id>lolN` quark name, creates a distinct LOLLIPOP_FULL or LOLLIPOP_HALF leaf that consumes the next Entity UID, and constructs a Link that consumes the following UID. The synthetic leaf is a fixed 10 by 10 circular SVEK node regardless of label width; its display label is centered below the circle outside the intrinsic node box. Connector orientation, shaft length, declaration order, rank direction, label spelling, and the number of prior or repeated UID-consuming objects change placement and generated identities through the same command and cpt1 model, not through fixture-specific branches.",
+  "causal_divergence": "Rust first misclassifies the valid source as DESCRIPTION because detect_uml_subtype treats the ordinary endpoint token `Component` in `Component --() Required` as if it were the `component` declaration keyword. Even when class parsing is selected, the fallback creates a normal Interface entity named `Required`, so layout sees a full interface box and no sequence slot exists for Java's `lolN` name. The oracle-assisted renderer hides this model gap by searching golden entity metadata for `<owner>lol...` and replaying its rectangle. The shipped path therefore has the wrong diagram family, entity topology, node shape, node dimensions, external-label shield, and cpt1-derived identities. This is not an ellipse-coordinate or subtype-score tuning problem.",
+  "planned_model_change": "Make component declaration evidence grammar-aware so an identifier named Component on a relationship line cannot select DESCRIPTION. Port CommandLinkLollipop's two orientations, one/two-character shafts, endpoint-existence rule, full/half leaf distinction, synthetic `<owner>lolN` quark creation, and shared cpt1 consumption into the class parser and model. Teach the no-oracle class SVEK path to register the synthetic endpoint as a 10px circle, reserve its external label shield, paint the full or half 1.5px ellipse and centered label, and emit relationship metadata from the normal generated identity stream. Retain the oracle path only as a regression net; do not infer lollipops from golden entity names, treat them as ordinary interfaces, branch on `Component` or `Required`, or tune coordinates to the one corpus fixture.",
+  "perturbation_axes": [
+    "ordinary endpoint renamed away from and back to the keyword spelling Component",
+    "entity-to-lollipop versus lollipop-to-entity notation",
+    "full `()` versus half `((` and `))` endpoint shapes",
+    "one-character versus two-character solid and dotted shafts",
+    "one, two, and four lollipops attached to the same ordinary entity",
+    "lollipop commands before and after unrelated entities, links, packages, and notes that consume cpt1 values",
+    "short, long, quoted, and Unicode interface labels",
+    "top-to-bottom versus left-to-right direction",
+    "declaration order permutations and renamed ordinary endpoints",
+    "missing ordinary endpoint rejection versus valid predeclared endpoint acceptance"
+  ],
+  "scope_boundary": "This mechanism owns class-factory selection for grammar-valid lollipop commands, the synthetic class lollipop leaf and its UID/name lifecycle, its fixed-size SVEK node and external label, and its ordinary association connector. It does not change component-diagram lollipop/socket semantics, ordinary class Interface rendering, general class relationship decorations, comparator tolerances, error-golden eligibility, or ORTHO routing.",
+  "acceptance": [
+    "The existing valid class_lollipop_required golden becomes byte-level identical through render_svg without oracle input.",
+    "Fresh valid lollipop inputs spanning both orientations, full/half forms, shaft lengths, repeated endpoints, UID-consuming declaration order, renamed labels, and both rank directions match Java or remain preserved as explicit checker evidence if Java generation is unavailable.",
+    "A class named Component followed by a valid class lollipop stays CLASS, while real component declarations and component diagram lollipop/socket controls retain their current family.",
+    "Parser, renderer, layout, class-family census, full no-oracle ratchet, clippy, and mechanical harness guards pass except for explicitly pre-existing gate debt.",
+    "An independent checker records a verdict at the exact implementation revision."
+  ]
+}
