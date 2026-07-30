@@ -550,7 +550,11 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             let kw_end = trimmed
                 .find(|c: char| !c.is_ascii_alphanumeric() && c != '_')
                 .unwrap_or(trimmed.len());
-            let kw = &trimmed[..kw_end];
+            // `Pattern2#compileInternal` makes DESCRIPTION command regexes
+            // case-insensitive. Factory selection must consume the same
+            // semantic token as the parsers behind it.
+            let normalized_keyword = trimmed[..kw_end].to_ascii_lowercase();
+            let kw = normalized_keyword.as_str();
             let package_with_brace = kw == "package" && trimmed.contains('{');
             if package_with_brace {
                 has_component_package_container = true;
@@ -605,7 +609,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         }
         // Component — weighted strongly so that a single `component` keyword
         // beats multiple `interface` lines that would otherwise score for class.
-        if trimmed.starts_with("component ") {
+        if leading_keyword == "component" && trimmed["component".len()..].starts_with(' ') {
             scores[5] += 15;
             if !trimmed.contains('{') {
                 if top_level {
@@ -1540,6 +1544,29 @@ mod tests {
             component.id == "FreshDeliveryQueue6131"
                 && component.kind == crate::diagram::component::ComponentElementKind::Queue
         }));
+    }
+
+    #[test]
+    fn root_description_commands_are_case_insensitive_during_dispatch() {
+        for input in [
+            "@startuml\n\
+             left to right direction\n\
+             DATABASE AuditStore7011\n\
+             AuditStore7011 --> Ledger7013\n\
+             @enduml",
+            "@startuml\n\
+             NoDe \"Runtime Mesh 7021\" As Mesh7023 {\n\
+               QuEuE DeliveryQueue7027\n\
+             }\n\
+             @enduml",
+        ] {
+            assert!(matches!(parse(input).unwrap(), Diagram::Deployment(_)));
+        }
+
+        assert!(matches!(
+            parse("@startuml\nCoMpOnEnT Api7031\n@enduml").unwrap(),
+            Diagram::Component(_)
+        ));
     }
 
     #[test]
