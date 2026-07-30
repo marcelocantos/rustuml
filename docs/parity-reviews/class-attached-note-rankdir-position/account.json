@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-attached-note-rankdir-position",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnEntity.java:executeInternal",
+    "src/main/java/net/sourceforge/plantuml/utils/Position.java:withRankdir",
+    "src/main/java/net/sourceforge/plantuml/svek/Bibliotekon.java:addLine",
+    "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java:rankSame"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/diagram/class.rs::NotePosition",
+    "crates/rustuml-render/src/class.rs::render_with_oracle_uid_origin",
+    "crates/rustuml-render/src/class.rs::render_plantuml_svg",
+    "crates/rustuml-render/src/class.rs::render_svek_note_emission"
+  ],
+  "invariant": "CommandFactoryNoteOnEntity converts the source note position through Position.withRankdir before it constructs the note Link. TOP_TO_BOTTOM leaves every position unchanged. LEFT_TO_RIGHT rotates RIGHT to BOTTOM, LEFT to TOP, BOTTOM to RIGHT, and TOP to LEFT. The converted position controls link orientation, length, horizontal-solitary status, lines0 membership, rank-same emission, and therefore Graphviz topology. EntityImageNote later chooses its painted callout side from the solved note-side contact; the source keyword is not reused as an unrotated layout constraint.",
+  "causal_divergence": "Rust preserves the source NotePosition correctly in the parser but also uses that raw value directly when adding attached-note SVEK edges and when locating the solved edge during rendering. In left-to-right diagrams this supplies the topology Java would use for a different source position. The independent follow-up's four-note probe demonstrates the exact rotation: Rust's source-left note occupies Java's source-top geometry, source-right occupies source-bottom, source-top occupies source-left, and source-bottom occupies source-right. This is a direction-model error, not a node-order or paint-side constant error.",
+  "planned_change": "Add one direction-aware attached-note layout-position transform derived exactly from Position.withRankdir. Apply it when constructing every attached-note layout edge and when carrying the position into solved-edge lookup/rendering, while retaining the original parsed source position in the diagram model. Add a four-position left-to-right regression plus top-to-bottom controls. Do not alter note dimensions, spacing, edge lengths, callout geometry, or comparator tolerances.",
+  "perturbation_axes": [
+    "rank direction: top-to-bottom versus left-to-right",
+    "source position: left, right, top, and bottom",
+    "target ownership: root entity versus direct package leaf versus nested descendant",
+    "note cardinality: one note versus multiple notes on one or several targets",
+    "declaration order: grouped positions versus interleaved targets"
+  ],
+  "predecessor_rejection": {
+    "implementation_commit": "34cc76f1e3305d3767da2a4827793df6dd0e4531",
+    "review": "docs/parity-reviews/class-svek-node-paint-order/review-followup-3.json",
+    "review_commit": "ede23f8e",
+    "counterexample": "test-diagrams/perturbations/class-svek-node-paint-order/followup2_lr_dense_attached_notes_flip_probe.puml"
+  },
+  "status": "proposed"
+}
