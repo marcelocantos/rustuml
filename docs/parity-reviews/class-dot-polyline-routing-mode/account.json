@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-dot-polyline-routing-mode",
+  "created": "2026-07-31",
+  "status": "proposed",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "a7bf180b",
+  "supersedes_rejected_account": "class-dot-spline-routing-mode",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/skin/SkinParam.java",
+      "symbol": "SkinParam.getDotSplines",
+      "lines": "628-638",
+      "role": "Resolves the effective case-insensitive linetype polyline value to DotSplines.POLYLINE and otherwise preserves the default spline mode."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/DotStringFactory.java",
+      "symbol": "DotStringFactory.createDotString",
+      "lines": "157-165",
+      "role": "Serializes splines=polyline as a graph-level attribute before SVEK nodes and edges."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbol": "class SVEK layout construction",
+      "lines": "2410-2430",
+      "role": "Constructs LayoutGraph from class direction and spacing but does not pass the retained linetype skinparam."
+    },
+    {
+      "path": "crates/rustuml-layout/src/graph.rs",
+      "symbols": [
+        "LayoutGraph",
+        "LayoutGraph.run_graphviz_layout_inner"
+      ],
+      "lines": "151-196,900-970",
+      "role": "Provides no typed polyline option and therefore leaves Graphviz on its default cubic spline router."
+    }
+  ],
+  "evidence_inputs": [
+    "test-diagrams/golden/class/class_skinparam_linetype_polyline.puml",
+    "test-diagrams/golden/edge-cases/edge_skinparam_linetype_polyline.puml",
+    "test-diagrams/golden/rendering/splines/splines_linetype_polyline_basic.puml",
+    "test-diagrams/golden/skinparam/skin_linetype_polyline_class.puml"
+  ],
+  "claimed_invariant": "When the latest effective class linetype value is polyline, SVEK sets Graphviz's graph-level splines attribute to polyline before layout. The router changes edge paths for the entire graph while node construction, rank constraints, spacing, labels, decorations, and SVG serialization remain unchanged. All other linetype values retain the current default route in this bounded mechanism.",
+  "causal_divergence": "Rust retains the skinparam but LayoutGraph always uses the default cubic router. A controlled full-corpus experiment showed that adding only splines=polyline fixed one exact pair in each of class, edge-cases, rendering, and skinparam, with every family baseline otherwise unchanged. The rejected successor stage that enabled Graphviz ortho is explicitly out of scope.",
+  "planned_model_change": "Add a typed default-versus-polyline routing option to LayoutGraph and serialize splines=polyline only for the Polyline variant. Resolve the latest class linetype declaration case-insensitively and configure the layout before node creation. Preserve the existing orthogonal label detection and leave ortho on its current ER-compatible path pending a separate migration.",
+  "perturbation_axes": [
+    "default versus polyline routing",
+    "top-to-bottom versus left-to-right rank direction",
+    "chain plus transitive long edge versus changed-count fanout topology",
+    "renamed node identifiers",
+    "mixed-case polyline value",
+    "repeated declarations with last value winning"
+  ],
+  "scope_boundary": "This mechanism owns only the graph-level splines=polyline attribute for class-family SVEK layouts. It does not enable Graphviz ortho, alter the vendored C build, change node or edge construction, labels, decorations, path formatting, canvas normalization, comparator behavior, or other renderers' defaults.",
+  "acceptance": [
+    "All four polyline evidence pairs become byte-exact with no family regression.",
+    "Fresh valid inputs show polyline routes distinct from default under both rank directions and changed topology; mixed-case values work and the last declaration wins.",
+    "Layout and renderer tests, full no-oracle ratchet, clippy, and mechanical harness guards pass except for explicitly pre-existing gate debt.",
+    "An independent checker records a verdict at the exact implementation revision."
+  ]
+}
