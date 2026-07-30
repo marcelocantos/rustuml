@@ -1,0 +1,6 @@
+@startuml
+node "Shared Node" {
+  entity Ledger
+  DATABASE AuditStore
+}
+@enduml

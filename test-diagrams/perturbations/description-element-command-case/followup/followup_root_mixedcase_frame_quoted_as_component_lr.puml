@@ -1,0 +1,6 @@
+@startuml
+left to right direction
+FrAmE "Operations Portal" as Portal {
+  [Renderer]
+}
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+package Outer {
+  frame "Shared Frame" {
+    entity Ledger
+    AlLoW_MiXiNg
+    DaTaBaSe AuditStore
+  }
+}
+@enduml

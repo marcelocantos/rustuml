@@ -1,0 +1,184 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-quoted-symbol-container-dispatch",
+  "review_kind": "followup-4",
+  "reviewed_on": "2026-07-30",
+  "implementation_commit": "ee0f6d52c547f980c5db65b3447c07c9ac792b14",
+  "account_commit": "6ffe53bbd0b1fcae5eade40d41577af48f7555da",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "reviewer": {
+    "identity": "independent adversarial checker",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop",
+    "independence": "Did not implement commit ee0f6d52 or edit shipping source. Worked in isolated git worktree /tmp/rustuml-check-ee0f6d52 on branch checker/t14-ee0f6d52-adversarial and modified only review/evidence files."
+  },
+  "revisions": {
+    "rust_revision_checked": "ee0f6d52c547f980c5db65b3447c07c9ac792b14",
+    "account_revision_checked": "6ffe53bbd0b1fcae5eade40d41577af48f7555da"
+  },
+  "artifacts": {
+    "helper": {
+      "path": "/tmp/rustuml-diff-one-ee0f6d52",
+      "sha256": "85a9c07f65d0b79205b4363635dc8d3cca0ac9f79994768f9aedabafe3c49107",
+      "mode": "--no-oracle"
+    },
+    "java_jar": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+    },
+    "rerun_hashes": {
+      "checker_followup3_allowmixing_before_upper_boundary_tb.puml": "73edc2cb6f3ffee5e1c69acb890697b51022fedc73cb02d67a83264be12795d1",
+      "checker_followup3_allowmixing_before_upper_boundary_tb.svg": "b7cbcda96bc224b1368a6a89b99a3cb0e3b8ee858e0b09fe5df4d767b6a3ef0a",
+      "checker_followup3_nested_cloud_upper_queue_tb.puml": "ca92500788cac08258e9c3c20ea0f080f8af491f2caaa3f0ff5e3359c5f84e2f",
+      "checker_followup3_nested_cloud_upper_queue_tb.svg": "621b9598361800937bcb4e4c2e627f0de92556f574ed159ae47f8c9ac5e5438c",
+      "checker_followup3_root_node_upper_database_lr.puml": "2a8b7b940433c891423e58de9a640df038dd10bc57a7e622ad564fbd6fe1daa0",
+      "checker_followup3_root_node_upper_database_lr.svg": "6e533dde92a935411c01b68d4ca82a86e1c57540146e202698df5efe6bdd928d",
+      "checker_followup3_upper_boundary_before_entity_tb.puml": "ade1710d0dc8521ca33da7ac5a4420fe4aeac9d0e03b33cf009d7e52a65d8a94",
+      "checker_followup3_upper_boundary_before_entity_tb.svg": "1d156b85571d675590d173aba59fb2771fb3acdac039d05b15a59cd2fd1aa7dc"
+    },
+    "fresh_artifact_hashes": {
+      "followup_root_cloud_database_before_entity_lr.puml": "a1c449558d07a1fee3059e717c528b8c312fb16bd6b42b2531a4a38f8f6faf72",
+      "followup_root_cloud_database_before_entity_lr.svg": "5bbeb82c74c90c0b25a63adf1d683e42ef7b7a84bee04e94bfce0b828cf18bfa",
+      "followup_root_node_entity_inline_upper_database_tb.puml": "a6b9c0c3432dac37d2ce7c121077b30bee06f07bbf948cb5488ed9fa0f1bd1ff",
+      "followup_root_node_entity_inline_upper_database_tb.svg": "76f2283063bec4babfdcae835be3f0373fb033480da9fdd919b2cab13f44e0ee",
+      "followup_nested_frame_entity_allowmixing_boundary_tb.puml": "5cfa8d267a3ce4137fd5066941b7a017980559a84d2bb9ad9bf92cb63e68ee53",
+      "followup_nested_frame_entity_allowmixing_boundary_tb.svg": "c8fbc6b64dd9efe1bcafd6930f0827ec8d6c1f290f64e37d8eae2c33d83beba6",
+      "followup_nested_frame_entity_allowmixing_queue_tb.puml": "327ec8037d722d2d1e758301b049d50d93e8a507145400f8eeb1f299c560ab10",
+      "followup_nested_frame_entity_allowmixing_queue_tb.svg": "f82db42c77f64a5ed6af06bb8d3f002c07abd5c578d8764127ae085c27d99a64",
+      "followup_nested_frame_entity_allowmixing_database_tb.puml": "3c83686441cd3123de476802c9386fc10ca48e39a841b5b20bee68d2333fc7c7",
+      "followup_nested_frame_entity_allowmixing_database_tb.svg": "9975b550057cf8c6e84da69cd0d577a5ce88a03668ad13865000c5cb63340229"
+    }
+  },
+  "commands": [
+    "git worktree add --detach /tmp/rustuml-check-ee0f6d52 ee0f6d52c547f980c5db65b3447c07c9ac792b14",
+    "git switch -c checker/t14-ee0f6d52-adversarial",
+    "sed -n '1,220p' docs/parity-reviews/class-quoted-symbol-container-dispatch/account.json",
+    "sed -n '1,260p' docs/parity-reviews/class-quoted-symbol-container-dispatch/review-followup-3.json",
+    "git show --format=medium --unified=80 ee0f6d52c547f980c5db65b3447c07c9ac792b14 -- crates/rustuml-parser/src/parse/mod.rs crates/rustuml-parser/src/parse/class.rs crates/rustuml-parser/src/parse/deployment.rs crates/rustuml-parser/src/parse/component.rs crates/rustuml-render/src/class.rs",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandCreateElementFull2.java | nl -ba | sed -n '82,224p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandCreateElementFull.java | nl -ba | sed -n '73,210p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/regex/Pattern2.java | nl -ba | sed -n '108,118p'",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_root_node_upper_database_lr.puml test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_nested_cloud_upper_queue_tb.puml test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_upper_boundary_before_entity_tb.puml test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_allowmixing_before_upper_boundary_tb.puml",
+    "/tmp/rustuml-diff-one-ee0f6d52 --no-oracle test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_root_node_upper_database_lr.puml",
+    "/tmp/rustuml-diff-one-ee0f6d52 --no-oracle test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_nested_cloud_upper_queue_tb.puml",
+    "/tmp/rustuml-diff-one-ee0f6d52 --no-oracle test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_upper_boundary_before_entity_tb.puml",
+    "/tmp/rustuml-diff-one-ee0f6d52 --no-oracle test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_allowmixing_before_upper_boundary_tb.puml",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/class-quoted-symbol-container-dispatch/followup/followup_root_cloud_database_before_entity_lr.puml test-diagrams/perturbations/class-quoted-symbol-container-dispatch/followup/followup_root_node_entity_inline_upper_database_tb.puml test-diagrams/perturbations/class-quoted-symbol-container-dispatch/followup/followup_nested_frame_entity_allowmixing_boundary_tb.puml test-diagrams/perturbations/class-quoted-symbol-container-dispatch/followup/followup_nested_frame_entity_allowmixing_queue_tb.puml test-diagrams/perturbations/class-quoted-symbol-container-dispatch/followup/followup_nested_frame_entity_allowmixing_database_tb.puml",
+    "/tmp/rustuml-diff-one-ee0f6d52 --no-oracle test-diagrams/perturbations/class-quoted-symbol-container-dispatch/followup/followup_root_cloud_database_before_entity_lr.puml",
+    "/tmp/rustuml-diff-one-ee0f6d52 --no-oracle test-diagrams/perturbations/class-quoted-symbol-container-dispatch/followup/followup_root_node_entity_inline_upper_database_tb.puml",
+    "/tmp/rustuml-diff-one-ee0f6d52 --no-oracle test-diagrams/perturbations/class-quoted-symbol-container-dispatch/followup/followup_nested_frame_entity_allowmixing_boundary_tb.puml",
+    "/tmp/rustuml-diff-one-ee0f6d52 --no-oracle test-diagrams/perturbations/class-quoted-symbol-container-dispatch/followup/followup_nested_frame_entity_allowmixing_queue_tb.puml",
+    "/tmp/rustuml-diff-one-ee0f6d52 --no-oracle test-diagrams/perturbations/class-quoted-symbol-container-dispatch/followup/followup_nested_frame_entity_allowmixing_database_tb.puml",
+    "sh -c '/tmp/rustuml-diff-one-ee0f6d52 --no-oracle --print-rust test-diagrams/perturbations/class-quoted-symbol-container-dispatch/followup/followup_nested_frame_entity_allowmixing_queue_tb.puml | rg -n -F \"data-diagram-type=\\\"CLASS\\\"\"'",
+    "sh -c '/tmp/rustuml-diff-one-ee0f6d52 --no-oracle --print-rust test-diagrams/perturbations/class-quoted-symbol-container-dispatch/followup/followup_nested_frame_entity_allowmixing_queue_tb.puml | rg -n -F \"<!--class DeliveryQueue-->\"'",
+    "rg -n -F \"DeliveryQueue\" test-diagrams/perturbations/class-quoted-symbol-container-dispatch/followup/followup_nested_frame_entity_allowmixing_queue_tb.svg"
+  ],
+  "source_inspection": {
+    "java": [
+      "Pattern2.compileInternal applies CASE_INSENSITIVE to all command regexes.",
+      "CommandCreateElementFull2 reuses CommandCreateElementFull.ALL_TYPES plus state, and NORMAL_KEYWORD rejects only when allowmixing has not yet executed.",
+      "Quoted frame, node, cloud, and database containers remain shared between class and description factories; the earlier class factory wins only while it stays source-consumable.",
+      "Once allowmixing has executed, a later mixed-only leaf still creates a DESCRIPTION entity with the keyword-specific USymbol."
+    ],
+    "rust": [
+      "The ee0f6d52 detector now lowercases the leading command token before MIXED_ONLY_CLASS_KEYWORDS membership, repairing the case-sensitive rejection gap reported by review-followup-3.",
+      "The class entity parser lowercases declaration keywords and now recognizes boundary, so uppercase and mixed-case class-side commands reach semantic matching.",
+      "No fixture-name strings, golden reads, or post-hoc SVG string surgery keyed to these stems were found in the touched shipping files.",
+      "The class renderer still materializes late allowmixing database and queue leaves as ordinary class entities (`<!--class DeliveryQueue-->`, rectangle plus circled glyph) rather than Java's symbol-specific mixed DESCRIPTION leaves."
+    ],
+    "fixture_shaping_search": "No checker stem or mechanism-name strings appeared in the touched shipping code.",
+    "golden_read_search": "No include_str!, golden-file reads, or fixture keyed conditionals appeared in the touched shipping code.",
+    "output_surgery_search": "No post-render string surgery keyed to coordinates or test labels appeared in the touched shipping code."
+  },
+  "rerun_inputs": [
+    "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_root_node_upper_database_lr.puml",
+    "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_nested_cloud_upper_queue_tb.puml",
+    "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_upper_boundary_before_entity_tb.puml",
+    "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_allowmixing_before_upper_boundary_tb.puml"
+  ],
+  "fresh_inputs": [
+    "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/followup/followup_root_cloud_database_before_entity_lr.puml",
+    "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/followup/followup_root_node_entity_inline_upper_database_tb.puml",
+    "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/followup/followup_nested_frame_entity_allowmixing_boundary_tb.puml"
+  ],
+  "fresh_perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/followup/followup_root_cloud_database_before_entity_lr.puml",
+      "golden": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/followup/followup_root_cloud_database_before_entity_lr.svg",
+      "axes": [
+        "root quoted shared cloud container",
+        "lowercase database mixed-only family",
+        "bare entity declaration appears later",
+        "mixed leaf before class declaration",
+        "left-to-right direction"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/followup/followup_root_node_entity_inline_upper_database_tb.puml",
+      "golden": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/followup/followup_root_node_entity_inline_upper_database_tb.svg",
+      "axes": [
+        "root quoted shared node container",
+        "uppercase database mixed-only family",
+        "bare entity declaration appears earlier",
+        "mixed leaf after class declaration",
+        "top-to-bottom direction"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/followup/followup_nested_frame_entity_allowmixing_boundary_tb.puml",
+      "golden": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/followup/followup_nested_frame_entity_allowmixing_boundary_tb.svg",
+      "axes": [
+        "nested quoted shared frame container inside package",
+        "allowmixing after class declaration but before mixed leaf",
+        "boundary mixed-only family",
+        "bare form",
+        "top-to-bottom direction"
+      ],
+      "result": "pass"
+    }
+  ],
+  "adjacent_counterexamples": [
+    {
+      "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/followup/followup_nested_frame_entity_allowmixing_queue_tb.puml",
+      "golden": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/followup/followup_nested_frame_entity_allowmixing_queue_tb.svg",
+      "result": "fail",
+      "classification": "adjacent mixed-leaf rendering defect, not dispatch selection",
+      "details": [
+        "Java and Rust both render data-diagram-type=\"CLASS\" and preserve the same container ownership.",
+        "Rust prints `<!--class DeliveryQueue-->` and emits a plain class rectangle with circled glyph, while Java prints `<!--entity DeliveryQueue-->` and emits the queue symbol path.",
+        "The failure is after the dispatch decision has already matched; it does not contradict the quoted-container factory viability claim."
+      ]
+    },
+    {
+      "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/followup/followup_nested_frame_entity_allowmixing_database_tb.puml",
+      "golden": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/followup/followup_nested_frame_entity_allowmixing_database_tb.svg",
+      "result": "fail",
+      "classification": "adjacent mixed-leaf rendering defect, not dispatch selection",
+      "details": [
+        "Java and Rust both render data-diagram-type=\"CLASS\" and preserve the same quoted frame ownership.",
+        "Rust again materializes the mixed database leaf as a class rectangle rather than the database cylinder used by Java's CommandCreateElementFull2 path."
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "severity": "info",
+      "summary": "I did not find a new counterexample that breaks the quoted-symbol container dispatch claim itself.",
+      "details": [
+        "All four preserved checker_followup3 inputs now pass with the frozen no-oracle helper.",
+        "Fresh root and nested perturbations covering lowercase, uppercase, and mixed-case mixed-only leaves, root versus nested ownership, bare forms, and late-but-valid allowmixing all preserved Java parity where they actually isolated factory-selection behavior."
+      ]
+    },
+    {
+      "severity": "medium",
+      "summary": "Fresh late-allowmixing queue and database probes uncovered a separate mixed DESCRIPTION leaf rendering defect in CLASS diagrams.",
+      "details": [
+        "Those failures occur after Rust has already selected the same CLASS factory as Java.",
+        "Because the reviewed account claims only source-order class-factory viability and allowmixing timing, I am not assigning those failures to this mechanism, but they remain executable residue from ee0f6d52."
+      ]
+    }
+  ],
+  "verdict": "ACCEPT"
+}

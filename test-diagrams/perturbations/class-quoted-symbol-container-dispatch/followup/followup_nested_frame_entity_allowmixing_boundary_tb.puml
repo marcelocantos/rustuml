@@ -1,0 +1,9 @@
+@startuml
+package Outer {
+  frame "Shared Frame" {
+    entity Ledger
+    allowmixing
+    boundary Gate
+  }
+}
+@enduml
