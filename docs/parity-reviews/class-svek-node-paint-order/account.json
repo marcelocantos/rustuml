@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-svek-node-paint-order",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "net.sourceforge.plantuml.command.note.CommandFactoryNoteOnEntity#executeInternal",
+    "net.atmp.CucaDiagram#leafs",
+    "net.sourceforge.plantuml.svek.GraphvizImageBuilder#buildImage",
+    "net.sourceforge.plantuml.svek.GraphvizImageBuilder#printEntities",
+    "net.sourceforge.plantuml.svek.Bibliotekon#createNode",
+    "net.sourceforge.plantuml.svek.Bibliotekon#allNodes",
+    "net.sourceforge.plantuml.svek.SvekResult#drawU"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/diagram/class.rs::ClassUidEvent",
+    "crates/rustuml-render/src/class.rs::svek_id_allocation",
+    "crates/rustuml-render/src/class.rs::render_svek_svg"
+  ],
+  "invariant": "PlantUML paints every SVEK leaf node in one insertion-ordered stream. CommandFactoryNoteOnEntity creates its generated NOTE as a real namespace leaf. CucaDiagram.leafs preserves namespace quark order, GraphvizImageBuilder creates SvekNodes in that order, Bibliotekon stores them in a LinkedHashMap, and SvekResult.drawU iterates Bibliotekon.allNodes without regrouping by leaf kind. Attached notes, floating notes, classes, and relationship-created entities therefore appear in SVG document order according to node construction order.",
+  "causal_divergence": "Rust already reconstructs the shared constructor sequence and assigns the same ent IDs as Java, but render_svek_svg emits ordinary entities first and postpones every attached note until after the entity loop. Floating notes alone are merged into entity output by ent ID. Consequently diagrams that interleave attached notes and later-created entities have correct geometry and IDs but a different SVG element order, causing a structural mismatch.",
+  "planned_change": "Build one no-oracle pending-note emission stream ordered by the already-derived SVEK entity IDs. Before painting each ordinary entity, emit every floating or attached note whose entity ID precedes it; flush the remainder afterward. Reuse the existing attached-note geometry and renderer without changing layout, UID allocation, or note coordinates. Preserve the oracle-assisted path unchanged.",
+  "perturbation_axes": [
+    "attached notes before, between, and after ordinary declarations",
+    "relationship-created endpoints interleaved with attached notes",
+    "floating and attached notes mixed in both orders",
+    "left, right, top, and bottom note positions",
+    "renamed labels and reordered declarations",
+    "top-to-bottom and left-to-right layout"
+  ],
+  "status": "proposed"
+}
