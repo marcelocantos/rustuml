@@ -406,6 +406,12 @@ pub struct Package {
     pub kind: PackageKind,
     /// Optional background color (CSS name or hex without leading `#`).
     pub color: Option<String>,
+    /// Resolved package URL from the declaration's `[[...]]` modifier.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
+    /// Optional brace tooltip from the package URL modifier.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub url_tooltip: Option<String>,
     pub entities: Vec<String>,
     /// Parent package index, when this package was declared inside another
     /// package/namespace block.

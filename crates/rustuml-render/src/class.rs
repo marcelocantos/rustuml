@@ -132,6 +132,8 @@ const STEREOTYPE_FONT_SIZE: f64 = 12.0;
 const LOLLIPOP_LABEL_BASELINE_FROM_CENTER: f64 = 18.5352;
 /// PlantUML draws class lollipop endpoints as a 5px ellipse with 1.5px stroke.
 const LOLLIPOP_ENDPOINT_STYLE: &str = "stroke:#181818;stroke-width:1.5;";
+/// `SkinParam#getSvgLinkTarget` uses `_top` when no target was configured.
+const DEFAULT_SVG_LINK_TARGET: &str = "_top";
 
 // Generic type-parameter box (`class Foo<T>`): a small dashed rectangle at the
 // entity's top-right corner. 12px italic text, 1px pad each side, overhanging
@@ -1602,6 +1604,34 @@ fn escape_xml(s: &str) -> String {
         .replace('\u{00bb}', "&#187;")
 }
 
+fn effective_svg_link_target(theme: &Theme) -> &str {
+    if theme.global.svg_link_target.is_empty() {
+        DEFAULT_SVG_LINK_TARGET
+    } else {
+        &theme.global.svg_link_target
+    }
+}
+
+fn emit_package_link_open(
+    svg: &mut String,
+    href: Option<&str>,
+    tooltip: Option<&str>,
+    target: &str,
+) -> bool {
+    let Some(href) = href else {
+        return false;
+    };
+    let escaped_href = escape_xml(href);
+    let escaped_title = escape_xml(tooltip.unwrap_or(href));
+    let escaped_target = escape_xml(target);
+    write!(
+        svg,
+        r#"<a href="{escaped_href}" target="{escaped_target}" title="{escaped_title}" xlink:actuate="onRequest" xlink:href="{escaped_href}" xlink:show="new" xlink:title="{escaped_title}" xlink:type="simple">"#,
+    )
+    .unwrap();
+    true
+}
+
 /// Parse the numeric suffix of a PlantUML entity id (`ent0007` → 7). Used to
 /// interleave note entities with regular entities by their shared emission
 /// counter. Ids that are absent or unparseable sort last.
@@ -2162,6 +2192,7 @@ fn render_with_oracle_uid_origin(
             &hidden,
             uid_origin,
             cs,
+            effective_svg_link_target(theme),
         );
     }
 
@@ -2575,6 +2606,7 @@ fn render_with_oracle_uid_origin(
         &hidden,
         uid_origin,
         cs,
+        effective_svg_link_target(theme),
     )
 }
 
@@ -4604,6 +4636,7 @@ fn render_plantuml_svg(
     hidden_entities: &std::collections::HashSet<usize>,
     uid_origin: &ClassDiagram,
     cs: &crate::style::ClassStyle,
+    svg_link_target: &str,
 ) -> String {
     if positions.len() < diagram.entities.len() {
         return render_grid_fallback(diagram, cs);
@@ -5216,7 +5249,7 @@ fn render_plantuml_svg(
         let entity_id = svek_ids.package_ids[cluster.package_idx]
             .as_deref()
             .unwrap_or("ent0002");
-        emit_layout_package_cluster(&mut svg, cluster, entity_id);
+        emit_layout_package_cluster(&mut svg, cluster, entity_id, svg_link_target);
     }
     if let Some(oracle) = oracle {
         for cluster in &oracle.loose_clusters {
@@ -5308,7 +5341,7 @@ fn render_plantuml_svg(
                         let entity_id = svek_ids.package_ids[package_idx]
                             .as_deref()
                             .unwrap_or("ent0002");
-                        emit_layout_empty_package(&mut svg, empty, entity_id);
+                        emit_layout_empty_package(&mut svg, empty, entity_id, svg_link_target);
                     }
                 }
             }
@@ -5545,7 +5578,7 @@ fn render_plantuml_svg(
                     let entity_id = svek_ids.package_ids[package_idx]
                         .as_deref()
                         .unwrap_or("ent0002");
-                    emit_layout_empty_package(&mut svg, empty, entity_id);
+                    emit_layout_empty_package(&mut svg, empty, entity_id, svg_link_target);
                 }
             }
         }
@@ -5662,6 +5695,8 @@ struct LayoutPackageCluster {
     stroke_width: String,
     filter_attr: String,
     font_fill: String,
+    url: Option<String>,
+    url_tooltip: Option<String>,
     x: f64,
     y: f64,
     width: f64,
@@ -5748,6 +5783,8 @@ fn layout_package_clusters(
                 stroke_width,
                 filter_attr: filter_attr.clone(),
                 font_fill,
+                url: pkg.url.clone(),
+                url_tooltip: pkg.url_tooltip.clone(),
                 x,
                 y,
                 // Java translates `RectangleArea` min and max independently,
@@ -5790,6 +5827,8 @@ struct EmptyPackageLayout {
     fill: String,
     stroke: String,
     font_fill: String,
+    url: Option<String>,
+    url_tooltip: Option<String>,
     x: f64,
     y: f64,
     width: f64,
@@ -5843,6 +5882,8 @@ fn layout_empty_packages(
                 fill,
                 stroke,
                 font_fill,
+                url: package.url.clone(),
+                url_tooltip: package.url_tooltip.clone(),
                 x: pos.x + MARGIN + layout_x_bias + body_dx,
                 y: pos.y + MARGIN + body_dy,
                 width,
@@ -5852,7 +5893,12 @@ fn layout_empty_packages(
         .collect()
 }
 
-fn emit_layout_empty_package(svg: &mut String, package: &EmptyPackageLayout, entity_id: &str) {
+fn emit_layout_empty_package(
+    svg: &mut String,
+    package: &EmptyPackageLayout,
+    entity_id: &str,
+    svg_link_target: &str,
+) {
     if let Some(kind) = package.symbol_kind {
         if package.wrapped_entity {
             write!(svg, "<!--entity {}-->", escape_xml(&package.qualified_name)).unwrap();
@@ -5865,6 +5911,12 @@ fn emit_layout_empty_package(svg: &mut String, package: &EmptyPackageLayout, ent
             )
             .unwrap();
         }
+        let linked = emit_package_link_open(
+            svg,
+            package.url.as_deref(),
+            package.url_tooltip.as_deref(),
+            svg_link_target,
+        );
         match kind {
             PackageKind::Folder => emit_layout_empty_symbol_folder(svg, package),
             PackageKind::Frame => emit_layout_empty_symbol_frame(svg, package),
@@ -5875,6 +5927,9 @@ fn emit_layout_empty_package(svg: &mut String, package: &EmptyPackageLayout, ent
             PackageKind::Package | PackageKind::Namespace => {
                 unreachable!("ordinary package kinds do not retain an explicit USymbol")
             }
+        }
+        if linked {
+            svg.push_str("</a>");
         }
         if package.wrapped_entity {
             svg.push_str("</g>");
@@ -5891,6 +5946,12 @@ fn emit_layout_empty_package(svg: &mut String, package: &EmptyPackageLayout, ent
     let tab_join = x + title_w - PACKAGE_ROUND_CORNER / 2.0;
     let tab_right = x + tab_w;
     let line_y = y + PACKAGE_TAB_H;
+    let linked = emit_package_link_open(
+        svg,
+        package.url.as_deref(),
+        package.url_tooltip.as_deref(),
+        svg_link_target,
+    );
     write!(
         svg,
         r#"<path d="M{},{} L{},{} A3.75,3.75 0 0 1 {},{} L{},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{}" fill="{}" style="stroke:{};stroke-width:{};"/>"#,
@@ -5967,6 +6028,9 @@ fn emit_layout_empty_package(svg: &mut String, package: &EmptyPackageLayout, ent
                 skip_underline: false,
             },
         );
+    }
+    if linked {
+        svg.push_str("</a>");
     }
 }
 
@@ -6253,7 +6317,12 @@ fn emit_layout_empty_symbol_cloud(svg: &mut String, package: &EmptyPackageLayout
     emit_layout_empty_symbol_text(svg, package, package.x + 15.0, package.y + 15.0);
 }
 
-fn emit_layout_package_cluster(svg: &mut String, cluster: &LayoutPackageCluster, entity_id: &str) {
+fn emit_layout_package_cluster(
+    svg: &mut String,
+    cluster: &LayoutPackageCluster,
+    entity_id: &str,
+    svg_link_target: &str,
+) {
     let label_w = text_render::measure_no_underline(&cluster.label, FONT_SIZE, true);
     let title_w = label_w + 2.0 * PACKAGE_TITLE_MARGIN_X;
     let tab_w = (title_w + PACKAGE_TAB_SLOPE_WIDTH).min(cluster.width.max(0.0));
@@ -6280,6 +6349,12 @@ fn emit_layout_package_cluster(svg: &mut String, cluster: &LayoutPackageCluster,
         entity_id,
     )
     .unwrap();
+    let linked = emit_package_link_open(
+        svg,
+        cluster.url.as_deref(),
+        cluster.url_tooltip.as_deref(),
+        svg_link_target,
+    );
     match cluster.kind {
         PackageKind::Database => emit_layout_database_cluster(svg, cluster),
         PackageKind::Frame => emit_layout_frame_cluster(svg, cluster),
@@ -6372,6 +6447,9 @@ fn emit_layout_package_cluster(svg: &mut String, cluster: &LayoutPackageCluster,
                 svg.push_str(&text);
             }
         }
+    }
+    if linked {
+        svg.push_str("</a>");
     }
     svg.push_str("</g>");
 }
@@ -15257,6 +15335,107 @@ mod tests {
         assert!(svg.contains(">Root Empty Leaf</text>"), "{svg}");
         assert!(svg.contains(">Painted Empty Leaf</text>"), "{svg}");
         assert!(svg.contains("«Archive»"), "{svg}");
+    }
+
+    fn render_package_link_case(input: &str, target: &str) -> String {
+        let lines = input.lines().map(str::to_string).collect::<Vec<_>>();
+        let diagram = rustuml_parser::parse::class::parse_class(&lines).unwrap();
+        let mut theme = Theme::default();
+        theme.global.svg_link_target = target.to_string();
+        render(&diagram, &theme)
+    }
+
+    fn remove_single_anchor(svg: &str) -> String {
+        let start = svg.find("<a ").expect("linked SVG must contain an anchor");
+        let open_end = svg[start..].find('>').unwrap() + start + 1;
+        let close = svg[open_end..].find("</a>").unwrap() + open_end;
+        format!(
+            "{}{}{}",
+            &svg[..start],
+            &svg[open_end..close],
+            &svg[close + 4..]
+        )
+    }
+
+    #[test]
+    fn package_link_anchors_escape_attributes_and_respect_role_boundaries() {
+        let href = "https://example.com/docs?a=1&b=2";
+        let anchor = r#"<a href="https://example.com/docs?a=1&amp;b=2" target="_blank" title="Docs &amp; support" xlink:actuate="onRequest" xlink:href="https://example.com/docs?a=1&amp;b=2" xlink:show="new" xlink:title="Docs &amp; support" xlink:type="simple">"#;
+
+        let cluster = render_package_link_case(
+            &format!(
+                "package LinkedCluster [[{href}{{Docs & support}}]] {{\n\
+                 package Nested {{\n\
+                 class Child\n\
+                 }}\n\
+                 }}"
+            ),
+            "_blank",
+        );
+        let cluster_start = cluster.find("<!--cluster LinkedCluster-->").unwrap();
+        let nested_start = cluster.find("<!--cluster LinkedCluster.Nested-->").unwrap();
+        let child_start = cluster.find("<!--class Child-->").unwrap();
+        let cluster_decoration = &cluster[cluster_start..nested_start];
+        assert!(
+            cluster_decoration.contains(&format!(
+                r#"<g class="cluster" data-qualified-name="LinkedCluster" data-source-line="1" id="ent0002">{anchor}"#
+            )),
+            "{cluster_decoration}"
+        );
+        assert!(
+            cluster_decoration.ends_with("</a></g>"),
+            "{cluster_decoration}"
+        );
+        assert!(
+            !cluster[nested_start..child_start].contains("<a "),
+            "{cluster}"
+        );
+        assert!(!cluster[child_start..].contains("<a "), "{cluster}");
+
+        let ordinary = render_package_link_case(
+            &format!("package EmptyOrdinary [[{href}{{Docs & support}}]] {{\n}}"),
+            "_blank",
+        );
+        assert!(ordinary.contains(&format!("{anchor}<path ")), "{ordinary}");
+        assert!(ordinary.contains("</text></a>"), "{ordinary}");
+        assert!(!ordinary.contains(r#"<g class="entity""#), "{ordinary}");
+
+        for declaration in [
+            format!("node ExplicitSymbol [[{href}{{Docs & support}}]] {{\n}}"),
+            format!("package AutomaticSymbol <<node>> [[{href}{{Docs & support}}]] {{\n}}"),
+        ] {
+            let symbol = render_package_link_case(&declaration, "_blank");
+            let entity_group = symbol.find(r#"<g class="entity""#).unwrap();
+            let anchor_start = symbol.find(anchor).unwrap();
+            assert!(entity_group < anchor_start, "{symbol}");
+            assert!(symbol[anchor_start..].contains("<polygon "), "{symbol}");
+            assert!(symbol.contains("</text></a></g>"), "{symbol}");
+        }
+    }
+
+    #[test]
+    fn package_urls_do_not_change_dimensions_or_geometry() {
+        for declaration in [
+            "package StableGeometry {\nclass Child\n}",
+            "package StableGeometry {\n}",
+            "node StableGeometry {\n}",
+            "package StableGeometry <<node>> {\n}",
+        ] {
+            let linked = declaration.replacen(" {", " [[https://example.com/geometry]] {", 1);
+            let plain_svg = render_package_link_case(declaration, "");
+            let linked_svg = render_package_link_case(&linked, "");
+            assert!(
+                linked_svg.contains(
+                    r#"<a href="https://example.com/geometry" target="_top" title="https://example.com/geometry""#
+                ),
+                "{linked_svg}"
+            );
+            assert_eq!(
+                remove_single_anchor(&linked_svg),
+                plain_svg,
+                "{declaration}"
+            );
+        }
     }
 
     #[test]

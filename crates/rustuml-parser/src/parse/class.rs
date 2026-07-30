@@ -402,6 +402,8 @@ impl ClassParser {
                 name,
                 kind: PackageKind::Package,
                 color: None,
+                url: None,
+                url_tooltip: None,
                 entities: Vec::new(),
                 parent,
                 source_line: self.current_line,
@@ -1269,7 +1271,7 @@ impl ClassParser {
         });
         static MODIFIERS_RE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
-                r#"^\s*(?:\$[^\s{}"<>$]+(?:\s+\$[^\s{}"<>$]+)*)?\s*(?:<<\s*([^>]+?)\s*>>)?\s*(?:\$[^\s{}"<>$]+(?:\s+\$[^\s{}"<>$]+)*)?\s*(?:\[\[.*?\]\])?\s*(?:#([^\s{]+))?\s*$"#,
+                r#"^\s*(?:\$[^\s{}"<>$]+(?:\s+\$[^\s{}"<>$]+)*)?\s*(?:<<\s*([^>]+?)\s*>>)?\s*(?:\$[^\s{}"<>$]+(?:\s+\$[^\s{}"<>$]+)*)?\s*(\[\[.*?\]\])?\s*(?:#([^\s{]+))?\s*$"#,
             )
             .unwrap()
         });
@@ -1310,7 +1312,23 @@ impl ClassParser {
                         .unwrap_or_default();
                     (code.clone(), code, false, None)
                 };
-            let color = modifiers.get(2).map(|m| m.as_str().to_string());
+            let (url, url_tooltip) = if let Some(link) = modifiers.get(2) {
+                let Some((href, tooltip)) = parse_package_link(
+                    link.as_str(),
+                    self.meta
+                        .skinparams
+                        .iter()
+                        .rev()
+                        .find(|param| param.key.eq_ignore_ascii_case("topurl"))
+                        .map(|param| param.value.as_str()),
+                ) else {
+                    return false;
+                };
+                (Some(href), tooltip)
+            } else {
+                (None, None)
+            };
+            let color = modifiers.get(3).map(|m| m.as_str().to_string());
             let stereotypes = identity_stereotype
                 .or_else(|| modifiers.get(1))
                 .map(|m| vec![m.as_str().trim().to_string()])
@@ -1352,6 +1370,10 @@ impl ClassParser {
                         let package = &mut self.packages[idx];
                         package.kind = kind;
                         package.color = color.clone();
+                        if url.is_some() {
+                            package.url = url.clone();
+                            package.url_tooltip = url_tooltip.clone();
+                        }
                         package.stereotypes = stereotypes.clone();
                         if package.source_line == 0 {
                             package.source_line = self.current_line;
@@ -1377,6 +1399,8 @@ impl ClassParser {
                         name,
                         kind: if is_final { kind } else { PackageKind::Package },
                         color: if is_final { color.clone() } else { None },
+                        url: if is_final { url.clone() } else { None },
+                        url_tooltip: if is_final { url_tooltip.clone() } else { None },
                         entities: Vec::new(),
                         parent,
                         // `CucaDiagram#eventuallyBuildPhantomGroups` gives
@@ -2395,6 +2419,88 @@ fn normalize_inline_stereotypes(s: &str) -> String {
     text
 }
 
+/// Parse the package command's URL slot with `UrlBuilder`'s STRICT grammar.
+///
+/// Java provenance: `UrlBuilder#getUrl` accepts quoted and unquoted hrefs,
+/// optional brace tooltips, and optional labels. `UrlBuilder#withTopUrl`
+/// prefixes every non-http(s)/file href with the active `topurl`.
+fn parse_package_link(raw: &str, topurl: Option<&str>) -> Option<(String, Option<String>)> {
+    let inner = raw.strip_prefix("[[")?.strip_suffix("]]")?.trim();
+    if inner.is_empty() || inner.contains(|ch| matches!(ch, '[' | ']')) {
+        return None;
+    }
+
+    let (href, mut rest, has_href) = if let Some(quoted) = inner.strip_prefix('"') {
+        let quote_end = quoted.find('"')?;
+        if quote_end == 0 {
+            return None;
+        }
+        (
+            quoted[..quote_end].to_string(),
+            &quoted[quote_end + 1..],
+            true,
+        )
+    } else if inner.starts_with('{') {
+        (String::new(), inner, false)
+    } else {
+        let href_end = inner
+            .find(|ch: char| ch.is_whitespace() || ch == '{')
+            .unwrap_or(inner.len());
+        if href_end == 0 {
+            return None;
+        }
+        let (href, remaining) = super::extract_link_url(raw);
+        if !remaining.is_empty() {
+            return None;
+        }
+        (href?, &inner[href_end..], true)
+    };
+
+    let leading_separator = rest.chars().next().is_some_and(char::is_whitespace);
+    rest = rest.trim_start();
+    let tooltip = if let Some(after_open) = rest.strip_prefix('{') {
+        let close = after_open.find('}')?;
+        let value = &after_open[..close];
+        if value.contains('{') {
+            return None;
+        }
+        rest = &after_open[close + 1..];
+        if value.is_empty() {
+            Some(String::new())
+        } else {
+            super::extract_link_tooltip(raw)
+        }
+    } else {
+        None
+    };
+
+    let had_label_separator = if tooltip.is_some() && !has_href {
+        true
+    } else if tooltip.is_some() {
+        rest.chars().next().is_some_and(char::is_whitespace)
+    } else {
+        leading_separator
+    };
+    rest = rest.trim_start();
+    if !rest.is_empty()
+        && (!had_label_separator || rest.contains(|ch| matches!(ch, '{' | '}' | '[' | ']')))
+    {
+        return None;
+    }
+
+    let href = if has_href
+        && !href.starts_with("http:")
+        && !href.starts_with("https:")
+        && !href.starts_with("file:")
+        && let Some(topurl) = topurl
+    {
+        format!("{topurl}{href}")
+    } else {
+        href
+    };
+    Some((href, tooltip))
+}
+
 fn text_outside_double_quotes(s: &str) -> String {
     let mut out = String::with_capacity(s.len());
     let mut in_quote = false;
@@ -3217,6 +3323,66 @@ mod tests {
         assert_eq!(d.packages[1].name, "CloudCode");
         assert_eq!(d.packages[1].stereotypes, ["Platform"]);
         assert_eq!(d.packages[1].color.as_deref(), Some("aliceblue"));
+    }
+
+    #[test]
+    fn package_urls_retain_structured_metadata_on_creation_and_promotion() {
+        let d = parse(
+            "skinparam topurl https://docs.example/\n\
+             class Promoted.Live\n\
+             package Promoted $before <<Application>> $after \
+             [[guide{Guide & docs} ignored-label]] #LightBlue {\n\
+             }\n\
+             package \"Absolute Display\" as Absolute \
+             [[https://example.com/api optional-label]] {\n\
+             }\n\
+             package Promoted {\n\
+             }",
+        );
+
+        let promoted = d
+            .packages
+            .iter()
+            .find(|package| package.name == "Promoted")
+            .unwrap();
+        assert_eq!(promoted.url.as_deref(), Some("https://docs.example/guide"));
+        assert_eq!(promoted.url_tooltip.as_deref(), Some("Guide & docs"));
+        assert!(!promoted.phantom);
+
+        let absolute = d
+            .packages
+            .iter()
+            .find(|package| package.name == "Absolute")
+            .unwrap();
+        assert_eq!(absolute.url.as_deref(), Some("https://example.com/api"));
+        assert_eq!(absolute.url_tooltip, None);
+        assert_eq!(absolute.display_name.as_deref(), Some("Absolute Display"));
+    }
+
+    #[test]
+    fn package_link_parser_matches_strict_urlbuilder_forms() {
+        assert_eq!(
+            parse_package_link(
+                r#"[[ "guide path" {Quoted docs} label ]]"#,
+                Some("https://docs.example/")
+            ),
+            Some((
+                "https://docs.example/guide path".to_string(),
+                Some("Quoted docs".to_string())
+            ))
+        );
+        assert_eq!(
+            parse_package_link("[[{Tooltip only}label]]", Some("https://docs.example/")),
+            Some(("".to_string(), Some("Tooltip only".to_string())))
+        );
+        assert_eq!(
+            parse_package_link("[[file:guide.txt]]", Some("https://docs.example/")),
+            Some(("file:guide.txt".to_string(), None))
+        );
+        assert_eq!(
+            parse_package_link("[[https://example.com{broken]]", None),
+            None
+        );
     }
 
     #[test]
