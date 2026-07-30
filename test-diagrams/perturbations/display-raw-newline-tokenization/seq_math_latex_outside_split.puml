@@ -1,0 +1,5 @@
+@startuml
+participant "Math Source" as Source
+participant "Math Sink" as Sink
+Source -> Sink : <math>x\ne y</math>\n<latex>p\neq q</latex>\nplain second row
+@enduml

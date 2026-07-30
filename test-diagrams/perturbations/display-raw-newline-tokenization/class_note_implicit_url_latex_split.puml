@@ -1,0 +1,6 @@
+@startuml
+class "Checker Record" as Record {
+  field
+}
+note right of Record : [[https://example.com/checker/class-note\npath note label]]\n<latex>a\neq b</latex>\noutside note row
+@enduml

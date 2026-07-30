@@ -1,0 +1,5 @@
+@startuml
+participant "Math Control Source" as Source
+participant "Math Control Sink" as Sink
+Source -> Sink : <math>x+y</math>\n<latex>p+q</latex>\nplain second row
+@enduml

@@ -1,0 +1,6 @@
+@startuml
+class "Checker Ledger" as Ledger {
+  entry
+}
+note right of Ledger : pre [[https://example.com/checker/note\npath note label]] tail\noutside note row
+@enduml

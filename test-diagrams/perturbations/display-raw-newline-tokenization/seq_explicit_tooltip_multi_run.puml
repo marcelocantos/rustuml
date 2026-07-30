@@ -1,0 +1,5 @@
+@startuml
+participant "Checker Caller" as Caller
+participant "Checker Callee" as Callee
+Caller -> Callee : lead [[https://example.com/checker/explicit{Docs line\ncontinued} visible docs]] bridge [[https://example.com/checker/second second label]] trail
+@enduml

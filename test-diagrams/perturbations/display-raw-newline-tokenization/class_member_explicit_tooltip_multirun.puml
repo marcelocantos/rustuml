@@ -1,0 +1,5 @@
+@startuml
+class "Checker Service" as Service {
+  [[https://example.com/checker/member{Member tip\ncontinued} first label]] plain [[https://example.com/checker/member-two second label]]
+}
+@enduml

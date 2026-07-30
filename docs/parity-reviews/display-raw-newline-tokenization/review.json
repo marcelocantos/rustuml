@@ -1,0 +1,196 @@
+{
+  "schema_version": 1,
+  "mechanism": "display-raw-newline-tokenization",
+  "review_date": "2026-07-30",
+  "checker": {
+    "identity": "Codex desktop independent adversarial checker",
+    "model": "GPT-5 Codex",
+    "role": "Checker did not implement the mechanism and did not edit shipping code or account"
+  },
+  "verdict": "ACCEPT",
+  "verdict_basis": "I tried to break the claimed raw-mode invariant with fresh held-out sequence, class-member, and class-note inputs covering implicit and explicit URLs, escaped-newline bytes inside and outside raw URL blocks, and multiple linked and unlinked runs. Every clean in-scope URL tokenization probe passed at Rust revision b9b5e3805458481c8e595247a18229c511aa52c3. The remaining failures sit on separate math or mixed note-layout surfaces and are reproducible without any raw escaped newline inside the raw block, so they do not reject this mechanism.",
+  "revisions": {
+    "rust_revision": "b9b5e3805458481c8e595247a18229c511aa52c3",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "account_sha256": "989913663be8a9b2f432fc4ed07641acfc946dd8cf15a200e94d21f0250d4eb3",
+    "diff_one": {
+      "path": "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one",
+      "requested_sha256": "a6b9987075ad50edbda5e889dff354ba18f3328f57020e1857af796d5900ac56",
+      "observed_sha256": "a6b9987075ad50edbda5e889dff354ba18f3328f57020e1857af796d5900ac56"
+    }
+  },
+  "source_audit": {
+    "java": [
+      "Display.getWithNewlines enters raw mode for `[[`, `<math>`, and `<latex>`, and only treats `\\n` as a row break while rawMode is false.",
+      "CommandCreoleUrl and UrlBuilder consume the whole raw `[[...]]` token before ordinary Creole text parsing, preserving literal backslash-n bytes in href and tooltip fields."
+    ],
+    "rust": [
+      "crates/rustuml-parser/src/display.rs ports the Java raw-mode scanner as split_escaped_newlines and toggles raw mode on the same `[[`, `<math>`, `<latex>`, `]]`, `</math>`, and `</latex>` boundaries.",
+      "crates/rustuml-render/src/sequence.rs uses split_escaped_newlines for message-label measurement and emission, and crates/rustuml-parser/src/parse/class.rs plus crates/rustuml-render/src/class.rs use it for class notes and member display lines.",
+      "The sequence renderer only special-cases whole-line `<latex>...</latex>` via latex_label_content and has no `<math>` equivalent. That explains the math-control failures without appealing to the newline splitter."
+    ]
+  },
+  "commands": [
+    "git worktree add /private/tmp/rustuml-checker-display-raw b9b5e3805458481c8e595247a18229c511aa52c3",
+    "shasum -a 256 /tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one",
+    "shasum -a 256 /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar docs/parity-reviews/display-raw-newline-tokenization/account.json",
+    "sed -n '240,340p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/creole/Display.java",
+    "sed -n '70,150p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/url/UrlBuilder.java",
+    "sed -n '1,140p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/creole/command/CommandCreoleUrl.java",
+    "sed -n '1,260p' crates/rustuml-parser/src/display.rs",
+    "rg -n \"split_escaped_newlines|latex_label_content|<math>|<latex>\" crates/rustuml-render/src/sequence.rs crates/rustuml-render/src/class.rs crates/rustuml-render/src/text_render.rs crates/rustuml-render/src/creole.rs crates/rustuml-parser/src/parse/class.rs",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/display-raw-newline-tokenization/*.puml",
+    "xmllint --noout test-diagrams/perturbations/display-raw-newline-tokenization/*.svg",
+    "ruby -rdigest -e 'verify each fresh .puml hash is unique against the repository corpus'",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/display-raw-newline-tokenization/<stem>.puml",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/display-raw-newline-tokenization/<stem>.puml"
+  ],
+  "constraints_observed": [
+    "No cargo command was run.",
+    "No rustc command was run.",
+    "No shipping Rust source was edited.",
+    "The account file was only read, not modified.",
+    "All fresh evidence was written under test-diagrams/perturbations/display-raw-newline-tokenization/ in the isolated checker worktree."
+  ],
+  "inputs": [
+    {
+      "stem": "seq_implicit_url_outside_split_multirun",
+      "family": "sequence",
+      "axes": [
+        "implicit URL tooltip",
+        "escaped newline inside URL raw block",
+        "escaped newline outside raw block",
+        "linked plus unlinked text"
+      ],
+      "oracle_svg": "test-diagrams/perturbations/display-raw-newline-tokenization/seq_implicit_url_outside_split_multirun.svg",
+      "rust_svg": "test-diagrams/perturbations/display-raw-newline-tokenization/seq_implicit_url_outside_split_multirun.rust.svg",
+      "diff_one": "pass",
+      "finding": "Java and Rust both keep `https://example.com/checker/implicit\\npath` in href, normalize only title to an XML newline, and split only the outside row control."
+    },
+    {
+      "stem": "seq_explicit_tooltip_multi_run",
+      "family": "sequence",
+      "axes": [
+        "explicit brace tooltip",
+        "tooltip literal backslash-n",
+        "multiple linked and unlinked runs"
+      ],
+      "oracle_svg": "test-diagrams/perturbations/display-raw-newline-tokenization/seq_explicit_tooltip_multi_run.svg",
+      "rust_svg": "test-diagrams/perturbations/display-raw-newline-tokenization/seq_explicit_tooltip_multi_run.rust.svg",
+      "diff_one": "pass",
+      "finding": "The full explicit tooltip token survives intact and the second link remains independent of the first."
+    },
+    {
+      "stem": "class_note_implicit_url_outside_split",
+      "family": "class note",
+      "axes": [
+        "class note parser path",
+        "implicit URL tooltip",
+        "escaped newline inside URL raw block",
+        "escaped newline outside raw block"
+      ],
+      "oracle_svg": "test-diagrams/perturbations/display-raw-newline-tokenization/class_note_implicit_url_outside_split.svg",
+      "rust_svg": "test-diagrams/perturbations/display-raw-newline-tokenization/class_note_implicit_url_outside_split.rust.svg",
+      "diff_one": "pass",
+      "finding": "The single-line note path named in the account now preserves the raw URL token and still emits the outside note row split."
+    },
+    {
+      "stem": "class_member_implicit_url_outside_split",
+      "family": "class member",
+      "axes": [
+        "class member renderer path",
+        "implicit URL tooltip",
+        "escaped newline inside URL raw block",
+        "escaped newline outside raw block"
+      ],
+      "oracle_svg": "test-diagrams/perturbations/display-raw-newline-tokenization/class_member_implicit_url_outside_split.svg",
+      "rust_svg": "test-diagrams/perturbations/display-raw-newline-tokenization/class_member_implicit_url_outside_split.rust.svg",
+      "diff_one": "pass",
+      "finding": "The member-display line splitter no longer truncates the raw link token before Creole parsing."
+    },
+    {
+      "stem": "class_member_explicit_tooltip_multirun",
+      "family": "class member",
+      "axes": [
+        "explicit tooltip",
+        "tooltip literal backslash-n",
+        "multiple linked and unlinked runs"
+      ],
+      "oracle_svg": "test-diagrams/perturbations/display-raw-newline-tokenization/class_member_explicit_tooltip_multirun.svg",
+      "rust_svg": "test-diagrams/perturbations/display-raw-newline-tokenization/class_member_explicit_tooltip_multirun.rust.svg",
+      "diff_one": "pass",
+      "finding": "The explicit class-member tooltip survives intact and neighboring unlinked runs remain outside the anchor."
+    },
+    {
+      "stem": "seq_math_latex_outside_split",
+      "family": "sequence math and LaTeX control surface",
+      "axes": [
+        "math raw block",
+        "LaTeX raw block",
+        "escaped newline inside raw block as part of `\\ne` and `\\neq`",
+        "escaped newline outside raw block"
+      ],
+      "oracle_svg": "test-diagrams/perturbations/display-raw-newline-tokenization/seq_math_latex_outside_split.svg",
+      "rust_svg": "test-diagrams/perturbations/display-raw-newline-tokenization/seq_math_latex_outside_split.rust.svg",
+      "diff_one": "fail",
+      "finding": "Rust emits the `<math>...</math>` row as literal text while still preserving the LaTeX row. This is not diagnostic of the newline splitter because the same surface fails without any raw `\\n` inside the raw blocks."
+    },
+    {
+      "stem": "seq_math_latex_control_no_raw_escape",
+      "family": "sequence math and LaTeX control surface",
+      "axes": [
+        "math raw block",
+        "LaTeX raw block",
+        "no escaped newline inside raw block",
+        "escaped newline outside raw block"
+      ],
+      "oracle_svg": "test-diagrams/perturbations/display-raw-newline-tokenization/seq_math_latex_control_no_raw_escape.svg",
+      "rust_svg": "test-diagrams/perturbations/display-raw-newline-tokenization/seq_math_latex_control_no_raw_escape.rust.svg",
+      "diff_one": "fail",
+      "finding": "The same `<math>` row mismatch reproduces when the raw block contains no escaped newline at all, isolating it as a broader generic math-rendering gap rather than a regression in raw newline tokenization."
+    },
+    {
+      "stem": "class_note_implicit_url_latex_split",
+      "family": "class note mixed URL and LaTeX surface",
+      "axes": [
+        "class note parser path",
+        "implicit URL tooltip",
+        "LaTeX raw block",
+        "escaped newline inside URL raw block",
+        "escaped newline outside raw block"
+      ],
+      "oracle_svg": "test-diagrams/perturbations/display-raw-newline-tokenization/class_note_implicit_url_latex_split.svg",
+      "rust_svg": "test-diagrams/perturbations/display-raw-newline-tokenization/class_note_implicit_url_latex_split.rust.svg",
+      "diff_one": "fail",
+      "finding": "Both sides preserve the raw URL and render the LaTeX row, but the remaining mismatch is a small note-geometry drift rather than a truncated token or misplaced row split."
+    }
+  ],
+  "findings": [
+    {
+      "severity": "high",
+      "kind": "adversarial_result",
+      "claim_evaluated": "Escaped Display newline controls create rows only outside raw Creole URL blocks and raw URL bytes reach the URL parser intact in the sequence, class-member, and class-note paths named in the account.",
+      "evidence": "All five clean URL-focused held-out probes pass structurally: sequence implicit and explicit URLs, class-note implicit URL, and class-member implicit and explicit URLs."
+    },
+    {
+      "severity": "medium",
+      "kind": "out_of_scope_residue",
+      "claim_evaluated": "Every raw block failure observed here is due to newline tokenization.",
+      "evidence": "The sequence math control fails in the same way with and without a raw escaped newline inside the raw blocks, and source inspection shows sequence.rs recognizes whole-line `<latex>` but has no parallel `<math>` path. That surface is not evidence against the newline-tokenization mechanism."
+    },
+    {
+      "severity": "low",
+      "kind": "mixed_surface_residue",
+      "claim_evaluated": "The mixed class-note URL plus LaTeX failure is a tokenization rejection.",
+      "evidence": "The simpler class-note implicit URL probe passes exactly. In the mixed URL plus LaTeX probe, the URL anchor and LaTeX image are both present and the mismatch reduces to note geometry, so it does not disprove the raw-mode invariant under review."
+    }
+  ],
+  "residue": [
+    "The Java jar on this host emits Batik-related stack traces to stderr for math-capable cases while still writing well-formed SVGs. The review relies on the actual SVG artifacts, not the stderr noise.",
+    "I intentionally avoided direct entity-anchor cases because the request called out unrelated class direct-anchor nesting residue. Every decisive URL verdict here stays on the generic Creole label and note paths."
+  ],
+  "preserved_evidence_root": "test-diagrams/perturbations/display-raw-newline-tokenization",
+  "review_file": "docs/parity-reviews/display-raw-newline-tokenization/review.json"
+}

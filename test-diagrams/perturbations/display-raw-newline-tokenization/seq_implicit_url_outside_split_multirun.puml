@@ -1,0 +1,5 @@
+@startuml
+participant "Checker Client" as Client
+participant "Checker Server" as Server
+Client -> Server : pre [[https://example.com/checker/implicit\npath implicit label]] mid plain tail\noutside split row
+@enduml

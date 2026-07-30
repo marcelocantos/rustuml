@@ -1,0 +1,48 @@
+SVG structural differences:
+  [0] <svg> attr mismatch:
+    expected: [("contentStyleType", "text/css"), ("data-diagram-type", "SEQUENCE"), ("height", "175px"), ("preserveAspectRatio", "none"), ("style", "width:236px;height:175px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 236 175"), ("width", "236px"), ("zoomAndPan", "magnify")]
+    actual:   [("contentStyleType", "text/css"), ("data-diagram-type", "SEQUENCE"), ("height", "164px"), ("preserveAspectRatio", "none"), ("style", "width:282px;height:164px;background:#FFFFFF;"), ("version", "1.1"), ("viewBox", "0 0 282 164"), ("width", "282px"), ("zoomAndPan", "magnify")]
+  [5] <rect> attr mismatch:
+    expected: [("fill", "#000000"), ("fill-opacity", "0.00000"), ("height", "101.3105"), ("width", "8"), ("x", "49.8359"), ("y", "36.4883")]
+    actual:   [("fill", "#000000"), ("fill-opacity", "0.00000"), ("height", "90.6211"), ("width", "8"), ("x", "49.8359"), ("y", "36.4883")]
+  [6] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;"), ("x1", "53"), ("x2", "53"), ("y1", "36.4883"), ("y2", "137.7988")]
+    actual:   [("style", "stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;"), ("x1", "53"), ("x2", "53"), ("y1", "36.4883"), ("y2", "127.1094")]
+  [9] <rect> attr mismatch:
+    expected: [("fill", "#000000"), ("fill-opacity", "0.00000"), ("height", "101.3105"), ("width", "8"), ("x", "181.0923"), ("y", "36.4883")]
+    actual:   [("fill", "#000000"), ("fill-opacity", "0.00000"), ("height", "90.6211"), ("width", "8"), ("x", "227.4873"), ("y", "36.4883")]
+  [10] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;"), ("x1", "184.791"), ("x2", "184.791"), ("y1", "36.4883"), ("y2", "137.7988")]
+    actual:   [("style", "stroke:#181818;stroke-width:0.5;stroke-dasharray:5,5;"), ("x1", "231.186"), ("x2", "231.186"), ("y1", "36.4883"), ("y2", "127.1094")]
+  [15] <rect> attr mismatch:
+    expected: [("fill", "#E2E2F0"), ("height", "30.4883"), ("rx", "2.5"), ("ry", "2.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "97.6719"), ("x", "5"), ("y", "136.7988")]
+    actual:   [("fill", "#E2E2F0"), ("height", "30.4883"), ("rx", "2.5"), ("ry", "2.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "97.6719"), ("x", "5"), ("y", "126.1094")]
+  [16] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "83.6719"), ("x", "12"), ("y", "157.334")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "83.6719"), ("x", "12"), ("y", "146.6445")]
+  [18] <rect> attr mismatch:
+    expected: [("fill", "#E2E2F0"), ("height", "30.4883"), ("rx", "2.5"), ("ry", "2.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "80.6025"), ("x", "144.791"), ("y", "5")]
+    actual:   [("fill", "#E2E2F0"), ("height", "30.4883"), ("rx", "2.5"), ("ry", "2.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "80.6025"), ("x", "191.186"), ("y", "5")]
+  [19] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "66.6025"), ("x", "151.791"), ("y", "25.5352")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "66.6025"), ("x", "198.186"), ("y", "25.5352")]
+  [21] <rect> attr mismatch:
+    expected: [("fill", "#E2E2F0"), ("height", "30.4883"), ("rx", "2.5"), ("ry", "2.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "80.6025"), ("x", "144.791"), ("y", "136.7988")]
+    actual:   [("fill", "#E2E2F0"), ("height", "30.4883"), ("rx", "2.5"), ("ry", "2.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "80.6025"), ("x", "191.186"), ("y", "126.1094")]
+  [22] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "66.6025"), ("x", "151.791"), ("y", "157.334")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "14"), ("lengthAdjust", "spacing"), ("textLength", "66.6025"), ("x", "198.186"), ("y", "146.6445")]
+  [24] <polygon> attr mismatch:
+    expected: [("fill", "#181818"), ("points", "173.0923,115.7988,183.0923,119.7988,173.0923,123.7988,177.0923,119.7988"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("fill", "#181818"), ("points", "219.4873,105.1094,229.4873,109.1094,219.4873,113.1094,223.4873,109.1094"), ("style", "stroke:#181818;stroke-width:1;")]
+  [25] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:1;"), ("x1", "53.8359"), ("x2", "179.0923"), ("y1", "119.7988"), ("y2", "119.7988")]
+    actual:   [("style", "stroke:#181818;stroke-width:1;"), ("x1", "53.8359"), ("x2", "225.4873"), ("y1", "109.1094"), ("y2", "109.1094")]
+  [26] tag mismatch: expected <image>, got <text>
+  [27] <image> attr mismatch:
+    expected: [("height", "27"), ("href", "data:image/svg+xml;base64,PHN2ZyBoZWlnaHQ9IjI3IiB3aWR0aD0iNzAiIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciID48P3BsYW50dW1sIDEuMjAyNi4zYmV0YTY/PjxkZWZzLz48Zz48cmVjdCBmaWxsPSIjRkZGRkZGIiBzdHlsZT0id2lkdGg6NzBweDtoZWlnaHQ6MjdweDtiYWNrZ3JvdW5kOiNGRkZGRkY7IiB3aWR0aD0iNzAiIGhlaWdodD0iMjciLz4gPHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9Im1vbm9zcGFjZSIgZm9udC1zaXplPSIxNCIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSI1OS4wMDEiIHg9IjUiIHk9IjE3Ljk5NTEiPnBcbmVxJiMxNjA7cTwvdGV4dD48L2c+PC9zdmc+"), ("width", "70"), ("x", "60.8359"), ("y", "76.4883")]
+    actual:   [("height", "27"), ("href", "data:image/svg+xml;base64,PHN2ZyBoZWlnaHQ9IjI3IiB3aWR0aD0iNzAiIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciID48P3BsYW50dW1sIDEuMjAyNi4zYmV0YTY/PjxkZWZzLz48Zz48cmVjdCBmaWxsPSIjRkZGRkZGIiBzdHlsZT0id2lkdGg6NzBweDtoZWlnaHQ6MjdweDtiYWNrZ3JvdW5kOiNGRkZGRkY7IiB3aWR0aD0iNzAiIGhlaWdodD0iMjciLz4gPHRleHQgZmlsbD0iIzAwMDAwMCIgZm9udC1mYW1pbHk9Im1vbm9zcGFjZSIgZm9udC1zaXplPSIxNCIgbGVuZ3RoQWRqdXN0PSJzcGFjaW5nIiB0ZXh0TGVuZ3RoPSI1OS4wMDEiIHg9IjUiIHk9IjE3Ljk5NTEiPnBcbmVxJiMxNjA7cTwvdGV4dD48L2c+PC9zdmc+"), ("width", "70"), ("x", "60.8359"), ("y", "89.0566")]
+  [28] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "107.2563"), ("x", "60.8359"), ("y", "115.0566")]
+    actual:   [("fill", "#000000"), ("font-family", "sans-serif"), ("font-size", "13"), ("lengthAdjust", "spacing"), ("textLength", "107.2563"), ("x", "60.8359"), ("y", "116.0566")]
+

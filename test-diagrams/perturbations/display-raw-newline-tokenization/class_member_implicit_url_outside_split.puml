@@ -1,0 +1,5 @@
+@startuml
+class "Checker Gateway" as Gateway {
+  pre [[https://example.com/checker/member-implicit\npath member label]] tail\noutside member row
+}
+@enduml
