@@ -2165,43 +2165,69 @@ fn render_with_oracle_uid_origin(
         .enumerate()
         .filter_map(|(idx, note)| (note.target.is_none() && note.alias.is_some()).then_some(idx))
         .collect();
-    let mut source_nodes = diagram
-        .entities
-        .iter()
-        .enumerate()
-        .map(|(idx, entity)| (entity.source_line, false, idx))
-        .chain(
-            floating_note_indices
-                .iter()
-                .map(|&idx| (diagram.notes[idx].source_line, true, idx)),
-        )
-        .collect::<Vec<_>>();
-    source_nodes.sort_by_key(|&(source_line, is_note, idx)| (source_line, is_note, idx));
     let mut entity_layout_slots = vec![0; diagram.entities.len()];
     let mut floating_layout_slots = vec![None; diagram.notes.len()];
     let mut empty_package_layout_slots = vec![None; diagram.packages.len()];
     let mut next_layout_slot = 0;
-    for (_, is_note, idx) in source_nodes {
-        if is_note {
-            let note = &diagram.notes[idx];
-            let (width, height) = note_box_dims(diagram, note, &diagram.meta.sprites);
-            layout.add_node(&floating_note_layout_id(idx), "", width, height);
-            floating_layout_slots[idx] = Some(next_layout_slot);
-        } else {
-            let entity = &diagram.entities[idx];
-            let dim = &dims[idx];
-            layout.add_node(&entity.id, &entity.label, dim.width, dim.height);
-            entity_layout_slots[idx] = next_layout_slot;
+    let svek_nodes = svek_node_emission_order(diagram);
+    let root_start = svek_nodes
+        .iter()
+        .position(|node| {
+            matches!(
+                node,
+                SvekNodeEmission::Entity(idx)
+                    if package_render.innermost_pkg[*idx].is_none()
+            )
+        })
+        .unwrap_or(svek_nodes.len());
+    let mut layout_nodes = svek_nodes[..root_start]
+        .iter()
+        .copied()
+        .map(ClassLayoutNodeEmission::Svek)
+        .collect::<Vec<_>>();
+    let mut root_nodes = svek_nodes[root_start..]
+        .iter()
+        .filter_map(|node| match node {
+            SvekNodeEmission::Entity(idx) => Some((
+                diagram.entities[*idx].source_line,
+                false,
+                *idx,
+                ClassLayoutNodeEmission::Svek(*node),
+            )),
+            SvekNodeEmission::EmptyPackage(_) => None,
+        })
+        .chain(floating_note_indices.iter().map(|&idx| {
+            (
+                diagram.notes[idx].source_line,
+                true,
+                idx,
+                ClassLayoutNodeEmission::FloatingNote(idx),
+            )
+        }))
+        .collect::<Vec<_>>();
+    root_nodes.sort_by_key(|&(source_line, is_note, idx, _)| (source_line, is_note, idx));
+    layout_nodes.extend(root_nodes.into_iter().map(|(_, _, _, node)| node));
+
+    for node in layout_nodes {
+        match node {
+            ClassLayoutNodeEmission::Svek(SvekNodeEmission::Entity(idx)) => {
+                let entity = &diagram.entities[idx];
+                let dim = &dims[idx];
+                layout.add_node(&entity.id, &entity.label, dim.width, dim.height);
+                entity_layout_slots[idx] = next_layout_slot;
+            }
+            ClassLayoutNodeEmission::Svek(SvekNodeEmission::EmptyPackage(idx)) => {
+                let (width, height) = empty_package_dims(&diagram.packages[idx]);
+                layout.add_node(&empty_package_layout_id(idx), "", width, height);
+                empty_package_layout_slots[idx] = Some(next_layout_slot);
+            }
+            ClassLayoutNodeEmission::FloatingNote(idx) => {
+                let note = &diagram.notes[idx];
+                let (width, height) = note_box_dims(diagram, note, &diagram.meta.sprites);
+                layout.add_node(&floating_note_layout_id(idx), "", width, height);
+                floating_layout_slots[idx] = Some(next_layout_slot);
+            }
         }
-        next_layout_slot += 1;
-    }
-    for (idx, role) in package_render.roles.iter().copied().enumerate() {
-        if role != PackageRenderRole::EmptyLeaf {
-            continue;
-        }
-        let (width, height) = empty_package_dims(&diagram.packages[idx]);
-        layout.add_node(&empty_package_layout_id(idx), "", width, height);
-        empty_package_layout_slots[idx] = Some(next_layout_slot);
         next_layout_slot += 1;
     }
     // `AbstractClassOrObjectDiagram.Association.createNew` replaces the A-B
@@ -3929,6 +3955,12 @@ enum SvekNodeEmission {
     EmptyPackage(usize),
 }
 
+#[derive(Clone, Copy)]
+enum ClassLayoutNodeEmission {
+    Svek(SvekNodeEmission),
+    FloatingNote(usize),
+}
+
 impl SvekEmissionOrder<'_> {
     fn collect_package(&mut self, pkg_idx: usize) {
         for (entity_idx, _) in self.diagram.entities.iter().enumerate() {
@@ -4873,16 +4905,11 @@ fn render_plantuml_svg(
         emit_oracle_cluster_children(&mut svg, cluster);
         svg.push_str("</g>");
     }
-    for package_idx in 0..diagram.packages.len() {
-        if let Some(cluster) = layout_pkg_clusters
-            .iter()
-            .find(|cluster| cluster.package_idx == package_idx)
-        {
-            let entity_id = svek_ids.package_ids[cluster.package_idx]
-                .as_deref()
-                .unwrap_or("ent0002");
-            emit_layout_package_cluster(&mut svg, cluster, entity_id);
-        }
+    for cluster in &layout_pkg_clusters {
+        let entity_id = svek_ids.package_ids[cluster.package_idx]
+            .as_deref()
+            .unwrap_or("ent0002");
+        emit_layout_package_cluster(&mut svg, cluster, entity_id);
     }
     if let Some(oracle) = oracle {
         for cluster in &oracle.loose_clusters {
@@ -5374,12 +5401,10 @@ fn layout_package_clusters(
     cluster_positions: &[ClusterPosition],
 ) -> Vec<LayoutPackageCluster> {
     let package_render = package_render_model(diagram);
-    diagram
-        .packages
-        .iter()
-        .enumerate()
-        .filter(|(idx, _)| package_render.roles[*idx] == PackageRenderRole::Cluster)
-        .filter_map(|(idx, pkg)| {
+    package_cluster_depth_first_order(&package_render)
+        .into_iter()
+        .filter_map(|idx| {
+            let pkg = &diagram.packages[idx];
             let id = package_cluster_id(idx);
             let pos = cluster_positions.iter().find(|p| p.id == id)?;
             let kind = effective_package_kind(pkg);
@@ -5425,6 +5450,24 @@ fn layout_package_clusters(
             })
         })
         .collect()
+}
+
+fn package_cluster_depth_first_order(package_render: &PackageRenderModel) -> Vec<usize> {
+    fn collect(parent: Option<usize>, package_render: &PackageRenderModel, order: &mut Vec<usize>) {
+        for idx in 0..package_render.parent_pkg.len() {
+            if package_render.parent_pkg[idx] != parent {
+                continue;
+            }
+            if package_render.roles[idx] == PackageRenderRole::Cluster {
+                order.push(idx);
+            }
+            collect(Some(idx), package_render, order);
+        }
+    }
+
+    let mut order = Vec::new();
+    collect(None, package_render, &mut order);
+    order
 }
 
 struct EmptyPackageLayout {
@@ -15035,6 +15078,35 @@ mod tests {
             svg.find(pair[0]).expect("missing earlier SVEK marker")
                 < svg.find(pair[1]).expect("missing later SVEK marker")
         }));
+    }
+
+    #[test]
+    fn package_clusters_paint_depth_first_before_root_siblings() {
+        let input = "@startuml\n\
+            package North {\n\
+              class Direct\n\
+            }\n\
+            package South {\n\
+              class SouthLeaf\n\
+            }\n\
+            package North {\n\
+              package Filled {\n\
+                class Deep\n\
+              }\n\
+            }\n\
+            class North.Phantom.Terminal\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Class(diagram) = diagram else {
+            panic!("expected class diagram");
+        };
+        let package_render = package_render_model(&diagram);
+        let labels = package_cluster_depth_first_order(&package_render)
+            .into_iter()
+            .map(|idx| diagram.packages[idx].name.as_str())
+            .collect::<Vec<_>>();
+
+        assert_eq!(labels, ["North", "North.Filled", "North.Phantom", "South"]);
     }
 
     #[test]
