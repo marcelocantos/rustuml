@@ -314,6 +314,22 @@ impl ClassParser {
         }
     }
 
+    fn current_together(&self) -> Option<usize> {
+        match self.scope_stack.last() {
+            Some(ClassScope::Together(group_idx)) => Some(*group_idx),
+            Some(ClassScope::Package) | None => None,
+        }
+    }
+
+    fn enroll_new_entity_in_current_together(&mut self, entity_id: &str) {
+        let Some(group_idx) = self.current_together() else {
+            return;
+        };
+        self.together[group_idx]
+            .entities
+            .push(entity_id.to_string());
+    }
+
     /// `CucaDiagram#eventuallyBuildPhantomGroups` materializes every empty
     /// parent quark when a class-like leaf is first created below it.
     fn ensure_phantom_packages(&mut self, entity_path: &[String]) {
@@ -377,6 +393,7 @@ impl ClassParser {
         self.entity_by_path.insert(path.clone(), idx);
         self.register_quark_path(&path);
         self.register_entity_path(&path, &id);
+        self.enroll_new_entity_in_current_together(&id);
         id
     }
 
@@ -691,6 +708,16 @@ impl ClassParser {
                 | "entity" => QuarkLookup::CurrentContext,
                 _ => QuarkLookup::ReuseUnique,
             };
+            let ordinary_class_command = matches!(
+                declaration_kind,
+                "class"
+                    | "abstract class"
+                    | "abstract"
+                    | "interface"
+                    | "enum"
+                    | "annotation"
+                    | "entity"
+            );
             let entity_path = self.resolve_quark_path(&id, lookup);
             let display_label = if explicit_alias || caps.get(4).is_some() {
                 label
@@ -698,25 +725,28 @@ impl ClassParser {
                 entity_path.last().cloned().unwrap_or(label)
             };
             let final_id = self.path_id(&entity_path);
-            let entity_idx = if let Some(&idx) = self.entity_by_path.get(&entity_path) {
-                idx
-            } else {
-                self.create_entity_at_path(
-                    entity_path.clone(),
-                    display_label.clone(),
-                    kind,
-                    explicit_alias,
-                );
-                self.entity_by_path[&entity_path]
-            };
+            let (entity_idx, entity_was_created) =
+                if let Some(&idx) = self.entity_by_path.get(&entity_path) {
+                    (idx, false)
+                } else {
+                    self.create_entity_at_path(
+                        entity_path.clone(),
+                        display_label.clone(),
+                        kind,
+                        explicit_alias,
+                    );
+                    (self.entity_by_path[&entity_path], true)
+                };
 
             {
                 let entity = &mut self.entities[entity_idx];
-                // `CommandCreateElementFull2#executeArg` only calls
-                // `reallyCreateLeaf` when the quark has no data. Reusing an
-                // endpoint updates display/decorations but retains the first
-                // location and `LeafType.CLASS`.
-                entity.label = display_label;
+                // `CommandCreateClass` preserves the display owned by the
+                // first materialization. `CommandCreateElementFull2` is the
+                // separate mixed-description command that calls setDisplay
+                // even when it reuses an existing quark.
+                if entity_was_created || !ordinary_class_command {
+                    entity.label = display_label;
+                }
                 if explicit_alias {
                     entity.explicit_alias = true;
                 }
@@ -750,12 +780,6 @@ impl ClassParser {
 
             self.register_entity_path(&entity_path, &final_id);
             self.materialize_active_phantom_packages();
-            if let Some(ClassScope::Together(group_idx)) = self.scope_stack.last().copied() {
-                let group = &mut self.together[group_idx];
-                if !group.entities.contains(&final_id) {
-                    group.entities.push(final_id.clone());
-                }
-            }
 
             // `CommandCreateClassMultilines.manageExtends` constructs each
             // declaration relationship as parent -> child with
@@ -1101,10 +1125,7 @@ impl ClassParser {
         }
         let idx = self.together.len();
         self.together.push(crate::diagram::class::TogetherGroup {
-            parent: self.scope_stack.iter().rev().find_map(|scope| match scope {
-                ClassScope::Together(group_idx) => Some(*group_idx),
-                ClassScope::Package => None,
-            }),
+            parent: self.current_together(),
             owner_package: self
                 .package_stack
                 .last()
@@ -1170,6 +1191,7 @@ impl ClassParser {
 
             let final_depth = path.len();
             let mut parent = None;
+            let mut final_was_created = false;
             for depth in 1..=final_depth {
                 let prefix = path[..depth].to_vec();
                 let is_final = depth == final_depth;
@@ -1187,6 +1209,9 @@ impl ClassParser {
                     }
                     idx
                 } else {
+                    if is_final {
+                        final_was_created = true;
+                    }
                     let idx = self.packages.len();
                     let name = self.path_id(&prefix);
                     let display_name = if is_final {
@@ -1219,12 +1244,9 @@ impl ClassParser {
                 parent = Some(idx);
             }
             let package_idx = parent.unwrap();
-            if let Some(ClassScope::Together(group_idx)) = self.scope_stack.last().copied() {
+            if final_was_created && let Some(group_idx) = self.current_together() {
                 let package_name = self.packages[package_idx].name.clone();
-                let group = &mut self.together[group_idx];
-                if !group.packages.contains(&package_name) {
-                    group.packages.push(package_name);
-                }
+                self.together[group_idx].packages.push(package_name);
             }
             self.package_stack.push(package_idx);
             self.scope_stack.push(ClassScope::Package);
@@ -2383,7 +2405,7 @@ mod tests {
                 "SepNoneSink"
             ]
         );
-        assert_eq!(d.entities[0].label, "Root Echo Declaration");
+        assert_eq!(d.entities[0].label, "EchoToken");
         assert_eq!(d.relationships[0].from, "SepNoneAlpha.EchoToken");
     }
 
@@ -2423,7 +2445,7 @@ mod tests {
                 "SlashRealm/InnerRealm/FinalLeaf",
             ]
         );
-        assert_eq!(d.entities[0].label, "Renamed Literal");
+        assert_eq!(d.entities[0].label, "Literal.Dot");
         assert_eq!(d.entities[1].source_line, 4);
         assert_eq!(d.entities[2].source_line, 8);
     }
@@ -2742,6 +2764,55 @@ mod tests {
         assert_eq!(d.together.len(), 2);
         assert_eq!(d.together[0].parent, None);
         assert_eq!(d.together[1].parent, None);
+    }
+
+    #[test]
+    fn together_membership_belongs_to_first_materialization() {
+        let d = parse(
+            "together {\n\
+               FreshImplicit3613 -- FreshImplicit3617\n\
+               class FreshImplicit3613\n\
+             }\n\
+             together {\n\
+               class FreshSibling3623\n\
+               class FreshImplicit3613\n\
+             }",
+        );
+
+        assert_eq!(
+            d.together[0].entities,
+            ["FreshImplicit3613", "FreshImplicit3617"]
+        );
+        assert_eq!(d.together[1].entities, ["FreshSibling3623"]);
+    }
+
+    #[test]
+    fn package_top_breaks_outer_together_parentage() {
+        let d = parse(
+            "together {\n\
+               package FreshOuterPackage3631 {\n\
+                 together {\n\
+                   class FreshPackaged3637\n\
+                   class FreshPackaged3643\n\
+                 }\n\
+               }\n\
+             }",
+        );
+
+        assert_eq!(d.together.len(), 2);
+        assert_eq!(d.together[0].packages, ["FreshOuterPackage3631"]);
+        assert_eq!(d.together[1].parent, None);
+        assert_eq!(
+            d.together[1].owner_package.as_deref(),
+            Some("FreshOuterPackage3631")
+        );
+        assert_eq!(
+            d.together[1].entities,
+            [
+                "FreshOuterPackage3631.FreshPackaged3637",
+                "FreshOuterPackage3631.FreshPackaged3643"
+            ]
+        );
     }
 
     #[test]
