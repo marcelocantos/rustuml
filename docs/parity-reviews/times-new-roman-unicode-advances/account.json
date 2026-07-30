@@ -4,9 +4,11 @@
   "created": "2026-07-31",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "rust_revision_before_change": "f2254d0bb7b271845bed8ea6555a01d66e5b2f46",
+  "corrective_revision_before_change": "7049eff8",
   "triggering_reviews": [
     "docs/parity-reviews/times-new-roman-face-metrics/review.json",
-    "docs/parity-reviews/state-flat-svek-painted-envelope/review-label-skinparams-2.json"
+    "docs/parity-reviews/state-flat-svek-painted-envelope/review-label-skinparams-2.json",
+    "docs/parity-reviews/times-new-roman-unicode-advances/review.json"
   ],
   "java_locations": [
     {
@@ -49,7 +51,7 @@
     }
   ],
   "claimed_invariant": "For text whose AWT width is the sum of scalar advances, every assigned Unicode scalar is measured with the same Times New Roman face and JDK fallback behavior as printable ASCII. Plain, bold, italic, and bold-italic layout widths therefore use the exact face that SVG emission names.",
-  "causal_divergence": "The previous implementation deliberately replaced every non-ASCII scalar with a half-em advance. Java instead measures the actual Times New Roman glyph or the AWT fallback glyph inside the resolved face. Accented Latin, Greek, Cyrillic, and punctuation consequently receive different advances, which changes state dimensions, Graphviz label boxes, routes, and canvases.",
+  "causal_divergence": "The original implementation deliberately replaced every non-ASCII scalar with a half-em advance. The first Unicode-table correction then rounded every AWT advance independently to an integer at a 2048-point extraction size. Java retains 16 fractional bits in these measurements and sums those fractional scalar advances before scaling. For additive scripts, repeated fractional-width scalars such as U+0518 therefore accumulate a visible width error even though the selected face and codepoint coverage are correct.",
   "derivation": {
     "tool": "tools/PhysicalFontMetricsExtract.java",
     "font_size": 2048,
@@ -58,15 +60,19 @@
       "FRACTIONALMETRICS_ON"
     ],
     "domain": "Every Character.isDefined Unicode scalar in the pinned JDK, excluding surrogate code points, for all four binary faces.",
-    "encoding": "Integer 2048-unit advances compressed into maximal consecutive codepoint ranges sharing the same four-face tuple; undefined scalars use a separately extracted missing-glyph tuple.",
+    "encoding": "Unsigned 16.16 fixed-point advances at a 2048-point extraction size, stored as u32 tuples and compressed into maximal consecutive codepoint ranges sharing the same four-face tuple; undefined scalars use a separately extracted missing-glyph tuple.",
     "preimplementation_probe": {
       "times_new_roman_displayable_bmp_scalars_per_face": 54739,
       "distinct_bmp_face_tuples": 4256,
       "consecutive_bmp_runs": 10812,
-      "maximum_observed_2048_unit_advance": 13290
+      "assigned_scalar_face_measurements": 1146364,
+      "maximum_observed_2048_unit_advance": 13289.779296875,
+      "maximum_error_at_12_fractional_bits": 0.0001220703125,
+      "maximum_error_at_16_fractional_bits": 0.0,
+      "fixed_point_fit": "The maximum observed 16.16 value is below u32::MAX."
     }
   },
-  "planned_model_change": "Extend the checked-in Java extractor to emit deterministic Rust range data for assigned Unicode scalars and all four Times New Roman faces. Check in the generated range table with generator provenance, binary-search it from times_new_roman_text_width, and replace the half-em non-ASCII branch with the extracted face tuple. Keep printable ASCII in the same generated face model or cross-check the existing arrays against it. Do not add string-specific values, script guesses, state offsets, or route changes.",
+  "planned_model_change": "Change the checked-in Java extractor and generated Rust range table from rounded u16 design units to exact u32 16.16 fixed-point advances, with a generation-time assertion that every AWT width is represented exactly and fits u32. Binary-search the same scalar ranges from times_new_roman_text_width and divide by both the fixed-point scale and the 2048-point extraction size only after summing through Rust's existing width path. Keep printable ASCII on its established integer arrays and cross-check that the Unicode representation agrees for overlapping scalars. Do not add string-specific values, script guesses, state offsets, or route changes.",
   "scope_residue": "This mechanism corrects additive scalar advances. Contextual shaping, ligatures, grapheme clusters, emoji sequences, and font-stack definitions containing multiple comma-separated families are not claimed to be solved by a scalar table and remain separate mechanisms. The checker must distinguish an additive-advance failure from that declared shaping residue.",
   "perturbation_axes": [
     "Latin-1 accents versus ASCII base letters",
@@ -76,6 +82,7 @@
     "state titles and attributes versus ordinary and self transition labels",
     "flat versus nested topology",
     "multiple font sizes",
+    "repetition counts that accumulate fractional scalar advances",
     "precomposed characters versus combining marks as a residue probe"
   ],
   "known_counterexamples": [
