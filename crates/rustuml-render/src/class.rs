@@ -4131,6 +4131,20 @@ enum SvekNodeEmission {
     EmptyPackage(usize),
 }
 
+enum LayoutNoteEmission {
+    Floating {
+        note_idx: usize,
+        node_idx: usize,
+        entity_id: String,
+    },
+    Attached {
+        note_idx: usize,
+        node_idx: usize,
+        position: NotePosition,
+        note_start: usize,
+    },
+}
+
 #[derive(Clone, Copy)]
 enum ClassLayoutNodeEmission {
     Svek(SvekNodeEmission),
@@ -5120,15 +5134,42 @@ fn render_plantuml_svg(
         })
         .collect::<Vec<_>>();
     let mut node_emission_cursor = 0;
-    let mut layout_floating_notes = floating_notes
+    let layout_floating_notes = floating_notes
         .iter()
         .filter_map(|&(note_idx, node_idx)| {
-            svek_ids.note_ids[note_idx]
-                .as_deref()
-                .map(|entity_id| (note_idx, node_idx, entity_id))
+            svek_ids.note_ids[note_idx].as_deref().map(|entity_id| {
+                (
+                    ent_id_seq(Some(entity_id)),
+                    LayoutNoteEmission::Floating {
+                        note_idx,
+                        node_idx,
+                        entity_id: entity_id.to_string(),
+                    },
+                )
+            })
         })
         .collect::<Vec<_>>();
-    layout_floating_notes.sort_by_key(|(_, _, entity_id)| ent_id_seq(Some(entity_id)));
+    let layout_attached_notes =
+        attached_notes
+            .iter()
+            .filter_map(|&(note_idx, node_idx, position)| {
+                svek_ids.attached_note_starts[note_idx].map(|note_start| {
+                    (
+                        ent_id_seq(Some(&format!("ent{:04}", note_start + 1))),
+                        LayoutNoteEmission::Attached {
+                            note_idx,
+                            node_idx,
+                            position,
+                            note_start,
+                        },
+                    )
+                })
+            });
+    let mut layout_note_emissions = layout_floating_notes
+        .into_iter()
+        .chain(layout_attached_notes)
+        .collect::<Vec<_>>();
+    layout_note_emissions.sort_by_key(|(sequence, _)| *sequence);
     let mut layout_note_cursor = 0;
 
     // Cursor over `oracle_note_entities` (already sorted by emission counter).
@@ -5227,25 +5268,21 @@ fn render_plantuml_svg(
         // (e.g. a `note … as N` declared before the first `entity`).
         let cur_seq = ent_id_seq(Some(&current_ent_id));
         while oracle.is_none()
-            && layout_note_cursor < layout_floating_notes.len()
-            && ent_id_seq(Some(layout_floating_notes[layout_note_cursor].2)) < cur_seq
+            && layout_note_cursor < layout_note_emissions.len()
+            && layout_note_emissions[layout_note_cursor].0 < cur_seq
         {
-            let (note_idx, node_idx, entity_id) = layout_floating_notes[layout_note_cursor];
-            if let Some(pos) = positions.get(node_idx) {
-                render_svek_floating_note(
-                    &mut svg,
-                    diagram,
-                    note_idx,
-                    pos,
-                    entity_id,
-                    edge_paths,
-                    &resolved_relationship_edges,
-                    floating_note_opale_relationships[note_idx],
-                    layout_x_bias,
-                    body_dx,
-                    body_dy,
-                );
-            }
+            render_svek_note_emission(
+                &mut svg,
+                diagram,
+                &layout_note_emissions[layout_note_cursor].1,
+                positions,
+                edge_paths,
+                &resolved_relationship_edges,
+                &floating_note_opale_relationships,
+                layout_x_bias,
+                body_dx,
+                body_dy,
+            );
             layout_note_cursor += 1;
         }
         while note_cursor < oracle_note_entities.len()
@@ -5381,88 +5418,20 @@ fn render_plantuml_svg(
         }
     }
 
-    while oracle.is_none() && layout_note_cursor < layout_floating_notes.len() {
-        let (note_idx, node_idx, entity_id) = layout_floating_notes[layout_note_cursor];
-        if let Some(pos) = positions.get(node_idx) {
-            render_svek_floating_note(
-                &mut svg,
-                diagram,
-                note_idx,
-                pos,
-                entity_id,
-                edge_paths,
-                &resolved_relationship_edges,
-                floating_note_opale_relationships[note_idx],
-                layout_x_bias,
-                body_dx,
-                body_dy,
-            );
-        }
+    while oracle.is_none() && layout_note_cursor < layout_note_emissions.len() {
+        render_svek_note_emission(
+            &mut svg,
+            diagram,
+            &layout_note_emissions[layout_note_cursor].1,
+            positions,
+            edge_paths,
+            &resolved_relationship_edges,
+            &floating_note_opale_relationships,
+            layout_x_bias,
+            body_dx,
+            body_dy,
+        );
         layout_note_cursor += 1;
-    }
-
-    if oracle.is_none() {
-        for &(note_idx, node_idx, position) in &attached_notes {
-            let note = &diagram.notes[note_idx];
-            let Some(target) = note.target.as_deref() else {
-                continue;
-            };
-            let note_layout_id = attached_note_layout_id(note_idx);
-            let (edge_from, edge_to) = match position {
-                NotePosition::Left | NotePosition::Top => (note_layout_id.as_str(), target),
-                NotePosition::Right | NotePosition::Bottom => (target, note_layout_id.as_str()),
-            };
-            let Some(edge) = edge_paths
-                .iter()
-                .find(|edge| edge.from == edge_from && edge.to == edge_to)
-            else {
-                continue;
-            };
-            let endpoint = match position {
-                NotePosition::Left | NotePosition::Top => {
-                    edge.end_point.or_else(|| edge.points.last().copied())
-                }
-                NotePosition::Right | NotePosition::Bottom => {
-                    edge.start_point.or_else(|| edge.points.first().copied())
-                }
-            };
-            let Some((tip_x, tip_y)) = endpoint else {
-                continue;
-            };
-            let Some(pos) = positions.get(node_idx) else {
-                continue;
-            };
-            let Some(note_start) = svek_ids.attached_note_starts[note_idx] else {
-                continue;
-            };
-            let qualified_name = format!("GMN{note_start}");
-            let entity_id = format!("ent{:04}", note_start + 1);
-            let x = ((pos.x + MARGIN + layout_x_bias + body_dx) * 100.0).round() / 100.0;
-            let y = ((pos.y + MARGIN + body_dy) * 100.0).round() / 100.0;
-            let (anchor_x, anchor_y) = match position {
-                NotePosition::Left | NotePosition::Right => (x, y + pos.height / 2.0),
-                NotePosition::Top | NotePosition::Bottom => (x + pos.width / 2.0, y),
-            };
-            render_attached_note(
-                &mut svg,
-                diagram,
-                note,
-                // SVEK consumes Graphviz's two-decimal SVG coordinates before
-                // `Opale` adds its local note and atom margins.
-                x,
-                y,
-                pos.width,
-                pos.height,
-                anchor_x,
-                anchor_y,
-                tip_x + MARGIN + layout_x_bias,
-                tip_y + MARGIN,
-                position,
-                &qualified_name,
-                &entity_id,
-                &diagram.meta.sprites,
-            );
-        }
     }
 
     while let Some(SvekNodeEmission::EmptyPackage(package_idx)) =
@@ -12907,6 +12876,107 @@ fn render_notes_only(
     svg.finalize()
 }
 
+#[allow(clippy::too_many_arguments)]
+fn render_svek_note_emission(
+    svg: &mut String,
+    diagram: &ClassDiagram,
+    emission: &LayoutNoteEmission,
+    positions: &[NodePosition],
+    edge_paths: &[EdgePath],
+    relationship_edges: &[Option<usize>],
+    floating_note_opale_relationships: &[Option<usize>],
+    layout_x_bias: f64,
+    body_dx: f64,
+    body_dy: f64,
+) {
+    match emission {
+        LayoutNoteEmission::Floating {
+            note_idx,
+            node_idx,
+            entity_id,
+        } => {
+            if let Some(pos) = positions.get(*node_idx) {
+                render_svek_floating_note(
+                    svg,
+                    diagram,
+                    *note_idx,
+                    pos,
+                    entity_id,
+                    edge_paths,
+                    relationship_edges,
+                    floating_note_opale_relationships[*note_idx],
+                    layout_x_bias,
+                    body_dx,
+                    body_dy,
+                );
+            }
+        }
+        LayoutNoteEmission::Attached {
+            note_idx,
+            node_idx,
+            position,
+            note_start,
+        } => {
+            let note = &diagram.notes[*note_idx];
+            let Some(target) = note.target.as_deref() else {
+                return;
+            };
+            let note_layout_id = attached_note_layout_id(*note_idx);
+            let (edge_from, edge_to) = match position {
+                NotePosition::Left | NotePosition::Top => (note_layout_id.as_str(), target),
+                NotePosition::Right | NotePosition::Bottom => (target, note_layout_id.as_str()),
+            };
+            let Some(edge) = edge_paths
+                .iter()
+                .find(|edge| edge.from == edge_from && edge.to == edge_to)
+            else {
+                return;
+            };
+            let endpoint = match position {
+                NotePosition::Left | NotePosition::Top => {
+                    edge.end_point.or_else(|| edge.points.last().copied())
+                }
+                NotePosition::Right | NotePosition::Bottom => {
+                    edge.start_point.or_else(|| edge.points.first().copied())
+                }
+            };
+            let Some((tip_x, tip_y)) = endpoint else {
+                return;
+            };
+            let Some(pos) = positions.get(*node_idx) else {
+                return;
+            };
+            let qualified_name = format!("GMN{note_start}");
+            let entity_id = format!("ent{:04}", note_start + 1);
+            let x = ((pos.x + MARGIN + layout_x_bias + body_dx) * 100.0).round() / 100.0;
+            let y = ((pos.y + MARGIN + body_dy) * 100.0).round() / 100.0;
+            let (anchor_x, anchor_y) = match position {
+                NotePosition::Left | NotePosition::Right => (x, y + pos.height / 2.0),
+                NotePosition::Top | NotePosition::Bottom => (x + pos.width / 2.0, y),
+            };
+            render_attached_note(
+                svg,
+                diagram,
+                note,
+                // SVEK consumes Graphviz's two-decimal SVG coordinates before
+                // `Opale` adds its local note and atom margins.
+                x,
+                y,
+                pos.width,
+                pos.height,
+                anchor_x,
+                anchor_y,
+                tip_x + MARGIN + layout_x_bias,
+                tip_y + MARGIN,
+                *position,
+                &qualified_name,
+                &entity_id,
+                &diagram.meta.sprites,
+            );
+        }
+    }
+}
+
 /// Port of the standalone `EntityImageNote` path through SVEK. `Opale.drawU`
 /// paints the folded note with a half-width outer stroke and a one-pixel fold
 /// stroke; `CucaDiagramFileMakerSvek` gives a lone named note the standard
@@ -16170,6 +16240,32 @@ mod tests {
         assert_eq!(allocation.entity_ids, ["ent0002", "ent0003"]);
         assert_eq!(allocation.relationship_ids, [4]);
         assert_eq!(allocation.attached_note_starts, [Some(5)]);
+    }
+
+    #[test]
+    fn attached_and_floating_notes_follow_svek_node_creation_order() {
+        let input = "@startuml\n\
+            class PaintOrigin1031\n\
+            note right of PaintOrigin1031 : attached checkpoint\n\
+            note \"floating checkpoint\" as FloatingCheckpoint1033\n\
+            class PaintTail1039\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Class(diagram) = diagram else {
+            panic!("expected class diagram");
+        };
+        let svg = render(&diagram, &Theme::default());
+        let markers = [
+            r#"data-qualified-name="PaintOrigin1031""#,
+            r#"data-qualified-name="GMN3""#,
+            r#"data-qualified-name="FloatingCheckpoint1033""#,
+            r#"data-qualified-name="PaintTail1039""#,
+        ];
+
+        assert!(markers.windows(2).all(|pair| {
+            svg.find(pair[0]).expect("missing earlier SVEK node")
+                < svg.find(pair[1]).expect("missing later SVEK node")
+        }));
     }
 
     #[test]
