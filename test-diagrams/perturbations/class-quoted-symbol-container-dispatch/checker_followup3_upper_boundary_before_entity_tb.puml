@@ -1,0 +1,6 @@
+@startuml
+frame "Shared Frame" {
+  BOUNDARY Ui
+  entity Ledger
+}
+@enduml

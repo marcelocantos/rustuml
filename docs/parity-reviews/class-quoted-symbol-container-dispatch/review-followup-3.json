@@ -1,0 +1,170 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-quoted-symbol-container-dispatch",
+  "review_kind": "followup-3",
+  "reviewed_on": "2026-07-30",
+  "implementation_commit": "1b1b575c6f6c1046ff322a31ed2d0d45ece472d7",
+  "account_commit": "5799a66f8045e99884325989c62f598924e6744e",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "reviewer": {
+    "identity": "independent adversarial checker",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop",
+    "independence": "Did not implement commit 1b1b575c or edit shipping source. Worked in isolated git worktree /tmp/rustuml-review-dispatch-followup3 on branch codex/checker-class-quoted-symbol-container-dispatch-followup3 and modified only review/evidence files."
+  },
+  "revisions": {
+    "rust_revision_checked": "1b1b575c6f6c1046ff322a31ed2d0d45ece472d7",
+    "account_revision_checked": "5799a66f8045e99884325989c62f598924e6744e"
+  },
+  "artifacts": {
+    "helper": {
+      "path": "/tmp/rustuml-diff-one-1b1b575c",
+      "sha256": "4cc2d46399de95d89b15023c68e2a280d855e4eff4833ff482c0a2d18e7cecac",
+      "mode": "--no-oracle"
+    },
+    "java_jar": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+    },
+    "fresh_artifact_hashes": {
+      "checker_followup3_allowmixing_before_upper_boundary_tb.puml": "73edc2cb6f3ffee5e1c69acb890697b51022fedc73cb02d67a83264be12795d1",
+      "checker_followup3_allowmixing_before_upper_boundary_tb.svg": "b7cbcda96bc224b1368a6a89b99a3cb0e3b8ee858e0b09fe5df4d767b6a3ef0a",
+      "checker_followup3_nested_cloud_upper_queue_tb.puml": "ca92500788cac08258e9c3c20ea0f080f8af491f2caaa3f0ff5e3359c5f84e2f",
+      "checker_followup3_nested_cloud_upper_queue_tb.svg": "621b9598361800937bcb4e4c2e627f0de92556f574ed159ae47f8c9ac5e5438c",
+      "checker_followup3_root_node_upper_database_lr.puml": "2a8b7b940433c891423e58de9a640df038dd10bc57a7e622ad564fbd6fe1daa0",
+      "checker_followup3_root_node_upper_database_lr.svg": "6e533dde92a935411c01b68d4ca82a86e1c57540146e202698df5efe6bdd928d",
+      "checker_followup3_upper_boundary_before_entity_tb.puml": "ade1710d0dc8521ca33da7ac5a4420fe4aeac9d0e03b33cf009d7e52a65d8a94",
+      "checker_followup3_upper_boundary_before_entity_tb.svg": "1d156b85571d675590d173aba59fb2771fb3acdac039d05b15a59cd2fd1aa7dc"
+    }
+  },
+  "commands": [
+    "git worktree add -b codex/checker-class-quoted-symbol-container-dispatch-followup3 /tmp/rustuml-review-dispatch-followup3 1b1b575c",
+    "shasum -a 256 /tmp/rustuml-diff-one-1b1b575c",
+    "git show --stat --name-status --format=fuller 1b1b575c",
+    "git show --stat --name-status --format=fuller 5799a66f",
+    "sed -n '1,240p' docs/parity-reviews/class-quoted-symbol-container-dispatch/account.json",
+    "nl -ba crates/rustuml-parser/src/parse/mod.rs | sed -n '320,430p'",
+    "nl -ba crates/rustuml-parser/src/parse/mod.rs | sed -n '428,455p'",
+    "nl -ba crates/rustuml-parser/src/parse/mod.rs | sed -n '740,860p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/classdiagram/ClassDiagramFactory.java | nl -ba | sed -n '100,150p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandCreateClass.java | nl -ba | sed -n '80,120p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandCreateElementFull2.java | nl -ba | sed -n '80,170p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/descdiagram/DescriptionDiagramFactory.java | nl -ba | sed -n '95,145p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandCreateElementFull.java | nl -ba | sed -n '70,110p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/regex/Pattern2.java | nl -ba | sed -n '92,118p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/command/PSystemCommandFactory.java | nl -ba | sed -n '130,205p'",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_*.puml",
+    "for p in test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_*.puml; do /tmp/rustuml-diff-one-1b1b575c --no-oracle \"$p\"; done",
+    "for p in test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_*.puml; do rg -o 'data-diagram-type=\"[^\"]+\"' -m 1 \"${p%.puml}.svg\"; /tmp/rustuml-diff-one-1b1b575c --no-oracle --print-rust \"$p\" | rg -o 'data-diagram-type=\"[^\"]+\"' -m 1; done",
+    "shasum -a 256 /tmp/rustuml-diff-one-1b1b575c /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_*.puml test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_*.svg"
+  ],
+  "source_inspection": {
+    "java": [
+      "PSystemCommandFactory abandons a candidate as soon as a matched command executes with an error or no command matches the next line.",
+      "ClassDiagramFactory registers native class commands before CommandAllowMixing and before CommandCreateElementFull2(Mode.NORMAL_KEYWORD).",
+      "CommandCreateElementFull2 reuses state plus CommandCreateElementFull.ALL_TYPES and rejects Mode.NORMAL_KEYWORD unless allowmixing has already executed.",
+      "Pattern2.compileInternal compiles PlantUML command regexes with Pattern.CASE_INSENSITIVE, so uppercase spellings such as DATABASE, QUEUE, and BOUNDARY are valid inputs for the same command families."
+    ],
+    "rust": [
+      "Commit 1b1b575c broadened the mixed-only family list from component-only to the full lowercase keyword set plus state.",
+      "The detection still compares trimmed.split_whitespace().next() directly against lowercase MIXED_ONLY_CLASS_KEYWORDS with no case normalization.",
+      "Quoted-container tie-breaking still relies on has_class_factory_decl, and lower-case native class controls such as entity and interface continue to set that flag.",
+      "Therefore uppercase mixed-only leaves do not invalidate class_factory_viable in Rust even though the Java class factory rejects them through the same case-insensitive CommandCreateElementFull2 path."
+    ],
+    "fixture_shaping_search": "No fixture-name strings or checker_followup3 stems appear in shipping code. The candidate touched only crates/rustuml-parser/src/parse/mod.rs.",
+    "constants": "No new numeric constants or threshold tuning were introduced beyond the pre-existing dispatch score weights."
+  },
+  "fresh_inputs": [
+    "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_root_node_upper_database_lr.puml",
+    "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_nested_cloud_upper_queue_tb.puml",
+    "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_upper_boundary_before_entity_tb.puml",
+    "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_allowmixing_before_upper_boundary_tb.puml"
+  ],
+  "fresh_perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_root_node_upper_database_lr.puml",
+      "golden": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_root_node_upper_database_lr.svg",
+      "java_diagram_type": "DESCRIPTION",
+      "rust_diagram_type": "CLASS",
+      "axes": [
+        "root quoted shared node container",
+        "native class control entity",
+        "mixed-only family database",
+        "uppercase keyword spelling",
+        "left-to-right direction",
+        "mixed leaf after class declaration"
+      ],
+      "result": "fail",
+      "failure_classification": "dispatch mismatch"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_nested_cloud_upper_queue_tb.puml",
+      "golden": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_nested_cloud_upper_queue_tb.svg",
+      "java_diagram_type": "DESCRIPTION",
+      "rust_diagram_type": "CLASS",
+      "axes": [
+        "nested quoted shared cloud container inside package",
+        "native class control interface",
+        "mixed-only family queue",
+        "uppercase keyword spelling",
+        "top-to-bottom direction",
+        "mixed leaf after class declaration"
+      ],
+      "result": "fail",
+      "failure_classification": "dispatch mismatch"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_upper_boundary_before_entity_tb.puml",
+      "golden": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_upper_boundary_before_entity_tb.svg",
+      "java_diagram_type": "DESCRIPTION",
+      "rust_diagram_type": "CLASS",
+      "axes": [
+        "root quoted shared frame container",
+        "mixed-only family boundary",
+        "uppercase keyword spelling",
+        "native class control entity appears later",
+        "mixed leaf before class declaration",
+        "top-to-bottom direction"
+      ],
+      "result": "fail",
+      "failure_classification": "dispatch mismatch"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_allowmixing_before_upper_boundary_tb.puml",
+      "golden": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_allowmixing_before_upper_boundary_tb.svg",
+      "java_diagram_type": "CLASS",
+      "rust_diagram_type": "CLASS",
+      "axes": [
+        "allowmixing before mixed leaf",
+        "root quoted shared frame container",
+        "mixed-only family boundary",
+        "uppercase keyword spelling",
+        "native class control entity",
+        "top-to-bottom direction"
+      ],
+      "result": "fail",
+      "failure_classification": "secondary exact SVG residue"
+    }
+  ],
+  "findings": [
+    {
+      "severity": "high",
+      "summary": "The revised mechanism still does not model the full Java keyword family because Rust recognizes only lowercase spellings of mixed-only leaves.",
+      "details": [
+        "Java command regexes are case-insensitive via Pattern2.compileInternal, so DATABASE, QUEUE, and BOUNDARY are valid spellings for the same CommandCreateElementFull2 family.",
+        "Rust compares the leading token literally against a lowercase MIXED_ONLY_CLASS_KEYWORDS slice and never normalizes case before that comparison.",
+        "Three fresh valid held-outs therefore route DESCRIPTION in Java but CLASS in Rust: checker_followup3_root_node_upper_database_lr, checker_followup3_nested_cloud_upper_queue_tb, and checker_followup3_upper_boundary_before_entity_tb."
+      ]
+    },
+    {
+      "severity": "medium",
+      "summary": "The corrected account overstates the current implementation as a complete source-order model of the Java family.",
+      "details": [
+        "The source-order behavior is still contingent on lowercase matching. A mixed-only leaf that appears before a later native class declaration should reject the class candidate regardless of case, but Rust misses uppercase BOUNDARY and keeps the class candidate viable until the later entity declaration wins the tie.",
+        "A preceding allowmixing does preserve CLASS selection for the uppercase boundary control, but Rust still drops the boundary element itself, leaving secondary executable residue even when dispatch matches."
+      ]
+    }
+  ],
+  "discarded_exploration": "An exploratory late-allowmixing uppercase boundary source produced a Java PlantUML error because the earlier mixed-only line had already rejected the class candidate and the later allowmixing line was not consumable by the description candidate. Per instructions, that invalid input was discarded and is not preserved under test-diagrams/perturbations.",
+  "verdict": "REJECT"
+}

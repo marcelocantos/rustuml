@@ -1,0 +1,7 @@
+@startuml
+left to right direction
+node "Shared Runtime" {
+  entity Ledger
+  DATABASE AuditStore
+}
+@enduml
