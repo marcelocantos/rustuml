@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-graphviz-svg-spline-quantization",
+  "created": "2026-07-31",
+  "status": "proposed",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "2007364348e62b80f1478efb7cc84b441cad7757",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/DotStringFactory.java",
+      "symbols": [
+        "DotStringFactory.getSvg",
+        "DotStringFactory.solve"
+      ],
+      "lines": "289-325, 350-365",
+      "role": "Runs Graphviz with SVG output, retains the serialized SVG string, and constructs one SvgResult over that exact text before solving SVEK nodes and edges."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvgResult.java",
+      "symbols": [
+        "SvgResult.getPoints",
+        "SvgResult.getFirstPoint",
+        "SvgResult.toDotPath"
+      ],
+      "lines": "101-123, 141-169",
+      "role": "Tokenizes every M/C path coordinate from Graphviz's serialized SVG text as a double and reconstructs the complete DotPath from those already serialized values."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+      "symbol": "SvekEdge.solveLine",
+      "lines": "612-683",
+      "role": "Obtains the edge path through SvgResult.toDotPath, then performs orientation correction, compound clipping, and endpoint-extremity construction on the reconstructed path."
+    },
+    {
+      "path": "Graphviz SVG output contract",
+      "symbol": "dot -Tsvg path serialization",
+      "lines": "runtime observation with Graphviz 15.0.0",
+      "role": "Serializes curved cubic paths such as `M54.65,-144.76C50.42,-136.55 45.19,-126.37 40.42,-117.09`, demonstrating that the SvgResult boundary receives two-decimal coordinates for curved as well as straight routes."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbol": "render_relationship_svg",
+      "lines": "12477-12507",
+      "role": "Quantizes Graphviz coordinates only when every point shares one x or one y value; curved routes retain native layout doubles before compound clipping and endpoint shortening."
+    },
+    {
+      "path": "crates/rustuml-render/src/deployment.rs",
+      "symbol": "deployment_svek_edge_points",
+      "lines": "5863-5883",
+      "role": "Sibling SVEK renderer already projects every Graphviz spline coordinate through the two-decimal SVG boundary before compound simulation and endpoint trimming."
+    },
+    {
+      "path": "crates/rustuml-render/src/object.rs",
+      "symbols": [
+        "normalize_attached_note_svek_envelope",
+        "render_no_oracle_links"
+      ],
+      "lines": "853-878, 1507-1518",
+      "role": "Sibling SVEK renderer quantizes every edge point before painted-envelope calculation and before shortening decorated link paths."
+    }
+  ],
+  "evidence_inputs": [
+    "test-diagrams/golden/class/class_feature_diamond_notation.puml",
+    "test-diagrams/golden/class/class_impl_07_interfaces.puml",
+    "test-diagrams/golden/class/class_skinparam_linetype_polyline.puml",
+    "test-diagrams/golden/class/class_spot_letter_G.puml",
+    "test-diagrams/golden/class/class_spot_letter_U.puml"
+  ],
+  "claimed_invariant": "Every ordinary class SVEK spline enters PlantUML geometry through Graphviz's serialized SVG representation. Each start point, cubic control point, and cubic endpoint is therefore quantized to Graphviz SVG precision before orientation correction, compound clipping, endpoint shortening, extremity construction, painted-bound calculation, or final UGraphic scaling. Route shape, curvature, decoration kind, rank direction, and scale factor do not bypass that boundary.",
+  "causal_divergence": "Rust reads native cgraph spline doubles directly from EdgePath and conditionally quantizes only axis-aligned routes. Java never receives that native stream: DotStringFactory asks Graphviz for SVG, SvgResult parses all M/C coordinates from the two-decimal path string, and SvekEdge mutates the reconstructed DotPath. Curved class links therefore diverge by the exact sub-centipixel residue that Java discarded before later shortening and extremity arithmetic. The mismatch is a missing representation boundary, not a fixture-specific coordinate table, route-kind exception, or comparator tolerance issue.",
+  "planned_model_change": "Replace the straight-route predicate in class relationship rendering with an unconditional Graphviz-SVG projection for every spline point before simulate_class_compound and shortened_endpoint_points. Keep subsequent arithmetic at full f64 precision, including during scaled rendering: the initial two-decimal projection models Graphviz serialization, while full-precision formatting allows the later UGraphic scale transform to round once. Do not alter layout, routing, endpoint lengths, comparator tolerances, or non-SVEK geometry.",
+  "perturbation_axes": [
+    "axis-aligned versus curved cubic routes",
+    "one, three, and seven parallel or fanout links",
+    "plain association versus arrow, inheritance, implementation, aggregation, and composition decorations",
+    "top-to-bottom versus left-to-right rank direction",
+    "unscaled versus 0.5, 0.75, 1.5, and 2.0 uniform scale",
+    "leaf-to-leaf versus package-compound endpoints",
+    "single cubic versus multi-cubic spline",
+    "renamed entities and reordered declarations"
+  ],
+  "scope_boundary": "This mechanism owns the Graphviz-SVG precision projection for ordinary no-oracle class relationship spline points. It does not change Graphviz solving, node or cluster reconstruction, labels, association-class replacement rendering, note connectors, handwritten paths, linetype routing policy, endpoint decoration constants, SVG formatting precision, comparator slack, or other diagram families.",
+  "acceptance": [
+    "Curved-route residuals improve as a cluster while straight-route and renamed controls remain exact.",
+    "Scaled class diagrams retain their existing no-oracle parity after the pre-scale SVG projection.",
+    "Fresh valid inputs spanning curvature, decoration, direction, scale, and changed node counts match Java without fixture-keyed branches.",
+    "Renderer tests, class-family census, full no-oracle ratchet, clippy, and mechanical harness guards pass except for explicitly pre-existing gate debt.",
+    "An independent checker records a verdict at the exact implementation revision."
+  ]
+}
