@@ -1,0 +1,12 @@
+@startuml
+left to right direction
+state "Outer Envelope" as OuterEnvelope {
+  state "Inner Draft" as InnerDraft
+  state "Inner Review" as InnerReview
+  [*] --> InnerDraft
+  InnerDraft --> InnerReview : settle
+  InnerReview --> [*]
+}
+[*] --> OuterEnvelope
+OuterEnvelope --> [*]
+@enduml

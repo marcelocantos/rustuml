@@ -1,0 +1,13 @@
+@startuml
+state "Finish Bay" as FinishBay
+state "Primary Capsule" as Capsule {
+  state "Release Gate" as ReleaseGate
+  state "Assembly Node" as AssemblyNode
+  [*] --> AssemblyNode
+  AssemblyNode --> ReleaseGate
+  ReleaseGate --> [*]
+}
+[*] --> Capsule
+Capsule --> FinishBay : handoff
+FinishBay --> [*]
+@enduml

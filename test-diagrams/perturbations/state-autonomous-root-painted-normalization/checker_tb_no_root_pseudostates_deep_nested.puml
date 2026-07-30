@@ -1,0 +1,13 @@
+@startuml
+state "Recovery Shelf" as RecoveryShelf
+state "Audit Shell" as AuditShell {
+  state "Phase Two" as PhaseTwo
+  state "Phase One" as PhaseOne {
+    state "Step Beta" as StepBeta
+    state "Step Alpha" as StepAlpha
+    StepAlpha --> StepBeta
+  }
+  PhaseOne --> PhaseTwo : handoff
+}
+AuditShell --> RecoveryShelf
+@enduml
