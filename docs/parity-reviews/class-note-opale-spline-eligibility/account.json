@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-note-opale-spline-eligibility",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java:isOpalisable",
+    "src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java:buildImage",
+    "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java:solve",
+    "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java:isOpalisable",
+    "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNote.java:drawU"
+  ],
+  "rust_locations": [
+    "crates/rustuml-layout/src/graph.rs::EdgePath",
+    "crates/rustuml-layout/src/graph.rs::LayoutGraph::layout_full_no_timeout",
+    "crates/rustuml-render/src/class.rs::render_svek_note_emission",
+    "crates/rustuml-render/src/class.rs::render_svek_floating_note"
+  ],
+  "invariant": "GraphvizImageBuilder initially marks a NOTE-to-non-NOTE single link as Opale-eligible. After Graphviz solves the link, SvekEdge.solve clears that flag unless DotPath contains at most one Bezier spline. EntityImageNote then draws the linked Opale callout only while the solved SvekEdge remains Opale; otherwise it paints the ordinary folded note and the edge remains a separate routed link. Eligibility is therefore a property of solved spline cardinality, not merely note degree or the presence of an edge.",
+  "causal_divergence": "Rust extracts every Graphviz spline into one flattened EdgePath.points vector and discards the native spline count. Attached notes always call render_attached_note when an edge exists, and floating named notes do the same whenever degree-based eligibility succeeds. In the rankdir perturbation, Java's top and bottom note edges solve to multiple splines and are painted as ordinary folded notes, while Rust incorrectly adds callout polygons and half-width fold strokes. The note coordinates and dimensions already match after rankdir rotation; only solved-spline eligibility differs.",
+  "planned_change": "Preserve Graphviz's native spline count on EdgePath. Render attached and floating note callouts only when that count is at most one; otherwise use the existing ordinary folded-note renderer at the same solved node position. Propagate the new field through all EdgePath construction sites and add layout plus renderer tests. Do not infer eligibility from coordinates, source note position, fixture labels, or a numeric geometry threshold.",
+  "perturbation_axes": [
+    "single-spline versus multi-spline solved note edges",
+    "attached versus floating named notes",
+    "top-to-bottom versus left-to-right rank direction",
+    "one linked note versus several notes competing around the same target",
+    "root target versus package-owned target"
+  ],
+  "predecessor_counterexample": "test-diagrams/perturbations/class-svek-node-paint-order/followup2_lr_dense_attached_notes_flip_probe.puml",
+  "status": "proposed"
+}
