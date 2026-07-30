@@ -1,0 +1,7 @@
+@startuml
+cloud "Service Mesh" as service.mesh $alpha <<Boundary>> $beta [[https://example.com/mesh{Docs\nPortal} helper]] #MistyRose {
+  class Gateway
+  class Worker
+  Gateway --> Worker
+}
+@enduml

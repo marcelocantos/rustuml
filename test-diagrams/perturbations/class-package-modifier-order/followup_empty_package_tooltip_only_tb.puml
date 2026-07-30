@@ -1,0 +1,5 @@
+@startuml
+skinparam svgLinkTarget _parent
+package TooltipOnly $doc <<Reference>> $stable [[{Tooltip <U+0026> More} shown-label]] #Wheat {
+}
+@enduml

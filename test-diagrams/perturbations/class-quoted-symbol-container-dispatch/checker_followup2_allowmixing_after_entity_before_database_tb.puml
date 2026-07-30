@@ -1,0 +1,7 @@
+@startuml
+entity Ledger {}
+allowmixing
+node "Runtime Edge" as Runtime {
+  database Cache
+}
+@enduml

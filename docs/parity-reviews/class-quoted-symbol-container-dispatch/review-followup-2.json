@@ -1,0 +1,351 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-quoted-symbol-container-dispatch",
+  "review_kind": "followup-2",
+  "reviewed_on": "2026-07-30",
+  "implementation_commit": "1f243f89acaf0d1304e1266e42b13c9f008e0903",
+  "account_commit": "e518b28509ea3318753503eb838868418ed42265",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "reviewer": {
+    "identity": "independent adversarial checker",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop",
+    "independence": "Did not implement commit 1f243f89, did not edit shipping source, reran inherited perturbations from a git-archived temp tree because this worktree currently has local deletions under the mechanism directory, and added only held-out evidence plus this review record."
+  },
+  "revisions": {
+    "rust_revision_checked": "1f243f89acaf0d1304e1266e42b13c9f008e0903",
+    "account_revision_checked": "e518b28509ea3318753503eb838868418ed42265",
+    "prior_review_revision_checked": "22cbd4904308b7b60102377be464a2782f05c4ca",
+    "prior_followup_revision_checked": "b5b568e97aaa69eb964bd5c45c0ef8e12c043918",
+    "helper_source_revision": "ede23f8ee1c14fb171c3b47e99290daf437dc36b",
+    "helper_relation_to_candidate": "git diff --stat 1f243f89acaf0d1304e1266e42b13c9f008e0903..ede23f8ee1c14fb171c3b47e99290daf437dc36b touches only class-svek-node-paint-order checker evidence, so the prebuilt helper reflects the candidate production code."
+  },
+  "artifacts": {
+    "helper": {
+      "path": "/tmp/rustuml-diff-one-ede23f8e",
+      "sha256": "dd2b34c1e3e4016b14e0059b4de8a272816fe7b2fc8537b5a0e8e64624a9b33e",
+      "mode": "--no-oracle"
+    },
+    "java_jar": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+    },
+    "existing_rerun_root": "/private/tmp/rustuml-review-class-quoted-symbol-container-dispatch-1f243f89",
+    "fresh_artifact_hashes": {
+      "checker_followup2_allowmixing_after_entity_before_database_tb.puml": "86aed95c5d2bb4db655a68ea6b417dadbd860c2cbbc32b8f0582e701a9e2b2f4",
+      "checker_followup2_allowmixing_after_entity_before_database_tb.svg": "9a9bb7b8a8d6ae3efb4d45e8ee9fe0e1b406939719d9792bca4cac8df44c5818",
+      "checker_followup2_allowmixing_before_database_leaf_tb.puml": "068ad2284e0dbc534112fdaaccf7b2d630e1615456ad9771c5e015bfb5a48a2d",
+      "checker_followup2_allowmixing_before_database_leaf_tb.svg": "a95595ffafb2bca7bc37add7a00b315e4376d4dd83808ec530f8b118e9a409e2",
+      "checker_followup2_cloud_nested_database_leaf_lr.puml": "81bf5d095fb11543e0fbe11267a95242fdf9b03e895bb12ea5b77e7ee940af3a",
+      "checker_followup2_cloud_nested_database_leaf_lr.svg": "2dda862f7f04d61870736c27d0a772e5b6e3570be147165a1935dbbf31fddc22",
+      "checker_followup2_database_nested_component_leaf_tb.puml": "1064d989ee6a347d70e24dd680ceb165d0c31ada5cda1c52d6fc0cd1b53af265",
+      "checker_followup2_database_nested_component_leaf_tb.svg": "dd1c9f7a9a9fe19b824166ce41ec80538b73fea4a90b3af385d0ac0beebebd20",
+      "checker_followup2_database_nested_database_leaf_tb.puml": "f18f3559eb903a91e5c7dbfadd65d76bc18852eeb3d8a7219fbe4a2a5dbea4a1",
+      "checker_followup2_database_nested_database_leaf_tb.svg": "d3a7e3ce964b500446c4f5d8c8815bd29404349caaa65972f98d02444eef04aa",
+      "checker_followup2_frame_component_container_tb.puml": "46d0ba974cd11eb8c0eac0f2abeed2fe7ecb6737a6318d87534a2ecfea8b979c",
+      "checker_followup2_frame_component_container_tb.svg": "354f44caab5fd7e50feeae529ee831265838a37449bcac5ea815e6a7da5dce67",
+      "checker_followup2_frame_root_component_leaf_lr.puml": "d3128522c9f98bd0043f3b2505cf3aed67a2310ba6c5cc5980c060ebf3a209da",
+      "checker_followup2_frame_root_component_leaf_lr.svg": "a4a3906eb545bf6585852e1ead19c9de6ed58f27898f54147cfed4c97ca26ce4",
+      "checker_followup2_frame_root_database_leaf_lr.puml": "e80dfdfb5d9f248744dcdf05b967742008dc34e7827ea493c4154722291a2814",
+      "checker_followup2_frame_root_database_leaf_lr.svg": "7c400ecbe16901f9c581e86de657fc3d38a88113df47b3b63e3822ab554b65e0",
+      "checker_followup2_node_nested_database_leaf_tb.puml": "a6964f963dc6890a7a7e1873ea6795c018bfb5b4a55ea4ebebfe5c7de486a0d3",
+      "checker_followup2_node_nested_database_leaf_tb.svg": "dfec5d756dc04add09a28a8230557d054a41d9ee99c5c808c64c9acf4427396d"
+    }
+  },
+  "prior_material": {
+    "account": "docs/parity-reviews/class-quoted-symbol-container-dispatch/account.json",
+    "prior_review": "docs/parity-reviews/class-quoted-symbol-container-dispatch/review.json",
+    "prior_followup": "docs/parity-reviews/class-quoted-symbol-container-dispatch/review-followup.json"
+  },
+  "commands": [
+    "shasum -a 256 /tmp/rustuml-diff-one-ede23f8e",
+    "git diff --stat 1f243f89acaf0d1304e1266e42b13c9f008e0903..ede23f8ee1c14fb171c3b47e99290daf437dc36b",
+    "git show e518b28509ea3318753503eb838868418ed42265:docs/parity-reviews/class-quoted-symbol-container-dispatch/account.json | sed -n '1,260p'",
+    "git show ede23f8ee1c14fb171c3b47e99290daf437dc36b:docs/parity-reviews/class-quoted-symbol-container-dispatch/review.json | sed -n '1,260p'",
+    "git show ede23f8ee1c14fb171c3b47e99290daf437dc36b:docs/parity-reviews/class-quoted-symbol-container-dispatch/review-followup.json | sed -n '1,260p'",
+    "git show 1f243f89acaf0d1304e1266e42b13c9f008e0903:crates/rustuml-parser/src/parse/mod.rs | nl -ba | sed -n '330,860p'",
+    "git show 1f243f89acaf0d1304e1266e42b13c9f008e0903^..1f243f89acaf0d1304e1266e42b13c9f008e0903 -- crates/rustuml-parser/src/parse/mod.rs docs/parity-reviews/class-quoted-symbol-container-dispatch/account.json test-diagrams/perturbations/class-quoted-symbol-container-dispatch | sed -n '1,280p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/PSystemBuilder.java | nl -ba | sed -n '120,240p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/command/PSystemCommandFactory.java | nl -ba | sed -n '70,220p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/classdiagram/ClassDiagramFactory.java | nl -ba | sed -n '95,180p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandCreateClass.java | nl -ba | sed -n '80,160p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandCreateElementFull2.java | nl -ba | sed -n '1,300p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/descdiagram/DescriptionDiagramFactory.java | nl -ba | sed -n '85,160p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandPackageWithUSymbol.java | nl -ba | sed -n '70,200p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandCreateElementFull.java | nl -ba | sed -n '1,240p'",
+    "rg -n -i 'class-quoted-symbol-container-dispatch|quoted_(node|cloud|frame|database)|Runtime Edge|Ledger|Cache|Nested Service|allowmixing_before_database_leaf_tb|root_node_database_leaf_tb|cloud_nested_database_leaf_lr|database_container_database_leaf_tb|root_database_leaf_before_frame_lr' crates",
+    "rg -n 'test-diagrams|include_str!|golden|replace\\(|replacen\\(|data-diagram-type' crates/rustuml crates/rustuml-parser crates/rustuml-render crates/rustuml-layout crates/rustuml-math",
+    "tmpdir=/private/tmp/rustuml-review-class-quoted-symbol-container-dispatch-1f243f89 && rm -rf \"$tmpdir\" && mkdir -p \"$tmpdir\" && git archive ede23f8ee1c14fb171c3b47e99290daf437dc36b test-diagrams/perturbations/class-quoted-symbol-container-dispatch | tar -x -C \"$tmpdir\"",
+    "tmpdir=/private/tmp/rustuml-review-class-quoted-symbol-container-dispatch-1f243f89; pdir=\"$tmpdir/test-diagrams/perturbations/class-quoted-symbol-container-dispatch\"; find \"$pdir\" -maxdepth 1 -name '*.svg' -delete; java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg \"$pdir\"/*.puml",
+    "tmpdir=/private/tmp/rustuml-review-class-quoted-symbol-container-dispatch-1f243f89; pdir=\"$tmpdir/test-diagrams/perturbations/class-quoted-symbol-container-dispatch\"; for p in \"$pdir\"/*.puml; do /tmp/rustuml-diff-one-ede23f8e --no-oracle \"$p\"; done",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg /Users/marcelo/work/github.com/marcelocantos/rustuml/test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup2_*.puml",
+    "for p in /Users/marcelo/work/github.com/marcelocantos/rustuml/test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup2_*.puml; do /tmp/rustuml-diff-one-ede23f8e --no-oracle \"$p\"; done",
+    "for p in /Users/marcelo/work/github.com/marcelocantos/rustuml/test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup2_*.puml; do /tmp/rustuml-diff-one-ede23f8e --no-oracle --print-rust \"$p\" | rg -o 'data-diagram-type=\"[^\"]+\"' -m 1; done",
+    "shasum -a 256 /tmp/rustuml-diff-one-ede23f8e /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar /Users/marcelo/work/github.com/marcelocantos/rustuml/test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup2_*.puml /Users/marcelo/work/github.com/marcelocantos/rustuml/test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup2_*.svg"
+  ],
+  "source_inspection": {
+    "java": [
+      "PSystemBuilder tries generic @startuml factories in registration order: SequenceDiagramFactory, then ClassDiagramFactory, then DescriptionDiagramFactory. The first complete successful factory wins.",
+      "PSystemCommandFactory rejects a candidate factory as soon as no command matches a line, an execution error occurs, or the diagram finishes incomplete.",
+      "ClassDiagramFactory accepts quoted shared containers through CommandPackageWithUSymbol and class-family declarations through CommandCreateClass and CommandCreateClassMultilines.",
+      "CommandCreateElementFull2 reuses CommandCreateElementFull.ALL_TYPES, so without allowmixing it rejects normal-keyword description leaves broadly, not just component leaves."
+    ],
+    "rust": [
+      "Commit 1f243f89 introduces class_factory_viable, but the invalidating evidence is only has_class_factory_incompatible_component_leaf set by trimmed.starts_with(\"component \") without braces.",
+      "Bare, inline-empty, and multiline entity declarations still set has_entity_class_factory_decl and has_class_factory_decl, and quoted shared-container promotion uses class_factory_viable to decide whether CLASS outranks DESCRIPTION.",
+      "Nothing in detect_uml_subtype marks database, artifact, cloud, frame, node, queue, boundary, control, collections, or bracket component leaves as class-factory-incompatible even though Java routes those through CommandCreateElementFull2 under the same allowmixing gate."
+    ],
+    "fixture_shaping_search": "No mechanism name, held-out filename stem, or held-out diagram text appeared in shipping crate logic.",
+    "golden_reads": "No mechanism-specific golden reads were introduced in the candidate parser change; the touched code path is subtype detection only.",
+    "output_surgery": "No mechanism-specific SVG post-processing or coordinate surgery was introduced in the candidate change.",
+    "constants": "The candidate adds no new high-precision constants. It reuses the existing score weights, including the pre-existing shared-container deployment bonus of 20."
+  },
+  "existing_perturbations": {
+    "source_commit": "ede23f8ee1c14fb171c3b47e99290daf437dc36b",
+    "rerun_root": "/private/tmp/rustuml-review-class-quoted-symbol-container-dispatch-1f243f89",
+    "results": [
+      {
+        "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup_allowmixing_node_entity_component_tb.puml",
+        "java_diagram_type": "CLASS",
+        "rust_diagram_type": "CLASS",
+        "result": "fail",
+        "failure_classification": "secondary executable residue"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup_cloud_component_then_bare_entity_lr.puml",
+        "java_diagram_type": "DESCRIPTION",
+        "rust_diagram_type": "DESCRIPTION",
+        "result": "fail",
+        "failure_classification": "secondary executable residue"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup_display_only_frame_entity_interface_lr.puml",
+        "java_diagram_type": "CLASS",
+        "rust_diagram_type": "CLASS",
+        "result": "pass"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup_nested_database_entity_body_lr.puml",
+        "java_diagram_type": "CLASS",
+        "rust_diagram_type": "CLASS",
+        "result": "pass"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup_nested_package_quoted_node_inline_empty_tb.puml",
+        "java_diagram_type": "CLASS",
+        "rust_diagram_type": "CLASS",
+        "result": "pass"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup_outer_bare_entity_component_node_tb.puml",
+        "java_diagram_type": "DESCRIPTION",
+        "rust_diagram_type": "DESCRIPTION",
+        "result": "pass"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/quoted_cloud_interface_nested_lr.puml",
+        "java_diagram_type": "CLASS",
+        "rust_diagram_type": "CLASS",
+        "result": "pass"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/quoted_cloud_interface_only_lr_nested.puml",
+        "java_diagram_type": "CLASS",
+        "rust_diagram_type": "CLASS",
+        "result": "pass"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/quoted_database_class_control_lr.puml",
+        "java_diagram_type": "CLASS",
+        "rust_diagram_type": "CLASS",
+        "result": "pass"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/quoted_frame_entity_body_lr.puml",
+        "java_diagram_type": "CLASS",
+        "rust_diagram_type": "CLASS",
+        "result": "pass"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/quoted_node_component_control_tb.puml",
+        "java_diagram_type": "DESCRIPTION",
+        "rust_diagram_type": "DESCRIPTION",
+        "result": "pass"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/quoted_node_interface_only_tb.puml",
+        "java_diagram_type": "CLASS",
+        "rust_diagram_type": "CLASS",
+        "result": "pass"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/quoted_node_interface_shared_tb.puml",
+        "java_diagram_type": "CLASS",
+        "rust_diagram_type": "CLASS",
+        "result": "pass"
+      }
+    ]
+  },
+  "fresh_inputs": [
+    "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup2_allowmixing_after_entity_before_database_tb.puml",
+    "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup2_allowmixing_before_database_leaf_tb.puml",
+    "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup2_cloud_nested_database_leaf_lr.puml",
+    "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup2_database_nested_component_leaf_tb.puml",
+    "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup2_database_nested_database_leaf_tb.puml",
+    "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup2_frame_component_container_tb.puml",
+    "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup2_frame_root_component_leaf_lr.puml",
+    "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup2_frame_root_database_leaf_lr.puml",
+    "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup2_node_nested_database_leaf_tb.puml"
+  ],
+  "fresh_perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup2_allowmixing_after_entity_before_database_tb.puml",
+      "golden": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup2_allowmixing_after_entity_before_database_tb.svg",
+      "java_diagram_type": "CLASS",
+      "rust_diagram_type": "CLASS",
+      "axes": [
+        "allowmixing after class-family content but before description leaf",
+        "quoted node container",
+        "database leaf",
+        "top-to-bottom direction"
+      ],
+      "result": "fail",
+      "failure_classification": "secondary executable residue"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup2_allowmixing_before_database_leaf_tb.puml",
+      "golden": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup2_allowmixing_before_database_leaf_tb.svg",
+      "java_diagram_type": "CLASS",
+      "rust_diagram_type": "CLASS",
+      "axes": [
+        "allowmixing before mixed content",
+        "quoted node container",
+        "database leaf",
+        "top-to-bottom direction"
+      ],
+      "result": "fail",
+      "failure_classification": "secondary executable residue"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup2_cloud_nested_database_leaf_lr.puml",
+      "golden": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup2_cloud_nested_database_leaf_lr.svg",
+      "java_diagram_type": "DESCRIPTION",
+      "rust_diagram_type": "CLASS",
+      "axes": [
+        "entity before description leaf",
+        "nested description leaf",
+        "quoted cloud container",
+        "left-to-right direction"
+      ],
+      "result": "fail",
+      "failure_classification": "dispatch-shaped"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup2_database_nested_component_leaf_tb.puml",
+      "golden": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup2_database_nested_component_leaf_tb.svg",
+      "java_diagram_type": "DESCRIPTION",
+      "rust_diagram_type": "DESCRIPTION",
+      "axes": [
+        "entity before component leaf",
+        "nested component leaf",
+        "quoted database container",
+        "top-to-bottom direction"
+      ],
+      "result": "fail",
+      "failure_classification": "secondary executable residue"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup2_database_nested_database_leaf_tb.puml",
+      "golden": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup2_database_nested_database_leaf_tb.svg",
+      "java_diagram_type": "DESCRIPTION",
+      "rust_diagram_type": "CLASS",
+      "axes": [
+        "entity before description leaf",
+        "nested description leaf",
+        "quoted database container",
+        "top-to-bottom direction"
+      ],
+      "result": "fail",
+      "failure_classification": "dispatch-shaped"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup2_frame_component_container_tb.puml",
+      "golden": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup2_frame_component_container_tb.svg",
+      "java_diagram_type": "CLASS",
+      "rust_diagram_type": "CLASS",
+      "axes": [
+        "component container versus component leaf control",
+        "quoted frame container",
+        "nested component container",
+        "top-to-bottom direction"
+      ],
+      "result": "fail",
+      "failure_classification": "secondary executable residue"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup2_frame_root_component_leaf_lr.puml",
+      "golden": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup2_frame_root_component_leaf_lr.svg",
+      "java_diagram_type": "DESCRIPTION",
+      "rust_diagram_type": "DESCRIPTION",
+      "axes": [
+        "component before entity",
+        "root component leaf",
+        "quoted frame container",
+        "left-to-right direction"
+      ],
+      "result": "fail",
+      "failure_classification": "secondary executable residue"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup2_frame_root_database_leaf_lr.puml",
+      "golden": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup2_frame_root_database_leaf_lr.svg",
+      "java_diagram_type": "DESCRIPTION",
+      "rust_diagram_type": "CLASS",
+      "axes": [
+        "database leaf before entity",
+        "root description leaf",
+        "quoted frame container",
+        "left-to-right direction"
+      ],
+      "result": "fail",
+      "failure_classification": "dispatch-shaped"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup2_node_nested_database_leaf_tb.puml",
+      "golden": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup2_node_nested_database_leaf_tb.svg",
+      "java_diagram_type": "DESCRIPTION",
+      "rust_diagram_type": "CLASS",
+      "axes": [
+        "entity before description leaf",
+        "nested description leaf",
+        "quoted node container",
+        "top-to-bottom direction"
+      ],
+      "result": "fail",
+      "failure_classification": "dispatch-shaped"
+    }
+  ],
+  "findings": [
+    "REJECT: commit 1f243f89 still does not model Java's whole-source first-complete-factory rule. The new class_factory_viable gate only treats bare component leaves as class-factory-incompatible, but Java's CommandCreateElementFull2 rejects a broader set of ordinary description leaves under the same allowmixing gate.",
+    "Four fresh valid counterexamples route DESCRIPTION in Java but CLASS in Rust: checker_followup2_node_nested_database_leaf_tb, checker_followup2_cloud_nested_database_leaf_lr, checker_followup2_database_nested_database_leaf_tb, and checker_followup2_frame_root_database_leaf_lr.",
+    "Those counterexamples generalize across all requested perturbation axes for the surviving hole: node, cloud, frame, and database quoted containers; nested and root ordinary leaves; entity-before-leaf and leaf-before-entity order; and both top-to-bottom and left-to-right directions.",
+    "The earlier component-leaf dispatch hole appears closed: inherited component-leaf counterexamples now pass on dispatch type. However, strict acceptance still fails because seven valid cases remain secondary executable residue even when Java and Rust choose the same diagram type.",
+    "No fixture-shaped logic, mechanism-specific golden reads, or mechanism-specific output surgery was found in the candidate change. The failure is still causal data-flow incompleteness inside subtype detection, not curve-fit artifact replay."
+  ],
+  "summary": {
+    "existing_valid_inputs": 13,
+    "existing_passes": 11,
+    "existing_failures": 2,
+    "fresh_valid_inputs": 9,
+    "fresh_passes": 0,
+    "fresh_failures": 9,
+    "dispatch_failures": 4,
+    "secondary_failures": 7,
+    "total_valid_inputs": 22,
+    "total_passes": 11,
+    "total_failures": 11,
+    "java_syntax_errors": 0,
+    "cargo_or_rustc_run": false
+  },
+  "verdict": "REJECT"
+}

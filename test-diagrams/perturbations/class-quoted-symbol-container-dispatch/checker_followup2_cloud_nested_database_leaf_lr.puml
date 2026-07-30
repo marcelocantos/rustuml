@@ -1,0 +1,7 @@
+@startuml
+left to right direction
+entity Ledger
+cloud "Runtime Edge" as Runtime {
+  database Cache
+}
+@enduml

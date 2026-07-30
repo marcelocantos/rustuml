@@ -1,0 +1,8 @@
+@startuml
+top to bottom direction
+frame "Runtime Edge" as Runtime {
+  component "Nested Service" as Nested {
+    entity Ledger
+  }
+}
+@enduml

@@ -1,0 +1,18 @@
+@startuml
+skinparam packageStyle cloud
+
+package "Nimbus" as FallbackCloud <<SuperLongStereotypeHeader>> <<Audit>> {
+  class CloudFallbackA
+  class CloudFallbackB
+}
+
+database "Container" as DatabaseParent <<Ops>> {
+  cloud "Extremely Verbose Weather Control Surface" as ExplicitCloud <<WX>> {
+    class CloudExplicitA
+    class CloudExplicitB
+  }
+}
+
+CloudFallbackA --> CloudExplicitA
+CloudFallbackB --> CloudExplicitB
+@enduml

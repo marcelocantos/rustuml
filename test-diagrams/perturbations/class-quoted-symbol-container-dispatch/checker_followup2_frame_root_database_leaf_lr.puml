@@ -1,0 +1,7 @@
+@startuml
+left to right direction
+database Cache
+frame "Runtime Edge" as Runtime {
+  entity Ledger
+}
+@enduml

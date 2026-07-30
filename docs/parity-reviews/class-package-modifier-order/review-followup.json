@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-package-modifier-order",
+  "review_kind": "followup",
+  "review_date": "2026-07-30",
+  "candidate_commit": "178883656d401630b88fadfc603a45af3f27da50",
+  "package_url_implementation_commit": "6caa3d93",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "reviewer": {
+    "identity": "independent adversarial checker",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop",
+    "independence": "Did not implement commit 6caa3d93 or candidate commit 178883656d401630b88fadfc603a45af3f27da50, worked only in the isolated worktree, and edited only held-out perturbation artifacts plus this review record."
+  },
+  "revisions": {
+    "rust_candidate_checked": "178883656d401630b88fadfc603a45af3f27da50",
+    "rust_package_url_implementation_commit": "6caa3d93",
+    "java_revision_checked": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "prior_reviews": [
+    {
+      "path": "docs/parity-reviews/class-package-modifier-order/review.json",
+      "commit": "22cbd490",
+      "implementation_commit": "8895b9de317ebdac7b32ddeb99733c8b73e786a3",
+      "verdict": "rejected",
+      "note": "The prior review rejected the first implementation because package URLs were still dropped from the Rust model. The exact candidate fixes that carry-through gap, but the held-out follow-up matrix below still rejects it on separate Java-behavior mismatches."
+    }
+  ],
+  "binary": {
+    "path": "/tmp/rustuml-diff-one-17888365",
+    "sha256": "faf4aaa919b8ab9c614ddfa9c0de00871efe682066f3f7da3cffa553c187b649",
+    "mode": "--no-oracle",
+    "rebuilt": false
+  },
+  "java_jar": {
+    "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+  },
+  "commands": [
+    "git show 178883656d401630b88fadfc603a45af3f27da50:docs/parity-reviews/class-package-modifier-order/account.json",
+    "git show 178883656d401630b88fadfc603a45af3f27da50:docs/parity-reviews/class-package-modifier-order/review.json",
+    "git show 22cbd490:docs/parity-reviews/class-package-modifier-order/review.json",
+    "git diff 6caa3d93..178883656d401630b88fadfc603a45af3f27da50 -- crates/rustuml-parser/src/parse/class.rs crates/rustuml-render/src/class.rs",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/command/CommandPackage.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandPackageWithUSymbol.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/url/UrlBuilder.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/Cluster.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/image/EntityImageEmptyPackage.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/image/EntityImageDescription.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/UGraphicSvg.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/klimt/drawing/svg/SvgGraphics.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/skin/SkinParam.java",
+    "git show 178883656d401630b88fadfc603a45af3f27da50:crates/rustuml-parser/src/parse/mod.rs",
+    "git show 178883656d401630b88fadfc603a45af3f27da50:crates/rustuml-parser/src/parse/class.rs",
+    "git show 178883656d401630b88fadfc603a45af3f27da50:crates/rustuml-parser/src/diagram/class.rs",
+    "git show 178883656d401630b88fadfc603a45af3f27da50:crates/rustuml-render/src/lib.rs",
+    "git show 178883656d401630b88fadfc603a45af3f27da50:crates/rustuml-render/src/skinparam.rs",
+    "git show 178883656d401630b88fadfc603a45af3f27da50:crates/rustuml-render/src/class.rs",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/class-package-modifier-order/followup_topurl_reopen_nested_lr.puml test-diagrams/perturbations/class-package-modifier-order/followup_explicit_node_tooltip_unicode_tb.puml test-diagrams/perturbations/class-package-modifier-order/followup_cloud_tooltip_newline_tb.puml test-diagrams/perturbations/class-package-modifier-order/followup_empty_package_tooltip_only_tb.puml",
+    "/tmp/rustuml-diff-one-17888365 --no-oracle test-diagrams/perturbations/class-package-modifier-order/followup_topurl_reopen_nested_lr.puml",
+    "/tmp/rustuml-diff-one-17888365 --no-oracle --print-rust test-diagrams/perturbations/class-package-modifier-order/followup_topurl_reopen_nested_lr.puml",
+    "/tmp/rustuml-diff-one-17888365 --no-oracle test-diagrams/perturbations/class-package-modifier-order/followup_explicit_node_tooltip_unicode_tb.puml",
+    "/tmp/rustuml-diff-one-17888365 --no-oracle test-diagrams/perturbations/class-package-modifier-order/followup_cloud_tooltip_newline_tb.puml",
+    "/tmp/rustuml-diff-one-17888365 --no-oracle test-diagrams/perturbations/class-package-modifier-order/followup_empty_package_tooltip_only_tb.puml",
+    "rg -n \"class-package-modifier-order|followup_topurl_reopen_nested_lr|followup_explicit_node_tooltip_unicode_tb|followup_cloud_tooltip_newline_tb|followup_empty_package_tooltip_only_tb|include_str!|read_to_string\\(|std::fs::read_to_string|golden|replace\\(\" crates/rustuml-parser/src/parse/class.rs crates/rustuml-render/src/class.rs crates/rustuml-render/src/skinparam.rs crates/rustuml-render/src/lib.rs"
+  ],
+  "source_inspection": {
+    "java": [
+      "CommandPackage and CommandPackageWithUSymbol accept tags, stereotype, URL, and trailing color after the package code/display. On reopen they mutate stereotype only when the current declaration supplies one, so an earlier stereotype survives a plain `package systems.api { ... }` reopen.",
+      "UrlBuilder returns Url objects with relative href resolution via `topurl`; SVG link serialization then happens through `UGraphicSvg.startUrl` and `SvgGraphics.LinkData`, which applies `SkinParam.getSvgLinkTarget()` and normalizes tooltip text by decoding `<U+XXXX>` escapes and replacing literal `\\n` with a newline."
+    ],
+    "rust": [
+      "ClassParser::try_package now carries URL metadata into Package, but when it reuses an existing final package it unconditionally assigns `package.stereotypes = stereotypes.clone()`. A reopen without a stereotype therefore clears the original stereotype instead of preserving it.",
+      "emit_package_link_open serializes `tooltip.unwrap_or(href)` literally. It does not reproduce Java's `SvgGraphics.LinkData.getXlinkTitle()` decoding of `<U+XXXX>` sequences or literal `\\n`.",
+      "The product renderer loses `skinparam svgLinkTarget` because parser-side metadata canonicalization lowercases keys to `svglinktarget`, while `skinparam::apply_skinparams` only lowercases the first character and matches the camel-case string `svgLinkTarget`."
+    ],
+    "fixture_shaping_search": "No mechanism name, perturbation filename, `include_str!`, or `read_to_string` hit appeared in the touched package URL parser/render paths. The renderer contains generic XML escaping and unrelated golden-commentary, but no package-URL-specific golden read or fixture-shaped branch.",
+    "constants_and_output_surgery": "No new URL-specific magic-number ladder or coordinate-based SVG surgery appeared in 6caa3d93..178883656d401630b88fadfc603a45af3f27da50. The added title-stack constants in 17888365 carry Java provenance comments and are not the cause of the URL failures below."
+  },
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-package-modifier-order/followup_topurl_reopen_nested_lr.puml",
+      "source_sha256": "80fb00603981250370d2f1adbf82069f37e9f5d4da871622778881c1cd6b1d72",
+      "golden": "test-diagrams/perturbations/class-package-modifier-order/followup_topurl_reopen_nested_lr.svg",
+      "golden_sha256": "181b2176ee54b8b110162047873966ef694f692b561c0a0cf0e1494c0781004d",
+      "axes": [
+        "populated ordinary package",
+        "left-to-right direction",
+        "topurl-resolved relative URL",
+        "explicit alias with dotted name",
+        "nested group",
+        "reopened group"
+      ],
+      "result": "fail",
+      "evidence": "Java keeps the outer package stereotype `<<Facade>>` from the first declaration when `package systems.api { ... }` reopens it later. The exact candidate clears that stereotype on reopen, removing the stereotype line, shrinking `systems.api` from 231px to 215px and its parent `systems` from 255px to 239px, and moving both child entities up by 16px."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-package-modifier-order/followup_explicit_node_tooltip_unicode_tb.puml",
+      "source_sha256": "5d6bfc0df8d6316456889445d981ad7a7c7ad65cc90e2c4710ecebd739a91d6a",
+      "golden": "test-diagrams/perturbations/class-package-modifier-order/followup_explicit_node_tooltip_unicode_tb.svg",
+      "golden_sha256": "6983823c9384588f2e290ee2ca7398f5b0a1e07abbf6ed0af9e84e93b559b528",
+      "axes": [
+        "empty explicit node symbol leaf",
+        "explicit alias with dotted name",
+        "topurl-resolved relative URL",
+        "nondefault svgLinkTarget",
+        "tooltip with Unicode escape",
+        "URL label form"
+      ],
+      "result": "fail",
+      "evidence": "Java emits target `_blank` and title `Docs & Support` for the package anchor. The exact candidate emits target `_top` and the literal undecoded title `Docs <U+0026> Support` even though the href is correctly resolved to `https://docs.example/root/runtime/index.html`."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-package-modifier-order/followup_cloud_tooltip_newline_tb.puml",
+      "source_sha256": "3f383407fc4ecc9ce4d4b031eb1355a34928632ac391f788d350c9327bdeda87",
+      "golden": "test-diagrams/perturbations/class-package-modifier-order/followup_cloud_tooltip_newline_tb.svg",
+      "golden_sha256": "77e098efade9d80c03508253c8f4302b0c84d19a65689b9b4b7b2f46f1a8ee61",
+      "axes": [
+        "populated explicit cloud symbol cluster",
+        "top-to-bottom direction",
+        "visible stereotype line",
+        "absolute URL",
+        "tooltip with literal newline escape"
+      ],
+      "result": "fail",
+      "evidence": "Java's anchor title is the two-line string `Docs\\nPortal` normalized to an actual newline in SVG. The exact candidate serializes the literal backslash sequence, producing `Docs\\\\nPortal` in both `title` and `xlink:title`."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-package-modifier-order/followup_empty_package_tooltip_only_tb.puml",
+      "source_sha256": "6eef12e2716c7f4be41bb7ca7f6db4783ae6498e3ab4a116ae6c997f77bcdf91",
+      "golden": "test-diagrams/perturbations/class-package-modifier-order/followup_empty_package_tooltip_only_tb.svg",
+      "golden_sha256": "43044be90ead1364ee85c7be09f82e8d5c69183a615a860e2c35794883fdfcdf",
+      "axes": [
+        "empty ordinary package leaf",
+        "tooltip-only URL form",
+        "nondefault svgLinkTarget",
+        "tags around stereotype",
+        "Unicode escape in tooltip"
+      ],
+      "result": "fail",
+      "evidence": "Java emits `href=\"\"`, target `_parent`, and title `Tooltip & More`. The exact candidate emits the same empty href but falls back to target `_top` and leaves the tooltip undecoded as `Tooltip <U+0026> More`."
+    }
+  ],
+  "findings": [
+    "Reject: the exact candidate still does not match Java package URL behavior on held-out valid inputs.",
+    "Reopening an existing package without re-stating its stereotype clears the stored stereotype in Rust, while Java preserves it. This changes cluster header content and layout geometry.",
+    "Package anchor titles are serialized too literally in Rust. Java decodes `<U+XXXX>` sequences and literal `\\n` before writing `title` and `xlink:title`; the exact candidate does not.",
+    "Product `skinparam svgLinkTarget` is ineffective for package links on the no-oracle path because parser-side lowercasing (`svglinktarget`) does not match the renderer's camel-case `svgLinkTarget` switch arm, so Rust falls back to `_top`."
+  ],
+  "summary": {
+    "valid_inputs": 4,
+    "passes": 0,
+    "failures": 4,
+    "java_syntax_errors": 0,
+    "cargo_or_rustc_run": false
+  },
+  "verdict": "rejected"
+}

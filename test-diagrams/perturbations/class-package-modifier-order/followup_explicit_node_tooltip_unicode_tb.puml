@@ -1,0 +1,7 @@
+@startuml
+skinparam topurl https://docs.example/root/
+skinparam svgLinkTarget _blank
+node "Runtime Node" as systems.runtime $ops <<Execution>> $live [[runtime/index.html{Docs <U+0026> Support} click-here]] #AliceBlue {
+}
+class Sentinel
+@enduml
