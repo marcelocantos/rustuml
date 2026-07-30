@@ -1,0 +1,12 @@
+@startuml
+top to bottom direction
+package "Owner Package F2C" as OwnerF2C {
+  storage "Nested Store F2C" as StoreF2C <<warm_f2c>> #Wheat {
+    queue "Retry Queue F2C" as RetryF2C
+    node "Worker Node F2C" as WorkerF2C
+  }
+}
+component "External Component F2C" as ExternalF2C
+StoreF2C --> ExternalF2C : exports
+RetryF2C --> WorkerF2C : retries
+@enduml

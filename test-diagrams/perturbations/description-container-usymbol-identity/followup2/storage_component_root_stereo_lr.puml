@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+storage "Component Store F2B" as StoreF2B <<retained_f2b>> #LightBlue {
+  database "Index F2B" as IndexF2B
+  artifact "Parcel F2B" as ParcelF2B
+}
+component "Unrelated Auditor F2B" as AuditorF2B
+StoreF2B --> AuditorF2B : audits
+IndexF2B --> ParcelF2B : locates
+@enduml

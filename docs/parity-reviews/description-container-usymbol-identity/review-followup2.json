@@ -1,0 +1,157 @@
+{
+  "schema_version": 1,
+  "mechanism": "description-container-usymbol-identity",
+  "review_kind": "followup2",
+  "reviewer": {
+    "role": "independent adversarial checker",
+    "tool": "Codex desktop",
+    "date": "2026-07-31",
+    "independence": "Did not implement 8d37a26a, did not edit shipping Rust, and worked in the isolated integration checkout only."
+  },
+  "verdict": "REJECT",
+  "reason": "Two fresh Java-valid held-outs fail the no-oracle comparison on the deployment backend. Both preserve the requested storage/artifact primitive and text stack but place the root cluster five pixels too far left and make the canvas five pixels too narrow. A valid counterexample rejects the cross-backend identity claim.",
+  "revisions": {
+    "implementation_revision": "8d37a26a927436b1b5ccb6b323d2ba72d84f19ce",
+    "account_revision": "9a3a98f49617e9d95cf2628bbb365524db7c20c6",
+    "account_file": "docs/parity-reviews/description-container-usymbol-identity/account-followup2.json",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "provenance": {
+    "isolated_checkout": "/tmp/rustuml-integrate-20260731a",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "helper": "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one",
+    "helper_sha256": "4ca91dffb9939e646cfd37e3f6726663deaaddb7ecc2e1b8e8f0fa5b7f574aa2",
+    "cargo_or_rustc_invocations": 0
+  },
+  "commands": [
+    "git rev-parse 8d37a26a927436b1b5ccb6b323d2ba72d84f19ce",
+    "git log -1 --format='%H%n%ad%n%s' --date=iso-strict -- docs/parity-reviews/description-container-usymbol-identity/account-followup2.json",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse 71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "sed -n '60,190p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandPackageWithUSymbol.java",
+    "sed -n '45,150p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolStorage.java",
+    "sed -n '45,150p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolArtifact.java",
+    "sed -n '50,115p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/ClusterHeader.java",
+    "sed -n '50,115p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/ClusterDecoration.java",
+    "sed -n '135,190p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java",
+    "sed -n '115,145p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekResult.java",
+    "rg -n 'F2A|F2B|F2C|F2D|F2E|F2F|F2G|F2H|followup2|Archive Vault|Component Store|Deployment Artifact' crates docs test-diagrams/golden -g '*.rs' -g '*.json' -g '*.md'",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/description-container-usymbol-identity/followup2/*.puml",
+    "for s in test-diagrams/perturbations/description-container-usymbol-identity/followup2/*.svg; do xmllint --noout \"$s\"; done",
+    "rg -qi 'syntax error|error line|an error has occured|no class|welcome to plantuml' test-diagrams/perturbations/description-container-usymbol-identity/followup2 -g '*.svg'",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/description-container-usymbol-identity/followup2/artifact_component_nested_lr.puml",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/description-container-usymbol-identity/followup2/artifact_component_root_lr_links.puml",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/description-container-usymbol-identity/followup2/artifact_deploy_root_stereo_tb.puml",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/description-container-usymbol-identity/followup2/storage_component_nested_tb.puml",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/description-container-usymbol-identity/followup2/storage_component_root_stereo_lr.puml",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/description-container-usymbol-identity/followup2/storage_deploy_nested_lr.puml",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/description-container-usymbol-identity/followup2/storage_deploy_root_plain_tb.puml",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/description-container-usymbol-identity/followup2/storage_deploy_sibling_links_tb.puml",
+    "DIFF_ONE_DEBUG=1 /tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/description-container-usymbol-identity/followup2/*.puml"
+  ],
+  "java_model_findings": [
+    "DescriptionDiagramFactory registers one CommandPackageWithUSymbol command for the DESCRIPTION surface, and CommandPackageWithUSymbol passes USymbols.fromString(symbol, ...) directly to diagram.gotoGroup.",
+    "USymbolStorage.asBig draws a rounded URectangle, places stereotype at local y=5, and places title at local y=7 plus stereotype height.",
+    "USymbolArtifact.asBig draws the rounded body plus the folded-page polygon, and places both stereotype and title at local y=2 with the title following stereotype height.",
+    "ClusterHeader derives title dimensions from merged stereotype/title blocks and adds only the selected symbol's supplement; these two symbols do not add a shape supplement in the cited implementation.",
+    "LimitFinder expands URectangle extrema by one pixel and UPolygon X extrema by ten pixels; SvekResult then translates the painted minimum to six pixels and reports a fifteen-pixel dimension delta. These rules describe the painted envelope, not an unconditional cluster-frame origin."
+  ],
+  "rust_model_findings": [
+    "The component parser now retains ComponentPackageKind::Storage and ::Artifact, and the component renderer dispatches both to the shared storage/artifact primitive helpers with the Java text offsets.",
+    "The deployment parser retains DeploymentNodeKind::Storage and ::Artifact, and the deployment renderer dispatches both to the corresponding cluster primitive helpers.",
+    "The four component-routed cases emitted Rust component inventories under DIFF_ONE_DEBUG and all passed. The four deployment-routed cases used deployment-exclusive storage/artifact container scoring; two passed and two failed.",
+    "The component frame code assigns Storage and Artifact the generic MARGIN origin (7), while component_cluster_painted_max special-cases Artifact's right extent but does not derive the frame origin from the complete painted envelope.",
+    "The deployment path has the analogous symbol-local painted bounds, but the failing root layouts show that the shared frame/canvas translation is not preserved when root topology changes."
+  ],
+  "fixture_keyed_logic_audit": {
+    "searched_literals": ["F2A", "F2B", "F2C", "F2D", "F2E", "F2F", "F2G", "F2H", "followup2", "Archive Vault", "Component Store", "Deployment Artifact"],
+    "result": "No fresh perturbation labels, ids, or directory names were found in shipping Rust. The implementation constants inspected were generic symbol geometry and adjacent Java-model comments; the rejection is behavioral, not a fixture-keyed branch finding."
+  },
+  "perturbations": [
+    {
+      "input": "test-diagrams/perturbations/description-container-usymbol-identity/followup2/artifact_component_nested_lr.puml",
+      "java_svg": "test-diagrams/perturbations/description-container-usymbol-identity/followup2/artifact_component_nested_lr.svg",
+      "java_valid": true,
+      "backend_signal": "component backend: DIFF_ONE_DEBUG emitted component inventory",
+      "axes": ["artifact", "nested", "package ownership", "unrelated component sibling", "left-to-right", "stereotype", "cross-container link"],
+      "comparison": "pass",
+      "stdout": "SVGs are structurally equivalent"
+    },
+    {
+      "input": "test-diagrams/perturbations/description-container-usymbol-identity/followup2/artifact_component_root_lr_links.puml",
+      "java_svg": "test-diagrams/perturbations/description-container-usymbol-identity/followup2/artifact_component_root_lr_links.svg",
+      "java_valid": true,
+      "backend_signal": "component backend: DIFF_ONE_DEBUG emitted component inventory",
+      "axes": ["artifact", "root", "unrelated component sibling", "left-to-right", "stereotype", "explicit color", "internal and root links"],
+      "comparison": "pass",
+      "stdout": "SVGs are structurally equivalent"
+    },
+    {
+      "input": "test-diagrams/perturbations/description-container-usymbol-identity/followup2/artifact_deploy_root_stereo_tb.puml",
+      "java_svg": "test-diagrams/perturbations/description-container-usymbol-identity/followup2/artifact_deploy_root_stereo_tb.svg",
+      "java_valid": true,
+      "backend_signal": "deployment backend: deployment-exclusive artifact container and no component inventory",
+      "axes": ["artifact", "root", "top-to-bottom", "stereotype", "explicit color", "nested storage and queue", "links"],
+      "comparison": "fail",
+      "stdout_excerpt": "Java 237x243; Rust 233x243. Java outer rect x=11.62 and Rust x=7; all artifact/child/link X coordinates are shifted by about 4.62 while primitive shape, text baselines, and heights match.",
+      "counterexample": true
+    },
+    {
+      "input": "test-diagrams/perturbations/description-container-usymbol-identity/followup2/storage_component_nested_tb.puml",
+      "java_svg": "test-diagrams/perturbations/description-container-usymbol-identity/followup2/storage_component_nested_tb.svg",
+      "java_valid": true,
+      "backend_signal": "component backend: DIFF_ONE_DEBUG emitted component inventory",
+      "axes": ["storage", "nested", "package ownership", "unrelated component sibling", "top-to-bottom", "stereotype", "explicit color", "links"],
+      "comparison": "pass",
+      "stdout": "SVGs are structurally equivalent"
+    },
+    {
+      "input": "test-diagrams/perturbations/description-container-usymbol-identity/followup2/storage_component_root_stereo_lr.puml",
+      "java_svg": "test-diagrams/perturbations/description-container-usymbol-identity/followup2/storage_component_root_stereo_lr.svg",
+      "java_valid": true,
+      "backend_signal": "component backend: DIFF_ONE_DEBUG emitted component inventory",
+      "axes": ["storage", "root", "unrelated component sibling", "left-to-right", "stereotype", "explicit color", "internal and root links"],
+      "comparison": "pass",
+      "stdout": "SVGs are structurally equivalent"
+    },
+    {
+      "input": "test-diagrams/perturbations/description-container-usymbol-identity/followup2/storage_deploy_nested_lr.puml",
+      "java_svg": "test-diagrams/perturbations/description-container-usymbol-identity/followup2/storage_deploy_nested_lr.svg",
+      "java_valid": true,
+      "backend_signal": "deployment backend: deployment-exclusive storage/artifact containers and no component inventory",
+      "axes": ["storage", "nested", "left-to-right", "stereotype", "nested artifact and database", "internal links"],
+      "comparison": "pass",
+      "stdout": "SVGs are structurally equivalent"
+    },
+    {
+      "input": "test-diagrams/perturbations/description-container-usymbol-identity/followup2/storage_deploy_root_plain_tb.puml",
+      "java_svg": "test-diagrams/perturbations/description-container-usymbol-identity/followup2/storage_deploy_root_plain_tb.svg",
+      "java_valid": true,
+      "backend_signal": "deployment backend: deployment-exclusive storage container and no component inventory",
+      "axes": ["storage", "root", "top-to-bottom", "no stereotype", "multiple children", "root and child links"],
+      "comparison": "pass",
+      "stdout": "SVGs are structurally equivalent"
+    },
+    {
+      "input": "test-diagrams/perturbations/description-container-usymbol-identity/followup2/storage_deploy_sibling_links_tb.puml",
+      "java_svg": "test-diagrams/perturbations/description-container-usymbol-identity/followup2/storage_deploy_sibling_links_tb.svg",
+      "java_valid": true,
+      "backend_signal": "deployment backend: two deployment-exclusive root containers and no component inventory",
+      "axes": ["storage", "artifact", "multiple roots", "top-to-bottom", "sibling containers", "cross-container links"],
+      "comparison": "fail",
+      "stdout_excerpt": "Java 256x292; Rust 251x292. Java root storage frame x=12 and Rust x=7; artifact and all descendants/links shift by 5 pixels in X while shape types, text baselines, and heights match.",
+      "counterexample": true
+    }
+  ],
+  "validation": {
+    "puml_count": 8,
+    "java_svg_count": 8,
+    "all_java_svgs_xml_valid": true,
+    "java_error_marker_scan": "pass",
+    "comparison_summary": {
+      "pass": 6,
+      "fail": 2
+    }
+  },
+  "conclusion": "REJECT. The corrected component-backend symbol variants survive four fresh component-routed cases, and the deployment backend passes four simpler/root-nested cases. The two fresh deployment counterexamples show that the claimed USymbol identity does not yet include the complete frame-origin and canvas-envelope behavior across root topology. The review record and all eight same-stem Java SVG pairs are preserved under test-diagrams/perturbations/description-container-usymbol-identity/followup2/; no shipping Rust was changed."
+}

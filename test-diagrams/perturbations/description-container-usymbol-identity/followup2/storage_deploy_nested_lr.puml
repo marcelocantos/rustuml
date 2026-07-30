@@ -1,0 +1,11 @@
+@startuml
+left to right direction
+storage "Outer Depot F2G" as DepotF2G <<outer_f2g>> {
+  artifact "Inner Receipt F2G" as ReceiptF2G {
+    node "Receipt Node F2G" as NodeF2G
+  }
+  database "Ledger F2G" as LedgerF2G
+}
+ReceiptF2G --> LedgerF2G : records
+NodeF2G --> LedgerF2G : writes
+@enduml

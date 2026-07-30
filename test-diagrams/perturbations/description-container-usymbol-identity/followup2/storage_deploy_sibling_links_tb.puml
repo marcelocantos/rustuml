@@ -1,0 +1,11 @@
+@startuml
+top to bottom direction
+storage "Primary Store F2H" as PrimaryF2H {
+  node "Primary Node F2H" as PrimaryNodeF2H
+}
+artifact "Audit Artifact F2H" as AuditF2H {
+  queue "Audit Queue F2H" as AuditQueueF2H
+}
+PrimaryNodeF2H --> AuditQueueF2H : records
+PrimaryF2H --> AuditF2H : archives
+@enduml

@@ -1,0 +1,9 @@
+@startuml
+top to bottom direction
+storage "Archive Vault F2A" as VaultF2A {
+  node "Ingest Rack F2A" as RackF2A
+  queue "Pending Row F2A" as RowF2A
+}
+RackF2A --> RowF2A : buffers
+VaultF2A --> RackF2A : receives
+@enduml

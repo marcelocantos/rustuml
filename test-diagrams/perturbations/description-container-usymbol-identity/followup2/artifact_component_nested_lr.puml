@@ -1,0 +1,12 @@
+@startuml
+left to right direction
+package "Artifact Owner F2E" as OwnerF2E {
+  artifact "Nested Artifact F2E" as ArtifactF2E {
+    component "Payload Reader F2E" as ReaderF2E
+  }
+  storage "Sibling Storage F2E" as StorageF2E
+}
+component "Verifier F2E" as VerifierF2E
+ReaderF2E --> StorageF2E : checks
+ArtifactF2E --> VerifierF2E : presents
+@enduml

@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+artifact "Component Bundle F2D" as BundleF2D <<sealed_f2d>> #PaleGreen {
+  component "Reader F2D" as ReaderF2D
+  database "Manifest F2D" as ManifestF2D
+}
+component "Release Gate F2D" as GateF2D
+ReaderF2D --> ManifestF2D : verifies
+BundleF2D --> GateF2D : releases
+@enduml

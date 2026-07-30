@@ -1,0 +1,9 @@
+@startuml
+top to bottom direction
+artifact "Deployment Artifact F2F" as ArtifactF2F <<signed_f2f>> #Lavender {
+  storage "Locker F2F" as LockerF2F
+  queue "Dispatch F2F" as DispatchF2F
+}
+LockerF2F --> DispatchF2F : schedules
+ArtifactF2F --> DispatchF2F : ships
+@enduml
