@@ -2357,6 +2357,15 @@ fn render_with_oracle_uid_origin(
                     + stereotype_height,
             },
         );
+        if diagram
+            .relationships
+            .iter()
+            .any(|relationship| relationship.from == pkg.name || relationship.to == pkg.name)
+        {
+            let endpoint_id = package_cluster_endpoint_layout_id(idx);
+            layout.add_svek_cluster_endpoint(&endpoint_id);
+            layout.add_cluster_node(&package_cluster_id(idx), &endpoint_id);
+        }
     }
     for (entity_idx, entity) in diagram.entities.iter().enumerate() {
         if let Some(pkg_idx) = package_render.innermost_pkg[entity_idx]
@@ -3681,6 +3690,10 @@ fn empty_package_layout_id(idx: usize) -> String {
     format!("empty_pkg{idx}")
 }
 
+fn package_cluster_endpoint_layout_id(idx: usize) -> String {
+    format!("__svek_group_endpoint_{idx}")
+}
+
 fn together_layout_id(idx: usize) -> String {
     format!("together{idx}")
 }
@@ -3874,6 +3887,24 @@ fn relationship_endpoint_name<'a>(
 ) -> std::borrow::Cow<'a, str> {
     if let Some(name) = association_point_name(diagram, id) {
         return std::borrow::Cow::Owned(name);
+    }
+    if let Some((idx, package)) = diagram
+        .packages
+        .iter()
+        .enumerate()
+        .find(|(_, package)| package.name == id)
+    {
+        if let Some(parent_idx) = package.parent
+            && let Some(suffix) = package
+                .name
+                .strip_prefix(&diagram.packages[parent_idx].name)
+        {
+            let short = suffix.trim_start_matches(|ch: char| !ch.is_alphanumeric() && ch != '_');
+            if !short.is_empty() {
+                return std::borrow::Cow::Borrowed(short);
+            }
+        }
+        return std::borrow::Cow::Borrowed(diagram.packages[idx].name.as_str());
     }
     // Java `Link.idCommentForSvg` builds path ids from `Entity.getName()`,
     // which delegates to the short `Quark#getName`, not its qualified name.
@@ -5502,6 +5533,7 @@ fn render_plantuml_svg(
                         package_ids: Some(&svek_ids.package_ids),
                         entity_ids: Some(&svek_ids.entity_ids),
                         note_ids: Some(&svek_ids.note_ids),
+                        cluster_positions: Some(cluster_positions),
                     },
                     ep,
                     link_id,
@@ -10049,6 +10081,7 @@ fn render_no_oracle_association_class_links(
                     package_ids: Some(&allocation.package_ids),
                     entity_ids: Some(&allocation.entity_ids),
                     note_ids: Some(&allocation.note_ids),
+                    cluster_positions: None,
                 },
                 edge,
                 first_link_id + link_idx,
@@ -10602,6 +10635,7 @@ struct RelationshipRenderContext<'a> {
     package_ids: Option<&'a [Option<String>]>,
     entity_ids: Option<&'a [String]>,
     note_ids: Option<&'a [Option<String>]>,
+    cluster_positions: Option<&'a [ClusterPosition]>,
 }
 
 fn render_relationship_svg(
@@ -10619,6 +10653,7 @@ fn render_relationship_svg(
         package_ids,
         entity_ids,
         note_ids,
+        cluster_positions,
     } = context;
     if edge_path.points.is_empty() {
         return;
@@ -10653,9 +10688,8 @@ fn render_relationship_svg(
     let decorates_from = relationship_decorates_from(rel);
     let decorates_to = relationship_decorates_to(rel);
     let is_reverse = decorates_from && !decorates_to;
-    let comment_from =
-        association_point_name(diagram, &rel.from).unwrap_or_else(|| rel.from.clone());
-    let comment_to = association_point_name(diagram, &rel.to).unwrap_or_else(|| rel.to.clone());
+    let comment_from = relationship_endpoint_name(diagram, &rel.from);
+    let comment_to = relationship_endpoint_name(diagram, &rel.to);
 
     // HTML comment.
     if is_reverse {
@@ -10767,7 +10801,7 @@ fn render_relationship_svg(
             value
         }
     };
-    let edge_points: Vec<(f64, f64)> = edge_path
+    let mut edge_points: Vec<(f64, f64)> = edge_path
         .points
         .iter()
         .map(|(x, y)| {
@@ -10777,6 +10811,33 @@ fn render_relationship_svg(
             )
         })
         .collect();
+    if let Some(cluster_positions) = cluster_positions {
+        let cluster_rect = |layout_endpoint: &str| {
+            diagram
+                .packages
+                .iter()
+                .enumerate()
+                .find(|(idx, _)| package_cluster_endpoint_layout_id(*idx) == layout_endpoint)
+                .and_then(|(idx, _)| {
+                    cluster_positions
+                        .iter()
+                        .find(|position| position.id == package_cluster_id(idx))
+                })
+                .map(|position| {
+                    (
+                        position.x + MARGIN,
+                        position.y + MARGIN,
+                        position.width,
+                        position.height,
+                    )
+                })
+        };
+        edge_points = simulate_class_compound(
+            edge_points,
+            cluster_rect(&edge_path.from),
+            cluster_rect(&edge_path.to),
+        );
+    }
     let start_decoration_len = if decorates_from {
         relationship_decoration_length(rel.kind)
     } else {
@@ -11290,7 +11351,7 @@ fn no_oracle_entity_id_from(
         .position(|e| e.id == id)
         .and_then(|index| entity_ids.and_then(|ids| ids.get(index)).cloned())
         .or_else(|| {
-            empty_package_endpoint_index(diagram, id).and_then(|index| {
+            package_endpoint_index(diagram, id).and_then(|index| {
                 package_ids
                     .and_then(|ids| ids.get(index))
                     .and_then(Clone::clone)
@@ -11308,6 +11369,94 @@ fn no_oracle_entity_id_from(
                 .map(|index| format!("ent{:04}", association_point_sequence(diagram, index) + 1))
         })
         .unwrap_or_else(|| "ent0002".to_string())
+}
+
+/// Clip a spline routed through a group's hidden point to the painted cluster
+/// boundary. Java `DotPath.simulateCompound` bisects the crossing cubic eight
+/// times and retains the outside halves.
+fn simulate_class_compound(
+    points: Vec<(f64, f64)>,
+    tail: Option<(f64, f64, f64, f64)>,
+    head: Option<(f64, f64, f64, f64)>,
+) -> Vec<(f64, f64)> {
+    if points.len() < 4 || !(points.len() - 1).is_multiple_of(3) {
+        return points;
+    }
+
+    type Cubic = [(f64, f64); 4];
+
+    let contains = |rectangle: (f64, f64, f64, f64), point: (f64, f64)| {
+        point.0 >= rectangle.0
+            && point.0 <= rectangle.0 + rectangle.2
+            && point.1 >= rectangle.1
+            && point.1 <= rectangle.1 + rectangle.3
+    };
+    let subdivide = |curve: Cubic| {
+        let midpoint = |a: (f64, f64), b: (f64, f64)| ((a.0 + b.0) / 2.0, (a.1 + b.1) / 2.0);
+        let p01 = midpoint(curve[0], curve[1]);
+        let p12 = midpoint(curve[1], curve[2]);
+        let p23 = midpoint(curve[2], curve[3]);
+        let p012 = midpoint(p01, p12);
+        let p123 = midpoint(p12, p23);
+        let split = midpoint(p012, p123);
+        ([curve[0], p01, p012, split], [split, p123, p23, curve[3]])
+    };
+    let mut curves = points[1..]
+        .chunks_exact(3)
+        .scan(points[0], |start, chunk| {
+            let curve = [*start, chunk[0], chunk[1], chunk[2]];
+            *start = chunk[2];
+            Some(curve)
+        })
+        .collect::<Vec<_>>();
+
+    if let Some(tail) = tail
+        && curves.first().is_some_and(|curve| contains(tail, curve[0]))
+        && let Some(index) = curves.iter().position(|curve| !contains(tail, curve[3]))
+    {
+        let mut current = curves[index];
+        let mut clipped = Vec::new();
+        for _ in 0..8 {
+            let (inside_half, outside_half) = subdivide(current);
+            if contains(tail, inside_half[3]) {
+                current = outside_half;
+            } else {
+                clipped.insert(0, outside_half);
+                current = inside_half;
+            }
+        }
+        clipped.extend_from_slice(&curves[index + 1..]);
+        curves = clipped;
+    }
+
+    if let Some(head) = head
+        && curves.last().is_some_and(|curve| contains(head, curve[3]))
+        && let Some(index) = curves.iter().position(|curve| contains(head, curve[3]))
+        && !contains(head, curves[index][0])
+    {
+        let mut current = curves[index];
+        let mut clipped = curves[..index].to_vec();
+        for _ in 0..8 {
+            let (outside_half, inside_half) = subdivide(current);
+            if contains(head, outside_half[3]) {
+                current = outside_half;
+            } else {
+                clipped.push(outside_half);
+                current = inside_half;
+            }
+        }
+        curves = clipped;
+    }
+
+    let Some(first) = curves.first() else {
+        return Vec::new();
+    };
+    let mut clipped = Vec::with_capacity(curves.len() * 3 + 1);
+    clipped.push(first[0]);
+    for curve in curves {
+        clipped.extend_from_slice(&curve[1..]);
+    }
+    clipped
 }
 
 /// Match each source relationship to one solved edge without reusing parallel
@@ -12217,20 +12366,30 @@ fn relationship_layout_id<'a>(
         .position(|note| note.alias.as_deref() == Some(endpoint))
         .map(|note_idx| std::borrow::Cow::Owned(floating_note_layout_id(note_idx)))
         .or_else(|| {
-            empty_package_endpoint_index(diagram, endpoint)
-                .map(|package_idx| std::borrow::Cow::Owned(empty_package_layout_id(package_idx)))
+            package_endpoint_index(diagram, endpoint).and_then(|package_idx| {
+                let package_render = package_render_model(diagram);
+                match package_render.roles[package_idx] {
+                    PackageRenderRole::Cluster => Some(std::borrow::Cow::Owned(
+                        package_cluster_endpoint_layout_id(package_idx),
+                    )),
+                    PackageRenderRole::EmptyLeaf | PackageRenderRole::SymbolLeaf => Some(
+                        std::borrow::Cow::Owned(empty_package_layout_id(package_idx)),
+                    ),
+                    PackageRenderRole::Hidden => None,
+                }
+            })
         })
         .unwrap_or(std::borrow::Cow::Borrowed(endpoint))
 }
 
-fn empty_package_endpoint_index(diagram: &ClassDiagram, endpoint: &str) -> Option<usize> {
+fn package_endpoint_index(diagram: &ClassDiagram, endpoint: &str) -> Option<usize> {
     let package_render = package_render_model(diagram);
     diagram
         .packages
         .iter()
         .enumerate()
         .position(|(idx, package)| {
-            package.name == endpoint && package_render.roles[idx].is_leaf_node()
+            package.name == endpoint && package_render.roles[idx].is_rendered()
         })
 }
 
@@ -14594,7 +14753,7 @@ fn render_note_box(
 #[cfg(test)]
 mod tests {
     use super::*;
-    use rustuml_parser::diagram::DiagramMeta;
+    use rustuml_parser::diagram::{Diagram, DiagramMeta};
 
     fn simple_class_diagram() -> ClassDiagram {
         ClassDiagram {
@@ -14962,7 +15121,7 @@ mod tests {
                      package \"Root Empty Leaf\" as RootLeaf {\n\
                      }\n\
                      package Outer {\n\
-                       package \"Painted Empty Leaf\" as PaintedLeaf #ABCDEF <<Archive>> {\n\
+                       package \"Painted Empty Leaf\" as PaintedLeaf <<Archive>> #ABCDEF {\n\
                        }\n\
                      }\n\
                      class LayoutAnchor\n\
@@ -16738,6 +16897,63 @@ mod tests {
     }
 
     #[test]
+    fn package_relationship_endpoints_use_leaf_or_cluster_svek_nodes() {
+        let input = "@startuml\n\
+            package OuterDomain7401 {\n\
+              package FilledGroup7403 {\n\
+                class Member7405\n\
+              }\n\
+              package EmptyGroup7407 {\n\
+              }\n\
+            }\n\
+            class Sink7411\n\
+            OuterDomain7401.FilledGroup7403 --> Sink7411\n\
+            OuterDomain7401.EmptyGroup7407 --> Sink7411\n\
+            @enduml";
+        let parsed = rustuml_parser::parse::parse(input).unwrap();
+        let Diagram::Class(diagram) = parsed else {
+            panic!("expected class diagram");
+        };
+        let filled_idx = diagram
+            .packages
+            .iter()
+            .position(|package| package.name == "OuterDomain7401.FilledGroup7403")
+            .unwrap();
+        let empty_idx = diagram
+            .packages
+            .iter()
+            .position(|package| package.name == "OuterDomain7401.EmptyGroup7407")
+            .unwrap();
+
+        assert_eq!(
+            relationship_layout_id(&diagram, &diagram.relationships[0].from),
+            package_cluster_endpoint_layout_id(filled_idx)
+        );
+        assert_eq!(
+            relationship_layout_id(&diagram, &diagram.relationships[1].from),
+            empty_package_layout_id(empty_idx)
+        );
+
+        let allocation = svek_id_allocation(&diagram);
+        assert_eq!(
+            no_oracle_entity_id_from(
+                &diagram,
+                Some(&allocation.package_ids),
+                Some(&allocation.entity_ids),
+                Some(&allocation.note_ids),
+                &diagram.relationships[0].from,
+            ),
+            allocation.package_ids[filled_idx].clone().unwrap()
+        );
+
+        let svg = crate::render_svg(&Diagram::Class(diagram));
+        assert!(svg.contains("<!--link FilledGroup7403 to Sink7411-->"));
+        assert!(svg.contains("<!--link EmptyGroup7407 to Sink7411-->"));
+        assert!(svg.contains(r#"id="FilledGroup7403-to-Sink7411""#));
+        assert!(svg.contains(r#"id="EmptyGroup7407-to-Sink7411""#));
+    }
+
+    #[test]
     fn explicit_svek_spacing_overrides_only_its_named_axis() {
         let nodesep_only = rustuml_parser::parse::parse(
             "@startuml\n\
@@ -17111,6 +17327,7 @@ mod tests {
                 package_ids: None,
                 entity_ids: None,
                 note_ids: None,
+                cluster_positions: None,
             },
             &edge_path,
             4,
