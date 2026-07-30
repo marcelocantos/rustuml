@@ -1655,23 +1655,20 @@ fn qualify_entity(diagram: &ClassDiagram, entity: &ClassEntity, translated_label
         .collect();
     // Port of `Quark.getQualifiedName`. A `set namespaceSeparator`-namespaced
     // entity carries its full separated path in its id (`com::example::MyClass`,
-    // `com/example/Foo`), whereas the label is just the leaf (`MyClass`). The
-    // parser splits the path into containing packages, but the id already
-    // encodes the whole chain — re-joining the package prefixes would duplicate
-    // the embedded path (`com.com..example.MyClass`). When a containing package
-    // name is a prefix of the id, the entity is namespace-separated: its
-    // qualified name is just the translated id (`::`/`/` → `.`). User
-    // `package`/`namespace` blocks keep a short id equal to the label (their
-    // package names are NOT id prefixes), and quoted names (`"My Class"`,
-    // id `My_Class`) carry no namespace packages at all — both fall through to
-    // the package-prefix chain below, so `Inner.InnerClass` and the label-based
-    // qualified name still resolve correctly.
-    let namespaced = entity.id != entity.label
-        && pkgs.iter().any(|p| {
-            entity.id.starts_with(p)
-                && entity.id[p.len()..]
-                    .starts_with(|c: char| !c.is_ascii_alphanumeric() && c != '_')
-        });
+    // `com/example/Foo`), whereas the label is usually just the leaf
+    // (`MyClass`). The parser splits the path into containing packages, but the
+    // id already encodes the whole chain — re-joining the package prefixes
+    // would duplicate the embedded path (`com.com..example.MyClass`). Quoted
+    // CODE4 declarations are the important equal-string case:
+    // `class "com.example.Class"` has the same id and display, but Java still
+    // serializes its canonical Quark path exactly once. A quoted display with
+    // no separator ancestry (`"My Class"`, id `My_Class`) has no containing
+    // package prefix and therefore still falls through to the label-derived
+    // qualified name below.
+    let namespaced = pkgs.iter().any(|p| {
+        entity.id.starts_with(p)
+            && entity.id[p.len()..].starts_with(|c: char| !c.is_ascii_alphanumeric() && c != '_')
+    });
     if namespaced {
         return translate_qualified_name(&entity.id);
     }
@@ -4207,7 +4204,9 @@ fn relationship_endpoint_name<'a>(
     // Java `Link.idCommentForSvg` builds path ids from `Entity.getName()`,
     // which delegates to the short `Quark#getName`, not its qualified name.
     // Bare quoted names use their display as that short name; explicit aliases
-    // use the canonical id's leaf below the innermost owning package.
+    // use the canonical id's leaf below the innermost owning package. A
+    // separator-bearing CODE4 declaration has already received its short
+    // Quark leaf as the display during parsing.
     let Some(entity) = diagram.entities.iter().find(|entity| entity.id == id) else {
         return std::borrow::Cow::Borrowed(id);
     };
@@ -19305,6 +19304,20 @@ mod tests {
         assert!(
             !svg.contains(r#"data-qualified-name="FreshDomain761...Renamed Ledger.. .service.""#)
         );
+    }
+
+    #[test]
+    fn quoted_separator_identity_serializes_the_canonical_quark_path_once() {
+        let input = "@startuml\n\
+            class \"fresh.domain.AuditRecord779\"\n\
+            class \"Fresh Display With Spaces 787\"\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(r#"data-qualified-name="fresh.domain.AuditRecord779""#));
+        assert!(!svg.contains("fresh.domain.fresh.domain"));
+        assert!(svg.contains(r#"data-qualified-name="Fresh Display With Spaces 787""#));
     }
 
     #[test]

@@ -823,8 +823,17 @@ impl ClassParser {
                     | "annotation"
                     | "entity"
             );
+            let quoted_identity_has_separator =
+                caps.get(4).is_some() && self.split_identity(&id).1.len() > 1;
             let entity_path = self.resolve_quark_path(&id, lookup);
-            let display_label = if explicit_alias || caps.get(4).is_some() {
+            // CODE4 is a quoted identity, not an explicit DISPLAY. Java leaves
+            // DISPLAY absent and falls back to the short Quark name, so a
+            // separator-bearing `"fresh.domain.Record"` displays `Record`.
+            // A one-segment quoted identity still has the whole quoted text as
+            // its leaf and therefore preserves spaces and Creole presentation.
+            let display_label = if explicit_alias
+                || (caps.get(4).is_some() && !quoted_identity_has_separator)
+            {
                 label
             } else {
                 entity_path.last().cloned().unwrap_or(label)
