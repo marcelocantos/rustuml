@@ -1114,6 +1114,7 @@ impl ClassParser {
             let to_quoted = caps.get(6).map(|m| m.as_str());
             let to_raw = to_quoted.unwrap_or_else(|| caps.get(7).unwrap().as_str());
             let (label, label_arrow) = parse_label_arrow(caps.get(8).map(|m| m.as_str()));
+            let label = label.map(|label| normalize_link_label_guillemets(&label));
 
             // Java `CommandLinkClass` parses `ARROW_HEAD1` and `ARROW_HEAD2`
             // independently through `LinkDecor`; `)` and `(` are the two
@@ -2289,6 +2290,16 @@ fn parse_label_arrow(label: Option<&str>) -> (Option<String>, LinkArrow) {
         (Some(label.to_string()), LinkArrow::None)
     };
     (text.filter(|text| !text.is_empty()), arrow)
+}
+
+/// Port of `LinkArg.build` -> `Display.manageGuillemet` ->
+/// `Guillemet.GUILLEMET.manageGuillemet`. Class link labels replace each
+/// comparator-delimited stereotype group before both layout and rendering.
+fn normalize_link_label_guillemets(label: &str) -> String {
+    static RE: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(r"<<\s?((?:<&\w+>|[^<>])+?)\s?>>").expect("valid guillemet regex")
+    });
+    RE.replace_all(label, "«$1»").into_owned()
 }
 
 fn parse_endpoint_decor(s: &str) -> Option<EndpointDecor> {
@@ -4096,6 +4107,38 @@ mod tests {
         assert_eq!(d.relationships[0].kind, RelationshipKind::Dependency);
         assert!(!d.relationships[0].dashed);
         assert_eq!(d.relationships[0].label.as_deref(), Some("uses"));
+    }
+
+    #[test]
+    fn relationship_labels_normalize_java_guillemet_groups() {
+        let d = parse(
+            "A --> B : prefix << first >> and <<second>> suffix\n\
+             B -left-> C : < << renamed >>",
+        );
+        assert_eq!(
+            d.relationships[0].label.as_deref(),
+            Some("prefix «first» and «second» suffix")
+        );
+        assert_eq!(d.relationships[1].label.as_deref(), Some("«renamed»"));
+        assert_eq!(d.relationships[1].label_arrow, LinkArrow::Backward);
+    }
+
+    #[test]
+    fn relationship_labels_preserve_malformed_guillemet_groups() {
+        let d = parse(
+            "A --> B : <<>>\n\
+             B --> C : <<outer <inner> tail>>\n\
+             C --> D : unmatched <<label",
+        );
+        assert_eq!(d.relationships[0].label.as_deref(), Some("<<>>"));
+        assert_eq!(
+            d.relationships[1].label.as_deref(),
+            Some("<<outer <inner> tail>>")
+        );
+        assert_eq!(
+            d.relationships[2].label.as_deref(),
+            Some("unmatched <<label")
+        );
     }
 
     #[test]
