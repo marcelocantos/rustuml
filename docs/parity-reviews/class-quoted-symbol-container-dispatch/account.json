@@ -13,9 +13,9 @@
     "crates/rustuml-parser/src/parse/mod.rs::detect_uml_subtype",
     "crates/rustuml-parser/src/parse/deployment.rs::DEPLOYMENT_KEYWORDS"
   ],
-  "invariant": "Java tries UML factories in order and the class factory accepts ordinary package blocks, quoted symbol-container commands through CommandPackageWithUSymbol, class declarations, and class relationships in one source. A quoted node/frame/cloud container is therefore not a deployment discriminator when explicit non-interface class declarations make the complete source valid for ClassDiagramFactory. Deployment-only containers remain deployment signals when no class declarations establish the earlier class grammar.",
-  "causal_divergence": "Rust initially scores each class declaration strongly, but then unconditionally promotes a quoted deployment container above every other subtype. When an ordinary package container is also present it instead unconditionally promotes COMPONENT. Fresh valid matrices containing quoted node/frame/cloud containers plus classes consequently render as DESCRIPTION while Java renders CLASS. Unquoted forms already pass, proving the renderer geometry is reached correctly once dispatch selects Class.",
-  "planned_change": "Prevent the late quoted-deployment and component-container tie-break promotions from overriding explicit non-interface class declarations. Preserve their existing behavior when no such class declaration exists. Add subtype tests crossing quoted shared containers with class declarations and true deployment-only controls.",
+  "invariant": "Java tries UML factories in order and the class factory accepts ordinary package blocks, quoted symbol-container commands through CommandPackageWithUSymbol, class declarations, and class relationships in one source. CommandCreateClass includes interface alongside class, enum, annotation, record, and the other class-family declaration keywords. A quoted node/frame/cloud container is therefore not a deployment discriminator when any explicit class-factory declaration makes the complete source valid for ClassDiagramFactory. Deployment-only containers remain deployment signals when no class-factory declaration establishes the earlier grammar.",
+  "causal_divergence": "Rust now prevents late quoted-container promotion only for non-interface class declarations. Interface declarations receive a class score but do not set that guard, so valid interface-only sources with quoted node/cloud containers are promoted to DESCRIPTION even though Java's earlier ClassDiagramFactory accepts them. The non-interface controls pass, isolating the incomplete declaration-family predicate.",
+  "planned_change": "Replace the non-interface-only guard with an explicit class-factory-declaration predicate set by every declaration accepted through Java CommandCreateClass, including interface. Use that predicate consistently for the quoted-deployment and component-container tie-breaks while preserving interface-plus-component-leaf behavior when there is no quoted class-container source.",
   "perturbation_axes": [
     "quoted node crossed with frame and cloud",
     "ordinary package sibling present crossed with absent",
@@ -24,6 +24,12 @@
     "top-to-bottom crossed with left-to-right direction",
     "inside links crossed with links leaving the container"
   ],
+  "rejected_attempt": {
+    "implementation_commit": "09014421f785f5d251a0b28541603b6dcda7aae9",
+    "review": "docs/parity-reviews/class-quoted-symbol-container-dispatch/review.json",
+    "review_commit": "28a85f6f",
+    "result": "Rejected by valid quoted node/cloud interface-only controls because the dispatch guard excluded interface declarations."
+  },
   "predecessor_rejections": [
     {
       "review": "docs/parity-reviews/class-package-style-symbol-fallback/review.json",

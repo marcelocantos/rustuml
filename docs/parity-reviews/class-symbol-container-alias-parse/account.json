@@ -10,9 +10,9 @@
   "rust_locations": [
     "crates/rustuml-parser/src/parse/class.rs::ClassParser::try_package"
   ],
-  "invariant": "CommandPackageWithUSymbol accepts DISPLAY as CODE for every supported symbol-container keyword, including node, frame, cloud, database, and rectangle. CODE is cleaned and used as the quark identity; DISPLAY remains the visible group label. Alias support is part of the shared command grammar and is not restricted to the package keyword.",
-  "causal_divergence": "Rust's class parser recognizes the same symbol-container keywords and captures aliases, but explicitly rejects every alias unless the keyword is package. After subtype dispatch correctly selects CLASS, a quoted node/frame/cloud alias is therefore skipped as a group declaration, its contents escape to the root, and a closing brace is ignored. This accounts for the remaining explicit-precedence and renamed-node counterexamples.",
-  "planned_change": "Remove the package-only alias restriction from ClassParser::try_package. Continue using the alias as the resolved group path and the quoted token as display text, preserving the existing package quark discipline for all supported symbol keywords. Add parser tests for quoted aliases across multiple symbols, nesting, and relationship endpoints.",
+  "invariant": "CommandPackageWithUSymbol accepts both DISPLAY as CODE and CODE as \"DISPLAY\" for every supported symbol-container keyword, including node, frame, cloud, database, folder, and rectangle. It also accepts the corresponding unquoted display/code form. CODE is cleaned and used as the quark identity; DISPLAY remains the visible group label. Alias direction is presentation syntax and never changes the group identity model.",
+  "causal_divergence": "Rust now accepts aliases for every recognized symbol keyword, but its single regex models only quoted-or-bare DISPLAY followed by an optional bare CODE. It cannot represent bare CODE followed by quoted DISPLAY, so valid folder and rectangle declarations are skipped and later references materialize a different implicit package/class structure.",
+  "planned_change": "Parse the two Java alias alternatives explicitly, normalize both into one code/display pair, and then reuse the existing quark-backed package construction path. Preserve the unaliased and DISPLAY-as-CODE behavior. Add parser tests for both directions across symbols, nesting, external relationships, and renamed labels.",
   "perturbation_axes": [
     "node alias crossed with frame, cloud, database, and rectangle aliases",
     "quoted display crossed with unquoted code",
@@ -21,6 +21,12 @@
     "internal links crossed with links leaving the container",
     "top-to-bottom crossed with left-to-right direction"
   ],
+  "rejected_attempt": {
+    "implementation_commit": "09014421f785f5d251a0b28541603b6dcda7aae9",
+    "review": "docs/parity-reviews/class-symbol-container-alias-parse/review.json",
+    "review_commit": "28a85f6f",
+    "result": "Rejected because CODE as quoted DISPLAY remained outside the Rust grammar."
+  },
   "predecessor_rejections": [
     {
       "review": "docs/parity-reviews/class-package-style-symbol-fallback/review.json",

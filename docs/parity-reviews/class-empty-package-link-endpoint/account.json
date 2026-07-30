@@ -5,18 +5,20 @@
   "java_locations": [
     "net.sourceforge.plantuml.classdiagram.command.CommandLinkClass#executeArg",
     "net.sourceforge.plantuml.cucadiagram.CucaDiagram#quarkInContextSafe",
-    "net.sourceforge.plantuml.svek.GraphvizImageBuilder#printGroups",
-    "net.sourceforge.plantuml.svek.GraphvizImageBuilder#printEntity"
+    "net.sourceforge.plantuml.svek.Bibliotekon#getNodeUid",
+    "net.sourceforge.plantuml.svek.Cluster#getSpecialPointId",
+    "net.sourceforge.plantuml.svek.ClusterDotString#printCluster1"
   ],
   "rust_locations": [
     "crates/rustuml-parser/src/parse/class.rs::ClassParser::resolve_relationship_endpoint",
     "crates/rustuml-render/src/class.rs::relationship_layout_id",
     "crates/rustuml-render/src/class.rs::empty_package_layout_id",
-    "crates/rustuml-render/src/class.rs::no_oracle_entity_id_from"
+    "crates/rustuml-render/src/class.rs::no_oracle_entity_id_from",
+    "crates/rustuml-layout/src/graph.rs::LayoutGraph::add_svek_cluster_endpoint"
   ],
-  "invariant": "A relationship endpoint resolves through the existing quark tree before creating a missing class leaf. A directly empty package is still the same quark and UID when GraphvizImageBuilder later mutates its group entity to EMPTY_PACKAGE for SVEK. Links to that name therefore terminate at the converted package leaf and retain its original UID; no second class entity is created.",
-  "causal_divergence": "Rust resolves relationship endpoints only against class entities. Naming an existing directly empty package falls through ensure_entity, creating a duplicate class with the package's name and a new UID. The renderer then emits both the genuine empty-package leaf and the phantom class, routes the link to the phantom, and reports the wrong endpoint metadata. The held-out cloud fallback control exposes the duplicate directly.",
-  "planned_change": "Resolve an endpoint that names an existing directly empty package to a stable package endpoint identity without creating a class. Map that identity to the package leaf's layout node and package UID during rendering. Preserve current class creation for genuinely missing endpoints, and do not reinterpret filled cluster endpoints until Java behavior for those links is separately established.",
+  "invariant": "CommandLinkClass resolves a relationship endpoint through the existing quark tree before creating a missing class leaf, and an existing group remains the endpoint entity whether it is empty or contains children. SVEK converts a directly empty group into its package leaf while preserving the group UID. For a filled group, Bibliotekon#getNodeUid selects Cluster#getSpecialPointId and ClusterDotString emits that point inside the cluster before routing the edge. SVG endpoint metadata uses the group's own short quark name rather than its fully qualified nesting path.",
+  "causal_divergence": "Rust now resolves existing packages in the parser but only maps directly empty package leaves to layout nodes and UIDs. A filled package endpoint is left as a non-node cluster name, so the relationship cannot reproduce Java's internal special point. Nested package endpoints also serialize the fully qualified Rust path where Java reports the short group name. The first attempt therefore passed top-level empty controls but failed valid nested and filled-group counterparts.",
+  "planned_change": "Treat every existing package as a group endpoint in the class model. Keep directly empty packages mapped to their converted leaf node; create and attach a SVEK cluster endpoint point for rendered clusters using LayoutGraph's existing group-endpoint mechanism; map both forms to the package UID; and derive relationship metadata from the package's short identity component. Preserve current class creation only for genuinely missing endpoints.",
   "perturbation_axes": [
     "empty package source crossed with empty package target",
     "aliased crossed with unaliased package names",
@@ -25,6 +27,12 @@
     "link declared before crossed with after an external class",
     "top-to-bottom crossed with left-to-right direction"
   ],
+  "rejected_attempt": {
+    "implementation_commit": "09014421f785f5d251a0b28541603b6dcda7aae9",
+    "review": "docs/parity-reviews/class-empty-package-link-endpoint/review.json",
+    "review_commit": "28a85f6f",
+    "result": "Rejected because nested endpoint metadata remained qualified and filled groups lacked Java's internal cluster endpoint point."
+  },
   "predecessor_rejection": {
     "review": "docs/parity-reviews/class-package-style-symbol-fallback/review.json",
     "review_commit": "63d978e7",

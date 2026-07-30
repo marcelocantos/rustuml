@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-package-modifier-order",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "net.sourceforge.plantuml.command.CommandPackage#getRegexConcat",
+    "net.sourceforge.plantuml.descdiagram.command.CommandPackageWithUSymbol#getRegexConcat",
+    "net.sourceforge.plantuml.descdiagram.command.CommandPackageWithUSymbol#executeArg"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/class.rs::ClassParser::try_package"
+  ],
+  "invariant": "Both Java package commands parse presentation modifiers after the code/display portion in this order: optional tags, optional stereotype, optional tags, optional URL, then optional background color. The color is therefore valid after a stereotype, and a stereotype without a color remains part of the group header model. These modifiers do not alter the quark identity selected from CODE.",
+  "causal_divergence": "Rust's package regex accepts optional color before optional stereotype and has no URL/tag slots. Java-valid package and cloud declarations with stereotype-before-color are skipped entirely; stereotype-only explicit cloud declarations parse but later rendering exposed a separate missing stereotype/title stack. The skipped declaration then causes relationship endpoints to materialize unrelated classes.",
+  "planned_change": "Make try_package consume the Java modifier order, retaining the resolved stereotype and trailing color while tolerating the supported tag and URL slots. Keep identity parsing separate from presentation modifiers. Add parser tests for stereotype-only, stereotype-before-color, tags around stereotype, and URL-before-color across ordinary and explicit symbol packages.",
+  "perturbation_axes": [
+    "ordinary package crossed with cloud and node symbols",
+    "stereotype-only crossed with stereotype-before-color",
+    "tags before and after stereotype",
+    "URL before color",
+    "empty leaf crossed with filled cluster",
+    "nested crossed with top-level declarations",
+    "linked crossed with disconnected topology"
+  ],
+  "status": "proposed"
+}
