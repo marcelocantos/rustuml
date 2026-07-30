@@ -1,0 +1,4 @@
+@startuml
+allowmixing
+boundary Ui
+@enduml

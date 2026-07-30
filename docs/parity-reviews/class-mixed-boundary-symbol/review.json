@@ -1,0 +1,123 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-mixed-boundary-symbol",
+  "review_kind": "initial",
+  "reviewed_on": "2026-07-30",
+  "implementation_commit": "ee0f6d52c547f980c5db65b3447c07c9ac792b14",
+  "account_commit": "5d70428b3a88fdbf98d62e7ef6186cd169a6d959",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "reviewer": {
+    "identity": "independent adversarial checker",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop",
+    "independence": "Did not implement commit ee0f6d52 or edit shipping source. Worked in isolated git worktree /tmp/rustuml-check-ee0f6d52 on branch checker/t14-ee0f6d52-adversarial and modified only review/evidence files."
+  },
+  "revisions": {
+    "rust_revision_checked": "ee0f6d52c547f980c5db65b3447c07c9ac792b14",
+    "account_revision_checked": "5d70428b3a88fdbf98d62e7ef6186cd169a6d959"
+  },
+  "artifacts": {
+    "helper": {
+      "path": "/tmp/rustuml-diff-one-ee0f6d52",
+      "sha256": "85a9c07f65d0b79205b4363635dc8d3cca0ac9f79994768f9aedabafe3c49107",
+      "mode": "--no-oracle"
+    },
+    "java_jar": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+    },
+    "fresh_artifact_hashes": {
+      "followup_root_isolated_boundary_short_tb.puml": "7cb97532febbffc8eb1affecd863d4f684065b6ae195347247d5e6fa27b7ca88",
+      "followup_root_isolated_boundary_short_tb.svg": "a4271c526063bd038391a3d6e2a030178910d86e5b844999a0fae05d78dcb488",
+      "followup_root_connected_boundary_wide_lr.puml": "cdc83683f0b4e30be3560061dbe924d31076c439c5731c0a3f571c4ede9e8d5a",
+      "followup_root_connected_boundary_wide_lr.svg": "bda8cc78513c704a083165c3515c668d1f2c51b5c73cb612b4e5dfbee723439e",
+      "followup_nested_connected_boundary_short_tb.puml": "07cb6cd5ac58071295b0884c91132776accf1d4bf9f323cefd0f315d2b4b535d",
+      "followup_nested_connected_boundary_short_tb.svg": "7b6cd9b3c46183ca0f3992931bd39763f4f0854c772c11553e75c8f92dda6495"
+    }
+  },
+  "commands": [
+    "sed -n '1,220p' docs/parity-reviews/class-mixed-boundary-symbol/account.json",
+    "git show --format=medium --unified=80 ee0f6d52c547f980c5db65b3447c07c9ac792b14 -- crates/rustuml-parser/src/diagram/class.rs crates/rustuml-parser/src/parse/class.rs crates/rustuml-render/src/class.rs",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolBoundary.java | nl -ba | sed -n '43,53p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolSimpleAbstract.java | nl -ba | sed -n '53,88p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/image/EntityImageDescription.java | nl -ba | sed -n '108,229p'",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/class-mixed-boundary-symbol/followup/followup_root_isolated_boundary_short_tb.puml test-diagrams/perturbations/class-mixed-boundary-symbol/followup/followup_root_connected_boundary_wide_lr.puml test-diagrams/perturbations/class-mixed-boundary-symbol/followup/followup_nested_connected_boundary_short_tb.puml",
+    "/tmp/rustuml-diff-one-ee0f6d52 --no-oracle test-diagrams/perturbations/class-mixed-boundary-symbol/followup/followup_root_isolated_boundary_short_tb.puml",
+    "/tmp/rustuml-diff-one-ee0f6d52 --no-oracle test-diagrams/perturbations/class-mixed-boundary-symbol/followup/followup_root_connected_boundary_wide_lr.puml",
+    "/tmp/rustuml-diff-one-ee0f6d52 --no-oracle test-diagrams/perturbations/class-mixed-boundary-symbol/followup/followup_nested_connected_boundary_short_tb.puml",
+    "sh -c '/tmp/rustuml-diff-one-ee0f6d52 --no-oracle --print-rust test-diagrams/perturbations/class-mixed-boundary-symbol/followup/followup_root_connected_boundary_wide_lr.puml | rg -n -F \"Wide Customer Gateway\"'",
+    "rg -n -F \"Wide Customer Gateway\" test-diagrams/perturbations/class-mixed-boundary-symbol/followup/followup_root_connected_boundary_wide_lr.svg"
+  ],
+  "source_inspection": {
+    "java": [
+      "USymbolBoundary delegates drawing to Boundary through USymbolSimpleAbstract.asSmall, so label placement and symbol placement are jointly centered from the same merged dimension.",
+      "EntityImageDescription calculates dimensions from the composed asSmall block; the rendered link anchor and sibling node positions inherit that same geometry.",
+      "Pattern2.compileInternal makes the boundary command regex case-insensitive."
+    ],
+    "rust": [
+      "ee0f6d52 adds EntityKind::Boundary and a dedicated early return in render_entity_content for boundary.",
+      "That boundary branch reimplements symbol placement with standalone constants instead of reusing the class header/block layout used by other entities.",
+      "No fixture-shaped logic, golden reads, or output surgery keyed to the perturbation stems appeared in the touched files."
+    ],
+    "fixture_shaping_search": "No checker stem or mechanism-name strings appeared in shipping code.",
+    "golden_read_search": "No golden-file reads or include_str! usage appeared in the touched files.",
+    "output_surgery_search": "No post-render SVG surgery keyed to coordinates or labels appeared in the touched files."
+  },
+  "fresh_inputs": [
+    "test-diagrams/perturbations/class-mixed-boundary-symbol/followup/followup_root_isolated_boundary_short_tb.puml",
+    "test-diagrams/perturbations/class-mixed-boundary-symbol/followup/followup_root_connected_boundary_wide_lr.puml",
+    "test-diagrams/perturbations/class-mixed-boundary-symbol/followup/followup_nested_connected_boundary_short_tb.puml"
+  ],
+  "fresh_perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-mixed-boundary-symbol/followup/followup_root_isolated_boundary_short_tb.puml",
+      "golden": "test-diagrams/perturbations/class-mixed-boundary-symbol/followup/followup_root_isolated_boundary_short_tb.svg",
+      "axes": [
+        "root ownership",
+        "isolated boundary",
+        "lowercase spelling",
+        "short label",
+        "top-to-bottom direction"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-mixed-boundary-symbol/followup/followup_root_connected_boundary_wide_lr.puml",
+      "golden": "test-diagrams/perturbations/class-mixed-boundary-symbol/followup/followup_root_connected_boundary_wide_lr.svg",
+      "axes": [
+        "root ownership",
+        "connected boundary",
+        "mixed-case spelling",
+        "quoted display with AS alias",
+        "wide renamed label",
+        "left-to-right direction"
+      ],
+      "result": "fail",
+      "failure_classification": "boundary geometry drift"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-mixed-boundary-symbol/followup/followup_nested_connected_boundary_short_tb.puml",
+      "golden": "test-diagrams/perturbations/class-mixed-boundary-symbol/followup/followup_nested_connected_boundary_short_tb.svg",
+      "axes": [
+        "nested package ownership",
+        "connected boundary",
+        "uppercase spelling",
+        "short label",
+        "top-to-bottom direction"
+      ],
+      "result": "pass"
+    }
+  ],
+  "findings": [
+    {
+      "severity": "high",
+      "summary": "The new boundary branch still drifts on the wide connected case, so the claimed Java geometry has not been matched.",
+      "details": [
+        "Java centers the wide boundary one pixel left and one quarter-pixel higher than Rust: Java path starts at `M67.5791,10.75`, Rust at `M68.5791,11`.",
+        "The label baseline and connected-class placement drift with the same offset, proving the mismatch is in the boundary block geometry rather than an isolated path literal.",
+        "Because the linked Ledger box and the Gateway-to-Ledger edge move with the boundary, this is not a comparator artifact; the class pipeline is computing different positions from the Java symbol block."
+      ]
+    }
+  ],
+  "verdict": "REJECT"
+}

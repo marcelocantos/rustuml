@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "mechanism": "description-element-command-case",
+  "review_kind": "initial",
+  "reviewed_on": "2026-07-30",
+  "implementation_commit": "ee0f6d52c547f980c5db65b3447c07c9ac792b14",
+  "account_commit": "c49a5b6d324a8d226ae2e51326e0bfd25f8266f3",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "reviewer": {
+    "identity": "independent adversarial checker",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop",
+    "independence": "Did not implement commit ee0f6d52 or edit shipping source. Worked in isolated git worktree /tmp/rustuml-check-ee0f6d52 on branch checker/t14-ee0f6d52-adversarial and modified only review/evidence files."
+  },
+  "revisions": {
+    "rust_revision_checked": "ee0f6d52c547f980c5db65b3447c07c9ac792b14",
+    "account_revision_checked": "c49a5b6d324a8d226ae2e51326e0bfd25f8266f3"
+  },
+  "artifacts": {
+    "helper": {
+      "path": "/tmp/rustuml-diff-one-ee0f6d52",
+      "sha256": "85a9c07f65d0b79205b4363635dc8d3cca0ac9f79994768f9aedabafe3c49107",
+      "mode": "--no-oracle"
+    },
+    "java_jar": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+    },
+    "fresh_artifact_hashes": {
+      "followup_root_upper_database_bare_lr.puml": "d08d89bee079d61530b8c655923c47d43461e651a77151d45179daea837206cc",
+      "followup_root_upper_database_bare_lr.svg": "4b852acaf385bbf93f6dce602d74112a855f49f13065c05de91c83f8eafc7c7a",
+      "followup_root_mixedcase_node_quoted_as_tb.puml": "849853b2a109c4c6faadf0097cdb67f6dd2080f6c40627776c3ba58e65623970",
+      "followup_root_mixedcase_node_quoted_as_tb.svg": "c1a9b49c9951f61be02630fcb776541e73424ebe9f4134c775c3fbc9cfe9f9cb",
+      "followup_root_mixedcase_frame_quoted_as_component_lr.puml": "42b55345916bc95625e9b2adececc1ffc5e17bf8753d4ca33fe2110050f53204",
+      "followup_root_mixedcase_frame_quoted_as_component_lr.svg": "f090c7562bb2b07b0d31d472f62ae3eae4b59ca53be1e95e017b4c596b6d058c"
+    }
+  },
+  "commands": [
+    "sed -n '1,220p' docs/parity-reviews/description-element-command-case/account.json",
+    "git show --format=medium --unified=80 ee0f6d52c547f980c5db65b3447c07c9ac792b14 -- crates/rustuml-parser/src/parse/deployment.rs crates/rustuml-parser/src/parse/component.rs crates/rustuml-parser/src/parse/mod.rs",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandCreateElementFull.java | nl -ba | sed -n '73,210p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandPackageWithUSymbol.java | nl -ba | sed -n '74,178p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/regex/Pattern2.java | nl -ba | sed -n '108,118p'",
+    "nl -ba crates/rustuml-parser/src/parse/mod.rs | sed -n '543,605p'",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/description-element-command-case/followup/followup_root_upper_database_bare_lr.puml test-diagrams/perturbations/description-element-command-case/followup/followup_root_mixedcase_node_quoted_as_tb.puml test-diagrams/perturbations/description-element-command-case/followup/followup_root_mixedcase_frame_quoted_as_component_lr.puml",
+    "/tmp/rustuml-diff-one-ee0f6d52 --no-oracle test-diagrams/perturbations/description-element-command-case/followup/followup_root_upper_database_bare_lr.puml",
+    "/tmp/rustuml-diff-one-ee0f6d52 --no-oracle test-diagrams/perturbations/description-element-command-case/followup/followup_root_mixedcase_node_quoted_as_tb.puml",
+    "/tmp/rustuml-diff-one-ee0f6d52 --no-oracle test-diagrams/perturbations/description-element-command-case/followup/followup_root_mixedcase_frame_quoted_as_component_lr.puml",
+    "sh -c '/tmp/rustuml-diff-one-ee0f6d52 --no-oracle --print-rust test-diagrams/perturbations/description-element-command-case/followup/followup_root_upper_database_bare_lr.puml | sed -n \"1,40p\"'",
+    "sh -c '/tmp/rustuml-diff-one-ee0f6d52 --no-oracle --print-rust test-diagrams/perturbations/description-element-command-case/followup/followup_root_mixedcase_node_quoted_as_tb.puml | sed -n \"1,60p\"'"
+  ],
+  "source_inspection": {
+    "java": [
+      "CommandCreateElementFull and CommandPackageWithUSymbol are both compiled through Pattern2.compileInternal, so root leaf keywords, root container keywords, and the `as` token are all case-insensitive.",
+      "Java accepts uppercase DATABASE as a root DESCRIPTION leaf and mixed-case NoDe `\"Runtime Mesh\" as Mesh` as a quoted container with a nested queue leaf."
+    ],
+    "rust": [
+      "ee0f6d52 lowercases captured keywords inside deployment/component parsers and makes quoted component `AS` case-insensitive.",
+      "detect_uml_subtype still extracts `kw` directly from the raw trimmed line and compares it case-sensitively against deployment::DEPLOYMENT_KEYWORDS, package/container heuristics, and quoted-container scoring.",
+      "That means mixed-case or uppercase root deployment keywords never score as DESCRIPTION candidates and fall through to the wrong product path before the now-fixed parsers ever run."
+    ],
+    "fixture_shaping_search": "No checker stem or mechanism-name strings appeared in shipping code.",
+    "golden_read_search": "No golden-file reads or include_str! usage appeared in the touched files.",
+    "output_surgery_search": "No post-render SVG surgery keyed to these stems appeared in the touched files."
+  },
+  "fresh_inputs": [
+    "test-diagrams/perturbations/description-element-command-case/followup/followup_root_upper_database_bare_lr.puml",
+    "test-diagrams/perturbations/description-element-command-case/followup/followup_root_mixedcase_node_quoted_as_tb.puml",
+    "test-diagrams/perturbations/description-element-command-case/followup/followup_root_mixedcase_frame_quoted_as_component_lr.puml"
+  ],
+  "fresh_perturbations": [
+    {
+      "source": "test-diagrams/perturbations/description-element-command-case/followup/followup_root_upper_database_bare_lr.puml",
+      "golden": "test-diagrams/perturbations/description-element-command-case/followup/followup_root_upper_database_bare_lr.svg",
+      "axes": [
+        "root ownership",
+        "uppercase keyword",
+        "bare leaf form",
+        "database family",
+        "left-to-right direction"
+      ],
+      "result": "fail",
+      "failure_classification": "case-sensitive subtype detection"
+    },
+    {
+      "source": "test-diagrams/perturbations/description-element-command-case/followup/followup_root_mixedcase_node_quoted_as_tb.puml",
+      "golden": "test-diagrams/perturbations/description-element-command-case/followup/followup_root_mixedcase_node_quoted_as_tb.svg",
+      "axes": [
+        "root ownership",
+        "mixed-case container keyword",
+        "quoted display with AS alias",
+        "mixed-case nested queue leaf",
+        "node and queue families",
+        "top-to-bottom direction"
+      ],
+      "result": "fail",
+      "failure_classification": "case-sensitive subtype detection"
+    },
+    {
+      "source": "test-diagrams/perturbations/description-element-command-case/followup/followup_root_mixedcase_frame_quoted_as_component_lr.puml",
+      "golden": "test-diagrams/perturbations/description-element-command-case/followup/followup_root_mixedcase_frame_quoted_as_component_lr.svg",
+      "axes": [
+        "root ownership",
+        "mixed-case shared container keyword",
+        "quoted display with AS alias",
+        "component-backed path",
+        "left-to-right direction"
+      ],
+      "result": "pass"
+    }
+  ],
+  "findings": [
+    {
+      "severity": "high",
+      "summary": "The implementation fixed parser-local case handling but left the subtype detector case-sensitive for root DESCRIPTION keywords and quoted deployment containers.",
+      "details": [
+        "Uppercase `DATABASE AuditStore` still falls through to RustUML's welcome/error SVG instead of the Java DESCRIPTION database cylinder.",
+        "Mixed-case `NoDe \"Runtime Mesh\" as Mesh { ... }` does the same, proving the failure happens before the deployment parser can consume the now-case-folded tokens.",
+        "A mixed-case `FrAmE ... as ... { [Renderer] }` component-backed control passes, confirming the parser-local component fix is real and the remaining defect lives in detect_uml_subtype."
+      ]
+    }
+  ],
+  "verdict": "REJECT"
+}

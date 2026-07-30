@@ -1,0 +1,7 @@
+@startuml
+left to right direction
+cloud "Shared Cloud" {
+  database AuditStore
+  entity Ledger
+}
+@enduml
