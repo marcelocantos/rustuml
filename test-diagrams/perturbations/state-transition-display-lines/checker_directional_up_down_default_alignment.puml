@@ -1,0 +1,10 @@
+@startuml
+skinparam stateMessageAlignment center
+skinparam StateArrowFontName Helvetica
+skinparam StateArrowFontSize 11
+state "North Gate" as NorthGate
+state "South Gate" as SouthGate
+state "East Gate" as EastGate
+NorthGate -down-> SouthGate : upper\nlonger default centered row
+SouthGate -up-> EastGate : climb\nreturn row
+@enduml

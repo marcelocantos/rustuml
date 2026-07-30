@@ -1,0 +1,183 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-transition-display-lines",
+  "checker_identity": {
+    "agent": "Codex",
+    "model": "GPT-5",
+    "role": "independent adversarial checker",
+    "timestamp": "2026-07-31T04:32:00+10:00"
+  },
+  "verdict": "REJECT",
+  "reviewed_revisions": {
+    "rust_revision": "723af6cdc732456f7150e6501f1f0ad0c6f6ef0e",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "account_path": "docs/parity-reviews/state-transition-display-lines/account.json",
+    "account_recorded_rust_revision": "22f8bf85b2f6113472079d3e20b39fc2971fa52a",
+    "account_revision_note": "The account records an older proposed Rust revision, but this review inspected the requested 723af6cdc732456f7150e6501f1f0ad0c6f6ef0e revision where the TransitionLabel and StateTransitionLabelBlock implementation is present."
+  },
+  "artifacts": {
+    "checker_worktree": "/private/tmp/rustuml-check-state-transition-display-lines",
+    "checker_branch": "checker/state-transition-display-lines",
+    "plantuml_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "diff_helper": "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one",
+    "diff_helper_sha256": "7016bd7c6c39a34e7a978ffd991ea026fb7eb2d876c389aa0c69c69b3a6c710a"
+  },
+  "constraints_observed": {
+    "shipping_rust_edited": false,
+    "cargo_or_rustc_invoked": false,
+    "java_svg_generation": "Generated with -Djava.awt.headless=true. A non-headless jar invocation aborted with status 134 before diagnostics; headless generation completed. The math fixture printed a Batik ClassNotFoundException while still producing a well-formed SVG with an embedded math image."
+  },
+  "commands": [
+    "sed -n '1,240p' docs/parity-reviews/state-transition-display-lines/account.json",
+    "git --no-pager show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/statediagram/command/CommandLinkStateCommon.java | nl -ba | sed -n '80,135p'",
+    "git --no-pager show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/klimt/creole/Display.java | nl -ba | sed -n '240,360p;520,590p;632,704p'",
+    "git --no-pager show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java | nl -ba | sed -n '260,310p;360,380p;930,955p'",
+    "git --no-pager show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/skin/SkinParam.java | nl -ba | sed -n '660,705p'",
+    "git --no-pager show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/klimt/creole/SheetBlock1.java | nl -ba | sed -n '59,210p'",
+    "nl -ba crates/rustuml-parser/src/diagram/state.rs | sed -n '232,380p'",
+    "nl -ba crates/rustuml-parser/src/parse/state.rs | sed -n '500,545p;1160,1220p'",
+    "nl -ba crates/rustuml-render/src/state.rs | sed -n '960,1175p;1250,1345p;2760,2805p;3010,3075p;3225,3275p;4505,4575p;5250,5355p;5550,5605p'",
+    "rg -n \"StateTransitionLabelBlock|label_block|measure\\\\(label|row_x|first_baseline_ascent|label.rows|natural_alignment|arrow_font.alignment|stateMessageAlignment|defaultTextAlignment\" crates/rustuml-render/src/state.rs crates/rustuml-parser/src",
+    "rg -n \"Copper Intake|Violet Review|Amber Archive|Draft Lane|Audit Lane|Review Hub|Link Source|Math Source|Escape Alpha|Marker Alpha|first expansive row|very wide left aligned trailer|outside split row|column\\\\\\\\slash\" crates",
+    "rg -n \"include_str!|include_bytes!|golden|fixture|checker_|test-diagrams|perturbations/state-transition-display-lines\" crates/rustuml-parser/src/diagram/state.rs crates/rustuml-parser/src/parse/state.rs crates/rustuml-render/src/state.rs",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/state-transition-display-lines/checker_*.puml",
+    "xmllint --noout test-diagrams/perturbations/state-transition-display-lines/checker_*.svg",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/state-transition-display-lines/checker_alignment_order_last_marker_wins.puml",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/state-transition-display-lines/checker_default_center_unequal_tb.puml",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/state-transition-display-lines/checker_directional_up_down_default_alignment.puml",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/state-transition-display-lines/checker_left_empty_rows_nested_lr.puml",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/state-transition-display-lines/checker_link_raw_escape_outside_newline_lr.puml",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/state-transition-display-lines/checker_math_raw_escape_font_tb.puml",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/state-transition-display-lines/checker_right_empty_rows_selfloop_tb.puml",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/state-transition-display-lines/checker_tab_backslash_unknown_escape_lr.puml",
+    "shasum -a 256 test-diagrams/perturbations/state-transition-display-lines/checker_*.puml test-diagrams/perturbations/state-transition-display-lines/checker_*.svg"
+  ],
+  "source_review": {
+    "java_findings": [
+      "CommandLinkStateCommon.java:111 creates a Display with Display.getWithNewlines for state transition labels before LinkArg/SvekEdge consume it.",
+      "Display.getWithNewlines parses legacy \\\\n, \\\\l, \\\\r, \\\\t, and \\\\\\\\ outside raw <math>, <latex>, and [[link]] spans; \\\\l and \\\\r set Display.naturalHorizontalAlignment.",
+      "SvekEdge.java:286-293 resolves state link alignment through getMessageTextAlignment, then Display.create0 overrides that with Display.getNaturalHorizontalAlignment when present.",
+      "SheetBlock1 sizes and draws the Display-created stripes as one TextBlock. Empty Display rows are not equivalent to Rust's zero-width empty text: the generated Java SVGs for empty rows contain a nonbreaking-space text node with positive textLength."
+    ],
+    "rust_findings": [
+      "TransitionLabel at 723af6 parses source into rows plus optional natural alignment and preserves raw spans for <math>, <latex>, and [[...]].",
+      "StateTransitionLabelBlock is shared by sizing, emission, SVEK label boxes, and painted bounds; the core scalar-line divergence found in state-transition-label-family-baseline/checker_courier_nested_multiline_tb is addressed for ordinary unequal rows.",
+      "No fresh checker fixture labels, fixture stems, include_str!/include_bytes! references, or mechanism-specific golden reads were found in the inspected parser/state renderer paths.",
+      "The empty-row path is not Java-equivalent. Rust passes an empty row to text_render::emit_text, whose empty-segment branch emits an empty <text> with textLength 0; Java's row is rendered as NBSP with measurable width and participates in alignment."
+    ],
+    "overfit_scan": {
+      "fresh_fixture_label_search": "No matches in crates/",
+      "mechanical_forbidden_patterns": "No mechanism-specific fixture labels, stems, include_str!, include_bytes!, or coordinate keyed post-hoc SVG surgery found in the inspected TransitionLabel/state label block paths.",
+      "constant_provenance": "The reviewed mechanism uses existing SVEK margins/padding and text metrics helpers. I did not find a new unexplained fixture-shaped numeric constant in the inspected label-block code."
+    }
+  },
+  "inputs": [
+    {
+      "name": "checker_default_center_unequal_tb",
+      "puml": "test-diagrams/perturbations/state-transition-display-lines/checker_default_center_unequal_tb.puml",
+      "java_svg": "test-diagrams/perturbations/state-transition-display-lines/checker_default_center_unequal_tb.svg",
+      "axes": ["default center alignment", "unequal three-row label", "renamed topology", "Courier New", "font size 13", "top-to-bottom"],
+      "result": "PASS",
+      "finding": "Structurally equivalent. This confirms the core scalar-to-Display-row change for ordinary unequal rows in a flat top-to-bottom state diagram.",
+      "sha256": {
+        "puml": "1fdce0a33ee32adae084dc1bfe5f5bd4e39c3f0670508d9d520ee7caeb8402b0",
+        "java_svg": "3a6cf94a9cf933abd273a9385acbb0960da0398c20ab37493ecb2fc963c05fc9"
+      }
+    },
+    {
+      "name": "checker_left_empty_rows_nested_lr",
+      "puml": "test-diagrams/perturbations/state-transition-display-lines/checker_left_empty_rows_nested_lr.puml",
+      "java_svg": "test-diagrams/perturbations/state-transition-display-lines/checker_left_empty_rows_nested_lr.svg",
+      "axes": ["left natural alignment via \\\\l", "empty intermediate row", "nested autonomous state scope", "left-to-right direction", "Arial", "font size 12"],
+      "result": "FAIL",
+      "finding": "Rejecting counterexample. Java lays out the nested scope left-to-right and renders three label rows: 'head', an NBSP empty row with textLength 3.334, and 'very wide left aligned trailer'. Rust lays out a different vertical/autonomous shape and the corresponding label comparison shows the empty row as zero-width with shifted/missing row correspondence. This disproves the account's claim that every state rendering path sizes, routes, paints, and bounds the same parsed Display block for empty rows and nested/directional axes.",
+      "sha256": {
+        "puml": "3a37b3b455690b5a0142444e0c3e1d3c62ffdb6d508605a5a78c1769cc2d4a89",
+        "java_svg": "521b6afc90d14c7b3b8b15dd918a17357a3a9c0953f7f1d8276ea71e510c5d57"
+      }
+    },
+    {
+      "name": "checker_right_empty_rows_selfloop_tb",
+      "puml": "test-diagrams/perturbations/state-transition-display-lines/checker_right_empty_rows_selfloop_tb.puml",
+      "java_svg": "test-diagrams/perturbations/state-transition-display-lines/checker_right_empty_rows_selfloop_tb.svg",
+      "axes": ["right natural alignment via \\\\r", "empty intermediate row", "self loop", "defaultTextAlignment override", "Verdana", "font size 14"],
+      "result": "FAIL",
+      "finding": "Rejecting counterexample with an isolated display-line failure. The only reported structural difference is the empty middle row: Java emits NBSP with textLength 4.9219 at x=275.5254, while Rust emits a zero-width empty text node at x=280.4473. This is squarely inside the Display-row model, not a broad layout failure.",
+      "sha256": {
+        "puml": "03cc226c41eb52107d52894a405f5a4fdbf7d28b6a78b43b3d74e4e1125c849b",
+        "java_svg": "f1b344210668beeb19c896274adf8ca0af39e1b2ce1e8bdcc8c0f61420d87273"
+      }
+    },
+    {
+      "name": "checker_link_raw_escape_outside_newline_lr",
+      "puml": "test-diagrams/perturbations/state-transition-display-lines/checker_link_raw_escape_outside_newline_lr.puml",
+      "java_svg": "test-diagrams/perturbations/state-transition-display-lines/checker_link_raw_escape_outside_newline_lr.svg",
+      "axes": ["raw link span containing \\\\n", "outside \\\\n split", "left-to-right direction", "renamed topology"],
+      "result": "FAIL",
+      "finding": "Rejecting counterexample. Java preserves the raw link href/title newline semantics inside [[...]] and splits the outside row; Rust emits comparable text rows but the no-oracle comparison fails with a vertical canvas and a literal-backslash title attribute where Java encodes a newline in the title. The raw-span axis is not accepted by exact shipping comparison.",
+      "sha256": {
+        "puml": "b29d883d73039b60bb0566197c27b41c578f3abcdffae022058c5b69ecde0814",
+        "java_svg": "a75e79f317361fec977f3940ff8a4b259700a8a56d8831c6a443133eb3f8fc7a"
+      }
+    },
+    {
+      "name": "checker_math_raw_escape_font_tb",
+      "puml": "test-diagrams/perturbations/state-transition-display-lines/checker_math_raw_escape_font_tb.puml",
+      "java_svg": "test-diagrams/perturbations/state-transition-display-lines/checker_math_raw_escape_font_tb.svg",
+      "axes": ["raw math span containing \\\\n", "outside \\\\n split", "Times New Roman", "font size 15", "top-to-bottom"],
+      "result": "FAIL",
+      "finding": "Rejecting counterexample. Java produces an embedded math image for the raw <math> span and a second text row. Rust emits only text for the second row in the compared position and the canvas/path/row geometry differs. The Java run printed a Batik ClassNotFoundException but still generated a well-formed SVG with an embedded math image; the pair remains preserved as a valid raw-span held-out failure.",
+      "sha256": {
+        "puml": "c37988682e27d034806c4052abf4268fd967c424f4463ba9e172d155bb5611cd",
+        "java_svg": "a0a1f4175989de435fff4497c366a20c50e268729f4c656a578cd52f79df3faf"
+      }
+    },
+    {
+      "name": "checker_directional_up_down_default_alignment",
+      "puml": "test-diagrams/perturbations/state-transition-display-lines/checker_directional_up_down_default_alignment.puml",
+      "java_svg": "test-diagrams/perturbations/state-transition-display-lines/checker_directional_up_down_default_alignment.svg",
+      "axes": ["explicit up/down arrow direction", "default center alignment", "two-row labels", "Helvetica", "font size 11", "renamed topology"],
+      "result": "PASS",
+      "finding": "Structurally equivalent. This gives some confidence that ordinary directional arrows without left-to-right layout and without empty/raw rows consume the shared label block correctly.",
+      "sha256": {
+        "puml": "4465a017a7ad0742ba0a4d2c271b586f75a1a20fc10d73e095bef175df08b915",
+        "java_svg": "5eda2916107efdc36f66961e0c59bdacc64df30366e6b52ea15d3402d3c3b5aa"
+      }
+    },
+    {
+      "name": "checker_tab_backslash_unknown_escape_lr",
+      "puml": "test-diagrams/perturbations/state-transition-display-lines/checker_tab_backslash_unknown_escape_lr.puml",
+      "java_svg": "test-diagrams/perturbations/state-transition-display-lines/checker_tab_backslash_unknown_escape_lr.svg",
+      "axes": ["\\\\t", "\\\\\\\\", "unknown escape preservation", "outside \\\\n split", "left-to-right direction", "Courier New", "font size 12"],
+      "result": "FAIL",
+      "finding": "Rejecting counterexample. Java converts \\\\t into a tab advance, \\\\\\\\ into one backslash, preserves \\\\q, and splits the outside newline, but the exact no-oracle comparison fails with the same left-to-right vs vertical layout drift seen in other LR state fixtures. The escape-row content itself is largely consistent, but the mechanism's held-out LR axis is not green.",
+      "sha256": {
+        "puml": "58136a15c0ce8b1e352f060eb02ac151d1c34d8a7e8352702bc0c02e57838dd9",
+        "java_svg": "93a87a8eb0b7662b89a68be6d6b2ab19d5163b829028d4dd162ed478ad145c8d"
+      }
+    },
+    {
+      "name": "checker_alignment_order_last_marker_wins",
+      "puml": "test-diagrams/perturbations/state-transition-display-lines/checker_alignment_order_last_marker_wins.puml",
+      "java_svg": "test-diagrams/perturbations/state-transition-display-lines/checker_alignment_order_last_marker_wins.svg",
+      "axes": ["mixed \\\\l then \\\\r markers", "last natural alignment marker wins", "stateMessageAlignment left override", "Arial", "font size 13"],
+      "result": "PASS",
+      "finding": "Structurally equivalent. This supports the source claim that later \\\\l/\\\\r markers overwrite the block-wide natural alignment.",
+      "sha256": {
+        "puml": "e5fcd9e14b4e3c68ef5ad08f6ca4a30aa0ddd57fae69d29649653c0010b7a86f",
+        "java_svg": "1705c6f5b989c978f268b37d9d411bf29148d47ce3d39dc95cb2e2b7a40de2ac"
+      }
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 5,
+    "acceptance_gate": "failed",
+    "primary_reject_reason": "The implementation does not yet model Java's empty Display row as a measurable NBSP atom; a self-loop fixture isolates this to one text element. Additional raw-span and left-to-right/nested held-out fixtures also fail exact no-oracle comparison.",
+    "recommended_next_account_focus": [
+      "Trace Java's empty Display row through Sheet/Stripe/Atom creation to the emitted NBSP and apply the same model before measuring, aligning, emitting, and bounding transition label rows.",
+      "Separate the left-to-right state layout drift from Display-row correctness; either narrow the mechanism acceptance axes or fix the direction/autonomous path before claiming all listed perturbation axes.",
+      "Clarify raw link title escaping and raw math image support in the account's scope boundary so the held-out raw-span tests do not mask or excuse unrelated renderer gaps."
+    ]
+  }
+}

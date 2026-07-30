@@ -1,0 +1,7 @@
+@startuml
+left to right direction
+skinparam StateArrowFontSize 12
+state "Link Source" as LinkSource
+state "Link Sink" as LinkSink
+LinkSource --> LinkSink : [[https://example.com/a\nb linked row]] tail\noutside split row
+@enduml

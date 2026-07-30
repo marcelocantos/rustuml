@@ -1,0 +1,7 @@
+@startuml
+skinparam StateArrowFontName Times New Roman
+skinparam StateArrowFontSize 15
+state "Math Source" as MathSource
+state "Math Sink" as MathSink
+MathSource --> MathSink : <math>x\n+y</math> stays raw\nplain second row
+@enduml

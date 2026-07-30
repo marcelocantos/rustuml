@@ -1,0 +1,11 @@
+@startuml
+skinparam StateArrowFontName Courier New
+skinparam StateArrowFontSize 13
+state "Copper Intake" as CopperIntake
+state "Violet Review" as VioletReview
+state "Amber Archive" as AmberArchive
+[*] --> CopperIntake
+CopperIntake --> VioletReview : short\nmuch wider middle row\nend
+VioletReview --> AmberArchive : pass
+AmberArchive --> [*]
+@enduml

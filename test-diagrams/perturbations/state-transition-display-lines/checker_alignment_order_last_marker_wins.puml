@@ -1,0 +1,8 @@
+@startuml
+skinparam stateMessageAlignment left
+skinparam StateArrowFontName Arial
+skinparam StateArrowFontSize 13
+state "Marker Alpha" as MarkerAlpha
+state "Marker Beta" as MarkerBeta
+MarkerAlpha --> MarkerBeta : start\lmiddle row\rshort
+@enduml

@@ -1,0 +1,13 @@
+@startuml
+left to right direction
+skinparam stateMessageAlignment right
+skinparam StateArrowFontName Arial
+skinparam StateArrowFontSize 12
+state "Outer Ledger" as OuterLedger {
+  state "Draft Lane" as DraftLane
+  state "Audit Lane" as AuditLane
+  [*] --> DraftLane
+  DraftLane --> AuditLane : head\l\lvery wide left aligned trailer
+  AuditLane --> [*]
+}
+@enduml
