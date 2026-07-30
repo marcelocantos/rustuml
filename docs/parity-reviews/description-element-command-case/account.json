@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "mechanism": "description-element-command-case",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "net.sourceforge.plantuml.descdiagram.DescriptionDiagramFactory#initCommandsList",
+    "net.sourceforge.plantuml.descdiagram.command.CommandCreateElementFull#getRegexConcat",
+    "net.sourceforge.plantuml.descdiagram.command.CommandCreateElementFull#ALL_TYPES",
+    "net.sourceforge.plantuml.descdiagram.command.CommandPackageWithUSymbol#getRegexConcat",
+    "net.sourceforge.plantuml.regex.Pattern2#compileInternal"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/deployment.rs::DEPLOYMENT_KEYWORDS",
+    "crates/rustuml-parser/src/parse/deployment.rs::parse_deployment",
+    "crates/rustuml-parser/src/parse/deployment.rs::kind_from_keyword"
+  ],
+  "invariant": "DescriptionDiagramFactory command regexes are compiled through Pattern2.compileInternal with CASE_INSENSITIVE. Every spelling of a CommandCreateElementFull.ALL_TYPES keyword therefore selects the same USymbol and Entity type, and CommandPackageWithUSymbol treats container keywords and AS case-insensitively as well. Case changes affect neither identifier spelling nor label text, package ownership, constructor order, layout dimensions, nor SVG geometry.",
+  "causal_divergence": "Rust's deployment/description parser captures uppercase element keywords with its generic word regex but tests the captured token directly against a lowercase DEPLOYMENT_KEYWORDS set and passes it directly to kind_from_keyword. Uppercase or mixed-case DATABASE, QUEUE, and BOUNDARY lines are silently dropped, even though subtype detection now correctly routes the complete source to DESCRIPTION. This removes real nodes and corrupts package dimensions, SVEK layout, canvas size, and paint order. The defect is command-token normalization at the parser boundary, not symbol geometry or dispatch scoring.",
+  "planned_change": "ASCII-case-fold only the captured deployment command keyword before lowercase-set membership and kind_from_keyword dispatch, while preserving captured identifiers and labels verbatim. Make the optional AS token case-insensitive in bare and quoted declaration regexes. Add family-spanning parser tests for uppercase and mixed-case leaf/container declarations and rerun the dispatch follow-up-3 DESCRIPTION pairs exactly. Do not change layout constants, symbol renderers, comparator behavior, or SVG output after rendering.",
+  "perturbation_axes": [
+    "uppercase, lowercase, and mixed-case element keywords",
+    "leaf versus shared-symbol container declarations",
+    "bare identifier versus quoted display and AS alias forms",
+    "database, queue, and boundary symbol families",
+    "root versus nested ownership",
+    "top-to-bottom versus left-to-right direction"
+  ],
+  "observed_counterexamples": [
+    "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_root_node_upper_database_lr.puml",
+    "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_nested_cloud_upper_queue_tb.puml",
+    "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_upper_boundary_before_entity_tb.puml"
+  ],
+  "status": "proposed"
+}
