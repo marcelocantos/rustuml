@@ -9,21 +9,27 @@
     "net.sourceforge.plantuml.abel.Entity#Entity",
     "net.sourceforge.plantuml.abel.Link#Link",
     "net.sourceforge.plantuml.classdiagram.command.CommandCreateClass#executeArg",
-    "net.sourceforge.plantuml.classdiagram.command.CommandCreateClassMultilines#manageExtends"
+    "net.sourceforge.plantuml.classdiagram.command.CommandCreateClassMultilines#manageExtends",
+    "net.sourceforge.plantuml.objectdiagram.AbstractClassOrObjectDiagram.Association#Association",
+    "net.sourceforge.plantuml.objectdiagram.AbstractClassOrObjectDiagram.Association#createNew"
   ],
   "rust_locations": [
     "crates/rustuml-parser/src/diagram/class.rs::ClassDiagram",
+    "crates/rustuml-parser/src/diagram/class.rs::AssociationClass",
     "crates/rustuml-parser/src/parse/class.rs::ClassParser",
     "crates/rustuml-render/src/class.rs::CucaUidEvent",
     "crates/rustuml-render/src/class.rs::svek_id_allocation"
   ],
-  "invariant": "PlantUML Entity and Link constructors consume one shared CucaDiagram.cpt1 sequence at the instant each object is created. Commands may interleave object kinds on the same source line. In particular, CommandCreateClass creates the child, then manageExtends creates one missing parent and its Link before moving to the next missing parent and Link. The resulting public SVEK IDs reflect this constructor event order, not a later sort by source line or object category.",
-  "causal_divergence": "Rust stores entities, relationships, packages, notes, and association classes in separate vectors and later reconstructs the shared counter using CucaUidEvent.sort_key. Its same-line category ordering forces every newly inferred supertype entity ahead of every declaration relationship. For `class Child extends Base implements Port`, Java allocates child, Base, first link, Port, second link; Rust allocates child, Base, Port, first link, second link. No source-line/category sort can recover arbitrary cross-kind constructor interleaving.",
-  "planned_change": "Record a typed UID creation event whenever the parser first materializes a package or entity or constructs a note, relationship, or association class. Store stable entity/package identities and vector indices for the other event types on ClassDiagram. Have no-oracle SVEK allocation replay that event stream, filtering only objects absent from the rendered model, while retaining the current deterministic reconstruction as a compatibility fallback for manually constructed diagrams and older serialized models. Add perturbations for declaration supertypes, missing relationship endpoints, notes before and after links, phantom groups, aliases, and reordered declarations.",
+  "invariant": "PlantUML Entity and Link constructors consume one shared CucaDiagram.cpt1 sequence at the instant each object is created. Commands may interleave object kinds on the same source line. In particular, CommandCreateClass creates the child, then manageExtends creates one missing parent and its Link before moving to the next missing parent and Link. Association construction consumes the apoint short name, point Entity, and three replacement Links; it consumes one additional temporary A-B Link only when foundLink returns null. When foundLink returns an existing base Link, createNew removes that Link and reuses its type, labels, length, and endpoint order without constructing the temporary Link. The resulting graph and public SVEK IDs reflect these constructor and replacement events, not a later sort by source line or object category.",
+  "causal_divergence": "Rust stores entities, relationships, packages, notes, and association classes in separate vectors and originally reconstructed the shared counter using CucaUidEvent.sort_key, which could not recover arbitrary same-line constructor interleaving. The typed event replay fixes that class of error, but Association events still hardcode six slots and the parser leaves a preexisting A-B relationship in the rendered relationship vector. Java's existing-link branch consumes five slots and replaces that base relationship with the association point's split links. The no-base control therefore passes while a preexisting-base case retains one extra Rust link and shifts every subsequent UID by one.",
+  "planned_change": "Continue recording typed UID creation events at parser materialization time. When parsing an association class, identify the same preexisting A-B relationship that Java foundLink would select, record on AssociationClass whether a base Link was replaced, and exclude that relationship from ordinary SVEK rendering without erasing its already-consumed UID event. Replay an Association event as five slots for the replacement branch and six for the no-base branch. Retain deterministic reconstruction only for manually constructed diagrams and older serialized models, deriving the branch from surviving relationship state where possible. Do not key behavior to labels, fixture names, coordinates, or fixed corpus topology.",
   "perturbation_axes": [
     "extends plus implements with both targets missing",
     "missing supertype crossed with preexisting supertype",
     "relationship-created endpoints crossed with explicit declarations",
+    "association class with preexisting base link crossed with no-base control",
+    "forward crossed with inverted preexisting base link",
+    "base-link labels, multiplicities, and lengths",
     "attached and floating notes before and after links",
     "explicit packages crossed with phantom package materialization",
     "renamed labels and reordered declarations"
