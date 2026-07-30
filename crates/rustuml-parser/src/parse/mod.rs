@@ -30,6 +30,7 @@ pub mod wbs;
 mod style;
 
 use crate::diagram::Diagram;
+use crate::diagram::class::PackageKind;
 use crate::preprocess;
 
 /// Return the ordinary-key identity used by PlantUML's
@@ -337,6 +338,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     let mut has_class_factory_decl = false;
     let mut has_entity_class_factory_decl = false;
     let mut class_factory_rejected_by_mixed_leaf = false;
+    let mut has_class_symbol_container = false;
     let mut quoted_shared_deployment_containers = 0i32;
     let mut brace_depth = 0usize;
 
@@ -399,6 +401,16 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             .next()
             .unwrap_or_default()
             .to_ascii_lowercase();
+        if trimmed.trim_end().ends_with('{')
+            && (leading_keyword == "namespace"
+                || PackageKind::from_command_symbol(&leading_keyword).is_some())
+        {
+            // `CommandPackage`, `CommandNamespace`, and
+            // `CommandPackageWithUSymbol` are registered before the mixed
+            // DESCRIPTION leaf consumer in ClassDiagramFactory.
+            has_class_symbol_container = true;
+            has_class_factory_decl = true;
+        }
         if !has_allowmixing
             && !trimmed.contains('{')
             && MIXED_ONLY_CLASS_KEYWORDS.contains(&leading_keyword.as_str())
@@ -834,6 +846,23 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     // consumable. Once a mixed-only leaf rejects ClassDiagramFactory, a later
     // command cannot revive that candidate.
     let class_factory_viable = has_class_factory_decl && !class_factory_rejected_by_mixed_leaf;
+
+    // Every complete braced USymbol command is consumable by the earlier
+    // ClassDiagramFactory. When no mixed leaf has rejected that candidate,
+    // preserve factory order instead of letting deployment keyword weights
+    // steal the same command.
+    if has_class_symbol_container && class_factory_viable {
+        let other_max = scores
+            .iter()
+            .enumerate()
+            .filter(|&(i, _)| i != 1)
+            .map(|(_, &score)| score)
+            .max()
+            .unwrap_or(0);
+        if scores[1] <= other_max {
+            scores[1] = other_max + 1;
+        }
+    }
 
     // CommandPackageWithUSymbol makes a quoted shared container valid for both
     // CLASS and DESCRIPTION, but not SEQUENCE. If the complete source remains
@@ -2158,6 +2187,54 @@ mod tests {
         let input = "@startuml\nnote : x = 1\nAlice -> Bob : Message 1\n@enduml";
         let diagram = parse(input).unwrap();
         assert!(matches!(diagram, Diagram::Class(_)));
+    }
+
+    #[test]
+    fn braced_package_usymbol_commands_keep_class_factory_precedence() {
+        for (keyword, expected_kind) in PackageKind::COMMAND_SYMBOLS {
+            let code = format!("{keyword}_container");
+            let declaration = format!("{keyword} \"{keyword} container\" as {code} {{");
+            let input = format!(
+                "@startuml\n\
+                 {declaration}\n\
+                   class NestedLeaf\n\
+                 }}\n\
+                 @enduml"
+            );
+            let Diagram::Class(diagram) = parse(&input).unwrap() else {
+                panic!("{keyword} did not select ClassDiagramFactory");
+            };
+            let package = diagram
+                .packages
+                .iter()
+                .find(|package| package.name == code)
+                .unwrap_or_else(|| panic!("{keyword} did not create its package quark"));
+            assert_eq!(package.kind, expected_kind, "{keyword}");
+            assert!(
+                diagram
+                    .entities
+                    .iter()
+                    .any(|entity| entity.id == format!("{code}.NestedLeaf")),
+                "{keyword}"
+            );
+        }
+    }
+
+    #[test]
+    fn malformed_new_package_usymbol_opener_reaches_class_error() {
+        let error = parse(
+            "@startuml\n\
+             storage \"Broken\" <<Open> {\n\
+               class EscapedLeaf\n\
+             }\n\
+             @enduml",
+        )
+        .unwrap_err();
+        assert_eq!(error.line, 1);
+        assert_eq!(
+            error.message,
+            "invalid package or symbol-container declaration"
+        );
     }
 
     #[test]

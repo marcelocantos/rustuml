@@ -401,6 +401,7 @@ impl ClassParser {
                 parent,
                 source_line: self.current_line,
                 stereotypes: Vec::new(),
+                symbol_from_keyword: false,
                 display_name: path.last().cloned(),
                 phantom: true,
             });
@@ -757,7 +758,7 @@ impl ClassParser {
             // matching while preserving labels and identifiers verbatim.
             let declaration_kind = caps[1].trim().to_ascii_lowercase();
             if line.trim_end().ends_with('{')
-                && matches!(declaration_kind.as_str(), "database" | "node" | "rectangle")
+                && PackageKind::from_command_symbol(&declaration_kind).is_some()
             {
                 return false;
             }
@@ -1284,8 +1285,21 @@ impl ClassParser {
             .unwrap()
         });
         static SYMBOL_RE: LazyLock<Regex> = LazyLock::new(|| {
+            let keywords = PackageKind::COMMAND_SYMBOLS
+                .iter()
+                .map(|(keyword, _)| *keyword)
+                .collect::<Vec<_>>()
+                .join("|");
+            Regex::new(&format!(
+                r#"^((?i:{keywords}))\s+(?:"([^"]+)"(?:\s+((?:<<\s*[^<>]+?\s*>>\s*)+))?\s+(?i:as)\s+([^\s#{{}}"]+)|([^\s#{{}}"]+)(?:\s+((?:<<\s*[^<>]+?\s*>>\s*)+))?\s+(?i:as)\s+"([^"]+)"|([^\s#{{}}"]+)(?:\s+((?:<<\s*[^<>]+?\s*>>\s*)+))?\s+(?i:as)\s+([^\s#{{}}"]+)|"([^"]+)"|([^\s#{{}}"]+))(.*?)\{{\s*$"#
+            ))
+            .unwrap()
+        });
+        static NAMESPACE_RE: LazyLock<Regex> = LazyLock::new(|| {
+            // Java registers namespace as a separate command. Keep its
+            // identity separate even though Rust shares the modifier parser.
             Regex::new(
-                r#"^((?i:package|namespace|cloud|database|folder|frame|rectangle|node))\s+(?:"([^"]+)"(?:\s+((?:<<\s*[^<>]+?\s*>>\s*)+))?\s+(?i:as)\s+([^\s#{}"]+)|([^\s#{}"]+)(?:\s+((?:<<\s*[^<>]+?\s*>>\s*)+))?\s+(?i:as)\s+"([^"]+)"|([^\s#{}"]+)(?:\s+((?:<<\s*[^<>]+?\s*>>\s*)+))?\s+(?i:as)\s+([^\s#{}"]+)|"([^"]+)"|([^\s#{}"]+))(.*?)\{\s*$"#,
+                r#"^((?i:namespace))\s+(?:"([^"]+)"(?:\s+((?:<<\s*[^<>]+?\s*>>\s*)+))?\s+(?i:as)\s+([^\s#{}"]+)|([^\s#{}"]+)(?:\s+((?:<<\s*[^<>]+?\s*>>\s*)+))?\s+(?i:as)\s+"([^"]+)"|([^\s#{}"]+)(?:\s+((?:<<\s*[^<>]+?\s*>>\s*)+))?\s+(?i:as)\s+([^\s#{}"]+)|"([^"]+)"|([^\s#{}"]+))(.*?)\{\s*$"#,
             )
             .unwrap()
         });
@@ -1333,13 +1347,18 @@ impl ClassParser {
                 url,
                 url_tooltip,
                 color,
+                false,
             ))
         });
 
         let parsed = ordinary.or_else(|| {
-            let caps = SYMBOL_RE.captures(line)?;
+            let (caps, kind, symbol_from_keyword) = if let Some(caps) = SYMBOL_RE.captures(line) {
+                let kind = PackageKind::from_command_symbol(&caps[1])?;
+                (caps, kind, true)
+            } else {
+                (NAMESPACE_RE.captures(line)?, PackageKind::Namespace, false)
+            };
             let modifiers = SYMBOL_MODIFIERS_RE.captures(caps.get(13)?.as_str())?;
-            let kind_key = caps[1].to_ascii_lowercase();
             let (display, code, explicit_alias, identity_stereotype) =
                 if let (Some(display), Some(code)) = (caps.get(2), caps.get(4)) {
                     (
@@ -1386,16 +1405,6 @@ impl ClassParser {
                 .flat_map(|value| STEREOTYPE_RE.captures_iter(value.as_str()))
                 .map(|capture| capture[1].trim().to_string())
                 .collect::<Vec<_>>();
-            let kind = match kind_key.as_str() {
-                "namespace" => PackageKind::Namespace,
-                "cloud" => PackageKind::Cloud,
-                "database" => PackageKind::Database,
-                "folder" => PackageKind::Folder,
-                "frame" => PackageKind::Frame,
-                "rectangle" => PackageKind::Rectangle,
-                "node" => PackageKind::Node,
-                _ => PackageKind::Package,
-            };
             Some((
                 kind,
                 display,
@@ -1405,11 +1414,21 @@ impl ClassParser {
                 url,
                 url_tooltip,
                 color,
+                symbol_from_keyword,
             ))
         });
 
-        if let Some((kind, display, code, explicit_alias, stereotypes, url, url_tooltip, color)) =
-            parsed
+        if let Some((
+            kind,
+            display,
+            code,
+            explicit_alias,
+            stereotypes,
+            url,
+            url_tooltip,
+            color,
+            symbol_from_keyword,
+        )) = parsed
         {
             // `CommandPackage#getRegexConcat` consumes the complete line.
             // `CommandPackage#executeArg` sends `AS` to `quarkInContext` and
@@ -1449,6 +1468,7 @@ impl ClassParser {
                         if !stereotypes.is_empty() {
                             package.stereotypes = stereotypes.clone();
                         }
+                        package.symbol_from_keyword = symbol_from_keyword;
                         if package.source_line == 0 {
                             package.source_line = self.current_line;
                         }
@@ -1485,6 +1505,7 @@ impl ClassParser {
                         } else {
                             Vec::new()
                         },
+                        symbol_from_keyword: is_final && symbol_from_keyword,
                         display_name,
                         phantom: !is_final,
                     });
@@ -2585,11 +2606,11 @@ fn parse_package_link(raw: &str, topurl: Option<&str>) -> Option<(String, Option
 }
 
 fn looks_like_package_opener(line: &str) -> bool {
-    static RE: LazyLock<Regex> = LazyLock::new(|| {
-        Regex::new(r"^(?i:package|namespace|cloud|database|folder|frame|rectangle|node)\s+.*\{\s*$")
-            .unwrap()
-    });
-    RE.is_match(line)
+    if !line.trim_end().ends_with('{') {
+        return false;
+    }
+    let keyword = line.split_whitespace().next().unwrap_or_default();
+    keyword.eq_ignore_ascii_case("namespace") || PackageKind::from_command_symbol(keyword).is_some()
 }
 
 fn text_outside_double_quotes(s: &str) -> String {
@@ -3500,6 +3521,70 @@ mod tests {
                 .iter()
                 .any(|entity| entity.id == "SplitExplicit.CloudLeaf")
         );
+    }
+
+    #[test]
+    fn every_package_usymbol_command_owns_its_nested_leaf() {
+        for (keyword, expected_kind) in PackageKind::COMMAND_SYMBOLS {
+            let code = format!("{keyword}Code");
+            let declaration = if keyword == "package" {
+                format!("{keyword} \"{keyword} Display\" as {code} <<Trailing>> {{")
+            } else {
+                format!("{keyword} \"{keyword} Display\" <<Identity>> as {code} <<Trailing>> {{")
+            };
+            let source = format!(
+                "package Host {{\n\
+                   {declaration}\n\
+                     class Child\n\
+                   }}\n\
+                 }}"
+            );
+            let diagram = parse(&source);
+            let qualified = format!("Host.{code}");
+            let package = diagram
+                .packages
+                .iter()
+                .find(|package| package.name == qualified)
+                .unwrap_or_else(|| panic!("{keyword} did not create {qualified}"));
+            let expected_display = format!("{keyword} Display");
+
+            assert_eq!(package.kind, expected_kind, "{keyword}");
+            assert_eq!(
+                package.symbol_from_keyword,
+                keyword != "package",
+                "{keyword}"
+            );
+            assert_eq!(
+                package.display_name.as_deref(),
+                Some(expected_display.as_str()),
+                "{keyword}"
+            );
+            assert_eq!(package.stereotypes, ["Trailing"], "{keyword}");
+            assert!(
+                diagram
+                    .entities
+                    .iter()
+                    .any(|entity| entity.id == format!("{qualified}.Child")),
+                "{keyword}"
+            );
+        }
+    }
+
+    #[test]
+    fn malformed_package_usymbol_openers_all_fail_closed() {
+        for (keyword, _) in PackageKind::COMMAND_SYMBOLS {
+            let lines = [
+                format!("{keyword} \"Broken\" <<Open> {{"),
+                "class EscapedLeaf".to_string(),
+                "}".to_string(),
+            ];
+            let error = parse_class(&lines).unwrap_err();
+            assert_eq!(error.line, 1, "{keyword}");
+            assert_eq!(
+                error.message, "invalid package or symbol-container declaration",
+                "{keyword}"
+            );
+        }
     }
 
     #[test]
