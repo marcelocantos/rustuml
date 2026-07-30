@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-svek-painted-envelope-origin",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "net.sourceforge.plantuml.svek.SvekResult#calculateDimension",
+    "net.sourceforge.plantuml.svek.SvekResult#moveSvek",
+    "net.sourceforge.plantuml.svek.SvekResult#drawU",
+    "net.sourceforge.plantuml.klimt.shape.TextBlockUtils#getMinMax",
+    "net.sourceforge.plantuml.klimt.drawing.LimitFinder#drawRectangle",
+    "net.sourceforge.plantuml.svek.SvekNode#moveSvek",
+    "net.sourceforge.plantuml.svek.SvekEdge#moveSvek",
+    "net.sourceforge.plantuml.svek.Cluster#moveSvek"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs::render_plantuml_svg",
+    "crates/rustuml-render/src/class.rs::svek_layout_x_bias",
+    "crates/rustuml-render/src/class.rs::svek_layout_y_bias",
+    "crates/rustuml-render/src/class.rs::normalize_svek_package_envelope",
+    "crates/rustuml-layout/src/graph.rs::LayoutResult"
+  ],
+  "invariant": "SvekResult measures the painted graph, not Graphviz's abstract root box, and translates the complete solved model so the minimum painted coordinate lands at six. The measured vertical frontier is the union of node-image primitives, cluster decorations, solved edge paths, and edge label blocks. LimitFinder.drawRectangle starts one pixel above a node image's reported rectangle, so a Graphviz node at y=0 contributes minY=-1 and Java moves the complete body down by one. moveSvek applies the same delta to nodes, edges, and clusters before final paint. Invisible Together subgraphs affect solved placement but contribute no painted frontier.",
+  "causal_divergence": "The Rust class renderer computes a horizontal painted-envelope correction but has no vertical counterpart. It adds the fixed outer margin directly to Graphviz positions, clusters, paths, and labels. When the top frontier is an ordinary entity rectangle, Graphviz reports y=0 while Java LimitFinder observes y=-1, leaving every Rust primitive one pixel too high. The immutable 1482ade4 replay demonstrates the model: both held-outs where a Together-owned package coexists with root nodes have identical topology, dimensions, and relative geometry, but every cluster, node, edge, and label is translated by exactly negative one in Rust.",
+  "planned_change": "Compute the class SVEK minimum painted y from entity node positions with the Java rectangle inset, visible cluster positions, every solved edge control point, and every solved edge label box. Derive one delta as 6 - minY - the renderer's existing outer margin, clamp against duplicate package-envelope normalization in the same way as the horizontal path, and apply the delta uniformly to node positions, cluster positions, paths, endpoints, and labels before any SVG emission. Do not key the correction to Together, package names, fixture labels, coordinates, or node counts.",
+  "perturbation_axes": [
+    "root entities crossed with package clusters",
+    "plain package ownership crossed with Together-owned packages",
+    "top-level Together crossed with package-local Together",
+    "straight edges crossed with curved and one-rank edges",
+    "unlabelled edges crossed with center and endpoint labels",
+    "top-to-bottom crossed with left-to-right direction",
+    "renamed labels and reordered declarations"
+  ],
+  "protocol_timing": {
+    "status": "pre-acceptance-existing-worktree-code",
+    "note": "The generic vertical helper already existed as unrelated uncommitted work when immutable replay exposed that the accepted class package revision depended on it. This account precedes staging or committing that helper and records the causal model used to decide whether it belongs in the shipped change; it does not claim that the text was authored before the dormant worktree code."
+  }
+}
