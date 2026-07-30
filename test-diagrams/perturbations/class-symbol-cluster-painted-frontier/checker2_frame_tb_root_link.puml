@@ -1,0 +1,9 @@
+@startuml
+package CobaltFrameMeridian <<Frame>> {
+  class FrameInteriorQuasar
+  class FrameInteriorLattice
+  FrameInteriorQuasar --> FrameInteriorLattice : internal-current
+}
+class RootHarborSignal
+FrameInteriorQuasar --> RootHarborSignal : outbound-current
+@enduml

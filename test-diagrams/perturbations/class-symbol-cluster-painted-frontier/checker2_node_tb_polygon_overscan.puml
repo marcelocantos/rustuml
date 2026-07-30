@@ -1,0 +1,9 @@
+@startuml
+package VerdantNodeParallax <<Node>> {
+  class NodeInteriorKite
+  class NodeInteriorArc
+  NodeInteriorKite --> NodeInteriorArc : inner
+}
+class RootParallaxGauge
+NodeInteriorKite --> RootParallaxGauge : crossing
+@enduml

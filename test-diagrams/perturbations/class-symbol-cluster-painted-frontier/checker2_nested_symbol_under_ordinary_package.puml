@@ -1,0 +1,12 @@
+@startuml
+left to right direction
+package OrdinaryShelterDelta {
+  package NestedNodeFulcrum <<Node>> {
+    class NestedFulcrumCore
+  }
+  class OrdinaryShelterLeaf
+  NestedFulcrumCore --> OrdinaryShelterLeaf : nested-route
+}
+class RootShelterMarker
+OrdinaryShelterLeaf --> RootShelterMarker : outside-route
+@enduml

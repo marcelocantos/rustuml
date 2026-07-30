@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+rectangle "Heliotrope Rectangle Transit" {
+  class RectangleTransitNode
+  class RectangleTransitRelay
+  RectangleTransitNode --> RectangleTransitRelay
+}
+class RootTransitBeacon
+RectangleTransitRelay --> RootTransitBeacon : outward
+@enduml

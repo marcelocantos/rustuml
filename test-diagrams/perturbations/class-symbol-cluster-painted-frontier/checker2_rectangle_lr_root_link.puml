@@ -1,0 +1,10 @@
+@startuml
+left to right direction
+package HeliotropeRectangleTransit <<Rectangle>> {
+  class RectangleTransitNode
+  class RectangleTransitRelay
+  RectangleTransitNode --> RectangleTransitRelay
+}
+class RootTransitBeacon
+RectangleTransitRelay --> RootTransitBeacon : outward
+@enduml

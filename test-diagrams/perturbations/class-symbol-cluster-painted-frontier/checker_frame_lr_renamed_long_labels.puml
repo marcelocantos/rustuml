@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+frame "Longitudinal Cobalt Frame Boundary" {
+  class "Interior Luminous Calibration Station" as FrameLongInterior
+}
+class "Rootward Transmission Observatory" as FrameLongRoot
+FrameLongInterior --> FrameLongRoot : long-boundary-link
+@enduml

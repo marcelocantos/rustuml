@@ -1,0 +1,11 @@
+@startuml
+package AmberRectangleEnvelope <<Rectangle>> {
+  class RectangleAnchorCinder
+}
+package IndigoFrameEnvelope <<Frame>> {
+  class FrameAnchorCinder
+}
+class RootBridgeCinder
+RectangleAnchorCinder --> RootBridgeCinder : rectangle-route
+FrameAnchorCinder --> RootBridgeCinder : frame-route
+@enduml

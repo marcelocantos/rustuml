@@ -1,0 +1,8 @@
+@startuml
+left to right direction
+package CobaltFrameBoundaryLongitudinal <<Frame>> {
+  class InteriorLuminousCalibrationStation
+}
+class RootwardTransmissionObservatory
+InteriorLuminousCalibrationStation --> RootwardTransmissionObservatory : long-boundary-link
+@enduml

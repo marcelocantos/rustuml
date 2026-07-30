@@ -1,0 +1,16 @@
+@startuml
+left to right direction
+frame "Frame Owner North" {
+  class FrameNorthLeaf
+}
+rectangle "Rectangle Owner East" {
+  class RectangleEastLeaf
+}
+node "Node Owner West" {
+  class NodeWestLeaf
+}
+class RootEnvelopeConfluence
+FrameNorthLeaf --> RootEnvelopeConfluence : north-route
+RectangleEastLeaf --> RootEnvelopeConfluence : east-route
+NodeWestLeaf --> RootEnvelopeConfluence : west-route
+@enduml

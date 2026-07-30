@@ -1,0 +1,200 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-symbol-cluster-painted-frontier",
+  "reviewer": {
+    "identity": "independent adversarial checker",
+    "model": "gpt-5.6-terra",
+    "reasoning": "xhigh",
+    "tool": "Codex desktop with the exact prebuilt diff_one --no-oracle helper and local PlantUML picoweb oracle"
+  },
+  "revisions": {
+    "account_commit": "794ad847f3814a275f8fece7026d91752b41d060",
+    "implementation_commits": [
+      "f0d9939afa371e4280da5455476bb4c265a27944",
+      "a272c3160d576b745ea3af25ad991f5abb218f91"
+    ],
+    "rust_detached_revision": "e0d1de01df9c5567f185132ebce4bb36657d5f60",
+    "rust_tree": "aad8db5d14cfec0c778c8842bcc8a3425bab53c6",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "binary": {
+    "path": "/tmp/rustuml-checker-1482/target/release/examples/diff_one",
+    "sha256": "2a5b8a6d8be944adbf509d7808ebe89129f98fe181b63aae5f58ff3d6c1d5036",
+    "mode": "--no-oracle",
+    "cargo_or_rustc_run": false
+  },
+  "oracle": {
+    "url": "http://127.0.0.1:8787/render",
+    "request": "POST JSON {source, options:[-tsvg]}",
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar"
+  },
+  "commands": [
+    "git -C /tmp/rustuml-checker-1482 rev-parse HEAD",
+    "git -C /tmp/rustuml-checker-1482 rev-parse e0d1de01^{tree}",
+    "git diff b594f227..e0d1de01 -- crates/rustuml-render/src/class.rs",
+    "git diff --check b594f227..e0d1de01",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "inspect ClusterDecoration#drawU, SvekResult#calculateDimension, LimitFinder#drawRectangle, LimitFinder#drawUPolygon, USymbolFrame#asBig, USymbolRectangle#asBig, and USymbolNode#drawNode/asBig at Java revision 71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "rg -n 'CobaltFrame|AmberRectangle|VerdantNode|OrdinaryShelter|RootEnvelope|checker2_|class-symbol-cluster-painted-frontier' crates/rustuml crates/rustuml-parser crates/rustuml-render crates/rustuml-layout crates/rustuml-math -S",
+    "curl -sf -H 'Content-Type: application/json' --data generated-json http://127.0.0.1:8787/render -o test-diagrams/perturbations/class-symbol-cluster-painted-frontier/<same-stem>.svg",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-symbol-cluster-painted-frontier/<each .puml>",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-together-structural-layout/review2_control_frame_folder_node_no_together.puml",
+    "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-together-structural-layout/review2_frame_folder_node_together_order.puml"
+  ],
+  "source_inspection": {
+    "supported": [
+      "ClusterDecoration draws each symbol's asBig TextBlock after applying RectangleArea.getPosition().",
+      "USymbolFrame and USymbolRectangle draw their URectangle at local origin; LimitFinder records its minimum at x - 1, y - 1.",
+      "USymbolNode.drawNode begins its polygon at local points (0,10), (10,0), and (width,0); LimitFinder records its polygon minimum at x - 10 with no vertical inset.",
+      "SvekResult.calculateDimension measures the fully drawn result and calls one clusterManager.moveDelta(6 - minX, 6 - minY), so the frontier translation is diagram-wide rather than an enclosed-entity adjustment."
+    ],
+    "implementation_audit": [
+      "The diff replaces package-local entity and edge offsets with a painted-cluster minimum used to translate nodes, clusters, and edges together.",
+      "No production reference to checker labels, test-diagram paths, golden data, include_str/include_bytes, filesystem fixture reads, coordinate-keyed SVG surgery, or per-fixture branch ladders was found.",
+      "The changed numerical values are pre-existing named LimitFinder and node-bevel constants with Java-source comments; this review did not find unexplained new tuning constants."
+    ],
+    "rejected_assumption": "The implementation treats positioning the rectangle border at the normalized RectangleArea origin as sufficient. USymbolRectangle.asBig also positions its title at local y = 2 + stereotype height. Rust leaves emit_layout_rectangle_cluster at cluster.y + PACKAGE_TITLE_BASELINE + 1.0, placing the title one pixel below Java after the origin correction."
+  },
+  "controls": [
+    {
+      "path": "test-diagrams/perturbations/class-together-structural-layout/review2_control_frame_folder_node_no_together.puml",
+      "result": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-together-structural-layout/review2_frame_folder_node_together_order.puml",
+      "result": "pass: SVGs are structurally equivalent"
+    }
+  ],
+  "inputs": [
+    {
+      "path": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker_frame_tb_root_link.puml",
+      "java_svg": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker_frame_tb_root_link.svg",
+      "axes": ["outer frame", "top-to-bottom", "root entity and crossing link"],
+      "result": "fail: Rust routes quoted frame syntax through DESCRIPTION rather than the class cluster renderer; not used as mechanism evidence"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker_frame_lr_renamed_long_labels.puml",
+      "java_svg": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker_frame_lr_renamed_long_labels.svg",
+      "axes": ["outer frame", "left-to-right", "long renamed labels"],
+      "result": "fail: Rust routes quoted frame syntax through DESCRIPTION rather than the class cluster renderer; not used as mechanism evidence"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker_rectangle_tb_competing_owners.puml",
+      "java_svg": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker_rectangle_tb_competing_owners.svg",
+      "axes": ["outer rectangle", "competing frame owner", "root links"],
+      "result": "fail: Rust routes this quoted root-symbol form through DESCRIPTION rather than the class cluster renderer; not used as mechanism evidence"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker_rectangle_lr_root_link.puml",
+      "java_svg": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker_rectangle_lr_root_link.svg",
+      "axes": ["outer rectangle", "left-to-right", "root entity and link"],
+      "result": "fail: rectangle title expected y=22.5352, Rust emitted y=23.5352"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker_node_tb_polygon_overscan.puml",
+      "java_svg": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker_node_tb_polygon_overscan.svg",
+      "axes": ["outer node", "top-to-bottom", "polygon x overscan", "root link"],
+      "result": "fail: Rust routes quoted node syntax through DESCRIPTION rather than the class cluster renderer; not used as mechanism evidence"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker_node_lr_competing_frame.puml",
+      "java_svg": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker_node_lr_competing_frame.svg",
+      "axes": ["outer node", "left-to-right", "competing frame owner"],
+      "result": "fail: Rust routes quoted node syntax through DESCRIPTION rather than the class cluster renderer; not used as mechanism evidence"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker_nested_symbol_under_ordinary_package.puml",
+      "java_svg": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker_nested_symbol_under_ordinary_package.svg",
+      "axes": ["nested node symbol", "ordinary package parent", "left-to-right"],
+      "result": "fail: raw nested node form emits a malformed negative-coordinate node in Rust; package-stereotype sibling below is the class-renderer mechanism probe"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker_three_root_envelope_owners.puml",
+      "java_svg": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker_three_root_envelope_owners.svg",
+      "axes": ["frame rectangle node root owners", "left-to-right", "multiple root links"],
+      "result": "fail: Rust routes quoted root symbols through DESCRIPTION rather than the class cluster renderer; not used as mechanism evidence"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker2_frame_tb_root_link.puml",
+      "java_svg": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker2_frame_tb_root_link.svg",
+      "axes": ["outer frame", "top-to-bottom", "root entity and crossing link"],
+      "result": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker2_frame_lr_long_labels.puml",
+      "java_svg": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker2_frame_lr_long_labels.svg",
+      "axes": ["outer frame", "left-to-right", "long renamed labels"],
+      "result": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker2_rectangle_tb_competing_owners.puml",
+      "java_svg": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker2_rectangle_tb_competing_owners.svg",
+      "axes": ["outer rectangle", "top-to-bottom", "competing frame owner", "root links"],
+      "result": "fail: rectangle title expected y=22.5352, Rust emitted y=23.5352"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker2_rectangle_lr_root_link.puml",
+      "java_svg": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker2_rectangle_lr_root_link.svg",
+      "axes": ["outer rectangle", "left-to-right", "root entity and link"],
+      "result": "fail: rectangle title expected x=135.8115,y=22.5352, Rust emitted x=135.8125,y=23.5352"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker2_node_tb_polygon_overscan.puml",
+      "java_svg": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker2_node_tb_polygon_overscan.svg",
+      "axes": ["outer node", "top-to-bottom", "polygon x overscan", "root entity and crossing link"],
+      "result": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker2_node_lr_competing_frame.puml",
+      "java_svg": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker2_node_lr_competing_frame.svg",
+      "axes": ["outer node", "left-to-right", "competing frame owner", "root links"],
+      "result": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker2_nested_symbol_under_ordinary_package.puml",
+      "java_svg": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker2_nested_symbol_under_ordinary_package.svg",
+      "axes": ["nested node symbol", "ordinary package parent", "left-to-right", "renamed labels"],
+      "result": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker2_three_root_envelope_owners.puml",
+      "java_svg": "test-diagrams/perturbations/class-symbol-cluster-painted-frontier/checker2_three_root_envelope_owners.svg",
+      "axes": ["frame rectangle node root owners", "left-to-right", "multiple competing envelope owners", "root links"],
+      "result": "fail: RectangleOwnerEast title expected x=38.496,y=145.5352, Rust emitted x=38.501,y=146.5352"
+    }
+  ],
+  "result_counts": {
+    "all_fresh_pairs": 16,
+    "all_fresh_passed": 5,
+    "all_fresh_failed": 11,
+    "class_renderer_mechanism_matrix_pairs": 8,
+    "class_renderer_mechanism_matrix_passed": 5,
+    "class_renderer_mechanism_matrix_failed": 3,
+    "motivating_controls_passed": 2
+  },
+  "findings": [
+    {
+      "severity": "rejecting",
+      "summary": "The global painted-frontier model is supported by the inspected Java data flow, but the Rust realization is incomplete for rectangle symbols.",
+      "evidence": "Three independent class-renderer perturbations with an outer rectangle fail only at the title: y is exactly one pixel too large in both directions and when a frame or node competes to own the root envelope. Frame and node equivalents pass."
+    },
+    {
+      "severity": "rejecting",
+      "summary": "The rectangle error is mechanism-relevant, not a fixture-shaped discrepancy.",
+      "evidence": "USymbolRectangle.asBig draws its title from the same translated local origin as its URectangle. Rust class.rs:6183 retains +1.0 after the border was moved to cluster.y, while Java USymbolRectangle.java:133 uses local y=2 plus stereotype height. The failure survives direction, label, topology, and sibling-envelope changes."
+    },
+    {
+      "severity": "informational",
+      "summary": "No overfitting signal was found in the implementation diff.",
+      "evidence": "Static inspection found no reference to fixture labels or golden paths and no output embedding or per-fixture branch logic. The defect is a general unported primitive-local translation."
+    },
+    {
+      "severity": "informational",
+      "summary": "The quoted raw frame/node forms expose separate Rust class-dispatch and nested-node weaknesses.",
+      "evidence": "Their Java SVGs and failure pairs are preserved, but the package-stereotype matrix is the controlled mechanism test because it reaches the same class package renderer under an established RustUML spelling."
+    }
+  ],
+  "no_oracle_gate": "failed",
+  "rejection_basis": "Valid fresh rectangle class-package inputs fail the exact no-oracle comparator across both TB and LR directions and with competing root envelope owners.",
+  "verdict": "REJECTED"
+}
