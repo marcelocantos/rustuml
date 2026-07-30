@@ -7,10 +7,21 @@ use super::{DiagramMeta, SkinParam};
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use std::ops::Deref;
 
+/// Diagram-wide Graphviz rank direction selected by PlantUML's direction
+/// command.
+#[derive(Debug, Clone, Copy, Default, PartialEq, Eq, Serialize, Deserialize)]
+pub enum StateLayoutDirection {
+    #[default]
+    TopToBottom,
+    LeftToRight,
+}
+
 /// A complete state diagram.
 #[derive(Debug, Serialize, Deserialize)]
 pub struct StateDiagram {
     pub meta: DiagramMeta,
+    #[serde(default)]
+    pub direction: StateLayoutDirection,
     pub states: Vec<State>,
     pub transitions: Vec<Transition>,
     pub notes: Vec<StateNote>,

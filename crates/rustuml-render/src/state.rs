@@ -3265,6 +3265,15 @@ fn autonomous_scope_painted_bounds(
     bounds.is_finite().then_some(bounds)
 }
 
+fn state_layout_direction(diagram: &StateDiagram) -> Direction {
+    // Java provenance: every root and `GroupMakerState` inner
+    // `DotStringFactory` reads the same diagram `SkinParam.rankdir`.
+    match diagram.direction {
+        StateLayoutDirection::TopToBottom => Direction::TopToBottom,
+        StateLayoutDirection::LeftToRight => Direction::LeftToRight,
+    }
+}
+
 fn layout_autonomous_scope(
     diagram: &StateDiagram,
     ids: Vec<String>,
@@ -3273,7 +3282,7 @@ fn layout_autonomous_scope(
     live_clusters: &[&State],
     spacing: Option<GraphSpacing>,
 ) -> Option<AutonomousScopeLayout> {
-    let mut layout = LayoutGraph::new(Direction::TopToBottom);
+    let mut layout = LayoutGraph::new(state_layout_direction(diagram));
     if let Some(spacing) = spacing {
         layout = layout.with_spacing(spacing);
     }
@@ -5207,7 +5216,7 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
     let skin = StateSkin::from_diagram(diagram);
     let transition_indices = plantuml_svek_transition_order(diagram, 0..diagram.transitions.len());
     let ids = collect_autonomous_scope_ids(diagram, &transition_indices, |_| true);
-    let mut layout = LayoutGraph::new(Direction::TopToBottom)
+    let mut layout = LayoutGraph::new(state_layout_direction(diagram))
         .with_plantuml_svek_spacing()
         .with_plantuml_svek_node_order();
     let node_sizes = ids
@@ -6271,7 +6280,8 @@ pub fn render_with_oracle(
     let layout_result = if use_oracle {
         None
     } else {
-        let mut layout = LayoutGraph::new(Direction::TopToBottom).with_plantuml_svek_spacing();
+        let mut layout =
+            LayoutGraph::new(state_layout_direction(diagram)).with_plantuml_svek_spacing();
         for id in &layout_node_ids {
             if let Some(note) = floating_notes.iter().find(|note| note.alias == *id) {
                 layout.add_node(id, "", note.width, note.height);
@@ -10547,6 +10557,7 @@ CobaltDecision --> [*]
     fn simple_state_diagram() {
         let d = StateDiagram {
             meta: DiagramMeta::default(),
+            direction: StateLayoutDirection::TopToBottom,
             states: vec![
                 State {
                     id: "Active".into(),
@@ -11644,6 +11655,65 @@ CobaltDecision --> [*]
         let mut svg = String::new();
         block.emit(&mut svg, &label, 40.0, 20.0, &font);
         assert!(svg.contains(">&#160;</text>"), "{svg}");
+    }
+
+    #[test]
+    fn state_rank_direction_drives_flat_and_nested_layouts() {
+        fn dimensions(svg: &str) -> (f64, f64) {
+            let values = svg
+                .split_once(r#"viewBox="0 0 "#)
+                .unwrap()
+                .1
+                .split_once('"')
+                .unwrap()
+                .0
+                .split_whitespace()
+                .map(|value| value.parse::<f64>().unwrap())
+                .collect::<Vec<_>>();
+            (values[0], values[1])
+        }
+
+        let flat_body = "state Copper\n\
+                         state Violet\n\
+                         state Amber\n\
+                         state Silver\n\
+                         [*] --> Copper\n\
+                         Copper --> Violet\n\
+                         Violet --> Amber\n\
+                         Amber --> Silver\n\
+                         Silver --> [*]";
+        let flat_tb = rustuml_parser::parse::parse(&format!(
+            "@startuml\ntop to bottom direction\n{flat_body}\n@enduml"
+        ))
+        .unwrap();
+        let flat_lr = rustuml_parser::parse::parse(&format!(
+            "@startuml\nleft to right direction\n{flat_body}\n@enduml"
+        ))
+        .unwrap();
+        let (flat_tb_width, flat_tb_height) = dimensions(&crate::render_svg(&flat_tb));
+        let (flat_lr_width, flat_lr_height) = dimensions(&crate::render_svg(&flat_lr));
+        assert!(flat_tb_height > flat_tb_width);
+        assert!(flat_lr_width > flat_lr_height);
+
+        let nested_body = "state \"Outer Ledger\" as OuterLedger {\n\
+                             state \"Draft Lane\" as DraftLane\n\
+                             state \"Audit Lane\" as AuditLane\n\
+                             [*] --> DraftLane\n\
+                             DraftLane --> AuditLane : renamed row\n\
+                             AuditLane --> [*]\n\
+                           }";
+        let nested_tb = rustuml_parser::parse::parse(&format!(
+            "@startuml\ntop to bottom direction\n{nested_body}\n@enduml"
+        ))
+        .unwrap();
+        let nested_lr = rustuml_parser::parse::parse(&format!(
+            "@startuml\nleft to right direction\n{nested_body}\n@enduml"
+        ))
+        .unwrap();
+        let (nested_tb_width, nested_tb_height) = dimensions(&crate::render_svg(&nested_tb));
+        let (nested_lr_width, nested_lr_height) = dimensions(&crate::render_svg(&nested_lr));
+        assert!(nested_tb_height > nested_tb_width);
+        assert!(nested_lr_width > nested_lr_height);
     }
 
     #[test]

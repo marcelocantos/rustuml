@@ -114,6 +114,7 @@ struct NoteBuffer {
 
 struct StateParser {
     meta: DiagramMeta,
+    direction: StateLayoutDirection,
     states: Vec<State>,
     transitions: Vec<Transition>,
     notes: Vec<StateNote>,
@@ -152,6 +153,7 @@ impl StateParser {
     fn new() -> Self {
         Self {
             meta: DiagramMeta::default(),
+            direction: StateLayoutDirection::TopToBottom,
             states: Vec::new(),
             transitions: Vec::new(),
             notes: Vec::new(),
@@ -335,6 +337,7 @@ impl StateParser {
     fn finish(self) -> StateDiagram {
         StateDiagram {
             meta: self.meta,
+            direction: self.direction,
             states: self.states,
             transitions: self.transitions,
             notes: self.notes,
@@ -417,6 +420,17 @@ impl StateParser {
                 }
                 buf.text.push_str(line);
             }
+            return Ok(());
+        }
+
+        // Java provenance: `CommandRankDir.executeArg` writes the shared
+        // `SkinParam.rankdir`; later commands replace the earlier value.
+        if line.eq_ignore_ascii_case("left to right direction") {
+            self.direction = StateLayoutDirection::LeftToRight;
+            return Ok(());
+        }
+        if line.eq_ignore_ascii_case("top to bottom direction") {
+            self.direction = StateLayoutDirection::TopToBottom;
             return Ok(());
         }
 
@@ -932,6 +946,25 @@ mod tests {
     fn parse(input: &str) -> StateDiagram {
         let lines: Vec<String> = input.lines().map(|s| s.to_string()).collect();
         parse_state(&lines).unwrap()
+    }
+
+    #[test]
+    fn direction_commands_update_state_layout_direction() {
+        let default = parse("state Alpha\nstate Beta\nAlpha --> Beta");
+        assert_eq!(default.direction, StateLayoutDirection::TopToBottom);
+
+        let left_to_right =
+            parse("left to right direction\nstate Alpha\nstate Beta\nAlpha --> Beta");
+        assert_eq!(left_to_right.direction, StateLayoutDirection::LeftToRight);
+
+        let reset = parse(
+            "left to right direction\n\
+             top to bottom direction\n\
+             state Alpha\n\
+             state Beta\n\
+             Alpha --> Beta",
+        );
+        assert_eq!(reset.direction, StateLayoutDirection::TopToBottom);
     }
 
     #[test]
