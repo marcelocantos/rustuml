@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-generic-badge-painted-frontier",
+  "created": "2026-07-31",
+  "status": "proposed",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "a1fe2dc653715048a6644a5df0ca4117109a18a1",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageClassHeader.java",
+      "symbol": "EntityImageClassHeader.EntityImageClassHeader",
+      "lines": "129-158",
+      "role": "Wraps the generic Display in one-pixel inner margins, TextBlockGeneric, and one-pixel outer margins before passing it to HeaderLayout."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/HeaderLayout.java",
+      "symbol": "HeaderLayout.drawU",
+      "lines": "81-116",
+      "role": "Places the wrapped generic block four pixels beyond the class header's top-right corner."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/shape/TextBlockGeneric.java",
+      "symbol": "TextBlockGeneric.drawU",
+      "lines": "57-70",
+      "role": "Draws the generic block's dashed URectangle at the translated outer-margin origin."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java",
+      "symbol": "LimitFinder.drawRectangle",
+      "lines": "175-179",
+      "role": "Adds the generic rectangle's translated primitive bounds to the complete SVEK painted MinMax."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekResult.java",
+      "symbol": "SvekResult.calculateDimension",
+      "lines": "125-136",
+      "role": "Measures every painted primitive, translates the complete graph by `6 - min`, and reports the painted span plus fifteen pixels."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbol": "render_class_entity",
+      "lines": "9735-9776",
+      "role": "Paints the generic rectangle three pixels above and to the right of the entity box."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbol": "render_with_oracle_uid_origin",
+      "lines": "5064-5180",
+      "role": "Builds body bounds and decoration translation from entity rectangles, clusters, and notes, but omits the generic badge's painted minimum and maximum."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbol": "render_with_oracle_uid_origin",
+      "lines": "5194-5366",
+      "role": "Builds final canvas dimensions from entity boxes and other painted primitives, again omitting the generic badge's right frontier."
+    }
+  ],
+  "evidence_inputs": [
+    "test-diagrams/golden/class/class_edge_nested_generics.puml",
+    "test-diagrams/golden/class/class_generic_class_with_enum.puml",
+    "test-diagrams/golden/class/class_pattern_iterator.puml",
+    "test-diagrams/golden/class/class_collection_framework.puml",
+    "test-diagrams/golden/class/class_oop_pillars.puml"
+  ],
+  "claimed_invariant": "A modern class generic badge is part of the SVEK image's painted primitive frontier even though Graphviz sizes only the entity node. EntityImageClassHeader's two margin wrappers and HeaderLayout's four-pixel top-right translation place the TextBlockGeneric rectangle outside the entity box. LimitFinder unions that primitive with every node, edge, cluster, and label; SvekResult then translates all solved content from the resulting global minimum and computes dimensions from the resulting global span. A generic badge affects global translation only when it establishes a new painted minimum, and affects the right extent only when it establishes a new painted maximum.",
+  "causal_divergence": "Rust emits each generic badge at the correct negative-three-pixel visual offset relative to its entity, but its body-normalization and canvas passes see only the entity rectangle. In unrelated generic-heavy inputs, Java therefore translates every primitive three pixels downward when a topmost badge establishes the minimum, while Rust leaves entities at y=7 instead of y=10. A rightmost badge also extends Java's painted span beyond the owning entity, while Rust truncates the canvas at the entity frontier. The repeated three-pixel vertical and four-integer-pixel canvas differences arise from one omitted primitive frontier, not from Graphviz routing, generic text metrics, topology, or fixture-specific padding.",
+  "planned_model_change": "Introduce one Java-derived generic-badge painted-frontier projection from the same entity dimensions and existing generic overhang used for SVG painting. Union its top primitive bound into the pre-decoration painted minimum, derive the no-oracle body translation from SvekResult's `6 - minY` rule, and apply that translation uniformly to entities, clusters, edges, and labels. Union the badge's right painted edge into both decoration sizing and final canvas sizing, retaining the fractional frontier until the final integer dimension conversion. Keep generic text measurement, node width, header composition, and SVG badge coordinates on their existing shared model. Do not add a global generic-present offset, fixture checks, or post-hoc SVG translation.",
+  "perturbation_axes": [
+    "a generic entity that is versus is not the topmost painted primitive",
+    "a generic entity that is versus is not the rightmost painted primitive",
+    "short and long generic parameter Displays",
+    "one generic entity versus multiple generic entities",
+    "connected and disconnected topologies",
+    "top-to-bottom versus left-to-right layout",
+    "renamed classes and generic parameters",
+    "plain non-generic classes as a negative control"
+  ],
+  "scope_boundary": "This mechanism owns only the generic badge's contribution to the complete class SVEK painted minimum, maximum, translation, and canvas. It does not change generic parsing, old-fashion generic display, generic font/style resolution, class node dimensions, Graphviz routes, or non-generic primitives.",
+  "acceptance": [
+    "The generic residual cluster improves without moving non-generic class pairs backward.",
+    "Fresh valid inputs in which generic badges alternately own and do not own the global top/right frontier match Java.",
+    "All translated entities, edges, clusters, and labels preserve their solved relative geometry.",
+    "Focused renderer tests, the class-family census, the full no-oracle ratchet, clippy, and mechanical harness guards pass except for explicitly pre-existing gate debt.",
+    "An independent checker records a verdict at the exact implementation revision."
+  ]
+}
