@@ -1,0 +1,7 @@
+@startuml
+node "Runtime Host" as Host {
+  interface Api
+}
+interface Consumer
+Consumer --> Host.Api
+@enduml

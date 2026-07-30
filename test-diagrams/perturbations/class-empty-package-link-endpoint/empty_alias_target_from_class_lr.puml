@@ -1,0 +1,7 @@
+@startuml
+left to right direction
+class Source
+package "Archive Bin" as Archive {
+}
+Source --> Archive
+@enduml
