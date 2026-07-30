@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-empty-leaf-intrinsic-dimensions",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "net.sourceforge.plantuml.svek.SvekNode#appendShape",
+    "net.sourceforge.plantuml.svek.SvekResult#drawU",
+    "net.sourceforge.plantuml.svek.image.EntityImageEmptyPackage#calculateDimensionSlow",
+    "net.sourceforge.plantuml.svek.image.EntityImageEmptyPackage#drawU",
+    "net.sourceforge.plantuml.decoration.symbol.USymbolCloud#asBig"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs::empty_package_dims",
+    "crates/rustuml-render/src/class.rs::empty_package_cloud_minima",
+    "crates/rustuml-render/src/class.rs::layout_empty_packages"
+  ],
+  "invariant": "A SVEK node has separate layout-box and image dimensions. PlantUML serializes the intrinsic image width and height to Graphviz as six-decimal inch attributes, so the solved node box may be slightly truncated. SvekResult later uses only the solved node minimum for placement and redraws the IEntityImage at its original calculated dimensions. LimitFinder measures that same intrinsic redraw.",
+  "causal_divergence": "Rust preserved intrinsic empty-package dimensions when creating the layout node but later used NodePosition.width and height from Graphviz both to paint the empty leaf and to compute its cloud frontier for envelope normalization. For Direct Empty Parcel Group, Java redraws EntityImageEmptyPackage at 209.888671875 by 52.9765625, while Graphviz's six-decimal-inch round trip yields 209.88864 by 52.976592. Rust used the latter. The cloud frontier therefore shifted the global normalization minimum by about 7.6e-6 even though all serialized text and ordinary geometry rounded identically.",
+  "planned_change": "Recompute each empty leaf's intrinsic dimensions from empty_package_dims using its explicit automatic symbol, exactly as at layout-node creation. Use the solved NodePosition only for x and y. Feed intrinsic dimensions to empty cloud frontier measurement and EmptyPackageLayout painting. Keep Graphviz dimensions for placement and routing only.",
+  "perturbation_axes": [
+    "label widths that survive crossed with widths that change under six-decimal-inch serialization",
+    "ordinary empty package crossed with explicit symbol leaf",
+    "packageStyle cloud fallback crossed with explicit cloud",
+    "cloud crossed with non-frontier-sensitive symbols",
+    "top-to-bottom crossed with left-to-right direction",
+    "root leaf crossed with nested and linked leaf topology"
+  ],
+  "predecessor_rejection": {
+    "review": "docs/parity-reviews/class-package-style-symbol-fallback/review.json",
+    "review_commit": "63d978e7",
+    "relevant_counterexample": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_empty_control_valid_tb.puml"
+  },
+  "diagnostic_evidence": {
+    "java_intrinsic_leaf_dimensions": "209.888671875 by 52.9765625",
+    "rust_graphviz_leaf_dimensions": "209.88864000000004 by 52.976592000000004",
+    "java_svek_min_x": "-2.6178599221549064",
+    "rust_svek_min_x_in_java_coordinates": "-2.617867522501482"
+  }
+}
