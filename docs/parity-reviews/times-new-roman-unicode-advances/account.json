@@ -50,7 +50,7 @@
       "role": "The checked-in derivation currently emits only printable ASCII even though the same AWT API can derive assigned Unicode scalar advances."
     }
   ],
-  "claimed_invariant": "For text whose AWT width is the sum of scalar advances, every assigned Unicode scalar is measured with the same Times New Roman face and JDK fallback behavior as printable ASCII. Plain, bold, italic, and bold-italic layout widths therefore use the exact face that SVG emission names.",
+  "claimed_invariant": "For text whose AWT width is scalar-additive, every assigned Unicode scalar is measured with the same Times New Roman face and JDK fallback behavior as printable ASCII, scaled to the requested size as f32, and accumulated in source order as f32. Plain, bold, italic, and bold-italic layout widths therefore reproduce the same additive AWT path that SVG emission names.",
   "causal_divergence": "The original implementation deliberately replaced every non-ASCII scalar with a half-em advance. The first Unicode-table correction then rounded every AWT advance independently to an integer at a 2048-point extraction size. Java retains 16 fractional bits in these measurements and sums those fractional scalar advances before scaling. For additive scripts, repeated fractional-width scalars such as U+0518 therefore accumulate a visible width error even though the selected face and codepoint coverage are correct.",
   "derivation": {
     "tool": "tools/PhysicalFontMetricsExtract.java",
@@ -69,10 +69,11 @@
       "maximum_observed_2048_unit_advance": 13289.779296875,
       "maximum_error_at_12_fractional_bits": 0.0001220703125,
       "maximum_error_at_16_fractional_bits": 0.0,
-      "fixed_point_fit": "The maximum observed 16.16 value is below u32::MAX."
+      "fixed_point_fit": "The maximum observed 16.16 value is below u32::MAX.",
+      "awt_accumulation_probe": "For 32 repetitions of U+0518, scaling the exact 2048-point advance to sizes 17 and 19 as f32 and accumulating as f32 exactly equals Font.getStringBounds on the complete string: 560.864135742188 and 626.847839355469."
     }
   },
-  "planned_model_change": "Change the checked-in Java extractor and generated Rust range table from rounded u16 design units to exact u32 16.16 fixed-point advances, with a generation-time assertion that every AWT width is represented exactly and fits u32. Binary-search the same scalar ranges from times_new_roman_text_width and divide by both the fixed-point scale and the 2048-point extraction size only after summing through Rust's existing width path. Keep printable ASCII on its established integer arrays and cross-check that the Unicode representation agrees for overlapping scalars. Do not add string-specific values, script guesses, state offsets, or route changes.",
+  "planned_model_change": "Change the checked-in Java extractor and generated Rust range table from rounded u16 design units to exact u32 16.16 fixed-point advances, with a generation-time assertion that every AWT width is represented exactly and fits u32. For strings containing non-ASCII scalars, binary-search the same ranges, convert both Unicode and printable-ASCII advances to the requested size as f32, and accumulate in source order as f32 before returning f64, matching AWT's additive glyph-position path. Preserve the established all-ASCII f64 path and cross-check the overlapping arrays. Do not add string-specific values, script guesses, state offsets, or route changes.",
   "scope_residue": "This mechanism corrects additive scalar advances. Contextual shaping, ligatures, grapheme clusters, emoji sequences, and font-stack definitions containing multiple comma-separated families are not claimed to be solved by a scalar table and remain separate mechanisms. The checker must distinguish an additive-advance failure from that declared shaping residue.",
   "perturbation_axes": [
     "Latin-1 accents versus ASCII base letters",
