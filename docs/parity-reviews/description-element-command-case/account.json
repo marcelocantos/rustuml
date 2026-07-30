@@ -16,18 +16,21 @@
     "crates/rustuml-parser/src/parse/deployment.rs::kind_from_keyword",
     "crates/rustuml-parser/src/parse/component.rs::CONTAINER_KEYWORDS",
     "crates/rustuml-parser/src/parse/component.rs::container_keyword",
-    "crates/rustuml-parser/src/parse/component.rs::parse_component"
+    "crates/rustuml-parser/src/parse/component.rs::parse_component",
+    "crates/rustuml-parser/src/parse/component.rs::RE_COMP"
   ],
-  "invariant": "DescriptionDiagramFactory command regexes are compiled through Pattern2.compileInternal with CASE_INSENSITIVE. Every spelling of a CommandCreateElementFull.ALL_TYPES keyword therefore selects the same USymbol and Entity type, and CommandPackageWithUSymbol treats container keywords and AS case-insensitively as well. Case changes affect neither identifier spelling nor label text, package ownership, constructor order, layout dimensions, nor SVG geometry.",
-  "causal_divergence": "Rust has two internal product paths that render Java DESCRIPTION diagrams plus a shared subtype selector in front of them. The implementation commit correctly ASCII-case-folds captured command keywords in both deployment and component-backed parsers, but detect_uml_subtype still extracts the raw first token and compares it case-sensitively against lowercase DEPLOYMENT_KEYWORDS, package/container heuristics, exclusive-container membership, and quoted-container scoring. Uppercase DATABASE and mixed-case NoDe therefore receive no DESCRIPTION score and fall through to the welcome/error product before either corrected parser can run. The component-backed mixed-case FrAmE control passes because its bracket child independently supplies component evidence; the same token without that separate signal fails selection. This removes the entire diagram rather than one node. The residual defect is command-token normalization at the shared factory-selection boundary, not parser-local symbol geometry or a need to retune scoring weights.",
-  "planned_change": "At detect_uml_subtype's command boundary, derive one ASCII-lowercase keyword solely for semantic family membership and scoring while retaining the original source line, identifiers, quoted labels, and aliases verbatim. Use that normalized token consistently for package-with-brace exclusion, deployment-exclusive container membership, quoted-container classification, DEPLOYMENT_KEYWORDS membership, component keyword scoring, and the related shared-container heuristics. Keep the existing score magnitudes and tie-breaking model unchanged. Add dispatch tests proving uppercase and mixed-case root DESCRIPTION leaves and quoted containers select the same product as lowercase controls, then rerun the three fresh checker inputs exactly. Do not change layout constants, symbol renderers, comparator behavior, or SVG output after rendering.",
+  "invariant": "DescriptionDiagramFactory command regexes are compiled through Pattern2.compileInternal with CASE_INSENSITIVE. Every spelling of a CommandCreateElementFull.ALL_TYPES keyword therefore both selects the same DESCRIPTION factory and is consumed by the same element command. CommandCreateElementFull also treats its `as` token case-insensitively. The selector and selected parser form one contract: a line credited as component evidence must materialize the same Entity under uppercase, lowercase, or mixed-case command and AS spellings. Case changes affect neither identifier spelling nor label text, package ownership, constructor order, layout dimensions, nor SVG geometry.",
+  "causal_divergence": "Rust has a shared detect_uml_subtype selector in front of separate deployment and component-backed DESCRIPTION parsers. Commit 40394d67 repaired the selector boundary: it case-folds the leading semantic token, so the prior uppercase DATABASE, mixed-case NoDe, and mixed-case FrAmE examples now reach the intended product path. The independent follow-up disproved completion one layer later. parse_component's container_keyword is case-insensitive and identifies a mixed-case `CoMpOnEnT` line as the canonical `component` keyword, but leaf components are intentionally delegated to RE_COMP. RE_COMP is anchored to lowercase `component` and lowercase `as`, so it consumes neither `CoMpOnEnT \"Telemetry\" As Alias` nor `COMPONENT Api`. The parser returns a valid but empty ComponentDiagram and renders the empty DESCRIPTION canvas. The existing dispatch unit test asserted only Diagram::Component and therefore missed loss of the declaration. This is a selector/consumer contract violation in the component leaf command, not a score-weight, renderer, storage-container, or artifact-container problem.",
+  "planned_change": "Make only RE_COMP's semantic command token and AS token ASCII-case-insensitive, mirroring Pattern2.compileInternal, while leaving captured labels and identifiers verbatim. Strengthen the parser test to assert the selected ComponentDiagram contains the expected component identity and display label for mixed-case quoted-AS and uppercase bare forms. Rerun all six prior accepted inputs and the two fresh mechanism-specific failures. Treat the four storage/artifact container failures in the follow-up as adjacent symbol-model residue under separate causal accounts; do not fold their geometry into this command-case change. Do not change subtype scores, layout constants, symbol renderers, comparator behavior, or output strings after rendering.",
   "perturbation_axes": [
     "uppercase, lowercase, and mixed-case element keywords",
     "leaf versus shared-symbol container declarations",
     "bare identifier versus quoted display and AS alias forms",
     "database, queue, and boundary symbol families",
     "root versus nested ownership",
-    "top-to-bottom versus left-to-right direction"
+    "top-to-bottom versus left-to-right direction",
+    "lowercase, uppercase, and mixed-case AS token",
+    "factory selection crossed with successful entity materialization"
   ],
   "observed_counterexamples": [
     "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup3_root_node_upper_database_lr.puml",
@@ -36,5 +39,18 @@
     "test-diagrams/perturbations/description-element-command-case/followup/followup_root_upper_database_bare_lr.puml",
     "test-diagrams/perturbations/description-element-command-case/followup/followup_root_mixedcase_node_quoted_as_tb.puml"
   ],
-  "status": "proposed"
+  "correction_evidence": {
+    "record": "docs/parity-reviews/description-element-command-case/review-followup.json",
+    "verdict": "REJECT",
+    "prior_inputs_passed": 6,
+    "fresh_mechanism_specific_failures": [
+      "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_mixedcase_component_quoted_as_tb.puml",
+      "test-diagrams/perturbations/description-element-command-case/followup/followup2_root_upper_component_bare_lr.puml"
+    ],
+    "adjacent_residue_excluded": [
+      "storage-container symbol rendering",
+      "artifact-container symbol rendering"
+    ]
+  },
+  "status": "corrected_after_followup_rejection"
 }
