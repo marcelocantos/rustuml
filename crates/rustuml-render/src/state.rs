@@ -2425,12 +2425,7 @@ fn state_history_text_style(diagram: &StateDiagram, state: Option<&State>) -> Au
         .map(|value| crate::sequence::resolve_color(&value))
         .unwrap_or_else(|| DEFAULT_TEXT_COLOR.to_string());
     let family = stereotype_value("FontName")
-        .or_else(|| {
-            state_skinparam_preferred_value(
-                diagram,
-                &["stateFontName", "defaultFontName", "fontName"],
-            )
-        })
+        .or_else(|| state_skinparam_preferred_value(diagram, &["stateFontName", "defaultFontName"]))
         .map(|value| canonical_state_font_family(&value))
         .filter(|value| !value.is_empty())
         .unwrap_or_else(|| "sans-serif".to_string());
@@ -2604,21 +2599,11 @@ fn autonomous_state_style(
 
     let title_family = font_family(
         &["AttributeFontName", "FontName"],
-        &[
-            "stateAttributeFontName",
-            "stateFontName",
-            "defaultFontName",
-            "fontName",
-        ],
+        &["stateAttributeFontName", "stateFontName", "defaultFontName"],
     );
     let attribute_family = font_family(
         &["AttributeFontName", "FontName"],
-        &[
-            "stateAttributeFontName",
-            "stateFontName",
-            "defaultFontName",
-            "fontName",
-        ],
+        &["stateAttributeFontName", "stateFontName", "defaultFontName"],
     );
     let title_size = font_size(
         &["AttributeFontSize", "FontSize"],
@@ -2770,14 +2755,9 @@ impl StateArrowFont {
         let color = find(&["stateArrowFontColor", "arrowFontColor"])
             .map(|sp| crate::sequence::resolve_color(sp.value.trim()))
             .unwrap_or_else(|| DEFAULT_TEXT_COLOR.to_string());
-        let family = find(&[
-            "stateArrowFontName",
-            "arrowFontName",
-            "defaultFontName",
-            "fontName",
-        ])
-        .map(|sp| canonical_state_font_family(sp.value.trim()))
-        .unwrap_or_else(|| "sans-serif".to_string());
+        let family = find(&["stateArrowFontName", "arrowFontName", "defaultFontName"])
+            .map(|sp| canonical_state_font_family(sp.value.trim()))
+            .unwrap_or_else(|| "sans-serif".to_string());
         let size = find(&["stateArrowFontSize", "arrowFontSize", "defaultFontSize"])
             .and_then(|sp| sp.value.trim().parse::<u32>().ok())
             .unwrap_or(LINK_FONT_SIZE as u32);
@@ -3529,7 +3509,6 @@ fn has_only_autonomous_layout_skinparams(diagram: &StateDiagram) -> bool {
                 | "defaultfontsize"
                 | "defaultfontname"
                 | "defaulttextalignment"
-                | "fontname"
                 | "arrowcolor"
                 | "arrowfontsize"
                 | "arrowfontname"
@@ -3552,7 +3531,6 @@ fn has_only_flat_label_skinparams(diagram: &StateDiagram) -> bool {
                 | "statearrowfontname"
                 | "arrowfontname"
                 | "defaultfontname"
-                | "fontname"
                 | "statearrowfontstyle"
                 | "arrowfontstyle"
                 | "statemessagealignment"
@@ -6053,7 +6031,7 @@ pub fn render_with_oracle(
     let state_desc_font_size = state_font_override.unwrap_or(DESC_FONT_SIZE);
 
     // Resolve the state-node label font name and style. PlantUML applies
-    // `skinparam stateFontName` (or the global `defaultFontName`/`fontName`)
+    // `skinparam stateFontName` (or the global `defaultFontName`)
     // and `stateFontStyle` to the state name and description lines. A monospace font name
     // (Courier et al.) also switches the width metric to the fixed-advance
     // mono table — the emitted `font-family` then carries the user-supplied
@@ -6068,7 +6046,6 @@ pub fn render_with_oracle(
         .find(|sp| {
             sp.key.eq_ignore_ascii_case("stateFontName")
                 || sp.key.eq_ignore_ascii_case("defaultFontName")
-                || sp.key.eq_ignore_ascii_case("fontName")
         })
         .map(|sp| canonical_state_font_family(sp.value.trim()))
         .filter(|v| !v.is_empty());
@@ -8821,7 +8798,6 @@ fn render_oracle_transitions(svg: &mut String, diagram: &StateDiagram, oracle: &
             sp.key.eq_ignore_ascii_case("stateArrowFontName")
                 || sp.key.eq_ignore_ascii_case("arrowFontName")
                 || sp.key.eq_ignore_ascii_case("defaultFontName")
-                || sp.key.eq_ignore_ascii_case("fontName")
         })
         .map(|sp| canonical_state_font_family(sp.value.trim()))
         .unwrap_or_else(|| "sans-serif".to_string());
@@ -11287,6 +11263,28 @@ CobaltDecision --> [*]
 
         assert!(svg.contains(r#"font-family="Verdana""#));
         assert!(svg.contains(">start</text>"));
+    }
+
+    #[test]
+    fn generic_font_name_is_not_a_legacy_state_font_input() {
+        let input = concat!(
+            "@startuml\n",
+            "top to bottom direction\n",
+            "skinparam fontName Courier New\n",
+            "skinparam defaultFontSize 14\n",
+            "state \"Wide Courier State\" as Wide\n",
+            "state \"Narrow State\" as Narrow\n",
+            "Wide --> Narrow : node and arrow fonts share defaults\\nsecond line\n",
+            "@enduml\n",
+        );
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        // `SkinParam.getFontFamily` consults FontParam-specific keys and then
+        // `defaultFontName`; an unrelated raw `fontName` key is inert.
+        assert!(!svg.contains(r#"font-family="Courier New""#), "{svg}");
+        assert!(svg.contains(r#"font-family="sans-serif""#), "{svg}");
+        assert!(svg.contains(r#"viewBox="0 0 343 215""#), "{svg}");
     }
 
     #[test]
