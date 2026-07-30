@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-parenthesis-endpoint-decoration",
+  "created": "2026-07-31",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "da7a3385",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/classdiagram/ClassDiagramFactory.java",
+      "symbol": "ClassDiagramFactory.initCommandsList",
+      "lines": "138-149",
+      "role": "Registers CommandLinkClass before the separate lollipop command."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandLinkClass.java",
+      "symbols": [
+        "getRegexConcat",
+        "executeArg"
+      ],
+      "lines": "96-123, 205-226",
+      "role": "Parses endpoint decorations independently through LinkDecor and constructs one ordinary class Link with the current style snapshot."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/decoration/LinkDecor.java",
+      "symbol": "PARENTHESIS",
+      "lines": "84-96",
+      "role": "Maps a literal parenthesis endpoint to the PARENTHESIS link decoration."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/extremity/ExtremityParenthesis.java",
+      "symbols": [
+        "drawU",
+        "getDecorationLength"
+      ],
+      "lines": "47-80",
+      "role": "Paints the fixed-stroke radius-9, 140-degree socket arc and reserves ten pixels of decoration length."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/parse/class.rs",
+      "symbols": [
+        "try_relationship",
+        "try_lollipop"
+      ],
+      "role": "The ordinary relationship grammar excludes '(' and ')'; the separate lollipop grammar accepts only -()/()- and therefore silently drops -(/)- relationships."
+    },
+    {
+      "path": "crates/rustuml-parser/src/diagram/class.rs",
+      "symbol": "EndpointDecor",
+      "role": "Has crow-foot and line decorations but no parenthesis variant."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "role": "Already owns class relationship endpoint resolution, style snapshots, layout, path shortening, and extremity painting; it needs a parenthesis projection within that model."
+    }
+  ],
+  "claimed_invariant": "A parenthesis attached to either end of an ordinary class relationship is an endpoint decoration on that same relationship. It participates in endpoint lookup, layout, style ownership, path shortening, painted bounds, and SVG emission exactly once; it is not a component-interface declaration and not the separate two-character lollipop command.",
+  "causal_divergence": "Rust correctly selects the class backend for the preserved input but silently ignores `Foo -( IFoo`. Java creates a class Link whose target decoration is PARENTHESIS. The missing Rust relationship removes the edge from layout entirely, shrinking the cluster and canvas even though the interface entity itself is exact.",
+  "planned_model_change": "Add Parenthesis to the shared class EndpointDecor model. Extend the ordinary relationship parser to accept mirrored -(/)- forms with one or more shaft characters while preserving existing endpoint lookup and source-line/style snapshots. Feed a ten-pixel decoration length into layout/path trimming and emit the Java radius-9, 140-degree fixed-1.5px arc at the decorated endpoint. Keep -()/()- on the existing lollipop command path and do not change diagram dispatch.",
+  "constant_provenance": {
+    "decoration_length": "ExtremityParenthesis.getDecorationLength returns 10",
+    "radius": "ExtremityParenthesis uses radius 9",
+    "arc_angle_degrees": "ExtremityParenthesis uses 140 degrees",
+    "stroke_width": "ExtremityParenthesis uses UStroke.withThickness(1.5)"
+  },
+  "perturbation_axes": [
+    "left versus right endpoint parenthesis",
+    "one versus multiple dash shaft length",
+    "top-to-bottom versus left-to-right direction",
+    "nested versus external interface endpoint",
+    "renamed endpoints and declaration order",
+    "solid versus dotted or styled shaft where grammar permits",
+    "legacy and CSS arrow styles before versus after link construction",
+    "parenthesis endpoint versus existing -() lollipop negative control"
+  ],
+  "known_counterexample": "test-diagrams/golden/component/comp_lollipop_provided.puml",
+  "acceptance": [
+    "The preserved regression is structurally equivalent through the no-oracle helper while remaining a class diagram.",
+    "Fresh mirrored and changed-length parenthesis endpoint perturbations match Java.",
+    "Existing lollipop and other class endpoint decoration tests remain green.",
+    "Parser and renderer library suites pass.",
+    "The no-oracle component family returns to 663/663 with no class-family regression.",
+    "An independent checker records a verdict at the exact implementation revision."
+  ]
+}
