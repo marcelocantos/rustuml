@@ -1097,7 +1097,7 @@ impl ClassParser {
             // separator colon flanked by optional space), which a bare endpoint
             // (no spaces) never matches, so `A::B --> C::D : label` still splits.
             Regex::new(
-                r#"^(?:"([^"]+)"|([\w./:]+))\s*(?:"([^"]+)")?\s*((?:<\|--\|>|<\.\.>|<\|--|--\|>|\.\.\|>|<\|\.\.|<\.\.|<-->>|<-->|<->|\*--|--\*|o--|--o|-->>|<-{2,}|-{2,}>|<--|-->|->>|->|<-|-{1,}|\.{2,}>>|\.{2,}>|\.\.))\s*(?:"([^"]+)")?\s*(?:"([^"]+)"|([\w./:]+))(?:\s*:\s*(.+))?$"#,
+                r#"^(?:"([^"]+)"|([\w./:]+))\s*(?:"([^"]+)")?\s*((?:<\|--\|>|<\.\.>|<\|--|--\|>|\.\.\|>|<\|\.\.|<\.\.|<-->>|<-->|<->|\*--|--\*|o--|--o|-->>|<-{2,}|-{2,}>|<--|-->|->>|->|<-|\)-{1,}\(|\)-{1,}|-{1,}\(|-{1,}|\.{2,}>>|\.{2,}>|\.\.))\s*(?:"([^"]+)")?\s*(?:"([^"]+)"|([\w./:]+))(?:\s*:\s*(.+))?$"#,
             )
             .unwrap()
         });
@@ -1116,7 +1116,15 @@ impl ClassParser {
             let to_raw = to_quoted.unwrap_or_else(|| caps.get(7).unwrap().as_str());
             let (label, label_arrow) = parse_label_arrow(caps.get(8).map(|m| m.as_str()));
 
-            let (kind, dashed, mut decorated_end) = parse_relationship_kind(rel_str);
+            // Java `CommandLinkClass` parses `ARROW_HEAD1` and `ARROW_HEAD2`
+            // independently through `LinkDecor`; `)` and `(` are the two
+            // endpoint spellings of `LinkDecor.PARENTHESIS`.
+            let mut from_decor = rel_str
+                .starts_with(')')
+                .then_some(EndpointDecor::Parenthesis);
+            let mut to_decor = rel_str.ends_with('(').then_some(EndpointDecor::Parenthesis);
+            let rel_body = rel_str.trim_start_matches(')').trim_end_matches('(');
+            let (kind, dashed, mut decorated_end) = parse_relationship_kind(rel_body);
             let length = if direction.is_some_and(QueueDirection::is_horizontal) {
                 1
             } else {
@@ -1141,6 +1149,7 @@ impl ClassParser {
                 // ports while `LinkType.getInversed` swaps its decorations.
                 std::mem::swap(&mut from, &mut to);
                 std::mem::swap(&mut from_mult, &mut to_mult);
+                std::mem::swap(&mut from_decor, &mut to_decor);
                 decorated_end = invert_relationship_end(decorated_end);
                 style.inverted = true;
             }
@@ -1153,8 +1162,8 @@ impl ClassParser {
                 label_arrow,
                 from_multiplicity: from_mult,
                 to_multiplicity: to_mult,
-                from_decor: None,
-                to_decor: None,
+                from_decor,
+                to_decor,
                 decorated_end,
                 dashed,
                 length,
@@ -4240,6 +4249,37 @@ mod tests {
             Some(EndpointDecor::CircleCrowFoot)
         );
         assert_eq!(d.relationships[2].to_decor, Some(EndpointDecor::DoubleLine));
+    }
+
+    #[test]
+    fn parenthesis_endpoint_decorations_use_ordinary_relationships() {
+        let d = parse(
+            "package Outer {\n\
+               interface ITarget\n\
+             }\n\
+             Outer -( ITarget\n\
+             \"source node\" )-- Outer.ITarget\n\
+             Alpha )-( Omega",
+        );
+        assert_eq!(d.relationships.len(), 3);
+        assert_eq!(d.relationships[0].from, "Outer");
+        assert_eq!(d.relationships[0].to, "Outer.ITarget");
+        assert_eq!(
+            d.relationships[0].to_decor,
+            Some(EndpointDecor::Parenthesis)
+        );
+        assert_eq!(
+            d.relationships[1].from_decor,
+            Some(EndpointDecor::Parenthesis)
+        );
+        assert_eq!(
+            d.relationships[2].from_decor,
+            Some(EndpointDecor::Parenthesis)
+        );
+        assert_eq!(
+            d.relationships[2].to_decor,
+            Some(EndpointDecor::Parenthesis)
+        );
     }
 
     #[test]

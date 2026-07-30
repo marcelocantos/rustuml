@@ -387,6 +387,7 @@ pub enum EndpointDecor {
     CircleLine,
     DoubleLine,
     LineCrowFoot,
+    Parenthesis,
 }
 
 /// Container type for grouping entities in a class diagram.

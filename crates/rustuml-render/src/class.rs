@@ -90,6 +90,11 @@ const MIXED_BOUNDARY_LABEL_BASELINE: f64 = MIXED_BOUNDARY_SYMBOL_BAND_HEIGHT + 1
 /// Height of entity header (icon + name area) — used in height computations.
 #[allow(dead_code)]
 const HEADER_HEIGHT: f64 = 32.0;
+/// PlantUML `ExtremityParenthesis` geometry and fixed stroke.
+const PARENTHESIS_RADIUS: f64 = 9.0;
+const PARENTHESIS_HALF_ANGLE_DEGREES: f64 = 70.0;
+const PARENTHESIS_DECORATION_LENGTH: f64 = 10.0;
+const PARENTHESIS_STROKE_WIDTH: f64 = 1.5;
 /// Height of a member line.
 const MEMBER_LINE_HEIGHT: f64 = 16.48828125;
 /// Vertical offset from compartment top to first member baseline.
@@ -2550,13 +2555,21 @@ fn render_with_oracle_uid_origin(
     for (rel_idx, rel) in diagram.relationships.iter().enumerate() {
         let from = relationship_layout_id(diagram, &rel.from);
         let to = relationship_layout_id(diagram, &rel.to);
+        let touches_group_endpoint =
+            from.starts_with("__svek_group_endpoint_") || to.starts_with("__svek_group_endpoint_");
         if rel.length == 1 {
             // Java `Bibliotekon.addLine` stores every one-rank link in
             // `lines0`, and `DotStringFactory.createDotString` serializes
             // those edges before `Cluster.printCluster2` emits ordinary
             // nodes. Preserve that lazy endpoint-creation order in SVEK.
             layout.add_plantuml_svek_line0_edge(&from, &to);
-            layout.add_same_rank(&from, &to);
+            // `Cluster.getRankSame` only sees ordinary SvekNode members. A
+            // group's hidden `za...` routing point is emitted by
+            // `ClusterDotString`, so Java does not put that edge in an
+            // explicit rank=same subgraph.
+            if !touches_group_endpoint {
+                layout.add_same_rank(&from, &to);
+            }
         }
         // Java `SvekEdge.appendDotString` sends center labels through
         // Graphviz's `xlabel` channel for `DotSplines.ORTHO`, so they do not
@@ -12343,12 +12356,23 @@ fn render_relationship_svg(
 
     let entity_1 = no_oracle_entity_id_from(diagram, package_ids, entity_ids, note_ids, &rel.from);
     let entity_2 = no_oracle_entity_id_from(diagram, package_ids, entity_ids, note_ids, &rel.to);
-    write!(
-        svg,
-        r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="{link_type}" data-source-line="{}" id="lnk{}">"#,
-        rel.source_line, ent_id,
-    )
-    .unwrap();
+    if rel.from_decor == Some(EndpointDecor::Parenthesis)
+        || rel.to_decor == Some(EndpointDecor::Parenthesis)
+    {
+        write!(
+            svg,
+            r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-source-line="{}" id="lnk{}">"#,
+            rel.source_line, ent_id,
+        )
+        .unwrap();
+    } else {
+        write!(
+            svg,
+            r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="{link_type}" data-source-line="{}" id="lnk{}">"#,
+            rel.source_line, ent_id,
+        )
+        .unwrap();
+    }
 
     // PlantUML `SvekEdge.drawU` merges the class-diagram arrow style, then
     // lets `Link.getColors` and a link-specific stroke override it. Apply the
@@ -12521,7 +12545,11 @@ fn render_relationship_svg(
     // remain the Quark name themselves.
     let from_name = relationship_endpoint_name(context.diagram, &rel.from);
     let to_name = relationship_endpoint_name(context.diagram, &rel.to);
-    let mut path_id = if rel.from_decor.is_some()
+    let has_parenthesis = rel.from_decor == Some(EndpointDecor::Parenthesis)
+        || rel.to_decor == Some(EndpointDecor::Parenthesis);
+    let mut path_id = if has_parenthesis {
+        format!("{from_name}-to-{to_name}")
+    } else if rel.from_decor.is_some()
         || rel.to_decor.is_some()
         || matches!(rel.kind, RelationshipKind::Association)
         || (decorates_from && decorates_to)
@@ -13265,6 +13293,15 @@ fn endpoint_decor_x_bounds(
             points.extend(line_points(add(contact, scale(inside, 7.0)), 4.0));
             points.push(add(contact, scale(inside, 8.0)));
         }
+        EndpointDecor::Parenthesis => {
+            let half_angle = PARENTHESIS_HALF_ANGLE_DEGREES.to_radians();
+            let along = PARENTHESIS_RADIUS * half_angle.cos();
+            let across = PARENTHESIS_RADIUS * half_angle.sin();
+            let chord_center = add(contact, scale(inside, along));
+            points.push(add(contact, scale(inside, PARENTHESIS_RADIUS)));
+            points.push(add(chord_center, scale(perp, across)));
+            points.push(add(chord_center, scale(perp, -across)));
+        }
     }
     Some(points.into_iter().fold(
         (f64::INFINITY, f64::NEG_INFINITY),
@@ -13736,6 +13773,7 @@ fn endpoint_decoration_length(decor: EndpointDecor) -> f64 {
         EndpointDecor::CircleLine => 15.0,
         EndpointDecor::DoubleLine => 8.0,
         EndpointDecor::LineCrowFoot => 8.0,
+        EndpointDecor::Parenthesis => PARENTHESIS_DECORATION_LENGTH,
     }
 }
 
@@ -13812,7 +13850,36 @@ fn emit_no_oracle_endpoint_decor(
             stroke_width,
             CrowfootVariant::Line,
         ),
+        EndpointDecor::Parenthesis => emit_parenthesis(svg, contact, inside, perp, color),
     }
+}
+
+fn emit_parenthesis(
+    svg: &mut String,
+    contact: (f64, f64),
+    inside: (f64, f64),
+    perp: (f64, f64),
+    color: &str,
+) {
+    let half_angle = PARENTHESIS_HALF_ANGLE_DEGREES.to_radians();
+    let along = PARENTHESIS_RADIUS * half_angle.cos();
+    let across = PARENTHESIS_RADIUS * half_angle.sin();
+    let chord_center = add(contact, scale(inside, along));
+    let first = add(chord_center, scale(perp, across));
+    let second = add(chord_center, scale(perp, -across));
+    write!(
+        svg,
+        r#"<path d="M{},{} A{},{} 0 0 0 {} {}" fill="none" style="stroke:{};stroke-width:{};"/>"#,
+        crate::plantuml_metrics::fmt_coord(first.0),
+        crate::plantuml_metrics::fmt_coord(first.1),
+        crate::plantuml_metrics::fmt_coord(PARENTHESIS_RADIUS),
+        crate::plantuml_metrics::fmt_coord(PARENTHESIS_RADIUS),
+        crate::plantuml_metrics::fmt_coord(second.0),
+        crate::plantuml_metrics::fmt_coord(second.1),
+        color,
+        crate::plantuml_metrics::fmt_coord(PARENTHESIS_STROKE_WIDTH),
+    )
+    .unwrap();
 }
 
 #[derive(Clone, Copy)]
