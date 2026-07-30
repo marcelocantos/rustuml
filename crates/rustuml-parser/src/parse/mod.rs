@@ -332,6 +332,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     let mut has_meta_only_class_default = false;
     let mut has_class_dependency_arrow = false;
     let mut has_class_association_line = false;
+    let mut has_class_lollipop_command = false;
     let mut has_direction_directive = false;
     let mut has_floating_note = false;
     let mut has_interface_decl = false;
@@ -367,6 +368,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         if is_allow_mixing_command(trimmed) {
             has_allowmixing = true;
         }
+        has_class_lollipop_command |= looks_like_class_lollipop_command(trimmed);
         // `CommandCreateElementFull2(NORMAL_KEYWORD)` is registered after
         // native class/object declarations and covers
         // `CommandCreateElementFull.ALL_TYPES` plus `state`. Its execution
@@ -428,6 +430,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         if !has_allowmixing
             && !trimmed.contains('{')
             && MIXED_ONLY_CLASS_KEYWORDS.contains(&leading_keyword.as_str())
+            && (leading_keyword != "component" || looks_like_component_keyword_declaration(trimmed))
         {
             class_factory_rejected_by_mixed_leaf = true;
         }
@@ -884,6 +887,22 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         && !has_interface_decl
         && !has_entity_class_factory_decl;
 
+    // `CommandLinkLollipop` belongs to the earlier ClassDiagramFactory. When
+    // every source command remains consumable there, factory order wins over
+    // DESCRIPTION's coincidental interpretation of an owner named Component.
+    if has_class_lollipop_command && class_factory_viable {
+        let other_max = scores
+            .iter()
+            .enumerate()
+            .filter(|&(i, _)| i != 1)
+            .map(|(_, &score)| score)
+            .max()
+            .unwrap_or(0);
+        if scores[1] <= other_max {
+            scores[1] = other_max + 1;
+        }
+    }
+
     // Every complete braced USymbol command is consumable by the earlier
     // ClassDiagramFactory. When no mixed leaf has rejected that candidate,
     // preserve factory order instead of letting deployment keyword weights
@@ -1052,6 +1071,34 @@ fn looks_like_bare_class_association(line: &str) -> bool {
         .unwrap()
     });
     RE.is_match(line)
+}
+
+fn looks_like_class_lollipop_command(line: &str) -> bool {
+    static RE: std::sync::LazyLock<regex::Regex> = std::sync::LazyLock::new(|| {
+        regex::Regex::new(
+            r#"^(?:"[^"]+"|[\p{L}\p{N}_./:]+)\s*(?:"[^"]+")?\s*(?:[-=.]+\([()]|[()]\)[-=.]+)\s*(?:"[^"]+")?\s*(?:"[^"]+"|[\p{L}\p{N}_./:]+)(?:\s*:\s*.+)?$"#,
+        )
+        .unwrap()
+    });
+    RE.is_match(line)
+}
+
+/// `CommandCreateElementFull` only treats `component` as a declaration when
+/// the text after the keyword starts a legal name. An entity whose identifier
+/// happens to be `Component` may instead begin a relationship command.
+fn looks_like_component_keyword_declaration(line: &str) -> bool {
+    const KEYWORD: &str = "component";
+    if line.len() <= KEYWORD.len()
+        || !line[..KEYWORD.len()].eq_ignore_ascii_case(KEYWORD)
+        || !line[KEYWORD.len()..].starts_with(char::is_whitespace)
+    {
+        return false;
+    }
+    line[KEYWORD.len()..]
+        .trim_start()
+        .chars()
+        .next()
+        .is_some_and(|ch| ch == '"' || ch == '_' || ch.is_alphanumeric())
 }
 
 fn looks_like_class_leaf_body_opener(line: &str) -> bool {
@@ -2496,6 +2543,24 @@ Application --> RR
         let input = "@startuml\ncom.example.A -- com.example.B\n@enduml";
         let diagram = parse(input).unwrap();
         assert!(matches!(diagram, Diagram::Class(_)));
+    }
+
+    #[test]
+    fn component_spelling_on_a_class_lollipop_is_not_declaration_evidence() {
+        for owner in ["Component", "component", "FreshComponentOwner"] {
+            let input = format!("@startuml\nclass {owner}\n{owner} --() FreshPort\n@enduml");
+            assert!(
+                matches!(parse(&input).unwrap(), Diagram::Class(_)),
+                "{input}"
+            );
+        }
+
+        let real_component =
+            "@startuml\ncomponent FreshAdapter\nFreshAdapter --() FreshPort\n@enduml";
+        assert!(matches!(
+            parse(real_component).unwrap(),
+            Diagram::Component(_)
+        ));
     }
 
     #[test]

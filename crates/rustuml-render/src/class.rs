@@ -159,6 +159,9 @@ const FONT_SIZE: f64 = 14.0;
 const STEREOTYPE_FONT_SIZE: f64 = 12.0;
 /// Lollipop interface labels sit below the small synthetic endpoint ellipse.
 const LOLLIPOP_LABEL_BASELINE_FROM_CENTER: f64 = 18.5352;
+/// `EntityImageLollipopInterface.SIZE`.
+const LOLLIPOP_SIZE: f64 = 10.0;
+const LOLLIPOP_RADIUS: f64 = LOLLIPOP_SIZE / 2.0;
 /// PlantUML draws class lollipop endpoints as a 5px ellipse with 1.5px stroke.
 const LOLLIPOP_ENDPOINT_STYLE: &str = "stroke:#181818;stroke-width:1.5;";
 /// `SkinParam#getSvgLinkTarget` uses `_top` when no target was configured.
@@ -608,6 +611,7 @@ fn resolve_hide(entity: &ClassEntity, directives: &[HideShow]) -> HideFlags {
         EntityKind::State => "state",
         EntityKind::Circle => "circle",
         EntityKind::Diamond => "diamond",
+        EntityKind::LollipopFull | EntityKind::LollipopHalf => "interface",
         EntityKind::Actor => "actor",
         EntityKind::UseCase => "usecase",
         EntityKind::Component => "component",
@@ -1019,16 +1023,23 @@ fn calc_entity_dims(
             source_line,
         };
     }
-    if matches!(entity.kind, EntityKind::Circle | EntityKind::Diamond) {
+    if matches!(
+        entity.kind,
+        EntityKind::Circle
+            | EntityKind::Diamond
+            | EntityKind::LollipopFull
+            | EntityKind::LollipopHalf
+    ) {
         let source_line = if entity.source_line > 0 {
             entity.source_line
         } else {
             entity_index + 1
         };
-        let shape_size = if entity.kind == EntityKind::Circle {
-            CLASS_CIRCLE_SIZE
-        } else {
-            24.0
+        let shape_size = match entity.kind {
+            EntityKind::Circle => CLASS_CIRCLE_SIZE,
+            EntityKind::Diamond => 24.0,
+            EntityKind::LollipopFull | EntityKind::LollipopHalf => LOLLIPOP_SIZE,
+            _ => unreachable!("shape kind matched above"),
         };
         return EntityDims {
             width: shape_size,
@@ -1454,6 +1465,29 @@ fn class_circle_label_bounds(
         left + dim.name_width,
         baseline + LIMIT_FINDER_TEXT_BASELINE_TAIL,
     ))
+}
+
+fn class_external_circle_label_bounds(
+    entity: &ClassEntity,
+    dim: &EntityDims,
+    font: &ClassFontOverrides,
+    x: f64,
+    y: f64,
+) -> Option<(f64, f64, f64, f64)> {
+    if matches!(
+        entity.kind,
+        EntityKind::LollipopFull | EntityKind::LollipopHalf
+    ) {
+        let left = x + (dim.width - dim.name_width) / 2.0;
+        let baseline = y + dim.height / 2.0 + LOLLIPOP_LABEL_BASELINE_FROM_CENTER;
+        return Some((
+            left,
+            baseline,
+            left + dim.name_width,
+            baseline + LIMIT_FINDER_TEXT_BASELINE_TAIL,
+        ));
+    }
+    class_circle_label_bounds(entity, dim, font, x, y)
 }
 
 fn uses_document_order_body(entity: &ClassEntity, hide: HideFlags) -> bool {
@@ -2446,6 +2480,11 @@ fn render_with_oracle_uid_origin(
                 let font = ClassFontOverrides::from_diagram_for_entity(diagram, entity);
                 if entity.kind == EntityKind::Diamond {
                     layout.add_diamond_node(&entity.id, &entity.label, dim.width, dim.height);
+                } else if matches!(
+                    entity.kind,
+                    EntityKind::LollipopFull | EntityKind::LollipopHalf
+                ) {
+                    layout.add_circle_node(&entity.id, "", LOLLIPOP_SIZE);
                 } else if let Some((shield_x, shield_y)) =
                     class_circle_shield(diagram, entity, dim, &font)
                 {
@@ -4798,6 +4837,7 @@ fn svek_node_emission_order(diagram: &ClassDiagram) -> Vec<SvekNodeEmission> {
 enum CucaUidEvent {
     Package(usize),
     Entity(usize),
+    UniqueSequence,
     FloatingNote(usize),
     AttachedNote(usize),
     Relationship(usize),
@@ -4820,6 +4860,9 @@ impl CucaUidEvent {
             // `CommandLinkClass` creates any missing endpoint entities before
             // constructing its `Link`, so entities win same-line ties.
             Self::Entity(idx) => (diagram.entities[idx].source_line, 1, idx),
+            Self::UniqueSequence => {
+                unreachable!("direct sequence events retain parser event order")
+            }
             Self::FloatingNote(idx) => (diagram.notes[idx].source_line, 3, idx),
             Self::AttachedNote(idx) => (diagram.notes[idx].source_line, 3, idx),
             Self::Association(idx) => (diagram.association_classes[idx].source_line, 4, idx),
@@ -4904,6 +4947,7 @@ fn svek_id_allocation(diagram: &ClassDiagram) -> SvekIdAllocation {
                     .iter()
                     .position(|entity| entity.id == *id)
                     .map(CucaUidEvent::Entity),
+                ClassUidEvent::UniqueSequence => Some(CucaUidEvent::UniqueSequence),
                 ClassUidEvent::Note { index, .. } => diagram.notes.get(*index).and_then(|note| {
                     if note.target.is_some() && note.position.is_some() {
                         Some(CucaUidEvent::AttachedNote(*index))
@@ -4946,6 +4990,9 @@ fn svek_id_allocation(diagram: &ClassDiagram) -> SvekIdAllocation {
             }
             CucaUidEvent::Entity(idx) => {
                 allocation.entity_ids[idx] = format!("ent{next_id:04}");
+                next_id += 1;
+            }
+            CucaUidEvent::UniqueSequence => {
                 next_id += 1;
             }
             CucaUidEvent::FloatingNote(idx) => {
@@ -5246,7 +5293,7 @@ fn render_plantuml_svg(
         body_bottom = body_bottom.max(y + dims[i].height + shadow_extra);
         let font = ClassFontOverrides::from_diagram_for_entity(diagram, entity);
         if let Some((label_left, _, label_right, label_bottom)) =
-            class_circle_label_bounds(entity, &dims[i], &font, *x, *y)
+            class_external_circle_label_bounds(entity, &dims[i], &font, *x, *y)
         {
             body_min_x = body_min_x.min(label_left);
             body_max_x = body_max_x.max(label_right);
@@ -5383,7 +5430,7 @@ fn render_plantuml_svg(
             max_y = max_y.max(y + dims[i].height + shadow_extra);
             let font = ClassFontOverrides::from_diagram_for_entity(diagram, entity);
             if let Some((_, _, label_right, label_bottom)) =
-                class_circle_label_bounds(entity, &dims[i], &font, *x, *y)
+                class_external_circle_label_bounds(entity, &dims[i], &font, *x, *y)
             {
                 max_x = max_x.max(label_right);
                 max_y = max_y.max(label_bottom);
@@ -5925,6 +5972,21 @@ fn render_plantuml_svg(
                 lollipop_rect,
                 &current_ent_id,
                 &entity.label,
+            );
+            continue;
+        }
+        if matches!(
+            entity.kind,
+            EntityKind::LollipopFull | EntityKind::LollipopHalf
+        ) {
+            emit_generated_lollipop_entity(
+                &mut svg,
+                qualified_name,
+                &current_ent_id,
+                entity,
+                x,
+                y,
+                dim.source_line,
             );
             continue;
         }
@@ -9564,6 +9626,9 @@ fn render_entity_content(
                 EntityKind::Circle | EntityKind::Diamond => {
                     stereotype_c_fill.as_deref().unwrap_or(CLASS_ICON_FILL)
                 }
+                EntityKind::LollipopFull | EntityKind::LollipopHalf => {
+                    stereotype_i_fill.as_deref().unwrap_or(INTERFACE_ICON_FILL)
+                }
                 EntityKind::Actor
                 | EntityKind::UseCase
                 | EntityKind::Component
@@ -9633,6 +9698,7 @@ fn render_entity_content(
                 EntityKind::AbstractClass => 'A',
                 EntityKind::Annotation => '@',
                 EntityKind::Circle | EntityKind::Diamond => 'C',
+                EntityKind::LollipopFull | EntityKind::LollipopHalf => 'I',
                 EntityKind::Actor
                 | EntityKind::UseCase
                 | EntityKind::Component
@@ -11778,6 +11844,70 @@ fn emit_lollipop_entity(
     );
 }
 
+fn emit_generated_lollipop_entity(
+    svg: &mut String,
+    qualified_name: &str,
+    entity_id: &str,
+    entity: &ClassEntity,
+    x: f64,
+    y: f64,
+    source_line: usize,
+) {
+    let cx = x + LOLLIPOP_RADIUS;
+    let cy = y + LOLLIPOP_RADIUS;
+    write!(
+        svg,
+        r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
+        escape_xml(qualified_name),
+        source_line,
+        entity_id,
+    )
+    .unwrap();
+    if entity.kind == EntityKind::LollipopFull {
+        write!(
+            svg,
+            r#"<ellipse cx="{}" cy="{}" fill="{}" rx="5" ry="5" style="{}"/>"#,
+            crate::plantuml_metrics::fmt_coord(cx),
+            crate::plantuml_metrics::fmt_coord(cy),
+            ENTITY_FILL,
+            LOLLIPOP_ENDPOINT_STYLE,
+        )
+        .unwrap();
+    } else {
+        // `EntityImageLollipopInterface` paints LOLLIPOP_HALF as a 180-degree
+        // UEllipse. SvekEdge rotates the opening toward the incident edge;
+        // the default unrotated form is the right-facing semicircle.
+        write!(
+            svg,
+            r#"<path d="M{},{} A5,5 0 0,0 {},{}" fill="none" style="{}"/>"#,
+            crate::plantuml_metrics::fmt_coord(cx + LOLLIPOP_RADIUS),
+            crate::plantuml_metrics::fmt_coord(cy),
+            crate::plantuml_metrics::fmt_coord(cx - LOLLIPOP_RADIUS),
+            crate::plantuml_metrics::fmt_coord(cy),
+            LOLLIPOP_ENDPOINT_STYLE,
+        )
+        .unwrap();
+    }
+    svg.push_str("</g>");
+
+    let label_width = text_render::measure(&entity.label, FONT_SIZE, false);
+    text_render::emit_text(
+        svg,
+        &entity.label,
+        &TextBase {
+            x: cx - label_width / 2.0,
+            y: cy + LOLLIPOP_LABEL_BASELINE_FROM_CENTER,
+            font_size: FONT_SIZE as u32,
+            font_family: "sans-serif",
+            fill: "#000000",
+            bold: false,
+            italic: false,
+            underline: false,
+            skip_underline: false,
+        },
+    );
+}
+
 fn render_oracle_note_connectors(svg: &mut String, oracle: &OracleLayout) {
     for edge in &oracle.edges {
         let touches_note = oracle.note_entities.iter().any(|note| {
@@ -12764,11 +12894,12 @@ fn render_relationship_svg(
         i += 3;
     }
 
-    let code_line_attr = if rel.source_line > 0 && !rel.style.declaration {
-        format!(r#" codeLine="{}""#, rel.source_line)
-    } else {
-        String::new()
-    };
+    let code_line_attr =
+        if rel.source_line > 0 && !rel.style.declaration && !rel.style.suppress_code_line {
+            format!(r#" codeLine="{}""#, rel.source_line)
+        } else {
+            String::new()
+        };
     write!(
         svg,
         r#"<path{code_line_attr} d="{}" fill="none" id="{}" style="stroke:{};stroke-width:{};{}"/>"#,
@@ -17901,6 +18032,81 @@ mod tests {
         let vertical = dimensions(&crate::render_svg(&top_to_bottom));
         assert!(horizontal.0 > horizontal.1, "{horizontal:?}");
         assert!(vertical.1 > vertical.0, "{vertical:?}");
+    }
+
+    #[test]
+    fn generated_class_lollipops_use_native_circle_geometry_and_uid_slots() {
+        let input = "@startuml\n\
+                     class FreshHub\n\
+                     class PriorLedger\n\
+                     FreshHub --() \"Renamed Required Port\"\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+
+        assert!(svg.contains(r#"data-diagram-type="CLASS""#), "{svg}");
+        assert!(
+            svg.contains(
+                r#"<g class="entity" data-qualified-name="FreshHublol4" data-source-line="3" id="ent0005"><ellipse"#
+            ),
+            "{svg}"
+        );
+        assert!(
+            svg.contains(
+                r##"fill="#F1F1F1" rx="5" ry="5" style="stroke:#181818;stroke-width:1.5;""##
+            ),
+            "{svg}"
+        );
+        assert!(svg.contains(">Renamed Required Port</text>"), "{svg}");
+        assert!(
+            svg.contains(
+                r#"<g class="link" data-entity-1="ent0002" data-entity-2="ent0005" data-link-type="association" data-source-line="3" id="lnk6">"#
+            ),
+            "{svg}"
+        );
+        assert!(svg.contains(r#"id="FreshHub-FreshHublol4""#), "{svg}");
+        assert!(!svg.contains("codeLine=\"3\""), "{svg}");
+        assert!(!svg.contains("<!--class Renamed Required Port-->"), "{svg}");
+    }
+
+    #[test]
+    fn generated_lollipop_layout_responds_to_rank_direction_and_label_width() {
+        let render = |direction: &str, label: &str| {
+            let input = format!(
+                "@startuml\n{direction}\nclass RenamedOwner\nRenamedOwner --() \"{label}\"\n@enduml"
+            );
+            let diagram = rustuml_parser::parse::parse(&input).unwrap();
+            crate::render_svg(&diagram)
+        };
+        let vertical = render("top to bottom direction", "Short Port");
+        let horizontal = render(
+            "left to right direction",
+            "A deliberately longer renamed interface label",
+        );
+
+        assert!(vertical.contains(r#"data-qualified-name="RenamedOwnerlol3""#));
+        assert!(horizontal.contains(r#"data-qualified-name="RenamedOwnerlol3""#));
+        let link_vector = |svg: &str| {
+            let path = svg
+                .split("<!--link ")
+                .nth(1)
+                .and_then(|tail| tail.split("<path d=\"").nth(1))
+                .and_then(|tail| tail.split('"').next())
+                .unwrap();
+            let coordinates = path
+                .split(['M', 'C', ' ', ',', '\t'])
+                .filter(|value| !value.is_empty())
+                .map(|value| value.parse::<f64>().unwrap())
+                .collect::<Vec<_>>();
+            (
+                coordinates[coordinates.len() - 2] - coordinates[0],
+                coordinates[coordinates.len() - 1] - coordinates[1],
+            )
+        };
+        let (vertical_dx, vertical_dy) = link_vector(&vertical);
+        let (horizontal_dx, horizontal_dy) = link_vector(&horizontal);
+        assert!(vertical_dy.abs() > vertical_dx.abs(), "{vertical}");
+        assert!(horizontal_dx.abs() > horizontal_dy.abs(), "{horizontal}");
     }
 
     #[test]

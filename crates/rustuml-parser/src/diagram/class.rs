@@ -77,10 +77,14 @@ pub struct ClassDiagram {
     pub legend_line: Option<usize>,
 }
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub enum ClassUidEvent {
     Package(String),
     Entity(String),
+    /// A direct `CucaDiagram#getUniqueSequence` call that advances cpt1
+    /// without constructing an Entity or Link, such as a lollipop's `lolN`
+    /// backing-Quark suffix.
+    UniqueSequence,
     Note {
         index: usize,
         owner_package: Option<String>,
@@ -199,6 +203,8 @@ pub enum EntityKind {
     State,
     Circle,
     Diamond,
+    LollipopFull,
+    LollipopHalf,
     Actor,
     UseCase,
     Component,
@@ -345,6 +351,10 @@ pub struct RelationshipStyle {
     /// entity/source provenance but no SVG path `codeLine` attribute.
     #[serde(default)]
     pub declaration: bool,
+    /// The Java command constructs a Link but does not call `Link.setCodeLine`.
+    /// `CommandLinkLollipop` is the ordinary source-command example.
+    #[serde(default)]
+    pub suppress_code_line: bool,
 }
 
 impl RelationshipStyle {

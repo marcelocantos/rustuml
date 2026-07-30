@@ -2,7 +2,7 @@
   "schema_version": 1,
   "mechanism": "class-lollipop-synthetic-endpoint",
   "created": "2026-07-31",
-  "status": "proposed",
+  "status": "implemented_review_pending",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "rust_revision_before_change": "d7be29d729eddfbb52e55ec3b98be6eee38f5320",
   "java_locations": [
@@ -112,6 +112,21 @@
   "claimed_invariant": "A class lollipop command is owned by the earlier ClassDiagramFactory whenever its ordinary endpoint declaration and the lollipop command are both consumable there; an identifier whose spelling is `Component` does not become a component declaration merely because it begins a relationship line. CommandLinkLollipop requires the ordinary endpoint to exist, consumes one shared cpt1 value for a synthetic `<ordinary-id>lolN` quark name, creates a distinct LOLLIPOP_FULL or LOLLIPOP_HALF leaf that consumes the next Entity UID, and constructs a Link that consumes the following UID. The synthetic leaf is a fixed 10 by 10 circular SVEK node regardless of label width; its display label is centered below the circle outside the intrinsic node box. Connector orientation, shaft length, declaration order, rank direction, label spelling, and the number of prior or repeated UID-consuming objects change placement and generated identities through the same command and cpt1 model, not through fixture-specific branches.",
   "causal_divergence": "Rust first misclassifies the valid source as DESCRIPTION because detect_uml_subtype treats the ordinary endpoint token `Component` in `Component --() Required` as if it were the `component` declaration keyword. Even when class parsing is selected, the fallback creates a normal Interface entity named `Required`, so layout sees a full interface box and no sequence slot exists for Java's `lolN` name. The oracle-assisted renderer hides this model gap by searching golden entity metadata for `<owner>lol...` and replaying its rectangle. The shipped path therefore has the wrong diagram family, entity topology, node shape, node dimensions, external-label shield, and cpt1-derived identities. This is not an ellipse-coordinate or subtype-score tuning problem.",
   "planned_model_change": "Make component declaration evidence grammar-aware so an identifier named Component on a relationship line cannot select DESCRIPTION. Port CommandLinkLollipop's two orientations, one/two-character shafts, endpoint-existence rule, full/half leaf distinction, synthetic `<owner>lolN` quark creation, and shared cpt1 consumption into the class parser and model. Teach the no-oracle class SVEK path to register the synthetic endpoint as a 10px circle, reserve its external label shield, paint the full or half 1.5px ellipse and centered label, and emit relationship metadata from the normal generated identity stream. Retain the oracle path only as a regression net; do not infer lollipops from golden entity names, treat them as ordinary interfaces, branch on `Component` or `Required`, or tune coordinates to the one corpus fixture.",
+  "experimental_result": {
+    "implementation_revision": "pending implementation commit",
+    "rejected_attempt": "A first dispatch change stopped treating relationship lines beginning with an identifier spelled Component as DESCRIPTION declaration evidence globally. Although the target fixture matched, the full no-oracle census fell from 11,113 to 11,066 and regressed activity, creole, deployment, edge-cases, rendering, sequence, state, and usecase. That broad heuristic was reverted. The accepted dispatch change instead preserves existing DESCRIPTION scoring and applies Java factory precedence only when a lollipop command is present and the complete source remains consumable by ClassDiagramFactory.",
+    "accepted_result": "The frozen strict comparator now accepts both valid corpus examples: class/class_lollipop_required and edge-cases/edge_class_lollipop. The full shipped-path census rises from 11,113/11,251 to 11,115/11,251: class 1,962 to 1,963 and edge-cases 726 to 727, with every other family unchanged. The repeated edge-case fixture independently exercises Foolol3 and Foolol6 synthetic identities. Literal SVG bytes still differ in harmless representation details: Rust retains sub-millipixel native positions such as 62.5903 where Java's Graphviz-SVG boundary serialized 62.59, and Rust omits PlantUML's encoded source processing instruction. The frozen comparator accepts the modeled geometry; no coordinate tuning or comparator change was made.",
+    "commands": [
+      "cargo test -p rustuml-parser --lib",
+      "cargo test -p rustuml-render --lib",
+      "cargo clippy -p rustuml-parser -p rustuml-render --all-targets -- -D warnings",
+      "cargo test --test golden_no_oracle --release -- --nocapture",
+      "cargo test -p rustuml-oracle --test harness_guards comparator_constants_frozen",
+      "cargo test -p rustuml-oracle --test harness_guards error_golden_census_is_frozen",
+      "cargo test -p rustuml-oracle --test harness_guards no_golden_data_embedded_in_shipping_crates",
+      "cargo test -p rustuml-oracle --test harness_guards parity_review_paths_reject_traversal"
+    ]
+  },
   "perturbation_axes": [
     "ordinary endpoint renamed away from and back to the keyword spelling Component",
     "entity-to-lollipop versus lollipop-to-entity notation",
@@ -126,7 +141,7 @@
   ],
   "scope_boundary": "This mechanism owns class-factory selection for grammar-valid lollipop commands, the synthetic class lollipop leaf and its UID/name lifecycle, its fixed-size SVEK node and external label, and its ordinary association connector. It does not change component-diagram lollipop/socket semantics, ordinary class Interface rendering, general class relationship decorations, comparator tolerances, error-golden eligibility, or ORTHO routing.",
   "acceptance": [
-    "The existing valid class_lollipop_required golden becomes byte-level identical through render_svg without oracle input.",
+    "The existing valid class_lollipop_required and edge_class_lollipop goldens pass the frozen strict comparator through render_svg without oracle input.",
     "Fresh valid lollipop inputs spanning both orientations, full/half forms, shaft lengths, repeated endpoints, UID-consuming declaration order, renamed labels, and both rank directions match Java or remain preserved as explicit checker evidence if Java generation is unavailable.",
     "A class named Component followed by a valid class lollipop stays CLASS, while real component declarations and component diagram lollipop/socket controls retain their current family.",
     "Parser, renderer, layout, class-family census, full no-oracle ratchet, clippy, and mechanical harness guards pass except for explicitly pre-existing gate debt.",

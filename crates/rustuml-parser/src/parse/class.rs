@@ -58,6 +58,9 @@ struct ClassParser {
     relationships: Vec<Relationship>,
     association_classes: Vec<crate::diagram::class::AssociationClass>,
     uid_events: Vec<ClassUidEvent>,
+    /// PlantUML resets `CucaDiagram.cpt1` to one at the start of each parser
+    /// pass. Entity, Link, and direct unique-sequence calls share this stream.
+    cpt1: usize,
     together: Vec<crate::diagram::class::TogetherGroup>,
     packages: Vec<Package>,
     notes: Vec<Note>,
@@ -115,6 +118,7 @@ impl ClassParser {
             relationships: Vec::new(),
             association_classes: Vec::new(),
             uid_events: Vec::new(),
+            cpt1: 1,
             together: Vec::new(),
             packages: Vec::new(),
             notes: Vec::new(),
@@ -163,6 +167,7 @@ impl ClassParser {
     }
 
     fn push_relationship(&mut self, relationship: Relationship) {
+        self.cpt1 += 1 + usize::from(relationship.style.inverted);
         self.uid_events
             .push(ClassUidEvent::Relationship(self.relationships.len()));
         self.relationships.push(relationship);
@@ -197,6 +202,13 @@ impl ClassParser {
             self.note_by_path.insert(path, self.notes.len());
             note.id = Some(id);
         }
+        self.cpt1 += if note.target.is_some() && note.position.is_some() {
+            3
+        } else if note.target.is_none() && note.alias.is_some() {
+            1
+        } else {
+            0
+        };
         self.uid_events.push(ClassUidEvent::Note {
             index: self.notes.len(),
             owner_package: self
@@ -380,6 +392,7 @@ impl ClassParser {
             if let Some(&idx) = self.package_by_path.get(&path) {
                 if self.packages[idx].phantom && self.packages[idx].source_line == 0 {
                     self.packages[idx].source_line = self.current_line;
+                    self.cpt1 += 1;
                     self.uid_events
                         .push(ClassUidEvent::Package(self.packages[idx].name.clone()));
                 }
@@ -390,6 +403,7 @@ impl ClassParser {
                 .and_then(|(_, parent)| self.package_by_path.get(parent).copied());
             let idx = self.packages.len();
             let name = self.path_id(&path);
+            self.cpt1 += 1;
             self.uid_events.push(ClassUidEvent::Package(name.clone()));
             self.packages.push(Package {
                 name,
@@ -421,6 +435,7 @@ impl ClassParser {
         self.register_quark_path(&path);
         // `reallyCreateLeaf` consumes the entity UID before
         // `eventuallyBuildPhantomGroups` performs its global quark sweep.
+        self.cpt1 += 1;
         self.uid_events.push(ClassUidEvent::Entity(id.clone()));
         let idx = self.entities.len();
         self.entities.push(ClassEntity {
@@ -528,6 +543,7 @@ impl ClassParser {
                 parent = package.parent;
             }
             for parent_idx in newly_materialized.into_iter().rev() {
+                self.cpt1 += 1;
                 self.uid_events.push(ClassUidEvent::Package(
                     self.packages[parent_idx].name.clone(),
                 ));
@@ -692,6 +708,9 @@ impl ClassParser {
         if self.try_association_class(line) {
             return Ok(());
         }
+        if self.try_lollipop_relationship(line)? {
+            return Ok(());
+        }
         if self.try_relationship(line) {
             return Ok(());
         }
@@ -831,13 +850,12 @@ impl ClassParser {
             // separator-bearing `"fresh.domain.Record"` displays `Record`.
             // A one-segment quoted identity still has the whole quoted text as
             // its leaf and therefore preserves spaces and Creole presentation.
-            let display_label = if explicit_alias
-                || (caps.get(4).is_some() && !quoted_identity_has_separator)
-            {
-                label
-            } else {
-                entity_path.last().cloned().unwrap_or(label)
-            };
+            let display_label =
+                if explicit_alias || (caps.get(4).is_some() && !quoted_identity_has_separator) {
+                    label
+                } else {
+                    entity_path.last().cloned().unwrap_or(label)
+                };
             let final_id = self.path_id(&entity_path);
             let (entity_idx, entity_was_created) =
                 if let Some(&idx) = self.entity_by_path.get(&entity_path) {
@@ -1067,6 +1085,10 @@ impl ClassParser {
             })
             .map(|index| self.take_relationship(index));
 
+        // Java `Association` consumes the apoint short name, point Entity,
+        // three replacement Links, and a temporary base Link only when there
+        // was no existing A-B relationship.
+        self.cpt1 += 5 + usize::from(replaced_relationship.is_none());
         self.uid_events
             .push(ClassUidEvent::Association(self.association_classes.len()));
         self.association_classes
@@ -1217,39 +1239,141 @@ impl ClassParser {
             return true;
         }
 
-        // Lollipop notation: `Foo -() Interface` or `Foo --() Interface` (provided interface)
-        // or `Foo ()- Interface` or `Foo ()-- Interface` (required interface).
-        static LOLLIPOP_RE: LazyLock<Regex> = LazyLock::new(|| {
-            Regex::new(r"^(\w+)\s*-{1,2}\(\)\s*(\w+)$|^(\w+)\s*\(\)-{1,2}\s*(\w+)$").unwrap()
+        false
+    }
+
+    /// Port of Java `CommandLinkLollipop`: the interface display is carried by
+    /// a synthetic LOLLIPOP leaf, not by an ordinary Interface declaration.
+    fn try_lollipop_relationship(&mut self, line: &str) -> Result<bool, ParseError> {
+        static OWNER_THEN_LOLLIPOP: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(
+                r#"^(?:"(?P<owner_q>[^"]+)"|(?P<owner>[\p{L}\p{N}_./:]+))\s*(?:"(?P<first>[^"]+)")?\s*(?P<shaft>[-=.]+)(?P<lollipop>\([()])\s*(?:"(?P<second>[^"]+)")?\s*(?:"(?P<label_q>[^"]+)"|(?P<label>[\p{L}\p{N}_./:]+))(?:\s*:\s*(?P<link_label>.+))?$"#,
+            )
+            .unwrap()
         });
-        if let Some(caps) = LOLLIPOP_RE.captures(line) {
-            let (from_raw, to_raw) = if caps.get(1).is_some() {
-                (caps[1].to_string(), caps[2].to_string())
-            } else {
-                (caps[3].to_string(), caps[4].to_string())
-            };
-            let to = self.ensure_entity_kind(&to_raw, EntityKind::Interface);
-            let from = self.ensure_entity(&from_raw);
-            self.push_relationship(Relationship {
-                from,
-                to,
-                kind: RelationshipKind::Association,
-                label: None,
-                label_arrow: LinkArrow::None,
-                from_multiplicity: None,
-                to_multiplicity: None,
-                from_decor: None,
-                to_decor: None,
-                decorated_end: RelationshipEnd::None,
-                dashed: false,
-                length: 2,
-                style: RelationshipStyle::default(),
-                source_line: self.current_line,
+        static LOLLIPOP_THEN_OWNER: LazyLock<Regex> = LazyLock::new(|| {
+            Regex::new(
+                r#"^(?:"(?P<label_q>[^"]+)"|(?P<label>[\p{L}\p{N}_./:]+))\s*(?:"(?P<first>[^"]+)")?\s*(?P<lollipop>[()]\))(?P<shaft>[-=.]+)\s*(?:"(?P<second>[^"]+)")?\s*(?:"(?P<owner_q>[^"]+)"|(?P<owner>[\p{L}\p{N}_./:]+))(?:\s*:\s*(?P<link_label>.+))?$"#,
+            )
+            .unwrap()
+        });
+
+        let (captures, owner_first) = if let Some(captures) = OWNER_THEN_LOLLIPOP.captures(line) {
+            (captures, true)
+        } else if let Some(captures) = LOLLIPOP_THEN_OWNER.captures(line) {
+            (captures, false)
+        } else {
+            return Ok(false);
+        };
+
+        let owner_raw = captures
+            .name("owner_q")
+            .or_else(|| captures.name("owner"))
+            .expect("lollipop owner capture")
+            .as_str();
+        let owner_path = self.resolve_quark_path(owner_raw, QuarkLookup::ReuseUnique);
+        let Some(&owner_idx) = self.entity_by_path.get(&owner_path) else {
+            return Err(ParseError {
+                line: self.current_line,
+                message: format!("No class {}", self.path_id(&owner_path)),
             });
-            return true;
+        };
+        let owner = self.entities[owner_idx].id.clone();
+        let label = captures
+            .name("label_q")
+            .or_else(|| captures.name("label"))
+            .expect("lollipop label capture")
+            .as_str()
+            .to_string();
+        let lollipop_token = captures
+            .name("lollipop")
+            .expect("lollipop token capture")
+            .as_str();
+        let lollipop_kind = if lollipop_token.as_bytes()[0] == lollipop_token.as_bytes()[1] {
+            EntityKind::LollipopHalf
+        } else {
+            EntityKind::LollipopFull
+        };
+
+        // `getUniqueSequence("lol")` consumes cpt1 before the synthetic leaf's
+        // Entity constructor claims the following slot.
+        self.cpt1 += 1;
+        let suffix = format!("lol{}", self.cpt1);
+        self.uid_events.push(ClassUidEvent::UniqueSequence);
+        let owner_leaf = owner_path.last().cloned().unwrap_or_else(|| owner.clone());
+        let mut synthetic_path = owner_path;
+        *synthetic_path
+            .last_mut()
+            .expect("an existing owner has a nonempty quark path") =
+            format!("{owner_leaf}{suffix}");
+        let synthetic = self.create_entity_at_path(synthetic_path, label, lollipop_kind, true);
+
+        let mut length = captures
+            .name("shaft")
+            .expect("lollipop shaft capture")
+            .as_str()
+            .chars()
+            .count();
+        if length == 1
+            && self
+                .relationships
+                .iter()
+                .filter(|relationship| {
+                    relationship.length == 1
+                        && (relationship.from == owner || relationship.to == owner)
+                        && [relationship.from.as_str(), relationship.to.as_str()]
+                            .into_iter()
+                            .filter_map(|id| self.entities.iter().find(|entity| entity.id == id))
+                            .any(|entity| {
+                                matches!(
+                                    entity.kind,
+                                    EntityKind::LollipopFull | EntityKind::LollipopHalf
+                                )
+                            })
+                })
+                .count()
+                > 1
+        {
+            length += 1;
         }
 
-        false
+        let first = captures
+            .name("first")
+            .map(|value| value.as_str().to_string());
+        let second = captures
+            .name("second")
+            .map(|value| value.as_str().to_string());
+        let (label, label_arrow) =
+            parse_label_arrow(captures.name("link_label").map(|value| value.as_str()));
+        let label = label.map(|label| normalize_link_label_guillemets(&label));
+        let (from, to, from_multiplicity, to_multiplicity) = if owner_first {
+            (owner, synthetic, first, second)
+        } else {
+            (synthetic, owner, first, second)
+        };
+        // Unlike `CommandLinkClass`, Java `CommandLinkLollipop` never calls
+        // `Link.setCodeLine`, so its painted UPath has no codeLine attribute.
+        let style = RelationshipStyle {
+            suppress_code_line: true,
+            ..RelationshipStyle::default()
+        };
+        self.push_relationship(Relationship {
+            from,
+            to,
+            kind: RelationshipKind::Association,
+            label,
+            label_arrow,
+            from_multiplicity,
+            to_multiplicity,
+            from_decor: None,
+            to_decor: None,
+            decorated_end: RelationshipEnd::None,
+            dashed: false,
+            length,
+            style,
+            source_line: self.current_line,
+        });
+        Ok(true)
     }
 
     fn try_inline_member(&mut self, line: &str) -> bool {
@@ -1500,6 +1624,7 @@ impl ClassParser {
                     let idx = self.packages.len();
                     let name = self.path_id(&prefix);
                     if is_final {
+                        self.cpt1 += 1;
                         self.uid_events.push(ClassUidEvent::Package(name.clone()));
                     }
                     let display_name = if is_final {
@@ -2716,6 +2841,89 @@ mod tests {
     }
 
     #[test]
+    fn lollipop_commands_create_synthetic_leaves_on_the_shared_uid_stream() {
+        let d = parse(
+            "class RenamedHub\n\
+             class PriorConsumer\n\
+             RenamedHub -() \"Long Provided Port\"\n\
+             \"Reverse Required Port\" ()-- RenamedHub",
+        );
+
+        assert_eq!(
+            d.entities
+                .iter()
+                .map(|entity| (entity.id.as_str(), entity.label.as_str(), entity.kind))
+                .collect::<Vec<_>>(),
+            vec![
+                ("RenamedHub", "RenamedHub", EntityKind::Class),
+                ("PriorConsumer", "PriorConsumer", EntityKind::Class),
+                (
+                    "RenamedHublol4",
+                    "Long Provided Port",
+                    EntityKind::LollipopFull
+                ),
+                (
+                    "RenamedHublol7",
+                    "Reverse Required Port",
+                    EntityKind::LollipopFull
+                ),
+            ]
+        );
+        assert_eq!(
+            d.uid_events,
+            vec![
+                ClassUidEvent::Entity("RenamedHub".to_string()),
+                ClassUidEvent::Entity("PriorConsumer".to_string()),
+                ClassUidEvent::UniqueSequence,
+                ClassUidEvent::Entity("RenamedHublol4".to_string()),
+                ClassUidEvent::Relationship(0),
+                ClassUidEvent::UniqueSequence,
+                ClassUidEvent::Entity("RenamedHublol7".to_string()),
+                ClassUidEvent::Relationship(1),
+            ]
+        );
+        assert_eq!(d.relationships[0].length, 1);
+        assert_eq!(d.relationships[1].length, 2);
+        assert_eq!(d.relationships[0].from, "RenamedHub");
+        assert_eq!(d.relationships[0].to, "RenamedHublol4");
+        assert_eq!(d.relationships[1].from, "RenamedHublol7");
+        assert_eq!(d.relationships[1].to, "RenamedHub");
+        assert!(
+            d.relationships
+                .iter()
+                .all(|relationship| relationship.style.suppress_code_line)
+        );
+    }
+
+    #[test]
+    fn half_lollipop_tokens_remain_distinct_from_full_lollipops() {
+        let d = parse(
+            "class FreshOwner\n\
+             FreshOwner --(( LeftHalf\n\
+             RightHalf )).. FreshOwner\n\
+             FreshOwner ==() FullPort",
+        );
+        assert_eq!(d.entities[1].kind, EntityKind::LollipopHalf);
+        assert_eq!(d.entities[2].kind, EntityKind::LollipopHalf);
+        assert_eq!(d.entities[3].kind, EntityKind::LollipopFull);
+        assert_eq!(
+            d.relationships
+                .iter()
+                .map(|relationship| relationship.length)
+                .collect::<Vec<_>>(),
+            vec![2, 2, 2]
+        );
+    }
+
+    #[test]
+    fn lollipop_command_rejects_a_missing_ordinary_endpoint() {
+        let lines = vec!["MissingOwner --() FreshPort".to_string()];
+        let error = parse_class(&lines).unwrap_err();
+        assert_eq!(error.line, 1);
+        assert_eq!(error.message, "No class MissingOwner");
+    }
+
+    #[test]
     fn multiline_title_preserves_lines() {
         let d = parse("title\n  My Class Diagram\n  Version 1.0\nend title\nclass A");
         assert_eq!(
@@ -3081,6 +3289,7 @@ mod tests {
                 hidden: false,
                 inverted: false,
                 declaration: false,
+                suppress_code_line: false,
             }
         );
         assert_eq!(d.relationships[1].style.thickness, Some(3));
@@ -3304,6 +3513,7 @@ mod tests {
                 ClassUidEvent::Entity(id) => format!("entity:{id}"),
                 ClassUidEvent::Relationship(index) => format!("relationship:{index}"),
                 ClassUidEvent::Note { .. }
+                | ClassUidEvent::UniqueSequence
                 | ClassUidEvent::DiscardedRelationship { .. }
                 | ClassUidEvent::Association(_) => "other".to_string(),
             })
