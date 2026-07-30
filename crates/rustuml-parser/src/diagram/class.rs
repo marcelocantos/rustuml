@@ -80,6 +80,7 @@ pub enum ClassUidEvent {
     Entity(String),
     Note(usize),
     Relationship(usize),
+    DiscardedRelationship { inverted: bool },
     Association(usize),
 }
 
@@ -247,6 +248,11 @@ pub struct AssociationClass {
     pub b: String,
     /// The association class hanging off the apoint.
     pub c: String,
+    /// The latest pre-existing A-B link removed by Java `Association.createNew`.
+    /// Its constructor UID remains in `ClassUidEvent`, while its semantic data
+    /// supplies the replacement split links.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub replaced_relationship: Option<Relationship>,
     /// Whether the apoint→C connector is dashed (`..`) rather than solid (`--`).
     #[serde(default = "default_true")]
     pub dashed: bool,

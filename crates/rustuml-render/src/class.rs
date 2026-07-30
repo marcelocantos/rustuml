@@ -188,10 +188,15 @@ const NOTE_TREE_BODY_EXTRA: f64 = 4.0;
 /// synthetic point inserted into an association-class base edge as a 4px
 /// circle.
 const ASSOCIATION_POINT_SIZE: f64 = 4.0;
-/// `Association.createNew` advances CucaDiagram's shared sequence six times:
-/// the `apoint` short name, the point entity uid, a replaced temporary A-B
-/// link, and the three emitted links.
-const ASSOCIATION_SEQUENCE_SLOTS: usize = 6;
+/// `Association` claims the `apoint` short name and point Entity UID before
+/// `Association.createNew` constructs links.
+const ASSOCIATION_POINT_SEQUENCE_SLOTS: usize = 2;
+/// `Association.createNew` always constructs the two split base links and the
+/// association-class connector.
+const ASSOCIATION_REPLACEMENT_LINK_SLOTS: usize = 3;
+/// When `foundLink` returns null, `Association.createNew` first constructs one
+/// temporary A-B Link. The existing-link branch removes its base and skips it.
+const ASSOCIATION_TEMPORARY_BASE_SLOTS: usize = 1;
 #[allow(dead_code)]
 const SMALL_FONT: f64 = 11.0;
 const TITLE_FONT_SIZE: f64 = 14.0;
@@ -2249,10 +2254,32 @@ fn render_with_oracle_uid_origin(
         layout.add_circle_node(&point, "", ASSOCIATION_POINT_SIZE);
         association_layout_slots.push(next_layout_slot);
         next_layout_slot += 1;
-        layout.add_edge_with_minlen(&association.a, &point, None, 1);
-        layout.add_edge_with_minlen(&point, &association.b, None, 1);
-        layout.add_same_rank(&point, &association.c);
-        layout.add_edge(&point, &association.c, None);
+        for relationship in association_replacement_relationships(association, idx) {
+            if relationship.length == 1 {
+                layout.add_plantuml_svek_line0_edge(&relationship.from, &relationship.to);
+                layout.add_same_rank(&relationship.from, &relationship.to);
+            }
+            let label_size =
+                relationship_center_layout(diagram, &relationship, None, &diagram.meta.sprites)
+                    .map(|center| EdgeLabelSize {
+                        width: center.width,
+                        height: center.height,
+                    });
+            let endpoint_size = |label: Option<&str>| {
+                label.map(|label| EdgeLabelSize {
+                    width: text_render::measure(label, RELATIONSHIP_LABEL_FONT_SIZE, false).floor(),
+                    height: text_render::label_height(label, RELATIONSHIP_LABEL_FONT_SIZE).floor(),
+                })
+            };
+            layout.add_edge_with_label_sizes_and_minlen(
+                &relationship.from,
+                &relationship.to,
+                label_size,
+                endpoint_size(relationship.from_multiplicity.as_deref()),
+                endpoint_size(relationship.to_multiplicity.as_deref()),
+                Some(relationship.length.saturating_sub(1)),
+            );
+        }
     }
     let mut attached_layout_slots = Vec::new();
     for (idx, note) in diagram.notes.iter().enumerate() {
@@ -3790,6 +3817,9 @@ fn relationship_endpoint_name<'a>(
     diagram: &'a ClassDiagram,
     id: &'a str,
 ) -> std::borrow::Cow<'a, str> {
+    if let Some(name) = association_point_name(diagram, id) {
+        return std::borrow::Cow::Owned(name);
+    }
     // Java `Link.idCommentForSvg` builds path ids from `Entity.getName()`,
     // which delegates to the short `Quark#getName`, not its qualified name.
     // Bare quoted names use their display as that short name; explicit aliases
@@ -4123,6 +4153,7 @@ enum CucaUidEvent {
     FloatingNote(usize),
     AttachedNote(usize),
     Relationship(usize),
+    DiscardedRelationship(bool),
     Association(usize),
 }
 
@@ -4145,6 +4176,9 @@ impl CucaUidEvent {
             Self::AttachedNote(idx) => (diagram.notes[idx].source_line, 3, idx),
             Self::Association(idx) => (diagram.association_classes[idx].source_line, 4, idx),
             Self::Relationship(idx) => (diagram.relationships[idx].source_line, 5, idx),
+            Self::DiscardedRelationship(_) => {
+                unreachable!("discarded links retain parser event order")
+            }
         }
     }
 }
@@ -4241,6 +4275,9 @@ fn svek_id_allocation(diagram: &ClassDiagram) -> SvekIdAllocation {
                     .relationships
                     .get(*idx)
                     .map(|_| CucaUidEvent::Relationship(*idx)),
+                ClassUidEvent::DiscardedRelationship { inverted } => {
+                    Some(CucaUidEvent::DiscardedRelationship(*inverted))
+                }
                 ClassUidEvent::Association(idx) => diagram
                     .association_classes
                     .get(*idx)
@@ -4286,9 +4323,18 @@ fn svek_id_allocation(diagram: &ClassDiagram) -> SvekIdAllocation {
                 allocation.relationship_ids[idx] = next_id + inverted;
                 next_id += 1 + inverted;
             }
+            CucaUidEvent::DiscardedRelationship(inverted) => {
+                next_id += 1 + usize::from(inverted);
+            }
             CucaUidEvent::Association(idx) => {
                 allocation.association_starts[idx] = Some(next_id);
-                next_id += ASSOCIATION_SEQUENCE_SLOTS;
+                next_id += ASSOCIATION_POINT_SEQUENCE_SLOTS
+                    + ASSOCIATION_REPLACEMENT_LINK_SLOTS
+                    + usize::from(
+                        diagram.association_classes[idx]
+                            .replaced_relationship
+                            .is_none(),
+                    ) * ASSOCIATION_TEMPORARY_BASE_SLOTS;
             }
         }
     }
@@ -9861,108 +9907,38 @@ fn render_no_oracle_association_class_links(
     edge_paths: &[EdgePath],
     layout_x_bias: f64,
 ) {
-    let label_of = |id: &str| -> String {
-        diagram
-            .entities
-            .iter()
-            .find(|entity| entity.id == id)
-            .map_or(id.to_string(), |entity| entity.label.clone())
-    };
-
+    let allocation = svek_id_allocation(diagram);
     for (association_idx, association) in diagram.association_classes.iter().enumerate() {
         let point_sequence = association_point_sequence(diagram, association_idx);
-        let point_layout_id = association_point_layout_id(association_idx);
-        let point_name = format!("apoint{point_sequence}");
-        // `getUniqueSequence("apoint")` claims the short-name sequence first;
-        // `Bibliotekon.createNode` then claims the following `entNNNN` id.
-        let point_entity_id = format!("ent{:04}", point_sequence + 1);
-        let first_link_id = point_sequence + 3;
-        let a_label = label_of(&association.a);
-        let b_label = label_of(&association.b);
-        let c_label = label_of(&association.c);
-        let a_entity_id = no_oracle_entity_id(diagram, &association.a);
-        let b_entity_id = no_oracle_entity_id(diagram, &association.b);
-        let c_entity_id = no_oracle_entity_id(diagram, &association.c);
-
-        let links = [
-            (
-                association.a.as_str(),
-                point_layout_id.as_str(),
-                a_label.as_str(),
-                point_name.as_str(),
-                a_entity_id.as_str(),
-                point_entity_id.as_str(),
-                false,
-            ),
-            (
-                point_layout_id.as_str(),
-                association.b.as_str(),
-                point_name.as_str(),
-                b_label.as_str(),
-                point_entity_id.as_str(),
-                b_entity_id.as_str(),
-                false,
-            ),
-            (
-                point_layout_id.as_str(),
-                association.c.as_str(),
-                point_name.as_str(),
-                c_label.as_str(),
-                point_entity_id.as_str(),
-                c_entity_id.as_str(),
-                association.dashed,
-            ),
-        ];
-
-        for (link_idx, (from, to, from_label, to_label, from_entity, to_entity, dashed)) in
-            links.into_iter().enumerate()
+        let first_link_id = point_sequence
+            + ASSOCIATION_POINT_SEQUENCE_SLOTS
+            + usize::from(association.replaced_relationship.is_none())
+                * ASSOCIATION_TEMPORARY_BASE_SLOTS;
+        for (link_idx, relationship) in
+            association_replacement_relationships(association, association_idx)
+                .into_iter()
+                .enumerate()
         {
             let Some(edge) = edge_paths
                 .iter()
-                .find(|edge| edge.from == from && edge.to == to)
+                .find(|edge| edge.from == relationship.from && edge.to == relationship.to)
             else {
                 continue;
             };
-            let points: Vec<(f64, f64)> = edge
-                .points
-                .iter()
-                .map(|(x, y)| (x + MARGIN + layout_x_bias, y + MARGIN))
-                .collect();
-            if points.is_empty() {
-                continue;
-            }
-            let mut path = format!("M{},{}", fmt4(points[0].0), fmt4(points[0].1));
-            let mut point_idx = 1;
-            while point_idx + 2 < points.len() {
-                write!(
-                    path,
-                    " C{},{} {},{} {},{}",
-                    fmt4(points[point_idx].0),
-                    fmt4(points[point_idx].1),
-                    fmt4(points[point_idx + 1].0),
-                    fmt4(points[point_idx + 1].1),
-                    fmt4(points[point_idx + 2].0),
-                    fmt4(points[point_idx + 2].1),
-                )
-                .unwrap();
-                point_idx += 3;
-            }
-            let dash = if dashed { "stroke-dasharray:7,7;" } else { "" };
-            write!(
+            render_relationship_svg(
                 svg,
-                r#"<!--link {} to {}--><g class="link" data-entity-1="{}" data-entity-2="{}" data-link-type="association" data-source-line="{}" id="lnk{}"><path d="{}" fill="none" id="{}-{}" style="stroke:#181818;stroke-width:1;{}"/></g>"#,
-                escape_xml(from_label),
-                escape_xml(to_label),
-                from_entity,
-                to_entity,
-                association.source_line,
+                &relationship,
+                RelationshipRenderContext {
+                    diagram,
+                    note: None,
+                    entity_ids: Some(&allocation.entity_ids),
+                    note_ids: Some(&allocation.note_ids),
+                },
+                edge,
                 first_link_id + link_idx,
-                path,
-                escape_xml(from_label),
-                escape_xml(to_label),
-                dash,
-            )
-            .unwrap();
+                layout_x_bias,
+                0,
+            );
         }
     }
 }
@@ -10559,12 +10535,15 @@ fn render_relationship_svg(
     let decorates_from = relationship_decorates_from(rel);
     let decorates_to = relationship_decorates_to(rel);
     let is_reverse = decorates_from && !decorates_to;
+    let comment_from =
+        association_point_name(diagram, &rel.from).unwrap_or_else(|| rel.from.clone());
+    let comment_to = association_point_name(diagram, &rel.to).unwrap_or_else(|| rel.to.clone());
 
     // HTML comment.
     if is_reverse {
-        write!(svg, "<!--reverse link {} to {}-->", rel.from, rel.to).unwrap();
+        write!(svg, "<!--reverse link {comment_from} to {comment_to}-->").unwrap();
     } else {
-        write!(svg, "<!--link {} to {}-->", rel.from, rel.to).unwrap();
+        write!(svg, "<!--link {comment_from} to {comment_to}-->").unwrap();
     }
     if rel.style.hidden {
         return;
@@ -11180,16 +11159,6 @@ fn emit_diamond_extremity(
     .unwrap();
 }
 
-fn no_oracle_entity_id(diagram: &ClassDiagram, id: &str) -> String {
-    let allocation = svek_id_allocation(diagram);
-    no_oracle_entity_id_from(
-        diagram,
-        Some(&allocation.entity_ids),
-        Some(&allocation.note_ids),
-        id,
-    )
-}
-
 fn no_oracle_entity_id_from(
     diagram: &ClassDiagram,
     entity_ids: Option<&[String]>,
@@ -11207,6 +11176,10 @@ fn no_oracle_entity_id_from(
                 .iter()
                 .position(|note| note.alias.as_deref() == Some(id))
                 .and_then(|index| note_ids.and_then(|ids| ids.get(index)).cloned().flatten())
+        })
+        .or_else(|| {
+            association_point_index(id)
+                .map(|index| format!("ent{:04}", association_point_sequence(diagram, index) + 1))
         })
         .unwrap_or_else(|| "ent0002".to_string())
 }
@@ -12210,6 +12183,123 @@ fn floating_note_opale_relationship(diagram: &ClassDiagram, note_idx: usize) -> 
 
 fn association_point_layout_id(association_idx: usize) -> String {
     format!("__association_point_{association_idx}")
+}
+
+fn association_point_index(id: &str) -> Option<usize> {
+    id.strip_prefix("__association_point_")?.parse().ok()
+}
+
+fn association_point_name(diagram: &ClassDiagram, id: &str) -> Option<String> {
+    let index = association_point_index(id)?;
+    Some(format!(
+        "apoint{}",
+        association_point_sequence(diagram, index)
+    ))
+}
+
+fn association_replacement_relationships(
+    association: &AssociationClass,
+    association_idx: usize,
+) -> [Relationship; 3] {
+    let mut base = association
+        .replaced_relationship
+        .clone()
+        .unwrap_or_else(|| Relationship {
+            from: association.a.clone(),
+            to: association.b.clone(),
+            kind: RelationshipKind::Association,
+            label: None,
+            label_arrow: LinkArrow::None,
+            from_multiplicity: None,
+            to_multiplicity: None,
+            from_decor: None,
+            to_decor: None,
+            decorated_end: RelationshipEnd::None,
+            dashed: false,
+            length: 2,
+            style: RelationshipStyle::default(),
+            source_line: association.source_line,
+        });
+    if base.style.inverted {
+        std::mem::swap(&mut base.from, &mut base.to);
+    }
+    base.source_line = association.source_line;
+    base.style.inverted = false;
+    // Association replacement Links are synthetic and do not carry SVG
+    // `codeLine`, even when the removed base came from an explicit command.
+    base.style.declaration = true;
+
+    let point = association_point_layout_id(association_idx);
+    let first_decorated_end = match base.decorated_end {
+        RelationshipEnd::From | RelationshipEnd::Both => RelationshipEnd::From,
+        RelationshipEnd::None | RelationshipEnd::To => RelationshipEnd::None,
+    };
+    let second_decorated_end = match base.decorated_end {
+        RelationshipEnd::To | RelationshipEnd::Both => RelationshipEnd::To,
+        RelationshipEnd::None | RelationshipEnd::From => RelationshipEnd::None,
+    };
+    let first = Relationship {
+        from: base.from.clone(),
+        to: point.clone(),
+        kind: base.kind,
+        label: base.label.clone(),
+        label_arrow: base.label_arrow,
+        from_multiplicity: base.from_multiplicity.clone(),
+        to_multiplicity: None,
+        from_decor: base.from_decor,
+        to_decor: None,
+        decorated_end: first_decorated_end,
+        dashed: base.dashed,
+        length: base.length,
+        style: base.style.clone(),
+        source_line: association.source_line,
+    };
+    let second = Relationship {
+        from: point.clone(),
+        to: base.to.clone(),
+        kind: base.kind,
+        label: None,
+        label_arrow: LinkArrow::None,
+        from_multiplicity: None,
+        to_multiplicity: base.to_multiplicity.clone(),
+        from_decor: None,
+        to_decor: base.to_decor,
+        decorated_end: second_decorated_end,
+        dashed: base.dashed,
+        length: base.length,
+        style: base.style,
+        source_line: association.source_line,
+    };
+
+    // Java uses a two-rank C connector only when a one-rank non-self base (or
+    // a two-rank self base) would otherwise collide with the split line.
+    let connector_length = if (base.length == 1 && base.from != base.to)
+        || (base.length == 2 && base.from == base.to)
+    {
+        2
+    } else {
+        1
+    };
+    let third = Relationship {
+        from: point,
+        to: association.c.clone(),
+        kind: RelationshipKind::Association,
+        label: None,
+        label_arrow: LinkArrow::None,
+        from_multiplicity: None,
+        to_multiplicity: None,
+        from_decor: None,
+        to_decor: None,
+        decorated_end: RelationshipEnd::None,
+        dashed: association.dashed,
+        length: connector_length,
+        style: RelationshipStyle {
+            declaration: true,
+            ..RelationshipStyle::default()
+        },
+        source_line: association.source_line,
+    };
+    [first, second, third]
 }
 
 fn association_point_sequence(diagram: &ClassDiagram, association_idx: usize) -> usize {

@@ -185,6 +185,24 @@ impl ClassParser {
         self.relationships.push(relationship);
     }
 
+    fn take_relationship(&mut self, index: usize) -> Relationship {
+        let relationship = self.relationships.remove(index);
+        for event in &mut self.uid_events {
+            match event {
+                ClassUidEvent::Relationship(event_index) if *event_index == index => {
+                    *event = ClassUidEvent::DiscardedRelationship {
+                        inverted: relationship.style.inverted,
+                    };
+                }
+                ClassUidEvent::Relationship(event_index) if *event_index > index => {
+                    *event_index -= 1;
+                }
+                _ => {}
+            }
+        }
+        relationship
+    }
+
     fn push_note(&mut self, note: Note) {
         self.uid_events.push(ClassUidEvent::Note(self.notes.len()));
         self.notes.push(note);
@@ -969,6 +987,17 @@ impl ClassParser {
         let a = self.ensure_entity(&a_raw);
         let b = self.ensure_entity(&b_raw);
         let c = self.ensure_entity(&c_raw);
+        // Java `foundLink` searches live links from newest to oldest and
+        // `Association.createNew` removes the selected base before inserting
+        // its three split links.
+        let replaced_relationship = self
+            .relationships
+            .iter()
+            .rposition(|relationship| {
+                (relationship.from == a && relationship.to == b)
+                    || (relationship.from == b && relationship.to == a)
+            })
+            .map(|index| self.take_relationship(index));
 
         self.uid_events
             .push(ClassUidEvent::Association(self.association_classes.len()));
@@ -977,6 +1006,7 @@ impl ClassParser {
                 a,
                 b,
                 c,
+                replaced_relationship,
                 dashed,
                 source_line: self.current_line,
             });
@@ -3552,5 +3582,35 @@ mod tests {
         assert_eq!(d.relationships[0].to, "FreshMemo4217");
         assert_eq!(d.relationships[1].from, "FreshMemo4217");
         assert_eq!(d.relationships[1].to, "FreshPeer4219");
+    }
+
+    #[test]
+    fn association_replaces_latest_base_but_preserves_its_uid_event() {
+        let d = parse(
+            "class Existing\n\
+             MissingA -- Existing : retained label\n\
+             (MissingA, Existing) .. MissingAssoc\n\
+             MissingB --> Existing",
+        );
+
+        assert_eq!(d.relationships.len(), 1);
+        assert_eq!(d.relationships[0].from, "MissingB");
+        assert_eq!(d.association_classes.len(), 1);
+        let base = d.association_classes[0]
+            .replaced_relationship
+            .as_ref()
+            .unwrap();
+        assert_eq!(base.from, "MissingA");
+        assert_eq!(base.to, "Existing");
+        assert_eq!(base.label.as_deref(), Some("retained label"));
+        assert!(d.uid_events.iter().any(|event| matches!(
+            event,
+            ClassUidEvent::DiscardedRelationship { inverted: false }
+        )));
+        assert!(
+            d.uid_events
+                .iter()
+                .any(|event| matches!(event, ClassUidEvent::Association(0)))
+        );
     }
 }
