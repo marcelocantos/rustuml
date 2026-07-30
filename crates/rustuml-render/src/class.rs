@@ -6180,7 +6180,7 @@ fn emit_layout_rectangle_cluster(svg: &mut String, cluster: &LayoutPackageCluste
         svg,
         cluster,
         x + (cluster.width - label_w) / 2.0,
-        cluster.y + PACKAGE_TITLE_BASELINE + 1.0,
+        y + PACKAGE_TITLE_BASELINE,
     );
 }
 
