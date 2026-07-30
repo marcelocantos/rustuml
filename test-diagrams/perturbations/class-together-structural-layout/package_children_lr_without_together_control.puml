@@ -1,0 +1,25 @@
+@startuml
+left to right direction
+
+package "Plain Outer Registry 1451" as PlainOuter1451 {
+  package "Plain Direct Filled 1453" as PlainFilled1453 {
+    class "Plain Direct Leaf 1459" as PlainLeaf1459
+  }
+
+  package "Plain Direct Empty 1471" as PlainEmpty1471 {
+  }
+
+  class "Plain Alpha 1481" as PlainAlpha1481
+
+  package "Plain Grouped Filled 1483" as PlainNested1483 {
+    class "Plain Grouped Leaf 1487" as PlainNestedLeaf1487
+  }
+
+  package "Plain Grouped Empty 1489" as PlainNestedEmpty1489 {
+  }
+
+  class "Plain Beta With Longer Label 1493" as PlainBeta1493
+  class "Plain Peer 1499" as PlainPeer1499
+  PlainAlpha1481 --> PlainPeer1499 : ownership
+}
+@enduml

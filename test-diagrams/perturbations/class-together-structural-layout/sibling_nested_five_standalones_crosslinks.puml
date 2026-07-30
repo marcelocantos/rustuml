@@ -1,0 +1,26 @@
+@startuml
+RelayEast863 ..> RelayWest877 : lateral
+RelayNorth881 --> RelaySouth883 : vertical
+RelayEast863 --> RelaySouth883 : diagonal
+
+together {
+  together {
+    class "Amber Registry Alpha 809" as AmberRegistry809
+    class "Blue Service Beta 811" as BlueService811
+  }
+  class "Crimson Gateway Gamma 821" as CrimsonGateway821
+}
+
+class RelaySouth883
+
+together {
+  class "Delta Store 823" as DeltaStore823
+  together {
+    class "Epsilon Archive 827" as EpsilonArchive827
+  }
+}
+
+class RelayEast863
+class RelayNorth881
+class RelayWest877
+@enduml

@@ -1,0 +1,25 @@
+@startuml
+left to right direction
+
+together {
+  class "Root Sentinel 1103" as RootSentinel1103
+
+  package "Nested Owner 1109" as NestedOwner1109 {
+    class "Package Peer 1117" as PackagePeer1117
+
+    together {
+      class "Inner One 1123" as InnerOne1123
+      class "Inner Two With Width 1129" as InnerTwo1129
+      class "Inner Three 1151" as InnerThree1151
+    }
+
+    package "Inner Empty 1153" as InnerEmpty1153 {
+    }
+  }
+
+  class "Root Tail 1163" as RootTail1163
+}
+
+RootSentinel1103 --> RootTail1163 : root
+InnerOne1123 ..> PackagePeer1117 : inward
+@enduml

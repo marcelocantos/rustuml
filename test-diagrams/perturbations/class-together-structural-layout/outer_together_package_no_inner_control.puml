@@ -1,0 +1,22 @@
+@startuml
+left to right direction
+
+together {
+  class "Control Root Sentinel 1361" as ControlRoot1361
+
+  package "Control Nested Owner 1367" as ControlNested1367 {
+    class "Control Package Peer 1373" as ControlPeer1373
+    class "Control Plain One 1381" as ControlPlain1381
+    class "Control Plain Two Wide 1399" as ControlPlain1399
+    class "Control Plain Three 1409" as ControlPlain1409
+
+    package "Control Inner Empty 1423" as ControlEmpty1423 {
+    }
+  }
+
+  class "Control Root Tail 1427" as ControlTail1427
+}
+
+ControlRoot1361 --> ControlTail1427 : root
+ControlPlain1381 ..> ControlPeer1373 : inward
+@enduml

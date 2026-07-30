@@ -1,0 +1,14 @@
+@startuml
+together {
+  class "First Shared Label 1201" as SharedNode1201
+}
+
+class "Anchor Node 1213" as AnchorNode1213
+
+together {
+  class "Second Shared Label 1217" as SharedNode1201
+  class "Fresh Companion 1223" as FreshCompanion1223
+}
+
+SharedNode1201 --> AnchorNode1213 : retained
+@enduml

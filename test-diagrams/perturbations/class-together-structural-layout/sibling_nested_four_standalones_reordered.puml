@@ -1,0 +1,20 @@
+@startuml
+top to bottom direction
+
+together {
+  class "Narrow Probe 751" as NarrowProbe751
+}
+
+class RouteTerminal797
+
+together {
+  class "Very Wide Registry Label 757" as WideRegistry757
+  together {
+    class "Middle Broker 761" as MiddleBroker761
+    class "Tiny Queue 769" as TinyQueue769
+  }
+}
+
+RouteOrigin787 ..> RouteTerminal797 : delayed
+class RouteOrigin787
+@enduml

@@ -1,0 +1,28 @@
+@startuml
+left to right direction
+
+package "Outer Registry 907" as OuterRegistry907 {
+  package "Direct Filled 911" as DirectFilled911 {
+    class "Direct Leaf 919" as DirectLeaf919
+  }
+
+  package "Direct Empty 929" as DirectEmpty929 {
+  }
+
+  together {
+    class "Owned Alpha 937" as OwnedAlpha937
+
+    package "Grouped Filled 941" as GroupedFilled941 {
+      class "Grouped Leaf 947" as GroupedLeaf947
+    }
+
+    package "Grouped Empty 953" as GroupedEmpty953 {
+    }
+
+    class "Owned Beta With Longer Label 967" as OwnedBeta967
+  }
+
+  class "Outer Peer 971" as OuterPeer971
+  OwnedAlpha937 --> OuterPeer971 : ownership
+}
+@enduml

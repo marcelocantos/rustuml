@@ -1,0 +1,13 @@
+@startuml
+together {
+  ImplicitNorth1009 --> ImplicitSouth1013 : first
+  ImplicitWest1019 ..> ImplicitEast1021 : second
+}
+
+together {
+  class "Explicit Sibling Probe 1031" as ExplicitProbe1031
+}
+
+class OutsideSink1033
+ImplicitSouth1013 --> OutsideSink1033 : escape
+@enduml

@@ -1,0 +1,18 @@
+@startuml
+left to right direction
+
+package "Control Owner 1301" as ControlOwner1301 {
+  class "Control Peer 1303" as ControlPeer1303
+
+  together {
+    class "Control Inner One 1307" as ControlInner1307
+    class "Control Inner Two Wide 1319" as ControlInner1319
+    class "Control Inner Three 1321" as ControlInner1321
+  }
+
+  package "Control Empty 1327" as ControlEmpty1327 {
+  }
+}
+
+ControlInner1307 ..> ControlPeer1303 : inward
+@enduml

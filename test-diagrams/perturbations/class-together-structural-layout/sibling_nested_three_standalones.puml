@@ -1,0 +1,18 @@
+@startuml
+skinparam linetype polyline
+
+class RouteSink739
+RouteSource733 --> RouteSink739 : dispatch
+class RouteSource733
+
+together {
+  class "Copper Ledger 701" as CopperLedger701
+  together {
+    class "Indigo Relay 709" as IndigoRelay709
+  }
+}
+
+together {
+  class "Quartz Cache 719" as QuartzCache719
+}
+@enduml

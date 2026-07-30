@@ -1,0 +1,15 @@
+@startuml
+PreexistingSeed1601 --> PreexistingPeer1607 : created-first
+
+together {
+  class PreexistingSeed1601
+  class "Local Companion One 1609" as LocalCompanion1609
+  class "Local Companion Two Wide 1613" as LocalCompanion1613
+}
+
+together {
+  class "Sibling Control 1619" as SiblingControl1619
+}
+
+class PreexistingPeer1607
+@enduml

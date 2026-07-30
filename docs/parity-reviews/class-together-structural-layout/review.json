@@ -1,0 +1,211 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-together-structural-layout",
+  "reviewer": {
+    "task_id": "codex-desktop-task-019ee369-54e2-7203-afce-ddde7bfe1723-independent-adversarial-checker",
+    "model": "GPT-5 Codex / Codex desktop"
+  },
+  "account_commit": "420032ce73003f17709936ecb7f44196a90b180b",
+  "implementation_commit": "f840f7070d3c203265e6bcb871e7116a5ec843a9",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "git show 420032ce:docs/parity-reviews/class-together-structural-layout/account.json",
+    "git diff --check 420032ce f840f707",
+    "git diff --unified=25 420032ce f840f707 -- crates/rustuml-layout/src/graph.rs crates/rustuml-parser/src/diagram/class.rs crates/rustuml-parser/src/parse/class.rs crates/rustuml-render/src/ascii_class.rs crates/rustuml-render/src/class.rs",
+    "git merge-base --is-ancestor 420032ce f840f707",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "shasum -a 256 /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "sed -n '170,245p;325,385p;735,790p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/atmp/CucaDiagram.java",
+    "sed -n '490,590p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/Cluster.java",
+    "sed -n '35,130p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/cucadiagram/SquareMaker.java",
+    "sed -n '40,135p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/cucadiagram/Magma.java",
+    "sed -n '55,150p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekResult.java",
+    "rg -n \"include_str|test-diagrams|golden|fixture|Fresh|Renamed|coordinates?|\\\\.svg|\\\\.puml|cfg\\\\(|debug_assert|INFINITY\" /tmp/class-together-structural-layout.diff",
+    "git archive --format=tar --output=/tmp/rustuml-f840f707.tar f840f707",
+    "tar -xf /tmp/rustuml-f840f707.tar -C /tmp/rustuml-check-f840f707",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-together-structural-layout/*.puml",
+    "xmllint --noout test-diagrams/perturbations/class-together-structural-layout/*.svg",
+    "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"|an error has occured|\\\\[From string|No class ' test-diagrams/perturbations/class-together-structural-layout -g '*.svg'",
+    "ruby -rdigest -e 'verify every fresh source hash is unique against all golden and perturbation sources and against the other fresh sources'",
+    "cargo build --release -p rustuml-oracle --example diff_one",
+    "target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-together-structural-layout/<each of the 12 named sources>",
+    "cargo build -p rustuml-oracle --example diff_one",
+    "target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-together-structural-layout/redeclared_entity_sibling_release_path.puml",
+    "cargo test -p rustuml-oracle --test parity_perturbations --release -- --nocapture",
+    "cargo test -p rustuml-parser together --release -- --nocapture",
+    "cargo test -p rustuml-layout together --release -- --nocapture",
+    "cargo clippy -p rustuml-layout -p rustuml-parser -p rustuml-render --all-targets --release -- -D warnings",
+    "cargo test -p rustuml-oracle --test harness_guards --release parity_review_records_are_complete -- --nocapture"
+  ],
+  "artifact_hashes": {
+    "account_json_sha256": "ce5c088cd2af663b69831cea7b9448be25689f32b4c715475c596f9c41207982",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "sources": {
+      "implicit_explicit_mixed_together_members.puml": "eb96679b752e048679572045edd064ee5e92fab880ee61dd8ea2ad55e094bf3a",
+      "outer_together_package_inner_together_scope.puml": "e2729bd5256cef91171daaefed3482dbecd430b8841c6c52c0f51adfc7f392a7",
+      "outer_together_package_no_inner_control.puml": "6f8864554a94de9df55781337aca865e5cc4a082ac1a81ca650455ce2562633b",
+      "package_children_lr_without_together_control.puml": "92ba29c35882120fbceea60d4e5079ae50657f95047554f1437903f6848d01be",
+      "package_inner_together_without_outer_control.puml": "0266a3ece9a643e0b995d6d643e85d997d2b87f01f53026cd8a372086db87660",
+      "package_owned_together_children_lr.puml": "85a99bc8a000ca29cb6e21a9d94d489443776c9cc0a443c9ce2d55c99af34ee2",
+      "preexisting_entity_declared_inside_together.puml": "bbc94067239708d4700f14fe5b57a6b95c582bae90afee51bc27ca8f00bdcdde",
+      "redeclared_entity_sibling_release_path.puml": "5803c12ab49036cf5a22f02ad6226d236038ff10db93696d47b45217c0142d3d",
+      "relationship_first_implicit_together_members.puml": "96097c47646292b0b1df1307696ffad32dbcd8f89d3fe1839db0b40f744c61fe",
+      "sibling_nested_five_standalones_crosslinks.puml": "a36a6b10aea50c6b73be73d514e6cb88cbeec82de823b00b5305bd79063a4793",
+      "sibling_nested_four_standalones_reordered.puml": "f21b6bbe2664e1051a451f1bdce632084c808144e48bff834bbf61c51b6ff284",
+      "sibling_nested_three_standalones.puml": "98f34a88aceb6b28d74608f278e3b86cf751ef4222406b5cc061ec3df2294db5"
+    },
+    "java_svgs": {
+      "implicit_explicit_mixed_together_members.svg": "c920f7db2c5b25c6ea4b43582b96a8a7171561637e66ab200d154f5cdf4d5041",
+      "outer_together_package_inner_together_scope.svg": "6151ac8ecfe8913a89d3d962aebf27f339bc0eda7b3263f9b45ac1841346cde2",
+      "outer_together_package_no_inner_control.svg": "89ed70ca549bcda3bdb2fc02fb1b94ccfab58138f3ffd6bcfb909a5ccf3ab76c",
+      "package_children_lr_without_together_control.svg": "99ded83a5d3bbae382fa2856288307fabe401b83d29e6cc0ce6467cfd2327b0d",
+      "package_inner_together_without_outer_control.svg": "d36a36190595e32cb88a93df60be76bd0295d43fd005a8bcb348e13df1c47fb6",
+      "package_owned_together_children_lr.svg": "b715573210d1be8fbd9e769d97bbc384d869b18bdc8c13251fb2ec3bcd4c0132",
+      "preexisting_entity_declared_inside_together.svg": "99d675e328528b6dde5d0a17c34085c98e31b6ca6e10f20e87db8fef0284cf3c",
+      "redeclared_entity_sibling_release_path.svg": "59c35ff8882c24b73e1492a51f222124039f2059da42f053838dd224985dec0b",
+      "relationship_first_implicit_together_members.svg": "d3bb99c2af19576e8b03dc89ea4573c2355255c6ff8dff24912e09408bf98d07",
+      "sibling_nested_five_standalones_crosslinks.svg": "c3456a874eae1a6742c49c05528200beb17970d58f3b33cbb4cf11cbfd84499d",
+      "sibling_nested_four_standalones_reordered.svg": "441c05dcfbeb093fd7a475b66b4ef88f7be3d575aa9e02e445375884413850e3",
+      "sibling_nested_three_standalones.svg": "41ac30c7adcb3fa44309a55b1a0c96eaf6c42ab046ef8a977421e34fe9c373e3"
+    }
+  },
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-together-structural-layout/sibling_nested_three_standalones.puml",
+      "golden": "test-diagrams/perturbations/class-together-structural-layout/sibling_nested_three_standalones.svg",
+      "axes": [
+        "three standalone entities and SquareMaker branch shape",
+        "sibling and nested Together scopes",
+        "relationship-before-declaration order with renamed labels"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-together-structural-layout/sibling_nested_four_standalones_reordered.puml",
+      "golden": "test-diagrams/perturbations/class-together-structural-layout/sibling_nested_four_standalones_reordered.svg",
+      "axes": [
+        "four standalone entities and SquareMaker branch shape",
+        "reordered sibling and nested Together scopes",
+        "unequal label widths and delayed relationship declaration"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-together-structural-layout/sibling_nested_five_standalones_crosslinks.puml",
+      "golden": "test-diagrams/perturbations/class-together-structural-layout/sibling_nested_five_standalones_crosslinks.svg",
+      "axes": [
+        "five standalone entities and SquareMaker branch shape",
+        "two root Together siblings with nested children",
+        "cross-linked topology declared before explicit endpoints"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-together-structural-layout/package_owned_together_children_lr.puml",
+      "golden": "test-diagrams/perturbations/class-together-structural-layout/package_owned_together_children_lr.svg",
+      "axes": [
+        "Together owned by an aliased package",
+        "direct filled and empty child packages inside and outside Together",
+        "left-to-right direction and user relationship"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-together-structural-layout/relationship_first_implicit_together_members.puml",
+      "golden": "test-diagrams/perturbations/class-together-structural-layout/relationship_first_implicit_together_members.svg",
+      "axes": [
+        "implicit relationship-created leaves inside Together",
+        "sibling explicit Together scope",
+        "relationship order and post-scope escape link"
+      ],
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-together-structural-layout/outer_together_package_inner_together_scope.puml",
+      "golden": "test-diagrams/perturbations/class-together-structural-layout/outer_together_package_inner_together_scope.svg",
+      "axes": [
+        "outer Together owning a child package",
+        "inner package-owned Together across the package stack boundary",
+        "left-to-right direction, empty package, and cross-boundary links"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-together-structural-layout/redeclared_entity_sibling_release_path.puml",
+      "golden": "test-diagrams/perturbations/class-together-structural-layout/redeclared_entity_sibling_release_path.svg",
+      "axes": [
+        "same aliased entity redeclared across sibling Together scopes",
+        "changed display label and declaration order",
+        "debug assertion versus release behavior"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-together-structural-layout/package_inner_together_without_outer_control.puml",
+      "golden": "test-diagrams/perturbations/class-together-structural-layout/package_inner_together_without_outer_control.svg",
+      "axes": [
+        "package-owned Together without an outer Together",
+        "left-to-right direction and empty sibling package",
+        "mixed linked and standalone package leaves"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-together-structural-layout/outer_together_package_no_inner_control.puml",
+      "golden": "test-diagrams/perturbations/class-together-structural-layout/outer_together_package_no_inner_control.svg",
+      "axes": [
+        "outer Together owning a package without an inner Together",
+        "left-to-right direction and nested empty package",
+        "root and package-local relationships"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-together-structural-layout/package_children_lr_without_together_control.puml",
+      "golden": "test-diagrams/perturbations/class-together-structural-layout/package_children_lr_without_together_control.svg",
+      "axes": [
+        "no-Together package control",
+        "left-to-right direction",
+        "filled and empty direct child packages with reordered leaves"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-together-structural-layout/implicit_explicit_mixed_together_members.puml",
+      "golden": "test-diagrams/perturbations/class-together-structural-layout/implicit_explicit_mixed_together_members.svg",
+      "axes": [
+        "implicit and explicit leaves mixed in one Together",
+        "sibling Together scope with renamed labels",
+        "independent control topology and declaration order"
+      ],
+      "result": "fail"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-together-structural-layout/preexisting_entity_declared_inside_together.puml",
+      "golden": "test-diagrams/perturbations/class-together-structural-layout/preexisting_entity_declared_inside_together.svg",
+      "axes": [
+        "entity created before and redeclared inside Together",
+        "sibling Together scope",
+        "relationship-first order and unequal label widths"
+      ],
+      "result": "pass"
+    }
+  ],
+  "findings": [
+    "Protocol ancestry is nonconforming and is judged separately from behavior. The account commit is mechanically an ancestor of the implementation commit, but account.json candidly records that the production implementation already existed as uncommitted work when the three-commit protocol became active. This review preserves that grandfathered-work-in-progress fact and does not treat the commit ordering as historical account-before-code evidence.",
+    "Java CucaDiagram.currentTogether inspects only the top stack item. gotoGroup pushes an Entity, so a Together opened inside that package receives no parent from an outer Together. Rust ClassParser::try_together instead scans backward across ClassScope::Package entries and can assign the outer Together as parent. This directly contradicts Java stack semantics and the account's claimed nesting model.",
+    "Java CucaDiagram.reallyCreateLeaf assigns currentTogether to every newly created leaf, including leaves first created by CommandLinkClass. Rust assigns Together membership only in try_entity_decl after an explicit declaration; create_entity_at_path and ensure_entity do not enroll implicit relationship endpoints. The relationship-only probe happens to pass, but implicit_explicit_mixed_together_members fails once implicit and explicit members share the same scope.",
+    "Java Cluster.printCluster2 emits ordinary nodes before root Together subgraphs, and printTogether emits direct leaves, direct child clusters, then child Together scopes. Rust build_together_trees creates the entire nested subgraph tree before grouped nodes exist, creates grouped nodes afterward, and builds visible child clusters later. The implementation therefore does not reproduce the cited Java statement order even though the three top-level standalone matrices happen to solve identically.",
+    "The SquareMaker and Magma phase-order portion survives the held-outs. The 3, 4, and 5 standalone matrices all match exactly after generated links are appended behind user relationships, covering both perfect-square and non-square branch shapes, changed labels, nested scopes, and declaration-order variation.",
+    "The invisible-versus-painted canvas adjustment survives the three top-level Together matrices, whose complete SVG structures and canvas dimensions match Java. It is not sufficient for package-owned cases: package_owned_together_children_lr differs at 592x612 expected versus 809x429 actual, and the package-crossing scope case differs at 542x450 expected versus 520x318 actual.",
+    "Package controls show mixed causality. package_children_lr_without_together_control also fails, so the package-heavy divergence is not solely attributable to Together. However package_inner_together_without_outer_control and outer_together_package_no_inner_control also fail, so package ownership and node/cluster emission remain behaviorally unvalidated for this mechanism. All controls remain executable rather than being excluded as unrelated.",
+    "The sibling redeclaration probe exposes release-only behavior introduced by the new ordering code. The same node is enrolled in two Together groups, graphviz_node_creation_order produces four entries for three nodes, and the debug build panics at the new debug_assert_eq with left 4 and right 3 before falling back to a grid. Release compiles the assertion away and emits a different incorrect SVG. Java retains the entity's first Together identity. The changed display-label mismatch is older parser behavior, but the duplicate-membership assertion and release divergence are specific to this mechanism.",
+    "Static searches found no new production golden reads, fixture-label branches, coordinate-keyed SVG surgery, comparator edits, or changed layout thresholds. Fresh names occur only in unit tests. The only new numeric layout expression is the standard 0.0 versus f64::INFINITY fold identity used for painted bounds; no new high-precision parity constant was introduced.",
+    "All 12 fresh Java SVGs are well-formed CLASS diagrams with entity groups and no recognized PlantUML error-page markers. Their source hashes are mutually unique and do not duplicate any of the 12,876 golden or perturbation sources examined after generation.",
+    "Focused immutable release comparisons at f840f707 produce 5 passes and 7 failures. The repository-wide parity_perturbations release test also fails, including these preserved counterexamples among pre-existing failures. The maker's focused parser tests pass 3 of 3 and layout Together tests pass 2 of 2, demonstrating that those unit tests do not cover the counterexamples.",
+    "The focused parity_review_records_are_complete guard parsed this review and every evidence path. For class-together-structural-layout it reported only the intentional rejection conditions: the latest review is not accepted and the seven failed perturbations cannot appear in an accepted latest review. Its other reported violations are pre-existing records at f840f707.",
+    "Immutable all-target Clippy could not complete because f840f707 contains an unrelated malformed raw string in a rustuml-render test at class.rs:13827. This is recorded as verification residue and is not used as the rejection basis.",
+    "Behavioral verdict is rejected independently of the ancestry exception. Seven valid held-outs differ from the pinned Java output, including direct failures of implicit leaf membership and release-stable scope membership. The failing fixtures must remain in the suite."
+  ],
+  "verdict": "rejected"
+}
