@@ -1,0 +1,19 @@
+@startuml
+left to right direction
+
+together {
+  package BatchBoxOrderReview {
+    class BatchFirstOrderReview
+    package EmptyBatchOrderReview {
+    }
+    package BatchNestedOrderReview {
+      class BatchNestedLeafOrderReview
+    }
+    class BatchSecondOrderReview
+  }
+}
+
+class OutsideOrderReview
+BatchFirstOrderReview -- BatchSecondOrderReview
+OutsideOrderReview --> BatchNestedLeafOrderReview
+@enduml

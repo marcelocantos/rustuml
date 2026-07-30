@@ -1,0 +1,10 @@
+@startuml
+package PaintOuterReview {
+  class GenericTopReview<T>
+  class PlainSinkReview
+}
+
+class RootCallerReview
+RootCallerReview --> GenericTopReview : drives
+GenericTopReview --> PlainSinkReview : folds
+@enduml

@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-svek-painted-envelope-origin",
+  "reviewer": {
+    "identity": "independent adversarial checker",
+    "model": "GPT-5 Codex",
+    "tool": "Codex shell, Java PlantUML JAR, release diff_one binary"
+  },
+  "revisions": {
+    "rust_revision_recorded": "10a16ee3",
+    "rust_revision_local_head": "10a16ee323cf2a2a21054967681eec6e43cd5b22",
+    "rust_revision_requested_full": "10a16ee37cc98b38f5ba465b217a3362ab73a8ed",
+    "rust_revision_requested_full_available_locally": false,
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "diff_one_binary": "/Users/marcelo/work/github.com/marcelocantos/rustuml/target/release/examples/diff_one",
+    "diff_one_sha256": "f14280518d64a5de983ec7df7fa9e2b773608cb0b4a5bf2400605814adafa71a"
+  },
+  "commands": [
+    "git rev-parse HEAD",
+    "git diff --stat 1482ade4..10a16ee3",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-package-explicit-parent-ownership/review_10a16ee3_root_empty_phantom_reorder.puml test-diagrams/perturbations/class-package-explicit-parent-ownership/review_10a16ee3_reopened_nested_empty_custom_separator.puml test-diagrams/perturbations/class-svek-bibliotekon-order/review_10a16ee3_root_leaf_package_empty_interleave.puml test-diagrams/perturbations/class-svek-bibliotekon-order/review_10a16ee3_lr_together_nested_empty_order.puml test-diagrams/perturbations/class-svek-painted-envelope-origin/review_10a16ee3_generic_package_labeled_edges.puml test-diagrams/perturbations/class-svek-painted-envelope-origin/review_10a16ee3_lr_together_generic_rank_edge.puml",
+    "/Users/marcelo/work/github.com/marcelocantos/rustuml/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-svek-painted-envelope-origin/review_10a16ee3_generic_package_labeled_edges.puml",
+    "/Users/marcelo/work/github.com/marcelocantos/rustuml/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-svek-painted-envelope-origin/review_10a16ee3_lr_together_generic_rank_edge.puml",
+    "rg -n \"include_str!|include_bytes!|test-diagrams|golden|review_10a16ee3|RootEmptyOrderReview|North Display Review|GenericPeerReview|[0-9]+\\.[0-9]{3,}\" crates/rustuml-parser/src/parse/class.rs crates/rustuml-render/src/class.rs crates/rustuml-layout/src/graph.rs"
+  ],
+  "source_inspection": {
+    "java": [
+      "SvekResult#calculateDimension at SvekResult.java:130-135 measures the drawn result with TextBlockUtils.getMinMax and calls moveDelta(6 - minX, 6 - minY).",
+      "LimitFinder#drawRectangle at LimitFinder.java:175-179 contributes x - 1 and y - 1 for rectangles.",
+      "DotStringFactory#moveDelta at DotStringFactory.java:635-643 applies one delta to all nodes, lines, and clusters.",
+      "SvekNode#moveDelta, SvekEdge#moveDelta, and Cluster#moveDelta move the solved coordinates that are later painted."
+    ],
+    "rust": [
+      "The 10a16ee3 implementation adds svek_layout_y_bias and applies the resulting y delta to positions, cluster positions, path points, endpoints, and edge labels before SVG emission.",
+      "The helper includes node rectangles, visible clusters, edge path points, and center/endpoint labels in the minimum-y frontier.",
+      "No production reference to the fresh held-out labels or test-diagram paths was found in the inspected implementation diff."
+    ]
+  },
+  "inputs": [
+    {
+      "path": "test-diagrams/perturbations/class-svek-painted-envelope-origin/review_10a16ee3_generic_package_labeled_edges.puml",
+      "java_svg": "test-diagrams/perturbations/class-svek-painted-envelope-origin/review_10a16ee3_generic_package_labeled_edges.svg",
+      "sha256": {
+        "puml": "02dcb0b7eb0aa6c1b4de43b6bc774422d40e6310716211499c840298e7ab5c8c",
+        "svg": "82a6177d230f01078769a6949bec2378418fb16cd03ef6fa701dce34bb097697"
+      },
+      "axes": [
+        "generic class overhang crossed with package cluster",
+        "root entity crossed with labelled dependency edges"
+      ],
+      "diff_one_no_oracle": {
+        "exit_code": 0,
+        "summary": "SVGs are structurally equivalent"
+      }
+    },
+    {
+      "path": "test-diagrams/perturbations/class-svek-painted-envelope-origin/review_10a16ee3_lr_together_generic_rank_edge.puml",
+      "java_svg": "test-diagrams/perturbations/class-svek-painted-envelope-origin/review_10a16ee3_lr_together_generic_rank_edge.svg",
+      "sha256": {
+        "puml": "7e0261e8b15c53c6f1b4ee4139c22c8b1e2368c484ecff6a7adebb9ed86bc0d9",
+        "svg": "d74c6829bbe16f61618b80ab66e3b336d2ca05c5ef57fda0d728e36803376c5b"
+      },
+      "axes": [
+        "left-to-right direction crossed with top-level Together",
+        "generic class overhang crossed with one-rank edge and labelled dependency",
+        "package cluster crossed with Together-owned root leaves"
+      ],
+      "diff_one_no_oracle": {
+        "exit_code": 1,
+        "summary": "Rust emitted Graphviz warnings about GenericPeerReview and PlainPeerReview already being in a rankset. Java canvas is 519x204 while Rust is 518x186; entity and package y coordinates diverge by large amounts, with GenericPeerReview and PlainPeerReview vertically swapped relative to Java."
+      },
+      "counterexample": true
+    }
+  ],
+  "findings": [
+    {
+      "severity": "rejecting",
+      "summary": "The generic painted-envelope fix survives a simple package-plus-label control, but not the account's Together/rank/generic stress surface.",
+      "evidence": "review_10a16ee3_lr_together_generic_rank_edge.puml fails `diff_one --no-oracle`: expected GenericPeerReview at y=141 and PlainPeerReview/PaintPackReview at y=41/6, while Rust places GenericPeerReview at y=7 and PlainPeerReview/PaintPackReview at y=107/72, with a smaller canvas."
+    },
+    {
+      "severity": "informational",
+      "summary": "The failure is not evidence of fixture-shaped vertical normalization code.",
+      "evidence": "The new y-bias helper is generic and source-cited; the failure appears coupled to rankset/Together placement before final painted-envelope normalization."
+    }
+  ],
+  "verdict": "rejected",
+  "notes": [
+    "The requested full Rust SHA was not present as a local git object; the checked revision and binary were the local immutable short revision 10a16ee3.",
+    "No Cargo or rustc command was run."
+  ]
+}

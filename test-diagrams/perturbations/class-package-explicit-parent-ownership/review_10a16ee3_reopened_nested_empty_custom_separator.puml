@@ -1,0 +1,23 @@
+@startuml
+set namespaceSeparator ::
+
+package "North Display Review" as NorthScopeReview {
+  package EmptyDockReview {
+  }
+}
+
+package SouthScopeReview {
+  class SouthLeafReview
+}
+
+package NorthScopeReview {
+  class ReopenedLeafReview
+  package FilledChildReview {
+    class DeepLeafReview
+  }
+}
+
+class NorthScopeReview::PhantomLaneReview::TerminalLeafReview
+NorthScopeReview::ReopenedLeafReview --> SouthScopeReview::SouthLeafReview
+NorthScopeReview::PhantomLaneReview::TerminalLeafReview --> NorthScopeReview::FilledChildReview::DeepLeafReview
+@enduml

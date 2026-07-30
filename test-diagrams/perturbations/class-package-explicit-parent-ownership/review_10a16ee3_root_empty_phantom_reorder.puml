@@ -1,0 +1,17 @@
+@startuml
+package "Root Empty Alpha Review" as ReviewRootEmptyAlpha {
+}
+
+class sky.harbor.DockedReviewLeaf
+
+package CargoBayReview {
+  package NestedEmptyReview {
+  }
+  class PalletReview
+}
+
+package "Root Empty Beta Review" as ReviewRootEmptyBeta {
+}
+
+sky.harbor.DockedReviewLeaf --> CargoBayReview.PalletReview
+@enduml

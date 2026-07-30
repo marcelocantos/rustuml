@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-svek-bibliotekon-order",
+  "reviewer": {
+    "identity": "independent adversarial checker",
+    "model": "GPT-5 Codex",
+    "tool": "Codex shell, Java PlantUML JAR, release diff_one binary"
+  },
+  "revisions": {
+    "rust_revision_recorded": "10a16ee3",
+    "rust_revision_local_head": "10a16ee323cf2a2a21054967681eec6e43cd5b22",
+    "rust_revision_requested_full": "10a16ee37cc98b38f5ba465b217a3362ab73a8ed",
+    "rust_revision_requested_full_available_locally": false,
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "diff_one_binary": "/Users/marcelo/work/github.com/marcelocantos/rustuml/target/release/examples/diff_one",
+    "diff_one_sha256": "f14280518d64a5de983ec7df7fa9e2b773608cb0b4a5bf2400605814adafa71a"
+  },
+  "commands": [
+    "git rev-parse HEAD",
+    "git diff --stat a2ddb8b1..10a16ee3",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-package-explicit-parent-ownership/review_10a16ee3_root_empty_phantom_reorder.puml test-diagrams/perturbations/class-package-explicit-parent-ownership/review_10a16ee3_reopened_nested_empty_custom_separator.puml test-diagrams/perturbations/class-svek-bibliotekon-order/review_10a16ee3_root_leaf_package_empty_interleave.puml test-diagrams/perturbations/class-svek-bibliotekon-order/review_10a16ee3_lr_together_nested_empty_order.puml test-diagrams/perturbations/class-svek-painted-envelope-origin/review_10a16ee3_generic_package_labeled_edges.puml test-diagrams/perturbations/class-svek-painted-envelope-origin/review_10a16ee3_lr_together_generic_rank_edge.puml",
+    "/Users/marcelo/work/github.com/marcelocantos/rustuml/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-svek-bibliotekon-order/review_10a16ee3_root_leaf_package_empty_interleave.puml",
+    "/Users/marcelo/work/github.com/marcelocantos/rustuml/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-svek-bibliotekon-order/review_10a16ee3_lr_together_nested_empty_order.puml",
+    "rg -n \"include_str!|include_bytes!|test-diagrams|golden|review_10a16ee3|RootEmptyOrderReview|North Display Review|GenericPeerReview|[0-9]+\\.[0-9]{3,}\" crates/rustuml-parser/src/parse/class.rs crates/rustuml-render/src/class.rs crates/rustuml-layout/src/graph.rs"
+  ],
+  "source_inspection": {
+    "java": [
+      "GraphvizImageBuilder#buildImage at GraphvizImageBuilder.java:226-227 creates package/tree nodes before root ordinary entities.",
+      "GraphvizImageBuilder#printGroups at GraphvizImageBuilder.java:408-423 mutates empty packages to leaf nodes at the point the child group is visited.",
+      "Bibliotekon#createNode/allNodes at Bibliotekon.java:72-77 and 182-184 preserve insertion order through a LinkedHashMap.",
+      "SvekResult#drawU at SvekResult.java:72-100 paints all clusters first, then all nodes in Bibliotekon insertion order."
+    ],
+    "rust": [
+      "LayoutGraph::with_plantuml_svek_node_order is enabled for the class SVEK path.",
+      "svek_node_emission_order walks package clusters depth first and interleaves empty packages, then appends root ordinary entities.",
+      "LayoutGraph::graphviz_node_creation_order still treats every unclustered node as an early root node in original node-addition order, which puts root leaves before root empty packages in this held-out."
+    ]
+  },
+  "inputs": [
+    {
+      "path": "test-diagrams/perturbations/class-svek-bibliotekon-order/review_10a16ee3_root_leaf_package_empty_interleave.puml",
+      "java_svg": "test-diagrams/perturbations/class-svek-bibliotekon-order/review_10a16ee3_root_leaf_package_empty_interleave.svg",
+      "sha256": {
+        "puml": "0d2c41c1af4f7523e925b53eee81fa47ca53372f7c0d752c809c98e368e45b5d",
+        "svg": "7d3e85c36903727acce362d63ba0bc598fc3814eb6c1ab52053f9d779e3bdf05"
+      },
+      "axes": [
+        "root entities crossed with packaged direct entities",
+        "root empty package crossed with child empty package",
+        "linked leaves crossed with unlinked leaves"
+      ],
+      "diff_one_no_oracle": {
+        "exit_code": 1,
+        "summary": "RootEmptyOrderReview is placed at x=39.48 in Java but at x=491.4756 in Rust. The first strict mismatches are the empty-package path/line/text x coordinates."
+      },
+      "counterexample": true
+    },
+    {
+      "path": "test-diagrams/perturbations/class-svek-bibliotekon-order/review_10a16ee3_lr_together_nested_empty_order.puml",
+      "java_svg": "test-diagrams/perturbations/class-svek-bibliotekon-order/review_10a16ee3_lr_together_nested_empty_order.svg",
+      "sha256": {
+        "puml": "d9ad36c777a46f451d9e608b820cd9dba72ac21b7c2345c09aa59be9df0fa200",
+        "svg": "63c85dc1cc30e3bae94b30053612d16a6e6bc9c87a9d20c8cfd01234a1c417d7"
+      },
+      "axes": [
+        "left-to-right direction",
+        "Together-owned package crossed with nested empty and filled children",
+        "linked and unlinked leaves"
+      ],
+      "diff_one_no_oracle": {
+        "exit_code": 0,
+        "summary": "SVGs are structurally equivalent"
+      }
+    }
+  ],
+  "findings": [
+    {
+      "severity": "rejecting",
+      "summary": "Root-level empty package nodes are still not modeled in Java's SVEK/Bibliotekon order for Graphviz placement.",
+      "evidence": "review_10a16ee3_root_leaf_package_empty_interleave.puml fails with only the RootEmptyOrderReview empty-package coordinates differing first: Java x=39.48, Rust x=491.4756. This matches a root-node creation order issue rather than a label-specific or fixture-specific branch."
+    },
+    {
+      "severity": "informational",
+      "summary": "No fixture-shaped production logic was found in the touched implementation paths.",
+      "evidence": "Searches for fresh held-out labels, test-diagram reads, include_str/include_bytes, and new high-precision literals in the touched parser/render/layout files found no production references to these held-outs."
+    }
+  ],
+  "verdict": "rejected",
+  "notes": [
+    "The requested full Rust SHA was not present as a local git object; the checked revision and binary were the local immutable short revision 10a16ee3.",
+    "No Cargo or rustc command was run."
+  ]
+}

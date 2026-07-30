@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-package-direct-standalone-layout",
+  "reviewer": {
+    "task_id": "codex-desktop-task-019ee369-54e2-7203-afce-ddde7bfe1723-independent-adversarial-checker",
+    "identity": "independent adversarial checker",
+    "model": "GPT-5 Codex / Codex desktop",
+    "tool": "Codex desktop, Java PlantUML JAR, and target/release/examples/diff_one --no-oracle"
+  },
+  "requested_rust_revision": "10a16ee37cc98b38f5ba465b217a3362ab73a8ed (not a Git object in this checkout)",
+  "rust_revision": "10a16ee323cf2a2a21054967681eec6e43cd5b22",
+  "rust_short_revision": "10a16ee3",
+  "account_commit": "4fe430091e56f22963be85e0592e7b65e0511829",
+  "implementation_commit": "1482ade4ff70df8c2da81848b11956d66179a029",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "commands": [
+    "git show 4fe43009:docs/parity-reviews/class-package-direct-standalone-layout/account.json",
+    "git merge-base --is-ancestor 4fe430091e56f22963be85e0592e7b65e0511829 1482ade4ff70df8c2da81848b11956d66179a029",
+    "git merge-base --is-ancestor 1482ade4ff70df8c2da81848b11956d66179a029 10a16ee323cf2a2a21054967681eec6e43cd5b22",
+    "git diff --check 4fe43009 10a16ee323cf2a2a21054967681eec6e43cd5b22",
+    "git diff --unified=30 4fe43009 10a16ee323cf2a2a21054967681eec6e43cd5b22 -- crates/rustuml-parser/src/parse/class.rs crates/rustuml-render/src/class.rs",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse HEAD",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/atmp/CucaDiagram.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/abel/Entity.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/cucadiagram/Magma.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/cucadiagram/SquareMaker.java",
+    "java -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-package-direct-standalone-layout/review_nested_descendant_threshold.puml test-diagrams/perturbations/class-package-direct-standalone-layout/review_linked_five_standalones_ltr.puml test-diagrams/perturbations/class-package-direct-standalone-layout/review_reordered_four_direct.puml",
+    "/Users/marcelo/work/github.com/marcelocantos/rustuml/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-package-direct-standalone-layout/review_nested_descendant_threshold.puml",
+    "/Users/marcelo/work/github.com/marcelocantos/rustuml/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-package-direct-standalone-layout/review_linked_five_standalones_ltr.puml",
+    "/Users/marcelo/work/github.com/marcelocantos/rustuml/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-package-direct-standalone-layout/review_reordered_four_direct.puml",
+    "xmllint --noout test-diagrams/perturbations/class-package-direct-standalone-layout/*.svg",
+    "rg -n -i 'syntax error|error line|plantuml.*error|class=\"message\"|an error has occured|\\[From string|No class ' test-diagrams/perturbations/class-package-direct-standalone-layout -g '*.svg'",
+    "rg --files test-diagrams -g '*.puml' | xargs shasum -a 256",
+    "shasum -a 256 docs/parity-reviews/class-package-direct-standalone-layout/account.json /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar target/release/examples/diff_one"
+  ],
+  "no_cargo_or_rustc": true,
+  "artifact_hashes": {
+    "account_json_sha256": "566719a6f99ca746c27f74eb95f1fa36de4c8f856b2516c530dc0bcf3d1ea826",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "diff_one_sha256": "f14280518d64a5de983ec7df7fa9e2b773608cb0b4a5bf2400605814adafa71a",
+    "sources": {
+      "review_nested_descendant_threshold.puml": "8fa6b2c8445bab5c4302ace20903a36fb0810c40d51bdef544dfe214c7e3be29",
+      "review_linked_five_standalones_ltr.puml": "771aca2995db791fb72a733557a7420057d7d29e305e2fe1df397b27d578f6d5",
+      "review_reordered_four_direct.puml": "eaa1f155fd04cc1c4c4ea8517f287726d7a6d6086eb11f2fffdba3991ecbb863"
+    },
+    "java_svgs": {
+      "review_nested_descendant_threshold.svg": "a3daec673181958754c66ba75a78ef76430aa19898cef7bf49c48d9af77cd870",
+      "review_linked_five_standalones_ltr.svg": "3c2d25a5ea92bc22b19bd9ded3273258c9b230197fc51725cfaa34eb6f6696a5",
+      "review_reordered_four_direct.svg": "bd17749f5ca63591b4290bbd4c46527db025c3d1dd124fe8aaecd2aac0d27b8d"
+    }
+  },
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-package-direct-standalone-layout/review_nested_descendant_threshold.puml",
+      "golden": "test-diagrams/perturbations/class-package-direct-standalone-layout/review_nested_descendant_threshold.svg",
+      "axes": [
+        "two direct outer leaves crossed with three descendant leaves",
+        "three-level package nesting with filled and empty sibling packages",
+        "three-direct-leaf SquareMaker branch under a nested package",
+        "top-to-bottom direction and declaration order"
+      ],
+      "result": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-package-direct-standalone-layout/review_linked_five_standalones_ltr.puml",
+      "golden": "test-diagrams/perturbations/class-package-direct-standalone-layout/review_linked_five_standalones_ltr.svg",
+      "axes": [
+        "six direct package leaves with one link-incidental leaf excluded",
+        "five remaining standalones and non-square branch size three",
+        "cross-package relationship and left-to-right direction"
+      ],
+      "result": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-package-direct-standalone-layout/review_reordered_four_direct.puml",
+      "golden": "test-diagrams/perturbations/class-package-direct-standalone-layout/review_reordered_four_direct.svg",
+      "axes": [
+        "four direct standalones and perfect-square branch size two",
+        "renamed labels with intentionally non-alphabetical declaration order",
+        "single-level package control"
+      ],
+      "result": "pass: SVGs are structurally equivalent"
+    }
+  ],
+  "findings": [
+    "Java Entity.leafs enumerates only immediate non-group quark children; CucaDiagram.applySingleStrategy filters those children with link incidence before invoking Magma and SquareMaker. The Rust projection assigns every entity to the deepest package that contains it, so recursively stored Package.entities membership cannot make an ancestor include a descendant as a standalone.",
+    "The branch formula in Rust, ceil(sqrt(n)), is equivalent to Java SquareMaker.computeBranch: exact squares use sqrt(n), all other positive sizes use floor(sqrt(n)) + 1. The fresh three-, four-, and five-standalone matrices exercise both paths and compare structurally equal without oracle layout assistance.",
+    "The linked-incidence held-out confirms that a direct leaf participating in a user relationship is excluded before thresholding; the remaining five leaves follow the Java branch-three shape in left-to-right mode.",
+    "Static inspection of the mechanism projection found no fixture-label conditionals, golden or SVG reads, coordinate-keyed surgery, comparator changes, per-branch-count ladders, or new high-precision parity constants. The relevant thresholds and minlen values retain adjacent Java provenance.",
+    "The mechanism account is commit 4fe43009 and is an ancestor of implementation commit 1482ade4. The replay revision 10a16ee3 is a descendant and includes a separate account for the generic painted-envelope correction that was needed for the final complete SVG comparisons.",
+    "All three fresh PlantUML outputs are well-formed XML, contain no recognized PlantUML error marker, and their source hashes occur only once across the repository's .puml corpus.",
+    "The supplied 40-character Rust revision 10a16ee37cc98b38f5ba465b217a3362ab73a8ed is not present in this checkout. Its requested short revision resolves unambiguously to 10a16ee323cf2a2a21054967681eec6e43cd5b22, which is the artifact tested and attested here; this record does not attest the unresolvable full spelling."
+  ],
+  "verdict": "accepted"
+}

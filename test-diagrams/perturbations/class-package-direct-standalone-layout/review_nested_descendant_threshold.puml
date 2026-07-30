@@ -1,0 +1,18 @@
+@startuml
+package ObservatoryArc {
+  class OuterBeacon
+  package IntakeBay {
+    class IntakeLedger
+    package ArchiveShaft {
+      class ArchiveAlpha
+      class ArchiveBeta
+      class ArchiveGamma
+    }
+    package VacantCove {
+    }
+  }
+  package SilentAnnex {
+  }
+  class OuterSignal
+}
+@enduml

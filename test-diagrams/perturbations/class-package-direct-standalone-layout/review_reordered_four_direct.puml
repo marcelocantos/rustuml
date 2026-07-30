@@ -1,0 +1,8 @@
+@startuml
+package ReorderedDeck {
+  class QuartzFourth
+  class AmberFirst
+  class CinderThird
+  class BerylSecond
+}
+@enduml

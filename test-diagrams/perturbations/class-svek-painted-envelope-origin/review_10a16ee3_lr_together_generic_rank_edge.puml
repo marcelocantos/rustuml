@@ -1,0 +1,15 @@
+@startuml
+left to right direction
+
+together {
+  class GenericPeerReview<K>
+  class PlainPeerReview
+}
+
+package PaintPackReview {
+  class PackGenericReview<V>
+}
+
+GenericPeerReview - PlainPeerReview : rank one label
+PlainPeerReview --> PackGenericReview : longer label
+@enduml

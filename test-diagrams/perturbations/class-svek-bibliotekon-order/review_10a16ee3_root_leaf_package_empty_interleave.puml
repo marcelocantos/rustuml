@@ -1,0 +1,20 @@
+@startuml
+class RootBeforeOrderReview
+
+package OrderCrateReview {
+  class DirectAlphaOrderReview
+  package EmptyGapOrderReview {
+  }
+  class DirectBetaOrderReview
+  package FilledOrderReview {
+    class FilledLeafOrderReview
+  }
+}
+
+package RootEmptyOrderReview {
+}
+
+class RootAfterOrderReview
+RootBeforeOrderReview --> DirectAlphaOrderReview
+DirectBetaOrderReview --> RootAfterOrderReview
+@enduml

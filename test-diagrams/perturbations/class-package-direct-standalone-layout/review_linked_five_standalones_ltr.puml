@@ -1,0 +1,13 @@
+@startuml
+left to right direction
+class TransitGate
+package HarborMatrix {
+  class LinkedMast
+  class FreeAmber
+  class FreeBeryl
+  class FreeCobalt
+  class FreeDune
+  class FreeEmber
+}
+LinkedMast --> TransitGate
+@enduml
