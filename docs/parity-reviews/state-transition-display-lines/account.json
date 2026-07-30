@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-transition-display-lines",
+  "status": "proposed",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "22f8bf85b2f6113472079d3e20b39fc2971fa52a",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/statediagram/command/CommandLinkStateCommon.java:111 CommandLinkStateCommon#execute creates the transition Display",
+    "src/main/java/net/sourceforge/plantuml/klimt/creole/Display.java:258-333 Display#getWithNewlines parses legacy newline, alignment, tab, escaped-backslash, raw math, latex, and link spans",
+    "src/main/java/net/sourceforge/plantuml/klimt/creole/Display.java Display#naturalHorizontalAlignment retains the block-wide alignment selected by legacy \\\\l or \\\\r",
+    "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java:279-303 SvekEdge constructs the label TextBlock from the Display",
+    "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java:942-948 SvekEdge draws the same TextBlock at the solved label origin",
+    "src/main/java/net/sourceforge/plantuml/klimt/creole/SheetBlock1.java SheetBlock1 sizes and draws the ordered Display rows"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/state.rs:502 StateParser#try_transition stores the captured label as one opaque String",
+    "crates/rustuml-parser/src/diagram/state.rs:242-247 Transition stores label as Option<String>",
+    "crates/rustuml-render/src/state.rs:1038 ordinary_edge_label_size measures one scalar line",
+    "crates/rustuml-render/src/state.rs:1092 emit_link_label_composition emits one scalar line",
+    "crates/rustuml-render/src/state.rs:2930 svek_edge_label_box_size derives a one-line Graphviz label box",
+    "crates/rustuml-render/src/state.rs autonomous and flat painted-bound consumers derive one-line bounds",
+    "crates/rustuml-render/src/text_render.rs measure_with_family, label_height_with_family, label_first_baseline_ascent_with_family, and emit_text operate on one logical row"
+  ],
+  "evidence_inputs": [
+    "test-diagrams/perturbations/state-transition-label-family-baseline/checker_courier_nested_multiline_tb.puml"
+  ],
+  "invariant": "A state transition label is a Display block, not a scalar SVG text node. CommandLinkStateCommon calls Display.getWithNewlines before constructing LinkArg. Outside raw <math>, <latex>, and [[link]] spans, legacy \\\\n, \\\\l, and \\\\r terminate the current row; \\\\l and \\\\r also select the Display's natural horizontal alignment, \\\\t becomes a tab, and \\\\\\\\ becomes one literal backslash. The resulting ordered rows and block-wide alignment are consumed by one SheetBlock1/TextBlock for both pre-layout dimensions and final painting. Block width is the maximum row width, block height is the sum of row heights, and each row is placed according to the Display alignment within that maximum width. The first row uses the resolved StateArrowFont first-baseline ascent; subsequent row baselines advance by the measured row heights. Every state rendering path must size, route, paint, and bound the same parsed block.",
+  "causal_divergence": "Rust keeps the captured transition label as an opaque String and every state label consumer measures and emits it as one logical row. A source label such as `boot pass\\\\nsecond line` therefore becomes one SVG text element containing the two backslash characters instead of two Display rows. This inflates the Graphviz label width, collapses the label height, changes solved routing space, emits the wrong glyph content, and produces incorrect painted bounds. Fixing only SVG emission would leave layout and bounds inconsistent; replacing every `\\\\n` blindly in text_render would corrupt raw math/link content and unrelated diagram families. The divergence is the absence of PlantUML's state-transition Display value model at the parser-renderer boundary.",
+  "planned_change": "Introduce a typed state-transition Display representation owned by the parser diagram model: ordered row strings plus a block-wide natural alignment. Parse the Java legacy escapes with raw-mode boundaries matching Display.getWithNewlines, including \\\\n, \\\\l, \\\\r, \\\\t, and \\\\\\\\, while preserving unknown escapes and raw math, latex, and link content. Retain Option<String>-equivalent source absence semantics without allowing renderers to reinterpret the raw command text independently. In the state renderer, build one shared measured label-block value from the parsed rows and resolved StateArrowFont. Use it in ordinary and SVEK box sizing, all layout requests, autonomous and flat painted bounds, and both label emission paths. Emit each row through text_render::emit_text, advance baselines by family-aware row height, and align rows inside the maximum measured width using the Display alignment. Preserve Graphviz padding, SvekEdge margins, solved origins, Creole run styling, arrow geometry, DPI scaling, and oracle-assisted captured-label handling. Do not add fixture-label checks, per-row coordinate constants, or post-hoc SVG rewriting.",
+  "perturbation_axes": [
+    "two, three, and empty-intermediate rows with renamed labels and unequal row widths",
+    "default, \\\\l, and \\\\r natural alignment with the widest row in different positions",
+    "escaped backslash, tab, and unknown escape content",
+    "\\\\n sequences inside and outside math, latex, and link raw spans",
+    "Verdana, Arial, Courier New, and generic sans-serif StateArrowFont families at multiple sizes",
+    "plain, bold, italic, monospace-Creole, subscript, and superscript row content",
+    "flat and nested autonomous state scopes",
+    "top-to-bottom and left-to-right layout, including self links and pseudostate endpoints"
+  ],
+  "scope_boundary": "This mechanism owns parsing, dimensions, row placement, and painted bounds for state transition Display rows. It does not own transition font-family selection, pseudostate paint, arrow routing algorithms, state body text, labels in other diagram families, or raw math/latex rendering beyond preventing legacy escape splitting inside their spans."
+}
