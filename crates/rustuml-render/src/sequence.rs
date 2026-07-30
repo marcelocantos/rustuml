@@ -7238,9 +7238,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let mut min_participant_center_x = vec![0.0_f64; n];
     let mut min_scan_auto = AutoState::default();
     for event in &diagram.events {
-        match event {
-            Event::Autonumber(command) => min_scan_auto.apply(command),
-            _ => {}
+        if let Event::Autonumber(command) = event {
+            min_scan_auto.apply(command);
         }
         if let Event::Note(note) = event {
             // A message-attached Left note anchors to the leftmost endpoint by
@@ -9164,7 +9163,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         anchor_xs.first().copied()?
                     };
                     let gap = left_note_lifeline_gap(
-                        &participants,
+                        participants,
                         note.shape,
                         anchor_idxs.first().copied(),
                         note.on_message,
@@ -9260,7 +9259,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 )
                             };
                             let geom = over_several_note_geometry(
-                                &participants,
+                                participants,
                                 lo,
                                 hi,
                                 component_pref_w,
@@ -9477,17 +9476,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                     left_owner = group.note_left_owner;
                                 }
                             }
-                            if has_ref {
-                                if group.ref_left < frame_left {
-                                    frame_left = group.ref_left;
-                                    left_owner = GroupLeftOwner::Other;
-                                }
+                            if has_ref && group.ref_left < frame_left {
+                                frame_left = group.ref_left;
+                                left_owner = GroupLeftOwner::Other;
                             }
-                            if has_external_left {
-                                if group.external_left < frame_left {
-                                    frame_left = group.external_left;
-                                    left_owner = GroupLeftOwner::Other;
-                                }
+                            if has_external_left && group.external_left < frame_left {
+                                frame_left = group.external_left;
+                                left_owner = GroupLeftOwner::Other;
                             }
 
                             // Compute the header text right edge (group kind label + guard)

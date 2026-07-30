@@ -4351,9 +4351,8 @@ fn painted_package_cluster_ids(diagram: &ClassDiagram) -> std::collections::Hash
         .roles
         .iter()
         .enumerate()
-        .filter_map(|(idx, role)| {
-            (*role == PackageRenderRole::Cluster).then(|| package_cluster_id(idx))
-        })
+        .filter(|(_, role)| **role == PackageRenderRole::Cluster)
+        .map(|(idx, _)| package_cluster_id(idx))
         .collect()
 }
 
@@ -4531,16 +4530,15 @@ impl SvekEmissionOrder<'_> {
                         self.node_order.push(SvekNodeEmission::Entity(idx));
                     }
                 }
-                ClassUidEvent::Note { index, .. } => {
+                ClassUidEvent::Note { index, .. }
                     if self.note_owner_pkg.get(*index).copied().flatten() == owner
                         && self
                             .diagram
                             .notes
                             .get(*index)
-                            .is_some_and(note_is_svek_leaf)
-                    {
-                        self.node_order.push(SvekNodeEmission::Note(*index));
-                    }
+                            .is_some_and(note_is_svek_leaf) =>
+                {
+                    self.node_order.push(SvekNodeEmission::Note(*index));
                 }
                 _ => {}
             }
@@ -6020,14 +6018,14 @@ fn layout_package_clusters(
     cluster_positions: &[ClusterPosition],
 ) -> Vec<LayoutPackageCluster> {
     let package_render = package_render_model(diagram);
-    let filter_attr = has_shadowing_skinparam(diagram)
-        .then(|| {
-            format!(
-                r#" filter="url(#{})""#,
-                crate::filter_registry::shadow_id_for(diagram.meta.source.as_deref().unwrap_or(""))
-            )
-        })
-        .unwrap_or_default();
+    let filter_attr = if has_shadowing_skinparam(diagram) {
+        format!(
+            r#" filter="url(#{})""#,
+            crate::filter_registry::shadow_id_for(diagram.meta.source.as_deref().unwrap_or(""))
+        )
+    } else {
+        String::new()
+    };
     package_cluster_depth_first_order(&package_render)
         .into_iter()
         .filter_map(|idx| {

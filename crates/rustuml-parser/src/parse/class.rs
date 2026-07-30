@@ -480,8 +480,7 @@ impl ClassParser {
             }
             return self.resolve_quark_path(&strip_creole_for_id(raw), QuarkLookup::ReuseUnique);
         }
-        let path = self.resolve_quark_path(raw, QuarkLookup::ReuseUnique);
-        path
+        self.resolve_quark_path(raw, QuarkLookup::ReuseUnique)
     }
 
     fn materialize_relationship_endpoint(&mut self, path: Vec<String>) -> String {
@@ -2540,7 +2539,7 @@ fn normalize_inline_stereotypes(s: &str) -> String {
 /// prefixes every non-http(s)/file href with the active `topurl`.
 fn parse_package_link(raw: &str, topurl: Option<&str>) -> Option<(String, Option<String>)> {
     let inner = raw.strip_prefix("[[")?.strip_suffix("]]")?.trim();
-    if inner.is_empty() || inner.contains(|ch| matches!(ch, '[' | ']')) {
+    if inner.is_empty() || inner.contains(['[', ']']) {
         return None;
     }
 
@@ -2596,9 +2595,7 @@ fn parse_package_link(raw: &str, topurl: Option<&str>) -> Option<(String, Option
         leading_separator
     };
     rest = rest.trim_start();
-    if !rest.is_empty()
-        && (!had_label_separator || rest.contains(|ch| matches!(ch, '{' | '}' | '[' | ']')))
-    {
+    if !rest.is_empty() && (!had_label_separator || rest.contains(['{', '}', '[', ']'])) {
         return None;
     }
 

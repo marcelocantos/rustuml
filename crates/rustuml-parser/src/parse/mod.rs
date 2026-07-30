@@ -640,10 +640,8 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         // beats multiple `interface` lines that would otherwise score for class.
         if leading_keyword == "component" && trimmed["component".len()..].starts_with(' ') {
             scores[5] += 15;
-            if !trimmed.contains('{') {
-                if top_level {
-                    has_top_level_component_leaf = true;
-                }
+            if !trimmed.contains('{') && top_level {
+                has_top_level_component_leaf = true;
             }
         }
         // Standalone `[Bracket]` syntax marks a component (leaf on its own line).
