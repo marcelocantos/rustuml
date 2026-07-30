@@ -212,17 +212,18 @@ pub fn parse_component(lines: &[String]) -> Result<ComponentDiagram, ParseError>
     });
     static RE_BRACKET: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^\[([^\]]+)\]$").unwrap());
     // Interface: `interface "Name" as ID`, `interface Name`, or `interface [Name] as ID`.
-    static RE_IFACE_QUOTED_AS: LazyLock<Regex> =
-        LazyLock::new(|| Regex::new(r#"^interface\s+"((?:[^"]|"")+)"\s+as\s+(\w+)"#).unwrap());
+    static RE_IFACE_QUOTED_AS: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(r#"^(?i:interface)\s+"((?:[^"]|"")+)"\s+(?i:as)\s+(\w+)"#).unwrap()
+    });
     static RE_IFACE_BRACKET_AS: LazyLock<Regex> =
-        LazyLock::new(|| Regex::new(r"^interface\s+\[([^\]]+)\]\s+as\s+(\w+)").unwrap());
+        LazyLock::new(|| Regex::new(r"^(?i:interface)\s+\[([^\]]+)\]\s+(?i:as)\s+(\w+)").unwrap());
     static RE_IFACE_BARE: LazyLock<Regex> =
-        LazyLock::new(|| Regex::new(r"^interface\s+(\w+)\s*$").unwrap());
+        LazyLock::new(|| Regex::new(r"^(?i:interface)\s+(\w+)\s*$").unwrap());
     // Lollipop interface shorthand: `() IFoo`, `() "Label"`, `() "Label" as ID`.
     // Matched as a standalone declaration only (no trailing arrow), so it must
     // be tried before RE_CONN, whose arrow class also contains `(`/`)`.
     static RE_IFACE_PAREN: LazyLock<Regex> = LazyLock::new(|| {
-        Regex::new(r#"^\(\)\s+(?:"([^"]+)"|(\w+))(?:\s+as\s+(\w+))?\s*$"#).unwrap()
+        Regex::new(r#"^\(\)\s+(?:"([^"]+)"|(\w+))(?:\s+(?i:as)\s+(\w+))?\s*$"#).unwrap()
     });
     // Note: `note right of ID : text` or `note right of ID` (multiline)
     static RE_NOTE_OF: LazyLock<Regex> = LazyLock::new(|| {
@@ -1236,6 +1237,43 @@ mod tests {
                 .iter()
                 .any(|interface| interface.id == "Bracket9709")
         );
+    }
+
+    #[test]
+    fn interface_command_family_is_case_insensitive_without_losing_owner_or_source() {
+        let d = parse(
+            "package RenamedShell9731 {\n\
+               InTeRfAcE \"Quoted Port 9733\" AS Quoted9733\n\
+               INTERFACE BarePort9739\n\
+               iNtErFaCe [Bracket Port 9743] aS Bracket9743\n\
+               () \"Parenthesized Port 9749\" As Paren9749\n\
+             }",
+        );
+
+        assert_eq!(
+            d.packages[0].components,
+            ["Quoted9733", "BarePort9739", "Bracket9743", "Paren9749"]
+        );
+        assert!(d.interfaces.iter().any(|interface| {
+            interface.id == "Quoted9733"
+                && interface.label == "Quoted Port 9733"
+                && interface.source_line == 2
+        }));
+        assert!(d.interfaces.iter().any(|interface| {
+            interface.id == "BarePort9739"
+                && interface.label == "BarePort9739"
+                && interface.source_line == 3
+        }));
+        assert!(d.components.iter().any(|component| {
+            component.id == "Bracket9743"
+                && component.label == "Bracket Port 9743"
+                && component.source_line == 4
+        }));
+        assert!(d.interfaces.iter().any(|interface| {
+            interface.id == "Paren9749"
+                && interface.label == "Parenthesized Port 9749"
+                && interface.source_line == 5
+        }));
     }
 
     #[test]

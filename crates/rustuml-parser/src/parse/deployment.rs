@@ -430,7 +430,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
 
     // [Label] [as id] [<<stereo>>] [#color]  — bracket component notation
     static RE_NODE_BRACKET: LazyLock<Regex> = LazyLock::new(|| {
-        Regex::new(r#"^\[([^\]]+)\](?:\s+as\s+(\w+))?(?:\s+<<([^>]+)>>)?(?:\s+#(\w+))?\s*$"#)
+        Regex::new(r#"^\[([^\]]+)\](?:\s+(?i:as)\s+(\w+))?(?:\s+<<([^>]+)>>)?(?:\s+#(\w+))?\s*$"#)
             .unwrap()
     });
 
@@ -1096,6 +1096,28 @@ mod tests {
         let container = d.nodes.iter().find(|n| n.id == "Container").unwrap();
         assert!(container.children.contains(&"fe".to_string()));
         assert!(container.children.contains(&"api".to_string()));
+    }
+
+    #[test]
+    fn bracket_component_alias_is_case_insensitive_and_keeps_nested_owner() {
+        let d = parse(
+            "NoDe RenamedHost9751 {\n\
+               [Worker Port 9767] AS Worker9767 <<edge_9769>> #LightBlue\n\
+             }",
+        );
+
+        assert_eq!(d.nodes[0].id, "RenamedHost9751");
+        assert_eq!(d.nodes[0].children, ["Worker9767"]);
+        let worker = d
+            .nodes
+            .iter()
+            .find(|node| node.id == "Worker9767")
+            .expect("mixed-case bracket alias");
+        assert_eq!(worker.label, "Worker Port 9767");
+        assert_eq!(worker.kind, DeploymentNodeKind::Component);
+        assert_eq!(worker.stereotype.as_deref(), Some("edge_9769"));
+        assert_eq!(worker.color.as_deref(), Some("LightBlue"));
+        assert_eq!(worker.source_line, 2);
     }
 
     #[test]
