@@ -24,6 +24,34 @@ use crate::style_cascade::{StyleBoxSides, StyleCascade, StyleSignature};
 use crate::text_render::{self, TextBase};
 use rustuml_parser::diagram::style::StyleScheme;
 
+#[derive(Debug, Clone, PartialEq, Eq)]
+enum StatePaint {
+    Solid(String),
+    Transparent,
+    Gradient {
+        color1: String,
+        color2: String,
+        policy: char,
+    },
+}
+
+impl StatePaint {
+    fn from_raw(value: &str) -> Self {
+        let value = value.trim();
+        if value.eq_ignore_ascii_case("transparent") || value.eq_ignore_ascii_case("none") {
+            return Self::Transparent;
+        }
+        if let Some((raw1, raw2, policy)) = split_state_gradient(value) {
+            return Self::Gradient {
+                color1: crate::sequence::resolve_color(raw1),
+                color2: crate::sequence::resolve_color(raw2),
+                policy,
+            };
+        }
+        Self::Solid(crate::sequence::resolve_color(value))
+    }
+}
+
 #[derive(Debug)]
 struct StateGradient {
     color1: String,
@@ -45,48 +73,56 @@ fn split_state_gradient(value: &str) -> Option<(&str, &str, char)> {
     None
 }
 
-fn state_gradients(diagram: &StateDiagram) -> Vec<StateGradient> {
-    let source = diagram.meta.source.as_deref().unwrap_or("");
-    let mut gradients: Vec<StateGradient> = Vec::new();
-    for state in &diagram.states {
-        let Some((raw1, raw2, policy)) = state.fill.as_deref().and_then(split_state_gradient)
-        else {
-            continue;
-        };
-        let color1 = crate::sequence::resolve_color(raw1);
-        let color2 = crate::sequence::resolve_color(raw2);
-        if gradients.iter().any(|gradient| {
-            gradient.color1 == color1 && gradient.color2 == color2 && gradient.policy == policy
-        }) {
-            continue;
+#[derive(Debug)]
+struct StateGradientRegistry {
+    source: String,
+    gradients: Vec<StateGradient>,
+}
+
+impl StateGradientRegistry {
+    fn new(diagram: &StateDiagram) -> Self {
+        Self {
+            source: diagram.meta.source.clone().unwrap_or_default(),
+            gradients: Vec::new(),
         }
-        let id = crate::filter_registry::gradient_id_for(source, gradients.len());
-        gradients.push(StateGradient {
-            color1,
-            color2,
-            policy,
-            id,
-        });
     }
-    gradients
+
+    fn use_paint(&mut self, paint: &StatePaint) -> String {
+        match paint {
+            StatePaint::Solid(color) => color.clone(),
+            StatePaint::Transparent => "none".to_string(),
+            StatePaint::Gradient {
+                color1,
+                color2,
+                policy,
+            } => {
+                if let Some(gradient) = self.gradients.iter().find(|gradient| {
+                    gradient.color1 == *color1
+                        && gradient.color2 == *color2
+                        && gradient.policy == *policy
+                }) {
+                    return format!("url(#{})", gradient.id);
+                }
+                let id =
+                    crate::filter_registry::gradient_id_for(&self.source, self.gradients.len());
+                self.gradients.push(StateGradient {
+                    color1: color1.clone(),
+                    color2: color2.clone(),
+                    policy: *policy,
+                    id: id.clone(),
+                });
+                format!("url(#{id})")
+            }
+        }
+    }
+
+    fn use_raw(&mut self, value: &str) -> String {
+        self.use_paint(&StatePaint::from_raw(value))
+    }
 }
 
-fn state_gradient_fill(value: &str, gradients: &[StateGradient]) -> String {
-    let Some((raw1, raw2, policy)) = split_state_gradient(value) else {
-        return crate::sequence::resolve_color(value);
-    };
-    let color1 = crate::sequence::resolve_color(raw1);
-    let color2 = crate::sequence::resolve_color(raw2);
-    gradients
-        .iter()
-        .find(|gradient| {
-            gradient.color1 == color1 && gradient.color2 == color2 && gradient.policy == policy
-        })
-        .map_or(color1, |gradient| format!("url(#{})", gradient.id))
-}
-
-fn emit_state_gradient_defs(svg: &mut String, gradients: &[StateGradient]) {
-    for gradient in gradients {
+fn emit_state_gradient_defs(svg: &mut String, registry: &StateGradientRegistry) {
+    for gradient in &registry.gradients {
         // Java provenance: `SvgGraphics.createSvgGradient` maps the
         // HColorGradient separator policy to these four endpoint pairs. The
         // DOM serializer emits attributes alphabetically.
@@ -103,6 +139,19 @@ fn emit_state_gradient_defs(svg: &mut String, gradients: &[StateGradient]) {
         )
         .unwrap();
     }
+}
+
+fn state_defs(registry: &StateGradientRegistry, shadow_filter_id: Option<&str>) -> String {
+    if registry.gradients.is_empty() && shadow_filter_id.is_none() {
+        return "<defs/>".to_string();
+    }
+    let mut defs = String::from("<defs>");
+    emit_state_gradient_defs(&mut defs, registry);
+    if let Some(id) = shadow_filter_id {
+        defs.push_str(&crate::filter_registry::shadow_filter_def(id));
+    }
+    defs.push_str("</defs>");
+    defs
 }
 
 // --- PlantUML state diagram constants ---
@@ -1955,12 +2004,6 @@ struct StateSkin {
     arrow_color: String,
     /// Resolved transition shaft and arrowhead stroke width.
     arrow_thickness: f64,
-    /// Root style line colour from modern themes, used by pseudo-state chrome.
-    root_line_color: Option<String>,
-    /// Theme/skinparam colour for the start pseudo-state, when specified.
-    start_color: Option<String>,
-    /// Theme/skinparam colour for the end pseudo-state, when specified.
-    end_color: Option<String>,
     /// Final `root.document` background, when explicitly styled.
     document_background: Option<String>,
     /// Final `root.document` margin.
@@ -1999,8 +2042,9 @@ impl StateSkin {
             .or_else(|| color("stateFontColor"))
             .or_else(|| color("defaultFontColor"))
             .unwrap_or_else(|| DEFAULT_TEXT_COLOR.to_string());
+        // Preserve gradients until the SVG driver selects a primitive paint.
         let state_fill =
-            color("stateBackgroundColor").unwrap_or_else(|| DEFAULT_STATE_FILL.to_string());
+            find("stateBackgroundColor").unwrap_or_else(|| DEFAULT_STATE_FILL.to_string());
         // Java provenance: `SkinParam.cleanForKeySlow` normalizes both
         // `stateArrowColor` and `ArrowColor` to the same arrow style property,
         // so `SkinParam.setParam` makes the later source declaration win.
@@ -2022,8 +2066,6 @@ impl StateSkin {
         let arrow_thickness = find("arrowThickness")
             .and_then(|value| value.parse::<f64>().ok())
             .unwrap_or(1.0);
-        let start_color = color("stateStartColor");
-        let end_color = color("stateEndColor");
         let mut skin = Self {
             stroke,
             border_thickness,
@@ -2031,9 +2073,6 @@ impl StateSkin {
             state_fill,
             arrow_color,
             arrow_thickness,
-            root_line_color,
-            start_color,
-            end_color,
             document_background: None,
             document_margin: None,
         };
@@ -2048,12 +2087,11 @@ impl StateSkin {
         let arrow_style = cascade.resolve(&arrow_signature, StyleScheme::Regular);
         let document_style = cascade.resolve(&document_signature, StyleScheme::Regular);
         if let Some(value) = state_style.property("backgroundColor") {
-            skin.state_fill = crate::sequence::resolve_color(value);
+            skin.state_fill = value.trim().to_string();
         }
         if let Some(value) = state_style.property("lineColor") {
             let color = crate::sequence::resolve_color(value);
-            skin.stroke = color.clone();
-            skin.root_line_color = Some(color);
+            skin.stroke = color;
         }
         if let Some(value) = state_style.property("lineThickness")
             && let Ok(value) = value.parse::<f64>()
@@ -2077,6 +2115,132 @@ impl StateSkin {
         skin.document_margin = document_style.box_sides("margin");
         skin
     }
+}
+
+#[derive(Clone, Copy)]
+enum StatePseudoImage {
+    Start,
+    End,
+    Choice,
+    Bar,
+    History,
+}
+
+#[derive(Clone)]
+struct StatePseudoStyle {
+    fill: StatePaint,
+    stroke: StatePaint,
+    line_thickness: f64,
+    shadow: f64,
+}
+
+fn state_shadow_value(value: &str, fallback: f64) -> f64 {
+    match value.trim().to_ascii_lowercase().as_str() {
+        "true" | "yes" => 3.0,
+        "false" | "no" => 0.0,
+        _ => value.trim().parse::<f64>().unwrap_or(fallback).max(0.0),
+    }
+}
+
+fn state_pseudostate_style(
+    diagram: &StateDiagram,
+    image: StatePseudoImage,
+    stereotype: Option<&str>,
+) -> StatePseudoStyle {
+    // Java image selection owns these signatures. In particular, state
+    // choices and bars deliberately consume activity-diagram styles, while
+    // history consumes the state-diagram diamond style.
+    let (selectors, mut style) = match image {
+        StatePseudoImage::Start => (
+            &["root", "element", "stateDiagram", "circle", "start"][..],
+            StatePseudoStyle {
+                fill: StatePaint::from_raw(PSEUDO_COLOR),
+                stroke: StatePaint::from_raw(PSEUDO_COLOR),
+                line_thickness: 1.0,
+                shadow: 0.0,
+            },
+        ),
+        StatePseudoImage::End => (
+            &["root", "element", "stateDiagram", "circle", "end"][..],
+            StatePseudoStyle {
+                fill: StatePaint::from_raw(PSEUDO_COLOR),
+                stroke: StatePaint::from_raw(PSEUDO_COLOR),
+                line_thickness: 1.0,
+                shadow: 0.0,
+            },
+        ),
+        StatePseudoImage::Choice => (
+            &["root", "element", "activityDiagram", "activity", "diamond"][..],
+            StatePseudoStyle {
+                fill: StatePaint::from_raw(DEFAULT_STATE_FILL),
+                stroke: StatePaint::from_raw(DEFAULT_STROKE_COLOR),
+                line_thickness: 0.5,
+                shadow: 0.0,
+            },
+        ),
+        StatePseudoImage::Bar => (
+            &["root", "element", "activityDiagram", "activityBar"][..],
+            StatePseudoStyle {
+                fill: StatePaint::from_raw(BAR_COLOR),
+                stroke: StatePaint::Transparent,
+                line_thickness: 1.0,
+                shadow: 0.0,
+            },
+        ),
+        StatePseudoImage::History => (
+            &["root", "element", "stateDiagram", "diamond"][..],
+            StatePseudoStyle {
+                fill: StatePaint::from_raw(DEFAULT_STATE_FILL),
+                stroke: StatePaint::from_raw(DEFAULT_STROKE_COLOR),
+                line_thickness: 0.5,
+                shadow: 0.0,
+            },
+        ),
+    };
+    let mut signature = StyleSignature::from_selectors(selectors);
+    if matches!(image, StatePseudoImage::Bar)
+        && let Some(stereotype) = stereotype
+    {
+        signature = signature.with_stereotype(stereotype);
+    }
+    let resolved =
+        StyleCascade::new(&diagram.meta.style_program).resolve(&signature, StyleScheme::Regular);
+    if let Some(value) = resolved.property("backgroundColor") {
+        style.fill = StatePaint::from_raw(value);
+    }
+    if let Some(value) = resolved.property("lineColor") {
+        style.stroke = StatePaint::from_raw(value);
+    }
+    if let Some(value) = resolved.property("lineThickness")
+        && let Ok(value) = value.parse::<f64>()
+    {
+        style.line_thickness = value;
+    }
+    if let Some(value) = resolved.property("shadowing") {
+        style.shadow = state_shadow_value(value, style.shadow);
+    }
+    style
+}
+
+fn state_pseudostates_have_shadow(diagram: &StateDiagram) -> bool {
+    [
+        StatePseudoImage::Start,
+        StatePseudoImage::End,
+        StatePseudoImage::Choice,
+        StatePseudoImage::History,
+    ]
+    .into_iter()
+    .any(|image| state_pseudostate_style(diagram, image, None).shadow > 0.0)
+        || diagram.states.iter().any(|state| {
+            matches!(state.kind, StateKind::Fork | StateKind::Join)
+                && state_pseudostate_style(
+                    diagram,
+                    StatePseudoImage::Bar,
+                    state.stereotype.as_deref(),
+                )
+                .shadow
+                    > 0.0
+        })
 }
 
 #[derive(Clone)]
@@ -2124,6 +2288,77 @@ impl AutonomousTextStyle {
             },
         );
     }
+}
+
+fn state_skinparam_preferred_value(diagram: &StateDiagram, keys: &[&str]) -> Option<String> {
+    keys.iter().find_map(|key| {
+        diagram
+            .meta
+            .skinparams
+            .iter()
+            .rev()
+            .find(|skinparam| skinparam.key.eq_ignore_ascii_case(key))
+            .map(|skinparam| skinparam.value.trim().to_string())
+    })
+}
+
+fn state_history_text_style(diagram: &StateDiagram, state: Option<&State>) -> AutonomousTextStyle {
+    let stereotype = state.and_then(|state| state.stereotype.as_deref());
+    let stereotype_value = |attribute: &str| {
+        stereotype.and_then(|stereotype| stereotype_state_value(diagram, stereotype, attribute))
+    };
+    let color = stereotype_value("FontColor")
+        .or_else(|| {
+            state_skinparam_preferred_value(diagram, &["stateFontColor", "defaultFontColor"])
+        })
+        .map(|value| crate::sequence::resolve_color(&value))
+        .unwrap_or_else(|| DEFAULT_TEXT_COLOR.to_string());
+    let family = stereotype_value("FontName")
+        .or_else(|| {
+            state_skinparam_preferred_value(
+                diagram,
+                &["stateFontName", "defaultFontName", "fontName"],
+            )
+        })
+        .map(|value| canonical_state_font_family(&value))
+        .filter(|value| !value.is_empty())
+        .unwrap_or_else(|| "sans-serif".to_string());
+    let size = stereotype_value("FontSize")
+        .or_else(|| state_skinparam_preferred_value(diagram, &["stateFontSize", "defaultFontSize"]))
+        .and_then(|value| value.parse::<f64>().ok())
+        .unwrap_or(STATE_FONT_SIZE);
+    let face = stereotype_value("FontStyle")
+        .or_else(|| {
+            state_skinparam_preferred_value(diagram, &["stateFontStyle", "defaultFontStyle"])
+        })
+        .unwrap_or_default()
+        .to_ascii_lowercase();
+    let (bold, italic) = match face.trim() {
+        "bold" | "bolder" => (true, false),
+        "italic" => (false, true),
+        "plain" | "normal" | "lighter" => (false, false),
+        value => (
+            value
+                .parse::<u16>()
+                .ok()
+                .is_some_and(|weight| weight >= 700),
+            false,
+        ),
+    };
+    AutonomousTextStyle {
+        color,
+        family,
+        size,
+        bold,
+        italic,
+    }
+}
+
+fn state_history_label_baseline(style: &AutonomousTextStyle, label: &str, center_y: f64) -> f64 {
+    // Java centers the complete FontParam.STATE display block in the 22px
+    // ellipse, so the baseline follows the selected family's own ascent and
+    // height rather than a sans-serif constant.
+    center_y - style.height(label) / 2.0 + style.ascent(label)
 }
 
 #[derive(Clone)]
@@ -2294,7 +2529,7 @@ fn autonomous_state_style(
     );
 
     let mut style = AutonomousStateStyle {
-        fill: stereo_color(&["BackgroundColor"]).unwrap_or_else(|| skin.state_fill.clone()),
+        fill: stereo_value(&["BackgroundColor"]).unwrap_or_else(|| skin.state_fill.clone()),
         stroke: stereo_color(&["BorderColor"]).unwrap_or_else(|| skin.stroke.clone()),
         border_thickness: stereo_value(&["BorderThickness"])
             .and_then(|value| value.parse::<f64>().ok())
@@ -2333,7 +2568,7 @@ fn autonomous_state_style(
     let header_style = cascade.resolve(&header_signature, StyleScheme::Regular);
 
     if let Some(value) = state_style.property("backgroundColor") {
-        style.fill = crate::sequence::resolve_color(value);
+        style.fill = value.trim().to_string();
     }
     if let Some(value) = state_style.property("lineColor") {
         style.stroke = crate::sequence::resolve_color(value);
@@ -2577,6 +2812,7 @@ struct AutonomousRenderContext<'a> {
     allocated_ids: &'a StateSvgIds,
     skin: &'a StateSkin,
     shadow_filter_id: Option<String>,
+    paint_registry: std::cell::RefCell<StateGradientRegistry>,
 }
 
 fn autonomous_shadow_attr(context: &AutonomousRenderContext<'_>, shadow: f64) -> String {
@@ -2586,6 +2822,14 @@ fn autonomous_shadow_attr(context: &AutonomousRenderContext<'_>, shadow: f64) ->
         .filter(|_| shadow > 0.0)
         .map(|id| format!(r#" filter="url(#{id})""#))
         .unwrap_or_default()
+}
+
+fn autonomous_paint(context: &AutonomousRenderContext<'_>, paint: &StatePaint) -> String {
+    context.paint_registry.borrow_mut().use_paint(paint)
+}
+
+fn autonomous_raw_paint(context: &AutonomousRenderContext<'_>, value: &str) -> String {
+    context.paint_registry.borrow_mut().use_raw(value)
 }
 
 fn endpoint_parent_scope<'a>(
@@ -2806,9 +3050,10 @@ fn autonomous_scope_painted_bounds(
             } else {
                 "H"
             };
-            let text_width = text_render::measure(label, STATE_FONT_SIZE, false);
-            let baseline = y + height / 2.0 + HISTORY_LABEL_BASELINE_OFFSET;
-            let text_height = text_render::label_height(label, STATE_FONT_SIZE);
+            let text_style = state_history_text_style(diagram, Some(state));
+            let text_width = text_style.width(label);
+            let baseline = state_history_label_baseline(&text_style, label, y + height / 2.0);
+            let text_height = text_style.height(label);
             bounds.include(
                 x + width / 2.0 - text_width / 2.0,
                 baseline - text_height + LIMIT_FINDER_TEXT_ADJUST,
@@ -3683,8 +3928,6 @@ fn emit_autonomous_scope_entities(
     skip_composites: bool,
 ) {
     let (offset_x, offset_y) = offset;
-    let default_style = autonomous_state_style(context.diagram, context.skin, None);
-    let default_shadow_attr = autonomous_shadow_attr(context, default_style.shadow);
     for (id, cx, cy, width, height) in &scope.positions {
         let layout_cy = *cy;
         let cx = cx + offset_x;
@@ -3692,23 +3935,34 @@ fn emit_autonomous_scope_entities(
         if let Some(qualified_name) = autonomous_pseudo_name(id) {
             let source_line = autonomous_pseudo_source_line(context.diagram, id);
             if id.starts_with("__start__") {
+                let style = state_pseudostate_style(context.diagram, StatePseudoImage::Start, None);
+                let fill = autonomous_paint(context, &style.fill);
+                let stroke = autonomous_paint(context, &style.stroke);
+                let shadow_attr = autonomous_shadow_attr(context, style.shadow);
                 write!(
                     svg,
-                    r#"<g class="start_entity" data-qualified-name="{qualified_name}" data-source-line="{source_line}" id="{}"><ellipse cx="{}" cy="{}" fill="{PSEUDO_COLOR}"{default_shadow_attr} rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/></g>"#,
+                    r#"<g class="start_entity" data-qualified-name="{qualified_name}" data-source-line="{source_line}" id="{}"><ellipse cx="{}" cy="{}" fill="{fill}"{shadow_attr} rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{stroke};stroke-width:{};"/></g>"#,
                     autonomous_entity_id(context.entity_ids, id),
                     fmt_f(cx),
                     fmt_f(cy),
+                    fmt_f(style.line_thickness),
                 )
                 .unwrap();
             } else {
+                let style = state_pseudostate_style(context.diagram, StatePseudoImage::End, None);
+                let fill = autonomous_paint(context, &style.fill);
+                let stroke = autonomous_paint(context, &style.stroke);
+                let shadow_attr = autonomous_shadow_attr(context, style.shadow);
                 write!(
                     svg,
-                    r#"<g class="end_entity" data-qualified-name="{qualified_name}" data-source-line="{source_line}" id="{}"><ellipse cx="{}" cy="{}" fill="none"{default_shadow_attr} rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/><ellipse cx="{}" cy="{}" fill="{PSEUDO_COLOR}" rx="{END_INNER_RADIUS}" ry="{END_INNER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/></g>"#,
+                    r#"<g class="end_entity" data-qualified-name="{qualified_name}" data-source-line="{source_line}" id="{}"><ellipse cx="{}" cy="{}" fill="none"{shadow_attr} rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{stroke};stroke-width:{};"/><ellipse cx="{}" cy="{}" fill="{fill}" rx="{END_INNER_RADIUS}" ry="{END_INNER_RADIUS}" style="stroke:{stroke};stroke-width:{};"/></g>"#,
                     autonomous_entity_id(context.entity_ids, id),
                     fmt_f(cx),
                     fmt_f(cy),
+                    fmt_f(style.line_thickness),
                     fmt_f(cx),
                     fmt_f(cy),
+                    fmt_f(style.line_thickness),
                 )
                 .unwrap();
             }
@@ -3725,52 +3979,59 @@ fn emit_autonomous_scope_entities(
         let entity_position = StateEntityPosition::of(state);
         match state.kind {
             StateKind::Initial => {
-                let fill = state
-                    .fill
-                    .as_deref()
-                    .map(crate::sequence::resolve_color)
-                    .unwrap_or_else(|| PSEUDO_COLOR.to_string());
+                let style = state_pseudostate_style(context.diagram, StatePseudoImage::Start, None);
+                let fill = state.fill.as_deref().map_or_else(
+                    || autonomous_paint(context, &style.fill),
+                    |fill| autonomous_raw_paint(context, fill),
+                );
+                let stroke = autonomous_paint(context, &style.stroke);
+                let shadow_attr = autonomous_shadow_attr(context, style.shadow);
                 write!(
                     svg,
-                    r#"<g class="start_entity" data-qualified-name="{}" data-source-line="{}" id="{}"><ellipse cx="{}" cy="{}" fill="{fill}"{default_shadow_attr} rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/></g>"#,
+                    r#"<g class="start_entity" data-qualified-name="{}" data-source-line="{}" id="{}"><ellipse cx="{}" cy="{}" fill="{fill}"{shadow_attr} rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{stroke};stroke-width:{};"/></g>"#,
                     escape_attr(&state.id),
                     state.source_line,
                     autonomous_entity_id(context.entity_ids, id),
                     fmt_f(cx),
                     fmt_f(cy),
+                    fmt_f(style.line_thickness),
                 )
                 .unwrap();
                 continue;
             }
             StateKind::Final => {
-                let fill = state
-                    .fill
-                    .as_deref()
-                    .map(crate::sequence::resolve_color)
-                    .unwrap_or_else(|| PSEUDO_COLOR.to_string());
+                let style = state_pseudostate_style(context.diagram, StatePseudoImage::End, None);
+                let fill = state.fill.as_deref().map_or_else(
+                    || autonomous_paint(context, &style.fill),
+                    |fill| autonomous_raw_paint(context, fill),
+                );
+                let stroke = autonomous_paint(context, &style.stroke);
+                let shadow_attr = autonomous_shadow_attr(context, style.shadow);
                 write!(
                     svg,
-                    r#"<g class="end_entity" data-qualified-name="{}" data-source-line="{}" id="{}"><ellipse cx="{}" cy="{}" fill="none"{default_shadow_attr} rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/><ellipse cx="{}" cy="{}" fill="{fill}" rx="{END_INNER_RADIUS}" ry="{END_INNER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/></g>"#,
+                    r#"<g class="end_entity" data-qualified-name="{}" data-source-line="{}" id="{}"><ellipse cx="{}" cy="{}" fill="none"{shadow_attr} rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{stroke};stroke-width:{};"/><ellipse cx="{}" cy="{}" fill="{fill}" rx="{END_INNER_RADIUS}" ry="{END_INNER_RADIUS}" style="stroke:{stroke};stroke-width:{};"/></g>"#,
                     escape_attr(&state.id),
                     state.source_line,
                     autonomous_entity_id(context.entity_ids, id),
                     fmt_f(cx),
                     fmt_f(cy),
+                    fmt_f(style.line_thickness),
                     fmt_f(cx),
                     fmt_f(cy),
+                    fmt_f(style.line_thickness),
                 )
                 .unwrap();
                 continue;
             }
             StateKind::Choice => {
-                let fill = state
-                    .fill
-                    .as_deref()
-                    .map(crate::sequence::resolve_color)
-                    .unwrap_or_else(|| context.skin.state_fill.clone());
+                let style =
+                    state_pseudostate_style(context.diagram, StatePseudoImage::Choice, None);
+                let fill = autonomous_paint(context, &style.fill);
+                let stroke = autonomous_paint(context, &style.stroke);
+                let shadow_attr = autonomous_shadow_attr(context, style.shadow);
                 write!(
                     svg,
-                    r#"<g class="entity" data-qualified-name="{}" id="{}"><polygon fill="{fill}" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{};stroke-width:0.5;"/></g>"#,
+                    r#"<g class="entity" data-qualified-name="{}" id="{}"><polygon fill="{fill}"{shadow_attr} points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{stroke};stroke-width:{};"/></g>"#,
                     escape_attr(&state.id),
                     autonomous_entity_id(context.entity_ids, id),
                     fmt_f(cx),
@@ -3783,20 +4044,22 @@ fn emit_autonomous_scope_entities(
                     fmt_f(cy),
                     fmt_f(cx),
                     fmt_f(cy - CHOICE_SIZE),
-                    context.skin.stroke,
+                    fmt_f(style.line_thickness),
                 )
                 .unwrap();
                 continue;
             }
             StateKind::Fork | StateKind::Join => {
-                let fill = state
-                    .fill
-                    .as_deref()
-                    .map(crate::sequence::resolve_color)
-                    .unwrap_or_else(|| BAR_COLOR.to_string());
+                let style = state_pseudostate_style(
+                    context.diagram,
+                    StatePseudoImage::Bar,
+                    state.stereotype.as_deref(),
+                );
+                let fill = autonomous_paint(context, &style.fill);
+                let shadow_attr = autonomous_shadow_attr(context, style.shadow);
                 write!(
                     svg,
-                    r#"<rect fill="{fill}" height="{}" style="stroke:none;stroke-width:1;" width="{}" x="{}" y="{}"/>"#,
+                    r#"<rect fill="{fill}"{shadow_attr} height="{}" style="stroke:none;stroke-width:1;" width="{}" x="{}" y="{}"/>"#,
                     fmt_f(*height),
                     fmt_f(*width),
                     fmt_f(cx - width / 2.0),
@@ -3811,40 +4074,37 @@ fn emit_autonomous_scope_entities(
                 } else {
                     "H"
                 };
-                let fill = state
-                    .fill
-                    .as_deref()
-                    .map(crate::sequence::resolve_color)
-                    .unwrap_or_else(|| context.skin.state_fill.clone());
+                let style =
+                    state_pseudostate_style(context.diagram, StatePseudoImage::History, None);
+                let fill = autonomous_paint(context, &style.fill);
+                let stroke = autonomous_paint(context, &style.stroke);
+                let shadow_attr = autonomous_shadow_attr(context, style.shadow);
                 write!(
                     svg,
-                    r#"<ellipse cx="{}" cy="{}" fill="{fill}" rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{};stroke-width:0.5;"/>"#,
+                    r#"<ellipse cx="{}" cy="{}" fill="{fill}"{shadow_attr} rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{stroke};stroke-width:{};"/>"#,
                     fmt_f(cx),
                     fmt_f(cy),
-                    context.skin.stroke,
+                    fmt_f(style.line_thickness),
                 )
                 .unwrap();
-                let text_width = text_render::measure(label, STATE_FONT_SIZE, false);
-                write!(
+                let text_style = state_history_text_style(context.diagram, Some(state));
+                let text_width = text_style.width(label);
+                text_style.emit(
                     svg,
-                    r#"<text fill="{}" font-family="sans-serif" font-size="{STATE_FONT_SIZE}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{label}</text>"#,
-                    context.skin.text_color,
-                    fmt_f(text_width),
-                    fmt_f(cx - text_width / 2.0),
-                    fmt_f(cy + HISTORY_LABEL_BASELINE_OFFSET),
-                )
-                .unwrap();
+                    label,
+                    cx - text_width / 2.0,
+                    state_history_label_baseline(&text_style, label, cy),
+                );
                 continue;
             }
             StateKind::EntryPoint | StateKind::ExitPoint | StateKind::Normal
                 if !entity_position.is_normal() =>
             {
                 let style = autonomous_state_style(context.diagram, context.skin, Some(state));
-                let fill = state
-                    .fill
-                    .as_deref()
-                    .map(crate::sequence::resolve_color)
-                    .unwrap_or_else(|| style.fill.clone());
+                let fill = state.fill.as_deref().map_or_else(
+                    || autonomous_raw_paint(context, &style.fill),
+                    |fill| autonomous_raw_paint(context, fill),
+                );
                 let (image_width, image_height) = entity_position.dimensions();
                 let label_width = style.title.width(&state.label);
                 let label_height = style.title.height(&state.label);
@@ -3943,11 +4203,10 @@ fn emit_autonomous_scope_entities(
         let box_y = cy - height / 2.0;
         let style = autonomous_state_style(context.diagram, context.skin, Some(state));
         let shadow_attr = autonomous_shadow_attr(context, style.shadow);
-        let fill = state
-            .fill
-            .as_deref()
-            .map(crate::sequence::resolve_color)
-            .unwrap_or_else(|| style.fill.clone());
+        let fill = state.fill.as_deref().map_or_else(
+            || autonomous_raw_paint(context, &style.fill),
+            |fill| autonomous_raw_paint(context, fill),
+        );
         let stroke = state
             .stroke
             .as_deref()
@@ -4244,12 +4503,12 @@ fn emit_autonomous_empty_concurrent_state(
     let (width, height) = size;
     let style = autonomous_state_style(context.diagram, context.skin, None);
     let shadow_attr = autonomous_shadow_attr(context, style.shadow);
+    let fill = autonomous_raw_paint(context, &style.fill);
     write!(
         svg,
-        r#"<g class="entity" data-qualified-name="{}" id="{}"><rect fill="{}"{shadow_attr} height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/><line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
+        r#"<g class="entity" data-qualified-name="{}" id="{}"><rect fill="{fill}"{shadow_attr} height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/><line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
         escape_attr(id),
         autonomous_entity_id(context.entity_ids, id),
-        style.fill,
         fmt_f(height),
         style.stroke,
         style.border_thickness,
@@ -4289,12 +4548,10 @@ fn emit_autonomous_composite(
     let title_divider_y = box_y + 5.0 + style.title.height(&composite.state.label) + 5.0;
     let header_divider_y = title_divider_y + composite.attribute_height + composite.field_margin;
     let right = box_x + composite.width;
-    let header_fill = composite
-        .state
-        .fill
-        .as_deref()
-        .map(crate::sequence::resolve_color)
-        .unwrap_or_else(|| style.fill.clone());
+    let header_fill = composite.state.fill.as_deref().map_or_else(
+        || autonomous_raw_paint(context, &style.fill),
+        |fill| autonomous_raw_paint(context, fill),
+    );
     let stroke = composite
         .state
         .stroke
@@ -4496,25 +4753,23 @@ fn render_autonomous_composite(diagram: &StateDiagram) -> Option<String> {
             || diagram
                 .states
                 .iter()
-                .any(|state| autonomous_state_style(diagram, &skin, Some(state)).shadow > 0.0))
+                .any(|state| autonomous_state_style(diagram, &skin, Some(state)).shadow > 0.0)
+            || state_pseudostates_have_shadow(diagram))
         .then(|| {
             crate::filter_registry::shadow_id_for(diagram.meta.source.as_deref().unwrap_or(""))
         }),
+        paint_registry: std::cell::RefCell::new(StateGradientRegistry::new(diagram)),
     };
     let width = outer.width.ceil() as i64;
     let height = outer.height.ceil() as i64;
     let mut svg = String::with_capacity(4096);
-    let defs = context
-        .shadow_filter_id
-        .as_deref()
-        .map(crate::filter_registry::shadow_filter_def)
-        .map(|content| format!("<defs>{content}</defs>"))
-        .unwrap_or_else(|| "<defs/>".to_string());
     write!(
         svg,
-        r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="STATE" height="{height}px" preserveAspectRatio="none" style="width:{width}px;height:{height}px;background:#FFFFFF;" version="1.1" viewBox="0 0 {width} {height}" width="{width}px" zoomAndPan="magnify"><?plantuml ?>{defs}<g>"#,
+        r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="STATE" height="{height}px" preserveAspectRatio="none" style="width:{width}px;height:{height}px;background:#FFFFFF;" version="1.1" viewBox="0 0 {width} {height}" width="{width}px" zoomAndPan="magnify"><?plantuml ?>"#,
     )
     .unwrap();
+    let defs_insert_at = svg.len();
+    svg.push_str("<g>");
 
     for live_cluster in &live_clusters {
         let cluster = outer
@@ -4570,6 +4825,11 @@ fn render_autonomous_composite(diagram: &StateDiagram) -> Option<String> {
     }
     emit_autonomous_scope_links(&mut svg, &context, &outer, (0.0, 0.0));
     svg.push_str("</g></svg>");
+    let defs = state_defs(
+        &context.paint_registry.borrow(),
+        context.shadow_filter_id.as_deref(),
+    );
+    svg.insert_str(defs_insert_at, &defs);
     Some(svg)
 }
 
@@ -5292,25 +5552,23 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
             || diagram
                 .states
                 .iter()
-                .any(|state| autonomous_state_style(diagram, &skin, Some(state)).shadow > 0.0))
+                .any(|state| autonomous_state_style(diagram, &skin, Some(state)).shadow > 0.0)
+            || state_pseudostates_have_shadow(diagram))
         .then(|| {
             crate::filter_registry::shadow_id_for(diagram.meta.source.as_deref().unwrap_or(""))
         }),
+        paint_registry: std::cell::RefCell::new(StateGradientRegistry::new(diagram)),
     };
     let width = scope.width.ceil() as i64;
     let height = scope.height.ceil() as i64;
     let mut svg = String::with_capacity(4096);
-    let defs = context
-        .shadow_filter_id
-        .as_deref()
-        .map(crate::filter_registry::shadow_filter_def)
-        .map(|content| format!("<defs>{content}</defs>"))
-        .unwrap_or_else(|| "<defs/>".to_string());
     write!(
         svg,
-        r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="STATE" height="{height}px" preserveAspectRatio="none" style="width:{width}px;height:{height}px;background:#FFFFFF;" version="1.1" viewBox="0 0 {width} {height}" width="{width}px" zoomAndPan="magnify"><?plantuml ?>{defs}<g>"#,
+        r#"<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="STATE" height="{height}px" preserveAspectRatio="none" style="width:{width}px;height:{height}px;background:#FFFFFF;" version="1.1" viewBox="0 0 {width} {height}" width="{width}px" zoomAndPan="magnify"><?plantuml ?>"#,
     )
     .unwrap();
+    let defs_insert_at = svg.len();
+    svg.push_str("<g>");
 
     for composite in &composites {
         let cluster = result
@@ -5363,6 +5621,11 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
     );
     emit_autonomous_scope_links(&mut svg, &context, &scope, (0.0, 0.0));
     svg.push_str("</g></svg>");
+    let defs = state_defs(
+        &context.paint_registry.borrow(),
+        context.shadow_filter_id.as_deref(),
+    );
+    svg.insert_str(defs_insert_at, &defs);
     Some(svg)
 }
 
@@ -5381,6 +5644,7 @@ fn emit_root_state_cluster(
     let divider_y = y + CLUSTER_HEADER_DIVIDER_OFFSET;
     let style = autonomous_state_style(context.diagram, context.skin, Some(composite));
     let shadow_attr = autonomous_shadow_attr(context, style.shadow);
+    let fill = autonomous_raw_paint(context, &style.fill);
     write!(
         svg,
         r#"<g class="cluster" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
@@ -5419,7 +5683,7 @@ fn emit_root_state_cluster(
         fmt_f(y + STATE_RX),
         fmt_f(x + STATE_RX),
         fmt_f(y),
-        style.fill,
+        fill,
         fmt_f(height),
         style.stroke,
         style.border_thickness,
@@ -5650,31 +5914,6 @@ pub fn render_with_oracle(
     let STROKE_COLOR: &str = skin.stroke.as_str();
     #[allow(non_snake_case)]
     let TEXT_COLOR: &str = skin.text_color.as_str();
-    #[allow(non_snake_case)]
-    let STATE_FILL: &str = skin.state_fill.as_str();
-    let apply_themed_pseudo_colors = bg_is_transparent;
-    let start_fill = if apply_themed_pseudo_colors {
-        skin.start_color.as_deref().unwrap_or(PSEUDO_COLOR)
-    } else {
-        PSEUDO_COLOR
-    };
-    let start_stroke = if apply_themed_pseudo_colors && skin.start_color.is_some() {
-        skin.root_line_color.as_deref().unwrap_or(PSEUDO_COLOR)
-    } else {
-        PSEUDO_COLOR
-    };
-    let end_stroke = if apply_themed_pseudo_colors {
-        skin.end_color.as_deref().unwrap_or(PSEUDO_COLOR)
-    } else {
-        PSEUDO_COLOR
-    };
-    let end_inner_fill =
-        if apply_themed_pseudo_colors && skin.end_color.is_some() && skin.root_line_color.is_some()
-        {
-            "none"
-        } else {
-            PSEUDO_COLOR
-        };
 
     // Resolve the state-box font size. PlantUML applies `skinparam stateFontSize`,
     // `stateAttributeFontSize`, or the global `defaultFontSize` uniformly to both
@@ -6600,7 +6839,15 @@ pub fn render_with_oracle(
     // --- Build SVG ---
     let w = total_width.ceil() as i64;
     let h = total_height.ceil() as i64;
-    let gradients = state_gradients(diagram);
+    let mut paint_registry = StateGradientRegistry::new(diagram);
+    let generated_shadow_filter_id = (oracle.is_none()
+        && (autonomous_state_style(diagram, &skin, None).shadow > 0.0
+            || diagram
+                .states
+                .iter()
+                .any(|state| autonomous_state_style(diagram, &skin, Some(state)).shadow > 0.0)
+            || state_pseudostates_have_shadow(diagram)))
+    .then(|| crate::filter_registry::shadow_id_for(diagram.meta.source.as_deref().unwrap_or("")));
 
     let mut svg = String::with_capacity(4096);
     let root_style = if bg_is_transparent {
@@ -6615,33 +6862,25 @@ pub fn render_with_oracle(
     .unwrap();
 
     svg.push_str("<?plantuml ?>");
-    // Emit any `<defs>` the oracle captured verbatim (e.g. the
-    // `<linearGradient>` PlantUML generates for `state X #c1/c2` fills). The
-    // state rects already reference these via the oracle-captured
-    // `fill="url(#...)"`, so the ids must be kept live in `<defs>`.
-    match oracle.map(|o| o.defs_inner_xml.as_str()) {
-        Some(defs) if !defs.is_empty() => {
-            svg.push_str("<defs>");
-            svg.push_str(defs);
-            svg.push_str("</defs>");
-        }
-        _ if gradients.is_empty() => svg.push_str("<defs/>"),
-        _ => {
-            svg.push_str("<defs>");
-            emit_state_gradient_defs(&mut svg, &gradients);
-            svg.push_str("</defs>");
-        }
-    }
+    let defs_insert_at = svg.len();
     svg.push_str("<g>");
 
     // `skinparam shadowing true` adds a `filter="url(#...)"` drop-shadow to
     // every shape. The filter def is in the captured `defs_inner_xml`; its id
     // is global to the diagram, so recover it from the first entity rect that
     // carries one and echo it after `fill="…"` on each shape.
-    let shadow_attr: String = oracle
+    let oracle_shadow_attr: Option<String> = oracle
         .and_then(|orc| orc.entities.values().find_map(|r| r.rect_filter.as_deref()))
-        .map(|f| format!(r#" filter="{f}""#))
-        .unwrap_or_default();
+        .map(|f| format!(r#" filter="{f}""#));
+    let shadow_attr_for = |shadow: f64| {
+        oracle_shadow_attr.clone().unwrap_or_else(|| {
+            generated_shadow_filter_id
+                .as_deref()
+                .filter(|_| shadow > 0.0)
+                .map(|id| format!(r#" filter="url(#{id})""#))
+                .unwrap_or_default()
+        })
+    };
 
     if has_explicit_background && bg_color != "#FFFFFF" {
         write!(
@@ -6834,11 +7073,16 @@ pub fn render_with_oracle(
             if let Some(polygon) = orc_rect.and_then(|r| r.body_polygon.as_ref()) {
                 emit_entity_polygon(&mut svg, polygon);
             } else {
+                let style = state_pseudostate_style(diagram, StatePseudoImage::Start, None);
+                let start_fill = paint_registry.use_paint(&style.fill);
+                let start_stroke = paint_registry.use_paint(&style.stroke);
+                let shadow_attr = shadow_attr_for(style.shadow);
                 write!(
                         svg,
-                        r#"<ellipse cx="{}" cy="{}" fill="{start_fill}"{shadow_attr} rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{start_stroke};stroke-width:1;"/>"#,
+                        r#"<ellipse cx="{}" cy="{}" fill="{start_fill}"{shadow_attr} rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{start_stroke};stroke-width:{};"/>"#,
                         fmt_f(*cx),
                         fmt_f(*cy),
+                        fmt_f(style.line_thickness),
                     )
                 .unwrap();
             }
@@ -6862,22 +7106,30 @@ pub fn render_with_oracle(
             if let Some(polygon) = orc_rect.and_then(|r| r.body_polygon.as_ref()) {
                 emit_entity_polygon(&mut svg, polygon);
             } else {
+                let style = state_pseudostate_style(diagram, StatePseudoImage::End, None);
+                let end_stroke = paint_registry.use_paint(&style.stroke);
+                let shadow_attr = shadow_attr_for(style.shadow);
                 write!(
                         svg,
-                        r#"<ellipse cx="{}" cy="{}" fill="none"{shadow_attr} rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{end_stroke};stroke-width:1;"/>"#,
+                        r#"<ellipse cx="{}" cy="{}" fill="none"{shadow_attr} rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{end_stroke};stroke-width:{};"/>"#,
                         fmt_f(*cx),
                         fmt_f(*cy),
+                        fmt_f(style.line_thickness),
                     )
                 .unwrap();
             }
             if let Some(polygon) = orc_rect.and_then(|r| r.icon_polygon.as_ref()) {
                 emit_entity_polygon(&mut svg, polygon);
             } else {
+                let style = state_pseudostate_style(diagram, StatePseudoImage::End, None);
+                let end_inner_fill = paint_registry.use_paint(&style.fill);
+                let end_stroke = paint_registry.use_paint(&style.stroke);
                 write!(
                         svg,
-                        r#"<ellipse cx="{}" cy="{}" fill="{end_inner_fill}" rx="{END_INNER_RADIUS}" ry="{END_INNER_RADIUS}" style="stroke:{end_stroke};stroke-width:1;"/>"#,
+                        r#"<ellipse cx="{}" cy="{}" fill="{end_inner_fill}" rx="{END_INNER_RADIUS}" ry="{END_INNER_RADIUS}" style="stroke:{end_stroke};stroke-width:{};"/>"#,
                         fmt_f(*cx),
                         fmt_f(*cy),
+                        fmt_f(style.line_thickness),
                     )
                 .unwrap();
             }
@@ -6893,23 +7145,27 @@ pub fn render_with_oracle(
                     })
                 })
                 .unwrap_or((*cx, *cy));
+            let style = state_pseudostate_style(diagram, StatePseudoImage::History, None);
+            let fill = paint_registry.use_paint(&style.fill);
+            let stroke = paint_registry.use_paint(&style.stroke);
+            let shadow_attr = shadow_attr_for(style.shadow);
             write!(
                 svg,
-                r#"<ellipse cx="{}" cy="{}" fill="{STATE_FILL}" rx="{h_radius}" ry="{h_radius}" style="stroke:{STROKE_COLOR};stroke-width:0.5;"/>"#,
-                fmt_f(px), fmt_f(py),
+                r#"<ellipse cx="{}" cy="{}" fill="{fill}"{shadow_attr} rx="{h_radius}" ry="{h_radius}" style="stroke:{stroke};stroke-width:{};"/>"#,
+                fmt_f(px),
+                fmt_f(py),
+                fmt_f(style.line_thickness),
             )
             .unwrap();
             let label = history_marker_label(id);
-            let tw = text_render::measure(label, STATE_FONT_SIZE, false);
-            let text_y = py + HISTORY_LABEL_BASELINE_OFFSET;
-            write!(
-                svg,
-                r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{STATE_FONT_SIZE}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{label}</text>"#,
-                fmt_f(tw),
-                fmt_f(px - tw / 2.0),
-                fmt_f(text_y),
-            )
-            .unwrap();
+            let text_style = state_history_text_style(diagram, None);
+            let text_width = text_style.width(label);
+            text_style.emit(
+                &mut svg,
+                label,
+                px - text_width / 2.0,
+                state_history_label_baseline(&text_style, label, py),
+            );
         } else {
             let state_def = find_state(id);
             match state_def.map(|s| s.kind) {
@@ -6921,14 +7177,20 @@ pub fn render_with_oracle(
                     // entity's `Colors` to `CircleStart`, whose `drawU`
                     // resolves `BackGroundColor` through that entity-aware
                     // color set before falling back to the merged style.
-                    let parser_fill = state_def
-                        .and_then(|state| state.fill.as_deref())
-                        .map(crate::sequence::resolve_color);
-                    let fill_color: String = oracle
+                    let style = state_pseudostate_style(diagram, StatePseudoImage::Start, None);
+                    let fill_color = oracle
                         .and_then(|orc| orc.entities.get(id.as_str()))
                         .and_then(|r| r.fill.clone())
-                        .or(parser_fill)
-                        .unwrap_or_else(|| PSEUDO_COLOR.to_string());
+                        .unwrap_or_else(|| {
+                            state_def
+                                .and_then(|state| state.fill.as_deref())
+                                .map_or_else(
+                                    || paint_registry.use_paint(&style.fill),
+                                    |fill| paint_registry.use_raw(fill),
+                                )
+                        });
+                    let stroke = paint_registry.use_paint(&style.stroke);
+                    let shadow_attr = shadow_attr_for(style.shadow);
                     write!(
                         svg,
                         r#"<g class="start_entity" data-qualified-name="{id}" data-source-line="{source_line}" id="{}">"#,
@@ -6941,9 +7203,10 @@ pub fn render_with_oracle(
                     } else {
                         write!(
                             svg,
-                            r#"<ellipse cx="{}" cy="{}" fill="{fill_color}" rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/>"#,
+                            r#"<ellipse cx="{}" cy="{}" fill="{fill_color}"{shadow_attr} rx="{START_RADIUS}" ry="{START_RADIUS}" style="stroke:{stroke};stroke-width:{};"/>"#,
                             fmt_f(*cx),
                             fmt_f(*cy),
+                            fmt_f(style.line_thickness),
                         )
                         .unwrap();
                     }
@@ -6957,14 +7220,20 @@ pub fn render_with_oracle(
                     // entity's `Colors` to `CircleEnd`, whose `drawU` uses
                     // the entity-aware `BackGroundColor` for the inner
                     // ellipse while retaining the style's line color.
-                    let parser_fill = state_def
-                        .and_then(|state| state.fill.as_deref())
-                        .map(crate::sequence::resolve_color);
-                    let inner_fill: String = oracle
+                    let style = state_pseudostate_style(diagram, StatePseudoImage::End, None);
+                    let inner_fill = oracle
                         .and_then(|orc| orc.entities.get(id.as_str()))
                         .and_then(|r| r.fill.clone())
-                        .or(parser_fill)
-                        .unwrap_or_else(|| PSEUDO_COLOR.to_string());
+                        .unwrap_or_else(|| {
+                            state_def
+                                .and_then(|state| state.fill.as_deref())
+                                .map_or_else(
+                                    || paint_registry.use_paint(&style.fill),
+                                    |fill| paint_registry.use_raw(fill),
+                                )
+                        });
+                    let stroke = paint_registry.use_paint(&style.stroke);
+                    let shadow_attr = shadow_attr_for(style.shadow);
                     write!(
                         svg,
                         r#"<g class="end_entity" data-qualified-name="{id}" data-source-line="{source_line}" id="{}">"#,
@@ -6977,9 +7246,10 @@ pub fn render_with_oracle(
                     } else {
                         write!(
                             svg,
-                            r#"<ellipse cx="{}" cy="{}" fill="none" rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/>"#,
+                            r#"<ellipse cx="{}" cy="{}" fill="none"{shadow_attr} rx="{END_OUTER_RADIUS}" ry="{END_OUTER_RADIUS}" style="stroke:{stroke};stroke-width:{};"/>"#,
                             fmt_f(*cx),
                             fmt_f(*cy),
+                            fmt_f(style.line_thickness),
                         )
                         .unwrap();
                     }
@@ -6988,9 +7258,10 @@ pub fn render_with_oracle(
                     } else {
                         write!(
                             svg,
-                            r#"<ellipse cx="{}" cy="{}" fill="{inner_fill}" rx="{END_INNER_RADIUS}" ry="{END_INNER_RADIUS}" style="stroke:{PSEUDO_COLOR};stroke-width:1;"/>"#,
+                            r#"<ellipse cx="{}" cy="{}" fill="{inner_fill}" rx="{END_INNER_RADIUS}" ry="{END_INNER_RADIUS}" style="stroke:{stroke};stroke-width:{};"/>"#,
                             fmt_f(*cx),
                             fmt_f(*cy),
+                            fmt_f(style.line_thickness),
                         )
                         .unwrap();
                     }
@@ -7010,19 +7281,22 @@ pub fn render_with_oracle(
                     let right = cx + CHOICE_SIZE;
                     let bottom = cy + CHOICE_SIZE;
                     let left = cx - CHOICE_SIZE;
-                    // Resolve fill from oracle (recovers `#color` skinparam) or default.
+                    let style = state_pseudostate_style(diagram, StatePseudoImage::Choice, None);
                     let fill_color: String = oracle
                         .and_then(|orc| orc.entities.get(id.as_str()))
                         .and_then(|r| r.fill.clone())
-                        .unwrap_or_else(|| STATE_FILL.to_string());
+                        .unwrap_or_else(|| paint_registry.use_paint(&style.fill));
+                    let stroke = paint_registry.use_paint(&style.stroke);
+                    let shadow_attr = shadow_attr_for(style.shadow);
                     write!(
                         svg,
-                        r#"<polygon fill="{fill_color}" points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{DEFAULT_STROKE_COLOR};stroke-width:0.5;"/>"#,
+                        r#"<polygon fill="{fill_color}"{shadow_attr} points="{},{},{},{},{},{},{},{},{},{}" style="stroke:{stroke};stroke-width:{};"/>"#,
                         fmt_f(*cx), fmt_f(top),
                         fmt_f(right), fmt_f(*cy),
                         fmt_f(*cx), fmt_f(bottom),
                         fmt_f(left), fmt_f(*cy),
                         fmt_f(*cx), fmt_f(top),
+                        fmt_f(style.line_thickness),
                     )
                     .unwrap();
                     svg.push_str("</g>");
@@ -7042,9 +7316,16 @@ pub fn render_with_oracle(
                             BAR_HEIGHT,
                         )
                     };
+                    let style = state_pseudostate_style(
+                        diagram,
+                        StatePseudoImage::Bar,
+                        state_def.and_then(|state| state.stereotype.as_deref()),
+                    );
+                    let fill = paint_registry.use_paint(&style.fill);
+                    let shadow_attr = shadow_attr_for(style.shadow);
                     write!(
                         svg,
-                        r#"<rect fill="{BAR_COLOR}" height="{}" style="stroke:none;stroke-width:1;" width="{}" x="{}" y="{}"/>"#,
+                        r#"<rect fill="{fill}"{shadow_attr} height="{}" style="stroke:none;stroke-width:1;" width="{}" x="{}" y="{}"/>"#,
                         fmt_f(bh_bar),
                         fmt_f(bw_bar),
                         fmt_f(bx),
@@ -7074,26 +7355,26 @@ pub fn render_with_oracle(
                             })
                         })
                         .unwrap_or((*cx, *cy));
+                    let style = state_pseudostate_style(diagram, StatePseudoImage::History, None);
+                    let fill = paint_registry.use_paint(&style.fill);
+                    let stroke = paint_registry.use_paint(&style.stroke);
+                    let shadow_attr = shadow_attr_for(style.shadow);
                     write!(
                         svg,
-                        r#"<ellipse cx="{}" cy="{}" fill="{STATE_FILL}" rx="{h_radius}" ry="{h_radius}" style="stroke:{STROKE_COLOR};stroke-width:0.5;"/>"#,
-                        fmt_f(px), fmt_f(py),
+                        r#"<ellipse cx="{}" cy="{}" fill="{fill}"{shadow_attr} rx="{h_radius}" ry="{h_radius}" style="stroke:{stroke};stroke-width:{};"/>"#,
+                        fmt_f(px),
+                        fmt_f(py),
+                        fmt_f(style.line_thickness),
                     )
                     .unwrap();
-                    let tw = text_render::measure("H", STATE_FONT_SIZE, false);
-                    // PlantUML's actual text baseline is empirically at
-                    // py + HISTORY_LABEL_BASELINE_OFFSET for the 14pt
-                    // sans-serif "H" glyph; the
-                    // analytic "py + font_size/3" form misses by ~1px.
-                    let text_y = py + HISTORY_LABEL_BASELINE_OFFSET;
-                    write!(
-                        svg,
-                        r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{STATE_FONT_SIZE}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">H</text>"#,
-                        fmt_f(tw),
-                        fmt_f(px - tw / 2.0),
-                        fmt_f(text_y),
-                    )
-                    .unwrap();
+                    let text_style = state_history_text_style(diagram, state_def);
+                    let text_width = text_style.width("H");
+                    text_style.emit(
+                        &mut svg,
+                        "H",
+                        px - text_width / 2.0,
+                        state_history_label_baseline(&text_style, "H", py),
+                    );
                 }
                 Some(StateKind::DeepHistory) => {
                     // Deep history pseudo-state — same bare-pair output as
@@ -7114,22 +7395,26 @@ pub fn render_with_oracle(
                             })
                         })
                         .unwrap_or((*cx, *cy));
+                    let style = state_pseudostate_style(diagram, StatePseudoImage::History, None);
+                    let fill = paint_registry.use_paint(&style.fill);
+                    let stroke = paint_registry.use_paint(&style.stroke);
+                    let shadow_attr = shadow_attr_for(style.shadow);
                     write!(
                         svg,
-                        r#"<ellipse cx="{}" cy="{}" fill="{STATE_FILL}" rx="{h_radius}" ry="{h_radius}" style="stroke:{STROKE_COLOR};stroke-width:0.5;"/>"#,
-                        fmt_f(px), fmt_f(py),
+                        r#"<ellipse cx="{}" cy="{}" fill="{fill}"{shadow_attr} rx="{h_radius}" ry="{h_radius}" style="stroke:{stroke};stroke-width:{};"/>"#,
+                        fmt_f(px),
+                        fmt_f(py),
+                        fmt_f(style.line_thickness),
                     )
                     .unwrap();
-                    let tw = text_render::measure("H*", STATE_FONT_SIZE, false);
-                    let text_y = py + HISTORY_LABEL_BASELINE_OFFSET;
-                    write!(
-                        svg,
-                        r#"<text fill="{TEXT_COLOR}" font-family="sans-serif" font-size="{STATE_FONT_SIZE}" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">H*</text>"#,
-                        fmt_f(tw),
-                        fmt_f(px - tw / 2.0),
-                        fmt_f(text_y),
-                    )
-                    .unwrap();
+                    let text_style = state_history_text_style(diagram, state_def);
+                    let text_width = text_style.width("H*");
+                    text_style.emit(
+                        &mut svg,
+                        "H*",
+                        px - text_width / 2.0,
+                        state_history_label_baseline(&text_style, "H*", py),
+                    );
                 }
                 _ => {
                     // Normal state box.
@@ -7148,12 +7433,13 @@ pub fn render_with_oracle(
                     // path; oracle wins when both exist.
                     let parser_fill = state_def
                         .and_then(|s| s.fill.as_deref())
-                        .map(|fill| state_gradient_fill(fill, &gradients));
+                        .map(|fill| paint_registry.use_raw(fill));
                     let fill_color: String = oracle
                         .and_then(|orc| orc.entities.get(id.as_str()))
                         .and_then(|r| r.fill.clone())
                         .or(parser_fill)
-                        .unwrap_or_else(|| rendered_style.fill.clone());
+                        .unwrap_or_else(|| paint_registry.use_raw(&rendered_style.fill));
+                    let shadow_attr = shadow_attr_for(rendered_style.shadow);
 
                     // Border style: `state X ##color` sets stroke colour;
                     // `##[dashed]color` adds a dash pattern; `##[bold]`
@@ -8026,6 +8312,11 @@ pub fn render_with_oracle(
     }
 
     svg.push_str("</g></svg>");
+    let defs = match oracle.map(|oracle| oracle.defs_inner_xml.as_str()) {
+        Some(contents) if !contents.is_empty() => format!("<defs>{contents}</defs>"),
+        _ => state_defs(&paint_registry, generated_shadow_filter_id.as_deref()),
+    };
+    svg.insert_str(defs_insert_at, &defs);
     svg
 }
 
@@ -12041,6 +12332,154 @@ CobaltDecision --> [*]
         assert_eq!(
             svg.matches(&format!(r#"fill="url(#{gradient1})""#)).count(),
             1
+        );
+    }
+
+    #[test]
+    fn pseudostate_images_resolve_their_java_owned_style_signatures() {
+        let input = concat!(
+            "@startuml\n",
+            "skinparam backgroundColor #ABCDEF\n",
+            "skinparam stateStartColor #101010\n",
+            "skinparam stateEndColor #202020\n",
+            "skinparam activityStartColor #123456\n",
+            "skinparam activityEndColor #654321\n",
+            "skinparam activityDiamondBackgroundColor #112233\n",
+            "skinparam activityDiamondBorderColor #445566\n",
+            "skinparam activityBarColor #778899\n",
+            "state Decision <<choice>>\n",
+            "state Split <<fork>>\n",
+            "state Recall <<history>>\n",
+            "@enduml\n",
+        );
+        let parsed = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::State(diagram) = &parsed else {
+            panic!("expected state diagram");
+        };
+        let start = state_pseudostate_style(diagram, StatePseudoImage::Start, None);
+        let end = state_pseudostate_style(diagram, StatePseudoImage::End, None);
+        let choice = state_pseudostate_style(diagram, StatePseudoImage::Choice, None);
+        let history = state_pseudostate_style(diagram, StatePseudoImage::History, None);
+        let split = diagram
+            .states
+            .iter()
+            .find(|state| state.kind == StateKind::Fork)
+            .unwrap();
+        let bar =
+            state_pseudostate_style(diagram, StatePseudoImage::Bar, split.stereotype.as_deref());
+
+        assert_eq!(start.fill, StatePaint::Solid("#123456".to_string()));
+        assert_eq!(start.stroke, StatePaint::Solid(PSEUDO_COLOR.to_string()));
+        assert_eq!(end.fill, StatePaint::Solid(PSEUDO_COLOR.to_string()));
+        assert_eq!(end.stroke, StatePaint::Solid("#654321".to_string()));
+        assert_eq!(choice.fill, StatePaint::Solid("#112233".to_string()));
+        assert_eq!(choice.stroke, StatePaint::Solid("#445566".to_string()));
+        assert_eq!(history.fill, choice.fill);
+        assert_eq!(history.stroke, choice.stroke);
+        assert_eq!(bar.fill, StatePaint::Solid("#778899".to_string()));
+    }
+
+    #[test]
+    fn pseudostate_style_projection_is_shared_by_flat_and_autonomous_paths() {
+        let styles = concat!(
+            "skinparam activityDiamondBackgroundColor #13579B\n",
+            "skinparam activityDiamondBorderColor #2468AC\n",
+            "skinparam activityBarColor #3579BD\n",
+        );
+        let graph = concat!(
+            "state Decision <<choice>> #AA0000\n",
+            "state Split <<fork>> #00AA00\n",
+            "state Recall <<history>> #0000AA\n",
+            "[*] --> Decision\n",
+            "Decision --> Split\n",
+            "Split --> Recall\n",
+            "Recall --> [*]\n",
+        );
+        let flat_input = format!("@startuml\n{styles}{graph}@enduml\n");
+        let flat = rustuml_parser::parse::parse(&flat_input).unwrap();
+        let rustuml_parser::diagram::Diagram::State(flat) = &flat else {
+            panic!("expected state diagram");
+        };
+        let flat_svg = render(flat, &Theme::default());
+
+        let nested_input =
+            format!("@startuml\n{styles}state Envelope {{\n{graph}}}\n[*] --> Envelope\n@enduml\n");
+        let nested = rustuml_parser::parse::parse(&nested_input).unwrap();
+        let rustuml_parser::diagram::Diagram::State(nested) = &nested else {
+            panic!("expected state diagram");
+        };
+        let nested_svg = render(nested, &Theme::default());
+
+        for svg in [&flat_svg, &nested_svg] {
+            assert!(svg.contains(r##"fill="#13579B""##));
+            assert!(svg.contains(r##"stroke:#2468AC;"##));
+            assert!(svg.contains(r##"fill="#3579BD""##));
+            assert!(!svg.contains(r##"fill="#AA0000""##));
+            assert!(!svg.contains(r##"fill="#00AA00""##));
+            assert!(!svg.contains(r##"fill="#0000AA""##));
+        }
+    }
+
+    #[test]
+    fn diamond_gradient_is_typed_and_reused_by_choice_and_history() {
+        let input = concat!(
+            "@startuml\n",
+            "skinparam activityDiamondBackgroundColor #010203-#A0B0C0\n",
+            "state Decision <<choice>>\n",
+            "state Recall <<history>>\n",
+            "@enduml\n",
+        );
+        let parsed = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::State(diagram) = &parsed else {
+            panic!("expected state diagram");
+        };
+        let choice = state_pseudostate_style(diagram, StatePseudoImage::Choice, None);
+        let history = state_pseudostate_style(diagram, StatePseudoImage::History, None);
+        let mut registry = StateGradientRegistry::new(diagram);
+
+        let choice_fill = registry.use_paint(&choice.fill);
+        let history_fill = registry.use_paint(&history.fill);
+        let gradient_id = crate::filter_registry::gradient_id_for(input, 0);
+
+        assert_eq!(choice_fill, format!("url(#{gradient_id})"));
+        assert_eq!(history_fill, choice_fill);
+        assert_eq!(registry.gradients.len(), 1);
+        let mut defs = String::new();
+        emit_state_gradient_defs(&mut defs, &registry);
+        assert!(defs.contains(r#"x1="50%" x2="50%" y1="0%" y2="100%""#));
+        assert!(defs.contains(r##"stop-color="#010203""##));
+        assert!(defs.contains(r##"stop-color="#A0B0C0""##));
+    }
+
+    #[test]
+    fn history_uses_state_font_channel_instead_of_attribute_font_channel() {
+        let input = concat!(
+            "@startuml\n",
+            "skinparam defaultFontName Verdana\n",
+            "skinparam stateFontColor #2468AC\n",
+            "skinparam stateAttributeFontColor #CC5500\n",
+            "skinparam stateFontSize 17\n",
+            "skinparam stateAttributeFontSize 9\n",
+            "state Recall <<history>>\n",
+            "@enduml\n",
+        );
+        let parsed = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::State(diagram) = &parsed else {
+            panic!("expected state diagram");
+        };
+        let history = diagram
+            .states
+            .iter()
+            .find(|state| state.kind == StateKind::History)
+            .unwrap();
+        let style = state_history_text_style(diagram, Some(history));
+
+        assert_eq!(style.color, "#2468AC");
+        assert_eq!(style.family, "Verdana");
+        assert_eq!(style.size, 17.0);
+        assert_ne!(
+            state_history_label_baseline(&style, "H", 50.0),
+            50.0 + HISTORY_LABEL_BASELINE_OFFSET
         );
     }
 
