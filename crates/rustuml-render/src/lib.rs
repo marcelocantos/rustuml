@@ -67,6 +67,7 @@ pub mod style;
 pub mod style_cascade;
 pub mod svg;
 pub mod text_render;
+mod times_new_roman_unicode;
 pub mod timing;
 pub mod usecase;
 pub mod wbs;

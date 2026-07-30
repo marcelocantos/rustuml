@@ -180,10 +180,11 @@ pub fn times_new_roman_text_width(text: &str, font_size: f64, bold: bool, italic
             let units = if (32..=126).contains(&code) {
                 table[(code - 32) as usize] as f64
             } else {
-                // The checked-in extractor currently derives printable ASCII.
-                // Keep unknown glyphs on the face's half-em fallback rather
-                // than borrowing a different family's metrics.
-                1024.0
+                // Java `FontStack` retains the selected physical family and
+                // AWT supplies the actual glyph or fallback advance inside
+                // that face. The generated table covers every scalar assigned
+                // in the pinned JDK, including all four binary faces.
+                crate::times_new_roman_unicode::units(code, bold, italic) as f64
             };
             units / TIMES_NEW_ROMAN_UNITS_PER_EM * font_size
         })

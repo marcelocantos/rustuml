@@ -2013,6 +2013,39 @@ mod tests {
             )),
             "106.9805"
         );
+        // Java AWT values preserved by the independent Unicode checker and
+        // regenerated across the complete assigned-scalar domain by
+        // `PhysicalFontMetricsExtract --rust-unicode-ranges`.
+        assert_eq!(
+            pm::fmt_coord(measure_with_family_and_face(
+                "Café Ωmega 27",
+                15.0,
+                false,
+                true,
+                "Times New Roman"
+            )),
+            "94.1675"
+        );
+        assert_eq!(
+            pm::fmt_coord(measure_with_family_and_face(
+                "Журнал Z8",
+                15.0,
+                false,
+                true,
+                "Times New Roman"
+            )),
+            "68.9722"
+        );
+        assert_eq!(
+            pm::fmt_coord(measure_with_family_and_face(
+                "Crème brûlée — déjà vu",
+                19.0,
+                false,
+                true,
+                "Times New Roman"
+            )),
+            "185.7324"
+        );
         assert_eq!(
             pm::fmt_coord(text_height_for_family(16.0, "Arial")),
             "18.3984"
