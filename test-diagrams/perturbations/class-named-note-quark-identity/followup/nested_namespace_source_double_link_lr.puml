@@ -1,0 +1,15 @@
+@startuml
+set namespaceSeparator ::
+left to right direction
+package Vault9801 {
+  package Archive9803 {
+    class Primary9805
+    class Secondary9807
+  }
+}
+package Vault9801::Archive9803 {
+  note "nested separator memo" as SharedMemo9809
+  SharedMemo9809 .. Vault9801::Archive9803::Primary9805
+  SharedMemo9809 .. Vault9801::Archive9803::Secondary9807
+}
+@enduml

@@ -1,0 +1,340 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-named-note-quark-identity",
+  "reviewed_at": "2026-07-30",
+  "reviewer": {
+    "identity": "independent adversarial checker",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop",
+    "independence": "Did not implement commits eaba4b71, 842f8604, or dbaa4a8e; worked in isolated worktree /tmp/rustuml-review-class-named-note-quark-identity on branch codex/checker-class-named-note-quark-identity-followup; did not edit shipping source; and added only review/evidence artifacts."
+  },
+  "revisions": {
+    "account_commit": "279c5a1896a39f17e7b586b188c4e6da01b02499",
+    "prior_review_commit": "2722641e5614bcce6078d8482336e52122ad0c3d",
+    "implementation_commit": "dbaa4a8e2563a3aa50ebf2859a0b5d43a8a2d76e",
+    "checker_repo_head": "dbaa4a8e2563a3aa50ebf2859a0b5d43a8a2d76e",
+    "checker_branch": "codex/checker-class-named-note-quark-identity-followup",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "prior_review": {
+    "path": "docs/parity-reviews/class-named-note-quark-identity/review.json",
+    "commit": "2722641e5614bcce6078d8482336e52122ad0c3d",
+    "verdict": "REJECT",
+    "summary": "The prior checker found one valid failing counterexample under `set namespaceSeparator ::`: Java serialized the package-owned named note as `Archive9761..Memo9765`, while Rust reconstructed `Archive9761.Memo9765`."
+  },
+  "binary": {
+    "path": "/tmp/rustuml-diff-one-dbaa4a8e",
+    "sha256": "fafe317b87aedd6c203c2f30f2a50dae36bc96c4bcf581a48cfe808352a5b27e",
+    "mode": "--no-oracle",
+    "rebuilt": false
+  },
+  "java_jar": {
+    "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+  },
+  "commands": [
+    "sed -n '1,260p' /Users/marcelo/.codex/skills/oracle-first/SKILL.md",
+    "sed -n '1,260p' /Users/marcelo/.claude/rust.md",
+    "git worktree add -b codex/checker-class-named-note-quark-identity-followup /tmp/rustuml-review-class-named-note-quark-identity dbaa4a8e2563a3aa50ebf2859a0b5d43a8a2d76e",
+    "sed -n '1,260p' docs/parity-reviews/class-named-note-quark-identity/account.json",
+    "sed -n '1,260p' docs/parity-reviews/class-named-note-quark-identity/review.json",
+    "git show --stat --patch dbaa4a8e2563a3aa50ebf2859a0b5d43a8a2d76e -- crates/rustuml-render/src/class.rs",
+    "rg -n \"note_qualified_name|note_by_path|Quark|getQualifiedName|EntityImageNote|CommandFactoryNote|CommandLinkClass\" crates /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNote.java | sed -n '138,176p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/atmp/CucaDiagram.java | sed -n '219,286p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandLinkClass.java | sed -n '187,236p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNote.java | sed -n '194,200p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/plasma/Quark.java | sed -n '57,90p'",
+    "nl -ba crates/rustuml-parser/src/parse/class.rs | sed -n '189,505p'",
+    "nl -ba crates/rustuml-render/src/class.rs | sed -n '4353,4370p'",
+    "nl -ba crates/rustuml-render/src/class.rs | sed -n '17098,17117p'",
+    "cp test-diagrams/perturbations/class-named-note-quark-identity/*.puml test-diagrams/perturbations/class-named-note-quark-identity/followup/",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg /tmp/rustuml-review-class-named-note-quark-identity/test-diagrams/perturbations/class-named-note-quark-identity/followup/*.puml",
+    "/tmp/rustuml-diff-one-dbaa4a8e --no-oracle /tmp/rustuml-review-class-named-note-quark-identity/test-diagrams/perturbations/class-named-note-quark-identity/followup/root_source_single_link_tb.puml",
+    "/tmp/rustuml-diff-one-dbaa4a8e --no-oracle /tmp/rustuml-review-class-named-note-quark-identity/test-diagrams/perturbations/class-named-note-quark-identity/followup/root_target_single_link_lr.puml",
+    "/tmp/rustuml-diff-one-dbaa4a8e --no-oracle /tmp/rustuml-review-class-named-note-quark-identity/test-diagrams/perturbations/class-named-note-quark-identity/followup/reopened_package_source_double_link_tb.puml",
+    "/tmp/rustuml-diff-one-dbaa4a8e --no-oracle /tmp/rustuml-review-class-named-note-quark-identity/test-diagrams/perturbations/class-named-note-quark-identity/followup/reopened_package_target_double_link_lr.puml",
+    "/tmp/rustuml-diff-one-dbaa4a8e --no-oracle /tmp/rustuml-review-class-named-note-quark-identity/test-diagrams/perturbations/class-named-note-quark-identity/followup/duplicate_local_aliases_reopened_tb.puml",
+    "/tmp/rustuml-diff-one-dbaa4a8e --no-oracle /tmp/rustuml-review-class-named-note-quark-identity/test-diagrams/perturbations/class-named-note-quark-identity/followup/namespace_separator_reopened_lr.puml",
+    "/tmp/rustuml-diff-one-dbaa4a8e --no-oracle /tmp/rustuml-review-class-named-note-quark-identity/test-diagrams/perturbations/class-named-note-quark-identity/followup/nested_namespace_source_double_link_lr.puml",
+    "/tmp/rustuml-diff-one-dbaa4a8e --no-oracle /tmp/rustuml-review-class-named-note-quark-identity/test-diagrams/perturbations/class-named-note-quark-identity/followup/nested_namespace_target_single_tb.puml",
+    "/tmp/rustuml-diff-one-dbaa4a8e --no-oracle /tmp/rustuml-review-class-named-note-quark-identity/test-diagrams/perturbations/class-named-note-quark-identity/followup/duplicate_alias_namespace_reopened_lr.puml",
+    "/tmp/rustuml-diff-one-dbaa4a8e --no-oracle /tmp/rustuml-review-class-named-note-quark-identity/test-diagrams/perturbations/class-named-note-quark-identity/followup/reopened_nested_triple_target_tb.puml",
+    "shasum -a 256 /tmp/rustuml-diff-one-dbaa4a8e /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "shasum -a 256 test-diagrams/perturbations/class-named-note-quark-identity/followup/*.puml test-diagrams/perturbations/class-named-note-quark-identity/followup/*.svg",
+    "rg -n \"FreshArchive4241|FreshMemo4253|Archive9761|Memo9765|RootMemo9705|RootMemo9713|Memo9727|Memo9737|SharedMemo9751|Direct9763\" crates/rustuml crates/rustuml-parser crates/rustuml-render crates/rustuml-layout crates/rustuml-math",
+    "rg -n \"data-qualified-name=\\\"Vault9801\\.\\.Archive9803\\.\\.SharedMemo9809\\\"|data-qualified-name=\\\"Vault9811\\.\\.Archive9813\\.\\.SharedMemo9817\\\"|data-qualified-name=\\\"North9821\\.\\.Wing9823\\.\\.SharedMemo9833\\\"|data-qualified-name=\\\"South9827\\.\\.Wing9829\\.\\.SharedMemo9833\\\"|data-qualified-name=\\\"Outer9841\\.Inner9843\\.Memo9851\\\"\" test-diagrams/perturbations/class-named-note-quark-identity/followup/*.svg"
+  ],
+  "source_inspection": {
+    "java": [
+      "CommandFactoryNote still resolves the alias with `diagram.quarkInContext(false, diagram.cleanId(idShort))`, so a named floating note is data on the ordinary class-diagram quark selected in current context.",
+      "CommandLinkClass still resolves both endpoints with `diagram.quarkInContextSafe(true, endpoint)` and reuses pre-existing note quarks instead of synthesizing a phantom class when NOTE data is present.",
+      "EntityImageNote still emits `data-qualified-name` from `getEntity().getQuark().getQualifiedName()`, while `Quark#getQualifiedName()` preserves the plasma separator and the SVG writer later translates each punctuation character independently."
+    ],
+    "rust": [
+      "The parser path from 842f8604 remains intact: `push_note` stores `note.id` from `resolve_quark_path(alias, QuarkLookup::CurrentContext)` and registers that path in `note_by_path`.",
+      "Relationship materialization still reuses named-note endpoints through `note_by_path` before entity/package fallback, which prevents the old phantom-class divergence.",
+      "The follow-up implementation in `note_qualified_name` now prefers `note.id` and feeds the complete canonical identity through `translate_qualified_name(id)`, matching the Java `EntityImageNote` projection instead of reconstructing owner plus leaf."
+    ]
+  },
+  "prohibited_pattern_audit": {
+    "fixture_shaped_conditions": "None found in shipping source. The implementation diff adds one production branch keyed only to `note.id.is_some()` and one renderer unit test using fresh labels. No held-out fixture labels appear in the shipping renderer path.",
+    "unexplained_constants": "No new parity-affecting constants, thresholds, or precision-heavy literals were introduced by dbaa4a8e.",
+    "golden_reads": "No evidence of golden corpus reads, embedded SVG payloads, or fixture-name keyed lookups in the implementation diff or surrounding renderer/parser data flow.",
+    "output_surgery": "No post-render SVG string surgery keyed to coordinates, fixture names, or special-case punctuation was found."
+  },
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-named-note-quark-identity/followup/root_source_single_link_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-named-note-quark-identity/followup/root_source_single_link_tb.svg",
+      "preserved": true,
+      "sha256": {
+        "puml": "276b21babc6f447225aed184acd50f9282adeec5a36d17cdea83053f973bac96",
+        "svg": "05b9fdc8750a57368bcb96376f6a469171dfdb622b0ab0a744f65b38e32f5e71"
+      },
+      "axes": [
+        "root-owned note",
+        "note as source",
+        "single relationship",
+        "default separator",
+        "top-to-bottom direction"
+      ],
+      "valid_java_svg": true,
+      "diff_one_no_oracle": {
+        "exit_code": 0,
+        "summary": "SVGs are structurally equivalent"
+      },
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-named-note-quark-identity/followup/root_target_single_link_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-named-note-quark-identity/followup/root_target_single_link_lr.svg",
+      "preserved": true,
+      "sha256": {
+        "puml": "7ec26dcc0f2037ba86c0381563db3e216cc00a9765d0be9841b8685d3a2bfd3f",
+        "svg": "a19120482b2b34da534817e01b3540835975d0f67e5ba02fdea378e2dc858ff0"
+      },
+      "axes": [
+        "root-owned note",
+        "note as target",
+        "single relationship",
+        "default separator",
+        "left-to-right direction"
+      ],
+      "valid_java_svg": true,
+      "diff_one_no_oracle": {
+        "exit_code": 0,
+        "summary": "SVGs are structurally equivalent"
+      },
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-named-note-quark-identity/followup/reopened_package_source_double_link_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-named-note-quark-identity/followup/reopened_package_source_double_link_tb.svg",
+      "preserved": true,
+      "sha256": {
+        "puml": "ea36d208638a6d3af768180a17a6794a30b7c5a94bad3aa502da7026188c72c1",
+        "svg": "fad12dcb948fe8d40f8a695de96ccdaa04ddc96310dac99cea6c0fc51bf89c55"
+      },
+      "axes": [
+        "package-owned note",
+        "reopened package ownership",
+        "note as source",
+        "two relationships",
+        "default separator",
+        "top-to-bottom direction"
+      ],
+      "valid_java_svg": true,
+      "diff_one_no_oracle": {
+        "exit_code": 0,
+        "summary": "SVGs are structurally equivalent"
+      },
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-named-note-quark-identity/followup/reopened_package_target_double_link_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-named-note-quark-identity/followup/reopened_package_target_double_link_lr.svg",
+      "preserved": true,
+      "sha256": {
+        "puml": "fbacaedf5fce06b46720e8c0a7eea9d97adac9edd188dea3114d2d03a7841a8f",
+        "svg": "b7a618bd44db7580d45cc3d1ff90909dce0e72ed06c7067de535e5c2feee75a"
+      },
+      "axes": [
+        "package-owned note",
+        "reopened package ownership",
+        "note as target",
+        "two relationships",
+        "default separator",
+        "left-to-right direction"
+      ],
+      "valid_java_svg": true,
+      "diff_one_no_oracle": {
+        "exit_code": 0,
+        "summary": "SVGs are structurally equivalent"
+      },
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-named-note-quark-identity/followup/duplicate_local_aliases_reopened_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-named-note-quark-identity/followup/duplicate_local_aliases_reopened_tb.svg",
+      "preserved": true,
+      "sha256": {
+        "puml": "33f62c91d72f235df6856684d4cfe7d1881ea50683e4dc73b00d97ab12cf4e4b",
+        "svg": "3c7474ba0352e992e876a4a02aa20f2a28224af24002898475fae4c8a8d0458c"
+      },
+      "axes": [
+        "duplicate local aliases in separate packages",
+        "reopened package ownership",
+        "single relationship per note",
+        "default separator",
+        "top-to-bottom direction"
+      ],
+      "valid_java_svg": true,
+      "diff_one_no_oracle": {
+        "exit_code": 0,
+        "summary": "SVGs are structurally equivalent"
+      },
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-named-note-quark-identity/followup/namespace_separator_reopened_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-named-note-quark-identity/followup/namespace_separator_reopened_lr.svg",
+      "preserved": true,
+      "sha256": {
+        "puml": "abdf575dfdf4fb37862e4ef49587b42527128a4f9d435bcea6eee79cbc8b78e0",
+        "svg": "35bf16404771ab0fe735f84d3853bd3001d0ea655edc48c1c7b63a662c63788e"
+      },
+      "axes": [
+        "package-owned note",
+        "reopened package ownership",
+        "single relationship",
+        "custom namespace separator",
+        "left-to-right direction"
+      ],
+      "valid_java_svg": true,
+      "diff_one_no_oracle": {
+        "exit_code": 0,
+        "summary": "SVGs are structurally equivalent"
+      },
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-named-note-quark-identity/followup/nested_namespace_source_double_link_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-named-note-quark-identity/followup/nested_namespace_source_double_link_lr.svg",
+      "preserved": false,
+      "sha256": {
+        "puml": "9fad334c98aa6b352eb90bcd8769ad2fdd24c6ade259e1649534332606463c8f",
+        "svg": "9b1685c8c5ce9a3486180fba2f9d668ee361cfb18ab6f597e1b4c4925f6f11a9"
+      },
+      "axes": [
+        "custom namespace separator",
+        "nested package ownership",
+        "package reopened by qualified name",
+        "note as source",
+        "two relationships",
+        "left-to-right direction"
+      ],
+      "valid_java_svg": true,
+      "diff_one_no_oracle": {
+        "exit_code": 0,
+        "summary": "SVGs are structurally equivalent"
+      },
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-named-note-quark-identity/followup/nested_namespace_target_single_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-named-note-quark-identity/followup/nested_namespace_target_single_tb.svg",
+      "preserved": false,
+      "sha256": {
+        "puml": "d43fe4ed738a580569689ff286cd0dca53c485fbe70678e9c7d4faf2f9d97929",
+        "svg": "807957aa7383c10b4c4a0743f9f591ec3f3894c64616277d2e5120695cc3bad5"
+      },
+      "axes": [
+        "custom namespace separator",
+        "nested package ownership",
+        "package reopened by qualified name",
+        "fully qualified note endpoint",
+        "note as target",
+        "single relationship",
+        "top-to-bottom direction"
+      ],
+      "valid_java_svg": true,
+      "diff_one_no_oracle": {
+        "exit_code": 0,
+        "summary": "SVGs are structurally equivalent"
+      },
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-named-note-quark-identity/followup/duplicate_alias_namespace_reopened_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-named-note-quark-identity/followup/duplicate_alias_namespace_reopened_lr.svg",
+      "preserved": false,
+      "sha256": {
+        "puml": "80183f3a4208a42d9be2d108b585cc8c78ad0d3feeb4154747785f16aa32e4a0",
+        "svg": "5e51102875415d2aa788e9a4b768a88e8a1706cee4704dbab3b35d587bf41afa"
+      },
+      "axes": [
+        "custom namespace separator",
+        "duplicate aliases in separate nested packages",
+        "mixed source and target orientation",
+        "package reopened by qualified name",
+        "left-to-right direction"
+      ],
+      "valid_java_svg": true,
+      "diff_one_no_oracle": {
+        "exit_code": 0,
+        "summary": "SVGs are structurally equivalent"
+      },
+      "result": "pass"
+    },
+    {
+      "source": "test-diagrams/perturbations/class-named-note-quark-identity/followup/reopened_nested_triple_target_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-named-note-quark-identity/followup/reopened_nested_triple_target_tb.svg",
+      "preserved": false,
+      "sha256": {
+        "puml": "0b40c84f1b8bd721097799e59ea087540c642019f57d1ca2af789452230dbb6e",
+        "svg": "1648ac83199b72d60256936970781196e68db546bb2150526de9fa1524d2bc75"
+      },
+      "axes": [
+        "default separator",
+        "nested package ownership",
+        "package reopened by qualified name",
+        "fully qualified note endpoint",
+        "note as target",
+        "three relationships",
+        "top-to-bottom direction"
+      ],
+      "valid_java_svg": true,
+      "diff_one_no_oracle": {
+        "exit_code": 0,
+        "summary": "SVGs are structurally equivalent"
+      },
+      "result": "pass"
+    }
+  ],
+  "findings": [
+    {
+      "severity": "medium",
+      "summary": "The prior namespace-separator reject is fixed by the claimed mechanism.",
+      "evidence": "The preserved `namespace_separator_reopened_lr` case now passes under `/tmp/rustuml-diff-one-dbaa4a8e --no-oracle`, and the Java SVG under `followup/` contains the package-owned note identity `Archive9761..Memo9765` that the Rust path now matches structurally."
+    },
+    {
+      "severity": "medium",
+      "summary": "I could not disprove the mechanism with fresh valid counterexamples spanning deeper nesting, duplicate aliases, source/target reversal, and changed link counts.",
+      "evidence": "All four fresh inputs passed: `nested_namespace_source_double_link_lr`, `nested_namespace_target_single_tb`, `duplicate_alias_namespace_reopened_lr`, and `reopened_nested_triple_target_tb`."
+    },
+    {
+      "severity": "informational",
+      "summary": "The fix remains model-shaped rather than fixture-shaped.",
+      "evidence": "The production diff is a single renderer projection change from owner-plus-leaf reconstruction to canonical `note.id` projection, with no new constants, golden reads, or held-out label conditionals."
+    }
+  ],
+  "summary": {
+    "valid_inputs": 10,
+    "passes": 10,
+    "failures": 0,
+    "java_syntax_errors": 0,
+    "cargo_or_rustc_run": false
+  },
+  "verdict": "ACCEPT"
+}

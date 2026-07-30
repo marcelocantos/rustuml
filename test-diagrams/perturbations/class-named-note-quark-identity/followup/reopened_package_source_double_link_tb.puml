@@ -1,0 +1,11 @@
+@startuml
+package Archive9721 {
+  class Direct9723
+  class Peer9725
+}
+package Archive9721 {
+  note "package memo" as Memo9727
+  Memo9727 .. Direct9723
+  Memo9727 .. Peer9725
+}
+@enduml
