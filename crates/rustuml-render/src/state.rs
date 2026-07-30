@@ -542,8 +542,9 @@ fn autonomous_layout_node_size(
     skin: &StateSkin,
     id: &str,
     state_def: Option<&State>,
+    hide_empty_desc: bool,
 ) -> (f64, f64, StateLayoutShape) {
-    let (_, _, shape) = layout_node_size(id, state_def, false);
+    let (_, _, shape) = layout_node_size(id, state_def, hide_empty_desc);
     if shape != StateLayoutShape::Box
         || state_def.is_some_and(|state| {
             matches!(
@@ -552,7 +553,7 @@ fn autonomous_layout_node_size(
             )
         })
     {
-        return layout_node_size(id, state_def, false);
+        return layout_node_size(id, state_def, hide_empty_desc);
     }
 
     let style = autonomous_state_style(diagram, skin, state_def);
@@ -568,11 +569,25 @@ fn autonomous_layout_node_size(
         .iter()
         .map(|description| style.attribute.height(description))
         .sum::<f64>();
-    (
-        (title_width.max(attribute_width) + STATE_DIMENSION_PADDING).max(STATE_MIN_WIDTH),
-        (title_height + attribute_height + STATE_DIMENSION_PADDING).max(STATE_BOX_HEIGHT),
-        shape,
-    )
+    let title_block_width = title_width + 2.0 * style.padding;
+    let attribute_block_width = attribute_width + 2.0 * style.padding;
+    let title_block_height = title_height + 2.0 * style.padding;
+    let attribute_block_height = attribute_height + 2.0 * style.padding;
+    if hide_empty_desc && descriptions.is_empty() {
+        (
+            (title_block_width + 10.0).max(STATE_MIN_WIDTH),
+            (title_block_height + 10.0).max(STATE_EMPTY_BOX_HEIGHT),
+            shape,
+        )
+    } else {
+        (
+            (title_block_width.max(attribute_block_width) + STATE_DIMENSION_PADDING)
+                .max(STATE_MIN_WIDTH),
+            (title_block_height + attribute_block_height + STATE_DIMENSION_PADDING)
+                .max(STATE_BOX_HEIGHT),
+            shape,
+        )
+    }
 }
 
 struct StateNodeFont<'a> {
@@ -581,6 +596,7 @@ struct StateNodeFont<'a> {
     name: Option<&'a str>,
     monospace: bool,
     bold: bool,
+    padding: f64,
 }
 
 fn layout_node_size_with_font(
@@ -630,14 +646,23 @@ fn layout_node_size_with_font(
     // title and fields, adds 2*MARGIN + 2*MARGIN_LINE, then applies the 50px
     // minimum. `EntityImageStateEmptyDescription` adds only 2*MARGIN and uses
     // a 40px minimum.
-    let (padding, minimum_height) = if hide_empty_desc && descriptions.is_empty() {
-        (10.0, STATE_EMPTY_BOX_HEIGHT)
+    let (width, height, minimum_height) = if hide_empty_desc && descriptions.is_empty() {
+        (
+            title_width + 2.0 * font.padding + 10.0,
+            title_height + 2.0 * font.padding + 10.0,
+            STATE_EMPTY_BOX_HEIGHT,
+        )
     } else {
-        (STATE_DIMENSION_PADDING, STATE_BOX_HEIGHT)
+        (
+            (title_width + 2.0 * font.padding).max(fields_width + 2.0 * font.padding)
+                + STATE_DIMENSION_PADDING,
+            title_height + fields_height + 4.0 * font.padding + STATE_DIMENSION_PADDING,
+            STATE_BOX_HEIGHT,
+        )
     };
     (
-        (title_width.max(fields_width) + padding).max(STATE_MIN_WIDTH),
-        (title_height + fields_height + padding).max(minimum_height),
+        width.max(STATE_MIN_WIDTH),
+        height.max(minimum_height),
         shape,
     )
 }
@@ -962,16 +987,18 @@ fn link_note_component_size(note: &StateNote) -> EdgeLabelSize {
 }
 
 fn ordinary_edge_label_size(label: &str, arrow_font: &StateArrowFont) -> EdgeLabelSize {
+    let inset = SVEK_EDGE_LABEL_MARGIN + arrow_font.padding;
     EdgeLabelSize {
-        // Java provenance: `SvekEdge.addVisibilityModifier` gives ordinary
-        // center labels one pixel of margin on every side.
+        // Java provenance: `Display#create0` contributes the live SkinParam
+        // padding, then `SvekEdge#addVisibilityModifier` wraps that block in
+        // one independent pixel of margin on every side.
         width: text_render::measure_with_family(
             label,
             arrow_font.size as f64,
             arrow_font.bold,
             &arrow_font.family,
-        ) + 2.0,
-        height: text_render::label_height(label, arrow_font.size as f64) + 2.0,
+        ) + 2.0 * inset,
+        height: text_render::label_height(label, arrow_font.size as f64) + 2.0 * inset,
     }
 }
 
@@ -1050,10 +1077,11 @@ fn emit_link_label_composition(
             svg,
             label,
             &TextBase {
-                x: label_origin.0 + offset_x + 1.0,
+                x: label_origin.0 + offset_x + SVEK_EDGE_LABEL_MARGIN + arrow_font.padding,
                 y: label_origin.1
                     + offset_y
-                    + 1.0
+                    + SVEK_EDGE_LABEL_MARGIN
+                    + arrow_font.padding
                     + text_render::label_ascent(label, arrow_font.size as f64),
                 font_size: arrow_font.size,
                 font_family: &arrow_font.family,
@@ -1134,7 +1162,8 @@ fn link_label_painted_max(
         max_x = max_x.max(
             label_origin.0
                 + offset_x
-                + 1.0
+                + SVEK_EDGE_LABEL_MARGIN
+                + arrow_font.padding
                 + text_render::measure_with_family(
                     label,
                     arrow_font.size as f64,
@@ -2095,6 +2124,7 @@ struct AutonomousStateStyle {
     stroke: String,
     border_thickness: String,
     shadow: f64,
+    padding: f64,
     title: AutonomousTextStyle,
     attribute: AutonomousTextStyle,
 }
@@ -2117,6 +2147,24 @@ fn state_skinparam_value(diagram: &StateDiagram, keys: &[&str]) -> Option<String
                 .any(|key| skinparam.key.eq_ignore_ascii_case(key))
         })
         .map(|skinparam| skinparam.value.trim().to_string())
+}
+
+fn state_text_block_padding(diagram: &StateDiagram) -> f64 {
+    // Java provenance: `SkinParam#getPadding` supplies the live legacy
+    // `Padding` value to both `Display#getCreole` calls in
+    // `EntityImageState`; each resulting `SheetBlock1` pads all four sides.
+    state_skinparam_value(diagram, &["padding"])
+        .and_then(|value| value.parse::<f64>().ok())
+        .filter(|value| value.is_finite() && *value >= 0.0)
+        .unwrap_or(0.0)
+}
+
+fn state_hides_empty_description(diagram: &StateDiagram) -> bool {
+    diagram.meta.skinparams.iter().any(|skinparam| {
+        skinparam.key.eq_ignore_ascii_case("hideEmptyDescription")
+            || (skinparam.key.eq_ignore_ascii_case("hide")
+                && skinparam.value.eq_ignore_ascii_case("empty description"))
+    })
 }
 
 fn autonomous_state_style(
@@ -2245,6 +2293,7 @@ fn autonomous_state_style(
             .map(fmt_f)
             .unwrap_or_else(|| skin.border_thickness.clone()),
         shadow,
+        padding: state_text_block_padding(diagram),
         title: AutonomousTextStyle {
             color: stereo_color(&["AttributeFontColor", "FontColor"])
                 .unwrap_or_else(|| skin.text_color.clone()),
@@ -2350,6 +2399,7 @@ struct StateArrowFont {
     size: u32,
     bold: bool,
     italic: bool,
+    padding: f64,
 }
 
 impl StateArrowFont {
@@ -2385,6 +2435,7 @@ impl StateArrowFont {
             size,
             bold: style.contains("bold"),
             italic: style.contains("italic"),
+            padding: state_text_block_padding(diagram),
         }
     }
 
@@ -2629,7 +2680,7 @@ fn svek_edge_label_box_size(
     label: &str,
     arrow_font: &StateArrowFont,
 ) -> EdgeLabelSize {
-    let margin = state_edge_label_margin(transition);
+    let margin = state_edge_label_margin(transition) + arrow_font.padding;
     EdgeLabelSize {
         width: text_render::measure_with_family(
             label,
@@ -2829,7 +2880,7 @@ fn autonomous_scope_painted_bounds(
             && let Some(label_position) = edge.label
         {
             let transition_font = StateArrowFont::for_transition(diagram, transition);
-            let label_margin = state_edge_label_margin(transition);
+            let label_margin = state_edge_label_margin(transition) + transition_font.padding;
             let x = quantize_svek_coord(label_position.x) + label_margin;
             let baseline = quantize_svek_coord(label_position.y)
                 + label_margin
@@ -3248,6 +3299,7 @@ fn build_state_group_outcome<'a>(
     }
 
     let skin = StateSkin::from_diagram(diagram);
+    let hide_empty_desc = state_hides_empty_description(diagram);
     let mut children = Vec::new();
     let mut regions = Vec::with_capacity(region_scopes.len());
     for (scope, outcomes) in region_outcomes {
@@ -3315,7 +3367,7 @@ fn build_state_group_outcome<'a>(
                 } else {
                     let state = diagram.states.iter().find(|state| state.id == *id);
                     let (width, height, shape) =
-                        autonomous_layout_node_size(diagram, &skin, id, state);
+                        autonomous_layout_node_size(diagram, &skin, id, state, hide_empty_desc);
                     (id.clone(), width, height, shape)
                 }
             })
@@ -3328,9 +3380,13 @@ fn build_state_group_outcome<'a>(
             // CONCURRENT_STATE before its concurrent-image branch.
             let empty_style = autonomous_state_style(diagram, &skin, None);
             let empty_label = "\u{00a0}";
-            let empty_width = (empty_style.title.width(empty_label) + STATE_DIMENSION_PADDING)
+            let empty_width = (empty_style.title.width(empty_label)
+                + 2.0 * empty_style.padding
+                + STATE_DIMENSION_PADDING)
                 .max(STATE_MIN_WIDTH);
-            let empty_height = (empty_style.title.height(empty_label) + STATE_DIMENSION_PADDING)
+            let empty_height = (empty_style.title.height(empty_label)
+                + 4.0 * empty_style.padding
+                + STATE_DIMENSION_PADDING)
                 .max(STATE_BOX_HEIGHT);
             AutonomousScopeLayout {
                 ids: vec![scope.clone()],
@@ -3513,6 +3569,7 @@ fn build_autonomous_composite<'a>(
         })
     });
     let skin = StateSkin::from_diagram(diagram);
+    let hide_empty_desc = state_hides_empty_description(diagram);
     let outer_sizes: Vec<(String, f64, f64, StateLayoutShape)> = outer_ids
         .iter()
         .map(|id| {
@@ -3536,7 +3593,7 @@ fn build_autonomous_composite<'a>(
             } else {
                 let state = diagram.states.iter().find(|state| state.id == *id);
                 let (node_width, node_height, shape) =
-                    autonomous_layout_node_size(diagram, &skin, id, state);
+                    autonomous_layout_node_size(diagram, &skin, id, state, hide_empty_desc);
                 (id.clone(), node_width, node_height, shape)
             }
         })
@@ -3894,7 +3951,7 @@ fn emit_autonomous_scope_entities(
             Some("dotted") => format!("stroke:{stroke};stroke-width:1;stroke-dasharray:1,3;"),
             _ => format!("stroke:{stroke};stroke-width:{};", style.border_thickness),
         };
-        let divider_y = box_y + 5.0 + style.title.height(&state.label) + 5.0;
+        let divider_y = box_y + 5.0 + style.title.height(&state.label) + 2.0 * style.padding + 5.0;
         write!(
             svg,
             r#"<g class="entity" data-qualified-name="{}" id="{}"><rect fill="{fill}"{shadow_attr} height="{}" rx="{STATE_RX}" ry="{STATE_RX}" style="{stroke_style}" width="{}" x="{}" y="{}"/><line style="{stroke_style}" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
@@ -3915,15 +3972,16 @@ fn emit_autonomous_scope_entities(
             svg,
             &state.label,
             cx - text_width / 2.0,
-            box_y + 5.0 + style.title.ascent(&state.label),
+            box_y + 5.0 + style.padding + style.title.ascent(&state.label),
         );
         for (index, description) in state.descriptions.iter().enumerate() {
             style.attribute.emit(
                 svg,
                 description,
-                box_x + 5.0,
+                box_x + 5.0 + style.padding,
                 divider_y
                     + 5.0
+                    + style.padding
                     + style.attribute.ascent(description)
                     + state.descriptions[..index]
                         .iter()
@@ -4103,7 +4161,7 @@ fn emit_autonomous_scope_links(
             render_arrowhead(svg, arrow_control, arrow_tip, color, thickness);
 
             if let Some(label) = &transition.label {
-                let label_margin = state_edge_label_margin(transition);
+                let label_margin = state_edge_label_margin(transition) + arrow_font.padding;
                 let (label_x, label_y) = edge_path
                     .label
                     .map(|position| {
@@ -4862,14 +4920,10 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
         if transition.arrow.is_horizontal() {
             layout.add_plantuml_svek_line0_edge(layout_from, layout_to);
         }
-        let label_size = transition.label.as_deref().map(|label| EdgeLabelSize {
-            width: text_render::measure_with_family(
-                label,
-                arrow_font.size as f64,
-                arrow_font.bold,
-                &arrow_font.family,
-            ) + 2.0,
-            height: (text_render::label_height(label, arrow_font.size as f64) + 2.0).floor(),
+        let label_size = transition.label.as_deref().map(|label| {
+            let mut size = svek_edge_label_box_size(transition, label, &arrow_font);
+            size.height = size.height.floor();
+            size
         });
         let border_port = |endpoint: &str| {
             diagram
@@ -5163,7 +5217,7 @@ fn render_non_autarkic_root_clusters(diagram: &StateDiagram) -> Option<String> {
         else {
             continue;
         };
-        let margin = state_edge_label_margin(transition);
+        let margin = state_edge_label_margin(transition) + arrow_font.padding;
         let x = quantize_svek_coord(position.x) + margin;
         let baseline = quantize_svek_coord(position.y)
             + margin
@@ -5678,21 +5732,19 @@ pub fn render_with_oracle(
         .map(|sp| sp.value.to_ascii_lowercase())
         .unwrap_or_default();
     let state_font_bold = state_font_style.contains("bold");
+    let state_padding = state_text_block_padding(diagram);
 
     let (has_start, _has_end) = classify_star_nodes(&diagram.transitions);
 
     // Check for `hide empty description` directive.
-    let hide_empty_desc = diagram.meta.skinparams.iter().any(|sp| {
-        sp.key.eq_ignore_ascii_case("hideEmptyDescription")
-            || (sp.key.eq_ignore_ascii_case("hide")
-                && sp.value.eq_ignore_ascii_case("empty description"))
-    });
+    let hide_empty_desc = state_hides_empty_description(diagram);
     let state_node_font = StateNodeFont {
         name_size: state_name_font_size,
         desc_size: state_desc_font_size,
         name: state_font_name.as_deref(),
         monospace: state_name_is_mono,
         bold: state_font_bold,
+        padding: state_padding,
     };
 
     // Collect ordered unique entity IDs in PlantUML's render order.
@@ -5856,7 +5908,7 @@ pub fn render_with_oracle(
     };
     let state_node_size = |id: &str, state_def: Option<&State>| {
         if oracle.is_none() && !diagram.meta.style_program.is_empty() {
-            autonomous_layout_node_size(diagram, &skin, id, state_def)
+            autonomous_layout_node_size(diagram, &skin, id, state_def, hide_empty_desc)
         } else {
             layout_node_size_with_font(id, state_def, hide_empty_desc, &state_node_font)
         }
@@ -7233,6 +7285,7 @@ pub fn render_with_oracle(
                             .unwrap_or_else(|| {
                                 box_y
                                     + 10.0
+                                    + 2.0 * state_padding
                                     + text_render::label_height_with_family(
                                         label,
                                         title_style.size,
@@ -7280,6 +7333,7 @@ pub fn render_with_oracle(
                             .unwrap_or_else(|| {
                                 box_y
                                     + 5.0
+                                    + state_padding
                                     + text_render::label_ascent_with_family(
                                         label,
                                         title_style.size,
@@ -7356,7 +7410,7 @@ pub fn render_with_oracle(
                             )
                         };
                         for (j, desc) in descriptions.iter().enumerate() {
-                            let desc_x = box_x + 5.0;
+                            let desc_x = box_x + 5.0 + state_padding;
                             let desc_y = orc_rect
                                 .and_then(|r| r.text_y_values.get(oracle_text_y_index).copied())
                                 .unwrap_or_else(|| {
@@ -7370,6 +7424,7 @@ pub fn render_with_oracle(
                                     // baseline.
                                     div_y
                                         + STATE_FIELD_TOP_PADDING
+                                        + state_padding
                                         + text_render::label_first_baseline_ascent_with_family(
                                             desc,
                                             attribute_style.size,
@@ -11039,6 +11094,48 @@ CobaltDecision --> [*]
         );
         // The divider line should be present.
         assert!(svg.contains("<line"), "divider line should be rendered");
+    }
+
+    #[test]
+    fn state_text_block_padding_expands_intrinsic_blocks_before_layout() {
+        let parsed = rustuml_parser::parse::parse(
+            "@startuml\n\
+             state PaddedStateWithLongLabel : detailed body line\n\
+             state HiddenStateWithLongLabel\n\
+             @enduml",
+        )
+        .unwrap();
+        let rustuml_parser::diagram::Diagram::State(diagram) = parsed else {
+            panic!("expected state diagram");
+        };
+        let padded = diagram
+            .states
+            .iter()
+            .find(|state| state.id == "PaddedStateWithLongLabel")
+            .unwrap();
+        let hidden = diagram
+            .states
+            .iter()
+            .find(|state| state.id == "HiddenStateWithLongLabel")
+            .unwrap();
+        let font = |padding| StateNodeFont {
+            name_size: 24.0,
+            desc_size: 18.0,
+            name: None,
+            monospace: false,
+            bold: false,
+            padding,
+        };
+
+        let padded_five = layout_node_size_with_font(&padded.id, Some(padded), false, &font(5.0));
+        let padded_eight = layout_node_size_with_font(&padded.id, Some(padded), false, &font(8.0));
+        assert!((padded_eight.0 - padded_five.0 - 6.0).abs() < f64::EPSILON);
+        assert!((padded_eight.1 - padded_five.1 - 12.0).abs() < f64::EPSILON);
+
+        let hidden_five = layout_node_size_with_font(&hidden.id, Some(hidden), true, &font(5.0));
+        let hidden_eight = layout_node_size_with_font(&hidden.id, Some(hidden), true, &font(8.0));
+        assert!((hidden_eight.0 - hidden_five.0 - 6.0).abs() < f64::EPSILON);
+        assert!((hidden_eight.1 - hidden_five.1 - 6.0).abs() < f64::EPSILON);
     }
 
     #[test]
