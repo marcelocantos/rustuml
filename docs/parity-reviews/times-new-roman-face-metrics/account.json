@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "mechanism": "times-new-roman-face-metrics",
+  "created": "2026-07-31",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "bec36e62",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/font/UFontFactory.java",
+      "symbol": "UFontFactory.build",
+      "lines": "38-52",
+      "role": "Builds a UFont from the requested physical family, complete face (weight plus italic axis), and point size."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/font/UFontImpl.java",
+      "symbol": "UFontImpl.getUnderlayingFont",
+      "lines": "69-82",
+      "role": "Resolves the requested face to a Java AWT Font before measurement."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/FileFormat.java",
+      "symbol": "FileFormat.getJavaDimension",
+      "lines": "220-237",
+      "role": "Measures SVG text with FontMetrics.getStringBounds using fractional metrics."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/font/StringBounderRaw.java",
+      "symbols": [
+        "calculateDimension",
+        "getDescent"
+      ],
+      "lines": "53-79",
+      "role": "Uses the same face-aware AWT font for width, height, and descent."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/text_render.rs",
+      "symbols": [
+        "MetricFamily",
+        "metric_family",
+        "family_text_width",
+        "measure_with_family",
+        "text_width_for_style"
+      ],
+      "role": "Does not recognize Times New Roman, falls back to Sans, and drops the italic axis from width measurement even though SVG emission carries font-style."
+    },
+    {
+      "path": "crates/rustuml-render/src/state.rs",
+      "symbols": [
+        "StateTransitionLabelBlock::measure",
+        "state_text_width_with_family",
+        "StateNodeFont",
+        "AutonomousTextStyle::width"
+      ],
+      "role": "Passes family and bold state to layout measurement but not the resolved italic face."
+    },
+    {
+      "path": "tools/PhysicalFontMetricsExtract.java",
+      "role": "Existing checked-in Java AWT extractor provides the provenance path for physical-family line metrics; it currently prints only an M advance rather than the complete printable-ASCII table."
+    }
+  ],
+  "claimed_invariant": "A resolved physical font family and face are one measurement input. Layout widths, line heights, baselines, emitted textLength, and SVG face attributes all derive from the same Times New Roman plain/bold/italic/bold-italic AWT metrics.",
+  "causal_divergence": "Rust emits Times New Roman italic SVG attributes but measures those runs with sans-serif non-italic tables. At 18px, the held-out state labels therefore use widths such as 125.6221 instead of Java's 106.9805, changing self-link loops, ordinary routes, node positions, painted bounds, and canvas dimensions. This is a family/face model omission, not a state-layout constant.",
+  "derivation": {
+    "tool": "tools/PhysicalFontMetricsExtract.java",
+    "method": "Java AWT Graphics2D with TEXT_ANTIALIAS_ON and FRACTIONALMETRICS_ON; printable ASCII advances sampled at 2048px so the resulting integer font units scale exactly at arbitrary sizes.",
+    "observed_family": "Times New Roman",
+    "units_per_em": 2048,
+    "line_metrics_units": {
+      "ascent": 1825,
+      "descent": 443,
+      "height": 2355
+    }
+  },
+  "planned_model_change": "Extend the checked-in extractor to emit printable-ASCII units for all four faces. Add Times New Roman face tables and symbolic 2048-unit line metrics to the shared text metric model. Thread italic through internal segment widths and add a face-aware public measurement entry point while preserving existing non-italic APIs. Make state transition, autonomous, and node measurement pass their resolved face. Do not add per-label values or state-specific geometry adjustments.",
+  "perturbation_axes": [
+    "plain versus bold versus italic versus bold-italic face",
+    "ordinary versus self transition",
+    "transition labels versus state titles and attributes",
+    "flat versus nested state topology",
+    "multiple font sizes",
+    "ASCII punctuation, digits, uppercase, and lowercase"
+  ],
+  "known_counterexample": "test-diagrams/perturbations/state-flat-svek-label-skinparams/checker_lr_italic_self_and_ordinary.puml",
+  "acceptance": [
+    "The known Times New Roman italic counterexample is structurally equivalent.",
+    "Fresh face and text-content perturbations match Java without per-input constants.",
+    "Shared metric unit tests validate representative advances and line metrics from the extractor.",
+    "The full renderer library suite passes.",
+    "An independent checker records a verdict at the exact implementation revision."
+  ]
+}
