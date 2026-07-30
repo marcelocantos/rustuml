@@ -1050,10 +1050,10 @@ impl LayoutGraph {
         }
 
         macro_rules! create_node {
-            ($node_idx:expr) => {{
+            ($node_idx:expr, $parent_graph:expr) => {{
                 let spec = &self.nodes[$node_idx];
                 let cid = CString::new(spec.id.as_str()).unwrap();
-                let node = graphviz_ffi::agnode(g, cid.as_ptr(), 1);
+                let node = graphviz_ffi::agnode($parent_graph, cid.as_ptr(), 1);
 
                 if let NodeShape::SvekShielded { shield_x, shield_y } = spec.shape {
                     let w_inches = spec.width / DOT_POINTS_PER_INCH;
@@ -1260,7 +1260,7 @@ impl LayoutGraph {
             })
             .count();
         for &node_idx in &graphviz_node_order[..early_node_count] {
-            create_node!(node_idx);
+            create_node!(node_idx, g);
         }
 
         let mut edge_specs: HashMap<usize, (usize, String, String, bool)> = HashMap::new();
@@ -1399,8 +1399,25 @@ impl LayoutGraph {
         for &edge_idx in &early_edge_indices {
             create_edge!(edge_idx);
         }
+        let direct_together_for_node = |node_id: &str| {
+            self.together
+                .iter()
+                .find(|group| group.nodes.iter().any(|member| member == node_id))
+        };
         for &node_idx in &graphviz_node_order[early_node_count..] {
-            create_node!(node_idx);
+            if direct_together_for_node(&self.nodes[node_idx].id).is_none() {
+                create_node!(node_idx, g);
+            }
+        }
+
+        let mut together_handles: HashMap<String, *mut graphviz_ffi::Agraph_t> = HashMap::new();
+        self.build_together_trees(None, g, &node_handles, &mut together_handles);
+        for &node_idx in &graphviz_node_order[early_node_count..] {
+            let Some(group) = direct_together_for_node(&self.nodes[node_idx].id) else {
+                continue;
+            };
+            let parent = together_handles.get(&group.id).copied().unwrap_or(g);
+            create_node!(node_idx, parent);
         }
 
         let rank_key = CString::new("rank").unwrap();
@@ -1425,8 +1442,6 @@ impl LayoutGraph {
         }
 
         let mut cluster_handles: HashMap<String, *mut graphviz_ffi::Agraph_t> = HashMap::new();
-        let mut together_handles: HashMap<String, *mut graphviz_ffi::Agraph_t> = HashMap::new();
-        self.build_together_trees(None, g, &node_handles, &mut together_handles);
         let mut cluster_order: Vec<String> = Vec::new();
         let mut built_clusters = vec![false; self.clusters.len()];
         for idx in 0..self.clusters.len() {
@@ -1739,6 +1754,41 @@ impl LayoutGraph {
             if !was_seen {
                 order.push(idx);
             }
+        }
+        if !self.together.is_empty() {
+            // Java `Cluster.printCluster2` first appends every ordinary node,
+            // then calls `printTogether` for root groups in first-seen order.
+            // Node creation sequence affects dot's horizontal packing even
+            // when the same subgraph memberships are applied afterward.
+            let early = |node_id: &str| {
+                self.plantuml_svek_inverted_starts
+                    .iter()
+                    .chain(&self.plantuml_svek_line0_nodes)
+                    .any(|id| id == node_id)
+            };
+            let grouped_nodes = self
+                .together
+                .iter()
+                .flat_map(|group| group.nodes.iter().map(String::as_str))
+                .collect::<HashSet<_>>();
+            let mut reordered = Vec::with_capacity(order.len());
+            reordered.extend(
+                order
+                    .iter()
+                    .copied()
+                    .filter(|&idx| early(&self.nodes[idx].id)),
+            );
+            reordered.extend(order.iter().copied().filter(|&idx| {
+                !early(&self.nodes[idx].id) && !grouped_nodes.contains(self.nodes[idx].id.as_str())
+            }));
+            for group in &self.together {
+                reordered.extend(order.iter().copied().filter(|&idx| {
+                    !early(&self.nodes[idx].id)
+                        && group.nodes.iter().any(|id| id == &self.nodes[idx].id)
+                }));
+            }
+            debug_assert_eq!(reordered.len(), order.len());
+            return reordered;
         }
         order
     }
@@ -2612,6 +2662,26 @@ mod tests {
         assert!(
             grouped_result.cluster_positions[0].height > plain_result.cluster_positions[0].height
         );
+    }
+
+    #[test]
+    fn together_nodes_follow_java_cluster_emission_order() {
+        let mut graph = LayoutGraph::new(Direction::TopToBottom);
+        for id in [
+            "FreshGroupOneA",
+            "FreshGroupOneB",
+            "FreshGroupTwoA",
+            "FreshOrdinaryRoot",
+        ] {
+            graph.add_node(id, "", 40.0, 30.0);
+        }
+        graph.add_together("fresh_group_one", None, None);
+        graph.add_together_node("fresh_group_one", "FreshGroupOneA");
+        graph.add_together_node("fresh_group_one", "FreshGroupOneB");
+        graph.add_together("fresh_group_two", None, None);
+        graph.add_together_node("fresh_group_two", "FreshGroupTwoA");
+
+        assert_eq!(graph.graphviz_node_creation_order(), vec![3, 0, 1, 2]);
     }
 
     #[test]

@@ -2198,7 +2198,6 @@ fn render_with_oracle_uid_origin(
         empty_package_layout_slots[idx] = Some(next_layout_slot);
         next_layout_slot += 1;
     }
-    add_single_strategy_links(&mut layout, diagram);
     // `AbstractClassOrObjectDiagram.Association.createNew` replaces the A-B
     // association with A->apoint and apoint->B links of the original length,
     // then connects the 4px point to C. A one-length C link is horizontal in
@@ -2302,6 +2301,42 @@ fn render_with_oracle_uid_origin(
             );
         }
     }
+    for (group_idx, group) in diagram.together.iter().enumerate() {
+        let group_id = together_layout_id(group_idx);
+        let owner_cluster = group.owner_package.as_deref().and_then(|package_name| {
+            diagram
+                .packages
+                .iter()
+                .position(|package| package.name == package_name)
+                .filter(|&package_idx| {
+                    package_render.roles[package_idx] == PackageRenderRole::Cluster
+                })
+                .map(package_cluster_id)
+        });
+        let parent = group.parent.map(together_layout_id);
+        layout.add_together(&group_id, owner_cluster.as_deref(), parent.as_deref());
+        for entity_id in &group.entities {
+            layout.add_together_node(&group_id, entity_id);
+        }
+        for package_name in &group.packages {
+            let Some(package_idx) = diagram
+                .packages
+                .iter()
+                .position(|package| package.name == *package_name)
+            else {
+                continue;
+            };
+            match package_render.roles[package_idx] {
+                PackageRenderRole::Cluster => {
+                    layout.add_together_cluster(&group_id, &package_cluster_id(package_idx));
+                }
+                PackageRenderRole::EmptyLeaf => {
+                    layout.add_together_node(&group_id, &empty_package_layout_id(package_idx));
+                }
+                PackageRenderRole::Hidden => {}
+            }
+        }
+    }
     let uses_ortho_labels = has_ortho_linetype(diagram);
     let relationship_note_indices = relationship_note_indices(diagram);
     for (rel_idx, rel) in diagram.relationships.iter().enumerate() {
@@ -2341,6 +2376,11 @@ fn render_with_oracle_uid_origin(
             Some(rel.length.saturating_sub(1)),
         );
     }
+    // Java `CucaDiagram.applySingleStrategy` appends Magma/SquareMaker links
+    // after the source relationships. `DotStringFactory` still promotes its
+    // horizontal `lines0` edges ahead of nodes, while the remaining invisible
+    // edges retain this trailing order for dot's crossing minimizer.
+    add_single_strategy_links(&mut layout, diagram);
 
     let mut result = match layout.layout_full(std::time::Duration::from_secs(5)) {
         Some(r) => r,
@@ -2446,7 +2486,12 @@ fn render_with_oracle_uid_origin(
         result
             .cluster_positions
             .is_empty()
-            .then_some((result.width, result.height)),
+            // Java `SvekResult.calculateDimension` measures painted blocks
+            // through `LimitFinder`; an invisible `Together` cluster affects
+            // dot's solve but its margin is not part of the SVG envelope.
+            .then_some(())
+            .filter(|_| diagram.together.is_empty())
+            .map(|()| (result.width, result.height)),
         None,
         None,
         None,
@@ -3504,6 +3549,10 @@ fn package_cluster_id(idx: usize) -> String {
 
 fn empty_package_layout_id(idx: usize) -> String {
     format!("empty_pkg{idx}")
+}
+
+fn together_layout_id(idx: usize) -> String {
+    format!("together{idx}")
 }
 
 fn empty_package_dims(pkg: &Package) -> (f64, f64) {
@@ -10879,7 +10928,14 @@ fn svek_layout_x_bias(
                 }),
         )
         .chain(visibility_polygon_min_x)
-        .fold(0.0_f64, f64::min);
+        .fold(
+            if diagram.together.is_empty() {
+                0.0
+            } else {
+                f64::INFINITY
+            },
+            f64::min,
+        );
     let envelope_bias = SVEK_LABEL_ENVELOPE_MARGIN - min_x - MARGIN;
     if cluster_positions.is_empty() {
         envelope_bias
@@ -13640,6 +13696,7 @@ mod tests {
                 source_line: 0,
             }],
             association_classes: vec![],
+            together: vec![],
             packages: vec![],
             notes: vec![],
             hide_show: vec![],
@@ -14143,6 +14200,7 @@ mod tests {
             }],
             relationships: vec![],
             association_classes: vec![],
+            together: vec![],
             packages: vec![],
             notes: vec![],
             hide_show: vec![],
@@ -15571,6 +15629,7 @@ mod tests {
             }],
             relationships: vec![],
             association_classes: vec![],
+            together: vec![],
             packages: vec![],
             notes: vec![],
             hide_show: vec![],
@@ -16412,6 +16471,7 @@ mod tests {
             entities: vec![],
             relationships: vec![],
             association_classes: vec![],
+            together: vec![],
             packages: vec![],
             notes: vec![],
             hide_show: vec![],

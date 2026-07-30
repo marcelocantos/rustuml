@@ -45,6 +45,9 @@ pub struct ClassDiagram {
     /// Association classes declared via `(A, B) .. C` syntax.
     #[serde(default, skip_serializing_if = "Vec::is_empty")]
     pub association_classes: Vec<AssociationClass>,
+    /// Invisible SVEK grouping scopes declared by `together { ... }`.
+    #[serde(default, skip_serializing_if = "Vec::is_empty")]
+    pub together: Vec<TogetherGroup>,
     pub packages: Vec<Package>,
     pub notes: Vec<Note>,
     /// Visibility-control directives accumulated from `hide ...` / `show ...`
@@ -65,6 +68,17 @@ pub struct ClassDiagram {
     pub caption_line: Option<usize>,
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub legend_line: Option<usize>,
+}
+
+/// One `together { ... }` scope. Members are direct children only: nested
+/// together groups refer to their parent, while package children are recorded
+/// as package identities so Graphviz can nest the visible cluster.
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct TogetherGroup {
+    pub parent: Option<usize>,
+    pub owner_package: Option<String>,
+    pub entities: Vec<String>,
+    pub packages: Vec<String>,
 }
 
 /// Dot/SVEK rank direction selected by the diagram direction command.

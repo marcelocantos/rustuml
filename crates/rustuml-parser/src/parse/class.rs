@@ -57,6 +57,7 @@ struct ClassParser {
     entities: Vec<ClassEntity>,
     relationships: Vec<Relationship>,
     association_classes: Vec<crate::diagram::class::AssociationClass>,
+    together: Vec<crate::diagram::class::TogetherGroup>,
     packages: Vec<Package>,
     notes: Vec<Note>,
     /// Entity currently being parsed (inside { ... } block).
@@ -66,6 +67,7 @@ struct ClassParser {
     current_entity_needs_body_location: bool,
     /// Stack of active package indices (innermost last), supporting nested packages.
     package_stack: Vec<usize>,
+    scope_stack: Vec<ClassScope>,
     /// Canonical quark path for each package, parallel to `packages`.
     package_paths: Vec<Vec<String>>,
     /// Package lookup by canonical quark path.
@@ -95,6 +97,12 @@ struct ClassParser {
     legend_line: Option<usize>,
 }
 
+#[derive(Clone, Copy)]
+enum ClassScope {
+    Package,
+    Together(usize),
+}
+
 impl ClassParser {
     fn new() -> Self {
         Self {
@@ -103,11 +111,13 @@ impl ClassParser {
             entities: Vec::new(),
             relationships: Vec::new(),
             association_classes: Vec::new(),
+            together: Vec::new(),
             packages: Vec::new(),
             notes: Vec::new(),
             current_entity: None,
             current_entity_needs_body_location: false,
             package_stack: Vec::new(),
+            scope_stack: Vec::new(),
             package_paths: Vec::new(),
             package_by_path: HashMap::new(),
             entity_by_path: HashMap::new(),
@@ -154,6 +164,7 @@ impl ClassParser {
             entities,
             relationships: self.relationships,
             association_classes: self.association_classes,
+            together: self.together,
             packages: self.packages,
             notes: self.notes,
             hide_show: self.hide_show,
@@ -536,9 +547,15 @@ impl ClassParser {
             return Ok(());
         }
 
-        // Closing brace: pop the innermost package scope.
+        // Closing brace: leave the exact structural scope that opened it.
         if line == "}" {
-            self.package_stack.pop();
+            match self.scope_stack.pop() {
+                Some(ClassScope::Package) => {
+                    self.package_stack.pop();
+                }
+                Some(ClassScope::Together(_)) => {}
+                None => {}
+            }
             return Ok(());
         }
 
@@ -553,6 +570,9 @@ impl ClassParser {
             return Ok(());
         }
 
+        if self.try_together(line) {
+            return Ok(());
+        }
         if self.try_entity_decl(line) {
             return Ok(());
         }
@@ -730,6 +750,12 @@ impl ClassParser {
 
             self.register_entity_path(&entity_path, &final_id);
             self.materialize_active_phantom_packages();
+            if let Some(ClassScope::Together(group_idx)) = self.scope_stack.last().copied() {
+                let group = &mut self.together[group_idx];
+                if !group.entities.contains(&final_id) {
+                    group.entities.push(final_id.clone());
+                }
+            }
 
             // `CommandCreateClassMultilines.manageExtends` constructs each
             // declaration relationship as parent -> child with
@@ -1068,6 +1094,28 @@ impl ClassParser {
         }
     }
 
+    fn try_together(&mut self, line: &str) -> bool {
+        let compact = line.split_whitespace().collect::<String>();
+        if !compact.eq_ignore_ascii_case("together{") {
+            return false;
+        }
+        let idx = self.together.len();
+        self.together.push(crate::diagram::class::TogetherGroup {
+            parent: self.scope_stack.iter().rev().find_map(|scope| match scope {
+                ClassScope::Together(group_idx) => Some(*group_idx),
+                ClassScope::Package => None,
+            }),
+            owner_package: self
+                .package_stack
+                .last()
+                .map(|&package_idx| self.packages[package_idx].name.clone()),
+            entities: Vec::new(),
+            packages: Vec::new(),
+        });
+        self.scope_stack.push(ClassScope::Together(idx));
+        true
+    }
+
     fn try_package(&mut self, line: &str) -> bool {
         static RE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
@@ -1170,7 +1218,16 @@ impl ClassParser {
                 };
                 parent = Some(idx);
             }
-            self.package_stack.push(parent.unwrap());
+            let package_idx = parent.unwrap();
+            if let Some(ClassScope::Together(group_idx)) = self.scope_stack.last().copied() {
+                let package_name = self.packages[package_idx].name.clone();
+                let group = &mut self.together[group_idx];
+                if !group.packages.contains(&package_name) {
+                    group.packages.push(package_name);
+                }
+            }
+            self.package_stack.push(package_idx);
+            self.scope_stack.push(ClassScope::Package);
             true
         } else {
             false
@@ -1500,7 +1557,7 @@ impl ClassParser {
             return true;
         }
         // Skip other layout/format directives.
-        line.starts_with("together") || line.starts_with("map ") || line.starts_with("set ")
+        line.starts_with("map ") || line.starts_with("set ")
     }
 
     fn parse_member_line(&mut self, line: &str) {
@@ -2640,6 +2697,51 @@ mod tests {
         assert_eq!(d.entities.len(), 2);
         assert_eq!(d.entities[0].id, "com.example.Foo");
         assert_eq!(d.entities[1].id, "com.example.Bar");
+    }
+
+    #[test]
+    fn renamed_together_scopes_preserve_direct_entities_packages_and_children() {
+        let d = parse(
+            "together {\n\
+               class FreshAlpha3527\n\
+               class FreshBeta3529\n\
+               together {\n\
+                 class FreshNested3533\n\
+               }\n\
+               package FreshBundle3539 {\n\
+                 class FreshPackaged3541\n\
+               }\n\
+             }\n\
+             class FreshOutside3547",
+        );
+
+        assert_eq!(d.together.len(), 2);
+        assert_eq!(d.together[0].parent, None);
+        assert_eq!(d.together[0].entities, ["FreshAlpha3527", "FreshBeta3529"]);
+        assert_eq!(d.together[0].packages, ["FreshBundle3539"]);
+        assert_eq!(d.together[1].parent, Some(0));
+        assert_eq!(d.together[1].entities, ["FreshNested3533"]);
+    }
+
+    #[test]
+    fn preprocessed_renamed_together_siblings_do_not_become_nested() {
+        let source = "@startuml\n\
+            together {\n\
+              class FreshFirst3557\n\
+              class FreshSecond3559\n\
+            }\n\
+            together {\n\
+              class FreshThird3563\n\
+              class FreshFourth3571\n\
+            }\n\
+            @enduml";
+        let crate::diagram::Diagram::Class(d) = crate::parse::parse(source).unwrap() else {
+            panic!("expected class diagram");
+        };
+
+        assert_eq!(d.together.len(), 2);
+        assert_eq!(d.together[0].parent, None);
+        assert_eq!(d.together[1].parent, None);
     }
 
     #[test]

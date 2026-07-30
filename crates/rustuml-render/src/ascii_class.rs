@@ -301,6 +301,7 @@ mod tests {
             entities,
             relationships,
             association_classes: vec![],
+            together: vec![],
             packages: vec![],
             notes: vec![],
             hide_show: vec![],
