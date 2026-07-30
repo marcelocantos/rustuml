@@ -1,0 +1,23 @@
+@startuml
+left to right direction
+skinparam packageStyle database
+package "Ordinary Follows Database Style" as OrdinaryDatabase {
+  class OrdinaryRecord
+}
+package "Automatic Rectangle Holds Precedence" as AutomaticRectangle <<rectangle>> {
+  class RectangleRecord
+}
+node "Keyword Node Holds Precedence" as KeywordNode {
+  class NodeRecord
+}
+frame "Keyword Frame Holds Precedence" as KeywordFrame {
+  class FrameRecord
+}
+cloud "Keyword Cloud Holds Precedence" as KeywordCloud {
+  class CloudRecord
+}
+OrdinaryRecord --> RectangleRecord
+RectangleRecord --> NodeRecord
+NodeRecord --> FrameRecord
+FrameRecord --> CloudRecord
+@enduml

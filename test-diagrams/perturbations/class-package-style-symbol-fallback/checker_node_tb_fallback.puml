@@ -1,0 +1,8 @@
+@startuml
+skinparam packageStyle node
+package "Northwind Relay Cabinet" as RelayCabinet {
+  class RelayIngress
+  class RelayEgress
+  RelayIngress --> RelayEgress
+}
+@enduml

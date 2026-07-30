@@ -1,0 +1,187 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-package-style-symbol-fallback",
+  "reviewer": {
+    "identity": "independent adversarial checker",
+    "model": "GPT-5",
+    "tool": "Codex desktop",
+    "independence": "Did not implement the mechanism, author the account, edit production code, edit baselines, or alter any predecessor review."
+  },
+  "revisions": {
+    "checker_worktree_branch": "codex/class-package-style-symbol-fallback-checker",
+    "rust_revision": "eca14ad8c80817e267ebce35834c263d2bdb35f2",
+    "rust_tree": "8fcbc440fb7763a45909982208ea591410eeddfc",
+    "implementation_commit": "f7bf3fa3dd2cb33cae8fc4cb8d55027025430f65",
+    "account_commit": "fe21fd308d19aa19092149a557a60ef5c24daf95",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "comparator_build_revision": "826fbfd0"
+  },
+  "binary": {
+    "path": "/tmp/rustuml-checker-1482/target/release/examples/diff_one",
+    "sha256": "d36d5f2332316226802a938eaeefef6a23ecdc09af1006afa95c1bd9b2d03926",
+    "mode": "--no-oracle",
+    "cargo_or_rustc_run": false,
+    "rebuilt": false
+  },
+  "oracle": {
+    "url": "http://127.0.0.1:8787/render",
+    "java_jar_checked": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "request": "POST JSON {source, options:[-tsvg]}",
+    "java_svg_count": 12,
+    "java_syntax_error_count": 1
+  },
+  "commands": [
+    "git worktree add -b codex/class-package-style-symbol-fallback-checker /private/tmp/rustuml-class-package-style-symbol-fallback-checker eca14ad8",
+    "git -C /private/tmp/rustuml-class-package-style-symbol-fallback-checker rev-parse HEAD",
+    "git -C /private/tmp/rustuml-class-package-style-symbol-fallback-checker rev-parse HEAD^{tree}",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml rev-parse 71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/Cluster.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/ClusterDecoration.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/PackageStyle.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/image/EntityImageEmptyPackage.java",
+    "git show --format=fuller --find-renames f7bf3fa3 -- crates/rustuml-render/src/class.rs docs/parity-reviews/class-package-style-symbol-fallback/account.json",
+    "git diff --check f7bf3fa3^..eca14ad8",
+    "rg -n -i 'class-package-style-symbol-fallback|checker_(rect|node|database|frame|cloud|empty|explicit|last)' crates/rustuml crates/rustuml-parser crates/rustuml-render crates/rustuml-layout crates/rustuml-math crates/rustuml-oracle",
+    "for f in checker_*.puml; do jq -Rs --argjson options '[\"-tsvg\"]' '{source: ., options: $options}' \"$f\" | curl -sf -H 'Content-Type: application/json' --data-binary @- http://127.0.0.1:8787/render -o \"${f%.puml}.svg\"; done",
+    "for f in checker_*.puml; do /tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle \"$f\"; done"
+  ],
+  "source_inspection": {
+    "supported": [
+      "Cluster.drawU resolves group.getPackageStyle(), falling back to skinParam.packageStyle(), then constructs ClusterDecoration(packageStyle, group.getUSymbol(), ...). ClusterDecoration.guess returns the non-null explicit symbol before PackageStyle.toUSymbol().",
+      "Cluster.getStyle uses USymbols.PACKAGE when group.getUSymbol() is null, so global packageStyle changes decoration geometry without promoting ordinary package paint/style lookup to the fallback symbol.",
+      "PackageStyle.fromString accepts rectangle and rect, and PackageStyle.toUSymbol maps rectangle, node, database, frame, cloud, and folder to their corresponding symbols.",
+      "No reference to this mechanism name, any checker input name, a held-out path, or golden fixture text was found in shipping crates. The mechanism diff passes git diff --check."
+    ],
+    "disproven": [
+      "The Rust title-layout path calls effective_package_kind for every cluster. This applies DATABASE_CLUSTER_TITLE_EXTRA and NODE_CLUSTER_TITLE_WIDTH_EXTRA/NODE_CLUSTER_TITLE_HEIGHT_EXTRA to global fallback styles, although Java's ClusterHeader is created from the group's explicit symbol before ClusterDecoration performs packageStyle fallback.",
+      "EntityImageEmptyPackage directly calls new ClusterDecoration(getSkinParam().packageStyle(), null, ...). A valid ordinary empty package therefore does receive the packageStyle symbol in Java. Rust layout_empty_packages keeps symbol_kind at automatic_package_kind(package), so global fallback is omitted for that leaf path.",
+      "The Rust result for the explicit-keyword matrix is a DESCRIPTION diagram rather than Java's CLASS diagram, so node/frame/cloud keyword clusters do not retain explicit-symbol precedence in the product path."
+    ]
+  },
+  "inputs": [
+    {
+      "path": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_rect_alias_tb_style_top.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_rect_alias_tb_style_top.svg",
+      "valid": true,
+      "axes": ["rect alias", "top-to-bottom", "top-level ordinary package", "long renamed label", "package versus rectangle colors"],
+      "outcome": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_rect_lr_nested_explicit.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_rect_lr_nested_explicit.svg",
+      "valid": true,
+      "axes": ["rectangle", "left-to-right", "nested ordinary package", "automatic node precedence"],
+      "outcome": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_frame_tb_style.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_frame_tb_style.svg",
+      "valid": true,
+      "axes": ["frame", "top-to-bottom", "package versus frame colors", "renamed label"],
+      "outcome": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_cloud_lr_fallback.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_cloud_lr_fallback.svg",
+      "valid": true,
+      "axes": ["cloud", "left-to-right", "top-level ordinary package"],
+      "outcome": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_last_style_wins_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_last_style_wins_lr.svg",
+      "valid": true,
+      "axes": ["last packageStyle declaration wins", "folder then cloud", "left-to-right"],
+      "outcome": "pass: SVGs are structurally equivalent"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_database_tb_top.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_database_tb_top.svg",
+      "valid": true,
+      "axes": ["database", "top-to-bottom", "top-level ordinary package"],
+      "outcome": "fail: Rust adds 15px before the inner nodes and canvas bottom; Java does not promote database title layout through global packageStyle fallback"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_database_lr_nested.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_database_lr_nested.svg",
+      "valid": true,
+      "axes": ["database", "left-to-right", "nested ordinary packages"],
+      "outcome": "fail: Rust is 30px taller and moves both database clusters and descendants downward; this repeats the global-fallback database title coupling error"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_node_tb_fallback.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_node_tb_fallback.svg",
+      "valid": true,
+      "axes": ["node", "top-to-bottom", "top-level ordinary package", "renamed label"],
+      "outcome": "fail: Rust widens the cluster by 60px and adds 5px vertical slack, moving all descendants; Java does neither"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_node_lr_fallback.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_node_lr_fallback.svg",
+      "valid": true,
+      "axes": ["node", "left-to-right", "top-level ordinary package"],
+      "outcome": "fail: Rust adds 5px cluster height and shifts descendants down; Java's node fallback has no matching title-layout expansion"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_explicit_precedence_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_explicit_precedence_lr.svg",
+      "valid": true,
+      "axes": ["database fallback", "automatic rectangle", "explicit node", "explicit frame", "explicit cloud", "left-to-right"],
+      "outcome": "fail: Java emits five CLASS clusters with their explicit symbols preserved; Rust emits a DESCRIPTION diagram with only 52 rather than 70 structural elements"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_empty_control_valid_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_empty_control_valid_tb.svg",
+      "valid": true,
+      "axes": ["ordinary direct empty package", "cloud fallback", "filled ordinary control", "top-to-bottom"],
+      "outcome": "fail: Java EntityImageEmptyPackage uses Cloud through ClusterDecoration(packageStyle, null, ...); Rust retains the ordinary folder leaf and produces a wider, structurally different diagram"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_empty_control_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_empty_control_tb.svg",
+      "valid": false,
+      "axes": ["attempted direct empty package spelling", "cloud fallback"],
+      "outcome": "excluded: Java reports Syntax Error? (Assumed diagram type: component) at line 4; retained as required but excluded from valid-input counts"
+    }
+  ],
+  "result_counts": {
+    "fresh_inputs_total": 12,
+    "java_syntax_error_inputs": 1,
+    "valid_inputs": 11,
+    "valid_passed": 5,
+    "valid_failed": 6,
+    "valid_mechanism_relevant_passed": 5,
+    "valid_mechanism_relevant_failed": 6,
+    "oracle_errors": 0
+  },
+  "findings": [
+    {
+      "severity": "rejecting",
+      "summary": "Global node and database fallback is incorrectly coupled to explicit-symbol title sizing.",
+      "evidence": "effective_package_kind drives the ClusterHeader title-size extras in Rust. The node controls fail in both TB and LR with an added 60px width and/or 5px height, while the database controls fail in both top-level and nested forms with a 15px-per-cluster vertical displacement. Java resolves packageStyle only when ClusterDecoration chooses its asBig symbol after ClusterHeader is already built."
+    },
+    {
+      "severity": "rejecting",
+      "summary": "The account's empty-package exclusion is false for valid empty package groups.",
+      "evidence": "Java EntityImageEmptyPackage constructs ClusterDecoration(getSkinParam().packageStyle(), null, ...), and checker_empty_control_valid_tb renders an empty ordinary package as a cloud. Rust layout_empty_packages does not consult configured_package_kind for symbol_kind, so it renders the same leaf with ordinary folder chrome."
+    },
+    {
+      "severity": "rejecting",
+      "summary": "Explicit keyword precedence is not preserved across the requested keyword forms.",
+      "evidence": "checker_explicit_precedence_lr is valid Java class-diagram input containing node, frame, and cloud clusters. Java produces all five CLASS clusters, but Rust produces a DESCRIPTION diagram with 52 elements against Java's 70. This prevents accepting the claim that a global fallback cannot replace explicit keyword symbols."
+    },
+    {
+      "severity": "informational",
+      "summary": "The rectangle/frame/cloud and last-declaration parts of the general selector are supported.",
+      "evidence": "Five independent valid inputs pass exactly, including rect alias, nested rectangle with an automatic node, package-vs-symbol colors, frame, cloud, and a later cloud declaration superseding folder. No fixture-shaped production branch was found."
+    }
+  ],
+  "artifacts": {
+    "held_out_directory": "test-diagrams/perturbations/class-package-style-symbol-fallback/",
+    "review": "docs/parity-reviews/class-package-style-symbol-fallback/review.json",
+    "production_files_modified": false,
+    "baselines_modified": false,
+    "existing_fixtures_modified": false
+  },
+  "verdict": "REJECT"
+}

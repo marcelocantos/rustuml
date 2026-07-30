@@ -1,0 +1,14 @@
+@startuml
+left to right direction
+skinparam packageStyle rectangle
+package "Outer Meridian Registry" as MeridianOuter {
+  package "Inner Lantern Registry" as LanternInner {
+    class LanternSource
+    class LanternSink
+    LanternSource --> LanternSink
+  }
+  package "Explicit Node Remains Node" as ExplicitNode <<node>> {
+    class NodePayload
+  }
+}
+@enduml

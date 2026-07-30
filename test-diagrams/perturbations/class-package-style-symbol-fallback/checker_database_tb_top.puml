@@ -1,0 +1,8 @@
+@startuml
+skinparam packageStyle database
+package "Top Level Reservoir" as TopReservoir {
+  class ReservoirReader
+  class ReservoirWriter
+  ReservoirReader --> ReservoirWriter
+}
+@enduml
