@@ -3,29 +3,49 @@
   "mechanism": "class-symbol-container-alias-parse",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "java_locations": [
-    "net.sourceforge.plantuml.descdiagram.command.CommandPackageWithUSymbol#getRegexConcat",
-    "net.sourceforge.plantuml.descdiagram.command.CommandPackageWithUSymbol#executeArg",
-    "net.sourceforge.plantuml.cucadiagram.CucaDiagram#gotoGroup"
+    "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandPackageWithUSymbol.java:74-128::CommandPackageWithUSymbol#getRegexConcat",
+    "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandPackageWithUSymbol.java:136-177::CommandPackageWithUSymbol#executeArg",
+    "src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandLinkClass.java:161-201::CommandLinkClass#executeArg",
+    "src/main/java/net/atmp/CucaDiagram.java:249-287::CucaDiagram#quarkInContextSafe",
+    "src/main/java/net/sourceforge/plantuml/plasma/Quark.java:116-140::Quark#child and Quark#getDirectChild",
+    "src/main/java/net/sourceforge/plantuml/plasma/Plasma.java:63-72,92-101::Plasma#register, Plasma#quarks, and Plasma#firstWithName",
+    "src/main/java/net/atmp/CucaDiagram.java:219-241::CucaDiagram#reallyCreateLeaf",
+    "src/main/java/net/atmp/CucaDiagram.java:324-336::CucaDiagram#eventuallyBuildPhantomGroups",
+    "src/main/java/net/atmp/CucaDiagram.java:348-364::CucaDiagram#gotoGroup",
+    "src/main/java/net/sourceforge/plantuml/abel/Entity.java:162-187::Entity constructors"
   ],
   "rust_locations": [
-    "crates/rustuml-parser/src/parse/class.rs::ClassParser::try_package"
+    "crates/rustuml-parser/src/parse/class.rs:252-342::ClassParser::{unique_quark_path_named,first_quark_path_named,register_quark_path,resolve_quark_path,resolve_group_path}",
+    "crates/rustuml-parser/src/parse/class.rs:371-441::ClassParser::{ensure_phantom_packages,create_entity_at_path}",
+    "crates/rustuml-parser/src/parse/class.rs:462-486::ClassParser::{resolve_relationship_endpoint,resolve_quoted_relationship_endpoint}",
+    "crates/rustuml-parser/src/parse/class.rs:1052-1140::ClassParser::try_relationship",
+    "crates/rustuml-parser/src/parse/class.rs:1246-1390::ClassParser::try_package",
+    "crates/rustuml-parser/src/diagram/class.rs:43-90::ClassDiagram::uid_events and ClassUidEvent",
+    "crates/rustuml-render/src/class.rs:4333-4465::svek_id_allocation"
   ],
-  "invariant": "CommandPackageWithUSymbol accepts both DISPLAY as CODE and CODE as \"DISPLAY\" for every supported symbol-container keyword, including node, frame, cloud, database, folder, and rectangle. It also accepts the corresponding unquoted display/code form. CODE is cleaned and used as the quark identity; DISPLAY remains the visible group label. Alias direction is presentation syntax and never changes the group identity model.",
-  "causal_divergence": "Rust now accepts aliases for every recognized symbol keyword, but its single regex models only quoted-or-bare DISPLAY followed by an optional bare CODE. It cannot represent bare CODE followed by quoted DISPLAY, so valid folder and rectangle declarations are skipped and later references materialize a different implicit package/class structure.",
-  "planned_change": "Parse the two Java alias alternatives explicitly, normalize both into one code/display pair, and then reuse the existing quark-backed package construction path. Preserve the unaliased and DISPLAY-as-CODE behavior. Add parser tests for both directions across symbols, nesting, external relationships, and renamed labels.",
+  "invariant": "PlantUML separates quark identity selection from Entity construction and shared UID allocation. CommandLinkClass resolves quark1 and quark2 before constructing either missing endpoint. Quark.child eagerly creates and Plasma.register records every segment of each dotted path in one global creation order, but those data-less Quarks consume no Entity UID. reallyCreateLeaf then constructs the first missing endpoint Entity, whose Entity constructor consumes a UID, and for a class-like leaf calls eventuallyBuildPhantomGroups. That method scans all already registered Quarks in Plasma order and constructs a package Entity for every data-less Quark that has children. Consequently, when the second endpoint is a new dotted path, its ancestor packages are constructed during the first endpoint's phantom sweep and consume UIDs before the second endpoint leaf, even though that leaf's identity was already selected. CommandPackageWithUSymbol later resolves CODE to the same existing Quark; gotoGroup reuses and mutates an existing phantom group without constructing a second Entity or replacing its first display. DISPLAY as CODE and CODE as quoted DISPLAY therefore select the same identity model: alias direction affects parsing and presentation, not constructor order.",
+  "causal_divergence": "Rust now parses both alias directions and selects the correct canonical path, so identity selection is not the rejected case's remaining defect. ClassParser::try_relationship resolves and materializes the source endpoint before it resolves the target. resolve_quark_path is a pure path calculation, and register_quark_path records only paths that create_entity_at_path or ensure_phantom_packages has already materialized; Rust has no Java-equivalent data-less Quark state. For Client --> Outer.Ui.Facade.Controller, Rust therefore records Client, then resolves the target and create_entity_at_path records Controller before ensure_phantom_packages records Outer, Outer.Ui, and Outer.Ui.Facade. Java has already registered both endpoint paths before constructing Client, so Client's reallyCreateLeaf call globally materializes Outer, Outer.Ui, and Outer.Ui.Facade before Controller. The later frame declaration correctly reuses the same Facade identity in both implementations and allocates no replacement package UID, so try_package cannot repair the earlier constructor-event order. The rejected review's package-before-entity observation is thus specific to the preselected second endpoint, not a general reversal inside reallyCreateLeaf.",
+  "planned_change": "Represent Java's quark tree independently from materialized packages and entities: each canonical quark path has creation order, parent/children, and optional data. Make relationship parsing first resolve and register both endpoint quarks, preserving CommandLinkClass's quark1-then-quark2 selection order, and only then materialize missing endpoint entities in source-then-target order. After each class-like Entity event, run one global creation-ordered phantom sweep over every registered data-less quark with children, recording Package events when their Entity constructors occur. Keep Link/Relationship allocation after both endpoints. Make try_package resolve through the same quark registry; when a late declaration reaches an already materialized phantom group, apply the Java-owned mutable group type, symbol, colors, and stereotypes without another constructor event or a late display replacement. Retain the existing grammar normalization for both alias directions and do not key ordering to labels, fixture names, path depth, or SVG coordinates.",
   "perturbation_axes": [
-    "node alias crossed with frame, cloud, database, and rectangle aliases",
-    "quoted display crossed with unquoted code",
-    "top-level crossed with nested symbol containers",
-    "short crossed with long renamed labels",
-    "internal links crossed with links leaving the container",
-    "top-to-bottom crossed with left-to-right direction"
+    "dotted relationship before explicit symbol-container declaration crossed with the same declaration before the relationship",
+    "new dotted endpoint on the right crossed with the left, with both endpoints dotted, and with source/target order reversed",
+    "top-level code crossed with two- and three-level nesting under the default dot separator",
+    "default dot separator crossed with valid custom separators such as :: and /, plus namespaceSeparator none short-name reuse",
+    "DISPLAY as CODE crossed with CODE as quoted DISPLAY while holding the canonical CODE and topology constant",
+    "late declaration of the exact preselected ancestor crossed with declaration of its parent and with no later declaration",
+    "one endpoint already materialized crossed with neither or both endpoints materialized before the link",
+    "top-to-bottom crossed with left-to-right direction as a non-causal layout control"
   ],
   "rejected_attempt": {
-    "implementation_commit": "09014421f785f5d251a0b28541603b6dcda7aae9",
+    "implementation_commit": "8895b9de317ebdac7b32ddeb99733c8b73e786a3",
     "review": "docs/parity-reviews/class-symbol-container-alias-parse/review.json",
-    "review_commit": "28a85f6f",
-    "result": "Rejected because CODE as quoted DISPLAY remained outside the Rust grammar."
+    "review_commit": "22cbd4904308b7b60102377be464a2782f05c4ca",
+    "result": "Rejected because the completed alias grammar still materialized a nested dotted target atomically instead of preselecting both endpoint quark paths before constructor and phantom-group events.",
+    "prior_rejection": {
+      "implementation_commit": "09014421f785f5d251a0b28541603b6dcda7aae9",
+      "review_commit": "28a85f6f",
+      "result": "Rejected because CODE as quoted DISPLAY remained outside the Rust grammar."
+    }
   },
   "predecessor_rejections": [
     {
