@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-transition-label-family-baseline",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "d8a42c00",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java:116-122,231-242 GraphvizImageBuilder#getDefaultStyleDefinitionArrow and SvekEdge construction",
+    "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java:279-303 SvekEdge label Display creation",
+    "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java:942-948 SvekEdge label TextBlock emission",
+    "src/main/java/net/sourceforge/plantuml/klimt/creole/SheetBlock1.java:195-210 SheetBlock1 padded atom emission",
+    "src/main/java/net/sourceforge/plantuml/klimt/creole/legacy/AtomText.java:110-153 AtomText dimension, descent, and baseline calculation",
+    "src/main/resources/themes/puml-theme-minty.puml:203-210 minty Verdana default font and dpi 100"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/state.rs:989-1000 ordinary_edge_label_size",
+    "crates/rustuml-render/src/state.rs:1040-1096 emit_link_label_composition",
+    "crates/rustuml-render/src/state.rs:2396-2450 StateArrowFont family/size resolution",
+    "crates/rustuml-render/src/state.rs:2879-2896 autonomous painted label bounds",
+    "crates/rustuml-render/src/state.rs:4163-4185 autonomous transition label emission",
+    "crates/rustuml-render/src/state.rs:5206-5230 flat painted label bounds",
+    "crates/rustuml-render/src/text_render.rs:237-248 label_ascent and label_ascent_with_family",
+    "crates/rustuml-render/src/text_render.rs:268-292 label_first_baseline_ascent_with_family",
+    "crates/rustuml-render/src/text_render.rs:1318-1347 family-specific text height and ascent"
+  ],
+  "evidence_inputs": [
+    "test-diagrams/perturbations/state-arrow-style-isolation/checker_theme_user_order_and_local_override.puml",
+    "test-diagrams/perturbations/state-arrow-style-isolation/review4_repeated_themes_bidirectional_order.puml",
+    "test-diagrams/perturbations/state-arrow-style-isolation/review6_repeated_themes_state_user_order.puml"
+  ],
+  "invariant": "A state transition label is one Display text block built from the arrow style's resolved FontConfiguration. Graphviz receives the block dimensions before routing, and SvekEdge later draws that same block at the solved label origin. Within SheetBlock1, AtomText asks StringBounder for dimensions and descent using FontConfiguration.getFont; its emitted baseline is text height minus descent, including the metrics of the resolved family, size, weight, and positioned Creole run. The global Display padding and SvekEdge outer margin translate the block origin but do not replace its font metrics. Every Rust path that paints a transition label or computes its painted bound must therefore derive the first emitted baseline from the same StateArrowFont family and size used for width measurement and SVG font-family emission.",
+  "causal_divergence": "The state renderer correctly resolves StateArrowFont.family and uses it for transition-label width, style, and emitted font-family, but emit_link_label_composition, autonomous label emission, autonomous painted bounds, and flat painted bounds still call text_render::label_ascent. That convenience function hardcodes the generic sans-serif metric family. Under minty, the resolved label font is Verdana at 12px and dpi 100. Rust's generic sans ascent is 11.6015625px; the checked-in Verdana ascent is 12.064453125px. Their 0.462890625px unscaled difference becomes 0.482177734375px after the independent 100/96 document scale, matching the observed approximately 0.4821 SVG baseline error on every transition label while x coordinates, label boxes, ranks, routes, and state geometry match. This is a font-metric consumer mismatch, not a coordinate offset to tune and not part of the prior Display-padding mechanism.",
+  "planned_change": "At each state transition-label emission and painted-bound consumer, replace the family-blind ascent call with label_first_baseline_ascent_with_family using the already-resolved StateArrowFont.family and size. Use the first-baseline helper rather than a new numeric adjustment so plain labels, mixed-family Creole runs, subscript/superscript positioning, and future font families follow the same AtomText model. Keep label box dimensions, padding, SvekEdge margins, solved origins, path geometry, theme cascade, DPI scaling, and SVG post-processing unchanged. Add a unit-level assertion that Verdana and generic sans produce distinct expected baselines through the chosen helper, then verify fresh transition labels across multiple families and Creole forms. Do not add a minty branch, a 0.462890625 constant, or fixture-coordinate compensation.",
+  "perturbation_axes": [
+    "Verdana, Arial, Courier New, and generic sans-serif arrow font families",
+    "font sizes 11, 12, 13, and a fresh larger size",
+    "plain, bold, italic, monospace-Creole, subscript, and superscript label content",
+    "global Padding 0, 5, and 8 crossed with ordinary and self-link SvekEdge margins",
+    "flat and autonomous state scopes",
+    "top-to-bottom and left-to-right layout",
+    "dpi 96 and dpi 100",
+    "theme-provided arrow font crossed with a later user override"
+  ],
+  "scope_boundary": "This mechanism owns only the transition-label glyph baseline and the corresponding painted-bound calculations. It does not own state-node title/body baselines, transition box dimensions, pseudo-state colors or gradients, Graphviz routes, or the remaining one-pixel canvas frontier.",
+  "status": "proposed"
+}
