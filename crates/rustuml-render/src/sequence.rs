@@ -7114,8 +7114,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         }
                     }
 
-                    // Deactivate AFTER spacing computation, but only when the
-                    // return consumed an activation context.
+                    // CommandReturn adds the synthesized reverse message to the
+                    // diagram. If another bare return has no activation owner,
+                    // SequenceDiagram#getLastEventWithDeactivate therefore
+                    // reverses this return, not the older concrete message.
+                    spacing_last_return_pair = Some((ret_to, ret_from));
                 }
 
                 // Advance autonumber
@@ -11753,6 +11756,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                         );
                     }
                 }
+
+                // The synthesized return is now the newest concrete message.
+                // A consecutive ownerless return reverses it via
+                // SequenceDiagram#getLastEventWithDeactivate.
+                last_return_pair = Some((ret_to.clone(), ret_from.clone(), ret_open));
 
                 // Advance autonumber
                 auto_num.advance();

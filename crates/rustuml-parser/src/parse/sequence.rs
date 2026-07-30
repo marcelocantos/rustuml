@@ -442,7 +442,13 @@ impl SeqParser {
             arrow.direction = ArrowDirection::LeftToRight;
             apply_inline_arrow_style(&mut arrow, arrow_style);
             let to = self.ensure_participant(&caps[3]);
-            let activation = caps.get(4).map(|m| parse_activation(m.as_str()));
+            // CommandExoArrowAny applies the same explicit-first autoactivation
+            // rule as CommandArrow. External boundaries change only the remote
+            // endpoint; their participant still owns the lifecycle variation.
+            let activation = caps
+                .get(4)
+                .map(|m| parse_activation(m.as_str()))
+                .or_else(|| self.autoactivation_for(&arrow));
             let activation_color = caps.get(5).map(|m| m.as_str().to_string());
             let label = message_label(line, caps.get(6));
             self.events.push(Event::Message(Message {
@@ -461,7 +467,10 @@ impl SeqParser {
             let mut arrow = parse_arrow(&arrow_str);
             arrow.direction = ArrowDirection::LeftToRight;
             apply_inline_arrow_style(&mut arrow, arrow_style);
-            let activation = caps.get(4).map(|m| parse_activation(m.as_str()));
+            let activation = caps
+                .get(4)
+                .map(|m| parse_activation(m.as_str()))
+                .or_else(|| self.autoactivation_for(&arrow));
             let activation_color = caps.get(5).map(|m| m.as_str().to_string());
             let label = message_label(line, caps.get(6));
             self.events.push(Event::Message(Message {
@@ -1407,6 +1416,29 @@ mod tests {
             };
             assert_eq!(message.arrow.color.as_deref(), Some(color));
             assert_eq!(message.arrow.line, LineStyle::Dotted);
+        }
+    }
+
+    #[test]
+    fn external_messages_share_explicit_first_autoactivation() {
+        let d = parse(
+            "autoactivate on\n\
+             [-> Alice : incoming solid\n\
+             Alice -->] : outgoing dotted\n\
+             Alice -->] ++ : explicit open wins\n\
+             [/-x Bob : crossed half head",
+        );
+        let expected = [
+            Some(ActivationChange::Activate),
+            Some(ActivationChange::Deactivate),
+            Some(ActivationChange::Activate),
+            None,
+        ];
+        for (event, expected_activation) in d.events.iter().zip(expected) {
+            let Event::Message(message) = event else {
+                panic!("expected message");
+            };
+            assert_eq!(message.activation, expected_activation);
         }
     }
 
