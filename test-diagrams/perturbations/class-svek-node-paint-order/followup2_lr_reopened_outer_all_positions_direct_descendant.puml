@@ -1,0 +1,19 @@
+@startuml
+left to right direction
+class ReviewRootA9301
+package ReviewVault9303 {
+  class DirectLeaf9305
+  package ReviewCell9307 {
+    class NestedLeaf9309
+  }
+}
+class ReviewRootB9311
+ReviewRootA9301 --> ReviewVault9303.ReviewCell9307.NestedLeaf9309
+ReviewVault9303.DirectLeaf9305 --> ReviewRootB9311
+package ReviewVault9303 {
+  note left of ReviewVault9303.ReviewCell9307.NestedLeaf9309 : reopened descendant left
+  note right of ReviewVault9303.DirectLeaf9305 : reopened direct right
+  note top of ReviewVault9303.DirectLeaf9305 : reopened direct top
+  note bottom of ReviewVault9303.ReviewCell9307.NestedLeaf9309 : reopened descendant bottom
+}
+@enduml

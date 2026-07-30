@@ -1,0 +1,21 @@
+@startuml
+top to bottom direction
+class RootHead9401
+package Orbit9403 {
+  class Direct9405
+  package Capsule9407 {
+    class Nested9409
+  }
+}
+class RootTail9411
+RootHead9401 --> Orbit9403.Capsule9407.Nested9409
+Orbit9403.Direct9405 --> RootTail9411
+package Orbit9403 {
+  note "floating descendant" as FloatDesc9413
+  FloatDesc9413 .. Orbit9403.Capsule9407.Nested9409
+  note "floating direct" as FloatDirect9415
+  FloatDirect9415 .. Orbit9403.Direct9405
+  note right of Orbit9403.Capsule9407.Nested9409 : attached descendant
+  note left of Orbit9403.Direct9405 : attached direct
+}
+@enduml

@@ -1,0 +1,19 @@
+@startuml
+top to bottom direction
+class RootLead9601
+package Archive9603 {
+  class Direct9605
+  package Inner9607 {
+    class Nested9609
+  }
+}
+class RootTail9611
+RootLead9601 --> Archive9603.Inner9607.Nested9609
+Archive9603.Direct9605 --> RootTail9611
+package Archive9603 {
+  note left of Archive9603.Inner9607.Nested9609 : first attached note
+  note right of Archive9603.Inner9607.Nested9609 : second attached note
+  note "floating sibling note" as Floating9613
+  Floating9613 .. Archive9603.Direct9605
+}
+@enduml

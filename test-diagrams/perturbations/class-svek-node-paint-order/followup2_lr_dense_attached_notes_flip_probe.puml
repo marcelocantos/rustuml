@@ -1,0 +1,18 @@
+@startuml
+left to right direction
+class Start9501
+class Buffer9503
+package Fold9505 {
+  class Focus9507
+  class Support9509
+}
+class End9511
+Start9501 --> Buffer9503
+Buffer9503 --> Fold9505.Focus9507
+Fold9505.Focus9507 --> End9511
+Fold9505.Support9509 --> End9511
+note left of Fold9505.Focus9507 : declared left probe
+note right of Fold9505.Support9509 : declared right probe
+note top of Fold9505.Focus9507 : declared top probe
+note bottom of Fold9505.Support9509 : declared bottom probe
+@enduml

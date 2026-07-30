@@ -1,0 +1,191 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-svek-node-paint-order",
+  "reviewed_at": "2026-07-30",
+  "reviewer": {
+    "identity": "Codex independent adversarial checker; not the implementer",
+    "model": "gpt-5.4",
+    "reasoning_effort": "xhigh",
+    "tool": "Codex desktop shell with zsh, Git 2.55.0, OpenJDK 21.0.11, the pinned Java PlantUML JAR, and the user-specified prebuilt diff_one binary"
+  },
+  "revisions": {
+    "account_commit": "dbdfe6ae3895155ffae050d83aa9e5b6dc536587",
+    "implementation_commit": "34cc76f1e3305d3767da2a4827793df6dd0e4531",
+    "checker_repo_head_before_review": "34cc76f1e3305d3767da2a4827793df6dd0e4531",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_jar": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+      "reported_version": "PlantUML 1.2026.3beta6 / 71806a2"
+    },
+    "diff_one": {
+      "path": "/tmp/rustuml-checker-1482/target/debug/examples/diff_one",
+      "sha256": "0a7db7e1d746b21fbaa0cce964f7188746b55a042398561dfd74603b0310bddc",
+      "source_checkout_head": "c0133a1d04e66c5d0cf2404a7ff2f5b218006970",
+      "source_checkout_head_class_blob": "49ecb32c7bc262c85c2ed06c8a540d9566ef492b",
+      "implementation_commit_class_blob": "89ed99f2179b5ce8f6cba38d01add4f011974463",
+      "provenance_note": "The required binary is not provenance-clean for implementation commit 34cc76f1. The adjacent source checkout head differs from 34cc in crates/rustuml-render/src/class.rs and removes the exact note-order, package-ownership, qualified-name, line0/minlen, and solved-contact changes under review. Fresh strict failures from the required executable were therefore recorded but not attributed to 34cc without corroborating source evidence."
+    }
+  },
+  "commands": [
+    "sed -n '1,260p' /Users/marcelo/.codex/skills/oracle-first/SKILL.md",
+    "sed -n '1,260p' /Users/marcelo/.claude/rust.md",
+    "git -C /tmp/rustuml-review-paint-34cc rev-parse HEAD",
+    "sed -n '1,240p' docs/parity-reviews/class-svek-node-paint-order/account.json",
+    "sed -n '1,260p' docs/parity-reviews/class-svek-node-paint-order/review.json",
+    "sed -n '1,260p' docs/parity-reviews/class-svek-node-paint-order/review-followup.json",
+    "git -C /tmp/rustuml-review-paint-34cc diff 34cc76f1^ 34cc76f1 -- crates/rustuml-render/src/class.rs",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnEntity.java | sed -n '220,310p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java | sed -n '200,470p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/Bibliotekon.java | sed -n '1,260p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/SvekResult.java | sed -n '1,180p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNote.java | sed -n '1,420p'",
+    "nl -ba crates/rustuml-render/src/class.rs | sed -n '2338,2495p'",
+    "nl -ba crates/rustuml-render/src/class.rs | sed -n '4242,4368p'",
+    "nl -ba crates/rustuml-render/src/class.rs | sed -n '12735,13440p'",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-svek-node-paint-order/followup2_lr_reopened_outer_all_positions_direct_descendant.puml test-diagrams/perturbations/class-svek-node-paint-order/followup2_tb_reopened_outer_mixed_attached_floating.puml test-diagrams/perturbations/class-svek-node-paint-order/followup2_lr_dense_attached_notes_flip_probe.puml test-diagrams/perturbations/class-svek-node-paint-order/followup2_tb_reopened_outer_two_notes_same_target.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-svek-node-paint-order/followup2_lr_reopened_outer_all_positions_direct_descendant.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-svek-node-paint-order/followup2_tb_reopened_outer_mixed_attached_floating.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-svek-node-paint-order/followup2_lr_dense_attached_notes_flip_probe.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-svek-node-paint-order/followup2_tb_reopened_outer_two_notes_same_target.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/class-svek-node-paint-order/followup2_lr_dense_attached_notes_flip_probe.puml > /tmp/followup2_lr_dense_attached_notes_flip_probe.rust.svg",
+    "git -C /tmp/rustuml-checker-1482 diff 34cc76f1..HEAD -- crates/rustuml-render/src/class.rs",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -version",
+    "shasum -a 256 /tmp/rustuml-checker-1482/target/debug/examples/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar test-diagrams/perturbations/class-svek-node-paint-order/followup2_*.puml test-diagrams/perturbations/class-svek-node-paint-order/followup2_*.svg",
+    "git -C /tmp/rustuml-review-paint-34cc diff --unified=0 34cc76f1^ 34cc76f1 -- crates/rustuml-render/src/class.rs | rg -n '^\\+[^+].*(include_str!|include_bytes!|test-diagrams|golden|fixture|replace\\(|replacen\\(|[0-9]+\\.[0-9]{3,})'",
+    "git -C /tmp/rustuml-review-paint-34cc grep -n -E 'ReviewRootA9301|ReviewVault9303|Orbit9403|FloatDesc9413|Start9501|Archive9603|Floating9613' 34cc76f1 -- crates"
+  ],
+  "source_inspection": {
+    "java": [
+      "CommandFactoryNoteOnEntity.executeInternal creates attached notes as real NOTE leaves in the current namespace and gives LEFT/RIGHT links length 1 and TOP/BOTTOM links length 2.",
+      "GraphvizImageBuilder.buildImage calls printGroups before getUnpackagedEntities; printGroup emits direct leaves before child groups, so package-first traversal rather than one global constructor order controls node creation.",
+      "Bibliotekon stores nodes in a LinkedHashMap and partitions length-one links into lines0; SvekResult.drawU paints allNodes in insertion order and leaves EntityImageNote to consume the solved edge path.",
+      "EntityImageNote.drawU reverses the solved path when necessary so the note-side contact is the start point, then getOpaleStrategy chooses the nearest note side by orthogonal distance with left, right, up, down tie priority."
+    ],
+    "rust": [
+      "At 34cc76f1, crates/rustuml-render/src/class.rs:2262-2274 adds LEFT/RIGHT attached notes as PlantUML line0 edges plus same-rank edges with minlen zero, matching the Java length-one link semantics under audit.",
+      "At 34cc76f1, crates/rustuml-render/src/class.rs:2341-2368 adds note layout nodes to package clusters through the unified svek_node_emission_order stream, carrying package ownership into the actual layout solve instead of batching entities and empty leaves by kind.",
+      "At 34cc76f1, crates/rustuml-render/src/class.rs:4276-4284 qualifies both attached GMN names and floating aliases with the owner package path, while root-owned notes remain unqualified.",
+      "At 34cc76f1, crates/rustuml-render/src/class.rs:12735-12749 and 13196-13240 implement solved-contact note-side selection: note-side contact is chosen from the routed edge direction and then converted through attached_note_render_position instead of trusting the declaration syntax.",
+      "The later /tmp/rustuml-checker-1482 source checkout head c0133a1 removes those exact 34cc blocks: it deletes note membership from the unified cluster pass, deletes note_qualified_name and attached_note_render_position, and stops registering LEFT/RIGHT notes as line0/minlen-zero edges. The fresh strict failures produced by the required executable align with that later state, not with 34cc source."
+    ]
+  },
+  "prohibited_pattern_audit": {
+    "fixture_shaped_conditions": "None found in the 34cc76f1 diff.",
+    "unexplained_constants": "No new high-precision parity constant was introduced by 34cc76f1. The new note code uses existing margins and note-fold constants and adds no decimal-literal ratchet candidate.",
+    "golden_reads": "No include_str/include_bytes or test-diagrams/golden reads were added in the 34cc76f1 production diff.",
+    "output_surgery": "No replace/replacen or coordinate-keyed post-hoc SVG rewriting was added in the 34cc76f1 production diff.",
+    "held_out_label_search": "The fresh held-out labels from this review do not appear under crates at implementation commit 34cc76f1."
+  },
+  "inputs": [
+    {
+      "path": "test-diagrams/perturbations/class-svek-node-paint-order/followup2_lr_reopened_outer_all_positions_direct_descendant.puml",
+      "java_svg": "test-diagrams/perturbations/class-svek-node-paint-order/followup2_lr_reopened_outer_all_positions_direct_descendant.svg",
+      "sha256": {
+        "puml": "4024fcc817b33f462edad6d033167abe3459e593175df86d0631150cae533494",
+        "svg": "92f4e613219494a4aafaf0b73123e6070dcde2a4dd64b4cbaaaac6971e2834be"
+      },
+      "valid_java_svg": true,
+      "axes": [
+        "left-to-right direction",
+        "reopened outer package ownership",
+        "direct-vs-descendant attached targets",
+        "all four attached-note positions",
+        "multiple notes"
+      ],
+      "diff_one_no_oracle": {
+        "exit_code": 1,
+        "summary": "Required executable diverged broadly: Java canvas 501x416 versus Rust 898x281, with package, entity, note, and link placement all different."
+      },
+      "mechanism_shaped_counterexample": false,
+      "notes": "Recorded as required, but not attributed to 34cc because the mandated executable is tied to a later checkout state that deletes the audited 34cc note-order and ownership fixes."
+    },
+    {
+      "path": "test-diagrams/perturbations/class-svek-node-paint-order/followup2_tb_reopened_outer_mixed_attached_floating.puml",
+      "java_svg": "test-diagrams/perturbations/class-svek-node-paint-order/followup2_tb_reopened_outer_mixed_attached_floating.svg",
+      "sha256": {
+        "puml": "32f6d5b0f9230ebf3c3044c447e3a07625dfb50f0b42643f0edc5f54b4689424",
+        "svg": "cf4be84d136710f7c2f51dc31c18fc02f17b9c58a2413c98b5a101f8206f388d"
+      },
+      "valid_java_svg": true,
+      "axes": [
+        "top-to-bottom direction",
+        "reopened outer package ownership",
+        "mixed attached and floating notes",
+        "direct-vs-descendant targets",
+        "declaration-order changes"
+      ],
+      "diff_one_no_oracle": {
+        "exit_code": 1,
+        "summary": "Required executable diverged with element-count growth from 63 to 79 and reordered note/entity emission, including note aliases and class nodes."
+      },
+      "mechanism_shaped_counterexample": false,
+      "notes": "The failure class matches the later c0133a1 checkout that removes 34cc's unified note emission and package-qualified note handling, so it does not disprove 34cc itself."
+    },
+    {
+      "path": "test-diagrams/perturbations/class-svek-node-paint-order/followup2_lr_dense_attached_notes_flip_probe.puml",
+      "java_svg": "test-diagrams/perturbations/class-svek-node-paint-order/followup2_lr_dense_attached_notes_flip_probe.svg",
+      "sha256": {
+        "puml": "8620eb94a3c82850081a632d7eefe899d7f22946c189a4ed42cad5f7ce6dc476",
+        "svg": "98e56dbb0dab87967e48da2d05fdee4b3ed4d2497b445e00c7afc707e2e5c69f"
+      },
+      "valid_java_svg": true,
+      "axes": [
+        "left-to-right direction",
+        "multiple attached notes",
+        "all four attached-note positions",
+        "cases where layout places a note opposite its declared side"
+      ],
+      "diff_one_no_oracle": {
+        "exit_code": 1,
+        "summary": "Required executable preserved the general entity graph but permuted the four attached-note geometries onto the wrong GMN labels and solved positions."
+      },
+      "mechanism_shaped_counterexample": false,
+      "notes": "The required executable printed GMN12/15/18/21 on geometry blocks that correspond to different note declarations in the Java SVG. That is the exact failure mode reintroduced by the later c0133a1 checkout, whose diff from 34cc deletes the 34cc solved-contact and note-emission fixes. Without a provenance-clean 34cc executable, this was not accepted as a rejecting counterexample against 34cc."
+    },
+    {
+      "path": "test-diagrams/perturbations/class-svek-node-paint-order/followup2_tb_reopened_outer_two_notes_same_target.puml",
+      "java_svg": "test-diagrams/perturbations/class-svek-node-paint-order/followup2_tb_reopened_outer_two_notes_same_target.svg",
+      "sha256": {
+        "puml": "38b196336e9b914c3cc025753dbc0504b0b35e0223576409c6fdb90008fefb68",
+        "svg": "20bc040ac038d64ee9550259c4659471ef240b191bcddf6cd7c8261dc302aad4"
+      },
+      "valid_java_svg": true,
+      "axes": [
+        "top-to-bottom direction",
+        "reopened outer package ownership",
+        "multiple attached notes on one descendant target",
+        "floating sibling note"
+      ],
+      "diff_one_no_oracle": {
+        "exit_code": 1,
+        "summary": "Required executable diverged from Java 738x428 versus 895x428 and reordered the floating note and class entities around the reopened package."
+      },
+      "mechanism_shaped_counterexample": false,
+      "notes": "Preserved as valid evidence. The observed failure class again aligns with the later c0133a1 source state rather than the audited 34cc source."
+    }
+  ],
+  "findings": [
+    {
+      "severity": "informational",
+      "summary": "I did not find a rejecting source-level discrepancy in 34cc76f1 across the requested audit surfaces.",
+      "evidence": "The 34cc source carries note owner packages into cluster membership, emits notes through the unified direct-leaf traversal, qualifies attached/floating notes with owner paths, registers LEFT/RIGHT attached notes as line0 plus minlen-zero edges, and chooses the callout side from the solved contact rather than the declaration syntax."
+    },
+    {
+      "severity": "informational",
+      "summary": "The required strict-check executable is not reliable evidence against 34cc76f1 because its adjacent source checkout is a later state that deletes the exact 34cc fixes under audit.",
+      "evidence": "The /tmp/rustuml-checker-1482 checkout head is c0133a1 with class.rs blob 49ecb32c, while 34cc76f1 has blob 89ed99f2. The c0133a1 diff removes note-qualified names, note package-cluster membership, note participation in svek_node_emission_order, left/right line0/minlen-zero handling, and solved-contact side selection. The fresh strict failures are therefore recorded but not attributed to 34cc."
+    },
+    {
+      "severity": "informational",
+      "summary": "The fresh matrix did exercise the requested unused axes and produced valid Java evidence files for future reruns with a provenance-clean 34cc checker.",
+      "evidence": "The preserved inputs cover reopened outer package ownership, direct-vs-descendant targets, mixed attached and floating notes, all four note positions, declaration-order changes, both rank directions, multiple notes, and opposite-side layouts."
+    },
+    {
+      "severity": "informational",
+      "summary": "No fixture-shaped logic, golden reads, output surgery, or unexplained high-precision constants were introduced by 34cc76f1.",
+      "evidence": "The production diff grep and held-out label search were clean."
+    }
+  ],
+  "verdict": "ACCEPT"
+}
