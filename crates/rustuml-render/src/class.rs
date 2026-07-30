@@ -5523,6 +5523,7 @@ struct LayoutPackageCluster {
     stereotype_lines: Vec<String>,
     fill: String,
     stroke: String,
+    stroke_width: &'static str,
     font_fill: String,
     x: f64,
     y: f64,
@@ -5553,7 +5554,7 @@ fn layout_package_clusters(
                 .map(crate::sequence::resolve_color)
                 .unwrap_or_else(|| {
                     if matches!(
-                        kind,
+                        paint_kind,
                         PackageKind::Database
                             | PackageKind::Frame
                             | PackageKind::Rectangle
@@ -5565,6 +5566,22 @@ fn layout_package_clusters(
                         "#000000".to_string()
                     }
                 });
+            // Java `Cluster.drawU()` resolves the style and its `UStroke`
+            // from the group's own USymbol/group type, then passes that
+            // stroke separately to `ClusterDecoration`; only the decoration
+            // geometry falls back through `PackageStyle.toUSymbol()`.
+            let stroke_width = if matches!(
+                paint_kind,
+                PackageKind::Database
+                    | PackageKind::Frame
+                    | PackageKind::Rectangle
+                    | PackageKind::Node
+                    | PackageKind::Cloud
+            ) {
+                SYMBOL_CLUSTER_STROKE_WIDTH
+            } else {
+                PACKAGE_STROKE_WIDTH
+            };
             let font_fill = package_skinparam(diagram, paint_kind, "FontColor")
                 .map(crate::sequence::resolve_color)
                 .unwrap_or_else(|| "#000000".to_string());
@@ -5577,6 +5594,7 @@ fn layout_package_clusters(
                 stereotype_lines: visible_package_stereotype_lines(pkg),
                 fill,
                 stroke,
+                stroke_width,
                 font_fill,
                 x: pos.x + MARGIN,
                 y: pos.y + MARGIN,
@@ -6123,14 +6141,14 @@ fn emit_layout_package_cluster(svg: &mut String, cluster: &LayoutPackageCluster,
                 fmt4(y),
                 cluster.fill,
                 cluster.stroke,
-                PACKAGE_STROKE_WIDTH,
+                cluster.stroke_width,
             )
             .unwrap();
             write!(
                 svg,
                 r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
                 cluster.stroke,
-                PACKAGE_STROKE_WIDTH,
+                cluster.stroke_width,
                 fmt4(x),
                 fmt4(tab_right),
                 fmt4(line_y),
@@ -6198,7 +6216,7 @@ fn emit_layout_frame_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
         cluster.fill,
         fmt4(cluster.height),
         cluster.stroke,
-        SYMBOL_CLUSTER_STROKE_WIDTH,
+        cluster.stroke_width,
         fmt4(cluster.width),
         fmt4(x),
         fmt4(y),
@@ -6216,7 +6234,7 @@ fn emit_layout_frame_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
         fmt4(x),
         fmt4(lower_y),
         cluster.stroke,
-        SYMBOL_CLUSTER_STROKE_WIDTH,
+        cluster.stroke_width,
     )
     .unwrap();
     emit_layout_symbol_cluster_title(svg, cluster, x + 3.0, y + PACKAGE_TITLE_BASELINE - 1.0);
@@ -6235,7 +6253,7 @@ fn emit_layout_rectangle_cluster(svg: &mut String, cluster: &LayoutPackageCluste
         cluster.fill,
         fmt4(cluster.height),
         cluster.stroke,
-        SYMBOL_CLUSTER_STROKE_WIDTH,
+        cluster.stroke_width,
         fmt4(cluster.width),
         fmt4(x),
         fmt4(y),
@@ -6278,14 +6296,14 @@ fn emit_layout_node_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
         fmt4(x),
         fmt4(y + NODE_BEVEL),
         cluster.stroke,
-        SYMBOL_CLUSTER_STROKE_WIDTH,
+        cluster.stroke_width,
     )
     .unwrap();
     write!(
         svg,
         r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
         cluster.stroke,
-        SYMBOL_CLUSTER_STROKE_WIDTH,
+        cluster.stroke_width,
         fmt4(front_right),
         fmt4(right),
         fmt4(y + NODE_BEVEL),
@@ -6296,7 +6314,7 @@ fn emit_layout_node_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
         svg,
         r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
         cluster.stroke,
-        SYMBOL_CLUSTER_STROKE_WIDTH,
+        cluster.stroke_width,
         fmt4(x),
         fmt4(front_right),
         fmt4(y + NODE_BEVEL),
@@ -6307,7 +6325,7 @@ fn emit_layout_node_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
         svg,
         r#"<line style="stroke:{};stroke-width:{};" x1="{}" x2="{}" y1="{}" y2="{}"/>"#,
         cluster.stroke,
-        SYMBOL_CLUSTER_STROKE_WIDTH,
+        cluster.stroke_width,
         fmt4(front_right),
         fmt4(front_right),
         fmt4(y + NODE_BEVEL),
@@ -6602,7 +6620,7 @@ fn emit_layout_cloud_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
     write!(
         svg,
         r#"" fill="{}" style="stroke:{};stroke-width:{};"/>"#,
-        cluster.fill, cluster.stroke, SYMBOL_CLUSTER_STROKE_WIDTH,
+        cluster.fill, cluster.stroke, cluster.stroke_width,
     )
     .unwrap();
 
@@ -6648,7 +6666,7 @@ fn emit_layout_database_cluster(svg: &mut String, cluster: &LayoutPackageCluster
     // cylinder path plus the top ellipse's lower half as a separate path.
     write!(
         svg,
-        r#"<path d="M{},{} C{},{} {},{} {},{} C{},{} {},{} {},{} L{},{} C{},{} {},{} {},{} C{},{} {},{} {},{} L{},{}" fill="{}" style="stroke:{};stroke-width:1;"/>"#,
+        r#"<path d="M{},{} C{},{} {},{} {},{} C{},{} {},{} {},{} L{},{} C{},{} {},{} {},{} C{},{} {},{} {},{} L{},{}" fill="{}" style="stroke:{};stroke-width:{};"/>"#,
         fmt4(x),
         fmt4(y + 10.0),
         fmt4(x),
@@ -6681,11 +6699,12 @@ fn emit_layout_database_cluster(svg: &mut String, cluster: &LayoutPackageCluster
         fmt4(y + 10.0),
         cluster.fill,
         cluster.stroke,
+        cluster.stroke_width,
     )
     .unwrap();
     write!(
         svg,
-        r#"<path d="M{},{} C{},{} {},{} {},{} C{},{} {},{} {},{}" fill="none" style="stroke:{};stroke-width:1;"/>"#,
+        r#"<path d="M{},{} C{},{} {},{} {},{} C{},{} {},{} {},{}" fill="none" style="stroke:{};stroke-width:{};"/>"#,
         fmt4(x),
         fmt4(y + 10.0),
         fmt4(x),
@@ -6701,6 +6720,7 @@ fn emit_layout_database_cluster(svg: &mut String, cluster: &LayoutPackageCluster
         fmt4(right),
         fmt4(y + 10.0),
         cluster.stroke,
+        cluster.stroke_width,
     )
     .unwrap();
     write!(
