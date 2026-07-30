@@ -1,0 +1,16 @@
+@startuml
+top to bottom direction
+skinparam stateFontName Times New Roman
+skinparam stateFontStyle bold
+skinparam stateFontSize 18
+skinparam stateArrowFontName Times New Roman
+skinparam stateArrowFontStyle italic
+skinparam stateArrowFontSize 15
+
+state "مرحبا بالعالم 12" as Hello
+Hello : كتابة عربية 23
+state "اختبار النص 34" as Test
+Test : مسار جديد 45
+Hello --> Test : انتقال سريع 56
+Test --> Test : دورة كاملة 67
+@enduml

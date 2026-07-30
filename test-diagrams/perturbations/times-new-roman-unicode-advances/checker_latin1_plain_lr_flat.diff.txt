@@ -1,0 +1,44 @@
+SVG structural differences:
+  [4] <rect> attr mismatch:
+    expected: [("fill", "#F1F1F1"), ("height", "50"), ("rx", "12.5"), ("ry", "12.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "93.6108"), ("x", "7"), ("y", "66")]
+    actual:   [("fill", "#F1F1F1"), ("height", "50"), ("rx", "12.5"), ("ry", "12.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "93.6108"), ("x", "7"), ("y", "7")]
+  [5] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "7"), ("x2", "100.6108"), ("y1", "88.6489"), ("y2", "88.6489")]
+    actual:   [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "7"), ("x2", "100.6108"), ("y1", "29.6489"), ("y2", "29.6489")]
+  [6] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "11"), ("lengthAdjust", "spacing"), ("textLength", "73.6108"), ("x", "17"), ("y", "81.2695")]
+    actual:   [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "11"), ("lengthAdjust", "spacing"), ("textLength", "73.6108"), ("x", "17"), ("y", "22.2695")]
+  [7] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "11"), ("lengthAdjust", "spacing"), ("textLength", "36.9531"), ("x", "12"), ("y", "103.9185")]
+    actual:   [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "11"), ("lengthAdjust", "spacing"), ("textLength", "36.9531"), ("x", "12"), ("y", "44.9185")]
+  [9] <rect> attr mismatch:
+    expected: [("fill", "#F1F1F1"), ("height", "50"), ("rx", "12.5"), ("ry", "12.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "96.9731"), ("x", "228.61"), ("y", "66")]
+    actual:   [("fill", "#F1F1F1"), ("height", "50"), ("rx", "12.5"), ("ry", "12.5"), ("style", "stroke:#181818;stroke-width:0.5;"), ("width", "96.9731"), ("x", "228.61"), ("y", "7")]
+  [10] <line> attr mismatch:
+    expected: [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "228.61"), ("x2", "325.5831"), ("y1", "88.6489"), ("y2", "88.6489")]
+    actual:   [("style", "stroke:#181818;stroke-width:0.5;"), ("x1", "228.61"), ("x2", "325.5831"), ("y1", "29.6489"), ("y2", "29.6489")]
+  [11] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "11"), ("lengthAdjust", "spacing"), ("textLength", "76.9731"), ("x", "238.61"), ("y", "81.2695")]
+    actual:   [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "11"), ("lengthAdjust", "spacing"), ("textLength", "76.9731"), ("x", "238.61"), ("y", "22.2695")]
+  [12] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "11"), ("lengthAdjust", "spacing"), ("textLength", "49.7632"), ("x", "233.61"), ("y", "103.9185")]
+    actual:   [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "11"), ("lengthAdjust", "spacing"), ("textLength", "49.7632"), ("x", "233.61"), ("y", "44.9185")]
+  [14] <path> attr mismatch:
+    expected: [("d", "M100.93,91 C138.17,91 184.4,91 222.12,91"), ("fill", "none"), ("id", "Elan-to-Curacao"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("d", "M100.93,32 C138.17,32 184.4,32 222.12,32"), ("fill", "none"), ("id", "Elan-to-Curacao"), ("style", "stroke:#181818;stroke-width:1;")]
+  [15] <polygon> attr mismatch:
+    expected: [("fill", "#181818"), ("points", "228.12,91,219.12,87,223.12,91,219.12,95,228.12,91"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("fill", "#181818"), ("points", "228.12,32,219.12,28,223.12,32,219.12,36,228.12,32"), ("style", "stroke:#181818;stroke-width:1;")]
+  [16] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "12"), ("lengthAdjust", "spacing"), ("textLength", "66.9785"), ("x", "131.61"), ("y", "88.2031")]
+    actual:   [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "12"), ("lengthAdjust", "spacing"), ("textLength", "66.9785"), ("x", "131.61"), ("y", "29.2031")]
+  [18] <path> attr mismatch:
+    expected: [("d", "M258.07,65.72 C252.3,48.23 258.64,31 277.1,31 C295.55,31 303.7798,42.5321 298.0098,60.0221"), ("fill", "none"), ("id", "Curacao-to-Curacao"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("d", "M258.07,6.72 C252.3,-10.77 258.64,-28 277.1,-28 C295.55,-28 303.7798,-16.4679 298.0098,1.0221"), ("fill", "none"), ("id", "Curacao-to-Curacao"), ("style", "stroke:#181818;stroke-width:1;")]
+  [19] <polygon> attr mismatch:
+    expected: [("fill", "#181818"), ("points", "296.13,65.72,302.7483,58.4263,297.6965,60.9717,295.151,55.9199,296.13,65.72"), ("style", "stroke:#181818;stroke-width:1;")]
+    actual:   [("fill", "#181818"), ("points", "296.13,6.72,302.7483,-0.5737,297.6965,1.9717,295.151,-3.0801,296.13,6.72"), ("style", "stroke:#181818;stroke-width:1;")]
+  [20] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "12"), ("lengthAdjust", "spacing"), ("textLength", "64.6465"), ("x", "245.1"), ("y", "23.2031")]
+    actual:   [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "12"), ("lengthAdjust", "spacing"), ("textLength", "64.6465"), ("x", "245.1"), ("y", "-35.7969")]
+

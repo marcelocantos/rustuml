@@ -1,0 +1,16 @@
+@startuml
+left to right direction
+skinparam stateFontName Times New Roman
+skinparam stateFontStyle plain
+skinparam stateFontSize 11
+skinparam stateArrowFontName Times New Roman
+skinparam stateArrowFontStyle plain
+skinparam stateArrowFontSize 12
+
+state "Élan à Zürich 17" as Elan
+Elan : rôle naïf
+state "Curaçao señor 28" as Curacao
+Curacao : façade déjà
+Elan --> Curacao : Noël où ça 39
+Curacao --> Curacao : piñata très 40
+@enduml

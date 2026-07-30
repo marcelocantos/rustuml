@@ -1,0 +1,18 @@
+@startuml
+top to bottom direction
+skinparam stateFontName Times New Roman
+skinparam stateFontStyle plain
+skinparam stateFontSize 20
+skinparam stateArrowFontName Times New Roman
+skinparam stateArrowFontStyle plain
+skinparam stateArrowFontSize 16
+
+state "Frame «A» — 91" as Frame {
+  state "Source one… 82" as Source
+  Source : plain “quote” © ® ± × ÷
+  state "Target two – 73" as Target
+  Target : currency ‘quote’ € £ ¥
+  Source --> Target : plain – — … **bold № 64** //italic “Q” 55// **//both ‹R› 46//**
+  Target --> Target : self ‰ † ‡ **bold §** //italic ¶// **//both ™//**
+}
+@enduml

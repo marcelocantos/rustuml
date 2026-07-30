@@ -1,0 +1,29 @@
+SVG structural differences:
+  [15] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "20"), ("lengthAdjust", "spacing"), ("textLength", "123.8477"), ("x", "64.9787"), ("y", "197.6599")]
+    actual:   [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "20"), ("lengthAdjust", "spacing"), ("textLength", "127.1875"), ("x", "63.3063"), ("y", "197.6699")]
+  [15] <text> text mismatch:
+    expected: Some("Target two - 73")
+    actual:   Some("Target two – 73")
+  [20] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "16"), ("lengthAdjust", "spacing"), ("textLength", "81.3203"), ("x", "127.9"), ("y", "151.9255")]
+    actual:   [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "16"), ("lengthAdjust", "spacing"), ("textLength", "83.9922"), ("x", "127.9"), ("y", "151.9355")]
+  [20] <text> text mismatch:
+    expected: Some("plain - — …")
+    actual:   Some("plain – — …")
+  [21] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "16"), ("font-weight", "700"), ("lengthAdjust", "spacing"), ("textLength", "70.3203"), ("x", "213.2203"), ("y", "151.9255")]
+    actual:   [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "16"), ("font-weight", "700"), ("lengthAdjust", "spacing"), ("textLength", "70.3203"), ("x", "215.8922"), ("y", "151.9355")]
+  [22] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "16"), ("lengthAdjust", "spacing"), ("textLength", "4"), ("x", "283.5406"), ("y", "151.9255")]
+    actual:   [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "16"), ("lengthAdjust", "spacing"), ("textLength", "4"), ("x", "286.2125"), ("y", "151.9355")]
+  [23] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "16"), ("font-style", "italic"), ("lengthAdjust", "spacing"), ("textLength", "86.2344"), ("x", "287.5406"), ("y", "151.9255")]
+    actual:   [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "16"), ("font-style", "italic"), ("lengthAdjust", "spacing"), ("textLength", "86.2344"), ("x", "290.2125"), ("y", "151.9355")]
+  [24] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "16"), ("lengthAdjust", "spacing"), ("textLength", "4"), ("x", "373.775"), ("y", "151.9255")]
+    actual:   [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "16"), ("lengthAdjust", "spacing"), ("textLength", "4"), ("x", "376.4469"), ("y", "151.9355")]
+  [25] <text> attr mismatch:
+    expected: [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "16"), ("font-style", "italic"), ("font-weight", "700"), ("lengthAdjust", "spacing"), ("textLength", "74.6719"), ("x", "377.775"), ("y", "151.9255")]
+    actual:   [("fill", "#000000"), ("font-family", "Times New Roman"), ("font-size", "16"), ("font-style", "italic"), ("font-weight", "700"), ("lengthAdjust", "spacing"), ("textLength", "74.6719"), ("x", "380.4469"), ("y", "151.9355")]
+

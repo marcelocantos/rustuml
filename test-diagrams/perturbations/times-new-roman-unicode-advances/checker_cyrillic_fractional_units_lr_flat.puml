@@ -1,0 +1,14 @@
+@startuml
+left to right direction
+skinparam stateFontName Times New Roman
+skinparam stateFontStyle plain
+skinparam stateFontSize 17
+skinparam stateArrowFontName Times New Roman
+skinparam stateArrowFontStyle plain
+skinparam stateArrowFontSize 19
+
+state "ԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘ 11" as Left
+state "ԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘ 22" as Right
+Left --> Right : ԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘ 33
+Right --> Right : ԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘԘ 44
+@enduml

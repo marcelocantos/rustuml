@@ -1,0 +1,16 @@
+@startuml
+top to bottom direction
+skinparam stateFontName Times New Roman
+skinparam stateFontStyle bold
+skinparam stateFontSize 17
+skinparam stateArrowFontName Times New Roman
+skinparam stateArrowFontStyle bold
+skinparam stateArrowFontSize 14
+
+state "Αθήνα Δέλτα 51" as Athens
+Athens : κόσμος άλφα
+state "Θεσσαλονίκη Ωμέγα 62" as Salonica
+Salonica : γλώσσα βήτα
+Athens --> Salonica : πέρασμα Ωμέγα 73
+Salonica --> Salonica : κύκλος Δέλτα 84
+@enduml

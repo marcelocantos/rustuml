@@ -1,0 +1,20 @@
+@startuml
+left to right direction
+skinparam stateFontName Times New Roman
+skinparam stateFontStyle italic
+skinparam stateFontSize 13
+skinparam stateArrowFontName Times New Roman
+skinparam stateArrowFontStyle italic
+skinparam stateArrowFontSize 19
+
+state "Область 15" as Region {
+  state "Москва 26" as Moscow
+  Moscow : Журнал и файл
+  state "Київ 37" as Kyiv
+  Kyiv : мова та шлях
+  Moscow --> Kyiv : переход Журнал 48
+  Kyiv --> Kyiv : цикл Москва 59
+}
+state "Финиш 60" as Finish
+Region --> Finish : внешний путь 71
+@enduml
