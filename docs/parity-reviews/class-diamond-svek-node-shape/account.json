@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-diamond-svek-node-shape",
+  "created": "2026-07-31",
+  "status": "proposed",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "d2f48e24",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageBranch.java",
+      "symbols": [
+        "EntityImageBranch.calculateDimensionSlow",
+        "EntityImageBranch.getShapeType"
+      ],
+      "lines": "54-105",
+      "role": "Defines a 24 by 24 branch image and reports ShapeType.DIAMOND."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/SvekNode.java",
+      "symbols": [
+        "SvekNode.appendShape",
+        "SvekNode.appendShapeInternal"
+      ],
+      "lines": "145-167,327-345",
+      "role": "Serializes the image dimensions to Graphviz and maps ShapeType.DIAMOND to native shape=diamond."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbol": "calc_entity_dims",
+      "lines": "1022-1046",
+      "role": "Correctly assigns EntityKind::Diamond its 24 by 24 painted dimensions."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbol": "class SVEK node registration",
+      "lines": "2438-2453",
+      "role": "Registers every unshielded class entity with LayoutGraph.add_node, which is a rectangular Graphviz shape even for EntityKind::Diamond."
+    },
+    {
+      "path": "crates/rustuml-layout/src/graph.rs",
+      "symbol": "LayoutGraph.add_diamond_node",
+      "lines": "349-367",
+      "role": "Existing Java-provenanced native Graphviz diamond registration already used by state choices."
+    },
+    {
+      "path": "crates/rustuml-render/src/state.rs",
+      "symbol": "add_state_layout_node",
+      "lines": "730-750",
+      "role": "Demonstrates the ported SVEK dispatch from a diamond image to add_diamond_node."
+    }
+  ],
+  "evidence_inputs": [
+    "test-diagrams/golden/class/class_feature_diamond_notation.puml"
+  ],
+  "claimed_invariant": "A PlantUML branch/diamond entity has a fixed 24 by 24 painted image and must also be represented to Graphviz as a native diamond of those dimensions. Node placement still uses the 24 by 24 bounding box, but incident splines clip against the diagonal boundary selected by shape=diamond rather than the rectangular bounding box.",
+  "causal_divergence": "Rust paints the correct polygon after layout but supplies Graphviz NodeShape::Box. In the vertical golden, node and canvas geometry already match while the association spline control points and target contact differ, exactly the surface owned by Graphviz shape clipping. The existing layout diamond primitive carries the missing generative distinction.",
+  "planned_model_change": "Dispatch EntityKind::Diamond to LayoutGraph.add_diamond_node during class SVEK node registration, preserving the existing 24 by 24 dimensions, node order, painted polygon, entity metadata, edge semantics, spacing, and all non-diamond entity registration.",
+  "perturbation_axes": [
+    "incoming versus outgoing links",
+    "top-to-bottom versus left-to-right rank direction",
+    "vertical, horizontal, and diagonal diamond contacts",
+    "one versus multiple incident links",
+    "renamed class and diamond identifiers",
+    "diamond declared before versus after its peers"
+  ],
+  "scope_boundary": "This mechanism owns only the Graphviz node shape used to route links touching EntityKind::Diamond. It does not change diamond dimensions or painting, relationship decoration, edge length, rank direction, UID ordering, canvas normalization, comparator behavior, or any layout constant.",
+  "acceptance": [
+    "class_feature_diamond_notation becomes byte-exact with no family regression.",
+    "Fresh valid inputs preserve 24 by 24 diamond nodes while routing incoming and outgoing links to diagonal boundaries in both rank directions and under declaration-order changes.",
+    "Renderer and layout tests, full no-oracle ratchet, clippy, and mechanical harness guards pass except for explicitly pre-existing gate debt.",
+    "An independent checker records a verdict at the exact implementation revision."
+  ]
+}
