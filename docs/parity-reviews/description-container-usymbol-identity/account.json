@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "mechanism": "description-container-usymbol-identity",
+  "status": "proposed",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "d6899ae83f9e24ac4badfeac3c94820204818c4b",
+  "scope": {
+    "included": [
+      "Brace-delimited DESCRIPTION storage containers",
+      "Brace-delimited DESCRIPTION artifact containers",
+      "The semantic symbol identity carried from command selection through cluster layout and painting"
+    ],
+    "excluded": [
+      "Command keyword case folding",
+      "Class-diagram package parsing",
+      "State rendering",
+      "Leaf storage and artifact elements without braces"
+    ]
+  },
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/descdiagram/DescriptionDiagramFactory.java:85-138 DescriptionDiagramFactory#initCommandsList",
+    "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandPackageWithUSymbol.java:73-178 CommandPackageWithUSymbol#getRegexConcat/executeArg",
+    "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbols.java:78-119 USymbols constants/fromString",
+    "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolStorage.java:50-115 USymbolStorage#drawStorage/asBig",
+    "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolArtifact.java:50-139 USymbolArtifact#drawArtifact/asBig",
+    "src/main/java/net/sourceforge/plantuml/svek/ClusterHeader.java:73-94 ClusterHeader constructor",
+    "src/main/java/net/sourceforge/plantuml/svek/ClusterDecoration.java:62-96 ClusterDecoration#guess/getTextBlock/drawU"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/diagram/component.rs:168-194 ComponentPackage/ComponentPackageKind",
+    "crates/rustuml-parser/src/parse/component.rs:14-50 CONTAINER_KEYWORDS/container_keyword",
+    "crates/rustuml-parser/src/parse/component.rs:90-105 component_package_kind",
+    "crates/rustuml-parser/src/parse/component.rs:479-505 parse_component block-container construction",
+    "crates/rustuml-render/src/component.rs:4702-4744 add_package_clusters_to_layout",
+    "crates/rustuml-render/src/component.rs:4911-5006 package_kind_for_qname/component_cluster_frame",
+    "crates/rustuml-render/src/component.rs:7530-7580 emit_layout_package_cluster",
+    "crates/rustuml-render/src/component.rs:7768-7824 emit_layout_rectangle_cluster",
+    "crates/rustuml-render/src/component.rs:8070-8138 emit_layout_database_cluster"
+  ],
+  "command_selection": {
+    "java": "DescriptionDiagramFactory registers CommandPackageWithUSymbol before CommandCreateElementFull. A storage or artifact declaration ending in an opening brace is consumed as a group by CommandPackageWithUSymbol, not as a leaf by CommandCreateElementFull. executeArg passes the command keyword through USymbols.fromString and stores the resulting exact USymbol on the PACKAGE group via gotoGroup.",
+    "rust": "parse_component also distinguishes brace-delimited containers from leaves, but component_package_kind immediately maps storage to ComponentPackageKind::Database and artifact to ComponentPackageKind::Rectangle. ComponentPackageKind has no Storage or Artifact variant, so the exact command-selected symbol cannot survive into layout or painting."
+  },
+  "invariant": "A valid brace-delimited DESCRIPTION container retains the exact USymbol selected by its command keyword from parsing through cluster rendering. The solved cluster rectangle and its painted symbol are related but distinct contracts. Storage and artifact both inherit USymbol's zero title-width and title-height shape supplements, so ClusterHeader submits ordinary title dimensions to Graphviz. ClusterDecoration then calls that same exact symbol's asBig implementation over the solved rectangle. USymbolStorage paints a rectangle rounded by 70, centers the stereotype at y=5, and centers the title at y=7 plus stereotype height. USymbolArtifact paints the ordinary rounded cluster rectangle plus its 12 by 14 folded-page glyph five pixels from the top and right, places the stereotype at y=2, and places the title at y=2 plus stereotype height. Storage is therefore not database, and artifact is not rectangle or component, even where their solved cluster dimensions happen to coincide.",
+  "causal_divergence": "Rust's ComponentPackageKind is a lossy surrogate for Java's group USymbol. The parser collapses storage into Database and artifact into Rectangle before SVEK layout. That forces storage through database-only title-height supplementation, cluster framing, canvas padding, cylinder painting, and title placement. It forces artifact through plain-rectangle painting, which has no artifact glyph and a different title contract. The shared cause is semantic symbol identity erasure, not either fixture's label, direction, child kind, or observed coordinate delta. The one-pixel artifact placement symptom in the preserved checker result is especially unsafe as a tuning target: current tracked Rust source contains no artifact package kind or artifact cluster emitter, so an origin adjustment cannot establish the Java invariant.",
+  "evidence_interpretation": {
+    "preserved_inputs": [
+      "test-diagrams/perturbations/description-element-command-case/followup/followup2_control_lower_storage_container_nested_queue_tb.puml",
+      "test-diagrams/perturbations/description-element-command-case/followup/followup2_control_lower_artifact_container_nested_database_lr.puml"
+    ],
+    "java_observation": "Both inputs are valid and their Java SVGs expose distinct group symbols: storage is a rounded rectangle with rx=ry=35; artifact is a rounded rectangle with a folded-page glyph. Both clusters start at the ordinary DESCRIPTION cluster frame in these controls.",
+    "rust_source_observation": "At rust_revision, the only tracked package mappings are storage-to-Database and artifact-to-Rectangle. No later tracked change between the reviewed implementation and rust_revision adds Storage or Artifact package variants or corresponding cluster emitters.",
+    "binary_provenance_warning": "The review helper's reported artifact output already contained an artifact glyph and differed mainly by a one-pixel frame offset, but that output is not derivable from the tracked Rust locations above. Its binary hash proves binary identity, not source-revision identity. The implementation checker must build in an isolated target directory from the exact reviewed revision and record both revision and helper hash before accepting coordinate-level evidence."
+  },
+  "planned_change": "Make DESCRIPTION container symbol kind an identity-preserving semantic model of CommandPackageWithUSymbol rather than a visual fallback table. Add explicit Storage and Artifact package kinds and audit every accepted container keyword so unsupported symbols remain explicit instead of silently aliasing to Database or Rectangle. Map the parsed command keyword to the same symbol family as USymbols.fromString. Derive Graphviz title supplements, cluster frame/canvas behavior, and painting from that retained kind. Storage and Artifact use zero shape supplements and the ordinary cluster frame; Storage paints the Java rounded-70 body and y=5/y=7 text stack, while Artifact paints the Java ordinary body plus the top-right 12 by 14 glyph and y=2 text stack. Preserve labels, aliases, stereotypes, colors, source lines, ownership, and child topology unchanged. Do not introduce fixture-text branches, coordinate post-processing, or a constant chosen from the two preserved SVGs.",
+  "perturbation_axes": [
+    "symbol family: storage versus database with identical labels, children, and direction",
+    "symbol family: artifact versus rectangle and component with identical labels, children, and direction",
+    "scope: root container versus the same container nested under a shared outer container",
+    "topology: one child versus multiple children and a cross-container link",
+    "text: renamed bare identifier versus quoted display with AS alias",
+    "decoration: no stereotype versus stereotype, explicit color, and both together",
+    "layout direction: top-to-bottom versus left-to-right",
+    "child symbol: queue, database, component, and bracket-component controls"
+  ],
+  "acceptance_evidence": [
+    "Parser tests assert that brace-delimited storage and artifact retain distinct package kinds and that leaf declarations remain distinct ComponentElementKind values.",
+    "Renderer tests assert Java-derived shape and text-stack invariants without fixture labels or whole-SVG string surgery.",
+    "Held-out Java-valid perturbations cover at least two independent axes for each symbol and preserve every generated input and Java SVG.",
+    "An independent checker rebuilds from the exact implementation revision in an isolated target directory and attempts to disprove symbol identity, layout supplement, frame, and paint claims."
+  ]
+}
