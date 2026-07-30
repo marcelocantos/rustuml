@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-node-cluster-limitfinder-max",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "net.sourceforge.plantuml.decoration.symbol.USymbolNode#drawNode",
+    "net.sourceforge.plantuml.klimt.drawing.LimitFinder#drawUPolygon",
+    "net.sourceforge.plantuml.klimt.drawing.LimitFinder#drawEmpty",
+    "net.sourceforge.plantuml.svek.SvekResult#calculateDimension"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs::NODE_CLUSTER_ENVELOPE_X_EXTRA",
+    "crates/rustuml-render/src/class.rs::package_cluster_envelope_extra",
+    "crates/rustuml-render/src/class.rs::normalize_svek_package_envelope",
+    "crates/rustuml-render/src/class.rs::render_plantuml_svg"
+  ],
+  "invariant": "USymbolNode.drawNode draws a polygon whose horizontal points span 0 through width and a UEmpty(10,10) translated to (0,height). LimitFinder.drawUPolygon expands the polygon minimum and maximum by exactly ten pixels on x, while drawEmpty contributes x=0 and x=10. The painted node frontier is therefore [-10,width+10] horizontally and [0,height+10] vertically. SvekResult calculates one global MinMax from those primitives, translates its minimum to the SVEK margin, and sizes the canvas from the translated maximum.",
+  "causal_divergence": "Rust correctly normalizes the node cluster minimum from x-10, but package_cluster_envelope_extra extends its maximum by 20 pixels. The constant's existing comment incorrectly describes the lower UEmpty as lower-right; Java translates it to x=0. When a node cluster owns the right envelope, Rust consequently emits an otherwise byte-equivalent diagram in a canvas exactly ten pixels wider than Java. Three independent top-to-bottom checker inputs expose the same isolated 10px SVG-width surplus, while cases where another primitive owns the maximum already pass.",
+  "planned_change": "Model the node cluster's right LimitFinder frontier as width+10 and retain the existing bottom frontier as height+10. Correct the adjacent Java provenance comment. Do not alter cluster geometry, layout positions, painted-min normalization, direction handling, or the common canvas padding.",
+  "perturbation_axes": [
+    "explicit node crossed with packageStyle node fallback",
+    "node as right-envelope owner crossed with a wider competing cluster",
+    "top-level node crossed with nested node",
+    "top-to-bottom crossed with left-to-right direction",
+    "short labels crossed with renamed long labels",
+    "root links crossed with links wholly inside a cluster"
+  ],
+  "predecessor_rejection": {
+    "review": "docs/parity-reviews/class-rectangle-cluster-title-origin/review.json",
+    "review_commit": "2a3e16d6",
+    "relevant_counterexamples": [
+      "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_competing_frame_node_rootlinks.puml",
+      "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_competing_nested_rectangle.puml",
+      "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_stereo_nested_long.puml"
+    ]
+  }
+}
