@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-transition-display-empty-row-atom",
+  "status": "proposed",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "8d37a26a927436b1b5ccb6b323d2ba72d84f19ce",
+  "parent_account": "docs/parity-reviews/state-transition-display-lines/account.json",
+  "rejecting_review": "docs/parity-reviews/state-transition-display-lines/review.json",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java:279-303 SvekEdge creates the state transition label TextBlock from Link#getLabel through Display#create0",
+    "src/main/java/net/sourceforge/plantuml/klimt/creole/Display.java:640-693 Display#create0/getCreole creates one Sheet from the ordered Display rows",
+    "src/main/java/net/sourceforge/plantuml/klimt/creole/legacy/CreoleParser.java:142-180 CreoleParser#createSheetSlow sends every Display row, including an empty row, through createStripes and adds the resulting stripe to the Sheet",
+    "src/main/java/net/sourceforge/plantuml/klimt/creole/legacy/CreoleStripeSimpleParser.java:162-170 CreoleStripeSimpleParser#createStripes constructs and analyzes a StripeSimple for each logical row",
+    "src/main/java/net/sourceforge/plantuml/klimt/creole/legacy/StripeSimple.java:124-129 StripeSimple#getAtoms inserts AtomTextUtils.createLegacy(\" \", fontConfiguration) when the row produced no atoms",
+    "src/main/java/net/sourceforge/plantuml/klimt/creole/SheetBlock1.java SheetBlock1 measures, aligns, and draws the same retained row atom"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/diagram/state.rs:261-340 TransitionLabel preserves empty strings as logical Display rows",
+    "crates/rustuml-render/src/state.rs:1045-1168 StateTransitionLabelBlock measures, aligns, emits, and bounds each logical row",
+    "crates/rustuml-render/src/text_render.rs measure_with_family and emit_text currently treat an empty string as zero-width content"
+  ],
+  "evidence_inputs": [
+    "test-diagrams/perturbations/state-transition-display-lines/checker_right_empty_rows_selfloop_tb.puml",
+    "test-diagrams/perturbations/state-transition-display-lines/checker_left_empty_rows_nested_lr.puml"
+  ],
+  "invariant": "Every logical Display row owns at least one paint atom. When Creole parsing leaves a StripeSimple with no atoms, StripeSimple#getAtoms inserts a single ordinary-space AtomText before SheetBlock1 measures or draws the stripe. Consequently an empty source row has the active font's space width and line height, participates in block width and horizontal alignment, emits a retained whitespace text node (serialized as &#160; by the SVG path), and contributes to painted bounds. This is a generic row invariant and does not depend on self links, label text, fixture identity, topology, or direction.",
+  "causal_divergence": "TransitionLabel correctly retains empty logical rows, but StateTransitionLabelBlock passes their empty strings directly to Rust text metrics and SVG emission. Rust therefore assigns width zero, right-aligns the empty row at the block's far edge, and emits a zero-length text node. Java first materializes a one-space AtomText for the row, so its font-dependent width is subtracted during right alignment and preserved in SVG as &#160;. The isolated self-loop checker differs only in this row: Java reports textLength 4.9219 while Rust reports textLength 0. Correcting coordinates or that literal width would overfit; the missing retained atom is the cause.",
+  "planned_change": "Add one shared Java-cited row-paint normalization in StateTransitionLabelBlock that maps an empty logical row to a single ordinary space and leaves non-empty rows unchanged. Use the normalized row for width, height, first-baseline ascent, SVG emission, and painted-bound calculations while retaining the parser model and source serialization exactly as written. Keep text_render generic and avoid changing empty-string behavior for unrelated diagram families. Add renderer tests proving that an empty middle row has positive font-dependent width, aligns using that width, and emits retained whitespace. Re-run the isolated self-loop and nested left-to-right counterexamples; treat any remaining nested/direction drift as a separate mechanism.",
+  "perturbation_axes": [
+    "empty first, intermediate, and final Display rows",
+    "left, center, and right effective alignment",
+    "Verdana, Arial, Courier New, and generic font families at different sizes",
+    "self links, ordinary links, and pseudostate endpoints",
+    "flat and nested state scopes",
+    "top-to-bottom and left-to-right direction"
+  ],
+  "scope_boundary": "This mechanism owns only the materialization and consumption of an otherwise empty state-transition Display row. It does not own Display escape parsing, non-empty Creole runs, link title escaping, math image rendering, state direction/layout, edge routing, or empty text behavior outside state transition labels."
+}
