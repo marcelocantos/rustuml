@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-package-style-symbol-fallback",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "net.sourceforge.plantuml.svek.Cluster#drawU",
+    "net.sourceforge.plantuml.svek.ClusterDecoration#ClusterDecoration",
+    "net.sourceforge.plantuml.svek.ClusterDecoration#guess",
+    "net.sourceforge.plantuml.skin.PackageStyle#fromString",
+    "net.sourceforge.plantuml.skin.PackageStyle#toUSymbol"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs::effective_package_kind",
+    "crates/rustuml-render/src/class.rs::layout_package_clusters",
+    "crates/rustuml-render/src/class.rs::package_skinparam"
+  ],
+  "invariant": "Cluster.drawU passes both the group's explicit USymbol and its effective PackageStyle into ClusterDecoration. ClusterDecoration.guess uses the explicit symbol when non-null; otherwise PackageStyle.toUSymbol supplies the cluster geometry. PackageStyle.fromString recognizes rectangle and its rect alias along with database, frame, node, and cloud. This fallback changes the asBig geometry of ordinary package clusters, including nested clusters, but does not replace an explicit keyword or automatic symbol stereotype. Style lookup remains based on the group's explicit semantic symbol/package identity rather than being silently promoted to the fallback symbol.",
+  "causal_divergence": "Rust chooses cluster geometry only from Package.kind or an automatic symbol stereotype. It parses skinparam packageStyle into theme data but the class renderer never consults that setting, so valid ordinary packages under packageStyle rectangle still emit the folder-tab path. The independent rectangle-title checker rejected four fresh TB/LR and top-level/nested inputs on this general dispatch omission; the explicit rectangle renderer and its corrected title origin pass when reached.",
+  "planned_change": "Resolve a configured packageStyle from the class diagram's last matching skinparam, accepting Java's rect alias and supported symbol names. For ordinary package and namespace clusters with no explicit or automatic symbol, use that configured kind for dimensions, painted-frontier measurement, and asBig emission. Keep explicit keywords and recognized stereotypes authoritative. Keep border/background/font style lookup on the original package semantic kind so changing geometry does not also select a different style signature. Do not apply the global cluster fallback to directly empty package leaves unless Java's leaf dispatch independently demonstrates that behavior.",
+  "perturbation_axes": [
+    "rectangle crossed with rect alias",
+    "top-level crossed with nested ordinary packages",
+    "top-to-bottom crossed with left-to-right direction",
+    "plain package crossed with explicit rectangle, frame, node, and database siblings",
+    "short crossed with long renamed labels",
+    "single cluster crossed with competing frame and node envelope owners",
+    "filled ordinary cluster crossed with directly empty ordinary package"
+  ],
+  "predecessor_rejection": {
+    "review": "docs/parity-reviews/class-rectangle-cluster-title-origin/review.json",
+    "review_commit": "2a3e16d6",
+    "relevant_counterexamples": [
+      "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_tb_plain_top_short.puml",
+      "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_plain_top_renamed_long.puml",
+      "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_plain_nested_short.puml",
+      "test-diagrams/perturbations/class-rectangle-cluster-title-origin/checker3_lr_stereo_nested_under_plain.puml"
+    ]
+  }
+}
