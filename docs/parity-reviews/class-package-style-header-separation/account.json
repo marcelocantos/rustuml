@@ -7,6 +7,11 @@
     "net.sourceforge.plantuml.svek.ClusterHeader#ClusterHeader",
     "net.sourceforge.plantuml.svek.Cluster#drawU",
     "net.sourceforge.plantuml.svek.ClusterDecoration#guess",
+    "net.sourceforge.plantuml.decoration.symbol.USymbolNode#asBig",
+    "net.sourceforge.plantuml.decoration.symbol.USymbolDatabase#asBig",
+    "net.sourceforge.plantuml.decoration.symbol.USymbolFrame#asBig",
+    "net.sourceforge.plantuml.decoration.symbol.USymbolRectangle#asBig",
+    "net.sourceforge.plantuml.decoration.symbol.USymbolCloud#asBig",
     "net.sourceforge.plantuml.decoration.symbol.USymbolNode#suppWidthBecauseOfShape",
     "net.sourceforge.plantuml.decoration.symbol.USymbolNode#suppHeightBecauseOfShape",
     "net.sourceforge.plantuml.decoration.symbol.USymbolDatabase#suppHeightBecauseOfShape"
@@ -15,9 +20,9 @@
     "crates/rustuml-render/src/class.rs::effective_package_kind",
     "crates/rustuml-render/src/class.rs::render_with_oracle_uid_origin"
   ],
-  "invariant": "GraphvizImageBuilder constructs ClusterHeader from the group before Cluster.drawU performs packageStyle fallback in ClusterDecoration. ClusterHeader obtains shape-specific width and height reserves only from group.getUSymbol(). An ordinary package has a null explicit USymbol, so packageStyle node or database changes its painted asBig decoration but contributes no node/database reserve to the Graphviz cluster title. Explicit and automatic symbols retain their own reserves.",
-  "causal_divergence": "Rust uses effective_package_kind for both painted fallback geometry and ClusterTitleSize. That promotes an ordinary package under packageStyle node to the node's 60px width and 5px height reserves, and under packageStyle database to the database's 15px height reserve. The independent checker reproduced the error in TB/LR and top-level/nested inputs: four fresh valid cases fail while rectangle, frame, and cloud controls pass.",
-  "planned_change": "Derive Graphviz ClusterTitleSize reserves only from the package's explicit or automatic symbol identity, while continuing to derive painted cluster geometry from explicit/automatic symbol first and configured packageStyle second. Keep stereotype/title measurement, integer truncation, style lookup, and decoration emission unchanged.",
+  "invariant": "GraphvizImageBuilder constructs ClusterHeader from the group before Cluster.drawU performs packageStyle fallback in ClusterDecoration. ClusterHeader obtains shape-specific width and height reserves only from group.getUSymbol(). An ordinary package has a null explicit USymbol, so packageStyle node or database changes its painted asBig decoration but contributes no node/database reserve to the Graphviz cluster title. Explicit and automatic symbols retain their own reserves. During paint, ClusterDecoration passes separate title and stereotype TextBlocks to every selected USymbol#asBig. Node, database, rectangle, and cloud draw the stereotype block first and shift the title down by its measured height; node applies its -4,+11 translation, database uses a 20px top reserve, rectangle starts at y=2, and cloud starts at y=13. Frame keeps the title in its top tab and paints the stereotype below getYpos(title), centered with its 4px offset. The stereotype therefore affects both the Graphviz header dimensions and the final visible title stack without changing package identity.",
+  "causal_divergence": "The 09014421 implementation corrected the reserve source but left symbol-cluster paint label-only. emit_layout_symbol_cluster_title writes only the bold package label, and every explicit, automatic, or packageStyle-derived frame/rectangle/node/cloud/database cluster emitter calls it without rendering LayoutPackageCluster.stereotype_lines. The independent review preserved node and database counterexamples where Java paints the stereotype and Rust promotes the title into its row; a URL-bearing dotted explicit node reproduces the same general gap and also shows the missing stereotype width changing the solved cluster envelope.",
+  "planned_change": "Keep the corrected explicit-symbol-only Graphviz reserve selection. Replace the label-only symbol helper with Java-shaped title/stereotype stack emission: center each stereotype line using ordinary italic title metrics, preserve source order and accumulated measured line heights, then place the bold title at the symbol-specific vertical offset after the complete stereotype block. Preserve node's -4 horizontal translation, database's 20px top reserve, rectangle/cloud centering, and frame's distinct title-first tab plus stereotype-below-title behavior. Use one shared stack helper for the symbols whose asBig implementations share stereotype-first ordering and a frame-specific path for its title-first ordering. Add fresh dotted/reopened and URL/no-URL tests; no dimensions, layout constants, or coordinates may be introduced without the cited Java translation.",
   "perturbation_axes": [
     "packageStyle node crossed with explicit node",
     "packageStyle database crossed with explicit database",
@@ -35,5 +40,11 @@
       "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_node_tb_fallback.puml",
       "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_node_lr_fallback.puml"
     ]
-  }
+  },
+  "rejected_attempt": {
+    "implementation_commit": "09014421f785f5d251a0b28541603b6dcda7aae9",
+    "review": "docs/parity-reviews/class-package-style-header-separation/review.json",
+    "result": "Rejected because symbol-cluster emitters retained a label-only helper and omitted the stereotype TextBlock passed by Java ClusterDecoration."
+  },
+  "status": "proposed"
 }
