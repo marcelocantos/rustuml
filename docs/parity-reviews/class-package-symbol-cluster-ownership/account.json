@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-package-symbol-cluster-ownership",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/command/CommandPackage.java:71-93 CommandPackage#getRegexConcat",
+    "src/main/java/net/sourceforge/plantuml/command/CommandPackage.java:106-168 CommandPackage#executeArg",
+    "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandPackageWithUSymbol.java:74-128 CommandPackageWithUSymbol#getRegexConcat",
+    "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandPackageWithUSymbol.java:136-177 CommandPackageWithUSymbol#executeArg",
+    "src/main/java/net/sourceforge/plantuml/stereo/StereotypePattern.java:45-55 StereotypePattern#optional/#mandatory",
+    "src/main/java/net/sourceforge/plantuml/stereo/Stereotype.java:81-90 Stereotype#build",
+    "src/main/java/net/sourceforge/plantuml/stereo/StereotypeDecoration.java:185-195 StereotypeDecoration#cutLabels",
+    "src/main/java/net/atmp/CucaDiagram.java:245-286 CucaDiagram#quarkInContextSafe",
+    "src/main/java/net/atmp/CucaDiagram.java:319-335 CucaDiagram#getChildrenGroups/#eventuallyBuildPhantomGroups",
+    "src/main/java/net/atmp/CucaDiagram.java:343-364 CucaDiagram#gotoGroup",
+    "src/main/java/net/atmp/CucaDiagram.java:907-943 CucaDiagram#createGroup/#groups",
+    "src/main/java/net/sourceforge/plantuml/plasma/Plasma.java:54-64,92-100 Plasma#register/#quarks/#firstWithName",
+    "src/main/java/net/sourceforge/plantuml/plasma/Quark.java:48-65,100-107,134-155 Quark parent/data/ordered children",
+    "src/main/java/net/sourceforge/plantuml/abel/Entity.java:639-662 Entity#getParentContainer/#leafs/#groups",
+    "src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java:408-436 GraphvizImageBuilder#printGroups/#printGroup",
+    "src/main/java/net/sourceforge/plantuml/svek/Cluster.java:152-180,241-250 Cluster construction/#createChild",
+    "src/main/java/net/sourceforge/plantuml/svek/Cluster.java:330-390 Cluster#drawU",
+    "src/main/java/net/sourceforge/plantuml/svek/ClusterDecoration.java:57-90 ClusterDecoration#guess/#drawU/#getTextBlock"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/diagram/class.rs:406-437 Package",
+    "crates/rustuml-parser/src/parse/class.rs:210-223 ClassParser#current_group_path/#path_id",
+    "crates/rustuml-parser/src/parse/class.rs:313-349 ClassParser#resolve_group_path/#register_entity_path",
+    "crates/rustuml-parser/src/parse/class.rs:663-672 ClassParser closing-scope handling",
+    "crates/rustuml-parser/src/parse/class.rs:684-703 ClassParser command dispatch",
+    "crates/rustuml-parser/src/parse/class.rs:718-899 ClassParser#try_entity_decl",
+    "crates/rustuml-parser/src/parse/class.rs:1267-1439 ClassParser#try_package",
+    "crates/rustuml-render/src/class.rs:2389-2474 package cluster construction and direct-node assignment",
+    "crates/rustuml-render/src/class.rs:3575-3690 package_parent_indices/#package_render_model",
+    "crates/rustuml-render/src/class.rs:4273-4345 SvekEmissionOrder#collect_direct_leaves/#collect_package",
+    "crates/rustuml-render/src/class.rs:4407-4439 svek_node_emission_order",
+    "crates/rustuml-render/src/class.rs:5811-5921 layout_package_clusters/#package_cluster_depth_first_order",
+    "crates/rustuml-layout/src/graph.rs:1800-2037 LayoutGraph#build_cluster_tree"
+  ],
+  "invariant": "A valid package or symbol-container opening line is one atomic ownership event. CommandPackage and CommandPackageWithUSymbol first resolve one Quark from the declaration identity, then CucaDiagram#gotoGroup creates or reuses the Entity on that Quark and pushes that same group as the current scope. Every following child declaration resolves below the current Quark until the matching closing brace. Quark.parent is therefore the sole parent-container identity returned by Entity#getParentContainer. Quark children use LinkedHashMap order and Plasma registers Quarks in creation order, so Entity#leafs/#groups and GraphvizImageBuilder#printGroups/#printGroup traverse direct leaves and child groups in source-derived Quark order. printGroup opens exactly one Cluster for each non-empty child group, emits its direct leaves, recursively emits child groups, and closes that Cluster. Whether the visible outline came from skinparam packageStyle or from an explicit symbol keyword does not alter this ownership model: CommandPackage may leave Entity.getUSymbol null and ClusterDecoration then falls back through PackageStyle#toUSymbol, while CommandPackageWithUSymbol installs an explicit USymbol before the same group traversal. A Java stereotype capture may contain several consecutive <<...>> spans. StereotypePattern's anchored regex can capture the complete sequence, Stereotype#build retains it as one value, and StereotypeDecoration#cutLabels extracts every visible label in declaration order. Multiple stereotypes therefore remain metadata on one successfully created group; they never cancel the group or its scope.",
+  "causal_divergence": "Rust's ClassParser#try_package separates the identity regex from MODIFIERS_RE, but MODIFIERS_RE permits only one trailing stereotype span with << followed by characters excluding the first >. All five independent follow-up inputs place two visible stereotypes on one package opening line. RE captures the identity and leaves both stereotypes in the modifier tail; MODIFIERS_RE then fails, try_package returns false at lines 1281-1284, and parse_line silently ignores the otherwise valid opener. Because no Package is inserted, no canonical package path is registered, and no package index is pushed on package_stack, the following classes resolve through current_group_path to the surrounding package or root. The renderer then receives a self-consistent but incomplete tree: Package.parent, package_render_model roles, SvekEmissionOrder traversal, cluster construction, and qualified-name emission all correctly reflect the missing parser owner. This explains both manifestations in the rejection record. A root declaration produces top-level children and no cluster; a nested declaration produces children owned directly by the surrounding group and no intermediate cluster. The explicit-versus-fallback alternation is incidental: in each pair, the declaration that disappears is exactly the declaration carrying two stereotypes, independent of symbol family, packageStyle fallback, nesting, direction, or source position.",
+  "planned_change": "Replace the one-slot package modifier match with a structured package-opening parser that consumes the complete Java-shaped modifier sequence and collects every <<...>> span in source order, including consecutive labels in the pre-AS identity slot and in the post-identity stereotype slot. Treat parsing and scope creation transactionally: once the complete valid opening line is recognized, resolve exactly one canonical group path, create or update exactly one Package/Quark record, preserve all visible stereotype labels in Package.stereotypes, record its explicit symbol kind or packageStyle-fallback kind without changing ownership, and push that package index before parsing children. Keep Package.parent authoritative and leave package_render_model, direct-child role calculation, cluster traversal, and layout geometry unchanged except for consuming the corrected parser tree. Add parser-level assertions for canonical child paths and parent indices before any SVG comparison, then verify held-out root/nested and reordered cases across packageStyle fallback and explicit node/database/frame/rectangle/cloud forms. Do not add symbol-family branches, fixture names, coordinate adjustments, or renderer-side reconstruction of missing owners.",
+  "perturbation_axes": [
+    "zero, one, two, and three consecutive visible stereotypes",
+    "stereotypes before AS crossed with stereotypes after the canonical identity",
+    "ordinary package plus packageStyle fallback crossed with explicit symbol keyword",
+    "node, database, frame, rectangle/rect, and cloud symbol families",
+    "root package crossed with nested package and two nesting depths",
+    "missing declaration first, middle, or last among sibling groups",
+    "top-to-bottom crossed with left-to-right direction",
+    "renamed display labels crossed with aliases that remain stable",
+    "stereotypes crossed with tags, URL, and trailing color in Java modifier order",
+    "linked children crossed with disconnected children"
+  ],
+  "observed_counterexamples": [
+    {
+      "path": "test-diagrams/perturbations/class-package-style-header-separation/followup_node_tb_root_explicit_mix.puml",
+      "rejected_declaration": "package \"API\" as FallbackNode <<ObservabilityPortal>> <<AuditTrail>> {",
+      "java_owner": "FallbackNode owns NodeFallbackA and NodeFallbackB as direct leaves and is painted with packageStyle node.",
+      "rust_observation": "FallbackNode is absent; NodeFallbackA and NodeFallbackB are emitted at root. ExplicitNode, which has one stereotype, survives.",
+      "causal_match": "The two-stereotype modifier tail is rejected before package creation or package_stack push."
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-header-separation/followup_database_lr_nested_root_mix.puml",
+      "rejected_declaration": "package \"DB\" as FallbackDatabase <<ReplicaSetMembers>> <<Readonly>> {",
+      "java_owner": "Envelope owns FallbackDatabase, which directly owns DbFallbackA and DbFallbackB and is painted with packageStyle database.",
+      "rust_observation": "FallbackDatabase is absent; its classes have Envelope as their qualified owner. ExplicitDatabase, which has one stereotype, survives.",
+      "causal_match": "Ignoring the nested opener leaves Envelope as current_group_path while both child classes are parsed."
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-header-separation/followup_frame_tb_root_nested_mix.puml",
+      "rejected_declaration": "frame \"FR\" as ExplicitFrame <<VeryWideApprovalWindow>> <<Beta>> {",
+      "java_owner": "CloudParent owns ExplicitFrame, which directly owns FrameExplicitA and FrameExplicitB.",
+      "rust_observation": "ExplicitFrame is absent; its classes are direct CloudParent members. FallbackFrame, which has one stereotype, survives.",
+      "causal_match": "The explicit symbol keyword reaches the same failing two-stereotype modifier tail; symbol explicitness does not protect ownership."
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-header-separation/followup_rectangle_lr_alias_nested_mix.puml",
+      "rejected_declaration": "rectangle \"RX\" as ExplicitRectangle <<VeryWideApprovalWindow>> <<Escalated>> {",
+      "java_owner": "ExplicitRectangle is a root group that directly owns RectExplicitA and RectExplicitB.",
+      "rust_observation": "ExplicitRectangle is absent; its classes are emitted at root. Wrapper.FallbackRectangle, which has one stereotype, survives.",
+      "causal_match": "The rectangle opener is deliberately not consumed as a leaf declaration, then try_package rejects its two-stereotype modifier tail."
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-header-separation/followup_cloud_tb_root_nested_mix.puml",
+      "rejected_declaration": "package \"Nimbus\" as FallbackCloud <<SuperLongStereotypeHeader>> <<Audit>> {",
+      "java_owner": "FallbackCloud owns CloudFallbackA and CloudFallbackB as direct leaves and is painted with packageStyle cloud.",
+      "rust_observation": "FallbackCloud is absent; its classes are emitted at root. DatabaseParent.ExplicitCloud, which has one stereotype, survives.",
+      "causal_match": "The root packageStyle declaration fails for the same modifier grammar reason as the explicit-symbol and nested cases."
+    }
+  ],
+  "review_evidence": {
+    "record": "docs/parity-reviews/class-package-style-header-separation/review-followup.json",
+    "verdict": "REJECT",
+    "valid_inputs": 5,
+    "valid_failed": 5,
+    "java_syntax_errors": 0,
+    "diagnostic": "Every missing group declaration has two visible stereotypes; every paired surviving mechanism-relevant declaration has one. Rust qualified names lose exactly the rejected group's path segment."
+  },
+  "scope_boundary": "This account supersedes a renderer-header explanation for these five failures. The existing header-separation implementation remains relevant to clusters that survive parsing, but it cannot run for a declaration discarded before group materialization. This mechanism changes parser ownership data only; any residual symbol header geometry after ownership is restored remains under class-package-style-header-separation.",
+  "status": "proposed"
+}
