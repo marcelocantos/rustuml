@@ -3107,7 +3107,11 @@ fn sequence_depth_snapshots(
             let level = levels.entry(participant.to_owned()).or_default();
             match kind {
                 LifeVariationKind::Open => *level += 1,
-                LifeVariationKind::Close => *level -= 1,
+                // PlantUML LifeSegmentVariation.SMALLER.apply clamps an
+                // already-zero lifeline at zero. Redundant deactivations in
+                // alternate branches remain ordered events but cannot create
+                // negative debt that cancels a later activation.
+                LifeVariationKind::Close => *level = (*level - 1).max(0),
             }
             accepted_changes[event_index] = Some(AcceptedLifeChange {
                 participant: participant.to_owned(),
@@ -3216,7 +3220,9 @@ impl SequenceLifeLines {
                 break;
             }
             match variation.kind {
-                LifeVariationKind::Close => depth -= 1,
+                // LifeSegmentVariation.SMALLER.apply(int) returns zero when
+                // the current value is zero; replay the same saturating stair.
+                LifeVariationKind::Close => depth = (depth - 1).max(0),
                 LifeVariationKind::Open => depth += 1,
             }
         }
@@ -6784,7 +6790,11 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     let lifecycle_row_after_message = lifecycle.row_after_message;
     let spacing_depths = sequence_depth_snapshots(
         &diagram.events,
-        page1_end,
+        // DrawableSetInitializer establishes horizontal constraints for every
+        // page before individual pages are painted. Lifecycle depth therefore
+        // continues across newpage boundaries even though this SVG renders
+        // only page one.
+        diagram.events.len(),
         &lifecycle_owner,
         &lifecycle_y_offset,
     );
@@ -7203,12 +7213,9 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // of the lifeline, so the lifeline must be far enough right to fit the note.
     //
     let mut min_first_center_x: f64 = 0.0;
-    let mut min_scan_group_depth = 0usize;
     let mut min_scan_auto = AutoState::default();
     for event in &diagram.events {
         match event {
-            Event::GroupStart(_) => min_scan_group_depth += 1,
-            Event::GroupEnd => min_scan_group_depth = min_scan_group_depth.saturating_sub(1),
             Event::Autonumber(command) => min_scan_auto.apply(command),
             _ => {}
         }
@@ -7292,13 +7299,13 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
             let autonumber_extra = min_scan_auto
                 .current()
                 .map_or(0.0, |(_, width, _)| width + AUTONUMBER_LABEL_GAP);
-            let group_pad = if min_scan_group_depth > 0 {
-                MSG_TEXT_LEFT_PAD
-            } else {
-                0.0
-            };
+            // MessageExoArrow contributes the same participant constraint
+            // inside and outside a group. InGroupableList#getMinX applies its
+            // exo-specific +3 only when the later group envelope is queried;
+            // GroupingGraphicalElement and prepareMissingSpace then turn that
+            // envelope into the shared 7px translation.
             min_first_center_x =
-                min_first_center_x.max(autonumber_extra + label_w + 24.0 + group_pad);
+                min_first_center_x.max(autonumber_extra + label_w + 24.0);
         }
         if matches!(event, Event::Message(_) | Event::Return(_)) {
             min_scan_auto.advance();
@@ -9360,18 +9367,28 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                     // and child.getMinX() = child.min - EXTERNAL_MARGINX1, so
                                     // the parent rect sits MARGINX + EXTERNAL_MARGINX1 left of
                                     // the child rect.
-                                    part_left.min(
-                                        child_left
-                                            - TEOZ_GROUP_MARGIN_X
-                                            - TEOZ_GROUP_EXTERNAL_MARGIN_X1,
-                                    )
+                                    let child_candidate = child_left
+                                        - TEOZ_GROUP_MARGIN_X
+                                        - TEOZ_GROUP_EXTERNAL_MARGIN_X1;
+                                    if child_candidate < part_left {
+                                        left_owner = child_left_owner;
+                                        child_candidate
+                                    } else {
+                                        part_left
+                                    }
                                 } else {
                                     part_left
                                 }
                             } else if has_msgs {
                                 let part_left = participants[min_idx].box_x - group_frame_margin;
                                 if has_child {
-                                    part_left.min(child_left - group_frame_margin)
+                                    let child_candidate = child_left - group_frame_margin;
+                                    if child_candidate < part_left {
+                                        left_owner = child_left_owner;
+                                        child_candidate
+                                    } else {
+                                        part_left
+                                    }
                                 } else {
                                     part_left
                                 }
@@ -9405,10 +9422,16 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 }
                             }
                             if has_ref {
-                                frame_left = frame_left.min(group.ref_left);
+                                if group.ref_left < frame_left {
+                                    frame_left = group.ref_left;
+                                    left_owner = GroupLeftOwner::Other;
+                                }
                             }
                             if has_external_left {
-                                frame_left = frame_left.min(group.external_left);
+                                if group.external_left < frame_left {
+                                    frame_left = group.external_left;
+                                    left_owner = GroupLeftOwner::Other;
+                                }
                             }
 
                             // Compute the header text right edge (group kind label + guard)
@@ -9553,7 +9576,8 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                                 let active = life_lines.depth_at(
                                     &msg.from,
                                     event_y_positions.get(ev_idx).copied().unwrap_or_default(),
-                                ) > 0;
+                                ) > 0
+                                    || matches!(msg.activation, Some(ActivationChange::Activate));
                                 let from_x = if active {
                                     cx_base + ACTIVATION_HALF_W
                                 } else {
