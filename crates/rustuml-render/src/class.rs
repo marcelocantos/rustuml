@@ -4445,6 +4445,7 @@ fn render_plantuml_svg(
         })
         .collect();
     let package_render = package_render_model(diagram);
+    let painted_cluster_ids = painted_package_cluster_ids(diagram);
     let empty_package_start = diagram.entities.len()
         + diagram.association_classes.len()
         + attached_notes.len()
@@ -4472,7 +4473,10 @@ fn render_plantuml_svg(
         body_top = body_top.min(*y);
         body_bottom = body_bottom.max(y + dims[i].height);
     }
-    for cluster in cluster_positions {
+    for cluster in cluster_positions
+        .iter()
+        .filter(|cluster| painted_cluster_ids.contains(cluster.id.as_str()))
+    {
         let x = cluster.x + MARGIN;
         let y = cluster.y + MARGIN;
         let cloud_frontier = package_cloud_frontier(diagram, cluster);
@@ -4632,7 +4636,10 @@ fn render_plantuml_svg(
                 max_y = max_y.max(pos.y + MARGIN + body_dy + pos.height);
             }
         }
-        for cluster in cluster_positions {
+        for cluster in cluster_positions
+            .iter()
+            .filter(|cluster| painted_cluster_ids.contains(cluster.id.as_str()))
+        {
             let (envelope_extra_x, envelope_extra_y) =
                 package_cluster_envelope_extra(diagram, cluster);
             max_x = max_x.max(cluster.x + MARGIN + cluster.width + envelope_extra_x);
@@ -14729,6 +14736,61 @@ mod tests {
         assert!(
             svg.contains(r#"style="width:384px;height:111px;background:#FFFFFF;""#),
             "{svg}"
+        );
+    }
+
+    #[test]
+    fn renamed_together_margin_affects_layout_but_not_painted_canvas() {
+        let input = "@startuml\n\
+            class FreshSource811\n\
+            class FreshPeer823\n\
+            together {\n\
+              class FreshGroupedTarget827\n\
+              class FreshGroupedPeer829\n\
+            }\n\
+            FreshSource811 --> FreshGroupedTarget827\n\
+            FreshPeer823 --> FreshGroupedPeer829\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let svg = crate::render_svg(&diagram);
+        let mut painted_left = f64::INFINITY;
+        let mut painted_right = 0.0_f64;
+        let mut painted_bottom = 0.0_f64;
+        for entity in svg.split(r#"<g class="entity""#).skip(1) {
+            let rect = entity
+                .split_once("<rect ")
+                .unwrap()
+                .1
+                .split_once("/>")
+                .unwrap()
+                .0;
+            let x = attr_value(rect, " x").unwrap().parse::<f64>().unwrap();
+            let y = attr_value(rect, " y").unwrap().parse::<f64>().unwrap();
+            let width = attr_value(rect, " width").unwrap().parse::<f64>().unwrap();
+            let height = attr_value(rect, " height").unwrap().parse::<f64>().unwrap();
+            painted_left = painted_left.min(x);
+            painted_right = painted_right.max(x + width);
+            painted_bottom = painted_bottom.max(y + height);
+        }
+        let view_box = svg
+            .split_once(r#"viewBox="0 0 "#)
+            .unwrap()
+            .1
+            .split_once('"')
+            .unwrap()
+            .0;
+        let mut canvas = view_box
+            .split_whitespace()
+            .map(|value| value.parse::<i64>().unwrap());
+
+        assert!((painted_left - MARGIN).abs() < 1.0 / 1000.0);
+        assert_eq!(
+            canvas.next().unwrap(),
+            painted_right as i64 + PACKAGE_CANVAS_EXTENT_PAD
+        );
+        assert_eq!(
+            canvas.next().unwrap(),
+            painted_bottom as i64 + PACKAGE_CANVAS_EXTENT_PAD
         );
     }
 
