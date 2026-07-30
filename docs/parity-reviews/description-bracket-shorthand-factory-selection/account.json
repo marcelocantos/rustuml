@@ -29,7 +29,7 @@
   ],
   "claimed_invariant": "A shared package-symbol opener does not establish CLASS ownership. For generic @startuml, ClassDiagramFactory wins only if every later line is accepted by its command grammar. Bare bracket component declarations and bracket-endpoint links are DESCRIPTION commands and reject the earlier Class candidate.",
   "causal_divergence": "Rust scores bracket syntax as Component evidence but does not feed it into Class-factory viability. The symbol-container override consequently revives a Java candidate that failed at the first bracket shorthand line, dispatching to a Class model that discards the leaves and links.",
-  "planned_model_change": "Recognize exact DESCRIPTION-only bracket declaration and bracket-endpoint link grammar, excluding class qualifiers, guards, URLs, and arrow styles, and invalidate Class-factory viability before score promotion. Preserve existing scores and dispatch the source through Diagram::Component.",
+  "planned_model_change": "Recognize exact DESCRIPTION-only bracket declaration and bracket-endpoint link grammar, excluding class qualifiers, guards, URLs, arrow styles, and bracket text consumed inside a multiline class body. Invalidate Class-factory viability before score promotion and dispatch the source through Diagram::Component. Extend that parser's bracket declaration command to preserve Java's display/code split for both `[Display] as Code` and `Code as [Display]` forms.",
   "perturbation_axes": [
     "package/component/node/frame containers, aliases, and nested scopes",
     "bare bracket, bracket-with-alias, and links-only endpoint forms",
