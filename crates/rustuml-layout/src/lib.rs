@@ -3,8 +3,8 @@
 
 //! Hierarchical graph layout engine for RustUML.
 //!
-//! Uses vendored Graphviz (dot algorithm) for layout with proper edge
-//! routing via cubic bezier splines.
+//! Uses vendored Graphviz (dot algorithm) for layout with configurable edge
+//! routing.
 
 pub mod graph;
 mod graphviz_ffi;

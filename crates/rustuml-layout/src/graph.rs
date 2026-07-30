@@ -4,7 +4,7 @@
 //! PlantUML-oriented graph layout API.
 //!
 //! Uses vendored Graphviz (dot algorithm) for hierarchical layout with
-//! proper edge routing via cubic bezier splines.
+//! configurable edge routing.
 
 use std::collections::{HashMap, HashSet};
 use std::ffi::CString;
@@ -38,6 +38,14 @@ pub enum Direction {
     #[default]
     TopToBottom,
     LeftToRight,
+}
+
+/// Graphviz edge-routing mode supported by the layout engine.
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+pub enum SplineRouting {
+    #[default]
+    Splines,
+    Polyline,
 }
 
 /// Graph-level spacing inputs for Graphviz dot, expressed in pixels.
@@ -152,6 +160,7 @@ impl GraphSpacing {
 /// A graph builder that produces laid-out node positions and edge paths.
 pub struct LayoutGraph {
     direction: Direction,
+    spline_routing: SplineRouting,
     spacing: Option<GraphSpacing>,
     plantuml_svek_node_order: bool,
     plantuml_svek_inverted_starts: Vec<String>,
@@ -169,6 +178,7 @@ impl LayoutGraph {
     pub fn new(direction: Direction) -> Self {
         Self {
             direction,
+            spline_routing: SplineRouting::Splines,
             spacing: None,
             plantuml_svek_node_order: false,
             plantuml_svek_inverted_starts: Vec::new(),
@@ -180,6 +190,12 @@ impl LayoutGraph {
             edges: Vec::new(),
             same_rank_pairs: Vec::new(),
         }
+    }
+
+    /// Selects Graphviz's graph-level edge-routing mode.
+    pub fn with_spline_routing(mut self, routing: SplineRouting) -> Self {
+        self.spline_routing = routing;
+        self
     }
 
     /// Sets graph-level dot spacing in pixels.
@@ -909,6 +925,16 @@ impl LayoutGraph {
         for (key, value) in [("remincross", "true"), ("searchsize", "500")] {
             let key = CString::new(key).unwrap();
             let value = CString::new(value).unwrap();
+            graphviz_ffi::agsafeset(
+                g as *mut c_void,
+                key.as_ptr(),
+                value.as_ptr(),
+                empty.as_ptr(),
+            );
+        }
+        if self.spline_routing == SplineRouting::Polyline {
+            let key = CString::new("splines").unwrap();
+            let value = CString::new("polyline").unwrap();
             graphviz_ffi::agsafeset(
                 g as *mut c_void,
                 key.as_ptr(),
@@ -2398,6 +2424,46 @@ mod tests {
             result.node_positions[0].y,
             result.node_positions[1].y
         );
+    }
+
+    #[test]
+    fn polyline_routing_changes_paths_without_moving_nodes() {
+        let solve = |direction, routing| {
+            let mut graph = LayoutGraph::new(direction)
+                .with_plantuml_svek_spacing()
+                .with_spline_routing(routing);
+            for id in ["FreshAlpha3313", "FreshBeta3319", "FreshGamma3323"] {
+                graph.add_node(id, id, 64.0, 48.0);
+            }
+            graph.add_edge("FreshAlpha3313", "FreshBeta3319", None);
+            graph.add_edge("FreshBeta3319", "FreshGamma3323", None);
+            graph.add_edge("FreshAlpha3313", "FreshGamma3323", None);
+            graph.layout_full_no_timeout()
+        };
+
+        for direction in [Direction::TopToBottom, Direction::LeftToRight] {
+            let splines = solve(direction, SplineRouting::Splines);
+            let polylines = solve(direction, SplineRouting::Polyline);
+            for (spline_node, polyline_node) in
+                splines.node_positions.iter().zip(&polylines.node_positions)
+            {
+                assert_eq!(spline_node.x, polyline_node.x);
+                assert_eq!(spline_node.y, polyline_node.y);
+                assert_eq!(spline_node.width, polyline_node.width);
+                assert_eq!(spline_node.height, polyline_node.height);
+            }
+            let spline_long_edge = splines
+                .edge_paths
+                .iter()
+                .find(|edge| edge.from == "FreshAlpha3313" && edge.to == "FreshGamma3323")
+                .unwrap();
+            let polyline_long_edge = polylines
+                .edge_paths
+                .iter()
+                .find(|edge| edge.from == "FreshAlpha3313" && edge.to == "FreshGamma3323")
+                .unwrap();
+            assert_ne!(spline_long_edge.points, polyline_long_edge.points);
+        }
     }
 
     #[test]

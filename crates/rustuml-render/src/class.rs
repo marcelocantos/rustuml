@@ -17,7 +17,7 @@ use std::fmt::Write;
 
 use rustuml_layout::graph::{
     ClusterPosition, ClusterTitleSize, Direction, EdgeLabelSize, EdgePath, LayoutGraph,
-    NodePosition,
+    NodePosition, SplineRouting,
 };
 use rustuml_parser::diagram::SpriteData;
 use rustuml_parser::diagram::class::*;
@@ -2424,6 +2424,7 @@ fn render_with_oracle_uid_origin(
     let (node_sep, rank_sep) = class_svek_spacing(diagram);
     let mut layout = LayoutGraph::new(direction)
         .with_spacing_pixels(node_sep, rank_sep)
+        .with_spline_routing(class_svek_spline_routing(diagram))
         .with_plantuml_svek_node_order();
     let floating_note_indices: Vec<usize> = diagram
         .notes
@@ -12044,6 +12045,21 @@ fn has_ortho_linetype(diagram: &ClassDiagram) -> bool {
         .is_some_and(|sp| sp.value.trim().eq_ignore_ascii_case("ortho"))
 }
 
+fn class_svek_spline_routing(diagram: &ClassDiagram) -> SplineRouting {
+    if diagram
+        .meta
+        .skinparams
+        .iter()
+        .rev()
+        .find(|sp| sp.key.eq_ignore_ascii_case("linetype"))
+        .is_some_and(|sp| sp.value.trim().eq_ignore_ascii_case("polyline"))
+    {
+        SplineRouting::Polyline
+    } else {
+        SplineRouting::Splines
+    }
+}
+
 fn find_oracle_relationship_edge<'a>(
     oracle: &'a OracleLayout,
     candidates: &[(String, bool)],
@@ -18387,6 +18403,53 @@ mod tests {
                 }
                 assert!(saw_diagonal_contact, "{svg}");
             }
+        }
+    }
+
+    #[test]
+    fn class_polyline_routing_is_case_insensitive_and_last_value_wins() {
+        let long_edge_path = |direction: &str, skinparams: &str| {
+            let input = format!(
+                "@startuml\n\
+                 {direction}\
+                 {skinparams}\
+                 class FreshAlpha3343\n\
+                 class FreshBeta3347\n\
+                 class FreshGamma3359\n\
+                 class FreshDelta3361\n\
+                 FreshAlpha3343 -- FreshBeta3347\n\
+                 FreshBeta3347 -- FreshGamma3359\n\
+                 FreshGamma3359 -- FreshDelta3361\n\
+                 FreshAlpha3343 -- FreshDelta3361\n\
+                 @enduml"
+            );
+            let diagram = rustuml_parser::parse::parse(&input).unwrap();
+            let svg = crate::render_svg(&diagram);
+            let marker = r#" id="FreshAlpha3343-FreshDelta3361""#;
+            let marker_index = svg.find(marker).unwrap();
+            let path_start = svg[..marker_index].rfind("<path ").unwrap();
+            attr_value(&svg[path_start..marker_index + marker.len()], "d")
+                .unwrap()
+                .to_string()
+        };
+
+        for direction in ["", "left to right direction\n"] {
+            let default = long_edge_path(direction, "");
+            let polyline = long_edge_path(direction, "skinparam linetype polyline\n");
+            let mixed_case = long_edge_path(direction, "skinparam linetype PoLyLiNe\n");
+            let reset_to_default = long_edge_path(
+                direction,
+                "skinparam linetype polyline\nskinparam linetype spline\n",
+            );
+            let last_polyline = long_edge_path(
+                direction,
+                "skinparam linetype spline\nskinparam linetype polyline\n",
+            );
+
+            assert_ne!(default, polyline);
+            assert_eq!(mixed_case, polyline);
+            assert_eq!(reset_to_default, default);
+            assert_eq!(last_polyline, polyline);
         }
     }
 
