@@ -2,7 +2,7 @@
   "schema_version": 1,
   "mechanism": "class-svek-retracted-edge-envelope",
   "created": "2026-07-31",
-  "status": "proposed",
+  "status": "rejected",
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "rust_revision_before_change": "a418f6d02fd49550eda2773e1ea603f5c8a0bc7e",
   "java_locations": [
@@ -56,6 +56,19 @@
   "claimed_invariant": "A decorated SVEK relationship has two coordinate streams with different ownership. The endpoint extremity remains at the original Graphviz contact, while the visible DotPath shaft is retracted by the extremity's Java decoration length before SvekResult measures the painted graph. SvekResult's minimum therefore unions retracted shaft controls, unretracted extremity geometry, nodes, labels, and clusters. The same retracted path that is emitted must participate in both horizontal and vertical origin normalization; raw Graphviz controls are layout input, not painted shaft bounds.",
   "causal_divergence": "Rust's final relationship emitter correctly derives a shortened path from the raw EdgePath and leaves endpoint decorations at the original contacts. Its earlier svek_layout_x_bias and svek_layout_y_bias helpers nevertheless include every raw EdgePath control. When a moved endpoint or adjacent control is the painted minimum, Rust normalizes from geometry Java no longer paints. In class_rel_label_navigability this translates both nodes, both splines, all endpoint labels, and both navigability marks about 0.75px left while preserving their relative geometry, which is the signature of a wrong global painted origin rather than a node-size, label-width, spline-routing, or comparator problem.",
   "planned_model_change": "Project every ordinary class relationship edge through the same decoration-length and shortened_endpoint_points model before collecting SVEK painted minima. Preserve raw paths for Graphviz contact geometry, endpoint extremities, and final shortening; use retracted copies only for the DotPath portion of the envelope. Keep non-relationship edges on their existing path model. Apply the correction symmetrically to x and y and add tests whose minimum is owned by a retracted first or last control under renamed labels, reversed arrows, different relationship kinds, and both rank directions. Do not add fixture-coordinate offsets, tune decoration lengths, alter Graphviz routing, or relax the comparator.",
+  "experimental_result": {
+    "implementation_revision": "not committed; shipping diff fully reverted",
+    "change": "The origin helpers projected ordinary relationship EdgePaths through the exact endpoint lengths and shortened_endpoint_points function used by final emission. A focused test confirmed opposite dependency arrows retracted opposite shaft ends while preserving raw contacts.",
+    "commands": [
+      "cargo test -p rustuml-render --lib svek_painted_envelope_uses_retracted_shaft_and_keeps_raw_contacts",
+      "cargo build --release -p rustuml-oracle --example diff_one",
+      "target/release/examples/diff_one --no-oracle test-diagrams/golden/class/class_rel_label_navigability.puml",
+      "target/release/examples/diff_one --no-oracle test-diagrams/golden/class/class_impl_07_interfaces.puml",
+      "target/release/examples/diff_one --no-oracle test-diagrams/golden/class/class_mega_all_features.puml"
+    ],
+    "outcome": "The focused model test passed, but class_rel_label_navigability and the other sampled residuals were byte-for-byte unchanged. The retracted endpoint controls do not own this fixture's measured minimum, so the causal claim does not explain the observed global translation and the implementation was reverted.",
+    "corrected_observation": "The expected navigability polygon has visible minX 16 while Java LimitFinder.drawUPolygon subtracts its fixed 10px horizontal polygon overscan, producing the hidden measured frontier at x=6. The expected spline control minimum is x=6.7493. Rust omits the center navigability polygon from svek_layout_x_bias, normalizes the spline control to x=6 instead, and consequently shifts every emitted primitive 0.7505px left. A successor account must own StringWithArrow's center-marker polygon and LimitFinder's polygon frontier rather than endpoint retraction."
+  },
   "perturbation_axes": [
     "arrow decoration at the source versus the target endpoint",
     "association arrow versus dependency and inheritance extremities",
