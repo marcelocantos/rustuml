@@ -1,0 +1,11 @@
+@startuml
+left to right direction
+package OuterScope {
+  database "Shared Vault" {
+    entity Ledger {
+      +id : UUID
+      +post(entry : Entry)
+    }
+  }
+}
+@enduml

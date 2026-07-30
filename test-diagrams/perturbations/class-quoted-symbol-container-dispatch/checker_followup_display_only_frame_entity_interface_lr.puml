@@ -1,0 +1,7 @@
+@startuml
+left to right direction
+frame "Shared Boundary" {
+  entity Ledger
+  interface LedgerPort
+}
+@enduml

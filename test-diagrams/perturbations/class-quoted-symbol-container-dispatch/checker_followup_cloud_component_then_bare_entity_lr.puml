@@ -1,0 +1,7 @@
+@startuml
+left to right direction
+cloud "Runtime Edge" {
+  component API
+}
+entity Ledger
+@enduml

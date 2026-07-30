@@ -1,0 +1,197 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-quoted-symbol-container-dispatch",
+  "review_kind": "followup",
+  "implementation_commit": "1ff38dfd59e9fdf40a890024b549ade98e0cba41",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "reviewer": {
+    "identity": "independent adversarial checker",
+    "model": "gpt-5.4",
+    "reasoning": "xhigh",
+    "tool": "Codex desktop",
+    "independence": "Did not implement commit 1ff38dfd, did not edit shipping source, and added only held-out perturbation inputs plus this follow-up record inside /tmp/rustuml-review-dispatch-1ff."
+  },
+  "tools": [
+    {
+      "name": "functions.exec_command",
+      "purpose": "Read the account and prior review, inspect Rust and Java source, generate pinned Java SVGs, run diff_one --no-oracle, and collect git/sha metadata."
+    },
+    {
+      "name": "functions.apply_patch",
+      "purpose": "Add held-out perturbation .puml files and write this review-followup.json record."
+    }
+  ],
+  "revisions": {
+    "rust_revision_checked": "1ff38dfd59e9fdf40a890024b549ade98e0cba41",
+    "java_revision_checked": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "diff_one_source_revision": "c0133a1d04e66c5d0cf2404a7ff2f5b218006970",
+    "diff_one_source_tree_state": [
+      "M crates/rustuml-render/src/class.rs",
+      "?? docs/parity-reviews/class-empty-symbol-package-leaf/review.json",
+      "?? test-diagrams/perturbations/class-empty-symbol-package-leaf/"
+    ]
+  },
+  "prior_material": {
+    "account": "docs/parity-reviews/class-quoted-symbol-container-dispatch/account.json",
+    "prior_review": "docs/parity-reviews/class-quoted-symbol-container-dispatch/review.json",
+    "implementation_diff": "git show 1ff38dfd^..1ff38dfd -- docs/parity-reviews/class-quoted-symbol-container-dispatch crates test-diagrams"
+  },
+  "binary": {
+    "path": "/tmp/rustuml-checker-1482/target/debug/examples/diff_one",
+    "sha256": "9a1335e17e88439002a2f55bc6d5265961b585584597a85157412a979b98745a",
+    "mode": "--no-oracle",
+    "rebuilt": false
+  },
+  "java_jar": {
+    "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+  },
+  "commands": [
+    "sed -n '1,260p' docs/parity-reviews/class-quoted-symbol-container-dispatch/account.json",
+    "sed -n '1,260p' docs/parity-reviews/class-quoted-symbol-container-dispatch/review.json",
+    "git show --stat --patch --find-renames --find-copies 1ff38dfd^..1ff38dfd -- docs/parity-reviews/class-quoted-symbol-container-dispatch crates test-diagrams",
+    "sed -n '317,860p' crates/rustuml-parser/src/parse/mod.rs",
+    "nl -ba crates/rustuml-parser/src/parse/mod.rs | sed -n '370,420p'",
+    "nl -ba crates/rustuml-parser/src/parse/mod.rs | sed -n '680,705p'",
+    "nl -ba crates/rustuml-parser/src/parse/mod.rs | sed -n '775,855p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/PSystemBuilder.java | sed -n '128,255p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/command/PSystemCommandFactory.java | sed -n '74,240p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/classdiagram/ClassDiagramFactory.java | sed -n '100,175p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandCreateClass.java | sed -n '80,130p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandCreateClassMultilines.java | sed -n '91,230p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandCreateElementFull2.java | sed -n '1,260p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/descdiagram/DescriptionDiagramFactory.java | sed -n '85,150p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandPackageWithUSymbol.java | sed -n '74,180p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandCreateElementFull.java | sed -n '73,160p'",
+    "rg -n -i 'class-quoted-symbol-container-dispatch|quoted_(node|cloud|frame|database)|entity Ledger|Shared Boundary|Runtime Boundary' crates test-diagrams",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -charset UTF-8 -tsvg test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup_nested_database_entity_body_lr.puml test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup_outer_bare_entity_component_node_tb.puml test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup_display_only_frame_entity_interface_lr.puml test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup_allowmixing_node_entity_component_tb.puml test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup_nested_package_quoted_node_inline_empty_tb.puml test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup_cloud_component_then_bare_entity_lr.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup_nested_database_entity_body_lr.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup_outer_bare_entity_component_node_tb.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup_display_only_frame_entity_interface_lr.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup_allowmixing_node_entity_component_tb.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup_nested_package_quoted_node_inline_empty_tb.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup_cloud_component_then_bare_entity_lr.puml",
+    "shasum -a 256 /tmp/rustuml-checker-1482/target/debug/examples/diff_one",
+    "shasum -a 256 /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar"
+  ],
+  "source_inspection": {
+    "java": [
+      "PSystemBuilder tries SequenceDiagramFactory before ClassDiagramFactory before DescriptionDiagramFactory for generic @startuml, and PSystemCommandFactory rejects a factory on the first execution error or incomplete parse.",
+      "ClassDiagramFactory accepts bare entity, inline entity {}, and multiline entity { ... } declarations, but CommandCreateElementFull2 explicitly rejects ordinary component leaves unless allowmixing is enabled.",
+      "DescriptionDiagramFactory accepts quoted shared symbol containers plus bare entity/component leaves, so mixed sources can legitimately fall through to DESCRIPTION when the class factory becomes non-viable."
+    ],
+    "rust": [
+      "detect_uml_subtype now records any bare or braced entity declaration as has_entity_class_factory_decl/has_class_factory_decl (crates/rustuml-parser/src/parse/mod.rs:380-401,693-695).",
+      "The quoted-container tie-break then boosts CLASS whenever any quoted shared deployment container and any entity declaration coexist, without checking whether the remaining source stays class-consumable (crates/rustuml-parser/src/parse/mod.rs:777-789).",
+      "That shortcut matches simple entity-only controls, but it does not model Java's whole-source viability once a nested component line requires DescriptionDiagramFactory or allowmixing."
+    ],
+    "fixture_shaping_search": "No mechanism name, held-out stem name, or review-specific source text was found in shipping crates; the new logic is heuristic, not fixture-keyed."
+  },
+  "inputs": [
+    "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup_nested_database_entity_body_lr.puml",
+    "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup_outer_bare_entity_component_node_tb.puml",
+    "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup_display_only_frame_entity_interface_lr.puml",
+    "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup_allowmixing_node_entity_component_tb.puml",
+    "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup_nested_package_quoted_node_inline_empty_tb.puml",
+    "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup_cloud_component_then_bare_entity_lr.puml"
+  ],
+  "perturbations": [
+    {
+      "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup_nested_database_entity_body_lr.puml",
+      "golden": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup_nested_database_entity_body_lr.svg",
+      "java_diagram_type": "CLASS",
+      "axes": [
+        "nested ordinary package ownership",
+        "display-only quoted database container",
+        "multiline entity body",
+        "left-to-right direction"
+      ],
+      "result": "pass",
+      "evidence": "The held-out nested multiline-body case compares exactly, so 1ff38dfd does fix the simple entity-body family described in the corrected account."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup_outer_bare_entity_component_node_tb.puml",
+      "golden": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup_outer_bare_entity_component_node_tb.svg",
+      "java_diagram_type": "DESCRIPTION",
+      "axes": [
+        "top-level bare entity outside the quoted shared container",
+        "quoted node containing a nested component leaf",
+        "entity-before-container source order",
+        "top-to-bottom direction"
+      ],
+      "result": "fail",
+      "mechanism_shaped": true,
+      "evidence": "Java emits data-diagram-type=DESCRIPTION because SequenceDiagramFactory is blocked by the quoted node and ClassDiagramFactory is then blocked by the nested component leaf without allowmixing, so the source falls through to DescriptionDiagramFactory. diff_one reports Rust data-diagram-type=CLASS instead."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup_display_only_frame_entity_interface_lr.puml",
+      "golden": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup_display_only_frame_entity_interface_lr.svg",
+      "java_diagram_type": "CLASS",
+      "axes": [
+        "display-only quoted frame container",
+        "bare entity plus interface control",
+        "left-to-right direction"
+      ],
+      "result": "pass",
+      "evidence": "A second held-out class-family control compares exactly, so the rejection is not a blanket regression for display-only quoted containers."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup_allowmixing_node_entity_component_tb.puml",
+      "golden": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup_allowmixing_node_entity_component_tb.svg",
+      "java_diagram_type": "CLASS",
+      "axes": [
+        "allowmixing-enabled mixed class/component content",
+        "quoted node container",
+        "inline empty entity body",
+        "top-to-bottom direction"
+      ],
+      "result": "fail",
+      "mechanism_shaped": false,
+      "evidence": "Java and Rust both select CLASS, but diff_one still reports a structural mismatch in the nested component leaf rendering. This is a secondary residual, not the basis for the dispatch verdict."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup_nested_package_quoted_node_inline_empty_tb.puml",
+      "golden": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup_nested_package_quoted_node_inline_empty_tb.svg",
+      "java_diagram_type": "CLASS",
+      "axes": [
+        "nested package plus quoted node container",
+        "display-only quoted container",
+        "inline empty entity body",
+        "top-to-bottom direction"
+      ],
+      "result": "pass",
+      "evidence": "The nested inline-empty-body control also compares exactly."
+    },
+    {
+      "source": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup_cloud_component_then_bare_entity_lr.puml",
+      "golden": "test-diagrams/perturbations/class-quoted-symbol-container-dispatch/checker_followup_cloud_component_then_bare_entity_lr.svg",
+      "java_diagram_type": "DESCRIPTION",
+      "axes": [
+        "display-only quoted cloud container",
+        "nested component leaf before the bare entity",
+        "container-before-entity source order",
+        "left-to-right direction"
+      ],
+      "result": "fail",
+      "mechanism_shaped": true,
+      "evidence": "The same whole-source viability hole survives a different shared-container symbol and reversed declaration order: Java again falls through to DESCRIPTION, while diff_one reports Rust data-diagram-type=CLASS."
+    }
+  ],
+  "findings": [
+    "REJECT: commit 1ff38dfd still does not model Java's first-complete-factory rule. Two fresh valid sources with a quoted shared container, a bare entity, and a nested component leaf route DESCRIPTION in Java but CLASS in Rust.",
+    "The root cause is the new global viability shortcut in crates/rustuml-parser/src/parse/mod.rs:693-695 and 777-789. It treats any entity declaration plus any quoted shared container as enough to keep ClassDiagramFactory alive, but Java requires the remaining lines to stay class-consumable, and nested component leaves without allowmixing break that assumption.",
+    "The failure generalizes across two new axes not used by the implementer: node versus cloud shared-container symbols, and entity-before-container versus container-before-entity ordering.",
+    "No fixture-shaped logic or held-out filename matching was found in shipping crates.",
+    "A secondary allowmixing-enabled mixed-content case still mismatches structurally even when both systems choose CLASS; that residual is real but separate from the dispatch rejection."
+  ],
+  "summary": {
+    "valid_inputs": 6,
+    "passes": 3,
+    "failures": 3,
+    "mechanism_failures": 2,
+    "secondary_failures": 1,
+    "java_syntax_errors": 0,
+    "cargo_or_rustc_run": false
+  },
+  "verdict": "REJECT"
+}
