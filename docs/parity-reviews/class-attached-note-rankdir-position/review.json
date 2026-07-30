@@ -1,0 +1,187 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-attached-note-rankdir-position",
+  "account": "docs/parity-reviews/class-attached-note-rankdir-position/account.json",
+  "implementation_commit": "bf4b9c0a924b5dfe10c0e85f69a39e8bf6d3467d",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "reviewed_at": "2026-07-30",
+  "reviewer": {
+    "identity": "independent adversarial checker",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop",
+    "independence": "Did not implement commit bf4b9c0a, did not edit shipping source or baselines, and only added held-out evidence plus this review record in an isolated checker worktree."
+  },
+  "revisions": {
+    "account_commit": "85513d6415b4db1feeb8adfb186dcbec6e38ce63",
+    "checker_worktree_branch": "codex/checker-class-attached-note-rankdir-position-511a5e78",
+    "checker_worktree_path": "/private/tmp/rustuml-review-rankdir-position-511a5e78",
+    "rust_revision_checked": "511a5e786faa91f89477eeba636732b7f4d7abff",
+    "rust_tree_checked": "6758555b5ca1ccd25d1a5a1960e2da14aa86b2fb",
+    "current_clean_evidence_tip": "511a5e786faa91f89477eeba636732b7f4d7abff",
+    "java_revision_checked": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "comparator": {
+    "binary": "/tmp/rustuml-diff-one-bf4b9c0a",
+    "sha256": "a39360f199e01332f0e6720dda270a4c1ef203e0bcc4f5bb7f6cb6ff14d6a0cf",
+    "mode": "--no-oracle",
+    "source_revision_claimed": "bf4b9c0a924b5dfe10c0e85f69a39e8bf6d3467d",
+    "rebuilt": false,
+    "cargo_or_rustc_run": false,
+    "notes": "User-specified frozen exact product helper. No Cargo or rustc commands were run during this checker pass."
+  },
+  "java_jar": {
+    "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "reported_version": "PlantUML version 1.2026.3beta6 / 71806a2 [2026-06-18 16:03:22 UTC]"
+  },
+  "commands": [
+    "sed -n '1,260p' /Users/marcelo/.codex/skills/oracle-first/SKILL.md",
+    "sed -n '1,260p' ~/.claude/rust.md",
+    "sed -n '1,220p' /Users/marcelo/.claude/gates.md",
+    "sed -n '1,220p' /Users/marcelo/.claude/convergence.md",
+    "git worktree list --porcelain",
+    "git rev-parse --verify bf4b9c0a^{commit}",
+    "git rev-parse --verify 511a5e78^{commit}",
+    "shasum -a 256 /tmp/rustuml-diff-one-bf4b9c0a",
+    "test -f /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar && echo ok",
+    "git worktree add -b codex/checker-class-attached-note-rankdir-position-511a5e78 /private/tmp/rustuml-review-rankdir-position-511a5e78 511a5e78",
+    "sed -n '1,240p' docs/parity-reviews/class-attached-note-rankdir-position/account.json",
+    "git show --stat --name-only bf4b9c0a --",
+    "sed -n '1,220p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/utils/Position.java",
+    "sed -n '220,340p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnEntity.java",
+    "sed -n '1,220p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/Bibliotekon.java",
+    "sed -n '280,340p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+    "sed -n '470,520p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/utils/Position.java | sed -n '40,70p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnEntity.java | sed -n '238,289p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNote.java | sed -n '228,316p'",
+    "git show bf4b9c0a -- crates/rustuml-render/src/class.rs crates/rustuml-layout/src/graph.rs",
+    "nl -ba crates/rustuml-render/src/class.rs | sed -n '2290,2325p'",
+    "nl -ba crates/rustuml-render/src/class.rs | sed -n '4710,4725p'",
+    "nl -ba crates/rustuml-render/src/class.rs | sed -n '12664,12686p'",
+    "nl -ba crates/rustuml-render/src/class.rs | sed -n '13432,13508p'",
+    "git diff --unified=0 bf4b9c0a^ bf4b9c0a -- crates/rustuml-render/src/class.rs crates/rustuml-layout/src/graph.rs | rg -n '^\\+[^+].*(include_str!|include_bytes!|test-diagrams|golden|fixture|replace\\(|replacen\\(|[0-9]+\\.[0-9]{3,})'",
+    "git grep -n -E 'Beacon7201|Intake7303|Orbit7403|Orbit7503|Nested7509|lower root trace|direct top marker' bf4b9c0a -- crates",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-attached-note-rankdir-position/checker_root_tb_all_positions_renamed.puml test-diagrams/perturbations/class-attached-note-rankdir-position/checker_root_lr_all_positions_renamed.puml test-diagrams/perturbations/class-attached-note-rankdir-position/checker_package_tb_direct_nested_mix.puml test-diagrams/perturbations/class-attached-note-rankdir-position/checker_package_lr_direct_nested_mix.puml",
+    "/tmp/rustuml-diff-one-bf4b9c0a --no-oracle test-diagrams/perturbations/class-attached-note-rankdir-position/checker_root_tb_all_positions_renamed.puml",
+    "/tmp/rustuml-diff-one-bf4b9c0a --no-oracle test-diagrams/perturbations/class-attached-note-rankdir-position/checker_root_lr_all_positions_renamed.puml",
+    "/tmp/rustuml-diff-one-bf4b9c0a --no-oracle test-diagrams/perturbations/class-attached-note-rankdir-position/checker_package_tb_direct_nested_mix.puml",
+    "/tmp/rustuml-diff-one-bf4b9c0a --no-oracle test-diagrams/perturbations/class-attached-note-rankdir-position/checker_package_lr_direct_nested_mix.puml",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -version 2>&1 | head -n 1",
+    "shasum -a 256 /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar /tmp/rustuml-diff-one-bf4b9c0a test-diagrams/perturbations/class-attached-note-rankdir-position/*.puml test-diagrams/perturbations/class-attached-note-rankdir-position/*.svg",
+    "git rev-parse HEAD HEAD^{tree} --abbrev-ref HEAD"
+  ],
+  "source_inspection": {
+    "java": [
+      "Position.withRankdir applies a pure rankdir-dependent rotation in LEFT_TO_RIGHT mode: RIGHT to BOTTOM, LEFT to TOP, BOTTOM to RIGHT, and TOP to LEFT.",
+      "CommandFactoryNoteOnEntity.executeInternal calls withRankdir before it constructs the attached note Link, so link direction, horizontal-solitary status, and LinkArg.noDisplay length are driven by the transformed position rather than the raw keyword.",
+      "Bibliotekon.first and SvekEdge.rankSame preserve Java's length-one link handling for LEFT and RIGHT attached notes through lines0 ordering and rank=same constraints.",
+      "EntityImageNote.drawU reverses the solved path when needed and derives the callout strategy from the routed contact point through getOpaleStrategy, so paint-side choice follows solved geometry rather than the raw note keyword."
+    ],
+    "rust": [
+      "crates/rustuml-render/src/class.rs:12668-12678 implements attached_note_layout_position with the same four-way LEFT_TO_RIGHT rotation and identity TOP_TO_BOTTOM behavior as Java Position.withRankdir.",
+      "crates/rustuml-render/src/class.rs:2297-2318 applies the transformed attached-note position before layout edge construction, so line0 membership, same-rank emission, edge direction, and minlen mirror Java's transformed-link semantics.",
+      "crates/rustuml-render/src/class.rs:4711-4725 stores transformed positions in the attached_notes layout stream, preventing a later raw-position leak through note-node ordinal assignment.",
+      "crates/rustuml-render/src/class.rs:13435-13508 uses the transformed position to locate the solved edge, choose contact versus endpoint orientation, and feed attached_note_render_position from solved geometry.",
+      "No remaining raw attached-note position use was found in the inspected Rust class renderer path that would bypass attached_note_layout_position for this mechanism."
+    ],
+    "fixture_shaping_search": "The implementation diff and held-out label grep were clean. I found no mechanism-name strings, held-out labels, or fixture-path branches in shipping crates at implementation commit bf4b9c0a.",
+    "constants": "No new production magic constants or unexplained high-precision decimal literals were introduced by bf4b9c0a. The mechanism change is a symbolic position mapping plus existing layout calls."
+  },
+  "inputs": [
+    {
+      "path": "test-diagrams/perturbations/class-attached-note-rankdir-position/checker_root_tb_all_positions_renamed.puml",
+      "java_svg": "test-diagrams/perturbations/class-attached-note-rankdir-position/checker_root_tb_all_positions_renamed.svg",
+      "sha256": {
+        "puml": "c44097b321c1575b4c0f300b9c6e5fd95aaac50ccc0d2e4b7ccb888bcb8cf800",
+        "svg": "04fc050aac1a1fa8114d9b3ce2629a51086a4a5ce482b0d0ae07c26bd6019283"
+      },
+      "valid_java_svg": true,
+      "axes": [
+        "top-to-bottom direction",
+        "root ownership",
+        "all four attached-note positions",
+        "declaration-order permutation",
+        "renamed labels"
+      ],
+      "diff_one_no_oracle": {
+        "exit_code": 0,
+        "summary": "pass: SVGs are structurally equivalent"
+      }
+    },
+    {
+      "path": "test-diagrams/perturbations/class-attached-note-rankdir-position/checker_root_lr_all_positions_renamed.puml",
+      "java_svg": "test-diagrams/perturbations/class-attached-note-rankdir-position/checker_root_lr_all_positions_renamed.svg",
+      "sha256": {
+        "puml": "4c146458f9477fe57495806b1ee749be8f89d1f2a12bfbf93f153f78ac319963",
+        "svg": "fd94cbb0ad7ab29227e2f9fd05063a7e9443b274544b24e040a551c3d2e4586f"
+      },
+      "valid_java_svg": true,
+      "axes": [
+        "left-to-right direction",
+        "root ownership",
+        "all four attached-note positions",
+        "declaration-order permutation",
+        "renamed labels"
+      ],
+      "diff_one_no_oracle": {
+        "exit_code": 0,
+        "summary": "pass: SVGs are structurally equivalent"
+      }
+    },
+    {
+      "path": "test-diagrams/perturbations/class-attached-note-rankdir-position/checker_package_tb_direct_nested_mix.puml",
+      "java_svg": "test-diagrams/perturbations/class-attached-note-rankdir-position/checker_package_tb_direct_nested_mix.svg",
+      "sha256": {
+        "puml": "65ab6b1e4fdc1ed7dd3e72e4fd5b255fe16937fe74fbebd55f1d6d2cfe8cfabd",
+        "svg": "ffed8aede8f21aeba77f7e2f9dc3878423ff335c7b291f06b998dee5230dcb6e"
+      },
+      "valid_java_svg": true,
+      "axes": [
+        "top-to-bottom direction",
+        "direct package leaf versus nested descendant ownership",
+        "all four attached-note positions",
+        "interleaved targets",
+        "renamed labels"
+      ],
+      "diff_one_no_oracle": {
+        "exit_code": 0,
+        "summary": "pass: SVGs are structurally equivalent"
+      }
+    },
+    {
+      "path": "test-diagrams/perturbations/class-attached-note-rankdir-position/checker_package_lr_direct_nested_mix.puml",
+      "java_svg": "test-diagrams/perturbations/class-attached-note-rankdir-position/checker_package_lr_direct_nested_mix.svg",
+      "sha256": {
+        "puml": "6857a835c1e19629f3896c80cee0ff36156d748ccec124b025cbe7fe4a6a75cf",
+        "svg": "17281287827b735dfa3ec5cbaa2aba831e256edaa08769c8c7839a08807fd94f"
+      },
+      "valid_java_svg": true,
+      "axes": [
+        "left-to-right direction",
+        "direct package leaf versus nested descendant ownership",
+        "all four attached-note positions",
+        "interleaved targets",
+        "renamed labels"
+      ],
+      "diff_one_no_oracle": {
+        "exit_code": 0,
+        "summary": "pass: SVGs are structurally equivalent"
+      }
+    }
+  ],
+  "findings": [
+    "ACCEPT: I did not find a mechanism-shaped counterexample against bf4b9c0a. Four fresh valid held-out cases spanning both rank directions, all four attached-note positions, root versus package-descendant ownership, declaration-order changes, and renamed labels all passed strict no-oracle comparison.",
+    "The source audit supports the causal account. Java rotates the declared side through Position.withRankdir before link construction, and the Rust implementation now applies the same transformed side consistently through layout-edge creation, attached-note slot assignment, solved-edge lookup, and render-side derivation.",
+    "I found no fixture-shaped shipping logic, golden reads, output surgery, or unexplained parity constants in the bf4b9c0a production diff.",
+    "The held-out package cases show the mechanism generalizes beyond the original dense root-only probe: direct package leaves and nested descendants also match in both TOP_TO_BOTTOM and LEFT_TO_RIGHT diagrams."
+  ],
+  "summary": {
+    "fresh_valid_inputs": 4,
+    "passes": 4,
+    "failures": 0,
+    "java_syntax_errors": 0,
+    "cargo_or_rustc_run": false
+  },
+  "verdict": "ACCEPT"
+}

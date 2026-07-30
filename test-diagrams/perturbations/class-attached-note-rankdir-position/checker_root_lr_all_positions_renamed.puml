@@ -1,0 +1,14 @@
+@startuml
+left to right direction
+class Beacon7301
+class Intake7303
+class Pivot7305
+class Exit7307
+Beacon7301 --> Intake7303
+Intake7303 --> Pivot7305
+Pivot7305 --> Exit7307
+note bottom of Intake7303 : lower root trace
+note right of Pivot7305 : right root trace
+note top of Intake7303 : upper root trace
+note left of Pivot7305 : left root trace
+@enduml
