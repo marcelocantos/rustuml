@@ -1,0 +1,284 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-note-opale-spline-eligibility",
+  "reviewed_at": "2026-07-30",
+  "reviewer": {
+    "identity": "Codex independent adversarial checker; not the implementer",
+    "model": "gpt-5",
+    "reasoning_effort": "high",
+    "tool": "Codex desktop shell with zsh, an isolated git worktree, OpenJDK 21, the pinned Java PlantUML JAR, and the frozen bf4b9c0a diff_one helper; no Cargo or rustc invoked"
+  },
+  "review_context": {
+    "isolated_branch": "codex/review-class-note-opale-spline-eligibility-20260731",
+    "isolated_worktree": "/tmp/rustuml-review-opale-spline-eligibility",
+    "cargo_or_rustc_invocations": 0
+  },
+  "revisions": {
+    "account_commits": [
+      "8695b1de8c212162fccc532f591d9d481b7a55d0",
+      "e9bec60554110bbc04c4ead97e9f08a289a3ab2f"
+    ],
+    "implementation_commit": "bf4b9c0a924b5dfe10c0e85f69a39e8bf6d3467d",
+    "checker_repo_head_before_review": "511a5e786faa91f89477eeba636732b7f4d7abff",
+    "evidence_tip_production_diff_from_implementation": "none under crates/rustuml-layout/src/graph.rs or crates/rustuml-render/src/class.rs",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_jar": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+      "reported_version": "PlantUML 1.2026.3beta6 / 71806a2"
+    },
+    "diff_one": {
+      "path": "/tmp/rustuml-diff-one-bf4b9c0a",
+      "sha256": "a39360f199e01332f0e6720dda270a4c1ef203e0bcc4f5bb7f6cb6ff14d6a0cf",
+      "source_revision": "bf4b9c0a924b5dfe10c0e85f69a39e8bf6d3467d",
+      "cargo_invocations": 0,
+      "provenance_note": "Frozen helper supplied by the user; the SHA-256 matched the requested value exactly."
+    }
+  },
+  "commands": [
+    "sed -n '1,260p' /Users/marcelo/.claude/rust.md",
+    "sed -n '1,260p' /Users/marcelo/.codex/skills/oracle-first/SKILL.md",
+    "git worktree add -b codex/review-class-note-opale-spline-eligibility-20260731 /tmp/rustuml-review-opale-spline-eligibility 511a5e78",
+    "sed -n '1,220p' docs/parity-reviews/class-note-opale-spline-eligibility/account.json",
+    "rg -n \"class-note-opale-spline-eligibility|bezier_count|attached_note_layout_position|render_floating_note_entity|attached_notes|Opale\" docs/parity-reviews crates/rustuml-layout/src/graph.rs crates/rustuml-render/src/class.rs",
+    "sed -n '120,320p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
+    "sed -n '740,835p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java",
+    "sed -n '200,270p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNote.java",
+    "sed -n '1,240p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/shape/DotPath.java",
+    "sed -n '1510,1595p' crates/rustuml-layout/src/graph.rs",
+    "sed -n '5620,5715p' crates/rustuml-render/src/class.rs",
+    "sed -n '10840,10935p' crates/rustuml-render/src/class.rs",
+    "sed -n '13420,13630p' crates/rustuml-render/src/class.rs",
+    "git show --stat --patch bf4b9c0a -- crates/rustuml-layout/src/graph.rs crates/rustuml-render/src/class.rs",
+    "shasum -a 256 /tmp/rustuml-diff-one-bf4b9c0a",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-note-opale-spline-eligibility/review_tb_root_simple_opale_pair.puml test-diagrams/perturbations/class-note-opale-spline-eligibility/review_lr_package_simple_opale_top.puml test-diagrams/perturbations/class-note-opale-spline-eligibility/review_lr_root_dense_four_positions.puml test-diagrams/perturbations/class-note-opale-spline-eligibility/review_tb_package_dense_branch_fanout.puml",
+    "/tmp/rustuml-diff-one-bf4b9c0a --no-oracle test-diagrams/perturbations/class-note-opale-spline-eligibility/review_tb_root_simple_opale_pair.puml",
+    "/tmp/rustuml-diff-one-bf4b9c0a --no-oracle test-diagrams/perturbations/class-note-opale-spline-eligibility/review_lr_package_simple_opale_top.puml",
+    "/tmp/rustuml-diff-one-bf4b9c0a --no-oracle test-diagrams/perturbations/class-note-opale-spline-eligibility/review_lr_root_dense_four_positions.puml",
+    "/tmp/rustuml-diff-one-bf4b9c0a --no-oracle test-diagrams/perturbations/class-note-opale-spline-eligibility/review_tb_package_dense_branch_fanout.puml",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-note-opale-spline-eligibility/review_lr_package_dense_four_positions.puml test-diagrams/perturbations/class-note-opale-spline-eligibility/review_tb_root_dense_same_target_four_positions.puml",
+    "/tmp/rustuml-diff-one-bf4b9c0a --no-oracle test-diagrams/perturbations/class-note-opale-spline-eligibility/review_lr_package_dense_four_positions.puml",
+    "/tmp/rustuml-diff-one-bf4b9c0a --no-oracle test-diagrams/perturbations/class-note-opale-spline-eligibility/review_tb_root_dense_same_target_four_positions.puml",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-note-opale-spline-eligibility/review_lr_package_outer_dense_four_positions.puml",
+    "/tmp/rustuml-diff-one-bf4b9c0a --no-oracle test-diagrams/perturbations/class-note-opale-spline-eligibility/review_lr_package_outer_dense_four_positions.puml",
+    "git diff --unified=0 bf4b9c0a^ bf4b9c0a -- crates/rustuml-layout/src/graph.rs crates/rustuml-render/src/class.rs | rg -n '^\\\\+[^+].*(include_str!|include_bytes!|test-diagrams|golden|fixture|replace\\\\(|replacen\\\\(|[0-9]+\\\\.[0-9]{3,})'",
+    "git grep -n -E 'IntakeA9701|VaultA9713|HubA9725|NestA9745|FoldA9775|CoreA9791|pack dense left alt|tb dense bottom' bf4b9c0a -- crates",
+    "perl -0pe 's/></>\\\\n</g' test-diagrams/perturbations/class-note-opale-spline-eligibility/review_lr_root_dense_four_positions.svg | rg -n 'stroke-dasharray:7,7|data-source-line=\"1[6-9]\"'",
+    "perl -0pe 's/></>\\\\n</g' test-diagrams/perturbations/class-note-opale-spline-eligibility/review_lr_package_dense_four_positions.svg | rg -n 'stroke-dasharray:7,7|data-source-line=\"1[6-9]\"'",
+    "perl -0pe 's/></>\\\\n</g' test-diagrams/perturbations/class-note-opale-spline-eligibility/review_tb_root_dense_same_target_four_positions.svg | rg -n 'stroke-dasharray:7,7|data-source-line=\"1[3-6]\"'",
+    "perl -0pe 's/></>\\\\n</g' test-diagrams/perturbations/class-note-opale-spline-eligibility/review_tb_package_dense_branch_fanout.svg | rg -n 'stroke-dasharray:7,7|data-source-line=\"1[6-7]\"'",
+    "perl -0pe 's/></>\\\\n</g' test-diagrams/perturbations/class-note-opale-spline-eligibility/review_lr_package_outer_dense_four_positions.svg | rg -n 'stroke-dasharray:7,7|data-source-line=\"1[3-6]\"'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java | sed -n '130,260p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/SvekEdge.java | sed -n '740,835p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/image/EntityImageNote.java | sed -n '200,270p'",
+    "nl -ba /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/klimt/shape/DotPath.java | sed -n '90,120p;410,420p'",
+    "nl -ba crates/rustuml-layout/src/graph.rs | sed -n '1528,1575p;2348,2362p'",
+    "nl -ba crates/rustuml-render/src/class.rs | sed -n '5650,5675p;10850,10935p;13440,13570p'",
+    "shasum -a 256 /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar /tmp/rustuml-diff-one-bf4b9c0a test-diagrams/perturbations/class-note-opale-spline-eligibility/*.puml test-diagrams/perturbations/class-note-opale-spline-eligibility/*.svg",
+    "shasum -a 256 test-diagrams/perturbations/class-note-opale-spline-eligibility/review_lr_package_outer_dense_four_positions.puml test-diagrams/perturbations/class-note-opale-spline-eligibility/review_lr_package_outer_dense_four_positions.svg",
+    "git rev-parse 8695b1de e9bec605 bf4b9c0a 511a5e78",
+    "git diff --stat bf4b9c0a 511a5e78 -- crates/rustuml-layout/src/graph.rs crates/rustuml-render/src/class.rs"
+  ],
+  "source_inspection": {
+    "java": [
+      "GraphvizImageBuilder.isOpalisable only marks a non-group NOTE with exactly one non-note partner as initially Opale-eligible, and buildImage sets SvekEdge.opale before Graphviz solve at lines 133-147 and 229-258.",
+      "SvekEdge.solve revokes that optimistic flag after SVG solve when isOpalisable() becomes false, and isOpalisable() is exactly DotPath.getBeziers().size() <= 1 at lines 762-799.",
+      "DotPath.addCurve stores one XCubicCurve2D per cubic segment and getBeziers returns that list at lines 112-116 and 414-415, so the Java gate is cubic-segment cardinality, not native spline count.",
+      "EntityImageNote.drawU paints a plain folded note whenever opaleLine is absent or no longer Opale, and otherwise draws the Opale callout using the solved path at lines 206-263."
+    ],
+    "rust": [
+      "LayoutGraph::layout_full_no_timeout now sums (point_count - 1) / 3 across every native spline and stores that as EdgePath.bezier_count at crates/rustuml-layout/src/graph.rs:1531-1572 and 2350-2355, matching Java's per-cubic accounting.",
+      "render_svek_note_emission draws an attached note as Opale only when bezier_count <= 1; otherwise it falls back to the ordinary folded-note entity at crates/rustuml-render/src/class.rs:13440-13513.",
+      "render_non_opale_attached_note_links emits the ordinary dashed attached-note association link only for edges with bezier_count > 1 and does so after normal relationships at crates/rustuml-render/src/class.rs:5650-5671 and 10854-10935.",
+      "render_svek_floating_note uses the same <= 1 gate for floating-note Opale eligibility at crates/rustuml-render/src/class.rs:13540-13567."
+    ]
+  },
+  "prohibited_pattern_audit": {
+    "fixture_shaped_conditions": "None found in the bf4b9c0a production diff.",
+    "unexplained_constants": "No new high-precision parity constants or threshold ladders were introduced.",
+    "golden_reads": "No include_str/include_bytes or test-diagrams/golden reads were added.",
+    "output_surgery": "No replace/replacen or coordinate-keyed post-hoc SVG rewriting was added.",
+    "held_out_label_search": "No fresh held-out labels appeared under crates at implementation commit bf4b9c0a."
+  },
+  "inputs": [
+    {
+      "path": "test-diagrams/perturbations/class-note-opale-spline-eligibility/review_tb_root_simple_opale_pair.puml",
+      "java_svg": "test-diagrams/perturbations/class-note-opale-spline-eligibility/review_tb_root_simple_opale_pair.svg",
+      "sha256": {
+        "puml": "a0fa7d0f509d4fa788c99def7779146251025781096a8a4f118dde9b903e381a",
+        "svg": "a55b4eeb536eb89c29ef95bfd2497392791428639b13c2a6d83ed3732420ee10"
+      },
+      "valid_java_svg": true,
+      "axes": [
+        "top-to-bottom direction",
+        "root-owned target",
+        "simple chain topology",
+        "two side-attached notes"
+      ],
+      "route_classification": "one-cubic opale only",
+      "java_observed_route": "Both attached notes are absorbed into Opale note bodies; Java emits no separate dashed note-link group for source lines 7 or 8.",
+      "diff_one_no_oracle": {
+        "exit_code": 0,
+        "summary": "SVGs are structurally equivalent"
+      },
+      "mechanism_shaped_counterexample": false
+    },
+    {
+      "path": "test-diagrams/perturbations/class-note-opale-spline-eligibility/review_lr_package_simple_opale_top.puml",
+      "java_svg": "test-diagrams/perturbations/class-note-opale-spline-eligibility/review_lr_package_simple_opale_top.svg",
+      "sha256": {
+        "puml": "f890c6f9ae95f27063a3286a6750761c9dec5dcbb37952f79c1daca061db22ac",
+        "svg": "18b26a11fe76e48440c727720319bf84fe835738c606f12a72355d2c80c450e0"
+      },
+      "valid_java_svg": true,
+      "axes": [
+        "left-to-right direction",
+        "package-owned target",
+        "simple chain topology",
+        "top-attached note"
+      ],
+      "route_classification": "one-cubic opale only",
+      "java_observed_route": "The package-owned attached note is absorbed into the Opale note body; Java emits no separate dashed note-link group for source line 10.",
+      "diff_one_no_oracle": {
+        "exit_code": 0,
+        "summary": "SVGs are structurally equivalent"
+      },
+      "mechanism_shaped_counterexample": false
+    },
+    {
+      "path": "test-diagrams/perturbations/class-note-opale-spline-eligibility/review_lr_root_dense_four_positions.puml",
+      "java_svg": "test-diagrams/perturbations/class-note-opale-spline-eligibility/review_lr_root_dense_four_positions.svg",
+      "sha256": {
+        "puml": "3d6d17fd166e3bebb60cae2700e632b936caad87001877b638e7693bfe5156d1",
+        "svg": "9c9dbaedf1179214044d2f7e583e581229c9927b41c6c34a0dc53bf274d07e09"
+      },
+      "valid_java_svg": true,
+      "axes": [
+        "left-to-right direction",
+        "root-owned target",
+        "branch fanout",
+        "all four attached-note positions"
+      ],
+      "route_classification": "mixed one-cubic and multi-cubic attached-note routes",
+      "java_observed_route": "Source line 17 remains a separate dashed association link (HubA9725-GMN19), while source lines 16, 18, and 19 are absorbed into Opale note bodies.",
+      "diff_one_no_oracle": {
+        "exit_code": 0,
+        "summary": "SVGs are structurally equivalent"
+      },
+      "mechanism_shaped_counterexample": false
+    },
+    {
+      "path": "test-diagrams/perturbations/class-note-opale-spline-eligibility/review_tb_package_dense_branch_fanout.puml",
+      "java_svg": "test-diagrams/perturbations/class-note-opale-spline-eligibility/review_tb_package_dense_branch_fanout.svg",
+      "sha256": {
+        "puml": "723e528f52e281ce8a0b3296666a1cb6b18a0ba16c3d15ed3fd755715c5aa0a8",
+        "svg": "5934cf289212289fb0f3ec6d10b4467da092642919d602ac8e6f775b7185f40f"
+      },
+      "valid_java_svg": true,
+      "axes": [
+        "top-to-bottom direction",
+        "package-owned target",
+        "two incoming and two outgoing competing edges",
+        "top and bottom attached notes"
+      ],
+      "route_classification": "one-cubic opale only",
+      "java_observed_route": "Both package-owned attached notes are absorbed into Opale note bodies; Java emits no separate dashed note-link group for source lines 16 or 17.",
+      "diff_one_no_oracle": {
+        "exit_code": 0,
+        "summary": "SVGs are structurally equivalent"
+      },
+      "mechanism_shaped_counterexample": false
+    },
+    {
+      "path": "test-diagrams/perturbations/class-note-opale-spline-eligibility/review_lr_package_dense_four_positions.puml",
+      "java_svg": "test-diagrams/perturbations/class-note-opale-spline-eligibility/review_lr_package_dense_four_positions.svg",
+      "sha256": {
+        "puml": "ef9da4c549eb23b98434c069e363c4a8b2d11205b8bf10d54ae4479a293d747b",
+        "svg": "f1fc0d46e442d9da0f88537111a89d8d4c46e238cbe5d12677059a186dc7d835"
+      },
+      "valid_java_svg": true,
+      "axes": [
+        "left-to-right direction",
+        "package-owned target",
+        "reopened package scope",
+        "extra spare branch",
+        "all four attached-note positions"
+      ],
+      "route_classification": "one-cubic opale only",
+      "java_observed_route": "All four attached notes are absorbed into Opale note bodies; Java emits no separate dashed note-link group for source lines 16 through 19.",
+      "diff_one_no_oracle": {
+        "exit_code": 0,
+        "summary": "SVGs are structurally equivalent"
+      },
+      "mechanism_shaped_counterexample": false
+    },
+    {
+      "path": "test-diagrams/perturbations/class-note-opale-spline-eligibility/review_tb_root_dense_same_target_four_positions.puml",
+      "java_svg": "test-diagrams/perturbations/class-note-opale-spline-eligibility/review_tb_root_dense_same_target_four_positions.svg",
+      "sha256": {
+        "puml": "6ba12afdd55feb7bdeb4e3ab14e038d86908044a34abca22dca8649b21f9a8c3",
+        "svg": "41f5f3f720e614447845fb1c67dc341ad6e4965158101207e75abc4fa6036753"
+      },
+      "valid_java_svg": true,
+      "axes": [
+        "top-to-bottom direction",
+        "root-owned target",
+        "multiple incoming and outgoing competitors",
+        "all four attached-note positions"
+      ],
+      "route_classification": "one-cubic opale only",
+      "java_observed_route": "All four attached notes are absorbed into Opale note bodies; Java emits no separate dashed note-link group for source lines 13 through 16.",
+      "diff_one_no_oracle": {
+        "exit_code": 0,
+        "summary": "SVGs are structurally equivalent"
+      },
+      "mechanism_shaped_counterexample": false
+    },
+    {
+      "path": "test-diagrams/perturbations/class-note-opale-spline-eligibility/review_lr_package_outer_dense_four_positions.puml",
+      "java_svg": "test-diagrams/perturbations/class-note-opale-spline-eligibility/review_lr_package_outer_dense_four_positions.svg",
+      "sha256": {
+        "puml": "ed5fa23ed807d1a4c78198fa50c29d1af5fafa66c85b74509f98ad0a72e89518",
+        "svg": "e58dbf94e9a77c2e8cfde4bdfece7731f41b74abd2d25c6e344f3c8b95b55483"
+      },
+      "valid_java_svg": true,
+      "axes": [
+        "left-to-right direction",
+        "package-owned target",
+        "outer-scope attached-note declarations",
+        "all four attached-note positions",
+        "dense two-class package with external relay and tail"
+      ],
+      "route_classification": "mixed one-cubic and multi-cubic attached-note routes",
+      "java_observed_route": "Source lines 15 and 16 remain separate dashed association links (GMN18-FocusA9807 and SupportA9809-GMN21), while source lines 13 and 14 are absorbed into Opale note bodies.",
+      "diff_one_no_oracle": {
+        "exit_code": 0,
+        "summary": "SVGs are structurally equivalent"
+      },
+      "mechanism_shaped_counterexample": false
+    }
+  ],
+  "findings": [
+    {
+      "severity": "high",
+      "summary": "I found no failing counterexample across seven fresh valid held-outs, including two cases where Java genuinely mixes Opale and non-Opale attached-note outcomes.",
+      "evidence": "Every preserved input above exits 0 under /tmp/rustuml-diff-one-bf4b9c0a --no-oracle."
+    },
+    {
+      "severity": "medium",
+      "summary": "The strongest adversarial case was review_lr_package_outer_dense_four_positions, which reproduces the earlier mechanism family but with fresh labels and a fresh layout; Java leaves the top and bottom notes as separate dashed links while consuming the left and right notes into Opale, and Rust matches that exactly.",
+      "evidence": "The Java SVG preserves dashed note-link groups for source lines 15 and 16 only, and the frozen helper still reports structural equivalence."
+    },
+    {
+      "severity": "medium",
+      "summary": "Java provenance and Rust data flow line up with the account's causal claim rather than a fixture-specific proxy.",
+      "evidence": "Java's gate is DotPath.getBeziers().size() <= 1 after solve, while Rust now derives EdgePath.bezier_count from the flattened cubic segments and branches both note-body and note-link rendering on that field."
+    },
+    {
+      "severity": "informational",
+      "summary": "I found no fixture-shaped logic, golden-data reads, output surgery, or unexplained high-precision constants in the implementation diff.",
+      "evidence": "The rejecting-pattern searches came back clean."
+    }
+  ],
+  "verdict": "ACCEPT"
+}

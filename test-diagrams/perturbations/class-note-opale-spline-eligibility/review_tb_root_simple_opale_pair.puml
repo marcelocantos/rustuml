@@ -1,0 +1,10 @@
+@startuml
+top to bottom direction
+class IntakeA9701
+class FocusA9703
+class OutputA9705
+IntakeA9701 --> FocusA9703
+FocusA9703 --> OutputA9705
+note left of FocusA9703 : root simple left
+note right of FocusA9703 : root simple right
+@enduml

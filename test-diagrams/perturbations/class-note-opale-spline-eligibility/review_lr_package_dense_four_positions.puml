@@ -1,0 +1,22 @@
+@startuml
+left to right direction
+class InA9771
+class InB9773
+package FoldA9775 {
+  class FocusA9777
+  class SupportA9779
+  class SpareA9781
+}
+class OutA9783
+InA9771 --> FoldA9775.FocusA9777
+InB9773 --> FoldA9775.FocusA9777
+FoldA9775.FocusA9777 --> OutA9783
+FoldA9775.SupportA9779 --> OutA9783
+FoldA9775.SpareA9781 --> OutA9783
+package FoldA9775 {
+  note left of FoldA9775.FocusA9777 : pack dense left alt
+  note right of FoldA9775.SupportA9779 : pack dense right alt
+  note top of FoldA9775.FocusA9777 : pack dense top alt
+  note bottom of FoldA9775.SupportA9779 : pack dense bottom alt
+}
+@enduml
