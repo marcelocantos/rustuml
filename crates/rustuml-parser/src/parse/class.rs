@@ -370,9 +370,8 @@ impl ClassParser {
             if let Some(&idx) = self.package_by_path.get(&path) {
                 if self.packages[idx].phantom && self.packages[idx].source_line == 0 {
                     self.packages[idx].source_line = self.current_line;
-                    self.uid_events.push(ClassUidEvent::Package(
-                        self.packages[idx].name.clone(),
-                    ));
+                    self.uid_events
+                        .push(ClassUidEvent::Package(self.packages[idx].name.clone()));
                 }
                 continue;
             }
@@ -456,9 +455,18 @@ impl ClassParser {
 
     fn resolve_relationship_endpoint(&mut self, raw: &str) -> String {
         // `CommandLinkClass#executeArg` calls
-        // `CucaDiagram#quarkInContextSafe(true, endpoint)` and first creates a
-        // missing endpoint as `LeafType.CLASS` at the relationship location.
-        self.ensure_entity(raw)
+        // `CucaDiagram#quarkInContextSafe(true, endpoint)`. An existing group
+        // quark is retained and may later be muted to `EMPTY_PACKAGE`; only a
+        // genuinely missing quark is created as `LeafType.CLASS`.
+        let path = self.resolve_quark_path(raw, QuarkLookup::ReuseUnique);
+        if let Some(&idx) = self.entity_by_path.get(&path) {
+            return self.entities[idx].id.clone();
+        }
+        if let Some(&idx) = self.package_by_path.get(&path) {
+            return self.packages[idx].name.clone();
+        }
+        let label = path.last().cloned().unwrap_or_default();
+        self.create_entity_at_path(path, label, EntityKind::Class, false)
     }
 
     fn find_entity_mut(&mut self, id: &str) -> Option<&mut ClassEntity> {
@@ -1227,9 +1235,6 @@ impl ClassParser {
                 .map(|m| m.as_str().to_string())
                 .unwrap_or_default();
             let alias = caps.get(4).map(|m| m.as_str().to_string());
-            if alias.is_some() && kind_str != "package" {
-                return false;
-            }
             let color = caps.get(5).map(|m| m.as_str().to_string());
             let stereotypes = caps
                 .get(6)
@@ -1287,8 +1292,7 @@ impl ClassParser {
                     let idx = self.packages.len();
                     let name = self.path_id(&prefix);
                     if is_final {
-                        self.uid_events
-                            .push(ClassUidEvent::Package(name.clone()));
+                        self.uid_events.push(ClassUidEvent::Package(name.clone()));
                     }
                     let display_name = if is_final {
                         requested_display_name.clone()
@@ -2781,6 +2785,27 @@ mod tests {
     }
 
     #[test]
+    fn empty_package_relationship_endpoint_reuses_group_identity() {
+        let d = parse(
+            "package \"Empty Parcel\" as EmptyParcel {\n\
+             }\n\
+             class Receiver\n\
+             EmptyParcel --> Receiver",
+        );
+
+        assert_eq!(d.entities.len(), 1);
+        assert_eq!(d.entities[0].id, "Receiver");
+        assert_eq!(d.relationships[0].from, "EmptyParcel");
+        assert_eq!(
+            d.uid_events
+                .iter()
+                .filter(|event| matches!(event, ClassUidEvent::Entity(_)))
+                .count(),
+            1
+        );
+    }
+
+    #[test]
     fn package() {
         let d = parse("package com.example {\n  class Foo\n  class Bar\n}");
         assert_eq!(d.packages.len(), 2);
@@ -2938,6 +2963,43 @@ mod tests {
             ["ServiceCode.Gateway", "Audit"]
         );
         assert_eq!(d.relationships[0].from, "ServiceCode.Gateway");
+    }
+
+    #[test]
+    fn symbol_container_alias_separates_display_from_canonical_identity() {
+        let d = parse(
+            "node \"Compute Display\" as ComputeCode {\n\
+               class Gateway\n\
+             }\n\
+             frame \"Outer Frame\" as OuterCode {\n\
+               cloud \"Cloud Display\" as CloudCode {\n\
+                 class Worker\n\
+               }\n\
+             }\n\
+             ComputeCode.Gateway --> OuterCode.CloudCode.Worker",
+        );
+
+        assert_eq!(
+            d.packages
+                .iter()
+                .map(|package| (
+                    package.name.as_str(),
+                    package.display_name.as_deref(),
+                    package.kind
+                ))
+                .collect::<Vec<_>>(),
+            [
+                ("ComputeCode", Some("Compute Display"), PackageKind::Node),
+                ("OuterCode", Some("Outer Frame"), PackageKind::Frame),
+                (
+                    "OuterCode.CloudCode",
+                    Some("Cloud Display"),
+                    PackageKind::Cloud
+                )
+            ]
+        );
+        assert_eq!(d.relationships[0].from, "ComputeCode.Gateway");
+        assert_eq!(d.relationships[0].to, "OuterCode.CloudCode.Worker");
     }
 
     #[test]

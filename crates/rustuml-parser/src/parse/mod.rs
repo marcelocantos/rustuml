@@ -334,6 +334,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     let mut has_component_package_container = false;
     let mut has_top_level_component_leaf = false;
     let mut has_non_interface_class_decl = false;
+    let mut quoted_shared_deployment_containers = 0i32;
     let mut brace_depth = 0usize;
 
     for line in lines {
@@ -512,12 +513,15 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
                     has_component_leaf_keyword = true;
                 }
             }
-            if is_deploy_exclusive_container || is_quoted_container {
-                // Extra boost: deployment-exclusive container overrides component score.
+            if is_deploy_exclusive_container {
+                // Deployment-exclusive containers override component score.
                 scores[7] += 20;
             }
             if is_quoted_container {
                 has_quoted_deployment_container = true;
+                if !is_deploy_exclusive_container {
+                    quoted_shared_deployment_containers += 1;
+                }
             }
         }
         // Component — weighted strongly so that a single `component` keyword
@@ -741,6 +745,14 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         brace_depth = brace_depth.saturating_add(opens).saturating_sub(closes);
     }
 
+    // Java tries ClassDiagramFactory before the later shared-container
+    // factories. Quoted node/frame/cloud containers only need their deployment
+    // bonus when explicit class declarations have not made the class grammar
+    // authoritative for the complete source.
+    if !has_non_interface_class_decl {
+        scores[7] += 20 * quoted_shared_deployment_containers;
+    }
+
     // Standalone floating notes (`note as X` or `note "text" as X`) can attach
     // to class/object/deployment diagrams. Score class/object always so
     // note-only diagrams tie back to CLASS by the default ordering; score
@@ -774,6 +786,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     }
 
     if has_quoted_deployment_container
+        && !has_non_interface_class_decl
         && !has_component_package_container
         && !has_top_level_component_leaf
     {
@@ -790,6 +803,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     }
 
     if has_quoted_deployment_container
+        && !has_non_interface_class_decl
         && (has_component_package_container || has_top_level_component_leaf)
     {
         let other_max = scores
@@ -1320,6 +1334,26 @@ mod tests {
         let input = "@startuml\nAlice -> Bob : hello\n@enduml";
         let diagram = parse(input).unwrap();
         assert!(matches!(diagram, Diagram::Sequence(_)));
+    }
+
+    #[test]
+    fn quoted_shared_containers_with_explicit_classes_select_class() {
+        for keyword in ["node", "frame", "cloud"] {
+            let input = format!(
+                "@startuml\n{keyword} \"Fresh Shared Container\" as Shared {{\nclass FreshLeaf\n}}\n@enduml"
+            );
+            assert!(
+                matches!(parse(&input).unwrap(), Diagram::Class(_)),
+                "{keyword}"
+            );
+        }
+    }
+
+    #[test]
+    fn quoted_shared_container_without_class_signal_stays_deployment() {
+        let input =
+            "@startuml\nnode \"Fresh Runtime Host\" as Host {\nartifact FreshBinary\n}\n@enduml";
+        assert!(matches!(parse(input).unwrap(), Diagram::Deployment(_)));
     }
 
     #[test]

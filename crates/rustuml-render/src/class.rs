@@ -216,6 +216,11 @@ const BODY_DECORATION_MARGIN: f64 = 15.0;
 /// on its right and bottom sides. An explicit `root { Margin ... }` replaces
 /// that amount in `TextBlockExporter12026.Builder.calculateMargin`.
 const DEFAULT_DOCUMENT_EXTENT_MARGIN: i64 = 5;
+/// `FromSkinparamToStyle` maps `shadowing true` to 3, and
+/// `LimitFinder#drawRectangle` / `drawEllipse` include
+/// `size - 1 + 2 * deltaShadow` in the painted maximum.
+const DEFAULT_SHADOW_DELTA: f64 = 3.0;
+const RECTANGLE_SHADOW_LIMIT_EXTRA: f64 = 2.0 * DEFAULT_SHADOW_DELTA - 1.0;
 /// Java SVEK `ExtremityExtends` draws the inheritance triangle with an 18px
 /// length from contact tip to base centre and 12px base width, oriented by the
 /// edge tangent.
@@ -2231,7 +2236,8 @@ fn render_with_oracle_uid_origin(
                 entity_layout_slots[idx] = next_layout_slot;
             }
             ClassLayoutNodeEmission::Svek(SvekNodeEmission::EmptyPackage(idx)) => {
-                let (width, height) = empty_package_dims(&diagram.packages[idx]);
+                let package = &diagram.packages[idx];
+                let (width, height) = empty_package_intrinsic_dims(package);
                 layout.add_node(&empty_package_layout_id(idx), "", width, height);
                 empty_package_layout_slots[idx] = Some(next_layout_slot);
             }
@@ -2325,9 +2331,12 @@ fn render_with_oracle_uid_origin(
             .iter()
             .map(|line| text_render::label_height(line, FONT_SIZE))
             .sum::<f64>();
-        let (title_width_extra, title_height_extra) = match effective_package_kind(diagram, pkg) {
-            PackageKind::Database => (0.0, DATABASE_CLUSTER_TITLE_EXTRA),
-            PackageKind::Node => (
+        // `ClusterHeader` reads only `Entity.getUSymbol()`. The later
+        // `ClusterDecoration` packageStyle fallback changes paint geometry,
+        // but cannot retroactively add node/database title reserves.
+        let (title_width_extra, title_height_extra) = match automatic_package_kind(pkg) {
+            Some(PackageKind::Database) => (0.0, DATABASE_CLUSTER_TITLE_EXTRA),
+            Some(PackageKind::Node) => (
                 NODE_CLUSTER_TITLE_WIDTH_EXTRA,
                 NODE_CLUSTER_TITLE_HEIGHT_EXTRA,
             ),
@@ -2456,6 +2465,16 @@ fn render_with_oracle_uid_origin(
             return render_grid_fallback(diagram, cs);
         }
     };
+    for cluster in &mut result.cluster_positions {
+        // `DotStringFactory.solve` reconstructs every cluster rectangle from
+        // the serialized SVG polygon rather than Graphviz's internal box.
+        cluster.x = (cluster.x * 100.0).round() / 100.0;
+        cluster.y = (cluster.y * 100.0).round() / 100.0;
+        if let Some(&(width, height)) = result.cluster_serialized_sizes.get(&cluster.id) {
+            cluster.width = width;
+            cluster.height = height;
+        }
+    }
     let solved_positions = result.node_positions.clone();
     result.node_positions = entity_layout_slots
         .iter()
@@ -3666,9 +3685,15 @@ fn together_layout_id(idx: usize) -> String {
     format!("together{idx}")
 }
 
-fn empty_package_dims(pkg: &Package) -> (f64, f64) {
+fn empty_package_symbol_kind(diagram: &ClassDiagram, pkg: &Package) -> Option<PackageKind> {
+    // `EntityImageEmptyPackage.drawU()` passes a null explicit symbol and the
+    // configured packageStyle to `ClusterDecoration`, whose `guess()` applies
+    // the same fallback as a painted cluster.
+    automatic_package_kind(pkg).or_else(|| configured_package_kind(diagram))
+}
+
+fn empty_package_dims(pkg: &Package, symbol_kind: Option<PackageKind>) -> (f64, f64) {
     let label = package_display_label(pkg);
-    let symbol_kind = automatic_package_kind(pkg);
     let bold = symbol_kind.is_none();
     let label_width = text_render::measure_no_underline(label, FONT_SIZE, bold);
     let label_height = text_render::label_height(label, FONT_SIZE);
@@ -3718,6 +3743,13 @@ fn empty_package_dims(pkg: &Package) -> (f64, f64) {
     )
 }
 
+fn empty_package_intrinsic_dims(pkg: &Package) -> (f64, f64) {
+    // `SvekNode` retains its `IEntityImage` after Graphviz solves a rounded
+    // layout box. `SvekResult.drawU` places that image at the solved minimum
+    // but asks the image to calculate its own dimensions again.
+    empty_package_dims(pkg, automatic_package_kind(pkg))
+}
+
 fn package_cluster_envelope_extra(diagram: &ClassDiagram, cluster: &ClusterPosition) -> (f64, f64) {
     cluster
         .id
@@ -3765,16 +3797,21 @@ fn package_skinparam<'a>(
     kind: PackageKind,
     suffix: &str,
 ) -> Option<&'a str> {
+    let group_paint = matches!(suffix, "BackgroundColor" | "BorderColor");
     let prefixes: &[&str] = match kind {
+        PackageKind::Database if group_paint => &["Database", "Package"],
         PackageKind::Database => &["Database"],
-        // Java `USymbolFolder.asBig` applies the folder symbol context to
-        // `drawFolder`; only its background retains the legacy Package*
-        // fallback. Border and title font remain Folder* channels.
-        PackageKind::Folder if suffix == "BackgroundColor" => &["Folder", "Package"],
+        // `packageBackgroundColor` and `packageBorderColor` map to the generic
+        // `group` style, which explicit symbol signatures inherit.
+        PackageKind::Folder if group_paint => &["Folder", "Package"],
         PackageKind::Folder => &["Folder"],
+        PackageKind::Frame if group_paint => &["Frame", "Package"],
         PackageKind::Frame => &["Frame"],
+        PackageKind::Rectangle if group_paint => &["Rectangle", "Package"],
         PackageKind::Rectangle => &["Rectangle"],
+        PackageKind::Node if group_paint => &["Node", "Package"],
         PackageKind::Node => &["Node"],
+        PackageKind::Cloud if group_paint => &["Cloud", "Package"],
         PackageKind::Cloud => &["Cloud"],
         PackageKind::Package | PackageKind::Namespace => &["Package"],
     };
@@ -4232,21 +4269,15 @@ fn svek_id_allocation(diagram: &ClassDiagram) -> SvekIdAllocation {
                     .enumerate()
                     .map(|(idx, _)| CucaUidEvent::Entity(idx)),
             )
-            .chain(
-                diagram
-                    .notes
-                    .iter()
-                    .enumerate()
-                    .filter_map(|(idx, note)| {
-                        if note.target.is_some() && note.position.is_some() {
-                            Some(CucaUidEvent::AttachedNote(idx))
-                        } else if note.target.is_none() && note.alias.is_some() {
-                            Some(CucaUidEvent::FloatingNote(idx))
-                        } else {
-                            None
-                        }
-                    }),
-            )
+            .chain(diagram.notes.iter().enumerate().filter_map(|(idx, note)| {
+                if note.target.is_some() && note.position.is_some() {
+                    Some(CucaUidEvent::AttachedNote(idx))
+                } else if note.target.is_none() && note.alias.is_some() {
+                    Some(CucaUidEvent::FloatingNote(idx))
+                } else {
+                    None
+                }
+            }))
             .chain(
                 diagram
                     .association_classes
@@ -4483,6 +4514,7 @@ fn render_plantuml_svg(
     let positions = normalized_positions.as_slice();
     let mut normalized_cluster_positions = cluster_positions.to_vec();
     for position in &mut normalized_cluster_positions {
+        position.x += layout_x_bias;
         position.y += layout_y_bias;
     }
     let cluster_positions = normalized_cluster_positions.as_slice();
@@ -4552,6 +4584,13 @@ fn render_plantuml_svg(
         .collect();
     let package_render = package_render_model(diagram);
     let painted_cluster_ids = painted_package_cluster_ids(diagram);
+    let entity_shadow_limit_extra = |entity: &ClassEntity| {
+        if shadow_filter_id.is_some() && entity.kind != EntityKind::Diamond {
+            RECTANGLE_SHADOW_LIMIT_EXTRA
+        } else {
+            0.0
+        }
+    };
     let empty_package_start = diagram.entities.len()
         + diagram.association_classes.len()
         + attached_notes.len()
@@ -4574,10 +4613,11 @@ fn render_plantuml_svg(
     let mut body_top = f64::INFINITY;
     let mut body_bottom = f64::NEG_INFINITY;
     for (i, (x, y)) in entity_positions.iter().enumerate() {
+        let shadow_extra = entity_shadow_limit_extra(&diagram.entities[i]);
         body_min_x = body_min_x.min(*x);
-        body_max_x = body_max_x.max(x + dims[i].width);
+        body_max_x = body_max_x.max(x + dims[i].width + shadow_extra);
         body_top = body_top.min(*y);
-        body_bottom = body_bottom.max(y + dims[i].height);
+        body_bottom = body_bottom.max(y + dims[i].height + shadow_extra);
     }
     for cluster in cluster_positions
         .iter()
@@ -4612,14 +4652,19 @@ fn render_plantuml_svg(
             body_bottom = body_bottom.max(y + pos.height);
         }
     }
-    for &(_, node_idx) in &empty_packages {
+    for &(package_idx, node_idx) in &empty_packages {
         if let Some(pos) = positions.get(node_idx) {
             let x = pos.x + MARGIN + layout_x_bias;
             let y = pos.y + MARGIN;
-            body_min_x = body_min_x.min(x);
-            body_max_x = body_max_x.max(x + pos.width);
-            body_top = body_top.min(y);
-            body_bottom = body_bottom.max(y + pos.height);
+            let package = &diagram.packages[package_idx];
+            let (width, height) = empty_package_intrinsic_dims(package);
+            let cloud_frontier = (empty_package_symbol_kind(diagram, package)
+                == Some(PackageKind::Cloud))
+            .then(|| cloud_frontier(width, height));
+            body_min_x = body_min_x.min(x + cloud_frontier.as_ref().map_or(0.0, |f| f.min_x));
+            body_max_x = body_max_x.max(x + cloud_frontier.as_ref().map_or(width, |f| f.max_x));
+            body_top = body_top.min(y + cloud_frontier.as_ref().map_or(0.0, |f| f.min_y));
+            body_bottom = body_bottom.max(y + cloud_frontier.as_ref().map_or(height, |f| f.max_y));
         }
     }
     if !body_min_x.is_finite() {
@@ -4699,8 +4744,9 @@ fn render_plantuml_svg(
         let mut max_y = 0.0_f64;
         let mut latex_image_max_x = 0.0_f64;
         for (i, (x, y)) in entity_positions.iter().enumerate() {
-            max_x = max_x.max(x + dims[i].width);
-            max_y = max_y.max(y + dims[i].height);
+            let shadow_extra = entity_shadow_limit_extra(&diagram.entities[i]);
+            max_x = max_x.max(x + dims[i].width + shadow_extra);
+            max_y = max_y.max(y + dims[i].height + shadow_extra);
             let entity = &diagram.entities[i];
             let hide = resolve_hide(entity, &diagram.hide_show);
             for member in entity
@@ -4736,10 +4782,23 @@ fn render_plantuml_svg(
                 max_y = max_y.max(pos.y + MARGIN + body_dy + pos.height);
             }
         }
-        for &(_, node_idx) in &empty_packages {
+        for &(package_idx, node_idx) in &empty_packages {
             if let Some(pos) = positions.get(node_idx) {
-                max_x = max_x.max(pos.x + MARGIN + layout_x_bias + body_dx + pos.width);
-                max_y = max_y.max(pos.y + MARGIN + body_dy + pos.height);
+                let package = &diagram.packages[package_idx];
+                let (width, height) = empty_package_intrinsic_dims(package);
+                let cloud_frontier = (empty_package_symbol_kind(diagram, package)
+                    == Some(PackageKind::Cloud))
+                .then(|| cloud_frontier(width, height));
+                max_x = max_x.max(
+                    pos.x
+                        + MARGIN
+                        + layout_x_bias
+                        + body_dx
+                        + cloud_frontier.as_ref().map_or(width, |f| f.max_x),
+                );
+                max_y = max_y.max(
+                    pos.y + MARGIN + body_dy + cloud_frontier.as_ref().map_or(height, |f| f.max_y),
+                );
             }
         }
         for cluster in cluster_positions
@@ -4832,7 +4891,10 @@ fn render_plantuml_svg(
         let extent_pad = if uses_degenerated_entity {
             13
         } else {
-            PACKAGE_CANVAS_EXTENT_PAD + i64::from(shadow_filter_id.is_some()) * 5
+            // SVG shadow filters are paint metadata. Java's LimitFinder
+            // measures the underlying shapes and does not enlarge the SVEK
+            // envelope for their delta shadow.
+            PACKAGE_CANVAS_EXTENT_PAD
         };
         let (extent_pad_x, extent_pad_y, document_width) =
             document_margin.map_or((extent_pad, extent_pad, 0), |margin| {
@@ -5468,6 +5530,7 @@ fn render_plantuml_svg(
                     RelationshipRenderContext {
                         diagram,
                         note: relationship_note_indices[rel_idx].map(|idx| &diagram.notes[idx]),
+                        package_ids: Some(&svek_ids.package_ids),
                         entity_ids: Some(&svek_ids.entity_ids),
                         note_ids: Some(&svek_ids.note_ids),
                     },
@@ -5523,7 +5586,8 @@ struct LayoutPackageCluster {
     stereotype_lines: Vec<String>,
     fill: String,
     stroke: String,
-    stroke_width: &'static str,
+    stroke_width: String,
+    filter_attr: String,
     font_fill: String,
     x: f64,
     y: f64,
@@ -5536,6 +5600,14 @@ fn layout_package_clusters(
     cluster_positions: &[ClusterPosition],
 ) -> Vec<LayoutPackageCluster> {
     let package_render = package_render_model(diagram);
+    let filter_attr = has_shadowing_skinparam(diagram)
+        .then(|| {
+            format!(
+                r#" filter="url(#{})""#,
+                crate::filter_registry::shadow_id_for(diagram.meta.source.as_deref().unwrap_or(""))
+            )
+        })
+        .unwrap_or_default();
     package_cluster_depth_first_order(&package_render)
         .into_iter()
         .filter_map(|idx| {
@@ -5570,21 +5642,27 @@ fn layout_package_clusters(
             // from the group's own USymbol/group type, then passes that
             // stroke separately to `ClusterDecoration`; only the decoration
             // geometry falls back through `PackageStyle.toUSymbol()`.
-            let stroke_width = if matches!(
-                paint_kind,
-                PackageKind::Database
-                    | PackageKind::Frame
-                    | PackageKind::Rectangle
-                    | PackageKind::Node
-                    | PackageKind::Cloud
-            ) {
-                SYMBOL_CLUSTER_STROKE_WIDTH
-            } else {
-                PACKAGE_STROKE_WIDTH
-            };
+            let stroke_width = package_skinparam(diagram, paint_kind, "BorderThickness")
+                .map(str::to_string)
+                .unwrap_or_else(|| {
+                    if matches!(
+                        paint_kind,
+                        PackageKind::Database
+                            | PackageKind::Frame
+                            | PackageKind::Rectangle
+                            | PackageKind::Node
+                            | PackageKind::Cloud
+                    ) {
+                        SYMBOL_CLUSTER_STROKE_WIDTH.to_string()
+                    } else {
+                        PACKAGE_STROKE_WIDTH.to_string()
+                    }
+                });
             let font_fill = package_skinparam(diagram, paint_kind, "FontColor")
                 .map(crate::sequence::resolve_color)
                 .unwrap_or_else(|| "#000000".to_string());
+            let x = pos.x + MARGIN;
+            let y = pos.y + MARGIN;
             Some(LayoutPackageCluster {
                 package_idx: idx,
                 kind,
@@ -5595,11 +5673,16 @@ fn layout_package_clusters(
                 fill,
                 stroke,
                 stroke_width,
+                filter_attr: filter_attr.clone(),
                 font_fill,
-                x: pos.x + MARGIN,
-                y: pos.y + MARGIN,
-                width: pos.width,
-                height: pos.height,
+                x,
+                y,
+                // Java translates `RectangleArea` min and max independently,
+                // then derives the final symbol dimensions from those
+                // translated endpoints. Keep that operation order: at large
+                // origins, cancellation can move an integer extent by one ULP.
+                width: (x + pos.width) - x,
+                height: (y + pos.height) - y,
             })
         })
         .collect()
@@ -5628,6 +5711,7 @@ struct EmptyPackageLayout {
     qualified_name: String,
     source_line: usize,
     symbol_kind: Option<PackageKind>,
+    wrapped_entity: bool,
     label: String,
     stereotype_lines: Vec<String>,
     fill: String,
@@ -5670,6 +5754,7 @@ fn layout_empty_packages(
             let font_fill = package_skinparam(diagram, kind, "FontColor")
                 .map(crate::sequence::resolve_color)
                 .unwrap_or_else(|| "#000000".to_string());
+            let (width, height) = empty_package_intrinsic_dims(package);
             Some(EmptyPackageLayout {
                 package_idx,
                 qualified_name: package_qualified_name(
@@ -5678,7 +5763,8 @@ fn layout_empty_packages(
                     package_idx,
                 ),
                 source_line: package.source_line,
-                symbol_kind: automatic_package_kind(package),
+                symbol_kind: empty_package_symbol_kind(diagram, package),
+                wrapped_entity: automatic_package_kind(package).is_some(),
                 label: package_display_label(package).to_string(),
                 stereotype_lines: visible_package_stereotype_lines(package),
                 fill,
@@ -5686,8 +5772,8 @@ fn layout_empty_packages(
                 font_fill,
                 x: pos.x + MARGIN + layout_x_bias + body_dx,
                 y: pos.y + MARGIN + body_dy,
-                width: pos.width,
-                height: pos.height,
+                width,
+                height,
             })
         })
         .collect()
@@ -5695,15 +5781,17 @@ fn layout_empty_packages(
 
 fn emit_layout_empty_package(svg: &mut String, package: &EmptyPackageLayout, entity_id: &str) {
     if let Some(kind) = package.symbol_kind {
-        write!(svg, "<!--entity {}-->", escape_xml(&package.qualified_name)).unwrap();
-        write!(
-            svg,
-            r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
-            escape_xml(&package.qualified_name),
-            package.source_line,
-            entity_id,
-        )
-        .unwrap();
+        if package.wrapped_entity {
+            write!(svg, "<!--entity {}-->", escape_xml(&package.qualified_name)).unwrap();
+            write!(
+                svg,
+                r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
+                escape_xml(&package.qualified_name),
+                package.source_line,
+                entity_id,
+            )
+            .unwrap();
+        }
         match kind {
             PackageKind::Folder => emit_layout_empty_symbol_folder(svg, package),
             PackageKind::Frame => emit_layout_empty_symbol_frame(svg, package),
@@ -5715,7 +5803,9 @@ fn emit_layout_empty_package(svg: &mut String, package: &EmptyPackageLayout, ent
                 unreachable!("ordinary package kinds do not retain an explicit USymbol")
             }
         }
-        svg.push_str("</g>");
+        if package.wrapped_entity {
+            svg.push_str("</g>");
+        }
         return;
     }
     let label_w = text_render::measure_no_underline(&package.label, FONT_SIZE, true);
@@ -5873,13 +5963,25 @@ fn emit_layout_empty_symbol_text(
     body_x: f64,
     body_y: f64,
 ) {
-    let label_width = text_render::measure_no_underline(&package.label, FONT_SIZE, false);
+    let label_bold = !package.wrapped_entity;
+    let label_width = text_render::measure_no_underline(&package.label, FONT_SIZE, label_bold);
     let content_width = package
         .stereotype_lines
         .iter()
         .map(|line| text_render::measure_no_underline(line, FONT_SIZE, false))
         .fold(label_width, f64::max);
     let mut preceding_height = 0.0;
+    let (body_x, body_y) = if package.wrapped_entity {
+        (body_x, body_y)
+    } else {
+        // `EntityImageEmptyPackage` supplies the package title as the `asBig`
+        // title block. Symbol implementations center it in the fixed
+        // rectangle and start stereotype/title content 13px from the top.
+        (
+            package.x + (package.width - content_width) / 2.0,
+            package.y + 13.0,
+        )
+    };
     for stereotype in &package.stereotype_lines {
         let width = text_render::measure_no_underline(stereotype, FONT_SIZE, false);
         text_render::emit_text(
@@ -5908,7 +6010,7 @@ fn emit_layout_empty_symbol_text(
             font_size: FONT_SIZE as u32,
             font_family: "sans-serif",
             fill: &package.font_fill,
-            bold: false,
+            bold: label_bold,
             italic: false,
             underline: false,
             skip_underline: true,
@@ -6114,7 +6216,7 @@ fn emit_layout_package_cluster(svg: &mut String, cluster: &LayoutPackageCluster,
         _ => {
             write!(
                 svg,
-                r#"<path d="M{},{} L{},{} A3.75,3.75 0 0 1 {},{} L{},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{}" fill="{}" style="stroke:{};stroke-width:{};"/>"#,
+                r#"<path d="M{},{} L{},{} A3.75,3.75 0 0 1 {},{} L{},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{} L{},{} A2.5,2.5 0 0 1 {},{}" fill="{}"{} style="stroke:{};stroke-width:{};"/>"#,
                 fmt4(x + 2.5),
                 fmt4(y),
                 fmt4(tab_join),
@@ -6140,6 +6242,7 @@ fn emit_layout_package_cluster(svg: &mut String, cluster: &LayoutPackageCluster,
                 fmt4(x + 2.5),
                 fmt4(y),
                 cluster.fill,
+                cluster.filter_attr,
                 cluster.stroke,
                 cluster.stroke_width,
             )
@@ -6212,8 +6315,9 @@ fn emit_layout_frame_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
     // rectangle plus the title-corner path, then draws the title at (3, 1).
     write!(
         svg,
-        r#"<rect fill="{}" height="{}" rx="2.5" ry="2.5" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
+        r#"<rect fill="{}"{} height="{}" rx="2.5" ry="2.5" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
         cluster.fill,
+        cluster.filter_attr,
         fmt4(cluster.height),
         cluster.stroke,
         cluster.stroke_width,
@@ -6249,8 +6353,9 @@ fn emit_layout_rectangle_cluster(svg: &mut String, cluster: &LayoutPackageCluste
     // the title independently of the stereotype block.
     write!(
         svg,
-        r#"<rect fill="{}" height="{}" rx="2.5" ry="2.5" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
+        r#"<rect fill="{}"{} height="{}" rx="2.5" ry="2.5" style="stroke:{};stroke-width:{};" width="{}" x="{}" y="{}"/>"#,
         cluster.fill,
+        cluster.filter_attr,
         fmt4(cluster.height),
         cluster.stroke,
         cluster.stroke_width,
@@ -6279,8 +6384,9 @@ fn emit_layout_node_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
     // polygon followed by the top-right diagonal, front top, and front side.
     write!(
         svg,
-        r#"<polygon fill="{}" points="{},{},{},{},{},{},{},{},{},{},{},{},{},{}" style="stroke:{};stroke-width:{};"/>"#,
+        r#"<polygon fill="{}"{} points="{},{},{},{},{},{},{},{},{},{},{},{},{},{}" style="stroke:{};stroke-width:{};"/>"#,
         cluster.fill,
+        cluster.filter_attr,
         fmt4(x),
         fmt4(y + NODE_BEVEL),
         fmt4(x + NODE_BEVEL),
@@ -6619,8 +6725,8 @@ fn emit_layout_cloud_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
     }
     write!(
         svg,
-        r#"" fill="{}" style="stroke:{};stroke-width:{};"/>"#,
-        cluster.fill, cluster.stroke, cluster.stroke_width,
+        r#"" fill="{}"{} style="stroke:{};stroke-width:{};"/>"#,
+        cluster.fill, cluster.filter_attr, cluster.stroke, cluster.stroke_width,
     )
     .unwrap();
 
@@ -6666,7 +6772,7 @@ fn emit_layout_database_cluster(svg: &mut String, cluster: &LayoutPackageCluster
     // cylinder path plus the top ellipse's lower half as a separate path.
     write!(
         svg,
-        r#"<path d="M{},{} C{},{} {},{} {},{} C{},{} {},{} {},{} L{},{} C{},{} {},{} {},{} C{},{} {},{} {},{} L{},{}" fill="{}" style="stroke:{};stroke-width:{};"/>"#,
+        r#"<path d="M{},{} C{},{} {},{} {},{} C{},{} {},{} {},{} L{},{} C{},{} {},{} {},{} C{},{} {},{} {},{} L{},{}" fill="{}"{} style="stroke:{};stroke-width:{};"/>"#,
         fmt4(x),
         fmt4(y + 10.0),
         fmt4(x),
@@ -6698,6 +6804,7 @@ fn emit_layout_database_cluster(svg: &mut String, cluster: &LayoutPackageCluster
         fmt4(x),
         fmt4(y + 10.0),
         cluster.fill,
+        cluster.filter_attr,
         cluster.stroke,
         cluster.stroke_width,
     )
@@ -9970,6 +10077,7 @@ fn render_no_oracle_association_class_links(
                 RelationshipRenderContext {
                     diagram,
                     note: None,
+                    package_ids: Some(&allocation.package_ids),
                     entity_ids: Some(&allocation.entity_ids),
                     note_ids: Some(&allocation.note_ids),
                 },
@@ -10522,6 +10630,7 @@ fn oracle_polygon_fill(fill: Option<&str>, monochrome: bool) -> &str {
 struct RelationshipRenderContext<'a> {
     diagram: &'a ClassDiagram,
     note: Option<&'a Note>,
+    package_ids: Option<&'a [Option<String>]>,
     entity_ids: Option<&'a [String]>,
     note_ids: Option<&'a [Option<String>]>,
 }
@@ -10538,6 +10647,7 @@ fn render_relationship_svg(
     let RelationshipRenderContext {
         diagram,
         note,
+        package_ids,
         entity_ids,
         note_ids,
     } = context;
@@ -10588,8 +10698,8 @@ fn render_relationship_svg(
         return;
     }
 
-    let entity_1 = no_oracle_entity_id_from(diagram, entity_ids, note_ids, &rel.from);
-    let entity_2 = no_oracle_entity_id_from(diagram, entity_ids, note_ids, &rel.to);
+    let entity_1 = no_oracle_entity_id_from(diagram, package_ids, entity_ids, note_ids, &rel.from);
+    let entity_2 = no_oracle_entity_id_from(diagram, package_ids, entity_ids, note_ids, &rel.to);
     write!(
         svg,
         r#"<g class="link" data-entity-1="{entity_1}" data-entity-2="{entity_2}" data-link-type="{link_type}" data-source-line="{}" id="lnk{}">"#,
@@ -11200,6 +11310,7 @@ fn emit_diamond_extremity(
 
 fn no_oracle_entity_id_from(
     diagram: &ClassDiagram,
+    package_ids: Option<&[Option<String>]>,
     entity_ids: Option<&[String]>,
     note_ids: Option<&[Option<String>]>,
     id: &str,
@@ -11209,6 +11320,13 @@ fn no_oracle_entity_id_from(
         .iter()
         .position(|e| e.id == id)
         .and_then(|index| entity_ids.and_then(|ids| ids.get(index)).cloned())
+        .or_else(|| {
+            empty_package_endpoint_index(diagram, id).and_then(|index| {
+                package_ids
+                    .and_then(|ids| ids.get(index))
+                    .and_then(Clone::clone)
+            })
+        })
         .or_else(|| {
             diagram
                 .notes
@@ -11428,6 +11546,7 @@ fn svek_layout_x_bias(
     font: &ClassFontOverrides,
 ) -> f64 {
     let painted_cluster_ids = painted_package_cluster_ids(diagram);
+    let empty_cloud_minima = empty_package_cloud_minima(diagram, positions);
     let visibility_polygon_min_x = (!uses_degenerated_entity(diagram, cluster_positions))
         .then(|| {
             let icon = font.visibility_icon_geom();
@@ -11472,6 +11591,7 @@ fn svek_layout_x_bias(
                 .filter(|position| painted_cluster_ids.contains(position.id.as_str()))
                 .map(|position| position.x),
         )
+        .chain(empty_cloud_minima.iter().map(|&(x, _)| x))
         .chain(
             edge_paths
                 .iter()
@@ -11525,6 +11645,7 @@ fn svek_layout_y_bias(
     edge_paths: &[EdgePath],
 ) -> f64 {
     let painted_cluster_ids = painted_package_cluster_ids(diagram);
+    let empty_cloud_minima = empty_package_cloud_minima(diagram, positions);
     let min_y = positions
         .iter()
         .enumerate()
@@ -11542,6 +11663,7 @@ fn svek_layout_y_bias(
                 .filter(|position| painted_cluster_ids.contains(position.id.as_str()))
                 .map(|position| position.y),
         )
+        .chain(empty_cloud_minima.iter().map(|&(_, y)| y))
         .chain(
             edge_paths
                 .iter()
@@ -11563,6 +11685,50 @@ fn svek_layout_y_bias(
     } else {
         envelope_bias.max(0.0)
     }
+}
+
+fn empty_package_cloud_minima(
+    diagram: &ClassDiagram,
+    positions: &[NodePosition],
+) -> Vec<(f64, f64)> {
+    let attached_notes = diagram
+        .notes
+        .iter()
+        .filter(|note| note.target.is_some() && note.position.is_some())
+        .count();
+    let floating_notes = diagram
+        .notes
+        .iter()
+        .filter(|note| note.target.is_none() && note.alias.is_some())
+        .count();
+    let empty_package_start = diagram.entities.len()
+        + diagram.association_classes.len()
+        + attached_notes
+        + floating_notes;
+    let package_render = package_render_model(diagram);
+    package_render
+        .roles
+        .iter()
+        .enumerate()
+        .filter(|(_, role)| role.is_leaf_node())
+        .enumerate()
+        .filter_map(|(ordinal, (package_idx, _))| {
+            if empty_package_symbol_kind(diagram, &diagram.packages[package_idx])
+                != Some(PackageKind::Cloud)
+            {
+                return None;
+            }
+            let position = positions.get(empty_package_start + ordinal)?;
+            let package = &diagram.packages[package_idx];
+            let (width, height) = empty_package_intrinsic_dims(package);
+            // `LimitFinder#drawUPath` contributes the cloud frontier rather
+            // than the Graphviz node rectangle to SVEK's painted origin.
+            // `SvekResult` redraws the intrinsic image dimensions at the
+            // solved node minimum; Graphviz's rounded box is placement only.
+            let frontier = cloud_frontier(width, height);
+            Some((position.x + frontier.min_x, position.y + frontier.min_y))
+        })
+        .collect()
 }
 
 fn uses_degenerated_entity(diagram: &ClassDiagram, cluster_positions: &[ClusterPosition]) -> bool {
@@ -12081,7 +12247,22 @@ fn relationship_layout_id<'a>(
         .iter()
         .position(|note| note.alias.as_deref() == Some(endpoint))
         .map(|note_idx| std::borrow::Cow::Owned(floating_note_layout_id(note_idx)))
+        .or_else(|| {
+            empty_package_endpoint_index(diagram, endpoint)
+                .map(|package_idx| std::borrow::Cow::Owned(empty_package_layout_id(package_idx)))
+        })
         .unwrap_or(std::borrow::Cow::Borrowed(endpoint))
+}
+
+fn empty_package_endpoint_index(diagram: &ClassDiagram, endpoint: &str) -> Option<usize> {
+    let package_render = package_render_model(diagram);
+    diagram
+        .packages
+        .iter()
+        .enumerate()
+        .position(|(idx, package)| {
+            package.name == endpoint && package_render.roles[idx].is_leaf_node()
+        })
 }
 
 struct ResolvedNoteStyle {
@@ -14596,7 +14777,8 @@ mod tests {
                 "{name}"
             );
             let label = package_display_label(&diagram.packages[package_idx]);
-            let (width, height) = empty_package_dims(&diagram.packages[package_idx]);
+            let package = &diagram.packages[package_idx];
+            let (width, height) = empty_package_dims(package, automatic_package_kind(package));
             assert_eq!(
                 width,
                 text_render::measure_no_underline(label, FONT_SIZE, false) + extra_width,
@@ -14618,6 +14800,40 @@ mod tests {
             svg.contains("<!--entity FreshFrame7101.FreshEmptyFolder7103-->"),
             "{svg}"
         );
+    }
+
+    #[test]
+    fn empty_leaf_paint_uses_intrinsic_image_dimensions_after_layout() {
+        let input = "@startuml\n\
+                     skinparam packageStyle cloud\n\
+                     package \"Fresh intrinsic parcel 7151\" as IntrinsicParcel7151 {\n\
+                     }\n\
+                     @enduml";
+        let lines = input
+            .lines()
+            .filter(|line| !line.starts_with("@start") && !line.starts_with("@end"))
+            .map(str::to_string)
+            .collect::<Vec<_>>();
+        let diagram = rustuml_parser::parse::class::parse_class(&lines).unwrap();
+        let package_idx = diagram
+            .packages
+            .iter()
+            .position(|package| package.name == "IntrinsicParcel7151")
+            .unwrap();
+        let intrinsic = empty_package_intrinsic_dims(&diagram.packages[package_idx]);
+        let solved = [NodePosition {
+            x: 12.0,
+            y: 34.0,
+            width: 999.0,
+            height: 888.0,
+        }];
+
+        let painted = layout_empty_packages(&diagram, &solved, &[(package_idx, 0)], 0.0, 0.0, 0.0);
+
+        assert_eq!(painted.len(), 1);
+        assert_eq!((painted[0].width, painted[0].height), intrinsic);
+        assert_eq!((painted[0].x, painted[0].y), (12.0 + MARGIN, 34.0 + MARGIN));
+        assert_ne!((painted[0].width, painted[0].height), (999.0, 888.0));
     }
 
     #[test]
@@ -15586,7 +15802,7 @@ mod tests {
         assert!(svg.contains(r#"style="width:308px;height:259px;background:#FFFFFF;""#));
         assert!(svg.contains(r#"<!--cluster ComputeRack439--><g class="cluster""#));
         assert!(svg.contains(
-            r##"<polygon fill="#F0FFF0" points="16,16,26,6,283,6,283,224.4883,273,234.4883,16,234.4883,16,16" style="stroke:#2E8B57;stroke-width:1;"/>"##
+            r##"<polygon fill="#F0FFF0" points="16,16,26,6,283,6,283,224.49,273,234.49,16,234.49,16,16" style="stroke:#2E8B57;stroke-width:1;"/>"##
         ));
         assert!(svg.contains(
             r##"<text fill="#483D8B" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="126.7451" x="82.1274" y="32.5352">ComputeRack439</text>"##
@@ -16796,6 +17012,7 @@ mod tests {
             RelationshipRenderContext {
                 diagram: &diagram,
                 note: None,
+                package_ids: None,
                 entity_ids: None,
                 note_ids: None,
             },
