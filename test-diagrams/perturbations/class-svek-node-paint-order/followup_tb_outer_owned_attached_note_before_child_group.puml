@@ -1,0 +1,13 @@
+@startuml
+package LedgerScope8301 {
+  package ArchiveWing8303 {
+    class InnerLedger8305
+  }
+}
+class RootBeacon8307
+package LedgerScope8301 {
+  note left of LedgerScope8301.ArchiveWing8303.InnerLedger8305 : outer-owned attached note
+  class OuterTail8309
+}
+class RootCoda8311
+@enduml

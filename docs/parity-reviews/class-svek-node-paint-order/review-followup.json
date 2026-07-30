@@ -1,0 +1,153 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-svek-node-paint-order",
+  "reviewed_at": "2026-07-30T23:20:00+10:00",
+  "reviewer": {
+    "identity": "Codex independent adversarial checker; not the implementer",
+    "model": "gpt-5.4",
+    "reasoning_effort": "xhigh",
+    "tool": "Codex desktop shell with zsh, Git 2.55.0, OpenJDK 21.0.11, the pinned Java PlantUML JAR, and the user-specified prebuilt diff_one binary"
+  },
+  "revisions": {
+    "implementation_commit": "aa9c4cfa9ff19c64070cee600356ba672172082d",
+    "checker_repo_head_before_review": "aa9c4cfa9ff19c64070cee600356ba672172082d",
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "java_jar": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+      "reported_version": "PlantUML 1.2026.3beta6 / 71806a2"
+    },
+    "diff_one": {
+      "path": "/tmp/rustuml-checker-1482/target/debug/examples/diff_one",
+      "sha256": "51328d41877b65e32b85ef7005ab1f0137c0a82a640ecacf02be72be6a06097b",
+      "provenance_note": "Used the user-specified prebuilt binary. The adjacent /tmp/rustuml-checker-1482 checkout currently resolves to c0133a1d04e66c5d0cf2404a7ff2f5b218006970 with crates/rustuml-render/src/class.rs blob 49ecb32c7bc262c85c2ed06c8a540d9566ef492b rather than aa9c4cfa's eb8e7bca0a54b38da30413f22dea5277f9a7894c, so commit provenance is user-asserted rather than independently proven. The observed failures are nevertheless corroborated directly by aa9c4cfa source inspection."
+    }
+  },
+  "commands": [
+    "git rev-parse HEAD",
+    "sed -n '1,240p' docs/parity-reviews/class-svek-node-paint-order/account.json",
+    "git diff --stat 544d24530c0dc2ed5784d7d26fe2a8d8481f873d..aa9c4cfa9ff19c64070cee600356ba672172082d -- docs/parity-reviews/class-svek-node-paint-order/account.json crates/rustuml-render/src/class.rs crates/rustuml-parser/src/diagram/class.rs",
+    "sed -n '220,310p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/command/note/CommandFactoryNoteOnEntity.java",
+    "sed -n '915,955p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/atmp/CucaDiagram.java",
+    "sed -n '340,370p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
+    "sed -n '408,438p' /Users/marcelo/work/github.com/plantuml/plantuml/src/main/java/net/sourceforge/plantuml/svek/GraphvizImageBuilder.java",
+    "nl -ba crates/rustuml-parser/src/parse/class.rs | sed -n '200,215p'",
+    "nl -ba crates/rustuml-render/src/class.rs | sed -n '2298,2362p'",
+    "nl -ba crates/rustuml-render/src/class.rs | sed -n '13140,13335p'",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-svek-node-paint-order/followup_tb_outer_owned_attached_note_before_child_group.puml test-diagrams/perturbations/class-svek-node-paint-order/followup_lr_outer_owned_floating_note_before_child_group.puml test-diagrams/perturbations/class-svek-node-paint-order/followup_tb_root_floating_note_after_packages_with_empty_leaf_endpoint.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-svek-node-paint-order/followup_tb_outer_owned_attached_note_before_child_group.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-svek-node-paint-order/followup_lr_outer_owned_floating_note_before_child_group.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/class-svek-node-paint-order/followup_tb_root_floating_note_after_packages_with_empty_leaf_endpoint.puml",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/class-svek-node-paint-order/followup_tb_outer_owned_attached_note_before_child_group.puml > /tmp/followup_tb_outer_owned_attached_note_before_child_group.rust.svg",
+    "/tmp/rustuml-checker-1482/target/debug/examples/diff_one --no-oracle --print-rust test-diagrams/perturbations/class-svek-node-paint-order/followup_lr_outer_owned_floating_note_before_child_group.puml > /tmp/followup_lr_outer_owned_floating_note_before_child_group.rust.svg",
+    "git diff --unified=0 544d24530c0dc2ed5784d7d26fe2a8d8481f873d..aa9c4cfa9ff19c64070cee600356ba672172082d -- crates/rustuml-render/src/class.rs crates/rustuml-parser/src/diagram/class.rs crates/rustuml-parser/src/parse/class.rs | rg -n '^\\+[^+].*(include_str!|include_bytes!|test-diagrams|golden|fixture|replace\\(|replacen\\(|[0-9]+\\.[0-9]{3,})'",
+    "rg -n 'LedgerScope8301|ArchiveWing8303|SignalScope8401|RelayWing8403|VaultScope8505|EmptyPocket8507|RootMemo8503|OuterMemo8409' crates -S",
+    "shasum -a 256 /tmp/rustuml-checker-1482/target/debug/examples/diff_one /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar test-diagrams/perturbations/class-svek-node-paint-order/followup_tb_outer_owned_attached_note_before_child_group.puml test-diagrams/perturbations/class-svek-node-paint-order/followup_tb_outer_owned_attached_note_before_child_group.svg test-diagrams/perturbations/class-svek-node-paint-order/followup_lr_outer_owned_floating_note_before_child_group.puml test-diagrams/perturbations/class-svek-node-paint-order/followup_lr_outer_owned_floating_note_before_child_group.svg test-diagrams/perturbations/class-svek-node-paint-order/followup_tb_root_floating_note_after_packages_with_empty_leaf_endpoint.puml test-diagrams/perturbations/class-svek-node-paint-order/followup_tb_root_floating_note_after_packages_with_empty_leaf_endpoint.svg"
+  ],
+  "source_inspection": {
+    "java": [
+      "CommandFactoryNoteOnEntity.executeInternal creates attached notes as real NOTE leaves in the current namespace via quarkInContext(true, tmp) followed by reallyCreateLeaf, then constructs the connector Link. This means owner namespace is the parser's current package, not necessarily the target entity's innermost package.",
+      "CucaDiagram.leafs returns non-group quark children in quark creation order, and Plasma.register plus Quark.children preserve creation order globally and per namespace.",
+      "GraphvizImageBuilder.buildImage calls printGroups(root) before printEntities(getUnpackagedEntities()). Within a package, printGroup emits direct leaves before recurring into child groups; empty package children are emitted as leaf nodes during that child-group walk."
+    ],
+    "rust": [
+      "The parser records each note constructor event with owner_package at crates/rustuml-parser/src/parse/class.rs:206-213, which is the right Java-shaped ownership source for reopened packages and notes targeting nested entities.",
+      "The no-oracle layout graph never adds note layout ids to package clusters. At crates/rustuml-render/src/class.rs:2337-2355 only ordinary entity ids and empty package leaf ids are attached to clusters; attached_note_layout_id(...) and floating_note_layout_id(...) are omitted.",
+      "Attached-note paint drops namespace ownership at crates/rustuml-render/src/class.rs:13155 by hardcoding the qualified name to bare GMN{note_start}. Floating-note paint does the same at crates/rustuml-render/src/class.rs:13213-13228 and 13319-13327 by using the bare alias rather than a package-qualified alias."
+    ]
+  },
+  "prohibited_pattern_audit": {
+    "fixture_shaped_conditions": "None found in the aa9c4cfa diff. The held-out perturbation labels are absent from shipping crates.",
+    "unexplained_constants": "No new high-precision decimal literal, golden lookup, or SVG string surgery was introduced by 544d2453..aa9c4cfa.",
+    "golden_reads": "No include_str/include_bytes or test-diagrams/golden reads were added in the inspected diff.",
+    "output_surgery": "No replace/replacen or coordinate-keyed post-hoc SVG rewriting was added in the inspected diff."
+  },
+  "inputs": [
+    {
+      "path": "test-diagrams/perturbations/class-svek-node-paint-order/followup_tb_outer_owned_attached_note_before_child_group.puml",
+      "java_svg": "test-diagrams/perturbations/class-svek-node-paint-order/followup_tb_outer_owned_attached_note_before_child_group.svg",
+      "sha256": {
+        "puml": "6ee8454cc56a6833adbcd8e1e86ce2f587235dd93c50c6b3469405c04c3b2961",
+        "svg": "4ea5aa2acc85a8ff9922b0cb881115503f3364ec1a972a129696f2337f56dffb"
+      },
+      "valid_java_svg": true,
+      "axes": [
+        "outer namespace reopened after a nested child package already exists",
+        "attached note owned by the outer package but targeting a nested child entity",
+        "root entity declared between package openings and another declared after them",
+        "top-to-bottom direction"
+      ],
+      "diff_one_no_oracle": {
+        "exit_code": 1,
+        "summary": "Structural mismatch. Java renders the package-owned attached note as LedgerScope8301.GMN6 inside the owning package layout, while Rust renders bare GMN6 at root-level coordinates and shifts the package cluster downward."
+      },
+      "rust_svg_observation": "The Rust SVG from --print-rust shows data-qualified-name=\"GMN6\" and positions the note at x=22.94,y=18.34 outside the owning LedgerScope8301 cluster, even though the parser recorded owner_package=LedgerScope8301.",
+      "mechanism_shaped_counterexample": true
+    },
+    {
+      "path": "test-diagrams/perturbations/class-svek-node-paint-order/followup_lr_outer_owned_floating_note_before_child_group.puml",
+      "java_svg": "test-diagrams/perturbations/class-svek-node-paint-order/followup_lr_outer_owned_floating_note_before_child_group.svg",
+      "sha256": {
+        "puml": "3938e5fe81a2e6e7436dd276be245d256a3e2f4ab96b61692b3afde07a0fa438",
+        "svg": "515e8e6533d19079f310afd343a5cdabca2b82c23127d75f8e6ba5c2b4eec636"
+      },
+      "valid_java_svg": true,
+      "axes": [
+        "outer namespace reopened after a nested child package already exists",
+        "floating named note owned by the outer package but linked to a nested child entity",
+        "left-to-right direction",
+        "root entities before and after the reopened package"
+      ],
+      "diff_one_no_oracle": {
+        "exit_code": 1,
+        "summary": "Structural mismatch. Java renders SignalScope8401.OuterMemo8409 inside SignalScope8401, while Rust renders bare OuterMemo8409 at root-level coordinates; the package cluster moves to the right and the root nodes reorder spatially around it."
+      },
+      "rust_svg_observation": "The Rust SVG from --print-rust shows data-qualified-name=\"OuterMemo8409\" and places the note at x=6,y=173.34 outside SignalScope8401. Java qualifies it as SignalScope8401.OuterMemo8409 and keeps it in the package solve.",
+      "mechanism_shaped_counterexample": true
+    },
+    {
+      "path": "test-diagrams/perturbations/class-svek-node-paint-order/followup_tb_root_floating_note_after_packages_with_empty_leaf_endpoint.puml",
+      "java_svg": "test-diagrams/perturbations/class-svek-node-paint-order/followup_tb_root_floating_note_after_packages_with_empty_leaf_endpoint.svg",
+      "sha256": {
+        "puml": "66848030d1efd39ee01d81fdc6012f9e3cc69c129ae92319aa5ff646ed736322",
+        "svg": "0156184690b8d38f8365cbb6de3cefe906eb2474ba124a2a088033a40706024b"
+      },
+      "valid_java_svg": true,
+      "axes": [
+        "root floating note declared before a later package",
+        "nested empty package leaf used as a relationship endpoint",
+        "package-first/root-last traversal crossing constructor order",
+        "top-to-bottom direction"
+      ],
+      "diff_one_no_oracle": {
+        "exit_code": 0,
+        "summary": "SVGs are structurally equivalent."
+      },
+      "mechanism_shaped_counterexample": false,
+      "notes": "This pass suggests the package-first/root-last traversal itself is improved for root-owned notes and empty-package endpoints."
+    }
+  ],
+  "findings": [
+    {
+      "severity": "rejecting",
+      "summary": "Package-owned notes are omitted from package cluster membership in the no-oracle layout graph.",
+      "evidence": "At crates/rustuml-render/src/class.rs:2337-2355 the cluster population pass adds only ordinary entity ids and empty package leaf ids. There is no analogous loop for attached_note_layout_id(...) or floating_note_layout_id(...). The fresh attached and floating counterexamples both render their package-owned notes outside the owning package solve, which is impossible under the claimed mechanism."
+    },
+    {
+      "severity": "rejecting",
+      "summary": "The renderer discards owner-package identity when emitting note qualified names.",
+      "evidence": "The parser correctly records owner_package at crates/rustuml-parser/src/parse/class.rs:206-213, but attached-note paint hardcodes bare GMN names at crates/rustuml-render/src/class.rs:13155 and floating-note paint emits the bare alias at crates/rustuml-render/src/class.rs:13213-13228 and 13319-13327. In the fresh failures Java emits LedgerScope8301.GMN6 and SignalScope8401.OuterMemo8409, while Rust emits GMN6 and OuterMemo8409."
+    },
+    {
+      "severity": "informational",
+      "summary": "The package-first/root-last traversal fix appears real for root-owned notes and empty-package endpoints.",
+      "evidence": "followup_tb_root_floating_note_after_packages_with_empty_leaf_endpoint passed structurally in no-oracle mode, so the earlier global note/root inversion does not appear to survive unchanged."
+    },
+    {
+      "severity": "informational",
+      "summary": "No fixture-shaped production branches, golden reads, unexplained high-precision constants, or output surgery were found in the inspected aa9 diff.",
+      "evidence": "The diff grep and held-out label search were clean."
+    }
+  ],
+  "verdict": "REJECT"
+}

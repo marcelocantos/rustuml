@@ -1,0 +1,12 @@
+@startuml
+class RootStart8501
+note "root floating before package" as RootMemo8503
+package VaultScope8505 {
+  package EmptyPocket8507 {
+  }
+  class FilledNode8509
+}
+RootMemo8503 .. RootStart8501
+VaultScope8505.EmptyPocket8507 --> RootStart8501
+class RootTail8511
+@enduml

@@ -1,0 +1,15 @@
+@startuml
+left to right direction
+package SignalScope8401 {
+  package RelayWing8403 {
+    class InnerRelay8405
+  }
+}
+class RootLead8407
+package SignalScope8401 {
+  note "outer floating note" as OuterMemo8409
+  class OuterBuffer8411
+}
+OuterMemo8409 .. SignalScope8401.RelayWing8403.InnerRelay8405
+class RootTail8413
+@enduml
