@@ -1,0 +1,12 @@
+@startuml
+top to bottom direction
+cloud "Seeded Plain Cloud Cluster 94811" as Cloud94811 {
+  class Producer94817 {
+    +String payload
+  }
+  class Archive94821
+  class Monitor94823
+  Producer94817 --> Archive94821 : writes
+  Producer94817 --> Monitor94823 : observes
+}
+@enduml

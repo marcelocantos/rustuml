@@ -1,0 +1,11 @@
+@startuml
+top to bottom direction
+skinparam packageStyle cloud
+package "Cloud Style Filled Cluster 94701" as Cluster94701 {
+  class A94703
+  class B94705
+  A94703 --> B94705 : integer route
+}
+class External94707
+A94703 --> External94707
+@enduml

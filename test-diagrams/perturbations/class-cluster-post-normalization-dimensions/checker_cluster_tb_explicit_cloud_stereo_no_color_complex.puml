@@ -1,0 +1,12 @@
+@startuml
+top to bottom direction
+cloud "Seeded Stereotype Cloud Cluster 94791" as Cloud94791 <<service>> {
+  class Producer94797 {
+    +String payload
+  }
+  class Archive94801
+  class Monitor94803
+  Producer94797 --> Archive94801 : writes
+  Producer94797 --> Monitor94803 : observes
+}
+@enduml

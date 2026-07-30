@@ -1,0 +1,12 @@
+@startuml
+left to right direction
+cloud "Explicit Cloud Cluster With Fractional Title 94711" as Cloud94711 {
+  package Inner94713 {
+    class "Wide decimal measuring class 94717" as Wide94717
+    class Sink94719
+    Wide94717 --> Sink94719 : fractional label
+  }
+}
+class Outside94723
+Wide94717 --> Outside94723 : outer link
+@enduml

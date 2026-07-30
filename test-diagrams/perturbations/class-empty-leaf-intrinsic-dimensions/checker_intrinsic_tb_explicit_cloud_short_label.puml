@@ -1,0 +1,7 @@
+@startuml
+top to bottom direction
+cloud C84621 {
+}
+class D84623
+D84623 --> C84621
+@enduml

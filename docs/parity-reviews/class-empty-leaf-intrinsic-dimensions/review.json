@@ -1,0 +1,153 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-empty-leaf-intrinsic-dimensions",
+  "account": "docs/parity-reviews/class-empty-leaf-intrinsic-dimensions/account.json",
+  "checker": {
+    "identity": "Codex independent adversarial checker",
+    "model": "GPT-5",
+    "tool": "Codex desktop functions.exec_command/apply_patch with PlantUML Java jar and prebuilt diff_one helper",
+    "implemented_commit_under_review": false
+  },
+  "revisions": {
+    "rust_under_review": "09014421f785f5d251a0b28541603b6dcda7aae9",
+    "java_under_review": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "diff_one_helper_worktree": "3ad4160372fdf08217f8ca6c5624e7485d281056",
+    "diff_one_helper_note": "The helper worktree has a different commit id, but the three source blobs touched by 09014421 match byte-for-byte: crates/rustuml-render/src/class.rs, crates/rustuml-parser/src/parse/class.rs, and crates/rustuml-parser/src/parse/mod.rs."
+  },
+  "source_audit": {
+    "java_locations_checked": [
+      "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageEmptyPackage.java:133-159",
+      "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolCloud.java:74-107",
+      "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolCloud.java:222-243",
+      "src/main/java/net/sourceforge/plantuml/command/CommandPackage.java:71-93",
+      "src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandPackageWithUSymbol.java:74-128"
+    ],
+    "rust_locations_checked": [
+      "crates/rustuml-render/src/class.rs:2240",
+      "crates/rustuml-render/src/class.rs:3746-3751",
+      "crates/rustuml-render/src/class.rs:4660-4667",
+      "crates/rustuml-render/src/class.rs:4788-4800",
+      "crates/rustuml-render/src/class.rs:5726-5758",
+      "crates/rustuml-render/src/class.rs:11690-11730",
+      "crates/rustuml-parser/src/parse/class.rs:1221-1242",
+      "crates/rustuml-render/src/class.rs:3871-3905",
+      "crates/rustuml-render/src/class.rs:10849-10864"
+    ],
+    "fixture_shape_scan": {
+      "status": "no production golden read, include_str, fixture-label branch, per-fixture coordinate surgery, or unexplained account-specific constant found in the 09014421 production diff",
+      "notes": [
+        "Added Fresh* labels and 999/888 sentinel dimensions appear only in unit tests.",
+        "The production intrinsic-dimension change consistently recomputes empty_package_intrinsic_dims(package) and uses solved NodePosition only for placement."
+      ]
+    }
+  },
+  "commands": {
+    "source_audit": [
+      "git show --no-ext-diff --unified=80 --no-renames 09014421 -- crates/rustuml-render/src/class.rs",
+      "git diff --unified=0 09014421^ 09014421 -- crates/rustuml-render/src/class.rs crates/rustuml-parser/src/parse/class.rs crates/rustuml-parser/src/parse/mod.rs | rg '^\\+[^+].*(Fresh|7151|7101|checker_|test-diagrams|golden/|include_str!|read_to_string|replace\\(|d=\\\"M|999\\.0|888\\.0|170\\.|171\\.|99\\.|path d|split_once|contains\\()'",
+      "git diff --check 09014421^ 09014421 -- crates/rustuml-render/src/class.rs crates/rustuml-parser/src/parse/class.rs crates/rustuml-parser/src/parse/mod.rs"
+    ],
+    "java_reference_generation": [
+      "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/class-empty-leaf-intrinsic-dimensions/*.puml"
+    ],
+    "rust_validation": [
+      "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-empty-leaf-intrinsic-dimensions/checker_intrinsic_lr_explicit_cloud_nested_linked.puml",
+      "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-empty-leaf-intrinsic-dimensions/checker_intrinsic_lr_explicit_cloud_top_level_linked.puml",
+      "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-empty-leaf-intrinsic-dimensions/checker_intrinsic_lr_package_style_cloud_stereotype_color.puml",
+      "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-empty-leaf-intrinsic-dimensions/checker_intrinsic_tb_explicit_cloud_short_label.puml",
+      "/tmp/rustuml-checker-1482/target/release/examples/diff_one --no-oracle test-diagrams/perturbations/class-empty-leaf-intrinsic-dimensions/checker_intrinsic_tb_package_style_cloud_long_label.puml"
+    ]
+  },
+  "inputs": [
+    {
+      "puml": "test-diagrams/perturbations/class-empty-leaf-intrinsic-dimensions/checker_intrinsic_lr_explicit_cloud_nested_linked.puml",
+      "java_svg": "test-diagrams/perturbations/class-empty-leaf-intrinsic-dimensions/checker_intrinsic_lr_explicit_cloud_nested_linked.svg",
+      "axes": [
+        "explicit cloud empty leaf",
+        "left-to-right direction",
+        "nested package",
+        "linked topology",
+        "noninteger text width"
+      ],
+      "rust_status": 1,
+      "result": "FAIL",
+      "diff_summary": "Java emits path id ExplicitLeaf84613-to-Peer84617 while Rust emits Outer84611.ExplicitLeaf84613-to-Peer84617; path coordinates differ only at formatter/rounding scale."
+    },
+    {
+      "puml": "test-diagrams/perturbations/class-empty-leaf-intrinsic-dimensions/checker_intrinsic_lr_explicit_cloud_top_level_linked.puml",
+      "java_svg": "test-diagrams/perturbations/class-empty-leaf-intrinsic-dimensions/checker_intrinsic_lr_explicit_cloud_top_level_linked.svg",
+      "axes": [
+        "explicit cloud empty leaf",
+        "left-to-right direction",
+        "linked topology",
+        "noninteger text width"
+      ],
+      "rust_status": 0,
+      "result": "PASS",
+      "diff_summary": "SVGs are structurally equivalent."
+    },
+    {
+      "puml": "test-diagrams/perturbations/class-empty-leaf-intrinsic-dimensions/checker_intrinsic_lr_package_style_cloud_stereotype_color.puml",
+      "java_svg": "test-diagrams/perturbations/class-empty-leaf-intrinsic-dimensions/checker_intrinsic_lr_package_style_cloud_stereotype_color.svg",
+      "axes": [
+        "packageStyle cloud fallback empty leaf",
+        "left-to-right direction",
+        "stereotype plus color",
+        "linked topology",
+        "noninteger text width"
+      ],
+      "rust_status": 1,
+      "result": "FAIL",
+      "diff_summary": "Java accepts stereotype-before-color package syntax and renders Leaf84631 as an empty package entity; Rust misses the package declaration and later materializes Leaf84631 as a class from the link."
+    },
+    {
+      "puml": "test-diagrams/perturbations/class-empty-leaf-intrinsic-dimensions/checker_intrinsic_tb_explicit_cloud_short_label.puml",
+      "java_svg": "test-diagrams/perturbations/class-empty-leaf-intrinsic-dimensions/checker_intrinsic_tb_explicit_cloud_short_label.svg",
+      "axes": [
+        "explicit cloud empty leaf",
+        "top-to-bottom direction",
+        "short label",
+        "linked topology"
+      ],
+      "rust_status": 0,
+      "result": "PASS",
+      "diff_summary": "SVGs are structurally equivalent."
+    },
+    {
+      "puml": "test-diagrams/perturbations/class-empty-leaf-intrinsic-dimensions/checker_intrinsic_tb_package_style_cloud_long_label.puml",
+      "java_svg": "test-diagrams/perturbations/class-empty-leaf-intrinsic-dimensions/checker_intrinsic_tb_package_style_cloud_long_label.svg",
+      "axes": [
+        "packageStyle cloud fallback empty leaf",
+        "top-to-bottom direction",
+        "long label",
+        "linked topology",
+        "noninteger text width"
+      ],
+      "rust_status": 0,
+      "result": "PASS",
+      "diff_summary": "SVGs are structurally equivalent."
+    }
+  ],
+  "findings": [
+    {
+      "severity": "rejecting",
+      "summary": "Nested explicit empty package links still use a fully qualified package name in Rust path ids.",
+      "evidence": "checker_intrinsic_lr_explicit_cloud_nested_linked.puml fails: Java path id is ExplicitLeaf84613-to-Peer84617; Rust path id is Outer84611.ExplicitLeaf84613-to-Peer84617. Rust relationship_endpoint_name only normalizes ClassEntity ids and returns package endpoint ids unchanged.",
+      "scope": "dependent identity/rendering gap on the nested linked topology axis; it does not directly falsify intrinsic image dimension ownership."
+    },
+    {
+      "severity": "rejecting",
+      "summary": "Rust package parsing rejects Java-valid stereotype-before-color package declarations.",
+      "evidence": "checker_intrinsic_lr_package_style_cloud_stereotype_color.puml is accepted by Java CommandPackage/CommandPackageWithUSymbol, where stereotype/tags/url appear before color, but Rust try_package requires optional #color before optional <<stereotype>>. Rust then treats Leaf84631 as a class created by the relationship.",
+      "scope": "valid PlantUML parser divergence on the packageStyle cloud plus linked-topology axis; not an intrinsic-dimension arithmetic falsification."
+    },
+    {
+      "severity": "supporting",
+      "summary": "The core intrinsic-dimension ownership claim survived the clean controls.",
+      "evidence": "Top-level LR explicit cloud, TB explicit cloud, and TB packageStyle cloud empty leaves all matched Java byte-structurally through diff_one --no-oracle.",
+      "scope": "supports the account's separation of solved placement from intrinsic empty-image dimensions for the exercised clean cases."
+    }
+  ],
+  "verdict": "REJECT",
+  "verdict_reason": "The intrinsic-dimension account was not directly disproven by the clean controls, but the requested held-out axes include nested/linked and packageStyle cloud cases. Two valid PlantUML perturbations on those axes fail, so this mechanism cannot be accepted under the T14 held-out adversarial gate."
+}

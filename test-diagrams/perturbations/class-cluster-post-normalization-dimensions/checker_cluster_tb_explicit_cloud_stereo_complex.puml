@@ -1,0 +1,12 @@
+@startuml
+top to bottom direction
+cloud "Seeded Complex Cloud Cluster 94731" as Cloud94731 <<service>> #F0FFF0 {
+  class Producer94737 {
+    +String payload
+  }
+  class Archive94741
+  class Monitor94743
+  Producer94737 --> Archive94741 : writes
+  Producer94737 --> Monitor94743 : observes
+}
+@enduml

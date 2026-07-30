@@ -1,0 +1,12 @@
+@startuml
+left to right direction
+skinparam packageStyle cloud
+skinparam PackageBackgroundColor #F8FBFF
+skinparam CloudBorderColor #336699
+package "Stereotyped empty package 84631" as Leaf84631 <<boundary>> #EEF7FF {
+}
+package Wrap84637 {
+  class Worker84641
+}
+Leaf84631 ..> Worker84641 : monitors
+@enduml

@@ -1,0 +1,8 @@
+@startuml
+top to bottom direction
+skinparam packageStyle cloud
+package "Adversarial Intrinsic Empty Leaf 84601" as IntrinsicLeaf84601 {
+}
+class Anchor84603
+IntrinsicLeaf84601 --> Anchor84603 : owns
+@enduml

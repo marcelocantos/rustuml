@@ -1,0 +1,7 @@
+@startuml
+left to right direction
+cloud "LR Top Level Explicit Empty Cloud 84651" as ExplicitTop84651 {
+}
+class Peer84653
+ExplicitTop84651 --> Peer84653 : top link
+@enduml

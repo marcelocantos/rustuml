@@ -1,0 +1,9 @@
+@startuml
+left to right direction
+package Outer84611 {
+  cloud "LR Explicit Empty Cloud 84613" as ExplicitLeaf84613 {
+  }
+  class Peer84617
+}
+ExplicitLeaf84613 --> Peer84617 : nested edge
+@enduml

@@ -1,0 +1,13 @@
+@startuml
+left to right direction
+skinparam packageStyle cloud
+package "Fallback Cloud Outer 94751" as Outer94751 {
+  package Inner94753 {
+    class Source94757
+    class Target94759
+    Source94757 --> Target94759 : linked
+  }
+}
+class Receiver94761
+Source94757 --> Receiver94761 : exports
+@enduml
