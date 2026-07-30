@@ -5072,7 +5072,14 @@ fn render_plantuml_svg(
     let package_render = package_render_model(diagram);
     let painted_cluster_ids = painted_package_cluster_ids(diagram);
     let entity_shadow_limit_extra = |entity: &ClassEntity| {
-        if shadow_filter_id.is_some() && entity.kind != EntityKind::Diamond {
+        // `GraphvizImageBuilder.buildImage` bypasses `SvekResult` for one
+        // unlinked root leaf. `EntityImageDegenerated.calculateDimension`
+        // uses only the intrinsic image plus its fixed inset, so no
+        // `LimitFinder` shadow frontier participates in that lifecycle.
+        if !uses_degenerated_entity
+            && shadow_filter_id.is_some()
+            && entity.kind != EntityKind::Diamond
+        {
             RECTANGLE_SHADOW_LIMIT_EXTRA
         } else {
             0.0
@@ -17903,6 +17910,33 @@ mod tests {
             3,
             "{svg}"
         );
+    }
+
+    #[test]
+    fn degenerated_leaf_shadow_does_not_expand_fixed_inset_dimension() {
+        let render = |shadowing: bool| {
+            let input = format!(
+                "@startuml\n\
+                 skinparam shadowing {shadowing}\n\
+                 class FreshShadowSolo3011 {{\n\
+                   +String renamedKey\n\
+                   +void rotateFreshly()\n\
+                 }}\n\
+                 @enduml"
+            );
+            let diagram = rustuml_parser::parse::parse(&input).unwrap();
+            crate::render_svg(&diagram)
+        };
+        let plain = render(false);
+        let shadowed = render(true);
+
+        assert_eq!(
+            attr_value(&plain, " viewBox"),
+            attr_value(&shadowed, " viewBox")
+        );
+        assert!(!plain.contains("<filter "));
+        assert!(shadowed.contains("<filter "));
+        assert!(shadowed.contains(r#"filter="url(#"#));
     }
 
     #[test]
