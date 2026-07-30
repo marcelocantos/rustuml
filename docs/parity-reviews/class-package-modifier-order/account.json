@@ -4,23 +4,63 @@
   "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
   "java_locations": [
     "net.sourceforge.plantuml.command.CommandPackage#getRegexConcat",
+    "net.sourceforge.plantuml.command.CommandPackage#executeArg",
     "net.sourceforge.plantuml.descdiagram.command.CommandPackageWithUSymbol#getRegexConcat",
-    "net.sourceforge.plantuml.descdiagram.command.CommandPackageWithUSymbol#executeArg"
+    "net.sourceforge.plantuml.descdiagram.command.CommandPackageWithUSymbol#executeArg",
+    "net.sourceforge.plantuml.url.UrlBuilder#getUrl",
+    "net.sourceforge.plantuml.url.Url#Url",
+    "net.sourceforge.plantuml.abel.Entity#addUrl",
+    "net.sourceforge.plantuml.abel.Entity#getUrl99",
+    "net.sourceforge.plantuml.svek.GraphvizImageBuilder#printGroups",
+    "net.sourceforge.plantuml.svek.GraphvizImageBuilder#printGroup",
+    "net.sourceforge.plantuml.svek.GeneralImageBuilder#createEntityImageBlockInternal",
+    "net.sourceforge.plantuml.svek.Cluster#drawU",
+    "net.sourceforge.plantuml.svek.image.EntityImageEmptyPackage#calculateDimensionSlow",
+    "net.sourceforge.plantuml.svek.image.EntityImageEmptyPackage#drawU",
+    "net.sourceforge.plantuml.svek.image.EntityImageDescription#calculateDimensionSlow",
+    "net.sourceforge.plantuml.svek.image.EntityImageDescription#drawU",
+    "net.sourceforge.plantuml.klimt.drawing.svg.UGraphicSvg#startUrl",
+    "net.sourceforge.plantuml.klimt.drawing.svg.UGraphicSvg#closeUrl",
+    "net.sourceforge.plantuml.klimt.drawing.svg.SvgGraphics#openLink",
+    "net.sourceforge.plantuml.klimt.drawing.svg.SvgGraphics#closeLink",
+    "net.sourceforge.plantuml.klimt.drawing.svg.SvgGraphics$LinkData#updateAttributesOf",
+    "net.sourceforge.plantuml.skin.SkinParam#getSvgLinkTarget"
   ],
   "rust_locations": [
-    "crates/rustuml-parser/src/parse/class.rs::ClassParser::try_package"
+    "crates/rustuml-parser/src/diagram/class.rs::Package",
+    "crates/rustuml-parser/src/parse/mod.rs::extract_link_url",
+    "crates/rustuml-parser/src/parse/mod.rs::extract_link_tooltip",
+    "crates/rustuml-parser/src/parse/class.rs::ClassParser::try_package",
+    "crates/rustuml-render/src/class.rs::package_render_model",
+    "crates/rustuml-render/src/class.rs::layout_package_clusters",
+    "crates/rustuml-render/src/class.rs::layout_empty_packages",
+    "crates/rustuml-render/src/class.rs::emit_layout_package_cluster",
+    "crates/rustuml-render/src/class.rs::emit_layout_empty_package",
+    "crates/rustuml-render/src/skinparam.rs::apply_skinparams",
+    "crates/rustuml-render/src/style.rs::GlobalStyle::svg_link_target"
   ],
-  "invariant": "Both Java package commands parse presentation modifiers after the code/display portion in this order: optional tags, optional stereotype, optional tags, optional URL, then optional background color. The color is therefore valid after a stereotype, and a stereotype without a color remains part of the group header model. These modifiers do not alter the quark identity selected from CODE.",
-  "causal_divergence": "Rust's package regex accepts optional color before optional stereotype and has no URL/tag slots. Java-valid package and cloud declarations with stereotype-before-color are skipped entirely; stereotype-only explicit cloud declarations parse but later rendering exposed a separate missing stereotype/title stack. The skipped declaration then causes relationship endpoints to materialize unrelated classes.",
-  "planned_change": "Make try_package consume the Java modifier order, retaining the resolved stereotype and trailing color while tolerating the supported tag and URL slots. Keep identity parsing separate from presentation modifiers. Add parser tests for stereotype-only, stereotype-before-color, tags around stereotype, and URL-before-color across ordinary and explicit symbol packages.",
+  "invariant": "CommandPackage and CommandPackageWithUSymbol parse presentation modifiers after the code/display portion in the order optional tags, optional stereotype, optional tags, optional URL, then optional background color; these modifiers do not change the Quark identity selected from AS/CODE. A URL is not a tolerated no-op. Each executeArg parses it with UrlBuilder in STRICT mode, applies the active topurl to relative hrefs, preserves an optional brace tooltip, and stores the resulting Url on the current package Entity with addUrl. Rendering then reads Entity#getUrl99 on every package role. A populated package is a Cluster whose drawU wraps only its own outline/title/stereotype decoration, not descendant entities or nested clusters. GraphvizImageBuilder converts a directly empty ordinary package to EMPTY_PACKAGE, which GeneralImageBuilder routes to EntityImageEmptyPackage; its drawU wraps the complete empty-package decoration. A directly empty package retaining an explicit or stereotype-derived USymbol is instead routed to EntityImageDescription; its drawU opens the anchor inside the entity group and wraps the complete symbol/title/stereotype image. In SVG the wrapper carries href and xlink:href with the resolved URL, title and xlink:title with the explicit tooltip or otherwise the resolved URL, target from svgLinkTarget (default _top), xlink:actuate=onRequest, xlink:show=new, and xlink:type=simple. A URL label is not substituted for the package display. URL presence is paint metadata only: none of Cluster, EntityImageEmptyPackage, or EntityImageDescription includes the URL in dimension calculation or layout, so adding a URL leaves canvas dimensions and geometry unchanged and only adds the anchor wrapper.",
+  "causal_divergence": "The modifier-order parser change fixed the original grammar error: the no-URL held-out package now matches Java. However, ClassParser::try_package accepts the URL slot with a noncapturing regex and extracts only stereotype and color. Package has no href or tooltip fields, so both newly created and reopened final packages discard the parsed URL. The no-oracle renderer consequently has no link metadata in LayoutPackageCluster or EmptyPackageLayout, and emit_layout_package_cluster/emit_layout_empty_package write package geometry directly with no anchor. Java-valid URL declarations therefore retain the same dimensions and coordinates in Rust but lose the Java <a> element for populated clusters, empty ordinary package leaves, and empty explicit/automatic symbol leaves. This missing model carry-through, not modifier ordering, endpoint materialization, or layout geometry, is the first remaining structural divergence.",
+  "planned_change": "Keep the corrected Java modifier order and add structured package link metadata to Package: resolved href plus optional tooltip, with serde defaults. Parse the URL from the original package declaration rather than merely consuming it, including strict URL syntax, declaration-time topurl resolution for relative hrefs, and tooltip fallback to the resolved href; the optional URL label need not enter the package title model. Store the metadata on the final package both when it is created and when an existing/phantom Quark is promoted. Carry the metadata into LayoutPackageCluster and EmptyPackageLayout without feeding it into any dimension, layout-node, envelope, or routing calculation. Emit the standard escaped PlantUML SVG anchor with the effective svgLinkTarget (default _top): inside the cluster <g> around only cluster decoration, directly around an ordinary empty-package decoration, and inside the entity <g> around the full explicit/automatic symbol-leaf image. Add parser/model tests plus no-oracle SVG tests that assert exact href, tooltip, target, and wrapper boundaries, assert descendants remain outside cluster anchors, and ratchet identical dimensions/coordinates between URL and no-URL pairs.",
   "perturbation_axes": [
-    "ordinary package crossed with cloud and node symbols",
-    "stereotype-only crossed with stereotype-before-color",
-    "tags before and after stereotype",
-    "URL before color",
-    "empty leaf crossed with filled cluster",
-    "nested crossed with top-level declarations",
-    "linked crossed with disconnected topology"
+    "populated cluster crossed with directly empty ordinary package and directly empty explicit or stereotype-derived symbol leaf",
+    "ordinary CommandPackage crossed with CommandPackageWithUSymbol while retaining tags before and after stereotype and URL before trailing color",
+    "absolute URL with implicit URL tooltip and default _top target crossed with explicit brace tooltip and nondefault svgLinkTarget",
+    "relative URL under topurl crossed with absolute URL, including a URL label that must not replace the package display",
+    "top-level package crossed with nested package containing linked descendants, verifying that a cluster anchor excludes child entities and nested clusters",
+    "top-to-bottom crossed with left-to-right direction and linked crossed with disconnected topology, with URL/no-URL pairs required to preserve dimensions and coordinates"
   ],
+  "svg_semantics": {
+    "populated_cluster": "Cluster#drawU opens the URL after the cluster group and closes it before the group closes; the anchor contains ClusterDecoration output only. Child entities and child clusters are emitted separately outside that anchor.",
+    "empty_ordinary_leaf": "EntityImageEmptyPackage#drawU opens the URL before calculating/drawing the package decoration and closes it immediately after; the full leaf decoration is the anchor content.",
+    "empty_symbol_leaf": "EntityImageDescription#drawU opens the entity group, then the URL, draws the complete USymbol image and text, closes the URL, and finally closes the entity group.",
+    "anchor_attributes": "href and xlink:href are the resolved URL; title and xlink:title are the brace tooltip or the resolved URL when no tooltip was supplied; target is svgLinkTarget with Java default _top; xlink:actuate is onRequest, xlink:show is new, and xlink:type is simple."
+  },
+  "diagnostic_evidence": {
+    "modifier_order_control": "The review's ordinary no-URL package passes exactly, isolating the remaining failure from modifier ordering.",
+    "populated_cluster_probe": "At Java revision 71806a23780b04a5ccde2f8ceb5121edad5eb711, otherwise identical URL and no-URL populated-cluster inputs both serialize as 141px by 136px with identical coordinates; only the URL input adds the anchor.",
+    "empty_leaf_probes": "An empty ordinary package with a custom tooltip emits one anchor around the complete EntityImageEmptyPackage decoration. An empty explicit node emits one anchor inside its entity group around the complete EntityImageDescription symbol and text.",
+    "review_preserved": "docs/parity-reviews/class-package-modifier-order/review.json remains the rejection record for implementation commit 8895b9de317ebdac7b32ddeb99733c8b73e786a3."
+  },
   "status": "proposed"
 }
