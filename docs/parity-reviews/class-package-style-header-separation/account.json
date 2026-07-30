@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-package-style-header-separation",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "net.sourceforge.plantuml.svek.GraphvizImageBuilder#printGroup",
+    "net.sourceforge.plantuml.svek.ClusterHeader#ClusterHeader",
+    "net.sourceforge.plantuml.svek.Cluster#drawU",
+    "net.sourceforge.plantuml.svek.ClusterDecoration#guess",
+    "net.sourceforge.plantuml.decoration.symbol.USymbolNode#suppWidthBecauseOfShape",
+    "net.sourceforge.plantuml.decoration.symbol.USymbolNode#suppHeightBecauseOfShape",
+    "net.sourceforge.plantuml.decoration.symbol.USymbolDatabase#suppHeightBecauseOfShape"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs::effective_package_kind",
+    "crates/rustuml-render/src/class.rs::render_with_oracle_uid_origin"
+  ],
+  "invariant": "GraphvizImageBuilder constructs ClusterHeader from the group before Cluster.drawU performs packageStyle fallback in ClusterDecoration. ClusterHeader obtains shape-specific width and height reserves only from group.getUSymbol(). An ordinary package has a null explicit USymbol, so packageStyle node or database changes its painted asBig decoration but contributes no node/database reserve to the Graphviz cluster title. Explicit and automatic symbols retain their own reserves.",
+  "causal_divergence": "Rust uses effective_package_kind for both painted fallback geometry and ClusterTitleSize. That promotes an ordinary package under packageStyle node to the node's 60px width and 5px height reserves, and under packageStyle database to the database's 15px height reserve. The independent checker reproduced the error in TB/LR and top-level/nested inputs: four fresh valid cases fail while rectangle, frame, and cloud controls pass.",
+  "planned_change": "Derive Graphviz ClusterTitleSize reserves only from the package's explicit or automatic symbol identity, while continuing to derive painted cluster geometry from explicit/automatic symbol first and configured packageStyle second. Keep stereotype/title measurement, integer truncation, style lookup, and decoration emission unchanged.",
+  "perturbation_axes": [
+    "packageStyle node crossed with explicit node",
+    "packageStyle database crossed with explicit database",
+    "top-level crossed with nested clusters",
+    "top-to-bottom crossed with left-to-right direction",
+    "short labels crossed with long renamed labels",
+    "single cluster crossed with multiple fallback clusters"
+  ],
+  "predecessor_rejection": {
+    "review": "docs/parity-reviews/class-package-style-symbol-fallback/review.json",
+    "review_commit": "63d978e7",
+    "relevant_counterexamples": [
+      "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_database_tb_top.puml",
+      "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_database_lr_nested.puml",
+      "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_node_tb_fallback.puml",
+      "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_node_lr_fallback.puml"
+    ]
+  }
+}

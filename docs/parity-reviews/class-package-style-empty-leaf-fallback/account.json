@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-package-style-empty-leaf-fallback",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "net.sourceforge.plantuml.svek.GraphvizImageBuilder#printGroups",
+    "net.sourceforge.plantuml.svek.GeneralImageBuilder#createEntityImageBlock",
+    "net.sourceforge.plantuml.svek.image.EntityImageEmptyPackage#calculateDimensionSlow",
+    "net.sourceforge.plantuml.svek.image.EntityImageEmptyPackage#drawU",
+    "net.sourceforge.plantuml.svek.ClusterDecoration#guess"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs::empty_package_dims",
+    "crates/rustuml-render/src/class.rs::layout_empty_packages",
+    "crates/rustuml-render/src/class.rs::emit_layout_empty_package"
+  ],
+  "invariant": "GraphvizImageBuilder mutates a directly empty package group to EMPTY_PACKAGE. For an ordinary package with no explicit USymbol, GeneralImageBuilder selects EntityImageEmptyPackage. Its drawU constructs ClusterDecoration with getSkinParam().packageStyle() and a null symbol, so ClusterDecoration.guess applies the configured packageStyle geometry. The leaf's style and colors remain those calculated by EntityImageEmptyPackage; the fallback selects shape and shape-specific dimensions, not a different semantic entity kind.",
+  "causal_divergence": "Rust intentionally restricted empty-leaf symbol_kind and dimensions to automatic_package_kind, based on the predecessor account's false assumption that packageStyle affected clusters only. The independent checker generated a valid ordinary directly empty package under packageStyle cloud: Java paints and sizes a cloud leaf, while Rust keeps ordinary folder chrome. The filled ordinary package control follows the separate cluster path.",
+  "planned_change": "For directly empty ordinary package leaves, select geometry and shape-specific dimensions from automatic_package_kind first and configured_package_kind second, matching ClusterDecoration.guess. Retain package semantic style lookup and explicit colors. Keep explicit/automatic symbol precedence and do not turn the leaf into a painted cluster.",
+  "perturbation_axes": [
+    "cloud fallback crossed with rectangle, frame, node, and database",
+    "ordinary empty leaf crossed with explicit symbol empty leaf",
+    "directly empty crossed with filled package cluster",
+    "top-level crossed with nested empty leaves",
+    "top-to-bottom crossed with left-to-right direction",
+    "plain labels crossed with stereotypes and renamed labels"
+  ],
+  "predecessor_rejection": {
+    "review": "docs/parity-reviews/class-package-style-symbol-fallback/review.json",
+    "review_commit": "63d978e7",
+    "relevant_counterexamples": [
+      "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_empty_control_valid_tb.puml"
+    ],
+    "excluded_syntax_probe": "test-diagrams/perturbations/class-package-style-symbol-fallback/checker_empty_control_tb.puml"
+  }
+}
