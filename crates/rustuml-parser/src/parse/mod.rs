@@ -336,7 +336,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     let mut has_non_interface_class_decl = false;
     let mut has_class_factory_decl = false;
     let mut has_entity_class_factory_decl = false;
-    let mut has_class_factory_incompatible_component_leaf = false;
+    let mut class_factory_rejected_by_mixed_leaf = false;
     let mut quoted_shared_deployment_containers = 0i32;
     let mut brace_depth = 0usize;
 
@@ -351,6 +351,54 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         } else {
             trimmed
         };
+        if is_allow_mixing_command(trimmed) {
+            has_allowmixing = true;
+        }
+        // `CommandCreateElementFull2(NORMAL_KEYWORD)` is registered after
+        // native class/object declarations and covers
+        // `CommandCreateElementFull.ALL_TYPES` plus `state`. Its execution
+        // error abandons this ClassDiagramFactory candidate immediately when
+        // `allowmixing` has not already run.
+        const MIXED_ONLY_CLASS_KEYWORDS: &[&str] = &[
+            "person",
+            "artifact",
+            "actor/",
+            "actor",
+            "folder",
+            "card",
+            "file",
+            "package",
+            "rectangle",
+            "hexagon",
+            "label",
+            "node",
+            "frame",
+            "cloud",
+            "action",
+            "process",
+            "database",
+            "queue",
+            "stack",
+            "storage",
+            "agent",
+            "usecase/",
+            "usecase",
+            "component",
+            "boundary",
+            "control",
+            "collections",
+            "port",
+            "portin",
+            "portout",
+            "state",
+        ];
+        let leading_keyword = trimmed.split_whitespace().next().unwrap_or_default();
+        if !has_allowmixing
+            && !trimmed.contains('{')
+            && MIXED_ONLY_CLASS_KEYWORDS.contains(&leading_keyword)
+        {
+            class_factory_rejected_by_mixed_leaf = true;
+        }
         let looks_like_sequence_message = sequence::looks_like_message(trimmed);
         let looks_like_sequence_participant = !trimmed.ends_with('{')
             && (trimmed.starts_with("participant ")
@@ -554,7 +602,6 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         if trimmed.starts_with("component ") {
             scores[5] += 15;
             if !trimmed.contains('{') {
-                has_class_factory_incompatible_component_leaf = true;
                 if top_level {
                     has_top_level_component_leaf = true;
                 }
@@ -768,21 +815,15 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
         if trimmed.starts_with("archimate_element ") || trimmed.starts_with("archimate_rel ") {
             scores[9] += 20;
         }
-        // `allowmixing` directive (class-diagram only).
-        if is_allow_mixing_command(trimmed) {
-            has_allowmixing = true;
-        }
-
         let opens = trimmed.chars().filter(|&c| c == '{').count();
         let closes = trimmed.chars().filter(|&c| c == '}').count();
         brace_depth = brace_depth.saturating_add(opens).saturating_sub(closes);
     }
 
     // Java keeps trying a factory only while every source command is
-    // consumable. `CommandCreateElementFull2` rejects ordinary component
-    // leaves in CLASS unless `allowmixing` has enabled mixed element kinds.
-    let class_factory_viable = has_class_factory_decl
-        && (!has_class_factory_incompatible_component_leaf || has_allowmixing);
+    // consumable. Once a mixed-only leaf rejects ClassDiagramFactory, a later
+    // command cannot revive that candidate.
+    let class_factory_viable = has_class_factory_decl && !class_factory_rejected_by_mixed_leaf;
 
     // CommandPackageWithUSymbol makes a quoted shared container valid for both
     // CLASS and DESCRIPTION, but not SEQUENCE. If the complete source remains
@@ -889,7 +930,7 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
     // factory even when every following leaf uses description syntax; the
     // selected parser remains responsible for rejecting commands it cannot
     // consume.
-    if has_allowmixing {
+    if has_allowmixing && !class_factory_rejected_by_mixed_leaf {
         let other_max = scores
             .iter()
             .enumerate()
@@ -1458,15 +1499,61 @@ mod tests {
     }
 
     #[test]
+    fn mixed_description_keyword_family_rejects_the_class_factory() {
+        for keyword in ["artifact", "database", "queue", "rectangle"] {
+            let input = format!(
+                "@startuml\n\
+                 entity FreshLedger6111 {{}}\n\
+                 node \"Fresh Runtime 6113\" as Runtime6113 {{\n\
+                   {keyword} FreshMixed6117\n\
+                 }}\n\
+                 @enduml"
+            );
+            assert!(
+                matches!(parse(&input).unwrap(), Diagram::Deployment(_)),
+                "{keyword}"
+            );
+        }
+    }
+
+    #[test]
+    fn native_class_keyword_family_keeps_the_earlier_class_factory() {
+        for declaration in [
+            "entity FreshNative6211",
+            "interface FreshNative6211",
+            "circle FreshNative6211",
+        ] {
+            let input = format!(
+                "@startuml\n\
+                 node \"Fresh Runtime 6213\" as Runtime6213 {{\n\
+                   {declaration}\n\
+                 }}\n\
+                 @enduml"
+            );
+            assert!(
+                matches!(parse(&input).unwrap(), Diagram::Class(_)),
+                "{declaration}"
+            );
+        }
+    }
+
+    #[test]
     fn allowmixing_keeps_quoted_entity_and_component_source_in_class_factory() {
-        let input = "@startuml\n\
-                     allowmixing\n\
-                     node \"Runtime Edge\" as Runtime {\n\
-                       entity Ledger {}\n\
-                       component API\n\
-                     }\n\
-                     @enduml";
-        assert!(matches!(parse(input).unwrap(), Diagram::Class(_)));
+        for keyword in ["component", "database", "rectangle"] {
+            let input = format!(
+                "@startuml\n\
+                 entity FreshLedger6311 {{}}\n\
+                 allowmixing\n\
+                 node \"Fresh Runtime 6313\" as Runtime6313 {{\n\
+                   {keyword} FreshMixed6317\n\
+                 }}\n\
+                 @enduml"
+            );
+            assert!(
+                matches!(parse(&input).unwrap(), Diagram::Class(_)),
+                "{keyword}"
+            );
+        }
     }
 
     #[test]
