@@ -3003,6 +3003,12 @@ struct LifeVariation {
     kind: LifeVariationKind,
 }
 
+#[derive(Clone)]
+struct AcceptedLifeChange {
+    participant: String,
+    kind: LifeVariationKind,
+}
+
 #[derive(Default)]
 struct SequenceLifeLines {
     variations: HashMap<String, Vec<LifeVariation>>,
@@ -3011,7 +3017,7 @@ struct SequenceLifeLines {
 
 struct SequenceDepthSnapshots {
     before_event: Vec<HashMap<String, usize>>,
-    accepted_events: Vec<bool>,
+    accepted_changes: Vec<Option<AcceptedLifeChange>>,
 }
 
 impl SequenceDepthSnapshots {
@@ -3024,10 +3030,9 @@ impl SequenceDepthSnapshots {
     }
 
     fn accepted_event(&self, event_index: usize) -> bool {
-        self.accepted_events
+        self.accepted_changes
             .get(event_index)
-            .copied()
-            .unwrap_or(false)
+            .is_some_and(Option::is_some)
     }
 }
 
@@ -3045,7 +3050,7 @@ fn sequence_depth_snapshots(
     let mut last_variation: HashMap<String, ((usize, i32), LifeVariationKind)> = HashMap::new();
     let mut return_stack: Vec<String> = Vec::new();
     let mut before_event = Vec::with_capacity(page1_end);
-    let mut accepted_events = vec![false; page1_end];
+    let mut accepted_changes = vec![None; page1_end];
 
     for (event_index, event) in events.iter().take(page1_end).enumerate() {
         before_event.push(
@@ -3104,7 +3109,10 @@ fn sequence_depth_snapshots(
                 LifeVariationKind::Open => *level += 1,
                 LifeVariationKind::Close => *level -= 1,
             }
-            accepted_events[event_index] = true;
+            accepted_changes[event_index] = Some(AcceptedLifeChange {
+                participant: participant.to_owned(),
+                kind,
+            });
             true
         };
 
@@ -3161,7 +3169,7 @@ fn sequence_depth_snapshots(
 
     SequenceDepthSnapshots {
         before_event,
-        accepted_events,
+        accepted_changes,
     }
 }
 
@@ -3172,22 +3180,15 @@ impl SequenceLifeLines {
         ordinate: f64,
         event_index: usize,
         kind: LifeVariationKind,
-    ) -> bool {
-        let variations = self.variations.entry(participant.to_owned()).or_default();
-        if let Some(last) = variations.last()
-            && (ordinate < last.ordinate || (ordinate == last.ordinate && kind != last.kind))
-        {
-            return false;
-        }
-        variations.push(LifeVariation {
-            ordinate,
-            event_index,
-            kind,
-        });
-        if let Some(accepted) = self.accepted_events.get_mut(event_index) {
-            *accepted = true;
-        }
-        true
+    ) {
+        self.variations
+            .entry(participant.to_owned())
+            .or_default()
+            .push(LifeVariation {
+                ordinate,
+                event_index,
+                kind,
+            });
     }
 
     fn accepted_event(&self, event_index: usize) -> bool {
@@ -3240,18 +3241,32 @@ fn sequence_lifelines(
     page1_end: usize,
     lifecycle_owner: &[Option<usize>],
     create_msg_idx: &HashMap<String, usize>,
+    lifecycle_history: &SequenceDepthSnapshots,
 ) -> SequenceLifeLines {
     let mut model = SequenceLifeLines {
         variations: HashMap::new(),
-        accepted_events: vec![false; page1_end],
+        accepted_events: lifecycle_history
+            .accepted_changes
+            .iter()
+            .map(Option::is_some)
+            .collect(),
     };
-    let mut return_stack: Vec<String> = Vec::new();
     let first_message_index = events
         .iter()
         .take(page1_end)
         .position(|event| matches!(event, Event::Message(_)));
 
-    let mut add = |participant: &str, event_index: usize, kind: LifeVariationKind| {
+    for (event_index, accepted) in lifecycle_history
+        .accepted_changes
+        .iter()
+        .take(page1_end)
+        .enumerate()
+    {
+        let Some(accepted) = accepted else {
+            continue;
+        };
+        let participant = accepted.participant.as_str();
+        let kind = accepted.kind;
         let event_ordinate = event_y_positions
             .get(event_index)
             .copied()
@@ -3292,59 +3307,7 @@ fn sequence_lifelines(
             }
             _ => event_ordinate,
         };
-        model.add_variation(participant, ordinate, event_index, kind)
-    };
-
-    for (event_index, event) in events.iter().take(page1_end).enumerate() {
-        match event {
-            Event::Message(message) => {
-                if let Some(change) = &message.activation {
-                    match change {
-                        ActivationChange::Activate => {
-                            if add(&message.to, event_index, LifeVariationKind::Open) {
-                                return_stack.push(message.to.clone());
-                            }
-                        }
-                        ActivationChange::Deactivate => {
-                            if add(&message.from, event_index, LifeVariationKind::Close)
-                                && let Some(position) =
-                                    return_stack.iter().rposition(|id| id == &message.from)
-                            {
-                                return_stack.remove(position);
-                            }
-                        }
-                        ActivationChange::Destroy => {
-                            if add(&message.to, event_index, LifeVariationKind::Close)
-                                && let Some(position) =
-                                    return_stack.iter().rposition(|id| id == &message.to)
-                            {
-                                return_stack.remove(position);
-                            }
-                        }
-                    }
-                }
-            }
-            Event::Activate(participant, _) => {
-                if add(participant, event_index, LifeVariationKind::Open) {
-                    return_stack.push(participant.clone());
-                }
-            }
-            Event::Deactivate(participant) | Event::Destroy(participant) => {
-                if add(participant, event_index, LifeVariationKind::Close)
-                    && let Some(position) = return_stack.iter().rposition(|id| id == participant)
-                {
-                    return_stack.remove(position);
-                }
-            }
-            Event::Return(_) => {
-                if let Some(participant) = return_stack.last().cloned()
-                    && add(&participant, event_index, LifeVariationKind::Close)
-                {
-                    return_stack.pop();
-                }
-            }
-            _ => {}
-        }
+        model.add_variation(participant, ordinate, event_index, kind);
     }
     model
 }
@@ -7292,16 +7255,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     min_first_center_x = min_first_center_x.max(min_cx);
                 }
                 NotePosition::Left if first_part == Some(0) => {
-                    // "note left of" on participant 0: the note extends left from the
-                    // lifeline. The note right edge = floor(lifeline_line_x) - gap.
-                    // The note left edge = note_right - note_content_w, which must be >= HEAD_BOX_Y.
-                    // So: lifeline_line_x >= HEAD_BOX_Y + note_content_w + gap
-                    // And: lifeline_line_x = center_x - box_width/2 + floor(box_width/2)
-                    // Therefore: center_x >= HEAD_BOX_Y + note_content_w + gap
-                    //                        + box_width/2 - floor(box_width/2)
-                    // hnote/rnote sit 1px closer to the lifeline than a standard
-                    // note (the same shape offset as note_msg_arrow_offset): their
-                    // box right edge is gap-1 from the lifeline.
+                    // `NoteBox#getStartingX` truncates the complete side-note
+                    // expression after lifeline thickness and shape width are
+                    // known. Solving this lower bound here makes it part of the
+                    // participant constraint set exactly once.
                     let max_tw = note_max_line_width_with_family(
                         &note.text,
                         note_font_size_f,
@@ -8387,6 +8344,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         page1_end,
         &lifecycle_owner,
         &create_msg_idx,
+        &spacing_depths,
     );
     let mut note_left_live_shift_by_event: HashMap<usize, f64> = HashMap::new();
     let mut note_right_live_shift_by_event: HashMap<usize, f64> = HashMap::new();
@@ -8415,77 +8373,6 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
         }
         if right_shift != 0.0 {
             note_right_live_shift_by_event.insert(event_index, right_shift);
-        }
-    }
-
-    // `DrawableSet#prepareMissingSpace` measures every concrete graphical
-    // element after participant constraints are solved, then shifts those
-    // constraints by the largest left deficit. Side notes are participant
-    // relative, so derive their actual starting X from the accepted lifeline
-    // segments and apply the shared push once.
-    let mut left_missing_space = 0.0_f64;
-    for (event_index, event) in diagram.events.iter().take(page1_end).enumerate() {
-        let Event::Note(note) = event else {
-            continue;
-        };
-        if note.position != NotePosition::Left {
-            continue;
-        }
-        let anchor_idxs: Vec<usize> = note
-            .participants
-            .iter()
-            .filter_map(|id| id_to_idx.get(id.as_str()).copied())
-            .collect();
-        if anchor_idxs.is_empty() {
-            continue;
-        }
-        let max_text_w =
-            note_max_line_width_with_family(&note.text, note_font_size_f, &note_font_family);
-        let note_content_w = note_content_width_padded(max_text_w, note.shape, note_text_align);
-        let ll_x = if note.on_message {
-            anchor_idxs
-                .iter()
-                .map(|&index| participants[index].center_x)
-                .fold(f64::MAX, f64::min)
-        } else {
-            let index = anchor_idxs[0];
-            let live_shift = note_left_live_shift_by_event
-                .get(&event_index)
-                .copied()
-                .unwrap_or(0.0);
-            if live_shift == 0.0 {
-                participants[index].lifeline_line_x
-            } else {
-                participants[index].center_x + live_shift
-            }
-        };
-        let gap = left_note_lifeline_gap(
-            &participants,
-            note.shape,
-            anchor_idxs.first().copied(),
-            note.on_message,
-            note.color.is_some(),
-            note.text.lines().count(),
-        );
-        let note_left = if note.on_message {
-            ll_x.floor() - gap - note_content_w
-        } else {
-            let position_width =
-                single_note_visible_raw_width(max_text_w, note.shape, note_global_padding);
-            (ll_x - gap - position_width).floor()
-        };
-        left_missing_space = left_missing_space.max(HEAD_BOX_Y - note_left);
-    }
-    if left_missing_space > 0.0 {
-        let shift = left_missing_space.ceil();
-        for participant in &mut participants {
-            participant.center_x += shift;
-            participant.box_x += shift;
-            participant.lifeline_line_x += shift;
-        }
-        max_self_msg_right += shift;
-        for left in self_msg_right_note_left_by_event.values_mut() {
-            *left += shift;
         }
     }
 
@@ -9238,7 +9125,7 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                     Some((right - note_content_w, right))
                 } else {
                     let position_width =
-                        single_note_visible_raw_width(max_text_w, note.shape, note_global_padding);
+                        note_content_width_raw_padded(max_text_w, note.shape, note_text_align);
                     let left = (ll_x - gap - position_width).floor();
                     Some((left, left + raw_note_content_w + 1.0))
                 }
@@ -9788,6 +9675,48 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
     // rects in document order (outermost first). Sort by the group's start event
     // index to restore document order.
     group_frames.sort_by_key(|f| f.event_idx);
+
+    // `GroupingGraphicalElement#getStartingX` is ten pixels left of the
+    // InGroupableList envelope that is used to draw the frame. It participates
+    // in DrawableSetInitializer.prepareMissingSpace alongside notes, arrows,
+    // refs, and every other graphical element. The legacy path previously
+    // discovered frames only after its note-only reservation, so a negative
+    // group header start never translated the shared participant constraints.
+    //
+    // Apply the one Java missing-space translation here. All coordinates stored
+    // below are views of the same constraint set, so they move together; no
+    // second note or frame-specific solve follows this translation.
+    let group_left_missing_space = if diagram.teoz {
+        0.0
+    } else {
+        group_frames
+            .iter()
+            .map(|frame| GROUP_FRAME_MARGIN - frame.left)
+            .fold(0.0_f64, f64::max)
+            .max(0.0)
+    };
+    if group_left_missing_space > 0.0 {
+        for participant in &mut participants {
+            participant.center_x += group_left_missing_space;
+            participant.box_x += group_left_missing_space;
+            participant.lifeline_line_x += group_left_missing_space;
+        }
+        for note_left in self_msg_right_note_left_by_event.values_mut() {
+            *note_left += group_left_missing_space;
+        }
+        for frame in &mut group_frames {
+            frame.left += group_left_missing_space;
+            frame.right += group_left_missing_space;
+        }
+        svg_width_exact += group_left_missing_space;
+    }
+    let effective_right = effective_right + group_left_missing_space;
+    let center_of = |id: &str| -> f64 {
+        id_to_idx
+            .get(id)
+            .map(|&i| participants[i].center_x)
+            .unwrap_or(0.0)
+    };
 
     // A group left open at @enduml (e.g. a `break` inside an `alt` consumes the
     // loop's `end`) is never drawn, but PlantUML's InGroupableList still
@@ -12016,10 +11945,10 @@ pub fn render(diagram: &SequenceDiagram, _theme: &Theme, oracle: Option<&OracleL
                             let right = ll_x.floor() - gap;
                             (right - note_content_w, right)
                         } else {
-                            let position_width = single_note_visible_raw_width(
+                            let position_width = note_content_width_raw_padded(
                                 max_text_w,
                                 note.shape,
-                                note_global_padding,
+                                note_text_align,
                             );
                             let left = (ll_x - gap - position_width).floor();
                             (left, left + note_content_w)
