@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-autonomous-root-painted-normalization",
+  "status": "proposed",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "35edafc3339259bcfbed3572da87635e70cf98e9",
+  "parent_account": "docs/parity-reviews/state-autonomous-painted-bounds/account.json",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/svek/GroupMakerState.java:110-153 builds every autonomous inner image through a GraphvizImageBuilder using the shared diagram SkinParam",
+    "src/main/java/net/sourceforge/plantuml/svek/SvekResult.java calculateDimension draws every solved result through LimitFinder and calls DotStringFactory.moveDelta",
+    "src/main/java/net/sourceforge/plantuml/svek/DotStringFactory.java moveDelta applies the same 6-minX,6-minY translation to nodes, edges, and clusters",
+    "src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java:175-200 gives rectangles a one-pixel upper/left frontier while ellipses begin at their image origin"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/state.rs layout_autonomous_scope computes primitive-aware painted_bounds for every autonomous scope",
+    "crates/rustuml-render/src/state.rs normalize_autonomous_scope applies the Java 6-minus-minimum translation and painted span plus 15 dimension",
+    "crates/rustuml-render/src/state.rs build_state_group_outcome normalizes every autonomous inner region",
+    "crates/rustuml-render/src/state.rs build_autonomous_composite normalizes the top-level outer scope only when live_clusters is nonempty and returns an unnormalized all-autonomous root"
+  ],
+  "evidence_inputs": [
+    "test-diagrams/perturbations/state-autonomous-label-alignment-capability-adversarial-fail/cap_state_alignment_nested_lr.puml",
+    "test-diagrams/perturbations/state-autonomous-label-alignment-capability-adversarial-fail/cap_default_alignment_nested_raw_link.puml",
+    "test-diagrams/perturbations/state-rank-direction-adversarial-fail/rank_nested_lr_concurrent.puml",
+    "test-diagrams/perturbations/state-rank-direction-adversarial-pass/rank_deep_nested_tb.puml"
+  ],
+  "invariant": "Every SVEK result, including the all-autonomous top-level state graph, is normalized from its complete painted minimum. The primitive occupying that minimum determines the translation: an ordinary rectangle contributes x-1, while an initial-state ellipse contributes its image x without rectangle overscan. Rank direction may change which primitive is leftmost, but it never changes whether SvekResult applies moveDelta. The five-pixel Cuca positive-axis compatibility margin remains a file-level addition for live-cluster composition and is independent of painted-origin normalization.",
+  "causal_divergence": "Rust normalizes autonomous inner regions and mixed live-cluster roots, but skips normalize_autonomous_scope for an all-autonomous outer root. Its legacy initial origin is x=7. In top-to-bottom fixtures a leftmost composite rectangle contributes x-1, accidentally yielding Java's visible x=6 and hiding the omission. In left-to-right fixtures the root initial-state ellipse is leftmost and has no negative overscan, so every emitted primitive is one pixel too far right. The legacy width calculation also retains one extra pixel on each horizontal side and one vertical side, producing the repeated +2 width and +1 height checker failures. Alignment, raw-link metadata, and label text are incidental to this shared root-envelope divergence.",
+  "planned_change": "Always pass the outer autonomous scope through normalize_autonomous_scope after layout. Preserve the existing extra five-pixel positive-axis margin only when live clusters are present. Do not change the painted-bounds collector, primitive constants, Graphviz coordinates, rank direction, or child image dimensions. Add a regression covering an all-autonomous left-to-right root whose initial ellipse is the minimum, while retaining a top-to-bottom rectangle-minimum control. Verify the preserved rank/alignment checker matrix and complete renderer tests.",
+  "perturbation_axes": [
+    "left-to-right ellipse minimum versus top-to-bottom rectangle minimum",
+    "one through three nested autonomous composites",
+    "concurrent and non-concurrent inner regions",
+    "root pseudostates present or absent",
+    "renamed multiline labels and alignment settings",
+    "live-cluster roots retaining their separate positive-axis margin"
+  ],
+  "scope_boundary": "This correction only removes the conditional omission of root painted normalization. It does not claim Times New Roman metric parity, flat fanout paint ordering, live-cluster frontier behavior, or any comparator change."
+}
