@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-link-label-guillemet-normalization",
+  "created": "2026-07-31",
+  "status": "proposed",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "a8eec74061427f7e273e98ca00b9a90668fead83",
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/classdiagram/command/CommandLinkClass.java",
+      "symbol": "CommandLinkClass.executeArg",
+      "lines": "210-223",
+      "role": "Builds a LinkArg from the parsed relationship-label Display before constructing the class Link."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/abel/LinkArg.java",
+      "symbol": "LinkArg.build(Display, int, boolean)",
+      "lines": "65-75",
+      "role": "Normalizes every non-null link-label Display through Display.manageGuillemet before storing or measuring it."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/klimt/creole/Display.java",
+      "symbol": "Display.manageGuillemet",
+      "lines": "406-420",
+      "role": "Applies Guillemet.GUILLEMET to each label line while separately removing a leading visibility marker when requested."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/text/Guillemet.java",
+      "symbol": "Guillemet.manageGuillemet",
+      "lines": "42-84",
+      "role": "Replaces every valid comparator-delimited group with U+00AB/U+00BB while preserving its interior text."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/parse/class.rs",
+      "symbol": "ClassParser::try_relationship",
+      "lines": "1075-1168",
+      "role": "Stores the parsed relationship-label source text unchanged."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "symbols": [
+        "relationship_center_layout",
+        "render_no_oracle_edge"
+      ],
+      "lines": "12726-12767, 13572-13615",
+      "role": "Measures and emits the unchanged comparator text, so both the edge-label box and visible glyphs diverge."
+    },
+    {
+      "path": "crates/rustuml-render/src/text_render.rs",
+      "symbols": [
+        "emit_text_no_mono",
+        "measure_no_underline"
+      ],
+      "role": "Provides the shared creole segmentation and matching text metrics used by class link labels, but does not yet model LinkArg's guillemet pre-normalization."
+    }
+  ],
+  "evidence_inputs": [
+    "test-diagrams/golden/class/class_feature_relation_stereotype.puml"
+  ],
+  "claimed_invariant": "A class relationship label is normalized once at LinkArg construction: every valid `<<...>>` group becomes `\u00ab...\u00bb` before the same normalized Display is measured for Graphviz and emitted as SVG text. The transformation is content-driven and independent of endpoint names, arrow direction, topology, declaration order, or fixture identity.",
+  "causal_divergence": "For `A --> B : <<uses>>`, Java's LinkArg stores and measures `\u00abuses\u00bb`; Rust stores, measures, and emits `<<uses>>`. The wider comparator glyph sequence expands Rust's edge-label box and canvas, while the output text remains lexically wrong. The divergence originates before layout in the missing LinkArg label-normalization stage, not in Graphviz coordinates, SVG escaping, font metrics, or the relationship fixture.",
+  "planned_model_change": "Introduce a Java-cited class-link-label normalization function that implements Guillemet.manageGuillemet's full valid-group pattern. Apply it at the shared class relationship-label projection used by both measurement and emission, so Graphviz and SVG consume one normalized value. Preserve invalid or nested comparator text unchanged, and leave endpoint multiplicities and entity stereotypes on their existing models.",
+  "perturbation_axes": [
+    "renamed endpoints and stereotype label content",
+    "left-to-right versus top-to-bottom relationship direction",
+    "one versus multiple valid guillemet groups within surrounding text",
+    "leading and trailing interior whitespace",
+    "plain labels and malformed comparator groups as negative controls",
+    "relationship labels versus endpoint multiplicities"
+  ],
+  "scope_boundary": "This mechanism owns only class relationship-label Display normalization. It does not reinterpret a label as a Link stereotype, change entity stereotype handling, alter comparator syntax inside class members, modify Graphviz routing, or tune any geometry constants.",
+  "acceptance": [
+    "The existing class_feature_relation_stereotype pair matches in the no-oracle path.",
+    "Fresh valid relationship labels covering at least two perturbation axes match freshly generated Java SVG.",
+    "Malformed comparator groups remain literal and do not panic.",
+    "Class parser, creole/text-renderer, harness-guard, and no-oracle ratchet tests pass.",
+    "An independent checker records a verdict at the exact implementation revision."
+  ]
+}
