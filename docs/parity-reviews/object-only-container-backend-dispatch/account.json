@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "mechanism": "object-only-container-backend-dispatch",
+  "created": "2026-07-31",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision_before_change": "3046a6d9e9e1743c66aba6cbc71454d211bde738",
+  "regression_origin": {
+    "commit": "4275bab624c02c820e28ab866b58f5db5b470b7c",
+    "subject": "fix: port complete package symbol model",
+    "evidence": "The dedicated object renderer blob is unchanged from the green baseline through the current revision; this commit made any braced namespace or package-like symbol force class-factory dispatch."
+  },
+  "java_locations": [
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/classdiagram/ClassDiagramFactory.java",
+      "symbol": "ClassDiagramFactory.createEmptyDiagram",
+      "lines": "101-123",
+      "role": "Objects, maps, classes, packages, and namespaces share one command grammar and semantic diagram factory."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/GeneralImageBuilder.java",
+      "symbol": "GeneralImageBuilder.createEntityImageBlock",
+      "lines": "174-190",
+      "role": "After shared parsing, dispatches an OBJECT leaf to EntityImageObject rather than treating shared grammar ownership as class rendering."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/svek/image/EntityImageObject.java",
+      "symbols": [
+        "calculateDimensionSlow",
+        "drawU"
+      ],
+      "lines": "89-145",
+      "role": "Owns the object-specific header/body dimensions and paint."
+    },
+    {
+      "path": "src/main/java/net/sourceforge/plantuml/command/CommandNamespace.java",
+      "symbol": "CommandNamespace.executeArg",
+      "lines": "81-114",
+      "role": "Materializes a dotted namespace path while attaching declaration location only to the declared group, not synthesized ancestors."
+    }
+  ],
+  "rust_locations": [
+    {
+      "path": "crates/rustuml-parser/src/parse/mod.rs",
+      "symbols": [
+        "detect_uml_subtype",
+        "has_class_symbol_container"
+      ],
+      "role": "Conflates acceptance by the shared class-diagram grammar with selection of Diagram::Class whenever a braced package or namespace is present."
+    },
+    {
+      "path": "crates/rustuml-render/src/object.rs",
+      "role": "Already implements the exact object-specific header/body model and synthesized-ancestor source-location distinction."
+    },
+    {
+      "path": "crates/rustuml-render/src/class.rs",
+      "role": "The wrongly selected backend uses a generic class header envelope six pixels taller for these object leaves."
+    }
+  ],
+  "claimed_invariant": "Shared class-diagram grammar viability and renderer backend selection are separate decisions. A diagram containing only object/map leaves inside ordinary object-compatible package or namespace containers remains an object diagram; class-only leaves, package symbols, allowmixing, or incompatible mixed constructs select the class backend.",
+  "causal_divergence": "Rust's has_class_symbol_container flag raises the class score above all competitors for every braced package or namespace. Four object-only container diagrams therefore bypass the exact object renderer and enter the class renderer, gaining six pixels per object header and incorrect synthesized-ancestor source metadata. Java shares parsing but later dispatches each leaf by LeafType.",
+  "planned_model_change": "Replace container-presence forcing with semantic backend evidence: track native object/map leaves, class-only or mixed constructs, and whether every container is an ordinary object-compatible package or namespace. Preserve class dispatch for genuine package symbols and mixed diagrams. Select Diagram::Object only when the leaf and container model is wholly object-compatible. Do not change object dimensions or add fixture-specific dispatch names.",
+  "perturbation_axes": [
+    "package versus aliased package versus dotted and explicitly nested namespaces",
+    "object-only versus map-only versus object-plus-map",
+    "object-plus-class and object-plus-description mixed controls",
+    "ordinary containers versus explicit package symbols",
+    "namespace depth, siblings, reopenings, and declaration order",
+    "no links versus intra-container and cross-container links",
+    "top-to-bottom versus left-to-right",
+    "implicit versus explicit ancestor source locations"
+  ],
+  "known_counterexamples": [
+    "test-diagrams/golden/object/obj_ns_00.puml",
+    "test-diagrams/golden/object/obj_ns_01.puml",
+    "test-diagrams/golden/object/obj_ns_02.puml",
+    "test-diagrams/golden/object/obj_package.puml"
+  ],
+  "acceptance": [
+    "The four preserved object regressions are structurally equivalent through the no-oracle helper.",
+    "Fresh object/map container perturbations select the object backend and fresh mixed/package-symbol controls retain their existing backends.",
+    "Parser and renderer library suites pass.",
+    "The no-oracle object family returns to 155/155 without regressing class, component, deployment, or mixed families.",
+    "An independent checker records a verdict at the exact implementation revision."
+  ]
+}
