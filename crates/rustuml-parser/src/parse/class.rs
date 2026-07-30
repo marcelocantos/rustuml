@@ -1267,16 +1267,18 @@ impl ClassParser {
     fn try_package(&mut self, line: &str) -> bool {
         static RE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
-                r#"^((?i:package|namespace|cloud|database|folder|frame|rectangle|node))\s+(?:"([^"]+)"(?:\s+<<\s*([^>]+?)\s*>>)?\s+(?i:as)\s+([^\s#{}"]+)|([^\s#{}"]+)(?:\s+<<\s*([^>]+?)\s*>>)?\s+(?i:as)\s+"([^"]+)"|([^\s#{}"]+)(?:\s+<<\s*([^>]+?)\s*>>)?\s+(?i:as)\s+([^\s#{}"]+)|"([^"]+)"|([^\s#{}"]+))(.*?)\{\s*$"#,
+                r#"^((?i:package|namespace|cloud|database|folder|frame|rectangle|node))\s+(?:"([^"]+)"(?:\s+((?:<<\s*[^<>]+?\s*>>\s*)+))?\s+(?i:as)\s+([^\s#{}"]+)|([^\s#{}"]+)(?:\s+((?:<<\s*[^<>]+?\s*>>\s*)+))?\s+(?i:as)\s+"([^"]+)"|([^\s#{}"]+)(?:\s+((?:<<\s*[^<>]+?\s*>>\s*)+))?\s+(?i:as)\s+([^\s#{}"]+)|"([^"]+)"|([^\s#{}"]+))(.*?)\{\s*$"#,
             )
             .unwrap()
         });
         static MODIFIERS_RE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
-                r#"^\s*(?:\$[^\s{}"<>$]+(?:\s+\$[^\s{}"<>$]+)*)?\s*(?:<<\s*([^>]+?)\s*>>)?\s*(?:\$[^\s{}"<>$]+(?:\s+\$[^\s{}"<>$]+)*)?\s*(\[\[.*?\]\])?\s*(?:#([^\s{]+))?\s*$"#,
+                r#"^\s*(?:\$[^\s{}"<>$]+(?:\s+\$[^\s{}"<>$]+)*)?\s*((?:<<\s*[^<>]+?\s*>>\s*)+)?(?:\$[^\s{}"<>$]+(?:\s+\$[^\s{}"<>$]+)*)?\s*(\[\[.*?\]\])?\s*(?:#([^\s{]+))?\s*$"#,
             )
             .unwrap()
         });
+        static STEREOTYPE_RE: LazyLock<Regex> =
+            LazyLock::new(|| Regex::new(r"<<\s*([^<>]+?)\s*>>").unwrap());
 
         if let Some(caps) = RE.captures(line) {
             let Some(modifiers) = MODIFIERS_RE.captures(caps.get(13).unwrap().as_str()) else {
@@ -1331,10 +1333,16 @@ impl ClassParser {
                 (None, None)
             };
             let color = modifiers.get(3).map(|m| m.as_str().to_string());
+            // `StereotypePattern` captures the complete sequence, and
+            // `StereotypeDecoration#cutLabels` preserves every label in
+            // declaration order. Keep that sequence as package metadata
+            // before the group is materialized and pushed as current scope.
             let stereotypes = identity_stereotype
-                .or_else(|| modifiers.get(1))
-                .map(|m| vec![m.as_str().trim().to_string()])
-                .unwrap_or_default();
+                .into_iter()
+                .chain(modifiers.get(1))
+                .flat_map(|value| STEREOTYPE_RE.captures_iter(value.as_str()))
+                .map(|capture| capture[1].trim().to_string())
+                .collect::<Vec<_>>();
             let kind = match kind_str {
                 "namespace" => PackageKind::Namespace,
                 "cloud" => PackageKind::Cloud,
@@ -3342,6 +3350,50 @@ mod tests {
         assert_eq!(d.packages[1].name, "CloudCode");
         assert_eq!(d.packages[1].stereotypes, ["Platform"]);
         assert_eq!(d.packages[1].color.as_deref(), Some("aliceblue"));
+    }
+
+    #[test]
+    fn package_stereotype_sequences_preserve_group_ownership() {
+        let d = parse(
+            "package \"API\" as FallbackNode <<ObservabilityPortal>> <<AuditTrail>> {\n\
+               class RootChild\n\
+             }\n\
+             database Envelope {\n\
+               frame \"FR\" <<ApprovalWindow>> <<Beta>> as ExplicitFrame {\n\
+                 class NestedChild\n\
+               }\n\
+             }",
+        );
+
+        let fallback = d
+            .packages
+            .iter()
+            .find(|package| package.name == "FallbackNode")
+            .unwrap();
+        assert_eq!(fallback.stereotypes, ["ObservabilityPortal", "AuditTrail"]);
+        assert!(
+            d.entities
+                .iter()
+                .any(|entity| entity.id == "FallbackNode.RootChild")
+        );
+
+        let envelope_idx = d
+            .packages
+            .iter()
+            .position(|package| package.name == "Envelope")
+            .unwrap();
+        let frame = d
+            .packages
+            .iter()
+            .find(|package| package.name == "Envelope.ExplicitFrame")
+            .unwrap();
+        assert_eq!(frame.parent, Some(envelope_idx));
+        assert_eq!(frame.stereotypes, ["ApprovalWindow", "Beta"]);
+        assert!(
+            d.entities
+                .iter()
+                .any(|entity| entity.id == "Envelope.ExplicitFrame.NestedChild")
+        );
     }
 
     #[test]
