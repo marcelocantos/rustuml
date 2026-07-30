@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "mechanism": "state-themed-pseudostate-paint",
+  "status": "proposed",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "0f48128e644c380809183ab298628ec2f6aa50ee",
+  "java_locations": [
+    "src/main/resources/themes/puml-theme-minty.puml",
+    "src/main/resources/themes/puml-theme-metal.puml",
+    "net.sourceforge.plantuml.command.SkinLoader#execute",
+    "net.sourceforge.plantuml.skin.SkinParam#setParam",
+    "net.sourceforge.plantuml.style.FromSkinparamToStyle",
+    "net.sourceforge.plantuml.style.StyleSignatureBasic#matchAllImpl",
+    "net.sourceforge.plantuml.style.StyleBuilder#getMergedStyle",
+    "net.sourceforge.plantuml.svek.GeneralImageBuilder#createEntityImageBlockInternal",
+    "net.sourceforge.plantuml.svek.image.EntityImageCircleStart#getDefaultStyleDefinitionCircle",
+    "net.sourceforge.plantuml.svek.image.CircleStart#drawU",
+    "net.sourceforge.plantuml.svek.image.EntityImageCircleEnd#getDefaultStyleDefinitionCircle",
+    "net.sourceforge.plantuml.svek.image.CircleEnd#drawU",
+    "net.sourceforge.plantuml.svek.image.EntityImageBranch#getDefaultStyleDefinition",
+    "net.sourceforge.plantuml.svek.image.EntityImageBranch#drawU",
+    "net.sourceforge.plantuml.svek.image.EntityImageSynchroBar#getStyleSignature",
+    "net.sourceforge.plantuml.svek.image.EntityImageSynchroBar#drawU",
+    "net.sourceforge.plantuml.svek.image.EntityImagePseudoState#getStyleSignature",
+    "net.sourceforge.plantuml.svek.image.EntityImagePseudoState#drawU",
+    "net.sourceforge.plantuml.svek.image.EntityImageDeepHistory#EntityImageDeepHistory",
+    "net.sourceforge.plantuml.klimt.font.FontConfiguration#create",
+    "net.sourceforge.plantuml.klimt.color.HColorSet#getColor",
+    "net.sourceforge.plantuml.klimt.color.HColorGradient",
+    "net.sourceforge.plantuml.klimt.drawing.svg.DriverRectangleSvg#applyFillColor",
+    "net.sourceforge.plantuml.klimt.drawing.svg.DriverRectangleSvg#applyStrokeColor",
+    "net.sourceforge.plantuml.klimt.drawing.svg.SvgGraphics#createSvgGradient"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/preprocess/themes.rs::flatten_theme_output",
+    "crates/rustuml-render/src/sequence.rs::resolve_color",
+    "crates/rustuml-render/src/state.rs::StateSkin::from_diagram",
+    "crates/rustuml-render/src/state.rs::split_state_gradient",
+    "crates/rustuml-render/src/state.rs::state_gradients",
+    "crates/rustuml-render/src/state.rs::state_gradient_fill",
+    "crates/rustuml-render/src/state.rs::emit_state_gradient_defs",
+    "crates/rustuml-render/src/state.rs::emit_autonomous_scope_entities",
+    "crates/rustuml-render/src/state.rs::render_with_oracle",
+    "crates/rustuml-render/src/filter_registry.rs::gradient_id_for"
+  ],
+  "invariant": "PlantUML does not assign one generic state paint to all state pseudostates. GeneralImageBuilder selects a concrete image by LeafType, and each image merges its own style signature before drawing. Start and end use root.element.stateDiagram.circle.start/end. CircleStart resolves BackGroundColor and LineColor through the entity's Colors over that merged style; CircleEnd similarly uses entity-aware BackGroundColor for its inner disk and the merged LineColor for both rings. A state choice uses EntityImageBranch's root.element.activityDiagram.activity.diamond signature. A state fork or join uses EntityImageSynchroBar's root.element.activityDiagram.activityBar signature, including stereotype selection. Shallow and deep history use EntityImagePseudoState's root.element.stateDiagram.diamond signature, while their H/H* text is created separately from FontParam.STATE. FromSkinparamToStyle deliberately installs activityStartColor as generic circle.start BackGroundColor, activityEndColor as generic circle.end LineColor, activityBarColor as generic activityBar BackGroundColor, and activityDiamondBackgroundColor/activityDiamondBorderColor as generic diamond paint. Those generic declarations match the state-image signatures through StyleSignatureBasic.matchAll. stateStartColor and stateEndColor are retained legacy parameters but are not the style conversions that paint these SVEK images. Consequently the bundled minty theme paints start/end #6CC3D5, choices and history #F4A1A4 with #DB878B strokes, and bars #56CC9D; metal paints start/end #4682B4, choices and history with the #C0C0C0-#9A9A9A vertical gradient and #9A9A9A strokes, and bars #CD7F32. Metal's ordinary state uses the independent #E5E4E2-#B7B6B5 state gradient. History text uses state font configuration, yielding Verdana and the state FontColor rather than the state AttributeFontColor. Per-entity colors override start/end through Colors but are not consulted by EntityImageBranch, EntityImageSynchroBar, or EntityImagePseudoState. HColorSet preserves '-', '|', '/', and '\\\\' two-color values as HColorGradient. The SVG primitive drivers register a gradient on first paint use, deduplicate by (color1, color2, policy), and use the resulting url(#id) for ellipse, polygon, rectangle, fill, or stroke without coupling paint selection to document background transparency.",
+  "causal_divergence": "RustUML's theme preprocessor retains the source data needed for these channels, but StateSkin immediately routes stateBackgroundColor and related values through sequence::resolve_color, whose unknown-value fallback converts a two-color gradient string to #FFFFFF. The existing StateGradient registry only discovers explicit per-state fill suffixes, so theme-derived state and diamond gradients never enter <defs>. More fundamentally, both state rendering paths bypass the Java image signatures: synthetic and named start/end shapes use PSEUDO_COLOR (#222222), with the oracle-assisted fallback making an invented bg_is_transparent decision before considering stateStartColor/stateEndColor; choices fall back to the generic state fill and inconsistent hard-coded strokes; forks/joins fall back to BAR_COLOR (#555555); and history falls back to state fill/stroke. The autonomous path has the same hard-coded ownership. This loses the activity-derived diamond and bar channels that Java intentionally reuses for state pseudostates, and it incorrectly permits per-state fill to override choice, bar, and history despite those Java image classes never consulting Entity Colors. History also reuses Rust's state attribute text color and hard-codes sans-serif at 14px, whereas Java's separate FontParam.STATE path selects the theme's state FontColor, default family, and default/state font size. The transparent-background condition has no Java counterpart; style resolution is independent of page paint. The resulting geometry can remain exact while minty pseudostates stay #222222/#555555, metal gradient consumers become white, required gradient definitions disappear, themed stroke widths are reduced, and H/H* text uses the wrong color, family, size, and baseline metrics.",
+  "planned_change": "Add a state pseudostate style projection keyed by the concrete Java image signature, not by a shared state-fill bucket: circle.start, circle.end, activityDiagram.activity.diamond, activityDiagram.activityBar (with stereotype), and stateDiagram.diamond plus a separate FontParam.STATE text style. Build it from the effective parser-owned theme/skinparam stream and StyleProgram in source order using the FromSkinparamToStyle conversion ownership above, including root inheritance and explicit style declarations. Keep stateStartColor/stateEndColor as legacy parameters rather than treating them as substitutes for the activityStartColor/activityEndColor style conversions. Represent fill and stroke as typed paint (solid, transparent, or two-stop gradient with policy) until SVG emission. Extend the existing state gradient machinery into a paint-order registry that accepts theme/style paints as well as explicit ordinary-state fills, allocates ids through filter_registry on first actual primitive use, deduplicates the Java (color1, color2, policy) tuple, emits the Java policy endpoints, and returns url(#id) for fills or strokes. Apply each resolved image style consistently in both autonomous and oracle-assisted no-oracle fallbacks, including line thickness and shadow. Preserve Java's entity-color override only for start/end; choice, fork/join, and history ignore a declaration fill unless Java's corresponding image begins consuming Colors. Resolve H/H* through the state font channel and use its family-aware metrics. Remove all document-background gating from pseudostate style selection. Preserve node dimensions, layout, routing, transition-label typography, transition paint, parser identity, comparator behavior, and existing explicit gradient id seeding; do not add theme-name checks, fixture-label branches, post-hoc SVG replacement, or color constants copied from minty/metal.",
+  "research_observations": [
+    "A Java all-pseudostate metal probe emitted two gradients in paint order: #E5E4E2-#B7B6B5 for the ordinary state, then #C0C0C0-#9A9A9A shared by the choice and both history ellipses. RustUML emitted no gradients and used #FFFFFF for all four consumers.",
+    "The same minty probe emitted solid #6CC3D5 start/end channels, #F4A1A4/#DB878B choice and history paint, and #56CC9D bars. RustUML emitted #222222 start/end, #FFFFFF choice/history, and #555555 bars.",
+    "A channel-precedence Java probe with conflicting activityStartColor/stateStartColor and activityEndColor/stateEndColor painted the activity values, confirming the generic FromSkinparamToStyle conversions rather than a state-specific pseudostate lookup.",
+    "Metal history text rendered as Verdana in state FontColor #4682B4; minty history text rendered as Verdana in state FontColor #FFFFFF. RustUML used sans-serif and, for metal, state AttributeFontColor #C0C0C0."
+  ],
+  "perturbation_axes": [
+    "the same renamed all-pseudostate topology under minty and metal, separating solid and gradient themes",
+    "conflicting activityStartColor/stateStartColor and activityEndColor/stateEndColor declarations in both source orders",
+    "activity diamond and bar overrides varied independently from state background and border overrides",
+    "vertical, horizontal, and both diagonal gradient policies with repeated paints to test first-use ordering and tuple deduplication",
+    "explicit per-entity colors on start/end crossed with the same colors on choice, fork/join, and history",
+    "transparent and opaque document backgrounds with otherwise identical pseudostate styles",
+    "theme directives before and after ordinary user overrides",
+    "history font family, size, state FontColor, and state AttributeFontColor varied independently",
+    "top-to-bottom and left-to-right layouts plus nested composite scopes, proving that paint resolution is geometry-independent"
+  ],
+  "out_of_scope": [
+    "state transition-label baseline and font-family ascent",
+    "state transition arrow paint and routing",
+    "package parsing",
+    "pseudostate geometry, dimensions, ordering, and painted bounds"
+  ]
+}
