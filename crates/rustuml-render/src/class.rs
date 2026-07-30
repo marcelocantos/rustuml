@@ -5611,16 +5611,16 @@ fn layout_empty_packages(
 }
 
 fn emit_layout_empty_package(svg: &mut String, package: &EmptyPackageLayout, entity_id: &str) {
-    write!(svg, "<!--entity {}-->", escape_xml(&package.qualified_name)).unwrap();
-    write!(
-        svg,
-        r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
-        escape_xml(&package.qualified_name),
-        package.source_line,
-        entity_id,
-    )
-    .unwrap();
     if let Some(kind) = package.symbol_kind {
+        write!(svg, "<!--entity {}-->", escape_xml(&package.qualified_name)).unwrap();
+        write!(
+            svg,
+            r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{}">"#,
+            escape_xml(&package.qualified_name),
+            package.source_line,
+            entity_id,
+        )
+        .unwrap();
         match kind {
             PackageKind::Folder => emit_layout_empty_symbol_folder(svg, package),
             PackageKind::Frame => emit_layout_empty_symbol_frame(svg, package),
@@ -5722,7 +5722,6 @@ fn emit_layout_empty_package(svg: &mut String, package: &EmptyPackageLayout, ent
             },
         );
     }
-    svg.push_str("</g>");
 }
 
 fn emit_layout_empty_symbol_folder(svg: &mut String, package: &EmptyPackageLayout) {
