@@ -68,8 +68,8 @@
     }
   },
   "invariant": "Factory selection is the first complete successful Java grammar, not a declaration score. A quoted shared symbol container is accepted by both the class and description factories. With a bare entity, sequence participation remains possible only if every other line is sequence-valid; the quoted container invalidates that earlier factory, after which ClassDiagramFactory wins through CommandPackageWithUSymbol plus CommandCreateClass before DescriptionDiagramFactory can use CommandCreateElementFull. With entity {} or entity { members }, the declaration itself is class-specific through CommandCreateClass or CommandCreateClassMultilines. Therefore quoted shared containers containing any of these entity forms select CLASS, while a standalone bare entity remains SEQUENCE and genuine description/component syntax must remain DESCRIPTION.",
-  "causal_divergence": "Rust chooses one parser before parsing by additive scores. detect_uml_subtype sets has_class_factory_decl for class/enum/annotation/circle/diamond and interface declarations, but the separate entity-with-body branch only adds 15 to CLASS and never records class-factory viability; bare entity records neither. The quoted outer frame/node/cloud contributes deployment evidence and quoted_shared_deployment_containers, then the missing guard permits a post-scan +20 deployment bonus and the deployment tie-break. Rust consequently selects UmlSubtype::Deployment even though ClassParser already supports the package and entity-body data flow. parse_with_base then calls parse_deployment, whose keyword set contains both frame and entity and whose optional-brace node regex treats entity Ledger { as another deployment container; member lines are not class members on that path. The emitted semantics are DESCRIPTION. The defect is thus pre-parse factory modeling, not class body parsing or rendering.",
-  "planned_change": "Replace the declaration-name guard with declaration-form and factory-viability evidence derived from the Java command grammars. Recognize CommandCreateClass single-line forms separately from CommandCreateClassMultilines body openings, including entity in both applicable type sets and distinguishing bare, inline-empty, and multiline braces. Track earlier SequenceDiagramFactory viability for ambiguous bare entity declarations: do not globally force a standalone bare entity to CLASS, but mark sequence non-viable when a quoted CommandPackageWithUSymbol container is present. When the remaining structural lines are consumable by ClassDiagramFactory, apply Java's order and choose CLASS before DESCRIPTION instead of adding a quoted-container deployment bonus. Preserve the genuine component/description control because ClassDiagramFactory's CommandCreateElementFull2 rejects ordinary component leaves without allowmixing.",
+  "causal_divergence": "Commit 1ff38dfd repaired entity declaration-form evidence but converted it into a global shortcut: any entity declaration plus any quoted shared container promotes CLASS without checking the rest of the source. Java's ClassDiagramFactory remains viable only if every command is consumable. In the rejected controls, an ordinary component leaf is accepted by DescriptionDiagramFactory but rejected by the class-only CommandCreateElementFull2 path unless allowmixing has already enabled mixed element kinds. Java therefore rejects the class candidate and falls through to DESCRIPTION; Rust retains has_class_factory_decl from the entity and selects CLASS. The defect remains pre-parse factory modeling: declaration evidence and whole-source factory viability are conflated.",
+  "planned_change": "Retain declaration-form evidence for CommandCreateClass and CommandCreateClassMultilines, but derive a separate whole-source class_factory_viable condition. Track ordinary component leaf commands as class-factory-incompatible evidence and clear that incompatibility only when a valid allowmixing command is present, matching CommandCreateElementFull2's gate. Use class_factory_viable, rather than declaration presence alone, for the quoted shared-container class-order tie and for the later DESCRIPTION/deployment fallback. Preserve standalone bare entity as SEQUENCE, simple quoted entity containers as CLASS, quoted component controls as DESCRIPTION, and allowmixing mixed content as CLASS. Add source-order and nesting perturbations so viability cannot collapse back into a declaration score.",
   "perturbation_axes": [
     "declaration form: bare entity, inline entity {}, and multiline entity { field/method body }, each both standalone and inside the same quoted shared container",
     "earlier-factory viability: standalone bare entity expected SEQUENCE versus the identical declaration under a quoted frame/node/cloud expected CLASS",
@@ -80,12 +80,18 @@
     "source order and layout direction: declaration before/after sibling class evidence crossed with top-to-bottom/left-to-right"
   ],
   "rejected_attempt": {
-    "implementation_commit": "8895b9de317ebdac7b32ddeb99733c8b73e786a3",
-    "review": "docs/parity-reviews/class-quoted-symbol-container-dispatch/review.json",
-    "review_commit": "22cbd4904308b7b60102377be464a2782f05c4ca",
-    "result": "Rejected because quoted shared containers with an entity { ... } body still route DESCRIPTION. The implementation repaired interface evidence but did not model CommandCreateClassMultilines or entity declaration forms."
+    "implementation_commit": "1ff38dfd59e9fdf40a890024b549ade98e0cba41",
+    "review": "docs/parity-reviews/class-quoted-symbol-container-dispatch/review-followup.json",
+    "review_commit": "b5b568e9",
+    "result": "Rejected because entity evidence was treated as global class-factory viability. Fresh quoted node and cloud sources containing an ordinary component leaf route DESCRIPTION in Java but CLASS in Rust when allowmixing is absent."
   },
   "prior_rejections": [
+    {
+      "implementation_commit": "8895b9de317ebdac7b32ddeb99733c8b73e786a3",
+      "review": "docs/parity-reviews/class-quoted-symbol-container-dispatch/review.json",
+      "review_commit": "22cbd4904308b7b60102377be464a2782f05c4ca",
+      "result": "Rejected because quoted shared containers with an entity { ... } body still route DESCRIPTION. The implementation repaired interface evidence but did not model CommandCreateClassMultilines or entity declaration forms."
+    },
     {
       "implementation_commit": "09014421f785f5d251a0b28541603b6dcda7aae9",
       "review": "docs/parity-reviews/class-quoted-symbol-container-dispatch/review.json",
