@@ -48,9 +48,9 @@
     },
     {
       "path": "crates/rustuml-parser/src/parse/class.rs",
-      "symbol": "class body escaped-newline expansion",
+      "symbol": "class note escaped-newline expansion",
       "lines": "1565-1676",
-      "role": "Splits class member source on every literal backslash-n before a complete raw link token reaches the renderer."
+      "role": "Splits inline class-note Display source on every literal backslash-n before a complete raw link token reaches the renderer."
     },
     {
       "path": "crates/rustuml-render/src/class.rs",
@@ -60,8 +60,8 @@
     }
   ],
   "claimed_invariant": "Escaped Display newline controls create rows only outside raw Creole URL, math, and LaTeX blocks. Raw block bytes reach their domain parser intact. In particular, a literal backslash-n inside a URL remains in href and is normalized only when producing the SVG title.",
-  "causal_divergence": "Rust has a correct raw-mode scanner only in the state transition model. Sequence measurement/emission and class member parsing/rendering independently split on every literal backslash-n first. The shared Creole parser therefore receives a truncated `[[...]]` token in those families, even though its direct unit path handles the complete token correctly.",
-  "planned_model_change": "Extract a parser-level raw-aware Display newline splitter from the existing state model. Use it in sequence Display row measurement/emission and class body/member row expansion. Keep the raw token unchanged; hyperlink parsing and title normalization remain separate downstream responsibilities. Add parser, sequence, and class tests with renamed labels and controls both inside and outside raw blocks.",
+  "causal_divergence": "Rust has a correct raw-mode scanner only in the state transition model. Sequence measurement/emission, class note parsing, and class member rendering independently split on every literal backslash-n first. The shared Creole parser therefore receives a truncated `[[...]]` token in those families, even though its direct unit path handles the complete token correctly.",
+  "planned_model_change": "Extract a parser-level raw-aware Display newline splitter from the existing state model. Use it in sequence Display row measurement/emission, class note parsing, and class member rendering. Keep the raw token unchanged; hyperlink parsing and title normalization remain separate downstream responsibilities. Add parser, sequence, and class tests with renamed labels and controls both inside and outside raw blocks.",
   "perturbation_axes": [
     "sequence message labels versus class member labels",
     "literal backslash-n inside a URL versus outside a raw block",
