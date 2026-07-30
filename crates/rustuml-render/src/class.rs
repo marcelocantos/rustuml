@@ -14097,7 +14097,7 @@ mod tests {
         };
 
         let svg = render(&diagram, &Theme::default());
-        assert!(svg.contains(r#"fill="#ABCDEF""#), "{svg}");
+        assert!(svg.contains(r##"fill="#ABCDEF""##), "{svg}");
         assert!(
             svg.contains(r#"style="stroke:#123456;stroke-width:0.5;""#),
             "{svg}"
