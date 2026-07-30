@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-package-full-symbol-model-integration",
+  "status": "proposed",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "rust_revision": "4275bab624c02c820e28ab866b58f5db5b470b7c",
+  "parent_account": "docs/parity-reviews/class-package-symbol-cluster-ownership/account.json",
+  "java_locations": [
+    "src/main/java/net/sourceforge/plantuml/classdiagram/ClassDiagramFactory.java CommandPackageWithUSymbol is one command inside the class factory; it does not make source commands owned only by component or ArchiMate factories consumable by the class factory",
+    "src/main/java/net/sourceforge/plantuml/decoration/symbol/USymbolFolder.java:58-83 USymbolFolder retains its folder SName for style resolution",
+    "src/main/java/net/sourceforge/plantuml/svek/Cluster.java:286-295 Cluster#getDefaultStyleDefinition resolves an explicit symbol signature inside the diagram group style",
+    "src/main/java/net/sourceforge/plantuml/svek/Cluster.java:350-375 Cluster#drawU obtains one stroke from the merged group/symbol style and passes it to ClusterDecoration",
+    "src/main/java/net/sourceforge/plantuml/svek/Cluster.java:403-408 Cluster#getStrokeInternal returns an explicit line stroke or the merged style stroke"
+  ],
+  "rust_locations": [
+    "crates/rustuml-parser/src/parse/mod.rs detect_uml_subtype forces every braced symbol keyword above all other family evidence once it marks the class factory viable",
+    "crates/rustuml-render/src/class.rs uses_symbol_cluster_style changed Folder from the established package-group stroke default to the one-pixel symbol default"
+  ],
+  "evidence_inputs": [
+    "crates/rustuml-render/src/archimate.rs renamed_rectangle_groups_use_svek_clusters_and_block_skinparams",
+    "crates/rustuml-render/src/component.rs renamed_bracket_interface_and_container_share_component_symbol",
+    "crates/rustuml-render/src/class.rs no_oracle_folder_cluster_routes_symbol_styles"
+  ],
+  "invariant": "A symbol-container command contributes class-factory evidence only while the complete source remains consumable by that factory. Strong expanded ArchiMate commands and component-only bracket-interface declarations still select their own factories; a shared container keyword cannot override an incompatible child command. Once CLASS is selected, an explicit Folder USymbol uses its folder geometry but retains the established merged folder/package group stroke channel; geometry identity and default stroke thickness are independent properties.",
+  "causal_divergence": "The full-symbol implementation correctly widened the command table and concrete shapes, but its dispatch ratchet treated the presence of any valid symbol opener as proof that the entire source was class-consumable. It therefore stole an ArchiMate rectangle group and a component container with bracket-interface child. Separately, the generalized uses_symbol_cluster_style predicate assigned every new and existing concrete symbol the one-pixel default, regressing Folder's Java-equivalent 1.5-pixel cluster stroke. These are command-factory and style-ownership regressions, not defects in the new symbol geometries.",
+  "planned_change": "Keep the shared complete symbol table, but do not apply the class-factory precedence ratchet when explicit expanded ArchiMate evidence is present or when component interface evidence is present without a native non-interface class declaration. Preserve class precedence for symbol containers with actual class children and for otherwise ambiguous empty symbol containers. Restore Folder to the package-group default stroke class while retaining its Folder background/border/font skinparam prefixes and concrete folder geometry. Use the three existing fresh regression tests as executable guards and rerun the complete parser and renderer suites.",
+  "perturbation_axes": [
+    "rectangle symbol container with expanded ArchiMate elements and relations",
+    "component symbol container with bracket-interface versus native class children",
+    "folder symbol cluster with explicit Folder and Package paint channels",
+    "empty symbol containers versus containers with family-exclusive children",
+    "new symbol keywords with aliases, stereotypes, and nested classes"
+  ],
+  "scope_boundary": "This correction owns subtype precedence for cross-factory symbol keywords and Folder's cluster stroke ownership. It does not narrow the Java CommandPackageWithUSymbol keyword set, remove concrete symbol geometry, or alter package identity and stereotype parsing."
+}
