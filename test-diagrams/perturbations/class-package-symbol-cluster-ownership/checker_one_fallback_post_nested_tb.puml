@@ -1,0 +1,8 @@
+@startuml
+skinparam packageStyle database
+package OuterBox {
+  package "Inner Post" as InnerPost <<OnePost>> {
+    class InnerLeaf
+  }
+}
+@enduml

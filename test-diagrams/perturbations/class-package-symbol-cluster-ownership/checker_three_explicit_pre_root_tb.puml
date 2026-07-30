@@ -1,0 +1,5 @@
+@startuml
+frame "Three Pre" <<LayerOne>> <<LayerTwo>> <<LayerThree>> as ThreePre {
+  class TripleLeaf
+}
+@enduml

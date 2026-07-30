@@ -1,0 +1,5 @@
+@startuml
+package "Broken" <<PreOne>> as Broken $ops <<PostTwo> #Pink {
+  class BrokenLeaf
+}
+@enduml

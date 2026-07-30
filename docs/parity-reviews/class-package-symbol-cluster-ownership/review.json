@@ -1,0 +1,329 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-package-symbol-cluster-ownership",
+  "reviewer": {
+    "identity": "independent adversarial checker",
+    "model": "GPT-5 Codex",
+    "tool": "Codex desktop",
+    "independence": "Did not implement commit 30c0430d25f0be04597b48b3666e623693f5fe88, did not author account commit 5355666715c90a68f3affc6d2c788faa3f5a99d4, and did not edit production source, baselines, or predecessor review records."
+  },
+  "revisions": {
+    "checker_worktree_branch": "codex/checker-class-package-symbol-cluster-ownership",
+    "rust_revision": "30c0430d25f0be04597b48b3666e623693f5fe88",
+    "rust_tree": "e652547c9470c716a723cf01c46f62825ba5e1b2",
+    "implementation_commit": "30c0430d25f0be04597b48b3666e623693f5fe88",
+    "account_commits": [
+      "5355666715c90a68f3affc6d2c788faa3f5a99d4"
+    ],
+    "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711"
+  },
+  "binary": {
+    "path": "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one",
+    "sha256": "0a8652fa189f64e3315e00048fd0675eb0b1779fd8d4bc19f5aa8f8aa4f68b9c",
+    "mode": "--no-oracle",
+    "cargo_or_rustc_run": false,
+    "rebuilt": false
+  },
+  "oracle": {
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+    "java_jar_sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45",
+    "generation_mode": "java -Djava.awt.headless=true -jar ... -tsvg <file>",
+    "fresh_java_svg_count": 9,
+    "fresh_java_syntax_error_count": 1,
+    "source_uniqueness": "All nine fresh .puml inputs are SHA-256-unique against the pre-existing golden and perturbation corpus."
+  },
+  "commands": [
+    "git -C /tmp/rustuml-integrate-20260731a worktree add -b codex/checker-class-package-symbol-cluster-ownership /private/tmp/rustuml-checker-class-package-symbol-cluster-ownership 30c0430d25f0be04597b48b3666e623693f5fe88",
+    "shasum -a 256 /tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one",
+    "git -C /private/tmp/rustuml-checker-class-package-symbol-cluster-ownership show 53556667:docs/parity-reviews/class-package-symbol-cluster-ownership/account.json",
+    "git -C /private/tmp/rustuml-checker-class-package-symbol-cluster-ownership show --stat --patch 30c0430d25f0be04597b48b3666e623693f5fe88 -- crates/rustuml-parser/src/parse/class.rs docs/parity-reviews/class-package-symbol-cluster-ownership/account.json",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/command/CommandPackage.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/descdiagram/command/CommandPackageWithUSymbol.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/stereo/StereotypePattern.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/stereo/Stereotype.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/stereo/StereotypeDecoration.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/regex/RegexResult.java",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/regex/RegexComposed.java",
+    "rg -n -i 'class-package-symbol-cluster-ownership|followup_|checker_|include_str!|include_bytes!|golden|perturbation' crates/rustuml-parser/src/parse/class.rs crates/rustuml-render/src/class.rs crates/rustuml-layout/src/graph.rs crates/rustuml/src/main.rs",
+    "git -C /private/tmp/rustuml-checker-class-package-symbol-cluster-ownership diff --check 30c0430d25f0be04597b48b3666e623693f5fe88^..30c0430d25f0be04597b48b3666e623693f5fe88",
+    "for f in /tmp/rustuml-integrate-20260731a/test-diagrams/perturbations/class-package-style-header-separation/followup_*.puml; do /tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle \"$f\"; done",
+    "for f in /private/tmp/rustuml-checker-class-package-symbol-cluster-ownership/test-diagrams/perturbations/class-package-symbol-cluster-ownership/*.puml; do java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg \"$f\"; done",
+    "for f in /private/tmp/rustuml-checker-class-package-symbol-cluster-ownership/test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_*.puml; do if [[ \"$f\" == *negative* ]]; then continue; fi; /tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle \"$f\"; done",
+    "rg -n 'Syntax Error|An error has occured|\\[From string' test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_negative_malformed_split_stereotype.svg",
+    "tmpdir=$(mktemp -d /private/tmp/rustuml-negative-probe.XXXXXX); cp test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_negative_malformed_split_stereotype.puml \"$tmpdir/probe_negative.puml\"; printf '<svg xmlns=\"http://www.w3.org/2000/svg\"></svg>\\n' > \"$tmpdir/probe_negative.svg\"; /tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle --print-rust \"$tmpdir/probe_negative.puml\"",
+    "python3 - <<'PY' ... uniqueness check over test-diagrams/**/*.puml excluding the fresh checker files ... PY",
+    "shasum -a 256 /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar test-diagrams/perturbations/class-package-symbol-cluster-ownership/*.puml test-diagrams/perturbations/class-package-symbol-cluster-ownership/*.svg"
+  ],
+  "source_inspection": {
+    "supported": [
+      "The audited diff is narrowly scoped to ClassParser#try_package. It widens the identity and modifier regexes and concatenates identity-slot and trailing-slot stereotypes into one Rust vector; there is no renderer-side repair, no fixture-name branching, and no new numeric layout constants.",
+      "The original five preserved follow-up inputs from class-package-style-header-separation now all pass exactly under the no-oracle helper, so the narrow two-trailing-stereotype ownership bug that motivated the account is genuinely fixed.",
+      "Static review found no test-diagram reads, include_str/include_bytes additions, comparator changes, or coordinate-keyed SVG surgery in the audited implementation diff."
+    ],
+    "disproven": [
+      "The account's claim that Java semantics preserve every visible stereotype across both the pre-AS identity slot and the trailing post-identity slot is false. In Java, CommandPackageWithUSymbol stores those captures under different names (STEREOTYPE1/2/3 and STEREOTYPE), while RegexResult#getLazzy returns the first prefix-matching capture and RegexComposed#createPartialMatch stores matches in a HashMap. Java does not concatenate both slots into one stereotype string.",
+      "The mixed explicit split held-out checker_three_explicit_split_root_lr shows the consequence directly: Java renders only the trailing stereotype <<East>> above the title Split Explicit, while Rust renders <<North>>, <<South>>, and <<East>>, enlarging the cluster and changing text order.",
+      "The mixed fallback split held-out checker_three_fallback_split_nested_tb disproves the blanket canonical-path invariant. Java's cluster and leaf are qualified as Host.Split Fallback and Host.Split Fallback.SplitLeaf, while Rust qualifies them as Host.SplitFallback and Host.SplitFallback.SplitLeaf."
+    ]
+  },
+  "preserved_followups": [
+    {
+      "path": "test-diagrams/perturbations/class-package-style-header-separation/followup_cloud_tb_root_nested_mix.puml",
+      "valid": true,
+      "outcome": "pass"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-header-separation/followup_database_lr_nested_root_mix.puml",
+      "valid": true,
+      "outcome": "pass"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-header-separation/followup_frame_tb_root_nested_mix.puml",
+      "valid": true,
+      "outcome": "pass"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-header-separation/followup_node_tb_root_explicit_mix.puml",
+      "valid": true,
+      "outcome": "pass"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-style-header-separation/followup_rectangle_lr_alias_nested_mix.puml",
+      "valid": true,
+      "outcome": "pass"
+    }
+  ],
+  "inputs": [
+    {
+      "path": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_zero_fallback_root_tags_url_color_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_zero_fallback_root_tags_url_color_tb.svg",
+      "valid": true,
+      "axes": [
+        "zero stereotypes",
+        "packageStyle fallback",
+        "root",
+        "tags plus URL plus color ordering",
+        "top-to-bottom"
+      ],
+      "outcome": "pass"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_one_explicit_pre_root_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_one_explicit_pre_root_tb.svg",
+      "valid": true,
+      "axes": [
+        "one stereotype",
+        "pre-AS placement",
+        "explicit symbol",
+        "root",
+        "top-to-bottom"
+      ],
+      "outcome": "pass"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_one_fallback_post_nested_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_one_fallback_post_nested_tb.svg",
+      "valid": true,
+      "axes": [
+        "one stereotype",
+        "post-identity placement",
+        "packageStyle fallback",
+        "nested",
+        "top-to-bottom"
+      ],
+      "outcome": "pass"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_two_fallback_post_root_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_two_fallback_post_root_lr.svg",
+      "valid": true,
+      "axes": [
+        "two stereotypes",
+        "post-identity placement",
+        "packageStyle fallback",
+        "root",
+        "left-to-right"
+      ],
+      "outcome": "pass"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_two_explicit_pre_nested_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_two_explicit_pre_nested_lr.svg",
+      "valid": true,
+      "axes": [
+        "two stereotypes",
+        "pre-AS placement",
+        "explicit symbol",
+        "nested",
+        "left-to-right"
+      ],
+      "outcome": "pass"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_three_explicit_pre_root_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_three_explicit_pre_root_tb.svg",
+      "valid": true,
+      "axes": [
+        "three stereotypes",
+        "pre-AS placement",
+        "explicit symbol",
+        "root",
+        "top-to-bottom"
+      ],
+      "outcome": "pass"
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_three_explicit_split_root_lr.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_three_explicit_split_root_lr.svg",
+      "valid": true,
+      "axes": [
+        "three stereotypes",
+        "split pre-AS plus post-identity placement",
+        "explicit symbol",
+        "root",
+        "left-to-right",
+        "tag plus trailing color ordering"
+      ],
+      "outcome": "fail: Java renders only the trailing stereotype <<East>> above the title Split Explicit, while Rust renders all three stereotype labels and expands the cloud cluster."
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_three_fallback_split_nested_tb.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_three_fallback_split_nested_tb.svg",
+      "valid": true,
+      "axes": [
+        "three stereotypes",
+        "split pre-AS plus post-identity placement",
+        "packageStyle fallback",
+        "nested",
+        "URL plus color ordering",
+        "top-to-bottom"
+      ],
+      "outcome": "fail: Java qualifies the group and child as Host.Split Fallback and Host.Split Fallback.SplitLeaf, while Rust uses the alias path Host.SplitFallback and Host.SplitFallback.SplitLeaf."
+    },
+    {
+      "path": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_negative_malformed_split_stereotype.puml",
+      "java_svg": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_negative_malformed_split_stereotype.svg",
+      "valid": false,
+      "axes": [
+        "malformed trailing stereotype",
+        "split pre-AS plus post-identity placement",
+        "invalid syntax negative control"
+      ],
+      "java_outcome": "syntax error page; line 3 is flagged in the generated Java SVG",
+      "rust_probe_outcome": "fail-open: when paired with a synthetic placeholder SVG so the helper would parse the source, Rust rendered BrokenLeaf as a top-level class and silently discarded the malformed package opener."
+    }
+  ],
+  "result_counts": {
+    "preserved_followups_total": 5,
+    "preserved_followups_passed": 5,
+    "fresh_inputs_total": 9,
+    "fresh_valid_inputs": 8,
+    "fresh_valid_passed": 6,
+    "fresh_valid_failed": 2,
+    "fresh_java_syntax_errors": 1,
+    "invalid_rust_fail_open_probes": 1,
+    "oracle_errors": 0
+  },
+  "findings": [
+    {
+      "severity": "rejecting",
+      "summary": "The account overgeneralizes from the original trailing-two-stereotype bug to mixed-slot syntax that Java does not model the same way.",
+      "evidence": "checker_three_explicit_split_root_lr is a valid fresh counterexample. Java renders only <<East>> above Split Explicit, while Rust merges both identity-slot stereotypes and the trailing stereotype into one sequence. That mismatch changes cluster height, path geometry, and text order."
+    },
+    {
+      "severity": "rejecting",
+      "summary": "The account's canonical ownership claim is false for mixed-slot package syntax.",
+      "evidence": "checker_three_fallback_split_nested_tb is a valid fresh counterexample. Java qualifies the nested group as Host.Split Fallback, but Rust qualifies it as Host.SplitFallback. A valid failing counterexample alone rejects the change under the T14 rules."
+    },
+    {
+      "severity": "rejecting",
+      "summary": "Invalid mixed-slot syntax still fails open on the Rust side.",
+      "evidence": "checker_negative_malformed_split_stereotype produces a Java syntax-error SVG, but a helper probe with a synthetic placeholder golden shows Rust rendering BrokenLeaf as a top-level class after discarding the malformed opener. That is precisely the kind of over-acceptance the user asked this review to search for."
+    },
+    {
+      "severity": "informational",
+      "summary": "The narrow ownership repair that motivated the account is real.",
+      "evidence": "All five preserved class-package-style-header-separation follow-ups that previously failed because a two-trailing-stereotype opener disappeared now pass exactly under the no-oracle helper."
+    },
+    {
+      "severity": "informational",
+      "summary": "No fixture-shaped logic or unexplained numeric tuning was found in the audited implementation diff.",
+      "evidence": "The diff changes only parser regexes and stereotype extraction. git diff --check is clean, and searches across the changed files found no held-out filenames, mechanism-name strings, test-diagram reads, include_str/include_bytes additions, or comparator manipulation."
+    }
+  ],
+  "artifact_hashes": {
+    "helper": {
+      "path": "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one",
+      "sha256": "0a8652fa189f64e3315e00048fd0675eb0b1779fd8d4bc19f5aa8f8aa4f68b9c"
+    },
+    "java_jar": {
+      "path": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar",
+      "sha256": "c4d7d78bf9bc1145299d02f648d7895d4056dc262a091d25c91714dec0478d45"
+    },
+    "fresh_pairs": [
+      {
+        "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_zero_fallback_root_tags_url_color_tb.puml",
+        "source_sha256": "79446d37fe2bb6dc137e07e747be7f797cde34b57be10ff7af2e53b2f2eb47d5",
+        "java_svg": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_zero_fallback_root_tags_url_color_tb.svg",
+        "java_svg_sha256": "f2fadacf5ee44f7076b450eaef7dfef870ac13af8142d6d42c060db55370e118"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_one_explicit_pre_root_tb.puml",
+        "source_sha256": "06e33feb5ba6f339b043b983bf594095854747527a78c46bd0cf42e3681838e8",
+        "java_svg": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_one_explicit_pre_root_tb.svg",
+        "java_svg_sha256": "fc84224b8610fe47c668fa474450463f6d5136e8ce3449ac5d15f3ff45afe95f"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_one_fallback_post_nested_tb.puml",
+        "source_sha256": "3a0f3a7d5756470ab36189914b7996b547204357b3064f21be09cae3dc9771fa",
+        "java_svg": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_one_fallback_post_nested_tb.svg",
+        "java_svg_sha256": "3d03c331d8849762b2a760bc4e942a5accebe6355220794df32c35a5c2ec8a6c"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_two_fallback_post_root_lr.puml",
+        "source_sha256": "d2039cebe759f521395361c9704b3448e25e44cf1fe577323b23fcf4e0eae271",
+        "java_svg": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_two_fallback_post_root_lr.svg",
+        "java_svg_sha256": "ca30b94b858762ccda5010b7bae93e080a748e52190239f2f6b014e362b6468c"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_two_explicit_pre_nested_lr.puml",
+        "source_sha256": "9ee118a71365ce1f34e042a504f9faf24a3027b8bbb01e5de58b793ceec8f208",
+        "java_svg": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_two_explicit_pre_nested_lr.svg",
+        "java_svg_sha256": "260b574cfc7e8a8f0629b5e14816e21ec2466e05f6baaba05899639cf0ede7cf"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_three_explicit_pre_root_tb.puml",
+        "source_sha256": "43a257b1f224f8c471ea8c163a128c7098d3ce472a0dd8407ed78715ccaac2ac",
+        "java_svg": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_three_explicit_pre_root_tb.svg",
+        "java_svg_sha256": "6fa609cb7768bdcfbcb6597da4387fa4f012deab74b0595287a0b6fde3da9aec"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_three_explicit_split_root_lr.puml",
+        "source_sha256": "19793e3135b1574138e6a387b1b7e305e26d3e3873906178ab3d753bd0f12efb",
+        "java_svg": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_three_explicit_split_root_lr.svg",
+        "java_svg_sha256": "045a2f575427c469bdc1600d95e98f05a02cfd0fae5fdceecf8fa33218573e73"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_three_fallback_split_nested_tb.puml",
+        "source_sha256": "3c70691dc67ba9c50302d194effef9c948953a4f6817505878c699ccfbd1039e",
+        "java_svg": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_three_fallback_split_nested_tb.svg",
+        "java_svg_sha256": "1415f883e54526601f9d4b8dc9c5e05f2be60b4c96c2412e25d54d2f343442d2"
+      },
+      {
+        "source": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_negative_malformed_split_stereotype.puml",
+        "source_sha256": "dfa5b14281e9b8555d63c87ad0f18ff74f5c2c7d683988eb33ea8cf33999f3e2",
+        "java_svg": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/checker_negative_malformed_split_stereotype.svg",
+        "java_svg_sha256": "26ff429511d73f5443c677e3ff0baab17bf3f6a6a7f32204acbbd024eea1ddd5"
+      }
+    ]
+  },
+  "artifacts": {
+    "held_out_directory": "test-diagrams/perturbations/class-package-symbol-cluster-ownership/",
+    "review": "docs/parity-reviews/class-package-symbol-cluster-ownership/review.json",
+    "production_files_modified": false,
+    "baselines_modified": false,
+    "existing_review_records_modified": false,
+    "rust_svgs_preserved": false
+  },
+  "verdict": "REJECT"
+}

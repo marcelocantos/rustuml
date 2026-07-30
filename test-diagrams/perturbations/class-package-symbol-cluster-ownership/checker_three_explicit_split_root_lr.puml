@@ -1,0 +1,7 @@
+@startuml
+left to right direction
+cloud "Split Explicit" <<North>> <<South>> as SplitExplicit $ops <<East>> #Thistle {
+  class SplitA
+  class SplitB
+}
+@enduml
