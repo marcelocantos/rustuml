@@ -4728,6 +4728,9 @@ fn add_package_clusters_to_layout(
         let (shape_width, shape_height) = match pkg.kind {
             ComponentPackageKind::Node => (60.0, 5.0),
             ComponentPackageKind::Database => (0.0, 15.0),
+            // Java `USymbolStorage` and `USymbolArtifact` inherit the base
+            // zero ClusterHeader supplement; their symbol detail is paint-only.
+            ComponentPackageKind::Storage | ComponentPackageKind::Artifact => (0.0, 0.0),
             _ => (0.0, 0.0),
         };
         // Java `ClusterHeader` merges stereotype and title vertically,
@@ -4936,6 +4939,31 @@ fn package_kind_for_qname(
     walk(packages, "", qname)
 }
 
+fn component_cluster_painted_max(
+    kind: Option<ComponentPackageKind>,
+    width: f64,
+    height: f64,
+) -> (f64, f64, f64) {
+    if matches!(kind, Some(ComponentPackageKind::Cloud)) {
+        let (_, _, path_max_x, path_max_y) = crate::cloud_shape::generate(width, height).bounds();
+        return (path_max_x, path_max_y, SVEK_CANVAS_PAD);
+    }
+
+    let pad = match kind {
+        Some(ComponentPackageKind::Package | ComponentPackageKind::Folder) => 15.0,
+        Some(ComponentPackageKind::Node | ComponentPackageKind::Database) => 25.0,
+        _ => SVEK_CANVAS_PAD,
+    };
+    let shape_max_x = if matches!(kind, Some(ComponentPackageKind::Artifact)) {
+        // Java `LimitFinder.drawUPolygon` expands the folded-page polygon ten
+        // pixels in X, ending five pixels past the solved body rectangle.
+        width + 5.0
+    } else {
+        width
+    };
+    (shape_max_x, height, pad)
+}
+
 fn component_cluster_frame(
     packages: &[ComponentPackage],
     cluster_positions: &[ClusterPosition],
@@ -4978,6 +5006,11 @@ fn component_cluster_frame(
                 // `USymbolDatabase.drawDatabase` appends `UEmpty(10,10)` at
                 // its lower-right corner.
                 (SVEK_CLUSTER_ORIGIN, SVEK_CLUSTER_ORIGIN)
+            }
+            ComponentPackageKind::Storage | ComponentPackageKind::Artifact => {
+                // `LimitFinder` expands both symbols' outer URectangle to
+                // (-1,-1), so `SvekResult` translates their body origin to 7.
+                (MARGIN, MARGIN)
             }
             ComponentPackageKind::Cloud => {
                 let (min_x, min_y) =
@@ -5712,18 +5745,8 @@ fn compute_no_oracle_canvas(input: NoOracleCanvas<'_>) -> (f64, f64) {
     }
     for cluster in input.cluster_positions {
         let kind = package_kind_for_qname(input.packages, &cluster.id);
-        let (shape_max_x, shape_max_y, pad) = if matches!(kind, Some(ComponentPackageKind::Cloud)) {
-            let (_, _, path_max_x, path_max_y) =
-                crate::cloud_shape::generate(cluster.width, cluster.height).bounds();
-            (path_max_x, path_max_y, SVEK_CANVAS_PAD)
-        } else {
-            let pad = match kind {
-                Some(ComponentPackageKind::Package | ComponentPackageKind::Folder) => 15.0,
-                Some(ComponentPackageKind::Node | ComponentPackageKind::Database) => 25.0,
-                _ => SVEK_CANVAS_PAD,
-            };
-            (cluster.width, cluster.height, pad)
-        };
+        let (shape_max_x, shape_max_y, pad) =
+            component_cluster_painted_max(kind, cluster.width, cluster.height);
         total_w = total_w.max(cluster.x + shape_max_x + pad);
         total_h = total_h.max(cluster.y + shape_max_y + pad);
     }
@@ -7574,6 +7597,12 @@ fn emit_layout_package_cluster(
         ComponentPackageKind::Database => {
             emit_layout_database_cluster(svg, pos, &pkg.label, pkg.stereotype.as_deref(), &fill);
         }
+        ComponentPackageKind::Storage => {
+            emit_layout_storage_cluster(svg, pos, &pkg.label, pkg.stereotype.as_deref(), &fill);
+        }
+        ComponentPackageKind::Artifact => {
+            emit_layout_artifact_cluster(svg, pos, &pkg.label, pkg.stereotype.as_deref(), &fill);
+        }
         _ => {
             emit_layout_rectangle_cluster(svg, pos, &pkg.label, None, &fill);
         }
@@ -7587,6 +7616,8 @@ fn emit_layout_package_cluster(
                 | ComponentPackageKind::Node
                 | ComponentPackageKind::Cloud
                 | ComponentPackageKind::Database
+                | ComponentPackageKind::Storage
+                | ComponentPackageKind::Artifact
         )
     {
         let label = format!("\u{00AB}{stereo}\u{00BB}");
@@ -7821,6 +7852,89 @@ fn emit_layout_rectangle_cluster(
         },
     );
     svg.raw(&text_buf);
+}
+
+fn emit_layout_usymbol_cluster_text(
+    svg: &mut SvgBuilder,
+    pos: &ClusterPosition,
+    label: &str,
+    stereotype: Option<&str>,
+    stereotype_top: f64,
+    title_top: f64,
+) {
+    let stereotype_height = if let Some(stereotype) = stereotype {
+        let text = format!("\u{00AB}{stereotype}\u{00BB}");
+        let width = text_render::measure_no_underline(&text, FONT_SIZE, false);
+        let mut text_buf = String::new();
+        text_render::emit_text(
+            &mut text_buf,
+            &text,
+            &TextBase {
+                x: pos.x + (pos.width - width) / 2.0,
+                y: pos.y + stereotype_top + pm::ascent(FONT_SIZE),
+                font_size: FONT_SIZE as u32,
+                font_family: "sans-serif",
+                fill: TEXT_COLOR,
+                bold: false,
+                italic: true,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        svg.raw(&text_buf);
+        text_render::label_height(&text, FONT_SIZE)
+    } else {
+        0.0
+    };
+
+    let title_width = text_render::measure_no_underline(label, FONT_SIZE, true);
+    let mut title_buf = String::new();
+    text_render::emit_text(
+        &mut title_buf,
+        label,
+        &TextBase {
+            x: pos.x + (pos.width - title_width) / 2.0,
+            y: pos.y + title_top + stereotype_height + pm::ascent(FONT_SIZE),
+            font_size: FONT_SIZE as u32,
+            font_family: "sans-serif",
+            fill: TEXT_COLOR,
+            bold: true,
+            italic: false,
+            underline: false,
+            skip_underline: false,
+        },
+    );
+    svg.raw(&title_buf);
+}
+
+fn emit_layout_storage_cluster(
+    svg: &mut SvgBuilder,
+    pos: &ClusterPosition,
+    label: &str,
+    stereotype: Option<&str>,
+    fill: &str,
+) {
+    // Java `USymbolStorage.asBig` paints a round-70 rectangle and places
+    // stereotype/title blocks at y=5 and y=7+stereotype-height.
+    crate::deployment::emit_storage_with_stroke_width(
+        svg, pos.x, pos.y, pos.width, pos.height, fill, "#181818", 1.0,
+    );
+    emit_layout_usymbol_cluster_text(svg, pos, label, stereotype, 5.0, 7.0);
+}
+
+fn emit_layout_artifact_cluster(
+    svg: &mut SvgBuilder,
+    pos: &ClusterPosition,
+    label: &str,
+    stereotype: Option<&str>,
+    fill: &str,
+) {
+    // Java `USymbolArtifact.asBig` paints the folded-page symbol over the
+    // solved cluster body and starts both text blocks at y=2.
+    crate::deployment::emit_artifact_with_stroke_width(
+        svg, pos.x, pos.y, pos.width, pos.height, fill, "#181818", 1.0,
+    );
+    emit_layout_usymbol_cluster_text(svg, pos, label, stereotype, 2.0, 2.0);
 }
 
 fn emit_layout_frame_cluster(
@@ -9790,6 +9904,71 @@ mod tests {
             svg.matches("<line ").count(),
             3,
             "USymbolNode should emit its fold and inner corner lines: {svg}"
+        );
+    }
+
+    #[test]
+    fn component_backed_storage_and_artifact_clusters_keep_usymbols() {
+        let input = "@startuml\n\
+                     left to right direction\n\
+                     storage \"Durable Vault 5101\" as Vault5101 <<durable_5103>> #LightBlue {\n\
+                       artifact \"Receipt Bundle 5107\" as Receipts5107 {\n\
+                         component \"Inner Worker 5113\" as Inner5113\n\
+                       }\n\
+                     }\n\
+                     component \"Audit Peer 5119\" as Peer5119\n\
+                     Vault5101 --> Peer5119 : grants\n\
+                     @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Component(component) = &diagram else {
+            panic!("expected the component-backed DESCRIPTION path");
+        };
+        assert_eq!(
+            component.packages[0].kind,
+            super::ComponentPackageKind::Storage
+        );
+        assert_eq!(
+            component.packages[0].packages[0].kind,
+            super::ComponentPackageKind::Artifact
+        );
+
+        let svg = crate::render_svg(&diagram);
+        let storage_start = svg.find("<!--cluster Vault5101-->").unwrap();
+        let artifact_start = svg.find("<!--cluster Receipts5107-->").unwrap();
+        let storage = &svg[storage_start..artifact_start];
+        let artifact = &svg[artifact_start..svg.find("<!--entity Inner5113-->").unwrap()];
+
+        assert!(
+            storage.contains(r#"rx="35" ry="35" style="stroke:#181818;stroke-width:1;""#),
+            "storage must use USymbolStorage's rounded body: {storage}"
+        );
+        assert!(
+            !storage.contains("<path "),
+            "storage must not inherit the database cylinder: {storage}"
+        );
+        assert!(
+            artifact.contains("<polygon ") && artifact.matches("<line ").count() == 2,
+            "artifact must retain the folded-page glyph: {artifact}"
+        );
+    }
+
+    #[test]
+    fn artifact_cluster_canvas_uses_limitfinder_polygon_overscan() {
+        assert_eq!(
+            super::component_cluster_painted_max(
+                Some(super::ComponentPackageKind::Storage),
+                120.0,
+                80.0
+            ),
+            (120.0, 80.0, super::SVEK_CANVAS_PAD)
+        );
+        assert_eq!(
+            super::component_cluster_painted_max(
+                Some(super::ComponentPackageKind::Artifact),
+                120.0,
+                80.0
+            ),
+            (125.0, 80.0, super::SVEK_CANVAS_PAD)
         );
     }
 

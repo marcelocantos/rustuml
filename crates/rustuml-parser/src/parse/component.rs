@@ -89,15 +89,17 @@ fn parse_container_label(kw: &str, rest: &str) -> (String, String) {
 
 fn component_package_kind(kw: &str) -> ComponentPackageKind {
     match kw {
+        "artifact" => ComponentPackageKind::Artifact,
         "cloud" => ComponentPackageKind::Cloud,
         "component" => ComponentPackageKind::Component,
-        "database" | "storage" => ComponentPackageKind::Database,
+        "database" => ComponentPackageKind::Database,
         "folder" => ComponentPackageKind::Folder,
         "frame" => ComponentPackageKind::Frame,
         "node" => ComponentPackageKind::Node,
         "package" => ComponentPackageKind::Package,
         "queue" => ComponentPackageKind::Queue,
-        "rectangle" | "boundary" | "control" | "entity" | "collections" | "actor" | "artifact" => {
+        "storage" => ComponentPackageKind::Storage,
+        "rectangle" | "boundary" | "control" | "entity" | "collections" | "actor" => {
             ComponentPackageKind::Rectangle
         }
         _ => ComponentPackageKind::Rectangle,
@@ -1130,6 +1132,26 @@ mod tests {
         assert!(d.components.iter().any(|c| c.id == "X"));
         assert!(d.components.iter().any(|c| c.id == "Y"));
         assert_eq!(d.connections.len(), 1);
+    }
+
+    #[test]
+    fn storage_and_artifact_containers_retain_their_usymbol_identity() {
+        let d = parse(
+            "storage \"Durable Archive\" as Archive <<durable>> #LightBlue {\n\
+               artifact \"Receipt Bundle\" as Receipts {\n\
+                 component Worker\n\
+               }\n\
+             }",
+        );
+
+        assert_eq!(d.packages[0].name, "Archive");
+        assert_eq!(d.packages[0].kind, ComponentPackageKind::Storage);
+        assert_eq!(d.packages[0].stereotype.as_deref(), Some("durable"));
+        assert_eq!(d.packages[0].packages[0].name, "Receipts");
+        assert_eq!(
+            d.packages[0].packages[0].kind,
+            ComponentPackageKind::Artifact
+        );
     }
 
     #[test]

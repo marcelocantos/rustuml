@@ -1421,7 +1421,7 @@ pub(crate) fn emit_artifact(
 }
 
 #[allow(clippy::too_many_arguments)]
-fn emit_artifact_with_stroke_width(
+pub(crate) fn emit_artifact_with_stroke_width(
     svg: &mut SvgBuilder,
     x: f64,
     y: f64,
@@ -1950,7 +1950,7 @@ fn emit_storage(svg: &mut SvgBuilder, x: f64, y: f64, w: f64, h: f64, fill: &str
 }
 
 #[allow(clippy::too_many_arguments)]
-fn emit_storage_with_stroke_width(
+pub(crate) fn emit_storage_with_stroke_width(
     svg: &mut SvgBuilder,
     x: f64,
     y: f64,

@@ -181,6 +181,7 @@ pub struct ComponentPackage {
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default, Serialize, Deserialize)]
 pub enum ComponentPackageKind {
+    Artifact,
     Cloud,
     Component,
     Database,
@@ -189,6 +190,7 @@ pub enum ComponentPackageKind {
     Node,
     Package,
     Queue,
+    Storage,
     #[default]
     Rectangle,
 }
