@@ -324,9 +324,9 @@ const SYMBOL_CLUSTER_STROKE_WIDTH: &str = "1";
 /// Java `USymbolDatabase.suppHeightBecauseOfShape()` reserves 15px above the
 /// ordinary cluster title so the title sits below the cylinder's top ellipse.
 const DATABASE_CLUSTER_TITLE_EXTRA: f64 = 15.0;
-/// `USymbolDatabase.asBig()` translates the title 20px below the ordinary
-/// package-title baseline.
-const DATABASE_CLUSTER_TITLE_OFFSET: f64 = 20.0;
+/// Java `USymbolDatabase.asBig()` starts its stereotype/title stack at
+/// `2 + 20` inside the symbol.
+const DATABASE_CLUSTER_CONTENT_TOP: f64 = 22.0;
 /// `USymbolDatabase.drawDatabase()` emits `UEmpty(10, 10)` at the shape's
 /// lower-right corner, extending the SVEK painted envelope on both axes.
 const DATABASE_CLUSTER_ENVELOPE_EXTRA: f64 = 10.0;
@@ -340,10 +340,18 @@ const NODE_CLUSTER_TITLE_HEIGHT_EXTRA: f64 = 5.0;
 const NODE_CLUSTER_ENVELOPE_X_EXTRA: f64 = 10.0;
 const NODE_CLUSTER_ENVELOPE_Y_EXTRA: f64 = 10.0;
 const NODE_BEVEL: f64 = 10.0;
+/// Java `USymbolNode.asBig()` translates by +11 vertically and then starts
+/// its stereotype/title stack at y=2.
+const NODE_CLUSTER_CONTENT_TOP: f64 = 13.0;
 const FRAME_TITLE_CORNER: f64 = 10.0;
-/// Java `USymbolCloud.asBig()` draws the title at y=13 within the symbol;
-/// the title text block's 14px bold baseline is another 13.5352px below it.
-const CLOUD_TITLE_BASELINE: f64 = 26.5352;
+/// Java `USymbolFrame.asBig()` paints the title at y=1 and starts the
+/// stereotype at `2 + getYpos(title)`, where `getYpos` adds three pixels.
+const FRAME_CLUSTER_TITLE_TOP: f64 = 1.0;
+const FRAME_CLUSTER_STEREOTYPE_TOP_EXTRA: f64 = 5.0;
+/// Java `USymbolRectangle.asBig()` starts its stereotype/title stack at y=2.
+const RECTANGLE_CLUSTER_CONTENT_TOP: f64 = 2.0;
+/// Java `USymbolCloud.asBig()` starts its stereotype/title stack at y=13.
+const CLOUD_CLUSTER_CONTENT_TOP: f64 = 13.0;
 /// Package cluster canvases use the full SVEK body side extent (left 6 plus
 /// right-side stroke/body slack) rather than the single-entity 13px formula.
 /// Provenance: Java `SvekResult.drawU` normalises the body at x/y=6 before
@@ -2351,9 +2359,9 @@ fn render_with_oracle_uid_origin(
             &package_cluster_id(idx),
             parent.as_deref(),
             ClusterTitleSize {
-                width: (text_render::measure_no_underline(label, FONT_SIZE, true)
-                    + title_width_extra)
-                    .max(stereotype_width),
+                width: text_render::measure_no_underline(label, FONT_SIZE, true)
+                    .max(stereotype_width)
+                    + title_width_extra,
                 height: text_render::label_height(label, FONT_SIZE)
                     + title_height_extra
                     + stereotype_height,
@@ -6492,14 +6500,12 @@ fn emit_layout_frame_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
         cluster.stroke_width,
     )
     .unwrap();
-    emit_layout_symbol_cluster_title(svg, cluster, x + 3.0, y + PACKAGE_TITLE_BASELINE - 1.0);
+    emit_layout_frame_cluster_title(svg, cluster);
 }
 
 fn emit_layout_rectangle_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
     let x = cluster.x;
     let y = cluster.y;
-    let label_w = text_render::measure_no_underline(&cluster.label, FONT_SIZE, true);
-
     // Java `USymbolRectangle.asBig()` delegates to `drawRect()` and centres
     // the title independently of the stereotype block.
     write!(
@@ -6515,12 +6521,7 @@ fn emit_layout_rectangle_cluster(svg: &mut String, cluster: &LayoutPackageCluste
         fmt4(y),
     )
     .unwrap();
-    emit_layout_symbol_cluster_title(
-        svg,
-        cluster,
-        x + (cluster.width - label_w) / 2.0,
-        y + PACKAGE_TITLE_BASELINE,
-    );
+    emit_layout_symbol_cluster_title_stack(svg, cluster, 0.0, y + RECTANGLE_CLUSTER_CONTENT_TOP);
 }
 
 fn emit_layout_node_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
@@ -6529,8 +6530,6 @@ fn emit_layout_node_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
     let right = x + cluster.width;
     let front_right = right - NODE_BEVEL;
     let bottom = y + cluster.height;
-    let label_w = text_render::measure_no_underline(&cluster.label, FONT_SIZE, true);
-
     // Java `USymbolNode.asBig()` delegates to `drawNode()`: a bevelled
     // polygon followed by the top-right diagonal, front top, and front side.
     write!(
@@ -6589,12 +6588,7 @@ fn emit_layout_node_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
         fmt4(bottom),
     )
     .unwrap();
-    emit_layout_symbol_cluster_title(
-        svg,
-        cluster,
-        x - 4.0 + (cluster.width - label_w) / 2.0,
-        y + PACKAGE_TITLE_BASELINE + 11.0,
-    );
+    emit_layout_symbol_cluster_title_stack(svg, cluster, -4.0, y + NODE_CLUSTER_CONTENT_TOP);
 }
 
 #[derive(Clone, Copy)]
@@ -6881,32 +6875,100 @@ fn emit_layout_cloud_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
     )
     .unwrap();
 
-    let label_w = text_render::measure_no_underline(&cluster.label, FONT_SIZE, true);
-    emit_layout_symbol_cluster_title(
+    emit_layout_symbol_cluster_title_stack(
         svg,
         cluster,
-        cluster.x + (cluster.width - label_w) / 2.0,
-        cluster.y + CLOUD_TITLE_BASELINE,
+        0.0,
+        cluster.y + CLOUD_CLUSTER_CONTENT_TOP,
     );
 }
 
-fn emit_layout_symbol_cluster_title(
+fn emit_layout_symbol_cluster_title_stack(
     svg: &mut String,
     cluster: &LayoutPackageCluster,
-    x: f64,
-    y: f64,
+    center_offset: f64,
+    content_top: f64,
 ) {
+    let mut preceding_height = 0.0;
+    for stereotype in &cluster.stereotype_lines {
+        let width = text_render::measure_no_underline(stereotype, FONT_SIZE, false);
+        text_render::emit_text(
+            svg,
+            stereotype,
+            &TextBase {
+                x: cluster.x + center_offset + (cluster.width - width) / 2.0,
+                y: content_top
+                    + preceding_height
+                    + text_render::label_ascent(stereotype, FONT_SIZE),
+                font_size: FONT_SIZE as u32,
+                font_family: "sans-serif",
+                fill: &cluster.font_fill,
+                bold: false,
+                italic: true,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        preceding_height += text_render::label_height(stereotype, FONT_SIZE);
+    }
+
     let label_w = text_render::measure_no_underline(&cluster.label, FONT_SIZE, true);
     write!(
         svg,
         r#"<text fill="{}" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
         cluster.font_fill,
         fmt4(label_w),
-        fmt4(x),
-        fmt4(y),
+        fmt4(cluster.x + center_offset + (cluster.width - label_w) / 2.0),
+        fmt4(
+            content_top
+                + preceding_height
+                + text_render::label_ascent(&cluster.label, FONT_SIZE),
+        ),
         escape_xml(&cluster.label),
     )
     .unwrap();
+}
+
+fn emit_layout_frame_cluster_title(svg: &mut String, cluster: &LayoutPackageCluster) {
+    let label_width = text_render::measure_no_underline(&cluster.label, FONT_SIZE, true);
+    let label_baseline =
+        cluster.y + FRAME_CLUSTER_TITLE_TOP + text_render::label_ascent(&cluster.label, FONT_SIZE);
+    write!(
+        svg,
+        r#"<text fill="{}" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
+        cluster.font_fill,
+        fmt4(label_width),
+        fmt4(cluster.x + 3.0),
+        fmt4(label_baseline),
+        escape_xml(&cluster.label),
+    )
+    .unwrap();
+
+    let mut preceding_height = 0.0;
+    let stereotype_top = cluster.y
+        + FRAME_CLUSTER_STEREOTYPE_TOP_EXTRA
+        + text_render::label_height(&cluster.label, FONT_SIZE);
+    for stereotype in &cluster.stereotype_lines {
+        let width = text_render::measure_no_underline(stereotype, FONT_SIZE, false);
+        text_render::emit_text(
+            svg,
+            stereotype,
+            &TextBase {
+                x: cluster.x + 4.0 + (cluster.width - width) / 2.0,
+                y: stereotype_top
+                    + preceding_height
+                    + text_render::label_ascent(stereotype, FONT_SIZE),
+                font_size: FONT_SIZE as u32,
+                font_family: "sans-serif",
+                fill: &cluster.font_fill,
+                bold: false,
+                italic: true,
+                underline: false,
+                skip_underline: false,
+            },
+        );
+        preceding_height += text_render::label_height(stereotype, FONT_SIZE);
+    }
 }
 
 fn emit_layout_database_cluster(svg: &mut String, cluster: &LayoutPackageCluster) {
@@ -6915,10 +6977,6 @@ fn emit_layout_database_cluster(svg: &mut String, cluster: &LayoutPackageCluster
     let middle = x + cluster.width / 2.0;
     let right = x + cluster.width;
     let bottom = y + cluster.height;
-    let label_w = text_render::measure_no_underline(&cluster.label, FONT_SIZE, true);
-    let text_x = x + (cluster.width - label_w) / 2.0;
-    let text_y = y + PACKAGE_TITLE_BASELINE + DATABASE_CLUSTER_TITLE_OFFSET;
-
     // Java `USymbolDatabase.asBig()` delegates to `drawDatabase()`: a closed
     // cylinder path plus the top ellipse's lower half as a separate path.
     write!(
@@ -6981,16 +7039,7 @@ fn emit_layout_database_cluster(svg: &mut String, cluster: &LayoutPackageCluster
         cluster.stroke_width,
     )
     .unwrap();
-    write!(
-        svg,
-        r#"<text fill="{}" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="{}" x="{}" y="{}">{}</text>"#,
-        cluster.font_fill,
-        fmt4(label_w),
-        fmt4(text_x),
-        fmt4(text_y),
-        escape_xml(&cluster.label),
-    )
-    .unwrap();
+    emit_layout_symbol_cluster_title_stack(svg, cluster, 0.0, y + DATABASE_CLUSTER_CONTENT_TOP);
 }
 
 fn emit_oracle_legend(svg: &mut String, legend: &OracleLegend, fallback_line: Option<usize>) {
@@ -15436,6 +15485,30 @@ mod tests {
                 "{declaration}"
             );
         }
+    }
+
+    #[test]
+    fn linked_dotted_symbol_cluster_keeps_its_stereotype_title_stack() {
+        let input = "@startuml\n\
+            node Systems.Runtime as \"Runtime Node\" $ops <<Execution>> $live \
+            [[https://example.com/runtime]] #AliceBlue {\n\
+              class Worker\n\
+            }\n\
+            @enduml";
+        let parsed = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Class(diagram) = parsed else {
+            panic!("expected class diagram");
+        };
+        let runtime = diagram
+            .packages
+            .iter()
+            .find(|package| package.name == "Systems.Runtime")
+            .unwrap();
+        assert_eq!(runtime.stereotypes, ["Execution"]);
+
+        let svg = render(&diagram, &Theme::default());
+        assert!(svg.contains(">«Execution»</text>"), "{svg}");
+        assert!(svg.contains(">Runtime Node</text>"), "{svg}");
     }
 
     #[test]

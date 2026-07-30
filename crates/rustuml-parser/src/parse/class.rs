@@ -3336,6 +3336,9 @@ mod tests {
              package \"Absolute Display\" as Absolute \
              [[https://example.com/api optional-label]] {\n\
              }\n\
+             node Systems.Runtime as \"Runtime Node\" $ops <<Execution>> $live \
+             [[https://example.com/runtime]] #AliceBlue {\n\
+             }\n\
              package Promoted {\n\
              }",
         );
@@ -3357,6 +3360,17 @@ mod tests {
         assert_eq!(absolute.url.as_deref(), Some("https://example.com/api"));
         assert_eq!(absolute.url_tooltip, None);
         assert_eq!(absolute.display_name.as_deref(), Some("Absolute Display"));
+
+        let runtime = d
+            .packages
+            .iter()
+            .find(|package| package.name == "Systems.Runtime")
+            .unwrap();
+        assert_eq!(runtime.kind, PackageKind::Node);
+        assert_eq!(runtime.display_name.as_deref(), Some("Runtime Node"));
+        assert_eq!(runtime.stereotypes, ["Execution"]);
+        assert_eq!(runtime.url.as_deref(), Some("https://example.com/runtime"));
+        assert_eq!(runtime.color.as_deref(), Some("AliceBlue"));
     }
 
     #[test]
