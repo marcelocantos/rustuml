@@ -1,0 +1,13 @@
+@startuml
+left to right direction
+state "Border Cluster" as BorderCluster {
+  state "Inside A" as InsideA
+  state "Inside B" as InsideB
+  [*] --> InsideA
+  InsideA --> InsideB
+}
+state "Outside Hop" as OutsideHop
+[*] --> BorderCluster
+InsideB --> OutsideHop : escape
+OutsideHop --> InsideA : resume
+@enduml

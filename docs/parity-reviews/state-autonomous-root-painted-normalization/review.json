@@ -1,0 +1,140 @@
+{
+  "schema_version": 1,
+  "review_kind": "adversarial-checker",
+  "mechanism": "state-autonomous-root-painted-normalization",
+  "verdict": "PASS",
+  "review_date": "2026-07-30",
+  "account_file": "docs/parity-reviews/state-autonomous-painted-bounds/account-root-normalization.json",
+  "checker_identity": {
+    "agent": "Codex",
+    "model": "GPT-5",
+    "tooling": [
+      "functions.exec_command",
+      "functions.apply_patch",
+      "mcp__bullseye.bullseye_frontier"
+    ]
+  },
+  "checker_worktree": {
+    "path": "/private/tmp/rustuml-state-autonomous-root-painted-normalization-checker",
+    "branch": "codex/state-autonomous-root-painted-normalization-checker"
+  },
+  "revisions": {
+    "rust": "0ddff733b8a5f6b25e731d57f62f824c9810bea4",
+    "rust_commit_timestamp": "2026-07-31T05:05:50+10:00",
+    "java": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+    "diff_one": {
+      "path": "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one",
+      "sha1": "52a7f230b19801fa686f3c984fea38a29d95aab6"
+    },
+    "java_jar": "/Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar"
+  },
+  "commands": [
+    "git worktree add -b codex/state-autonomous-root-painted-normalization-checker /private/tmp/rustuml-state-autonomous-root-painted-normalization-checker 0ddff733b8a5f6b25e731d57f62f824c9810bea4",
+    "git show --stat --summary 0ddff733b8a5f6b25e731d57f62f824c9810bea4",
+    "sed -n '1,240p' docs/parity-reviews/state-autonomous-painted-bounds/account-root-normalization.json",
+    "git diff 0ddff733b8a5f6b25e731d57f62f824c9810bea4^ 0ddff733b8a5f6b25e731d57f62f824c9810bea4 -- crates/rustuml-render/src/state.rs",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/GroupMakerState.java | sed -n '90,175p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/SvekResult.java | sed -n '120,170p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/svek/DotStringFactory.java | sed -n '628,650p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/atmp/CucaDiagram.java | sed -n '796,812p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/core/TextBlockExporter12026.java | sed -n '470,490p'",
+    "git -C /Users/marcelo/work/github.com/plantuml/plantuml show 71806a23780b04a5ccde2f8ceb5121edad5eb711:src/main/java/net/sourceforge/plantuml/klimt/drawing/LimitFinder.java | sed -n '168,210p'",
+    "rg -n 'SVEK_PAINTED_ORIGIN|SVEK_RESULT_DIMENSION_PAD|CUCA_POSITIVE_AXIS_MARGIN|LIMIT_FINDER_PIXEL_ADJUST|POLYGON_LIMIT_FINDER_OVERSCAN_X' crates/rustuml-render/src/state.rs",
+    "rg -n 'cap_state_alignment_nested_lr|rank_nested_lr_concurrent|Outer Model|Inner Start|state-autonomous-root-painted-normalization|checker_|followup' crates/rustuml-render/src/state.rs docs/parity-reviews test-diagrams/perturbations",
+    "ruby -rdigest -e 'cands=Dir[\"test-diagrams/perturbations/state-autonomous-root-painted-normalization/*.puml\"].sort; pool=(Dir[\"test-diagrams/golden/**/*.puml\"] + Dir[\"test-diagrams/perturbations/**/*.puml\"] - cands).uniq; cands.each{|cand| h=Digest::SHA256.file(cand).hexdigest; dup=pool.find{|p| Digest::SHA256.file(p).hexdigest==h}; abort(\"duplicate #{cand} #{dup}\") if dup}; puts \"unique_against_existing_corpus\"'",
+    "java -Djava.awt.headless=true -jar /Users/marcelo/work/github.com/plantuml/plantuml/build/libs/plantuml-1.2026.3beta6.jar -tsvg test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_lr_root_ellipse_nested_chain.puml test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_tb_rectangle_min_reordered.puml test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_lr_concurrent_nested_labels.puml test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_tb_no_root_pseudostates_deep_nested.puml test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_lr_live_cluster_boundary_control.puml",
+    "xmllint --noout test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_lr_root_ellipse_nested_chain.svg test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_tb_rectangle_min_reordered.svg test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_lr_concurrent_nested_labels.svg test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_tb_no_root_pseudostates_deep_nested.svg test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_lr_live_cluster_boundary_control.svg",
+    "rg -n -i 'syntax error|error line|an error has occured|welcome to plantuml' test-diagrams/perturbations/state-autonomous-root-painted-normalization -g '*.svg'",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_lr_concurrent_nested_labels.puml",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_lr_live_cluster_boundary_control.puml",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_lr_root_ellipse_nested_chain.puml",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_tb_no_root_pseudostates_deep_nested.puml",
+    "/tmp/rustuml-integrate-20260731a/target/debug/examples/diff_one --no-oracle test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_tb_rectangle_min_reordered.puml",
+    "shasum -a 256 test-diagrams/perturbations/state-autonomous-root-painted-normalization/*.puml test-diagrams/perturbations/state-autonomous-root-painted-normalization/*.svg"
+  ],
+  "findings": [
+    "Rust source audit: the reviewed commit changes only crates/rustuml-render/src/state.rs, removing the live-cluster guard around outer normalize_autonomous_scope and then applying the pre-existing +5 right/bottom Cuca compatibility margin to every autonomous root. No new parity-affecting constants were introduced by the fix.",
+    "Java provenance audit: GroupMakerState builds autonomous inner images through GraphvizImageBuilder; SvekResult.calculateDimension translates the full rendered result with clusterManager.moveDelta(6 - minX, 6 - minY); DotStringFactory.moveDelta propagates that translation to nodes, edges, and clusters; TextBlockExporter12026 falls back to CucaDiagram.getDefaultMargins() = top/right/bottom/left 0/5/5/0 when document margin is unset. This supports the account's claim that root normalization and the positive-axis margin are global Java behaviors.",
+    "Fixture-shape audit: mechanism-area searches found only the new unit-test labels in crates/rustuml-render/src/state.rs. I found no include_str!/include_bytes! reads of golden data, no conditionals keyed to fixture labels, and no new unexplained high-precision constants in the touched path.",
+    "Held-out results: all five fresh perturbations were unique against the existing golden plus perturbation corpus, rendered valid Java SVGs, and passed diff_one --no-oracle structural comparison. This includes the live-cluster boundary control, so the unconditional normalization did not show an immediate regression on the already-normalized path.",
+    "Date note: the checker ran on 2026-07-30, while the requested Rust commit records timestamp 2026-07-31T05:05:50+10:00. I used the requested SHA, not the future-dated timestamp, as the review authority."
+  ],
+  "inputs": [
+    {
+      "path": "test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_lr_root_ellipse_nested_chain.puml",
+      "java_svg": "test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_lr_root_ellipse_nested_chain.svg",
+      "axes": [
+        "LR",
+        "all-autonomous root",
+        "nested composite",
+        "root pseudostates present"
+      ],
+      "result": "pass",
+      "sha256": {
+        "puml": "58a8d1e64b68a5daa3726238fcd2bcf08a59c20d797fad73121e92b1d1a45955",
+        "svg": "f95d470ae6df078abd34fe3908caad9ca9270d02a5f0cfb5b291343cbe12ee03"
+      }
+    },
+    {
+      "path": "test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_tb_rectangle_min_reordered.puml",
+      "java_svg": "test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_tb_rectangle_min_reordered.svg",
+      "axes": [
+        "TB",
+        "all-autonomous root",
+        "declaration order variation",
+        "rectangle-minimum control"
+      ],
+      "result": "pass",
+      "sha256": {
+        "puml": "a4e94cab9dafff4b5c8fb5c3a78882b2a3be8a1ebc8a200d345d39fb2c656931",
+        "svg": "3fef2cb4ddc40895dc5007c59651c31e4c9c16cb42df43e365011b61591c6872"
+      }
+    },
+    {
+      "path": "test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_lr_concurrent_nested_labels.puml",
+      "java_svg": "test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_lr_concurrent_nested_labels.svg",
+      "axes": [
+        "LR",
+        "all-autonomous root",
+        "concurrent regions",
+        "renamed labels"
+      ],
+      "result": "pass",
+      "sha256": {
+        "puml": "85bf4c890993ebdd5668dd998a998d53ee04a5c785c8514615e55127fa7fec74",
+        "svg": "950cb33e700da2cd3aa1ae689c29c99f83c824cb1203a504d741d24dd3121fed"
+      }
+    },
+    {
+      "path": "test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_tb_no_root_pseudostates_deep_nested.puml",
+      "java_svg": "test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_tb_no_root_pseudostates_deep_nested.svg",
+      "axes": [
+        "TB",
+        "all-autonomous root",
+        "root pseudostates absent",
+        "deeper nesting"
+      ],
+      "result": "pass",
+      "sha256": {
+        "puml": "052822038e0bf959b3ecbe9d12d4972c616bec6a6eebd9f1dd82400b411a3c67",
+        "svg": "68f8c9003922229e5765cd98637b04a848131bca85b6ac8e23b0a00a64c0df7f"
+      }
+    },
+    {
+      "path": "test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_lr_live_cluster_boundary_control.puml",
+      "java_svg": "test-diagrams/perturbations/state-autonomous-root-painted-normalization/checker_lr_live_cluster_boundary_control.svg",
+      "axes": [
+        "LR",
+        "live-cluster root control",
+        "cross-boundary topology",
+        "root pseudostate present"
+      ],
+      "result": "pass",
+      "sha256": {
+        "puml": "9394a740ac9c25522f81941e1a6342a0399f2e03f2edef3ea0d598180ad6e7d8",
+        "svg": "52bc2249ee96bb72f9cab8661be69c897553478af9e70f16b18bad5295024dee"
+      }
+    }
+  ],
+  "verdict_detail": "No failing counterexample was found. The source-level account is consistent with the inspected Java and Rust data flow, and the five fresh held-out perturbations all passed no-oracle structural comparison."
+}

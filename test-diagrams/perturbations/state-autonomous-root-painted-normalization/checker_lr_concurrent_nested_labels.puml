@@ -1,0 +1,14 @@
+@startuml
+left to right direction
+state "Parallel Harbor" as ParallelHarbor {
+  state "North Lane" as NorthLane
+  [*] --> NorthLane
+  NorthLane --> [*]
+  --
+  state "South Lane" as SouthLane
+  [*] --> SouthLane
+  SouthLane --> [*]
+}
+[*] --> ParallelHarbor
+ParallelHarbor --> [*]
+@enduml
