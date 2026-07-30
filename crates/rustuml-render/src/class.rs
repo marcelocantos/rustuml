@@ -1147,38 +1147,62 @@ fn calc_entity_dims(
         0.0
     };
 
-    // Java `MethodsOrFieldsArea.hasSmallIcon()` scans a whole compartment,
-    // then `calculateDimensionOnlyMembers()` adds
-    // `getCircledCharacterRadius() + 3` to its maximum text width. Thus a
-    // default-visibility row still reserves the icon column when a sibling
-    // field or method has a class visibility modifier. Rust's `IeMandatory`
-    // represents ER-table `*` syntax, which is not a Java VisibilityModifier.
-    let has_visibility_modifier = |visibility: Visibility| {
-        matches!(
-            visibility,
-            Visibility::Public | Visibility::Private | Visibility::Protected | Visibility::Package
-        )
-    };
+    // Java `BodyEnhanced1.getArea()` creates one `MethodsOrFieldsArea` per
+    // separator-delimited block. Each area independently runs `hasSmallIcon()`
+    // and, when any member has a non-null modifier, reserves
+    // `getCircledCharacterRadius() + 3` for every member in that block.
+    // Without an enhanced body, fields and methods are the two independent
+    // areas (`BodierLikeClassOrObject.getBody`). IE_MANDATORY is an ordinary
+    // non-null Java VisibilityModifier inside the area that owns it.
     let visibility_icons_enabled = font.attr_icon_size != Some(0);
-    let fields_have_small_icon = visibility_icons_enabled
-        && entity.members.iter().any(|m| {
-            m.kind == MemberKind::Field
-                && !hide.hides_member(m)
-                && has_visibility_modifier(m.visibility)
-        });
-    let methods_have_small_icon = visibility_icons_enabled
-        && entity.members.iter().any(|m| {
-            m.kind == MemberKind::Method
-                && !hide.hides_member(m)
-                && has_visibility_modifier(m.visibility)
-        });
+    let mut member_uses_icon_lane = vec![false; entity.members.len()];
+    if visibility_icons_enabled {
+        if entity
+            .members
+            .iter()
+            .any(|member| member.kind == MemberKind::Separator)
+        {
+            let mut block_start = 0;
+            for block_end in 0..=entity.members.len() {
+                if block_end == entity.members.len()
+                    || entity.members[block_end].kind == MemberKind::Separator
+                {
+                    let block_has_icon =
+                        entity.members[block_start..block_end].iter().any(|member| {
+                            !hide.hides_member(member) && visibility_modifier(member).is_some()
+                        });
+                    member_uses_icon_lane[block_start..block_end].fill(block_has_icon);
+                    block_start = block_end + 1;
+                }
+            }
+        } else {
+            let fields_have_icon = entity.members.iter().any(|member| {
+                member.kind == MemberKind::Field
+                    && !hide.hides_member(member)
+                    && visibility_modifier(member).is_some()
+            });
+            let methods_have_icon = entity.members.iter().any(|member| {
+                member.kind == MemberKind::Method
+                    && !hide.hides_member(member)
+                    && visibility_modifier(member).is_some()
+            });
+            for (index, member) in entity.members.iter().enumerate() {
+                member_uses_icon_lane[index] = match member.kind {
+                    MemberKind::Field => fields_have_icon,
+                    MemberKind::Method => methods_have_icon,
+                    MemberKind::Separator => false,
+                };
+            }
+        }
+    }
     let member_text_offset = MEMBER_TEXT_INSET + font.circled_radius();
     let member_widths: Vec<f64> = entity
         .members
         .iter()
-        .filter(|m| m.kind != MemberKind::Separator)
-        .filter(|m| !hide.hides_member(m))
-        .map(|m| {
+        .enumerate()
+        .filter(|(_, member)| member.kind != MemberKind::Separator)
+        .filter(|(_, member)| !hide.hides_member(member))
+        .map(|(member_index, m)| {
             let text_w = member_display_lines(m, font.monospace_member_spaces())
                 .iter()
                 .map(|text| {
@@ -1194,19 +1218,11 @@ fn calc_entity_dims(
                     }
                 })
                 .fold(0.0_f64, f64::max);
-            let compartment_has_small_icon = match m.kind {
-                MemberKind::Field => fields_have_small_icon,
-                MemberKind::Method => methods_have_small_icon,
-                MemberKind::Separator => false,
+            let text_offset = if member_uses_icon_lane[member_index] {
+                member_text_offset
+            } else {
+                ENUM_TEXT_OFFSET
             };
-            // ER mandatory markers reserve space only on their own row; they
-            // do not activate the Java class-visibility column for siblings.
-            let text_offset =
-                if compartment_has_small_icon || m.visibility == Visibility::IeMandatory {
-                    member_text_offset
-                } else {
-                    ENUM_TEXT_OFFSET
-                };
             text_offset + text_w + MEMBER_RIGHT_PAD + font.text_padding * 2.0
         })
         .collect();
@@ -18179,6 +18195,87 @@ mod tests {
             .unwrap();
         let circle_x = attr_value(ellipse, "cx").unwrap().parse::<f64>().unwrap();
         assert!((label_x + label_width / 2.0 - circle_x).abs() < 0.001);
+    }
+
+    #[test]
+    fn visibility_lanes_follow_java_body_block_boundaries() {
+        let entity_width = |body: &str, icon_size: Option<u32>| {
+            let icon_param = icon_size.map_or(String::new(), |size| {
+                format!("skinparam ClassAttributeIconSize {size}\n")
+            });
+            let input = format!(
+                "@startuml\n\
+                 {icon_param}\
+                 entity FreshLedger3149 {{\n\
+                 {body}\n\
+                 }}\n\
+                 @enduml"
+            );
+            let parsed = rustuml_parser::parse::parse(&input).unwrap();
+            let rustuml_parser::diagram::Diagram::Class(diagram) = parsed else {
+                panic!("expected class diagram");
+            };
+            let entity = &diagram.entities[0];
+            let font = ClassFontOverrides::from_diagram_for_entity(&diagram, entity);
+            let width = calc_entity_dims(
+                entity,
+                0,
+                HideFlags::default(),
+                &font,
+                &diagram.meta.sprites,
+            )
+            .width;
+            (width, font.circled_radius())
+        };
+
+        let long_field = "renamed_ordinary_attribute : VARCHAR";
+        let (same_block, radius) = entity_width(&format!("*id : INT\n{long_field}"), None);
+        let (same_block_reordered, _) = entity_width(&format!("{long_field}\n*id : INT"), None);
+        let (same_block_without_marker, _) = entity_width(&format!("id : INT\n{long_field}"), None);
+        assert_eq!(same_block, same_block_reordered);
+        assert_eq!(
+            same_block - same_block_without_marker,
+            MEMBER_TEXT_INSET + radius - ENUM_TEXT_OFFSET
+        );
+
+        let (marker_before_separator, _) =
+            entity_width(&format!("*id : INT\n--\n{long_field}"), None);
+        let (marker_before_separator_control, _) =
+            entity_width(&format!("id : INT\n--\n{long_field}"), None);
+        assert_eq!(marker_before_separator, marker_before_separator_control);
+
+        let (marker_after_separator, _) =
+            entity_width(&format!("{long_field}\n--\n*id : INT"), None);
+        let (marker_after_separator_control, _) =
+            entity_width(&format!("{long_field}\n--\nid : INT"), None);
+        assert_eq!(marker_after_separator, marker_after_separator_control);
+
+        let (marker_between_separators, _) = entity_width(
+            &format!("header : INT\n--\n*id : INT\n--\n{long_field}"),
+            None,
+        );
+        let (marker_between_separators_control, _) = entity_width(
+            &format!("header : INT\n--\nid : INT\n--\n{long_field}"),
+            None,
+        );
+        assert_eq!(marker_between_separators, marker_between_separators_control);
+
+        let (shared_second_block, _) =
+            entity_width(&format!("header : INT\n--\n*id : INT\n{long_field}"), None);
+        let (plain_second_block, _) =
+            entity_width(&format!("header : INT\n--\nid : INT\n{long_field}"), None);
+        assert_eq!(
+            shared_second_block - plain_second_block,
+            MEMBER_TEXT_INSET + radius - ENUM_TEXT_OFFSET
+        );
+
+        let long_method = "renamed_ordinary_operation()";
+        let (field_marker, _) = entity_width(&format!("*id : INT\n{long_method}"), None);
+        let (field_marker_control, _) = entity_width(&format!("id : INT\n{long_method}"), None);
+        assert_eq!(field_marker, field_marker_control);
+
+        let (icons_hidden, _) = entity_width(&format!("*id : INT\n{long_field}"), Some(0));
+        assert_eq!(icons_hidden, same_block_without_marker);
     }
 
     #[test]
