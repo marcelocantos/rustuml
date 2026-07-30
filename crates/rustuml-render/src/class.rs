@@ -74,6 +74,19 @@ const MIXED_STATE_MIN_WIDTH: f64 = 50.0;
 const MIXED_STATE_HPAD: f64 = 20.0;
 const MIXED_STATE_NAME_BASELINE: f64 = 18.5352;
 const MIXED_STATE_SEPARATOR_Y: f64 = 26.4883;
+/// `USymbolBoundary.asSmall` delegates to `USymbolSimpleAbstract`: a 49px
+/// minimum-width node with a 32px symbol band above one standard text line.
+const MIXED_BOUNDARY_MIN_WIDTH: f64 = 49.0;
+const MIXED_BOUNDARY_SYMBOL_BAND_HEIGHT: f64 = 32.0;
+const MIXED_BOUNDARY_HEIGHT: f64 = MIXED_BOUNDARY_SYMBOL_BAND_HEIGHT + MEMBER_LINE_HEIGHT;
+/// `USymbolBoundary.drawBoundary` paints a 24px circle after a 24px bar and
+/// 17px stub, with the symbol four pixels below the image origin.
+const MIXED_BOUNDARY_CIRCLE_SIZE: f64 = 24.0;
+const MIXED_BOUNDARY_ICON_TOP: f64 = 4.0;
+const MIXED_BOUNDARY_CIRCLE_LEFT: f64 = 21.0;
+const MIXED_BOUNDARY_STUB_LENGTH: f64 = 17.0;
+/// Default 14px AWT ascent used by `USymbolSimpleAbstract.asSmall`.
+const MIXED_BOUNDARY_LABEL_BASELINE: f64 = MIXED_BOUNDARY_SYMBOL_BAND_HEIGHT + 13.53515625;
 /// Height of entity header (icon + name area) — used in height computations.
 #[allow(dead_code)]
 const HEADER_HEIGHT: f64 = 32.0;
@@ -517,6 +530,7 @@ fn resolve_hide(entity: &ClassEntity, directives: &[HideShow]) -> HideFlags {
         EntityKind::Component => "component",
         EntityKind::Database => "database",
         EntityKind::Queue => "queue",
+        EntityKind::Boundary => "boundary",
         EntityKind::Node => "node",
         EntityKind::Rectangle => "rectangle",
     };
@@ -891,6 +905,26 @@ fn calc_entity_dims(
         return EntityDims {
             width: MIXED_STATE_MIN_WIDTH.max(name_width + MIXED_STATE_HPAD),
             height: MIXED_STATE_HEIGHT,
+            field_count: 0,
+            method_count: 0,
+            is_enum: false,
+            name_width,
+            has_stereotypes: false,
+            stereotype_count: 0,
+            has_header_sprite: false,
+            hide,
+            source_line,
+        };
+    }
+    if entity.kind == EntityKind::Boundary {
+        let source_line = if entity.source_line > 0 {
+            entity.source_line
+        } else {
+            entity_index + 1
+        };
+        return EntityDims {
+            width: MIXED_BOUNDARY_MIN_WIDTH.max(name_width),
+            height: MIXED_BOUNDARY_HEIGHT,
             field_count: 0,
             method_count: 0,
             is_enum: false,
@@ -5497,7 +5531,12 @@ fn render_plantuml_svg(
         }
 
         // HTML comment before entity.
-        write!(svg, "<!--class {}-->", entity.label).unwrap();
+        let comment_kind = if entity.kind == EntityKind::Boundary {
+            "entity"
+        } else {
+            "class"
+        };
+        write!(svg, "<!--{comment_kind} {}-->", entity.label).unwrap();
 
         // Entity group wrapper.
         write!(
@@ -7401,6 +7440,93 @@ fn render_entity_content(
     shadow_filter_id: Option<&str>,
     sprites: &HashMap<String, SpriteData>,
 ) {
+    if entity.kind == EntityKind::Boundary {
+        if let Some(anchor) = link_anchor {
+            svg.push_str(anchor);
+        }
+        let fill = oracle_rect
+            .and_then(|rect| rect.fill.as_deref())
+            .map(str::to_string)
+            .or_else(|| entity.color.as_deref().map(resolve_flat_or_gradient_start))
+            .or_else(|| {
+                font.class_background
+                    .as_deref()
+                    .map(resolve_flat_or_gradient_start)
+            })
+            .unwrap_or_else(|| ENTITY_FILL.to_string());
+        let border = entity
+            .line_color
+            .as_deref()
+            .map(crate::sequence::resolve_color)
+            .or_else(|| {
+                font.border_color
+                    .as_deref()
+                    .map(crate::sequence::resolve_color)
+            })
+            .unwrap_or_else(|| BORDER_COLOR.to_string());
+        let text_fill = entity
+            .text_color
+            .as_deref()
+            .map(crate::sequence::resolve_color)
+            .or_else(|| {
+                font.font_color
+                    .as_deref()
+                    .map(crate::sequence::resolve_color)
+            })
+            .unwrap_or_else(|| "#000000".to_string());
+        let symbol_x = x + (dim.width - MIXED_BOUNDARY_MIN_WIDTH) / 2.0;
+        let circle_x = symbol_x + MIXED_BOUNDARY_CIRCLE_LEFT;
+        let circle_y = y + MIXED_BOUNDARY_ICON_TOP;
+        let radius = MIXED_BOUNDARY_CIRCLE_SIZE / 2.0;
+        let center_x = circle_x + radius;
+        let center_y = circle_y + radius;
+        let bar_x = circle_x - MIXED_BOUNDARY_STUB_LENGTH;
+        write!(
+            svg,
+            r#"<path d="M{},{} L{},{} M{},{} L{},{}" fill="none" style="stroke:{};stroke-width:0.5;"/>"#,
+            fmt4(bar_x),
+            fmt4(circle_y),
+            fmt4(bar_x),
+            fmt4(circle_y + MIXED_BOUNDARY_CIRCLE_SIZE),
+            fmt4(bar_x),
+            fmt4(center_y),
+            fmt4(circle_x),
+            fmt4(center_y),
+            border,
+        )
+        .unwrap();
+        write!(
+            svg,
+            r#"<ellipse cx="{}" cy="{}" fill="{}" rx="{}" ry="{}" style="stroke:{};stroke-width:0.5;"/>"#,
+            fmt4(center_x),
+            fmt4(center_y),
+            fill,
+            fmt4(radius),
+            fmt4(radius),
+            border,
+        )
+        .unwrap();
+        text_render::emit_text(
+            svg,
+            &entity.label,
+            &TextBase {
+                x: x + (dim.width - dim.name_width) / 2.0,
+                y: y + MIXED_BOUNDARY_LABEL_BASELINE,
+                font_size: font.name_font_size(),
+                font_family: &font.name_family,
+                fill: &text_fill,
+                bold: font.font_bold,
+                italic: false,
+                underline: false,
+                skip_underline: true,
+            },
+        );
+        if link_anchor.is_some() {
+            svg.push_str("</a>");
+        }
+        return;
+    }
+
     if matches!(entity.kind, EntityKind::Circle | EntityKind::Diamond) {
         if let Some(anchor) = link_anchor {
             svg.push_str(anchor);
@@ -8056,6 +8182,7 @@ fn render_entity_content(
                 | EntityKind::Component
                 | EntityKind::Database
                 | EntityKind::Queue
+                | EntityKind::Boundary
                 | EntityKind::Node
                 | EntityKind::Rectangle => stereotype_c_fill.as_deref().unwrap_or(CLASS_ICON_FILL),
             },
@@ -8124,6 +8251,7 @@ fn render_entity_content(
                 | EntityKind::Component
                 | EntityKind::Database
                 | EntityKind::Queue
+                | EntityKind::Boundary
                 | EntityKind::Node
                 | EntityKind::Rectangle => 'C',
             });

@@ -204,6 +204,7 @@ pub enum EntityKind {
     Component,
     Database,
     Queue,
+    Boundary,
     Node,
     Rectangle,
 }

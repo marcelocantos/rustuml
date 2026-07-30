@@ -722,14 +722,14 @@ impl ClassParser {
         // Allows dots in the identifier (for `set namespaceSeparator none`).
         static RE_DOTTED: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
-                r#"^(class|abstract\s+class|abstract|interface|enum|annotation|entity|object|state|circle|diamond|actor|usecase|component|database|queue|node|rectangle)\s+(?:(?:"([^"]+)"\s+as\s+)?(\w[\w.]*(?:<[^<>]*(?:<[^<>]*>[^<>]*)*>)?)|"([^"]+)")"#,
+                r#"(?i)^(class|abstract\s+class|abstract|interface|enum|annotation|entity|object|state|circle|diamond|actor|usecase|component|database|queue|boundary|node|rectangle)\s+(?:(?:"([^"]+)"\s+as\s+)?(\w[\w.]*(?:<[^<>]*(?:<[^<>]*>[^<>]*)*>)?)|"([^"]+)")"#,
             )
             .unwrap()
         });
         // Permissive regex: accepts any non-whitespace name (for custom namespace separators).
         static RE_PERMISSIVE: LazyLock<Regex> = LazyLock::new(|| {
             Regex::new(
-                r#"^(class|abstract\s+class|abstract|interface|enum|annotation|entity|object|state|circle|diamond|actor|usecase|component|database|queue|node|rectangle)\s+(?:(?:"([^"]+)"\s+as\s+)?([^\s{<>]+(?:<[^<>]*(?:<[^<>]*>[^<>]*)*>)?)|"([^"]+)")"#,
+                r#"(?i)^(class|abstract\s+class|abstract|interface|enum|annotation|entity|object|state|circle|diamond|actor|usecase|component|database|queue|boundary|node|rectangle)\s+(?:(?:"([^"]+)"\s+as\s+)?([^\s{<>]+(?:<[^<>]*(?:<[^<>]*>[^<>]*)*>)?)|"([^"]+)")"#,
             )
             .unwrap()
         });
@@ -746,13 +746,16 @@ impl ClassParser {
             &*RE_PERMISSIVE
         };
         if let Some(caps) = re.captures(line) {
-            let declaration_kind = caps[1].trim();
+            // Pattern2.compileInternal makes PlantUML command regexes
+            // case-insensitive; normalize the captured command for semantic
+            // matching while preserving labels and identifiers verbatim.
+            let declaration_kind = caps[1].trim().to_ascii_lowercase();
             if line.trim_end().ends_with('{')
-                && matches!(declaration_kind, "database" | "node" | "rectangle")
+                && matches!(declaration_kind.as_str(), "database" | "node" | "rectangle")
             {
                 return false;
             }
-            let kind = parse_entity_kind(declaration_kind);
+            let kind = parse_entity_kind(&declaration_kind);
             // Group 4: quoted-only form — class "**Name**" with no `as` keyword.
             let (mut label, mut id) = if let Some(m) = caps.get(4) {
                 let label_raw = m.as_str().to_string();
@@ -799,13 +802,13 @@ impl ClassParser {
             // The ordinary class commands use
             // `CucaDiagram#quarkInContextSafe(false, idShort)`, while
             // `CommandCreateElementFull2` uses the unique-reuse form.
-            let lookup = match declaration_kind {
+            let lookup = match declaration_kind.as_str() {
                 "class" | "abstract class" | "abstract" | "interface" | "enum" | "annotation"
                 | "entity" => QuarkLookup::CurrentContext,
                 _ => QuarkLookup::ReuseUnique,
             };
             let ordinary_class_command = matches!(
-                declaration_kind,
+                declaration_kind.as_str(),
                 "class"
                     | "abstract class"
                     | "abstract"
@@ -1944,6 +1947,7 @@ fn parse_entity_kind(s: &str) -> EntityKind {
         "component" => EntityKind::Component,
         "database" => EntityKind::Database,
         "queue" => EntityKind::Queue,
+        "boundary" => EntityKind::Boundary,
         "node" => EntityKind::Node,
         "rectangle" => EntityKind::Rectangle,
         _ => EntityKind::Class,
@@ -2632,6 +2636,7 @@ mod tests {
              component PolicyEngine\n\
              database MetricsStore\n\
              queue RetryQueue\n\
+             BoUnDaRy AccessEdge\n\
              node EdgeHost\n\
              rectangle TrustBoundary\n\
              Operator --> Approval\n\
@@ -2643,8 +2648,9 @@ mod tests {
             ("PolicyEngine", EntityKind::Component, 4),
             ("MetricsStore", EntityKind::Database, 5),
             ("RetryQueue", EntityKind::Queue, 6),
-            ("EdgeHost", EntityKind::Node, 7),
-            ("TrustBoundary", EntityKind::Rectangle, 8),
+            ("AccessEdge", EntityKind::Boundary, 7),
+            ("EdgeHost", EntityKind::Node, 8),
+            ("TrustBoundary", EntityKind::Rectangle, 9),
         ];
         for (id, kind, source_line) in expected {
             let entity = d.entities.iter().find(|entity| entity.id == id).unwrap();

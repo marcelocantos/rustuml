@@ -34,7 +34,10 @@ const CONTAINER_KEYWORDS: &[&str] = &[
 /// Check if a trimmed line opens a container block (keyword followed by optional label and `{`).
 fn container_keyword(trimmed: &str) -> Option<&'static str> {
     for &kw in CONTAINER_KEYWORDS {
-        if let Some(rest) = trimmed.strip_prefix(kw)
+        if trimmed
+            .get(..kw.len())
+            .is_some_and(|prefix| prefix.eq_ignore_ascii_case(kw))
+            && let Some(rest) = trimmed.get(kw.len()..)
             && (rest.is_empty()
                 || rest.starts_with(' ')
                 || rest.starts_with('\t')
@@ -62,8 +65,9 @@ fn parse_stereotypes(s: &str) -> Vec<String> {
 ///
 /// Returns `(id, label)`.
 fn parse_container_label(kw: &str, rest: &str) -> (String, String) {
-    static RE_QUOTED: LazyLock<Regex> =
-        LazyLock::new(|| Regex::new(r#"^\s*"([^"]+)"(?:\s+as\s+(\w+))?(?:\s+[^{]*)?\{?"#).unwrap());
+    static RE_QUOTED: LazyLock<Regex> = LazyLock::new(|| {
+        Regex::new(r#"^\s*"([^"]+)"(?:\s+(?i:as)\s+(\w+))?(?:\s+[^{]*)?\{?"#).unwrap()
+    });
     static RE_WORD: LazyLock<Regex> =
         LazyLock::new(|| Regex::new(r#"^\s*(\w+)(?:\s+[^{]*)?\{?"#).unwrap());
 
@@ -1458,6 +1462,26 @@ mod tests {
         assert_eq!(d.components.len(), 2);
         assert_eq!(d.components[0].kind, ComponentElementKind::Queue);
         assert_eq!(d.components[1].kind, ComponentElementKind::Storage);
+    }
+
+    #[test]
+    fn shared_description_commands_are_case_insensitive() {
+        let d = parse(
+            "PaCkAgE Outer {\n\
+               ClOuD \"Shared Cloud\" AS Shared {\n\
+                 QuEuE \"Delivery Work\" As DeliveryQueue\n\
+               }\n\
+             }",
+        );
+        assert_eq!(d.packages[0].name, "Outer");
+        assert_eq!(d.packages[0].packages[0].name, "Shared");
+        let queue = d
+            .components
+            .iter()
+            .find(|component| component.id == "DeliveryQueue")
+            .unwrap();
+        assert_eq!(queue.label, "Delivery Work");
+        assert_eq!(queue.kind, ComponentElementKind::Queue);
     }
 
     #[test]

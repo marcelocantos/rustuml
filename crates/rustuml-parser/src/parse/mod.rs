@@ -392,10 +392,16 @@ fn detect_uml_subtype(lines: &[String]) -> UmlSubtype {
             "portout",
             "state",
         ];
-        let leading_keyword = trimmed.split_whitespace().next().unwrap_or_default();
+        // Pattern2.compileInternal applies CASE_INSENSITIVE to PlantUML
+        // command regexes, including CommandCreateElementFull2.
+        let leading_keyword = trimmed
+            .split_whitespace()
+            .next()
+            .unwrap_or_default()
+            .to_ascii_lowercase();
         if !has_allowmixing
             && !trimmed.contains('{')
-            && MIXED_ONLY_CLASS_KEYWORDS.contains(&leading_keyword)
+            && MIXED_ONLY_CLASS_KEYWORDS.contains(&leading_keyword.as_str())
         {
             class_factory_rejected_by_mixed_leaf = true;
         }
@@ -1500,7 +1506,7 @@ mod tests {
 
     #[test]
     fn mixed_description_keyword_family_rejects_the_class_factory() {
-        for keyword in ["artifact", "database", "queue", "rectangle"] {
+        for keyword in ["artifact", "DATABASE", "QuEuE", "rectangle", "BOUNDARY"] {
             let input = format!(
                 "@startuml\n\
                  entity FreshLedger6111 {{}}\n\
@@ -1514,6 +1520,26 @@ mod tests {
                 "{keyword}"
             );
         }
+    }
+
+    #[test]
+    fn uppercase_mixed_leaf_survives_description_factory_dispatch() {
+        let input = "@startuml\n\
+            package FreshOuter6121 {\n\
+              cloud \"Fresh Shared Cloud 6123\" {\n\
+                interface FreshContract6127\n\
+                QUEUE FreshDeliveryQueue6131\n\
+              }\n\
+            }\n\
+            @enduml";
+        let parsed = parse(input).unwrap();
+        let Diagram::Component(diagram) = parsed else {
+            panic!("expected component-backed description diagram, got {parsed:?}");
+        };
+        assert!(diagram.components.iter().any(|component| {
+            component.id == "FreshDeliveryQueue6131"
+                && component.kind == crate::diagram::component::ComponentElementKind::Queue
+        }));
     }
 
     #[test]
@@ -1539,7 +1565,7 @@ mod tests {
 
     #[test]
     fn allowmixing_keeps_quoted_entity_and_component_source_in_class_factory() {
-        for keyword in ["component", "database", "rectangle"] {
+        for keyword in ["component", "DATABASE", "rectangle", "BoUnDaRy"] {
             let input = format!(
                 "@startuml\n\
                  entity FreshLedger6311 {{}}\n\

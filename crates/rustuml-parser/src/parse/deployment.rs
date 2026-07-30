@@ -192,7 +192,7 @@ fn try_parse_connection(
             .unwrap_or(rest.len());
         if kw_end < rest.len() {
             let kw = &rest[..kw_end];
-            if keyword_set.contains(kw) {
+            if keyword_set.contains(kw.to_ascii_lowercase().as_str()) {
                 let after_kw = rest[kw_end..].trim_start();
                 if let Some(after_open_quote) = after_kw.strip_prefix('"') {
                     // `CommandLinkElement` parses the quoted text between the
@@ -415,7 +415,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
     // keyword id [as "label"] [<<stereo>>] [#color] [{]
     static RE_NODE_BARE: LazyLock<Regex> = LazyLock::new(|| {
         Regex::new(
-            r#"^(\w+)\s+(\w[\w.]*)(?:\s+as\s+"([^"]+)")?(?:\s+<<([^>]+)>>)?(?:\s+#(\w+))?(?:\s*\{)?"#,
+            r#"^(\w+)\s+(\w[\w.]*)(?:\s+(?i:as)\s+"([^"]+)")?(?:\s+<<([^>]+)>>)?(?:\s+#(\w+))?(?:\s*\{)?"#,
         )
         .unwrap()
     });
@@ -423,7 +423,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
     // keyword "label" [as id] [<<stereo>>] [#color] [{]
     static RE_NODE_QUOTED: LazyLock<Regex> = LazyLock::new(|| {
         Regex::new(
-            r#"^(\w+)\s+"([^"]+)"(?:\s+as\s+(\w+))?(?:\s+<<([^>]+)>>)?(?:\s+#(\w+))?(?:\s*\{)?"#,
+            r#"^(\w+)\s+"([^"]+)"(?:\s+(?i:as)\s+(\w+))?(?:\s+<<([^>]+)>>)?(?:\s+#(\w+))?(?:\s*\{)?"#,
         )
         .unwrap()
     });
@@ -671,9 +671,13 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
         }
 
         // Check if the first word is a deployment keyword.
-        let first_word: &str = trimmed.split_whitespace().next().unwrap_or("");
+        let first_word = trimmed
+            .split_whitespace()
+            .next()
+            .unwrap_or("")
+            .to_ascii_lowercase();
 
-        if keyword_set.contains(first_word) {
+        if keyword_set.contains(first_word.as_str()) {
             // Check if this is a connection line (keyword "label" --> ...)
             // before treating it as a pure node declaration.
             if let Some(parsed) = try_parse_connection(trimmed, &keyword_set) {
@@ -724,8 +728,10 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
 
             // Try bare form first: keyword id [as "label"]
             if let Some(caps) = RE_NODE_BARE.captures(trimmed) {
-                let keyword = &caps[1];
-                if keyword_set.contains(keyword) {
+                // Pattern2.compileInternal applies CASE_INSENSITIVE to
+                // CommandCreateElementFull and CommandPackageWithUSymbol.
+                let keyword = caps[1].to_ascii_lowercase();
+                if keyword_set.contains(keyword.as_str()) {
                     let raw_id = caps[2].to_string();
                     let label = caps
                         .get(3)
@@ -734,7 +740,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                     let id = raw_id;
                     let stereotype = caps.get(4).map(|m| m.as_str().trim().to_string());
                     let color = caps.get(5).map(|m| m.as_str().to_string());
-                    let kind = kind_from_keyword(keyword);
+                    let kind = kind_from_keyword(&keyword);
                     let declared_container = trimmed.contains('{');
 
                     let created = push_node(
@@ -759,8 +765,8 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
 
             // Try quoted form: keyword "label" [as id]
             if let Some(caps) = RE_NODE_QUOTED.captures(trimmed) {
-                let keyword = &caps[1];
-                if keyword_set.contains(keyword) {
+                let keyword = caps[1].to_ascii_lowercase();
+                if keyword_set.contains(keyword.as_str()) {
                     // Process `\n` escape sequences in quoted labels.
                     let label = process_label(&caps[2]);
                     let id = caps
@@ -769,7 +775,7 @@ pub fn parse_deployment(lines: &[String]) -> Result<DeploymentDiagram, ParseErro
                         .unwrap_or_else(|| label_to_id(&label));
                     let stereotype = caps.get(4).map(|m| m.as_str().trim().to_string());
                     let color = caps.get(5).map(|m| m.as_str().to_string());
-                    let kind = kind_from_keyword(keyword);
+                    let kind = kind_from_keyword(&keyword);
                     let declared_container = trimmed.contains('{');
 
                     let created = push_node(
@@ -882,6 +888,32 @@ mod tests {
         assert!(d.nodes.iter().any(|n| n.id == "WebServer"));
         assert!(d.nodes.iter().any(|n| n.id == "DB"));
         assert_eq!(d.connections.len(), 1);
+    }
+
+    #[test]
+    fn element_commands_are_case_insensitive_but_preserve_identity() {
+        let d = parse(
+            "NoDe \"Runtime\" AS Runtime {\n\
+               DATABASE AuditStore\n\
+               QuEuE \"Retry Work\" As RetryQueue\n\
+               BoUnDaRy AccessEdge\n\
+             }",
+        );
+        let expected = [
+            ("Runtime", "Runtime", DeploymentNodeKind::Node),
+            ("AuditStore", "AuditStore", DeploymentNodeKind::Database),
+            ("RetryQueue", "Retry Work", DeploymentNodeKind::Queue),
+            ("AccessEdge", "AccessEdge", DeploymentNodeKind::Boundary),
+        ];
+        for (id, label, kind) in expected {
+            let node = d
+                .nodes
+                .iter()
+                .find(|node| node.id == id)
+                .unwrap_or_else(|| panic!("missing {id}; parsed nodes: {:?}", d.nodes));
+            assert_eq!(node.label, label);
+            assert_eq!(node.kind, kind);
+        }
     }
 
     #[test]
