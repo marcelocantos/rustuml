@@ -2262,12 +2262,16 @@ fn render_with_oracle_uid_origin(
         let note_id = attached_note_layout_id(idx);
         match position {
             NotePosition::Left => {
+                // Java `CommandFactoryNoteOnEntity` creates left/right notes as
+                // length-one links; `Bibliotekon.lines0` emits them before nodes.
+                layout.add_plantuml_svek_line0_edge(&note_id, target);
                 layout.add_same_rank(&note_id, target);
-                layout.add_edge(&note_id, target, None);
+                layout.add_edge_with_minlen(&note_id, target, None, 0);
             }
             NotePosition::Right => {
+                layout.add_plantuml_svek_line0_edge(target, &note_id);
                 layout.add_same_rank(target, &note_id);
-                layout.add_edge(target, &note_id, None);
+                layout.add_edge_with_minlen(target, &note_id, None, 0);
             }
             NotePosition::Top => layout.add_edge(&note_id, target, None),
             NotePosition::Bottom => layout.add_edge(target, &note_id, None),
@@ -2334,24 +2338,34 @@ fn render_with_oracle_uid_origin(
             layout.add_cluster_node(&package_cluster_id(idx), &endpoint_id);
         }
     }
-    for (entity_idx, entity) in diagram.entities.iter().enumerate() {
-        if let Some(pkg_idx) = package_render.innermost_pkg[entity_idx]
+    let note_owner_pkg = note_owner_packages(diagram, &package_render.innermost_pkg);
+    // Java `GraphvizImageBuilder#printGroup` adds direct leaves to the open
+    // cluster in quark creation order. Keep that unified stream here: batching
+    // entities, notes, and empty child packages by kind changes dot node order.
+    for emission in svek_node_emission_order(diagram) {
+        let (owner, node_id) = match emission {
+            SvekNodeEmission::Entity(entity_idx) => (
+                package_render.innermost_pkg[entity_idx],
+                diagram.entities[entity_idx].id.clone(),
+            ),
+            SvekNodeEmission::Note(note_idx) => {
+                let note = &diagram.notes[note_idx];
+                let node_id = if note.target.is_some() && note.position.is_some() {
+                    attached_note_layout_id(note_idx)
+                } else {
+                    floating_note_layout_id(note_idx)
+                };
+                (note_owner_pkg[note_idx], node_id)
+            }
+            SvekNodeEmission::EmptyPackage(pkg_idx) => (
+                package_render.parent_pkg[pkg_idx],
+                empty_package_layout_id(pkg_idx),
+            ),
+        };
+        if let Some(pkg_idx) = owner
             && package_render.roles[pkg_idx] == PackageRenderRole::Cluster
         {
-            layout.add_cluster_node(&package_cluster_id(pkg_idx), &entity.id);
-        }
-    }
-    for (pkg_idx, role) in package_render.roles.iter().copied().enumerate() {
-        if !role.is_leaf_node() {
-            continue;
-        }
-        if let Some(parent) = package_render.parent_pkg[pkg_idx]
-            && package_render.roles[parent] == PackageRenderRole::Cluster
-        {
-            layout.add_cluster_node(
-                &package_cluster_id(parent),
-                &empty_package_layout_id(pkg_idx),
-            );
+            layout.add_cluster_node(&package_cluster_id(pkg_idx), &node_id);
         }
     }
     for (group_idx, group) in diagram.together.iter().enumerate() {
@@ -4257,6 +4271,17 @@ fn note_owner_packages(
         }
     }
     owners
+}
+
+fn note_qualified_name(diagram: &ClassDiagram, note_idx: usize, leaf: &str) -> String {
+    let package_render = package_render_model(diagram);
+    let owners = note_owner_packages(diagram, &package_render.innermost_pkg);
+    let translated_leaf = translate_qualified_name(leaf);
+    let Some(owner) = owners.get(note_idx).copied().flatten() else {
+        return translated_leaf;
+    };
+    let prefix = package_qualified_name(diagram, &package_render.parent_pkg, owner);
+    format!("{prefix}.{translated_leaf}")
 }
 
 fn svek_node_emission_order(diagram: &ClassDiagram) -> Vec<SvekNodeEmission> {
@@ -12701,6 +12726,29 @@ fn association_point_sequence(diagram: &ClassDiagram, association_idx: usize) ->
     svek_id_allocation(diagram).association_starts[association_idx].unwrap_or(2)
 }
 
+fn attached_note_render_position(
+    width: f64,
+    height: f64,
+    contact_x: f64,
+    contact_y: f64,
+) -> NotePosition {
+    // Java `EntityImageNote#getOpaleStrategy` measures the routed note-side
+    // contact against the four infinite side lines in left/right/up/down order.
+    let right = (width - contact_x).abs();
+    let bottom = (height - contact_y).abs();
+    let left = contact_x.abs();
+    let top = contact_y.abs();
+    if left <= right && left <= bottom && left <= top {
+        NotePosition::Right
+    } else if right <= bottom && right <= left && right <= top {
+        NotePosition::Left
+    } else if top <= right && top <= bottom && top <= left {
+        NotePosition::Bottom
+    } else {
+        NotePosition::Top
+    }
+}
+
 /// Port of PlantUML `Opale`'s four linked-note polygons. Graphviz positions the
 /// note node and its dashed logical edge; `EntityImageNote` consumes that edge
 /// and draws the callout tip as part of the note body instead of emitting a
@@ -13102,12 +13150,19 @@ fn render_svek_note_emission(
             entity_id,
         } => {
             if let Some(pos) = positions.get(*node_idx) {
+                let note = &diagram.notes[*note_idx];
+                let qualified_name = note_qualified_name(
+                    diagram,
+                    *note_idx,
+                    note.alias.as_deref().expect("floating named note"),
+                );
                 render_svek_floating_note(
                     svg,
                     diagram,
                     *note_idx,
                     pos,
                     entity_id,
+                    &qualified_name,
                     edge_paths,
                     relationship_edges,
                     floating_note_opale_relationships[*note_idx],
@@ -13138,28 +13193,36 @@ fn render_svek_note_emission(
             else {
                 return;
             };
-            let endpoint = match position {
-                NotePosition::Left | NotePosition::Top => {
-                    edge.end_point.or_else(|| edge.points.last().copied())
-                }
-                NotePosition::Right | NotePosition::Bottom => {
-                    edge.start_point.or_else(|| edge.points.first().copied())
-                }
+            let (contact, endpoint) = match position {
+                NotePosition::Left | NotePosition::Top => (
+                    edge.start_point.or_else(|| edge.points.first().copied()),
+                    edge.end_point.or_else(|| edge.points.last().copied()),
+                ),
+                NotePosition::Right | NotePosition::Bottom => (
+                    edge.end_point.or_else(|| edge.points.last().copied()),
+                    edge.start_point.or_else(|| edge.points.first().copied()),
+                ),
             };
             let Some((tip_x, tip_y)) = endpoint else {
+                return;
+            };
+            let Some((contact_x, contact_y)) = contact else {
                 return;
             };
             let Some(pos) = positions.get(*node_idx) else {
                 return;
             };
-            let qualified_name = format!("GMN{note_start}");
+            let qualified_name =
+                note_qualified_name(diagram, *note_idx, &format!("GMN{note_start}"));
             let entity_id = format!("ent{:04}", note_start + 1);
             let x = ((pos.x + MARGIN + layout_x_bias + body_dx) * 100.0).round() / 100.0;
             let y = ((pos.y + MARGIN + body_dy) * 100.0).round() / 100.0;
-            let (anchor_x, anchor_y) = match position {
-                NotePosition::Left | NotePosition::Right => (x, y + pos.height / 2.0),
-                NotePosition::Top | NotePosition::Bottom => (x + pos.width / 2.0, y),
-            };
+            let render_position = attached_note_render_position(
+                pos.width,
+                pos.height,
+                contact_x - pos.x,
+                contact_y - pos.y,
+            );
             render_attached_note(
                 svg,
                 diagram,
@@ -13170,11 +13233,11 @@ fn render_svek_note_emission(
                 y,
                 pos.width,
                 pos.height,
-                anchor_x,
-                anchor_y,
+                contact_x + MARGIN + layout_x_bias + body_dx,
+                contact_y + MARGIN + body_dy,
                 tip_x + MARGIN + layout_x_bias,
                 tip_y + MARGIN,
-                *position,
+                render_position,
                 &qualified_name,
                 &entity_id,
                 &diagram.meta.sprites,
@@ -13194,6 +13257,7 @@ fn render_svek_floating_note(
     note_idx: usize,
     pos: &NodePosition,
     entity_id: &str,
+    qualified_name: &str,
     edge_paths: &[EdgePath],
     relationship_edges: &[Option<usize>],
     opale_relationship: Option<usize>,
@@ -13210,7 +13274,6 @@ fn render_svek_floating_note(
         && let Some(geometry) =
             floating_note_opale_geometry(edge, x, y, pos.width, pos.height, layout_x_bias)
     {
-        let alias = note.alias.as_deref().expect("floating named note");
         render_attached_note(
             svg,
             diagram,
@@ -13224,7 +13287,7 @@ fn render_svek_floating_note(
             geometry.tip.0,
             geometry.tip.1,
             geometry.position,
-            alias,
+            qualified_name,
             entity_id,
             &diagram.meta.sprites,
         );
@@ -13240,6 +13303,7 @@ fn render_svek_floating_note(
         pos.width,
         pos.height,
         entity_id,
+        qualified_name,
         &diagram.meta.sprites,
     );
 }
@@ -13309,6 +13373,7 @@ fn render_floating_note_entity(
     width: f64,
     height: f64,
     entity_id: &str,
+    qualified_name: &str,
     sprites: &HashMap<String, SpriteData>,
 ) {
     let style = ResolvedNoteStyle::for_note(diagram, note);
@@ -13316,13 +13381,12 @@ fn render_floating_note_entity(
     let bottom = y + height;
     let fold_x = right - NOTE_FOLD;
     let fold_y = y + NOTE_FOLD;
-    let alias = note.alias.as_deref().expect("floating named note");
     let f = crate::plantuml_metrics::fmt_coord;
 
     write!(
         svg,
         r#"<g class="entity" data-qualified-name="{}" data-source-line="{}" id="{entity_id}">"#,
-        escape_xml(alias),
+        escape_xml(qualified_name),
         note.source_line,
     )
     .unwrap();
@@ -16505,7 +16569,7 @@ mod tests {
         let svg = render(&diagram, &Theme::default());
         let markers = [
             r#"data-qualified-name="FreshScope4153.FreshNested4157""#,
-            r#"data-qualified-name="GMN8""#,
+            r#"data-qualified-name="FreshScope4153.GMN8""#,
             r#"data-qualified-name="FreshRoot4141""#,
             r#"data-qualified-name="GMN3""#,
             r#"data-qualified-name="FreshTail4163""#,
@@ -16514,6 +16578,34 @@ mod tests {
             svg.find(pair[0]).expect("missing earlier SVEK node")
                 < svg.find(pair[1]).expect("missing later SVEK node")
         }));
+    }
+
+    #[test]
+    fn package_owned_notes_keep_owner_qualified_names() {
+        let input = "@startuml\n\
+            package FreshOwner4211 {\n\
+              class FreshDirect4217\n\
+              package FreshChild4223 {\n\
+                class FreshNested4229\n\
+              }\n\
+              note left of FreshChild4223.FreshNested4229 : outer attached\n\
+              note \"outer floating\" as FreshMemo4231\n\
+              FreshMemo4231 .. FreshChild4223.FreshNested4229\n\
+            }\n\
+            @enduml";
+        let diagram = rustuml_parser::parse::parse(input).unwrap();
+        let rustuml_parser::diagram::Diagram::Class(diagram) = diagram else {
+            panic!("expected class diagram");
+        };
+        let allocation = svek_id_allocation(&diagram);
+        let attached_name = format!(
+            "FreshOwner4211.GMN{}",
+            allocation.attached_note_starts[0].expect("attached note UID")
+        );
+
+        let svg = render(&diagram, &Theme::default());
+        assert!(svg.contains(&format!(r#"data-qualified-name="{attached_name}""#)));
+        assert!(svg.contains(r#"data-qualified-name="FreshOwner4211.FreshMemo4231""#));
     }
 
     #[test]
