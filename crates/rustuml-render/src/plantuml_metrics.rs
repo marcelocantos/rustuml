@@ -128,6 +128,9 @@ pub fn courier_new_text_height(font_size: f64) -> f64 {
 // kept distinct. Each entry is the printable-ASCII advance for codepoints
 // 32..=126 in integer font units.
 const TIMES_NEW_ROMAN_UNITS_PER_EM: f64 = 2048.0;
+/// `PhysicalFontMetricsExtract --rust-unicode-ranges` proves every assigned
+/// scalar advance in the pinned JDK is exact with 16 fractional bits.
+const TIMES_NEW_ROMAN_UNICODE_FIXED_SCALE: f32 = 65536.0;
 // PlantUML's SVG text baseline includes AWT leading: height - descent
 // (2355 - 443), matching `StringBounderRaw`/`AtomText` baseline placement.
 const TIMES_NEW_ROMAN_BASELINE_ASCENT_UNITS: f64 = 1912.0;
@@ -174,21 +177,37 @@ pub fn times_new_roman_text_width(text: &str, font_size: f64, bold: bool, italic
         (false, true) => &TIMES_NEW_ROMAN_ITALIC_UNITS,
         (true, true) => &TIMES_NEW_ROMAN_BOLD_ITALIC_UNITS,
     };
+    if text.bytes().all(|byte| (32..=126).contains(&byte)) {
+        return text
+            .chars()
+            .map(|c| table[(c as u32 - 32) as usize] as f64)
+            .sum::<f64>()
+            / TIMES_NEW_ROMAN_UNITS_PER_EM
+            * font_size;
+    }
+
+    // AWT stores glyph positions as float. Scaling each exact source advance
+    // to the requested font size and accumulating in source order as f32
+    // reproduces `Font.getStringBounds` for scalar-additive text.
     text.chars()
-        .map(|c| {
+        .fold(0.0_f32, |width, c| {
             let code = c as u32;
-            let units = if (32..=126).contains(&code) {
-                table[(code - 32) as usize] as f64
+            let fixed_units = if (32..=126).contains(&code) {
+                table[(code - 32) as usize] as f32 * TIMES_NEW_ROMAN_UNICODE_FIXED_SCALE
             } else {
                 // Java `FontStack` retains the selected physical family and
                 // AWT supplies the actual glyph or fallback advance inside
                 // that face. The generated table covers every scalar assigned
                 // in the pinned JDK, including all four binary faces.
-                crate::times_new_roman_unicode::units(code, bold, italic) as f64
+                crate::times_new_roman_unicode::fixed_units(code, bold, italic) as f32
             };
-            units / TIMES_NEW_ROMAN_UNITS_PER_EM * font_size
+            width
+                + fixed_units
+                    / TIMES_NEW_ROMAN_UNICODE_FIXED_SCALE
+                    / TIMES_NEW_ROMAN_UNITS_PER_EM as f32
+                    * font_size as f32
         })
-        .sum()
+        .into()
 }
 
 pub fn times_new_roman_ascent(font_size: f64) -> f64 {
@@ -1591,6 +1610,19 @@ const CHAR_WIDTHS_14_BOLD: [f64; 95] = [
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn times_new_roman_fractional_unicode_advances_accumulate_like_awt() {
+        let repeated = "\u{0518}".repeat(32);
+        assert_eq!(
+            fmt_coord(times_new_roman_text_width(&repeated, 17.0, false, false)),
+            "560.8641"
+        );
+        assert_eq!(
+            fmt_coord(times_new_roman_text_width(&repeated, 19.0, false, false)),
+            "626.8478"
+        );
+    }
 
     #[test]
     fn matches_plantuml_golden_formatted() {
