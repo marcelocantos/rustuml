@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "mechanism": "class-empty-symbol-package-leaf",
+  "java_revision": "71806a23780b04a5ccde2f8ceb5121edad5eb711",
+  "java_locations": [
+    "net.sourceforge.plantuml.svek.GraphvizImageBuilder#printGroups",
+    "net.sourceforge.plantuml.svek.GeneralImageBuilder#createEntityImageBlock",
+    "net.sourceforge.plantuml.svek.image.EntityImageEmptyPackage#calculateDimensionSlow",
+    "net.sourceforge.plantuml.svek.image.EntityImageEmptyPackage#drawU",
+    "net.sourceforge.plantuml.svek.image.EntityImageDescription",
+    "net.sourceforge.plantuml.decoration.symbol.USymbolFolder#asSmall",
+    "net.sourceforge.plantuml.decoration.symbol.USymbolFrame#asSmall",
+    "net.sourceforge.plantuml.decoration.symbol.USymbolNode#asSmall"
+  ],
+  "rust_locations": [
+    "crates/rustuml-render/src/class.rs::package_render_model",
+    "crates/rustuml-render/src/class.rs::empty_package_dims",
+    "crates/rustuml-render/src/class.rs::svek_node_emission_order",
+    "crates/rustuml-render/src/class.rs::layout_empty_packages",
+    "crates/rustuml-render/src/class.rs::emit_layout_empty_package"
+  ],
+  "invariant": "GraphvizImageBuilder mutates a directly empty GroupType.PACKAGE into LeafType.EMPTY_PACKAGE. GeneralImageBuilder then branches on the retained USymbol: a null symbol uses EntityImageEmptyPackage, while a non-null explicit folder, frame, node, database, rectangle, or cloud symbol uses EntityImageDescription and the symbol's asSmall geometry. Both remain Bibliotekon leaf nodes and share ordinary entity UID and paint ordering, but their dimensions, title placement, weight, wrapper, and outline come from different image models.",
+  "causal_divergence": "Rust classifies every directly empty rendered package as one EmptyLeaf role and always applies the ordinary package-tab model. For an explicit empty folder this measures the label as a bold cluster title, paints it inside the tab, omits the surrounding entity group, and gives Graphviz the wrong node dimensions. Java instead retains USymbol.FOLDER, measures a regular-weight body label through USymbolFolder.asSmall, reserves its titleless 40 by 15 tab and asymmetric symbol margins, and emits a normal entity wrapper. The wrong node size perturbs its containing frame and node clusters even in the no-Together control.",
+  "planned_change": "Split directly empty package leaves into ordinary and explicit-symbol roles based on the parser's semantic PackageKind, without consulting labels or fixture inventory. Keep both roles in the shared Bibliotekon node stream and UID allocation. For symbol leaves, derive dimensions and SVG from the corresponding USymbol asSmall model, including regular body text and the entity wrapper; retain EntityImageEmptyPackage behavior only for ordinary package and namespace leaves. Reuse common symbol dispatch and metrics across root, nested, Together-owned, and reordered cases.",
+  "perturbation_axes": [
+    "ordinary empty package crossed with explicit empty folder",
+    "folder crossed with frame, node, database, rectangle, and cloud symbols",
+    "root crossed with nested ownership",
+    "Together-owned crossed with no-Together controls",
+    "short crossed with long renamed labels",
+    "declaration order and neighboring filled groups",
+    "top-to-bottom crossed with left-to-right direction"
+  ]
+}
