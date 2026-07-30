@@ -1,0 +1,6 @@
+@startuml
+skinparam packageStyle node
+package "Zero Root" as ZeroRoot $ops $live [[https://example.com/zero{Zero docs}]] #AliceBlue {
+  class ZeroLeaf
+}
+@enduml
