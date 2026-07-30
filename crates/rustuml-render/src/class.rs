@@ -328,9 +328,9 @@ const DATABASE_CLUSTER_ENVELOPE_EXTRA: f64 = 10.0;
 const NODE_CLUSTER_TITLE_WIDTH_EXTRA: f64 = 60.0;
 const NODE_CLUSTER_TITLE_HEIGHT_EXTRA: f64 = 5.0;
 /// `LimitFinder.drawUPolygon()` expands the node polygon by ten pixels on
-/// each horizontal side. `USymbolNode.drawNode()` also emits a lower-right
-/// `UEmpty(10, 10)`, extending the calculated SVEK envelope.
-const NODE_CLUSTER_ENVELOPE_X_EXTRA: f64 = 20.0;
+/// each horizontal side. `USymbolNode.drawNode()` emits its `UEmpty(10, 10)`
+/// at `(0, height)`, so it extends only the bottom frontier.
+const NODE_CLUSTER_ENVELOPE_X_EXTRA: f64 = 10.0;
 const NODE_CLUSTER_ENVELOPE_Y_EXTRA: f64 = 10.0;
 const NODE_BEVEL: f64 = 10.0;
 const FRAME_TITLE_CORNER: f64 = 10.0;
