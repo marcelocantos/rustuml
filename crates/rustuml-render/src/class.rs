@@ -30,7 +30,7 @@ use crate::layout_oracle::{
 };
 use crate::style::Theme;
 use crate::style_cascade::{StyleCascade, StyleSignature};
-use crate::svg::SvgBuilder;
+use crate::svg::{SvgBuilder, normalize_svg_link_title};
 use crate::text_render::{self, TextBase};
 
 // ---------------------------------------------------------------------------
@@ -1717,36 +1717,6 @@ fn effective_svg_link_target(theme: &Theme) -> &str {
     }
 }
 
-fn normalize_svg_link_title(title: &str) -> String {
-    let mut normalized = String::with_capacity(title.len());
-    let mut rest = title;
-    while let Some(start) = rest.find("<U+") {
-        normalized.push_str(&rest[..start]);
-        let after_marker = &rest[start + 3..];
-        let Some(end) = after_marker.find('>') else {
-            normalized.push_str(&rest[start..]);
-            rest = "";
-            break;
-        };
-        let hex = &after_marker[..end];
-        let decoded = (!hex.is_empty() && hex.chars().all(|ch| ch.is_ascii_hexdigit()))
-            .then(|| u32::from_str_radix(hex, 16).ok())
-            .flatten()
-            // SvgGraphics.LinkData.getXlinkTitle casts the parsed value to
-            // Java `char` before XML serialization.
-            .and_then(|value| char::from_u32(u32::from(value as u16)));
-        if let Some(decoded) = decoded {
-            normalized.push(decoded);
-            rest = &after_marker[end + 1..];
-        } else {
-            normalized.push_str("<U+");
-            rest = after_marker;
-        }
-    }
-    normalized.push_str(rest);
-    normalized.replace("\\n", "\n")
-}
-
 fn emit_package_link_open(
     svg: &mut String,
     href: Option<&str>,
@@ -1758,7 +1728,7 @@ fn emit_package_link_open(
     };
     let escaped_href = escape_xml(href);
     let normalized_title = normalize_svg_link_title(tooltip.unwrap_or(href));
-    let escaped_title = escape_xml(&normalized_title);
+    let escaped_title = escape_xml(&normalized_title).replace('\n', "&#10;");
     let escaped_target = escape_xml(target);
     write!(
         svg,
@@ -5786,7 +5756,7 @@ fn render_plantuml_svg(
             let h = escape_xml(url);
             let normalized_title =
                 normalize_svg_link_title(entity.url_tooltip.as_deref().unwrap_or(url));
-            let title = escape_xml(&normalized_title);
+            let title = escape_xml(&normalized_title).replace('\n', "&#10;");
             let target = escape_xml(svg_link_target);
             format!(
                 r#"<a href="{h}" target="{target}" title="{title}" xlink:actuate="onRequest" xlink:href="{h}" xlink:show="new" xlink:title="{title}" xlink:type="simple">"#,

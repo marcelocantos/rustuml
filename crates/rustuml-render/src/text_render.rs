@@ -22,6 +22,7 @@ use std::fmt::Write;
 use crate::creole::{self, Segment, Style};
 use crate::filter_registry;
 use crate::plantuml_metrics as pm;
+use crate::svg::normalize_svg_link_title;
 
 const TAB_STOP_SPACES: usize = 8;
 
@@ -1648,11 +1649,8 @@ fn write_text_element(
     if let Some(url) = style.link_url.as_deref() {
         let escaped = escape_xml_attr(url);
         // `title` / `xlink:title` is the `{tooltip}` when supplied, else the URL.
-        let title = style
-            .link_title
-            .as_deref()
-            .map(escape_xml_attr)
-            .unwrap_or_else(|| escaped.clone());
+        let normalized_title = normalize_svg_link_title(style.link_title.as_deref().unwrap_or(url));
+        let title = escape_xml_attr(&normalized_title);
         write!(
             buf,
             r#"<a href="{escaped}" target="_top" title="{title}" xlink:actuate="onRequest" xlink:href="{escaped}" xlink:show="new" xlink:title="{title}" xlink:type="simple">"#,
@@ -1693,6 +1691,7 @@ fn escape_xml_attr(s: &str) -> String {
         .replace('<', "&lt;")
         .replace('>', "&gt;")
         .replace('"', "&quot;")
+        .replace('\n', "&#10;")
 }
 
 #[cfg(test)]
@@ -1944,6 +1943,27 @@ mod tests {
         assert!(buf.contains(">field</text>"));
         // Second element: plain + ": String"
         assert!(buf.contains(">: String</text>"));
+    }
+
+    #[test]
+    fn creole_link_normalizes_title_without_decoding_href() {
+        let mut fallback = String::new();
+        emit_text(
+            &mut fallback,
+            r"[[https://example.com/a\nb linked fallback]]",
+            &base(0.0, 0.0),
+        );
+        assert!(fallback.contains(r#"href="https://example.com/a\nb""#));
+        assert!(fallback.contains(r#"title="https://example.com/a&#10;b""#));
+
+        let mut explicit = String::new();
+        emit_text(
+            &mut explicit,
+            r"[[https://example.com/raw\npath{Docs <U+0026> Help\nLine} linked explicit]]",
+            &base(0.0, 0.0),
+        );
+        assert!(explicit.contains(r#"href="https://example.com/raw\npath""#));
+        assert!(explicit.contains(r#"title="Docs &amp; Help&#10;Line""#));
     }
 
     #[test]

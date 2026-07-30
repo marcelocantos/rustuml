@@ -5,6 +5,36 @@
 
 use std::fmt::Write;
 
+pub(crate) fn normalize_svg_link_title(title: &str) -> String {
+    let mut normalized = String::with_capacity(title.len());
+    let mut rest = title;
+    while let Some(start) = rest.find("<U+") {
+        normalized.push_str(&rest[..start]);
+        let after_marker = &rest[start + 3..];
+        let Some(end) = after_marker.find('>') else {
+            normalized.push_str(&rest[start..]);
+            rest = "";
+            break;
+        };
+        let hex = &after_marker[..end];
+        let decoded = (!hex.is_empty() && hex.chars().all(|ch| ch.is_ascii_hexdigit()))
+            .then(|| u32::from_str_radix(hex, 16).ok())
+            .flatten()
+            // `SvgGraphics.LinkData#getXlinkTitle` casts the parsed value to
+            // Java `char` before XML serialization.
+            .and_then(|value| char::from_u32(u32::from(value as u16)));
+        if let Some(decoded) = decoded {
+            normalized.push(decoded);
+            rest = &after_marker[end + 1..];
+        } else {
+            normalized.push_str("<U+");
+            rest = after_marker;
+        }
+    }
+    normalized.push_str(rest);
+    normalized.replace("\\n", "\n")
+}
+
 pub struct SvgBuilder {
     buf: String,
     indent: usize,
@@ -862,6 +892,18 @@ fn escape_xml(s: &str) -> String {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn link_titles_follow_java_unicode_and_newline_normalization() {
+        assert_eq!(
+            normalize_svg_link_title("Docs <U+0026> Support\\nPortal"),
+            "Docs & Support\nPortal"
+        );
+        assert_eq!(
+            normalize_svg_link_title("Keep <U+ZZZZ> literal"),
+            "Keep <U+ZZZZ> literal"
+        );
+    }
 
     #[test]
     fn single_cubic_bezier_segment() {
